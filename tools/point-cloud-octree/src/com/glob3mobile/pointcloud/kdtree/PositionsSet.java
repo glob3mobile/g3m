@@ -19,7 +19,7 @@ class PositionsSet {
       _positions = positions;
 
       _cartesianPoints = new ArrayList<GVector3D>(positions.size());
-      final EllipsoidalPlanet planet = EllipsoidalPlanet.EARTH;
+      final Planet planet = EllipsoidalPlanet.EARTH;
       for (final Geodetic3D position : positions) {
          final GVector3D point = planet.toCartesian(position);
          _cartesianPoints.add(point);

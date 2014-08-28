@@ -34,5 +34,12 @@ void G3MStreamingPointCloudDemoScene::rawActivate(const G3MContext *context) {
                                                  TimeInterval::zero(),
                                                  false);
 
-  g3mWidget->setAnimatedCameraPosition( Geodetic3D::fromDegrees(39.102078762909024, -77.66098022460936, 50000) );
+  // g3mWidget->setAnimatedCameraPosition( Geodetic3D::fromDegrees(39.102078762909024, -77.66098022460936, 50000) );
+  // g3mWidget->setAnimatedCameraPosition( Geodetic3D::fromDegrees(39.208333053497035792, -77.64400127682505115, 6000) );
+  g3mWidget->setAnimatedCameraPosition( Geodetic3D::fromDegrees(39.23148585629368057, -77.641587694782629114, 5000) );
+
+
+// Camera position=(lat=39.23148585629368057d, lon=-77.641587694782629114d, height=6008.4517767920915503) heading=-0.001518 pitch=-90.000000
+
+
 }

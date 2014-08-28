@@ -14,6 +14,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.glob3mobile.pointcloud.kdtree.EllipsoidalPlanet;
+import com.glob3mobile.pointcloud.kdtree.Planet;
 import com.glob3mobile.pointcloud.octree.PersistentLOD;
 import com.glob3mobile.pointcloud.octree.berkeleydb.BerkeleyDBLOD;
 
@@ -33,8 +35,8 @@ public class PCSSServlet
    public void init(final ServletConfig config) throws ServletException {
       super.init(config);
 
-      _cloudDirectory = new File(System.getProperty("user.dir"));
-      // _cloudDirectory = new File("/Volumes/My Passport/_LIDAR_COPY");
+      //_cloudDirectory = new File(System.getProperty("user.dir"));
+      _cloudDirectory = new File("/Volumes/My Passport/_LIDAR_COPY");
 
       log("initialization of " + getClass() + " at " + _cloudDirectory);
    }
@@ -122,7 +124,9 @@ public class PCSSServlet
          response.setStatus(HttpServletResponse.SC_OK);
          response.setContentType("application/json");
 
-         JSONUtils.sendNodeMetadataJSON(writer, node);
+         final Planet planet = EllipsoidalPlanet.EARTH;
+
+         JSONUtils.sendNodeMetadataJSON(writer, planet, node);
       }
    }
 

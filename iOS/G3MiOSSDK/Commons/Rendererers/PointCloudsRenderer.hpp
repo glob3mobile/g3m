@@ -22,6 +22,8 @@
 class Sector;
 class IDownloader;
 class ITimer;
+class Box;
+class Mesh;
 
 class PointCloudsRenderer : public DefaultRenderer {
 private:
@@ -177,6 +179,7 @@ private:
                             bool expired) {
       // do nothing
     }
+
   };
 
 
@@ -195,20 +198,25 @@ private:
 
     bool _canceled;
 
+    Box* _bounds;
+    std::vector<int>* _lodLevels;
+    std::vector<IFloatBuffer*>* _lodPoints;
+
+    Vector3D* _averagePoint;
+
+    Mesh* _mesh;
+    Mesh* getMesh();
+
+    GLState* _glState;
+    void updateGLState(const G3MRenderContext* rc);
+
+  protected:
+    ~PointCloudNode();
+
   public:
     PointCloudNode(PointCloud* pointCloud,
                    const std::string& cloudName,
-                   const std::string& id) :
-    _pointCloud(pointCloud),
-    _cloudName(cloudName),
-    _id(id),
-    _referenceCountFromPointCloud(1),
-    _isInitialized(false),
-    _downloader(NULL),
-    _metadataRequestID(-1),
-    _canceled(false)
-    {
-    }
+                   const std::string& id);
 
     void retainFromPointCloud() {
       _referenceCountFromPointCloud++;
@@ -218,6 +226,10 @@ private:
     bool releaseFromPointCloud() {
       _referenceCountFromPointCloud--;
       return _release();
+    }
+
+    int getReferenceCountFromPointCloud() const {
+      return _referenceCountFromPointCloud;
     }
 
     void releaseAllFromPointCloud() {
@@ -243,6 +255,9 @@ private:
     void onMetadataError();
 
     void onMetadataCancel();
+
+    void render(const G3MRenderContext* rc,
+                GLState* glState);
 
   };
 

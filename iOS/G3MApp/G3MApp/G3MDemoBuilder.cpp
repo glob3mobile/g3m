@@ -59,7 +59,7 @@ void G3MDemoBuilder::build() {
 
   IG3MBuilder* builder = getG3MBuilder();
 
-//  builder->getPlanetRendererBuilder()->setRenderDebug(true);
+  //builder->getPlanetRendererBuilder()->setRenderDebug(true);
 
   LayerSet* layerSet = new LayerSet();
   builder->getPlanetRendererBuilder()->setLayerSet(layerSet);

@@ -320,7 +320,7 @@ public class BerkeleyDBLOD
                                                                  final DatabaseEntry keyEntry,
                                                                  final DatabaseEntry dataEntry,
                                                                  final byte[] id) {
-      final int maxLevelDelta = 4;
+      final int maxLevelDelta = 3;
       final int maxDescendantDepth = id.length + maxLevelDelta;
       //      final int maxDescendantDepth = 1000;
 

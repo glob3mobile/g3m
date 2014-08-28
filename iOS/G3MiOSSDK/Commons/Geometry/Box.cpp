@@ -220,18 +220,17 @@ Vector3D Box::intersectionWithRay(const Vector3D& origin,
 
 
 void Box::createMesh(Color* color) const {
-  
-  float v[] = {
-    (float) _lower._x, (float) _lower._y, (float) _lower._z,
-    (float) _lower._x, (float) _upper._y, (float) _lower._z,
-    (float) _lower._x, (float) _upper._y, (float) _upper._z,
-    (float) _lower._x, (float) _lower._y, (float) _upper._z,
-    (float) _upper._x, (float) _lower._y, (float) _lower._z,
-    (float) _upper._x, (float) _upper._y, (float) _lower._z,
-    (float) _upper._x, (float) _upper._y, (float) _upper._z,
-    (float) _upper._x, (float) _lower._y, (float) _upper._z
+  double v[] = {
+    _lower._x, _lower._y, _lower._z,
+    _lower._x, _upper._y, _lower._z,
+    _lower._x, _upper._y, _upper._z,
+    _lower._x, _lower._y, _upper._z,
+    _upper._x, _lower._y, _lower._z,
+    _upper._x, _upper._y, _lower._z,
+    _upper._x, _upper._y, _upper._z,
+    _upper._x, _lower._y, _upper._z
   };
-  
+
   short i[] = {
     0, 1, 1, 2, 2, 3, 3, 0,
     1, 5, 5, 6, 6, 2, 2, 1,
@@ -242,24 +241,23 @@ void Box::createMesh(Color* color) const {
   };
   
   FloatBufferBuilderFromCartesian3D* vertices = FloatBufferBuilderFromCartesian3D::builderWithFirstVertexAsCenter();
-  ShortBufferBuilder indices;
-  
-  const unsigned int numVertices = 8;
-  for (unsigned int n=0; n<numVertices; n++) {
+  const int numVertices = 8;
+  for (int n = 0; n < numVertices; n++) {
     vertices->add(v[n*3], v[n*3+1], v[n*3+2]);
   }
   
+  ShortBufferBuilder indices;
   const int numIndices = 48;
-  for (unsigned int n=0; n<numIndices; n++) {
+  for (int n = 0; n < numIndices; n++) {
     indices.add(i[n]);
   }
-  
+
   _mesh = new IndexedMesh(GLPrimitive::lines(),
                           true,
                           vertices->getCenter(),
                           vertices->create(),
                           indices.create(),
-                          1,
+                          2,
                           1,
                           color);
 

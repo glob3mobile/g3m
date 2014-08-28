@@ -8,12 +8,14 @@ import com.glob3mobile.pointcloud.octree.Geodetic3D;
 import es.igosoftware.euclid.vector.GVector3D;
 
 
-public class EllipsoidalPlanet {
+public class EllipsoidalPlanet
+         implements
+            Planet {
 
-   public static final EllipsoidalPlanet EARTH = new EllipsoidalPlanet(new GVector3D(6378137.0, 6378137.0, 6356752.314245));
+   public static final Planet EARTH = new EllipsoidalPlanet(new GVector3D(6378137.0, 6378137.0, 6356752.314245));
 
-   private final GVector3D               _radii;
-   private final GVector3D               _radiiSquared;
+   private final GVector3D    _radii;
+   private final GVector3D    _radiiSquared;
 
 
    //   private final GVector3D               _radiiToTheFourth;
@@ -50,6 +52,7 @@ public class EllipsoidalPlanet {
    }
 
 
+   @Override
    public GVector3D toCartesian(final Angle latitude,
                                 final Angle longitude,
                                 final double height) {
@@ -63,6 +66,7 @@ public class EllipsoidalPlanet {
    }
 
 
+   @Override
    public GVector3D toCartesian(final Geodetic3D geodetic) {
       return toCartesian(geodetic._latitude, geodetic._longitude, geodetic._height);
    }

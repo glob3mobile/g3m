@@ -20,7 +20,11 @@
 #include "IFactory.hpp"
 #include "JSONArray.hpp"
 #include "JSONString.hpp"
-
+#include "JSONNumber.hpp"
+#include "Box.hpp"
+#include "CompositeMesh.hpp"
+#include "DirectMesh.hpp"
+#include "Camera.hpp"
 
 void PointCloudsRenderer::PointCloudMetadataDownloadListener::onDownload(const URL& url,
                                                                          IByteBuffer* buffer,
@@ -82,7 +86,7 @@ PointCloudsRenderer::PointCloud::~PointCloud() {
        it++) {
     PointCloudNode* node = it->second;
     node->releaseAllFromPointCloud();
-    delete node;
+    //delete node;
   }
 
 
@@ -476,13 +480,13 @@ void PointCloudsRenderer::PointCloud::render(const G3MRenderContext* rc,
     }
   }
 
-#warning DGD at work: render nodes
-//  for (std::map<std::string, PointCloudNode*>::iterator it = _nodes.begin();
-//       it != _nodes.end();
-//       it++) {
-//    PointCloudNode* node = it->second;
-//    node->render(rc, glState);
-//  }
+
+  for (std::map<std::string, PointCloudNode*>::iterator it = _nodes.begin();
+       it != _nodes.end();
+       it++) {
+    PointCloudNode* node = it->second;
+    node->render(rc, glState);
+  }
 }
 
 PointCloudsRenderer::~PointCloudsRenderer() {
@@ -608,7 +612,7 @@ void PointCloudsRenderer::PointCloud::createNode(const std::string& nodeID) {
     _nodesNeedsInitialization = true;
   }
   else {
-    ILogger::instance()->logInfo(" retaining node: %s", nodeID.c_str());
+    //ILogger::instance()->logInfo(" retaining node: %s", nodeID.c_str());
     _nodes[nodeID]->retainFromPointCloud();
   }
 }
@@ -619,15 +623,20 @@ void PointCloudsRenderer::PointCloud::removeNode(const std::string& nodeID) {
     THROW_EXCEPTION("Logic error");
   }
   PointCloudNode* node = _nodes[nodeID];
-  if (node->releaseFromPointCloud()) {
-    ILogger::instance()->logInfo(" deleting node: %s", nodeID.c_str());
+
+  if (node->getReferenceCountFromPointCloud() == 1) {
     node->cancel();
-    delete node;
     _nodes.erase(nodeID);
   }
-  else {
-    ILogger::instance()->logInfo(" releasing node: %s", nodeID.c_str());
+
+  if (node->releaseFromPointCloud()) {
+    ILogger::instance()->logInfo(" deleting node: %s", nodeID.c_str());
+//    node->cancel();
+//    delete node;
   }
+//  else {
+//    ILogger::instance()->logInfo(" releasing node: %s", nodeID.c_str());
+//  }
 }
 
 
@@ -637,6 +646,7 @@ void PointCloudsRenderer::PointCloudNode::initialize(const G3MContext* context,
                                                      long long downloadPriority,
                                                      const TimeInterval& timeToCache,
                                                      bool readExpired) {
+
   if (_downloader == NULL) {
     _downloader = context->getDownloader();
   }
@@ -664,7 +674,6 @@ PointCloudsRenderer::NodeMetadataBufferDownloadListener::NodeMetadataBufferDownl
 
 PointCloudsRenderer::NodeMetadataBufferDownloadListener::~NodeMetadataBufferDownloadListener() {
   _node->_release();
-  _node = NULL;
 }
 
 void PointCloudsRenderer::NodeMetadataBufferDownloadListener::onDownload(const URL& url,
@@ -681,15 +690,48 @@ void PointCloudsRenderer::NodeMetadataBufferDownloadListener::onCancel(const URL
   _node->onMetadataCancel();
 }
 
+PointCloudsRenderer::PointCloudNode::PointCloudNode(PointCloud* pointCloud,
+                                                    const std::string& cloudName,
+                                                    const std::string& id) :
+_pointCloud(pointCloud),
+_cloudName(cloudName),
+_id(id),
+_referenceCountFromPointCloud(1),
+_isInitialized(false),
+_downloader(NULL),
+_metadataRequestID(-1),
+_canceled(false),
+_bounds(NULL),
+_lodLevels(NULL),
+_lodPoints(NULL),
+_averagePoint(NULL),
+_mesh(NULL),
+_glState(new GLState())
+{
+}
 
-void PointCloudsRenderer::PointCloudNode::onMetadataDownload(IByteBuffer* buffer) {
-  if (!_canceled) {
-#warning TODO parse json
+PointCloudsRenderer::PointCloudNode::~PointCloudNode() {
+  delete _mesh;
+
+  delete _bounds;
+  delete _lodLevels;
+
+  delete _averagePoint;
+
+  _glState->_release();
+
+  if (_lodPoints != NULL) {
+    const int lodPointsSize = _lodPoints->size();
+    for (int i = 0; i < lodPointsSize; i++) {
+      IFloatBuffer* levelBuffer = _lodPoints->at(i);
+      delete levelBuffer;
+    }
+    delete _lodPoints;
   }
 
-  delete buffer;
-
-  _metadataRequestID = -1;
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
 }
 
 void PointCloudsRenderer::PointCloudNode::onMetadataError() {
@@ -699,4 +741,122 @@ void PointCloudsRenderer::PointCloudNode::onMetadataError() {
 
 void PointCloudsRenderer::PointCloudNode::onMetadataCancel() {
   _metadataRequestID = -1;
+}
+
+void PointCloudsRenderer::PointCloudNode::onMetadataDownload(IByteBuffer* buffer) {
+  if (!_canceled) {
+    const JSONBaseObject* jsonBaseObject = IJSONParser::instance()->parse(buffer);
+
+    const JSONObject* jsonObject = jsonBaseObject->asObject();
+    if (jsonObject != NULL) {
+      const JSONArray* boundsArray = jsonObject->getAsArray("cartesianEllipsoidalBounds");
+
+      const Vector3D lower(boundsArray->getAsNumber(0)->value(),
+                           boundsArray->getAsNumber(1)->value(),
+                           boundsArray->getAsNumber(2)->value());
+      const Vector3D upper(boundsArray->getAsNumber(3)->value(),
+                           boundsArray->getAsNumber(4)->value(),
+                           boundsArray->getAsNumber(5)->value());
+      _bounds = new Box(lower, upper);
+
+      const JSONArray* lodLevelsArray = jsonObject->getAsArray("lodLevels");
+      const int lodLevelsSize = lodLevelsArray->size();
+      _lodLevels = new std::vector<int>();
+      for (int i = 0; i < lodLevelsSize; i++) {
+        _lodLevels->push_back((int) lodLevelsArray->getAsNumber(i)->value());
+      }
+
+      const JSONArray* averagePointArray = jsonObject->getAsArray("cartesianEllipsoidalAveragePoint");
+      _averagePoint = new Vector3D(averagePointArray->getAsNumber(0)->value(),
+                                   averagePointArray->getAsNumber(1)->value(),
+                                   averagePointArray->getAsNumber(2)->value());
+
+      const JSONArray* lodLevelsPointsArray = jsonObject->getAsArray("lodLevelsCartesianEllipsoidalDeltaPoints");
+      const int lodLevelsPointsSize = lodLevelsPointsArray->size();
+      _lodPoints = new std::vector<IFloatBuffer*>();
+      for (int i = 0; i < lodLevelsPointsSize; i++) {
+        const JSONArray* lodLevelPoints = lodLevelsPointsArray->getAsArray(i);
+        const int lodLevelPointsSize = lodLevelPoints->size();
+
+        if ((lodLevelPointsSize / 3.0) != _lodLevels->at(i)) {
+          THROW_EXCEPTION("Logic error");
+        }
+
+        IFloatBuffer* levelBuffer = IFactory::instance()->createFloatBuffer(lodLevelPointsSize);
+        for (int j = 0; j < lodLevelPointsSize; j++) {
+          const float value = (float) lodLevelPoints->getAsNumber(j)->value();
+          levelBuffer->rawPut(j, value);
+        }
+        _lodPoints->push_back(levelBuffer);
+      }
+
+#warning DGD at work;
+    }
+
+    delete jsonBaseObject;
+  }
+
+  delete buffer;
+
+  _metadataRequestID = -1;
+}
+
+Mesh* PointCloudsRenderer::PointCloudNode::getMesh() {
+  if (_mesh == NULL) {
+    if (_lodPoints != NULL) {
+      CompositeMesh* compositeMesh = new CompositeMesh();
+
+      const int lodPointsSize = _lodPoints->size();
+      for (int i = 0; i < lodPointsSize; i++) {
+        Mesh* levelMesh = new DirectMesh(GLPrimitive::points(),
+                                         false,
+                                         *_averagePoint,
+                                         _lodPoints->at(i),
+                                         1,
+                                         2,
+                                         new Color(Color::white()),
+                                         NULL,
+                                         0,
+                                         false);
+        compositeMesh->addMesh(levelMesh);
+      }
+
+      _mesh = compositeMesh;
+    }
+  }
+  return _mesh;
+}
+
+void PointCloudsRenderer::PointCloudNode::updateGLState(const G3MRenderContext* rc) {
+  const Camera* cam = rc->getCurrentCamera();
+
+  ModelViewGLFeature* f = (ModelViewGLFeature*) _glState->getGLFeature(GLF_MODEL_VIEW);
+  if (f == NULL) {
+    _glState->addGLFeature(new ModelViewGLFeature(cam), true);
+  }
+  else {
+    f->setMatrix(cam->getModelViewMatrix44D());
+  }
+}
+
+
+void PointCloudsRenderer::PointCloudNode::render(const G3MRenderContext* rc,
+                                                 GLState* glState) {
+  const Frustum* frustum = rc->getCurrentCamera()->getFrustumInModelCoordinates();
+  updateGLState(rc);
+
+  _glState->setParent(glState);
+
+//  if (_bounds != NULL) {
+//    _bounds->render(rc, *_glState);
+//  }
+
+  Mesh* mesh = getMesh();
+  if (mesh != NULL) {
+    // mesh->render(rc, glState);
+    const BoundingVolume* boundingVolume = mesh->getBoundingVolume();
+    if ( boundingVolume != NULL && boundingVolume->touchesFrustum(frustum) ) {
+      mesh->render(rc, _glState);
+    }
+  }
 }
