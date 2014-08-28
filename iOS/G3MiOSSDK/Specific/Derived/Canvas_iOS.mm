@@ -336,19 +336,6 @@ void Canvas_iOS::_fillText(const std::string& text,
 }
 
 void Canvas_iOS::_drawImage(const IImage* image,
-                            float destLeft, float destTop) {
-  UIImage* uiImage = ((Image_iOS*) image)->getUIImage();
-  CGImage* cgImage = [uiImage CGImage];
-  CGContextDrawImage(_context,
-                     CGRectMake(destLeft,
-#warning DIEGO Not same behaviour as _drawImage(const IImage* image, srcRect, srcDest) that inverts Y
-                                destTop,
-                                image->getWidth(),
-                                image->getHeight()),
-                     cgImage);
-}
-
-void Canvas_iOS::_drawImage(const IImage* image,
                             float destLeft, float destTop, float destWidth, float destHeight) {
 
   UIImage* uiImage = ((Image_iOS*) image)->getUIImage();
@@ -361,6 +348,27 @@ void Canvas_iOS::_drawImage(const IImage* image,
                                 destWidth,
                                 destHeight),
                      cgImage);
+}
+
+void Canvas_iOS::_drawImage(const IImage* image,
+                            float destLeft, float destTop, float destWidth, float destHeight,
+                            float transparency) {
+  
+  UIImage* uiImage = ((Image_iOS*) image)->getUIImage();
+  CGImage* cgImage = [uiImage CGImage];
+
+  CGContextSetAlpha(_context, transparency);
+
+  
+  CGContextDrawImage(_context,
+                     CGRectMake(destLeft,
+#warning DIEGO Not same behaviour as _drawImage(const IImage* image, srcRect, srcDest) that inverts Y
+                                destTop,
+                                destWidth,
+                                destHeight),
+                     cgImage);
+  
+  CGContextSetAlpha(_context, 1.0);
 }
 
 void Canvas_iOS::_drawImage(const IImage* image,
@@ -387,6 +395,8 @@ void Canvas_iOS::_drawImage(const IImage* image,
   else {
     // Cropping image
     CGRect cropRect = CGRectMake(srcLeft,
+#warning vtp woking
+                                // _canvasHeight - (srcTop + srcHeight), // Bottom
                                  srcTop,
                                  srcWidth,
                                  srcHeight);

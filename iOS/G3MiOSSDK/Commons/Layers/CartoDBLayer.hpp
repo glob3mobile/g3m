@@ -50,7 +50,6 @@ public:
                      "png",
                      timeToCache,
                      readExpired,
-                     Sector::fullSphere(),
                      2,
                      17,
                      isTransparent,

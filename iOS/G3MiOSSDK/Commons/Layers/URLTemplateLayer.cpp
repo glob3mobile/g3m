@@ -39,7 +39,8 @@ _urlTemplate(urlTemplate),
 _dataSector(dataSector),
 _isTransparent(isTransparent),
 _su(NULL),
-_mu(NULL)
+_mu(NULL),
+_tiled(true)
 {
 }
 
@@ -88,15 +89,15 @@ URLTemplateLayer* URLTemplateLayer::newWGS84(const std::string&    urlTemplate,
 
 bool URLTemplateLayer::rawIsEquals(const Layer* that) const {
   URLTemplateLayer* t = (URLTemplateLayer*) that;
-
+  
   if (_isTransparent != t->_isTransparent) {
     return false;
   }
-
+  
   if (_urlTemplate != t->_urlTemplate) {
     return false;
   }
-
+  
   return (_dataSector.isEquals(t->_dataSector));
 }
 
@@ -124,27 +125,27 @@ URL URLTemplateLayer::getFeatureInfoURL(const Geodetic2D& position,
 const std::string URLTemplateLayer::getPath(const LayerTilesRenderParameters* layerTilesRenderParameters,
                                             const Tile* tile,
                                             const Sector& sector) const {
-
+  
   if (_mu == NULL) {
     _mu = IMathUtils::instance();
   }
-
+  
   if (_su == NULL) {
     _su = IStringUtils::instance();
   }
-
+  
   const Vector2I tileTextureResolution = _parameters->_tileTextureResolution;
-
+  
   const int level   = tile->_level;
   const int column  = tile->_column;
   const int numRows = (int) (layerTilesRenderParameters->_topSectorSplitsByLatitude * _mu->pow(2.0, level));
   const int row     = numRows - tile->_row - 1;
-
+  
   const double north = MercatorUtils::latitudeToMeters( sector._upper._latitude );
   const double south = MercatorUtils::latitudeToMeters( sector._lower._latitude );
   const double east  = MercatorUtils::longitudeToMeters( sector._upper._longitude );
   const double west  = MercatorUtils::longitudeToMeters( sector._lower._longitude );
-
+  
   std::string path = _urlTemplate;
   path = _su->replaceSubstring(path, "{width}",          _su->toString( tileTextureResolution._x          ) );
   path = _su->replaceSubstring(path, "{height}",         _su->toString( tileTextureResolution._y          ) );
@@ -160,34 +161,34 @@ const std::string URLTemplateLayer::getPath(const LayerTilesRenderParameters* la
   path = _su->replaceSubstring(path, "{south}",          _su->toString( south                             ) );
   path = _su->replaceSubstring(path, "{west}",           _su->toString( west                              ) );
   path = _su->replaceSubstring(path, "{east}",           _su->toString( east                              ) );
-
+  
   return path;
 }
 
 const URL URLTemplateLayer::createURL(const Tile* tile) const {
-
+  
   if (_mu == NULL) {
     _mu = IMathUtils::instance();
   }
-
+  
   if (_su == NULL) {
     _su = IStringUtils::instance();
   }
-
+  
   const Sector sector = tile->_sector;
-
+  
   const Vector2I tileTextureResolution = _parameters->_tileTextureResolution;
-
+  
   const int level   = tile->_level;
   const int column  = tile->_column;
   const int numRows = (int) (_parameters->_topSectorSplitsByLatitude * _mu->pow(2.0, level));
   const int row     = numRows - tile->_row - 1;
-
+  
   const double north = MercatorUtils::latitudeToMeters( sector._upper._latitude );
   const double south = MercatorUtils::latitudeToMeters( sector._lower._latitude );
   const double east  = MercatorUtils::longitudeToMeters( sector._upper._longitude );
   const double west  = MercatorUtils::longitudeToMeters( sector._lower._longitude );
-
+  
   std::string path = _urlTemplate;
   path = _su->replaceSubstring(path, "{width}",          _su->toString( tileTextureResolution._x          ) );
   path = _su->replaceSubstring(path, "{height}",         _su->toString( tileTextureResolution._y          ) );
@@ -203,7 +204,7 @@ const URL URLTemplateLayer::createURL(const Tile* tile) const {
   path = _su->replaceSubstring(path, "{south}",          _su->toString( south                             ) );
   path = _su->replaceSubstring(path, "{west}",           _su->toString( west                              ) );
   path = _su->replaceSubstring(path, "{east}",           _su->toString( east                              ) );
-
+  
   return URL(path, false);
 }
 
@@ -211,27 +212,27 @@ std::vector<Petition*> URLTemplateLayer::createTileMapPetitions(const G3MRenderC
                                                                 const LayerTilesRenderParameters* layerTilesRenderParameters,
                                                                 const Tile* tile) const {
   std::vector<Petition*> petitions;
-
+  
   const Sector tileSector = tile->_sector;
   if (!_dataSector.touchesWith(tileSector)) {
     return petitions;
   }
-
+  
   const Sector sector = tileSector.intersection(_dataSector);
   if (sector._deltaLatitude.isZero() ||
       sector._deltaLongitude.isZero() ) {
     return petitions;
   }
-
+  
   const std::string path = getPath(layerTilesRenderParameters, tile, sector);
-
+  
   petitions.push_back( new Petition(sector,
                                     URL(path, false),
                                     _timeToCache,
                                     _readExpired,
                                     _isTransparent,
                                     _transparency) );
-
+  
   return petitions;
 }
 
@@ -240,7 +241,7 @@ RenderState URLTemplateLayer::getRenderState() {
   if (_urlTemplate.compare("") == 0) {
     _errors.push_back("Missing layer parameter: urlTemplate");
   }
-
+  
   if (_errors.size() > 0) {
     return RenderState::error(_errors);
   }
@@ -252,26 +253,20 @@ const TileImageContribution* URLTemplateLayer::rawContribution(const Tile* tile)
   if (tileP == NULL) {
     return NULL;
   }
-
+  
   const Sector requestedImageSector = tileP->_sector;
-
+  
   if (!_dataSector.touchesWith(requestedImageSector)) {
     return NULL;
   }
-  else if (_dataSector.fullContains(requestedImageSector) && (tile == tileP)) {
-    //Most common case tile of suitable level being fully coveraged by layer
+  
+  if (tile == tileP && ( _dataSector.fullContains(requestedImageSector) || _tiled )) {
     return ((_isTransparent || (_transparency < 1))
             ? TileImageContribution::fullCoverageTransparent(_transparency)
             : TileImageContribution::fullCoverageOpaque());
   }
-  else {
-    const Sector contributionSector = _dataSector.intersection(requestedImageSector);
-    if (contributionSector.hasNoArea()){
-      return NULL;
-    }
-
-    return ((_isTransparent || (_transparency < 1))
-            ? TileImageContribution::partialCoverageTransparent(contributionSector, _transparency)
-            : TileImageContribution::partialCoverageOpaque(contributionSector));
-  }
+  
+  return  ((_isTransparent || (_transparency < 1))
+           ? TileImageContribution::partialCoverageTransparent(requestedImageSector, _transparency)
+           : TileImageContribution::partialCoverageOpaque(requestedImageSector));
 }

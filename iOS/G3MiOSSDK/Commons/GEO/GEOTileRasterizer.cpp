@@ -91,7 +91,7 @@ public:
 
       _canvas = _geoTileRasterizer->getCanvas(width, height);
 
-      _canvas->drawImage(_originalImage, 0, 0);
+      _canvas->drawImage(_originalImage, 0, 0, _originalImage->getWidth(), _originalImage->getHeight());
 
       _projection = new GEORasterProjection(tile->_sector,
                                             tile->_mercator,

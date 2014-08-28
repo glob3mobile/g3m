@@ -99,11 +99,19 @@ protected:
   virtual void _fillText(const std::string& text,
                          float left, float top) = 0;
 
-  virtual void _drawImage(const IImage* image,
-                          float destLeft, float destTop) = 0;
+//  virtual void _drawImage(const IImage* image,
+//                          float destLeft, float destTop) = 0;
+//  
+//  virtual void _drawImage(const IImage* image,
+//                          float destLeft, float destTop,
+//                          float transparency) = 0;
 
   virtual void _drawImage(const IImage* image,
                           float destLeft, float destTop, float destWidth, float destHeight) = 0;
+  
+  virtual void _drawImage(const IImage* image,
+                          float destLeft, float destTop, float destWidth, float destHeight,
+                          float transparency) = 0;
 
   virtual void _drawImage(const IImage* image,
                           float srcLeft, float srcTop, float srcWidth, float srcHeight,
@@ -219,11 +227,19 @@ public:
   void fillText(const std::string& text,
                 float left, float top);
 
-  void drawImage(const IImage* image,
-                 float destLeft, float destTop);
+//  void drawImage(const IImage* image,
+//                 float destLeft, float destTop);
+//  
+//  void drawImage(const IImage* image,
+//                 float destLeft, float destTop,
+//                 float transparency);
 
   void drawImage(const IImage* image,
                  float destLeft, float destTop, float destWidth, float destHeight);
+  
+  void drawImage(const IImage* image,
+                          float destLeft, float destTop, float destWidth, float destHeight,
+                          float transparency);
 
   void drawImage(const IImage* image,
                  float srcLeft, float srcTop, float srcWidth, float srcHeight,

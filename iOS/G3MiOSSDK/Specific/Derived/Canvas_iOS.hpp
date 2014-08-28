@@ -92,12 +92,14 @@ protected:
 
   void _fillText(const std::string& text,
                  float left, float top);
-
-  void _drawImage(const IImage* image,
-                  float destLeft, float destTop);
-
+  
   void _drawImage(const IImage* image,
                   float destLeft, float destTop, float destWidth, float destHeight);
+  
+  
+  void _drawImage(const IImage* image,
+                  float destLeft, float destTop, float destWidth, float destHeight,
+                  float transparency);
 
   void _drawImage(const IImage* image,
                   float srcLeft, float srcTop, float srcWidth, float srcHeight,

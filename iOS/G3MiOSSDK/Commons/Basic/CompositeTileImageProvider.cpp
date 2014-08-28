@@ -224,25 +224,6 @@ void CompositeTileImageProvider::Composer::done() {
   }
 }
 
-RectangleF* CompositeTileImageProvider::Composer::getInnerRectangle(int wholeSectorWidth,
-                                                                    int wholeSectorHeight,
-                                                                    const Sector& wholeSector,
-                                                                    const Sector& innerSector) const {
-  if (wholeSector.isNan() || innerSector.isNan() || wholeSector.isEquals(innerSector)){
-    return new RectangleF(0, 0, wholeSectorWidth, wholeSectorHeight);
-  }
-
-  const double widthFactor  = innerSector._deltaLongitude.div(wholeSector._deltaLongitude);
-  const double heightFactor = innerSector._deltaLatitude.div(wholeSector._deltaLatitude);
-
-  const Vector2D lowerUV = wholeSector.getUVCoordinates(innerSector.getNW());
-
-  return new RectangleF((float) (lowerUV._x   * wholeSectorWidth),
-                        (float) (lowerUV._y   * wholeSectorHeight),
-                        (float) (widthFactor  * wholeSectorWidth),
-                        (float) (heightFactor * wholeSectorHeight));
-}
-
 void CompositeTileImageProvider::Composer::mixResult() {
   if (_canceled) {
     cleanUp();
@@ -253,34 +234,48 @@ void CompositeTileImageProvider::Composer::mixResult() {
 
   canvas->initialize(_width, _height);
   
-  std::string imageId = "";
+  IStringBuilder* imageId = IStringBuilder::newStringBuilder();
   
   for (int i = 0; i < _contributionsSize; i++) {
     const ChildResult* result = _results[i];
-    imageId += result->_imageId + "|";
+
+    
+    imageId->addString(result->_imageId);
+    imageId->addString("|");
 
     const IImage* image = result->_image;
-    const float   alpha = result->_contribution->_alpha;
-    const Sector* imageSector = result->_contribution->getSector();
     
-#warning Question: I (vtp) think it is not necessary to do this check: I think it is not necessary to do this check inside the "if clause": imageSector->isNan()
-    
-    if (result->_contribution->isFullCoverageAndOpaque() ) {
-      canvas->drawImage(image, 0, 0);
+    const float alpha = result->_contribution->_alpha;
+
+    if (result->_contribution->isFullCoverage()) {
+      if ( result->_contribution->isOpaque() ) {
+        canvas->drawImage(image, 0, 0, _width, _height);
+      } else {
+        imageId->addFloat(alpha);
+        imageId->addString("|");
+        
+        canvas->drawImage(image, 0, 0, _width, _height, alpha);
+      }
     }
     else {
+      const Sector* imageSector = result->_contribution->getSector();
       const Sector visibleContributionSector = imageSector->intersection(_tileSector);
-      imageId += "_" + visibleContributionSector.description();
+      
+      imageId->addString(visibleContributionSector.id());
+      imageId->addString("|");
 
-      const RectangleF* srcRect = getInnerRectangle(_width, _height,
-                                                    *imageSector,
-                                                    visibleContributionSector);
-
-      const RectangleF* destRect = getInnerRectangle(_width, _height,
-                                                     _tileSector,
-                                                     visibleContributionSector);
-      //We add "destRect->description()" to "imageId" for to differentiate cases of same "visibleContributionSector" at different levels of tiles
-      imageId += "_" + destRect->description();
+      const RectangleF* srcRect = RectangleF::calculateInnerRectangleFromSector(image->getWidth(), image->getHeight(),
+                                                                                *imageSector,
+                                                                                visibleContributionSector);
+      
+      const RectangleF* destRect = RectangleF::calculateInnerRectangleFromSector(_width, _height,
+                                                                                _tileSector,
+                                                                                visibleContributionSector);
+      
+      //We add "destRect->id()" to "imageId" for to differentiate cases of same "visibleContributionSector" at different levels of tiles
+      
+      imageId->addString(destRect->id());
+      imageId->addString("|");
       
       canvas->drawImage(image,
                         //SRC RECT
@@ -295,7 +290,9 @@ void CompositeTileImageProvider::Composer::mixResult() {
       delete srcRect;
     }
   }
-  _imageId = imageId;
+  _imageId = imageId->getString();
+  
+  delete imageId;
 
   canvas->createImage(new ComposerImageListener(this), true);
 

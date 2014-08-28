@@ -19,6 +19,7 @@ class URLTemplateLayer : public RasterLayer {
 private:
   const std::string _urlTemplate;
   const bool        _isTransparent;
+  const bool        _tiled;
 
 #ifdef C_CODE
   mutable const IMathUtils*   _mu;

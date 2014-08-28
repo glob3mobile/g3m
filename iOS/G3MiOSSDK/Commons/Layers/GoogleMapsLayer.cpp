@@ -209,16 +209,16 @@ const TileImageContribution* GoogleMapsLayer::rawContribution(const Tile* tile) 
   if (tileP == NULL) {
     return NULL;
   }
-  else if (tile == tileP) {
+  
+  if (tile == tileP) {
     //Most common case tile of suitable level being fully coveraged by layer
     return ((_transparency < 1)
             ? TileImageContribution::fullCoverageTransparent(_transparency)
             : TileImageContribution::fullCoverageOpaque());
   }
-  else {
-    const Sector requestedImageSector = tileP->_sector;
-    return ((_transparency < 1)
+  
+  const Sector requestedImageSector = tileP->_sector;
+  return ((_transparency < 1)
             ? TileImageContribution::partialCoverageTransparent(requestedImageSector, _transparency)
             : TileImageContribution::partialCoverageOpaque(requestedImageSector));
-  }
 }

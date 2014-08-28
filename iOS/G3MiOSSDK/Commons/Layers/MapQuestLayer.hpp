@@ -42,7 +42,6 @@ private:
                      "jpg",
                      timeToCache,
                      readExpired,
-                     Sector::fullSphere(),
                      initialLevel,
                      maxLevel,
                      false, // isTransparent

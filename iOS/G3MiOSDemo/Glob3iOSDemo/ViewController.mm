@@ -417,8 +417,16 @@ public:
                                                                      5,
                                                                      10,
                                                                      0,
-                                                                     17,
-                                                                     Vector2I(512, 512),
+                                                                     12,
+                                                                     Vector2I(256, 256),
+                                                                     LayerTilesRenderParameters::defaultTileMeshResolution(),
+                                                                     false);
+  LayerTilesRenderParameters* ltrp3 = new LayerTilesRenderParameters(Sector::fullSphere(),
+                                                                     5,
+                                                                     10,
+                                                                     0,
+                                                                     13,
+                                                                     Vector2I(256, 256),
                                                                      LayerTilesRenderParameters::defaultTileMeshResolution(),
                                                                      false);
   
@@ -457,16 +465,16 @@ public:
       WMSLayer* blueMarble = new WMSLayer("bmng200405",
                                           URL("http://www.nasa.network.com/wms?", false),
                                           WMS_1_1_0,
-//                                          Sector::fromDegrees(40.1240143280790858,
-//                                                              -5.8964874640814313,
-//                                                              40.3723148480663158,
-//                                                              -5.4816079822178570),
+                                          Sector::fromDegrees(40.1240143280790858,
+                                                              -5.8964874640814313,
+                                                              40.3723148480663158,
+                                                              -5.4816079822178570),
 //                                          Sector::fromDegrees(0,
 //                                                              -90,
 //                                                              45,
 //                                                              0),
 //                                          Sector::fullSphere(),
-                                          Sector::fromDegrees(39.13, -6.86, 39.66, -6.05),
+//                                          Sector::fromDegrees(39.13, -6.86, 39.66, -6.05),
 
                                           "image/jpeg",
                                           "EPSG:4326",
@@ -476,21 +484,21 @@ public:
                                           //NULL,
                                           TimeInterval::fromDays(0),
                                           true,
-                                          ltrp2,
+                                          NULL,
                                           1);
-  //layerSet->addLayer(blueMarble);
-  //layerSet->addLayer(pnoa);
+  layerSet->addLayer(blueMarble);
+  layerSet->addLayer(pnoa);
   
  
   
-  layerSet->addLayer(new URLTemplateLayer("http://195.57.27.86:9080/geoserver/gwc/service/tms/1.0.0/sigaytocc:AytoCC/{level}/{x}/{y2}.png",
-                       Sector::fromDegrees(39.13, -6.86, 39.66, -6.05),
-                       true,
-                       TimeInterval::fromDays(30),
-                       true,
-                       new LevelTileCondition(5, 16),
-                                          ltrp2));
-                       
+//  layerSet->addLayer(new URLTemplateLayer("http://195.57.27.86:9080/geoserver/gwc/service/tms/1.0.0/sigaytocc:AytoCC/{level}/{x}/{y2}.png",
+//                       Sector::fromDegrees(39.13, -6.86, 39.66, -6.05),
+//                       true,
+//                       TimeInterval::fromDays(30),
+//                       true,
+//                       new LevelTileCondition(5, 16),
+//                                          ltrp2));
+  
 
   
   
@@ -506,9 +514,9 @@ public:
   
   //  layerSet->addLayer(MapQuestLayer::newOSM(TimeInterval::fromDays(30)));
   builder.getPlanetRendererBuilder()->setLayerSet(layerSet);
-  //builder.getPlanetRendererBuilder()->setRenderDebug(true);
+  builder.getPlanetRendererBuilder()->setRenderDebug(true);
   
-  builder.getPlanetRendererBuilder()->setDefaultTileBackGroundImage(new DownloaderImageBuilder(URL("https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcTAxqqnjI5-2zr3pn4o6mpXLKWL-yyjQey798hEH2mrWuF7MuyL")));
+  builder.getPlanetRendererBuilder()->setDefaultTileBackGroundImage(new DownloaderImageBuilder(URL("http://www.freelogovectors.net/wp-content/uploads/2013/02/sheep-b.png")));
 
 //  builder.getPlanetRendererBuilder()->setDefaultTileBackGroundImage(new DownloaderImageBuilder(URL("http://192.168.1.127:8080/web/img/tileNotFound.jpg")));
 //  const Sector sector = Sector::fromDegrees(40.1540143280790858, -5.8664874640814313,
@@ -523,13 +531,175 @@ public:
   
   //builder.setShownSector(sector);
   builder.getPlanetRendererBuilder()->setForceFirstLevelTilesRenderOnStart(forceFirstLevelTilesRenderOnStart);
+  //ShapesRenderer* shapesRenderer = [self createShapesRendererForTestImageDrawingOfCanvas: builder.getPlanet()];
+  //builder.addRenderer(shapesRenderer);
+
+  
+  
   builder.initializeWidget();
-      [[self G3MWidget] widget]->setAnimatedCameraPosition(TimeInterval::fromSeconds(5),
-                                                           Geodetic3D::fromDegrees(39.13,
-                                                                                   -6.86,
-                                                                                   10076.892613024946));
+  
+  
+  [[self G3MWidget] widget]->setAnimatedCameraPosition(TimeInterval::fromSeconds(5),
+                                                       Geodetic3D::fromDegrees(40.20,
+                                                                               -5.6,
+                                                                               100076.892613024946));
+
+  //      [[self G3MWidget] widget]->setAnimatedCameraPosition(TimeInterval::fromSeconds(5),
+//                                                           Geodetic3D::fromDegrees(39.13,
+//                                                                                   -6.86,
+//                                                                                   10076.892613024946));
+//  
+ 
+//  [[self G3MWidget] widget]->setAnimatedCameraPosition(TimeInterval::fromSeconds(5),
+//                                                       Geodetic3D::fromDegrees(28.410728,
+//                                                                               -16.339417,
+//                                                                               100076.892613024946));
+//
+  
   
 }
+
+- (ShapesRenderer*) createShapesRendererForTestImageDrawingOfCanvas : (const Planet*) planet
+{
+  ShapesRenderer* shapesRenderer = new ShapesRenderer();
+  Shape* quad1 = new QuadShape(new Geodetic3D(Angle::fromDegrees(37.78333333),
+                                              Angle::fromDegrees(-122 - 2),
+                                              824000 / 2),
+                               RELATIVE_TO_GROUND,
+                               URL("file:///hud.png", false),
+                               //50000, 50000,
+                               663000, 824000,
+                               false);
+  
+  //shapesRenderer->addShape(quad1);
+  
+  class QuadListener: public IImageListener {
+    ShapesRenderer* _sr;
+  public:
+    QuadListener(ShapesRenderer* sr):_sr(sr) {
+      
+    }
+    
+    void imageCreated(const IImage* image) {
+      
+      Shape* quadImages = new QuadShape(new Geodetic3D(Angle::fromDegrees(28.410728),
+                                                       Angle::fromDegrees(-16.339417),
+                                                       8000),
+                                        RELATIVE_TO_GROUND,
+                                        image,
+                                        2560,
+                                        2560,
+                                        false);
+      
+      _sr->addShape(quadImages);
+    }
+  };
+  
+  Image_iOS *image = new Image_iOS([[UIImage alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"Icon-72" ofType:@"png"]], NULL);
+
+  
+  
+  ICanvas* canvas = IFactory::instance()->createCanvas();
+  
+  const int _width =  256;
+  
+  const int _height =  256;
+  
+  
+  
+  canvas->initialize(_width, _height);
+  
+  const RectangleF* srcRect = new RectangleF(0,0,72,72);
+  
+  const RectangleF* destRect = new RectangleF(128,128,72,72);
+  
+  //Test 1
+  
+//  canvas->drawImage(image,
+//                    184,
+//                    184);
+//  
+//  canvas->drawImage(image2,
+//                    184,
+//                    72);
+  
+  
+  //Test 2
+  
+  canvas->drawImage(image,
+                    0,
+                    0,
+                    256,
+                    256);
+//
+//  canvas->drawImage(image,
+//                    128,
+//                    128,
+//                    -72,
+//                    -72);
+//  
+//  canvas->drawImage(image,
+//                    128,
+//                    128,
+//                    -72,
+//                    72);
+//  
+//  canvas->drawImage(image,
+//                    128,
+//                    128,
+//                    72,
+//                    -72);
+//  
+//  canvas->drawImage(image,
+//                    128,
+//                    128,
+//                    72,
+//                    72);
+  
+  //Test 3
+  
+  canvas->drawImage(image,
+                    //SRC RECT
+                    0, 0,
+                    54, 54,
+                    //DEST RECT
+                    0, 0,
+                    192, 192
+                    );
+  
+  canvas->drawImage(image,
+                    //SRC RECT
+                    0, 0,
+                    54, 54,
+                    //DEST RECT
+                    0, 64,
+                    192, 192
+                    );
+  
+//  canvas->drawImage(image,
+//                    //SRC RECT
+//                    30, 30,
+//                    12, 12,
+//                    //DEST RECT
+//                    107, 149,
+//                    42.66, 42.66
+//                    );
+  
+  
+  
+  
+  delete destRect;
+  delete srcRect;
+  
+  canvas->createImage(new QuadListener(shapesRenderer), true);
+  
+  delete canvas;
+  
+  delete image;
+
+  return shapesRenderer;
+}
+
 
 - (void) initWithBuilderAndSegmentedWorld
 {
@@ -1948,7 +2118,6 @@ public:
                                                                  "png",
                                                                  TimeInterval::fromDays(30),
                                                                  true,
-                                                                 Sector::fullSphere(),
                                                                  2,
                                                                  11,
                                                                  false, // isTransparent

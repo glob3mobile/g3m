@@ -160,7 +160,8 @@ public:
     
     const Angle clampLatitude(const Angle& latitude) const;
     const Angle clampLongitude(const Angle& longitude) const;
-    
+  
+    const std::string id() const;
     const std::string description() const;
 #ifdef JAVA_CODE
     @Override

@@ -169,16 +169,32 @@ void ICanvas::fillText(const std::string& text,
   _fillText(text, left, top);
 }
 
-void ICanvas::drawImage(const IImage* image,
-                        float destLeft, float destTop) {
-  checkInitialized();
-  _drawImage(image, destLeft, destTop);
-}
+//void ICanvas::drawImage(const IImage* image,
+//                        float destLeft, float destTop) {
+//  checkInitialized();
+//  _drawImage(image, destLeft, destTop);
+//}
+//
+//void ICanvas::drawImage(const IImage* image,
+//                        float destLeft, float destTop,
+//                        float transparency) {
+//  checkInitialized();
+//  _drawImage(image, destLeft, destTop,
+//            transparency);
+//}
 
 void ICanvas::drawImage(const IImage* image,
                         float destLeft, float destTop, float destWidth, float destHeight) {
   checkInitialized();
   _drawImage(image, destLeft, destTop, destWidth, destHeight);
+}
+
+void ICanvas::drawImage(const IImage* image,
+                        float destLeft, float destTop, float destWidth, float destHeight,
+                        float transparency)
+{
+  checkInitialized();
+  _drawImage(image, destLeft, destTop, destWidth, destHeight, transparency);
 }
 
 void ICanvas::drawImage(const IImage* image,

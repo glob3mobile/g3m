@@ -32,12 +32,12 @@ class DTT_LTMInitializer : public LazyTextureMappingInitializer {
 private:
   const Tile* _tile;
   const Tile* _ancestor;
-
+  
   float _translationU;
   float _translationV;
   float _scaleU;
   float _scaleV;
-
+  
   const TileTessellator* _tessellator;
 #ifdef C_CODE
   const Vector2I _resolution;
@@ -45,7 +45,7 @@ private:
 #ifdef JAVA_CODE
   private final Vector2I _resolution;
 #endif
-
+  
 public:
   DTT_LTMInitializer(const Vector2I& resolution,
                      const Tile* tile,
@@ -60,47 +60,47 @@ public:
   _scaleU(1),
   _scaleV(1)
   {
-
+    
   }
-
+  
   virtual ~DTT_LTMInitializer() {
 #ifdef JAVA_CODE
     super.dispose();
 #endif
-
+    
   }
-
+  
   void initialize() {
     // The default scale and translation are ok when (tile == _ancestor)
     if (_tile != _ancestor) {
       const Sector tileSector = _tile->_sector;
-
+      
       const Vector2F lowerTextCoordUV = _tessellator->getTextCoord(_ancestor,
                                                                    tileSector._lower);
-
+      
       const Vector2F upperTextCoordUV = _tessellator->getTextCoord(_ancestor,
                                                                    tileSector._upper);
-
+      
       _translationU = lowerTextCoordUV._x;
       _translationV = upperTextCoordUV._y;
-
+      
       _scaleU = upperTextCoordUV._x - lowerTextCoordUV._x;
       _scaleV = lowerTextCoordUV._y - upperTextCoordUV._y;
     }
   }
-
+  
   const Vector2F getTranslation() const {
     return Vector2F(_translationU, _translationV);
   }
-
+  
   const Vector2F getScale() const {
     return Vector2F(_scaleU, _scaleV);
   }
-
+  
   IFloatBuffer* createTextCoords() const {
     return _tessellator->createTextCoords(_resolution, _tile);
   }
-
+  
 };
 
 class DTT_TileTextureBuilder;
@@ -115,7 +115,7 @@ private:
   const Tile* _tile;
   const IImage* _backGroundTileImage;
   const std::string _backGroundTileImageName;
-
+  
 #ifdef C_CODE
   const Vector2I       _tileTextureResolution;
 #endif
@@ -123,27 +123,22 @@ private:
   private final Vector2I _tileTextureResolution;
 #endif
   
-  RectangleF* getInnerRectangle(int wholeSectorWidth,
-                                int wholeSectorHeight,
-                                const Sector& wholeSector,
-                                const Sector& innerSector) const;
-  
 public:
   DTT_TileImageListener(DTT_TileTextureBuilder* builder,
                         const Tile* tile, const Vector2I& tileTextureResolution,
                         const IImage* backGroundTileImage,
                         const std::string& _backGroundTileImageName);
-
+  
   virtual ~DTT_TileImageListener();
-
+  
   void imageCreated(const std::string&           tileId,
                     const IImage*                image,
                     const std::string&           imageId,
                     const TileImageContribution* contribution);
-
+  
   void imageCreationError(const std::string& tileId,
                           const std::string& error);
-
+  
   void imageCreationCanceled(const std::string& tileId);
   
   
@@ -169,56 +164,79 @@ private:
   FrameTasksExecutor* _frameTasksExecutor;
   const IImage* _backGroundTileImage;
   const std::string _backGroundTileImageName;
-
-
+  const bool _ownedTexCoords;
+  const bool _transparent;
+  const bool _generateMipmap;
+  
+  
   static const TextureIDReference* getTopLevelTextureIdForTile(Tile* tile) {
     LeveledTexturedMesh* mesh = (LeveledTexturedMesh*) tile->getTexturizedMesh();
-
+    
     return (mesh == NULL) ? NULL : mesh->getTopLevelTextureId();
   }
-
+  
   static LeveledTexturedMesh* createMesh(Tile* tile,
                                          const Mesh* tessellatorMesh,
                                          const Vector2I tileMeshResolution,
-                                         const TileTessellator* tessellator) {
+                                         const TileTessellator* tessellator,
+                                         TexturesHandler*     texturesHandler,
+                                         const IImage*  backGroundTileImage,
+                                         const std::string& backGroundTileImageName,
+                                         const bool ownedTexCoords,
+                                         const bool transparent,
+                                         const bool generateMipmap) {
     std::vector<LazyTextureMapping*>* mappings = new std::vector<LazyTextureMapping*>();
-
+    
     Tile* ancestor = tile;
     bool fallbackSolved = false;
     while (ancestor != NULL && !fallbackSolved) {
-      const bool ownedTexCoords = true;
-      const bool transparent    = false;
+      
       LazyTextureMapping* mapping = new LazyTextureMapping(new DTT_LTMInitializer(tileMeshResolution,
                                                                                   tile,
                                                                                   ancestor,
                                                                                   tessellator),
                                                            ownedTexCoords,
                                                            transparent);
-
+      
       if (ancestor != tile) {
         const TextureIDReference* glTextureId = getTopLevelTextureIdForTile(ancestor);
         if (glTextureId != NULL) {
           TextureIDReference* glTextureIdRetainedCopy = glTextureId->createCopy();
-
+          
           mapping->setGLTextureId(glTextureIdRetainedCopy);
           fallbackSolved = true;
         }
       }
-
+      
       mappings->push_back(mapping);
-
+      
       ancestor = ancestor->getParent();
     }
-
-    //backGroundTextureMesh
+    
+    if (!fallbackSolved && backGroundTileImage != NULL) {
+      LazyTextureMapping* mapping = new LazyTextureMapping(new DTT_LTMInitializer(tileMeshResolution,
+                                                                                  tile,
+                                                                                  tile,
+                                                                                  tessellator),
+                                                           true,
+                                                           false);
+      const TextureIDReference* glTextureId = texturesHandler->getTextureIDReference(backGroundTileImage,
+                                                                                     GLFormat::rgba(),
+                                                                                     backGroundTileImageName,
+                                                                                     generateMipmap);
+      mapping->setGLTextureId(glTextureId); //Mandatory to active mapping
+      
+      mappings->push_back(mapping);
+      
+    }
     
     return new LeveledTexturedMesh(tessellatorMesh,
                                    false,
                                    mappings);
   }
-
+  
 public:
-
+  
   DTT_TileTextureBuilder(const G3MRenderContext*           rc,
                          const LayerTilesRenderParameters* layerTilesRenderParameters,
                          TileImageProvider*                tileImageProvider,
@@ -241,32 +259,40 @@ public:
   _logTilesPetitions(logTilesPetitions),
   _frameTasksExecutor(frameTasksExecutor),
   _backGroundTileImage(backGroundTileImage),
-  _backGroundTileImageName(backGroundTileImageName)
+  _backGroundTileImageName(backGroundTileImageName),
+  _ownedTexCoords(true),
+  _transparent(false),
+  _generateMipmap(true)
+
   {
     _tileImageProvider->_retain();
-
+    
     _texturedMesh = createMesh(tile,
                                tessellatorMesh,
                                layerTilesRenderParameters->_tileMeshResolution,
-                               tessellator);
+                               tessellator,
+                               _texturesHandler,
+                               backGroundTileImage,
+                               backGroundTileImageName,
+                               _ownedTexCoords,
+                               _transparent,
+                               _generateMipmap);
   }
-
+  
   LeveledTexturedMesh* getTexturedMesh() {
     return _texturedMesh;
   }
-
+  
   void start() {
     if (!_canceled) {
       const TileImageContribution* contribution = _tileImageProvider->contribution(_tile);
       if (contribution == NULL) {
         if (_tile != NULL) {
-          ILogger::instance()->logInfo("Start without contribution...");
           imageCreated(_backGroundTileImage->shallowCopy(), _backGroundTileImageName, TileImageContribution::fullCoverageOpaque());
           //_tile->setTextureSolved(true);
         }
       }
       else {
-        ILogger::instance()->logInfo("Start with contribution...");
         _tileImageProvider->create(_tile,
                                    contribution,
                                    _tileTextureResolution,
@@ -278,7 +304,7 @@ public:
       }
     }
   }
-
+  
   void cancel(bool cleanTile) {
     _texturedMesh = NULL;
     if (cleanTile) {
@@ -289,37 +315,36 @@ public:
       _tileImageProvider->cancel(_tileId);
     }
   }
-
+  
   bool isCanceled() const {
     return _canceled;
   }
-
+  
   ~DTT_TileTextureBuilder() {
     _tileImageProvider->_release();
 #ifdef JAVA_CODE
     super.dispose();
 #endif
   }
-
+  
   bool uploadTexture(const IImage*      image,
                      const std::string& imageId) {
-    const bool generateMipmap = true;
-
+    
     const TextureIDReference* glTextureId = _texturesHandler->getTextureIDReference(image,
                                                                                     GLFormat::rgba(),
                                                                                     imageId,
-                                                                                    generateMipmap);
+                                                                                    _generateMipmap);
     if (glTextureId == NULL) {
       return false;
     }
-
+    
     if (!_texturedMesh->setGLTextureIdForLevel(0, glTextureId)) {
       delete glTextureId;
     }
-
+    
     return true;
   }
-
+  
   void imageCreated(const IImage*                image,
                     const std::string&           imageId,
                     const TileImageContribution* contribution) {
@@ -328,16 +353,16 @@ public:
         _tile->setTextureSolved(true);
       }
     }
-
+    
     delete image;
     TileImageContribution::releaseContribution( contribution );
   }
-
+  
   void imageCreationError(const std::string& error) {
 #warning Diego at work
     ILogger::instance()->logError("%s", error.c_str());
   }
-
+  
   void imageCreationCanceled() {
 #warning Diego at work
   }
@@ -370,7 +395,6 @@ public:
   }
   
   void imageCreated(const IImage* image) {
-    ILogger::instance()->logInfo("Image %s", image->description().c_str());
     _builder->imageCreated(image,_imageId,_contribution);
   }
 };
@@ -405,62 +429,67 @@ void DTT_TileImageListener::imageCreated(const std::string&           tileId,
                                          const IImage*                image,
                                          const std::string&           imageId,
                                          const TileImageContribution* contribution) {
+  
+  if (!contribution->isFullCoverageAndOpaque()){
     
-#warning JM at WORK: CREAR CANVAS SOURCE RECTANGLE Y DEST RECTANGLE. EL LISTENER DEL CANVAS TIENE QUE HACER UN RETAIN Y UN RELEASE DEL BUILDER. METER DEFAULTIMAGEPROVIDER (CLASE QUE GENERA UNA IMAGEN). QUE RENDER STATE DEVUELVA BUSY HASTA QUE NO TENGA LA IMAGEN DEFAULT, PARA QUE PUEDA ARRANCAR EL GLOBO.
-  
-  
-  
-  
- if (!contribution->isFullCoverageAndOpaque()){
-
-      std::string auxImageId = "";
-      
-      // retain the singleResult->_contribution as the _listener take full ownership of the contribution
-      TileImageContribution::retainContribution(contribution);
-      
-      ILogger::instance()->logInfo("DTT_TileImageListener received image that does not fit tile. Building new Image....");
-
-      ICanvas* canvas = IFactory::instance()->createCanvas();
-      
-      const int _width =  _tileTextureResolution._x;
-      
-      const int _height =  _tileTextureResolution._y;
-
-      const Sector tileSector = _tile->_sector;
-
-      ILogger::instance()->logInfo("Tile " + _tile->description());
-
-      canvas->initialize(_width, _height);
+    IStringBuilder* auxImageId = IStringBuilder::newStringBuilder();
     
-      if (_backGroundTileImage != NULL) {
-        canvas->drawImage(_backGroundTileImage, 0, 0);
-        auxImageId += _backGroundTileImageName + "|";
-      }
-   
-      auxImageId += imageId + "|";
-      
-      const float   alpha = contribution->_alpha;
+    // retain the singleResult->_contribution as the _listener take full ownership of the contribution
+    TileImageContribution::retainContribution(contribution);
+    
+    //ILogger::instance()->logInfo("DTT_TileImageListener received image that does not fit tile. Building new Image....");
+    
+    ICanvas* canvas = IFactory::instance()->createCanvas();
+    
+    const int _width =  _tileTextureResolution._x;
+    
+    const int _height =  _tileTextureResolution._y;
+    
+    const Sector tileSector = _tile->_sector;
+    
+    //ILogger::instance()->logInfo("Tile " + _tile->description());
+    
+    canvas->initialize(_width, _height);
+    
+    if (_backGroundTileImage != NULL) {
+      auxImageId->addString(_backGroundTileImageName);
+      auxImageId->addString("|");
+      canvas->drawImage(_backGroundTileImage, 0, 0, _width, _height);
+    }
+    
+    auxImageId->addString(imageId);
+    auxImageId->addString("|");
+    
+    const float   alpha = contribution->_alpha;
+    
+    if (contribution->isFullCoverage()) {
+      auxImageId->addFloat(alpha);
+      auxImageId->addString("|");
+      canvas->drawImage(image, 0, 0, _width, _height, alpha);
+    } else {
       const Sector* imageSector = contribution->getSector();
       
       const Sector visibleContributionSector = imageSector->intersection(tileSector);
       
-      auxImageId += visibleContributionSector.description()+ "|";
-
+      auxImageId->addString(visibleContributionSector.id());
+      auxImageId->addString("|");
       
-      const RectangleF* srcRect = getInnerRectangle(_width, _height,
-                                                    *imageSector,
-                                                    visibleContributionSector);
+      const RectangleF* srcRect = RectangleF::calculateInnerRectangleFromSector(image->getWidth(), image->getHeight(),
+                                                                                *imageSector,
+                                                                                visibleContributionSector);
       
-      const RectangleF* destRect = getInnerRectangle(_width, _height,
-                                                     tileSector,
-                                                     *imageSector);
-    
-      //We add "destRect->description()" to "auxImageId" for to differentiate cases of same "visibleContributionSector" at different levels of tiles
-      auxImageId += destRect->description()+ "|";
-
-    
-      ILogger::instance()->logInfo("destRect " + destRect->description());
-
+      const RectangleF* destRect = RectangleF::calculateInnerRectangleFromSector(_width, _height,
+                                                                                 tileSector,
+                                                                                 visibleContributionSector);
+      
+      
+      //We add "destRect->id()" to "auxImageId" for to differentiate cases of same "visibleContributionSector" at different levels of tiles
+      auxImageId->addString(destRect->id());
+      auxImageId->addString("|");
+      
+      
+      //ILogger::instance()->logInfo("destRect " + destRect->description());
+      
       
       canvas->drawImage(image,
                         //SRC RECT
@@ -471,19 +500,21 @@ void DTT_TileImageListener::imageCreated(const std::string&           tileId,
                         destRect->_width, destRect->_height,
                         alpha);
       
-   
+      
       
       
       delete destRect;
       delete srcRect;
+    }
     
-      canvas->createImage(new DTT_NotFullProviderImageListener(_builder, auxImageId, contribution), true);
-      
-      delete canvas;
+    canvas->createImage(new DTT_NotFullProviderImageListener(_builder, auxImageId->getString(), contribution), true);
     
-   } else {
-      _builder->imageCreated(image, imageId, contribution);
-   }
+    delete auxImageId;
+    delete canvas;
+    
+  } else {
+    _builder->imageCreated(image, imageId, contribution);
+  }
 }
 
 void DTT_TileImageListener::imageCreationError(const std::string& tileId,
@@ -495,46 +526,26 @@ void DTT_TileImageListener::imageCreationCanceled(const std::string& tileId) {
   _builder->imageCreationCanceled();
 }
 
-RectangleF* DTT_TileImageListener::getInnerRectangle(int wholeSectorWidth,
-                                                                    int wholeSectorHeight,
-                                                                    const Sector& wholeSector,
-                                                                    const Sector& innerSector) const {
-  if (wholeSector.isNan() || innerSector.isNan() || wholeSector.isEquals(innerSector)){
-    return new RectangleF(0, 0, wholeSectorWidth, wholeSectorHeight);
-  }
-  
-  const double widthFactor  = innerSector._deltaLongitude.div(wholeSector._deltaLongitude);
-  const double heightFactor = innerSector._deltaLatitude.div(wholeSector._deltaLatitude);
-  
-  const Vector2D lowerUV = wholeSector.getUVCoordinates(innerSector.getNW());
-  
-  return new RectangleF((float) (lowerUV._x   * wholeSectorWidth),
-                        (float) (lowerUV._y   * wholeSectorHeight),
-                        (float) (widthFactor  * wholeSectorWidth),
-                        (float) (heightFactor * wholeSectorHeight));
-}
-
-
 class DTT_TileTextureBuilderHolder : public ITexturizerData {
 private:
   DTT_TileTextureBuilder* _builder;
-
+  
 public:
   DTT_TileTextureBuilderHolder(DTT_TileTextureBuilder* builder) :
   _builder(builder)
   {
   }
-
+  
   DTT_TileTextureBuilder* get() const {
     return _builder;
   }
-
+  
   ~DTT_TileTextureBuilderHolder() {
     if (_builder != NULL) {
       _builder->_release();
     }
   }
-
+  
 #ifndef C_CODE
   void unusedMethod() { }
 #endif
@@ -544,36 +555,36 @@ public:
 class DTT_TileTextureBuilderStartTask : public FrameTask {
 private:
   DTT_TileTextureBuilder* _builder;
-
+  
 public:
   DTT_TileTextureBuilderStartTask(DTT_TileTextureBuilder* builder) :
   _builder(builder)
   {
     _builder->_retain();
   }
-
+  
   virtual ~DTT_TileTextureBuilderStartTask() {
     _builder->_release();
 #ifdef JAVA_CODE
     super.dispose();
 #endif
   }
-
+  
   void execute(const G3MRenderContext* rc) {
     _builder->start();
   }
-
+  
   bool isCanceled(const G3MRenderContext* rc) {
     return _builder->isCanceled();
   }
 };
 
 DefaultTileTexturizer::DefaultTileTexturizer(IImageBuilder* defaultBackGroundImageBuilder) :
-  _defaultBackGroundImageBuilder(defaultBackGroundImageBuilder),
-  _defaultBackGroundImageLoaded(false)
+_defaultBackGroundImageBuilder(defaultBackGroundImageBuilder),
+_defaultBackGroundImageLoaded(false)
 {
   ILogger::instance()->logInfo("Create texturizer...");
-
+  
 }
 
 
@@ -585,7 +596,7 @@ LeveledTexturedMesh* DefaultTileTexturizer::getMesh(Tile* tile) const {
 
 RenderState DefaultTileTexturizer::getRenderState(LayerSet* layerSet) {
   //ILogger::instance()->logInfo("Check render state texturizer...");
-
+  
   if (!_defaultBackGroundImageLoaded) {
     return RenderState::busy();
   }
@@ -626,7 +637,7 @@ public:
 void DefaultTileTexturizer::initialize(const G3MContext* context,
                                        const TilesRenderParameters* parameters) {
   ILogger::instance()->logInfo("Initializing texturizer...");
-
+  
   _defaultBackGroundImageBuilder->build(context, new DTT_IImageBuilderListener(this), true);
   
   // do nothing
@@ -634,7 +645,7 @@ void DefaultTileTexturizer::initialize(const G3MContext* context,
 
 Mesh* DefaultTileTexturizer::texturize(const G3MRenderContext* rc,
                                        const TileTessellator* tessellator,
-//                                       TileRasterizer* tileRasterizer,
+                                       //                                       TileRasterizer* tileRasterizer,
                                        const LayerTilesRenderParameters* layerTilesRenderParameters,
                                        const LayerSet* layerSet,
                                        bool forceFullRender,
@@ -644,21 +655,21 @@ Mesh* DefaultTileTexturizer::texturize(const G3MRenderContext* rc,
                                        Mesh* previousMesh,
                                        bool logTilesPetitions) {
   DTT_TileTextureBuilderHolder* builderHolder = (DTT_TileTextureBuilderHolder*) tile->getTexturizerData();
-
+  
   //  TileImageProvider* tileImageProvider = new DebugTileImageProvider();
   //  TileImageProvider* tileImageProvider = new ChessboardTileImageProvider();
-
+  
 #warning TODO: creates the TileImageProvider from the LayerSet (and Rasterizer?)
   TileImageProvider* tileImageProvider = layerSet->getTileImageProvider(rc,
                                                                         layerTilesRenderParameters);
-
+  
   if (tileImageProvider == NULL) {
 #warning TODO: error callback
     tile->setTextureSolved(true);
     tile->setTexturizerDirty(false);
     return NULL;
   }
-
+  
   DTT_TileTextureBuilder* builder;
   if (builderHolder == NULL) {
     builder = new DTT_TileTextureBuilder(rc,
@@ -678,20 +689,20 @@ Mesh* DefaultTileTexturizer::texturize(const G3MRenderContext* rc,
   else {
     builder = builderHolder->get();
   }
-
+  
   // get the mesh just before calling start(), if not... the start(ed) task can finish immediately
   // and as one consequence the builder got deleted and the "builder" pointer becomes a dangling pointer
   Mesh* texturizedMesh = builder->getTexturedMesh();
-
+  
   if (forceFullRender) {
     builder->start();
   }
   else {
     rc->getFrameTasksExecutor()->addPreRenderTask( new DTT_TileTextureBuilderStartTask(builder) );
   }
-
+  
   tile->setTexturizerDirty(false);
-
+  
   return texturizedMesh;
 }
 
@@ -729,28 +740,28 @@ void DefaultTileTexturizer::ancestorTexturedSolvedChanged(Tile* tile,
   if (!textureSolved) {
     return;
   }
-
+  
   if (tile->isTextureSolved()) {
     return;
   }
-
+  
   LeveledTexturedMesh* ancestorMesh = getMesh(ancestorTile);
   if (ancestorMesh == NULL) {
     return;
   }
-
+  
   const TextureIDReference* glTextureId = ancestorMesh->getTopLevelTextureId();
   if (glTextureId == NULL) {
     return;
   }
-
+  
   LeveledTexturedMesh* tileMesh = getMesh(tile);
   if (tileMesh == NULL) {
     return;
   }
-
+  
   const TextureIDReference* glTextureIdRetainedCopy = glTextureId->createCopy();
-
+  
   const int level = tile->_level - ancestorTile->_level;
   if (!tileMesh->setGLTextureIdForLevel(level, glTextureIdRetainedCopy)) {
     delete glTextureIdRetainedCopy;

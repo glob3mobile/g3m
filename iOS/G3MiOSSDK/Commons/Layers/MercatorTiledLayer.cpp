@@ -28,7 +28,6 @@ MercatorTiledLayer::MercatorTiledLayer(const std::string&              protocol,
                                        const std::string&              imageFormat,
                                        const TimeInterval&             timeToCache,
                                        const bool                      readExpired,
-                                       const Sector&                   dataSector,
                                        const int                       initialLevel,
                                        const int                       maxLevel,
                                        const bool                      isTransparent,
@@ -54,8 +53,7 @@ _subdomains(subdomains),
 _imageFormat(imageFormat),
 _initialLevel(initialLevel),
 _maxLevel(maxLevel),
-_isTransparent(isTransparent),
-_dataSector(dataSector)
+_isTransparent(isTransparent)
 {
 }
 
@@ -63,6 +61,7 @@ URL MercatorTiledLayer::getFeatureInfoURL(const Geodetic2D& position,
                                           const Sector& sector) const {
   return URL();
 }
+
 
 std::vector<Petition*> MercatorTiledLayer::createTileMapPetitions(const G3MRenderContext* rc,
                                                                   const LayerTilesRenderParameters* layerTilesRenderParameters,
@@ -72,11 +71,12 @@ std::vector<Petition*> MercatorTiledLayer::createTileMapPetitions(const G3MRende
   std::vector<Petition*> petitions;
 
   const Sector tileSector = tile->_sector;
-  if (!_dataSector.touchesWith(tileSector)) {
-    return petitions;
-  }
-
-  const Sector sector = tileSector.intersection(_dataSector);
+  const Sector sector = tileSector;
+//  if (!_dataSector.touchesWith(tileSector)) {
+//    return petitions;
+//  }
+//
+//  const Sector sector = tileSector.intersection(_dataSector);
   if (sector._deltaLatitude.isZero() ||
       sector._deltaLongitude.isZero() ) {
     return petitions;
@@ -188,7 +188,6 @@ MercatorTiledLayer* MercatorTiledLayer::copy() const {
                                 _imageFormat,
                                 _timeToCache,
                                 _readExpired,
-                                _dataSector,
                                 _initialLevel,
                                 _maxLevel,
                                 _isTransparent,
@@ -211,11 +210,7 @@ bool MercatorTiledLayer::rawIsEquals(const Layer* that) const {
   if (_imageFormat != t->_imageFormat) {
     return false;
   }
-
-  if (!_dataSector.isEquals(t->_dataSector)) {
-    return false;
-  }
-
+  
   if (_initialLevel != t->_initialLevel) {
     return false;
   }
@@ -257,26 +252,16 @@ const TileImageContribution* MercatorTiledLayer::rawContribution(const Tile* til
   if (tileP == NULL) {
     return NULL;
   }
-
-  const Sector requestedImageSector = tileP->_sector;
-
-  if (!_dataSector.touchesWith(requestedImageSector)) {
-    return NULL;
-  }
-  else if (_dataSector.fullContains(requestedImageSector) && (tile == tileP)) {
+  
+  if (tile == tileP) {
     //Most common case tile of suitable level being fully coveraged by layer
-    return ((_isTransparent || (_transparency < 1))
+    return ((_transparency < 1)
             ? TileImageContribution::fullCoverageTransparent(_transparency)
             : TileImageContribution::fullCoverageOpaque());
   }
-  else {
-    const Sector contributionSector = _dataSector.intersection(requestedImageSector);
-    if (contributionSector.hasNoArea()){
-      return NULL;
-    }
-
-    return ((_isTransparent || (_transparency < 1))
-            ? TileImageContribution::partialCoverageTransparent(contributionSector, _transparency)
-            : TileImageContribution::partialCoverageOpaque(contributionSector));
-  }
+  
+  const Sector requestedImageSector = tileP->_sector;
+  return ((_transparency < 1)
+          ? TileImageContribution::partialCoverageTransparent(requestedImageSector, _transparency)
+          : TileImageContribution::partialCoverageOpaque(requestedImageSector));
 }
