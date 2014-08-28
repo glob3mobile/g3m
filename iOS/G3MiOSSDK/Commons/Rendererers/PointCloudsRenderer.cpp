@@ -287,16 +287,21 @@ _canceled(false)
 }
 
 void PointCloudsRenderer::TileLayout::cancel() {
-  _canceled = true;
-  if (_downloader != NULL && _layoutRequestID >= 0) {
-    ILogger::instance()->logInfo(" => Canceling initialization of tile " + _tileID + " (" + _tileQuadKey + ") for cloud \"" + _cloudName + "\"");
-    _downloader->cancelRequest(_layoutRequestID);
+  if (_canceled) {
+#warning TODO
   }
+  else {
+    _canceled = true;
+    if (_downloader != NULL && _layoutRequestID >= 0) {
+      ILogger::instance()->logInfo(" => Canceling initialization of tile " + _tileID + " (" + _tileQuadKey + ") for cloud \"" + _cloudName + "\"");
+      _downloader->cancelRequest(_layoutRequestID);
+    }
 
-  const int size = _nodesIDs.size();
-  for (int i = 0; i < size; i++) {
-    const std::string nodeID = _nodesIDs[i];
-    _pointCloud->removeNode(nodeID);
+    const int size = _nodesIDs.size();
+    for (int i = 0; i < size; i++) {
+      const std::string nodeID = _nodesIDs[i];
+      _pointCloud->removeNode(nodeID);
+    }
   }
 }
 
@@ -607,7 +612,7 @@ void PointCloudsRenderer::PointCloud::createNode(const std::string& nodeID) {
 #warning DGD at work!
 
   if (_nodes.find(nodeID) == _nodes.end()) {
-    ILogger::instance()->logInfo(" creating node: %s", nodeID.c_str());
+    //ILogger::instance()->logInfo(" creating node: %s", nodeID.c_str());
     _nodes[nodeID] = new PointCloudNode(this, _cloudName, nodeID);
     _nodesNeedsInitialization = true;
   }
@@ -630,7 +635,7 @@ void PointCloudsRenderer::PointCloud::removeNode(const std::string& nodeID) {
   }
 
   if (node->releaseFromPointCloud()) {
-    ILogger::instance()->logInfo(" deleting node: %s", nodeID.c_str());
+    //ILogger::instance()->logInfo(" deleting node: %s", nodeID.c_str());
 //    node->cancel();
 //    delete node;
   }
@@ -659,10 +664,15 @@ void PointCloudsRenderer::PointCloudNode::initialize(const G3MContext* context,
 }
 
 void PointCloudsRenderer::PointCloudNode::cancel() {
-  _canceled = true;
-  if (_downloader != NULL && _metadataRequestID >= 0) {
-    ILogger::instance()->logInfo(" => Canceling initialization of node " + _id + " for cloud \"" + _cloudName + "\"");
-    _downloader->cancelRequest(_metadataRequestID);
+  if (_canceled) {
+#warning TODO
+  }
+  else {
+    _canceled = true;
+    if (_downloader != NULL && _metadataRequestID >= 0) {
+      ILogger::instance()->logInfo(" => Canceling initialization of node " + _id + " for cloud \"" + _cloudName + "\"");
+      _downloader->cancelRequest(_metadataRequestID);
+    }
   }
 }
 
@@ -804,24 +814,35 @@ void PointCloudsRenderer::PointCloudNode::onMetadataDownload(IByteBuffer* buffer
 Mesh* PointCloudsRenderer::PointCloudNode::getMesh() {
   if (_mesh == NULL) {
     if (_lodPoints != NULL) {
-      CompositeMesh* compositeMesh = new CompositeMesh();
+//      CompositeMesh* compositeMesh = new CompositeMesh();
+//
+//      const int lodPointsSize = _lodPoints->size();
+//      for (int i = 0; i < lodPointsSize; i++) {
+//        Mesh* levelMesh = new DirectMesh(GLPrimitive::points(),
+//                                         false,
+//                                         *_averagePoint,
+//                                         _lodPoints->at(i),
+//                                         1,
+//                                         2,
+//                                         new Color(Color::white()),
+//                                         NULL,
+//                                         0,
+//                                         false);
+//        compositeMesh->addMesh(levelMesh);
+//      }
+//
+//      _mesh = compositeMesh;
 
-      const int lodPointsSize = _lodPoints->size();
-      for (int i = 0; i < lodPointsSize; i++) {
-        Mesh* levelMesh = new DirectMesh(GLPrimitive::points(),
-                                         false,
-                                         *_averagePoint,
-                                         _lodPoints->at(i),
-                                         1,
-                                         2,
-                                         new Color(Color::white()),
-                                         NULL,
-                                         0,
-                                         false);
-        compositeMesh->addMesh(levelMesh);
-      }
-
-      _mesh = compositeMesh;
+      _mesh = new DirectMesh(GLPrimitive::points(),
+                             false,
+                             *_averagePoint,
+                             _lodPoints->at(0),
+                             1,
+                             2,
+                             new Color(Color::white()),
+                             NULL,
+                             0,
+                             false);
     }
   }
   return _mesh;
@@ -854,7 +875,8 @@ void PointCloudsRenderer::PointCloudNode::render(const G3MRenderContext* rc,
   Mesh* mesh = getMesh();
   if (mesh != NULL) {
     // mesh->render(rc, glState);
-    const BoundingVolume* boundingVolume = mesh->getBoundingVolume();
+    // const BoundingVolume* boundingVolume = mesh->getBoundingVolume();
+    const BoundingVolume* boundingVolume = _bounds;
     if ( boundingVolume != NULL && boundingVolume->touchesFrustum(frustum) ) {
       mesh->render(rc, _glState);
     }

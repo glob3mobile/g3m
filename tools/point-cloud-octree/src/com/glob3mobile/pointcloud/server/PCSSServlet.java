@@ -23,8 +23,8 @@ import es.igosoftware.util.XStringTokenizer;
 
 
 public class PCSSServlet
-         extends
-            HttpServlet {
+extends
+HttpServlet {
    private static final long                serialVersionUID = 1L;
 
    private final Map<String, PersistentLOD> _openedDBs       = new HashMap<String, PersistentLOD>();
@@ -35,8 +35,8 @@ public class PCSSServlet
    public void init(final ServletConfig config) throws ServletException {
       super.init(config);
 
-      //_cloudDirectory = new File(System.getProperty("user.dir"));
-      _cloudDirectory = new File("/Volumes/My Passport/_LIDAR_COPY");
+      _cloudDirectory = new File(System.getProperty("user.dir"));
+      //_cloudDirectory = new File("/Volumes/My Passport/_LIDAR_COPY");
 
       log("initialization of " + getClass() + " at " + _cloudDirectory);
    }

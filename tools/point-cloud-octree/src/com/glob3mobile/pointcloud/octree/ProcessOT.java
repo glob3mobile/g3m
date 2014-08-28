@@ -8,6 +8,7 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.imageio.ImageIO;
@@ -62,9 +63,9 @@ public class ProcessOT {
       final int cacheSizeInBytes = 1024 * 1024 * 1024;
 
       final boolean createMapForSourceOT = false;
-      final boolean createLOD = true;
-      final boolean showLODStats = true;
-      //final boolean drawSampleLODNode = false;
+      final boolean createLOD = false;
+      final boolean showLODStats = false;
+      final boolean drawSampleLODNode = true;
 
       if (createMapForSourceOT) {
          try (final PersistentOctree sourceOctree = BerkeleyDBOctree.openReadOnly(sourceCloudName, cacheSizeInBytes)) {
@@ -100,43 +101,43 @@ public class ProcessOT {
          System.out.println();
       }
 
-      //      if (drawSampleLODNode) {
-      //         try (final PersistentLOD lodDB = BerkeleyDBLOD.openReadOnly(cloudDirectory, lodCloudName)) {
-      //            final PersistentLOD.Statistics statistics = lodDB.getStatistics(false, true);
-      //
-      //            final double minHeight = statistics.getMinHeight();
-      //            final double maxHeight = statistics.getMaxHeight();
-      //
-      //
-      //            final String id = "032010023321230000"; // FoundSelf -> OK
-      //            // final String id = "333333333333333"; // FoundNothing -> OK
-      //
-      //            //            final String id = "03201002332123000000"; // NotFoundSelfNorDescendants **** PENDING ***
-      //
-      //            // final String id = "03201002332123000"; // FoundDescendants -> OK
-      //            // final String id = "0320100233212300"; // FoundDescendants -> OK
-      //            //final String id = "03201002332"; // FoundDescendants -> OK
-      //
-      //            final Sector sector = lodDB.getSector(id);
-      //
-      //            final long start = System.currentTimeMillis();
-      //            final List<PersistentLOD.Level> levels = lodDB.getLODLevels(id);
-      //            final long elapsed = System.currentTimeMillis() - start;
-      //            System.out.println("== " + elapsed + "ms");
-      //
-      //            final List<Geodetic3D> accumulatedPoints = new ArrayList<Geodetic3D>();
-      //            long totalPoints = 0;
-      //            for (final PersistentLOD.Level level : levels) {
-      //               System.out.println(level);
-      //               totalPoints += level.size();
-      //
-      //               accumulatedPoints.addAll(level.getPoints());
-      //               generateImage(id, level.getLevel(), sector, accumulatedPoints, minHeight, maxHeight);
-      //            }
-      //            System.out.println("* Total Points=" + totalPoints);
-      //         }
-      //         System.out.println();
-      //      }
+      if (drawSampleLODNode) {
+         try (final PersistentLOD lodDB = BerkeleyDBLOD.openReadOnly(cloudDirectory, lodCloudName, cacheSizeInBytes)) {
+            final PersistentLOD.Statistics statistics = lodDB.getStatistics(false, true);
+
+            final double minHeight = statistics.getMinHeight();
+            final double maxHeight = statistics.getMaxHeight();
+
+
+            final String id = "032010023321230000"; // FoundSelf -> OK
+            // final String id = "333333333333333"; // FoundNothing -> OK
+
+            //            final String id = "03201002332123000000"; // NotFoundSelfNorDescendants **** PENDING ***
+
+            // final String id = "03201002332123000"; // FoundDescendants -> OK
+            // final String id = "0320100233212300"; // FoundDescendants -> OK
+            //final String id = "03201002332"; // FoundDescendants -> OK
+
+            final Sector sector = lodDB.getSector(id);
+
+            final long start = System.currentTimeMillis();
+            final PersistentLOD.Node node = lodDB.getNode(id, true);
+            final long elapsed = System.currentTimeMillis() - start;
+            System.out.println("== " + elapsed + "ms");
+
+            final List<Geodetic3D> accumulatedPoints = new ArrayList<Geodetic3D>();
+            long totalPoints = 0;
+            for (final PersistentLOD.NodeLevel level : node.getLevels()) {
+               System.out.println(level);
+               totalPoints += level.getPointsCount();
+
+               accumulatedPoints.addAll(level.getPoints(null));
+               generateImage(id, level.getLevel(), sector, accumulatedPoints, minHeight, maxHeight);
+            }
+            System.out.println("* Total Points=" + totalPoints);
+         }
+         System.out.println();
+      }
 
    }
 
@@ -153,19 +154,19 @@ public class ProcessOT {
       final BufferedImage image = new BufferedImage(imageWidth, imageHeight, BufferedImage.TYPE_4BYTE_ABGR);
       final Graphics2D g = image.createGraphics();
 
-      //      g.setColor(Color.WHITE);
-      //      g.fillRect(0, 0, imageWidth, imageHeight);
-
-
       g.setColor(Color.WHITE);
+      g.fillRect(0, 0, imageWidth, imageHeight);
 
-      //final double deltaHeight = maxHeight - minHeight;
+
+      //      g.setColor(Color.WHITE);
+
+      final double deltaHeight = maxHeight - minHeight;
 
       for (final Geodetic3D point : points) {
-         //         final float alpha = (float) ((point._height - minHeight) / deltaHeight);
-         //         //final GColorF color = GColorF.BLACK.mixedWidth(GColorF.WHITE, alpha);
-         //         final GColorF color = ProcessOT.interpolateColorFromRamp(GColorF.BLUE, ProcessOT.RAMP, alpha);
-         //         g.setColor(Utils.toAWTColor(color));
+         final float alpha = (float) ((point._height - minHeight) / deltaHeight);
+         //final GColorF color = GColorF.BLACK.mixedWidth(GColorF.WHITE, alpha);
+         final GColorF color = ProcessOT.interpolateColorFromRamp(GColorF.BLUE, ProcessOT.RAMP, alpha);
+         g.setColor(Utils.toAWTColor(color));
 
          final int x = Math.round((float) (sector.getUCoordinate(point._longitude) * imageWidth));
          final int y = Math.round((float) (sector.getVCoordinate(point._latitude) * imageHeight));

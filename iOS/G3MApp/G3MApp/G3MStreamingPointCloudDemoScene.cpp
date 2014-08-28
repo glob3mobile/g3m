@@ -30,7 +30,7 @@ void G3MStreamingPointCloudDemoScene::rawActivate(const G3MContext *context) {
 #warning TODO cache
   model->getPointCloudsRenderer()->addPointCloud(URL("http://192.168.1.6:8080"),
                                                  "Loudoun-VA_LOD",
-                                                 DownloadPriority::HIGHEST,
+                                                 DownloadPriority::LOWER,
                                                  TimeInterval::zero(),
                                                  false);
 

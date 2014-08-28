@@ -50,7 +50,8 @@ _started(false)
   _downloadingHandlers = [NSMutableDictionary dictionary];
   _queuedHandlers      = [NSMutableDictionary dictionary];
 
-  _lock = [[NSLock alloc] init];
+  _lock = [[NSRecursiveLock alloc] init];
+  [_lock setName:@"Downloader_iOS_lock"];
 
   _workers = [NSMutableArray arrayWithCapacity:maxConcurrentOperationCount];
   for (int i = 0; i < maxConcurrentOperationCount; i++) {

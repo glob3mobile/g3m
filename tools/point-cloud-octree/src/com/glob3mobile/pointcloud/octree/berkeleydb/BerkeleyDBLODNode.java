@@ -168,6 +168,13 @@ public class BerkeleyDBLODNode
       }
 
 
+      @Override
+      public String toString() {
+         return "[BerkeleyDBLODNodeLevel id=" + Utils.toIDString(_id) + ", lodLevel=" + _lodLevel + ", points=" + _pointsCount
+                  + ", averagePoint=" + _averagePoint + "]";
+      }
+
+
    }
 
 

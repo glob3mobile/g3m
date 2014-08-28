@@ -145,7 +145,7 @@ public class JSONUtils {
 
       writer.print(',');
       final List<PersistentLOD.NodeLevel> levels = node.getLevels();
-      sendJSON(writer, planet, "lodLevelsCartesianEllipsoidalDeltaPoints", levels.subList(0, Math.min(5, levels.size())), average);
+      sendJSON(writer, planet, "lodLevelsCartesianEllipsoidalDeltaPoints", levels.subList(0, Math.min(4, levels.size())), average);
 
       writer.println('}');
    }
@@ -265,7 +265,7 @@ public class JSONUtils {
 
 
    private static GPair<GAxisAlignedBox, GVector3D> calculateBoundsAndAverage(final Planet planet,
-                                                                              final PersistentLOD.Node node) {
+            final PersistentLOD.Node node) {
       double lowerX = Double.POSITIVE_INFINITY;
       double lowerY = Double.POSITIVE_INFINITY;
       double lowerZ = Double.POSITIVE_INFINITY;
