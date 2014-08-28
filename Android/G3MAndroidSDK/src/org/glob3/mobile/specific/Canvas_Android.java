@@ -249,15 +249,6 @@ public final class Canvas_Android
    @Override
    protected void _drawImage(final IImage image,
                              final float left,
-                             final float top) {
-      final Bitmap bitmap = ((Image_Android) image).getBitmap();
-      _canvas.drawBitmap(bitmap, left, top, null);
-   }
-
-
-   @Override
-   protected void _drawImage(final IImage image,
-                             final float left,
                              final float top,
                              final float width,
                              final float height) {
@@ -269,6 +260,27 @@ public final class Canvas_Android
                left + width, // Right
                top + height); // Bottom
 
+      _canvas.drawBitmap(bitmap, null, dst, null);
+   }
+
+
+   @Override
+   protected void _drawImage(final IImage image,
+                             final float left,
+                             final float top,
+                             final float width,
+                             final float height,
+                             final float transparency) {
+      final Bitmap bitmap = ((Image_Android) image).getBitmap();
+
+      final RectF dst = _rectF;
+      dst.set(left, //
+               top, //
+               left + width, // Right
+               top + height); // Bottom
+
+      final Paint paint = new Paint();
+      paint.setAlpha(Math.round(255 * transparency));
       _canvas.drawBitmap(bitmap, null, dst, null);
    }
 

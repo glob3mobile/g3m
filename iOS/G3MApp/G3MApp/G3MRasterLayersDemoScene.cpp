@@ -118,7 +118,6 @@ void G3MRasterLayersDemoScene::createLayerSet(LayerSet* layerSet) {
                                                                "png",
                                                                TimeInterval::fromDays(90),
                                                                false,
-                                                               Sector::fullSphere(),
                                                                2,
                                                                17,
                                                                true // isTransparent
