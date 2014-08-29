@@ -597,10 +597,38 @@ void PointCloudsRenderer::render(const G3MRenderContext* rc,
 
 void PointCloudsRenderer::changedTilesRendering(const std::vector<const Tile*>* tilesStartedRendering,
                                                 const std::vector<std::string>* tilesStoppedRendering) {
-  for (int i = 0; i < _cloudsSize; i++) {
-    PointCloud* cloud = _clouds[i];
-    cloud->changedTilesRendering(tilesStartedRendering, tilesStoppedRendering);
-  }
+//  for (int i = 0; i < _cloudsSize; i++) {
+//    PointCloud* cloud = _clouds[i];
+//    cloud->changedTilesRendering(tilesStartedRendering, tilesStoppedRendering);
+//  }
+#warning Diego at work
+//  //ILogger::instance()->logInfo("=====================");
+//  for (int i = 0; i < tilesStartedRendering->size(); i++) {
+//    const std::string tileID = tilesStartedRendering->at(i)->_id;
+//    //ILogger::instance()->logInfo(" started: %s", tileID.c_str());
+//    if (_visibleTiles.find(tileID) != _visibleTiles.end()) {
+//      THROW_EXCEPTION("Logic Error");
+//    }
+//    _visibleTiles[tileID] = NULL;
+//  }
+//  for (int i = 0; i < tilesStoppedRendering->size(); i++) {
+//    const std::string tileID = tilesStoppedRendering->at(i);
+//    //ILogger::instance()->logInfo(" stopped: %s", tileID.c_str());
+//    if (_visibleTiles.find(tileID) == _visibleTiles.end()) {
+//      THROW_EXCEPTION("Logic Error");
+//    }
+//    _visibleTiles.erase(tileID);
+//  }
+//
+//  std::string msg = "==> visibles: [";
+//  for (std::map<std::string, void*>::iterator it = _visibleTiles.begin();
+//       it != _visibleTiles.end();
+//       it++) {
+//    const std::string tileID = it->first;
+//    msg += " " + tileID;
+//  }
+//  msg += " ]";
+//  ILogger::instance()->logInfo(msg.c_str());
 }
 
 void PointCloudsRenderer::PointCloudsTileRenderingListener::changedTilesRendering(const std::vector<const Tile*>* tilesStartedRendering,

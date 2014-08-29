@@ -5,16 +5,13 @@ package com.glob3mobile.pointcloud.server;
 import java.io.PrintWriter;
 import java.util.List;
 
-import com.glob3mobile.pointcloud.kdtree.Planet;
 import com.glob3mobile.pointcloud.octree.Angle;
 import com.glob3mobile.pointcloud.octree.Geodetic3D;
 import com.glob3mobile.pointcloud.octree.PersistentLOD;
+import com.glob3mobile.pointcloud.octree.PersistentLOD.Node;
 import com.glob3mobile.pointcloud.octree.Sector;
 
-import es.igosoftware.euclid.bounding.GAxisAlignedBox;
-import es.igosoftware.euclid.vector.GVector3D;
-import es.igosoftware.euclid.vector.IVector3;
-import es.igosoftware.util.GPair;
+import es.igosoftware.util.GTriplet;
 
 
 public class JSONUtils {
@@ -126,36 +123,89 @@ public class JSONUtils {
 
 
    public static void sendNodeMetadataJSON(final PrintWriter writer,
-                                           final Planet planet,
                                            final PersistentLOD.Node node) {
-      final GPair<GAxisAlignedBox, GVector3D> boundsAndAverage = calculateBoundsAndAverage(planet, node);
+      //      final GPair<GAxisAlignedBox, GVector3D> boundsAndAverage = calculateBoundsAndAverage(planet, node);
+
+      final GTriplet<Double, Double, Geodetic3D> minAndMaxHeightsAndAverage = calculateMinAndMaxHeights(node);
 
       writer.print('{');
-      //      sendJSON(writer, "sector", node.getSector());
-      //      writer.print(',');
 
-      sendJSON(writer, "cartesianEllipsoidalBounds", boundsAndAverage._first);
+      sendJSON(writer, "sector", node.getSector());
+      writer.print(',');
+
+      sendJSON(writer, "minHeight", minAndMaxHeightsAndAverage._first.doubleValue());
+      writer.print(',');
+      sendJSON(writer, "maxHeight", minAndMaxHeightsAndAverage._second.doubleValue());
+
+      //      writer.print(',');
+      //      sendJSON(writer, "cartesianEllipsoidalBounds", boundsAndAverage._first);
 
       writer.print(',');
       sendJSON(writer, "lodLevels", node.getLevelsPointsCount());
 
+      final Geodetic3D average = minAndMaxHeightsAndAverage._third;
       writer.print(',');
-      final GVector3D average = boundsAndAverage._second;
-      sendJSON(writer, "cartesianEllipsoidalAveragePoint", average);
+      sendJSON(writer, "averagePositionInRadians", average);
+
+      //      writer.print(',');
+      //      final GVector3D average = boundsAndAverage._second;
+      //      sendJSON(writer, "cartesianEllipsoidalAveragePoint", average);
 
       writer.print(',');
       final List<PersistentLOD.NodeLevel> levels = node.getLevels();
-      sendJSON(writer, planet, "lodLevelsCartesianEllipsoidalDeltaPoints", levels.subList(0, Math.min(4, levels.size())), average);
+      sendJSON(writer, "lodLevelsositionsInRadians", levels.subList(0, Math.min(4, levels.size())), average);
 
       writer.println('}');
    }
 
 
    private static void sendJSON(final PrintWriter writer,
-                                final Planet planet,
+                                final String key,
+                                final Geodetic3D value) {
+      sendJSONKey(writer, key);
+      writer.print('[');
+      writer.print(Double.toString(value._latitude._radians));
+      writer.print(',');
+      writer.print(Double.toString(value._longitude._radians));
+      writer.print(',');
+      writer.print(Double.toString(value._height));
+      writer.print(']');
+   }
+
+
+   private static GTriplet<Double, Double, Geodetic3D> calculateMinAndMaxHeights(final Node node) {
+      double minHeight = Double.POSITIVE_INFINITY;
+      double maxHeight = Double.NEGATIVE_INFINITY;
+      double sumLatitude = 0;
+      double sumLongitude = 0;
+      double sumHeight = 0;
+      long pointsCount = 0;
+      for (final PersistentLOD.NodeLevel level : node.getLevels()) {
+         for (final Geodetic3D pos : level.getPoints(null)) {
+            final double height = pos._height;
+            minHeight = Math.min(minHeight, height);
+            maxHeight = Math.max(maxHeight, height);
+
+            sumLatitude += pos._latitude._radians;
+            sumLongitude += pos._longitude._radians;
+            sumHeight += height;
+            pointsCount++;
+         }
+      }
+
+      final Geodetic3D average = Geodetic3D.fromRadians( //
+               sumLatitude / pointsCount, //
+               sumLongitude / pointsCount, //
+               sumHeight / pointsCount);
+
+      return new GTriplet<Double, Double, Geodetic3D>(minHeight, maxHeight, average);
+   }
+
+
+   private static void sendJSON(final PrintWriter writer,
                                 final String key,
                                 final List<PersistentLOD.NodeLevel> value,
-                                final GVector3D average) {
+                                final Geodetic3D average) {
       sendJSONKey(writer, key);
       writer.print('[');
       boolean first = true;
@@ -166,16 +216,64 @@ public class JSONUtils {
          else {
             writer.print(',');
          }
-         sendJSON(writer, planet, each, average);
+         sendJSON(writer, each, average);
       }
       writer.print(']');
    }
 
 
+   //   private static void sendJSON(final PrintWriter writer,
+   //                                final Planet planet,
+   //                                final String key,
+   //                                final List<PersistentLOD.NodeLevel> value,
+   //                                final GVector3D average) {
+   //      sendJSONKey(writer, key);
+   //      writer.print('[');
+   //      boolean first = true;
+   //      for (final PersistentLOD.NodeLevel each : value) {
+   //         if (first) {
+   //            first = false;
+   //         }
+   //         else {
+   //            writer.print(',');
+   //         }
+   //         sendJSON(writer, planet, each, average);
+   //      }
+   //      writer.print(']');
+   //   }
+
+
+   //   private static void sendJSON(final PrintWriter writer,
+   //                                final Planet planet,
+   //                                final PersistentLOD.NodeLevel level,
+   //                                final GVector3D average) {
+   //      writer.print('[');
+   //
+   //      boolean first = true;
+   //      for (final Geodetic3D pos : level.getPoints(null)) {
+   //         if (first) {
+   //            first = false;
+   //         }
+   //         else {
+   //            writer.print(',');
+   //         }
+   //         final GVector3D point = planet.toCartesian(pos);
+   //
+   //         // System.out.println("geodetic: " + pos + " to cartesian: " + point);
+   //
+   //         writer.print(Float.toString((float) (point.x() - average._x)));
+   //         writer.print(',');
+   //         writer.print(Float.toString((float) (point.y() - average._y)));
+   //         writer.print(',');
+   //         writer.print(Float.toString((float) (point.z() - average._z)));
+   //      }
+   //
+   //      writer.print(']');
+   //   }
+
    private static void sendJSON(final PrintWriter writer,
-                                final Planet planet,
                                 final PersistentLOD.NodeLevel level,
-                                final GVector3D average) {
+                                final Geodetic3D average) {
       writer.print('[');
 
       boolean first = true;
@@ -186,40 +284,37 @@ public class JSONUtils {
          else {
             writer.print(',');
          }
-         final GVector3D point = planet.toCartesian(pos);
 
-         // System.out.println("geodetic: " + pos + " to cartesian: " + point);
-
-         writer.print(Float.toString((float) (point.x() - average._x)));
+         writer.print(Float.toString((float) (pos._latitude._radians - average._latitude._radians)));
          writer.print(',');
-         writer.print(Float.toString((float) (point.y() - average._y)));
+         writer.print(Float.toString((float) (pos._longitude._radians - average._longitude._radians)));
          writer.print(',');
-         writer.print(Float.toString((float) (point.z() - average._z)));
+         writer.print(Float.toString((float) (pos._height - average._height)));
       }
 
       writer.print(']');
    }
 
 
-   private static void sendJSON(final PrintWriter writer,
-                                final String key,
-                                final GAxisAlignedBox value) {
-
-      sendJSONKey(writer, key);
-      writer.print('[');
-      writer.print(Double.toString(value._lower.x()));
-      writer.print(',');
-      writer.print(Double.toString(value._lower.y()));
-      writer.print(',');
-      writer.print(Double.toString(value._lower.z()));
-      writer.print(',');
-      writer.print(Double.toString(value._upper.x()));
-      writer.print(',');
-      writer.print(Double.toString(value._upper.y()));
-      writer.print(',');
-      writer.print(Double.toString(value._upper.z()));
-      writer.print(']');
-   }
+   //   private static void sendJSON(final PrintWriter writer,
+   //                                final String key,
+   //                                final GAxisAlignedBox value) {
+   //
+   //      sendJSONKey(writer, key);
+   //      writer.print('[');
+   //      writer.print(Double.toString(value._lower.x()));
+   //      writer.print(',');
+   //      writer.print(Double.toString(value._lower.y()));
+   //      writer.print(',');
+   //      writer.print(Double.toString(value._lower.z()));
+   //      writer.print(',');
+   //      writer.print(Double.toString(value._upper.x()));
+   //      writer.print(',');
+   //      writer.print(Double.toString(value._upper.y()));
+   //      writer.print(',');
+   //      writer.print(Double.toString(value._upper.z()));
+   //      writer.print(']');
+   //   }
 
 
    //   private static void sendJSON(final PrintWriter writer,
@@ -244,78 +339,78 @@ public class JSONUtils {
    //   }
 
 
-   private static void sendJSON(final PrintWriter writer,
-                                final IVector3 value) {
-      writer.print('[');
-      writer.print(Double.toString(value.x()));
-      writer.print(',');
-      writer.print(Double.toString(value.y()));
-      writer.print(',');
-      writer.print(Double.toString(value.z()));
-      writer.print(']');
-   }
+   //   private static void sendJSON(final PrintWriter writer,
+   //                                final IVector3 value) {
+   //      writer.print('[');
+   //      writer.print(Double.toString(value.x()));
+   //      writer.print(',');
+   //      writer.print(Double.toString(value.y()));
+   //      writer.print(',');
+   //      writer.print(Double.toString(value.z()));
+   //      writer.print(']');
+   //   }
 
 
-   private static void sendJSON(final PrintWriter writer,
-                                final String key,
-                                final IVector3 value) {
-      sendJSONKey(writer, key);
-      sendJSON(writer, value);
-   }
+   //   private static void sendJSON(final PrintWriter writer,
+   //                                final String key,
+   //                                final IVector3 value) {
+   //      sendJSONKey(writer, key);
+   //      sendJSON(writer, value);
+   //   }
 
 
-   private static GPair<GAxisAlignedBox, GVector3D> calculateBoundsAndAverage(final Planet planet,
-            final PersistentLOD.Node node) {
-      double lowerX = Double.POSITIVE_INFINITY;
-      double lowerY = Double.POSITIVE_INFINITY;
-      double lowerZ = Double.POSITIVE_INFINITY;
-
-      double upperX = Double.NEGATIVE_INFINITY;
-      double upperY = Double.NEGATIVE_INFINITY;
-      double upperZ = Double.NEGATIVE_INFINITY;
-
-
-      double sumX = 0;
-      double sumY = 0;
-      double sumZ = 0;
-      long totalPoints = 0;
-
-
-      for (final PersistentLOD.NodeLevel level : node.getLevels()) {
-         for (final Geodetic3D pos : level.getPoints(null)) {
-
-            final GVector3D point = planet.toCartesian(pos);
-            final double x = point._x;
-            final double y = point._y;
-            final double z = point._z;
-
-            lowerX = Math.min(lowerX, x);
-            lowerY = Math.min(lowerY, y);
-            lowerZ = Math.min(lowerZ, z);
-
-            upperX = Math.max(upperX, x);
-            upperY = Math.max(upperY, y);
-            upperZ = Math.max(upperZ, z);
-
-            sumX += x;
-            sumY += y;
-            sumZ += z;
-            totalPoints++;
-         }
-      }
-
-
-      final GVector3D average = new GVector3D( //
-               sumX / totalPoints, //
-               sumY / totalPoints, //
-               sumZ / totalPoints);
-
-      final GAxisAlignedBox bounds = new GAxisAlignedBox( //
-               new GVector3D(lowerX, lowerY, lowerZ), //
-               new GVector3D(upperX, upperY, upperZ));
-
-      return new GPair<GAxisAlignedBox, GVector3D>(bounds, average);
-   }
+   //   private static GPair<GAxisAlignedBox, GVector3D> calculateBoundsAndAverage(final Planet planet,
+   //            final PersistentLOD.Node node) {
+   //      double lowerX = Double.POSITIVE_INFINITY;
+   //      double lowerY = Double.POSITIVE_INFINITY;
+   //      double lowerZ = Double.POSITIVE_INFINITY;
+   //
+   //      double upperX = Double.NEGATIVE_INFINITY;
+   //      double upperY = Double.NEGATIVE_INFINITY;
+   //      double upperZ = Double.NEGATIVE_INFINITY;
+   //
+   //
+   //      double sumX = 0;
+   //      double sumY = 0;
+   //      double sumZ = 0;
+   //      long totalPoints = 0;
+   //
+   //
+   //      for (final PersistentLOD.NodeLevel level : node.getLevels()) {
+   //         for (final Geodetic3D pos : level.getPoints(null)) {
+   //
+   //            final GVector3D point = planet.toCartesian(pos);
+   //            final double x = point._x;
+   //            final double y = point._y;
+   //            final double z = point._z;
+   //
+   //            lowerX = Math.min(lowerX, x);
+   //            lowerY = Math.min(lowerY, y);
+   //            lowerZ = Math.min(lowerZ, z);
+   //
+   //            upperX = Math.max(upperX, x);
+   //            upperY = Math.max(upperY, y);
+   //            upperZ = Math.max(upperZ, z);
+   //
+   //            sumX += x;
+   //            sumY += y;
+   //            sumZ += z;
+   //            totalPoints++;
+   //         }
+   //      }
+   //
+   //
+   //      final GVector3D average = new GVector3D( //
+   //               sumX / totalPoints, //
+   //               sumY / totalPoints, //
+   //               sumZ / totalPoints);
+   //
+   //      final GAxisAlignedBox bounds = new GAxisAlignedBox( //
+   //               new GVector3D(lowerX, lowerY, lowerZ), //
+   //               new GVector3D(upperX, upperY, upperZ));
+   //
+   //      return new GPair<GAxisAlignedBox, GVector3D>(bounds, average);
+   //   }
 
 
    private static void sendJSON(final PrintWriter writer,

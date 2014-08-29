@@ -65,7 +65,7 @@ public class ProcessOT {
       final boolean createMapForSourceOT = false;
       final boolean createLOD = false;
       final boolean showLODStats = false;
-      final boolean drawSampleLODNode = true;
+      final boolean drawSampleLODNode = false;
 
       if (createMapForSourceOT) {
          try (final PersistentOctree sourceOctree = BerkeleyDBOctree.openReadOnly(sourceCloudName, cacheSizeInBytes)) {

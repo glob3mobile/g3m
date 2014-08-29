@@ -369,6 +369,8 @@ private:
 
   TileRenderingListener* _tileRenderingListener;
 
+  std::map<const std::string, void*> _visibleTiles;
+
 protected:
   void onChangedContext();
 

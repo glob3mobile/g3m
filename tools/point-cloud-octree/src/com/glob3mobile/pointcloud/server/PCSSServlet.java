@@ -14,8 +14,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.glob3mobile.pointcloud.kdtree.EllipsoidalPlanet;
-import com.glob3mobile.pointcloud.kdtree.Planet;
 import com.glob3mobile.pointcloud.octree.PersistentLOD;
 import com.glob3mobile.pointcloud.octree.berkeleydb.BerkeleyDBLOD;
 
@@ -23,8 +21,8 @@ import es.igosoftware.util.XStringTokenizer;
 
 
 public class PCSSServlet
-extends
-HttpServlet {
+         extends
+            HttpServlet {
    private static final long                serialVersionUID = 1L;
 
    private final Map<String, PersistentLOD> _openedDBs       = new HashMap<String, PersistentLOD>();
@@ -124,9 +122,9 @@ HttpServlet {
          response.setStatus(HttpServletResponse.SC_OK);
          response.setContentType("application/json");
 
-         final Planet planet = EllipsoidalPlanet.EARTH;
+         //final Planet planet = EllipsoidalPlanet.EARTH;
 
-         JSONUtils.sendNodeMetadataJSON(writer, planet, node);
+         JSONUtils.sendNodeMetadataJSON(writer, node);
       }
    }
 
