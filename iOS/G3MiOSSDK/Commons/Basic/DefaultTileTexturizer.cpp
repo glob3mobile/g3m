@@ -596,7 +596,9 @@ LeveledTexturedMesh* DefaultTileTexturizer::getMesh(Tile* tile) const {
 
 RenderState DefaultTileTexturizer::getRenderState(LayerSet* layerSet) {
   //ILogger::instance()->logInfo("Check render state texturizer...");
-  
+  if (_errors.size() > 0) {
+    return RenderState::error(_errors);
+  }
   if (!_defaultBackGroundImageLoaded) {
     return RenderState::busy();
   }
@@ -630,7 +632,10 @@ public:
   }
   
   void onError(const std::string& error) {
-    //Exception
+    ILogger::instance()->logError(error);
+    _defaultTileTesturizer->_errors.push_back("Can't download background image default");
+    _defaultTileTesturizer->_errors.push_back(error);
+
   }
 };
 
