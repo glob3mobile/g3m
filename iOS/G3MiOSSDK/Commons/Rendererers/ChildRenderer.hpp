@@ -28,7 +28,6 @@ public:
   _renderer(renderer),
   _info(info)
   {
-    
   }
   
   ~ChildRenderer() {

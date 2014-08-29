@@ -29,7 +29,7 @@ CartoDBLayer* CartoDBLayer::copy() const {
                           _transparency,
                           _isTransparent,
                           (_condition == NULL) ? NULL : _condition->copy(),
-                          _disclaimerInfo);
+                          _layerInfo);
 }
 
 RenderState CartoDBLayer::getRenderState() {

@@ -13,7 +13,7 @@
 void DefaultHUDInfoRenderer_ImageFactory::drawOn(ICanvas* canvas,
                                           int width,
                                           int height) {
-  ICanvasUtils::drawStringsOn(_infos,
+  ICanvasUtils::drawStringsOn(_info,
                               canvas,
                               width,
                               height,
@@ -46,19 +46,15 @@ bool DefaultHUDInfoRenderer_ImageFactory::isEquals(const std::vector<std::string
   return true;
 }
 
-bool DefaultHUDInfoRenderer_ImageFactory::setInfos(const std::vector<std::string>& infos) {
-  if ( isEquals(_infos, infos) ) {
-    return false;
-  }
-  
-  _infos.clear();
+bool DefaultHUDInfoRenderer_ImageFactory::setInfo(const std::vector<std::string>& info) {
+  _info.clear();
 #ifdef C_CODE
-  _infos.insert(_infos.end(),
-                infos.begin(),
-                infos.end());
+  _info.insert(_info.end(),
+                info.begin(),
+                info.end());
 #endif
 #ifdef JAVA_CODE
-  _infos.addAll(infos);
+  _info.addAll(info);
 #endif
   
   return true;
@@ -74,7 +70,7 @@ Default_HUDRenderer::~Default_HUDRenderer() {
 
 void Default_HUDRenderer::updateInfo(const std::vector<std::string> &info) {
   DefaultHUDInfoRenderer_ImageFactory* factory = (DefaultHUDInfoRenderer_ImageFactory*) (_hudImageRenderer->getImageFactory());
-  if (factory->setInfos(info)) {
+  if (factory->setInfo(info)) {
     _hudImageRenderer->recreateImage();
   }
 }

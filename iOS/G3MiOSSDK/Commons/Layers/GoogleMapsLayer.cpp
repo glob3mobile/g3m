@@ -23,7 +23,7 @@ GoogleMapsLayer::GoogleMapsLayer(const std::string&    key,
                                  const int             initialLevel,
                                  const float           transparency,
                                  const LayerCondition* condition,
-                                 const std::string&    disclaimerInfo) :
+                                 const std::vector<std::string>&  layerInfo) :
 RasterLayer(timeToCache,
             readExpired,
             new LayerTilesRenderParameters(Sector::fullSphere(),
@@ -36,7 +36,7 @@ RasterLayer(timeToCache,
                                            true),
             transparency,
             condition,
-            disclaimerInfo),
+            layerInfo),
 _key(key),
 _initialLevel(initialLevel)
 {
@@ -175,7 +175,7 @@ GoogleMapsLayer* GoogleMapsLayer::copy() const {
                              _initialLevel,
                              _transparency,
                              (_condition == NULL) ? NULL : _condition->copy(),
-                             _disclaimerInfo);
+                             _layerInfo);
 }
 
 bool GoogleMapsLayer::rawIsEquals(const Layer* that) const {

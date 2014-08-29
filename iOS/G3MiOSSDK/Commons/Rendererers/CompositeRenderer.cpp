@@ -197,7 +197,7 @@ PlanetRenderer* CompositeRenderer::getPlanetRenderer() {
   return result;
 }
 
-std::vector<std::string> CompositeRenderer::getInfo() {
+const std::vector<std::string> CompositeRenderer::getInfo() {
   _info.clear();
   
   for (int i = 0; i < _renderersSize; i++) {

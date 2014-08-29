@@ -18,31 +18,31 @@
 GEOVectorLayer::GEOVectorLayer(const std::vector<const LayerTilesRenderParameters*>& parametersVector,
                                const float                                           transparency,
                                const LayerCondition*                                 condition,
-                               const std::string&                                    disclaimerInfo) :
+                               const std::vector<std::string>&                       layerInfo) :
 VectorLayer(parametersVector,
             transparency,
             condition,
-            disclaimerInfo),
+            layerInfo),
 _tileImageProvider(NULL)
 {
 
 }
 
 
-GEOVectorLayer::GEOVectorLayer(const int             mercatorFirstLevel,
-                               const int             mercatorMaxLevel,
-                               const int             wgs84firstLevel,
-                               const int             wgs84maxLevel,
-                               const float           transparency,
-                               const LayerCondition* condition,
-                               const std::string&    disclaimerInfo) :
+GEOVectorLayer::GEOVectorLayer(const int                        mercatorFirstLevel,
+                               const int                        mercatorMaxLevel,
+                               const int                        wgs84firstLevel,
+                               const int                        wgs84maxLevel,
+                               const float                      transparency,
+                               const LayerCondition*            condition,
+                               const std::vector<std::string>&  layerInfo) :
 VectorLayer(LayerTilesRenderParameters::createDefaultMultiProjection(mercatorFirstLevel,
                                                                      mercatorMaxLevel,
                                                                      wgs84firstLevel,
                                                                      wgs84maxLevel),
             transparency,
             condition,
-            disclaimerInfo),
+            layerInfo),
 _tileImageProvider(NULL)
 {
 

@@ -75,7 +75,7 @@ public:
            const bool                        readExpired,
            const LayerTilesRenderParameters* parameters     = NULL,
            const float                       transparency   = 1,
-           const std::string&                disclaimerInfo = "");
+           const std::vector<std::string>& layerInfo  = std::vector<std::string>());
 
   WMSLayer(const std::string&                mapLayer,
            const URL&                        mapServerURL,
@@ -90,7 +90,7 @@ public:
            const bool                        readExpired,
            const LayerTilesRenderParameters* parameters     = NULL,
            const float                       transparency   = 1,
-           const std::string&                disclaimerInfo = "");
+           const std::vector<std::string>& layerInfo = std::vector<std::string>());
 
   std::vector<Petition*> createTileMapPetitions(const G3MRenderContext* rc,
                                                 const LayerTilesRenderParameters* layerTilesRenderParameters,

@@ -32,7 +32,7 @@ WMSLayer::WMSLayer(const std::string&                mapLayer,
                    const bool                        readExpired,
                    const LayerTilesRenderParameters* parameters,
                    const float                       transparency,
-                   const std::string&                disclaimerInfo):
+                   const std::vector<std::string>&   layerInfo):
 RasterLayer(timeToCache,
             readExpired,
             (parameters == NULL)
@@ -40,7 +40,7 @@ RasterLayer(timeToCache,
             : parameters,
             transparency,
             condition,
-            disclaimerInfo),
+            layerInfo),
 _mapLayer(mapLayer),
 _mapServerURL(mapServerURL),
 _mapServerVersion(mapServerVersion),
@@ -69,7 +69,7 @@ WMSLayer::WMSLayer(const std::string&                mapLayer,
                    const bool                        readExpired,
                    const LayerTilesRenderParameters* parameters,
                    const float                       transparency,
-                   const std::string&                disclaimerInfo):
+                   const std::vector<std::string>&                layerInfo):
 RasterLayer(timeToCache,
             readExpired,
             (parameters == NULL)
@@ -77,7 +77,7 @@ RasterLayer(timeToCache,
             : parameters,
             transparency,
             condition,
-            disclaimerInfo),
+            layerInfo),
 _mapLayer(mapLayer),
 _mapServerURL(mapServerURL),
 _mapServerVersion(mapServerVersion),
@@ -623,7 +623,7 @@ WMSLayer* WMSLayer::copy() const {
                       _readExpired,
                       (_parameters == NULL) ? NULL : _parameters->copy(),
                       _transparency,
-                      _disclaimerInfo);
+                      _layerInfo);
 }
 
 RenderState WMSLayer::getRenderState() {
@@ -650,12 +650,14 @@ const TileImageContribution* WMSLayer::rawContribution(const Tile* tile) const {
   if (tileP == NULL) {
     return NULL;
   }
-
+  
   const Sector requestedImageSector = tileP->_sector;
 
   if (!_dataSector.touchesWith(requestedImageSector)) {
     return NULL;
   }
+ 
+  
   else if (_dataSector.fullContains(requestedImageSector) && (tile == tileP)) {
     //Most common case tile of suitable level being fully coveraged by layer
     return ((_isTransparent || (_transparency < 1))

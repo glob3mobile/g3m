@@ -646,7 +646,7 @@ BingMapsLayer* MapBooBuilder::parseBingMapsLayer(const JSONObject* jsonLayer,
                            25, // maxLevel
                            1, // transparency
                            NULL, // condition
-                           ""); // disclaimerInfo
+                           std::vector<std::string>()); // disclaimerInfo
 }
 
 CartoDBLayer* MapBooBuilder::parseCartoDBLayer(const JSONObject* jsonLayer,
@@ -662,7 +662,7 @@ CartoDBLayer* MapBooBuilder::parseCartoDBLayer(const JSONObject* jsonLayer,
                           1, // transparency
                           transparent, // isTransparent
                           NULL, // condition,
-                          ""); // disclaimerInfo
+                          std::vector<std::string>()); // disclaimerInfo
 }
 
 MapBoxLayer* MapBooBuilder::parseMapBoxLayer(const JSONObject* jsonLayer,
@@ -676,7 +676,7 @@ MapBoxLayer* MapBooBuilder::parseMapBoxLayer(const JSONObject* jsonLayer,
                          19, // maxLevel
                          1, // transparency
                          NULL, // condition
-                         ""); // disclaimerInfo
+                         std::vector<std::string>()); // disclaimerInfo
 }
 
 WMSLayer* MapBooBuilder::parseWMSLayer(const JSONObject* jsonLayer,
@@ -792,7 +792,7 @@ Layer* MapBooBuilder::parseLayer(const JSONBaseObject* jsonBaseObjectLayer) cons
                          2, // initialLevel,
                          1, // transparency,
                          NULL, // condition,
-                         ""); //disclaimerInfo
+                         std::vector<std::string>()); //disclaimerInfo
   }
   else if (layerType.compare("MapQuest") == 0) {
     layer = parseMapQuestLayer(jsonLayer, defaultTimeToCache);
@@ -820,7 +820,7 @@ Layer* MapBooBuilder::parseLayer(const JSONBaseObject* jsonBaseObjectLayer) cons
   
   const std::string layerAttribution = jsonLayer->getAsString("attribution", "");
   if (layerAttribution.compare("") != 0) {
-    layer->setInfo(layerAttribution);
+    layer->addInfo(layerAttribution);
   }
   return layer;
 }

@@ -33,7 +33,8 @@ private:
 
   ChangedRendererInfoListener* _changedInfoListener;
 
-  std::vector<std::string> getInfo();
+  const std::vector<std::string> getInfo();
+  
 public:
   CompositeRenderer():
   _context(NULL),

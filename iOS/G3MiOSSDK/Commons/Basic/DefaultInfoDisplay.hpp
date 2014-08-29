@@ -16,7 +16,7 @@
 
 class DefaultHUDInfoRenderer_ImageFactory : public HUDImageRenderer::CanvasImageFactory {
 private:
-  std::vector<std::string> _infos;
+  std::vector<std::string> _info;
   
 protected:
   
@@ -31,7 +31,7 @@ public:
   ~DefaultHUDInfoRenderer_ImageFactory() {
   }
   
-  bool setInfos(const std::vector<std::string>& infos);
+  bool setInfo(const std::vector<std::string>& info);
 };
 
 class Default_HUDRenderer : public DefaultRenderer {

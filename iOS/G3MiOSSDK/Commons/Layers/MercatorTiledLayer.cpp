@@ -33,7 +33,7 @@ MercatorTiledLayer::MercatorTiledLayer(const std::string&              protocol,
                                        const bool                      isTransparent,
                                        const float                     transparency,
                                        const LayerCondition*           condition,
-                                       const std::string&              disclaimerInfo) :
+                                       const std::vector<std::string>&  layerInfo) :
 RasterLayer(timeToCache,
             readExpired,
             new LayerTilesRenderParameters(Sector::fullSphere(),
@@ -46,7 +46,7 @@ RasterLayer(timeToCache,
                                            true),
             transparency,
             condition,
-            disclaimerInfo),
+            layerInfo),
 _protocol(protocol),
 _domain(domain),
 _subdomains(subdomains),
@@ -193,7 +193,7 @@ MercatorTiledLayer* MercatorTiledLayer::copy() const {
                                 _isTransparent,
                                 _transparency,
                                 (_condition == NULL) ? NULL : _condition->copy(),
-                                _disclaimerInfo);
+                                _layerInfo);
 }
 
 bool MercatorTiledLayer::rawIsEquals(const Layer* that) const {

@@ -348,7 +348,12 @@ public:
   void imageCreated(const IImage*                image,
                     const std::string&           imageId,
                     const TileImageContribution* contribution) {
+    if (!contribution->isFullCoverageAndOpaque()) {
+      ILogger::instance()->logWarning("Contribution isn't full covearge and opaque before to upload tuxtuer");
+    }
+    
     if (!_canceled && (_tile != NULL) && (_texturedMesh != NULL)) {
+      
       if (uploadTexture(image, imageId)) {
         _tile->setTextureSolved(true);
       }
@@ -359,12 +364,11 @@ public:
   }
   
   void imageCreationError(const std::string& error) {
-#warning Diego at work
+#warning propagate the error to the texturizer and change the render state if is necessary
     ILogger::instance()->logError("%s", error.c_str());
   }
   
   void imageCreationCanceled() {
-#warning Diego at work
   }
 };
 
@@ -372,15 +376,12 @@ class DTT_NotFullProviderImageListener : public IImageListener {
 private:
   DTT_TileTextureBuilder* _builder;
   const std::string& _imageId;
-  const TileImageContribution* _contribution;
   
 public:
   DTT_NotFullProviderImageListener(DTT_TileTextureBuilder* builder,
-                                   const std::string& imageId,
-                                   const TileImageContribution* contribution) :
+                                   const std::string& imageId) :
   _builder(builder),
-  _imageId(imageId),
-  _contribution(contribution)
+  _imageId(imageId)
   {
     _builder->_retain();
   }
@@ -395,7 +396,7 @@ public:
   }
   
   void imageCreated(const IImage* image) {
-    _builder->imageCreated(image,_imageId,_contribution);
+    _builder->imageCreated(image,_imageId,TileImageContribution::fullCoverageOpaque());
   }
 };
 
@@ -433,9 +434,6 @@ void DTT_TileImageListener::imageCreated(const std::string&           tileId,
   if (!contribution->isFullCoverageAndOpaque()){
     
     IStringBuilder* auxImageId = IStringBuilder::newStringBuilder();
-    
-    // retain the singleResult->_contribution as the _listener take full ownership of the contribution
-    TileImageContribution::retainContribution(contribution);
     
     //ILogger::instance()->logInfo("DTT_TileImageListener received image that does not fit tile. Building new Image....");
     
@@ -507,10 +505,12 @@ void DTT_TileImageListener::imageCreated(const std::string&           tileId,
       delete srcRect;
     }
     
-    canvas->createImage(new DTT_NotFullProviderImageListener(_builder, auxImageId->getString(), contribution), true);
+    canvas->createImage(new DTT_NotFullProviderImageListener(_builder, auxImageId->getString()), true);
     
     delete auxImageId;
     delete canvas;
+    delete image;
+    TileImageContribution::releaseContribution( contribution );
     
   } else {
     _builder->imageCreated(image, imageId, contribution);
@@ -655,16 +655,11 @@ Mesh* DefaultTileTexturizer::texturize(const G3MRenderContext* rc,
                                        Mesh* previousMesh,
                                        bool logTilesPetitions) {
   DTT_TileTextureBuilderHolder* builderHolder = (DTT_TileTextureBuilderHolder*) tile->getTexturizerData();
-  
-  //  TileImageProvider* tileImageProvider = new DebugTileImageProvider();
-  //  TileImageProvider* tileImageProvider = new ChessboardTileImageProvider();
-  
-#warning TODO: creates the TileImageProvider from the LayerSet (and Rasterizer?)
+ 
   TileImageProvider* tileImageProvider = layerSet->getTileImageProvider(rc,
                                                                         layerTilesRenderParameters);
   
   if (tileImageProvider == NULL) {
-#warning TODO: error callback
     tile->setTextureSolved(true);
     tile->setTexturizerDirty(false);
     return NULL;

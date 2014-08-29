@@ -36,7 +36,7 @@ public:
                   const int             initialLevel   = 2,
                   const float           transparency   = 1,
                   const LayerCondition* condition      = NULL,
-                  const std::string&    disclaimerInfo = "");
+                  const std::vector<std::string>&  layerInfo = std::vector<std::string>());
 
   URL getFeatureInfoURL(const Geodetic2D& position,
                         const Sector& sector) const;

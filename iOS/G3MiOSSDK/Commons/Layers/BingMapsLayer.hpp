@@ -101,7 +101,7 @@ public:
                 const int             maxLevel       = 25,
                 const float           transparency   = 1,
                 const LayerCondition* condition      = NULL,
-                const std::string&    disclaimerInfo = "");
+                const std::vector<std::string>&  layerInfo = std::vector<std::string>());
   
   BingMapsLayer(const std::string&    imagerySet,
                 const std::string&    culture,
@@ -112,7 +112,7 @@ public:
                 const int             maxLevel       = 25,
                 const float           transparency   = 1,
                 const LayerCondition* condition      = NULL,
-                const std::string&    disclaimerInfo = "");
+                const std::vector<std::string>&  layerInfo = std::vector<std::string>());
   
   URL getFeatureInfoURL(const Geodetic2D& position,
                         const Sector& sector) const;

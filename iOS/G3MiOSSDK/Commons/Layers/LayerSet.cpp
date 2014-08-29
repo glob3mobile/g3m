@@ -137,7 +137,7 @@ void LayerSet::addLayer(Layer* layer) {
   }
 
   layersChanged();
-  changedInfo(layer->getInfos());
+  changedInfo(layer->getInfo());
 }
 
 void LayerSet::removeAllLayers(const bool deleteLayers) {
@@ -445,18 +445,7 @@ LayerTilesRenderParameters* LayerSet::checkAndComposeLayerTilesRenderParameters(
     }
   }
   
-  LayerTilesRenderParameters* params = mutableLayerTilesRenderParameters.create(errors);
-
-  //if (!forceFirstLevelTilesRenderOnStart && params == NULL) {
-  if (params == NULL) {
-    errors.clear();
-    delete params;
-    mutableLayerTilesRenderParameters.update(LayerTilesRenderParameters::createDefaultMercator(2, 16), errors);
-    params = mutableLayerTilesRenderParameters.create(errors);
-  }
-  
-  
-  return params;
+  return mutableLayerTilesRenderParameters.create(errors);
 }
 
 
@@ -572,7 +561,7 @@ TileImageProvider* LayerSet::getTileImageProvider(const G3MRenderContext* rc,
   return _tileImageProvider;
 }
 
-const std::vector<std::string> LayerSet::getInfo() {
+std::vector<std::string> LayerSet::getInfo() {
   _infos.clear();
   const int layersCount = _layers.size();
   bool anyEnabled = false;
@@ -580,8 +569,11 @@ const std::vector<std::string> LayerSet::getInfo() {
     Layer* layer = _layers[i];
     if (layer->isEnable()) {
       anyEnabled = true;
-      const std::string layerInfo = layer->getInfo();
-      _infos.push_back(layerInfo);
+      const std::vector<std::string> layerInfo = layer->getInfo();
+      const int infoSize = layerInfo.size();
+      for (int j = 0; j < infoSize; j++) {
+        _infos.push_back(layerInfo[j]);
+      }
     }
   }
   if (!anyEnabled) {

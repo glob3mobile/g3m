@@ -399,37 +399,37 @@ public:
   LayerSet* layerSet = new LayerSet();
   const bool forceFirstLevelTilesRenderOnStart = false;
   std::vector<std::string> errors;
-  layerSet->createLayerTilesRenderParameters(forceFirstLevelTilesRenderOnStart, errors);
+//  layerSet->createLayerTilesRenderParameters(forceFirstLevelTilesRenderOnStart, errors);
   
   
   
   
   
-  LayerTilesRenderParameters* ltrp = new LayerTilesRenderParameters(Sector::fromDegrees(40.1640143280790858, -5.8564874640814313,
-                                                     40.3323148480663158, -5.5216079822178570),
-                                 2, 4,
-                                 2, 16,
-                                 LayerTilesRenderParameters::defaultTileTextureResolution(),
-                                 LayerTilesRenderParameters::defaultTileMeshResolution(),
-                                 false);
-  
-  LayerTilesRenderParameters* ltrp2 = new LayerTilesRenderParameters(Sector::fullSphere(),
-                                                                     5,
-                                                                     10,
-                                                                     0,
-                                                                     12,
-                                                                     Vector2I(256, 256),
-                                                                     LayerTilesRenderParameters::defaultTileMeshResolution(),
-                                                                     false);
-  LayerTilesRenderParameters* ltrp3 = new LayerTilesRenderParameters(Sector::fullSphere(),
-                                                                     5,
-                                                                     10,
-                                                                     0,
-                                                                     13,
-                                                                     Vector2I(256, 256),
-                                                                     LayerTilesRenderParameters::defaultTileMeshResolution(),
-                                                                     false);
-  
+//  LayerTilesRenderParameters* ltrp = new LayerTilesRenderParameters(Sector::fromDegrees(40.1640143280790858, -5.8564874640814313,
+//                                                     40.3323148480663158, -5.5216079822178570),
+//                                 2, 4,
+//                                 2, 16,
+//                                 LayerTilesRenderParameters::defaultTileTextureResolution(),
+//                                 LayerTilesRenderParameters::defaultTileMeshResolution(),
+//                                 false);
+//  
+//  LayerTilesRenderParameters* ltrp2 = new LayerTilesRenderParameters(Sector::fullSphere(),
+//                                                                     5,
+//                                                                     10,
+//                                                                     0,
+//                                                                     12,
+//                                                                     Vector2I(256, 256),
+//                                                                     LayerTilesRenderParameters::defaultTileMeshResolution(),
+//                                                                     false);
+//  LayerTilesRenderParameters* ltrp3 = new LayerTilesRenderParameters(Sector::fullSphere(),
+//                                                                     5,
+//                                                                     10,
+//                                                                     0,
+//                                                                     13,
+//                                                                     Vector2I(256, 256),
+//                                                                     LayerTilesRenderParameters::defaultTileMeshResolution(),
+//                                                                     false);
+//  
   
   WMSLayer *pnoa = new WMSLayer("PNOA",
                                 URL("http://www.idee.es/wms/PNOA/PNOA", false),
@@ -463,7 +463,7 @@ public:
 //                                   NULL,
 //                                   1));
       WMSLayer* blueMarble = new WMSLayer("bmng200405",
-                                          URL("http://www.nasa.network.com/wms?", false),
+                                          URL("http://www.nasa.network.com/wmsxxxx?", false),
                                           WMS_1_1_0,
                                           Sector::fromDegrees(40.1240143280790858,
                                                               -5.8964874640814313,
@@ -484,10 +484,10 @@ public:
                                           //NULL,
                                           TimeInterval::fromDays(0),
                                           true,
-                                          NULL,
+                                          LayerTilesRenderParameters::createDefaultWGS84(Sector::fullSphere(), 0, 8),
                                           1);
-  layerSet->addLayer(blueMarble);
-  layerSet->addLayer(pnoa);
+//  layerSet->addLayer(blueMarble);
+//  layerSet->addLayer(pnoa);
   
  
   
@@ -531,8 +531,8 @@ public:
   
   //builder.setShownSector(sector);
   builder.getPlanetRendererBuilder()->setForceFirstLevelTilesRenderOnStart(forceFirstLevelTilesRenderOnStart);
-  //ShapesRenderer* shapesRenderer = [self createShapesRendererForTestImageDrawingOfCanvas: builder.getPlanet()];
-  //builder.addRenderer(shapesRenderer);
+  ShapesRenderer* shapesRenderer = [self createShapesRendererForTestImageDrawingOfCanvas: builder.getPlanet()];
+  builder.addRenderer(shapesRenderer);
 
   
   
@@ -2123,7 +2123,7 @@ public:
                                                                  false, // isTransparent
                                                                  1,     // transparency
                                                                  NULL,  // condition
-                                                                 ""     // disclaimerInfo
+                                                                 std::vector<std::string>()     // disclaimerInfo
                                                                  );
     layerSet->addLayer(osmEditMapLayer);
   }

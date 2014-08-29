@@ -35,7 +35,7 @@ private:
                 const bool                      readExpired,
                 const float                     transparency,
                 const LayerCondition*           condition,
-                const std::string& disclaimerInfo = "") :
+                const std::vector<std::string>&  layerInfo = std::vector<std::string>()) :
   MercatorTiledLayer("http://",
                      domain,
                      subdomains,
@@ -47,7 +47,7 @@ private:
                      false, // isTransparent
                      transparency,
                      condition,
-                     disclaimerInfo)
+                     layerInfo)
   {
   }
 

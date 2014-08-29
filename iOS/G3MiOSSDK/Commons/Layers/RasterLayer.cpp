@@ -24,13 +24,13 @@ RasterLayer::~RasterLayer() {
 #endif
 }
 
-RasterLayer::RasterLayer(const TimeInterval&               timeToCache,
-                         const bool                        readExpired,
-                         const LayerTilesRenderParameters* parameters,
-                         const float                       transparency,
-                         const LayerCondition*             condition,
-                         const std::string&                disclaimerInfo) :
-Layer(transparency, condition, disclaimerInfo),
+RasterLayer::RasterLayer(const TimeInterval&                    timeToCache,
+                         const bool                             readExpired,
+                         const LayerTilesRenderParameters*      parameters,
+                         const float                            transparency,
+                         const LayerCondition*                  condition,
+                         const std::vector<std::string>&        layerInfo) :
+Layer(transparency, condition, layerInfo),
 _timeToCache(timeToCache),
 _readExpired(readExpired),
 _parameters(parameters)

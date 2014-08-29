@@ -15,10 +15,10 @@
 
 Layer::Layer(float           transparency,
              const LayerCondition* condition,
-             const std::string&    disclaimerInfo) :
+             const std::vector<std::string>& layerInfo) :
 _transparency(transparency),
 _condition(condition),
-_disclaimerInfo(disclaimerInfo),
+_layerInfo(layerInfo),
 _layerSet(NULL),
 _enable(true),
 _title("")
@@ -64,7 +64,7 @@ void Layer::removeLayerSet(LayerSet* layerSet) {
 void Layer::notifyChanges() const {
   if (_layerSet != NULL) {
     _layerSet->layerChanged(this);
-    _layerSet->changedInfo(_infos);
+    _layerSet->changedInfo(_layerInfo);
   }
 }
 
@@ -133,12 +133,16 @@ bool Layer::isEquals(const Layer* that) const {
     return false;
   }
 
-  if (!(_infos == that->_infos)) {
+  const int infoSize = _layerInfo.size();
+  const int thatInfoSize = that->_layerInfo.size();
+  if (infoSize != thatInfoSize) {
     return false;
   }
-  
-  if (!(_disclaimerInfo == that->_disclaimerInfo)) {
-    return false;
+
+  for (int i = 0; i < infoSize; i++) {
+    if (_layerInfo[i] != that->_layerInfo[i]) {
+      return false;
+    }
   }
   
   return rawIsEquals(that);
@@ -158,21 +162,42 @@ bool Layer::onLayerTouchEventListener(const G3MEventContext* ec,
   return false;
 }
 
-void Layer::setInfo(const std::string& disclaimerInfo) {
-  if (_disclaimerInfo != disclaimerInfo) {
-    _disclaimerInfo = disclaimerInfo;
-    if (_layerSet != NULL) {
-      _layerSet->changedInfo(getInfos());
-    }
-  }
+void Layer::setInfo(const std::vector<std::string>& info) {
+  _layerInfo.clear();
+#ifdef C_CODE
+  _layerInfo.insert(_layerInfo.end(),
+               info.begin(),
+               info.end());
+#endif
+#ifdef JAVA_CODE
+  _layerInfo.addAll(info);
+#endif
+
 }
 
-const std::vector<std::string> Layer::getInfos() {
-#warning TODO BETTER
-  _infos.clear();
-  const std::string layerInfo = getInfo();
-  _infos.push_back(layerInfo);
-  return _infos;
+void Layer::addInfo(const std::vector<std::string>& info){
+#ifdef C_CODE
+  _layerInfo.insert(_layerInfo.end(),
+               info.begin(),
+               info.end());
+#endif
+#ifdef JAVA_CODE
+  _layerInfo.addAll(info);
+#endif
+}
+
+void Layer::addInfo(const std::string info){
+#ifdef C_CODE
+  _layerInfo.insert(_layerInfo.end(), info);
+#endif
+#ifdef JAVA_CODE
+  _layerInfo.add(info);
+#endif
+}
+
+
+const std::vector<std::string> Layer::getInfo() const {
+  return _layerInfo;
 }
 
 const std::vector<const LayerTilesRenderParameters*> Layer::createParametersVectorCopy() const {

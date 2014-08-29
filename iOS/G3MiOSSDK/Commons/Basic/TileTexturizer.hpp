@@ -23,8 +23,6 @@ class LayerSet;
 class LayerTilesRenderParameters;
 class G3MEventContext;
 
-
-#warning añadir el defaultImage (IImageBuilder que no acepte provider que sean mutables, así no hay que implementar el changedlistener) (forzarla a que esté disponible, si no no arranca el el globo), con las image hay que pasar shallowcopy, porque los listener van borrando la imagen. Transformar el tablero de ajedrez en un IImageBuilder. Como default el tablero de ajedrez (en el builder).
 class TileTexturizer {
 public:
   virtual ~TileTexturizer() {

@@ -125,12 +125,21 @@ void Canvas_iOS::_setLineMiterLimit(float limit) {
 void Canvas_iOS::_setLineDash(float lengths[],
                               int count,
                               float phase) {
-//#warning UNCOMMENT
+#if __LP64__
+  double* lengthsD = new double[count];
+  for (int i = 0; i < count; i++) {
+    lengthsD[i] = lengths[i];
+  }
+  CGContextSetLineDash(_context,
+                       phase,
+                       lengthsD, count);
+  delete [] lengthsD;
+#else
   CGContextSetLineDash(_context,
                        phase,
                        lengths, count);
+#endif
 }
-
 void Canvas_iOS::_setShadow(const Color& color,
                             float blur,
                             float offsetX,
@@ -343,7 +352,6 @@ void Canvas_iOS::_drawImage(const IImage* image,
 
   CGContextDrawImage(_context,
                      CGRectMake(destLeft,
-#warning DIEGO Not same behaviour as _drawImage(const IImage* image, srcRect, srcDest) that inverts Y
                                 destTop,
                                 destWidth,
                                 destHeight),
@@ -362,7 +370,6 @@ void Canvas_iOS::_drawImage(const IImage* image,
   
   CGContextDrawImage(_context,
                      CGRectMake(destLeft,
-#warning DIEGO Not same behaviour as _drawImage(const IImage* image, srcRect, srcDest) that inverts Y
                                 destTop,
                                 destWidth,
                                 destHeight),
@@ -395,7 +402,6 @@ void Canvas_iOS::_drawImage(const IImage* image,
   else {
     // Cropping image
     CGRect cropRect = CGRectMake(srcLeft,
-#warning vtp woking
                                 // _canvasHeight - (srcTop + srcHeight), // Bottom
                                  srcTop,
                                  srcWidth,
