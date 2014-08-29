@@ -33,7 +33,6 @@ public class ChildRenderer
   {
      _renderer = renderer;
      _info = info;
-
   }
 
   public void dispose()

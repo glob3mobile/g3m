@@ -160,8 +160,14 @@ public class DTT_TileTextureBuilder extends RCObject
 
   public final void imageCreated(IImage image, String imageId, TileImageContribution contribution)
   {
+    if (!contribution.isFullCoverageAndOpaque())
+    {
+      ILogger.instance().logWarning("Contribution isn't full covearge and opaque before to upload tuxtuer");
+    }
+
     if (!_canceled && (_tile != null) && (_texturedMesh != null))
     {
+
       if (uploadTexture(image, imageId))
       {
         _tile.setTextureSolved(true);
@@ -176,13 +182,11 @@ public class DTT_TileTextureBuilder extends RCObject
   public final void imageCreationError(String error)
   {
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning Diego at work
+//#warning propagate the error to the texturizer && change the render state if is necessary
     ILogger.instance().logError("%s", error);
   }
 
   public final void imageCreationCanceled()
   {
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning Diego at work
   }
 }

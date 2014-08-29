@@ -45,6 +45,7 @@ public class CompositeRenderer implements Renderer, ChangedRendererInfoListener
   
     return _info;
   }
+
   public CompositeRenderer()
   {
      _context = null;

@@ -205,7 +205,7 @@ public abstract class MapBooBuilder
     Layer layer;
     if (layerType.compareTo("OSM") == 0)
     {
-      layer = new OSMLayer(defaultTimeToCache, true, 2, 1, null, ""); //disclaimerInfo -  condition, -  transparency, -  initialLevel, -  readExpired,
+      layer = new OSMLayer(defaultTimeToCache, true, 2, 1, null, new java.util.ArrayList<String>()); //disclaimerInfo -  condition, -  transparency, -  initialLevel, -  readExpired,
     }
     else if (layerType.compareTo("MapQuest") == 0)
     {
@@ -241,7 +241,7 @@ public abstract class MapBooBuilder
     final String layerAttribution = jsonLayer.getAsString("attribution", "");
     if (layerAttribution.compareTo("") != 0)
     {
-      layer.setInfo(layerAttribution);
+      layer.addInfo(layerAttribution);
     }
     return layer;
   }
@@ -263,7 +263,7 @@ public abstract class MapBooBuilder
     final String key = jsonLayer.getAsString("key", "");
     final String imagerySet = jsonLayer.getAsString("imagerySet", "Aerial");
   
-    return new BingMapsLayer(imagerySet, key, timeToCache, true, 2, 25, 1, null, ""); // disclaimerInfo -  condition -  transparency -  maxLevel -  initialLevel -  readExpired
+    return new BingMapsLayer(imagerySet, key, timeToCache, true, 2, 25, 1, null, new java.util.ArrayList<String>()); // disclaimerInfo -  condition -  transparency -  maxLevel -  initialLevel -  readExpired
   }
 
   private CartoDBLayer parseCartoDBLayer(JSONObject jsonLayer, boolean transparent, TimeInterval timeToCache)
@@ -271,7 +271,7 @@ public abstract class MapBooBuilder
     final String userName = jsonLayer.getAsString("userName", "");
     final String table = jsonLayer.getAsString("table", "");
   
-    return new CartoDBLayer(userName, table, timeToCache, true, 1, transparent, null, ""); // disclaimerInfo -  condition, -  isTransparent -  transparency -  readExpired
+    return new CartoDBLayer(userName, table, timeToCache, true, 1, transparent, null, new java.util.ArrayList<String>()); // disclaimerInfo -  condition, -  isTransparent -  transparency -  readExpired
   }
 
 
@@ -279,7 +279,7 @@ public abstract class MapBooBuilder
   {
     final String mapKey = jsonLayer.getAsString("mapKey", "");
   
-    return new MapBoxLayer(mapKey, timeToCache, true, 1, 19, 1, null, ""); // disclaimerInfo -  condition -  transparency -  maxLevel -  initialLevel -  readExpired
+    return new MapBoxLayer(mapKey, timeToCache, true, 1, 19, 1, null, new java.util.ArrayList<String>()); // disclaimerInfo -  condition -  transparency -  maxLevel -  initialLevel -  readExpired
   }
 
   private WMSLayer parseWMSLayer(JSONObject jsonLayer, boolean transparent)

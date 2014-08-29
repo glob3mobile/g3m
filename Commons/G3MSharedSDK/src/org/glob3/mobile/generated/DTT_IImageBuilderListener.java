@@ -24,6 +24,9 @@ public class DTT_IImageBuilderListener implements IImageBuilderListener
 
   public final void onError(String error)
   {
-    //Exception
+    ILogger.instance().logError(error);
+    _defaultTileTesturizer._errors.add("Can't download background image default");
+    _defaultTileTesturizer._errors.add(error);
+
   }
 }

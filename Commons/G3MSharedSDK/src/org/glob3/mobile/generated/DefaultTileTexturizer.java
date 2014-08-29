@@ -30,10 +30,15 @@ public class DefaultTileTexturizer extends TileTexturizer
     DTT_TileTextureBuilderHolder tileBuilderHolder = (DTT_TileTextureBuilderHolder) tile.getTexturizerData();
     return (tileBuilderHolder == null) ? null : tileBuilderHolder.get().getTexturedMesh();
   }
+
+
   private IImageBuilder _defaultBackGroundImageBuilder;
   private boolean _defaultBackGroundImageLoaded;
   private IImage _defaultBackGroundImage;
   private String _defaultBackGroundImageName;
+
+
+  public java.util.ArrayList<String> _errors = new java.util.ArrayList<String>();
 
 
   public DefaultTileTexturizer(IImageBuilder defaultBackGroundImageBuilder)
@@ -52,7 +57,10 @@ public class DefaultTileTexturizer extends TileTexturizer
   public final RenderState getRenderState(LayerSet layerSet)
   {
     //ILogger::instance()->logInfo("Check render state texturizer...");
-  
+    if (_errors.size() > 0)
+    {
+      return RenderState.error(_errors);
+    }
     if (!_defaultBackGroundImageLoaded)
     {
       return RenderState.busy();
@@ -78,17 +86,10 @@ public class DefaultTileTexturizer extends TileTexturizer
   {
     DTT_TileTextureBuilderHolder builderHolder = (DTT_TileTextureBuilderHolder) tile.getTexturizerData();
   
-    //  TileImageProvider* tileImageProvider = new DebugTileImageProvider();
-    //  TileImageProvider* tileImageProvider = new ChessboardTileImageProvider();
-  
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning TODO: creates the TileImageProvider from the LayerSet (&& Rasterizer?)
     TileImageProvider tileImageProvider = layerSet.getTileImageProvider(rc, layerTilesRenderParameters);
   
     if (tileImageProvider == null)
     {
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning TODO: error callback
       tile.setTextureSolved(true);
       tile.setTexturizerDirty(false);
       return null;

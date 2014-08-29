@@ -151,23 +151,23 @@ public class MercatorTiledLayer extends RasterLayer
   
   public MercatorTiledLayer(String protocol, String domain, java.util.ArrayList<String> subdomains, String imageFormat, TimeInterval timeToCache, boolean readExpired, int initialLevel, int maxLevel, boolean isTransparent, float transparency, LayerCondition condition)
   {
-     this(protocol, domain, subdomains, imageFormat, timeToCache, readExpired, initialLevel, maxLevel, isTransparent, transparency, condition, "");
+     this(protocol, domain, subdomains, imageFormat, timeToCache, readExpired, initialLevel, maxLevel, isTransparent, transparency, condition, java.util.<String>ArrayList());
   }
   public MercatorTiledLayer(String protocol, String domain, java.util.ArrayList<String> subdomains, String imageFormat, TimeInterval timeToCache, boolean readExpired, int initialLevel, int maxLevel, boolean isTransparent, float transparency)
   {
-     this(protocol, domain, subdomains, imageFormat, timeToCache, readExpired, initialLevel, maxLevel, isTransparent, transparency, null, "");
+     this(protocol, domain, subdomains, imageFormat, timeToCache, readExpired, initialLevel, maxLevel, isTransparent, transparency, null, java.util.<String>ArrayList());
   }
   public MercatorTiledLayer(String protocol, String domain, java.util.ArrayList<String> subdomains, String imageFormat, TimeInterval timeToCache, boolean readExpired, int initialLevel, int maxLevel, boolean isTransparent)
   {
-     this(protocol, domain, subdomains, imageFormat, timeToCache, readExpired, initialLevel, maxLevel, isTransparent, 1, null, "");
+     this(protocol, domain, subdomains, imageFormat, timeToCache, readExpired, initialLevel, maxLevel, isTransparent, 1, null, java.util.<String>ArrayList());
   }
   public MercatorTiledLayer(String protocol, String domain, java.util.ArrayList<String> subdomains, String imageFormat, TimeInterval timeToCache, boolean readExpired, int initialLevel, int maxLevel)
   {
-     this(protocol, domain, subdomains, imageFormat, timeToCache, readExpired, initialLevel, maxLevel, false, 1, null, "");
+     this(protocol, domain, subdomains, imageFormat, timeToCache, readExpired, initialLevel, maxLevel, false, 1, null, java.util.<String>ArrayList());
   }
-  public MercatorTiledLayer(String protocol, String domain, java.util.ArrayList<String> subdomains, String imageFormat, TimeInterval timeToCache, boolean readExpired, int initialLevel, int maxLevel, boolean isTransparent, float transparency, LayerCondition condition, String disclaimerInfo)
+  public MercatorTiledLayer(String protocol, String domain, java.util.ArrayList<String> subdomains, String imageFormat, TimeInterval timeToCache, boolean readExpired, int initialLevel, int maxLevel, boolean isTransparent, float transparency, LayerCondition condition, java.util.ArrayList<String> layerInfo)
   {
-     super(timeToCache, readExpired, new LayerTilesRenderParameters(Sector.fullSphere(), 1, 1, initialLevel, maxLevel, new Vector2I(256, 256), LayerTilesRenderParameters.defaultTileMeshResolution(), true), transparency, condition, disclaimerInfo);
+     super(timeToCache, readExpired, new LayerTilesRenderParameters(Sector.fullSphere(), 1, 1, initialLevel, maxLevel, new Vector2I(256, 256), LayerTilesRenderParameters.defaultTileMeshResolution(), true), transparency, condition, layerInfo);
      _protocol = protocol;
      _domain = domain;
      _subdomains = subdomains;
@@ -250,7 +250,7 @@ public class MercatorTiledLayer extends RasterLayer
 
   public MercatorTiledLayer copy()
   {
-    return new MercatorTiledLayer(_protocol, _domain, _subdomains, _imageFormat, _timeToCache, _readExpired, _initialLevel, _maxLevel, _isTransparent, _transparency, (_condition == null) ? null : _condition.copy(), _disclaimerInfo);
+    return new MercatorTiledLayer(_protocol, _domain, _subdomains, _imageFormat, _timeToCache, _readExpired, _initialLevel, _maxLevel, _isTransparent, _transparency, (_condition == null) ? null : _condition.copy(), _layerInfo);
   }
 
   public RenderState getRenderState()

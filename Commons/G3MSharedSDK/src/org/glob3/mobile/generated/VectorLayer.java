@@ -26,9 +26,9 @@ public abstract class VectorLayer extends Layer
   protected VectorLayer(final java.util.ArrayList<LayerTilesRenderParameters> parametersVector,
                         final float transparency,
                         final LayerCondition condition,
-                        final String disclaimerInfo) {
+                        final java.util.ArrayList<String> layerInfo) {
     super(transparency, condition, disclaimerInfo);
-    _parametersVector.addAll(parametersVector);
+    _parametersVector.addAll(layerInfo);
     _selectedLayerTilesRenderParametersIndex = -1;
   }
 

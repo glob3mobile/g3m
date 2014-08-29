@@ -74,28 +74,20 @@ public class MutableVector3D
 
   public final MutableVector3D normalized()
   {
-    if (isNan())
-    {
-      return nan();
-    }
-    if (isZero())
-    {
-      return new MutableVector3D();
-    }
-  
+  //  if (isZero()) {
+  //    return MutableVector3D();
+  //  }
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning vtp asked dgd: "check nan and zero cases????"
     final double d = length();
     return new MutableVector3D(_x / d, _y /d, _z / d);
   }
   public final void normalize()
   {
-    if (!isNan() && !isZero())
-    {
       final double d = length();
-      //  return MutableVector3D(_x / d, _y /d, _z / d);
       _x /= d;
       _y /= d;
       _z /= d;
-    }
   }
 
   public static MutableVector3D nan()

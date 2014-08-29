@@ -67,8 +67,7 @@ public abstract class Layer
 
   protected boolean _enable;
 
-  protected String _disclaimerInfo;
-  protected java.util.ArrayList<String> _infos = new java.util.ArrayList<String>();
+  protected java.util.ArrayList<String> _layerInfo = new java.util.ArrayList<String>();
 
 
   protected float _transparency;
@@ -79,17 +78,17 @@ public abstract class Layer
     if (_layerSet != null)
     {
       _layerSet.layerChanged(this);
-      _layerSet.changedInfo(_infos);
+      _layerSet.changedInfo(_layerInfo);
     }
   }
 
   protected String _title;
 
-  protected Layer(float transparency, LayerCondition condition, String disclaimerInfo)
+  protected Layer(float transparency, LayerCondition condition, java.util.ArrayList<String> layerInfo)
   {
      _transparency = transparency;
      _condition = condition;
-     _disclaimerInfo = disclaimerInfo;
+     _layerInfo = layerInfo;
      _layerSet = null;
      _enable = true;
      _title = "";
@@ -270,14 +269,19 @@ public abstract class Layer
       return false;
     }
   
-    if (!(_infos == that._infos))
+    final int infoSize = _layerInfo.size();
+    final int thatInfoSize = that._layerInfo.size();
+    if (infoSize != thatInfoSize)
     {
       return false;
     }
   
-    if (!(_disclaimerInfo.equals(that._disclaimerInfo)))
+    for (int i = 0; i < infoSize; i++)
     {
-      return false;
+      if (!_layerInfo.get(i).equals(that._layerInfo.get(i)))
+      {
+        return false;
+      }
     }
   
     return rawIsEquals(that);
@@ -301,31 +305,26 @@ public abstract class Layer
 
   public abstract TileImageProvider createTileImageProvider(G3MRenderContext rc, LayerTilesRenderParameters layerTilesRenderParameters);
 
-  public final String getInfo()
+  public final void setInfo(java.util.ArrayList<String> info)
   {
-    return _disclaimerInfo;
+    _layerInfo.clear();
+    _layerInfo.addAll(info);
+  
   }
 
-  public final void setInfo(String disclaimerInfo)
+  public final java.util.ArrayList<String> getInfo()
   {
-    if (!_disclaimerInfo.equals(disclaimerInfo))
-    {
-      _disclaimerInfo = disclaimerInfo;
-      if (_layerSet != null)
-      {
-        _layerSet.changedInfo(getInfos());
-      }
-    }
+    return _layerInfo;
   }
 
-  public final java.util.ArrayList<String> getInfos()
+  public final void addInfo(java.util.ArrayList<String> info)
   {
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning TODO BETTER
-    _infos.clear();
-    final String layerInfo = getInfo();
-    _infos.add(layerInfo);
-    return _infos;
+    _layerInfo.addAll(info);
+  }
+
+  public final void addInfo(String info)
+  {
+    _layerInfo.add(info);
   }
 
 }

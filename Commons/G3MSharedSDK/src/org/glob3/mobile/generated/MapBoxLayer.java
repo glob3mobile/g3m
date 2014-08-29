@@ -50,31 +50,31 @@ public class MapBoxLayer extends MercatorTiledLayer
 
   public MapBoxLayer(String mapKey, TimeInterval timeToCache, boolean readExpired, int initialLevel, int maxLevel, float transparency, LayerCondition condition)
   {
-     this(mapKey, timeToCache, readExpired, initialLevel, maxLevel, transparency, condition, "");
+     this(mapKey, timeToCache, readExpired, initialLevel, maxLevel, transparency, condition, java.util.<String>ArrayList());
   }
   public MapBoxLayer(String mapKey, TimeInterval timeToCache, boolean readExpired, int initialLevel, int maxLevel, float transparency)
   {
-     this(mapKey, timeToCache, readExpired, initialLevel, maxLevel, transparency, null, "");
+     this(mapKey, timeToCache, readExpired, initialLevel, maxLevel, transparency, null, java.util.<String>ArrayList());
   }
   public MapBoxLayer(String mapKey, TimeInterval timeToCache, boolean readExpired, int initialLevel, int maxLevel)
   {
-     this(mapKey, timeToCache, readExpired, initialLevel, maxLevel, 1, null, "");
+     this(mapKey, timeToCache, readExpired, initialLevel, maxLevel, 1, null, java.util.<String>ArrayList());
   }
   public MapBoxLayer(String mapKey, TimeInterval timeToCache, boolean readExpired, int initialLevel)
   {
-     this(mapKey, timeToCache, readExpired, initialLevel, 19, 1, null, "");
+     this(mapKey, timeToCache, readExpired, initialLevel, 19, 1, null, java.util.<String>ArrayList());
   }
   public MapBoxLayer(String mapKey, TimeInterval timeToCache, boolean readExpired)
   {
-     this(mapKey, timeToCache, readExpired, 1, 19, 1, null, "");
+     this(mapKey, timeToCache, readExpired, 1, 19, 1, null, java.util.<String>ArrayList());
   }
   public MapBoxLayer(String mapKey, TimeInterval timeToCache)
   {
-     this(mapKey, timeToCache, true, 1, 19, 1, null, "");
+     this(mapKey, timeToCache, true, 1, 19, 1, null, java.util.<String>ArrayList());
   }
-  public MapBoxLayer(String mapKey, TimeInterval timeToCache, boolean readExpired, int initialLevel, int maxLevel, float transparency, LayerCondition condition, String disclaimerInfo) // isTransparent
+  public MapBoxLayer(String mapKey, TimeInterval timeToCache, boolean readExpired, int initialLevel, int maxLevel, float transparency, LayerCondition condition, java.util.ArrayList<String> layerInfo) // isTransparent
   {
-     super("http://", "tiles.mapbox.com/v3/" + mapKey, getSubdomains(), "png", timeToCache, readExpired, initialLevel, maxLevel, false, transparency, condition, disclaimerInfo);
+     super("http://", "tiles.mapbox.com/v3/" + mapKey, getSubdomains(), "png", timeToCache, readExpired, initialLevel, maxLevel, false, transparency, condition, layerInfo);
      _mapKey = mapKey;
   }
 
@@ -85,7 +85,7 @@ public class MapBoxLayer extends MercatorTiledLayer
 
   public final MapBoxLayer copy()
   {
-    return new MapBoxLayer(_mapKey, _timeToCache, _readExpired, _initialLevel, _maxLevel, _transparency, (_condition == null) ? null : _condition.copy(), _disclaimerInfo);
+    return new MapBoxLayer(_mapKey, _timeToCache, _readExpired, _initialLevel, _maxLevel, _transparency, (_condition == null) ? null : _condition.copy(), _layerInfo);
   }
 
   public final RenderState getRenderState()

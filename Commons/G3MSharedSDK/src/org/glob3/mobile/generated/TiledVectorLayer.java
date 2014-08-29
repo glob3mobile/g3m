@@ -35,9 +35,9 @@ public class TiledVectorLayer extends VectorLayer
   private IStringUtils _su;
   private TileImageProvider _tileImageProvider;
 
-  private TiledVectorLayer(GEORasterSymbolizer symbolizer, String urlTemplate, Sector dataSector, java.util.ArrayList<LayerTilesRenderParameters> parametersVector, TimeInterval timeToCache, boolean readExpired, float transparency, LayerCondition condition, String disclaimerInfo)
+  private TiledVectorLayer(GEORasterSymbolizer symbolizer, String urlTemplate, Sector dataSector, java.util.ArrayList<LayerTilesRenderParameters> parametersVector, TimeInterval timeToCache, boolean readExpired, float transparency, LayerCondition condition, java.util.ArrayList<String> layerInfo)
   {
-     super(parametersVector, transparency, condition, disclaimerInfo);
+     super(parametersVector, transparency, condition, layerInfo);
      _symbolizer = symbolizer;
      _urlTemplate = urlTemplate;
      _dataSector = new Sector(dataSector);
@@ -118,29 +118,29 @@ public class TiledVectorLayer extends VectorLayer
 
   public static TiledVectorLayer newMercator(GEORasterSymbolizer symbolizer, String urlTemplate, Sector dataSector, int firstLevel, int maxLevel, TimeInterval timeToCache, boolean readExpired, float transparency, LayerCondition condition)
   {
-     return newMercator(symbolizer, urlTemplate, dataSector, firstLevel, maxLevel, timeToCache, readExpired, transparency, condition, "");
+     return newMercator(symbolizer, urlTemplate, dataSector, firstLevel, maxLevel, timeToCache, readExpired, transparency, condition, java.util.<String>ArrayList());
   }
   public static TiledVectorLayer newMercator(GEORasterSymbolizer symbolizer, String urlTemplate, Sector dataSector, int firstLevel, int maxLevel, TimeInterval timeToCache, boolean readExpired, float transparency)
   {
-     return newMercator(symbolizer, urlTemplate, dataSector, firstLevel, maxLevel, timeToCache, readExpired, transparency, null, "");
+     return newMercator(symbolizer, urlTemplate, dataSector, firstLevel, maxLevel, timeToCache, readExpired, transparency, null, java.util.<String>ArrayList());
   }
   public static TiledVectorLayer newMercator(GEORasterSymbolizer symbolizer, String urlTemplate, Sector dataSector, int firstLevel, int maxLevel, TimeInterval timeToCache, boolean readExpired)
   {
-     return newMercator(symbolizer, urlTemplate, dataSector, firstLevel, maxLevel, timeToCache, readExpired, 1, null, "");
+     return newMercator(symbolizer, urlTemplate, dataSector, firstLevel, maxLevel, timeToCache, readExpired, 1, null, java.util.<String>ArrayList());
   }
   public static TiledVectorLayer newMercator(GEORasterSymbolizer symbolizer, String urlTemplate, Sector dataSector, int firstLevel, int maxLevel, TimeInterval timeToCache)
   {
-     return newMercator(symbolizer, urlTemplate, dataSector, firstLevel, maxLevel, timeToCache, true, 1, null, "");
+     return newMercator(symbolizer, urlTemplate, dataSector, firstLevel, maxLevel, timeToCache, true, 1, null, java.util.<String>ArrayList());
   }
   public static TiledVectorLayer newMercator(GEORasterSymbolizer symbolizer, String urlTemplate, Sector dataSector, int firstLevel, int maxLevel)
   {
-     return newMercator(symbolizer, urlTemplate, dataSector, firstLevel, maxLevel, TimeInterval.fromDays(30), true, 1, null, "");
+     return newMercator(symbolizer, urlTemplate, dataSector, firstLevel, maxLevel, TimeInterval.fromDays(30), true, 1, null, java.util.<String>ArrayList());
   }
-  public static TiledVectorLayer newMercator(GEORasterSymbolizer symbolizer, String urlTemplate, Sector dataSector, int firstLevel, int maxLevel, TimeInterval timeToCache, boolean readExpired, float transparency, LayerCondition condition, String disclaimerInfo)
+  public static TiledVectorLayer newMercator(GEORasterSymbolizer symbolizer, String urlTemplate, Sector dataSector, int firstLevel, int maxLevel, TimeInterval timeToCache, boolean readExpired, float transparency, LayerCondition condition, java.util.ArrayList<String> layerInfo)
   {
     final java.util.ArrayList<LayerTilesRenderParameters> parametersVector = new java.util.ArrayList<LayerTilesRenderParameters>();
     parametersVector.add(LayerTilesRenderParameters.createDefaultMercator(firstLevel, maxLevel));
-    return new TiledVectorLayer(symbolizer, urlTemplate, dataSector, parametersVector, timeToCache, readExpired, transparency, condition, disclaimerInfo);
+    return new TiledVectorLayer(symbolizer, urlTemplate, dataSector, parametersVector, timeToCache, readExpired, transparency, condition, layerInfo);
   }
 
   public void dispose()
@@ -171,7 +171,7 @@ public class TiledVectorLayer extends VectorLayer
   public final TiledVectorLayer copy()
   {
   
-    return new TiledVectorLayer(_symbolizer.copy(), _urlTemplate, _dataSector, createParametersVectorCopy(), _timeToCache, _readExpired, _transparency, (_condition == null) ? null : _condition.copy(), _disclaimerInfo);
+    return new TiledVectorLayer(_symbolizer.copy(), _urlTemplate, _dataSector, createParametersVectorCopy(), _timeToCache, _readExpired, _transparency, (_condition == null) ? null : _condition.copy(), _layerInfo);
   }
 
   public final TileImageContribution contribution(Tile tile)

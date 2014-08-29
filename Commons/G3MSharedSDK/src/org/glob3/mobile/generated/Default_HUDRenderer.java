@@ -19,7 +19,7 @@ public class Default_HUDRenderer extends DefaultRenderer
   public final void updateInfo(java.util.ArrayList<String> info)
   {
     DefaultHUDInfoRenderer_ImageFactory factory = (DefaultHUDInfoRenderer_ImageFactory)(_hudImageRenderer.getImageFactory());
-    if (factory.setInfos(info))
+    if (factory.setInfo(info))
     {
       _hudImageRenderer.recreateImage();
     }

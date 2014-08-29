@@ -217,20 +217,7 @@ public class LayerSet implements ChangedInfoListener
       }
     }
   
-    LayerTilesRenderParameters params = mutableLayerTilesRenderParameters.create(errors);
-  
-    //if (!forceFirstLevelTilesRenderOnStart && params == NULL) {
-    if (params == null)
-    {
-      errors.clear();
-      if (params != null)
-         params.dispose();
-      mutableLayerTilesRenderParameters.update(LayerTilesRenderParameters.createDefaultMercator(2, 16), errors);
-      params = mutableLayerTilesRenderParameters.create(errors);
-    }
-  
-  
-    return params;
+    return mutableLayerTilesRenderParameters.create(errors);
   }
 
   public LayerSet()
@@ -288,7 +275,7 @@ public class LayerSet implements ChangedInfoListener
     }
   
     layersChanged();
-    changedInfo(layer.getInfos());
+    changedInfo(layer.getInfo());
   }
 
   public final boolean onTerrainTouchEvent(G3MEventContext ec, Geodetic3D position, Tile tile)
@@ -559,8 +546,12 @@ public class LayerSet implements ChangedInfoListener
       if (layer.isEnable())
       {
         anyEnabled = true;
-        final String layerInfo = layer.getInfo();
-        _infos.add(layerInfo);
+        final java.util.ArrayList<String> layerInfo = layer.getInfo();
+        final int infoSize = layerInfo.size();
+        for (int j = 0; j < infoSize; j++)
+        {
+          _infos.add(layerInfo.get(j));
+        }
       }
     }
     if (!anyEnabled)

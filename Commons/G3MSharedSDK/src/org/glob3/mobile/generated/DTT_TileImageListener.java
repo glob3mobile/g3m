@@ -41,9 +41,6 @@ public class DTT_TileImageListener extends TileImageListener
   
       IStringBuilder auxImageId = IStringBuilder.newStringBuilder();
   
-      // retain the singleResult->_contribution as the _listener take full ownership of the contribution
-      TileImageContribution.retainContribution(contribution);
-  
       //ILogger::instance()->logInfo("DTT_TileImageListener received image that does not fit tile. Building new Image....");
   
       ICanvas canvas = IFactory.instance().createCanvas();
@@ -111,12 +108,15 @@ public class DTT_TileImageListener extends TileImageListener
            srcRect.dispose();
       }
   
-      canvas.createImage(new DTT_NotFullProviderImageListener(_builder, auxImageId.getString(), contribution), true);
+      canvas.createImage(new DTT_NotFullProviderImageListener(_builder, auxImageId.getString()), true);
   
       if (auxImageId != null)
          auxImageId.dispose();
       if (canvas != null)
          canvas.dispose();
+      if (image != null)
+         image.dispose();
+      TileImageContribution.releaseContribution(contribution);
   
     }
     else

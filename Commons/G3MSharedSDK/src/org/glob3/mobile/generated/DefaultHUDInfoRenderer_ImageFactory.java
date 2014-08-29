@@ -20,12 +20,12 @@ package org.glob3.mobile.generated;
 
 public class DefaultHUDInfoRenderer_ImageFactory extends HUDImageRenderer.CanvasImageFactory
 {
-  private java.util.ArrayList<String> _infos = new java.util.ArrayList<String>();
+  private java.util.ArrayList<String> _info = new java.util.ArrayList<String>();
 
 
   protected final void drawOn(ICanvas canvas, int width, int height)
   {
-    ICanvasUtils.drawStringsOn(_infos, canvas, width, height, HorizontalAlignment.Left, VerticalAlignment.Bottom, HorizontalAlignment.Left, Color.white(), 11, 2, Color.transparent(), Color.black(), 5);
+    ICanvasUtils.drawStringsOn(_info, canvas, width, height, HorizontalAlignment.Left, VerticalAlignment.Bottom, HorizontalAlignment.Left, Color.white(), 11, 2, Color.transparent(), Color.black(), 5);
   }
 
   protected final boolean isEquals(java.util.ArrayList<String> v1, java.util.ArrayList<String> v2)
@@ -53,15 +53,10 @@ public class DefaultHUDInfoRenderer_ImageFactory extends HUDImageRenderer.Canvas
   {
   }
 
-  public final boolean setInfos(java.util.ArrayList<String> infos)
+  public final boolean setInfo(java.util.ArrayList<String> info)
   {
-    if (isEquals(_infos, infos))
-    {
-      return false;
-    }
-  
-    _infos.clear();
-    _infos.addAll(infos);
+    _info.clear();
+    _info.addAll(info);
   
     return true;
   }
