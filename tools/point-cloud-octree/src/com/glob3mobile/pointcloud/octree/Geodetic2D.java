@@ -6,8 +6,8 @@ import java.io.Serializable;
 
 
 public class Geodetic2D
-         implements
-            Serializable {
+implements
+Serializable {
 
 
    private static final long serialVersionUID = 1L;
@@ -38,7 +38,7 @@ public class Geodetic2D
 
    @Override
    public String toString() {
-      return "[lat=" + _latitude + ", lon=" + _longitude + "]";
+      return "[" + _latitude + ", " + _longitude + "]";
    }
 
 

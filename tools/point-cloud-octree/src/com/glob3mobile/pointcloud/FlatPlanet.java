@@ -1,6 +1,6 @@
 
 
-package com.glob3mobile.pointcloud.kdtree;
+package com.glob3mobile.pointcloud;
 
 import com.glob3mobile.pointcloud.octree.Angle;
 import com.glob3mobile.pointcloud.octree.Geodetic3D;

@@ -4,10 +4,12 @@ package com.glob3mobile.pointcloud.kdtree;
 
 import java.util.LinkedList;
 
+import com.glob3mobile.pointcloud.PositionsSet;
+
 
 public class KDInnerNode
-extends
-KDNode {
+         extends
+            KDNode {
    private final Axis     _splitAxis;
    //   private final int    _medianVertexIndex;
    //   private final KDNode _leftNode;
@@ -18,11 +20,11 @@ KDNode {
 
 
    KDInnerNode(final KDNode parent,
-            final PositionsSet positions,
-            final Axis splitAxis,
-            final int[] mediansVertexIndexes,
-            final int[][] childrenVerticesIndexes,
-               final int arity) {
+               final PositionsSet positions,
+               final Axis splitAxis,
+               final int[] mediansVertexIndexes,
+               final int[][] childrenVerticesIndexes,
+            final int arity) {
       super(parent, positions);
       _splitAxis = splitAxis;
       //      _medianVertexIndex = medianVertexIndex;

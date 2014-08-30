@@ -32,8 +32,8 @@ import es.igosoftware.util.GUndeterminateProgress;
 
 
 public class BerkeleyDBOctree
-         implements
-            PersistentOctree {
+implements
+PersistentOctree {
 
    // private static final ILogger LOGGER              = GLogger.instance();
    // private static final Charset UTF8                = Charset.forName("UTF-8");
@@ -44,8 +44,9 @@ public class BerkeleyDBOctree
    private static final String NODE_DATA_DATABASE_NAME      = "NodeData";
 
 
-   public static void delete(final String cloudName) {
-      final File envHome = new File(cloudName);
+   public static void delete(final File cloudDirectory,
+                             final String cloudName) {
+      final File envHome = new File(cloudDirectory, cloudName);
       if (!envHome.exists()) {
          return;
       }
@@ -59,26 +60,31 @@ public class BerkeleyDBOctree
    }
 
 
-   public static PersistentOctree open(final String cloudName,
+   public static PersistentOctree open(final File cloudDirectory,
+                                       final String cloudName,
                                        final boolean createIfNotExists,
                                        final long cacheSizeInBytes) {
-      return open(cloudName, createIfNotExists, DEFAULT_BUFFER_SIZE, DEFAULT_MAX_POINTS_PER_TITLE, cacheSizeInBytes);
+      return open(cloudDirectory, cloudName, createIfNotExists, DEFAULT_BUFFER_SIZE, DEFAULT_MAX_POINTS_PER_TITLE,
+               cacheSizeInBytes);
    }
 
 
-   public static PersistentOctree open(final String cloudName,
+   public static PersistentOctree open(final File cloudDirectory,
+                                       final String cloudName,
                                        final boolean createIfNotExists,
                                        final int bufferSize,
                                        final int maxPointsPerTitle,
                                        final long cacheSizeInBytes) {
 
-      return new BerkeleyDBOctree(cloudName, createIfNotExists, bufferSize, maxPointsPerTitle, false, cacheSizeInBytes);
+      return new BerkeleyDBOctree(cloudDirectory, cloudName, createIfNotExists, bufferSize, maxPointsPerTitle, false,
+               cacheSizeInBytes);
    }
 
 
-   public static PersistentOctree openReadOnly(final String cloudName,
+   public static PersistentOctree openReadOnly(final File cloudDirectory,
+                                               final String cloudName,
                                                final long cacheSizeInBytes) {
-      return new BerkeleyDBOctree(cloudName, false, 0, 0, true, cacheSizeInBytes);
+      return new BerkeleyDBOctree(cloudDirectory, cloudName, false, 0, 0, true, cacheSizeInBytes);
    }
 
 
@@ -104,14 +110,22 @@ public class BerkeleyDBOctree
    private final File             _cachedStatisticsFile;
 
 
-   private BerkeleyDBOctree(final String cloudName,
+   private BerkeleyDBOctree(final File cloudDirectory,
+                            final String cloudName,
                             final boolean createIfNotExists,
                             final int bufferSize,
                             final int maxPointsPerTitle,
                             final boolean readOnly,
                             final long cacheSizeInBytes) {
+      final File envHome = new File(cloudDirectory, cloudName);
+      if (createIfNotExists) {
+         if (!envHome.exists()) {
+            envHome.mkdirs();
+         }
+      }
+
       final String readOnlyMsg = readOnly ? " read-only" : " read-write";
-      System.out.println("- opening" + readOnlyMsg + " cloud name \"" + cloudName + "\"");
+      System.out.println("- opening" + readOnlyMsg + " cloud name \"" + cloudName + "\" (" + envHome.getAbsoluteFile() + ")");
 
       _readOnly = readOnly;
       _cloudName = cloudName;
@@ -122,12 +136,6 @@ public class BerkeleyDBOctree
 
       _maxPointsPerTitle = maxPointsPerTitle;
 
-      final File envHome = new File(cloudName);
-      if (createIfNotExists) {
-         if (!envHome.exists()) {
-            envHome.mkdirs();
-         }
-      }
 
       final EnvironmentConfig envConfig = new EnvironmentConfig();
       envConfig.setAllowCreate(createIfNotExists);
@@ -149,7 +157,7 @@ public class BerkeleyDBOctree
       _nodeDB = _env.openDatabase(null, NODE_DATABASE_NAME, dbConfig);
       _nodeDataDB = _env.openDatabase(null, NODE_DATA_DATABASE_NAME, dbConfig);
 
-      _cachedStatisticsFile = new File("_stats_" + cloudName + ".ser");
+      _cachedStatisticsFile = new File(cloudDirectory, "_stats_" + cloudName + ".ser");
    }
 
 
@@ -350,10 +358,10 @@ public class BerkeleyDBOctree
 
 
    private static class BerkeleyDBStatistics
-   implements
-   PersistentOctree.Visitor,
-   PersistentOctree.Statistics,
-   Serializable {
+            implements
+               PersistentOctree.Visitor,
+               PersistentOctree.Statistics,
+               Serializable {
 
       private static final long      serialVersionUID = 1L;
 
@@ -456,8 +464,8 @@ public class BerkeleyDBOctree
          System.out.println("   Nodes: " + _nodesCount);
          System.out.println("   Depth: " + _minDepth + "/" + _maxDepth + ", Average=" + ((float) _sumDepth / _nodesCount));
          System.out.println("   Points/Node: Average=" + ((float) _pointsCount / _nodesCount) + //
-                  ", Min=" + _minPointsCountPerNode + //
-                  ", Max=" + _maxPointsCountPerNode);
+                            ", Min=" + _minPointsCountPerNode + //
+                            ", Max=" + _maxPointsCountPerNode);
          System.out.println("======================================================================");
 
 

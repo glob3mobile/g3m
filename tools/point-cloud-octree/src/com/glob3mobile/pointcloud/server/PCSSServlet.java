@@ -21,8 +21,8 @@ import es.igosoftware.util.XStringTokenizer;
 
 
 public class PCSSServlet
-         extends
-            HttpServlet {
+extends
+HttpServlet {
    private static final long                serialVersionUID = 1L;
 
    private final Map<String, PersistentLOD> _openedDBs       = new HashMap<String, PersistentLOD>();
@@ -129,6 +129,24 @@ public class PCSSServlet
    }
 
 
+   //   private static void sendNodeMetadata(final PersistentLOD db,
+   //                                        final Sector sector,
+   //                                        final HttpServletResponse response) throws IOException {
+   //      final PrintWriter writer = response.getWriter();
+   //
+   //      final PersistentLOD.NodeLayout layout = db.getNodeLayout(sector);
+   //      if (layout == null) {
+   //         response.sendError(HttpServletResponse.SC_NOT_FOUND, "no layout found for " + sector);
+   //      }
+   //      else {
+   //         response.setStatus(HttpServletResponse.SC_OK);
+   //         response.setContentType("application/json");
+   //
+   //         JSONUtils.sendNodeLayoutJSON(writer, layout);
+   //      }
+   //   }
+
+
    @Override
    protected void doGet(final HttpServletRequest request,
                         final HttpServletResponse response) throws IOException {
@@ -164,10 +182,45 @@ public class PCSSServlet
          final String nodeID = path[2].trim();
          sendNodeMetadata(db, nodeID, response);
       }
+      //      else if ((path.length == 3) && path[1].trim().equalsIgnoreCase("metadataForSector")) {
+      //         final Sector sector = parseSector(path[2]);
+      //         if (sector == null) {
+      //            error(response, "Invalid sector format");
+      //         }
+      //         else {
+      //            sendNodeMetadata(db, sector, response);
+      //         }
+      //      }
       else {
          error(response, "Invalid request");
       }
    }
+
+
+   //   private static Sector parseSector(final String string) {
+   //
+   //      // (Sector (lat=39.198205348894802569d, lon=-77.673339843749985789d) - (lat=39.249270846223389242d, lon=-77.607421875d))
+   //      // [Sector [lat=39.1982053488948d,      lon=-77.67333984374999d],      [lat=39.24927084622339d,     lon=77.607421875d]]
+   //
+   //      // "39.198205348894802569|-77.673339843749985789|39.249270846223389242|77.607421875"
+   //
+   //      final String[] tokens = XStringTokenizer.getAllTokens(string.trim(), "|");
+   //      if (tokens.length != 4) {
+   //         return null;
+   //      }
+   //
+   //      try {
+   //         final double lowerLatitude = Double.parseDouble(tokens[0].trim());
+   //         final double lowerLongitude = Double.parseDouble(tokens[1].trim());
+   //         final double upperLatitude = Double.parseDouble(tokens[2].trim());
+   //         final double upperLongitude = Double.parseDouble(tokens[3].trim());
+   //
+   //         return Sector.fromDegrees(lowerLatitude, lowerLongitude, upperLatitude, upperLongitude);
+   //      }
+   //      catch (final NumberFormatException e) {
+   //         return null;
+   //      }
+   //   }
 
 
 }

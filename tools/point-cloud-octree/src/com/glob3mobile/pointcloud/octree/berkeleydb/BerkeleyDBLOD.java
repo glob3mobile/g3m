@@ -224,12 +224,103 @@ public class BerkeleyDBLOD
    }
 
 
+   @Override
+   public void acceptVisitor(final PersistentLOD.Transaction transaction,
+                             final PersistentLOD.Visitor visitor,
+                             final Sector sector) {
+      final TileHeader header = TileHeader.deepestEnclosingTileHeader(sector);
+
+      System.out.println(sector + " => node: " + Utils.toIDString(header._id));
+
+      final byte[] id = header._id;
+
+      visitor.start(transaction);
+
+      final CursorConfig cursorConfig = new CursorConfig();
+
+      final com.sleepycat.je.Transaction txn = getBerkeleyDBTransaction(transaction);
+      try (final Cursor cursor = _nodeDB.openCursor(txn, cursorConfig)) {
+         final DatabaseEntry keyEntry = new DatabaseEntry(id);
+         final DatabaseEntry dataEntry = new DatabaseEntry();
+
+         final CursorSituation situation = getCursorSituation(cursor, keyEntry, dataEntry, id);
+         switch (situation) {
+            case NotFoundSelfNorDescendants: {
+               visitParent(transaction, cursor, keyEntry, dataEntry, id, visitor);
+               break;
+            }
+            case FoundDescendants: {
+               visitDescendants(transaction, cursor, keyEntry, dataEntry, id, visitor);
+               break;
+            }
+            case FoundSelf: {
+               final BerkeleyDBLODNode node = BerkeleyDBLODNode.fromDB(txn, this, id, dataEntry.getData(), false);
+               visitor.visit(transaction, node);
+               break;
+            }
+            case FoundNothing: {
+               break;
+            }
+            default:
+               throw new RuntimeException("Invalid situation: " + situation);
+         }
+      }
+
+      visitor.stop(transaction);
+   }
+
+
+   private void visitDescendants(final PersistentLOD.Transaction transaction,
+                                 final Cursor cursor,
+                                 final DatabaseEntry keyEntry,
+                                 final DatabaseEntry dataEntry,
+                                 final byte[] id,
+                                 final PersistentLOD.Visitor visitor) {
+
+      byte[] key = keyEntry.getData();
+
+      final com.sleepycat.je.Transaction txn = getBerkeleyDBTransaction(transaction);
+      BerkeleyDBLODNode node = BerkeleyDBLODNode.fromDB(txn, this, key, dataEntry.getData(), false);
+      if (!visitor.visit(transaction, node)) {
+         return;
+      }
+
+      while (cursor.getNext(keyEntry, dataEntry, LockMode.READ_UNCOMMITTED) == OperationStatus.SUCCESS) {
+         key = keyEntry.getData();
+         if (!Utils.hasSamePrefix(key, id)) {
+            break;
+         }
+         node = BerkeleyDBLODNode.fromDB(txn, this, key, dataEntry.getData(), false);
+         if (!visitor.visit(transaction, node)) {
+            return;
+         }
+      }
+   }
+
+
+   private void visitParent(final PersistentLOD.Transaction transaction,
+                            final Cursor cursor,
+                            final DatabaseEntry keyEntry,
+                            final DatabaseEntry dataEntry,
+                            final byte[] id,
+                            final PersistentLOD.Visitor visitor) {
+      if (cursor.getPrev(keyEntry, dataEntry, LockMode.READ_UNCOMMITTED) == OperationStatus.SUCCESS) {
+         final byte[] key = keyEntry.getData();
+         if (Utils.hasSamePrefix(id, key)) {
+            final com.sleepycat.je.Transaction txn = getBerkeleyDBTransaction(transaction);
+            final BerkeleyDBLODNode node = BerkeleyDBLODNode.fromDB(txn, this, key, dataEntry.getData(), false);
+            visitor.visit(transaction, node);
+         }
+      }
+   }
+
+
    private static com.sleepycat.je.Transaction getBerkeleyDBTransaction(final PersistentLOD.Transaction transaction) {
       return (transaction == null) ? null : ((BerkeleyDBTransaction) transaction)._txn;
    }
 
 
-   private static enum Situation {
+   private static enum CursorSituation {
       NotFoundSelfNorDescendants,
       FoundDescendants,
       FoundSelf,
@@ -237,27 +328,27 @@ public class BerkeleyDBLOD
    }
 
 
-   private Situation getCursorSituation(final Cursor cursor,
-                                        final DatabaseEntry keyEntry,
-                                        final DatabaseEntry dataEntry,
-                                        final byte[] id) {
+   private static CursorSituation getCursorSituation(final Cursor cursor,
+                                                     final DatabaseEntry keyEntry,
+                                                     final DatabaseEntry dataEntry,
+                                                     final byte[] id) {
       final OperationStatus status = cursor.getSearchKeyRange(keyEntry, dataEntry, LockMode.READ_UNCOMMITTED);
       switch (status) {
          case SUCCESS: {
             final byte[] key = keyEntry.getData();
 
             if (!Utils.hasSamePrefix(key, id)) {
-               return Situation.NotFoundSelfNorDescendants;
+               return CursorSituation.NotFoundSelfNorDescendants;
             }
             else if (Utils.isGreaterThan(key, id)) {
-               return Situation.FoundDescendants;
+               return CursorSituation.FoundDescendants;
             }
             else {
-               return Situation.FoundSelf;
+               return CursorSituation.FoundSelf;
             }
          }
          case NOTFOUND: {
-            return Situation.FoundNothing;
+            return CursorSituation.FoundNothing;
          }
          default:
             throw new RuntimeException("Status not supported: " + status);
@@ -266,31 +357,31 @@ public class BerkeleyDBLOD
    }
 
 
-   @Override
-   public PersistentLOD.NodeLayout getNodeLayout(final String id) {
-      final byte[] binaryID = Utils.toBinaryID(id);
+   private PersistentLOD.NodeLayout getNodeLayout(final byte[] id,
+                                                  final int maxLevelDelta) {
 
       final CursorConfig cursorConfig = new CursorConfig();
 
       final com.sleepycat.je.Transaction txn = null;
       try (final Cursor cursor = _nodeDB.openCursor(txn, cursorConfig)) {
-         final DatabaseEntry keyEntry = new DatabaseEntry(binaryID);
+         final DatabaseEntry keyEntry = new DatabaseEntry(id);
          final DatabaseEntry dataEntry = new DatabaseEntry();
          dataEntry.setPartial(0, 0, true);
 
-         final Situation situation = getCursorSituation(cursor, keyEntry, dataEntry, binaryID);
+         final CursorSituation situation = getCursorSituation(cursor, keyEntry, dataEntry, id);
          switch (situation) {
             case NotFoundSelfNorDescendants: {
-               return getNodeLayoutFromParent(cursor, keyEntry, dataEntry, binaryID);
+               return getNodeLayoutFromParent(cursor, keyEntry, dataEntry, id);
             }
             case FoundDescendants: {
-               return getNodeLayoutFromDescendants(cursor, keyEntry, dataEntry, binaryID);
+               return getNodeLayoutFromDescendants(cursor, keyEntry, dataEntry, id, maxLevelDelta);
             }
             case FoundSelf: {
-               return new PersistentLOD.NodeLayout(id, Arrays.asList(id));
+               final String strID = Utils.toIDString(id);
+               return new PersistentLOD.NodeLayout(strID, Arrays.asList(strID));
             }
             case FoundNothing: {
-               return new PersistentLOD.NodeLayout(id, Collections.<String> emptyList());
+               return new PersistentLOD.NodeLayout(Utils.toIDString(id), Collections.<String> emptyList());
             }
             default:
                throw new RuntimeException("Invalid situation: " + situation);
@@ -299,10 +390,26 @@ public class BerkeleyDBLOD
    }
 
 
-   private PersistentLOD.NodeLayout getNodeLayoutFromParent(final Cursor cursor,
-                                                            final DatabaseEntry keyEntry,
-                                                            final DatabaseEntry dataEntry,
-                                                            final byte[] id) {
+   @Override
+   public PersistentLOD.NodeLayout getNodeLayout(final String id) {
+      final int maxLevelDelta = 3;
+      return getNodeLayout(Utils.toBinaryID(id), maxLevelDelta);
+   }
+
+
+   //   @Override
+   //   public PersistentLOD.NodeLayout getNodeLayout(final Sector sector) {
+   //      final int maxLevelDelta = Integer.MAX_VALUE;
+   //
+   //      final TileHeader header = TileHeader.deepestEnclosingTileHeader(sector);
+   //      return getNodeLayout(header._id, maxLevelDelta);
+   //   }
+
+
+   static private PersistentLOD.NodeLayout getNodeLayoutFromParent(final Cursor cursor,
+                                                                   final DatabaseEntry keyEntry,
+                                                                   final DatabaseEntry dataEntry,
+                                                                   final byte[] id) {
       final List<String> nodesID = new ArrayList<>(1);
 
       if (cursor.getPrev(keyEntry, dataEntry, LockMode.READ_UNCOMMITTED) == OperationStatus.SUCCESS) {
@@ -316,11 +423,11 @@ public class BerkeleyDBLOD
    }
 
 
-   private PersistentLOD.NodeLayout getNodeLayoutFromDescendants(final Cursor cursor,
-                                                                 final DatabaseEntry keyEntry,
-                                                                 final DatabaseEntry dataEntry,
-                                                                 final byte[] id) {
-      final int maxLevelDelta = 3;
+   static private PersistentLOD.NodeLayout getNodeLayoutFromDescendants(final Cursor cursor,
+                                                                        final DatabaseEntry keyEntry,
+                                                                        final DatabaseEntry dataEntry,
+                                                                        final byte[] id,
+                                                                        final int maxLevelDelta) {
       final int maxDescendantDepth = id.length + maxLevelDelta;
       //      final int maxDescendantDepth = 1000;
 

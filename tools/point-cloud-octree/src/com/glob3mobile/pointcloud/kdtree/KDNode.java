@@ -6,6 +6,8 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.glob3mobile.pointcloud.PositionsSet;
+
 import es.igosoftware.euclid.bounding.GAxisAlignedBox;
 import es.igosoftware.euclid.vector.GVector3D;
 import es.igosoftware.util.GCollections;
@@ -27,20 +29,6 @@ public abstract class KDNode {
       }
       return Double.compare(point1._y, point2._y);
    }
-
-
-   //   private static int compareYXZ(final GVector3D point1,
-   //                                 final GVector3D point2) {
-   //      final int compareY = Double.compare(point1._y, point2._y);
-   //      if (compareY != 0) {
-   //         return compareY;
-   //      }
-   //      final int compareX = Double.compare(point1._x, point2._x);
-   //      if (compareX != 0) {
-   //         return compareX;
-   //      }
-   //      return Double.compare(point1._z, point2._z);
-   //   }
 
 
    private static int compareXYZ(final GVector3D point1,

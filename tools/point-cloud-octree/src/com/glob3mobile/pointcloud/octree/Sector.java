@@ -7,8 +7,8 @@ import java.util.List;
 
 
 public class Sector
-         implements
-            Serializable {
+implements
+Serializable {
 
    private static final long  serialVersionUID = 1L;
 
@@ -102,19 +102,19 @@ public class Sector
    public final boolean contains(final Angle latitude,
                                  final Angle longitude) {
       return latitude.isBetween(_lower._latitude, _upper._latitude) && //
-               longitude.isBetween(_lower._longitude, _upper._longitude);
+             longitude.isBetween(_lower._longitude, _upper._longitude);
    }
 
 
    public final boolean fullContains(final Sector that) {
       return contains(that._lower._latitude, that._lower._longitude) && //
-             contains(that._upper._latitude, that._upper._longitude);
+               contains(that._upper._latitude, that._upper._longitude);
    }
 
 
    @Override
    public String toString() {
-      return "[Sector lower=" + _lower + ", upper=" + _upper + "]";
+      return "[Sector " + _lower + " / " + _upper + "]";
    }
 
 

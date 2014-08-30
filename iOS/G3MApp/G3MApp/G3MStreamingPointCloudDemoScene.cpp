@@ -41,5 +41,9 @@ void G3MStreamingPointCloudDemoScene::rawActivate(const G3MContext *context) {
 
 // Camera position=(lat=39.23148585629368057d, lon=-77.641587694782629114d, height=6008.4517767920915503) heading=-0.001518 pitch=-90.000000
 
+/*
+ latitude  =  39° 15' 53.35" N
+ longitude =  77° 33'  7.49" W
+ */
 
 }

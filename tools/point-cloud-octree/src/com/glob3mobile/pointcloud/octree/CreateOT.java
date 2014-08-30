@@ -27,6 +27,9 @@ public class CreateOT {
       System.out.println("------------\n");
 
 
+      final File cloudDirectory = new File(System.getProperty("user.dir"));
+      //final File cloudDirectory = new File("/Volumes/My Passport/_LIDAR_COPY");
+
       final String cloudName = "Loudoun-VA";
 
       final boolean deleteOT = true;
@@ -36,23 +39,23 @@ public class CreateOT {
       final boolean showStatisticsOT = true;
 
       if (deleteOT) {
-         BerkeleyDBOctree.delete(cloudName);
+         BerkeleyDBOctree.delete(cloudDirectory, cloudName);
       }
 
       if (loadOT) {
-         loadOT(cloudName, renameDone, getFilesToLoad());
+         loadOT(cloudDirectory, cloudName, renameDone, getFilesToLoad());
       }
 
       System.out.println();
 
       if (visitOT) {
-         visitOT(cloudName);
+         visitOT(cloudDirectory, cloudName);
       }
 
       System.out.println();
 
       if (showStatisticsOT) {
-         showStatisticsOT(cloudName);
+         showStatisticsOT(cloudDirectory, cloudName);
       }
 
    }
@@ -120,7 +123,8 @@ public class CreateOT {
    }
 
 
-   private static void loadOT(final String cloudName,
+   private static void loadOT(final File cloudDirectory,
+                              final String cloudName,
                               final boolean renameDone,
                               final String... filesNames) throws IOException {
 
@@ -128,7 +132,8 @@ public class CreateOT {
       if (loadPoints) {
          final boolean createIfNotExists = true;
          final int cacheSizeInBytes = 1024 * 1024 * 1024;
-         try (final PersistentOctree octree = BerkeleyDBOctree.open(cloudName, createIfNotExists, cacheSizeInBytes)) {
+         try (final PersistentOctree octree = BerkeleyDBOctree.open(cloudDirectory, cloudName, createIfNotExists,
+                  cacheSizeInBytes)) {
             final GProjection projection = GProjection.EPSG_26918;
 
             final int filesNamesLength = filesNames.length;
@@ -148,11 +153,12 @@ public class CreateOT {
    }
 
 
-   private static void visitOT(final String cloudName) {
+   private static void visitOT(final File cloudDirectory,
+                               final String cloudName) {
       final boolean createIfNotExists = false;
       final int cacheSizeInBytes = 1024 * 1024 * 1024;
 
-      try (final PersistentOctree octree = BerkeleyDBOctree.open(cloudName, createIfNotExists, cacheSizeInBytes)) {
+      try (final PersistentOctree octree = BerkeleyDBOctree.open(cloudDirectory, cloudName, createIfNotExists, cacheSizeInBytes)) {
          octree.acceptDepthFirstVisitor(new PersistentOctree.Visitor() {
             private int  _counter;
             private long _started;
@@ -199,10 +205,11 @@ public class CreateOT {
    }
 
 
-   private static void showStatisticsOT(final String cloudName) {
+   private static void showStatisticsOT(final File cloudDirectory,
+                                        final String cloudName) {
       final boolean createIfNotExists = false;
       final int cacheSizeInBytes = 1024 * 1024 * 1024;
-      try (final PersistentOctree octree = BerkeleyDBOctree.open(cloudName, createIfNotExists, cacheSizeInBytes)) {
+      try (final PersistentOctree octree = BerkeleyDBOctree.open(cloudDirectory, cloudName, createIfNotExists, cacheSizeInBytes)) {
          octree.getStatistics(false, false).show();
       }
    }

@@ -165,7 +165,15 @@ public interface PersistentLOD
    PersistentLOD.NodeLayout getNodeLayout(String id);
 
 
+   //   PersistentLOD.NodeLayout getNodeLayout(Sector sector);
+
+   void acceptVisitor(PersistentLOD.Transaction transaction,
+                      PersistentLOD.Visitor visitor,
+                      Sector sector);
+
+
    PersistentLOD.Node getNode(String id,
                               boolean loadPoints);
+
 
 }

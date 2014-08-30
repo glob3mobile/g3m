@@ -83,10 +83,6 @@ void G3MDemoModel::initializeG3MWidget(G3MWidget* g3mWidget) {
 }
 
 void G3MDemoModel::reset() {
-
-#warning remove leak
-  std::string* leak = new std::string();
-
   _g3mWidget->cancelAllEffects();
 
   PlanetRenderer* planetRenderer = getPlanetRenderer();

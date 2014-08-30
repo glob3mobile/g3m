@@ -12,7 +12,6 @@ import com.glob3mobile.pointcloud.kdtree.KDInnerNode;
 import com.glob3mobile.pointcloud.kdtree.KDLeafNode;
 import com.glob3mobile.pointcloud.kdtree.KDTree;
 import com.glob3mobile.pointcloud.kdtree.KDTreeVisitor;
-import com.glob3mobile.pointcloud.octree.PersistentLOD.Transaction;
 import com.glob3mobile.pointcloud.octree.berkeleydb.BerkeleyDBLOD;
 import com.glob3mobile.pointcloud.octree.berkeleydb.TileHeader;
 
@@ -106,7 +105,7 @@ class LODSortingTask
    }
 
 
-   private void splitPoints(final Transaction transaction,
+   private void splitPoints(final PersistentLOD.Transaction transaction,
                             final PersistentLOD lodDB,
                             final byte[] nodeID,
                             final Sector nodeSector,
@@ -132,7 +131,7 @@ class LODSortingTask
    }
 
 
-   private void process(final Transaction transaction,
+   private void process(final PersistentLOD.Transaction transaction,
                         final PersistentLOD lodDB,
                         final String nodeID,
                         final List<Geodetic3D> points) {
@@ -362,6 +361,64 @@ class LODSortingTask
          lodIndices.add(sortedVerticesCount - 1);
       }
    }
+
+
+   //   private static void sortPoints(final List<Geodetic3D> points,
+   //                                  final List<Integer> sortedVertices,
+   //                                  final List<Integer> lodIndices) {
+   //
+   //      final int maxPointsPerLeaf = 4;
+   //      final QuadTree tree = new QuadTree(points, maxPointsPerLeaf);
+   //
+   //      final QuadTreeVisitor visitor = new QuadTreeVisitor() {
+   //         private int _lastDepth = 0;
+   //
+   //
+   //         @Override
+   //         public void startVisiting(final QuadTree tree1) {
+   //         }
+   //
+   //
+   //         @Override
+   //         public void visitInnerNode(final QuadInnerNode innerNode) {
+   //            pushVertexIndex(innerNode.getVertexIndexes(), innerNode.getDepth());
+   //         }
+   //
+   //
+   //         @Override
+   //         public void visitLeafNode(final QuadLeafNode leafNode) {
+   //            pushVertexIndex(leafNode.getVertexIndexes(), leafNode.getDepth());
+   //         }
+   //
+   //
+   //         private void pushVertexIndex(final int[] vertexIndexes,
+   //                                      final int depth) {
+   //            if (_lastDepth != depth) {
+   //               _lastDepth = depth;
+   //
+   //               final int sortedVerticesCount = sortedVertices.size();
+   //               if (sortedVerticesCount > 0) {
+   //                  lodIndices.add(sortedVerticesCount - 1);
+   //               }
+   //            }
+   //
+   //            for (final int vertexIndex : vertexIndexes) {
+   //               sortedVertices.add(vertexIndex);
+   //            }
+   //         }
+   //
+   //
+   //         @Override
+   //         public void endVisiting(final QuadTree tree1) {
+   //         }
+   //      };
+   //      tree.breadthFirstAcceptVisitor(visitor);
+   //
+   //      final int sortedVerticesCount = sortedVertices.size();
+   //      if (sortedVerticesCount > 0) {
+   //         lodIndices.add(sortedVerticesCount - 1);
+   //      }
+   //   }
 
 
    @Override
