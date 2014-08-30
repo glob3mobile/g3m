@@ -73,11 +73,13 @@ implements
       _progress.finish();
       _progress = null;
 
+      System.out.println();
       try (PersistentOctree targetOctree = BerkeleyDBOctree.openReadOnly(_cloudDirectory, _simplifiedCloudName, _cacheSizeInBytes)) {
          final PersistentOctree.Statistics statistics = targetOctree.getStatistics(false, true);
          statistics.show();
          final long simplifiedPointsCount = statistics.getPointsCount();
 
+         System.out.println();
          System.out.println("Source points=" + _sourcePointsCount + ", Simplified Points=" + simplifiedPointsCount + " ("
                             + GStringUtils.formatPercent(simplifiedPointsCount, _sourcePointsCount) + ")");
       }
