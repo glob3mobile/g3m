@@ -10,12 +10,13 @@ import es.igosoftware.euclid.vector.GVector3D;
 
 
 public class SphericalPlanet
-         implements
-            Planet {
-   private final double       _radius;
-
+implements
+Planet {
 
    public static final Planet EARTH = new SphericalPlanet(6378137.0);
+
+
+   private final double       _radius;
 
 
    public SphericalPlanet(final double radius) {
