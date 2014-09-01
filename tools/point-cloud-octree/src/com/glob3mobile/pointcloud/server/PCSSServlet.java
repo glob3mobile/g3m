@@ -29,8 +29,8 @@ import es.igosoftware.util.XStringTokenizer;
 
 
 public class PCSSServlet
-         extends
-            HttpServlet {
+extends
+HttpServlet {
    private static final long                serialVersionUID = 1L;
 
    private final Map<String, PersistentLOD> _openedDBs       = new HashMap<String, PersistentLOD>();
@@ -298,19 +298,7 @@ public class PCSSServlet
 
       if (path.length == 1) {
          final String planetType = request.getParameter("planet");
-         final Planet planet;
-         if ("ellipsoidal".equalsIgnoreCase(planetType)) {
-            planet = EllipsoidalPlanet.EARTH;
-         }
-         else if ("flat".equalsIgnoreCase(planetType)) {
-            planet = FlatPlanet.EARTH;
-         }
-         else if ("spherical".equalsIgnoreCase(planetType)) {
-            planet = SphericalPlanet.EARTH;
-         }
-         else {
-            planet = null;
-         }
+         final Planet planet = getPlanet(planetType);
          if (planet == null) {
             error(response, "planet parameters invalid or missing: " + planet);
          }
@@ -337,6 +325,22 @@ public class PCSSServlet
       //      }
       else {
          error(response, "Invalid request");
+      }
+   }
+
+
+   private static Planet getPlanet(final String type) {
+      if ("ellipsoidal".equalsIgnoreCase(type)) {
+         return EllipsoidalPlanet.EARTH;
+      }
+      else if ("flat".equalsIgnoreCase(type)) {
+         return FlatPlanet.EARTH;
+      }
+      else if ("spherical".equalsIgnoreCase(type)) {
+         return SphericalPlanet.EARTH;
+      }
+      else {
+         return null;
       }
    }
 
