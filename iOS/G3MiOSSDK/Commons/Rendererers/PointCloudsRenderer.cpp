@@ -53,7 +53,9 @@ void PointCloudsRenderer::PointCloud::initialize(const G3MContext* context) {
   _errorDownloadingMetadata = false;
   _errorParsingMetadata = false;
 
-  const URL metadataURL(_serverURL, _cloudName);
+  const std::string planetType = context->getPlanet()->getType();
+
+  const URL metadataURL(_serverURL, _cloudName + "?planet=" + planetType);
 
   _downloader->requestBuffer(metadataURL,
                              _downloadPriority,

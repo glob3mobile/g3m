@@ -5,12 +5,16 @@ package com.glob3mobile.pointcloud.server;
 import java.io.PrintWriter;
 import java.util.List;
 
+import com.glob3mobile.pointcloud.Planet;
 import com.glob3mobile.pointcloud.octree.Angle;
 import com.glob3mobile.pointcloud.octree.Geodetic3D;
 import com.glob3mobile.pointcloud.octree.PersistentLOD;
 import com.glob3mobile.pointcloud.octree.PersistentLOD.Node;
 import com.glob3mobile.pointcloud.octree.Sector;
 
+import es.igosoftware.euclid.bounding.GAxisAlignedBox;
+import es.igosoftware.euclid.vector.GVector3D;
+import es.igosoftware.euclid.vector.IVector3;
 import es.igosoftware.util.GTriplet;
 
 
@@ -59,8 +63,8 @@ public class JSONUtils {
    }
 
 
-   private static void sendJSONKey(final PrintWriter writer,
-                                   final String key) {
+   public static void sendJSONKey(final PrintWriter writer,
+                                  final String key) {
       writer.print('"');
       writer.print(key);
       writer.print("\":");
@@ -159,9 +163,9 @@ public class JSONUtils {
    }
 
 
-   private static void sendJSON(final PrintWriter writer,
-                                final String key,
-                                final Geodetic3D value) {
+   public static void sendJSON(final PrintWriter writer,
+                               final String key,
+                               final Geodetic3D value) {
       sendJSONKey(writer, key);
       writer.print('[');
       writer.print(Double.toString(value._latitude._radians));
@@ -169,6 +173,20 @@ public class JSONUtils {
       writer.print(Double.toString(value._longitude._radians));
       writer.print(',');
       writer.print(Double.toString(value._height));
+      writer.print(']');
+   }
+
+
+   public static void sendJSON(final PrintWriter writer,
+                               final String key,
+                               final IVector3 value) {
+      sendJSONKey(writer, key);
+      writer.print('[');
+      writer.print(Double.toString(value.x()));
+      writer.print(',');
+      writer.print(Double.toString(value.y()));
+      writer.print(',');
+      writer.print(Double.toString(value.z()));
       writer.print(']');
    }
 
@@ -202,10 +220,10 @@ public class JSONUtils {
    }
 
 
-   private static void sendJSON(final PrintWriter writer,
-                                final String key,
-                                final List<PersistentLOD.NodeLevel> value,
-                                final Geodetic3D average) {
+   public static void sendJSON(final PrintWriter writer,
+                               final String key,
+                               final List<PersistentLOD.NodeLevel> value,
+                               final Geodetic3D average) {
       sendJSONKey(writer, key);
       writer.print('[');
       boolean first = true;
@@ -218,6 +236,55 @@ public class JSONUtils {
          }
          sendJSON(writer, each, average);
       }
+      writer.print(']');
+   }
+
+
+   public static void sendJSON(final PrintWriter writer,
+                               final String key,
+                               final List<PersistentLOD.NodeLevel> value,
+                               final Planet planet,
+                               final IVector3 average) {
+      sendJSONKey(writer, key);
+      writer.print('[');
+      boolean first = true;
+      for (final PersistentLOD.NodeLevel each : value) {
+         if (first) {
+            first = false;
+         }
+         else {
+            writer.print(',');
+         }
+         sendJSON(writer, each, planet, average);
+      }
+      writer.print(']');
+   }
+
+
+   private static void sendJSON(final PrintWriter writer,
+                                final PersistentLOD.NodeLevel level,
+                                final Planet planet,
+                                final IVector3 average) {
+      writer.print('[');
+
+      boolean first = true;
+      for (final Geodetic3D pos : level.getPoints(null)) {
+         if (first) {
+            first = false;
+         }
+         else {
+            writer.print(',');
+         }
+
+         final GVector3D cartesian = planet.toCartesian(pos);
+
+         writer.print(Float.toString((float) (cartesian._x - average.x())));
+         writer.print(',');
+         writer.print(Float.toString((float) (cartesian._y - average.y())));
+         writer.print(',');
+         writer.print(Float.toString((float) (cartesian._z - average.z())));
+      }
+
       writer.print(']');
    }
 
@@ -296,25 +363,47 @@ public class JSONUtils {
    }
 
 
-   //   private static void sendJSON(final PrintWriter writer,
-   //                                final String key,
-   //                                final GAxisAlignedBox value) {
-   //
-   //      sendJSONKey(writer, key);
-   //      writer.print('[');
-   //      writer.print(Double.toString(value._lower.x()));
-   //      writer.print(',');
-   //      writer.print(Double.toString(value._lower.y()));
-   //      writer.print(',');
-   //      writer.print(Double.toString(value._lower.z()));
-   //      writer.print(',');
-   //      writer.print(Double.toString(value._upper.x()));
-   //      writer.print(',');
-   //      writer.print(Double.toString(value._upper.y()));
-   //      writer.print(',');
-   //      writer.print(Double.toString(value._upper.z()));
-   //      writer.print(']');
-   //   }
+   public static void sendJSON(final PrintWriter writer,
+                               final String key,
+                               final GAxisAlignedBox value) {
+
+      sendJSONKey(writer, key);
+      writer.print('[');
+      writer.print(Double.toString(value._lower.x()));
+      writer.print(',');
+      writer.print(Double.toString(value._lower.y()));
+      writer.print(',');
+      writer.print(Double.toString(value._lower.z()));
+      writer.print(',');
+      writer.print(Double.toString(value._upper.x()));
+      writer.print(',');
+      writer.print(Double.toString(value._upper.y()));
+      writer.print(',');
+      writer.print(Double.toString(value._upper.z()));
+      writer.print(']');
+   }
+
+
+   public static void sendJSON(final PrintWriter writer,
+                               final String key,
+                               final GAxisAlignedBox value,
+                               final IVector3 average) {
+
+      sendJSONKey(writer, key);
+      writer.print('[');
+      writer.print(Float.toString((float) (value._lower.x() - average.x())));
+      writer.print(',');
+      writer.print(Float.toString((float) (value._lower.y() - average.y())));
+      writer.print(',');
+      writer.print(Float.toString((float) (value._lower.z() - average.z())));
+      writer.print(',');
+      writer.print(Float.toString((float) (value._upper.x() - average.x())));
+      writer.print(',');
+      writer.print(Float.toString((float) (value._upper.y() - average.y())));
+      writer.print(',');
+      writer.print(Float.toString((float) (value._upper.z() - average.z())));
+      writer.print(']');
+   }
 
 
    //   private static void sendJSON(final PrintWriter writer,
@@ -413,9 +502,9 @@ public class JSONUtils {
    //   }
 
 
-   private static void sendJSON(final PrintWriter writer,
-                                final String key,
-                                final int[] value) {
+   public static void sendJSON(final PrintWriter writer,
+                               final String key,
+                               final int[] value) {
       sendJSONKey(writer, key);
       writer.print('[');
       boolean first = true;

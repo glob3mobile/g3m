@@ -33,6 +33,7 @@ _model(NULL)
 G3MDemoBuilder::~G3MDemoBuilder() {
 }
 
+
 class G3MDemoInitializationTask : public GInitializationTask {
 private:
   G3MDemoModel* _model;

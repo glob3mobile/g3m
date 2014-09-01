@@ -765,7 +765,7 @@ void PlanetRenderer::render(const G3MRenderContext* rc,
   const Sector* previousLastVisibleSector = _lastVisibleSector;
   _lastVisibleSector = _statistics.updateVisibleSector(_lastVisibleSector);
   if (previousLastVisibleSector != _lastVisibleSector) {
-    ILogger::instance()->logInfo("=> visibleSector: %s", _lastVisibleSector->description().c_str());
+    // ILogger::instance()->logInfo("=> visibleSector: %s", _lastVisibleSector->description().c_str());
     if (_lastVisibleSector != NULL) {
       const int visibleSectorListenersCount = _visibleSectorListeners.size();
       for (int i = 0; i < visibleSectorListenersCount; i++) {

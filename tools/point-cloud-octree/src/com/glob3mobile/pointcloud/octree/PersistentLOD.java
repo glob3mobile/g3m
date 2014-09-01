@@ -133,6 +133,9 @@ public interface PersistentLOD
 
       double getAverageDepth();
 
+
+      long getNodesCount();
+
    }
 
 

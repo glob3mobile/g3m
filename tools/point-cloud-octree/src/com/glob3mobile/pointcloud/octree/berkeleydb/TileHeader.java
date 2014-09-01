@@ -13,7 +13,7 @@ public class TileHeader {
    static final TileHeader ROOT_TILE_HEADER = new TileHeader(new byte[0], Sector.FULL_SPHERE);
 
 
-   static TileHeader deepestEnclosingTileHeader(final Sector targetSector) {
+   public static TileHeader deepestEnclosingTileHeader(final Sector targetSector) {
       return deepestEnclosingTile(ROOT_TILE_HEADER, targetSector);
    }
 

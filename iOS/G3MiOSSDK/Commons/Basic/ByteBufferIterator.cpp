@@ -57,8 +57,6 @@ short ByteBufferIterator::nextInt16() {
 
   const int iResult = (((int) b1) |
                        ((int) (b2 << 8)));
-  //  const short result = (short) iResult;
-  //  return result;
   return (short) iResult;
 }
 

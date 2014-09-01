@@ -1,0 +1,50 @@
+
+
+package com.glob3mobile.pointcloud;
+
+
+import com.glob3mobile.pointcloud.octree.Angle;
+import com.glob3mobile.pointcloud.octree.Geodetic3D;
+
+import es.igosoftware.euclid.vector.GVector3D;
+
+
+public class SphericalPlanet
+         implements
+            Planet {
+   private final double       _radius;
+
+
+   public static final Planet EARTH = new SphericalPlanet(6378137.0);
+
+
+   public SphericalPlanet(final double radius) {
+      _radius = radius;
+   }
+
+
+   @Override
+   public final GVector3D toCartesian(final Geodetic3D geodetic) {
+      return toCartesian(geodetic._latitude, geodetic._longitude, geodetic._height);
+   }
+
+
+   @Override
+   public GVector3D toCartesian(final Angle latitude,
+                                final Angle longitude,
+                                final double height) {
+      return geodeticSurfaceNormal(latitude, longitude).scale(_radius + height);
+   }
+
+
+   public final GVector3D geodeticSurfaceNormal(final Angle latitude,
+                                                final Angle longitude) {
+      final double cosLatitude = Math.cos(latitude._radians);
+      return new GVector3D( //
+               cosLatitude * Math.cos(longitude._radians), //
+               cosLatitude * Math.sin(longitude._radians), //
+               Math.sin(latitude._radians));
+   }
+
+
+}

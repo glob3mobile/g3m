@@ -679,6 +679,12 @@ PersistentLOD {
          return _nodeLevelsCount;
       }
 
+
+      @Override
+      public long getNodesCount() {
+         return _nodesCount;
+      }
+
    }
 
 
