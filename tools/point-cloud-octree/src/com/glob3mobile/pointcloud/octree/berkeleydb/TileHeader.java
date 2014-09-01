@@ -10,7 +10,7 @@ import com.glob3mobile.pointcloud.octree.Utils;
 
 public class TileHeader {
 
-   private static final TileHeader ROOT_TILE_HEADER = new TileHeader(new byte[0], Sector.FULL_SPHERE);
+   static final TileHeader ROOT_TILE_HEADER = new TileHeader(new byte[0], Sector.FULL_SPHERE);
 
 
    static TileHeader deepestEnclosingTileHeader(final Sector targetSector) {

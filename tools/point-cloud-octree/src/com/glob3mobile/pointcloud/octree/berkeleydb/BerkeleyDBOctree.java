@@ -51,6 +51,9 @@ PersistentOctree {
          return;
       }
 
+      final File cachedStatisticsFile = new File(cloudDirectory, "_stats_" + cloudName + ".ser");
+      cachedStatisticsFile.delete();
+
       try {
          GIOUtils.cleanDirectory(envHome, false);
       }
@@ -251,16 +254,17 @@ PersistentOctree {
          }
 
 
-         final TileHeader header = TileHeader.deepestEnclosingTileHeader(targetSector);
+         //final TileHeader header = TileHeader.deepestEnclosingTileHeader(targetSector);
+         final TileHeader header = TileHeader.ROOT_TILE_HEADER;
 
-         for (final Geodetic3D point : _buffer) {
-            if (!targetSector.contains(point._latitude, point._longitude)) {
-               throw new RuntimeException("Logic Error");
-            }
-            if (!header._sector.contains(point._latitude, point._longitude)) {
-               throw new RuntimeException("Logic Error");
-            }
-         }
+         //         for (final Geodetic3D point : _buffer) {
+         //            if (!targetSector.contains(point._latitude, point._longitude)) {
+         //               throw new RuntimeException("Logic Error");
+         //            }
+         //            if (!header._sector.contains(point._latitude, point._longitude)) {
+         //               throw new RuntimeException("Logic Error");
+         //            }
+         //         }
 
          final double averageLatitudeInRadians = _sumLatitudeInRadians / bufferSize;
          final double averageLongitudeInRadians = _sumLongitudeInRadians / bufferSize;

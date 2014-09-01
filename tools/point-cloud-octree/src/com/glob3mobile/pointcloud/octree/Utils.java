@@ -7,7 +7,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import com.glob3mobile.pointcloud.Planet;
+
 import es.igosoftware.euclid.colors.GColorF;
+import es.igosoftware.euclid.vector.GVector3D;
 import es.igosoftware.util.GMath;
 
 
@@ -129,6 +132,59 @@ public class Utils {
          return null;
       }
       return Arrays.copyOf(id, length - 1);
+   }
+
+
+   public static Geodetic3D average(final List<Geodetic3D> points) {
+      double sumLat = 0;
+      double sumLon = 0;
+      double sumHeight = 0;
+      for (final Geodetic3D point : points) {
+         sumLat += point._latitude._radians;
+         sumLon += point._longitude._radians;
+         sumHeight += point._height;
+      }
+      final int size = points.size();
+      return Geodetic3D.fromRadians(sumLat / size, sumLon / size, sumHeight / size);
+   }
+
+
+   public static Geodetic3D centroid(final List<Geodetic3D> points) {
+      double minLat = Double.POSITIVE_INFINITY;
+      double minLon = Double.POSITIVE_INFINITY;
+      double minHeight = Double.POSITIVE_INFINITY;
+      double maxLat = Double.NEGATIVE_INFINITY;
+      double maxLon = Double.NEGATIVE_INFINITY;
+      double maxHeight = Double.NEGATIVE_INFINITY;
+      for (final Geodetic3D point : points) {
+         final double lat = point._latitude._radians;
+         final double lon = point._longitude._radians;
+         final double height = point._height;
+
+         minLat = Math.min(minLat, lat);
+         minLon = Math.min(minLon, lon);
+         minHeight = Math.min(minHeight, height);
+
+         maxLat = Math.max(maxLat, lat);
+         maxLon = Math.max(maxLon, lon);
+         maxHeight = Math.max(maxHeight, height);
+      }
+
+      return Geodetic3D.fromRadians( //
+               (minLat + maxLat) / 2, //
+               (minLon + maxLon) / 2, //
+               (minHeight + maxHeight) / 2);
+   }
+
+
+   public static List<GVector3D> toCartesian(final Planet planet,
+                                             final List<Geodetic3D> positions) {
+      final List<GVector3D> result = new ArrayList<GVector3D>(positions.size());
+      for (final Geodetic3D position : positions) {
+         result.add(planet.toCartesian(position));
+      }
+      return result;
+
    }
 
 

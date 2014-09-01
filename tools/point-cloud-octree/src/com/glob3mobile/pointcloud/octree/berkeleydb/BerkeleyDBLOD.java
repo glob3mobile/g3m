@@ -34,8 +34,8 @@ import es.igosoftware.util.GUndeterminateProgress;
 
 
 public class BerkeleyDBLOD
-         implements
-            PersistentLOD {
+implements
+PersistentLOD {
 
 
    public static PersistentLOD openReadOnly(final File cloudDirectory,
@@ -59,6 +59,9 @@ public class BerkeleyDBLOD
       if (!envHome.exists()) {
          return;
       }
+
+      final File cachedStatisticsFile = new File(cloudDirectory, "_stats_" + cloudName + ".ser");
+      cachedStatisticsFile.delete();
 
       try {
          GIOUtils.cleanDirectory(envHome, false);
@@ -138,8 +141,8 @@ public class BerkeleyDBLOD
 
 
    static class BerkeleyDBTransaction
-            implements
-               PersistentLOD.Transaction {
+   implements
+   PersistentLOD.Transaction {
 
       final com.sleepycat.je.Transaction _txn;
 
@@ -481,10 +484,10 @@ public class BerkeleyDBLOD
 
 
    private static class BerkeleyLODDBStatistics
-            implements
-               PersistentLOD.Visitor,
-               PersistentLOD.Statistics,
-               Serializable {
+   implements
+   PersistentLOD.Visitor,
+   PersistentLOD.Statistics,
+   Serializable {
 
       private static final long      serialVersionUID = 1L;
 
@@ -597,8 +600,8 @@ public class BerkeleyDBLOD
          System.out.println("   Nodes: " + _nodesCount);
          System.out.println("    Depth: " + _minDepth + "/" + _maxDepth + ", Average=" + ((float) _sumDepth / _nodesCount));
          System.out.println("    Points/Node: Average=" + ((float) _pointsCount / _nodesCount) + //
-                  ", Min=" + _minPointsCountPerNode + //
-                  ", Max=" + _maxPointsCountPerNode);
+                            ", Min=" + _minPointsCountPerNode + //
+                            ", Max=" + _maxPointsCountPerNode);
          System.out.println("   Levels: " + _nodeLevelsCount);
          System.out.println("    Levels/Node=" + ((float) _nodeLevelsCount / _nodesCount));
          System.out.println("    Points/Level: Average=" + ((float) _pointsCount / _nodeLevelsCount));
