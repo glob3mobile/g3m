@@ -150,14 +150,7 @@ public abstract class Layer
   {
     if (_condition != null)
        _condition.dispose();
-  //  const int size = _layerInfo->size();
-  //  for (unsigned int i = 0; i < size; i++)
-  //  {
-  //    delete _layerInfo->at(i);
-  //  }
-  //
-  //  _layerInfo->clear();
-    _layerInfo = null;
+    _layerInfo.clear();
   }
 
   public boolean isAvailable(Tile tile)

@@ -32,7 +32,7 @@ public class ChildRenderer
   public ChildRenderer(Renderer renderer, java.util.ArrayList<Info> info)
   {
      _renderer = renderer;
-     _info = info;
+    setInfo(info);
   }
 
   public void dispose()
