@@ -114,15 +114,19 @@ public class PointCloudsRenderer extends DefaultRenderer
   private static class PointCloudMetadataDownloadListener extends IBufferDownloadListener
   {
     private PointCloud _pointCloud;
+    private final IThreadUtils _threadUtils;
 
-    public PointCloudMetadataDownloadListener(PointCloud pointCloud)
+    public PointCloudMetadataDownloadListener(PointCloud pointCloud, IThreadUtils threadUtils)
     {
        _pointCloud = pointCloud;
+       _threadUtils = threadUtils;
     }
 
     public final void onDownload(URL url, IByteBuffer buffer, boolean expired)
     {
-      _pointCloud.downloadedMetadata(buffer);
+      ILogger.instance().logInfo("Downloaded metadata for \"%s\" (bytes=%ld)", _pointCloud.getCloudName(), buffer.size());
+    
+      _threadUtils.invokeAsyncTask(new PointCloudMetadataParserAsyncTask(_pointCloud, buffer), true);
     }
 
     public final void onError(URL url)
@@ -154,9 +158,6 @@ public class PointCloudsRenderer extends DefaultRenderer
     private PointCloudMetadataListener _metadataListener;
     private boolean _deleteListener;
 
-    private IDownloader _downloader;
-    private final IThreadUtils _threadUtils;
-
     private boolean _downloadingMetadata;
     private boolean _errorDownloadingMetadata;
     private boolean _errorParsingMetadata;
@@ -176,8 +177,6 @@ public class PointCloudsRenderer extends DefaultRenderer
        _readExpired = readExpired;
        _metadataListener = metadataListener;
        _deleteListener = deleteListener;
-       _downloader = null;
-       _threadUtils = null;
        _downloadingMetadata = false;
        _errorDownloadingMetadata = false;
        _errorParsingMetadata = false;
@@ -194,10 +193,13 @@ public class PointCloudsRenderer extends DefaultRenderer
          _sector.dispose();
     }
 
+    public final String getCloudName()
+    {
+      return _cloudName;
+    }
+
     public final void initialize(G3MContext context)
     {
-      _downloader = context.getDownloader();
-      _threadUtils = context.getThreadUtils();
       _downloadingMetadata = true;
       _errorDownloadingMetadata = false;
       _errorParsingMetadata = false;
@@ -208,9 +210,25 @@ public class PointCloudsRenderer extends DefaultRenderer
     
       ILogger.instance().logInfo("Downloading metadata for \"%s\"", _cloudName);
     
-      _downloader.requestBuffer(metadataURL, _downloadPriority, _timeToCache, _readExpired, new PointCloudsRenderer.PointCloudMetadataDownloadListener(this), true);
+      context.getDownloader().requestBuffer(metadataURL, _downloadPriority, _timeToCache, _readExpired, new PointCloudsRenderer.PointCloudMetadataDownloadListener(this, context.getThreadUtils()), true);
     }
 
+
+    //void PointCloudsRenderer::PointCloud::downloadedMetadata(IByteBuffer* buffer) {
+    //  ILogger::instance()->logInfo("Downloaded metadata for \"%s\" (bytes=%ld)", _cloudName.c_str(), buffer->size());
+    //
+    //  _threadUtils->invokeAsyncTask(new PointCloudMetadataParserAsyncTask(this, buffer),
+    //                                true);
+    //
+    //  //  _downloadingMetadata = false;
+    //  //
+    //  //
+    //  //#warning DGD at work!
+    //  ////  _errorParsingMetadata = true;
+    //  //
+    //  //  delete buffer;
+    //}
+    
     public final RenderState getRenderState(G3MRenderContext rc)
     {
       if (_downloadingMetadata)
@@ -237,20 +255,7 @@ public class PointCloudsRenderer extends DefaultRenderer
       _errorDownloadingMetadata = true;
     }
 
-    public final void downloadedMetadata(IByteBuffer buffer)
-    {
-      ILogger.instance().logInfo("Downloaded metadata for \"%s\" (bytes=%ld)", _cloudName, buffer.size());
-    
-      _threadUtils.invokeAsyncTask(new PointCloudMetadataParserAsyncTask(this, buffer), true);
-    
-      //  _downloadingMetadata = false;
-      //
-      //
-      ///#warning DGD at work!
-      ////  _errorParsingMetadata = true;
-      //
-      //  delete buffer;
-    }
+//    void downloadedMetadata(IByteBuffer* buffer);
 
     public final void parsedMetadata(long pointsCount, Sector sector, double minHeight, double maxHeight)
     {
