@@ -242,7 +242,6 @@ public class BoxShape extends AbstractMeshShape
        _borderColor.dispose();
 
   super.dispose();
-
   }
 
   public final void setExtent(Vector3D extent)

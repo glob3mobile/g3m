@@ -33,27 +33,25 @@ public class Box extends BoundingVolume
   private Mesh _mesh;
   private void createMesh(Color color)
   {
-  
-    float[] v = { (float) _lower._x, (float) _lower._y, (float) _lower._z, (float) _lower._x, (float) _upper._y, (float) _lower._z, (float) _lower._x, (float) _upper._y, (float) _upper._z, (float) _lower._x, (float) _lower._y, (float) _upper._z, (float) _upper._x, (float) _lower._y, (float) _lower._z, (float) _upper._x, (float) _upper._y, (float) _lower._z, (float) _upper._x, (float) _upper._y, (float) _upper._z, (float) _upper._x, (float) _lower._y, (float) _upper._z };
+    double[] v = { _lower._x, _lower._y, _lower._z, _lower._x, _upper._y, _lower._z, _lower._x, _upper._y, _upper._z, _lower._x, _lower._y, _upper._z, _upper._x, _lower._y, _lower._z, _upper._x, _upper._y, _lower._z, _upper._x, _upper._y, _upper._z, _upper._x, _lower._y, _upper._z };
   
     short[] i = { 0, 1, 1, 2, 2, 3, 3, 0, 1, 5, 5, 6, 6, 2, 2, 1, 5, 4, 4, 7, 7, 6, 6, 5, 4, 0, 0, 3, 3, 7, 7, 4, 3, 2, 2, 6, 6, 7, 7, 3, 0, 1, 1, 5, 5, 4, 4, 0 };
   
     FloatBufferBuilderFromCartesian3D vertices = FloatBufferBuilderFromCartesian3D.builderWithFirstVertexAsCenter();
-    ShortBufferBuilder indices = new ShortBufferBuilder();
-  
     final int numVertices = 8;
-    for (int n = 0; n<numVertices; n++)
+    for (int n = 0; n < numVertices; n++)
     {
       vertices.add(v[n *3], v[n *3+1], v[n *3+2]);
     }
   
+    ShortBufferBuilder indices = new ShortBufferBuilder();
     final int numIndices = 48;
-    for (int n = 0; n<numIndices; n++)
+    for (int n = 0; n < numIndices; n++)
     {
       indices.add(i[n]);
     }
   
-    _mesh = new IndexedMesh(GLPrimitive.lines(), true, vertices.getCenter(), vertices.create(), indices.create(), 1, 1, color);
+    _mesh = new IndexedMesh(GLPrimitive.lines(), true, vertices.getCenter(), vertices.create(), indices.create(), 2, 1, color);
   
     if (vertices != null)
        vertices.dispose();

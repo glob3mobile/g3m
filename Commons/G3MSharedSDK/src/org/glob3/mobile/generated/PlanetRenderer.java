@@ -547,14 +547,19 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
       }
     }
   
+    final Sector previousLastVisibleSector = _lastVisibleSector;
     _lastVisibleSector = _statistics.updateVisibleSector(_lastVisibleSector);
-    if (_lastVisibleSector != null)
+    if (previousLastVisibleSector != _lastVisibleSector)
     {
-      final int visibleSectorListenersCount = _visibleSectorListeners.size();
-      for (int i = 0; i < visibleSectorListenersCount; i++)
+      // ILogger::instance()->logInfo("=> visibleSector: %s", _lastVisibleSector->description().c_str());
+      if (_lastVisibleSector != null)
       {
-        VisibleSectorListenerEntry entry = _visibleSectorListeners.get(i);
-        entry.tryToNotifyListener(_lastVisibleSector, rc);
+        final int visibleSectorListenersCount = _visibleSectorListeners.size();
+        for (int i = 0; i < visibleSectorListenersCount; i++)
+        {
+          VisibleSectorListenerEntry entry = _visibleSectorListeners.get(i);
+          entry.tryToNotifyListener(_lastVisibleSector, rc);
+        }
       }
     }
   

@@ -71,8 +71,6 @@ public class ByteBufferIterator
     final short b2 = (short) (nextUInt8() & 0xFF);
   
     final int iResult = (((int) b1) | ((int)(b2 << 8)));
-    //  const short result = (short) iResult;
-    //  return result;
     return (short) iResult;
   }
   public final int nextInt32()
@@ -127,6 +125,14 @@ public class ByteBufferIterator
   {
     final long l = nextInt64();
     return IMathUtils.instance().rawLongBitsToDouble(l);
+  }
+
+  public final void nextUInt8(int count, byte[] dst)
+  {
+    for (int i = 0; i < count; i++)
+    {
+      dst[i] = nextUInt8();
+    }
   }
 
 }
