@@ -20,7 +20,7 @@ package org.glob3.mobile.generated;
 
 //class IDownloader;
 //class Sector;
-
+//class Frustum;
 
 public class PointCloudsRenderer extends DefaultRenderer
 {
@@ -35,30 +35,36 @@ public class PointCloudsRenderer extends DefaultRenderer
   }
 
 
+//  class PointCloudInnerNode;
+//  class PointCloudLeafNode;
+//
+//  class PointCloudNodeVisitor {
+//  public:
+//    virtual ~PointCloudNodeVisitor() {
+//    }
+//
+//    virtual void visitInnerNode(const PointCloudInnerNode* innerNode) = 0;
+//    virtual void visitLeafNode(const PointCloudLeafNode* leafNode) = 0;
+//  };
+
+
+
+
   private static class PointCloudNode
   {
-    protected final int _idLenght;
-    protected String _id;
 
-    protected PointCloudNode(int idLenght, String id)
-    {
-       _idLenght = idLenght;
-       _id = id;
-    }
+    public final String _id;
 
     public void dispose()
     {
-      _id = null;
     }
 
-    public final int getIDLenght()
-    {
-      return _idLenght;
-    }
+//    virtual void acceptVisitor(PointCloudNodeVisitor* visitor) = 0;
 
-    public final String getID()
+
+    protected PointCloudNode(String id)
     {
-      return _id;
+       _id = id;
     }
 
   }
@@ -67,19 +73,34 @@ public class PointCloudsRenderer extends DefaultRenderer
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following type could not be found.
 //  class PointCloudLeafNode;
 
-  private static class PointCloudOctreeInnerNode extends PointCloudNode
+  private static class PointCloudInnerNode extends PointCloudNode
   {
     private PointCloudNode[] _children = new PointCloudNode[4];
 
-    public PointCloudOctreeInnerNode(int idLenght, String id)
+    public PointCloudInnerNode(String id)
     {
-       super(idLenght, id);
+       super(id);
       _children[0] = null;
       _children[1] = null;
       _children[2] = null;
       _children[3] = null;
     }
 
+
+    //void PointCloudsRenderer::PointCloudInnerNode::acceptVisitor(PointCloudNodeVisitor* visitor) {
+    //  visitor->visitInnerNode(this);
+    //
+    //  if (_children[0] != NULL) { _children[0]->acceptVisitor(visitor); }
+    //  if (_children[1] != NULL) { _children[1]->acceptVisitor(visitor); }
+    //  if (_children[2] != NULL) { _children[2]->acceptVisitor(visitor); }
+    //  if (_children[3] != NULL) { _children[3]->acceptVisitor(visitor); }
+    //}
+    //
+    //void PointCloudsRenderer::PointCloudLeafNode::acceptVisitor(PointCloudNodeVisitor* visitor) {
+    //  visitor->visitLeafNode(this);
+    //}
+    
+    
     public void dispose()
     {
       if (_children[0] != null)
@@ -94,9 +115,10 @@ public class PointCloudsRenderer extends DefaultRenderer
 
     public final void addLeafNode(PointCloudLeafNode leafNode)
     {
-      if ((_idLenght + 1) == leafNode.getIDLenght())
+      final int idLenght = _id.length();
+      final int childIndex = leafNode._id.charAt(idLenght) - '0';
+      if ((idLenght + 1) == leafNode._id.length())
       {
-        final byte childIndex = leafNode.getID().charAt(_idLenght);
         if (_children[childIndex] != null)
         {
           throw new RuntimeException("Logic error!");
@@ -107,9 +129,25 @@ public class PointCloudsRenderer extends DefaultRenderer
       {
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#warning DGD at work!
+        PointCloudInnerNode innerChild = (PointCloudInnerNode)(_children[childIndex]);
+        if (innerChild == null)
+        {
+          IStringBuilder isb = IStringBuilder.newStringBuilder();
+          isb.addString(_id);
+          isb.addInt(childIndex);
+          final String childID = isb.getString();
+          if (isb != null)
+             isb.dispose();
     
+          innerChild = new PointCloudInnerNode(childID);
+          _children[childIndex] = innerChild;
+        }
+        innerChild.addLeafNode(leafNode);
       }
     }
+
+//    void acceptVisitor(PointCloudNodeVisitor* visitor);
+
   }
 
 
@@ -118,9 +156,9 @@ public class PointCloudsRenderer extends DefaultRenderer
     private final int _levelsCountLenght;
     private final int[] _levelsCount;
 
-    public PointCloudLeafNode(int idLenght, String id, int levelsCountLenght, int levelsCount)
+    public PointCloudLeafNode(String id, int levelsCountLenght, int levelsCount)
     {
-       super(idLenght, id);
+       super(id);
        _levelsCountLenght = levelsCountLenght;
        _levelsCount = levelsCount;
     }
@@ -129,6 +167,9 @@ public class PointCloudsRenderer extends DefaultRenderer
     {
       _levelsCount = null;
     }
+
+//    void acceptVisitor(PointCloudNodeVisitor* visitor);
+
   }
 
 
@@ -145,7 +186,7 @@ public class PointCloudsRenderer extends DefaultRenderer
     private double _minHeight;
     private double _maxHeight;
 
-    private PointCloudOctreeInnerNode _octree;
+    private PointCloudInnerNode _octree;
 
     public PointCloudMetadataParserAsyncTask(PointCloud pointCloud, IByteBuffer buffer)
     {
@@ -168,6 +209,30 @@ public class PointCloudsRenderer extends DefaultRenderer
          _octree.dispose();
     }
 
+
+    //class DebugVisitor : public PointCloudsRenderer::PointCloudNodeVisitor {
+    //private:
+    //  int _innerNodesCount;
+    //  int _leafNodesCount;
+    //public:
+    //  DebugVisitor() :
+    //  _innerNodesCount(0),
+    //  _leafNodesCount(0)
+    //  {
+    //  }
+    //
+    //  void visitInnerNode(const PointCloudsRenderer::PointCloudInnerNode* innerNode) {
+    //    printf("Inner: \"%s\"\n", innerNode->_id.c_str());
+    //    _innerNodesCount++;
+    //  }
+    //
+    //  void visitLeafNode(const PointCloudsRenderer::PointCloudLeafNode* leafNode) {
+    //    printf(" Leaf: \"%s\"\n", leafNode->_id.c_str());
+    //    _leafNodesCount++;
+    //  }
+    //
+    //};
+    
     public final void runInBackground(G3MContext context)
     {
       ByteBufferIterator it = new ByteBufferIterator(_buffer);
@@ -190,8 +255,16 @@ public class PointCloudsRenderer extends DefaultRenderer
       for (int i = 0; i < leafNodesCount; i++)
       {
         final int idLength = it.nextUInt8();
-        byte[] id = new byte[idLength];
-        it.nextUInt8(idLength, id);
+    //    unsigned char* id = new unsigned char[idLength];
+    //    it.nextUInt8(idLength, id);
+        IStringBuilder isb = IStringBuilder.newStringBuilder();
+        for (int j = 0; j < idLength; j++)
+        {
+          isb.addInt(it.nextUInt8());
+        }
+        final String id = isb.getString();
+        if (isb != null)
+           isb.dispose();
     
         final int byteLevelsCount = it.nextUInt8();
         final int shortLevelsCount = it.nextUInt8();
@@ -202,21 +275,21 @@ public class PointCloudsRenderer extends DefaultRenderer
     
         for (int j = 0; j < byteLevelsCount; j++)
         {
-    //      levelsCount.push_back( (int) it.nextUInt8() );
+          //      levelsCount.push_back( (int) it.nextUInt8() );
           levelsCount[j] = it.nextUInt8();
         }
         for (int j = 0; j < shortLevelsCount; j++)
         {
-    //      levelsCount.push_back( (int) it.nextInt16() );
+          //      levelsCount.push_back( (int) it.nextInt16() );
           levelsCount[byteLevelsCount + j] = it.nextInt16();
         }
         for (int j = 0; j < intLevelsCount; j++)
         {
-    //      levelsCount.push_back( it.nextInt32() );
+          //      levelsCount.push_back( it.nextInt32() );
           levelsCount[byteLevelsCount + shortLevelsCount + j] = it.nextInt32();
         }
     
-        leafNodes.add(new PointCloudLeafNode(idLength, id, levelsCountLength, levelsCount));
+        leafNodes.add(new PointCloudLeafNode(id, levelsCountLength, levelsCount));
       }
     
       if (it.hasNext())
@@ -233,11 +306,16 @@ public class PointCloudsRenderer extends DefaultRenderer
          _buffer.dispose();
       _buffer = null;
     
-      _octree = new PointCloudOctreeInnerNode(0, new byte[0]);
+      _octree = new PointCloudInnerNode("");
       for (int i = 0; i < leafNodesCount; i++)
       {
         _octree.addLeafNode(leafNodes.get(i));
       }
+    
+    
+    //  PointCloudNodeVisitor* visitor = new DebugVisitor();
+    //  _octree->acceptVisitor(visitor);
+    //  delete visitor;
     }
 
     public final void onPostExecute(G3MContext context)
@@ -306,7 +384,7 @@ public class PointCloudsRenderer extends DefaultRenderer
     private Sector _sector;
     private double _minHeight;
     private double _maxHeight;
-    private PointCloudOctreeInnerNode _octree;
+    private PointCloudInnerNode _octree;
 
     public PointCloud(URL serverURL, String cloudName, long downloadPriority, TimeInterval timeToCache, boolean readExpired, PointCloudMetadataListener metadataListener, boolean deleteListener)
     {
@@ -397,9 +475,7 @@ public class PointCloudsRenderer extends DefaultRenderer
       _errorDownloadingMetadata = true;
     }
 
-//    void downloadedMetadata(IByteBuffer* buffer);
-
-    public final void parsedMetadata(long pointsCount, Sector sector, double minHeight, double maxHeight, PointCloudOctreeInnerNode octree)
+    public final void parsedMetadata(long pointsCount, Sector sector, double minHeight, double maxHeight, PointCloudInnerNode octree)
     {
       _pointsCount = pointsCount;
       _sector = sector;
@@ -424,10 +500,14 @@ public class PointCloudsRenderer extends DefaultRenderer
     
     }
 
-    public final void render(G3MRenderContext rc, GLState glState)
+    public final void render(G3MRenderContext rc, GLState glState, Frustum frustum)
     {
-    
-    
+      if (_octree != null)
+      {
+    //    _octree->render(rc, glState, frustum);
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning DGD at work!
+      }
     }
 
   }
@@ -438,6 +518,7 @@ public class PointCloudsRenderer extends DefaultRenderer
   private int _cloudsSize;
   private java.util.ArrayList<String> _errors = new java.util.ArrayList<String>();
 
+  private GLState _glState;
 
 
   protected final void onChangedContext()
@@ -453,6 +534,7 @@ public class PointCloudsRenderer extends DefaultRenderer
   public PointCloudsRenderer()
   {
      _cloudsSize = 0;
+     _glState = new GLState();
   }
 
   public void dispose()
@@ -463,6 +545,9 @@ public class PointCloudsRenderer extends DefaultRenderer
       if (cloud != null)
          cloud.dispose();
     }
+  
+    _glState._release();
+  
     super.dispose();
   }
 
@@ -508,16 +593,32 @@ public class PointCloudsRenderer extends DefaultRenderer
 
   public final void render(G3MRenderContext rc, GLState glState)
   {
+    final Camera camera = rc.getCurrentCamera();
+  
+    //  updateGLState(rc);
+    ModelViewGLFeature f = (ModelViewGLFeature) _glState.getGLFeature(GLFeatureID.GLF_MODEL_VIEW);
+    if (f == null)
+    {
+      _glState.addGLFeature(new ModelViewGLFeature(camera), true);
+    }
+    else
+    {
+      f.setMatrix(camera.getModelViewMatrix44D());
+    }
+  
+    _glState.setParent(glState);
+  
+    final Frustum frustum = camera.getFrustumInModelCoordinates();
     for (int i = 0; i < _cloudsSize; i++)
     {
       PointCloud cloud = _clouds.get(i);
-      cloud.render(rc, glState);
+      cloud.render(rc, _glState, frustum);
     }
   }
 
   public final void onResizeViewportEvent(G3MEventContext ec, int width, int height)
   {
-  
+
   }
 
   public final void addPointCloud(URL serverURL, String cloudName, PointCloudMetadataListener metadataListener, boolean deleteListener)
