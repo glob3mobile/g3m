@@ -967,7 +967,7 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
     return _renderTileMeshes;
   }
 
-  public final void changedInfo(java.util.ArrayList<String> info)
+  public final void changedInfo(java.util.ArrayList<Info> info)
   {
     if (_changedInfoListener != null)
     {

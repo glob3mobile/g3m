@@ -20,15 +20,22 @@ package org.glob3.mobile.generated;
 
 public class DefaultHUDInfoRenderer_ImageFactory extends HUDImageRenderer.CanvasImageFactory
 {
-  private java.util.ArrayList<String> _info = new java.util.ArrayList<String>();
+  private final java.util.ArrayList<Info> _info = new java.util.ArrayList<Info>();
 
 
   protected final void drawOn(ICanvas canvas, int width, int height)
   {
-    ICanvasUtils.drawStringsOn(_info, canvas, width, height, HorizontalAlignment.Left, VerticalAlignment.Bottom, HorizontalAlignment.Left, Color.white(), 11, 2, Color.transparent(), Color.black(), 5);
+    java.util.ArrayList<String> strings = new java.util.ArrayList<String>();
+  
+    final int size = _info.size();
+    for (int i = 0; i < size; i++)
+    {
+      strings.add(_info.get(i).getText());
+    }
+    ICanvasUtils.drawStringsOn(strings, canvas, width, height, HorizontalAlignment.Left, VerticalAlignment.Bottom, HorizontalAlignment.Left, Color.white(), 11, 2, Color.transparent(), Color.black(), 5);
   }
 
-  protected final boolean isEquals(java.util.ArrayList<String> v1, java.util.ArrayList<String> v2)
+  protected final boolean isEquals(java.util.ArrayList<Info> v1, java.util.ArrayList<Info> v2)
   {
     final int size1 = v1.size();
     final int size2 = v2.size();
@@ -39,9 +46,9 @@ public class DefaultHUDInfoRenderer_ImageFactory extends HUDImageRenderer.Canvas
   
     for (int i = 0; i < size1; i++)
     {
-      final String str1 = v1.get(i);
-      final String str2 = v2.get(i);
-      if (!str1.equals(str2))
+      final Info str1 = v1.get(i);
+      final Info str2 = v2.get(i);
+      if (str1 != str2)
       {
         return false;
       }
@@ -53,7 +60,7 @@ public class DefaultHUDInfoRenderer_ImageFactory extends HUDImageRenderer.Canvas
   {
   }
 
-  public final boolean setInfo(java.util.ArrayList<String> info)
+  public final boolean setInfo(java.util.ArrayList<Info> info)
   {
     _info.clear();
     _info.addAll(info);

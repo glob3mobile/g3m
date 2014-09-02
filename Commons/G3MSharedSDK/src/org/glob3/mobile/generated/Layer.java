@@ -32,6 +32,7 @@ package org.glob3.mobile.generated;
 //class LayerTouchEvent;
 //class Petition;
 //class TileImageProvider;
+//class Info;
 
 
 public abstract class Layer
@@ -67,7 +68,7 @@ public abstract class Layer
 
   protected boolean _enable;
 
-  protected java.util.ArrayList<String> _layerInfo = new java.util.ArrayList<String>();
+  protected final java.util.ArrayList<Info> _layerInfo;
 
 
   protected float _transparency;
@@ -84,7 +85,7 @@ public abstract class Layer
 
   protected String _title;
 
-  protected Layer(float transparency, LayerCondition condition, java.util.ArrayList<String> layerInfo)
+  protected Layer(float transparency, LayerCondition condition, java.util.ArrayList<Info> layerInfo)
   {
      _transparency = transparency;
      _condition = condition;
@@ -149,6 +150,14 @@ public abstract class Layer
   {
     if (_condition != null)
        _condition.dispose();
+  //  const int size = _layerInfo->size();
+  //  for (unsigned int i = 0; i < size; i++)
+  //  {
+  //    delete _layerInfo->at(i);
+  //  }
+  //
+  //  _layerInfo->clear();
+    _layerInfo = null;
   }
 
   public boolean isAvailable(Tile tile)
@@ -278,7 +287,7 @@ public abstract class Layer
   
     for (int i = 0; i < infoSize; i++)
     {
-      if (!_layerInfo.get(i).equals(that._layerInfo.get(i)))
+      if (_layerInfo.get(i) != that._layerInfo.get(i))
       {
         return false;
       }
@@ -305,24 +314,24 @@ public abstract class Layer
 
   public abstract TileImageProvider createTileImageProvider(G3MRenderContext rc, LayerTilesRenderParameters layerTilesRenderParameters);
 
-  public final void setInfo(java.util.ArrayList<String> info)
+  public final void setInfo(java.util.ArrayList<Info> info)
   {
     _layerInfo.clear();
     _layerInfo.addAll(info);
   
   }
 
-  public final java.util.ArrayList<String> getInfo()
+  public final java.util.ArrayList<Info> getInfo()
   {
     return _layerInfo;
   }
 
-  public final void addInfo(java.util.ArrayList<String> info)
+  public final void addInfo(java.util.ArrayList<Info> info)
   {
     _layerInfo.addAll(info);
   }
 
-  public final void addInfo(String info)
+  public final void addInfo(Info info)
   {
     _layerInfo.add(info);
   }

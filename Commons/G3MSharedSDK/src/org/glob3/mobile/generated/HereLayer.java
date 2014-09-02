@@ -172,25 +172,25 @@ public class HereLayer extends RasterLayer
 
   public HereLayer(String appId, String appCode, TimeInterval timeToCache, boolean readExpired, int initialLevel, float transparency, LayerCondition condition)
   {
-     this(appId, appCode, timeToCache, readExpired, initialLevel, transparency, condition, java.util.<String>ArrayList());
+     this(appId, appCode, timeToCache, readExpired, initialLevel, transparency, condition, new java.util.ArrayList<Info>());
   }
   public HereLayer(String appId, String appCode, TimeInterval timeToCache, boolean readExpired, int initialLevel, float transparency)
   {
-     this(appId, appCode, timeToCache, readExpired, initialLevel, transparency, null, java.util.<String>ArrayList());
+     this(appId, appCode, timeToCache, readExpired, initialLevel, transparency, null, new java.util.ArrayList<Info>());
   }
   public HereLayer(String appId, String appCode, TimeInterval timeToCache, boolean readExpired, int initialLevel)
   {
-     this(appId, appCode, timeToCache, readExpired, initialLevel, 1, null, java.util.<String>ArrayList());
+     this(appId, appCode, timeToCache, readExpired, initialLevel, 1, null, new java.util.ArrayList<Info>());
   }
   public HereLayer(String appId, String appCode, TimeInterval timeToCache, boolean readExpired)
   {
-     this(appId, appCode, timeToCache, readExpired, 2, 1, null, java.util.<String>ArrayList());
+     this(appId, appCode, timeToCache, readExpired, 2, 1, null, new java.util.ArrayList<Info>());
   }
   public HereLayer(String appId, String appCode, TimeInterval timeToCache)
   {
-     this(appId, appCode, timeToCache, true, 2, 1, null, java.util.<String>ArrayList());
+     this(appId, appCode, timeToCache, true, 2, 1, null, new java.util.ArrayList<Info>());
   }
-  public HereLayer(String appId, String appCode, TimeInterval timeToCache, boolean readExpired, int initialLevel, float transparency, LayerCondition condition, java.util.ArrayList<String> layerInfo)
+  public HereLayer(String appId, String appCode, TimeInterval timeToCache, boolean readExpired, int initialLevel, float transparency, LayerCondition condition, java.util.ArrayList<Info> layerInfo)
   {
      super(timeToCache, readExpired, new LayerTilesRenderParameters(Sector.fullSphere(), 1, 1, initialLevel, 20, new Vector2I(256, 256), LayerTilesRenderParameters.defaultTileMeshResolution(), true), transparency, condition, layerInfo);
      _appId = appId;

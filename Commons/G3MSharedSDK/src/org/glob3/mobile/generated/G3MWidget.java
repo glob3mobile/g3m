@@ -677,7 +677,7 @@ public class G3MWidget implements ChangedRendererInfoListener
   //  }
   //}
   
-  public final void changedRendererInfo(int rendererIdentifier, java.util.ArrayList<String> info)
+  public final void changedRendererInfo(int rendererIdentifier, java.util.ArrayList<Info> info)
   {
     if(_infoDisplay != null)
     {

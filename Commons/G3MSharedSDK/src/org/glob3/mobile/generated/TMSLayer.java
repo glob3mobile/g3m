@@ -31,17 +31,17 @@ public abstract class TMSLayer extends RasterLayer
 
   public TMSLayer(String mapLayer, URL mapServerURL, Sector dataSector, String format, boolean isTransparent, LayerCondition condition, TimeInterval timeToCache, boolean readExpired, LayerTilesRenderParameters parameters, float transparency)
   {
-     this(mapLayer, mapServerURL, dataSector, format, isTransparent, condition, timeToCache, readExpired, parameters, transparency, java.util.<String>ArrayList());
+     this(mapLayer, mapServerURL, dataSector, format, isTransparent, condition, timeToCache, readExpired, parameters, transparency, new java.util.ArrayList<Info>());
   }
   public TMSLayer(String mapLayer, URL mapServerURL, Sector dataSector, String format, boolean isTransparent, LayerCondition condition, TimeInterval timeToCache, boolean readExpired, LayerTilesRenderParameters parameters)
   {
-     this(mapLayer, mapServerURL, dataSector, format, isTransparent, condition, timeToCache, readExpired, parameters, 1, java.util.<String>ArrayList());
+     this(mapLayer, mapServerURL, dataSector, format, isTransparent, condition, timeToCache, readExpired, parameters, 1, new java.util.ArrayList<Info>());
   }
   public TMSLayer(String mapLayer, URL mapServerURL, Sector dataSector, String format, boolean isTransparent, LayerCondition condition, TimeInterval timeToCache, boolean readExpired)
   {
-     this(mapLayer, mapServerURL, dataSector, format, isTransparent, condition, timeToCache, readExpired, null, 1, java.util.<String>ArrayList());
+     this(mapLayer, mapServerURL, dataSector, format, isTransparent, condition, timeToCache, readExpired, null, 1, new java.util.ArrayList<Info>());
   }
-  public TMSLayer(String mapLayer, URL mapServerURL, Sector dataSector, String format, boolean isTransparent, LayerCondition condition, TimeInterval timeToCache, boolean readExpired, LayerTilesRenderParameters parameters, float transparency, java.util.ArrayList<String> layerInfo)
+  public TMSLayer(String mapLayer, URL mapServerURL, Sector dataSector, String format, boolean isTransparent, LayerCondition condition, TimeInterval timeToCache, boolean readExpired, LayerTilesRenderParameters parameters, float transparency, java.util.ArrayList<Info> layerInfo)
   {
      super(timeToCache, readExpired, (parameters == null) ? LayerTilesRenderParameters.createDefaultWGS84(dataSector, 0, 17) : parameters, transparency, condition, layerInfo);
      _mapServerURL = mapServerURL;

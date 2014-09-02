@@ -48,25 +48,25 @@ public class CartoDBLayer extends MercatorTiledLayer
 
   public CartoDBLayer(String userName, String table, TimeInterval timeToCache, boolean readExpired, float transparency, boolean isTransparent, LayerCondition condition)
   {
-     this(userName, table, timeToCache, readExpired, transparency, isTransparent, condition, java.util.<String>ArrayList());
+     this(userName, table, timeToCache, readExpired, transparency, isTransparent, condition, new java.util.ArrayList<Info>());
   }
   public CartoDBLayer(String userName, String table, TimeInterval timeToCache, boolean readExpired, float transparency, boolean isTransparent)
   {
-     this(userName, table, timeToCache, readExpired, transparency, isTransparent, null, java.util.<String>ArrayList());
+     this(userName, table, timeToCache, readExpired, transparency, isTransparent, null, new java.util.ArrayList<Info>());
   }
   public CartoDBLayer(String userName, String table, TimeInterval timeToCache, boolean readExpired, float transparency)
   {
-     this(userName, table, timeToCache, readExpired, transparency, false, null, java.util.<String>ArrayList());
+     this(userName, table, timeToCache, readExpired, transparency, false, null, new java.util.ArrayList<Info>());
   }
   public CartoDBLayer(String userName, String table, TimeInterval timeToCache, boolean readExpired)
   {
-     this(userName, table, timeToCache, readExpired, 1, false, null, java.util.<String>ArrayList());
+     this(userName, table, timeToCache, readExpired, 1, false, null, new java.util.ArrayList<Info>());
   }
   public CartoDBLayer(String userName, String table, TimeInterval timeToCache)
   {
-     this(userName, table, timeToCache, true, 1, false, null, java.util.<String>ArrayList());
+     this(userName, table, timeToCache, true, 1, false, null, new java.util.ArrayList<Info>());
   }
-  public CartoDBLayer(String userName, String table, TimeInterval timeToCache, boolean readExpired, float transparency, boolean isTransparent, LayerCondition condition, java.util.ArrayList<String> layerInfo)
+  public CartoDBLayer(String userName, String table, TimeInterval timeToCache, boolean readExpired, float transparency, boolean isTransparent, LayerCondition condition, java.util.ArrayList<Info> layerInfo)
   {
      super("http://", "tiles.cartocdn.com/" + userName + "/tiles/" + table, getSubdomains(), "png", timeToCache, readExpired, 2, 17, isTransparent, transparency, condition, layerInfo);
      _userName = userName;

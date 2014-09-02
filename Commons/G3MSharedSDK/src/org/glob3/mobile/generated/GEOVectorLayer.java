@@ -29,17 +29,17 @@ public class GEOVectorLayer extends VectorLayer
 
   public GEOVectorLayer(java.util.ArrayList<LayerTilesRenderParameters> parametersVector, float transparency, LayerCondition condition)
   {
-     this(parametersVector, transparency, condition, java.util.<String>ArrayList());
+     this(parametersVector, transparency, condition, new java.util.ArrayList<Info>());
   }
   public GEOVectorLayer(java.util.ArrayList<LayerTilesRenderParameters> parametersVector, float transparency)
   {
-     this(parametersVector, transparency, null, java.util.<String>ArrayList());
+     this(parametersVector, transparency, null, new java.util.ArrayList<Info>());
   }
   public GEOVectorLayer(java.util.ArrayList<LayerTilesRenderParameters> parametersVector)
   {
-     this(parametersVector, 1.0f, null, java.util.<String>ArrayList());
+     this(parametersVector, 1.0f, null, new java.util.ArrayList<Info>());
   }
-  public GEOVectorLayer(java.util.ArrayList<LayerTilesRenderParameters> parametersVector, float transparency, LayerCondition condition, java.util.ArrayList<String> layerInfo)
+  public GEOVectorLayer(java.util.ArrayList<LayerTilesRenderParameters> parametersVector, float transparency, LayerCondition condition, java.util.ArrayList<Info> layerInfo)
   {
      super(parametersVector, transparency, condition, layerInfo);
      _tileImageProvider = null;
@@ -48,33 +48,33 @@ public class GEOVectorLayer extends VectorLayer
 
   public GEOVectorLayer(int mercatorFirstLevel, int mercatorMaxLevel, int wgs84firstLevel, int wgs84maxLevel, float transparency, LayerCondition condition)
   {
-     this(mercatorFirstLevel, mercatorMaxLevel, wgs84firstLevel, wgs84maxLevel, transparency, condition, java.util.<String>ArrayList());
+     this(mercatorFirstLevel, mercatorMaxLevel, wgs84firstLevel, wgs84maxLevel, transparency, condition, new java.util.ArrayList<Info>());
   }
   public GEOVectorLayer(int mercatorFirstLevel, int mercatorMaxLevel, int wgs84firstLevel, int wgs84maxLevel, float transparency)
   {
-     this(mercatorFirstLevel, mercatorMaxLevel, wgs84firstLevel, wgs84maxLevel, transparency, null, java.util.<String>ArrayList());
+     this(mercatorFirstLevel, mercatorMaxLevel, wgs84firstLevel, wgs84maxLevel, transparency, null, new java.util.ArrayList<Info>());
   }
   public GEOVectorLayer(int mercatorFirstLevel, int mercatorMaxLevel, int wgs84firstLevel, int wgs84maxLevel)
   {
-     this(mercatorFirstLevel, mercatorMaxLevel, wgs84firstLevel, wgs84maxLevel, 1.0f, null, java.util.<String>ArrayList());
+     this(mercatorFirstLevel, mercatorMaxLevel, wgs84firstLevel, wgs84maxLevel, 1.0f, null, new java.util.ArrayList<Info>());
   }
   public GEOVectorLayer(int mercatorFirstLevel, int mercatorMaxLevel, int wgs84firstLevel)
   {
-     this(mercatorFirstLevel, mercatorMaxLevel, wgs84firstLevel, 18, 1.0f, null, java.util.<String>ArrayList());
+     this(mercatorFirstLevel, mercatorMaxLevel, wgs84firstLevel, 18, 1.0f, null, new java.util.ArrayList<Info>());
   }
   public GEOVectorLayer(int mercatorFirstLevel, int mercatorMaxLevel)
   {
-     this(mercatorFirstLevel, mercatorMaxLevel, 0, 18, 1.0f, null, java.util.<String>ArrayList());
+     this(mercatorFirstLevel, mercatorMaxLevel, 0, 18, 1.0f, null, new java.util.ArrayList<Info>());
   }
   public GEOVectorLayer(int mercatorFirstLevel)
   {
-     this(mercatorFirstLevel, 18, 0, 18, 1.0f, null, java.util.<String>ArrayList());
+     this(mercatorFirstLevel, 18, 0, 18, 1.0f, null, new java.util.ArrayList<Info>());
   }
   public GEOVectorLayer()
   {
-     this(2, 18, 0, 18, 1.0f, null, java.util.<String>ArrayList());
+     this(2, 18, 0, 18, 1.0f, null, new java.util.ArrayList<Info>());
   }
-  public GEOVectorLayer(int mercatorFirstLevel, int mercatorMaxLevel, int wgs84firstLevel, int wgs84maxLevel, float transparency, LayerCondition condition, java.util.ArrayList<String> layerInfo)
+  public GEOVectorLayer(int mercatorFirstLevel, int mercatorMaxLevel, int wgs84firstLevel, int wgs84maxLevel, float transparency, LayerCondition condition, java.util.ArrayList<Info> layerInfo)
   {
      super(LayerTilesRenderParameters.createDefaultMultiProjection(mercatorFirstLevel, mercatorMaxLevel, wgs84firstLevel, wgs84maxLevel), transparency, condition, layerInfo);
      _tileImageProvider = null;

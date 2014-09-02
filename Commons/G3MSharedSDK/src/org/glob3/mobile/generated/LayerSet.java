@@ -40,7 +40,8 @@ public class LayerSet implements ChangedInfoListener
 
   //  mutable LayerTilesRenderParameters* _layerTilesRenderParameters;
   private java.util.ArrayList<String> _errors = new java.util.ArrayList<String>();
-  private java.util.ArrayList<String> _infos = new java.util.ArrayList<String>();
+
+  private final java.util.ArrayList<Info> _infos = new java.util.ArrayList<Info>();
 
   private void layersChanged()
   {
@@ -236,6 +237,13 @@ public class LayerSet implements ChangedInfoListener
       if (_layers.get(i) != null)
          _layers.get(i).dispose();
     }
+  
+    for (int i = 0; i < _infos.size(); i++)
+    {
+      if (_infos.get(i) != null)
+         _infos.get(i).dispose();
+    }
+  
     if (_tileImageProvider != null)
     {
       _tileImageProvider._release();
@@ -535,7 +543,7 @@ public class LayerSet implements ChangedInfoListener
     }
   }
 
-  public final java.util.ArrayList<String> getInfo()
+  public final java.util.ArrayList<Info> getInfo()
   {
     _infos.clear();
     final int layersCount = _layers.size();
@@ -546,7 +554,7 @@ public class LayerSet implements ChangedInfoListener
       if (layer.isEnable())
       {
         anyEnabled = true;
-        final java.util.ArrayList<String> layerInfo = layer.getInfo();
+        final java.util.ArrayList<Info> layerInfo = layer.getInfo();
         final int infoSize = layerInfo.size();
         for (int j = 0; j < infoSize; j++)
         {
@@ -556,12 +564,12 @@ public class LayerSet implements ChangedInfoListener
     }
     if (!anyEnabled)
     {
-      _infos.add("Can't find any enabled Layer at this zoom level");
+      _infos.add(new Info("Can't find any enabled Layer at this zoom level"));
     }
     return _infos;
   }
 
-  public final void changedInfo(java.util.ArrayList<String> info)
+  public final void changedInfo(java.util.ArrayList<Info> info)
   {
     if (_changedInfoListener != null)
     {
