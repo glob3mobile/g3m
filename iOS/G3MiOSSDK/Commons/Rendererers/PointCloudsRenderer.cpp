@@ -62,7 +62,7 @@ void PointCloudsRenderer::PointCloud::initialize(const G3MContext* context) {
 }
 
 PointCloudsRenderer::PointCloud::~PointCloud() {
-
+  delete _octree;
   delete _sector;
 }
 
@@ -74,14 +74,7 @@ void PointCloudsRenderer::PointCloud::errorDownloadingMetadata() {
 PointCloudsRenderer::PointCloudMetadataParserAsyncTask::~PointCloudMetadataParserAsyncTask() {
   delete _sector;
   delete _buffer;
-  if (_nodes != NULL) {
-    const int size = _nodes->size();
-    for (int i = 0; i < size; i++) {
-      PointCloudNode* node = _nodes->at(i);
-      delete node;
-    }
-    delete _nodes;
-  }
+  delete _octree;
 }
 
 void PointCloudsRenderer::PointCloudMetadataParserAsyncTask::runInBackground(const G3MContext* context) {
@@ -100,10 +93,10 @@ void PointCloudsRenderer::PointCloudMetadataParserAsyncTask::runInBackground(con
   _minHeight = it.nextDouble();
   _maxHeight = it.nextDouble();
 
-  const int nodesCount = it.nextInt32();
-  _nodes = new std::vector<PointCloudNode*>();
+  const int leafNodesCount = it.nextInt32();
+  std::vector<PointCloudLeafNode*> leafNodes;
 
-  for (int i = 0; i < nodesCount; i++) {
+  for (int i = 0; i < leafNodesCount; i++) {
     const int idLength = it.nextUInt8();
     unsigned char* id = new unsigned char[idLength];
     it.nextUInt8(idLength, id);
@@ -128,36 +121,68 @@ void PointCloudsRenderer::PointCloudMetadataParserAsyncTask::runInBackground(con
       levelsCount[byteLevelsCount + shortLevelsCount + j] =  it.nextInt32();
     }
 
-    _nodes->push_back( new PointCloudNode(idLength,
-                                          id,
-                                          levelsCountLength,
-                                          levelsCount) );
+    leafNodes.push_back( new PointCloudLeafNode(idLength,
+                                                id,
+                                                levelsCountLength,
+                                                levelsCount) );
   }
 
   if (it.hasNext()) {
     THROW_EXCEPTION("Logic error");
   }
- 
+
+  if (leafNodesCount != leafNodes.size()) {
+    THROW_EXCEPTION("Logic error");
+  }
+
   delete _buffer;
   _buffer = NULL;
+
+  _octree = new PointCloudOctreeInnerNode(0, new unsigned char[0]);
+  for (int i = 0; i < leafNodesCount; i++) {
+    _octree->addLeafNode( leafNodes[i] );
+  }
+}
+
+PointCloudsRenderer::PointCloudOctreeInnerNode::~PointCloudOctreeInnerNode() {
+  delete _children[0];
+  delete _children[1];
+  delete _children[2];
+  delete _children[3];
+}
+
+void PointCloudsRenderer::PointCloudOctreeInnerNode::addLeafNode(PointCloudLeafNode* leafNode) {
+  if ((_idLenght + 1) == leafNode->getIDLenght()) {
+    const unsigned char childIndex = leafNode->getID()[_idLenght];
+    if (_children[childIndex] != NULL) {
+      THROW_EXCEPTION("Logic error!");
+    }
+    _children[childIndex] = leafNode;
+  }
+  else {
+#warning DGD at work!
+
+  }
 }
 
 void PointCloudsRenderer::PointCloudMetadataParserAsyncTask::onPostExecute(const G3MContext* context) {
-  _pointCloud->parsedMetadata(_pointsCount, _sector, _minHeight, _maxHeight, _nodes);
+  _pointCloud->parsedMetadata(_pointsCount, _sector, _minHeight, _maxHeight, _octree);
   _sector = NULL; // moves ownership to pointCloud
-  _nodes = NULL;  // moves ownership to pointCloud
+  _octree = NULL;  // moves ownership to pointCloud
 }
 
 void PointCloudsRenderer::PointCloud::parsedMetadata(long long pointsCount,
                                                      Sector* sector,
                                                      double minHeight,
-                                                     double maxHeight) {
+                                                     double maxHeight,
+                                                     PointCloudOctreeInnerNode* octree) {
   _pointsCount = pointsCount;
   _sector = sector;
   _minHeight = minHeight;
   _maxHeight = maxHeight;
 
   _downloadingMetadata = false;
+  _octree = octree;
 
   ILogger::instance()->logInfo("Parsed metadata for \"%s\"", _cloudName.c_str());
 

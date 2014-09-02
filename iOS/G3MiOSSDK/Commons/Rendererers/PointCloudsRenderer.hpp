@@ -35,9 +35,81 @@ public:
 
 
 private:
+  class PointCloudNode {
+  protected:
+    const int            _idLenght;
+    const unsigned char* _id;
+
+    PointCloudNode(const int            idLenght,
+                   const unsigned char* id) :
+    _idLenght(idLenght),
+    _id(id)
+    {
+    }
+
+  public:
+    ~PointCloudNode() {
+      delete [] _id;
+    }
+
+    const int getIDLenght() const {
+      return _idLenght;
+    }
+
+    const unsigned char* getID() const {
+      return _id;
+    }
+
+  };
+
+
+  class PointCloudLeafNode;
+
+  class PointCloudOctreeInnerNode : public PointCloudNode {
+  private:
+    PointCloudNode* _children[4];
+
+  public:
+    PointCloudOctreeInnerNode(const int            idLenght,
+                              const unsigned char* id) :
+    PointCloudNode(idLenght, id)
+    {
+      _children[0] = NULL;
+      _children[1] = NULL;
+      _children[2] = NULL;
+      _children[3] = NULL;
+    }
+
+    virtual ~PointCloudOctreeInnerNode();
+
+    void addLeafNode(PointCloudLeafNode* leafNode);
+  };
+
+
+  class PointCloudLeafNode : public PointCloudNode {
+  private:
+    const int  _levelsCountLenght;
+    const int* _levelsCount;
+
+  public:
+    PointCloudLeafNode(const int            idLenght,
+                       const unsigned char* id,
+                       const int            levelsCountLenght,
+                       const int*           levelsCount) :
+    PointCloudNode(idLenght, id),
+    _levelsCountLenght(levelsCountLenght),
+    _levelsCount(levelsCount)
+    {
+    }
+
+    ~PointCloudLeafNode() {
+      delete [] _levelsCount;
+    }
+  };
+
 
   class PointCloud;
-  class PointCloudNode;
+
 
   class PointCloudMetadataParserAsyncTask : public GAsyncTask {
   private:
@@ -47,7 +119,8 @@ private:
     Sector* _sector;
     double _minHeight;
     double _maxHeight;
-    std::vector<PointCloudNode*>* _nodes;
+
+    PointCloudOctreeInnerNode* _octree;
 
   public:
     PointCloudMetadataParserAsyncTask(PointCloud* pointCloud,
@@ -58,7 +131,7 @@ private:
     _sector(NULL),
     _minHeight(0),
     _maxHeight(0),
-    _nodes(NULL)
+    _octree(NULL)
     {
     }
 
@@ -99,56 +172,6 @@ private:
   };
 
 
-
-  class PointCloudNode {
-#ifdef C_CODE
-  private:
-    const int            _idLenght;
-    const unsigned char* _id;
-    const int            _levelsCountLenght;
-    const int*           _levelsCount;
-
-  public:
-    PointCloudNode(const int            idLenght,
-                   const unsigned char* id,
-                   const int            levelsCountLenght,
-                   const int*           levelsCount) :
-    _idLenght(idLenght),
-    _id(id),
-    _levelsCountLenght(levelsCountLenght),
-    _levelsCount(levelsCount)
-    {
-    }
-
-    ~PointCloudNode() {
-      delete [] _id;
-      delete [] _levelsCount;
-    }
-#endif
-#ifdef JAVA_CODE
-    private final int    _idLenght;
-    private final byte[] _id;
-    private final int    _levelsCountLenght;
-    private final int[]  _levelsCount;
-
-
-    public PointCloudNode(final int idLenght,
-                          final byte[] id,
-                          final int levelsCountLenght,
-                          final int[] levelsCount) {
-      _idLenght = idLenght;
-      _id = id;
-      _levelsCountLenght = levelsCountLenght;
-      _levelsCount = levelsCount;
-    }
-
-
-    public void dispose() {
-    }
-#endif
-  };
-  
-
   class PointCloud {
   private:
 #ifdef C_CODE
@@ -179,6 +202,7 @@ private:
     Sector* _sector;
     double _minHeight;
     double _maxHeight;
+    PointCloudOctreeInnerNode* _octree;
 
   public:
     PointCloud(const URL& serverURL,
@@ -201,7 +225,8 @@ private:
     _pointsCount(-1),
     _sector(NULL),
     _minHeight(0),
-    _maxHeight(0)
+    _maxHeight(0),
+    _octree(NULL)
     {
     }
 
@@ -222,7 +247,8 @@ private:
     void parsedMetadata(long long pointsCount,
                         Sector* sector,
                         double minHeight,
-                        double maxHeight);
+                        double maxHeight,
+                        PointCloudOctreeInnerNode* octree);
 
     void render(const G3MRenderContext* rc,
                 GLState* glState);
