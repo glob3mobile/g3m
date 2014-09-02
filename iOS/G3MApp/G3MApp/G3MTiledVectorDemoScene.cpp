@@ -217,7 +217,7 @@ void G3MTiledVectorDemoScene::rawActivate(const G3MContext* context) {
                                                     1,                          // transparency
                                                     //new LevelTileCondition(15, 21),
                                                     new LevelTileCondition(10, 21),
-                                                    std::vector<std::string>()                          // disclaimerInfo
+                                                    new std::vector<const Info*>()                          // disclaimerInfo
                                                     );
   model->getLayerSet()->addLayer(_tiledVectorLayer);
 
