@@ -24,7 +24,7 @@ HereLayer::HereLayer(const std::string&    appId,
                      const int             initialLevel,
                      const float           transparency,
                      const LayerCondition* condition,
-                     const std::vector<std::string>&  layerInfo) :
+                     std::vector<const Info*>*  layerInfo) :
 RasterLayer(timeToCache,
             readExpired,
             new LayerTilesRenderParameters(Sector::fullSphere(),

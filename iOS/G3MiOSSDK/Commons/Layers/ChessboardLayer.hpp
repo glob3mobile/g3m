@@ -31,7 +31,7 @@ public:
                   const Sector&                                        dataSector      = Sector::fullSphere(),
                   const float                                          transparency    = 1.0f,
                   const LayerCondition*                                condition       = NULL,
-                  const std::vector<std::string>&                      layerInfo       = std::vector<std::string>()) :
+                  std::vector<const Info*>*                      layerInfo       = new std::vector<const Info*>()) :
   ProceduralLayer(parametersVector,
                   transparency,
                   condition,
@@ -53,7 +53,7 @@ public:
                   const Sector&         dataSector         = Sector::fullSphere(),
                   const float           transparency       = 1.0f,
                   const LayerCondition* condition          = NULL,
-                  const std::vector<std::string>& layerInfo= std::vector<std::string>());
+                  std::vector<const Info*>* layerInfo= new std::vector<const Info*>());
 
   std::string getLayerType() const {
     return "ChessboardLayer";

@@ -32,7 +32,7 @@ WMSLayer::WMSLayer(const std::string&                mapLayer,
                    const bool                        readExpired,
                    const LayerTilesRenderParameters* parameters,
                    const float                       transparency,
-                   const std::vector<std::string>&   layerInfo):
+                   std::vector<const Info*>*   layerInfo):
 RasterLayer(timeToCache,
             readExpired,
             (parameters == NULL)
@@ -69,7 +69,7 @@ WMSLayer::WMSLayer(const std::string&                mapLayer,
                    const bool                        readExpired,
                    const LayerTilesRenderParameters* parameters,
                    const float                       transparency,
-                   const std::vector<std::string>&                layerInfo):
+                   std::vector<const Info*>*   layerInfo):
 RasterLayer(timeToCache,
             readExpired,
             (parameters == NULL)

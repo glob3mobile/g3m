@@ -2123,7 +2123,7 @@ public:
                                                                  false, // isTransparent
                                                                  1,     // transparency
                                                                  NULL,  // condition
-                                                                 std::vector<std::string>()     // disclaimerInfo
+                                                                 new std::vector<const Info*>()// disclaimerInfo
                                                                  );
     layerSet->addLayer(osmEditMapLayer);
   }

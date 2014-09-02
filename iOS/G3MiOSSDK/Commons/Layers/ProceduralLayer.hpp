@@ -26,7 +26,7 @@ protected:
   ProceduralLayer(const std::vector<const LayerTilesRenderParameters*> parametersVector,
                   const float                                          transparency,
                   const LayerCondition*                                condition,
-                  const std::vector<std::string>&                      layerInfo) :
+                  std::vector<const Info*>*                      layerInfo) :
   Layer(transparency,
         condition,
         layerInfo),
@@ -39,7 +39,7 @@ protected:
   protected ProceduralLayer(final java.util.ArrayList<LayerTilesRenderParameters> parametersVector,
                             final float transparency,
                             final LayerCondition condition,
-                            final java.util.ArrayList<String> layerInfo) {
+                            final java.util.ArrayList<Info> layerInfo) {
     super(transparency, condition, layerInfo);
     _parametersVector.addAll(parametersVector);
     _selectedLayerTilesRenderParametersIndex = -1;

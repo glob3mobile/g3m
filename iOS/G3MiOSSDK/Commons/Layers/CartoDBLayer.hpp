@@ -43,7 +43,7 @@ public:
                const float           transparency   = 1,
                const bool            isTransparent  = false,
                const LayerCondition* condition      = NULL,
-               const std::vector<std::string>&  layerInfo = std::vector<std::string>()) :
+               std::vector<const Info*>*  layerInfo = new std::vector<const Info*>()) :
   MercatorTiledLayer("http://",
                      "tiles.cartocdn.com/" + userName + "/tiles/" + table,
                      getSubdomains(),

@@ -18,7 +18,7 @@
 GEOVectorLayer::GEOVectorLayer(const std::vector<const LayerTilesRenderParameters*>& parametersVector,
                                const float                                           transparency,
                                const LayerCondition*                                 condition,
-                               const std::vector<std::string>&                       layerInfo) :
+                               std::vector<const Info*>*                       layerInfo) :
 VectorLayer(parametersVector,
             transparency,
             condition,
@@ -35,7 +35,7 @@ GEOVectorLayer::GEOVectorLayer(const int                        mercatorFirstLev
                                const int                        wgs84maxLevel,
                                const float                      transparency,
                                const LayerCondition*            condition,
-                               const std::vector<std::string>&  layerInfo) :
+                               std::vector<const Info*>*  layerInfo) :
 VectorLayer(LayerTilesRenderParameters::createDefaultMultiProjection(mercatorFirstLevel,
                                                                      mercatorMaxLevel,
                                                                      wgs84firstLevel,

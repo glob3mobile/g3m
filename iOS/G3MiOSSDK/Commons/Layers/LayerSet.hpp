@@ -38,7 +38,8 @@ private:
 
   //  mutable LayerTilesRenderParameters* _layerTilesRenderParameters;
   std::vector<std::string> _errors;
-  std::vector<std::string> _infos;
+
+  std::vector<const Info*> _infos;
 
   void layersChanged() const;
 
@@ -119,9 +120,9 @@ public:
 
   void setChangedInfoListener(ChangedInfoListener* changedInfoListener);
 
-  std::vector<std::string> getInfo();
+  const std::vector<const Info*> getInfo();
 
-  void changedInfo(const std::vector<std::string>& info);
+  void changedInfo(const std::vector<const Info*> info);
   
 };
 

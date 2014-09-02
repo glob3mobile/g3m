@@ -36,7 +36,7 @@ public:
            const int           initialLevel = 2,
            const float         transparency = 1,
            LayerCondition*     condition    = NULL,
-           const std::vector<std::string>&  layerInfo = std::vector<std::string>()) :
+           std::vector<const Info*>*  layerInfo = new std::vector<const Info*>()) :
   MercatorTiledLayer("http://",
                      "tile.openstreetmap.org",
                      getSubdomains(),

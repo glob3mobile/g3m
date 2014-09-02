@@ -25,7 +25,7 @@ protected:
   VectorLayer(const std::vector<const LayerTilesRenderParameters*>& parametersVector,
               const float                                           transparency,
               const LayerCondition*                                 condition,
-              const std::vector<std::string>&                       layerInfo) :
+              std::vector<const Info*>*                       layerInfo) :
   Layer(transparency, condition, layerInfo),
   _parametersVector(parametersVector),
   _selectedLayerTilesRenderParametersIndex(-1)
@@ -36,9 +36,9 @@ protected:
   protected VectorLayer(final java.util.ArrayList<LayerTilesRenderParameters> parametersVector,
                         final float transparency,
                         final LayerCondition condition,
-                        final java.util.ArrayList<String> layerInfo) {
-    super(transparency, condition, disclaimerInfo);
-    _parametersVector.addAll(layerInfo);
+                        final java.util.ArrayList<Info> layerInfo) {
+    super(transparency, condition, layerInfo);
+    _parametersVector.addAll(parametersVector);
     _selectedLayerTilesRenderParametersIndex = -1;
   }
 #endif

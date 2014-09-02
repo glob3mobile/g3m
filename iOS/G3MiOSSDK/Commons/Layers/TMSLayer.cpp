@@ -25,7 +25,7 @@ TMSLayer::TMSLayer(const std::string& mapLayer,
                    bool readExpired,
                    const LayerTilesRenderParameters* parameters,
                    float transparency,
-                   const std::vector<std::string>&  layerInfo):
+                   std::vector<const Info*>*  layerInfo):
 RasterLayer(timeToCache,
             readExpired,
             (parameters == NULL) ? LayerTilesRenderParameters::createDefaultWGS84(dataSector, 0, 17) : parameters,

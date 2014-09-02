@@ -38,6 +38,7 @@
 		44D33CEE18DB07BC0027B892 /* ProtoRenderer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = 44D33CEC18DB06D50027B892 /* ProtoRenderer.hpp */; };
 		44D922721998D1EA0066D180 /* DefaultInfoDisplay.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 44D922701998D1EA0066D180 /* DefaultInfoDisplay.cpp */; };
 		44D922731998D69D0066D180 /* DefaultInfoDisplay.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = 44D922711998D1EA0066D180 /* DefaultInfoDisplay.hpp */; };
+		44E3C42B19B53B4100857275 /* Info.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 44E3C42919B53B4100857275 /* Info.cpp */; };
 		44EE3CDF19A60A3B00DDEF2B /* DefaultChessCanvasImageBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 44EE3CDD19A60A3B00DDEF2B /* DefaultChessCanvasImageBuilder.cpp */; };
 		44EE3CE019A60D2F00DDEF2B /* DefaultChessCanvasImageBuilder.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = 44EE3CDE19A60A3B00DDEF2B /* DefaultChessCanvasImageBuilder.hpp */; };
 		A70F5608161B54A400340256 /* IJSONParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A70F5607161B54A400340256 /* IJSONParser.cpp */; };
@@ -1161,6 +1162,8 @@
 		44D33CEC18DB06D50027B892 /* ProtoRenderer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = ProtoRenderer.hpp; path = Commons/Rendererers/ProtoRenderer.hpp; sourceTree = "<group>"; };
 		44D922701998D1EA0066D180 /* DefaultInfoDisplay.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = DefaultInfoDisplay.cpp; path = Commons/Basic/DefaultInfoDisplay.cpp; sourceTree = "<group>"; };
 		44D922711998D1EA0066D180 /* DefaultInfoDisplay.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = DefaultInfoDisplay.hpp; path = Commons/Basic/DefaultInfoDisplay.hpp; sourceTree = "<group>"; };
+		44E3C42919B53B4100857275 /* Info.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Info.cpp; path = Commons/Basic/Info.cpp; sourceTree = "<group>"; };
+		44E3C42A19B53B4100857275 /* Info.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Info.hpp; path = Commons/Basic/Info.hpp; sourceTree = "<group>"; };
 		44EE3CDD19A60A3B00DDEF2B /* DefaultChessCanvasImageBuilder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = DefaultChessCanvasImageBuilder.cpp; path = Commons/Basic/DefaultChessCanvasImageBuilder.cpp; sourceTree = "<group>"; };
 		44EE3CDE19A60A3B00DDEF2B /* DefaultChessCanvasImageBuilder.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = DefaultChessCanvasImageBuilder.hpp; path = Commons/Basic/DefaultChessCanvasImageBuilder.hpp; sourceTree = "<group>"; };
 		A70F5604161B53D000340256 /* IJSONParser.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; path = IJSONParser.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
@@ -2227,6 +2230,8 @@
 				44D922711998D1EA0066D180 /* DefaultInfoDisplay.hpp */,
 				44EE3CDD19A60A3B00DDEF2B /* DefaultChessCanvasImageBuilder.cpp */,
 				44EE3CDE19A60A3B00DDEF2B /* DefaultChessCanvasImageBuilder.hpp */,
+				44E3C42919B53B4100857275 /* Info.cpp */,
+				44E3C42A19B53B4100857275 /* Info.hpp */,
 			);
 			name = Basic;
 			sourceTree = "<group>";
@@ -2944,6 +2949,7 @@
 				D84D5A31157E0EAA000C5E35 /* MutableVector3D.cpp in Sources */,
 				CFB57DA61860E4EF00D5B094 /* HUDRenderer.cpp in Sources */,
 				D8228EBF157F7F7900BBAF60 /* MutableMatrix44D.cpp in Sources */,
+				44E3C42B19B53B4100857275 /* Info.cpp in Sources */,
 				CF0C396A157F988100646A2F /* Mark.cpp in Sources */,
 				38D786E61587B446003BBC75 /* Tile.cpp in Sources */,
 				CF31CBF1158776130085E8F1 /* Effects.cpp in Sources */,

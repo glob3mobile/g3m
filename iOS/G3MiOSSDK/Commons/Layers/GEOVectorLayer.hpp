@@ -28,7 +28,7 @@ public:
   GEOVectorLayer(const std::vector<const LayerTilesRenderParameters*>& parametersVector,
                  const float                                           transparency   = 1.0f,
                  const LayerCondition*                                 condition      = NULL,
-                 const std::vector<std::string>&                       layerInfo      = std::vector<std::string>());
+                 std::vector<const Info*>*                             layerInfo      = new std::vector<const Info*>());
 
   GEOVectorLayer(const int                        mercatorFirstLevel = 2,
                  const int                        mercatorMaxLevel   = 18,
@@ -36,7 +36,7 @@ public:
                  const int                        wgs84maxLevel      = 18,
                  const float                      transparency       = 1.0f,
                  const LayerCondition*            condition          = NULL,
-                 const std::vector<std::string>&  layerInfo = std::vector<std::string>());
+                 std::vector<const Info*>*       layerInfo           = new std::vector<const Info*>());
 
   ~GEOVectorLayer();
 

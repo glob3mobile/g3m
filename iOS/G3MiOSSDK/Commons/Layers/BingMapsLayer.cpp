@@ -24,6 +24,7 @@
 #include "LayerCondition.hpp"
 #include "Context.hpp"
 #include "RenderState.hpp"
+#include "Info.hpp"
 
 BingMapsLayer::BingMapsLayer(const std::string&    imagerySet,
                              const std::string&    key,
@@ -33,7 +34,7 @@ BingMapsLayer::BingMapsLayer(const std::string&    imagerySet,
                              const int             maxLevel,
                              const float           transparency,
                              const LayerCondition* condition,
-                             const std::vector<std::string>&  layerInfo) :
+                             std::vector<const Info*>*  layerInfo) :
 RasterLayer(timeToCache,
             readExpired,
             NULL,
@@ -58,7 +59,7 @@ BingMapsLayer::BingMapsLayer(const std::string&    imagerySet,
                              const int             maxLevel,
                              const float           transparency,
                              const LayerCondition* condition,
-                             const std::vector<std::string>&  layerInfo) :
+                             std::vector<const Info*>*  layerInfo) :
 RasterLayer(timeToCache,
             readExpired,
             NULL,
@@ -237,7 +238,7 @@ void BingMapsLayer::processMetadata(const std::string& brandLogoUri,
                                     const int zoomMax) {
   _brandLogoUri = brandLogoUri;
   _copyright = copyright;
-  _layerInfo.push_back(copyright);
+  addInfo(new Info(copyright));
   _imageUrl = imageUrl;
   _imageUrlSubdomains = imageUrlSubdomains;
   

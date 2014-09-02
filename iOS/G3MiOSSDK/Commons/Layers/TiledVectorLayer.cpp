@@ -27,7 +27,7 @@ TiledVectorLayer::TiledVectorLayer(const GEORasterSymbolizer*                   
                                    const bool                                            readExpired,
                                    const float                                           transparency,
                                    const LayerCondition*                                 condition,
-                                   const std::vector<std::string>&                       layerInfo) :
+                                   std::vector<const Info*>*                             layerInfo) :
 VectorLayer(parametersVector, transparency, condition, layerInfo),
 _symbolizer(symbolizer),
 _urlTemplate(urlTemplate),
@@ -61,16 +61,16 @@ void TiledVectorLayer::setSymbolizer(const GEORasterSymbolizer* symbolizer,
   }
 }
 
-TiledVectorLayer* TiledVectorLayer::newMercator(const GEORasterSymbolizer* symbolizer,
-                                                const std::string&         urlTemplate,
-                                                const Sector&              dataSector,
-                                                const int                  firstLevel,
-                                                const int                  maxLevel,
-                                                const TimeInterval&        timeToCache,
-                                                const bool                 readExpired,
-                                                const float                transparency,
-                                                const LayerCondition*      condition,
-                                                const std::vector<std::string>&                 layerInfo) {
+TiledVectorLayer* TiledVectorLayer::newMercator(const GEORasterSymbolizer*      symbolizer,
+                                                const std::string&              urlTemplate,
+                                                const Sector&                   dataSector,
+                                                const int                       firstLevel,
+                                                const int                       maxLevel,
+                                                const TimeInterval&             timeToCache,
+                                                const bool                      readExpired,
+                                                const float                     transparency,
+                                                const LayerCondition*           condition,
+                                                std::vector<const Info*>*       layerInfo) {
   std::vector<const LayerTilesRenderParameters*> parametersVector;
   parametersVector.push_back( LayerTilesRenderParameters::createDefaultMercator(firstLevel, maxLevel) );
   return new TiledVectorLayer(symbolizer,

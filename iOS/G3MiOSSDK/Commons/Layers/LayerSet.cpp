@@ -17,11 +17,17 @@
 #include "TileImageProvider.hpp"
 #include "CompositeTileImageProvider.hpp"
 #include "Color.hpp"
+#include "Info.hpp"
 
 LayerSet::~LayerSet() {
   for (unsigned int i = 0; i < _layers.size(); i++) {
     delete _layers[i];
   }
+  
+  for (unsigned int i = 0; i < _infos.size(); i++) {
+    delete _infos[i];
+  }
+  
   if (_tileImageProvider != NULL) {
     _tileImageProvider->_release();
   }
@@ -561,7 +567,7 @@ TileImageProvider* LayerSet::getTileImageProvider(const G3MRenderContext* rc,
   return _tileImageProvider;
 }
 
-std::vector<std::string> LayerSet::getInfo() {
+const std::vector<const Info*> LayerSet::getInfo() {
   _infos.clear();
   const int layersCount = _layers.size();
   bool anyEnabled = false;
@@ -569,7 +575,7 @@ std::vector<std::string> LayerSet::getInfo() {
     Layer* layer = _layers[i];
     if (layer->isEnable()) {
       anyEnabled = true;
-      const std::vector<std::string> layerInfo = layer->getInfo();
+      const std::vector<const Info*> layerInfo = layer->getInfo();
       const int infoSize = layerInfo.size();
       for (int j = 0; j < infoSize; j++) {
         _infos.push_back(layerInfo[j]);
@@ -577,12 +583,12 @@ std::vector<std::string> LayerSet::getInfo() {
     }
   }
   if (!anyEnabled) {
-    _infos.push_back("Can't find any enabled Layer at this zoom level");
+    _infos.push_back(new Info("Can't find any enabled Layer at this zoom level"));
   }
   return _infos;
 }
 
-void LayerSet::changedInfo(const std::vector<std::string>& info) {
+void LayerSet::changedInfo(const std::vector<const Info*> info) {
   if (_changedInfoListener != NULL) {
     _changedInfoListener->changedInfo(getInfo());
   }

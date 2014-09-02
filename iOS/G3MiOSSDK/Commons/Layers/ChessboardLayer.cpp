@@ -23,7 +23,7 @@ ChessboardLayer::ChessboardLayer(const int                        mercatorFirstL
                                  const Sector&                    dataSector,
                                  const float                      transparency,
                                  const LayerCondition*            condition,
-                                 const std::vector<std::string>&  layerInfo) :
+                                 std::vector<const Info*>*        layerInfo) :
 ProceduralLayer(LayerTilesRenderParameters::createDefaultMultiProjection(mercatorFirstLevel,
                                                                          mercatorMaxLevel,
                                                                          wgs84firstLevel,

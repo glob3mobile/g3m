@@ -15,7 +15,7 @@
 
 Layer::Layer(float           transparency,
              const LayerCondition* condition,
-             const std::vector<std::string>& layerInfo) :
+             std::vector<const Info*>* layerInfo) :
 _transparency(transparency),
 _condition(condition),
 _layerInfo(layerInfo),
@@ -35,6 +35,14 @@ void Layer::setTransparency(float transparency) {
 
 Layer::~Layer() {
   delete _condition;
+//  const int size = _layerInfo->size();
+//  for (unsigned int i = 0; i < size; i++)
+//  {
+//    delete _layerInfo->at(i);
+//  }
+//  
+//  _layerInfo->clear();
+  delete _layerInfo;
 }
 
 bool Layer::isAvailable(const Tile* tile) const {
@@ -64,7 +72,7 @@ void Layer::removeLayerSet(LayerSet* layerSet) {
 void Layer::notifyChanges() const {
   if (_layerSet != NULL) {
     _layerSet->layerChanged(this);
-    _layerSet->changedInfo(_layerInfo);
+    _layerSet->changedInfo(*_layerInfo);
   }
 }
 
@@ -133,8 +141,8 @@ bool Layer::isEquals(const Layer* that) const {
     return false;
   }
 
-  const int infoSize = _layerInfo.size();
-  const int thatInfoSize = that->_layerInfo.size();
+  const int infoSize = _layerInfo->size();
+  const int thatInfoSize = that->_layerInfo->size();
   if (infoSize != thatInfoSize) {
     return false;
   }
@@ -162,10 +170,10 @@ bool Layer::onLayerTouchEventListener(const G3MEventContext* ec,
   return false;
 }
 
-void Layer::setInfo(const std::vector<std::string>& info) {
-  _layerInfo.clear();
+void Layer::setInfo(const std::vector<const Info*> info) const {
+  _layerInfo->clear();
 #ifdef C_CODE
-  _layerInfo.insert(_layerInfo.end(),
+  _layerInfo->insert(_layerInfo->end(),
                info.begin(),
                info.end());
 #endif
@@ -175,9 +183,9 @@ void Layer::setInfo(const std::vector<std::string>& info) {
 
 }
 
-void Layer::addInfo(const std::vector<std::string>& info){
+void Layer::addInfo(const std::vector<const Info*> info){
 #ifdef C_CODE
-  _layerInfo.insert(_layerInfo.end(),
+  _layerInfo->insert(_layerInfo->end(),
                info.begin(),
                info.end());
 #endif
@@ -186,9 +194,9 @@ void Layer::addInfo(const std::vector<std::string>& info){
 #endif
 }
 
-void Layer::addInfo(const std::string info){
+void Layer::addInfo(const Info* info){
 #ifdef C_CODE
-  _layerInfo.insert(_layerInfo.end(), info);
+  _layerInfo->insert(_layerInfo->end(), info);
 #endif
 #ifdef JAVA_CODE
   _layerInfo.add(info);
@@ -196,8 +204,8 @@ void Layer::addInfo(const std::string info){
 }
 
 
-const std::vector<std::string> Layer::getInfo() const {
-  return _layerInfo;
+const std::vector<const Info*> Layer::getInfo() const {
+  return *_layerInfo;
 }
 
 const std::vector<const LayerTilesRenderParameters*> Layer::createParametersVectorCopy() const {

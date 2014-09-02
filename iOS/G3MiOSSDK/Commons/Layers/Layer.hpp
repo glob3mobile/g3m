@@ -27,6 +27,7 @@ class Sector;
 class LayerTouchEvent;
 class Petition;
 class TileImageProvider;
+class Info;
 
 
 class Layer {
@@ -41,7 +42,7 @@ protected:
 
   bool _enable;
 
-  std::vector<std::string> _layerInfo;
+  std::vector<const Info*>* _layerInfo;
 
 
   float           _transparency;
@@ -53,7 +54,7 @@ protected:
 
   Layer(float           transparency,
         const LayerCondition* condition,
-        const std::vector<std::string>& layerInfo);
+        std::vector<const Info*>* layerInfo);
 
   virtual std::string getLayerType() const = 0;
 
@@ -132,13 +133,13 @@ public:
   virtual TileImageProvider* createTileImageProvider(const G3MRenderContext* rc,
                                                      const LayerTilesRenderParameters* layerTilesRenderParameters) const = 0;
 
-  void setInfo(const std::vector<std::string>& info);
+  void setInfo(const std::vector<const Info*> info) const;
   
-  const std::vector<std::string> getInfo() const;
+  const std::vector<const Info*> getInfo() const;
   
-  void addInfo(const std::vector<std::string>& info);
+  void addInfo(const std::vector<const Info*> info);
   
-  void addInfo(const std::string info);
+  void addInfo(const Info* info);
   
 };
 

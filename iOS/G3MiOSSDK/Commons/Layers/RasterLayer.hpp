@@ -38,7 +38,7 @@ protected:
               const LayerTilesRenderParameters* parameters,
               const float                       transparency,
               const LayerCondition*             condition,
-              const std::vector<std::string>&                layerInfo);
+              std::vector<const Info*>*         layerInfo);
 
   const TimeInterval getTimeToCache() const {
     return _timeToCache;

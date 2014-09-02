@@ -8,12 +8,20 @@
 
 #include "DefaultInfoDisplay.hpp"
 #include "ICanvasUtils.hpp"
+#include "Info.hpp"
 
 
 void DefaultHUDInfoRenderer_ImageFactory::drawOn(ICanvas* canvas,
                                           int width,
                                           int height) {
-  ICanvasUtils::drawStringsOn(_info,
+  std::vector<std::string> strings;
+  
+  const int size = _info.size();
+  for (int i = 0; i < size; i++)
+  {
+    strings.push_back(_info.at(i)->getText());
+  }
+  ICanvasUtils::drawStringsOn(strings,
                               canvas,
                               width,
                               height,
@@ -28,8 +36,8 @@ void DefaultHUDInfoRenderer_ImageFactory::drawOn(ICanvas* canvas,
                               5);
 }
 
-bool DefaultHUDInfoRenderer_ImageFactory::isEquals(const std::vector<std::string>& v1,
-                                            const std::vector<std::string>& v2) const {
+bool DefaultHUDInfoRenderer_ImageFactory::isEquals(const std::vector<const Info*> v1,
+                                                   const std::vector<const Info*> v2) const {
   const int size1 = v1.size();
   const int size2 = v2.size();
   if (size1 != size2) {
@@ -37,8 +45,8 @@ bool DefaultHUDInfoRenderer_ImageFactory::isEquals(const std::vector<std::string
   }
   
   for (int i = 0; i < size1; i++) {
-    const std::string str1 = v1[i];
-    const std::string str2 = v2[i];
+    const Info* str1 = v1[i];
+    const Info* str2 = v2[i];
     if (str1 != str2) {
       return false;
     }
@@ -46,7 +54,7 @@ bool DefaultHUDInfoRenderer_ImageFactory::isEquals(const std::vector<std::string
   return true;
 }
 
-bool DefaultHUDInfoRenderer_ImageFactory::setInfo(const std::vector<std::string>& info) {
+bool DefaultHUDInfoRenderer_ImageFactory::setInfo(const std::vector<const Info*> info) {
   _info.clear();
 #ifdef C_CODE
   _info.insert(_info.end(),
@@ -68,7 +76,7 @@ Default_HUDRenderer::~Default_HUDRenderer() {
   delete _hudImageRenderer;
 }
 
-void Default_HUDRenderer::updateInfo(const std::vector<std::string> &info) {
+void Default_HUDRenderer::updateInfo(const std::vector<const Info*> info) {
   DefaultHUDInfoRenderer_ImageFactory* factory = (DefaultHUDInfoRenderer_ImageFactory*) (_hudImageRenderer->getImageFactory());
   if (factory->setInfo(info)) {
     _hudImageRenderer->recreateImage();

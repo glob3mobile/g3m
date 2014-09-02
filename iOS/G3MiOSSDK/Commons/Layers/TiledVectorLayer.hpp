@@ -56,7 +56,7 @@ private:
                    const bool                                            readExpired,
                    const float                                           transparency,
                    const LayerCondition*                                 condition,
-                   const std::vector<std::string>&                       layerInfo);
+                   std::vector<const Info*>*                             layerInfo);
 
   const URL createURL(const Tile* tile) const;
 
@@ -79,7 +79,7 @@ public:
                                        const bool                 readExpired    = true,
                                        const float                transparency   = 1,
                                        const LayerCondition*      condition      = NULL,
-                                       const std::vector<std::string>&  layerInfo = std::vector<std::string>());
+                                       std::vector<const Info*>* layerInfo = new std::vector<const Info*>());
 
   ~TiledVectorLayer();
 

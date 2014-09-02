@@ -29,7 +29,7 @@ RasterLayer::RasterLayer(const TimeInterval&                    timeToCache,
                          const LayerTilesRenderParameters*      parameters,
                          const float                            transparency,
                          const LayerCondition*                  condition,
-                         const std::vector<std::string>&        layerInfo) :
+                         std::vector<const Info*>*              layerInfo) :
 Layer(transparency, condition, layerInfo),
 _timeToCache(timeToCache),
 _readExpired(readExpired),
