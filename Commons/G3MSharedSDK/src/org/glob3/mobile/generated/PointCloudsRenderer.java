@@ -106,24 +106,30 @@ public class PointCloudsRenderer extends DefaultRenderer
         byte[] id = new byte[idLength];
         it.nextUInt8(idLength, id);
     
-        java.util.ArrayList<Integer> levelsCount = new java.util.ArrayList<Integer>();
         final int byteLevelsCount = it.nextUInt8();
+        final int shortLevelsCount = it.nextUInt8();
+        final int intLevelsCount = it.nextUInt8();
+        final int levelsCountLength = (int) byteLevelsCount + shortLevelsCount + intLevelsCount;
+    
+        int[] levelsCount = new int[levelsCountLength];
+    
         for (int j = 0; j < byteLevelsCount; j++)
         {
-          levelsCount.add((int) it.nextUInt8());
+    //      levelsCount.push_back( (int) it.nextUInt8() );
+          levelsCount[j] = it.nextUInt8();
         }
-        final int shortLevelsCount = it.nextUInt8();
         for (int j = 0; j < shortLevelsCount; j++)
         {
-          levelsCount.add((int) it.nextInt16());
+    //      levelsCount.push_back( (int) it.nextInt16() );
+          levelsCount[byteLevelsCount + j] = it.nextInt16();
         }
-        final int intLevelsCount = it.nextUInt8();
         for (int j = 0; j < intLevelsCount; j++)
         {
-          levelsCount.add(it.nextInt32());
+    //      levelsCount.push_back( it.nextInt32() );
+          levelsCount[byteLevelsCount + shortLevelsCount + j] = it.nextInt32();
         }
     
-        _nodes.add(new PointCloudNode(id, levelsCount));
+        _nodes.add(new PointCloudNode(idLength, id, levelsCountLength, levelsCount));
       }
     
       if (it.hasNext())
@@ -185,19 +191,25 @@ public class PointCloudsRenderer extends DefaultRenderer
 
   private static class PointCloudNode
   {
-    private final byte[]                       _id;
-    private final java.util.ArrayList<Integer> _levelsCount;
+    private final int _idLenght;
+    private String _id;
+    private final int _levelsCountLenght;
+    private final int[] _levelsCount;
 
-
-    public PointCloudNode(final byte[] id,
-                          final java.util.ArrayList<Integer> levelsCount) {
-      _id = id;
-      _levelsCount = levelsCount;
+    public PointCloudNode(int idLenght, String id, int levelsCountLenght, int levelsCount)
+    {
+       _idLenght = idLenght;
+       _id = id;
+       _levelsCountLenght = levelsCountLenght;
+       _levelsCount = levelsCount;
     }
 
-
-    public void dispose() {
+    public void dispose()
+    {
+      _id = null;
+      _levelsCount = null;
     }
+
   }
 
 
