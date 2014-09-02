@@ -101,6 +101,7 @@ private:
 
 
   class PointCloudNode {
+#ifdef C_CODE
   private:
     const int            _idLenght;
     const unsigned char* _id;
@@ -123,10 +124,31 @@ private:
       delete [] _id;
       delete [] _levelsCount;
     }
-    
+#endif
+#ifdef JAVA_CODE
+    private final int    _idLenght;
+    private final byte[] _id;
+    private final int    _levelsCountLenght;
+    private final int[]  _levelsCount;
+
+
+    public PointCloudNode(final int idLenght,
+                          final byte[] id,
+                          final int levelsCountLenght,
+                          final int[] levelsCount) {
+      _idLenght = idLenght;
+      _id = id;
+      _levelsCountLenght = levelsCountLenght;
+      _levelsCount = levelsCount;
+    }
+
+
+    public void dispose() {
+    }
+#endif
   };
   
-  
+
   class PointCloud {
   private:
 #ifdef C_CODE
