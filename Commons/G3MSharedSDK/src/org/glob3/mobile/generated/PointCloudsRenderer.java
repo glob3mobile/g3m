@@ -111,6 +111,7 @@ public class PointCloudsRenderer extends DefaultRenderer
          _children[2].dispose();
       if (_children[3] != null)
          _children[3].dispose();
+      super.dispose();
     }
 
     public final void addLeafNode(PointCloudLeafNode leafNode)
@@ -127,8 +128,6 @@ public class PointCloudsRenderer extends DefaultRenderer
       }
       else
       {
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning DGD at work!
         PointCloudInnerNode innerChild = (PointCloudInnerNode)(_children[childIndex]);
         if (innerChild == null)
         {
@@ -154,18 +153,20 @@ public class PointCloudsRenderer extends DefaultRenderer
   private static class PointCloudLeafNode extends PointCloudNode
   {
     private final int _levelsCountLenght;
-    private final int[] _levelsCount;
+    private final int _levelsCount;
 
-    public PointCloudLeafNode(String id, int levelsCountLenght, int levelsCount)
-    {
-       super(id);
-       _levelsCountLenght = levelsCountLenght;
-       _levelsCount = levelsCount;
+    public PointCloudLeafNode(final String id,
+                              final int levelsCountLenght,
+                              final int[] levelsCount) {
+      super(id);
+      _levelsCountLenght = levelsCountLenght;
+      _levelsCount = levelsCount;
     }
 
-    public void dispose()
-    {
-      _levelsCount = null;
+
+    @Override
+    public void dispose() {
+      super.dispose();
     }
 
 //    void acceptVisitor(PointCloudNodeVisitor* visitor);
