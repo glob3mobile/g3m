@@ -137,7 +137,7 @@ void PointCloudsRenderer::PointCloudMetadataParserAsyncTask::runInBackground(con
   if (it.hasNext()) {
     THROW_EXCEPTION("Logic error");
   }
-
+ 
   delete _buffer;
   _buffer = NULL;
 }
