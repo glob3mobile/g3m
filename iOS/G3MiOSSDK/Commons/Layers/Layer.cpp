@@ -35,14 +35,12 @@ void Layer::setTransparency(float transparency) {
 
 Layer::~Layer() {
   delete _condition;
-//  const int size = _layerInfo->size();
-//  for (unsigned int i = 0; i < size; i++)
-//  {
-//    delete _layerInfo->at(i);
-//  }
-//  
-//  _layerInfo->clear();
+#ifdef C_CODE
   delete _layerInfo;
+#endif
+#ifdef JAVA_CODE
+  _layerInfo.clear();
+#endif
 }
 
 bool Layer::isAvailable(const Tile* tile) const {

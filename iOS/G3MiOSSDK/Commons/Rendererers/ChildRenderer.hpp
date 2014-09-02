@@ -25,9 +25,9 @@ public:
   }
   
   ChildRenderer(Renderer* renderer, const std::vector<const Info*> info):
-  _renderer(renderer),
-  _info(info)
+  _renderer(renderer)
   {
+    setInfo(info);
   }
   
   ~ChildRenderer() {
