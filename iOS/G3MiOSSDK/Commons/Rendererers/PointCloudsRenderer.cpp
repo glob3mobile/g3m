@@ -97,8 +97,23 @@ void PointCloudsRenderer::PointCloudMetadataParserAsyncTask::runInBackground(con
     const int idLength = it.nextUInt8();
     unsigned char* id = new unsigned char[idLength];
     it.nextUInt8(idLength, id);
-    
+
+    const int byteLevelsCount = it.nextUInt8();
+    unsigned char* byteLevels = new unsigned char[byteLevelsCount];
+    it.nextUInt8(byteLevelsCount, byteLevels);
+
+    const int shortLevelsCount = it.nextUInt8();
+    short* shortLevels = new short[shortLevelsCount];
+    it.nextInt16(shortLevelsCount, shortLevels);
+
+    const int intLevelsCount = it.nextUInt8();
+    int* intLevels = new int[intLevelsCount];
+    it.nextInt32(intLevelsCount, intLevels);
+
     delete [] id;
+    delete [] byteLevels;
+    delete [] shortLevels;
+    delete [] intLevels;
   }
 
   if (it.hasNext()) {

@@ -293,57 +293,81 @@ HttpServlet {
    }
 
 
+   private static byte toByte(final int value) {
+      final byte result = (byte) value;
+      if (result != value) {
+         throw new RuntimeException("Logic error");
+      }
+      return result;
+   }
+
+
    private static byte[] getNodeArray(final NodeMetadata node) {
       final byte[] id = Utils.toBinaryID(node._id);
 
-      final byte idLength = (byte) id.length;
-      if (idLength != id.length) {
-         throw new RuntimeException("Logic error");
-      }
+      final byte idLength = toByte(id.length);
 
-      final List<Byte> byteLevels = new ArrayList<Byte>();
-      final List<Short> shortLevels = new ArrayList<Short>();
-      final List<Integer> intLevels = new ArrayList<Integer>();
+      final int[] levelsPointsCount = node._levelsPointsCount;
+      final List<Byte> byteLevels = new ArrayList<Byte>(levelsPointsCount.length);
+      final List<Short> shortLevels = new ArrayList<Short>(levelsPointsCount.length);
+      final List<Integer> intLevels = new ArrayList<Integer>(levelsPointsCount.length);
 
 
-      Area area = Area.BYTE;
-      for (final int levelPointCount : node._levelsPointsCount) {
-         if ((area == Area.SHORT) && (levelPointCount > Short.MAX_VALUE)) {
-            area = Area.INT;
+      Area currentArea = Area.BYTE;
+      for (final int levelPointCount : levelsPointsCount) {
+         if ((currentArea == Area.SHORT) && (levelPointCount > Short.MAX_VALUE)) {
+            currentArea = Area.INT;
          }
 
-         if ((area == Area.BYTE) && (levelPointCount > Byte.MAX_VALUE)) {
-            area = Area.SHORT;
+         if ((currentArea == Area.BYTE) && (levelPointCount > Byte.MAX_VALUE)) {
+            currentArea = Area.SHORT;
          }
 
-         switch (area) {
+         switch (currentArea) {
             case BYTE:
                byteLevels.add((byte) levelPointCount);
                break;
-
             case SHORT:
                shortLevels.add((short) levelPointCount);
                break;
-
             case INT:
                intLevels.add(levelPointCount);
                break;
-
             default:
-               throw new RuntimeException("area not supported: " + area);
+               throw new RuntimeException("area not supported: " + currentArea);
          }
       }
 
-      System.out.println("levelsPointsCount" + Arrays.toString(node._levelsPointsCount));
-      System.out.println("byteLevels=" + byteLevels);
-      System.out.println("shortLevels=" + shortLevels);
-      System.out.println("intLevels=" + intLevels);
+      final byte byteLevelsCount = toByte(byteLevels.size());
+      final byte shortLevelsCount = toByte(shortLevels.size());
+      final byte intLevelsCount = toByte(intLevels.size());
 
       final int bufferSize = ByteBufferUtils.sizeOf(idLength) + //
-               idLength;
+               idLength + //
+               ByteBufferUtils.sizeOf(byteLevelsCount) + //
+               byteLevelsCount + //
+                             ByteBufferUtils.sizeOf(shortLevelsCount) + //
+                             (shortLevelsCount * 2) + //
+                             ByteBufferUtils.sizeOf(intLevelsCount) + //
+                             (intLevelsCount * 4);
+
+
       final ByteBuffer buffer = ByteBuffer.allocate(bufferSize).order(ByteOrder.LITTLE_ENDIAN);
       buffer.put(idLength);
       buffer.put(id);
+
+      buffer.put(byteLevelsCount);
+      for (final byte byteLevel : byteLevels) {
+         buffer.put(byteLevel);
+      }
+      buffer.put(shortLevelsCount);
+      for (final short shortLevel : shortLevels) {
+         buffer.putShort(shortLevel);
+      }
+      buffer.put(intLevelsCount);
+      for (final int intLevel : intLevels) {
+         buffer.putInt(intLevel);
+      }
 
       return buffer.array();
    }

@@ -12,6 +12,7 @@
 #include "ILogger.hpp"
 #include "ByteBufferBuilder.hpp"
 #include "IMathUtils.hpp"
+#include "ErrorHandling.hpp"
 
 ByteBufferIterator::ByteBufferIterator(const IByteBuffer* buffer) :
 _buffer(buffer),
@@ -23,8 +24,8 @@ _bufferSize( buffer->size() )
 
 bool ByteBufferIterator::hasNext() const {
   if (_bufferTimestamp != _buffer->timestamp()) {
-    ILogger::instance()->logError("The buffer was changed after the iteration started");
-    _bufferSize = _buffer->size();
+    THROW_EXCEPTION("The buffer was changed after the iteration started");
+    //_bufferSize = _buffer->size();
   }
 
   return ( _cursor < _bufferSize );
@@ -32,12 +33,12 @@ bool ByteBufferIterator::hasNext() const {
 
 unsigned char ByteBufferIterator::nextUInt8() {
   if (_bufferTimestamp != _buffer->timestamp()) {
-    ILogger::instance()->logError("The buffer was changed after the iteration started");
-    _bufferSize = _buffer->size();
+    THROW_EXCEPTION("The buffer was changed after the iteration started");
+    //_bufferSize = _buffer->size();
   }
 
   if (_cursor >= _bufferSize) {
-    ILogger::instance()->logError("Iteration overflow");
+    THROW_EXCEPTION("Iteration overflow");
     return 0;
   }
 
@@ -49,6 +50,19 @@ void ByteBufferIterator::nextUInt8(int count, unsigned char* dst) {
     dst[i] = nextUInt8();
   }
 }
+
+void ByteBufferIterator::nextInt16(int count, short* dst) {
+  for (int i = 0; i < count; i++) {
+    dst[i] = nextInt16();
+  }
+}
+
+void ByteBufferIterator::nextInt32(int count, int* dst) {
+  for (int i = 0; i < count; i++) {
+    dst[i] = nextInt32();
+  }
+}
+
 
 short ByteBufferIterator::nextInt16() {
   // LittleEndian

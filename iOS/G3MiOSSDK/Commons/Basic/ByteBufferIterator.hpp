@@ -39,7 +39,9 @@ public:
   double nextDouble();
 
   void nextUInt8(int count, unsigned char* dst);
-  
+  void nextInt16(int count, short* dst);
+  void nextInt32(int count, int* dst);
+
 };
 
 #endif
