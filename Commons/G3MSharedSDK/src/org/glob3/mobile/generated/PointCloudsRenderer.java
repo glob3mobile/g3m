@@ -89,7 +89,22 @@ public class PointCloudsRenderer extends DefaultRenderer
         byte[] id = new byte[idLength];
         it.nextUInt8(idLength, id);
     
+        final int byteLevelsCount = it.nextUInt8();
+        byte[] byteLevels = new byte[byteLevelsCount];
+        it.nextUInt8(byteLevelsCount, byteLevels);
+    
+        final int shortLevelsCount = it.nextUInt8();
+        short[] shortLevels = new short[shortLevelsCount];
+        it.nextInt16(shortLevelsCount, shortLevels);
+    
+        final int intLevelsCount = it.nextUInt8();
+        int[] intLevels = new int[intLevelsCount];
+        it.nextInt32(intLevelsCount, intLevels);
+    
         id = null;
+        byteLevels = null;
+        shortLevels = null;
+        intLevels = null;
       }
     
       if (it.hasNext())

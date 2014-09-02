@@ -41,8 +41,8 @@ public class ByteBufferIterator
   {
     if (_bufferTimestamp != _buffer.timestamp())
     {
-      ILogger.instance().logError("The buffer was changed after the iteration started");
-      _bufferSize = _buffer.size();
+      throw new RuntimeException("The buffer was changed after the iteration started");
+      //_bufferSize = _buffer->size();
     }
   
     return (_cursor < _bufferSize);
@@ -52,13 +52,13 @@ public class ByteBufferIterator
   {
     if (_bufferTimestamp != _buffer.timestamp())
     {
-      ILogger.instance().logError("The buffer was changed after the iteration started");
-      _bufferSize = _buffer.size();
+      throw new RuntimeException("The buffer was changed after the iteration started");
+      //_bufferSize = _buffer->size();
     }
   
     if (_cursor >= _bufferSize)
     {
-      ILogger.instance().logError("Iteration overflow");
+      throw new RuntimeException("Iteration overflow");
       return 0;
     }
   
@@ -132,6 +132,20 @@ public class ByteBufferIterator
     for (int i = 0; i < count; i++)
     {
       dst[i] = nextUInt8();
+    }
+  }
+  public final void nextInt16(int count, short[] dst)
+  {
+    for (int i = 0; i < count; i++)
+    {
+      dst[i] = nextInt16();
+    }
+  }
+  public final void nextInt32(int count, int[] dst)
+  {
+    for (int i = 0; i < count; i++)
+    {
+      dst[i] = nextInt32();
     }
   }
 
