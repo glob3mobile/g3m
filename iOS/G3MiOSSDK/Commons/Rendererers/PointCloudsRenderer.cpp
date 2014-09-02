@@ -19,7 +19,12 @@
 void PointCloudsRenderer::PointCloudMetadataDownloadListener::onDownload(const URL& url,
                                                                          IByteBuffer* buffer,
                                                                          bool expired) {
-  _pointCloud->downloadedMetadata(buffer);
+  ILogger::instance()->logInfo("Downloaded metadata for \"%s\" (bytes=%ld)",
+                               _pointCloud->getCloudName().c_str(),
+                               buffer->size());
+
+  _threadUtils->invokeAsyncTask(new PointCloudMetadataParserAsyncTask(_pointCloud, buffer),
+                                true);
 }
 
 void PointCloudsRenderer::PointCloudMetadataDownloadListener::onError(const URL& url) {
@@ -38,8 +43,6 @@ void PointCloudsRenderer::PointCloudMetadataDownloadListener::onCanceledDownload
 
 
 void PointCloudsRenderer::PointCloud::initialize(const G3MContext* context) {
-  _downloader = context->getDownloader();
-  _threadUtils = context->getThreadUtils();
   _downloadingMetadata = true;
   _errorDownloadingMetadata = false;
   _errorParsingMetadata = false;
@@ -50,12 +53,12 @@ void PointCloudsRenderer::PointCloud::initialize(const G3MContext* context) {
 
   ILogger::instance()->logInfo("Downloading metadata for \"%s\"", _cloudName.c_str());
 
-  _downloader->requestBuffer(metadataURL,
-                             _downloadPriority,
-                             _timeToCache,
-                             _readExpired,
-                             new PointCloudsRenderer::PointCloudMetadataDownloadListener(this),
-                             true);
+  context->getDownloader()->requestBuffer(metadataURL,
+                                          _downloadPriority,
+                                          _timeToCache,
+                                          _readExpired,
+                                          new PointCloudsRenderer::PointCloudMetadataDownloadListener(this, context->getThreadUtils()),
+                                          true);
 }
 
 PointCloudsRenderer::PointCloud::~PointCloud() {
@@ -137,20 +140,20 @@ void PointCloudsRenderer::PointCloud::parsedMetadata(long long pointsCount,
 
 }
 
-void PointCloudsRenderer::PointCloud::downloadedMetadata(IByteBuffer* buffer) {
-  ILogger::instance()->logInfo("Downloaded metadata for \"%s\" (bytes=%ld)", _cloudName.c_str(), buffer->size());
-
-  _threadUtils->invokeAsyncTask(new PointCloudMetadataParserAsyncTask(this, buffer),
-                                true);
-
-  //  _downloadingMetadata = false;
-  //
-  //
-  //#warning DGD at work!
-  ////  _errorParsingMetadata = true;
-  //
-  //  delete buffer;
-}
+//void PointCloudsRenderer::PointCloud::downloadedMetadata(IByteBuffer* buffer) {
+//  ILogger::instance()->logInfo("Downloaded metadata for \"%s\" (bytes=%ld)", _cloudName.c_str(), buffer->size());
+//
+//  _threadUtils->invokeAsyncTask(new PointCloudMetadataParserAsyncTask(this, buffer),
+//                                true);
+//
+//  //  _downloadingMetadata = false;
+//  //
+//  //
+//  //#warning DGD at work!
+//  ////  _errorParsingMetadata = true;
+//  //
+//  //  delete buffer;
+//}
 
 RenderState PointCloudsRenderer::PointCloud::getRenderState(const G3MRenderContext* rc) {
   if (_downloadingMetadata) {

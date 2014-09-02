@@ -37,8 +37,8 @@ import es.igosoftware.util.XStringTokenizer;
 
 
 public class PCSSServlet
-         extends
-            HttpServlet {
+extends
+HttpServlet {
    private static final long serialVersionUID = 1L;
 
 
@@ -141,7 +141,7 @@ public class PCSSServlet
 
 
    private static List<NodeMetadata> getNodesMetadata(final PersistentLOD db,
-                                                      final Planet planet) {
+            final Planet planet) {
       final List<NodeMetadata> result = new ArrayList<PCSSServlet.NodeMetadata>(10000);
 
       db.acceptDepthFirstVisitor(null, new PersistentLOD.Visitor() {
@@ -286,13 +286,61 @@ public class PCSSServlet
    }
 
 
+   private static enum Area {
+      BYTE,
+      SHORT,
+      INT;
+   }
+
+
    private static byte[] getNodeArray(final NodeMetadata node) {
       final byte[] id = Utils.toBinaryID(node._id);
 
       final byte idLength = (byte) id.length;
+      if (idLength != id.length) {
+         throw new RuntimeException("Logic error");
+      }
+
+      final List<Byte> byteLevels = new ArrayList<Byte>();
+      final List<Short> shortLevels = new ArrayList<Short>();
+      final List<Integer> intLevels = new ArrayList<Integer>();
+
+
+      Area area = Area.BYTE;
+      for (final int levelPointCount : node._levelsPointsCount) {
+         if ((area == Area.SHORT) && (levelPointCount > Short.MAX_VALUE)) {
+            area = Area.INT;
+         }
+
+         if ((area == Area.BYTE) && (levelPointCount > Byte.MAX_VALUE)) {
+            area = Area.SHORT;
+         }
+
+         switch (area) {
+            case BYTE:
+               byteLevels.add((byte) levelPointCount);
+               break;
+
+            case SHORT:
+               shortLevels.add((short) levelPointCount);
+               break;
+
+            case INT:
+               intLevels.add(levelPointCount);
+               break;
+
+            default:
+               throw new RuntimeException("area not supported: " + area);
+         }
+      }
+
+      System.out.println("levelsPointsCount" + Arrays.toString(node._levelsPointsCount));
+      System.out.println("byteLevels=" + byteLevels);
+      System.out.println("shortLevels=" + shortLevels);
+      System.out.println("intLevels=" + intLevels);
 
       final int bufferSize = ByteBufferUtils.sizeOf(idLength) + //
-                             idLength;
+               idLength;
       final ByteBuffer buffer = ByteBuffer.allocate(bufferSize).order(ByteOrder.LITTLE_ENDIAN);
       buffer.put(idLength);
       buffer.put(id);
@@ -315,7 +363,7 @@ public class PCSSServlet
       final double maxHeight = statistics.getMaxHeight();
 
       final int bufferSize = //
-               ByteBufferUtils.sizeOf(pointsCount) + //
+      ByteBufferUtils.sizeOf(pointsCount) + //
                ByteBufferUtils.sizeOf(sector) + //
                ByteBufferUtils.sizeOf(minHeight) + //
                ByteBufferUtils.sizeOf(maxHeight);

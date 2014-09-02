@@ -71,10 +71,13 @@ private:
   class PointCloudMetadataDownloadListener : public IBufferDownloadListener {
   private:
     PointCloud*  _pointCloud;
+    const IThreadUtils* _threadUtils;
 
   public:
-    PointCloudMetadataDownloadListener(PointCloud* pointCloud) :
-    _pointCloud(pointCloud)
+    PointCloudMetadataDownloadListener(PointCloud* pointCloud,
+                                       const IThreadUtils* threadUtils) :
+    _pointCloud(pointCloud),
+    _threadUtils(threadUtils)
     {
     }
 
@@ -114,9 +117,6 @@ private:
     PointCloudMetadataListener* _metadataListener;
     bool _deleteListener;
 
-    IDownloader* _downloader;
-    const IThreadUtils* _threadUtils;
-
     bool _downloadingMetadata;
     bool _errorDownloadingMetadata;
     bool _errorParsingMetadata;
@@ -142,8 +142,6 @@ private:
     _readExpired(readExpired),
     _metadataListener(metadataListener),
     _deleteListener(deleteListener),
-    _downloader(NULL),
-    _threadUtils(NULL),
     _downloadingMetadata(false),
     _errorDownloadingMetadata(false),
     _errorParsingMetadata(false),
@@ -156,13 +154,17 @@ private:
 
     ~PointCloud();
 
+    const std::string getCloudName() const {
+      return _cloudName;
+    }
+
     void initialize(const G3MContext* context);
 
     RenderState getRenderState(const G3MRenderContext* rc);
 
     void errorDownloadingMetadata();
 
-    void downloadedMetadata(IByteBuffer* buffer);
+//    void downloadedMetadata(IByteBuffer* buffer);
 
     void parsedMetadata(long long pointsCount,
                         Sector* sector,
