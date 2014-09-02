@@ -42,7 +42,7 @@ public class ByteBufferIterator
     if (_bufferTimestamp != _buffer.timestamp())
     {
       throw new RuntimeException("The buffer was changed after the iteration started");
-      //_bufferSize = _buffer->size();
+      // _bufferSize = _buffer->size();
     }
   
     return (_cursor < _bufferSize);
@@ -59,7 +59,7 @@ public class ByteBufferIterator
     if (_cursor >= _bufferSize)
     {
       throw new RuntimeException("Iteration overflow");
-      return 0;
+      // return 0;
     }
   
     return _buffer.get(_cursor++);

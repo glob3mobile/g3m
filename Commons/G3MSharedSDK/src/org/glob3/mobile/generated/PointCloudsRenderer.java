@@ -83,28 +83,37 @@ public class PointCloudsRenderer extends DefaultRenderer
       _maxHeight = it.nextDouble();
     
       final int nodesCount = it.nextInt32();
+      java.util.ArrayList<PointCloudNode> nodes = new java.util.ArrayList<PointCloudNode>();
+    
       for (int i = 0; i < nodesCount; i++)
       {
         final int idLength = it.nextUInt8();
         byte[] id = new byte[idLength];
         it.nextUInt8(idLength, id);
     
+        java.util.ArrayList<Integer> levelsCount = new java.util.ArrayList<Integer>();
         final int byteLevelsCount = it.nextUInt8();
-        byte[] byteLevels = new byte[byteLevelsCount];
-        it.nextUInt8(byteLevelsCount, byteLevels);
-    
+        for (int j = 0; j < byteLevelsCount; j++)
+        {
+          levelsCount.add(it.nextUInt8());
+        }
         final int shortLevelsCount = it.nextUInt8();
-        short[] shortLevels = new short[shortLevelsCount];
-        it.nextInt16(shortLevelsCount, shortLevels);
-    
+        for (int j = 0; j < shortLevelsCount; j++)
+        {
+          levelsCount.add(it.nextInt16());
+        }
         final int intLevelsCount = it.nextUInt8();
-        int[] intLevels = new int[intLevelsCount];
-        it.nextInt32(intLevelsCount, intLevels);
+        for (int j = 0; j < intLevelsCount; j++)
+        {
+          levelsCount.add(it.nextInt32());
+        }
     
-        id = null;
-        byteLevels = null;
-        shortLevels = null;
-        intLevels = null;
+        nodes.add(new PointCloudNode(id, levelsCount));
+    
+    //    delete [] id;
+    //    delete [] byteLevels;
+    //    delete [] shortLevels;
+    //    delete [] intLevels;
       }
     
       if (it.hasNext())
@@ -161,6 +170,25 @@ public class PointCloudsRenderer extends DefaultRenderer
 
   }
 
+
+  private static class PointCloudNode
+  {
+    private String _id;
+    private final java.util.ArrayList<Integer> _levelsCount = new java.util.ArrayList<Integer>();
+
+    public PointCloudNode(String id, java.util.ArrayList<Integer> levelsCount)
+    {
+       _id = id;
+       _levelsCount = levelsCount;
+    }
+
+    public void dispose()
+    {
+      _id = null;
+    }
+  }
+
+
   private static class PointCloud
   {
     private final URL _serverURL;
@@ -181,7 +209,6 @@ public class PointCloudsRenderer extends DefaultRenderer
     private Sector _sector;
     private double _minHeight;
     private double _maxHeight;
-
 
     public PointCloud(URL serverURL, String cloudName, long downloadPriority, TimeInterval timeToCache, boolean readExpired, PointCloudMetadataListener metadataListener, boolean deleteListener)
     {
