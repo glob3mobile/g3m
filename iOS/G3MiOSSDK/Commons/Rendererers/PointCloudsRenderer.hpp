@@ -98,7 +98,12 @@ private:
   class PointCloudLeafNode : public PointCloudNode {
   private:
     const int  _levelsCountLenght;
+#ifdef C_CODE
     const int* _levelsCount;
+#endif
+#ifdef JAVA_CODE
+    private final int[] _levelsCount;
+#endif
 
   public:
 #ifdef C_CODE
