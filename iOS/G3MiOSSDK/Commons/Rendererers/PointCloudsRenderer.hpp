@@ -101,41 +101,32 @@ private:
 
 
   class PointCloudNode {
-#ifdef C_CODE
   private:
-    const unsigned char*   _id;
-    const std::vector<int> _levelsCount;
+    const int            _idLenght;
+    const unsigned char* _id;
+    const int            _levelsCountLenght;
+    const int*           _levelsCount;
 
   public:
-    PointCloudNode(const unsigned char* id,
-                   const std::vector<int>& levelsCount) :
+    PointCloudNode(const int            idLenght,
+                   const unsigned char* id,
+                   const int            levelsCountLenght,
+                   const int*           levelsCount) :
+    _idLenght(idLenght),
     _id(id),
+    _levelsCountLenght(levelsCountLenght),
     _levelsCount(levelsCount)
     {
     }
 
     ~PointCloudNode() {
       delete [] _id;
+      delete [] _levelsCount;
     }
-#endif
-#ifdef JAVA_CODE
-    private final byte[]                       _id;
-    private final java.util.ArrayList<Integer> _levelsCount;
-
-
-    public PointCloudNode(final byte[] id,
-                          final java.util.ArrayList<Integer> levelsCount) {
-      _id = id;
-      _levelsCount = levelsCount;
-    }
-
-
-    public void dispose() {
-    }
-#endif
+    
   };
-
-
+  
+  
   class PointCloud {
   private:
 #ifdef C_CODE

@@ -108,21 +108,30 @@ void PointCloudsRenderer::PointCloudMetadataParserAsyncTask::runInBackground(con
     unsigned char* id = new unsigned char[idLength];
     it.nextUInt8(idLength, id);
 
-    std::vector<int> levelsCount;
     const int byteLevelsCount = it.nextUInt8();
-    for (int j = 0; j < byteLevelsCount; j++) {
-      levelsCount.push_back( (int) it.nextUInt8() );
-    }
     const int shortLevelsCount = it.nextUInt8();
-    for (int j = 0; j < shortLevelsCount; j++) {
-      levelsCount.push_back( (int) it.nextInt16() );
-    }
     const int intLevelsCount = it.nextUInt8();
+    const int levelsCountLength = (int) byteLevelsCount + shortLevelsCount + intLevelsCount;
+
+    int* levelsCount = new int[levelsCountLength];
+
+    for (int j = 0; j < byteLevelsCount; j++) {
+//      levelsCount.push_back( (int) it.nextUInt8() );
+      levelsCount[j] = it.nextUInt8();
+    }
+    for (int j = 0; j < shortLevelsCount; j++) {
+//      levelsCount.push_back( (int) it.nextInt16() );
+      levelsCount[byteLevelsCount + j] = it.nextInt16();
+    }
     for (int j = 0; j < intLevelsCount; j++) {
-      levelsCount.push_back( it.nextInt32() );
+//      levelsCount.push_back( it.nextInt32() );
+      levelsCount[byteLevelsCount + shortLevelsCount + j] =  it.nextInt32();
     }
 
-    _nodes->push_back( new PointCloudNode(id, levelsCount) );
+    _nodes->push_back( new PointCloudNode(idLength,
+                                          id,
+                                          levelsCountLength,
+                                          levelsCount) );
   }
 
   if (it.hasNext()) {

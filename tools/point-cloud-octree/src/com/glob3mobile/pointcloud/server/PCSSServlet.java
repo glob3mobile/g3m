@@ -37,8 +37,8 @@ import es.igosoftware.util.XStringTokenizer;
 
 
 public class PCSSServlet
-extends
-HttpServlet {
+         extends
+            HttpServlet {
    private static final long serialVersionUID = 1L;
 
 
@@ -141,7 +141,7 @@ HttpServlet {
 
 
    private static List<NodeMetadata> getNodesMetadata(final PersistentLOD db,
-            final Planet planet) {
+                                                      final Planet planet) {
       final List<NodeMetadata> result = new ArrayList<PCSSServlet.NodeMetadata>(10000);
 
       db.acceptDepthFirstVisitor(null, new PersistentLOD.Visitor() {
@@ -343,13 +343,13 @@ HttpServlet {
       final byte intLevelsCount = toByte(intLevels.size());
 
       final int bufferSize = ByteBufferUtils.sizeOf(idLength) + //
-               idLength + //
-               ByteBufferUtils.sizeOf(byteLevelsCount) + //
-               byteLevelsCount + //
-                             ByteBufferUtils.sizeOf(shortLevelsCount) + //
-                             (shortLevelsCount * 2) + //
-                             ByteBufferUtils.sizeOf(intLevelsCount) + //
-                             (intLevelsCount * 4);
+                             idLength + //
+                             ByteBufferUtils.sizeOf(byteLevelsCount) + //
+                             byteLevelsCount + //
+               ByteBufferUtils.sizeOf(shortLevelsCount) + //
+               (shortLevelsCount * 2) + //
+               ByteBufferUtils.sizeOf(intLevelsCount) + //
+               (intLevelsCount * 4);
 
 
       final ByteBuffer buffer = ByteBuffer.allocate(bufferSize).order(ByteOrder.LITTLE_ENDIAN);
@@ -357,14 +357,14 @@ HttpServlet {
       buffer.put(id);
 
       buffer.put(byteLevelsCount);
+      buffer.put(shortLevelsCount);
+      buffer.put(intLevelsCount);
       for (final byte byteLevel : byteLevels) {
          buffer.put(byteLevel);
       }
-      buffer.put(shortLevelsCount);
       for (final short shortLevel : shortLevels) {
          buffer.putShort(shortLevel);
       }
-      buffer.put(intLevelsCount);
       for (final int intLevel : intLevels) {
          buffer.putInt(intLevel);
       }
@@ -387,7 +387,7 @@ HttpServlet {
       final double maxHeight = statistics.getMaxHeight();
 
       final int bufferSize = //
-      ByteBufferUtils.sizeOf(pointsCount) + //
+               ByteBufferUtils.sizeOf(pointsCount) + //
                ByteBufferUtils.sizeOf(sector) + //
                ByteBufferUtils.sizeOf(minHeight) + //
                ByteBufferUtils.sizeOf(maxHeight);
