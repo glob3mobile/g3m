@@ -30,10 +30,10 @@ public:
                   const Sector& sector,
                   double minHeight,
                   double maxHeight) {
-//    _g3mWidget->setAnimatedCameraPosition(Geodetic3D(sector._center, 5000),
-//                                          Angle::zero(),
-//                                          Angle::fromDegrees(-60));
-    _g3mWidget->setAnimatedCameraPosition( Geodetic3D(sector._center, 5000) );
+    _g3mWidget->setAnimatedCameraPosition(Geodetic3D(sector._center, 26000),
+                                          Angle::zero(),
+                                          Angle::fromDegrees(-25));
+//    _g3mWidget->setAnimatedCameraPosition( Geodetic3D(sector._center, 5000) );
   }
 
 };
