@@ -153,7 +153,7 @@ public class PointCloudsRenderer extends DefaultRenderer
   private static class PointCloudLeafNode extends PointCloudNode
   {
     private final int _levelsCountLenght;
-    private final int _levelsCount;
+    private final int[] _levelsCount;
 
     public PointCloudLeafNode(final String id,
                               final int levelsCountLenght,
