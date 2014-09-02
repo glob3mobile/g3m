@@ -37,6 +37,7 @@ public:
 private:
 
   class PointCloud;
+  class PointCloudNode;
 
   class PointCloudMetadataParserAsyncTask : public GAsyncTask {
   private:
@@ -46,6 +47,7 @@ private:
     Sector* _sector;
     double _minHeight;
     double _maxHeight;
+    std::vector<PointCloudNode*>* _nodes;
 
   public:
     PointCloudMetadataParserAsyncTask(PointCloud* pointCloud,
@@ -55,7 +57,8 @@ private:
     _pointsCount(-1),
     _sector(NULL),
     _minHeight(0),
-    _maxHeight(0)
+    _maxHeight(0),
+    _nodes(NULL)
     {
     }
 
@@ -96,7 +99,9 @@ private:
   };
 
 
+
   class PointCloudNode {
+#ifdef C_CODE
   private:
     const unsigned char*   _id;
     const std::vector<int> _levelsCount;
@@ -112,6 +117,22 @@ private:
     ~PointCloudNode() {
       delete [] _id;
     }
+#endif
+#ifdef JAVA_CODE
+    private final byte[]                       _id;
+    private final java.util.ArrayList<Integer> _levelsCount;
+
+
+    public PointCloudNode(final byte[] id,
+                          final java.util.ArrayList<Integer> levelsCount) {
+      _id = id;
+      _levelsCount = levelsCount;
+    }
+
+
+    public void dispose() {
+    }
+#endif
   };
 
 

@@ -74,6 +74,14 @@ void PointCloudsRenderer::PointCloud::errorDownloadingMetadata() {
 PointCloudsRenderer::PointCloudMetadataParserAsyncTask::~PointCloudMetadataParserAsyncTask() {
   delete _sector;
   delete _buffer;
+  if (_nodes != NULL) {
+    const int size = _nodes->size();
+    for (int i = 0; i < size; i++) {
+      PointCloudNode* node = _nodes->at(i);
+      delete node;
+    }
+    delete _nodes;
+  }
 }
 
 void PointCloudsRenderer::PointCloudMetadataParserAsyncTask::runInBackground(const G3MContext* context) {
@@ -93,7 +101,7 @@ void PointCloudsRenderer::PointCloudMetadataParserAsyncTask::runInBackground(con
   _maxHeight = it.nextDouble();
 
   const int nodesCount = it.nextInt32();
-  std::vector<PointCloudNode*> nodes;
+  _nodes = new std::vector<PointCloudNode*>();
 
   for (int i = 0; i < nodesCount; i++) {
     const int idLength = it.nextUInt8();
@@ -103,23 +111,18 @@ void PointCloudsRenderer::PointCloudMetadataParserAsyncTask::runInBackground(con
     std::vector<int> levelsCount;
     const int byteLevelsCount = it.nextUInt8();
     for (int j = 0; j < byteLevelsCount; j++) {
-      levelsCount.push_back( it.nextUInt8() );
+      levelsCount.push_back( (int) it.nextUInt8() );
     }
     const int shortLevelsCount = it.nextUInt8();
     for (int j = 0; j < shortLevelsCount; j++) {
-      levelsCount.push_back( it.nextInt16() );
+      levelsCount.push_back( (int) it.nextInt16() );
     }
     const int intLevelsCount = it.nextUInt8();
     for (int j = 0; j < intLevelsCount; j++) {
       levelsCount.push_back( it.nextInt32() );
     }
 
-    nodes.push_back( new PointCloudNode(id, levelsCount) );
-
-//    delete [] id;
-//    delete [] byteLevels;
-//    delete [] shortLevels;
-//    delete [] intLevels;
+    _nodes->push_back( new PointCloudNode(id, levelsCount) );
   }
 
   if (it.hasNext()) {
@@ -131,8 +134,9 @@ void PointCloudsRenderer::PointCloudMetadataParserAsyncTask::runInBackground(con
 }
 
 void PointCloudsRenderer::PointCloudMetadataParserAsyncTask::onPostExecute(const G3MContext* context) {
-  _pointCloud->parsedMetadata(_pointsCount, _sector, _minHeight, _maxHeight);
-  _sector = NULL;
+  _pointCloud->parsedMetadata(_pointsCount, _sector, _minHeight, _maxHeight, _nodes);
+  _sector = NULL; // moves ownership to pointCloud
+  _nodes = NULL;  // moves ownership to pointCloud
 }
 
 void PointCloudsRenderer::PointCloud::parsedMetadata(long long pointsCount,
