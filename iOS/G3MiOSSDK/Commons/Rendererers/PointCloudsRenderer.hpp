@@ -101,6 +101,7 @@ private:
     const int* _levelsCount;
 
   public:
+#ifdef C_CODE
     PointCloudLeafNode(const std::string& id,
                        const int          levelsCountLenght,
                        const int*         levelsCount) :
@@ -113,6 +114,22 @@ private:
     ~PointCloudLeafNode() {
       delete [] _levelsCount;
     }
+#endif
+#ifdef JAVA_CODE
+    public PointCloudLeafNode(final String id,
+                              final int levelsCountLenght,
+                              final int[] levelsCount) {
+      super(id);
+      _levelsCountLenght = levelsCountLenght;
+      _levelsCount = levelsCount;
+    }
+
+
+    @Override
+    public void dispose() {
+      super.dispose();
+    }
+#endif
 
 //    void acceptVisitor(PointCloudNodeVisitor* visitor);
 

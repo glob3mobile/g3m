@@ -198,6 +198,9 @@ PointCloudsRenderer::PointCloudInnerNode::~PointCloudInnerNode() {
   delete _children[1];
   delete _children[2];
   delete _children[3];
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
 }
 
 void PointCloudsRenderer::PointCloudInnerNode::addLeafNode(PointCloudLeafNode* leafNode) {
@@ -210,7 +213,6 @@ void PointCloudsRenderer::PointCloudInnerNode::addLeafNode(PointCloudLeafNode* l
     _children[childIndex] = leafNode;
   }
   else {
-#warning DGD at work!
     PointCloudInnerNode* innerChild = (PointCloudInnerNode*) (_children[childIndex]);
     if (innerChild == NULL) {
       IStringBuilder* isb = IStringBuilder::newStringBuilder();
