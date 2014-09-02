@@ -25,7 +25,7 @@ _bufferSize( buffer->size() )
 bool ByteBufferIterator::hasNext() const {
   if (_bufferTimestamp != _buffer->timestamp()) {
     THROW_EXCEPTION("The buffer was changed after the iteration started");
-    //_bufferSize = _buffer->size();
+    // _bufferSize = _buffer->size();
   }
 
   return ( _cursor < _bufferSize );
@@ -39,7 +39,7 @@ unsigned char ByteBufferIterator::nextUInt8() {
 
   if (_cursor >= _bufferSize) {
     THROW_EXCEPTION("Iteration overflow");
-    return 0;
+    // return 0;
   }
 
   return _buffer->get(_cursor++);

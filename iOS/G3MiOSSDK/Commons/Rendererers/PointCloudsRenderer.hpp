@@ -95,6 +95,26 @@ private:
 
   };
 
+
+  class PointCloudNode {
+  private:
+    const unsigned char*   _id;
+    const std::vector<int> _levelsCount;
+
+  public:
+    PointCloudNode(const unsigned char* id,
+                   const std::vector<int>& levelsCount) :
+    _id(id),
+    _levelsCount(levelsCount)
+    {
+    }
+
+    ~PointCloudNode() {
+      delete [] _id;
+    }
+  };
+
+
   class PointCloud {
   private:
 #ifdef C_CODE
@@ -125,7 +145,6 @@ private:
     Sector* _sector;
     double _minHeight;
     double _maxHeight;
-
 
   public:
     PointCloud(const URL& serverURL,
