@@ -15,6 +15,8 @@
 #include "Sector.hpp"
 #include "ByteBufferIterator.hpp"
 #include "ErrorHandling.hpp"
+#include "IStringBuilder.hpp"
+#include "Camera.hpp"
 
 void PointCloudsRenderer::PointCloudMetadataDownloadListener::onDownload(const URL& url,
                                                                          IByteBuffer* buffer,
@@ -77,6 +79,29 @@ PointCloudsRenderer::PointCloudMetadataParserAsyncTask::~PointCloudMetadataParse
   delete _octree;
 }
 
+//class DebugVisitor : public PointCloudsRenderer::PointCloudNodeVisitor {
+//private:
+//  int _innerNodesCount;
+//  int _leafNodesCount;
+//public:
+//  DebugVisitor() :
+//  _innerNodesCount(0),
+//  _leafNodesCount(0)
+//  {
+//  }
+//
+//  void visitInnerNode(const PointCloudsRenderer::PointCloudInnerNode* innerNode) {
+//    printf("Inner: \"%s\"\n", innerNode->_id.c_str());
+//    _innerNodesCount++;
+//  }
+//
+//  void visitLeafNode(const PointCloudsRenderer::PointCloudLeafNode* leafNode) {
+//    printf(" Leaf: \"%s\"\n", leafNode->_id.c_str());
+//    _leafNodesCount++;
+//  }
+//
+//};
+
 void PointCloudsRenderer::PointCloudMetadataParserAsyncTask::runInBackground(const G3MContext* context) {
   ByteBufferIterator it(_buffer);
 
@@ -98,8 +123,14 @@ void PointCloudsRenderer::PointCloudMetadataParserAsyncTask::runInBackground(con
 
   for (int i = 0; i < leafNodesCount; i++) {
     const int idLength = it.nextUInt8();
-    unsigned char* id = new unsigned char[idLength];
-    it.nextUInt8(idLength, id);
+//    unsigned char* id = new unsigned char[idLength];
+//    it.nextUInt8(idLength, id);
+    IStringBuilder* isb = IStringBuilder::newStringBuilder();
+    for (int j = 0; j < idLength; j++) {
+      isb->addInt( it.nextUInt8() );
+    }
+    const std::string id = isb->getString();
+    delete isb;
 
     const int byteLevelsCount = it.nextUInt8();
     const int shortLevelsCount = it.nextUInt8();
@@ -109,20 +140,19 @@ void PointCloudsRenderer::PointCloudMetadataParserAsyncTask::runInBackground(con
     int* levelsCount = new int[levelsCountLength];
 
     for (int j = 0; j < byteLevelsCount; j++) {
-//      levelsCount.push_back( (int) it.nextUInt8() );
+      //      levelsCount.push_back( (int) it.nextUInt8() );
       levelsCount[j] = it.nextUInt8();
     }
     for (int j = 0; j < shortLevelsCount; j++) {
-//      levelsCount.push_back( (int) it.nextInt16() );
+      //      levelsCount.push_back( (int) it.nextInt16() );
       levelsCount[byteLevelsCount + j] = it.nextInt16();
     }
     for (int j = 0; j < intLevelsCount; j++) {
-//      levelsCount.push_back( it.nextInt32() );
+      //      levelsCount.push_back( it.nextInt32() );
       levelsCount[byteLevelsCount + shortLevelsCount + j] =  it.nextInt32();
     }
 
-    leafNodes.push_back( new PointCloudLeafNode(idLength,
-                                                id,
+    leafNodes.push_back( new PointCloudLeafNode(id,
                                                 levelsCountLength,
                                                 levelsCount) );
   }
@@ -138,22 +168,42 @@ void PointCloudsRenderer::PointCloudMetadataParserAsyncTask::runInBackground(con
   delete _buffer;
   _buffer = NULL;
 
-  _octree = new PointCloudOctreeInnerNode(0, new unsigned char[0]);
+  _octree = new PointCloudInnerNode("");
   for (int i = 0; i < leafNodesCount; i++) {
     _octree->addLeafNode( leafNodes[i] );
   }
+
+
+//  PointCloudNodeVisitor* visitor = new DebugVisitor();
+//  _octree->acceptVisitor(visitor);
+//  delete visitor;
 }
 
-PointCloudsRenderer::PointCloudOctreeInnerNode::~PointCloudOctreeInnerNode() {
+//void PointCloudsRenderer::PointCloudInnerNode::acceptVisitor(PointCloudNodeVisitor* visitor) {
+//  visitor->visitInnerNode(this);
+//
+//  if (_children[0] != NULL) { _children[0]->acceptVisitor(visitor); }
+//  if (_children[1] != NULL) { _children[1]->acceptVisitor(visitor); }
+//  if (_children[2] != NULL) { _children[2]->acceptVisitor(visitor); }
+//  if (_children[3] != NULL) { _children[3]->acceptVisitor(visitor); }
+//}
+//
+//void PointCloudsRenderer::PointCloudLeafNode::acceptVisitor(PointCloudNodeVisitor* visitor) {
+//  visitor->visitLeafNode(this);
+//}
+
+
+PointCloudsRenderer::PointCloudInnerNode::~PointCloudInnerNode() {
   delete _children[0];
   delete _children[1];
   delete _children[2];
   delete _children[3];
 }
 
-void PointCloudsRenderer::PointCloudOctreeInnerNode::addLeafNode(PointCloudLeafNode* leafNode) {
-  if ((_idLenght + 1) == leafNode->getIDLenght()) {
-    const unsigned char childIndex = leafNode->getID()[_idLenght];
+void PointCloudsRenderer::PointCloudInnerNode::addLeafNode(PointCloudLeafNode* leafNode) {
+  const int idLenght = _id.length();
+  const int childIndex = leafNode->_id[idLenght] - '0';
+  if ((idLenght + 1) == leafNode->_id.length()) {
     if (_children[childIndex] != NULL) {
       THROW_EXCEPTION("Logic error!");
     }
@@ -161,7 +211,18 @@ void PointCloudsRenderer::PointCloudOctreeInnerNode::addLeafNode(PointCloudLeafN
   }
   else {
 #warning DGD at work!
+    PointCloudInnerNode* innerChild = (PointCloudInnerNode*) (_children[childIndex]);
+    if (innerChild == NULL) {
+      IStringBuilder* isb = IStringBuilder::newStringBuilder();
+      isb->addString(_id);
+      isb->addInt(childIndex);
+      const std::string childID = isb->getString();
+      delete isb;
 
+      innerChild = new PointCloudInnerNode(childID);
+      _children[childIndex] = innerChild;
+    }
+    innerChild->addLeafNode(leafNode);
   }
 }
 
@@ -175,7 +236,7 @@ void PointCloudsRenderer::PointCloud::parsedMetadata(long long pointsCount,
                                                      Sector* sector,
                                                      double minHeight,
                                                      double maxHeight,
-                                                     PointCloudOctreeInnerNode* octree) {
+                                                     PointCloudInnerNode* octree) {
   _pointsCount = pointsCount;
   _sector = sector;
   _minHeight = minHeight;
@@ -231,9 +292,18 @@ RenderState PointCloudsRenderer::PointCloud::getRenderState(const G3MRenderConte
 }
 
 void PointCloudsRenderer::PointCloud::render(const G3MRenderContext* rc,
-                                             GLState* glState) {
+                                             GLState* glState,
+                                             const Frustum* frustum) {
+  if (_octree != NULL) {
+//    _octree->render(rc, glState, frustum);
+#warning DGD at work!
+  }
+}
 
-
+PointCloudsRenderer::PointCloudsRenderer() :
+_cloudsSize(0),
+_glState(new GLState())
+{
 }
 
 PointCloudsRenderer::~PointCloudsRenderer() {
@@ -241,14 +311,12 @@ PointCloudsRenderer::~PointCloudsRenderer() {
     PointCloud* cloud = _clouds[i];
     delete cloud;
   }
+
+  _glState->_release();
+
 #ifdef JAVA_CODE
   super.dispose();
 #endif
-}
-
-void PointCloudsRenderer::onResizeViewportEvent(const G3MEventContext* ec,
-                                                int width, int height) {
-
 }
 
 void PointCloudsRenderer::onChangedContext() {
@@ -337,8 +405,22 @@ void PointCloudsRenderer::removeAllPointClouds() {
 
 void PointCloudsRenderer::render(const G3MRenderContext* rc,
                                  GLState* glState) {
+  const Camera* camera = rc->getCurrentCamera();
+
+  //  updateGLState(rc);
+  ModelViewGLFeature* f = (ModelViewGLFeature*) _glState->getGLFeature(GLF_MODEL_VIEW);
+  if (f == NULL) {
+    _glState->addGLFeature(new ModelViewGLFeature(camera), true);
+  }
+  else {
+    f->setMatrix(camera->getModelViewMatrix44D());
+  }
+
+  _glState->setParent(glState);
+
+  const Frustum* frustum = camera->getFrustumInModelCoordinates();
   for (int i = 0; i < _cloudsSize; i++) {
     PointCloud* cloud = _clouds[i];
-    cloud->render(rc, glState);
+    cloud->render(rc, _glState, frustum);
   }
 }

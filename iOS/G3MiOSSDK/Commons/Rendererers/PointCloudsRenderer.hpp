@@ -17,7 +17,7 @@
 
 class IDownloader;
 class Sector;
-
+class Frustum;
 
 class PointCloudsRenderer : public DefaultRenderer {
 public:
@@ -34,30 +34,37 @@ public:
   };
 
 
-private:
-  class PointCloudNode {
-  protected:
-    const int            _idLenght;
-    const unsigned char* _id;
+//  class PointCloudInnerNode;
+//  class PointCloudLeafNode;
+//
+//  class PointCloudNodeVisitor {
+//  public:
+//    virtual ~PointCloudNodeVisitor() {
+//    }
+//
+//    virtual void visitInnerNode(const PointCloudInnerNode* innerNode) = 0;
+//    virtual void visitLeafNode(const PointCloudLeafNode* leafNode) = 0;
+//  };
 
-    PointCloudNode(const int            idLenght,
-                   const unsigned char* id) :
-    _idLenght(idLenght),
-    _id(id)
-    {
-    }
+  
+private:
+
+
+  class PointCloudNode {
 
   public:
-    ~PointCloudNode() {
-      delete [] _id;
+    const std::string _id;
+
+    virtual ~PointCloudNode() {
     }
 
-    const int getIDLenght() const {
-      return _idLenght;
-    }
+//    virtual void acceptVisitor(PointCloudNodeVisitor* visitor) = 0;
 
-    const unsigned char* getID() const {
-      return _id;
+  protected:
+
+    PointCloudNode(const std::string& id) :
+    _id(id)
+    {
     }
 
   };
@@ -65,14 +72,13 @@ private:
 
   class PointCloudLeafNode;
 
-  class PointCloudOctreeInnerNode : public PointCloudNode {
+  class PointCloudInnerNode : public PointCloudNode {
   private:
     PointCloudNode* _children[4];
 
   public:
-    PointCloudOctreeInnerNode(const int            idLenght,
-                              const unsigned char* id) :
-    PointCloudNode(idLenght, id)
+    PointCloudInnerNode(const std::string& id) :
+    PointCloudNode(id)
     {
       _children[0] = NULL;
       _children[1] = NULL;
@@ -80,9 +86,12 @@ private:
       _children[3] = NULL;
     }
 
-    virtual ~PointCloudOctreeInnerNode();
+    virtual ~PointCloudInnerNode();
 
     void addLeafNode(PointCloudLeafNode* leafNode);
+
+//    void acceptVisitor(PointCloudNodeVisitor* visitor);
+
   };
 
 
@@ -92,11 +101,10 @@ private:
     const int* _levelsCount;
 
   public:
-    PointCloudLeafNode(const int            idLenght,
-                       const unsigned char* id,
-                       const int            levelsCountLenght,
-                       const int*           levelsCount) :
-    PointCloudNode(idLenght, id),
+    PointCloudLeafNode(const std::string& id,
+                       const int          levelsCountLenght,
+                       const int*         levelsCount) :
+    PointCloudNode(id),
     _levelsCountLenght(levelsCountLenght),
     _levelsCount(levelsCount)
     {
@@ -105,6 +113,9 @@ private:
     ~PointCloudLeafNode() {
       delete [] _levelsCount;
     }
+
+//    void acceptVisitor(PointCloudNodeVisitor* visitor);
+
   };
 
 
@@ -120,7 +131,7 @@ private:
     double _minHeight;
     double _maxHeight;
 
-    PointCloudOctreeInnerNode* _octree;
+    PointCloudInnerNode* _octree;
 
   public:
     PointCloudMetadataParserAsyncTask(PointCloud* pointCloud,
@@ -202,7 +213,7 @@ private:
     Sector* _sector;
     double _minHeight;
     double _maxHeight;
-    PointCloudOctreeInnerNode* _octree;
+    PointCloudInnerNode* _octree;
 
   public:
     PointCloud(const URL& serverURL,
@@ -242,16 +253,15 @@ private:
 
     void errorDownloadingMetadata();
 
-//    void downloadedMetadata(IByteBuffer* buffer);
-
     void parsedMetadata(long long pointsCount,
                         Sector* sector,
                         double minHeight,
                         double maxHeight,
-                        PointCloudOctreeInnerNode* octree);
+                        PointCloudInnerNode* octree);
 
     void render(const G3MRenderContext* rc,
-                GLState* glState);
+                GLState* glState,
+                const Frustum* frustum);
 
   };
 
@@ -261,6 +271,7 @@ private:
   int _cloudsSize;
   std::vector<std::string> _errors;
 
+  GLState* _glState;
 
 
 protected:
@@ -268,10 +279,7 @@ protected:
 
 public:
 
-  PointCloudsRenderer() :
-  _cloudsSize(0)
-  {
-  }
+  PointCloudsRenderer();
 
   ~PointCloudsRenderer();
 
@@ -281,7 +289,9 @@ public:
               GLState* glState);
 
   void onResizeViewportEvent(const G3MEventContext* ec,
-                             int width, int height);
+                             int width, int height) {
+    
+  }
 
   void addPointCloud(const URL& serverURL,
                      const std::string& cloudName,
