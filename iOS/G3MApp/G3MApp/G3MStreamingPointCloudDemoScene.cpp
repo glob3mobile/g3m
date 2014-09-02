@@ -17,6 +17,28 @@
 #include "G3MDemoModel.hpp"
 
 
+class G3MStreamingPointCloudDemoScene_PointCloudMetadataListener : public PointCloudsRenderer::PointCloudMetadataListener {
+private:
+  G3MWidget* _g3mWidget;
+public:
+  G3MStreamingPointCloudDemoScene_PointCloudMetadataListener(G3MWidget* g3mWidget) :
+  _g3mWidget(g3mWidget)
+  {
+  }
+
+  void onMetadata(long long pointsCount,
+                  const Sector& sector,
+                  double minHeight,
+                  double maxHeight) {
+//    _g3mWidget->setAnimatedCameraPosition(Geodetic3D(sector._center, 5000),
+//                                          Angle::zero(),
+//                                          Angle::fromDegrees(-60));
+    _g3mWidget->setAnimatedCameraPosition( Geodetic3D(sector._center, 5000) );
+  }
+
+};
+
+
 void G3MStreamingPointCloudDemoScene::rawActivate(const G3MContext *context) {
   G3MDemoModel* model     = getModel();
   G3MWidget*    g3mWidget = model->getG3MWidget();
@@ -29,21 +51,13 @@ void G3MStreamingPointCloudDemoScene::rawActivate(const G3MContext *context) {
 
 #warning TODO cache
   model->getPointCloudsRenderer()->addPointCloud(URL("http://192.168.1.6:8080"),
-                                                 "Loudoun-VA_LOD",
+                                                 "Loudoun-VA_simplified_LOD",
                                                  DownloadPriority::LOWER,
                                                  TimeInterval::zero(),
-                                                 false);
+                                                 false,
+                                                 new G3MStreamingPointCloudDemoScene_PointCloudMetadataListener(g3mWidget),
+                                                 true);
 
-  // g3mWidget->setAnimatedCameraPosition( Geodetic3D::fromDegrees(39.102078762909024, -77.66098022460936, 50000) );
-  // g3mWidget->setAnimatedCameraPosition( Geodetic3D::fromDegrees(39.208333053497035792, -77.64400127682505115, 6000) );
-  g3mWidget->setAnimatedCameraPosition( Geodetic3D::fromDegrees(39.23148585629368057, -77.641587694782629114, 5000) );
-
-
-// Camera position=(lat=39.23148585629368057d, lon=-77.641587694782629114d, height=6008.4517767920915503) heading=-0.001518 pitch=-90.000000
-
-/*
- latitude  =  39° 15' 53.35" N
- longitude =  77° 33'  7.49" W
- */
+//  g3mWidget->setAnimatedCameraPosition( Geodetic3D::fromDegrees(39.23148585629368057, -77.641587694782629114, 5000) );
 
 }

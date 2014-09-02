@@ -242,13 +242,13 @@ public class JSONUtils {
 
    public static void sendJSON(final PrintWriter writer,
                                final String key,
-                               final List<PersistentLOD.NodeLevel> value,
+                               final List<Geodetic3D> value,
                                final Planet planet,
                                final IVector3 average) {
       sendJSONKey(writer, key);
       writer.print('[');
       boolean first = true;
-      for (final PersistentLOD.NodeLevel each : value) {
+      for (final Geodetic3D each : value) {
          if (first) {
             first = false;
          }
@@ -259,6 +259,42 @@ public class JSONUtils {
       }
       writer.print(']');
    }
+
+
+   private static void sendJSON(final PrintWriter writer,
+                                final Geodetic3D value,
+                                final Planet planet,
+                                final IVector3 average) {
+      writer.print('[');
+      final GVector3D cartesian = planet.toCartesian(value);
+      writer.print(Float.toString((float) (cartesian._x - average.x())));
+      writer.print(',');
+      writer.print(Float.toString((float) (cartesian._y - average.y())));
+      writer.print(',');
+      writer.print(Float.toString((float) (cartesian._z - average.z())));
+      writer.print(']');
+   }
+
+
+   //      public static void sendJSON(final PrintWriter writer,
+   //                                  final String key,
+   //                                  final List<PersistentLOD.NodeLevel> value,
+   //                                  final Planet planet,
+   //                                  final IVector3 average) {
+   //         sendJSONKey(writer, key);
+   //         writer.print('[');
+   //         boolean first = true;
+   //         for (final PersistentLOD.NodeLevel each : value) {
+   //            if (first) {
+   //               first = false;
+   //            }
+   //            else {
+   //               writer.print(',');
+   //            }
+   //            sendJSON(writer, each, planet, average);
+   //         }
+   //         writer.print(']');
+   //      }
 
 
    private static void sendJSON(final PrintWriter writer,

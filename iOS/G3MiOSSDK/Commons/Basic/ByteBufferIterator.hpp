@@ -37,6 +37,8 @@ public:
   const std::string nextZeroTerminatedString();
 
   double nextDouble();
+
+  void nextUInt8(int count, unsigned char* dst);
   
 };
 

@@ -5,12 +5,17 @@ package com.glob3mobile.pointcloud.server;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -21,7 +26,10 @@ import com.glob3mobile.pointcloud.Planet;
 import com.glob3mobile.pointcloud.SphericalPlanet;
 import com.glob3mobile.pointcloud.octree.Geodetic3D;
 import com.glob3mobile.pointcloud.octree.PersistentLOD;
+import com.glob3mobile.pointcloud.octree.Sector;
+import com.glob3mobile.pointcloud.octree.Utils;
 import com.glob3mobile.pointcloud.octree.berkeleydb.BerkeleyDBLOD;
+import com.glob3mobile.pointcloud.octree.berkeleydb.ByteBufferUtils;
 
 import es.igosoftware.euclid.bounding.GAxisAlignedBox;
 import es.igosoftware.euclid.vector.GVector3D;
@@ -29,11 +37,27 @@ import es.igosoftware.util.XStringTokenizer;
 
 
 public class PCSSServlet
-extends
-HttpServlet {
-   private static final long                serialVersionUID = 1L;
+         extends
+            HttpServlet {
+   private static final long serialVersionUID = 1L;
 
-   private final Map<String, PersistentLOD> _openedDBs       = new HashMap<String, PersistentLOD>();
+
+   private static enum ResponseFormat {
+      JSON,
+      BINARY;
+
+      private static ResponseFormat get(final String name) {
+         for (final ResponseFormat candidate : ResponseFormat.values()) {
+            if (candidate.name().equalsIgnoreCase(name)) {
+               return candidate;
+            }
+         }
+         return null;
+      }
+   }
+
+
+   private final Map<String, PersistentLOD> _openedDBs = new HashMap<String, PersistentLOD>();
    private File                             _cloudDirectory;
 
 
@@ -93,58 +117,42 @@ HttpServlet {
    }
 
 
-   private static void sendMetadata(final PersistentLOD db,
-                                    final Planet planet,
-                                    final HttpServletResponse response) throws IOException {
-      response.setStatus(HttpServletResponse.SC_OK);
-      response.setContentType("application/json");
-      final PrintWriter writer = response.getWriter();
-
-      final PersistentLOD.Statistics statistics = db.getStatistics(false, false);
-      //      JSONUtils.sendJSON(writer, statistics);
+   private static class NodeMetadata {
+      private final String           _id;
+      private final int[]            _levelsPointsCount;
+      private final GVector3D        _average;
+      private final GAxisAlignedBox  _bounds;
+      private final List<Geodetic3D> _level0Points;
 
 
-      writer.print('{');
+      public NodeMetadata(final String id,
+                          final int[] levelsPointsCount,
+                          final GVector3D average,
+                          final GAxisAlignedBox bounds,
+                          final List<Geodetic3D> level0Points) {
+         _id = id;
+         _levelsPointsCount = Arrays.copyOf(levelsPointsCount, levelsPointsCount.length);
+         _average = average;
+         _bounds = bounds;
+         _level0Points = new ArrayList<Geodetic3D>(level0Points);
+      }
 
-      JSONUtils.sendJSON(writer, "name", statistics.getPointCloudName());
+   }
 
-      writer.print(',');
-      JSONUtils.sendJSON(writer, "pointsCount", statistics.getPointsCount());
 
-      writer.print(',');
-      JSONUtils.sendJSON(writer, "sector", statistics.getSector());
-
-      writer.print(',');
-      JSONUtils.sendJSON(writer, "minHeight", statistics.getMinHeight());
-
-      writer.print(',');
-      JSONUtils.sendJSON(writer, "maxHeight", statistics.getMaxHeight());
-
-      writer.print(',');
-      JSONUtils.sendJSONKey(writer, "nodes");
-      writer.print('[');
+   private static List<NodeMetadata> getNodesMetadata(final PersistentLOD db,
+                                                      final Planet planet) {
+      final List<NodeMetadata> result = new ArrayList<PCSSServlet.NodeMetadata>(10000);
 
       db.acceptDepthFirstVisitor(null, new PersistentLOD.Visitor() {
-         private boolean _first;
-
-
          @Override
          public void start(final PersistentLOD.Transaction transaction) {
-            _first = true;
          }
 
 
          @Override
          public boolean visit(final PersistentLOD.Transaction transaction,
                               final PersistentLOD.Node node) {
-            if (_first) {
-               _first = false;
-            }
-            else {
-               writer.print(',');
-            }
-
-            writer.print('{');
 
             double sumX = 0;
             double sumY = 0;
@@ -186,21 +194,14 @@ HttpServlet {
 
             final GAxisAlignedBox bounds = new GAxisAlignedBox(new GVector3D(minX, minY, minZ), new GVector3D(maxX, maxY, maxZ));
 
-            JSONUtils.sendJSON(writer, "i", node.getID());
+            final NodeMetadata nodeMetadata = new NodeMetadata( //
+                     node.getID(), //
+                     node.getLevelsPointsCount(), //
+                     average, //
+                     bounds, //
+                     levels.get(0).getPoints(transaction));
 
-            writer.print(',');
-            JSONUtils.sendJSON(writer, "l", node.getLevelsPointsCount());
-
-            writer.print(',');
-            JSONUtils.sendJSON(writer, "a", average);
-
-            writer.print(',');
-            JSONUtils.sendJSON(writer, "b", bounds, average);
-
-            writer.print(',');
-            JSONUtils.sendJSON(writer, "p", levels.subList(0, 1), planet, average);
-
-            writer.print('}');
+            result.add(nodeMetadata);
 
             return true;
          }
@@ -213,63 +214,142 @@ HttpServlet {
 
       });
 
-      writer.print(']');
-
-
-      writer.println('}');
-
-
+      return result;
    }
 
 
-   //   private static void sendNodeLayout(final PersistentLOD db,
-   //                                      final String nodeID,
-   //                                      final HttpServletResponse response) throws IOException {
-   //      response.setStatus(HttpServletResponse.SC_OK);
-   //      response.setContentType("application/json");
-   //      final PrintWriter writer = response.getWriter();
-   //
-   //      final PersistentLOD.NodeLayout layout = db.getNodeLayout(nodeID);
-   //      JSONUtils.sendNodeLayoutJSON(writer, layout);
-   //   }
+   private static void sendJSONMetadata(final HttpServletResponse response,
+                                        final Planet planet,
+                                        final PersistentLOD.Statistics statistics,
+                                        final List<NodeMetadata> nodes) throws IOException {
+      response.setStatus(HttpServletResponse.SC_OK);
+      response.setContentType("application/json");
+
+      final PrintWriter writer = response.getWriter();
+
+      writer.print('{');
+      JSONUtils.sendJSON(writer, "name", statistics.getPointCloudName());
+      writer.print(',');
+      JSONUtils.sendJSON(writer, "pointsCount", statistics.getPointsCount());
+      writer.print(',');
+      JSONUtils.sendJSON(writer, "sector", statistics.getSector());
+      writer.print(',');
+      JSONUtils.sendJSON(writer, "minHeight", statistics.getMinHeight());
+      writer.print(',');
+      JSONUtils.sendJSON(writer, "maxHeight", statistics.getMaxHeight());
+
+      writer.print(',');
+      JSONUtils.sendJSONKey(writer, "nodes");
+      writer.print('[');
+      boolean first = true;
+      for (final NodeMetadata node : nodes) {
+         if (first) {
+            first = false;
+         }
+         else {
+            writer.print(',');
+         }
+
+         writer.print('{');
+         JSONUtils.sendJSON(writer, "i", node._id);
+         writer.print(',');
+         JSONUtils.sendJSON(writer, "l", node._levelsPointsCount);
+         writer.print(',');
+         JSONUtils.sendJSON(writer, "a", node._average);
+         writer.print(',');
+         JSONUtils.sendJSON(writer, "b", node._bounds, node._average);
+         writer.print(',');
+         JSONUtils.sendJSON(writer, "p", node._level0Points, planet, node._average);
+         writer.print('}');
+      }
+      writer.print(']');
+
+      writer.println('}');
+   }
 
 
-   //   private static void sendNodeMetadata(final PersistentLOD db,
-   //                                        final String nodeID,
-   //                                        final HttpServletResponse response) throws IOException {
-   //      final PrintWriter writer = response.getWriter();
-   //
-   //      final PersistentLOD.Node node = db.getNode(nodeID, false);
-   //      if (node == null) {
-   //         response.sendError(HttpServletResponse.SC_NOT_FOUND, "node #" + nodeID + " not found");
-   //      }
-   //      else {
-   //         response.setStatus(HttpServletResponse.SC_OK);
-   //         response.setContentType("application/json");
-   //
-   //         //final Planet planet = EllipsoidalPlanet.EARTH;
-   //
-   //         JSONUtils.sendNodeMetadataJSON(writer, node);
-   //      }
-   //   }
+   private static void sendBinaryMetadata(final HttpServletResponse response,
+                                          final Planet planet,
+                                          final PersistentLOD.Statistics statistics,
+                                          final List<NodeMetadata> nodes) throws IOException {
+      response.setStatus(HttpServletResponse.SC_OK);
+      response.setContentType("application/octet-stream");
+      final ServletOutputStream os = response.getOutputStream();
+
+      os.write(getHeaderArray(statistics));
+
+      os.write(toLittleEndiang(nodes.size()));
+
+      for (final NodeMetadata node : nodes) {
+         os.write(getNodeArray(node));
+      }
+   }
 
 
-   //   private static void sendNodeMetadata(final PersistentLOD db,
-   //                                        final Sector sector,
-   //                                        final HttpServletResponse response) throws IOException {
-   //      final PrintWriter writer = response.getWriter();
-   //
-   //      final PersistentLOD.NodeLayout layout = db.getNodeLayout(sector);
-   //      if (layout == null) {
-   //         response.sendError(HttpServletResponse.SC_NOT_FOUND, "no layout found for " + sector);
-   //      }
-   //      else {
-   //         response.setStatus(HttpServletResponse.SC_OK);
-   //         response.setContentType("application/json");
-   //
-   //         JSONUtils.sendNodeLayoutJSON(writer, layout);
-   //      }
-   //   }
+   private static byte[] getNodeArray(final NodeMetadata node) {
+      final byte[] id = Utils.toBinaryID(node._id);
+
+      final byte idLength = (byte) id.length;
+
+      final int bufferSize = ByteBufferUtils.sizeOf(idLength) + //
+                             idLength;
+      final ByteBuffer buffer = ByteBuffer.allocate(bufferSize).order(ByteOrder.LITTLE_ENDIAN);
+      buffer.put(idLength);
+      buffer.put(id);
+
+      return buffer.array();
+   }
+
+
+   private static byte[] toLittleEndiang(final int value) {
+      final ByteBuffer buffer = ByteBuffer.allocate(4).order(ByteOrder.LITTLE_ENDIAN);
+      buffer.putInt(value);
+      return buffer.array();
+   }
+
+
+   private static byte[] getHeaderArray(final PersistentLOD.Statistics statistics) {
+      final long pointsCount = statistics.getPointsCount();
+      final Sector sector = statistics.getSector();
+      final double minHeight = statistics.getMinHeight();
+      final double maxHeight = statistics.getMaxHeight();
+
+      final int bufferSize = //
+               ByteBufferUtils.sizeOf(pointsCount) + //
+               ByteBufferUtils.sizeOf(sector) + //
+               ByteBufferUtils.sizeOf(minHeight) + //
+               ByteBufferUtils.sizeOf(maxHeight);
+
+      final ByteBuffer buffer = ByteBuffer.allocate(bufferSize).order(ByteOrder.LITTLE_ENDIAN);
+
+      buffer.putLong(pointsCount);
+      ByteBufferUtils.put(buffer, sector);
+      buffer.putDouble(minHeight);
+      buffer.putDouble(maxHeight);
+
+      return buffer.array();
+   }
+
+
+   private static void sendMetadata(final PersistentLOD db,
+                                    final Planet planet,
+                                    final ResponseFormat format,
+                                    final HttpServletResponse response) throws IOException {
+      switch (format) {
+         case JSON: {
+            sendJSONMetadata(response, planet, db.getStatistics(false, false), getNodesMetadata(db, planet));
+            break;
+         }
+         case BINARY: {
+            sendBinaryMetadata(response, planet, db.getStatistics(false, false), getNodesMetadata(db, planet));
+            break;
+         }
+         default: {
+            error(response, "format not supported: " + format);
+            break;
+         }
+      }
+   }
 
 
    @Override
@@ -297,32 +377,21 @@ HttpServlet {
       }
 
       if (path.length == 1) {
-         final String planetType = request.getParameter("planet");
-         final Planet planet = getPlanet(planetType);
+         final String planetName = request.getParameter("planet");
+         final String formatName = request.getParameter("format");
+
+         final Planet planet = getPlanet(planetName);
+         final ResponseFormat format = ResponseFormat.get(formatName);
          if (planet == null) {
-            error(response, "planet parameters invalid or missing: " + planet);
+            error(response, "planet parameter invalid or missing: " + planetName);
+         }
+         else if (format == null) {
+            error(response, "format parameter invalid or missing: " + formatName);
          }
          else {
-            sendMetadata(db, planet, response);
+            sendMetadata(db, planet, format, response);
          }
       }
-      //      else if ((path.length == 3) && path[1].trim().equalsIgnoreCase("layout")) {
-      //         final String nodeID = path[2].trim();
-      //         sendNodeLayout(db, nodeID, response);
-      //      }
-      //      else if ((path.length == 3) && path[1].trim().equalsIgnoreCase("metadata")) {
-      //         final String nodeID = path[2].trim();
-      //         sendNodeMetadata(db, nodeID, response);
-      //      }
-      //      else if ((path.length == 3) && path[1].trim().equalsIgnoreCase("metadataForSector")) {
-      //         final Sector sector = parseSector(path[2]);
-      //         if (sector == null) {
-      //            error(response, "Invalid sector format");
-      //         }
-      //         else {
-      //            sendNodeMetadata(db, sector, response);
-      //         }
-      //      }
       else {
          error(response, "Invalid request");
       }
@@ -343,32 +412,6 @@ HttpServlet {
          return null;
       }
    }
-
-
-   //   private static Sector parseSector(final String string) {
-   //
-   //      // (Sector (lat=39.198205348894802569d, lon=-77.673339843749985789d) - (lat=39.249270846223389242d, lon=-77.607421875d))
-   //      // [Sector [lat=39.1982053488948d,      lon=-77.67333984374999d],      [lat=39.24927084622339d,     lon=77.607421875d]]
-   //
-   //      // "39.198205348894802569|-77.673339843749985789|39.249270846223389242|77.607421875"
-   //
-   //      final String[] tokens = XStringTokenizer.getAllTokens(string.trim(), "|");
-   //      if (tokens.length != 4) {
-   //         return null;
-   //      }
-   //
-   //      try {
-   //         final double lowerLatitude = Double.parseDouble(tokens[0].trim());
-   //         final double lowerLongitude = Double.parseDouble(tokens[1].trim());
-   //         final double upperLatitude = Double.parseDouble(tokens[2].trim());
-   //         final double upperLongitude = Double.parseDouble(tokens[3].trim());
-   //
-   //         return Sector.fromDegrees(lowerLatitude, lowerLongitude, upperLatitude, upperLongitude);
-   //      }
-   //      catch (final NumberFormatException e) {
-   //         return null;
-   //      }
-   //   }
 
 
 }

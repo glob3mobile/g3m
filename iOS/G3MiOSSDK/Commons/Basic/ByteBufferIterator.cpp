@@ -44,6 +44,12 @@ unsigned char ByteBufferIterator::nextUInt8() {
   return _buffer->get(_cursor++);
 }
 
+void ByteBufferIterator::nextUInt8(int count, unsigned char* dst) {
+  for (int i = 0; i < count; i++) {
+    dst[i] = nextUInt8();
+  }
+}
+
 short ByteBufferIterator::nextInt16() {
   // LittleEndian
 #ifdef C_CODE
