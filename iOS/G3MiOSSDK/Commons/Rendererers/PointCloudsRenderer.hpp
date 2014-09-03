@@ -106,8 +106,8 @@ private:
 #ifdef JAVA_CODE
     private final int[] _levelsCount;
 #endif
-    const Vector3F _average;
-    const Box      _bounds;
+    const Vector3F* _average;
+    const Box*      _bounds;
     IFloatBuffer*  _firstLevelPointsBuffer;
 
   public:
@@ -115,35 +115,49 @@ private:
     PointCloudLeafNode(const std::string& id,
                        const int          levelsCountLenght,
                        const int*         levelsCount,
-                       const Vector3F&    average,
-                       const Box&         bounds,
+                       const Vector3F*    average,
+                       const Box*         bounds,
                        IFloatBuffer*      firstLevelPointsBuffer) :
     PointCloudNode(id),
     _levelsCountLenght(levelsCountLenght),
     _levelsCount(levelsCount),
     _average(average),
     _bounds(bounds),
-    _firstLevelPointsBuffer(NULL)
+    _firstLevelPointsBuffer(firstLevelPointsBuffer)
     {
     }
 
     ~PointCloudLeafNode() {
       delete [] _levelsCount;
+      delete _average;
+      delete _bounds;
       delete _firstLevelPointsBuffer;
     }
 #endif
 #ifdef JAVA_CODE
-    public PointCloudLeafNode(final String id,
-                              final int levelsCountLenght,
-                              final int[] levelsCount) {
+    public PointCloudLeafNode(final String       id,
+                              final int          levelsCountLenght,
+                              final int[]        levelsCount,
+                              final Vector3F     average,
+                              final Box          bounds,
+                              final IFloatBuffer firstLevelPointsBuffer) {
       super(id);
       _levelsCountLenght = levelsCountLenght;
       _levelsCount = levelsCount;
+      _average = average;
+      _bounds = bounds;
+      _firstLevelPointsBuffer = firstLevelPointsBuffer;
     }
 
 
     @Override
     public void dispose() {
+      if (_average != null) {
+        _average.dispose();
+      }
+      if (_bounds != null) {
+        _bounds.dispose();
+      }
       if (_firstLevelPointsBuffer != null) {
         _firstLevelPointsBuffer.dispose();
       }

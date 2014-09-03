@@ -157,7 +157,7 @@ void PointCloudsRenderer::PointCloudMetadataParserAsyncTask::runInBackground(con
     const float averageY = it.nextFloat();
     const float averageZ = it.nextFloat();
 
-    const Vector3F average(averageX, averageY, averageZ);
+    const Vector3F* average = new Vector3F(averageX, averageY, averageZ);
 
     const double lowerX = (double) it.nextFloat() + averageX;
     const double lowerY = (double) it.nextFloat() + averageY;
@@ -165,9 +165,8 @@ void PointCloudsRenderer::PointCloudMetadataParserAsyncTask::runInBackground(con
     const double upperX = (double) it.nextFloat() + averageX;
     const double upperY = (double) it.nextFloat() + averageY;
     const double upperZ = (double) it.nextFloat() + averageZ;
-    const Vector3D lower(lowerX, lowerY, lowerZ);
-    const Vector3D upper(upperX, upperY, upperZ);
-    const Box bounds(lower, upper);
+    const Box* bounds = new Box(Vector3D(lowerX, lowerY, lowerZ),
+                                Vector3D(upperX, upperY, upperZ));
 
     const int firstLevelPointsCount = it.nextInt32();
     FloatBufferBuilderFromCartesian3D* pointsBufferBuilder = FloatBufferBuilderFromCartesian3D::builderWithoutCenter();
