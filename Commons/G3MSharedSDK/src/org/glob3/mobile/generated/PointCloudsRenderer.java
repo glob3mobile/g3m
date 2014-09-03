@@ -50,7 +50,7 @@ public class PointCloudsRenderer extends DefaultRenderer
 
 
 
-  private static class PointCloudNode
+  private abstract static class PointCloudNode
   {
 
     public final String _id;
@@ -59,6 +59,8 @@ public class PointCloudsRenderer extends DefaultRenderer
     {
     }
 
+    public abstract Box getBounds();
+
 //    virtual void acceptVisitor(PointCloudNodeVisitor* visitor) = 0;
 
 
@@ -66,6 +68,7 @@ public class PointCloudsRenderer extends DefaultRenderer
     {
        _id = id;
     }
+
 
   }
 
@@ -76,10 +79,44 @@ public class PointCloudsRenderer extends DefaultRenderer
   private static class PointCloudInnerNode extends PointCloudNode
   {
     private PointCloudNode[] _children = new PointCloudNode[4];
+    private Box _bounds;
+
+    private Box calculateBounds()
+    {
+      Box bounds = null;
+      for (int i = 0; i < 4; i++)
+      {
+        PointCloudNode child = _children[i];
+        if (child != null)
+        {
+          final Box childBounds = child.getBounds();
+          if (childBounds == null)
+          {
+            throw new RuntimeException("Logic error");
+          }
+          if (bounds == null)
+          {
+            bounds = new Box(childBounds._lower, childBounds._upper);
+          }
+          else
+          {
+            if (!childBounds.fullContainedInBox(bounds))
+            {
+              Box previousBounds = bounds;
+              bounds = previousBounds.mergedWithBox(childBounds);
+              if (previousBounds != null)
+                 previousBounds.dispose();
+            }
+          }
+        }
+      }
+      return bounds;
+    }
 
     public PointCloudInnerNode(String id)
     {
        super(id);
+       _bounds = null;
       _children[0] = null;
       _children[1] = null;
       _children[2] = null;
@@ -111,6 +148,9 @@ public class PointCloudsRenderer extends DefaultRenderer
          _children[2].dispose();
       if (_children[3] != null)
          _children[3].dispose();
+    
+      if (_bounds != null)
+         _bounds.dispose();
       super.dispose();
     }
 
@@ -143,6 +183,15 @@ public class PointCloudsRenderer extends DefaultRenderer
         }
         innerChild.addLeafNode(leafNode);
       }
+    }
+
+    public final Box getBounds()
+    {
+      if (_bounds == null)
+      {
+        _bounds = calculateBounds();
+      }
+      return _bounds;
     }
 
 //    void acceptVisitor(PointCloudNodeVisitor* visitor);
@@ -185,6 +234,11 @@ public class PointCloudsRenderer extends DefaultRenderer
         _firstLevelPointsBuffer.dispose();
       }
       super.dispose();
+    }
+
+    public final Box getBounds()
+    {
+      return _bounds;
     }
 
 //    void acceptVisitor(PointCloudNodeVisitor* visitor);
@@ -333,6 +387,10 @@ public class PointCloudsRenderer extends DefaultRenderer
         }
         IFloatBuffer firstLevelPointsBuffer = pointsBufferBuilder.create();
     
+        if (pointsBufferBuilder != null)
+           pointsBufferBuilder.dispose();
+        pointsBufferBuilder = null;
+    
         leafNodes.add(new PointCloudLeafNode(id, levelsCountLength, levelsCount, average, bounds, firstLevelPointsBuffer));
       }
     
@@ -355,7 +413,8 @@ public class PointCloudsRenderer extends DefaultRenderer
       {
         _octree.addLeafNode(leafNodes.get(i));
       }
-    
+      final Box fullBounds = _octree.getBounds(); // force inner-node's bounds here, in background
+      ILogger.instance().logInfo("Octree fullBounds=%s", fullBounds.description());
     
     //  PointCloudNodeVisitor* visitor = new DebugVisitor();
     //  _octree->acceptVisitor(visitor);

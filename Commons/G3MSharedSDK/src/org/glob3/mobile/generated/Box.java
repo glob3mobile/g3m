@@ -24,11 +24,6 @@ package org.glob3.mobile.generated;
 
 public class Box extends BoundingVolume
 {
-  private final Vector3D _lower ;
-  private final Vector3D _upper ;
-
-  private java.util.ArrayList<Vector3D> _cornersD = null; // cache for getCorners() method
-  private java.util.ArrayList<Vector3F> _cornersF = null; // cache for getCornersF() method
 
   private Mesh _mesh;
   private void createMesh(Color color)
@@ -56,6 +51,12 @@ public class Box extends BoundingVolume
     if (vertices != null)
        vertices.dispose();
   }
+
+  public final Vector3D _lower ;
+  public final Vector3D _upper ;
+
+  private java.util.ArrayList<Vector3D> _cornersD = null; // cache for getCorners() method
+  private java.util.ArrayList<Vector3F> _cornersF = null; // cache for getCornersF() method
 
   public Box(Vector3D lower, Vector3D upper)
   {
@@ -329,7 +330,7 @@ public class Box extends BoundingVolume
     return that.mergedWithBox(this);
   }
 
-  public final BoundingVolume mergedWithBox(Box that)
+  public final Box mergedWithBox(Box that)
   {
     final IMathUtils mu = IMathUtils.instance();
   
@@ -410,6 +411,20 @@ public class Box extends BoundingVolume
       _cornersArray[7] = new Vector3F((float) _upper._x, (float) _upper._y, (float) _upper._z);
     }
     return _cornersArray;
+  }
+
+  public final String description()
+  {
+    IStringBuilder isb = IStringBuilder.newStringBuilder();
+    isb.addString("[Box ");
+    isb.addString(_lower.description());
+    isb.addString(" / ");
+    isb.addString(_upper.description());
+    isb.addString("]");
+    final String s = isb.getString();
+    if (isb != null)
+       isb.dispose();
+    return s;
   }
 
 }
