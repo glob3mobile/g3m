@@ -26,7 +26,7 @@ public class Box extends BoundingVolume
 {
 
   private Mesh _mesh;
-  private void createMesh(Color color)
+  private Mesh createMesh(Color color)
   {
     double[] v = { _lower._x, _lower._y, _lower._z, _lower._x, _upper._y, _lower._z, _lower._x, _upper._y, _upper._z, _lower._x, _lower._y, _upper._z, _upper._x, _lower._y, _lower._z, _upper._x, _upper._y, _lower._z, _upper._x, _upper._y, _upper._z, _upper._x, _lower._y, _upper._z };
   
@@ -46,10 +46,12 @@ public class Box extends BoundingVolume
       indices.add(i[n]);
     }
   
-    _mesh = new IndexedMesh(GLPrimitive.lines(), true, vertices.getCenter(), vertices.create(), indices.create(), 2, 1, color);
+    Mesh mesh = new IndexedMesh(GLPrimitive.lines(), true, vertices.getCenter(), vertices.create(), indices.create(), 2, 1, color);
   
     if (vertices != null)
        vertices.dispose();
+  
+    return mesh;
   }
 
   public final Vector3D _lower ;
@@ -270,11 +272,11 @@ public class Box extends BoundingVolume
     return Vector3D.nan();
   }
 
-  public final void render(G3MRenderContext rc, GLState parentState)
+  public final void render(G3MRenderContext rc, GLState parentState, Color color)
   {
     if (_mesh == null)
     {
-      createMesh(Color.newFromRGBA(1.0f, 0.0f, 1.0f, 1.0f));
+      _mesh = createMesh(color);
     }
     _mesh.render(rc, parentState);
   }
