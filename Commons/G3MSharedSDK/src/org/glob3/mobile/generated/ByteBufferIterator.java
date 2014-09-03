@@ -126,6 +126,11 @@ public class ByteBufferIterator
     final long l = nextInt64();
     return IMathUtils.instance().rawLongBitsToDouble(l);
   }
+  public final float nextFloat()
+  {
+    final int i = nextInt32();
+    return IMathUtils.instance().rawIntBitsToFloat(i);
+  }
 
   public final void nextUInt8(int count, byte[] dst)
   {

@@ -154,6 +154,9 @@ public class PointCloudsRenderer extends DefaultRenderer
   {
     private final int _levelsCountLenght;
     private final int[] _levelsCount;
+    private final Vector3F _average = new Vector3F();
+    private final Box _bounds = new Box();
+    private IFloatBuffer _firstLevelPointsBuffer;
 
     public PointCloudLeafNode(final String id,
                               final int levelsCountLenght,
@@ -166,6 +169,9 @@ public class PointCloudsRenderer extends DefaultRenderer
 
     @Override
     public void dispose() {
+      if (_firstLevelPointsBuffer != null) {
+        _firstLevelPointsBuffer.dispose();
+      }
       super.dispose();
     }
 
@@ -290,7 +296,34 @@ public class PointCloudsRenderer extends DefaultRenderer
           levelsCount[byteLevelsCount + shortLevelsCount + j] = it.nextInt32();
         }
     
-        leafNodes.add(new PointCloudLeafNode(id, levelsCountLength, levelsCount));
+        final float averageX = it.nextFloat();
+        final float averageY = it.nextFloat();
+        final float averageZ = it.nextFloat();
+    
+        final Vector3F average = new Vector3F(averageX, averageY, averageZ);
+    
+        final double lowerX = (double) it.nextFloat() + averageX;
+        final double lowerY = (double) it.nextFloat() + averageY;
+        final double lowerZ = (double) it.nextFloat() + averageZ;
+        final double upperX = (double) it.nextFloat() + averageX;
+        final double upperY = (double) it.nextFloat() + averageY;
+        final double upperZ = (double) it.nextFloat() + averageZ;
+        final Vector3D lower = new Vector3D(lowerX, lowerY, lowerZ);
+        final Vector3D upper = new Vector3D(upperX, upperY, upperZ);
+        final Box bounds = new Box(lower, upper);
+    
+        final int firstLevelPointsCount = it.nextInt32();
+        FloatBufferBuilderFromCartesian3D pointsBufferBuilder = FloatBufferBuilderFromCartesian3D.builderWithoutCenter();
+        for (int j = 0; j < firstLevelPointsCount; j++)
+        {
+          final float x = it.nextFloat();
+          final float y = it.nextFloat();
+          final float z = it.nextFloat();
+          pointsBufferBuilder.add(x, y, z);
+        }
+        IFloatBuffer firstLevelPointsBuffer = pointsBufferBuilder.create();
+    
+        leafNodes.add(new PointCloudLeafNode(id, levelsCountLength, levelsCount, average, bounds, firstLevelPointsBuffer));
       }
     
       if (it.hasNext())

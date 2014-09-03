@@ -186,6 +186,8 @@ public abstract class IMathUtils
   public abstract long doubleToRawLongBits(double value);
   public abstract double rawLongBitsToDouble(long value);
 
+  public abstract float rawIntBitsToFloat(int value);
+
   public double clamp(double value, double min, double max)
   {
     if (value < min)
