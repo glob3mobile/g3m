@@ -87,9 +87,7 @@ public class PointCloudsRenderer extends DefaultRenderer
       {
         if (bounds.touchesFrustum(frustum))
         {
-    //      const double projectedArea = bounds->projectedArea(rc);
-    
-          if ((_projectedAreaTimer == null) || (_projectedAreaTimer.elapsedTimeInMilliseconds() > 250))
+          if ((_projectedAreaTimer == null) || (_projectedAreaTimer.elapsedTimeInMilliseconds() > 500))
           {
             _projectedArea = bounds.projectedArea(rc);
             if (_projectedAreaTimer == null)
@@ -111,14 +109,15 @@ public class PointCloudsRenderer extends DefaultRenderer
           }
         }
       }
+    
       if (_rendered)
       {
-        //stoppedBeingRendered();
         _rendered = false;
         if (_projectedAreaTimer != null)
            _projectedAreaTimer.dispose();
         _projectedAreaTimer = null;
       }
+    
       return false;
     }
 
@@ -162,7 +161,7 @@ public class PointCloudsRenderer extends DefaultRenderer
       return bounds;
     }
 
-    private final Color _renderColor;
+//    const Color* _renderColor;
 
     private Vector3D _average;
     private long _pointsCount;
@@ -209,12 +208,12 @@ public class PointCloudsRenderer extends DefaultRenderer
           }
         }
       }
+    
       if (!anyChildRendered)
       {
         //_bounds->render(rc, glState, _renderColor);
         if (_mesh == null)
         {
-    
           final Vector3D average = getAverage();
     
           final float averageX = (float) average._x;
@@ -233,10 +232,10 @@ public class PointCloudsRenderer extends DefaultRenderer
     }
 
     public PointCloudInnerNode(String id)
+//    _renderColor( Color::newFromRGBA(1, 1, 0, 1) ),
     {
        super(id);
        _bounds = null;
-       _renderColor = Color.newFromRGBA(1, 1, 0, 1);
        _average = null;
        _pointsCount = -1;
        _mesh = null;
@@ -274,8 +273,7 @@ public class PointCloudsRenderer extends DefaultRenderer
     
       if (_bounds != null)
          _bounds.dispose();
-      if (_renderColor != null)
-         _renderColor.dispose();
+    //  delete _renderColor;
       if (_average != null)
          _average.dispose();
     
@@ -354,7 +352,7 @@ public class PointCloudsRenderer extends DefaultRenderer
     private final int[] _levelsCount;
     private final Vector3D _average;
     private final Box _bounds;
-    private IFloatBuffer _firstLevelPointsBuffer;
+    private IFloatBuffer _firstPointsBuffer;
 
     private Mesh _mesh;
 
@@ -364,7 +362,7 @@ public class PointCloudsRenderer extends DefaultRenderer
     {
       if (_mesh == null)
       {
-        _mesh = new DirectMesh(GLPrimitive.points(), false, _average, _firstLevelPointsBuffer, 1, 2, Color.newFromRGBA(1, 1, 1, 1), null, 1, false); // colorsIntensity -  colors.create(), -  flatColor
+        _mesh = new DirectMesh(GLPrimitive.points(), false, _average, _firstPointsBuffer, 1, 2, Color.newFromRGBA(1, 1, 1, 1), null, 1, false); // colorsIntensity -  colors.create(), -  flatColor
       }
       _mesh.render(rc, glState);
     }
@@ -373,15 +371,16 @@ public class PointCloudsRenderer extends DefaultRenderer
     public PointCloudLeafNode(final String       id,
                               final int          levelsCountLenght,
                               final int[]        levelsCount,
-                              final Vector3F     average,
+                              final Vector3D     average,
                               final Box          bounds,
-                              final IFloatBuffer firstLevelPointsBuffer) {
+                              final IFloatBuffer firstPointsBuffer) {
       super(id);
       _levelsCountLenght = levelsCountLenght;
       _levelsCount = levelsCount;
       _average = average;
       _bounds = bounds;
-      _firstLevelPointsBuffer = firstLevelPointsBuffer;
+      _firstPointsBuffer = firstPointsBuffer;
+      _mesh = null;
       _pointsCount = -1;
     }
 
@@ -389,13 +388,12 @@ public class PointCloudsRenderer extends DefaultRenderer
     {
       if (_mesh != null)
          _mesh.dispose();
-      _levelsCount = null;
       if (_average != null)
          _average.dispose();
       if (_bounds != null)
          _bounds.dispose();
-      if (_firstLevelPointsBuffer != null)
-         _firstLevelPointsBuffer.dispose();
+      if (_firstPointsBuffer != null)
+         _firstPointsBuffer.dispose();
       super.dispose();
     }
 
@@ -558,22 +556,22 @@ public class PointCloudsRenderer extends DefaultRenderer
         final double upperZ = (double) it.nextFloat() + averageZ;
         final Box bounds = new Box(new Vector3D(lowerX, lowerY, lowerZ), new Vector3D(upperX, upperY, upperZ));
     
-        final int firstLevelPointsCount = it.nextInt32();
-        FloatBufferBuilderFromCartesian3D pointsBufferBuilder = FloatBufferBuilderFromCartesian3D.builderWithoutCenter();
-        for (int j = 0; j < firstLevelPointsCount; j++)
+        final int firstPointsCount = it.nextInt32();
+        FloatBufferBuilderFromCartesian3D firstPointsBufferBuilder = FloatBufferBuilderFromCartesian3D.builderWithoutCenter();
+        for (int j = 0; j < firstPointsCount; j++)
         {
           final float x = it.nextFloat();
           final float y = it.nextFloat();
           final float z = it.nextFloat();
-          pointsBufferBuilder.add(x, y, z);
+          firstPointsBufferBuilder.add(x, y, z);
         }
-        IFloatBuffer firstLevelPointsBuffer = pointsBufferBuilder.create();
+        IFloatBuffer firstPointsBuffer = firstPointsBufferBuilder.create();
     
-        if (pointsBufferBuilder != null)
-           pointsBufferBuilder.dispose();
-        pointsBufferBuilder = null;
+        if (firstPointsBufferBuilder != null)
+           firstPointsBufferBuilder.dispose();
+        firstPointsBufferBuilder = null;
     
-        leafNodes.add(new PointCloudLeafNode(id, levelsCountLength, levelsCount, average, bounds, firstLevelPointsBuffer));
+        leafNodes.add(new PointCloudLeafNode(id, levelsCountLength, levelsCount, average, bounds, firstPointsBuffer));
       }
     
       if (it.hasNext())
