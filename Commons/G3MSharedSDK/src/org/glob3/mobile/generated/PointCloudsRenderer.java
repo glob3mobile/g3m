@@ -154,21 +154,33 @@ public class PointCloudsRenderer extends DefaultRenderer
   {
     private final int _levelsCountLenght;
     private final int[] _levelsCount;
-    private final Vector3F _average = new Vector3F();
-    private final Box _bounds = new Box();
+    private final Vector3F _average;
+    private final Box _bounds;
     private IFloatBuffer _firstLevelPointsBuffer;
 
-    public PointCloudLeafNode(final String id,
-                              final int levelsCountLenght,
-                              final int[] levelsCount) {
+    public PointCloudLeafNode(final String       id,
+                              final int          levelsCountLenght,
+                              final int[]        levelsCount,
+                              final Vector3F     average,
+                              final Box          bounds,
+                              final IFloatBuffer firstLevelPointsBuffer) {
       super(id);
       _levelsCountLenght = levelsCountLenght;
       _levelsCount = levelsCount;
+      _average = average;
+      _bounds = bounds;
+      _firstLevelPointsBuffer = firstLevelPointsBuffer;
     }
 
 
     @Override
     public void dispose() {
+      if (_average != null) {
+        _average.dispose();
+      }
+      if (_bounds != null) {
+        _bounds.dispose();
+      }
       if (_firstLevelPointsBuffer != null) {
         _firstLevelPointsBuffer.dispose();
       }
@@ -308,9 +320,7 @@ public class PointCloudsRenderer extends DefaultRenderer
         final double upperX = (double) it.nextFloat() + averageX;
         final double upperY = (double) it.nextFloat() + averageY;
         final double upperZ = (double) it.nextFloat() + averageZ;
-        final Vector3D lower = new Vector3D(lowerX, lowerY, lowerZ);
-        final Vector3D upper = new Vector3D(upperX, upperY, upperZ);
-        final Box bounds = new Box(lower, upper);
+        final Box bounds = new Box(new Vector3D(lowerX, lowerY, lowerZ), new Vector3D(upperX, upperY, upperZ));
     
         final int firstLevelPointsCount = it.nextInt32();
         FloatBufferBuilderFromCartesian3D pointsBufferBuilder = FloatBufferBuilderFromCartesian3D.builderWithoutCenter();
