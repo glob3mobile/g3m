@@ -60,6 +60,8 @@ private:
     virtual ~PointCloudNode() {
     }
 
+    virtual const Box* getBounds() = 0;
+
 //    virtual void acceptVisitor(PointCloudNodeVisitor* visitor) = 0;
 
   protected:
@@ -69,6 +71,7 @@ private:
     {
     }
 
+
   };
 
 
@@ -77,10 +80,14 @@ private:
   class PointCloudInnerNode : public PointCloudNode {
   private:
     PointCloudNode* _children[4];
+    Box*      _bounds;
+
+    Box* calculateBounds();
 
   public:
     PointCloudInnerNode(const std::string& id) :
-    PointCloudNode(id)
+    PointCloudNode(id),
+    _bounds(NULL)
     {
       _children[0] = NULL;
       _children[1] = NULL;
@@ -91,6 +98,13 @@ private:
     virtual ~PointCloudInnerNode();
 
     void addLeafNode(PointCloudLeafNode* leafNode);
+
+    const Box* getBounds() {
+      if (_bounds == NULL) {
+        _bounds = calculateBounds();
+      }
+      return _bounds;
+    }
 
 //    void acceptVisitor(PointCloudNodeVisitor* visitor);
 
@@ -164,6 +178,10 @@ private:
       super.dispose();
     }
 #endif
+
+    const Box* getBounds() {
+      return _bounds;
+    }
 
 //    void acceptVisitor(PointCloudNodeVisitor* visitor);
 

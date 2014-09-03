@@ -178,6 +178,9 @@ void PointCloudsRenderer::PointCloudMetadataParserAsyncTask::runInBackground(con
     }
     IFloatBuffer* firstLevelPointsBuffer = pointsBufferBuilder->create();
 
+    delete pointsBufferBuilder;
+    pointsBufferBuilder = NULL;
+
     leafNodes.push_back( new PointCloudLeafNode(id,
                                                 levelsCountLength,
                                                 levelsCount,
@@ -201,11 +204,36 @@ void PointCloudsRenderer::PointCloudMetadataParserAsyncTask::runInBackground(con
   for (int i = 0; i < leafNodesCount; i++) {
     _octree->addLeafNode( leafNodes[i] );
   }
-
+  const Box* fullBounds = _octree->getBounds(); // force inner-node's bounds here, in background
+  ILogger::instance()->logInfo("Octree fullBounds=%s", fullBounds->description().c_str());
 
 //  PointCloudNodeVisitor* visitor = new DebugVisitor();
 //  _octree->acceptVisitor(visitor);
 //  delete visitor;
+}
+
+Box* PointCloudsRenderer::PointCloudInnerNode::calculateBounds() {
+  Box* bounds = NULL;
+  for (int i = 0; i < 4; i++) {
+    PointCloudNode* child = _children[i];
+    if (child != NULL) {
+      const Box* childBounds = child->getBounds();
+      if (childBounds == NULL) {
+        THROW_EXCEPTION("Logic error");
+      }
+      if (bounds == NULL) {
+        bounds = new Box(childBounds->_lower, childBounds->_upper);
+      }
+      else {
+        if (!childBounds->fullContainedInBox(bounds)) {
+          Box* previousBounds = bounds;
+          bounds = previousBounds->mergedWithBox(childBounds);
+          delete previousBounds;
+        }
+      }
+    }
+  }
+  return bounds;
 }
 
 //void PointCloudsRenderer::PointCloudInnerNode::acceptVisitor(PointCloudNodeVisitor* visitor) {
@@ -227,6 +255,8 @@ PointCloudsRenderer::PointCloudInnerNode::~PointCloudInnerNode() {
   delete _children[1];
   delete _children[2];
   delete _children[3];
+
+  delete _bounds;
 #ifdef JAVA_CODE
   super.dispose();
 #endif

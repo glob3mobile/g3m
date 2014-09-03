@@ -22,6 +22,11 @@ class Color;
 
 class Box: public BoundingVolume {
 private:
+
+  mutable Mesh *_mesh;
+  void createMesh(Color* flatColor) const;
+
+public:
   const Vector3D _lower;
   const Vector3D _upper;
 
@@ -30,10 +35,6 @@ private:
   private java.util.ArrayList<Vector3F> _cornersF = null; // cache for getCornersF() method
 #endif
 
-  mutable Mesh *_mesh;
-  void createMesh(Color* flatColor) const;
-
-public:
   Box(const Vector3D& lower,
       const Vector3D& upper):
   _lower(lower),
@@ -81,7 +82,7 @@ public:
     return that->mergedWithBox(this);
   }
 
-  BoundingVolume* mergedWithBox(const Box* that) const;
+  Box* mergedWithBox(const Box* that) const;
   BoundingVolume* mergedWithSphere(const Sphere* that) const;
 
   Vector3D closestPoint(const Vector3D& point) const;
@@ -115,6 +116,8 @@ public:
     return _cornersArray;
   }
 #endif
+
+  const std::string description() const;
 
 };
 

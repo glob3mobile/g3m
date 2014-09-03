@@ -286,7 +286,7 @@ bool Box::touchesSphere(const Sphere* that) const {
 }
 
 
-BoundingVolume* Box::mergedWithBox(const Box* that) const {
+Box* Box::mergedWithBox(const Box* that) const {
   const IMathUtils* mu = IMathUtils::instance();
 
   const double lowerX = mu->min(_lower._x, that->_lower._x);
@@ -321,4 +321,17 @@ Sphere* Box::createSphere() const {
   const Vector3D center = _lower.add(_upper).div(2);
   const double radius = center.distanceTo(_upper);
   return new Sphere(center, radius);
+}
+
+
+const std::string Box::description() const {
+  IStringBuilder* isb = IStringBuilder::newStringBuilder();
+  isb->addString("[Box ");
+  isb->addString(_lower.description());
+  isb->addString(" / ");
+  isb->addString(_upper.description());
+  isb->addString("]");
+  const std::string s = isb->getString();
+  delete isb;
+  return s;
 }
