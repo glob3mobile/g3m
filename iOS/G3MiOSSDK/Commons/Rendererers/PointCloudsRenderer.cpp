@@ -20,7 +20,7 @@
 #include "FloatBufferBuilderFromCartesian3D.hpp"
 #include "DirectMesh.hpp"
 #include "IFactory.hpp"
-#include "SurfaceElevationProvider.hpp"
+//#include "SurfaceElevationProvider.hpp"
 
 void PointCloudsRenderer::PointCloudMetadataDownloadListener::onDownload(const URL& url,
                                                                          IByteBuffer* buffer,
@@ -54,7 +54,7 @@ void PointCloudsRenderer::PointCloud::initialize(const G3MContext* context) {
   _errorParsingMetadata = false;
 
   const std::string planetType = context->getPlanet()->getType();
-  const float verticalExaggeration = context->getSurfaceElevationProvider()->getVerticalExaggeration();
+//  const float verticalExaggeration = context->getSurfaceElevationProvider()->getVerticalExaggeration();
 
   const URL metadataURL(_serverURL, _cloudName + "?planet=" + planetType + "&format=binary");
 
@@ -209,9 +209,9 @@ void PointCloudsRenderer::PointCloudMetadataParserAsyncTask::runInBackground(con
   const Vector3D average = _octree->getAverage();
   ILogger::instance()->logInfo("Octree average=%s", average.description().c_str());
 
-//  PointCloudNodeVisitor* visitor = new DebugVisitor();
-//  _octree->acceptVisitor(visitor);
-//  delete visitor;
+  //  PointCloudNodeVisitor* visitor = new DebugVisitor();
+  //  _octree->acceptVisitor(visitor);
+  //  delete visitor;
 }
 
 void PointCloudsRenderer::PointCloudInnerNode::calculatePointsCountAndAverage() {
@@ -382,15 +382,20 @@ void PointCloudsRenderer::PointCloud::render(const G3MRenderContext* rc,
                                              GLState* glState,
                                              const Frustum* frustum) {
   if (_octree != NULL) {
-    _octree->render(rc, glState, frustum, _minHeight, _maxHeight);
+    const long long renderedCount = _octree->render(rc, glState, frustum, _minHeight, _maxHeight);
+
+    if (_lastRenderedCount != renderedCount) {
+      ILogger::instance()->logInfo("\"%s\": Rendered %ld points", _cloudName.c_str(), renderedCount);
+      _lastRenderedCount = renderedCount;
+    }
   }
 }
 
-bool PointCloudsRenderer::PointCloudNode::render(const G3MRenderContext* rc,
-                                                 GLState* glState,
-                                                 const Frustum* frustum,
-                                                 double minHeight,
-                                                 double maxHeight) {
+long long PointCloudsRenderer::PointCloudNode::render(const G3MRenderContext* rc,
+                                                      GLState* glState,
+                                                      const Frustum* frustum,
+                                                      double minHeight,
+                                                      double maxHeight) {
   const Box* bounds = getBounds();
   if (bounds != NULL) {
     if (bounds->touchesFrustum(frustum)) {
@@ -407,9 +412,14 @@ bool PointCloudsRenderer::PointCloudNode::render(const G3MRenderContext* rc,
 
       const double minProjectedArea = 500;
       if (_projectedArea >= minProjectedArea) {
-        rawRender(rc, glState, frustum, _projectedArea, minHeight, maxHeight);
+        const long long renderedCount = rawRender(rc,
+                                                  glState,
+                                                  frustum,
+                                                  _projectedArea,
+                                                  minHeight,
+                                                  maxHeight);
         _rendered = true;
-        return true;
+        return renderedCount;
       }
     }
   }
@@ -420,26 +430,24 @@ bool PointCloudsRenderer::PointCloudNode::render(const G3MRenderContext* rc,
     _projectedAreaTimer = NULL;
   }
 
-  return false;
+  return 0;
 }
 
-void PointCloudsRenderer::PointCloudInnerNode::rawRender(const G3MRenderContext* rc,
-                                                         GLState* glState,
-                                                         const Frustum* frustum,
-                                                         const double projectedArea,
-                                                         double minHeight,
-                                                         double maxHeight) {
-  bool anyChildRendered = false;
+long long PointCloudsRenderer::PointCloudInnerNode::rawRender(const G3MRenderContext* rc,
+                                                              GLState* glState,
+                                                              const Frustum* frustum,
+                                                              const double projectedArea,
+                                                              double minHeight,
+                                                              double maxHeight) {
+  long long renderedCount = 0;
   for (int i = 0; i < 4; i++) {
     PointCloudNode* child = _children[i];
     if (child != NULL) {
-      if ( child->render(rc, glState, frustum, minHeight, maxHeight) ) {
-        anyChildRendered = true;
-      }
+      renderedCount += child->render(rc, glState, frustum, minHeight, maxHeight);
     }
   }
 
-  if (!anyChildRendered) {
+  if (renderedCount == 0) {
     //_bounds->render(rc, glState, _renderColor);
     if (_mesh == NULL) {
       const Vector3D average = getAverage();
@@ -465,7 +473,10 @@ void PointCloudsRenderer::PointCloudInnerNode::rawRender(const G3MRenderContext*
                              false);
     }
     _mesh->render(rc, glState);
+    renderedCount = 1;
   }
+
+  return renderedCount;
 }
 
 PointCloudsRenderer::PointCloudLeafNode::~PointCloudLeafNode() {
@@ -481,12 +492,12 @@ PointCloudsRenderer::PointCloudLeafNode::~PointCloudLeafNode() {
 #endif
 }
 
-void PointCloudsRenderer::PointCloudLeafNode::rawRender(const G3MRenderContext* rc,
-                                                        GLState* glState,
-                                                        const Frustum* frustum,
-                                                        const double projectedArea,
-                                                        double minHeight,
-                                                        double maxHeight) {
+long long PointCloudsRenderer::PointCloudLeafNode::rawRender(const G3MRenderContext* rc,
+                                                             GLState* glState,
+                                                             const Frustum* frustum,
+                                                             const double projectedArea,
+                                                             double minHeight,
+                                                             double maxHeight) {
   if (_mesh == NULL) {
     _mesh = new DirectMesh(GLPrimitive::points(),
                            false,
@@ -500,6 +511,7 @@ void PointCloudsRenderer::PointCloudLeafNode::rawRender(const G3MRenderContext* 
                            false);
   }
   _mesh->render(rc, glState);
+  return _firstPointsBuffer->size();
 }
 
 
@@ -610,7 +622,7 @@ void PointCloudsRenderer::render(const G3MRenderContext* rc,
                                  GLState* glState) {
   const Camera* camera = rc->getCurrentCamera();
 
-  const float verticalExaggeration = rc->getSurfaceElevationProvider()->getVerticalExaggeration();
+//  const float verticalExaggeration = rc->getSurfaceElevationProvider()->getVerticalExaggeration();
 
   ModelViewGLFeature* f = (ModelViewGLFeature*) _glState->getGLFeature(GLF_MODEL_VIEW);
   if (f == NULL) {
@@ -621,7 +633,7 @@ void PointCloudsRenderer::render(const G3MRenderContext* rc,
   }
 
   _glState->setParent(glState);
-
+  
   const Frustum* frustum = camera->getFrustumInModelCoordinates();
   for (int i = 0; i < _cloudsSize; i++) {
     PointCloud* cloud = _clouds[i];

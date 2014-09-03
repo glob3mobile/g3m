@@ -68,12 +68,12 @@ private:
     {
     }
 
-    virtual void rawRender(const G3MRenderContext* rc,
-                           GLState* glState,
-                           const Frustum* frustum,
-                           const double projectedArea,
-                           double minHeight,
-                           double maxHeight) = 0;
+    virtual long long rawRender(const G3MRenderContext* rc,
+                                GLState* glState,
+                                const Frustum* frustum,
+                                const double projectedArea,
+                                double minHeight,
+                                double maxHeight) = 0;
 
   public:
     const std::string _id;
@@ -88,11 +88,11 @@ private:
 
 //    virtual void acceptVisitor(PointCloudNodeVisitor* visitor) = 0;
 
-    bool render(const G3MRenderContext* rc,
-                GLState* glState,
-                const Frustum* frustum,
-                double minHeight,
-                double maxHeight);
+    long long render(const G3MRenderContext* rc,
+                     GLState* glState,
+                     const Frustum* frustum,
+                     double minHeight,
+                     double maxHeight);
 
   };
 
@@ -114,12 +114,12 @@ private:
     Mesh* _mesh;
 
   protected:
-    void rawRender(const G3MRenderContext* rc,
-                   GLState* glState,
-                   const Frustum* frustum,
-                   const double projectedArea,
-                   double minHeight,
-                   double maxHeight);
+    long long rawRender(const G3MRenderContext* rc,
+                        GLState* glState,
+                        const Frustum* frustum,
+                        const double projectedArea,
+                        double minHeight,
+                        double maxHeight);
 
   public:
     PointCloudInnerNode(const std::string& id) :
@@ -183,12 +183,12 @@ private:
     long long _pointsCount;
 
   protected:
-    void rawRender(const G3MRenderContext* rc,
-                   GLState* glState,
-                   const Frustum* frustum,
-                   const double projectedArea,
-                   double minHeight,
-                   double maxHeight);
+    long long rawRender(const G3MRenderContext* rc,
+                        GLState* glState,
+                        const Frustum* frustum,
+                        const double projectedArea,
+                        double minHeight,
+                        double maxHeight);
 
 
   public:
@@ -350,6 +350,8 @@ private:
     double _maxHeight;
     PointCloudInnerNode* _octree;
 
+    long long _lastRenderedCount;
+
   public:
     PointCloud(const URL& serverURL,
                const std::string& cloudName,
@@ -372,7 +374,8 @@ private:
     _sector(NULL),
     _minHeight(0),
     _maxHeight(0),
-    _octree(NULL)
+    _octree(NULL),
+    _lastRenderedCount(0)
     {
     }
 
