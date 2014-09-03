@@ -52,6 +52,20 @@ public class PointCloudsRenderer extends DefaultRenderer
 
   private abstract static class PointCloudNode
   {
+    private boolean _rendered;
+    private double _projectedArea;
+    private ITimer _projectedAreaTimer;
+
+
+    protected PointCloudNode(String id)
+    {
+       _id = id;
+       _rendered = false;
+       _projectedArea = -1;
+       _projectedAreaTimer = null;
+    }
+
+    protected abstract void rawRender(G3MRenderContext rc, GLState glState, Frustum frustum, double projectedArea);
 
     public final String _id;
 
@@ -61,14 +75,52 @@ public class PointCloudsRenderer extends DefaultRenderer
 
     public abstract Box getBounds();
 
+    public abstract long getPointsCount();
+    public abstract Vector3D getAverage();
+
 //    virtual void acceptVisitor(PointCloudNodeVisitor* visitor) = 0;
 
-
-    protected PointCloudNode(String id)
+    public final boolean render(G3MRenderContext rc, GLState glState, Frustum frustum)
     {
-       _id = id;
+      final Box bounds = getBounds();
+      if (bounds != null)
+      {
+        if (bounds.touchesFrustum(frustum))
+        {
+    //      const double projectedArea = bounds->projectedArea(rc);
+    
+          if ((_projectedAreaTimer == null) || (_projectedAreaTimer.elapsedTimeInMilliseconds() > 250))
+          {
+            _projectedArea = bounds.projectedArea(rc);
+            if (_projectedAreaTimer == null)
+            {
+              _projectedAreaTimer = rc.getFactory().createTimer();
+            }
+            else
+            {
+              _projectedAreaTimer.start();
+            }
+          }
+    
+          final double minProjectedArea = 500;
+          if (_projectedArea >= minProjectedArea)
+          {
+            rawRender(rc, glState, frustum, _projectedArea);
+            _rendered = true;
+            return true;
+          }
+        }
+      }
+      if (_rendered)
+      {
+        //stoppedBeingRendered();
+        _rendered = false;
+        if (_projectedAreaTimer != null)
+           _projectedAreaTimer.dispose();
+        _projectedAreaTimer = null;
+      }
+      return false;
     }
-
 
   }
 
@@ -79,8 +131,8 @@ public class PointCloudsRenderer extends DefaultRenderer
   private static class PointCloudInnerNode extends PointCloudNode
   {
     private PointCloudNode[] _children = new PointCloudNode[4];
-    private Box _bounds;
 
+    private Box _bounds;
     private Box calculateBounds()
     {
       Box bounds = null;
@@ -110,10 +162,84 @@ public class PointCloudsRenderer extends DefaultRenderer
       return bounds;
     }
 
+    private final Color _renderColor;
+
+    private Vector3D _average;
+    private long _pointsCount;
+
+    private void calculatePointsCountAndAverage()
+    {
+    
+      _pointsCount = 0;
+      double sumX = 0;
+      double sumY = 0;
+      double sumZ = 0;
+    
+      for (int i = 0; i < 4; i++)
+      {
+        PointCloudNode child = _children[i];
+        if (child != null)
+        {
+          final long childPointsCount = child.getPointsCount();
+          _pointsCount += childPointsCount;
+    
+          final Vector3D childAverage = child.getAverage();
+          sumX += (childAverage._x * childPointsCount);
+          sumY += (childAverage._y * childPointsCount);
+          sumZ += (childAverage._z * childPointsCount);
+        }
+      }
+    
+      _average = new Vector3D(sumX / _pointsCount, sumY / _pointsCount, sumZ / _pointsCount);
+    }
+
+    private Mesh _mesh;
+
+    protected final void rawRender(G3MRenderContext rc, GLState glState, Frustum frustum, double projectedArea)
+    {
+      boolean anyChildRendered = false;
+      for (int i = 0; i < 4; i++)
+      {
+        PointCloudNode child = _children[i];
+        if (child != null)
+        {
+          if (child.render(rc, glState, frustum))
+          {
+            anyChildRendered = true;
+          }
+        }
+      }
+      if (!anyChildRendered)
+      {
+        //_bounds->render(rc, glState, _renderColor);
+        if (_mesh == null)
+        {
+    
+          final Vector3D average = getAverage();
+    
+          final float averageX = (float) average._x;
+          final float averageY = (float) average._y;
+          final float averageZ = (float) average._z;
+    
+          IFloatBuffer pointsBuffer = rc.getFactory().createFloatBuffer(3);
+          pointsBuffer.put(0, (float)(average._x - averageX));
+          pointsBuffer.put(1, (float)(average._y - averageY));
+          pointsBuffer.put(2, (float)(average._z - averageZ));
+    
+          _mesh = new DirectMesh(GLPrimitive.points(), true, new Vector3D(averageX, averageY, averageZ), pointsBuffer, 1, 2, Color.newFromRGBA(1, 1, 0, 1), null, 1, false); // colorsIntensity -  colors.create(), -  flatColor
+        }
+        _mesh.render(rc, glState);
+      }
+    }
+
     public PointCloudInnerNode(String id)
     {
        super(id);
        _bounds = null;
+       _renderColor = Color.newFromRGBA(1, 1, 0, 1);
+       _average = null;
+       _pointsCount = -1;
+       _mesh = null;
       _children[0] = null;
       _children[1] = null;
       _children[2] = null;
@@ -148,6 +274,14 @@ public class PointCloudsRenderer extends DefaultRenderer
     
       if (_bounds != null)
          _bounds.dispose();
+      if (_renderColor != null)
+         _renderColor.dispose();
+      if (_average != null)
+         _average.dispose();
+    
+      if (_mesh != null)
+         _mesh.dispose();
+    
       super.dispose();
     }
 
@@ -191,6 +325,24 @@ public class PointCloudsRenderer extends DefaultRenderer
       return _bounds;
     }
 
+    public final long getPointsCount()
+    {
+      if (_pointsCount <= 0 || _average == null)
+      {
+        calculatePointsCountAndAverage();
+      }
+      return _pointsCount;
+    }
+
+    public final Vector3D getAverage()
+    {
+      if (_pointsCount <= 0 || _average == null)
+      {
+        calculatePointsCountAndAverage();
+      }
+      return _average;
+    }
+
 //    void acceptVisitor(PointCloudNodeVisitor* visitor);
 
   }
@@ -200,9 +352,23 @@ public class PointCloudsRenderer extends DefaultRenderer
   {
     private final int _levelsCountLenght;
     private final int[] _levelsCount;
-    private final Vector3F _average;
+    private final Vector3D _average;
     private final Box _bounds;
     private IFloatBuffer _firstLevelPointsBuffer;
+
+    private Mesh _mesh;
+
+    private long _pointsCount;
+
+    protected final void rawRender(G3MRenderContext rc, GLState glState, Frustum frustum, double projectedArea)
+    {
+      if (_mesh == null)
+      {
+        _mesh = new DirectMesh(GLPrimitive.points(), false, _average, _firstLevelPointsBuffer, 1, 2, Color.newFromRGBA(1, 1, 1, 1), null, 1, false); // colorsIntensity -  colors.create(), -  flatColor
+      }
+      _mesh.render(rc, glState);
+    }
+
 
     public PointCloudLeafNode(final String       id,
                               final int          levelsCountLenght,
@@ -216,20 +382,20 @@ public class PointCloudsRenderer extends DefaultRenderer
       _average = average;
       _bounds = bounds;
       _firstLevelPointsBuffer = firstLevelPointsBuffer;
+      _pointsCount = -1;
     }
 
-
-    @Override
-    public void dispose() {
-      if (_average != null) {
-        _average.dispose();
-      }
-      if (_bounds != null) {
-        _bounds.dispose();
-      }
-      if (_firstLevelPointsBuffer != null) {
-        _firstLevelPointsBuffer.dispose();
-      }
+    public void dispose()
+    {
+      if (_mesh != null)
+         _mesh.dispose();
+      _levelsCount = null;
+      if (_average != null)
+         _average.dispose();
+      if (_bounds != null)
+         _bounds.dispose();
+      if (_firstLevelPointsBuffer != null)
+         _firstLevelPointsBuffer.dispose();
       super.dispose();
     }
 
@@ -237,6 +403,25 @@ public class PointCloudsRenderer extends DefaultRenderer
     {
       return _bounds;
     }
+
+    public final long getPointsCount()
+    {
+      if (_pointsCount <= 0)
+      {
+        _pointsCount = 0;
+        for (int i = 0; i < _levelsCountLenght; i++)
+        {
+          _pointsCount += _levelsCount[i];
+        }
+      }
+      return _pointsCount;
+    }
+
+    public final Vector3D getAverage()
+    {
+      return _average;
+    }
+
 
 //    void acceptVisitor(PointCloudNodeVisitor* visitor);
 
@@ -363,7 +548,7 @@ public class PointCloudsRenderer extends DefaultRenderer
         final float averageY = it.nextFloat();
         final float averageZ = it.nextFloat();
     
-        final Vector3F average = new Vector3F(averageX, averageY, averageZ);
+        final Vector3D average = new Vector3D(averageX, averageY, averageZ);
     
         final double lowerX = (double) it.nextFloat() + averageX;
         final double lowerY = (double) it.nextFloat() + averageY;
@@ -412,6 +597,9 @@ public class PointCloudsRenderer extends DefaultRenderer
       }
       final Box fullBounds = _octree.getBounds(); // force inner-node's bounds here, in background
       ILogger.instance().logInfo("Octree fullBounds=%s", fullBounds.description());
+    
+      final Vector3D average = _octree.getAverage();
+      ILogger.instance().logInfo("Octree average=%s", average.description());
     
     //  PointCloudNodeVisitor* visitor = new DebugVisitor();
     //  _octree->acceptVisitor(visitor);
@@ -604,9 +792,7 @@ public class PointCloudsRenderer extends DefaultRenderer
     {
       if (_octree != null)
       {
-    //    _octree->render(rc, glState, frustum);
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning DGD at work!
+        _octree.render(rc, glState, frustum);
       }
     }
 
