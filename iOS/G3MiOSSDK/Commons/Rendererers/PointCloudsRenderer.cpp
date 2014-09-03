@@ -222,13 +222,23 @@ Box* PointCloudsRenderer::PointCloudInnerNode::calculateBounds() {
         THROW_EXCEPTION("Logic error");
       }
       if (bounds == NULL) {
+#ifdef C_CODE
         bounds = new Box(childBounds->_lower, childBounds->_upper);
+#endif
+#ifdef JAVA_CODE
+        bounds = childBounds;
+#endif
       }
       else {
         if (!childBounds->fullContainedInBox(bounds)) {
+#ifdef C_CODE
           Box* previousBounds = bounds;
           bounds = previousBounds->mergedWithBox(childBounds);
           delete previousBounds;
+#endif
+#ifdef JAVA_CODE
+          bounds = bounds.mergedWithBox(childBounds);
+#endif
         }
       }
     }
