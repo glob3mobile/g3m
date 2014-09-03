@@ -8,6 +8,7 @@ import org.glob3.mobile.generated.Angle;
 import org.glob3.mobile.generated.BingMapType;
 import org.glob3.mobile.generated.BingMapsLayer;
 import org.glob3.mobile.generated.Color;
+import org.glob3.mobile.generated.DownloadPriority;
 import org.glob3.mobile.generated.GEO2DLineRasterStyle;
 import org.glob3.mobile.generated.GEO2DLineStringGeometry;
 import org.glob3.mobile.generated.GEO2DMultiLineStringGeometry;
@@ -25,11 +26,13 @@ import org.glob3.mobile.generated.Geodetic3D;
 import org.glob3.mobile.generated.JSONObject;
 import org.glob3.mobile.generated.LayerSet;
 import org.glob3.mobile.generated.LevelTileCondition;
+import org.glob3.mobile.generated.PointCloudsRenderer;
 import org.glob3.mobile.generated.Sector;
 import org.glob3.mobile.generated.StrokeCap;
 import org.glob3.mobile.generated.StrokeJoin;
 import org.glob3.mobile.generated.TiledVectorLayer;
 import org.glob3.mobile.generated.TimeInterval;
+import org.glob3.mobile.generated.URL;
 import org.glob3.mobile.specific.G3MBuilder_Android;
 import org.glob3.mobile.specific.G3MWidget_Android;
 
@@ -42,10 +45,11 @@ import android.widget.RelativeLayout;
 
 
 public class MainActivity
-         extends
-            Activity {
+extends
+Activity {
 
-   private G3MWidget_Android _g3mWidget;
+   private G3MWidget_Android   _g3mWidget;
+   private PointCloudsRenderer _pcr;
 
 
    //   private RelativeLayout    _placeHolder;
@@ -64,6 +68,8 @@ public class MainActivity
       _g3mWidget = createWidget();
 
       final RelativeLayout placeHolder = (RelativeLayout) findViewById(R.id.g3mWidgetHolder);
+
+
       placeHolder.addView(_g3mWidget);
 
 
@@ -77,9 +83,16 @@ public class MainActivity
    private G3MWidget_Android createWidget() {
       final G3MBuilder_Android builder = new G3MBuilder_Android(this);
 
-      final TimeInterval connectTimeout = TimeInterval.fromSeconds(60);
-      final TimeInterval readTimeout = TimeInterval.fromSeconds(65);
-      final boolean saveInBackground = true;
+      _pcr = new PointCloudsRenderer();
+      _pcr.addPointCloud(new URL("http://glob3mobile.dyndns.org:8080"), "Loudoun-VA_simplified_LOD", DownloadPriority.LOWER,
+               TimeInterval.zero(), false, null, true);
+
+
+      builder.addRenderer(_pcr);
+
+      //      final TimeInterval connectTimeout = TimeInterval.fromSeconds(60);
+      //      final TimeInterval readTimeout = TimeInterval.fromSeconds(65);
+      //      final boolean saveInBackground = true;
 
       builder.getPlanetRendererBuilder().setLayerSet(createLayerSet());
       // builder.getPlanetRendererBuilder().setRenderDebug(true);
@@ -90,8 +103,8 @@ public class MainActivity
 
 
    private static class SampleRasterSymbolizer
-            extends
-               GEORasterSymbolizer {
+   extends
+   GEORasterSymbolizer {
 
       private static final Color FROM_COLOR = Color.fromRGBA(0.7f, 0, 0, 0.5f);
 
@@ -145,7 +158,7 @@ public class MainActivity
                   geometry.getPolygonData(), //
                   createPolygonLineRasterStyle(geometry), //
                   createPolygonSurfaceRasterStyle(geometry) //
-         );
+                  );
          symbols.add(symbol);
          return symbols;
       }
@@ -205,8 +218,8 @@ public class MainActivity
                1, // transparency
                new LevelTileCondition(15, 21), // condition
                "" // disclaimerInfo
-      );
-      layerSet.addLayer(tiledVectorLayer);
+               );
+      // layerSet.addLayer(tiledVectorLayer);
 
 
       return layerSet;
