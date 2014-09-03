@@ -40,8 +40,8 @@ import es.igosoftware.util.XStringTokenizer;
 
 
 public class PCSSServlet
-         extends
-            HttpServlet {
+extends
+HttpServlet {
    private static final long serialVersionUID = 1L;
 
 
@@ -125,26 +125,26 @@ public class PCSSServlet
       private final int[]            _levelsPointsCount;
       private final GVector3F        _average;
       private final GAxisAlignedBox  _bounds;
-      private final List<Geodetic3D> _level0Points;
+      private final List<Geodetic3D> _firstPoints;
 
 
       public NodeMetadata(final String id,
                           final int[] levelsPointsCount,
                           final GVector3F average,
                           final GAxisAlignedBox bounds,
-                          final List<Geodetic3D> level0Points) {
+                          final List<Geodetic3D> firstPoints) {
          _id = id;
          _levelsPointsCount = Arrays.copyOf(levelsPointsCount, levelsPointsCount.length);
          _average = average;
          _bounds = bounds;
-         _level0Points = new ArrayList<Geodetic3D>(level0Points);
+         _firstPoints = new ArrayList<Geodetic3D>(firstPoints);
       }
 
    }
 
 
    private static List<NodeMetadata> getNodesMetadata(final PersistentLOD db,
-                                                      final Planet planet) {
+            final Planet planet) {
       final List<NodeMetadata> result = new ArrayList<PCSSServlet.NodeMetadata>(10000);
 
       db.acceptDepthFirstVisitor(null, new PersistentLOD.Visitor() {
@@ -200,12 +200,19 @@ public class PCSSServlet
 
             final GAxisAlignedBox bounds = new GAxisAlignedBox(new GVector3D(minX, minY, minZ), new GVector3D(maxX, maxY, maxZ));
 
+            final List<Geodetic3D> firstPoints = new ArrayList<Geodetic3D>();
+            firstPoints.addAll(levels.get(0).getPoints(transaction));
+            if (levels.size() > 1) {
+               firstPoints.addAll(levels.get(1).getPoints(transaction));
+            }
+
+
             final NodeMetadata nodeMetadata = new NodeMetadata( //
                      node.getID(), //
                      node.getLevelsPointsCount(), //
                      average, //
                      bounds, //
-                     levels.get(0).getPoints(transaction));
+                     firstPoints);
 
             result.add(nodeMetadata);
 
@@ -270,7 +277,7 @@ public class PCSSServlet
          writer.print(',');
          JSONUtils.sendJSON(writer, "b", node._bounds, node._average);
          writer.print(',');
-         JSONUtils.sendJSON(writer, "p", node._level0Points, planet, node._average);
+         JSONUtils.sendJSON(writer, "p", node._firstPoints, planet, node._average);
          writer.print('}');
       }
       writer.print(']');
@@ -280,7 +287,6 @@ public class PCSSServlet
 
 
    private static class MetadataEntry {
-      private final String                   _cloudName;
       private final Planet                   _planet;
       private final PersistentLOD.Statistics _statistics;
       private final List<NodeMetadata>       _nodes;
@@ -288,11 +294,9 @@ public class PCSSServlet
       private byte[]                         _buffer = null;
 
 
-      private MetadataEntry(final String cloudName,
-                            final Planet planet,
+      private MetadataEntry(final Planet planet,
                             final PersistentLOD.Statistics statistics,
-                            final List<NodeMetadata> nodes) throws IOException {
-         _cloudName = cloudName;
+                            final List<NodeMetadata> nodes) {
          _planet = planet;
          _statistics = statistics;
          _nodes = nodes;
@@ -326,13 +330,12 @@ public class PCSSServlet
 
 
    private static MetadataEntry getMetadataEntry(final PersistentLOD db,
-                                                 final Planet planet) throws IOException {
+                                                 final Planet planet) {
       synchronized (_metadataCache) {
-         final String cloudName = db.getCloudName();
-         final String key = cloudName + "/" + planet;
+         final String key = db.getCloudName() + "/" + planet;
          MetadataEntry entry = _metadataCache.get(key);
          if (entry == null) {
-            entry = new MetadataEntry(cloudName, planet, db.getStatistics(false, false), getNodesMetadata(db, planet));
+            entry = new MetadataEntry(planet, db.getStatistics(false, false), getNodesMetadata(db, planet));
             _metadataCache.put(key, entry);
          }
          return entry;
@@ -420,7 +423,7 @@ public class PCSSServlet
       final byte intLevelsCount = toByte(intLevels.size());
 
       final int bufferSize = //
-      ByteBufferUtils.sizeOf(idLength) + //
+               ByteBufferUtils.sizeOf(idLength) + //
                idLength + //
                ByteBufferUtils.sizeOf(byteLevelsCount) + //
                ByteBufferUtils.sizeOf(shortLevelsCount) + //
@@ -430,7 +433,7 @@ public class PCSSServlet
                (intLevelsCount * 4) + //
                ByteBufferUtils.sizeOf(node._average) + //
                ByteBufferUtils.sizeOf(node._bounds, node._average) + //
-               ByteBufferUtils.sizeOf(planet, node._level0Points, node._average);
+               ByteBufferUtils.sizeOf(planet, node._firstPoints, node._average);
 
 
       final ByteBuffer buffer = ByteBuffer.allocate(bufferSize).order(ByteOrder.LITTLE_ENDIAN);
@@ -454,7 +457,7 @@ public class PCSSServlet
 
       ByteBufferUtils.put(buffer, node._bounds, node._average);
 
-      ByteBufferUtils.put(buffer, planet, node._level0Points, node._average);
+      ByteBufferUtils.put(buffer, planet, node._firstPoints, node._average);
 
       return buffer.array();
    }
@@ -474,7 +477,7 @@ public class PCSSServlet
       final double maxHeight = statistics.getMaxHeight();
 
       final int bufferSize = //
-               ByteBufferUtils.sizeOf(pointsCount) + //
+      ByteBufferUtils.sizeOf(pointsCount) + //
                ByteBufferUtils.sizeOf(sector) + //
                ByteBufferUtils.sizeOf(minHeight) + //
                ByteBufferUtils.sizeOf(maxHeight);

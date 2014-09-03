@@ -30,10 +30,15 @@ public:
                   const Sector& sector,
                   double minHeight,
                   double maxHeight) {
-    _g3mWidget->setAnimatedCameraPosition(Geodetic3D(sector._center, 26000),
-                                          Angle::zero(),
-                                          Angle::fromDegrees(-25));
-//    _g3mWidget->setAnimatedCameraPosition( Geodetic3D(sector._center, 5000) );
+//    _g3mWidget->setAnimatedCameraPosition(Geodetic3D(sector._center, 26000),
+//                                          Angle::zero(),
+//                                          Angle::fromDegrees(-25));
+////    _g3mWidget->setAnimatedCameraPosition( Geodetic3D(sector._center, 5000) );
+
+    _g3mWidget->setAnimatedCameraPosition( Geodetic3D::fromDegrees(39.068479748852752209, -77.602316923351310152, 100363)  );
+
+//    2014-09-03 15:40:34.446 G3MApp[928:60b] Camera position=(lat=39.068479748852752209d, lon=-77.602316923351310152d, height=100363.33871739693859) heading=3.393677 pitch=-88.463277
+
   }
 
 };

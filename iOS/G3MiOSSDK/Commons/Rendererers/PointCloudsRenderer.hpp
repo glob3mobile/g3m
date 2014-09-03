@@ -53,6 +53,25 @@ private:
 
 
   class PointCloudNode {
+  private:
+    bool _rendered;
+    double _projectedArea;
+    ITimer* _projectedAreaTimer;
+
+  protected:
+
+    PointCloudNode(const std::string& id) :
+    _id(id),
+    _rendered(false),
+    _projectedArea(-1),
+    _projectedAreaTimer(NULL)
+    {
+    }
+
+    virtual void rawRender(const G3MRenderContext* rc,
+                           GLState* glState,
+                           const Frustum* frustum,
+                           const double projectedArea) = 0;
 
   public:
     const std::string _id;
@@ -62,15 +81,14 @@ private:
 
     virtual const Box* getBounds() = 0;
 
+    virtual long long getPointsCount() = 0;
+    virtual const Vector3D getAverage() = 0;
+
 //    virtual void acceptVisitor(PointCloudNodeVisitor* visitor) = 0;
 
-  protected:
-
-    PointCloudNode(const std::string& id) :
-    _id(id)
-    {
-    }
-
+    bool render(const G3MRenderContext* rc,
+                GLState* glState,
+                const Frustum* frustum);
 
   };
 
@@ -80,14 +98,33 @@ private:
   class PointCloudInnerNode : public PointCloudNode {
   private:
     PointCloudNode* _children[4];
-    Box*      _bounds;
 
+    Box* _bounds;
     Box* calculateBounds();
+
+    const Color* _renderColor;
+
+    Vector3D* _average;
+    long long _pointsCount;
+
+    void calculatePointsCountAndAverage();
+
+    Mesh* _mesh;
+
+  protected:
+    void rawRender(const G3MRenderContext* rc,
+                   GLState* glState,
+                   const Frustum* frustum,
+                   const double projectedArea);
 
   public:
     PointCloudInnerNode(const std::string& id) :
     PointCloudNode(id),
-    _bounds(NULL)
+    _bounds(NULL),
+    _renderColor( Color::newFromRGBA(1, 1, 0, 1) ),
+    _average(NULL),
+    _pointsCount(-1),
+    _mesh(NULL)
     {
       _children[0] = NULL;
       _children[1] = NULL;
@@ -106,6 +143,20 @@ private:
       return _bounds;
     }
 
+    long long getPointsCount() {
+      if (_pointsCount <= 0 || _average == NULL) {
+        calculatePointsCountAndAverage();
+      }
+      return _pointsCount;
+    }
+
+    const Vector3D getAverage() {
+      if (_pointsCount <= 0 || _average == NULL) {
+        calculatePointsCountAndAverage();
+      }
+      return *_average;
+    }
+
 //    void acceptVisitor(PointCloudNodeVisitor* visitor);
 
   };
@@ -120,16 +171,27 @@ private:
 #ifdef JAVA_CODE
     private final int[] _levelsCount;
 #endif
-    const Vector3F* _average;
+    const Vector3D* _average;
     const Box*      _bounds;
     IFloatBuffer*  _firstLevelPointsBuffer;
+
+    Mesh* _mesh;
+
+    long long _pointsCount;
+
+  protected:
+    void rawRender(const G3MRenderContext* rc,
+                   GLState* glState,
+                   const Frustum* frustum,
+                   const double projectedArea);
+
 
   public:
 #ifdef C_CODE
     PointCloudLeafNode(const std::string& id,
                        const int          levelsCountLenght,
                        const int*         levelsCount,
-                       const Vector3F*    average,
+                       const Vector3D*    average,
                        const Box*         bounds,
                        IFloatBuffer*      firstLevelPointsBuffer) :
     PointCloudNode(id),
@@ -137,15 +199,10 @@ private:
     _levelsCount(levelsCount),
     _average(average),
     _bounds(bounds),
-    _firstLevelPointsBuffer(firstLevelPointsBuffer)
+    _firstLevelPointsBuffer(firstLevelPointsBuffer),
+    _mesh(NULL),
+    _pointsCount(-1)
     {
-    }
-
-    ~PointCloudLeafNode() {
-      delete [] _levelsCount;
-      delete _average;
-      delete _bounds;
-      delete _firstLevelPointsBuffer;
     }
 #endif
 #ifdef JAVA_CODE
@@ -161,27 +218,30 @@ private:
       _average = average;
       _bounds = bounds;
       _firstLevelPointsBuffer = firstLevelPointsBuffer;
-    }
-
-
-    @Override
-    public void dispose() {
-      if (_average != null) {
-        _average.dispose();
-      }
-      if (_bounds != null) {
-        _bounds.dispose();
-      }
-      if (_firstLevelPointsBuffer != null) {
-        _firstLevelPointsBuffer.dispose();
-      }
-      super.dispose();
+      _pointsCount = -1;
     }
 #endif
+
+    ~PointCloudLeafNode();
 
     const Box* getBounds() {
       return _bounds;
     }
+
+    long long getPointsCount() {
+      if (_pointsCount <= 0) {
+        _pointsCount = 0;
+        for (int i = 0; i < _levelsCountLenght; i++) {
+          _pointsCount += _levelsCount[i];
+        }
+      }
+      return _pointsCount;
+    }
+
+    const Vector3D getAverage() {
+      return *_average;
+    }
+
 
 //    void acceptVisitor(PointCloudNodeVisitor* visitor);
 

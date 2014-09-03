@@ -18,6 +18,8 @@
 #include "IStringBuilder.hpp"
 #include "Camera.hpp"
 #include "FloatBufferBuilderFromCartesian3D.hpp"
+#include "DirectMesh.hpp"
+#include "IFactory.hpp"
 
 void PointCloudsRenderer::PointCloudMetadataDownloadListener::onDownload(const URL& url,
                                                                          IByteBuffer* buffer,
@@ -157,7 +159,7 @@ void PointCloudsRenderer::PointCloudMetadataParserAsyncTask::runInBackground(con
     const float averageY = it.nextFloat();
     const float averageZ = it.nextFloat();
 
-    const Vector3F* average = new Vector3F(averageX, averageY, averageZ);
+    const Vector3D* average = new Vector3D(averageX, averageY, averageZ);
 
     const double lowerX = (double) it.nextFloat() + averageX;
     const double lowerY = (double) it.nextFloat() + averageY;
@@ -207,9 +209,37 @@ void PointCloudsRenderer::PointCloudMetadataParserAsyncTask::runInBackground(con
   const Box* fullBounds = _octree->getBounds(); // force inner-node's bounds here, in background
   ILogger::instance()->logInfo("Octree fullBounds=%s", fullBounds->description().c_str());
 
+  const Vector3D average = _octree->getAverage();
+  ILogger::instance()->logInfo("Octree average=%s", average.description().c_str());
+
 //  PointCloudNodeVisitor* visitor = new DebugVisitor();
 //  _octree->acceptVisitor(visitor);
 //  delete visitor;
+}
+
+void PointCloudsRenderer::PointCloudInnerNode::calculatePointsCountAndAverage() {
+
+  _pointsCount = 0;
+  double sumX = 0;
+  double sumY = 0;
+  double sumZ = 0;
+
+  for (int i = 0; i < 4; i++) {
+    PointCloudNode* child = _children[i];
+    if (child != NULL) {
+      const long long childPointsCount = child->getPointsCount();
+      _pointsCount += childPointsCount;
+
+      const Vector3D childAverage = child->getAverage();
+      sumX += (childAverage._x * childPointsCount);
+      sumY += (childAverage._y * childPointsCount);
+      sumZ += (childAverage._z * childPointsCount);
+    }
+  }
+
+  _average = new Vector3D(sumX / _pointsCount,
+                          sumY / _pointsCount,
+                          sumZ / _pointsCount);
 }
 
 Box* PointCloudsRenderer::PointCloudInnerNode::calculateBounds() {
@@ -267,6 +297,11 @@ PointCloudsRenderer::PointCloudInnerNode::~PointCloudInnerNode() {
   delete _children[3];
 
   delete _bounds;
+  delete _renderColor;
+  delete _average;
+
+  delete _mesh;
+
 #ifdef JAVA_CODE
   super.dispose();
 #endif
@@ -366,10 +401,118 @@ void PointCloudsRenderer::PointCloud::render(const G3MRenderContext* rc,
                                              GLState* glState,
                                              const Frustum* frustum) {
   if (_octree != NULL) {
-//    _octree->render(rc, glState, frustum);
-#warning DGD at work!
+    _octree->render(rc, glState, frustum);
   }
 }
+
+bool PointCloudsRenderer::PointCloudNode::render(const G3MRenderContext* rc,
+                                                 GLState* glState,
+                                                 const Frustum* frustum) {
+  const Box* bounds = getBounds();
+  if (bounds != NULL) {
+    if (bounds->touchesFrustum(frustum)) {
+//      const double projectedArea = bounds->projectedArea(rc);
+
+      if ((_projectedAreaTimer == NULL) || (_projectedAreaTimer->elapsedTimeInMilliseconds() > 250)) {
+        _projectedArea = bounds->projectedArea(rc);
+        if (_projectedAreaTimer == NULL) {
+          _projectedAreaTimer = rc->getFactory()->createTimer();
+        }
+        else {
+          _projectedAreaTimer->start();
+        }
+      }
+
+      const double minProjectedArea = 500;
+      if (_projectedArea >= minProjectedArea) {
+        rawRender(rc, glState, frustum, _projectedArea);
+        _rendered = true;
+        return true;
+      }
+    }
+  }
+  if (_rendered) {
+    //stoppedBeingRendered();
+    _rendered = false;
+    delete _projectedAreaTimer;
+    _projectedAreaTimer = NULL;
+  }
+  return false;
+}
+
+void PointCloudsRenderer::PointCloudInnerNode::rawRender(const G3MRenderContext* rc,
+                                                         GLState* glState,
+                                                         const Frustum* frustum,
+                                                         const double projectedArea) {
+  bool anyChildRendered = false;
+  for (int i = 0; i < 4; i++) {
+    PointCloudNode* child = _children[i];
+    if (child != NULL) {
+      if ( child->render(rc, glState, frustum) ) {
+        anyChildRendered = true;
+      }
+    }
+  }
+  if (!anyChildRendered) {
+    //_bounds->render(rc, glState, _renderColor);
+    if (_mesh == NULL) {
+
+      const Vector3D average = getAverage();
+
+      const float averageX = (float) average._x;
+      const float averageY = (float) average._y;
+      const float averageZ = (float) average._z;
+
+      IFloatBuffer* pointsBuffer = rc->getFactory()->createFloatBuffer(3);
+      pointsBuffer->put(0, (float) (average._x - averageX) );
+      pointsBuffer->put(1, (float) (average._y - averageY) );
+      pointsBuffer->put(2, (float) (average._z - averageZ) );
+
+      _mesh = new DirectMesh(GLPrimitive::points(),
+                             true,
+                             Vector3D(averageX, averageY, averageZ),
+                             pointsBuffer,
+                             1,
+                             2,
+                             Color::newFromRGBA(1, 1, 0, 1), // flatColor
+                             NULL, // colors.create(),
+                             1, // colorsIntensity
+                             false);
+    }
+    _mesh->render(rc, glState);
+  }
+}
+
+PointCloudsRenderer::PointCloudLeafNode::~PointCloudLeafNode() {
+  delete _mesh;
+  delete [] _levelsCount;
+  delete _average;
+  delete _bounds;
+  delete _firstLevelPointsBuffer;
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+}
+
+void PointCloudsRenderer::PointCloudLeafNode::rawRender(const G3MRenderContext* rc,
+                                                        GLState* glState,
+                                                        const Frustum* frustum,
+                                                        const double projectedArea) {
+  if (_mesh == NULL) {
+    _mesh = new DirectMesh(GLPrimitive::points(),
+                           false,
+                           *_average,
+                           _firstLevelPointsBuffer,
+                           1,
+                           2,
+                           Color::newFromRGBA(1, 1, 1, 1), // flatColor
+                           NULL, // colors.create(),
+                           1, // colorsIntensity
+                           false);
+  }
+  _mesh->render(rc, glState);
+}
+
 
 PointCloudsRenderer::PointCloudsRenderer() :
 _cloudsSize(0),

@@ -23,8 +23,8 @@ class Color;
 class Box: public BoundingVolume {
 private:
 
-  mutable Mesh *_mesh;
-  void createMesh(Color* flatColor) const;
+  mutable Mesh* _mesh;
+  Mesh* createMesh(const Color* color) const;
 
 public:
   const Vector3D _lower;
@@ -63,7 +63,9 @@ public:
   Vector3D intersectionWithRay(const Vector3D& origin,
                                const Vector3D& direction) const;
 
-  void render(const G3MRenderContext* rc, const GLState& parentState) const;
+  void render(const G3MRenderContext* rc,
+              const GLState* parentState,
+              const Color* color) const;
 
   bool touches(const BoundingVolume* that) const {
     if (that == NULL) {

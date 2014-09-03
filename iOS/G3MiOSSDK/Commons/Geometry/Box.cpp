@@ -219,7 +219,7 @@ Vector3D Box::intersectionWithRay(const Vector3D& origin,
 }
 
 
-void Box::createMesh(Color* color) const {
+Mesh* Box::createMesh(const Color* color) const {
   double v[] = {
     _lower._x, _lower._y, _lower._z,
     _lower._x, _upper._y, _lower._z,
@@ -239,36 +239,40 @@ void Box::createMesh(Color* color) const {
     3, 2, 2, 6, 6, 7, 7, 3,
     0, 1, 1, 5, 5, 4, 4, 0
   };
-  
+
   FloatBufferBuilderFromCartesian3D* vertices = FloatBufferBuilderFromCartesian3D::builderWithFirstVertexAsCenter();
   const int numVertices = 8;
   for (int n = 0; n < numVertices; n++) {
     vertices->add(v[n*3], v[n*3+1], v[n*3+2]);
   }
-  
+
   ShortBufferBuilder indices;
   const int numIndices = 48;
   for (int n = 0; n < numIndices; n++) {
     indices.add(i[n]);
   }
 
-  _mesh = new IndexedMesh(GLPrimitive::lines(),
-                          true,
-                          vertices->getCenter(),
-                          vertices->create(),
-                          indices.create(),
-                          2,
-                          1,
-                          color);
-
+  Mesh* mesh = new IndexedMesh(GLPrimitive::lines(),
+                               true,
+                               vertices->getCenter(),
+                               vertices->create(),
+                               indices.create(),
+                               2,
+                               1,
+                               color);
+  
   delete vertices;
+  
+  return mesh;
 }
 
-void Box::render(const G3MRenderContext* rc, const GLState& parentState) const {
+void Box::render(const G3MRenderContext* rc,
+                 const GLState* parentState,
+                 const Color* color) const {
   if (_mesh == NULL) {
-    createMesh(Color::newFromRGBA(1.0f, 0.0f, 1.0f, 1.0f));
+    _mesh = createMesh(color);
   }
-  _mesh->render(rc, &parentState);
+  _mesh->render(rc, parentState);
 }
 
 bool Box::touchesBox(const Box* that) const {
