@@ -71,7 +71,9 @@ private:
     virtual void rawRender(const G3MRenderContext* rc,
                            GLState* glState,
                            const Frustum* frustum,
-                           const double projectedArea) = 0;
+                           const double projectedArea,
+                           double minHeight,
+                           double maxHeight) = 0;
 
   public:
     const std::string _id;
@@ -88,7 +90,9 @@ private:
 
     bool render(const G3MRenderContext* rc,
                 GLState* glState,
-                const Frustum* frustum);
+                const Frustum* frustum,
+                double minHeight,
+                double maxHeight);
 
   };
 
@@ -102,8 +106,6 @@ private:
     Box* _bounds;
     Box* calculateBounds();
 
-//    const Color* _renderColor;
-
     Vector3D* _average;
     long long _pointsCount;
 
@@ -115,13 +117,14 @@ private:
     void rawRender(const G3MRenderContext* rc,
                    GLState* glState,
                    const Frustum* frustum,
-                   const double projectedArea);
+                   const double projectedArea,
+                   double minHeight,
+                   double maxHeight);
 
   public:
     PointCloudInnerNode(const std::string& id) :
     PointCloudNode(id),
     _bounds(NULL),
-//    _renderColor( Color::newFromRGBA(1, 1, 0, 1) ),
     _average(NULL),
     _pointsCount(-1),
     _mesh(NULL)
@@ -183,7 +186,9 @@ private:
     void rawRender(const G3MRenderContext* rc,
                    GLState* glState,
                    const Frustum* frustum,
-                   const double projectedArea);
+                   const double projectedArea,
+                   double minHeight,
+                   double maxHeight);
 
 
   public:

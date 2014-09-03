@@ -86,7 +86,9 @@ public:
                            SurfaceElevationListener* listener) = 0;
 
   virtual bool removeListener(SurfaceElevationListener* listener) = 0;
-  
+
+  virtual float getVerticalExaggeration() const = 0;
+
 };
 
 #endif

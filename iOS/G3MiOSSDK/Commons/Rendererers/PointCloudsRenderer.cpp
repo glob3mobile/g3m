@@ -20,6 +20,7 @@
 #include "FloatBufferBuilderFromCartesian3D.hpp"
 #include "DirectMesh.hpp"
 #include "IFactory.hpp"
+#include "SurfaceElevationProvider.hpp"
 
 void PointCloudsRenderer::PointCloudMetadataDownloadListener::onDownload(const URL& url,
                                                                          IByteBuffer* buffer,
@@ -53,6 +54,7 @@ void PointCloudsRenderer::PointCloud::initialize(const G3MContext* context) {
   _errorParsingMetadata = false;
 
   const std::string planetType = context->getPlanet()->getType();
+  const float verticalExaggeration = context->getSurfaceElevationProvider()->getVerticalExaggeration();
 
   const URL metadataURL(_serverURL, _cloudName + "?planet=" + planetType + "&format=binary");
 
@@ -126,8 +128,6 @@ void PointCloudsRenderer::PointCloudMetadataParserAsyncTask::runInBackground(con
 
   for (int i = 0; i < leafNodesCount; i++) {
     const int idLength = it.nextUInt8();
-//    unsigned char* id = new unsigned char[idLength];
-//    it.nextUInt8(idLength, id);
     IStringBuilder* isb = IStringBuilder::newStringBuilder();
     for (int j = 0; j < idLength; j++) {
       isb->addInt( it.nextUInt8() );
@@ -143,15 +143,12 @@ void PointCloudsRenderer::PointCloudMetadataParserAsyncTask::runInBackground(con
     int* levelsCount = new int[levelsCountLength];
 
     for (int j = 0; j < byteLevelsCount; j++) {
-      //      levelsCount.push_back( (int) it.nextUInt8() );
       levelsCount[j] = it.nextUInt8();
     }
     for (int j = 0; j < shortLevelsCount; j++) {
-      //      levelsCount.push_back( (int) it.nextInt16() );
       levelsCount[byteLevelsCount + j] = it.nextInt16();
     }
     for (int j = 0; j < intLevelsCount; j++) {
-      //      levelsCount.push_back( it.nextInt32() );
       levelsCount[byteLevelsCount + shortLevelsCount + j] =  it.nextInt32();
     }
 
@@ -297,7 +294,6 @@ PointCloudsRenderer::PointCloudInnerNode::~PointCloudInnerNode() {
   delete _children[3];
 
   delete _bounds;
-//  delete _renderColor;
   delete _average;
 
   delete _mesh;
@@ -335,7 +331,7 @@ void PointCloudsRenderer::PointCloudInnerNode::addLeafNode(PointCloudLeafNode* l
 void PointCloudsRenderer::PointCloudMetadataParserAsyncTask::onPostExecute(const G3MContext* context) {
   _pointCloud->parsedMetadata(_pointsCount, _sector, _minHeight, _maxHeight, _octree);
   _sector = NULL; // moves ownership to pointCloud
-  _octree = NULL;  // moves ownership to pointCloud
+  _octree = NULL; // moves ownership to pointCloud
 }
 
 void PointCloudsRenderer::PointCloud::parsedMetadata(long long pointsCount,
@@ -366,21 +362,6 @@ void PointCloudsRenderer::PointCloud::parsedMetadata(long long pointsCount,
 
 }
 
-//void PointCloudsRenderer::PointCloud::downloadedMetadata(IByteBuffer* buffer) {
-//  ILogger::instance()->logInfo("Downloaded metadata for \"%s\" (bytes=%ld)", _cloudName.c_str(), buffer->size());
-//
-//  _threadUtils->invokeAsyncTask(new PointCloudMetadataParserAsyncTask(this, buffer),
-//                                true);
-//
-//  //  _downloadingMetadata = false;
-//  //
-//  //
-//  //#warning DGD at work!
-//  ////  _errorParsingMetadata = true;
-//  //
-//  //  delete buffer;
-//}
-
 RenderState PointCloudsRenderer::PointCloud::getRenderState(const G3MRenderContext* rc) {
   if (_downloadingMetadata) {
     return RenderState::busy();
@@ -401,13 +382,15 @@ void PointCloudsRenderer::PointCloud::render(const G3MRenderContext* rc,
                                              GLState* glState,
                                              const Frustum* frustum) {
   if (_octree != NULL) {
-    _octree->render(rc, glState, frustum);
+    _octree->render(rc, glState, frustum, _minHeight, _maxHeight);
   }
 }
 
 bool PointCloudsRenderer::PointCloudNode::render(const G3MRenderContext* rc,
                                                  GLState* glState,
-                                                 const Frustum* frustum) {
+                                                 const Frustum* frustum,
+                                                 double minHeight,
+                                                 double maxHeight) {
   const Box* bounds = getBounds();
   if (bounds != NULL) {
     if (bounds->touchesFrustum(frustum)) {
@@ -424,7 +407,7 @@ bool PointCloudsRenderer::PointCloudNode::render(const G3MRenderContext* rc,
 
       const double minProjectedArea = 500;
       if (_projectedArea >= minProjectedArea) {
-        rawRender(rc, glState, frustum, _projectedArea);
+        rawRender(rc, glState, frustum, _projectedArea, minHeight, maxHeight);
         _rendered = true;
         return true;
       }
@@ -443,12 +426,14 @@ bool PointCloudsRenderer::PointCloudNode::render(const G3MRenderContext* rc,
 void PointCloudsRenderer::PointCloudInnerNode::rawRender(const G3MRenderContext* rc,
                                                          GLState* glState,
                                                          const Frustum* frustum,
-                                                         const double projectedArea) {
+                                                         const double projectedArea,
+                                                         double minHeight,
+                                                         double maxHeight) {
   bool anyChildRendered = false;
   for (int i = 0; i < 4; i++) {
     PointCloudNode* child = _children[i];
     if (child != NULL) {
-      if ( child->render(rc, glState, frustum) ) {
+      if ( child->render(rc, glState, frustum, minHeight, maxHeight) ) {
         anyChildRendered = true;
       }
     }
@@ -474,9 +459,9 @@ void PointCloudsRenderer::PointCloudInnerNode::rawRender(const G3MRenderContext*
                              pointsBuffer,
                              1,
                              2,
-                             Color::newFromRGBA(1, 1, 0, 1), // flatColor
-                             NULL, // colors.create(),
-                             1, // colorsIntensity
+                             Color::newFromRGBA(1, 1, 0, 1),
+                             NULL, // colors
+                             1,    // colorsIntensity
                              false);
     }
     _mesh->render(rc, glState);
@@ -499,7 +484,9 @@ PointCloudsRenderer::PointCloudLeafNode::~PointCloudLeafNode() {
 void PointCloudsRenderer::PointCloudLeafNode::rawRender(const G3MRenderContext* rc,
                                                         GLState* glState,
                                                         const Frustum* frustum,
-                                                        const double projectedArea) {
+                                                        const double projectedArea,
+                                                        double minHeight,
+                                                        double maxHeight) {
   if (_mesh == NULL) {
     _mesh = new DirectMesh(GLPrimitive::points(),
                            false,
@@ -507,9 +494,9 @@ void PointCloudsRenderer::PointCloudLeafNode::rawRender(const G3MRenderContext* 
                            _firstPointsBuffer,
                            1,
                            2,
-                           Color::newFromRGBA(1, 1, 1, 1), // flatColor
-                           NULL, // colors.create(),
-                           1, // colorsIntensity
+                           Color::newFromRGBA(1, 1, 1, 1),
+                           NULL, // colors
+                           1,    // colorsIntensity
                            false);
   }
   _mesh->render(rc, glState);
@@ -623,7 +610,8 @@ void PointCloudsRenderer::render(const G3MRenderContext* rc,
                                  GLState* glState) {
   const Camera* camera = rc->getCurrentCamera();
 
-  //  updateGLState(rc);
+  const float verticalExaggeration = rc->getSurfaceElevationProvider()->getVerticalExaggeration();
+
   ModelViewGLFeature* f = (ModelViewGLFeature*) _glState->getGLFeature(GLF_MODEL_VIEW);
   if (f == NULL) {
     _glState->addGLFeature(new ModelViewGLFeature(camera), true);

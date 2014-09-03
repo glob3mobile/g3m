@@ -464,6 +464,10 @@ public:
       _changedInfoListener->changedRendererInfo(_rendererIdentifier, info);
     }
   }
+
+  float getVerticalExaggeration() const {
+    return _verticalExaggeration;
+  }
   
 };
 
