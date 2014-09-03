@@ -2,6 +2,7 @@
 
 package com.glob3mobile.pointcloud.server;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -26,6 +27,7 @@ import com.glob3mobile.pointcloud.Planet;
 import com.glob3mobile.pointcloud.SphericalPlanet;
 import com.glob3mobile.pointcloud.octree.Geodetic3D;
 import com.glob3mobile.pointcloud.octree.PersistentLOD;
+import com.glob3mobile.pointcloud.octree.PersistentLOD.Statistics;
 import com.glob3mobile.pointcloud.octree.Sector;
 import com.glob3mobile.pointcloud.octree.Utils;
 import com.glob3mobile.pointcloud.octree.berkeleydb.BerkeleyDBLOD;
@@ -223,9 +225,14 @@ public class PCSSServlet
 
 
    private static void sendJSONMetadata(final HttpServletResponse response,
-                                        final Planet planet,
-                                        final PersistentLOD.Statistics statistics,
-                                        final List<NodeMetadata> nodes) throws IOException {
+                                        final PersistentLOD db,
+                                        final Planet planet) throws IOException {
+
+      final MetadataEntry metadata = getMetadataEntry(db, planet);
+
+      final Statistics statistics = metadata._statistics;
+      final List<NodeMetadata> nodes = metadata._nodes;
+
       response.setStatus(HttpServletResponse.SC_OK);
       response.setContentType("application/json");
 
@@ -272,21 +279,86 @@ public class PCSSServlet
    }
 
 
+   private static class MetadataEntry {
+      private final String                   _cloudName;
+      private final Planet                   _planet;
+      private final PersistentLOD.Statistics _statistics;
+      private final List<NodeMetadata>       _nodes;
+
+      private byte[]                         _buffer = null;
+
+
+      private MetadataEntry(final String cloudName,
+                            final Planet planet,
+                            final PersistentLOD.Statistics statistics,
+                            final List<NodeMetadata> nodes) throws IOException {
+         _cloudName = cloudName;
+         _planet = planet;
+         _statistics = statistics;
+         _nodes = nodes;
+      }
+
+
+      private synchronized byte[] getBuffer() throws IOException {
+         if (_buffer == null) {
+            _buffer = createBuffer();
+         }
+         return _buffer;
+      }
+
+
+      private byte[] createBuffer() throws IOException {
+         final ByteArrayOutputStream os = new ByteArrayOutputStream();
+
+         os.write(getHeaderArray(_statistics));
+
+         os.write(toLittleEndiang(_nodes.size()));
+
+         for (final NodeMetadata node : _nodes) {
+            os.write(getNodeArray(_planet, node));
+         }
+
+         return os.toByteArray();
+      }
+   }
+
+   private static Map<String, MetadataEntry> _metadataCache = new HashMap<String, MetadataEntry>();
+
+
+   private static MetadataEntry getMetadataEntry(final PersistentLOD db,
+                                                 final Planet planet) throws IOException {
+      synchronized (_metadataCache) {
+         final String cloudName = db.getCloudName();
+         final String key = cloudName + "/" + planet;
+         MetadataEntry entry = _metadataCache.get(key);
+         if (entry == null) {
+            entry = new MetadataEntry(cloudName, planet, db.getStatistics(false, false), getNodesMetadata(db, planet));
+            _metadataCache.put(key, entry);
+         }
+         return entry;
+      }
+   }
+
+
    private static void sendBinaryMetadata(final HttpServletResponse response,
-                                          final Planet planet,
-                                          final PersistentLOD.Statistics statistics,
-                                          final List<NodeMetadata> nodes) throws IOException {
+                                          final PersistentLOD db,
+                                          final Planet planet) throws IOException {
+
+      final MetadataEntry metadata = getMetadataEntry(db, planet);
+
       response.setStatus(HttpServletResponse.SC_OK);
       response.setContentType("application/octet-stream");
+
       final ServletOutputStream os = response.getOutputStream();
+      os.write(metadata.getBuffer());
 
-      os.write(getHeaderArray(statistics));
-
-      os.write(toLittleEndiang(nodes.size()));
-
-      for (final NodeMetadata node : nodes) {
-         os.write(getNodeArray(planet, node));
-      }
+      //      os.write(getHeaderArray(statistics));
+      //
+      //      os.write(toLittleEndiang(nodes.size()));
+      //
+      //      for (final NodeMetadata node : nodes) {
+      //         os.write(getNodeArray(planet, node));
+      //      }
    }
 
 
@@ -424,11 +496,11 @@ public class PCSSServlet
                                     final HttpServletResponse response) throws IOException {
       switch (format) {
          case JSON: {
-            sendJSONMetadata(response, planet, db.getStatistics(false, false), getNodesMetadata(db, planet));
+            sendJSONMetadata(response, db, planet);
             break;
          }
          case BINARY: {
-            sendBinaryMetadata(response, planet, db.getStatistics(false, false), getNodesMetadata(db, planet));
+            sendBinaryMetadata(response, db, planet);
             break;
          }
          default: {
