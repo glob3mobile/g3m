@@ -157,3 +157,8 @@ double ByteBufferIterator::nextDouble() {
   const long long l = nextInt64();
   return IMathUtils::instance()->rawLongBitsToDouble( l );
 }
+
+float ByteBufferIterator::nextFloat() {
+  const int i = nextInt32();
+  return IMathUtils::instance()->rawIntBitsToFloat( i );
+}

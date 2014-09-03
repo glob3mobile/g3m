@@ -14,6 +14,8 @@
 #include "IThreadUtils.hpp"
 #include "IBufferDownloadListener.hpp"
 #include "TimeInterval.hpp"
+#include "Vector3D.hpp"
+#include "Box.hpp"
 
 class IDownloader;
 class Sector;
@@ -104,20 +106,30 @@ private:
 #ifdef JAVA_CODE
     private final int[] _levelsCount;
 #endif
+    const Vector3F _average;
+    const Box      _bounds;
+    IFloatBuffer*  _firstLevelPointsBuffer;
 
   public:
 #ifdef C_CODE
     PointCloudLeafNode(const std::string& id,
                        const int          levelsCountLenght,
-                       const int*         levelsCount) :
+                       const int*         levelsCount,
+                       const Vector3F&    average,
+                       const Box&         bounds,
+                       IFloatBuffer*      firstLevelPointsBuffer) :
     PointCloudNode(id),
     _levelsCountLenght(levelsCountLenght),
-    _levelsCount(levelsCount)
+    _levelsCount(levelsCount),
+    _average(average),
+    _bounds(bounds),
+    _firstLevelPointsBuffer(NULL)
     {
     }
 
     ~PointCloudLeafNode() {
       delete [] _levelsCount;
+      delete _firstLevelPointsBuffer;
     }
 #endif
 #ifdef JAVA_CODE
@@ -132,6 +144,9 @@ private:
 
     @Override
     public void dispose() {
+      if (_firstLevelPointsBuffer != null) {
+        _firstLevelPointsBuffer.dispose();
+      }
       super.dispose();
     }
 #endif

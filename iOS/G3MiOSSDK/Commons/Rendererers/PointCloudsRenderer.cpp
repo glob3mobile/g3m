@@ -17,6 +17,7 @@
 #include "ErrorHandling.hpp"
 #include "IStringBuilder.hpp"
 #include "Camera.hpp"
+#include "FloatBufferBuilderFromCartesian3D.hpp"
 
 void PointCloudsRenderer::PointCloudMetadataDownloadListener::onDownload(const URL& url,
                                                                          IByteBuffer* buffer,
@@ -152,9 +153,38 @@ void PointCloudsRenderer::PointCloudMetadataParserAsyncTask::runInBackground(con
       levelsCount[byteLevelsCount + shortLevelsCount + j] =  it.nextInt32();
     }
 
+    const float averageX = it.nextFloat();
+    const float averageY = it.nextFloat();
+    const float averageZ = it.nextFloat();
+
+    const Vector3F average(averageX, averageY, averageZ);
+
+    const double lowerX = (double) it.nextFloat() + averageX;
+    const double lowerY = (double) it.nextFloat() + averageY;
+    const double lowerZ = (double) it.nextFloat() + averageZ;
+    const double upperX = (double) it.nextFloat() + averageX;
+    const double upperY = (double) it.nextFloat() + averageY;
+    const double upperZ = (double) it.nextFloat() + averageZ;
+    const Vector3D lower(lowerX, lowerY, lowerZ);
+    const Vector3D upper(upperX, upperY, upperZ);
+    const Box bounds(lower, upper);
+
+    const int firstLevelPointsCount = it.nextInt32();
+    FloatBufferBuilderFromCartesian3D* pointsBufferBuilder = FloatBufferBuilderFromCartesian3D::builderWithoutCenter();
+    for (int j = 0; j < firstLevelPointsCount; j++) {
+      const float x = it.nextFloat();
+      const float y = it.nextFloat();
+      const float z = it.nextFloat();
+      pointsBufferBuilder->add(x, y, z);
+    }
+    IFloatBuffer* firstLevelPointsBuffer = pointsBufferBuilder->create();
+
     leafNodes.push_back( new PointCloudLeafNode(id,
                                                 levelsCountLength,
-                                                levelsCount) );
+                                                levelsCount,
+                                                average,
+                                                bounds,
+                                                firstLevelPointsBuffer) );
   }
 
   if (it.hasNext()) {

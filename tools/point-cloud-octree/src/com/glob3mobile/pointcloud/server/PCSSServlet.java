@@ -33,6 +33,7 @@ import com.glob3mobile.pointcloud.octree.berkeleydb.ByteBufferUtils;
 
 import es.igosoftware.euclid.bounding.GAxisAlignedBox;
 import es.igosoftware.euclid.vector.GVector3D;
+import es.igosoftware.euclid.vector.GVector3F;
 import es.igosoftware.util.XStringTokenizer;
 
 
@@ -120,14 +121,14 @@ public class PCSSServlet
    private static class NodeMetadata {
       private final String           _id;
       private final int[]            _levelsPointsCount;
-      private final GVector3D        _average;
+      private final GVector3F        _average;
       private final GAxisAlignedBox  _bounds;
       private final List<Geodetic3D> _level0Points;
 
 
       public NodeMetadata(final String id,
                           final int[] levelsPointsCount,
-                          final GVector3D average,
+                          final GVector3F average,
                           final GAxisAlignedBox bounds,
                           final List<Geodetic3D> level0Points) {
          _id = id;
@@ -190,7 +191,10 @@ public class PCSSServlet
                }
             }
 
-            final GVector3D average = new GVector3D(sumX / pointsCount, sumY / pointsCount, sumZ / pointsCount);
+            final GVector3F average = new GVector3F( //
+                     (float) (sumX / pointsCount), //
+                     (float) (sumY / pointsCount), //
+                     (float) (sumZ / pointsCount));
 
             final GAxisAlignedBox bounds = new GAxisAlignedBox(new GVector3D(minX, minY, minZ), new GVector3D(maxX, maxY, maxZ));
 
@@ -281,7 +285,7 @@ public class PCSSServlet
       os.write(toLittleEndiang(nodes.size()));
 
       for (final NodeMetadata node : nodes) {
-         os.write(getNodeArray(node));
+         os.write(getNodeArray(planet, node));
       }
    }
 
@@ -302,7 +306,8 @@ public class PCSSServlet
    }
 
 
-   private static byte[] getNodeArray(final NodeMetadata node) {
+   private static byte[] getNodeArray(final Planet planet,
+                                      final NodeMetadata node) {
       final byte[] id = Utils.toBinaryID(node._id);
 
       final byte idLength = toByte(id.length);
@@ -342,14 +347,18 @@ public class PCSSServlet
       final byte shortLevelsCount = toByte(shortLevels.size());
       final byte intLevelsCount = toByte(intLevels.size());
 
-      final int bufferSize = ByteBufferUtils.sizeOf(idLength) + //
-                             idLength + //
-                             ByteBufferUtils.sizeOf(byteLevelsCount) + //
-                             byteLevelsCount + //
+      final int bufferSize = //
+      ByteBufferUtils.sizeOf(idLength) + //
+               idLength + //
+               ByteBufferUtils.sizeOf(byteLevelsCount) + //
                ByteBufferUtils.sizeOf(shortLevelsCount) + //
-               (shortLevelsCount * 2) + //
                ByteBufferUtils.sizeOf(intLevelsCount) + //
-               (intLevelsCount * 4);
+               byteLevelsCount + //
+               (shortLevelsCount * 2) + //
+               (intLevelsCount * 4) + //
+               ByteBufferUtils.sizeOf(node._average) + //
+               ByteBufferUtils.sizeOf(node._bounds, node._average) + //
+               ByteBufferUtils.sizeOf(planet, node._level0Points, node._average);
 
 
       final ByteBuffer buffer = ByteBuffer.allocate(bufferSize).order(ByteOrder.LITTLE_ENDIAN);
@@ -368,6 +377,12 @@ public class PCSSServlet
       for (final int intLevel : intLevels) {
          buffer.putInt(intLevel);
       }
+
+      ByteBufferUtils.put(buffer, node._average);
+
+      ByteBufferUtils.put(buffer, node._bounds, node._average);
+
+      ByteBufferUtils.put(buffer, planet, node._level0Points, node._average);
 
       return buffer.array();
    }
