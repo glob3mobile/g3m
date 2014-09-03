@@ -96,16 +96,13 @@ public class PointCloudsRenderer extends DefaultRenderer
           }
           if (bounds == null)
           {
-            bounds = new Box(childBounds._lower, childBounds._upper);
+            bounds = childBounds;
           }
           else
           {
             if (!childBounds.fullContainedInBox(bounds))
             {
-              Box previousBounds = bounds;
-              bounds = previousBounds.mergedWithBox(childBounds);
-              if (previousBounds != null)
-                 previousBounds.dispose();
+              bounds = bounds.mergedWithBox(childBounds);
             }
           }
         }
