@@ -170,25 +170,25 @@ void PointCloudsRenderer::PointCloudMetadataParserAsyncTask::runInBackground(con
     const Box* bounds = new Box(Vector3D(lowerX, lowerY, lowerZ),
                                 Vector3D(upperX, upperY, upperZ));
 
-    const int firstLevelPointsCount = it.nextInt32();
-    FloatBufferBuilderFromCartesian3D* pointsBufferBuilder = FloatBufferBuilderFromCartesian3D::builderWithoutCenter();
-    for (int j = 0; j < firstLevelPointsCount; j++) {
+    const int firstPointsCount = it.nextInt32();
+    FloatBufferBuilderFromCartesian3D* firstPointsBufferBuilder = FloatBufferBuilderFromCartesian3D::builderWithoutCenter();
+    for (int j = 0; j < firstPointsCount; j++) {
       const float x = it.nextFloat();
       const float y = it.nextFloat();
       const float z = it.nextFloat();
-      pointsBufferBuilder->add(x, y, z);
+      firstPointsBufferBuilder->add(x, y, z);
     }
-    IFloatBuffer* firstLevelPointsBuffer = pointsBufferBuilder->create();
+    IFloatBuffer* firstPointsBuffer = firstPointsBufferBuilder->create();
 
-    delete pointsBufferBuilder;
-    pointsBufferBuilder = NULL;
+    delete firstPointsBufferBuilder;
+    firstPointsBufferBuilder = NULL;
 
     leafNodes.push_back( new PointCloudLeafNode(id,
                                                 levelsCountLength,
                                                 levelsCount,
                                                 average,
                                                 bounds,
-                                                firstLevelPointsBuffer) );
+                                                firstPointsBuffer) );
   }
 
   if (it.hasNext()) {
@@ -488,7 +488,7 @@ PointCloudsRenderer::PointCloudLeafNode::~PointCloudLeafNode() {
   delete [] _levelsCount;
   delete _average;
   delete _bounds;
-  delete _firstLevelPointsBuffer;
+  delete _firstPointsBuffer;
 #ifdef JAVA_CODE
   super.dispose();
 #endif
@@ -502,7 +502,7 @@ void PointCloudsRenderer::PointCloudLeafNode::rawRender(const G3MRenderContext* 
     _mesh = new DirectMesh(GLPrimitive::points(),
                            false,
                            *_average,
-                           _firstLevelPointsBuffer,
+                           _firstPointsBuffer,
                            1,
                            2,
                            Color::newFromRGBA(1, 1, 1, 1), // flatColor
