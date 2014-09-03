@@ -485,7 +485,9 @@ void PointCloudsRenderer::PointCloudInnerNode::rawRender(const G3MRenderContext*
 
 PointCloudsRenderer::PointCloudLeafNode::~PointCloudLeafNode() {
   delete _mesh;
+#ifdef C_CODE
   delete [] _levelsCount;
+#endif
   delete _average;
   delete _bounds;
   delete _firstPointsBuffer;

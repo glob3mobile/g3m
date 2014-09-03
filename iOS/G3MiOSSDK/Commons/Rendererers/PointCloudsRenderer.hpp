@@ -209,15 +209,16 @@ private:
     public PointCloudLeafNode(final String       id,
                               final int          levelsCountLenght,
                               final int[]        levelsCount,
-                              final Vector3F     average,
+                              final Vector3D     average,
                               final Box          bounds,
-                              final IFloatBuffer firstLevelPointsBuffer) {
+                              final IFloatBuffer firstPointsBuffer) {
       super(id);
       _levelsCountLenght = levelsCountLenght;
       _levelsCount = levelsCount;
       _average = average;
       _bounds = bounds;
-      _firstLevelPointsBuffer = firstLevelPointsBuffer;
+      _firstPointsBuffer = firstPointsBuffer;
+      _mesh = null;
       _pointsCount = -1;
     }
 #endif
