@@ -972,4 +972,9 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
     }
   }
 
+  public final float getVerticalExaggeration()
+  {
+    return _verticalExaggeration;
+  }
+
 }
