@@ -102,7 +102,7 @@ private:
     Box* _bounds;
     Box* calculateBounds();
 
-    const Color* _renderColor;
+//    const Color* _renderColor;
 
     Vector3D* _average;
     long long _pointsCount;
@@ -121,7 +121,7 @@ private:
     PointCloudInnerNode(const std::string& id) :
     PointCloudNode(id),
     _bounds(NULL),
-    _renderColor( Color::newFromRGBA(1, 1, 0, 1) ),
+//    _renderColor( Color::newFromRGBA(1, 1, 0, 1) ),
     _average(NULL),
     _pointsCount(-1),
     _mesh(NULL)

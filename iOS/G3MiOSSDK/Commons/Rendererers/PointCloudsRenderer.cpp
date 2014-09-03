@@ -297,7 +297,7 @@ PointCloudsRenderer::PointCloudInnerNode::~PointCloudInnerNode() {
   delete _children[3];
 
   delete _bounds;
-  delete _renderColor;
+//  delete _renderColor;
   delete _average;
 
   delete _mesh;
@@ -411,9 +411,8 @@ bool PointCloudsRenderer::PointCloudNode::render(const G3MRenderContext* rc,
   const Box* bounds = getBounds();
   if (bounds != NULL) {
     if (bounds->touchesFrustum(frustum)) {
-//      const double projectedArea = bounds->projectedArea(rc);
-
-      if ((_projectedAreaTimer == NULL) || (_projectedAreaTimer->elapsedTimeInMilliseconds() > 250)) {
+      if ((_projectedAreaTimer == NULL) ||
+          (_projectedAreaTimer->elapsedTimeInMilliseconds() > 500)) {
         _projectedArea = bounds->projectedArea(rc);
         if (_projectedAreaTimer == NULL) {
           _projectedAreaTimer = rc->getFactory()->createTimer();
@@ -431,12 +430,13 @@ bool PointCloudsRenderer::PointCloudNode::render(const G3MRenderContext* rc,
       }
     }
   }
+
   if (_rendered) {
-    //stoppedBeingRendered();
     _rendered = false;
     delete _projectedAreaTimer;
     _projectedAreaTimer = NULL;
   }
+
   return false;
 }
 
@@ -453,10 +453,10 @@ void PointCloudsRenderer::PointCloudInnerNode::rawRender(const G3MRenderContext*
       }
     }
   }
+
   if (!anyChildRendered) {
     //_bounds->render(rc, glState, _renderColor);
     if (_mesh == NULL) {
-
       const Vector3D average = getAverage();
 
       const float averageX = (float) average._x;
