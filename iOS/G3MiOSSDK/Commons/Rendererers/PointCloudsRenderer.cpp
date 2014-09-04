@@ -208,8 +208,12 @@ PointCloudsRenderer::PointCloudInnerNode* PointCloudsRenderer::PointCloudInnerNo
 
       // forget childrens to avoid deleting them from the destructor
       for (int i = 0; i < 4; i++) { _children[i] = NULL; }
+#ifdef C_CODE
       delete this;
-
+#endif
+#ifdef JAVA_CODE
+      dispose();
+#endif
       return result;
     }
   }
