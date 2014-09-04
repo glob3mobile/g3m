@@ -2059,5 +2059,17 @@
     <None Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\G3MWidget.cpp.orig">
       <Filter>Common\Basic</Filter>
     </None>
+    <None Include="$(MSBuildThisFileDirectory)..\..\Specific\Image_win8.cpp">
+      <Filter>Specific</Filter>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)..\..\Specific\Image_win8.hpp">
+      <Filter>Specific</Filter>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)..\..\Specific\SQDatabase.cpp">
+      <Filter>Specific</Filter>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)..\..\Specific\SQDatabase.hpp">
+      <Filter>Specific</Filter>
+    </None>
   </ItemGroup>
 </Project>

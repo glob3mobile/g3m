@@ -7,6 +7,7 @@
 //
 
 #include "Storage_win8.hpp"
+#include "SQDatabase.hpp"
 #include "IStringBuilder.hpp"
 #include "GTask.hpp"
 #include "TimeInterval.hpp"
@@ -16,15 +17,10 @@
 #include "IFactory.hpp"
 #include "Context.hpp"
 #include "ThreadUtils_win8.hpp"
-#include <msclr\marshal_cppstd.h>
-//#include <vcclr.h>
+#include <sstream>
+//#include <ppltasks.h>
 
-using namespace msclr::interop;
-using namespace System::IO;
-//using namespace System::Runtime::InteropServices;
-
-//#include <windows.h>
-//using namespace Windows;
+//using namespace concurrency;
 
 
 
@@ -34,15 +30,18 @@ Storage_win8::Storage_win8(const std::string &databaseName)
 	
 	//_lock = [[NSLock alloc] init]; TODO: ???
 
-	std::string* dbPath = getDBPath();
+	const std::string dbPath = getDBPath();
+	ILogger::instance()->logInfo("Storage full database path: \"%s\"\n", dbPath.c_str());
 
-	_writeDB = SQDatabase::initWithPath(*dbPath);
+	_writeDB = SQDatabase::initWithPath(dbPath);
+	//_writeDB = new SQDatabase(dbPath);
 
-	if (!_writeDB) {
-		ILogger::instance()->logError("Can't open write-database \"%s\"\n", databaseName.c_str());
+	//if (!_writeDB) {
+	if (!_writeDB->openReadWrite()) {
+		ILogger::instance()->logError("Can't open read-write database \"%s\"\n", databaseName.c_str());
 	}
 	else {
-		_writeDB->openReadWrite();
+		//_writeDB->openReadWrite();
 
 		// addSkipBackupAttributeToItemAtPath(dbPath); //
 
@@ -88,16 +87,16 @@ Storage_win8::Storage_win8(const std::string &databaseName)
 			return;
 		}
 
-		_readDB = SQDatabase::initWithPath(*dbPath);
+		_readDB = SQDatabase::initWithPath(dbPath);
 
-		if (!_readDB) {
-			ILogger::instance()->logError("Can't open read-database \"%s\"\n", databaseName.c_str());
+		if (!_readDB->openReadOnly()) {
+			ILogger::instance()->logError("Can't open read-only database \"%s\"\n", databaseName.c_str());
 		}
-		else {
-			_readDB->openReadOnly();
-		}
+		//else {
+		//	_readDB->openReadOnly();
+		//}
 
-		if (false) {
+		if (true) {
 			showStatistics();
 		}
 	}
@@ -127,65 +126,89 @@ void Storage_win8::showStatistics() const {
 	rs2->close();
 }
 
-std::string* Storage_win8::getDBPath() const{
+Platform::String^ ToStringHat(std::string str)
+{
+	std::wstring wid_str = std::wstring(str.begin(), str.end());
+	const wchar_t* w_char = wid_str.c_str();
+	Platform::String^ p_string = ref new Platform::String(w_char);
+	return p_string;
+}
 
-	//std::string dbPath = Path.Combine(Windows.Storage.ApplicationData.Current.LocalFolder.Path, dbName);
+std::string ToStringStd(Platform::String^ str_hat)
+{
+	std::wstring wstr(str_hat->Data());
+	std::string stdStr(wstr.begin(), wstr.end());
+	return stdStr;
+}
+
+std::string getAppDataAbsoluteFilename(const std::string filename)
+{	
+	//from: http://jne100.blogspot.com.es/2012/10/winrt-accessing-app-data-files-by.html
+	/*std::wstring appDataFolder(Windows::ApplicationModel::Package::
+		Current->InstalledLocation->Path->Data());*/
+
 	Windows::Storage::StorageFolder^ localFolder = Windows::Storage::ApplicationData::Current->LocalFolder;
 	Platform::String^ folderPath = localFolder->Path;
-	System::String^ combinedPath = Path::Combine(folderPath, _databaseName);
-	std::string dbPath = marshal_as<std::string>(combinedPath);
-	//std::string dbPath = nullptr;
-	//MarshalString(combinedPath, dbPath);
 
-	ILogger::instance()->logInfo("Data base path: %s", dbPath);
+	std::wstring appDataFolder(folderPath->Data());
+	std::wstring separator(L"\\");
+	std::wstring appFilename = std::wstring(filename.begin(), filename.end());
+	std::wstring absPath = (appDataFolder + separator + appFilename);
 
-	return &dbPath;
+	std::string stdAbsPath(absPath.begin(), absPath.end());
+	return stdAbsPath;
 }
 
-/*
-bool To_string(System::String^ source, std::string &target)
-{
-	pin_ptr<const wchar_t> wch = PtrToStringChars(source);
-	int len = ((source->Length + 1) * 2);
-	char *ch = new char[len];
-	bool result = wcstombs(ch, wch, len) != -1;
-	target = ch;
-	delete ch;
-	return result;
-}
-*/
+std::string Storage_win8::getDBPath() const{
 
-/*
-void MarshalString(System::String^ s, std::string& os) {
-	//using namespace Runtime::InteropServices;
-	const char* chars =
-		(const char*)(Marshal::StringToHGlobalAnsi(s)).ToPointer();
-	os = chars;
-	Marshal::FreeHGlobal(System::IntPtr((void*)chars));
+	return getAppDataAbsoluteFilename(_databaseName);
 }
-*/
 
-time_t incrementTime(time_t init, long seconds) {
+
+std::time_t incrementTime(time_t init, long seconds) {
 	if (init == NULL) return NULL;
-	struct tm* tm = localtime(&init);
-	tm->tm_sec += seconds;
-	return mktime(tm);
+	struct tm timeinfo;
+	//struct tm* tm = localtime(&init);
+	localtime_s(&timeinfo, &init);
+	timeinfo.tm_sec += seconds;
+	return mktime(&timeinfo);
+}
+
+std::string getTimeStamp(std::time_t t) {
+	std::stringstream timeStamp;
+	timeStamp << t;
+	return timeStamp.str();
 }
 
 double timeDifferenceFromNow(double then) {
 
-	time_t now = time(NULL);
-	std::string nowS = marshal_as<std::string>(now.ToString());
+	std::time_t now = time(NULL);
+	//std::string nowS = marshal_as<std::string>(now.ToString());
+	std::string nowS = getTimeStamp(now);
 	double nowD = atof(nowS.c_str());
 
 	return (then - nowD);
 }
 
+bool isStringType(unsigned char* data, int length){
+
+	char* ch = (char*)data + length - 1;
+	return (*ch == '\0');
+
+	/*if (*ch == '\0'){
+		std::string* str = new std::string((char*)data);
+		const char * c = str->c_str();
+		ILogger::instance()->logInfo("ESTO ES UN STRING: \"%s\"\n", c);
+		return true;
+	}
+	return false;*/
+}
 
 void Storage_win8::rawSave(std::string* table,
-	std::string* name,
-	unsigned char* contents,
-	const TimeInterval& timeToExpires) {
+						   std::string* name,
+						   unsigned char* contents,
+						   int length,
+						   const TimeInterval& timeToExpires) {
 	
 	//[_lock lock]; TODO: ??
 
@@ -196,18 +219,28 @@ void Storage_win8::rawSave(std::string* table,
 	stmBuilder->addString(" (name, contents, expiration) VALUES (? , ? , ?)");
 
 	std::string statement = stmBuilder->getString();
-	delete stmBuilder;
+	
 	//NSDate* expiration = [NSDate dateWithTimeIntervalSinceNow : timeToExpires.seconds()];
 	//std::string* expirationS = [NSString stringWithFormat : @"%f", [expiration timeIntervalSince1970]];
 	std::time_t currentTime = std::time(NULL);
 	//time_t expiration = currentTime + (long) timeToExpires.seconds();
-	time_t expiration = incrementTime(currentTime, timeToExpires.seconds());
-	std::string expirationS = marshal_as<std::string>(expiration.ToString());
+	time_t expiration = incrementTime(currentTime, (long)timeToExpires.seconds());
+	//std::string expirationS = marshal_as<std::string>(expiration.ToString());
+	std::string expirationS = getTimeStamp(expiration);
+
+	//std::string dataType = isStringType(contents, length) ? "string" : "unsigned char";
+
+	std::vector<ContentValue*> contentValues = std::vector<ContentValue*>();
+	contentValues.reserve(3);
+	contentValues.push_back(new ContentValue((unsigned char*)name, name->length(), "string"));
+	contentValues.push_back(new ContentValue(contents, length, "unsigned char"));
+	contentValues.push_back(new ContentValue((unsigned char*)&expirationS, expirationS.length(), "string"));
 	
-	if (!_writeDB->executeNonQuery(&statement, name, contents, expirationS)){
-		ILogger::instance()->logError("Can't save \"%s\"\n", name);
+	if (!_writeDB->executeNonQuery(&statement, contentValues)){
+		ILogger::instance()->logError("Can't save data for \"%s\"\n", name->c_str());
 	}
 
+	delete stmBuilder;
 	//[_lock unlock];
 }
 
@@ -222,10 +255,11 @@ throw std::exception(errMsg.c_str());
 
 class SaverTask : public GTask {
 private:
-	Storage_win8* _storage;
+	Storage_win8*	_storage;
 	std::string*          _table;
 	std::string*          _name;
 	unsigned char*            _contents;
+	int						  _size;
 	const TimeInterval _timeToExpires;
 
 public:
@@ -233,18 +267,20 @@ public:
 		std::string* table,
 		std::string* name,
 		unsigned char* contents,
+		int size,
 		const TimeInterval timeToExpires) :
 		_storage(storage),
 		_table(table),
 		_name(name),
 		_contents(contents),
+		_size(size),
 		_timeToExpires(timeToExpires)
 	{
 
 	}
 
 	void run(const G3MContext* context) {
-		_storage->rawSave(_table, _name, _contents, _timeToExpires);
+		_storage->rawSave(_table, _name, _contents, _size, _timeToExpires);
 	}
 };
 
@@ -258,17 +294,17 @@ IByteBufferResult Storage_win8::readBuffer(const URL& url, bool readExpired){
 
 	//SQResultSet* rs = [_readDB executeQuery : @"SELECT contents, expiration FROM buffer2 WHERE (name = ?)", name];
 	IStringBuilder* queryBuilder = IStringBuilder::newStringBuilder();
-	queryBuilder->addString("SELECT contents, expiration FROM buffer2 WHERE (name = ");
+	queryBuilder->addString("SELECT contents, expiration FROM buffer2 WHERE (name = '");
 	queryBuilder->addString(name);
-	queryBuilder->addString(")");
+	queryBuilder->addString("')");
 	std::string query = queryBuilder->getString();
-	delete queryBuilder;
 
 	SQResultSet* rs = _readDB->executeQuery(&query);
 
 	if (rs->next()) {
 		//NSData* nsData = [rs dataColumnByIndex : 0];
-		const unsigned char* data = rs->dataColumnByIndex(0);
+		int dataLength = 0;
+		const unsigned char* data = rs->dataColumnByIndex(0, dataLength);
 		//const double expirationInterval = [[rs stringColumnByIndex : 1] doubleValue];
 		std::string* expirationIntervalS = rs->stringColumnByIndex(1);
 		const double expirationInterval = atof(expirationIntervalS->c_str());
@@ -279,16 +315,18 @@ IByteBufferResult Storage_win8::readBuffer(const URL& url, bool readExpired){
 
 		if (readExpired || !expired) {
 			//NSUInteger length = [nsData length];
-			unsigned char* dataArr = (unsigned char*)data;
-			int length = strlen((char*)dataArr); //TODO: funcionara esto??
-			unsigned char* bytes = new unsigned char[length];
+			//unsigned char* dataArr = (unsigned char*)data;
+			//char* dataArr = (char*)data;
+			//int length = strlen(dataArr); //TODO: works??
+			unsigned char* bytes = new unsigned char[dataLength];
 			//[nsData getBytes : bytes length : length];
-			memcpy(bytes, data, length);
-			buffer = IFactory::instance()->createByteBuffer(bytes, length);
+			memcpy(bytes, data, dataLength);
+			buffer = IFactory::instance()->createByteBuffer(bytes, dataLength);
 		}
 	}
 
 	rs->close();
+	delete queryBuilder;
 
 	return IByteBufferResult(buffer, expired);
 }
@@ -302,17 +340,17 @@ IImageResult Storage_win8::readImage(const URL& url, bool readExpired){
 	std::string name = url._path;
 	//SQResultSet* rs = [_readDB executeQuery : @"SELECT contents, expiration FROM image2 WHERE (name = ?)", name];
 	IStringBuilder* queryBuilder = IStringBuilder::newStringBuilder();
-	queryBuilder->addString("SELECT contents, expiration FROM image2 WHERE (name = ");
+	queryBuilder->addString("SELECT contents, expiration FROM image2 WHERE (name = '");
 	queryBuilder->addString(name);
-	queryBuilder->addString(")");
+	queryBuilder->addString("')");
 	std::string query = queryBuilder->getString();
-	delete queryBuilder;
 
 	SQResultSet* rs = _readDB->executeQuery(&query);
 
 	if (rs->next()) {
 		//NSData* data = [rs dataColumnByIndex : 0];
-		const unsigned char* data = rs->dataColumnByIndex(0);
+		int dataLength = 0;
+		const unsigned char* data = rs->dataColumnByIndex(0, dataLength);
 		//const double expirationInterval = [[rs stringColumnByIndex : 1] doubleValue];
 		std::string* expirationIntervalS = rs->stringColumnByIndex(1);
 		const double expirationInterval = atof(expirationIntervalS->c_str());
@@ -321,22 +359,25 @@ IImageResult Storage_win8::readImage(const URL& url, bool readExpired){
 		//expired = ([expiration compare : [NSDate date]] != NSOrderedDescending);
 		expired = timeDifferenceFromNow(expirationInterval) <= 0;
 
-		if (readExpired || !expired) {
-			/*
-			UIImage* uiImage = UIImage->imageWithData(data);
+		if (readExpired || !expired) { //TODO:
+			
+			//UIImage* uiImage = UIImage->imageWithData(data);
+			/*BYTE* imageData = (BYTE*)malloc(dataLength);
+			memcpy(imageData, data, dataLength);*/
+			IWICBitmap* bitmap = Image_win8::imageWithData((BYTE*)data, dataLength);
 
-			if (uiImage) {
-				image = new Image_iOS(uiImage,
+			if (bitmap) {
+				image = new Image_win8(bitmap,
 					NULL); // data is not needed 
 			}
 			else {
 				ILogger::instance()->logError("Can't create image with contents of storage.");
-			}
-			*/
+			}	
 		}
 	}
 
 	rs->close();
+	delete queryBuilder;
 
 	return IImageResult(image, expired);
 }
@@ -350,36 +391,37 @@ void Storage_win8::saveBuffer(const URL& url, const IByteBuffer* buffer, const T
 	std::string table = "buffer2";
 	
 	if (saveInBackground) { 
-		_context->getThreadUtils()->invokeInBackground(new SaverTask(this, &table, &name, contents, timeToExpires), true);
+		_context->getThreadUtils()->invokeInBackground(new SaverTask(this, &table, &name, contents, buffer_win8->size(), timeToExpires), true);
 	}
 	else {
-		rawSave(&table, &name, contents, timeToExpires);
+		rawSave(&table, &name, contents, buffer_win8->size(), timeToExpires);
 	}
 }
 
 void Storage_win8::saveImage(const URL& url, const IImage* image, const TimeInterval& timeToExpires, bool saveInBackground){
 	
-	const Image_win8* image_win8 = (const Image_win8*)image;
+	const Image_win8* imagew8 = (const Image_win8*)image;
 	//UIImage* uiImage = image_win8->getUIImage();
+	IWICBitmap* bitmap = imagew8->getBitmap();
 
 	//NSString* name = [NSString stringWithCppString : url._path];
 	std::string name = url._path;
 	std::string table = "image2";
 	
-	unsigned char* contents = image_win8->getSourceBuffer();
-	/*
+	BYTE* contents = imagew8->getSourceBuffer();
+	
 	if (contents == NULL) {
-		contents = UIImagePNGRepresentation(uiImage);
+		contents = imagew8->getImageBuffer();
 	}
-	else {
-		image_iOS->releaseSourceBuffer();
-	}
-	*/
+	/*else {
+		imagew8->releaseSourceBuffer();
+	}*/
+	
 	if (saveInBackground) {
-		_context->getThreadUtils()->invokeInBackground(new SaverTask(this, &table, &name, contents, timeToExpires), true);
+		_context->getThreadUtils()->invokeInBackground(new SaverTask(this, &table, &name, contents, imagew8->getBufferSize(), timeToExpires), true);
 	}
 	else {
-		rawSave(&table, &name, contents, timeToExpires);
+		rawSave(&table, &name, contents, imagew8->getBufferSize(), timeToExpires);
 	}
 }
 
@@ -396,6 +438,6 @@ void Storage_win8::onDestroy(const G3MContext* context){
 }
 
 bool Storage_win8::isAvailable(){
-	std::string errMsg("TODO: isAvailable() test pending..");
+	//std::string errMsg("TODO: isAvailable() test pending..");
 	return (_readDB != NULL) && (_writeDB != NULL);
 }
