@@ -995,8 +995,17 @@ public:
       
       std::vector<GEOSymbol*>* createSymbols(const GEO2DPolygonGeometry*      geometry) const{
         
+        const JSONObject* properties = geometry->getFeature()->getProperties();
+        
+        std::string color = properties->getAsString("FILL_COLOR", "");// getAsNumber("LINE_COLOR", 0);
+        
+        int r,g,b;
+        sscanf(color.c_str(), "RGB(%d,%d,%d)", &r, &g, &b);
+        
+        const Color lineColor = Color::fromRGBA(r/255.0, g/255.0, b/255.0, 1.0);
+        
         GEOLine2DMeshSymbol* line = new GEOLine2DMeshSymbol(geometry->getCoordinates(),
-                                                            GEOLine2DStyle(_color, 2),
+                                                            GEOLine2DStyle(lineColor, 3),
                                                             1.0);
         
         std::vector<GEOSymbol*>* v = new std::vector<GEOSymbol*>();
@@ -1025,10 +1034,10 @@ public:
           GEOObject* geoObject = GEOJSONParser::parseJSON(geoJSON);
           
           GEORenderer* geaCronRenderer1800 = new GEORenderer(new GeaCronSymbolizer(Color::fromRGBA(1, 1, 0, 1)),
-                                                         mr1,
-                                                         NULL,
-                                                         NULL,
-                                                         NULL);
+                                                             mr1,
+                                                             NULL,
+                                                             NULL,
+                                                             NULL);
           
           builder.addRenderer(geaCronRenderer1800);
           builder.addRenderer(mr1);
@@ -1053,10 +1062,10 @@ public:
           GEOObject* geoObject = GEOJSONParser::parseJSON(geoJSON);
           
           GEORenderer* geaCronRenderer1900 = new GEORenderer(new GeaCronSymbolizer(Color::fromRGBA(1, 0, 0, 1)),
-                                                         mr2,
-                                                         NULL,
-                                                         NULL,
-                                                         NULL);
+                                                             mr2,
+                                                             NULL,
+                                                             NULL,
+                                                             NULL);
           
           builder.addRenderer(geaCronRenderer1900);
           builder.addRenderer(mr2);
@@ -1082,8 +1091,37 @@ public:
     };
     
     builder.addPeriodicalTask(new PeriodicalTask(TimeInterval::fromMilliseconds(1000), new GeaCronTask(mr1, mr2)));
-
     
+    
+    
+  }
+  
+  {
+    //Test método chulo
+    
+    int c = 0;
+    double average = 0;
+    
+    for (int i = -90; i <= 90; i+=10) {
+      for (int j = -180; j <= 180; j+=10) {
+        for (int k = 1; k < 1e5; k*=10) {
+          c++;
+          
+          Geodetic3D g = Geodetic3D::fromDegrees(i,j,k);
+          Vector3D v = planet->toCartesian(g);
+          Geodetic3D g2 = planet->toGeodetic3D(v);
+          
+          Geodetic3D dist = g.sub(g2);
+          double d = fabs(dist._latitude._degrees) + fabs(dist._longitude._degrees) + fabs(dist._height);
+          average += d;
+          if (d > 0.000){
+            printf("DIST = %f, G = %s\n",d, g.description().c_str());
+          }
+        }
+      }
+    }
+    
+    printf("AVERAGE DIST = %f\n", average / c);
     
   }
   

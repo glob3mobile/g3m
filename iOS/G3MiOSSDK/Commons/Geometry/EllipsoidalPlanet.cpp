@@ -115,12 +115,30 @@ Vector3D EllipsoidalPlanet::scaleToGeodeticSurface(const Vector3D& position) con
              z2 / (radiiToTheFourth._z * dc3)));
   }
   while (mu->abs(s) > 1e-10);
+  
+  Vector3D res(position._x / da,
+           position._y / db,
+           position._z / dc);
+  
+  
+  
+    //Test
+    //Seems to work :)
+    Vector3D spherePos = position.div(_ellipsoid._radii);
+    
+    Vector3D normSpherePos = spherePos.normalized();
+    
+    Vector3D finalRes = normSpherePos.times(_ellipsoid._radii);
+    
+//    double dist = res.sub(finalRes).length();
+//    if (dist > 2){
+//      printf("%f - %s - %s \n", dist, finalRes.description().c_str(), res.description().c_str());
+//    }
+  
+  
 
-  return Vector3D(position._x / da,
-                  position._y / db,
-                  position._z / dc);
+  return finalRes;
 }
-
 
 Vector3D EllipsoidalPlanet::scaleToGeocentricSurface(const Vector3D& position) const {
   Vector3D oneOverRadiiSquared = _ellipsoid._oneOverRadiiSquared;
