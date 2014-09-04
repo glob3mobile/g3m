@@ -52,7 +52,7 @@ public class PointCloudsRenderer extends DefaultRenderer
        _lastProjectedAreaTimeInMS = -1;
     }
 
-    protected abstract long rawRender(G3MRenderContext rc, GLState glState, Frustum frustum, double projectedArea, double minHeight, double maxHeight, long nowInMS);
+    protected abstract long rawRender(G3MRenderContext rc, GLState glState, Frustum frustum, double projectedArea, double minHeight, double maxHeight, long nowInMS, boolean justRecalculatedProjectedArea);
 
     public final String _id;
 
@@ -72,16 +72,24 @@ public class PointCloudsRenderer extends DefaultRenderer
       {
         if (bounds.touchesFrustum(frustum))
         {
-          if ((_projectedArea == -1) || ((_lastProjectedAreaTimeInMS + 500) < nowInMS))
+          boolean justRecalculatedProjectedArea = false;
+          if ((_projectedArea == -1) || ((_lastProjectedAreaTimeInMS + 750) < nowInMS))
           {
-            _projectedArea = bounds.projectedArea(rc);
-            _lastProjectedAreaTimeInMS = nowInMS;
+            final double currentProjectedArea = bounds.projectedArea(rc);
+            if (currentProjectedArea != _projectedArea)
+            {
+              _projectedArea = currentProjectedArea;
+              _lastProjectedAreaTimeInMS = nowInMS;
+              justRecalculatedProjectedArea = true;
+            }
           }
     
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning TODO: quality factor
           final double minProjectedArea = 500;
           if (_projectedArea >= minProjectedArea)
           {
-            final long renderedCount = rawRender(rc, glState, frustum, _projectedArea, minHeight, maxHeight, nowInMS);
+            final long renderedCount = rawRender(rc, glState, frustum, _projectedArea, minHeight, maxHeight, nowInMS, justRecalculatedProjectedArea);
             _rendered = true;
             return renderedCount;
           }
@@ -169,7 +177,7 @@ public class PointCloudsRenderer extends DefaultRenderer
 
     private Mesh _mesh;
 
-    protected final long rawRender(G3MRenderContext rc, GLState glState, Frustum frustum, double projectedArea, double minHeight, double maxHeight, long nowInMS)
+    protected final long rawRender(G3MRenderContext rc, GLState glState, Frustum frustum, double projectedArea, double minHeight, double maxHeight, long nowInMS, boolean justRecalculatedProjectedArea)
     {
       long renderedCount = 0;
       for (int i = 0; i < 4; i++)
@@ -356,8 +364,35 @@ public class PointCloudsRenderer extends DefaultRenderer
 
     private long _pointsCount;
 
-    protected final long rawRender(G3MRenderContext rc, GLState glState, Frustum frustum, double projectedArea, double minHeight, double maxHeight, long nowInMS)
+    private int _neededLevel;
+
+    protected final long rawRender(G3MRenderContext rc, GLState glState, Frustum frustum, double projectedArea, double minHeight, double maxHeight, long nowInMS, boolean justRecalculatedProjectedArea)
     {
+      if (justRecalculatedProjectedArea)
+      {
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning TODO: quality factor
+        final int intendedPointsCount = IMathUtils.instance().round((float) projectedArea);
+        int accummulated = 0;
+        int neededLevel = -1;
+        for (int i = 0; i < _levelsCountLenght; i++)
+        {
+          final int levelPointsCount = _levelsCount[i];
+          accummulated += levelPointsCount;
+          if (accummulated > intendedPointsCount)
+          {
+            break;
+          }
+          neededLevel = i;
+        }
+    
+        if (neededLevel != _neededLevel)
+        {
+          ILogger.instance().logInfo("Needed Level changed for %s from=%d to=%d", _id, _neededLevel, neededLevel);
+          _neededLevel = neededLevel;
+        }
+      }
+    
       if (_mesh == null)
       {
         _mesh = new DirectMesh(GLPrimitive.points(), false, _average, _firstPointsBuffer, 1, 2, Color.newFromRGBA(1, 1, 1, 1), null, 1, false); // colorsIntensity -  colors
