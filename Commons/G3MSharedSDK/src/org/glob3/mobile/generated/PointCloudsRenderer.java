@@ -54,7 +54,7 @@ public class PointCloudsRenderer extends DefaultRenderer
   {
     private boolean _rendered;
     private double _projectedArea;
-    private ITimer _projectedAreaTimer;
+    private long _lastProjectedAreaTimeInMS;
 
 
     protected PointCloudNode(String id)
@@ -62,10 +62,10 @@ public class PointCloudsRenderer extends DefaultRenderer
        _id = id;
        _rendered = false;
        _projectedArea = -1;
-       _projectedAreaTimer = null;
+       _lastProjectedAreaTimeInMS = -1;
     }
 
-    protected abstract long rawRender(G3MRenderContext rc, GLState glState, Frustum frustum, double projectedArea, double minHeight, double maxHeight);
+    protected abstract long rawRender(G3MRenderContext rc, GLState glState, Frustum frustum, double projectedArea, double minHeight, double maxHeight, long nowInMS);
 
     public final String _id;
 
@@ -80,30 +80,23 @@ public class PointCloudsRenderer extends DefaultRenderer
 
 //    virtual void acceptVisitor(PointCloudNodeVisitor* visitor) = 0;
 
-    public final long render(G3MRenderContext rc, GLState glState, Frustum frustum, double minHeight, double maxHeight)
+    public final long render(G3MRenderContext rc, GLState glState, Frustum frustum, double minHeight, double maxHeight, long nowInMS)
     {
       final Box bounds = getBounds();
       if (bounds != null)
       {
         if (bounds.touchesFrustum(frustum))
         {
-          if ((_projectedAreaTimer == null) || (_projectedAreaTimer.elapsedTimeInMilliseconds() > 500))
+          if ((_projectedArea == -1) || ((_lastProjectedAreaTimeInMS + 500) < nowInMS))
           {
             _projectedArea = bounds.projectedArea(rc);
-            if (_projectedAreaTimer == null)
-            {
-              _projectedAreaTimer = rc.getFactory().createTimer();
-            }
-            else
-            {
-              _projectedAreaTimer.start();
-            }
+            _lastProjectedAreaTimeInMS = nowInMS;
           }
     
           final double minProjectedArea = 500;
           if (_projectedArea >= minProjectedArea)
           {
-            final long renderedCount = rawRender(rc, glState, frustum, _projectedArea, minHeight, maxHeight);
+            final long renderedCount = rawRender(rc, glState, frustum, _projectedArea, minHeight, maxHeight, nowInMS);
             _rendered = true;
             return renderedCount;
           }
@@ -113,13 +106,14 @@ public class PointCloudsRenderer extends DefaultRenderer
       if (_rendered)
       {
         _rendered = false;
-        if (_projectedAreaTimer != null)
-           _projectedAreaTimer.dispose();
-        _projectedAreaTimer = null;
+    //    delete _projectedAreaTimer;
+    //    _projectedAreaTimer = NULL;
       }
     
       return 0;
     }
+
+    public abstract boolean isInner();
 
   }
 
@@ -192,7 +186,7 @@ public class PointCloudsRenderer extends DefaultRenderer
 
     private Mesh _mesh;
 
-    protected final long rawRender(G3MRenderContext rc, GLState glState, Frustum frustum, double projectedArea, double minHeight, double maxHeight)
+    protected final long rawRender(G3MRenderContext rc, GLState glState, Frustum frustum, double projectedArea, double minHeight, double maxHeight, long nowInMS)
     {
       long renderedCount = 0;
       for (int i = 0; i < 4; i++)
@@ -200,7 +194,7 @@ public class PointCloudsRenderer extends DefaultRenderer
         PointCloudNode child = _children[i];
         if (child != null)
         {
-          renderedCount += child.render(rc, glState, frustum, minHeight, maxHeight);
+          renderedCount += child.render(rc, glState, frustum, minHeight, maxHeight, nowInMS);
         }
       }
     
@@ -337,7 +331,51 @@ public class PointCloudsRenderer extends DefaultRenderer
       return _average;
     }
 
+    public final PointCloudsRenderer.PointCloudInnerNode pruneUnneededParents()
+    {
+      PointCloudNode onlyChild = null;
+      for (int i = 0; i < 4; i++)
+      {
+        PointCloudNode child = _children[i];
+        if (child != null)
+        {
+          if (onlyChild == null)
+          {
+            onlyChild = child;
+          }
+          else
+          {
+            return this;
+          }
+        }
+      }
+    
+      if (onlyChild != null)
+      {
+        if (onlyChild.isInner())
+        {
+          PointCloudInnerNode result = ((PointCloudInnerNode) onlyChild).pruneUnneededParents();
+    
+          // forget childrens to avoid deleting them from the destructor
+          for (int i = 0; i < 4; i++)
+          {
+             _children[i] = null;
+          }
+          this = null;
+    
+          return result;
+        }
+      }
+    
+      return this;
+    }
+
 //    void acceptVisitor(PointCloudNodeVisitor* visitor);
+
+    public final boolean isInner()
+    {
+      return true;
+    }
 
   }
 
@@ -354,7 +392,7 @@ public class PointCloudsRenderer extends DefaultRenderer
 
     private long _pointsCount;
 
-    protected final long rawRender(G3MRenderContext rc, GLState glState, Frustum frustum, double projectedArea, double minHeight, double maxHeight)
+    protected final long rawRender(G3MRenderContext rc, GLState glState, Frustum frustum, double projectedArea, double minHeight, double maxHeight, long nowInMS)
     {
       if (_mesh == null)
       {
@@ -363,7 +401,6 @@ public class PointCloudsRenderer extends DefaultRenderer
       _mesh.render(rc, glState);
       return _firstPointsBuffer.size();
     }
-
 
     public PointCloudLeafNode(final String       id,
                               final int          levelsCountLenght,
@@ -417,6 +454,10 @@ public class PointCloudsRenderer extends DefaultRenderer
       return _average;
     }
 
+    public final boolean isInner()
+    {
+      return false;
+    }
 
 //    void acceptVisitor(PointCloudNodeVisitor* visitor);
 
@@ -436,7 +477,7 @@ public class PointCloudsRenderer extends DefaultRenderer
     private double _minHeight;
     private double _maxHeight;
 
-    private PointCloudInnerNode _octree;
+    private PointCloudInnerNode _rootNode;
 
     public PointCloudMetadataParserAsyncTask(PointCloud pointCloud, IByteBuffer buffer)
     {
@@ -446,7 +487,7 @@ public class PointCloudsRenderer extends DefaultRenderer
        _sector = null;
        _minHeight = 0;
        _maxHeight = 0;
-       _octree = null;
+       _rootNode = null;
     }
 
     public void dispose()
@@ -455,8 +496,8 @@ public class PointCloudsRenderer extends DefaultRenderer
          _sector.dispose();
       if (_buffer != null)
          _buffer.dispose();
-      if (_octree != null)
-         _octree.dispose();
+      if (_rootNode != null)
+         _rootNode.dispose();
     }
 
 
@@ -578,27 +619,30 @@ public class PointCloudsRenderer extends DefaultRenderer
          _buffer.dispose();
       _buffer = null;
     
-      _octree = new PointCloudInnerNode("");
+      _rootNode = new PointCloudInnerNode("");
       for (int i = 0; i < leafNodesCount; i++)
       {
-        _octree.addLeafNode(leafNodes.get(i));
+        _rootNode.addLeafNode(leafNodes.get(i));
       }
-      final Box fullBounds = _octree.getBounds(); // force inner-node's bounds here, in background
-      ILogger.instance().logInfo("Octree fullBounds=%s", fullBounds.description());
     
-      final Vector3D average = _octree.getAverage();
-      ILogger.instance().logInfo("Octree average=%s", average.description());
+      _rootNode = _rootNode.pruneUnneededParents();
+    
+      final Box fullBounds = _rootNode.getBounds(); // force inner-node's bounds here, in background
+      ILogger.instance().logInfo("rootNode fullBounds=%s", fullBounds.description());
+    
+      final Vector3D average = _rootNode.getAverage();
+      ILogger.instance().logInfo("rootNode average=%s", average.description());
     
       //  PointCloudNodeVisitor* visitor = new DebugVisitor();
-      //  _octree->acceptVisitor(visitor);
+      //  _rootNode->acceptVisitor(visitor);
       //  delete visitor;
     }
 
     public final void onPostExecute(G3MContext context)
     {
-      _pointCloud.parsedMetadata(_pointsCount, _sector, _minHeight, _maxHeight, _octree);
+      _pointCloud.parsedMetadata(_pointsCount, _sector, _minHeight, _maxHeight, _rootNode);
       _sector = null; // moves ownership to pointCloud
-      _octree = null; // moves ownership to pointCloud
+      _rootNode = null; // moves ownership to pointCloud
     }
 
   }
@@ -663,7 +707,7 @@ public class PointCloudsRenderer extends DefaultRenderer
     private Sector _sector;
     private double _minHeight;
     private double _maxHeight;
-    private PointCloudInnerNode _octree;
+    private PointCloudInnerNode _rootNode;
 
     private long _lastRenderedCount;
 
@@ -683,14 +727,14 @@ public class PointCloudsRenderer extends DefaultRenderer
        _sector = null;
        _minHeight = 0;
        _maxHeight = 0;
-       _octree = null;
+       _rootNode = null;
        _lastRenderedCount = 0;
     }
 
     public void dispose()
     {
-      if (_octree != null)
-         _octree.dispose();
+      if (_rootNode != null)
+         _rootNode.dispose();
       if (_sector != null)
          _sector.dispose();
     }
@@ -742,7 +786,7 @@ public class PointCloudsRenderer extends DefaultRenderer
       _errorDownloadingMetadata = true;
     }
 
-    public final void parsedMetadata(long pointsCount, Sector sector, double minHeight, double maxHeight, PointCloudInnerNode octree)
+    public final void parsedMetadata(long pointsCount, Sector sector, double minHeight, double maxHeight, PointCloudInnerNode rootNode)
     {
       _pointsCount = pointsCount;
       _sector = sector;
@@ -750,7 +794,7 @@ public class PointCloudsRenderer extends DefaultRenderer
       _maxHeight = maxHeight;
     
       _downloadingMetadata = false;
-      _octree = octree;
+      _rootNode = rootNode;
     
       ILogger.instance().logInfo("Parsed metadata for \"%s\"", _cloudName);
     
@@ -767,11 +811,11 @@ public class PointCloudsRenderer extends DefaultRenderer
     
     }
 
-    public final void render(G3MRenderContext rc, GLState glState, Frustum frustum)
+    public final void render(G3MRenderContext rc, GLState glState, Frustum frustum, long nowInMS)
     {
-      if (_octree != null)
+      if (_rootNode != null)
       {
-        final long renderedCount = _octree.render(rc, glState, frustum, _minHeight, _maxHeight);
+        final long renderedCount = _rootNode.render(rc, glState, frustum, _minHeight, _maxHeight, nowInMS);
     
         if (_lastRenderedCount != renderedCount)
         {
@@ -783,7 +827,7 @@ public class PointCloudsRenderer extends DefaultRenderer
 
   }
 
-
+  private ITimer _timer;
 
   private java.util.ArrayList<PointCloud> _clouds = new java.util.ArrayList<PointCloud>();
   private int _cloudsSize;
@@ -806,6 +850,7 @@ public class PointCloudsRenderer extends DefaultRenderer
   {
      _cloudsSize = 0;
      _glState = new GLState();
+     _timer = null;
   }
 
   public void dispose()
@@ -818,6 +863,8 @@ public class PointCloudsRenderer extends DefaultRenderer
     }
   
     _glState._release();
+    if (_timer != null)
+       _timer.dispose();
   
     super.dispose();
   }
@@ -864,27 +911,33 @@ public class PointCloudsRenderer extends DefaultRenderer
 
   public final void render(G3MRenderContext rc, GLState glState)
   {
-    final Camera camera = rc.getCurrentCamera();
-  
-  //  const float verticalExaggeration = rc->getSurfaceElevationProvider()->getVerticalExaggeration();
-  
-    ModelViewGLFeature f = (ModelViewGLFeature) _glState.getGLFeature(GLFeatureID.GLF_MODEL_VIEW);
-    if (f == null)
+    if (_cloudsSize > 0)
     {
-      _glState.addGLFeature(new ModelViewGLFeature(camera), true);
-    }
-    else
-    {
-      f.setMatrix(camera.getModelViewMatrix44D());
-    }
+      if (_timer == null)
+      {
+        _timer = rc.getFactory().createTimer();
+      }
+      final long nowInMS = _timer.elapsedTimeInMilliseconds();
   
-    _glState.setParent(glState);
+      final Camera camera = rc.getCurrentCamera();
+      ModelViewGLFeature f = (ModelViewGLFeature) _glState.getGLFeature(GLFeatureID.GLF_MODEL_VIEW);
+      if (f == null)
+      {
+        _glState.addGLFeature(new ModelViewGLFeature(camera), true);
+      }
+      else
+      {
+        f.setMatrix(camera.getModelViewMatrix44D());
+      }
   
-    final Frustum frustum = camera.getFrustumInModelCoordinates();
-    for (int i = 0; i < _cloudsSize; i++)
-    {
-      PointCloud cloud = _clouds.get(i);
-      cloud.render(rc, _glState, frustum);
+      _glState.setParent(glState);
+  
+      final Frustum frustum = camera.getFrustumInModelCoordinates();
+      for (int i = 0; i < _cloudsSize; i++)
+      {
+        PointCloud cloud = _clouds.get(i);
+        cloud.render(rc, _glState, frustum, nowInMS);
+      }
     }
   }
 
@@ -893,11 +946,27 @@ public class PointCloudsRenderer extends DefaultRenderer
 
   }
 
+  public final void addPointCloud(URL serverURL, String cloudName, PointCloudMetadataListener metadataListener)
+  {
+     addPointCloud(serverURL, cloudName, metadataListener, true);
+  }
+  public final void addPointCloud(URL serverURL, String cloudName)
+  {
+     addPointCloud(serverURL, cloudName, null, true);
+  }
   public final void addPointCloud(URL serverURL, String cloudName, PointCloudMetadataListener metadataListener, boolean deleteListener)
   {
     addPointCloud(serverURL, cloudName, DownloadPriority.MEDIUM, TimeInterval.fromDays(30), true, metadataListener, deleteListener);
   }
 
+  public final void addPointCloud(URL serverURL, String cloudName, long downloadPriority, TimeInterval timeToCache, boolean readExpired, PointCloudMetadataListener metadataListener)
+  {
+     addPointCloud(serverURL, cloudName, downloadPriority, timeToCache, readExpired, metadataListener, true);
+  }
+  public final void addPointCloud(URL serverURL, String cloudName, long downloadPriority, TimeInterval timeToCache, boolean readExpired)
+  {
+     addPointCloud(serverURL, cloudName, downloadPriority, timeToCache, readExpired, null, true);
+  }
   public final void addPointCloud(URL serverURL, String cloudName, long downloadPriority, TimeInterval timeToCache, boolean readExpired, PointCloudMetadataListener metadataListener, boolean deleteListener)
   {
     PointCloud pointCloud = new PointCloud(serverURL, cloudName, downloadPriority, timeToCache, readExpired, metadataListener, deleteListener);
