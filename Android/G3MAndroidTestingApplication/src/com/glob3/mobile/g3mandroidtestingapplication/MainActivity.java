@@ -4,6 +4,7 @@ package com.glob3.mobile.g3mandroidtestingapplication;
 
 import java.util.ArrayList;
 
+import org.glob3.mobile.generated.AltitudeMode;
 import org.glob3.mobile.generated.Angle;
 import org.glob3.mobile.generated.BingMapType;
 import org.glob3.mobile.generated.BingMapsLayer;
@@ -25,11 +26,15 @@ import org.glob3.mobile.generated.Geodetic3D;
 import org.glob3.mobile.generated.JSONObject;
 import org.glob3.mobile.generated.LayerSet;
 import org.glob3.mobile.generated.LevelTileCondition;
+import org.glob3.mobile.generated.Mark;
+import org.glob3.mobile.generated.MarksRenderer;
+import org.glob3.mobile.generated.Planet;
 import org.glob3.mobile.generated.Sector;
 import org.glob3.mobile.generated.StrokeCap;
 import org.glob3.mobile.generated.StrokeJoin;
 import org.glob3.mobile.generated.TiledVectorLayer;
 import org.glob3.mobile.generated.TimeInterval;
+import org.glob3.mobile.generated.URL;
 import org.glob3.mobile.specific.G3MBuilder_Android;
 import org.glob3.mobile.specific.G3MWidget_Android;
 
@@ -61,16 +66,44 @@ public class MainActivity
       setContentView(R.layout.activity_main);
 
 
-      _g3mWidget = createWidget();
+      // _g3mWidget = createWidget();
+      _g3mWidget = sanjayTesting();
 
       final RelativeLayout placeHolder = (RelativeLayout) findViewById(R.id.g3mWidgetHolder);
       placeHolder.addView(_g3mWidget);
 
 
-      final Geodetic3D zurichPos = Geodetic3D.fromDegrees(47.371716253228562721, 8.5409432031508725203, 1040);
+      final Geodetic3D zurichPos = Geodetic3D.fromDegrees(40, -75, 80000);
       _g3mWidget.getG3MWidget().setAnimatedCameraPosition(TimeInterval.fromSeconds(5), zurichPos, Angle.zero(),
                Angle.fromDegrees(-90));
 
+   }
+
+
+   private G3MWidget_Android sanjayTesting() {
+      final G3MBuilder_Android builder = new G3MBuilder_Android(this);
+
+      builder.setPlanet(Planet.createSphericalEarth());
+
+
+      final MarksRenderer _weatherMarkers = new MarksRenderer(false);
+
+      // draw one simple marker
+      final Mark mark = new Mark( //
+               new URL("file:///mark.png"), //
+               new Geodetic3D(Angle.fromDegrees(40.0), Angle.fromDegrees(-75.0), 75000), //
+               AltitudeMode.ABSOLUTE, //
+               5000000, //
+               null, //
+               false, //
+               null, //
+               true);
+
+      _weatherMarkers.addMark(mark);
+
+      builder.addRenderer(_weatherMarkers);
+
+      return builder.createWidget();
    }
 
 
