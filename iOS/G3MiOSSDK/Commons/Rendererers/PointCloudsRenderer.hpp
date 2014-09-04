@@ -61,7 +61,8 @@ private:
                                 const double projectedArea,
                                 double minHeight,
                                 double maxHeight,
-                                long long nowInMS) = 0;
+                                long long nowInMS,
+                                bool justRecalculatedProjectedArea) = 0;
 
   public:
     const std::string _id;
@@ -109,7 +110,8 @@ private:
                         const double projectedArea,
                         double minHeight,
                         double maxHeight,
-                        long long nowInMS);
+                        long long nowInMS,
+                        bool justRecalculatedProjectedArea);
 
   public:
     PointCloudInnerNode(const std::string& id) :
@@ -176,6 +178,8 @@ private:
 
     long long _pointsCount;
 
+    int _neededLevel;
+
   protected:
     long long rawRender(const G3MRenderContext* rc,
                         GLState* glState,
@@ -183,7 +187,8 @@ private:
                         const double projectedArea,
                         double minHeight,
                         double maxHeight,
-                        long long nowInMS);
+                        long long nowInMS,
+                        bool justRecalculatedProjectedArea);
 
   public:
 #ifdef C_CODE
@@ -200,7 +205,8 @@ private:
     _bounds(bounds),
     _firstPointsBuffer(firstPointsBuffer),
     _mesh(NULL),
-    _pointsCount(-1)
+    _pointsCount(-1),
+    _neededLevel(0)
     {
     }
 #endif

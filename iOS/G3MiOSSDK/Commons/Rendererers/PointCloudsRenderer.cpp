@@ -394,12 +394,18 @@ long long PointCloudsRenderer::PointCloudNode::render(const G3MRenderContext* rc
   const Box* bounds = getBounds();
   if (bounds != NULL) {
     if (bounds->touchesFrustum(frustum)) {
+      bool justRecalculatedProjectedArea = false;
       if ((_projectedArea == -1) ||
-          ((_lastProjectedAreaTimeInMS + 500) < nowInMS)) {
-        _projectedArea = bounds->projectedArea(rc);
-        _lastProjectedAreaTimeInMS = nowInMS;
+          ((_lastProjectedAreaTimeInMS + 750) < nowInMS)) {
+        const double currentProjectedArea = bounds->projectedArea(rc);
+        if (currentProjectedArea != _projectedArea) {
+          _projectedArea = currentProjectedArea;
+          _lastProjectedAreaTimeInMS = nowInMS;
+          justRecalculatedProjectedArea = true;
+        }
       }
 
+#warning TODO: quality factor
       const double minProjectedArea = 500;
       if (_projectedArea >= minProjectedArea) {
         const long long renderedCount = rawRender(rc,
@@ -408,7 +414,8 @@ long long PointCloudsRenderer::PointCloudNode::render(const G3MRenderContext* rc
                                                   _projectedArea,
                                                   minHeight,
                                                   maxHeight,
-                                                  nowInMS);
+                                                  nowInMS,
+                                                  justRecalculatedProjectedArea);
         _rendered = true;
         return renderedCount;
       }
@@ -428,7 +435,8 @@ long long PointCloudsRenderer::PointCloudInnerNode::rawRender(const G3MRenderCon
                                                               const double projectedArea,
                                                               double minHeight,
                                                               double maxHeight,
-                                                              long long nowInMS) {
+                                                              long long nowInMS,
+                                                              bool justRecalculatedProjectedArea) {
   long long renderedCount = 0;
   for (int i = 0; i < 4; i++) {
     PointCloudNode* child = _children[i];
@@ -487,7 +495,28 @@ long long PointCloudsRenderer::PointCloudLeafNode::rawRender(const G3MRenderCont
                                                              const double projectedArea,
                                                              double minHeight,
                                                              double maxHeight,
-                                                             long long nowInMS) {
+                                                             long long nowInMS,
+                                                             bool justRecalculatedProjectedArea) {
+  if (justRecalculatedProjectedArea) {
+#warning TODO: quality factor
+    const int intendedPointsCount = IMathUtils::instance()->round((float) projectedArea);
+    int accummulated = 0;
+    int neededLevel = -1;
+    for (int i = 0; i < _levelsCountLenght; i++) {
+      const int levelPointsCount = _levelsCount[i];
+      accummulated += levelPointsCount;
+      if (accummulated > intendedPointsCount) {
+        break;
+      }
+      neededLevel = i;
+    }
+
+    if (neededLevel != _neededLevel) {
+      ILogger::instance()->logInfo("Needed Level changed for %s from=%d to=%d", _id.c_str(), _neededLevel, neededLevel);
+      _neededLevel = neededLevel;
+    }
+  }
+
   if (_mesh == NULL) {
     _mesh = new DirectMesh(GLPrimitive::points(),
                            false,
