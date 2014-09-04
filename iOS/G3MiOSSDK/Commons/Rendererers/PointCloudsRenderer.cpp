@@ -68,7 +68,7 @@ void PointCloudsRenderer::PointCloud::initialize(const G3MContext* context) {
 }
 
 PointCloudsRenderer::PointCloud::~PointCloud() {
-  delete _octree;
+  delete _rootNode;
   delete _sector;
 }
 
@@ -80,7 +80,7 @@ void PointCloudsRenderer::PointCloud::errorDownloadingMetadata() {
 PointCloudsRenderer::PointCloudMetadataParserAsyncTask::~PointCloudMetadataParserAsyncTask() {
   delete _sector;
   delete _buffer;
-  delete _octree;
+  delete _rootNode;
 }
 
 //class DebugVisitor : public PointCloudsRenderer::PointCloudNodeVisitor {
@@ -197,19 +197,51 @@ void PointCloudsRenderer::PointCloudMetadataParserAsyncTask::runInBackground(con
   delete _buffer;
   _buffer = NULL;
 
-  _octree = new PointCloudInnerNode("");
+  _rootNode = new PointCloudInnerNode("");
   for (int i = 0; i < leafNodesCount; i++) {
-    _octree->addLeafNode( leafNodes[i] );
+    _rootNode->addLeafNode( leafNodes[i] );
   }
-  const Box* fullBounds = _octree->getBounds(); // force inner-node's bounds here, in background
-  ILogger::instance()->logInfo("Octree fullBounds=%s", fullBounds->description().c_str());
 
-  const Vector3D average = _octree->getAverage();
-  ILogger::instance()->logInfo("Octree average=%s", average.description().c_str());
+  _rootNode = _rootNode->pruneUnneededParents();
+
+  const Box* fullBounds = _rootNode->getBounds(); // force inner-node's bounds here, in background
+  ILogger::instance()->logInfo("rootNode fullBounds=%s", fullBounds->description().c_str());
+
+  const Vector3D average = _rootNode->getAverage();
+  ILogger::instance()->logInfo("rootNode average=%s", average.description().c_str());
 
   //  PointCloudNodeVisitor* visitor = new DebugVisitor();
-  //  _octree->acceptVisitor(visitor);
+  //  _rootNode->acceptVisitor(visitor);
   //  delete visitor;
+}
+
+PointCloudsRenderer::PointCloudInnerNode* PointCloudsRenderer::PointCloudInnerNode::pruneUnneededParents() {
+  PointCloudNode* onlyChild = NULL;
+  for (int i = 0; i < 4; i++) {
+    PointCloudNode* child = _children[i];
+    if (child != NULL) {
+      if (onlyChild == NULL) {
+        onlyChild = child;
+      }
+      else {
+        return this;
+      }
+    }
+  }
+
+  if (onlyChild != NULL) {
+    if (onlyChild->isInner()) {
+      PointCloudInnerNode* result = ((PointCloudInnerNode*) onlyChild)->pruneUnneededParents();
+
+      // forget childrens to avoid deleting them from the destructor
+      for (int i = 0; i < 4; i++) { _children[i] = NULL; }
+      delete this;
+
+      return result;
+    }
+  }
+
+  return this;
 }
 
 void PointCloudsRenderer::PointCloudInnerNode::calculatePointsCountAndAverage() {
@@ -327,23 +359,23 @@ void PointCloudsRenderer::PointCloudInnerNode::addLeafNode(PointCloudLeafNode* l
 }
 
 void PointCloudsRenderer::PointCloudMetadataParserAsyncTask::onPostExecute(const G3MContext* context) {
-  _pointCloud->parsedMetadata(_pointsCount, _sector, _minHeight, _maxHeight, _octree);
+  _pointCloud->parsedMetadata(_pointsCount, _sector, _minHeight, _maxHeight, _rootNode);
   _sector = NULL; // moves ownership to pointCloud
-  _octree = NULL; // moves ownership to pointCloud
+  _rootNode = NULL; // moves ownership to pointCloud
 }
 
 void PointCloudsRenderer::PointCloud::parsedMetadata(long long pointsCount,
                                                      Sector* sector,
                                                      double minHeight,
                                                      double maxHeight,
-                                                     PointCloudInnerNode* octree) {
+                                                     PointCloudInnerNode* rootNode) {
   _pointsCount = pointsCount;
   _sector = sector;
   _minHeight = minHeight;
   _maxHeight = maxHeight;
 
   _downloadingMetadata = false;
-  _octree = octree;
+  _rootNode = rootNode;
 
   ILogger::instance()->logInfo("Parsed metadata for \"%s\"", _cloudName.c_str());
 
@@ -378,9 +410,10 @@ RenderState PointCloudsRenderer::PointCloud::getRenderState(const G3MRenderConte
 
 void PointCloudsRenderer::PointCloud::render(const G3MRenderContext* rc,
                                              GLState* glState,
-                                             const Frustum* frustum) {
-  if (_octree != NULL) {
-    const long long renderedCount = _octree->render(rc, glState, frustum, _minHeight, _maxHeight);
+                                             const Frustum* frustum,
+                                             long long nowInMS) {
+  if (_rootNode != NULL) {
+    const long long renderedCount = _rootNode->render(rc, glState, frustum, _minHeight, _maxHeight, nowInMS);
 
     if (_lastRenderedCount != renderedCount) {
       ILogger::instance()->logInfo("\"%s\": Rendered %ld points", _cloudName.c_str(), renderedCount);
@@ -393,19 +426,15 @@ long long PointCloudsRenderer::PointCloudNode::render(const G3MRenderContext* rc
                                                       GLState* glState,
                                                       const Frustum* frustum,
                                                       double minHeight,
-                                                      double maxHeight) {
+                                                      double maxHeight,
+                                                      long long nowInMS) {
   const Box* bounds = getBounds();
   if (bounds != NULL) {
     if (bounds->touchesFrustum(frustum)) {
-      if ((_projectedAreaTimer == NULL) ||
-          (_projectedAreaTimer->elapsedTimeInMilliseconds() > 500)) {
+      if ((_projectedArea == -1) ||
+          ((_lastProjectedAreaTimeInMS + 500) < nowInMS)) {
         _projectedArea = bounds->projectedArea(rc);
-        if (_projectedAreaTimer == NULL) {
-          _projectedAreaTimer = rc->getFactory()->createTimer();
-        }
-        else {
-          _projectedAreaTimer->start();
-        }
+        _lastProjectedAreaTimeInMS = nowInMS;
       }
 
       const double minProjectedArea = 500;
@@ -415,7 +444,8 @@ long long PointCloudsRenderer::PointCloudNode::render(const G3MRenderContext* rc
                                                   frustum,
                                                   _projectedArea,
                                                   minHeight,
-                                                  maxHeight);
+                                                  maxHeight,
+                                                  nowInMS);
         _rendered = true;
         return renderedCount;
       }
@@ -424,8 +454,8 @@ long long PointCloudsRenderer::PointCloudNode::render(const G3MRenderContext* rc
 
   if (_rendered) {
     _rendered = false;
-    delete _projectedAreaTimer;
-    _projectedAreaTimer = NULL;
+//    delete _projectedAreaTimer;
+//    _projectedAreaTimer = NULL;
   }
 
   return 0;
@@ -436,12 +466,13 @@ long long PointCloudsRenderer::PointCloudInnerNode::rawRender(const G3MRenderCon
                                                               const Frustum* frustum,
                                                               const double projectedArea,
                                                               double minHeight,
-                                                              double maxHeight) {
+                                                              double maxHeight,
+                                                              long long nowInMS) {
   long long renderedCount = 0;
   for (int i = 0; i < 4; i++) {
     PointCloudNode* child = _children[i];
     if (child != NULL) {
-      renderedCount += child->render(rc, glState, frustum, minHeight, maxHeight);
+      renderedCount += child->render(rc, glState, frustum, minHeight, maxHeight, nowInMS);
     }
   }
 
@@ -495,7 +526,8 @@ long long PointCloudsRenderer::PointCloudLeafNode::rawRender(const G3MRenderCont
                                                              const Frustum* frustum,
                                                              const double projectedArea,
                                                              double minHeight,
-                                                             double maxHeight) {
+                                                             double maxHeight,
+                                                             long long nowInMS) {
   if (_mesh == NULL) {
     _mesh = new DirectMesh(GLPrimitive::points(),
                            false,
@@ -515,7 +547,8 @@ long long PointCloudsRenderer::PointCloudLeafNode::rawRender(const G3MRenderCont
 
 PointCloudsRenderer::PointCloudsRenderer() :
 _cloudsSize(0),
-_glState(new GLState())
+_glState(new GLState()),
+_timer(NULL)
 {
 }
 
@@ -526,6 +559,7 @@ PointCloudsRenderer::~PointCloudsRenderer() {
   }
 
   _glState->_release();
+  delete _timer;
 
 #ifdef JAVA_CODE
   super.dispose();
@@ -618,23 +652,27 @@ void PointCloudsRenderer::removeAllPointClouds() {
 
 void PointCloudsRenderer::render(const G3MRenderContext* rc,
                                  GLState* glState) {
-  const Camera* camera = rc->getCurrentCamera();
+  if (_cloudsSize > 0) {
+    if (_timer == NULL) {
+      _timer = rc->getFactory()->createTimer();
+    }
+    const long long nowInMS = _timer->elapsedTimeInMilliseconds();
 
-//  const float verticalExaggeration = rc->getSurfaceElevationProvider()->getVerticalExaggeration();
+    const Camera* camera = rc->getCurrentCamera();
+    ModelViewGLFeature* f = (ModelViewGLFeature*) _glState->getGLFeature(GLF_MODEL_VIEW);
+    if (f == NULL) {
+      _glState->addGLFeature(new ModelViewGLFeature(camera), true);
+    }
+    else {
+      f->setMatrix(camera->getModelViewMatrix44D());
+    }
 
-  ModelViewGLFeature* f = (ModelViewGLFeature*) _glState->getGLFeature(GLF_MODEL_VIEW);
-  if (f == NULL) {
-    _glState->addGLFeature(new ModelViewGLFeature(camera), true);
-  }
-  else {
-    f->setMatrix(camera->getModelViewMatrix44D());
-  }
+    _glState->setParent(glState);
 
-  _glState->setParent(glState);
-  
-  const Frustum* frustum = camera->getFrustumInModelCoordinates();
-  for (int i = 0; i < _cloudsSize; i++) {
-    PointCloud* cloud = _clouds[i];
-    cloud->render(rc, _glState, frustum);
+    const Frustum* frustum = camera->getFrustumInModelCoordinates();
+    for (int i = 0; i < _cloudsSize; i++) {
+      PointCloud* cloud = _clouds[i];
+      cloud->render(rc, _glState, frustum, nowInMS);
+    }
   }
 }

@@ -56,7 +56,7 @@ private:
   private:
     bool _rendered;
     double _projectedArea;
-    ITimer* _projectedAreaTimer;
+    long long _lastProjectedAreaTimeInMS;
 
   protected:
 
@@ -64,7 +64,7 @@ private:
     _id(id),
     _rendered(false),
     _projectedArea(-1),
-    _projectedAreaTimer(NULL)
+    _lastProjectedAreaTimeInMS(-1)
     {
     }
 
@@ -73,7 +73,8 @@ private:
                                 const Frustum* frustum,
                                 const double projectedArea,
                                 double minHeight,
-                                double maxHeight) = 0;
+                                double maxHeight,
+                                long long nowInMS) = 0;
 
   public:
     const std::string _id;
@@ -92,7 +93,10 @@ private:
                      GLState* glState,
                      const Frustum* frustum,
                      double minHeight,
-                     double maxHeight);
+                     double maxHeight,
+                     long long nowInMS);
+
+    virtual bool isInner() const = 0;
 
   };
 
@@ -119,7 +123,8 @@ private:
                         const Frustum* frustum,
                         const double projectedArea,
                         double minHeight,
-                        double maxHeight);
+                        double maxHeight,
+                        long long nowInMS);
 
   public:
     PointCloudInnerNode(const std::string& id) :
@@ -160,7 +165,13 @@ private:
       return *_average;
     }
 
+    PointCloudInnerNode* pruneUnneededParents();
+
 //    void acceptVisitor(PointCloudNodeVisitor* visitor);
+
+    bool isInner() const {
+      return true;
+    }
 
   };
 
@@ -188,8 +199,8 @@ private:
                         const Frustum* frustum,
                         const double projectedArea,
                         double minHeight,
-                        double maxHeight);
-
+                        double maxHeight,
+                        long long nowInMS);
 
   public:
 #ifdef C_CODE
@@ -248,6 +259,9 @@ private:
       return *_average;
     }
 
+    bool isInner() const {
+      return false;
+    }
 
 //    void acceptVisitor(PointCloudNodeVisitor* visitor);
 
@@ -266,7 +280,7 @@ private:
     double _minHeight;
     double _maxHeight;
 
-    PointCloudInnerNode* _octree;
+    PointCloudInnerNode* _rootNode;
 
   public:
     PointCloudMetadataParserAsyncTask(PointCloud* pointCloud,
@@ -277,7 +291,7 @@ private:
     _sector(NULL),
     _minHeight(0),
     _maxHeight(0),
-    _octree(NULL)
+    _rootNode(NULL)
     {
     }
 
@@ -348,7 +362,7 @@ private:
     Sector* _sector;
     double _minHeight;
     double _maxHeight;
-    PointCloudInnerNode* _octree;
+    PointCloudInnerNode* _rootNode;
 
     long long _lastRenderedCount;
 
@@ -374,7 +388,7 @@ private:
     _sector(NULL),
     _minHeight(0),
     _maxHeight(0),
-    _octree(NULL),
+    _rootNode(NULL),
     _lastRenderedCount(0)
     {
     }
@@ -395,15 +409,16 @@ private:
                         Sector* sector,
                         double minHeight,
                         double maxHeight,
-                        PointCloudInnerNode* octree);
+                        PointCloudInnerNode* rootNode);
 
     void render(const G3MRenderContext* rc,
                 GLState* glState,
-                const Frustum* frustum);
+                const Frustum* frustum,
+                long long nowInMS);
 
   };
 
-
+  ITimer* _timer;
 
   std::vector<PointCloud*> _clouds;
   int _cloudsSize;
@@ -433,16 +448,16 @@ public:
 
   void addPointCloud(const URL& serverURL,
                      const std::string& cloudName,
-                     PointCloudMetadataListener* metadataListener,
-                     bool deleteListener);
+                     PointCloudMetadataListener* metadataListener = NULL,
+                     bool deleteListener = true);
 
   void addPointCloud(const URL& serverURL,
                      const std::string& cloudName,
                      long long downloadPriority,
                      const TimeInterval& timeToCache,
                      bool readExpired,
-                     PointCloudMetadataListener* metadataListener,
-                     bool deleteListener);
+                     PointCloudMetadataListener* metadataListener = NULL,
+                     bool deleteListener = true);
   
   void removeAllPointClouds();
   
