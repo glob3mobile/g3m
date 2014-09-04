@@ -19,7 +19,7 @@
 #include "Camera.hpp"
 #include "DirectMesh.hpp"
 #include "IFactory.hpp"
-//#include "SurfaceElevationProvider.hpp"
+
 
 void PointCloudsRenderer::PointCloudMetadataDownloadListener::onDownload(const URL& url,
                                                                          IByteBuffer* buffer,
@@ -82,29 +82,6 @@ PointCloudsRenderer::PointCloudMetadataParserAsyncTask::~PointCloudMetadataParse
   delete _buffer;
   delete _rootNode;
 }
-
-//class DebugVisitor : public PointCloudsRenderer::PointCloudNodeVisitor {
-//private:
-//  int _innerNodesCount;
-//  int _leafNodesCount;
-//public:
-//  DebugVisitor() :
-//  _innerNodesCount(0),
-//  _leafNodesCount(0)
-//  {
-//  }
-//
-//  void visitInnerNode(const PointCloudsRenderer::PointCloudInnerNode* innerNode) {
-//    printf("Inner: \"%s\"\n", innerNode->_id.c_str());
-//    _innerNodesCount++;
-//  }
-//
-//  void visitLeafNode(const PointCloudsRenderer::PointCloudLeafNode* leafNode) {
-//    printf(" Leaf: \"%s\"\n", leafNode->_id.c_str());
-//    _leafNodesCount++;
-//  }
-//
-//};
 
 void PointCloudsRenderer::PointCloudMetadataParserAsyncTask::runInBackground(const G3MContext* context) {
   ByteBufferIterator it(_buffer);
@@ -209,10 +186,6 @@ void PointCloudsRenderer::PointCloudMetadataParserAsyncTask::runInBackground(con
 
   const Vector3D average = _rootNode->getAverage();
   ILogger::instance()->logInfo("rootNode average=%s", average.description().c_str());
-
-  //  PointCloudNodeVisitor* visitor = new DebugVisitor();
-  //  _rootNode->acceptVisitor(visitor);
-  //  delete visitor;
 }
 
 PointCloudsRenderer::PointCloudInnerNode* PointCloudsRenderer::PointCloudInnerNode::pruneUnneededParents() {
@@ -303,20 +276,6 @@ Box* PointCloudsRenderer::PointCloudInnerNode::calculateBounds() {
   return bounds;
 }
 
-//void PointCloudsRenderer::PointCloudInnerNode::acceptVisitor(PointCloudNodeVisitor* visitor) {
-//  visitor->visitInnerNode(this);
-//
-//  if (_children[0] != NULL) { _children[0]->acceptVisitor(visitor); }
-//  if (_children[1] != NULL) { _children[1]->acceptVisitor(visitor); }
-//  if (_children[2] != NULL) { _children[2]->acceptVisitor(visitor); }
-//  if (_children[3] != NULL) { _children[3]->acceptVisitor(visitor); }
-//}
-//
-//void PointCloudsRenderer::PointCloudLeafNode::acceptVisitor(PointCloudNodeVisitor* visitor) {
-//  visitor->visitLeafNode(this);
-//}
-
-
 PointCloudsRenderer::PointCloudInnerNode::~PointCloudInnerNode() {
   delete _children[0];
   delete _children[1];
@@ -360,7 +319,7 @@ void PointCloudsRenderer::PointCloudInnerNode::addLeafNode(PointCloudLeafNode* l
 
 void PointCloudsRenderer::PointCloudMetadataParserAsyncTask::onPostExecute(const G3MContext* context) {
   _pointCloud->parsedMetadata(_pointsCount, _sector, _minHeight, _maxHeight, _rootNode);
-  _sector = NULL; // moves ownership to pointCloud
+  _sector   = NULL; // moves ownership to pointCloud
   _rootNode = NULL; // moves ownership to pointCloud
 }
 
@@ -454,8 +413,6 @@ long long PointCloudsRenderer::PointCloudNode::render(const G3MRenderContext* rc
 
   if (_rendered) {
     _rendered = false;
-//    delete _projectedAreaTimer;
-//    _projectedAreaTimer = NULL;
   }
 
   return 0;
@@ -477,7 +434,6 @@ long long PointCloudsRenderer::PointCloudInnerNode::rawRender(const G3MRenderCon
   }
 
   if (renderedCount == 0) {
-    //_bounds->render(rc, glState, _renderColor);
     if (_mesh == NULL) {
       const Vector3D average = getAverage();
 

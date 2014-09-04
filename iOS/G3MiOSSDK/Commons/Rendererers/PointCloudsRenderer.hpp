@@ -35,19 +35,6 @@ public:
                             double maxHeight) = 0;
   };
 
-
-//  class PointCloudInnerNode;
-//  class PointCloudLeafNode;
-//
-//  class PointCloudNodeVisitor {
-//  public:
-//    virtual ~PointCloudNodeVisitor() {
-//    }
-//
-//    virtual void visitInnerNode(const PointCloudInnerNode* innerNode) = 0;
-//    virtual void visitLeafNode(const PointCloudLeafNode* leafNode) = 0;
-//  };
-
   
 private:
 
@@ -86,8 +73,6 @@ private:
 
     virtual long long getPointsCount() = 0;
     virtual const Vector3D getAverage() = 0;
-
-//    virtual void acceptVisitor(PointCloudNodeVisitor* visitor) = 0;
 
     long long render(const G3MRenderContext* rc,
                      GLState* glState,
@@ -166,8 +151,6 @@ private:
     }
 
     PointCloudInnerNode* pruneUnneededParents();
-
-//    void acceptVisitor(PointCloudNodeVisitor* visitor);
 
     bool isInner() const {
       return true;
@@ -262,8 +245,6 @@ private:
     bool isInner() const {
       return false;
     }
-
-//    void acceptVisitor(PointCloudNodeVisitor* visitor);
 
   };
 
