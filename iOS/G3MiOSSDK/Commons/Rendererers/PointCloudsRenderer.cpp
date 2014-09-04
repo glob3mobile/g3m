@@ -17,7 +17,6 @@
 #include "ErrorHandling.hpp"
 #include "IStringBuilder.hpp"
 #include "Camera.hpp"
-#include "FloatBufferBuilderFromCartesian3D.hpp"
 #include "DirectMesh.hpp"
 #include "IFactory.hpp"
 //#include "SurfaceElevationProvider.hpp"
@@ -168,17 +167,16 @@ void PointCloudsRenderer::PointCloudMetadataParserAsyncTask::runInBackground(con
                                 Vector3D(upperX, upperY, upperZ));
 
     const int firstPointsCount = it.nextInt32();
-    FloatBufferBuilderFromCartesian3D* firstPointsBufferBuilder = FloatBufferBuilderFromCartesian3D::builderWithoutCenter();
+    IFloatBuffer* firstPointsBuffer = IFactory::instance()->createFloatBuffer( firstPointsCount * 3 * 4 );
     for (int j = 0; j < firstPointsCount; j++) {
       const float x = it.nextFloat();
       const float y = it.nextFloat();
       const float z = it.nextFloat();
-      firstPointsBufferBuilder->add(x, y, z);
+      const int j3 = j * 3;
+      firstPointsBuffer->rawPut(j3 + 0, x);
+      firstPointsBuffer->rawPut(j3 + 1, y);
+      firstPointsBuffer->rawPut(j3 + 2, z);
     }
-    IFloatBuffer* firstPointsBuffer = firstPointsBufferBuilder->create();
-
-    delete firstPointsBufferBuilder;
-    firstPointsBufferBuilder = NULL;
 
     leafNodes.push_back( new PointCloudLeafNode(id,
                                                 levelsCountLength,
@@ -457,9 +455,9 @@ long long PointCloudsRenderer::PointCloudInnerNode::rawRender(const G3MRenderCon
       const float averageZ = (float) average._z;
 
       IFloatBuffer* pointsBuffer = rc->getFactory()->createFloatBuffer(3);
-      pointsBuffer->put(0, (float) (average._x - averageX) );
-      pointsBuffer->put(1, (float) (average._y - averageY) );
-      pointsBuffer->put(2, (float) (average._z - averageZ) );
+      pointsBuffer->rawPut(0, (float) (average._x - averageX) );
+      pointsBuffer->rawPut(1, (float) (average._y - averageY) );
+      pointsBuffer->rawPut(2, (float) (average._z - averageZ) );
 
       _mesh = new DirectMesh(GLPrimitive::points(),
                              true,
