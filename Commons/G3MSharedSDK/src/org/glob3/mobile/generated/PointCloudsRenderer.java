@@ -35,19 +35,6 @@ public class PointCloudsRenderer extends DefaultRenderer
   }
 
 
-//  class PointCloudInnerNode;
-//  class PointCloudLeafNode;
-//
-//  class PointCloudNodeVisitor {
-//  public:
-//    virtual ~PointCloudNodeVisitor() {
-//    }
-//
-//    virtual void visitInnerNode(const PointCloudInnerNode* innerNode) = 0;
-//    virtual void visitLeafNode(const PointCloudLeafNode* leafNode) = 0;
-//  };
-
-
 
 
   private abstract static class PointCloudNode
@@ -78,8 +65,6 @@ public class PointCloudsRenderer extends DefaultRenderer
     public abstract long getPointsCount();
     public abstract Vector3D getAverage();
 
-//    virtual void acceptVisitor(PointCloudNodeVisitor* visitor) = 0;
-
     public final long render(G3MRenderContext rc, GLState glState, Frustum frustum, double minHeight, double maxHeight, long nowInMS)
     {
       final Box bounds = getBounds();
@@ -106,8 +91,6 @@ public class PointCloudsRenderer extends DefaultRenderer
       if (_rendered)
       {
         _rendered = false;
-    //    delete _projectedAreaTimer;
-    //    _projectedAreaTimer = NULL;
       }
     
       return 0;
@@ -200,7 +183,6 @@ public class PointCloudsRenderer extends DefaultRenderer
     
       if (renderedCount == 0)
       {
-        //_bounds->render(rc, glState, _renderColor);
         if (_mesh == null)
         {
           final Vector3D average = getAverage();
@@ -236,21 +218,6 @@ public class PointCloudsRenderer extends DefaultRenderer
       _children[3] = null;
     }
 
-
-    //void PointCloudsRenderer::PointCloudInnerNode::acceptVisitor(PointCloudNodeVisitor* visitor) {
-    //  visitor->visitInnerNode(this);
-    //
-    //  if (_children[0] != NULL) { _children[0]->acceptVisitor(visitor); }
-    //  if (_children[1] != NULL) { _children[1]->acceptVisitor(visitor); }
-    //  if (_children[2] != NULL) { _children[2]->acceptVisitor(visitor); }
-    //  if (_children[3] != NULL) { _children[3]->acceptVisitor(visitor); }
-    //}
-    //
-    //void PointCloudsRenderer::PointCloudLeafNode::acceptVisitor(PointCloudNodeVisitor* visitor) {
-    //  visitor->visitLeafNode(this);
-    //}
-    
-    
     public void dispose()
     {
       if (_children[0] != null)
@@ -361,16 +328,13 @@ public class PointCloudsRenderer extends DefaultRenderer
           {
              _children[i] = null;
           }
-          this = null;
-    
+          dispose();
           return result;
         }
       }
     
       return this;
     }
-
-//    void acceptVisitor(PointCloudNodeVisitor* visitor);
 
     public final boolean isInner()
     {
@@ -459,8 +423,6 @@ public class PointCloudsRenderer extends DefaultRenderer
       return false;
     }
 
-//    void acceptVisitor(PointCloudNodeVisitor* visitor);
-
   }
 
 
@@ -500,30 +462,6 @@ public class PointCloudsRenderer extends DefaultRenderer
          _rootNode.dispose();
     }
 
-
-    //class DebugVisitor : public PointCloudsRenderer::PointCloudNodeVisitor {
-    //private:
-    //  int _innerNodesCount;
-    //  int _leafNodesCount;
-    //public:
-    //  DebugVisitor() :
-    //  _innerNodesCount(0),
-    //  _leafNodesCount(0)
-    //  {
-    //  }
-    //
-    //  void visitInnerNode(const PointCloudsRenderer::PointCloudInnerNode* innerNode) {
-    //    printf("Inner: \"%s\"\n", innerNode->_id.c_str());
-    //    _innerNodesCount++;
-    //  }
-    //
-    //  void visitLeafNode(const PointCloudsRenderer::PointCloudLeafNode* leafNode) {
-    //    printf(" Leaf: \"%s\"\n", leafNode->_id.c_str());
-    //    _leafNodesCount++;
-    //  }
-    //
-    //};
-    
     public final void runInBackground(G3MContext context)
     {
       ByteBufferIterator it = new ByteBufferIterator(_buffer);
@@ -632,10 +570,6 @@ public class PointCloudsRenderer extends DefaultRenderer
     
       final Vector3D average = _rootNode.getAverage();
       ILogger.instance().logInfo("rootNode average=%s", average.description());
-    
-      //  PointCloudNodeVisitor* visitor = new DebugVisitor();
-      //  _rootNode->acceptVisitor(visitor);
-      //  delete visitor;
     }
 
     public final void onPostExecute(G3MContext context)
@@ -659,9 +593,6 @@ public class PointCloudsRenderer extends DefaultRenderer
        _threadUtils = threadUtils;
     }
 
-
-    ///#include "SurfaceElevationProvider.hpp"
-    
     public final void onDownload(URL url, IByteBuffer buffer, boolean expired)
     {
       ILogger.instance().logInfo("Downloaded metadata for \"%s\" (bytes=%ld)", _pointCloud.getCloudName(), buffer.size());
