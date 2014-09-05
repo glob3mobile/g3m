@@ -74,7 +74,7 @@ public class PointCloudsRenderer extends DefaultRenderer
         if (bounds.touchesFrustum(frustum))
         {
           boolean justRecalculatedProjectedArea = false;
-          if ((_projectedArea == -1) || ((_lastProjectedAreaTimeInMS + 750) < nowInMS))
+          if ((_projectedArea == -1) || ((_lastProjectedAreaTimeInMS + 500) < nowInMS))
           {
             final double currentProjectedArea = bounds.projectedArea(rc);
             if (currentProjectedArea != _projectedArea)
@@ -429,9 +429,6 @@ public class PointCloudsRenderer extends DefaultRenderer
         }
       }
     
-    
-      //032010023301230
-    
       if (_mesh == null)
       {
         _mesh = new DirectMesh(GLPrimitive.points(), false, _average, _firstPointsBuffer, 1, 2, Color.newFromRGBA(1, 1, 1, 1), null, 1, false); // colorsIntensity -  colors
@@ -711,6 +708,7 @@ public class PointCloudsRenderer extends DefaultRenderer
   {
     private final URL _serverURL;
     private final String _cloudName;
+    private final float _verticalExaggeration;
 
     private final long _downloadPriority;
     private final TimeInterval _timeToCache;
@@ -733,10 +731,11 @@ public class PointCloudsRenderer extends DefaultRenderer
 
     private long _lastRenderedCount;
 
-    public PointCloud(URL serverURL, String cloudName, long downloadPriority, TimeInterval timeToCache, boolean readExpired, PointCloudMetadataListener metadataListener, boolean deleteListener)
+    public PointCloud(URL serverURL, String cloudName, float verticalExaggeration, long downloadPriority, TimeInterval timeToCache, boolean readExpired, PointCloudMetadataListener metadataListener, boolean deleteListener)
     {
        _serverURL = serverURL;
        _cloudName = cloudName;
+       _verticalExaggeration = verticalExaggeration;
        _downloadPriority = downloadPriority;
        _timeToCache = timeToCache;
        _readExpired = readExpired;
@@ -774,9 +773,8 @@ public class PointCloudsRenderer extends DefaultRenderer
       _errorParsingMetadata = false;
     
       final String planetType = context.getPlanet().getType();
-    //  const float verticalExaggeration = context->getSurfaceElevationProvider()->getVerticalExaggeration();
     
-      final URL metadataURL = new URL(_serverURL, _cloudName + "?planet=" + planetType + "&format=binary");
+      final URL metadataURL = new URL(_serverURL, _cloudName + "?planet=" + planetType + "&verticalExaggeration=" + IStringUtils.instance().toString(_verticalExaggeration) + "&format=binary");
     
       ILogger.instance().logInfo("Downloading metadata for \"%s\"", _cloudName);
     
@@ -970,30 +968,38 @@ public class PointCloudsRenderer extends DefaultRenderer
 
   }
 
-  public final void addPointCloud(URL serverURL, String cloudName, PointCloudMetadataListener metadataListener)
+  public final void addPointCloud(URL serverURL, String cloudName, float verticalExaggeration, PointCloudMetadataListener metadataListener)
   {
-     addPointCloud(serverURL, cloudName, metadataListener, true);
+     addPointCloud(serverURL, cloudName, verticalExaggeration, metadataListener, true);
+  }
+  public final void addPointCloud(URL serverURL, String cloudName, float verticalExaggeration)
+  {
+     addPointCloud(serverURL, cloudName, verticalExaggeration, null, true);
   }
   public final void addPointCloud(URL serverURL, String cloudName)
   {
-     addPointCloud(serverURL, cloudName, null, true);
+     addPointCloud(serverURL, cloudName, 1.0f, null, true);
   }
-  public final void addPointCloud(URL serverURL, String cloudName, PointCloudMetadataListener metadataListener, boolean deleteListener)
+  public final void addPointCloud(URL serverURL, String cloudName, float verticalExaggeration, PointCloudMetadataListener metadataListener, boolean deleteListener)
   {
-    addPointCloud(serverURL, cloudName, DownloadPriority.MEDIUM, TimeInterval.fromDays(30), true, metadataListener, deleteListener);
+    addPointCloud(serverURL, cloudName, DownloadPriority.MEDIUM, TimeInterval.fromDays(30), true, verticalExaggeration, metadataListener, deleteListener);
   }
 
-  public final void addPointCloud(URL serverURL, String cloudName, long downloadPriority, TimeInterval timeToCache, boolean readExpired, PointCloudMetadataListener metadataListener)
+  public final void addPointCloud(URL serverURL, String cloudName, long downloadPriority, TimeInterval timeToCache, boolean readExpired, float verticalExaggeration, PointCloudMetadataListener metadataListener)
   {
-     addPointCloud(serverURL, cloudName, downloadPriority, timeToCache, readExpired, metadataListener, true);
+     addPointCloud(serverURL, cloudName, downloadPriority, timeToCache, readExpired, verticalExaggeration, metadataListener, true);
+  }
+  public final void addPointCloud(URL serverURL, String cloudName, long downloadPriority, TimeInterval timeToCache, boolean readExpired, float verticalExaggeration)
+  {
+     addPointCloud(serverURL, cloudName, downloadPriority, timeToCache, readExpired, verticalExaggeration, null, true);
   }
   public final void addPointCloud(URL serverURL, String cloudName, long downloadPriority, TimeInterval timeToCache, boolean readExpired)
   {
-     addPointCloud(serverURL, cloudName, downloadPriority, timeToCache, readExpired, null, true);
+     addPointCloud(serverURL, cloudName, downloadPriority, timeToCache, readExpired, 1.0f, null, true);
   }
-  public final void addPointCloud(URL serverURL, String cloudName, long downloadPriority, TimeInterval timeToCache, boolean readExpired, PointCloudMetadataListener metadataListener, boolean deleteListener)
+  public final void addPointCloud(URL serverURL, String cloudName, long downloadPriority, TimeInterval timeToCache, boolean readExpired, float verticalExaggeration, PointCloudMetadataListener metadataListener, boolean deleteListener)
   {
-    PointCloud pointCloud = new PointCloud(serverURL, cloudName, downloadPriority, timeToCache, readExpired, metadataListener, deleteListener);
+    PointCloud pointCloud = new PointCloud(serverURL, cloudName, verticalExaggeration, downloadPriority, timeToCache, readExpired, metadataListener, deleteListener);
     if (_context != null)
     {
       pointCloud.initialize(_context);
