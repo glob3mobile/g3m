@@ -76,7 +76,7 @@ public class Sphere extends BoundingVolume
       indices.add((short)(j));
     }
   
-    Mesh mesh = new IndexedMesh(GLPrimitive.lines(), true, vertices.getCenter(), vertices.create(), indices.create(), 1, 1, color);
+    Mesh mesh = new IndexedMesh(GLPrimitive.lines(), true, vertices.getCenter(), vertices.create(), indices.create(), 1, 1, new Color(color));
   
     if (vertices != null)
        vertices.dispose();

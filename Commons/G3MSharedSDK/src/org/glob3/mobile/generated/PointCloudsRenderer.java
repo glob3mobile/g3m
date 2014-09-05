@@ -372,12 +372,14 @@ public class PointCloudsRenderer extends DefaultRenderer
       {
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#warning TODO: quality factor
-        final int intendedPointsCount = IMathUtils.instance().round((float) projectedArea);
+        final int intendedPointsCount = IMathUtils.instance().round((float) projectedArea * 0.5f);
         int accummulated = 0;
         int neededLevel = -1;
+        int neededPoints = -1;
         for (int i = 0; i < _levelsCountLenght; i++)
         {
           final int levelPointsCount = _levelsCount[i];
+          neededPoints = accummulated;
           accummulated += levelPointsCount;
           if (accummulated > intendedPointsCount)
           {
@@ -388,7 +390,7 @@ public class PointCloudsRenderer extends DefaultRenderer
     
         if (neededLevel != _neededLevel)
         {
-          ILogger.instance().logInfo("Needed Level changed for %s from=%d to=%d", _id, _neededLevel, neededLevel);
+          ILogger.instance().logInfo("Needed Level changed for %s from=%d to=%d, needed points=%d, projectedArea=%f", _id, _neededLevel, neededLevel, neededPoints, projectedArea);
           _neededLevel = neededLevel;
         }
       }
@@ -398,6 +400,7 @@ public class PointCloudsRenderer extends DefaultRenderer
         _mesh = new DirectMesh(GLPrimitive.points(), false, _average, _firstPointsBuffer, 1, 2, Color.newFromRGBA(1, 1, 1, 1), null, 1, false); // colorsIntensity -  colors
       }
       _mesh.render(rc, glState);
+      // getBounds()->render(rc, glState, Color::blue());
       return _firstPointsBuffer.size();
     }
 
