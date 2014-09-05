@@ -27,7 +27,6 @@ import com.glob3mobile.pointcloud.Planet;
 import com.glob3mobile.pointcloud.SphericalPlanet;
 import com.glob3mobile.pointcloud.octree.Geodetic3D;
 import com.glob3mobile.pointcloud.octree.PersistentLOD;
-import com.glob3mobile.pointcloud.octree.PersistentLOD.Statistics;
 import com.glob3mobile.pointcloud.octree.Sector;
 import com.glob3mobile.pointcloud.octree.Utils;
 import com.glob3mobile.pointcloud.octree.berkeleydb.BerkeleyDBLOD;
@@ -36,13 +35,74 @@ import com.glob3mobile.pointcloud.octree.berkeleydb.ByteBufferUtils;
 import es.igosoftware.euclid.bounding.GAxisAlignedBox;
 import es.igosoftware.euclid.vector.GVector3D;
 import es.igosoftware.euclid.vector.GVector3F;
+import es.igosoftware.util.LRUCache;
 import es.igosoftware.util.XStringTokenizer;
 
 
 public class PCSSServlet
-extends
-HttpServlet {
+         extends
+            HttpServlet {
    private static final long serialVersionUID = 1L;
+
+
+   private static class NodeAverageCacheKey {
+      private final Planet _planet;
+      private final String _cloudName;
+      private final String _nodeID;
+
+
+      private NodeAverageCacheKey(final Planet planet,
+                                  final String cloudName,
+                                  final String nodeID) {
+         _planet = planet;
+         _cloudName = cloudName;
+         _nodeID = nodeID;
+      }
+
+
+   }
+
+
+   private final LRUCache<NodeAverageCacheKey, GVector3F, RuntimeException> _nodeAverageCache;
+   {
+      final LRUCache.ValueFactory<NodeAverageCacheKey, GVector3F, RuntimeException> factory = new LRUCache.ValueFactory<NodeAverageCacheKey, GVector3F, RuntimeException>() {
+         @Override
+         public GVector3F create(final NodeAverageCacheKey key) throws RuntimeException {
+            final String cloudName = key._cloudName;
+            final String nodeID = key._nodeID;
+            final Planet planet = key._planet;
+
+            final PersistentLOD db = getDB(cloudName);
+            final PersistentLOD.Node node = db.getNode(nodeID, true);
+
+            double sumX = 0;
+            double sumY = 0;
+            double sumZ = 0;
+            long pointsCount = 0;
+
+            final PersistentLOD.Transaction transaction = null;
+
+            final List<PersistentLOD.NodeLevel> levels = node.getLevels();
+            for (final PersistentLOD.NodeLevel level : levels) {
+               final List<Geodetic3D> points = level.getPoints(transaction);
+               for (final Geodetic3D point : points) {
+                  pointsCount++;
+
+                  final GVector3D cartesian = planet.toCartesian(point);
+                  sumX += cartesian._x;
+                  sumY += cartesian._y;
+                  sumZ += cartesian._z;
+               }
+            }
+
+            return new GVector3F( //
+                     (float) (sumX / pointsCount), //
+                     (float) (sumY / pointsCount), //
+                     (float) (sumZ / pointsCount));
+         }
+      };
+      _nodeAverageCache = new LRUCache<NodeAverageCacheKey, GVector3F, RuntimeException>(1024, factory);
+   }
 
 
    private static enum ResponseFormat {
@@ -81,7 +141,7 @@ HttpServlet {
          if (result == null) {
             try {
                result = BerkeleyDBLOD.openReadOnly(_cloudDirectory, cloudName, -1);
-               final PersistentLOD.Statistics statistics = result.getStatistics(true, true);
+               final PersistentLOD.Statistics statistics = result.getStatistics(true);
                statistics.show();
             }
             catch (final Exception e) {
@@ -201,9 +261,8 @@ HttpServlet {
             final GAxisAlignedBox bounds = new GAxisAlignedBox(new GVector3D(minX, minY, minZ), new GVector3D(maxX, maxY, maxZ));
 
             final List<Geodetic3D> firstPoints = new ArrayList<Geodetic3D>();
-            firstPoints.addAll(levels.get(0).getPoints(transaction));
-            if (levels.size() > 1) {
-               firstPoints.addAll(levels.get(1).getPoints(transaction));
+            for (int i = 0; i < Math.min(levels.size(), 5); i++) {
+               firstPoints.addAll(levels.get(i).getPoints(transaction));
             }
 
 
@@ -232,12 +291,11 @@ HttpServlet {
 
 
    private static void sendJSONMetadata(final HttpServletResponse response,
-                                        final PersistentLOD db,
+                                        final MetadataEntry metadata,
                                         final Planet planet) throws IOException {
 
-      final MetadataEntry metadata = getMetadataEntry(db, planet);
 
-      final Statistics statistics = metadata._statistics;
+      final PersistentLOD.Statistics statistics = metadata._statistics;
       final List<NodeMetadata> nodes = metadata._nodes;
 
       response.setStatus(HttpServletResponse.SC_OK);
@@ -255,6 +313,8 @@ HttpServlet {
       JSONUtils.sendJSON(writer, "minHeight", statistics.getMinHeight());
       writer.print(',');
       JSONUtils.sendJSON(writer, "maxHeight", statistics.getMaxHeight());
+      writer.print(',');
+      JSONUtils.sendJSON(writer, "averageHeight", statistics.getAverageHeight());
 
       writer.print(',');
       JSONUtils.sendJSONKey(writer, "nodes");
@@ -335,7 +395,7 @@ HttpServlet {
          final String key = db.getCloudName() + "/" + planet;
          MetadataEntry entry = _metadataCache.get(key);
          if (entry == null) {
-            entry = new MetadataEntry(planet, db.getStatistics(false, false), getNodesMetadata(db, planet));
+            entry = new MetadataEntry(planet, db.getStatistics(false), getNodesMetadata(db, planet));
             _metadataCache.put(key, entry);
          }
          return entry;
@@ -344,24 +404,14 @@ HttpServlet {
 
 
    private static void sendBinaryMetadata(final HttpServletResponse response,
-                                          final PersistentLOD db,
-                                          final Planet planet) throws IOException {
+                                          final MetadataEntry metadata) throws IOException {
 
-      final MetadataEntry metadata = getMetadataEntry(db, planet);
 
       response.setStatus(HttpServletResponse.SC_OK);
       response.setContentType("application/octet-stream");
 
       final ServletOutputStream os = response.getOutputStream();
       os.write(metadata.getBuffer());
-
-      //      os.write(getHeaderArray(statistics));
-      //
-      //      os.write(toLittleEndiang(nodes.size()));
-      //
-      //      for (final NodeMetadata node : nodes) {
-      //         os.write(getNodeArray(planet, node));
-      //      }
    }
 
 
@@ -423,7 +473,7 @@ HttpServlet {
       final byte intLevelsCount = toByte(intLevels.size());
 
       final int bufferSize = //
-               ByteBufferUtils.sizeOf(idLength) + //
+      ByteBufferUtils.sizeOf(idLength) + //
                idLength + //
                ByteBufferUtils.sizeOf(byteLevelsCount) + //
                ByteBufferUtils.sizeOf(shortLevelsCount) + //
@@ -475,12 +525,14 @@ HttpServlet {
       final Sector sector = statistics.getSector();
       final double minHeight = statistics.getMinHeight();
       final double maxHeight = statistics.getMaxHeight();
+      final double averageHeight = statistics.getAverageHeight();
 
       final int bufferSize = //
-      ByteBufferUtils.sizeOf(pointsCount) + //
+               ByteBufferUtils.sizeOf(pointsCount) + //
                ByteBufferUtils.sizeOf(sector) + //
                ByteBufferUtils.sizeOf(minHeight) + //
-               ByteBufferUtils.sizeOf(maxHeight);
+               ByteBufferUtils.sizeOf(maxHeight) + //
+               ByteBufferUtils.sizeOf(averageHeight);
 
       final ByteBuffer buffer = ByteBuffer.allocate(bufferSize).order(ByteOrder.LITTLE_ENDIAN);
 
@@ -488,6 +540,7 @@ HttpServlet {
       ByteBufferUtils.put(buffer, sector);
       buffer.putDouble(minHeight);
       buffer.putDouble(maxHeight);
+      buffer.putDouble(averageHeight);
 
       return buffer.array();
    }
@@ -499,11 +552,37 @@ HttpServlet {
                                     final HttpServletResponse response) throws IOException {
       switch (format) {
          case JSON: {
-            sendJSONMetadata(response, db, planet);
+            sendJSONMetadata(response, getMetadataEntry(db, planet), planet);
             break;
          }
          case BINARY: {
-            sendBinaryMetadata(response, db, planet);
+            sendBinaryMetadata(response, getMetadataEntry(db, planet));
+            break;
+         }
+         default: {
+            error(response, "format not supported: " + format);
+            break;
+         }
+      }
+   }
+
+
+   private static void sendNodeLevelPoints(final PersistentLOD db,
+                                           final Planet planet,
+                                           final ResponseFormat format,
+                                           final String nodeID,
+                                           final int level,
+                                           final HttpServletResponse response) {
+      switch (format) {
+         case JSON: {
+
+            final PersistentLOD.Node node = db.getNode(nodeID, false);
+
+            sendJSONNodeLevelPoints(response, db, planet, nodeID, level);
+            break;
+         }
+         case BINARY: {
+            sendBinaryNodeLevelPoints(response, db, planet, nodeID, level);
             break;
          }
          default: {
@@ -552,6 +631,31 @@ HttpServlet {
          }
          else {
             sendMetadata(db, planet, format, response);
+         }
+      }
+      else if (path.length == 3) {
+         final String nodeID = path[1];
+         final String levelStr = path[2];
+         try {
+            final int level = Integer.parseInt(levelStr);
+
+            final String planetName = request.getParameter("planet");
+            final String formatName = request.getParameter("format");
+
+            final Planet planet = getPlanet(planetName);
+            final ResponseFormat format = ResponseFormat.get(formatName);
+            if (planet == null) {
+               error(response, "planet parameter invalid or missing: " + planetName);
+            }
+            else if (format == null) {
+               error(response, "format parameter invalid or missing: " + formatName);
+            }
+            else {
+               sendNodeLevelPoints(db, planet, format, nodeID, level, response);
+            }
+         }
+         catch (final NumberFormatException e) {
+            error(response, "invalid level format: " + levelStr);
          }
       }
       else {

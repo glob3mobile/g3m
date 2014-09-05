@@ -111,7 +111,7 @@ public class CreateOT {
       octree.flush();
       progress.finish();
 
-      octree.getStatistics(false, false).show();
+      octree.getStatistics(false).show();
    }
 
 
@@ -210,7 +210,7 @@ public class CreateOT {
       final boolean createIfNotExists = false;
       final int cacheSizeInBytes = 1024 * 1024 * 1024;
       try (final PersistentOctree octree = BerkeleyDBOctree.open(cloudDirectory, cloudName, createIfNotExists, cacheSizeInBytes)) {
-         octree.getStatistics(false, false).show();
+         octree.getStatistics(false).show();
       }
    }
 

@@ -20,6 +20,7 @@
 class IDownloader;
 class Sector;
 class Frustum;
+class DirectMesh;
 
 class PointCloudsRenderer : public DefaultRenderer {
 public:
@@ -174,11 +175,12 @@ private:
     const Box*      _bounds;
     IFloatBuffer*  _firstPointsBuffer;
 
-    Mesh* _mesh;
+    DirectMesh* _mesh;
 
     long long _pointsCount;
 
     int _neededLevel;
+    int _neededPoints;
 
   protected:
     long long rawRender(const G3MRenderContext* rc,
@@ -206,7 +208,8 @@ private:
     _firstPointsBuffer(firstPointsBuffer),
     _mesh(NULL),
     _pointsCount(-1),
-    _neededLevel(0)
+    _neededLevel(0),
+    _neededPoints(0)
     {
     }
 #endif
@@ -266,6 +269,7 @@ private:
     Sector* _sector;
     double _minHeight;
     double _maxHeight;
+    double _averageHeight;
 
     PointCloudInnerNode* _rootNode;
 
@@ -278,6 +282,7 @@ private:
     _sector(NULL),
     _minHeight(0),
     _maxHeight(0),
+    _averageHeight(0),
     _rootNode(NULL)
     {
     }
@@ -349,6 +354,8 @@ private:
     Sector* _sector;
     double _minHeight;
     double _maxHeight;
+    double _averageHeight;
+
     PointCloudInnerNode* _rootNode;
 
     long long _lastRenderedCount;
@@ -375,6 +382,7 @@ private:
     _sector(NULL),
     _minHeight(0),
     _maxHeight(0),
+    _averageHeight(0),
     _rootNode(NULL),
     _lastRenderedCount(0)
     {
@@ -396,6 +404,7 @@ private:
                         Sector* sector,
                         double minHeight,
                         double maxHeight,
+                        double averageHeight,
                         PointCloudInnerNode* rootNode);
 
     void render(const G3MRenderContext* rc,

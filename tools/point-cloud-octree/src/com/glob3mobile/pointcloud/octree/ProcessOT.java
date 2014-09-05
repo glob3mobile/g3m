@@ -15,7 +15,6 @@ import javax.imageio.ImageIO;
 
 import com.glob3mobile.pointcloud.octree.berkeleydb.BerkeleyDBLOD;
 import com.glob3mobile.pointcloud.octree.berkeleydb.BerkeleyDBOctree;
-import com.glob3mobile.pointcloud.octree.berkeleydb.TileHeader;
 
 import es.igosoftware.util.GUndeterminateProgress;
 
@@ -56,7 +55,7 @@ public class ProcessOT {
       System.out.println("-------------\n");
 
       final File cloudDirectory = new File(System.getProperty("user.dir"));
-      //      final File cloudDirectory = new File("/Volumes/My Passport/_LIDAR_COPY");
+      // final File cloudDirectory = new File("/Volumes/My Passport/_LIDAR_COPY");
 
 
       final String completeSourceCloudName = "Loudoun-VA";
@@ -77,7 +76,7 @@ public class ProcessOT {
       if (createSimplifiedCloudName) {
          try (final PersistentOctree sourceOctree = BerkeleyDBOctree.openReadOnly(cloudDirectory, completeSourceCloudName,
                   cacheSizeInBytes)) {
-            final PersistentOctree.Statistics statistics = sourceOctree.getStatistics(false, true);
+            final PersistentOctree.Statistics statistics = sourceOctree.getStatistics(true);
             statistics.show();
 
             final long sourcePointsCount = statistics.getPointsCount();
@@ -102,7 +101,7 @@ public class ProcessOT {
       if (createMapForSourceOT) {
          try (final PersistentOctree sourceOctree = BerkeleyDBOctree.openReadOnly(cloudDirectory, sourceCloudName,
                   cacheSizeInBytes)) {
-            final PersistentOctree.Statistics statistics = sourceOctree.getStatistics(false, true);
+            final PersistentOctree.Statistics statistics = sourceOctree.getStatistics(true);
             statistics.show();
 
             sourceOctree.acceptDepthFirstVisitor(new CreateMapTask(sourceCloudName, statistics, 2048 * 2));
@@ -113,7 +112,7 @@ public class ProcessOT {
       if (createLOD) {
          try (final PersistentOctree sourceOctree = BerkeleyDBOctree.openReadOnly(cloudDirectory, sourceCloudName,
                   cacheSizeInBytes)) {
-            final PersistentOctree.Statistics statistics = sourceOctree.getStatistics(false, true);
+            final PersistentOctree.Statistics statistics = sourceOctree.getStatistics(true);
             final long pointsCount = statistics.getPointsCount();
             statistics.show();
 
@@ -128,44 +127,44 @@ public class ProcessOT {
 
       if (showLODStats) {
          try (final PersistentLOD lodDB = BerkeleyDBLOD.openReadOnly(cloudDirectory, lodCloudName, cacheSizeInBytes)) {
-            final PersistentLOD.Statistics statistics = lodDB.getStatistics(false, true);
+            final PersistentLOD.Statistics statistics = lodDB.getStatistics(true);
             statistics.show();
 
-            final Sector wholeSector = statistics.getSector();
-            final TileHeader rootHeader = TileHeader.deepestEnclosingTileHeader(wholeSector);
-
-            System.out.println(rootHeader);
-
-
-            lodDB.acceptDepthFirstVisitor(null, new PersistentLOD.Visitor() {
-               private final List<String> _nodesIDs = new ArrayList<String>((int) statistics.getNodesCount());
-               private long               _sumIDLengths;
-
-
-               @Override
-               public void start(final PersistentLOD.Transaction transaction) {
-                  _sumIDLengths = 0;
-               }
-
-
-               @Override
-               public void stop(final PersistentLOD.Transaction transaction) {
-                  System.out.println(_nodesIDs.size());
-
-                  System.out.println((_nodesIDs.size() * 3) + _sumIDLengths);
-               }
-
-
-               @Override
-               public boolean visit(final PersistentLOD.Transaction transaction,
-                                    final PersistentLOD.Node node) {
-                  final String nodeID = node.getID();
-                  //System.out.println(nodeID);
-                  _nodesIDs.add(nodeID);
-                  _sumIDLengths += nodeID.length();
-                  return true;
-               }
-            });
+            //            final Sector wholeSector = statistics.getSector();
+            //            final TileHeader rootHeader = TileHeader.deepestEnclosingTileHeader(wholeSector);
+            //
+            //            System.out.println(rootHeader);
+            //
+            //
+            //            lodDB.acceptDepthFirstVisitor(null, new PersistentLOD.Visitor() {
+            //               private final List<String> _nodesIDs = new ArrayList<String>((int) statistics.getNodesCount());
+            //               private long               _sumIDLengths;
+            //
+            //
+            //               @Override
+            //               public void start(final PersistentLOD.Transaction transaction) {
+            //                  _sumIDLengths = 0;
+            //               }
+            //
+            //
+            //               @Override
+            //               public void stop(final PersistentLOD.Transaction transaction) {
+            //                  System.out.println(_nodesIDs.size());
+            //
+            //                  System.out.println((_nodesIDs.size() * 3) + _sumIDLengths);
+            //               }
+            //
+            //
+            //               @Override
+            //               public boolean visit(final PersistentLOD.Transaction transaction,
+            //                                    final PersistentLOD.Node node) {
+            //                  final String nodeID = node.getID();
+            //                  //System.out.println(nodeID);
+            //                  _nodesIDs.add(nodeID);
+            //                  _sumIDLengths += nodeID.length();
+            //                  return true;
+            //               }
+            //            });
 
 
             final boolean showStatisticsForSector = false;
@@ -200,7 +199,7 @@ public class ProcessOT {
                         public void informProgress(final long stepsDone,
                                                    final long elapsed) {
                            System.out.println("- gathering statistics for \"" + lodDB.getCloudName() + "\""
-                                    + progressString(stepsDone, elapsed));
+                                              + progressString(stepsDone, elapsed));
                         }
                      };
                   }
@@ -245,8 +244,8 @@ public class ProcessOT {
                      System.out.println("     Points/Node: " + ((float) _pointsCounter / _nodesCounter));
                      System.out.println("     Points/Level: " + ((float) _pointsCounter / _levelsCounter));
                      System.out.println("   Density/Node: Average=" + (_sumDensity / _nodesCounter) + //
-                              ", Min=" + _minDensity + //
-                              ", Max=" + _maxDensity);
+                                        ", Min=" + _minDensity + //
+                                        ", Max=" + _maxDensity);
                      System.out.println("======================================================================");
                   }
                };
@@ -262,7 +261,7 @@ public class ProcessOT {
 
       if (drawSampleLODNode) {
          try (final PersistentLOD lodDB = BerkeleyDBLOD.openReadOnly(cloudDirectory, lodCloudName, cacheSizeInBytes)) {
-            final PersistentLOD.Statistics statistics = lodDB.getStatistics(false, true);
+            final PersistentLOD.Statistics statistics = lodDB.getStatistics(true);
             statistics.show();
 
             final double minHeight = statistics.getMinHeight();

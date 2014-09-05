@@ -119,6 +119,9 @@ public interface PersistentLOD
       double getMaxHeight();
 
 
+      double getAverageHeight();
+
+
       int getMinPointsPerNode();
 
 
@@ -135,6 +138,7 @@ public interface PersistentLOD
 
 
       long getNodesCount();
+
 
    }
 
@@ -161,8 +165,7 @@ public interface PersistentLOD
    Sector getSector(String id);
 
 
-   PersistentLOD.Statistics getStatistics(boolean fast,
-                                          boolean showProgress);
+   PersistentLOD.Statistics getStatistics(boolean showProgress);
 
 
    PersistentLOD.NodeLayout getNodeLayout(String id);

@@ -489,7 +489,7 @@ PersistentLOD {
    PersistentLOD.Statistics,
    Serializable {
 
-      private static final long      serialVersionUID = 1L;
+      private static final long      serialVersionUID = 3L;
 
       private final String           _cloudName;
       private GUndeterminateProgress _progress;
@@ -500,19 +500,17 @@ PersistentLOD {
       private long                   _sumDepth;
       private int                    _minDepth;
       private int                    _maxDepth;
+      private double                 _sumHeight;
       private int                    _minPointsCountPerNode;
       private int                    _maxPointsCountPerNode;
       private Sector                 _sector;
       private double                 _minHeight       = Double.POSITIVE_INFINITY;
       private double                 _maxHeight       = Double.NEGATIVE_INFINITY;
-      private final boolean          _fast;
 
 
       private BerkeleyLODDBStatistics(final String cloudName,
-                                      final boolean fast,
                                       final GUndeterminateProgress progress) {
          _cloudName = cloudName;
-         _fast = fast;
          _progress = progress;
       }
 
@@ -526,6 +524,7 @@ PersistentLOD {
          _sumDepth = 0;
          _minDepth = Integer.MAX_VALUE;
          _maxDepth = Integer.MIN_VALUE;
+         _sumHeight = 0;
          _nodeLevelsCount = 0;
       }
 
@@ -563,17 +562,16 @@ PersistentLOD {
          }
 
 
-         if (!_fast) {
-            for (final PersistentLOD.NodeLevel level : node.getLevels()) {
-               for (final Geodetic3D point : level.getPoints(transaction)) {
-                  final double height = point._height;
-                  if (height < _minHeight) {
-                     _minHeight = height;
-                  }
-                  if (height > _maxHeight) {
-                     _maxHeight = height;
-                  }
+         for (final PersistentLOD.NodeLevel level : node.getLevels()) {
+            for (final Geodetic3D point : level.getPoints(transaction)) {
+               final double height = point._height;
+               if (height < _minHeight) {
+                  _minHeight = height;
                }
+               if (height > _maxHeight) {
+                  _maxHeight = height;
+               }
+               _sumHeight += height;
             }
          }
 
@@ -596,7 +594,9 @@ PersistentLOD {
          System.out.println(" " + _cloudName);
          System.out.println("   Points: " + _pointsCount);
          System.out.println("   Sector: " + _sector);
-         System.out.println("   Heights: " + _minHeight + "/" + _maxHeight + " (delta=" + (_maxHeight - _minHeight) + ")");
+         System.out.println("   Heights: " + _minHeight + "/" + _maxHeight + //
+                  " (delta=" + (_maxHeight - _minHeight) + ")" + //
+                            " average=" + ((float) (_sumHeight / _pointsCount)));
          System.out.println("   Nodes: " + _nodesCount);
          System.out.println("    Depth: " + _minDepth + "/" + _maxDepth + ", Average=" + ((float) _sumDepth / _nodesCount));
          System.out.println("    Points/Node: Average=" + ((float) _pointsCount / _nodesCount) + //
@@ -635,6 +635,12 @@ PersistentLOD {
       @Override
       public double getMaxHeight() {
          return _maxHeight;
+      }
+
+
+      @Override
+      public double getAverageHeight() {
+         return _sumHeight / _pointsCount;
       }
 
 
@@ -685,6 +691,7 @@ PersistentLOD {
          return _nodesCount;
       }
 
+
    }
 
 
@@ -704,10 +711,12 @@ PersistentLOD {
          return (BerkeleyLODDBStatistics) in.readObject();
       }
       catch (final ClassNotFoundException e) {
-         throw new RuntimeException(e);
+         //         throw new RuntimeException(e);
+         return null;
       }
       catch (final IOException e) {
-         throw new RuntimeException(e);
+         //         throw new RuntimeException(e);
+         return null;
       }
 
    }
@@ -729,14 +738,11 @@ PersistentLOD {
 
 
    @Override
-   public PersistentLOD.Statistics getStatistics(final boolean fast,
-                                                 final boolean showProgress) {
+   public PersistentLOD.Statistics getStatistics(final boolean showProgress) {
 
       final BerkeleyLODDBStatistics cachedStatistics = getCachedStatistics();
       if (cachedStatistics != null) {
-         if (fast || !cachedStatistics._fast) {
-            return cachedStatistics;
-         }
+         return cachedStatistics;
       }
 
       final GUndeterminateProgress progress;
@@ -753,7 +759,7 @@ PersistentLOD {
          progress = null;
       }
 
-      final BerkeleyLODDBStatistics statistics = new BerkeleyLODDBStatistics(_cloudName, fast, progress);
+      final BerkeleyLODDBStatistics statistics = new BerkeleyLODDBStatistics(_cloudName, progress);
       final Transaction transaction = null;
       acceptDepthFirstVisitor(transaction, statistics);
       saveCachedStatistics(statistics);

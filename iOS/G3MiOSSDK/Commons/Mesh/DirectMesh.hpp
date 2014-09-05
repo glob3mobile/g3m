@@ -12,6 +12,9 @@
 #include "AbstractMesh.hpp"
 
 class DirectMesh : public AbstractMesh {
+private:
+  int _renderVerticesCount;
+
 protected:
   void rawRender(const G3MRenderContext* rc) const;
 
@@ -35,6 +38,14 @@ public:
 #ifdef JAVA_CODE
     super.dispose();
 #endif
+  }
+
+  void setRenderVerticesCount(int renderVerticesCount) {
+    _renderVerticesCount = renderVerticesCount;
+  }
+
+  int getRenderVerticesCount() const {
+    return _renderVerticesCount;
   }
 
 };

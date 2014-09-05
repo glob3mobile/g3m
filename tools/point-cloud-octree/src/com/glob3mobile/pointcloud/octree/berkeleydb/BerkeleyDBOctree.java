@@ -367,7 +367,7 @@ PersistentOctree {
                PersistentOctree.Statistics,
                Serializable {
 
-      private static final long      serialVersionUID = 1L;
+      private static final long      serialVersionUID = 2L;
 
       private final String           _cloudName;
       private GUndeterminateProgress _progress;
@@ -382,14 +382,11 @@ PersistentOctree {
       private Sector                 _sector;
       private double                 _minHeight       = Double.POSITIVE_INFINITY;
       private double                 _maxHeight       = Double.NEGATIVE_INFINITY;
-      private final boolean          _fast;
 
 
       private BerkeleyDBStatistics(final String cloudName,
-                                   final boolean fast,
                                    final GUndeterminateProgress progress) {
          _cloudName = cloudName;
-         _fast = fast;
          _progress = progress;
       }
 
@@ -415,15 +412,13 @@ PersistentOctree {
             _progress.stepDone();
          }
 
-         if (!_fast) {
-            for (final Geodetic3D point : node.getPoints()) {
-               final double height = point._height;
-               if (height < _minHeight) {
-                  _minHeight = height;
-               }
-               if (height > _maxHeight) {
-                  _maxHeight = height;
-               }
+         for (final Geodetic3D point : node.getPoints()) {
+            final double height = point._height;
+            if (height < _minHeight) {
+               _minHeight = height;
+            }
+            if (height > _maxHeight) {
+               _maxHeight = height;
             }
          }
 
@@ -559,14 +554,11 @@ PersistentOctree {
 
 
    @Override
-   public PersistentOctree.Statistics getStatistics(final boolean fast,
-                                                    final boolean showProgress) {
+   public PersistentOctree.Statistics getStatistics(final boolean showProgress) {
 
       final BerkeleyDBStatistics cachedStatistics = getCachedStatistics();
       if (cachedStatistics != null) {
-         if (fast || !cachedStatistics._fast) {
-            return cachedStatistics;
-         }
+         return cachedStatistics;
       }
 
       final GUndeterminateProgress progress;
@@ -583,7 +575,7 @@ PersistentOctree {
          progress = null;
       }
 
-      final BerkeleyDBStatistics statistics = new BerkeleyDBStatistics(_cloudName, fast, progress);
+      final BerkeleyDBStatistics statistics = new BerkeleyDBStatistics(_cloudName, progress);
       acceptDepthFirstVisitor(statistics);
       saveCachedStatistics(statistics);
       return statistics;

@@ -98,6 +98,7 @@ void PointCloudsRenderer::PointCloudMetadataParserAsyncTask::runInBackground(con
 
   _minHeight = it.nextDouble();
   _maxHeight = it.nextDouble();
+  _averageHeight = it.nextDouble();
 
   const int leafNodesCount = it.nextInt32();
   std::vector<PointCloudLeafNode*> leafNodes;
@@ -144,7 +145,7 @@ void PointCloudsRenderer::PointCloudMetadataParserAsyncTask::runInBackground(con
                                 Vector3D(upperX, upperY, upperZ));
 
     const int firstPointsCount = it.nextInt32();
-    IFloatBuffer* firstPointsBuffer = IFactory::instance()->createFloatBuffer( firstPointsCount * 3 * 4 );
+    IFloatBuffer* firstPointsBuffer = IFactory::instance()->createFloatBuffer( firstPointsCount * 3 );
     for (int j = 0; j < firstPointsCount; j++) {
       const float x = it.nextFloat();
       const float y = it.nextFloat();
@@ -322,7 +323,7 @@ void PointCloudsRenderer::PointCloudInnerNode::addLeafNode(PointCloudLeafNode* l
 }
 
 void PointCloudsRenderer::PointCloudMetadataParserAsyncTask::onPostExecute(const G3MContext* context) {
-  _pointCloud->parsedMetadata(_pointsCount, _sector, _minHeight, _maxHeight, _rootNode);
+  _pointCloud->parsedMetadata(_pointsCount, _sector, _minHeight, _maxHeight, _averageHeight, _rootNode);
   _sector   = NULL; // moves ownership to pointCloud
   _rootNode = NULL; // moves ownership to pointCloud
 }
@@ -331,11 +332,13 @@ void PointCloudsRenderer::PointCloud::parsedMetadata(long long pointsCount,
                                                      Sector* sector,
                                                      double minHeight,
                                                      double maxHeight,
+                                                     double averageHeight,
                                                      PointCloudInnerNode* rootNode) {
   _pointsCount = pointsCount;
   _sector = sector;
   _minHeight = minHeight;
   _maxHeight = maxHeight;
+  _averageHeight = averageHeight;
 
   _downloadingMetadata = false;
   _rootNode = rootNode;
@@ -406,7 +409,7 @@ long long PointCloudsRenderer::PointCloudNode::render(const G3MRenderContext* rc
       }
 
 #warning TODO: quality factor
-      const double minProjectedArea = 500;
+      const double minProjectedArea = 250;
       if (_projectedArea >= minProjectedArea) {
         const long long renderedCount = rawRender(rc,
                                                   glState,
@@ -499,7 +502,7 @@ long long PointCloudsRenderer::PointCloudLeafNode::rawRender(const G3MRenderCont
                                                              bool justRecalculatedProjectedArea) {
   if (justRecalculatedProjectedArea) {
 #warning TODO: quality factor
-    const int intendedPointsCount = IMathUtils::instance()->round((float) projectedArea * 0.5f);
+    const int intendedPointsCount = IMathUtils::instance()->round((float) projectedArea * 0.01f);
     int accummulated = 0;
     int neededLevel = -1;
     int neededPoints = -1;
@@ -514,13 +517,17 @@ long long PointCloudsRenderer::PointCloudLeafNode::rawRender(const G3MRenderCont
     }
 
     if (neededLevel != _neededLevel) {
-      ILogger::instance()->logInfo("Needed Level changed for %s from=%d to=%d, needed points=%d, projectedArea=%f",
-                                   _id.c_str(),
-                                   _neededLevel,
-                                   neededLevel,
-                                   neededPoints,
-                                   projectedArea);
+//      ILogger::instance()->logInfo("Needed Level changed for %s from=%d to=%d, needed points=%d, projectedArea=%f",
+//                                   _id.c_str(),
+//                                   _neededLevel,
+//                                   neededLevel,
+//                                   neededPoints,
+//                                   projectedArea);
       _neededLevel = neededLevel;
+      _neededPoints = neededPoints;
+      if (_mesh != NULL) {
+        _mesh->setRenderVerticesCount( IMathUtils::instance()->min(_neededPoints, _firstPointsBuffer->size() / 3) );
+      }
     }
   }
 
@@ -535,10 +542,11 @@ long long PointCloudsRenderer::PointCloudLeafNode::rawRender(const G3MRenderCont
                            NULL, // colors
                            1,    // colorsIntensity
                            false);
+    _mesh->setRenderVerticesCount( IMathUtils::instance()->min(_neededPoints, _firstPointsBuffer->size() / 3) );
   }
   _mesh->render(rc, glState);
-  // getBounds()->render(rc, glState, Color::blue());
-  return _firstPointsBuffer->size();
+  //getBounds()->render(rc, glState, Color::blue());
+  return _mesh->getRenderVerticesCount();
 }
 
 

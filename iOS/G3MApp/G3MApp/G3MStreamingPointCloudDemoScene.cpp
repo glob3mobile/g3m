@@ -56,7 +56,7 @@ void G3MStreamingPointCloudDemoScene::rawActivate(const G3MContext *context) {
 
 #warning TODO cache
   model->getPointCloudsRenderer()->addPointCloud(URL("http://glob3mobile.dyndns.org:8080"),
-                                                 "Loudoun-VA_simplified_LOD",
+                                                 "Loudoun-VA_simplified2_LOD",
                                                  DownloadPriority::LOWER,
                                                  TimeInterval::zero(),
                                                  false,
