@@ -22,8 +22,8 @@ import es.igosoftware.util.GStringUtils;
 
 
 public class SimplifyOctreeTask
-implements
-            PersistentOctree.Visitor {
+         implements
+PersistentOctree.Visitor {
 
    private final String     _sourceCloudName;
    private final File       _cloudDirectory;
@@ -37,12 +37,12 @@ implements
 
 
    SimplifyOctreeTask(final String sourceCloudName,
-            final File cloudDirectory,
-            final String simplifiedCloudName,
-            final long cacheSizeInBytes,
-            final long sourcePointsCount,
-            final float resultSizeFactor,
-            final int maxPointsPerTitle) {
+                      final File cloudDirectory,
+                      final String simplifiedCloudName,
+                      final long cacheSizeInBytes,
+                      final long sourcePointsCount,
+                      final float resultSizeFactor,
+                      final int maxPointsPerTitle) {
       _sourceCloudName = sourceCloudName;
       _cloudDirectory = cloudDirectory;
       _simplifiedCloudName = simplifiedCloudName;
@@ -67,7 +67,7 @@ implements
                                     final long elapsed,
                                     final long estimatedMsToFinish) {
             System.out.println("- Simplifying \"" + _sourceCloudName + "\" "
-                     + progressString(stepsDone, percent, elapsed, estimatedMsToFinish));
+                               + progressString(stepsDone, percent, elapsed, estimatedMsToFinish));
          }
       };
    }
@@ -89,7 +89,7 @@ implements
 
          System.out.println();
          System.out.println("Source points=" + _sourcePointsCount + ", Simplified Points=" + simplifiedPointsCount + " ("
-                            + GStringUtils.formatPercent(simplifiedPointsCount, _sourcePointsCount) + ")");
+                  + GStringUtils.formatPercent(simplifiedPointsCount, _sourcePointsCount) + ")");
       }
    }
 
@@ -135,7 +135,7 @@ implements
 
       final List<Geodetic3D> points = sourceNode.getPoints();
       final int targetPointsCount = Math.round(pointsSize * _resultSizeFactor);
-      final List<Geodetic3D> simplifiedPoints = KMeans.cluster(points, targetPointsCount);
+      final List<Geodetic3D> simplifiedPoints = KMeans.cluster(points, targetPointsCount, 1);
 
       for (final Geodetic3D point : simplifiedPoints) {
          _targetOctree.addPoint(point);
@@ -223,9 +223,9 @@ implements
                                      //final int level,
                                      final Sector sector,
                                      final List<Geodetic3D> points
-                                     //final double minHeight,
-                                     //final double maxHeight
-            ) {
+   //final double minHeight,
+   //final double maxHeight
+   ) {
       final int imageWidth = 1024;
       final int imageHeight = 1024;
 

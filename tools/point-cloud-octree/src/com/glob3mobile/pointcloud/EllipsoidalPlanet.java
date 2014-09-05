@@ -9,8 +9,8 @@ import es.igosoftware.euclid.vector.GVector3D;
 
 
 public class EllipsoidalPlanet
-implements
-Planet {
+         implements
+            Planet {
 
    public static final Planet EARTH = new EllipsoidalPlanet(new GVector3D(6378137.0, 6378137.0, 6356752.314245));
 
@@ -55,20 +55,22 @@ Planet {
    @Override
    public GVector3D toCartesian(final Angle latitude,
                                 final Angle longitude,
-                                final double height) {
+                                final double height,
+                                final float verticalExaggeration) {
       final GVector3D n = geodeticSurfaceNormal(latitude, longitude);
 
       final GVector3D k = _radiiSquared.scale(n);
       final double gamma = Math.sqrt((k._x * n._x) + (k._y * n._y) + (k._z * n._z));
 
       final GVector3D rSurface = k.div(gamma);
-      return rSurface.add(n.scale(height));
+      return rSurface.add(n.scale(height * verticalExaggeration));
    }
 
 
    @Override
-   public GVector3D toCartesian(final Geodetic3D geodetic) {
-      return toCartesian(geodetic._latitude, geodetic._longitude, geodetic._height);
+   public GVector3D toCartesian(final Geodetic3D geodetic,
+                                final float verticalExaggeration) {
+      return toCartesian(geodetic._latitude, geodetic._longitude, geodetic._height, verticalExaggeration);
    }
 
 

@@ -244,7 +244,8 @@ public class JSONUtils {
                                final String key,
                                final List<Geodetic3D> value,
                                final Planet planet,
-                               final IVector3 average) {
+                               final IVector3 average,
+                               final float verticalExaggeration) {
       sendJSONKey(writer, key);
       writer.print('[');
       boolean first = true;
@@ -255,7 +256,7 @@ public class JSONUtils {
          else {
             writer.print(',');
          }
-         sendJSON(writer, each, planet, average);
+         sendJSON(writer, each, planet, average, verticalExaggeration);
       }
       writer.print(']');
    }
@@ -264,7 +265,8 @@ public class JSONUtils {
    public static void sendJSON(final PrintWriter writer,
                                final List<Geodetic3D> value,
                                final Planet planet,
-                               final IVector3 average) {
+                               final IVector3 average,
+                               final float verticalExaggeration) {
       writer.print('[');
       boolean first = true;
       for (final Geodetic3D point : value) {
@@ -274,7 +276,7 @@ public class JSONUtils {
          else {
             writer.print(',');
          }
-         final GVector3D cartesian = planet.toCartesian(point);
+         final GVector3D cartesian = planet.toCartesian(point, verticalExaggeration);
          writer.print(Float.toString((float) (cartesian._x - average.x())));
          writer.print(',');
          writer.print(Float.toString((float) (cartesian._y - average.y())));
@@ -288,9 +290,10 @@ public class JSONUtils {
    private static void sendJSON(final PrintWriter writer,
                                 final Geodetic3D value,
                                 final Planet planet,
-                                final IVector3 average) {
+                                final IVector3 average,
+                                final float verticalExaggeration) {
       writer.print('[');
-      final GVector3D cartesian = planet.toCartesian(value);
+      final GVector3D cartesian = planet.toCartesian(value, verticalExaggeration);
       writer.print(Float.toString((float) (cartesian._x - average.x())));
       writer.print(',');
       writer.print(Float.toString((float) (cartesian._y - average.y())));
@@ -324,7 +327,8 @@ public class JSONUtils {
    private static void sendJSON(final PrintWriter writer,
                                 final PersistentLOD.NodeLevel level,
                                 final Planet planet,
-                                final IVector3 average) {
+                                final IVector3 average,
+                                final float verticalExaggeration) {
       writer.print('[');
 
       boolean first = true;
@@ -336,7 +340,7 @@ public class JSONUtils {
             writer.print(',');
          }
 
-         final GVector3D cartesian = planet.toCartesian(pos);
+         final GVector3D cartesian = planet.toCartesian(pos, verticalExaggeration);
 
          writer.print(Float.toString((float) (cartesian._x - average.x())));
          writer.print(',');

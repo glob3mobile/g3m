@@ -200,8 +200,8 @@ public class ByteBufferUtils {
 
 
    public static List<Geodetic3D> getPoints(final ByteBuffer buffer,
-            final Format format,
-            final int pointsCount) {
+                                            final Format format,
+                                            final int pointsCount) {
       switch (format) {
          case LatLonHeight:
             final List<Geodetic3D> points = new ArrayList<Geodetic3D>(pointsCount);
@@ -234,9 +234,9 @@ public class ByteBufferUtils {
 
 
    public static List<Geodetic3D> getPoints(final ByteBuffer buffer,
-                                            final Format format,
-                                            final int pointsCount,
-                                            final Geodetic3D averagePoint) {
+            final Format format,
+            final int pointsCount,
+            final Geodetic3D averagePoint) {
       switch (format) {
          case LatLonHeight:
             final List<Geodetic3D> points = new ArrayList<Geodetic3D>(pointsCount);
@@ -304,10 +304,11 @@ public class ByteBufferUtils {
    public static void put(final ByteBuffer buffer,
                           final Planet planet,
                           final List<Geodetic3D> points,
-                          final GVector3F average) {
+                          final GVector3F average,
+                          final float verticalExaggeration) {
       buffer.putInt(points.size());
       for (final Geodetic3D point : points) {
-         final GVector3D cartesian = planet.toCartesian(point);
+         final GVector3D cartesian = planet.toCartesian(point, verticalExaggeration);
          put(buffer, cartesian, average);
       }
    }

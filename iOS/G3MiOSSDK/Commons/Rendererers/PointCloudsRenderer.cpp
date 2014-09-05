@@ -20,7 +20,6 @@
 #include "DirectMesh.hpp"
 #include "IFactory.hpp"
 
-
 void PointCloudsRenderer::PointCloudMetadataDownloadListener::onDownload(const URL& url,
                                                                          IByteBuffer* buffer,
                                                                          bool expired) {
@@ -53,9 +52,12 @@ void PointCloudsRenderer::PointCloud::initialize(const G3MContext* context) {
   _errorParsingMetadata = false;
 
   const std::string planetType = context->getPlanet()->getType();
-//  const float verticalExaggeration = context->getSurfaceElevationProvider()->getVerticalExaggeration();
 
-  const URL metadataURL(_serverURL, _cloudName + "?planet=" + planetType + "&format=binary");
+  const URL metadataURL(_serverURL,
+                        _cloudName +
+                        "?planet=" + planetType +
+                        "&verticalExaggeration=" + IStringUtils::instance()->toString(_verticalExaggeration) +
+                        "&format=binary");
 
   ILogger::instance()->logInfo("Downloading metadata for \"%s\"", _cloudName.c_str());
 
@@ -399,7 +401,7 @@ long long PointCloudsRenderer::PointCloudNode::render(const G3MRenderContext* rc
     if (bounds->touchesFrustum(frustum)) {
       bool justRecalculatedProjectedArea = false;
       if ((_projectedArea == -1) ||
-          ((_lastProjectedAreaTimeInMS + 750) < nowInMS)) {
+          ((_lastProjectedAreaTimeInMS + 500) < nowInMS)) {
         const double currentProjectedArea = bounds->projectedArea(rc);
         if (currentProjectedArea != _projectedArea) {
           _projectedArea = currentProjectedArea;
@@ -546,9 +548,6 @@ long long PointCloudsRenderer::PointCloudLeafNode::rawRender(const G3MRenderCont
     }
   }
 
-
-  //032010023301230
-
   if (_mesh == NULL) {
     _mesh = new DirectMesh(GLPrimitive::points(),
                            false,
@@ -646,6 +645,7 @@ RenderState PointCloudsRenderer::getRenderState(const G3MRenderContext* rc) {
 
 void PointCloudsRenderer::addPointCloud(const URL& serverURL,
                                         const std::string& cloudName,
+                                        float verticalExaggeration,
                                         PointCloudMetadataListener* metadataListener,
                                         bool deleteListener) {
   addPointCloud(serverURL,
@@ -653,6 +653,7 @@ void PointCloudsRenderer::addPointCloud(const URL& serverURL,
                 DownloadPriority::MEDIUM,
                 TimeInterval::fromDays(30),
                 true,
+                verticalExaggeration,
                 metadataListener,
                 deleteListener);
 }
@@ -662,9 +663,10 @@ void PointCloudsRenderer::addPointCloud(const URL& serverURL,
                                         long long downloadPriority,
                                         const TimeInterval& timeToCache,
                                         bool readExpired,
+                                        float verticalExaggeration,
                                         PointCloudMetadataListener* metadataListener,
                                         bool deleteListener) {
-  PointCloud* pointCloud = new PointCloud(serverURL, cloudName, downloadPriority, timeToCache, readExpired, metadataListener, deleteListener);
+  PointCloud* pointCloud = new PointCloud(serverURL, cloudName, verticalExaggeration, downloadPriority, timeToCache, readExpired, metadataListener, deleteListener);
   if (_context != NULL) {
     pointCloud->initialize(_context);
   }

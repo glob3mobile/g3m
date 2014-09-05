@@ -339,6 +339,7 @@ private:
     private final URL _serverURL;
 #endif
     const std::string _cloudName;
+    const float _verticalExaggeration;
 
     const long long    _downloadPriority;
 #ifdef C_CODE
@@ -369,6 +370,7 @@ private:
   public:
     PointCloud(const URL& serverURL,
                const std::string& cloudName,
+               float verticalExaggeration,
                long long downloadPriority,
                const TimeInterval& timeToCache,
                bool readExpired,
@@ -376,6 +378,7 @@ private:
                bool deleteListener) :
     _serverURL(serverURL),
     _cloudName(cloudName),
+    _verticalExaggeration(verticalExaggeration),
     _downloadPriority(downloadPriority),
     _timeToCache(timeToCache),
     _readExpired(readExpired),
@@ -450,6 +453,7 @@ public:
 
   void addPointCloud(const URL& serverURL,
                      const std::string& cloudName,
+                     float verticalExaggeration = 1.0f,
                      PointCloudMetadataListener* metadataListener = NULL,
                      bool deleteListener = true);
 
@@ -458,6 +462,7 @@ public:
                      long long downloadPriority,
                      const TimeInterval& timeToCache,
                      bool readExpired,
+                     float verticalExaggeration = 1.0f,
                      PointCloudMetadataListener* metadataListener = NULL,
                      bool deleteListener = true);
   

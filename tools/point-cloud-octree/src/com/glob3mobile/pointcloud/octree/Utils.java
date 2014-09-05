@@ -178,10 +178,11 @@ public class Utils {
 
 
    public static List<GVector3D> toCartesian(final Planet planet,
-                                             final List<Geodetic3D> positions) {
+                                             final List<Geodetic3D> positions,
+            final float verticalExaggeration) {
       final List<GVector3D> result = new ArrayList<GVector3D>(positions.size());
       for (final Geodetic3D position : positions) {
-         result.add(planet.toCartesian(position));
+         result.add(planet.toCartesian(position, verticalExaggeration));
       }
       return result;
 

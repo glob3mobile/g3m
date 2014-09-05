@@ -14,6 +14,9 @@
 #include <G3MiOSSDK/URL.hpp>
 #include <G3MiOSSDK/DownloadPriority.hpp>
 
+#include <G3MiOSSDK/SingleBilElevationDataProvider.hpp>
+#include <G3MiOSSDK/PlanetRenderer.hpp>
+
 #include "G3MDemoModel.hpp"
 
 
@@ -35,10 +38,9 @@ public:
 //                                          Angle::fromDegrees(-25));
 ////    _g3mWidget->setAnimatedCameraPosition( Geodetic3D(sector._center, 5000) );
 
-    _g3mWidget->setAnimatedCameraPosition( Geodetic3D::fromDegrees(39.068479748852752209, -77.602316923351310152, 100363)  );
-
-//    2014-09-03 15:40:34.446 G3MApp[928:60b] Camera position=(lat=39.068479748852752209d, lon=-77.602316923351310152d, height=100363.33871739693859) heading=3.393677 pitch=-88.463277
-
+//    _g3mWidget->setAnimatedCameraPosition( Geodetic3D::fromDegrees(39.068479748852752209, -77.602316923351310152, 100000)  );
+//    _g3mWidget->setAnimatedCameraPosition( Geodetic3D::fromDegrees(39.068479748852752209, -77.602316923351310152, 83000)  );
+    _g3mWidget->setAnimatedCameraPosition( Geodetic3D::fromDegrees(39.068479748852752209, -77.602316923351310152, 70000) );
   }
 
 };
@@ -47,6 +49,16 @@ public:
 void G3MStreamingPointCloudDemoScene::rawActivate(const G3MContext *context) {
   G3MDemoModel* model     = getModel();
   G3MWidget*    g3mWidget = model->getG3MWidget();
+
+  float verticalExaggeration = 1;
+
+  PlanetRenderer* planetRenderer = model->getPlanetRenderer();
+  planetRenderer->setVerticalExaggeration(verticalExaggeration);
+
+  ElevationDataProvider* elevationDataProvider = new SingleBilElevationDataProvider(URL("file:///full-earth-2048x1024.bil"),
+                                                                                    Sector::fullSphere(),
+                                                                                    Vector2I(2048, 1024));
+  planetRenderer->setElevationDataProvider(elevationDataProvider, true);
 
   MapBoxLayer* layer = new MapBoxLayer("examples.map-m0t0lrpu",
                                        TimeInterval::fromDays(30),
@@ -60,6 +72,7 @@ void G3MStreamingPointCloudDemoScene::rawActivate(const G3MContext *context) {
                                                  DownloadPriority::LOWER,
                                                  TimeInterval::zero(),
                                                  false,
+                                                 verticalExaggeration,
                                                  new G3MStreamingPointCloudDemoScene_PointCloudMetadataListener(g3mWidget),
                                                  true);
 

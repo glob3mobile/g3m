@@ -33,7 +33,8 @@ public class KMeans {
 
 
    public static List<Geodetic3D> cluster(final List<Geodetic3D> positions,
-                                          final int k) {
+            final int k,
+                                          final float verticalExaggeration) {
       final int positionsSize = positions.size();
       if (k > positionsSize) {
          throw new RuntimeException("Invalid K");
@@ -44,7 +45,7 @@ public class KMeans {
          indexes[i] = i;
       }
 
-      final List<GVector3D> cartesianPoints = Utils.toCartesian(FlatPlanet.EARTH, positions);
+      final List<GVector3D> cartesianPoints = Utils.toCartesian(FlatPlanet.EARTH, positions, verticalExaggeration);
 
       final GAxisAlignedBox bounds = GAxisAlignedBox.minimumBoundingBox(cartesianPoints);
       final IVector3 center = bounds._center;

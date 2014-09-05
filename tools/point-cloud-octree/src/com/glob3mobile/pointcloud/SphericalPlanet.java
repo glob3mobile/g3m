@@ -10,8 +10,8 @@ import es.igosoftware.euclid.vector.GVector3D;
 
 
 public class SphericalPlanet
-implements
-Planet {
+         implements
+            Planet {
 
    public static final Planet EARTH = new SphericalPlanet(6378137.0);
 
@@ -25,16 +25,18 @@ Planet {
 
 
    @Override
-   public final GVector3D toCartesian(final Geodetic3D geodetic) {
-      return toCartesian(geodetic._latitude, geodetic._longitude, geodetic._height);
+   public final GVector3D toCartesian(final Geodetic3D geodetic,
+                                      final float verticalExaggeration) {
+      return toCartesian(geodetic._latitude, geodetic._longitude, geodetic._height, verticalExaggeration);
    }
 
 
    @Override
    public GVector3D toCartesian(final Angle latitude,
                                 final Angle longitude,
-                                final double height) {
-      return geodeticSurfaceNormal(latitude, longitude).scale(_radius + height);
+                                final double height,
+                                final float verticalExaggeration) {
+      return geodeticSurfaceNormal(latitude, longitude).scale(_radius + (height * verticalExaggeration));
    }
 
 

@@ -67,6 +67,8 @@ public:
 
   std::string toString(double value) const;
 
+  std::string toString(float value) const;
+
   double parseDouble(const std::string& str) const;
 
 };
