@@ -527,7 +527,7 @@ long long PointCloudsRenderer::PointCloudLeafNode::rawRender(const G3MRenderCont
                                                              bool justRecalculatedProjectedArea) {
   if (justRecalculatedProjectedArea) {
 #warning TODO: quality factor
-    const int intendedPointsCount = IMathUtils::instance()->round((float) projectedArea * 0.01f);
+    const int intendedPointsCount = IMathUtils::instance()->round((float) projectedArea * 0.05f);
     int accummulated = 0;
     int neededLevel = -1;
     int neededPoints = -1;
@@ -563,7 +563,7 @@ long long PointCloudsRenderer::PointCloudLeafNode::rawRender(const G3MRenderCont
 //      const Color middleColor = Color::green();
 //      const Color toColor     = Color::blue();
 
-      double deltaHeight = maxHeight - minHeight;
+      const double deltaHeight = maxHeight - minHeight;
 
       _firstPointsColorsBuffer = IFactory::instance()->createFloatBuffer( firstPointsCount * 4 );
       for (int i = 0; i < firstPointsCount; i++) {
