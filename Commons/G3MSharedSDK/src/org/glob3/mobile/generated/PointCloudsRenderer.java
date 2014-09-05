@@ -382,6 +382,8 @@ public class PointCloudsRenderer extends DefaultRenderer
     private final Vector3D _average;
     private final Box _bounds;
     private IFloatBuffer _firstPointsBuffer;
+    private IFloatBuffer _firstPointsHeightsBuffer;
+    private IFloatBuffer _firstPointsColorsBuffer;
 
     private DirectMesh _mesh;
 
@@ -431,8 +433,37 @@ public class PointCloudsRenderer extends DefaultRenderer
     
       if (_mesh == null)
       {
-        _mesh = new DirectMesh(GLPrimitive.points(), false, _average, _firstPointsBuffer, 1, 2, Color.newFromRGBA(1, 1, 1, 1), null, 1, false); // colorsIntensity -  colors
-        _mesh.setRenderVerticesCount(IMathUtils.instance().min(_neededPoints, _firstPointsBuffer.size() / 3));
+        final int firstPointsCount = _firstPointsBuffer.size() / 3;
+        if (_firstPointsColorsBuffer == null)
+        {
+    //      const Color fromColor   = Color::red();
+    //      const Color middleColor = Color::green();
+    //      const Color toColor     = Color::blue();
+    
+          double deltaHeight = maxHeight - minHeight;
+    
+          _firstPointsColorsBuffer = IFactory.instance().createFloatBuffer(firstPointsCount * 4);
+          for (int i = 0; i < firstPointsCount; i++)
+          {
+            final float height = _firstPointsHeightsBuffer.get(i);
+            final float alpha = (float)((height - minHeight) / deltaHeight);
+    
+    //        const Color color = Color::interpolateColor(fromColor,
+    //                                                    middleColor,
+    //                                                    toColor,
+    //                                                    alpha);
+            final Color color = Color.red().wheelStep(5000, IMathUtils.instance().round(5000 * alpha));
+    
+            final int i4 = i *4;
+            _firstPointsColorsBuffer.rawPut(i4 + 0, color._red);
+            _firstPointsColorsBuffer.rawPut(i4 + 1, color._green);
+            _firstPointsColorsBuffer.rawPut(i4 + 2, color._blue);
+            _firstPointsColorsBuffer.rawPut(i4 + 3, color._alpha);
+          }
+        }
+    
+        _mesh = new DirectMesh(GLPrimitive.points(), false, _average, _firstPointsBuffer, 1, 2, Color.newFromRGBA(1, 1, 1, 1), _firstPointsColorsBuffer, 1, false); // colorsIntensity -  colors
+        _mesh.setRenderVerticesCount(IMathUtils.instance().min(_neededPoints, firstPointsCount));
       }
       _mesh.render(rc, glState);
       //getBounds()->render(rc, glState, Color::blue());
@@ -444,15 +475,18 @@ public class PointCloudsRenderer extends DefaultRenderer
                               final int[]        levelsCount,
                               final Vector3D     average,
                               final Box          bounds,
-                              final IFloatBuffer firstPointsBuffer) {
+                              final IFloatBuffer firstPointsBuffer,
+                              final IFloatBuffer firstPointsHeightsBuffer) {
       super(id);
       _levelsCountLenght = levelsCountLenght;
       _levelsCount = levelsCount;
       _average = average;
       _bounds = bounds;
       _firstPointsBuffer = firstPointsBuffer;
+      _firstPointsHeightsBuffer = firstPointsHeightsBuffer;
       _mesh = null;
       _pointsCount = -1;
+      _firstPointsColorsBuffer = null;
     }
 
     public void dispose()
@@ -465,6 +499,10 @@ public class PointCloudsRenderer extends DefaultRenderer
          _bounds.dispose();
       if (_firstPointsBuffer != null)
          _firstPointsBuffer.dispose();
+      if (_firstPointsHeightsBuffer != null)
+         _firstPointsHeightsBuffer.dispose();
+      if (_firstPointsColorsBuffer != null)
+         _firstPointsColorsBuffer.dispose();
       super.dispose();
     }
 
@@ -499,11 +537,12 @@ public class PointCloudsRenderer extends DefaultRenderer
     public final void stoppedRendering()
     {
       if (_mesh != null)
-      {
-        if (_mesh != null)
-           _mesh.dispose();
-        _mesh = null;
-      }
+         _mesh.dispose();
+      _mesh = null;
+    
+      if (_firstPointsColorsBuffer != null)
+         _firstPointsColorsBuffer.dispose();
+      _firstPointsColorsBuffer = null;
     }
 
   }
@@ -626,7 +665,13 @@ public class PointCloudsRenderer extends DefaultRenderer
           firstPointsBuffer.rawPut(j3 + 2, z);
         }
     
-        leafNodes.add(new PointCloudLeafNode(id, levelsCountLength, levelsCount, average, bounds, firstPointsBuffer));
+        IFloatBuffer firstPointsHeightsBuffer = IFactory.instance().createFloatBuffer(firstPointsCount);
+        for (int j = 0; j < firstPointsCount; j++)
+        {
+          firstPointsHeightsBuffer.rawPut(j, it.nextFloat());
+        }
+    
+        leafNodes.add(new PointCloudLeafNode(id, levelsCountLength, levelsCount, average, bounds, firstPointsBuffer, firstPointsHeightsBuffer));
       }
     
       if (it.hasNext())
