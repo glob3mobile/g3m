@@ -9,9 +9,6 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 import com.glob3mobile.pointcloud.octree.Geodetic3D;
@@ -34,8 +31,8 @@ import es.igosoftware.util.GUndeterminateProgress;
 
 
 public class BerkeleyDBLOD
-implements
-PersistentLOD {
+         implements
+            PersistentLOD {
 
 
    public static PersistentLOD openReadOnly(final File cloudDirectory,
@@ -141,8 +138,8 @@ PersistentLOD {
 
 
    static class BerkeleyDBTransaction
-   implements
-   PersistentLOD.Transaction {
+            implements
+               PersistentLOD.Transaction {
 
       final com.sleepycat.je.Transaction _txn;
 
@@ -360,44 +357,44 @@ PersistentLOD {
    }
 
 
-   private PersistentLOD.NodeLayout getNodeLayout(final byte[] id,
-                                                  final int maxLevelDelta) {
+   //   private PersistentLOD.NodeLayout getNodeLayout(final byte[] id,
+   //                                                  final int maxLevelDelta) {
+   //
+   //      final CursorConfig cursorConfig = new CursorConfig();
+   //
+   //      final com.sleepycat.je.Transaction txn = null;
+   //      try (final Cursor cursor = _nodeDB.openCursor(txn, cursorConfig)) {
+   //         final DatabaseEntry keyEntry = new DatabaseEntry(id);
+   //         final DatabaseEntry dataEntry = new DatabaseEntry();
+   //         dataEntry.setPartial(0, 0, true);
+   //
+   //         final CursorSituation situation = getCursorSituation(cursor, keyEntry, dataEntry, id);
+   //         switch (situation) {
+   //            case NotFoundSelfNorDescendants: {
+   //               return getNodeLayoutFromParent(cursor, keyEntry, dataEntry, id);
+   //            }
+   //            case FoundDescendants: {
+   //               return getNodeLayoutFromDescendants(cursor, keyEntry, dataEntry, id, maxLevelDelta);
+   //            }
+   //            case FoundSelf: {
+   //               final String strID = Utils.toIDString(id);
+   //               return new PersistentLOD.NodeLayout(strID, Arrays.asList(strID));
+   //            }
+   //            case FoundNothing: {
+   //               return new PersistentLOD.NodeLayout(Utils.toIDString(id), Collections.<String> emptyList());
+   //            }
+   //            default:
+   //               throw new RuntimeException("Invalid situation: " + situation);
+   //         }
+   //      }
+   //   }
 
-      final CursorConfig cursorConfig = new CursorConfig();
 
-      final com.sleepycat.je.Transaction txn = null;
-      try (final Cursor cursor = _nodeDB.openCursor(txn, cursorConfig)) {
-         final DatabaseEntry keyEntry = new DatabaseEntry(id);
-         final DatabaseEntry dataEntry = new DatabaseEntry();
-         dataEntry.setPartial(0, 0, true);
-
-         final CursorSituation situation = getCursorSituation(cursor, keyEntry, dataEntry, id);
-         switch (situation) {
-            case NotFoundSelfNorDescendants: {
-               return getNodeLayoutFromParent(cursor, keyEntry, dataEntry, id);
-            }
-            case FoundDescendants: {
-               return getNodeLayoutFromDescendants(cursor, keyEntry, dataEntry, id, maxLevelDelta);
-            }
-            case FoundSelf: {
-               final String strID = Utils.toIDString(id);
-               return new PersistentLOD.NodeLayout(strID, Arrays.asList(strID));
-            }
-            case FoundNothing: {
-               return new PersistentLOD.NodeLayout(Utils.toIDString(id), Collections.<String> emptyList());
-            }
-            default:
-               throw new RuntimeException("Invalid situation: " + situation);
-         }
-      }
-   }
-
-
-   @Override
-   public PersistentLOD.NodeLayout getNodeLayout(final String id) {
-      final int maxLevelDelta = 3;
-      return getNodeLayout(Utils.toBinaryID(id), maxLevelDelta);
-   }
+   //   @Override
+   //   public PersistentLOD.NodeLayout getNodeLayout(final String id) {
+   //      final int maxLevelDelta = 3;
+   //      return getNodeLayout(Utils.toBinaryID(id), maxLevelDelta);
+   //   }
 
 
    //   @Override
@@ -409,50 +406,50 @@ PersistentLOD {
    //   }
 
 
-   static private PersistentLOD.NodeLayout getNodeLayoutFromParent(final Cursor cursor,
-                                                                   final DatabaseEntry keyEntry,
-                                                                   final DatabaseEntry dataEntry,
-                                                                   final byte[] id) {
-      final List<String> nodesID = new ArrayList<>(1);
+   //   static private PersistentLOD.NodeLayout getNodeLayoutFromParent(final Cursor cursor,
+   //                                                                   final DatabaseEntry keyEntry,
+   //                                                                   final DatabaseEntry dataEntry,
+   //                                                                   final byte[] id) {
+   //      final List<String> nodesID = new ArrayList<>(1);
+   //
+   //      if (cursor.getPrev(keyEntry, dataEntry, LockMode.READ_UNCOMMITTED) == OperationStatus.SUCCESS) {
+   //         final byte[] key = keyEntry.getData();
+   //         if (Utils.hasSamePrefix(id, key)) {
+   //            nodesID.add(Utils.toIDString(key));
+   //         }
+   //      }
+   //
+   //      return new PersistentLOD.NodeLayout(Utils.toIDString(id), nodesID);
+   //   }
 
-      if (cursor.getPrev(keyEntry, dataEntry, LockMode.READ_UNCOMMITTED) == OperationStatus.SUCCESS) {
-         final byte[] key = keyEntry.getData();
-         if (Utils.hasSamePrefix(id, key)) {
-            nodesID.add(Utils.toIDString(key));
-         }
-      }
 
-      return new NodeLayout(Utils.toIDString(id), nodesID);
-   }
-
-
-   static private PersistentLOD.NodeLayout getNodeLayoutFromDescendants(final Cursor cursor,
-                                                                        final DatabaseEntry keyEntry,
-                                                                        final DatabaseEntry dataEntry,
-                                                                        final byte[] id,
-                                                                        final int maxLevelDelta) {
-      final int maxDescendantDepth = id.length + maxLevelDelta;
-      //      final int maxDescendantDepth = 1000;
-
-      final List<String> nodesID = new ArrayList<>();
-
-      byte[] key = keyEntry.getData();
-      if (key.length <= maxDescendantDepth) {
-         nodesID.add(Utils.toIDString(key));
-      }
-
-      while (cursor.getNext(keyEntry, dataEntry, LockMode.READ_UNCOMMITTED) == OperationStatus.SUCCESS) {
-         key = keyEntry.getData();
-         if (!Utils.hasSamePrefix(key, id)) {
-            break;
-         }
-         if (key.length <= maxDescendantDepth) {
-            nodesID.add(Utils.toIDString(key));
-         }
-      }
-
-      return new NodeLayout(Utils.toIDString(id), nodesID);
-   }
+   //   static private PersistentLOD.NodeLayout getNodeLayoutFromDescendants(final Cursor cursor,
+   //                                                                        final DatabaseEntry keyEntry,
+   //                                                                        final DatabaseEntry dataEntry,
+   //                                                                        final byte[] id,
+   //                                                                        final int maxLevelDelta) {
+   //      final int maxDescendantDepth = id.length + maxLevelDelta;
+   //      //      final int maxDescendantDepth = 1000;
+   //
+   //      final List<String> nodesID = new ArrayList<>();
+   //
+   //      byte[] key = keyEntry.getData();
+   //      if (key.length <= maxDescendantDepth) {
+   //         nodesID.add(Utils.toIDString(key));
+   //      }
+   //
+   //      while (cursor.getNext(keyEntry, dataEntry, LockMode.READ_UNCOMMITTED) == OperationStatus.SUCCESS) {
+   //         key = keyEntry.getData();
+   //         if (!Utils.hasSamePrefix(key, id)) {
+   //            break;
+   //         }
+   //         if (key.length <= maxDescendantDepth) {
+   //            nodesID.add(Utils.toIDString(key));
+   //         }
+   //      }
+   //
+   //      return new PersistentLOD.NodeLayout(Utils.toIDString(id), nodesID);
+   //   }
 
 
    @Override
@@ -478,16 +475,33 @@ PersistentLOD {
 
 
    @Override
+   public PersistentLOD.NodeLevel getNodeLevel(final String nodeID,
+                                               final int level,
+                                               final boolean loadPoints) {
+      if (level >= 0) {
+         final PersistentLOD.Node node = getNode(nodeID, false);
+         if (node != null) {
+            if (level < node.getLevelsCount()) {
+               return node.getLevels().get(level);
+            }
+         }
+      }
+
+      return null;
+   }
+
+
+   @Override
    public Sector getSector(final String id) {
       return TileHeader.sectorFor(Utils.toBinaryID(id));
    }
 
 
    private static class BerkeleyLODDBStatistics
-   implements
-   PersistentLOD.Visitor,
-   PersistentLOD.Statistics,
-   Serializable {
+            implements
+               PersistentLOD.Visitor,
+               PersistentLOD.Statistics,
+               Serializable {
 
       private static final long      serialVersionUID = 3L;
 
@@ -595,13 +609,13 @@ PersistentLOD {
          System.out.println("   Points: " + _pointsCount);
          System.out.println("   Sector: " + _sector);
          System.out.println("   Heights: " + _minHeight + "/" + _maxHeight + //
-                  " (delta=" + (_maxHeight - _minHeight) + ")" + //
-                            " average=" + ((float) (_sumHeight / _pointsCount)));
+                            " (delta=" + (_maxHeight - _minHeight) + ")" + //
+                  " average=" + ((float) (_sumHeight / _pointsCount)));
          System.out.println("   Nodes: " + _nodesCount);
          System.out.println("    Depth: " + _minDepth + "/" + _maxDepth + ", Average=" + ((float) _sumDepth / _nodesCount));
          System.out.println("    Points/Node: Average=" + ((float) _pointsCount / _nodesCount) + //
-                            ", Min=" + _minPointsCountPerNode + //
-                            ", Max=" + _maxPointsCountPerNode);
+                  ", Min=" + _minPointsCountPerNode + //
+                  ", Max=" + _maxPointsCountPerNode);
          System.out.println("   Levels: " + _nodeLevelsCount);
          System.out.println("    Levels/Node=" + ((float) _nodeLevelsCount / _nodesCount));
          System.out.println("    Points/Level: Average=" + ((float) _pointsCount / _nodeLevelsCount));

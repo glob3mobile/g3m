@@ -36,7 +36,7 @@ public:
                             double maxHeight) = 0;
   };
 
-  
+
 private:
 
 
@@ -84,6 +84,8 @@ private:
                      long long nowInMS);
 
     virtual bool isInner() const = 0;
+
+    virtual void stoppedRendering() = 0;
 
   };
 
@@ -158,6 +160,8 @@ private:
     bool isInner() const {
       return true;
     }
+
+    void stoppedRendering();
 
   };
 
@@ -254,6 +258,8 @@ private:
     bool isInner() const {
       return false;
     }
+
+    void stoppedRendering();
 
   };
 
@@ -439,7 +445,7 @@ public:
 
   void onResizeViewportEvent(const G3MEventContext* ec,
                              int width, int height) {
-    
+
   }
 
   void addPointCloud(const URL& serverURL,

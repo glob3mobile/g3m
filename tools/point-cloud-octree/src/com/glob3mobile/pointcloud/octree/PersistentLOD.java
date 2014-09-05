@@ -2,8 +2,6 @@
 
 package com.glob3mobile.pointcloud.octree;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 
@@ -50,27 +48,27 @@ public interface PersistentLOD
    }
 
 
-   public static class NodeLayout {
-      private final String       _id;
-      private final List<String> _nodesIDs;
-
-
-      public NodeLayout(final String id,
-                        final List<String> nodesIDs) {
-         _id = id;
-         _nodesIDs = Collections.unmodifiableList(new ArrayList<>(nodesIDs));
-      }
-
-
-      public String getID() {
-         return _id;
-      }
-
-
-      public List<String> getNodesIDs() {
-         return _nodesIDs;
-      }
-   }
+   //   public static class NodeLayout {
+   //      private final String       _id;
+   //      private final List<String> _nodesIDs;
+   //
+   //
+   //      public NodeLayout(final String id,
+   //                        final List<String> nodesIDs) {
+   //         _id = id;
+   //         _nodesIDs = Collections.unmodifiableList(new ArrayList<>(nodesIDs));
+   //      }
+   //
+   //
+   //      public String getID() {
+   //         return _id;
+   //      }
+   //
+   //
+   //      public List<String> getNodesIDs() {
+   //         return _nodesIDs;
+   //      }
+   //   }
 
 
    public static interface Visitor {
@@ -139,7 +137,6 @@ public interface PersistentLOD
 
       long getNodesCount();
 
-
    }
 
 
@@ -168,10 +165,8 @@ public interface PersistentLOD
    PersistentLOD.Statistics getStatistics(boolean showProgress);
 
 
-   PersistentLOD.NodeLayout getNodeLayout(String id);
+   //   PersistentLOD.NodeLayout getNodeLayout(String id);
 
-
-   //   PersistentLOD.NodeLayout getNodeLayout(Sector sector);
 
    void acceptVisitor(PersistentLOD.Transaction transaction,
                       PersistentLOD.Visitor visitor,
@@ -180,6 +175,11 @@ public interface PersistentLOD
 
    PersistentLOD.Node getNode(String id,
                               boolean loadPoints);
+
+
+   PersistentLOD.NodeLevel getNodeLevel(String nodeID,
+                                        int level,
+                                        boolean loadPoints);
 
 
 }

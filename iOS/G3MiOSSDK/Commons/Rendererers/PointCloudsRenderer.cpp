@@ -409,7 +409,7 @@ long long PointCloudsRenderer::PointCloudNode::render(const G3MRenderContext* rc
       }
 
 #warning TODO: quality factor
-      const double minProjectedArea = 250;
+      const double minProjectedArea = 200;
       if (_projectedArea >= minProjectedArea) {
         const long long renderedCount = rawRender(rc,
                                                   glState,
@@ -426,6 +426,7 @@ long long PointCloudsRenderer::PointCloudNode::render(const G3MRenderContext* rc
   }
 
   if (_rendered) {
+    stoppedRendering();
     _rendered = false;
   }
 
@@ -466,7 +467,7 @@ long long PointCloudsRenderer::PointCloudInnerNode::rawRender(const G3MRenderCon
                              Vector3D(averageX, averageY, averageZ),
                              pointsBuffer,
                              1,
-                             2,
+                             3,
                              Color::newFromRGBA(1, 1, 0, 1),
                              NULL, // colors
                              1,    // colorsIntensity
@@ -477,6 +478,20 @@ long long PointCloudsRenderer::PointCloudInnerNode::rawRender(const G3MRenderCon
   }
 
   return renderedCount;
+}
+
+void PointCloudsRenderer::PointCloudInnerNode::stoppedRendering() {
+  for (int i = 0; i < 4; i++) {
+    PointCloudNode* child = _children[i];
+    if (child != NULL) {
+      child->stoppedRendering();
+    }
+  }
+
+  if (_mesh != NULL) {
+    delete _mesh;
+    _mesh = NULL;
+  }
 }
 
 PointCloudsRenderer::PointCloudLeafNode::~PointCloudLeafNode() {
@@ -531,6 +546,9 @@ long long PointCloudsRenderer::PointCloudLeafNode::rawRender(const G3MRenderCont
     }
   }
 
+
+  //032010023301230
+
   if (_mesh == NULL) {
     _mesh = new DirectMesh(GLPrimitive::points(),
                            false,
@@ -547,6 +565,14 @@ long long PointCloudsRenderer::PointCloudLeafNode::rawRender(const G3MRenderCont
   _mesh->render(rc, glState);
   //getBounds()->render(rc, glState, Color::blue());
   return _mesh->getRenderVerticesCount();
+}
+
+
+void PointCloudsRenderer::PointCloudLeafNode::stoppedRendering() {
+  if (_mesh != NULL) {
+    delete _mesh;
+    _mesh = NULL;
+  }
 }
 
 

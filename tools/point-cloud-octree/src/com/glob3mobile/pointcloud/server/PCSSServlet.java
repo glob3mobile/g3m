@@ -567,22 +567,25 @@ public class PCSSServlet
    }
 
 
-   private static void sendNodeLevelPoints(final PersistentLOD db,
-                                           final Planet planet,
-                                           final ResponseFormat format,
-                                           final String nodeID,
-                                           final int level,
-                                           final HttpServletResponse response) {
+   private void sendNodeLevelPoints(final PersistentLOD db,
+                                    final Planet planet,
+                                    final ResponseFormat format,
+                                    final String nodeID,
+                                    final int level,
+                                    final HttpServletResponse response) throws IOException {
+      final PersistentLOD.NodeLevel nodeLevel = db.getNodeLevel(nodeID, level, false);
+      if (nodeLevel == null) {
+         error(response, "node/level not found: " + nodeID + "/" + level);
+         return;
+      }
+
       switch (format) {
          case JSON: {
-
-            final PersistentLOD.Node node = db.getNode(nodeID, false);
-
-            sendJSONNodeLevelPoints(response, db, planet, nodeID, level);
+            sendJSONNodeLevelPoints(response, db, planet, nodeID, nodeLevel);
             break;
          }
          case BINARY: {
-            sendBinaryNodeLevelPoints(response, db, planet, nodeID, level);
+            sendBinaryNodeLevelPoints(response, db, planet, nodeID, nodeLevel);
             break;
          }
          default: {
@@ -590,6 +593,51 @@ public class PCSSServlet
             break;
          }
       }
+   }
+
+
+   private void sendBinaryNodeLevelPoints(final HttpServletResponse response,
+                                          final PersistentLOD db,
+                                          final Planet planet,
+                                          final String nodeID,
+                                          final PersistentLOD.NodeLevel nodeLevel) throws IOException {
+      final GVector3F average = getNodeAverage(db, planet, nodeID);
+
+      response.setStatus(HttpServletResponse.SC_OK);
+      response.setContentType("application/octet-stream");
+
+      final List<Geodetic3D> points = nodeLevel.getPoints(null);
+
+      final int bufferSize = ByteBufferUtils.sizeOf(planet, points, average);
+      final ByteBuffer buffer = ByteBuffer.allocate(bufferSize).order(ByteOrder.LITTLE_ENDIAN);
+      ByteBufferUtils.put(buffer, planet, points, average);
+
+      final ServletOutputStream os = response.getOutputStream();
+      os.write(buffer.array());
+   }
+
+
+   private void sendJSONNodeLevelPoints(final HttpServletResponse response,
+                                        final PersistentLOD db,
+                                        final Planet planet,
+                                        final String nodeID,
+                                        final PersistentLOD.NodeLevel nodeLevel) throws IOException {
+      final GVector3F average = getNodeAverage(db, planet, nodeID);
+
+      response.setStatus(HttpServletResponse.SC_OK);
+      response.setContentType("application/json");
+
+      final PrintWriter writer = response.getWriter();
+
+      JSONUtils.sendJSON(writer, nodeLevel.getPoints(null), planet, average);
+   }
+
+
+   private GVector3F getNodeAverage(final PersistentLOD db,
+                                    final Planet planet,
+                                    final String nodeID) {
+      final NodeAverageCacheKey key = new NodeAverageCacheKey(planet, db.getCloudName(), nodeID);
+      return _nodeAverageCache.get(key);
    }
 
 

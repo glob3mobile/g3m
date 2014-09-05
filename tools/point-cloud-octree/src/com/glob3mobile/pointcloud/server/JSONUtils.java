@@ -105,25 +105,25 @@ public class JSONUtils {
    }
 
 
-   public static void sendNodeLayoutJSON(final PrintWriter writer,
-                                         final PersistentLOD.NodeLayout layout) {
-
-      writer.print('[');
-      boolean first = true;
-      // for (final PersistentLOD.Node node : layout.getNodes()) {
-      for (final String nodeID : layout.getNodesIDs()) {
-         if (first) {
-            first = false;
-         }
-         else {
-            writer.print(',');
-         }
-         writer.print('"');
-         writer.print(nodeID);
-         writer.print('"');
-      }
-      writer.print(']');
-   }
+   //   public static void sendNodeLayoutJSON(final PrintWriter writer,
+   //                                         final PersistentLOD.NodeLayout layout) {
+   //
+   //      writer.print('[');
+   //      boolean first = true;
+   //      // for (final PersistentLOD.Node node : layout.getNodes()) {
+   //      for (final String nodeID : layout.getNodesIDs()) {
+   //         if (first) {
+   //            first = false;
+   //         }
+   //         else {
+   //            writer.print(',');
+   //         }
+   //         writer.print('"');
+   //         writer.print(nodeID);
+   //         writer.print('"');
+   //      }
+   //      writer.print(']');
+   //   }
 
 
    public static void sendNodeMetadataJSON(final PrintWriter writer,
@@ -256,6 +256,30 @@ public class JSONUtils {
             writer.print(',');
          }
          sendJSON(writer, each, planet, average);
+      }
+      writer.print(']');
+   }
+
+
+   public static void sendJSON(final PrintWriter writer,
+                               final List<Geodetic3D> value,
+                               final Planet planet,
+                               final IVector3 average) {
+      writer.print('[');
+      boolean first = true;
+      for (final Geodetic3D point : value) {
+         if (first) {
+            first = false;
+         }
+         else {
+            writer.print(',');
+         }
+         final GVector3D cartesian = planet.toCartesian(point);
+         writer.print(Float.toString((float) (cartesian._x - average.x())));
+         writer.print(',');
+         writer.print(Float.toString((float) (cartesian._y - average.y())));
+         writer.print(',');
+         writer.print(Float.toString((float) (cartesian._z - average.z())));
       }
       writer.print(']');
    }
