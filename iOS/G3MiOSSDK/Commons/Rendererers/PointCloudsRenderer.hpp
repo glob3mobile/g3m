@@ -177,7 +177,9 @@ private:
 #endif
     const Vector3D* _average;
     const Box*      _bounds;
-    IFloatBuffer*  _firstPointsBuffer;
+    IFloatBuffer*   _firstPointsBuffer;
+    IFloatBuffer*   _firstPointsHeightsBuffer;
+    IFloatBuffer*   _firstPointsColorsBuffer;
 
     DirectMesh* _mesh;
 
@@ -203,17 +205,20 @@ private:
                        const int*         levelsCount,
                        const Vector3D*    average,
                        const Box*         bounds,
-                       IFloatBuffer*      firstPointsBuffer) :
+                       IFloatBuffer*      firstPointsBuffer,
+                       IFloatBuffer*      firstPointsHeightsBuffer) :
     PointCloudNode(id),
     _levelsCountLenght(levelsCountLenght),
     _levelsCount(levelsCount),
     _average(average),
     _bounds(bounds),
     _firstPointsBuffer(firstPointsBuffer),
+    _firstPointsHeightsBuffer(firstPointsHeightsBuffer),
     _mesh(NULL),
     _pointsCount(-1),
     _neededLevel(0),
-    _neededPoints(0)
+    _neededPoints(0),
+    _firstPointsColorsBuffer(NULL)
     {
     }
 #endif
@@ -223,15 +228,18 @@ private:
                               final int[]        levelsCount,
                               final Vector3D     average,
                               final Box          bounds,
-                              final IFloatBuffer firstPointsBuffer) {
+                              final IFloatBuffer firstPointsBuffer,
+                              final IFloatBuffer firstPointsHeightsBuffer) {
       super(id);
       _levelsCountLenght = levelsCountLenght;
       _levelsCount = levelsCount;
       _average = average;
       _bounds = bounds;
       _firstPointsBuffer = firstPointsBuffer;
+      _firstPointsHeightsBuffer = firstPointsHeightsBuffer;
       _mesh = null;
       _pointsCount = -1;
+      _firstPointsColorsBuffer = null;
     }
 #endif
 

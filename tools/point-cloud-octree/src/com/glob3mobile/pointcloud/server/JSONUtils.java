@@ -262,6 +262,25 @@ public class JSONUtils {
    }
 
 
+   public static void sendHeightsJSON(final PrintWriter writer,
+                                      final String key,
+                                      final List<Geodetic3D> points) {
+      sendJSONKey(writer, key);
+      writer.print('[');
+      boolean first = true;
+      for (final Geodetic3D point : points) {
+         if (first) {
+            first = false;
+         }
+         else {
+            writer.print(',');
+         }
+         writer.print(Float.toString((float) point._height));
+      }
+      writer.print(']');
+   }
+
+
    public static void sendJSON(final PrintWriter writer,
                                final List<Geodetic3D> value,
                                final Planet planet,

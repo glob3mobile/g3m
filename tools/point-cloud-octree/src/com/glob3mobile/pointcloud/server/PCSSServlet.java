@@ -398,6 +398,8 @@ HttpServlet {
          JSONUtils.sendJSON(writer, "b", node._bounds, node._average);
          writer.print(',');
          JSONUtils.sendJSON(writer, "p", node._firstPoints, planet, node._average, verticalExaggeration);
+         writer.print(',');
+         JSONUtils.sendHeightsJSON(writer, "h", node._firstPoints);
          writer.print('}');
       }
       writer.print(']');
@@ -552,7 +554,8 @@ HttpServlet {
                (intLevelsCount * 4) + //
                ByteBufferUtils.sizeOf(node._average) + //
                ByteBufferUtils.sizeOf(node._bounds, node._average) + //
-               ByteBufferUtils.sizeOf(planet, node._firstPoints, node._average);
+               ByteBufferUtils.sizeOf(planet, node._firstPoints, node._average) + //
+               (node._firstPoints.size() * 4);
 
 
       final ByteBuffer buffer = ByteBuffer.allocate(bufferSize).order(ByteOrder.LITTLE_ENDIAN);
@@ -577,6 +580,10 @@ HttpServlet {
       ByteBufferUtils.put(buffer, node._bounds, node._average);
 
       ByteBufferUtils.put(buffer, planet, node._firstPoints, node._average, verticalExaggeration);
+
+      for (final Geodetic3D point : node._firstPoints) {
+         buffer.putFloat((float) point._height);
+      }
 
       return buffer.array();
    }

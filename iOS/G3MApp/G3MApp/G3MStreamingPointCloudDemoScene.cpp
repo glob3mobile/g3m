@@ -50,7 +50,7 @@ void G3MStreamingPointCloudDemoScene::rawActivate(const G3MContext *context) {
   G3MDemoModel* model     = getModel();
   G3MWidget*    g3mWidget = model->getG3MWidget();
 
-  float verticalExaggeration = 1;
+  const float verticalExaggeration = 1;
 
   PlanetRenderer* planetRenderer = model->getPlanetRenderer();
   planetRenderer->setVerticalExaggeration(verticalExaggeration);

@@ -158,12 +158,18 @@ void PointCloudsRenderer::PointCloudMetadataParserAsyncTask::runInBackground(con
       firstPointsBuffer->rawPut(j3 + 2, z);
     }
 
+    IFloatBuffer* firstPointsHeightsBuffer = IFactory::instance()->createFloatBuffer( firstPointsCount );
+    for (int j = 0; j < firstPointsCount; j++) {
+      firstPointsHeightsBuffer->rawPut(j, it.nextFloat());
+    }
+
     leafNodes.push_back( new PointCloudLeafNode(id,
                                                 levelsCountLength,
                                                 levelsCount,
                                                 average,
                                                 bounds,
-                                                firstPointsBuffer) );
+                                                firstPointsBuffer,
+                                                firstPointsHeightsBuffer) );
   }
 
   if (it.hasNext()) {
@@ -504,6 +510,8 @@ PointCloudsRenderer::PointCloudLeafNode::~PointCloudLeafNode() {
   delete _average;
   delete _bounds;
   delete _firstPointsBuffer;
+  delete _firstPointsHeightsBuffer;
+  delete _firstPointsColorsBuffer;
 #ifdef JAVA_CODE
   super.dispose();
 #endif
@@ -549,6 +557,34 @@ long long PointCloudsRenderer::PointCloudLeafNode::rawRender(const G3MRenderCont
   }
 
   if (_mesh == NULL) {
+    const int firstPointsCount = _firstPointsBuffer->size() / 3;
+    if (_firstPointsColorsBuffer == NULL) {
+//      const Color fromColor   = Color::red();
+//      const Color middleColor = Color::green();
+//      const Color toColor     = Color::blue();
+
+      double deltaHeight = maxHeight - minHeight;
+
+      _firstPointsColorsBuffer = IFactory::instance()->createFloatBuffer( firstPointsCount * 4 );
+      for (int i = 0; i < firstPointsCount; i++) {
+        const float height = _firstPointsHeightsBuffer->get(i);
+        const float alpha = (float) ((height - minHeight) / deltaHeight);
+
+//        const Color color = Color::interpolateColor(fromColor,
+//                                                    middleColor,
+//                                                    toColor,
+//                                                    alpha);
+        const Color color = Color::red().wheelStep(5000,
+                                                   IMathUtils::instance()->round(5000 * alpha) );
+
+        const int i4 = i*4;
+        _firstPointsColorsBuffer->rawPut(i4 + 0, color._red);
+        _firstPointsColorsBuffer->rawPut(i4 + 1, color._green);
+        _firstPointsColorsBuffer->rawPut(i4 + 2, color._blue);
+        _firstPointsColorsBuffer->rawPut(i4 + 3, color._alpha);
+      }
+    }
+
     _mesh = new DirectMesh(GLPrimitive::points(),
                            false,
                            *_average,
@@ -556,10 +592,10 @@ long long PointCloudsRenderer::PointCloudLeafNode::rawRender(const G3MRenderCont
                            1,
                            2,
                            Color::newFromRGBA(1, 1, 1, 1),
-                           NULL, // colors
+                           _firstPointsColorsBuffer, // colors
                            1,    // colorsIntensity
                            false);
-    _mesh->setRenderVerticesCount( IMathUtils::instance()->min(_neededPoints, _firstPointsBuffer->size() / 3) );
+    _mesh->setRenderVerticesCount( IMathUtils::instance()->min(_neededPoints, firstPointsCount) );
   }
   _mesh->render(rc, glState);
   //getBounds()->render(rc, glState, Color::blue());
@@ -568,10 +604,11 @@ long long PointCloudsRenderer::PointCloudLeafNode::rawRender(const G3MRenderCont
 
 
 void PointCloudsRenderer::PointCloudLeafNode::stoppedRendering() {
-  if (_mesh != NULL) {
-    delete _mesh;
-    _mesh = NULL;
-  }
+  delete _mesh;
+  _mesh = NULL;
+
+  delete _firstPointsColorsBuffer;
+  _firstPointsColorsBuffer = NULL;
 }
 
 
