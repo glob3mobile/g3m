@@ -87,7 +87,7 @@ public class PointCloudsRenderer extends DefaultRenderer
     
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#warning TODO: quality factor
-          final double minProjectedArea = 250;
+          final double minProjectedArea = 200;
           if (_projectedArea >= minProjectedArea)
           {
             final long renderedCount = rawRender(rc, glState, frustum, _projectedArea, minHeight, maxHeight, nowInMS, justRecalculatedProjectedArea);
@@ -99,6 +99,7 @@ public class PointCloudsRenderer extends DefaultRenderer
     
       if (_rendered)
       {
+        stoppedRendering();
         _rendered = false;
       }
     
@@ -106,6 +107,8 @@ public class PointCloudsRenderer extends DefaultRenderer
     }
 
     public abstract boolean isInner();
+
+    public abstract void stoppedRendering();
 
   }
 
@@ -205,7 +208,7 @@ public class PointCloudsRenderer extends DefaultRenderer
           pointsBuffer.rawPut(1, (float)(average._y - averageY));
           pointsBuffer.rawPut(2, (float)(average._z - averageZ));
     
-          _mesh = new DirectMesh(GLPrimitive.points(), true, new Vector3D(averageX, averageY, averageZ), pointsBuffer, 1, 2, Color.newFromRGBA(1, 1, 0, 1), null, 1, false); // colorsIntensity -  colors
+          _mesh = new DirectMesh(GLPrimitive.points(), true, new Vector3D(averageX, averageY, averageZ), pointsBuffer, 1, 3, Color.newFromRGBA(1, 1, 0, 1), null, 1, false); // colorsIntensity -  colors
         }
         _mesh.render(rc, glState);
         renderedCount = 1;
@@ -350,6 +353,25 @@ public class PointCloudsRenderer extends DefaultRenderer
       return true;
     }
 
+    public final void stoppedRendering()
+    {
+      for (int i = 0; i < 4; i++)
+      {
+        PointCloudNode child = _children[i];
+        if (child != null)
+        {
+          child.stoppedRendering();
+        }
+      }
+    
+      if (_mesh != null)
+      {
+        if (_mesh != null)
+           _mesh.dispose();
+        _mesh = null;
+      }
+    }
+
   }
 
 
@@ -406,6 +428,9 @@ public class PointCloudsRenderer extends DefaultRenderer
           }
         }
       }
+    
+    
+      //032010023301230
     
       if (_mesh == null)
       {
@@ -472,6 +497,16 @@ public class PointCloudsRenderer extends DefaultRenderer
     public final boolean isInner()
     {
       return false;
+    }
+
+    public final void stoppedRendering()
+    {
+      if (_mesh != null)
+      {
+        if (_mesh != null)
+           _mesh.dispose();
+        _mesh = null;
+      }
     }
 
   }
