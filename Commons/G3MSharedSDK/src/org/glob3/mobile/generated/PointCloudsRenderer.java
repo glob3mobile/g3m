@@ -21,6 +21,7 @@ package org.glob3.mobile.generated;
 //class IDownloader;
 //class Sector;
 //class Frustum;
+//class DirectMesh;
 
 public class PointCloudsRenderer extends DefaultRenderer
 {
@@ -86,7 +87,7 @@ public class PointCloudsRenderer extends DefaultRenderer
     
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#warning TODO: quality factor
-          final double minProjectedArea = 500;
+          final double minProjectedArea = 250;
           if (_projectedArea >= minProjectedArea)
           {
             final long renderedCount = rawRender(rc, glState, frustum, _projectedArea, minHeight, maxHeight, nowInMS, justRecalculatedProjectedArea);
@@ -360,11 +361,12 @@ public class PointCloudsRenderer extends DefaultRenderer
     private final Box _bounds;
     private IFloatBuffer _firstPointsBuffer;
 
-    private Mesh _mesh;
+    private DirectMesh _mesh;
 
     private long _pointsCount;
 
     private int _neededLevel;
+    private int _neededPoints;
 
     protected final long rawRender(G3MRenderContext rc, GLState glState, Frustum frustum, double projectedArea, double minHeight, double maxHeight, long nowInMS, boolean justRecalculatedProjectedArea)
     {
@@ -372,7 +374,7 @@ public class PointCloudsRenderer extends DefaultRenderer
       {
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#warning TODO: quality factor
-        final int intendedPointsCount = IMathUtils.instance().round((float) projectedArea * 0.5f);
+        final int intendedPointsCount = IMathUtils.instance().round((float) projectedArea * 0.01f);
         int accummulated = 0;
         int neededLevel = -1;
         int neededPoints = -1;
@@ -390,18 +392,29 @@ public class PointCloudsRenderer extends DefaultRenderer
     
         if (neededLevel != _neededLevel)
         {
-          ILogger.instance().logInfo("Needed Level changed for %s from=%d to=%d, needed points=%d, projectedArea=%f", _id, _neededLevel, neededLevel, neededPoints, projectedArea);
+    //      ILogger::instance()->logInfo("Needed Level changed for %s from=%d to=%d, needed points=%d, projectedArea=%f",
+    //                                   _id.c_str(),
+    //                                   _neededLevel,
+    //                                   neededLevel,
+    //                                   neededPoints,
+    //                                   projectedArea);
           _neededLevel = neededLevel;
+          _neededPoints = neededPoints;
+          if (_mesh != null)
+          {
+            _mesh.setRenderVerticesCount(IMathUtils.instance().min(_neededPoints, _firstPointsBuffer.size() / 3));
+          }
         }
       }
     
       if (_mesh == null)
       {
         _mesh = new DirectMesh(GLPrimitive.points(), false, _average, _firstPointsBuffer, 1, 2, Color.newFromRGBA(1, 1, 1, 1), null, 1, false); // colorsIntensity -  colors
+        _mesh.setRenderVerticesCount(IMathUtils.instance().min(_neededPoints, _firstPointsBuffer.size() / 3));
       }
       _mesh.render(rc, glState);
-      // getBounds()->render(rc, glState, Color::blue());
-      return _firstPointsBuffer.size();
+      //getBounds()->render(rc, glState, Color::blue());
+      return _mesh.getRenderVerticesCount();
     }
 
     public PointCloudLeafNode(final String       id,
@@ -476,6 +489,7 @@ public class PointCloudsRenderer extends DefaultRenderer
     private Sector _sector;
     private double _minHeight;
     private double _maxHeight;
+    private double _averageHeight;
 
     private PointCloudInnerNode _rootNode;
 
@@ -487,6 +501,7 @@ public class PointCloudsRenderer extends DefaultRenderer
        _sector = null;
        _minHeight = 0;
        _maxHeight = 0;
+       _averageHeight = 0;
        _rootNode = null;
     }
 
@@ -515,6 +530,7 @@ public class PointCloudsRenderer extends DefaultRenderer
     
       _minHeight = it.nextDouble();
       _maxHeight = it.nextDouble();
+      _averageHeight = it.nextDouble();
     
       final int leafNodesCount = it.nextInt32();
       java.util.ArrayList<PointCloudLeafNode> leafNodes = new java.util.ArrayList<PointCloudLeafNode>();
@@ -566,7 +582,7 @@ public class PointCloudsRenderer extends DefaultRenderer
         final Box bounds = new Box(new Vector3D(lowerX, lowerY, lowerZ), new Vector3D(upperX, upperY, upperZ));
     
         final int firstPointsCount = it.nextInt32();
-        IFloatBuffer firstPointsBuffer = IFactory.instance().createFloatBuffer(firstPointsCount * 3 * 4);
+        IFloatBuffer firstPointsBuffer = IFactory.instance().createFloatBuffer(firstPointsCount * 3);
         for (int j = 0; j < firstPointsCount; j++)
         {
           final float x = it.nextFloat();
@@ -612,7 +628,7 @@ public class PointCloudsRenderer extends DefaultRenderer
 
     public final void onPostExecute(G3MContext context)
     {
-      _pointCloud.parsedMetadata(_pointsCount, _sector, _minHeight, _maxHeight, _rootNode);
+      _pointCloud.parsedMetadata(_pointsCount, _sector, _minHeight, _maxHeight, _averageHeight, _rootNode);
       _sector = null; // moves ownership to pointCloud
       _rootNode = null; // moves ownership to pointCloud
     }
@@ -676,6 +692,8 @@ public class PointCloudsRenderer extends DefaultRenderer
     private Sector _sector;
     private double _minHeight;
     private double _maxHeight;
+    private double _averageHeight;
+
     private PointCloudInnerNode _rootNode;
 
     private long _lastRenderedCount;
@@ -696,6 +714,7 @@ public class PointCloudsRenderer extends DefaultRenderer
        _sector = null;
        _minHeight = 0;
        _maxHeight = 0;
+       _averageHeight = 0;
        _rootNode = null;
        _lastRenderedCount = 0;
     }
@@ -755,12 +774,13 @@ public class PointCloudsRenderer extends DefaultRenderer
       _errorDownloadingMetadata = true;
     }
 
-    public final void parsedMetadata(long pointsCount, Sector sector, double minHeight, double maxHeight, PointCloudInnerNode rootNode)
+    public final void parsedMetadata(long pointsCount, Sector sector, double minHeight, double maxHeight, double averageHeight, PointCloudInnerNode rootNode)
     {
       _pointsCount = pointsCount;
       _sector = sector;
       _minHeight = minHeight;
       _maxHeight = maxHeight;
+      _averageHeight = averageHeight;
     
       _downloadingMetadata = false;
       _rootNode = rootNode;

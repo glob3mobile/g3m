@@ -19,12 +19,13 @@ package org.glob3.mobile.generated;
 
 public class DirectMesh extends AbstractMesh
 {
+  private int _renderVerticesCount;
+
   protected final void rawRender(G3MRenderContext rc)
   {
     GL gl = rc.getGL();
   
-    final int verticesCount = getVertexCount();
-    gl.drawArrays(_primitive, 0, verticesCount, _glState, rc.getGPUProgramManager());
+    gl.drawArrays(_primitive, 0, _renderVerticesCount, _glState, rc.getGPUProgramManager());
   }
 
 //  Mesh* createNormalsMesh() const;
@@ -53,11 +54,22 @@ public class DirectMesh extends AbstractMesh
   public DirectMesh(int primitive, boolean owner, Vector3D center, IFloatBuffer vertices, float lineWidth, float pointSize, Color flatColor, IFloatBuffer colors, float colorsIntensity, boolean depthTest, IFloatBuffer normals)
   {
      super(primitive, owner, center, vertices, lineWidth, pointSize, flatColor, colors, colorsIntensity, depthTest, normals);
+    _renderVerticesCount = vertices.size() / 3;
   }
 
   public void dispose()
   {
     super.dispose();
+  }
+
+  public final void setRenderVerticesCount(int renderVerticesCount)
+  {
+    _renderVerticesCount = renderVerticesCount;
+  }
+
+  public final int getRenderVerticesCount()
+  {
+    return _renderVerticesCount;
   }
 
 }
