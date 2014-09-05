@@ -38,8 +38,8 @@ PersistentOctree {
    // private static final ILogger LOGGER              = GLogger.instance();
    // private static final Charset UTF8                = Charset.forName("UTF-8");
 
-   private static final int    DEFAULT_BUFFER_SIZE          = 1024 * 64;
-   private static final int    DEFAULT_MAX_POINTS_PER_TITLE = 1024 * 64;
+   private static final int    DEFAULT_BUFFER_SIZE          = 64 * 1024;
+   private static final int    DEFAULT_MAX_POINTS_PER_TITLE = 64 * 1024;
    private static final String NODE_DATABASE_NAME           = "Node";
    private static final String NODE_DATA_DATABASE_NAME      = "NodeData";
 
@@ -254,8 +254,8 @@ PersistentOctree {
          }
 
 
-         //final TileHeader header = TileHeader.deepestEnclosingTileHeader(targetSector);
-         final TileHeader header = TileHeader.ROOT_TILE_HEADER;
+         final TileHeader header = TileHeader.deepestEnclosingTileHeader(targetSector);
+         //final TileHeader header = TileHeader.ROOT_TILE_HEADER;
 
          //         for (final Geodetic3D point : _buffer) {
          //            if (!targetSector.contains(point._latitude, point._longitude)) {

@@ -499,11 +499,13 @@ long long PointCloudsRenderer::PointCloudLeafNode::rawRender(const G3MRenderCont
                                                              bool justRecalculatedProjectedArea) {
   if (justRecalculatedProjectedArea) {
 #warning TODO: quality factor
-    const int intendedPointsCount = IMathUtils::instance()->round((float) projectedArea);
+    const int intendedPointsCount = IMathUtils::instance()->round((float) projectedArea * 0.5f);
     int accummulated = 0;
     int neededLevel = -1;
+    int neededPoints = -1;
     for (int i = 0; i < _levelsCountLenght; i++) {
       const int levelPointsCount = _levelsCount[i];
+      neededPoints = accummulated;
       accummulated += levelPointsCount;
       if (accummulated > intendedPointsCount) {
         break;
@@ -512,7 +514,12 @@ long long PointCloudsRenderer::PointCloudLeafNode::rawRender(const G3MRenderCont
     }
 
     if (neededLevel != _neededLevel) {
-      ILogger::instance()->logInfo("Needed Level changed for %s from=%d to=%d", _id.c_str(), _neededLevel, neededLevel);
+      ILogger::instance()->logInfo("Needed Level changed for %s from=%d to=%d, needed points=%d, projectedArea=%f",
+                                   _id.c_str(),
+                                   _neededLevel,
+                                   neededLevel,
+                                   neededPoints,
+                                   projectedArea);
       _neededLevel = neededLevel;
     }
   }
@@ -530,6 +537,7 @@ long long PointCloudsRenderer::PointCloudLeafNode::rawRender(const G3MRenderCont
                            false);
   }
   _mesh->render(rc, glState);
+  // getBounds()->render(rc, glState, Color::blue());
   return _firstPointsBuffer->size();
 }
 

@@ -17,53 +17,51 @@ import com.glob3mobile.pointcloud.octree.berkeleydb.BerkeleyDBLOD;
 import com.glob3mobile.pointcloud.octree.berkeleydb.BerkeleyDBOctree;
 import com.glob3mobile.pointcloud.octree.berkeleydb.TileHeader;
 
-import es.igosoftware.euclid.colors.GColorF;
-import es.igosoftware.util.GMath;
 import es.igosoftware.util.GUndeterminateProgress;
 
 
 public class ProcessOT {
 
-   private static final GColorF[] RAMP = new GColorF[] { GColorF.CYAN, GColorF.GREEN, GColorF.YELLOW, GColorF.RED };
-
-
-   private static GColorF interpolateColorFromRamp(final GColorF colorFrom,
-                                                   final GColorF[] ramp,
-                                                   final float alpha) {
-      final float rampStep = 1f / ramp.length;
-
-      final int toI;
-      if (GMath.closeTo(alpha, 1)) {
-         toI = ramp.length - 1;
-      }
-      else {
-         toI = (int) (alpha / rampStep);
-      }
-
-      final GColorF from;
-      if (toI == 0) {
-         from = colorFrom;
-      }
-      else {
-         from = ramp[toI - 1];
-      }
-
-      final float colorAlpha = (alpha % rampStep) / rampStep;
-      return from.mixedWidth(ramp[toI], colorAlpha);
-   }
+   //   private static final GColorF[] RAMP = new GColorF[] { GColorF.CYAN, GColorF.GREEN, GColorF.YELLOW, GColorF.RED };
+   //
+   //
+   //   private static GColorF interpolateColorFromRamp(final GColorF colorFrom,
+   //                                                   final GColorF[] ramp,
+   //                                                   final float alpha) {
+   //      final float rampStep = 1f / ramp.length;
+   //
+   //      final int toI;
+   //      if (GMath.closeTo(alpha, 1)) {
+   //         toI = ramp.length - 1;
+   //      }
+   //      else {
+   //         toI = (int) (alpha / rampStep);
+   //      }
+   //
+   //      final GColorF from;
+   //      if (toI == 0) {
+   //         from = colorFrom;
+   //      }
+   //      else {
+   //         from = ramp[toI - 1];
+   //      }
+   //
+   //      final float colorAlpha = (alpha % rampStep) / rampStep;
+   //      return from.mixedWidth(ramp[toI], colorAlpha);
+   //   }
 
 
    public static void main(final String[] args) {
       System.out.println("ProcessOT 0.1");
       System.out.println("-------------\n");
 
-      // final File cloudDirectory = new File(System.getProperty("user.dir"));
-      final File cloudDirectory = new File("/Volumes/My Passport/_LIDAR_COPY");
+      final File cloudDirectory = new File(System.getProperty("user.dir"));
+      //      final File cloudDirectory = new File("/Volumes/My Passport/_LIDAR_COPY");
 
 
       final String completeSourceCloudName = "Loudoun-VA";
       //final String sourceCloudName = "Loudoun-VA_simplified";
-      final String simplifiedCloudName = completeSourceCloudName + "_simplified";
+      final String simplifiedCloudName = completeSourceCloudName + "_simplified2";
       final String sourceCloudName = simplifiedCloudName;
       final String lodCloudName = sourceCloudName + "_LOD";
 
@@ -73,7 +71,7 @@ public class ProcessOT {
       final boolean createSimplifiedCloudName = false;
       final boolean createMapForSourceOT = false;
       final boolean createLOD = false;
-      final boolean showLODStats = true;
+      final boolean showLODStats = false;
       final boolean drawSampleLODNode = false;
 
       if (createSimplifiedCloudName) {
@@ -84,9 +82,19 @@ public class ProcessOT {
 
             final long sourcePointsCount = statistics.getPointsCount();
 
+            final int maxPointsPerTitle = 256 * 1024;
             final float resultSizeFactor = 0.06f;
-            sourceOctree.acceptDepthFirstVisitor(new SimplifyOctreeTask(completeSourceCloudName, cloudDirectory,
-                     simplifiedCloudName, cacheSizeInBytes, sourcePointsCount, resultSizeFactor));
+            //            final float resultSizeFactor = 0.1f;
+
+            final SimplifyOctreeTask visitor = new SimplifyOctreeTask( //
+                     completeSourceCloudName, //
+                     cloudDirectory, //
+                     simplifiedCloudName, //
+                     cacheSizeInBytes, //
+                     sourcePointsCount, //
+                     resultSizeFactor, //
+                     maxPointsPerTitle);
+            sourceOctree.acceptDepthFirstVisitor(visitor);
          }
          System.out.println();
       }
@@ -192,7 +200,7 @@ public class ProcessOT {
                         public void informProgress(final long stepsDone,
                                                    final long elapsed) {
                            System.out.println("- gathering statistics for \"" + lodDB.getCloudName() + "\""
-                                              + progressString(stepsDone, elapsed));
+                                    + progressString(stepsDone, elapsed));
                         }
                      };
                   }
@@ -237,8 +245,8 @@ public class ProcessOT {
                      System.out.println("     Points/Node: " + ((float) _pointsCounter / _nodesCounter));
                      System.out.println("     Points/Level: " + ((float) _pointsCounter / _levelsCounter));
                      System.out.println("   Density/Node: Average=" + (_sumDensity / _nodesCounter) + //
-                                        ", Min=" + _minDensity + //
-                                        ", Max=" + _maxDensity);
+                              ", Min=" + _minDensity + //
+                              ", Max=" + _maxDensity);
                      System.out.println("======================================================================");
                   }
                };
@@ -313,6 +321,7 @@ public class ProcessOT {
 
       g.setColor(Color.WHITE);
 
+      @SuppressWarnings("unused")
       final double deltaHeight = maxHeight - minHeight;
 
       for (final Geodetic3D point : points) {

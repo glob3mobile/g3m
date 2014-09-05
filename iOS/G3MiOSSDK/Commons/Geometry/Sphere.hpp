@@ -19,7 +19,7 @@ class Sphere : public BoundingVolume {
 private:
 
   mutable Mesh* _mesh;
-  Mesh* createWireframeMesh(const Color* color,
+  Mesh* createWireframeMesh(const Color& color,
                             short resolution) const;
 
  
@@ -63,7 +63,7 @@ public:
 
   void render(const G3MRenderContext* rc,
               const GLState* parentState,
-              const Color* color) const;
+              const Color& color) const;
 
   bool touches(const BoundingVolume* that) const {
     if (that == NULL) {

@@ -24,8 +24,8 @@ double Sphere::projectedArea(const G3MRenderContext* rc) const {
 //  return Vector2I::zero();
 //}
 
-Mesh* Sphere::createWireframeMesh(const Color* color,
-                                 short resolution) const {
+Mesh* Sphere::createWireframeMesh(const Color& color,
+                                  short resolution) const {
   IMathUtils* mu = IMathUtils::instance();
   const double delta = PI / (resolution-1);
 
@@ -72,7 +72,7 @@ Mesh* Sphere::createWireframeMesh(const Color* color,
                                indices.create(),
                                1,
                                1,
-                               color);
+                               new Color(color));
 
   delete vertices;
 
@@ -82,7 +82,7 @@ Mesh* Sphere::createWireframeMesh(const Color* color,
 
 void Sphere::render(const G3MRenderContext* rc,
                     const GLState* parentState,
-                    const Color* color) const {
+                    const Color& color) const {
   if (_mesh == NULL) {
     _mesh = createWireframeMesh(color, (short) 16);
   }

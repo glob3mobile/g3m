@@ -33,6 +33,7 @@ PersistentOctree.Visitor {
    private final long       _cacheSizeInBytes;
    private PersistentOctree _targetOctree;
    private GProgress        _progress;
+   private final int        _maxPointsPerTitle;
 
 
    SimplifyOctreeTask(final String sourceCloudName,
@@ -40,13 +41,15 @@ PersistentOctree.Visitor {
                       final String simplifiedCloudName,
                       final long cacheSizeInBytes,
                       final long sourcePointsCount,
-                      final float resultSizeFactor) {
+                      final float resultSizeFactor,
+                      final int maxPointsPerTitle) {
       _sourceCloudName = sourceCloudName;
       _cloudDirectory = cloudDirectory;
       _simplifiedCloudName = simplifiedCloudName;
       _cacheSizeInBytes = cacheSizeInBytes;
       _sourcePointsCount = sourcePointsCount;
       _resultSizeFactor = resultSizeFactor;
+      _maxPointsPerTitle = maxPointsPerTitle;
    }
 
 
@@ -54,7 +57,8 @@ PersistentOctree.Visitor {
    public void start() {
       BerkeleyDBOctree.delete(_cloudDirectory, _simplifiedCloudName);
 
-      _targetOctree = BerkeleyDBOctree.open(_cloudDirectory, _simplifiedCloudName, true, _cacheSizeInBytes);
+      _targetOctree = BerkeleyDBOctree.open(_cloudDirectory, _simplifiedCloudName, true, _maxPointsPerTitle, _maxPointsPerTitle,
+               _cacheSizeInBytes);
 
       _progress = new GProgress(_sourcePointsCount, true) {
          @Override

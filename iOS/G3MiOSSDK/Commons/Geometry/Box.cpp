@@ -219,7 +219,7 @@ Vector3D Box::intersectionWithRay(const Vector3D& origin,
 }
 
 
-Mesh* Box::createMesh(const Color* color) const {
+Mesh* Box::createMesh(const Color& color) const {
   double v[] = {
     _lower._x, _lower._y, _lower._z,
     _lower._x, _upper._y, _lower._z,
@@ -259,7 +259,7 @@ Mesh* Box::createMesh(const Color* color) const {
                                indices.create(),
                                2,
                                1,
-                               color);
+                               new Color(color));
   
   delete vertices;
   
@@ -268,7 +268,7 @@ Mesh* Box::createMesh(const Color* color) const {
 
 void Box::render(const G3MRenderContext* rc,
                  const GLState* parentState,
-                 const Color* color) const {
+                 const Color& color) const {
   if (_mesh == NULL) {
     _mesh = createMesh(color);
   }
