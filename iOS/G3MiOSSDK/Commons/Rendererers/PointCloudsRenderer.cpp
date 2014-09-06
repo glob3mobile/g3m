@@ -401,7 +401,8 @@ void PointCloudsRenderer::PointCloud::render(const G3MRenderContext* rc,
                                              const Frustum* frustum,
                                              long long nowInMS) {
   if (_rootNode != NULL) {
-    const long long renderedCount = _rootNode->render(this, rc, glState, frustum, _minHeight, _maxHeight, nowInMS);
+#warning TODO
+    const long long renderedCount = _rootNode->render(this, rc, glState, frustum, _minHeight, _averageHeight * 3, nowInMS);
 
     if (_lastRenderedCount != renderedCount) {
       ILogger::instance()->logInfo("\"%s\": Rendered %ld points", _cloudName.c_str(), renderedCount);
@@ -422,7 +423,7 @@ long long PointCloudsRenderer::PointCloudNode::render(const PointCloud* pointClo
     if (bounds->touchesFrustum(frustum)) {
       bool justRecalculatedProjectedArea = false;
       if ((_projectedArea == -1) ||
-          ((_lastProjectedAreaTimeInMS + 250) < nowInMS)) {
+          ((_lastProjectedAreaTimeInMS + 350) < nowInMS)) {
         const double currentProjectedArea = bounds->projectedArea(rc);
         if (currentProjectedArea != _projectedArea) {
           _projectedArea = currentProjectedArea;
@@ -682,8 +683,8 @@ DirectMesh* PointCloudsRenderer::PointCloudLeafNode::createMesh(double minHeight
         const float height = _firstPointsHeightsBuffer->get(i);
         const float alpha = (float) ((height - minHeight) / deltaHeight);
 
-        const Color color = Color::magenta().wheelStep(500000,
-                                                   IMathUtils::instance()->round(500000 * alpha) );
+        const Color color = Color::magenta().wheelStep(2147483647,
+                                                       IMathUtils::instance()->round(2147483647 * alpha) );
 
         const int i4 = i*4;
         _firstPointsColorsBuffer->rawPut(i4 + 0, color._red);
@@ -735,8 +736,8 @@ DirectMesh* PointCloudsRenderer::PointCloudLeafNode::createMesh(double minHeight
     const float height = _firstPointsHeightsBuffer->get(i);
     const float alpha = (float) ((height - minHeight) / deltaHeight);
 
-    const Color color = Color::magenta().wheelStep(500000,
-                                               IMathUtils::instance()->round(500000 * alpha) );
+    const Color color = Color::magenta().wheelStep(2147483647,
+                                                   IMathUtils::instance()->round(2147483647 * alpha) );
 
     const int i4 = i*4;
     colors->rawPut(i4 + 0, color._red);
@@ -752,8 +753,8 @@ DirectMesh* PointCloudsRenderer::PointCloudLeafNode::createMesh(double minHeight
       const float height = levelHeightsBuffers->get(i);
       const float alpha = (float) ((height - minHeight) / deltaHeight);
 
-      const Color color = Color::magenta().wheelStep(500000,
-                                                 IMathUtils::instance()->round(500000 * alpha) );
+      const Color color = Color::magenta().wheelStep(2147483647,
+                                                     IMathUtils::instance()->round(2147483647 * alpha) );
       
       const int offset = cursor + i*4;
       colors->rawPut(offset + 0, color._red);
@@ -793,7 +794,7 @@ long long PointCloudsRenderer::PointCloudLeafNode::rawRender(const PointCloud* p
 
   if (justRecalculatedProjectedArea) {
 #warning TODO: quality factor 2
-    const int intendedPointsCount = IMathUtils::instance()->round((float) projectedArea * 0.2f);
+    const int intendedPointsCount = IMathUtils::instance()->round((float) projectedArea * 0.1f);
     int accummulated = 0;
     int neededLevel = -1;
     int neededPoints = -1;
