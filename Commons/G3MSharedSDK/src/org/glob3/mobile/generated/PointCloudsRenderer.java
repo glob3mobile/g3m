@@ -502,8 +502,8 @@ public class PointCloudsRenderer extends DefaultRenderer
 
   private static class PointCloudLeafNode extends PointCloudNode
   {
-    private final int _levelsCountLenght;
-    private final int[] _levelsCount;
+    private final int _levelsCount;
+    private final int[] _levelsPointsCount;
     private final Vector3D _average;
     private final Box _bounds;
     private IFloatBuffer _firstPointsVerticesBuffer;
@@ -516,15 +516,16 @@ public class PointCloudsRenderer extends DefaultRenderer
 
     private int _neededLevel;
     private int _neededPoints;
+    private int _preloadedLoadedLevel;
     private int _currentLoadedLevel;
     private int _loadingLevel;
     private int calculateCurrentLoadedLevel()
     {
       int loadedPointsCount = _firstPointsVerticesBuffer.size() / 3;
       int accummulated = 0;
-      for (int i = 0; i < _levelsCountLenght; i++)
+      for (int i = 0; i < _levelsCount; i++)
       {
-        final int levelPointsCount = _levelsCount[i];
+        final int levelPointsCount = _levelsPointsCount[i];
         accummulated += levelPointsCount;
         if (accummulated == loadedPointsCount)
         {
@@ -534,11 +535,10 @@ public class PointCloudsRenderer extends DefaultRenderer
       return -1;
     }
 
-//    void loadLevel(const PointCloud* pointCloud,
-//                   const G3MRenderContext* rc,
-//                   int newLevel);
-
     private long _loadingLevelRequestID;
+
+    private IFloatBuffer[] _levelsVerticesBuffers;
+    private IFloatBuffer[] _levelsHeightsBuffers;
 
     protected final long rawRender(PointCloud pointCloud, G3MRenderContext rc, GLState glState, Frustum frustum, double projectedArea, double minHeight, double maxHeight, long nowInMS, boolean justRecalculatedProjectedArea)
     {
@@ -551,9 +551,9 @@ public class PointCloudsRenderer extends DefaultRenderer
         int accummulated = 0;
         int neededLevel = -1;
         int neededPoints = -1;
-        for (int i = 0; i < _levelsCountLenght; i++)
+        for (int i = 0; i < _levelsCount; i++)
         {
-          final int levelPointsCount = _levelsCount[i];
+          final int levelPointsCount = _levelsPointsCount[i];
           neededPoints = accummulated;
           accummulated += levelPointsCount;
           if (accummulated > intendedPointsCount)
@@ -651,15 +651,15 @@ public class PointCloudsRenderer extends DefaultRenderer
     }
 
     public PointCloudLeafNode(final String       id,
-                              final int          levelsCountLenght,
-                              final int[]        levelsCount,
+                              final int          levelsCount,
+                              final int[]        levelsPointsCount,
                               final Vector3D     average,
                               final Box          bounds,
                               final IFloatBuffer firstPointsVerticesBuffer,
                               final IFloatBuffer firstPointsHeightsBuffer) {
       super(id);
-      _levelsCountLenght = levelsCountLenght;
       _levelsCount = levelsCount;
+      _levelsPointsCount = levelsPointsCount;
       _average = average;
       _bounds = bounds;
       _firstPointsVerticesBuffer = firstPointsVerticesBuffer;
@@ -667,9 +667,12 @@ public class PointCloudsRenderer extends DefaultRenderer
       _mesh = null;
       _pointsCount = -1;
       _firstPointsColorsBuffer = null;
-      _currentLoadedLevel = calculateCurrentLoadedLevel();
       _loadingLevel = -1;
       _loadingLevelRequestID = -1;
+      _currentLoadedLevel = calculateCurrentLoadedLevel();
+      _preloadedLoadedLevel = _currentLoadedLevel;
+      _levelsVerticesBuffers = new IFloatBuffer[_levelsCount];
+      _levelsHeightsBuffers  = new IFloatBuffer[_levelsCount];
     }
 
     public final Box getBounds()
@@ -682,9 +685,9 @@ public class PointCloudsRenderer extends DefaultRenderer
       if (_pointsCount <= 0)
       {
         _pointsCount = 0;
-        for (int i = 0; i < _levelsCountLenght; i++)
+        for (int i = 0; i < _levelsCount; i++)
         {
-          _pointsCount += _levelsCount[i];
+          _pointsCount += _levelsPointsCount[i];
         }
       }
       return _pointsCount;
@@ -719,13 +722,10 @@ public class PointCloudsRenderer extends DefaultRenderer
 
     public final void onLevelBuffersDownload(int level, IFloatBuffer verticesBuffer, IFloatBuffer heightsBuffer)
     {
-      ILogger.instance().logInfo("-> loaded level %s/%d (needed=%d)", _id, level, _neededLevel);
-    
-      _currentLoadedLevel = level;
       _loadingLevel = -1;
       _loadingLevelRequestID = -1;
     
-      final int levelCount = _levelsCount[level];
+      final int levelCount = _levelsPointsCount[level];
     
       if ((verticesBuffer.size() / 3 != levelCount) || (heightsBuffer.size() != levelCount))
       {
@@ -739,7 +739,12 @@ public class PointCloudsRenderer extends DefaultRenderer
       {
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#warning Diego at work;
-        System.out.print("");
+        ILogger.instance().logInfo("-> loaded level %s/%d (needed=%d)", _id, level, _neededLevel);
+    
+        _levelsVerticesBuffers[level] = verticesBuffer;
+        _levelsHeightsBuffers[level] = heightsBuffer;
+    
+        _currentLoadedLevel = level;
       }
     
     }
