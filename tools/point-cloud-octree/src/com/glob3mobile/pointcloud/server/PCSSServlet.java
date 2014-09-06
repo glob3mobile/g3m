@@ -40,8 +40,8 @@ import es.igosoftware.util.XStringTokenizer;
 
 
 public class PCSSServlet
-extends
-HttpServlet {
+         extends
+            HttpServlet {
    private static final long serialVersionUID = 1L;
 
 
@@ -262,8 +262,8 @@ HttpServlet {
 
 
    private static List<NodeMetadata> getNodesMetadata(final PersistentLOD db,
-                                                      final Planet planet,
-                                                      final float verticalExaggeration) {
+            final Planet planet,
+            final float verticalExaggeration) {
       final List<NodeMetadata> result = new ArrayList<PCSSServlet.NodeMetadata>(10000);
 
       db.acceptDepthFirstVisitor(null, new PersistentLOD.Visitor() {
@@ -544,7 +544,7 @@ HttpServlet {
       final byte intLevelsCount = toByte(intLevels.size());
 
       final int bufferSize = //
-               ByteBufferUtils.sizeOf(idLength) + //
+      ByteBufferUtils.sizeOf(idLength) + //
                idLength + //
                ByteBufferUtils.sizeOf(byteLevelsCount) + //
                ByteBufferUtils.sizeOf(shortLevelsCount) + //
@@ -604,7 +604,7 @@ HttpServlet {
       final double averageHeight = statistics.getAverageHeight();
 
       final int bufferSize = //
-      ByteBufferUtils.sizeOf(pointsCount) + //
+               ByteBufferUtils.sizeOf(pointsCount) + //
                ByteBufferUtils.sizeOf(sector) + //
                ByteBufferUtils.sizeOf(minHeight) + //
                ByteBufferUtils.sizeOf(maxHeight) + //
@@ -687,9 +687,14 @@ HttpServlet {
 
       final List<Geodetic3D> points = nodeLevel.getPoints(null);
 
-      final int bufferSize = ByteBufferUtils.sizeOf(planet, points, average);
+      final int bufferSize = ByteBufferUtils.sizeOf(planet, points, average) + (points.size() * 4);
+
       final ByteBuffer buffer = ByteBuffer.allocate(bufferSize).order(ByteOrder.LITTLE_ENDIAN);
       ByteBufferUtils.put(buffer, planet, points, average, verticalExaggeration);
+
+      for (final Geodetic3D point : points) {
+         buffer.putFloat((float) point._height);
+      }
 
       final ServletOutputStream os = response.getOutputStream();
       os.write(buffer.array());

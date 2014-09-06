@@ -39,6 +39,7 @@ public:
 
 private:
 
+  class PointCloud;
 
   class PointCloudNode {
   private:
@@ -56,7 +57,8 @@ private:
     {
     }
 
-    virtual long long rawRender(const G3MRenderContext* rc,
+    virtual long long rawRender(const PointCloud* pointCloud,
+                                const G3MRenderContext* rc,
                                 GLState* glState,
                                 const Frustum* frustum,
                                 const double projectedArea,
@@ -76,7 +78,8 @@ private:
     virtual long long getPointsCount() = 0;
     virtual const Vector3D getAverage() = 0;
 
-    long long render(const G3MRenderContext* rc,
+    long long render(const PointCloud* pointCloud,
+                     const G3MRenderContext* rc,
                      GLState* glState,
                      const Frustum* frustum,
                      double minHeight,
@@ -85,7 +88,7 @@ private:
 
     virtual bool isInner() const = 0;
 
-    virtual void stoppedRendering() = 0;
+    virtual void stoppedRendering(const G3MRenderContext* rc) = 0;
 
   };
 
@@ -107,7 +110,8 @@ private:
     Mesh* _mesh;
 
   protected:
-    long long rawRender(const G3MRenderContext* rc,
+    long long rawRender(const PointCloud* pointCloud,
+                        const G3MRenderContext* rc,
                         GLState* glState,
                         const Frustum* frustum,
                         const double projectedArea,
@@ -161,11 +165,41 @@ private:
       return true;
     }
 
-    void stoppedRendering();
+    void stoppedRendering(const G3MRenderContext* rc);
 
   };
 
 
+  class PointCloudLeafNodeLevelListener : public IBufferDownloadListener {
+  private:
+    PointCloudLeafNode* _leafNode;
+    const int _level;
+  public:
+    PointCloudLeafNodeLevelListener(PointCloudLeafNode* leafNode,
+                                    int level) :
+    _leafNode(leafNode),
+    _level(level)
+    {
+    }
+
+
+    void onDownload(const URL& url,
+                    IByteBuffer* buffer,
+                    bool expired);
+
+    void onError(const URL& url);
+
+    void onCancel(const URL& url);
+
+    void onCanceledDownload(const URL& url,
+                            IByteBuffer* buffer,
+                            bool expired) {
+      // do nothing
+    }
+
+  };
+  
+  
   class PointCloudLeafNode : public PointCloudNode {
   private:
     const int  _levelsCountLenght;
@@ -177,7 +211,7 @@ private:
 #endif
     const Vector3D* _average;
     const Box*      _bounds;
-    IFloatBuffer*   _firstPointsBuffer;
+    IFloatBuffer*   _firstPointsVerticesBuffer;
     IFloatBuffer*   _firstPointsHeightsBuffer;
     IFloatBuffer*   _firstPointsColorsBuffer;
 
@@ -187,9 +221,19 @@ private:
 
     int _neededLevel;
     int _neededPoints;
+    int _currentLoadedLevel;
+    bool _loading;
+    int calculateCurrentLoadedLevel() const;
+
+    void loadLevel(const PointCloud* pointCloud,
+                   const G3MRenderContext* rc,
+                   int newLevel);
+
+    long long _loadingLevelRequestID;
 
   protected:
-    long long rawRender(const G3MRenderContext* rc,
+    long long rawRender(const PointCloud* pointCloud,
+                        const G3MRenderContext* rc,
                         GLState* glState,
                         const Frustum* frustum,
                         const double projectedArea,
@@ -205,21 +249,24 @@ private:
                        const int*         levelsCount,
                        const Vector3D*    average,
                        const Box*         bounds,
-                       IFloatBuffer*      firstPointsBuffer,
+                       IFloatBuffer*      firstPointsVerticesBuffer,
                        IFloatBuffer*      firstPointsHeightsBuffer) :
     PointCloudNode(id),
     _levelsCountLenght(levelsCountLenght),
     _levelsCount(levelsCount),
     _average(average),
     _bounds(bounds),
-    _firstPointsBuffer(firstPointsBuffer),
+    _firstPointsVerticesBuffer(firstPointsVerticesBuffer),
     _firstPointsHeightsBuffer(firstPointsHeightsBuffer),
     _mesh(NULL),
     _pointsCount(-1),
     _neededLevel(0),
     _neededPoints(0),
-    _firstPointsColorsBuffer(NULL)
+    _firstPointsColorsBuffer(NULL),
+    _loading(false),
+    _loadingLevelRequestID(-1)
     {
+      _currentLoadedLevel = calculateCurrentLoadedLevel();
     }
 #endif
 #ifdef JAVA_CODE
@@ -228,18 +275,21 @@ private:
                               final int[]        levelsCount,
                               final Vector3D     average,
                               final Box          bounds,
-                              final IFloatBuffer firstPointsBuffer,
+                              final IFloatBuffer firstPointsVerticesBuffer,
                               final IFloatBuffer firstPointsHeightsBuffer) {
       super(id);
       _levelsCountLenght = levelsCountLenght;
       _levelsCount = levelsCount;
       _average = average;
       _bounds = bounds;
-      _firstPointsBuffer = firstPointsBuffer;
+      _firstPointsVerticesBuffer = firstPointsVerticesBuffer;
       _firstPointsHeightsBuffer = firstPointsHeightsBuffer;
       _mesh = null;
       _pointsCount = -1;
       _firstPointsColorsBuffer = null;
+      _currentLoadedLevel = calculateCurrentLoadedLevel();
+      _loading = false;
+      _loadingLevelRequestID = -1;
     }
 #endif
 
@@ -267,12 +317,14 @@ private:
       return false;
     }
 
-    void stoppedRendering();
+    void stoppedRendering(const G3MRenderContext* rc);
+
+    void onLevelBufferDownload(int level, IByteBuffer* buffer);
+    void onLevelBufferError(int level);
+    void onLevelBufferCancel(int level);
 
   };
 
-
-  class PointCloud;
 
 
   class PointCloudMetadataParserAsyncTask : public GAsyncTask {
@@ -429,6 +481,12 @@ private:
                 const Frustum* frustum,
                 long long nowInMS);
 
+    long long requestBufferForLevel(const G3MRenderContext* rc,
+                                    const std::string& nodeID,
+                                    int level,
+                                    IBufferDownloadListener *listener,
+                                    bool deleteListener) const;
+
   };
 
   ITimer* _timer;
@@ -475,7 +533,7 @@ public:
                      bool deleteListener = true);
   
   void removeAllPointClouds();
-  
+
 };
 
 #endif
