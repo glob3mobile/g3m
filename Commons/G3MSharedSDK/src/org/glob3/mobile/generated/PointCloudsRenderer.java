@@ -78,7 +78,7 @@ public class PointCloudsRenderer extends DefaultRenderer
         if (bounds.touchesFrustum(frustum))
         {
           boolean justRecalculatedProjectedArea = false;
-          if ((_projectedArea == -1) || ((_lastProjectedAreaTimeInMS + 500) < nowInMS))
+          if ((_projectedArea == -1) || ((_lastProjectedAreaTimeInMS + 250) < nowInMS))
           {
             final double currentProjectedArea = bounds.projectedArea(rc);
             if (currentProjectedArea != _projectedArea)
@@ -90,8 +90,8 @@ public class PointCloudsRenderer extends DefaultRenderer
           }
     
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning TODO: quality factor
-          final double minProjectedArea = 200;
+//#warning TODO: quality factor 1
+          final double minProjectedArea = 250;
           if (_projectedArea >= minProjectedArea)
           {
             final long renderedCount = rawRender(pointCloud, rc, glState, frustum, _projectedArea, minHeight, maxHeight, nowInMS, justRecalculatedProjectedArea);
@@ -212,7 +212,7 @@ public class PointCloudsRenderer extends DefaultRenderer
           pointsBuffer.rawPut(1, (float)(average._y - averageY));
           pointsBuffer.rawPut(2, (float)(average._z - averageZ));
     
-          _mesh = new DirectMesh(GLPrimitive.points(), true, new Vector3D(averageX, averageY, averageZ), pointsBuffer, 1, 3, Color.newFromRGBA(1, 1, 0, 1), null, 1, false); // colorsIntensity -  colors
+          _mesh = new DirectMesh(GLPrimitive.points(), true, new Vector3D(averageX, averageY, averageZ), pointsBuffer, 1, 4, Color.newFromRGBA(1, 1, 0, 1), null, 1, true); // colorsIntensity -  colors
         }
         _mesh.render(rc, glState);
         renderedCount = 1;
@@ -420,12 +420,9 @@ public class PointCloudsRenderer extends DefaultRenderer
       final int pointsCount = it.nextInt32();
     
       _verticesBuffer = IFactory.instance().createFloatBuffer(pointsCount * 3);
-      for (int i = 0; i < pointsCount; i++)
+      for (int i = 0; i < pointsCount * 3; i++)
       {
-        final int i3 = i *3;
-        _verticesBuffer.rawPut(i3 + 0, it.nextFloat());
-        _verticesBuffer.rawPut(i3 + 1, it.nextFloat());
-        _verticesBuffer.rawPut(i3 + 2, it.nextFloat());
+        _verticesBuffer.rawPut(i, it.nextFloat());
       }
     
       _heightsBuffer = IFactory.instance().createFloatBuffer(pointsCount);
@@ -477,8 +474,6 @@ public class PointCloudsRenderer extends DefaultRenderer
 
     public final void onDownload(URL url, IByteBuffer buffer, boolean expired)
     {
-    //  _leafNode->onLevelBufferDownload(_level, buffer);
-    
       _threadUtils.invokeAsyncTask(new PointCloudLeafNodeLevelParserTask(_leafNode, _level, buffer), true);
     }
 
@@ -542,9 +537,9 @@ public class PointCloudsRenderer extends DefaultRenderer
 
     private DirectMesh createMesh(double minHeight, double maxHeight)
     {
-      final int firstPointsCount = _firstPointsVerticesBuffer.size() / 3;
       if (_currentLoadedLevel <= _preloadedLevel)
       {
+        final int firstPointsCount = _firstPointsVerticesBuffer.size() / 3;
         if (_firstPointsColorsBuffer == null)
         {
           final double deltaHeight = maxHeight - minHeight;
@@ -555,7 +550,7 @@ public class PointCloudsRenderer extends DefaultRenderer
             final float height = _firstPointsHeightsBuffer.get(i);
             final float alpha = (float)((height - minHeight) / deltaHeight);
     
-            final Color color = Color.red().wheelStep(5000, IMathUtils.instance().round(5000 * alpha));
+            final Color color = Color.magenta().wheelStep(500000, IMathUtils.instance().round(500000 * alpha));
     
             final int i4 = i *4;
             _firstPointsColorsBuffer.rawPut(i4 + 0, color._red);
@@ -565,9 +560,9 @@ public class PointCloudsRenderer extends DefaultRenderer
           }
         }
     
-        DirectMesh mesh = new DirectMesh(GLPrimitive.points(), false, _average, _firstPointsVerticesBuffer, 1, 2, Color.newFromRGBA(1, 1, 1, 1), _firstPointsColorsBuffer, 1, false); // colorsIntensity -  colors
-    //    mesh->setRenderVerticesCount( IMathUtils::instance()->min(_neededPoints, firstPointsCount) );
-        mesh.setRenderVerticesCount(_neededPoints);
+        DirectMesh mesh = new DirectMesh(GLPrimitive.points(), false, _average, _firstPointsVerticesBuffer, 1, 3, Color.newFromRGBA(1, 1, 1, 1), _firstPointsColorsBuffer, 1, true); // colorsIntensity -  colors
+        mesh.setRenderVerticesCount(IMathUtils.instance().min(_neededPoints, firstPointsCount));
+    //    mesh->setRenderVerticesCount( _neededPoints );
     
         return mesh;
       }
@@ -579,18 +574,60 @@ public class PointCloudsRenderer extends DefaultRenderer
       }
     
       IFloatBuffer vertices = IFactory.instance().createFloatBuffer(pointsCount * 3);
+    
+    
       vertices.rawPut(0, _firstPointsVerticesBuffer);
       int cursor = _firstPointsVerticesBuffer.size();
       for (int level = _preloadedLevel+1; level <= _currentLoadedLevel; level++)
       {
         IFloatBuffer levelVerticesBuffers = _levelsVerticesBuffers[level];
         vertices.rawPut(cursor, levelVerticesBuffers);
+    
         cursor += levelVerticesBuffers.size();
       }
     
-      DirectMesh mesh = new DirectMesh(GLPrimitive.points(), true, _average, vertices, 1, 2, Color.newFromRGBA(1, 1, 1, 1), null, 1, false); // colorsIntensity -  colors
+    //  IFloatBuffer* colors = NULL;
+      IFloatBuffer colors = IFactory.instance().createFloatBuffer(pointsCount * 4);
+      final double deltaHeight = maxHeight - minHeight;
+      final int firstPointsCount = _firstPointsVerticesBuffer.size() / 3;
+    
+      for (int i = 0; i < firstPointsCount; i++)
+      {
+        final float height = _firstPointsHeightsBuffer.get(i);
+        final float alpha = (float)((height - minHeight) / deltaHeight);
+    
+        final Color color = Color.magenta().wheelStep(500000, IMathUtils.instance().round(500000 * alpha));
+    
+        final int i4 = i *4;
+        colors.rawPut(i4 + 0, color._red);
+        colors.rawPut(i4 + 1, color._green);
+        colors.rawPut(i4 + 2, color._blue);
+        colors.rawPut(i4 + 3, color._alpha);
+      }
+    
+      cursor = firstPointsCount * 4;
+      for (int level = _preloadedLevel+1; level <= _currentLoadedLevel; level++)
+      {
+        IFloatBuffer levelHeightsBuffers = _levelsHeightsBuffers[level];
+        for (int i = 0; i < _levelsPointsCount[level]; i++)
+        {
+          final float height = levelHeightsBuffers.get(i);
+          final float alpha = (float)((height - minHeight) / deltaHeight);
+    
+          final Color color = Color.magenta().wheelStep(500000, IMathUtils.instance().round(500000 * alpha));
+    
+          final int offset = cursor + i *4;
+          colors.rawPut(offset + 0, color._red);
+          colors.rawPut(offset + 1, color._green);
+          colors.rawPut(offset + 2, color._blue);
+          colors.rawPut(offset + 3, color._alpha);
+        }
+        cursor += _levelsPointsCount[level] * 4;
+      }
+    
+      DirectMesh mesh = new DirectMesh(GLPrimitive.points(), true, _average, vertices, 1, 3, Color.newFromRGBA(1, 1, 1, 1), colors, 1, true); // colorsIntensity -  colors
       //    mesh->setRenderVerticesCount( IMathUtils::instance()->min(_neededPoints, firstPointsCount) );
-      mesh.setRenderVerticesCount(pointsCount); //_neededPoints
+      mesh.setRenderVerticesCount(pointsCount);
     
       return mesh;
     }
@@ -601,8 +638,8 @@ public class PointCloudsRenderer extends DefaultRenderer
       if (justRecalculatedProjectedArea)
       {
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning TODO: quality factor
-        final int intendedPointsCount = IMathUtils.instance().round((float) projectedArea * 0.05f);
+//#warning TODO: quality factor 2
+        final int intendedPointsCount = IMathUtils.instance().round((float) projectedArea * 0.2f);
         int accummulated = 0;
         int neededLevel = -1;
         int neededPoints = -1;
@@ -763,7 +800,7 @@ public class PointCloudsRenderer extends DefaultRenderer
     {
       if (_loadingLevelRequestID >= 0)
       {
-        ILogger.instance().logInfo("Canceling level request");
+    //    ILogger::instance()->logInfo("Canceling level request");
         rc.getDownloader().cancelRequest(_loadingLevelRequestID);
       }
     
@@ -793,8 +830,6 @@ public class PointCloudsRenderer extends DefaultRenderer
       }
       else
       {
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning Diego at work;
         //ILogger::instance()->logInfo("-> loaded level %s/%d (needed=%d)",  _id.c_str(), level, _neededLevel);
     
         if ((_levelsVerticesBuffers[level] != null) || (_levelsHeightsBuffers[level] != null))
