@@ -174,16 +174,66 @@ private:
   };
 
 
+  class PointCloudLeafNodeLevelParserTask : public GAsyncTask {
+  private:
+    PointCloudLeafNode* _leafNode;
+    const int           _level;
+
+    IByteBuffer* _buffer;
+
+    IFloatBuffer* _verticesBuffer;
+    IFloatBuffer* _heightsBuffer;
+
+  public:
+    PointCloudLeafNodeLevelParserTask(PointCloudLeafNode* leafNode,
+                                      int level,
+                                      IByteBuffer* buffer) :
+    _leafNode(leafNode),
+    _level(level),
+    _buffer(buffer),
+    _verticesBuffer(NULL),
+    _heightsBuffer(NULL)
+    {
+      _leafNode->_retain();
+    }
+
+    ~PointCloudLeafNodeLevelParserTask() {
+      _leafNode->_release();
+      delete _buffer;
+
+      delete _verticesBuffer;
+      delete _heightsBuffer;
+    }
+
+    void runInBackground(const G3MContext* context);
+
+    void onPostExecute(const G3MContext* context);
+
+  };
+
+
   class PointCloudLeafNodeLevelListener : public IBufferDownloadListener {
   private:
     PointCloudLeafNode* _leafNode;
     const int _level;
 
+    const IThreadUtils* _threadUtils;
+
   public:
     PointCloudLeafNodeLevelListener(PointCloudLeafNode* leafNode,
-                                    int level);
+                                    int level,
+                                    const IThreadUtils* threadUtils) :
+    _leafNode(leafNode),
+    _level(level),
+    _threadUtils(threadUtils)
+    {
+      _leafNode->_retain();
+    }
 
-    ~PointCloudLeafNodeLevelListener();
+
+    ~PointCloudLeafNodeLevelListener() {
+      _leafNode->_release();
+    }
 
     void onDownload(const URL& url,
                     IByteBuffer* buffer,
@@ -321,7 +371,10 @@ private:
 
     void stoppedRendering(const G3MRenderContext* rc);
 
-    void onLevelBufferDownload(int level, IByteBuffer* buffer);
+    void onLevelBuffersDownload(int level,
+                                IFloatBuffer* verticesBuffer,
+                                IFloatBuffer* heightsBuffer);
+    
     void onLevelBufferError(int level);
     void onLevelBufferCancel(int level);
 

@@ -573,23 +573,49 @@ long long PointCloudsRenderer::PointCloud::requestBufferForLevel(const G3MRender
                                             deleteListener);
 }
 
-PointCloudsRenderer::PointCloudLeafNodeLevelListener::PointCloudLeafNodeLevelListener(PointCloudLeafNode* leafNode,
-                                                                                      int level) :
-_leafNode(leafNode),
-_level(level)
-{
-  _leafNode->_retain();
+
+void PointCloudsRenderer::PointCloudLeafNodeLevelParserTask::runInBackground(const G3MContext* context) {
+  ByteBufferIterator it(_buffer);
+
+  const int pointsCount = it.nextInt32();
+
+  _verticesBuffer = IFactory::instance()->createFloatBuffer( pointsCount * 3 );
+  for (int i = 0; i < pointsCount; i++) {
+    const int i3 = i*3;
+    _verticesBuffer->rawPut(i3 + 0, it.nextFloat());
+    _verticesBuffer->rawPut(i3 + 1, it.nextFloat());
+    _verticesBuffer->rawPut(i3 + 2, it.nextFloat());
+  }
+
+  _heightsBuffer = IFactory::instance()->createFloatBuffer( pointsCount );
+  for (int i = 0; i < pointsCount; i++) {
+    _heightsBuffer->rawPut(i, it.nextFloat());
+  }
+
+  if (it.hasNext()) {
+    ILogger::instance()->logError("Logic error");
+  }
+
+  delete _buffer;
+  _buffer = NULL;
 }
 
-
-PointCloudsRenderer::PointCloudLeafNodeLevelListener::~PointCloudLeafNodeLevelListener() {
-  _leafNode->_release();
+void PointCloudsRenderer::PointCloudLeafNodeLevelParserTask::onPostExecute(const G3MContext* context) {
+  _leafNode->onLevelBuffersDownload(_level, _verticesBuffer, _heightsBuffer);
+  _verticesBuffer = NULL; // moves ownership to _leafNode
+  _heightsBuffer  = NULL; // moves ownership to _leafNode
 }
+
 
 void PointCloudsRenderer::PointCloudLeafNodeLevelListener::onDownload(const URL& url,
                                                                       IByteBuffer* buffer,
                                                                       bool expired) {
-  _leafNode->onLevelBufferDownload(_level, buffer);
+//  _leafNode->onLevelBufferDownload(_level, buffer);
+
+  _threadUtils->invokeAsyncTask(new PointCloudLeafNodeLevelParserTask(_leafNode,
+                                                                      _level,
+                                                                      buffer),
+                                true);
 }
 
 void PointCloudsRenderer::PointCloudLeafNodeLevelListener::onError(const URL& url) {
@@ -600,7 +626,9 @@ void PointCloudsRenderer::PointCloudLeafNodeLevelListener::onCancel(const URL& u
   _leafNode->onLevelBufferCancel(_level);
 }
 
-void PointCloudsRenderer::PointCloudLeafNode::onLevelBufferDownload(int level, IByteBuffer* buffer) {
+void PointCloudsRenderer::PointCloudLeafNode::onLevelBuffersDownload(int level,
+                                                                     IFloatBuffer* verticesBuffer,
+                                                                     IFloatBuffer* heightsBuffer) {
   ILogger::instance()->logInfo("-> loaded level %s/%d (needed=%d)",  _id.c_str(), level, _neededLevel);
 
   _currentLoadedLevel = level;
@@ -608,45 +636,18 @@ void PointCloudsRenderer::PointCloudLeafNode::onLevelBufferDownload(int level, I
   _loadingLevelRequestID = -1;
 
   const int levelCount = _levelsCount[level];
-  const int expectedBufferSize = (4 /* pointsCount, int */ +
-                                  levelCount * (3 * 4 /* 3 vertices, float */ +
-                                                4     /* height, float */));
 
-  if (expectedBufferSize != buffer->size()) {
-    ILogger::instance()->logError("Invalid buffer size for %s/%d", _id.c_str(), level);
+  if ((verticesBuffer->size() / 3 != levelCount) ||
+      (heightsBuffer->size() != levelCount)) {
+    ILogger::instance()->logError("Invalid buffer size");
+    delete verticesBuffer;
+    delete heightsBuffer;
   }
   else {
-#warning diego at work;
-
-    ByteBufferIterator it(buffer);
-
-    const int pointsCount = it.nextInt32();
-    if (pointsCount != levelCount) {
-      ILogger::instance()->logError("Invalid pointsCount %d", pointsCount);
-    }
-    else {
-//      IFloatBuffer* verticesBuffer = IFactory::instance()->createFloatBuffer( pointsCount * 3 );
-//      for (int i = 0; i < pointsCount; i++) {
-//        const int i3 = i*3;
-//        verticesBuffer->rawPut(i3 + 0, it.nextFloat());
-//        verticesBuffer->rawPut(i3 + 1, it.nextFloat());
-//        verticesBuffer->rawPut(i3 + 2, it.nextFloat());
-//      }
-//
-//      IFloatBuffer* heightsBuffer = IFactory::instance()->createFloatBuffer( pointsCount );
-//      for (int i = 0; i < pointsCount; i++) {
-//        heightsBuffer->rawPut(i, it.nextFloat());
-//      }
-//
-//      if (it.hasNext()) {
-//        ILogger::instance()->logError("Logic error");
-//      }
-    }
-
-#warning TODO parse points on background
+#warning Diego at work;
+    printf("");
   }
 
-  delete buffer;
 }
 
 void PointCloudsRenderer::PointCloudLeafNode::onLevelBufferError(int level) {
@@ -658,21 +659,6 @@ void PointCloudsRenderer::PointCloudLeafNode::onLevelBufferCancel(int level) {
   _loadingLevel = -1;
   _loadingLevelRequestID = -1;
 }
-
-
-//void PointCloudsRenderer::PointCloudLeafNode::loadLevel(const PointCloud* pointCloud,
-//                                                        const G3MRenderContext* rc,
-//                                                        int newLevel) {
-//  _loadingLevel = newLevel;
-//
-//  _loadingLevelRequestID = pointCloud->requestBufferForLevel(rc,
-//                                                             _id,
-//                                                             newLevel,
-//                                                             new PointCloudLeafNodeLevelListener(this, newLevel),
-//                                                             true);
-//
-//
-//}
 
 long long PointCloudsRenderer::PointCloudLeafNode::rawRender(const PointCloud* pointCloud,
                                                              const G3MRenderContext* rc,
@@ -731,7 +717,9 @@ long long PointCloudsRenderer::PointCloudLeafNode::rawRender(const PointCloud* p
         _loadingLevelRequestID = pointCloud->requestBufferForLevel(rc,
                                                                    _id,
                                                                    _loadingLevel,
-                                                                   new PointCloudLeafNodeLevelListener(this, _loadingLevel),
+                                                                   new PointCloudLeafNodeLevelListener(this,
+                                                                                                       _loadingLevel,
+                                                                                                       rc->getThreadUtils()),
                                                                    true);
       }
     }
