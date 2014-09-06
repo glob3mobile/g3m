@@ -37,6 +37,8 @@ public class PointCloudsRenderer extends DefaultRenderer
 
 
 
+//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following type could not be found.
+//  class PointCloud;
 
   private abstract static class PointCloudNode
   {
@@ -53,7 +55,7 @@ public class PointCloudsRenderer extends DefaultRenderer
        _lastProjectedAreaTimeInMS = -1;
     }
 
-    protected abstract long rawRender(G3MRenderContext rc, GLState glState, Frustum frustum, double projectedArea, double minHeight, double maxHeight, long nowInMS, boolean justRecalculatedProjectedArea);
+    protected abstract long rawRender(PointCloud pointCloud, G3MRenderContext rc, GLState glState, Frustum frustum, double projectedArea, double minHeight, double maxHeight, long nowInMS, boolean justRecalculatedProjectedArea);
 
     public final String _id;
 
@@ -66,7 +68,7 @@ public class PointCloudsRenderer extends DefaultRenderer
     public abstract long getPointsCount();
     public abstract Vector3D getAverage();
 
-    public final long render(G3MRenderContext rc, GLState glState, Frustum frustum, double minHeight, double maxHeight, long nowInMS)
+    public final long render(PointCloud pointCloud, G3MRenderContext rc, GLState glState, Frustum frustum, double minHeight, double maxHeight, long nowInMS)
     {
       final Box bounds = getBounds();
       if (bounds != null)
@@ -90,7 +92,7 @@ public class PointCloudsRenderer extends DefaultRenderer
           final double minProjectedArea = 200;
           if (_projectedArea >= minProjectedArea)
           {
-            final long renderedCount = rawRender(rc, glState, frustum, _projectedArea, minHeight, maxHeight, nowInMS, justRecalculatedProjectedArea);
+            final long renderedCount = rawRender(pointCloud, rc, glState, frustum, _projectedArea, minHeight, maxHeight, nowInMS, justRecalculatedProjectedArea);
             _rendered = true;
             return renderedCount;
           }
@@ -99,7 +101,7 @@ public class PointCloudsRenderer extends DefaultRenderer
     
       if (_rendered)
       {
-        stoppedRendering();
+        stoppedRendering(rc);
         _rendered = false;
       }
     
@@ -108,7 +110,7 @@ public class PointCloudsRenderer extends DefaultRenderer
 
     public abstract boolean isInner();
 
-    public abstract void stoppedRendering();
+    public abstract void stoppedRendering(G3MRenderContext rc);
 
   }
 
@@ -181,7 +183,7 @@ public class PointCloudsRenderer extends DefaultRenderer
 
     private Mesh _mesh;
 
-    protected final long rawRender(G3MRenderContext rc, GLState glState, Frustum frustum, double projectedArea, double minHeight, double maxHeight, long nowInMS, boolean justRecalculatedProjectedArea)
+    protected final long rawRender(PointCloud pointCloud, G3MRenderContext rc, GLState glState, Frustum frustum, double projectedArea, double minHeight, double maxHeight, long nowInMS, boolean justRecalculatedProjectedArea)
     {
       long renderedCount = 0;
       for (int i = 0; i < 4; i++)
@@ -189,7 +191,7 @@ public class PointCloudsRenderer extends DefaultRenderer
         PointCloudNode child = _children[i];
         if (child != null)
         {
-          renderedCount += child.render(rc, glState, frustum, minHeight, maxHeight, nowInMS);
+          renderedCount += child.render(pointCloud, rc, glState, frustum, minHeight, maxHeight, nowInMS);
         }
       }
     
@@ -353,23 +355,54 @@ public class PointCloudsRenderer extends DefaultRenderer
       return true;
     }
 
-    public final void stoppedRendering()
+    public final void stoppedRendering(G3MRenderContext rc)
     {
+      if (_mesh != null)
+         _mesh.dispose();
+      _mesh = null;
+    
       for (int i = 0; i < 4; i++)
       {
         PointCloudNode child = _children[i];
         if (child != null)
         {
-          child.stoppedRendering();
+          child.stoppedRendering(rc);
         }
       }
-    
-      if (_mesh != null)
-      {
-        if (_mesh != null)
-           _mesh.dispose();
-        _mesh = null;
-      }
+    }
+
+  }
+
+
+  private static class PointCloudLeafNodeLevelListener extends IBufferDownloadListener
+  {
+    private PointCloudLeafNode _leafNode;
+    private final int _level;
+    public PointCloudLeafNodeLevelListener(PointCloudLeafNode leafNode, int level)
+    {
+       _leafNode = leafNode;
+       _level = level;
+    }
+
+
+    public final void onDownload(URL url, IByteBuffer buffer, boolean expired)
+    {
+      _leafNode.onLevelBufferDownload(_level, buffer);
+    }
+
+    public final void onError(URL url)
+    {
+      _leafNode.onLevelBufferError(_level);
+    }
+
+    public final void onCancel(URL url)
+    {
+      _leafNode.onLevelBufferCancel(_level);
+    }
+
+    public final void onCanceledDownload(URL url, IByteBuffer buffer, boolean expired)
+    {
+      // do nothing
     }
 
   }
@@ -381,7 +414,7 @@ public class PointCloudsRenderer extends DefaultRenderer
     private final int[] _levelsCount;
     private final Vector3D _average;
     private final Box _bounds;
-    private IFloatBuffer _firstPointsBuffer;
+    private IFloatBuffer _firstPointsVerticesBuffer;
     private IFloatBuffer _firstPointsHeightsBuffer;
     private IFloatBuffer _firstPointsColorsBuffer;
 
@@ -391,14 +424,43 @@ public class PointCloudsRenderer extends DefaultRenderer
 
     private int _neededLevel;
     private int _neededPoints;
-
-    protected final long rawRender(G3MRenderContext rc, GLState glState, Frustum frustum, double projectedArea, double minHeight, double maxHeight, long nowInMS, boolean justRecalculatedProjectedArea)
+    private int _currentLoadedLevel;
+    private boolean _loading;
+    private int calculateCurrentLoadedLevel()
     {
+      int loadedPointsCount = _firstPointsVerticesBuffer.size() / 3;
+      int accummulated = 0;
+      for (int i = 0; i < _levelsCountLenght; i++)
+      {
+        final int levelPointsCount = _levelsCount[i];
+        accummulated += levelPointsCount;
+        if (accummulated == loadedPointsCount)
+        {
+          return i;
+        }
+      }
+      return -1;
+    }
+
+    private void loadLevel(PointCloud pointCloud, G3MRenderContext rc, int newLevel)
+    {
+      _loading = true;
+    
+      _loadingLevelRequestID = pointCloud.requestBufferForLevel(rc, _id, newLevel, new PointCloudLeafNodeLevelListener(this, newLevel), true);
+    
+    
+    }
+
+    private long _loadingLevelRequestID;
+
+    protected final long rawRender(PointCloud pointCloud, G3MRenderContext rc, GLState glState, Frustum frustum, double projectedArea, double minHeight, double maxHeight, long nowInMS, boolean justRecalculatedProjectedArea)
+    {
+    
       if (justRecalculatedProjectedArea)
       {
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#warning TODO: quality factor
-        final int intendedPointsCount = IMathUtils.instance().round((float) projectedArea * 0.01f);
+        final int intendedPointsCount = IMathUtils.instance().round((float) projectedArea * 0.05f);
         int accummulated = 0;
         int neededLevel = -1;
         int neededPoints = -1;
@@ -414,6 +476,14 @@ public class PointCloudsRenderer extends DefaultRenderer
           neededLevel = i;
         }
     
+    
+    
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning TODO- cancel current request if neededLevel < currentLoadingLevel
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning TODO- make Nodes RCObjects to _retain the leafs from the buffer-listener && background points parser
+    
+    
         if (neededLevel != _neededLevel)
         {
     //      ILogger::instance()->logInfo("Needed Level changed for %s from=%d to=%d, needed points=%d, projectedArea=%f",
@@ -426,21 +496,29 @@ public class PointCloudsRenderer extends DefaultRenderer
           _neededPoints = neededPoints;
           if (_mesh != null)
           {
-            _mesh.setRenderVerticesCount(IMathUtils.instance().min(_neededPoints, _firstPointsBuffer.size() / 3));
+            _mesh.setRenderVerticesCount(IMathUtils.instance().min(_neededPoints, _firstPointsVerticesBuffer.size() / 3));
           }
+        }
+      }
+    
+      if (_neededLevel > _currentLoadedLevel)
+      {
+        if (!_loading)
+        {
+          loadLevel(pointCloud, rc, _currentLoadedLevel + 1);
         }
       }
     
       if (_mesh == null)
       {
-        final int firstPointsCount = _firstPointsBuffer.size() / 3;
+        final int firstPointsCount = _firstPointsVerticesBuffer.size() / 3;
         if (_firstPointsColorsBuffer == null)
         {
     //      const Color fromColor   = Color::red();
     //      const Color middleColor = Color::green();
     //      const Color toColor     = Color::blue();
     
-          double deltaHeight = maxHeight - minHeight;
+          final double deltaHeight = maxHeight - minHeight;
     
           _firstPointsColorsBuffer = IFactory.instance().createFloatBuffer(firstPointsCount * 4);
           for (int i = 0; i < firstPointsCount; i++)
@@ -462,7 +540,7 @@ public class PointCloudsRenderer extends DefaultRenderer
           }
         }
     
-        _mesh = new DirectMesh(GLPrimitive.points(), false, _average, _firstPointsBuffer, 1, 2, Color.newFromRGBA(1, 1, 1, 1), _firstPointsColorsBuffer, 1, false); // colorsIntensity -  colors
+        _mesh = new DirectMesh(GLPrimitive.points(), false, _average, _firstPointsVerticesBuffer, 1, 2, Color.newFromRGBA(1, 1, 1, 1), _firstPointsColorsBuffer, 1, false); // colorsIntensity -  colors
         _mesh.setRenderVerticesCount(IMathUtils.instance().min(_neededPoints, firstPointsCount));
       }
       _mesh.render(rc, glState);
@@ -475,18 +553,21 @@ public class PointCloudsRenderer extends DefaultRenderer
                               final int[]        levelsCount,
                               final Vector3D     average,
                               final Box          bounds,
-                              final IFloatBuffer firstPointsBuffer,
+                              final IFloatBuffer firstPointsVerticesBuffer,
                               final IFloatBuffer firstPointsHeightsBuffer) {
       super(id);
       _levelsCountLenght = levelsCountLenght;
       _levelsCount = levelsCount;
       _average = average;
       _bounds = bounds;
-      _firstPointsBuffer = firstPointsBuffer;
+      _firstPointsVerticesBuffer = firstPointsVerticesBuffer;
       _firstPointsHeightsBuffer = firstPointsHeightsBuffer;
       _mesh = null;
       _pointsCount = -1;
       _firstPointsColorsBuffer = null;
+      _currentLoadedLevel = calculateCurrentLoadedLevel();
+      _loading = false;
+      _loadingLevelRequestID = -1;
     }
 
     public void dispose()
@@ -497,8 +578,8 @@ public class PointCloudsRenderer extends DefaultRenderer
          _average.dispose();
       if (_bounds != null)
          _bounds.dispose();
-      if (_firstPointsBuffer != null)
-         _firstPointsBuffer.dispose();
+      if (_firstPointsVerticesBuffer != null)
+         _firstPointsVerticesBuffer.dispose();
       if (_firstPointsHeightsBuffer != null)
          _firstPointsHeightsBuffer.dispose();
       if (_firstPointsColorsBuffer != null)
@@ -534,8 +615,14 @@ public class PointCloudsRenderer extends DefaultRenderer
       return false;
     }
 
-    public final void stoppedRendering()
+    public final void stoppedRendering(G3MRenderContext rc)
     {
+      if (_loadingLevelRequestID >= 0)
+      {
+        ILogger.instance().logInfo("Canceling level request");
+        rc.getDownloader().cancelRequest(_loadingLevelRequestID);
+      }
+    
       if (_mesh != null)
          _mesh.dispose();
       _mesh = null;
@@ -545,11 +632,73 @@ public class PointCloudsRenderer extends DefaultRenderer
       _firstPointsColorsBuffer = null;
     }
 
+    public final void onLevelBufferDownload(int level, IByteBuffer buffer)
+    {
+      ILogger.instance().logInfo("-> loaded level %s/%d (needed=%d)", _id, level, _neededLevel);
+    
+      _currentLoadedLevel = level;
+      _loading = false;
+      _loadingLevelRequestID = -1;
+    
+      final int levelCount = _levelsCount[level];
+      final int expectedBufferSize = (4 + levelCount * (3 * 4 + 4)); // height, float -  3 vertices, float -  pointsCount, int
+    
+      if (expectedBufferSize != buffer.size())
+      {
+        ILogger.instance().logError("Invalid buffer size for %s/%d", _id, level);
+      }
+      else
+      {
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning diego at work;
+    
+        ByteBufferIterator it = new ByteBufferIterator(buffer);
+    
+        final int pointsCount = it.nextInt32();
+        if (pointsCount != levelCount)
+        {
+          ILogger.instance().logError("Invalid pointsCount %d", pointsCount);
+        }
+        else
+        {
+    //      IFloatBuffer* verticesBuffer = IFactory::instance()->createFloatBuffer( pointsCount * 3 );
+    //      for (int i = 0; i < pointsCount; i++) {
+    //        const int i3 = i*3;
+    //        verticesBuffer->rawPut(i3 + 0, it.nextFloat());
+    //        verticesBuffer->rawPut(i3 + 1, it.nextFloat());
+    //        verticesBuffer->rawPut(i3 + 2, it.nextFloat());
+    //      }
+    //
+    //      IFloatBuffer* heightsBuffer = IFactory::instance()->createFloatBuffer( pointsCount );
+    //      for (int i = 0; i < pointsCount; i++) {
+    //        heightsBuffer->rawPut(i, it.nextFloat());
+    //      }
+    //
+    //      if (it.hasNext()) {
+    //        ILogger::instance()->logError("Logic error");
+    //      }
+        }
+    
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning TODO parse points on background
+      }
+    
+      if (buffer != null)
+         buffer.dispose();
+    }
+    public final void onLevelBufferError(int level)
+    {
+      _loading = false;
+      _loadingLevelRequestID = -1;
+    }
+    public final void onLevelBufferCancel(int level)
+    {
+      _loading = false;
+      _loadingLevelRequestID = -1;
+    }
+
   }
 
-
-//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following type could not be found.
-//  class PointCloud;
 
 
   private static class PointCloudMetadataParserAsyncTask extends GAsyncTask
@@ -653,16 +802,16 @@ public class PointCloudsRenderer extends DefaultRenderer
         final Box bounds = new Box(new Vector3D(lowerX, lowerY, lowerZ), new Vector3D(upperX, upperY, upperZ));
     
         final int firstPointsCount = it.nextInt32();
-        IFloatBuffer firstPointsBuffer = IFactory.instance().createFloatBuffer(firstPointsCount * 3);
+        IFloatBuffer firstPointsVerticesBuffer = IFactory.instance().createFloatBuffer(firstPointsCount * 3);
         for (int j = 0; j < firstPointsCount; j++)
         {
           final float x = it.nextFloat();
           final float y = it.nextFloat();
           final float z = it.nextFloat();
           final int j3 = j * 3;
-          firstPointsBuffer.rawPut(j3 + 0, x);
-          firstPointsBuffer.rawPut(j3 + 1, y);
-          firstPointsBuffer.rawPut(j3 + 2, z);
+          firstPointsVerticesBuffer.rawPut(j3 + 0, x);
+          firstPointsVerticesBuffer.rawPut(j3 + 1, y);
+          firstPointsVerticesBuffer.rawPut(j3 + 2, z);
         }
     
         IFloatBuffer firstPointsHeightsBuffer = IFactory.instance().createFloatBuffer(firstPointsCount);
@@ -671,7 +820,7 @@ public class PointCloudsRenderer extends DefaultRenderer
           firstPointsHeightsBuffer.rawPut(j, it.nextFloat());
         }
     
-        leafNodes.add(new PointCloudLeafNode(id, levelsCountLength, levelsCount, average, bounds, firstPointsBuffer, firstPointsHeightsBuffer));
+        leafNodes.add(new PointCloudLeafNode(id, levelsCountLength, levelsCount, average, bounds, firstPointsVerticesBuffer, firstPointsHeightsBuffer));
       }
     
       if (it.hasNext())
@@ -882,7 +1031,7 @@ public class PointCloudsRenderer extends DefaultRenderer
     {
       if (_rootNode != null)
       {
-        final long renderedCount = _rootNode.render(rc, glState, frustum, _minHeight, _maxHeight, nowInMS);
+        final long renderedCount = _rootNode.render(this, rc, glState, frustum, _minHeight, _maxHeight, nowInMS);
     
         if (_lastRenderedCount != renderedCount)
         {
@@ -890,6 +1039,18 @@ public class PointCloudsRenderer extends DefaultRenderer
           _lastRenderedCount = renderedCount;
         }
       }
+    }
+
+    public final long requestBufferForLevel(G3MRenderContext rc, String nodeID, int level, IBufferDownloadListener listener, boolean deleteListener)
+    {
+    
+      final String planetType = rc.getPlanet().getType();
+    
+      final URL url = new URL(_serverURL, _cloudName + "/" + nodeID + "/" + IStringUtils.instance().toString(level) + "?planet=" + planetType + "&verticalExaggeration=" + IStringUtils.instance().toString(_verticalExaggeration) + "&format=binary");
+    
+      //  ILogger::instance()->logInfo("Downloading metadata for \"%s\"", _cloudName.c_str());
+    
+      return rc.getDownloader().requestBuffer(url, _downloadPriority - level, _timeToCache, _readExpired, listener, deleteListener);
     }
 
   }
