@@ -78,7 +78,7 @@ public class PointCloudsRenderer extends DefaultRenderer
         if (bounds.touchesFrustum(frustum))
         {
           boolean justRecalculatedProjectedArea = false;
-          if ((_projectedArea == -1) || ((_lastProjectedAreaTimeInMS + 250) < nowInMS))
+          if ((_projectedArea == -1) || ((_lastProjectedAreaTimeInMS + 350) < nowInMS))
           {
             final double currentProjectedArea = bounds.projectedArea(rc);
             if (currentProjectedArea != _projectedArea)
@@ -550,7 +550,7 @@ public class PointCloudsRenderer extends DefaultRenderer
             final float height = _firstPointsHeightsBuffer.get(i);
             final float alpha = (float)((height - minHeight) / deltaHeight);
     
-            final Color color = Color.magenta().wheelStep(500000, IMathUtils.instance().round(500000 * alpha));
+            final Color color = Color.magenta().wheelStep(2147483647, IMathUtils.instance().round(2147483647 * alpha));
     
             final int i4 = i *4;
             _firstPointsColorsBuffer.rawPut(i4 + 0, color._red);
@@ -596,7 +596,7 @@ public class PointCloudsRenderer extends DefaultRenderer
         final float height = _firstPointsHeightsBuffer.get(i);
         final float alpha = (float)((height - minHeight) / deltaHeight);
     
-        final Color color = Color.magenta().wheelStep(500000, IMathUtils.instance().round(500000 * alpha));
+        final Color color = Color.magenta().wheelStep(2147483647, IMathUtils.instance().round(2147483647 * alpha));
     
         final int i4 = i *4;
         colors.rawPut(i4 + 0, color._red);
@@ -614,7 +614,7 @@ public class PointCloudsRenderer extends DefaultRenderer
           final float height = levelHeightsBuffers.get(i);
           final float alpha = (float)((height - minHeight) / deltaHeight);
     
-          final Color color = Color.magenta().wheelStep(500000, IMathUtils.instance().round(500000 * alpha));
+          final Color color = Color.magenta().wheelStep(2147483647, IMathUtils.instance().round(2147483647 * alpha));
     
           final int offset = cursor + i *4;
           colors.rawPut(offset + 0, color._red);
@@ -639,7 +639,7 @@ public class PointCloudsRenderer extends DefaultRenderer
       {
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#warning TODO: quality factor 2
-        final int intendedPointsCount = IMathUtils.instance().round((float) projectedArea * 0.2f);
+        final int intendedPointsCount = IMathUtils.instance().round((float) projectedArea * 0.1f);
         int accummulated = 0;
         int neededLevel = -1;
         int neededPoints = -1;
@@ -1206,7 +1206,9 @@ public class PointCloudsRenderer extends DefaultRenderer
     {
       if (_rootNode != null)
       {
-        final long renderedCount = _rootNode.render(this, rc, glState, frustum, _minHeight, _maxHeight, nowInMS);
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning TODO
+        final long renderedCount = _rootNode.render(this, rc, glState, frustum, _minHeight, _averageHeight * 3, nowInMS);
     
         if (_lastRenderedCount != renderedCount)
         {
