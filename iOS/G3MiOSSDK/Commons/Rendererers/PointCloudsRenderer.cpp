@@ -519,7 +519,7 @@ void PointCloudsRenderer::PointCloudInnerNode::stoppedRendering(const G3MRenderC
 
 PointCloudsRenderer::PointCloudLeafNode::~PointCloudLeafNode() {
 #ifdef C_CODE
-  delete [] _levelsCount;
+  delete [] _levelsPointsCount;
 #endif
   delete _average;
   delete _bounds;
@@ -536,8 +536,8 @@ PointCloudsRenderer::PointCloudLeafNode::~PointCloudLeafNode() {
 int PointCloudsRenderer::PointCloudLeafNode::calculateCurrentLoadedLevel() const {
   int loadedPointsCount = _firstPointsVerticesBuffer->size() / 3;
   int accummulated = 0;
-  for (int i = 0; i < _levelsCountLenght; i++) {
-    const int levelPointsCount = _levelsCount[i];
+  for (int i = 0; i < _levelsCount; i++) {
+    const int levelPointsCount = _levelsPointsCount[i];
     accummulated += levelPointsCount;
     if (accummulated == loadedPointsCount) {
       return i;
@@ -629,13 +629,10 @@ void PointCloudsRenderer::PointCloudLeafNodeLevelListener::onCancel(const URL& u
 void PointCloudsRenderer::PointCloudLeafNode::onLevelBuffersDownload(int level,
                                                                      IFloatBuffer* verticesBuffer,
                                                                      IFloatBuffer* heightsBuffer) {
-  ILogger::instance()->logInfo("-> loaded level %s/%d (needed=%d)",  _id.c_str(), level, _neededLevel);
-
-  _currentLoadedLevel = level;
   _loadingLevel = -1;
   _loadingLevelRequestID = -1;
 
-  const int levelCount = _levelsCount[level];
+  const int levelCount = _levelsPointsCount[level];
 
   if ((verticesBuffer->size() / 3 != levelCount) ||
       (heightsBuffer->size() != levelCount)) {
@@ -645,7 +642,12 @@ void PointCloudsRenderer::PointCloudLeafNode::onLevelBuffersDownload(int level,
   }
   else {
 #warning Diego at work;
-    printf("");
+    ILogger::instance()->logInfo("-> loaded level %s/%d (needed=%d)",  _id.c_str(), level, _neededLevel);
+
+    _levelsVerticesBuffers[level] = verticesBuffer;
+    _levelsHeightsBuffers[level]  = heightsBuffer;
+
+    _currentLoadedLevel = level;
   }
 
 }
@@ -676,8 +678,8 @@ long long PointCloudsRenderer::PointCloudLeafNode::rawRender(const PointCloud* p
     int accummulated = 0;
     int neededLevel = -1;
     int neededPoints = -1;
-    for (int i = 0; i < _levelsCountLenght; i++) {
-      const int levelPointsCount = _levelsCount[i];
+    for (int i = 0; i < _levelsCount; i++) {
+      const int levelPointsCount = _levelsPointsCount[i];
       neededPoints = accummulated;
       accummulated += levelPointsCount;
       if (accummulated > intendedPointsCount) {

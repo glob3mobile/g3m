@@ -254,12 +254,12 @@ private:
   
   class PointCloudLeafNode : public PointCloudNode {
   private:
-    const int  _levelsCountLenght;
+    const int  _levelsCount;
 #ifdef C_CODE
-    const int* _levelsCount;
+    const int* _levelsPointsCount;
 #endif
 #ifdef JAVA_CODE
-    private final int[] _levelsCount;
+    private final int[] _levelsPointsCount;
 #endif
     const Vector3D* _average;
     const Box*      _bounds;
@@ -273,15 +273,15 @@ private:
 
     int _neededLevel;
     int _neededPoints;
+    int _preloadedLoadedLevel;
     int _currentLoadedLevel;
     int _loadingLevel;
     int calculateCurrentLoadedLevel() const;
 
-//    void loadLevel(const PointCloud* pointCloud,
-//                   const G3MRenderContext* rc,
-//                   int newLevel);
-
     long long _loadingLevelRequestID;
+
+    IFloatBuffer** _levelsVerticesBuffers;
+    IFloatBuffer** _levelsHeightsBuffers;
 
   protected:
     long long rawRender(const PointCloud* pointCloud,
@@ -299,15 +299,15 @@ private:
   public:
 #ifdef C_CODE
     PointCloudLeafNode(const std::string& id,
-                       const int          levelsCountLenght,
-                       const int*         levelsCount,
+                       const int          levelsCount,
+                       const int*         levelsPointsCount,
                        const Vector3D*    average,
                        const Box*         bounds,
                        IFloatBuffer*      firstPointsVerticesBuffer,
                        IFloatBuffer*      firstPointsHeightsBuffer) :
     PointCloudNode(id),
-    _levelsCountLenght(levelsCountLenght),
     _levelsCount(levelsCount),
+    _levelsPointsCount(levelsPointsCount),
     _average(average),
     _bounds(bounds),
     _firstPointsVerticesBuffer(firstPointsVerticesBuffer),
@@ -321,19 +321,26 @@ private:
     _loadingLevelRequestID(-1)
     {
       _currentLoadedLevel = calculateCurrentLoadedLevel();
+      _preloadedLoadedLevel = _currentLoadedLevel;
+      _levelsVerticesBuffers = new IFloatBuffer*[_levelsCount];
+      _levelsHeightsBuffers  = new IFloatBuffer*[_levelsCount];
+      for (int i = 0; i < _levelsCount; i++) {
+        _levelsVerticesBuffers[i] = NULL;
+        _levelsHeightsBuffers[i] = NULL;
+      }
     }
 #endif
 #ifdef JAVA_CODE
     public PointCloudLeafNode(final String       id,
-                              final int          levelsCountLenght,
-                              final int[]        levelsCount,
+                              final int          levelsCount,
+                              final int[]        levelsPointsCount,
                               final Vector3D     average,
                               final Box          bounds,
                               final IFloatBuffer firstPointsVerticesBuffer,
                               final IFloatBuffer firstPointsHeightsBuffer) {
       super(id);
-      _levelsCountLenght = levelsCountLenght;
       _levelsCount = levelsCount;
+      _levelsPointsCount = levelsPointsCount;
       _average = average;
       _bounds = bounds;
       _firstPointsVerticesBuffer = firstPointsVerticesBuffer;
@@ -341,9 +348,12 @@ private:
       _mesh = null;
       _pointsCount = -1;
       _firstPointsColorsBuffer = null;
-      _currentLoadedLevel = calculateCurrentLoadedLevel();
       _loadingLevel = -1;
       _loadingLevelRequestID = -1;
+      _currentLoadedLevel = calculateCurrentLoadedLevel();
+      _preloadedLoadedLevel = _currentLoadedLevel;
+      _levelsVerticesBuffers = new IFloatBuffer[_levelsCount];
+      _levelsHeightsBuffers  = new IFloatBuffer[_levelsCount];
     }
 #endif
 
@@ -354,8 +364,8 @@ private:
     long long getPointsCount() {
       if (_pointsCount <= 0) {
         _pointsCount = 0;
-        for (int i = 0; i < _levelsCountLenght; i++) {
-          _pointsCount += _levelsCount[i];
+        for (int i = 0; i < _levelsCount; i++) {
+          _pointsCount += _levelsPointsCount[i];
         }
       }
       return _pointsCount;
