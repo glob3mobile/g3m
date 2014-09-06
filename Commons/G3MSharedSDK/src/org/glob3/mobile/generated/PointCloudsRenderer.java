@@ -381,17 +381,94 @@ public class PointCloudsRenderer extends DefaultRenderer
   }
 
 
+  private static class PointCloudLeafNodeLevelParserTask extends GAsyncTask
+  {
+    private PointCloudLeafNode _leafNode;
+    private final int _level;
+
+    private IByteBuffer _buffer;
+
+    private IFloatBuffer _verticesBuffer;
+    private IFloatBuffer _heightsBuffer;
+
+    public PointCloudLeafNodeLevelParserTask(PointCloudLeafNode leafNode, int level, IByteBuffer buffer)
+    {
+       _leafNode = leafNode;
+       _level = level;
+       _buffer = buffer;
+       _verticesBuffer = null;
+       _heightsBuffer = null;
+      _leafNode._retain();
+    }
+
+    public void dispose()
+    {
+      _leafNode._release();
+      if (_buffer != null)
+         _buffer.dispose();
+
+      if (_verticesBuffer != null)
+         _verticesBuffer.dispose();
+      if (_heightsBuffer != null)
+         _heightsBuffer.dispose();
+    }
+
+    public final void runInBackground(G3MContext context)
+    {
+      ByteBufferIterator it = new ByteBufferIterator(_buffer);
+    
+      final int pointsCount = it.nextInt32();
+    
+      _verticesBuffer = IFactory.instance().createFloatBuffer(pointsCount * 3);
+      for (int i = 0; i < pointsCount; i++)
+      {
+        final int i3 = i *3;
+        _verticesBuffer.rawPut(i3 + 0, it.nextFloat());
+        _verticesBuffer.rawPut(i3 + 1, it.nextFloat());
+        _verticesBuffer.rawPut(i3 + 2, it.nextFloat());
+      }
+    
+      _heightsBuffer = IFactory.instance().createFloatBuffer(pointsCount);
+      for (int i = 0; i < pointsCount; i++)
+      {
+        _heightsBuffer.rawPut(i, it.nextFloat());
+      }
+    
+      if (it.hasNext())
+      {
+        ILogger.instance().logError("Logic error");
+      }
+    
+      if (_buffer != null)
+         _buffer.dispose();
+      _buffer = null;
+    }
+
+    public final void onPostExecute(G3MContext context)
+    {
+      _leafNode.onLevelBuffersDownload(_level, _verticesBuffer, _heightsBuffer);
+      _verticesBuffer = null; // moves ownership to _leafNode
+      _heightsBuffer = null; // moves ownership to _leafNode
+    }
+
+  }
+
+
   private static class PointCloudLeafNodeLevelListener extends IBufferDownloadListener
   {
     private PointCloudLeafNode _leafNode;
     private final int _level;
 
-    public PointCloudLeafNodeLevelListener(PointCloudLeafNode leafNode, int level)
+    private final IThreadUtils _threadUtils;
+
+    public PointCloudLeafNodeLevelListener(PointCloudLeafNode leafNode, int level, IThreadUtils threadUtils)
     {
        _leafNode = leafNode;
        _level = level;
+       _threadUtils = threadUtils;
       _leafNode._retain();
     }
+
 
     public void dispose()
     {
@@ -400,7 +477,9 @@ public class PointCloudsRenderer extends DefaultRenderer
 
     public final void onDownload(URL url, IByteBuffer buffer, boolean expired)
     {
-      _leafNode.onLevelBufferDownload(_level, buffer);
+    //  _leafNode->onLevelBufferDownload(_level, buffer);
+    
+      _threadUtils.invokeAsyncTask(new PointCloudLeafNodeLevelParserTask(_leafNode, _level, buffer), true);
     }
 
     public final void onError(URL url)
@@ -461,21 +540,6 @@ public class PointCloudsRenderer extends DefaultRenderer
 
     private long _loadingLevelRequestID;
 
-
-    //void PointCloudsRenderer::PointCloudLeafNode::loadLevel(const PointCloud* pointCloud,
-    //                                                        const G3MRenderContext* rc,
-    //                                                        int newLevel) {
-    //  _loadingLevel = newLevel;
-    //
-    //  _loadingLevelRequestID = pointCloud->requestBufferForLevel(rc,
-    //                                                             _id,
-    //                                                             newLevel,
-    //                                                             new PointCloudLeafNodeLevelListener(this, newLevel),
-    //                                                             true);
-    //
-    //
-    //}
-    
     protected final long rawRender(PointCloud pointCloud, G3MRenderContext rc, GLState glState, Frustum frustum, double projectedArea, double minHeight, double maxHeight, long nowInMS, boolean justRecalculatedProjectedArea)
     {
     
@@ -531,7 +595,7 @@ public class PointCloudsRenderer extends DefaultRenderer
             //loadLevel(pointCloud, rc, _currentLoadedLevel + 1);
             _loadingLevel = _currentLoadedLevel + 1;
     
-            _loadingLevelRequestID = pointCloud.requestBufferForLevel(rc, _id, _loadingLevel, new PointCloudLeafNodeLevelListener(this, _loadingLevel), true);
+            _loadingLevelRequestID = pointCloud.requestBufferForLevel(rc, _id, _loadingLevel, new PointCloudLeafNodeLevelListener(this, _loadingLevel, rc.getThreadUtils()), true);
           }
         }
       }
@@ -653,7 +717,7 @@ public class PointCloudsRenderer extends DefaultRenderer
       _firstPointsColorsBuffer = null;
     }
 
-    public final void onLevelBufferDownload(int level, IByteBuffer buffer)
+    public final void onLevelBuffersDownload(int level, IFloatBuffer verticesBuffer, IFloatBuffer heightsBuffer)
     {
       ILogger.instance().logInfo("-> loaded level %s/%d (needed=%d)", _id, level, _neededLevel);
     
@@ -662,51 +726,24 @@ public class PointCloudsRenderer extends DefaultRenderer
       _loadingLevelRequestID = -1;
     
       final int levelCount = _levelsCount[level];
-      final int expectedBufferSize = (4 + levelCount * (3 * 4 + 4)); // height, float -  3 vertices, float -  pointsCount, int
     
-      if (expectedBufferSize != buffer.size())
+      if ((verticesBuffer.size() / 3 != levelCount) || (heightsBuffer.size() != levelCount))
       {
-        ILogger.instance().logError("Invalid buffer size for %s/%d", _id, level);
+        ILogger.instance().logError("Invalid buffer size");
+        if (verticesBuffer != null)
+           verticesBuffer.dispose();
+        if (heightsBuffer != null)
+           heightsBuffer.dispose();
       }
       else
       {
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning diego at work;
-    
-        ByteBufferIterator it = new ByteBufferIterator(buffer);
-    
-        final int pointsCount = it.nextInt32();
-        if (pointsCount != levelCount)
-        {
-          ILogger.instance().logError("Invalid pointsCount %d", pointsCount);
-        }
-        else
-        {
-    //      IFloatBuffer* verticesBuffer = IFactory::instance()->createFloatBuffer( pointsCount * 3 );
-    //      for (int i = 0; i < pointsCount; i++) {
-    //        const int i3 = i*3;
-    //        verticesBuffer->rawPut(i3 + 0, it.nextFloat());
-    //        verticesBuffer->rawPut(i3 + 1, it.nextFloat());
-    //        verticesBuffer->rawPut(i3 + 2, it.nextFloat());
-    //      }
-    //
-    //      IFloatBuffer* heightsBuffer = IFactory::instance()->createFloatBuffer( pointsCount );
-    //      for (int i = 0; i < pointsCount; i++) {
-    //        heightsBuffer->rawPut(i, it.nextFloat());
-    //      }
-    //
-    //      if (it.hasNext()) {
-    //        ILogger::instance()->logError("Logic error");
-    //      }
-        }
-    
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning TODO parse points on background
+//#warning Diego at work;
+        System.out.print("");
       }
     
-      if (buffer != null)
-         buffer.dispose();
     }
+
     public final void onLevelBufferError(int level)
     {
       _loadingLevel = -1;
