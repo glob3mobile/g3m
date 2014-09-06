@@ -343,33 +343,33 @@ public class JSONUtils {
    //      }
 
 
-   private static void sendJSON(final PrintWriter writer,
-                                final PersistentLOD.NodeLevel level,
-                                final Planet planet,
-                                final IVector3 average,
-                                final float verticalExaggeration) {
-      writer.print('[');
-
-      boolean first = true;
-      for (final Geodetic3D pos : level.getPoints(null)) {
-         if (first) {
-            first = false;
-         }
-         else {
-            writer.print(',');
-         }
-
-         final GVector3D cartesian = planet.toCartesian(pos, verticalExaggeration);
-
-         writer.print(Float.toString((float) (cartesian._x - average.x())));
-         writer.print(',');
-         writer.print(Float.toString((float) (cartesian._y - average.y())));
-         writer.print(',');
-         writer.print(Float.toString((float) (cartesian._z - average.z())));
-      }
-
-      writer.print(']');
-   }
+   //   private static void sendJSON(final PrintWriter writer,
+   //                                final PersistentLOD.NodeLevel level,
+   //                                final Planet planet,
+   //                                final IVector3 average,
+   //                                final float verticalExaggeration) {
+   //      writer.print('[');
+   //
+   //      boolean first = true;
+   //      for (final Geodetic3D pos : level.getPoints(null)) {
+   //         if (first) {
+   //            first = false;
+   //         }
+   //         else {
+   //            writer.print(',');
+   //         }
+   //
+   //         final GVector3D cartesian = planet.toCartesian(pos, verticalExaggeration);
+   //
+   //         writer.print(Float.toString((float) (cartesian._x - average.x())));
+   //         writer.print(',');
+   //         writer.print(Float.toString((float) (cartesian._y - average.y())));
+   //         writer.print(',');
+   //         writer.print(Float.toString((float) (cartesian._z - average.z())));
+   //      }
+   //
+   //      writer.print(']');
+   //   }
 
 
    //   private static void sendJSON(final PrintWriter writer,
