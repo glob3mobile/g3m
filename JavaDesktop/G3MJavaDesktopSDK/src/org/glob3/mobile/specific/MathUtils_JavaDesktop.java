@@ -6,8 +6,8 @@ import org.glob3.mobile.generated.IMathUtils;
 
 
 public class MathUtils_JavaDesktop
-         extends
-            IMathUtils {
+extends
+IMathUtils {
 
 
    @Override
@@ -365,4 +365,11 @@ public class MathUtils_JavaDesktop
                      final float f2) {
       return f1 % f2;
    }
+
+
+   @Override
+   public float rawIntBitsToFloat(final int value) {
+      return Float.intBitsToFloat(value);
+   }
+
 }

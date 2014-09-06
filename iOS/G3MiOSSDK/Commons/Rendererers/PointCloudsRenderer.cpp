@@ -616,8 +616,6 @@ void PointCloudsRenderer::PointCloudLeafNode::onLevelBufferDownload(int level, I
 //      }
     }
 
-#warning TODO- create copy(from, to) method for buffers  ---> not sure, ByteBuffer::copyFloatBuffer() ???
-
 #warning TODO parse points on background
   }
 
