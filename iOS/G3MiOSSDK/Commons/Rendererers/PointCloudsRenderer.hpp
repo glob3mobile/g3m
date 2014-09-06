@@ -273,7 +273,7 @@ private:
 
     int _neededLevel;
     int _neededPoints;
-    int _preloadedLoadedLevel;
+    int _preloadedLevel;
     int _currentLoadedLevel;
     int _loadingLevel;
     int calculateCurrentLoadedLevel() const;
@@ -282,6 +282,9 @@ private:
 
     IFloatBuffer** _levelsVerticesBuffers;
     IFloatBuffer** _levelsHeightsBuffers;
+
+    DirectMesh* createMesh(double minHeight,
+                           double maxHeight);
 
   protected:
     long long rawRender(const PointCloud* pointCloud,
@@ -321,7 +324,7 @@ private:
     _loadingLevelRequestID(-1)
     {
       _currentLoadedLevel = calculateCurrentLoadedLevel();
-      _preloadedLoadedLevel = _currentLoadedLevel;
+      _preloadedLevel = _currentLoadedLevel;
       _levelsVerticesBuffers = new IFloatBuffer*[_levelsCount];
       _levelsHeightsBuffers  = new IFloatBuffer*[_levelsCount];
       for (int i = 0; i < _levelsCount; i++) {
@@ -351,7 +354,7 @@ private:
       _loadingLevel = -1;
       _loadingLevelRequestID = -1;
       _currentLoadedLevel = calculateCurrentLoadedLevel();
-      _preloadedLoadedLevel = _currentLoadedLevel;
+      _preloadedLevel = _currentLoadedLevel;
       _levelsVerticesBuffers = new IFloatBuffer[_levelsCount];
       _levelsHeightsBuffers  = new IFloatBuffer[_levelsCount];
     }

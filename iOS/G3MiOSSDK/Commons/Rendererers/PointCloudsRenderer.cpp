@@ -518,7 +518,13 @@ void PointCloudsRenderer::PointCloudInnerNode::stoppedRendering(const G3MRenderC
 }
 
 PointCloudsRenderer::PointCloudLeafNode::~PointCloudLeafNode() {
+  for (int i = 0; i < _levelsCount; i++) {
+    delete _levelsVerticesBuffers[i];
+    delete _levelsHeightsBuffers[i];
+  }
 #ifdef C_CODE
+  delete [] _levelsVerticesBuffers;
+  delete [] _levelsHeightsBuffers;
   delete [] _levelsPointsCount;
 #endif
   delete _average;
@@ -642,12 +648,20 @@ void PointCloudsRenderer::PointCloudLeafNode::onLevelBuffersDownload(int level,
   }
   else {
 #warning Diego at work;
-    ILogger::instance()->logInfo("-> loaded level %s/%d (needed=%d)",  _id.c_str(), level, _neededLevel);
+    //ILogger::instance()->logInfo("-> loaded level %s/%d (needed=%d)",  _id.c_str(), level, _neededLevel);
+
+    if ((_levelsVerticesBuffers[level] != NULL) ||
+        (_levelsHeightsBuffers[level]  != NULL)) {
+      THROW_EXCEPTION("Logic error");
+    }
 
     _levelsVerticesBuffers[level] = verticesBuffer;
     _levelsHeightsBuffers[level]  = heightsBuffer;
 
     _currentLoadedLevel = level;
+
+    delete _mesh;
+    _mesh = NULL;
   }
 
 }
@@ -661,6 +675,76 @@ void PointCloudsRenderer::PointCloudLeafNode::onLevelBufferCancel(int level) {
   _loadingLevel = -1;
   _loadingLevelRequestID = -1;
 }
+
+DirectMesh* PointCloudsRenderer::PointCloudLeafNode::createMesh(double minHeight,
+                                                                double maxHeight) {
+  const int firstPointsCount = _firstPointsVerticesBuffer->size() / 3;
+  if (_currentLoadedLevel <= _preloadedLevel) {
+    if (_firstPointsColorsBuffer == NULL) {
+      const double deltaHeight = maxHeight - minHeight;
+
+      _firstPointsColorsBuffer = IFactory::instance()->createFloatBuffer( firstPointsCount * 4 );
+      for (int i = 0; i < firstPointsCount; i++) {
+        const float height = _firstPointsHeightsBuffer->get(i);
+        const float alpha = (float) ((height - minHeight) / deltaHeight);
+
+        const Color color = Color::red().wheelStep(5000,
+                                                   IMathUtils::instance()->round(5000 * alpha) );
+
+        const int i4 = i*4;
+        _firstPointsColorsBuffer->rawPut(i4 + 0, color._red);
+        _firstPointsColorsBuffer->rawPut(i4 + 1, color._green);
+        _firstPointsColorsBuffer->rawPut(i4 + 2, color._blue);
+        _firstPointsColorsBuffer->rawPut(i4 + 3, color._alpha);
+      }
+    }
+
+    DirectMesh* mesh = new DirectMesh(GLPrimitive::points(),
+                                      false,
+                                      *_average,
+                                      _firstPointsVerticesBuffer,
+                                      1,
+                                      2,
+                                      Color::newFromRGBA(1, 1, 1, 1),
+                                      _firstPointsColorsBuffer, // colors
+                                      1,    // colorsIntensity
+                                      false);
+//    mesh->setRenderVerticesCount( IMathUtils::instance()->min(_neededPoints, firstPointsCount) );
+    mesh->setRenderVerticesCount( _neededPoints );
+
+    return mesh;
+  }
+
+  int pointsCount = 0;
+  for (int i = 0; i <= _currentLoadedLevel; i++) {
+    pointsCount += _levelsPointsCount[i];
+  }
+
+  IFloatBuffer* vertices = IFactory::instance()->createFloatBuffer( pointsCount * 3 );
+  vertices->rawPut(0, _firstPointsVerticesBuffer);
+  int cursor = _firstPointsVerticesBuffer->size();
+  for (int level = _preloadedLevel+1; level <= _currentLoadedLevel; level++) {
+    IFloatBuffer* levelVerticesBuffers = _levelsVerticesBuffers[level];
+    vertices->rawPut(cursor, levelVerticesBuffers);
+    cursor += levelVerticesBuffers->size();
+  }
+
+  DirectMesh* mesh = new DirectMesh(GLPrimitive::points(),
+                                    true,
+                                    *_average,
+                                    vertices,
+                                    1,
+                                    2,
+                                    Color::newFromRGBA(1, 1, 1, 1),
+                                    NULL, // colors
+                                    1,    // colorsIntensity
+                                    false);
+  //    mesh->setRenderVerticesCount( IMathUtils::instance()->min(_neededPoints, firstPointsCount) );
+  mesh->setRenderVerticesCount( pointsCount /*_neededPoints*/ );
+
+  return mesh;
+}
+
 
 long long PointCloudsRenderer::PointCloudLeafNode::rawRender(const PointCloud* pointCloud,
                                                              const G3MRenderContext* rc,
@@ -698,7 +782,7 @@ long long PointCloudsRenderer::PointCloudLeafNode::rawRender(const PointCloud* p
       _neededLevel = neededLevel;
       _neededPoints = neededPoints;
       if (_mesh != NULL) {
-        _mesh->setRenderVerticesCount( IMathUtils::instance()->min(_neededPoints, _firstPointsVerticesBuffer->size() / 3) );
+        _mesh->setRenderVerticesCount( IMathUtils::instance()->min(_neededPoints, _mesh->getRenderVerticesCount()) );
       }
     }
   }
@@ -725,41 +809,22 @@ long long PointCloudsRenderer::PointCloudLeafNode::rawRender(const PointCloud* p
                                                                    true);
       }
     }
+    if (_neededLevel < _currentLoadedLevel) {
+      for (int i = _neededLevel+1; i <= _currentLoadedLevel; i++) {
+        delete _levelsVerticesBuffers[i];
+        _levelsVerticesBuffers[i] = NULL;
+        delete _levelsHeightsBuffers[i];
+        _levelsHeightsBuffers[i] = NULL;
+      }
+      _currentLoadedLevel = _neededLevel;
+      delete _mesh;
+      _mesh = NULL;
+    }
   }
 
 
   if (_mesh == NULL) {
-    const int firstPointsCount = _firstPointsVerticesBuffer->size() / 3;
-    if (_firstPointsColorsBuffer == NULL) {
-      const double deltaHeight = maxHeight - minHeight;
-
-      _firstPointsColorsBuffer = IFactory::instance()->createFloatBuffer( firstPointsCount * 4 );
-      for (int i = 0; i < firstPointsCount; i++) {
-        const float height = _firstPointsHeightsBuffer->get(i);
-        const float alpha = (float) ((height - minHeight) / deltaHeight);
-
-        const Color color = Color::red().wheelStep(5000,
-                                                   IMathUtils::instance()->round(5000 * alpha) );
-
-        const int i4 = i*4;
-        _firstPointsColorsBuffer->rawPut(i4 + 0, color._red);
-        _firstPointsColorsBuffer->rawPut(i4 + 1, color._green);
-        _firstPointsColorsBuffer->rawPut(i4 + 2, color._blue);
-        _firstPointsColorsBuffer->rawPut(i4 + 3, color._alpha);
-      }
-    }
-
-    _mesh = new DirectMesh(GLPrimitive::points(),
-                           false,
-                           *_average,
-                           _firstPointsVerticesBuffer,
-                           1,
-                           2,
-                           Color::newFromRGBA(1, 1, 1, 1),
-                           _firstPointsColorsBuffer, // colors
-                           1,    // colorsIntensity
-                           false);
-    _mesh->setRenderVerticesCount( IMathUtils::instance()->min(_neededPoints, firstPointsCount) );
+    _mesh = createMesh(minHeight, maxHeight);
   }
   _mesh->render(rc, glState);
   //getBounds()->render(rc, glState, Color::blue());
