@@ -70,7 +70,10 @@ void PointCloudsRenderer::PointCloud::initialize(const G3MContext* context) {
 }
 
 PointCloudsRenderer::PointCloud::~PointCloud() {
-  delete _rootNode;
+//  delete _rootNode;
+  if (_rootNode != NULL) {
+    _rootNode->_release();
+  }
   delete _sector;
 }
 
@@ -82,8 +85,85 @@ void PointCloudsRenderer::PointCloud::errorDownloadingMetadata() {
 PointCloudsRenderer::PointCloudMetadataParserAsyncTask::~PointCloudMetadataParserAsyncTask() {
   delete _sector;
   delete _buffer;
-  delete _rootNode;
+//  delete _rootNode;
+  if (_rootNode != NULL) {
+    _rootNode->_release();
+  }
 }
+
+void PointCloudsRenderer::PointCloudMetadataParserAsyncTask::onPostExecute(const G3MContext* context) {
+  _pointCloud->parsedMetadata(_pointsCount, _sector, _minHeight, _maxHeight, _averageHeight, _rootNode);
+  _sector   = NULL; // moves ownership to pointCloud
+  _rootNode = NULL; // moves ownership to pointCloud
+}
+
+PointCloudsRenderer::PointCloudLeafNode* PointCloudsRenderer::PointCloudMetadataParserAsyncTask::parseLeafNode(ByteBufferIterator& it) {
+  const int idLength = it.nextUInt8();
+  IStringBuilder* isb = IStringBuilder::newStringBuilder();
+  for (int i = 0; i < idLength; i++) {
+    isb->addInt( it.nextUInt8() );
+  }
+  const std::string id = isb->getString();
+  delete isb;
+
+  const int byteLevelsCount = it.nextUInt8();
+  const int shortLevelsCount = it.nextUInt8();
+  const int intLevelsCount = it.nextUInt8();
+  const int levelsCountLength = (int) byteLevelsCount + shortLevelsCount + intLevelsCount;
+
+  int* levelsCount = new int[levelsCountLength];
+
+  for (int i = 0; i < byteLevelsCount; i++) {
+    levelsCount[i] = it.nextUInt8();
+  }
+  for (int i = 0; i < shortLevelsCount; i++) {
+    levelsCount[byteLevelsCount + i] = it.nextInt16();
+  }
+  for (int i = 0; i < intLevelsCount; i++) {
+    levelsCount[byteLevelsCount + shortLevelsCount + i] =  it.nextInt32();
+  }
+
+  const float averageX = it.nextFloat();
+  const float averageY = it.nextFloat();
+  const float averageZ = it.nextFloat();
+
+  const Vector3D* average = new Vector3D(averageX, averageY, averageZ);
+
+  const double lowerX = (double) it.nextFloat() + averageX;
+  const double lowerY = (double) it.nextFloat() + averageY;
+  const double lowerZ = (double) it.nextFloat() + averageZ;
+  const double upperX = (double) it.nextFloat() + averageX;
+  const double upperY = (double) it.nextFloat() + averageY;
+  const double upperZ = (double) it.nextFloat() + averageZ;
+  const Box* bounds = new Box(Vector3D(lowerX, lowerY, lowerZ),
+                              Vector3D(upperX, upperY, upperZ));
+
+  const int firstPointsCount = it.nextInt32();
+  IFloatBuffer* firstPointsVerticesBuffer = IFactory::instance()->createFloatBuffer( firstPointsCount * 3 );
+  for (int i = 0; i < firstPointsCount; i++) {
+    const float x = it.nextFloat();
+    const float y = it.nextFloat();
+    const float z = it.nextFloat();
+    const int i3 = i * 3;
+    firstPointsVerticesBuffer->rawPut(i3 + 0, x);
+    firstPointsVerticesBuffer->rawPut(i3 + 1, y);
+    firstPointsVerticesBuffer->rawPut(i3 + 2, z);
+  }
+
+  IFloatBuffer* firstPointsHeightsBuffer = IFactory::instance()->createFloatBuffer( firstPointsCount );
+  for (int i = 0; i < firstPointsCount; i++) {
+    firstPointsHeightsBuffer->rawPut(i, it.nextFloat());
+  }
+
+  return new PointCloudLeafNode(id,
+                                levelsCountLength,
+                                levelsCount,
+                                average,
+                                bounds,
+                                firstPointsVerticesBuffer,
+                                firstPointsHeightsBuffer);
+}
+
 
 void PointCloudsRenderer::PointCloudMetadataParserAsyncTask::runInBackground(const G3MContext* context) {
   ByteBufferIterator it(_buffer);
@@ -106,70 +186,7 @@ void PointCloudsRenderer::PointCloudMetadataParserAsyncTask::runInBackground(con
   std::vector<PointCloudLeafNode*> leafNodes;
 
   for (int i = 0; i < leafNodesCount; i++) {
-    const int idLength = it.nextUInt8();
-    IStringBuilder* isb = IStringBuilder::newStringBuilder();
-    for (int j = 0; j < idLength; j++) {
-      isb->addInt( it.nextUInt8() );
-    }
-    const std::string id = isb->getString();
-    delete isb;
-
-    const int byteLevelsCount = it.nextUInt8();
-    const int shortLevelsCount = it.nextUInt8();
-    const int intLevelsCount = it.nextUInt8();
-    const int levelsCountLength = (int) byteLevelsCount + shortLevelsCount + intLevelsCount;
-
-    int* levelsCount = new int[levelsCountLength];
-
-    for (int j = 0; j < byteLevelsCount; j++) {
-      levelsCount[j] = it.nextUInt8();
-    }
-    for (int j = 0; j < shortLevelsCount; j++) {
-      levelsCount[byteLevelsCount + j] = it.nextInt16();
-    }
-    for (int j = 0; j < intLevelsCount; j++) {
-      levelsCount[byteLevelsCount + shortLevelsCount + j] =  it.nextInt32();
-    }
-
-    const float averageX = it.nextFloat();
-    const float averageY = it.nextFloat();
-    const float averageZ = it.nextFloat();
-
-    const Vector3D* average = new Vector3D(averageX, averageY, averageZ);
-
-    const double lowerX = (double) it.nextFloat() + averageX;
-    const double lowerY = (double) it.nextFloat() + averageY;
-    const double lowerZ = (double) it.nextFloat() + averageZ;
-    const double upperX = (double) it.nextFloat() + averageX;
-    const double upperY = (double) it.nextFloat() + averageY;
-    const double upperZ = (double) it.nextFloat() + averageZ;
-    const Box* bounds = new Box(Vector3D(lowerX, lowerY, lowerZ),
-                                Vector3D(upperX, upperY, upperZ));
-
-    const int firstPointsCount = it.nextInt32();
-    IFloatBuffer* firstPointsVerticesBuffer = IFactory::instance()->createFloatBuffer( firstPointsCount * 3 );
-    for (int j = 0; j < firstPointsCount; j++) {
-      const float x = it.nextFloat();
-      const float y = it.nextFloat();
-      const float z = it.nextFloat();
-      const int j3 = j * 3;
-      firstPointsVerticesBuffer->rawPut(j3 + 0, x);
-      firstPointsVerticesBuffer->rawPut(j3 + 1, y);
-      firstPointsVerticesBuffer->rawPut(j3 + 2, z);
-    }
-
-    IFloatBuffer* firstPointsHeightsBuffer = IFactory::instance()->createFloatBuffer( firstPointsCount );
-    for (int j = 0; j < firstPointsCount; j++) {
-      firstPointsHeightsBuffer->rawPut(j, it.nextFloat());
-    }
-
-    leafNodes.push_back( new PointCloudLeafNode(id,
-                                                levelsCountLength,
-                                                levelsCount,
-                                                average,
-                                                bounds,
-                                                firstPointsVerticesBuffer,
-                                                firstPointsHeightsBuffer) );
+    leafNodes.push_back( parseLeafNode(it) );
   }
 
   if (it.hasNext()) {
@@ -187,6 +204,7 @@ void PointCloudsRenderer::PointCloudMetadataParserAsyncTask::runInBackground(con
   for (int i = 0; i < leafNodesCount; i++) {
     _rootNode->addLeafNode( leafNodes[i] );
   }
+  leafNodes.clear();
 
   _rootNode = _rootNode->pruneUnneededParents();
 
@@ -217,12 +235,8 @@ PointCloudsRenderer::PointCloudInnerNode* PointCloudsRenderer::PointCloudInnerNo
 
       // forget childrens to avoid deleting them from the destructor
       for (int i = 0; i < 4; i++) { _children[i] = NULL; }
-#ifdef C_CODE
-      delete this;
-#endif
-#ifdef JAVA_CODE
-      dispose();
-#endif
+      _release();
+
       return result;
     }
   }
@@ -290,10 +304,16 @@ Box* PointCloudsRenderer::PointCloudInnerNode::calculateBounds() {
 }
 
 PointCloudsRenderer::PointCloudInnerNode::~PointCloudInnerNode() {
-  delete _children[0];
-  delete _children[1];
-  delete _children[2];
-  delete _children[3];
+//  delete _children[0];
+//  delete _children[1];
+//  delete _children[2];
+//  delete _children[3];
+  for (int i = 0; i < 4; i++) {
+    PointCloudNode* child = _children[i];
+    if (child != NULL) {
+      child->_release();
+    }
+  }
 
   delete _bounds;
   delete _average;
@@ -328,12 +348,6 @@ void PointCloudsRenderer::PointCloudInnerNode::addLeafNode(PointCloudLeafNode* l
     }
     innerChild->addLeafNode(leafNode);
   }
-}
-
-void PointCloudsRenderer::PointCloudMetadataParserAsyncTask::onPostExecute(const G3MContext* context) {
-  _pointCloud->parsedMetadata(_pointsCount, _sector, _minHeight, _maxHeight, _averageHeight, _rootNode);
-  _sector   = NULL; // moves ownership to pointCloud
-  _rootNode = NULL; // moves ownership to pointCloud
 }
 
 void PointCloudsRenderer::PointCloud::parsedMetadata(long long pointsCount,
@@ -504,7 +518,6 @@ void PointCloudsRenderer::PointCloudInnerNode::stoppedRendering(const G3MRenderC
 }
 
 PointCloudsRenderer::PointCloudLeafNode::~PointCloudLeafNode() {
-  delete _mesh;
 #ifdef C_CODE
   delete [] _levelsCount;
 #endif
@@ -513,6 +526,8 @@ PointCloudsRenderer::PointCloudLeafNode::~PointCloudLeafNode() {
   delete _firstPointsVerticesBuffer;
   delete _firstPointsHeightsBuffer;
   delete _firstPointsColorsBuffer;
+  delete _mesh;
+
 #ifdef JAVA_CODE
   super.dispose();
 #endif
@@ -558,6 +573,18 @@ long long PointCloudsRenderer::PointCloud::requestBufferForLevel(const G3MRender
                                             deleteListener);
 }
 
+PointCloudsRenderer::PointCloudLeafNodeLevelListener::PointCloudLeafNodeLevelListener(PointCloudLeafNode* leafNode,
+                                                                                      int level) :
+_leafNode(leafNode),
+_level(level)
+{
+  _leafNode->_retain();
+}
+
+
+PointCloudsRenderer::PointCloudLeafNodeLevelListener::~PointCloudLeafNodeLevelListener() {
+  _leafNode->_release();
+}
 
 void PointCloudsRenderer::PointCloudLeafNodeLevelListener::onDownload(const URL& url,
                                                                       IByteBuffer* buffer,
@@ -577,7 +604,7 @@ void PointCloudsRenderer::PointCloudLeafNode::onLevelBufferDownload(int level, I
   ILogger::instance()->logInfo("-> loaded level %s/%d (needed=%d)",  _id.c_str(), level, _neededLevel);
 
   _currentLoadedLevel = level;
-  _loading = false;
+  _loadingLevel = -1;
   _loadingLevelRequestID = -1;
 
   const int levelCount = _levelsCount[level];
@@ -623,29 +650,29 @@ void PointCloudsRenderer::PointCloudLeafNode::onLevelBufferDownload(int level, I
 }
 
 void PointCloudsRenderer::PointCloudLeafNode::onLevelBufferError(int level) {
-  _loading = false;
+  _loadingLevel = -1;
   _loadingLevelRequestID = -1;
 }
 
 void PointCloudsRenderer::PointCloudLeafNode::onLevelBufferCancel(int level) {
-  _loading = false;
+  _loadingLevel = -1;
   _loadingLevelRequestID = -1;
 }
 
 
-void PointCloudsRenderer::PointCloudLeafNode::loadLevel(const PointCloud* pointCloud,
-                                                        const G3MRenderContext* rc,
-                                                        int newLevel) {
-  _loading = true;
-
-  _loadingLevelRequestID = pointCloud->requestBufferForLevel(rc,
-                                                             _id,
-                                                             newLevel,
-                                                             new PointCloudLeafNodeLevelListener(this, newLevel),
-                                                             true);
-
-
-}
+//void PointCloudsRenderer::PointCloudLeafNode::loadLevel(const PointCloud* pointCloud,
+//                                                        const G3MRenderContext* rc,
+//                                                        int newLevel) {
+//  _loadingLevel = newLevel;
+//
+//  _loadingLevelRequestID = pointCloud->requestBufferForLevel(rc,
+//                                                             _id,
+//                                                             newLevel,
+//                                                             new PointCloudLeafNodeLevelListener(this, newLevel),
+//                                                             true);
+//
+//
+//}
 
 long long PointCloudsRenderer::PointCloudLeafNode::rawRender(const PointCloud* pointCloud,
                                                              const G3MRenderContext* rc,
@@ -673,12 +700,6 @@ long long PointCloudsRenderer::PointCloudLeafNode::rawRender(const PointCloud* p
       neededLevel = i;
     }
 
-
-
-#warning TODO- cancel current request if neededLevel < currentLoadingLevel
-#warning TODO- make Nodes RCObjects to _retain the leafs from the buffer-listener and background points parser
-
-
     if (neededLevel != _neededLevel) {
 //      ILogger::instance()->logInfo("Needed Level changed for %s from=%d to=%d, needed points=%d, projectedArea=%f",
 //                                   _id.c_str(),
@@ -694,19 +715,32 @@ long long PointCloudsRenderer::PointCloudLeafNode::rawRender(const PointCloud* p
     }
   }
 
-  if (_neededLevel > _currentLoadedLevel) {
-    if (!_loading) {
-      loadLevel(pointCloud, rc, _currentLoadedLevel + 1);
+
+  if ((_loadingLevel >= 0) &&
+      (_neededLevel < _loadingLevel) &&
+      (_loadingLevelRequestID >= 0)) {
+    rc->getDownloader()->cancelRequest(_loadingLevelRequestID);
+    _loadingLevelRequestID = -1;
+  }
+  else {
+    if (_neededLevel > _currentLoadedLevel) {
+      if (_loadingLevel < 0) {
+        //loadLevel(pointCloud, rc, _currentLoadedLevel + 1);
+        _loadingLevel = _currentLoadedLevel + 1;
+
+        _loadingLevelRequestID = pointCloud->requestBufferForLevel(rc,
+                                                                   _id,
+                                                                   _loadingLevel,
+                                                                   new PointCloudLeafNodeLevelListener(this, _loadingLevel),
+                                                                   true);
+      }
     }
   }
+
 
   if (_mesh == NULL) {
     const int firstPointsCount = _firstPointsVerticesBuffer->size() / 3;
     if (_firstPointsColorsBuffer == NULL) {
-//      const Color fromColor   = Color::red();
-//      const Color middleColor = Color::green();
-//      const Color toColor     = Color::blue();
-
       const double deltaHeight = maxHeight - minHeight;
 
       _firstPointsColorsBuffer = IFactory::instance()->createFloatBuffer( firstPointsCount * 4 );
@@ -714,10 +748,6 @@ long long PointCloudsRenderer::PointCloudLeafNode::rawRender(const PointCloud* p
         const float height = _firstPointsHeightsBuffer->get(i);
         const float alpha = (float) ((height - minHeight) / deltaHeight);
 
-//        const Color color = Color::interpolateColor(fromColor,
-//                                                    middleColor,
-//                                                    toColor,
-//                                                    alpha);
         const Color color = Color::red().wheelStep(5000,
                                                    IMathUtils::instance()->round(5000 * alpha) );
 

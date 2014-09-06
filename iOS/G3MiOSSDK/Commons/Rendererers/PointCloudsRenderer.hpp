@@ -21,6 +21,7 @@ class IDownloader;
 class Sector;
 class Frustum;
 class DirectMesh;
+class ByteBufferIterator;
 
 class PointCloudsRenderer : public DefaultRenderer {
 public:
@@ -41,7 +42,7 @@ private:
 
   class PointCloud;
 
-  class PointCloudNode {
+  class PointCloudNode : public RCObject {
   private:
     bool _rendered;
     double _projectedArea;
@@ -67,11 +68,14 @@ private:
                                 long long nowInMS,
                                 bool justRecalculatedProjectedArea) = 0;
 
+    virtual ~PointCloudNode() {
+#ifdef JAVA_CODE
+      super.dispose();
+#endif
+    }
+
   public:
     const std::string _id;
-
-    virtual ~PointCloudNode() {
-    }
 
     virtual const Box* getBounds() = 0;
 
@@ -120,6 +124,8 @@ private:
                         long long nowInMS,
                         bool justRecalculatedProjectedArea);
 
+    ~PointCloudInnerNode();
+
   public:
     PointCloudInnerNode(const std::string& id) :
     PointCloudNode(id),
@@ -133,8 +139,6 @@ private:
       _children[2] = NULL;
       _children[3] = NULL;
     }
-
-    virtual ~PointCloudInnerNode();
 
     void addLeafNode(PointCloudLeafNode* leafNode);
 
@@ -174,14 +178,12 @@ private:
   private:
     PointCloudLeafNode* _leafNode;
     const int _level;
+
   public:
     PointCloudLeafNodeLevelListener(PointCloudLeafNode* leafNode,
-                                    int level) :
-    _leafNode(leafNode),
-    _level(level)
-    {
-    }
+                                    int level);
 
+    ~PointCloudLeafNodeLevelListener();
 
     void onDownload(const URL& url,
                     IByteBuffer* buffer,
@@ -222,12 +224,12 @@ private:
     int _neededLevel;
     int _neededPoints;
     int _currentLoadedLevel;
-    bool _loading;
+    int _loadingLevel;
     int calculateCurrentLoadedLevel() const;
 
-    void loadLevel(const PointCloud* pointCloud,
-                   const G3MRenderContext* rc,
-                   int newLevel);
+//    void loadLevel(const PointCloud* pointCloud,
+//                   const G3MRenderContext* rc,
+//                   int newLevel);
 
     long long _loadingLevelRequestID;
 
@@ -241,6 +243,8 @@ private:
                         double maxHeight,
                         long long nowInMS,
                         bool justRecalculatedProjectedArea);
+
+    ~PointCloudLeafNode();
 
   public:
 #ifdef C_CODE
@@ -263,7 +267,7 @@ private:
     _neededLevel(0),
     _neededPoints(0),
     _firstPointsColorsBuffer(NULL),
-    _loading(false),
+    _loadingLevel(-1),
     _loadingLevelRequestID(-1)
     {
       _currentLoadedLevel = calculateCurrentLoadedLevel();
@@ -288,12 +292,10 @@ private:
       _pointsCount = -1;
       _firstPointsColorsBuffer = null;
       _currentLoadedLevel = calculateCurrentLoadedLevel();
-      _loading = false;
+      _loadingLevel = -1;
       _loadingLevelRequestID = -1;
     }
 #endif
-
-    ~PointCloudLeafNode();
 
     const Box* getBounds() {
       return _bounds;
@@ -338,6 +340,8 @@ private:
     double _averageHeight;
 
     PointCloudInnerNode* _rootNode;
+
+    PointCloudLeafNode* parseLeafNode(ByteBufferIterator& it);
 
   public:
     PointCloudMetadataParserAsyncTask(PointCloud* pointCloud,
