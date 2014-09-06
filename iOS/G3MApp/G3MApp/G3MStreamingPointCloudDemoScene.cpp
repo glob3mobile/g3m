@@ -55,10 +55,10 @@ void G3MStreamingPointCloudDemoScene::rawActivate(const G3MContext *context) {
   PlanetRenderer* planetRenderer = model->getPlanetRenderer();
   planetRenderer->setVerticalExaggeration(verticalExaggeration);
 
-  ElevationDataProvider* elevationDataProvider = new SingleBilElevationDataProvider(URL("file:///full-earth-2048x1024.bil"),
-                                                                                    Sector::fullSphere(),
-                                                                                    Vector2I(2048, 1024));
-  planetRenderer->setElevationDataProvider(elevationDataProvider, true);
+//  ElevationDataProvider* elevationDataProvider = new SingleBilElevationDataProvider(URL("file:///full-earth-2048x1024.bil"),
+//                                                                                    Sector::fullSphere(),
+//                                                                                    Vector2I(2048, 1024));
+//  planetRenderer->setElevationDataProvider(elevationDataProvider, true);
 
   MapBoxLayer* layer = new MapBoxLayer("examples.map-m0t0lrpu",
                                        TimeInterval::fromDays(30),
