@@ -58,7 +58,7 @@ public class NormalsUtils
     IFloatBuffer normals = IFactory.instance().createFloatBuffer(verticesSize);
     for (int i = 0; i < verticesSize; i++)
     {
-      normals.rawPut(i, 0);
+      normals.rawPut(i, 0.0f);
     }
   
     final int indicesSize = indices.size();
@@ -95,7 +95,7 @@ public class NormalsUtils
     IFloatBuffer normals = IFactory.instance().createFloatBuffer(verticesSize);
     for (int i = 0; i < verticesSize; i++)
     {
-      normals.rawPut(i, 0);
+      normals.rawPut(i, 0.0f);
     }
   
     short index0 = indices.get(0);
