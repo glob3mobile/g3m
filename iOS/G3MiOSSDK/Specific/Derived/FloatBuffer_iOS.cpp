@@ -104,10 +104,10 @@ void FloatBuffer_iOS::rawPut(int i,
     THROW_EXCEPTION("buffer put error");
   }
 
-//  FloatBuffer_iOS* iosSrcBuffer = (FloatBuffer_iOS*) srcBuffer;
+  FloatBuffer_iOS* iosSrcBuffer = (FloatBuffer_iOS*) srcBuffer;
   for (int j = 0; j < count; j++) {
-#warning remove debug code
-    //_values[i + j] = iosSrcBuffer->_values[srcFromIndex + j];
-    rawPut(i + j, srcBuffer->get(srcFromIndex + j));
+//#warning remove debug code
+    _values[i + j] = iosSrcBuffer->_values[srcFromIndex + j];
+    //rawPut(i + j, srcBuffer->get(srcFromIndex + j));
   }
 }
