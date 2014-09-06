@@ -604,4 +604,20 @@ public class JSONUtils {
    }
 
 
+   public static void sendJSON(final PrintWriter writer,
+                               final float[] value) {
+      writer.print('[');
+      boolean first = true;
+      for (final float each : value) {
+         if (first) {
+            first = false;
+         }
+         else {
+            writer.print(',');
+         }
+         writer.write(Float.toString(each));
+      }
+      writer.print(']');
+   }
+
 }

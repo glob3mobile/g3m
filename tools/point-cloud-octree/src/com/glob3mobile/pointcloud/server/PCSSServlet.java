@@ -713,8 +713,20 @@ public class PCSSServlet
       response.setContentType("application/json");
 
       final PrintWriter writer = response.getWriter();
+      writer.print('[');
 
-      JSONUtils.sendJSON(writer, nodeLevel.getPoints(null), planet, average, verticalExaggeration);
+      final List<Geodetic3D> points = nodeLevel.getPoints(null);
+      JSONUtils.sendJSON(writer, points, planet, average, verticalExaggeration);
+
+      final float[] heights = new float[points.size()];
+      for (int i = 0; i < points.size(); i++) {
+         final Geodetic3D point = points.get(i);
+         heights[i] = (float) point._height;
+      }
+      writer.print(',');
+      JSONUtils.sendJSON(writer, heights);
+
+      writer.print(']');
    }
 
 
