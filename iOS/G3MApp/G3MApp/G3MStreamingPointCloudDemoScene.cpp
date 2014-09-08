@@ -47,9 +47,6 @@ public:
 //                                          Angle::fromDegrees(23),
 //                                          Angle::fromDegrees(-28));
 
-
-//Camera position=(lat=39.053582130600460687d, lon=-77.512115783629141674d, height=534.52888301402106208) heading=23.511954 pitch=-28.493308
-
   }
 
 };
