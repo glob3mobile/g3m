@@ -65,6 +65,7 @@ private:
                                 const double projectedArea,
                                 double minHeight,
                                 double maxHeight,
+                                float pointSize,
                                 long long nowInMS,
                                 bool justRecalculatedProjectedArea) = 0;
 
@@ -88,6 +89,7 @@ private:
                      const Frustum* frustum,
                      double minHeight,
                      double maxHeight,
+                     float pointSize,
                      long long nowInMS);
 
     virtual bool isInner() const = 0;
@@ -121,6 +123,7 @@ private:
                         const double projectedArea,
                         double minHeight,
                         double maxHeight,
+                        float pointSize,
                         long long nowInMS,
                         bool justRecalculatedProjectedArea);
 
@@ -284,7 +287,8 @@ private:
     IFloatBuffer** _levelsHeightsBuffers;
 
     DirectMesh* createMesh(double minHeight,
-                           double maxHeight);
+                           double maxHeight,
+                           float pointSize);
 
   protected:
     long long rawRender(const PointCloud* pointCloud,
@@ -294,6 +298,7 @@ private:
                         const double projectedArea,
                         double minHeight,
                         double maxHeight,
+                        float pointSize,
                         long long nowInMS,
                         bool justRecalculatedProjectedArea);
 
@@ -492,6 +497,7 @@ private:
     double _minHeight;
     double _maxHeight;
     double _averageHeight;
+    const float _pointSize;
 
     PointCloudInnerNode* _rootNode;
 
@@ -501,6 +507,7 @@ private:
     PointCloud(const URL& serverURL,
                const std::string& cloudName,
                float verticalExaggeration,
+               float pointSize,
                long long downloadPriority,
                const TimeInterval& timeToCache,
                bool readExpired,
@@ -509,6 +516,7 @@ private:
     _serverURL(serverURL),
     _cloudName(cloudName),
     _verticalExaggeration(verticalExaggeration),
+    _pointSize(pointSize),
     _downloadPriority(downloadPriority),
     _timeToCache(timeToCache),
     _readExpired(readExpired),
@@ -589,6 +597,7 @@ public:
 
   void addPointCloud(const URL& serverURL,
                      const std::string& cloudName,
+                     float pointSize = 2.0f,
                      float verticalExaggeration = 1.0f,
                      PointCloudMetadataListener* metadataListener = NULL,
                      bool deleteListener = true);
@@ -598,6 +607,7 @@ public:
                      long long downloadPriority,
                      const TimeInterval& timeToCache,
                      bool readExpired,
+                     float pointSize = 2.0f,
                      float verticalExaggeration = 1.0f,
                      PointCloudMetadataListener* metadataListener = NULL,
                      bool deleteListener = true);

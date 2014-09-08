@@ -402,7 +402,7 @@ void PointCloudsRenderer::PointCloud::render(const G3MRenderContext* rc,
                                              long long nowInMS) {
   if (_rootNode != NULL) {
 #warning TODO
-    const long long renderedCount = _rootNode->render(this, rc, glState, frustum, _minHeight, _averageHeight * 3, nowInMS);
+    const long long renderedCount = _rootNode->render(this, rc, glState, frustum, _minHeight, _averageHeight * 3, _pointSize, nowInMS);
 
     if (_lastRenderedCount != renderedCount) {
       ILogger::instance()->logInfo("\"%s\": Rendered %ld points", _cloudName.c_str(), renderedCount);
@@ -417,6 +417,7 @@ long long PointCloudsRenderer::PointCloudNode::render(const PointCloud* pointClo
                                                       const Frustum* frustum,
                                                       double minHeight,
                                                       double maxHeight,
+                                                      float pointSize,
                                                       long long nowInMS) {
   const Box* bounds = getBounds();
   if (bounds != NULL) {
@@ -442,6 +443,7 @@ long long PointCloudsRenderer::PointCloudNode::render(const PointCloud* pointClo
                                                   _projectedArea,
                                                   minHeight,
                                                   maxHeight,
+                                                  pointSize,
                                                   nowInMS,
                                                   justRecalculatedProjectedArea);
         _rendered = true;
@@ -465,13 +467,14 @@ long long PointCloudsRenderer::PointCloudInnerNode::rawRender(const PointCloud* 
                                                               const double projectedArea,
                                                               double minHeight,
                                                               double maxHeight,
+                                                              float pointSize,
                                                               long long nowInMS,
                                                               bool justRecalculatedProjectedArea) {
   long long renderedCount = 0;
   for (int i = 0; i < 4; i++) {
     PointCloudNode* child = _children[i];
     if (child != NULL) {
-      renderedCount += child->render(pointCloud, rc, glState, frustum, minHeight, maxHeight, nowInMS);
+      renderedCount += child->render(pointCloud, rc, glState, frustum, minHeight, maxHeight, pointSize, nowInMS);
     }
   }
 
@@ -493,7 +496,7 @@ long long PointCloudsRenderer::PointCloudInnerNode::rawRender(const PointCloud* 
                              Vector3D(averageX, averageY, averageZ),
                              pointsBuffer,
                              1,
-                             4,
+                             pointSize * 2,
                              Color::newFromRGBA(1, 1, 0, 1),
                              NULL, // colors
                              1,    // colorsIntensity
@@ -672,7 +675,8 @@ void PointCloudsRenderer::PointCloudLeafNode::onLevelBufferCancel(int level) {
 }
 
 DirectMesh* PointCloudsRenderer::PointCloudLeafNode::createMesh(double minHeight,
-                                                                double maxHeight) {
+                                                                double maxHeight,
+                                                                float pointSize) {
   if (_currentLoadedLevel <= _preloadedLevel) {
     const int firstPointsCount = _firstPointsVerticesBuffer->size() / 3;
     if (_firstPointsColorsBuffer == NULL) {
@@ -699,7 +703,7 @@ DirectMesh* PointCloudsRenderer::PointCloudLeafNode::createMesh(double minHeight
                                       *_average,
                                       _firstPointsVerticesBuffer,
                                       1,
-                                      3,
+                                      pointSize,
                                       Color::newFromRGBA(1, 1, 1, 1),
                                       _firstPointsColorsBuffer, // colors
                                       1,    // colorsIntensity
@@ -770,7 +774,7 @@ DirectMesh* PointCloudsRenderer::PointCloudLeafNode::createMesh(double minHeight
                                     *_average,
                                     vertices,
                                     1,
-                                    3,
+                                    pointSize,
                                     Color::newFromRGBA(1, 1, 1, 1),
                                     colors, // colors
                                     1,      // colorsIntensity
@@ -789,6 +793,7 @@ long long PointCloudsRenderer::PointCloudLeafNode::rawRender(const PointCloud* p
                                                              const double projectedArea,
                                                              double minHeight,
                                                              double maxHeight,
+                                                             float pointSize,
                                                              long long nowInMS,
                                                              bool justRecalculatedProjectedArea) {
 
@@ -860,7 +865,7 @@ long long PointCloudsRenderer::PointCloudLeafNode::rawRender(const PointCloud* p
 
 
   if (_mesh == NULL) {
-    _mesh = createMesh(minHeight, maxHeight);
+    _mesh = createMesh(minHeight, maxHeight, pointSize);
   }
   _mesh->render(rc, glState);
   //getBounds()->render(rc, glState, Color::blue());
@@ -952,6 +957,7 @@ RenderState PointCloudsRenderer::getRenderState(const G3MRenderContext* rc) {
 
 void PointCloudsRenderer::addPointCloud(const URL& serverURL,
                                         const std::string& cloudName,
+                                        float pointSize,
                                         float verticalExaggeration,
                                         PointCloudMetadataListener* metadataListener,
                                         bool deleteListener) {
@@ -960,6 +966,7 @@ void PointCloudsRenderer::addPointCloud(const URL& serverURL,
                 DownloadPriority::MEDIUM,
                 TimeInterval::fromDays(30),
                 true,
+                pointSize,
                 verticalExaggeration,
                 metadataListener,
                 deleteListener);
@@ -970,10 +977,11 @@ void PointCloudsRenderer::addPointCloud(const URL& serverURL,
                                         long long downloadPriority,
                                         const TimeInterval& timeToCache,
                                         bool readExpired,
+                                        float pointSize,
                                         float verticalExaggeration,
                                         PointCloudMetadataListener* metadataListener,
                                         bool deleteListener) {
-  PointCloud* pointCloud = new PointCloud(serverURL, cloudName, verticalExaggeration, downloadPriority, timeToCache, readExpired, metadataListener, deleteListener);
+  PointCloud* pointCloud = new PointCloud(serverURL, cloudName, verticalExaggeration, pointSize, downloadPriority, timeToCache, readExpired, metadataListener, deleteListener);
   if (_context != NULL) {
     pointCloud->initialize(_context);
   }

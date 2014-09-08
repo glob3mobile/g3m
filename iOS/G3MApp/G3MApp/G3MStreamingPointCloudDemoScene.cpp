@@ -59,6 +59,7 @@ void G3MStreamingPointCloudDemoScene::rawActivate(const G3MContext *context) {
   G3MDemoModel* model     = getModel();
   G3MWidget*    g3mWidget = model->getG3MWidget();
 
+  const float pointSize = 2;
   const float verticalExaggeration = 1;
 
   PlanetRenderer* planetRenderer = model->getPlanetRenderer();
@@ -81,6 +82,7 @@ void G3MStreamingPointCloudDemoScene::rawActivate(const G3MContext *context) {
                                                  DownloadPriority::LOWER,
                                                  TimeInterval::zero(),
                                                  false,
+                                                 pointSize,
                                                  verticalExaggeration,
                                                  new G3MStreamingPointCloudDemoScene_PointCloudMetadataListener(g3mWidget),
                                                  true);
