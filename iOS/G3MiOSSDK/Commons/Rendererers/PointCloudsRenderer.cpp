@@ -794,7 +794,7 @@ long long PointCloudsRenderer::PointCloudLeafNode::rawRender(const PointCloud* p
 
   if (justRecalculatedProjectedArea) {
 #warning TODO: quality factor 2
-    const int intendedPointsCount = IMathUtils::instance()->round((float) projectedArea * 0.1f);
+    const int intendedPointsCount = IMathUtils::instance()->round((float) projectedArea * 0.09f);
     int accummulated = 0;
     int neededLevel = -1;
     int neededPoints = -1;

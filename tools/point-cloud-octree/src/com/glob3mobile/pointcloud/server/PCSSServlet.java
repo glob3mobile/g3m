@@ -186,8 +186,8 @@ HttpServlet {
    public void init(final ServletConfig config) throws ServletException {
       super.init(config);
 
-      // _cloudDirectory = new File(System.getProperty("user.dir"));
-      _cloudDirectory = new File("/Volumes/My Passport/_LIDAR_COPY");
+      _cloudDirectory = new File(System.getProperty("user.dir"));
+      //_cloudDirectory = new File("/Volumes/My Passport/_LIDAR_COPY");
 
       log("initialization of " + getClass() + " at " + _cloudDirectory);
    }
@@ -629,10 +629,12 @@ HttpServlet {
                                     final HttpServletResponse response) throws IOException {
       switch (format) {
          case JSON: {
+            response.addHeader("Access-Control-Allow-Origin", "*");
             sendJSONMetadata(response, getMetadataEntry(db, planet, verticalExaggeration), planet, verticalExaggeration);
             break;
          }
          case BINARY: {
+            response.addHeader("Access-Control-Allow-Origin", "*");
             sendBinaryMetadata(response, getMetadataEntry(db, planet, verticalExaggeration));
             break;
          }
@@ -659,10 +661,12 @@ HttpServlet {
 
       switch (format) {
          case JSON: {
+            response.addHeader("Access-Control-Allow-Origin", "*");
             sendJSONNodeLevelPoints(response, db, planet, nodeID, verticalExaggeration, nodeLevel);
             break;
          }
          case BINARY: {
+            response.addHeader("Access-Control-Allow-Origin", "*");
             sendBinaryNodeLevelPoints(response, db, planet, nodeID, verticalExaggeration, nodeLevel);
             break;
          }
@@ -764,6 +768,7 @@ HttpServlet {
          error(response, "Can't open DB \"" + cloudName + "\"");
          return;
       }
+
 
       if (path.length == 1) {
          final String planetName = request.getParameter("planet");
