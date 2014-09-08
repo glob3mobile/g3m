@@ -639,7 +639,7 @@ public class PointCloudsRenderer extends DefaultRenderer
       {
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#warning TODO: quality factor 2
-        final int intendedPointsCount = IMathUtils.instance().round((float) projectedArea * 0.1f);
+        final int intendedPointsCount = IMathUtils.instance().round((float) projectedArea * 0.09f);
         int accummulated = 0;
         int neededLevel = -1;
         int neededPoints = -1;
