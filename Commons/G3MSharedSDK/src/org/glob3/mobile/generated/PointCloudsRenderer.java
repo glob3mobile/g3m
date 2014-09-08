@@ -56,7 +56,7 @@ public class PointCloudsRenderer extends DefaultRenderer
        _lastProjectedAreaTimeInMS = -1;
     }
 
-    protected abstract long rawRender(PointCloud pointCloud, G3MRenderContext rc, GLState glState, Frustum frustum, double projectedArea, double minHeight, double maxHeight, long nowInMS, boolean justRecalculatedProjectedArea);
+    protected abstract long rawRender(PointCloud pointCloud, G3MRenderContext rc, GLState glState, Frustum frustum, double projectedArea, double minHeight, double maxHeight, float pointSize, long nowInMS, boolean justRecalculatedProjectedArea);
 
     public void dispose()
     {
@@ -70,7 +70,7 @@ public class PointCloudsRenderer extends DefaultRenderer
     public abstract long getPointsCount();
     public abstract Vector3D getAverage();
 
-    public final long render(PointCloud pointCloud, G3MRenderContext rc, GLState glState, Frustum frustum, double minHeight, double maxHeight, long nowInMS)
+    public final long render(PointCloud pointCloud, G3MRenderContext rc, GLState glState, Frustum frustum, double minHeight, double maxHeight, float pointSize, long nowInMS)
     {
       final Box bounds = getBounds();
       if (bounds != null)
@@ -94,7 +94,7 @@ public class PointCloudsRenderer extends DefaultRenderer
           final double minProjectedArea = 250;
           if (_projectedArea >= minProjectedArea)
           {
-            final long renderedCount = rawRender(pointCloud, rc, glState, frustum, _projectedArea, minHeight, maxHeight, nowInMS, justRecalculatedProjectedArea);
+            final long renderedCount = rawRender(pointCloud, rc, glState, frustum, _projectedArea, minHeight, maxHeight, pointSize, nowInMS, justRecalculatedProjectedArea);
             _rendered = true;
             return renderedCount;
           }
@@ -185,7 +185,7 @@ public class PointCloudsRenderer extends DefaultRenderer
 
     private Mesh _mesh;
 
-    protected final long rawRender(PointCloud pointCloud, G3MRenderContext rc, GLState glState, Frustum frustum, double projectedArea, double minHeight, double maxHeight, long nowInMS, boolean justRecalculatedProjectedArea)
+    protected final long rawRender(PointCloud pointCloud, G3MRenderContext rc, GLState glState, Frustum frustum, double projectedArea, double minHeight, double maxHeight, float pointSize, long nowInMS, boolean justRecalculatedProjectedArea)
     {
       long renderedCount = 0;
       for (int i = 0; i < 4; i++)
@@ -193,7 +193,7 @@ public class PointCloudsRenderer extends DefaultRenderer
         PointCloudNode child = _children[i];
         if (child != null)
         {
-          renderedCount += child.render(pointCloud, rc, glState, frustum, minHeight, maxHeight, nowInMS);
+          renderedCount += child.render(pointCloud, rc, glState, frustum, minHeight, maxHeight, pointSize, nowInMS);
         }
       }
     
@@ -212,7 +212,7 @@ public class PointCloudsRenderer extends DefaultRenderer
           pointsBuffer.rawPut(1, (float)(average._y - averageY));
           pointsBuffer.rawPut(2, (float)(average._z - averageZ));
     
-          _mesh = new DirectMesh(GLPrimitive.points(), true, new Vector3D(averageX, averageY, averageZ), pointsBuffer, 1, 4, Color.newFromRGBA(1, 1, 0, 1), null, 1, true); // colorsIntensity -  colors
+          _mesh = new DirectMesh(GLPrimitive.points(), true, new Vector3D(averageX, averageY, averageZ), pointsBuffer, 1, pointSize * 2, Color.newFromRGBA(1, 1, 0, 1), null, 1, true); // colorsIntensity -  colors
         }
         _mesh.render(rc, glState);
         renderedCount = 1;
@@ -535,7 +535,7 @@ public class PointCloudsRenderer extends DefaultRenderer
     private IFloatBuffer[] _levelsVerticesBuffers;
     private IFloatBuffer[] _levelsHeightsBuffers;
 
-    private DirectMesh createMesh(double minHeight, double maxHeight)
+    private DirectMesh createMesh(double minHeight, double maxHeight, float pointSize)
     {
       if (_currentLoadedLevel <= _preloadedLevel)
       {
@@ -560,7 +560,7 @@ public class PointCloudsRenderer extends DefaultRenderer
           }
         }
     
-        DirectMesh mesh = new DirectMesh(GLPrimitive.points(), false, _average, _firstPointsVerticesBuffer, 1, 3, Color.newFromRGBA(1, 1, 1, 1), _firstPointsColorsBuffer, 1, true); // colorsIntensity -  colors
+        DirectMesh mesh = new DirectMesh(GLPrimitive.points(), false, _average, _firstPointsVerticesBuffer, 1, pointSize, Color.newFromRGBA(1, 1, 1, 1), _firstPointsColorsBuffer, 1, true); // colorsIntensity -  colors
         mesh.setRenderVerticesCount(IMathUtils.instance().min(_neededPoints, firstPointsCount));
     //    mesh->setRenderVerticesCount( _neededPoints );
     
@@ -625,14 +625,14 @@ public class PointCloudsRenderer extends DefaultRenderer
         cursor += _levelsPointsCount[level] * 4;
       }
     
-      DirectMesh mesh = new DirectMesh(GLPrimitive.points(), true, _average, vertices, 1, 3, Color.newFromRGBA(1, 1, 1, 1), colors, 1, true); // colorsIntensity -  colors
+      DirectMesh mesh = new DirectMesh(GLPrimitive.points(), true, _average, vertices, 1, pointSize, Color.newFromRGBA(1, 1, 1, 1), colors, 1, true); // colorsIntensity -  colors
       //    mesh->setRenderVerticesCount( IMathUtils::instance()->min(_neededPoints, firstPointsCount) );
       mesh.setRenderVerticesCount(pointsCount);
     
       return mesh;
     }
 
-    protected final long rawRender(PointCloud pointCloud, G3MRenderContext rc, GLState glState, Frustum frustum, double projectedArea, double minHeight, double maxHeight, long nowInMS, boolean justRecalculatedProjectedArea)
+    protected final long rawRender(PointCloud pointCloud, G3MRenderContext rc, GLState glState, Frustum frustum, double projectedArea, double minHeight, double maxHeight, float pointSize, long nowInMS, boolean justRecalculatedProjectedArea)
     {
     
       if (justRecalculatedProjectedArea)
@@ -711,7 +711,7 @@ public class PointCloudsRenderer extends DefaultRenderer
     
       if (_mesh == null)
       {
-        _mesh = createMesh(minHeight, maxHeight);
+        _mesh = createMesh(minHeight, maxHeight, pointSize);
       }
       _mesh.render(rc, glState);
       //getBounds()->render(rc, glState, Color::blue());
@@ -1092,16 +1092,18 @@ public class PointCloudsRenderer extends DefaultRenderer
     private double _minHeight;
     private double _maxHeight;
     private double _averageHeight;
+    private final float _pointSize;
 
     private PointCloudInnerNode _rootNode;
 
     private long _lastRenderedCount;
 
-    public PointCloud(URL serverURL, String cloudName, float verticalExaggeration, long downloadPriority, TimeInterval timeToCache, boolean readExpired, PointCloudMetadataListener metadataListener, boolean deleteListener)
+    public PointCloud(URL serverURL, String cloudName, float verticalExaggeration, float pointSize, long downloadPriority, TimeInterval timeToCache, boolean readExpired, PointCloudMetadataListener metadataListener, boolean deleteListener)
     {
        _serverURL = serverURL;
        _cloudName = cloudName;
        _verticalExaggeration = verticalExaggeration;
+       _pointSize = pointSize;
        _downloadPriority = downloadPriority;
        _timeToCache = timeToCache;
        _readExpired = readExpired;
@@ -1208,7 +1210,7 @@ public class PointCloudsRenderer extends DefaultRenderer
       {
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#warning TODO
-        final long renderedCount = _rootNode.render(this, rc, glState, frustum, _minHeight, _averageHeight * 3, nowInMS);
+        final long renderedCount = _rootNode.render(this, rc, glState, frustum, _minHeight, _averageHeight * 3, _pointSize, nowInMS);
     
         if (_lastRenderedCount != renderedCount)
         {
@@ -1351,38 +1353,46 @@ public class PointCloudsRenderer extends DefaultRenderer
 
   }
 
-  public final void addPointCloud(URL serverURL, String cloudName, float verticalExaggeration, PointCloudMetadataListener metadataListener)
+  public final void addPointCloud(URL serverURL, String cloudName, float pointSize, float verticalExaggeration, PointCloudMetadataListener metadataListener)
   {
-     addPointCloud(serverURL, cloudName, verticalExaggeration, metadataListener, true);
+     addPointCloud(serverURL, cloudName, pointSize, verticalExaggeration, metadataListener, true);
   }
-  public final void addPointCloud(URL serverURL, String cloudName, float verticalExaggeration)
+  public final void addPointCloud(URL serverURL, String cloudName, float pointSize, float verticalExaggeration)
   {
-     addPointCloud(serverURL, cloudName, verticalExaggeration, null, true);
+     addPointCloud(serverURL, cloudName, pointSize, verticalExaggeration, null, true);
+  }
+  public final void addPointCloud(URL serverURL, String cloudName, float pointSize)
+  {
+     addPointCloud(serverURL, cloudName, pointSize, 1.0f, null, true);
   }
   public final void addPointCloud(URL serverURL, String cloudName)
   {
-     addPointCloud(serverURL, cloudName, 1.0f, null, true);
+     addPointCloud(serverURL, cloudName, 2.0f, 1.0f, null, true);
   }
-  public final void addPointCloud(URL serverURL, String cloudName, float verticalExaggeration, PointCloudMetadataListener metadataListener, boolean deleteListener)
+  public final void addPointCloud(URL serverURL, String cloudName, float pointSize, float verticalExaggeration, PointCloudMetadataListener metadataListener, boolean deleteListener)
   {
-    addPointCloud(serverURL, cloudName, DownloadPriority.MEDIUM, TimeInterval.fromDays(30), true, verticalExaggeration, metadataListener, deleteListener);
+    addPointCloud(serverURL, cloudName, DownloadPriority.MEDIUM, TimeInterval.fromDays(30), true, pointSize, verticalExaggeration, metadataListener, deleteListener);
   }
 
-  public final void addPointCloud(URL serverURL, String cloudName, long downloadPriority, TimeInterval timeToCache, boolean readExpired, float verticalExaggeration, PointCloudMetadataListener metadataListener)
+  public final void addPointCloud(URL serverURL, String cloudName, long downloadPriority, TimeInterval timeToCache, boolean readExpired, float pointSize, float verticalExaggeration, PointCloudMetadataListener metadataListener)
   {
-     addPointCloud(serverURL, cloudName, downloadPriority, timeToCache, readExpired, verticalExaggeration, metadataListener, true);
+     addPointCloud(serverURL, cloudName, downloadPriority, timeToCache, readExpired, pointSize, verticalExaggeration, metadataListener, true);
   }
-  public final void addPointCloud(URL serverURL, String cloudName, long downloadPriority, TimeInterval timeToCache, boolean readExpired, float verticalExaggeration)
+  public final void addPointCloud(URL serverURL, String cloudName, long downloadPriority, TimeInterval timeToCache, boolean readExpired, float pointSize, float verticalExaggeration)
   {
-     addPointCloud(serverURL, cloudName, downloadPriority, timeToCache, readExpired, verticalExaggeration, null, true);
+     addPointCloud(serverURL, cloudName, downloadPriority, timeToCache, readExpired, pointSize, verticalExaggeration, null, true);
+  }
+  public final void addPointCloud(URL serverURL, String cloudName, long downloadPriority, TimeInterval timeToCache, boolean readExpired, float pointSize)
+  {
+     addPointCloud(serverURL, cloudName, downloadPriority, timeToCache, readExpired, pointSize, 1.0f, null, true);
   }
   public final void addPointCloud(URL serverURL, String cloudName, long downloadPriority, TimeInterval timeToCache, boolean readExpired)
   {
-     addPointCloud(serverURL, cloudName, downloadPriority, timeToCache, readExpired, 1.0f, null, true);
+     addPointCloud(serverURL, cloudName, downloadPriority, timeToCache, readExpired, 2.0f, 1.0f, null, true);
   }
-  public final void addPointCloud(URL serverURL, String cloudName, long downloadPriority, TimeInterval timeToCache, boolean readExpired, float verticalExaggeration, PointCloudMetadataListener metadataListener, boolean deleteListener)
+  public final void addPointCloud(URL serverURL, String cloudName, long downloadPriority, TimeInterval timeToCache, boolean readExpired, float pointSize, float verticalExaggeration, PointCloudMetadataListener metadataListener, boolean deleteListener)
   {
-    PointCloud pointCloud = new PointCloud(serverURL, cloudName, verticalExaggeration, downloadPriority, timeToCache, readExpired, metadataListener, deleteListener);
+    PointCloud pointCloud = new PointCloud(serverURL, cloudName, verticalExaggeration, pointSize, downloadPriority, timeToCache, readExpired, metadataListener, deleteListener);
     if (_context != null)
     {
       pointCloud.initialize(_context);
