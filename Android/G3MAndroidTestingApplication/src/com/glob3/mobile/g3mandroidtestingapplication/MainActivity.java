@@ -45,8 +45,8 @@ import android.widget.RelativeLayout;
 
 
 public class MainActivity
-extends
-Activity {
+         extends
+            Activity {
 
    private G3MWidget_Android   _g3mWidget;
    private PointCloudsRenderer _pcr;
@@ -85,8 +85,9 @@ Activity {
 
       _pcr = new PointCloudsRenderer();
       final float verticalExaggeration = 1;
+      final float pointSize = 2;
       _pcr.addPointCloud(new URL("http://glob3mobile.dyndns.org:8080"), "Loudoun-VA_simplified2_LOD", DownloadPriority.LOWER,
-               TimeInterval.zero(), false, verticalExaggeration, null, true);
+               TimeInterval.zero(), false, pointSize, verticalExaggeration, null, true);
 
 
       builder.addRenderer(_pcr);
@@ -104,8 +105,8 @@ Activity {
 
 
    private static class SampleRasterSymbolizer
-   extends
-   GEORasterSymbolizer {
+            extends
+               GEORasterSymbolizer {
 
       private static final Color FROM_COLOR = Color.fromRGBA(0.7f, 0, 0, 0.5f);
 
@@ -159,7 +160,7 @@ Activity {
                   geometry.getPolygonData(), //
                   createPolygonLineRasterStyle(geometry), //
                   createPolygonSurfaceRasterStyle(geometry) //
-                  );
+         );
          symbols.add(symbol);
          return symbols;
       }
@@ -219,7 +220,7 @@ Activity {
                1, // transparency
                new LevelTileCondition(15, 21), // condition
                "" // disclaimerInfo
-               );
+      );
       // layerSet.addLayer(tiledVectorLayer);
 
 
