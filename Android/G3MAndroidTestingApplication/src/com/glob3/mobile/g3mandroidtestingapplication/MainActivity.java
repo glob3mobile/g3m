@@ -27,6 +27,7 @@ import org.glob3.mobile.generated.JSONObject;
 import org.glob3.mobile.generated.LayerSet;
 import org.glob3.mobile.generated.LevelTileCondition;
 import org.glob3.mobile.generated.PointCloudsRenderer;
+import org.glob3.mobile.generated.PointCloudsRenderer.PointCloudMetadataListener;
 import org.glob3.mobile.generated.Sector;
 import org.glob3.mobile.generated.StrokeCap;
 import org.glob3.mobile.generated.StrokeJoin;
@@ -48,8 +49,7 @@ public class MainActivity
          extends
             Activity {
 
-   private G3MWidget_Android   _g3mWidget;
-   private PointCloudsRenderer _pcr;
+   private G3MWidget_Android _g3mWidget;
 
 
    //   private RelativeLayout    _placeHolder;
@@ -83,14 +83,27 @@ public class MainActivity
    private G3MWidget_Android createWidget() {
       final G3MBuilder_Android builder = new G3MBuilder_Android(this);
 
-      _pcr = new PointCloudsRenderer();
-      final float verticalExaggeration = 1;
+      final PointCloudsRenderer pcr = new PointCloudsRenderer();
+
+      final URL serverURL = new URL("http://glob3mobile.dyndns.org:8080");
+      final String cloudName = "Loudoun-VA_simplified2_LOD";
+      final long downloadPriority = DownloadPriority.LOWER;
+      final TimeInterval timeToCache = TimeInterval.zero();
+      final boolean readExpired = false;
       final float pointSize = 2;
-      _pcr.addPointCloud(new URL("http://glob3mobile.dyndns.org:8080"), "Loudoun-VA_simplified2_LOD", DownloadPriority.LOWER,
-               TimeInterval.zero(), false, pointSize, verticalExaggeration, null, true);
+      final float verticalExaggeration = 1;
+      final PointCloudMetadataListener metadataListener = null;
+      final boolean deleteListener = true;
+
+      pcr.addPointCloud( //
+               serverURL, cloudName, //
+               downloadPriority, timeToCache, readExpired, //
+               pointSize, //
+               verticalExaggeration, //
+               metadataListener, deleteListener);
 
 
-      builder.addRenderer(_pcr);
+      builder.addRenderer(pcr);
 
       //      final TimeInterval connectTimeout = TimeInterval.fromSeconds(60);
       //      final TimeInterval readTimeout = TimeInterval.fromSeconds(65);
