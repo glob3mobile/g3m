@@ -17,27 +17,22 @@ Vector3D Vector3D::zero = Vector3D(0,0,0);
 
 
 Vector3D Vector3D::normalized() const {
+  if (isNan()) {
+    return nan();
+  }
+  if (isZero()) {
+    return zero;
+  }
   const double d = length();
   return Vector3D(_x / d, _y / d, _z / d);
 }
 
 double Vector3D::angleInRadiansBetween(const Vector3D& other) const {
-  const Vector3D v1 = normalized();
-  const Vector3D v2 = other.normalized();
-
-  double c = v1.dot(v2);
-  if (c > 1.0) {
-    c = 1.0;
-  }
-  else if (c < -1.0) {
-    c = -1.0;
-  }
-
-  return IMathUtils::instance()->acos(c);
+  return Vector3D::angleInRadiansBetween(*this, other);
 }
 
 Angle Vector3D::angleBetween(const Vector3D& other) const {
-  return Angle::fromRadians( angleInRadiansBetween(other) );
+  return Angle::fromRadians( Vector3D::angleInRadiansBetween(*this, other) );
 }
 
 Angle Vector3D::signedAngleBetween(const Vector3D& other,
@@ -50,6 +45,64 @@ Angle Vector3D::signedAngleBetween(const Vector3D& other,
   return angle.times(-1);
 }
 
+double Vector3D::normalizedDot(const Vector3D& a,
+                               const Vector3D& b) {
+  const double aLength = a.length();
+  const double a_x = a._x / aLength;
+  const double a_y = a._y / aLength;
+  const double a_z = a._z / aLength;
+
+  const double bLength = b.length();
+  const double b_x = b._x / bLength;
+  const double b_y = b._y / bLength;
+  const double b_z = b._z / bLength;
+
+  return ((a_x * b_x) +
+          (a_y * b_y) +
+          (a_z * b_z));
+}
+
+double Vector3D::normalizedDot(const Vector3D& a,
+                               const MutableVector3D& b) {
+  const double aLength = a.length();
+  const double a_x = a._x / aLength;
+  const double a_y = a._y / aLength;
+  const double a_z = a._z / aLength;
+
+  const double bLength = b.length();
+  const double b_x = b.x() / bLength;
+  const double b_y = b.y() / bLength;
+  const double b_z = b.z() / bLength;
+
+  return ((a_x * b_x) +
+          (a_y * b_y) +
+          (a_z * b_z));
+}
+
+
+double Vector3D::angleInRadiansBetween(const Vector3D& a,
+                                       const Vector3D& b) {
+  double c = Vector3D::normalizedDot(a, b);
+  if (c > 1.0) {
+    c = 1.0;
+  }
+  else if (c < -1.0) {
+    c = -1.0;
+  }
+  return IMathUtils::instance()->acos(c);
+}
+
+double Vector3D::angleInRadiansBetween(const Vector3D& a,
+                                       const MutableVector3D& b) {
+  double c = Vector3D::normalizedDot(a, b);
+  if (c > 1.0) {
+    c = 1.0;
+  }
+  else if (c < -1.0) {
+    c = -1.0;
+  }
+  return IMathUtils::instance()->acos(c);
+}
 
 Vector3D Vector3D::rotateAroundAxis(const Vector3D& axis,
                                     const Angle& theta) const {
@@ -57,8 +110,6 @@ Vector3D Vector3D::rotateAroundAxis(const Vector3D& axis,
   const double v = axis._y;
   const double w = axis._z;
   
-//  const double cosTheta = theta.cosinus();
-//  const double sinTheta = theta.sinus();
   const double cosTheta = COS(theta._radians);
   const double sinTheta = SIN(theta._radians);
 
@@ -172,3 +223,8 @@ Vector3F Vector3D::asVector3F() const{
   return Vector3F((float)_x, (float)_y, (float)_z);
 }
 
+Vector3D Vector3D::sub(const MutableVector3D& v) const {
+  return Vector3D(_x - v.x(),
+                  _y - v.y(),
+                  _z - v.z());
+}

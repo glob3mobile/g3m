@@ -21,6 +21,7 @@ package org.glob3.mobile.generated;
 public class FlatPlanet extends Planet
 {
   private final Vector2D _size ;
+  private final Vector3D _radii ;
 
   private MutableVector3D _origin = new MutableVector3D();
   private MutableVector3D _initialPoint = new MutableVector3D();
@@ -47,8 +48,12 @@ public class FlatPlanet extends Planet
   public FlatPlanet(Vector2D size)
   {
      _size = new Vector2D(size);
+//<<<<<<< HEAD
      _firstDoubleDragMovement = false;
   
+//=======
+     _radii = new Vector3D(size._x, size._y, 0);
+//>>>>>>> origin/purgatory
   }
 
   public void dispose()
@@ -58,7 +63,7 @@ public class FlatPlanet extends Planet
 
   public final Vector3D getRadii()
   {
-    return new Vector3D(_size._x, _size._y, 0);
+    return _radii;
   }
 
   public final Vector3D centricSurfaceNormal(Vector3D position)
@@ -92,19 +97,19 @@ public class FlatPlanet extends Planet
     return new Vector3D(0, 0, 1);
   }
 
-  public final java.util.ArrayList<Double> intersectionsDistances(Vector3D origin, Vector3D direction)
+  public final java.util.ArrayList<Double> intersectionsDistances(double originX, double originY, double originZ, double directionX, double directionY, double directionZ)
   {
     java.util.ArrayList<Double> intersections = new java.util.ArrayList<Double>();
   
     // compute intersection with plane
-    if (direction._z == 0)
+    if (directionZ == 0)
        return intersections;
-    final double t = -origin._z / direction._z;
-    final double x = origin._x + t * direction._x;
+    final double t = -originZ / directionZ;
+    final double x = originX + t * directionX;
     final double halfWidth = 0.5 * _size._x;
     if (x < -halfWidth || x > halfWidth)
        return intersections;
-    final double y = origin._y + t * direction._y;
+    final double y = originY + t * directionY;
     final double halfHeight = 0.5 * _size._y;
     if (y < -halfHeight || y > halfHeight)
        return intersections;
@@ -177,24 +182,9 @@ public class FlatPlanet extends Planet
     return computePreciseLatLonDistance(g1, g2);
   }
 
-  public final Vector3D closestIntersection(Vector3D pos, Vector3D ray)
-  {
-    java.util.ArrayList<Double> distances = intersectionsDistances(pos, ray);
-    if (distances.isEmpty())
-    {
-      return Vector3D.nan();
-    }
-    return pos.add(ray.times(distances.get(0)));
-  }
-
-
   public final MutableMatrix44D createGeodeticTransformMatrix(Geodetic3D position)
   {
-    final MutableMatrix44D translation = MutableMatrix44D.createTranslationMatrix(toCartesian(position));
-    return translation;
-  
-    //const MutableMatrix44D rotation    = MutableMatrix44D::createGeodeticRotationMatrix( position );
-    //return translation.multiply(rotation);
+    return MutableMatrix44D.createTranslationMatrix(toCartesian(position));
   }
 
   public final boolean isFlat()
@@ -334,7 +324,8 @@ public class FlatPlanet extends Planet
       delta = delta.add(viewDirection.times(t2));
       MutableMatrix44D translation = MutableMatrix44D.createTranslationMatrix(delta.asVector3D());
       positionCamera = positionCamera.transformedBy(translation, 1.0);
-      matrix = translation.multiply(matrix);
+  //    matrix.copyValue(translation.multiply(matrix));
+      matrix.copyValueOfMultiplication(translation, matrix);
     }
   
     // compute middle point in 3D
@@ -354,7 +345,8 @@ public class FlatPlanet extends Planet
     {
       MutableMatrix44D translation = MutableMatrix44D.createTranslationMatrix(correctedCenterPoint.sub(finalPoint));
       positionCamera = positionCamera.transformedBy(translation, 1.0);
-      matrix = translation.multiply(matrix);
+  //    matrix.copyValue(translation.multiply(matrix));
+      matrix.copyValueOfMultiplication(translation, matrix);
     }
   
     // camera rotation
@@ -368,8 +360,14 @@ public class FlatPlanet extends Planet
       double sign = v1.cross(v0).dot(normal);
       if (sign<0)
          angle = -angle;
+<<<<<<< HEAD
       MutableMatrix44D rotation = MutableMatrix44D.createGeneralRotationMatrix(Angle.fromDegrees(angle), normal, correctedCenterPoint);
       matrix = rotation.multiply(matrix);
+=======
+      MutableMatrix44D rotation = MutableMatrix44D.createGeneralRotationMatrix(Angle.fromDegrees(angle), normal, centerPoint2);
+  //    matrix.copyValue(rotation.multiply(matrix));
+      matrix.copyValueOfMultiplication(rotation, matrix);
+>>>>>>> origin/purgatory
     }
   
     return matrix;
@@ -418,7 +416,6 @@ public class FlatPlanet extends Planet
 
   public final void applyCameraConstrainers(Camera previousCamera, Camera nextCamera)
   {
-  
   //  Vector3D pos = nextCamera->getCartesianPosition();
   //  Vector3D origin = _origin.asVector3D();
   //  double maxDist = _size.length() * 1.5;
@@ -427,8 +424,6 @@ public class FlatPlanet extends Planet
   //    //    printf("TOO FAR %f\n", pos.distanceTo(origin) / maxDist);
   //    nextCamera->copyFrom(*previousCamera);
   //  }
-  
-  
   }
 
   public final Geodetic3D getDefaultCameraPosition(Sector rendereSector)

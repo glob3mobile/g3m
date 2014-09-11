@@ -5,6 +5,7 @@ package com.glob3.mobile.g3mandroidtestingapplication;
 
 import org.glob3.mobile.generated.AltitudeMode;
 import org.glob3.mobile.generated.Angle;
+<<<<<<< HEAD
 import org.glob3.mobile.generated.BoxShape;
 import org.glob3.mobile.generated.CameraDoubleDragHandler;
 import org.glob3.mobile.generated.CameraDoubleTapHandler;
@@ -28,6 +29,30 @@ import org.glob3.mobile.generated.MapQuestLayer;
 import org.glob3.mobile.generated.Mark;
 import org.glob3.mobile.generated.MarksRenderer;
 import org.glob3.mobile.generated.MeshRenderer;
+=======
+import org.glob3.mobile.generated.BingMapType;
+import org.glob3.mobile.generated.BingMapsLayer;
+import org.glob3.mobile.generated.Color;
+import org.glob3.mobile.generated.GEO2DLineRasterStyle;
+import org.glob3.mobile.generated.GEO2DLineStringGeometry;
+import org.glob3.mobile.generated.GEO2DMultiLineStringGeometry;
+import org.glob3.mobile.generated.GEO2DMultiPolygonGeometry;
+import org.glob3.mobile.generated.GEO2DPointGeometry;
+import org.glob3.mobile.generated.GEO2DPolygonData;
+import org.glob3.mobile.generated.GEO2DPolygonGeometry;
+import org.glob3.mobile.generated.GEO2DSurfaceRasterStyle;
+import org.glob3.mobile.generated.GEOGeometry;
+import org.glob3.mobile.generated.GEOPolygonRasterSymbol;
+import org.glob3.mobile.generated.GEORasterSymbol;
+import org.glob3.mobile.generated.GEORasterSymbolizer;
+import org.glob3.mobile.generated.Geodetic2D;
+import org.glob3.mobile.generated.Geodetic3D;
+import org.glob3.mobile.generated.JSONObject;
+import org.glob3.mobile.generated.LayerSet;
+import org.glob3.mobile.generated.LevelTileCondition;
+import org.glob3.mobile.generated.Mark;
+import org.glob3.mobile.generated.MarksRenderer;
+>>>>>>> origin/purgatory
 import org.glob3.mobile.generated.Planet;
 import org.glob3.mobile.generated.Sector;
 import org.glob3.mobile.generated.Shape;
@@ -35,11 +60,14 @@ import org.glob3.mobile.generated.ShapesRenderer;
 import org.glob3.mobile.generated.SingleBilElevationDataProvider;
 import org.glob3.mobile.generated.TimeInterval;
 import org.glob3.mobile.generated.URL;
+<<<<<<< HEAD
 import org.glob3.mobile.generated.Vector2I;
 import org.glob3.mobile.generated.Vector3D;
 import org.glob3.mobile.generated.URLTemplateLayer;
 import org.glob3.mobile.generated.WMSLayer;
 import org.glob3.mobile.generated.WMSServerVersion;
+=======
+>>>>>>> origin/purgatory
 import org.glob3.mobile.specific.G3MBuilder_Android;
 import org.glob3.mobile.specific.G3MWidget_Android;
 
@@ -66,6 +94,7 @@ public class MainActivity
 
    @Override
    protected void onCreate(final Bundle savedInstanceState) {
+<<<<<<< HEAD
 	   super.onCreate(savedInstanceState);
 
 	   requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -120,11 +149,63 @@ public class MainActivity
 
 	   _placeHolder = (RelativeLayout) findViewById(R.id.g3mWidgetHolder);
 	   _placeHolder.addView(_g3mWidget);
+=======
+      super.onCreate(savedInstanceState);
+
+      requestWindowFeature(Window.FEATURE_NO_TITLE);
+      getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
+      setContentView(R.layout.activity_main);
+
+
+      // _g3mWidget = createWidget();
+      _g3mWidget = sanjayTesting();
+
+      final RelativeLayout placeHolder = (RelativeLayout) findViewById(R.id.g3mWidgetHolder);
+      placeHolder.addView(_g3mWidget);
+
+
+      final Geodetic3D zurichPos = Geodetic3D.fromDegrees(40, -75, 80000);
+      _g3mWidget.getG3MWidget().setAnimatedCameraPosition(TimeInterval.fromSeconds(5), zurichPos, Angle.zero(),
+               Angle.fromDegrees(-90));
+
+   }
+
+
+   private G3MWidget_Android sanjayTesting() {
+      final G3MBuilder_Android builder = new G3MBuilder_Android(this);
+
+      builder.setPlanet(Planet.createSphericalEarth());
+
+
+      final MarksRenderer _weatherMarkers = new MarksRenderer(false);
+
+      // draw one simple marker
+      final Mark mark = new Mark( //
+               new URL("file:///mark.png"), //
+               new Geodetic3D(Angle.fromDegrees(40.0), Angle.fromDegrees(-75.0), 75000), //
+               AltitudeMode.ABSOLUTE, //
+               5000000, //
+               null, //
+               false, //
+               null, //
+               true);
+
+      _weatherMarkers.addMark(mark);
+
+      builder.addRenderer(_weatherMarkers);
+
+      return builder.createWidget();
+>>>>>>> origin/purgatory
    }
 
 
    private G3MWidget_Android createWidget() {
       final G3MBuilder_Android builder = new G3MBuilder_Android(this);
+
+      final TimeInterval connectTimeout = TimeInterval.fromSeconds(60);
+      final TimeInterval readTimeout = TimeInterval.fromSeconds(65);
+      final boolean saveInBackground = true;
 
       builder.getPlanetRendererBuilder().setLayerSet(createLayerSet());
       // builder.getPlanetRendererBuilder().setRenderDebug(true);
@@ -144,15 +225,52 @@ public class MainActivity
       final LayerSet layerSet = new LayerSet();
       //      layerSet.addLayer(MapQuestLayer.newOSM(TimeInterval.fromDays(30)));
 
-      layerSet.addLayer(new MapBoxLayer("examples.map-9ijuk24y", TimeInterval.fromDays(30)));
+
+      final BingMapsLayer rasterLayer = new BingMapsLayer( //
+               BingMapType.AerialWithLabels(), //
+               "AnU5uta7s5ql_HTrRZcPLI4_zotvNefEeSxIClF1Jf7eS-mLig1jluUdCoecV7jc", //
+               TimeInterval.fromDays(30));
+      layerSet.addLayer(rasterLayer);
 
 
+<<<<<<< HEAD
 
       final String urlTemplate = "http://192.168.1.2/ne_10m_admin_0_countries-Levels10/{level}/{y}/{x}.geojson";
+=======
+      final String urlTemplate = "http://glob3mobile.dyndns.org/vectorial/swiss-buildings/{level}/{x}/{y}.geojson";
+>>>>>>> origin/purgatory
       final int firstLevel = 2;
-      final int maxLevel = 10;
+      final int maxLevel = 17;
 
+      final Geodetic2D lower = new Geodetic2D( //
+               Angle.fromDegrees(45.8176852), //
+               Angle.fromDegrees(5.956216));
+      final Geodetic2D upper = new Geodetic2D( //
+               Angle.fromDegrees(47.803029), //
+               Angle.fromDegrees(10.492264));
+
+      final Sector sector = new Sector(lower, upper);
+
+<<<<<<< HEAD
  
+=======
+      final GEORasterSymbolizer symbolizer = new SampleRasterSymbolizer();
+
+      final TiledVectorLayer tiledVectorLayer = TiledVectorLayer.newMercator( //
+               symbolizer, //
+               urlTemplate, //
+               sector, // sector
+               firstLevel, //
+               maxLevel, //
+               TimeInterval.fromDays(30), // timeToCache
+               true, // readExpired
+               1, // transparency
+               new LevelTileCondition(15, 21), // condition
+               "" // disclaimerInfo
+      );
+      layerSet.addLayer(tiledVectorLayer);
+
+>>>>>>> origin/purgatory
 
       return layerSet;
    }

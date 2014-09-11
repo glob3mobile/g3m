@@ -107,13 +107,13 @@ public:
 
   void onElevationData(ElevationData* elevationData);
 
-  std::vector<const Sector*> getSectors() const{
+  std::vector<const Sector*> getSectors() const {
     std::vector<const Sector*> sectors;
     sectors.push_back(&_sector);
     return sectors;
   }
 
-  const Vector2I getMinResolution() const{
+  const Vector2I getMinResolution() const {
     return Vector2I(_extentWidth, _extentHeight);
   }
 

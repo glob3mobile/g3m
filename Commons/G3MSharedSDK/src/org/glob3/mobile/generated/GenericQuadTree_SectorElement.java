@@ -8,22 +8,24 @@ public class GenericQuadTree_SectorElement extends GenericQuadTree_Element
      super(element);
      _sector = new Sector(sector);
   }
+
   public final boolean isSectorElement()
   {
-     return true;
+    return true;
   }
+
   public final Geodetic2D getCenter()
   {
-     return _sector.getCenter();
+    return _sector.getCenter();
   }
+
   public final Sector getSector()
   {
-     return _sector;
+    return _sector;
   }
 
   public void dispose()
   {
   super.dispose();
-
   }
 }

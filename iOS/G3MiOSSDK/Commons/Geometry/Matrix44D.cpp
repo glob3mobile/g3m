@@ -120,7 +120,7 @@ Matrix44D* Matrix44D::createMultiplication(const Matrix44D &that) const {
                        m03, m13, m23, m33);
 }
 
-bool Matrix44D::isEquals(const Matrix44D& m) const{
+bool Matrix44D::isEquals(const Matrix44D& m) const {
   return (
           (_m00 == m._m00) && (_m01 == m._m01) && (_m02 == m._m02) && (_m03 == m._m03) &&
           (_m10 == m._m10) && (_m11 == m._m11) && (_m12 == m._m12) && (_m13 == m._m13) &&

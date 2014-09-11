@@ -29,11 +29,12 @@ class ChangedInfoListener;
 #include "ITileVisitor.hpp"
 #include "SurfaceElevationProvider.hpp"
 #include "ChangedListener.hpp"
+#include "TouchEvent.hpp"
 
 
 
 class EllipsoidShape;
-class TileRasterizer;
+//class TileRasterizer;
 
 
 class TilesStatistics {
@@ -212,7 +213,7 @@ private:
   ElevationDataProvider*       _elevationDataProvider;
   bool                         _ownsElevationDataProvider;
   TileTexturizer*              _texturizer;
-  TileRasterizer*              _tileRasterizer;
+//  TileRasterizer*              _tileRasterizer;
   LayerSet*                    _layerSet;
   const TilesRenderParameters* _tilesRenderParameters;
   const bool                   _showStatistics;
@@ -293,6 +294,12 @@ private:
   long long _renderedTilesListFrame;
   std::list<Tile*> _renderedTiles;
   std::list<Tile*>* getRenderedTilesList(const G3MRenderContext* rc);
+  
+  TouchEventType _touchEventTypeOfTerrainTouchListener;
+
+
+  std::vector<Tile*> _toVisit;
+  std::vector<Tile*> _toVisitInNextIteration;
 
 public:
   PlanetRenderer(TileTessellator*             tessellator,
@@ -300,7 +307,7 @@ public:
                  bool                         ownsElevationDataProvider,
                  float                        verticalExaggeration,
                  TileTexturizer*              texturizer,
-                 TileRasterizer*              tileRasterizer,
+//                 TileRasterizer*              tileRasterizer,
                  LayerSet*                    layerSet,
                  const TilesRenderParameters* tilesRenderParameters,
                  bool                         showStatistics,
@@ -309,7 +316,8 @@ public:
                  const bool                   renderTileMeshes,
                  const bool                   logTilesPetitions,
                  TileRenderingListener*       tileRenderingListener,
-                 ChangedRendererInfoListener* changedInfoListener);
+                 ChangedRendererInfoListener* changedInfoListener,
+                 TouchEventType _touchEventTypeOfTerrainTouchListener);
 
   ~PlanetRenderer();
 
@@ -432,7 +440,7 @@ public:
 
   void sectorElevationChanged(ElevationData* elevationData) const;
 
-  const Sector* getRenderedSector() const{
+  const Sector* getRenderedSector() const {
     return _renderedSector;
   }
 
@@ -446,7 +454,7 @@ public:
                                 bool owned);
   void setVerticalExaggeration(float verticalExaggeration);
 
-  ElevationDataProvider* getElevationDataProvider() const{
+  ElevationDataProvider* getElevationDataProvider() const {
     return _elevationDataProvider;
   }
 

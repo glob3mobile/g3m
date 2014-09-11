@@ -51,7 +51,7 @@ public:
       delete _mesh;
   }
 
-  Vector3D getCenter() const{
+  Vector3D getCenter() const {
     return _center;
   }
 

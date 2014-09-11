@@ -35,12 +35,22 @@ public class ShapeFullPositionEffect extends EffectWithDuration
   private final Angle _fromRoll ;
   private final Angle _toRoll ;
 
+  private final boolean _forceToPositionOnCancel;
+  private final boolean _forceToPositionOnStop;
 
-  public ShapeFullPositionEffect(TimeInterval duration, Shape shape, Geodetic3D fromPosition, Geodetic3D toPosition, Angle fromPitch, Angle toPitch, Angle fromHeading, Angle toHeading, Angle fromRoll, Angle toRoll)
+  public ShapeFullPositionEffect(TimeInterval duration, Shape shape, Geodetic3D fromPosition, Geodetic3D toPosition, Angle fromPitch, Angle toPitch, Angle fromHeading, Angle toHeading, Angle fromRoll, Angle toRoll, boolean linearTiming, boolean forceToPositionOnCancel)
   {
-     this(duration, shape, fromPosition, toPosition, fromPitch, toPitch, fromHeading, toHeading, fromRoll, toRoll, false);
+     this(duration, shape, fromPosition, toPosition, fromPitch, toPitch, fromHeading, toHeading, fromRoll, toRoll, linearTiming, forceToPositionOnCancel, true);
   }
   public ShapeFullPositionEffect(TimeInterval duration, Shape shape, Geodetic3D fromPosition, Geodetic3D toPosition, Angle fromPitch, Angle toPitch, Angle fromHeading, Angle toHeading, Angle fromRoll, Angle toRoll, boolean linearTiming)
+  {
+     this(duration, shape, fromPosition, toPosition, fromPitch, toPitch, fromHeading, toHeading, fromRoll, toRoll, linearTiming, true, true);
+  }
+  public ShapeFullPositionEffect(TimeInterval duration, Shape shape, Geodetic3D fromPosition, Geodetic3D toPosition, Angle fromPitch, Angle toPitch, Angle fromHeading, Angle toHeading, Angle fromRoll, Angle toRoll)
+  {
+     this(duration, shape, fromPosition, toPosition, fromPitch, toPitch, fromHeading, toHeading, fromRoll, toRoll, false, true, true);
+  }
+  public ShapeFullPositionEffect(TimeInterval duration, Shape shape, Geodetic3D fromPosition, Geodetic3D toPosition, Angle fromPitch, Angle toPitch, Angle fromHeading, Angle toHeading, Angle fromRoll, Angle toRoll, boolean linearTiming, boolean forceToPositionOnCancel, boolean forceToPositionOnStop)
   {
      super(duration, linearTiming);
      _shape = shape;
@@ -52,7 +62,8 @@ public class ShapeFullPositionEffect extends EffectWithDuration
      _toHeading = new Angle(toHeading);
      _fromRoll = new Angle(fromRoll);
      _toRoll = new Angle(toRoll);
-
+     _forceToPositionOnCancel = forceToPositionOnCancel;
+     _forceToPositionOnStop = forceToPositionOnStop;
   }
 
   public final void doStep(G3MRenderContext rc, TimeInterval when)
@@ -60,7 +71,7 @@ public class ShapeFullPositionEffect extends EffectWithDuration
     final double alpha = getAlpha(when);
   
     final Geodetic3D pos = Geodetic3D.linearInterpolation(_fromPosition, _toPosition, alpha);
-    _shape.setPosition(new Geodetic3D(pos));
+    _shape.setPosition(pos);
   
     if (!_fromPitch.isNan() && !_toPitch.isNan())
     {
@@ -80,38 +91,44 @@ public class ShapeFullPositionEffect extends EffectWithDuration
 
   public final void cancel(TimeInterval when)
   {
-    _shape.setPosition(new Geodetic3D(_toPosition));
-    if (!_toPitch.isNan())
+    if (_forceToPositionOnCancel)
     {
-      _shape.setPitch(_toPitch);
-    }
+      _shape.setPosition(_toPosition);
+      if (!_toPitch.isNan())
+      {
+        _shape.setPitch(_toPitch);
+      }
   
-    if (!_toHeading.isNan())
-    {
-      _shape.setHeading(_toHeading);
-    }
+      if (!_toHeading.isNan())
+      {
+        _shape.setHeading(_toHeading);
+      }
   
-    if (!_toRoll.isNan())
-    {
-      _shape.setRoll(_toRoll);
+      if (!_toRoll.isNan())
+      {
+        _shape.setRoll(_toRoll);
+      }
     }
   }
   public final void stop(G3MRenderContext rc, TimeInterval when)
   {
-    _shape.setPosition(new Geodetic3D(_toPosition));
-    if (!_toPitch.isNan())
+    if (_forceToPositionOnStop)
     {
-      _shape.setPitch(_toPitch);
-    }
+      _shape.setPosition(_toPosition);
+      if (!_toPitch.isNan())
+      {
+        _shape.setPitch(_toPitch);
+      }
   
-    if (!_toHeading.isNan())
-    {
-      _shape.setHeading(_toHeading);
-    }
+      if (!_toHeading.isNan())
+      {
+        _shape.setHeading(_toHeading);
+      }
   
-    if (!_toRoll.isNan())
-    {
-      _shape.setRoll(_toRoll);
+      if (!_toRoll.isNan())
+      {
+        _shape.setRoll(_toRoll);
+      }
     }
   }
 

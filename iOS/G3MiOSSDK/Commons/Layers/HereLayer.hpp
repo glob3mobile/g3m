@@ -21,7 +21,7 @@ private:
   const int         _initialLevel;
 
 protected:
-  std::string getLayerType() const{
+  std::string getLayerType() const {
     return "Here";
   }
 

@@ -101,39 +101,39 @@ public class G3MWidget_WebGL
 
 
    private native void exportJSFunctions() /*-{
-		var that = this;
-		if (!$wnd.G3M) {
-			$wnd.G3M = {};
-		}
+                                           var that = this;
+                                           if (!$wnd.G3M) {
+                                           $wnd.G3M = {};
+                                           }
 
-		//	$wnd.Geodetic3D = $entry(@org.glob3.mobile.generated.Geodetic3D::new(Lorg/glob3/mobile/generated/Angle;Lorg/glob3/mobile/generated/Angle;D));
-		//	$wnd.setAnimatedCameraPosition = $entry(function (widget, position) {
-		//		widget.@org.glob3.mobile.specific.G3MWidget_WebGL::setAnimatedCameraPosition(Lorg/glob3/mobile/generated/Geodetic3D;)(position);
-		//	});
-		//	$wnd.angleFromDegrees = $entry(function (degrees) {
-		//		return @org.glob3.mobile.generated.Angle::fromDegrees(D)(degrees);
-		//	});
+                                           //	$wnd.Geodetic3D = $entry(@org.glob3.mobile.generated.Geodetic3D::new(Lorg/glob3/mobile/generated/Angle;Lorg/glob3/mobile/generated/Angle;D));
+                                           //	$wnd.setAnimatedCameraPosition = $entry(function (widget, position) {
+                                           //		widget.@org.glob3.mobile.specific.G3MWidget_WebGL::setAnimatedCameraPosition(Lorg/glob3/mobile/generated/Geodetic3D;)(position);
+                                           //	});
+                                           //	$wnd.angleFromDegrees = $entry(function (degrees) {
+                                           //		return @org.glob3.mobile.generated.Angle::fromDegrees(D)(degrees);
+                                           //	});
 
-		$wnd.G3M.takeScreenshotAsImage = $entry(function() {
-			return that.@org.glob3.mobile.specific.G3MWidget_WebGL::takeScreenshotAsImage()();
-		});
-		$wnd.G3M.takeScreenshotAsBase64 = $entry(function() {
-			return that.@org.glob3.mobile.specific.G3MWidget_WebGL::takeScreenshotAsBase64()();
-		});
-		$wnd.G3M.getCameraData = $entry(function() {
-			return that.@org.glob3.mobile.specific.G3MWidget_WebGL::getCameraData()();
-		});
-		// temp Java function with parameters and return value to test JS function calls
-		$wnd.G3M.newGeodetic3D = $entry(function(latitude, longitude, height) {
-			return that.@org.glob3.mobile.specific.G3MWidget_WebGL::newGeodetic3D(DDD)(latitude, longitude, height);
-		});
-		$wnd.G3M.moveCameraTo = $entry(function(position) {
-			//return that.@org.glob3.mobile.specific.G3MWidget_WebGL::moveToSpain()();
-			//return that.@org.glob3.mobile.specific.G3MWidget_WebGL::moveToSpain(D)(height);
-			//return that.@org.glob3.mobile.specific.G3MWidget_WebGL::moveCameraTo(DDD)(latitude, longitude, height);
-			that.@org.glob3.mobile.specific.G3MWidget_WebGL::moveCameraTo(Lorg/glob3/mobile/generated/Geodetic3D;)(position);
-		});
-   }-*/;
+                                           $wnd.G3M.takeScreenshotAsImage = $entry(function() {
+                                           return that.@org.glob3.mobile.specific.G3MWidget_WebGL::takeScreenshotAsImage()();
+                                           });
+                                           $wnd.G3M.takeScreenshotAsBase64 = $entry(function() {
+                                           return that.@org.glob3.mobile.specific.G3MWidget_WebGL::takeScreenshotAsBase64()();
+                                           });
+                                           $wnd.G3M.getCameraData = $entry(function() {
+                                           return that.@org.glob3.mobile.specific.G3MWidget_WebGL::getCameraData()();
+                                           });
+                                           // temp Java function with parameters and return value to test JS function calls
+                                           $wnd.G3M.newGeodetic3D = $entry(function(latitude, longitude, height) {
+                                           return that.@org.glob3.mobile.specific.G3MWidget_WebGL::newGeodetic3D(DDD)(latitude, longitude, height);
+                                           });
+                                           $wnd.G3M.moveCameraTo = $entry(function(position) {
+                                           //return that.@org.glob3.mobile.specific.G3MWidget_WebGL::moveToSpain()();
+                                           //return that.@org.glob3.mobile.specific.G3MWidget_WebGL::moveToSpain(D)(height);
+                                           //return that.@org.glob3.mobile.specific.G3MWidget_WebGL::moveCameraTo(DDD)(latitude, longitude, height);
+                                           that.@org.glob3.mobile.specific.G3MWidget_WebGL::moveCameraTo(Lorg/glob3/mobile/generated/Geodetic3D;)(position);
+                                           });
+                                           }-*/;
 
 
    public void moveCameraTo(final Geodetic3D position) {
@@ -149,46 +149,46 @@ public class G3MWidget_WebGL
 
 
    public final native JavaScriptObject getCameraData() /*-{
-		var widget = this.@org.glob3.mobile.specific.G3MWidget_WebGL::_g3mWidget;
-		var camera = widget.@org.glob3.mobile.generated.G3MWidget::getCurrentCamera()();
+                                                        var widget = this.@org.glob3.mobile.specific.G3MWidget_WebGL::_g3mWidget;
+                                                        var camera = widget.@org.glob3.mobile.generated.G3MWidget::getCurrentCamera()();
 
-		var position = camera.@org.glob3.mobile.generated.Camera::getGeodeticPosition()();
-		var latitude = position.@org.glob3.mobile.generated.Geodetic3D::_latitude;
-		var longitude = position.@org.glob3.mobile.generated.Geodetic3D::_longitude;
-		var height = position.@org.glob3.mobile.generated.Geodetic3D::_height;
+                                                        var position = camera.@org.glob3.mobile.generated.Camera::getGeodeticPosition()();
+                                                        var latitude = position.@org.glob3.mobile.generated.Geodetic3D::_latitude;
+                                                        var longitude = position.@org.glob3.mobile.generated.Geodetic3D::_longitude;
+                                                        var height = position.@org.glob3.mobile.generated.Geodetic3D::_height;
 
-		var heading = camera.@org.glob3.mobile.generated.Camera::getHeading()();
-		var pitch = camera.@org.glob3.mobile.generated.Camera::getPitch()();
+                                                        var heading = camera.@org.glob3.mobile.generated.Camera::getHeading()();
+                                                        var pitch = camera.@org.glob3.mobile.generated.Camera::getPitch()();
 
-		var result = new Object();
-		result.latitude = latitude.@org.glob3.mobile.generated.Angle::_degrees;
-		result.longitude = longitude.@org.glob3.mobile.generated.Angle::_degrees;
-		result.height = height;
+                                                        var result = new Object();
+                                                        result.latitude = latitude.@org.glob3.mobile.generated.Angle::_degrees;
+                                                        result.longitude = longitude.@org.glob3.mobile.generated.Angle::_degrees;
+                                                        result.height = height;
 
-		result.heading = heading.@org.glob3.mobile.generated.Angle::_degrees;
-		result.pitch = pitch.@org.glob3.mobile.generated.Angle::_degrees;
+                                                        result.heading = heading.@org.glob3.mobile.generated.Angle::_degrees;
+                                                        result.pitch = pitch.@org.glob3.mobile.generated.Angle::_degrees;
 
-		return result;
-   }-*/;
+                                                        return result;
+                                                        }-*/;
 
 
    public native String takeScreenshotAsBase64() /*-{
-		var javaCanvas = this.@org.glob3.mobile.specific.G3MWidget_WebGL::_canvas;
-		var canvas = javaCanvas.@com.google.gwt.canvas.client.Canvas::getCanvasElement()();
-		var dataURL = canvas.toDataURL("image/jpeg");
-		return dataURL.replace(/^data:image\/(png|jpg|jpeg);base64,/, "");
-   }-*/;
+                                                 var javaCanvas = this.@org.glob3.mobile.specific.G3MWidget_WebGL::_canvas;
+                                                 var canvas = javaCanvas.@com.google.gwt.canvas.client.Canvas::getCanvasElement()();
+                                                 var dataURL = canvas.toDataURL("image/jpeg");
+                                                 return dataURL.replace(/^data:image\/(png|jpg|jpeg);base64,/, "");
+                                                 }-*/;
 
 
    public native JavaScriptObject takeScreenshotAsImage() /*-{
-		var javaCanvas = this.@org.glob3.mobile.specific.G3MWidget_WebGL::_canvas;
-		var canvas = javaCanvas.@com.google.gwt.canvas.client.Canvas::getCanvasElement()();
-		var image = new Image();
-		image.width = canvas.width;
-		image.height = canvas.height;
-		image.src = canvas.toDataURL("image/jpeg");
-		return image;
-   }-*/;
+                                                          var javaCanvas = this.@org.glob3.mobile.specific.G3MWidget_WebGL::_canvas;
+                                                          var canvas = javaCanvas.@com.google.gwt.canvas.client.Canvas::getCanvasElement()();
+                                                          var image = new Image();
+                                                          image.width = canvas.width;
+                                                          image.height = canvas.height;
+                                                          image.src = canvas.toDataURL("image/jpeg");
+                                                          return image;
+                                                          }-*/;
 
 
    private VerticalPanel createUnsupportedMessage(final String message) {
@@ -231,17 +231,17 @@ public class G3MWidget_WebGL
 
 
    private native void jsAddResizeHandler(JavaScriptObject jsCanvas) /*-{
-		//		debugger;
-		var that = this;
-		$wnd.g3mWidgetResize = function() {
-			if ((jsCanvas.clientWidth != jsCanvas.parentNode.clientWidth)
-					|| (jsCanvas.clientHeight != jsCanvas.parentNode.clientHeight)) {
-				that.@org.glob3.mobile.specific.G3MWidget_WebGL::onSizeChanged(II)(jsCanvas.parentNode.clientWidth, jsCanvas.parentNode.clientHeight);
-			}
-		};
+                                                                     //		debugger;
+                                                                     var that = this;
+                                                                     $wnd.g3mWidgetResize = function() {
+                                                                     if ((jsCanvas.clientWidth != jsCanvas.parentNode.clientWidth)
+                                                                     || (jsCanvas.clientHeight != jsCanvas.parentNode.clientHeight)) {
+                                                                     that.@org.glob3.mobile.specific.G3MWidget_WebGL::onSizeChanged(II)(jsCanvas.parentNode.clientWidth, jsCanvas.parentNode.clientHeight);
+                                                                     }
+                                                                     };
 
-		$wnd.g3mWidgetResizeChecker = setInterval($wnd.g3mWidgetResize, 200);
-   }-*/;
+                                                                     $wnd.g3mWidgetResizeChecker = setInterval($wnd.g3mWidgetResize, 200);
+                                                                     }-*/;
 
 
    protected void onSizeChanged(final int w,
@@ -264,91 +264,91 @@ public class G3MWidget_WebGL
 
    private native void jsOnResizeViewport(final int width,
                                           final int height) /*-{
-		var webGLContext = this.@org.glob3.mobile.specific.G3MWidget_WebGL::_webGLContext;
+                                                            var webGLContext = this.@org.glob3.mobile.specific.G3MWidget_WebGL::_webGLContext;
 
-		webGLContext.viewport(0, 0, width, height);
-		webGLContext.clear(webGLContext.COLOR_BUFFER_BIT
-				| webGLContext.DEPTH_BUFFER_BIT);
-   }-*/;
+                                                            webGLContext.viewport(0, 0, width, height);
+                                                            webGLContext.clear(webGLContext.COLOR_BUFFER_BIT
+                                                            | webGLContext.DEPTH_BUFFER_BIT);
+                                                            }-*/;
 
 
    private native void jsDefineG3MBrowserObjects() /*-{
-		//		debugger;
-		var that = this;
+                                                   //		debugger;
+                                                   var that = this;
 
-		// URL Object
-		$wnd.g3mURL = $wnd.URL || $wnd.webkitURL;
+                                                   // URL Object
+                                                   $wnd.g3mURL = $wnd.URL || $wnd.webkitURL;
 
-		// IndexedDB
-		//		$wnd.g3mIDB = $wnd.indexedDB || $wnd.webkitIndexedDB
-		//				|| $wnd.mozIndexedDB || $wnd.OIndexedDB || $wnd.msIndexedDB;
-		//		$wnd.g3mIDBTransaction = $wnd.IDBTransaction
-		//				|| $wnd.webkitIDBTransaction || $wnd.OIDBTransaction
-		//				|| $wnd.msIDBTransaction;
-		//		$wnd.g3mDBVersion = 1;
+                                                   // IndexedDB
+                                                   //		$wnd.g3mIDB = $wnd.indexedDB || $wnd.webkitIndexedDB
+                                                   //				|| $wnd.mozIndexedDB || $wnd.OIndexedDB || $wnd.msIndexedDB;
+                                                   //		$wnd.g3mIDBTransaction = $wnd.IDBTransaction
+                                                   //				|| $wnd.webkitIDBTransaction || $wnd.OIDBTransaction
+                                                   //				|| $wnd.msIDBTransaction;
+                                                   //		$wnd.g3mDBVersion = 1;
 
-		// Animation
-		// Provides requestAnimationFrame in a cross browser way.
-		$wnd.requestAnimFrame = (function() {
-			return $wnd.requestAnimationFrame
-					|| $wnd.webkitRequestAnimationFrame
-					|| $wnd.mozRequestAnimationFrame
-					|| $wnd.oRequestAnimationFrame
-					|| $wnd.msRequestAnimationFrame
-					|| function(callback, element) {
-						return $wnd.setTimeout(callback, 1000 / 60);
-					};
-		})();
+                                                   // Animation
+                                                   // Provides requestAnimationFrame in a cross browser way.
+                                                   $wnd.requestAnimFrame = (function() {
+                                                   return $wnd.requestAnimationFrame
+                                                   || $wnd.webkitRequestAnimationFrame
+                                                   || $wnd.mozRequestAnimationFrame
+                                                   || $wnd.oRequestAnimationFrame
+                                                   || $wnd.msRequestAnimationFrame
+                                                   || function(callback, element) {
+                                                   return $wnd.setTimeout(callback, 1000 / 60);
+                                                   };
+                                                   })();
 
-		// Provides cancelAnimationFrame in a cross browser way.
-		$wnd.cancelAnimFrame = (function() {
-			return $wnd.cancelAnimationFrame || $wnd.webkitCancelAnimationFrame
-					|| $wnd.mozCancelAnimationFrame
-					|| $wnd.oCancelAnimationFrame
-					|| $wnd.msCancelAnimationFrame || $wnd.clearTimeout;
-		})();
+                                                   // Provides cancelAnimationFrame in a cross browser way.
+                                                   $wnd.cancelAnimFrame = (function() {
+                                                   return $wnd.cancelAnimationFrame || $wnd.webkitCancelAnimationFrame
+                                                   || $wnd.mozCancelAnimationFrame
+                                                   || $wnd.oCancelAnimationFrame
+                                                   || $wnd.msCancelAnimationFrame || $wnd.clearTimeout;
+                                                   })();
 
-		$wnd.g3mTick = function() {
-			$wnd.requestAnimFrame($wnd.g3mTick);
-			that.@org.glob3.mobile.specific.G3MWidget_WebGL::renderG3MWidget()();
-		};
-   }-*/;
+                                                   $wnd.g3mTick = function() {
+                                                   $wnd.requestAnimFrame($wnd.g3mTick);
+                                                   that.@org.glob3.mobile.specific.G3MWidget_WebGL::renderG3MWidget()();
+                                                   };
+                                                   }-*/;
 
 
    private native JavaScriptObject jsGetWebGLContext(JavaScriptObject jsCanvas) /*-{
-		var context = null;
-		var contextNames = [ "experimental-webgl", "webgl", "webkit-3d",
-				"moz-webgl" ];
+                                                                                var context = null;
+                                                                                var contextNames = [ "experimental-webgl", "webgl", "webkit-3d",
+                                                                                "moz-webgl" ];
 
-		if (jsCanvas != null) {
-			for ( var cn in contextNames) {
-				try {
-					context = jsCanvas.getContext(contextNames[cn], {
-						preserveDrawingBuffer : true
-					});
-					//STORING SIZE FOR GLVIEWPORT
-					context.viewportWidth = jsCanvas.width;
-					context.viewportHeight = jsCanvas.height;
-				} catch (e) {
-				}
-				if (context) {
-					jsCanvas.addEventListener("webglcontextlost", function(
-							event) {
-						event.preventDefault();
-						$wnd.alert("webglcontextlost");
-					}, false);
-					break;
-				}
-			}
-			if (context == null) {
-				alert("No WebGL context available");
-			}
-		} else {
-			alert("No canvas available");
-		}
+                                                                                if (jsCanvas != null) {
+                                                                                for ( var cn in contextNames) {
+                                                                                try {
+                                                                                context = jsCanvas.getContext(contextNames[cn], {
+                                                                                preserveDrawingBuffer : true
+                                                                                });
+                                                                                //STORING SIZE FOR GLVIEWPORT
+                                                                                context.viewportWidth = jsCanvas.width;
+                                                                                context.viewportHeight = jsCanvas.height;
+                                                                                } catch (e) {
+                                                                                }
+                                                                                if (context) {
+                                                                                jsCanvas.addEventListener("webglcontextlost", function(
+                                                                                event) {
+                                                                                event.preventDefault();
+                                                                                $wnd.alert("webglcontextlost");
+                                                                                }, false);
+                                                                                break;
+                                                                                }
+                                                                                }
+                                                                                if (context == null) {
+                                                                                alert("No WebGL context available");
+                                                                                }
+                                                                                } else {
+                                                                                alert("No canvas available");
+                                                                                }
 
-		return context;
-   }-*/;
+                                                                                return context;
+                                                                                }-*/;
 
 
    private GPUProgramManager createGPUProgramManager() {
@@ -399,6 +399,7 @@ public class G3MWidget_WebGL
                           final SceneLighting sceneLighting,
                           final InitialCameraPositionProvider initialCameraPositionProvider,
                           final InfoDisplay infoDisplay) {
+
 
       _g3mWidget = G3MWidget.create(//
                _gl, //
@@ -453,10 +454,10 @@ public class G3MWidget_WebGL
 
 
    private native void jsStartRenderLoop() /*-{
-		//		debugger;
+                                           //		debugger;
 
-		$wnd.g3mTick();
-   }-*/;
+                                           $wnd.g3mTick();
+                                           }-*/;
 
 
    private void renderG3MWidget() {

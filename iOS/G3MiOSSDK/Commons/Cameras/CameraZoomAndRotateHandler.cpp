@@ -82,8 +82,10 @@ void CameraZoomAndRotateHandler::onMove(const G3MEventContext *eventContext,
       //Vector3D intersection = planet->closestIntersection(_camera0.getCartesianPosition(), _camera0.getViewDirection());
       Vector3D intersection = eventContext->getWidget()->getScenePositionForCentralPixel();
       if (!intersection.isNan()) {
-        _centralGlobePoint = intersection.asMutableVector3D();
-        _centralGlobeNormal = planet->geodeticSurfaceNormal(_centralGlobePoint).asMutableVector3D();
+//        _centralGlobePoint = intersection.asMutableVector3D();
+        _centralGlobePoint.copyFrom(intersection);
+//        _centralGlobeNormal = planet->geodeticSurfaceNormal(_centralGlobePoint).asMutableVector3D();
+        _centralGlobeNormal.copyFrom(planet->geodeticSurfaceNormal(_centralGlobePoint));
         _fingerSep0 = sqrt((difCurrentPixels._x*difCurrentPixels._x+difCurrentPixels._y*difCurrentPixels._y));
         _lastAngle = _angle0 = atan2(difCurrentPixels._y, difCurrentPixels._x);
         cameraContext->setCurrentGesture(Zoom);

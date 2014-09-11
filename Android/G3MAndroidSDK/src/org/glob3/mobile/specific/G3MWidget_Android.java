@@ -302,7 +302,6 @@ public final class G3MWidget_Android
                           final WidgetUserData userData,
                           final InfoDisplay infoDisplay) {
 
-
       _g3mWidget = G3MWidget.create(//
                getGL(), //
                storage, //

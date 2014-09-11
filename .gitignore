@@ -35,6 +35,12 @@ WebGL/G3MWebGLDemo/war/org.glob3.mobile.G3MWebGLDemo/
 WebGL/G3MWebGLDemo/war/WEB-INF/classes/
 WebGL/G3MWebGLDemo/war/WEB-INF/deploy/
 
+WebGL/HelloWorld/.gwt
+WebGL/HelloWorld/gwt-unitCache/
+WebGL/HelloWorld/war/com.g3m.hello.world.HelloWorld/
+WebGL/HelloWorld/war/WEB-INF/classes/
+WebGL/HelloWorld/war/WEB-INF/deploy/
+
 Android/G3MAndroidSDK/bin/
 Android/G3MAndroidSDK/gen/
 Android/G3MAndroidSDK/build.xml
@@ -65,6 +71,5 @@ WebGL/G3MWebGLTestingApplication/gwt-unitCache/
 WebGL/G3MWebGLTestingApplication/war/org.glob3.mobile.G3MWebGLTestingApplication/
 WebGL/G3MWebGLTestingApplication/war/WEB-INF/classes/
 WebGL/G3MWebGLTestingApplication/war/WEB-INF/deploy/
-
 
 *.xccheckout

@@ -253,10 +253,30 @@ RenderState MercatorTiledLayer::getRenderState() {
 }
 
 const TileImageContribution* MercatorTiledLayer::rawContribution(const Tile* tile) const {
-//  return ((_transparency < 1)
-//          ? TileImageContribution::fullCoverageTransparent(_transparency)
-//          : TileImageContribution::fullCoverageOpaque());
-  return ((_isTransparent || (_transparency < 1))
-          ? TileImageContribution::fullCoverageTransparent(_transparency)
-          : TileImageContribution::fullCoverageOpaque());
+  const Tile* tileP = getParentTileOfSuitableLevel(tile);
+  if (tileP == NULL) {
+    return NULL;
+  }
+
+  const Sector requestedImageSector = tileP->_sector;
+
+  if (!_dataSector.touchesWith(requestedImageSector)) {
+    return NULL;
+  }
+  else if (_dataSector.fullContains(requestedImageSector) && (tile == tileP)) {
+    //Most common case tile of suitable level being fully coveraged by layer
+    return ((_isTransparent || (_transparency < 1))
+            ? TileImageContribution::fullCoverageTransparent(_transparency)
+            : TileImageContribution::fullCoverageOpaque());
+  }
+  else {
+    const Sector contributionSector = _dataSector.intersection(requestedImageSector);
+    if (contributionSector.hasNoArea()){
+      return NULL;
+    }
+
+    return ((_isTransparent || (_transparency < 1))
+            ? TileImageContribution::partialCoverageTransparent(contributionSector, _transparency)
+            : TileImageContribution::partialCoverageOpaque(contributionSector));
+  }
 }

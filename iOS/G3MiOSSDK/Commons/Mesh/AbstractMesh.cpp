@@ -187,7 +187,7 @@ void AbstractMesh::createGLState() {
 }
 
 void AbstractMesh::rawRender(const G3MRenderContext* rc,
-                             const GLState* parentGLState) const{
+                             const GLState* parentGLState) const {
   _glState->setParent(parentGLState);
   rawRender(rc, _glState, REGULAR_RENDER);
 
@@ -200,7 +200,8 @@ void AbstractMesh::rawRender(const G3MRenderContext* rc,
       if (_normalsMesh != NULL) {
         //_normalsMesh->render(rc, parentGLState);
       }
-    } else{
+    }
+    else {
       if (_normalsMesh != NULL) {
         delete _normalsMesh;
         _normalsMesh = NULL;
@@ -236,7 +237,7 @@ void AbstractMesh::zRawRender(const G3MRenderContext* rc, const GLState* parentG
 }
 
 
-Mesh* AbstractMesh::createNormalsMesh() const{
+Mesh* AbstractMesh::createNormalsMesh() const {
 
   DirectMesh* verticesMesh = new DirectMesh(GLPrimitive::points(),
                                             false,

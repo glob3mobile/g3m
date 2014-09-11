@@ -97,7 +97,7 @@ public final class SQLiteStorage_Android
 
 
    public SQLiteStorage_Android(final String path,
-                         final android.content.Context context) {
+                                final android.content.Context context) {
       _databaseName = path;
       _androidContext = context;
 
@@ -118,7 +118,7 @@ public final class SQLiteStorage_Android
       final String table = "buffer2";
 
       final byte[] contents = ((ByteBuffer_Android) buffer).getBuffer();
-      final String name = url.getPath();
+      final String name = url._path;
 
       if (saveInBackground) {
          _context.getThreadUtils().invokeInBackground( //
@@ -163,7 +163,7 @@ public final class SQLiteStorage_Android
                                        final boolean readExpired) {
       ByteBuffer_Android buffer = null;
       boolean expired = false;
-      final String name = url.getPath();
+      final String name = url._path;
 
       final Cursor cursor = _readDB.query( // 
                "buffer2", //
@@ -210,7 +210,7 @@ public final class SQLiteStorage_Android
       }
 
       final String table = "image2";
-      final String name = url.getPath();
+      final String name = url._path;
 
       final byte[] contentsF = contents;
       if (saveInBackground) {
@@ -234,7 +234,7 @@ public final class SQLiteStorage_Android
                                  final boolean readExpired) {
       IImage image = null;
       boolean expired = false;
-      final String name = url.getPath();
+      final String name = url._path;
 
       final Cursor cursor = _readDB.query( //
                "image2", //

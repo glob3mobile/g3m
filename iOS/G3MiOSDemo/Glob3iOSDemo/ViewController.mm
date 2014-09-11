@@ -145,6 +145,8 @@
 #import <G3MiOSSDK/GEO2DPolygonData.hpp>
 
 #import <G3MiOSSDK/DirectMesh.hpp>
+#import <G3MiOSSDK/ChessboardLayer.hpp>
+#import <G3MiOSSDK/GEORectangleRasterSymbol.hpp>
 
 //class TestVisibleSectorListener : public VisibleSectorListener {
 //public:
@@ -500,6 +502,9 @@ public:
 
 class TestMeshLoadListener : public MeshLoadListener {
 public:
+  void onError(const URL& url) {
+  }
+  
   void onBeforeAddMesh(Mesh* mesh) {
   }
 
@@ -528,48 +533,48 @@ public:
 
 //  builder.getPlanetRendererBuilder()->setTileRenderingListener(new SampleTileRenderingListener());
 
-  GEOTileRasterizer* geoTileRasterizer = new GEOTileRasterizer();
+  //GEOTileRasterizer* geoTileRasterizer = new GEOTileRasterizer();
 
   //builder.getPlanetRendererBuilder()->addTileRasterizer(new DebugTileRasterizer());
   //builder.getPlanetRendererBuilder()->addTileRasterizer(geoTileRasterizer);
-  builder.getPlanetRendererBuilder()->addTileRasterizer(geoTileRasterizer);
+//  builder.getPlanetRendererBuilder()->addTileRasterizer(geoTileRasterizer);
   
-  bool showingPNOA = false;
-    
-    if (showingPNOA){
-        Sector sector = Sector::fromDegrees(21, -18, 45, 6);
-        std::vector<Geodetic2D*>* coordinates = new std::vector<Geodetic2D*>();
-        
-        coordinates->push_back( new Geodetic2D( sector.getSW() ) );
-        coordinates->push_back( new Geodetic2D( sector.getNW() ) );
-        coordinates->push_back( new Geodetic2D( sector.getNE() ) );
-        coordinates->push_back( new Geodetic2D( sector.getSE() ) );
-        coordinates->push_back( new Geodetic2D( sector.getSW() ) );
-        
-        //    printf("RESTERIZING: %s\n", _sector->description().c_str());
-        
-        float dashLengths[] = {};
-        int dashCount = 0;
-        
-        Color c = Color::red();
-        
-        GEO2DLineRasterStyle ls(c, //const Color&     color,
-                                (float)1.0, //const float      width,
-                                CAP_ROUND, // const StrokeCap  cap,
-                                JOIN_ROUND, //const StrokeJoin join,
-                                1,//const float      miterLimit,
-                                dashLengths,//float            dashLengths[],
-                                dashCount,//const int        dashCount,
-                                0);//const int        dashPhase) :
-        
-        
-        const GEO2DCoordinatesData* coordinatesData = new GEO2DCoordinatesData(coordinates);
-        GEOLineRasterSymbol * symbol = new GEOLineRasterSymbol(coordinatesData, ls);
-        coordinatesData->_release();
-        
-        geoTileRasterizer->addSymbol(symbol);
-    }
-    
+  
+  bool showingPNOA = true;
+  if (showingPNOA){
+    Sector sector = Sector::fromDegrees(21, -18, 45, 6);
+    std::vector<Geodetic2D*>* coordinates = new std::vector<Geodetic2D*>();
+
+    coordinates->push_back( new Geodetic2D( sector.getSW() ) );
+    coordinates->push_back( new Geodetic2D( sector.getNW() ) );
+    coordinates->push_back( new Geodetic2D( sector.getNE() ) );
+    coordinates->push_back( new Geodetic2D( sector.getSE() ) );
+    coordinates->push_back( new Geodetic2D( sector.getSW() ) );
+
+    //    printf("RESTERIZING: %s\n", _sector->description().c_str());
+
+    float dashLengths[] = {};
+    int dashCount = 0;
+
+    Color c = Color::red();
+
+    GEO2DLineRasterStyle ls(c, //const Color&     color,
+                            (float)1.0, //const float      width,
+                            CAP_ROUND, // const StrokeCap  cap,
+                            JOIN_ROUND, //const StrokeJoin join,
+                            1,//const float      miterLimit,
+                            dashLengths,//float            dashLengths[],
+                            dashCount,//const int        dashCount,
+                            0);//const int        dashPhase) :
+
+
+    const GEO2DCoordinatesData* coordinatesData = new GEO2DCoordinatesData(coordinates);
+    //GEOLineRasterSymbol * symbol = new GEOLineRasterSymbol(coordinatesData, ls);
+    coordinatesData->_release();
+
+    //geoTileRasterizer->addSymbol(symbol);
+  }
+
 //#warning Diego at work!
 //  builder.getPlanetRendererBuilder()->setShowStatistics(true);
 
@@ -580,6 +585,7 @@ public:
   builder.setPlanet(planet);
 
   Color* bgColor = Color::newFromRGBA(0.0f, 0.1f, 0.2f, 1.0f);
+//  Color* bgColor = Color::newFromRGBA(1, 0, 0, 1);
 
   builder.setBackgroundColor(bgColor);
 
@@ -606,12 +612,12 @@ public:
   /*builder.getPlanetRendererBuilder()->addVisibleSectorListener(new TestVisibleSectorListener(),
                                                                TimeInterval::fromSeconds(3));*/
 
-  builder.getPlanetRendererBuilder()->addTileRasterizer(new DebugTileRasterizer(GFont::monospaced(15),
-                                                                                Color::yellow(),
-                                                                                true,  // showIDLabel
-                                                                                false, // showSectorLabels,
-                                                                                true   // showTileBounds
-                                                                                ));
+//  builder.getPlanetRendererBuilder()->addTileRasterizer(new DebugTileRasterizer(GFont::monospaced(15),
+//                                                                                Color::yellow(),
+//                                                                                true,  // showIDLabel
+//                                                                                false, // showSectorLabels,
+//                                                                                true   // showTileBounds
+//                                                                                ));
   builder.getPlanetRendererBuilder()->setIncrementalTileQuality(true);
   
  /* Renderer* busyRenderer = new BusyMeshRenderer(Color::newFromRGBA((float)0, (float)0.1, (float)0.2, (float)1));
@@ -690,31 +696,14 @@ public:
   
   MarksRenderer* marksRenderer = [self createMarksRenderer];
   builder.addRenderer(marksRenderer);
-  GEORenderer* geoRenderer;
+//  GEORenderer* geoRenderer;
 
-  if (false) {
-    geoRenderer = [self createGEORendererMeshRenderer: meshRenderer
-                                                    shapesRenderer: shapesRenderer
-                                                     marksRenderer: marksRenderer
-                                                 geoTileRasterizer: geoTileRasterizer
-                                                            planet: builder.getPlanet()];
-    builder.addRenderer(geoRenderer);
-    GInitializationTask* initializationTask = [self createSampleInitializationTask: shapesRenderer
-                                                                       geoRenderer: geoRenderer
-                                                                      meshRenderer: meshRenderer
-                                                                     marksRenderer: marksRenderer
-                                                                            planet: planet];
-    builder.setInitializationTask(initializationTask, true);
-    
-    //PeriodicalTask* periodicalTask = [self createSamplePeriodicalTask: &builder];
-    //builder.addPeriodicalTask(periodicalTask);
-    
-    const bool logFPS = false;
-    builder.setLogFPS(logFPS);
-    
-    const bool logDownloaderStatistics = false;
-    builder.setLogDownloaderStatistics(logDownloaderStatistics);
-  }
+  GEORenderer* geoRenderer = [self createGEORendererMeshRenderer: meshRenderer
+                                                  shapesRenderer: shapesRenderer
+                                                   marksRenderer: marksRenderer
+                                                  geoVectorLayer: NULL
+                                                          planet: builder.getPlanet()];
+  builder.addRenderer(geoRenderer);
 
   //Showing light directions
   if (false){
@@ -724,7 +713,7 @@ public:
     builder.setSceneLighting(light);
   }
 
-  if (false) { //HUD
+  if (true) { //HUD
     HUDRenderer* hudRenderer = new HUDRenderer();
     builder.setHUDRenderer(hudRenderer);
 
@@ -927,7 +916,7 @@ public:
           degrees -= 360;
         }
         const std::string degreesText = IStringUtils::instance()->toString( IMathUtils::instance()->round( degrees )  );
-        _labelBuilder->setText( degreesText );
+        _labelBuilder->setText( "     " + degreesText );
 
         //        _compass1->setTexCoordsRotation(_angleInRadians,
         //                                        0.5f, 0.5f);
@@ -1365,17 +1354,19 @@ builder.initializeWidget();
 class SampleRasterSymbolizer : public GEORasterSymbolizer {
 private:
   static GEO2DLineRasterStyle createPolygonLineRasterStyle(const GEOGeometry* geometry) {
-    const JSONObject* properties = geometry->getFeature()->getProperties();
+//    const JSONObject* properties = geometry->getFeature()->getProperties();
+//
+//    const int colorIndex = (int) properties->getAsNumber("mapcolor7", 0);
+//
+//    const Color color = Color::fromRGBA(0.7, 0, 0, 0.5).wheelStep(7, colorIndex).muchLighter().muchLighter();
 
-    const int colorIndex = (int) properties->getAsNumber("mapcolor7", 0);
-
-    const Color color = Color::fromRGBA(0.7, 0, 0, 0.5).wheelStep(7, colorIndex).muchLighter().muchLighter();
+    const Color color = Color::fromRGBA(0.85, 0.5, 0.5, 0.75).muchDarker();
 
     float dashLengths[] = {};
     int dashCount = 0;
 
     return GEO2DLineRasterStyle(color,
-                                2,
+                                1,
                                 CAP_ROUND,
                                 JOIN_ROUND,
                                 1,
@@ -1385,59 +1376,63 @@ private:
   }
 
   static GEO2DSurfaceRasterStyle createPolygonSurfaceRasterStyle(const GEOGeometry* geometry) {
-    const JSONObject* properties = geometry->getFeature()->getProperties();
+//    const JSONObject* properties = geometry->getFeature()->getProperties();
+//
+//    const int colorIndex = (int) properties->getAsNumber("mapcolor7", 0);
+//
+//    const Color color = Color::fromRGBA(0.7, 0, 0, 0.5).wheelStep(7, colorIndex);
 
-    const int colorIndex = (int) properties->getAsNumber("mapcolor7", 0);
-
-    const Color color = Color::fromRGBA(0.7, 0, 0, 0.5).wheelStep(7, colorIndex);
+    const Color color = Color::fromRGBA(0.85, 0.5, 0.5, 0.75);
 
     return GEO2DSurfaceRasterStyle( color );
   }
 
   static GEO2DLineRasterStyle createLineRasterStyle(const GEOGeometry* geometry) {
-    const JSONObject* properties = geometry->getFeature()->getProperties();
+//    const JSONObject* properties = geometry->getFeature()->getProperties();
+//
+//    const std::string type = properties->getAsString("type", "");
+//
+//    int colorIndex = 0;
+//    if (type == "residential") {
+//      colorIndex = 1;
+//    }
+//    else if (type == "service") {
+//      colorIndex = 2;
+//    }
+//    else if (type == "footway") {
+//      colorIndex = 3;
+//    }
+//    else if (type == "unclassified") {
+//      colorIndex = 4;
+//    }
+//    else if (type == "track") {
+//      colorIndex = 5;
+//    }
+//    else if (type == "tertiary") {
+//      colorIndex = 6;
+//    }
+//    else if (type == "path") {
+//      colorIndex = 7;
+//    }
+//    else if (type == "primary") {
+//      colorIndex = 8;
+//    }
+//    else if (type == "secondary") {
+//      colorIndex = 9;
+//    }
+//    else if (type == "trunk") {
+//      colorIndex = 10;
+//    }
+//    else if (type == "cycleway") {
+//      colorIndex = 11;
+//    }
+//    else if (type == "steps") {
+//      colorIndex = 12;
+//    }
+//
+//    const Color color = Color::fromRGBA(0.7, 0, 0, 0.75).wheelStep(13, colorIndex).muchLighter().muchLighter();
 
-    const std::string type = properties->getAsString("type", "");
-
-    int colorIndex = 0;
-    if (type == "residential") {
-      colorIndex = 1;
-    }
-    else if (type == "service") {
-      colorIndex = 2;
-    }
-    else if (type == "footway") {
-      colorIndex = 3;
-    }
-    else if (type == "unclassified") {
-      colorIndex = 4;
-    }
-    else if (type == "track") {
-      colorIndex = 5;
-    }
-    else if (type == "tertiary") {
-      colorIndex = 6;
-    }
-    else if (type == "path") {
-      colorIndex = 7;
-    }
-    else if (type == "primary") {
-      colorIndex = 8;
-    }
-    else if (type == "secondary") {
-      colorIndex = 9;
-    }
-    else if (type == "trunk") {
-      colorIndex = 10;
-    }
-    else if (type == "cycleway") {
-      colorIndex = 11;
-    }
-    else if (type == "steps") {
-      colorIndex = 12;
-    }
-
-    const Color color = Color::fromRGBA(0.7, 0, 0, 0.75).wheelStep(13, colorIndex).muchLighter().muchLighter();
+    const Color color = Color::fromRGBA(0.85, 0.5, 0.5, 0.75).muchDarker();
 
 //    float dashLengths[] = {1, 12};
 //    int dashCount = 2;
@@ -1453,6 +1448,84 @@ private:
                                 dashCount,
                                 0);
   }
+    
+    static GEO2DLineRasterStyle createPointLineRasterStyle(const GEOGeometry* geometry) {
+        
+        const JSONObject* properties = geometry->getFeature()->getProperties();
+        const std::string geoType = properties->getAsString("lodType", "");
+        
+        if(geoType != ""){
+            if (geoType=="LINESTRING" || geoType=="MULTILINESTRING"){
+                const Color color = Color::fromRGBA(0.85, 0.5, 0.5, 0.75).muchDarker();
+                
+                //const Color color = Color::fromRGBA(0.1, 1.0, 0.1, 0.95);
+                float dashLengths[] = {};
+                int dashCount = 0;
+                
+                return GEO2DLineRasterStyle(color,
+                                            1,
+                                            CAP_ROUND,
+                                            JOIN_ROUND,
+                                            1,
+                                            dashLengths,
+                                            dashCount,
+                                            0);
+            }
+            else if(geoType=="POLYGON" || geoType=="MULTIPOLYGON"){
+                return createPolygonLineRasterStyle(geometry);
+//                const Color color = Color::fromRGBA(0.1, 1.0, 0.1, 0.95);
+//                float dashLengths[] = {};
+//                int dashCount = 0;
+//                
+//                return GEO2DLineRasterStyle(color,
+//                                            1,
+//                                            CAP_ROUND,
+//                                            JOIN_ROUND,
+//                                            1,
+//                                            dashLengths,
+//                                            dashCount,
+//                                            0);
+            }
+        }
+        
+        // for POINTS and MULTIPOINTS
+        float dashLengths[] = {};
+        int dashCount = 0;
+        
+        return GEO2DLineRasterStyle(Color::white(),
+                                    1,
+                                    CAP_ROUND,
+                                    JOIN_ROUND,
+                                    1,
+                                    dashLengths,
+                                    dashCount,
+                                    0);
+    }
+    
+    static GEO2DSurfaceRasterStyle createPointSurfaceRasterStyle(const GEOGeometry* geometry) {
+        
+        const JSONObject* properties = geometry->getFeature()->getProperties();
+        const std::string geoType = properties->getAsString("lodType", "");
+        
+        if(geoType != ""){
+            if (geoType=="LINESTRING" || geoType=="MULTILINESTRING"){
+                const Color color = Color::fromRGBA(0.85, 0.5, 0.5, 0.75).muchDarker();
+                
+                //const Color color = Color::fromRGBA(0.1, 1.0, 0.1, 0.95);
+                
+                return GEO2DSurfaceRasterStyle(color);
+            }
+            else if(geoType=="POLYGON" || geoType=="MULTIPOLYGON"){
+                return createPolygonSurfaceRasterStyle(geometry);
+//                const Color color = Color::fromRGBA(0.1, 1.0, 0.1, 0.95);
+//                
+//                return GEO2DSurfaceRasterStyle(color);
+            }
+        }
+        
+        // for POINTS and MULTIPOINTS
+        return GEO2DSurfaceRasterStyle(Color::white());
+    }
 
 public:
   GEORasterSymbolizer* copy() const {
@@ -1460,7 +1533,19 @@ public:
   }
 
   std::vector<GEORasterSymbol*>* createSymbols(const GEO2DPointGeometry* geometry) const {
-    return NULL;
+    //return NULL;
+    std::vector<GEORasterSymbol*>* symbols = new std::vector<GEORasterSymbol*>();
+    std::vector<Geodetic2D*>* coordinates = new std::vector<Geodetic2D*>();
+    coordinates->push_back(new Geodetic2D(geometry->getPosition()));
+      
+    GEO2DPolygonData* rectangleData = new GEO2DPolygonData(coordinates, NULL);
+      
+    symbols->push_back( new GEORectangleRasterSymbol(rectangleData,
+                                                    Vector2F(3.0f,3.0f),
+                                                    createPointLineRasterStyle(geometry),
+                                                    createPointSurfaceRasterStyle(geometry)));
+      
+    return symbols;
   }
 
   std::vector<GEORasterSymbol*>* createSymbols(const GEO2DLineStringGeometry* geometry) const {
@@ -1554,30 +1639,32 @@ public:
                                        TimeInterval::fromDays(30)));
   }
 
-  bool testingTransparencies = true;
+  bool testingTransparencies = false;
   if (testingTransparencies){
 
-    WMSLayer* blueMarble = new WMSLayer("bmng200405",
-                                        URL("http://www.nasa.network.com/wms?", false),
-                                        WMS_1_1_0,
-                                        Sector::fullSphere(),
-                                        "image/jpeg",
-                                        "EPSG:4326",
-                                        "",
-                                        false,
-                                        NULL, //new LevelTileCondition(0, 6),
-                                        //NULL,
-                                        TimeInterval::fromDays(30),
-                                        true,
-                                        new LayerTilesRenderParameters(Sector::fullSphere(),
-                                                                       2, 4,
-                                                                       0, 6,
-                                                                       LayerTilesRenderParameters::defaultTileTextureResolution(),
-                                                                       LayerTilesRenderParameters::defaultTileMeshResolution(),
-                                                                       false)
-                                        );
-    layerSet->addLayer(blueMarble);
-      
+//    WMSLayer* blueMarble = new WMSLayer("bmng200405",
+//                                        URL("http://www.nasa.network.com/wms?", false),
+//                                        WMS_1_1_0,
+//                                        Sector::fullSphere(),
+//                                        "image/jpeg",
+//                                        "EPSG:4326",
+//                                        "",
+//                                        false,
+//                                        NULL, //new LevelTileCondition(0, 6),
+//                                        //NULL,
+//                                        TimeInterval::fromDays(30),
+//                                        true,
+//                                        new LayerTilesRenderParameters(Sector::fullSphere(),
+//                                                                       2, 4,
+//                                                                       0, 6,
+//                                                                       LayerTilesRenderParameters::defaultTileTextureResolution(),
+//                                                                       LayerTilesRenderParameters::defaultTileMeshResolution(),
+//                                                                       false)
+//                                        );
+//    layerSet->addLayer(blueMarble);
+
+    //layerSet->addLayer( ChessboardLayer::newWGS84() );
+
 //      WMSLayer* bing = new WMSLayer("ve",
 //                                    URL("http://worldwind27.arc.nasa.gov/wms/virtualearth?", false),
 //                                    WMS_1_1_0,
@@ -1607,19 +1694,31 @@ public:
     layerSet->addLayer(pnoa);
   }
 
-  if (false) {
+  if (true) {
 #warning Diego at work!
-    layerSet->addLayer(new MapBoxLayer("examples.map-9ijuk24y",
-                                       TimeInterval::fromDays(30),
-                                       true,
-                                       2,
-                                       10));
+//    layerSet->addLayer(new MapBoxLayer("examples.map-9ijuk24y",
+//                                       TimeInterval::fromDays(30),
+//                                       true,
+//                                       2,
+//                                       10));
+
+    layerSet->addLayer(new BingMapsLayer(BingMapType::AerialWithLabels(),
+                                         "AnU5uta7s5ql_HTrRZcPLI4_zotvNefEeSxIClF1Jf7eS-mLig1jluUdCoecV7jc",
+                                         TimeInterval::fromDays(30)
+//                                         true,
+//                                         2,
+//                                         17
+                                         )
+                       );
+
+
+//    layerSet->addLayer( ChessboardLayer::newMercator() );
 
 //    layerSet->addLayer( MapQuestLayer::newOpenAerial(TimeInterval::fromDays(30)) );
 
 //    const std::string urlTemplate = "http://192.168.1.2/ne_10m_admin_0_countries-Levels10/{level}/{y}/{x}.geojson";
 //    const int firstLevel = 2;
-//    const int maxLevel = 10;
+//    const int maxLevel = 9;
 
     // http://igosoftware.dyndns.org:8000/vectorial/catastro_4-LEVELS_MERCATOR/GEOJSON/15/16034/12348.geojson
 
@@ -1636,29 +1735,48 @@ public:
 //    const Sector sector = Sector::fromDegrees(  49.1625, -8.58622,
 //                                              60.84, 1.76259);
 
-    const std::string urlTemplate = "http://192.168.1.15/vectorial/virginia-polygons/{level}/{x}/{y}.geojson";
-    const int firstLevel = 2;
-    const int maxLevel = 10;
-    const Sector sector = Sector::fromDegrees(34.991, -83.9755,
-                                              39.728, -74.749);
+//    const std::string urlTemplate = "http://192.168.1.15/vectorial/virginia-lines/{level}/{x}/{y}.geojson";
+//    const std::string urlTemplate = "http://192.168.1.15/vectorial/virginia-polygons/{level}/{x}/{y}.geojson";
+//    const std::string urlTemplate = "http://192.168.1.15/vectorial/portugal-buildings/{level}/{x}/{y}.geojson";
 
-//    xMin,yMin -83.9755,34.991 : xMax,yMax -74.749,39.728
+//    const std::string urlTemplate = "http://192.168.1.15/vectorial/portugal-buildings/{level}/{x}/{y}.geojson";
 
-    const GEORasterSymbolizer* symbolizer = new SampleRasterSymbolizer();
-
-    layerSet->addLayer(TiledVectorLayer::newMercator(symbolizer,
-                                                     urlTemplate,
-                                                     //Sector::fullSphere(),       // sector
-                                                     sector,
-                                                     firstLevel,
-                                                     maxLevel,
-                                                     TimeInterval::fromDays(30), // timeToCache
-                                                     true,                       // readExpired
-                                                     1,                          // transparency
-                                                     //NULL,                       // condition
-                                                     new LevelTileCondition(9, 10),
-                                                     ""                          // disclaimerInfo
-                                                     ));
+//    const std::string urlTemplate = "http://192.168.1.15/vectorial/swiss-buildings/{level}/{x}/{y}.geojson";
+//    //const std::string urlTemplate = "http://192.168.1.15/vectorial/swiss-buildings-bson/{level}/{x}/{y}.bson";
+//    //const std::string urlTemplate = "http://192.168.1.15/vectorial/swiss-roads/{level}/{x}/{y}.geojson";
+//
+//    const std::string scotlandUrl = "http://192.168.1.12:8000/vectorial/scotland_buildings/GEOJSON/{level}/{x}/{y}.geojson";
+//      
+//    const int firstLevel = 2;
+//    const int maxLevel = 17;
+//    const Sector virginiaSector = Sector::fromDegrees(34.991, -83.9755,
+//                                                      39.728, -74.749);
+//
+////    (-17.2631249 32.6339646,-6.1857279 42.141711)
+//    const Sector portugalSector = Sector::fromDegrees(32.6339646, -17.2631249,
+//                                                      42.14171, -6.1857279);
+//
+//    const Sector swissSector = Sector::fromDegrees(45.8176852, 5.956216,
+//                                                   47.803029, 10.492264);
+//
+//    const Sector scotlandSector = Sector::fromDegrees(54.7226296, -7.6536084,
+//                                                      60.855646, -0.7279944);
+//
+//    const GEORasterSymbolizer* symbolizer = new SampleRasterSymbolizer();
+//
+//    layerSet->addLayer(TiledVectorLayer::newMercator(symbolizer,
+//                                                     scotlandUrl,
+//                                                     //Sector::fullSphere(),       // sector
+//                                                     scotlandSector,
+//                                                     firstLevel,
+//                                                     maxLevel,
+//                                                     TimeInterval::fromDays(30), // timeToCache
+//                                                     true,                       // readExpired
+//                                                     1,                          // transparency
+//                                                     //NULL,                       // condition
+//                                                     new LevelTileCondition(1, 17),
+//                                                     ""                          // disclaimerInfo
+//                                                     ));
   }
 
   const bool useCartoDB = false;
@@ -2763,17 +2881,16 @@ public:
 - (GEORenderer*) createGEORendererMeshRenderer: (MeshRenderer*) meshRenderer
                                 shapesRenderer: (ShapesRenderer*) shapesRenderer
                                  marksRenderer: (MarksRenderer*) marksRenderer
-                             geoTileRasterizer: (GEOTileRasterizer*) geoTileRasterizer
+                             geoVectorLayer: (GEOVectorLayer*) geoVectorLayer
                                         planet: (const Planet*) planet
 {
   GEOSymbolizer* symbolizer = new SampleSymbolizer(planet);
-
 
   GEORenderer* geoRenderer = new GEORenderer(symbolizer,
                                              meshRenderer,
                                              shapesRenderer,
                                              marksRenderer,
-                                             geoTileRasterizer);
+                                             geoVectorLayer);
 
   return geoRenderer;
 }

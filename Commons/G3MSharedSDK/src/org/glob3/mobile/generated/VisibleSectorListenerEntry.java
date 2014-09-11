@@ -1,4 +1,6 @@
 package org.glob3.mobile.generated; 
+///#include "TileRasterizer.hpp"
+
 public class VisibleSectorListenerEntry
 {
   private VisibleSectorListener _listener;

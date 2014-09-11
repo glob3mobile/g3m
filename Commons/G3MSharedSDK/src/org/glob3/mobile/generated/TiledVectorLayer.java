@@ -22,9 +22,10 @@ package org.glob3.mobile.generated;
 //class IStringUtils;
 //class GEORasterSymbolizer;
 
+
 public class TiledVectorLayer extends VectorLayer
 {
-  private final GEORasterSymbolizer _symbolizer;
+  private GEORasterSymbolizer _symbolizer;
   private final String _urlTemplate;
   private final Sector _dataSector ;
   private final TimeInterval _timeToCache;
@@ -32,15 +33,17 @@ public class TiledVectorLayer extends VectorLayer
 
   private IMathUtils   _mu;
   private IStringUtils _su;
+  private TileImageProvider _tileImageProvider;
 
-  private TiledVectorLayer(GEORasterSymbolizer symbolizer, String urlTemplate, Sector dataSector, LayerTilesRenderParameters parameters, TimeInterval timeToCache, boolean readExpired, float transparency, LayerCondition condition, String disclaimerInfo)
+  private TiledVectorLayer(GEORasterSymbolizer symbolizer, String urlTemplate, Sector dataSector, java.util.ArrayList<LayerTilesRenderParameters> parametersVector, TimeInterval timeToCache, boolean readExpired, float transparency, LayerCondition condition, String disclaimerInfo)
   {
-     super(parameters, transparency, condition, disclaimerInfo);
+     super(parametersVector, transparency, condition, disclaimerInfo);
      _symbolizer = symbolizer;
      _urlTemplate = urlTemplate;
      _dataSector = new Sector(dataSector);
      _timeToCache = timeToCache;
      _readExpired = readExpired;
+     _tileImageProvider = null;
      _su = null;
      _mu = null;
   }
@@ -60,11 +63,14 @@ public class TiledVectorLayer extends VectorLayer
   
     final Sector sector = tile._sector;
   
-    final Vector2I tileTextureResolution = _parameters._tileTextureResolution;
+  
+    final LayerTilesRenderParameters parameters = _parametersVector.get(_selectedLayerTilesRenderParametersIndex);
+  
+    final Vector2I tileTextureResolution = parameters._tileTextureResolution;
   
     final int level = tile._level;
     final int column = tile._column;
-    final int numRows = (int)(_parameters._topSectorSplitsByLatitude * _mu.pow(2.0, level));
+    final int numRows = (int)(parameters._topSectorSplitsByLatitude * _mu.pow(2.0, level));
     final int row = numRows - tile._row - 1;
   
     final double north = MercatorUtils.latitudeToMeters(sector._upper._latitude);
@@ -109,6 +115,7 @@ public class TiledVectorLayer extends VectorLayer
   }
 
 
+
   public static TiledVectorLayer newMercator(GEORasterSymbolizer symbolizer, String urlTemplate, Sector dataSector, int firstLevel, int maxLevel, TimeInterval timeToCache, boolean readExpired, float transparency, LayerCondition condition)
   {
      return newMercator(symbolizer, urlTemplate, dataSector, firstLevel, maxLevel, timeToCache, readExpired, transparency, condition, "");
@@ -131,13 +138,18 @@ public class TiledVectorLayer extends VectorLayer
   }
   public static TiledVectorLayer newMercator(GEORasterSymbolizer symbolizer, String urlTemplate, Sector dataSector, int firstLevel, int maxLevel, TimeInterval timeToCache, boolean readExpired, float transparency, LayerCondition condition, String disclaimerInfo)
   {
-    return new TiledVectorLayer(symbolizer, urlTemplate, dataSector, LayerTilesRenderParameters.createDefaultMercator(firstLevel, maxLevel), timeToCache, readExpired, transparency, condition, disclaimerInfo);
+    final java.util.ArrayList<LayerTilesRenderParameters> parametersVector = new java.util.ArrayList<LayerTilesRenderParameters>();
+    parametersVector.add(LayerTilesRenderParameters.createDefaultMercator(firstLevel, maxLevel));
+    return new TiledVectorLayer(symbolizer, urlTemplate, dataSector, parametersVector, timeToCache, readExpired, transparency, condition, disclaimerInfo);
   }
 
   public void dispose()
   {
-    if (_symbolizer != null)
-       _symbolizer.dispose();
+    _symbolizer = null;
+    if (_tileImageProvider != null)
+    {
+      _tileImageProvider._release();
+    }
     super.dispose();
   }
 
@@ -158,7 +170,8 @@ public class TiledVectorLayer extends VectorLayer
 
   public final TiledVectorLayer copy()
   {
-    return new TiledVectorLayer(_symbolizer.copy(), _urlTemplate, _dataSector, _parameters.copy(), _timeToCache, _readExpired, _transparency, (_condition == null) ? null : _condition.copy(), _disclaimerInfo);
+  
+    return new TiledVectorLayer(_symbolizer.copy(), _urlTemplate, _dataSector, createParametersVectorCopy(), _timeToCache, _readExpired, _transparency, (_condition == null) ? null : _condition.copy(), _disclaimerInfo);
   }
 
   public final TileImageContribution contribution(Tile tile)
@@ -178,17 +191,42 @@ public class TiledVectorLayer extends VectorLayer
 
   public final TileImageProvider createTileImageProvider(G3MRenderContext rc, LayerTilesRenderParameters layerTilesRenderParameters)
   {
-    return new TiledVectorLayerTileImageProvider(this, rc.getDownloader(), rc.getThreadUtils());
+    if (_tileImageProvider == null)
+    {
+      _tileImageProvider = new TiledVectorLayerTileImageProvider(this, rc.getDownloader(), rc.getThreadUtils());
+    }
+    _tileImageProvider._retain();
+    return _tileImageProvider;
   }
 
-  public final long requestGEOJSONBuffer(Tile tile, IDownloader downloader, long tileDownloadPriority, boolean logDownloadActivity, IBufferDownloadListener listener, boolean deleteListener)
+  public static class RequestGEOJSONBufferData
   {
-    final URL url = createURL(tile);
-    if (logDownloadActivity)
+    public final URL          _url;
+    public final TimeInterval _timeToCache;
+    public final boolean _readExpired;
+
+    public RequestGEOJSONBufferData(URL url, TimeInterval timeToCache, boolean readExpired)
     {
-      ILogger.instance().logInfo("Downloading %s", url._path);
+       _url = url;
+       _timeToCache = timeToCache;
+       _readExpired = readExpired;
     }
-    return downloader.requestBuffer(url, tileDownloadPriority, _timeToCache, _readExpired, listener, deleteListener);
+  }
+
+  public final TiledVectorLayer.RequestGEOJSONBufferData getRequestGEOJSONBufferData(Tile tile)
+  {
+    final LayerTilesRenderParameters parameters = _parametersVector.get(_selectedLayerTilesRenderParametersIndex);
+  
+    if (tile._level > parameters._maxLevel)
+    {
+      final Tile parentTile = tile.getParent();
+      if (parentTile != null)
+      {
+        return getRequestGEOJSONBufferData(parentTile);
+      }
+    }
+  
+    return new RequestGEOJSONBufferData(createURL(tile), _timeToCache, _readExpired);
   }
 
   public final GEORasterSymbolizer symbolizerCopy()
@@ -199,6 +237,19 @@ public class TiledVectorLayer extends VectorLayer
   public final Sector getDataSector()
   {
     return _dataSector;
+  }
+
+  public final void setSymbolizer(GEORasterSymbolizer symbolizer, boolean deletePrevious)
+  {
+    if (_symbolizer != symbolizer)
+    {
+      if (deletePrevious)
+      {
+        _symbolizer = null;
+      }
+      _symbolizer = symbolizer;
+      notifyChanges();
+    }
   }
 
 }

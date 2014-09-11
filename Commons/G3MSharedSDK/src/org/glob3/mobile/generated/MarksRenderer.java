@@ -143,7 +143,7 @@ public class MarksRenderer extends DefaultRenderer
   
       _lastCamera = camera; // Saving camera for use in onTouchEvent
   
-      final Vector3D cameraPosition = camera.getCartesianPosition();
+      final MutableVector3D cameraPosition = camera.getCartesianPositionMutable();
       final double cameraHeight = camera.getGeodeticPosition()._height;
   
       updateGLState(rc);

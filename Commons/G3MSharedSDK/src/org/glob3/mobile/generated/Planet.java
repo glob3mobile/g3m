@@ -55,7 +55,18 @@ public abstract class Planet
 
   public abstract Vector3D geodeticSurfaceNormal(Geodetic3D geodetic);
   public abstract Vector3D geodeticSurfaceNormal(Geodetic2D geodetic);
-  public abstract java.util.ArrayList<Double> intersectionsDistances(Vector3D origin, Vector3D direction);
+
+  public final java.util.ArrayList<Double> intersectionsDistances(Vector3D origin, Vector3D direction)
+  {
+    return intersectionsDistances(origin._x, origin._y, origin._z, direction._x, direction._y, direction._z);
+  }
+
+  public final java.util.ArrayList<Double> intersectionsDistances(Vector3D origin, MutableVector3D direction)
+  {
+    return intersectionsDistances(origin._x, origin._y, origin._z, direction.x(), direction.y(), direction.z());
+  }
+
+  public abstract java.util.ArrayList<Double> intersectionsDistances(double originX, double originY, double originZ, double directionX, double directionY, double directionZ);
 
   public abstract Vector3D toCartesian(Angle latitude, Angle longitude, double height);
 
@@ -83,7 +94,19 @@ public abstract class Planet
 
   //virtual Vector3D closestPointToSphere(const Vector3D& pos, const Vector3D& ray) const = 0;
 
-  public abstract Vector3D closestIntersection(Vector3D pos, Vector3D ray);
+  public final Vector3D closestIntersection(Vector3D pos, Vector3D ray)
+  {
+    if (pos.isNan() || ray.isNan())
+    {
+      return Vector3D.nan();
+    }
+    java.util.ArrayList<Double> distances = intersectionsDistances(pos._x, pos._y, pos._z, ray._x, ray._y, ray._z);
+    if (distances.isEmpty())
+    {
+      return Vector3D.nan();
+    }
+    return pos.add(ray.times(distances.get(0)));
+  }
 
 
   public abstract MutableMatrix44D createGeodeticTransformMatrix(Geodetic3D position);

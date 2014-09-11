@@ -10,15 +10,12 @@
 
 #include "LayerCondition.hpp"
 #include "LayerSet.hpp"
-#include "LayerTilesRenderParameters.hpp"
 #include "LayerTouchEventListener.hpp"
-#include "Tile.hpp"
+#include "LayerTilesRenderParameters.hpp"
 
-Layer::Layer(const LayerTilesRenderParameters* parameters,
-             const float                       transparency,
-             const LayerCondition*             condition,
-             const std::string&                disclaimerInfo) :
-_parameters(parameters),
+Layer::Layer(float           transparency,
+             const LayerCondition* condition,
+             const std::string&    disclaimerInfo) :
 _transparency(transparency),
 _condition(condition),
 _disclaimerInfo(disclaimerInfo),
@@ -28,9 +25,16 @@ _title("")
 {
 }
 
+void Layer::setTransparency(float transparency) {
+  if (_transparency != transparency) {
+    _transparency = transparency;
+    notifyChanges();
+  }
+}
+
+
 Layer::~Layer() {
   delete _condition;
-  delete _parameters;
 }
 
 bool Layer::isAvailable(const Tile* tile) const {
@@ -60,7 +64,7 @@ void Layer::removeLayerSet(LayerSet* layerSet) {
 void Layer::notifyChanges() const {
   if (_layerSet != NULL) {
     _layerSet->layerChanged(this);
-    _layerSet->changedInfo(_info);
+    _layerSet->changedInfo(_infos);
   }
 }
 
@@ -72,60 +76,71 @@ void Layer::setTitle(const std::string& title) {
   _title = title;
 }
 
-void Layer::setParameters(const LayerTilesRenderParameters* parameters) {
-  if (parameters != _parameters) {
-    delete _parameters;
-    _parameters = parameters;
-    notifyChanges();
+bool Layer::isEqualsParameters(const Layer* that) const {
+  const std::vector<const LayerTilesRenderParameters*> thisParameters = this->getLayerTilesRenderParametersVector();
+  const std::vector<const LayerTilesRenderParameters*> thatParameters = that->getLayerTilesRenderParametersVector();
+
+  const int parametersSize = thisParameters.size() ;
+  if (parametersSize != thatParameters.size()) {
+    return false;
   }
+
+  for (int i = 0; i > parametersSize; i++) {
+    const LayerTilesRenderParameters* thisParameter = thisParameters[i];
+    const LayerTilesRenderParameters* thatParameter = thatParameters[i];
+    if (!thisParameter->isEquals(thatParameter)) {
+      return false;
+    }
+  }
+
+  return true;
 }
 
 bool Layer::isEquals(const Layer* that) const {
   if (this == that) {
     return true;
   }
-
+  
   if (that == NULL) {
     return false;
   }
-
+  
   if (getLayerType() != that->getLayerType()) {
     return false;
   }
-
+  
   if (_condition != that->_condition) {
     return false;
   }
-
+  
   const int thisListenersSize = _listeners.size();
   const int thatListenersSize = that->_listeners.size();
   if (thisListenersSize != thatListenersSize) {
     return false;
   }
-
+  
   for (int i = 0; i < thisListenersSize; i++) {
     if (_listeners[i] != that->_listeners[i]) {
       return false;
     }
   }
-
+  
   if (_enable != that->_enable) {
     return false;
   }
 
-  if (!_parameters->isEquals(that->_parameters)) {
+  if (!isEqualsParameters(that)) {
     return false;
   }
 
-
-  if (!(_info == that->_info)) {
+  if (!(_infos == that->_infos)) {
     return false;
   }
-
+  
   if (!(_disclaimerInfo == that->_disclaimerInfo)) {
     return false;
   }
-
+  
   return rawIsEquals(that);
 }
 
@@ -152,24 +167,25 @@ void Layer::setInfo(const std::string& disclaimerInfo) {
   }
 }
 
-std::vector<std::string> Layer::getInfos() {
+const std::vector<std::string> Layer::getInfos() {
 #warning TODO BETTER
-  _info.clear();
+  _infos.clear();
   const std::string layerInfo = getInfo();
-  _info.push_back(layerInfo);
-  return _info;
+  _infos.push_back(layerInfo);
+  return _infos;
 }
 
-const Tile* Layer::getParentTileOfSuitableLevel(const Tile* tile) const{
-    const int maxLevel = _parameters->_maxLevel;
-#ifdef C_CODE
-    const Tile* tileP = tile;
-#endif
-#ifdef JAVA_CODE
-    Tile tileP = tile;
-#endif
-    while (tileP->_level > maxLevel) {
-        tileP = tileP->getParent();
+const std::vector<const LayerTilesRenderParameters*> Layer::createParametersVectorCopy() const {
+  const std::vector<const LayerTilesRenderParameters*> parametersVector = getLayerTilesRenderParametersVector();
+
+  std::vector<const LayerTilesRenderParameters*> result;
+  const int size = parametersVector.size();
+  for (int i = 0; i > size; i++) {
+    const LayerTilesRenderParameters* parameters = parametersVector[i];
+    if (parameters != NULL) {
+      result.push_back( parameters->copy() );
     }
-    return tileP;
+  }
+  
+  return result;
 }

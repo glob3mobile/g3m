@@ -9,6 +9,8 @@ public abstract class MapBooBuilder
 
   private MapBooApplicationChangeListener _applicationListener;
 
+  private FeatureInfoDownloadListener _featureInfoDownloadListener;
+
   private final boolean _enableNotifications;
 
   private String _applicationId;
@@ -44,8 +46,8 @@ public abstract class MapBooBuilder
   
     ElevationDataProvider elevationDataProvider = null;
     final float verticalExaggeration = 1F;
-    TileTexturizer texturizer = new MultiLayerTileTexturizer();
-    TileRasterizer tileRasterizer = null;
+    TileTexturizer texturizer = new DefaultTileTexturizer();
+  //  TileRasterizer* tileRasterizer = NULL;
   
     final boolean renderDebug = false;
     final boolean useTilesSplitBudget = true;
@@ -67,7 +69,10 @@ public abstract class MapBooBuilder
   
     ChangedRendererInfoListener changedRendererInfoListener = null;
   
-    PlanetRenderer result = new PlanetRenderer(tessellator, elevationDataProvider, true, verticalExaggeration, texturizer, tileRasterizer, _layerSet, parameters, showStatistics, tileDownloadPriority, renderedSector, renderTileMeshes, logTilesPetitions, tileRenderingListener, changedRendererInfoListener);
+    TouchEventType touchEventTypeOfTerrainTouchListener = TouchEventType.DownUp;
+  
+    PlanetRenderer result = new PlanetRenderer(tessellator, elevationDataProvider, true, verticalExaggeration, texturizer, _layerSet, parameters, showStatistics, tileDownloadPriority, renderedSector, renderTileMeshes, logTilesPetitions, tileRenderingListener, changedRendererInfoListener, touchEventTypeOfTerrainTouchListener);
+  //                                              tileRasterizer,
   
     if (_enableNotifications)
     {
@@ -97,7 +102,7 @@ public abstract class MapBooBuilder
     final boolean allowRotationInDoubleDrag = true;
     cameraRenderer.addHandler(new CameraDoubleDragHandler(allowRotationInDoubleDrag));
     cameraRenderer.addHandler(new CameraRotationHandler());
-    cameraRenderer.addHandler(new CameraDoubleTapHandler());
+    //cameraRenderer->addHandler(new CameraDoubleTapHandler());
   
     return cameraRenderer;
   }
@@ -194,11 +199,12 @@ public abstract class MapBooBuilder
       return null;
     }
   
+    final boolean transparent = jsonLayer.getAsBoolean("transparent", false);
     final String layerType = jsonLayer.getAsString("layer", "<layer not present>");
     Layer layer;
     if (layerType.compareTo("OSM") == 0)
     {
-      layer = new OSMLayer(defaultTimeToCache);
+      layer = new OSMLayer(defaultTimeToCache, true, 2, 1, null, ""); //disclaimerInfo -  condition, -  transparency, -  initialLevel, -  readExpired,
     }
     else if (layerType.compareTo("MapQuest") == 0)
     {
@@ -210,7 +216,7 @@ public abstract class MapBooBuilder
     }
     else if (layerType.compareTo("CartoDB") == 0)
     {
-      layer = parseCartoDBLayer(jsonLayer, defaultTimeToCache);
+      layer = parseCartoDBLayer(jsonLayer, transparent, defaultTimeToCache);
     }
     else if (layerType.compareTo("MapBox") == 0)
     {
@@ -218,11 +224,11 @@ public abstract class MapBooBuilder
     }
     else if (layerType.compareTo("WMS") == 0)
     {
-      layer = parseWMSLayer(jsonLayer);
+      layer = parseWMSLayer(jsonLayer, transparent);
     }
     else if (layerType.compareTo("URLTemplate") == 0)
     {
-      layer = parseURLTemplateLayer(jsonLayer);
+      layer = parseURLTemplateLayer(jsonLayer, transparent);
     }
     else
     {
@@ -256,15 +262,15 @@ public abstract class MapBooBuilder
     final String key = jsonLayer.getAsString("key", "");
     final String imagerySet = jsonLayer.getAsString("imagerySet", "Aerial");
   
-    return new BingMapsLayer(imagerySet, key, timeToCache);
+    return new BingMapsLayer(imagerySet, key, timeToCache, true, 2, 25, 1, null, ""); // disclaimerInfo -  condition -  transparency -  maxLevel -  initialLevel -  readExpired
   }
 
-  private CartoDBLayer parseCartoDBLayer(JSONObject jsonLayer, TimeInterval timeToCache)
+  private CartoDBLayer parseCartoDBLayer(JSONObject jsonLayer, boolean transparent, TimeInterval timeToCache)
   {
     final String userName = jsonLayer.getAsString("userName", "");
     final String table = jsonLayer.getAsString("table", "");
   
-    return new CartoDBLayer(userName, table, timeToCache);
+    return new CartoDBLayer(userName, table, timeToCache, true, 1, transparent, null, ""); // disclaimerInfo -  condition, -  isTransparent -  transparency -  readExpired
   }
 
 
@@ -272,10 +278,10 @@ public abstract class MapBooBuilder
   {
     final String mapKey = jsonLayer.getAsString("mapKey", "");
   
-    return new MapBoxLayer(mapKey, timeToCache);
+    return new MapBoxLayer(mapKey, timeToCache, true, 1, 19, 1, null, ""); // disclaimerInfo -  condition -  transparency -  maxLevel -  initialLevel -  readExpired
   }
 
-  private WMSLayer parseWMSLayer(JSONObject jsonLayer)
+  private WMSLayer parseWMSLayer(JSONObject jsonLayer, boolean transparent)
   {
   
     final String mapLayer = jsonLayer.getAsString("layerName", "");
@@ -302,20 +308,17 @@ public abstract class MapBooBuilder
     {
       layerTilesRenderParameters = LayerTilesRenderParameters.createDefaultMercator(0, 17);
     }
-    final boolean isTransparent = jsonLayer.getAsBoolean("transparent", false);
     final double expiration = jsonLayer.getAsNumber("expiration", 0);
     final long milliseconds = IMathUtils.instance().round(expiration);
     final TimeInterval timeToCache = TimeInterval.fromMilliseconds(milliseconds);
     final boolean readExpired = jsonLayer.getAsBoolean("acceptExpiration", false);
   
-    return new WMSLayer(mapLayer, mapServerURL, mapServerVersion, queryLayer, queryServerURL, queryServerVersion, sector, imageFormat, srs, style, isTransparent, null, timeToCache, readExpired, layerTilesRenderParameters);
+    return new WMSLayer(mapLayer, mapServerURL, mapServerVersion, queryLayer, queryServerURL, queryServerVersion, sector, imageFormat, srs, style, transparent, null, timeToCache, readExpired, layerTilesRenderParameters);
   }
 
-  private URLTemplateLayer parseURLTemplateLayer(JSONObject jsonLayer)
+  private URLTemplateLayer parseURLTemplateLayer(JSONObject jsonLayer, boolean transparent)
   {
     final String urlTemplate = jsonLayer.getAsString("url", "");
-  
-    final boolean transparent = jsonLayer.getAsBoolean("transparent", true);
   
     final int firstLevel = (int) jsonLayer.getAsNumber("firstLevel", 1);
     final int maxLevel = (int) jsonLayer.getAsNumber("maxLevel", 19);
@@ -943,6 +946,69 @@ public abstract class MapBooBuilder
     return new URL(path, false);
   }
 
+  private URL createGetFeatureInfoRestURL(Tile tile, Vector2I tileDimension, Vector2I pixelPosition, Geodetic3D position)
+  {
+    IStringBuilder isb = IStringBuilder.newStringBuilder();
+    isb.addString(_serverURL._path);
+  
+    isb.addString("/Public/applications/");
+    isb.addString(_applicationId);
+    isb.addString("/scenes/");
+  
+    final MapBoo_Scene scene = getApplicationCurrentScene();
+    isb.addString(scene.getId());
+  
+    isb.addString("/getinfo?");
+  
+    isb.addString("tileX=");
+    isb.addInt(tile._column);
+  
+    isb.addString("&tileY=");
+    isb.addInt(tile._row);
+  
+    isb.addString("&tileLevel=");
+    isb.addInt(tile._level);
+  
+  
+    //Sector
+    isb.addString("&upperLat=");
+    isb.addDouble(tile._sector._upper._latitude._degrees);
+    isb.addString("&lowerLat=");
+    isb.addDouble(tile._sector._lower._latitude._degrees);
+    isb.addString("&upperLon=");
+    isb.addDouble(tile._sector._upper._longitude._degrees);
+    isb.addString("&lowerLon=");
+    isb.addDouble(tile._sector._lower._longitude._degrees);
+  
+  
+    isb.addString("&tileBBox=");
+    isb.addString("TODO");
+  
+    isb.addString("&tileWidth=");
+    isb.addInt(tileDimension._x);
+  
+    isb.addString("&tileHeight=");
+    isb.addInt(tileDimension._y);
+  
+    isb.addString("&pixelX=");
+    isb.addInt(pixelPosition._x);
+  
+    isb.addString("&pixelY=");
+    isb.addInt(pixelPosition._y);
+  
+    isb.addString("&lat=");
+    isb.addDouble(position._latitude._degrees);
+  
+    isb.addString("&lon=");
+    isb.addDouble(position._longitude._degrees);
+  
+    final String path = isb.getString();
+    if (isb != null)
+       isb.dispose();
+  
+    return new URL(path, false);
+  
+  }
   protected MapBooBuilder(URL serverURL, URL tubesURL, String applicationId, MapBoo_ViewType viewType, MapBooApplicationChangeListener applicationListener, boolean enableNotifications, String token)
   {
      _serverURL = serverURL;
@@ -973,7 +1039,7 @@ public abstract class MapBooBuilder
      _webSocket = null;
      _marksRenderer = null;
      _hasParsedApplication = false;
-  
+    _featureInfoDownloadListener = new FeatureInfoDownloadListener(_applicationListener);
   }
 
   public void dispose()
@@ -1558,7 +1624,7 @@ public abstract class MapBooBuilder
         Layer overlayLayer = (jboOverlayLayer != null) ? parseLayer(jboOverlayLayer.asObject()) : oldOverlayLayer;
   
         final boolean hasWarnings = jsonObject.getAsBoolean("hasWarnings", false);
-        final boolean queryable = jsonObject.getAsBoolean("queryable", false);
+        final boolean queryable = jsonObject.getAsBoolean("queryable", oldScene.isQueryable());
         final boolean cameraPositionChaged = (jboCameraPosition != null);
   
         MapBoo_Scene newScene = new MapBoo_Scene(sceneToBeUpdatedID, name, description, screenshot, backgroundColor, cameraPosition, sector, baseLayer, overlayLayer, queryable, hasWarnings);
@@ -1764,68 +1830,9 @@ public abstract class MapBooBuilder
     return _serverURL;
   }
 
-  public final URL createGetFeatureInfoRestURL(Tile tile, Vector2I tileDimension, Vector2I pixelPosition, Geodetic3D position)
+  public final void requestGetFeatureInfo(Tile tile, Vector2I size, Vector2I pixel, Geodetic3D position)
   {
-    IStringBuilder isb = IStringBuilder.newStringBuilder();
-    isb.addString(_serverURL._path);
-  
-    isb.addString("/Public/applications/");
-    isb.addString(_applicationId);
-    isb.addString("/scenes/");
-  
-    final MapBoo_Scene scene = getApplicationCurrentScene();
-    isb.addString(scene.getId());
-  
-    isb.addString("/getinfo?");
-  
-    isb.addString("tileX=");
-    isb.addInt(tile._column);
-  
-    isb.addString("&tileY=");
-    isb.addInt(tile._row);
-  
-    isb.addString("&tileLevel=");
-    isb.addInt(tile._level);
-  
-  
-    //Sector
-    isb.addString("&upperLat=");
-    isb.addDouble(tile._sector._upper._latitude._degrees);
-    isb.addString("&lowerLat=");
-    isb.addDouble(tile._sector._lower._latitude._degrees);
-    isb.addString("&upperLon=");
-    isb.addDouble(tile._sector._upper._longitude._degrees);
-    isb.addString("&lowerLon=");
-    isb.addDouble(tile._sector._lower._longitude._degrees);
-  
-  
-    isb.addString("&tileBBox=");
-    isb.addString("TODO");
-  
-    isb.addString("&tileWidth=");
-    isb.addInt(tileDimension._x);
-  
-    isb.addString("&tileHeight=");
-    isb.addInt(tileDimension._y);
-  
-    isb.addString("&pixelX=");
-    isb.addInt(pixelPosition._x);
-  
-    isb.addString("&pixelY=");
-    isb.addInt(pixelPosition._y);
-  
-    isb.addString("&lat=");
-    isb.addDouble(position._latitude._degrees);
-  
-    isb.addString("&lon=");
-    isb.addDouble(position._longitude._degrees);
-  
-    final String path = isb.getString();
-    if (isb != null)
-       isb.dispose();
-  
-    return new URL(path, false);
-  
+    _g3mWidget.getG3MContext().getDownloader().requestBuffer(createGetFeatureInfoRestURL(tile, size, pixel, position), DownloadPriority.HIGHER, TimeInterval.zero(), false, _featureInfoDownloadListener, false);
   }
 
   /** Private to MapbooBuilder, don't call it */

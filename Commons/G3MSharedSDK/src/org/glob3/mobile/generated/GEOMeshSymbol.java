@@ -85,11 +85,11 @@ public abstract class GEOMeshSymbol extends GEOSymbol
   protected abstract Mesh createMesh(G3MRenderContext rc);
 
 
-  public final boolean symbolize(G3MRenderContext rc, GEOSymbolizer symbolizer, MeshRenderer meshRenderer, ShapesRenderer shapesRenderer, MarksRenderer marksRenderer, GEOTileRasterizer geoTileRasterizer)
+  public final boolean symbolize(G3MRenderContext rc, GEOSymbolizer symbolizer, MeshRenderer meshRenderer, ShapesRenderer shapesRenderer, MarksRenderer marksRenderer, GEOVectorLayer geoVectorLayer)
   {
     if (meshRenderer == null)
     {
-      ILogger.instance().logError("Can't simbolize with Mesh, MeshRenderer was not set");
+      ILogger.instance().logError("Can't symbolize with Mesh, MeshRenderer was not set");
     }
     else
     {
