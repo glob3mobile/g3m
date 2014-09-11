@@ -196,7 +196,7 @@ public class Frustum
      _nearPlane = new Plane(new Vector3D(0, 0, 1), znear);
      _farPlane = new Plane(new Vector3D(0, 0, -1), -zfar);
      _boundingVolume = null;
-    //System.out.printf ("znear=%f\n", znear);
+    System.out.printf ("znear=%f\n", znear);
   }
 
   public Frustum (FrustumData data)

@@ -177,7 +177,7 @@ public abstract class Shape implements SurfaceElevationListener, EffectTarget
 //                   AltitudeMode altitudeMode);
 
 
-  //void Shape::setPosition(Geodetic3D* position,
+    //void Shape::setPosition(Geodetic3D* position,
   //                        AltitudeMode altitudeMode) {
   //  delete _position;
   //  _position = position;

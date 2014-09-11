@@ -15,10 +15,6 @@ public class GPUProgramFactory
 
   public final GPUProgramSources get(String name)
   {
-<<<<<<< HEAD
-
-=======
->>>>>>> origin/purgatory
     final int size = _sources.size();
     for (int i = 0; i < size; i++)
     {

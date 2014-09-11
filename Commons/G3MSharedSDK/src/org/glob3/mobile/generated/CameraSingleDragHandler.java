@@ -95,9 +95,10 @@ public class CameraSingleDragHandler extends CameraEventHandler
   {
     Camera camera = cameraContext.getNextCamera();
     _camera0.copyFrom(camera);
+    cameraContext.setCurrentGesture(Gesture.Drag);
+  
     // dragging
     final Vector2I pixel = touchEvent.getTouch(0).getPos();
-<<<<<<< HEAD
   
     Vector3D touchedPosition = eventContext.getWidget().getScenePositionForPixel(pixel._x, pixel._y);
   
@@ -106,18 +107,17 @@ public class CameraSingleDragHandler extends CameraEventHandler
   /*
     eventContext->getPlanet()->beginSingleDrag(_camera0.getCartesianPosition(),
                                                _camera0.pixel2Ray(pixel));*/
+      eventContext.getPlanet().beginSingleDrag(_camera0.getCartesianPosition(), touchedPosition);
   
-    eventContext.getPlanet().beginSingleDrag(_camera0.getCartesianPosition(), touchedPosition);
-  
-  
-=======
-    final Vector3D initialRay = _camera0.pixel2Ray(pixel);
-    if (!initialRay.isNan())
-    {
-      cameraContext.setCurrentGesture(Gesture.Drag);
-      eventContext.getPlanet().beginSingleDrag(_camera0.getCartesianPosition(), initialRay);
+  /*
+  =======
+    const Vector3D& initialRay = _camera0.pixel2Ray(pixel);
+    if (!initialRay.isNan()) {
+      cameraContext->setCurrentGesture(Drag);
+      eventContext->getPlanet()->beginSingleDrag(_camera0.getCartesianPosition(),initialRay);
     }
->>>>>>> origin/purgatory
+  >>>>>>> origin/purgatory
+   */
   }
   public final void onMove(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
   {

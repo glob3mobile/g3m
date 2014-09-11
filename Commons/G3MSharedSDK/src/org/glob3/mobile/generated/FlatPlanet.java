@@ -37,23 +37,17 @@ public class FlatPlanet extends Planet
   private double _dragHeight1;
   private double _distanceBetweenInitialPoints;
   private MutableVector3D _centerPoint = new MutableVector3D();
-//  mutable double          _angleBetweenInitialRays;
 
-  private boolean _firstDoubleDragMovement;
   private double _correctionT2;
   private MutableVector3D _correctedCenterPoint = new MutableVector3D();
 
+  private double _lastDoubleDragAngle;
 
 
   public FlatPlanet(Vector2D size)
   {
      _size = new Vector2D(size);
-//<<<<<<< HEAD
-     _firstDoubleDragMovement = false;
-  
-//=======
      _radii = new Vector3D(size._x, size._y, 0);
-//>>>>>>> origin/purgatory
   }
 
   public void dispose()
@@ -247,15 +241,77 @@ public class FlatPlanet extends Planet
     _distanceBetweenInitialPoints = _initialPoint0.sub(_initialPoint1).length();
     //_centerPoint = Plane::intersectionXYPlaneWithRay(origin, centerRay).asMutableVector3D();
     _centerPoint = centerPosition.asMutableVector3D();
-    //  _angleBetweenInitialRays = initialRay0.angleBetween(initialRay1).degrees();
+    _lastDoubleDragAngle = 0;
   
     // middle point in 3D
     _initialPoint = _initialPoint0.add(_initialPoint1).times(0.5);
-  
-    _firstDoubleDragMovement = true;
   }
 
-  public final MutableMatrix44D doubleDrag(Vector3D finalRay0, Vector3D finalRay1, boolean allowRotation)
+
+  /*
+  MutableMatrix44D FlatPlanet::doubleDrag(const Vector3D& finalRay0,
+                                          const Vector3D& finalRay1,
+                                          bool allowRotation) const
+  {
+    // test if initialPoints are valid
+    if (_initialPoint0.isNan() || _initialPoint1.isNan())
+      return MutableMatrix44D::invalid();
+    
+    // init params
+    const IMathUtils* mu = IMathUtils::instance();
+    MutableVector3D positionCamera = _origin;
+    
+    // compute distance to translate camera
+    double d0 = _distanceBetweenInitialPoints;
+    const Vector3D r1 = finalRay0;
+    const Vector3D r2 = finalRay1;
+    double zA = _dragHeight0;
+    double zB = _dragHeight1;
+    double zc = _origin.z();
+    double uz = _centerRay.z();
+    double Rx = r2._x / r2._z - r1._x / r1._z;
+    double Ry = r2._y / r2._z - r1._y / r1._z;
+    double Kx = zc*Rx + zA*r1._x/r1._z - zB*r2._x/r2._z;
+    double Ky = zc*Ry + zA*r1._y/r1._z - zB*r2._y/r2._z;
+    double a = uz*uz * (Rx*Rx + Ry*Ry);
+    double b = 2 * uz * (Rx*Kx + Ry*Ky);
+    double c = Kx*Kx + Ky*Ky + (zA-zB)*(zA-zB) - d0*d0;
+    double root = b*b - 4*a*c;
+    if (root<0) return MutableMatrix44D::invalid();
+    double squareRoot = mu->sqrt(root);
+    double t2 = (-b - squareRoot) / (2*a);
+    
+    // the first time, t2 must be corrected
+    if (_firstDoubleDragMovement) {
+      _firstDoubleDragMovement = false;
+      _correctionT2 = t2;
+      t2 = 0;
+    } else {
+      t2 -= _correctionT2;
+    }
+    
+    // start to compound matrix
+    MutableMatrix44D matrix = MutableMatrix44D::identity();
+    positionCamera = _origin;
+    MutableVector3D viewDirection = _centerRay;
+    MutableVector3D ray0 = finalRay0.asMutableVector3D();
+    MutableVector3D ray1 = finalRay1.asMutableVector3D();
+    
+    MutableVector3D delta = viewDirection.times(t2);
+    MutableMatrix44D translation = MutableMatrix44D::createTranslationMatrix(delta.asVector3D());
+    positionCamera = positionCamera.transformedBy(translation, 1.0);
+    matrix = translation.multiply(matrix);
+    
+    // compute final point
+    MutableVector3D finalDragPoint = Plane::intersectionXYPlaneWithRay(positionCamera.asVector3D(), finalRay0, _dragHeight0).asMutableVector3D();
+    if (finalDragPoint.isNan()) return MutableMatrix44D::invalid();
+    MutableMatrix44D translationDrag = MutableMatrix44D::createTranslationMatrix(_initialPoint0.sub(finalDragPoint).asVector3D());
+    matrix = translationDrag.multiply(matrix);
+    
+    return matrix;
+  }*/
+  
+  public final MutableMatrix44D doubleDrag_old(Vector3D finalRay0, Vector3D finalRay1, boolean allowRotation)
   {
     // test if initialPoints are valid
     if (_initialPoint0.isNan() || _initialPoint1.isNan())
@@ -267,16 +323,16 @@ public class FlatPlanet extends Planet
   
     // following math in http://serdis.dis.ulpgc.es/~atrujill/glob3m/IGO/DoubleDrag.pdf
     /*
-    // compute distance to translate camera
-    double d0 = _distanceBetweenInitialPoints;
-    const Vector3D r1 = finalRay0;
-    const Vector3D r2 = finalRay1;
-    double k = ((r1._x/r1._z - r2._x/r2._z) * (r1._x/r1._z - r2._x/r2._z) +
-                (r1._y/r1._z - r2._y/r2._z) * (r1._y/r1._z - r2._y/r2._z));
-    double zc = _origin.z();
-    double uz = _centerRay.z();
-    double t2 = (d0 / mu->sqrt(k) - zc) / uz;
-    */
+     // compute distance to translate camera
+     double d0 = _distanceBetweenInitialPoints;
+     const Vector3D r1 = finalRay0;
+     const Vector3D r2 = finalRay1;
+     double k = ((r1._x/r1._z - r2._x/r2._z) * (r1._x/r1._z - r2._x/r2._z) +
+     (r1._y/r1._z - r2._y/r2._z) * (r1._y/r1._z - r2._y/r2._z));
+     double zc = _origin.z();
+     double uz = _centerRay.z();
+     double t2 = (d0 / mu->sqrt(k) - zc) / uz;
+     */
   
     // compute distance to translate camera
     double d0 = _distanceBetweenInitialPoints;
@@ -298,18 +354,6 @@ public class FlatPlanet extends Planet
        return MutableMatrix44D.invalid();
     double squareRoot = mu.sqrt(root);
     double t2 = (-b - squareRoot) / (2 *a);
-  
-    // the first time, t2 must be corrected
-    if (_firstDoubleDragMovement)
-    {
-      _firstDoubleDragMovement = false;
-      _correctionT2 = t2;
-      t2 = 0;
-    }
-    else
-    {
-      t2 -= _correctionT2;
-    }
   
     // start to compound matrix
     MutableMatrix44D matrix = MutableMatrix44D.identity();
@@ -360,15 +404,231 @@ public class FlatPlanet extends Planet
       double sign = v1.cross(v0).dot(normal);
       if (sign<0)
          angle = -angle;
-<<<<<<< HEAD
       MutableMatrix44D rotation = MutableMatrix44D.createGeneralRotationMatrix(Angle.fromDegrees(angle), normal, correctedCenterPoint);
-      matrix = rotation.multiply(matrix);
-=======
-      MutableMatrix44D rotation = MutableMatrix44D.createGeneralRotationMatrix(Angle.fromDegrees(angle), normal, centerPoint2);
+      matrix.copyValueOfMultiplication(rotation, matrix); // = rotation.multiply(matrix);
+      /*
+  =======
+      MutableMatrix44D rotation = MutableMatrix44D::createGeneralRotationMatrix(Angle::fromDegrees(angle), normal, centerPoint2);
   //    matrix.copyValue(rotation.multiply(matrix));
       matrix.copyValueOfMultiplication(rotation, matrix);
->>>>>>> origin/purgatory
+  >>>>>>> origin/purgatory
+       */
+  
     }
+  
+    return matrix;
+  }
+
+  /* ********************
+   TODO ESTA FUNCION ES PARA ORDENARLA, DOCUMENTARLA EN CHULETA PARA WEB, EXPLICARLA A JM
+   Y QUE LA PASE AL PAPER GESTOS DESPUÉS DEL VERANO.
+   Y TODAVIA FALTARA PROBARLO EN PLANETAS ESFERICOS
+   AQUI DEBE SER PRACTICAMENTE IGUAL EXCEPTO LA MATRIZ DEL PASO 2 PARA PONER EL ORIGEN DE COORDENADAS
+   SOBRE EL DRAGGED INITIAL POINT, QUE AHORA SOLO ES TRASLACION, PERO LUEGO SERA UNA MATRIZ
+   DE CAMBIO DE SISTEMA
+   *****/
+  /*MutableMatrix44D FlatPlanet::doubleDrag(const Vector3D& finalRay0,
+                                          const Vector3D& finalRay1,
+                                          bool allowRotation) const
+  {
+    // test if initialPoints are valid
+    if (_initialPoint0.isNan() || _initialPoint1.isNan())
+      return MutableMatrix44D::invalid();
+    
+    // init params
+    const IMathUtils* mu = IMathUtils::instance();
+    const Vector3D origin = _origin.asVector3D();
+    MutableVector3D positionCamera = _origin;
+    
+    // compute final points
+    Vector3D finalPoint0 = Plane::intersectionXYPlaneWithRay(origin, finalRay0, _dragHeight0);
+    if (finalPoint0.isNan()) return MutableMatrix44D::invalid();
+  
+    // drag initial point 0 to final point 0
+    MutableMatrix44D matrix = MutableMatrix44D::createTranslationMatrix(_initialPoint0.sub(finalPoint0));
+    
+    // transform points to set axis origin in initialPoint0
+    // (en el mundo plano es solo una traslacion)
+    // (en el esférico será un cambio de sistema de referencia: traslacion + rotacion, usando el sistema local normal en ese punto)
+    {
+      Vector3D draggedCameraPos = positionCamera.transformedBy(matrix, 1.0).asVector3D();
+      Vector3D finalPoint1 = Plane::intersectionXYPlaneWithRay(draggedCameraPos, finalRay1.transformedBy(matrix,0), _dragHeight1);
+      MutableMatrix44D traslation = MutableMatrix44D::createTranslationMatrix(_initialPoint0.times(-1).asVector3D());
+      Vector3D transformedInitialPoint1 = _initialPoint1.transformedBy(traslation, 1.0).asVector3D();
+      Vector3D transformedFinalPoint1 = finalPoint1.transformedBy(traslation, 1.0);
+      Vector3D transformedCameraPos = draggedCameraPos.transformedBy(traslation, 1.0);
+      Vector3D v0 = transformedFinalPoint1.sub(transformedCameraPos);
+      Vector3D v1 = transformedCameraPos.times(-1);
+      Vector3D planeNormal = v0.cross(v1).normalized();
+      double a = planeNormal._x;
+      double b = planeNormal._y;
+      double c = planeNormal._z;
+      double xb = transformedInitialPoint1._x;
+      double yb = transformedInitialPoint1._y;
+      double zb = transformedInitialPoint1._z;
+      double A = a*xb + b*yb;
+      double B = b*xb - a*yb;
+      double C = c*zb;
+      double ap = A*A + B*B;
+      double bp = 2*B*C;
+      double cp = C*C - A*A;
+      double root = bp*bp - 4*ap*cp;
+      if (root<0) return MutableMatrix44D::invalid();
+      double squareRoot = mu->sqrt(root);
+      double sinTita1 = (-bp + squareRoot) / (2*ap);
+      double sinTita2 = (-bp - squareRoot) / (2*ap);
+      double cosTita1 = - (C + B*sinTita1) / A;
+      double cosTita2 = - (C + B*sinTita2) / A;
+      double angulo1 = atan2(sinTita1, cosTita1) / 3.14159 * 180;
+      double angulo2 = atan2(sinTita2, cosTita2) / 3.14159 * 180;
+      double dif1 = mu->abs(angulo1-_lastDoubleDragAngle);
+      if (dif1 > 180) dif1 = 360 - dif1;
+      double dif2 = mu->abs(angulo2-_lastDoubleDragAngle);
+      if (dif2 > 180) dif2 = 360 - dif2;
+      _lastDoubleDragAngle = (dif1 < dif2)? angulo1 : angulo2;
+      Vector3D normal0 = geodeticSurfaceNormal(_initialPoint0);
+      MutableMatrix44D rotation = MutableMatrix44D::createGeneralRotationMatrix(Angle::fromDegrees(-_lastDoubleDragAngle),
+                                                                                normal0, _initialPoint0.asVector3D());
+      matrix = rotation.multiply(matrix);
+    }
+    
+    // zoom camera (see chuleta en pdf)
+    // ahora mismo lo que se hace es buscar cuánto acercar para que el angulo de las dos parejas de vectores
+    // sea el mismo
+    {
+      Vector3D P0   = positionCamera.transformedBy(matrix, 1.0).asVector3D();
+      Vector3D B    = _initialPoint1.asVector3D();
+      Vector3D B0   = B.sub(P0);
+      Vector3D Ra   = finalRay0.transformedBy(matrix, 0.0).normalized();
+      Vector3D Rb   = finalRay1.transformedBy(matrix, 0.0).normalized();
+      double b      = -2 * (B0.dot(Ra));
+      double c      = B0.squaredLength();
+      double k      = Ra.dot(B0);
+      double RaRb2  = Ra.dot(Rb) * Ra.dot(Rb);
+      double at     = RaRb2 - 1;
+      double bt     = b*RaRb2 + 2*k;
+      double ct     = c*RaRb2 - k*k;
+      double root   = bt*bt - 4*at*ct;
+      if (root<0) return MutableMatrix44D::invalid();
+      double squareRoot = mu->sqrt(root);
+      double t = (-bt + squareRoot) / (2*at);
+      MutableMatrix44D zoom = MutableMatrix44D::createTranslationMatrix(Ra.times(t));
+      matrix = zoom.multiply(matrix);
+    }
+    
+    return matrix;
+  }
+  */
+  
+  //JM VERSION: JUST TO CLARIFY A FEW THINGS
+  public final MutableMatrix44D doubleDrag(Vector3D finalRay0, Vector3D finalRay1, boolean allowRotation)
+  {
+    // test if initialPoints are valid
+    if (_initialPoint0.isNan() || _initialPoint1.isNan())
+      return MutableMatrix44D.invalid();
+  
+    // init params
+    final IMathUtils mu = IMathUtils.instance();
+    final Vector3D origin = _origin.asVector3D();
+    MutableVector3D positionCamera = _origin;
+  
+    // compute final points
+    Vector3D finalPoint0 = Plane.intersectionXYPlaneWithRay(origin, finalRay0, _dragHeight0); //A1
+    if (finalPoint0.isNan())
+       return MutableMatrix44D.invalid();
+  
+    // drag initial point 0 to final point 0
+    MutableMatrix44D matrix = MutableMatrix44D.createTranslationMatrix(_initialPoint0.sub(finalPoint0));
+  
+    // transform points to set axis origin in initialPoint0
+    // (en el mundo plano es solo una traslacion)
+    // (en el esférico será un cambio de sistema de referencia: traslacion + rotacion, usando el sistema local normal en ese punto)
+    {
+  
+      Vector3D draggedCameraPos = positionCamera.transformedBy(matrix, 1.0).asVector3D();
+      Vector3D finalPoint1 = Plane.intersectionXYPlaneWithRay(draggedCameraPos, finalRay1.transformedBy(matrix, 0), _dragHeight1); //B1
+  
+      //Taking whole system to origin
+      MutableMatrix44D traslation = MutableMatrix44D.createTranslationMatrix(_initialPoint0.times(-1).asVector3D());
+      Vector3D transformedInitialPoint1 = _initialPoint1.transformedBy(traslation, 1.0).asVector3D();
+      Vector3D transformedFinalPoint1 = finalPoint1.transformedBy(traslation, 1.0);
+      Vector3D transformedCameraPos = draggedCameraPos.transformedBy(traslation, 1.0);
+      Vector3D v0 = transformedFinalPoint1.sub(transformedCameraPos);
+  
+      //Angles to rotate transformedInitialPoint1 to adjust the plane that contains origin, TFP1 and TCP
+      Vector3D planeNormal = transformedCameraPos.cross(v0).normalized();
+      Plane plane = new Plane(planeNormal, v0);
+      Vector2D angles = plane.rotationAngleAroundZAxisToFixPointInRadians(transformedInitialPoint1);
+  
+      //Selecting best angle to rotate (smallest)
+      double angulo1 = angles._x;
+      double angulo2 = angles._y;
+      double dif1 = Angle.distanceBetweenAnglesInRadians(angulo1, _lastDoubleDragAngle);
+      double dif2 = Angle.distanceBetweenAnglesInRadians(angulo2, _lastDoubleDragAngle);
+      _lastDoubleDragAngle = (dif1 < dif2)? angulo1 : angulo2;
+  
+      //Creating rotating matrix
+      Vector3D normal0 = geodeticSurfaceNormal(_initialPoint0);
+      MutableMatrix44D rotation = MutableMatrix44D.createGeneralRotationMatrix(Angle.fromRadians(-_lastDoubleDragAngle), normal0, _initialPoint0.asVector3D());
+      matrix.copyValueOfMultiplication(rotation, matrix); // = rotation.multiply(matrix);
+  
+    }
+  
+    // zoom camera (see chuleta en pdf)
+    // ahora mismo lo que se hace es buscar cuánto acercar para que el angulo de las dos parejas de vectores
+    // sea el mismo
+    {
+      Vector3D P0 = positionCamera.transformedBy(matrix, 1.0).asVector3D();
+      Vector3D B = _initialPoint1.asVector3D();
+      Vector3D B0 = B.sub(P0);
+      Vector3D Ra = finalRay0.transformedBy(matrix, 0.0).normalized();
+      Vector3D Rb = finalRay1.transformedBy(matrix, 0.0).normalized();
+      double b = -2 * (B0.dot(Ra));
+      double c = B0.squaredLength();
+      double k = Ra.dot(B0);
+      double RaRb2 = Ra.dot(Rb) * Ra.dot(Rb);
+      double at = RaRb2 - 1;
+      double bt = b *RaRb2 + 2 *k;
+      double ct = c *RaRb2 - k *k;
+  
+      Vector2D sol = mu.solveSecondDegreeEquation(at, bt, ct);
+      if (sol.isNan())
+      {
+        return MutableMatrix44D.invalid();
+      }
+      double t = sol._x;
+  
+      MutableMatrix44D zoom = MutableMatrix44D.createTranslationMatrix(Ra.times(t));
+      matrix.copyValueOfMultiplication(zoom, matrix); // = zoom.multiply(matrix);
+    }
+  
+    /*
+    //Much more visual reasoning (does not work so well though) :S [Check with AGUSTIN]
+    {
+      Vector3D A0 = _initialPoint0.transformedBy(matrix, 1.0).asVector3D();
+      Vector3D P0 = positionCamera.transformedBy(matrix, 1.0).asVector3D();
+      Vector3D B0 = _initialPoint1.transformedBy(matrix, 1.0).asVector3D();
+    
+      Vector3D finalPoint1 = Plane::intersectionXYPlaneWithRay(positionCamera.asVector3D(), finalRay1, _dragHeight1);
+      Vector3D B1 = finalPoint1.transformedBy(matrix, 1.0);
+    
+      Vector3D P0_A0 = P0.sub(A0);
+      Vector3D P0_B0 = P0.sub(B0);
+      Vector3D A0_B0 = A0.sub(B0);
+      Vector3D A0_B1 = A0.sub(B1);
+      Vector3D B1_A0 = B1.sub(A0);
+  
+      Angle alpha = finalRay0.angleBetween(finalRay1); // P0_A0.angleBetween(P0_B0);
+      Angle tita = (P0_B0.times(-1)).angleBetween(B1_A0);
+    
+      double distP1_A0 = mu->sin(tita._radians) / mu->sin(alpha._radians) * A0_B1.length();
+    
+      double distToMove = P0_A0.length() - distP1_A0;
+    
+      MutableMatrix44D zoom = MutableMatrix44D::createTranslationMatrix(P0_A0.normalized().times(distToMove));
+      matrix = zoom.multiply(matrix);
+    }
+     */
   
     return matrix;
   }
@@ -381,6 +641,15 @@ public class FlatPlanet extends Planet
     //const Vector3D centerPoint = Plane::intersectionXYPlaneWithRay(origin, centerRay);
     double dragHeight = toGeodetic3D(touchedPosition)._height;
     final Vector3D centerPoint = Plane.intersectionXYPlaneWithRay(origin, centerRay, dragHeight);
+  
+    /*
+     =======
+                                            const Vector3D& tapRay) const {
+    const Vector3D initialPoint = Plane::intersectionXYPlaneWithRay(origin, tapRay);
+    if (initialPoint.isNan()) return NULL;
+    const Vector3D centerPoint = Plane::intersectionXYPlaneWithRay(origin, centerRay);
+  >>>>>>> origin/purgatory
+     */
   
     // create effect
     double distanceToGround = toGeodetic3D(origin)._height - dragHeight;

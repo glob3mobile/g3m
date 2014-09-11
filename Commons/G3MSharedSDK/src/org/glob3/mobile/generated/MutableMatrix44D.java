@@ -753,6 +753,16 @@ public class MutableMatrix44D
   
   }
 
+  public static MutableMatrix44D createModelMatrix(MutableVector3D u, MutableVector3D v, MutableVector3D w, MutableVector3D pos)
+  {
+    final MutableVector3D normalizedU = u.normalized();
+    final MutableVector3D normalizedV = v.normalized();
+    final MutableVector3D normalizedW = w.normalized();
+  
+    return new MutableMatrix44D(normalizedU.x(), normalizedV.x(), normalizedW.x(), 0, normalizedU.y(), normalizedV.y(), normalizedW.y(), 0, normalizedU.z(), normalizedV.z(), normalizedW.z(), 0, -pos.x(), -pos.y(), -pos.z(), 1);
+  }
+
+
   public static MutableMatrix44D createProjectionMatrix(double left, double right, double bottom, double top, double znear, double zfar)
   {
     // set frustum MutableMatrix44D in double

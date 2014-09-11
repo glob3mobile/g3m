@@ -408,6 +408,18 @@ public class GL
     }
 
     return a;
+
+    /*
+     =======
+  GPUUniform* getActiveUniform(const GPUProgram* program, int i) const {
+    return _nativeGL->getActiveUniform(program, i);
+  }
+  
+  GPUAttribute* getActiveAttribute(const GPUProgram* program, int i) const {
+    return _nativeGL->getActiveAttribute(program, i);
+>>>>>>> origin/purgatory
+     */
+
   }
 
   public final void useProgram(GPUProgram program)

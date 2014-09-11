@@ -89,13 +89,13 @@ public class EllipsoidalPlanet extends Planet
     return geodeticSurfaceNormal(geodetic._latitude, geodetic._longitude);
   }
 
+  public final java.util.ArrayList<Double> intersectionsDistances(Vector3D origin, Vector3D direction)
+  {
+    return Ellipsoid.intersectionCenteredEllipsoidWithRay(origin, direction, _ellipsoid.getOneOverRadiiSquared());
+  }
   public final java.util.ArrayList<Double> intersectionsDistances(double originX, double originY, double originZ, double directionX, double directionY, double directionZ)
   {
-<<<<<<< HEAD
-    return Ellipsoid.intersectionCenteredEllipsoidWithRay(origin, direction, _ellipsoid.getOneOverRadiiSquared());
-=======
     return _ellipsoid.intersectionsDistances(originX, originY, originZ, directionX, directionY, directionZ);
->>>>>>> origin/purgatory
   }
 
   public final Vector3D toCartesian(Angle latitude, Angle longitude, double height)
@@ -347,14 +347,11 @@ public class EllipsoidalPlanet extends Planet
     return result;
   }
 
-<<<<<<< HEAD
   public final Vector3D closestIntersection(Vector3D pos, Vector3D ray)
   {
     return Ellipsoid.closestIntersectionCenteredEllipsoidWithRay(pos, ray, _ellipsoid.getOneOverRadiiSquared());
   }
 
-=======
->>>>>>> origin/purgatory
   public final MutableMatrix44D createGeodeticTransformMatrix(Geodetic3D position)
   {
     final MutableMatrix44D translation = MutableMatrix44D.createTranslationMatrix(toCartesian(position));
@@ -371,7 +368,6 @@ public class EllipsoidalPlanet extends Planet
   //void beginSingleDrag(const Vector3D& origin, const Vector3D& initialRay) const;
   public final void beginSingleDrag(Vector3D origin, Vector3D touchedPosition)
   {
-<<<<<<< HEAD
     _origin = origin.asMutableVector3D();
     //_initialPoint = closestIntersection(origin, initialRay).asMutableVector3D();
     _initialPoint = touchedPosition.asMutableVector3D();
@@ -379,12 +375,15 @@ public class EllipsoidalPlanet extends Planet
     double _dragRadiusFactorSquared = touchedPosition._x * touchedPosition._x / _originalRadiusSquared._x + touchedPosition._y * touchedPosition._y / _originalRadiusSquared._y + touchedPosition._z * touchedPosition._z / _originalRadiusSquared._z;
     _oneOverDragRadiiSquared = new MutableVector3D(1.0 / _dragRadiusFactorSquared / _originalRadiusSquared._x, 1.0 / _dragRadiusFactorSquared / _originalRadiusSquared._y, 1.0 / _dragRadiusFactorSquared / _originalRadiusSquared._z);
   
-=======
+  /*
+    =======
   //  _origin = origin.asMutableVector3D();
     _origin.copyFrom(origin);
   //  _initialPoint = closestIntersection(origin, initialRay).asMutableVector3D();
     _initialPoint.copyFrom(closestIntersection(origin, initialRay));
->>>>>>> origin/purgatory
+  >>>>>>> origin/purgatory
+   */
+  
     _validSingleDrag = false;
   }
 
