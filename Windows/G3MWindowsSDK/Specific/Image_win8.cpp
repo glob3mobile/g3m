@@ -287,6 +287,20 @@ IWICBitmap* Image_win8::imageWithData(BYTE* data, int dataLength){
 		(LPVOID*)&pFactory
 		);
 
+
+	//hr = pFactory->CreateBitmapFromMemory(
+	//	90,	// height
+	//	120, // width
+	//	GUID_WICPixelFormat24bppBGR, // pixel format of the NEW bitmap
+	//	360,	// calculated from width and bpp information
+	//	dataLength, // height x width
+	//	data, // pointer to data
+	//	&pBitmap	// pointer to pointer to whatever an IWICBitmap is.
+	//	);
+	//if (SUCCEEDED(hr)){
+	//	return pBitmap;
+	//}
+
 	// Create a WIC stream to map onto the memory.
 	if (SUCCEEDED(hr)){
 		hr = pFactory->CreateStream(&pIWICStream);
@@ -305,8 +319,10 @@ IWICBitmap* Image_win8::imageWithData(BYTE* data, int dataLength){
 		return NULL;
 	}
 	
+	
 	// Create a decoder for the stream.
 	if (SUCCEEDED(hr)){
+		
 		hr = pFactory->CreateDecoderFromStream(
 			pIWICStream,                   // The stream to use to create the decoder
 			NULL,                          // Do not prefer a particular vendor
@@ -316,6 +332,8 @@ IWICBitmap* Image_win8::imageWithData(BYTE* data, int dataLength){
 	else{
 		return NULL;
 	}
+
+	
 
 	//// Create a encoder for the stream.
 	//if (SUCCEEDED(hr)){
@@ -368,7 +386,7 @@ IWICBitmap* Image_win8::imageWithData(BYTE* data, int dataLength){
 	hr = pFactory->CreateBitmapFromMemory(width, height, pPixelFormat, stride, bufferSize, data, &pBitmap);
 
 	if (SUCCEEDED(hr)){
-		return pBitmap;//TODO: faltan los releases
+		return pBitmap;//TODO: faltan todos los releases
 	}
 
 	return NULL;
@@ -419,12 +437,15 @@ Image_win8* Image_win8::imageFromFile(std::string name){
 		WICDecodeMetadataCacheOnDemand,
 		&pIDecoder);
 	
-
 	if (SUCCEEDED(hr)){
 		hr = pIDecoder->GetFrame(0, &pIDecoderFrame);
+
+		/*DWORD* capability = 0;
+		pIDecoder->QueryCapability(,capability);*/
+
 		//IWICBitmapDecoderInfo* pDecoderInfo = NULL;
 		//hr = pIDecoder->GetDecoderInfo(&pDecoderInfo);
-		//pDecoderInfo->GetFriendlyName();
+		////pDecoderInfo->GetFriendlyName();
 		//GUID containerFormat;
 		//hr = pIDecoder->GetContainerFormat(&containerFormat);
 		//
@@ -452,7 +473,7 @@ Image_win8* Image_win8::imageFromFile(std::string name){
 		hr = pIDecoderFrame->GetPixelFormat(&pPixelFormat);
 		if (SUCCEEDED(hr)){
 			bpp = getbppFromPixelFormat(pPixelFormat);
-			ILogger::instance()->logInfo("PIXEL FORMAT OK: \"%#x, %#x, %#x \"\n", pPixelFormat.Data1, pPixelFormat.Data2, pPixelFormat.Data3);
+			ILogger::instance()->logInfo("PIXEL FORMAT OK: \"%#x, %#x, %#x\", bpp: %d \n", pPixelFormat.Data1, pPixelFormat.Data2, pPixelFormat.Data3, bpp);
 		}
 		else{
 			ILogger::instance()->logInfo("PIXEL FORMAT UNKNOWN");
@@ -464,6 +485,7 @@ Image_win8* Image_win8::imageFromFile(std::string name){
 
 	//UINT stride = width * 4;
 	UINT stride = getStride(width, bpp);
+	ILogger::instance()->logInfo("stride: %d \n", stride);
 	UINT bufferSize = stride * height;
 	
 	BYTE* imageData = (BYTE*)malloc(bufferSize);
@@ -490,5 +512,5 @@ Image_win8* Image_win8::imageFromFile(std::string name){
 		return NULL;
 	}
 
-	return NULL;
+	return NULL; //TODO: faltan todos los releases
 }

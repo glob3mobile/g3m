@@ -315,9 +315,6 @@ IByteBufferResult Storage_win8::readBuffer(const URL& url, bool readExpired){
 
 		if (readExpired || !expired) {
 			//NSUInteger length = [nsData length];
-			//unsigned char* dataArr = (unsigned char*)data;
-			//char* dataArr = (char*)data;
-			//int length = strlen(dataArr); //TODO: works??
 			unsigned char* bytes = new unsigned char[dataLength];
 			//[nsData getBytes : bytes length : length];
 			memcpy(bytes, data, dataLength);
@@ -363,7 +360,8 @@ IImageResult Storage_win8::readImage(const URL& url, bool readExpired){
 			
 			//UIImage* uiImage = UIImage->imageWithData(data);
 			/*BYTE* imageData = (BYTE*)malloc(dataLength);
-			memcpy(imageData, data, dataLength);*/
+			memcpy(imageData, data, dataLength);
+			IWICBitmap* bitmap = Image_win8::imageWithData(imageData, dataLength);*/
 			IWICBitmap* bitmap = Image_win8::imageWithData((BYTE*)data, dataLength);
 
 			if (bitmap) {

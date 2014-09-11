@@ -981,6 +981,12 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)..\..\D3D\D3DRenderer.cpp">
       <Filter>D3D</Filter>
     </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\Specific\Image_win8.cpp">
+      <Filter>Specific</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\Specific\SQDatabase.cpp">
+      <Filter>Specific</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="$(MSBuildThisFileDirectory)..\..\Specific\ByteBuffer_win8.hpp">
@@ -2054,22 +2060,16 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Interfaces\IGPUProgramFactory.hpp">
       <Filter>Common\Interfaces</Filter>
     </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\Specific\Image_win8.hpp">
+      <Filter>Specific</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\Specific\SQDatabase.hpp">
+      <Filter>Specific</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\G3MWidget.cpp.orig">
       <Filter>Common\Basic</Filter>
-    </None>
-    <None Include="$(MSBuildThisFileDirectory)..\..\Specific\Image_win8.cpp">
-      <Filter>Specific</Filter>
-    </None>
-    <None Include="$(MSBuildThisFileDirectory)..\..\Specific\Image_win8.hpp">
-      <Filter>Specific</Filter>
-    </None>
-    <None Include="$(MSBuildThisFileDirectory)..\..\Specific\SQDatabase.cpp">
-      <Filter>Specific</Filter>
-    </None>
-    <None Include="$(MSBuildThisFileDirectory)..\..\Specific\SQDatabase.hpp">
-      <Filter>Specific</Filter>
     </None>
   </ItemGroup>
 </Project>
