@@ -96,6 +96,9 @@ public:
   void layerChanged(const Layer* layer) const;
 
   void setChangeListener(ChangedListener* listener);
+  
+  void setTileImageProvider(TileImageProvider* tileImageProvider);
+
 
   Layer* getLayer(int index) const;
 

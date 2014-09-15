@@ -145,6 +145,9 @@
 #import <G3MiOSSDK/GEORectangleRasterSymbol.hpp>
 
 #import <G3MiOSSDK/DefaultInfoDisplay.hpp>
+#import <G3MiOSSDK/DebugTileImageProvider.hpp>
+
+
 
 
 
@@ -486,8 +489,8 @@ public:
                                           true,
                                           LayerTilesRenderParameters::createDefaultWGS84(Sector::fullSphere(), 0, 8),
                                           1);
-//  layerSet->addLayer(blueMarble);
-//  layerSet->addLayer(pnoa);
+layerSet->addLayer(blueMarble);
+//layerSet->addLayer(pnoa);
   
  
   
@@ -513,6 +516,9 @@ public:
   
   
   //  layerSet->addLayer(MapQuestLayer::newOSM(TimeInterval::fromDays(30)));
+  
+  layerSet->setTileImageProvider(new DebugTileImageProvider());
+  
   builder.getPlanetRendererBuilder()->setLayerSet(layerSet);
   builder.getPlanetRendererBuilder()->setRenderDebug(true);
   

@@ -344,6 +344,38 @@ void Canvas_iOS::_fillText(const std::string& text,
   UIGraphicsPopContext();
 }
 
+
+void Canvas_iOS::_drawImage(const IImage* image,
+                            float destLeft, float destTop) {
+  UIImage* uiImage = ((Image_iOS*) image)->getUIImage();
+  CGImage* cgImage = [uiImage CGImage];
+  
+  CGContextDrawImage(_context,
+                     CGRectMake(destLeft,
+                                destTop,
+                                image->getWidth(),
+                                image->getHeight()),
+                     cgImage);
+}
+
+void Canvas_iOS::_drawImage(const IImage* image,
+                            float destLeft, float destTop,
+                            float transparency) {
+  UIImage* uiImage = ((Image_iOS*) image)->getUIImage();
+  CGImage* cgImage = [uiImage CGImage];
+  
+  CGContextSetAlpha(_context, transparency);
+  
+  CGContextDrawImage(_context,
+                     CGRectMake(destLeft,
+                                destTop,
+                                image->getWidth(),
+                                image->getHeight()),
+                     cgImage);
+  
+  CGContextSetAlpha(_context, 1.0);
+}
+
 void Canvas_iOS::_drawImage(const IImage* image,
                             float destLeft, float destTop, float destWidth, float destHeight) {
 

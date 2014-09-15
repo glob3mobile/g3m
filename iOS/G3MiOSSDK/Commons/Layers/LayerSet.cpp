@@ -67,6 +67,13 @@ void LayerSet::setChangeListener(ChangedListener* listener) {
   _listener = listener;
 }
 
+void LayerSet::setTileImageProvider(TileImageProvider* tileImageProvider) {
+  if (_tileImageProvider != NULL) {
+    ILogger::instance()->logError("TileImageProvider already set");
+  }
+  _tileImageProvider = tileImageProvider;
+}
+
 
 RenderState LayerSet::getRenderState() {
   _errors.clear();

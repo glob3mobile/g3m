@@ -94,6 +94,13 @@ protected:
                  float left, float top);
   
   void _drawImage(const IImage* image,
+                  float destLeft, float destTop);
+  
+  void _drawImage(const IImage* image,
+                  float destLeft, float destTop,
+                  float transparency);
+  
+  void _drawImage(const IImage* image,
                   float destLeft, float destTop, float destWidth, float destHeight);
   
   
