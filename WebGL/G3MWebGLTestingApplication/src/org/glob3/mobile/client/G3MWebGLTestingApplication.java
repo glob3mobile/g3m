@@ -3,104 +3,17 @@
 package org.glob3.mobile.client;
 
 import java.util.ArrayList;
+import java.util.Scanner;
 
-import org.glob3.mobile.generated.AltitudeMode;
-import org.glob3.mobile.generated.Angle;
-import org.glob3.mobile.generated.BoxShape;
-import org.glob3.mobile.generated.BusyMeshRenderer;
-import org.glob3.mobile.generated.CameraDoubleDragHandler;
-import org.glob3.mobile.generated.CameraDoubleTapHandler;
-import org.glob3.mobile.generated.CameraRenderer;
-import org.glob3.mobile.generated.CameraRotationHandler;
-import org.glob3.mobile.generated.CameraSingleDragHandler;
-import org.glob3.mobile.generated.CircleShape;
-import org.glob3.mobile.generated.Color;
-import org.glob3.mobile.generated.CompositeElevationDataProvider;
-import org.glob3.mobile.generated.CompositeRenderer;
-import org.glob3.mobile.generated.DirectMesh;
-import org.glob3.mobile.generated.ElevationDataProvider;
-import org.glob3.mobile.generated.ErrorRenderer;
-import org.glob3.mobile.generated.FixedFocusSceneLighting;
-import org.glob3.mobile.generated.FloatBufferBuilderFromColor;
-import org.glob3.mobile.generated.FloatBufferBuilderFromGeodetic;
-import org.glob3.mobile.generated.G3MContext;
-import org.glob3.mobile.generated.G3MEventContext;
-import org.glob3.mobile.generated.GEO2DLineRasterStyle;
-import org.glob3.mobile.generated.GEO2DLineStringGeometry;
-import org.glob3.mobile.generated.GEO2DMultiLineStringGeometry;
-import org.glob3.mobile.generated.GEO2DMultiPolygonGeometry;
-import org.glob3.mobile.generated.GEO2DPointGeometry;
-import org.glob3.mobile.generated.GEO2DPolygonData;
-import org.glob3.mobile.generated.GEO2DPolygonGeometry;
-import org.glob3.mobile.generated.GEO2DSurfaceRasterStyle;
-import org.glob3.mobile.generated.GEOGeometry;
-import org.glob3.mobile.generated.GEOMultiLineRasterSymbol;
 //import org.glob3.mobile.generated.GEORasterLineSymbol;
 //import org.glob3.mobile.generated.GEORasterPolygonSymbol;
-import org.glob3.mobile.generated.GEORenderer;
-import org.glob3.mobile.generated.GEOSymbol;
-import org.glob3.mobile.generated.GEOSymbolizer;
-import org.glob3.mobile.generated.GEOTileRasterizer;
-import org.glob3.mobile.generated.GInitializationTask;
-import org.glob3.mobile.generated.GLPrimitive;
-import org.glob3.mobile.generated.Geodetic2D;
-import org.glob3.mobile.generated.Geodetic3D;
-import org.glob3.mobile.generated.HUDErrorRenderer;
-import org.glob3.mobile.generated.IBufferDownloadListener;
-import org.glob3.mobile.generated.IByteBuffer;
-import org.glob3.mobile.generated.ICameraActivityListener;
-import org.glob3.mobile.generated.ICameraConstrainer;
-import org.glob3.mobile.generated.IDownloader;
-import org.glob3.mobile.generated.IImage;
-import org.glob3.mobile.generated.IImageDownloadListener;
-import org.glob3.mobile.generated.IImageListener;
-import org.glob3.mobile.generated.IImageUtils;
-import org.glob3.mobile.generated.IJSONParser;
-import org.glob3.mobile.generated.IStorage;
-import org.glob3.mobile.generated.IThreadUtils;
-import org.glob3.mobile.generated.InitialCameraPositionProvider;
-import org.glob3.mobile.generated.JSONArray;
-import org.glob3.mobile.generated.JSONBaseObject;
-import org.glob3.mobile.generated.JSONObject;
-import org.glob3.mobile.generated.LayerSet;
-import org.glob3.mobile.generated.LayerTilesRenderParameters;
-import org.glob3.mobile.generated.LayerTouchEvent;
-import org.glob3.mobile.generated.LayerTouchEventListener;
-import org.glob3.mobile.generated.LevelTileCondition;
-import org.glob3.mobile.generated.Mark;
-import org.glob3.mobile.generated.MarkTouchListener;
-import org.glob3.mobile.generated.MarksRenderer;
-import org.glob3.mobile.generated.Mesh;
-import org.glob3.mobile.generated.MeshRenderer;
-import org.glob3.mobile.generated.PeriodicalTask;
-import org.glob3.mobile.generated.Planet;
-import org.glob3.mobile.generated.PlanetRenderer;
-import org.glob3.mobile.generated.PlanetRendererBuilder;
-import org.glob3.mobile.generated.QuadShape;
-import org.glob3.mobile.generated.RectangleF;
-import org.glob3.mobile.generated.Renderer;
-import org.glob3.mobile.generated.SceneLighting;
-import org.glob3.mobile.generated.Sector;
-import org.glob3.mobile.generated.Shape;
-import org.glob3.mobile.generated.ShapesRenderer;
-import org.glob3.mobile.generated.SimpleCameraConstrainer;
-import org.glob3.mobile.generated.SimpleInitialCameraPositionProvider;
-import org.glob3.mobile.generated.SingleBilElevationDataProvider;
-import org.glob3.mobile.generated.StrokeCap;
-import org.glob3.mobile.generated.StrokeJoin;
-import org.glob3.mobile.generated.TimeInterval;
-import org.glob3.mobile.generated.URL;
-import org.glob3.mobile.generated.Vector2I;
-import org.glob3.mobile.generated.Vector3D;
-import org.glob3.mobile.generated.WMSLayer;
-import org.glob3.mobile.generated.WMSServerVersion;
-import org.glob3.mobile.generated.WidgetUserData;
+import org.glob3.mobile.generated.*;
 import org.glob3.mobile.specific.Downloader_WebGL;
 import org.glob3.mobile.specific.G3MBuilder_WebGL;
 import org.glob3.mobile.specific.G3MWidget_WebGL;
 import org.glob3.mobile.specific.ThreadUtils_WebGL;
-
 import org.glob3.mobile.client.MyG3MWidget_WebGL;
+
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
@@ -150,7 +63,8 @@ public class G3MWebGLTestingApplication
     	  
     	  //testBranch_zrender_touchhandlers();
     	  //testBILGC();
-    	  testBandama();
+    	  //testBandama();
+    	  testGeacron();
     	  
          // initialize a customized widget by using a builder
          //initCustomizedWithBuilder();
@@ -1718,5 +1632,252 @@ public class G3MWebGLTestingApplication
 		   _widget.setCameraPitch(Angle.fromDegrees(-12.75));
 	   }
 
+	   
+	   // ******************************
+	   // GEACRON **********************
+	   // ******************************
+	   
+		private static class SampleRasterSymbolizer extends GEORasterSymbolizer {
+
+			private static final Color FROM_COLOR = Color
+					.fromRGBA(0.7f, 0, 0, 0.5f);
+
+			private static GEO2DLineRasterStyle createPolygonLineRasterStyle(
+					final GEOGeometry geometry) {
+				final JSONObject properties = geometry.getFeature().getProperties();
+				final int colorIndex = (int) properties.getAsNumber("mapcolor7", 0);
+				final Color color = FROM_COLOR.wheelStep(7, colorIndex)
+						.muchLighter().muchLighter();
+				final float dashLengths[] = {};
+				final int dashCount = 0;
+				return new GEO2DLineRasterStyle(color, 2, StrokeCap.CAP_ROUND,
+						StrokeJoin.JOIN_ROUND, 1, dashLengths, dashCount, 0);
+			}
+
+			private static GEO2DSurfaceRasterStyle createPolygonSurfaceRasterStyle(
+					final GEOGeometry geometry) {
+				final JSONObject properties = geometry.getFeature().getProperties();
+				final int colorIndex = (int) properties.getAsNumber("mapcolor7", 0);
+				final Color color = FROM_COLOR.wheelStep(7, colorIndex);
+				return new GEO2DSurfaceRasterStyle(color);
+			}
+
+			@Override
+			public GEORasterSymbolizer copy() {
+				return new SampleRasterSymbolizer();
+			}
+
+			@Override
+			public ArrayList<GEORasterSymbol> createSymbols(
+					final GEO2DPointGeometry geometry) {
+				return null;
+			}
+
+			@Override
+			public ArrayList<GEORasterSymbol> createSymbols(
+					final GEO2DLineStringGeometry geometry) {
+				return null;
+			}
+
+			@Override
+			public ArrayList<GEORasterSymbol> createSymbols(
+					final GEO2DMultiLineStringGeometry geometry) {
+				return null;
+			}
+
+			@Override
+			public ArrayList<GEORasterSymbol> createSymbols(
+					final GEO2DPolygonGeometry geometry) {
+				final ArrayList<GEORasterSymbol> symbols = new ArrayList<GEORasterSymbol>();
+				final GEOPolygonRasterSymbol symbol = new GEOPolygonRasterSymbol( //
+						geometry.getPolygonData(), //
+						createPolygonLineRasterStyle(geometry), //
+						createPolygonSurfaceRasterStyle(geometry) //
+				);
+				symbols.add(symbol);
+				return symbols;
+			}
+
+			@Override
+			public ArrayList<GEORasterSymbol> createSymbols(
+					final GEO2DMultiPolygonGeometry geometry) {
+				final ArrayList<GEORasterSymbol> symbols = new ArrayList<GEORasterSymbol>();
+
+				final GEO2DLineRasterStyle lineStyle = createPolygonLineRasterStyle(geometry);
+				final GEO2DSurfaceRasterStyle surfaceStyle = createPolygonSurfaceRasterStyle(geometry);
+
+				for (final GEO2DPolygonData polygonData : geometry
+						.getPolygonsData()) {
+					symbols.add(new GEOPolygonRasterSymbol(polygonData, lineStyle,
+							surfaceStyle));
+				}
+
+				return symbols;
+			}
+		}
+
+	   public void testGeacron() {
+		   final MyG3MWidget_WebGL widgetJS = new MyG3MWidget_WebGL();
+		   final G3MBuilder_WebGL builder = new G3MBuilder_WebGL(widgetJS);
+
+		   {
+			   final LayerSet layerSet = new LayerSet();
+			   // layerSet.addLayer(MapQuestLayer.newOSM(TimeInterval.fromDays(30)));
+			   layerSet.addLayer(new MapBoxLayer("examples.map-9ijuk24y", TimeInterval
+					   .fromDays(30)));
+			   final String urlTemplate = "http://192.168.1.2/ne_10m_admin_0_countries-Levels10/{level}/{y}/{x}.geojson";
+			   final int firstLevel = 2;
+			   final int maxLevel = 10;
+			   final GEORasterSymbolizer symbolizer = new SampleRasterSymbolizer();
+			   final TiledVectorLayer tiledVectorLayer = TiledVectorLayer.newMercator( //
+					   symbolizer, //
+					   urlTemplate, //
+					   Sector.fullSphere(), // sector
+					   firstLevel, //
+					   maxLevel, //
+					   TimeInterval.fromDays(30), // timeToCache
+					   true, // readExpired
+					   1, // transparency
+					   null // condition
+					   );
+			   layerSet.addLayer(tiledVectorLayer);
+			   //builder.getPlanetRendererBuilder().setLayerSet(layerSet);
+		   }
+
+			final String proxy = null; // "http://galileo.glob3mobile.com/" +
+										// "proxy.php?url="
+			/*builder.setDownloader(new Downloader_WebGL( //
+					8, // maxConcurrentOperationCount
+					10, // delayMillis
+					proxy));*/
+			
+			
+			String A1800DC = null; //AGUSTIN TODO:LOAD file
+			String A1900DC = null; //AGUSTIN TODO:LOAD file
+			//geaCron(builder, A1800DC, A1900DC);
+			geaCron(builder, null, null);
+
+		   _widget = builder.createWidget();
+	   }
+
+	   
+		class GeaCronSymbolizer extends GEOSymbolizer {
+
+			@Override
+			public ArrayList<GEOSymbol> createSymbols(GEO2DPointGeometry geometry) {
+				// TODO Auto-generated method stub
+				return null;
+			}
+
+			@Override
+			public ArrayList<GEOSymbol> createSymbols(
+					GEO2DLineStringGeometry geometry) {
+				// TODO Auto-generated method stub
+				return null;
+			}
+
+			@Override
+			public ArrayList<GEOSymbol> createSymbols(
+					GEO2DMultiLineStringGeometry geometry) {
+				// TODO Auto-generated method stub
+				return null;
+			}
+
+			@Override
+			public ArrayList<GEOSymbol> createSymbols(GEO2DPolygonGeometry geometry) {
+
+				JSONObject properties = geometry.getFeature().getProperties();
+
+				/*
+				String color = properties.getAsString("FILL_COLOR", "");
+				int n=0, start, end;
+				while (color.charAt(n) != '(') n++;
+				start = n;
+				start = color.indexOf("(");
+				end = color.indexOf(",");
+				int r = Integer.parseInt(color.substring(start+1, end).trim());
+				start = color.indexOf("(");
+				end = color.indexOf(",");
+				int r = Integer.parseInt(color.substring(start+1, end).trim());
+				*/
+				
+				int r = 255;
+				int g = 0;
+				int b = 0;
+				
+
+				Color lineColor = Color.fromRGBA((float) (r / 255.0),
+						(float) (g / 255.0), (float) (b / 255.0), (float) 1.0);
+
+				GEOLine2DMeshSymbol line = new GEOLine2DMeshSymbol(
+						geometry.getCoordinates(),
+						new GEOLine2DStyle(lineColor, 3), 1.0);
+
+				ArrayList<GEOSymbol> v = new ArrayList<GEOSymbol>();
+				v.add(line);
+				return v;
+			}
+
+			@Override
+			public ArrayList<GEOSymbol> createSymbols(
+					GEO2DMultiPolygonGeometry geometry) {
+				// TODO Auto-generated method stub
+				return null;
+			}
+
+		};
+
+		private void geaCron(G3MBuilder_WebGL builder, String A1800DC,
+				String A1900DC) {
+
+			GeaCronSymbolizer symbolizer = new GeaCronSymbolizer();
+
+
+			MeshRenderer mr1 = new MeshRenderer();
+			if (A1800DC != null) {
+				GEORenderer renderer = new GEORenderer(symbolizer, mr1, null, null,
+						null);
+
+				builder.addRenderer(renderer);
+				builder.addRenderer(mr1);
+
+				GEOObject geoObject = GEOJSONParser.parseJSON(A1800DC);
+				renderer.addGEOObject(geoObject);
+			}
+
+
+			MeshRenderer mr2 = new MeshRenderer();
+			if (A1900DC != null) {
+				GEORenderer renderer = new GEORenderer(symbolizer, mr2, null, null,
+						null);
+
+				builder.addRenderer(renderer);
+				builder.addRenderer(mr2);
+
+				GEOObject geoObject = GEOJSONParser.parseJSON(A1900DC);
+				renderer.addGEOObject(geoObject);
+			}
+			
+			class GeaCronTask extends GTask {
+
+				Renderer _r1, _r2;
+
+				public GeaCronTask(Renderer r1, Renderer r2) {
+					_r1 = r1;
+					_r2 = r2;
+				}
+
+				@Override
+				public void run(G3MContext context) {
+					boolean x = _r1.isEnable();
+					_r1.setEnable(!x);
+					_r2.setEnable(x);
+
+				}
+
+			};
+
+			builder.addPeriodicalTask(new PeriodicalTask(TimeInterval.fromMilliseconds(1000), new GeaCronTask(mr1, mr2)));
+		}
 
 }
