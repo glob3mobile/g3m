@@ -159,6 +159,15 @@ void Canvas_iOS::_removeShadow() {
                               NULL);
 }
 
+void Canvas_iOS::_clearRect(float left, float top,
+                            float width, float height) {
+  
+  
+  
+  CGContextClearRect(_context, CGRectMake(left, _canvasHeight - top,
+                                                               width, -height));
+}
+
 void Canvas_iOS::_createImage(IImageListener* listener,
                               bool autodelete) {
   CGImageRef cgImage = CGBitmapContextCreateImage(_context);

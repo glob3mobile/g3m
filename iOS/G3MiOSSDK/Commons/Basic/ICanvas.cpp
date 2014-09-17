@@ -97,6 +97,13 @@ void ICanvas::removeShadow() {
   _removeShadow();
 }
 
+void ICanvas::clearRect(float left, float top, float width, float height) {
+  checkInitialized();
+  _clearRect(left, top,
+             width, height);
+}
+
+
 void ICanvas::fillRectangle(float left, float top,
                             float width, float height) {
   checkInitialized();

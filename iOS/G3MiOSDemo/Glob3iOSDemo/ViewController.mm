@@ -537,8 +537,8 @@ layerSet->addLayer(blueMarble);
   
   //builder.setShownSector(sector);
   builder.getPlanetRendererBuilder()->setForceFirstLevelTilesRenderOnStart(forceFirstLevelTilesRenderOnStart);
-  ShapesRenderer* shapesRenderer = [self createShapesRendererForTestImageDrawingOfCanvas: builder.getPlanet()];
-  builder.addRenderer(shapesRenderer);
+//  ShapesRenderer* shapesRenderer = [self createShapesRendererForTestImageDrawingOfCanvas: builder.getPlanet()];
+//  builder.addRenderer(shapesRenderer);
 
   
   

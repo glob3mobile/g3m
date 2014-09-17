@@ -629,6 +629,8 @@ public:
     _defaultTileTesturizer->setDefaultBackGroundImage(image);
     _defaultTileTesturizer->setDefaultBackGroundImageName(imageName);
     _defaultTileTesturizer->setDefaultBackGroundImageLoaded(true);
+    ILogger::instance()->logInfo("Default Back Ground Image loaded...");
+
   }
   
   void onError(const std::string& error) {

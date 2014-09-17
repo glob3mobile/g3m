@@ -87,7 +87,9 @@ protected:
                           float offsetY) = 0;
 
   virtual void _removeShadow() = 0;
-
+  
+  virtual void _clearRect(float left, float top,
+                          float width, float height) = 0;
 
   virtual void _createImage(IImageListener* listener,
                             bool autodelete) = 0;
@@ -198,7 +200,9 @@ public:
                  float offsetY);
 
   void removeShadow();
-
+  
+  void clearRect(float left, float top,
+                 float width, float height);
 
   void fillRectangle(float left, float top,
                      float width, float height);

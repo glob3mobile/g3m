@@ -58,6 +58,9 @@ protected:
                   float offsetY);
 
   void _removeShadow();
+  
+  void _clearRect(float left, float top,
+                  float width, float height);
 
 
   void _fillRectangle(float left, float top,

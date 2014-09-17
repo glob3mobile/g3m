@@ -21,6 +21,7 @@
 #include "IStringBuilder.hpp"
 #include "TextCanvasElement.hpp"
 #include "ColumnCanvasElement.hpp"
+#include "IFactory.hpp"
 
 DebugTileImageProvider::ImageListener::ImageListener(const std::string&           tileId,
                                                      const TileImageContribution* contribution,
@@ -85,8 +86,8 @@ DebugTileImageProvider::DebugTileImageProvider() :
 _font(GFont::monospaced(15)),
 _color(Color::yellow()),
 _showIDLabel(true),
-_showSectorLabels(false),
-_showTileBounds(false)
+_showSectorLabels(true),
+_showTileBounds(true)
 {
 }
 
@@ -136,9 +137,10 @@ void DebugTileImageProvider::create(const Tile* tile,
   
   ICanvas* canvas = getCanvas(width, height);
   
-  canvas->removeShadow();
+  //canvas->removeShadow();
   
-  if(tile->_level == 0) {
+  //canvas->clearRect(0, 0, width, height);
+
   
   if (_showTileBounds) {
     canvas->setLineColor(_color);
@@ -166,23 +168,14 @@ void DebugTileImageProvider::create(const Tile* tile,
                (height - colExtent._y) / 2,
                canvas);
   }
-  }
   
-  
-  
-  //
-  //  canvas->setLineColor(Color::green());
-  //  canvas->setLineWidth(1);
-  //  canvas->strokeRectangle(0, 0, width, height);
-  
-  
-  ILogger::instance()->logInfo(getIDLabel(tile));
+  //ILogger::instance()->logInfo(getIDLabel(tile));
   
   canvas->createImage(new DebugTileImageProvider::ImageListener(tile->_id,
                                                                 contribution,
                                                                 listener,
                                                                 deleteListener),
-                      true);
+                      true);  
 }
 
 void DebugTileImageProvider::cancel(const std::string& tileId) {

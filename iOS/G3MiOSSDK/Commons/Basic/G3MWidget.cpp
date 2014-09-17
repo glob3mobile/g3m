@@ -187,13 +187,14 @@ _infoDisplay(infoDisplay)
                                         _gpuProgramManager,
                                         _surfaceElevationProvider);
 
-#ifdef C_CODE
-  delete _rendererState;
-  _rendererState = new RenderState( calculateRendererState() );
-#endif
-#ifdef JAVA_CODE
-  _rendererState = calculateRendererState();
-#endif
+
+//#ifdef C_CODE
+//  delete _rendererState;
+//  _rendererState = new RenderState( calculateRendererState() );
+//#endif
+//#ifdef JAVA_CODE
+//  _rendererState = calculateRendererState();
+//#endif
 }
 
 
