@@ -151,12 +151,10 @@ _touchEventTypeOfTerrainTouchListener(touchEventTypeOfTerrainTouchListener)
 {
   _context = NULL;
   _layerSet->setChangeListener(this);
+  
   _layerSet->setChangedInfoListener(this);
-//  if (_tileRasterizer != NULL) {
-//    _tileRasterizer->setChangeListener(this);
-//  }
-
   _changedInfoListener = changedInfoListener;
+  _rendererIdentifier = -1;
 }
 
 void PlanetRenderer::recreateTiles() {
@@ -428,9 +426,7 @@ void PlanetRenderer::initialize(const G3MContext* context) {
   if (_elevationDataProvider != NULL) {
     _elevationDataProvider->initialize(context);
   }
-//  if (_tileRasterizer != NULL) {
-//    _tileRasterizer->initialize(context);
-//  }
+  
 }
 
 RenderState PlanetRenderer::getRenderState(const G3MRenderContext* rc) {
@@ -931,9 +927,11 @@ void PlanetRenderer::setChangedRendererInfoListener(ChangedRendererInfoListener*
   if (_changedInfoListener != NULL) {
     ILogger::instance()->logWarning("Changed Renderer Info Listener of PlanetRenderer already set");
   }
+  
+  _rendererIdentifier = rendererIdentifier;
   _changedInfoListener = changedInfoListener;
   
-  if(_changedInfoListener != NULL){
+  if(_changedInfoListener != NULL) {
     _changedInfoListener->changedRendererInfo(rendererIdentifier, _layerSet->getInfo());
   }
 }

@@ -279,6 +279,46 @@ public final class Canvas_WebGL
 
 
    @Override
+   protected native void _clearRect(final float left,
+                                    final float top,
+                                    final float width,
+                                    final float height) /*-{
+                                                        var context = this.@org.glob3.mobile.specific.Canvas_WebGL::_domCanvasContext;
+
+                                                        context.clearRect(left, top, width, height);
+                                                        }-*/;
+
+
+   @Override
+   protected native void _drawImage(final IImage image,
+                                    final float destLeft,
+                                    final float destTop) /*-{
+                                                         var context = this.@org.glob3.mobile.specific.Canvas_WebGL::_domCanvasContext;
+                                                         var imageJS = image.@org.glob3.mobile.specific.Image_WebGL::getImage()();
+
+                                                         context.drawImage(imageJS, left, top, imageJS.width, imageJS.height);
+                                                         }-*/;
+
+
+   @Override
+   protected native void _drawImage(final IImage image,
+                                    final float destLeft,
+                                    final float destTop,
+                                    final float transparency) /*-{
+                                                              var context = this.@org.glob3.mobile.specific.Canvas_WebGL::_domCanvasContext;
+                                                              var imageJS = image.@org.glob3.mobile.specific.Image_WebGL::getImage()();
+
+                                                              context.globalAlpha = transparency;
+
+                                                              context.drawImage(imageJS, left, top, imageJS.width, imageJS.height);
+
+                                                              context.globalAlpha = 1.0;
+
+
+                                                              }-*/;
+
+
+   @Override
    protected native void _drawImage(IImage image,
                                     float left,
                                     float top,
@@ -475,6 +515,5 @@ public final class Canvas_WebGL
                                           context.fill();
                                           context.stroke();
                                           }-*/;
-
 
 }

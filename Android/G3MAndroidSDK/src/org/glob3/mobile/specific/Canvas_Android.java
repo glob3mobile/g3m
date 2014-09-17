@@ -15,6 +15,8 @@ import android.graphics.Canvas;
 import android.graphics.DashPathEffect;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Typeface;
@@ -177,6 +179,19 @@ public final class Canvas_Android
 
 
    @Override
+   protected void _clearRect(final float left,
+                             final float top,
+                             final float width,
+                             final float height) {
+
+      final Paint clearPaint = new Paint();
+      clearPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
+      _canvas.drawRect(left, top, width, height, clearPaint);
+      //_canvas.drawColor(android.graphics.Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
+   }
+
+
+   @Override
    protected void _fillRectangle(final float left,
                                  final float top,
                                  final float width,
@@ -243,6 +258,23 @@ public final class Canvas_Android
                             final float left,
                             final float top) {
       _canvas.drawText(text, left, top, _fillPaint);
+   }
+
+
+   @Override
+   protected void _drawImage(final IImage image,
+                             final float destLeft,
+                             final float destTop) {
+      _drawImage(image, destLeft, destTop, image.getWidth(), image.getHeight());
+   }
+
+
+   @Override
+   protected void _drawImage(final IImage image,
+                             final float destLeft,
+                             final float destTop,
+                             final float transparency) {
+      _drawImage(image, destLeft, destTop, image.getWidth(), image.getHeight(), transparency);
    }
 
 
@@ -446,5 +478,6 @@ public final class Canvas_Android
 
       _canvas.drawBitmap(bitmap, src, dst, paint);
    }
+
 
 }

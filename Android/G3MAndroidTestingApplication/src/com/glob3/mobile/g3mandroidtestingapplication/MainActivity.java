@@ -9,6 +9,10 @@ import org.glob3.mobile.generated.Angle;
 import org.glob3.mobile.generated.BingMapType;
 import org.glob3.mobile.generated.BingMapsLayer;
 import org.glob3.mobile.generated.Color;
+import org.glob3.mobile.generated.DebugTileImageProvider;
+import org.glob3.mobile.generated.DefaultInfoDisplay;
+import org.glob3.mobile.generated.Default_HUDRenderer;
+import org.glob3.mobile.generated.DownloaderImageBuilder;
 import org.glob3.mobile.generated.GEO2DLineRasterStyle;
 import org.glob3.mobile.generated.GEO2DLineStringGeometry;
 import org.glob3.mobile.generated.GEO2DMultiLineStringGeometry;
@@ -24,6 +28,7 @@ import org.glob3.mobile.generated.GEORasterSymbolizer;
 import org.glob3.mobile.generated.Geodetic2D;
 import org.glob3.mobile.generated.Geodetic3D;
 import org.glob3.mobile.generated.Info;
+import org.glob3.mobile.generated.InfoDisplay;
 import org.glob3.mobile.generated.JSONObject;
 import org.glob3.mobile.generated.LayerSet;
 import org.glob3.mobile.generated.LevelTileCondition;
@@ -69,8 +74,8 @@ public class MainActivity
       setContentView(R.layout.activity_main);
 
 
-      // _g3mWidget = createWidget();
-      _g3mWidget = sanjayTesting();
+      _g3mWidget = createWidget();
+      //_g3mWidget = sanjayTesting();
 
       final RelativeLayout placeHolder = (RelativeLayout) findViewById(R.id.g3mWidgetHolder);
       placeHolder.addView(_g3mWidget);
@@ -121,6 +126,7 @@ public class MainActivity
       final boolean saveInBackground = true;
       final LayerSet layerSet = new LayerSet();
       final boolean forceFirstLevelTilesRenderOnStart = true;
+
       layerSet.createLayerTilesRenderParameters(forceFirstLevelTilesRenderOnStart, new ArrayList<String>());
 
 
@@ -139,9 +145,25 @@ public class MainActivity
       layerSet.addLayer(blueMarble);
       layerSet.addLayer(pnoa);
 
+      layerSet.setTileImageProvider(new DebugTileImageProvider());
 
       builder.getPlanetRendererBuilder().setLayerSet(layerSet);
       builder.getPlanetRendererBuilder().setRenderDebug(true);
+
+      builder.getPlanetRendererBuilder().setDefaultTileBackGroundImage(
+               new DownloaderImageBuilder(new URL("http://www.freelogovectors.net/wp-content/uploads/2013/02/sheep-b.png")));
+
+      //  builder.getPlanetRendererBuilder()->setDefaultTileBackGroundImage(new DownloaderImageBuilder(URL("http://192.168.1.127:8080/web/img/tileNotFound.jpg")));
+      //  const Sector sector = Sector::fromDegrees(40.1540143280790858, -5.8664874640814313,
+      //                                                40.3423148480663158, -5.5116079822178570);
+      //  
+      final Default_HUDRenderer hudRenderer = new Default_HUDRenderer();
+      final InfoDisplay infoDisplay = new DefaultInfoDisplay(hudRenderer);
+      //infoDisplay->showDisplay();
+
+      builder.setHUDRenderer(hudRenderer);
+      builder.setInfoDisplay(infoDisplay);
+
 
       //builder.getPlanetRendererBuilder().setLayerSet(createLayerSet());
       // builder.getPlanetRendererBuilder().setRenderDebug(true);
