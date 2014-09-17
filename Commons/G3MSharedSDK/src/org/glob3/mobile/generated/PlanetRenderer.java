@@ -356,12 +356,10 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
      _touchEventTypeOfTerrainTouchListener = touchEventTypeOfTerrainTouchListener;
     _context = null;
     _layerSet.setChangeListener(this);
-    _layerSet.setChangedInfoListener(this);
-  //  if (_tileRasterizer != NULL) {
-  //    _tileRasterizer->setChangeListener(this);
-  //  }
   
+    _layerSet.setChangedInfoListener(this);
     _changedInfoListener = changedInfoListener;
+    _rendererIdentifier = -1;
   }
 //                 TileRasterizer*              tileRasterizer,
 
@@ -421,9 +419,7 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
     {
       _elevationDataProvider.initialize(context);
     }
-  //  if (_tileRasterizer != NULL) {
-  //    _tileRasterizer->initialize(context);
-  //  }
+  
   }
 
   public final void render(G3MRenderContext rc, GLState glState)
@@ -981,6 +977,8 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
     {
       ILogger.instance().logWarning("Changed Renderer Info Listener of PlanetRenderer already set");
     }
+  
+    _rendererIdentifier = rendererIdentifier;
     _changedInfoListener = changedInfoListener;
   
     if(_changedInfoListener != null)
