@@ -57,6 +57,7 @@ public abstract class ICanvas
 
   protected abstract void _removeShadow();
 
+  protected abstract void _clearRect(float left, float top, float width, float height);
 
   protected abstract void _createImage(IImageListener listener, boolean autodelete);
 
@@ -66,12 +67,9 @@ public abstract class ICanvas
 
   protected abstract void _fillText(String text, float left, float top);
 
-//  virtual void _drawImage(const IImage* image,
-//                          float destLeft, float destTop) = 0;
-//  
-//  virtual void _drawImage(const IImage* image,
-//                          float destLeft, float destTop,
-//                          float transparency) = 0;
+  protected abstract void _drawImage(IImage image, float destLeft, float destTop);
+
+  protected abstract void _drawImage(IImage image, float destLeft, float destTop, float transparency);
 
   protected abstract void _drawImage(IImage image, float destLeft, float destTop, float destWidth, float destHeight);
 
@@ -217,6 +215,11 @@ public abstract class ICanvas
     _removeShadow();
   }
 
+  public final void clearRect(float left, float top, float width, float height)
+  {
+    checkInitialized();
+    _clearRect(left, top, width, height);
+  }
 
   public final void fillRectangle(float left, float top, float width, float height)
   {
@@ -267,28 +270,18 @@ public abstract class ICanvas
     _fillText(text, left, top);
   }
 
-//  void drawImage(const IImage* image,
-//                 float destLeft, float destTop);
-//  
-//  void drawImage(const IImage* image,
-//                 float destLeft, float destTop,
-//                 float transparency);
+  public final void drawImage(IImage image, float destLeft, float destTop)
+  {
+    checkInitialized();
+    _drawImage(image, destLeft, destTop);
+  }
 
+  public final void drawImage(IImage image, float destLeft, float destTop, float transparency)
+  {
+    checkInitialized();
+    _drawImage(image, destLeft, destTop, transparency);
+  }
 
-  //void ICanvas::drawImage(const IImage* image,
-  //                        float destLeft, float destTop) {
-  //  checkInitialized();
-  //  _drawImage(image, destLeft, destTop);
-  //}
-  //
-  //void ICanvas::drawImage(const IImage* image,
-  //                        float destLeft, float destTop,
-  //                        float transparency) {
-  //  checkInitialized();
-  //  _drawImage(image, destLeft, destTop,
-  //            transparency);
-  //}
-  
   public final void drawImage(IImage image, float destLeft, float destTop, float destWidth, float destHeight)
   {
     checkInitialized();

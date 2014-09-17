@@ -377,6 +377,16 @@ public class LayerSet implements ChangedInfoListener
     _listener = listener;
   }
 
+  public final void setTileImageProvider(TileImageProvider tileImageProvider)
+  {
+    if (_tileImageProvider != null)
+    {
+      ILogger.instance().logError("TileImageProvider already set");
+    }
+    _tileImageProvider = tileImageProvider;
+  }
+
+
   public final Layer getLayer(int index)
   {
     if (index < _layers.size())
