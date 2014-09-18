@@ -1751,11 +1751,93 @@ public class G3MWebGLTestingApplication
 					10, // delayMillis
 					proxy));*/
 			
+			//For A1800DC
+			GeaCronSymbolizer symbolizer = new GeaCronSymbolizer();
+			MeshRenderer mr1 = new MeshRenderer();
+			final GEORenderer renderer1800 = new GEORenderer(symbolizer, mr1, null, null,null);
+			builder.addRenderer(renderer1800);
+			builder.addRenderer(mr1);
 			
-			String A1800DC = null; //AGUSTIN TODO:LOAD file
-			String A1900DC = null; //AGUSTIN TODO:LOAD file
-			//geaCron(builder, A1800DC, A1900DC);
-			geaCron(builder, null, null);
+			//For 1900
+			MeshRenderer mr2 = new MeshRenderer();
+			final GEORenderer renderer1900 = new GEORenderer(symbolizer, mr2, null, null,null);
+			builder.addRenderer(renderer1900);
+			builder.addRenderer(mr2);
+			
+			class GeaCronBDL extends IBufferDownloadListener {
+				
+				GEORenderer _renderer1800;
+				GEORenderer _renderer1900;
+				
+				public GeaCronBDL(GEORenderer renderer1800, GEORenderer renderer1900){
+					_renderer1800 = renderer1800;
+					_renderer1900 = renderer1900;
+				}
+
+				@Override
+				public void onDownload(URL url, IByteBuffer buffer,
+						boolean expired) {
+					String s = buffer.getAsString();
+					if (url.getPath().contains("1800")){
+						GEOObject geoObject = GEOJSONParser.parseJSON(s);
+						_renderer1800.addGEOObject(geoObject);
+					}
+					if (url.getPath().contains("1900")){
+						GEOObject geoObject = GEOJSONParser.parseJSON(s);
+						_renderer1900.addGEOObject(geoObject);
+					}
+				}
+
+				@Override
+				public void onError(URL url) {
+					Window.alert("E");
+				}
+
+				@Override
+				public void onCancel(URL url) {
+					Window.alert("C");
+				}
+
+				@Override
+				public void onCanceledDownload(URL url, IByteBuffer buffer,
+						boolean expired) {
+					Window.alert("CD");
+				}
+				
+			};
+			
+			
+			builder.setInitializationTask(new GInitializationTask() {
+				
+				@Override
+				public void run(G3MContext context) {
+					GeaCronBDL listener = new GeaCronBDL(renderer1800, renderer1900);
+					context.getDownloader().requestBuffer(new URL("http://serdis.dis.ulpgc.es/~atrujill/glob3m/Geacron/A1800DC.json"), 100000000, TimeInterval.forever(), true, listener, false);
+					context.getDownloader().requestBuffer(new URL("http://serdis.dis.ulpgc.es/~atrujill/glob3m/Geacron/A1900DC.json"), 100000000, TimeInterval.forever(), true, listener, false);
+				}
+				
+				@Override
+				public boolean isDone(G3MContext context) {
+					return true;
+				}
+			});
+			
+			class GeaCronTask extends GTask {
+				Renderer _r1, _r2;
+				public GeaCronTask(Renderer r1, Renderer r2) {
+					_r1 = r1;
+					_r2 = r2;
+				}
+
+				@Override
+				public void run(G3MContext context) {
+					boolean x = _r1.isEnable();
+					_r1.setEnable(!x);
+					_r2.setEnable(x);
+				}
+			};
+
+			builder.addPeriodicalTask(new PeriodicalTask(TimeInterval.fromMilliseconds(1000), new GeaCronTask(mr1, mr2)));
 
 		   _widget = builder.createWidget();
 	   }
@@ -1788,22 +1870,18 @@ public class G3MWebGLTestingApplication
 
 				JSONObject properties = geometry.getFeature().getProperties();
 
-				/*
-				String color = properties.getAsString("FILL_COLOR", "");
-				int n=0, start, end;
-				while (color.charAt(n) != '(') n++;
-				start = n;
-				start = color.indexOf("(");
-				end = color.indexOf(",");
-				int r = Integer.parseInt(color.substring(start+1, end).trim());
-				start = color.indexOf("(");
-				end = color.indexOf(",");
-				int r = Integer.parseInt(color.substring(start+1, end).trim());
-				*/
 				
-				int r = 255;
-				int g = 0;
-				int b = 0;
+				String color = properties.getAsString("FILL_COLOR", "");
+				int c1 = color.indexOf(",");
+				int c2 = color.indexOf(",", c1+1);
+				
+				String rs = color.substring(color.indexOf("(") + 1, c1);
+				String gs = color.substring(c1 + 1, c2);
+				String bs = color.substring(c2 + 1, color.length()-1);
+				
+				int r = Integer.parseInt(rs);
+				int g = Integer.parseInt(gs);
+				int b = Integer.parseInt(bs);
 				
 
 				Color lineColor = Color.fromRGBA((float) (r / 255.0),
@@ -1826,58 +1904,5 @@ public class G3MWebGLTestingApplication
 			}
 
 		};
-
-		private void geaCron(G3MBuilder_WebGL builder, String A1800DC,
-				String A1900DC) {
-
-			GeaCronSymbolizer symbolizer = new GeaCronSymbolizer();
-
-
-			MeshRenderer mr1 = new MeshRenderer();
-			if (A1800DC != null) {
-				GEORenderer renderer = new GEORenderer(symbolizer, mr1, null, null,
-						null);
-
-				builder.addRenderer(renderer);
-				builder.addRenderer(mr1);
-
-				GEOObject geoObject = GEOJSONParser.parseJSON(A1800DC);
-				renderer.addGEOObject(geoObject);
-			}
-
-
-			MeshRenderer mr2 = new MeshRenderer();
-			if (A1900DC != null) {
-				GEORenderer renderer = new GEORenderer(symbolizer, mr2, null, null,
-						null);
-
-				builder.addRenderer(renderer);
-				builder.addRenderer(mr2);
-
-				GEOObject geoObject = GEOJSONParser.parseJSON(A1900DC);
-				renderer.addGEOObject(geoObject);
-			}
-			
-			class GeaCronTask extends GTask {
-
-				Renderer _r1, _r2;
-
-				public GeaCronTask(Renderer r1, Renderer r2) {
-					_r1 = r1;
-					_r2 = r2;
-				}
-
-				@Override
-				public void run(G3MContext context) {
-					boolean x = _r1.isEnable();
-					_r1.setEnable(!x);
-					_r2.setEnable(x);
-
-				}
-
-			};
-
-			builder.addPeriodicalTask(new PeriodicalTask(TimeInterval.fromMilliseconds(1000), new GeaCronTask(mr1, mr2)));
-		}
 
 }
