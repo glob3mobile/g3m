@@ -5,7 +5,6 @@ package com.glob3.mobile.g3mandroidtestingapplication;
 
 import org.glob3.mobile.generated.AltitudeMode;
 import org.glob3.mobile.generated.Angle;
-<<<<<<< HEAD
 import org.glob3.mobile.generated.BoxShape;
 import org.glob3.mobile.generated.CameraDoubleDragHandler;
 import org.glob3.mobile.generated.CameraDoubleTapHandler;
@@ -29,7 +28,6 @@ import org.glob3.mobile.generated.MapQuestLayer;
 import org.glob3.mobile.generated.Mark;
 import org.glob3.mobile.generated.MarksRenderer;
 import org.glob3.mobile.generated.MeshRenderer;
-=======
 import org.glob3.mobile.generated.BingMapType;
 import org.glob3.mobile.generated.BingMapsLayer;
 import org.glob3.mobile.generated.Color;
@@ -52,22 +50,19 @@ import org.glob3.mobile.generated.LayerSet;
 import org.glob3.mobile.generated.LevelTileCondition;
 import org.glob3.mobile.generated.Mark;
 import org.glob3.mobile.generated.MarksRenderer;
->>>>>>> origin/purgatory
 import org.glob3.mobile.generated.Planet;
 import org.glob3.mobile.generated.Sector;
 import org.glob3.mobile.generated.Shape;
 import org.glob3.mobile.generated.ShapesRenderer;
 import org.glob3.mobile.generated.SingleBilElevationDataProvider;
+import org.glob3.mobile.generated.TiledVectorLayer;
 import org.glob3.mobile.generated.TimeInterval;
 import org.glob3.mobile.generated.URL;
-<<<<<<< HEAD
 import org.glob3.mobile.generated.Vector2I;
 import org.glob3.mobile.generated.Vector3D;
 import org.glob3.mobile.generated.URLTemplateLayer;
 import org.glob3.mobile.generated.WMSLayer;
 import org.glob3.mobile.generated.WMSServerVersion;
-=======
->>>>>>> origin/purgatory
 import org.glob3.mobile.specific.G3MBuilder_Android;
 import org.glob3.mobile.specific.G3MWidget_Android;
 
@@ -94,7 +89,7 @@ public class MainActivity
 
    @Override
    protected void onCreate(final Bundle savedInstanceState) {
-<<<<<<< HEAD
+
 	   super.onCreate(savedInstanceState);
 
 	   requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -149,7 +144,8 @@ public class MainActivity
 
 	   _placeHolder = (RelativeLayout) findViewById(R.id.g3mWidgetHolder);
 	   _placeHolder.addView(_g3mWidget);
-=======
+
+	   /*
       super.onCreate(savedInstanceState);
 
       requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -167,7 +163,7 @@ public class MainActivity
 
       final Geodetic3D zurichPos = Geodetic3D.fromDegrees(40, -75, 80000);
       _g3mWidget.getG3MWidget().setAnimatedCameraPosition(TimeInterval.fromSeconds(5), zurichPos, Angle.zero(),
-               Angle.fromDegrees(-90));
+               Angle.fromDegrees(-90));*/
 
    }
 
@@ -196,7 +192,7 @@ public class MainActivity
       builder.addRenderer(_weatherMarkers);
 
       return builder.createWidget();
->>>>>>> origin/purgatory
+
    }
 
 
@@ -233,12 +229,12 @@ public class MainActivity
       layerSet.addLayer(rasterLayer);
 
 
-<<<<<<< HEAD
+
 
       final String urlTemplate = "http://192.168.1.2/ne_10m_admin_0_countries-Levels10/{level}/{y}/{x}.geojson";
-=======
-      final String urlTemplate = "http://glob3mobile.dyndns.org/vectorial/swiss-buildings/{level}/{x}/{y}.geojson";
->>>>>>> origin/purgatory
+
+      //final String urlTemplate = "http://glob3mobile.dyndns.org/vectorial/swiss-buildings/{level}/{x}/{y}.geojson";
+
       final int firstLevel = 2;
       final int maxLevel = 17;
 
@@ -251,11 +247,8 @@ public class MainActivity
 
       final Sector sector = new Sector(lower, upper);
 
-<<<<<<< HEAD
- 
-=======
-      final GEORasterSymbolizer symbolizer = new SampleRasterSymbolizer();
-
+      //final GEORasterSymbolizer symbolizer = new SampleRasterSymbolizer();
+/*
       final TiledVectorLayer tiledVectorLayer = TiledVectorLayer.newMercator( //
                symbolizer, //
                urlTemplate, //
@@ -268,9 +261,8 @@ public class MainActivity
                new LevelTileCondition(15, 21), // condition
                "" // disclaimerInfo
       );
-      layerSet.addLayer(tiledVectorLayer);
+      layerSet.addLayer(tiledVectorLayer);*/
 
->>>>>>> origin/purgatory
 
       return layerSet;
    }
