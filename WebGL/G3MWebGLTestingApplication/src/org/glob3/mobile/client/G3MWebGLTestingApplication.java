@@ -4,8 +4,14 @@ package org.glob3.mobile.client;
 
 import java.util.ArrayList;
 
+import org.glob3.mobile.generated.AltitudeMode;
+import org.glob3.mobile.generated.Angle;
+import org.glob3.mobile.generated.CameraDoubleDragHandler;
+import org.glob3.mobile.generated.CameraDoubleTapHandler;
+import org.glob3.mobile.generated.CameraRenderer;
+import org.glob3.mobile.generated.CameraRotationHandler;
+import org.glob3.mobile.generated.CameraSingleDragHandler;
 import org.glob3.mobile.generated.Color;
-<<<<<<< HEAD
 import org.glob3.mobile.generated.CompositeRenderer;
 import org.glob3.mobile.generated.DirectMesh;
 import org.glob3.mobile.generated.ElevationDataProvider;
@@ -15,8 +21,6 @@ import org.glob3.mobile.generated.FloatBufferBuilderFromColor;
 import org.glob3.mobile.generated.FloatBufferBuilderFromGeodetic;
 import org.glob3.mobile.generated.G3MContext;
 import org.glob3.mobile.generated.G3MEventContext;
-=======
->>>>>>> origin/purgatory
 import org.glob3.mobile.generated.GEO2DLineRasterStyle;
 import org.glob3.mobile.generated.GEO2DLineStringGeometry;
 import org.glob3.mobile.generated.GEO2DMultiLineStringGeometry;
@@ -26,7 +30,6 @@ import org.glob3.mobile.generated.GEO2DPolygonData;
 import org.glob3.mobile.generated.GEO2DPolygonGeometry;
 import org.glob3.mobile.generated.GEO2DSurfaceRasterStyle;
 import org.glob3.mobile.generated.GEOGeometry;
-<<<<<<< HEAD
 import org.glob3.mobile.generated.GEOMultiLineRasterSymbol;
 //import org.glob3.mobile.generated.GEORasterLineSymbol;
 //import org.glob3.mobile.generated.GEORasterPolygonSymbol;
@@ -54,27 +57,28 @@ import org.glob3.mobile.generated.IThreadUtils;
 import org.glob3.mobile.generated.InitialCameraPositionProvider;
 import org.glob3.mobile.generated.JSONArray;
 import org.glob3.mobile.generated.JSONBaseObject;
-=======
 import org.glob3.mobile.generated.GEOPolygonRasterSymbol;
 import org.glob3.mobile.generated.GEORasterSymbol;
 import org.glob3.mobile.generated.GEORasterSymbolizer;
->>>>>>> origin/purgatory
 import org.glob3.mobile.generated.JSONObject;
 import org.glob3.mobile.generated.LayerSet;
 import org.glob3.mobile.generated.MapBoxLayer;
 import org.glob3.mobile.generated.MarksRenderer;
+import org.glob3.mobile.generated.Planet;
 import org.glob3.mobile.generated.Sector;
+import org.glob3.mobile.generated.Shape;
+import org.glob3.mobile.generated.BoxShape;
 import org.glob3.mobile.generated.ShapesRenderer;
-<<<<<<< HEAD
 import org.glob3.mobile.generated.SimpleCameraConstrainer;
 import org.glob3.mobile.generated.SimpleInitialCameraPositionProvider;
 import org.glob3.mobile.generated.SingleBilElevationDataProvider;
-=======
->>>>>>> origin/purgatory
 import org.glob3.mobile.generated.StrokeCap;
 import org.glob3.mobile.generated.StrokeJoin;
 import org.glob3.mobile.generated.TiledVectorLayer;
 import org.glob3.mobile.generated.TimeInterval;
+import org.glob3.mobile.generated.URL;
+import org.glob3.mobile.generated.Vector2I;
+import org.glob3.mobile.generated.Vector3D;
 import org.glob3.mobile.specific.Downloader_WebGL;
 import org.glob3.mobile.specific.G3MBuilder_WebGL;
 import org.glob3.mobile.specific.G3MWidget_WebGL;
@@ -104,7 +108,7 @@ public class G3MWebGLTestingApplication
 
    @Override
    public void onModuleLoad() {
-<<<<<<< HEAD
+	   /*
       Scheduler.get().scheduleDeferred(new ScheduledCommand() {
 
          @Override
@@ -112,7 +116,7 @@ public class G3MWebGLTestingApplication
             runUserPlugin();
          }
 
-      });
+      });*/
 
 
       if (_widget == null) {
@@ -132,28 +136,26 @@ public class G3MWebGLTestingApplication
          g3mWidgetHolder.add(_widget);
       }
    }
-=======
-      //initCustomizedWithBuilder();
->>>>>>> origin/purgatory
 
       final Panel g3mWidgetHolder = RootPanel.get(_g3mWidgetHolderId);
 
       final G3MBuilder_WebGL builder = new G3MBuilder_WebGL();
 
-<<<<<<< HEAD
       //      final LayerSet layerSet = new LayerSet();
       //      layerSet.addLayer(MapQuestLayer.newOpenAerial(TimeInterval.fromDays(30)));
       //      builder.getPlanetRendererBuilder().setLayerSet(layerSet);
 
+      /*
       final MeshRenderer meshRenderer = new MeshRenderer();
       meshRenderer.addMesh(createPointsMesh(builder.getPlanet()));
-      builder.addRenderer(meshRenderer);
+      builder.addRenderer(meshRenderer);*/
 
       //		if (true) {
       //			final Sector spain = Sector.fromDegrees(27.3174927, -18.5284423, 45.0299024, 5.4084426);
       //			builder.setShownSector(spain);
       //		}
 
+      /*
       final boolean useMarkers = true;
       if (useMarkers) {
          // marks renderer
@@ -243,7 +245,7 @@ public class G3MWebGLTestingApplication
                new Geodetic3D(Angle.fromDegrees(28), Angle.fromDegrees(-15.431389), 10000), //
                Angle.fromDegrees(90), //
                Angle.fromDegrees(720), //
-               Angle.zero());
+               Angle.zero());*/
 
  /*     final GEOSymbolizer defaultSymbolizer = new GEOSymbolizer() {
          @Override
@@ -535,7 +537,8 @@ public class G3MWebGLTestingApplication
       //         }
       //      };
       //      builder.setInitializationTask(initializationTask);
-=======
+
+      /*
       builder.getPlanetRendererBuilder().setLayerSet(createLayerSet());
 
       final String proxy = null; // "http://galileo.glob3mobile.com/" + "proxy.php?url="
@@ -543,13 +546,11 @@ public class G3MWebGLTestingApplication
                8, // maxConcurrentOperationCount
                10, // delayMillis
                proxy));
->>>>>>> origin/purgatory
 
       _widget = builder.createWidget();
-      g3mWidgetHolder.add(_widget);
-   }
+      g3mWidgetHolder.add(_widget);*/
 
-
+/*
    private LayerSet createLayerSet() {
       final LayerSet layerSet = new LayerSet();
       //      layerSet.addLayer(MapQuestLayer.newOSM(TimeInterval.fromDays(30)));
@@ -578,13 +579,13 @@ public class G3MWebGLTestingApplication
 
 
       return layerSet;
-   }
+   }*/
 
+   /*
    private static class SampleRasterSymbolizer
             extends
                GEORasterSymbolizer {
 
-<<<<<<< HEAD
    public void initWithoutBuilder() {
 
       final Panel g3mWidgetHolder = RootPanel.get(_g3mWidgetHolderId);
@@ -813,12 +814,12 @@ public class G3MWebGLTestingApplication
             final Color edgeColor = Color.newFromRGBA(0.75f, 0, 0, 0.75f);
             final Shape box = new BoxShape(boxPosition, AltitudeMode.RELATIVE_TO_GROUND, size, 2, boxColor, edgeColor);
             shapesRenderer.addShape(box);
-=======
+
       private static final Color FROM_COLOR = Color.fromRGBA(0.7f, 0, 0, 0.5f);
->>>>>>> origin/purgatory
 
 
-<<<<<<< HEAD
+
+
             final boolean testingImagesCombine = false;
             if (testingImagesCombine) {
                class DL
@@ -976,7 +977,7 @@ public class G3MWebGLTestingApplication
                   userData, //
                   lighting, //
                   initialCameraPositionProvider, null);
-=======
+
       private static GEO2DLineRasterStyle createPolygonLineRasterStyle(final GEOGeometry geometry) {
          final JSONObject properties = geometry.getFeature().getProperties();
          final int colorIndex = (int) properties.getAsNumber("mapcolor7", 0);
@@ -984,7 +985,7 @@ public class G3MWebGLTestingApplication
          final float dashLengths[] = {};
          final int dashCount = 0;
          return new GEO2DLineRasterStyle(color, 2, StrokeCap.CAP_ROUND, StrokeJoin.JOIN_ROUND, 1, dashLengths, dashCount, 0);
->>>>>>> origin/purgatory
+
       }
 
 
@@ -996,7 +997,7 @@ public class G3MWebGLTestingApplication
       }
 
 
-<<<<<<< HEAD
+
       //final LayerSet layerSet = new LayerSet();
 
       /*
@@ -1039,11 +1040,10 @@ public class G3MWebGLTestingApplication
                   true, //
                   ltrp);
          layerSet.addLayer(ortoAyto);
-=======
+
       @Override
       public GEORasterSymbolizer copy() {
          return new SampleRasterSymbolizer();
->>>>>>> origin/purgatory
       }
 
 
@@ -1059,7 +1059,7 @@ public class G3MWebGLTestingApplication
       }
 
 
-<<<<<<< HEAD
+
       final boolean testingTransparencies = false;
       if (testingTransparencies) {
          final WMSLayer blueMarble = new WMSLayer("bmng200405", new URL("http://www.nasa.network.com/wms?", false),
@@ -1091,13 +1091,14 @@ public class G3MWebGLTestingApplication
        * "EPSG:4326", "countryboundaries", true, null,
        * TimeInterval.fromDays(30), true); layerSet.addLayer(political);
        */
-=======
+
+   /*
       @Override
       public ArrayList<GEORasterSymbol> createSymbols(final GEO2DMultiLineStringGeometry geometry) {
          return null;
       }
 
->>>>>>> origin/purgatory
+
 
       @Override
       public ArrayList<GEORasterSymbol> createSymbols(final GEO2DPolygonGeometry geometry) {
@@ -1126,7 +1127,7 @@ public class G3MWebGLTestingApplication
          return symbols;
       }
    }
-<<<<<<< HEAD
+*/
    
 	public CameraRenderer createCameraRenderer()
 	{
@@ -1182,9 +1183,6 @@ public class G3MWebGLTestingApplication
 	   Geodetic3D position = new Geodetic3D(Angle.fromDegrees(27.60), Angle.fromDegrees(-16.54), 55000.0);
 	   _widget.setCameraPosition(position);
 	   _widget.setCameraPitch(Angle.fromDegrees(-50.0));
-
   }
-=======
->>>>>>> origin/purgatory
 
 }

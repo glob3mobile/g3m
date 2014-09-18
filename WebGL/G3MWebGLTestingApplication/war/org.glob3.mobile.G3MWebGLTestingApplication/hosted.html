@@ -279,15 +279,11 @@ gwtOnLoad = function(errFn, modName, modBase){
       } catch (e) {
       }
     }
-    loadIframe("http://www.gwtproject.org/missing-plugin/");
+    loadIframe("http://gwt.google.com/missing-plugin");
   } else {
     if (plugin.connect(url, topWin.__gwt_SessionID, $hosted, $moduleName,
         $hostedHtmlVersion)) {
-      // take over the onunload function, wrapping any existing call if it exists
-      var oldUnload = window.onunload;
-      window.onunload = function() {
-        // run wrapped unload first in case it is running gwt code
-        !!oldUnload && oldUnload();
+      window.onUnload = function() {
         try {
           // wrap in try/catch since plugins are not required to supply this
           plugin.disconnect();
@@ -315,6 +311,9 @@ function simpleEscape(originalString) {
     .replace(/\'/g, "&#39;")
     .replace(/\"/g,"&quot;");
 }
+
+window.onunload = function() {
+};
 
 // Lightweight metrics
 window.fireOnModuleLoadStart = function(className) {
