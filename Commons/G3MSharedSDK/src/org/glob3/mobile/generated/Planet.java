@@ -56,11 +56,15 @@ public abstract class Planet
   public abstract Vector3D geodeticSurfaceNormal(Geodetic3D geodetic);
   public abstract Vector3D geodeticSurfaceNormal(Geodetic2D geodetic);
 
- /* std::vector<double> intersectionsDistances(const Vector3D& origin,
-                                             const Vector3D& direction) const;
+  public java.util.ArrayList<Double> intersectionsDistances(Vector3D origin, Vector3D direction)
+  {
+    return intersectionsDistances(origin._x, origin._y, origin._z, direction._x, direction._y, direction._z);
+  }
 
-  std::vector<double> intersectionsDistances(const Vector3D& origin,
-                                             const MutableVector3D& direction) const;*/
+  public java.util.ArrayList<Double> intersectionsDistances(Vector3D origin, MutableVector3D direction)
+  {
+    return intersectionsDistances(origin._x, origin._y, origin._z, direction.x(), direction.y(), direction.z());
+  }
 
   public abstract java.util.ArrayList<Double> intersectionsDistances(double originX, double originY, double originZ, double directionX, double directionY, double directionZ);
 
@@ -90,28 +94,7 @@ public abstract class Planet
 
   //virtual Vector3D closestPointToSphere(const Vector3D& pos, const Vector3D& ray) const = 0;
 
-  /*
-  std::vector<double> Planet::intersectionsDistances(const Vector3D& origin,
-                                                     const Vector3D& direction) const {
-    return intersectionsDistances(origin._x,
-                                  origin._y,
-                                  origin._z,
-                                  direction._x,
-                                  direction._y,
-                                  direction._z);
-  }
-  
-  std::vector<double> Planet::intersectionsDistances(const Vector3D& origin,
-                                                     const MutableVector3D& direction) const {
-    return intersectionsDistances(origin._x,
-                                  origin._y,
-                                  origin._z,
-                                  direction.x(),
-                                  direction.y(),
-                                  direction.z());
-  }*/
-  
-  public final Vector3D closestIntersection(Vector3D pos, Vector3D ray)
+  public Vector3D closestIntersection(Vector3D pos, Vector3D ray)
   {
     if (pos.isNan() || ray.isNan())
     {
