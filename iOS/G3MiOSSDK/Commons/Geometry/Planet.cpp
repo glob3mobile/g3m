@@ -41,7 +41,7 @@ CoordinateSystem Planet::getCoordinateSystemAt(const Geodetic3D& geo) const {
 
   return CoordinateSystem(x,y,z, origin);
 }
-
+/*
 std::vector<double> Planet::intersectionsDistances(const Vector3D& origin,
                                                    const Vector3D& direction) const {
   return intersectionsDistances(origin._x,
@@ -60,7 +60,7 @@ std::vector<double> Planet::intersectionsDistances(const Vector3D& origin,
                                 direction.x(),
                                 direction.y(),
                                 direction.z());
-}
+}*/
 
 Vector3D Planet::closestIntersection(const Vector3D& pos,
                                               const Vector3D& ray) const {

@@ -44,11 +44,11 @@ public:
   virtual Vector3D geodeticSurfaceNormal(const Geodetic3D& geodetic) const = 0;
   virtual Vector3D geodeticSurfaceNormal(const Geodetic2D& geodetic) const = 0;
 
-  std::vector<double> intersectionsDistances(const Vector3D& origin,
+ /* std::vector<double> intersectionsDistances(const Vector3D& origin,
                                              const Vector3D& direction) const;
 
   std::vector<double> intersectionsDistances(const Vector3D& origin,
-                                             const MutableVector3D& direction) const;
+                                             const MutableVector3D& direction) const;*/
 
   virtual std::vector<double> intersectionsDistances(double originX,
                                                      double originY,
