@@ -114,6 +114,7 @@ Storage* G3MBuilder_win8::createDefaultStorage(){
 	 //-- pruebas para guardar una image en la DB ---------------------------------------------------
 	 const URL imgUrl = URL("tiger.jpg");
 	 const Image_win8* testImage = Image_win8::imageFromFile("tiger.jpg");
+	 //const Image_win8* testImage = Image_win8::imageFromFile("MARBLES.BMP");
 
 	 ILogger::instance()->logInfo("Voy a guardar una image en la DB: \"%s\"\n", imgUrl.getPath().c_str());
 	 testStorage->saveImage(imgUrl, testImage, timeToExpire, false);

@@ -206,8 +206,7 @@ bool isStringType(unsigned char* data, int length){
 
 void Storage_win8::rawSave(std::string* table,
 						   std::string* name,
-						   unsigned char* contents,
-						   int length,
+						   IByteBuffer* buffer,
 						   const TimeInterval& timeToExpires) {
 	
 	//[_lock lock]; TODO: ??
@@ -228,12 +227,15 @@ void Storage_win8::rawSave(std::string* table,
 	//std::string expirationS = marshal_as<std::string>(expiration.ToString());
 	std::string expirationS = getTimeStamp(expiration);
 
+	const ByteBuffer_win8* buffer_win8 = (const ByteBuffer_win8*)buffer;
+	unsigned char* contents = buffer_win8->getPointer();
+
 	//std::string dataType = isStringType(contents, length) ? "string" : "unsigned char";
 
 	std::vector<ContentValue*> contentValues = std::vector<ContentValue*>();
 	contentValues.reserve(3);
 	contentValues.push_back(new ContentValue((unsigned char*)name, name->length(), "string"));
-	contentValues.push_back(new ContentValue(contents, length, "unsigned char"));
+	contentValues.push_back(new ContentValue(contents, buffer->size(), "unsigned char"));
 	contentValues.push_back(new ContentValue((unsigned char*)&expirationS, expirationS.length(), "string"));
 	
 	if (!_writeDB->executeNonQuery(&statement, contentValues)){
@@ -258,29 +260,26 @@ private:
 	Storage_win8*	_storage;
 	std::string*          _table;
 	std::string*          _name;
-	unsigned char*            _contents;
-	int						  _size;
+	IByteBuffer*            _buffer;
 	const TimeInterval _timeToExpires;
 
 public:
 	SaverTask(Storage_win8* storage,
 		std::string* table,
 		std::string* name,
-		unsigned char* contents,
-		int size,
+		IByteBuffer* buffer,
 		const TimeInterval timeToExpires) :
 		_storage(storage),
 		_table(table),
 		_name(name),
-		_contents(contents),
-		_size(size),
+		_buffer(buffer),
 		_timeToExpires(timeToExpires)
 	{
 
 	}
 
 	void run(const G3MContext* context) {
-		_storage->rawSave(_table, _name, _contents, _size, _timeToExpires);
+		_storage->rawSave(_table, _name, _buffer, _timeToExpires);
 	}
 };
 
@@ -359,14 +358,17 @@ IImageResult Storage_win8::readImage(const URL& url, bool readExpired){
 		if (readExpired || !expired) { //TODO:
 			
 			//UIImage* uiImage = UIImage->imageWithData(data);
-			/*BYTE* imageData = (BYTE*)malloc(dataLength);
+			//BYTE* imageData = (BYTE*)malloc(dataLength);
+			BYTE* imageData = new BYTE[dataLength];
 			memcpy(imageData, data, dataLength);
-			IWICBitmap* bitmap = Image_win8::imageWithData(imageData, dataLength);*/
-			IWICBitmap* bitmap = Image_win8::imageWithData((BYTE*)data, dataLength);
+			//IWICBitmap* bitmap = Image_win8::imageWithData(imageData, dataLength);
+			//IWICBitmap* bitmap = Image_win8::imageWithData((BYTE*)data, dataLength);
+			IByteBuffer* imgBuffer = IFactory::instance()->createByteBuffer(imageData, dataLength);
+			IWICBitmap* bitmap = Image_win8::imageWithData(imgBuffer);
+			//delete[] data;
 
 			if (bitmap) {
-				image = new Image_win8(bitmap,
-					NULL); // data is not needed 
+				image = new Image_win8(bitmap, imgBuffer);
 			}
 			else {
 				ILogger::instance()->logError("Can't create image with contents of storage.");
@@ -383,16 +385,17 @@ IImageResult Storage_win8::readImage(const URL& url, bool readExpired){
 void Storage_win8::saveBuffer(const URL& url, const IByteBuffer* buffer, const TimeInterval& timeToExpires, bool saveInBackground){
 	
 	const ByteBuffer_win8* buffer_win8 = (const ByteBuffer_win8*)buffer;
+	unsigned char* contents = buffer_win8->getPointer();
+	IByteBuffer* buffer2 = IFactory::instance()->createByteBuffer(contents, buffer->size());
 
 	std::string name = url._path; // [NSString stringWithCppString : url._path];
-	unsigned char* contents = buffer_win8->getPointer();
 	std::string table = "buffer2";
 	
 	if (saveInBackground) { 
-		_context->getThreadUtils()->invokeInBackground(new SaverTask(this, &table, &name, contents, buffer_win8->size(), timeToExpires), true);
+		_context->getThreadUtils()->invokeInBackground(new SaverTask(this, &table, &name, buffer2, timeToExpires), true);
 	}
 	else {
-		rawSave(&table, &name, contents, buffer_win8->size(), timeToExpires);
+		rawSave(&table, &name, buffer2, timeToExpires);
 	}
 }
 
@@ -406,20 +409,21 @@ void Storage_win8::saveImage(const URL& url, const IImage* image, const TimeInte
 	std::string name = url._path;
 	std::string table = "image2";
 	
-	BYTE* contents = imagew8->getSourceBuffer();
+	//BYTE* contents = imagew8->getSourceBuffer();
+	IByteBuffer* buffer = imagew8->getSourceBuffer();
 	
-	if (contents == NULL) {
-		contents = imagew8->getImageBuffer();
-	}
-	/*else {
-		imagew8->releaseSourceBuffer();
-	}*/
-	
-	if (saveInBackground) {
-		_context->getThreadUtils()->invokeInBackground(new SaverTask(this, &table, &name, contents, imagew8->getBufferSize(), timeToExpires), true);
+	if (buffer == NULL) {
+		buffer = imagew8->createImageBuffer();
 	}
 	else {
-		rawSave(&table, &name, contents, imagew8->getBufferSize(), timeToExpires);
+		imagew8->releaseSourceBuffer();
+	}
+	
+	if (saveInBackground) {
+		_context->getThreadUtils()->invokeInBackground(new SaverTask(this, &table, &name, buffer, timeToExpires), true);
+	}
+	else {
+		rawSave(&table, &name, buffer, timeToExpires);
 	}
 }
 

@@ -3,6 +3,8 @@
 #define __G3MWindowsSDK_Image_win8__
 
 #include "IImage.hpp"
+#include "IFactory.hpp"
+#include "ByteBuffer_win8.hpp"
 #include <Wincodec.h>
 
 //using namespace Windows::UI::Xaml::Media::Imaging;
@@ -14,17 +16,17 @@ class Image_win8 : public IImage {
 
 private:
 	
-	//Windows::UI::Xaml::Media::Imaging::BitmapImage^ _image;
 	IWICBitmap* _image;
-	mutable BYTE* _sourceBuffer;
+	//mutable BYTE* _sourceBuffer;
+	mutable IByteBuffer* _sourceBuffer;
 
-	Image_win8(const Image_win8& that);
+	Image_win8(const Image_win8 &that);
 
 public:
 	//Image_win8();
 	~Image_win8();
 
-	Image_win8(IWICBitmap* image, unsigned char* sourceBuffer);
+	Image_win8(IWICBitmap* image, IByteBuffer* sourceBuffer);
 
 	int getWidth() const;
 
@@ -34,7 +36,7 @@ public:
 
 	IWICBitmap* getBitmap() const;
 
-	BYTE* getSourceBuffer() const;
+	IByteBuffer* getSourceBuffer() const;
 
 	void releaseSourceBuffer() const;
 
@@ -42,13 +44,15 @@ public:
 
 	IImage* shallowCopy() const;
 
-	BYTE* getImageBuffer() const;
+	IByteBuffer* createImageBuffer() const;
 
-	static IWICBitmap* imageWithData(BYTE* data, int dataLength);
+	//static IWICBitmap* imageWithData(BYTE* data, int dataLength);
+	static IWICBitmap* imageWithData(IByteBuffer* imgData);
 
 	int getBufferSize() const;
 
 	//-- only for testing, remove later -----------------------------------
+	static bool exportToFile(Image_win8* image);
 	static Image_win8* imageFromFile(std::string path);
 
 };
