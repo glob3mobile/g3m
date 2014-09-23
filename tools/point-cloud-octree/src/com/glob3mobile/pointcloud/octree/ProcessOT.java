@@ -64,6 +64,7 @@ public class ProcessOT {
       final String sourceCloudName = simplifiedCloudName;
       final String lodCloudName = sourceCloudName + "_LOD";
 
+      final String fragmentCloudName = completeSourceCloudName + "_fragment";
 
       final long cacheSizeInBytes = 4 * 1024 * 1024 * 1024;
 
@@ -72,89 +73,35 @@ public class ProcessOT {
       final boolean createLOD = false;
       final boolean showLODStats = false;
       final boolean drawSampleLODNode = false;
+      final boolean createFragmentCloudName = true;
 
-
-      if (true) {
+      if (createFragmentCloudName) {
          try (final PersistentOctree sourceOctree = BerkeleyDBOctree.openReadOnly(cloudDirectory, completeSourceCloudName,
                   cacheSizeInBytes)) {
             final PersistentOctree.Statistics statistics = sourceOctree.getStatistics(true);
             statistics.show();
 
 
+            //            // cantera
+            //            final Sector sector = Sector.fromDegrees( //
+            //                     39.051968051473274102, -77.5404852494428809, //
+            //                     39.095519409073318684, -77.497507593275656745);
+            //            // - processing for "Loudoun-VA" [ done ] 45819 steps [Finished in 5s] 8.9kB/sec (avr=8.9kB/sec)
+            //            // Total points: 43447637, nodes: 45819, full: 1285, edges: 148
+
+
             final Sector sector = Sector.fromDegrees( //
-                     39.051968051473274102, -77.5404852494428809, //
-                     39.095519409073318684, -77.497507593275656745);
+                     39.058452085532550768, -77.692590169281558587, //
+                     39.107394637653797531, -77.594653167458375265);
+            // - processing "Loudoun-VA" [ done ] 88296 steps [Finished in 11m 57s] 123.2B/sec (avr=123.2B/sec)
+            // Total points: 119809579, nodes: 88296, full: 3757, edges: 244
+            // Avr Density=5.933766718645362E-10 / 7.644235651407404E-10
 
-            final PersistentOctree.Visitor visitor = new PersistentOctree.Visitor() {
-               private long                   _totalPointsCount;
-               private long                   _nodesCount;
-               private long                   _edgesNodes;
-               private long                   _fullNodes;
-               private GUndeterminateProgress _progress;
+            final int maxPointsPerTitle = 256 * 1024;
 
-
-               @Override
-               public void start() {
-                  _totalPointsCount = 0;
-                  _nodesCount = 0;
-                  _fullNodes = 0;
-                  _edgesNodes = 0;
-
-                  _progress = new GUndeterminateProgress(10, true) {
-                     @Override
-                     public void informProgress(final long stepsDone,
-                                                final long elapsed) {
-                        System.out.println("- processing for \"" + sourceOctree.getCloudName() + "\""
-                                 + progressString(stepsDone, elapsed));
-                     }
-                  };
-               }
-
-
-               @Override
-               public boolean visit(final PersistentOctree.Node node) {
-
-                  final Sector nodeSector = node.getSector();
-                  _nodesCount++;
-
-                  // System.out.println("-> " + node.getID() + ", points=" + node.getPointsCount() + ", sector=" + nodeSector);
-
-                  if (sector.fullContains(nodeSector)) {
-                     _fullNodes++;
-                     _totalPointsCount += node.getPointsCount();
-                     final List<Geodetic3D> points = node.getPoints();
-                  }
-                  else if (sector.touchesWith(nodeSector)) {
-                     _edgesNodes++;
-                     _totalPointsCount += node.getPointsCount();
-                     final List<Geodetic3D> points = node.getPoints();
-                  }
-
-                  _progress.stepDone();
-
-                  // final boolean keepVisiting = _nodesCount < 50;
-                  final boolean keepVisiting = true;
-                  return keepVisiting;
-               }
-
-
-               @Override
-               public void stop() {
-                  _progress.finish();
-                  _progress = null;
-                  //                  Total points: 1413564164 in 45819 nodes
-
-                  //                  - processing for "Loudoun-VA" [ done ] 45819 steps [Finished in 1m 57s] 351B/sec (avr=391.9B/sec)
-                  //                  Total points: 0 in 45819 nodes, full=0, edges=0
-
-                  System.out.println("Total points: " + _totalPointsCount + //
-                           ", nodes: " + _nodesCount + //
-                           ", full: " + _fullNodes + //
-                                     ", edges: " + _edgesNodes);
-               }
-            };
-
-            sourceOctree.acceptDepthFirstVisitor(sector, visitor);
+            sourceOctree.acceptDepthFirstVisitor( //
+                     sector, //
+                     new FragmentCreator(cloudDirectory, fragmentCloudName, sector, cacheSizeInBytes, maxPointsPerTitle));
          }
       }
 
@@ -284,7 +231,7 @@ public class ProcessOT {
                         public void informProgress(final long stepsDone,
                                                    final long elapsed) {
                            System.out.println("- gathering statistics for \"" + lodDB.getCloudName() + "\""
-                                              + progressString(stepsDone, elapsed));
+                                    + progressString(stepsDone, elapsed));
                         }
                      };
                   }
@@ -329,8 +276,8 @@ public class ProcessOT {
                      System.out.println("     Points/Node: " + ((float) _pointsCounter / _nodesCounter));
                      System.out.println("     Points/Level: " + ((float) _pointsCounter / _levelsCounter));
                      System.out.println("   Density/Node: Average=" + (_sumDensity / _nodesCounter) + //
-                                        ", Min=" + _minDensity + //
-                                        ", Max=" + _maxDensity);
+                              ", Min=" + _minDensity + //
+                              ", Max=" + _maxDensity);
                      System.out.println("======================================================================");
                   }
                };

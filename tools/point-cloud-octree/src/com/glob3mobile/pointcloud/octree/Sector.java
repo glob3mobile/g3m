@@ -7,8 +7,8 @@ import java.util.List;
 
 
 public class Sector
-         implements
-            Serializable {
+implements
+Serializable {
 
    private static final long  serialVersionUID = 1L;
 
@@ -102,13 +102,13 @@ public class Sector
    public final boolean contains(final Angle latitude,
                                  final Angle longitude) {
       return latitude.isBetween(_lower._latitude, _upper._latitude) && //
-               longitude.isBetween(_lower._longitude, _upper._longitude);
+             longitude.isBetween(_lower._longitude, _upper._longitude);
    }
 
 
    public final boolean fullContains(final Sector that) {
       return contains(that._lower._latitude, that._lower._longitude) && //
-             contains(that._upper._latitude, that._upper._longitude);
+               contains(that._upper._latitude, that._upper._longitude);
    }
 
 
@@ -188,11 +188,11 @@ public class Sector
       //   page 79
 
       if ((_upper._latitude._radians < that._lower._latitude._radians) || //
-          (_lower._latitude._radians > that._upper._latitude._radians)) {
+               (_lower._latitude._radians > that._upper._latitude._radians)) {
          return false;
       }
       if ((_upper._longitude._radians < that._lower._longitude._radians) || //
-          (_lower._longitude._radians > that._upper._longitude._radians)) {
+               (_lower._longitude._radians > that._upper._longitude._radians)) {
          return false;
       }
 
@@ -200,5 +200,22 @@ public class Sector
       return true;
    }
 
+
+   public final Sector intersection(final Sector that) {
+      final Angle lowLat = Angle.max(_lower._latitude, that._lower._latitude);
+      final Angle lowLon = Angle.max(_lower._longitude, that._lower._longitude);
+
+      final Angle upLat = Angle.min(_upper._latitude, that._upper._latitude);
+      final Angle upLon = Angle.min(_upper._longitude, that._upper._longitude);
+
+      if (lowLat.lowerThan(upLat) && lowLon.lowerThan(upLon)) {
+         final Geodetic2D low = new Geodetic2D(lowLat, lowLon);
+         final Geodetic2D up = new Geodetic2D(upLat, upLon);
+
+         return new Sector(low, up);
+      }
+
+      return null;
+   }
 
 }

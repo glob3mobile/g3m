@@ -33,8 +33,8 @@ import es.igosoftware.util.GUndeterminateProgress;
 
 
 public class BerkeleyDBOctree
-implements
-PersistentOctree {
+         implements
+            PersistentOctree {
 
    // private static final ILogger LOGGER              = GLogger.instance();
    // private static final Charset UTF8                = Charset.forName("UTF-8");
@@ -414,7 +414,7 @@ PersistentOctree {
 
       final TileHeader header = TileHeader.deepestEnclosingTileHeader(sector);
 
-      System.out.println("==> " + Utils.toIDString(header._id) + "   " + header._sector);
+      //System.out.println("==> " + Utils.toIDString(header._id) + "   " + header._sector);
 
       final byte[] id = header._id;
 
@@ -487,10 +487,10 @@ PersistentOctree {
 
 
    private static class BerkeleyDBStatistics
-            implements
-               PersistentOctree.Visitor,
-               PersistentOctree.Statistics,
-               Serializable {
+   implements
+   PersistentOctree.Visitor,
+   PersistentOctree.Statistics,
+   Serializable {
 
       private static final long      serialVersionUID = 2L;
 
@@ -588,8 +588,8 @@ PersistentOctree {
          System.out.println("   Nodes: " + _nodesCount);
          System.out.println("   Depth: " + _minDepth + "/" + _maxDepth + ", Average=" + ((float) _sumDepth / _nodesCount));
          System.out.println("   Points/Node: Average=" + ((float) _pointsCount / _nodesCount) + //
-                            ", Min=" + _minPointsCountPerNode + //
-                            ", Max=" + _maxPointsCountPerNode);
+                  ", Min=" + _minPointsCountPerNode + //
+                  ", Max=" + _maxPointsCountPerNode);
          System.out.println("======================================================================");
 
 

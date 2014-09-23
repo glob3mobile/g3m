@@ -6,8 +6,8 @@ import java.io.Serializable;
 
 
 public class Angle
-         implements
-            Serializable {
+implements
+Serializable {
 
 
    private static final long serialVersionUID = 1L;
@@ -105,6 +105,11 @@ public class Angle
    public static Angle max(final Angle a1,
                            final Angle a2) {
       return (a1._radians > a2._radians) ? a1 : a2;
+   }
+
+
+   public final boolean lowerThan(final Angle that) {
+      return (_radians < that._radians);
    }
 
 

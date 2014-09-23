@@ -22,8 +22,8 @@ import es.igosoftware.util.GStringUtils;
 
 
 public class SimplifyOctreeTask
-         implements
-PersistentOctree.Visitor {
+implements
+            PersistentOctree.Visitor {
 
    private final String     _sourceCloudName;
    private final File       _cloudDirectory;
@@ -36,13 +36,13 @@ PersistentOctree.Visitor {
    private final int        _maxPointsPerTitle;
 
 
-   SimplifyOctreeTask(final String sourceCloudName,
-                      final File cloudDirectory,
-                      final String simplifiedCloudName,
-                      final long cacheSizeInBytes,
-                      final long sourcePointsCount,
-                      final float resultSizeFactor,
-                      final int maxPointsPerTitle) {
+   public SimplifyOctreeTask(final String sourceCloudName,
+                             final File cloudDirectory,
+                             final String simplifiedCloudName,
+                             final long cacheSizeInBytes,
+                             final long sourcePointsCount,
+                             final float resultSizeFactor,
+                             final int maxPointsPerTitle) {
       _sourceCloudName = sourceCloudName;
       _cloudDirectory = cloudDirectory;
       _simplifiedCloudName = simplifiedCloudName;
@@ -67,7 +67,7 @@ PersistentOctree.Visitor {
                                     final long elapsed,
                                     final long estimatedMsToFinish) {
             System.out.println("- Simplifying \"" + _sourceCloudName + "\" "
-                               + progressString(stepsDone, percent, elapsed, estimatedMsToFinish));
+                     + progressString(stepsDone, percent, elapsed, estimatedMsToFinish));
          }
       };
    }
@@ -89,7 +89,7 @@ PersistentOctree.Visitor {
 
          System.out.println();
          System.out.println("Source points=" + _sourcePointsCount + ", Simplified Points=" + simplifiedPointsCount + " ("
-                  + GStringUtils.formatPercent(simplifiedPointsCount, _sourcePointsCount) + ")");
+                            + GStringUtils.formatPercent(simplifiedPointsCount, _sourcePointsCount) + ")");
       }
    }
 
@@ -223,9 +223,9 @@ PersistentOctree.Visitor {
                                      //final int level,
                                      final Sector sector,
                                      final List<Geodetic3D> points
-   //final double minHeight,
-   //final double maxHeight
-   ) {
+                                     //final double minHeight,
+                                     //final double maxHeight
+            ) {
       final int imageWidth = 1024;
       final int imageHeight = 1024;
 
