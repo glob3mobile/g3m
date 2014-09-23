@@ -808,7 +808,9 @@ bool PlanetRenderer::onTouchEvent(const G3MEventContext* ec,
     for (int i = 0; i < firstLevelTilesCount; i++) {
       const Tile* tile = _firstLevelTiles[i]->getDeepestTileContaining(position);
       if (tile != NULL) {
-        ILogger::instance()->logInfo("Touched on %s", tile->description().c_str());
+        ILogger::instance()->logInfo("Touched on %s (%s)",
+                                     position.description().c_str(),
+                                     tile->description().c_str());
         ILogger::instance()->logInfo("Camera position=%s heading=%f pitch=%f",
                                      _lastCamera->getGeodeticPosition().description().c_str(),
                                      _lastCamera->getHeading()._degrees,

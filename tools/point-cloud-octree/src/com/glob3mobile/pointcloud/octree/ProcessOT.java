@@ -54,8 +54,8 @@ public class ProcessOT {
       System.out.println("ProcessOT 0.1");
       System.out.println("-------------\n");
 
-      final File cloudDirectory = new File(System.getProperty("user.dir"));
-      // final File cloudDirectory = new File("/Volumes/My Passport/_LIDAR_COPY");
+      // final File cloudDirectory = new File(System.getProperty("user.dir"));
+      final File cloudDirectory = new File("/Volumes/My Passport/_LIDAR_COPY");
 
 
       final String completeSourceCloudName = "Loudoun-VA";
@@ -72,6 +72,91 @@ public class ProcessOT {
       final boolean createLOD = false;
       final boolean showLODStats = false;
       final boolean drawSampleLODNode = false;
+
+
+      if (true) {
+         try (final PersistentOctree sourceOctree = BerkeleyDBOctree.openReadOnly(cloudDirectory, completeSourceCloudName,
+                  cacheSizeInBytes)) {
+            final PersistentOctree.Statistics statistics = sourceOctree.getStatistics(true);
+            statistics.show();
+
+
+            final Sector sector = Sector.fromDegrees( //
+                     39.051968051473274102, -77.5404852494428809, //
+                     39.095519409073318684, -77.497507593275656745);
+
+            final PersistentOctree.Visitor visitor = new PersistentOctree.Visitor() {
+               private long                   _totalPointsCount;
+               private long                   _nodesCount;
+               private long                   _edgesNodes;
+               private long                   _fullNodes;
+               private GUndeterminateProgress _progress;
+
+
+               @Override
+               public void start() {
+                  _totalPointsCount = 0;
+                  _nodesCount = 0;
+                  _fullNodes = 0;
+                  _edgesNodes = 0;
+
+                  _progress = new GUndeterminateProgress(10, true) {
+                     @Override
+                     public void informProgress(final long stepsDone,
+                                                final long elapsed) {
+                        System.out.println("- processing for \"" + sourceOctree.getCloudName() + "\""
+                                 + progressString(stepsDone, elapsed));
+                     }
+                  };
+               }
+
+
+               @Override
+               public boolean visit(final PersistentOctree.Node node) {
+
+                  final Sector nodeSector = node.getSector();
+                  _nodesCount++;
+
+                  // System.out.println("-> " + node.getID() + ", points=" + node.getPointsCount() + ", sector=" + nodeSector);
+
+                  if (sector.fullContains(nodeSector)) {
+                     _fullNodes++;
+                     _totalPointsCount += node.getPointsCount();
+                     final List<Geodetic3D> points = node.getPoints();
+                  }
+                  else if (sector.touchesWith(nodeSector)) {
+                     _edgesNodes++;
+                     _totalPointsCount += node.getPointsCount();
+                     final List<Geodetic3D> points = node.getPoints();
+                  }
+
+                  _progress.stepDone();
+
+                  // final boolean keepVisiting = _nodesCount < 50;
+                  final boolean keepVisiting = true;
+                  return keepVisiting;
+               }
+
+
+               @Override
+               public void stop() {
+                  _progress.finish();
+                  _progress = null;
+                  //                  Total points: 1413564164 in 45819 nodes
+
+                  //                  - processing for "Loudoun-VA" [ done ] 45819 steps [Finished in 1m 57s] 351B/sec (avr=391.9B/sec)
+                  //                  Total points: 0 in 45819 nodes, full=0, edges=0
+
+                  System.out.println("Total points: " + _totalPointsCount + //
+                           ", nodes: " + _nodesCount + //
+                           ", full: " + _fullNodes + //
+                                     ", edges: " + _edgesNodes);
+               }
+            };
+
+            sourceOctree.acceptDepthFirstVisitor(sector, visitor);
+         }
+      }
 
       if (createSimplifiedCloudName) {
          try (final PersistentOctree sourceOctree = BerkeleyDBOctree.openReadOnly(cloudDirectory, completeSourceCloudName,

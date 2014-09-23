@@ -31,8 +31,8 @@ import es.igosoftware.util.GUndeterminateProgress;
 
 
 public class BerkeleyDBLOD
-         implements
-            PersistentLOD {
+implements
+PersistentLOD {
 
 
    public static PersistentLOD openReadOnly(final File cloudDirectory,
@@ -138,8 +138,8 @@ public class BerkeleyDBLOD
 
 
    static class BerkeleyDBTransaction
-            implements
-               PersistentLOD.Transaction {
+   implements
+   PersistentLOD.Transaction {
 
       final com.sleepycat.je.Transaction _txn;
 
@@ -228,13 +228,11 @@ public class BerkeleyDBLOD
    public void acceptVisitor(final PersistentLOD.Transaction transaction,
                              final PersistentLOD.Visitor visitor,
                              final Sector sector) {
+      visitor.start(transaction);
+
       final TileHeader header = TileHeader.deepestEnclosingTileHeader(sector);
 
-      System.out.println(sector + " => node: " + Utils.toIDString(header._id));
-
       final byte[] id = header._id;
-
-      visitor.start(transaction);
 
       final CursorConfig cursorConfig = new CursorConfig();
 
@@ -498,10 +496,10 @@ public class BerkeleyDBLOD
 
 
    private static class BerkeleyLODDBStatistics
-            implements
-               PersistentLOD.Visitor,
-               PersistentLOD.Statistics,
-               Serializable {
+   implements
+   PersistentLOD.Visitor,
+   PersistentLOD.Statistics,
+   Serializable {
 
       private static final long      serialVersionUID = 3L;
 
@@ -609,13 +607,13 @@ public class BerkeleyDBLOD
          System.out.println("   Points: " + _pointsCount);
          System.out.println("   Sector: " + _sector);
          System.out.println("   Heights: " + _minHeight + "/" + _maxHeight + //
-                            " (delta=" + (_maxHeight - _minHeight) + ")" + //
-                  " average=" + ((float) (_sumHeight / _pointsCount)));
+                  " (delta=" + (_maxHeight - _minHeight) + ")" + //
+                            " average=" + ((float) (_sumHeight / _pointsCount)));
          System.out.println("   Nodes: " + _nodesCount);
          System.out.println("    Depth: " + _minDepth + "/" + _maxDepth + ", Average=" + ((float) _sumDepth / _nodesCount));
          System.out.println("    Points/Node: Average=" + ((float) _pointsCount / _nodesCount) + //
-                  ", Min=" + _minPointsCountPerNode + //
-                  ", Max=" + _maxPointsCountPerNode);
+                            ", Min=" + _minPointsCountPerNode + //
+                            ", Max=" + _maxPointsCountPerNode);
          System.out.println("   Levels: " + _nodeLevelsCount);
          System.out.println("    Levels/Node=" + ((float) _nodeLevelsCount / _nodesCount));
          System.out.println("    Points/Level: Average=" + ((float) _pointsCount / _nodeLevelsCount));

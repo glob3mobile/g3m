@@ -15,6 +15,7 @@ import java.util.List;
 import com.glob3mobile.pointcloud.octree.Geodetic3D;
 import com.glob3mobile.pointcloud.octree.PersistentOctree;
 import com.glob3mobile.pointcloud.octree.Sector;
+import com.glob3mobile.pointcloud.octree.Utils;
 import com.sleepycat.je.Cursor;
 import com.sleepycat.je.CursorConfig;
 import com.sleepycat.je.Database;
@@ -321,6 +322,130 @@ PersistentOctree {
             if (!keepGoing) {
                break;
             }
+         }
+      }
+
+      visitor.stop();
+   }
+
+   private static enum CursorSituation {
+      NotFoundSelfNorDescendants,
+      FoundDescendants,
+      FoundSelf,
+      FoundNothing;
+   }
+
+
+   private static CursorSituation getCursorSituation(final Cursor cursor,
+                                                     final DatabaseEntry keyEntry,
+                                                     final DatabaseEntry dataEntry,
+                                                     final byte[] id) {
+      final OperationStatus status = cursor.getSearchKeyRange(keyEntry, dataEntry, LockMode.READ_UNCOMMITTED);
+      switch (status) {
+         case SUCCESS: {
+            final byte[] key = keyEntry.getData();
+
+            if (!Utils.hasSamePrefix(key, id)) {
+               return CursorSituation.NotFoundSelfNorDescendants;
+            }
+            else if (Utils.isGreaterThan(key, id)) {
+               return CursorSituation.FoundDescendants;
+            }
+            else {
+               return CursorSituation.FoundSelf;
+            }
+         }
+         case NOTFOUND: {
+            return CursorSituation.FoundNothing;
+         }
+         default:
+            throw new RuntimeException("Status not supported: " + status);
+      }
+   }
+
+
+   private void visitParent(final com.sleepycat.je.Transaction txn,
+                            final Cursor cursor,
+                            final DatabaseEntry keyEntry,
+                            final DatabaseEntry dataEntry,
+                            final byte[] id,
+                            final PersistentOctree.Visitor visitor) {
+      if (cursor.getPrev(keyEntry, dataEntry, LockMode.READ_UNCOMMITTED) == OperationStatus.SUCCESS) {
+         final byte[] key = keyEntry.getData();
+         if (Utils.hasSamePrefix(id, key)) {
+            final BerkeleyDBOctreeNode node = BerkeleyDBOctreeNode.fromDB(txn, this, key, dataEntry.getData(), false);
+            visitor.visit(node);
+         }
+      }
+   }
+
+
+   private void visitDescendants(final com.sleepycat.je.Transaction txn,
+                                 final Cursor cursor,
+                                 final DatabaseEntry keyEntry,
+                                 final DatabaseEntry dataEntry,
+                                 final byte[] id,
+                                 final PersistentOctree.Visitor visitor) {
+
+      byte[] key = keyEntry.getData();
+
+      BerkeleyDBOctreeNode node = BerkeleyDBOctreeNode.fromDB(txn, this, key, dataEntry.getData(), false);
+      if (!visitor.visit(node)) {
+         return;
+      }
+
+      while (cursor.getNext(keyEntry, dataEntry, LockMode.READ_UNCOMMITTED) == OperationStatus.SUCCESS) {
+         key = keyEntry.getData();
+         if (!Utils.hasSamePrefix(key, id)) {
+            break;
+         }
+         node = BerkeleyDBOctreeNode.fromDB(txn, this, key, dataEntry.getData(), false);
+         if (!visitor.visit(node)) {
+            return;
+         }
+      }
+   }
+
+
+   @Override
+   public void acceptDepthFirstVisitor(final Sector sector,
+                                       final PersistentOctree.Visitor visitor) {
+      visitor.start();
+
+      final TileHeader header = TileHeader.deepestEnclosingTileHeader(sector);
+
+      System.out.println("==> " + Utils.toIDString(header._id) + "   " + header._sector);
+
+      final byte[] id = header._id;
+
+
+      final CursorConfig cursorConfig = new CursorConfig();
+
+      final com.sleepycat.je.Transaction txn = null;
+      try (final Cursor cursor = _nodeDB.openCursor(txn, cursorConfig)) {
+         final DatabaseEntry keyEntry = new DatabaseEntry(id);
+         final DatabaseEntry dataEntry = new DatabaseEntry();
+
+         final CursorSituation situation = getCursorSituation(cursor, keyEntry, dataEntry, id);
+         switch (situation) {
+            case NotFoundSelfNorDescendants: {
+               visitParent(txn, cursor, keyEntry, dataEntry, id, visitor);
+               break;
+            }
+            case FoundDescendants: {
+               visitDescendants(txn, cursor, keyEntry, dataEntry, id, visitor);
+               break;
+            }
+            case FoundSelf: {
+               final BerkeleyDBOctreeNode node = BerkeleyDBOctreeNode.fromDB(txn, this, id, dataEntry.getData(), false);
+               visitor.visit(node);
+               break;
+            }
+            case FoundNothing: {
+               break;
+            }
+            default:
+               throw new RuntimeException("Invalid situation: " + situation);
          }
       }
 

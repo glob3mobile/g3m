@@ -7,8 +7,8 @@ import java.util.List;
 
 
 public class Sector
-implements
-Serializable {
+         implements
+            Serializable {
 
    private static final long  serialVersionUID = 1L;
 
@@ -102,13 +102,13 @@ Serializable {
    public final boolean contains(final Angle latitude,
                                  final Angle longitude) {
       return latitude.isBetween(_lower._latitude, _upper._latitude) && //
-             longitude.isBetween(_lower._longitude, _upper._longitude);
+               longitude.isBetween(_lower._longitude, _upper._longitude);
    }
 
 
    public final boolean fullContains(final Sector that) {
       return contains(that._lower._latitude, that._lower._longitude) && //
-               contains(that._upper._latitude, that._upper._longitude);
+             contains(that._upper._latitude, that._upper._longitude);
    }
 
 
@@ -181,5 +181,24 @@ Serializable {
 
       return new Sector(low, up);
    }
+
+
+   public final boolean touchesWith(final Sector that) {
+      // from Real-Time Collision Detection - Christer Ericson
+      //   page 79
+
+      if ((_upper._latitude._radians < that._lower._latitude._radians) || //
+          (_lower._latitude._radians > that._upper._latitude._radians)) {
+         return false;
+      }
+      if ((_upper._longitude._radians < that._lower._longitude._radians) || //
+          (_lower._longitude._radians > that._upper._longitude._radians)) {
+         return false;
+      }
+
+      // Overlapping on all axes means Sectors are intersecting
+      return true;
+   }
+
 
 }

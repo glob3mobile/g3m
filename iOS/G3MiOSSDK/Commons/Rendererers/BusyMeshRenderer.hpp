@@ -59,9 +59,9 @@ public:
                              int width, int height) {
     const int halfWidth = width / 2;
     const int halfHeight = height / 2;
-    _projectionMatrix.copyValue(MutableMatrix44D::createOrthographicProjectionMatrix(-halfWidth,   halfWidth,
-                                                                                    -halfHeight, halfHeight,
-                                                                                    -halfWidth,  halfWidth));
+    _projectionMatrix.copyValue(MutableMatrix44D::createOrthographicProjectionMatrix(-halfWidth,  halfWidth,
+                                                                                     -halfHeight, halfHeight,
+                                                                                     -halfWidth,  halfWidth));
     
     delete _mesh;
     _mesh = NULL;
