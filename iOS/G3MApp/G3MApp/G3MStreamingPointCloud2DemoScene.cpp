@@ -1,12 +1,12 @@
 //
-//  G3MStreamingPointCloud1DemoScene.cpp
+//  G3MStreamingPointCloud2DemoScene.cpp
 //  G3MApp
 //
 //  Created by Diego Gomez Deck on 8/19/14.
 //  Copyright (c) 2014 Igo Software SL. All rights reserved.
 //
 
-#include "G3MStreamingPointCloud1DemoScene.hpp"
+#include "G3MStreamingPointCloud2DemoScene.hpp"
 #include <G3MiOSSDK/MapBoxLayer.hpp>
 #include <G3MiOSSDK/LayerSet.hpp>
 #include <G3MiOSSDK/G3MWidget.hpp>
@@ -20,11 +20,11 @@
 #include "G3MDemoModel.hpp"
 
 
-class G3MStreamingPointCloud1DemoScene_PointCloudMetadataListener : public PointCloudsRenderer::PointCloudMetadataListener {
+class G3MStreamingPointCloud2DemoScene_PointCloudMetadataListener : public PointCloudsRenderer::PointCloudMetadataListener {
 private:
   G3MWidget* _g3mWidget;
 public:
-  G3MStreamingPointCloud1DemoScene_PointCloudMetadataListener(G3MWidget* g3mWidget) :
+  G3MStreamingPointCloud2DemoScene_PointCloudMetadataListener(G3MWidget* g3mWidget) :
   _g3mWidget(g3mWidget)
   {
   }
@@ -33,13 +33,13 @@ public:
                   const Sector& sector,
                   double minHeight,
                   double maxHeight) {
-    _g3mWidget->setAnimatedCameraPosition( Geodetic3D::fromDegrees(39.068479748852752209, -77.602316923351310152, 70000) );
+    _g3mWidget->setAnimatedCameraPosition( Geodetic3D::fromDegrees(39.084024168630392637, -77.643438514919708382, 11000) );
   }
 
 };
 
 
-void G3MStreamingPointCloud1DemoScene::rawActivate(const G3MContext *context) {
+void G3MStreamingPointCloud2DemoScene::rawActivate(const G3MContext *context) {
   G3MDemoModel* model     = getModel();
   G3MWidget*    g3mWidget = model->getG3MWidget();
 
@@ -62,12 +62,12 @@ void G3MStreamingPointCloud1DemoScene::rawActivate(const G3MContext *context) {
 
 #warning TODO cache
   model->getPointCloudsRenderer()->addPointCloud(URL("http://glob3mobile.dyndns.org:8080"),
-                                                 "Loudoun-VA_simplified2_LOD",
+                                                 "Loudoun-VA_fragment_LOD",
                                                  DownloadPriority::LOWER,
                                                  TimeInterval::zero(),
                                                  false,
                                                  pointSize,
                                                  verticalExaggeration,
-                                                 new G3MStreamingPointCloud1DemoScene_PointCloudMetadataListener(g3mWidget),
+                                                 new G3MStreamingPointCloud2DemoScene_PointCloudMetadataListener(g3mWidget),
                                                  true);
 }

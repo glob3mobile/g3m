@@ -34,6 +34,7 @@
 #include "G3MScenarioDEMDemoScene.hpp"
 #include "G3MTiledVectorDemoScene.hpp"
 #include "G3MStreamingPointCloud1DemoScene.hpp"
+#include "G3MStreamingPointCloud2DemoScene.hpp"
 
 G3MDemoModel::G3MDemoModel(G3MDemoListener*     listener,
                            LayerSet*            layerSet,
@@ -55,6 +56,7 @@ _context(NULL)
 {
 #warning Put the demo back to its position
   _scenes.push_back( new G3MStreamingPointCloud1DemoScene(this) );
+  _scenes.push_back( new G3MStreamingPointCloud2DemoScene(this) );
 
   _scenes.push_back( new G3MRasterLayersDemoScene(this) );
   _scenes.push_back( new G3MScenarioDEMDemoScene(this) );
