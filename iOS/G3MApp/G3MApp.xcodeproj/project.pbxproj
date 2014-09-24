@@ -23,6 +23,7 @@
 		CF6920C718394E44007409D8 /* restaurant-96x96.png in Resources */ = {isa = PBXBuildFile; fileRef = CF6920C618394E44007409D8 /* restaurant-96x96.png */; };
 		CF6920C918394F56007409D8 /* restaurant-48x48.png in Resources */ = {isa = PBXBuildFile; fileRef = CF6920C818394F56007409D8 /* restaurant-48x48.png */; };
 		CF6920CC1839679B007409D8 /* G3MSelectOptionViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = CF6920CB1839679B007409D8 /* G3MSelectOptionViewController.mm */; };
+		CF6E184C19D35ADD002B456A /* loudoun_4326_300.bil in Resources */ = {isa = PBXBuildFile; fileRef = CF6E184B19D35ADD002B456A /* loudoun_4326_300.bil */; };
 		CF8B1A541837DBFA004D3902 /* G3MDemoModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF8B1A521837DBFA004D3902 /* G3MDemoModel.cpp */; };
 		CF8B1A581837DC69004D3902 /* G3MDemoListener.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF8B1A561837DC69004D3902 /* G3MDemoListener.cpp */; };
 		CFB806E21837D4D300DB4B3B /* G3MDemoBuilder_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = CFB806E01837D4D300DB4B3B /* G3MDemoBuilder_iOS.mm */; };
@@ -130,6 +131,7 @@
 		CF6920C818394F56007409D8 /* restaurant-48x48.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "restaurant-48x48.png"; sourceTree = "<group>"; };
 		CF6920CA1839679B007409D8 /* G3MSelectOptionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = G3MSelectOptionViewController.h; sourceTree = "<group>"; };
 		CF6920CB1839679B007409D8 /* G3MSelectOptionViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = G3MSelectOptionViewController.mm; sourceTree = "<group>"; };
+		CF6E184B19D35ADD002B456A /* loudoun_4326_300.bil */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = loudoun_4326_300.bil; sourceTree = "<group>"; };
 		CF8B1A521837DBFA004D3902 /* G3MDemoModel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = G3MDemoModel.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CF8B1A531837DBFA004D3902 /* G3MDemoModel.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = G3MDemoModel.hpp; sourceTree = "<group>"; };
 		CF8B1A561837DC69004D3902 /* G3MDemoListener.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = G3MDemoListener.cpp; sourceTree = "<group>"; };
@@ -399,6 +401,7 @@
 		E7D1B7F116D2750400AF47C1 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				CF6E184B19D35ADD002B456A /* loudoun_4326_300.bil */,
 				CF37F5F0183D26500050CAEF /* 0576.bil */,
 				CFE3B3F1183C07C50078C796 /* isosurface-mesh.json */,
 				CFE3B3E1183ADAB80078C796 /* arcdeTriomphe.bson */,
@@ -534,6 +537,7 @@
 				CF6920C518394DB6007409D8 /* roads_monaco.geojson in Resources */,
 				CFE3B3EB183ADB2D0078C796 /* texture0.png in Resources */,
 				CF37F5F1183D26500050CAEF /* 0576.bil in Resources */,
+				CF6E184C19D35ADD002B456A /* loudoun_4326_300.bil in Resources */,
 				E7D1B64216D2462B00AF47C1 /* Icon-Small-50.png in Resources */,
 				CF6920C418394DB6007409D8 /* restaurants_monaco.geojson in Resources */,
 				E7D1B64316D2462B00AF47C1 /* Icon-Small-50@2x.png in Resources */,

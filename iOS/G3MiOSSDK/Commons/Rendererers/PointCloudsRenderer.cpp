@@ -403,7 +403,7 @@ void PointCloudsRenderer::PointCloud::render(const G3MRenderContext* rc,
   if (_rootNode != NULL) {
 #warning TODO
     const long long renderedCount = _rootNode->render(this, rc, glState, frustum, _minHeight, _averageHeight * 3, _pointSize, nowInMS);
-//    const long long renderedCount = _rootNode->render(this, rc, glState, frustum, _minHeight, _maxHeight, _pointSize, nowInMS);
+    // const long long renderedCount = _rootNode->render(this, rc, glState, frustum, _minHeight, _maxHeight, _pointSize, nowInMS);
 
     if (_lastRenderedCount != renderedCount) {
       ILogger::instance()->logInfo("\"%s\": Rendered %ld points", _cloudName.c_str(), renderedCount);

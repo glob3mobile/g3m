@@ -54,6 +54,14 @@ void G3MStreamingPointCloud2DemoScene::rawActivate(const G3MContext *context) {
 //                                                                                    Vector2I(2048, 1024));
 //  planetRenderer->setElevationDataProvider(elevationDataProvider, true);
 
+//  ElevationDataProvider* elevationDataProvider = new SingleBilElevationDataProvider(URL("file:///loudoun_4326_300.bil", false),
+//                                                                                    Sector::fromDegrees(38.8423858972, -77.3224512673,
+//                                                                                                        39.3301640652, -77.9660628933),
+//                                                                                    Vector2I(773, 586),
+//                                                                                    0);
+//  
+//  planetRenderer->setElevationDataProvider(elevationDataProvider, true);
+
   MapBoxLayer* layer = new MapBoxLayer("examples.map-m0t0lrpu",
                                        TimeInterval::fromDays(30),
                                        true,
