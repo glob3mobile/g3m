@@ -1,31 +1,65 @@
 #include "Image_win8.hpp"
-//#include <wrl.h>
-//#include <robuffer.h>
+#include "IStringUtils.hpp"
+#include "StringUtils_win8.hpp"
+
 #include <exception>
 #include <Windows.h>
 #include <WinBase.h>
 //#include <Shlwapi.h>
 
 //using namespace Windows;
-
 //using namespace Windows::Storage::Streams;
 //using namespace Microsoft::WRL;
 
 
-inline void ThrowIfFailed(HRESULT hr)
-{
+inline void ThrowIfFailed(HRESULT hr){
 	if (FAILED(hr))
 	{
 		throw Platform::Exception::CreateException(hr);
 	}
 }
 
-Platform::String^ toStringHat(std::string str)
-{
-	std::wstring wid_str = std::wstring(str.begin(), str.end());
-	const wchar_t* w_char = wid_str.c_str();
-	Platform::String^ p_string = ref new Platform::String(w_char);
-	return p_string;
+//Platform::String^ toStringHat(std::string str){
+//	std::wstring wid_str = std::wstring(str.begin(), str.end());
+//	const wchar_t* w_char = wid_str.c_str();
+//	Platform::String^ p_string = ref new Platform::String(w_char);
+//	return p_string;
+//}
+
+//std::string ToStringStd(Platform::String^ str_hat){
+//	std::wstring wstr(str_hat->Data());
+//	std::string stdStr(wstr.begin(), wstr.end());
+//	return stdStr;
+//}
+
+std::string getContainerFormatExtension(GUID containerFormat){
+
+	if (containerFormat == GUID_ContainerFormatJpeg){
+		return "jpg";
+	}
+	else if (containerFormat == GUID_ContainerFormatPng){
+		return "png";
+	}
+	else if (containerFormat == GUID_ContainerFormatBmp){
+		return "bmp";
+	}
+	else if (containerFormat == GUID_ContainerFormatTiff){
+		return "tif";
+	}
+	else if (containerFormat == GUID_ContainerFormatGif){
+		return "gif";
+	}
+	else if (containerFormat == GUID_ContainerFormatDds){
+		return "dds";
+	}
+	else if (containerFormat == GUID_ContainerFormatIco){
+		return "ico";
+	}
+	else if (containerFormat == GUID_ContainerFormatWmp){
+		return "wmp";
+	}
+
+	return NULL;
 }
 
 UINT getbppFromPixelFormat(WICPixelFormatGUID pPixelFormat){
@@ -122,57 +156,57 @@ UINT getStride(
 	return stride;
 }
 
-int getBitmapSize(IWICBitmap* bitmap) {
+//int getBitmapSize(IWICBitmap* bitmap) {
+//
+//	if (bitmap == nullptr){
+//		return 0;
+//	}
+//
+//	UINT uiWidth = 0;
+//	UINT uiHeight = 0;
+//	IWICImagingFactory *pFactory = NULL;
+//	WICRect* rcLock = NULL;
+//	IWICBitmapLock *pLock = NULL;
+//	BYTE *pv = NULL;
+//	UINT cbBufferSize = 0;
+//
+//	HRESULT hr = bitmap->GetSize(&uiWidth, &uiHeight);
+//
+//	if (SUCCEEDED(hr)){
+//		rcLock = new WICRect{ 0, 0, uiWidth, uiHeight };
+//	}
+//
+//	if (SUCCEEDED(hr)){
+//		hr = CoCreateInstance(
+//			CLSID_WICImagingFactory,
+//			NULL,
+//			CLSCTX_INPROC_SERVER,
+//			IID_IWICImagingFactory,
+//			(LPVOID*)&pFactory
+//			);
+//	}
+//
+//	if (SUCCEEDED(hr)){
+//		hr = bitmap->Lock(rcLock, WICBitmapLockRead, &pLock);
+//
+//		if (SUCCEEDED(hr)){
+//			if (SUCCEEDED(hr)){
+//				hr = pLock->GetDataPointer(&cbBufferSize, &pv);
+//			}
+//			// Release the bitmap lock.
+//			pLock->Release();
+//		}
+//	}
+//
+//	if (pFactory){
+//		pFactory->Release();
+//	}
+//
+//	return cbBufferSize;
+//}
 
-	if (bitmap == nullptr){
-		return 0;
-	}
 
-	UINT uiWidth = 0;
-	UINT uiHeight = 0;
-	IWICImagingFactory *pFactory = NULL;
-	WICRect* rcLock = NULL;
-	IWICBitmapLock *pLock = NULL;
-	BYTE *pv = NULL;
-	UINT cbBufferSize = 0;
-
-	HRESULT hr = bitmap->GetSize(&uiWidth, &uiHeight);
-
-	if (SUCCEEDED(hr)){
-		rcLock = new WICRect{ 0, 0, uiWidth, uiHeight };
-	}
-
-	if (SUCCEEDED(hr)){
-		hr = CoCreateInstance(
-			CLSID_WICImagingFactory,
-			NULL,
-			CLSCTX_INPROC_SERVER,
-			IID_IWICImagingFactory,
-			(LPVOID*)&pFactory
-			);
-	}
-
-	if (SUCCEEDED(hr)){
-		hr = bitmap->Lock(rcLock, WICBitmapLockRead, &pLock);
-
-		if (SUCCEEDED(hr)){
-			if (SUCCEEDED(hr)){
-				hr = pLock->GetDataPointer(&cbBufferSize, &pv);
-			}
-			// Release the bitmap lock.
-			pLock->Release();
-		}
-	}
-
-	if (pFactory){
-		pFactory->Release();
-	}
-
-	return cbBufferSize;
-}
-
-
-BYTE* getBitmapBuffer(IWICBitmap* bitmap) {
+IByteBuffer* getBitmapBuffer(IWICBitmap* bitmap) {
 
 	if (bitmap == nullptr){
 		return NULL;
@@ -181,44 +215,49 @@ BYTE* getBitmapBuffer(IWICBitmap* bitmap) {
 	UINT uiWidth = 0;
 	UINT uiHeight = 0;
 	IWICImagingFactory *pFactory = NULL;
-	WICRect* rcLock = NULL;
+	
 	IWICBitmapLock *pLock = NULL;
 	BYTE *pv = NULL;
 	UINT cbBufferSize = 0;
 
-	HRESULT hr = bitmap->GetSize(&uiWidth, &uiHeight);
-
-	if (SUCCEEDED(hr)){
-		rcLock = new WICRect{ 0, 0, uiWidth, uiHeight };
-	}
-
-	if (SUCCEEDED(hr)){
-		hr = CoCreateInstance(
+	HRESULT	hr = CoCreateInstance(
 			CLSID_WICImagingFactory,
 			NULL,
 			CLSCTX_INPROC_SERVER,
 			IID_IWICImagingFactory,
 			(LPVOID*)&pFactory
 			);
+
+	if (SUCCEEDED(hr)){
+		hr = bitmap->GetSize(&uiWidth, &uiHeight);
 	}
 
 	if (SUCCEEDED(hr)){
-		hr = bitmap->Lock(rcLock, WICBitmapLockRead, &pLock);
+		WICRect rcLock;
+		rcLock = WICRect{ 0, 0, uiWidth, uiHeight };
+		
+		if (SUCCEEDED(hr)){
+			hr = bitmap->Lock(&rcLock, WICBitmapLockRead, &pLock);
+		}
 
 		if (SUCCEEDED(hr)){
-			if (SUCCEEDED(hr)){
-				hr = pLock->GetDataPointer(&cbBufferSize, &pv);
-			}
+			hr = pLock->GetDataPointer(&cbBufferSize, &pv);
 			// Release the bitmap lock.
 			pLock->Release();
 		}
+	}
+
+	if (!SUCCEEDED(hr)){
+		ILogger::instance()->logError("Unnable to retrieve bitmap data buffer");
+		return NULL;
 	}
 
 	if (pFactory){
 		pFactory->Release();
 	}
 
-	return pv;
+	IByteBuffer* bitmapBuffer = IFactory::instance()->createByteBuffer(pv, cbBufferSize);
+	return bitmapBuffer;
 }
 
 
@@ -308,24 +347,149 @@ IImage* Image_win8::shallowCopy() const{
 }
 
 
+
 IByteBuffer* Image_win8::createImageBuffer() const{
+	
+	//-- This workaround creates image buffer compressed in png format, but metadata are not included.
+	if (_sourceBuffer != nullptr){
+		return _sourceBuffer;
+	}
 
 	if (_image == nullptr){
 		return NULL;
 	}
 
-	//TODO: 
+	// WIC interface pointers.
+	IWICImagingFactory* pFactory = NULL;
+	IWICStream* pOutputStream = NULL;
+	IWICBitmapEncoder* pIEncoder = NULL;
+	IWICBitmapFrameEncode* pIEncoderFrame = NULL;
 
+	HRESULT hr = CoCreateInstance(
+		CLSID_WICImagingFactory,
+		NULL,
+		CLSCTX_INPROC_SERVER,
+		IID_IWICImagingFactory,
+		(LPVOID*)&pFactory
+		);
+
+	// Create input and output stream
+	if (SUCCEEDED(hr)){
+		hr = pFactory->CreateStream(&pOutputStream);
+	}
+	 
+	// getBitmapBuffer
+	IByteBuffer* bitmapBuffer = getBitmapBuffer(_image);
 	
+	//-- reserve memory for output data
+	int outputLength = bitmapBuffer->size();
+	BYTE* outputData = new BYTE[outputLength];
 
-	return NULL;
+	// Initialize the output stream with the memory pointer and size.
+	if (SUCCEEDED(hr)){
+		hr = pOutputStream->InitializeFromMemory(outputData, outputLength);
+	}
+
+	// Create a encoder for the output stream.
+	if (SUCCEEDED(hr)){
+		hr = pFactory->CreateEncoder(
+			GUID_ContainerFormatPng, // png compression
+			0, // vendor
+			&pIEncoder);
+	}
+
+	// Init enconder
+	if (SUCCEEDED(hr)){
+		hr = pIEncoder->Initialize(
+			pOutputStream,
+			WICBitmapEncoderNoCache);
+	}
+
+	//Get and create image frame
+	if (SUCCEEDED(hr)){
+		hr = pIEncoder->CreateNewFrame(&pIEncoderFrame, nullptr);
+	}
+
+	if (SUCCEEDED(hr)){
+		hr = pIEncoderFrame->Initialize(NULL);
+	}
+
+	// Set frame size
+	if (SUCCEEDED(hr)){
+		UINT width, height;
+		_image->GetSize(&width, &height);
+		hr = pIEncoderFrame->SetSize(width, height);
+	}
+
+	// Set resolution
+	if (SUCCEEDED(hr)){
+		double pDpiX, pDpiY;
+		_image->GetResolution(&pDpiX, &pDpiY);
+		hr = pIEncoderFrame->SetResolution(pDpiX, pDpiY);
+	}
+
+	// Set pixel format
+	if (SUCCEEDED(hr)){
+		WICPixelFormatGUID pixelFormat;
+		_image->GetPixelFormat(&pixelFormat);
+		hr = pIEncoderFrame->SetPixelFormat(&pixelFormat);
+	}
+	
+	//-- Image metadata should also be copied, but no
+	//-- workaround has not already been found to do it.
+
+	if (SUCCEEDED(hr)){
+		hr = pIEncoderFrame->WriteSource(_image, nullptr);
+		hr = pIEncoderFrame->Commit();
+		hr = pIEncoder->Commit();
+	}
+
+	//-- calculate output stream length
+	int bufferLength = 0;
+	if (SUCCEEDED(hr)){
+		ULARGE_INTEGER newPos;
+		LARGE_INTEGER offsetZero = {0, 0};
+		hr = pOutputStream->Seek(offsetZero, STREAM_SEEK_CUR, &newPos);
+		bufferLength = newPos.LowPart;
+	}
+
+	//-- release 
+	if (pFactory){
+		pFactory->Release();
+	}
+
+	if (pIEncoder){
+		pIEncoder->Release();
+	}
+
+	if (pIEncoderFrame){
+		pIEncoderFrame->Release();
+	}
+
+	if (pOutputStream){
+		pOutputStream->Release();
+	}
+
+	if (!SUCCEEDED(hr)){
+		ILogger::instance()->logError("Unnable to create image data buffer");
+		return NULL;
+	}
+	
+	// copy data to buffer of the right size and release old buffer
+	BYTE* bufferData = new BYTE[bufferLength];
+	memcpy(bufferData, outputData, bufferLength);
+	delete[] outputData;
+
+	IByteBuffer* imageBuffer = IFactory::instance()->createByteBuffer(bufferData, bufferLength);
+	return imageBuffer;
 }
+
 
 
 IWICBitmap* Image_win8::imageWithData(IByteBuffer* imgData){
 	
 	// WIC interface pointers.
-	IWICStream *pIWICStream = NULL;
+	IWICStream* pIWICStream = NULL;
 	IWICBitmapDecoder *pIDecoder = NULL;
 	IWICBitmapFrameDecode *pIDecoderFrame = NULL;
 	IWICImagingFactory *pFactory = NULL;
@@ -372,53 +536,6 @@ IWICBitmap* Image_win8::imageWithData(IByteBuffer* imgData){
 		hr = pFactory->CreateBitmapFromSource(pIDecoderFrame, WICBitmapCacheOnDemand, &pBitmap);
 	}
 
-	//-------------------------------------------------------
-	//-- TODO: just while debugging. Remove later
-	if (SUCCEEDED(hr)){
-		IWICStream* outStream;
-		// Create a stream for the encoder
-		pFactory->CreateStream(&outStream);
-		// Initialize the stream using the output file path
-		Windows::Storage::StorageFolder^ localFolder = Windows::Storage::ApplicationData::Current->LocalFolder;
-		Platform::String^ folderPath = localFolder->Path;
-		Platform::String^ tmpPath = Platform::String::Concat(folderPath, "\\");
-		Platform::String^ outputPath = Platform::String::Concat(tmpPath, "tiger_recovered.jpg");
-		//Platform::String^ outputPath = Platform::String::Concat(tmpPath, "MARBLES_RECOVERED.BMP");
-		hr = outStream->InitializeFromFilename(outputPath->Data(), GENERIC_WRITE);
-		ULARGE_INTEGER cb;
-		cb.HighPart = 0;
-		cb.LowPart = dataLength;
-		LARGE_INTEGER ini;
-		ini.HighPart = 0;
-		ini.LowPart = 0;
-
-		hr = pIWICStream->Seek(ini, STREAM_SEEK_SET, NULL);
-		//hr = pIWICStream->CopyTo(outStream, cb, NULL, NULL);
-		BYTE* buffer = new BYTE[dataLength];
-		if (SUCCEEDED(hr)){
-			hr = pIWICStream->Read(buffer, dataLength, NULL);
-		}
-
-		if (SUCCEEDED(hr)){
-			hr = outStream->Write(buffer, dataLength, NULL);
-		}
-
-		if (SUCCEEDED(hr)){
-			//outStream->Commit(STGC_DEFAULT);
-			ILogger::instance()->logInfo("Stream de salida OK");
-		}
-		else{
-			ILogger::instance()->logInfo("Pos no tira el stream de salida !");
-		}
-		outStream->Commit(STGC_DEFAULT);
-	}
-	//-------------------------------------------------------
-
-	if (!SUCCEEDED(hr)){
-		ILogger::instance()->logError("Unnable to create bitmap from source data");
-		return NULL;
-	}
-
 	//-- release 
 	if (pFactory){
 		pFactory->Release();
@@ -436,6 +553,11 @@ IWICBitmap* Image_win8::imageWithData(IByteBuffer* imgData){
 		pIWICStream->Release();
 	}
 
+	if (!SUCCEEDED(hr)){
+		ILogger::instance()->logError("Unnable to create bitmap from source data");
+		return NULL;
+	}
+
 	return pBitmap;
 }
 
@@ -448,12 +570,10 @@ int Image_win8::getBufferSize() const{
 
 //-- only for testing, remove later -----------------------------------
 
-Image_win8* Image_win8::imageFromFile(std::string finaName){
+Image_win8* Image_win8::imageFromFile(const URL& fileUrl){
 
-	Windows::Storage::StorageFolder^ localFolder = Windows::Storage::ApplicationData::Current->LocalFolder;
-	Platform::String^ folderPath = localFolder->Path;
-	Platform::String^ tmpPath = Platform::String::Concat(folderPath, "\\");
-	Platform::String^ path = Platform::String::Concat(tmpPath, toStringHat(finaName));
+	const StringUtils_win8* su = (StringUtils_win8*)IStringUtils::instance();
+	Platform::String^ path = su->toStringHat(fileUrl._path);
 
 	// WIC interface pointers.
 	IWICImagingFactory *pFactory = NULL;
@@ -485,19 +605,17 @@ Image_win8* Image_win8::imageFromFile(std::string finaName){
 
 	//-- calculate stream length
 	if (SUCCEEDED(hr)){
-		STATSTG pStatstg;
+		//STATSTG pStatstg;
 		ULARGE_INTEGER newPos;
-		LARGE_INTEGER offset = { 0, 0 };
-		hr = pIWICStream->Seek(offset, STREAM_SEEK_END, &newPos);
-		hr = pIWICStream->Stat(&pStatstg, STATFLAG_DEFAULT);
-		dataLength = pStatstg.cbSize.LowPart;
+		LARGE_INTEGER offsetZero = {0, 0};
+		hr = pIWICStream->Seek(offsetZero, STREAM_SEEK_END, &newPos);
+		dataLength = newPos.LowPart;
 
-		//imageData = (BYTE*)malloc(dataLength);
 		imageData = new BYTE[dataLength];
 
 		//-- read data from stream
 		ULONG pcbRead;
-		hr = pIWICStream->Seek(offset, STREAM_SEEK_SET, &newPos); //reset pointer to the beginning of data
+		hr = pIWICStream->Seek(offsetZero, STREAM_SEEK_SET, NULL); //reset pointer to the beginning of data
 		hr = pIWICStream->Read(imageData, dataLength, &pcbRead);
 	}
 
@@ -519,14 +637,9 @@ Image_win8* Image_win8::imageFromFile(std::string finaName){
 	}
 
 	if (SUCCEEDED(hr)){
-		hr = pFactory->CreateBitmapFromSource(pIDecoderFrame, WICBitmapCacheOnDemand, &pBitmap);
+		hr = pFactory->CreateBitmapFromSource(pIDecoderFrame, WICBitmapCacheOnDemand, &pBitmap); 
 	}
 
-	if (!SUCCEEDED(hr)){
-		ILogger::instance()->logError("Unnable to create bitmap from file");
-		return NULL;
-	}
-	
 	//-- release 
 	if (pFactory){
 		pFactory->Release();
@@ -544,14 +657,96 @@ Image_win8* Image_win8::imageFromFile(std::string finaName){
 		pIWICStream->Release();
 	}
 
+	if (!SUCCEEDED(hr)){
+		ILogger::instance()->logError("Unnable to create bitmap from file");
+		return NULL;
+	}
+	
 	return new Image_win8(pBitmap, imgBuffer);
+	//return new Image_win8(pBitmap, NULL); //-- only for test createImageBuffer. Remove later
 }
 
 
-bool Image_win8::exportToFile(Image_win8* image){
+bool Image_win8::exportToFile(const URL& fileUrl, const Image_win8* image){
 
-	// TODO:
-	return false;
+	// WIC interface pointers.
+	IWICImagingFactory* pFactory = NULL;
+	IWICStream* pIWICStream = NULL;
+	IWICBitmapDecoder* pIDecoder = NULL;
+
+	HRESULT hr = CoCreateInstance(
+		CLSID_WICImagingFactory,
+		NULL,
+		CLSCTX_INPROC_SERVER,
+		IID_IWICImagingFactory,
+		(LPVOID*)&pFactory
+		);
+
+	// Create a WIC stream to map onto the memory.
+	if (SUCCEEDED(hr)){
+		hr = pFactory->CreateStream(&pIWICStream);
+	}
+
+	// get image data and initialize stream
+	ByteBuffer_win8* buffer = (ByteBuffer_win8*)image->getSourceBuffer();
+	if (buffer == NULL){
+		buffer = (ByteBuffer_win8*)image->createImageBuffer();
+	}
+	BYTE* data = buffer->getPointer();
+	int dataLength = buffer->size();
+
+	// Initialize the stream with the memory pointer and size.
+	if (SUCCEEDED(hr)){
+		hr = pIWICStream->InitializeFromMemory(
+			data,
+			dataLength);
+	}
+
+	// Create a decoder for the stream.
+	if (SUCCEEDED(hr)){
+		hr = pFactory->CreateDecoderFromStream(
+			pIWICStream,                   // The stream to use to create the decoder
+			NULL,                          // Do not prefer a particular vendor
+			WICDecodeMetadataCacheOnLoad,  // Cache metadata when needed
+			&pIDecoder);                   // Pointer to the decoder
+	}
+
+	// Build file name according compression type
+	const StringUtils_win8* su = (StringUtils_win8*)IStringUtils::instance();
+	GUID containerFormat;
+	hr = pIDecoder->GetContainerFormat(&containerFormat);
+	std::string ext = getContainerFormatExtension(containerFormat);
+	Platform::String^ extension = Platform::String::Concat(".", su->toStringHat(ext));
+	Platform::String^ fileName = Platform::String::Concat(su->toStringHat(fileUrl._path), extension);
+
+	// Create a output stream onto file
+	IWICStream* outStream;
+	pFactory->CreateStream(&outStream);
+	hr = outStream->InitializeFromFilename(fileName->Data(), GENERIC_WRITE);
+
+	LARGE_INTEGER offsetZero = { 0, 0 };
+	hr = pIWICStream->Seek(offsetZero, STREAM_SEEK_SET, NULL);
+	BYTE* tmpBuffer = new BYTE[dataLength];
+	// Copy data from input to output stream
+	if (SUCCEEDED(hr)){
+		hr = pIWICStream->Read(tmpBuffer, dataLength, NULL);
+	}
+
+	if (SUCCEEDED(hr)){
+		hr = outStream->Write(tmpBuffer, dataLength, NULL);
+	}
+
+	if (SUCCEEDED(hr)){
+		outStream->Commit(STGC_DEFAULT);
+	}
+	delete[] tmpBuffer;
+
+	if (!SUCCEEDED(hr)){
+		ILogger::instance()->logError("Unnable to export image to file");
+		return false;
+	}
+
+	return true;
 }
 
 
@@ -1170,4 +1365,555 @@ bool Image_win8::exportToFile(Image_win8* image){
 //	return pv;
 //}
 
+
+//IByteBuffer* Image_win8::createImageBuffer() const{
+//
+//	if (_sourceBuffer != nullptr){
+//		return _sourceBuffer;
+//	}
+//
+//	if (_image == nullptr){
+//		return NULL;
+//	}
+//
+//	// WIC interface pointers.
+//	IWICImagingFactory* pFactory = NULL;
+//	IWICStream* pInputStream = NULL;
+//	IWICStream* pOutputStream = NULL;
+//	IWICBitmapDecoder* pIDecoder = NULL;
+//	IWICBitmapEncoder* pIEncoder = NULL;
+//	IWICBitmapFrameDecode* pIDecoderFrame = NULL;
+//	IWICBitmapFrameEncode* pIEncoderFrame = NULL;
+//
+//	HRESULT hr = CoCreateInstance(
+//		CLSID_WICImagingFactory,
+//		NULL,
+//		CLSCTX_INPROC_SERVER,
+//		IID_IWICImagingFactory,
+//		(LPVOID*)&pFactory
+//		);
+//
+//	IWICBitmapSource* pBitmapSource = NULL;
+//	IWICBitmap* pNewBitmap = NULL;
+//	hr = WICConvertBitmapSource(GUID_WICPixelFormat32bppRGBA, _image, &pBitmapSource);
+//	hr = pFactory->CreateBitmapFromSource(pBitmapSource, WICBitmapCacheOnDemand, &pNewBitmap);
+//
+//	IByteBuffer* imgData = getBitmapBuffer(pNewBitmap);
+//	BYTE* data = ((ByteBuffer_win8*)imgData)->getPointer();
+//	int dataLength = imgData->size();
+//
+//	IByteBuffer* imgBuffer = IFactory::instance()->createByteBuffer(data, dataLength);
+//	return imgBuffer;
+//}
+
+
+
+//IByteBuffer* Image_win8::createImageBuffer() const{
+//
+//	if (_sourceBuffer != nullptr){
+//		return _sourceBuffer;
+//	}
+//
+//	if (_image == nullptr){
+//		return NULL;
+//	}
+//
+//	// WIC interface pointers.
+//	IWICImagingFactory* pFactory = NULL;
+//	IWICStream* pInputStream = NULL;
+//	IWICStream* pOutputStream = NULL;
+//	IWICBitmapEncoder* pIEncoder = NULL;
+//	IWICBitmapFrameEncode* pIEncoderFrame = NULL;
+//
+//	HRESULT hr = CoCreateInstance(
+//		CLSID_WICImagingFactory,
+//		NULL,
+//		CLSCTX_INPROC_SERVER,
+//		IID_IWICImagingFactory,
+//		(LPVOID*)&pFactory
+//		);
+//
+//	// Create a stream for the encoder
+//	pFactory->CreateStream(&pOutputStream);
+//	// Initialize the stream using the output file path
+//	Windows::Storage::StorageFolder^ localFolder = Windows::Storage::ApplicationData::Current->LocalFolder;
+//	Platform::String^ folderPath = localFolder->Path;
+//	Platform::String^ tmpPath = Platform::String::Concat(folderPath, "\\");
+//	Platform::String^ outputPath = Platform::String::Concat(tmpPath, "tiger_tmp.png");
+//	//Platform::String^ outputPath = Platform::String::Concat(tmpPath, "MARBLES_RECOVERED.BMP");
+//	hr = pOutputStream->InitializeFromFilename(outputPath->Data(), GENERIC_WRITE);
+//
+//	// Create a encoder for the output stream.
+//	if (SUCCEEDED(hr)){
+//		hr = pFactory->CreateEncoder(
+//			GUID_ContainerFormatPng, // png compression
+//			0, // vendor
+//			&pIEncoder);
+//	}
+//
+//	// Init enconder
+//	if (SUCCEEDED(hr)){
+//		hr = pIEncoder->Initialize(
+//			pOutputStream,
+//			WICBitmapEncoderNoCache);
+//	}
+//
+//	//Get and create image frame
+//	if (SUCCEEDED(hr)){
+//		hr = pIEncoder->CreateNewFrame(&pIEncoderFrame, nullptr);
+//	}
+//
+//	if (SUCCEEDED(hr)){
+//		hr = pIEncoderFrame->Initialize(NULL);
+//	}
+//
+//	// Set frame size
+//	if (SUCCEEDED(hr)){
+//		UINT width, height;
+//		_image->GetSize(&width, &height);
+//		hr = pIEncoderFrame->SetSize(width, height);
+//	}
+//
+//	// Set resolution
+//	if (SUCCEEDED(hr)){
+//		double pDpiX, pDpiY;
+//		_image->GetResolution(&pDpiX, &pDpiY);
+//		hr = pIEncoderFrame->SetResolution(pDpiX, pDpiY);
+//	}
+//
+//	// Set pixel format
+//	if (SUCCEEDED(hr)){
+//		WICPixelFormatGUID pixelFormat;
+//		_image->GetPixelFormat(&pixelFormat);
+//		hr = pIEncoderFrame->SetPixelFormat(&pixelFormat);
+//	}
+//
+//	/*IWICMetadataQueryReader* pMetaQueryReader = NULL;
+//	IWICMetadataQueryWriter* pMetaQueryWriter = NULL;
+//	if (SUCCEEDED(hr)){
+//	pIDecoderFrame->GetMetadataQueryReader(&pMetaQueryReader);
+//	pIEncoderFrame->GetMetadataQueryWriter(&pMetaQueryWriter);
+//	}
+//
+//	if (SUCCEEDED(hr)){
+//	IEnumString* pIEnumString;
+//	pMetaQueryReader->GetEnumerator(&pIEnumString);
+//	LPOLESTR psz;
+//	while (S_OK == pIEnumString->Next(1, &psz, NULL))
+//	{
+//	pMetaQueryWriter->SetMetadataByName(psz, NULL);
+//	}
+//	pIEnumString->Release();
+//	pMetaQueryReader->Release();
+//	pMetaQueryWriter->Release();
+//	}*/
+//
+//	if (SUCCEEDED(hr)){
+//		hr = pIEncoderFrame->WriteSource(_image, nullptr);
+//		hr = pIEncoderFrame->Commit();
+//		hr = pIEncoder->Commit();
+//		//hr = pOutputStream->Commit(STGC_DEFAULT);
+//	}
+//
+//	//-- calculate stream length
+//	if (SUCCEEDED(hr)){
+//		/*ULARGE_INTEGER newPos;
+//		LARGE_INTEGER offset = { 0, 0 };
+//		hr = pOutputStream->Seek(offset, STREAM_SEEK_CUR, &newPos);*/
+//		STATSTG pStatstg;
+//		hr = pOutputStream->Stat(&pStatstg, STATFLAG_DEFAULT);
+//		int outputLength = pStatstg.cbSize.LowPart;
+//	}
+//
+//	//-- release 
+//	if (pFactory){
+//		pFactory->Release();
+//	}
+//
+//	if (pIEncoder){
+//		pIEncoder->Release();
+//	}
+//
+//	if (pIEncoderFrame){
+//		pIEncoderFrame->Release();
+//	}
+//
+//	if (pInputStream){
+//		pInputStream->Release();
+//	}
+//	if (pOutputStream){
+//		pOutputStream->Release();
+//	}
+//
+//	if (!SUCCEEDED(hr)){
+//		ILogger::instance()->logError("Unnable to create image data buffer");
+//		return NULL;
+//	}
+//
+//	/*IByteBuffer* imgBuffer = IFactory::instance()->createByteBuffer(outputData, outputLength);
+//	return imgBuffer;*/
+//	return NULL;
+//}
+
+
+
+//IByteBuffer* Image_win8::createImageBuffer() const{
+//
+//	if (_sourceBuffer != nullptr){
+//		return _sourceBuffer;
+//	}
+//
+//	if (_image == nullptr){
+//		return NULL;
+//	}
+//
+//	// WIC interface pointers.
+//	IWICImagingFactory* pFactory = NULL;
+//	IWICStream* pInputStream = NULL;
+//	IWICStream* pOutputStream = NULL;
+//	IWICBitmapDecoder* pIDecoder = NULL;
+//	IWICBitmapEncoder* pIEncoder = NULL;
+//	IWICBitmapFrameDecode* pIDecoderFrame = NULL;
+//	IWICBitmapFrameEncode* pIEncoderFrame = NULL;
+//
+//	HRESULT hr = CoCreateInstance(
+//		CLSID_WICImagingFactory,
+//		NULL,
+//		CLSCTX_INPROC_SERVER,
+//		IID_IWICImagingFactory,
+//		(LPVOID*)&pFactory
+//		);
+//
+//	// Create input and output stream
+//	if (SUCCEEDED(hr)){
+//		hr = pFactory->CreateStream(&pInputStream);
+//		hr = pFactory->CreateStream(&pOutputStream);
+//	}
+//
+//	// getBitmapBuffer
+//	IByteBuffer* imgData = getBitmapBuffer(_image);
+//	BYTE* inputData = ((ByteBuffer_win8*)imgData)->getPointer();
+//	int inputLength = imgData->size();
+//
+//	/*IStream* stream = NULL;
+//	if (SUCCEEDED(hr)){
+//		hr = CreateStreamOnHGlobal(inputdata, TRUE, &stream);
+//	}
+//	hr = pInputStream->InitializeFromIStream(stream);*/
+//
+//	// Initialize the stream with the memory pointer and size.
+//	if (SUCCEEDED(hr)){
+//		hr = pInputStream->InitializeFromMemory(
+//			inputData,
+//			inputLength);
+//	}
+//	
+//	// Create a decoder for the stream.
+//	if (SUCCEEDED(hr)){
+//		hr = pFactory->CreateDecoderFromStream(
+//			pInputStream,                   // The stream to use to create the decoder
+//			NULL,                          // Do not prefer a particular vendor
+//			WICDecodeMetadataCacheOnLoad,  // Cache metadata when needed
+//			&pIDecoder);                   // Pointer to the decoder
+//		/*hr = pFactory->CreateDecoder(GUID_ContainerFormatBmp, NULL, &pIDecoder);
+//		hr = pIDecoder->Initialize(pInputStream, WICDecodeMetadataCacheOnLoad);*/
+//	}
+//	
+//	//-- reserve memory for output stream (assume compression reduces sizes in 75%)
+//	int outputLength = inputLength;
+//	BYTE* outputData = new BYTE[outputLength];
+//
+//	// Initialize the output stream with the memory pointer and size.
+//	if (SUCCEEDED(hr)){
+//		hr = pOutputStream->InitializeFromMemory(outputData, outputLength);
+//	}
+//
+//	// Create a encoder for the output stream.
+//	if (SUCCEEDED(hr)){
+//		hr = pFactory->CreateEncoder(
+//			GUID_ContainerFormatPng, // png compression
+//			0, // vendor
+//			&pIEncoder);
+//	}
+//
+//	// Init enconder
+//	if (SUCCEEDED(hr)){
+//		pIEncoder->Initialize(
+//			pOutputStream,
+//			WICBitmapEncoderNoCache);
+//	}
+//
+//	//Get and create image frame
+//	if (SUCCEEDED(hr)){
+//		pIDecoder->GetFrame(0, &pIDecoderFrame);
+//	}
+//	if (SUCCEEDED(hr)){
+//		pIEncoder->CreateNewFrame(&pIEncoderFrame, nullptr);
+//	}
+//
+//	if (SUCCEEDED(hr)){
+//		pIEncoderFrame->Initialize(NULL);
+//	}
+//
+//	//Set frame size
+//	if (SUCCEEDED(hr)){
+//		UINT width, height;
+//		pIDecoderFrame->GetSize(&width, &height);
+//		pIEncoderFrame->SetSize(width, height);
+//	}
+//
+//	//Set pixel format
+//	if (SUCCEEDED(hr)){
+//		WICPixelFormatGUID pixelFormat;
+//		pIDecoderFrame->GetPixelFormat(&pixelFormat);
+//		pIEncoderFrame->SetPixelFormat(&pixelFormat);
+//	}
+//
+//	IWICMetadataQueryReader* pMetaQueryReader = NULL;
+//	IWICMetadataQueryWriter* pMetaQueryWriter = NULL;
+//	if (SUCCEEDED(hr)){
+//		pIDecoderFrame->GetMetadataQueryReader(&pMetaQueryReader);
+//		pIEncoderFrame->GetMetadataQueryWriter(&pMetaQueryWriter);
+//	}
+//
+//	if (SUCCEEDED(hr)){
+//		IEnumString* pIEnumString;
+//		pMetaQueryReader->GetEnumerator(&pIEnumString);
+//		LPOLESTR psz;
+//		while (S_OK == pIEnumString->Next(1, &psz, NULL))
+//		{
+//			pMetaQueryWriter->SetMetadataByName(psz, NULL);
+//		}
+//		pIEnumString->Release();
+//		pMetaQueryReader->Release();
+//		pMetaQueryWriter->Release();
+//	}
+//
+//	if (SUCCEEDED(hr)){
+//		pIEncoderFrame->WriteSource(static_cast<IWICBitmapSource*> (pIDecoderFrame), nullptr);
+//		pIEncoderFrame->Commit();
+//		pIEncoder->Commit();
+//	}
+//
+//	//-- calculate stream length
+//	if (SUCCEEDED(hr)){
+//		/*STATSTG pStatstg;
+//		hr = pOutputStream->Stat(&pStatstg, STATFLAG_DEFAULT);
+//		outputLength = pStatstg.cbSize.LowPart;*/
+//		ULARGE_INTEGER newPos;
+//		LARGE_INTEGER offset = { 0, 0 };
+//		hr = pOutputStream->Seek(offset, STREAM_SEEK_CUR, &newPos);
+//		outputLength = newPos.LowPart;
+//	}
+//
+//	if (pFactory){
+//		pFactory->Release();
+//	}
+//
+//	if (pIDecoder){
+//		pIDecoder->Release();
+//	}
+//
+//	if (pIEncoder){
+//		pIEncoder->Release();
+//	}
+//
+//	if (pIDecoderFrame){
+//		pIDecoderFrame->Release();
+//	}
+//
+//	if (pIEncoderFrame){
+//		pIEncoderFrame->Release();
+//	}
+//
+//	if (pInputStream){
+//		pInputStream->Release();
+//	}
+//	if (pOutputStream){
+//		pOutputStream->Release();
+//	}
+//
+//	if (!SUCCEEDED(hr)){
+//		ILogger::instance()->logError("Unnable to create image data buffer");
+//		return NULL;
+//	}
+//
+//	IByteBuffer* imgBuffer = IFactory::instance()->createByteBuffer(outputData, outputLength);
+//	return imgBuffer;
+//}
+
+
+
+//IByteBuffer* Image_win8::createImageBuffer() const{
+//
+//	//-- This workaround creates image buffer compressed in png format, but metadata are not included.
+//	if (_sourceBuffer != nullptr){
+//		return _sourceBuffer;
+//	}
+//
+//	if (_image == nullptr){
+//		return NULL;
+//	}
+//
+//	// WIC interface pointers.
+//	IWICImagingFactory* pFactory = NULL;
+//	IWICStream* pOutputStream = NULL;
+//	IWICBitmapEncoder* pIEncoder = NULL;
+//	IWICBitmapFrameEncode* pIEncoderFrame = NULL;
+//
+//	HRESULT hr = CoCreateInstance(
+//		CLSID_WICImagingFactory,
+//		NULL,
+//		CLSCTX_INPROC_SERVER,
+//		IID_IWICImagingFactory,
+//		(LPVOID*)&pFactory
+//		);
+//
+//	// Create input and output stream
+//	if (SUCCEEDED(hr)){
+//		//hr = pFactory->CreateStream(&pInputStream);
+//		hr = pFactory->CreateStream(&pOutputStream);
+//	}
+//
+//	// getBitmapBuffer
+//	IByteBuffer* bitmapBuffer = getBitmapBuffer(_image);
+//
+//	//-- reserve memory for output data
+//	int outputLength = bitmapBuffer->size();
+//	BYTE* outputData = new BYTE[outputLength];
+//	//BYTE* outputData = (BYTE*)HeapAlloc(GetProcessHeap(), HEAP_NO_SERIALIZE | HEAP_GENERATE_EXCEPTIONS | HEAP_ZERO_MEMORY, imgLength);
+//	/*IStream* stream = NULL;
+//	if (SUCCEEDED(hr)){
+//	hr = CreateStreamOnHGlobal(outputData, TRUE, &stream);
+//	}*/
+//
+//	// Initialize the output stream with the memory pointer and size.
+//	if (SUCCEEDED(hr)){
+//		hr = pOutputStream->InitializeFromMemory(outputData, outputLength);
+//	}
+//	/*if (SUCCEEDED(hr)){
+//	hr = pOutputStream->InitializeFromIStream(stream);
+//	}*/
+//
+//	// Create a encoder for the output stream.
+//	if (SUCCEEDED(hr)){
+//		hr = pFactory->CreateEncoder(
+//			GUID_ContainerFormatPng, // png compression
+//			0, // vendor
+//			&pIEncoder);
+//	}
+//
+//	// Init enconder
+//	if (SUCCEEDED(hr)){
+//		hr = pIEncoder->Initialize(
+//			pOutputStream,
+//			WICBitmapEncoderNoCache);
+//	}
+//
+//	//Get and create image frame
+//	if (SUCCEEDED(hr)){
+//		hr = pIEncoder->CreateNewFrame(&pIEncoderFrame, nullptr);
+//	}
+//
+//	if (SUCCEEDED(hr)){
+//		hr = pIEncoderFrame->Initialize(NULL);
+//	}
+//
+//	// Set frame size
+//	if (SUCCEEDED(hr)){
+//		UINT width, height;
+//		_image->GetSize(&width, &height);
+//		hr = pIEncoderFrame->SetSize(width, height);
+//	}
+//
+//	// Set resolution
+//	if (SUCCEEDED(hr)){
+//		double pDpiX, pDpiY;
+//		_image->GetResolution(&pDpiX, &pDpiY);
+//		hr = pIEncoderFrame->SetResolution(pDpiX, pDpiY);
+//	}
+//
+//	// Set pixel format
+//	if (SUCCEEDED(hr)){
+//		WICPixelFormatGUID pixelFormat;
+//		_image->GetPixelFormat(&pixelFormat);
+//		hr = pIEncoderFrame->SetPixelFormat(&pixelFormat);
+//	}
+//
+//	//-- This part attemps to copy metadata to output data, but
+//	//-- a workaround to do it has not already been found.
+//	//--
+//	//IWICComponentInfo* pComponentInfo = NULL;
+//	//IWICBitmapDecoderInfo* pDecoderInfo = NULL;
+//	//IWICBitmapSource* pBitmapSource = NULL;
+//	//hr = pFactory->CreateComponentInfo(CLSID_, &pComponentInfo);
+//	//hr = _image->QueryInterface(IID_IWICBitmapSource, (void**)&pBitmapSource);
+//	//hr = _image->QueryInterface(IID_IWICBitmapDecoderInfo, (void**)&pDecoderInfo);
+//
+//	/*IWICMetadataQueryReader* pMetaQueryReader = NULL;
+//	IWICMetadataQueryWriter* pMetaQueryWriter = NULL;
+//	if (SUCCEEDED(hr)){
+//	pIDecoderFrame->GetMetadataQueryReader(&pMetaQueryReader);
+//	pIEncoderFrame->GetMetadataQueryWriter(&pMetaQueryWriter);
+//	}
+//
+//	if (SUCCEEDED(hr)){
+//	IEnumString* pIEnumString;
+//	pMetaQueryReader->GetEnumerator(&pIEnumString);
+//	LPOLESTR psz;
+//	while (S_OK == pIEnumString->Next(1, &psz, NULL))
+//	{
+//	pMetaQueryWriter->SetMetadataByName(psz, NULL);
+//	}
+//	pIEnumString->Release();
+//	pMetaQueryReader->Release();
+//	pMetaQueryWriter->Release();
+//	}*/
+//
+//	if (SUCCEEDED(hr)){
+//		hr = pIEncoderFrame->WriteSource(_image, nullptr);
+//		hr = pIEncoderFrame->Commit();
+//		hr = pIEncoder->Commit();
+//	}
+//
+//	//-- calculate output stream length
+//	int bufferLength = 0;
+//	if (SUCCEEDED(hr)){
+//		ULARGE_INTEGER newPos;
+//		LARGE_INTEGER offsetZero = { 0, 0 };
+//		hr = pOutputStream->Seek(offsetZero, STREAM_SEEK_CUR, &newPos);
+//		bufferLength = newPos.LowPart;
+//	}
+//
+//	//-- release 
+//	if (pFactory){
+//		pFactory->Release();
+//	}
+//
+//	if (pIEncoder){
+//		pIEncoder->Release();
+//	}
+//
+//	if (pIEncoderFrame){
+//		pIEncoderFrame->Release();
+//	}
+//
+//	if (pOutputStream){
+//		pOutputStream->Release();
+//	}
+//
+//	if (!SUCCEEDED(hr)){
+//		ILogger::instance()->logError("Unnable to create image data buffer");
+//		return NULL;
+//	}
+//
+//	// copy data to buffer of the right size and release old buffer
+//	BYTE* bufferData = new BYTE[bufferLength];
+//	memcpy(bufferData, outputData, bufferLength);
+//	delete[] outputData;
+//	//delete bitmapBuffer;
+//
+//	IByteBuffer* imageBuffer = IFactory::instance()->createByteBuffer(bufferData, bufferLength);
+//	return imageBuffer;
+//}
 

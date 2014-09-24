@@ -137,3 +137,16 @@ std::string StringUtils_win8::toString(double value) const {
 double StringUtils_win8::parseDouble(const std::string& str) const{
 	return atof(str.c_str());
 }
+
+Platform::String^ StringUtils_win8::toStringHat(std::string str) const{
+	std::wstring wid_str = std::wstring(str.begin(), str.end());
+	const wchar_t* w_char = wid_str.c_str();
+	Platform::String^ p_string = ref new Platform::String(w_char);
+	return p_string;
+}
+
+std::string StringUtils_win8::toStringStd(Platform::String^ strhat) const{
+	std::wstring wstr(strhat->Data());
+	std::string stdStr(wstr.begin(), wstr.end());
+	return stdStr;
+}

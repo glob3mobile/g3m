@@ -5,6 +5,7 @@
 #include "IImage.hpp"
 #include "IFactory.hpp"
 #include "ByteBuffer_win8.hpp"
+#include "URL.hpp"
 #include <Wincodec.h>
 
 //using namespace Windows::UI::Xaml::Media::Imaging;
@@ -17,7 +18,6 @@ class Image_win8 : public IImage {
 private:
 	
 	IWICBitmap* _image;
-	//mutable BYTE* _sourceBuffer;
 	mutable IByteBuffer* _sourceBuffer;
 
 	Image_win8(const Image_win8 &that);
@@ -52,8 +52,8 @@ public:
 	int getBufferSize() const;
 
 	//-- only for testing, remove later -----------------------------------
-	static bool exportToFile(Image_win8* image);
-	static Image_win8* imageFromFile(std::string path);
+	static Image_win8* imageFromFile(const URL& fileUrl);
+	static bool exportToFile(const URL& fileUrl, const Image_win8* image);
 
 };
 

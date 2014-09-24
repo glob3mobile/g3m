@@ -12,6 +12,7 @@
 #include "Storage.hpp"
 #include <string>
 #include <ctime>
+#include "URL.hpp"
 
 class SQDatabase;
 

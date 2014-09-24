@@ -48,6 +48,10 @@ public:
 	std::string toString(double value) const;
 
 	double parseDouble(const std::string& str) const;
+
+	Platform::String^ toStringHat(std::string str) const;
+
+	std::string toStringStd(Platform::String^ strhat) const;
 };
 
 

@@ -20,6 +20,8 @@
 #include "ByteBuffer_win8.hpp"
 #include "TimeInterval.hpp"
 #include "Image_win8.hpp"
+#include "IStringUtils.hpp"
+#include "StringUtils_win8.hpp"
 
 //-------------------------------------------------------
 
@@ -37,6 +39,7 @@ IThreadUtils* G3MBuilder_win8::createDefaultThreadUtils(){
 	//return new ThreadUtils_win8();
 	return NULL;
 }
+
 
 Storage* G3MBuilder_win8::createDefaultStorage(){
 	//return new Storage_win8("sqlite_win8_db");
@@ -112,11 +115,25 @@ Storage* G3MBuilder_win8::createDefaultStorage(){
 
 
 	 //-- pruebas para guardar una image en la DB ---------------------------------------------------
-	 const URL imgUrl = URL("tiger.jpg");
-	 const Image_win8* testImage = Image_win8::imageFromFile("tiger.jpg");
-	 //const Image_win8* testImage = Image_win8::imageFromFile("MARBLES.BMP");
+	 const StringUtils_win8* su = (StringUtils_win8*)IStringUtils::instance();
 
-	 ILogger::instance()->logInfo("Voy a guardar una image en la DB: \"%s\"\n", imgUrl.getPath().c_str());
+	 //std::string imgName = "tiger";
+	 //Platform::String^ ext = ".jpg"
+	 std::string name = "MARBLES";
+	 std::string ext = ".BMP";
+
+	 std::string imgName = name + ext;
+	 Platform::String^ imgHatName = su->toStringHat(imgName);
+	 Windows::Storage::StorageFolder^ localFolder = Windows::Storage::ApplicationData::Current->LocalFolder;
+	 Platform::String^ folderPath = localFolder->Path;
+	 Platform::String^ tmpPath = Platform::String::Concat(folderPath, "\\");
+	 Platform::String^ fileName = Platform::String::Concat(tmpPath, imgHatName);
+	 std::string fileUrl = su->toStringStd(fileName);
+	 const URL imgFileUrl = URL(fileUrl);
+	 const Image_win8* testImage = Image_win8::imageFromFile(imgFileUrl);
+
+	 const URL imgUrl = URL(imgName);
+	 ILogger::instance()->logInfo("Voy a guardar una image en la DB: \"%s\"\n", imgUrl._path.c_str());
 	 testStorage->saveImage(imgUrl, testImage, timeToExpire, false);
 	 ILogger::instance()->logInfo("Ya he guardado una image en la DB");
 
@@ -125,6 +142,13 @@ Storage* G3MBuilder_win8::createDefaultStorage(){
 	 Image_win8* ii = (Image_win8*)(iResult._image);
 	 std::string desc = ii->description();
 	 ILogger::instance()->logInfo("Ya he recuperado una image de la DB: \"%s\"\n", desc.c_str());
+
+	 // Save the recovered image to a file
+	 imgHatName = su->toStringHat(name + "_recovered");
+	 Platform::String^ recoveredFileName = Platform::String::Concat(tmpPath, imgHatName);
+	 std::string recoveredfileUrl = su->toStringStd(recoveredFileName);
+	 const URL recoveredUrl = URL(recoveredfileUrl);
+	 Image_win8::exportToFile(recoveredUrl, ii);
 
 	return testStorage;
 	//return NULL;

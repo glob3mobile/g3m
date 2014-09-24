@@ -13,7 +13,7 @@
 #include "TimeInterval.hpp"
 #include "ByteBuffer_win8.hpp"
 #include "Image_win8.hpp"
-#include "URL.hpp"
+//#include "URL.hpp"
 #include "IFactory.hpp"
 #include "Context.hpp"
 #include "ThreadUtils_win8.hpp"
@@ -126,20 +126,20 @@ void Storage_win8::showStatistics() const {
 	rs2->close();
 }
 
-Platform::String^ ToStringHat(std::string str)
-{
-	std::wstring wid_str = std::wstring(str.begin(), str.end());
-	const wchar_t* w_char = wid_str.c_str();
-	Platform::String^ p_string = ref new Platform::String(w_char);
-	return p_string;
-}
-
-std::string ToStringStd(Platform::String^ str_hat)
-{
-	std::wstring wstr(str_hat->Data());
-	std::string stdStr(wstr.begin(), wstr.end());
-	return stdStr;
-}
+//Platform::String^ ToStringHat(std::string str)
+//{
+//	std::wstring wid_str = std::wstring(str.begin(), str.end());
+//	const wchar_t* w_char = wid_str.c_str();
+//	Platform::String^ p_string = ref new Platform::String(w_char);
+//	return p_string;
+//}
+//
+//std::string ToStringStd(Platform::String^ strhat)
+//{
+//	std::wstring wstr(strhat->Data());
+//	std::string stdStr(wstr.begin(), wstr.end());
+//	return stdStr;
+//}
 
 std::string getAppDataAbsoluteFilename(const std::string filename)
 {	
