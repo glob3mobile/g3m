@@ -11,8 +11,8 @@ import es.igosoftware.util.GUndeterminateProgress;
 
 
 public class FragmentCreator
-implements
-PersistentOctree.Visitor {
+         implements
+            PersistentOctree.Visitor {
    private final File             _cloudDirectory;
    private final String           _fragmentCloudName;
    private final Sector           _sector;
@@ -91,7 +91,7 @@ PersistentOctree.Visitor {
       if (_sector.fullContains(nodeSector)) {
          _fullNodes++;
          _totalPointsCount += node.getPointsCount();
-         //final List<Geodetic3D> points = node.getPoints();
+
          final GVector2D density = getDensity(node);
          _totalLatitudeDensity += density._y;
          _totalLongitudeDensity += density._x;
@@ -134,9 +134,9 @@ PersistentOctree.Visitor {
 
 
       System.out.println("== Total points: " + _totalPointsCount + //
-                         ", nodes: " + _nodesCount + //
-                         ", full: " + _fullNodes + //
-               ", edges: " + _edgesNodes);
+               ", nodes: " + _nodesCount + //
+               ", full: " + _fullNodes + //
+                         ", edges: " + _edgesNodes);
 
       final double averageLatitudeDensity = _totalLatitudeDensity / (_fullNodes + _edgesNodes);
       final double averageLongitudeDensity = _totalLongitudeDensity / (_fullNodes + _edgesNodes);

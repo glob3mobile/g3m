@@ -61,19 +61,21 @@ public class ProcessOT {
       final String completeSourceCloudName = "Loudoun-VA";
       //final String sourceCloudName = "Loudoun-VA_simplified";
       final String simplifiedCloudName = completeSourceCloudName + "_simplified2";
-      final String sourceCloudName = simplifiedCloudName;
+      //final String sourceCloudName = simplifiedCloudName;
+      final String fragmentCloudName = completeSourceCloudName + "_fragment";
+      final String sourceCloudName = fragmentCloudName;
       final String lodCloudName = sourceCloudName + "_LOD";
 
-      final String fragmentCloudName = completeSourceCloudName + "_fragment";
 
       final long cacheSizeInBytes = 4 * 1024 * 1024 * 1024;
 
       final boolean createSimplifiedCloudName = false;
       final boolean createMapForSourceOT = false;
-      final boolean createLOD = false;
+      final boolean createLOD = true;
       final boolean showLODStats = false;
       final boolean drawSampleLODNode = false;
-      final boolean createFragmentCloudName = true;
+
+      final boolean createFragmentCloudName = false;
 
       if (createFragmentCloudName) {
          try (final PersistentOctree sourceOctree = BerkeleyDBOctree.openReadOnly(cloudDirectory, completeSourceCloudName,
@@ -231,7 +233,7 @@ public class ProcessOT {
                         public void informProgress(final long stepsDone,
                                                    final long elapsed) {
                            System.out.println("- gathering statistics for \"" + lodDB.getCloudName() + "\""
-                                    + progressString(stepsDone, elapsed));
+                                              + progressString(stepsDone, elapsed));
                         }
                      };
                   }
@@ -276,8 +278,8 @@ public class ProcessOT {
                      System.out.println("     Points/Node: " + ((float) _pointsCounter / _nodesCounter));
                      System.out.println("     Points/Level: " + ((float) _pointsCounter / _levelsCounter));
                      System.out.println("   Density/Node: Average=" + (_sumDensity / _nodesCounter) + //
-                              ", Min=" + _minDensity + //
-                              ", Max=" + _maxDensity);
+                                        ", Min=" + _minDensity + //
+                                        ", Max=" + _maxDensity);
                      System.out.println("======================================================================");
                   }
                };
