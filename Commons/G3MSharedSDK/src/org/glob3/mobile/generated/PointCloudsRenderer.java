@@ -91,6 +91,7 @@ public class PointCloudsRenderer extends DefaultRenderer
     
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#warning TODO: quality factor 1
+    //      const double minProjectedArea = 250;
           final double minProjectedArea = 250;
           if (_projectedArea >= minProjectedArea)
           {
@@ -640,6 +641,7 @@ public class PointCloudsRenderer extends DefaultRenderer
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#warning TODO: quality factor 2
         final int intendedPointsCount = IMathUtils.instance().round((float) projectedArea * 0.09f);
+        // const int intendedPointsCount = IMathUtils::instance()->round((float) projectedArea * 0.25f);
         int accummulated = 0;
         int neededLevel = -1;
         int neededPoints = -1;
@@ -1211,6 +1213,7 @@ public class PointCloudsRenderer extends DefaultRenderer
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#warning TODO
         final long renderedCount = _rootNode.render(this, rc, glState, frustum, _minHeight, _averageHeight * 3, _pointSize, nowInMS);
+    //    const long long renderedCount = _rootNode->render(this, rc, glState, frustum, _minHeight, _maxHeight, _pointSize, nowInMS);
     
         if (_lastRenderedCount != renderedCount)
         {
