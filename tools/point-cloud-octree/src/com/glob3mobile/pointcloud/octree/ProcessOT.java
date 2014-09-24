@@ -71,8 +71,8 @@ public class ProcessOT {
 
       final boolean createSimplifiedCloudName = false;
       final boolean createMapForSourceOT = false;
-      final boolean createLOD = true;
-      final boolean showLODStats = false;
+      final boolean createLOD = false;
+      final boolean showLODStats = true;
       final boolean drawSampleLODNode = false;
 
       final boolean createFragmentCloudName = false;
@@ -233,7 +233,7 @@ public class ProcessOT {
                         public void informProgress(final long stepsDone,
                                                    final long elapsed) {
                            System.out.println("- gathering statistics for \"" + lodDB.getCloudName() + "\""
-                                              + progressString(stepsDone, elapsed));
+                                    + progressString(stepsDone, elapsed));
                         }
                      };
                   }
@@ -278,8 +278,8 @@ public class ProcessOT {
                      System.out.println("     Points/Node: " + ((float) _pointsCounter / _nodesCounter));
                      System.out.println("     Points/Level: " + ((float) _pointsCounter / _levelsCounter));
                      System.out.println("   Density/Node: Average=" + (_sumDensity / _nodesCounter) + //
-                                        ", Min=" + _minDensity + //
-                                        ", Max=" + _maxDensity);
+                              ", Min=" + _minDensity + //
+                              ", Max=" + _maxDensity);
                      System.out.println("======================================================================");
                   }
                };
