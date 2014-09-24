@@ -8,7 +8,6 @@
 
 #import "ViewController.h"
 
-
 #import <G3MiOSSDK/G3MBuilder_iOS.hpp>
 #import <G3MiOSSDK/VisibleSectorListener.hpp>
 #import <G3MiOSSDK/MarksRenderer.hpp>
@@ -41,6 +40,7 @@
 #import <G3MiOSSDK/LayoutUtils.hpp>
 #import <G3MiOSSDK/IJSONParser.hpp>
 #import <G3MiOSSDK/JSONGenerator.hpp>
+#import <G3MiOSSDK/JSONString.hpp>
 #import <G3MiOSSDK/BSONParser.hpp>
 #import <G3MiOSSDK/BSONGenerator.hpp>
 #import <G3MiOSSDK/MeshShape.hpp>
@@ -98,9 +98,6 @@
 #import <G3MiOSSDK/GPUProgramFactory.hpp>
 #import <G3MiOSSDK/FloatBufferBuilderFromCartesian3D.hpp>
 #import <G3MiOSSDK/Color.hpp>
-#import <G3MiOSSDK/TileRasterizer.hpp>
-#import <G3MiOSSDK/DebugTileRasterizer.hpp>
-#import <G3MiOSSDK/GEOTileRasterizer.hpp>
 #import <G3MiOSSDK/GEOLineRasterSymbol.hpp>
 #import <G3MiOSSDK/GEOMultiLineRasterSymbol.hpp>
 #import <G3MiOSSDK/GEO2DLineRasterStyle.hpp>
@@ -146,8 +143,10 @@
 
 #import <G3MiOSSDK/DefaultInfoDisplay.hpp>
 #import <G3MiOSSDK/DebugTileImageProvider.hpp>
+#import <G3MiOSSDK/GEOVectorLayer.hpp>
+#import <G3MiOSSDK/Info.hpp>
 
-
+#include <typeinfo>
 
 
 
@@ -516,11 +515,51 @@ layerSet->addLayer(blueMarble);
   
   
   //  layerSet->addLayer(MapQuestLayer::newOSM(TimeInterval::fromDays(30)));
+  const Planet* planet = Planet::createEarth();
+  builder.setPlanet(planet);
+  
+  GEOVectorLayer* geoVectorLayer = new GEOVectorLayer();
+  
+  geoVectorLayer->addInfo(new Info("Cultural Vectors Layer from http://www.naturalearthdata.com/"));
+  layerSet->addLayer(geoVectorLayer);
+  
   
   layerSet->setTileImageProvider(new DebugTileImageProvider());
   
   builder.getPlanetRendererBuilder()->setLayerSet(layerSet);
   builder.getPlanetRendererBuilder()->setRenderDebug(true);
+  
+  
+  GEORenderer* g = [self createGEORendererMeshRenderer:new MeshRenderer() shapesRenderer:NULL marksRenderer:NULL geoVectorLayer:geoVectorLayer planet:planet];
+  
+  builder.addRenderer(g);
+  
+  NSString* geojsonName = @"geojson/countries-50m";
+  //      NSString* geojsonName = @"geojson/boundary_lines_land";
+  // NSString* geojsonName = @"geojson/cities";
+  //      NSString* geojsonName = @"geojson/test";
+  
+  NSString *geoJSONFilePath = [[NSBundle mainBundle] pathForResource: geojsonName
+                                                              ofType: @"geojson"];
+  
+  GEOFeatureCollection* fc = NULL;
+  
+  if (geoJSONFilePath) {
+    NSString *nsGEOJSON = [NSString stringWithContentsOfFile: geoJSONFilePath
+                                                    encoding: NSUTF8StringEncoding
+                                                       error: nil];
+    
+    if (nsGEOJSON) {
+      std::string geoJSON = [nsGEOJSON UTF8String];
+      
+      GEOObject* geoObject = GEOJSONParser::parseJSON(geoJSON);
+      
+      fc = (GEOFeatureCollection*) geoObject;
+      
+      g->addGEOObject(geoObject);
+    }
+  }
+
   
   builder.getPlanetRendererBuilder()->setDefaultTileBackGroundImage(new DownloaderImageBuilder(URL("http://www.freelogovectors.net/wp-content/uploads/2013/02/sheep-b.png")));
 
@@ -549,6 +588,13 @@ layerSet->addLayer(blueMarble);
                                                        Geodetic3D::fromDegrees(40.20,
                                                                                -5.6,
                                                                                100076.892613024946));
+  
+  if (fc != NULL) {
+    [self testContainsGEO2DPolygonDataWorld : fc];
+
+  }
+  
+  [self testContainsGEO2DPolygonData];
 
   //      [[self G3MWidget] widget]->setAnimatedCameraPosition(TimeInterval::fromSeconds(5),
 //                                                           Geodetic3D::fromDegrees(39.13,
@@ -561,6 +607,154 @@ layerSet->addLayer(blueMarble);
 //                                                                               -16.339417,
 //                                                                               100076.892613024946));
 //
+// [self testGenericQuadTree:geoVectorLayer];
+  
+}
+
+- (void) testContainsGEO2DPolygonDataWorld : (const GEOFeatureCollection*) fc
+{
+  const size_t sizeFc = fc->size();
+  
+  for (size_t i = 0; i < sizeFc; i++) {
+    
+    const GEOFeature* f = fc->get(i);
+    
+    ILogger::instance()->logInfo("%s", f->getProperties()->description().c_str());
+
+    GEO2DMultiPolygonGeometry* polygons = (GEO2DMultiPolygonGeometry*) fc->get(i)->getGeometry();
+    
+    GEO2DPolygonGeometry* polygon = (GEO2DPolygonGeometry*) fc->get(i)->getGeometry();
+
+    
+    ILogger::instance()->logInfo("Geometry Type: %s", typeid(fc->get(i)->getGeometry()).name());
+
+    ILogger::instance()->logInfo("Polygons Type: %s", typeid(polygons).name());
+    
+    ILogger::instance()->logInfo("Polygon Type: %s", typeid(polygon).name());
+
+
+   // if (typeid(*polygons) != typeid(GEO2DMultiPolygonGeometry)) {
+    GEO2DMultiPolygonGeometry* aux = dynamic_cast<GEO2DMultiPolygonGeometry*>(polygons);
+    if (!aux) {
+      GEO2DPolygonGeometry* polygon = (GEO2DPolygonGeometry*) fc->get(i)->getGeometry();
+      ILogger::instance()->logInfo("%s", polygon->getPolygonData()->getSector()->description().c_str());
+    } else {
+      ILogger::instance()->logInfo("%s", polygons->getPolygonsData()->at(0)->getSector()->description().c_str());
+    }
+    
+    delete aux;
+    
+    //GEO2DPolygonGeometry* polygon = (GEO2DPolygonGeometry*) fc->get(i)->getGeometry();
+    
+    
+    
+    
+    if (polygon->getPolygonData()->contains(Geodetic2D(Angle::fromDegrees(35.5), Angle::fromDegrees(-5.5)))) {
+      const JSONString* name = f->getProperties()->getAsString("name");
+      if (name != NULL && name->value() == "Morocco") {
+        ILogger::instance()->logInfo("Test OK: %s", f->getProperties()->description().c_str());
+      }
+      delete name;
+    }
+    
+    if (polygon->getPolygonData()->contains(Geodetic2D(Angle::fromDegrees(-13.692198), Angle::fromDegrees(-53.862846)))) {
+      ILogger::instance()->logInfo("Test OK: %s", f->getProperties()->description().c_str());
+
+      const JSONString* name = f->getProperties()->getAsString("name");
+      if (name != NULL && name->value() == "Morocco") {
+        ILogger::instance()->logInfo("Test OK: %s", f->getProperties()->description().c_str());
+      }
+    }
+    
+    if (polygon->getPolygonData()->contains(Geodetic2D(Angle::fromDegrees(5.503043), Angle::fromDegrees(-65.464408)))) {
+      ILogger::instance()->logInfo("Test OK: %s", f->getProperties()->description().c_str());
+      
+      const JSONString* name = f->getProperties()->getAsString("name");
+      if (name != NULL && name->value() == "Morocco") {
+        ILogger::instance()->logInfo("Test OK: %s", f->getProperties()->description().c_str());
+      }
+    }
+    if (polygon->getPolygonData()->contains(Geodetic2D(Angle::fromDegrees(38.183546), Angle::fromDegrees(-3.940974)))) {
+      ILogger::instance()->logInfo("Test OK: %s", f->getProperties()->description().c_str());
+      
+      const JSONString* name = f->getProperties()->getAsString("name");
+      if (name != NULL && name->value() == "Morocco") {
+        ILogger::instance()->logInfo("Test OK: %s", f->getProperties()->description().c_str());
+      }
+    }
+
+    
+    delete polygon;
+  }
+
+}
+
+- (void) testContainsGEO2DPolygonData
+{
+  std::vector<Geodetic2D*>* coordinates = new std::vector<Geodetic2D*>();
+  
+  coordinates->push_back(new Geodetic2D(Angle::fromDegrees(34), Angle::fromDegrees(-6)));
+  coordinates->push_back(new Geodetic2D(Angle::fromDegrees(35), Angle::fromDegrees(-7.5)));
+  coordinates->push_back(new Geodetic2D(Angle::fromDegrees(36), Angle::fromDegrees(-6.5)));
+  coordinates->push_back(new Geodetic2D(Angle::fromDegrees(36.5), Angle::fromDegrees(-5.5)));
+  coordinates->push_back(new Geodetic2D(Angle::fromDegrees(34.5), Angle::fromDegrees(-4.5)));
+  coordinates->push_back(new Geodetic2D(Angle::fromDegrees(34), Angle::fromDegrees(-6)));
+  
+  std::vector<std::vector<Geodetic2D*>*>* holesCoordinatesArray = new std::vector<std::vector<Geodetic2D*>*>();
+  
+  std::vector<Geodetic2D*>* coordinatesHole = new std::vector<Geodetic2D*>();
+  
+  coordinatesHole->push_back(new Geodetic2D(Angle::fromDegrees(35), Angle::fromDegrees(-6)));
+  coordinatesHole->push_back(new Geodetic2D(Angle::fromDegrees(35.5), Angle::fromDegrees(-6.5)));
+  coordinatesHole->push_back(new Geodetic2D(Angle::fromDegrees(36), Angle::fromDegrees(-6)));
+  coordinatesHole->push_back(new Geodetic2D(Angle::fromDegrees(35), Angle::fromDegrees(-5.5)));
+  coordinatesHole->push_back(new Geodetic2D(Angle::fromDegrees(35), Angle::fromDegrees(-6)));
+  
+  holesCoordinatesArray->push_back(coordinatesHole);
+  
+  GEO2DPolygonData* figure = new GEO2DPolygonData(coordinates, holesCoordinatesArray);
+  
+  if (figure->contains(Geodetic2D(Angle::fromDegrees(34), Angle::fromDegrees(-6))) ) {
+    ILogger::instance()->logInfo("Test 1: OK -> Point is a polygon's vertex PIPV");
+  } else {
+    ILogger::instance()->logInfo("Test 1: KO");
+  }
+  
+  if (figure->contains(Geodetic2D(Angle::fromDegrees(35.5), Angle::fromDegrees(-5.5))) ) {
+    ILogger::instance()->logInfo("Test 2: OK -> Point in polygon PIP");
+  } else {
+    ILogger::instance()->logInfo("Test 2: KO");
+  }
+  
+  if (figure->contains(Geodetic2D(Angle::fromDegrees(35.5), Angle::fromDegrees(-5))) ) {
+    ILogger::instance()->logInfo("Test 3: OK -> Point in polygon's edge PIPE");
+  } else {
+    ILogger::instance()->logInfo("Test 3: KO");
+  }
+  
+  if (!figure->contains(Geodetic2D(Angle::fromDegrees(36), Angle::fromDegrees(-5))) ) {
+    ILogger::instance()->logInfo("Test 4: OK -> Point out polygon POP");
+  } else {
+    ILogger::instance()->logInfo("Test 4: KO");
+  }
+  
+  if (!figure->contains(Geodetic2D(Angle::fromDegrees(35), Angle::fromDegrees(-6))) ) {
+    ILogger::instance()->logInfo("Test 5: OK -> POP: Point is a hole's vertex PIHV");
+  } else {
+    ILogger::instance()->logInfo("Test 5: KO");
+  }
+  
+  if (!figure->contains(Geodetic2D(Angle::fromDegrees(35.5), Angle::fromDegrees(-6))) ) {
+    ILogger::instance()->logInfo("Test 6: OK -> POP: Point in hole PIH");
+  } else {
+    ILogger::instance()->logInfo("Test 6: KO");
+  }
+  
+  if (!figure->contains(Geodetic2D(Angle::fromDegrees(35.5), Angle::fromDegrees(-5.75))) ) {
+    ILogger::instance()->logInfo("Test 7: OK -> POP: Point in hole's edge PIHE");
+  } else {
+    ILogger::instance()->logInfo("Test 7: KO");
+  }
   
   
 }
@@ -716,11 +910,6 @@ layerSet->addLayer(blueMarble);
   layerSet->addLayer(MapQuestLayer::newOSM(TimeInterval::fromDays(30)));
   builder.getPlanetRendererBuilder()->setLayerSet(layerSet);
 
-  // builder.getPlanetRendererBuilder()->addTileRasterizer(new DebugTileRasterizer(GFont::monospaced(),
-  //                                                                               Color::red(),
-  //                                                                               false,
-  //                                                                               true));
-
   const Sector sector = Sector::fromDegrees(40.1540143280790858, -5.8664874640814313,
                                             40.3423148480663158, -5.5116079822178570);
 
@@ -833,10 +1022,8 @@ public:
 
 //  builder.getPlanetRendererBuilder()->setTileRenderingListener(new SampleTileRenderingListener());
 
-  //GEOTileRasterizer* geoTileRasterizer = new GEOTileRasterizer();
-
-  //builder.getPlanetRendererBuilder()->addTileRasterizer(new DebugTileRasterizer());
-  //builder.getPlanetRendererBuilder()->addTileRasterizer(geoTileRasterizer);
+  GEOVectorLayer* geoVectorLayer = new GEOVectorLayer();
+  
 
   bool showingPNOA = true;
   if (showingPNOA){
@@ -867,10 +1054,10 @@ public:
 
 
     const GEO2DCoordinatesData* coordinatesData = new GEO2DCoordinatesData(coordinates);
-    //GEOLineRasterSymbol * symbol = new GEOLineRasterSymbol(coordinatesData, ls);
+    
+    GEOLineRasterSymbol * symbol = new GEOLineRasterSymbol(coordinatesData, ls);
     coordinatesData->_release();
-
-    //geoTileRasterizer->addSymbol(symbol);
+    geoVectorLayer->addSymbol(symbol);
   }
 
 //#warning Diego at work!
@@ -914,12 +1101,6 @@ public:
 //  builder.getPlanetRendererBuilder()->addVisibleSectorListener(new TestVisibleSectorListener(),
 //                                                               TimeInterval::fromSeconds(3));
 
-//  builder.getPlanetRendererBuilder()->addTileRasterizer(new DebugTileRasterizer(GFont::monospaced(15),
-//                                                                                Color::yellow(),
-//                                                                                true,  // showIDLabel
-//                                                                                false, // showSectorLabels,
-//                                                                                true   // showTileBounds
-//                                                                                ));
 //  builder.getPlanetRendererBuilder()->setIncrementalTileQuality(true);
 
   ProtoRenderer* busyRenderer = new BusyMeshRenderer(Color::newFromRGBA((float)0, (float)0.1, (float)0.2, (float)1));
@@ -1361,11 +1542,11 @@ public:
 
   // initialization
   builder.initializeWidget();
-  //  [self testGenericQuadTree:geoTileRasterizer];
+  //  [self testGenericQuadTree:geoVectorLayer];
 
 }
 
-- (void) testGenericQuadTree: (GEOTileRasterizer*) geoTileRasterizer{
+- (void) testGenericQuadTree: (GEOVectorLayer*) geoVectorLayer {
 
 
   NSString *geoJSONFilePath = [[NSBundle mainBundle] pathForResource: @"geojson/populated_places"
@@ -1375,8 +1556,9 @@ public:
     NSString *nsGEOJSON = [NSString stringWithContentsOfFile: geoJSONFilePath
                                                     encoding: NSUTF8StringEncoding
                                                        error: nil];
-
+    
     if (nsGEOJSON) {
+      
       std::string geoJSON = [nsGEOJSON UTF8String];
 
       GEOObject* geoObject = GEOJSONParser::parseJSON(geoJSON);
@@ -1401,7 +1583,7 @@ public:
 
         //      double areaProportion = 0.5;
         printf("TREE WITH CHILD_ARE_PROPORTION %f\n--------------------\n", areaProportion);
-        GenericQuadTree_TESTER::run(tree, geoTileRasterizer);
+        GenericQuadTree_TESTER::run(tree, geoVectorLayer);
 
         delete x;
       }
@@ -1411,7 +1593,7 @@ public:
     }
 
   } else{
-    GenericQuadTree_TESTER::run(10000, geoTileRasterizer);
+    GenericQuadTree_TESTER::run(10000, geoVectorLayer);
   }
 
   ////////////////////////////////////////////////////
@@ -1463,13 +1645,13 @@ public:
 
    //      double areaProportion = 0.5;
    printf("TREE WITH CHILD_ARE_PROPORTION %f\n--------------------\n", areaProportion);
-   GenericQuadTree_TESTER::run(tree, geoTileRasterizer);
+   GenericQuadTree_TESTER::run(tree, geoVectorLayer);
 
    delete x;
    }
    }
    } else{
-   GenericQuadTree_TESTER::run(10000, geoTileRasterizer);
+   GenericQuadTree_TESTER::run(10000, geoVectorLayer);
    }
 
    }
@@ -3153,7 +3335,7 @@ public:
 - (GEORenderer*) createGEORendererMeshRenderer: (MeshRenderer*) meshRenderer
                                 shapesRenderer: (ShapesRenderer*) shapesRenderer
                                  marksRenderer: (MarksRenderer*) marksRenderer
-                             geoVectorLayer: (GEOVectorLayer*) geoVectorLayer
+                                geoVectorLayer: (GEOVectorLayer*) geoVectorLayer
                                         planet: (const Planet*) planet
 {
   GEOSymbolizer* symbolizer = new SampleSymbolizer(planet);

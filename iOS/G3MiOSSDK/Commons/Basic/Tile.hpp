@@ -25,7 +25,6 @@ class TilesStatistics;
 class ElevationDataProvider;
 class ITimer;
 class GLState;
-//class TileRasterizer;
 class LayerSet;
 class ITexturizerData;
 class PlanetTileTessellatorData;
@@ -116,7 +115,6 @@ private:
                         TileTexturizer* texturizer,
                         ElevationDataProvider* elevationDataProvider,
                         const TileTessellator* tessellator,
-//                        TileRasterizer* tileRasterizer,
                         const LayerTilesRenderParameters* layerTilesRenderParameters,
                         const LayerSet* layerSet,
                         const TilesRenderParameters* tilesRenderParameters,
@@ -209,7 +207,6 @@ public:
                                TileTexturizer* texturizer,
                                ElevationDataProvider* elevationDataProvider,
                                const TileTessellator* tessellator,
-//                               TileRasterizer* tileRasterizer,
                                const LayerTilesRenderParameters* layerTilesRenderParameters,
                                const LayerSet* layerSet,
                                const TilesRenderParameters* tilesRenderParameters,
@@ -233,7 +230,6 @@ public:
               ITimer* lastSplitTimer,
               ElevationDataProvider* elevationDataProvider,
               const TileTessellator* tessellator,
-//              TileRasterizer* tileRasterizer,
               const LayerSet* layerSet,
               const Sector* renderedSector,
               bool forceFullRender,

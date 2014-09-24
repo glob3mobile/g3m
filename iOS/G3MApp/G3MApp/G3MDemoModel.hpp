@@ -18,7 +18,6 @@ class LayerSet;
 //class GEORenderer;
 class G3MWidget;
 class G3MContext;
-//class GEOTileRasterizer;
 class GEOVectorLayer;
 class MarksRenderer;
 class MeshRenderer;

@@ -11,7 +11,6 @@
 #include <G3MiOSSDK/LayerSet.hpp>
 #include <G3MiOSSDK/ILogger.hpp>
 #include <G3MiOSSDK/GEORenderer.hpp>
-#include <G3MiOSSDK/GEOTileRasterizer.hpp>
 #include <G3MiOSSDK/MarksRenderer.hpp>
 #include <G3MiOSSDK/MeshRenderer.hpp>
 #include <G3MiOSSDK/ShapesRenderer.hpp>

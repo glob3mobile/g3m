@@ -25,7 +25,6 @@ class PlanetRendererBuilder {
 private:
   TileTessellator* _tileTessellator;
   TileTexturizer* _texturizer;
-//  std::vector<TileRasterizer*> _tileRasterizers;
   std::vector<GEOVectorLayer*> _geoVectorLayers;
 
   LayerSet* _layerSet;
@@ -45,7 +44,6 @@ private:
 
   TileTessellator* getTileTessellator();
   TileTexturizer* getTexturizer();
-//  TileRasterizer* getTileRasterizer();
 
   LayerSet* getLayerSet();
   TilesRenderParameters* getParameters();
@@ -93,7 +91,6 @@ public:
   PlanetRenderer* create();
   void setTileTessellator(TileTessellator* tileTessellator);
   void setTileTexturizer(TileTexturizer* tileTexturizer);
-//  void addTileRasterizer(TileRasterizer* tileRasterizer);
   void setLayerSet(LayerSet* layerSet);
   void setPlanetRendererParameters(TilesRenderParameters* parameters);
   void setShowStatistics(const bool showStatistics);
@@ -113,8 +110,6 @@ public:
   void setVerticalExaggeration(float verticalExaggeration);
 
   void setRenderedSector(const Sector& sector);
-
-//  GEOTileRasterizer* createGEOTileRasterizer();
 
   GEOVectorLayer* createGEOVectorLayer();
 

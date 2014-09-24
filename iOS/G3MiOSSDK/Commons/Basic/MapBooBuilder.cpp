@@ -12,7 +12,6 @@
 #include "CompositeRenderer.hpp"
 #include "PlanetRenderer.hpp"
 #include "PlanetTileTessellator.hpp"
-//#include "MultiLayerTileTexturizer.hpp"
 #include "DefaultTileTexturizer.hpp"
 #include "TilesRenderParameters.hpp"
 #include "DownloadPriority.hpp"
@@ -501,7 +500,6 @@ PlanetRenderer* MapBooBuilder::createPlanetRenderer() {
   const float verticalExaggeration = 1;
   
   TileTexturizer* texturizer = new DefaultTileTexturizer(new DownloaderImageBuilder(URL("http://www.mapboo.com/web/img/tileNotFound.jpg")));
-//  TileRasterizer* tileRasterizer = NULL;
 
   const bool renderDebug = false;
   const bool useTilesSplitBudget = true;
@@ -535,7 +533,6 @@ PlanetRenderer* MapBooBuilder::createPlanetRenderer() {
                                               true,
                                               verticalExaggeration,
                                               texturizer,
-//                                              tileRasterizer,
                                               _layerSet,
                                               parameters,
                                               showStatistics,
