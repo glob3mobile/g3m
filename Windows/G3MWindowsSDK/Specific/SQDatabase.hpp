@@ -36,13 +36,12 @@ public:
 	SQResultSet(const SQDatabase* db, std::string* query, std::vector<ContentValue*> args);
 	~SQResultSet();
 
-	static SQResultSet* initForDatabase(const SQDatabase* db, std::string* query, std::vector<ContentValue*> args);
+	static SQResultSet* execForDatabase(const SQDatabase* db, std::string* query, std::vector<ContentValue*> args);
 	virtual bool next() const;
 	virtual void close() const;
 	virtual int integerColumnByIndex(int index) const;
 	virtual std::string* stringColumnByIndex(int index) const;
 	virtual const unsigned char* dataColumnByIndex(int index, int &length) const;
-	//virtual const std::vector<unsigned char> dataColumnByIndex(int index) const;
 	virtual double doubleColumnByIndex(int index) const;
 	virtual bool isNullColumnByIndex(int index) const;
 };

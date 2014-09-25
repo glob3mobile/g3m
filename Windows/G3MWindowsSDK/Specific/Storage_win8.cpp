@@ -13,7 +13,7 @@
 #include "TimeInterval.hpp"
 #include "ByteBuffer_win8.hpp"
 #include "Image_win8.hpp"
-//#include "URL.hpp"
+#include "URL.hpp"
 #include "IFactory.hpp"
 #include "Context.hpp"
 #include "ThreadUtils_win8.hpp"
@@ -23,7 +23,6 @@
 //using namespace concurrency;
 
 
-
 Storage_win8::Storage_win8(const std::string &databaseName)
 {
 	_databaseName = databaseName.c_str();
@@ -31,70 +30,58 @@ Storage_win8::Storage_win8(const std::string &databaseName)
 	//_lock = [[NSLock alloc] init]; TODO: ???
 
 	const std::string dbPath = getDBPath();
-	ILogger::instance()->logInfo("Storage full database path: \"%s\"\n", dbPath.c_str());
+	ILogger::instance()->logInfo("Storage database path: \"%s\"\n", dbPath.c_str());
 
 	_writeDB = SQDatabase::initWithPath(dbPath);
-	//_writeDB = new SQDatabase(dbPath);
 
 	//if (!_writeDB) {
-	if (!_writeDB->openReadWrite()) {
-		ILogger::instance()->logError("Can't open read-write database \"%s\"\n", databaseName.c_str());
+	if ((!_writeDB) || (!_writeDB->openReadWrite())) {
+		ILogger::instance()->logError("Can't open read-write database \"%s\"\n", _databaseName);
 	}
 	else {
 		//_writeDB->openReadWrite();
 
-		// addSkipBackupAttributeToItemAtPath(dbPath); //
-
-		//if (![_writeDB executeNonQuery : @"DROP TABLE IF EXISTS buffer;"]) {
 		std::string query = "DROP TABLE IF EXISTS buffer;";
 		if (!_writeDB->executeNonQuery(&query)) {
-			ILogger::instance()->logError("Can't drop table \"buffer\" from database \"%s\"\n", databaseName.c_str());
+			ILogger::instance()->logError("Can't drop table \"buffer\" from database \"%s\"\n", _databaseName);
 			return;
 		}
 
 		query = "DROP TABLE IF EXISTS image;";
-		//if (![_writeDB executeNonQuery : @"DROP TABLE IF EXISTS image;"]) {
 		if (!_writeDB->executeNonQuery(&query)) {
-			ILogger::instance()->logError("Can't drop table \"image\" from database \"%s\"\n", databaseName.c_str());
+			ILogger::instance()->logError("Can't drop table \"image\" from database \"%s\"\n", _databaseName);
 			return;
 		}
 
 		query = "CREATE TABLE IF NOT EXISTS buffer2 (name TEXT, contents TEXT, expiration TEXT);";
-		//if (![_writeDB executeNonQuery : @"CREATE TABLE IF NOT EXISTS buffer2 (name TEXT, contents TEXT, expiration TEXT);"]) {
 		if (!_writeDB->executeNonQuery(&query)) {
-			ILogger::instance()->logError("Can't create table \"buffer\" on database \"%s\"\n", databaseName.c_str());
+			ILogger::instance()->logError("Can't create table \"buffer\" on database \"%s\"\n", _databaseName);
 			return;
 		}
 
 		query = "CREATE UNIQUE INDEX IF NOT EXISTS buffer_name ON buffer2(name);";
-		//if (![_writeDB executeNonQuery : @"CREATE UNIQUE INDEX IF NOT EXISTS buffer_name ON buffer2(name);"]) {
 		if (!_writeDB->executeNonQuery(&query)) {
-			ILogger::instance()->logError("Can't create index \"buffer_name\" on database \"%s\"\n", databaseName.c_str());
+			ILogger::instance()->logError("Can't create index \"buffer_name\" on database \"%s\"\n", _databaseName);
 			return;
 		}
 
 		query = "CREATE TABLE IF NOT EXISTS image2 (name TEXT, contents TEXT, expiration TEXT);";
-		//if (![_writeDB executeNonQuery : @"CREATE TABLE IF NOT EXISTS image2 (name TEXT, contents TEXT, expiration TEXT);"]) {
 		if (!_writeDB->executeNonQuery(&query)) {
-			ILogger::instance()->logError("Can't create table \"image\" on database \"%s\"\n", databaseName.c_str());
+			ILogger::instance()->logError("Can't create table \"image\" on database \"%s\"\n", _databaseName);
 			return;
 		}
 
 		query = "CREATE UNIQUE INDEX IF NOT EXISTS image_name ON image2(name);";
-		//if (![_writeDB executeNonQuery : @"CREATE UNIQUE INDEX IF NOT EXISTS image_name ON image2(name);"]) {
 		if (!_writeDB->executeNonQuery(&query)) {
-			ILogger::instance()->logError("Can't create index \"image_name\" on database \"%s\"\n", databaseName.c_str());
+			ILogger::instance()->logError("Can't create index \"image_name\" on database \"%s\"\n", _databaseName);
 			return;
 		}
 
 		_readDB = SQDatabase::initWithPath(dbPath);
 
-		if (!_readDB->openReadOnly()) {
-			ILogger::instance()->logError("Can't open read-only database \"%s\"\n", databaseName.c_str());
+		if ((!_readDB) || (!_readDB->openReadOnly())) {
+			ILogger::instance()->logError("Can't open read-only database \"%s\"\n", _databaseName);
 		}
-		//else {
-		//	_readDB->openReadOnly();
-		//}
 
 		if (true) {
 			showStatistics();
@@ -168,7 +155,6 @@ std::string Storage_win8::getDBPath() const{
 std::time_t incrementTime(time_t init, long seconds) {
 	if (init == NULL) return NULL;
 	struct tm timeinfo;
-	//struct tm* tm = localtime(&init);
 	localtime_s(&timeinfo, &init);
 	timeinfo.tm_sec += seconds;
 	return mktime(&timeinfo);
@@ -183,7 +169,6 @@ std::string getTimeStamp(std::time_t t) {
 double timeDifferenceFromNow(double then) {
 
 	std::time_t now = time(NULL);
-	//std::string nowS = marshal_as<std::string>(now.ToString());
 	std::string nowS = getTimeStamp(now);
 	double nowD = atof(nowS.c_str());
 
@@ -194,14 +179,6 @@ bool isStringType(unsigned char* data, int length){
 
 	char* ch = (char*)data + length - 1;
 	return (*ch == '\0');
-
-	/*if (*ch == '\0'){
-		std::string* str = new std::string((char*)data);
-		const char * c = str->c_str();
-		ILogger::instance()->logInfo("ESTO ES UN STRING: \"%s\"\n", c);
-		return true;
-	}
-	return false;*/
 }
 
 void Storage_win8::rawSave(std::string* table,
@@ -211,26 +188,18 @@ void Storage_win8::rawSave(std::string* table,
 	
 	//[_lock lock]; TODO: ??
 
-	//std::string* statement = [NSString stringWithFormat : @"INSERT OR REPLACE INTO %@ (name, contents, expiration) VALUES (?, ?, ?)", table];
 	IStringBuilder* stmBuilder = IStringBuilder::newStringBuilder();
 	stmBuilder->addString("INSERT OR REPLACE INTO ");
 	stmBuilder->addString(*table);
 	stmBuilder->addString(" (name, contents, expiration) VALUES (? , ? , ?)");
 
 	std::string statement = stmBuilder->getString();
-	
-	//NSDate* expiration = [NSDate dateWithTimeIntervalSinceNow : timeToExpires.seconds()];
-	//std::string* expirationS = [NSString stringWithFormat : @"%f", [expiration timeIntervalSince1970]];
 	std::time_t currentTime = std::time(NULL);
-	//time_t expiration = currentTime + (long) timeToExpires.seconds();
 	time_t expiration = incrementTime(currentTime, (long)timeToExpires.seconds());
-	//std::string expirationS = marshal_as<std::string>(expiration.ToString());
 	std::string expirationS = getTimeStamp(expiration);
 
 	const ByteBuffer_win8* buffer_win8 = (const ByteBuffer_win8*)buffer;
 	unsigned char* contents = buffer_win8->getPointer();
-
-	//std::string dataType = isStringType(contents, length) ? "string" : "unsigned char";
 
 	std::vector<ContentValue*> contentValues = std::vector<ContentValue*>();
 	contentValues.reserve(3);
@@ -288,10 +257,7 @@ IByteBufferResult Storage_win8::readBuffer(const URL& url, bool readExpired){
 	IByteBuffer* buffer = NULL;
 	bool expired = false;
 
-	//NSString* name = [NSString stringWithCppString : url._path];
 	std::string name = url._path;
-
-	//SQResultSet* rs = [_readDB executeQuery : @"SELECT contents, expiration FROM buffer2 WHERE (name = ?)", name];
 	IStringBuilder* queryBuilder = IStringBuilder::newStringBuilder();
 	queryBuilder->addString("SELECT contents, expiration FROM buffer2 WHERE (name = '");
 	queryBuilder->addString(name);
@@ -301,21 +267,14 @@ IByteBufferResult Storage_win8::readBuffer(const URL& url, bool readExpired){
 	SQResultSet* rs = _readDB->executeQuery(&query);
 
 	if (rs->next()) {
-		//NSData* nsData = [rs dataColumnByIndex : 0];
 		int dataLength = 0;
 		const unsigned char* data = rs->dataColumnByIndex(0, dataLength);
-		//const double expirationInterval = [[rs stringColumnByIndex : 1] doubleValue];
 		std::string* expirationIntervalS = rs->stringColumnByIndex(1);
 		const double expirationInterval = atof(expirationIntervalS->c_str());
-		//NSDate* expiration = [NSDate dateWithTimeIntervalSince1970 : expirationInterval];
-
-		//expired = [expiration compare : [NSDate date]] != NSOrderedDescending;
 		expired = timeDifferenceFromNow(expirationInterval) <= 0;
 
 		if (readExpired || !expired) {
-			//NSUInteger length = [nsData length];
 			unsigned char* bytes = new unsigned char[dataLength];
-			//[nsData getBytes : bytes length : length];
 			memcpy(bytes, data, dataLength);
 			buffer = IFactory::instance()->createByteBuffer(bytes, dataLength);
 		}
@@ -332,9 +291,7 @@ IImageResult Storage_win8::readImage(const URL& url, bool readExpired){
 	IImage* image = NULL;
 	bool expired = false;
 
-	//NSString* name = [NSString stringWithCppString : url._path];
 	std::string name = url._path;
-	//SQResultSet* rs = [_readDB executeQuery : @"SELECT contents, expiration FROM image2 WHERE (name = ?)", name];
 	IStringBuilder* queryBuilder = IStringBuilder::newStringBuilder();
 	queryBuilder->addString("SELECT contents, expiration FROM image2 WHERE (name = '");
 	queryBuilder->addString(name);
@@ -344,25 +301,16 @@ IImageResult Storage_win8::readImage(const URL& url, bool readExpired){
 	SQResultSet* rs = _readDB->executeQuery(&query);
 
 	if (rs->next()) {
-		//NSData* data = [rs dataColumnByIndex : 0];
 		int dataLength = 0;
 		const unsigned char* data = rs->dataColumnByIndex(0, dataLength);
-		//const double expirationInterval = [[rs stringColumnByIndex : 1] doubleValue];
 		std::string* expirationIntervalS = rs->stringColumnByIndex(1);
 		const double expirationInterval = atof(expirationIntervalS->c_str());
-		//NSDate* expiration = [NSDate dateWithTimeIntervalSince1970 : expirationInterval];
-
-		//expired = ([expiration compare : [NSDate date]] != NSOrderedDescending);
 		expired = timeDifferenceFromNow(expirationInterval) <= 0;
 
-		if (readExpired || !expired) { //TODO:
+		if (readExpired || !expired) {
 			
-			//UIImage* uiImage = UIImage->imageWithData(data);
-			//BYTE* imageData = (BYTE*)malloc(dataLength);
 			BYTE* imageData = new BYTE[dataLength];
 			memcpy(imageData, data, dataLength);
-			//IWICBitmap* bitmap = Image_win8::imageWithData(imageData, dataLength);
-			//IWICBitmap* bitmap = Image_win8::imageWithData((BYTE*)data, dataLength);
 			IByteBuffer* imgBuffer = IFactory::instance()->createByteBuffer(imageData, dataLength);
 			IWICBitmap* bitmap = Image_win8::imageWithData(imgBuffer);
 			//delete[] data;
@@ -388,7 +336,7 @@ void Storage_win8::saveBuffer(const URL& url, const IByteBuffer* buffer, const T
 	unsigned char* contents = buffer_win8->getPointer();
 	IByteBuffer* buffer2 = IFactory::instance()->createByteBuffer(contents, buffer->size());
 
-	std::string name = url._path; // [NSString stringWithCppString : url._path];
+	std::string name = url._path;
 	std::string table = "buffer2";
 	
 	if (saveInBackground) { 
@@ -402,14 +350,11 @@ void Storage_win8::saveBuffer(const URL& url, const IByteBuffer* buffer, const T
 void Storage_win8::saveImage(const URL& url, const IImage* image, const TimeInterval& timeToExpires, bool saveInBackground){
 	
 	const Image_win8* imagew8 = (const Image_win8*)image;
-	//UIImage* uiImage = image_win8->getUIImage();
 	IWICBitmap* bitmap = imagew8->getBitmap();
 
-	//NSString* name = [NSString stringWithCppString : url._path];
 	std::string name = url._path;
 	std::string table = "image2";
-	
-	//BYTE* contents = imagew8->getSourceBuffer();
+
 	IByteBuffer* buffer = imagew8->getSourceBuffer();
 	
 	if (buffer == NULL) {
@@ -440,6 +385,6 @@ void Storage_win8::onDestroy(const G3MContext* context){
 }
 
 bool Storage_win8::isAvailable(){
-	//std::string errMsg("TODO: isAvailable() test pending..");
+	
 	return (_readDB != NULL) && (_writeDB != NULL);
 }

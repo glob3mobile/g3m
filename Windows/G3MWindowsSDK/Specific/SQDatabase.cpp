@@ -6,7 +6,6 @@
 #include <ctime>
 #include <sstream>
 #include <cstdarg>
-//#include <stdarg.h>
 
 
 
@@ -17,15 +16,15 @@ ContentValue::ContentValue(unsigned char* content, int size, std::string type){
 	_type = type;
 }
 
-//ContentValue::~ContentValue(){
-//
-//}
+ContentValue::~ContentValue(){
+	
+	delete[_size] _content;
+}
 
 //----------------------------------------------------------------------------------
 
 
-
-SQResultSet* SQResultSet::initForDatabase(const SQDatabase* db, std::string* query, std::vector<ContentValue*> args){
+SQResultSet* SQResultSet::execForDatabase(const SQDatabase* db, std::string* query, std::vector<ContentValue*> args){
 
 	try{
 		return new SQResultSet(db, query, args);
@@ -56,7 +55,7 @@ SQResultSet::SQResultSet(const SQDatabase* db, std::string* query, std::vector<C
 	}
 
 	_queryParamCount = sqlite3_bind_parameter_count(_stmt);
-	ILogger::instance()->logInfo("Query param count: %d", _queryParamCount);
+	//ILogger::instance()->logInfo("Query param count: %d", _queryParamCount);
 
 	int i = 0;
 	while (i++ < _queryParamCount) {
@@ -64,10 +63,11 @@ SQResultSet::SQResultSet(const SQDatabase* db, std::string* query, std::vector<C
 	}
 
 	_columnCount = sqlite3_column_count(_stmt);
-	ILogger::instance()->logInfo("Column count: %d", _columnCount);
+	//ILogger::instance()->logInfo("Column count: %d", _columnCount);
 }
 
 bool SQResultSet::next() const{
+	
 	bool result = _db->hasData(_stmt);
 	if (!result) {
 		this->close();
@@ -76,6 +76,7 @@ bool SQResultSet::next() const{
 }
 
 void SQResultSet::close() const{
+	
 	if (_stmt) {
 		sqlite3_finalize(_stmt);
 		_stmt = NULL;
@@ -83,6 +84,7 @@ void SQResultSet::close() const{
 }
 
 int SQResultSet::integerColumnByIndex(int index) const{
+	
 	int columnType = sqlite3_column_type(_stmt, index);
 
 	if (columnType == SQLITE_NULL) {
@@ -93,6 +95,7 @@ int SQResultSet::integerColumnByIndex(int index) const{
 }
 
 std::string* SQResultSet::stringColumnByIndex(int index) const{
+	
 	int columnType = sqlite3_column_type(_stmt, index);
 
 	if (columnType == SQLITE_NULL) {
@@ -106,21 +109,21 @@ std::string* SQResultSet::stringColumnByIndex(int index) const{
 }
 
 const unsigned char* SQResultSet::dataColumnByIndex(int index, int &length) const{
+	
 	int columnType = sqlite3_column_type(_stmt, index);
 
 	if (columnType == SQLITE_NULL) {
 		return NULL;
 	}
+
 	length = sqlite3_column_bytes(_stmt, index);
 	return (const unsigned char*)sqlite3_column_blob(_stmt, index);
-
-	//return[NSData dataWithBytes : sqlite3_column_blob(_stmt, index)
-	//length : (NSUInteger)blobLength];
 }
 
 
 
 double SQResultSet::doubleColumnByIndex(int index) const{
+	
 	int columnType = sqlite3_column_type(_stmt, index);
 
 	if (columnType == SQLITE_NULL) {
@@ -160,6 +163,7 @@ SQDatabase* SQDatabase::initWithPath(const std::string dbPath) {
 }
 
 bool SQDatabase::isOpen() const{
+	
 	if (_db != NULL)
 		return true;
 	else
@@ -167,6 +171,7 @@ bool SQDatabase::isOpen() const{
 }
 
 bool SQDatabase::openReadWrite() const{
+	
 	this->close();
 
 	const char* dbpathC = _dbPath.c_str();
@@ -174,14 +179,14 @@ bool SQDatabase::openReadWrite() const{
 	if (sqlite3_open_v2(dbpathC, &_db, SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE, NULL) == SQLITE_OK) {
 		return true;
 	}
-	else {
-		_db = NULL;
-		ILogger::instance()->logError("Can't open readwrite database: %s", dbpathC);
-		return false;
-	}
+
+	_db = NULL;
+	ILogger::instance()->logError("Can't open readwrite database: %s", dbpathC);
+	return false;
 }
 
 bool SQDatabase::openReadOnly() const{
+	
 	this->close();
 
 	const char* dbpathC = _dbPath.c_str();
@@ -189,14 +194,14 @@ bool SQDatabase::openReadOnly() const{
 	if (sqlite3_open_v2(dbpathC, &_db, SQLITE_OPEN_READONLY, NULL) == SQLITE_OK) {
 		return true;
 	}
-	else {
-		_db = NULL;
-		ILogger::instance()->logError("Can't open readonly database: %s", dbpathC);
-		return false;
-	}
+	
+	_db = NULL;
+	ILogger::instance()->logError("Can't open readonly database: %s", dbpathC);
+	return false;
 }
 
 void SQDatabase::close() const{
+	
 	if (this->isOpen()) {
 		sqlite3_close(_db);
 		_db = NULL;
@@ -204,19 +209,6 @@ void SQDatabase::close() const{
 }
 
 SQResultSet* SQDatabase::executeQuery(std::string* sql) const{
-	
-	//va_list args;
-	//va_start(args, sql);
-
-	//std::vector<unsigned char*> argsArray;
-	//
-	//for (int i = 0; i < sql->length(); ++i) {
-	//	if (sql->at(i) == '?'){
-	//		argsArray.push_back(va_arg(args, unsigned char*)); //TODO: ??
-	//	}
-	//}
-
-	//va_end(args);
 
 	std::vector<ContentValue*> argsArray = std::vector<ContentValue*>();
 
@@ -225,10 +217,11 @@ SQResultSet* SQDatabase::executeQuery(std::string* sql) const{
 
 SQResultSet* SQDatabase::executeQuery(std::string* sql, std::vector<ContentValue*> args) const{
 
-	return SQResultSet::initForDatabase(this, sql, args);
+	return SQResultSet::execForDatabase(this, sql, args);
 }
 
 bool SQDatabase::prepareSql(std::string* sql, sqlite3_stmt** stmt) const{
+	
 	int numOfRetries = 0;
 
 	do {
@@ -288,10 +281,12 @@ bool SQDatabase::hasData(sqlite3_stmt* stmt) const{
 }
 
 int SQDatabase::errorCode() const{
+	
 	return sqlite3_errcode(_db);
 }
 
 const std::string* SQDatabase::errorMessage() const{
+	
 	const char* text = sqlite3_errmsg(_db);
 	std::string str(text);
 
@@ -299,6 +294,7 @@ const std::string* SQDatabase::errorMessage() const{
 }
 
 double getTimeStamp(std::time_t* t) {
+	
 	std::stringstream ts;
 	ts << *t;
 	std::string timeStamp = ts.str();
@@ -308,23 +304,17 @@ double getTimeStamp(std::time_t* t) {
 
 void SQDatabase::bindObjectAtColumnToStatement(ContentValue* obj, int idx, sqlite3_stmt* stmt) const{
 
-	
 	if (obj == NULL) {
 		sqlite3_bind_null(stmt, idx);
 	}
 	else if (obj->_type == "string"){
 		std::string* str = (std::string*)(obj->_content);
-		//const char * cstr = str->c_str();
-		//std::string* str = new std::string((const char*)(obj->_content));
-		//const char* c = (const char*)(obj->_content);
-		ILogger::instance()->logInfo("Typeid del OBJ: %s", obj->_type.c_str());
-		ILogger::instance()->logInfo("Content del OBJ: %s", str->c_str());
+		//ILogger::instance()->logInfo("Typeid del OBJ: %s", obj->_type.c_str());
+		//ILogger::instance()->logInfo("Content del OBJ: %s", str->c_str());
 		sqlite3_bind_text(stmt, idx, str->c_str(), -1, SQLITE_STATIC);
 	}
 	else {
-		//char* dataArr = (char*)(obj->_content);
-		//int length = strlen(dataArr);
-		ILogger::instance()->logInfo("Typeid del OBJ: %s", obj->_type.c_str());
+		//ILogger::instance()->logInfo("Typeid del OBJ: %s", obj->_type.c_str());
 		sqlite3_bind_blob(stmt, idx, obj->_content, obj->_size, SQLITE_STATIC);
 	}
 	//else if (obj->_type == "unsigned char"){
@@ -356,6 +346,7 @@ void SQDatabase::bindObjectAtColumnToStatement(ContentValue* obj, int idx, sqlit
 }
 
 bool SQDatabase::executeStatament(sqlite3_stmt * stmt) const{
+	
 	int numOfRetries = 0;
 	int rc;
 
@@ -383,21 +374,7 @@ bool SQDatabase::executeStatament(sqlite3_stmt * stmt) const{
 
 bool SQDatabase::executeNonQuery(std::string* sql) const{
 
-	//va_list args;
-	//va_start(args, sql);
-
-	//std::vector<unsigned char*> argsArray;
-	////argsArray.reserve(3);
 	//ILogger::instance()->logInfo("EXECUTENONQUERY SQL= %s", sql->c_str());
-	//for (int i = 0; i < sql->length(); ++i) {
-	//	if (sql->at(i) == '?'){
-	//		ILogger::instance()->logInfo("Typeid del OBJ: %s", typeid(args).name());
-	//		argsArray.push_back(va_arg(args, unsigned char*)); //TODO: works??
-	//	}
-	//}
-
-	//va_end(args);
-	ILogger::instance()->logInfo("EXECUTENONQUERY SQL= %s", sql->c_str());
 	std::vector<ContentValue*> argsArray = std::vector<ContentValue*>(); //empty args
 
 	return this->executeNonQuery(sql, argsArray);
@@ -424,25 +401,30 @@ bool SQDatabase::executeNonQuery(std::string* sql, std::vector<ContentValue*> ar
 }
 
 bool SQDatabase::beginTransaction() const{
+	
 	std::string str("BEGIN EXCLUSIVE TRANSACTION;");
 	return this->executeNonQuery(&str);
 }
 
 bool SQDatabase::commit() const{
+	
 	std::string str("COMMIT TRANSACTION;");
 	return this->executeNonQuery(&str);
 }
 
 bool SQDatabase::rollback() const{
+	
 	std::string str("ROLLBACK TRANSACTION;");
 	return this->executeNonQuery(&str);
 }
 
 bool SQDatabase::beginDeferredTransaction() const{
+	
 	std::string str("BEGIN DEFERRED TRANSACTION;");
 	return this->executeNonQuery(&str);
 }
 
 SQDatabase::~SQDatabase(){
-	//TODO: 
+	
+	_db = nullptr;
 }

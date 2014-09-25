@@ -12,23 +12,21 @@
 #include "Storage.hpp"
 #include <string>
 #include <ctime>
-#include "URL.hpp"
 
 class SQDatabase;
+class URL;
+
 
 class Storage_win8 : public Storage {
 
 private:
 
 	const char* _databaseName;
-
-	SQDatabase* _readDB;
-	SQDatabase* _writeDB;
+	SQDatabase* _readDB = NULL;
+	SQDatabase* _writeDB = NULL;
 
 	std::string getDBPath() const;
 	void showStatistics() const;
-	
-	//bool addSkipBackupAttributeToItemAtPath(std::string* path);
 
 public:
 

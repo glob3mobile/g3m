@@ -49,9 +49,16 @@ public:
 
 	double parseDouble(const std::string& str) const;
 
+
+	// -- Windows specific --
+
 	Platform::String^ toStringHat(std::string str) const;
 
 	std::string toStringStd(Platform::String^ strhat) const;
+
+	std::wstring toWString(std::string str) const;
+
+	std::string toStringStd(std::wstring wstr) const;
 };
 
 

@@ -115,20 +115,23 @@ Storage* G3MBuilder_win8::createDefaultStorage(){
 
 
 	 //-- pruebas para guardar una image en la DB ---------------------------------------------------
-	 const StringUtils_win8* su = (StringUtils_win8*)IStringUtils::instance();
+	 const StringUtils_win8* sUtils = (StringUtils_win8*)IStringUtils::instance();
 
-	 //std::string imgName = "tiger";
-	 //Platform::String^ ext = ".jpg"
-	 std::string name = "MARBLES";
-	 std::string ext = ".BMP";
+	 //std::string imgName = "tiger.jpg";
+	 //std::string imgName = "MARBLES.BMP";
+	 //std::string imgName = "MARBLES.TIF";
+	 std::string imgName = "tree.png";
 
-	 std::string imgName = name + ext;
-	 Platform::String^ imgHatName = su->toStringHat(imgName);
+	 std::size_t pos = imgName.find("."); 
+	 std::string name = imgName.substr(0, pos);
+	 //std::string ext = imgName.substr(pos+1, imgName.length());
+
+	 Platform::String^ imgHatName = sUtils->toStringHat(imgName);
 	 Windows::Storage::StorageFolder^ localFolder = Windows::Storage::ApplicationData::Current->LocalFolder;
 	 Platform::String^ folderPath = localFolder->Path;
 	 Platform::String^ tmpPath = Platform::String::Concat(folderPath, "\\");
 	 Platform::String^ fileName = Platform::String::Concat(tmpPath, imgHatName);
-	 std::string fileUrl = su->toStringStd(fileName);
+	 std::string fileUrl = sUtils->toStringStd(fileName);
 	 const URL imgFileUrl = URL(fileUrl);
 	 const Image_win8* testImage = Image_win8::imageFromFile(imgFileUrl);
 
@@ -144,9 +147,9 @@ Storage* G3MBuilder_win8::createDefaultStorage(){
 	 ILogger::instance()->logInfo("Ya he recuperado una image de la DB: \"%s\"\n", desc.c_str());
 
 	 // Save the recovered image to a file
-	 imgHatName = su->toStringHat(name + "_recovered");
+	 imgHatName = sUtils->toStringHat(name + "_recovered");
 	 Platform::String^ recoveredFileName = Platform::String::Concat(tmpPath, imgHatName);
-	 std::string recoveredfileUrl = su->toStringStd(recoveredFileName);
+	 std::string recoveredfileUrl = sUtils->toStringStd(recoveredFileName);
 	 const URL recoveredUrl = URL(recoveredfileUrl);
 	 Image_win8::exportToFile(recoveredUrl, ii);
 

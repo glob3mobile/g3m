@@ -156,55 +156,6 @@ UINT getStride(
 	return stride;
 }
 
-//int getBitmapSize(IWICBitmap* bitmap) {
-//
-//	if (bitmap == nullptr){
-//		return 0;
-//	}
-//
-//	UINT uiWidth = 0;
-//	UINT uiHeight = 0;
-//	IWICImagingFactory *pFactory = NULL;
-//	WICRect* rcLock = NULL;
-//	IWICBitmapLock *pLock = NULL;
-//	BYTE *pv = NULL;
-//	UINT cbBufferSize = 0;
-//
-//	HRESULT hr = bitmap->GetSize(&uiWidth, &uiHeight);
-//
-//	if (SUCCEEDED(hr)){
-//		rcLock = new WICRect{ 0, 0, uiWidth, uiHeight };
-//	}
-//
-//	if (SUCCEEDED(hr)){
-//		hr = CoCreateInstance(
-//			CLSID_WICImagingFactory,
-//			NULL,
-//			CLSCTX_INPROC_SERVER,
-//			IID_IWICImagingFactory,
-//			(LPVOID*)&pFactory
-//			);
-//	}
-//
-//	if (SUCCEEDED(hr)){
-//		hr = bitmap->Lock(rcLock, WICBitmapLockRead, &pLock);
-//
-//		if (SUCCEEDED(hr)){
-//			if (SUCCEEDED(hr)){
-//				hr = pLock->GetDataPointer(&cbBufferSize, &pv);
-//			}
-//			// Release the bitmap lock.
-//			pLock->Release();
-//		}
-//	}
-//
-//	if (pFactory){
-//		pFactory->Release();
-//	}
-//
-//	return cbBufferSize;
-//}
-
 
 IByteBuffer* getBitmapBuffer(IWICBitmap* bitmap) {
 
@@ -334,7 +285,6 @@ const std::string Image_win8::description() const{
 	isb->addString("x");
 	isb->addInt(getHeight());
 	isb->addString(", _image=(");
-	//isb->addString([[_image description] cStringUsingEncoding:NSUTF8StringEncoding]); TODO:
 	isb->addString(")");
 	std::string desc = isb->getString();
 	delete isb;
@@ -350,7 +300,7 @@ IImage* Image_win8::shallowCopy() const{
 
 IByteBuffer* Image_win8::createImageBuffer() const{
 	
-	//-- This workaround creates image buffer compressed in png format, but metadata are not included.
+	//-- This workaround creates image buffer compressed in png format, but without metadata.
 	if (_sourceBuffer != nullptr){
 		return _sourceBuffer;
 	}
@@ -436,7 +386,7 @@ IByteBuffer* Image_win8::createImageBuffer() const{
 	}
 	
 	//-- Image metadata should also be copied, but no
-	//-- workaround has not already been found to do it.
+	//-- workaround has already been found to do it.
 
 	if (SUCCEEDED(hr)){
 		hr = pIEncoderFrame->WriteSource(_image, nullptr);
@@ -572,8 +522,8 @@ int Image_win8::getBufferSize() const{
 
 Image_win8* Image_win8::imageFromFile(const URL& fileUrl){
 
-	const StringUtils_win8* su = (StringUtils_win8*)IStringUtils::instance();
-	Platform::String^ path = su->toStringHat(fileUrl._path);
+	const StringUtils_win8* sUtils = (StringUtils_win8*)IStringUtils::instance();
+	Platform::String^ path = sUtils->toStringHat(fileUrl._path);
 
 	// WIC interface pointers.
 	IWICImagingFactory *pFactory = NULL;
@@ -712,12 +662,12 @@ bool Image_win8::exportToFile(const URL& fileUrl, const Image_win8* image){
 	}
 
 	// Build file name according compression type
-	const StringUtils_win8* su = (StringUtils_win8*)IStringUtils::instance();
+	const StringUtils_win8* sUtils = (StringUtils_win8*)IStringUtils::instance();
 	GUID containerFormat;
 	hr = pIDecoder->GetContainerFormat(&containerFormat);
 	std::string ext = getContainerFormatExtension(containerFormat);
-	Platform::String^ extension = Platform::String::Concat(".", su->toStringHat(ext));
-	Platform::String^ fileName = Platform::String::Concat(su->toStringHat(fileUrl._path), extension);
+	Platform::String^ extension = Platform::String::Concat(".", sUtils->toStringHat(ext));
+	Platform::String^ fileName = Platform::String::Concat(sUtils->toStringHat(fileUrl._path), extension);
 
 	// Create a output stream onto file
 	IWICStream* outStream;
@@ -1916,4 +1866,55 @@ bool Image_win8::exportToFile(const URL& fileUrl, const Image_win8* image){
 //	IByteBuffer* imageBuffer = IFactory::instance()->createByteBuffer(bufferData, bufferLength);
 //	return imageBuffer;
 //}
+
+
+//int getBitmapSize(IWICBitmap* bitmap) {
+//
+//	if (bitmap == nullptr){
+//		return 0;
+//	}
+//
+//	UINT uiWidth = 0;
+//	UINT uiHeight = 0;
+//	IWICImagingFactory *pFactory = NULL;
+//	WICRect* rcLock = NULL;
+//	IWICBitmapLock *pLock = NULL;
+//	BYTE *pv = NULL;
+//	UINT cbBufferSize = 0;
+//
+//	HRESULT hr = bitmap->GetSize(&uiWidth, &uiHeight);
+//
+//	if (SUCCEEDED(hr)){
+//		rcLock = new WICRect{ 0, 0, uiWidth, uiHeight };
+//	}
+//
+//	if (SUCCEEDED(hr)){
+//		hr = CoCreateInstance(
+//			CLSID_WICImagingFactory,
+//			NULL,
+//			CLSCTX_INPROC_SERVER,
+//			IID_IWICImagingFactory,
+//			(LPVOID*)&pFactory
+//			);
+//	}
+//
+//	if (SUCCEEDED(hr)){
+//		hr = bitmap->Lock(rcLock, WICBitmapLockRead, &pLock);
+//
+//		if (SUCCEEDED(hr)){
+//			if (SUCCEEDED(hr)){
+//				hr = pLock->GetDataPointer(&cbBufferSize, &pv);
+//			}
+//			// Release the bitmap lock.
+//			pLock->Release();
+//		}
+//	}
+//
+//	if (pFactory){
+//		pFactory->Release();
+//	}
+//
+//	return cbBufferSize;
+//}
+
 

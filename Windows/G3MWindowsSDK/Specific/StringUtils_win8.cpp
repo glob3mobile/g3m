@@ -141,12 +141,22 @@ double StringUtils_win8::parseDouble(const std::string& str) const{
 Platform::String^ StringUtils_win8::toStringHat(std::string str) const{
 	std::wstring wid_str = std::wstring(str.begin(), str.end());
 	const wchar_t* w_char = wid_str.c_str();
-	Platform::String^ p_string = ref new Platform::String(w_char);
-	return p_string;
+	return ref new Platform::String(w_char);
 }
 
 std::string StringUtils_win8::toStringStd(Platform::String^ strhat) const{
 	std::wstring wstr(strhat->Data());
-	std::string stdStr(wstr.begin(), wstr.end());
-	return stdStr;
+	return std::string(wstr.begin(), wstr.end());
 }
+
+std::wstring StringUtils_win8::toWString(std::string str) const{
+
+	return std::wstring(str.begin(), str.end());
+}
+
+std::string StringUtils_win8::toStringStd(std::wstring wstr) const{
+
+	return std::string(wstr.begin(), wstr.end());
+}
+
+
