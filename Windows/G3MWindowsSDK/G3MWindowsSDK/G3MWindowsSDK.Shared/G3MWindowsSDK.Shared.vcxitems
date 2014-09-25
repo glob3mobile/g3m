@@ -702,5 +702,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\G3MWidget.cpp.orig" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\Specific\Image_win8.cpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\Specific\Image_win8.hpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\Specific\SQDatabase.cpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\Specific\SQDatabase.hpp" />
   </ItemGroup>
 </Project>
