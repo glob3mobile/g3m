@@ -6,5 +6,7 @@
   <ItemGroup>
     <FxCompile Include="$(MSBuildThisFileDirectory)..\..\..\G3MWindowsSDK\Shaders\ColorMeshV.hlsl" />
     <FxCompile Include="$(MSBuildThisFileDirectory)..\..\..\G3MWindowsSDK\Shaders\ColorMeshP.hlsl" />
+    <FxCompile Include="$(MSBuildThisFileDirectory)..\..\..\G3MWindowsSDK\Shaders\NoColorMeshV.hlsl" />
+    <FxCompile Include="$(MSBuildThisFileDirectory)..\..\..\G3MWindowsSDK\Shaders\NoColorMeshP.hlsl" />
   </ItemGroup>
 </Project>

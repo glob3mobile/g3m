@@ -103,6 +103,7 @@ Mesh* BusyMeshRenderer::createMesh(const G3MRenderContext* rc) {
 
     colors.add(1, 1, 1, 1);
     colors.add(1, 1, 1, 0);
+	
   }
 
   // the two last indices

@@ -996,6 +996,12 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)..\..\Specific\GPUProgram_D3D.cpp">
       <Filter>Specific</Filter>
     </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\Specific\GPUUniform_D3D.cpp">
+      <Filter>Specific</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\Specific\GPUAttribute_D3D.cpp">
+      <Filter>Specific</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="$(MSBuildThisFileDirectory)..\..\Specific\ByteBuffer_win8.hpp">
@@ -2079,6 +2085,12 @@
       <Filter>Specific</Filter>
     </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)..\..\Specific\GLUniformID_win8.hpp">
+      <Filter>Specific</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\Specific\GPUUniform_D3D.hpp">
+      <Filter>Specific</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\Specific\GPUAttribute_D3D.hpp">
       <Filter>Specific</Filter>
     </ClInclude>
   </ItemGroup>

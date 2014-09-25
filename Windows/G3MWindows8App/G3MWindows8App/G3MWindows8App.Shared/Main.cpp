@@ -3,7 +3,20 @@
 #include "G3MBuilder_win8.hpp"
 
 
+
+
+/////////////////////////////////////
+//Testing
+#include "PlanetRendererBuilder.hpp"
 #include "GInitializationTask.hpp"
+#include "IDownloader.hpp"
+#include "LayerSet.hpp"
+#include "WMSLayer.hpp"
+#include "LevelTileCondition.hpp"
+
+
+
+//Non-finishing init-task
 class RueditaTask :public GInitializationTask{
 	bool isDone(const G3MContext* context){
 		return false;
@@ -13,7 +26,37 @@ class RueditaTask :public GInitializationTask{
 
 	}
 };
-
+//Dummy-Downloader
+class DummyDownloader :public IDownloader{
+	void initialize(const G3MContext* context, FrameTasksExecutor* frameTasksExecutor){}
+	void onResume(const G3MContext* context){}
+	void onPause(const G3MContext* context){}
+	void onDestroy(const G3MContext* context){}
+	void start(){}
+	void stop(){}
+	long long requestBuffer(const URL& url,
+		long long priority,
+		const TimeInterval& timeToCache,
+		bool readExpired,
+		IBufferDownloadListener* listener,
+		bool deleteListener){
+		return NULL;
+	}
+	long long requestImage(const URL& url,
+		long long priority,
+		const TimeInterval& timeToCache,
+		bool readExpired,
+		IImageDownloadListener* listener,
+		bool deleteListener){
+		return NULL;
+	}
+	void cancelRequest(long long requestId){}
+	const std::string statistics(){
+		return NULL;
+	}
+};
+//Ende Testing
+//////////////////////////////////////////
 
 
 
@@ -53,10 +96,34 @@ public:
 		Windows::UI::Core::CoreWindow::GetForCurrentThread()->Activate();
 
 		G3MBuilder_win8* _builder = new G3MBuilder_win8();
-		_builder->setInitializationTask(new RueditaTask(), TRUE);
+		//_builder->setInitializationTask(new RueditaTask(), TRUE);
+		//_builder.getPlanetRendererBuilder().setLayerSet(createLayerSet());
+		//PlanetRendererBuilder* pbuilder = _builder->
+		_builder->setDownloader(new DummyDownloader());
+		_builder->getPlanetRendererBuilder()->setLayerSet(createLayerset());
+		_builder->getPlanetRendererBuilder()->setForceFirstLevelTilesRenderOnStart(false);
+
 		_widget = _builder->createWidget();
 		renderer = _widget->getRenderer();
 	}
+
+	////////////////////////////////
+	///Testing
+private:
+	LayerSet* createLayerset(){
+		LayerSet* ls = new LayerSet();
+
+		WMSLayer* layer = new WMSLayer("bmng200405", URL::nullURL(), WMSServerVersion::WMS_1_1_0,
+			Sector::fullSphere(), "image/jpeg", "EPSG:4326", "", false, new LevelTileCondition(0, 1),
+			TimeInterval::fromDays(30), true);
+
+		ls->addLayer(layer);
+		return ls;
+	}
+	/////////////////////////////
+	//End Testing
+
+
 
 
 
@@ -73,6 +140,7 @@ public:
 
 // Main.cpp
 // main entry point for application
+[Platform::MTAThread]
 int main(Platform::Array<Platform::String^>^) {
 	Windows::ApplicationModel::Core::CoreApplication::Run(ref new G3MViewSource());
 	return 0;

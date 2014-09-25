@@ -29,15 +29,19 @@ IGPUProgram* GPUProgramManager::getProgram(GL* gl, int uniformsCode, int attribu
       return NULL;
     }
 
+
+
     //#warning AVOID getAttributesCode and getUniformsCode calls
     if (p->getAttributesCode() != attributesCode ||
         p->getUniformsCode() != uniformsCode) {
       //#warning GIVE MORE DETAIL
+		ILogger::instance()->logError("New compiled program does not match GL state.");
 		ILogger::instance()->logInfo("Program AttCode: %i", p->getAttributesCode());
 		ILogger::instance()->logInfo("State AttCode: %i", attributesCode);
 		ILogger::instance()->logInfo("Program UniCode: %i", p->getUniformsCode());
 		ILogger::instance()->logInfo("State UniCode: %i", uniformsCode);
-      ILogger::instance()->logError("New compiled program does not match GL state.");
+
+      
     }
   }
 

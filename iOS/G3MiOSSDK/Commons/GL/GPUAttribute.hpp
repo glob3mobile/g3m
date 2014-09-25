@@ -79,7 +79,7 @@ public:
 };
 
 class GPUAttribute: public GPUVariable {
-private:
+protected:
 
   bool _dirty;
 #ifdef C_CODE
@@ -138,6 +138,8 @@ public:
 #endif
   }
 
+
+
   void unset(GL* gl) {
     if (_value != NULL) {
       _value->_release();
@@ -149,7 +151,7 @@ public:
     gl->disableVertexAttribArray(_id);
   }
 
-  void set(const GPUAttributeValue* v) {
+  virtual void set(const GPUAttributeValue* v) {
     if (v != _value) {
 
       if (v->_enabled && _type != v->_type) { //type checking
@@ -242,7 +244,7 @@ public:
 
 class GPUAttributeValueVecFloat : public GPUAttributeValue {
 private:
-  const IFloatBuffer* _buffer;
+  IFloatBuffer* _buffer;
   const int _timeStamp;
   const long long _id;
 
@@ -303,6 +305,10 @@ public:
     std::string s = isb->getString();
     delete isb;
     return s;
+  }
+
+  IFloatBuffer* getBuffer(){
+	  return _buffer;
   }
 
 };

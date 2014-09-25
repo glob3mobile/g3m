@@ -4,6 +4,8 @@
 #include "GL.hpp"
 #include "NativeGL_win8.hpp"
 
+#include "Camera.hpp"
+
 D3DRenderer::D3DRenderer()
 {
 	initialize(Windows::UI::Core::CoreWindow::GetForCurrentThread());
@@ -15,6 +17,8 @@ D3DRenderer::D3DRenderer()
 	this->_gl = new GL(_nativeGL, true);
 
 	_isInitialized = true;
+
+
 }
 
 void D3DRenderer::setWidget(G3MWidget* widget){
@@ -23,6 +27,14 @@ void D3DRenderer::setWidget(G3MWidget* widget){
 
 void D3DRenderer::initialize(Windows::UI::Core::CoreWindow^ coreWindow){
 	this->_coreWindow = coreWindow;
+
+	/*bgcol = new float[4];
+	bgcol[0] = 1.0f;
+	bgcol[1] = 1.0f;
+	bgcol[2] = 1.0f;
+	bgcol[3] = 1.0f;*/
+
+
 }
 
 void D3DRenderer::createDeviceAndContext(){
@@ -34,9 +46,9 @@ void D3DRenderer::createDeviceAndContext(){
 	D3D11CreateDevice(
 		nullptr,
 		D3D_DRIVER_TYPE_HARDWARE,
-		nullptr,
-		D3D11_CREATE_DEVICE_BGRA_SUPPORT,
-		nullptr,
+		0,//nullptr,
+		D3D11_CREATE_DEVICE_BGRA_SUPPORT | D3D11_CREATE_DEVICE_DEBUG,
+		nullptr,//feature level
 		0,
 		D3D11_SDK_VERSION,
 		&dev11,
@@ -80,13 +92,18 @@ void D3DRenderer::createSwapChain(){
 	//8. Additional Flags
 	scDesc.Flags = 0;
 
+	//9. No idea what that is...copied from sample app
+	scDesc.Scaling = DXGI_SCALING_NONE;
+	scDesc.AlphaMode = DXGI_ALPHA_MODE_IGNORE;
+
 	//Get the dxgiFactory. Weird. Whatever...
 	Microsoft::WRL::ComPtr<IDXGIDevice1> dxgiDevice;
 	device.As(&dxgiDevice);
 	Microsoft::WRL::ComPtr<IDXGIAdapter> dxgiAdapter;
 	dxgiDevice->GetAdapter(&dxgiAdapter);
 	Microsoft::WRL::ComPtr<IDXGIFactory2> dxgiFactory;
-	dxgiAdapter->GetParent(__uuidof(IDXGIFactory2), &dxgiFactory);
+	//dxgiAdapter->GetParent(__uuidof(IDXGIFactory2), &dxgiFactory);
+	dxgiAdapter->GetParent(IID_PPV_ARGS(&dxgiFactory));
 
 	//Finally, create the darn swapchain
 	dxgiFactory->CreateSwapChainForCoreWindow(
@@ -103,6 +120,8 @@ void D3DRenderer::createDeviceDependentResources(){
 	Microsoft::WRL::ComPtr<ID3D11Texture2D> d3dBackBuffer;
 	swapChain->GetBuffer(0, IID_PPV_ARGS(&d3dBackBuffer));
 	device->CreateRenderTargetView(d3dBackBuffer.Get(), nullptr, &d3dRenderTargetView);
+
+	deviceContext->OMSetRenderTargets(1, d3dRenderTargetView.GetAddressOf(), nullptr);
 
 
 	//StencilBuffer (also used as z-buffer) (it is basically another 2D-Texture)
@@ -124,29 +143,47 @@ void D3DRenderer::createDeviceDependentResources(){
 	device->CreateDepthStencilView(d3dStencilBuffer.Get(), &depthStencilViewDesc, &d3dDepthStencilView);
 
 	// set the viewport
-	D3D11_VIEWPORT viewport = { 0 };
-	viewport.TopLeftX = 0;
+	//D3D11_VIEWPORT viewport = { 1 };
+	/*viewport.TopLeftX = 0;
 	viewport.TopLeftY = 0;
 	viewport.Width = _coreWindow->Bounds.Width;
 	viewport.Height = _coreWindow->Bounds.Height;
+	viewport.MaxDepth = 1;
+	viewport.MinDepth = -1;*/
+	
+	D3D11_VIEWPORT viewport = CD3D11_VIEWPORT(
+		0.0f,
+		0.0f,
+		_coreWindow->Bounds.Width,
+		_coreWindow->Bounds.Height
+		);
 	deviceContext->RSSetViewports(1, &viewport);
+
+
+
 }
 
 
 void D3DRenderer::render(){
+
+	//deviceContext->ClearRenderTargetView(d3dRenderTargetView.Get(),bgcol);
+	//deviceContext->ClearDepthStencilView(d3dDepthStencilView.Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 	// set our new render target object as the active render target
 	deviceContext->OMSetRenderTargets(1, d3dRenderTargetView.GetAddressOf(), nullptr);
 
-	// clear the back buffer to a deep blue
-	float color[4] = { 0.0f, 0.0f, 0.0f, 1.0f };
-	deviceContext->ClearRenderTargetView(d3dRenderTargetView.Get(), color);
-
 	if (_widget != NULL){
-		_widget->render(100, 100);
-	}
+		_widget->render(_coreWindow->Bounds.Width, _coreWindow->Bounds.Height);
 
+	}
 	// switch the back buffer and the front buffer
-	swapChain->Present(1, 0);
+	HRESULT hr = swapChain->Present(1, 0);
+
+
+
+	deviceContext->DiscardView(d3dRenderTargetView.Get());
+
+	// Discard the contents of the depth stencil.
+	deviceContext->DiscardView(d3dDepthStencilView.Get());
 }
 
 bool D3DRenderer::isInitialized() const{

@@ -12,7 +12,7 @@
 
 class GLUniformID_win8 : public IGLUniformID{
 private:
-	const int _id;
+	int _id;
 public:
 	GLUniformID_win8(int id) :_id(id) {}
 

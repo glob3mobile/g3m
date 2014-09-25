@@ -7,6 +7,38 @@
 //
 #include <d3d11_2.h>
 #include "NativeGL_win8.hpp"
+#include "GPUProgram_D3D.hpp"
+#include "Matrix44D.hpp"
+#include "ShortBuffer_win8.hpp"
+
+
+void NativeGL_win8::initializeRenderStates() const{
+	_rasterizerDesc.FillMode = D3D11_FILL_WIREFRAME;
+
+	_rtblendDesc.BlendOp = D3D11_BLEND_OP_ADD;
+	_rtblendDesc.BlendOpAlpha = D3D11_BLEND_OP_ADD;
+	_rtblendDesc.SrcBlendAlpha = D3D11_BLEND_ONE;
+	_rtblendDesc.DestBlendAlpha = D3D11_BLEND_ZERO;
+	_rtblendDesc.RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+
+}
+
+//Method should be called by any Draw-method
+void NativeGL_win8::setRenderState() const{
+	if (_rasterizerStateChanged){
+		_device->CreateRasterizerState1(&_rasterizerDesc, &_rasterizerState);
+		_deviceContext->RSSetState(_rasterizerState);
+	}
+
+	if (_blendDescChanged){
+
+		_blendDesc.RenderTarget[0] = _rtblendDesc;
+		_device->CreateBlendState(&_blendDesc, &_blendState);
+		_deviceContext->OMSetBlendState(_blendState, NULL, 0xffffffff);
+	}
+	
+}
+
 
 void NativeGL_win8::clearColor(float red, float green, float blue, float alpha) const {
 	_clearColor[0] = red;
@@ -16,8 +48,11 @@ void NativeGL_win8::clearColor(float red, float green, float blue, float alpha) 
 }
 
 void NativeGL_win8::useProgram(IGPUProgram* program) const{
-	std::string errMsg("TODO: Implementation");
-	throw std::exception(errMsg.c_str());
+
+	//Cast to GPUProgram_D3D and set Shaders
+	GPUProgram_D3D* p = (GPUProgram_D3D*) program;
+	_deviceContext->VSSetShader(p->getVertexShader(), nullptr, 0);
+	_deviceContext->PSSetShader(p->getPixelShader(), nullptr, 0);
 }
 
 void NativeGL_win8::uniform2f(const IGLUniformID* loc, float x, float y) const{
@@ -50,6 +85,7 @@ void NativeGL_win8::uniform3f(const IGLUniformID* location, float v0, float v1, 
 }
 
 void NativeGL_win8::clear(int buffers) const{
+	
 	if ((buffers &  COLOR_BUFFER_BIT) != 0) {	
 		_deviceContext->ClearRenderTargetView(_renderTargetView.Get(), _clearColor);
 	}
@@ -60,32 +96,32 @@ void NativeGL_win8::clear(int buffers) const{
 
 void NativeGL_win8::enable(int feature) const{
 	if (feature == FEATURE_DEPTHTEST){
-		_depthStencilDesc->DepthEnable = true;
+		_depthStencilDesc.DepthEnable = true;
 		_depthStencilStateChanged = true;
 	}
 	else if (feature == FEATURE_BLEND){
-		_blendDesc->BlendEnable = true;
+		_rtblendDesc.BlendEnable = true;
 		_blendDescChanged = true;
 	}
 }
 
 void NativeGL_win8::disable(int feature) const{
 	if (feature == FEATURE_DEPTHTEST){
-		_depthStencilDesc->DepthEnable = false;
+		_depthStencilDesc.DepthEnable = false;
 		_depthStencilStateChanged = true;
 	}
 	else if (feature == FEATURE_BLEND){
-		_blendDesc->BlendEnable = false;
+		_rtblendDesc.BlendEnable = false;
 		_blendDescChanged = true;
 	}
 	else if (feature == FEATURE_CULLFACE){
-		_rasterizerDesc->CullMode = D3D11_CULL_MODE::D3D11_CULL_NONE;
+		_rasterizerDesc.CullMode = D3D11_CULL_MODE::D3D11_CULL_NONE;
 		_rasterizerStateChanged = true;
 	}
 	else if (feature == FEATURE_POLYGONOFFSETFILL){
-		_rasterizerDesc->DepthBias = 0;
-		_rasterizerDesc->DepthBiasClamp = 0.0f;
-		_rasterizerDesc->SlopeScaledDepthBias = 0.0f;
+		_rasterizerDesc.DepthBias = 0;
+		_rasterizerDesc.DepthBiasClamp = 0.0f;
+		_rasterizerDesc.SlopeScaledDepthBias = 0.0f;
 		_rasterizerStateChanged = true;
 	}
 }
@@ -104,8 +140,55 @@ void NativeGL_win8::vertexAttribPointer(int index, int size, bool normalized, in
 }
 
 void NativeGL_win8::drawElements(int mode, int count, IShortBuffer* indices) const{
-	std::string errMsg("TODO: Implementation");
-	throw std::exception(errMsg.c_str());
+
+
+	//get pointer to underlying array
+	short* values = ((ShortBuffer_win8*)indices)->getPointer();
+
+	//buffer does not exist or has changed size -> create new
+	if ((_indexBuffer == NULL) || (_indexBufferSize != sizeof(unsigned short)*count)){
+		ILogger::instance()->logInfo("creating index buffer");
+
+		if (_indexBuffer != NULL){
+			_indexBuffer->Release();
+		}
+
+		_indexBufferSize = sizeof(unsigned short)*count;
+		D3D11_BUFFER_DESC _indexBufferDesc;
+		_indexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
+		_indexBufferDesc.ByteWidth = _indexBufferSize;
+		_indexBufferDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
+		_indexBufferDesc.CPUAccessFlags = 0;
+		_indexBufferDesc.MiscFlags = 0;
+
+		D3D11_SUBRESOURCE_DATA InitData;
+		InitData.pSysMem = values;
+		InitData.SysMemPitch = 0;
+		InitData.SysMemSlicePitch = 0;
+
+		HRESULT hr = _device->CreateBuffer(&_indexBufferDesc, &InitData, &_indexBuffer);
+		if (FAILED(hr)){
+			ILogger::instance()->logError("Error while creating index buffer");
+			std::string errMsg("Error while creating index buffer");
+			throw std::exception(errMsg.c_str());
+		}	
+	}
+
+	//size has not changed, just update with new values
+	// TODO: Only update if necessary
+	else{
+		_deviceContext->UpdateSubresource(_indexBuffer, 0, NULL, values, 0, 0);
+	}
+
+	// set RenderStates
+	setRenderState();
+	// Set the buffer.
+	_deviceContext->IASetIndexBuffer(_indexBuffer, DXGI_FORMAT_R16_UINT, 0);
+	// Set Toppology (tringles, triangleStrip, lines, etc...)
+	_deviceContext->IASetPrimitiveTopology((D3D11_PRIMITIVE_TOPOLOGY)mode);
+	//Draw
+	_deviceContext->DrawIndexed(count, 0, 0);
+	
 }
 
 void NativeGL_win8::lineWidth(float width) const{
@@ -119,33 +202,16 @@ int NativeGL_win8::getError() const{
 }
 
 void NativeGL_win8::blendFunc(int sfactor, int dfactor) const{
+
+	if (sfactor != _rtblendDesc.SrcBlend){
+		_rtblendDesc.SrcBlend = D3D11_BLEND(sfactor);
+		_blendDescChanged = true;
+	}
 	
-	_blendDesc->SrcBlendAlpha = D3D11_BLEND(sfactor);
-	_blendDesc->DestBlendAlpha = D3D11_BLEND(dfactor);
-
-	if (sfactor == D3D11_BLEND::D3D11_BLEND_SRC_ALPHA){
-		_blendDesc->SrcBlend = D3D11_BLEND::D3D11_BLEND_SRC_COLOR;
+	if (dfactor != _rtblendDesc.DestBlend){
+		_rtblendDesc.DestBlend = D3D11_BLEND(dfactor);
+		_blendDescChanged = true;
 	}
-	else if (sfactor == D3D11_BLEND::D3D11_BLEND_INV_SRC_ALPHA){
-		_blendDesc->SrcBlend = D3D11_BLEND::D3D11_BLEND_INV_SRC_COLOR;
-	}
-	else{
-		_blendDesc->SrcBlend = D3D11_BLEND(sfactor);
-	}
-
-
-	if (dfactor == D3D11_BLEND::D3D11_BLEND_SRC_ALPHA){
-		_blendDesc->DestBlend = D3D11_BLEND::D3D11_BLEND_SRC_COLOR;
-	}
-	else if (dfactor == D3D11_BLEND::D3D11_BLEND_INV_SRC_ALPHA){
-		_blendDesc->DestBlend = D3D11_BLEND::D3D11_BLEND_INV_SRC_COLOR;
-	}
-	else{
-		_blendDesc->DestBlend = D3D11_BLEND(dfactor);
-	}
-
-	_blendDescChanged = true;
-
 }
 
 void NativeGL_win8::bindTexture(int target, const IGLTextureId* texture) const{
@@ -199,7 +265,7 @@ void NativeGL_win8::drawArrays(int mode, int first, int count) const{
 }
 
 void NativeGL_win8::cullFace(int c) const{
-	_rasterizerDesc->CullMode = D3D11_CULL_MODE(c);
+	_rasterizerDesc.CullMode = D3D11_CULL_MODE(c);
 	_rasterizerStateChanged = true;
 }
 

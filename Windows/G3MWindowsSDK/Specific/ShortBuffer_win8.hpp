@@ -14,7 +14,7 @@
 
 class ShortBuffer_win8 : public IShortBuffer {
 private:
-	const int _size;
+	int _size;
 	short*    _values;
 	int       _timestamp;
 

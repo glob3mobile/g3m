@@ -54,7 +54,7 @@ public:
 
 
 class GPUUniform: public GPUVariable {
-private:
+protected:
 
   bool _dirty;
 #ifdef C_CODE
@@ -110,7 +110,11 @@ public:
 
   void unset();
 
-  void set(const GPUUniformValue* v) {
+  const IGLUniformID* getID(){
+	  return _id;
+  }
+
+  virtual void set(const GPUUniformValue* v) {
     if (_type == v->getType()) { //type checking
       if (_value == NULL || !_value->isEquals(v)) {
         _dirty = true;
@@ -126,7 +130,7 @@ public:
     }
   }
 
-  void applyChanges(GL* gl);
+  virtual void applyChanges(GL* gl);
 
 };
 
@@ -153,6 +157,10 @@ public:
   }
   bool isEquals(const GPUUniformValue* v) const{
     return _value == ((GPUUniformValueBool*)v)->_value;
+  }
+
+  bool getBoolValue(){
+	  return _value;
   }
 
   std::string description() const{
@@ -198,6 +206,13 @@ public:
   bool isEquals(const GPUUniformValue* v) const{
     GPUUniformValueVec2Float *v2 = (GPUUniformValueVec2Float *)v;
     return (_x == v2->_x) && (_y == v2->_y);
+  }
+
+  float getXValue(){
+	  return _x;
+  }
+  float getYValue(){
+	  return _y;
   }
 
   std::string description() const{
@@ -277,6 +292,16 @@ public:
     return (_x == v2->_x) && (_y == v2->_y) && (_z == v2->_z);
   }
 
+  float getXValue(){
+	  return _x;
+  }
+  float getYValue(){
+	  return _y;
+  }
+  float getZValue(){
+	  return _z;
+  }
+
   std::string description() const{
     IStringBuilder* isb = IStringBuilder::newStringBuilder();
     isb->addString("Uniform Value Vec4Float: x:");
@@ -352,6 +377,19 @@ public:
   bool isEquals(const GPUUniformValue* v) const{
     GPUUniformValueVec4Float *v2 = (GPUUniformValueVec4Float *)v;
     return (_x == v2->_x) && (_y == v2->_y) && (_z == v2->_z) && (_w == v2->_w);
+  }
+
+  float getXValue(){
+	  return _x;
+  }
+  float getYValue(){
+	  return _y;
+  }
+  float getZValue(){
+	  return _z;
+  }
+  float getWValue(){
+	  return _w;
   }
 
   std::string description() const{
@@ -451,6 +489,17 @@ public:
     return false;
   }
 
+  const Matrix44D* getMatrixValue(){
+	  if (_lastModelSet != NULL) {
+		  _lastModelSet->_release();
+	  }
+
+	  _lastModelSet = _provider->getMatrix();
+
+	  _lastModelSet->_retain();
+	  return _lastModelSet;
+  }
+
   std::string description() const{
     IStringBuilder* isb = IStringBuilder::newStringBuilder();
     isb->addString("Uniform Value Matrix44D.");
@@ -492,6 +541,10 @@ public:
   bool isEquals(const GPUUniformValue* v) const{
     GPUUniformValueFloat *v2 = (GPUUniformValueFloat *)v;
     return _value == v2->_value;
+  }
+
+  float getFloatValue(){
+	  return _value;
   }
 
   std::string description() const{
@@ -565,6 +618,10 @@ public:
   }
   bool isEquals(const GPUUniformValue* v) const{
     return _value == ((GPUUniformValueInt*)v)->_value;
+  }
+
+  int getIntValue(){
+	  return _value;
   }
 
   std::string description() const{

@@ -8,7 +8,6 @@
 
 #ifndef __G3MWindowsSDK_NativeGL_win8__
 #define __G3MWindowsSDK_NativeGL_win8__
-//#define NOMINMAX
 
 #include <wrl/client.h>
 #include <d3d11_2.h>
@@ -39,6 +38,8 @@
 #define TEXTURETYPE2D 1
 
 
+
+
 class NativeGL_win8 :public INativeGL {
 private:
 	Microsoft::WRL::ComPtr<ID3D11Device1> _device;
@@ -46,19 +47,31 @@ private:
 	Microsoft::WRL::ComPtr<ID3D11RenderTargetView> _renderTargetView;
 	Microsoft::WRL::ComPtr<ID3D11DepthStencilView> _depthStencilView;
 
-	D3D11_RASTERIZER_DESC1* _rasterizerDesc;
+	mutable ID3D11Buffer* _indexBuffer = NULL;
+	mutable int _indexBufferSize = 0;
+
+
+	mutable ID3D11RasterizerState1* _rasterizerState;
+	mutable D3D11_RASTERIZER_DESC1 _rasterizerDesc;
 	mutable bool _rasterizerStateChanged = true;
-	D3D11_DEPTH_STENCIL_DESC* _depthStencilDesc;
+
+	mutable D3D11_DEPTH_STENCIL_DESC _depthStencilDesc;
 	mutable bool _depthStencilStateChanged = true;
-	D3D11_RENDER_TARGET_BLEND_DESC1* _blendDesc;
+	
+	mutable ID3D11BlendState* _blendState;
+	mutable D3D11_BLEND_DESC _blendDesc;
+	mutable D3D11_RENDER_TARGET_BLEND_DESC _rtblendDesc;
 	mutable bool _blendDescChanged = true;
-	D3D11_SAMPLER_DESC* _samplerDesc;
+
+	mutable D3D11_SAMPLER_DESC _samplerDesc;
 	mutable bool _samplerDescChanged = true;
 
 	mutable float _clearColor[4];
 
 	mutable int _sourceBlendColor = 1;
 	mutable int _destBlendColor = 1;
+
+//	GPUUniform_D3D* _currentUniforms;
 
 public:
 
@@ -71,11 +84,15 @@ public:
 		_renderTargetView(rtv),
 		_depthStencilView(dsv)
 	{
-
+		initializeRenderStates();
 	}
 
 	Microsoft::WRL::ComPtr<ID3D11Device1> getDevice(){
 		return _device;
+	}
+
+	Microsoft::WRL::ComPtr<ID3D11DeviceContext1> getDeviceContext(){
+		return _deviceContext;
 	}
 
 	//d3d: colors as const FLOAT ColorRGBA[4], clear color is passed as an argument of buffer-specific API-call
@@ -199,6 +216,10 @@ public:
 	void depthMask(bool v) const;
 
 	void setActiveTexture(int i) const;
+
+private:
+		void setRenderState() const;
+		void initializeRenderStates() const;
 };
 
 #endif

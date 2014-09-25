@@ -3,7 +3,6 @@
 #ifndef __G3MWindowSDK_D3DRenderer__
 #define __G3MWindowSDK_D3DRenderer__
 
-#define NOMINMAX
 
 //#include <wrl.h>
 #include <wrl/client.h>
@@ -54,6 +53,9 @@ private:
 	Microsoft::WRL::ComPtr<ID3D11PixelShader> pixelshader;
 
 	Windows::UI::Core::CoreWindow^ _coreWindow;
+
+	float* bgcol;
+
 
 public:
 	D3DRenderer();

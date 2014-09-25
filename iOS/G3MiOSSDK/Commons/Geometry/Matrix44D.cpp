@@ -40,6 +40,7 @@ _m33(m33) {
 Matrix44D::~Matrix44D()
 {
   delete[] _columnMajorFloatArray;
+  delete[] _rowMajorFloatArray;
   delete _columnMajorFloatBuffer;
 
 #ifdef JAVA_CODE

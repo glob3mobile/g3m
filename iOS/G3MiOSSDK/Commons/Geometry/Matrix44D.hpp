@@ -38,6 +38,7 @@ public:
   const double _m33;
 
   mutable float*        _columnMajorFloatArray;
+  mutable float*		_rowMajorFloatArray;
   mutable IFloatBuffer* _columnMajorFloatBuffer;
 
   explicit Matrix44D(const Matrix44D& m);
@@ -84,6 +85,39 @@ public:
   }
 
   const IFloatBuffer* getColumnMajorFloatBuffer() const;
+
+#ifdef C_CODE
+  float* getRowMajorFloatArray() const
+#else
+  float[] getRowMajorFloatArray() const
+#endif
+  {
+	  if (_rowMajorFloatArray == NULL) {
+		  _rowMajorFloatArray = new float[16];
+
+		  _rowMajorFloatArray[0] = (float)_m00;
+		  _rowMajorFloatArray[1] = (float)_m01;
+		  _rowMajorFloatArray[2] = (float)_m02;
+		  _rowMajorFloatArray[3] = (float)_m03;
+
+		  _rowMajorFloatArray[4] = (float)_m10;
+		  _rowMajorFloatArray[5] = (float)_m11;
+		  _rowMajorFloatArray[6] = (float)_m12;
+		  _rowMajorFloatArray[7] = (float)_m13;
+
+		  _rowMajorFloatArray[8] = (float)_m20;
+		  _rowMajorFloatArray[9] = (float)_m21;
+		  _rowMajorFloatArray[10] = (float)_m22;
+		  _rowMajorFloatArray[11] = (float)_m23;
+
+		  _rowMajorFloatArray[12] = (float)_m30;
+		  _rowMajorFloatArray[13] = (float)_m31;
+		  _rowMajorFloatArray[14] = (float)_m32;
+		  _rowMajorFloatArray[15] = (float)_m33;
+	  }
+
+	  return _rowMajorFloatArray;
+  }
 
   bool isEquals(const Matrix44D& m) const;
 

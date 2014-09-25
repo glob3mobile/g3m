@@ -19,6 +19,10 @@ private:
 	float*    _values;
 	int       _timestamp;
 
+	//Same values with added padding (to turn vec3 to vec4)
+	float* _paddedTo4Values;
+
+
 	//ID
 	const long long _id;
 	static long long _nextID;
@@ -93,10 +97,15 @@ public:
 
 	virtual ~FloatBuffer_win8(){
 		delete[] _values;
+		delete[] _paddedTo4Values;
 	}
 
 	int size() const {
 		return _size;
+	}
+
+	int getPaddedSize() const{
+		return _size + _size / 3;
 	}
 
 	int timestamp() const {
@@ -121,6 +130,12 @@ public:
 			_values[i] = value;
 			_timestamp++;
 		}
+		if (_paddedTo4Values != NULL){
+			int paddedIndex = i + (i / 3);
+			if (_paddedTo4Values[paddedIndex] != value){
+				_paddedTo4Values[paddedIndex] = value;
+			}
+		}
 	}
 
 	void rawPut(int i,
@@ -130,6 +145,9 @@ public:
 		}
 
 		_values[i] = value;
+		if (_paddedTo4Values != NULL){
+			_paddedTo4Values[i + (i / 3)] = value;
+		}
 	}
 
 	void rawAdd(int i, float value) {
@@ -138,11 +156,18 @@ public:
 		}
 
 		_values[i] = _values[i] + value;
+		if (_paddedTo4Values == NULL){
+			int paddedIndex = i + (i / 3);
+			_paddedTo4Values[paddedIndex] = _paddedTo4Values[paddedIndex]+value;
+		}
 	}
 
 	float* getPointer() const {
 		return _values;
 	}
+
+	float* getPaddedTo4Pointer();
+
 
 	const std::string description() const;
 

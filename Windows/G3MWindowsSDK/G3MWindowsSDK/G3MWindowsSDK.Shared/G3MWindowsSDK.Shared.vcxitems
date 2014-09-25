@@ -323,8 +323,10 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)..\..\Specific\FloatBuffer_win8.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)..\..\Specific\G3MBuilder_win8.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)..\..\Specific\G3MWidget_win8.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\Specific\GPUAttribute_D3D.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)..\..\Specific\GPUProgramFactory_D3D.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)..\..\Specific\GPUProgram_D3D.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\Specific\GPUUniform_D3D.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)..\..\Specific\IntBuffer_win8.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)..\..\Specific\Logger_win8.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)..\..\Specific\NativeGL_win8.cpp" />
@@ -683,8 +685,10 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)..\..\Specific\G3MBuilder_win8.hpp" />
     <ClInclude Include="$(MSBuildThisFileDirectory)..\..\Specific\G3MWidget_win8.hpp" />
     <ClInclude Include="$(MSBuildThisFileDirectory)..\..\Specific\GLUniformID_win8.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\Specific\GPUAttribute_D3D.hpp" />
     <ClInclude Include="$(MSBuildThisFileDirectory)..\..\Specific\GPUProgramFactory_D3D.hpp" />
     <ClInclude Include="$(MSBuildThisFileDirectory)..\..\Specific\GPUProgram_D3D.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\Specific\GPUUniform_D3D.hpp" />
     <ClInclude Include="$(MSBuildThisFileDirectory)..\..\Specific\IntBuffer_win8.hpp" />
     <ClInclude Include="$(MSBuildThisFileDirectory)..\..\Specific\Logger_win8.hpp" />
     <ClInclude Include="$(MSBuildThisFileDirectory)..\..\Specific\MathUtils_win8.hpp" />
