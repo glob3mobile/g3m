@@ -320,6 +320,9 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)..\..\Specific\ByteBuffer_win8.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)..\..\Specific\DeviceInfo_win8.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)..\..\Specific\Downloader_win8.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\Specific\Downloader_win8_Handler.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\Specific\Downloader_win8_Listener.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\Specific\Downloader_win8_WorkerThread.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)..\..\Specific\FloatBuffer_win8.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)..\..\Specific\G3MBuilder_win8.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)..\..\Specific\G3MWidget_win8.cpp" />
@@ -680,6 +683,9 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)..\..\Specific\ByteBuffer_win8.hpp" />
     <ClInclude Include="$(MSBuildThisFileDirectory)..\..\Specific\DeviceInfo_win8.hpp" />
     <ClInclude Include="$(MSBuildThisFileDirectory)..\..\Specific\Downloader_win8.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\Specific\Downloader_win8_Handler.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\Specific\Downloader_win8_Listener.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\Specific\Downloader_win8_WorkerThread.hpp" />
     <ClInclude Include="$(MSBuildThisFileDirectory)..\..\Specific\Factory_win8.hpp" />
     <ClInclude Include="$(MSBuildThisFileDirectory)..\..\Specific\FloatBuffer_win8.hpp" />
     <ClInclude Include="$(MSBuildThisFileDirectory)..\..\Specific\G3MBuilder_win8.hpp" />
