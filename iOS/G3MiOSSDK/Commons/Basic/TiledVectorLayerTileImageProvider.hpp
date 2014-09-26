@@ -223,7 +223,12 @@ private:
   };
 
 
+#ifdef C_CODE
   const TiledVectorLayer* _layer;
+#endif
+#ifdef JAVA_CODE
+  private TiledVectorLayer _layer;
+#endif
   IDownloader*            _downloader;
   const IThreadUtils*     _threadUtils;
 

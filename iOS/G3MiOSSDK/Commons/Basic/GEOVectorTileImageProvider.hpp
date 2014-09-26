@@ -127,7 +127,12 @@ public:
 
 
 private:
+#ifdef C_CODE
   const GEOVectorLayer* _layer;
+#endif
+#ifdef JAVA_CODE
+  private GEOVectorLayer _layer;
+#endif
 
   std::map<const std::string, GEORasterizerFrameTask*> _rasterizers;
 
