@@ -521,6 +521,63 @@ layerSet->addLayer(blueMarble);
   GEOVectorLayer* geoVectorLayer = new GEOVectorLayer();
   
   geoVectorLayer->addInfo(new Info("Cultural Vectors Layer from http://www.naturalearthdata.com/"));
+  
+  
+  GEOFeatureCollection* fcfc = NULL;
+  
+  class VectorLayerTouchEventListener : public LayerTouchEventListener {
+  public:
+    
+    const GEOFeatureCollection* _fc;
+    
+    VectorLayerTouchEventListener(const GEOFeatureCollection* fc) : _fc(fc)
+    {
+      
+    }
+    
+    bool onTerrainTouch(const G3MEventContext* context,
+                        const LayerTouchEvent& event) {
+      
+      Geodetic2D point = event.getPosition().asGeodetic2D();
+      
+      printf ("GEOVectorLayer touched in = %s\n", point.description().c_str());
+
+      
+      const size_t sizeFc = _fc->size();
+      
+      for (unsigned int i = 0; i < sizeFc; i++) {
+        
+        const GEOFeature* f = _fc->get(i);
+        
+        const GEOGeometry2D* polygon = (GEOGeometry2D*) f->getGeometry();
+        
+        if (polygon->contain(point)) {
+          const JSONString* name = f->getProperties()->getAsString("name");
+          if (name != NULL) {
+            NSString* message = [NSString stringWithFormat: @"This country is: \"%s\"", name->value().c_str()];
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Country Selected"
+                                                            message:message
+                                                           delegate:nil
+                                                  cancelButtonTitle:@"OK"
+                                                  otherButtonTitles:nil];
+            [alert show];
+            
+            
+//            ILogger::instance()->logInfo("This country is: %s", name->value().c_str());
+          }
+          
+          break;
+        }
+      }
+      
+      return true;
+    }
+  };
+  
+  
+  
+  //geoVectorLayer->addLayerTouchEventListener(new VectorLayerTouchEventListener(fcfc));
+  
   layerSet->addLayer(geoVectorLayer);
   
   
@@ -556,9 +613,14 @@ layerSet->addLayer(blueMarble);
       
       fc = (GEOFeatureCollection*) geoObject;
       
+      fcfc = (GEOFeatureCollection*)GEOJSONParser::parseJSON(geoJSON);
+      
+      
       g->addGEOObject(geoObject);
     }
   }
+
+  geoVectorLayer->addLayerTouchEventListener(new VectorLayerTouchEventListener(fcfc));
 
   
   builder.getPlanetRendererBuilder()->setDefaultTileBackGroundImage(new DownloaderImageBuilder(URL("http://www.freelogovectors.net/wp-content/uploads/2013/02/sheep-b.png")));
@@ -591,10 +653,9 @@ layerSet->addLayer(blueMarble);
   
   if (fc != NULL) {
     [self testContainsGEO2DPolygonDataWorld : fc];
-
   }
   
-  [self testContainsGEO2DPolygonData];
+  //[self testContainsGEO2DPolygonData];
 
   //      [[self G3MWidget] widget]->setAnimatedCameraPosition(TimeInterval::fromSeconds(5),
 //                                                           Geodetic3D::fromDegrees(39.13,
@@ -615,49 +676,24 @@ layerSet->addLayer(blueMarble);
 {
   const size_t sizeFc = fc->size();
   
-  for (size_t i = 0; i < sizeFc; i++) {
+  for (unsigned int i = 0; i < sizeFc; i++) {
     
     const GEOFeature* f = fc->get(i);
     
-    ILogger::instance()->logInfo("%s", f->getProperties()->description().c_str());
+    GEOGeometry2D* polygon = (GEOGeometry2D*) f->getGeometry();
 
-    GEO2DMultiPolygonGeometry* polygons = (GEO2DMultiPolygonGeometry*) fc->get(i)->getGeometry();
+  
     
-    GEO2DPolygonGeometry* polygon = (GEO2DPolygonGeometry*) fc->get(i)->getGeometry();
-
-    
-    ILogger::instance()->logInfo("Geometry Type: %s", typeid(fc->get(i)->getGeometry()).name());
-
-    ILogger::instance()->logInfo("Polygons Type: %s", typeid(polygons).name());
-    
-    ILogger::instance()->logInfo("Polygon Type: %s", typeid(polygon).name());
-
-
-   // if (typeid(*polygons) != typeid(GEO2DMultiPolygonGeometry)) {
-    GEO2DMultiPolygonGeometry* aux = dynamic_cast<GEO2DMultiPolygonGeometry*>(polygons);
-    if (!aux) {
-      GEO2DPolygonGeometry* polygon = (GEO2DPolygonGeometry*) fc->get(i)->getGeometry();
-      ILogger::instance()->logInfo("%s", polygon->getPolygonData()->getSector()->description().c_str());
-    } else {
-      ILogger::instance()->logInfo("%s", polygons->getPolygonsData()->at(0)->getSector()->description().c_str());
-    }
-    
-    delete aux;
-    
-    //GEO2DPolygonGeometry* polygon = (GEO2DPolygonGeometry*) fc->get(i)->getGeometry();
-    
-    
-    
-    
-    if (polygon->getPolygonData()->contains(Geodetic2D(Angle::fromDegrees(35.5), Angle::fromDegrees(-5.5)))) {
+    if (polygon->contain(*new Geodetic2D(Angle::fromDegrees(35.5), Angle::fromDegrees(-5.5)))) {
       const JSONString* name = f->getProperties()->getAsString("name");
       if (name != NULL && name->value() == "Morocco") {
         ILogger::instance()->logInfo("Test OK: %s", f->getProperties()->description().c_str());
       }
-      delete name;
+      //delete name;
     }
     
-    if (polygon->getPolygonData()->contains(Geodetic2D(Angle::fromDegrees(-13.692198), Angle::fromDegrees(-53.862846)))) {
+    
+    if (polygon->contain(*new Geodetic2D(Angle::fromDegrees(-13.692198), Angle::fromDegrees(-53.862846)))) {
       ILogger::instance()->logInfo("Test OK: %s", f->getProperties()->description().c_str());
 
       const JSONString* name = f->getProperties()->getAsString("name");
@@ -666,7 +702,8 @@ layerSet->addLayer(blueMarble);
       }
     }
     
-    if (polygon->getPolygonData()->contains(Geodetic2D(Angle::fromDegrees(5.503043), Angle::fromDegrees(-65.464408)))) {
+
+    if (polygon->contain(*new Geodetic2D(Angle::fromDegrees(5.503043), Angle::fromDegrees(-65.464408)))) {
       ILogger::instance()->logInfo("Test OK: %s", f->getProperties()->description().c_str());
       
       const JSONString* name = f->getProperties()->getAsString("name");
@@ -674,7 +711,9 @@ layerSet->addLayer(blueMarble);
         ILogger::instance()->logInfo("Test OK: %s", f->getProperties()->description().c_str());
       }
     }
-    if (polygon->getPolygonData()->contains(Geodetic2D(Angle::fromDegrees(38.183546), Angle::fromDegrees(-3.940974)))) {
+    
+
+    if (polygon->contain(* new Geodetic2D(Angle::fromDegrees(38.183546), Angle::fromDegrees(-3.940974)))) {
       ILogger::instance()->logInfo("Test OK: %s", f->getProperties()->description().c_str());
       
       const JSONString* name = f->getProperties()->getAsString("name");
@@ -684,7 +723,7 @@ layerSet->addLayer(blueMarble);
     }
 
     
-    delete polygon;
+    //delete polygon;
   }
 
 }

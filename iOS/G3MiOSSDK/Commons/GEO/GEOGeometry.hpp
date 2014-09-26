@@ -49,7 +49,7 @@ public:
                  GEOVectorLayer*         geoVectorLayer) const;
 
   virtual GEOGeometry* deepCopy() const = 0;
-
+  
 };
 
 #endif

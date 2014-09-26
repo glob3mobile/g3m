@@ -9,7 +9,10 @@
 #ifndef __G3MiOSSDK__GEOGeometry2D__
 #define __G3MiOSSDK__GEOGeometry2D__
 
+class Geodetic2D;
+
 #include "GEOGeometry.hpp"
+
 class GEORasterSymbol;
 
 class GEOGeometry2D : public GEOGeometry  {
@@ -31,6 +34,9 @@ public:
                  int tileLevel) const;
 
   virtual GEOGeometry2D* deepCopy() const = 0;
+  
+  virtual bool contain(const Geodetic2D& point) const;
+
 
 };
 
