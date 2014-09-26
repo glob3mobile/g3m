@@ -479,7 +479,7 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
   }
 
 
-  private final TiledVectorLayer _layer;
+  private TiledVectorLayer _layer;
   private IDownloader _downloader;
   private final IThreadUtils _threadUtils;
 

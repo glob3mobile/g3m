@@ -24,7 +24,7 @@ package org.glob3.mobile.generated;
 
 public class RasterLayerTileImageProvider extends TileImageProvider
 {
-  private final RasterLayer _layer;
+  private RasterLayer _layer;
   private IDownloader _downloader;
 
   private final java.util.HashMap<String, Long> _requestsIdsPerTile = new java.util.HashMap<String, Long>();

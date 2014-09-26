@@ -159,7 +159,7 @@ public class GEOVectorTileImageProvider extends TileImageProvider
   }
 
 
-  private final GEOVectorLayer _layer;
+  private GEOVectorLayer _layer;
 
   private final java.util.HashMap<String, GEORasterizerFrameTask> _rasterizers = new java.util.HashMap<String, GEORasterizerFrameTask>();
 
