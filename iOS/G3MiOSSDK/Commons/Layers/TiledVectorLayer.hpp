@@ -18,7 +18,7 @@ class IDownloader;
 class IBufferDownloadListener;
 class IStringUtils;
 class GEORasterSymbolizer;
-
+class TiledVectorLayerTileImageProvider;
 
 class TiledVectorLayer : public VectorLayer {
 private:
@@ -46,7 +46,7 @@ private:
   private IMathUtils   _mu;
   private IStringUtils _su;
 #endif
-  mutable TileImageProvider* _tileImageProvider;
+  mutable TiledVectorLayerTileImageProvider* _tileImageProvider;
 
   TiledVectorLayer(const GEORasterSymbolizer*                            symbolizer,
                    const std::string&                                    urlTemplate,

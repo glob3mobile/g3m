@@ -52,6 +52,7 @@ _tileImageProvider(NULL)
 GEOVectorLayer::~GEOVectorLayer() {
   //  delete _symbolizer;
   if (_tileImageProvider != NULL) {
+    _tileImageProvider->layerDeleted(this);
     _tileImageProvider->_release();
   }
 #ifdef JAVA_CODE

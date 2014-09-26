@@ -12,11 +12,15 @@
 #include "Layer.hpp"
 
 #include "TileImageContribution.hpp"
+#include "TimeInterval.hpp"
 class IDownloader;
 class IImageDownloadListener;
-#include "TimeInterval.hpp"
+class RasterLayerTileImageProvider;
 
 class RasterLayer : public Layer {
+private:
+  mutable RasterLayerTileImageProvider* _tileImageProvider;
+
 protected:
 #ifdef C_CODE
   const LayerTilesRenderParameters* _parameters;

@@ -53,6 +53,8 @@ public:
 
   void requestFinish(const std::string& tileId);
 
+  void layerDeleted(const RasterLayer* layer);
+
 };
 
 #endif

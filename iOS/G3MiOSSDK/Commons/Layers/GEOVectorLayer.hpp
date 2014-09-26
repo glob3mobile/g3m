@@ -16,12 +16,13 @@
 #include "QuadTree.hpp"
 
 class TileImageContribution;
+class GEOVectorTileImageProvider;
 
 class GEOVectorLayer : public VectorLayer {
 private:
   QuadTree _quadTree;
 
-  mutable TileImageProvider* _tileImageProvider;
+  mutable GEOVectorTileImageProvider* _tileImageProvider;
 
 public:
 

@@ -831,7 +831,6 @@ long long PointCloudsRenderer::PointCloudLeafNode::rawRender(const PointCloud* p
     }
   }
 
-
   if ((_loadingLevel >= 0) &&
       (_neededLevel < _loadingLevel) &&
       (_loadingLevelRequestID >= 0)) {
@@ -853,7 +852,8 @@ long long PointCloudsRenderer::PointCloudLeafNode::rawRender(const PointCloud* p
                                                                    true);
       }
     }
-    if (_neededLevel < _currentLoadedLevel) {
+    if ((_neededLevel < _currentLoadedLevel) &&
+        (_neededLevel > _preloadedLevel)) {
       for (int i = _neededLevel+1; i <= _currentLoadedLevel; i++) {
         delete _levelsVerticesBuffers[i];
         _levelsVerticesBuffers[i] = NULL;
@@ -887,6 +887,23 @@ void PointCloudsRenderer::PointCloudLeafNode::stoppedRendering(const G3MRenderCo
 
   delete _firstPointsColorsBuffer;
   _firstPointsColorsBuffer = NULL;
+
+  if (_currentLoadedLevel > _preloadedLevel) {
+    for (int i = 0; i < _levelsCount; i++) {
+      delete _levelsVerticesBuffers[i];
+      _levelsVerticesBuffers[i] = NULL;
+
+      delete _levelsHeightsBuffers[i];
+      _levelsHeightsBuffers[i] = NULL;
+    }
+    _currentLoadedLevel = _preloadedLevel;
+
+    _loadingLevel = -1;
+    if (_loadingLevelRequestID >= 0) {
+      rc->getDownloader()->cancelRequest(_loadingLevelRequestID);
+      _loadingLevelRequestID = -1;
+    }
+  }
 }
 
 

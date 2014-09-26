@@ -129,7 +129,7 @@ public:
   virtual std::vector<Petition*> createTileMapPetitions(const G3MRenderContext* rc,
                                                         const LayerTilesRenderParameters* layerTilesRenderParameters,
                                                         const Tile* tile) const = 0;
-
+  
   virtual TileImageProvider* createTileImageProvider(const G3MRenderContext* rc,
                                                      const LayerTilesRenderParameters* layerTilesRenderParameters) const = 0;
 

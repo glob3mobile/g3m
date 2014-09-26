@@ -159,7 +159,9 @@ public:
                  int resolutionHeight,
                  TileImageListener* listener,
                  bool deleteListener);
-  
+
+  void layerDeleted(const GEOVectorLayer* layer);
+
 };
 
 #endif

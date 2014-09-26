@@ -19,6 +19,10 @@
 
 RasterLayer::~RasterLayer() {
   delete _parameters;
+  if (_tileImageProvider != NULL) {
+    _tileImageProvider->layerDeleted(this);
+    _tileImageProvider->_release();
+  }
 #ifdef JAVA_CODE
   super.dispose();
 #endif
@@ -33,7 +37,8 @@ RasterLayer::RasterLayer(const TimeInterval&               timeToCache,
 Layer(transparency, condition, disclaimerInfo),
 _timeToCache(timeToCache),
 _readExpired(readExpired),
-_parameters(parameters)
+_parameters(parameters),
+_tileImageProvider(NULL)
 {
 }
 
@@ -58,7 +63,11 @@ bool RasterLayer::isEquals(const Layer* that) const {
 
 TileImageProvider* RasterLayer::createTileImageProvider(const G3MRenderContext* rc,
                                                         const LayerTilesRenderParameters* layerTilesRenderParameters) const {
-  return new RasterLayerTileImageProvider(this, rc->getDownloader());
+  if (_tileImageProvider == NULL) {
+    _tileImageProvider = new RasterLayerTileImageProvider(this, rc->getDownloader());;
+  }
+  _tileImageProvider->_retain();
+  return _tileImageProvider;
 }
 
 const TileImageContribution* RasterLayer::contribution(const Tile* tile) const {
