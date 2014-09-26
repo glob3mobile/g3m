@@ -476,8 +476,6 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
       _tileImageProvider.requestFinish(_tileId);
     }
 
-//    void geoObjectDownloaded(const GEOObject* geoObject,
-//                             const GEORasterSymbolizer* symbolizer);
   }
 
 
@@ -522,8 +520,6 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
   }
 
   private java.util.LinkedList<CacheEntry> _geoObjectsCache = new java.util.LinkedList<CacheEntry>();
-//  long long _geoObjectsCacheRequests;
-//  long long _geoObjectsCacheHits;
 
   public void dispose()
   {
@@ -540,18 +536,24 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
 
 
   public TiledVectorLayerTileImageProvider(TiledVectorLayer layer, IDownloader downloader, IThreadUtils threadUtils)
-//  _geoObjectsCacheRequests(0),
-//  _geoObjectsCacheHits(0)
   {
      _layer = layer;
      _downloader = downloader;
      _threadUtils = threadUtils;
   }
 
+  public final void layerDeleted(TiledVectorLayer layer)
+  {
+    if (layer != _layer)
+    {
+      throw new RuntimeException("Logic error");
+    }
+    _layer = layer;
+  }
 
   public final TileImageContribution contribution(Tile tile)
   {
-    return _layer.contribution(tile);
+    return (_layer == null) ? null : _layer.contribution(tile);
   }
 
   public final void create(Tile tile, TileImageContribution contribution, Vector2I resolution, long tileDownloadPriority, boolean logDownloadActivity, TileImageListener listener, boolean deleteListener, FrameTasksExecutor frameTasksExecutor)

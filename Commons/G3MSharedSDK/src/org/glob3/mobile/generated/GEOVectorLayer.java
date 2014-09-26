@@ -19,12 +19,13 @@ package org.glob3.mobile.generated;
 
 
 //class TileImageContribution;
+//class GEOVectorTileImageProvider;
 
 public class GEOVectorLayer extends VectorLayer
 {
   private QuadTree _quadTree = new QuadTree();
 
-  private TileImageProvider _tileImageProvider;
+  private GEOVectorTileImageProvider _tileImageProvider;
 
 
   public GEOVectorLayer(java.util.ArrayList<LayerTilesRenderParameters> parametersVector, float transparency, LayerCondition condition)
@@ -86,6 +87,7 @@ public class GEOVectorLayer extends VectorLayer
     //  delete _symbolizer;
     if (_tileImageProvider != null)
     {
+      _tileImageProvider.layerDeleted(this);
       _tileImageProvider._release();
     }
     super.dispose();

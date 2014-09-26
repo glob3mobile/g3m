@@ -674,7 +674,6 @@ public class PointCloudsRenderer extends DefaultRenderer
         }
       }
     
-    
       if ((_loadingLevel >= 0) && (_neededLevel < _loadingLevel) && (_loadingLevelRequestID >= 0))
       {
         rc.getDownloader().cancelRequest(_loadingLevelRequestID);
@@ -692,7 +691,7 @@ public class PointCloudsRenderer extends DefaultRenderer
             _loadingLevelRequestID = pointCloud.requestBufferForLevel(rc, _id, _loadingLevel, new PointCloudLeafNodeLevelListener(this, _loadingLevel, rc.getThreadUtils()), true);
           }
         }
-        if (_neededLevel < _currentLoadedLevel)
+        if ((_neededLevel < _currentLoadedLevel) && (_neededLevel > _preloadedLevel))
         {
           for (int i = _neededLevel+1; i <= _currentLoadedLevel; i++)
           {
@@ -813,6 +812,28 @@ public class PointCloudsRenderer extends DefaultRenderer
       if (_firstPointsColorsBuffer != null)
          _firstPointsColorsBuffer.dispose();
       _firstPointsColorsBuffer = null;
+    
+      if (_currentLoadedLevel > _preloadedLevel)
+      {
+        for (int i = 0; i < _levelsCount; i++)
+        {
+          if (_levelsVerticesBuffers[i] != null)
+             _levelsVerticesBuffers[i].dispose();
+          _levelsVerticesBuffers[i] = null;
+    
+          if (_levelsHeightsBuffers[i] != null)
+             _levelsHeightsBuffers[i].dispose();
+          _levelsHeightsBuffers[i] = null;
+        }
+        _currentLoadedLevel = _preloadedLevel;
+    
+        _loadingLevel = -1;
+        if (_loadingLevelRequestID >= 0)
+        {
+          rc.getDownloader().cancelRequest(_loadingLevelRequestID);
+          _loadingLevelRequestID = -1;
+        }
+      }
     }
 
     public final void onLevelBuffersDownload(int level, IFloatBuffer verticesBuffer, IFloatBuffer heightsBuffer)
@@ -1213,7 +1234,7 @@ public class PointCloudsRenderer extends DefaultRenderer
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#warning TODO
         final long renderedCount = _rootNode.render(this, rc, glState, frustum, _minHeight, _averageHeight * 3, _pointSize, nowInMS);
-    //    const long long renderedCount = _rootNode->render(this, rc, glState, frustum, _minHeight, _maxHeight, _pointSize, nowInMS);
+        // const long long renderedCount = _rootNode->render(this, rc, glState, frustum, _minHeight, _maxHeight, _pointSize, nowInMS);
     
         if (_lastRenderedCount != renderedCount)
         {

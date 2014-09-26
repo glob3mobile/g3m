@@ -19,9 +19,12 @@ package org.glob3.mobile.generated;
 
 //class IDownloader;
 //class IImageDownloadListener;
+//class RasterLayerTileImageProvider;
 
 public abstract class RasterLayer extends Layer
 {
+  private RasterLayerTileImageProvider _tileImageProvider;
+
   protected LayerTilesRenderParameters _parameters;
 
   protected final TimeInterval _timeToCache;
@@ -33,6 +36,7 @@ public abstract class RasterLayer extends Layer
      _timeToCache = timeToCache;
      _readExpired = readExpired;
      _parameters = parameters;
+     _tileImageProvider = null;
   }
 
   protected final TimeInterval getTimeToCache()
@@ -62,6 +66,11 @@ public abstract class RasterLayer extends Layer
   public void dispose()
   {
     _parameters = null;
+    if (_tileImageProvider != null)
+    {
+      _tileImageProvider.layerDeleted(this);
+      _tileImageProvider._release();
+    }
     super.dispose();
   }
 
@@ -115,7 +124,12 @@ public abstract class RasterLayer extends Layer
 
   public final TileImageProvider createTileImageProvider(G3MRenderContext rc, LayerTilesRenderParameters layerTilesRenderParameters)
   {
-    return new RasterLayerTileImageProvider(this, rc.getDownloader());
+    if (_tileImageProvider == null)
+    {
+      _tileImageProvider = new RasterLayerTileImageProvider(this, rc.getDownloader());
+    }
+    _tileImageProvider._retain();
+    return _tileImageProvider;
   }
 
   public final TileImageContribution contribution(Tile tile)

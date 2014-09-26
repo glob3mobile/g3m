@@ -21,7 +21,7 @@ package org.glob3.mobile.generated;
 //class IBufferDownloadListener;
 //class IStringUtils;
 //class GEORasterSymbolizer;
-
+//class TiledVectorLayerTileImageProvider;
 
 public class TiledVectorLayer extends VectorLayer
 {
@@ -33,7 +33,7 @@ public class TiledVectorLayer extends VectorLayer
 
   private IMathUtils   _mu;
   private IStringUtils _su;
-  private TileImageProvider _tileImageProvider;
+  private TiledVectorLayerTileImageProvider _tileImageProvider;
 
   private TiledVectorLayer(GEORasterSymbolizer symbolizer, String urlTemplate, Sector dataSector, java.util.ArrayList<LayerTilesRenderParameters> parametersVector, TimeInterval timeToCache, boolean readExpired, float transparency, LayerCondition condition, String disclaimerInfo)
   {
@@ -148,6 +148,7 @@ public class TiledVectorLayer extends VectorLayer
     _symbolizer = null;
     if (_tileImageProvider != null)
     {
+      _tileImageProvider.layerDeleted(this);
       _tileImageProvider._release();
     }
     super.dispose();

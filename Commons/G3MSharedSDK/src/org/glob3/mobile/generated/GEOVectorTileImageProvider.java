@@ -171,7 +171,7 @@ public class GEOVectorTileImageProvider extends TileImageProvider
 
   public final TileImageContribution contribution(Tile tile)
   {
-    return _layer.contribution(tile);
+    return (_layer == null) ? null : _layer.contribution(tile);
   }
 
   public final void create(Tile tile, TileImageContribution contribution, Vector2I resolution, long tileDownloadPriority, boolean logDownloadActivity, TileImageListener listener, boolean deleteListener, FrameTasksExecutor frameTasksExecutor)
@@ -213,6 +213,15 @@ public class GEOVectorTileImageProvider extends TileImageProvider
   
     if (canvas != null)
        canvas.dispose();
+  }
+
+  public final void layerDeleted(GEOVectorLayer layer)
+  {
+    if (layer != _layer)
+    {
+      throw new RuntimeException("Logic error");
+    }
+    _layer = layer;
   }
 
 }
