@@ -304,10 +304,6 @@ Box* PointCloudsRenderer::PointCloudInnerNode::calculateBounds() {
 }
 
 PointCloudsRenderer::PointCloudInnerNode::~PointCloudInnerNode() {
-//  delete _children[0];
-//  delete _children[1];
-//  delete _children[2];
-//  delete _children[3];
   for (int i = 0; i < 4; i++) {
     PointCloudNode* child = _children[i];
     if (child != NULL) {
@@ -655,10 +651,17 @@ void PointCloudsRenderer::PointCloudLeafNode::onLevelBuffersDownload(int level,
       THROW_EXCEPTION("Logic error");
     }
 
+    if (_currentLoadedLevel+1 != level) {
+      delete verticesBuffer;
+      delete heightsBuffer;
+      return;
+    }
+
     _levelsVerticesBuffers[level] = verticesBuffer;
     _levelsHeightsBuffers[level]  = heightsBuffer;
 
     _currentLoadedLevel = level;
+//    ILogger::instance()->logInfo("node %s changed _currentLoadedLevel=%d (1)", _id.c_str(), _currentLoadedLevel);
 
     delete _mesh;
     _mesh = NULL;
@@ -840,7 +843,6 @@ long long PointCloudsRenderer::PointCloudLeafNode::rawRender(const PointCloud* p
   else {
     if (_neededLevel > _currentLoadedLevel) {
       if (_loadingLevel < 0) {
-        //loadLevel(pointCloud, rc, _currentLoadedLevel + 1);
         _loadingLevel = _currentLoadedLevel + 1;
 
         _loadingLevelRequestID = pointCloud->requestBufferForLevel(rc,
@@ -861,6 +863,7 @@ long long PointCloudsRenderer::PointCloudLeafNode::rawRender(const PointCloud* p
         _levelsHeightsBuffers[i] = NULL;
       }
       _currentLoadedLevel = _neededLevel;
+//      ILogger::instance()->logInfo("node %s changed _currentLoadedLevel=%d (2)", _id.c_str(), _currentLoadedLevel);
       delete _mesh;
       _mesh = NULL;
     }
@@ -889,6 +892,12 @@ void PointCloudsRenderer::PointCloudLeafNode::stoppedRendering(const G3MRenderCo
   _firstPointsColorsBuffer = NULL;
 
   if (_currentLoadedLevel > _preloadedLevel) {
+    _loadingLevel = -1;
+    if (_loadingLevelRequestID >= 0) {
+      rc->getDownloader()->cancelRequest(_loadingLevelRequestID);
+      _loadingLevelRequestID = -1;
+    }
+
     for (int i = 0; i < _levelsCount; i++) {
       delete _levelsVerticesBuffers[i];
       _levelsVerticesBuffers[i] = NULL;
@@ -897,12 +906,7 @@ void PointCloudsRenderer::PointCloudLeafNode::stoppedRendering(const G3MRenderCo
       _levelsHeightsBuffers[i] = NULL;
     }
     _currentLoadedLevel = _preloadedLevel;
-
-    _loadingLevel = -1;
-    if (_loadingLevelRequestID >= 0) {
-      rc->getDownloader()->cancelRequest(_loadingLevelRequestID);
-      _loadingLevelRequestID = -1;
-    }
+//    ILogger::instance()->logInfo("node %s changed _currentLoadedLevel=%d (3)", _id.c_str(), _currentLoadedLevel);
   }
 }
 
