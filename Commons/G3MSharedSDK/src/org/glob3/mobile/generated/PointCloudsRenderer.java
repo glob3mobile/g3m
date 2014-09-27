@@ -854,7 +854,14 @@ public class PointCloudsRenderer extends DefaultRenderer
     
         if ((_levelsVerticesBuffers[level] != null) || (_levelsHeightsBuffers[level] != null))
         {
-          throw new RuntimeException("Logic error");
+    //      THROW_EXCEPTION("Logic error");
+    
+          if (_levelsVerticesBuffers[level] != null)
+             _levelsVerticesBuffers[level].dispose();
+          _levelsVerticesBuffers[level] = null;
+          if (_levelsHeightsBuffers[level] != null)
+             _levelsHeightsBuffers[level].dispose();
+          _levelsHeightsBuffers[level] = null;
         }
     
         if (_currentLoadedLevel+1 != level)
