@@ -648,7 +648,12 @@ void PointCloudsRenderer::PointCloudLeafNode::onLevelBuffersDownload(int level,
 
     if ((_levelsVerticesBuffers[level] != NULL) ||
         (_levelsHeightsBuffers[level]  != NULL)) {
-      THROW_EXCEPTION("Logic error");
+//      THROW_EXCEPTION("Logic error");
+
+      delete _levelsVerticesBuffers[level];
+      _levelsVerticesBuffers[level] = NULL;
+      delete _levelsHeightsBuffers[level];
+      _levelsHeightsBuffers[level]  = NULL;
     }
 
     if (_currentLoadedLevel+1 != level) {
