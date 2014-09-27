@@ -224,10 +224,6 @@ public class PointCloudsRenderer extends DefaultRenderer
 
     public void dispose()
     {
-    //  delete _children[0];
-    //  delete _children[1];
-    //  delete _children[2];
-    //  delete _children[3];
       for (int i = 0; i < 4; i++)
       {
         PointCloudNode child = _children[i];
@@ -685,7 +681,6 @@ public class PointCloudsRenderer extends DefaultRenderer
         {
           if (_loadingLevel < 0)
           {
-            //loadLevel(pointCloud, rc, _currentLoadedLevel + 1);
             _loadingLevel = _currentLoadedLevel + 1;
     
             _loadingLevelRequestID = pointCloud.requestBufferForLevel(rc, _id, _loadingLevel, new PointCloudLeafNodeLevelListener(this, _loadingLevel, rc.getThreadUtils()), true);
@@ -703,6 +698,7 @@ public class PointCloudsRenderer extends DefaultRenderer
             _levelsHeightsBuffers[i] = null;
           }
           _currentLoadedLevel = _neededLevel;
+    //      ILogger::instance()->logInfo("node %s changed _currentLoadedLevel=%d (2)", _id.c_str(), _currentLoadedLevel);
           if (_mesh != null)
              _mesh.dispose();
           _mesh = null;
@@ -815,6 +811,13 @@ public class PointCloudsRenderer extends DefaultRenderer
     
       if (_currentLoadedLevel > _preloadedLevel)
       {
+        _loadingLevel = -1;
+        if (_loadingLevelRequestID >= 0)
+        {
+          rc.getDownloader().cancelRequest(_loadingLevelRequestID);
+          _loadingLevelRequestID = -1;
+        }
+    
         for (int i = 0; i < _levelsCount; i++)
         {
           if (_levelsVerticesBuffers[i] != null)
@@ -826,13 +829,7 @@ public class PointCloudsRenderer extends DefaultRenderer
           _levelsHeightsBuffers[i] = null;
         }
         _currentLoadedLevel = _preloadedLevel;
-    
-        _loadingLevel = -1;
-        if (_loadingLevelRequestID >= 0)
-        {
-          rc.getDownloader().cancelRequest(_loadingLevelRequestID);
-          _loadingLevelRequestID = -1;
-        }
+    //    ILogger::instance()->logInfo("node %s changed _currentLoadedLevel=%d (3)", _id.c_str(), _currentLoadedLevel);
       }
     }
 
@@ -860,10 +857,20 @@ public class PointCloudsRenderer extends DefaultRenderer
           throw new RuntimeException("Logic error");
         }
     
+        if (_currentLoadedLevel+1 != level)
+        {
+          if (verticesBuffer != null)
+             verticesBuffer.dispose();
+          if (heightsBuffer != null)
+             heightsBuffer.dispose();
+          return;
+        }
+    
         _levelsVerticesBuffers[level] = verticesBuffer;
         _levelsHeightsBuffers[level] = heightsBuffer;
     
         _currentLoadedLevel = level;
+    //    ILogger::instance()->logInfo("node %s changed _currentLoadedLevel=%d (1)", _id.c_str(), _currentLoadedLevel);
     
         if (_mesh != null)
            _mesh.dispose();
