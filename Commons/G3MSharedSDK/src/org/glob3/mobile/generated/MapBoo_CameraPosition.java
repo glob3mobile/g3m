@@ -39,10 +39,6 @@ public class MapBoo_CameraPosition
     return _animated;
   }
 
-
-  ///#include "MultiLayerTileTexturizer.hpp"
-  
-  
   public final String description()
   {
     IStringBuilder isb = IStringBuilder.newStringBuilder();

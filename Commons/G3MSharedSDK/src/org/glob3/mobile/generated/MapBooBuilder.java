@@ -48,7 +48,6 @@ public abstract class MapBooBuilder
     final float verticalExaggeration = 1F;
   
     TileTexturizer texturizer = new DefaultTileTexturizer(new DownloaderImageBuilder(new URL("http://www.mapboo.com/web/img/tileNotFound.jpg")));
-  //  TileRasterizer* tileRasterizer = NULL;
   
     final boolean renderDebug = false;
     final boolean useTilesSplitBudget = true;
@@ -74,7 +73,6 @@ public abstract class MapBooBuilder
     TouchEventType touchEventTypeOfTerrainTouchListener = TouchEventType.DownUp;
   
     PlanetRenderer result = new PlanetRenderer(tessellator, elevationDataProvider, true, verticalExaggeration, texturizer, _layerSet, parameters, showStatistics, tileDownloadPriority, renderedSector, renderTileMeshes, logTilesPetitions, tileRenderingListener, changedRendererInfoListener, touchEventTypeOfTerrainTouchListener);
-  //                                              tileRasterizer,
   
     if (_enableNotifications)
     {

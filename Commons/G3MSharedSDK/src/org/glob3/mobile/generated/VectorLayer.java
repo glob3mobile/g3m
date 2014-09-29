@@ -29,7 +29,7 @@ public abstract class VectorLayer extends Layer
                         final java.util.ArrayList<Info> layerInfo) {
     super(transparency, condition, layerInfo);
     _parametersVector.addAll(parametersVector);
-    _selectedLayerTilesRenderParametersIndex = -1;
+    _selectedLayerTilesRenderParametersIndex = 0;
   }
 
   public void dispose()

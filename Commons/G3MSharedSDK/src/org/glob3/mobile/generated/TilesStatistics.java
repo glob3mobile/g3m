@@ -31,7 +31,6 @@ package org.glob3.mobile.generated;
 
 
 //class EllipsoidShape;
-//class TileRasterizer;
 
 
 public class TilesStatistics
