@@ -132,12 +132,6 @@ public class ChessboardLayer extends ProceduralLayer
     return _dataSector;
   }
 
-  public final java.util.ArrayList<Petition> createTileMapPetitions(G3MRenderContext rc, LayerTilesRenderParameters layerTilesRenderParameters, Tile tile)
-  {
-    java.util.ArrayList<Petition> petitions = new java.util.ArrayList<Petition>();
-    return petitions;
-  }
-
   public final String description()
   {
     return "[ChessboardLayer]";

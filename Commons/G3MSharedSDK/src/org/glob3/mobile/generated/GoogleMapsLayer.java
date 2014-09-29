@@ -150,64 +150,6 @@ public class GoogleMapsLayer extends RasterLayer
   }
 
 
-  public final java.util.ArrayList<Petition> createTileMapPetitions(G3MRenderContext rc, LayerTilesRenderParameters layerTilesRenderParameters, Tile tile)
-  {
-    java.util.ArrayList<Petition> petitions = new java.util.ArrayList<Petition>();
-  
-    final Sector tileSector = tile._sector;
-  
-    IStringBuilder isb = IStringBuilder.newStringBuilder();
-  
-    // http://maps.googleapis.com/maps/api/staticmap?center=New+York,NY&zoom=13&size=600x300&key=AIzaSyC9pospBjqsfpb0Y9N3E3uNMD8ELoQVOrc&sensor=false
-  
-    /*
-     http: //maps.googleapis.com/maps/api/staticmap
-     ?center=New+York,NY
-     &zoom=13
-     &size=600x300
-     &key=AIzaSyC9pospBjqsfpb0Y9N3E3uNMD8ELoQVOrc
-     &sensor=false
-     */
-  
-    isb.addString("http://maps.googleapis.com/maps/api/staticmap?sensor=false");
-  
-    isb.addString("&center=");
-    isb.addDouble(tileSector._center._latitude._degrees);
-    isb.addString(",");
-    isb.addDouble(tileSector._center._longitude._degrees);
-  
-    final int level = tile._level;
-    isb.addString("&zoom=");
-    isb.addInt(level);
-  
-    isb.addString("&size=");
-    isb.addInt(_parameters._tileTextureResolution._x);
-    isb.addString("x");
-    isb.addInt(_parameters._tileTextureResolution._y);
-  
-    isb.addString("&format=jpg");
-  
-  
-    //  isb->addString("&maptype=roadmap);
-    //  isb->addString("&maptype=satellite");
-    isb.addString("&maptype=hybrid");
-    //  isb->addString("&maptype=terrain");
-  
-  
-    isb.addString("&key=");
-    isb.addString(_key);
-  
-  
-    final String path = isb.getString();
-  
-    if (isb != null)
-       isb.dispose();
-  
-    petitions.add(new Petition(tileSector, new URL(path, false), getTimeToCache(), getReadExpired(), true, _transparency));
-  
-    return petitions;
-  }
-
   public final String description()
   {
     return "[GoogleMapsLayer]";

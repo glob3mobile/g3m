@@ -227,38 +227,6 @@ public class BingMapsLayer extends RasterLayer
     return new URL();
   }
 
-  public final java.util.ArrayList<Petition> createTileMapPetitions(G3MRenderContext rc, LayerTilesRenderParameters layerTilesRenderParameters, Tile tile)
-  {
-    java.util.ArrayList<Petition> petitions = new java.util.ArrayList<Petition>();
-  
-    final IStringUtils su = IStringUtils.instance();
-  
-    final int level = tile._level;
-    final int column = tile._column;
-    final int numRows = (int) IMathUtils.instance().pow(2.0, level);
-    final int row = numRows - tile._row - 1;
-  
-    final int subdomainsSize = _imageUrlSubdomains.size();
-    String subdomain = "";
-    if (subdomainsSize > 0)
-    {
-      // select subdomain based on fixed data (instead of round-robin) to be cache friendly
-      final int subdomainsIndex = IMathUtils.instance().abs(level + column + row) % subdomainsSize;
-      subdomain = _imageUrlSubdomains.get(subdomainsIndex);
-    }
-  
-    final String quadkey = getQuadKey(level, column, row);
-  
-    String path = _imageUrl;
-    path = su.replaceSubstring(path, "{subdomain}", subdomain);
-    path = su.replaceSubstring(path, "{quadkey}", quadkey);
-    path = su.replaceSubstring(path, "{culture}", _culture);
-  
-    petitions.add(new Petition(tile._sector, new URL(path, false), getTimeToCache(), getReadExpired(), true, _transparency));
-  
-    return petitions;
-  }
-
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
 //  boolean isReady();
 

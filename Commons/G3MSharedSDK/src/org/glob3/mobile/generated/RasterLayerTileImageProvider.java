@@ -82,7 +82,7 @@ public class RasterLayerTileImageProvider extends TileImageProvider
     {
       throw new RuntimeException("Logic error");
     }
-    _layer = layer;
+    _layer = null;
   }
 
 }

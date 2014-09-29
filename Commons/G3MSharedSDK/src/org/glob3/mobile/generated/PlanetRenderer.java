@@ -674,15 +674,12 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
       errors.add("Texturizer is null");
       return RenderState.error(errors);
     }
-    else
-    {
-      final RenderState texturizerRenderState = _texturizer.getRenderState(_layerSet);
-      if (texturizerRenderState._type != RenderState_Type.RENDER_READY)
-      {
-        return texturizerRenderState;
-      }
-    }
   
+    final RenderState texturizerRenderState = _texturizer.getRenderState(_layerSet);
+    if (texturizerRenderState._type != RenderState_Type.RENDER_READY)
+    {
+      return texturizerRenderState;
+    }
   
     if (_firstLevelTilesJustCreated)
     {

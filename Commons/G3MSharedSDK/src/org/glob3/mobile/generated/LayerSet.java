@@ -27,7 +27,6 @@ package org.glob3.mobile.generated;
 //class G3MEventContext;
 //class Geodetic3D;
 //class RenderState;
-//class Petition;
 
 
 public class LayerSet implements ChangedInfoListener
@@ -485,48 +484,6 @@ public class LayerSet implements ChangedInfoListener
     {
       _layers.get(i).setEnable(false);
     }
-  }
-
-  public final java.util.ArrayList<Petition> createTileMapPetitions(G3MRenderContext rc, LayerTilesRenderParameters layerTilesRenderParameters, Tile tile)
-  {
-    java.util.ArrayList<Petition> petitions = new java.util.ArrayList<Petition>();
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning REMOVE createTileMapPetitions??
-  //  const int layersSize = _layers.size();
-  //  for (int i = 0; i < layersSize; i++) {
-  //    Layer* layer = _layers[i];
-  //    if (layer->isAvailable(tile)) {
-  ///#ifdef C_CODE
-  //      const Tile* petitionTile = tile;
-  ///#else
-  //      Tile* petitionTile = tile;
-  ///#endif
-  //      const int maxLevel = layer->getLayerTilesRenderParameters()->_maxLevel;
-  //      while ((petitionTile->_level > maxLevel) && (petitionTile != NULL)) {
-  //        petitionTile = petitionTile->getParent();
-  //      }
-  //
-  //      if (petitionTile == NULL) {
-  //        ILogger::instance()->logError("Can't find a valid tile for petitions");
-  //      }
-  //
-  //      std::vector<Petition*> tilePetitions = layer->createTileMapPetitions(rc,
-  //                                                                           layerTilesRenderParameters,
-  //                                                                           petitionTile);
-  //
-  //      const int tilePetitionsSize = tilePetitions.size();
-  //      for (int j = 0; j < tilePetitionsSize; j++) {
-  //        petitions.push_back( tilePetitions[j] );
-  //      }
-  //    }
-  //  }
-  //
-  //  if (petitions.empty()) {
-  //    rc->getLogger()->logWarning("Can't create map petitions for tile %s",
-  //                                tile->_id.c_str());
-  //  }
-  
-    return petitions;
   }
 
   public final TileImageProvider getTileImageProvider(G3MRenderContext rc, LayerTilesRenderParameters layerTilesRenderParameters)

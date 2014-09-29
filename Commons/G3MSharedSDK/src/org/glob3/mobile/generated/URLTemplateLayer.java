@@ -242,29 +242,6 @@ public class URLTemplateLayer extends RasterLayer
     return new URL();
   }
 
-  public final java.util.ArrayList<Petition> createTileMapPetitions(G3MRenderContext rc, LayerTilesRenderParameters layerTilesRenderParameters, Tile tile)
-  {
-    java.util.ArrayList<Petition> petitions = new java.util.ArrayList<Petition>();
-  
-    final Sector tileSector = tile._sector;
-    if (!_dataSector.touchesWith(tileSector))
-    {
-      return petitions;
-    }
-  
-    final Sector sector = tileSector.intersection(_dataSector);
-    if (sector._deltaLatitude.isZero() || sector._deltaLongitude.isZero())
-    {
-      return petitions;
-    }
-  
-    final String path = getPath(layerTilesRenderParameters, tile, sector);
-  
-    petitions.add(new Petition(sector, new URL(path, false), _timeToCache, _readExpired, _isTransparent, _transparency));
-  
-    return petitions;
-  }
-
   public final RenderState getRenderState()
   {
     _errors.clear();

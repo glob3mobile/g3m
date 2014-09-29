@@ -548,7 +548,7 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
     {
       throw new RuntimeException("Logic error");
     }
-    _layer = layer;
+    _layer = null;
   }
 
   public final TileImageContribution contribution(Tile tile)

@@ -771,12 +771,10 @@ public class Tile
 
   public final void prune(TileTexturizer texturizer, ElevationDataProvider elevationDataProvider, java.util.ArrayList<String> tilesStoppedRendering)
   {
-    if (texturizer == null && elevationDataProvider == null && _subtiles != null)
-    {
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning remove debug code
-      System.out.print("break point\n");
-    }
+  //  if (texturizer == NULL && elevationDataProvider == NULL && _subtiles != NULL) {
+  ///#warning remove debug code
+  //    printf("break point\n");
+  //  }
   
     if (_subtiles != null)
     {

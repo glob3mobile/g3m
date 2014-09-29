@@ -51,43 +51,6 @@ public abstract class TMSLayer extends RasterLayer
      _isTransparent = isTransparent;
   }
 
-  public final java.util.ArrayList<Petition> createTileMapPetitions(G3MRenderContext rc, LayerTilesRenderParameters layerTilesRenderParameters, Tile tile)
-  {
-  
-    java.util.ArrayList<Petition> petitions = new java.util.ArrayList<Petition>();
-  
-    final Sector tileSector = tile._sector;
-    if (!_dataSector.touchesWith(tileSector))
-    {
-      return petitions;
-    }
-  
-    IStringBuilder isb = IStringBuilder.newStringBuilder();
-    isb.addString(_mapServerURL._path);
-    isb.addString(_mapLayer);
-    isb.addString("/");
-    isb.addInt(tile._level);
-    isb.addString("/");
-    isb.addInt(tile._column);
-    isb.addString("/");
-    isb.addInt(tile._row);
-    isb.addString(".");
-    isb.addString(IStringUtils.instance().replaceSubstring(_format, "image/", ""));
-  
-    ILogger.instance().logInfo(isb.getString());
-  
-  
-    Petition petition = new Petition(tileSector, new URL(isb.getString(), false), _timeToCache, _readExpired, _isTransparent, _transparency);
-  
-    if (isb != null)
-       isb.dispose();
-  
-    petitions.add(petition);
-  
-     return petitions;
-  
-  }
-
   public final URL getFeatureInfoURL(Geodetic2D g, Sector sector)
   {
     return URL.nullURL();

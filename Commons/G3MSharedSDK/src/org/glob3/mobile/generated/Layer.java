@@ -30,7 +30,6 @@ package org.glob3.mobile.generated;
 //class G3MContext;
 //class Sector;
 //class LayerTouchEvent;
-//class Petition;
 //class TileImageProvider;
 //class Info;
 
@@ -302,8 +301,6 @@ public abstract class Layer
   {
     _title = title;
   }
-
-  public abstract java.util.ArrayList<Petition> createTileMapPetitions(G3MRenderContext rc, LayerTilesRenderParameters layerTilesRenderParameters, Tile tile);
 
   public abstract TileImageProvider createTileImageProvider(G3MRenderContext rc, LayerTilesRenderParameters layerTilesRenderParameters);
 

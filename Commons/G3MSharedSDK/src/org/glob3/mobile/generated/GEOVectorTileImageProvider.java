@@ -221,7 +221,7 @@ public class GEOVectorTileImageProvider extends TileImageProvider
     {
       throw new RuntimeException("Logic error");
     }
-    _layer = layer;
+    _layer = null;
   }
 
 }

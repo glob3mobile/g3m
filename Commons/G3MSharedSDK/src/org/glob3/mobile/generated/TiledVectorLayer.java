@@ -184,12 +184,6 @@ public class TiledVectorLayer extends VectorLayer
     return null;
   }
 
-  public final java.util.ArrayList<Petition> createTileMapPetitions(G3MRenderContext rc, LayerTilesRenderParameters layerTilesRenderParameters, Tile tile)
-  {
-    java.util.ArrayList<Petition> petitions = new java.util.ArrayList<Petition>();
-    return petitions;
-  }
-
   public final TileImageProvider createTileImageProvider(G3MRenderContext rc, LayerTilesRenderParameters layerTilesRenderParameters)
   {
     if (_tileImageProvider == null)
