@@ -32,8 +32,8 @@ import android.widget.RelativeLayout;
 
 
 public class MainActivity
-         extends
-            Activity {
+extends
+Activity {
 
    private G3MWidget_Android _g3mWidget;
 
@@ -69,7 +69,8 @@ public class MainActivity
       final PointCloudsRenderer pcr = new PointCloudsRenderer();
 
       final URL serverURL = new URL("http://glob3mobile.dyndns.org:8080");
-      final String cloudName = "Loudoun-VA_simplified2_LOD";
+      //  final String cloudName = "Loudoun-VA_simplified2_LOD";
+      final String cloudName = "Loudoun-VA_fragment_LOD";
       final long downloadPriority = DownloadPriority.LOWER;
       final TimeInterval timeToCache = TimeInterval.zero();
       final boolean readExpired = false;
@@ -88,8 +89,95 @@ public class MainActivity
 
       builder.addRenderer(pcr);
 
+<<<<<<< HEAD
+      //      final TimeInterval connectTimeout = TimeInterval.fromSeconds(60);
+      //      final TimeInterval readTimeout = TimeInterval.fromSeconds(65);
+      //      final boolean saveInBackground = true;
+
+      builder.getPlanetRendererBuilder().setLayerSet(createLayerSet());
+      // builder.getPlanetRendererBuilder().setRenderDebug(true);
+      // builder.getPlanetRendererBuilder().setLogTilesPetitions(true);
+
+      return builder.createWidget();
+   }
+
+
+   private static class SampleRasterSymbolizer
+   extends
+   GEORasterSymbolizer {
+
+      private static final Color FROM_COLOR = Color.fromRGBA(0.7f, 0, 0, 0.5f);
+
+
+      private static GEO2DLineRasterStyle createPolygonLineRasterStyle(final GEOGeometry geometry) {
+         final JSONObject properties = geometry.getFeature().getProperties();
+         final int colorIndex = (int) properties.getAsNumber("mapcolor7", 0);
+         final Color color = FROM_COLOR.wheelStep(7, colorIndex).muchLighter().muchLighter();
+         final float dashLengths[] = {};
+         final int dashCount = 0;
+         return new GEO2DLineRasterStyle(color, 2, StrokeCap.CAP_ROUND, StrokeJoin.JOIN_ROUND, 1, dashLengths, dashCount, 0);
+      }
+
+
+      private static GEO2DSurfaceRasterStyle createPolygonSurfaceRasterStyle(final GEOGeometry geometry) {
+         final JSONObject properties = geometry.getFeature().getProperties();
+         final int colorIndex = (int) properties.getAsNumber("mapcolor7", 0);
+         final Color color = FROM_COLOR.wheelStep(7, colorIndex);
+         return new GEO2DSurfaceRasterStyle(color);
+      }
+
+
+      @Override
+      public GEORasterSymbolizer copy() {
+         return new SampleRasterSymbolizer();
+      }
+
+
+      @Override
+      public ArrayList<GEORasterSymbol> createSymbols(final GEO2DPointGeometry geometry) {
+         return null;
+      }
+
+
+      @Override
+      public ArrayList<GEORasterSymbol> createSymbols(final GEO2DLineStringGeometry geometry) {
+         return null;
+      }
+
+
+      @Override
+      public ArrayList<GEORasterSymbol> createSymbols(final GEO2DMultiLineStringGeometry geometry) {
+         return null;
+      }
+
+
+      @Override
+      public ArrayList<GEORasterSymbol> createSymbols(final GEO2DPolygonGeometry geometry) {
+         final ArrayList<GEORasterSymbol> symbols = new ArrayList<GEORasterSymbol>();
+         final GEOPolygonRasterSymbol symbol = new GEOPolygonRasterSymbol( //
+                  geometry.getPolygonData(), //
+                  createPolygonLineRasterStyle(geometry), //
+                  createPolygonSurfaceRasterStyle(geometry) //
+                  );
+         symbols.add(symbol);
+         return symbols;
+      }
+
+
+      @Override
+      public ArrayList<GEORasterSymbol> createSymbols(final GEO2DMultiPolygonGeometry geometry) {
+         final ArrayList<GEORasterSymbol> symbols = new ArrayList<GEORasterSymbol>();
+
+         final GEO2DLineRasterStyle lineStyle = createPolygonLineRasterStyle(geometry);
+         final GEO2DSurfaceRasterStyle surfaceStyle = createPolygonSurfaceRasterStyle(geometry);
+
+         for (final GEO2DPolygonData polygonData : geometry.getPolygonsData()) {
+            symbols.add(new GEOPolygonRasterSymbol(polygonData, lineStyle, surfaceStyle));
+         }
+=======
       final LayerSet layerSet = new LayerSet();
       final boolean forceFirstLevelTilesRenderOnStart = true;
+>>>>>>> d5477722ec9bd7d16e4a2227a98720d818e6d038
 
       layerSet.createLayerTilesRenderParameters(forceFirstLevelTilesRenderOnStart, new ArrayList<String>());
 
@@ -128,6 +216,22 @@ public class MainActivity
       builder.setHUDRenderer(hudRenderer);
       builder.setInfoDisplay(infoDisplay);
 
+<<<<<<< HEAD
+      final TiledVectorLayer tiledVectorLayer = TiledVectorLayer.newMercator( //
+               symbolizer, //
+               urlTemplate, //
+               sector, // sector
+               firstLevel, //
+               maxLevel, //
+               TimeInterval.fromDays(30), // timeToCache
+               true, // readExpired
+               1, // transparency
+               new LevelTileCondition(15, 21), // condition
+               "" // disclaimerInfo
+               );
+      // layerSet.addLayer(tiledVectorLayer);
+=======
+>>>>>>> d5477722ec9bd7d16e4a2227a98720d818e6d038
 
       // builder.getPlanetRendererBuilder().setRenderDebug(true);
       // builder.getPlanetRendererBuilder().setLogTilesPetitions(true);
