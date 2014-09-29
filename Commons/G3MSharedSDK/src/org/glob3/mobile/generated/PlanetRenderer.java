@@ -731,14 +731,14 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
           }
         }
   
-        if (_texturizer != null)
-        {
-          final RenderState texturizerRenderState = _texturizer.getRenderState(_layerSet);
-          if (texturizerRenderState._type != RenderState_Type.RENDER_READY)
-          {
-            return texturizerRenderState;
-          }
-        }
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning Ask Vidal
+  //      if (_texturizer != NULL) {
+  //        const RenderState texturizerRenderState = _texturizer->getRenderState(_layerSet);
+  //        if (texturizerRenderState._type != RENDER_READY) {
+  //          return texturizerRenderState;
+  //        }
+  //      }
   
         _allFirstLevelTilesAreTextureSolved = true;
       }
