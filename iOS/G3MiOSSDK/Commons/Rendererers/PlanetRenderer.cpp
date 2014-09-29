@@ -632,23 +632,18 @@ void PlanetRenderer::render(const G3MRenderContext* rc,
 
   const IDeviceInfo* deviceInfo = IFactory::instance()->getDeviceInfo();
   const float deviceQualityFactor = deviceInfo->getQualityFactor();
+  const double factor = _tilesRenderParameters->_texturePixelsPerInch; //UNIT: Dots / Inch^2 (ppi)
+  const double correctionFactor = (deviceInfo->getDPI() * deviceQualityFactor) / factor;
+
+  const double texWidth  = correctionFactor * layerTilesRenderParameters->_tileTextureResolution._x;
+  const double texHeight = correctionFactor * layerTilesRenderParameters->_tileTextureResolution._y;
+
+  const double texWidthSquared  = texWidth  * texWidth;
+  const double texHeightSquared = texHeight * texHeight;
 
   const int firstLevelTilesCount = _firstLevelTiles.size();
 
   const Frustum* cameraFrustumInModelCoordinates = _lastCamera->getFrustumInModelCoordinates();
-
-  //Texture Size for every tile
-  int texWidth  = layerTilesRenderParameters->_tileTextureResolution._x;
-  int texHeight = layerTilesRenderParameters->_tileTextureResolution._y;
-
-  const double factor = _tilesRenderParameters->_texturePixelsPerInch; //UNIT: Dots / Inch^2 (ppi)
-  const double correctionFactor = (deviceInfo->getDPI() * deviceQualityFactor) / factor;
-
-  texWidth  *= correctionFactor;
-  texHeight *= correctionFactor;
-
-  const double texWidthSquared  = texWidth  * texWidth;
-  const double texHeightSquared = texHeight * texHeight;
 
   const double nowInMS = _lastSplitTimer->nowInMilliseconds();
 
