@@ -530,12 +530,13 @@ RenderState PlanetRenderer::getRenderState(const G3MRenderContext* rc) {
         }
       }
 
-      if (_texturizer != NULL) {
-        const RenderState texturizerRenderState = _texturizer->getRenderState(_layerSet);
-        if (texturizerRenderState._type != RENDER_READY) {
-          return texturizerRenderState;
-        }
-      }
+#warning Ask Vidal
+//      if (_texturizer != NULL) {
+//        const RenderState texturizerRenderState = _texturizer->getRenderState(_layerSet);
+//        if (texturizerRenderState._type != RENDER_READY) {
+//          return texturizerRenderState;
+//        }
+//      }
 
       _allFirstLevelTilesAreTextureSolved = true;
     }
