@@ -92,13 +92,8 @@ public:
            const float                       transparency   = 1,
            std::vector<const Info*>*   layerInfo = new std::vector<const Info*>());
 
-  std::vector<Petition*> createTileMapPetitions(const G3MRenderContext* rc,
-                                                const LayerTilesRenderParameters* layerTilesRenderParameters,
-                                                const Tile* tile) const;
-
   URL getFeatureInfoURL(const Geodetic2D& g,
                         const Sector& sector) const;
-
 
   void setExtraParameter(const std::string& extraParameter) {
     _extraParameter = extraParameter;

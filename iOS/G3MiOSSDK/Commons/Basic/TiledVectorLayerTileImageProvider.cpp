@@ -504,5 +504,5 @@ void TiledVectorLayerTileImageProvider::layerDeleted(const TiledVectorLayer* lay
   if (layer != _layer) {
     THROW_EXCEPTION("Logic error");
   }
-  _layer = layer;
+  _layer = NULL;
 }

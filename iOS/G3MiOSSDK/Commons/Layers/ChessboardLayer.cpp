@@ -43,13 +43,6 @@ RenderState ChessboardLayer::getRenderState() {
   return RenderState::ready();
 }
 
-std::vector<Petition*> ChessboardLayer::createTileMapPetitions(const G3MRenderContext* rc,
-                                                               const LayerTilesRenderParameters* layerTilesRenderParameters,
-                                                               const Tile* tile) const {
-  std::vector<Petition*> petitions;
-  return petitions;
-}
-
 URL ChessboardLayer::getFeatureInfoURL(const Geodetic2D& position,
                                        const Sector& sector) const {
   return URL();

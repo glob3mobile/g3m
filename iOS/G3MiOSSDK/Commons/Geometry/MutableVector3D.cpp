@@ -10,10 +10,6 @@
 
 
 MutableVector3D MutableVector3D::normalized() const {
-//  if (isZero()) {
-//    return MutableVector3D();
-//  }
-#warning vtp asked dgd: "check nan and zero cases????"
   const double d = length();
   return MutableVector3D(_x / d, _y /d, _z / d);
 }
@@ -68,7 +64,6 @@ MutableVector3D MutableVector3D::rotatedAroundAxis(const MutableVector3D& axis,
 
 double MutableVector3D::normalizedDot(const MutableVector3D& a,
                                       const MutableVector3D& b) {
-#warning vtp asked dgd: "check nan and zero cases????"
   const double aLength = a.length();
   const double a_x = a._x / aLength;
   const double a_y = a._y / aLength;

@@ -65,10 +65,6 @@ public:
     return _dataSector;
   }
 
-  std::vector<Petition*> createTileMapPetitions(const G3MRenderContext* rc,
-                                                const LayerTilesRenderParameters* layerTilesRenderParameters,
-                                                const Tile* tile) const;
-
   const std::string description() const {
     return "[ChessboardLayer]";
   }

@@ -25,7 +25,6 @@ class Tile;
 class G3MEventContext;
 class Geodetic3D;
 class RenderState;
-class Petition;
 
 
 class LayerSet : public ChangedInfoListener {
@@ -112,10 +111,6 @@ public:
   void takeLayersFrom(LayerSet* that);
 
   void disableAllLayers();
-
-  std::vector<Petition*> createTileMapPetitions(const G3MRenderContext* rc,
-                                                const LayerTilesRenderParameters* layerTilesRenderParameters,
-                                                const Tile* tile) const;
 
   TileImageProvider* getTileImageProvider(const G3MRenderContext* rc,
                                           const LayerTilesRenderParameters* layerTilesRenderParameters) const;

@@ -117,11 +117,7 @@ public:
   
   URL getFeatureInfoURL(const Geodetic2D& position,
                         const Sector& sector) const;
-  
-  std::vector<Petition*> createTileMapPetitions(const G3MRenderContext* rc,
-                                                const LayerTilesRenderParameters* layerTilesRenderParameters,
-                                                const Tile* tile) const;
-  
+    
   bool isReady() const;
   
   void initialize(const G3MContext* context);

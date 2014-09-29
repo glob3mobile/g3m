@@ -158,5 +158,5 @@ void RasterLayerTileImageProvider::layerDeleted(const RasterLayer* layer) {
   if (layer != _layer) {
     THROW_EXCEPTION("Logic error");
   }
-  _layer = layer;
+  _layer = NULL;
 }

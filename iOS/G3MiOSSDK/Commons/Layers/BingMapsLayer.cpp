@@ -13,7 +13,6 @@
 #include "Tile.hpp"
 #include "IStringBuilder.hpp"
 #include "IStringUtils.hpp"
-#include "Petition.hpp"
 #include "IDownloader.hpp"
 #include "DownloadPriority.hpp"
 #include "IBufferDownloadListener.hpp"
@@ -296,43 +295,6 @@ const std::string BingMapsLayer::getQuadKey(const Tile* tile) {
   const int numRows = (int) IMathUtils::instance()->pow(2.0, level);
   const int row     = numRows - tile->_row - 1;
   return getQuadKey(level, tile->_column, row);
-}
-
-std::vector<Petition*> BingMapsLayer::createTileMapPetitions(const G3MRenderContext* rc,
-                                                             const LayerTilesRenderParameters* layerTilesRenderParameters,
-                                                             const Tile* tile) const {
-  std::vector<Petition*> petitions;
-  
-  const IStringUtils* su = IStringUtils::instance();
-  
-  const int level   = tile->_level;
-  const int column  = tile->_column;
-  const int numRows = (int) IMathUtils::instance()->pow(2.0, level);
-  const int row     = numRows - tile->_row - 1;
-  
-  const int subdomainsSize = _imageUrlSubdomains.size();
-  std::string subdomain = "";
-  if (subdomainsSize > 0) {
-    // select subdomain based on fixed data (instead of round-robin) to be cache friendly
-    const int subdomainsIndex =  IMathUtils::instance()->abs(level + column + row) % subdomainsSize;
-    subdomain = _imageUrlSubdomains[subdomainsIndex];
-  }
-  
-  const std::string quadkey = getQuadKey(level, column, row);
-  
-  std::string path = _imageUrl;
-  path = su->replaceSubstring(path, "{subdomain}", subdomain);
-  path = su->replaceSubstring(path, "{quadkey}",   quadkey);
-  path = su->replaceSubstring(path, "{culture}",   _culture);
-  
-  petitions.push_back( new Petition(tile->_sector,
-                                    URL(path, false),
-                                    getTimeToCache(),
-                                    getReadExpired(),
-                                    true,
-                                    _transparency) );
-  
-  return petitions;
 }
 
 const URL BingMapsLayer::createURL(const Tile* tile) const {

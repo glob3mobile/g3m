@@ -25,7 +25,6 @@ class Geodetic2D;
 class G3MContext;
 class Sector;
 class LayerTouchEvent;
-class Petition;
 class TileImageProvider;
 class Info;
 
@@ -125,10 +124,6 @@ public:
   const std::string getTitle() const;
 
   void setTitle(const std::string& title);
-
-  virtual std::vector<Petition*> createTileMapPetitions(const G3MRenderContext* rc,
-                                                        const LayerTilesRenderParameters* layerTilesRenderParameters,
-                                                        const Tile* tile) const = 0;
   
   virtual TileImageProvider* createTileImageProvider(const G3MRenderContext* rc,
                                                      const LayerTilesRenderParameters* layerTilesRenderParameters) const = 0;

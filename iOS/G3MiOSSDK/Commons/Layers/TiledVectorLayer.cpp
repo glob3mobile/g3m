@@ -121,13 +121,6 @@ TiledVectorLayer* TiledVectorLayer::copy() const {
                               _layerInfo);
 }
 
-std::vector<Petition*> TiledVectorLayer::createTileMapPetitions(const G3MRenderContext* rc,
-                                                                const LayerTilesRenderParameters* layerTilesRenderParameters,
-                                                                const Tile* tile) const {
-  std::vector<Petition*> petitions;
-  return petitions;
-}
-
 TileImageProvider* TiledVectorLayer::createTileImageProvider(const G3MRenderContext* rc,
                                                              const LayerTilesRenderParameters* layerTilesRenderParameters) const {
   if (_tileImageProvider == NULL) {

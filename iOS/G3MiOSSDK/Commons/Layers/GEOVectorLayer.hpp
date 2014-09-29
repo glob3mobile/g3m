@@ -56,10 +56,6 @@ public:
     return URL();
   }
 
-  std::vector<Petition*> createTileMapPetitions(const G3MRenderContext* rc,
-                                                const LayerTilesRenderParameters* layerTilesRenderParameters,
-                                                const Tile* tile) const;
-
   RenderState getRenderState();
 
   const std::string description() const;

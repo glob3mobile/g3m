@@ -495,48 +495,6 @@ void LayerSet::takeLayersFrom(LayerSet* that) {
   }
 }
 
-std::vector<Petition*> LayerSet::createTileMapPetitions(const G3MRenderContext* rc,
-                                                        const LayerTilesRenderParameters* layerTilesRenderParameters,
-                                                        const Tile* tile) const {
-  std::vector<Petition*> petitions;
-#warning REMOVE createTileMapPetitions??
-//  const int layersSize = _layers.size();
-//  for (int i = 0; i < layersSize; i++) {
-//    Layer* layer = _layers[i];
-//    if (layer->isAvailable(tile)) {
-//#ifdef C_CODE
-//      const Tile* petitionTile = tile;
-//#else
-//      Tile* petitionTile = tile;
-//#endif
-//      const int maxLevel = layer->getLayerTilesRenderParameters()->_maxLevel;
-//      while ((petitionTile->_level > maxLevel) && (petitionTile != NULL)) {
-//        petitionTile = petitionTile->getParent();
-//      }
-//
-//      if (petitionTile == NULL) {
-//        ILogger::instance()->logError("Can't find a valid tile for petitions");
-//      }
-//
-//      std::vector<Petition*> tilePetitions = layer->createTileMapPetitions(rc,
-//                                                                           layerTilesRenderParameters,
-//                                                                           petitionTile);
-//
-//      const int tilePetitionsSize = tilePetitions.size();
-//      for (int j = 0; j < tilePetitionsSize; j++) {
-//        petitions.push_back( tilePetitions[j] );
-//      }
-//    }
-//  }
-//
-//  if (petitions.empty()) {
-//    rc->getLogger()->logWarning("Can't create map petitions for tile %s",
-//                                tile->_id.c_str());
-//  }
-
-  return petitions;
-}
-
 TileImageProvider* LayerSet::createTileImageProvider(const G3MRenderContext* rc,
                                                      const LayerTilesRenderParameters* layerTilesRenderParameters) const {
   TileImageProvider*          singleTileImageProvider    = NULL;

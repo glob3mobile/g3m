@@ -10,7 +10,6 @@
 
 #include "LayerTilesRenderParameters.hpp"
 #include "Tile.hpp"
-#include "Petition.hpp"
 #include "RenderState.hpp"
 #include "TimeInterval.hpp"
 
@@ -40,48 +39,6 @@ _isTransparent(isTransparent)
 {
 }
 
-
-std::vector<Petition*> TMSLayer::createTileMapPetitions(const G3MRenderContext* rc,
-                                                        const LayerTilesRenderParameters* layerTilesRenderParameters,
-                                                        const Tile* tile) const {
-
-  std::vector<Petition*> petitions;
-
-  const Sector tileSector = tile->_sector;
-  if (!_dataSector.touchesWith(tileSector)) {
-    return petitions;
-  }
-
-  IStringBuilder* isb = IStringBuilder::newStringBuilder();
-  isb->addString(_mapServerURL._path);
-  isb->addString(_mapLayer);
-  isb->addString("/");
-  isb->addInt(tile->_level);
-  isb->addString("/");
-  isb->addInt(tile->_column);
-  isb->addString("/");
-  isb->addInt(tile->_row);
-  isb->addString(".");
-  isb->addString(IStringUtils::instance()->replaceSubstring(_format, "image/", ""));
-
-  ILogger::instance()->logInfo(isb->getString());
-  
-
-  Petition *petition = new Petition(tileSector,
-                                    URL(isb->getString(), false),
-                                    _timeToCache,
-                                    _readExpired,
-                                    _isTransparent,
-                                    _transparency);
-  
-  delete isb;
-  
-  petitions.push_back(petition);
-
-	return petitions;
-
-}
-
 URL TMSLayer::getFeatureInfoURL(const Geodetic2D& g,
                                 const Sector& sector) const {
   return URL::nullURL();
@@ -91,7 +48,6 @@ URL TMSLayer::getFeatureInfoURL(const Geodetic2D& g,
 const std::string TMSLayer::description() const {
   return "[TMSLayer]";
 }
-
 
 RenderState TMSLayer::getRenderState() {
   _errors.clear();

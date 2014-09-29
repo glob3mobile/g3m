@@ -518,10 +518,10 @@ void Tile::toBeDeleted(TileTexturizer*        texturizer,
 void Tile::prune(TileTexturizer*           texturizer,
                  ElevationDataProvider*    elevationDataProvider,
                  std::vector<std::string>* tilesStoppedRendering) {
-  if (texturizer == NULL && elevationDataProvider == NULL && _subtiles != NULL) {
-#warning remove debug code
-    printf("break point\n");
-  }
+//  if (texturizer == NULL && elevationDataProvider == NULL && _subtiles != NULL) {
+//#warning remove debug code
+//    printf("break point\n");
+//  }
 
   if (_subtiles != NULL) {
     //Notifying elevation event when LOD decreases

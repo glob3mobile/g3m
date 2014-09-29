@@ -11,14 +11,13 @@
 #include "LayerTilesRenderParameters.hpp"
 #include "LayerCondition.hpp"
 #include "Tile.hpp"
-#include "Petition.hpp"
 #include "IStringUtils.hpp"
 #include "IMathUtils.hpp"
 #include "MercatorUtils.hpp"
 #include "LevelTileCondition.hpp"
 #include "TimeInterval.hpp"
 #include "RenderState.hpp"
-
+#include "URL.hpp"
 
 URLTemplateLayer::URLTemplateLayer(const std::string&                urlTemplate,
                                    const Sector&                     dataSector,
@@ -206,34 +205,6 @@ const URL URLTemplateLayer::createURL(const Tile* tile) const {
   path = _su->replaceSubstring(path, "{east}",           _su->toString( east                              ) );
   
   return URL(path, false);
-}
-
-std::vector<Petition*> URLTemplateLayer::createTileMapPetitions(const G3MRenderContext* rc,
-                                                                const LayerTilesRenderParameters* layerTilesRenderParameters,
-                                                                const Tile* tile) const {
-  std::vector<Petition*> petitions;
-  
-  const Sector tileSector = tile->_sector;
-  if (!_dataSector.touchesWith(tileSector)) {
-    return petitions;
-  }
-  
-  const Sector sector = tileSector.intersection(_dataSector);
-  if (sector._deltaLatitude.isZero() ||
-      sector._deltaLongitude.isZero() ) {
-    return petitions;
-  }
-  
-  const std::string path = getPath(layerTilesRenderParameters, tile, sector);
-  
-  petitions.push_back( new Petition(sector,
-                                    URL(path, false),
-                                    _timeToCache,
-                                    _readExpired,
-                                    _isTransparent,
-                                    _transparency) );
-  
-  return petitions;
 }
 
 RenderState URLTemplateLayer::getRenderState() {

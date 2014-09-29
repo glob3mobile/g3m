@@ -88,13 +88,6 @@ void GEOVectorLayer::addSymbol(const GEORasterSymbol* symbol) {
   }
 }
 
-std::vector<Petition*> GEOVectorLayer::createTileMapPetitions(const G3MRenderContext* rc,
-                                                              const LayerTilesRenderParameters* layerTilesRenderParameters,
-                                                              const Tile* tile) const {
-  std::vector<Petition*> petitions;
-  return petitions;
-}
-
 RenderState GEOVectorLayer::getRenderState() {
   return RenderState::ready();
 }
