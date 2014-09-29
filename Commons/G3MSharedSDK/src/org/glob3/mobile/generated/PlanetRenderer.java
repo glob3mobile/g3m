@@ -372,14 +372,10 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
      _touchEventTypeOfTerrainTouchListener = touchEventTypeOfTerrainTouchListener;
     _context = null;
     _layerSet.setChangeListener(this);
-<<<<<<< HEAD
-    _layerSet.setChangedInfoListener(this);
-=======
->>>>>>> tileimageprovider
   
     _layerSet.setChangedInfoListener(this);
+  
     _changedInfoListener = changedInfoListener;
-<<<<<<< HEAD
   
     if (_tileRenderingListener == null)
     {
@@ -391,9 +387,8 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
       _tilesStartedRendering = new java.util.ArrayList<Tile>();
       _tilesStoppedRendering = new java.util.ArrayList<String>();
     }
-=======
+  
     _rendererIdentifier = -1;
->>>>>>> tileimageprovider
   }
 
   public void dispose()
@@ -453,10 +448,6 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
     {
       _elevationDataProvider.initialize(context);
     }
-<<<<<<< HEAD
-=======
-  
->>>>>>> tileimageprovider
   }
 
   public final void render(G3MRenderContext rc, GLState glState)
@@ -479,23 +470,18 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
   
     final IDeviceInfo deviceInfo = IFactory.instance().getDeviceInfo();
     final float deviceQualityFactor = deviceInfo.getQualityFactor();
+    final double factor = _tilesRenderParameters._texturePixelsPerInch; //UNIT: Dots / Inch^2 (ppi)
+    final double correctionFactor = (deviceInfo.getDPI() * deviceQualityFactor) / factor;
+  
+    final double texWidth = correctionFactor * layerTilesRenderParameters._tileTextureResolution._x;
+    final double texHeight = correctionFactor * layerTilesRenderParameters._tileTextureResolution._y;
+  
+    final double texWidthSquared = texWidth * texWidth;
+    final double texHeightSquared = texHeight * texHeight;
   
     final int firstLevelTilesCount = _firstLevelTiles.size();
   
     final Frustum cameraFrustumInModelCoordinates = _lastCamera.getFrustumInModelCoordinates();
-  
-    //Texture Size for every tile
-    int texWidth = layerTilesRenderParameters._tileTextureResolution._x;
-    int texHeight = layerTilesRenderParameters._tileTextureResolution._y;
-  
-    final double factor = _tilesRenderParameters._texturePixelsPerInch; //UNIT: Dots / Inch^2 (ppi)
-    final double correctionFactor = (deviceInfo.getDPI() * deviceQualityFactor) / factor;
-  
-    texWidth *= correctionFactor;
-    texHeight *= correctionFactor;
-  
-    final double texWidthSquared = texWidth * texWidth;
-    final double texHeightSquared = texHeight * texHeight;
   
     final double nowInMS = _lastSplitTimer.nowInMilliseconds();
   
@@ -508,14 +494,7 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
       for (int i = 0; i < firstLevelTilesCount; i++)
       {
         Tile tile = _firstLevelTiles.get(i);
-<<<<<<< HEAD
         tile.render(rc, _glState, null, cameraFrustumInModelCoordinates, _statistics, _verticalExaggeration, layerTilesRenderParameters, _texturizer, _tilesRenderParameters, _lastSplitTimer, _elevationDataProvider, _tessellator, _layerSet, _renderedSector, _firstRender, _tileDownloadPriority, texWidthSquared, texHeightSquared, nowInMS, _renderTileMeshes, _logTilesPetitions, _tilesStartedRendering, _tilesStoppedRendering); // if first render, force full render
-=======
-        tile.render(rc, _glState, null, cameraFrustumInModelCoordinates, _statistics, _verticalExaggeration, layerTilesRenderParameters, _texturizer, _tilesRenderParameters, _lastSplitTimer, _elevationDataProvider, _tessellator, _layerSet, _renderedSector, _firstRender, _tileDownloadPriority, texWidthSquared, texHeightSquared, nowInMS, _renderTileMeshes, _logTilesPetitions, _tileRenderingListener); // if first render, force full render
-                     //planet,
-                     //cameraNormalizedPosition,
-                     //cameraAngle2HorizonInRadians,
->>>>>>> tileimageprovider
       }
   
   
@@ -539,15 +518,8 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
         for (int i = 0; i < toVisitSize; i++)
         {
           Tile tile = _toVisit.get(i);
-<<<<<<< HEAD
           tile.render(rc, _glState, _toVisitInNextIteration, cameraFrustumInModelCoordinates, _statistics, _verticalExaggeration, layerTilesRenderParameters, _texturizer, _tilesRenderParameters, _lastSplitTimer, _elevationDataProvider, _tessellator, _layerSet, _renderedSector, _firstRender, _tileDownloadPriority, texWidthSquared, texHeightSquared, nowInMS, _renderTileMeshes, _logTilesPetitions, _tilesStartedRendering, _tilesStoppedRendering); // if first render, forceFullRender
                        //_tileRenderingListener
-=======
-          tile.render(rc, _glState, _toVisitInNextIteration, cameraFrustumInModelCoordinates, _statistics, _verticalExaggeration, layerTilesRenderParameters, _texturizer, _tilesRenderParameters, _lastSplitTimer, _elevationDataProvider, _tessellator, _layerSet, _renderedSector, _firstRender, _tileDownloadPriority, texWidthSquared, texHeightSquared, nowInMS, _renderTileMeshes, _logTilesPetitions, _tileRenderingListener); // if first render, forceFullRender
-                       //planet,
-                       //cameraNormalizedPosition,
-                       //cameraAngle2HorizonInRadians,
->>>>>>> tileimageprovider
         }
   
         _toVisit.clear();
@@ -627,16 +599,12 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
         final Tile tile = _firstLevelTiles.get(i).getDeepestTileContaining(position);
         if (tile != null)
         {
-<<<<<<< HEAD
-          ILogger.instance().logInfo("Touched on %s (%s)", position.description(), tile.description());
-=======
+  
           final Vector2I tileDimension = new Vector2I(256, 256);
           final Vector2I normalizedPixel = tile.getNormalizedPixelsFromPosition(position.asGeodetic2D(), tileDimension);
           ILogger.instance().logInfo("Touched on %s", tile.description());
           ILogger.instance().logInfo("Touched on position %s", position.description());
           ILogger.instance().logInfo("Touched on pixels %s", normalizedPixel.description());
-  
->>>>>>> tileimageprovider
           ILogger.instance().logInfo("Camera position=%s heading=%f pitch=%f", _lastCamera.getGeodeticPosition().description(), _lastCamera.getHeading()._degrees, _lastCamera.getPitch()._degrees);
   
           if (_texturizer.onTerrainTouchEvent(ec, position, tile, _layerSet))
@@ -1030,11 +998,11 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
     }
   }
 
-<<<<<<< HEAD
   public final float getVerticalExaggeration()
   {
     return _verticalExaggeration;
-=======
+  }
+
   public final void setChangedRendererInfoListener(ChangedRendererInfoListener changedInfoListener, int rendererIdentifier)
   {
     if (_changedInfoListener != null)
@@ -1049,7 +1017,6 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
     {
       _changedInfoListener.changedRendererInfo(rendererIdentifier, _layerSet.getInfo());
     }
->>>>>>> tileimageprovider
   }
 
 }
