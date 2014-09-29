@@ -30,9 +30,9 @@ public abstract class RasterLayer extends Layer
   protected final TimeInterval _timeToCache;
   protected final boolean _readExpired;
 
-  protected RasterLayer(TimeInterval timeToCache, boolean readExpired, LayerTilesRenderParameters parameters, float transparency, LayerCondition condition, String disclaimerInfo)
+  protected RasterLayer(TimeInterval timeToCache, boolean readExpired, LayerTilesRenderParameters parameters, float transparency, LayerCondition condition, java.util.ArrayList<Info> layerInfo)
   {
-     super(transparency, condition, disclaimerInfo);
+     super(transparency, condition, layerInfo);
      _timeToCache = timeToCache;
      _readExpired = readExpired;
      _parameters = parameters;

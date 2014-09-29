@@ -21,6 +21,7 @@ import org.glob3.mobile.generated.GEORasterSymbolizer;
 import org.glob3.mobile.generated.Geodetic2D;
 import org.glob3.mobile.generated.Geodetic3D;
 import org.glob3.mobile.generated.ILogger;
+import org.glob3.mobile.generated.Info;
 import org.glob3.mobile.generated.JSONObject;
 import org.glob3.mobile.generated.LayerSet;
 import org.glob3.mobile.generated.LevelTileCondition;
@@ -137,7 +138,7 @@ public class VectorTilesActivity
                true, // readExpired
                1, // transparency
                new LevelTileCondition(10, 21), // condition
-               "" // disclaimerInfo
+               new ArrayList<Info>() // disclaimerInfo
       );
       layerSet.addLayer(tiledVectorLayer);
 

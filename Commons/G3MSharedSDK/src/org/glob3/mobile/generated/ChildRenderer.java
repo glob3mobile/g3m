@@ -20,7 +20,7 @@ package org.glob3.mobile.generated;
 public class ChildRenderer
 {
   private Renderer _renderer;
-  private java.util.ArrayList<String> _info = new java.util.ArrayList<String>();
+  private final java.util.ArrayList<Info> _info = new java.util.ArrayList<Info>();
 
 
   public ChildRenderer(Renderer renderer)
@@ -29,11 +29,10 @@ public class ChildRenderer
 
   }
 
-  public ChildRenderer(Renderer renderer, java.util.ArrayList<String> info)
+  public ChildRenderer(Renderer renderer, java.util.ArrayList<Info> info)
   {
      _renderer = renderer;
-     _info = info;
-
+    setInfo(info);
   }
 
   public void dispose()
@@ -42,12 +41,12 @@ public class ChildRenderer
     _info.clear();
   }
 
-  public final void addInfo(String inf)
+  public final void addInfo(Info inf)
   {
     _info.add(inf);
   }
 
-  public final void setInfo(java.util.ArrayList<String> info)
+  public final void setInfo(java.util.ArrayList<Info> info)
   {
     _info.clear();
     _info.addAll(info);
@@ -58,7 +57,7 @@ public class ChildRenderer
     return _renderer;
   }
 
-  public final java.util.ArrayList<String> getInfo()
+  public final java.util.ArrayList<Info> getInfo()
   {
     return _info;
   }

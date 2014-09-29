@@ -24,6 +24,7 @@
 #include "LayerCondition.hpp"
 #include "Context.hpp"
 #include "RenderState.hpp"
+#include "Info.hpp"
 
 BingMapsLayer::BingMapsLayer(const std::string&    imagerySet,
                              const std::string&    key,
@@ -33,13 +34,13 @@ BingMapsLayer::BingMapsLayer(const std::string&    imagerySet,
                              const int             maxLevel,
                              const float           transparency,
                              const LayerCondition* condition,
-                             const std::string&    disclaimerInfo) :
+                             std::vector<const Info*>*  layerInfo) :
 RasterLayer(timeToCache,
             readExpired,
             NULL,
             transparency,
             condition,
-            disclaimerInfo),
+            layerInfo),
 _imagerySet(imagerySet),
 _culture("en-US"),
 _key(key),
@@ -58,13 +59,13 @@ BingMapsLayer::BingMapsLayer(const std::string&    imagerySet,
                              const int             maxLevel,
                              const float           transparency,
                              const LayerCondition* condition,
-                             const std::string&    disclaimerInfo) :
+                             std::vector<const Info*>*  layerInfo) :
 RasterLayer(timeToCache,
             readExpired,
             NULL,
             transparency,
             condition,
-            disclaimerInfo),
+            layerInfo),
 _imagerySet(imagerySet),
 _culture(culture),
 _key(key),
@@ -237,7 +238,7 @@ void BingMapsLayer::processMetadata(const std::string& brandLogoUri,
                                     const int zoomMax) {
   _brandLogoUri = brandLogoUri;
   _copyright = copyright;
-  _disclaimerInfo = copyright;
+  addInfo(new Info(copyright));
   _imageUrl = imageUrl;
   _imageUrlSubdomains = imageUrlSubdomains;
   
@@ -396,7 +397,7 @@ BingMapsLayer* BingMapsLayer::copy() const {
                            _maxLevel,
                            _transparency,
                            (_condition == NULL) ? NULL : _condition->copy(),
-                           _disclaimerInfo);
+                           _layerInfo);
 }
 
 RenderState BingMapsLayer::getRenderState() {

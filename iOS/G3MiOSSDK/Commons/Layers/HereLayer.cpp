@@ -24,7 +24,7 @@ HereLayer::HereLayer(const std::string&    appId,
                      const int             initialLevel,
                      const float           transparency,
                      const LayerCondition* condition,
-                     const std::string&    disclaimerInfo) :
+                     std::vector<const Info*>*  layerInfo) :
 RasterLayer(timeToCache,
             readExpired,
             new LayerTilesRenderParameters(Sector::fullSphere(),
@@ -37,7 +37,7 @@ RasterLayer(timeToCache,
                                            true),
             transparency,
             condition,
-            disclaimerInfo),
+            layerInfo),
 _appId(appId),
 _appCode(appCode),
 _initialLevel(initialLevel)
@@ -262,7 +262,7 @@ HereLayer* HereLayer::copy() const {
                        _initialLevel,
                        _transparency,
                        (_condition == NULL) ? NULL : _condition->copy(),
-                       _disclaimerInfo);
+                       _layerInfo);
 }
 
 bool HereLayer::rawIsEquals(const Layer* that) const {

@@ -21,7 +21,6 @@ class MeshRenderer;
 class MarksRenderer;
 class ShapesRenderer;
 class GEOVectorLayer;
-//class GEOTileRasterizer;
 class GEORenderer_ObjectSymbolizerPair;
 
 class GEORenderer : public DefaultRenderer {
@@ -74,7 +73,6 @@ private:
   MeshRenderer*   _meshRenderer;
   ShapesRenderer* _shapesRenderer;
   MarksRenderer*  _marksRenderer;
-//  GEOTileRasterizer* _geoTileRasterizer;
   GEOVectorLayer*  _geoVectorLayer;
 
   std::vector<LoadQueueItem*> _loadQueue;
@@ -104,14 +102,12 @@ public:
               ShapesRenderer*      shapesRenderer,
               MarksRenderer*       marksRenderer,
               GEOVectorLayer*      geoVectorLayer
-//              GEOTileRasterizer*   geoTileRasterizer
               ) :
   _defaultSymbolizer(defaultSymbolizer),
   _meshRenderer(meshRenderer),
   _shapesRenderer(shapesRenderer),
   _marksRenderer(marksRenderer),
   _geoVectorLayer(geoVectorLayer)
-//  _geoTileRasterizer(geoTileRasterizer)
   {
     initialize(NULL);
   }
@@ -149,10 +145,6 @@ public:
   ShapesRenderer* getShapesRenderer() const {
     return _shapesRenderer;
   }
-
-//  GEOTileRasterizer* getGEOTileRasterizer() const {
-//    return _geoTileRasterizer;
-//  }
 
   GEOVectorLayer* getGEOVectorLayer() const {
     return _geoVectorLayer;

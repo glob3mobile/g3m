@@ -148,6 +148,7 @@ _touchEventTypeOfTerrainTouchListener(touchEventTypeOfTerrainTouchListener)
 {
   _context = NULL;
   _layerSet->setChangeListener(this);
+  
   _layerSet->setChangedInfoListener(this);
 
   _changedInfoListener = changedInfoListener;
@@ -160,6 +161,8 @@ _touchEventTypeOfTerrainTouchListener(touchEventTypeOfTerrainTouchListener)
     _tilesStartedRendering = new std::vector<const Tile*>();
     _tilesStoppedRendering = new std::vector<std::string>();
   }
+
+  _rendererIdentifier = -1;
 }
 
 void PlanetRenderer::recreateTiles() {
@@ -420,6 +423,9 @@ void PlanetRenderer::createFirstLevelTiles(const G3MContext* context) {
   sortTiles(_firstLevelTiles);
 
   context->getLogger()->logInfo("Created %d first level tiles", _firstLevelTiles.size());
+  if (_firstLevelTiles.size() > 64) {
+    context->getLogger()->logWarning("%d tiles are many for the first level. We recommend a number of those less than 64. You can review some parameters (Render Sector and/or First Level) to reduce the number of tiles.", _firstLevelTiles.size());
+  }
 
   _firstLevelTilesJustCreated = true;
 }
@@ -442,6 +448,7 @@ void PlanetRenderer::initialize(const G3MContext* context) {
 }
 
 RenderState PlanetRenderer::getRenderState(const G3MRenderContext* rc) {
+  
   const LayerTilesRenderParameters* layerTilesRenderParameters = getLayerTilesRenderParameters();
   if (layerTilesRenderParameters == NULL) {
     if (_errors.empty()) {
@@ -463,6 +470,18 @@ RenderState PlanetRenderer::getRenderState(const G3MRenderContext* rc) {
       return RenderState::busy();
     }
   }
+  
+  if (_texturizer == NULL) {
+    std::vector<std::string> errors;
+    errors.push_back("Texturizer is null");
+    return RenderState::error(errors);
+  } else {
+    const RenderState texturizerRenderState = _texturizer->getRenderState(_layerSet);
+    if (texturizerRenderState._type != RENDER_READY) {
+      return texturizerRenderState;
+    }
+  }
+  
 
   if (_firstLevelTilesJustCreated) {
     _firstLevelTilesJustCreated = false;
@@ -486,8 +505,9 @@ RenderState PlanetRenderer::getRenderState(const G3MRenderContext* rc) {
                                       _verticalExaggeration,
                                       _logTilesPetitions);
       }
+    } else {
+      
     }
-
     if (_texturizer != NULL) {
       for (int i = 0; i < firstLevelTilesCount; i++) {
         Tile* tile = _firstLevelTiles[i];
@@ -496,8 +516,7 @@ RenderState PlanetRenderer::getRenderState(const G3MRenderContext* rc) {
     }
   }
 
-  if (_tilesRenderParameters->_forceFirstLevelTilesRenderOnStart) {
-    if (!_allFirstLevelTilesAreTextureSolved) {
+  if (_tilesRenderParameters->_forceFirstLevelTilesRenderOnStart && !_allFirstLevelTilesAreTextureSolved) {
       const int firstLevelTilesCount = _firstLevelTiles.size();
       for (int i = 0; i < firstLevelTilesCount; i++) {
         Tile* tile = _firstLevelTiles[i];
@@ -521,7 +540,6 @@ RenderState PlanetRenderer::getRenderState(const G3MRenderContext* rc) {
 
       _allFirstLevelTilesAreTextureSolved = true;
     }
-  }
 
   return RenderState::ready();
 }
@@ -679,7 +697,7 @@ void PlanetRenderer::render(const G3MRenderContext* rc,
                    _tilesStoppedRendering);
     }
 
-    _firstRender = false;
+    
   }
   else {
 #ifdef C_CODE
@@ -744,6 +762,8 @@ void PlanetRenderer::render(const G3MRenderContext* rc,
 #endif
     }
   }
+  
+  _firstRender = false;
 
   if (_showStatistics) {
     _statistics.log( rc->getLogger() );
@@ -803,9 +823,12 @@ bool PlanetRenderer::onTouchEvent(const G3MEventContext* ec,
     for (int i = 0; i < firstLevelTilesCount; i++) {
       const Tile* tile = _firstLevelTiles[i]->getDeepestTileContaining(position);
       if (tile != NULL) {
-        ILogger::instance()->logInfo("Touched on %s (%s)",
-                                     position.description().c_str(),
-                                     tile->description().c_str());
+
+        const Vector2I& tileDimension = Vector2I(256, 256);
+        const Vector2I& normalizedPixel = tile->getNormalizedPixelsFromPosition(position.asGeodetic2D(), tileDimension);
+        ILogger::instance()->logInfo("Touched on %s", tile->description().c_str());
+        ILogger::instance()->logInfo("Touched on position %s", position.description().c_str());
+        ILogger::instance()->logInfo("Touched on pixels %s", normalizedPixel.description().c_str());
         ILogger::instance()->logInfo("Camera position=%s heading=%f pitch=%f",
                                      _lastCamera->getGeodeticPosition().description().c_str(),
                                      _lastCamera->getHeading()._degrees,
@@ -920,6 +943,19 @@ void PlanetRenderer::setVerticalExaggeration(float verticalExaggeration) {
   if (_verticalExaggeration != verticalExaggeration) {
     _verticalExaggeration = verticalExaggeration;
     changed();
+  }
+}
+
+void PlanetRenderer::setChangedRendererInfoListener(ChangedRendererInfoListener* changedInfoListener, const int rendererIdentifier) {
+  if (_changedInfoListener != NULL) {
+    ILogger::instance()->logWarning("Changed Renderer Info Listener of PlanetRenderer already set");
+  }
+  
+  _rendererIdentifier = rendererIdentifier;
+  _changedInfoListener = changedInfoListener;
+  
+  if(_changedInfoListener != NULL) {
+    _changedInfoListener->changedRendererInfo(rendererIdentifier, _layerSet->getInfo());
   }
 }
 

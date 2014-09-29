@@ -41,7 +41,7 @@ public:
             const int             initialLevel   = 2,
             const float           transparency   = 1,
             const LayerCondition* condition      = NULL,
-            const std::string&    disclaimerInfo = "");
+            std::vector<const Info*>*  layerInfo = new std::vector<const Info*>());
 
   std::vector<Petition*> createTileMapPetitions(const G3MRenderContext* rc,
                                                 const LayerTilesRenderParameters* layerTilesRenderParameters,

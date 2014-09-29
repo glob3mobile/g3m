@@ -198,9 +198,23 @@ void G3MTiledVectorDemoScene::rawActivate(const G3MContext* context) {
 
 //  const std::string urlTemplate = "http://glob3mobile.dyndns.org/vectorial/swiss-buildings/{level}/{x}/{y}.geojson";
 //  const std::string urlTemplate = "http://glob3mobile.dyndns.org/vectorial/swiss-buildings-bson-new/{level}/{x}/{y}.bson";
-  const std::string urlTemplate = "http://192.168.1.12/vectorial/swiss-buildings-bson-new/{level}/{x}/{y}.bson";
+//  const std::string urlTemplate = "http://192.168.1.12/vectorial/swiss-buildings-bson-new/{level}/{x}/{y}.bson";
+  
+  const std::string urlTemplate = "http://192.168.1.12:8000/vectorial/scotland_buildings/GEOJSON/{level}/{x}/{y}.geojson";
+
+  
   const Sector swissSector = Sector::fromDegrees(45.8176852, 5.956216,
                                                  47.803029, 10.492264);
+  
+  const Geodetic2D lower =Geodetic2D( //
+                                           Angle::fromDegrees(54.7226296), //
+                                           Angle::fromDegrees(-7.6536084));
+  const Geodetic2D upper =Geodetic2D( //
+                                          Angle::fromDegrees(60.855646), //
+                                          Angle::fromDegrees(-0.7279944));
+  
+  const Sector sector = Sector(lower, upper);
+  
   const int firstLevel = 2;
   const int maxLevel = 16;
 //  const int maxLevel = 17;
@@ -209,7 +223,7 @@ void G3MTiledVectorDemoScene::rawActivate(const G3MContext* context) {
 
   _tiledVectorLayer = TiledVectorLayer::newMercator(symbolizer,
                                                     urlTemplate,
-                                                    swissSector,
+                                                    sector,
                                                     firstLevel,
                                                     maxLevel,
                                                     TimeInterval::fromDays(30), // timeToCache
@@ -217,12 +231,13 @@ void G3MTiledVectorDemoScene::rawActivate(const G3MContext* context) {
                                                     1,                          // transparency
                                                     //new LevelTileCondition(15, 21),
                                                     new LevelTileCondition(10, 21),
-                                                    ""                          // disclaimerInfo
+                                                    new std::vector<const Info*>()                          // disclaimerInfo
                                                     );
   model->getLayerSet()->addLayer(_tiledVectorLayer);
 
   g3mWidget->setAnimatedCameraPosition(TimeInterval::fromSeconds(5),
-                                       Geodetic3D::fromDegrees(47.371716253228562721, 8.5409432031508725203, 1040),
+                                       //Geodetic3D::fromDegrees(47.371716253228562721, 8.5409432031508725203, 1040),
+                                       Geodetic3D(lower, 1040),
                                        Angle::zero(),
                                        Angle::fromDegrees(-90));
 

@@ -174,7 +174,7 @@ public class GenericQuadTree_TESTER
     return i % max;
   }
 
-  public static void run(int nElements, GEOTileRasterizer rasterizer)
+  public static void run(int nElements, GEOVectorLayer geoVectorLayer)
   {
   
     _nElements = 0;
@@ -241,9 +241,13 @@ public class GenericQuadTree_TESTER
     NodeVisitor_TESTER nodeVis = new NodeVisitor_TESTER();
     tree.acceptNodeVisitor(nodeVis);
   
-    if (rasterizer != null)
+  //  if (rasterizer != NULL) {
+  //    tree.symbolize(rasterizer);
+  //  }
+  
+    if (geoVectorLayer != null)
     {
-      tree.symbolize(rasterizer);
+      tree.symbolize(geoVectorLayer);
     }
   
     double c_e = (float)_nComparisons / _nElements;
@@ -251,7 +255,7 @@ public class GenericQuadTree_TESTER
   
   }
 
-  public static void run(GenericQuadTree tree, GEOTileRasterizer rasterizer)
+  public static void run(GenericQuadTree tree, GEOVectorLayer geoVectorLayer)
   {
   
     _nElements = 0;
@@ -282,9 +286,9 @@ public class GenericQuadTree_TESTER
     NodeVisitor_TESTER nodeVis = new NodeVisitor_TESTER();
     tree.acceptNodeVisitor(nodeVis);
   
-    if (rasterizer != null)
+    if (geoVectorLayer != null)
     {
-      tree.symbolize(rasterizer);
+      tree.symbolize(geoVectorLayer);
     }
   
     double c_e = (float)_nComparisons / _nElements;

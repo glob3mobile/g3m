@@ -40,7 +40,8 @@ public class LayerSet implements ChangedInfoListener
 
   //  mutable LayerTilesRenderParameters* _layerTilesRenderParameters;
   private java.util.ArrayList<String> _errors = new java.util.ArrayList<String>();
-  private java.util.ArrayList<String> _infos = new java.util.ArrayList<String>();
+
+  private final java.util.ArrayList<Info> _infos = new java.util.ArrayList<Info>();
 
   private void layersChanged()
   {
@@ -177,7 +178,7 @@ public class LayerSet implements ChangedInfoListener
     return !layerSetNotReadyFlag;
   }
 
-  private LayerTilesRenderParameters checkAndComposeLayerTilesRenderParameters(java.util.ArrayList<Layer> enableLayers, java.util.ArrayList<String> errors)
+  private LayerTilesRenderParameters checkAndComposeLayerTilesRenderParameters(boolean forceFirstLevelTilesRenderOnStart, java.util.ArrayList<Layer> enableLayers, java.util.ArrayList<String> errors)
   {
   
     MutableLayerTilesRenderParameters mutableLayerTilesRenderParameters = new MutableLayerTilesRenderParameters();
@@ -236,6 +237,13 @@ public class LayerSet implements ChangedInfoListener
       if (_layers.get(i) != null)
          _layers.get(i).dispose();
     }
+  
+    for (int i = 0; i < _infos.size(); i++)
+    {
+      if (_infos.get(i) != null)
+         _infos.get(i).dispose();
+    }
+  
     if (_tileImageProvider != null)
     {
       _tileImageProvider._release();
@@ -275,7 +283,7 @@ public class LayerSet implements ChangedInfoListener
     }
   
     layersChanged();
-    changedInfo(layer.getInfos());
+    changedInfo(layer.getInfo());
   }
 
   public final boolean onTerrainTouchEvent(G3MEventContext ec, Geodetic3D position, Tile tile)
@@ -369,6 +377,16 @@ public class LayerSet implements ChangedInfoListener
     _listener = listener;
   }
 
+  public final void setTileImageProvider(TileImageProvider tileImageProvider)
+  {
+    if (_tileImageProvider != null)
+    {
+      ILogger.instance().logError("TileImageProvider already set");
+    }
+    _tileImageProvider = tileImageProvider;
+  }
+
+
   public final Layer getLayer(int index)
   {
     if (index < _layers.size())
@@ -406,7 +424,7 @@ public class LayerSet implements ChangedInfoListener
       return null;
     }
   
-    return checkAndComposeLayerTilesRenderParameters(enableLayers, errors);
+    return checkAndComposeLayerTilesRenderParameters(forceFirstLevelTilesRenderOnStart, enableLayers, errors);
   }
 
   public final boolean isEquals(LayerSet that)
@@ -529,26 +547,39 @@ public class LayerSet implements ChangedInfoListener
       return;
     }
     _changedInfoListener = changedInfoListener;
-    changedInfo(getInfo());
+    if (_changedInfoListener != null)
+    {
+      _changedInfoListener.changedInfo(getInfo());
+    }
   }
 
-  public final java.util.ArrayList<String> getInfo()
+  public final java.util.ArrayList<Info> getInfo()
   {
     _infos.clear();
     final int layersCount = _layers.size();
+    boolean anyEnabled = false;
     for (int i = 0; i < layersCount; i++)
     {
       Layer layer = _layers.get(i);
       if (layer.isEnable())
       {
-        final String layerInfo = layer.getInfo();
-        _infos.add(layerInfo);
+        anyEnabled = true;
+        final java.util.ArrayList<Info> layerInfo = layer.getInfo();
+        final int infoSize = layerInfo.size();
+        for (int j = 0; j < infoSize; j++)
+        {
+          _infos.add(layerInfo.get(j));
+        }
       }
+    }
+    if (!anyEnabled)
+    {
+      _infos.add(new Info("Can't find any enabled Layer at this zoom level"));
     }
     return _infos;
   }
 
-  public final void changedInfo(java.util.ArrayList<String> info)
+  public final void changedInfo(java.util.ArrayList<Info> info)
   {
     if (_changedInfoListener != null)
     {

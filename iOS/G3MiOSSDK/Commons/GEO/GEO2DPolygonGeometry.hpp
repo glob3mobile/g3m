@@ -44,6 +44,8 @@ public:
 
   GEO2DPolygonGeometry* deepCopy() const;
 
+  bool contain(const Geodetic2D& point) const;
+
 };
 
 #endif

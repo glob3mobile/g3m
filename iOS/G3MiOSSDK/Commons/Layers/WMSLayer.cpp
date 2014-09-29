@@ -32,7 +32,7 @@ WMSLayer::WMSLayer(const std::string&                mapLayer,
                    const bool                        readExpired,
                    const LayerTilesRenderParameters* parameters,
                    const float                       transparency,
-                   const std::string&                disclaimerInfo):
+                   std::vector<const Info*>*   layerInfo):
 RasterLayer(timeToCache,
             readExpired,
             (parameters == NULL)
@@ -40,7 +40,7 @@ RasterLayer(timeToCache,
             : parameters,
             transparency,
             condition,
-            disclaimerInfo),
+            layerInfo),
 _mapLayer(mapLayer),
 _mapServerURL(mapServerURL),
 _mapServerVersion(mapServerVersion),
@@ -69,7 +69,7 @@ WMSLayer::WMSLayer(const std::string&                mapLayer,
                    const bool                        readExpired,
                    const LayerTilesRenderParameters* parameters,
                    const float                       transparency,
-                   const std::string&                disclaimerInfo):
+                   std::vector<const Info*>*   layerInfo):
 RasterLayer(timeToCache,
             readExpired,
             (parameters == NULL)
@@ -77,7 +77,7 @@ RasterLayer(timeToCache,
             : parameters,
             transparency,
             condition,
-            disclaimerInfo),
+            layerInfo),
 _mapLayer(mapLayer),
 _mapServerURL(mapServerURL),
 _mapServerVersion(mapServerVersion),
@@ -167,7 +167,7 @@ std::vector<Petition*> WMSLayer::createTileMapPetitions(const G3MRenderContext* 
       isb->addDouble( toBBOXLatitude( sector._upper._latitude ) );
       isb->addString(",");
       isb->addDouble( toBBOXLongitude( sector._upper._longitude ) );
-
+      
       req += isb->getString();
       delete isb;
 
@@ -189,14 +189,24 @@ std::vector<Petition*> WMSLayer::createTileMapPetitions(const G3MRenderContext* 
       isb->addInt(tileTextureResolution._y);
 
       isb->addString("&BBOX=");
-      isb->addDouble( toBBOXLongitude( sector._lower._longitude ) );
-      isb->addString(",");
-      isb->addDouble( toBBOXLatitude( sector._lower._latitude ) );
-      isb->addString(",");
-      isb->addDouble( toBBOXLongitude( sector._upper._longitude ) );
-      isb->addString(",");
-      isb->addDouble( toBBOXLatitude( sector._upper._latitude ) );
+//      isb->addDouble( toBBOXLongitude( sector._lower._longitude ) );
+//      isb->addString(",");
+//      isb->addDouble( toBBOXLatitude( sector._lower._latitude ) );
+//      isb->addString(",");
+//      isb->addDouble( toBBOXLongitude( sector._upper._longitude ) );
+//      isb->addString(",");
+//      isb->addDouble( toBBOXLatitude( sector._upper._latitude ) );
 
+      isb->addDouble( toBBOXLatitude( tileSector._lower._latitude ) );
+      isb->addString(",");
+      isb->addDouble( toBBOXLongitude( tileSector._lower._longitude ) );
+      isb->addString(",");
+      isb->addDouble( toBBOXLatitude( tileSector._upper._latitude ) );
+      isb->addString(",");
+      isb->addDouble( toBBOXLongitude( tileSector._upper._longitude ) );
+      
+
+      
       req += isb->getString();
       delete isb;
       break;
@@ -267,8 +277,9 @@ const URL WMSLayer::createURL(const Tile* tile) const {
   //  }
 
   //TODO: MUST SCALE WIDTH,HEIGHT
-
-  const Vector2I tileTextureResolution = _parameters->_tileTextureResolution;
+  
+  const int width = _parameters->_tileTextureResolution._x;
+  const int height = _parameters->_tileTextureResolution._y;
 
 	//Server name
   std::string req = path;
@@ -298,9 +309,9 @@ const URL WMSLayer::createURL(const Tile* tile) const {
       IStringBuilder* isb = IStringBuilder::newStringBuilder();
 
       isb->addString("&WIDTH=");
-      isb->addInt(tileTextureResolution._x);
+      isb->addInt(width);
       isb->addString("&HEIGHT=");
-      isb->addInt(tileTextureResolution._y);
+      isb->addInt(height);
 
       isb->addString("&BBOX=");
       isb->addDouble( toBBOXLatitude( sector._lower._latitude ) );
@@ -325,11 +336,28 @@ const URL WMSLayer::createURL(const Tile* tile) const {
       req += "&VERSION=1.1.1";
 
       IStringBuilder* isb = IStringBuilder::newStringBuilder();
-
+      
       isb->addString("&WIDTH=");
-      isb->addInt(tileTextureResolution._x);
+      isb->addInt(width);
       isb->addString("&HEIGHT=");
-      isb->addInt(tileTextureResolution._y);
+      isb->addInt(height);
+      
+      
+      
+//      const double widthHeihtFactor  = sector._deltaLongitude.div(sector._deltaLatitude);
+//      if (widthHeihtFactor >= 1) {
+//        isb->addString("&WIDTH=");
+//        isb->addInt(tileTextureResolution._x);
+//        isb->addString("&HEIGHT=");
+//        isb->addInt((int)tileTextureResolution._y/widthHeihtFactor);
+//      } else {
+//        isb->addString("&WIDTH=");
+//        isb->addInt((int)tileTextureResolution._x*widthHeihtFactor);
+//        isb->addString("&HEIGHT=");
+//        isb->addInt(tileTextureResolution._y);
+//      }
+      
+      
 
       isb->addString("&BBOX=");
       isb->addDouble( toBBOXLongitude( sector._lower._longitude ) );
@@ -339,6 +367,14 @@ const URL WMSLayer::createURL(const Tile* tile) const {
       isb->addDouble( toBBOXLongitude( sector._upper._longitude ) );
       isb->addString(",");
       isb->addDouble( toBBOXLatitude( sector._upper._latitude ) );
+      
+//      isb->addDouble( toBBOXLatitude( tileSector._lower._longitude ) );
+//      isb->addString(",");
+//      isb->addDouble( toBBOXLongitude( tileSector._lower._latitude ) );
+//      isb->addString(",");
+//      isb->addDouble( toBBOXLatitude( tileSector._upper._longitude ) );
+//      isb->addString(",");
+//      isb->addDouble( toBBOXLongitude( tileSector._upper._latitude ) );
 
       req += isb->getString();
       delete isb;
@@ -587,7 +623,7 @@ WMSLayer* WMSLayer::copy() const {
                       _readExpired,
                       (_parameters == NULL) ? NULL : _parameters->copy(),
                       _transparency,
-                      _disclaimerInfo);
+                      _layerInfo);
 }
 
 RenderState WMSLayer::getRenderState() {
@@ -614,12 +650,14 @@ const TileImageContribution* WMSLayer::rawContribution(const Tile* tile) const {
   if (tileP == NULL) {
     return NULL;
   }
-
+  
   const Sector requestedImageSector = tileP->_sector;
 
   if (!_dataSector.touchesWith(requestedImageSector)) {
     return NULL;
   }
+ 
+  
   else if (_dataSector.fullContains(requestedImageSector) && (tile == tileP)) {
     //Most common case tile of suitable level being fully coveraged by layer
     return ((_isTransparent || (_transparency < 1))

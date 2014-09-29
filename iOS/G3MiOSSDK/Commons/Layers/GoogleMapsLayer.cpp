@@ -23,7 +23,7 @@ GoogleMapsLayer::GoogleMapsLayer(const std::string&    key,
                                  const int             initialLevel,
                                  const float           transparency,
                                  const LayerCondition* condition,
-                                 const std::string&    disclaimerInfo) :
+                                 std::vector<const Info*>*  layerInfo) :
 RasterLayer(timeToCache,
             readExpired,
             new LayerTilesRenderParameters(Sector::fullSphere(),
@@ -36,7 +36,7 @@ RasterLayer(timeToCache,
                                            true),
             transparency,
             condition,
-            disclaimerInfo),
+            layerInfo),
 _key(key),
 _initialLevel(initialLevel)
 {
@@ -175,7 +175,7 @@ GoogleMapsLayer* GoogleMapsLayer::copy() const {
                              _initialLevel,
                              _transparency,
                              (_condition == NULL) ? NULL : _condition->copy(),
-                             _disclaimerInfo);
+                             _layerInfo);
 }
 
 bool GoogleMapsLayer::rawIsEquals(const Layer* that) const {
@@ -209,16 +209,16 @@ const TileImageContribution* GoogleMapsLayer::rawContribution(const Tile* tile) 
   if (tileP == NULL) {
     return NULL;
   }
-  else if (tile == tileP) {
+  
+  if (tile == tileP) {
     //Most common case tile of suitable level being fully coveraged by layer
     return ((_transparency < 1)
             ? TileImageContribution::fullCoverageTransparent(_transparency)
             : TileImageContribution::fullCoverageOpaque());
   }
-  else {
-    const Sector requestedImageSector = tileP->_sector;
-    return ((_transparency < 1)
+  
+  const Sector requestedImageSector = tileP->_sector;
+  return ((_transparency < 1)
             ? TileImageContribution::partialCoverageTransparent(requestedImageSector, _transparency)
             : TileImageContribution::partialCoverageOpaque(requestedImageSector));
-  }
 }

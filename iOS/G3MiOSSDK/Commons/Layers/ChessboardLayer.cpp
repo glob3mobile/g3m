@@ -13,24 +13,24 @@
 #include "LayerCondition.hpp"
 #include "ChessboardTileImageProvider.hpp"
 
-ChessboardLayer::ChessboardLayer(const int             mercatorFirstLevel,
-                                 const int             mercatorMaxLevel,
-                                 const int             wgs84firstLevel,
-                                 const int             wgs84maxLevel,
-                                 const Color&          backgroundColor,
-                                 const Color&          boxColor,
-                                 const int             splits,
-                                 const Sector&         dataSector,
-                                 const float           transparency,
-                                 const LayerCondition* condition,
-                                 const std::string&    disclaimerInfo) :
+ChessboardLayer::ChessboardLayer(const int                        mercatorFirstLevel,
+                                 const int                        mercatorMaxLevel,
+                                 const int                        wgs84firstLevel,
+                                 const int                        wgs84maxLevel,
+                                 const Color&                     backgroundColor,
+                                 const Color&                     boxColor,
+                                 const int                        splits,
+                                 const Sector&                    dataSector,
+                                 const float                      transparency,
+                                 const LayerCondition*            condition,
+                                 std::vector<const Info*>*        layerInfo) :
 ProceduralLayer(LayerTilesRenderParameters::createDefaultMultiProjection(mercatorFirstLevel,
                                                                          mercatorMaxLevel,
                                                                          wgs84firstLevel,
                                                                          wgs84maxLevel),
                 transparency,
                 condition,
-                disclaimerInfo),
+                layerInfo),
 _dataSector(dataSector),
 _backgroundColor(backgroundColor),
 _boxColor(boxColor),
@@ -63,7 +63,7 @@ ChessboardLayer* ChessboardLayer::copy() const {
                              _dataSector,
                              _transparency,
                              (_condition == NULL) ? NULL : _condition->copy(),
-                             _disclaimerInfo);
+                             _layerInfo);
 }
 
 TileImageProvider* ChessboardLayer::createTileImageProvider(const G3MRenderContext* rc,

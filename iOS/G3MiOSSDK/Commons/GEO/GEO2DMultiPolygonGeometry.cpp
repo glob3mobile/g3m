@@ -58,3 +58,18 @@ std::vector<GEO2DPolygonData*>* GEO2DMultiPolygonGeometry::copy(const std::vecto
 GEO2DMultiPolygonGeometry* GEO2DMultiPolygonGeometry::deepCopy() const {
   return new GEO2DMultiPolygonGeometry(copy(_polygonsData));
 }
+
+bool GEO2DMultiPolygonGeometry::contain(const Geodetic2D& point) const {
+  if (_polygonsData == NULL) {
+    return false;
+  }
+  const size_t polygonsDataSize = _polygonsData->size();
+  for (size_t i = 0; i < polygonsDataSize; i++) {
+    GEO2DPolygonData* polygonData = _polygonsData->at(i);
+    if (polygonData->contains(point)) {
+      return true;
+    }
+  }
+
+  return false;
+}

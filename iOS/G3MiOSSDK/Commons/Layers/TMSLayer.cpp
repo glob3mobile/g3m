@@ -25,13 +25,13 @@ TMSLayer::TMSLayer(const std::string& mapLayer,
                    bool readExpired,
                    const LayerTilesRenderParameters* parameters,
                    float transparency,
-                   const std::string& disclaimerInfo):
+                   std::vector<const Info*>*  layerInfo):
 RasterLayer(timeToCache,
             readExpired,
             (parameters == NULL) ? LayerTilesRenderParameters::createDefaultWGS84(dataSector, 0, 17) : parameters,
             transparency,
             condition,
-            disclaimerInfo),
+            layerInfo),
 _mapServerURL(mapServerURL),
 _mapLayer(mapLayer),
 _dataSector(dataSector),
@@ -65,6 +65,7 @@ std::vector<Petition*> TMSLayer::createTileMapPetitions(const G3MRenderContext* 
   isb->addString(IStringUtils::instance()->replaceSubstring(_format, "image/", ""));
 
   ILogger::instance()->logInfo(isb->getString());
+  
 
   Petition *petition = new Petition(tileSector,
                                     URL(isb->getString(), false),
@@ -72,6 +73,9 @@ std::vector<Petition*> TMSLayer::createTileMapPetitions(const G3MRenderContext* 
                                     _readExpired,
                                     _isTransparent,
                                     _transparency);
+  
+  delete isb;
+  
   petitions.push_back(petition);
 
 	return petitions;

@@ -95,4 +95,22 @@ public class GEO2DMultiPolygonGeometry extends GEOGeometry2D
     return new GEO2DMultiPolygonGeometry(copy(_polygonsData));
   }
 
+  public final boolean contain(Geodetic2D point)
+  {
+    if (_polygonsData == null)
+    {
+      return false;
+    }
+    final int polygonsDataSize = _polygonsData.size();
+    for (int i = 0; i < polygonsDataSize; i++)
+    {
+      GEO2DPolygonData polygonData = _polygonsData.get(i);
+      if (polygonData.contains(point))
+      {
+        return true;
+      }
+    }
+  
+    return false;
+  }
 }

@@ -388,7 +388,7 @@ public class GenericQuadTree_Node
     return n;
   }
 
-  public final void symbolize(GEOTileRasterizer geoTileRasterizer)
+  public final void symbolize(GEOVectorLayer geoVectorLayer)
   {
   
     if (_elements.size() > 0)
@@ -415,14 +415,14 @@ public class GenericQuadTree_Node
       GEOLineRasterSymbol symbol = new GEOLineRasterSymbol(coordinatesData, ls);
       coordinatesData._release();
   
-      geoTileRasterizer.addSymbol(symbol);
+      geoVectorLayer.addSymbol(symbol);
     }
   
     if (_children != null)
     {
       for (int i = 0; i < 4; i++)
       {
-        _children[i].symbolize(geoTileRasterizer);
+        _children[i].symbolize(geoVectorLayer);
       }
     }
   

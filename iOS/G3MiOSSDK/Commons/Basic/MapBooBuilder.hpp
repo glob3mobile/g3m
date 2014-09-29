@@ -471,7 +471,7 @@ public:
 
 class HUDInfoRenderer_ImageFactory : public HUDImageRenderer::CanvasImageFactory {
 private:
-  std::vector<std::string> _infos;
+  std::vector<const Info*> _info;
   
 protected:
   
@@ -479,14 +479,14 @@ protected:
               int width,
               int height);
   
-  bool isEquals(const std::vector<std::string>& v1,
-                const std::vector<std::string>& v2) const;
+  bool isEquals(const std::vector<const Info*> v1,
+                const std::vector<const Info*> v2) const;
   
 public:
   ~HUDInfoRenderer_ImageFactory() {
   }
   
-  bool setInfos(const std::vector<std::string>& infos);
+  bool setInfo(const std::vector<const Info*> info);
 };
 
 class MapBoo_HUDRenderer : public DefaultRenderer {
@@ -494,8 +494,11 @@ private:
   HUDImageRenderer* _hudImageRenderer;
 public:
   MapBoo_HUDRenderer();
+  
   ~MapBoo_HUDRenderer();
-  void updateInfo(const std::vector<std::string>& info);
+  
+  void updateInfo(const std::vector<const Info*> info);
+  
   void initialize(const G3MContext* context);
   
   void render(const G3MRenderContext* rc,
@@ -528,7 +531,7 @@ public:
     
   }
   
-  void changedInfo(const std::vector<std::string>& info){
+  void changedInfo(const std::vector<const Info*> info){
     _mapBooHUDRenderer->updateInfo(info);
     
   }
