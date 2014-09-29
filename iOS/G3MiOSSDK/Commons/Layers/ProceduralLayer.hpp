@@ -31,7 +31,7 @@ protected:
         condition,
         layerInfo),
   _parametersVector(parametersVector),
-  _selectedLayerTilesRenderParametersIndex(-1)
+  _selectedLayerTilesRenderParametersIndex(0)
   {
   }
 #endif
@@ -42,7 +42,7 @@ protected:
                             final java.util.ArrayList<Info> layerInfo) {
     super(transparency, condition, layerInfo);
     _parametersVector.addAll(parametersVector);
-    _selectedLayerTilesRenderParametersIndex = -1;
+    _selectedLayerTilesRenderParametersIndex = 0;
   }
 #endif
 
