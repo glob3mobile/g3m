@@ -7,8 +7,6 @@
 //
 
 #include "GEORasterSymbol.hpp"
-
-//#include "GEOTileRasterizer.hpp"
 #include "ICanvas.hpp"
 #include "GEORasterProjection.hpp"
 #include "GEO2DPolygonData.hpp"

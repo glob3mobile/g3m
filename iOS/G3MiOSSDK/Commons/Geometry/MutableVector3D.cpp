@@ -10,25 +10,19 @@
 
 
 MutableVector3D MutableVector3D::normalized() const {
-  if (isNan()) {
-    return nan();
-  }
-  if (isZero()) {
-    return MutableVector3D();
-  }
-
+//  if (isZero()) {
+//    return MutableVector3D();
+//  }
+#warning vtp asked dgd: "check nan and zero cases????"
   const double d = length();
   return MutableVector3D(_x / d, _y /d, _z / d);
 }
 
 void MutableVector3D::normalize() {
-  if (!isNan() && !isZero()) {
     const double d = length();
-    //  return MutableVector3D(_x / d, _y /d, _z / d);
     _x /= d;
     _y /= d;
     _z /= d;
-  }
 }
 
 

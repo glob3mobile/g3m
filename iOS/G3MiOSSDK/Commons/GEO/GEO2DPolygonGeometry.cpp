@@ -47,3 +47,11 @@ GEO2DPolygonGeometry* GEO2DPolygonGeometry::deepCopy() const {
   }
   return new GEO2DPolygonGeometry(_polygonData);
 }
+
+bool GEO2DPolygonGeometry::contain(const Geodetic2D& point) const {
+  if (_polygonData) {
+    return _polygonData->contains(point);
+  }
+  return false;
+}
+

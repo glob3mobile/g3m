@@ -203,9 +203,6 @@ public abstract class GEORasterSymbol extends GEOSymbol implements QuadTree_Cont
     super.dispose();
   }
 
-
-  ///#include "GEOTileRasterizer.hpp"
-  
   public final boolean symbolize(G3MRenderContext rc, GEOSymbolizer symbolizer, MeshRenderer meshRenderer, ShapesRenderer shapesRenderer, MarksRenderer marksRenderer, GEOVectorLayer geoVectorLayer)
   {
     if (geoVectorLayer == null)

@@ -52,16 +52,15 @@ public class GoogleMapsLayer extends RasterLayer
     {
       return null;
     }
-    else if (tile == tileP)
+  
+    if (tile == tileP)
     {
       //Most common case tile of suitable level being fully coveraged by layer
       return ((_transparency < 1) ? TileImageContribution.fullCoverageTransparent(_transparency) : TileImageContribution.fullCoverageOpaque());
     }
-    else
-    {
-      final Sector requestedImageSector = tileP._sector;
-      return ((_transparency < 1) ? TileImageContribution.partialCoverageTransparent(requestedImageSector, _transparency) : TileImageContribution.partialCoverageOpaque(requestedImageSector));
-    }
+  
+    final Sector requestedImageSector = tileP._sector;
+    return ((_transparency < 1) ? TileImageContribution.partialCoverageTransparent(requestedImageSector, _transparency) : TileImageContribution.partialCoverageOpaque(requestedImageSector));
   }
 
   protected final URL createURL(Tile tile)
@@ -120,27 +119,27 @@ public class GoogleMapsLayer extends RasterLayer
 
   public GoogleMapsLayer(String key, TimeInterval timeToCache, boolean readExpired, int initialLevel, float transparency, LayerCondition condition)
   {
-     this(key, timeToCache, readExpired, initialLevel, transparency, condition, "");
+     this(key, timeToCache, readExpired, initialLevel, transparency, condition, new java.util.ArrayList<Info>());
   }
   public GoogleMapsLayer(String key, TimeInterval timeToCache, boolean readExpired, int initialLevel, float transparency)
   {
-     this(key, timeToCache, readExpired, initialLevel, transparency, null, "");
+     this(key, timeToCache, readExpired, initialLevel, transparency, null, new java.util.ArrayList<Info>());
   }
   public GoogleMapsLayer(String key, TimeInterval timeToCache, boolean readExpired, int initialLevel)
   {
-     this(key, timeToCache, readExpired, initialLevel, 1, null, "");
+     this(key, timeToCache, readExpired, initialLevel, 1, null, new java.util.ArrayList<Info>());
   }
   public GoogleMapsLayer(String key, TimeInterval timeToCache, boolean readExpired)
   {
-     this(key, timeToCache, readExpired, 2, 1, null, "");
+     this(key, timeToCache, readExpired, 2, 1, null, new java.util.ArrayList<Info>());
   }
   public GoogleMapsLayer(String key, TimeInterval timeToCache)
   {
-     this(key, timeToCache, true, 2, 1, null, "");
+     this(key, timeToCache, true, 2, 1, null, new java.util.ArrayList<Info>());
   }
-  public GoogleMapsLayer(String key, TimeInterval timeToCache, boolean readExpired, int initialLevel, float transparency, LayerCondition condition, String disclaimerInfo)
+  public GoogleMapsLayer(String key, TimeInterval timeToCache, boolean readExpired, int initialLevel, float transparency, LayerCondition condition, java.util.ArrayList<Info> layerInfo)
   {
-     super(timeToCache, readExpired, new LayerTilesRenderParameters(Sector.fullSphere(), 1, 1, initialLevel, 20, new Vector2I(256, 256), LayerTilesRenderParameters.defaultTileMeshResolution(), true), transparency, condition, disclaimerInfo);
+     super(timeToCache, readExpired, new LayerTilesRenderParameters(Sector.fullSphere(), 1, 1, initialLevel, 20, new Vector2I(256, 256), LayerTilesRenderParameters.defaultTileMeshResolution(), true), transparency, condition, layerInfo);
      _key = key;
      _initialLevel = initialLevel;
   }
@@ -216,7 +215,7 @@ public class GoogleMapsLayer extends RasterLayer
 
   public final GoogleMapsLayer copy()
   {
-    return new GoogleMapsLayer(_key, _timeToCache, _readExpired, _initialLevel, _transparency, (_condition == null) ? null : _condition.copy(), _disclaimerInfo);
+    return new GoogleMapsLayer(_key, _timeToCache, _readExpired, _initialLevel, _transparency, (_condition == null) ? null : _condition.copy(), _layerInfo);
   }
 
   public final RenderState getRenderState()

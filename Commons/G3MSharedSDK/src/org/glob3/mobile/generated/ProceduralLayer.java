@@ -26,10 +26,10 @@ public abstract class ProceduralLayer extends Layer
   protected ProceduralLayer(final java.util.ArrayList<LayerTilesRenderParameters> parametersVector,
                             final float transparency,
                             final LayerCondition condition,
-                            final String disclaimerInfo) {
-    super(transparency, condition, disclaimerInfo);
+                            final java.util.ArrayList<Info> layerInfo) {
+    super(transparency, condition, layerInfo);
     _parametersVector.addAll(parametersVector);
-    _selectedLayerTilesRenderParametersIndex = -1;
+    _selectedLayerTilesRenderParametersIndex = 0;
   }
 
   public final java.util.ArrayList<LayerTilesRenderParameters> getLayerTilesRenderParametersVector()
