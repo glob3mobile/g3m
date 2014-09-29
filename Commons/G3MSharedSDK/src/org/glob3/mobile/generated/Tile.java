@@ -583,14 +583,7 @@ public class Tile
     }
   }
 
-<<<<<<< HEAD
   public final void render(G3MRenderContext rc, GLState parentState, java.util.ArrayList<Tile> toVisitInNextIteration, Frustum cameraFrustumInModelCoordinates, TilesStatistics tilesStatistics, float verticalExaggeration, LayerTilesRenderParameters layerTilesRenderParameters, TileTexturizer texturizer, TilesRenderParameters tilesRenderParameters, ITimer lastSplitTimer, ElevationDataProvider elevationDataProvider, TileTessellator tessellator, LayerSet layerSet, Sector renderedSector, boolean forceFullRender, long tileDownloadPriority, double texWidthSquared, double texHeightSquared, double nowInMS, boolean renderTileMeshes, boolean logTilesPetitions, java.util.ArrayList<Tile> tilesStartedRendering, java.util.ArrayList<String> tilesStoppedRendering)
-=======
-  public final void render(G3MRenderContext rc, GLState parentState, java.util.ArrayList<Tile> toVisitInNextIteration, Frustum cameraFrustumInModelCoordinates, TilesStatistics tilesStatistics, float verticalExaggeration, LayerTilesRenderParameters layerTilesRenderParameters, TileTexturizer texturizer, TilesRenderParameters tilesRenderParameters, ITimer lastSplitTimer, ElevationDataProvider elevationDataProvider, TileTessellator tessellator, LayerSet layerSet, Sector renderedSector, boolean forceFullRender, long tileDownloadPriority, double texWidthSquared, double texHeightSquared, double nowInMS, boolean renderTileMeshes, boolean logTilesPetitions, TileRenderingListener tileRenderingListener)
-                    //const Planet* planet,
-                    //const Vector3D& cameraNormalizedPosition,
-                    //double cameraAngle2HorizonInRadians,
->>>>>>> tileimageprovider
   {
   
     tilesStatistics.computeTileProcessed(this);
@@ -677,12 +670,6 @@ public class Tile
     }
   
   }
-<<<<<<< HEAD
-=======
-              //const Planet* planet,
-              //const Vector3D& cameraNormalizedPosition,
-              //double cameraAngle2HorizonInRadians,
->>>>>>> tileimageprovider
 
   public final void setTextureSolved(boolean textureSolved)
   {
