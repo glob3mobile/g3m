@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\..\..\G3MWindows8App\packages\directxtk_windowsstore_8_1.2014.07.15.1\build\native\directxtk_windowsstore_8_1.props" Condition="Exists('..\..\..\G3MWindows8App\packages\directxtk_windowsstore_8_1.2014.07.15.1\build\native\directxtk_windowsstore_8_1.props')" />
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|ARM">
       <Configuration>Debug</Configuration>
@@ -25,6 +26,18 @@
       <Configuration>Release</Configuration>
       <Platform>x64</Platform>
     </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="resource.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="G3MWindowsSDK.Windows.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <SDKReference Include="SQLite.WinRT81, Version=3.8.6" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{71dc9d42-e310-48e5-9257-5f6ea6a489dc}</ProjectGuid>
@@ -74,23 +87,37 @@
   <Import Project="..\G3MWindowsSDK.Shared\G3MWindowsSDK.Shared.vcxitems" Label="Shared" />
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(ExtensionSDKDirectoryRoot)\Windows\v$(TargetPlatformVersion)\ExtensionSDKs\SQLite.WinRT81\3.8.5\DesignTime\CommonConfiguration\Neutral\SQLite.WinRT81.props" Condition="exists('$(ExtensionSDKDirectoryRoot)\Windows\v$(TargetPlatformVersion)\ExtensionSDKs\SQLite.WinRT81\3.8.5\DesignTime\CommonConfiguration\Neutral\SQLite.WinRT81.props')" />
+    <Import Project="$(ExtensionSDKDirectoryRoot)\Windows\v$(TargetPlatformVersion)\ExtensionSDKs\SQLite.WinRT81\3.8.6\DesignTime\CommonConfiguration\Neutral\SQLite.WinRT81.props" Condition="exists('$(ExtensionSDKDirectoryRoot)\Windows\v$(TargetPlatformVersion)\ExtensionSDKs\SQLite.WinRT81\3.8.6\DesignTime\CommonConfiguration\Neutral\SQLite.WinRT81.props')" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(ExtensionSDKDirectoryRoot)\Windows\v$(TargetPlatformVersion)\ExtensionSDKs\SQLite.WinRT81\3.8.5\DesignTime\CommonConfiguration\Neutral\SQLite.WinRT81.props" Condition="exists('$(ExtensionSDKDirectoryRoot)\Windows\v$(TargetPlatformVersion)\ExtensionSDKs\SQLite.WinRT81\3.8.5\DesignTime\CommonConfiguration\Neutral\SQLite.WinRT81.props')" />
+    <Import Project="$(ExtensionSDKDirectoryRoot)\Windows\v$(TargetPlatformVersion)\ExtensionSDKs\SQLite.WinRT81\3.8.6\DesignTime\CommonConfiguration\Neutral\SQLite.WinRT81.props" Condition="exists('$(ExtensionSDKDirectoryRoot)\Windows\v$(TargetPlatformVersion)\ExtensionSDKs\SQLite.WinRT81\3.8.6\DesignTime\CommonConfiguration\Neutral\SQLite.WinRT81.props')" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(ExtensionSDKDirectoryRoot)\Windows\v$(TargetPlatformVersion)\ExtensionSDKs\SQLite.WinRT81\3.8.5\DesignTime\CommonConfiguration\Neutral\SQLite.WinRT81.props" Condition="exists('$(ExtensionSDKDirectoryRoot)\Windows\v$(TargetPlatformVersion)\ExtensionSDKs\SQLite.WinRT81\3.8.5\DesignTime\CommonConfiguration\Neutral\SQLite.WinRT81.props')" />
+    <Import Project="$(ExtensionSDKDirectoryRoot)\Windows\v$(TargetPlatformVersion)\ExtensionSDKs\SQLite.WinRT81\3.8.6\DesignTime\CommonConfiguration\Neutral\SQLite.WinRT81.props" Condition="exists('$(ExtensionSDKDirectoryRoot)\Windows\v$(TargetPlatformVersion)\ExtensionSDKs\SQLite.WinRT81\3.8.6\DesignTime\CommonConfiguration\Neutral\SQLite.WinRT81.props')" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(ExtensionSDKDirectoryRoot)\Windows\v$(TargetPlatformVersion)\ExtensionSDKs\SQLite.WinRT81\3.8.5\DesignTime\CommonConfiguration\Neutral\SQLite.WinRT81.props" Condition="exists('$(ExtensionSDKDirectoryRoot)\Windows\v$(TargetPlatformVersion)\ExtensionSDKs\SQLite.WinRT81\3.8.5\DesignTime\CommonConfiguration\Neutral\SQLite.WinRT81.props')" />
+    <Import Project="$(ExtensionSDKDirectoryRoot)\Windows\v$(TargetPlatformVersion)\ExtensionSDKs\SQLite.WinRT81\3.8.6\DesignTime\CommonConfiguration\Neutral\SQLite.WinRT81.props" Condition="exists('$(ExtensionSDKDirectoryRoot)\Windows\v$(TargetPlatformVersion)\ExtensionSDKs\SQLite.WinRT81\3.8.6\DesignTime\CommonConfiguration\Neutral\SQLite.WinRT81.props')" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(ExtensionSDKDirectoryRoot)\Windows\v$(TargetPlatformVersion)\ExtensionSDKs\SQLite.WinRT81\3.8.5\DesignTime\CommonConfiguration\Neutral\SQLite.WinRT81.props" Condition="exists('$(ExtensionSDKDirectoryRoot)\Windows\v$(TargetPlatformVersion)\ExtensionSDKs\SQLite.WinRT81\3.8.5\DesignTime\CommonConfiguration\Neutral\SQLite.WinRT81.props')" />
+    <Import Project="$(ExtensionSDKDirectoryRoot)\Windows\v$(TargetPlatformVersion)\ExtensionSDKs\SQLite.WinRT81\3.8.6\DesignTime\CommonConfiguration\Neutral\SQLite.WinRT81.props" Condition="exists('$(ExtensionSDKDirectoryRoot)\Windows\v$(TargetPlatformVersion)\ExtensionSDKs\SQLite.WinRT81\3.8.6\DesignTime\CommonConfiguration\Neutral\SQLite.WinRT81.props')" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(ExtensionSDKDirectoryRoot)\Windows\v$(TargetPlatformVersion)\ExtensionSDKs\SQLite.WinRT81\3.8.5\DesignTime\CommonConfiguration\Neutral\SQLite.WinRT81.props" Condition="exists('$(ExtensionSDKDirectoryRoot)\Windows\v$(TargetPlatformVersion)\ExtensionSDKs\SQLite.WinRT81\3.8.5\DesignTime\CommonConfiguration\Neutral\SQLite.WinRT81.props')" />
+    <Import Project="$(ExtensionSDKDirectoryRoot)\Windows\v$(TargetPlatformVersion)\ExtensionSDKs\SQLite.WinRT81\3.8.6\DesignTime\CommonConfiguration\Neutral\SQLite.WinRT81.props" Condition="exists('$(ExtensionSDKDirectoryRoot)\Windows\v$(TargetPlatformVersion)\ExtensionSDKs\SQLite.WinRT81\3.8.6\DesignTime\CommonConfiguration\Neutral\SQLite.WinRT81.props')" />
   </ImportGroup>
-  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Label="UserMacros">
+    <NuGetPackageImportStamp>6219a652</NuGetPackageImportStamp>
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <GenerateManifest>false</GenerateManifest>
   </PropertyGroup>
@@ -123,6 +150,10 @@
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
       <GenerateWindowsMetadata>false</GenerateWindowsMetadata>
     </Link>
+    <Lib>
+      <AdditionalDependencies>sqlite3.lib;windowscodecs.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -186,5 +217,17 @@
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
+    <Import Project="..\..\..\G3MWindows8App\packages\sqlite.redist.3.8.4.2\build\native\sqlite.redist.targets" Condition="Exists('..\..\..\G3MWindows8App\packages\sqlite.redist.3.8.4.2\build\native\sqlite.redist.targets')" />
+    <Import Project="..\..\..\G3MWindows8App\packages\sqlite.3.8.4.2\build\native\sqlite.targets" Condition="Exists('..\..\..\G3MWindows8App\packages\sqlite.3.8.4.2\build\native\sqlite.targets')" />
+    <Import Project="..\..\..\G3MWindows8App\packages\directxtk_windowsstore_8_1.2014.07.15.1\build\native\directxtk_windowsstore_8_1.targets" Condition="Exists('..\..\..\G3MWindows8App\packages\directxtk_windowsstore_8_1.2014.07.15.1\build\native\directxtk_windowsstore_8_1.targets')" />
   </ImportGroup>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\..\..\G3MWindows8App\packages\sqlite.redist.3.8.4.2\build\native\sqlite.redist.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\G3MWindows8App\packages\sqlite.redist.3.8.4.2\build\native\sqlite.redist.targets'))" />
+    <Error Condition="!Exists('..\..\..\G3MWindows8App\packages\sqlite.3.8.4.2\build\native\sqlite.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\G3MWindows8App\packages\sqlite.3.8.4.2\build\native\sqlite.targets'))" />
+    <Error Condition="!Exists('..\..\..\G3MWindows8App\packages\directxtk_windowsstore_8_1.2014.07.15.1\build\native\directxtk_windowsstore_8_1.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\G3MWindows8App\packages\directxtk_windowsstore_8_1.2014.07.15.1\build\native\directxtk_windowsstore_8_1.props'))" />
+    <Error Condition="!Exists('..\..\..\G3MWindows8App\packages\directxtk_windowsstore_8_1.2014.07.15.1\build\native\directxtk_windowsstore_8_1.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\G3MWindows8App\packages\directxtk_windowsstore_8_1.2014.07.15.1\build\native\directxtk_windowsstore_8_1.targets'))" />
+  </Target>
 </Project>

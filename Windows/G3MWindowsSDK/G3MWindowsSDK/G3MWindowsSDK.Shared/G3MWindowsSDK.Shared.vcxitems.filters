@@ -1002,6 +1002,12 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)..\..\Specific\GPUAttribute_D3D.cpp">
       <Filter>Specific</Filter>
     </ClCompile>
+	<ClCompile Include="$(MSBuildThisFileDirectory)..\..\Specific\Image_win8.cpp">
+      <Filter>Specific</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\Specific\SQDatabase.cpp">
+      <Filter>Specific</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="$(MSBuildThisFileDirectory)..\..\Specific\ByteBuffer_win8.hpp">
@@ -1018,6 +1024,7 @@
     </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)..\..\Specific\FloatBuffer_win8.hpp">
       <Filter>Specific</Filter>
+	  
     </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)..\..\Specific\G3MBuilder_win8.hpp">
       <Filter>Specific</Filter>
@@ -2091,6 +2098,12 @@
       <Filter>Specific</Filter>
     </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)..\..\Specific\GPUAttribute_D3D.hpp">
+      <Filter>Specific</Filter>
+    </ClInclude>
+	<ClInclude Include="$(MSBuildThisFileDirectory)..\..\Specific\Image_win8.hpp">
+      <Filter>Specific</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\Specific\SQDatabase.hpp">
       <Filter>Specific</Filter>
     </ClInclude>
   </ItemGroup>
