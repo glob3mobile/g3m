@@ -140,6 +140,9 @@
 #import <G3MiOSSDK/GEO2DPolygonData.hpp>
 #import <G3MiOSSDK/ChessboardLayer.hpp>
 #import <G3MiOSSDK/GEORectangleRasterSymbol.hpp>
+#import <G3MiOSSDK/ByteBufferBuilder.hpp>
+#import <G3MiOSSDK/PointCloudMesh.hpp>
+
 
 #import <G3MiOSSDK/DefaultInfoDisplay.hpp>
 #import <G3MiOSSDK/DebugTileImageProvider.hpp>
@@ -641,7 +644,34 @@ layerSet->addLayer(blueMarble);
 //  ShapesRenderer* shapesRenderer = [self createShapesRendererForTestImageDrawingOfCanvas: builder.getPlanet()];
 //  builder.addRenderer(shapesRenderer);
 
-  
+  if (true){ //POINT-CLOUD-MESH
+    
+    FloatBufferBuilderFromGeodetic* fbb = FloatBufferBuilderFromGeodetic::builderWithoutCenter(planet);
+    fbb->add(Angle::zero(), Angle::zero(), 1000);
+    IFloatBuffer* points = fbb->create();
+    
+    ByteBufferBuilder bbb;
+    bbb.add(255);
+    bbb.add(0);
+    bbb.add(0);
+    IByteBuffer* colors = bbb.create();
+    
+    MeshRenderer* mr = new MeshRenderer();
+    
+    PointCloudMesh* pcm = new PointCloudMesh(points,
+                                             true,
+                                             colors,
+                                             true,
+                                             10.0,
+                                             true);
+    
+    mr->addMesh(pcm);
+    
+    
+    
+    builder.addRenderer(mr);
+    
+  }
   
   builder.initializeWidget();
   
@@ -669,6 +699,8 @@ layerSet->addLayer(blueMarble);
 //                                                                               100076.892613024946));
 //
 // [self testGenericQuadTree:geoVectorLayer];
+  
+
   
 }
 

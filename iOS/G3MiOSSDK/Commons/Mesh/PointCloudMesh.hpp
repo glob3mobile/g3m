@@ -28,8 +28,13 @@ private:
   int                     _pointSize;
   bool                    _depthTest;
   
+  int                     _nPoints;
+  
   GLState*                _glState;
   void createGLState();
+  
+  BoundingVolume* computeBoundingVolume() const;
+  mutable BoundingVolume* _boundingVolume;
 
   
 public:
@@ -41,6 +46,34 @@ public:
                  int pointSize = 1.0,
                  bool depthTest = true);
   ~PointCloudMesh();
+  
+  void rawRender(const G3MRenderContext* rc, const GLState* parentGLState) const;
+  
+  int getVertexCount() const{
+    return _nPoints;
+  }
+  
+  const Vector3D getVertex(int i) const{
+    const int p = i * 3;
+    return Vector3D(_points->get(p  ),// + _center._x,
+                    _points->get(p+1),// + _center._y,
+                    _points->get(p+2));// + _center._z);
+  }
+  
+  BoundingVolume* getBoundingVolume() const{
+    if (_boundingVolume == NULL){
+      _boundingVolume = computeBoundingVolume();
+    }
+    return _boundingVolume;
+  }
+  
+  bool isTransparent(const G3MRenderContext* rc) const{
+    return false;
+  }
+  
+  void showNormals(bool v) const{
+    //IDLE
+  }
   
 //protected:
 //  Vector3D                _center;

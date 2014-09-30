@@ -54,6 +54,12 @@ GPUProgram* GPUProgramManager::getNewProgram(GL* gl, int uniformsCode, int attri
 
   const bool hasTexture2 = GPUVariable::hasUniform(uniformsCode, SAMPLER2);
 //  const bool hasTexture3 = GPUVariable::hasUniform(uniformsCode, SAMPLER3);
+  
+  const bool hasRGBColor = GPUVariable::hasAttribute(attributesCode, RGB_COLOR);
+  
+  if (hasRGBColor){
+    return compileProgramWithName(gl, "RGBColorMesh");
+  }
 
   if (billboard) {
     return compileProgramWithName(gl, "Billboard");

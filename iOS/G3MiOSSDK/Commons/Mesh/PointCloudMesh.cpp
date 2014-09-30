@@ -36,11 +36,16 @@ _ownsPoints(ownsPoints),
 _rgbColors(rgbColors),
 _ownsColors(ownsColors),
 _pointSize(pointSize),
-_depthTest(depthTest)
+_depthTest(depthTest),
+_nPoints(points->size() / 3),
+_boundingVolume(NULL),
+_glState(new GLState())
 {
-  if ((points->size() / 4) != (rgbColors->size() / 3)){
+  if (_nPoints != (rgbColors->size() / 3)){
     ILogger::instance()->logError("Wrong parameters for PointCloudMesh()");
   }
+  
+  createGLState();
 }
 
 PointCloudMesh::~PointCloudMesh(){
@@ -50,6 +55,8 @@ PointCloudMesh::~PointCloudMesh(){
   if (_ownsColors){
     delete _rgbColors;
   }
+  _glState->_release();
+  delete _boundingVolume;
 }
 
 void PointCloudMesh::createGLState() {
@@ -62,6 +69,63 @@ void PointCloudMesh::createGLState() {
                                                false, 0,
                                                false, 0, 0,
                                                1.0,
-                                               true, _pointSize),
+                                               true,
+                                               _pointSize),
+                         false);
+  
+  _glState->addGLFeature(new ColorGLFeature(_rgbColors,// The attribute is a byte vector of 3 elements RGB
+                                            3,            // Our buffer contains elements of 3
+                                            0,            // Index 0
+                                            false,        // Not normalized
+                                            0,            // Stride 0
+                                            true, GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha()),
                          false);
 }
+
+void PointCloudMesh::rawRender(const G3MRenderContext* rc,
+                             const GLState* parentGLState) const {
+  _glState->setParent(parentGLState);
+  GL* gl = rc->getGL();
+  gl->drawArrays(GLPrimitive::points(),
+                 0,
+                 _nPoints,
+                 _glState,
+                 *rc->getGPUProgramManager());
+}
+
+BoundingVolume* PointCloudMesh::computeBoundingVolume() const {
+  const int vertexCount = getVertexCount();
+  
+  if (vertexCount <= 0) {
+    return NULL;
+  }
+  
+  double minX = 1e12;
+  double minY = 1e12;
+  double minZ = 1e12;
+  
+  double maxX = -1e12;
+  double maxY = -1e12;
+  double maxZ = -1e12;
+  
+  for (int i=0; i < vertexCount; i++) {
+    const int i3 = i * 3;
+    
+    const double x = _points->get(i3    );// + _center._x;
+    const double y = _points->get(i3 + 1);// + _center._y;
+    const double z = _points->get(i3 + 2);// + _center._z;
+    
+    if (x < minX) minX = x;
+    if (x > maxX) maxX = x;
+    
+    if (y < minY) minY = y;
+    if (y > maxY) maxY = y;
+    
+    if (z < minZ) minZ = z;
+    if (z > maxZ) maxZ = z;
+  }
+  
+  return new Box(Vector3D(minX, minY, minZ),
+                 Vector3D(maxX, maxY, maxZ));
+}
+

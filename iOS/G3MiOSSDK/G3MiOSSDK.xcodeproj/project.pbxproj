@@ -505,6 +505,7 @@
 		D8F2EBAD18994A7B001B6103 /* CoordinateSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8F2EBAB18994A7B001B6103 /* CoordinateSystem.cpp */; };
 		D8FBCA981797F88300DBBB90 /* GLGlobalState.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8FBCA971797F87900DBBB90 /* GLGlobalState.hpp */; };
 		D8FDBDEF19DAB67F00471141 /* PointCloudMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8FDBDED19DAB67F00471141 /* PointCloudMesh.cpp */; };
+		D8FDBDF219DAD76E00471141 /* PointCloudMesh.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8FDBDEE19DAB67F00471141 /* PointCloudMesh.hpp */; };
 		E705123C165E782C00AEADB9 /* PlanetRendererBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E705123A165E782C00AEADB9 /* PlanetRendererBuilder.cpp */; };
 		E7051242165E916000AEADB9 /* G3MBuilder_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = E7051240165E916000AEADB9 /* G3MBuilder_iOS.mm */; };
 		E71AA049191AACE400834D69 /* ICanvasUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E71AA047191AACE400834D69 /* ICanvasUtils.cpp */; };
@@ -716,6 +717,7 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				D8FDBDF219DAD76E00471141 /* PointCloudMesh.hpp in CopyFiles */,
 				CFBD815719A3E1D500F1A8C4 /* PointCloudsRenderer.hpp in CopyFiles */,
 				44E3C43019C1ADB800857275 /* Info.hpp in CopyFiles */,
 				44EE3CE019A60D2F00DDEF2B /* DefaultChessCanvasImageBuilder.hpp in CopyFiles */,
