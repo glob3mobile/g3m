@@ -30,29 +30,27 @@ ITileVisitor {
    }
 
 
-   // C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in
-   // Java:
-   // ORIGINAL LINE: void visitTile(Tile* tile) const
-   @Override
-   public final void visitTile(final ArrayList<Layer> layers,
-                               final Tile tile) {
-      //      for (int i = 0; i < layers.size(); i++) {
-      //         final Layer layer = layers.get(i);
-      //         final java.util.ArrayList<Petition> pet = layer.createTileMapPetitions(null, null, tile);
-      //         // Storing petitions
-      //         for (int j = 0; j < pet.size(); j++) {
-      //            final Petition petition = pet.get(j);
-      //            _context.getLogger().logInfo(pet.get(j).getURL().description());
-      //            _context.getDownloader().requestImage(new URL(petition.getURL()), 1, petition.getTimeToCache(), true,
-      //                     new IImageDownloadListenerTileCache(_debugCounter), true);
-      //            _debugCounter++;
-      //         }
-      //      }
-      final int __TODO_Refactor_Layer;
-   }
-
-
    public long getDebugCounter() {
       return _debugCounter;
    }
+
+
+   @Override
+   public final void visitTile(final ArrayList<Layer> layers,
+                               final Tile tile) {
+      for (int i = 0; i < layers.size(); i++) {
+         final Layer layer = layers.get(i);
+         final java.util.ArrayList<Petition> pet = layer.createTileMapPetitions(null, null, tile);
+         // Storing petitions
+         for (int j = 0; j < pet.size(); j++) {
+            final Petition petition = pet.get(j);
+            _context.getLogger().logInfo(pet.get(j).getURL().description());
+            _context.getDownloader().requestImage(new URL(petition.getURL()), 1, petition.getTimeToCache(), true,
+                     new IImageDownloadListenerTileCache(_debugCounter), true);
+            _debugCounter++;
+         }
+      }
+   }
+
+
 }
