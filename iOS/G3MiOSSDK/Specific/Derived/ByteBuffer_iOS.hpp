@@ -17,24 +17,34 @@ private:
   const int            _size;
   unsigned char* const _values;
   int                  _timestamp;
+  
+  //ID
+  const long long _id;
+  static long long _nextID;
 
 
 public:
   ByteBuffer_iOS(int size) :
   _values(new unsigned char[size]),
   _size(size),
-  _timestamp(-1)
+  _timestamp(-1),
+  _id(_nextID++)
   {
     if (_values == NULL) {
       ILogger::instance()->logError("Allocating error.");
     }
   }
   
+  long long getID() const{
+    return _id;
+  }
+  
   ByteBuffer_iOS(unsigned char* values,
                  int size) :
   _values(values),
   _size(size),
-  _timestamp(-1)
+  _timestamp(-1),
+  _id(_nextID++)
   {
 
   }

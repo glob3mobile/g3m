@@ -182,6 +182,10 @@ GPUAttributeKey GPUVariable::getAttributeKey(const std::string& name) {
   if (name.compare("aNormal") == 0) {
     return NORMAL;
   }
+  
+  if (name.compare("aRGBColor") == 0) {
+    return RGB_COLOR;
+  }
 
   return UNRECOGNIZED_ATTRIBUTE;
 }

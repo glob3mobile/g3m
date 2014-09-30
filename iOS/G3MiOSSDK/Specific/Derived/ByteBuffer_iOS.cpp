@@ -11,6 +11,8 @@
 
 #include "IStringBuilder.hpp"
 
+long long ByteBuffer_iOS::_nextID = 0;
+
 const std::string ByteBuffer_iOS::description() const {
   IStringBuilder* isb = IStringBuilder::newStringBuilder();
   isb->addString("(ByteBuffer_iOS: size=");

@@ -211,7 +211,7 @@ public:
                                    int size,
                                    bool normalized,
                                    int stride,
-                                   const IByteBuffer* buffer) const;
+                                   const IByteBuffer* buffer) const = 0;
   
 };
 

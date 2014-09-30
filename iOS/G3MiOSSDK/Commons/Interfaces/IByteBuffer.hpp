@@ -13,14 +13,7 @@
 
 
 class IByteBuffer {
-  
-  //ID
-  const long long _id;
-  static long long _nextID;
-  
 public:
-  
-  IByteBuffer():_id(_nextID++){}
   
   virtual ~IByteBuffer() {
   }
@@ -45,12 +38,8 @@ public:
   
   virtual const std::string getAsString() const = 0;
   
-  long long getID() const{
-    return _id;
-  }
+  virtual long long getID() const = 0;
   
 };
-
-long long IByteBuffer::_nextID = 0;
 
 #endif
