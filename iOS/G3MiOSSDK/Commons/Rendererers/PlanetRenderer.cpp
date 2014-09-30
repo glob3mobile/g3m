@@ -448,14 +448,22 @@ void PlanetRenderer::initialize(const G3MContext* context) {
 }
 
 RenderState PlanetRenderer::getRenderState(const G3MRenderContext* rc) {
-  
+  if (_tessellator == NULL) {
+    return RenderState::error("Tessellator is null");
+  }
+
+  if (_texturizer == NULL) {
+    return RenderState::error("Texturizer is null");
+  }
+
   const LayerTilesRenderParameters* layerTilesRenderParameters = getLayerTilesRenderParameters();
   if (layerTilesRenderParameters == NULL) {
     if (_errors.empty()) {
       if (_tilesRenderParameters->_forceFirstLevelTilesRenderOnStart) {
         return RenderState::busy();
       }
-    } else {
+    }
+    else {
       return RenderState::error(_errors);
     }
   }
@@ -471,12 +479,6 @@ RenderState PlanetRenderer::getRenderState(const G3MRenderContext* rc) {
     }
   }
 
-  if (_texturizer == NULL) {
-    std::vector<std::string> errors;
-    errors.push_back("Texturizer is null");
-    return RenderState::error(errors);
-  }
-
   const RenderState texturizerRenderState = _texturizer->getRenderState(_layerSet);
   if (texturizerRenderState._type != RENDER_READY) {
     return texturizerRenderState;
@@ -484,7 +486,7 @@ RenderState PlanetRenderer::getRenderState(const G3MRenderContext* rc) {
 
   if (_firstLevelTilesJustCreated) {
     _firstLevelTilesJustCreated = false;
-    
+
     const int firstLevelTilesCount = _firstLevelTiles.size();
 
     if (_tilesRenderParameters->_forceFirstLevelTilesRenderOnStart) {
@@ -504,43 +506,26 @@ RenderState PlanetRenderer::getRenderState(const G3MRenderContext* rc) {
                                       _verticalExaggeration,
                                       _logTilesPetitions);
       }
-    } else {
-      
     }
-    if (_texturizer != NULL) {
-      for (int i = 0; i < firstLevelTilesCount; i++) {
-        Tile* tile = _firstLevelTiles[i];
-        _texturizer->justCreatedTopTile(rc, tile, _layerSet);
-      }
+
+    for (int i = 0; i < firstLevelTilesCount; i++) {
+      Tile* tile = _firstLevelTiles[i];
+      _texturizer->justCreatedTopTile(rc, tile, _layerSet);
     }
   }
 
   if (_tilesRenderParameters->_forceFirstLevelTilesRenderOnStart && !_allFirstLevelTilesAreTextureSolved) {
-      const int firstLevelTilesCount = _firstLevelTiles.size();
-      for (int i = 0; i < firstLevelTilesCount; i++) {
-        Tile* tile = _firstLevelTiles[i];
-        if (!tile->isTextureSolved()) {
-          return RenderState::busy();
-        }
+    const int firstLevelTilesCount = _firstLevelTiles.size();
+    for (int i = 0; i < firstLevelTilesCount; i++) {
+      Tile* tile = _firstLevelTiles[i];
+      if (!tile->isTextureSolved()) {
+        return RenderState::busy();
       }
-
-      if (_tessellator != NULL) {
-        if (!_tessellator->isReady(rc)) {
-          return RenderState::busy();
-        }
-      }
-
-#warning Ask Vidal
-//      if (_texturizer != NULL) {
-//        const RenderState texturizerRenderState = _texturizer->getRenderState(_layerSet);
-//        if (texturizerRenderState._type != RENDER_READY) {
-//          return texturizerRenderState;
-//        }
-//      }
-
-      _allFirstLevelTilesAreTextureSolved = true;
     }
 
+    _allFirstLevelTilesAreTextureSolved = true;
+  }
+  
   return RenderState::ready();
 }
 
