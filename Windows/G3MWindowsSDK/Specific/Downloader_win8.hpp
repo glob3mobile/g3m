@@ -13,6 +13,7 @@
 
 class Downloader_win8 : public IDownloader {
 
+public:
 	void initialize(const G3MContext* context, FrameTasksExecutor* frameTasksExecutor);
 	
 	void start();
@@ -43,6 +44,8 @@ class Downloader_win8 : public IDownloader {
 	void onDestroy(const G3MContext* context){
 		//only for android
 	}
+
+	void removeDownloadingHandlerForUrl(const std::string url);
 
 };
 

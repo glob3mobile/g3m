@@ -25,6 +25,7 @@ private:
 	Downloader_win8_Listener* _listener;
 	long long                _requestId;
 	bool                     _canceled;
+	
 
 public:
 	Listener_win8_Entry(Downloader_win8_Listener* listener, long long requestId);

@@ -51,3 +51,7 @@ const std::string Downloader_win8::statistics(){
 	std::string errMsg("TODO: Implementation");
 	throw std::exception(errMsg.c_str());
 }
+
+void Downloader_win8::removeDownloadingHandlerForUrl(const std::string url){
+
+}
