@@ -12,26 +12,17 @@ void Downloader_win8::initialize(const G3MContext* context, FrameTasksExecutor* 
 	std::string errMsg("TODO: Implementation");
 	throw std::exception(errMsg.c_str());
 }
-void Downloader_win8::onResume(const G3MContext* context){
-	std::string errMsg("TODO: Implementation");
-	throw std::exception(errMsg.c_str());
-}
-void Downloader_win8::onPause(const G3MContext* context){
-	std::string errMsg("TODO: Implementation");
-	throw std::exception(errMsg.c_str());
-}
-void Downloader_win8::onDestroy(const G3MContext* context){
-	std::string errMsg("TODO: Implementation");
-	throw std::exception(errMsg.c_str());
-}
+
 void Downloader_win8::start(){
 	std::string errMsg("TODO: Implementation");
 	throw std::exception(errMsg.c_str());
 }
+
 void Downloader_win8::stop(){
 	std::string errMsg("TODO: Implementation");
 	throw std::exception(errMsg.c_str());
 }
+
 long long Downloader_win8::requestBuffer(const URL& url, long long priority,
 	const TimeInterval& timeToCache,
 	bool readExpired,

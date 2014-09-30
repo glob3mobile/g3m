@@ -12,10 +12,9 @@
 #include "IDownloader.hpp"
 
 class Downloader_win8 : public IDownloader {
+
 	void initialize(const G3MContext* context, FrameTasksExecutor* frameTasksExecutor);
-	void onResume(const G3MContext* context);
-	void onPause(const G3MContext* context);
-	void onDestroy(const G3MContext* context);
+	
 	void start();
 	void stop();
 	long long requestBuffer(const URL& url, long long priority,
@@ -34,6 +33,17 @@ class Downloader_win8 : public IDownloader {
 	void cancelRequest(long long requestId);
 
 	const std::string statistics();
+
+	void onResume(const G3MContext* context) {
+		//only for android
+	}
+	void onPause(const G3MContext* context){
+		//only for android
+	}
+	void onDestroy(const G3MContext* context){
+		//only for android
+	}
+
 };
 
 
