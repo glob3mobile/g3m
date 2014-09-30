@@ -28,6 +28,7 @@ void NativeGL_win8::setRenderState() const{
 	if (_rasterizerStateChanged){
 		_device->CreateRasterizerState1(&_rasterizerDesc, &_rasterizerState);
 		_deviceContext->RSSetState(_rasterizerState);
+		_rasterizerStateChanged = false;
 	}
 
 	if (_blendDescChanged){
@@ -35,6 +36,7 @@ void NativeGL_win8::setRenderState() const{
 		_blendDesc.RenderTarget[0] = _rtblendDesc;
 		_device->CreateBlendState(&_blendDesc, &_blendState);
 		_deviceContext->OMSetBlendState(_blendState, NULL, 0xffffffff);
+		_blendDescChanged = false;
 	}
 	
 }
