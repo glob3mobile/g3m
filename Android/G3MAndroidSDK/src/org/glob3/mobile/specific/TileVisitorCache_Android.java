@@ -9,13 +9,15 @@ import org.glob3.mobile.generated.G3MContext;
 import org.glob3.mobile.generated.ITileVisitor;
 import org.glob3.mobile.generated.Layer;
 import org.glob3.mobile.generated.Tile;
+import org.glob3.mobile.generated.TimeInterval;
+import org.glob3.mobile.generated.URL;
 
 
 public class TileVisitorCache_Android
 implements
 ITileVisitor {
 
-   private final long       _debugCounter = 0;
+   private long             _debugCounter = 0;
    private final G3MContext _context;
 
 
@@ -38,15 +40,14 @@ ITileVisitor {
    @Override
    public final void visitTile(final ArrayList<Layer> layers,
                                final Tile tile) {
-      for (int i = 0; i < layers.size(); i++) {
-         final Layer layer = layers.get(i);
-         final java.util.ArrayList<Petition> pet = layer.createTileMapPetitions(null, null, tile);
-         // Storing petitions
-         for (int j = 0; j < pet.size(); j++) {
-            final Petition petition = pet.get(j);
-            _context.getLogger().logInfo(pet.get(j).getURL().description());
-            _context.getDownloader().requestImage(new URL(petition.getURL()), 1, petition.getTimeToCache(), true,
-                     new IImageDownloadListenerTileCache(_debugCounter), true);
+
+      final TimeInterval timeToCache = TimeInterval.fromDays(30);
+
+      for (final Layer layer : layers) {
+         for (final URL url : layer.getDownloadURLs(tile)) {
+            _context.getLogger().logInfo(url._path);
+            _context.getDownloader().requestImage(url, 1, timeToCache, true, new IImageDownloadListenerTileCache(_debugCounter),
+                     true);
             _debugCounter++;
          }
       }
