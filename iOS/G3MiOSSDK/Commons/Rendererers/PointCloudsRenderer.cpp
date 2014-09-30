@@ -432,7 +432,6 @@ long long PointCloudsRenderer::PointCloudNode::render(const PointCloud* pointClo
       }
 
 #warning TODO: quality factor 1
-//      const double minProjectedArea = 250;
       const double minProjectedArea = 250;
       if (_projectedArea >= minProjectedArea) {
         const long long renderedCount = rawRender(pointCloud,
@@ -720,7 +719,6 @@ DirectMesh* PointCloudsRenderer::PointCloudLeafNode::createMesh(double minHeight
                                       1,    // colorsIntensity
                                       true);
     mesh->setRenderVerticesCount( IMathUtils::instance()->min(_neededPoints, firstPointsCount) );
-//    mesh->setRenderVerticesCount( _neededPoints );
 
     return mesh;
   }
