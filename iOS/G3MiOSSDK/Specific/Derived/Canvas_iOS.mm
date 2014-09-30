@@ -140,6 +140,7 @@ void Canvas_iOS::_setLineDash(float lengths[],
                        lengths, count);
 #endif
 }
+
 void Canvas_iOS::_setShadow(const Color& color,
                             float blur,
                             float offsetX,

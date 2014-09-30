@@ -22,6 +22,7 @@
 #include "WebSocket_iOS.hpp"
 #import "NSString_CppAdditions.h"
 #include "DeviceInfo_iOS.hpp"
+#include "LocationManager_iOS.hpp"
 
 class Factory_iOS: public IFactory {
 protected:
@@ -111,6 +112,11 @@ public:
                              autodeleteListener,
                              autodeleteWebSocket);
   }
+  
+  ILocationManager* createLocationManager() const {
+    return new LocationManager_iOS();
+  }
+
 
 };
 

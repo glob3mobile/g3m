@@ -24,6 +24,7 @@ class IWebSocket;
 class IWebSocketListener;
 class URL;
 class IDeviceInfo;
+class ILocationManager;
 
 class IFactory {
 private:
@@ -99,6 +100,7 @@ public:
 
   const IDeviceInfo* getDeviceInfo() const;
 
+  virtual ILocationManager* createLocationManager() const = 0;
 
 #ifdef JAVA_CODE
 
