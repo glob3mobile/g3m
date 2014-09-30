@@ -75,6 +75,8 @@ public:
     return _quadTree;
   }
 
+  const std::vector<URL*> getDownloadURLs(const Tile* tile) const;
+  
 };
 
 #endif

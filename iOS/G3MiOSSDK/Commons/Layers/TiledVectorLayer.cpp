@@ -205,3 +205,9 @@ TiledVectorLayer::RequestGEOJSONBufferData* TiledVectorLayer::getRequestGEOJSONB
                                       _timeToCache,
                                       _readExpired);
 }
+
+const std::vector<URL*> TiledVectorLayer::getDownloadURLs(const Tile* tile) const {
+  std::vector<URL*> result;
+  result.push_back( new URL(createURL(tile)) );
+  return result;
+}

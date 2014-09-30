@@ -117,3 +117,8 @@ const TileImageContribution* GEOVectorLayer::contribution(const Tile* tile) cons
   }
   return NULL;
 }
+
+const std::vector<URL*> GEOVectorLayer::getDownloadURLs(const Tile* tile) const {
+  std::vector<URL*> result;
+  return result;
+}

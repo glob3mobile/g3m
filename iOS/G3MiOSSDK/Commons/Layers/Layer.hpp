@@ -43,8 +43,7 @@ protected:
 
   std::vector<const Info*>* _layerInfo;
 
-
-  float           _transparency;
+  float                 _transparency;
   const LayerCondition* _condition;
 
   void notifyChanges() const;
@@ -135,7 +134,9 @@ public:
   void addInfo(const std::vector<const Info*> info);
   
   void addInfo(const Info* info);
-  
+
+  virtual const std::vector<URL*> getDownloadURLs(const Tile* tile) const = 0;
+
 };
 
 #endif

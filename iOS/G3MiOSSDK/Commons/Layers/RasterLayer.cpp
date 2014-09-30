@@ -130,3 +130,9 @@ const Tile* RasterLayer::getParentTileOfSuitableLevel(const Tile* tile) const {
 void RasterLayer::selectLayerTilesRenderParameters(int index) {
   THROW_EXCEPTION("Logic error");
 }
+
+const std::vector<URL*> RasterLayer::getDownloadURLs(const Tile* tile) const {
+  std::vector<URL*> result;
+  result.push_back( new URL(createURL(tile)) );
+  return result;
+}
