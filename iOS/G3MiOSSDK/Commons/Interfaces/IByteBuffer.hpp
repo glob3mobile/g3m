@@ -13,21 +13,28 @@
 
 
 class IByteBuffer {
+  
+  //ID
+  const long long _id;
+  static long long _nextID;
+  
 public:
-
+  
+  IByteBuffer():_id(_nextID++){}
+  
   virtual ~IByteBuffer() {
   }
-
+  
   virtual int size() const = 0;
-
+  
   virtual int timestamp() const = 0;
-
+  
   virtual unsigned char get(int i) const = 0;
-
+  
   virtual void put(int i, unsigned char value) = 0;
-
+  
   virtual void rawPut(int i, unsigned char value) = 0;
-
+  
   virtual const std::string description() const = 0;
 #ifdef JAVA_CODE
   @Override
@@ -35,9 +42,15 @@ public:
     return description();
   }
 #endif
-
+  
   virtual const std::string getAsString() const = 0;
-
+  
+  long long getID() const{
+    return _id;
+  }
+  
 };
+
+long long IByteBuffer::_nextID = 0;
 
 #endif

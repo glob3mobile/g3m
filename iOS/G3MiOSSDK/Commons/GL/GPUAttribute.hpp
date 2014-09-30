@@ -12,6 +12,7 @@
 
 #include "INativeGL.hpp"
 #include "IFloatBuffer.hpp"
+#include "IByteBuffer.hpp"
 #include "GL.hpp"
 
 #include "IStringBuilder.hpp"
@@ -307,6 +308,73 @@ public:
 
 };
 
+class GPUAttributeValueVecByte : public GPUAttributeValue {
+private:
+  const IByteBuffer* _buffer;
+  const int _timeStamp;
+  const long long _id;
+  
+protected:
+  ~GPUAttributeValueVecByte() {
+#ifdef JAVA_CODE
+    super.dispose();
+#endif
+  }
+  
+public:
+  GPUAttributeValueVecByte(IByteBuffer* buffer, int attributeSize, int arrayElementSize, int index, int stride, bool normalized):
+  GPUAttributeValue(GLType::glUnsignedByte(), attributeSize, arrayElementSize, index, stride, normalized),
+  _buffer(buffer),
+  _timeStamp(buffer->timestamp()),
+  _id(buffer->getID()) {}
+  
+  void setAttribute(GL* gl, const int id) const {
+    if (_index != 0) {
+      //TODO: Change vertexAttribPointer
+      ILogger::instance()->logError("INDEX NO 0");
+    }
+    
+    gl->vertexAttribPointer(id, _arrayElementSize, _normalized, _stride, _buffer);
+  }
+  
+  bool isEquals(const GPUAttributeValue* v) const {
+    
+    if (!v->_enabled) {
+      return false;          //Is a disabled value
+    }
+    GPUAttributeValueVecByte* vecV = (GPUAttributeValueVecByte*)v;
+    bool equal = ((_id      == vecV->_buffer->getID())     &&
+                  (_timeStamp     == vecV->_timeStamp)  &&
+                  (_type          == v->_type)          &&
+                  (_attributeSize == v->_attributeSize) &&
+                  (_stride        == v->_stride)        &&
+                  (_normalized    == v->_normalized) );
+    
+    return equal;
+  }
+  
+  std::string description() const {
+    
+    IStringBuilder* isb = IStringBuilder::newStringBuilder();
+    isb->addString("Attribute Value Float.");
+    isb->addString(" ArrayElementSize:");
+    isb->addInt(_arrayElementSize);
+    isb->addString(" AttributeSize:");
+    isb->addInt(_attributeSize);
+    isb->addString(" Index:");
+    isb->addInt(_index);
+    isb->addString(" Stride:");
+    isb->addInt(_stride);
+    isb->addString(" Normalized:");
+    isb->addBool(_normalized);
+    
+    std::string s = isb->getString();
+    delete isb;
+    return s;
+  }
+  
+};
+
 class GPUAttributeValueVec1Float: public GPUAttributeValueVecFloat {
 private:
   ~GPUAttributeValueVec1Float() {
@@ -411,5 +479,18 @@ public:
   GPUAttributeVec4Float(const std::string&name, int id):GPUAttribute(name, id, GLType::glFloat(), 4) {}
 };
 ////////
+
+class GPUAttributeValueVec3Byte: public GPUAttributeValueVecByte {
+private:
+  ~GPUAttributeValueVec3Byte() {
+#ifdef JAVA_CODE
+    super.dispose();
+#endif
+  }
+  
+public:
+  GPUAttributeValueVec3Byte(IByteBuffer* buffer, int arrayElementSize, int index, int stride, bool normalized):
+  GPUAttributeValueVecByte(buffer, 4, arrayElementSize, index, stride, normalized) {}
+};
 
 #endif

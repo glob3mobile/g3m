@@ -237,6 +237,14 @@ public:
     _nativeGL->vertexAttribPointer(index, size, normalized, stride, buffer);
   }
   
+  void vertexAttribPointer(int index,
+                           int size,
+                           bool normalized,
+                           int stride,
+                           const IByteBuffer* buffer) const {
+    _nativeGL->vertexAttribPointer(index, size, normalized, stride, buffer);
+  }
+  
   void bindAttribLocation(const GPUProgram* program, int loc, const std::string& name) const {
     _nativeGL->bindAttribLocation(program, loc, name);
   }

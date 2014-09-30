@@ -16,6 +16,7 @@
 #include "GLUniformID_iOS.hpp"
 #include "GLTextureId_iOS.hpp"
 #include "FloatBuffer_iOS.hpp"
+#include "ByteBuffer_iOS.hpp"
 #include "ShortBuffer_iOS.hpp"
 #include "Image_iOS.hpp"
 #include "GPUProgram.hpp"
@@ -104,6 +105,16 @@ public:
 //#warning uncoment for no VBO
 //    const float* pointer = buffer_iOS->getPointer();
 //    glVertexAttribPointer(index, size, GL_FLOAT, normalized, stride, pointer);
+  }
+  
+  void vertexAttribPointer(int index,
+                           int size,
+                           bool normalized,
+                           int stride,
+                           const IByteBuffer* buffer) const {
+    const ByteBuffer_iOS* buffer_iOS = (ByteBuffer_iOS*) buffer;
+    const unsigned char* pointer = buffer_iOS->getPointer();
+    glVertexAttribPointer(index, size, GL_UNSIGNED_BYTE, normalized, stride, pointer);
   }
 
 //  void drawElements(int mode,

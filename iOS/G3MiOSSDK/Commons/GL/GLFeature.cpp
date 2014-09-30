@@ -278,6 +278,20 @@ GLColorGroupFeature(GLF_COLOR, 3, blend, sFactor, dFactor)
   _values->addAttributeValue(COLOR, value, false);
 }
 
+ColorGLFeature::ColorGLFeature(IByteBuffer* colors,
+               int arrayElementSize,
+               int index,
+               bool normalized,
+               int stride,
+               bool blend,
+               int sFactor,
+               int dFactor):
+GLColorGroupFeature(GLF_COLOR, 3, blend, sFactor, dFactor)
+{
+  GPUAttributeValueVec3Byte* value = new GPUAttributeValueVec4Float(colors, arrayElementSize, index, stride, normalized);
+  _values->addAttributeValue(COLOR, value, false);
+}
+
 FlatColorGLFeature::FlatColorGLFeature(const Color& color,
                                        bool blend, int sFactor, int dFactor):
 GLColorGroupFeature(GLF_FLATCOLOR, 2, blend, sFactor, dFactor)

@@ -18,6 +18,7 @@ private:
   unsigned char* const _values;
   int                  _timestamp;
 
+
 public:
   ByteBuffer_iOS(int size) :
   _values(new unsigned char[size]),
@@ -28,7 +29,7 @@ public:
       ILogger::instance()->logError("Allocating error.");
     }
   }
-
+  
   ByteBuffer_iOS(unsigned char* values,
                  int size) :
   _values(values),

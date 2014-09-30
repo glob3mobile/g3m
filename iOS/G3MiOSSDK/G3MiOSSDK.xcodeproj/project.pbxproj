@@ -504,6 +504,7 @@
 		D8F0C70B17B52702002A89E0 /* GenericQuadTree.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8F0C70A17B52701002A89E0 /* GenericQuadTree.cpp */; };
 		D8F2EBAD18994A7B001B6103 /* CoordinateSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8F2EBAB18994A7B001B6103 /* CoordinateSystem.cpp */; };
 		D8FBCA981797F88300DBBB90 /* GLGlobalState.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8FBCA971797F87900DBBB90 /* GLGlobalState.hpp */; };
+		D8FDBDEF19DAB67F00471141 /* PointCloudMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8FDBDED19DAB67F00471141 /* PointCloudMesh.cpp */; };
 		E705123C165E782C00AEADB9 /* PlanetRendererBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E705123A165E782C00AEADB9 /* PlanetRendererBuilder.cpp */; };
 		E7051242165E916000AEADB9 /* G3MBuilder_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = E7051240165E916000AEADB9 /* G3MBuilder_iOS.mm */; };
 		E71AA049191AACE400834D69 /* ICanvasUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E71AA047191AACE400834D69 /* ICanvasUtils.cpp */; };
@@ -1791,6 +1792,8 @@
 		D8F2EBAB18994A7B001B6103 /* CoordinateSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = CoordinateSystem.cpp; path = Commons/Geometry/CoordinateSystem.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		D8F2EBAC18994A7B001B6103 /* CoordinateSystem.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = CoordinateSystem.hpp; path = Commons/Geometry/CoordinateSystem.hpp; sourceTree = "<group>"; };
 		D8FBCA971797F87900DBBB90 /* GLGlobalState.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; path = GLGlobalState.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
+		D8FDBDED19DAB67F00471141 /* PointCloudMesh.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PointCloudMesh.cpp; path = Commons/Mesh/PointCloudMesh.cpp; sourceTree = "<group>"; };
+		D8FDBDEE19DAB67F00471141 /* PointCloudMesh.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = PointCloudMesh.hpp; path = Commons/Mesh/PointCloudMesh.hpp; sourceTree = "<group>"; };
 		D8FEDAC615E7BD23007633A0 /* IMathUtils.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = IMathUtils.hpp; path = Commons/Interfaces/IMathUtils.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		D8FEDAC815E7C219007633A0 /* MathUtils_iOS.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = MathUtils_iOS.hpp; path = Specific/Derived/MathUtils_iOS.hpp; sourceTree = "<group>"; };
 		D8FFA4C1183D03CE004E4AF3 /* TransformedTexCoorTexturedMesh_DirectionLight.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = TransformedTexCoorTexturedMesh_DirectionLight.fsh; sourceTree = "<group>"; };
@@ -2671,6 +2674,8 @@
 				CF6FE3EC1899812800C05775 /* G3MMeshParser.hpp */,
 				CF6FE3EE1899852300C05775 /* G3MMeshMaterial.cpp */,
 				CF6FE3EF1899852300C05775 /* G3MMeshMaterial.hpp */,
+				D8FDBDED19DAB67F00471141 /* PointCloudMesh.cpp */,
+				D8FDBDEE19DAB67F00471141 /* PointCloudMesh.hpp */,
 			);
 			name = Mesh;
 			sourceTree = "<group>";
@@ -3105,6 +3110,7 @@
 				CFCBA3C51907086C00FD2A2F /* TileImageContribution.cpp in Sources */,
 				D8765D061779C3AE004B62F4 /* LeveledMesh.cpp in Sources */,
 				D8765D071779C3AE004B62F4 /* FlatColorMesh.cpp in Sources */,
+				D8FDBDEF19DAB67F00471141 /* PointCloudMesh.cpp in Sources */,
 				CF4027CF1770DCB400D5A80C /* IWebSocket.cpp in Sources */,
 				CF4027D21770DD5C00D5A80C /* WebSocket_iOS.mm in Sources */,
 				CF4027DD1770E7B900D5A80C /* base64.c in Sources */,

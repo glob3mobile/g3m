@@ -16,6 +16,7 @@
 #include "RCObject.hpp"
 
 class Camera;
+class IByteBuffer;
 
 enum GLFeatureID{
   GLF_BILLBOARD,
@@ -393,6 +394,15 @@ private:
 
 public:
   ColorGLFeature(IFloatBuffer* colors,
+                 int arrayElementSize,
+                 int index,
+                 bool normalized,
+                 int stride,
+                 bool blend,
+                 int sFactor,
+                 int dFactor);
+  
+  ColorGLFeature(IByteBuffer* colors,
                  int arrayElementSize,
                  int index,
                  bool normalized,
