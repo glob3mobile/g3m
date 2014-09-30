@@ -247,4 +247,11 @@ public class TiledVectorLayer extends VectorLayer
     }
   }
 
+  public final java.util.ArrayList<URL> getDownloadURLs(Tile tile)
+  {
+    java.util.ArrayList<URL> result = new java.util.ArrayList<URL>();
+    result.add(new URL(createURL(tile)));
+    return result;
+  }
+
 }

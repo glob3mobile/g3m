@@ -91,7 +91,6 @@ public class PointCloudsRenderer extends DefaultRenderer
     
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#warning TODO: quality factor 1
-    //      const double minProjectedArea = 250;
           final double minProjectedArea = 250;
           if (_projectedArea >= minProjectedArea)
           {
@@ -559,7 +558,6 @@ public class PointCloudsRenderer extends DefaultRenderer
     
         DirectMesh mesh = new DirectMesh(GLPrimitive.points(), false, _average, _firstPointsVerticesBuffer, 1, pointSize, Color.newFromRGBA(1, 1, 1, 1), _firstPointsColorsBuffer, 1, true); // colorsIntensity -  colors
         mesh.setRenderVerticesCount(IMathUtils.instance().min(_neededPoints, firstPointsCount));
-    //    mesh->setRenderVerticesCount( _neededPoints );
     
         return mesh;
       }

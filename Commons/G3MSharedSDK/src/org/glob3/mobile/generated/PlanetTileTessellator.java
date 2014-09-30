@@ -484,11 +484,6 @@ public class PlanetTileTessellator extends TileTessellator
     return result;
   }
 
-  public final boolean isReady(G3MRenderContext rc)
-  {
-    return true;
-  }
-
   public final IFloatBuffer createTextCoords(Vector2I rawResolution, Tile tile)
   {
   
