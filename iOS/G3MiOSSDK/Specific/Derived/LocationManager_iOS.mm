@@ -69,7 +69,7 @@ bool const LocationManager_iOS::serviceIsEneabled() const {
 }
 
 bool const LocationManager_iOS::isAuthorized() const {
-  return ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorized || [CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorizedAlways);
+  return ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusNotDetermined ||[CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorized || [CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorizedAlways);
 }
 
 void LocationManager_iOS::start(long long minTime, double minDistance, const Activity_Type activityType) {
@@ -109,7 +109,11 @@ void LocationManager_iOS::start(long long minTime, double minDistance, const Act
     
     //TODO minTime
     
-    [_locationManager startUpdatingLocation];  }
+    [_locationManager startUpdatingLocation];
+  } else {
+    [_locationManager startUpdatingLocation];
+    //[_locationManager stopUpdatingLocation];
+  }
 }
 
 void LocationManager_iOS::stop() {
