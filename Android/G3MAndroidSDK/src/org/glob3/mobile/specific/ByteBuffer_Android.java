@@ -14,11 +14,16 @@ IByteBuffer {
    //private final ByteBuffer _buffer;
    private final byte[] _buffer;
    private int          _timestamp = 0;
+   
+   //ID
+   final long _id;
+   static long _nextID = 0;
 
 
    ByteBuffer_Android(final byte[] data) {
       //      _buffer = ByteBuffer.wrap(data);
       _buffer = data;
+      _id = _nextID++;
 
       //_buffer = ByteBuffer.allocateDirect(data.length);
       //_buffer.put(data);
@@ -30,6 +35,7 @@ IByteBuffer {
       //_buffer = ByteBuffer.allocate(size);
       //      _buffer = ByteBuffer.wrap(new byte[size]);
       _buffer = new byte[size];
+      _id = _nextID++;
    }
 
 
@@ -102,6 +108,12 @@ IByteBuffer {
       catch (final UnsupportedEncodingException e) {
          throw new RuntimeException(e);
       }
+   }
+
+
+   @Override
+   public long getID() {
+	   return _id;
    }
 
 

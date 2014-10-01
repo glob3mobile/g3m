@@ -100,7 +100,7 @@ public class PointCloudMesh extends Mesh
   }
   public PointCloudMesh(IFloatBuffer points, boolean ownsPoints, IByteBuffer rgbColors, boolean ownsColors)
   {
-     this(points, ownsPoints, rgbColors, ownsColors, 1.0, true);
+     this(points, ownsPoints, rgbColors, ownsColors, 1, true);
   }
   public PointCloudMesh(IFloatBuffer points, boolean ownsPoints, IByteBuffer rgbColors, boolean ownsColors, int pointSize, boolean depthTest)
   {
