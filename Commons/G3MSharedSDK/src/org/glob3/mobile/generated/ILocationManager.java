@@ -3,8 +3,14 @@ public abstract class ILocationManager
 {
 
 
-  protected final java.util.ArrayList<LocationChangedListener> _listeners;
+  protected static final java.util.ArrayList<LocationChangedListener> _listeners = new java.util.ArrayList<LocationChangedListener>();
 
+
+///#ifdef C_CODE
+//  std::vector<const LocationChangedListener*>* _listeners = new std::vector<const LocationChangedListener*>();
+///#else
+//  protected final java.util.ArrayList<LocationChangedListener> _listeners = java.util.ArrayList<LocationChangedListener>();
+///#endif
 
 
 
