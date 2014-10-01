@@ -29,7 +29,7 @@ public class PointCloudMesh extends Mesh
   private boolean _ownsPoints;
   private IByteBuffer _rgbColors;
   private boolean _ownsColors;
-  private int _pointSize;
+  private float _pointSize;
   private boolean _depthTest;
 
   private int _nPoints;
@@ -38,7 +38,7 @@ public class PointCloudMesh extends Mesh
   private void createGLState()
   {
   
-    _geometryGLFeature = new GeometryGLFeature(_points, 3, 0, false, 0, _depthTest, false, 0, false, 0, 0, (float) 1.0, _pointSize); //Depth test - Stride 0 - Not normalized - Index 0 - Our buffer contains elements of 3 - The attribute is a float vector of 4 elements
+    _geometryGLFeature = new GeometryGLFeature(_points, 3, 0, false, 0, _depthTest, false, 0, false, 0, 0, (float)1.0, _pointSize); //Depth test - Stride 0 - Not normalized - Index 0 - Our buffer contains elements of 3 - The attribute is a float vector of 4 elements
   
     _glState.addGLFeature(_geometryGLFeature, false);
   
@@ -94,15 +94,15 @@ public class PointCloudMesh extends Mesh
 
 
 
-  public PointCloudMesh(IFloatBuffer points, boolean ownsPoints, IByteBuffer rgbColors, boolean ownsColors, int pointSize)
+  public PointCloudMesh(IFloatBuffer points, boolean ownsPoints, IByteBuffer rgbColors, boolean ownsColors, float pointSize)
   {
      this(points, ownsPoints, rgbColors, ownsColors, pointSize, true);
   }
   public PointCloudMesh(IFloatBuffer points, boolean ownsPoints, IByteBuffer rgbColors, boolean ownsColors)
   {
-     this(points, ownsPoints, rgbColors, ownsColors, 1.0, true);
+     this(points, ownsPoints, rgbColors, ownsColors, (float)1.0, true);
   }
-  public PointCloudMesh(IFloatBuffer points, boolean ownsPoints, IByteBuffer rgbColors, boolean ownsColors, int pointSize, boolean depthTest)
+  public PointCloudMesh(IFloatBuffer points, boolean ownsPoints, IByteBuffer rgbColors, boolean ownsColors, float pointSize, boolean depthTest)
   {
      _points = points;
      _ownsPoints = ownsPoints;
@@ -179,62 +179,5 @@ public class PointCloudMesh extends Mesh
   {
     _geometryGLFeature.setPointSize(v);
   }
-
-//protected:
-//  Vector3D                _center;
-//  const MutableMatrix44D* _translationMatrix;
-//  IFloatBuffer*           _vertices;
-//  const bool              _ownsVertices;
-//  IFloatBuffer*           _normals;
-//  const bool              _ownsNormals;
-//  const float             _lineWidth;
-//  const float             _pointSize;
-//  const bool              _depthTest;
-//  
-//  mutable BoundingVolume* _extent;
-//  BoundingVolume* computeBoundingVolume() const;
-//  
-//  AbstractGeometryMesh(const int       primitive,
-//                       const Vector3D& center,
-//                       IFloatBuffer*   vertices,
-//                       bool            ownsVertices,
-//                       IFloatBuffer*   normals,
-//                       bool            ownsNormals,
-//                       float           lineWidth,
-//                       float           pointSize,
-//                       bool            depthTest);
-//  
-//  GLState* _glState;
-//  
-//  void createGLState();
-//  
-//  virtual void rawRender(const G3MRenderContext* rc) const = 0;
-//  
-//  mutable bool _showNormals;
-//  mutable Mesh* _normalsMesh;
-//  Mesh* createNormalsMesh() const;
-//  
-//public:
-//  ~AbstractGeometryMesh();
-//  
-//  BoundingVolume* getBoundingVolume() const;
-//  
-//  int getVertexCount() const;
-//  
-//  const Vector3D getVertex(int i) const;
-//  
-//  bool isTransparent(const G3MRenderContext* rc) const {
-//    return false; //TODO: CHECK
-//  }
-//  
-//  void rawRender(const G3MRenderContext* rc,
-//                 const GLState* parentGLState) const;
-//  
-//  void showNormals(bool v) const {
-//    _showNormals = v;
-//  }
-
-
-
 
 }
