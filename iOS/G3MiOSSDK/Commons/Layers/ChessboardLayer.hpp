@@ -79,6 +79,8 @@ public:
 
   bool rawIsEquals(const Layer* that) const;
 
+  const std::vector<URL*> getDownloadURLs(const Tile* tile) const;
+
 };
 
 #endif

@@ -91,7 +91,6 @@ public class PointCloudsRenderer extends DefaultRenderer
     
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#warning TODO: quality factor 1
-    //      const double minProjectedArea = 250;
           final double minProjectedArea = 250;
           if (_projectedArea >= minProjectedArea)
           {
@@ -559,7 +558,6 @@ public class PointCloudsRenderer extends DefaultRenderer
     
         DirectMesh mesh = new DirectMesh(GLPrimitive.points(), false, _average, _firstPointsVerticesBuffer, 1, pointSize, Color.newFromRGBA(1, 1, 1, 1), _firstPointsColorsBuffer, 1, true); // colorsIntensity -  colors
         mesh.setRenderVerticesCount(IMathUtils.instance().min(_neededPoints, firstPointsCount));
-    //    mesh->setRenderVerticesCount( _neededPoints );
     
         return mesh;
       }
@@ -1358,11 +1356,11 @@ public class PointCloudsRenderer extends DefaultRenderer
   {
     if (_cloudsSize > 0)
     {
-      final IDeviceInfo deviceInfo = IFactory.instance().getDeviceInfo();
-      final float deviceQualityFactor = deviceInfo.getQualityFactor();
-  //    const double factor = _tilesRenderParameters->_texturePixelsPerInch; //UNIT: Dots / Inch^2 (ppi)
-  //    const double correctionFactor = (deviceInfo->getDPI() * deviceQualityFactor) / factor;
-      final double correctionFactor = (deviceInfo.getDPI() * deviceQualityFactor) / 256;
+  //    const IDeviceInfo* deviceInfo = IFactory::instance()->getDeviceInfo();
+  //    const float deviceQualityFactor = deviceInfo->getQualityFactor();
+  ////    const double factor = _tilesRenderParameters->_texturePixelsPerInch; //UNIT: Dots / Inch^2 (ppi)
+  ////    const double correctionFactor = (deviceInfo->getDPI() * deviceQualityFactor) / factor;
+  //    const double correctionFactor = (deviceInfo->getDPI() * deviceQualityFactor) / 256;
   
       if (_timer == null)
       {

@@ -184,4 +184,10 @@ public class GEOVectorLayer extends VectorLayer
     return _quadTree;
   }
 
+  public final java.util.ArrayList<URL> getDownloadURLs(Tile tile)
+  {
+    java.util.ArrayList<URL> result = new java.util.ArrayList<URL>();
+    return result;
+  }
+
 }
