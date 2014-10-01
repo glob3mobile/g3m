@@ -637,6 +637,15 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
 
   public final RenderState getRenderState(G3MRenderContext rc)
   {
+    if (_tessellator == null)
+    {
+      return RenderState.error("Tessellator is null");
+    }
+  
+    if (_texturizer == null)
+    {
+      return RenderState.error("Texturizer is null");
+    }
   
     final LayerTilesRenderParameters layerTilesRenderParameters = getLayerTilesRenderParameters();
     if (layerTilesRenderParameters == null)
@@ -668,13 +677,6 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
       }
     }
   
-    if (_texturizer == null)
-    {
-      java.util.ArrayList<String> errors = new java.util.ArrayList<String>();
-      errors.add("Texturizer is null");
-      return RenderState.error(errors);
-    }
-  
     final RenderState texturizerRenderState = _texturizer.getRenderState(_layerSet);
     if (texturizerRenderState._type != RenderState_Type.RENDER_READY)
     {
@@ -697,51 +699,28 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
           tile.prepareForFullRendering(rc, _texturizer, _elevationDataProvider, _tessellator, layerTilesRenderParameters, _layerSet, _tilesRenderParameters, true, _tileDownloadPriority, _verticalExaggeration, _logTilesPetitions); // forceFullRender
         }
       }
-      else
-      {
   
-      }
-      if (_texturizer != null)
+      for (int i = 0; i < firstLevelTilesCount; i++)
       {
-        for (int i = 0; i < firstLevelTilesCount; i++)
-        {
-          Tile tile = _firstLevelTiles.get(i);
-          _texturizer.justCreatedTopTile(rc, tile, _layerSet);
-        }
+        Tile tile = _firstLevelTiles.get(i);
+        _texturizer.justCreatedTopTile(rc, tile, _layerSet);
       }
     }
   
     if (_tilesRenderParameters._forceFirstLevelTilesRenderOnStart && !_allFirstLevelTilesAreTextureSolved)
     {
-        final int firstLevelTilesCount = _firstLevelTiles.size();
-        for (int i = 0; i < firstLevelTilesCount; i++)
+      final int firstLevelTilesCount = _firstLevelTiles.size();
+      for (int i = 0; i < firstLevelTilesCount; i++)
+      {
+        Tile tile = _firstLevelTiles.get(i);
+        if (!tile.isTextureSolved())
         {
-          Tile tile = _firstLevelTiles.get(i);
-          if (!tile.isTextureSolved())
-          {
-            return RenderState.busy();
-          }
+          return RenderState.busy();
         }
-  
-        if (_tessellator != null)
-        {
-          if (!_tessellator.isReady(rc))
-          {
-            return RenderState.busy();
-          }
-        }
-  
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning Ask Vidal
-  //      if (_texturizer != NULL) {
-  //        const RenderState texturizerRenderState = _texturizer->getRenderState(_layerSet);
-  //        if (texturizerRenderState._type != RENDER_READY) {
-  //          return texturizerRenderState;
-  //        }
-  //      }
-  
-        _allFirstLevelTilesAreTextureSolved = true;
       }
+  
+      _allFirstLevelTilesAreTextureSolved = true;
+    }
   
     return RenderState.ready();
   }

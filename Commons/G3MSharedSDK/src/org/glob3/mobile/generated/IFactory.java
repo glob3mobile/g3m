@@ -30,6 +30,7 @@ package org.glob3.mobile.generated;
 //class IWebSocketListener;
 //class URL;
 //class IDeviceInfo;
+//class ILocationManager;
 
 public abstract class IFactory
 {
@@ -97,6 +98,7 @@ public abstract class IFactory
     return _deviceInfo;
   }
 
+  public abstract ILocationManager createLocationManager();
 
 
   public abstract IShortBuffer createShortBuffer(final short[] array, final int length);
