@@ -3,6 +3,7 @@
 package org.glob3.mobile.specific;
 
 import java.io.UnsupportedEncodingException;
+import java.nio.ByteBuffer;
 
 import org.glob3.mobile.generated.IByteBuffer;
 
@@ -18,6 +19,8 @@ IByteBuffer {
    //ID
    final long _id;
    static long _nextID = 0;
+   
+   ByteBuffer _byteBuffer = null;
 
 
    ByteBuffer_Android(final byte[] data) {
@@ -90,6 +93,13 @@ IByteBuffer {
       return _buffer;
    }
 
+   public ByteBuffer getByteBuffer() {
+	   if (_byteBuffer == null){
+		   _byteBuffer = ByteBuffer.allocateDirect(_buffer.length);
+		   _byteBuffer.put(_buffer);
+	   }
+	   return _byteBuffer;
+   }
 
    @Override
    public String description() {

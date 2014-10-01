@@ -1,10 +1,17 @@
-
-
 package com.glob3.mobile.g3mandroidtestingapplication;
 
 import org.glob3.mobile.generated.Angle;
+import org.glob3.mobile.generated.ByteBufferBuilder;
 import org.glob3.mobile.generated.DownloadPriority;
+import org.glob3.mobile.generated.FloatBufferBuilderFromGeodetic;
+import org.glob3.mobile.generated.G3MContext;
+import org.glob3.mobile.generated.GTask;
 import org.glob3.mobile.generated.Geodetic3D;
+import org.glob3.mobile.generated.IByteBuffer;
+import org.glob3.mobile.generated.IFloatBuffer;
+import org.glob3.mobile.generated.MeshRenderer;
+import org.glob3.mobile.generated.PeriodicalTask;
+import org.glob3.mobile.generated.PointCloudMesh;
 import org.glob3.mobile.generated.PointCloudsRenderer;
 import org.glob3.mobile.generated.PointCloudsRenderer.PointCloudMetadataListener;
 import org.glob3.mobile.generated.TimeInterval;
@@ -12,222 +19,311 @@ import org.glob3.mobile.generated.URL;
 import org.glob3.mobile.specific.G3MBuilder_Android;
 import org.glob3.mobile.specific.G3MWidget_Android;
 
+import android.R.bool;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.RelativeLayout;
 
+public class MainActivity extends Activity {
 
-public class MainActivity
-         extends
-            Activity {
+	private G3MWidget_Android _g3mWidget;
 
-   private G3MWidget_Android _g3mWidget;
+	@Override
+	protected void onCreate(final Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
 
+		requestWindowFeature(Window.FEATURE_NO_TITLE);
+		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+				WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-   @Override
-   protected void onCreate(final Bundle savedInstanceState) {
-      super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_main);
 
-      requestWindowFeature(Window.FEATURE_NO_TITLE);
-      getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+		_g3mWidget = createWidget();
 
-      setContentView(R.layout.activity_main);
+		final RelativeLayout placeHolder = (RelativeLayout) findViewById(R.id.g3mWidgetHolder);
 
+		placeHolder.addView(_g3mWidget);
 
-      _g3mWidget = createWidget();
+		final Geodetic3D zurichPos = Geodetic3D.fromDegrees(40, -75, 80000);
+		_g3mWidget.getG3MWidget().setAnimatedCameraPosition(
+				TimeInterval.fromSeconds(5), zurichPos, Angle.zero(),
+				Angle.fromDegrees(-90));
 
-      final RelativeLayout placeHolder = (RelativeLayout) findViewById(R.id.g3mWidgetHolder);
+	}
 
+	private G3MWidget_Android createWidget() {
+		final G3MBuilder_Android builder = new G3MBuilder_Android(this);
+/*
+		final PointCloudsRenderer pcr = new PointCloudsRenderer();
 
-      placeHolder.addView(_g3mWidget);
+		final URL serverURL = new URL("http://glob3mobile.dyndns.org:8080");
+		// final String cloudName = "Loudoun-VA_simplified2_LOD";
+		final String cloudName = "Loudoun-VA_fragment_LOD";
+		final long downloadPriority = DownloadPriority.LOWER;
+		final TimeInterval timeToCache = TimeInterval.zero();
+		final boolean readExpired = false;
+		final float pointSize = 2;
+		final float verticalExaggeration = 1;
+		final PointCloudMetadataListener metadataListener = null;
+		final boolean deleteListener = true;
 
+		pcr.addPointCloud( //
+				serverURL, cloudName, //
+				downloadPriority, timeToCache, readExpired, //
+				pointSize, //
+				verticalExaggeration, //
+				metadataListener, deleteListener);
 
-      final Geodetic3D zurichPos = Geodetic3D.fromDegrees(40, -75, 80000);
-      _g3mWidget.getG3MWidget().setAnimatedCameraPosition(TimeInterval.fromSeconds(5), zurichPos, Angle.zero(),
-               Angle.fromDegrees(-90));
+		builder.addRenderer(pcr);
+*/
+		boolean pointCloud = true;
+		if (pointCloud) { // POINT-CLOUD-MESH
 
-   }
+			FloatBufferBuilderFromGeodetic fbb = FloatBufferBuilderFromGeodetic
+					.builderWithoutCenter(builder.getPlanet());
+			ByteBufferBuilder bbb = new ByteBufferBuilder();
 
+			for (int i = 0; i < 10; i++) {
+				// Point
+				double lat = (Math.random() * 180) - 90;
+				double lon = (Math.random() * 360) - 180;
+				double h = Math.random() * 10000;
+				fbb.add(Angle.fromDegrees(lat), Angle.fromDegrees(lon), h);
 
-   private G3MWidget_Android createWidget() {
-      final G3MBuilder_Android builder = new G3MBuilder_Android(this);
+				// Color
+				byte r = (byte) ((byte) Math.random() * 256);
+				byte g = (byte) ((byte) Math.random() * 256);
+				byte b = (byte) ((byte) Math.random() * 256);
+				bbb.add(r); // R
+				bbb.add(g); // G
+				bbb.add(b); // B
+			}
 
-      final PointCloudsRenderer pcr = new PointCloudsRenderer();
+			IFloatBuffer points = fbb.create();
+			IByteBuffer colors = bbb.create();
 
-      final URL serverURL = new URL("http://glob3mobile.dyndns.org:8080");
-      //  final String cloudName = "Loudoun-VA_simplified2_LOD";
-      final String cloudName = "Loudoun-VA_fragment_LOD";
-      final long downloadPriority = DownloadPriority.LOWER;
-      final TimeInterval timeToCache = TimeInterval.zero();
-      final boolean readExpired = false;
-      final float pointSize = 2;
-      final float verticalExaggeration = 1;
-      final PointCloudMetadataListener metadataListener = null;
-      final boolean deleteListener = true;
+			MeshRenderer mr = new MeshRenderer();
 
-      pcr.addPointCloud( //
-               serverURL, cloudName, //
-               downloadPriority, timeToCache, readExpired, //
-               pointSize, //
-               verticalExaggeration, //
-               metadataListener, deleteListener);
+			PointCloudMesh pcm = new PointCloudMesh(points, true, colors, true,
+					(float) 10.0, false);
+			mr.addMesh(pcm);
 
+			builder.addRenderer(mr);
 
-      builder.addRenderer(pcr);
+			// Changing point size
+			class PointCloudTask extends GTask {
+				PointCloudMesh _mesh;
+				int _size = 1;
+				boolean _growing = true;
 
-      //      final TimeInterval connectTimeout = TimeInterval.fromSeconds(60);
-      //      final TimeInterval readTimeout = TimeInterval.fromSeconds(65);
-      //      final boolean saveInBackground = true;
+				public PointCloudTask(PointCloudMesh mesh) {
+					_mesh = mesh;
+				}
 
-      //      builder.getPlanetRendererBuilder().setLayerSet(createLayerSet());
-      // builder.getPlanetRendererBuilder().setRenderDebug(true);
-      // builder.getPlanetRendererBuilder().setLogTilesPetitions(true);
+				@Override
+				public void run(G3MContext context) {
+					// TODO Auto-generated method stub
+					if (_growing) {
+						_size++;
+					} else {
+						_size--;
+					}
 
-      return builder.createWidget();
-   }
+					if (_size == 1) {
+						_growing = true;
+					} else if (_size == 10) {
+						_growing = false;
+					}
 
+					_mesh.setPointSize(_size);
+				}
 
-   //   private static class SampleRasterSymbolizer
-   //   extends
-   //   GEORasterSymbolizer {
-   //
-   //      private static final Color FROM_COLOR = Color.fromRGBA(0.7f, 0, 0, 0.5f);
-   //
-   //
-   //      private static GEO2DLineRasterStyle createPolygonLineRasterStyle(final GEOGeometry geometry) {
-   //         final JSONObject properties = geometry.getFeature().getProperties();
-   //         final int colorIndex = (int) properties.getAsNumber("mapcolor7", 0);
-   //         final Color color = FROM_COLOR.wheelStep(7, colorIndex).muchLighter().muchLighter();
-   //         final float dashLengths[] = {};
-   //         final int dashCount = 0;
-   //         return new GEO2DLineRasterStyle(color, 2, StrokeCap.CAP_ROUND, StrokeJoin.JOIN_ROUND, 1, dashLengths, dashCount, 0);
-   //      }
-   //
-   //
-   //      private static GEO2DSurfaceRasterStyle createPolygonSurfaceRasterStyle(final GEOGeometry geometry) {
-   //         final JSONObject properties = geometry.getFeature().getProperties();
-   //         final int colorIndex = (int) properties.getAsNumber("mapcolor7", 0);
-   //         final Color color = FROM_COLOR.wheelStep(7, colorIndex);
-   //         return new GEO2DSurfaceRasterStyle(color);
-   //      }
-   //
-   //
-   //      @Override
-   //      public GEORasterSymbolizer copy() {
-   //         return new SampleRasterSymbolizer();
-   //      }
-   //
-   //
-   //      @Override
-   //      public ArrayList<GEORasterSymbol> createSymbols(final GEO2DPointGeometry geometry) {
-   //         return null;
-   //      }
-   //
-   //
-   //      @Override
-   //      public ArrayList<GEORasterSymbol> createSymbols(final GEO2DLineStringGeometry geometry) {
-   //         return null;
-   //      }
-   //
-   //
-   //      @Override
-   //      public ArrayList<GEORasterSymbol> createSymbols(final GEO2DMultiLineStringGeometry geometry) {
-   //         return null;
-   //      }
-   //
-   //
-   //      @Override
-   //      public ArrayList<GEORasterSymbol> createSymbols(final GEO2DPolygonGeometry geometry) {
-   //         final ArrayList<GEORasterSymbol> symbols = new ArrayList<GEORasterSymbol>();
-   //         final GEOPolygonRasterSymbol symbol = new GEOPolygonRasterSymbol( //
-   //                  geometry.getPolygonData(), //
-   //                  createPolygonLineRasterStyle(geometry), //
-   //                  createPolygonSurfaceRasterStyle(geometry) //
-   //                  );
-   //         symbols.add(symbol);
-   //         return symbols;
-   //      }
-   //
-   //
-   //      @Override
-   //      public ArrayList<GEORasterSymbol> createSymbols(final GEO2DMultiPolygonGeometry geometry) {
-   //         final ArrayList<GEORasterSymbol> symbols = new ArrayList<GEORasterSymbol>();
-   //
-   //         final GEO2DLineRasterStyle lineStyle = createPolygonLineRasterStyle(geometry);
-   //         final GEO2DSurfaceRasterStyle surfaceStyle = createPolygonSurfaceRasterStyle(geometry);
-   //
-   //         for (final GEO2DPolygonData polygonData : geometry.getPolygonsData()) {
-   //            symbols.add(new GEOPolygonRasterSymbol(polygonData, lineStyle, surfaceStyle));
-   //         }
-   //
-   //
-   //         layerSet.createLayerTilesRenderParameters(forceFirstLevelTilesRenderOnStart, new ArrayList<String>());
-   //
-   //
-   //         final WMSLayer pnoa = new WMSLayer("PNOA", new URL("http://www.idee.es/wms/PNOA/PNOA", false), WMSServerVersion.WMS_1_1_0,
-   //                  Sector.fromDegrees(40.1640143280790858, -5.8564874640814313, 40.3323148480663158, -5.5216079822178570),
-   //                  "image/png", "EPSG:4326", "", true, null, TimeInterval.fromDays(0), true, null, 1);
-   //
-   //
-   //         final WMSLayer blueMarble = new WMSLayer("bmng200405", new URL("http://www.nasa.network.com/wms?", false),
-   //                  WMSServerVersion.WMS_1_1_0, //
-   //                  Sector.fromDegrees(40.1240143280790858, -5.8964874640814313, 40.3723148480663158, -5.4816079822178570),//
-   //                  //               Sector.fromDegrees(0, -90, 45, 0),
-   //                  "image/jpeg", "EPSG:4326", "", false, null, //new LevelTileCondition(0, 6),
-   //                  //NULL,
-   //                  TimeInterval.fromDays(0), true, null, 1);
-   //         layerSet.addLayer(blueMarble);
-   //         layerSet.addLayer(pnoa);
-   //
-   //         layerSet.setTileImageProvider(new DebugTileImageProvider());
-   //
-   //         builder.getPlanetRendererBuilder().setLayerSet(layerSet);
-   //         builder.getPlanetRendererBuilder().setRenderDebug(true);
-   //
-   //         builder.getPlanetRendererBuilder().setDefaultTileBackGroundImage(
-   //                  new DownloaderImageBuilder(new URL("http://www.freelogovectors.net/wp-content/uploads/2013/02/sheep-b.png")));
-   //
-   //         //  builder.getPlanetRendererBuilder()->setDefaultTileBackGroundImage(new DownloaderImageBuilder(URL("http://192.168.1.127:8080/web/img/tileNotFound.jpg")));
-   //         //  const Sector sector = Sector::fromDegrees(40.1540143280790858, -5.8664874640814313,
-   //         //                                                40.3423148480663158, -5.5116079822178570);
-   //         //
-   //         final Default_HUDRenderer hudRenderer = new Default_HUDRenderer();
-   //         final InfoDisplay infoDisplay = new DefaultInfoDisplay(hudRenderer);
-   //         //infoDisplay->showDisplay();
-   //
-   //         builder.setHUDRenderer(hudRenderer);
-   //         builder.setInfoDisplay(infoDisplay);
-   //
-   //         final TiledVectorLayer tiledVectorLayer = TiledVectorLayer.newMercator( //
-   //                  symbolizer, //
-   //                  urlTemplate, //
-   //                  sector, // sector
-   //                  firstLevel, //
-   //                  maxLevel, //
-   //                  TimeInterval.fromDays(30), // timeToCache
-   //                  true, // readExpired
-   //                  1, // transparency
-   //                  new LevelTileCondition(15, 21), // condition
-   //                  "" // disclaimerInfo
-   //                  );
-   //         // layerSet.addLayer(tiledVectorLayer);
-   //
-   //         // builder.getPlanetRendererBuilder().setRenderDebug(true);
-   //         // builder.getPlanetRendererBuilder().setLogTilesPetitions(true);
-   //
-   //         return builder.createWidget();
-   //      }
-   //
-   //
-   //      @Override
-   //      public boolean onCreateOptionsMenu(final Menu menu) {
-   //         // Inflate the menu; this adds items to the action bar if it is present.
-   //         getMenuInflater().inflate(R.menu.main, menu);
-   //         return true;
-   //      }
-   //
-   //   }
+			}
+			;
+
+			builder.addPeriodicalTask(new PeriodicalTask(TimeInterval
+					.fromSeconds(1.0), new PointCloudTask(pcm)));
+
+		}
+
+		// final TimeInterval connectTimeout = TimeInterval.fromSeconds(60);
+		// final TimeInterval readTimeout = TimeInterval.fromSeconds(65);
+		// final boolean saveInBackground = true;
+
+		// builder.getPlanetRendererBuilder().setLayerSet(createLayerSet());
+		// builder.getPlanetRendererBuilder().setRenderDebug(true);
+		// builder.getPlanetRendererBuilder().setLogTilesPetitions(true);
+
+		return builder.createWidget();
+	}
+
+	// private static class SampleRasterSymbolizer
+	// extends
+	// GEORasterSymbolizer {
+	//
+	// private static final Color FROM_COLOR = Color.fromRGBA(0.7f, 0, 0, 0.5f);
+	//
+	//
+	// private static GEO2DLineRasterStyle createPolygonLineRasterStyle(final
+	// GEOGeometry geometry) {
+	// final JSONObject properties = geometry.getFeature().getProperties();
+	// final int colorIndex = (int) properties.getAsNumber("mapcolor7", 0);
+	// final Color color = FROM_COLOR.wheelStep(7,
+	// colorIndex).muchLighter().muchLighter();
+	// final float dashLengths[] = {};
+	// final int dashCount = 0;
+	// return new GEO2DLineRasterStyle(color, 2, StrokeCap.CAP_ROUND,
+	// StrokeJoin.JOIN_ROUND, 1, dashLengths, dashCount, 0);
+	// }
+	//
+	//
+	// private static GEO2DSurfaceRasterStyle
+	// createPolygonSurfaceRasterStyle(final GEOGeometry geometry) {
+	// final JSONObject properties = geometry.getFeature().getProperties();
+	// final int colorIndex = (int) properties.getAsNumber("mapcolor7", 0);
+	// final Color color = FROM_COLOR.wheelStep(7, colorIndex);
+	// return new GEO2DSurfaceRasterStyle(color);
+	// }
+	//
+	//
+	// @Override
+	// public GEORasterSymbolizer copy() {
+	// return new SampleRasterSymbolizer();
+	// }
+	//
+	//
+	// @Override
+	// public ArrayList<GEORasterSymbol> createSymbols(final GEO2DPointGeometry
+	// geometry) {
+	// return null;
+	// }
+	//
+	//
+	// @Override
+	// public ArrayList<GEORasterSymbol> createSymbols(final
+	// GEO2DLineStringGeometry geometry) {
+	// return null;
+	// }
+	//
+	//
+	// @Override
+	// public ArrayList<GEORasterSymbol> createSymbols(final
+	// GEO2DMultiLineStringGeometry geometry) {
+	// return null;
+	// }
+	//
+	//
+	// @Override
+	// public ArrayList<GEORasterSymbol> createSymbols(final
+	// GEO2DPolygonGeometry geometry) {
+	// final ArrayList<GEORasterSymbol> symbols = new
+	// ArrayList<GEORasterSymbol>();
+	// final GEOPolygonRasterSymbol symbol = new GEOPolygonRasterSymbol( //
+	// geometry.getPolygonData(), //
+	// createPolygonLineRasterStyle(geometry), //
+	// createPolygonSurfaceRasterStyle(geometry) //
+	// );
+	// symbols.add(symbol);
+	// return symbols;
+	// }
+	//
+	//
+	// @Override
+	// public ArrayList<GEORasterSymbol> createSymbols(final
+	// GEO2DMultiPolygonGeometry geometry) {
+	// final ArrayList<GEORasterSymbol> symbols = new
+	// ArrayList<GEORasterSymbol>();
+	//
+	// final GEO2DLineRasterStyle lineStyle =
+	// createPolygonLineRasterStyle(geometry);
+	// final GEO2DSurfaceRasterStyle surfaceStyle =
+	// createPolygonSurfaceRasterStyle(geometry);
+	//
+	// for (final GEO2DPolygonData polygonData : geometry.getPolygonsData()) {
+	// symbols.add(new GEOPolygonRasterSymbol(polygonData, lineStyle,
+	// surfaceStyle));
+	// }
+	//
+	//
+	// layerSet.createLayerTilesRenderParameters(forceFirstLevelTilesRenderOnStart,
+	// new ArrayList<String>());
+	//
+	//
+	// final WMSLayer pnoa = new WMSLayer("PNOA", new
+	// URL("http://www.idee.es/wms/PNOA/PNOA", false),
+	// WMSServerVersion.WMS_1_1_0,
+	// Sector.fromDegrees(40.1640143280790858, -5.8564874640814313,
+	// 40.3323148480663158, -5.5216079822178570),
+	// "image/png", "EPSG:4326", "", true, null, TimeInterval.fromDays(0), true,
+	// null, 1);
+	//
+	//
+	// final WMSLayer blueMarble = new WMSLayer("bmng200405", new
+	// URL("http://www.nasa.network.com/wms?", false),
+	// WMSServerVersion.WMS_1_1_0, //
+	// Sector.fromDegrees(40.1240143280790858, -5.8964874640814313,
+	// 40.3723148480663158, -5.4816079822178570),//
+	// // Sector.fromDegrees(0, -90, 45, 0),
+	// "image/jpeg", "EPSG:4326", "", false, null, //new LevelTileCondition(0,
+	// 6),
+	// //NULL,
+	// TimeInterval.fromDays(0), true, null, 1);
+	// layerSet.addLayer(blueMarble);
+	// layerSet.addLayer(pnoa);
+	//
+	// layerSet.setTileImageProvider(new DebugTileImageProvider());
+	//
+	// builder.getPlanetRendererBuilder().setLayerSet(layerSet);
+	// builder.getPlanetRendererBuilder().setRenderDebug(true);
+	//
+	// builder.getPlanetRendererBuilder().setDefaultTileBackGroundImage(
+	// new DownloaderImageBuilder(new
+	// URL("http://www.freelogovectors.net/wp-content/uploads/2013/02/sheep-b.png")));
+	//
+	// // builder.getPlanetRendererBuilder()->setDefaultTileBackGroundImage(new
+	// DownloaderImageBuilder(URL("http://192.168.1.127:8080/web/img/tileNotFound.jpg")));
+	// // const Sector sector = Sector::fromDegrees(40.1540143280790858,
+	// -5.8664874640814313,
+	// // 40.3423148480663158, -5.5116079822178570);
+	// //
+	// final Default_HUDRenderer hudRenderer = new Default_HUDRenderer();
+	// final InfoDisplay infoDisplay = new DefaultInfoDisplay(hudRenderer);
+	// //infoDisplay->showDisplay();
+	//
+	// builder.setHUDRenderer(hudRenderer);
+	// builder.setInfoDisplay(infoDisplay);
+	//
+	// final TiledVectorLayer tiledVectorLayer = TiledVectorLayer.newMercator(
+	// //
+	// symbolizer, //
+	// urlTemplate, //
+	// sector, // sector
+	// firstLevel, //
+	// maxLevel, //
+	// TimeInterval.fromDays(30), // timeToCache
+	// true, // readExpired
+	// 1, // transparency
+	// new LevelTileCondition(15, 21), // condition
+	// "" // disclaimerInfo
+	// );
+	// // layerSet.addLayer(tiledVectorLayer);
+	//
+	// // builder.getPlanetRendererBuilder().setRenderDebug(true);
+	// // builder.getPlanetRendererBuilder().setLogTilesPetitions(true);
+	//
+	// return builder.createWidget();
+	// }
+	//
+	//
+	// @Override
+	// public boolean onCreateOptionsMenu(final Menu menu) {
+	// // Inflate the menu; this adds items to the action bar if it is present.
+	// getMenuInflater().inflate(R.menu.main, menu);
+	// return true;
+	// }
+	//
+	// }
 
 }

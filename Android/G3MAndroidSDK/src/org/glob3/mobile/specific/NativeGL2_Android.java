@@ -3,9 +3,11 @@
 package org.glob3.mobile.specific;
 
 import java.io.UnsupportedEncodingException;
+import java.nio.ByteBuffer;
 import java.nio.ShortBuffer;
 import java.util.ArrayList;
 
+import org.glob3.mobile.generated.GLError;
 import org.glob3.mobile.generated.GPUAttribute;
 import org.glob3.mobile.generated.GPUAttributeVec2Float;
 import org.glob3.mobile.generated.GPUAttributeVec3Float;
@@ -19,6 +21,7 @@ import org.glob3.mobile.generated.GPUUniformSampler2D;
 import org.glob3.mobile.generated.GPUUniformVec2Float;
 import org.glob3.mobile.generated.GPUUniformVec3Float;
 import org.glob3.mobile.generated.GPUUniformVec4Float;
+import org.glob3.mobile.generated.IByteBuffer;
 import org.glob3.mobile.generated.IFloatBuffer;
 import org.glob3.mobile.generated.IGLTextureId;
 import org.glob3.mobile.generated.IGLUniformID;
@@ -864,6 +867,21 @@ public final class NativeGL2_Android
    public void setActiveTexture(final int i) {
       GLES20.glActiveTexture(GLES20.GL_TEXTURE0 + i);
    }
+
+
+@Override
+public void vertexAttribPointer(int index, int size, boolean normalized,
+		int stride, IByteBuffer buffer) {
+  if (getError() != GLError.noError()){
+		  ILogger.instance().logError("Error in glVertexAttribPointer of ByteBuffer");
+  }
+  final ByteBuffer_Android buffer_Android = (ByteBuffer_Android) buffer;
+  ByteBuffer pointer = buffer_Android.getByteBuffer();
+  GLES20.glVertexAttribPointer(index, size, GLES20.GL_UNSIGNED_BYTE, normalized, stride, pointer);
+  if (getError() != GLError.noError()){
+	  ILogger.instance().logError("Error in glVertexAttribPointer of ByteBuffer");
+  }
+}
 
 
 }
