@@ -38,7 +38,7 @@ public class PointCloudMesh extends Mesh
   private void createGLState()
   {
   
-    _geometryGLFeature = new GeometryGLFeature(_points, 3, 0, false, 0, _depthTest, false, 0, false, 0, 0, 1.0, _pointSize); //Depth test - Stride 0 - Not normalized - Index 0 - Our buffer contains elements of 3 - The attribute is a float vector of 4 elements
+    _geometryGLFeature = new GeometryGLFeature(_points, 3, 0, false, 0, _depthTest, false, 0, false, 0, 0, (float) 1.0, _pointSize); //Depth test - Stride 0 - Not normalized - Index 0 - Our buffer contains elements of 3 - The attribute is a float vector of 4 elements
   
     _glState.addGLFeature(_geometryGLFeature, false);
   

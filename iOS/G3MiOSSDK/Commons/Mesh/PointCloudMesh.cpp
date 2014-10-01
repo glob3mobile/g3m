@@ -29,7 +29,7 @@ PointCloudMesh::PointCloudMesh(IFloatBuffer* points,
                                bool ownsPoints,
                                IByteBuffer* rgbColors,
                                bool ownsColors,
-                               int pointSize,
+                               float pointSize,
                                bool depthTest):
 _points(points),
 _ownsPoints(ownsPoints),
@@ -62,15 +62,15 @@ PointCloudMesh::~PointCloudMesh(){
 
 void PointCloudMesh::createGLState() {
   
-  _geometryGLFeature = new GeometryGLFeature(_points,    //The attribute is a float vector of 4 elements
+  _geometryGLFeature = new GeometryGLFeature(_points,      //The attribute is a float vector of 4 elements
                                              3,            //Our buffer contains elements of 3
                                              0,            //Index 0
                                              false,        //Not normalized
                                              0,            //Stride 0
-                                             _depthTest,         //Depth test
+                                             _depthTest,   //Depth test
                                              false, 0,
                                              false, 0, 0,
-                                             1.0,
+                                             (float)1.0,
                                              _pointSize);
   
   _glState->addGLFeature(_geometryGLFeature,
