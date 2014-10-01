@@ -53,7 +53,6 @@ GeometryGLFeature::GeometryGLFeature(IFloatBuffer* buffer,
                                      float polygonOffsetFactor,
                                      float polygonOffsetUnits,
                                      float lineWidth,
-                                     bool needsPointSize,
                                      float pointSize) :
 GLFeature(NO_GROUP, GLF_GEOMETRY),
 _depthTestEnabled(depthTestEnabled),
@@ -62,14 +61,31 @@ _culledFace(culledFace),
 _polygonOffsetFill(polygonOffsetFill),
 _polygonOffsetFactor(polygonOffsetFactor),
 _polygonOffsetUnits(polygonOffsetUnits),
-_lineWidth(lineWidth)
+_lineWidth(lineWidth),
+_pointSizeUniformValue(NULL)
 {
 
   _position = new GPUAttributeValueVec4Float(buffer, arrayElementSize, index, stride, normalized);
   _values->addAttributeValue(POSITION, _position, false);
 
-  if (needsPointSize) {
-    _values->addUniformValue(POINT_SIZE, new GPUUniformValueFloat(pointSize), false);
+  if (pointSize > 0.0) {
+    _pointSizeUniformValue = new GPUUniformValueFloatMutable(pointSize);
+    _values->addUniformValue(POINT_SIZE, _pointSizeUniformValue, false);
+  }
+}
+
+void GeometryGLFeature::setPointSize(float v){
+  
+  if (v < 0.0){
+    v = 0.0;
+  }
+  
+  if (_pointSizeUniformValue == NULL) {
+    _pointSizeUniformValue = new GPUUniformValueFloatMutable(v);
+    _values->addUniformValue(POINT_SIZE, _pointSizeUniformValue, false);
+  }
+  else{
+    _pointSizeUniformValue->changeValue(v);
   }
 }
 

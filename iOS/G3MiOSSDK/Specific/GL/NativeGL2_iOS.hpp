@@ -113,6 +113,11 @@ public:
                            int stride,
                            const IByteBuffer* buffer) const {
     const ByteBuffer_iOS* buffer_iOS = (ByteBuffer_iOS*) buffer;
+    
+//    buffer_iOS->bindAsVBOToGPU();
+//    glVertexAttribPointer(index, size, GL_UNSIGNED_BYTE, normalized, stride, 0);
+//    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    
     const unsigned char* pointer = buffer_iOS->getPointer();
     glVertexAttribPointer(index, size, GL_UNSIGNED_BYTE, normalized, stride, pointer);
   }

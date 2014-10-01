@@ -44,7 +44,7 @@ void SGGeometryNode::createGLState() {
                                                false, 0,
                                                false, (float)0.0, (float)0.0,
                                                (float)1.0,
-                                               true, (float)1.0),
+                                               (float)1.0),
                          false);
 
   if (_normals != NULL) {

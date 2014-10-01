@@ -647,13 +647,26 @@ layerSet->addLayer(blueMarble);
   if (true){ //POINT-CLOUD-MESH
     
     FloatBufferBuilderFromGeodetic* fbb = FloatBufferBuilderFromGeodetic::builderWithoutCenter(planet);
-    fbb->add(Angle::zero(), Angle::zero(), 1000);
-    IFloatBuffer* points = fbb->create();
-    
     ByteBufferBuilder bbb;
-    bbb.add(255);
-    bbb.add(0);
-    bbb.add(0);
+    
+    for(int i = 0; i < 100000; i++){
+      //Point
+      double lat = (rand() % 180) - 90;
+      double lon = (rand() % 360) - 180;
+      double h = rand() % 10000;
+      fbb->add(Angle::fromDegrees(lat), Angle::fromDegrees(lon), h);
+      
+      //Color
+      unsigned char r = (unsigned char)rand() % 256;
+      unsigned char g = (unsigned char)rand() % 256;
+      unsigned char b = (unsigned char)rand() % 256;
+      bbb.add(r); //R
+      bbb.add(g); //G
+      bbb.add(b); //B
+      
+    }
+    
+    IFloatBuffer* points = fbb->create();
     IByteBuffer* colors = bbb.create();
     
     MeshRenderer* mr = new MeshRenderer();
@@ -663,13 +676,39 @@ layerSet->addLayer(blueMarble);
                                              colors,
                                              true,
                                              10.0,
-                                             true);
-    
+                                             false);
     mr->addMesh(pcm);
     
-    
-    
     builder.addRenderer(mr);
+    
+    //Changing point size
+    class PointCloudTask: public GTask{
+      PointCloudMesh* _mesh;
+      int _size;
+      bool _growing;
+    public:
+      PointCloudTask(PointCloudMesh* mesh):_mesh(mesh), _size(1), _growing(true){}
+      
+      virtual void run(const G3MContext* context){
+        
+        if (_growing){
+          _size++;
+        } else{
+          _size--;
+        }
+        
+        if (_size == 1){
+          _growing = true;
+        } else if (_size == 10){
+          _growing = false;
+        }
+        
+        _mesh->setPointSize(_size);
+      }
+    };
+    
+    builder.addPeriodicalTask(new PeriodicalTask(TimeInterval::fromSeconds(1),
+                                                 new PointCloudTask(pcm)));
     
   }
   

@@ -323,7 +323,7 @@ protected:
   
 public:
   GPUAttributeValueVecByte(IByteBuffer* buffer, int attributeSize, int arrayElementSize, int index, int stride, bool normalized):
-  GPUAttributeValue(GLType::glUnsignedByte(), attributeSize, arrayElementSize, index, stride, normalized),
+  GPUAttributeValue(GLType::glFloat(), attributeSize, arrayElementSize, index, stride, normalized),
   _buffer(buffer),
   _timeStamp(buffer->timestamp()),
   _id(buffer->getID()) {}

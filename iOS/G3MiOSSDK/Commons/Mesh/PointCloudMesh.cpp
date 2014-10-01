@@ -39,7 +39,8 @@ _pointSize(pointSize),
 _depthTest(depthTest),
 _nPoints(points->size() / 3),
 _boundingVolume(NULL),
-_glState(new GLState())
+_glState(new GLState()),
+_geometryGLFeature(NULL)
 {
   if (_nPoints != (rgbColors->size() / 3)){
     ILogger::instance()->logError("Wrong parameters for PointCloudMesh()");
@@ -60,17 +61,19 @@ PointCloudMesh::~PointCloudMesh(){
 }
 
 void PointCloudMesh::createGLState() {
-  _glState->addGLFeature(new GeometryGLFeature(_points,    //The attribute is a float vector of 4 elements
-                                               3,            //Our buffer contains elements of 3
-                                               0,            //Index 0
-                                               false,        //Not normalized
-                                               0,            //Stride 0
-                                               _depthTest,         //Depth test
-                                               false, 0,
-                                               false, 0, 0,
-                                               1.0,
-                                               true,
-                                               _pointSize),
+  
+  _geometryGLFeature = new GeometryGLFeature(_points,    //The attribute is a float vector of 4 elements
+                                             3,            //Our buffer contains elements of 3
+                                             0,            //Index 0
+                                             false,        //Not normalized
+                                             0,            //Stride 0
+                                             _depthTest,         //Depth test
+                                             false, 0,
+                                             false, 0, 0,
+                                             1.0,
+                                             _pointSize);
+  
+  _glState->addGLFeature(_geometryGLFeature,
                          false);
   
   _glState->addGLFeature(new ColorGLFeature(_rgbColors,// The attribute is a byte vector of 3 elements RGB
@@ -83,7 +86,7 @@ void PointCloudMesh::createGLState() {
 }
 
 void PointCloudMesh::rawRender(const G3MRenderContext* rc,
-                             const GLState* parentGLState) const {
+                               const GLState* parentGLState) const {
   _glState->setParent(parentGLState);
   GL* gl = rc->getGL();
   gl->drawArrays(GLPrimitive::points(),

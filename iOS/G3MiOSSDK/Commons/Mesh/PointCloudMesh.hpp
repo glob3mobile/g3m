@@ -35,6 +35,8 @@ private:
   
   BoundingVolume* computeBoundingVolume() const;
   mutable BoundingVolume* _boundingVolume;
+  
+  GeometryGLFeature* _geometryGLFeature;
 
   
 public:
@@ -73,6 +75,10 @@ public:
   
   void showNormals(bool v) const{
     //IDLE
+  }
+  
+  void setPointSize(float v) const{
+    _geometryGLFeature->setPointSize(v);
   }
   
 //protected:

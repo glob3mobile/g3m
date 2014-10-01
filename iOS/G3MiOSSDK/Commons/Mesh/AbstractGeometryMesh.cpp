@@ -136,7 +136,7 @@ void AbstractGeometryMesh::createGLState() {
                                                false, 0,
                                                false, 0, 0,
                                                _lineWidth,
-                                               true, _pointSize),
+                                               _pointSize),
                          false);
 
   if (_normals != NULL) {

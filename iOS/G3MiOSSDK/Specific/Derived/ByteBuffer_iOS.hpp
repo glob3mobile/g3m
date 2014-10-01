@@ -12,6 +12,8 @@
 #include "IByteBuffer.hpp"
 #include "ILogger.hpp"
 
+#include <OpenGLES/ES2/gl.h>
+
 class ByteBuffer_iOS : public IByteBuffer {
 private:
   const int            _size;
@@ -21,7 +23,18 @@ private:
   //ID
   const long long _id;
   static long long _nextID;
-
+  
+  //VBO
+  static GLuint     _boundVertexBuffer;
+  mutable bool      _vertexBufferCreated;
+  mutable GLuint    _vertexBuffer; //VBO
+  mutable int       _vertexBufferTimeStamp;
+  
+  //Counters
+  static long long _newCounter;
+  static long long _deleteCounter;
+  static long long _genBufferCounter;
+  static long long _deleteBufferCounter;
 
 public:
   ByteBuffer_iOS(int size) :
@@ -50,7 +63,24 @@ public:
   }
 
   virtual ~ByteBuffer_iOS() {
+    _deleteCounter++;
+    
+    if (_vertexBufferCreated) {
+      _deleteBufferCounter++;
+      
+      glDeleteBuffers(1, &_vertexBuffer);
+      if (GL_NO_ERROR != glGetError()) {
+        ILogger::instance()->logError("Problem deleting VBO");
+      }
+      
+      if (_vertexBuffer == _boundVertexBuffer) {
+        _boundVertexBuffer = -1;
+      }
+    }
+    
     delete [] _values;
+    
+//    showStatistics();
   }
 
   int size() const {
@@ -103,6 +133,8 @@ public:
 #endif
 
   const std::string getAsString() const;
+  
+  void bindAsVBOToGPU() const;
   
 };
 

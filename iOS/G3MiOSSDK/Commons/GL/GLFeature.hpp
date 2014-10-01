@@ -113,6 +113,9 @@ private:
   const float _lineWidth;
 
   ~GeometryGLFeature();
+  
+  GPUUniformValueFloatMutable* _pointSizeUniformValue;
+  
 
 public:
 
@@ -128,11 +131,12 @@ public:
                     float polygonOffsetFactor,
                     float polygonOffsetUnits,
                     float lineWidth,
-                    bool needsPointSize,
                     float pointSize);
 
 
   void applyOnGlobalGLState(GLGlobalState* state) const ;
+  
+  void setPointSize(float v);
 
 };
 ///////////////////////////////////////////////////////////////////////////////////////////
