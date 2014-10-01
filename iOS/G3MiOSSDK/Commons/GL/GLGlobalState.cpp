@@ -18,7 +18,7 @@
 bool GLGlobalState::_initializationAvailable = false;
 
 
-void GLGlobalState::applyChanges(GL* gl, GLGlobalState& currentState) const{
+void GLGlobalState::applyChanges(GL* gl, GLGlobalState& currentState) const {
 
   INativeGL* nativeGL = gl->getNative();
 
@@ -77,8 +77,8 @@ void GLGlobalState::applyChanges(GL* gl, GLGlobalState& currentState) const{
         currentState._polygonOffsetUnits = _polygonOffsetUnits;
         currentState._polygonOffsetFactor = _polygonOffsetFactor;
       }
-
-    } else{
+    }
+    else {
       nativeGL->disable(GLStage::polygonOffsetFill());
     }
   }

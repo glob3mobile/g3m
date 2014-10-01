@@ -232,7 +232,7 @@
 				break;
 			}
 
-      usleep(10000 /* 10ms */);
+      usleep(1000 /* 1ms */);
 		}
     else {
 			NSLog(@"SQLite Prepare Failed: %s", sqlite3_errmsg(_db));
@@ -297,7 +297,7 @@
 				break;
 			}
 
-      usleep(10000 /* 10ms */);
+      usleep(1000 /* 1ms */);
 		}
     else {
 			NSLog(@"SQLite Prepare Failed: %s", sqlite3_errmsg(_db));
@@ -373,7 +373,7 @@
 				break;
 			}
 
-      usleep(10000 /* 10ms */);
+      usleep(1000 /* 1ms */);
 		}
     else {
 			NSLog(@"SQLite Step Failed: %s", sqlite3_errmsg(_db));

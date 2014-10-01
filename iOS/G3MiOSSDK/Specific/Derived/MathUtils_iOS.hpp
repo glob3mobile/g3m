@@ -144,6 +144,16 @@ public:
     return dal._l;
   }
 
+  float rawIntBitsToFloat(int value) const {
+    union FloatAndInt {
+      float _f;
+      int   _i;
+    } dal;
+
+    dal._i = value;
+    return dal._f;
+  }
+
   double rawLongBitsToDouble(long long value) const {
     union DoubleAndLong {
       double    _d;

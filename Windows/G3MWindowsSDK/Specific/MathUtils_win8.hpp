@@ -154,6 +154,16 @@ public:
 		return dal._d;
 	}
 
+	float rawIntBitsToFloat(int value) const{
+		union FloatAndInt {
+			float _f;
+			int   _i;
+		} dal;
+
+		dal._i = value;
+		return dal._f;
+	}
+
 	double floor(double d) const {
 		return MathAux::floor_(d);
 	}

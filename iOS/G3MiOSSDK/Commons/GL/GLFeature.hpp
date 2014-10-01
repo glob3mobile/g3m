@@ -59,7 +59,7 @@ public:
     _values = new GPUVariableValueSet();
   }
 
-  const GPUVariableValueSet* getGPUVariableValueSet() const{
+  const GPUVariableValueSet* getGPUVariableValueSet() const {
     return _values;
   }
 
@@ -103,9 +103,9 @@ private:
   //Position + cull + depth + polygonoffset + linewidth
   GPUAttributeValueVec4Float* _position;
 
-  const bool _depthTestEnabled;
-  const bool _cullFace;
-  const int _culledFace;
+  const bool  _depthTestEnabled;
+  const bool  _cullFace;
+  const int   _culledFace;
   const bool  _polygonOffsetFill;
   const float _polygonOffsetFactor;
   const float _polygonOffsetUnits;
@@ -172,7 +172,7 @@ public:
     _matrixHolder->setMatrix(matrix);
   }
 
-  const Matrix44DHolder* getMatrixHolder() const{
+  const Matrix44DHolder* getMatrixHolder() const {
     return _matrixHolder;
   }
 
@@ -365,12 +365,12 @@ public:
   void setScale(float u, float v);
   void setRotationAngleInRadiansAndRotationCenter(float angle, float u, float v);
 
-  int getTarget() const{
+  int getTarget() const {
     return _target;
   }
 
 #ifdef C_CODE
-  IGLTextureId const* getTextureID() const{
+  IGLTextureId const* getTextureID() const {
     return _texID;
   }
 #endif
@@ -401,7 +401,7 @@ public:
                  int sFactor,
                  int dFactor);
 
-  void applyOnGlobalGLState(GLGlobalState* state) const{
+  void applyOnGlobalGLState(GLGlobalState* state) const {
     blendingOnGlobalGLState(state);
   }
 };
@@ -417,7 +417,7 @@ private:
 public:
   FlatColorGLFeature(const Color& color,
                      bool blend, int sFactor, int dFactor);
-  void applyOnGlobalGLState(GLGlobalState* state) const{
+  void applyOnGlobalGLState(GLGlobalState* state) const {
     blendingOnGlobalGLState(state);
   }
 };
@@ -491,7 +491,7 @@ public:
                           const Color& diffuseLightColor,
                           const Color& ambientLightColor);
 
-  void applyOnGlobalGLState(GLGlobalState* state) const{}
+  void applyOnGlobalGLState(GLGlobalState* state) const {}
 
   void setLightDirection(const Vector3D& lightDir);
 };
@@ -511,7 +511,7 @@ public:
                         bool normalized,
                         int stride);
   
-  void applyOnGlobalGLState(GLGlobalState* state) const{}
+  void applyOnGlobalGLState(GLGlobalState* state) const {}
 };
 
 

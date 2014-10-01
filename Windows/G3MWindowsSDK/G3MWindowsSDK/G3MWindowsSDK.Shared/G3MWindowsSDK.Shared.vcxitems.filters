@@ -117,9 +117,6 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\CanvasTileImageProvider.cpp">
       <Filter>Common\Basic</Filter>
     </ClCompile>
-    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\CanvasTileRasterizer.cpp">
-      <Filter>Common\Basic</Filter>
-    </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\CartoCSSLexer.cpp">
       <Filter>Common\Basic</Filter>
     </ClCompile>
@@ -163,9 +160,6 @@
       <Filter>Common\Basic</Filter>
     </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\DebugTileImageProvider.cpp">
-      <Filter>Common\Basic</Filter>
-    </ClCompile>
-    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\DebugTileRasterizer.cpp">
       <Filter>Common\Basic</Filter>
     </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\DecimatedSubviewElevationData.cpp">
@@ -261,13 +255,7 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\MercatorUtils.cpp">
       <Filter>Common\Basic</Filter>
     </ClCompile>
-    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\MultiLayerTileTexturizer.cpp">
-      <Filter>Common\Basic</Filter>
-    </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\OrderedRenderable.cpp">
-      <Filter>Common\Basic</Filter>
-    </ClCompile>
-    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\Petition.cpp">
       <Filter>Common\Basic</Filter>
     </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\PlanetRendererBuilder.cpp">
@@ -327,12 +315,6 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\TileImageProvider.cpp">
       <Filter>Common\Basic</Filter>
     </ClCompile>
-    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\TileRasterizer.cpp">
-      <Filter>Common\Basic</Filter>
-    </ClCompile>
-    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\TileRasterizerContext.cpp">
-      <Filter>Common\Basic</Filter>
-    </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\TileTessellator.cpp">
       <Filter>Common\Basic</Filter>
     </ClCompile>
@@ -389,9 +371,6 @@
     </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Downloader\NullStorage.cpp">
       <Filter>Common\Downloader</Filter>
-    </ClCompile>
-    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GEO\CompositeTileRasterizer.cpp">
-      <Filter>Common\GEO</Filter>
     </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GEO\GEO2DCoordinatesArrayData.cpp">
       <Filter>Common\GEO</Filter>
@@ -490,9 +469,6 @@
       <Filter>Common\GEO</Filter>
     </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GEO\GEOSymbolizer.cpp">
-      <Filter>Common\GEO</Filter>
-    </ClCompile>
-    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GEO\GEOTileRasterizer.cpp">
       <Filter>Common\GEO</Filter>
     </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Geometry\Angle.cpp">
@@ -1002,11 +978,38 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)..\..\Specific\GPUAttribute_D3D.cpp">
       <Filter>Specific</Filter>
     </ClCompile>
-	<ClCompile Include="$(MSBuildThisFileDirectory)..\..\Specific\Image_win8.cpp">
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\Specific\Image_win8.cpp">
       <Filter>Specific</Filter>
     </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)..\..\Specific\SQDatabase.cpp">
       <Filter>Specific</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\DefaultChessCanvasImageBuilder.cpp">
+      <Filter>Common\Basic</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\DefaultInfoDisplay.cpp">
+      <Filter>Common\Basic</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\GEOVectorTileImageProvider.cpp">
+      <Filter>Common\Basic</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\Info.cpp">
+      <Filter>Common\Basic</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GEO\GEORectangleRasterSymbol.cpp">
+      <Filter>Common\GEO</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Layers\ChessboardLayer.cpp">
+      <Filter>Common\Layers</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Layers\GEOVectorLayer.cpp">
+      <Filter>Common\Layers</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Layers\ProceduralLayer.cpp">
+      <Filter>Common\Layers</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Rendererers\PointCloudsRenderer.cpp">
+      <Filter>Common\Rendererers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1024,7 +1027,6 @@
     </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)..\..\Specific\FloatBuffer_win8.hpp">
       <Filter>Specific</Filter>
-	  
     </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)..\..\Specific\G3MBuilder_win8.hpp">
       <Filter>Specific</Filter>
@@ -1095,9 +1097,6 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\CanvasTileImageProvider.hpp">
       <Filter>Common\Basic</Filter>
     </ClInclude>
-    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\CanvasTileRasterizer.hpp">
-      <Filter>Common\Basic</Filter>
-    </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\CartoCSSLexer.hpp">
       <Filter>Common\Basic</Filter>
     </ClInclude>
@@ -1141,9 +1140,6 @@
       <Filter>Common\Basic</Filter>
     </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\DebugTileImageProvider.hpp">
-      <Filter>Common\Basic</Filter>
-    </ClInclude>
-    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\DebugTileRasterizer.hpp">
       <Filter>Common\Basic</Filter>
     </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\DecimatedSubviewElevationData.hpp">
@@ -1278,16 +1274,10 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\MercatorUtils.hpp">
       <Filter>Common\Basic</Filter>
     </ClInclude>
-    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\MultiLayerTileTexturizer.hpp">
-      <Filter>Common\Basic</Filter>
-    </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\OrderedRenderable.hpp">
       <Filter>Common\Basic</Filter>
     </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\PeriodicalTask.hpp">
-      <Filter>Common\Basic</Filter>
-    </ClInclude>
-    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\Petition.hpp">
       <Filter>Common\Basic</Filter>
     </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\PlanetRendererBuilder.hpp">
@@ -1351,12 +1341,6 @@
       <Filter>Common\Basic</Filter>
     </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\TileImageProvider.hpp">
-      <Filter>Common\Basic</Filter>
-    </ClInclude>
-    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\TileRasterizer.hpp">
-      <Filter>Common\Basic</Filter>
-    </ClInclude>
-    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\TileRasterizerContext.hpp">
       <Filter>Common\Basic</Filter>
     </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\TileRenderingListener.hpp">
@@ -1430,9 +1414,6 @@
     </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Downloader\NullStorage.hpp">
       <Filter>Common\Downloader</Filter>
-    </ClInclude>
-    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GEO\CompositeTileRasterizer.hpp">
-      <Filter>Common\GEO</Filter>
     </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GEO\GEO2DCoordinatesArrayData.hpp">
       <Filter>Common\GEO</Filter>
@@ -1531,9 +1512,6 @@
       <Filter>Common\GEO</Filter>
     </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GEO\GEOSymbolizer.hpp">
-      <Filter>Common\GEO</Filter>
-    </ClInclude>
-    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GEO\GEOTileRasterizer.hpp">
       <Filter>Common\GEO</Filter>
     </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Geometry\Angle.hpp">
@@ -2100,11 +2078,38 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)..\..\Specific\GPUAttribute_D3D.hpp">
       <Filter>Specific</Filter>
     </ClInclude>
-	<ClInclude Include="$(MSBuildThisFileDirectory)..\..\Specific\Image_win8.hpp">
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\Specific\Image_win8.hpp">
       <Filter>Specific</Filter>
     </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)..\..\Specific\SQDatabase.hpp">
       <Filter>Specific</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\DefaultChessCanvasImageBuilder.hpp">
+      <Filter>Common\Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\DefaultInfoDisplay.hpp">
+      <Filter>Common\Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\GEOVectorTileImageProvider.hpp">
+      <Filter>Common\Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\Info.hpp">
+      <Filter>Common\Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GEO\GEORectangleRasterSymbol.hpp">
+      <Filter>Common\GEO</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Layers\ChessboardLayer.hpp">
+      <Filter>Common\Layers</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Layers\GEOVectorLayer.hpp">
+      <Filter>Common\Layers</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Layers\ProceduralLayer.hpp">
+      <Filter>Common\Layers</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Rendererers\PointCloudsRenderer.hpp">
+      <Filter>Common\Rendererers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

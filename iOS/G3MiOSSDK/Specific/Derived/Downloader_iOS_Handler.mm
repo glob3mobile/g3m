@@ -251,6 +251,8 @@
           [[entry listener] onErrorURL: url];
         }
       }
+
+      [_listeners removeAllObjects];
       
       [_lock unlock];
     });

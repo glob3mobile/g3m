@@ -52,28 +52,28 @@ private:
                                         float verticalExaggeration,
                                         const Geodetic2D& g) const;
 
-  bool needsEastSkirt(const Sector& tileSector) const{
+  bool needsEastSkirt(const Sector& tileSector) const {
     if (_renderedSector == NULL) {
       return true;
     }
     return _renderedSector->_upper._longitude.greaterThan(tileSector._upper._longitude);
   }
 
-  bool needsNorthSkirt(const Sector& tileSector) const{
+  bool needsNorthSkirt(const Sector& tileSector) const {
     if (_renderedSector == NULL) {
       return true;
     }
     return _renderedSector->_upper._latitude.greaterThan(tileSector._upper._latitude);
   }
 
-  bool needsWestSkirt(const Sector& tileSector) const{
+  bool needsWestSkirt(const Sector& tileSector) const {
     if (_renderedSector == NULL) {
       return true;
     }
     return _renderedSector->_lower._longitude.lowerThan(tileSector._lower._longitude);
   }
 
-  bool needsSouthSkirt(const Sector& tileSector) const{
+  bool needsSouthSkirt(const Sector& tileSector) const {
     if (_renderedSector == NULL) {
       return true;
     }
@@ -155,10 +155,6 @@ public:
                             const Vector2I& resolution,
                             const Tile* tile) const;
 
-  bool isReady(const G3MRenderContext* rc) const {
-    return true;
-  }
-
   IFloatBuffer* createTextCoords(const Vector2I& resolution,
                                  const Tile* tile) const;
 
@@ -172,7 +168,8 @@ public:
 
       if (sector.isEquals(Sector::fullSphere())) {
         _renderedSector = NULL;
-      } else{
+      }
+      else {
         _renderedSector = new Sector(sector);
       }
     }

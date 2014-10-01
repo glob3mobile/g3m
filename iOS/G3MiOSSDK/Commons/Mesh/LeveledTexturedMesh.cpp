@@ -16,7 +16,7 @@
 #include "Camera.hpp"
 #include "GLState.hpp"
 
-void LazyTextureMapping::modifyGLState(GLState& state) const{
+void LazyTextureMapping::modifyGLState(GLState& state) const {
   if (!_initialized) {
     _initializer->initialize();
 
@@ -213,7 +213,7 @@ bool LeveledTexturedMesh::isTransparent(const G3MRenderContext* rc) const {
 }
 
 void LeveledTexturedMesh::rawRender(const G3MRenderContext* rc,
-                                    const GLState* parentGLState) const{
+                                    const GLState* parentGLState) const {
   LazyTextureMapping* mapping = getCurrentTextureMapping();
   if (mapping == NULL) {
     ILogger::instance()->logError("LeveledTexturedMesh: No Texture Mapping");

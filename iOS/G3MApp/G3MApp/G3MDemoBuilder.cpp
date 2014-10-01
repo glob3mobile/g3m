@@ -9,11 +9,16 @@
 #include "G3MDemoBuilder.hpp"
 
 #include <G3MiOSSDK/PlanetRendererBuilder.hpp>
-//#include <G3MiOSSDK/SingleBilElevationDataProvider.hpp>
 #include <G3MiOSSDK/LayerSet.hpp>
 #include <G3MiOSSDK/IG3MBuilder.hpp>
 #include <G3MiOSSDK/ErrorHandling.hpp>
 #include <G3MiOSSDK/GInitializationTask.hpp>
+
+#include <G3MiOSSDK/MeshRenderer.hpp>
+#include <G3MiOSSDK/ShapesRenderer.hpp>
+#include <G3MiOSSDK/MarksRenderer.hpp>
+#include <G3MiOSSDK/GEORenderer.hpp>
+#include <G3MiOSSDK/PointCloudsRenderer.hpp>
 
 #include "G3MDemoModel.hpp"
 
@@ -28,6 +33,7 @@ _model(NULL)
 G3MDemoBuilder::~G3MDemoBuilder() {
 }
 
+
 class G3MDemoInitializationTask : public GInitializationTask {
 private:
   G3MDemoModel* _model;
@@ -36,7 +42,6 @@ public:
   G3MDemoInitializationTask(G3MDemoModel* model) :
   _model(model)
   {
-
   }
 
   void run(const G3MContext* context) {
@@ -55,25 +60,39 @@ void G3MDemoBuilder::build() {
 
   IG3MBuilder* builder = getG3MBuilder();
 
-//  builder->getPlanetRendererBuilder()->setRenderDebug(true);
-//  builder->getPlanetRendererBuilder()->setRenderTileMeshes(false);
-
-//  const float verticalExaggeration = 10.0f;
-//  builder->getPlanetRendererBuilder()->setVerticalExaggeration(verticalExaggeration);
-
-//  ElevationDataProvider* elevationDataProvider = new SingleBilElevationDataProvider(URL("file:///full-earth-2048x1024.bil"),
-//                                                                                     Sector::fullSphere(),
-//                                                                                     Vector2I(2048, 1024));
-//  builder->getPlanetRendererBuilder()->setElevationDataProvider(elevationDataProvider);
-
+  //builder->getPlanetRendererBuilder()->setRenderDebug(true);
 
   LayerSet* layerSet = new LayerSet();
   builder->getPlanetRendererBuilder()->setLayerSet(layerSet);
 
-  GEORenderer* geoRenderer = builder->createGEORenderer(NULL);
+  MeshRenderer* meshRenderer = new MeshRenderer();
+  builder->addRenderer(meshRenderer);
+
+  ShapesRenderer* shapesRenderer = new ShapesRenderer();
+  builder->addRenderer(shapesRenderer);
+
+  MarksRenderer* marksRenderer = new MarksRenderer(false);
+  builder->addRenderer(marksRenderer);
+
+  PointCloudsRenderer* pointCloudsRenderer = new PointCloudsRenderer();
+  builder->addRenderer(pointCloudsRenderer);
+//  builder->getPlanetRendererBuilder()->setTileRenderingListener(pointCloudsRenderer->getTileRenderingListener());
+
+  GEORenderer* geoRenderer = new GEORenderer(NULL, /* symbolizer */
+                                             meshRenderer,
+                                             shapesRenderer,
+                                             marksRenderer,
+                                             NULL  /* geoVectorLayer */);
+  builder->addRenderer(geoRenderer);
 
   _initialized = true;
-  _model = new G3MDemoModel(_listener, layerSet, geoRenderer);
+  _model = new G3MDemoModel(_listener,
+                            layerSet,
+                            meshRenderer,
+                            shapesRenderer,
+                            marksRenderer,
+                            geoRenderer,
+                            pointCloudsRenderer);
 
   builder->setInitializationTask(new G3MDemoInitializationTask(_model), true);
 }

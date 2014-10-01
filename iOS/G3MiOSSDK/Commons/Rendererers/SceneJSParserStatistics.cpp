@@ -25,7 +25,7 @@ void SceneJSParserStatistics::computeNode() {
   _nodesCount++;
 }
 
-int SceneJSParserStatistics::getNodesCount() const{
+int SceneJSParserStatistics::getNodesCount() const {
   return _nodesCount;
 }
 
@@ -41,7 +41,7 @@ void SceneJSParserStatistics::computeGeometry() {
   _geometriesCount++;
 }
 
-int SceneJSParserStatistics::getGeometriesCount() const{
+int SceneJSParserStatistics::getGeometriesCount() const {
   return _geometriesCount;
 }
 

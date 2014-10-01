@@ -37,7 +37,7 @@ public:
   ~RectangleI() {
   }
 
-  bool equalTo(const RectangleI& that) const{
+  bool equalTo(const RectangleI& that) const {
     return (_x == that._x) && (_y == that._y) && (_width == that._width) && (_height == that._height);
   }
 

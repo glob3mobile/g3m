@@ -168,7 +168,8 @@ IGPUProgram* GPUProgramManager::compileProgramWithName(GL* gl,
       }
 
       _programs[name] = prog;
-    } else{
+    }
+    else {
       ILogger::instance()->logError("No shader sources for program named %s.", name.c_str());
     }*/
 
@@ -181,7 +182,8 @@ IGPUProgram* GPUProgramManager::getCompiledProgram(const std::string& name) {
   std::map<std::string, IGPUProgram*>::iterator it = _programs.find(name);
   if (it != _programs.end()) {
     return it->second;
-  } else{
+  }
+  else {
     return NULL;
   }
 #endif
@@ -198,19 +200,27 @@ void GPUProgramManager::removeUnused() {
       ILogger::instance()->logInfo("Deleting program %s", it->second->getName().c_str() );
       delete it->second;
       _programs.erase(it++);
-    } else{
+    }
+    else {
       ++it;
     }
   }
 #endif
 #ifdef JAVA_CODE
+<<<<<<< HEAD
   java.util.Iterator it = _programs.entrySet().iterator();
   while (it.hasNext()) {
     java.util.Map.Entry pairs = (java.util.Map.Entry)it.next();
     IGPUProgram program = (IGPUProgram) pairs.getValue();
+=======
+  final java.util.Iterator<java.util.Map.Entry<String, GPUProgram>> iterator = _programs.entrySet().iterator();
+  while (iterator.hasNext()) {
+    final java.util.Map.Entry<String, GPUProgram> entry = iterator.next();
+    final GPUProgram program = entry.getValue();
+>>>>>>> point-cloud
     if (program.getNReferences() == 0) {
-      ILogger.instance().logInfo("Deleting program %s", program.getName() );
-      it.remove();
+      ILogger.instance().logInfo("Deleting program %s", program.getName());
+      iterator.remove();
     }
   }
 #endif

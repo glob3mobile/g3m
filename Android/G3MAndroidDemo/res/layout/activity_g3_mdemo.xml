@@ -136,6 +136,33 @@
         </TableRow>
 
 
+                     <TableRow android:layout_margin="3dp" >
+                
+            <Button
+                android:id="@+id/vectorialTilesDemoButton"
+                android:layout_width="fill_parent"
+                android:layout_height="75dp"
+                android:layout_margin="2dp"
+                android:layout_weight="0.5"
+                android:background="@drawable/buttonbackground"
+                android:text="@string/vector_tiles"
+                android:textColor="@color/g3mGreenDark"
+                android:textSize="20sp" />
+                        <Button
+                android:id="@+id/HIDDEN"
+                android:layout_width="fill_parent"
+                android:layout_height="75dp"
+                android:layout_margin="2dp"
+                android:layout_weight="0.5"
+                android:visibility="invisible"
+                android:background="@drawable/buttonbackground"
+                android:text="@string/vector_tiles"
+                android:textColor="@color/g3mGreenDark"
+                android:textSize="20sp" />
+            
+
+        </TableRow>
+           
       
     </TableLayout>
 

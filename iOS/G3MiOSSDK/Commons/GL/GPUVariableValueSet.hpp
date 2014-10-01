@@ -40,7 +40,7 @@ public:
 
   ~GPUVariableValueSet();
 
-  bool containsUniform(GPUUniformKey key) const{
+  bool containsUniform(GPUUniformKey key) const {
 #ifdef C_CODE
     const int index = key;
 #endif
@@ -51,7 +51,7 @@ public:
     return _uniformValues[index] != NULL;
   }
 
-  bool containsAttribute(GPUAttributeKey key) const{
+  bool containsAttribute(GPUAttributeKey key) const {
 #ifdef C_CODE
     const int index = key;
 #endif
@@ -117,11 +117,11 @@ public:
     }
   }
 
-  GPUAttributeValue* getAttributeValue(int key) const{
+  GPUAttributeValue* getAttributeValue(int key) const {
     return _attributeValues[key];
   }
 
-  GPUUniformValue* getUniformValue(int key) const{
+  GPUUniformValue* getUniformValue(int key) const {
     return _uniformValues[key];
   }
 

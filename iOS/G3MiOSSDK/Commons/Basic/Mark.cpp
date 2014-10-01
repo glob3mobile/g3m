@@ -22,6 +22,7 @@
 #include "Vector2D.hpp"
 #include "Geodetic3D.hpp"
 #include "TextureIDReference.hpp"
+#include "ErrorHandling.hpp"
 
 class MarkLabelImageListener : public IImageListener {
 private:
@@ -447,7 +448,7 @@ void Mark::createGLState(const Planet* planet,
 }
 
 void Mark::render(const G3MRenderContext* rc,
-                  const Vector3D& cameraPosition,
+                  const MutableVector3D& cameraPosition,
                   double cameraHeight,
                   const GLState* parentGLState,
                   const Planet* planet,
@@ -456,7 +457,11 @@ void Mark::render(const G3MRenderContext* rc,
 
   const Vector3D* markPosition = getCartesianPosition(planet);
 
-  const Vector3D markCameraVector = markPosition->sub(cameraPosition);
+//  const Vector3D markCameraVector = markPosition->sub(cameraPosition);
+//  _markCameraVector.putSub(markPosition, cameraPosition);
+  _markCameraVector.put(markPosition->_x - cameraPosition.x(),
+                        markPosition->_y - cameraPosition.y(),
+                        markPosition->_z - cameraPosition.z());
 
   // mark will be renderered only if is renderable by distance and placed on a visible globe area
   bool renderableByDistance;
@@ -464,7 +469,7 @@ void Mark::render(const G3MRenderContext* rc,
     renderableByDistance = true;
   }
   else {
-    const double squaredDistanceToCamera = markCameraVector.squaredLength();
+    const double squaredDistanceToCamera = _markCameraVector.squaredLength();
     renderableByDistance = ( squaredDistanceToCamera <= (_minDistanceToCamera * _minDistanceToCamera) );
   }
 
@@ -475,7 +480,12 @@ void Mark::render(const G3MRenderContext* rc,
 
     if (_position->_height > cameraHeight) {
       // Computing horizon culling
-      const std::vector<double> dists = planet->intersectionsDistances(cameraPosition, markCameraVector);
+      const std::vector<double> dists = planet->intersectionsDistances(cameraPosition.x(),
+                                                                       cameraPosition.y(),
+                                                                       cameraPosition.z(),
+                                                                       _markCameraVector.x(),
+                                                                       _markCameraVector.y(),
+                                                                       _markCameraVector.z());
       if (dists.size() > 0) {
         const double dist = dists[0];
         if (dist > 0.0 && dist < 1.0) {
@@ -488,9 +498,9 @@ void Mark::render(const G3MRenderContext* rc,
       if (_normalAtMarkPosition == NULL) {
         _normalAtMarkPosition = new Vector3D( planet->geodeticSurfaceNormal(*markPosition) );
       }
-      occludedByHorizon = (_normalAtMarkPosition->angleBetween(markCameraVector)._radians <= HALF_PI);
+//      occludedByHorizon = (_normalAtMarkPosition->angleInRadiansBetween(markCameraVector) <= HALF_PI);
+      occludedByHorizon = (Vector3D::angleInRadiansBetween(*_normalAtMarkPosition, _markCameraVector) <= HALF_PI);
     }
-
 
     if (!occludedByHorizon) {
       if ((_textureId == NULL) && (_textureImage != NULL)) {
@@ -544,10 +554,16 @@ void Mark::elevationChanged(const Geodetic2D& position,
 
 void Mark::setPosition(const Geodetic3D& position) {
   if (_altitudeMode == RELATIVE_TO_GROUND) {
-    ILogger::instance()->logWarning("Position change with _altitudeMode == RELATIVE_TO_GROUND not supported");
+    THROW_EXCEPTION("Position change with (_altitudeMode == RELATIVE_TO_GROUND) not supported");
   }
+
   delete _position;
+#ifdef C_CODE
   _position = new Geodetic3D(position);
+#endif
+#ifdef JAVA_CODE
+  _position = position;
+#endif
 
   delete _cartesianPosition;
   _cartesianPosition = NULL;

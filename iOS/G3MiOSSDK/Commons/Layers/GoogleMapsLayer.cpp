@@ -12,10 +12,10 @@
 #include "LayerTilesRenderParameters.hpp"
 #include "Tile.hpp"
 #include "IStringBuilder.hpp"
-#include "Petition.hpp"
 #include "LayerCondition.hpp"
 #include "TimeInterval.hpp"
 #include "RenderState.hpp"
+#include "URL.hpp"
 
 GoogleMapsLayer::GoogleMapsLayer(const std::string&    key,
                                  const TimeInterval&   timeToCache,
@@ -23,7 +23,7 @@ GoogleMapsLayer::GoogleMapsLayer(const std::string&    key,
                                  const int             initialLevel,
                                  const float           transparency,
                                  const LayerCondition* condition,
-                                 const std::string&    disclaimerInfo) :
+                                 std::vector<const Info*>*  layerInfo) :
 RasterLayer(timeToCache,
             readExpired,
             new LayerTilesRenderParameters(Sector::fullSphere(),
@@ -36,7 +36,7 @@ RasterLayer(timeToCache,
                                            true),
             transparency,
             condition,
-            disclaimerInfo),
+            layerInfo),
 _key(key),
 _initialLevel(initialLevel)
 {
@@ -47,70 +47,6 @@ _initialLevel(initialLevel)
 URL GoogleMapsLayer::getFeatureInfoURL(const Geodetic2D& position,
                                        const Sector& sector) const {
   return URL();
-}
-
-
-std::vector<Petition*> GoogleMapsLayer::createTileMapPetitions(const G3MRenderContext* rc,
-                                                               const LayerTilesRenderParameters* layerTilesRenderParameters,
-                                                               const Tile* tile) const {
-  std::vector<Petition*> petitions;
-
-  const Sector tileSector = tile->_sector;
-
-  IStringBuilder* isb = IStringBuilder::newStringBuilder();
-
-  // http://maps.googleapis.com/maps/api/staticmap?center=New+York,NY&zoom=13&size=600x300&key=AIzaSyC9pospBjqsfpb0Y9N3E3uNMD8ELoQVOrc&sensor=false
-
-  /*
-   http://maps.googleapis.com/maps/api/staticmap
-   ?center=New+York,NY
-   &zoom=13
-   &size=600x300
-   &key=AIzaSyC9pospBjqsfpb0Y9N3E3uNMD8ELoQVOrc
-   &sensor=false
-   */
-
-  isb->addString("http://maps.googleapis.com/maps/api/staticmap?sensor=false");
-
-  isb->addString("&center=");
-  isb->addDouble(tileSector._center._latitude._degrees);
-  isb->addString(",");
-  isb->addDouble(tileSector._center._longitude._degrees);
-
-  const int level = tile->_level;
-  isb->addString("&zoom=");
-  isb->addInt(level);
-
-  isb->addString("&size=");
-  isb->addInt(_parameters->_tileTextureResolution._x);
-  isb->addString("x");
-  isb->addInt(_parameters->_tileTextureResolution._y);
-
-  isb->addString("&format=jpg");
-
-
-  //  isb->addString("&maptype=roadmap);
-  //  isb->addString("&maptype=satellite");
-  isb->addString("&maptype=hybrid");
-  //  isb->addString("&maptype=terrain");
-
-
-  isb->addString("&key=");
-  isb->addString(_key);
-
-
-  const std::string path = isb->getString();
-
-  delete isb;
-
-  petitions.push_back( new Petition(tileSector,
-                                    URL(path, false),
-                                    getTimeToCache(),
-                                    getReadExpired(),
-                                    true,
-                                    _transparency) );
-
-  return petitions;
 }
 
 const URL GoogleMapsLayer::createURL(const Tile* tile) const {
@@ -175,7 +111,7 @@ GoogleMapsLayer* GoogleMapsLayer::copy() const {
                              _initialLevel,
                              _transparency,
                              (_condition == NULL) ? NULL : _condition->copy(),
-                             _disclaimerInfo);
+                             _layerInfo);
 }
 
 bool GoogleMapsLayer::rawIsEquals(const Layer* that) const {
@@ -205,7 +141,20 @@ RenderState GoogleMapsLayer::getRenderState() {
 }
 
 const TileImageContribution* GoogleMapsLayer::rawContribution(const Tile* tile) const {
+  const Tile* tileP = getParentTileOfSuitableLevel(tile);
+  if (tileP == NULL) {
+    return NULL;
+  }
+  
+  if (tile == tileP) {
+    //Most common case tile of suitable level being fully coveraged by layer
+    return ((_transparency < 1)
+            ? TileImageContribution::fullCoverageTransparent(_transparency)
+            : TileImageContribution::fullCoverageOpaque());
+  }
+  
+  const Sector requestedImageSector = tileP->_sector;
   return ((_transparency < 1)
-          ? TileImageContribution::fullCoverageTransparent(_transparency)
-          : TileImageContribution::fullCoverageOpaque());
+            ? TileImageContribution::partialCoverageTransparent(requestedImageSector, _transparency)
+            : TileImageContribution::partialCoverageOpaque(requestedImageSector));
 }

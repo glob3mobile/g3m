@@ -127,6 +127,10 @@ public:
   virtual double min(double d1, double d2) const = 0;
   virtual float  min(float f1,  float f2)  const = 0;
 
+  int min(int i1, int i2) const {
+    return (i1 < i2) ? i1 : i2;
+  }
+
   virtual double max(double d1, double d2) const = 0;
   virtual float  max(float f1,  float f2)  const = 0;
 
@@ -186,6 +190,8 @@ public:
 
   virtual long long doubleToRawLongBits(double value) const = 0;
   virtual double rawLongBitsToDouble(long long value) const = 0;
+
+  virtual float rawIntBitsToFloat(int value) const = 0;
 
   virtual double clamp(double value,
                        double min,

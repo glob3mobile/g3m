@@ -36,6 +36,10 @@ public:
 		return TimeInterval::fromSeconds(nowInSeconds());
 	}
 
+	long long nowInMilliseconds() const{
+		return GetTickCount64();
+	}
+
 	void start() {
 		_startedInSeconds = nowInSeconds();
 	}

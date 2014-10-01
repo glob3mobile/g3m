@@ -33,23 +33,23 @@ public:
   const Angle _longitude;
   const double _height;
 
-  
+
   static Geodetic3D nan() {
     return Geodetic3D(Angle::nan(), Angle::nan(), 0);
   }
-  
-  bool isNan() const{
+
+  bool isNan() const {
     return _latitude.isNan() || _longitude.isNan();
   }
-  
+
   static Geodetic3D zero() {
     return Geodetic3D(Angle::zero(), Angle::zero(), 0);
   }
-  
+
   static Geodetic3D fromDegrees(double lat, double lon, double height) {
     return Geodetic3D(Angle::fromDegrees(lat), Angle::fromDegrees(lon), height);
   }
-  
+
   static Geodetic3D linearInterpolation(const Geodetic3D& from,
                                         const Geodetic3D& to,
                                         double alpha) {
@@ -59,7 +59,7 @@ public:
                       //((1.0 - alpha) * from._height) + (alpha * to._height)
                       );
   }
-  
+
   Geodetic3D(const Angle& latitude,
              const Angle& longitude,
              const double height) :
@@ -68,7 +68,7 @@ public:
   _height(height)
   {
   }
-  
+
   Geodetic3D(const Geodetic2D& g2,
              const double height):
   _latitude(g2._latitude),
@@ -76,7 +76,7 @@ public:
   _height(height)
   {
   }
-  
+
   Geodetic3D(const Geodetic3D& g) :
   _latitude(g._latitude),
   _longitude(g._longitude),
@@ -85,13 +85,12 @@ public:
   }
 
   ~Geodetic3D() {
-    
   }
-  
+
   Geodetic2D asGeodetic2D() const {
     return Geodetic2D(_latitude, _longitude);
   }
-  
+
   const std::string description() const;
 #ifdef JAVA_CODE
   @Override
@@ -106,19 +105,19 @@ public:
                       _longitude.add(that._longitude),
                       _height + that._height);
   }
-  
+
   Geodetic3D sub(const Geodetic3D& that) const {
     return Geodetic3D(_latitude.sub(that._latitude),
                       _longitude.sub(that._longitude),
                       _height - that._height);
   }
-  
+
   Geodetic3D times(const double magnitude) const {
     return Geodetic3D(_latitude.times(magnitude),
                       _longitude.times(magnitude),
                       _height * magnitude);
   }
-  
+
   Geodetic3D div(const double magnitude) const {
     return Geodetic3D(_latitude.div(magnitude),
                       _longitude.div(magnitude),
@@ -126,7 +125,7 @@ public:
   }
 
   bool isEquals(const Geodetic3D& that) const;
-
+  
 };
 
 

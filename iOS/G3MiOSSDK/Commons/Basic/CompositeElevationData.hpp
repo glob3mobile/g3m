@@ -60,7 +60,7 @@ public:
     return _sector;
   }
 
-  bool hasNoData() const{
+  bool hasNoData() const {
     return _hasNoData;
   }
 

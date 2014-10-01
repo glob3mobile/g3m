@@ -70,7 +70,9 @@ BoundingVolume* CompositeMesh::calculateBoundingVolume() const {
   BoundingVolume* result = _children[0]->getBoundingVolume();
   for (int i = 1; i < childrenCount; i++) {
     Mesh* child = _children[i];
-    result = result->mergedWith( child->getBoundingVolume() );
+    BoundingVolume* newResult = result->mergedWith( child->getBoundingVolume() );
+    delete result;
+    result = newResult;
   }
 
   return result;
@@ -91,7 +93,7 @@ void CompositeMesh::addMesh(Mesh* mesh) {
 }
 
 void CompositeMesh::rawRender(const G3MRenderContext* rc,
-                              const GLState* parentGLState) const{
+                              const GLState* parentGLState) const {
   const int childrenCount = _children.size();
   for (int i = 0; i < childrenCount; i++) {
     Mesh* child = _children[i];
@@ -99,7 +101,7 @@ void CompositeMesh::rawRender(const G3MRenderContext* rc,
   }
 }
 
-void CompositeMesh::showNormals(bool v) const{
+void CompositeMesh::showNormals(bool v) const {
   const int childrenCount = _children.size();
   for (int i = 0; i < childrenCount; i++) {
     Mesh* child = _children[i];

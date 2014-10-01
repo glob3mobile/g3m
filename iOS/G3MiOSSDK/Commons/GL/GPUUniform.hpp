@@ -148,14 +148,15 @@ public:
 
   GPUUniformValueBool(bool b):GPUUniformValue(GLType::glBool()),_value(b) {}
 
-  void setUniform(GL* gl, const IGLUniformID* id) const{
+  void setUniform(GL* gl, const IGLUniformID* id) const {
     if (_value) {
       gl->uniform1i(id, 1);
-    } else{
+    }
+    else {
       gl->uniform1i(id, 0);
     }
   }
-  bool isEquals(const GPUUniformValue* v) const{
+  bool isEquals(const GPUUniformValue* v) const {
     return _value == ((GPUUniformValueBool*)v)->_value;
   }
 
@@ -200,10 +201,10 @@ public:
 
   GPUUniformValueVec2Float(float x, float y):GPUUniformValue(GLType::glVec2Float()), _x(x),_y(y) {}
 
-  void setUniform(GL* gl, const IGLUniformID* id) const{
+  void setUniform(GL* gl, const IGLUniformID* id) const {
     gl->uniform2f(id, _x, _y);
   }
-  bool isEquals(const GPUUniformValue* v) const{
+  bool isEquals(const GPUUniformValue* v) const {
     GPUUniformValueVec2Float *v2 = (GPUUniformValueVec2Float *)v;
     return (_x == v2->_x) && (_y == v2->_y);
   }
@@ -284,10 +285,10 @@ public:
   GPUUniformValueVec3Float(float x, float y, float z):
   GPUUniformValue(GLType::glVec3Float()),_x(x),_y(y), _z(z) {}
 
-  void setUniform(GL* gl, const IGLUniformID* id) const{
+  void setUniform(GL* gl, const IGLUniformID* id) const {
     gl->uniform3f(id, _x, _y, _z);
   }
-  bool isEquals(const GPUUniformValue* v) const{
+  bool isEquals(const GPUUniformValue* v) const {
     GPUUniformValueVec3Float *v2 = (GPUUniformValueVec3Float *)v;
     return (_x == v2->_x) && (_y == v2->_y) && (_z == v2->_z);
   }
@@ -371,10 +372,10 @@ public:
   GPUUniformValueVec4Float(float x, float y, float z, float w):
   GPUUniformValue(GLType::glVec4Float()),_x(x),_y(y), _z(z), _w(w) {}
 
-  void setUniform(GL* gl, const IGLUniformID* id) const{
+  void setUniform(GL* gl, const IGLUniformID* id) const {
     gl->uniform4f(id, _x, _y, _z, _w);
   }
-  bool isEquals(const GPUUniformValue* v) const{
+  bool isEquals(const GPUUniformValue* v) const {
     GPUUniformValueVec4Float *v2 = (GPUUniformValueVec4Float *)v;
     return (_x == v2->_x) && (_y == v2->_y) && (_z == v2->_z) && (_w == v2->_w);
   }
@@ -469,7 +470,7 @@ public:
   {
   }
 
-  void setUniform(GL* gl, const IGLUniformID* id) const{
+  void setUniform(GL* gl, const IGLUniformID* id) const {
     if (_lastModelSet != NULL) {
       _lastModelSet->_release();
     }
@@ -481,7 +482,7 @@ public:
     gl->uniformMatrix4fv(id, false, _lastModelSet);
   }
 
-  bool isEquals(const GPUUniformValue* v) const{
+  bool isEquals(const GPUUniformValue* v) const {
     if (_lastModelSet == ((GPUUniformValueMatrix4 *)v)->_provider->getMatrix()) {
       return true;
     }
@@ -535,10 +536,10 @@ public:
 
   GPUUniformValueFloat(float d):GPUUniformValue(GLType::glFloat()),_value(d) {}
 
-  void setUniform(GL* gl, const IGLUniformID* id) const{
+  void setUniform(GL* gl, const IGLUniformID* id) const {
     gl->uniform1f(id, _value);
   }
-  bool isEquals(const GPUUniformValue* v) const{
+  bool isEquals(const GPUUniformValue* v) const {
     GPUUniformValueFloat *v2 = (GPUUniformValueFloat *)v;
     return _value == v2->_value;
   }
@@ -613,10 +614,10 @@ public:
 
   GPUUniformValueInt(int b):GPUUniformValue(GLType::glInt()),_value(b) {}
 
-  void setUniform(GL* gl, const IGLUniformID* id) const{
+  void setUniform(GL* gl, const IGLUniformID* id) const {
     gl->uniform1i(id, _value);
   }
-  bool isEquals(const GPUUniformValue* v) const{
+  bool isEquals(const GPUUniformValue* v) const {
     return _value == ((GPUUniformValueInt*)v)->_value;
   }
 

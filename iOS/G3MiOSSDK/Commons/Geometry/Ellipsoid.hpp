@@ -15,7 +15,7 @@
 
 
 class Ellipsoid {
-private:
+public:
   const Vector3D _center;
   const Vector3D _radii;
 
@@ -23,11 +23,11 @@ private:
   const Vector3D _radiiToTheFourth;
   const Vector3D _oneOverRadiiSquared;
 
-public:
 
   Ellipsoid(const Vector3D& center,
             const Vector3D& radii):
-  _center(center), _radii(radii),
+  _center(center),
+  _radii(radii),
   _radiiSquared(Vector3D(radii._x * radii._x ,
                          radii._y * radii._y,
                          radii._z * radii._z)),
@@ -59,13 +59,25 @@ public:
   }
 
   double getMeanRadius() const {
-    return (_radii._x + _radii._y + _radii._y) /3;
+    return (_radii._x + _radii._y + _radii._y) / 3;
   }
-  
-  std::vector<double> intersectionsDistances(const Vector3D& origin,
-                                                        const Vector3D& direction) const;
 
-  
+  std::vector<double> intersectionsDistances(const Vector3D& origin,
+                                             const Vector3D& direction) const {
+    return intersectionsDistances(origin._x,
+                                  origin._y,
+                                  origin._z,
+                                  direction._x,
+                                  direction._y,
+                                  direction._z);
+  }
+
+  std::vector<double> intersectionsDistances(double originX,
+                                             double originY,
+                                             double originZ,
+                                             double directionX,
+                                             double directionY,
+                                             double directionZ) const;
 };
 
 #endif

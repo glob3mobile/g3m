@@ -77,7 +77,7 @@ _ownsIndices(ownsIndices)
 //                               indices->size());
 }
 
-void IndexedGeometryMesh::rawRender(const G3MRenderContext* rc) const{
+void IndexedGeometryMesh::rawRender(const G3MRenderContext* rc) const {
   GL* gl = rc->getGL();
   gl->drawElements(_primitive, _indices, _glState, *rc->getGPUProgramManager());
 }

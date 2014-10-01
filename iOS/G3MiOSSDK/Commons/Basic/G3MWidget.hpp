@@ -245,7 +245,7 @@ public:
     return _infoDisplay;
   }
   
-  void changedRendererInfo(const int rendererIdentifier, const std::vector<std::string>& info);
+  void changedRendererInfo(const int rendererIdentifier, const std::vector<const Info*> info);
   
 private:
   Storage*                _storage;
@@ -318,7 +318,7 @@ private:
   bool _forceBusyRenderer;
   
   InfoDisplay* _infoDisplay;
-
+  
   G3MWidget(GL*                              gl,
             Storage*                        storage,
             IDownloader*                     downloader,

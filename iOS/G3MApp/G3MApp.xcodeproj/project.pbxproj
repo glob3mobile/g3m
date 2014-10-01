@@ -23,10 +23,13 @@
 		CF6920C718394E44007409D8 /* restaurant-96x96.png in Resources */ = {isa = PBXBuildFile; fileRef = CF6920C618394E44007409D8 /* restaurant-96x96.png */; };
 		CF6920C918394F56007409D8 /* restaurant-48x48.png in Resources */ = {isa = PBXBuildFile; fileRef = CF6920C818394F56007409D8 /* restaurant-48x48.png */; };
 		CF6920CC1839679B007409D8 /* G3MSelectOptionViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = CF6920CB1839679B007409D8 /* G3MSelectOptionViewController.mm */; };
+		CF6E184C19D35ADD002B456A /* loudoun_4326_300.bil in Resources */ = {isa = PBXBuildFile; fileRef = CF6E184B19D35ADD002B456A /* loudoun_4326_300.bil */; };
 		CF8B1A541837DBFA004D3902 /* G3MDemoModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF8B1A521837DBFA004D3902 /* G3MDemoModel.cpp */; };
 		CF8B1A581837DC69004D3902 /* G3MDemoListener.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF8B1A561837DC69004D3902 /* G3MDemoListener.cpp */; };
 		CFB806E21837D4D300DB4B3B /* G3MDemoBuilder_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = CFB806E01837D4D300DB4B3B /* G3MDemoBuilder_iOS.mm */; };
+		CFBD815219A3D9F600F1A8C4 /* G3MStreamingPointCloud1DemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFBD815019A3D9F600F1A8C4 /* G3MStreamingPointCloud1DemoScene.cpp */; };
 		CFC59BAC176F68DB002806D6 /* full-earth-2048x1024.bil in Resources */ = {isa = PBXBuildFile; fileRef = CFC59BAB176F68DB002806D6 /* full-earth-2048x1024.bil */; };
+		CFD3BE3D19D3324F00FE2D5A /* G3MStreamingPointCloud2DemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFD3BE3B19D3324F00FE2D5A /* G3MStreamingPointCloud2DemoScene.cpp */; };
 		CFE3B3C7183A99070078C796 /* G3MMarkersDemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFE3B3C5183A99070078C796 /* G3MMarkersDemoScene.cpp */; };
 		CFE3B3CB183ABAC70078C796 /* G3M3DSymbologyDemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFE3B3C9183ABAC70078C796 /* G3M3DSymbologyDemoScene.cpp */; };
 		CFE3B3CD183ABD8B0078C796 /* uscitieslite.geojson in Resources */ = {isa = PBXBuildFile; fileRef = CFE3B3CC183ABD8B0078C796 /* uscitieslite.geojson */; };
@@ -46,6 +49,7 @@
 		CFE3B3EC183ADB2D0078C796 /* planeDiffuse.png in Resources */ = {isa = PBXBuildFile; fileRef = CFE3B3E9183ADB2D0078C796 /* planeDiffuse.png */; };
 		CFE3B3EF183C05F70078C796 /* G3MIsosurfaceDemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFE3B3ED183C05F70078C796 /* G3MIsosurfaceDemoScene.cpp */; };
 		CFE3B3F2183C07C50078C796 /* isosurface-mesh.json in Resources */ = {isa = PBXBuildFile; fileRef = CFE3B3F1183C07C50078C796 /* isosurface-mesh.json */; };
+		CFF30256192816250049BEF4 /* G3MTiledVectorDemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFF30254192816250049BEF4 /* G3MTiledVectorDemoScene.cpp */; };
 		CFF64D4518329FB7006ABFF6 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CFF64D4418329FB7006ABFF6 /* Security.framework */; };
 		CFF64D4718329FC8006ABFF6 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CFF64D4618329FC8006ABFF6 /* CFNetwork.framework */; };
 		CFF64D4918329FE6006ABFF6 /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = CFF64D4818329FE6006ABFF6 /* libicucore.dylib */; };
@@ -127,13 +131,18 @@
 		CF6920C818394F56007409D8 /* restaurant-48x48.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "restaurant-48x48.png"; sourceTree = "<group>"; };
 		CF6920CA1839679B007409D8 /* G3MSelectOptionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = G3MSelectOptionViewController.h; sourceTree = "<group>"; };
 		CF6920CB1839679B007409D8 /* G3MSelectOptionViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = G3MSelectOptionViewController.mm; sourceTree = "<group>"; };
+		CF6E184B19D35ADD002B456A /* loudoun_4326_300.bil */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = loudoun_4326_300.bil; sourceTree = "<group>"; };
 		CF8B1A521837DBFA004D3902 /* G3MDemoModel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = G3MDemoModel.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CF8B1A531837DBFA004D3902 /* G3MDemoModel.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = G3MDemoModel.hpp; sourceTree = "<group>"; };
 		CF8B1A561837DC69004D3902 /* G3MDemoListener.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = G3MDemoListener.cpp; sourceTree = "<group>"; };
 		CF8B1A571837DC69004D3902 /* G3MDemoListener.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = G3MDemoListener.hpp; sourceTree = "<group>"; };
 		CFB806E01837D4D300DB4B3B /* G3MDemoBuilder_iOS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = G3MDemoBuilder_iOS.mm; sourceTree = "<group>"; };
 		CFB806E11837D4D300DB4B3B /* G3MDemoBuilder_iOS.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; path = G3MDemoBuilder_iOS.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
+		CFBD815019A3D9F600F1A8C4 /* G3MStreamingPointCloud1DemoScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = G3MStreamingPointCloud1DemoScene.cpp; sourceTree = "<group>"; };
+		CFBD815119A3D9F600F1A8C4 /* G3MStreamingPointCloud1DemoScene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = G3MStreamingPointCloud1DemoScene.hpp; sourceTree = "<group>"; };
 		CFC59BAB176F68DB002806D6 /* full-earth-2048x1024.bil */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "full-earth-2048x1024.bil"; sourceTree = "<group>"; };
+		CFD3BE3B19D3324F00FE2D5A /* G3MStreamingPointCloud2DemoScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = G3MStreamingPointCloud2DemoScene.cpp; sourceTree = "<group>"; };
+		CFD3BE3C19D3324F00FE2D5A /* G3MStreamingPointCloud2DemoScene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = G3MStreamingPointCloud2DemoScene.hpp; sourceTree = "<group>"; };
 		CFE3B3C5183A99070078C796 /* G3MMarkersDemoScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = G3MMarkersDemoScene.cpp; sourceTree = "<group>"; };
 		CFE3B3C6183A99070078C796 /* G3MMarkersDemoScene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = G3MMarkersDemoScene.hpp; sourceTree = "<group>"; };
 		CFE3B3C9183ABAC70078C796 /* G3M3DSymbologyDemoScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = G3M3DSymbologyDemoScene.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
@@ -159,6 +168,8 @@
 		CFE3B3ED183C05F70078C796 /* G3MIsosurfaceDemoScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = G3MIsosurfaceDemoScene.cpp; sourceTree = "<group>"; };
 		CFE3B3EE183C05F70078C796 /* G3MIsosurfaceDemoScene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = G3MIsosurfaceDemoScene.hpp; sourceTree = "<group>"; };
 		CFE3B3F1183C07C50078C796 /* isosurface-mesh.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "isosurface-mesh.json"; sourceTree = "<group>"; };
+		CFF30254192816250049BEF4 /* G3MTiledVectorDemoScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = G3MTiledVectorDemoScene.cpp; sourceTree = "<group>"; };
+		CFF30255192816250049BEF4 /* G3MTiledVectorDemoScene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = G3MTiledVectorDemoScene.hpp; sourceTree = "<group>"; };
 		CFF64D4418329FB7006ABFF6 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		CFF64D4618329FC8006ABFF6 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		CFF64D4818329FE6006ABFF6 /* libicucore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.dylib; path = usr/lib/libicucore.dylib; sourceTree = SDKROOT; };
@@ -264,8 +275,14 @@
 				CF6920B31837F1CA007409D8 /* G3MRasterLayersDemoScene.hpp */,
 				CF37F5EC183D239A0050CAEF /* G3MScenarioDEMDemoScene.cpp */,
 				CF37F5ED183D239A0050CAEF /* G3MScenarioDEMDemoScene.hpp */,
+				CFF30254192816250049BEF4 /* G3MTiledVectorDemoScene.cpp */,
+				CFF30255192816250049BEF4 /* G3MTiledVectorDemoScene.hpp */,
 				CF6920B51837F26B007409D8 /* G3MVectorialDemoScene.cpp */,
 				CF6920B61837F26B007409D8 /* G3MVectorialDemoScene.hpp */,
+				CFBD815019A3D9F600F1A8C4 /* G3MStreamingPointCloud1DemoScene.cpp */,
+				CFBD815119A3D9F600F1A8C4 /* G3MStreamingPointCloud1DemoScene.hpp */,
+				CFD3BE3B19D3324F00FE2D5A /* G3MStreamingPointCloud2DemoScene.cpp */,
+				CFD3BE3C19D3324F00FE2D5A /* G3MStreamingPointCloud2DemoScene.hpp */,
 			);
 			name = DemoBuilder;
 			sourceTree = "<group>";
@@ -384,6 +401,7 @@
 		E7D1B7F116D2750400AF47C1 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				CF6E184B19D35ADD002B456A /* loudoun_4326_300.bil */,
 				CF37F5F0183D26500050CAEF /* 0576.bil */,
 				CFE3B3F1183C07C50078C796 /* isosurface-mesh.json */,
 				CFE3B3E1183ADAB80078C796 /* arcdeTriomphe.bson */,
@@ -519,6 +537,7 @@
 				CF6920C518394DB6007409D8 /* roads_monaco.geojson in Resources */,
 				CFE3B3EB183ADB2D0078C796 /* texture0.png in Resources */,
 				CF37F5F1183D26500050CAEF /* 0576.bil in Resources */,
+				CF6E184C19D35ADD002B456A /* loudoun_4326_300.bil in Resources */,
 				E7D1B64216D2462B00AF47C1 /* Icon-Small-50.png in Resources */,
 				CF6920C418394DB6007409D8 /* restaurants_monaco.geojson in Resources */,
 				E7D1B64316D2462B00AF47C1 /* Icon-Small-50@2x.png in Resources */,
@@ -567,10 +586,12 @@
 				E7D1B61916D2436700AF47C1 /* G3MAppDelegate.m in Sources */,
 				E7D1B62816D2436700AF47C1 /* G3MViewController.mm in Sources */,
 				CF6920B71837F26B007409D8 /* G3MVectorialDemoScene.cpp in Sources */,
+				CFD3BE3D19D3324F00FE2D5A /* G3MStreamingPointCloud2DemoScene.cpp in Sources */,
 				CF3F8FDF183526AE00589B4C /* G3MDemoBuilder.cpp in Sources */,
 				CFE3B3CB183ABAC70078C796 /* G3M3DSymbologyDemoScene.cpp in Sources */,
 				CF37F5EE183D239A0050CAEF /* G3MScenarioDEMDemoScene.cpp in Sources */,
 				CF6920B41837F1CA007409D8 /* G3MRasterLayersDemoScene.cpp in Sources */,
+				CFF30256192816250049BEF4 /* G3MTiledVectorDemoScene.cpp in Sources */,
 				CF3F8FEA1835867D00589B4C /* G3MSelectDemoSceneViewController.mm in Sources */,
 				CFE3B3DC183AD38D0078C796 /* G3MCameraDemoScene.cpp in Sources */,
 				CF6920CC1839679B007409D8 /* G3MSelectOptionViewController.mm in Sources */,
@@ -578,6 +599,7 @@
 				CFB806E21837D4D300DB4B3B /* G3MDemoBuilder_iOS.mm in Sources */,
 				CFE3B3EF183C05F70078C796 /* G3MIsosurfaceDemoScene.cpp in Sources */,
 				CF8B1A541837DBFA004D3902 /* G3MDemoModel.cpp in Sources */,
+				CFBD815219A3D9F600F1A8C4 /* G3MStreamingPointCloud1DemoScene.cpp in Sources */,
 				CF6920BA18392D51007409D8 /* G3MDemoContext.cpp in Sources */,
 				CF8B1A581837DC69004D3902 /* G3MDemoListener.cpp in Sources */,
 			);
@@ -674,7 +696,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "0EC79B57-DA28-46E0-B9F6-524C06F973AD";
+				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				WRAPPER_EXTENSION = app;
 			};
@@ -686,7 +708,7 @@
 				CLANG_CXX_LANGUAGE_STANDARD = "compiler-default";
 				CLANG_CXX_LIBRARY = "compiler-default";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "G3MApp/G3MApp-Prefix.pch";
 				"GCC_PREPROCESSOR_DEFINITIONS[arch=*]" = C_CODE;
@@ -694,7 +716,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "0EC79B57-DA28-46E0-B9F6-524C06F973AD";
+				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				WRAPPER_EXTENSION = app;
 			};

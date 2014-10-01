@@ -17,7 +17,7 @@ class Shape;
 class ShapeFullPositionEffect : public EffectWithDuration {
 private:
   Shape* _shape;
-  
+
   const Geodetic3D _fromPosition;
   const Geodetic3D _toPosition;
 
@@ -30,6 +30,8 @@ private:
   const Angle _fromRoll;
   const Angle _toRoll;
 
+  const bool _forceToPositionOnCancel;
+  const bool _forceToPositionOnStop;
 
 public:
   ShapeFullPositionEffect(const TimeInterval& duration,
@@ -42,7 +44,10 @@ public:
                           const Angle& toHeading,
                           const Angle& fromRoll,
                           const Angle& toRoll,
-                          const bool linearTiming=false) :
+                          bool linearTiming            = false,
+                          bool forceToPositionOnCancel = true,
+                          bool forceToPositionOnStop   = true
+  ) :
   EffectWithDuration(duration, linearTiming),
   _shape(shape),
   _fromPosition(fromPosition),
@@ -52,18 +57,19 @@ public:
   _fromHeading(fromHeading),
   _toHeading(toHeading),
   _fromRoll(fromRoll),
-  _toRoll(toRoll)
+  _toRoll(toRoll),
+  _forceToPositionOnCancel(forceToPositionOnCancel),
+  _forceToPositionOnStop(forceToPositionOnStop)
   {
-    
   }
-  
+
   void doStep(const G3MRenderContext* rc,
               const TimeInterval& when);
-  
+
   void cancel(const TimeInterval& when);
   void stop(const G3MRenderContext* rc,
             const TimeInterval& when);
-  
+
 };
 
 #endif

@@ -35,8 +35,6 @@ public:
   virtual ~TileTessellator() {
   }
 
-  virtual bool isReady(const G3MRenderContext* rc) const = 0;
-
   virtual Mesh* createTileMesh(const Planet* planet,
                                const Vector2I& resolution,
                                Tile* tile,

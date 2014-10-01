@@ -11,14 +11,14 @@
 #include <G3MiOSSDK/LayerSet.hpp>
 #include <G3MiOSSDK/ILogger.hpp>
 #include <G3MiOSSDK/GEORenderer.hpp>
-#include <G3MiOSSDK/GEOTileRasterizer.hpp>
 #include <G3MiOSSDK/MarksRenderer.hpp>
 #include <G3MiOSSDK/MeshRenderer.hpp>
 #include <G3MiOSSDK/ShapesRenderer.hpp>
 #include <G3MiOSSDK/ErrorHandling.hpp>
 #include <G3MiOSSDK/G3MWidget.hpp>
 #include <G3MiOSSDK/PlanetRenderer.hpp>
-#include <G3MiOSSDK/SingleBilElevationDataProvider.hpp>
+#include <G3MiOSSDK/GEOVectorLayer.hpp>
+#include <G3MiOSSDK/PointCloudsRenderer.hpp>
 
 #include "G3MDemoScene.hpp"
 #include "G3MDemoListener.hpp"
@@ -31,17 +31,32 @@
 #include "G3MCameraDemoScene.hpp"
 #include "G3MIsosurfaceDemoScene.hpp"
 #include "G3MScenarioDEMDemoScene.hpp"
+#include "G3MTiledVectorDemoScene.hpp"
+#include "G3MStreamingPointCloud1DemoScene.hpp"
+#include "G3MStreamingPointCloud2DemoScene.hpp"
 
-G3MDemoModel::G3MDemoModel(G3MDemoListener* listener,
-                           LayerSet* layerSet,
-                           GEORenderer* geoRenderer) :
+G3MDemoModel::G3MDemoModel(G3MDemoListener*     listener,
+                           LayerSet*            layerSet,
+                           MeshRenderer*        meshRenderer,
+                           ShapesRenderer*      shapesRenderer,
+                           MarksRenderer*       marksRenderer,
+                           GEORenderer*         geoRenderer,
+                           PointCloudsRenderer* pointCloudsRenderer) :
 _listener(listener),
 _g3mWidget(NULL),
 _layerSet(layerSet),
+_meshRenderer(meshRenderer),
+_shapesRenderer(shapesRenderer),
+_marksRenderer(marksRenderer),
 _geoRenderer(geoRenderer),
+_pointCloudsRenderer(pointCloudsRenderer),
 _selectedScene(NULL),
 _context(NULL)
 {
+#warning Put the demo back to its position
+  _scenes.push_back( new G3MStreamingPointCloud1DemoScene(this) );
+  _scenes.push_back( new G3MStreamingPointCloud2DemoScene(this) );
+
   _scenes.push_back( new G3MRasterLayersDemoScene(this) );
   _scenes.push_back( new G3MScenarioDEMDemoScene(this) );
   _scenes.push_back( new G3MVectorialDemoScene(this) );
@@ -51,6 +66,7 @@ _context(NULL)
   _scenes.push_back( new G3M3DModelDemoScene(this) );
   _scenes.push_back( new G3MCameraDemoScene(this) );
   _scenes.push_back( new G3MIsosurfaceDemoScene(this) );
+  _scenes.push_back( new G3MTiledVectorDemoScene(this) );
 }
 
 void G3MDemoModel::initializeG3MContext(const G3MContext* context) {
@@ -70,15 +86,11 @@ void G3MDemoModel::initializeG3MWidget(G3MWidget* g3mWidget) {
 }
 
 void G3MDemoModel::reset() {
-  //_g3mWidget->cancelCameraAnimation();
   _g3mWidget->cancelAllEffects();
 
   PlanetRenderer* planetRenderer = getPlanetRenderer();
   planetRenderer->setVerticalExaggeration(1);
 
-  //  ElevationDataProvider* elevationDataProvider = new SingleBilElevationDataProvider(URL("file:///full-earth-2048x1024.bil"),
-  //                                                                                     Sector::fullSphere(),
-  //                                                                                     Vector2I(2048, 1024));
   ElevationDataProvider* elevationDataProvider = NULL;
   planetRenderer->setElevationDataProvider(elevationDataProvider, true);
 
@@ -89,26 +101,9 @@ void G3MDemoModel::reset() {
   getMarksRenderer()->removeAllMarks();
   getMeshRenderer()->clearMeshes();
   getShapesRenderer()->removeAllShapes(true);
-  getGEOTileRasterizer()->clear();
+  getPointCloudsRenderer()->removeAllPointClouds();
 
   _layerSet->removeAllLayers(true);
-
-}
-
-GEOTileRasterizer* G3MDemoModel::getGEOTileRasterizer() const {
-  return _geoRenderer->getGEOTileRasterizer();
-}
-
-MarksRenderer* G3MDemoModel::getMarksRenderer() const {
-  return _geoRenderer->getMarksRenderer();
-}
-
-MeshRenderer* G3MDemoModel::getMeshRenderer() const {
-  return _geoRenderer->getMeshRenderer();
-}
-
-ShapesRenderer* G3MDemoModel::getShapesRenderer() const {
-  return _geoRenderer->getShapesRenderer();
 }
 
 PlanetRenderer* G3MDemoModel::getPlanetRenderer() const {
@@ -158,7 +153,6 @@ void G3MDemoModel::selectScene(G3MDemoScene* scene) {
     }
     _selectedScene->activateOptions(_context);
   }
-
 }
 
 void G3MDemoModel::onChangeSceneOption(G3MDemoScene* scene,
@@ -171,9 +165,7 @@ void G3MDemoModel::onChangeSceneOption(G3MDemoScene* scene,
   if (_listener != NULL) {
     _listener->onChangeSceneOption(scene, option, optionIndex);
   }
-
 }
-
 
 void G3MDemoModel::showDialog(const std::string& title,
                               const std::string& message) const {
@@ -184,5 +176,4 @@ void G3MDemoModel::showDialog(const std::string& title,
   if (_listener != NULL) {
     _listener->showDialog(title, message);
   }
-
 }

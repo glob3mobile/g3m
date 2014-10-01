@@ -101,7 +101,7 @@ public:
 		//PlanetRendererBuilder* pbuilder = _builder->
 		_builder->setDownloader(new DummyDownloader());
 		_builder->getPlanetRendererBuilder()->setLayerSet(createLayerset());
-		//_builder->getPlanetRendererBuilder()->setForceFirstLevelTilesRenderOnStart(false);
+		_builder->getPlanetRendererBuilder()->setForceFirstLevelTilesRenderOnStart(false);
 
 		_widget = _builder->createWidget();
 		renderer = _widget->getRenderer();

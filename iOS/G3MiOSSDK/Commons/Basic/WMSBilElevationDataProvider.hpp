@@ -53,13 +53,13 @@ public:
 
   void cancelRequest(const long long requestId);
   
-  std::vector<const Sector*> getSectors() const{
+  std::vector<const Sector*> getSectors() const {
     std::vector<const Sector*> sectors;
     sectors.push_back(&_sector);
     return sectors;
   }
   
-  const Vector2I getMinResolution() const{
+  const Vector2I getMinResolution() const {
 //    int WORKING_JM;
     return Vector2I::zero();
   }

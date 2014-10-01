@@ -128,7 +128,8 @@ void IImageUtils::combine(int width,
       canvas->drawImage(image,
                         srcRect->_x, srcRect->_y, srcRect->_width, srcRect->_height,
                         dstRect->_x, dstRect->_y, dstRect->_width, dstRect->_height);
-    } else{
+    }
+    else {
       canvas->drawImage(image,
                         srcRect->_x, srcRect->_y, srcRect->_width, srcRect->_height,
                         dstRect->_x, dstRect->_y, dstRect->_width, dstRect->_height,

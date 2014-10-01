@@ -67,7 +67,7 @@ public:
     }
   }
 
-  const Matrix44D* getMatrix() const{
+  const Matrix44D* getMatrix() const {
     return _matrix;
   }
 };
@@ -105,7 +105,7 @@ public:
     }
   }
 
-  int size() const{
+  int size() const {
     return _providers.size();
   }
   

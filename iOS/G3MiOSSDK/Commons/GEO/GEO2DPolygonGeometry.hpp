@@ -20,7 +20,7 @@ private:
   const GEO2DPolygonData* _polygonData;
 
 protected:
-  std::vector<GEOSymbol*>* createSymbols(const GEOSymbolizer*    symbolizer) const;
+  std::vector<GEOSymbol*>* createSymbols(const GEOSymbolizer* symbolizer) const;
 
   std::vector<GEORasterSymbol*>* createRasterSymbols(const GEORasterSymbolizer* symbolizer) const;
 
@@ -41,6 +41,10 @@ public:
   const std::vector<std::vector<Geodetic2D*>*>* getHolesCoordinatesArray() const;
 
   long long getCoordinatesCount() const;
+
+  GEO2DPolygonGeometry* deepCopy() const;
+
+  bool contain(const Geodetic2D& point) const;
 
 };
 

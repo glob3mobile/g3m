@@ -150,6 +150,20 @@ public:
 		}
 	}
 
+	void rawPut(int i,
+		const IFloatBuffer* srcBuffer,
+		int srcFromIndex,
+		int count){
+		if (i < 0 || (i + count) > _size) {
+			ILogger::instance()->logError("buffer put error");
+		}
+
+		FloatBuffer_win8* winBuffer = (FloatBuffer_win8*)srcBuffer;
+		for (int j = 0; j < count; j++) {
+			_values[i + j] = winBuffer->_values[srcFromIndex + j];
+		}
+	}
+
 	void rawAdd(int i, float value) {
 		if (i < 0 || i > _size) {
 			ILogger::instance()->logError("Buffer Put error.");
