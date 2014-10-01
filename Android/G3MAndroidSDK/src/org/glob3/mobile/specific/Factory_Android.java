@@ -8,6 +8,7 @@ import org.glob3.mobile.generated.IDeviceInfo;
 import org.glob3.mobile.generated.IFactory;
 import org.glob3.mobile.generated.IFloatBuffer;
 import org.glob3.mobile.generated.IIntBuffer;
+import org.glob3.mobile.generated.ILocationManager;
 import org.glob3.mobile.generated.IShortBuffer;
 import org.glob3.mobile.generated.ITimer;
 import org.glob3.mobile.generated.IWebSocket;
@@ -18,8 +19,8 @@ import android.content.Context;
 
 
 public final class Factory_Android
-         extends
-            IFactory {
+extends
+IFactory {
 
 
    private final Context _context;
@@ -130,6 +131,13 @@ public final class Factory_Android
    @Override
    protected IDeviceInfo createDeviceInfo() {
       return new DeviceInfo_Android(_context);
+   }
+
+
+   @Override
+   public ILocationManager createLocationManager() {
+      // TODO Auto-generated method stub
+      return null;
    }
 
 
