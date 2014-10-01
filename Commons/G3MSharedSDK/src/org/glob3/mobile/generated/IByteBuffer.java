@@ -35,4 +35,6 @@ public abstract class IByteBuffer
 
   public abstract String getAsString();
 
+  public abstract long getID();
+
 }

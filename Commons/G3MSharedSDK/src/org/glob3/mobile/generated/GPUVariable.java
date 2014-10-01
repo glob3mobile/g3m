@@ -135,6 +135,11 @@ public class GPUVariable
       return GPUAttributeKey.NORMAL;
     }
   
+    if (name.compareTo("aRGBColor") == 0)
+    {
+      return GPUAttributeKey.RGB_COLOR;
+    }
+  
     return GPUAttributeKey.UNRECOGNIZED_ATTRIBUTE;
   }
 

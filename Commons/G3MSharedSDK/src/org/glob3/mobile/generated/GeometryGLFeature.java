@@ -19,8 +19,11 @@ public class GeometryGLFeature extends GLFeature
     super.dispose();
   }
 
+  private GPUUniformValueFloatMutable _pointSizeUniformValue;
 
-  public GeometryGLFeature(IFloatBuffer buffer, int arrayElementSize, int index, boolean normalized, int stride, boolean depthTestEnabled, boolean cullFace, int culledFace, boolean polygonOffsetFill, float polygonOffsetFactor, float polygonOffsetUnits, float lineWidth, boolean needsPointSize, float pointSize)
+
+
+  public GeometryGLFeature(IFloatBuffer buffer, int arrayElementSize, int index, boolean normalized, int stride, boolean depthTestEnabled, boolean cullFace, int culledFace, boolean polygonOffsetFill, float polygonOffsetFactor, float polygonOffsetUnits, float lineWidth, float pointSize)
   {
      super(GLFeatureGroupName.NO_GROUP, GLFeatureID.GLF_GEOMETRY);
      _depthTestEnabled = depthTestEnabled;
@@ -30,13 +33,15 @@ public class GeometryGLFeature extends GLFeature
      _polygonOffsetFactor = polygonOffsetFactor;
      _polygonOffsetUnits = polygonOffsetUnits;
      _lineWidth = lineWidth;
+     _pointSizeUniformValue = null;
   
     _position = new GPUAttributeValueVec4Float(buffer, arrayElementSize, index, stride, normalized);
     _values.addAttributeValue(GPUAttributeKey.POSITION, _position, false);
   
-    if (needsPointSize)
+    if (pointSize > 0.0)
     {
-      _values.addUniformValue(GPUUniformKey.POINT_SIZE, new GPUUniformValueFloat(pointSize), false);
+      _pointSizeUniformValue = new GPUUniformValueFloatMutable(pointSize);
+      _values.addUniformValue(GPUUniformKey.POINT_SIZE, _pointSizeUniformValue, false);
     }
   }
 
@@ -71,6 +76,25 @@ public class GeometryGLFeature extends GLFeature
     }
   
     state.setLineWidth(_lineWidth);
+  }
+
+  public final void setPointSize(float v)
+  {
+  
+    if (v < 0.0)
+    {
+      v = 0.0F;
+    }
+  
+    if (_pointSizeUniformValue == null)
+    {
+      _pointSizeUniformValue = new GPUUniformValueFloatMutable(v);
+      _values.addUniformValue(GPUUniformKey.POINT_SIZE, _pointSizeUniformValue, false);
+    }
+    else
+    {
+      _pointSizeUniformValue.changeValue(v);
+    }
   }
 
 }

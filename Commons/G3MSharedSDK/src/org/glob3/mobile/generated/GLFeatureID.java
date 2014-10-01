@@ -19,6 +19,7 @@ package org.glob3.mobile.generated;
 
 
 //class Camera;
+//class IByteBuffer;
 
 public enum GLFeatureID
 {

@@ -74,6 +74,13 @@ public class GPUProgramManager
     final boolean hasTexture2 = GPUVariable.hasUniform(uniformsCode, GPUUniformKey.SAMPLER2);
   //  const bool hasTexture3 = GPUVariable::hasUniform(uniformsCode, SAMPLER3);
   
+    final boolean hasRGBColor = GPUVariable.hasAttribute(attributesCode, GPUAttributeKey.RGB_COLOR);
+  
+    if (hasRGBColor)
+    {
+      return compileProgramWithName(gl, "RGBColorMesh");
+    }
+  
     if (billboard)
     {
       return compileProgramWithName(gl, "Billboard");

@@ -11,6 +11,3 @@ public class GPUAttributeVec4Float extends GPUAttribute
      super(name, id, GLType.glFloat(), 4);
   }
 }
-////////
-
-

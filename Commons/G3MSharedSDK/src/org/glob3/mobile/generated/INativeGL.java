@@ -15,6 +15,7 @@ package org.glob3.mobile.generated;
 //class IGLUniformID;
 //class IGLTextureId;
 //class Matrix44D;
+//class IByteBuffer;
 
 
 
@@ -172,5 +173,7 @@ public abstract class INativeGL
   public abstract void depthMask(boolean v);
 
   public abstract void setActiveTexture(int i);
+
+  public abstract void vertexAttribPointer(int index, int size, boolean normalized, int stride, IByteBuffer buffer);
 
 }

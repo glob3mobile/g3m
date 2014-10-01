@@ -392,6 +392,11 @@ public class GL
     _nativeGL.vertexAttribPointer(index, size, normalized, stride, buffer);
   }
 
+  public final void vertexAttribPointer(int index, int size, boolean normalized, int stride, IByteBuffer buffer)
+  {
+    _nativeGL.vertexAttribPointer(index, size, normalized, stride, buffer);
+  }
+
   public final void bindAttribLocation(GPUProgram program, int loc, String name)
   {
     _nativeGL.bindAttribLocation(program, loc, name);

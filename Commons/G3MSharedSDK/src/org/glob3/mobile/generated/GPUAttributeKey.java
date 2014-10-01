@@ -7,7 +7,8 @@ public enum GPUAttributeKey
   COLOR(2),
   NORMAL(3),
   TEXTURE_COORDS_2(4),
-  TEXTURE_COORDS_3(5);
+  TEXTURE_COORDS_3(5),
+  RGB_COLOR(6);
 
    private int intValue;
    private static java.util.HashMap<Integer, GPUAttributeKey> mappings;

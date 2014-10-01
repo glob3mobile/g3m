@@ -13,6 +13,13 @@ public class ColorGLFeature extends GLColorGroupFeature
     _values.addAttributeValue(GPUAttributeKey.COLOR, value, false);
   }
 
+  public ColorGLFeature(IByteBuffer colors, int arrayElementSize, int index, boolean normalized, int stride, boolean blend, int sFactor, int dFactor)
+  {
+     super(GLFeatureID.GLF_COLOR, 3, blend, sFactor, dFactor);
+    GPUAttributeValueVec3Byte value = new GPUAttributeValueVec3Byte(colors, arrayElementSize, index, stride, normalized);
+    _values.addAttributeValue(GPUAttributeKey.RGB_COLOR, value, false);
+  }
+
   public final void applyOnGlobalGLState(GLGlobalState state)
   {
     blendingOnGlobalGLState(state);
