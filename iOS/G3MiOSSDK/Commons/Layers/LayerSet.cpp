@@ -533,7 +533,11 @@ TileImageProvider* LayerSet::getTileImageProvider(const G3MRenderContext* rc,
 }
 
 const std::vector<const Info*> LayerSet::getInfo() {
+  for (unsigned int i = 0; i < _infos.size(); i++) {
+    delete _infos[i];
+  }
   _infos.clear();
+
   const int layersCount = _layers.size();
   bool anyEnabled = false;
   for (int i = 0; i < layersCount; i++) {

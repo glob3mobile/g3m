@@ -111,7 +111,7 @@ TileImageProvider* GEOVectorLayer::createTileImageProvider(const G3MRenderContex
 
 const TileImageContribution* GEOVectorLayer::contribution(const Tile* tile) const {
   if ((_condition == NULL) || _condition->isAvailable(tile)) {
-    return (_quadTree.getSector().touchesWith(tile->_sector)
+    return (_quadTree.getSector().touchesWith(tile->_sector) && !_quadTree.isEmpty()
             ? TileImageContribution::fullCoverageTransparent(_transparency)
             : NULL);
   }
