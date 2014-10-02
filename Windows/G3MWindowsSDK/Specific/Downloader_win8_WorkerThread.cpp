@@ -9,11 +9,30 @@
 #include "Downloader_win8_WorkerThread.hpp"
 
 
-Downloader_win8_WorkerThread::Downloader_win8_WorkerThread()
+Downloader_win8_WorkerThread::Downloader_win8_WorkerThread(const Downloader_win8* downloader) :
+	_downloader(downloader)
 {
 }
 
 
-Downloader_win8_WorkerThread::~Downloader_win8_WorkerThread()
-{
+void Downloader_win8_WorkerThread::start(){
+
+	//std::thread first(isStopping());
+	//first.
+}
+
+void Downloader_win8_WorkerThread::stop(){
+
+}
+
+bool Downloader_win8_WorkerThread::isStopping(){
+
+	return _stopping;
+}
+
+void Downloader_win8_WorkerThread::run(){
+
+}
+
+Downloader_win8_WorkerThread::~Downloader_win8_WorkerThread(){
 }

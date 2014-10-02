@@ -16,6 +16,7 @@
 
 class Downloader_win8;
 class StringUtils_win8;
+class G3MContext;
 
 using namespace Windows::Foundation;
 
@@ -46,9 +47,10 @@ class Downloader_win8_Handler{
 
 private:
 	std::vector<Listener_win8_Entry*> _listeners = std::vector<Listener_win8_Entry*>();
-	long long       _priority;
-	Uri^			_winURL;
-	URL*            _g3mURL;
+	long long					_priority;
+	URL*						_g3mURL;
+	Windows::Foundation::Uri^	_winURL;
+	
 
 	const StringUtils_win8* _sUtils;
 	
@@ -65,7 +67,7 @@ public:
 
 	long long priority();
 
-	void runWithDownloader(Downloader_win8* downloader);
+	void runWithDownloader(Downloader_win8* downloader, G3MContext* context);
 
 	void dealloc();
 

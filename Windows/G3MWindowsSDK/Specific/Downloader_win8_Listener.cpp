@@ -12,24 +12,37 @@
 #include "IImageDownloadListener.hpp"
 #include "URL.hpp"
 #include "IImage.hpp"
+#include "Image_win8.hpp"
 
 Downloader_win8_Listener::Downloader_win8_Listener(IBufferDownloadListener* cppBufferListener,
 												   IImageDownloadListener* cppImageListener,
-												   bool deleteListener):
+												   bool deleteListener) :
 	_cppBufferListener(cppBufferListener),
 	_cppImageListener(cppImageListener),
 	_deleteListener(deleteListener)
 {
 }
 
+Downloader_win8_Listener::Downloader_win8_Listener(IBufferDownloadListener* cppBufferListener,
+												   bool deleteListener){
+	Downloader_win8_Listener(cppBufferListener, NULL, deleteListener);
+}
 
-void Downloader_win8_Listener::onDownload(const URL& url, IByteBuffer* buffer, IImage* image){
+Downloader_win8_Listener::Downloader_win8_Listener(IImageDownloadListener* cppImageListener,
+												   bool deleteListener){
+	Downloader_win8_Listener(NULL, cppImageListener, deleteListener);
+}
+
+
+void Downloader_win8_Listener::onDownload(const URL& url, IByteBuffer* buffer){
 	
 	if (_cppBufferListener) {
 		_cppBufferListener->onDownload(url, buffer, false);
 	}
 
 	if (_cppImageListener) {
+		IWICBitmap* bitmap = Image_win8::imageWithData(buffer);
+		IImage* image = new Image_win8(bitmap, buffer);
 		if (image) {
 			_cppImageListener->onDownload(url, image, false);
 		}
@@ -61,7 +74,7 @@ void Downloader_win8_Listener::onCancel(const URL& url){
 	}
 }
 
-void Downloader_win8_Listener::onCanceledDownload(const URL& url, IByteBuffer* buffer, IImage* image){
+void Downloader_win8_Listener::onCanceledDownload(const URL& url, IByteBuffer* buffer){
 
 	if (_cppBufferListener) {
 		_cppBufferListener->onCanceledDownload(url, buffer, false);
@@ -69,6 +82,8 @@ void Downloader_win8_Listener::onCanceledDownload(const URL& url, IByteBuffer* b
 	}
 
 	if (_cppImageListener) {
+		IWICBitmap* bitmap = Image_win8::imageWithData(buffer);
+		IImage* image = new Image_win8(bitmap, buffer);
 		if (image) {
 			_cppImageListener->onCanceledDownload(url, image, false);
 			delete image;

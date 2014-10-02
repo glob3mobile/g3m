@@ -11,6 +11,11 @@
 #include "Downloader_win8.hpp"
 #include "ILogger.hpp"
 #include "StringUtils_win8.hpp"
+#include "Context.hpp"
+#include "GTask.hpp"
+#include "IThreadUtils.hpp"
+#include "IFactory.hpp"
+#include "IByteBuffer.hpp"
 
 #include <ppltasks.h>
 
@@ -53,6 +58,67 @@ Downloader_win8_Listener* Listener_win8_Entry::getListener(){
 Listener_win8_Entry::~Listener_win8_Entry(){
 	//TODO: ?
 }
+
+
+//==================== ProcessResponse task implementation =========================================
+
+
+
+
+class ProcessResponseGTask : public GTask {
+private:
+	const int    _statusCode;
+	IByteBuffer*	 _buffer;
+	const std::vector<Listener_win8_Entry*> _listeners;
+	const URL*            _g3mURL;
+
+public:
+	ProcessResponseGTask(const int statusCode,
+		IByteBuffer* buffer,
+		const std::vector<Listener_win8_Entry*> listeners,
+		const URL* g3mURL) :
+		_statusCode(statusCode),
+		_buffer(buffer),
+		_listeners(listeners),
+		_g3mURL(g3mURL)
+	{
+	}
+
+	void run(const G3MContext* context) {
+		//[_lock lock];  TODO: ?
+
+		const bool dataIsValid = (_buffer->size()>0) && (_statusCode == 200);
+		if (!dataIsValid) {
+			ILogger::instance()->logError("Error statusCode=%d, URL=%s \n", _statusCode, _g3mURL->getPath().c_str());
+		}
+
+		const int listenersCount = _listeners.size();
+
+		if (dataIsValid) {
+			for (int i = 0; i < listenersCount; i++) {
+				Listener_win8_Entry* entry = _listeners.at(i);
+				Downloader_win8_Listener* listener = entry->getListener();
+
+				if (entry->isCanceled()) {
+					listener->onCanceledDownload(*_g3mURL, _buffer);
+					listener->onCancel(*_g3mURL);
+				}
+				else {
+					listener->onDownload(*_g3mURL, _buffer);
+				}
+			}
+		}
+		else {
+			for (int i = 0; i < listenersCount; i++) {
+				Listener_win8_Entry* entry = _listeners.at(i);
+				Downloader_win8_Listener* listener = entry->getListener();
+				listener->onError(*_g3mURL);
+			}
+		}
+
+		//[_lock unlock];
+	}
+};
 
 
 //==================== class Downloader_win8_Handler implementation =========================================
@@ -145,11 +211,11 @@ long long Downloader_win8_Handler::priority(){
 	return result;
 }
 
-void Downloader_win8_Handler::runWithDownloader(Downloader_win8* downloader){
+void Downloader_win8_Handler::runWithDownloader(Downloader_win8* downloader, G3MContext* context){
 
 	int statusCode = 0;
-	BYTE* data = NULL;
-	//HttpURLConnection connection = null;
+	//BYTE* data = NULL;
+	IByteBuffer* byteBuffer = NULL;
 
 	if (_g3mURL->isFileProtocol()) {
 		const std::string fileFullName = _sUtils->replaceSubstring(_g3mURL->getPath(), URL::FILE_PROTOCOL, "");
@@ -163,11 +229,11 @@ void Downloader_win8_Handler::runWithDownloader(Downloader_win8* downloader){
 		//http://msdn.microsoft.com/en-us/library/windows/apps/windows.storage.applicationdata.localfolder
 
 		concurrency::task<StorageFile^> readFileOperation(StorageFile::GetFileFromPathAsync(_sUtils->toStringHat(fileFullName)));
-		readFileOperation.then([&data](StorageFile^ file)
+		readFileOperation.then([&byteBuffer](StorageFile^ file)
 		{
 			//return FileIO::ReadTextAsync(file);
 			return FileIO::ReadBufferAsync(file);
-		}).then([&data](concurrency::task<Streams::IBuffer^> previousOperation) {
+		}).then([&byteBuffer](concurrency::task<Streams::IBuffer^> previousOperation) {
 
 			try {
 				// Data is contained in timestamp
@@ -175,48 +241,50 @@ void Downloader_win8_Handler::runWithDownloader(Downloader_win8* downloader){
 				//http://stackoverflow.com/questions/11853838/getting-an-array-of-bytes-out-of-windowsstoragestreamsibuffer
 
 				auto reader = Windows::Storage::Streams::DataReader::FromBuffer(buffer);
-
 				unsigned int dataLength = reader->UnconsumedBufferLength;
-				data = new BYTE[dataLength];
-				if (dataLength > 0){
-					reader->ReadBytes(Platform::ArrayReference<unsigned char>(data, dataLength));
-				}
 
-				//this->_data = datos;
+				if (dataLength > 0){
+					BYTE* data = new BYTE[dataLength];
+					reader->ReadBytes(Platform::ArrayReference<unsigned char>(data, dataLength));
+					byteBuffer = IFactory::instance()->createByteBuffer(data, dataLength);
+				}
 			}
 			catch (...) {
-				// Timestamp not found
+				ILogger::instance()->logInfo("Downloader error getting data from local file \n");
 			}
 		});
-
-		statusCode = (data) ? 200 : 404;
 	}
 	else{
 		Windows::Web::Http::HttpClient^ client = ref new Windows::Web::Http::HttpClient();
 		//Windows::Foundation::IAsyncOperationWithProgress<> getdataOperation 
-		auto responseMessage = client->GetAsync(_winURL)->GetResults();
-		//responseMessage->EnsureSuccessStatusCode();
-		if (responseMessage->IsSuccessStatusCode){
-			statusCode = 200; //Windows::Web::Http::HttpStatusCode::Ok
-			auto content = responseMessage->Content;
-			Streams::IBuffer^ buffer = content->ReadAsBufferAsync()->GetResults();
+		try {
+			auto responseMessage = client->GetAsync(_winURL)->GetResults();
+			//responseMessage->EnsureSuccessStatusCode();
+			if (responseMessage->IsSuccessStatusCode){
+				auto content = responseMessage->Content;
+				Streams::IBuffer^ buffer = content->ReadAsBufferAsync()->GetResults();
 			
-			auto reader = Windows::Storage::Streams::DataReader::FromBuffer(buffer);
-
-			unsigned int dataLength = reader->UnconsumedBufferLength;
-			data = new BYTE[dataLength];
-			if (dataLength > 0){
-				reader->ReadBytes(Platform::ArrayReference<unsigned char>(data, dataLength));
+				auto reader = Windows::Storage::Streams::DataReader::FromBuffer(buffer);
+				unsigned int dataLength = reader->UnconsumedBufferLength;
+			
+				if (dataLength > 0){
+					BYTE* data = new BYTE[dataLength];
+					reader->ReadBytes(Platform::ArrayReference<unsigned char>(data, dataLength));
+					byteBuffer = IFactory::instance()->createByteBuffer(data, dataLength);
+				}
 			}
 		}
-		
-		statusCode = 404; //Windows::Web::Http::HttpStatusCode::NotFound
+		catch (...) {
+			ILogger::instance()->logInfo("Downloader error getting data from URL= %s \n", _g3mURL->getPath().c_str());
+		}	
 	}
+
+	statusCode = (byteBuffer->size() > 0) ? 200 : 404;
 
 	// inform downloader to remove myself, to avoid adding new Listener
 	downloader->removeDownloadingHandlerForUrl(_g3mURL->getPath());
 
-	//continuará...
+	context->getThreadUtils()->invokeInRendererThread(new ProcessResponseGTask(statusCode, byteBuffer, _listeners, _g3mURL), true);
 }
 
 

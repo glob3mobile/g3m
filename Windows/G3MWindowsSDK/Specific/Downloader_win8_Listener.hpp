@@ -31,13 +31,19 @@ public:
 							 IImageDownloadListener* cppImageListener,
 							 bool deleteListener);
 
-	void onDownload(const URL& url, IByteBuffer* buffer, IImage* image);
+	Downloader_win8_Listener(IBufferDownloadListener* cppBufferListener,
+							 bool deleteListener);
+
+	Downloader_win8_Listener(IImageDownloadListener* cppImageListener,
+							 bool deleteListener);
+
+	void onDownload(const URL& url, IByteBuffer* buffer);
 
 	void onError(const URL& url);
 
 	void onCancel(const URL& url);
 
-	void onCanceledDownload(const URL& url, IByteBuffer* buffer, IImage* image);
+	void onCanceledDownload(const URL& url, IByteBuffer* buffer);
 
 	void dealloc();
 
