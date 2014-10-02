@@ -212,7 +212,7 @@ public class PointCloudsRenderer extends DefaultRenderer
           pointsBuffer.rawPut(1, (float)(average._y - averageY));
           pointsBuffer.rawPut(2, (float)(average._z - averageZ));
     
-          _mesh = new DirectMesh(GLPrimitive.points(), true, new Vector3D(averageX, averageY, averageZ), pointsBuffer, 1, pointSize * 2, Color.newFromRGBA(1, 1, 0, 1), null, 1, true); // colorsIntensity -  colors
+          _mesh = new DirectMesh(GLPrimitive.points(), true, new Vector3D(averageX, averageY, averageZ), pointsBuffer, 1, pointSize * 2, Color.newFromRGBA(1, 1, 0, 1), null, 1, true); // colorsIntensity -  colors -  flatColor
         }
         _mesh.render(rc, glState);
         renderedCount = 1;
@@ -512,7 +512,7 @@ public class PointCloudsRenderer extends DefaultRenderer
     private int _loadingLevel;
     private int calculateCurrentLoadedLevel()
     {
-      int loadedPointsCount = _firstPointsVerticesBuffer.size() / 3;
+      final int loadedPointsCount = _firstPointsVerticesBuffer.size() / 3;
       int accummulated = 0;
       for (int i = 0; i < _levelsCount; i++)
       {
@@ -533,9 +533,12 @@ public class PointCloudsRenderer extends DefaultRenderer
 
     private DirectMesh createMesh(double minHeight, double maxHeight, float pointSize)
     {
+      final int firstPointsVerticesBufferSize = _firstPointsVerticesBuffer.size();
+    
       if (_currentLoadedLevel <= _preloadedLevel)
       {
-        final int firstPointsCount = _firstPointsVerticesBuffer.size() / 3;
+        final int firstPointsCount = firstPointsVerticesBufferSize / 3;
+    
         if (_firstPointsColorsBuffer == null)
         {
           final double deltaHeight = maxHeight - minHeight;
@@ -556,7 +559,7 @@ public class PointCloudsRenderer extends DefaultRenderer
           }
         }
     
-        DirectMesh mesh = new DirectMesh(GLPrimitive.points(), false, _average, _firstPointsVerticesBuffer, 1, pointSize, Color.newFromRGBA(1, 1, 1, 1), _firstPointsColorsBuffer, 1, true); // colorsIntensity -  colors
+        DirectMesh mesh = new DirectMesh(GLPrimitive.points(), false, _average, _firstPointsVerticesBuffer, 1, pointSize, null, _firstPointsColorsBuffer, 1, true); // colorsIntensity -  colors -  flatColor
         mesh.setRenderVerticesCount(IMathUtils.instance().min(_neededPoints, firstPointsCount));
     
         return mesh;
@@ -570,9 +573,8 @@ public class PointCloudsRenderer extends DefaultRenderer
     
       IFloatBuffer vertices = IFactory.instance().createFloatBuffer(pointsCount * 3);
     
-    
       vertices.rawPut(0, _firstPointsVerticesBuffer);
-      int cursor = _firstPointsVerticesBuffer.size();
+      int cursor = firstPointsVerticesBufferSize;
       for (int level = _preloadedLevel+1; level <= _currentLoadedLevel; level++)
       {
         IFloatBuffer levelVerticesBuffers = _levelsVerticesBuffers[level];
@@ -581,10 +583,9 @@ public class PointCloudsRenderer extends DefaultRenderer
         cursor += levelVerticesBuffers.size();
       }
     
-    //  IFloatBuffer* colors = NULL;
       IFloatBuffer colors = IFactory.instance().createFloatBuffer(pointsCount * 4);
       final double deltaHeight = maxHeight - minHeight;
-      final int firstPointsCount = _firstPointsVerticesBuffer.size() / 3;
+      final int firstPointsCount = firstPointsVerticesBufferSize / 3;
     
       for (int i = 0; i < firstPointsCount; i++)
       {
@@ -620,8 +621,8 @@ public class PointCloudsRenderer extends DefaultRenderer
         cursor += _levelsPointsCount[level] * 4;
       }
     
-      DirectMesh mesh = new DirectMesh(GLPrimitive.points(), true, _average, vertices, 1, pointSize, Color.newFromRGBA(1, 1, 1, 1), colors, 1, true); // colorsIntensity -  colors
-      //    mesh->setRenderVerticesCount( IMathUtils::instance()->min(_neededPoints, firstPointsCount) );
+      DirectMesh mesh = new DirectMesh(GLPrimitive.points(), true, _average, vertices, 1, pointSize, null, colors, 1, true); // colorsIntensity -  colors -  flatColor
+      // mesh->setRenderVerticesCount( IMathUtils::instance()->min(_neededPoints, firstPointsCount) );
       mesh.setRenderVerticesCount(pointsCount);
     
       return mesh;
