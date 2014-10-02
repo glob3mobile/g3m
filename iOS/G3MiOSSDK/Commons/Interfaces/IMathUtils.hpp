@@ -50,7 +50,7 @@ public:
     _instance = math;
   }
 
-  static IMathUtils* instance() {
+  static const IMathUtils* instance() {
     return _instance;
   }
 

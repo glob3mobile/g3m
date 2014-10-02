@@ -689,6 +689,10 @@ DirectMesh* PointCloudsRenderer::PointCloudLeafNode::createMesh(double minHeight
                                                                 float pointSize) {
   const int firstPointsVerticesBufferSize = _firstPointsVerticesBuffer->size();
 
+  const Color baseColor = Color::magenta();
+  const int wheelSize = 2147483647;
+  const IMathUtils* mu = IMathUtils::instance();
+
   if (_currentLoadedLevel <= _preloadedLevel) {
     const int firstPointsCount = firstPointsVerticesBufferSize / 3;
 
@@ -700,8 +704,8 @@ DirectMesh* PointCloudsRenderer::PointCloudLeafNode::createMesh(double minHeight
         const float height = _firstPointsHeightsBuffer->get(i);
         const float alpha = (float) ((height - minHeight) / deltaHeight);
 
-        const Color color = Color::magenta().wheelStep(2147483647,
-                                                       IMathUtils::instance()->round(2147483647 * alpha) );
+        const Color color = baseColor.wheelStep(wheelSize,
+                                                mu->round(wheelSize * alpha) );
 
         const int i4 = i*4;
         _firstPointsColorsBuffer->rawPut(i4 + 0, color._red);
@@ -721,7 +725,7 @@ DirectMesh* PointCloudsRenderer::PointCloudLeafNode::createMesh(double minHeight
                                       _firstPointsColorsBuffer, // colors
                                       1,                        // colorsIntensity
                                       true);
-    mesh->setRenderVerticesCount( IMathUtils::instance()->min(_neededPoints, firstPointsCount) );
+    mesh->setRenderVerticesCount( mu->min(_neededPoints, firstPointsCount) );
 
     return mesh;
   }
@@ -750,8 +754,8 @@ DirectMesh* PointCloudsRenderer::PointCloudLeafNode::createMesh(double minHeight
     const float height = _firstPointsHeightsBuffer->get(i);
     const float alpha = (float) ((height - minHeight) / deltaHeight);
 
-    const Color color = Color::magenta().wheelStep(2147483647,
-                                                   IMathUtils::instance()->round(2147483647 * alpha) );
+    const Color color = baseColor.wheelStep(wheelSize,
+                                            mu->round(wheelSize * alpha) );
 
     const int i4 = i*4;
     colors->rawPut(i4 + 0, color._red);
@@ -767,9 +771,9 @@ DirectMesh* PointCloudsRenderer::PointCloudLeafNode::createMesh(double minHeight
       const float height = levelHeightsBuffers->get(i);
       const float alpha = (float) ((height - minHeight) / deltaHeight);
 
-      const Color color = Color::magenta().wheelStep(2147483647,
-                                                     IMathUtils::instance()->round(2147483647 * alpha) );
-      
+      const Color color = baseColor.wheelStep(wheelSize,
+                                              mu->round(wheelSize * alpha) );
+
       const int offset = cursor + i*4;
       colors->rawPut(offset + 0, color._red);
       colors->rawPut(offset + 1, color._green);
@@ -789,7 +793,7 @@ DirectMesh* PointCloudsRenderer::PointCloudLeafNode::createMesh(double minHeight
                                     colors, // colors
                                     1,      // colorsIntensity
                                     true);
-  // mesh->setRenderVerticesCount( IMathUtils::instance()->min(_neededPoints, firstPointsCount) );
+  // mesh->setRenderVerticesCount( mu->min(_neededPoints, firstPointsCount) );
   mesh->setRenderVerticesCount( pointsCount );
 
   return mesh;
