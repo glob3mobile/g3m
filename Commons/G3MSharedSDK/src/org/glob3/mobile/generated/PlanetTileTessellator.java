@@ -106,7 +106,7 @@ public class PlanetTileTessellator extends TileTessellator
     final double mercatorDeltaGlobalV = mercatorLowerGlobalV - mercatorUpperGlobalV;
   
     //VERTICES///////////////////////////////////////////////////////////////
-    IMathUtils mu = IMathUtils.instance();
+    final IMathUtils mu = IMathUtils.instance();
     double minElevation = mu.maxDouble();
     double maxElevation = mu.minDouble();
     double averageElevation = 0;

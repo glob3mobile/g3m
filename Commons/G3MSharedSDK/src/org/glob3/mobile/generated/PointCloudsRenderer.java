@@ -535,6 +535,10 @@ public class PointCloudsRenderer extends DefaultRenderer
     {
       final int firstPointsVerticesBufferSize = _firstPointsVerticesBuffer.size();
     
+      final Color baseColor = Color.magenta();
+      final int wheelSize = 2147483647;
+      final IMathUtils mu = IMathUtils.instance();
+    
       if (_currentLoadedLevel <= _preloadedLevel)
       {
         final int firstPointsCount = firstPointsVerticesBufferSize / 3;
@@ -549,7 +553,7 @@ public class PointCloudsRenderer extends DefaultRenderer
             final float height = _firstPointsHeightsBuffer.get(i);
             final float alpha = (float)((height - minHeight) / deltaHeight);
     
-            final Color color = Color.magenta().wheelStep(2147483647, IMathUtils.instance().round(2147483647 * alpha));
+            final Color color = baseColor.wheelStep(wheelSize, mu.round(wheelSize * alpha));
     
             final int i4 = i *4;
             _firstPointsColorsBuffer.rawPut(i4 + 0, color._red);
@@ -560,7 +564,7 @@ public class PointCloudsRenderer extends DefaultRenderer
         }
     
         DirectMesh mesh = new DirectMesh(GLPrimitive.points(), false, _average, _firstPointsVerticesBuffer, 1, pointSize, null, _firstPointsColorsBuffer, 1, true); // colorsIntensity -  colors -  flatColor
-        mesh.setRenderVerticesCount(IMathUtils.instance().min(_neededPoints, firstPointsCount));
+        mesh.setRenderVerticesCount(mu.min(_neededPoints, firstPointsCount));
     
         return mesh;
       }
@@ -592,7 +596,7 @@ public class PointCloudsRenderer extends DefaultRenderer
         final float height = _firstPointsHeightsBuffer.get(i);
         final float alpha = (float)((height - minHeight) / deltaHeight);
     
-        final Color color = Color.magenta().wheelStep(2147483647, IMathUtils.instance().round(2147483647 * alpha));
+        final Color color = baseColor.wheelStep(wheelSize, mu.round(wheelSize * alpha));
     
         final int i4 = i *4;
         colors.rawPut(i4 + 0, color._red);
@@ -610,7 +614,7 @@ public class PointCloudsRenderer extends DefaultRenderer
           final float height = levelHeightsBuffers.get(i);
           final float alpha = (float)((height - minHeight) / deltaHeight);
     
-          final Color color = Color.magenta().wheelStep(2147483647, IMathUtils.instance().round(2147483647 * alpha));
+          final Color color = baseColor.wheelStep(wheelSize, mu.round(wheelSize * alpha));
     
           final int offset = cursor + i *4;
           colors.rawPut(offset + 0, color._red);
@@ -622,7 +626,7 @@ public class PointCloudsRenderer extends DefaultRenderer
       }
     
       DirectMesh mesh = new DirectMesh(GLPrimitive.points(), true, _average, vertices, 1, pointSize, null, colors, 1, true); // colorsIntensity -  colors -  flatColor
-      // mesh->setRenderVerticesCount( IMathUtils::instance()->min(_neededPoints, firstPointsCount) );
+      // mesh->setRenderVerticesCount( mu->min(_neededPoints, firstPointsCount) );
       mesh.setRenderVerticesCount(pointsCount);
     
       return mesh;

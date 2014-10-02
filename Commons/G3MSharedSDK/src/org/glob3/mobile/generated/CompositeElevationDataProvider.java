@@ -121,7 +121,7 @@ public class CompositeElevationDataProvider extends ElevationDataProvider
       double bestRes = extent.squaredLength();
       double selectedRes = IMathUtils.instance().maxDouble();
       double selectedResDistance = IMathUtils.instance().maxDouble();
-      IMathUtils mu = IMathUtils.instance();
+      final IMathUtils mu = IMathUtils.instance();
     
     
       ElevationDataProvider provider = null;
