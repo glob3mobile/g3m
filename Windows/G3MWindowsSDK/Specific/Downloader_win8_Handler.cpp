@@ -71,6 +71,7 @@ private:
 	IByteBuffer*	 _buffer;
 	const std::vector<Listener_win8_Entry*> _listeners;
 	const URL*            _g3mURL;
+	std::mutex _lock;
 
 public:
 	ProcessResponseGTask(const int statusCode,
@@ -85,7 +86,8 @@ public:
 	}
 
 	void run(const G3MContext* context) {
-		//[_lock lock];  TODO: ?
+
+		_lock.lock();
 
 		const bool dataIsValid = (_buffer->size()>0) && (_statusCode == 200);
 		if (!dataIsValid) {
@@ -116,7 +118,7 @@ public:
 			}
 		}
 
-		//[_lock unlock];
+		_lock.unlock();
 	}
 };
 
@@ -135,7 +137,7 @@ _priority(priority)
 
 void Downloader_win8_Handler::addListener(Downloader_win8_Listener* listener, long long priority, long long requestId){
 
-	//[_lock lock]; TODO:
+	_lock.lock();
 
 	_listeners.push_back(new Listener_win8_Entry(listener, requestId));
 
@@ -143,14 +145,14 @@ void Downloader_win8_Handler::addListener(Downloader_win8_Listener* listener, lo
 		_priority = priority;
 	}
 
-	//[_lock unlock];
+	_lock.unlock();
 }
 
 bool Downloader_win8_Handler::cancelListenerForRequestId(long long requestId){
 
 	bool canceled = false;
 
-	//[_lock lock]; TODO:
+	_lock.lock();
 
 	const int listenersCount = _listeners.size();
 	for (int i = 0; i < listenersCount; i++) {
@@ -162,7 +164,7 @@ bool Downloader_win8_Handler::cancelListenerForRequestId(long long requestId){
 		}
 	}
 
-	//[_lock unlock];
+	_lock.unlock();
 
 	return canceled;
 }
@@ -171,7 +173,7 @@ bool Downloader_win8_Handler::removeListenerForRequestId(long long requestId){
 
 	bool removed = false;
 
-	//[_lock lock]; TODO:
+	_lock.lock();
 
 	const int listenersCount = _listeners.size();
 	for (int i = 0; i < listenersCount; i++) {
@@ -184,29 +186,29 @@ bool Downloader_win8_Handler::removeListenerForRequestId(long long requestId){
 		}
 	}
 
-	//[_lock unlock];
+	_lock.unlock();
 
 	return removed;
 }
 
 bool Downloader_win8_Handler::hasListeners(){
 
-	//[_lock lock]; TODO:
+	_lock.lock();
 
 	const bool hasListeners = _listeners.size() > 0;
 
-	//[_lock unlock];
+	_lock.unlock();
 
 	return hasListeners;
 }
 
 long long Downloader_win8_Handler::priority(){
 
-	//[_lock lock]; TODO:
+	_lock.lock();
 
 	const long long result = _priority;
 
-	//[_lock unlock];
+	_lock.unlock();
 
 	return result;
 }
@@ -219,10 +221,6 @@ void Downloader_win8_Handler::runWithDownloader(Downloader_win8* downloader, G3M
 
 	if (_g3mURL->isFileProtocol()) {
 		const std::string fileFullName = _sUtils->replaceSubstring(_g3mURL->getPath(), URL::FILE_PROTOCOL, "");
-
-		//const int dotPos = _sUtils->indexOf(fileFullName, ".");
-		//std::string fileName = _sUtils->left(fileFullName, dotPos);
-		//std::string fileExt = _sUtils->substring(fileFullName, dotPos + 1, fileFullName.size());
 
 		//Windows::Storage::FileIO::
 		//Windows::Storage::StorageFolder^ localFolder = Windows::Storage::ApplicationData::Current->LocalFolder;

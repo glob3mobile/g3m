@@ -120,7 +120,7 @@ void Downloader_win8::cancelRequest(long long requestId){
 		return;
 	}
 
-	//[_lock lock];	TODO: 
+	_lock.lock();
 
 	_cancelsCounter++;
 
@@ -152,7 +152,7 @@ void Downloader_win8::cancelRequest(long long requestId){
 		}
 	}
 
-	//[_lock unlock];
+	_lock.unlock();
 }
 
 
@@ -162,7 +162,7 @@ Downloader_win8_Handler* Downloader_win8::getHandlerToRun(){
 	Downloader_win8_Handler*	selectedHandler = NULL;
 	std::string					selectedURL = NULL;
 
-	//[_lock lock];	TODO: 
+	_lock.lock();
 
 	std::map<std::string, Downloader_win8_Handler*>::iterator it = _queuedHandlers.begin();
 
@@ -184,7 +184,7 @@ Downloader_win8_Handler* Downloader_win8::getHandlerToRun(){
 		_downloadingHandlers.insert(std::pair<std::string, Downloader_win8_Handler*>(selectedURL, selectedHandler));
 	}
 
-	//[_lock unlock];
+	_lock.unlock();
 
 	return selectedHandler;
 
@@ -193,11 +193,9 @@ Downloader_win8_Handler* Downloader_win8::getHandlerToRun(){
 
 void Downloader_win8::removeDownloadingHandlerForUrl(const std::string url){
 
-	//[_lock lock];	TODO:
-
+	_lock.lock();
 	_downloadingHandlers.erase(url);
-
-	//[_lock unlock];
+	_lock.unlock();
 }
 
 

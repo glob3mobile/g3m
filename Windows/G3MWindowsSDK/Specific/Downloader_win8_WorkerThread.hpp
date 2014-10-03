@@ -11,17 +11,26 @@
 #pragma once
 
 #include <thread>
+#include <mutex>
+#include <chrono>
+//#include <sched.h>
 
 class Downloader_win8;
 
-class Downloader_win8_WorkerThread : std::thread{
+class Downloader_win8_WorkerThread {
 
 private:
-	const Downloader_win8* _downloader;
+	Downloader_win8* _downloader;
 	bool            _stopping;
+	std::thread _worker;
+
+	std::mutex _lock;
+
+	bool setPriorityBellowNormal();
+
 
 public:
-	Downloader_win8_WorkerThread(const Downloader_win8* downloader);
+	Downloader_win8_WorkerThread(Downloader_win8* downloader);
 
 	void start();
 

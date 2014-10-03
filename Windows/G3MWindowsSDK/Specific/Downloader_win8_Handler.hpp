@@ -13,6 +13,7 @@
 
 #include "Downloader_win8_Listener.hpp"
 #include "URL.hpp"
+#include <mutex>
 
 class Downloader_win8;
 class StringUtils_win8;
@@ -26,7 +27,6 @@ private:
 	Downloader_win8_Listener* _listener;
 	long long                _requestId;
 	bool                     _canceled;
-	
 
 public:
 	Listener_win8_Entry(Downloader_win8_Listener* listener, long long requestId);
@@ -51,8 +51,8 @@ private:
 	URL*						_g3mURL;
 	Windows::Foundation::Uri^	_winURL;
 	
-
 	const StringUtils_win8* _sUtils;
+	std::mutex _lock;
 	
 public:
 	Downloader_win8_Handler(URL* url, Downloader_win8_Listener* listener, long long priority, long long requestId);
