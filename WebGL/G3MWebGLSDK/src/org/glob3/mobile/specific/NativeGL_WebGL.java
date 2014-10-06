@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import org.glob3.mobile.generated.GPUAttribute;
 import org.glob3.mobile.generated.GPUProgram;
 import org.glob3.mobile.generated.GPUUniform;
+import org.glob3.mobile.generated.IByteBuffer;
 import org.glob3.mobile.generated.IFloatBuffer;
 import org.glob3.mobile.generated.IGLTextureId;
 import org.glob3.mobile.generated.IGLUniformID;
@@ -837,6 +838,20 @@ public final class NativeGL_WebGL
 		var gl = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl;
 		gl.activeTexture(gl.TEXTURE0 + i);
    }-*/;
+
+
+@Override
+public native void vertexAttribPointer(int index, int size, boolean normalized,
+		int stride, IByteBuffer buffer) /*-{
+	debugger;
+	var gl = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl;
+	var webGLBuffer = buffer.@org.glob3.mobile.specific.ByteBuffer_WebGL::getWebGLBuffer(Lcom/google/gwt/core/client/JavaScriptObject;)(gl);
+	gl.bindBuffer(gl.ARRAY_BUFFER, webGLBuffer);
+	var array = buffer.@org.glob3.mobile.specific.ByteBuffer_WebGL::getBuffer()();
+	gl.bufferData(gl.ARRAY_BUFFER, array, gl.STATIC_DRAW);
+	gl.vertexAttribPointer(index, size, gl.UNSIGNED_BYTE, normalized, stride, 0);
+	gl.getError();
+}-*/;
 
 
 }
