@@ -97,6 +97,7 @@ IByteBuffer {
 	   if (_byteBuffer == null){
 		   _byteBuffer = ByteBuffer.allocateDirect(_buffer.length);
 		   _byteBuffer.put(_buffer);
+		   _byteBuffer.position(0);
 	   }
 	   return _byteBuffer;
    }

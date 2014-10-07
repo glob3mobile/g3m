@@ -61,6 +61,7 @@ public final class ES2Renderer
 
       final G3MWidget widget = _widgetAndroid.getG3MWidget();
       widget.render(_width, _height);
+      _gl.getError();
 
       // experimental FPS reduction - DGD
       final long now = System.currentTimeMillis();
@@ -101,12 +102,14 @@ public final class ES2Renderer
       if (_hasRendered) {
          _widgetAndroid.getG3MWidget().onResizeViewportEvent(width, height);
       }
+      _gl.getError();
    }
 
 
    @Override
    public void onSurfaceCreated(final GL10 glUnused,
                                 final EGLConfig config) {
+	   _gl.getError();
    }
 
 
