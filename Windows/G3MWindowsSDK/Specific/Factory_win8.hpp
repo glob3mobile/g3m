@@ -17,22 +17,30 @@
 #include "IntBuffer_win8.hpp"
 #include "FloatBuffer_win8.hpp"
 #include "Timer_win8.hpp"
+#include "Canvas_win8.hpp"
 
 
 class Factory_win8 : public IFactory {
+private:
+	NativeGL_win8* _ngl;
 protected:
 	IDeviceInfo* createDeviceInfo() const{
-		return new DeviceInfo_win8();
+		return new DeviceInfo_win8(_ngl);
 	}
 
 public:
+
+	Factory_win8(NativeGL_win8* ngl):
+	_ngl(ngl)
+	{
+
+	}
 	ITimer* createTimer() const {
 		return new Timer_win8();
 	}
 
 	ICanvas* createCanvas() const {
-
-		return NULL;
+		return new Canvas_win8(_ngl);
 	}
 
 	IByteBuffer* createByteBuffer(int length) const{

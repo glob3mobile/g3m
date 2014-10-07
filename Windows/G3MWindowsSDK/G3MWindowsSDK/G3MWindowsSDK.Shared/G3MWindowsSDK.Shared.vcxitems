@@ -319,6 +319,7 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Rendererers\TrailsRenderer.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)..\..\D3D\D3DRenderer.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)..\..\Specific\ByteBuffer_win8.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\Specific\Canvas_win8.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)..\..\Specific\DeviceInfo_win8.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)..\..\Specific\Downloader_win8.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)..\..\Specific\FloatBuffer_win8.cpp" />
@@ -680,6 +681,7 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Rendererers\VisibleSectorListener.hpp" />
     <ClInclude Include="$(MSBuildThisFileDirectory)..\..\D3D\D3DRenderer.hpp" />
     <ClInclude Include="$(MSBuildThisFileDirectory)..\..\Specific\ByteBuffer_win8.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\Specific\Canvas_win8.hpp" />
     <ClInclude Include="$(MSBuildThisFileDirectory)..\..\Specific\DeviceInfo_win8.hpp" />
     <ClInclude Include="$(MSBuildThisFileDirectory)..\..\Specific\Downloader_win8.hpp" />
     <ClInclude Include="$(MSBuildThisFileDirectory)..\..\Specific\Factory_win8.hpp" />

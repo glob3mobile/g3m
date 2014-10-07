@@ -7,7 +7,7 @@
 //#include <wrl.h>
 #include <wrl/client.h>
 #include <d3d11_2.h>
-//#include <d2d1_2.h>
+#include <D2d1_2.h>
 //#include <d2d1effects_1.h>
 //#include <dwrite_2.h>
 //#include <wincodec.h>
@@ -54,6 +54,11 @@ private:
 
 	Windows::UI::Core::CoreWindow^ _coreWindow;
 
+	///d2d
+	Microsoft::WRL::ComPtr<ID2D1Factory2> _d2dFactory;
+	Microsoft::WRL::ComPtr<ID2D1Device1> _d2dDevice;
+	Microsoft::WRL::ComPtr<ID2D1DeviceContext1> _d2dDeviceContext;
+
 	float* bgcol;
 
 
@@ -63,6 +68,7 @@ public:
 	void createDeviceAndContext();
 	void createSwapChain();
 	void createDeviceDependentResources();
+	void createDeviceIndependentResources();
 
 	void render();
 

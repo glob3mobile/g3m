@@ -9,11 +9,12 @@
 D3DRenderer::D3DRenderer()
 {
 	initialize(Windows::UI::Core::CoreWindow::GetForCurrentThread());
+	createDeviceIndependentResources();
 	createDeviceAndContext();
 	createSwapChain();
 	createDeviceDependentResources();
 
-	this->_nativeGL = new NativeGL_win8(device, deviceContext, d3dRenderTargetView, d3dDepthStencilView);
+	this->_nativeGL = new NativeGL_win8(device, deviceContext, d3dRenderTargetView, d3dDepthStencilView, _d2dFactory, _d2dDevice, _d2dDeviceContext);
 	this->_gl = new GL(_nativeGL, true);
 
 	_isInitialized = true;
@@ -28,12 +29,19 @@ void D3DRenderer::setWidget(G3MWidget* widget){
 void D3DRenderer::initialize(Windows::UI::Core::CoreWindow^ coreWindow){
 	this->_coreWindow = coreWindow;
 
-	/*bgcol = new float[4];
-	bgcol[0] = 1.0f;
-	bgcol[1] = 1.0f;
-	bgcol[2] = 1.0f;
-	bgcol[3] = 1.0f;*/
 
+}
+
+void D3DRenderer::createDeviceIndependentResources(){
+	D2D1_FACTORY_OPTIONS options;
+	ZeroMemory(&options, sizeof(D2D1_FACTORY_OPTIONS));
+
+	D2D1CreateFactory(
+		D2D1_FACTORY_TYPE_SINGLE_THREADED,
+		__uuidof(ID2D1Factory2),
+		&options,
+		&_d2dFactory
+		);
 
 }
 
@@ -57,6 +65,15 @@ void D3DRenderer::createDeviceAndContext(){
 	// Cast the pointers from the DirectX 11 versions to the DirectX 11.1 versions
 	dev11.As(&device);
 	devcon11.As(&deviceContext);
+
+	//Create d2d device and context
+	Microsoft::WRL::ComPtr<IDXGIDevice3> dxgiDevice;
+	device.As(&dxgiDevice);
+	_d2dFactory->CreateDevice(dxgiDevice.Get(), &_d2dDevice);
+	_d2dDevice->CreateDeviceContext(
+		D2D1_DEVICE_CONTEXT_OPTIONS_NONE,
+		&_d2dDeviceContext
+		);
 }
 
 void D3DRenderer::createSwapChain(){

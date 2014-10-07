@@ -11,6 +11,7 @@
 
 #include <wrl/client.h>
 #include <d3d11_2.h>
+#include <d2d1_2.h>
 
 #include "INativeGL.hpp"
 
@@ -47,6 +48,10 @@ private:
 	Microsoft::WRL::ComPtr<ID3D11RenderTargetView> _renderTargetView;
 	Microsoft::WRL::ComPtr<ID3D11DepthStencilView> _depthStencilView;
 
+	Microsoft::WRL::ComPtr<ID2D1Factory2> _d2dFactory;
+	Microsoft::WRL::ComPtr<ID2D1Device1> _d2dDevice;
+	Microsoft::WRL::ComPtr<ID2D1DeviceContext1> _d2dDeviceContext;
+
 	mutable ID3D11Buffer* _indexBuffer = NULL;
 	mutable int _indexBufferSize = 0;
 
@@ -71,18 +76,23 @@ private:
 	mutable int _sourceBlendColor = 1;
 	mutable int _destBlendColor = 1;
 
-//	GPUUniform_D3D* _currentUniforms;
 
 public:
 
 	NativeGL_win8(Microsoft::WRL::ComPtr<ID3D11Device1>& device,
 		Microsoft::WRL::ComPtr<ID3D11DeviceContext1>& dc,
 		Microsoft::WRL::ComPtr<ID3D11RenderTargetView>& rtv,
-		Microsoft::WRL::ComPtr<ID3D11DepthStencilView>& dsv) :
+		Microsoft::WRL::ComPtr<ID3D11DepthStencilView>& dsv,
+		Microsoft::WRL::ComPtr<ID2D1Factory2>& d2dfactory,
+		Microsoft::WRL::ComPtr<ID2D1Device1>& d2device,
+		Microsoft::WRL::ComPtr<ID2D1DeviceContext1>& d2dContext) :
 		_device(device),
 		_deviceContext(dc),
 		_renderTargetView(rtv),
-		_depthStencilView(dsv)
+		_depthStencilView(dsv),
+		_d2dFactory(d2dfactory),
+		_d2dDevice(d2device),
+		_d2dDeviceContext(d2dContext)
 	{
 		initializeRenderStates();
 	}
@@ -93,6 +103,18 @@ public:
 
 	Microsoft::WRL::ComPtr<ID3D11DeviceContext1> getDeviceContext(){
 		return _deviceContext;
+	}
+
+	Microsoft::WRL::ComPtr<ID2D1Device1> getD2DDevice(){
+		return _d2dDevice;
+	}
+
+	Microsoft::WRL::ComPtr<ID2D1DeviceContext1> getD2DDeviceContext(){
+		return _d2dDeviceContext;
+	}
+
+	Microsoft::WRL::ComPtr<ID2D1Factory2> getD2DFactory(){
+		return _d2dFactory;
 	}
 
 	//d3d: colors as const FLOAT ColorRGBA[4], clear color is passed as an argument of buffer-specific API-call

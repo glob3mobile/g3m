@@ -1011,6 +1011,9 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Rendererers\PointCloudsRenderer.cpp">
       <Filter>Common\Rendererers</Filter>
     </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\Specific\Canvas_win8.cpp">
+      <Filter>Specific</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="$(MSBuildThisFileDirectory)..\..\Specific\ByteBuffer_win8.hpp">
@@ -2110,6 +2113,9 @@
     </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Rendererers\PointCloudsRenderer.hpp">
       <Filter>Common\Rendererers</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\Specific\Canvas_win8.hpp">
+      <Filter>Specific</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

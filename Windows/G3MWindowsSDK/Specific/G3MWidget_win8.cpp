@@ -9,6 +9,7 @@
 
 #include "G3MWidget.hpp"
 #include "D3DRenderer.hpp"
+#include "NativeGL_win8.hpp"
 
 //#include "G3MWidget.hpp"
 
@@ -19,8 +20,9 @@
 G3MWidget_win8::G3MWidget_win8():
 _genericWidget(NULL)
 {
-	initSingletons();
+	
 	_renderer = new D3DRenderer();
+	initSingletons((NativeGL_win8*)_renderer->getGL()->getNative());
 
 }
 
@@ -39,9 +41,9 @@ void G3MWidget_win8::setWidget(G3MWidget* genericWidget){
 }
 
 
-void G3MWidget_win8::initSingletons() const{
+void G3MWidget_win8::initSingletons(NativeGL_win8* ngl) const{
 	ILogger* logger = new Logger_win8(InfoLevel);
-	IFactory* factory = new Factory_win8();
+	IFactory* factory = new Factory_win8(ngl);
 	IStringUtils* stringUtils = new StringUtils_win8();
 	IStringBuilder* stringBuilder = new StringBuilder_win8();
 	IMathUtils* mathUtils = new MathUtils_win8();

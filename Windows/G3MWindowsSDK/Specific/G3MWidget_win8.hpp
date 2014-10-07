@@ -6,6 +6,7 @@
 
 class G3MWidget;
 class D3DRenderer;
+class NativeGL_win8;
 
 
 #include "GL.hpp"
@@ -20,7 +21,7 @@ public:
 	G3MWidget_win8();
 	GL* getGL();
 	D3DRenderer* getRenderer();
-	void initSingletons() const;
+	void initSingletons(NativeGL_win8* ngl) const;
 	void setWidget(G3MWidget* genericWidget);
 };
 

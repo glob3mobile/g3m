@@ -14,17 +14,19 @@
 
 
 
-DeviceInfo_win8::DeviceInfo_win8(){
+DeviceInfo_win8::DeviceInfo_win8(NativeGL_win8* ngl){
+
+	_ngl = ngl;
 
 
-	ID2D1Factory* pD2DFactory = NULL;
-	HRESULT hr = D2D1CreateFactory(
+	//ID2D1Factory* pD2DFactory = NULL;
+	/*HRESULT hr = D2D1CreateFactory(
 		D2D1_FACTORY_TYPE_SINGLE_THREADED,
 		&pD2DFactory
-		);
+		);*/
 
 	FLOAT dpiX, dpiY;
-	pD2DFactory->GetDesktopDpi(&dpiX, &dpiY);
+	_ngl->getD2DFactory()->GetDesktopDpi(&dpiX, &dpiY);
 
 	_dpi = (dpiX / dpiY) / 2.0f;
 
