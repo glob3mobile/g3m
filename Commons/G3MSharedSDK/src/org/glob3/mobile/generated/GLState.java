@@ -32,7 +32,7 @@ public class GLState extends RCObject
   private GPUVariableValueSet _valuesSet;
   private GLGlobalState _globalState;
 
-  private GPUProgram _linkedProgram;
+  private IGPUProgram _linkedProgram;
 
   private GLState _parentGLState;
 
@@ -197,7 +197,7 @@ public class GLState extends RCObject
     }
     else
     {
-      ILogger.instance().logError("No GPUProgram found.");
+      ILogger.instance().logError("No IGPUProgram found.");
     }
   
   }

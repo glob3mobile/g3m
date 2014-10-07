@@ -41,6 +41,23 @@ public class GPUUniformValueVec4Float extends GPUUniformValue
     return (_x == v2._x) && (_y == v2._y) && (_z == v2._z) && (_w == v2._w);
   }
 
+  public final float getXValue()
+  {
+     return _x;
+  }
+  public final float getYValue()
+  {
+     return _y;
+  }
+  public final float getZValue()
+  {
+     return _z;
+  }
+  public final float getWValue()
+  {
+     return _w;
+  }
+
   public final String description()
   {
     IStringBuilder isb = IStringBuilder.newStringBuilder();

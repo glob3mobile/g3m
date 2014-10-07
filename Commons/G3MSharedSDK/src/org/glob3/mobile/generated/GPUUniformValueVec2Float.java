@@ -26,6 +26,15 @@ public class GPUUniformValueVec2Float extends GPUUniformValue
     return (_x == v2._x) && (_y == v2._y);
   }
 
+  public final float getXValue()
+  {
+     return _x;
+  }
+  public final float getYValue()
+  {
+     return _y;
+  }
+
   public final String description()
   {
     IStringBuilder isb = IStringBuilder.newStringBuilder();

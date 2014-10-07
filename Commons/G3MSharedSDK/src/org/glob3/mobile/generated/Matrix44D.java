@@ -23,6 +23,7 @@ public class Matrix44D extends RCObject
   public void dispose()
   {
     _columnMajorFloatArray = null;
+    _rowMajorFloatArray = null;
     if (_columnMajorFloatBuffer != null)
        _columnMajorFloatBuffer.dispose();
   
@@ -49,6 +50,7 @@ public class Matrix44D extends RCObject
   public final double _m33;
 
   public float[] _columnMajorFloatArray;
+  public float[] _rowMajorFloatArray;
   public IFloatBuffer _columnMajorFloatBuffer;
 
   public Matrix44D(Matrix44D m)
@@ -180,6 +182,36 @@ public class Matrix44D extends RCObject
       _columnMajorFloatBuffer = IFactory.instance().createFloatBuffer((float) _m00, (float) _m10, (float) _m20, (float) _m30, (float) _m01, (float) _m11, (float) _m21, (float) _m31, (float) _m02, (float) _m12, (float) _m22, (float) _m32, (float) _m03, (float) _m13, (float) _m23, (float) _m33);
     }
     return _columnMajorFloatBuffer;
+  }
+
+  public final float[] getRowMajorFloatArray()
+  {
+     if (_rowMajorFloatArray == null)
+     {
+        _rowMajorFloatArray = new float[16];
+
+        _rowMajorFloatArray[0] = (float)_m00;
+        _rowMajorFloatArray[1] = (float)_m01;
+        _rowMajorFloatArray[2] = (float)_m02;
+        _rowMajorFloatArray[3] = (float)_m03;
+
+        _rowMajorFloatArray[4] = (float)_m10;
+        _rowMajorFloatArray[5] = (float)_m11;
+        _rowMajorFloatArray[6] = (float)_m12;
+        _rowMajorFloatArray[7] = (float)_m13;
+
+        _rowMajorFloatArray[8] = (float)_m20;
+        _rowMajorFloatArray[9] = (float)_m21;
+        _rowMajorFloatArray[10] = (float)_m22;
+        _rowMajorFloatArray[11] = (float)_m23;
+
+        _rowMajorFloatArray[12] = (float)_m30;
+        _rowMajorFloatArray[13] = (float)_m31;
+        _rowMajorFloatArray[14] = (float)_m32;
+        _rowMajorFloatArray[15] = (float)_m33;
+     }
+
+     return _rowMajorFloatArray;
   }
 
   public final boolean isEquals(Matrix44D m)

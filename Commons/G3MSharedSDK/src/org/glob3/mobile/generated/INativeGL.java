@@ -18,7 +18,7 @@ package org.glob3.mobile.generated;
 
 
 
-//class GPUProgram;
+//class IGPUProgram;
 
 //class GPUUniform;
 //class GPUAttribute;
@@ -30,7 +30,7 @@ public abstract class INativeGL
   {
   }
 
-  public abstract void useProgram(GPUProgram program);
+  public abstract void useProgram(IGPUProgram program);
 
   public abstract void uniform2f(IGLUniformID loc, float x, float y);
 
@@ -162,12 +162,12 @@ public abstract class INativeGL
   public abstract boolean linkProgram(int program);
   public abstract void printProgramInfoLog(int program);
 
-  public abstract void bindAttribLocation(GPUProgram program, int loc, String name);
+  public abstract void bindAttribLocation(IGPUProgram program, int loc, String name);
 
-  public abstract int getProgramiv(GPUProgram program, int param);
+  public abstract int getProgramiv(IGPUProgram program, int param);
 
-  public abstract GPUUniform getActiveUniform(GPUProgram program, int i);
-  public abstract GPUAttribute getActiveAttribute(GPUProgram program, int i);
+  public abstract GPUUniform getActiveUniform(IGPUProgram program, int i);
+  public abstract GPUAttribute getActiveAttribute(IGPUProgram program, int i);
 
   public abstract void depthMask(boolean v);
 

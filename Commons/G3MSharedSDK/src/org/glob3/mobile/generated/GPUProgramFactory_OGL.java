@@ -19,6 +19,7 @@ public class GPUProgramFactory_OGL extends IGPUProgramFactory
       return null;
    }
 
+
    public GPUProgramFactory_OGL()
    {
       BasicShadersGL2 basicShaders = new BasicShadersGL2();
@@ -27,15 +28,15 @@ public class GPUProgramFactory_OGL extends IGPUProgramFactory
          addGPUProgramSources(basicShaders.get(i));
       }
    }
-   public final GPUProgram get(GL gl, String name)
+   public final IGPUProgram get(GL gl, String name)
    {
       //Get the source code for the shader
       final GPUProgramSources ps = getSource(name);
-      GPUProgram prog;
-      //Compile if the sources exist
+      GPUProgram_OGL prog;
+      //Compile if the sources exist...
       if (ps != null)
       {
-         prog = GPUProgram.createProgram(gl, ps._name, ps._vertexSource, ps._fragmentSource);
+         prog = GPUProgram_OGL.createProgram(gl, ps._name, ps._vertexSource, ps._fragmentSource);
    
          if (prog == null)
          {
@@ -44,6 +45,7 @@ public class GPUProgramFactory_OGL extends IGPUProgramFactory
          }
          return prog;
       }
+      //...or show an error if it does not
       else
       {
          ILogger.instance().logError("No shader sources for program named %s.", name);

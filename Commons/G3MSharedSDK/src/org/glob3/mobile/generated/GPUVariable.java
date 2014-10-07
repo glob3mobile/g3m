@@ -105,6 +105,27 @@ public class GPUVariable
   public static GPUAttributeKey getAttributeKey(String name)
   {
   
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#if WINAPI_FAMILY
+     if (name.compareTo("POSITION") == 0)
+     {
+        return GPUAttributeKey.POSITION;
+     }
+     if (name.compareTo("COLOR") == 0)
+     {
+        return GPUAttributeKey.COLOR;
+     }
+     if (name.compareTo("TEXCOORD") == 0)
+     {
+        return GPUAttributeKey.TEXTURE_COORDS;
+     }
+     if (name.compareTo("NORMAL") == 0)
+     {
+        return GPUAttributeKey.NORMAL;
+     }
+//#endif
+  
+  
     if (name.compareTo("aPosition") == 0)
     {
       return GPUAttributeKey.POSITION;

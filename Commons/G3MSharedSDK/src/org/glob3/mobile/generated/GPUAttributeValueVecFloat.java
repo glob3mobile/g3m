@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated; 
 public class GPUAttributeValueVecFloat extends GPUAttributeValue
 {
-  private final IFloatBuffer _buffer;
+  private IFloatBuffer _buffer;
   private final int _timeStamp;
   private final long _id;
 
@@ -62,6 +62,11 @@ public class GPUAttributeValueVecFloat extends GPUAttributeValue
     if (isb != null)
        isb.dispose();
     return s;
+  }
+
+  public final IFloatBuffer getBuffer()
+  {
+     return _buffer;
   }
 
 }

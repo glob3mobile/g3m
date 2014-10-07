@@ -2,7 +2,7 @@ package org.glob3.mobile.generated;
 public class GPUUniform extends GPUVariable
 {
 
-  private boolean _dirty;
+  protected boolean _dirty;
   private GPUUniformValue _value;
 
 
@@ -59,7 +59,12 @@ public class GPUUniform extends GPUVariable
     _dirty = false;
   }
 
-  public final void set(GPUUniformValue v)
+  public final IGLUniformID getID()
+  {
+     return _id;
+  }
+
+  public void set(GPUUniformValue v)
   {
     if (_type == v.getType()) //type checking
     {
@@ -80,7 +85,7 @@ public class GPUUniform extends GPUVariable
     }
   }
 
-  public final void applyChanges(GL gl)
+  public void applyChanges(GL gl)
   {
     if (_dirty)
     {

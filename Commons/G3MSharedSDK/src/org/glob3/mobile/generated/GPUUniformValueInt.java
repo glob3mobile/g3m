@@ -23,6 +23,11 @@ public class GPUUniformValueInt extends GPUUniformValue
     return _value == ((GPUUniformValueInt)v)._value;
   }
 
+  public final int getIntValue()
+  {
+     return _value;
+  }
+
   public final String description()
   {
     IStringBuilder isb = IStringBuilder.newStringBuilder();

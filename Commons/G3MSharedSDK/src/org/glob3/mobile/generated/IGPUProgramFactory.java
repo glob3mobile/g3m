@@ -17,7 +17,7 @@ package org.glob3.mobile.generated;
 
 
 
-//class GPUProgram;
+//class IGPUProgram;
 //class GL;
 
 public abstract class IGPUProgramFactory
@@ -40,7 +40,7 @@ public abstract class IGPUProgramFactory
       return _instance;
    }
 
-   public abstract GPUProgram get(GL gl, String name);
+   public abstract IGPUProgram get(GL gl, String name);
 
    public void dispose()
    {

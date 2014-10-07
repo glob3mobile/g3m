@@ -30,6 +30,11 @@ public class GPUUniformValueBool extends GPUUniformValue
     return _value == ((GPUUniformValueBool)v)._value;
   }
 
+  public final boolean getBoolValue()
+  {
+     return _value;
+  }
+
   public final String description()
   {
     IStringBuilder isb = IStringBuilder.newStringBuilder();

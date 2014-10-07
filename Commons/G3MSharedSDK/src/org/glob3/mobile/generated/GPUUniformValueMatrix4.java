@@ -65,6 +65,19 @@ public class GPUUniformValueMatrix4 extends GPUUniformValue
     return false;
   }
 
+  public final Matrix44D getMatrixValue()
+  {
+     if (_lastModelSet != null)
+     {
+        _lastModelSet._release();
+     }
+
+     _lastModelSet = _provider.getMatrix();
+
+     _lastModelSet._retain();
+     return _lastModelSet;
+  }
+
   public final String description()
   {
     IStringBuilder isb = IStringBuilder.newStringBuilder();

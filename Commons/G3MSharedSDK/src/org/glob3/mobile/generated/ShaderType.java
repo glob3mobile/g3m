@@ -1,17 +1,17 @@
 package org.glob3.mobile.generated; 
 //
-//  GPUProgram.cpp
+//  IGPUProgram.cpp
 //  G3MiOSSDK
 //
-//  Created by Jose Miguel SN on 27/03/13.
+//  Created by Oliver Koehler on 21/07/14.
 //
 //
 
 //
-//  GPUProgram.hpp
+//  IGPUProgram.hpp
 //  G3MiOSSDK
 //
-//  Created by Jose Miguel SN on 27/03/13.
+//  Created by Oliver Koehler on 21/07/14.
 //
 //
 
@@ -19,6 +19,7 @@ package org.glob3.mobile.generated;
 
 //class GPUAttribute;
 //class GPUUniform;
+//class GL;
 
 //class GPUUniformBool;
 //class GPUUniformVec2Float;
@@ -29,16 +30,15 @@ package org.glob3.mobile.generated;
 //class GPUAttributeVec2Float;
 //class GPUAttributeVec3Float;
 //class GPUAttributeVec4Float;
+//class GPUVariable;
 //class GPUUniformValue;
 //class GPUAttributeValue;
-//class IFloatBuffer;
-//class GL;
-//class GPUProgramManager;
+
 
 public enum ShaderType
 {
-  VERTEX_SHADER,
-  FRAGMENT_SHADER;
+   VERTEX_SHADER,
+   FRAGMENT_SHADER;
 
    public int getValue()
    {

@@ -24,6 +24,11 @@ public class GPUUniformValueFloat extends GPUUniformValue
     return _value == v2._value;
   }
 
+  public final float getFloatValue()
+  {
+     return _value;
+  }
+
   public final String description()
   {
     IStringBuilder isb = IStringBuilder.newStringBuilder();

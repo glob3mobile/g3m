@@ -168,7 +168,7 @@ public class GPUVariableValueSet
     }
   }
 
-  public final void applyValuesToProgram(GPUProgram prog)
+  public final void applyValuesToProgram(IGPUProgram prog)
   {
     for (int i = 0; i <= _highestUniformKey; i++)
     {
