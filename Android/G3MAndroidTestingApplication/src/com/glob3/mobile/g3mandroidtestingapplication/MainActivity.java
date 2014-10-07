@@ -85,20 +85,20 @@ public class MainActivity extends Activity {
 					.builderWithoutCenter(builder.getPlanet());
 			ByteBufferBuilder bbb = new ByteBufferBuilder();
 
-			for (int i = 0; i < 10; i++) {
+			for (int i = 0; i < 1000000; i++) {
 				// Point
-				double lat = (Math.random() * 180) - 90;
-				double lon = (Math.random() * 360) - 180;
+				double lat = ((Math.random() * 18000) - 9000) / 100.0;
+				double lon = ((Math.random() * 36000) - 18000) / 100.0;
 				double h = Math.random() * 10000;
 				fbb.add(Angle.fromDegrees(lat), Angle.fromDegrees(lon), h);
 
 				// Color
-				byte r = (byte) ((byte) Math.random() * 256);
-				byte g = (byte) ((byte) Math.random() * 256);
-				byte b = (byte) ((byte) Math.random() * 256);
-				bbb.add(r); // R
-				bbb.add(g); // G
-				bbb.add(b); // B
+				int r = (byte) ( Math.random() * 256);
+				int g = (byte) ( Math.random() * 256);
+				int b = (byte) ( Math.random() * 256);
+				bbb.add((byte)r); // R
+				bbb.add((byte)g); // G
+				bbb.add((byte)b); // B
 			}
 
 			IFloatBuffer points = fbb.create();

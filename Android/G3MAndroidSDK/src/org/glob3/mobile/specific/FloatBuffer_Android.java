@@ -18,7 +18,6 @@ IFloatBuffer {
    private final FloatBuffer _buffer;
    private int               _timestamp;
 
-   private static int        _boundVertexBuffer     = -1;
    private boolean           _vertexBufferCreated   = false;
    //   private boolean           _disposed              = false;
    private int               _vertexBuffer          = -1;
@@ -27,6 +26,8 @@ IFloatBuffer {
    //ID
    private static long       _nextID                = 0;
    private final long        _id                    = _nextID++;
+   
+   NativeGL2_Android _nativeGL = null;
 
 
    FloatBuffer_Android(final int size) {
@@ -138,7 +139,8 @@ IFloatBuffer {
    }
 
 
-   void bindAsVBOToGPU() {
+   public int bindAsVBOToGPU(NativeGL2_Android gl, int currentBoundBuffer) {
+	  _nativeGL = gl;
       if (!_vertexBufferCreated) {
          final java.nio.IntBuffer ib = java.nio.IntBuffer.allocate(1);
          GLES20.glGenBuffers(1, ib); //COULD RETURN GL_INVALID_VALUE EVEN WITH NO ERROR
@@ -146,9 +148,8 @@ IFloatBuffer {
          _vertexBufferCreated = true;
       }
 
-      if (_vertexBuffer != _boundVertexBuffer) {
+      if (_vertexBuffer != currentBoundBuffer) {
          GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, _vertexBuffer);
-         _boundVertexBuffer = _vertexBuffer;
       }
 
       if (_vertexBufferTimeStamp != _timestamp) {
@@ -156,31 +157,23 @@ IFloatBuffer {
 
          final FloatBuffer buffer = getBuffer();
          final int vboSize = 4 * size();
-
-         //	      glBufferData(GL_ARRAY_BUFFER, vboSize, vertices, GL_STATIC_DRAW);
          GLES20.glBufferData(GLES20.GL_ARRAY_BUFFER, vboSize, buffer, GLES20.GL_STATIC_DRAW);
       }
 
       //	    if (GL_NO_ERROR != glGetError()){
       //	      ILogger::instance()->logError("Problem using VBO");
       //	    }
+      
+      return _vertexBuffer;
    }
 
 
    @Override
    public void dispose() {
       super.dispose();
-
-      //      _disposed = true;
-
-      if (_vertexBufferCreated) {
-         final int[] buffers = new int[] { _vertexBuffer };
-         GLES20.glDeleteBuffers(1, buffers, 0);
-         _vertexBufferCreated = false;
-
-         if (_vertexBuffer == _boundVertexBuffer) {
-            _boundVertexBuffer = -1;
-         }
+      if (_vertexBufferCreated && _nativeGL != null) {
+    	  _nativeGL.deleteVBO(_vertexBuffer);
+    	  _vertexBufferCreated = false;
       }
    }
 

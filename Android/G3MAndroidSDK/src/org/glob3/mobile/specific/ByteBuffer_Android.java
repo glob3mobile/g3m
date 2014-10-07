@@ -1,131 +1,158 @@
-
-
 package org.glob3.mobile.specific;
 
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 
 import org.glob3.mobile.generated.IByteBuffer;
+import org.glob3.mobile.generated.ILogger;
 
+import android.opengl.GLES20;
 
-public final class ByteBuffer_Android
-extends
-IByteBuffer {
+public final class ByteBuffer_Android extends IByteBuffer {
 
-   //private final ByteBuffer _buffer;
-   private final byte[] _buffer;
-   private int          _timestamp = 0;
-   
-   //ID
-   final long _id;
-   static long _nextID = 0;
-   
-   ByteBuffer _byteBuffer = null;
+	// private final ByteBuffer _buffer;
+	private final byte[] _buffer;
+	private int _timestamp = 0;
 
+	// ID
+	final long _id;
+	static long _nextID = 0;
 
-   ByteBuffer_Android(final byte[] data) {
-      //      _buffer = ByteBuffer.wrap(data);
-      _buffer = data;
-      _id = _nextID++;
+	ByteBuffer _byteBuffer = null;
+	private boolean _vertexBufferCreated = false;
+	// private boolean _disposed = false;
+	private int _vertexBuffer = -1;
+	private int _vertexBufferTimeStamp = -1;
+	
+	NativeGL2_Android _nativeGL = null;
 
-      //_buffer = ByteBuffer.allocateDirect(data.length);
-      //_buffer.put(data);
-      //_buffer.rewind();
-   }
+	ByteBuffer_Android(final byte[] data) {
+		// _buffer = ByteBuffer.wrap(data);
+		_buffer = data;
+		_id = _nextID++;
 
+		// _buffer = ByteBuffer.allocateDirect(data.length);
+		// _buffer.put(data);
+		// _buffer.rewind();
+	}
 
-   public ByteBuffer_Android(final int size) {
-      //_buffer = ByteBuffer.allocate(size);
-      //      _buffer = ByteBuffer.wrap(new byte[size]);
-      _buffer = new byte[size];
-      _id = _nextID++;
-   }
+	public ByteBuffer_Android(final int size) {
+		// _buffer = ByteBuffer.allocate(size);
+		// _buffer = ByteBuffer.wrap(new byte[size]);
+		_buffer = new byte[size];
+		_id = _nextID++;
+	}
 
+	@Override
+	public int size() {
+		// return _buffer.capacity();
+		return _buffer.length;
+	}
 
-   @Override
-   public int size() {
-      //      return _buffer.capacity();
-      return _buffer.length;
-   }
+	@Override
+	public int timestamp() {
+		return _timestamp;
+	}
 
+	@Override
+	public byte get(final int i) {
+		// return _buffer.get(i);
+		return _buffer[i];
+	}
 
-   @Override
-   public int timestamp() {
-      return _timestamp;
-   }
+	@Override
+	public void put(final int i, final byte value) {
+		// if (_buffer.get(i) != value) {
+		// _buffer.put(i, value);
+		// _timestamp++;
+		// }
+		if (_buffer[i] != value) {
+			_buffer[i] = value;
+			_timestamp++;
+		}
+	}
 
+	@Override
+	public void rawPut(final int i, final byte value) {
+		// _buffer.put(i, value);
+		_buffer[i] = value;
+	}
 
-   @Override
-   public byte get(final int i) {
-      //      return _buffer.get(i);
-      return _buffer[i];
-   }
+	// public ByteBuffer getBuffer() {
+	// return _buffer;
+	// }
 
+	public byte[] getBuffer() {
+		return _buffer;
+	}
 
-   @Override
-   public void put(final int i,
-                   final byte value) {
-      //      if (_buffer.get(i) != value) {
-      //         _buffer.put(i, value);
-      //         _timestamp++;
-      //      }
-      if (_buffer[i] != value) {
-         _buffer[i] = value;
-         _timestamp++;
-      }
-   }
+	public ByteBuffer getByteBuffer() {
+		if (_byteBuffer == null) {
+			_byteBuffer = ByteBuffer.allocateDirect(_buffer.length);
+			_byteBuffer.put(_buffer);
+			_byteBuffer.position(0);
+		}
+		return _byteBuffer;
+	}
 
+	@Override
+	public String description() {
+		// return "ByteBuffer_iOS (size=" + _buffer.capacity() + ")";
+		return "ByteBuffer_iOS (size=" + _buffer.length + ")";
+	}
 
-   @Override
-   public void rawPut(final int i,
-                      final byte value) {
-      //      _buffer.put(i, value);
-      _buffer[i] = value;
-   }
+	@Override
+	public String getAsString() {
+		// final byte[] bytes = _buffer.array();
+		// return new String(bytes);
+		try {
+			return new String(_buffer, "UTF-8");
+		} catch (final UnsupportedEncodingException e) {
+			throw new RuntimeException(e);
+		}
+	}
 
+	@Override
+	public long getID() {
+		return _id;
+	}
 
-   //   public ByteBuffer getBuffer() {
-   //      return _buffer;
-   //   }
+	public int bindAsVBOToGPU(int currentBoundBuffer) {
+		if (!_vertexBufferCreated) {
+			final java.nio.IntBuffer ib = java.nio.IntBuffer.allocate(1);
+			GLES20.glGenBuffers(1, ib); // COULD RETURN GL_INVALID_VALUE EVEN
+										// WITH NO ERROR
+			_vertexBuffer = ib.get(0);
+			_vertexBufferCreated = true;
+		}
 
+		if (_vertexBuffer != currentBoundBuffer) {
+			GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, _vertexBuffer);
+		}
 
-   public byte[] getBuffer() {
-      return _buffer;
-   }
+		if (_vertexBufferTimeStamp != _timestamp) {
+			_vertexBufferTimeStamp = _timestamp;
 
-   public ByteBuffer getByteBuffer() {
-	   if (_byteBuffer == null){
-		   _byteBuffer = ByteBuffer.allocateDirect(_buffer.length);
-		   _byteBuffer.put(_buffer);
-		   _byteBuffer.position(0);
+			final ByteBuffer buffer = getByteBuffer();
+			final int vboSize = size();
+
+			GLES20.glBufferData(GLES20.GL_ARRAY_BUFFER, vboSize, buffer, GLES20.GL_STATIC_DRAW);
+		}
+		
+		if (GLES20.glGetError() != GLES20.GL_NO_ERROR){
+			ILogger.instance().logError("Error at ByteBuffer::bindAsVBOToGPU()");
+		}
+		
+		return _vertexBuffer;
+	}
+	
+	   @Override
+	   public void dispose() {
+	      super.dispose();
+	      if (_vertexBufferCreated && _nativeGL != null) {
+	    	  _nativeGL.deleteVBO(_vertexBuffer);
+	    	  _vertexBufferCreated = false;
+	      }
 	   }
-	   return _byteBuffer;
-   }
-
-   @Override
-   public String description() {
-      //      return "ByteBuffer_iOS (size=" + _buffer.capacity() + ")";
-      return "ByteBuffer_iOS (size=" + _buffer.length + ")";
-   }
-
-
-   @Override
-   public String getAsString() {
-      //      final byte[] bytes = _buffer.array();
-      //      return new String(bytes);
-      try {
-         return new String(_buffer, "UTF-8");
-      }
-      catch (final UnsupportedEncodingException e) {
-         throw new RuntimeException(e);
-      }
-   }
-
-
-   @Override
-   public long getID() {
-	   return _id;
-   }
-
 
 }

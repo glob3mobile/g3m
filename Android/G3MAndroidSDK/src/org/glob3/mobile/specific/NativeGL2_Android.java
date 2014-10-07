@@ -37,6 +37,8 @@ import android.util.Log;
 public final class NativeGL2_Android extends INativeGL {
 
 	private Thread _openGLThread = null;
+	
+	private int _currentBoundVBO = -1;
 
 	void setOpenGLThread(final Thread openGLThread) {
 		_openGLThread = openGLThread;
@@ -307,7 +309,7 @@ public final class NativeGL2_Android extends INativeGL {
 		// normalized, stride, floatBuffer);
 
 		final FloatBuffer_Android buffer_Android = (FloatBuffer_Android) buffer;
-		buffer_Android.bindAsVBOToGPU();
+		_currentBoundVBO = buffer_Android.bindAsVBOToGPU(this, _currentBoundVBO);
 		GLES20.glVertexAttribPointer(index, size, GLES20.GL_FLOAT, normalized,
 				stride, 0);
 		getError();
@@ -817,12 +819,31 @@ public final class NativeGL2_Android extends INativeGL {
 	@Override
 	public void vertexAttribPointer(int index, int size, boolean normalized,
 			int stride, IByteBuffer buffer) {
-		getError();
+		
+		/*getError();
 		final ByteBuffer_Android buffer_Android = (ByteBuffer_Android) buffer;
 		ByteBuffer pointer = buffer_Android.getByteBuffer();
 		GLES20.glVertexAttribPointer(index, size, GLES20.GL_UNSIGNED_BYTE,
 				normalized, stride, pointer);
 		getError();
+		*/
+		////////////////////
+		checkOpenGLThread();
+		
+		final ByteBuffer_Android buffer_Android = (ByteBuffer_Android) buffer;
+		_currentBoundVBO = buffer_Android.bindAsVBOToGPU(_currentBoundVBO);
+		GLES20.glVertexAttribPointer(index, size, GLES20.GL_UNSIGNED_BYTE, normalized,
+				stride, 0);
+		getError();
+	}
+	
+	public void deleteVBO(int x){
+        final int[] buffers = new int[] { x };
+        GLES20.glDeleteBuffers(1, buffers, 0);
+        
+        if (x == _currentBoundVBO){
+        	_currentBoundVBO = -1;
+        }
 	}
 
 }
