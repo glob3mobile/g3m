@@ -22,6 +22,14 @@
 #include "Image_win8.hpp"
 #include "IStringUtils.hpp"
 #include "StringUtils_win8.hpp"
+#include "IImageDownloadListener.hpp"
+#include "IBufferDownloadListener.hpp"
+
+#include <iostream>
+using namespace std;
+
+//-------------------------------------------------------
+
 
 void executeStorageTests(Storage* testStorage){
 
@@ -134,7 +142,128 @@ void executeStorageTests(Storage* testStorage){
 
 }
 
+class Test_IImageDownloadListener : public IImageDownloadListener {
+private:
+	const URL _imgURL;
+
+public:
+
+	Test_IImageDownloadListener(const URL &url) :
+		_imgURL(url)
+	{
+	}
+
+	void onDownload(const URL& url,
+		IImage* image,
+		bool expired)  {
+
+		ILogger::instance()->logInfo("Llamando a Test_IImageDownloadListener \n");
+
+		Image_win8* ii = (Image_win8*)(image);
+		std::string desc = ii->description();
+		ILogger::instance()->logInfo("Ya he descargado la imagen: \"%s\"\n", desc.c_str());
+
+		Image_win8::exportToFile(_imgURL, ii);
+		ILogger::instance()->logInfo("Ya he guardado la imagen %s",_imgURL.getPath().c_str());
+	}
+
+	void onError(const URL& url) {
+		ILogger::instance()->logInfo("Llamando a Test_IImageDownloadListener ONERROR \n");
+	}
+
+	void onCancel(const URL& url) {
+		ILogger::instance()->logInfo("Llamando a Test_IImageDownloadListener ONCANCEL \n");
+	}
+
+	void onCanceledDownload(const URL& url,
+		IImage* image,
+		bool expired)  {
+		ILogger::instance()->logInfo("Llamando a Test_IImageDownloadListener ONCANCELDOWNLOAD \n");
+	}
+};
+
+class Test_BufferDownloadListener : public IBufferDownloadListener {
+private:
+	const URL _bufferURL;
+
+public:
+
+	Test_BufferDownloadListener(const URL &url) :
+		_bufferURL(url)
+	{
+	}
+
+	void onDownload(const URL& url,
+		IByteBuffer* buffer,
+		bool expired)  {
+
+		ILogger::instance()->logInfo("Llamando a Test_BufferDownloadListener \n");
+
+		ILogger::instance()->logInfo("Ya he descargado el buffer %s", _bufferURL.getPath().c_str());
+		ILogger::instance()->logInfo("Longitud de los datos: %d \n", buffer->size());
+		//ByteBuffer_win8* sb = (ByteBuffer_win8*)buffer;
+		//ILogger::instance()->logInfo("CONTENIDO: \"%s\"\n", reinterpret_cast<const char*>(sb->getPointer()));
+	}
+
+	void onError(const URL& url) {
+		ILogger::instance()->logInfo("Llamando a Test_BufferDownloadListener ONERROR \n");
+	}
+
+	void onCancel(const URL& url) {
+		ILogger::instance()->logInfo("Llamando a Test_BufferDownloadListener ONCANCEL \n");
+	}
+
+	void onCanceledDownload(const URL& url,
+		IByteBuffer* buffer,
+		bool expired)  {
+		ILogger::instance()->logInfo("Llamando a Test_BufferDownloadListener ONCANCELDOWNLOAD \n");
+	}
+};
+
+void executeDownloaderTests(IDownloader* downloader){
+
+	const TimeInterval timeToExpire = TimeInterval::fromDays(20);
+	const StringUtils_win8* sUtils = (StringUtils_win8*)IStringUtils::instance();
+
+	//-- Test downloading imagen and then save to a file --------
+	std::string imgName = "tiger.jpg";
+	//std::string imgName = "MARBLES.BMP";
+	std::size_t pos = imgName.find(".");
+	std::string name = imgName.substr(0, pos);
+	Platform::String^ imgHatName = sUtils->toStringHat(imgName);
+	Windows::Storage::StorageFolder^ localFolder = Windows::Storage::ApplicationData::Current->LocalFolder;
+	Platform::String^ folderPath = localFolder->Path;
+	Platform::String^ tmpPath = Platform::String::Concat(folderPath, "\\");
+
+	imgHatName = sUtils->toStringHat(name + "_downloaded");
+	Platform::String^ recoveredImgName = Platform::String::Concat(tmpPath, imgHatName);
+	std::string recoveredImgStr = sUtils->toStringStd(recoveredImgName);
+	const URL recoveredImgUrl = URL(recoveredImgStr);
+
+	const URL requestedImgUrl = URL("http://192.168.1.26/images/" + imgName);
+
+	downloader->requestImage(requestedImgUrl, 23, timeToExpire, true, new Test_IImageDownloadListener(recoveredImgUrl), true);
+
+
+	//-- Test downloading geojson and then ??? --------
+	std::string fileName = "countries.geojson";
+	const URL requestedDataUrl = URL("http://192.168.1.26/" + fileName);
+
+	downloader->requestBuffer(requestedDataUrl, 23, timeToExpire, true, new Test_BufferDownloadListener(requestedDataUrl), true);
+
+	//-- Test downloading imagen from local then save to a file --------
+	//const URL requestedImgUrl = URL("http://192.168.1.26/images/" + imgName);
+	std::string localImgName = URL::FILE_PROTOCOL + imgName;
+	//std::string reRecoveredImgStr = recoveredImgStr + "RE";
+	std::string recoveredLocalImgStr = localImgName + "RE";
+	const URL localImgUrl = URL(localImgName);
+	const URL recoveredLocalImgUrl = URL(recoveredLocalImgStr);
+	downloader->requestImage(localImgUrl, 23, timeToExpire, true, new Test_IImageDownloadListener(recoveredLocalImgUrl), true);
+}
+
 //-------------------------------------------------------
+
+
 
 G3MBuilder_win8::G3MBuilder_win8(){
 	_nativeWidget = new G3MWidget_win8();
@@ -163,5 +292,13 @@ Storage* G3MBuilder_win8::createDefaultStorage(){
 
 IDownloader* G3MBuilder_win8::createDefaultDownloader(){
 	//return new Downloader_win8();
-	return NULL;
+	const int MAX_CONCURRENT_OPERATION_COUNT = 8;
+	IDownloader* testDownloader = new Downloader_win8(MAX_CONCURRENT_OPERATION_COUNT);
+
+	/*ILogger::instance()->logInfo("Ejecutando test del downloader..");
+	executeDownloaderTests(testDownloader);
+	ILogger::instance()->logInfo("Terminando test del downloader");*/
+
+	return testDownloader;
 }
+
