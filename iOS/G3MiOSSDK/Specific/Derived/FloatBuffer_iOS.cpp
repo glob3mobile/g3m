@@ -11,8 +11,9 @@
 #include <sstream>
 #include <OpenGLES/ES2/gl.h>
 
+#include "INativeGL.hpp"
+
 long long FloatBuffer_iOS::_nextID = 0;
-GLuint FloatBuffer_iOS::_boundVertexBuffer = -1;
 
 long long FloatBuffer_iOS::_newCounter    = 0;
 long long FloatBuffer_iOS::_deleteCounter = 0;
@@ -51,18 +52,18 @@ const std::string FloatBuffer_iOS::description() const {
   return oss.str();
 }
 
-void FloatBuffer_iOS::bindAsVBOToGPU() const {
-  if (!_vertexBufferCreated) {
+int FloatBuffer_iOS::bindAsVBOToGPU(const INativeGL* gl) const {
+  
+  _gl = gl;
+  
+  if (_vertexBuffer < 0) {
     _genBufferCounter++;
     showStatistics();
-    glGenBuffers(1, &_vertexBuffer);
-    _vertexBufferCreated = true;
+    
+    _vertexBuffer = _gl->genBuffer();
   }
-
-  if (_vertexBuffer != _boundVertexBuffer) {
-    glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer);
-    _boundVertexBuffer = _vertexBuffer;
-  }
+  
+  _gl->bindVBO(_vertexBuffer);
 
   if (_vertexBufferTimeStamp != _timestamp) {
     _vertexBufferTimeStamp = _timestamp;
@@ -72,21 +73,18 @@ void FloatBuffer_iOS::bindAsVBOToGPU() const {
 
     glBufferData(GL_ARRAY_BUFFER, vboSize, vertices, GL_STATIC_DRAW);
   }
+  
+  return _vertexBuffer;
 }
 
 FloatBuffer_iOS::~FloatBuffer_iOS() {
   _deleteCounter++;
 
-  if (_vertexBufferCreated) {
+  if (_vertexBuffer > -1) {
     _deleteBufferCounter++;
-
-    glDeleteBuffers(1, &_vertexBuffer);
-    if (GL_NO_ERROR != glGetError()) {
-      THROW_EXCEPTION("Problem deleting VBO");
-    }
-
-    if (_vertexBuffer == _boundVertexBuffer) {
-      _boundVertexBuffer = -1;
+    
+    if (_gl != NULL){
+      _gl->deleteVBO(_vertexBuffer);
     }
   }
 

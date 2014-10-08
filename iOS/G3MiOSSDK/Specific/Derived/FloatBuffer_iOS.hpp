@@ -14,6 +14,8 @@
 #include "ErrorHandling.hpp"
 #include <OpenGLES/ES2/gl.h>
 
+class INativeGL;
+
 class FloatBuffer_iOS : public IFloatBuffer {
 private:
 
@@ -21,6 +23,7 @@ private:
   static long long _deleteCounter;
   static long long _genBufferCounter;
   static long long _deleteBufferCounter;
+  
 
   static void showStatistics();
 
@@ -33,10 +36,9 @@ private:
   static long long _nextID;
 
   //VBO
-  static GLuint     _boundVertexBuffer;
-  mutable bool      _vertexBufferCreated;
-  mutable GLuint    _vertexBuffer; //VBO
+  mutable int    _vertexBuffer; //VBO
   mutable int       _vertexBufferTimeStamp;
+  mutable INativeGL const* _gl;
 
 public:
   FloatBuffer_iOS(int size) :
@@ -45,8 +47,8 @@ public:
   _values(new float[size]),
   _vertexBuffer(-1),
   _vertexBufferTimeStamp(-1),
-  _vertexBufferCreated(false),
-  _id(_nextID++)
+  _id(_nextID++),
+  _gl(NULL)
   {
     if (_values == NULL) {
       THROW_EXCEPTION("Allocating error.");
@@ -85,8 +87,8 @@ public:
   _timestamp(0),
   _vertexBuffer(-1),
   _vertexBufferTimeStamp(-1),
-  _vertexBufferCreated(false),
-  _id(_nextID)
+  _id(_nextID),
+  _gl(NULL)
   {
     _values = new float[16];
     _values[ 0] = f0;
@@ -164,7 +166,7 @@ public:
 
   const std::string description() const;
   
-  void bindAsVBOToGPU() const;
+  int bindAsVBOToGPU(const INativeGL* gl) const;
 
   void rawPut(int i,
               const IFloatBuffer* srcBuffer,

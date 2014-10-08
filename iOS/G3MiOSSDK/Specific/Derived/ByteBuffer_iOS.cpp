@@ -11,10 +11,10 @@
 
 #include "IStringBuilder.hpp"
 
+#include "INativeGL.hpp"
+
 
 long long ByteBuffer_iOS::_nextID = 0;
-
-GLuint ByteBuffer_iOS::_boundVertexBuffer = -1;
 
 long long ByteBuffer_iOS::_newCounter    = 0;
 long long ByteBuffer_iOS::_deleteCounter = 0;
@@ -45,19 +45,17 @@ const std::string ByteBuffer_iOS::getAsString() const {
   return std::string(_values, _values + _size);
 }
 
-void ByteBuffer_iOS::bindAsVBOToGPU() const {
-#warning NOT WORKING
-  if (!_vertexBufferCreated) {
+int ByteBuffer_iOS::bindAsVBOToGPU(const INativeGL* gl) const {
+  
+  _gl = gl;
+  
+  if (_vertexBuffer < 0) {
     _genBufferCounter++;
-//    showStatistics();
-    glGenBuffers(1, &_vertexBuffer);
-    _vertexBufferCreated = true;
+    //showStatistics();
+    _vertexBuffer = _gl->genBuffer();
   }
   
-  if (_vertexBuffer != _boundVertexBuffer) {
-    glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer);
-    _boundVertexBuffer = _vertexBuffer;
-  }
+ _gl->bindVBO(_vertexBuffer);
   
   if (_vertexBufferTimeStamp != _timestamp) {
     _vertexBufferTimeStamp = _timestamp;
@@ -67,4 +65,22 @@ void ByteBuffer_iOS::bindAsVBOToGPU() const {
     
     glBufferData(GL_ARRAY_BUFFER, vboSize, vertices, GL_STATIC_DRAW);
   }
+  
+  return _vertexBuffer;
+}
+
+ByteBuffer_iOS::~ByteBuffer_iOS() {
+  _deleteCounter++;
+  
+  if (_vertexBuffer > -1) {
+    _deleteBufferCounter++;
+    
+    if (_gl != NULL){
+      _gl->deleteVBO(_vertexBuffer);
+    }
+  }
+  
+  delete [] _values;
+  
+  //showStatistics();
 }

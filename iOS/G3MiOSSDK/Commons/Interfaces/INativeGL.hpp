@@ -213,6 +213,12 @@ public:
                                    int stride,
                                    const IByteBuffer* buffer) const = 0;
   
+  
+  virtual void deleteVBO(const int x) const = 0;
+  virtual int getBoundVBO() const = 0;
+  virtual int genBuffer() const = 0;
+  virtual void bindVBO(int vbo) const = 0;
+  
 };
 
 #endif

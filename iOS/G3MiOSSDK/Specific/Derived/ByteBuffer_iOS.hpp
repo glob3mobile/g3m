@@ -14,6 +14,8 @@
 
 #include <OpenGLES/ES2/gl.h>
 
+class INativeGL;
+
 class ByteBuffer_iOS : public IByteBuffer {
 private:
   const int            _size;
@@ -23,12 +25,11 @@ private:
   //ID
   const long long _id;
   static long long _nextID;
-  
+
   //VBO
-  static GLuint     _boundVertexBuffer;
-  mutable bool      _vertexBufferCreated;
-  mutable GLuint    _vertexBuffer; //VBO
+  mutable int    _vertexBuffer; //VBO
   mutable int       _vertexBufferTimeStamp;
+  mutable INativeGL const* _gl;
   
   //Counters
   static long long _newCounter;
@@ -41,7 +42,8 @@ public:
   _values(new unsigned char[size]),
   _size(size),
   _timestamp(-1),
-  _id(_nextID++)
+  _id(_nextID++),
+  _vertexBuffer(-1)
   {
     if (_values == NULL) {
       ILogger::instance()->logError("Allocating error.");
@@ -57,31 +59,13 @@ public:
   _values(values),
   _size(size),
   _timestamp(-1),
-  _id(_nextID++)
+  _id(_nextID++),
+  _vertexBuffer(-1)
   {
 
   }
 
-  virtual ~ByteBuffer_iOS() {
-    _deleteCounter++;
-    
-    if (_vertexBufferCreated) {
-      _deleteBufferCounter++;
-      
-      glDeleteBuffers(1, &_vertexBuffer);
-      if (GL_NO_ERROR != glGetError()) {
-        ILogger::instance()->logError("Problem deleting VBO");
-      }
-      
-      if (_vertexBuffer == _boundVertexBuffer) {
-        _boundVertexBuffer = -1;
-      }
-    }
-    
-    delete [] _values;
-    
-//    showStatistics();
-  }
+  virtual ~ByteBuffer_iOS();
 
   int size() const {
     return _size;
@@ -134,7 +118,7 @@ public:
 
   const std::string getAsString() const;
   
-  void bindAsVBOToGPU() const;
+  int bindAsVBOToGPU(const INativeGL* gl) const;
   
 };
 

@@ -13,19 +13,26 @@
 
 #include "INativeGL.hpp"
 
+class FloatBuffer_iOS;
+
+#include "Image_iOS.hpp"
 #include "GLUniformID_iOS.hpp"
 #include "GLTextureId_iOS.hpp"
-#include "FloatBuffer_iOS.hpp"
 #include "ByteBuffer_iOS.hpp"
 #include "ShortBuffer_iOS.hpp"
-#include "Image_iOS.hpp"
 #include "GPUProgram.hpp"
 #include "GPUAttribute.hpp"
 #include "GPUUniform.hpp"
 
-
 class NativeGL2_iOS: public INativeGL {
+  
+  mutable GLuint _currentBoundVBO;
+  
 public:
+  
+  NativeGL2_iOS(){
+    _currentBoundVBO = -1;
+  }
 
   void useProgram(GPUProgram* program) const {
     glUseProgram(program->getProgramID());
@@ -95,32 +102,13 @@ public:
                            int size,
                            bool normalized,
                            int stride,
-                           const IFloatBuffer* buffer) const {
-    const FloatBuffer_iOS* buffer_iOS = (FloatBuffer_iOS*) buffer;
-
-    buffer_iOS->bindAsVBOToGPU();
-    glVertexAttribPointer(index, size, GL_FLOAT, normalized, stride, 0);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-//#warning uncoment for no VBO
-//    const float* pointer = buffer_iOS->getPointer();
-//    glVertexAttribPointer(index, size, GL_FLOAT, normalized, stride, pointer);
-  }
+                           const IFloatBuffer* buffer) const;
   
   void vertexAttribPointer(int index,
                            int size,
                            bool normalized,
                            int stride,
-                           const IByteBuffer* buffer) const {
-    const ByteBuffer_iOS* buffer_iOS = (ByteBuffer_iOS*) buffer;
-    
-//    buffer_iOS->bindAsVBOToGPU();
-//    glVertexAttribPointer(index, size, GL_UNSIGNED_BYTE, normalized, stride, 0);
-//    glBindBuffer(GL_ARRAY_BUFFER, 0);
-    
-    const unsigned char* pointer = buffer_iOS->getPointer();
-    glVertexAttribPointer(index, size, GL_UNSIGNED_BYTE, normalized, stride, pointer);
-  }
+                           const IByteBuffer* buffer) const;
 
 //  void drawElements(int mode,
 //                    int count,
@@ -585,6 +573,25 @@ public:
 
   void depthMask(bool v) const {
     glDepthMask(v);
+  }
+  
+  void deleteVBO(const int x) const;
+  
+  int getBoundVBO() const{
+    return _currentBoundVBO;
+  }
+  
+  int genBuffer() const{
+    GLuint vertexBuffer;
+    glGenBuffers(1, &vertexBuffer);
+    return vertexBuffer;
+  }
+  
+  void bindVBO(int vbo) const{
+    if (vbo != getBoundVBO()) {
+      glBindBuffer(GL_ARRAY_BUFFER, vbo);
+      _currentBoundVBO = vbo;
+    }
   }
   
 };

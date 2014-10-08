@@ -651,8 +651,8 @@ layerSet->addLayer(blueMarble);
     
     for(int i = 0; i < 100000; i++){
       //Point
-      double lat = (rand() % 180) - 90;
-      double lon = (rand() % 360) - 180;
+      double lat = ((rand() % 18000) - 9000) / 100.0;
+      double lon = ((rand() % 36000) - 18000) / 100.0;
       double h = rand() % 10000;
       fbb->add(Angle::fromDegrees(lat), Angle::fromDegrees(lon), h);
       
@@ -660,9 +660,9 @@ layerSet->addLayer(blueMarble);
       unsigned char r = (unsigned char)rand() % 256;
       unsigned char g = (unsigned char)rand() % 256;
       unsigned char b = (unsigned char)rand() % 256;
-      bbb.add(r); //R
-      bbb.add(g); //G
-      bbb.add(b); //B
+      bbb.add((unsigned char)0); //R
+      bbb.add((unsigned char)255); //G
+      bbb.add((unsigned char)0); //B
       
     }
     
