@@ -54,12 +54,7 @@ public:
   
 
   
-  virtual ~ILocationManager() {
-    const size_t size = _listeners->size();
-    for (size_t i = 0; i < size; i++) {
-      delete _listeners->at(i);
-    }
-  }
+  virtual ~ILocationManager();
   
   virtual const std::string getProvider() const = 0;
   
@@ -73,12 +68,7 @@ public:
   
   virtual const Geodetic2D* getLocation() = 0;
   
-  const void notifyLocationChanged(const Geodetic2D* newLocation) {
-    const size_t size = _listeners->size();
-    for (size_t i = 0; i < size; i++) {
-      _listeners->at(i)->onLocationChanged(newLocation);
-    }
-  }
+  const void notifyLocationChanged(const Geodetic2D* newLocation);
   
   void addLocationChangedListener(const LocationChangedListener* locationChangedListener);
   
