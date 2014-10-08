@@ -40,8 +40,8 @@ private:
   mutable double          _angleBetweenInitialPoints;
   mutable bool            _validSingleDrag;
   
-  mutable double          _dragHeight0;
-  mutable double          _dragHeight1;
+  mutable double          _dragRadius0;
+  mutable double          _dragRadius1;
   mutable double          _distanceBetweenInitialPoints;
   mutable double          _lastDoubleDragAngle;
 
@@ -211,6 +211,10 @@ public:
     return Geodetic3D(rendereSector._center,
                       height);
   }
+  
+  MutableMatrix44D createDragMatrix(const Vector3D initialPoint,
+                                    const Vector3D finalPoint) const;
+
 
 };
 

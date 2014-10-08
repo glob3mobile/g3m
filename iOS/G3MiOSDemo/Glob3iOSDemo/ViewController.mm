@@ -3823,8 +3823,8 @@ public:
   G3MBuilder_iOS builder([self G3MWidget]);
   
   //const Planet* planet = Planet::createEarth();
-  //const Planet* planet = Planet::createSphericalEarth();
-  const Planet* planet = Planet::createFlatEarth();
+  const Planet* planet = Planet::createSphericalEarth();
+  //const Planet* planet = Planet::createFlatEarth();
   builder.setPlanet(planet);
   
   // create shape
