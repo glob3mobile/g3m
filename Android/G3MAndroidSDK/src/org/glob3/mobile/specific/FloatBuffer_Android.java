@@ -18,7 +18,6 @@ IFloatBuffer {
    private final FloatBuffer _buffer;
    private int               _timestamp;
 
-   private boolean           _vertexBufferCreated   = false;
    //   private boolean           _disposed              = false;
    private int               _vertexBuffer          = -1;
    private int               _vertexBufferTimeStamp = -1;
@@ -139,18 +138,13 @@ IFloatBuffer {
    }
 
 
-   public int bindAsVBOToGPU(NativeGL2_Android gl, int currentBoundBuffer) {
+   public int bindAsVBOToGPU(NativeGL2_Android gl) {
 	  _nativeGL = gl;
-      if (!_vertexBufferCreated) {
-         final java.nio.IntBuffer ib = java.nio.IntBuffer.allocate(1);
-         GLES20.glGenBuffers(1, ib); //COULD RETURN GL_INVALID_VALUE EVEN WITH NO ERROR
-         _vertexBuffer = ib.get(0);
-         _vertexBufferCreated = true;
+      if (_vertexBuffer < 0) {
+         _vertexBuffer = _nativeGL.genBuffer();
       }
-
-      if (_vertexBuffer != currentBoundBuffer) {
-         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, _vertexBuffer);
-      }
+  
+      _nativeGL.bindVBO(_vertexBuffer);
 
       if (_vertexBufferTimeStamp != _timestamp) {
          _vertexBufferTimeStamp = _timestamp;
@@ -171,9 +165,9 @@ IFloatBuffer {
    @Override
    public void dispose() {
       super.dispose();
-      if (_vertexBufferCreated && _nativeGL != null) {
+      if (_vertexBuffer > -1 && _nativeGL != null) {
     	  _nativeGL.deleteVBO(_vertexBuffer);
-    	  _vertexBufferCreated = false;
+    	  _vertexBuffer = -1;
       }
    }
 

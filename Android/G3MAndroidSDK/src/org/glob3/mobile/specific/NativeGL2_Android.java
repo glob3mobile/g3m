@@ -309,7 +309,7 @@ public final class NativeGL2_Android extends INativeGL {
 		// normalized, stride, floatBuffer);
 
 		final FloatBuffer_Android buffer_Android = (FloatBuffer_Android) buffer;
-		_currentBoundVBO = buffer_Android.bindAsVBOToGPU(this, _currentBoundVBO);
+		_currentBoundVBO = buffer_Android.bindAsVBOToGPU(this);
 		GLES20.glVertexAttribPointer(index, size, GLES20.GL_FLOAT, normalized,
 				stride, 0);
 		getError();
@@ -831,7 +831,7 @@ public final class NativeGL2_Android extends INativeGL {
 		checkOpenGLThread();
 		
 		final ByteBuffer_Android buffer_Android = (ByteBuffer_Android) buffer;
-		_currentBoundVBO = buffer_Android.bindAsVBOToGPU(_currentBoundVBO);
+		_currentBoundVBO = buffer_Android.bindAsVBOToGPU(this);
 		GLES20.glVertexAttribPointer(index, size, GLES20.GL_UNSIGNED_BYTE, normalized,
 				stride, 0);
 		getError();
@@ -844,6 +844,26 @@ public final class NativeGL2_Android extends INativeGL {
         if (x == _currentBoundVBO){
         	_currentBoundVBO = -1;
         }
+	}
+
+	@Override
+	public int getBoundVBO() {
+		return _currentBoundVBO;
+	}
+
+	@Override
+	public int genBuffer() {
+        final java.nio.IntBuffer ib = java.nio.IntBuffer.allocate(1);
+        GLES20.glGenBuffers(1, ib); //COULD RETURN GL_INVALID_VALUE EVEN WITH NO ERROR
+        return ib.get(0);
+	}
+
+	@Override
+	public void bindVBO(int vbo) {
+	    if (vbo != getBoundVBO()) {
+	    	GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, vbo);
+	        _currentBoundVBO = vbo;
+	    }
 	}
 
 }

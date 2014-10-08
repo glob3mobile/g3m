@@ -23,7 +23,7 @@ public final class ByteBuffer_Android extends IByteBuffer {
 	// private boolean _disposed = false;
 	private int _vertexBuffer = -1;
 	private int _vertexBufferTimeStamp = -1;
-	
+
 	NativeGL2_Android _nativeGL = null;
 
 	ByteBuffer_Android(final byte[] data) {
@@ -117,18 +117,14 @@ public final class ByteBuffer_Android extends IByteBuffer {
 		return _id;
 	}
 
-	public int bindAsVBOToGPU(int currentBoundBuffer) {
-		if (!_vertexBufferCreated) {
-			final java.nio.IntBuffer ib = java.nio.IntBuffer.allocate(1);
-			GLES20.glGenBuffers(1, ib); // COULD RETURN GL_INVALID_VALUE EVEN
-										// WITH NO ERROR
-			_vertexBuffer = ib.get(0);
-			_vertexBufferCreated = true;
+	public int bindAsVBOToGPU(NativeGL2_Android gl) {
+
+		_nativeGL = gl;
+		if (_vertexBuffer < 0) {
+			_vertexBuffer = _nativeGL.genBuffer();
 		}
 
-		if (_vertexBuffer != currentBoundBuffer) {
-			GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, _vertexBuffer);
-		}
+		_nativeGL.bindVBO(_vertexBuffer);
 
 		if (_vertexBufferTimeStamp != _timestamp) {
 			_vertexBufferTimeStamp = _timestamp;
@@ -136,23 +132,25 @@ public final class ByteBuffer_Android extends IByteBuffer {
 			final ByteBuffer buffer = getByteBuffer();
 			final int vboSize = size();
 
-			GLES20.glBufferData(GLES20.GL_ARRAY_BUFFER, vboSize, buffer, GLES20.GL_STATIC_DRAW);
+			GLES20.glBufferData(GLES20.GL_ARRAY_BUFFER, vboSize, buffer,
+					GLES20.GL_STATIC_DRAW);
 		}
-		
-		if (GLES20.glGetError() != GLES20.GL_NO_ERROR){
-			ILogger.instance().logError("Error at ByteBuffer::bindAsVBOToGPU()");
+
+		if (GLES20.glGetError() != GLES20.GL_NO_ERROR) {
+			ILogger.instance()
+					.logError("Error at ByteBuffer::bindAsVBOToGPU()");
 		}
-		
+
 		return _vertexBuffer;
 	}
-	
-	   @Override
-	   public void dispose() {
-	      super.dispose();
-	      if (_vertexBufferCreated && _nativeGL != null) {
-	    	  _nativeGL.deleteVBO(_vertexBuffer);
-	    	  _vertexBufferCreated = false;
-	      }
-	   }
+
+	@Override
+	public void dispose() {
+		super.dispose();
+		if (_vertexBufferCreated && _nativeGL != null) {
+			_nativeGL.deleteVBO(_vertexBuffer);
+			_vertexBufferCreated = false;
+		}
+	}
 
 }
