@@ -1149,8 +1149,8 @@ public class G3MWebGLTestingApplication
 	   final G3MBuilder_WebGL builder = new G3MBuilder_WebGL();
 
 	   //const Planet* planet = Planet::createEarth();
-	   //const Planet* planet = Planet::createSphericalEarth();
-	   final Planet planet = Planet.createFlatEarth();
+	   final Planet planet = Planet.createSphericalEarth();
+	   //final Planet planet = Planet.createFlatEarth();
 	   builder.setPlanet(planet);
 	   	   
 	   // create shape
