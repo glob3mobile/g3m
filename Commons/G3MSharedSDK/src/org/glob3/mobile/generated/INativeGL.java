@@ -176,4 +176,10 @@ public abstract class INativeGL
 
   public abstract void vertexAttribPointer(int index, int size, boolean normalized, int stride, IByteBuffer buffer);
 
+
+  public abstract void deleteVBO(int x);
+  public abstract int getBoundVBO();
+  public abstract int genBuffer();
+  public abstract void bindVBO(int vbo);
+
 }
