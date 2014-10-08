@@ -19,8 +19,8 @@ import android.content.Context;
 
 
 public final class Factory_Android
-         extends
-            IFactory {
+extends
+IFactory {
 
 
    private final Context _context;
