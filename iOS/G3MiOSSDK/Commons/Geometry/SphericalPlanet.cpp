@@ -386,12 +386,18 @@ MutableMatrix44D SphericalPlanet::doubleDrag(const Vector3D& finalRay0,
                                 finalRay1.transformedBy(matrix, 0), _dragRadius1); // B1
     
     //Taking whole system to origin
-    MutableMatrix44D traslation = MutableMatrix44D::createTranslationMatrix(_initialPoint0.times(-1).asVector3D());
+    MutableMatrix44D M = createGeodeticTransformMatrix(toGeodetic3D(_initialPoint0.asVector3D()));
+    MutableMatrix44D transform = M.inversed();
     
+   /* MutableMatrix44D traslation(M.get0(),M.get4(),M.get8(),0,
+                                M.get1(),M.get5(),M.get9(),0,
+                                M.get2(),M.get6(),M.get10(),0,
+                                -M.get12(),-M.get13(),-M.get14(),1);*/
+                                
     
-    Vector3D transformedInitialPoint1 = _initialPoint1.transformedBy(traslation, 1.0).asVector3D();
-    Vector3D transformedFinalPoint1 = finalPoint1.transformedBy(traslation, 1.0);
-    Vector3D transformedCameraPos = draggedCameraPos.transformedBy(traslation, 1.0);
+    Vector3D transformedInitialPoint1 = _initialPoint1.transformedBy(transform, 1.0).asVector3D();
+    Vector3D transformedFinalPoint1 = finalPoint1.transformedBy(transform, 1.0);
+    Vector3D transformedCameraPos = draggedCameraPos.transformedBy(transform, 1.0);
     Vector3D v0 = transformedFinalPoint1.sub(transformedCameraPos);
     
     //Angles to rotate transformedInitialPoint1 to adjust the plane that contains origin, TFP1 and TCP
