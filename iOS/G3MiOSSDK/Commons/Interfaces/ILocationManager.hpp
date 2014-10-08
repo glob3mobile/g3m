@@ -42,14 +42,14 @@ private:
 protected:
   
 #warning with this converter add static
-  std::vector<const LocationChangedListener*>* _listeners = new std::vector<const LocationChangedListener*>();
+//  std::vector<const LocationChangedListener*>* _listeners = new std::vector<const LocationChangedListener*>();
   
   
-  //#ifdef C_CODE
-  //  std::vector<const LocationChangedListener*>* _listeners = new std::vector<const LocationChangedListener*>();
-  //#else
-  //  protected final java.util.ArrayList<LocationChangedListener> _listeners = java.util.ArrayList<LocationChangedListener>();
-  //#endif
+  #ifdef C_CODE
+    std::vector<const LocationChangedListener*>* _listeners = new std::vector<const LocationChangedListener*>();
+  #else
+    protected final java.util.ArrayList<LocationChangedListener> _listeners = java.util.ArrayList<LocationChangedListener>();
+  #endif
 public:
   
   
