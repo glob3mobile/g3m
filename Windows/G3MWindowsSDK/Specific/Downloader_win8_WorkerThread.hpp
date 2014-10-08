@@ -21,8 +21,8 @@ class Downloader_win8_WorkerThread {
 
 private:
 	Downloader_win8* _downloader;
-	bool            _stopping;
-	std::thread _worker;
+	bool            _stopping = false;
+	//std::thread _worker;
 
 	std::mutex _lock;
 

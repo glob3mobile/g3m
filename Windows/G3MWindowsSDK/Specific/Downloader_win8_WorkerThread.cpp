@@ -18,7 +18,6 @@ using namespace Windows::System::Threading;
 
 
 bool Downloader_win8_WorkerThread::setPriorityBellowNormal(){
-
 	
 	//thread::native_handle_type nhandlet= this->native_handle();
 	//std::this_thread::
@@ -33,7 +32,7 @@ bool Downloader_win8_WorkerThread::setPriorityBellowNormal(){
 	::Concurrency::details::_Scheduler::
 	::Concurrency::details::_CurrentScheduler::*/
 	
-	
+	return false;
 }
 
 
@@ -48,6 +47,7 @@ void Downloader_win8_WorkerThread::start(){
 
 	//std::thread(this->run());
 	std::thread _worker(&Downloader_win8_WorkerThread::run, this);
+	_worker.detach();
 }
 
 void Downloader_win8_WorkerThread::stop(){
@@ -68,9 +68,11 @@ bool Downloader_win8_WorkerThread::isStopping(){
 void Downloader_win8_WorkerThread::run(){
 
 	while (!isStopping()) {
-		Downloader_win8_Handler* handler = _downloader->getHandlerToRun();
+
+		Downloader_win8_Handler* handler = this->_downloader->getHandlerToRun();
 		if (handler) {
-			handler->runWithDownloader(_downloader);
+			//ILogger::instance()->logInfo("Executing in thread runwithDownloader.");
+			handler->runWithDownloader(this->_downloader);
 		}
 		else {
 			// sleep for 25 milliseconds

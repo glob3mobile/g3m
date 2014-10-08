@@ -20,24 +20,35 @@ Downloader_win8::Downloader_win8(int maxConcurrentOperationCount) :
 	_cancelsCounter(0),
 	_started(false)
 {
-	_workers = std::vector<Downloader_win8_WorkerThread*>(maxConcurrentOperationCount);
-	//_downloadingHandlers = std::map<std::string, Downloader_win8_Handler>();
-	//_queuedHandlers = std::map<std::string, Downloader_win8_Handler>();
+	_workers = std::vector<Downloader_win8_WorkerThread*>();
+	_workers.reserve(maxConcurrentOperationCount);
+	_downloadingHandlers = std::map<std::string, Downloader_win8_Handler*>();
+	_queuedHandlers = std::map<std::string, Downloader_win8_Handler*>();
 
-	for (int i = 0; i < maxConcurrentOperationCount; i++){
+	/*for (int i = 0; i < maxConcurrentOperationCount; i++){
 		_workers.push_back(new Downloader_win8_WorkerThread(this));
-	}
+	}*/
 }
 
 void Downloader_win8::initialize(const G3MContext* context, FrameTasksExecutor* frameTasksExecutor){
 
-	std::string errMsg("TODO: Implementation of Downloader_win8::initialize ??");
-	throw std::exception(errMsg.c_str());
+	//std::string errMsg("TODO: Implementation of Downloader_win8::initialize ??");
+	//throw std::exception(errMsg.c_str());
+	//ILogger::instance()->logInfo("Downloader_win8.initialize.. do nothing by the moment."); // TODO: remove
+	for (int i = 0; i < _maxConcurrentOperationCount; i++){
+		_workers.push_back(new Downloader_win8_WorkerThread(this));
+	}
 }
 
 long long  Downloader_win8::request(const URL &url,
-									long long priority,
-									Downloader_win8_Listener* listener){
+	long long priority,
+	Downloader_win8_Listener* listener){
+
+	ILogger::instance()->logInfo("requested URL: \"%s\"\n", url._path.c_str());
+	if (url.isNull() || (url.getPath().find("NULL") != std::string::npos)){
+		ILogger::instance()->logError("URL is NULL.");
+		return -1;
+	}
 
 	std::string path = url.getPath();
 	Downloader_win8_Handler* handler = NULL;
@@ -47,15 +58,19 @@ long long  Downloader_win8::request(const URL &url,
 	_requestsCounter++;
 
 	const long long requestId = _requestIdCounter++;
-
-	handler = _downloadingHandlers.at(path);
+	
+	if (_downloadingHandlers.count(path)>0){
+		handler = _downloadingHandlers.at(path);
+	}
 
 	if (handler) {
 		// the URL is being downloaded, just add the new listener.
 		handler->addListener(listener, priority, requestId);
 	}
 	else {
-		handler = _queuedHandlers.at(path);
+		if (_queuedHandlers.count(path) > 0){
+			handler = _queuedHandlers.at(path);
+		}
 		if (handler) {
 			// the URL is queued for future download, just add the new listener.
 			handler->addListener(listener, priority, requestId);
@@ -156,12 +171,12 @@ void Downloader_win8::cancelRequest(long long requestId){
 }
 
 
-Downloader_win8_Handler* Downloader_win8::getHandlerToRun(){
+Downloader_win8_Handler* Downloader_win8::getHandlerToRun() {
 
 	long long					selectedPriority = -100000000; // TODO: LONG_MIN_VALUE;
 	Downloader_win8_Handler*	selectedHandler = NULL;
-	std::string					selectedURL = NULL;
-
+	std::string					selectedURL;
+	
 	_lock.lock();
 
 	std::map<std::string, Downloader_win8_Handler*>::iterator it = _queuedHandlers.begin();

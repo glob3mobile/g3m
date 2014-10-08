@@ -24,13 +24,19 @@ Downloader_win8_Listener::Downloader_win8_Listener(IBufferDownloadListener* cppB
 }
 
 Downloader_win8_Listener::Downloader_win8_Listener(IBufferDownloadListener* cppBufferListener,
-												   bool deleteListener){
-	Downloader_win8_Listener(cppBufferListener, NULL, deleteListener);
+												   bool deleteListener) : 
+	_cppBufferListener(cppBufferListener),
+	_cppImageListener(NULL),
+	_deleteListener(deleteListener)
+{
 }
 
 Downloader_win8_Listener::Downloader_win8_Listener(IImageDownloadListener* cppImageListener,
-												   bool deleteListener){
-	Downloader_win8_Listener(NULL, cppImageListener, deleteListener);
+												   bool deleteListener) : 
+	_cppBufferListener(NULL),
+	_cppImageListener(cppImageListener),
+	_deleteListener(deleteListener)
+{
 }
 
 

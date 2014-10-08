@@ -22,9 +22,9 @@ class URL;
 class Downloader_win8_Listener {
 
 private:
-	IBufferDownloadListener* _cppBufferListener;
-	IImageDownloadListener*  _cppImageListener;
-	bool                     _deleteListener;
+	IBufferDownloadListener* _cppBufferListener = NULL;
+	IImageDownloadListener*  _cppImageListener = NULL;
+	bool                     _deleteListener = false;
 
 public:
 	Downloader_win8_Listener(IBufferDownloadListener* cppBufferListener,

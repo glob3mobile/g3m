@@ -53,6 +53,9 @@ private:
 	
 	const StringUtils_win8* _sUtils;
 	std::mutex _lock;
+
+	void runResponseTask(const int statusCode, IByteBuffer* buffer);
+	Downloader_win8* _downloader = NULL;
 	
 public:
 	Downloader_win8_Handler(URL* url, Downloader_win8_Listener* listener, long long priority, long long requestId);
@@ -67,7 +70,8 @@ public:
 
 	long long priority();
 
-	void runWithDownloader(Downloader_win8* downloader, G3MContext* context);
+	//void runWithDownloader(Downloader_win8* downloader, G3MContext* context);
+	void runWithDownloader(Downloader_win8* downloader);
 
 	void dealloc();
 
