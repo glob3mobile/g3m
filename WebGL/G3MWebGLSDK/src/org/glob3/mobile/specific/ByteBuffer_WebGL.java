@@ -119,5 +119,4 @@ public final class ByteBuffer_WebGL extends IByteBuffer {
 	private native JavaScriptObject jsCreateWebGLBuffer() /*-{
 		return this.@org.glob3.mobile.specific.ByteBuffer_WebGL::_gl.createBuffer();
 	}-*/;
-
 }

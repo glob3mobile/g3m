@@ -843,7 +843,7 @@ public final class NativeGL_WebGL
 @Override
 public native void vertexAttribPointer(int index, int size, boolean normalized,
 		int stride, IByteBuffer buffer) /*-{
-	debugger;
+//	debugger;
 	var gl = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl;
 	var webGLBuffer = buffer.@org.glob3.mobile.specific.ByteBuffer_WebGL::getWebGLBuffer(Lcom/google/gwt/core/client/JavaScriptObject;)(gl);
 	gl.bindBuffer(gl.ARRAY_BUFFER, webGLBuffer);
@@ -852,6 +852,34 @@ public native void vertexAttribPointer(int index, int size, boolean normalized,
 	gl.vertexAttribPointer(index, size, gl.UNSIGNED_BYTE, normalized, stride, 0);
 	gl.getError();
 }-*/;
+
+
+@Override
+public void deleteVBO(int x) {
+	// TODO METHOD UNUSED IN WEBGL (for the time being)
+	
+}
+
+
+@Override
+public int getBoundVBO() {
+	// TODO METHOD UNUSED IN WEBGL (for the time being)
+	return 0;
+}
+
+
+@Override
+public int genBuffer() {
+	// TODO METHOD UNUSED IN WEBGL (for the time being)
+	return 0;
+}
+
+
+@Override
+public void bindVBO(int vbo) {
+	// TODO Auto-generated method stub
+	
+}
 
 
 }

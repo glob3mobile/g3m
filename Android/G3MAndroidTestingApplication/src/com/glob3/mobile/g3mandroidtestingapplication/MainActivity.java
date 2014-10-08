@@ -96,9 +96,9 @@ public class MainActivity extends Activity {
 				int r = (byte) ( Math.random() * 256);
 				int g = (byte) ( Math.random() * 256);
 				int b = (byte) ( Math.random() * 256);
-				bbb.add((byte)255); // R
-				bbb.add((byte)0); // G
-				bbb.add((byte)0); // B
+				bbb.add((byte)r); // R
+				bbb.add((byte)g); // G
+				bbb.add((byte)b); // B
 			}
 
 			IFloatBuffer points = fbb.create();
