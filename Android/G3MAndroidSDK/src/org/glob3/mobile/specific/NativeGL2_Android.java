@@ -10,7 +10,6 @@ import org.glob3.mobile.generated.GPUAttribute;
 import org.glob3.mobile.generated.GPUAttributeVec2Float;
 import org.glob3.mobile.generated.GPUAttributeVec3Float;
 import org.glob3.mobile.generated.GPUAttributeVec4Float;
-import org.glob3.mobile.generated.GPUProgram;
 import org.glob3.mobile.generated.GPUUniform;
 import org.glob3.mobile.generated.GPUUniformBool;
 import org.glob3.mobile.generated.GPUUniformFloat;
@@ -22,6 +21,7 @@ import org.glob3.mobile.generated.GPUUniformVec4Float;
 import org.glob3.mobile.generated.IFloatBuffer;
 import org.glob3.mobile.generated.IGLTextureId;
 import org.glob3.mobile.generated.IGLUniformID;
+import org.glob3.mobile.generated.IGPUProgram;
 import org.glob3.mobile.generated.IImage;
 import org.glob3.mobile.generated.ILogger;
 import org.glob3.mobile.generated.INativeGL;
@@ -656,7 +656,7 @@ public final class NativeGL2_Android
 
 
    @Override
-   public void useProgram(final GPUProgram program) {
+   public void useProgram(final IGPUProgram program) {
       checkOpenGLThread();
       GLES20.glUseProgram(program.getProgramID());
    }
@@ -699,7 +699,7 @@ public final class NativeGL2_Android
 
 
    @Override
-   public void bindAttribLocation(final GPUProgram program,
+   public void bindAttribLocation(final IGPUProgram program,
                                   final int loc,
                                   final String name) {
       checkOpenGLThread();
@@ -708,7 +708,7 @@ public final class NativeGL2_Android
 
 
    @Override
-   public int getProgramiv(final GPUProgram program,
+   public int getProgramiv(final IGPUProgram program,
                            final int param) {
       checkOpenGLThread();
       final int[] i = new int[1];
@@ -718,7 +718,7 @@ public final class NativeGL2_Android
 
 
    @Override
-   public GPUUniform getActiveUniform(final GPUProgram program,
+   public GPUUniform getActiveUniform(final IGPUProgram program,
                                       final int i) {
       checkOpenGLThread();
       final int[] maxLength = new int[1];
@@ -760,7 +760,7 @@ public final class NativeGL2_Android
 
 
    @Override
-   public GPUAttribute getActiveAttribute(final GPUProgram program,
+   public GPUAttribute getActiveAttribute(final IGPUProgram program,
                                           final int i) {
       checkOpenGLThread();
       final int[] maxLength = new int[1];

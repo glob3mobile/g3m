@@ -2,7 +2,7 @@
 
 package com.glob3.mobile.g3mandroidtestingapplication;
 
-<<<<<<< HEAD
+import org.glob3.mobile.generated.DownloaderImageBuilder;
 import org.glob3.mobile.generated.LayerSet;
 import org.glob3.mobile.generated.LevelTileCondition;
 import org.glob3.mobile.generated.Sector;
@@ -10,15 +10,6 @@ import org.glob3.mobile.generated.TimeInterval;
 import org.glob3.mobile.generated.URL;
 import org.glob3.mobile.generated.WMSLayer;
 import org.glob3.mobile.generated.WMSServerVersion;
-=======
-import org.glob3.mobile.generated.Angle;
-import org.glob3.mobile.generated.DownloadPriority;
-import org.glob3.mobile.generated.Geodetic3D;
-import org.glob3.mobile.generated.PointCloudsRenderer;
-import org.glob3.mobile.generated.PointCloudsRenderer.PointCloudMetadataListener;
-import org.glob3.mobile.generated.TimeInterval;
-import org.glob3.mobile.generated.URL;
->>>>>>> point-cloud
 import org.glob3.mobile.specific.G3MBuilder_Android;
 import org.glob3.mobile.specific.G3MWidget_Android;
 
@@ -49,7 +40,6 @@ public class MainActivity
       _g3mWidget = createWidget();
 
       final RelativeLayout placeHolder = (RelativeLayout) findViewById(R.id.g3mWidgetHolder);
-<<<<<<< HEAD
       placeHolder.addView(_g3mWidget);
    }
 
@@ -57,12 +47,31 @@ public class MainActivity
    private G3MWidget_Android createWidget() {
       final G3MBuilder_Android builder = new G3MBuilder_Android(this);
 
-      builder.getPlanetRendererBuilder().setLayerSet(createLayerSet());
+      builder.getPlanetRendererBuilder().setLayerSet(createLayerset());
       builder.getPlanetRendererBuilder().setForceFirstLevelTilesRenderOnStart(false);
+
+      builder.getPlanetRendererBuilder().setDefaultTileBackGroundImage(
+      //               new DownloaderImageBuilder(new URL("http://www.freelogovectors.net/wp-content/uploads/2013/02/sheep-b.png")));
+               new DownloaderImageBuilder(new URL("file:///deathStarS.png")));
+
       // builder.getPlanetRendererBuilder().setRenderDebug(true);
       // builder.getPlanetRendererBuilder().setLogTilesPetitions(true);
 
       return builder.createWidget();
+   }
+
+
+   private LayerSet createLayerset() {
+      final LayerSet ls = new LayerSet();
+
+      final WMSLayer layer = new WMSLayer("bmng200405", new URL("http://www.nix.de", false), WMSServerVersion.WMS_1_1_0,
+               Sector.fullSphere(), "image/jpeg", "EPSG:4326", "", false, new LevelTileCondition(0, 18),
+               TimeInterval.fromDays(30), true);
+
+
+      ls.addLayer(layer);
+      return ls;
+
    }
 
 
@@ -142,95 +151,92 @@ public class MainActivity
    //         return symbols;
    //      }
    //   }
-=======
 
 
-      placeHolder.addView(_g3mWidget);
+   //      placeHolder.addView(_g3mWidget);
+   //
+   //
+   //      final Geodetic3D zurichPos = Geodetic3D.fromDegrees(40, -75, 80000);
+   //      _g3mWidget.getG3MWidget().setAnimatedCameraPosition(TimeInterval.fromSeconds(5), zurichPos, Angle.zero(),
+   //               Angle.fromDegrees(-90));
+   //
+   //   }
 
 
-      final Geodetic3D zurichPos = Geodetic3D.fromDegrees(40, -75, 80000);
-      _g3mWidget.getG3MWidget().setAnimatedCameraPosition(TimeInterval.fromSeconds(5), zurichPos, Angle.zero(),
-               Angle.fromDegrees(-90));
-
-   }
->>>>>>> point-cloud
-
-
-   private G3MWidget_Android createWidget() {
-      final G3MBuilder_Android builder = new G3MBuilder_Android(this);
-
-      final PointCloudsRenderer pcr = new PointCloudsRenderer();
-
-<<<<<<< HEAD
-      //layerSet.addLayer(new MapBoxLayer("examples.map-9ijuk24y", TimeInterval.fromDays(30)));
-
-
-      //final String urlTemplate = "http://111.111.1.1";
-
-      //final int firstLevel = 2;
-      //final int maxLevel = 10;
-
-      //final GEORasterSymbolizer symbolizer = new SampleRasterSymbolizer();
-
-      final WMSLayer layer = new WMSLayer("bmng200405", new URL("http://www.nix.de", false), WMSServerVersion.WMS_1_1_0,
-               Sector.fullSphere(), "image/jpeg", "EPSG:4326", "", false, new LevelTileCondition(0, 18),
-               TimeInterval.fromDays(30), true);
-
-      //      final TiledVectorLayer tiledVectorLayer = TiledVectorLayer.newMercator( //
-      //               symbolizer, //
-      //               urlTemplate, //
-      //               Sector.fullSphere(), // sector
-      //               firstLevel, //
-      //               maxLevel, //
-      //               TimeInterval.fromDays(30), // timeToCache
-      //               true, // readExpired
-      //               1, // transparency
-      //               null, // condition
-      //               "" // disclaimerInfo
-      //      );
-      layerSet.addLayer(layer);
-=======
-      final URL serverURL = new URL("http://glob3mobile.dyndns.org:8080");
-      //  final String cloudName = "Loudoun-VA_simplified2_LOD";
-      final String cloudName = "Loudoun-VA_fragment_LOD";
-      final long downloadPriority = DownloadPriority.LOWER;
-      final TimeInterval timeToCache = TimeInterval.zero();
-      final boolean readExpired = false;
-      final float pointSize = 2;
-      final float verticalExaggeration = 1;
-      final PointCloudMetadataListener metadataListener = null;
-      final boolean deleteListener = true;
-
-      pcr.addPointCloud( //
-               serverURL, cloudName, //
-               downloadPriority, timeToCache, readExpired, //
-               pointSize, //
-               verticalExaggeration, //
-               metadataListener, deleteListener);
-
-
-      builder.addRenderer(pcr);
-
-      //      final TimeInterval connectTimeout = TimeInterval.fromSeconds(60);
-      //      final TimeInterval readTimeout = TimeInterval.fromSeconds(65);
-      //      final boolean saveInBackground = true;
->>>>>>> point-cloud
-
-      //      builder.getPlanetRendererBuilder().setLayerSet(createLayerSet());
-      // builder.getPlanetRendererBuilder().setRenderDebug(true);
-      // builder.getPlanetRendererBuilder().setLogTilesPetitions(true);
-
-      return builder.createWidget();
-   }
+   //   private G3MWidget_Android createWidget() {
+   //      final G3MBuilder_Android builder = new G3MBuilder_Android(this);
+   //
+   //      final PointCloudsRenderer pcr = new PointCloudsRenderer();
+   //
+   //
+   //      //layerSet.addLayer(new MapBoxLayer("examples.map-9ijuk24y", TimeInterval.fromDays(30)));
+   //
+   //
+   //      //final String urlTemplate = "http://111.111.1.1";
+   //
+   //      //final int firstLevel = 2;
+   //      //final int maxLevel = 10;
+   //
+   //      //final GEORasterSymbolizer symbolizer = new SampleRasterSymbolizer();
+   //
+   //      final WMSLayer layer = new WMSLayer("bmng200405", new URL("http://www.nix.de", false), WMSServerVersion.WMS_1_1_0,
+   //               Sector.fullSphere(), "image/jpeg", "EPSG:4326", "", false, new LevelTileCondition(0, 18),
+   //               TimeInterval.fromDays(30), true);
+   //
+   //      //      final TiledVectorLayer tiledVectorLayer = TiledVectorLayer.newMercator( //
+   //      //               symbolizer, //
+   //      //               urlTemplate, //
+   //      //               Sector.fullSphere(), // sector
+   //      //               firstLevel, //
+   //      //               maxLevel, //
+   //      //               TimeInterval.fromDays(30), // timeToCache
+   //      //               true, // readExpired
+   //      //               1, // transparency
+   //      //               null, // condition
+   //      //               "" // disclaimerInfo
+   //      //      );
+   //      layerSet.addLayer(layer);
+   //
+   ////      final URL serverURL = new URL("http://glob3mobile.dyndns.org:8080");
+   ////      //  final String cloudName = "Loudoun-VA_simplified2_LOD";
+   ////      final String cloudName = "Loudoun-VA_fragment_LOD";
+   ////      final long downloadPriority = DownloadPriority.LOWER;
+   ////      final TimeInterval timeToCache = TimeInterval.zero();
+   ////      final boolean readExpired = false;
+   ////      final float pointSize = 2;
+   ////      final float verticalExaggeration = 1;
+   ////      final PointCloudMetadataListener metadataListener = null;
+   ////      final boolean deleteListener = true;
+   ////
+   ////      pcr.addPointCloud( //
+   ////               serverURL, cloudName, //
+   ////               downloadPriority, timeToCache, readExpired, //
+   ////               pointSize, //
+   ////               verticalExaggeration, //
+   ////               metadataListener, deleteListener);
+   ////
+   ////
+   ////      builder.addRenderer(pcr);
+   ////
+   ////      //      final TimeInterval connectTimeout = TimeInterval.fromSeconds(60);
+   ////      //      final TimeInterval readTimeout = TimeInterval.fromSeconds(65);
+   ////      //      final boolean saveInBackground = true;
+   ////
+   //
+   //      //      builder.getPlanetRendererBuilder().setLayerSet(createLayerSet());
+   //      // builder.getPlanetRendererBuilder().setRenderDebug(true);
+   //      // builder.getPlanetRendererBuilder().setLogTilesPetitions(true);
+   //
+   //      return builder.createWidget();
+   //   }
 
 
-<<<<<<< HEAD
    //   @Override
    //   public boolean onCreateOptionsMenu(final Menu menu) {
    //      // Inflate the menu; this adds items to the action bar if it is present.
    //      getMenuInflater().inflate(R.menu.main, menu);
    //      return true;
-=======
+
    //   private static class SampleRasterSymbolizer
    //   extends
    //   GEORasterSymbolizer {
@@ -370,7 +376,6 @@ public class MainActivity
    //         return true;
    //      }
    //
->>>>>>> point-cloud
    //   }
 
 }

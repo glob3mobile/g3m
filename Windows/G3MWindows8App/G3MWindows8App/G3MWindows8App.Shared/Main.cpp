@@ -13,6 +13,9 @@
 #include "LayerSet.hpp"
 #include "WMSLayer.hpp"
 #include "LevelTileCondition.hpp"
+#include "TileTexturizer.hpp"
+#include "DefaultTileTexturizer.hpp"
+#include "Image_win8.hpp"
 
 
 
@@ -48,7 +51,8 @@ class DummyDownloader :public IDownloader{
 		bool readExpired,
 		IImageDownloadListener* listener,
 		bool deleteListener){
-		return NULL;
+		//return NULL;
+		return priority;
 	}
 	void cancelRequest(long long requestId){}
 	const std::string statistics(){
@@ -101,7 +105,13 @@ public:
 		//PlanetRendererBuilder* pbuilder = _builder->
 		_builder->setDownloader(new DummyDownloader());
 		_builder->getPlanetRendererBuilder()->setLayerSet(createLayerset());
-		//_builder->getPlanetRendererBuilder()->setForceFirstLevelTilesRenderOnStart(false);
+		_builder->getPlanetRendererBuilder()->setForceFirstLevelTilesRenderOnStart(false);
+
+		_builder->getPlanetRendererBuilder()->setDefaultTileBackGroundImage(new DownloaderImageBuilder(URL("file:///deathStarS.png")));
+
+		//Image_win8* image = Image_win8::imageFromFile(URL("file:///deathStarS.png"));
+		
+		
 
 		_widget = _builder->createWidget();
 		renderer = _widget->getRenderer();

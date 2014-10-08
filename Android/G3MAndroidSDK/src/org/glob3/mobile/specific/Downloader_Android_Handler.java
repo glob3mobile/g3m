@@ -188,6 +188,7 @@ public final class Downloader_Android_Handler {
             final String filePath = _g3mURL._path.replaceFirst(URL.FILE_PROTOCOL, "");
 
             final File file = new File(filePath);
+            ILogger.instance().logWarning(new String("File: " + file.getCanonicalPath() + " exists: " + file.exists()), null);
             final InputStream fileIS = file.exists() ? new FileInputStream(file) //
                                                     : downloader.getAppContext().getAssets().open(filePath);
 
