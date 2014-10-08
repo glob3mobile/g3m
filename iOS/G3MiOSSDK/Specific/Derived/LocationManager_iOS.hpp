@@ -41,7 +41,7 @@ public:
   
   const Geodetic2D* getLocation();
   
-  void notifyLocationChanged(CLLocation * location);
+  //void notifyLocationChanged(CLLocation* location);
   
   
 };

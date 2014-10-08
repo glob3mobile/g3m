@@ -575,6 +575,35 @@ layerSet->addLayer(blueMarble);
   };
   
   
+  class TransparentCanvasImageBuilder : public CanvasImageBuilder {
+    
+  private:
+    
+  protected:
+    void buildOnCanvas(const G3MContext* context,
+                       ICanvas* canvas) {
+      const float width  = canvas->getWidth();
+      const float height = canvas->getHeight();
+      
+      canvas->setFillColor(Color::transparent());
+      canvas->fillRectangle(0, 0, width, height);
+    }
+  public:
+    
+    TransparentCanvasImageBuilder(int width,
+                                   int height):
+    CanvasImageBuilder(width, height)
+    {
+      
+    }
+    
+    bool isMutable() const {
+      return false;
+    }
+  };
+
+  builder.getPlanetRendererBuilder()->setDefaultTileBackGroundImage(new TransparentCanvasImageBuilder(256, 256));
+  
   
   //geoVectorLayer->addLayerTouchEventListener(new VectorLayerTouchEventListener(fcfc));
   
@@ -623,7 +652,7 @@ layerSet->addLayer(blueMarble);
   geoVectorLayer->addLayerTouchEventListener(new VectorLayerTouchEventListener(fcfc));
 
   
-  builder.getPlanetRendererBuilder()->setDefaultTileBackGroundImage(new DownloaderImageBuilder(URL("http://www.freelogovectors.net/wp-content/uploads/2013/02/sheep-b.png")));
+  //builder.getPlanetRendererBuilder()->setDefaultTileBackGroundImage(new DownloaderImageBuilder(URL("http://www.freelogovectors.net/wp-content/uploads/2013/02/sheep-b.png")));
 
 //  builder.getPlanetRendererBuilder()->setDefaultTileBackGroundImage(new DownloaderImageBuilder(URL("http://192.168.1.127:8080/web/img/tileNotFound.jpg")));
 //  const Sector sector = Sector::fromDegrees(40.1540143280790858, -5.8664874640814313,

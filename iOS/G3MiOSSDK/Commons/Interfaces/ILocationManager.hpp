@@ -27,7 +27,7 @@ enum Activity_Type {
 
 class LocationChangedListener {
 public:
-  virtual void onLocationChanged(const Geodetic2D newLocation) const = 0;
+  virtual void onLocationChanged(const Geodetic2D* newLocation) const = 0;
   
   virtual ~LocationChangedListener() {
     
@@ -40,14 +40,16 @@ class ILocationManager {
 private:
   
 protected:
-  std::vector<const LocationChangedListener*>* _listeners = new std::vector<const LocationChangedListener*>();
   
-  
-//#ifdef C_CODE
+#warning with this converter add static
 //  std::vector<const LocationChangedListener*>* _listeners = new std::vector<const LocationChangedListener*>();
-//#else
-//  protected final java.util.ArrayList<LocationChangedListener> _listeners = java.util.ArrayList<LocationChangedListener>();
-//#endif
+//  
+  
+#ifdef C_CODE
+  std::vector<const LocationChangedListener*>* _listeners = new std::vector<const LocationChangedListener*>();
+#else
+  protected final java.util.ArrayList<LocationChangedListener> _listeners = java.util.ArrayList<LocationChangedListener>();
+#endif
 public:
   
 
@@ -70,6 +72,13 @@ public:
   virtual void stop() = 0;
   
   virtual const Geodetic2D* getLocation() = 0;
+  
+  const void notifyLocationChanged(const Geodetic2D* newLocation) {
+    const size_t size = _listeners->size();
+    for (size_t i = 0; i < size; i++) {
+      _listeners->at(i)->onLocationChanged(newLocation);
+    }
+  }
   
   void addLocationChangedListener(const LocationChangedListener* locationChangedListener);
   
