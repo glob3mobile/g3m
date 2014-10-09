@@ -254,12 +254,12 @@ public class Tile
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#warning ÑAPA
     double augmentedFactor = 1.0;
-    for (int i = 0; i < _planetRenderer._lODAugmentedSectors.size(); i++)
+    for (int i = 0; i < GlobalMembersPlanetRenderer._lODAugmentedSectors.size(); i++)
     {
-      Sector sector = _planetRenderer._lODAugmentedSectors.at(i)._sector;
+      Sector sector = GlobalMembersPlanetRenderer._lODAugmentedSectors.get(i)._sector;
       if (_sector.touchesWith(sector))
       {
-        augmentedFactor = _planetRenderer._lODAugmentedSectors.at(i)._lodFactor;
+        augmentedFactor = GlobalMembersPlanetRenderer._lODAugmentedSectors.get(i)._lodFactor;
       }
     }
   
