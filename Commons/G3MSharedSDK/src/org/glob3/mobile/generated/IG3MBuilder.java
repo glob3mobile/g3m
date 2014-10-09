@@ -417,7 +417,12 @@ public abstract class IG3MBuilder
     }
   
     final Geodetic3D initialCameraPosition = getPlanet().getDefaultCameraPosition(shownSector);
-    addCameraConstraint(new RenderedSectorCameraConstrainer(mainRenderer.getPlanetRenderer(), initialCameraPosition._height * 1.2));
+  
+    /*
+     //Undesired behaviour for senderos-gc
+    addCameraConstraint(new RenderedSectorCameraConstrainer(mainRenderer->getPlanetRenderer(),
+                                                            initialCameraPosition._height * 1.2));
+     */
   
     InitialCameraPositionProvider icpp = new SimpleInitialCameraPositionProvider();
   

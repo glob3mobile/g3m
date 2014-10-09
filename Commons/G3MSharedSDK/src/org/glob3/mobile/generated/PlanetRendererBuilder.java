@@ -44,7 +44,10 @@ public class PlanetRendererBuilder
   private ElevationDataProvider _elevationDataProvider;
   private float _verticalExaggeration;
 
-  //TileRasterizer* getTileRasterizer() {
+//  TileRasterizer* getTileRasterizer();
+
+
+  //TileRasterizer* PlanetRendererBuilder::getTileRasterizer() {
   //  const int tileRasterizersSize = _tileRasterizers.size();
   //
   //  if (tileRasterizersSize == 0) {
@@ -63,33 +66,11 @@ public class PlanetRendererBuilder
   //}
   
   /**
-<<<<<<< HEAD
-   * Returns the _texturizer.
-   *
-   * @return _texturizer: TileTexturizer*
-   */
-  private TileTexturizer getTexturizer()
-  {
-    if (_texturizer == null)
-    {
-  //    _texturizer = new MultiLayerTileTexturizer();
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning Diego at work!
-      _texturizer = new DefaultTileTexturizer();
-    }
-  
-    return _texturizer;
-  }
-
-
-  /**
-=======
->>>>>>> dfbed904462a68b1b438219bce643d4651195efe
    * Returns the _layerSet.
    *
    * @return _layerSet: LayerSet*
    */
-  private LayerSet PlanetRendererBuilder.getLayerSet()
+  private LayerSet getLayerSet()
   {
     if (_layerSet == null)
     {
@@ -98,9 +79,6 @@ public class PlanetRendererBuilder
   
     return _layerSet;
   }
-
-//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
-//  LayerSet getLayerSet();
 
   /**
    * Returns the _parameters.
@@ -277,6 +255,41 @@ public class PlanetRendererBuilder
   private TouchEventType getTouchEventTypeOfTerrainTouchListener()
   {
     return _touchEventTypeOfTerrainTouchListener;
+  }
+
+
+  /**
+   * Returns the _tileTessellator.
+   *
+   * @return _tileTessellator: TileTessellator*
+   */
+  private TileTessellator getTileTessellator()
+  {
+    if (_tileTessellator == null)
+    {
+      _tileTessellator = createTileTessellator();
+    }
+  
+    return _tileTessellator;
+  }
+
+
+  /**
+   * Returns the _texturizer.
+   *
+   * @return _texturizer: TileTexturizer*
+   */
+  private TileTexturizer getTexturizer()
+  {
+    if (_texturizer == null)
+    {
+      //    _texturizer = new MultiLayerTileTexturizer();
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning Diego at work!
+      _texturizer = new DefaultTileTexturizer();
+    }
+  
+    return _texturizer;
   }
 
   ///#include "MultiLayerTileTexturizer.hpp"
@@ -589,40 +602,5 @@ public class PlanetRendererBuilder
   public final void setTouchEventTypeOfTerrainTouchListener(TouchEventType touchEventTypeOfTerrainTouchListener)
   {
     _touchEventTypeOfTerrainTouchListener = touchEventTypeOfTerrainTouchListener;
-  }
-
-
-  /**
-   * Returns the _tileTessellator.
-   *
-   * @return _tileTessellator: TileTessellator*
-   */
-  public final TileTessellator getTileTessellator()
-  {
-    if (_tileTessellator == null)
-    {
-      _tileTessellator = createTileTessellator();
-    }
-  
-    return _tileTessellator;
-  }
-
-
-  /**
-   * Returns the _texturizer.
-   *
-   * @return _texturizer: TileTexturizer*
-   */
-  public final TileTexturizer getTexturizer()
-  {
-    if (_texturizer == null)
-    {
-      //    _texturizer = new MultiLayerTileTexturizer();
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning Diego at work!
-      _texturizer = new DefaultTileTexturizer();
-    }
-  
-    return _texturizer;
   }
 }
