@@ -20,7 +20,13 @@ public class Tile
 
   private float _verticalExaggeration;
   private TileTessellatorMeshData _tileTessellatorMeshData = new TileTessellatorMeshData();
-
+//<<<<<<< HEAD
+//
+//=======
+//  
+//  BoundingVolume* _boundingVolume;
+//  
+//>>>>>>> zrender-touchhandlers
   private Vector3D _northWestPoint;
   private Vector3D _northEastPoint;
   private Vector3D _southWestPoint;
@@ -88,33 +94,6 @@ public class Tile
 
   private void prepareTestLODData(Planet planet)
   {
-  
-<<<<<<< HEAD
-=======
-    //  if (_middleNorthPoint == NULL) {
-    //    ILogger::instance()->logError("Error in Tile::prepareTestLODData");
-    //    return;
-    //  }
-    //
-    //  const Vector3D nN = planet->centricSurfaceNormal(*_middleNorthPoint);
-    //  const Vector3D nS = planet->centricSurfaceNormal(*_middleSouthPoint);
-    //  const Vector3D nE = planet->centricSurfaceNormal(*_middleEastPoint);
-    //  const Vector3D nW = planet->centricSurfaceNormal(*_middleWestPoint);
-    //
-    //  const Angle latitudeAngle = nN.angleBetween(nS);
-    //  double latRad = latitudeAngle._radians;
-    //  const double sin_lat_2 = SIN(latRad / 2);
-    //  const double latitudeArcSegmentRatio = (sin_lat_2 == 0) ? 1 : latRad / (2 * sin_lat_2);
-    //
-    //  const Angle longitudeAngle = nE.angleBetween(nW);
-    //  const double lonRad = longitudeAngle._radians;
-    //  const double sin_lon_2 = SIN(lonRad / 2);
-    //  const double longitudeArcSegmentRatio = (sin_lon_2 == 0) ? 1 : lonRad / (2 * sin_lon_2);
-    //
-    //  _latitudeArcSegmentRatioSquared  = latitudeArcSegmentRatio * latitudeArcSegmentRatio;
-    //  _longitudeArcSegmentRatioSquared = longitudeArcSegmentRatio * longitudeArcSegmentRatio;
-  
->>>>>>> zrender-touchhandlers
     if ((_northWestPoint == null) || (_northEastPoint == null) || (_southWestPoint == null) || (_southEastPoint == null))
     {
       ILogger.instance().logError("Error in Tile::prepareTestLODData");
@@ -182,6 +161,7 @@ public class Tile
     if (_debugMesh == null)
     {
       final Vector2I tileMeshResolution = new Vector2I(layerTilesRenderParameters._tileMeshResolution);
+  
       Color color = isTextureSolved()? Color.blue() : Color.red();
   
       //TODO: CHECK
@@ -190,21 +170,20 @@ public class Tile
     return _debugMesh;
   }
 
-<<<<<<< HEAD
-  private boolean isVisible(G3MRenderContext rc, Planet planet, Vector3D cameraNormalizedPosition, double cameraAngle2HorizonInRadians, Frustum cameraFrustumInModelCoordinates, Frustum cameraWiderFrustumInModelCoordinates, ElevationDataProvider elevationDataProvider, Sector renderedSector, TileTessellator tessellator, LayerTilesRenderParameters layerTilesRenderParameters, TilesRenderParameters tilesRenderParameters)
-=======
-  private boolean isVisible(G3MRenderContext rc, Frustum cameraFrustumInModelCoordinates, ElevationDataProvider elevationDataProvider, Sector renderedSector, TileTessellator tessellator, LayerTilesRenderParameters layerTilesRenderParameters, TilesRenderParameters tilesRenderParameters)
+  private boolean isVisible(G3MRenderContext rc, Frustum cameraFrustumInModelCoordinates, Frustum cameraWiderFrustumInModelCoordinates, ElevationDataProvider elevationDataProvider, Sector renderedSector, TileTessellator tessellator, LayerTilesRenderParameters layerTilesRenderParameters, TilesRenderParameters tilesRenderParameters)
                        //const Planet* planet,
                        //const Vector3D& cameraNormalizedPosition,
                        //double cameraAngle2HorizonInRadians,
->>>>>>> zrender-touchhandlers
   {
+  
+  
     if ((renderedSector != null) && !renderedSector.touchesWith(_sector)) //Incomplete world
     {
       return false;
     }
   
     final BoundingVolume boundingVolume = getBoundingVolume(rc, elevationDataProvider, tessellator, layerTilesRenderParameters, tilesRenderParameters);
+  
       return ((boundingVolume != null) && boundingVolume.touchesFrustum(cameraWiderFrustumInModelCoordinates));
   }
                         //const Planet* planet,
@@ -272,16 +251,15 @@ public class Tile
     final double distanceInPixelsSquaredArcWest = (distanceInPixelsWest * distanceInPixelsWest) * _westArcSegmentRatioSquared;
     final double distanceInPixelsSquaredArcEast = (distanceInPixelsEast * distanceInPixelsEast) * _eastArcSegmentRatioSquared;
   
-  
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#warning ÑAPA
     double augmentedFactor = 1.0;
     for (int i = 0; i < _planetRenderer._lODAugmentedSectors.size(); i++)
     {
-      Sector sector = _planetRenderer._lODAugmentedSectors.get(i)._sector;
+      Sector sector = _planetRenderer._lODAugmentedSectors.at(i)._sector;
       if (_sector.touchesWith(sector))
       {
-        augmentedFactor = _planetRenderer._lODAugmentedSectors.get(i)._lodFactor;
+        augmentedFactor = _planetRenderer._lODAugmentedSectors.at(i)._lodFactor;
       }
     }
   
@@ -292,29 +270,16 @@ public class Tile
       texWidthSquared /= augmentedFactor;
     }
   
-  
-  //  Sector bandamaSector = Sector::fromDegrees(28.0184736385041, -15.4667703990175,
-  //                                             28.0501939378331, -15.447509868283);
-  //
-  //  if (_sector.touchesWith(bandamaSector)){
-  //    texHeightSquared /= 16.0;
-  //    texWidthSquared /= 16.0;
-  //  }
-  
     _lastMeetsRenderCriteriaResult = ((distanceInPixelsSquaredArcNorth <= texHeightSquared) && (distanceInPixelsSquaredArcSouth <= texHeightSquared) && (distanceInPixelsSquaredArcWest <= texWidthSquared) && (distanceInPixelsSquaredArcEast <= texWidthSquared));
   
     return _lastMeetsRenderCriteriaResult;
   }
 
-<<<<<<< HEAD
 
   //int MAX_LOD = -1;
   
-  private void rawRender(G3MRenderContext rc, GLState glState, TileTexturizer texturizer, ElevationDataProvider elevationDataProvider, TileTessellator tessellator, TileRasterizer tileRasterizer, LayerTilesRenderParameters layerTilesRenderParameters, LayerSet layerSet, TilesRenderParameters tilesRenderParameters, boolean forceFullRender, long tileDownloadPriority, boolean logTilesPetitions)
-=======
   private void rawRender(G3MRenderContext rc, GLState glState, TileTexturizer texturizer, ElevationDataProvider elevationDataProvider, TileTessellator tessellator, LayerTilesRenderParameters layerTilesRenderParameters, LayerSet layerSet, TilesRenderParameters tilesRenderParameters, boolean forceFullRender, long tileDownloadPriority, boolean logTilesPetitions)
                        //                     TileRasterizer* tileRasterizer,
->>>>>>> zrender-touchhandlers
   {
   
     Mesh tessellatorMesh = getTessellatorMesh(rc, elevationDataProvider, tessellator, layerTilesRenderParameters, tilesRenderParameters);
@@ -352,11 +317,6 @@ public class Tile
       }
     }
   
-  //  if (_level > MAX_LOD){
-  //    MAX_LOD = _level;
-  //    ILogger::instance()->logInfo("MAXLOD = %d\n", _level);
-  //  }
-  
     //  const BoundingVolume* boundingVolume = getBoundingVolume(rc, trc);
     //  boundingVolume->render(rc, parentState);
   }
@@ -371,14 +331,32 @@ public class Tile
     }
   }
 
+  //<<<<<<< HEAD
+  //
+  //void Tile::setRendered(const bool rendered, TileRenderingListener* tileRenderingListener){
+  //  if (_rendered != rendered) {
+  //    _rendered = rendered;
+  //
+  //    if (tileRenderingListener != NULL) {
+  //      if (_rendered) {
+  //        tileRenderingListener->startRendering(this);
+  //      }
+  //      else {
+  //        tileRenderingListener->stopRendering(this);
+  //      }
+  //    }
+  //  }
+  //}
+  //
   //
   //bool Tile::render(const G3MRenderContext* rc,
   //                  const GLState& parentState,
-  //                  std::vector<Tile*>* toVisitInNextIteration,
-  //                  //const Planet* planet,
-  //                  //const Vector3D& cameraNormalizedPosition,
-  //                  //double cameraAngle2HorizonInRadians,
+  //                  std::list<Tile*>* toVisitInNextIteration,
+  //                  const Planet* planet,
+  //                  const Vector3D& cameraNormalizedPosition,
+  //                  double cameraAngle2HorizonInRadians,
   //                  const Frustum* cameraFrustumInModelCoordinates,
+  //                  const Frustum* cameraWiderFrustumInModelCoordinates,
   //                  TilesStatistics* tilesStatistics,
   //                  const float verticalExaggeration,
   //                  const LayerTilesRenderParameters* layerTilesRenderParameters,
@@ -387,7 +365,7 @@ public class Tile
   //                  ITimer* lastSplitTimer,
   //                  ElevationDataProvider* elevationDataProvider,
   //                  const TileTessellator* tessellator,
-  //                  //                  TileRasterizer* tileRasterizer,
+  //                  TileRasterizer* tileRasterizer,
   //                  const LayerSet* layerSet,
   //                  const Sector* renderedSector,
   //                  bool forceFullRender,
@@ -408,16 +386,12 @@ public class Tile
   //  
   //  bool rendered = false;
   //  
-  //  Geodetic2D pos = Geodetic2D(Angle::fromDegrees(28.2097), Angle::fromDegrees(-16.6158));
-  //  //if (_sector.contains(pos) && _level>15)
-  //  //printf ("Zrender: preguntando tile nivel %d\n", _level);
-  //  
-  //  
   //  if (isVisible(rc,
-  //                //planet,
-  //                //cameraNormalizedPosition,
-  //                //cameraAngle2HorizonInRadians,
+  //                planet,
+  //                cameraNormalizedPosition,
+  //                cameraAngle2HorizonInRadians,
   //                cameraFrustumInModelCoordinates,
+  //                cameraWiderFrustumInModelCoordinates,
   //                elevationDataProvider,
   //                renderedSector,
   //                tessellator,
@@ -454,7 +428,7 @@ public class Tile
   //                  texturizer,
   //                  elevationDataProvider,
   //                  tessellator,
-  //                  //                  tileRasterizer,
+  //                  tileRasterizer,
   //                  layerTilesRenderParameters,
   //                  layerSet,
   //                  tilesRenderParameters,
@@ -478,7 +452,7 @@ public class Tile
   //        _justCreatedSubtiles = false;
   //      }
   //      
-  //      const int subTilesSize = subTiles->size();
+  //      const int subTilesSize = (int)subTiles->size();
   //      for (int i = 0; i < subTilesSize; i++) {
   //        Tile* subTile = subTiles->at(i);
   //        toVisitInNextIteration->push_back(subTile);
@@ -489,45 +463,174 @@ public class Tile
   //    
   //    return isRawRender; //RETURN ISRAWRENDER
   //  }
-  //  
+  //
   //  //Not rendering, prunning will be performed
   //  
   //  setRendered(rendered, tileRenderingListener);
   //  setIsVisible(false, texturizer);
   //  prune(texturizer, elevationDataProvider); //TODO: AVISAR CAMBIO DE TERRENO
   //  return false;
-  //  
-  //  /*
-  //   //// ESTA PARTE FUE CAMBIADA POR JM EN RAMA SENDEROS
-  //   return isRawRender; //RETURN ISRAWRENDER
-  //   }
-  //   else {
-  //   setIsVisible(false, texturizer);
-  //   
-  //   prune(texturizer, elevationDataProvider);
-  //   //TODO: AVISAR CAMBIO DE TERRENO
-  //   
-  //   
-  //   return false;   //RETURN ISRAWRENDER
-  //   }
-  //   
-  //   if (_rendered != rendered) {
-  //   _rendered = rendered;
-  //   
-  //   if (tileRenderingListener != NULL) {
-  //   if (_rendered) {
-  //   tileRenderingListener->startRendering(this);
-  //   _tileRenderingListener = tileRenderingListener;
-  //   }
-  //   else {
-  //   tileRenderingListener->stopRendering(this);
-  //   _tileRenderingListener = NULL;
-  //   }
-  //   }
-  //   }
-  //   */
-  //  
+  //
   //}
+  //=======
+  ////
+  ////bool Tile::render(const G3MRenderContext* rc,
+  ////                  const GLState& parentState,
+  ////                  std::vector<Tile*>* toVisitInNextIteration,
+  ////                  //const Planet* planet,
+  ////                  //const Vector3D& cameraNormalizedPosition,
+  ////                  //double cameraAngle2HorizonInRadians,
+  ////                  const Frustum* cameraFrustumInModelCoordinates,
+  ////                  TilesStatistics* tilesStatistics,
+  ////                  const float verticalExaggeration,
+  ////                  const LayerTilesRenderParameters* layerTilesRenderParameters,
+  ////                  TileTexturizer* texturizer,
+  ////                  const TilesRenderParameters* tilesRenderParameters,
+  ////                  ITimer* lastSplitTimer,
+  ////                  ElevationDataProvider* elevationDataProvider,
+  ////                  const TileTessellator* tessellator,
+  ////                  //                  TileRasterizer* tileRasterizer,
+  ////                  const LayerSet* layerSet,
+  ////                  const Sector* renderedSector,
+  ////                  bool forceFullRender,
+  ////                  long long tileDownloadPriority,
+  ////                  double texWidthSquared,
+  ////                  double texHeightSquared,
+  ////                  double nowInMS,
+  ////                  const bool renderTileMeshes,
+  ////                  bool logTilesPetitions,
+  ////                  TileRenderingListener* tileRenderingListener) {
+  ////  
+  ////  tilesStatistics->computeTileProcessed(this);
+  ////  
+  ////  if (verticalExaggeration != _verticalExaggeration) {
+  ////    // TODO: verticalExaggeration changed, invalidate tileExtent, Mesh, etc.
+  ////    _verticalExaggeration = verticalExaggeration;
+  ////  }
+  ////  
+  ////  bool rendered = false;
+  ////  
+  ////  Geodetic2D pos = Geodetic2D(Angle::fromDegrees(28.2097), Angle::fromDegrees(-16.6158));
+  ////  //if (_sector.contains(pos) && _level>15)
+  ////  //printf ("Zrender: preguntando tile nivel %d\n", _level);
+  ////  
+  ////  
+  ////  if (isVisible(rc,
+  ////                //planet,
+  ////                //cameraNormalizedPosition,
+  ////                //cameraAngle2HorizonInRadians,
+  ////                cameraFrustumInModelCoordinates,
+  ////                elevationDataProvider,
+  ////                renderedSector,
+  ////                tessellator,
+  ////                layerTilesRenderParameters,
+  ////                tilesRenderParameters)) {
+  ////    setIsVisible(true, texturizer);
+  ////    
+  ////    tilesStatistics->computeVisibleTile(this);
+  ////    
+  ////    const bool isRawRender = (
+  ////                              (toVisitInNextIteration == NULL) ||
+  ////                              meetsRenderCriteria(rc,
+  ////                                                  layerTilesRenderParameters,
+  ////                                                  texturizer,
+  ////                                                  tilesRenderParameters,
+  ////                                                  tilesStatistics,
+  ////                                                  lastSplitTimer,
+  ////                                                  texWidthSquared,
+  ////                                                  texHeightSquared,
+  ////                                                  nowInMS) ||
+  ////                              (tilesRenderParameters->_incrementalTileQuality && !_textureSolved)
+  ////                              );
+  ////    
+  ////    if (isRawRender) {
+  ////      
+  ////      const long long tileTexturePriority = (tilesRenderParameters->_incrementalTileQuality
+  ////                                             ? tileDownloadPriority + layerTilesRenderParameters->_maxLevel - _level
+  ////                                             : tileDownloadPriority + _level);
+  ////      
+  ////      rendered = true;
+  ////      if (renderTileMeshes) {
+  ////        rawRender(rc,
+  ////                  &parentState,
+  ////                  texturizer,
+  ////                  elevationDataProvider,
+  ////                  tessellator,
+  ////                  //                  tileRasterizer,
+  ////                  layerTilesRenderParameters,
+  ////                  layerSet,
+  ////                  tilesRenderParameters,
+  ////                  forceFullRender,
+  ////                  tileTexturePriority,
+  ////                  logTilesPetitions);
+  ////      }
+  ////      if (tilesRenderParameters->_renderDebug) {
+  ////        debugRender(rc, &parentState, tessellator, layerTilesRenderParameters);
+  ////      }
+  ////      
+  ////      tilesStatistics->computeTileRenderered(this);
+  ////      
+  ////      prune(texturizer, elevationDataProvider);
+  ////      //TODO: AVISAR CAMBIO DE TERRENO
+  ////    }
+  ////    else {
+  ////      std::vector<Tile*>* subTiles = getSubTiles();
+  ////      if (_justCreatedSubtiles) {
+  ////        lastSplitTimer->start();
+  ////        _justCreatedSubtiles = false;
+  ////      }
+  ////      
+  ////      const int subTilesSize = subTiles->size();
+  ////      for (int i = 0; i < subTilesSize; i++) {
+  ////        Tile* subTile = subTiles->at(i);
+  ////        toVisitInNextIteration->push_back(subTile);
+  ////      }
+  ////    }
+  ////    
+  ////    setRendered(rendered, tileRenderingListener);
+  ////    
+  ////    return isRawRender; //RETURN ISRAWRENDER
+  ////  }
+  ////  
+  ////  //Not rendering, prunning will be performed
+  ////  
+  ////  setRendered(rendered, tileRenderingListener);
+  ////  setIsVisible(false, texturizer);
+  ////  prune(texturizer, elevationDataProvider); //TODO: AVISAR CAMBIO DE TERRENO
+  ////  return false;
+  ////  
+  ////  /*
+  ////   //// ESTA PARTE FUE CAMBIADA POR JM EN RAMA SENDEROS
+  ////   return isRawRender; //RETURN ISRAWRENDER
+  ////   }
+  ////   else {
+  ////   setIsVisible(false, texturizer);
+  ////   
+  ////   prune(texturizer, elevationDataProvider);
+  ////   //TODO: AVISAR CAMBIO DE TERRENO
+  ////   
+  ////   
+  ////   return false;   //RETURN ISRAWRENDER
+  ////   }
+  ////   
+  ////   if (_rendered != rendered) {
+  ////   _rendered = rendered;
+  ////   
+  ////   if (tileRenderingListener != NULL) {
+  ////   if (_rendered) {
+  ////   tileRenderingListener->startRendering(this);
+  ////   _tileRenderingListener = tileRenderingListener;
+  ////   }
+  ////   else {
+  ////   tileRenderingListener->stopRendering(this);
+  ////   _tileRenderingListener = NULL;
+  ////   }
+  ////   }
+  ////   }
+  ////   */
+  ////  
+  ////}
+  //>>>>>>> zrender-touchhandlers
   
   private Tile createSubTile(Angle lowerLat, Angle lowerLon, Angle upperLat, Angle upperLon, int level, int row, int column, boolean setParent)
   {
@@ -587,7 +690,6 @@ public class Tile
     }
   }
 
-
   private ITexturizerData _texturizerData;
   private PlanetTileTessellatorData _tessellatorData;
 
@@ -614,25 +716,8 @@ public class Tile
       }
   }
 
-  private void setRendered(boolean rendered, TileRenderingListener tileRenderingListener)
-  {
-    if (_rendered != rendered)
-    {
-      _rendered = rendered;
-  
-      if (tileRenderingListener != null)
-      {
-        if (_rendered)
-        {
-          tileRenderingListener.startRendering(this);
-        }
-        else
-        {
-          tileRenderingListener.stopRendering(this);
-        }
-      }
-    }
-  }
+//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
+//  void setRendered(boolean rendered, TileRenderingListener tileRenderingListener);
 
   private boolean _rendered;
   private TileRenderingListener _tileRenderingListener;
@@ -644,6 +729,7 @@ public class Tile
 
   private TileCache _tileCache;
   private boolean _deleteTextureWhenNotVisible;
+
 
   public final Sector _sector ;
   public final boolean _mercator;
@@ -692,17 +778,8 @@ public class Tile
      _rendered = false;
      _tileRenderingListener = null;
      _id = createTileId(level, row, column);
-<<<<<<< HEAD
      _tileCache = tileCache;
      _deleteTextureWhenNotVisible = deleteTextureWhenNotVisible;
-    //  int __remove_tile_print;
-    //  printf("Created tile=%s\n deltaLat=%s deltaLon=%s\n",
-    //         getKey().description().c_str(),
-    //         _sector._deltaLatitude.description().c_str(),
-    //         _sector._deltaLongitude.description().c_str()
-    //         );
-=======
->>>>>>> zrender-touchhandlers
   }
 
   public void dispose()
@@ -841,21 +918,18 @@ public class Tile
       }
     }
   }
-<<<<<<< HEAD
-
-  //RETURN ISRAWRENDER
-  public final boolean render(G3MRenderContext rc, GLState parentState, java.util.LinkedList<Tile> toVisitInNextIteration, Planet planet, Vector3D cameraNormalizedPosition, double cameraAngle2HorizonInRadians, Frustum cameraFrustumInModelCoordinates, Frustum cameraWiderFrustumInModelCoordinates, TilesStatistics tilesStatistics, float verticalExaggeration, LayerTilesRenderParameters layerTilesRenderParameters, TileTexturizer texturizer, TilesRenderParameters tilesRenderParameters, ITimer lastSplitTimer, ElevationDataProvider elevationDataProvider, TileTessellator tessellator, TileRasterizer tileRasterizer, LayerSet layerSet, Sector renderedSector, boolean forceFullRender, long tileDownloadPriority, double texWidthSquared, double texHeightSquared, double nowInMS, boolean renderTileMeshes, boolean logTilesPetitions, TileRenderingListener tileRenderingListener)
-=======
                                //                               TileRasterizer* tileRasterizer,
-
+//<<<<<<< HEAD
+//
 //  //RETURN ISRAWRENDER
 //  bool render(const G3MRenderContext* rc,
 //              const GLState& parentState,
-//              std::vector<Tile*>* toVisitInNextIteration,
-//              //const Planet* planet,
-//              //const Vector3D& cameraNormalizedPosition,
-//              //double cameraAngle2HorizonInRadians,
+//              std::list<Tile*>* toVisitInNextIteration,
+//              const Planet* planet,
+//              const Vector3D& cameraNormalizedPosition,
+//              double cameraAngle2HorizonInRadians,
 //              const Frustum* cameraFrustumInModelCoordinates,
+//              const Frustum* cameraWiderFrustumInModelCoordinates,
 //              TilesStatistics* tilesStatistics,
 //              const float verticalExaggeration,
 //              const LayerTilesRenderParameters* layerTilesRenderParameters,
@@ -864,7 +938,7 @@ public class Tile
 //              ITimer* lastSplitTimer,
 //              ElevationDataProvider* elevationDataProvider,
 //              const TileTessellator* tessellator,
-//              //              TileRasterizer* tileRasterizer,
+//              TileRasterizer* tileRasterizer,
 //              const LayerSet* layerSet,
 //              const Sector* renderedSector,
 //              bool forceFullRender,
@@ -875,11 +949,44 @@ public class Tile
 //              const bool renderTileMeshes,
 //              bool logTilesPetitions,
 //              TileRenderingListener* tileRenderingListener);
+//
+//void actualizeQuadTree(const G3MRenderContext* rc,
+//                         std::list<Tile*>& renderedTiles,
+//                         const Planet* planet,
+//                         const Vector3D& cameraNormalizedPosition,
+//                         double cameraAngle2HorizonInRadians,
+//                       const Frustum* cameraFrustumInModelCoordinates,
+//                       const Frustum* cameraWiderFrustumInModelCoordinates,
+//                         TilesStatistics* tilesStatistics,
+//                         const float verticalExaggeration,
+//                         const LayerTilesRenderParameters* layerTilesRenderParameters,
+//                         TileTexturizer* texturizer,
+//                         const TilesRenderParameters* tilesRenderParameters,
+//                         ITimer* lastSplitTimer,
+//                         ElevationDataProvider* elevationDataProvider,
+//                         const TileTessellator* tessellator,
+//                         TileRasterizer* tileRasterizer,
+//                         const LayerSet* layerSet,
+//                         const Sector* renderedSector,
+//                         bool isForcedFullRender,
+//                         long long texturePriority,
+//                         double texWidthSquared,
+//                         double texHeightSquared,
+//                         double nowInMS);
+//
+//
+//=======
+//  
+  //RETURN ISRAWRENDER
+//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
+//  boolean render(G3MRenderContext rc, GLState parentState, java.util.ArrayList<Tile> toVisitInNextIteration, Frustum cameraFrustumInModelCoordinates, TilesStatistics tilesStatistics, float verticalExaggeration, LayerTilesRenderParameters layerTilesRenderParameters, TileTexturizer texturizer, TilesRenderParameters tilesRenderParameters, ITimer lastSplitTimer, ElevationDataProvider elevationDataProvider, TileTessellator tessellator, LayerSet layerSet, Sector renderedSector, boolean forceFullRender, long tileDownloadPriority, double texWidth, double texHeight, double nowInMS, boolean renderTileMeshes, boolean logTilesPetitions, TileRenderingListener tileRenderingListener);
+              //const Planet* planet,
+              //const Vector3D& cameraNormalizedPosition,
+              //double cameraAngle2HorizonInRadians,
+              //              TileRasterizer* tileRasterizer,
 
-  public final void updateQuadTree(G3MRenderContext rc, java.util.LinkedList<Tile> renderedTiles, Planet planet, Vector3D cameraNormalizedPosition, double cameraAngle2HorizonInRadians, Frustum cameraFrustumInModelCoordinates, TilesStatistics tilesStatistics, float verticalExaggeration, LayerTilesRenderParameters layerTilesRenderParameters, TileTexturizer texturizer, TilesRenderParameters tilesRenderParameters, ITimer lastSplitTimer, ElevationDataProvider elevationDataProvider, TileTessellator tessellator, LayerSet layerSet, Sector renderedSector, boolean isForcedFullRender, long texturePriority, double texWidthSquared, double texHeightSquared, double nowInMS, TileRenderingListener tileRenderingListener)
->>>>>>> zrender-touchhandlers
+  public final void updateQuadTree(G3MRenderContext rc, java.util.LinkedList<Tile> renderedTiles, Planet planet, Vector3D cameraNormalizedPosition, double cameraAngle2HorizonInRadians, Frustum cameraFrustumInModelCoordinates, Frustum cameraWiderFrustumInModelCoordinates, TilesStatistics tilesStatistics, float verticalExaggeration, LayerTilesRenderParameters layerTilesRenderParameters, TileTexturizer texturizer, TilesRenderParameters tilesRenderParameters, ITimer lastSplitTimer, ElevationDataProvider elevationDataProvider, TileTessellator tessellator, LayerSet layerSet, Sector renderedSector, boolean isForcedFullRender, long texturePriority, double texWidthSquared, double texHeightSquared, double nowInMS, TileRenderingListener tileRenderingListener)
   {
-  
     tilesStatistics.computeTileProcessed(this);
   
     if (verticalExaggeration != _verticalExaggeration)
@@ -890,12 +997,8 @@ public class Tile
   
     boolean rendered = false;
   
-<<<<<<< HEAD
-    if (isVisible(rc, planet, cameraNormalizedPosition, cameraAngle2HorizonInRadians, cameraFrustumInModelCoordinates, cameraWiderFrustumInModelCoordinates, elevationDataProvider, renderedSector, tessellator, layerTilesRenderParameters, tilesRenderParameters))
-=======
   
-    if (isVisible(rc, cameraFrustumInModelCoordinates, elevationDataProvider, renderedSector, tessellator, layerTilesRenderParameters, tilesRenderParameters))
->>>>>>> zrender-touchhandlers
+    if (isVisible(rc, cameraFrustumInModelCoordinates, cameraWiderFrustumInModelCoordinates, elevationDataProvider, renderedSector, tessellator, layerTilesRenderParameters, tilesRenderParameters))
     {
       setIsVisible(true, texturizer);
   
@@ -934,97 +1037,16 @@ public class Tile
           _justCreatedSubtiles = false;
         }
   
-        final int subTilesSize = (int)subTiles.size();
+        final int subTilesSize = subTiles.size();
         for (int i = 0; i < subTilesSize; i++)
         {
           Tile subTile = subTiles.get(i);
   
-          subTile.updateQuadTree(rc, renderedTiles, planet, cameraNormalizedPosition, cameraAngle2HorizonInRadians, cameraFrustumInModelCoordinates, tilesStatistics, verticalExaggeration, layerTilesRenderParameters, texturizer, tilesRenderParameters, lastSplitTimer, elevationDataProvider, tessellator, layerSet, renderedSector, isForcedFullRender, texturePriority, texWidthSquared, texHeightSquared, nowInMS, tileRenderingListener);
+          subTile.updateQuadTree(rc, renderedTiles, planet, cameraNormalizedPosition, cameraAngle2HorizonInRadians, cameraFrustumInModelCoordinates, cameraWiderFrustumInModelCoordinates, tilesStatistics, verticalExaggeration, layerTilesRenderParameters, texturizer, tilesRenderParameters, lastSplitTimer, elevationDataProvider, tessellator, layerSet, renderedSector, isForcedFullRender, texturePriority, texWidthSquared, texHeightSquared, nowInMS, tileRenderingListener);
                                      /* parentState,*/
         }
       }
     }
-<<<<<<< HEAD
-  
-    //Not rendering, prunning will be performed
-  
-    setRendered(rendered, tileRenderingListener);
-    setIsVisible(false, texturizer);
-    prune(texturizer, elevationDataProvider); //TODO: AVISAR CAMBIO DE TERRENO
-    return false;
-  
-  }
-
-public final void actualizeQuadTree(G3MRenderContext rc, java.util.LinkedList<Tile> renderedTiles, Planet planet, Vector3D cameraNormalizedPosition, double cameraAngle2HorizonInRadians, Frustum cameraFrustumInModelCoordinates, Frustum cameraWiderFrustumInModelCoordinates, TilesStatistics tilesStatistics, float verticalExaggeration, LayerTilesRenderParameters layerTilesRenderParameters, TileTexturizer texturizer, TilesRenderParameters tilesRenderParameters, ITimer lastSplitTimer, ElevationDataProvider elevationDataProvider, TileTessellator tessellator, TileRasterizer tileRasterizer, LayerSet layerSet, Sector renderedSector, boolean isForcedFullRender, long texturePriority, double texWidthSquared, double texHeightSquared, double nowInMS)
-{
-
-  tilesStatistics.computeTileProcessed(this);
-
-  if (verticalExaggeration != _verticalExaggeration)
-  {
-    // TODO: verticalExaggeration changed, invalidate tileExtent, Mesh, etc.
-    _verticalExaggeration = verticalExaggeration;
-  }
-
-
-  if (isVisible(rc, planet, cameraNormalizedPosition, cameraAngle2HorizonInRadians, cameraFrustumInModelCoordinates, cameraWiderFrustumInModelCoordinates, elevationDataProvider, renderedSector, tessellator, layerTilesRenderParameters, tilesRenderParameters))
-  {
-    setIsVisible(true, texturizer);
-
-    tilesStatistics.computeVisibleTile(this);
-
-    final boolean isRawRender = (meetsRenderCriteria(rc, layerTilesRenderParameters, texturizer, tilesRenderParameters, tilesStatistics, lastSplitTimer, texWidthSquared, texHeightSquared, nowInMS) || (tilesRenderParameters._incrementalTileQuality && !_textureSolved));
-
-    if (isRawRender)
-    {
-
-      renderedTiles.addLast(this);
-
-      prune(texturizer, elevationDataProvider);
-      //TODO: AVISAR CAMBIO DE TERRENO
-
-    }
-    else
-    {
-      final Geodetic2D lower = _sector._lower;
-      final Geodetic2D upper = _sector._upper;
-
-      final Angle splitLongitude = Angle.midAngle(lower._longitude, upper._longitude);
-
-      final Angle splitLatitude = layerTilesRenderParameters._mercator ? MercatorUtils.calculateSplitLatitude(lower._latitude, upper._latitude) : Angle.midAngle(lower._latitude, upper._latitude);
-      /*                               */
-      /*                               */
-
-      java.util.ArrayList<Tile> subTiles = getSubTiles(splitLatitude, splitLongitude);
-      if (_justCreatedSubtiles)
-      {
-        lastSplitTimer.start();
-        tilesStatistics.computeBuilderStartInFrame();
-        _justCreatedSubtiles = false;
-      }
-
-      final int subTilesSize = subTiles.size();
-      for (int i = 0; i < subTilesSize; i++)
-      {
-        Tile subTile = subTiles.get(i);
-
-        subTile.actualizeQuadTree(rc, renderedTiles, planet, cameraNormalizedPosition, cameraAngle2HorizonInRadians, cameraFrustumInModelCoordinates, cameraWiderFrustumInModelCoordinates, tilesStatistics, verticalExaggeration, layerTilesRenderParameters, texturizer, tilesRenderParameters, lastSplitTimer, elevationDataProvider, tessellator, tileRasterizer, layerSet, renderedSector, isForcedFullRender, texturePriority, texWidthSquared, texHeightSquared, nowInMS); // parentState,
-      }
-    }
-  }
-  else
-  {
-    setIsVisible(false, texturizer);
-
-    prune(texturizer, elevationDataProvider);
-    //TODO: AVISAR CAMBIO DE TERRENO
-  }
-
-}
-
-
-  public final void performRawRender(G3MRenderContext rc, GLState glState, TileTexturizer texturizer, ElevationDataProvider elevationDataProvider, TileTessellator tessellator, TileRasterizer tileRasterizer, LayerTilesRenderParameters layerTilesRenderParameters, LayerSet layerSet, TilesRenderParameters tilesRenderParameters, boolean isForcedFullRender, long texturePriority, TilesStatistics tilesStatistics, boolean logTilesPetitions)
-=======
     else
     {
       setIsVisible(false, texturizer);
@@ -1054,9 +1076,7 @@ public final void actualizeQuadTree(G3MRenderContext rc, java.util.LinkedList<Ti
   
   }
 
-
   public final void performRawRender(G3MRenderContext rc, GLState glState, TileTexturizer texturizer, ElevationDataProvider elevationDataProvider, TileTessellator tessellator, LayerTilesRenderParameters layerTilesRenderParameters, LayerSet layerSet, TilesRenderParameters tilesRenderParameters, boolean isForcedFullRender, long texturePriority, TilesStatistics tilesStatistics, boolean logTilesPetitions)
->>>>>>> zrender-touchhandlers
   {
   
     rawRender(rc, glState, texturizer, elevationDataProvider, tessellator, layerTilesRenderParameters, layerSet, tilesRenderParameters, isForcedFullRender, texturePriority, logTilesPetitions);
@@ -1226,6 +1246,8 @@ public final void actualizeQuadTree(G3MRenderContext rc, java.util.LinkedList<Ti
         {
           _tileCache.clearTile(subtile);
         }
+  
+        //delete subtile;
       }
   
       _subtiles = null;
@@ -1343,7 +1365,6 @@ public final void actualizeQuadTree(G3MRenderContext rc, java.util.LinkedList<Ti
     }
   
     subTiles.trimToSize();
-  
     return subTiles;
   }
 

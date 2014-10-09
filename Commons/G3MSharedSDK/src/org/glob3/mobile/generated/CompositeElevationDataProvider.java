@@ -127,6 +127,7 @@ public class CompositeElevationDataProvider extends ElevationDataProvider
     public final ElevationDataProvider popBestProvider(java.util.ArrayList<ElevationDataProvider> ps, Vector2I extent)
     {
     
+      double bestRes = extent.squaredLength();
       double selectedRes = IMathUtils.instance().maxDouble();
     
       ElevationDataProvider provider = null;

@@ -107,17 +107,9 @@ public class Camera
   
     _frustumInModelCoordinates = that._frustumInModelCoordinates;
   
-<<<<<<< HEAD
-    if (_widerFrustumInModelCoordinates != null)
-       _widerFrustumInModelCoordinates.dispose();
-    _widerFrustumInModelCoordinates = (that._widerFrustumInModelCoordinates == null) ? null : new Frustum(that._widerFrustumInModelCoordinates);
+    _widerFrustumInModelCoordinates = that._widerFrustumInModelCoordinates;
   
-    if (_geodeticPosition != null)
-       _geodeticPosition.dispose();
-    _geodeticPosition = ((that._geodeticPosition == null) ? null : new Geodetic3D(that._geodeticPosition));
-=======
     _geodeticPosition = that._geodeticPosition;
->>>>>>> zrender-touchhandlers
     _angle2Horizon = that._angle2Horizon;
   
     _tanHalfVerticalFieldOfView = that._tanHalfVerticalFieldOfView;

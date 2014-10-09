@@ -69,14 +69,10 @@ public abstract class MapBooBuilder
   
     ChangedRendererInfoListener changedRendererInfoListener = null;
   
-<<<<<<< HEAD
-    PlanetRenderer result = new PlanetRenderer(tessellator, elevationDataProvider, true, verticalExaggeration, texturizer, tileRasterizer, _layerSet, parameters, showStatistics, tileDownloadPriority, renderedSector, renderTileMeshes, logTilesPetitions, tileRenderingListener, changedRendererInfoListener, 0, true);
-=======
     TouchEventType touchEventTypeOfTerrainTouchListener = TouchEventType.DownUp;
   
-    PlanetRenderer result = new PlanetRenderer(tessellator, elevationDataProvider, true, verticalExaggeration, texturizer, _layerSet, parameters, showStatistics, tileDownloadPriority, renderedSector, renderTileMeshes, logTilesPetitions, tileRenderingListener, changedRendererInfoListener, touchEventTypeOfTerrainTouchListener);
+    PlanetRenderer result = new PlanetRenderer(tessellator, elevationDataProvider, true, verticalExaggeration, texturizer, _layerSet, parameters, showStatistics, tileDownloadPriority, renderedSector, renderTileMeshes, logTilesPetitions, tileRenderingListener, changedRendererInfoListener, 0, true, touchEventTypeOfTerrainTouchListener);
   //                                              tileRasterizer,
->>>>>>> zrender-touchhandlers
   
     if (_enableNotifications)
     {

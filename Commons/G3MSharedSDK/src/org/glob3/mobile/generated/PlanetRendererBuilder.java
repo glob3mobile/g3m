@@ -45,46 +45,7 @@ public class PlanetRendererBuilder
   private ElevationDataProvider _elevationDataProvider;
   private float _verticalExaggeration;
 
-<<<<<<< HEAD
-  private TileRasterizer getTileRasterizer()
-  {
-    final int tileRasterizersSize = _tileRasterizers.size();
-  
-    if (tileRasterizersSize == 0)
-    {
-      return null;
-    }
-  
-    if (tileRasterizersSize == 1)
-    {
-      return _tileRasterizers.get(0);
-    }
-  
-    CompositeTileRasterizer result = new CompositeTileRasterizer();
-    for (int i = 0; i < tileRasterizersSize; i++)
-    {
-      result.addTileRasterizer(_tileRasterizers.get(i));
-    }
-    return result;
-  }
-=======
-
-  /**
-   * Returns the _tileTessellator.
-   *
-   * @return _tileTessellator: TileTessellator*
-   */
-  private TileTessellator getTileTessellator()
-  {
-    if (_tileTessellator == null)
-    {
-      _tileTessellator = createTileTessellator();
-    }
-  
-    return _tileTessellator;
-  }
-
-  //TileRasterizer* PlanetRendererBuilder::getTileRasterizer() {
+  //TileRasterizer* getTileRasterizer() {
   //  const int tileRasterizersSize = _tileRasterizers.size();
   //
   //  if (tileRasterizersSize == 0) {
@@ -107,7 +68,7 @@ public class PlanetRendererBuilder
    *
    * @return _texturizer: TileTexturizer*
    */
-  private TileTexturizer getTexturizer()
+  private TileTexturizer PlanetRendererBuilder.getTexturizer()
   {
     if (_texturizer == null)
     {
@@ -119,8 +80,6 @@ public class PlanetRendererBuilder
   
     return _texturizer;
   }
-//  TileRasterizer* getTileRasterizer();
->>>>>>> zrender-touchhandlers
 
 
   /**
@@ -306,19 +265,14 @@ public class PlanetRendererBuilder
 
   private ChangedRendererInfoListener _changedInfoListener;
 
-<<<<<<< HEAD
   private int _tileCacheSize;
   private boolean _deleteTexturesOfInvisibleTiles;
-
-=======
   private TouchEventType _touchEventTypeOfTerrainTouchListener;
 
   private TouchEventType getTouchEventTypeOfTerrainTouchListener()
   {
     return _touchEventTypeOfTerrainTouchListener;
   }
->>>>>>> zrender-touchhandlers
-
 
   ///#include "MultiLayerTileTexturizer.hpp"
   ///#include "TileRasterizer.hpp"
@@ -349,12 +303,9 @@ public class PlanetRendererBuilder
      _logTilesPetitions = false;
      _tileRenderingListener = null;
      _changedInfoListener = null;
-<<<<<<< HEAD
      _tileCacheSize = 0;
      _deleteTexturesOfInvisibleTiles = true;
-=======
      _touchEventTypeOfTerrainTouchListener = TouchEventType.LongPress;
->>>>>>> zrender-touchhandlers
   }
   public void dispose()
   {
@@ -392,9 +343,6 @@ public class PlanetRendererBuilder
   }
   public final PlanetRenderer create()
   {
-<<<<<<< HEAD
-    PlanetRenderer planetRenderer = new PlanetRenderer(getTileTessellator(), getElevationDataProvider(), true, getVerticalExaggeration(), getTexturizer(), getTileRasterizer(), getLayerSet(), getParameters(), getShowStatistics(), getTileDownloadPriority(), getRenderedSector(), getRenderTileMeshes(), getLogTilesPetitions(), getTileRenderingListener(), getChangedRendererInfoListener(), _tileCacheSize, _deleteTexturesOfInvisibleTiles);
-=======
   
     LayerSet layerSet = getLayerSet();
     final int geoVectorLayersSize = _geoVectorLayers.size();
@@ -404,9 +352,8 @@ public class PlanetRendererBuilder
       layerSet.addLayer(geoVectorLayer);
     }
   
-    PlanetRenderer planetRenderer = new PlanetRenderer(getTileTessellator(), getElevationDataProvider(), true, getVerticalExaggeration(), getTexturizer(), layerSet, getParameters(), getShowStatistics(), getTileDownloadPriority(), getRenderedSector(), getRenderTileMeshes(), getLogTilesPetitions(), getTileRenderingListener(), getChangedRendererInfoListener(), getTouchEventTypeOfTerrainTouchListener());
+    PlanetRenderer planetRenderer = new PlanetRenderer(getTileTessellator(), getElevationDataProvider(), true, getVerticalExaggeration(), getTexturizer(), layerSet, getParameters(), getShowStatistics(), getTileDownloadPriority(), getRenderedSector(), getRenderTileMeshes(), getLogTilesPetitions(), getTileRenderingListener(), getChangedRendererInfoListener(), _tileCacheSize, _deleteTexturesOfInvisibleTiles, getTouchEventTypeOfTerrainTouchListener());
   //                                                      getTileRasterizer(),
->>>>>>> zrender-touchhandlers
   
     for (int i = 0; i < getVisibleSectorListeners().size(); i++)
     {
@@ -629,7 +576,6 @@ public class PlanetRendererBuilder
     }
   }
 
-<<<<<<< HEAD
 
   /**
    * Returns the _tileTessellator.
@@ -646,23 +592,8 @@ public class PlanetRendererBuilder
     return _tileTessellator;
   }
 
-
-  /**
-   * Returns the _texturizer.
-   *
-   * @return _texturizer: TileTexturizer*
-   */
-  public final TileTexturizer getTexturizer()
-  {
-    if (_texturizer == null)
-    {
-      _texturizer = new MultiLayerTileTexturizer();
-  ///#warning Diego at work!
-  //    _texturizer = new DefaultTileTexturizer();
-    }
-  
-    return _texturizer;
-  }
+//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
+//  TileTexturizer getTexturizer();
 
   public final void setTileCacheSize(int x)
   {
@@ -672,10 +603,10 @@ public class PlanetRendererBuilder
   public final void setDeleteTexturesOfInvisibleTiles(boolean x)
   {
     _deleteTexturesOfInvisibleTiles = x;
-=======
+  }
+
   public final void setTouchEventTypeOfTerrainTouchListener(TouchEventType touchEventTypeOfTerrainTouchListener)
   {
     _touchEventTypeOfTerrainTouchListener = touchEventTypeOfTerrainTouchListener;
->>>>>>> zrender-touchhandlers
   }
 }
