@@ -30,6 +30,13 @@ using namespace std;
 
 //-------------------------------------------------------
 
+//Platform::String^ getLocalPath(Platform::String^ name){
+//
+//	Windows::Storage::StorageFolder^ localFolder = Windows::Storage::ApplicationData::Current->LocalFolder;
+//	Platform::String^ folderPath = localFolder->Path;
+//	Platform::String^ tmpPath = Platform::String::Concat(folderPath, "\\");
+//	return Platform::String::Concat(tmpPath, name);
+//}
 
 void executeStorageTests(Storage* testStorage){
 
@@ -119,6 +126,7 @@ void executeStorageTests(Storage* testStorage){
 	Platform::String^ tmpPath = Platform::String::Concat(folderPath, "\\");
 	Platform::String^ fileName = Platform::String::Concat(tmpPath, imgHatName);
 	std::string fileUrl = sUtils->toStringStd(fileName);
+	ILogger::instance()->logInfo("Image file URL: %s \n", fileUrl.c_str());
 	const URL imgFileUrl = URL(fileUrl);
 	const Image_win8* testImage = Image_win8::imageFromFile(imgFileUrl);
 
@@ -164,7 +172,7 @@ public:
 		ILogger::instance()->logInfo("Ya he descargado la imagen: \"%s\"\n", desc.c_str());
 
 		Image_win8::exportToFile(_imgURL, ii);
-		ILogger::instance()->logInfo("Ya he guardado la imagen %s",_imgURL.getPath().c_str());
+		ILogger::instance()->logInfo("Ya he guardado la imagen %s \n",_imgURL.getPath().c_str());
 	}
 
 	void onError(const URL& url) {
@@ -222,12 +230,14 @@ public:
 
 void executeDownloaderTests(IDownloader* downloader){
 
+	ILogger::instance()->logInfo("Ejecutando test del downloader..");
+
 	const TimeInterval timeToExpire = TimeInterval::fromDays(20);
 	const StringUtils_win8* sUtils = (StringUtils_win8*)IStringUtils::instance();
 
 	//-- Test downloading imagen and then save to a file --------
-	std::string imgName = "tiger.jpg";
-	//std::string imgName = "MARBLES.BMP";
+	//std::string imgName = "tiger.jpg";
+	std::string imgName = "MARBLES.BMP";
 	std::size_t pos = imgName.find(".");
 	std::string name = imgName.substr(0, pos);
 	Platform::String^ imgHatName = sUtils->toStringHat(imgName);
@@ -252,13 +262,17 @@ void executeDownloaderTests(IDownloader* downloader){
 	downloader->requestBuffer(requestedDataUrl, 23, timeToExpire, true, new Test_BufferDownloadListener(requestedDataUrl), true);
 
 	//-- Test downloading imagen from local then save to a file --------
-	//const URL requestedImgUrl = URL("http://192.168.1.26/images/" + imgName);
 	std::string localImgName = URL::FILE_PROTOCOL + imgName;
-	//std::string reRecoveredImgStr = recoveredImgStr + "RE";
-	std::string recoveredLocalImgStr = localImgName + "RE";
 	const URL localImgUrl = URL(localImgName);
-	const URL recoveredLocalImgUrl = URL(recoveredLocalImgStr);
-	downloader->requestImage(localImgUrl, 23, timeToExpire, true, new Test_IImageDownloadListener(recoveredLocalImgUrl), true);
+	//-- recovered URL
+	//std::size_t rpos = imgName.find(".");
+	//std::string rname = imgName.substr(0, rpos);
+	std::string reFilePath = name + "_RE";
+	Platform::String^ relocalPath = Platform::String::Concat(tmpPath,sUtils->toStringHat(reFilePath));
+	const URL reLocalImgUrl = URL(sUtils->toStringStd(relocalPath));
+
+	downloader->requestImage(localImgUrl, 23, timeToExpire, true, new Test_IImageDownloadListener(reLocalImgUrl), true);
+	ILogger::instance()->logInfo("Terminando test del downloader");
 }
 
 //-------------------------------------------------------
@@ -295,10 +309,7 @@ IDownloader* G3MBuilder_win8::createDefaultDownloader(){
 	const int MAX_CONCURRENT_OPERATION_COUNT = 8;
 	IDownloader* testDownloader = new Downloader_win8(MAX_CONCURRENT_OPERATION_COUNT);
 
-	/*ILogger::instance()->logInfo("Ejecutando test del downloader..");
-	executeDownloaderTests(testDownloader);
-	ILogger::instance()->logInfo("Terminando test del downloader");*/
-
+	//executeDownloaderTests(testDownloader);
 	return testDownloader;
 }
 

@@ -124,20 +124,23 @@ Listener_win8_Entry::~Listener_win8_Entry(){
 
 //==================== class Downloader_win8_Handler implementation =========================================
 
+Platform::String^ getLocalPath(Platform::String^ name){
+
+	Windows::Storage::StorageFolder^ localFolder = Windows::Storage::ApplicationData::Current->LocalFolder;
+	Platform::String^ folderPath = localFolder->Path;
+	Platform::String^ tmpPath = Platform::String::Concat(folderPath, "\\");
+	return Platform::String::Concat(tmpPath, name);
+}
+
 Downloader_win8_Handler::Downloader_win8_Handler(URL* url, Downloader_win8_Listener* listener, long long priority, long long requestId):
 _g3mURL(url),
 _priority(priority)
 {
 	_sUtils = (StringUtils_win8*)IStringUtils::instance();
 	if (url->isFileProtocol()){
-		Windows::Storage::StorageFolder^ localFolder = Windows::Storage::ApplicationData::Current->LocalFolder;
-		Platform::String^ folderPath = localFolder->Path;
-		Platform::String^ tmpPath = Platform::String::Concat(folderPath, "\\");
-		std::string urlPath = url->getPath();
-		//std::size_t pos = urlPath.find(URL::FILE_PROTOCOL);
-		std::string dataPath = urlPath.substr(URL::FILE_PROTOCOL.length());
-		Platform::String^ localPath = Platform::String::Concat(tmpPath, _sUtils->toStringHat(dataPath));
-		ILogger::instance()->logInfo("TENGO: %s", _sUtils->toStringStd(localPath).c_str());
+		std::string filePath = url->getPath().substr(URL::FILE_PROTOCOL.length());
+		Platform::String^ localPath = getLocalPath(_sUtils->toStringHat(filePath));
+		//ILogger::instance()->logInfo("local path: %s", _sUtils->toStringStd(localPath).c_str());
 		_winURL = ref new Uri(localPath);
 	}
 	else{
@@ -226,14 +229,17 @@ long long Downloader_win8_Handler::priority(){
 }
 
 
+
 void Downloader_win8_Handler::runWithDownloader(Downloader_win8* downloader){
 
 	if (_g3mURL->isFileProtocol()) {
-		const std::string fileFullName = _sUtils->replaceSubstring(_g3mURL->getPath(), URL::FILE_PROTOCOL, "");
+		
+		std::string filePath = _g3mURL->getPath().substr(URL::FILE_PROTOCOL.length());
+		Platform::String^ fileLocalPath = getLocalPath(_sUtils->toStringHat(filePath));
 
-		//http://msdn.microsoft.com/en-us/library/windows/apps/windows.storage.applicationdata.localfolder
+		//-- http://msdn.microsoft.com/en-us/library/windows/apps/windows.storage.applicationdata.localfolder
 
-		concurrency::task<StorageFile^> readFileOperation(StorageFile::GetFileFromPathAsync(_sUtils->toStringHat(fileFullName)));
+		concurrency::task<StorageFile^> readFileOperation(StorageFile::GetFileFromPathAsync(fileLocalPath));
 		readFileOperation.then([this, downloader](StorageFile^ file)
 		{
 			//return FileIO::ReadTextAsync(file);
@@ -243,9 +249,10 @@ void Downloader_win8_Handler::runWithDownloader(Downloader_win8* downloader){
 			try {
 				int statusCode = 0;
 				IByteBuffer* byteBuffer = NULL;
-				// Data is contained in timestamp
+				
+				//previousOperation.wait();
 				Streams::IBuffer^ buffer = previousOperation.get();
-				//http://stackoverflow.com/questions/11853838/getting-an-array-of-bytes-out-of-windowsstoragestreamsibuffer
+				//-- http://stackoverflow.com/questions/11853838/getting-an-array-of-bytes-out-of-windowsstoragestreamsibuffer
 
 				auto reader = Windows::Storage::Streams::DataReader::FromBuffer(buffer);
 				unsigned int dataLength = reader->UnconsumedBufferLength;
@@ -259,7 +266,7 @@ void Downloader_win8_Handler::runWithDownloader(Downloader_win8* downloader){
 
 				// inform downloader to remove myself, to avoid adding new Listener
 				downloader->removeDownloadingHandlerForUrl(this->_g3mURL->getPath());
-				this->runResponseTask(statusCode, byteBuffer);
+				this->runResponseTask(statusCode, byteBuffer); //TODO: make sense to start another thread if is running in async task???
 				//std::thread th(&Downloader_win8_Handler::runResponseTask, this, statusCode, byteBuffer);
 				//th.detach();
 			}
