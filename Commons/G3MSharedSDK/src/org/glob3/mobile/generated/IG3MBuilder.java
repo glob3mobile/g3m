@@ -1081,18 +1081,21 @@ public abstract class IG3MBuilder
 
   public final ShapesEditorRenderer createShapesEditorRenderer()
   {
+  
     // Tile rasterizer to create raster shapes
     GEOTileRasterizer geoTileRasterizer = new GEOTileRasterizer();
-    getPlanetRendererBuilder().addTileRasterizer(geoTileRasterizer);
-  
-    /* // shapesRenderer to render pointshapes whwen modifying shape vertices
-    ShapesRenderer* vertexRenderer = new ShapesRenderer;
-    vertexRenderer->setShapeTouchListener(new SimpleShapeSelectionListener, true);
-    addRenderer(vertexRenderer);*/
-  
-    // creating shape Editor Renderer
-    _shapesEditorRenderer = new ShapesEditorRenderer(geoTileRasterizer);
-    addRenderer(_shapesEditorRenderer);
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning MIRAR CON AGUSTIN
+  //  getPlanetRendererBuilder()->addTileRasterizer(geoTileRasterizer);
+  //
+  //  /*// shapesRenderer to render pointshapes whwen modifying shape vertices
+  //  ShapesRenderer* vertexRenderer = new ShapesRenderer;
+  //  vertexRenderer->setShapeTouchListener(new SimpleShapeSelectionListener, true);
+  //  addRenderer(vertexRenderer);*/
+  //
+  //  // creating shape Editor Renderer
+  //  _shapesEditorRenderer = new ShapesEditorRenderer(geoTileRasterizer);
+  //  addRenderer(_shapesEditorRenderer);
     return _shapesEditorRenderer;
   }
   public final void setInfoDisplay(InfoDisplay infoDisplay)

@@ -137,15 +137,8 @@ public class SubviewElevationData extends ElevationData
   }
 
   public final float[] getBufferPointer()
-<<<<<<< HEAD
 {
    return _buffer;
 }
-=======
-  {
-     return _buffer;
-  }
->>>>>>> senderos-gc
-
 
 }

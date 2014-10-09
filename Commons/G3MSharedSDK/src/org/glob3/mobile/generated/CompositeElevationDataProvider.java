@@ -140,10 +140,6 @@ public class CompositeElevationDataProvider extends ElevationDataProvider
     
         final Sector sector0 = each.getSectors().get(0);
         double res = getSquaredGridResolutionInDegreesSquared(each.getMinResolution(), sector0);
-<<<<<<< HEAD
-        final double newResDistance = mu.abs(bestRes - res);
-=======
->>>>>>> senderos-gc
     
         if (res <= selectedRes)
         {

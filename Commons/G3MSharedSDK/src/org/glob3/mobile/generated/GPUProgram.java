@@ -481,7 +481,9 @@ public class GPUProgram
     GPUUniform u = _uniforms[key];
     if (u == null)
     {
-      ILogger.instance().logError("Uniform [key=%d] not found", key);
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning MESSAGE SUPRESSED FOR SHAPES WITH LIGHT AND NO TEXTURED YET (ONLY AT THIS BRANCH)
+      //ILogger::instance()->logError("Uniform [key=%d] not found", key);
       return;
     }
     u.set(v);
@@ -491,7 +493,9 @@ public class GPUProgram
     GPUAttribute a = _attributes[key];
     if (a == null)
     {
-      ILogger.instance().logError("Attribute [key=%d] not found", key);
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning MESSAGE SUPRESSED FOR SHAPES WITH LIGHT AND NO TEXTURED YET (ONLY AT THIS BRANCH)
+      //ILogger::instance()->logError("Attribute [key=%d] not found", key);
       return;
     }
     a.set(v);

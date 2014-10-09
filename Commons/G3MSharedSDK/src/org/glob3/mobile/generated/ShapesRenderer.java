@@ -315,7 +315,7 @@ public class ShapesRenderer extends DefaultRenderer
       if (touchEvent.getTouchCount() == 1 && touchEvent.getTapCount()<=1 && touchEvent.getType() == TouchEventType.Down)
       {
         final Vector2I pixel = touchEvent.getTouch(0).getPos();
-<<<<<<< HEAD
+  //<<<<<<< HEAD
         java.util.ArrayList<ShapeDistance> shapeDistances = intersectionsDistances(ec.getPlanet(), _lastCamera, pixel);
   
         if (!shapeDistances.isEmpty())
@@ -324,31 +324,27 @@ public class ShapesRenderer extends DefaultRenderer
           if (_shapeTouchListener != null)
               handled = _shapeTouchListener.touchedShape(shapeDistances.get(0)._shape);
         }
-=======
-        final Vector3D direction = _lastCamera.pixel2Ray(pixel);
-        if (!direction.isNan())
-        {
-          java.util.ArrayList<ShapeDistance> shapeDistances = intersectionsDistances(origin, direction);
   
-          if (!shapeDistances.isEmpty())
-          {
-            //        printf ("Found %d intersections with shapes:\n",
-            //                (int)shapeDistances.size());
-            for (int i = 0; i<shapeDistances.size(); i++)
-            {
-              //          printf ("   %d: shape %x to distance %f\n",
-              //                  i+1,
-              //                  (unsigned int)shapeDistances[i]._shape,
-              //                  shapeDistances[i]._distance);
-            }
-          }
-        }
-        else
-        {
-          ILogger.instance().logWarning("ShapesRenderer::onTouchEvent: direction ( - _lastCamera->pixel2Ray(pixel) - ) is NaN");
-        }
->>>>>>> senderos-gc
-  
+  //=======
+  //      const Vector3D direction = _lastCamera->pixel2Ray(pixel);
+  //      if (!direction.isNan()) {
+  //        std::vector<ShapeDistance> shapeDistances = intersectionsDistances(origin, direction);
+  //
+  //        if (!shapeDistances.empty()) {
+  //          //        printf ("Found %d intersections with shapes:\n",
+  //          //                (int)shapeDistances.size());
+  //          for (int i=0; i<shapeDistances.size(); i++) {
+  //            //          printf ("   %d: shape %x to distance %f\n",
+  //            //                  i+1,
+  //            //                  (unsigned int)shapeDistances[i]._shape,
+  //            //                  shapeDistances[i]._distance);
+  //          }
+  //        }
+  //      } else {
+  //        ILogger::instance()->logWarning("ShapesRenderer::onTouchEvent: direction ( - _lastCamera->pixel2Ray(pixel) - ) is NaN");
+  //      }
+  //
+  //>>>>>>> senderos-gc
       }
     }
     return handled;

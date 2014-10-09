@@ -184,13 +184,7 @@ public class Tile
   
     final BoundingVolume boundingVolume = getBoundingVolume(rc, elevationDataProvider, tessellator, layerTilesRenderParameters, tilesRenderParameters);
   
-<<<<<<< HEAD
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning THIS LINE IS PROBLEMATIC WHEN ELEVATIONDATAPROVIDER IS ASYNCHRONOUS
-    return ((boundingVolume != null) && boundingVolume.touchesFrustum(cameraWiderFrustumInModelCoordinates));
-=======
       return ((boundingVolume != null) && boundingVolume.touchesFrustum(cameraWiderFrustumInModelCoordinates));
->>>>>>> senderos-gc
   }
                         //const Planet* planet,
                         //const Vector3D& cameraNormalizedPosition,
@@ -323,15 +317,6 @@ public class Tile
       }
     }
   
-<<<<<<< HEAD
-    if (_level > GlobalMembersTile.MAX_LOD)
-    {
-      GlobalMembersTile.MAX_LOD = _level;
-      //ILogger::instance()->logInfo("MAXLOD = %d\n", _level);
-    }
-  
-=======
->>>>>>> senderos-gc
     //  const BoundingVolume* boundingVolume = getBoundingVolume(rc, trc);
     //  boundingVolume->render(rc, parentState);
   }
