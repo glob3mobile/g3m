@@ -19,6 +19,19 @@
 @end
 
 @implementation LocationManagerDelegate
+
+
+- (id) initWith: (LocationManager_iOS*) locationManager
+{
+  self = [super init];
+  if (self)
+  {
+    _locationManager = locationManager;
+  }
+  
+  return self;
+}
+
 - (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error
 {
   NSLog(@"didFailWithError: %@", error);
@@ -28,15 +41,22 @@
 - (void)locationManager:(CLLocationManager *)manager didUpdateToLocation:(CLLocation *)newLocation fromLocation:(CLLocation *)oldLocation
 {
   NSLog(@"didUpdateToLocation: %@", newLocation);
-  if (_currentLocation != NULL) {
-    if (newLocation.coordinate.latitude != _currentLocation.coordinate.latitude ||
-        newLocation.coordinate.longitude != _currentLocation.coordinate.longitude)
-    {
-      _locationManager->notifyLocationChanged(new Geodetic2D(Geodetic2D::fromDegrees(newLocation.coordinate.latitude, newLocation.coordinate.longitude)));
-    }
-    
-    _currentLocation = newLocation;
-  }
+  _currentLocation = newLocation;
+  _locationManager->setLocation(_currentLocation.coordinate.latitude, _currentLocation.coordinate.longitude);
+  
+  
+//  if (_currentLocation != NULL) {
+//    if (newLocation.coordinate.latitude != _currentLocation.coordinate.latitude ||
+//        newLocation.coordinate.longitude != _currentLocation.coordinate.longitude)
+//    {
+//      _currentLocation = newLocation;
+//      _locationManager->setLocation(_currentLocation.coordinate.latitude, _currentLocation.coordinate.longitude);
+//    }
+//    
+//  } else {
+//    _currentLocation = newLocation;
+//    _locationManager->setLocation(_currentLocation.coordinate.latitude, _currentLocation.coordinate.longitude);
+//  }
 }
 
 - (CLLocation*) getCurrentLocation
@@ -52,11 +72,17 @@
 
 LocationManager_iOS::LocationManager_iOS()
 {
-  _locationManager = [CLLocationManager new];
-  _delegate = [[LocationManagerDelegate alloc] init];
+  //_location = NULL;
+  //_listeners = new std::vector<const LocationChangedListener*>();
+  _locationManager = [[CLLocationManager alloc] init];
+  
+  _delegate = [[LocationManagerDelegate alloc] initWith: this];
   
   [_locationManager setDelegate: _delegate];
   
+  if ([_locationManager respondsToSelector:@selector(requestAlwaysAuthorization)]) {
+    [_locationManager requestAlwaysAuthorization];
+  }
 }
 
 
@@ -69,7 +95,13 @@ bool const LocationManager_iOS::serviceIsEneabled() const {
 }
 
 bool const LocationManager_iOS::isAuthorized() const {
-  return ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusNotDetermined ||[CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorized || [CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorizedAlways);
+  CLAuthorizationStatus status = [CLLocationManager authorizationStatus];
+//  if (status == kCLAuthorizationStatusNotDetermined) {
+//    [_locationManager requestAlwaysAuthorization];
+//  }
+  return (status == kCLAuthorizationStatusAuthorized
+          || status == kCLAuthorizationStatusAuthorizedAlways
+          || status == kCLAuthorizationStatusAuthorizedWhenInUse);
 }
 
 void LocationManager_iOS::start(long long minTime, double minDistance, const Activity_Type activityType) {
@@ -110,9 +142,10 @@ void LocationManager_iOS::start(long long minTime, double minDistance, const Act
     //TODO minTime
     
     [_locationManager startUpdatingLocation];
+    
   } else {
-    [_locationManager startUpdatingLocation];
-    //[_locationManager stopUpdatingLocation];
+    //[_locationManager startUpdatingLocation];
+    [_locationManager stopUpdatingLocation];
   }
 }
 
@@ -122,13 +155,14 @@ void LocationManager_iOS::stop() {
   }
 }
 
-const Geodetic2D* LocationManager_iOS::getLocation() {
-  return new Geodetic2D(Geodetic2D::fromDegrees([_delegate getCurrentLocation].coordinate.latitude, [_delegate getCurrentLocation].coordinate.longitude));
+void LocationManager_iOS::setLocation(const double latitude,
+                                      const double longitude) {
+  delete _location;
+  _location = NULL;
+  _location = new Geodetic2D(Geodetic2D::fromDegrees(latitude, longitude));
+  notifyLocationChanged();
 }
 
-//void LocationManager_iOS::notifyLocationChanged(CLLocation* location) {
-//  const size_t s = _listeners->size();
-//  for( size_t i = 0; i < s; i++){
-//    _listeners->at(i)->onLocationChanged(new Geodetic2D(Geodetic2D::fromDegrees(location.coordinate.latitude, location.coordinate.longitude)));
-//  }
-//}
+Geodetic2D* LocationManager_iOS::getLocation() const {
+  return _location;
+}

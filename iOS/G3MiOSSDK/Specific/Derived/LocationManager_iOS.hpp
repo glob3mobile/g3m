@@ -24,6 +24,8 @@ private:
   const CLLocationManager* _locationManager;
   
   LocationManagerDelegate* _delegate;
+  
+  Geodetic2D* _location;
 
 public:
   
@@ -35,11 +37,17 @@ public:
   
   const bool isAuthorized() const;
   
-  void start(long long minTime, double minDistance, const Activity_Type activityType);
+  void start(long long minTime,
+             double minDistance,
+             const Activity_Type activityType);
   
   void stop();
   
-  const Geodetic2D* getLocation();
+  Geodetic2D* getLocation() const;
+  
+  void setLocation(const double latitude,
+                   const double longitude);
+
   
   //void notifyLocationChanged(CLLocation* location);
   
