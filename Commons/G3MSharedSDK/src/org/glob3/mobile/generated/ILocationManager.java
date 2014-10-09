@@ -6,10 +6,14 @@ public abstract class ILocationManager
 
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#warning with this converter add static
-//  std::vector<const LocationChangedListener*>* _listeners = new std::vector<const LocationChangedListener*>();
+  protected java.util.ArrayList<LocationChangedListener> _listeners = new java.util.ArrayList<LocationChangedListener>();
 
 
-    protected final java.util.ArrayList<LocationChangedListener> _listeners = java.util.<LocationChangedListener>ArrayList();
+//  #ifdef C_CODE
+//    std::vector<const LocationChangedListener*>* _listeners = new std::vector<const LocationChangedListener*>();
+//  #else
+//    protected final java.util.ArrayList<LocationChangedListener> _listeners = java.util.ArrayList<LocationChangedListener>();
+//  #endif
 
 
 
@@ -18,7 +22,8 @@ public abstract class ILocationManager
     final int size = _listeners.size();
     for (int i = 0; i < size; i++)
     {
-      _listeners.at(i) = null;
+      if (_listeners.get(i) != null)
+         _listeners.get(i).dispose();
     }
   }
 
@@ -34,18 +39,21 @@ public abstract class ILocationManager
 
   public abstract Geodetic2D getLocation();
 
-  public final void notifyLocationChanged(Geodetic2D newLocation)
+  public final void notifyLocationChanged()
   {
-    final int size = _listeners.size();
-    for (int i = 0; i < size; i++)
+    if (_listeners != null)
     {
-      _listeners.at(i).onLocationChanged(newLocation);
+      final int size = _listeners.size();
+      for (int i = 0; i < size; i++)
+      {
+        _listeners.get(i).onLocationChanged(getLocation());
+      }
     }
   }
 
   public final void addLocationChangedListener(LocationChangedListener locationChangedListener)
   {
-    _listeners.push_back(locationChangedListener);
+    _listeners.add(locationChangedListener);
   }
 
 
