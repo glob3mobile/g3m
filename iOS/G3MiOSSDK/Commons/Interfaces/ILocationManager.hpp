@@ -28,10 +28,12 @@ enum Activity_Type {
 class LocationChangedListener {
 public:
   virtual void onLocationChanged(Geodetic2D* newLocation) = 0;
-  
-  virtual ~LocationChangedListener() {
-    
-  }
+#ifdef C_CODE
+  virtual ~LocationChangedListener() { }
+#endif
+#ifdef JAVA_CODE
+  void dispose();
+#endif
 };
 
 
@@ -41,15 +43,8 @@ private:
   
 protected:
   
-#warning with this converter add static
   std::vector<LocationChangedListener*>* _listeners = new std::vector<LocationChangedListener*>();
   
-  
-//  #ifdef C_CODE
-//    std::vector<const LocationChangedListener*>* _listeners = new std::vector<const LocationChangedListener*>();
-//  #else
-//    protected final java.util.ArrayList<LocationChangedListener> _listeners = java.util.ArrayList<LocationChangedListener>();
-//  #endif
 public:
   
   
