@@ -3,35 +3,19 @@
 package org.glob3.mobile.client;
 
 import java.util.ArrayList;
-import java.util.Scanner;
 
-<<<<<<< HEAD
-//import org.glob3.mobile.generated.GEORasterLineSymbol;
-//import org.glob3.mobile.generated.GEORasterPolygonSymbol;
-import org.glob3.mobile.generated.*;
-import org.glob3.mobile.specific.Downloader_WebGL;
-import org.glob3.mobile.specific.G3MBuilder_WebGL;
-import org.glob3.mobile.specific.G3MWidget_WebGL;
-import org.glob3.mobile.specific.ThreadUtils_WebGL;
-import org.glob3.mobile.client.MyG3MWidget_WebGL;
-=======
 import org.glob3.mobile.generated.AltitudeMode;
 import org.glob3.mobile.generated.Angle;
+import org.glob3.mobile.generated.BoxShape;
 import org.glob3.mobile.generated.CameraDoubleDragHandler;
 import org.glob3.mobile.generated.CameraDoubleTapHandler;
 import org.glob3.mobile.generated.CameraRenderer;
 import org.glob3.mobile.generated.CameraRotationHandler;
 import org.glob3.mobile.generated.CameraSingleDragHandler;
 import org.glob3.mobile.generated.Color;
-import org.glob3.mobile.generated.CompositeRenderer;
-import org.glob3.mobile.generated.DirectMesh;
+import org.glob3.mobile.generated.CompositeElevationDataProvider;
 import org.glob3.mobile.generated.ElevationDataProvider;
-import org.glob3.mobile.generated.ErrorRenderer;
-import org.glob3.mobile.generated.FixedFocusSceneLighting;
-import org.glob3.mobile.generated.FloatBufferBuilderFromColor;
-import org.glob3.mobile.generated.FloatBufferBuilderFromGeodetic;
 import org.glob3.mobile.generated.G3MContext;
-import org.glob3.mobile.generated.G3MEventContext;
 import org.glob3.mobile.generated.GEO2DLineRasterStyle;
 import org.glob3.mobile.generated.GEO2DLineStringGeometry;
 import org.glob3.mobile.generated.GEO2DMultiLineStringGeometry;
@@ -41,47 +25,36 @@ import org.glob3.mobile.generated.GEO2DPolygonData;
 import org.glob3.mobile.generated.GEO2DPolygonGeometry;
 import org.glob3.mobile.generated.GEO2DSurfaceRasterStyle;
 import org.glob3.mobile.generated.GEOGeometry;
-import org.glob3.mobile.generated.GEOMultiLineRasterSymbol;
-//import org.glob3.mobile.generated.GEORasterLineSymbol;
-//import org.glob3.mobile.generated.GEORasterPolygonSymbol;
-import org.glob3.mobile.generated.GEORenderer;
-import org.glob3.mobile.generated.GEOSymbol;
-import org.glob3.mobile.generated.GEOSymbolizer;
-import org.glob3.mobile.generated.GEOTileRasterizer;
-import org.glob3.mobile.generated.GInitializationTask;
-import org.glob3.mobile.generated.GLPrimitive;
-import org.glob3.mobile.generated.Geodetic2D;
-import org.glob3.mobile.generated.Geodetic3D;
-import org.glob3.mobile.generated.HUDErrorRenderer;
-import org.glob3.mobile.generated.IBufferDownloadListener;
-import org.glob3.mobile.generated.IByteBuffer;
-import org.glob3.mobile.generated.ICameraActivityListener;
-import org.glob3.mobile.generated.ICameraConstrainer;
-import org.glob3.mobile.generated.IDownloader;
-import org.glob3.mobile.generated.IImage;
-import org.glob3.mobile.generated.IImageDownloadListener;
-import org.glob3.mobile.generated.IImageListener;
-import org.glob3.mobile.generated.IImageUtils;
-import org.glob3.mobile.generated.IJSONParser;
-import org.glob3.mobile.generated.IStorage;
-import org.glob3.mobile.generated.IThreadUtils;
-import org.glob3.mobile.generated.InitialCameraPositionProvider;
-import org.glob3.mobile.generated.JSONArray;
-import org.glob3.mobile.generated.JSONBaseObject;
+import org.glob3.mobile.generated.GEOJSONParser;
+import org.glob3.mobile.generated.GEOLine2DMeshSymbol;
+import org.glob3.mobile.generated.GEOLine2DStyle;
+import org.glob3.mobile.generated.GEOObject;
 import org.glob3.mobile.generated.GEOPolygonRasterSymbol;
 import org.glob3.mobile.generated.GEORasterSymbol;
 import org.glob3.mobile.generated.GEORasterSymbolizer;
+import org.glob3.mobile.generated.GEORenderer;
+import org.glob3.mobile.generated.GEOSymbol;
+import org.glob3.mobile.generated.GEOSymbolizer;
+import org.glob3.mobile.generated.GInitializationTask;
+import org.glob3.mobile.generated.GTask;
+import org.glob3.mobile.generated.Geodetic3D;
+import org.glob3.mobile.generated.IBufferDownloadListener;
+import org.glob3.mobile.generated.IByteBuffer;
 import org.glob3.mobile.generated.JSONObject;
 import org.glob3.mobile.generated.LayerSet;
+import org.glob3.mobile.generated.LayerTilesRenderParameters;
+import org.glob3.mobile.generated.LevelTileCondition;
 import org.glob3.mobile.generated.MapBoxLayer;
+//import org.glob3.mobile.generated.GEORasterLineSymbol;
+//import org.glob3.mobile.generated.GEORasterPolygonSymbol;
 import org.glob3.mobile.generated.MarksRenderer;
+import org.glob3.mobile.generated.MeshRenderer;
+import org.glob3.mobile.generated.PeriodicalTask;
 import org.glob3.mobile.generated.Planet;
+import org.glob3.mobile.generated.Renderer;
 import org.glob3.mobile.generated.Sector;
 import org.glob3.mobile.generated.Shape;
-import org.glob3.mobile.generated.BoxShape;
 import org.glob3.mobile.generated.ShapesRenderer;
-import org.glob3.mobile.generated.SimpleCameraConstrainer;
-import org.glob3.mobile.generated.SimpleInitialCameraPositionProvider;
 import org.glob3.mobile.generated.SingleBilElevationDataProvider;
 import org.glob3.mobile.generated.StrokeCap;
 import org.glob3.mobile.generated.StrokeJoin;
@@ -90,14 +63,17 @@ import org.glob3.mobile.generated.TimeInterval;
 import org.glob3.mobile.generated.URL;
 import org.glob3.mobile.generated.Vector2I;
 import org.glob3.mobile.generated.Vector3D;
-import org.glob3.mobile.specific.Downloader_WebGL;
+import org.glob3.mobile.generated.WMSLayer;
+import org.glob3.mobile.generated.WMSServerVersion;
 import org.glob3.mobile.specific.G3MBuilder_WebGL;
 import org.glob3.mobile.specific.G3MWidget_WebGL;
->>>>>>> zrender-touchhandlers
 
 import com.google.gwt.core.client.EntryPoint;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.RootPanel;
+//import org.glob3.mobile.generated.GEORasterLineSymbol;
+//import org.glob3.mobile.generated.GEORasterPolygonSymbol;
 
 
 public class G3MWebGLTestingApplication
@@ -1159,8 +1135,6 @@ public class G3MWebGLTestingApplication
 	  return cameraRenderer;
 	}
 
-	
-<<<<<<< HEAD
 	   public void testBranch_zrender_touchhandlers() {
 		   final G3MBuilder_WebGL builder = new G3MBuilder_WebGL();
 
@@ -1624,46 +1598,5 @@ public class G3MWebGLTestingApplication
 			}
 
 		};
-=======
-   public void testBranch_zrender_touchhandlers() {
-	   final G3MBuilder_WebGL builder = new G3MBuilder_WebGL();
-
-	   //const Planet* planet = Planet::createEarth();
-	   final Planet planet = Planet.createSphericalEarth();
-	   //final Planet planet = Planet.createFlatEarth();
-	   builder.setPlanet(planet);
-	   	   
-	   // create shape
-	   ShapesRenderer shapesRenderer = new ShapesRenderer();
-	   Shape box = new BoxShape(new Geodetic3D(Angle.fromDegrees(28.4),
-			   Angle.fromDegrees(-16.4),
-			   0),
-			   AltitudeMode.ABSOLUTE,
-			   new Vector3D(3000, 3000, 20000),
-			   2,
-			   Color.fromRGBA(1.0f, 1.0f, 0.0f, 0.5f),
-			   Color.newFromRGBA(0.0f, 0.75f, 0.0f, 0.75f));
-	   shapesRenderer.addShape(box);
-	   builder.addRenderer(shapesRenderer);
-
-	   // create elevations for Tenerife from bil file
-	   Sector sector = Sector.fromDegrees (27.967811065876,                  // min latitude
-			   -17.0232177085356,                // min longitude
-			   28.6103464294992,                 // max latitude
-			   -16.0019401695656);               // max longitude
-	   Vector2I extent = new Vector2I(256, 256);                             // image resolution
-	   URL url = new URL("http://serdis.dis.ulpgc.es/~atrujill/glob3m/IGO/Tenerife-256x256.bil", false);
-	   ElevationDataProvider elevationDataProvider = new SingleBilElevationDataProvider(url, sector, extent);
-	   builder.getPlanetRendererBuilder().setElevationDataProvider(elevationDataProvider);	  
-	   builder.getPlanetRendererBuilder().setVerticalExaggeration(4.0f);
-
-	   _widget = builder.createWidget();
-	   
-	   // set camera looking at Tenerife
-	   Geodetic3D position = new Geodetic3D(Angle.fromDegrees(27.60), Angle.fromDegrees(-16.54), 55000.0);
-	   _widget.setCameraPosition(position);
-	   _widget.setCameraPitch(Angle.fromDegrees(-50.0));
-  }
->>>>>>> zrender-touchhandlers
 
 }
