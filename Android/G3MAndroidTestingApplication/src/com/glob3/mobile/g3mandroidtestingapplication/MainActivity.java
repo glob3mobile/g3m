@@ -9,15 +9,15 @@ import java.util.LinkedList;
 
 import org.glob3.mobile.generated.AltitudeMode;
 import org.glob3.mobile.generated.Angle;
+import org.glob3.mobile.generated.BingMapType;
+import org.glob3.mobile.generated.BingMapsLayer;
 import org.glob3.mobile.generated.BoxShape;
 import org.glob3.mobile.generated.CameraDoubleDragHandler;
 import org.glob3.mobile.generated.CameraDoubleTapHandler;
 import org.glob3.mobile.generated.CameraRenderer;
 import org.glob3.mobile.generated.CameraRotationHandler;
 import org.glob3.mobile.generated.CameraSingleDragHandler;
-import org.glob3.mobile.generated.CameraZoomAndRotateHandler;
 import org.glob3.mobile.generated.Color;
-import org.glob3.mobile.generated.DownloaderImageBuilder;
 import org.glob3.mobile.generated.ElevationDataProvider;
 import org.glob3.mobile.generated.EllipsoidShape;
 import org.glob3.mobile.generated.G3MContext;
@@ -27,61 +27,33 @@ import org.glob3.mobile.generated.GInitializationTask;
 import org.glob3.mobile.generated.GeoMeter;
 import org.glob3.mobile.generated.Geodetic2D;
 import org.glob3.mobile.generated.Geodetic3D;
-import org.glob3.mobile.generated.HUDQuadWidget;
-import org.glob3.mobile.generated.HUDRelativePosition;
-import org.glob3.mobile.generated.HUDRelativeSize;
-import org.glob3.mobile.generated.HUDRenderer;
 import org.glob3.mobile.generated.IDownloader;
 import org.glob3.mobile.generated.IImage;
 import org.glob3.mobile.generated.IImageDownloadListener;
 import org.glob3.mobile.generated.ILogger;
 import org.glob3.mobile.generated.LayerSet;
-import org.glob3.mobile.generated.LayerTilesRenderParameters;
 import org.glob3.mobile.generated.LevelTileCondition;
 import org.glob3.mobile.generated.LineShape;
-import org.glob3.mobile.generated.MapBoxLayer;
 import org.glob3.mobile.generated.MapQuestLayer;
 import org.glob3.mobile.generated.Mark;
 import org.glob3.mobile.generated.MarksRenderer;
 import org.glob3.mobile.generated.MeshRenderer;
-import org.glob3.mobile.generated.BingMapType;
-import org.glob3.mobile.generated.BingMapsLayer;
-import org.glob3.mobile.generated.Color;
-import org.glob3.mobile.generated.GEO2DLineRasterStyle;
-import org.glob3.mobile.generated.GEO2DLineStringGeometry;
-import org.glob3.mobile.generated.GEO2DMultiLineStringGeometry;
-import org.glob3.mobile.generated.GEO2DMultiPolygonGeometry;
-import org.glob3.mobile.generated.GEO2DPointGeometry;
-import org.glob3.mobile.generated.GEO2DPolygonData;
-import org.glob3.mobile.generated.GEO2DPolygonGeometry;
-import org.glob3.mobile.generated.GEO2DSurfaceRasterStyle;
-import org.glob3.mobile.generated.GEOGeometry;
-import org.glob3.mobile.generated.GEOPolygonRasterSymbol;
-import org.glob3.mobile.generated.GEORasterSymbol;
-import org.glob3.mobile.generated.GEORasterSymbolizer;
-import org.glob3.mobile.generated.Geodetic2D;
-import org.glob3.mobile.generated.Geodetic3D;
-import org.glob3.mobile.generated.JSONObject;
-import org.glob3.mobile.generated.LayerSet;
-import org.glob3.mobile.generated.LevelTileCondition;
-import org.glob3.mobile.generated.Mark;
-import org.glob3.mobile.generated.MarksRenderer;
 import org.glob3.mobile.generated.Planet;
 import org.glob3.mobile.generated.PointShape;
 import org.glob3.mobile.generated.RasterLineShape;
 import org.glob3.mobile.generated.RasterPolygonShape;
+import org.glob3.mobile.generated.SGShape;
+import org.glob3.mobile.generated.SceneJSShapesParser;
 import org.glob3.mobile.generated.Sector;
 import org.glob3.mobile.generated.Shape;
+import org.glob3.mobile.generated.ShapeLoadListener;
 import org.glob3.mobile.generated.ShapeTouchListener;
 import org.glob3.mobile.generated.ShapesRenderer;
 import org.glob3.mobile.generated.SingleBilElevationDataProvider;
-import org.glob3.mobile.generated.TiledVectorLayer;
 import org.glob3.mobile.generated.TimeInterval;
 import org.glob3.mobile.generated.URL;
-import org.glob3.mobile.generated.URLTemplateLayer;
 import org.glob3.mobile.generated.Vector2I;
 import org.glob3.mobile.generated.Vector3D;
-import org.glob3.mobile.generated.URLTemplateLayer;
 import org.glob3.mobile.generated.WMSLayer;
 import org.glob3.mobile.generated.WMSServerVersion;
 import org.glob3.mobile.specific.G3MBuilder_Android;
@@ -111,78 +83,6 @@ public class MainActivity extends Activity {
 		cameraRenderer.addHandler(new CameraDoubleDragHandler(
 				allowRotationInDoubleDrag));
 		// cameraRenderer.addHandler(new CameraZoomAndRotateHandler());
-
-<<<<<<< HEAD
-	public CameraRenderer createCameraRenderer()
-	{
-	  CameraRenderer cameraRenderer = new CameraRenderer();
-	  final boolean useInertia = true;
-	  cameraRenderer.addHandler(new CameraSingleDragHandler(useInertia));
-	  //final boolean allowRotationInDoubleDrag = true;
-	  //cameraRenderer.addHandler(new CameraDoubleDragHandler(allowRotationInDoubleDrag));
-	  cameraRenderer.addHandler(new CameraZoomAndRotateHandler());
-
-	  cameraRenderer.addHandler(new CameraRotationHandler());
-	  cameraRenderer.addHandler(new CameraDoubleTapHandler());
-
-	  return cameraRenderer;
-	}
-
-   @Override
-   protected void onCreate(final Bundle savedInstanceState) {
-	   super.onCreate(savedInstanceState);
-	   requestWindowFeature(Window.FEATURE_NO_TITLE);
-	   getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-	   setContentView(R.layout.activity_main);
-	   
-	   // tests for Cotesa
-	   // testElevationNavigation();
-	   testingVectorialGeometry();
-	   
-		_placeHolder = (RelativeLayout) findViewById(R.id.g3mWidgetHolder);
-		_placeHolder.addView(_g3mWidget);
-   }
-   
-   public void testZrender() {
-
-	   final G3MBuilder_Android builder = new G3MBuilder_Android(this);
-
-	   //const Planet* planet = Planet::createEarth();
-	   //const Planet* planet = Planet::createSphericalEarth();
-	   final Planet planet = Planet.createFlatEarth();
-	   builder.setPlanet(planet);
-
-	   // set camera handlers
-	   CameraRenderer cameraRenderer = createCameraRenderer();
-	   builder.setCameraRenderer(cameraRenderer);
-	   
-	   // create shape
-	   ShapesRenderer shapesRenderer = new ShapesRenderer();
-	   Shape box = new BoxShape(new Geodetic3D(Angle.fromDegrees(28.4),
-			   Angle.fromDegrees(-16.4),
-			   0),
-			   AltitudeMode.ABSOLUTE,
-			   new Vector3D(3000, 3000, 20000),
-			   2,
-			   Color.fromRGBA(1.0f, 1.0f, 0.0f, 0.5f),
-			   Color.newFromRGBA(0.0f, 0.75f, 0.0f, 0.75f));
-	   shapesRenderer.addShape(box);
-	   builder.addRenderer(shapesRenderer);
-
-	   // create elevations for Tenerife from bil file
-	   Sector sector = Sector.fromDegrees (27.967811065876,                  // min latitude
-			   -17.0232177085356,                // min longitude
-			   28.6103464294992,                 // max latitude
-			   -16.0019401695656);               // max longitude
-	   Vector2I extent = new Vector2I(256, 256);                             // image resolution
-	   URL url = new URL("file:///Tenerife-256x256.bil", false);
-	   ElevationDataProvider elevationDataProvider = new SingleBilElevationDataProvider(url, sector, extent);
-	   builder.getPlanetRendererBuilder().setElevationDataProvider(elevationDataProvider);	  
-	   builder.getPlanetRendererBuilder().setVerticalExaggeration(4.0f);
-	   
-		//BEGINNING OF CODE FOR LOADING STORAGE
-		if (true){
-=======
 		cameraRenderer.addHandler(new CameraRotationHandler());
 		cameraRenderer.addHandler(new CameraDoubleTapHandler());
 
@@ -201,6 +101,38 @@ public class MainActivity extends Activity {
 		setContentView(R.layout.activity_main);
 
 		final G3MBuilder_Android builder = new G3MBuilder_Android(this);
+
+//		defaultTest(builder);
+		testingVectorialGeometry();
+
+		_placeHolder = (RelativeLayout) findViewById(R.id.g3mWidgetHolder);
+		_placeHolder.addView(_g3mWidget);
+
+		/*
+		 * super.onCreate(savedInstanceState);
+		 * 
+		 * requestWindowFeature(Window.FEATURE_NO_TITLE);
+		 * getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+		 * WindowManager.LayoutParams.FLAG_FULLSCREEN);
+		 * 
+		 * setContentView(R.layout.activity_main);
+		 * 
+		 * 
+		 * // _g3mWidget = createWidget(); _g3mWidget = sanjayTesting();
+		 * 
+		 * final RelativeLayout placeHolder = (RelativeLayout)
+		 * findViewById(R.id.g3mWidgetHolder); placeHolder.addView(_g3mWidget);
+		 * 
+		 * 
+		 * final Geodetic3D zurichPos = Geodetic3D.fromDegrees(40, -75, 80000);
+		 * _g3mWidget
+		 * .getG3MWidget().setAnimatedCameraPosition(TimeInterval.fromSeconds
+		 * (5), zurichPos, Angle.zero(), Angle.fromDegrees(-90));
+		 */
+
+	}
+	
+	private void defaultTest(G3MBuilder_Android builder){
 
 		// const Planet* planet = Planet::createEarth();
 		// const Planet* planet = Planet::createSphericalEarth();
@@ -237,9 +169,13 @@ public class MainActivity extends Activity {
 				elevationDataProvider);
 		builder.getPlanetRendererBuilder().setVerticalExaggeration(4.0f);
 
+		_g3mWidget = builder.createWidget();
+	}
+	
+	private void testCache(G3MBuilder_Android builder){
+
 		// BEGINNING OF CODE FOR LOADING STORAGE
 		if (false) {
->>>>>>> senderos-gc
 
 			AssetManager am = getAssets();
 
@@ -314,39 +250,6 @@ public class MainActivity extends Activity {
 
 			// END OF CODE FOR PRECACHING AREA
 		}
-<<<<<<< HEAD
-
-		//END OF CODE FOR PRECACHING AREA
-=======
-		
-		_g3mWidget = builder.createWidget();
-
-		_placeHolder = (RelativeLayout) findViewById(R.id.g3mWidgetHolder);
-		_placeHolder.addView(_g3mWidget);
-
-		/*
-		 * super.onCreate(savedInstanceState);
-		 * 
-		 * requestWindowFeature(Window.FEATURE_NO_TITLE);
-		 * getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-		 * WindowManager.LayoutParams.FLAG_FULLSCREEN);
-		 * 
-		 * setContentView(R.layout.activity_main);
-		 * 
-		 * 
-		 * // _g3mWidget = createWidget(); _g3mWidget = sanjayTesting();
-		 * 
-		 * final RelativeLayout placeHolder = (RelativeLayout)
-		 * findViewById(R.id.g3mWidgetHolder); placeHolder.addView(_g3mWidget);
-		 * 
-		 * 
-		 * final Geodetic3D zurichPos = Geodetic3D.fromDegrees(40, -75, 80000);
-		 * _g3mWidget
-		 * .getG3MWidget().setAnimatedCameraPosition(TimeInterval.fromSeconds
-		 * (5), zurichPos, Angle.zero(), Angle.fromDegrees(-90));
-		 */
->>>>>>> senderos-gc
-
 	}
 
 	private G3MWidget_Android sanjayTesting() {
@@ -552,13 +455,16 @@ public class MainActivity extends Activity {
 	}	
 	
 	
-	public void testingVectorialGeometry() {
+	private void testingVectorialGeometry() {
 		final G3MBuilder_Android builder = new G3MBuilder_Android(this);
 		// builder.getPlanetRendererBuilder().setRenderDebug(true);
 
 		// GeoTileRasterizer is needed to draw RasterShapes
 		GEOTileRasterizer geoTileRasterizer = new GEOTileRasterizer();
-		builder.getPlanetRendererBuilder().addTileRasterizer(geoTileRasterizer);
+		//builder.getPlanetRendererBuilder().addTileRasterizer(geoTileRasterizer);
+		
+		Planet planet = Planet.createFlatEarth();
+		builder.setPlanet(planet);
 		
 		// testing Geometer
 		testingGeometer();
@@ -708,9 +614,10 @@ public class MainActivity extends Activity {
 				shapesRenderer.addShape(pol1);
 			}
 
+			
 			// DRAWING JSON
-			/* shapesRenderer.loadJSONSceneJS(new URL("file:///seymour-plane.json", false), 
-      		  "file:////", 
+			shapesRenderer.loadJSONSceneJS(new URL("file:///seymour-plane.json", false), 
+      		  "file:///", 
       		  false,
   			  new Geodetic3D(Angle.fromDegrees(39.70),
   					  Angle.fromDegrees(2.60),
@@ -736,20 +643,21 @@ public class MainActivity extends Activity {
                       // TODO Auto-generated method stub
 
                    }
-                });*/
-			/*
-  	  Shape plane = SceneJSShapesParser.parseFromJSON("file:///seymour-plane.json", 
-  			  "file:////", 
-  			  false,
-  			  new Geodetic3D(Angle.fromDegrees(39.70),
-  					  Angle.fromDegrees(2.60),
-  					  7*factor),
-  					  AltitudeMode.ABSOLUTE);
-  	  double scale = factor/5;
-  	  plane.setScale(scale, scale, scale);
-  	  plane.setPitch(Angle.fromDegrees(120));
-  	  plane.setHeading(Angle.fromDegrees(-110));
-  	  shapesRenderer.addShape(plane);*/
+                });
+			
+//  	  Shape plane = SceneJSShapesParser.parseFromJSON("file:///seymour-plane.json", 
+//  			  "file:////", 
+//  			  false,
+//  			  new Geodetic3D(Angle.fromDegrees(39.70),
+//  					  Angle.fromDegrees(2.60),
+//  					  7*factor),
+//  					  AltitudeMode.ABSOLUTE);
+//  	  double scale = factor/5;
+//  	  plane.setScale(scale, scale, scale);
+//  	  plane.setPitch(Angle.fromDegrees(120));
+//  	  plane.setHeading(Angle.fromDegrees(-110));
+//  	  shapesRenderer.addShape(plane);
+  	  
 
 			// adding touch listener
 			ShapeTouchListener myShapeTouchListener = new ShapeTouchListener() {
