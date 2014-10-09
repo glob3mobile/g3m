@@ -234,6 +234,5 @@ const std::string Downloader_win8::statistics(){
 
 
 Downloader_win8::~Downloader_win8(){
-
 	stop();
 }

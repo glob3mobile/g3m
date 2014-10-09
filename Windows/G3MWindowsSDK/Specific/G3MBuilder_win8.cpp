@@ -236,8 +236,8 @@ void executeDownloaderTests(IDownloader* downloader){
 	const StringUtils_win8* sUtils = (StringUtils_win8*)IStringUtils::instance();
 
 	//-- Test downloading image and then save to a file --------
-	//std::string imgName = "tiger.jpg";
-	std::string imgName = "MARBLES.BMP";
+	std::string imgName = "tiger.jpg";
+	//std::string imgName = "MARBLES.BMP";
 	std::size_t pos = imgName.find(".");
 	std::string name = imgName.substr(0, pos);
 	std::string ext = imgName.substr(pos + 1, imgName.length());
@@ -348,7 +348,7 @@ IDownloader* G3MBuilder_win8::createDefaultDownloader(){
 	const int MAX_CONCURRENT_OPERATION_COUNT = 8;
 	IDownloader* testDownloader = new Downloader_win8(MAX_CONCURRENT_OPERATION_COUNT);
 
-	//executeDownloaderTests(testDownloader);
+	executeDownloaderTests(testDownloader);
 	return testDownloader;
 }
 

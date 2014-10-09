@@ -58,6 +58,7 @@ Downloader_win8_Listener* Listener_win8_Entry::getListener(){
 
 Listener_win8_Entry::~Listener_win8_Entry(){
 	//TODO: ?
+	//delete _listener;
 }
 
 
@@ -359,4 +360,7 @@ void Downloader_win8_Handler::dealloc(){
 
 Downloader_win8_Handler::~Downloader_win8_Handler(){
 	//TODO: ?
+	delete _g3mURL;
+	delete _winURL;
+	delete _sUtils;
 }

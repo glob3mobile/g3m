@@ -26,8 +26,8 @@ private:
 
 	std::mutex _lock;
 
-	bool setPriorityBellowNormal();
-
+	Windows::Foundation::IAsyncAction^ _workerThread;
+	//Windows::System::Threading::ThreadPoolTimer^ _periodicTimer;
 
 public:
 	Downloader_win8_WorkerThread(Downloader_win8* downloader);
