@@ -4,16 +4,8 @@ public abstract class ILocationManager
 
 
 
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning with this converter add static
   protected java.util.ArrayList<LocationChangedListener> _listeners = new java.util.ArrayList<LocationChangedListener>();
 
-
-//  #ifdef C_CODE
-//    std::vector<const LocationChangedListener*>* _listeners = new std::vector<const LocationChangedListener*>();
-//  #else
-//    protected final java.util.ArrayList<LocationChangedListener> _listeners = java.util.ArrayList<LocationChangedListener>();
-//  #endif
 
 
 
