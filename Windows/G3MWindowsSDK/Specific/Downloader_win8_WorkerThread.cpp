@@ -55,7 +55,6 @@ void Downloader_win8_WorkerThread::start(){
 
 	_workerThread = Threading::ThreadPool::RunAsync(workItem, Threading::WorkItemPriority::Low);
 
-
 	//auto elapsedHandler = ref new Threading::TimerElapsedHandler([this](Threading::ThreadPoolTimer^ source)
 	//{
 	//	this->run();
@@ -101,7 +100,7 @@ void Downloader_win8_WorkerThread::run(){
 
 		Downloader_win8_Handler* handler = this->_downloader->getHandlerToRun();
 		if (handler) {
-			ILogger::instance()->logInfo("Executing in thread runwithDownloader. Thread: %d", _workerThread->Id);
+			//ILogger::instance()->logInfo("Executing in thread runwithDownloader. Thread: %d", _workerThread->Id);
 			handler->runWithDownloader(this->_downloader);
 		}
 		else {
