@@ -24,7 +24,8 @@ private:
 #ifdef JAVA_CODE
   private Sphere _sphere;
 #endif
-  
+  const Vector3D _radii;
+
   mutable MutableVector3D _origin;
   mutable MutableVector3D _initialPoint;
   mutable double          _dragRadius;
@@ -39,6 +40,12 @@ private:
   mutable double          _angleBetweenInitialPoints;
   mutable bool            _validSingleDrag;
   
+  mutable double          _dragRadius0;
+  mutable double          _dragRadius1;
+  mutable double          _distanceBetweenInitialPoints;
+  mutable double          _lastDoubleDragAngle;
+
+  
 
 public:
 
@@ -51,8 +58,8 @@ public:
 
   }
 
-  Vector3D getRadii() const{
-    return Vector3D(_sphere._radius, _sphere._radius, _sphere._radius);
+  Vector3D getRadii() const {
+    return _radii;
   }
 
   Vector3D centricSurfaceNormal(const Vector3D& position) const {
@@ -85,6 +92,12 @@ public:
                                                      direction,
                                                      _sphere._radius);
   }
+  std::vector<double> intersectionsDistances(double originX,
+                                             double originY,
+                                             double originZ,
+                                             double directionX,
+                                             double directionY,
+                                             double directionZ) const;
 
   Vector3D toCartesian(const Angle& latitude,
                        const Angle& longitude,
@@ -150,11 +163,22 @@ public:
   
   Effect* createEffectFromLastSingleDrag() const;
   
+  void beginDoubleDrag(const Vector3D& origin,
+                       const Vector3D& centerRay,
+                       const Vector3D& centerPosition,
+                       const Vector3D& touchedPosition0,
+                       const Vector3D& touchedPosition1) const;
+  
+  MutableMatrix44D doubleDrag(const Vector3D& finalRay0,
+                              const Vector3D& finalRay1,
+                              bool allowRotation) const;
+
+  
  /* void beginDoubleDrag(const Vector3D& origin,
                        const Vector3D& centerRay,
                                const Vector3D& initialRay0,
                                const Vector3D& initialRay1) const;*/
-  void beginDoubleDrag(const Vector3D& origin,
+  /*void beginDoubleDrag(const Vector3D& origin,
                        const Vector3D& centerRay,
                        const Vector3D& centerPosition,
                        const Vector3D& touchedPosition0,
@@ -162,7 +186,7 @@ public:
 
   MutableMatrix44D doubleDrag(const Vector3D& finalRay0,
                               const Vector3D& finalRay1,
-                              bool allowRotation) const;
+                              bool allowRotation) const;*/
 
   Effect* createDoubleTapEffect(const Vector3D& origin,
                                 const Vector3D& centerRay,
@@ -179,7 +203,7 @@ public:
   void applyCameraConstrainers(const Camera* previousCamera,
                                Camera* nextCamera) const;
 
-  Geodetic3D getDefaultCameraPosition(const Sector& rendereSector) const{
+  Geodetic3D getDefaultCameraPosition(const Sector& rendereSector) const {
     const Vector3D asw = toCartesian(rendereSector.getSW());
     const Vector3D ane = toCartesian(rendereSector.getNE());
     const double height = asw.sub(ane).length() * 1.9;
@@ -187,6 +211,10 @@ public:
     return Geodetic3D(rendereSector._center,
                       height);
   }
+  
+  MutableMatrix44D createDragMatrix(const Vector3D initialPoint,
+                                    const Vector3D finalPoint) const;
+
 
 };
 

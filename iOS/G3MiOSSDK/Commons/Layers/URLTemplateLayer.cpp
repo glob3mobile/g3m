@@ -248,30 +248,30 @@ RenderState URLTemplateLayer::getRenderState() {
 }
 
 const TileImageContribution* URLTemplateLayer::rawContribution(const Tile* tile) const {
-    const Tile* tileP = getParentTileOfSuitableLevel(tile); //Parent tile with a suitable Level
-    //    if (tile != tileP){
-    //        ILogger::instance()->logInfo("Fetching image for tile parent of level %d", tileP->_level);
-    //    }
-    
-    const Sector requestedImageSector = tileP->_sector;
-    
-    if (!_dataSector.touchesWith(requestedImageSector)) {
-        return NULL;
+  const Tile* tileP = getParentTileOfSuitableLevel(tile);
+  if (tileP == NULL) {
+    return NULL;
+  }
+
+  const Sector requestedImageSector = tileP->_sector;
+
+  if (!_dataSector.touchesWith(requestedImageSector)) {
+    return NULL;
+  }
+  else if (_dataSector.fullContains(requestedImageSector) && (tile == tileP)) {
+    //Most common case tile of suitable level being fully coveraged by layer
+    return ((_isTransparent || (_transparency < 1))
+            ? TileImageContribution::fullCoverageTransparent(_transparency)
+            : TileImageContribution::fullCoverageOpaque());
+  }
+  else {
+    const Sector contributionSector = _dataSector.intersection(requestedImageSector);
+    if (contributionSector.hasNoArea()){
+      return NULL;
     }
-    else if (_dataSector.fullContains(requestedImageSector) && tile == tileP) {
-        //Most common case tile of suitable level being fully coveraged by layer
-        return ((_isTransparent || (_transparency < 1))
-                ? TileImageContribution::fullCoverageTransparent(_transparency)
-                : TileImageContribution::fullCoverageOpaque());
-    }
-    else {
-        const Sector contributionSector = _dataSector.intersection(requestedImageSector);
-        if (contributionSector.hasNoArea()){
-            return NULL;
-        }
-        
-        return ((_isTransparent || (_transparency < 1))
-                ? TileImageContribution::partialCoverageTransparent(contributionSector, _transparency)
-                : TileImageContribution::partialCoverageOpaque(contributionSector));
-    }
+
+    return ((_isTransparent || (_transparency < 1))
+            ? TileImageContribution::partialCoverageTransparent(contributionSector, _transparency)
+            : TileImageContribution::partialCoverageOpaque(contributionSector));
+  }
 }

@@ -645,10 +645,13 @@ public:
   void onError(const URL& url) {
     ILogger::instance()->logError("Error downloading \"%s\"", url._path.c_str());
 
+    if (_listener != NULL) {
+      _listener->onError(url);
+    }
+    
     if (_deleteListener) {
       delete _listener;
     }
-    delete _color;
   }
 
   void onCancel(const URL& url) {
@@ -657,7 +660,6 @@ public:
     if (_deleteListener) {
       delete _listener;
     }
-    delete _color;
   }
 
   void onCanceledDownload(const URL& url,
@@ -668,6 +670,7 @@ public:
 
   ~MeshRenderer_MeshBufferDownloadListener() {
     delete _color;
+    _color = NULL;
   }
 
 };

@@ -185,9 +185,9 @@ public:
     _polygonOffsetFill = false;
   }
   
-  bool getPolygonOffsetFill() const { return _polygonOffsetFill;}
-  float getPolygonOffsetUnits() const { return _polygonOffsetUnits;}
-  float getPolygonOffsetFactor() const { return _polygonOffsetFactor;}
+  bool getPolygonOffsetFill()    const { return _polygonOffsetFill;   }
+  float getPolygonOffsetUnits()  const { return _polygonOffsetUnits;  }
+  float getPolygonOffsetFactor() const { return _polygonOffsetFactor; }
   
   void setBlendFactors(int sFactor, int dFactor) {
     _blendSFactor = sFactor;
@@ -198,7 +198,7 @@ public:
     _boundTextureId[0] = textureId;
   }
   
-  const IGLTextureId* getBoundTexture() const{
+  const IGLTextureId* getBoundTexture() const {
     return _boundTextureId[0];
   }
 
@@ -213,7 +213,7 @@ public:
     _boundTextureId[target] = textureId;
   }
 
-  const IGLTextureId* getBoundTexture(int target) const{
+  const IGLTextureId* getBoundTexture(int target) const {
     return _boundTextureId[0];
   }
 

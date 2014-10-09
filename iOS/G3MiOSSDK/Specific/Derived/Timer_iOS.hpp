@@ -28,7 +28,11 @@ public:
   TimeInterval now() const {
     return TimeInterval::fromSeconds(nowInSeconds());
   }
-  
+
+  long long nowInMilliseconds() const {
+    return (long long) (nowInSeconds() * 1000.0);
+  }
+
   void start() {
     _startedInSeconds = nowInSeconds();
   }

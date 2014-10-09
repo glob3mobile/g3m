@@ -50,24 +50,6 @@ public class ShapesRenderer extends DefaultRenderer
   {
   
     final Camera cam = rc.getCurrentCamera();
-    /*
-  
-     if (_projection == NULL) {
-     _projection = new ProjectionGLFeature(cam->getProjectionMatrix44D());
-     _glState->addGLFeature(_projection, true);
-     _glStateTransparent->addGLFeature(_projection, true);
-     } else{
-     _projection->setMatrix(cam->getProjectionMatrix44D());
-     }
-  
-     if (_model == NULL) {
-     _model = new ModelGLFeature(cam->getModelMatrix44D());
-     _glState->addGLFeature(_model, true);
-     _glStateTransparent->addGLFeature(_model, true);
-     } else{
-     _model->setMatrix(cam->getModelMatrix44D());
-     }
-     */
     ModelViewGLFeature f = (ModelViewGLFeature) _glState.getGLFeature(GLFeatureID.GLF_MODEL_VIEW);
     if (f == null)
     {
@@ -283,20 +265,28 @@ public class ShapesRenderer extends DefaultRenderer
         final Vector3D origin = _lastCamera.getCartesianPosition();
         final Vector2I pixel = touchEvent.getTouch(0).getPos();
         final Vector3D direction = _lastCamera.pixel2Ray(pixel);
-        java.util.ArrayList<ShapeDistance> shapeDistances = intersectionsDistances(origin, direction);
-  
-        if (!shapeDistances.isEmpty())
+        if (!direction.isNan())
         {
-          //        printf ("Found %d intersections with shapes:\n",
-          //                (int)shapeDistances.size());
-          for (int i = 0; i<shapeDistances.size(); i++)
+          java.util.ArrayList<ShapeDistance> shapeDistances = intersectionsDistances(origin, direction);
+  
+          if (!shapeDistances.isEmpty())
           {
-            //          printf ("   %d: shape %x to distance %f\n",
-            //                  i+1,
-            //                  (unsigned int)shapeDistances[i]._shape,
-            //                  shapeDistances[i]._distance);
+            //        printf ("Found %d intersections with shapes:\n",
+            //                (int)shapeDistances.size());
+            for (int i = 0; i<shapeDistances.size(); i++)
+            {
+              //          printf ("   %d: shape %x to distance %f\n",
+              //                  i+1,
+              //                  (unsigned int)shapeDistances[i]._shape,
+              //                  shapeDistances[i]._distance);
+            }
           }
         }
+        else
+        {
+          ILogger.instance().logWarning("ShapesRenderer::onTouchEvent: direction ( - _lastCamera->pixel2Ray(pixel) - ) is NaN");
+        }
+  
       }
     }
     return false;
@@ -311,7 +301,7 @@ public class ShapesRenderer extends DefaultRenderer
     // Saving camera for use in onTouchEvent
     _lastCamera = rc.getCurrentCamera();
   
-    final Vector3D cameraPosition = rc.getCurrentCamera().getCartesianPosition();
+    final MutableVector3D cameraPosition = rc.getCurrentCamera().getCartesianPositionMutable();
   
     //Setting camera matrixes
     updateGLState(rc);

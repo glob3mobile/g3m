@@ -197,8 +197,9 @@ CompositeElevationDataProvider_Request::getSquaredGridResolutionInDegreesSquared
 
 ElevationDataProvider* CompositeElevationDataProvider::
 CompositeElevationDataProvider_Request::
-popBestProvider(std::vector<ElevationDataProvider*>& ps, const Vector2I& extent) const{
-  
+popBestProvider(std::vector<ElevationDataProvider*>& ps, const Vector2I& extent) const {
+
+  double bestRes = extent.squaredLength();
   double selectedRes = IMathUtils::instance()->maxDouble();
   
   ElevationDataProvider* provider = NULL;
@@ -251,13 +252,15 @@ void CompositeElevationDataProvider::CompositeElevationDataProvider_Request::onD
   _currentStep = NULL;
   if (_compData == NULL) {
     _compData = new CompositeElevationData(elevationData);
-  } else{
+  }
+  else {
     ((CompositeElevationData*)_compData)->addElevationData(elevationData);
   }
   
   if (!_compData->hasNoData()) {
     _compProvider->requestFinished(this);//If this data is enough we respond
-  } else{
+  }
+  else {
     if (!launchNewStep()) {//If there are no more providers we respond
       _compProvider->requestFinished(this);
     }
@@ -294,7 +297,8 @@ void CompositeElevationDataProvider::CompositeElevationDataProvider_Request::res
     if (_autodelete) {
       delete _listener;
     }
-  } else{
+  }
+  else {
     _listener->onData(_sector, _resolution, _compData);
     if (_autodelete) {
       delete _listener;

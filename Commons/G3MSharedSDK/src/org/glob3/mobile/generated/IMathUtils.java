@@ -16,6 +16,7 @@ package org.glob3.mobile.generated;
 //
 
 
+//class Vector2D;
 
 
 //#define SIN(x) java.lang.Math.sin(x)
@@ -123,6 +124,11 @@ public abstract class IMathUtils
 
   public abstract double min(double d1, double d2);
   public abstract float min(float f1, float f2);
+
+  public final int min(int i1, int i2)
+  {
+    return (i1 < i2) ? i1 : i2;
+  }
 
   public abstract double max(double d1, double d2);
   public abstract float max(float f1, float f2);
@@ -240,5 +246,19 @@ public abstract class IMathUtils
     return fracPart * denominator;
   }
 
+  public final Vector2D solveSecondDegreeEquation(double A, double B, double C)
+  {
+  
+    double x = B *B - 4 *A *C;
+    if (x < 0)
+    {
+      return Vector2D.nan();
+    }
+  
+    double squareRoot = this.sqrt(x);
+    double A2 = 2 *A;
+  
+    return new Vector2D((-B + squareRoot) / A2, (-B - squareRoot) / A2);
+  }
 
 }

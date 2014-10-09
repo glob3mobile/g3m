@@ -121,6 +121,18 @@ public:
                                           mercator);
   }
 
+  static const std::vector<const LayerTilesRenderParameters*> createDefaultMultiProjection(const int mercatorFirstLevel = 2,
+                                                                                           const int mercatorMaxLevel   = 18,
+                                                                                           const int wgs84firstLevel    = 0,
+                                                                                           const int wgs84maxLevel      = 18) {
+    std::vector<const LayerTilesRenderParameters*> result;
+    result.push_back( LayerTilesRenderParameters::createDefaultWGS84(wgs84firstLevel,
+                                                                     wgs84maxLevel) );  // WGS84 tiles-pyramid layout is preferred
+    result.push_back( LayerTilesRenderParameters::createDefaultMercator(mercatorFirstLevel,
+                                                                        mercatorMaxLevel) );
+    return result;
+  }
+
   ~LayerTilesRenderParameters() {
   }
 

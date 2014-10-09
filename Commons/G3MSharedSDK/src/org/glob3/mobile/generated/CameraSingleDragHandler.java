@@ -107,10 +107,17 @@ public class CameraSingleDragHandler extends CameraEventHandler
   /*
     eventContext->getPlanet()->beginSingleDrag(_camera0.getCartesianPosition(),
                                                _camera0.pixel2Ray(pixel));*/
+      eventContext.getPlanet().beginSingleDrag(_camera0.getCartesianPosition(), touchedPosition);
   
-    eventContext.getPlanet().beginSingleDrag(_camera0.getCartesianPosition(), touchedPosition);
-  
-  
+  /*
+  =======
+    const Vector3D& initialRay = _camera0.pixel2Ray(pixel);
+    if (!initialRay.isNan()) {
+      cameraContext->setCurrentGesture(Drag);
+      eventContext->getPlanet()->beginSingleDrag(_camera0.getCartesianPosition(),initialRay);
+    }
+  >>>>>>> origin/purgatory
+   */
   }
   public final void onMove(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
   {
@@ -118,10 +125,14 @@ public class CameraSingleDragHandler extends CameraEventHandler
     if (cameraContext.getCurrentGesture()!=Gesture.Drag)
        return;
   
+    //check finalRay
+    final Vector3D finalRay = _camera0.pixel2Ray(touchEvent.getTouch(0).getPos());
+    if (finalRay.isNan())
+       return;
+  
     // compute transformation matrix
     final Planet planet = eventContext.getPlanet();
-    final Vector2I pixel = touchEvent.getTouch(0).getPos();
-    MutableMatrix44D matrix = planet.singleDrag(_camera0.pixel2Ray(pixel));
+    MutableMatrix44D matrix = planet.singleDrag(finalRay);
     if (!matrix.isValid())
        return;
   

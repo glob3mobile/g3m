@@ -198,8 +198,10 @@ public class CameraZoomAndRotateHandler extends CameraEventHandler
         Vector3D intersection = eventContext.getWidget().getScenePositionForCentralPixel();
         if (!intersection.isNan())
         {
-          _centralGlobePoint = intersection.asMutableVector3D();
-          _centralGlobeNormal = planet.geodeticSurfaceNormal(_centralGlobePoint).asMutableVector3D();
+  //        _centralGlobePoint = intersection.asMutableVector3D();
+          _centralGlobePoint.copyFrom(intersection);
+  //        _centralGlobeNormal = planet->geodeticSurfaceNormal(_centralGlobePoint).asMutableVector3D();
+          _centralGlobeNormal.copyFrom(planet.geodeticSurfaceNormal(_centralGlobePoint));
           _fingerSep0 = Math.sqrt((difCurrentPixels._x *difCurrentPixels._x+difCurrentPixels._y *difCurrentPixels._y));
           _lastAngle = _angle0 = Math.atan2(difCurrentPixels._y, difCurrentPixels._x);
           cameraContext.setCurrentGesture(Gesture.Zoom);

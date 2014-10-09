@@ -28,6 +28,12 @@ public final class Timer_Android
 
 
    @Override
+   public long nowInMilliseconds() {
+      return SystemClock.uptimeMillis();
+   }
+
+
+   @Override
    public void start() {
       _startTimeInMilliseconds = SystemClock.uptimeMillis();
    }
@@ -43,5 +49,6 @@ public final class Timer_Android
    public long elapsedTimeInMilliseconds() {
       return SystemClock.uptimeMillis() - _startTimeInMilliseconds;
    }
+
 
 }

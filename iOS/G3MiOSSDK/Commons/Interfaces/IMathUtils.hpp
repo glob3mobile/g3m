@@ -12,6 +12,7 @@
 #include <string>
 #include <cstdio>
 #include "ILogger.hpp"
+class Vector2D;
 
 #ifdef C_CODE
 
@@ -127,6 +128,10 @@ public:
   virtual double min(double d1, double d2) const = 0;
   virtual float  min(float f1,  float f2)  const = 0;
 
+  int min(int i1, int i2) const {
+    return (i1 < i2) ? i1 : i2;
+  }
+
   virtual double max(double d1, double d2) const = 0;
   virtual float  max(float f1,  float f2)  const = 0;
 
@@ -239,7 +244,8 @@ public:
 
     return fracPart * denominator;
   }
-
+  
+  Vector2D solveSecondDegreeEquation(double A, double B, double C) const;
 
 };
 

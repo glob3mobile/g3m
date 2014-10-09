@@ -17,6 +17,7 @@ package org.glob3.mobile.generated;
 
 
 //class LayerSet;
+//class GEOVectorLayer;
 
 
 
@@ -25,7 +26,8 @@ public class PlanetRendererBuilder
 
   private TileTessellator _tileTessellator;
   private TileTexturizer _texturizer;
-  private java.util.ArrayList<TileRasterizer> _tileRasterizers = new java.util.ArrayList<TileRasterizer>();
+//  std::vector<TileRasterizer*> _tileRasterizers;
+  private java.util.ArrayList<GEOVectorLayer> _geoVectorLayers = new java.util.ArrayList<GEOVectorLayer>();
 
   private LayerSet _layerSet;
   private TilesRenderParameters _parameters;
@@ -43,6 +45,7 @@ public class PlanetRendererBuilder
   private ElevationDataProvider _elevationDataProvider;
   private float _verticalExaggeration;
 
+<<<<<<< HEAD
   private TileRasterizer getTileRasterizer()
   {
     final int tileRasterizersSize = _tileRasterizers.size();
@@ -64,6 +67,60 @@ public class PlanetRendererBuilder
     }
     return result;
   }
+=======
+
+  /**
+   * Returns the _tileTessellator.
+   *
+   * @return _tileTessellator: TileTessellator*
+   */
+  private TileTessellator getTileTessellator()
+  {
+    if (_tileTessellator == null)
+    {
+      _tileTessellator = createTileTessellator();
+    }
+  
+    return _tileTessellator;
+  }
+
+  //TileRasterizer* PlanetRendererBuilder::getTileRasterizer() {
+  //  const int tileRasterizersSize = _tileRasterizers.size();
+  //
+  //  if (tileRasterizersSize == 0) {
+  //    return NULL;
+  //  }
+  //
+  //  if (tileRasterizersSize == 1) {
+  //    return _tileRasterizers[0];
+  //  }
+  //
+  //  CompositeTileRasterizer* result = new CompositeTileRasterizer();
+  //  for (int i = 0; i < tileRasterizersSize; i++) {
+  //    result->addTileRasterizer(_tileRasterizers[i]);
+  //  }
+  //  return result;
+  //}
+  
+  /**
+   * Returns the _texturizer.
+   *
+   * @return _texturizer: TileTexturizer*
+   */
+  private TileTexturizer getTexturizer()
+  {
+    if (_texturizer == null)
+    {
+  //    _texturizer = new MultiLayerTileTexturizer();
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning Diego at work!
+      _texturizer = new DefaultTileTexturizer();
+    }
+  
+    return _texturizer;
+  }
+//  TileRasterizer* getTileRasterizer();
+>>>>>>> zrender-touchhandlers
 
 
   /**
@@ -249,12 +306,25 @@ public class PlanetRendererBuilder
 
   private ChangedRendererInfoListener _changedInfoListener;
 
+<<<<<<< HEAD
   private int _tileCacheSize;
   private boolean _deleteTexturesOfInvisibleTiles;
 
+=======
+  private TouchEventType _touchEventTypeOfTerrainTouchListener;
 
-  ///#include "DefaultTileTexturizer.hpp"
+  private TouchEventType getTouchEventTypeOfTerrainTouchListener()
+  {
+    return _touchEventTypeOfTerrainTouchListener;
+  }
+>>>>>>> zrender-touchhandlers
+
+
+  ///#include "MultiLayerTileTexturizer.hpp"
+  ///#include "TileRasterizer.hpp"
   
+  
+  ///#include "CompositeTileRasterizer.hpp"
   
   public PlanetRendererBuilder()
   {
@@ -279,8 +349,12 @@ public class PlanetRendererBuilder
      _logTilesPetitions = false;
      _tileRenderingListener = null;
      _changedInfoListener = null;
+<<<<<<< HEAD
      _tileCacheSize = 0;
      _deleteTexturesOfInvisibleTiles = true;
+=======
+     _touchEventTypeOfTerrainTouchListener = TouchEventType.LongPress;
+>>>>>>> zrender-touchhandlers
   }
   public void dispose()
   {
@@ -291,12 +365,18 @@ public class PlanetRendererBuilder
     if (_texturizer != null)
        _texturizer.dispose();
   
-    final int tileRasterizersSize = _tileRasterizers.size();
-    for (int i = 0 ; i < tileRasterizersSize; i++)
+  //  const int tileRasterizersSize = _tileRasterizers.size();
+  //  for (int i = 0 ; i < tileRasterizersSize; i++) {
+  //    TileRasterizer* tileRasterizer = _tileRasterizers[i];
+  //    delete tileRasterizer;
+  //  }
+  
+    final int geoVectorLayersSize = _geoVectorLayers.size();
+    for (int i = 0; i < geoVectorLayersSize; i++)
     {
-      TileRasterizer tileRasterizer = _tileRasterizers.get(i);
-      if (tileRasterizer != null)
-         tileRasterizer.dispose();
+      GEOVectorLayer geoVectorLayer = _geoVectorLayers.get(i);
+      if (geoVectorLayer != null)
+         geoVectorLayer.dispose();
     }
   
     if (_tileTessellator != null)
@@ -312,7 +392,21 @@ public class PlanetRendererBuilder
   }
   public final PlanetRenderer create()
   {
+<<<<<<< HEAD
     PlanetRenderer planetRenderer = new PlanetRenderer(getTileTessellator(), getElevationDataProvider(), true, getVerticalExaggeration(), getTexturizer(), getTileRasterizer(), getLayerSet(), getParameters(), getShowStatistics(), getTileDownloadPriority(), getRenderedSector(), getRenderTileMeshes(), getLogTilesPetitions(), getTileRenderingListener(), getChangedRendererInfoListener(), _tileCacheSize, _deleteTexturesOfInvisibleTiles);
+=======
+  
+    LayerSet layerSet = getLayerSet();
+    final int geoVectorLayersSize = _geoVectorLayers.size();
+    for (int i = 0; i < geoVectorLayersSize; i++)
+    {
+      GEOVectorLayer geoVectorLayer = _geoVectorLayers.get(i);
+      layerSet.addLayer(geoVectorLayer);
+    }
+  
+    PlanetRenderer planetRenderer = new PlanetRenderer(getTileTessellator(), getElevationDataProvider(), true, getVerticalExaggeration(), getTexturizer(), layerSet, getParameters(), getShowStatistics(), getTileDownloadPriority(), getRenderedSector(), getRenderTileMeshes(), getLogTilesPetitions(), getTileRenderingListener(), getChangedRendererInfoListener(), getTouchEventTypeOfTerrainTouchListener());
+  //                                                      getTileRasterizer(),
+>>>>>>> zrender-touchhandlers
   
     for (int i = 0; i < getVisibleSectorListeners().size(); i++)
     {
@@ -344,7 +438,8 @@ public class PlanetRendererBuilder
   
     _tileRenderingListener = null;
   
-    _tileRasterizers.clear();
+  //  _tileRasterizers.clear();
+    _geoVectorLayers.clear();
   
     return planetRenderer;
   }
@@ -357,6 +452,11 @@ public class PlanetRendererBuilder
     }
     _tileTessellator = tileTessellator;
   }
+
+  //void PlanetRendererBuilder::addTileRasterizer(TileRasterizer* tileRasterizer) {
+  //  _tileRasterizers.push_back(tileRasterizer);
+  //}
+  
   public final void setTileTexturizer(TileTexturizer tileTexturizer)
   {
     if (_texturizer != null)
@@ -366,10 +466,7 @@ public class PlanetRendererBuilder
     }
     _texturizer = tileTexturizer;
   }
-  public final void addTileRasterizer(TileRasterizer tileRasterizer)
-  {
-    _tileRasterizers.add(tileRasterizer);
-  }
+//  void addTileRasterizer(TileRasterizer* tileRasterizer);
   public final void setLayerSet(LayerSet layerSet)
   {
     if (_layerSet != null)
@@ -462,11 +559,21 @@ public class PlanetRendererBuilder
     _renderedSector = new Sector(sector);
   }
 
-  public final GEOTileRasterizer createGEOTileRasterizer()
+//  GEOTileRasterizer* createGEOTileRasterizer();
+
+
+  //GEOTileRasterizer* PlanetRendererBuilder::createGEOTileRasterizer() {
+  //  GEOTileRasterizer* geoTileRasterizer = new GEOTileRasterizer();
+  //  addTileRasterizer(geoTileRasterizer);
+  //  return geoTileRasterizer;
+  //}
+  
+  
+  public final GEOVectorLayer createGEOVectorLayer()
   {
-    GEOTileRasterizer geoTileRasterizer = new GEOTileRasterizer();
-    addTileRasterizer(geoTileRasterizer);
-    return geoTileRasterizer;
+    GEOVectorLayer geoVectorLayer = new GEOVectorLayer();
+    _geoVectorLayers.add(geoVectorLayer);
+    return geoVectorLayer;
   }
 
   public final Quality getQuality()
@@ -522,6 +629,7 @@ public class PlanetRendererBuilder
     }
   }
 
+<<<<<<< HEAD
 
   /**
    * Returns the _tileTessellator.
@@ -564,5 +672,10 @@ public class PlanetRendererBuilder
   public final void setDeleteTexturesOfInvisibleTiles(boolean x)
   {
     _deleteTexturesOfInvisibleTiles = x;
+=======
+  public final void setTouchEventTypeOfTerrainTouchListener(TouchEventType touchEventTypeOfTerrainTouchListener)
+  {
+    _touchEventTypeOfTerrainTouchListener = touchEventTypeOfTerrainTouchListener;
+>>>>>>> zrender-touchhandlers
   }
 }

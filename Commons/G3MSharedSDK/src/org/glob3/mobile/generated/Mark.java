@@ -102,6 +102,8 @@ public class Mark implements SurfaceElevationListener
 
   private Vector3D _normalAtMarkPosition;
 
+  private MutableVector3D _markCameraVector = new MutableVector3D();
+
   /**
    * Creates a marker with icon and label
    */
@@ -440,7 +442,7 @@ public class Mark implements SurfaceElevationListener
   }
 
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
-//  void render(G3MRenderContext rc, Vector3D cameraPosition);
+//  void render(G3MRenderContext rc, MutableVector3D cameraPosition);
 
   public final boolean isReady()
   {
@@ -540,12 +542,14 @@ public class Mark implements SurfaceElevationListener
     return _cartesianPosition;
   }
 
-  public final void render(G3MRenderContext rc, Vector3D cameraPosition, double cameraHeight, GLState parentGLState, Planet planet, GL gl, IFloatBuffer billboardTexCoords)
+  public final void render(G3MRenderContext rc, MutableVector3D cameraPosition, double cameraHeight, GLState parentGLState, Planet planet, GL gl, IFloatBuffer billboardTexCoords)
   {
   
     final Vector3D markPosition = getCartesianPosition(planet);
   
-    final Vector3D markCameraVector = markPosition.sub(cameraPosition);
+  //  const Vector3D markCameraVector = markPosition->sub(cameraPosition);
+  //  _markCameraVector.putSub(markPosition, cameraPosition);
+    _markCameraVector.put(markPosition._x - cameraPosition.x(), markPosition._y - cameraPosition.y(), markPosition._z - cameraPosition.z());
   
     // mark will be renderered only if is renderable by distance and placed on a visible globe area
     boolean renderableByDistance;
@@ -555,7 +559,7 @@ public class Mark implements SurfaceElevationListener
     }
     else
     {
-      final double squaredDistanceToCamera = markCameraVector.squaredLength();
+      final double squaredDistanceToCamera = _markCameraVector.squaredLength();
       renderableByDistance = (squaredDistanceToCamera <= (_minDistanceToCamera * _minDistanceToCamera));
     }
   
@@ -568,7 +572,7 @@ public class Mark implements SurfaceElevationListener
       if (_position._height > cameraHeight)
       {
         // Computing horizon culling
-        final java.util.ArrayList<Double> dists = planet.intersectionsDistances(cameraPosition, markCameraVector);
+        final java.util.ArrayList<Double> dists = planet.intersectionsDistances(cameraPosition.x(), cameraPosition.y(), cameraPosition.z(), _markCameraVector.x(), _markCameraVector.y(), _markCameraVector.z());
         if (dists.size() > 0)
         {
           final double dist = dists.get(0);
@@ -585,9 +589,9 @@ public class Mark implements SurfaceElevationListener
         {
           _normalAtMarkPosition = new Vector3D(planet.geodeticSurfaceNormal(markPosition));
         }
-        occludedByHorizon = (_normalAtMarkPosition.angleBetween(markCameraVector)._radians <= DefineConstants.HALF_PI);
+  //      occludedByHorizon = (_normalAtMarkPosition->angleInRadiansBetween(markCameraVector) <= HALF_PI);
+        occludedByHorizon = (Vector3D.angleInRadiansBetween(_normalAtMarkPosition, _markCameraVector) <= DefineConstants.HALF_PI);
       }
-  
   
       if (!occludedByHorizon)
       {
@@ -647,11 +651,12 @@ public class Mark implements SurfaceElevationListener
   {
     if (_altitudeMode == AltitudeMode.RELATIVE_TO_GROUND)
     {
-      ILogger.instance().logWarning("Position change with _altitudeMode == RELATIVE_TO_GROUND not supported");
+      throw new RuntimeException("Position change with (_altitudeMode == RELATIVE_TO_GROUND) not supported");
     }
+  
     if (_position != null)
        _position.dispose();
-    _position = new Geodetic3D(position);
+    _position = position;
   
     if (_cartesianPosition != null)
        _cartesianPosition.dispose();

@@ -413,7 +413,7 @@ void DefaultTileTexturizer::initialize(const G3MContext* context,
 
 Mesh* DefaultTileTexturizer::texturize(const G3MRenderContext* rc,
                                        const TileTessellator* tessellator,
-                                       TileRasterizer* tileRasterizer,
+//                                       TileRasterizer* tileRasterizer,
                                        const LayerTilesRenderParameters* layerTilesRenderParameters,
                                        const LayerSet* layerSet,
                                        bool forceFullRender,

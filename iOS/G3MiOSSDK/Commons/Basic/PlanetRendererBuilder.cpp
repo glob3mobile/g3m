@@ -8,16 +8,19 @@
 
 #include "PlanetRendererBuilder.hpp"
 #include "WMSLayer.hpp"
-#include "MultiLayerTileTexturizer.hpp"
-//#include "DefaultTileTexturizer.hpp"
+//#include "MultiLayerTileTexturizer.hpp"
+#include "DefaultTileTexturizer.hpp"
 #include "PlanetTileTessellator.hpp"
 #include "LayerBuilder.hpp"
 #include "DownloadPriority.hpp"
 #include "ElevationDataProvider.hpp"
-#include "TileRasterizer.hpp"
+//#include "TileRasterizer.hpp"
 #include "TileRenderingListener.hpp"
+#include "GEOVectorLayer.hpp"
+#include "TouchEvent.hpp"
 
-#include "CompositeTileRasterizer.hpp"
+
+//#include "CompositeTileRasterizer.hpp"
 
 PlanetRendererBuilder::PlanetRendererBuilder() :
 _showStatistics(false),
@@ -42,7 +45,8 @@ _logTilesPetitions(false),
 _tileRenderingListener(NULL),
 _changedInfoListener(NULL),
 _tileCacheSize(0),
-_deleteTexturesOfInvisibleTiles(true)
+_deleteTexturesOfInvisibleTiles(true),
+_touchEventTypeOfTerrainTouchListener(LongPress)
 {
 }
 
@@ -51,10 +55,16 @@ PlanetRendererBuilder::~PlanetRendererBuilder() {
   delete _layerSet;
   delete _texturizer;
 
-  const int tileRasterizersSize = _tileRasterizers.size();
-  for (int i = 0 ; i < tileRasterizersSize; i++) {
-    TileRasterizer* tileRasterizer = _tileRasterizers[i];
-    delete tileRasterizer;
+//  const int tileRasterizersSize = _tileRasterizers.size();
+//  for (int i = 0 ; i < tileRasterizersSize; i++) {
+//    TileRasterizer* tileRasterizer = _tileRasterizers[i];
+//    delete tileRasterizer;
+//  }
+
+  const int geoVectorLayersSize = _geoVectorLayers.size();
+  for (int i = 0; i < geoVectorLayersSize; i++) {
+    GEOVectorLayer* geoVectorLayer = _geoVectorLayers[i];
+    delete geoVectorLayer;
   }
 
   delete _tileTessellator;
@@ -78,23 +88,23 @@ TileTessellator* PlanetRendererBuilder::getTileTessellator() {
   return _tileTessellator;
 }
 
-TileRasterizer* PlanetRendererBuilder::getTileRasterizer() {
-  const int tileRasterizersSize = _tileRasterizers.size();
-
-  if (tileRasterizersSize == 0) {
-    return NULL;
-  }
-
-  if (tileRasterizersSize == 1) {
-    return _tileRasterizers[0];
-  }
-
-  CompositeTileRasterizer* result = new CompositeTileRasterizer();
-  for (int i = 0; i < tileRasterizersSize; i++) {
-    result->addTileRasterizer(_tileRasterizers[i]);
-  }
-  return result;
-}
+//TileRasterizer* PlanetRendererBuilder::getTileRasterizer() {
+//  const int tileRasterizersSize = _tileRasterizers.size();
+//
+//  if (tileRasterizersSize == 0) {
+//    return NULL;
+//  }
+//
+//  if (tileRasterizersSize == 1) {
+//    return _tileRasterizers[0];
+//  }
+//
+//  CompositeTileRasterizer* result = new CompositeTileRasterizer();
+//  for (int i = 0; i < tileRasterizersSize; i++) {
+//    result->addTileRasterizer(_tileRasterizers[i]);
+//  }
+//  return result;
+//}
 
 /**
  * Returns the _texturizer.
@@ -103,9 +113,9 @@ TileRasterizer* PlanetRendererBuilder::getTileRasterizer() {
  */
 TileTexturizer* PlanetRendererBuilder::getTexturizer() {
   if (!_texturizer) {
-    _texturizer = new MultiLayerTileTexturizer();
-//#warning Diego at work!
-//    _texturizer = new DefaultTileTexturizer();
+//    _texturizer = new MultiLayerTileTexturizer();
+#warning Diego at work!
+    _texturizer = new DefaultTileTexturizer();
   }
 
   return _texturizer;
@@ -248,9 +258,9 @@ void PlanetRendererBuilder::setTileTessellator(TileTessellator *tileTessellator)
   _tileTessellator = tileTessellator;
 }
 
-void PlanetRendererBuilder::addTileRasterizer(TileRasterizer* tileRasterizer) {
-  _tileRasterizers.push_back(tileRasterizer);
-}
+//void PlanetRendererBuilder::addTileRasterizer(TileRasterizer* tileRasterizer) {
+//  _tileRasterizers.push_back(tileRasterizer);
+//}
 
 void PlanetRendererBuilder::setTileTexturizer(TileTexturizer *tileTexturizer) {
   if (_texturizer) {
@@ -357,24 +367,44 @@ ChangedRendererInfoListener* PlanetRendererBuilder::getChangedRendererInfoListen
 void PlanetRendererBuilder::setChangedRendererInfoListener(ChangedRendererInfoListener* changedInfoListener) {
   if (_changedInfoListener != NULL) {
     ILogger::instance()->logError("LOGIC ERROR: ChangedInfoListener in Planet Render Builder already set");
-  } else {
+  }
+  else {
     _changedInfoListener = changedInfoListener;
     ILogger::instance()->logError("LOGIC INFO: ChangedInfoListener in Planet Render Builder set OK");
   }
 }
+
+void PlanetRendererBuilder::setTouchEventTypeOfTerrainTouchListener(TouchEventType touchEventTypeOfTerrainTouchListener) {
+  _touchEventTypeOfTerrainTouchListener = touchEventTypeOfTerrainTouchListener;
+}
+
+TouchEventType PlanetRendererBuilder::getTouchEventTypeOfTerrainTouchListener() {
+  return _touchEventTypeOfTerrainTouchListener;
+}
+
+
+
 
 TileRenderingListener* PlanetRendererBuilder::getTileRenderingListener() {
   return _tileRenderingListener;
 }
 
 PlanetRenderer* PlanetRendererBuilder::create() {
+
+  LayerSet* layerSet = getLayerSet();
+  const int geoVectorLayersSize = _geoVectorLayers.size();
+  for (int i = 0; i < geoVectorLayersSize; i++) {
+    GEOVectorLayer* geoVectorLayer = _geoVectorLayers[i];
+    layerSet->addLayer(geoVectorLayer);
+  }
+
   PlanetRenderer* planetRenderer = new PlanetRenderer(getTileTessellator(),
                                                       getElevationDataProvider(),
                                                       true,
                                                       getVerticalExaggeration(),
                                                       getTexturizer(),
-                                                      getTileRasterizer(),
-                                                      getLayerSet(),
+//                                                      getTileRasterizer(),
+                                                      layerSet,
                                                       getParameters(),
                                                       getShowStatistics(),
                                                       getTileDownloadPriority(),
@@ -384,7 +414,8 @@ PlanetRenderer* PlanetRendererBuilder::create() {
                                                       getTileRenderingListener(),
                                                       getChangedRendererInfoListener(),
                                                       _tileCacheSize,
-                                                      _deleteTexturesOfInvisibleTiles);
+                                                      _deleteTexturesOfInvisibleTiles,
+                                                      getTouchEventTypeOfTerrainTouchListener());
 
   for (int i = 0; i < getVisibleSectorListeners()->size(); i++) {
     planetRenderer->addVisibleSectorListener(getVisibleSectorListeners()->at(i),
@@ -414,7 +445,8 @@ PlanetRenderer* PlanetRendererBuilder::create() {
 
   _tileRenderingListener = NULL;
 
-  _tileRasterizers.clear();
+//  _tileRasterizers.clear();
+  _geoVectorLayers.clear();
 
   return planetRenderer;
 }
@@ -460,10 +492,17 @@ Sector PlanetRendererBuilder::getRenderedSector() {
   return *_renderedSector;
 }
 
-GEOTileRasterizer* PlanetRendererBuilder::createGEOTileRasterizer() {
-  GEOTileRasterizer* geoTileRasterizer = new GEOTileRasterizer();
-  addTileRasterizer(geoTileRasterizer);
-  return geoTileRasterizer;
+//GEOTileRasterizer* PlanetRendererBuilder::createGEOTileRasterizer() {
+//  GEOTileRasterizer* geoTileRasterizer = new GEOTileRasterizer();
+//  addTileRasterizer(geoTileRasterizer);
+//  return geoTileRasterizer;
+//}
+
+
+GEOVectorLayer* PlanetRendererBuilder::createGEOVectorLayer() {
+  GEOVectorLayer* geoVectorLayer = new GEOVectorLayer();
+  _geoVectorLayers.push_back(geoVectorLayer);
+  return geoVectorLayer;
 }
 
 void PlanetRendererBuilder::setTileCacheSize(int x){

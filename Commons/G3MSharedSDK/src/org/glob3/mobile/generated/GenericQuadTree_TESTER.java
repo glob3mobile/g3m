@@ -59,7 +59,7 @@ public class GenericQuadTree_TESTER
 
     public final boolean visitElement(Sector sector, Object element)
     {
-       return false;
+      return false;
     }
 
     public final boolean visitElement(Geodetic2D geodetic, Object element)
@@ -211,7 +211,6 @@ public class GenericQuadTree_TESTER
       }
       else
       {
-  
         Geodetic2D geo = Geodetic2D.fromDegrees(minLat, minLon);
         geos.add(new Geodetic2D(geo));
         String desc = "GEODETIC ELEMENT " + geo.description();

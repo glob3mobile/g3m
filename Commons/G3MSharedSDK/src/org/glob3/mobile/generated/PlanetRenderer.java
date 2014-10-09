@@ -5,7 +5,7 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
   private ElevationDataProvider _elevationDataProvider;
   private boolean _ownsElevationDataProvider;
   private TileTexturizer _texturizer;
-  private TileRasterizer _tileRasterizer;
+//  TileRasterizer*              _tileRasterizer;
   private LayerSet _layerSet;
   private final TilesRenderParameters _tilesRenderParameters;
   private final boolean _showStatistics;
@@ -287,7 +287,6 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
     {
       f.setMatrix(cam.getModelViewMatrix44D());
     }
-  
   }
 
   private SurfaceElevationProvider_Tree _elevationListenersTree = new SurfaceElevationProvider_Tree();
@@ -354,7 +353,11 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
   
       for (int i = 0; i < firstLevelTilesCount; i++)
       {
+<<<<<<< HEAD
         _firstLevelTiles.get(i).actualizeQuadTree(rc, _renderedTiles, planet, cameraNormalizedPosition, cameraAngle2HorizonInRadians, cameraFrustumInModelCoordinates, cameraWiderFrustumInModelCoordinates, _statistics, _verticalExaggeration, layerTilesRenderParameters, _texturizer, _tilesRenderParameters, _lastSplitTimer, _elevationDataProvider, _tessellator, _tileRasterizer, _layerSet, _renderedSector, _firstRender, _tileDownloadPriority, texWidthSquared, texHeightSquared, nowInMS); // if first render, force full render
+=======
+        _firstLevelTiles.get(i).updateQuadTree(rc, _renderedTiles, planet, cameraNormalizedPosition, cameraAngle2HorizonInRadians, cameraFrustumInModelCoordinates, _statistics, _verticalExaggeration, layerTilesRenderParameters, _texturizer, _tilesRenderParameters, _lastSplitTimer, _elevationDataProvider, _tessellator, _layerSet, _renderedSector, _firstRender, _tileDownloadPriority, texWidthSquared, texHeightSquared, nowInMS, _tileRenderingListener); // if first render, force full render
+>>>>>>> zrender-touchhandlers
       }
     }
     else
@@ -365,6 +368,7 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
     return _renderedTiles;
   }
 
+<<<<<<< HEAD
   private void addLayerSetURLForSector(java.util.LinkedList<URL> urls, Tile tile)
   {
     java.util.ArrayList<Petition> petitions = _layerSet.createTileMapPetitions(_renderContext, _layerTilesRenderParameters, tile);
@@ -411,13 +415,23 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
   private TileCache _tileCache;
   private boolean _deleteTexturesOfInvisibleTiles;
   public PlanetRenderer(TileTessellator tessellator, ElevationDataProvider elevationDataProvider, boolean ownsElevationDataProvider, float verticalExaggeration, TileTexturizer texturizer, TileRasterizer tileRasterizer, LayerSet layerSet, TilesRenderParameters tilesRenderParameters, boolean showStatistics, long tileDownloadPriority, Sector renderedSector, boolean renderTileMeshes, boolean logTilesPetitions, TileRenderingListener tileRenderingListener, ChangedRendererInfoListener changedInfoListener, int sizeOfTileCache, boolean deleteTexturesOfInvisibleTiles)
+=======
+  private TouchEventType _touchEventTypeOfTerrainTouchListener;
+
+
+  private java.util.ArrayList<Tile> _toVisit = new java.util.ArrayList<Tile>();
+  private java.util.ArrayList<Tile> _toVisitInNextIteration = new java.util.ArrayList<Tile>();
+
+  public PlanetRenderer(TileTessellator tessellator, ElevationDataProvider elevationDataProvider, boolean ownsElevationDataProvider, float verticalExaggeration, TileTexturizer texturizer, LayerSet layerSet, TilesRenderParameters tilesRenderParameters, boolean showStatistics, long tileDownloadPriority, Sector renderedSector, boolean renderTileMeshes, boolean logTilesPetitions, TileRenderingListener tileRenderingListener, ChangedRendererInfoListener changedInfoListener, TouchEventType touchEventTypeOfTerrainTouchListener)
+                                 //                               TileRasterizer*              tileRasterizer,
+  //_tileRasterizer(tileRasterizer),
+>>>>>>> zrender-touchhandlers
   {
      _tessellator = tessellator;
      _elevationDataProvider = elevationDataProvider;
      _ownsElevationDataProvider = ownsElevationDataProvider;
      _verticalExaggeration = verticalExaggeration;
      _texturizer = texturizer;
-     _tileRasterizer = tileRasterizer;
      _layerSet = layerSet;
      _tilesRenderParameters = tilesRenderParameters;
      _showStatistics = showStatistics;
@@ -438,20 +452,24 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
      _renderTileMeshes = renderTileMeshes;
      _logTilesPetitions = logTilesPetitions;
      _tileRenderingListener = tileRenderingListener;
+<<<<<<< HEAD
      _deleteTexturesOfInvisibleTiles = deleteTexturesOfInvisibleTiles;
+=======
+     _touchEventTypeOfTerrainTouchListener = touchEventTypeOfTerrainTouchListener;
+>>>>>>> zrender-touchhandlers
     _context = null;
     _layerSet.setChangeListener(this);
     _layerSet.setChangedInfoListener(this);
-    if (_tileRasterizer != null)
-    {
-      _tileRasterizer.setChangeListener(this);
-    }
+    //  if (_tileRasterizer != NULL) {
+    //    _tileRasterizer->setChangeListener(this);
+    //  }
   
     _changedInfoListener = changedInfoListener;
   
     _frustumCullingFactor = 1.0F;
     _tileCache = sizeOfTileCache < 1? null : new TileCache(sizeOfTileCache);
   }
+//                 TileRasterizer*              tileRasterizer,
 
   public void dispose()
   {
@@ -509,10 +527,9 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
     {
       _elevationDataProvider.initialize(context);
     }
-    if (_tileRasterizer != null)
-    {
-      _tileRasterizer.initialize(context);
-    }
+    //  if (_tileRasterizer != NULL) {
+    //    _tileRasterizer->initialize(context);
+    //  }
   }
 
   public final void render(G3MRenderContext rc, GLState glState)
@@ -525,13 +542,22 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
     }
   
     updateGLState(rc);
+<<<<<<< HEAD
   
+=======
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning Testing Terrain Normals
+>>>>>>> zrender-touchhandlers
     _glState.setParent(glState);
   
     // Saving camera for use in onTouchEvent
     _lastCamera = rc.getCurrentCamera();
   
     _statistics.clear();
+<<<<<<< HEAD
+=======
+    //<<<<<<< HEAD
+>>>>>>> zrender-touchhandlers
   
     if (_firstRender && _tilesRenderParameters._forceFirstLevelTilesRenderOnStart)
     {
@@ -543,19 +569,163 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
       for (int i = 0; i < firstLevelTilesCount; i++)
       {
         Tile tile = _firstLevelTiles.get(i);
+<<<<<<< HEAD
         tile.performRawRender(rc, _glState, _texturizer, _elevationDataProvider, _tessellator, _tileRasterizer, _layerTilesRenderParameters, _layerSet, _tilesRenderParameters, _firstRender, _tileDownloadPriority, _statistics, _logTilesPetitions);
+=======
+        tile.performRawRender(rc, _glState, _texturizer, _elevationDataProvider, _tessellator, _layerTilesRenderParameters, _layerSet, _tilesRenderParameters, _firstRender, _tileDownloadPriority, _statistics, _logTilesPetitions);
+  //                             _tileRasterizer,
+>>>>>>> zrender-touchhandlers
       }
     }
     else
     {
+<<<<<<< HEAD
   
       java.util.LinkedList<Tile> renderedTiles = getRenderedTilesList(rc);
   
+=======
+  
+      java.util.LinkedList<Tile> renderedTiles = getRenderedTilesList(rc);
+  
+>>>>>>> zrender-touchhandlers
       for (java.util.Iterator<Tile> iter = renderedTiles.iterator(); iter.hasNext();)
       {
         Tile tile = iter.next();
   
+<<<<<<< HEAD
         tile.performRawRender(rc, _glState, _texturizer, _elevationDataProvider, _tessellator, _tileRasterizer, _layerTilesRenderParameters, _layerSet, _tilesRenderParameters, _firstRender, _tileDownloadPriority, _statistics, _logTilesPetitions);
+=======
+        tile.performRawRender(rc, _glState, _texturizer, _elevationDataProvider, _tessellator, _layerTilesRenderParameters, _layerSet, _tilesRenderParameters, _firstRender, _tileDownloadPriority, _statistics, _logTilesPetitions);
+  //                             _tileRasterizer,
+        //=======
+        //
+        //  const IDeviceInfo* deviceInfo = IFactory::instance()->getDeviceInfo();
+        ////  const float dpiFactor = deviceInfo->getPixelsInMM(0.1f);
+        //  const float deviceQualityFactor = deviceInfo->getQualityFactor();
+        //
+        //  const int firstLevelTilesCount = _firstLevelTiles.size();
+        //
+        //  //const Planet* planet = rc->getPlanet();
+        //  //const Vector3D& cameraNormalizedPosition       = _lastCamera->getNormalizedPosition();
+        //  //const double cameraAngle2HorizonInRadians      = _lastCamera->getAngle2HorizonInRadians();
+        //  const Frustum* cameraFrustumInModelCoordinates = _lastCamera->getFrustumInModelCoordinates();
+        //
+        //  //Texture Size for every tile
+        //  int texWidth  = layerTilesRenderParameters->_tileTextureResolution._x;
+        //  int texHeight = layerTilesRenderParameters->_tileTextureResolution._y;
+        //
+        //  const double factor = _tilesRenderParameters->_texturePixelsPerInch; //UNIT: Dots / Inch^2 (ppi)
+        //  const double correctionFactor = (deviceInfo->getDPI() * deviceQualityFactor) / factor;
+        //
+        //  texWidth  *= correctionFactor;
+        //  texHeight *= correctionFactor;
+        //
+        //  const double texWidthSquared  = texWidth  * texWidth;
+        //  const double texHeightSquared = texHeight * texHeight;
+        //
+        //  const double nowInMS = _lastSplitTimer->nowInMilliseconds();
+        //
+        //  if (_firstRender && _tilesRenderParameters->_forceFirstLevelTilesRenderOnStart) {
+        //    // force one render pass of the firstLevelTiles tiles to make the (toplevel) textures
+        //    // loaded as they will be used as last-chance fallback texture for any tile.
+        //
+        //    for (int i = 0; i < firstLevelTilesCount; i++) {
+        //      Tile* tile = _firstLevelTiles[i];
+        //      tile->render(rc,
+        //                   *_glState,
+        //                   NULL,
+        //                   //planet,
+        //                   //cameraNormalizedPosition,
+        //                   //cameraAngle2HorizonInRadians,
+        //                   cameraFrustumInModelCoordinates,
+        //                   &_statistics,
+        //                   _verticalExaggeration,
+        //                   layerTilesRenderParameters,
+        //                   _texturizer,
+        //                   _tilesRenderParameters,
+        //                   _lastSplitTimer,
+        //                   _elevationDataProvider,
+        //                   _tessellator,
+        ////                   _tileRasterizer,
+        //                   _layerSet,
+        //                   _renderedSector,
+        //                   _firstRender, /* if first render, force full render */
+        //                   _tileDownloadPriority,
+        //                   texWidthSquared,
+        //                   texHeightSquared,
+        //                   nowInMS,
+        //                   _renderTileMeshes,
+        //                   _logTilesPetitions,
+        //                   _tileRenderingListener);
+        //    }
+        //
+        //    _firstRender = false;
+        //  }
+        //  else {
+        ///#ifdef C_CODE
+        //    _toVisit = _firstLevelTiles;
+        ///#endif
+        ///#ifdef JAVA_CODE
+        //    _toVisit.clear();
+        //    //_toVisit.addAll(_firstLevelTiles);
+        ////    for (final Tile tile : _firstLevelTiles) {
+        ////      _toVisit.add(tile);
+        ////    }
+        //    for (int i = 0; i < firstLevelTilesCount; i++) {
+        //      _toVisit.add( _firstLevelTiles.get(i) );
+        //    }
+        ///#endif
+        //
+        //    while (!_toVisit.empty()) {
+        //      _toVisitInNextIteration.clear();
+        //
+        //      const int toVisitSize = _toVisit.size();
+        //      for (int i = 0; i < toVisitSize; i++) {
+        //        Tile* tile = _toVisit[i];
+        //        tile->render(rc,
+        //                     *_glState,
+        //                     &_toVisitInNextIteration,
+        //                     //planet,
+        //                     //cameraNormalizedPosition,
+        //                     //cameraAngle2HorizonInRadians,
+        //                     cameraFrustumInModelCoordinates,
+        //                     &_statistics,
+        //                     _verticalExaggeration,
+        //                     layerTilesRenderParameters,
+        //                     _texturizer,
+        //                     _tilesRenderParameters,
+        //                     _lastSplitTimer,
+        //                     _elevationDataProvider,
+        //                     _tessellator,
+        ////                     _tileRasterizer,
+        //                     _layerSet,
+        //                     _renderedSector,
+        //                     _firstRender, /* if first render, forceFullRender */
+        //                     _tileDownloadPriority,
+        //                     texWidthSquared,
+        //                     texHeightSquared,
+        //                     nowInMS,
+        //                     _renderTileMeshes,
+        //                     _logTilesPetitions,
+        //                     _tileRenderingListener);
+        //      }
+        //
+        ///#ifdef C_CODE
+        //      _toVisit = _toVisitInNextIteration;
+        ///#endif
+        ///#ifdef JAVA_CODE
+        //      _toVisit.clear();
+        //      //_toVisit.addAll(_toVisitInNextIteration);
+        ////      for (final Tile tile : _toVisitInNextIteration) {
+        ////        _toVisit.add(tile);
+        ////      }
+        //      final int toVisitInNextIterationSize = _toVisitInNextIteration.size();
+        //      for (int i = 0; i < toVisitInNextIterationSize; i++) {
+        //        _toVisit.add( _toVisitInNextIteration.get(i) );
+        //      }
+        ///#endif
+        //>>>>>>> origin/purgatory
+>>>>>>> zrender-touchhandlers
       }
     }
   
@@ -584,9 +754,15 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
       return false;
     }
   
-    if (touchEvent.getType() == TouchEventType.LongPress)
-    {
+    /*
+     <<<<<<< HEAD
+     if (touchEvent->getType() == LongPress) {
+    
+     =======
+     */
   
+    if (touchEvent.getType() == _touchEventTypeOfTerrainTouchListener)
+    {
       final Vector2I pixel = touchEvent.getTouch(0).getPos();
   
       Vector3D positionCartesian = null;
@@ -603,6 +779,14 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
   
       if (positionCartesian == null || positionCartesian.isNan())
       {
+        /*
+         =======
+         const Vector3D positionCartesian = planet->closestIntersection(origin, ray);
+         if (positionCartesian.isNan()) {
+         ILogger::instance()->logWarning("PlanetRenderer::onTouchEvent: positionCartesian ( - planet->closestIntersection(origin, ray) - ) is NaN");
+         >>>>>>> origin/purgatory
+         */
+  
         return false;
       }
   
@@ -640,7 +824,6 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
           return false;
         }
       }
-  
     }
   
     return false;
@@ -654,10 +837,19 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
   public final RenderState getRenderState(G3MRenderContext rc)
   {
     final LayerTilesRenderParameters layerTilesRenderParameters = getLayerTilesRenderParameters();
-  
     if (layerTilesRenderParameters == null)
     {
-      return RenderState.error(_errors);
+      if (_errors.isEmpty())
+      {
+        if (_tilesRenderParameters._forceFirstLevelTilesRenderOnStart)
+        {
+          return RenderState.busy();
+        }
+      }
+      else
+      {
+        return RenderState.error(_errors);
+      }
     }
   
     final RenderState layerSetRenderState = _layerSet.getRenderState();
@@ -687,7 +879,8 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
         for (int i = 0; i < firstLevelTilesCount; i++)
         {
           Tile tile = _firstLevelTiles.get(i);
-          tile.prepareForFullRendering(rc, _texturizer, _elevationDataProvider, _tessellator, _tileRasterizer, layerTilesRenderParameters, _layerSet, _tilesRenderParameters, true, _tileDownloadPriority, _verticalExaggeration, _logTilesPetitions); // forceFullRender
+          tile.prepareForFullRendering(rc, _texturizer, _elevationDataProvider, _tessellator, layerTilesRenderParameters, _layerSet, _tilesRenderParameters, true, _tileDownloadPriority, _verticalExaggeration, _logTilesPetitions); // forceFullRender
+                                        //                                      _tileRasterizer,
         }
       }
   
@@ -785,7 +978,7 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
   
       if (_context == null)
       {
-        ILogger.instance().logError("_context if not initialized");
+        ILogger.instance().logError("_context is not initialized");
       }
       else
       {
@@ -1142,6 +1335,7 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
     }
   }
 
+<<<<<<< HEAD
   public final TileTessellator getTileTessellator()
   {
     return _tessellator;
@@ -1161,6 +1355,22 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
   public final void addLODAugmentedForSector(Sector sector, double factor)
   {
     _lODAugmentedSectors.add(new LODAugmentedSector(sector, factor));
+=======
+  public final LayerTilesRenderParameters getLayerTilesRenderParameters()
+  {
+    if (_layerTilesRenderParametersDirty)
+    {
+      _errors.clear();
+      _layerTilesRenderParameters = null;
+      _layerTilesRenderParameters = _layerSet.createLayerTilesRenderParameters(_tilesRenderParameters._forceFirstLevelTilesRenderOnStart, _errors);
+      if (_layerTilesRenderParameters == null)
+      {
+        ILogger.instance().logError("LayerSet returned a NULL for LayerTilesRenderParameters, can't render planet");
+      }
+      _layerTilesRenderParametersDirty = false;
+    }
+    return _layerTilesRenderParameters;
+>>>>>>> zrender-touchhandlers
   }
 
 }

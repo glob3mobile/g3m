@@ -266,7 +266,7 @@ void Box::createMesh(Color* color) const {
   delete vertices;
 }
 
-void Box::render(const G3MRenderContext* rc, const GLState& parentState) const{
+void Box::render(const G3MRenderContext* rc, const GLState& parentState) const {
   if (_mesh == NULL) {
     createMesh(Color::newFromRGBA(1.0f, 0.0f, 1.0f, 1.0f));
   }

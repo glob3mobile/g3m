@@ -19,6 +19,7 @@
 class FlatPlanet: public Planet {
 private:
   const Vector2D _size;
+  const Vector3D _radii;
 
   mutable MutableVector3D _origin;
   mutable MutableVector3D _initialPoint;
@@ -34,12 +35,11 @@ private:
   mutable double          _dragHeight1;
   mutable double          _distanceBetweenInitialPoints;
   mutable MutableVector3D _centerPoint;
-//  mutable double          _angleBetweenInitialRays;
 
-  mutable bool            _firstDoubleDragMovement;
   mutable double          _correctionT2;
   mutable MutableVector3D _correctedCenterPoint;
 
+  mutable double          _lastDoubleDragAngle;
   
 public:
   
@@ -49,8 +49,8 @@ public:
     
   }
   
-  Vector3D getRadii() const{
-    return Vector3D(_size._x, _size._y, 0);
+  Vector3D getRadii() const {
+    return _radii;
   }
   
   Vector3D centricSurfaceNormal(const Vector3D& position) const {
@@ -77,9 +77,13 @@ public:
     return Vector3D(0, 0, 1);
   }
   
-  std::vector<double> intersectionsDistances(const Vector3D& origin,
-                                             const Vector3D& direction) const;
-  
+  std::vector<double> intersectionsDistances(double originX,
+                                             double originY,
+                                             double originZ,
+                                             double directionX,
+                                             double directionY,
+                                             double directionZ) const;
+
   Vector3D toCartesian(const Angle& latitude,
                        const Angle& longitude,
                        const double height) const;
@@ -120,9 +124,6 @@ public:
   
   double computeFastLatLonDistance(const Geodetic2D& g1,
                                    const Geodetic2D& g2) const;
-    
-  Vector3D closestIntersection(const Vector3D& pos, const Vector3D& ray) const;
-  
   
   MutableMatrix44D createGeodeticTransformMatrix(const Geodetic3D& position) const;
   
@@ -141,6 +142,9 @@ public:
                        const Vector3D& touchedPosition0,
                        const Vector3D& touchedPosition1) const;
   
+  MutableMatrix44D doubleDrag_old(const Vector3D& finalRay0,
+                              const Vector3D& finalRay1,
+                              bool allowRotation) const;
   MutableMatrix44D doubleDrag(const Vector3D& finalRay0,
                               const Vector3D& finalRay1,
                               bool allowRotation) const;
@@ -160,7 +164,7 @@ public:
   void applyCameraConstrainers(const Camera* previousCamera,
                                Camera* nextCamera) const;
 
-  Geodetic3D getDefaultCameraPosition(const Sector& rendereSector) const{
+  Geodetic3D getDefaultCameraPosition(const Sector& rendereSector) const {
     const Vector3D asw = toCartesian(rendereSector.getSW());
     const Vector3D ane = toCartesian(rendereSector.getNE());
     const double height = asw.sub(ane).length() * 1.9;

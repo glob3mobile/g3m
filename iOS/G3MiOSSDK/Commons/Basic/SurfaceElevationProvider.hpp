@@ -52,7 +52,7 @@ public:
   bool visitElement(const Geodetic2D& geodetic,
                     const void*   element) const;
 
-  void endVisit(bool aborted) const{}
+  void endVisit(bool aborted) const {}
 };
 
 //Every SurfaceElevationProvider should store petitions in a SurfaceElevationProvider_Tree

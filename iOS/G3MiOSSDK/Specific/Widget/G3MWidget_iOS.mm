@@ -75,7 +75,7 @@ autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
                                                               Color::white());
 
   InitialCameraPositionProvider* icpp = new SimpleInitialCameraPositionProvider();
-  
+    
   _widgetVP = G3MWidget::create([_renderer getGL],
                                 storage,
                                 downloader,

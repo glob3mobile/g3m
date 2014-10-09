@@ -31,7 +31,7 @@ protected:
   const int    _maxLevel;
   const bool   _isTransparent;
 
-  virtual std::string getLayerType() const{
+  virtual std::string getLayerType() const {
     return "MercatorTiled";
   }
 

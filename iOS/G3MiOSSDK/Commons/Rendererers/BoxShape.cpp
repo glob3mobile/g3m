@@ -252,8 +252,8 @@ Mesh* BoxShape::createMesh(const G3MRenderContext* rc) {
   Mesh* surface = NULL;
   if (_useNormals) {
     surface = createSurfaceMeshWithNormals(rc);
-//    surface = createSurfaceMesh(rc);
-  } else{
+  }
+  else {
     surface = createSurfaceMesh(rc);
   }
   

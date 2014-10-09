@@ -13,7 +13,7 @@
 
 bool SectorAndHeightCameraConstrainer::onCameraChange(const Planet* planet,
                                                       const Camera* previousCamera,
-                                                      Camera* nextCamera) const{
+                                                      Camera* nextCamera) const {
 
   const Geodetic3D position = nextCamera->getGeodeticPosition();
   const double height = position._height;
@@ -32,7 +32,13 @@ bool SectorAndHeightCameraConstrainer::onCameraChange(const Planet* planet,
 
 bool RenderedSectorCameraConstrainer::onCameraChange(const Planet* planet,
                                                      const Camera* previousCamera,
-                                                     Camera* nextCamera) const{
+                                                     Camera* nextCamera) const {
+  int talk_to_Diego;
+  // maxHeight is used with different values in two different camera constrainers
+  // besides, if next camera is not valid, it's better to swap with current camera
+  // instead of changing just one only parameter as position
+  return true;
+  
   if (_planetRenderer != NULL) {
     const Sector* sector = _planetRenderer->getRenderedSector();
     const Geodetic3D position = nextCamera->getGeodeticPosition();

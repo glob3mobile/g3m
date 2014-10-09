@@ -40,7 +40,6 @@ public:
 
 class GPUProgramFactory {
 private:
-  //std::map<std::string, GPUProgramSources> _sources;
   std::vector<GPUProgramSources> _sources;
 
 public:
@@ -48,12 +47,10 @@ public:
   GPUProgramFactory() {}
 
   void add(const GPUProgramSources& ps) {
-    //_sources[ps._name] = ps;
     _sources.push_back(ps);
   }
 
   const GPUProgramSources* get(const std::string& name) const{
-
     const int size = _sources.size();
     for (int i = 0; i < size; i++) {
       if (_sources[i]._name.compare(name) == 0) {
@@ -63,16 +60,13 @@ public:
     return NULL;
   }
 
-  int size() const{
+  int size() const {
     return _sources.size();
   }
 
-  GPUProgramSources get(int i) const{
+  GPUProgramSources get(int i) const {
     return _sources[i];
   }
-  
-  
-  
 };
 
 #endif

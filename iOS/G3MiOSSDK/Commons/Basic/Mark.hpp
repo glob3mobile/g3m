@@ -18,6 +18,8 @@
 #include "Vector2I.hpp"
 #include "Color.hpp"
 #include "GLState.hpp"
+#include "SurfaceElevationProvider.hpp"
+#include "MutableVector3D.hpp"
 
 class IImage;
 class IFloatBuffer;
@@ -26,9 +28,6 @@ class MarkTouchListener;
 class GLGlobalState;
 class GPUProgramState;
 class TextureIDReference;
-
-#include "SurfaceElevationProvider.hpp"
-
 
 class MarkUserData {
 public:
@@ -141,6 +140,8 @@ private:
 
   Vector3D* _normalAtMarkPosition;
 
+  MutableVector3D _markCameraVector;
+
 public:
   /**
    * Creates a marker with icon and label
@@ -214,7 +215,7 @@ public:
                   long long downloadPriority);
 
   void render(const G3MRenderContext* rc,
-              const Vector3D& cameraPosition);
+              const MutableVector3D& cameraPosition);
 
   bool isReady() const;
 
@@ -257,7 +258,7 @@ public:
   Vector3D* getCartesianPosition(const Planet* planet);
 
   void render(const G3MRenderContext* rc,
-              const Vector3D& cameraPosition,
+              const MutableVector3D& cameraPosition,
               double cameraHeight,
               const GLState* parentGLState,
               const Planet* planet,

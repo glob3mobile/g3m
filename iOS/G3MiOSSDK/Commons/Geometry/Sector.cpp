@@ -281,7 +281,7 @@ const Vector3D Sector::getNormalizedCartesianCenter(const Planet* planet) const 
   return *_normalizedCartesianCenter;
 }
 
-const GEORasterSymbol* Sector::createGEOSymbol(const Color& c) const{
+const GEORasterSymbol* Sector::createGEOSymbol(const Color& c) const {
 
   std::vector<Geodetic2D*>* coordinates = new std::vector<Geodetic2D*>();
 
@@ -312,13 +312,14 @@ const GEORasterSymbol* Sector::createGEOSymbol(const Color& c) const{
   return result;
 }
 
-Geodetic2D Sector::getClosesInnerPoint(const Geodetic2D& g) const{
+Geodetic2D Sector::getClosesInnerPoint(const Geodetic2D& g) const {
   double lat = g._latitude._degrees;
   double lon = g._longitude._degrees;
 
   if (lat > _upper._latitude._degrees) {
     lat = _upper._latitude._degrees;
-  } else{
+  }
+  else {
     if (lat < _lower._latitude._degrees) {
       lat = _lower._latitude._degrees;
     }
@@ -326,7 +327,8 @@ Geodetic2D Sector::getClosesInnerPoint(const Geodetic2D& g) const{
 
   if (lon > _upper._longitude._degrees) {
     lon = _upper._longitude._degrees;
-  } else{
+  }
+  else {
     if (lon < _lower._longitude._degrees) {
       lon = _lower._longitude._degrees;
     }
