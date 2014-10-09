@@ -235,15 +235,21 @@ void executeDownloaderTests(IDownloader* downloader){
 	const TimeInterval timeToExpire = TimeInterval::fromDays(20);
 	const StringUtils_win8* sUtils = (StringUtils_win8*)IStringUtils::instance();
 
-	//-- Test downloading imagen and then save to a file --------
+	//-- Test downloading image and then save to a file --------
 	//std::string imgName = "tiger.jpg";
 	std::string imgName = "MARBLES.BMP";
 	std::size_t pos = imgName.find(".");
 	std::string name = imgName.substr(0, pos);
+	std::string ext = imgName.substr(pos + 1, imgName.length());
 	Platform::String^ imgHatName = sUtils->toStringHat(imgName);
 	Windows::Storage::StorageFolder^ localFolder = Windows::Storage::ApplicationData::Current->LocalFolder;
 	Platform::String^ folderPath = localFolder->Path;
 	Platform::String^ tmpPath = Platform::String::Concat(folderPath, "\\");
+
+	Windows::Storage::StorageFolder^ roamingFolder = Windows::Storage::ApplicationData::Current->RoamingFolder;
+	ILogger::instance()->logInfo("RoamingFolder %s", sUtils->toStringStd(roamingFolder->Path).c_str());
+
+	//Windows::Storage::StorageFolder^ InstallationFolder = Windows::ApplicationModel::Package::Current::InstalledLocation;
 
 	imgHatName = sUtils->toStringHat(name + "_downloaded");
 	Platform::String^ recoveredImgName = Platform::String::Concat(tmpPath, imgHatName);
@@ -261,18 +267,51 @@ void executeDownloaderTests(IDownloader* downloader){
 
 	downloader->requestBuffer(requestedDataUrl, 23, timeToExpire, true, new Test_BufferDownloadListener(requestedDataUrl), true);
 
-	//-- Test downloading imagen from local then save to a file --------
+	//-- Test downloading image from local then save to a file --------
 	std::string localImgName = URL::FILE_PROTOCOL + imgName;
 	const URL localImgUrl = URL(localImgName);
 	//-- recovered URL
 	//std::size_t rpos = imgName.find(".");
 	//std::string rname = imgName.substr(0, rpos);
 	std::string reFilePath = name + "_RE";
-	Platform::String^ relocalPath = Platform::String::Concat(tmpPath,sUtils->toStringHat(reFilePath));
+	Platform::String^ relocalPath = Platform::String::Concat(tmpPath, sUtils->toStringHat(reFilePath));
 	const URL reLocalImgUrl = URL(sUtils->toStringStd(relocalPath));
 
 	downloader->requestImage(localImgUrl, 23, timeToExpire, true, new Test_IImageDownloadListener(reLocalImgUrl), true);
 	ILogger::instance()->logInfo("Terminando test del downloader");
+
+	//-- Test downloading 15 images from local then save to a file --------
+	for (int i = 1; i <= 15; i++){
+		std::string nameI = name + std::to_string(i);
+		std::string imgNameI = nameI + "." + ext;
+		const URL requestedImgUrlI = URL("http://192.168.1.26/images/" + imgNameI);
+
+		Platform::String^ imgHatNameI = sUtils->toStringHat(nameI + "_downloaded");
+		Platform::String^ recoveredImgNameI = Platform::String::Concat(tmpPath, imgHatNameI);
+		std::string recoveredImgStrI = sUtils->toStringStd(recoveredImgNameI);
+		const URL recoveredImgUrlI = URL(recoveredImgStrI);
+
+		long long rid = downloader->requestImage(requestedImgUrlI, 23, timeToExpire, true, new Test_IImageDownloadListener(recoveredImgUrlI), true);
+		ILogger::instance()->logInfo("Request id image pedida: %d \n", rid);
+		if (i == 5){
+			ILogger::instance()->logInfo("Cancelando previous request id: %d \n", rid-1);
+			downloader->cancelRequest(rid-1); 
+		}
+	}
+
+	//-- Test downloading 15 geojson and then ??? --------
+	for (int i = 1; i <= 15; i++){
+		std::string fileGeoName = "countries" + to_string(i) + ".geojson";
+		const URL requestedGeoUrl = URL("http://192.168.1.26/" + fileGeoName);
+		
+		long long rid = downloader->requestBuffer(requestedGeoUrl, 23, timeToExpire, true, new Test_BufferDownloadListener(requestedGeoUrl), true);
+		ILogger::instance()->logInfo("Request id geojson pedido: %d \n", rid);
+		if (i == 5){
+			ILogger::instance()->logInfo("Cancelando previous request id: %d \n", rid - 1);
+			downloader->cancelRequest(rid - 1);
+		}
+	}
+
 }
 
 //-------------------------------------------------------
