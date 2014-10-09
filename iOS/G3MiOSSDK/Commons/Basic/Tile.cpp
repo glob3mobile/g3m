@@ -369,10 +369,10 @@ bool Tile::meetsRenderCriteria(const G3MRenderContext* rc,
   
 #warning ÑAPA
   double augmentedFactor = 1.0;
-  for (int i = 0; i < _planetRenderer->_lODAugmentedSectors.size(); i++) {
-    Sector* sector = _planetRenderer->_lODAugmentedSectors.at(i)._sector;
+  for (int i = 0; i < PlanetRenderer::_lODAugmentedSectors.size(); i++) {
+    Sector* sector = PlanetRenderer::_lODAugmentedSectors.at(i)._sector;
     if (_sector.touchesWith(*sector)){
-      augmentedFactor = _planetRenderer->_lODAugmentedSectors.at(i)._lodFactor;
+      augmentedFactor = PlanetRenderer::_lODAugmentedSectors.at(i)._lodFactor;
     }
   }
   
