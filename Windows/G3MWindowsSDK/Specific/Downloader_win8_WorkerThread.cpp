@@ -107,6 +107,7 @@ void Downloader_win8_WorkerThread::run(){
 			// sleep for 25 milliseconds
 			//ILogger::instance()->logInfo("Sleeping in thread.. %d", _workerThread->Id);
 			std::this_thread::sleep_for(std::chrono::milliseconds(25)); //TODO: is this a valid option in Windows Store apps??
+			//-- http://blogs.msdn.com/b/devosaure/archive/2012/03/23/asynchronisme-et-scenarios-hybrides-avec-le-nouveau-runtime-windows-winrt.aspx
 		}
 	}
 }
