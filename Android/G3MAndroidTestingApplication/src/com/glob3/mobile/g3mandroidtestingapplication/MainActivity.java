@@ -234,6 +234,8 @@ public class MainActivity extends Activity {
 
 			// END OF CODE FOR PRECACHING AREA
 		}
+		
+		_g3mWidget = builder.createWidget();
 
 		_placeHolder = (RelativeLayout) findViewById(R.id.g3mWidgetHolder);
 		_placeHolder.addView(_g3mWidget);

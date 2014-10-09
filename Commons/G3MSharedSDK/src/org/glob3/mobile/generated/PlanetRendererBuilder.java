@@ -68,7 +68,7 @@ public class PlanetRendererBuilder
    *
    * @return _texturizer: TileTexturizer*
    */
-  private TileTexturizer PlanetRendererBuilder.getTexturizer()
+  private TileTexturizer getTexturizer()
   {
     if (_texturizer == null)
     {
