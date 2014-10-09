@@ -107,21 +107,6 @@ TileTessellator* PlanetRendererBuilder::getTileTessellator() {
 //}
 
 /**
- * Returns the _texturizer.
- *
- * @return _texturizer: TileTexturizer*
- */
-TileTexturizer* PlanetRendererBuilder::getTexturizer() {
-  if (!_texturizer) {
-//    _texturizer = new MultiLayerTileTexturizer();
-#warning Diego at work!
-    _texturizer = new DefaultTileTexturizer();
-  }
-
-  return _texturizer;
-}
-
-/**
  * Returns the _layerSet.
  *
  * @return _layerSet: LayerSet*
@@ -132,6 +117,21 @@ LayerSet* PlanetRendererBuilder::getLayerSet() {
   }
 
   return _layerSet;
+}
+
+/**
+ * Returns the _texturizer.
+ *
+ * @return _texturizer: TileTexturizer*
+ */
+TileTexturizer* PlanetRendererBuilder::getTexturizer() {
+  if (!_texturizer) {
+    //    _texturizer = new MultiLayerTileTexturizer();
+#warning Diego at work!
+    _texturizer = new DefaultTileTexturizer();
+  }
+  
+  return _texturizer;
 }
 
 /**
@@ -403,7 +403,6 @@ PlanetRenderer* PlanetRendererBuilder::create() {
                                                       true,
                                                       getVerticalExaggeration(),
                                                       getTexturizer(),
-//                                                      getTileRasterizer(),
                                                       layerSet,
                                                       getParameters(),
                                                       getShowStatistics(),

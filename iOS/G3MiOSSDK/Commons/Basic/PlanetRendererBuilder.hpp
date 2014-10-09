@@ -21,7 +21,6 @@ class PlanetRendererBuilder {
 private:
   TileTessellator* _tileTessellator;
   TileTexturizer* _texturizer;
-//  std::vector<TileRasterizer*> _tileRasterizers;
   std::vector<GEOVectorLayer*> _geoVectorLayers;
 
   LayerSet* _layerSet;
@@ -86,7 +85,6 @@ public:
   PlanetRenderer* create();
   void setTileTessellator(TileTessellator* tileTessellator);
   void setTileTexturizer(TileTexturizer* tileTexturizer);
-//  void addTileRasterizer(TileRasterizer* tileRasterizer);
   void setLayerSet(LayerSet* layerSet);
   void setPlanetRendererParameters(TilesRenderParameters* parameters);
   void setShowStatistics(const bool showStatistics);
@@ -100,7 +98,6 @@ public:
     addVisibleSectorListener(listener, TimeInterval::zero());
   }
   void addTerrainTouchListener(TerrainTouchListener* listener);
-  //void setTexturePriority(long long texturePriority);
   void setTileDownloadPriority(long long tileDownloadPriority);
 
   void setElevationDataProvider(ElevationDataProvider* elevationDataProvider);
@@ -108,8 +105,6 @@ public:
   void setVerticalExaggeration(float verticalExaggeration);
 
   void setRenderedSector(const Sector& sector);
-
-//  GEOTileRasterizer* createGEOTileRasterizer();
 
   GEOVectorLayer* createGEOVectorLayer();
 
@@ -128,15 +123,15 @@ public:
   
   void setChangedRendererInfoListener(ChangedRendererInfoListener* changedInfoListener);
   
-  TileTessellator* getTileTessellator();
-  
-  TileTexturizer* getTexturizer();
-  
   void setTileCacheSize(int x);
   
   void setDeleteTexturesOfInvisibleTiles(bool x);
   
   void setTouchEventTypeOfTerrainTouchListener(TouchEventType _touchEventTypeOfTerrainTouchListener);
+  
+  TileTessellator* getTileTessellator();
+  
+  TileTexturizer* getTexturizer();
 };
 
 #endif
