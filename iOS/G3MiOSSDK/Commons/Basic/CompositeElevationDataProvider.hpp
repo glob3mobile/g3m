@@ -86,9 +86,7 @@ private:
     double getSquaredGridResolutionInDegreesSquared(const Vector2I& extent,
                                              const Sector& sector) const;
 
-    ElevationDataProvider* popBestProvider(std::vector<ElevationDataProvider*>& ps,
-                                           const Vector2I& extent,
-                                           const Sector& sector) const;
+    ElevationDataProvider* popBestProvider(std::vector<ElevationDataProvider*>& ps, const Vector2I& extent) const;
 
     CompositeElevationDataProvider_Request(CompositeElevationDataProvider* provider,
                                            const Sector& sector,

@@ -16,17 +16,11 @@
 EllipsoidalPlanet::EllipsoidalPlanet(const Ellipsoid& ellipsoid):
 _ellipsoid(ellipsoid)
 {
-
 }
 
 
 Vector3D EllipsoidalPlanet::geodeticSurfaceNormal(const Angle& latitude,
                                                   const Angle& longitude) const {
-//  const double cosLatitude = latitude.cosinus();
-//
-//  return Vector3D(cosLatitude * longitude.cosinus(),
-//                  cosLatitude * longitude.sinus(),
-//                  latitude.sinus());
   const double cosLatitude = COS(latitude._radians);
 
   return Vector3D(cosLatitude * COS(longitude._radians),
@@ -40,7 +34,7 @@ Vector3D EllipsoidalPlanet::toCartesian(const Angle& latitude,
                                         const double height) const {
   const Vector3D n = geodeticSurfaceNormal(latitude, longitude);
 
-  const Vector3D k = _ellipsoid.getRadiiSquared().times(n);
+  const Vector3D k = _ellipsoid._radiiSquared.times(n);
   const double gamma = IMathUtils::instance()->sqrt((k._x * n._x) +
                                                     (k._y * n._y) +
                                                     (k._z * n._z));
@@ -71,9 +65,9 @@ Geodetic3D EllipsoidalPlanet::toGeodetic3D(const Vector3D& position) const {
 Vector3D EllipsoidalPlanet::scaleToGeodeticSurface(const Vector3D& position) const {
   const IMathUtils* mu = IMathUtils::instance();
 
-  const Vector3D oneOverRadiiSquared = _ellipsoid.getOneOverRadiiSquared();
-  const Vector3D radiiSquared        = _ellipsoid.getRadiiSquared();
-  const Vector3D radiiToTheFourth    = _ellipsoid.getRadiiToTheFourth();
+  const Vector3D oneOverRadiiSquared = _ellipsoid._oneOverRadiiSquared;
+  const Vector3D radiiSquared        = _ellipsoid._radiiSquared;
+  const Vector3D radiiToTheFourth    = _ellipsoid._radiiToTheFourth;
 
   const double beta = 1.0 / mu->sqrt((position._x * position._x) * oneOverRadiiSquared._x +
                                      (position._y * position._y) * oneOverRadiiSquared._y +
@@ -129,7 +123,7 @@ Vector3D EllipsoidalPlanet::scaleToGeodeticSurface(const Vector3D& position) con
 
 
 Vector3D EllipsoidalPlanet::scaleToGeocentricSurface(const Vector3D& position) const {
-  Vector3D oneOverRadiiSquared = _ellipsoid.getOneOverRadiiSquared();
+  Vector3D oneOverRadiiSquared = _ellipsoid._oneOverRadiiSquared;
 
   const double beta = 1.0 / IMathUtils::instance()->sqrt((position._x * position._x) * oneOverRadiiSquared._x +
                                                          (position._y * position._y) * oneOverRadiiSquared._y +
@@ -159,7 +153,7 @@ std::list<Vector3D> EllipsoidalPlanet::computeCurve(const Vector3D& start,
   }
 
   const Vector3D normal = start.cross(stop).normalized();
-  const double theta = start.angleBetween(stop)._radians;
+  const double theta = start.angleInRadiansBetween(stop);
 
   //int n = max((int)(theta / granularity) - 1, 0);
   int n = ((int) (theta / granularity) - 1) > 0 ? (int) (theta / granularity) - 1 : 0;
@@ -185,7 +179,7 @@ double EllipsoidalPlanet::computePreciseLatLonDistance(const Geodetic2D& g1,
                                                        const Geodetic2D& g2) const {
   const IMathUtils* mu = IMathUtils::instance();
 
-  const Vector3D radius = _ellipsoid.getRadii();
+  const Vector3D radius = _ellipsoid._radii;
   const double R = (radius._x + radius._y + radius._z) / 3;
 
   // spheric distance from P to Q
@@ -215,7 +209,7 @@ double EllipsoidalPlanet::computeFastLatLonDistance(const Geodetic2D& g1,
                                                     const Geodetic2D& g2) const {
   const IMathUtils* mu = IMathUtils::instance();
 
-  const Vector3D radius = _ellipsoid.getRadii();
+  const Vector3D radius = _ellipsoid._radii;
   const double R = (radius._x + radius._y + radius._z) / 3;
 
   const double medLat = g1._latitude._degrees;
@@ -301,6 +295,15 @@ void EllipsoidalPlanet::beginSingleDrag(const Vector3D& origin, const Vector3D& 
                                              1.0 / _dragRadiusFactorSquared / _originalRadiusSquared._y,
                                              1.0 / _dragRadiusFactorSquared / _originalRadiusSquared._z);
 
+/*
+  =======
+//  _origin = origin.asMutableVector3D();
+  _origin.copyFrom(origin);
+//  _initialPoint = closestIntersection(origin, initialRay).asMutableVector3D();
+  _initialPoint.copyFrom(closestIntersection(origin, initialRay));
+>>>>>>> origin/purgatory
+ */
+  
   _validSingleDrag = false;
 }
 
@@ -317,7 +320,12 @@ MutableMatrix44D EllipsoidalPlanet::singleDrag(const Vector3D& finalRay) const
                                                                                       _oneOverDragRadiiSquared.asVector3D()).asMutableVector3D();
   if (finalPoint.isNan()) {
     //printf ("--invalid final point in drag!!\n");
-    finalPoint = closestPointToSphere(origin, finalRay).asMutableVector3D();
+//    finalPoint = closestPointToSphere(origin, finalRay).asMutableVector3D();
+    finalPoint.copyFrom(closestPointToSphere(origin, finalRay));
+    if (finalPoint.isNan()) {
+      ILogger::instance()->logWarning("EllipsoidalPlanet::singleDrag-> finalPoint is NaN");
+      return MutableMatrix44D::invalid();
+    }
   }
 
   // compute the rotation axis
@@ -329,7 +337,8 @@ MutableMatrix44D EllipsoidalPlanet::singleDrag(const Vector3D& finalRay) const
   if (rotationDelta.isNan()) return MutableMatrix44D::invalid();
 
   // save params for possible inertial animations
-  _lastDragAxis = rotationAxis.asMutableVector3D();
+//  _lastDragAxis = rotationAxis.asMutableVector3D();
+  _lastDragAxis.copyFrom(rotationAxis);
   double radians = rotationDelta._radians;
   _lastDragRadiansStep = radians - _lastDragRadians;
   _lastDragRadians = radians;
@@ -401,7 +410,7 @@ MutableMatrix44D EllipsoidalPlanet::doubleDrag(const Vector3D& finalRay0,
   // compute estimated camera translation: step 1
   d = mu->abs((distance-d)*0.3);
   if (angle0 < _angleBetweenInitialPoints) d*=-1;
-  translation = MutableMatrix44D::createTranslationMatrix(_centerRay.asVector3D().normalized().times(d));
+  translation.copyValue(MutableMatrix44D::createTranslationMatrix(_centerRay.asVector3D().normalized().times(d)));
   positionCamera = positionCamera.transformedBy(translation, 1.0);
   dAccum += d;
   {
@@ -418,7 +427,7 @@ MutableMatrix44D EllipsoidalPlanet::doubleDrag(const Vector3D& finalRay0,
   while (mu->abs(angle_n-_angleBetweenInitialPoints) > precision) {
 
     if ((angle_n1-angle_n)/(angle_n-_angleBetweenInitialPoints) < 0) d*=-0.5;
-    translation = MutableMatrix44D::createTranslationMatrix(_centerRay.asVector3D().normalized().times(d));
+    translation.copyValue(MutableMatrix44D::createTranslationMatrix(_centerRay.asVector3D().normalized().times(d)));
     positionCamera = positionCamera.transformedBy(translation, 1.0);
     dAccum += d;
     angle_n1 = angle_n;
@@ -452,14 +461,16 @@ MutableMatrix44D EllipsoidalPlanet::doubleDrag(const Vector3D& finalRay0,
     viewDirection = viewDirection.transformedBy(rotation, 0.0);
     ray0 = ray0.transformedBy(rotation, 0.0);
     ray1 = ray1.transformedBy(rotation, 0.0);
-    matrix = rotation.multiply(matrix);
+    //matrix.copyValue(rotation.multiply(matrix));
+    matrix.copyValueOfMultiplication(rotation, matrix);
   }
 
   // move the camera forward
   {
     MutableMatrix44D translation2 = MutableMatrix44D::createTranslationMatrix(viewDirection.asVector3D().normalized().times(dAccum));
     positionCamera = positionCamera.transformedBy(translation2, 1.0);
-    matrix = translation2.multiply(matrix);
+//    matrix.copyValue(translation2.multiply(matrix));
+    matrix.copyValueOfMultiplication(translation2, matrix);
   }
 
   // compute 3D point of view center
@@ -481,7 +492,8 @@ MutableMatrix44D EllipsoidalPlanet::doubleDrag(const Vector3D& finalRay0,
     viewDirection = viewDirection.transformedBy(rotation, 0.0);
     ray0 = ray0.transformedBy(rotation, 0.0);
     ray1 = ray1.transformedBy(rotation, 0.0);
-    matrix = rotation.multiply(matrix);
+//    matrix.copyValue(rotation.multiply(matrix));
+    matrix.copyValueOfMultiplication(rotation, matrix);
   }
 
   // camera rotation
@@ -494,7 +506,8 @@ MutableMatrix44D EllipsoidalPlanet::doubleDrag(const Vector3D& finalRay0,
     double sign     = v1.cross(v0).dot(normal);
     if (sign<0) angle = -angle;
     MutableMatrix44D rotation = MutableMatrix44D::createGeneralRotationMatrix(Angle::fromDegrees(angle), normal, centerPoint2);
-    matrix = rotation.multiply(matrix);
+//    matrix.copyValue(rotation.multiply(matrix));
+    matrix.copyValueOfMultiplication(rotation, matrix);
   }
 
   return matrix;

@@ -197,28 +197,23 @@ CompositeElevationDataProvider_Request::getSquaredGridResolutionInDegreesSquared
 
 ElevationDataProvider* CompositeElevationDataProvider::
 CompositeElevationDataProvider_Request::
-popBestProvider(std::vector<ElevationDataProvider*>& ps, const Vector2I& extent, const Sector& sector) const{
+popBestProvider(std::vector<ElevationDataProvider*>& ps, const Vector2I& extent) const {
 
-  double bestRes = getSquaredGridResolutionInDegreesSquared(extent, sector);
+  double bestRes = extent.squaredLength();
   double selectedRes = IMathUtils::instance()->maxDouble();
-  double selectedResDistance = IMathUtils::instance()->maxDouble();
-  IMathUtils *mu = IMathUtils::instance();
-
-
+  
   ElevationDataProvider* provider = NULL;
   
   const int psSize = ps.size();
   int selectedIndex = -1;
   for (int i = 0; i < psSize; i++) {
     ElevationDataProvider* each = ps[i];
-    
+
     const Sector* sector0 = each->getSectors().at(0);
     double res = getSquaredGridResolutionInDegreesSquared(each->getMinResolution(), *sector0);
-    const double newResDistance = mu->abs(bestRes - res);
-
-    if (newResDistance < selectedResDistance || //Closer Resolution
-        (newResDistance == selectedResDistance && res < selectedRes)) { //or equal and higher resolution
-      selectedResDistance = newResDistance;
+    
+    if (res <= selectedRes)
+    {
       selectedRes = res;
       selectedIndex = i;
       provider = each;
@@ -238,7 +233,7 @@ popBestProvider(std::vector<ElevationDataProvider*>& ps, const Vector2I& extent,
 }
 
 bool CompositeElevationDataProvider::CompositeElevationDataProvider_Request::launchNewStep() {
-  _currentProvider = popBestProvider(_providers, _resolution, _sector);
+  _currentProvider = popBestProvider(_providers, _resolution);
   if (_currentProvider != NULL) {
     _currentStep = new CompositeElevationDataProvider_RequestStepListener(this);
 
@@ -257,13 +252,15 @@ void CompositeElevationDataProvider::CompositeElevationDataProvider_Request::onD
   _currentStep = NULL;
   if (_compData == NULL) {
     _compData = new CompositeElevationData(elevationData);
-  } else{
+  }
+  else {
     ((CompositeElevationData*)_compData)->addElevationData(elevationData);
   }
   
   if (!_compData->hasNoData()) {
     _compProvider->requestFinished(this);//If this data is enough we respond
-  } else{
+  }
+  else {
     if (!launchNewStep()) {//If there are no more providers we respond
       _compProvider->requestFinished(this);
     }
@@ -300,7 +297,8 @@ void CompositeElevationDataProvider::CompositeElevationDataProvider_Request::res
     if (_autodelete) {
       delete _listener;
     }
-  } else{
+  }
+  else {
     _listener->onData(_sector, _resolution, _compData);
     if (_autodelete) {
       delete _listener;

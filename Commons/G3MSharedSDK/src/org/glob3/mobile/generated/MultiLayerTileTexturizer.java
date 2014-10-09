@@ -27,7 +27,7 @@ package org.glob3.mobile.generated;
 //class TextureIDReference;
 //class G3MEventContext;
 
-public class MultiLayerTileTexturizer extends TileTexturizer
+public abstract class MultiLayerTileTexturizer extends TileTexturizer
 {
   private LeveledTexturedMesh getMesh(Tile tile)
   {

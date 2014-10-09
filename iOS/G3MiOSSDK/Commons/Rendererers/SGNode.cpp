@@ -81,7 +81,8 @@ void SGNode::render(const G3MRenderContext* rc, const GLState* parentGLState, bo
     }
 
     cleanUpRender(rc);
-  } else{
+  }
+  else {
     ILogger::instance()->logError("NO GLSTATE");
   }
 }

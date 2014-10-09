@@ -61,35 +61,19 @@ RenderState ShapesRenderer::getRenderState(const G3MRenderContext* rc) {
 void ShapesRenderer::updateGLState(const G3MRenderContext* rc) {
 
   const Camera* cam = rc->getCurrentCamera();
-  /*
-
-   if (_projection == NULL) {
-   _projection = new ProjectionGLFeature(cam->getProjectionMatrix44D());
-   _glState->addGLFeature(_projection, true);
-   _glStateTransparent->addGLFeature(_projection, true);
-   } else{
-   _projection->setMatrix(cam->getProjectionMatrix44D());
-   }
-
-   if (_model == NULL) {
-   _model = new ModelGLFeature(cam->getModelMatrix44D());
-   _glState->addGLFeature(_model, true);
-   _glStateTransparent->addGLFeature(_model, true);
-   } else{
-   _model->setMatrix(cam->getModelMatrix44D());
-   }
-   */
   ModelViewGLFeature* f = (ModelViewGLFeature*) _glState->getGLFeature(GLF_MODEL_VIEW);
   if (f == NULL) {
     _glState->addGLFeature(new ModelViewGLFeature(cam), true);
-  } else{
+  }
+  else {
     f->setMatrix(cam->getModelViewMatrix44D());
   }
 
   f = (ModelViewGLFeature*) _glStateTransparent->getGLFeature(GLF_MODEL_VIEW);
   if (f == NULL) {
     _glStateTransparent->addGLFeature(new ModelViewGLFeature(cam), true);
-  } else{
+  }
+  else {
     f->setMatrix(cam->getModelViewMatrix44D());
   }
 
@@ -99,7 +83,7 @@ void ShapesRenderer::render(const G3MRenderContext* rc, GLState* glState) {
   // Saving camera for use in onTouchEvent
   _lastCamera = rc->getCurrentCamera();
 
-  const Vector3D cameraPosition = rc->getCurrentCamera()->getCartesianPosition();
+  const MutableVector3D cameraPosition = rc->getCurrentCamera()->getCartesianPositionMutable();
 
   //Setting camera matrixes
   updateGLState(rc);
@@ -199,6 +183,7 @@ bool ShapesRenderer::onTouchEvent(const G3MEventContext* ec,
         touchEvent->getTapCount()<=1 &&
         touchEvent->getType()==Down) {
       const Vector2I pixel = touchEvent->getTouch(0)->getPos();
+//<<<<<<< HEAD
       std::vector<ShapeDistance> shapeDistances = intersectionsDistances(ec->getPlanet(),
                                                                          _lastCamera,
                                                                          pixel);
@@ -209,6 +194,26 @@ bool ShapesRenderer::onTouchEvent(const G3MEventContext* ec,
             handled = _shapeTouchListener->touchedShape(shapeDistances[0]._shape);
       }
 
+//=======
+//      const Vector3D direction = _lastCamera->pixel2Ray(pixel);
+//      if (!direction.isNan()) {
+//        std::vector<ShapeDistance> shapeDistances = intersectionsDistances(origin, direction);
+//        
+//        if (!shapeDistances.empty()) {
+//          //        printf ("Found %d intersections with shapes:\n",
+//          //                (int)shapeDistances.size());
+//          for (int i=0; i<shapeDistances.size(); i++) {
+//            //          printf ("   %d: shape %x to distance %f\n",
+//            //                  i+1,
+//            //                  (unsigned int)shapeDistances[i]._shape,
+//            //                  shapeDistances[i]._distance);
+//          }
+//        }
+//      } else {
+//        ILogger::instance()->logWarning("ShapesRenderer::onTouchEvent: direction ( - _lastCamera->pixel2Ray(pixel) - ) is NaN");
+//      }
+//      
+//>>>>>>> senderos-gc
     }
   }
   return handled;

@@ -45,13 +45,13 @@ void EffectsScheduler::cancelAllEffects() {
 #endif
 
 #ifdef JAVA_CODE
-  final java.util.ArrayList<EffectRun> effectsToCancel = new java.util.ArrayList<EffectRun>();
+  _effectsToCancel.clear();
 
   final java.util.Iterator<EffectRun> iterator = _effectsRuns.iterator();
   while (iterator.hasNext()) {
     final EffectRun effectRun = iterator.next();
     if (effectRun._started) {
-      effectsToCancel.add(effectRun);
+      _effectsToCancel.add(effectRun);
     }
     else {
       effectRun.dispose();
@@ -59,7 +59,9 @@ void EffectsScheduler::cancelAllEffects() {
     iterator.remove();
   }
 
-  for (final EffectRun effectRun : effectsToCancel) {
+  final int effectsToCancelSize = _effectsToCancel.size();
+  for (int i = 0; i < effectsToCancelSize; i++) {
+    final EffectRun effectRun = _effectsToCancel.get(i);
     effectRun._effect.cancel(now);
     effectRun.dispose();
   }
@@ -94,14 +96,14 @@ void EffectsScheduler::cancelAllEffectsFor(EffectTarget* target) {
 #endif
 
 #ifdef JAVA_CODE
-  final java.util.ArrayList<EffectRun> effectsToCancel = new java.util.ArrayList<EffectRun>();
+  _effectsToCancel.clear();
 
   final java.util.Iterator<EffectRun> iterator = _effectsRuns.iterator();
   while (iterator.hasNext()) {
     final EffectRun effectRun = iterator.next();
     if (effectRun._target == target) {
       if (effectRun._started) {
-        effectsToCancel.add(effectRun);
+        _effectsToCancel.add(effectRun);
       }
       else {
         effectRun.dispose();
@@ -110,7 +112,9 @@ void EffectsScheduler::cancelAllEffectsFor(EffectTarget* target) {
     }
   }
 
-  for (final EffectRun effectRun : effectsToCancel) {
+  final int effectsToCancelSize = _effectsToCancel.size();
+  for (int i = 0; i < effectsToCancelSize; i++) {
+    final EffectRun effectRun = _effectsToCancel.get(i);
     effectRun._effect.cancel(now);
     effectRun.dispose();
   }
@@ -149,19 +153,21 @@ void EffectsScheduler::processFinishedEffects(const G3MRenderContext* rc,
 #endif
 
 #ifdef JAVA_CODE
-  final java.util.ArrayList<EffectRun> effectsToStop = new java.util.ArrayList<EffectRun>();
+  _effectsToStop.clear();
   final java.util.Iterator<EffectRun> iterator = _effectsRuns.iterator();
   while (iterator.hasNext()) {
     final EffectRun effectRun = iterator.next();
     if (effectRun._started) {
       if (effectRun._effect.isDone(rc, when)) {
         iterator.remove();
-        effectsToStop.add(effectRun);
+        _effectsToStop.add(effectRun);
       }
     }
   }
 
-  for (final EffectRun effectRun : effectsToStop) {
+  final int effectsToStopSize = _effectsToStop.size();
+  for (int i = 0; i < effectsToStopSize; i++) {
+    final EffectRun effectRun = _effectsToStop.get(i);
     effectRun._effect.stop(rc, when);
     effectRun.dispose();
   }
@@ -169,34 +175,23 @@ void EffectsScheduler::processFinishedEffects(const G3MRenderContext* rc,
 }
 
 void EffectsScheduler::doOneCyle(const G3MRenderContext* rc) {
-  const TimeInterval now = _timer->now();
+  if (!_effectsRuns.empty()) {
+    const TimeInterval now = _timer->now();
 
-  processFinishedEffects(rc, now);
+    processFinishedEffects(rc, now);
 
-#ifdef C_CODE
-  const int size = _effectsRuns.size();
-  for (int i = 0; i < size; i++) {
-    EffectRun* effectRun = _effectsRuns[i];
-    Effect* effect = effectRun->_effect;
-    if (!effectRun->_started) {
-      effect->start(rc, now);
-      effectRun->_started = true;
+    // ask for _effectsRuns.size() here, as processFinishedEffects can modify the size
+    const int effectsRunsSize = _effectsRuns.size();
+    for (int i = 0; i < effectsRunsSize; i++) {
+      EffectRun* effectRun = _effectsRuns[i];
+      Effect* effect = effectRun->_effect;
+      if (!effectRun->_started) {
+        effect->start(rc, now);
+        effectRun->_started = true;
+      }
+      effect->doStep(rc, now);
     }
-    effect->doStep(rc, now);
   }
-#endif
-#ifdef JAVA_CODE
-  final java.util.Iterator<EffectRun> iterator = _effectsRuns.iterator();
-  while (iterator.hasNext()) {
-    final EffectRun effectRun = iterator.next();
-    final Effect effect = effectRun._effect;
-    if (!effectRun._started) {
-      effect.start(rc, now);
-      effectRun._started = true;
-    }
-    effect.doStep(rc, now);
-  }
-#endif
 }
 
 void EffectsScheduler::startEffect(Effect* effect,

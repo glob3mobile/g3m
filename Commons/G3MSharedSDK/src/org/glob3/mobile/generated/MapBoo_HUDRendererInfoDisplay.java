@@ -32,5 +32,4 @@ public class MapBoo_HUDRendererInfoDisplay implements InfoDisplay
 
   public void dispose() { }
 
-
 }

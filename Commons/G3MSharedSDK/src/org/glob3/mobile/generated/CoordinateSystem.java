@@ -23,15 +23,26 @@ package org.glob3.mobile.generated;
 public class CoordinateSystem
 {
 
+  private boolean checkConsistency(Vector3D x, Vector3D y, Vector3D z)
+  {
+    if (x.isNan() || y.isNan() || z.isNan())
+    {
+      return false;
+    }
+    return areOrtogonal(x, y, z);
+  }
+
+  private boolean areOrtogonal(Vector3D x, Vector3D y, Vector3D z)
+  {
+    return x.isPerpendicularTo(y) && x.isPerpendicularTo(z) && y.isPerpendicularTo(z);
+  }
+
+
   public final Vector3D _x ;
   public final Vector3D _y ;
   public final Vector3D _z ;
   public final Vector3D _origin ;
 
-  public static boolean areOrtogonal(Vector3D x, Vector3D y, Vector3D z)
-  {
-    return x.isPerpendicularTo(y) && x.isPerpendicularTo(z) && y.isPerpendicularTo(z);
-  }
 
   public static CoordinateSystem global()
   {
@@ -45,9 +56,10 @@ public class CoordinateSystem
      _z = new Vector3D(z.normalized());
      _origin = new Vector3D(origin);
     //TODO CHECK CONSISTENCY
-    if (!areOrtogonal(x, y, z))
+    if (!checkConsistency(x, y, z))
     {
       ILogger.instance().logError("Inconsistent CoordinateSystem created.");
+      throw new RuntimeException("Inconsistent CoordinateSystem created.");
     }
   }
 
@@ -60,6 +72,11 @@ public class CoordinateSystem
      _y = new Vector3D(viewDirection.normalized());
      _z = new Vector3D(up.normalized());
      _origin = new Vector3D(origin);
+    if (!checkConsistency(_x, _y, _z))
+    {
+      ILogger.instance().logError("Inconsistent CoordinateSystem created.");
+      throw new RuntimeException("Inconsistent CoordinateSystem created.");
+    }
   }
 
   public final Mesh createMesh(double size, Color xColor, Color yColor, Color zColor)

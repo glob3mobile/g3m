@@ -24,6 +24,7 @@
 class MultiTexturedHUDQuadWidget_ImageDownloadListener : public IImageDownloadListener {
 private:
   MultiTexturedHUDQuadWidget* _quadWidget;
+
 public:
   MultiTexturedHUDQuadWidget_ImageDownloadListener(MultiTexturedHUDQuadWidget* quadWidget) :
   _quadWidget(quadWidget)
@@ -49,7 +50,6 @@ public:
                           bool expired) {
     // do nothing
   }
-
 };
 
 

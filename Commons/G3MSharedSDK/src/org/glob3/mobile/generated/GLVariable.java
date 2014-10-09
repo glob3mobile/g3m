@@ -26,6 +26,5 @@ public class GLVariable
     _viewport = ngl.Variable_Viewport();
     _activeAttributes = ngl.Variable_ActiveAttributes();
     _activeUniforms = ngl.Variable_ActiveUniforms();
-
   }
 }

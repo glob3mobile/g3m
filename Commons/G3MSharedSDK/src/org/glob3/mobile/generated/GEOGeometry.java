@@ -35,17 +35,19 @@ public abstract class GEOGeometry extends GEOObject
   public void dispose()
   {
   super.dispose();
-
   }
 
   public final void setFeature(GEOFeature feature)
   {
-    if (_feature != feature)
+  //  if (_feature != feature) {
+  //    delete _feature;
+  //    _feature = feature;
+  //  }
+    if (_feature != null)
     {
-      if (_feature != null)
-         _feature.dispose();
-      _feature = feature;
+      System.out.print("break point on me\n");
     }
+    _feature = feature;
   }
 
   public final GEOFeature getFeature()
@@ -53,7 +55,7 @@ public abstract class GEOGeometry extends GEOObject
     return _feature;
   }
 
-  public final void symbolize(G3MRenderContext rc, GEOSymbolizer symbolizer, MeshRenderer meshRenderer, ShapesRenderer shapesRenderer, MarksRenderer marksRenderer, GEOTileRasterizer geoTileRasterizer)
+  public final void symbolize(G3MRenderContext rc, GEOSymbolizer symbolizer, MeshRenderer meshRenderer, ShapesRenderer shapesRenderer, MarksRenderer marksRenderer, GEOVectorLayer geoVectorLayer)
   {
     java.util.ArrayList<GEOSymbol> symbols = createSymbols(symbolizer);
     if (symbols != null)
@@ -65,7 +67,7 @@ public abstract class GEOGeometry extends GEOObject
         final GEOSymbol symbol = symbols.get(i);
         if (symbol != null)
         {
-          final boolean deleteSymbol = symbol.symbolize(rc, symbolizer, meshRenderer, shapesRenderer, marksRenderer, geoTileRasterizer);
+          final boolean deleteSymbol = symbol.symbolize(rc, symbolizer, meshRenderer, shapesRenderer, marksRenderer, geoVectorLayer);
           if (deleteSymbol)
           {
             if (symbol != null)
@@ -77,5 +79,7 @@ public abstract class GEOGeometry extends GEOObject
       symbols = null;
     }
   }
+
+  public abstract GEOGeometry deepCopy();
 
 }

@@ -43,11 +43,11 @@ public:
 //    delete image;
 //  }
 
-  IByteBuffer* createByteBuffer(unsigned char data[], int length) const{
+  IByteBuffer* createByteBuffer(unsigned char data[], int length) const {
     return new ByteBuffer_iOS(data, length);
   }
 
-  IByteBuffer* createByteBuffer(int size) const{
+  IByteBuffer* createByteBuffer(int size) const {
     return new ByteBuffer_iOS(size);
   }
 

@@ -136,7 +136,8 @@ Mesh* EllipsoidShape::createSurfaceMesh(const G3MRenderContext* rc,
       }
       indices.add((short) ((2*_resolution-2)+(j+1)*delta));
     }
-  } else {
+  }
+  else {
     for (short j=0; j<_resolution-1; j++) {
       if (j>0) indices.add((short) ((j+1)*delta));
       for (short i=0; i<2*_resolution-1; i++) {
@@ -230,8 +231,7 @@ Mesh* EllipsoidShape::createMesh(const G3MRenderContext* rc) {
   }
 
   const EllipsoidalPlanet ellipsoid(Ellipsoid(Vector3D::zero,
-                                              _ellipsoid->getRadii()
-                                              ));
+                                              _ellipsoid->_radii));
   const Sector sector(Sector::fullSphere());
 
   FloatBufferBuilderFromGeodetic* vertices = FloatBufferBuilderFromGeodetic::builderWithGivenCenter(&ellipsoid, Vector3D::zero);

@@ -25,10 +25,10 @@ bool GEOShapeSymbol::symbolize(const G3MRenderContext* rc,
                                MeshRenderer*           meshRenderer,
                                ShapesRenderer*         shapesRenderer,
                                MarksRenderer*          marksRenderer,
-                               GEOTileRasterizer*      geoTileRasterizer) const {
+                               GEOVectorLayer*         geoVectorLayer) const {
   if (_shape != NULL) {
     if (shapesRenderer == NULL) {
-      ILogger::instance()->logError("Can't simbolize with Shape, ShapesRenderer was not set");
+      ILogger::instance()->logError("Can't symbolize with Shape, ShapesRenderer was not set");
       delete _shape;
     }
     else {

@@ -15,6 +15,7 @@
 #include "ShapeFullPositionEffect.hpp"
 #include "Camera.hpp"
 #include "ILogger.hpp"
+#include "ErrorHandling.hpp"
 
 class ShapePendingEffect {
 public:
@@ -172,14 +173,18 @@ void Shape::setAnimatedPosition(const TimeInterval& duration,
                                 const Angle& pitch,
                                 const Angle& heading,
                                 const Angle& roll,
-                                bool linearInterpolation) {
+                                bool linearInterpolation,
+                                bool forceToPositionOnCancel,
+                                bool forceToPositionOnStop) {
   Effect* effect = new ShapeFullPositionEffect(duration,
                                                this,
                                                *_position, position,
                                                *_pitch,    pitch,
                                                *_heading,  heading,
                                                *_roll,     roll,
-                                               linearInterpolation);
+                                               linearInterpolation,
+                                               forceToPositionOnCancel,
+                                               forceToPositionOnStop);
   addShapeEffect(effect);
 }
 
@@ -188,8 +193,9 @@ void Shape::elevationChanged(const Geodetic2D& position,
                       double verticalExaggeration) {
 
   if (ISNAN(rawElevation)) {
-    _surfaceElevation = 0;    //USING 0 WHEN NO ELEVATION DATA
-  } else{
+    _surfaceElevation = 0; //USING 0 WHEN NO ELEVATION DATA
+  }
+  else {
     _surfaceElevation = rawElevation * verticalExaggeration;
   }
 
@@ -216,4 +222,27 @@ void Shape::zRender(const G3MRenderContext* rc,
 
     state->_release();
   }
+}
+
+  //void Shape::setPosition(Geodetic3D* position,
+//                        AltitudeMode altitudeMode) {
+//  delete _position;
+//  _position = position;
+//  _altitudeMode = altitudeMode;
+//  cleanTransformMatrix();
+//}
+
+void Shape::setPosition(const Geodetic3D& position) {
+  if (_altitudeMode == RELATIVE_TO_GROUND) {
+    THROW_EXCEPTION("Position change with (_altitudeMode == RELATIVE_TO_GROUND) not supported");
+  }
+
+  delete _position;
+#ifdef C_CODE
+  _position = new Geodetic3D(position);
+#endif
+#ifdef JAVA_CODE
+  _position = position;
+#endif
+  cleanTransformMatrix();
 }

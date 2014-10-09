@@ -3,6 +3,7 @@
 package org.glob3.mobile.client;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 import java.util.ArrayList;
 
 <<<<<<< HEAD
@@ -105,6 +106,8 @@ import org.glob3.mobile.generated.WidgetUserData;
 import org.glob3.mobile.specific.Downloader_WebGL;
 =======
 >>>>>>> origin/purgatory
+=======
+>>>>>>> senderos-gc
 import org.glob3.mobile.specific.G3MBuilder_WebGL;
 import org.glob3.mobile.specific.G3MWidget_WebGL;
 
@@ -119,6 +122,7 @@ public class G3MWebGLDemo
 
    private static final String _g3mWidgetHolderId = "g3mWidgetHolder";
    private G3MWidget_WebGL     _widget            = null;
+
 
    @Override
    public void onModuleLoad() {
@@ -140,6 +144,7 @@ public class G3MWebGLDemo
    }
 
 
+<<<<<<< HEAD
 <<<<<<< HEAD
    private GInitializationTask createMarkersInitializationTask() {
       final GInitializationTask initializationTask = new GInitializationTask() {
@@ -1300,3 +1305,6 @@ public class G3MWebGLDemo
 =======
 >>>>>>> origin/purgatory
 }
+=======
+}
+>>>>>>> senderos-gc

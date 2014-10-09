@@ -32,7 +32,7 @@ public class Quadric
   public static Quadric fromEllipsoid(Ellipsoid ellipsoid)
   {
     // assuming ellipsoid is centered on origin
-    final Vector3D R = ellipsoid.getOneOverRadiiSquared();
+    final Vector3D R = ellipsoid._oneOverRadiiSquared;
     return new Quadric(new MutableMatrix44D(R._x, 0, 0, 0, 0, R._y, 0, 0, 0, 0, R._z, 0, 0, 0, 0, -1));
 
   }

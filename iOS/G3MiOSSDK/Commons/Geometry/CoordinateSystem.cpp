@@ -13,6 +13,8 @@
 #include "DirectMesh.hpp"
 #include "FloatBufferBuilderFromCartesian3D.hpp"
 #include "FloatBufferBuilderFromColor.hpp"
+#include "ErrorHandling.hpp"
+
 
 CoordinateSystem CoordinateSystem::global() {
   return CoordinateSystem(Vector3D::upX(), Vector3D::upY(), Vector3D::upZ(), Vector3D::zero);
@@ -22,29 +24,42 @@ CoordinateSystem::CoordinateSystem(const Vector3D& x, const Vector3D& y, const V
 _x(x.normalized()),_y(y.normalized()),_z(z.normalized()), _origin(origin)
 {
   //TODO CHECK CONSISTENCY
-  if (!areOrtogonal(x, y, z)) {
+  if (!checkConsistency(x, y, z)) {
     ILogger::instance()->logError("Inconsistent CoordinateSystem created.");
+    THROW_EXCEPTION("Inconsistent CoordinateSystem created.");
   }
 }
 
 //For camera
-CoordinateSystem::CoordinateSystem(const Vector3D& viewDirection, const Vector3D& up, const Vector3D& origin):
-_x(viewDirection.cross(up).normalized()),
-_y(viewDirection.normalized()),
-_z(up.normalized()),
-_origin(origin)
+CoordinateSystem::CoordinateSystem(const Vector3D& viewDirection, const Vector3D& up, const Vector3D& origin) :
+  _x(viewDirection.cross(up).normalized()),
+  _y(viewDirection.normalized()),
+  _z(up.normalized()),
+  _origin(origin)
 {
+  if (!checkConsistency(_x, _y, _z)) {
+    ILogger::instance()->logError("Inconsistent CoordinateSystem created.");
+    THROW_EXCEPTION("Inconsistent CoordinateSystem created.");
+  }
 }
+
+bool CoordinateSystem::checkConsistency(const Vector3D& x, const Vector3D& y, const Vector3D& z) {
+  if (x.isNan() || y.isNan() || z.isNan()) {
+    return false;
+  }
+  return areOrtogonal(x, y, z);
+}
+
 
 bool CoordinateSystem::areOrtogonal(const Vector3D& x, const Vector3D& y, const Vector3D& z) {
   return x.isPerpendicularTo(y) && x.isPerpendicularTo(z) && y.isPerpendicularTo(z);
 }
 
-CoordinateSystem CoordinateSystem::changeOrigin(const Vector3D& newOrigin) const{
+CoordinateSystem CoordinateSystem::changeOrigin(const Vector3D& newOrigin) const {
   return CoordinateSystem(_x, _y, _z, newOrigin);
 }
 
-Mesh* CoordinateSystem::createMesh(double size, const Color& xColor, const Color& yColor, const Color& zColor) const{
+Mesh* CoordinateSystem::createMesh(double size, const Color& xColor, const Color& yColor, const Color& zColor) const {
 
   FloatBufferBuilderFromColor colors;
 
@@ -81,7 +96,7 @@ Mesh* CoordinateSystem::createMesh(double size, const Color& xColor, const Color
   return dm;
 }
 
-TaitBryanAngles CoordinateSystem::getTaitBryanAngles(const CoordinateSystem& global) const{
+TaitBryanAngles CoordinateSystem::getTaitBryanAngles(const CoordinateSystem& global) const {
 
   //We know...
 
@@ -112,7 +127,8 @@ TaitBryanAngles CoordinateSystem::getTaitBryanAngles(const CoordinateSystem& glo
                            pitch,
                            roll);
 
-  } else if (x > 0.99999 && x < 1.000001) {
+  }
+  else if (x > 0.99999 && x < 1.000001) {
     //Pitch 90
     const Vector3D wpp = wppp; //No Roll
 
@@ -141,11 +157,11 @@ TaitBryanAngles CoordinateSystem::getTaitBryanAngles(const CoordinateSystem& glo
                          roll);
 }
 
-CoordinateSystem CoordinateSystem::applyTaitBryanAngles(const TaitBryanAngles& angles) const{
+CoordinateSystem CoordinateSystem::applyTaitBryanAngles(const TaitBryanAngles& angles) const {
   return applyTaitBryanAngles(angles._heading, angles._pitch, angles._roll);
 }
 
-CoordinateSystem CoordinateSystem::applyTaitBryanAngles(const Angle& heading, const Angle& pitch, const Angle& roll) const{
+CoordinateSystem CoordinateSystem::applyTaitBryanAngles(const Angle& heading, const Angle& pitch, const Angle& roll) const {
 
   //Check out Agustin Trujillo's review of this topic
   //This implementation is purposely explicit on every step
@@ -188,7 +204,7 @@ CoordinateSystem CoordinateSystem::applyTaitBryanAngles(const Angle& heading, co
 }
 
 
-bool CoordinateSystem::isEqualsTo(const CoordinateSystem& that) const{
+bool CoordinateSystem::isEqualsTo(const CoordinateSystem& that) const {
   return _x.isEquals(that._x) && _y.isEquals(that._y) && _z.isEquals(that._z);
 }
 

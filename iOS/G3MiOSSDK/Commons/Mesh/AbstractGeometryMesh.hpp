@@ -64,7 +64,7 @@ public:
   
   const Vector3D getVertex(int i) const;
   
-  bool isTransparent(const G3MRenderContext* rc) const{
+  bool isTransparent(const G3MRenderContext* rc) const {
     return false; //TODO: CHECK
   }
 

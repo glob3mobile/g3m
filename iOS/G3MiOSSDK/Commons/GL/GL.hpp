@@ -180,22 +180,29 @@ public:
     return _nativeGL->deleteProgram(program->getProgramID());
   }
   
-  INativeGL* getNative() const{
+  INativeGL* getNative() const {
     return _nativeGL;
   }
   
   void uniform2f(const IGLUniformID* loc,
                  float x,
-                 float y) const{ _nativeGL->uniform2f(loc, x, y);}
+                 float y) const {
+    _nativeGL->uniform2f(loc, x, y);
+  }
   
   void uniform1f(const IGLUniformID* loc,
-                 float x) const{ _nativeGL->uniform1f(loc, x);}
+                 float x) const {
+    _nativeGL->uniform1f(loc, x);
+  }
+
   void uniform1i(const IGLUniformID* loc,
-                 int v) const{ _nativeGL->uniform1i(loc, v);}
+                 int v) const {
+    _nativeGL->uniform1i(loc, v);
+  }
   
   void uniformMatrix4fv(const IGLUniformID* location,
                         bool transpose,
-                        const Matrix44D* matrix) const{
+                        const Matrix44D* matrix) const {
     _nativeGL->uniformMatrix4fv(location, transpose, matrix);
   }
   
@@ -203,26 +210,30 @@ public:
                  float v0,
                  float v1,
                  float v2,
-                 float v3) const{ _nativeGL->uniform4f(location, v0, v1, v2, v3);}
+                 float v3) const {
+    _nativeGL->uniform4f(location, v0, v1, v2, v3);
+  }
 
   void uniform3f(const IGLUniformID* location,
                  float v0,
                  float v1,
-                 float v2) const{ _nativeGL->uniform3f(location, v0, v1, v2);}
+                 float v2) const {
+    _nativeGL->uniform3f(location, v0, v1, v2);
+  }
 
   void vertexAttribPointer(int index,
                            int size,
                            bool normalized,
                            int stride,
-                           const IFloatBuffer* buffer) const{
+                           const IFloatBuffer* buffer) const {
     _nativeGL->vertexAttribPointer(index, size, normalized, stride, buffer);
   }
   
-  void bindAttribLocation(const GPUProgram* program, int loc, const std::string& name) const{
+  void bindAttribLocation(const GPUProgram* program, int loc, const std::string& name) const {
     _nativeGL->bindAttribLocation(program, loc, name);
   }
   
-  int getProgramiv(const GPUProgram* program, int pname) const{
+  int getProgramiv(const GPUProgram* program, int pname) const {
     return _nativeGL->getProgramiv(program, pname);
   }
   
@@ -245,17 +256,27 @@ public:
     }
 
     return a;
+
+    /*
+     =======
+  GPUUniform* getActiveUniform(const GPUProgram* program, int i) const {
+    return _nativeGL->getActiveUniform(program, i);
   }
   
-  //  GLGlobalState* getCurrentState() const{ return _currentState;}
-  
+  GPUAttribute* getActiveAttribute(const GPUProgram* program, int i) const {
+    return _nativeGL->getActiveAttribute(program, i);
+>>>>>>> origin/purgatory
+     */
+    
+  }
+    
   void useProgram(GPUProgram* program) ;
   
-  void enableVertexAttribArray(int location) const{
+  void enableVertexAttribArray(int location) const {
     _nativeGL->enableVertexAttribArray(location);
   }
   
-  void disableVertexAttribArray(int location) const{
+  void disableVertexAttribArray(int location) const {
     _nativeGL->disableVertexAttribArray(location);
   }
 

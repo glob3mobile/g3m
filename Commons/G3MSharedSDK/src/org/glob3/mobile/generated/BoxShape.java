@@ -180,7 +180,6 @@ public class BoxShape extends AbstractMeshShape
     if (_useNormals)
     {
       surface = createSurfaceMeshWithNormals(rc);
-  //    surface = createSurfaceMesh(rc);
     }
     else
     {

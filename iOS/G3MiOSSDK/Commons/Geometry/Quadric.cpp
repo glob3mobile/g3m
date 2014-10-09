@@ -53,7 +53,8 @@ std::vector<double> Quadric::intersectionsDistances(const Vector3D& origin,
       if (t2 > 0)
         distances.push_back(t2);
     }
-  } else {
+  }
+  else {
     if (b != 0) {
       double t = -c / b;
       distances.push_back(t);

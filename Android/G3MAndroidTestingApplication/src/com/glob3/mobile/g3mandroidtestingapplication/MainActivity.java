@@ -44,6 +44,28 @@ import org.glob3.mobile.generated.MapQuestLayer;
 import org.glob3.mobile.generated.Mark;
 import org.glob3.mobile.generated.MarksRenderer;
 import org.glob3.mobile.generated.MeshRenderer;
+import org.glob3.mobile.generated.BingMapType;
+import org.glob3.mobile.generated.BingMapsLayer;
+import org.glob3.mobile.generated.Color;
+import org.glob3.mobile.generated.GEO2DLineRasterStyle;
+import org.glob3.mobile.generated.GEO2DLineStringGeometry;
+import org.glob3.mobile.generated.GEO2DMultiLineStringGeometry;
+import org.glob3.mobile.generated.GEO2DMultiPolygonGeometry;
+import org.glob3.mobile.generated.GEO2DPointGeometry;
+import org.glob3.mobile.generated.GEO2DPolygonData;
+import org.glob3.mobile.generated.GEO2DPolygonGeometry;
+import org.glob3.mobile.generated.GEO2DSurfaceRasterStyle;
+import org.glob3.mobile.generated.GEOGeometry;
+import org.glob3.mobile.generated.GEOPolygonRasterSymbol;
+import org.glob3.mobile.generated.GEORasterSymbol;
+import org.glob3.mobile.generated.GEORasterSymbolizer;
+import org.glob3.mobile.generated.Geodetic2D;
+import org.glob3.mobile.generated.Geodetic3D;
+import org.glob3.mobile.generated.JSONObject;
+import org.glob3.mobile.generated.LayerSet;
+import org.glob3.mobile.generated.LevelTileCondition;
+import org.glob3.mobile.generated.Mark;
+import org.glob3.mobile.generated.MarksRenderer;
 import org.glob3.mobile.generated.Planet;
 import org.glob3.mobile.generated.PointShape;
 import org.glob3.mobile.generated.RasterLineShape;
@@ -53,6 +75,7 @@ import org.glob3.mobile.generated.Shape;
 import org.glob3.mobile.generated.ShapeTouchListener;
 import org.glob3.mobile.generated.ShapesRenderer;
 import org.glob3.mobile.generated.SingleBilElevationDataProvider;
+import org.glob3.mobile.generated.TiledVectorLayer;
 import org.glob3.mobile.generated.TimeInterval;
 import org.glob3.mobile.generated.URL;
 import org.glob3.mobile.generated.URLTemplateLayer;
@@ -73,17 +96,23 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.RelativeLayout;
 
-
-public class MainActivity
-extends
-Activity {
+public class MainActivity extends Activity {
 
 	private G3MWidget_Android _g3mWidget;
-	private RelativeLayout    _placeHolder;
+	private RelativeLayout _placeHolder;
 
+	G3MBuilder_Android builder = null;
 
-   G3MBuilder_Android builder = null;
+	public CameraRenderer createCameraRenderer() {
+		CameraRenderer cameraRenderer = new CameraRenderer();
+		final boolean useInertia = true;
+		cameraRenderer.addHandler(new CameraSingleDragHandler(useInertia));
+		final boolean allowRotationInDoubleDrag = true;
+		cameraRenderer.addHandler(new CameraDoubleDragHandler(
+				allowRotationInDoubleDrag));
+		// cameraRenderer.addHandler(new CameraZoomAndRotateHandler());
 
+<<<<<<< HEAD
 	public CameraRenderer createCameraRenderer()
 	{
 	  CameraRenderer cameraRenderer = new CameraRenderer();
@@ -153,24 +182,83 @@ Activity {
 	   
 		//BEGINNING OF CODE FOR LOADING STORAGE
 		if (true){
+=======
+		cameraRenderer.addHandler(new CameraRotationHandler());
+		cameraRenderer.addHandler(new CameraDoubleTapHandler());
+
+		return cameraRenderer;
+	}
+
+	@Override
+	protected void onCreate(final Bundle savedInstanceState) {
+
+		super.onCreate(savedInstanceState);
+
+		requestWindowFeature(Window.FEATURE_NO_TITLE);
+		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+				WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
+		setContentView(R.layout.activity_main);
+
+		final G3MBuilder_Android builder = new G3MBuilder_Android(this);
+
+		// const Planet* planet = Planet::createEarth();
+		// const Planet* planet = Planet::createSphericalEarth();
+		final Planet planet = Planet.createFlatEarth();
+		builder.setPlanet(planet);
+
+		// set camera handlers
+		CameraRenderer cameraRenderer = createCameraRenderer();
+		MeshRenderer meshRenderer = new MeshRenderer();
+		builder.addRenderer(meshRenderer);
+		cameraRenderer.setDebugMeshRenderer(meshRenderer);
+		builder.setCameraRenderer(cameraRenderer);
+
+		// create shape
+		ShapesRenderer shapesRenderer = new ShapesRenderer();
+		Shape box = new BoxShape(new Geodetic3D(Angle.fromDegrees(28.4),
+				Angle.fromDegrees(-16.4), 0), AltitudeMode.ABSOLUTE,
+				new Vector3D(3000, 3000, 20000), 2, Color.fromRGBA(1.0f, 1.0f,
+						0.0f, 0.5f),
+				Color.newFromRGBA(0.0f, 0.75f, 0.0f, 0.75f));
+		shapesRenderer.addShape(box);
+		builder.addRenderer(shapesRenderer);
+
+		// create elevations for Tenerife from bil file
+		Sector sector = Sector.fromDegrees(27.967811065876, // min latitude
+				-17.0232177085356, // min longitude
+				28.6103464294992, // max latitude
+				-16.0019401695656); // max longitude
+		Vector2I extent = new Vector2I(256, 256); // image resolution
+		URL url = new URL("file:///Tenerife-256x256.bil", false);
+		ElevationDataProvider elevationDataProvider = new SingleBilElevationDataProvider(
+				url, sector, extent);
+		builder.getPlanetRendererBuilder().setElevationDataProvider(
+				elevationDataProvider);
+		builder.getPlanetRendererBuilder().setVerticalExaggeration(4.0f);
+
+		// BEGINNING OF CODE FOR LOADING STORAGE
+		if (false) {
+>>>>>>> senderos-gc
 
 			AssetManager am = getAssets();
 
 			try {
-				//LEYENDO FICHERO DE ASSETS
+				// LEYENDO FICHERO DE ASSETS
 				InputStream in = am.open("g3m.cache");
 
-				//OBTENIENDO STREAM DE SALIDA
+				// OBTENIENDO STREAM DE SALIDA
 				File f = getExternalCacheDir();
 				if ((f == null) || !f.exists()) {
 					f = getCacheDir();
 				}
 				final String documentsDirectory = f.getAbsolutePath();
-				final File f2 = new File(new File(documentsDirectory), "g3m.cache");
+				final File f2 = new File(new File(documentsDirectory),
+						"g3m.cache");
 				final String path = f2.getAbsolutePath();
 				OutputStream out = new FileOutputStream(path);
 
-				//COPIANDO FICHERO
+				// COPIANDO FICHERO
 				byte[] buf = new byte[1024];
 				int len;
 				while ((len = in.read(buf)) > 0) {
@@ -179,9 +267,8 @@ Activity {
 				in.close();
 				out.close();
 
-
-				SQLiteStorage_Android storage = new SQLiteStorage_Android("g3m.cache", this.getApplicationContext());
-
+				SQLiteStorage_Android storage = new SQLiteStorage_Android(
+						"g3m.cache", this.getApplicationContext());
 				builder.setStorage(storage);
 
 			} catch (IOException e) {
@@ -189,88 +276,180 @@ Activity {
 				e.printStackTrace();
 			}
 		}
-		//END OF CODE FOR LOADING STORAGE
 
+		// END OF CODE FOR LOADING STORAGE
 
-		//BEGINNING OF CODE FOR PRECACHING AREA
-		boolean precaching = false;
-		PrecacherInitializationTask pit = null;
-		if (precaching){
-			//Las Palmas de GC
-			Geodetic2D upper = Geodetic2D.fromDegrees(28.20760859532738, -15.3314208984375);
-			Geodetic2D lower = Geodetic2D.fromDegrees(28.084096949164735, -15.4852294921875);
+		if (false) {
+			// BEGINNING OF CODE FOR PRECACHING AREA
+			boolean precaching = false;
+			PrecacherInitializationTask pit = null;
+			if (precaching) {
+				// Las Palmas de GC
+				Geodetic2D upper = Geodetic2D.fromDegrees(28.20760859532738,
+						-15.3314208984375);
+				Geodetic2D lower = Geodetic2D.fromDegrees(28.084096949164735,
+						-15.4852294921875);
 
-			pit = new PrecacherInitializationTask(null, upper, lower, 6);
-			builder.setInitializationTask(pit);
+				pit = new PrecacherInitializationTask(null, upper, lower, 6);
+				builder.setInitializationTask(pit);
+			}
+
+			_g3mWidget = builder.createWidget();
+
+			// set frustumCullingFactor
+			_g3mWidget.getPlanetRenderer().setFrustumCullingFactor(2.0f);
+
+			// set camera looking at Tenerife
+			Geodetic3D position = new Geodetic3D(Angle.fromDegrees(27.60),
+					Angle.fromDegrees(-16.54), 55000.0);
+			_g3mWidget.setCameraPosition(position);
+			_g3mWidget.setCameraPitch(Angle.fromDegrees(-50.0));
+
+			if (precaching) {
+				pit.setWidget(_g3mWidget);
+			}
+
+			_placeHolder = (RelativeLayout) findViewById(R.id.g3mWidgetHolder);
+			_placeHolder.addView(_g3mWidget);
+
+			// END OF CODE FOR PRECACHING AREA
 		}
-
-		_g3mWidget = builder.createWidget();  
-
-		// set frustumCullingFactor
-		_g3mWidget.getPlanetRenderer().setFrustumCullingFactor(2.0f);
-
-		// set camera looking at Tenerife
-		Geodetic3D position = new Geodetic3D(Angle.fromDegrees(27.60), Angle.fromDegrees(-16.54), 55000.0);
-		_g3mWidget.setCameraPosition(position);
-		_g3mWidget.setCameraPitch(Angle.fromDegrees(-50.0));
-
-
-
-		if (precaching){
-			pit.setWidget(_g3mWidget);
-		}
+<<<<<<< HEAD
 
 		//END OF CODE FOR PRECACHING AREA
+=======
+		
+		_g3mWidget = builder.createWidget();
+
+		_placeHolder = (RelativeLayout) findViewById(R.id.g3mWidgetHolder);
+		_placeHolder.addView(_g3mWidget);
+
+		/*
+		 * super.onCreate(savedInstanceState);
+		 * 
+		 * requestWindowFeature(Window.FEATURE_NO_TITLE);
+		 * getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+		 * WindowManager.LayoutParams.FLAG_FULLSCREEN);
+		 * 
+		 * setContentView(R.layout.activity_main);
+		 * 
+		 * 
+		 * // _g3mWidget = createWidget(); _g3mWidget = sanjayTesting();
+		 * 
+		 * final RelativeLayout placeHolder = (RelativeLayout)
+		 * findViewById(R.id.g3mWidgetHolder); placeHolder.addView(_g3mWidget);
+		 * 
+		 * 
+		 * final Geodetic3D zurichPos = Geodetic3D.fromDegrees(40, -75, 80000);
+		 * _g3mWidget
+		 * .getG3MWidget().setAnimatedCameraPosition(TimeInterval.fromSeconds
+		 * (5), zurichPos, Angle.zero(), Angle.fromDegrees(-90));
+		 */
+>>>>>>> senderos-gc
 
 	}
 
-   private G3MWidget_Android createWidget() {
-      final G3MBuilder_Android builder = new G3MBuilder_Android(this);
+	private G3MWidget_Android sanjayTesting() {
+		final G3MBuilder_Android builder = new G3MBuilder_Android(this);
 
-      builder.getPlanetRendererBuilder().setLayerSet(createLayerSet());
-      // builder.getPlanetRendererBuilder().setRenderDebug(true);
-      // builder.getPlanetRendererBuilder().setLogTilesPetitions(true);
+		builder.setPlanet(Planet.createSphericalEarth());
 
-      return builder.createWidget();
-      
-   }
+		final MarksRenderer _weatherMarkers = new MarksRenderer(false);
 
-		// final ShapesRenderer shapesRenderer = new ShapesRenderer();
-		// builder.addRenderer(shapesRenderer);
-	
-		
-      final LayerSet layerSet = new LayerSet();
-      //layerSet.addLayer(MapQuestLayer.newOSM(TimeInterval.fromDays(30)));
+		// draw one simple marker
+		final Mark mark = new Mark( //
+				new URL("file:///mark.png"), //
+				new Geodetic3D(Angle.fromDegrees(40.0),
+						Angle.fromDegrees(-75.0), 75000), //
+				AltitudeMode.ABSOLUTE, //
+				5000000, //
+				null, //
+				false, //
+				null, //
+				true);
 
-    private LayerSet createLayerSet() {
-      final LayerSet layerSet = new LayerSet();
-      //      layerSet.addLayer(MapQuestLayer.newOSM(TimeInterval.fromDays(30)));
+		_weatherMarkers.addMark(mark);
 
-      layerSet.addLayer(new MapBoxLayer("examples.map-9ijuk24y", TimeInterval.fromDays(30)));
+		builder.addRenderer(_weatherMarkers);
 
+		return builder.createWidget();
 
+	}
 
-      final String urlTemplate = "http://192.168.1.2/ne_10m_admin_0_countries-Levels10/{level}/{y}/{x}.geojson";
-      final int firstLevel = 2;
-      final int maxLevel = 10;
+	private G3MWidget_Android createWidget() {
+		final G3MBuilder_Android builder = new G3MBuilder_Android(this);
 
- 
+		final TimeInterval connectTimeout = TimeInterval.fromSeconds(60);
+		final TimeInterval readTimeout = TimeInterval.fromSeconds(65);
+		final boolean saveInBackground = true;
 
-      return layerSet;
-   }
+		builder.getPlanetRendererBuilder().setLayerSet(createLayerSet());
+		// builder.getPlanetRendererBuilder().setRenderDebug(true);
+		// builder.getPlanetRendererBuilder().setLogTilesPetitions(true);
 
-		/*// set elevations
-		      final Sector sector = Sector.fromDegrees(27.967811065876, -17.0232177085356, 28.6103464294992, -16.0019401695656);
-		      final Vector2I extent = new Vector2I(256, 256);
-		      final URL url = NasaBillElevationDataURL.compoundURL(sector, extent);
-		      final ElevationDataProvider elevationDataProvider = new SingleBillElevationDataProvider(url, sector, extent);
-		      builder.getPlanetRendererBuilder().setElevationDataProvider(elevationDataProvider);
-		      builder.getPlanetRendererBuilder().setVerticalExaggeration(2.0f);
-*/
+		return builder.createWidget();
 
+	}
 
+	// final ShapesRenderer shapesRenderer = new ShapesRenderer();
+	// builder.addRenderer(shapesRenderer);
 
+	final LayerSet layerSet = new LayerSet();
 
+	// layerSet.addLayer(MapQuestLayer.newOSM(TimeInterval.fromDays(30)));
+
+	private LayerSet createLayerSet() {
+		final LayerSet layerSet = new LayerSet();
+		// layerSet.addLayer(MapQuestLayer.newOSM(TimeInterval.fromDays(30)));
+
+		final BingMapsLayer rasterLayer = new BingMapsLayer(
+				//
+				BingMapType.AerialWithLabels(), //
+				"AnU5uta7s5ql_HTrRZcPLI4_zotvNefEeSxIClF1Jf7eS-mLig1jluUdCoecV7jc", //
+				TimeInterval.fromDays(30));
+		layerSet.addLayer(rasterLayer);
+
+		final String urlTemplate = "http://192.168.1.2/ne_10m_admin_0_countries-Levels10/{level}/{y}/{x}.geojson";
+
+		// final String urlTemplate =
+		// "http://glob3mobile.dyndns.org/vectorial/swiss-buildings/{level}/{x}/{y}.geojson";
+
+		final int firstLevel = 2;
+		final int maxLevel = 17;
+
+		final Geodetic2D lower = new Geodetic2D( //
+				Angle.fromDegrees(45.8176852), //
+				Angle.fromDegrees(5.956216));
+		final Geodetic2D upper = new Geodetic2D( //
+				Angle.fromDegrees(47.803029), //
+				Angle.fromDegrees(10.492264));
+
+		final Sector sector = new Sector(lower, upper);
+
+		// final GEORasterSymbolizer symbolizer = new SampleRasterSymbolizer();
+		/*
+		 * final TiledVectorLayer tiledVectorLayer =
+		 * TiledVectorLayer.newMercator( // symbolizer, // urlTemplate, //
+		 * sector, // sector firstLevel, // maxLevel, //
+		 * TimeInterval.fromDays(30), // timeToCache true, // readExpired 1, //
+		 * transparency new LevelTileCondition(15, 21), // condition "" //
+		 * disclaimerInfo ); layerSet.addLayer(tiledVectorLayer);
+		 */
+
+		return layerSet;
+	}
+
+	/*
+	 * // set elevations final Sector sector =
+	 * Sector.fromDegrees(27.967811065876, -17.0232177085356, 28.6103464294992,
+	 * -16.0019401695656); final Vector2I extent = new Vector2I(256, 256); final
+	 * URL url = NasaBillElevationDataURL.compoundURL(sector, extent); final
+	 * ElevationDataProvider elevationDataProvider = new
+	 * SingleBillElevationDataProvider(url, sector, extent);
+	 * builder.getPlanetRendererBuilder
+	 * ().setElevationDataProvider(elevationDataProvider);
+	 * builder.getPlanetRendererBuilder().setVerticalExaggeration(2.0f);
+	 */
 
 	@Override
 	public boolean onCreateOptionsMenu(final Menu menu) {
@@ -615,8 +794,7 @@ Activity {
 
 }
 
-
-//BEGINNING OF CODE FOR PRECACHING AREA
+// BEGINNING OF CODE FOR PRECACHING AREA
 
 class PrecacherInitializationTask extends GInitializationTask {
 
@@ -663,11 +841,12 @@ class PrecacherInitializationTask extends GInitializationTask {
 	private Geodetic2D _upper, _lower;
 	private int _level;
 
-	public void setWidget(G3MWidget_Android widget){
+	public void setWidget(G3MWidget_Android widget) {
 		_widget = widget;
 	}
 
-	public PrecacherInitializationTask(G3MWidget_Android widget, Geodetic2D upper, Geodetic2D lower, int level) {
+	public PrecacherInitializationTask(G3MWidget_Android widget,
+			Geodetic2D upper, Geodetic2D lower, int level) {
 		_widget = widget;
 		_upper = upper;
 		_lower = lower;
@@ -709,7 +888,7 @@ class PrecacherInitializationTask extends GInitializationTask {
 	public boolean isDone(G3MContext context) {
 		return _done;
 	}
-	
+
 }
 
-//END OF CODE FOR PRECACHING AREA
+// END OF CODE FOR PRECACHING AREA

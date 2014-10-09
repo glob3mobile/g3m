@@ -22,7 +22,7 @@ public class WebSocket_WebGL
                    final boolean autodeleteWebSocket) {
       super(url, listener, autodeleteListener, autodeleteWebSocket);
 
-      jsInitialize(this, getURL().getPath(), getListener(), getAutodeleteWebSocket());
+      jsInitialize(this, getURL()._path, getListener(), getAutodeleteWebSocket());
    }
 
 
@@ -49,13 +49,15 @@ public class WebSocket_WebGL
 			socket.onmessage = function(event) {
 				if (typeof event.data === "string") {
 					listener.@org.glob3.mobile.generated.IWebSocketListener::onMesssage(Lorg/glob3/mobile/generated/IWebSocket;Ljava/lang/String;)(webSocket, event.data);
-				} else {
+				}
+				else {
 					listener.@org.glob3.mobile.generated.IWebSocketListener::onError(Lorg/glob3/mobile/generated/IWebSocket;Ljava/lang/String;)(webSocket, "Unsupported message type.");
 				}
 			}
 
 			this.@org.glob3.mobile.specific.WebSocket_WebGL::_socket = socket;
-		} else {
+		}
+		else {
 			listener.@org.glob3.mobile.generated.IWebSocketListener::onError(Lorg/glob3/mobile/generated/IWebSocket;Ljava/lang/String;)(webSocket, "Your browser does not support WebSocket.");
 			if (autodeleteWebSocket) {
 				webSocket.@org.glob3.mobile.specific.WebSocket_WebGL::dispose();

@@ -10,6 +10,7 @@
 #define __G3MiOSSDK__PlanetRendererBuilder__
 
 class LayerSet;
+class GEOVectorLayer;
 
 #include "TilesRenderParameters.hpp"
 #include "PlanetRenderer.hpp"
@@ -20,7 +21,7 @@ class PlanetRendererBuilder {
 private:
   TileTessellator* _tileTessellator;
   TileTexturizer* _texturizer;
-  std::vector<TileRasterizer*> _tileRasterizers;
+  std::vector<GEOVectorLayer*> _geoVectorLayers;
 
   LayerSet* _layerSet;
   TilesRenderParameters* _parameters;
@@ -38,7 +39,7 @@ private:
   ElevationDataProvider* _elevationDataProvider;
   float _verticalExaggeration;
 
-  TileRasterizer* getTileRasterizer();
+//  TileRasterizer* getTileRasterizer();
 
   LayerSet* getLayerSet();
   TilesRenderParameters* getParameters();
@@ -75,14 +76,19 @@ private:
   
   int _tileCacheSize;
   bool _deleteTexturesOfInvisibleTiles;
-
+  TouchEventType _touchEventTypeOfTerrainTouchListener;
+  
+  TouchEventType getTouchEventTypeOfTerrainTouchListener();
+  
+  TileTessellator* getTileTessellator();
+  
+  TileTexturizer* getTexturizer();
 public:
   PlanetRendererBuilder();
   ~PlanetRendererBuilder();
   PlanetRenderer* create();
   void setTileTessellator(TileTessellator* tileTessellator);
   void setTileTexturizer(TileTexturizer* tileTexturizer);
-  void addTileRasterizer(TileRasterizer* tileRasterizer);
   void setLayerSet(LayerSet* layerSet);
   void setPlanetRendererParameters(TilesRenderParameters* parameters);
   void setShowStatistics(const bool showStatistics);
@@ -96,7 +102,6 @@ public:
     addVisibleSectorListener(listener, TimeInterval::zero());
   }
   void addTerrainTouchListener(TerrainTouchListener* listener);
-  //void setTexturePriority(long long texturePriority);
   void setTileDownloadPriority(long long tileDownloadPriority);
 
   void setElevationDataProvider(ElevationDataProvider* elevationDataProvider);
@@ -105,7 +110,7 @@ public:
 
   void setRenderedSector(const Sector& sector);
 
-  GEOTileRasterizer* createGEOTileRasterizer();
+  GEOVectorLayer* createGEOVectorLayer();
 
   Quality getQuality() const;
   void setQuality(Quality quality);
@@ -122,13 +127,11 @@ public:
   
   void setChangedRendererInfoListener(ChangedRendererInfoListener* changedInfoListener);
   
-  TileTessellator* getTileTessellator();
-  
-  TileTexturizer* getTexturizer();
-  
   void setTileCacheSize(int x);
   
   void setDeleteTexturesOfInvisibleTiles(bool x);
+  
+  void setTouchEventTypeOfTerrainTouchListener(TouchEventType _touchEventTypeOfTerrainTouchListener);
 };
 
 #endif

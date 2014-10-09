@@ -141,6 +141,13 @@ public class G3MDemoActivity
          }
       });
 
-
+      final Button vectorTilesButton = (Button) findViewById(R.id.vectorialTilesDemoButton);
+      vectorTilesButton.setOnClickListener(new OnClickListener() {
+         @Override
+         public void onClick(final View v) {
+            final Intent intent = new Intent(getApplicationContext(), VectorTilesActivity.class);
+            startActivity(intent);
+         }
+      });
    }
 }

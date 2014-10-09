@@ -170,12 +170,28 @@ public:
   }
 
   const Vector3D getCartesianPosition() const { return _position.asVector3D(); }
+  const MutableVector3D getCartesianPositionMutable() const { return _position; }
   const Vector3D getNormalizedPosition() const { return _normalizedPosition.asVector3D(); }
   const Vector3D getCenter() const { return _center.asVector3D(); }
   const Vector3D getUp() const { return _up.asVector3D(); }
+  const MutableVector3D getUpMutable() const { return _up; }
   const Geodetic3D getGeodeticCenterOfView() const { return *_getGeodeticCenterOfView(); }
   const Vector3D getXYZCenterOfView() const { return _getCartesianCenterOfView().asVector3D(); }
-  const Vector3D getViewDirection() const { return _center.sub(_position).asVector3D(); }
+  const Vector3D getViewDirection() const {
+    // return _center.sub(_position).asVector3D();
+
+    // perform the substraction inlinde to avoid a temporary MutableVector3D instance
+    return Vector3D(_center.x() - _position.x(),
+                    _center.y() - _position.y(),
+                    _center.z() - _position.z());
+  }
+
+  const void getViewDirectionInto(MutableVector3D& result) const {
+    result.put(_center.x() - _position.x(),
+               _center.y() - _position.y(),
+               _center.z() - _position.z());
+  }
+
 
   void dragCamera(const Vector3D& p0,
                   const Vector3D& p1);
@@ -218,14 +234,17 @@ public:
 
   void setCartesianPosition(const MutableVector3D& v) {
     if (!v.equalTo(_position)) {
-      _position = MutableVector3D(v);
+      //      _position = MutableVector3D(v);
+      _position.copyFrom(v);
       delete _geodeticPosition;
       _geodeticPosition = NULL;
       _dirtyFlags.setAll(true);
       const double distanceToPlanetCenter = _position.length();
       const double planetRadius = distanceToPlanetCenter - getGeodeticPosition()._height;
       _angle2Horizon = acos(planetRadius/distanceToPlanetCenter);
-      _normalizedPosition = _position.normalized();
+      //      _normalizedPosition = _position.normalized();
+      _normalizedPosition.copyFrom(_position);
+      _normalizedPosition.normalize();
     }
   }
 
@@ -259,7 +278,7 @@ public:
                            const double height) {
     setGeodeticPosition(Geodetic3D(g2d, height));
   }
-  
+
   /**
    This method put the camera pointing to given center, at the given distance, using the given angles.
 
@@ -273,23 +292,25 @@ public:
                       const Angle& azimuth,
                       const Angle& altitude);
 
-  void forceMatrixCreation() const{
-    //MutableMatrix44D projectionMatrix = MutableMatrix44D::createProjectionMatrix(_frustumData);
-    //getFrustumData();
+  void forceMatrixCreation() const {
+    getGeodeticCenterOfView();
+    //getXYZCenterOfView();
+    _getCartesianCenterOfView();
+    getFrustumInModelCoordinates();
     getProjectionMatrix44D();
     getModelMatrix44D();
     getModelViewMatrix().asMatrix44D();
   }
 
-  Matrix44D* getModelMatrix44D() const{
+  Matrix44D* getModelMatrix44D() const {
     return getModelMatrix().asMatrix44D();
   }
 
-  Matrix44D* getProjectionMatrix44D() const{
+  Matrix44D* getProjectionMatrix44D() const {
     return getProjectionMatrix().asMatrix44D();
   }
 
-  Matrix44D* getModelViewMatrix44D() const{
+  Matrix44D* getModelViewMatrix44D() const {
     return getModelViewMatrix().asMatrix44D();
   }
 
@@ -337,6 +358,10 @@ public:
                                    const Vector3D& point1) const;
 
 private:
+
+  mutable MutableVector3D _ray0;
+  mutable MutableVector3D _ray1;
+
   //  const Angle getHeading(const Vector3D& normal) const;
 
   //IF A NEW ATTRIBUTE IS ADDED CHECK CONSTRUCTORS AND RESET() !!!!
@@ -388,14 +413,16 @@ private:
 
   void setCenter(const MutableVector3D& v) {
     if (!v.equalTo(_center)) {
-      _center = MutableVector3D(v);
+      //      _center = MutableVector3D(v);
+      _center.copyFrom(v);
       _dirtyFlags.setAll(true);
     }
   }
 
   void setUp(const MutableVector3D& v) {
     if (!v.equalTo(_up)) {
-      _up = MutableVector3D(v);
+      //      _up = MutableVector3D(v);
+      _up.copyFrom(v);
       _dirtyFlags.setAll(true);
     }
   }
@@ -404,7 +431,8 @@ private:
   MutableVector3D   _getCartesianCenterOfView() const {
     if (_dirtyFlags._cartesianCenterOfViewDirty) {
       _dirtyFlags._cartesianCenterOfViewDirty = false;
-      _cartesianCenterOfView = centerOfViewOnPlanet().asMutableVector3D();
+      //      _cartesianCenterOfView = centerOfViewOnPlanet().asMutableVector3D();
+      _cartesianCenterOfView.copyFrom(centerOfViewOnPlanet());
     }
     return _cartesianCenterOfView;
   }
@@ -433,10 +461,10 @@ private:
   FrustumData calculateWiderFrustumData(float factor) const;
 
   // opengl projection matrix
-  const MutableMatrix44D& getProjectionMatrix() const{
+  const MutableMatrix44D& getProjectionMatrix() const {
     if (_dirtyFlags._projectionMatrixDirty) {
       _dirtyFlags._projectionMatrixDirty = false;
-      _projectionMatrix = MutableMatrix44D::createProjectionMatrix(getFrustumData());
+      _projectionMatrix.copyValue(MutableMatrix44D::createProjectionMatrix(getFrustumData()));
     }
     return _projectionMatrix;
   }
@@ -445,7 +473,7 @@ private:
   const MutableMatrix44D& getModelMatrix() const {
     if (_dirtyFlags._modelMatrixDirty) {
       _dirtyFlags._modelMatrixDirty = false;
-      _modelMatrix = MutableMatrix44D::createModelMatrix(_position, _center, _up);
+      _modelMatrix.copyValue(MutableMatrix44D::createModelMatrix(_position, _center, _up));
     }
     return _modelMatrix;
   }
@@ -454,17 +482,14 @@ private:
   const MutableMatrix44D& getModelViewMatrix() const {
     if (_dirtyFlags._modelViewMatrixDirty) {
       _dirtyFlags._modelViewMatrixDirty = false;
-      _modelViewMatrix = getProjectionMatrix().multiply(getModelMatrix());
+      //_modelViewMatrix.copyValue(getProjectionMatrix().multiply(getModelMatrix()));
+      _modelViewMatrix.copyValueOfMultiplication(getProjectionMatrix(), getModelMatrix());
     }
     return _modelViewMatrix;
   }
   
-  
-  
   void setCameraCoordinateSystem(const CoordinateSystem& rs);
   
 };
-
-
 
 #endif

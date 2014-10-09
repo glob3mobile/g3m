@@ -62,7 +62,8 @@ void GLFeatureSet::clearFeatures(GLFeatureGroupName g) {
       for (int j = i; j < _nFeatures; j++) {
         if (j+1 >= MAX_CONCURRENT_FEATURES_PER_GROUP) {
           _features[j] = NULL;
-        } else{
+        }
+        else {
           _features[j] = _features[j+1];
         }
       }
@@ -82,7 +83,8 @@ void GLFeatureSet::clearFeatures() {
     for (int j = i; j < _nFeatures; j++) {
       if (j+1 >= MAX_CONCURRENT_FEATURES_PER_GROUP) {
         _features[j] = NULL;
-      } else{
+      }
+      else {
         _features[j] = _features[j+1];
       }
     }

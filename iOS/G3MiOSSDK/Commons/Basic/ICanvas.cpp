@@ -215,7 +215,8 @@ void ICanvas::drawImage(const IImage* image,
     _drawImage(image,
                srcLeft, srcTop, srcWidth, srcHeight,
                destLeft, destTop, destWidth, destHeight, transparency);
-  } else{
+  }
+  else {
     _drawImage(image,
                srcLeft, srcTop, srcWidth, srcHeight,
                destLeft, destTop, destWidth, destHeight,

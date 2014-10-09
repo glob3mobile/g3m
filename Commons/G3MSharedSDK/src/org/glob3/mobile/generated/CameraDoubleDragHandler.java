@@ -105,16 +105,29 @@ public class CameraDoubleDragHandler extends CameraEventHandler
 
   public final void onDown(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
   {
+  
     Camera camera = cameraContext.getNextCamera();
     _camera0.copyFrom(camera);
-    cameraContext.setCurrentGesture(Gesture.DoubleDrag);
-  
     // double dragging
     G3MWidget widget = eventContext.getWidget();
     final Vector2I pixel0 = touchEvent.getTouch(0).getPos();
     Vector3D touchedPosition0 = widget.getScenePositionForPixel(pixel0._x, pixel0._y);
     final Vector2I pixel1 = touchEvent.getTouch(1).getPos();
     Vector3D touchedPosition1 = widget.getScenePositionForPixel(pixel1._x, pixel1._y);
+  
+    /*
+     =======
+    
+    const Vector3D& initialRay0 = _camera0.pixel2Ray(pixel0);
+    const Vector3D& initialRay1 = _camera0.pixel2Ray(pixel1);
+    
+    if ( initialRay0.isNan() || initialRay1.isNan() ) return;
+    
+    cameraContext->setCurrentGesture(DoubleDrag);
+  >>>>>>> origin/purgatory
+     */
+  
+    cameraContext.setCurrentGesture(Gesture.DoubleDrag);
     eventContext.getPlanet().beginDoubleDrag(_camera0.getCartesianPosition(), _camera0.getViewDirection(), widget.getScenePositionForCentralPixel(), touchedPosition0, touchedPosition1);
   
     // draw scene points int render debug mode
@@ -141,6 +154,18 @@ public class CameraDoubleDragHandler extends CameraEventHandler
     final Vector2I pixel0 = touchEvent.getTouch(0).getPos();
     final Vector2I pixel1 = touchEvent.getTouch(1).getPos();
     MutableMatrix44D matrix = planet.doubleDrag(_camera0.pixel2Ray(pixel0), _camera0.pixel2Ray(pixel1), _allowRotation);
+    /*
+  =======
+    const Vector3D& initialRay0 = _camera0.pixel2Ray(pixel0);
+    const Vector3D& initialRay1 = _camera0.pixel2Ray(pixel1);
+    
+     if ( initialRay0.isNan() || initialRay1.isNan() ) return;
+    
+    MutableMatrix44D matrix = planet->doubleDrag(initialRay0,
+                                                 initialRay1);
+  >>>>>>> origin/purgatory
+     */
+  
     if (!matrix.isValid())
        return;
   

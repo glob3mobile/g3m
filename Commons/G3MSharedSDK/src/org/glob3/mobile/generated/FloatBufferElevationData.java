@@ -135,7 +135,7 @@ public class FloatBufferElevationData extends BufferElevationData
 
   public final boolean hasNoData()
   {
-     return _hasNoData;
+    return _hasNoData;
   }
 
 }

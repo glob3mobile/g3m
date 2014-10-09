@@ -33,14 +33,14 @@ public:
   Vector3D getMinMaxAverageElevations() const;
   
   bool hasNoData() const{ return _hasNoData;}
-  
+
 #ifdef C_CODE
   const float* getBufferPointer() const
 #else
   const float[] getBufferPointer() const
 #endif
 { return _buffer;}
-  
+
 };
 
 #endif

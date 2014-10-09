@@ -17,7 +17,7 @@ class GEOFeature;
 
 class GEOGeometry : public GEOObject {
 private:
-  GEOFeature* _feature;
+  mutable GEOFeature* _feature;
 
 protected:
   virtual std::vector<GEOSymbol*>* createSymbols(const GEOSymbolizer* symbolizer) const = 0;
@@ -33,10 +33,9 @@ public:
 #ifdef JAVA_CODE
   super.dispose();
 #endif
-
   }
 
-  void setFeature(GEOFeature* feature);
+  void setFeature(GEOFeature* feature) const;
 
   const GEOFeature* getFeature() const {
     return _feature;
@@ -47,7 +46,9 @@ public:
                  MeshRenderer*           meshRenderer,
                  ShapesRenderer*         shapesRenderer,
                  MarksRenderer*          marksRenderer,
-                 GEOTileRasterizer*      geoTileRasterizer) const;
+                 GEOVectorLayer*         geoVectorLayer) const;
+
+  virtual GEOGeometry* deepCopy() const = 0;
 
 };
 

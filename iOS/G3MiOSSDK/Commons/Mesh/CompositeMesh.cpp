@@ -91,7 +91,7 @@ void CompositeMesh::addMesh(Mesh* mesh) {
 }
 
 void CompositeMesh::rawRender(const G3MRenderContext* rc,
-                              const GLState* parentGLState) const{
+                              const GLState* parentGLState) const {
   const int childrenCount = _children.size();
   for (int i = 0; i < childrenCount; i++) {
     Mesh* child = _children[i];

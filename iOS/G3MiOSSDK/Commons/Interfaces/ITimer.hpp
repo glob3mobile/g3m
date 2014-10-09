@@ -14,7 +14,9 @@
 class ITimer {
 public:
   virtual TimeInterval now() const = 0;
-  
+
+  virtual long long nowInMilliseconds() const = 0;
+
   virtual void start() = 0;
   
   virtual TimeInterval elapsedTime() const = 0;

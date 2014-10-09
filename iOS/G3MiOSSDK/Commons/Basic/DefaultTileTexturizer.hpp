@@ -32,7 +32,7 @@ public:
 
   Mesh* texturize(const G3MRenderContext* rc,
                   const TileTessellator* tessellator,
-                  TileRasterizer* tileRasterizer,
+//                  TileRasterizer* tileRasterizer,
                   const LayerTilesRenderParameters* layerTilesRenderParameters,
                   const LayerSet* layerSet,
                   bool forceFullRender,

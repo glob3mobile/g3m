@@ -63,11 +63,11 @@ public:
     return _mesh->isTransparent(rc);
   }
   
-  int getLevel() const{
+  int getLevel() const {
     return _currentLevel;
   }
 
-  void showNormals(bool v) const{
+  void showNormals(bool v) const {
     _mesh->showNormals(v);
   }
   

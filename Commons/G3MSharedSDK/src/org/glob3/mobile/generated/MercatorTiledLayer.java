@@ -93,10 +93,33 @@ public class MercatorTiledLayer extends RasterLayer
 
   protected final TileImageContribution rawContribution(Tile tile)
   {
-  //  return ((_transparency < 1)
-  //          ? TileImageContribution::fullCoverageTransparent(_transparency)
-  //          : TileImageContribution::fullCoverageOpaque());
-    return ((_isTransparent || (_transparency < 1)) ? TileImageContribution.fullCoverageTransparent(_transparency) : TileImageContribution.fullCoverageOpaque());
+    final Tile tileP = getParentTileOfSuitableLevel(tile);
+    if (tileP == null)
+    {
+      return null;
+    }
+  
+    final Sector requestedImageSector = tileP._sector;
+  
+    if (!_dataSector.touchesWith(requestedImageSector))
+    {
+      return null;
+    }
+    else if (_dataSector.fullContains(requestedImageSector) && (tile == tileP))
+    {
+      //Most common case tile of suitable level being fully coveraged by layer
+      return ((_isTransparent || (_transparency < 1)) ? TileImageContribution.fullCoverageTransparent(_transparency) : TileImageContribution.fullCoverageOpaque());
+    }
+    else
+    {
+      final Sector contributionSector = _dataSector.intersection(requestedImageSector);
+      if (contributionSector.hasNoArea())
+      {
+        return null;
+      }
+  
+      return ((_isTransparent || (_transparency < 1)) ? TileImageContribution.partialCoverageTransparent(contributionSector, _transparency) : TileImageContribution.partialCoverageOpaque(contributionSector));
+    }
   }
 
   protected final URL createURL(Tile tile)

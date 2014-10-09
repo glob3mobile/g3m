@@ -23,6 +23,7 @@
 #include <G3MiOSSDK/GEOMarkSymbol.hpp>
 #include <G3MiOSSDK/PlanetRenderer.hpp>
 #include <G3MiOSSDK/SingleBilElevationDataProvider.hpp>
+#include <G3MiOSSDK/GEOVectorLayer.hpp>
 
 #include "G3MDemoModel.hpp"
 
@@ -95,17 +96,21 @@ void G3M3DSymbologyDemoScene::rawActivate(const G3MContext* context) {
   planetRenderer->setElevationDataProvider(elevationDataProvider, true);
 
 
-  MapBoxLayer* layer = new MapBoxLayer("examples.map-qogxobv1",
-                                       TimeInterval::fromDays(30),
-                                       true,
-                                       3);
-  model->getLayerSet()->addLayer(layer);
+  MapBoxLayer* rasterLayer = new MapBoxLayer("examples.map-qogxobv1",
+                                             TimeInterval::fromDays(30),
+                                             true,
+                                             3);
+  model->getLayerSet()->addLayer(rasterLayer);
+
+  GEOVectorLayer* vectorLayer = new GEOVectorLayer();
+  model->getLayerSet()->addLayer(vectorLayer);
 
   g3mWidget->setBackgroundColor( Color::fromRGBA(0.19f, 0.23f, 0.22f, 1.0f) );
 
   GEORenderer* geoRenderer = model->getGEORenderer();
-  geoRenderer->loadJSON(URL("file:///uscitieslite.geojson"), new USCitiesSymbolizer());
+  geoRenderer->setGEOVectorLayer(vectorLayer, false);
 
+  geoRenderer->loadJSON(URL("file:///uscitieslite.geojson"), new USCitiesSymbolizer());
 
   g3mWidget->setAnimatedCameraPosition(TimeInterval::fromSeconds(5),
                                        Geodetic3D::fromDegrees(25.5, -74.52, 1595850),

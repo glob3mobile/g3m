@@ -444,7 +444,7 @@ public:
         //Layer transparency set by user
         transparencies.push_back(petition->getLayerTransparency());
       }
-      else{
+      else {
         return false;
       }
     }

@@ -152,11 +152,11 @@ public class Downloader_WebGL_Handler_DefaultImpl
    @Override
    final public void runWithDownloader(final IDownloader downloader) {
 
-      //      log(LogLevel.InfoLevel, ": runWithDownloader url=" + _url.getPath());
+      //      log(LogLevel.InfoLevel, ": runWithDownloader url=" + _url._path);
 
       _dl = (Downloader_WebGL) downloader;
 
-      jsRequest(_url.getPath());
+      jsRequest(_url._path);
 
       //      IThreadUtils.instance().invokeInRendererThread(new ProcessResponseGTask(statusCode, data, this), true);
    }
@@ -187,8 +187,8 @@ public class Downloader_WebGL_Handler_DefaultImpl
          }
       }
       else {
-         log(LogLevel.ErrorLevel,
-                  ": Error runWithDownloader: statusCode=" + statusCode + ", data=" + data + ", url=" + _url.getPath());
+         log(LogLevel.ErrorLevel, ": Error runWithDownloader: statusCode=" + statusCode + ", data=" + data + ", url="
+                                  + _url._path);
 
          for (final ListenerEntry entry : _listeners) {
             entry.onError(_url);

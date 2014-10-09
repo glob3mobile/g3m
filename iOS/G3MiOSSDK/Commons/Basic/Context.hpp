@@ -265,7 +265,7 @@ public:
     return _frameTasksExecutor;
   }
   
-  GPUProgramManager* getGPUProgramManager() const{
+  GPUProgramManager* getGPUProgramManager() const {
     return _gpuProgramManager;
   }
 

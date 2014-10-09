@@ -236,17 +236,15 @@ void CompositeRenderer::setChangedRendererInfoListener(ChangedRendererInfoListen
   if(_changedInfoListener != NULL){
     _changedInfoListener->changedRendererInfo(-1, getInfo());
   }
-  
-  ILogger::instance()->logInfo("Changed Renderer Info Listener of CompositeRenderer set ok");
-}
+  }
 
 void CompositeRenderer::changedRendererInfo(const int rendererIdentifier, const std::vector<std::string>& info) {
   if(rendererIdentifier >= 0 && rendererIdentifier < _renderersSize) {
     _renderers[rendererIdentifier]->setInfo(info);
-  }else {
+  }
+  else {
     ILogger::instance()->logWarning("Child Render not found: %d", rendererIdentifier);
   }
-  
   
   if (_changedInfoListener != NULL) {
     _changedInfoListener->changedRendererInfo(-1, getInfo());
