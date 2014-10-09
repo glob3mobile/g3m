@@ -39,7 +39,7 @@ private:
   ElevationDataProvider* _elevationDataProvider;
   float _verticalExaggeration;
 
-  TileRasterizer* getTileRasterizer();
+//  TileRasterizer* getTileRasterizer();
 
   LayerSet* getLayerSet();
   TilesRenderParameters* getParameters();
@@ -79,6 +79,10 @@ private:
   TouchEventType _touchEventTypeOfTerrainTouchListener;
   
   TouchEventType getTouchEventTypeOfTerrainTouchListener();
+  
+  TileTessellator* getTileTessellator();
+  
+  TileTexturizer* getTexturizer();
 public:
   PlanetRendererBuilder();
   ~PlanetRendererBuilder();
@@ -128,10 +132,6 @@ public:
   void setDeleteTexturesOfInvisibleTiles(bool x);
   
   void setTouchEventTypeOfTerrainTouchListener(TouchEventType _touchEventTypeOfTerrainTouchListener);
-  
-  TileTessellator* getTileTessellator();
-  
-  TileTexturizer* getTexturizer();
 };
 
 #endif

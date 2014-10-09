@@ -26,7 +26,6 @@ public class PlanetRendererBuilder
 
   private TileTessellator _tileTessellator;
   private TileTexturizer _texturizer;
-//  std::vector<TileRasterizer*> _tileRasterizers;
   private java.util.ArrayList<GEOVectorLayer> _geoVectorLayers = new java.util.ArrayList<GEOVectorLayer>();
 
   private LayerSet _layerSet;
@@ -64,6 +63,7 @@ public class PlanetRendererBuilder
   //}
   
   /**
+<<<<<<< HEAD
    * Returns the _texturizer.
    *
    * @return _texturizer: TileTexturizer*
@@ -83,11 +83,13 @@ public class PlanetRendererBuilder
 
 
   /**
+=======
+>>>>>>> dfbed904462a68b1b438219bce643d4651195efe
    * Returns the _layerSet.
    *
    * @return _layerSet: LayerSet*
    */
-  private LayerSet getLayerSet()
+  private LayerSet PlanetRendererBuilder.getLayerSet()
   {
     if (_layerSet == null)
     {
@@ -96,6 +98,9 @@ public class PlanetRendererBuilder
   
     return _layerSet;
   }
+
+//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
+//  LayerSet getLayerSet();
 
   /**
    * Returns the _parameters.
@@ -353,7 +358,6 @@ public class PlanetRendererBuilder
     }
   
     PlanetRenderer planetRenderer = new PlanetRenderer(getTileTessellator(), getElevationDataProvider(), true, getVerticalExaggeration(), getTexturizer(), layerSet, getParameters(), getShowStatistics(), getTileDownloadPriority(), getRenderedSector(), getRenderTileMeshes(), getLogTilesPetitions(), getTileRenderingListener(), getChangedRendererInfoListener(), _tileCacheSize, _deleteTexturesOfInvisibleTiles, getTouchEventTypeOfTerrainTouchListener());
-  //                                                      getTileRasterizer(),
   
     for (int i = 0; i < getVisibleSectorListeners().size(); i++)
     {
@@ -413,7 +417,6 @@ public class PlanetRendererBuilder
     }
     _texturizer = tileTexturizer;
   }
-//  void addTileRasterizer(TileRasterizer* tileRasterizer);
   public final void setLayerSet(LayerSet layerSet)
   {
     if (_layerSet != null)
@@ -465,7 +468,6 @@ public class PlanetRendererBuilder
   {
     getTerrainTouchListeners().add(listener);
   }
-  //void setTexturePriority(long long texturePriority);
 
   /*void PlanetRendererBuilder::setTexturePriority(long long texturePriority) {
     _tile = texturePriority;
@@ -505,8 +507,6 @@ public class PlanetRendererBuilder
     }
     _renderedSector = new Sector(sector);
   }
-
-//  GEOTileRasterizer* createGEOTileRasterizer();
 
 
   //GEOTileRasterizer* PlanetRendererBuilder::createGEOTileRasterizer() {
@@ -576,6 +576,21 @@ public class PlanetRendererBuilder
     }
   }
 
+  public final void setTileCacheSize(int x)
+  {
+    _tileCacheSize = x;
+  }
+
+  public final void setDeleteTexturesOfInvisibleTiles(boolean x)
+  {
+    _deleteTexturesOfInvisibleTiles = x;
+  }
+
+  public final void setTouchEventTypeOfTerrainTouchListener(TouchEventType touchEventTypeOfTerrainTouchListener)
+  {
+    _touchEventTypeOfTerrainTouchListener = touchEventTypeOfTerrainTouchListener;
+  }
+
 
   /**
    * Returns the _tileTessellator.
@@ -592,21 +607,22 @@ public class PlanetRendererBuilder
     return _tileTessellator;
   }
 
-//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
-//  TileTexturizer getTexturizer();
 
-  public final void setTileCacheSize(int x)
+  /**
+   * Returns the _texturizer.
+   *
+   * @return _texturizer: TileTexturizer*
+   */
+  public final TileTexturizer getTexturizer()
   {
-    _tileCacheSize = x;
-  }
-
-  public final void setDeleteTexturesOfInvisibleTiles(boolean x)
-  {
-    _deleteTexturesOfInvisibleTiles = x;
-  }
-
-  public final void setTouchEventTypeOfTerrainTouchListener(TouchEventType touchEventTypeOfTerrainTouchListener)
-  {
-    _touchEventTypeOfTerrainTouchListener = touchEventTypeOfTerrainTouchListener;
+    if (_texturizer == null)
+    {
+      //    _texturizer = new MultiLayerTileTexturizer();
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning Diego at work!
+      _texturizer = new DefaultTileTexturizer();
+    }
+  
+    return _texturizer;
   }
 }
