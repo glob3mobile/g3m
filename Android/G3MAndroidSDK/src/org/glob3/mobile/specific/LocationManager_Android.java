@@ -17,10 +17,10 @@ import android.os.Bundle;
 
 
 public class LocationManager_Android
-         extends
-            ILocationManager
-         implements
-            LocationListener {
+extends
+ILocationManager
+implements
+LocationListener {
 
 
    private final Context          _context;
@@ -79,7 +79,7 @@ public class LocationManager_Android
 
 
    LocationManager_Android(final Context context,
-                           final LocationListener locationListener) {
+            final LocationListener locationListener) {
       _context = context;
       _locationListener = locationListener;
 
@@ -143,6 +143,7 @@ public class LocationManager_Android
    @Override
    public void onLocationChanged(final Location location) {
       _location = new Geodetic2D(Angle.fromDegrees(location.getLatitude()), Angle.fromDegrees(location.getLongitude()));
+      notifyLocationChanged();
       if (_locationListener != null) {
          _locationListener.onLocationChanged(location);
       }

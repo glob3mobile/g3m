@@ -19,8 +19,8 @@ import android.content.Context;
 
 
 public final class Factory_Android
-extends
-IFactory {
+         extends
+            IFactory {
 
 
    private final Context _context;
@@ -136,8 +136,7 @@ IFactory {
 
    @Override
    public ILocationManager createLocationManager() {
-      // TODO Auto-generated method stub
-      return null;
+      return new LocationManager_Android(_context, null);
    }
 
 
