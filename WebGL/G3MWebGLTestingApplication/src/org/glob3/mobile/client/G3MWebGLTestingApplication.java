@@ -5,7 +5,6 @@ package org.glob3.mobile.client;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-<<<<<<< HEAD
 //import org.glob3.mobile.generated.GEORasterLineSymbol;
 //import org.glob3.mobile.generated.GEORasterPolygonSymbol;
 import org.glob3.mobile.generated.*;
@@ -14,7 +13,6 @@ import org.glob3.mobile.specific.G3MBuilder_WebGL;
 import org.glob3.mobile.specific.G3MWidget_WebGL;
 import org.glob3.mobile.specific.ThreadUtils_WebGL;
 import org.glob3.mobile.client.MyG3MWidget_WebGL;
-=======
 import org.glob3.mobile.generated.AltitudeMode;
 import org.glob3.mobile.generated.Angle;
 import org.glob3.mobile.generated.CameraDoubleDragHandler;
@@ -93,7 +91,6 @@ import org.glob3.mobile.generated.Vector3D;
 import org.glob3.mobile.specific.Downloader_WebGL;
 import org.glob3.mobile.specific.G3MBuilder_WebGL;
 import org.glob3.mobile.specific.G3MWidget_WebGL;
->>>>>>> zrender-touchhandlers
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.user.client.ui.Panel;
@@ -1160,66 +1157,6 @@ public class G3MWebGLTestingApplication
 	}
 
 	
-<<<<<<< HEAD
-	   public void testBranch_zrender_touchhandlers() {
-		   final G3MBuilder_WebGL builder = new G3MBuilder_WebGL();
-
-		   //const Planet* planet = Planet::createEarth();
-		   //const Planet* planet = Planet::createSphericalEarth();
-		   final Planet planet = Planet.createFlatEarth();
-		   builder.setPlanet(planet);
-		   	   
-		   // create shape
-		   ShapesRenderer shapesRenderer = new ShapesRenderer();
-		   Shape box = new BoxShape(new Geodetic3D(Angle.fromDegrees(28.4),
-				   Angle.fromDegrees(-16.4),
-				   0),
-				   AltitudeMode.ABSOLUTE,
-				   new Vector3D(3000, 3000, 20000),
-				   2,
-				   Color.fromRGBA(1.0f, 1.0f, 0.0f, 0.5f),
-				   Color.newFromRGBA(0.0f, 0.75f, 0.0f, 0.75f));
-		   shapesRenderer.addShape(box);
-		   builder.addRenderer(shapesRenderer);
-		   
-		   // create wmslayer from Grafcan
-		   LayerSet layerSet = new LayerSet();
-		   WMSLayer grafcanLIDAR = new WMSLayer("LIDAR_MTL",
-				   new URL("http://idecan1.grafcan.es/ServicioWMS/MTL?", false),
-				   WMSServerVersion.WMS_1_1_0,
-				   Sector.fullSphere(),//gcSector,
-				   "image/jpeg",
-				   "EPSG:4326",
-				   "",
-				   false,
-				   new LevelTileCondition(0, 17),
-				   TimeInterval.fromDays(30),
-				   true);
-		   layerSet.addLayer(grafcanLIDAR);
-		   builder.getPlanetRendererBuilder().setLayerSet(layerSet);
-
-		   // create elevations for Tenerife from bil file
-		   Sector sector = Sector.fromDegrees (27.967811065876,                  // min latitude
-				   -17.0232177085356,                // min longitude
-				   28.6103464294992,                 // max latitude
-				   -16.0019401695656);               // max longitude
-		   Vector2I extent = new Vector2I(256, 256);                             // image resolution
-		   URL url = new URL("http://serdis.dis.ulpgc.es/~atrujill/glob3m/IGO/Tenerife-256x256.bil", false);
-		   ElevationDataProvider elevationDataProvider = new SingleBilElevationDataProvider(url, sector, extent);
-		   builder.getPlanetRendererBuilder().setElevationDataProvider(elevationDataProvider);	  
-		   builder.getPlanetRendererBuilder().setVerticalExaggeration(2.0f);
-
-		   _widget = builder.createWidget();
-		   
-		   // set frustumCullingFactor
-		   _widget.getPlanetRenderer().setFrustumCullingFactor(2.0f);
-		   
-		   // set camera looking at Tenerife
-		   Geodetic3D position = new Geodetic3D(Angle.fromDegrees(27.60), Angle.fromDegrees(-16.54), 55000.0);
-		   _widget.setCameraPosition(position);
-		   _widget.setCameraPitch(Angle.fromDegrees(-50.0));
-
-	  }
 
 	   public void testBILGC() {
 		   final G3MBuilder_WebGL builder = new G3MBuilder_WebGL();
@@ -1439,6 +1376,12 @@ public class G3MWebGLTestingApplication
 	   public void testGeacron() {
 		   final MyG3MWidget_WebGL widgetJS = new MyG3MWidget_WebGL();
 		   final G3MBuilder_WebGL builder = new G3MBuilder_WebGL(widgetJS);
+		   
+		   //const Planet* planet = Planet::createEarth();
+		   //final Planet planet = Planet.createSphericalEarth();
+		   final Planet planet = Planet.createFlatEarth();
+		   builder.setPlanet(planet);
+
 
 		   {
 			   final LayerSet layerSet = new LayerSet();
@@ -1510,18 +1453,18 @@ public class G3MWebGLTestingApplication
 
 				@Override
 				public void onError(URL url) {
-					Window.alert("E");
+					//Window.alert("E");
 				}
 
 				@Override
 				public void onCancel(URL url) {
-					Window.alert("C");
+					//Window.alert("C");
 				}
 
 				@Override
 				public void onCanceledDownload(URL url, IByteBuffer buffer,
 						boolean expired) {
-					Window.alert("CD");
+					//Window.alert("CD");
 				}
 				
 			};
@@ -1624,8 +1567,8 @@ public class G3MWebGLTestingApplication
 			}
 
 		};
-=======
-   public void testBranch_zrender_touchhandlers() {
+
+		public void testBranch_zrender_touchhandlers() {
 	   final G3MBuilder_WebGL builder = new G3MBuilder_WebGL();
 
 	   //const Planet* planet = Planet::createEarth();
@@ -1633,6 +1576,36 @@ public class G3MWebGLTestingApplication
 	   //final Planet planet = Planet.createFlatEarth();
 	   builder.setPlanet(planet);
 	   	   
+	   LayerSet	layerSet = new LayerSet();
+		  
+	   /* WMSLayer grafcanLIDAR = new WMSLayer("LIDAR_MTL",
+			   new URL("http://idecan1.grafcan.es/ServicioWMS/MTL?", false),
+			   WMSServerVersion.WMS_1_1_0,
+			   Sector.fullSphere(),//gcSector,
+			   "image/jpeg",
+			   "EPSG:4326",
+			   "",
+			   false,
+			   new LevelTileCondition(0, 17),
+			   TimeInterval.fromDays(30),
+			   true,
+			   ltrp);
+	   layerSet.addLayer(grafcanLIDAR);*/
+
+	   WMSLayer grafcanOrto = new WMSLayer("WMS_OrtoExpress",
+               new URL("http://idecan1.grafcan.es/ServicioWMS/OrtoExpress?", false),
+               WMSServerVersion.WMS_1_1_0,
+               Sector.fullSphere(),
+               "image/jpeg",
+               "EPSG:4326",
+               "",
+               false,
+               new LevelTileCondition(0, 19),
+               TimeInterval.fromDays(30),
+               true);
+	   layerSet.addLayer(grafcanOrto);
+	   builder.getPlanetRendererBuilder().setLayerSet(layerSet);
+
 	   // create shape
 	   ShapesRenderer shapesRenderer = new ShapesRenderer();
 	   Shape box = new BoxShape(new Geodetic3D(Angle.fromDegrees(28.4),
@@ -1664,6 +1637,5 @@ public class G3MWebGLTestingApplication
 	   _widget.setCameraPosition(position);
 	   _widget.setCameraPitch(Angle.fromDegrees(-50.0));
   }
->>>>>>> zrender-touchhandlers
 
 }
