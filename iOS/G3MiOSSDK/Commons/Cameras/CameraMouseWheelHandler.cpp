@@ -26,12 +26,10 @@ bool CameraMouseWheelHandler::onTouchEvent(const G3MEventContext *eventContext,
 void CameraMouseWheelHandler::onMouseWheel(const G3MEventContext *eventContext,
                                            const TouchEvent& touchEvent,
                                            CameraContext *cameraContext){
-  ILogger::instance()->logInfo("Mouse Wheel detected");
-  
   Camera* cam = cameraContext->getNextCamera();
   const Planet* planet = eventContext->getPlanet();
   
-  const Vector3D dir = cam->pixel2Ray(touchEvent.getTouch(0)->getPos());
+  const Vector3D dir = cam->pixel2Ray(touchEvent.getTouch(0)->getPos()).normalized();
   
 #warning USE ZRENDER IN THE FUTURE
   std::vector<double> dists = planet->intersectionsDistances(cam->getCartesianPosition(), dir);

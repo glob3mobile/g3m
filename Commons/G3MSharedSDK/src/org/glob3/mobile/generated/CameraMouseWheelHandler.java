@@ -60,12 +60,10 @@ public class CameraMouseWheelHandler extends CameraEventHandler
 
   public final void onMouseWheel(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
   {
-    ILogger.instance().logInfo("Mouse Wheel detected");
-  
     Camera cam = cameraContext.getNextCamera();
     final Planet planet = eventContext.getPlanet();
   
-    final Vector3D dir = cam.pixel2Ray(touchEvent.getTouch(0).getPos());
+    final Vector3D dir = cam.pixel2Ray(touchEvent.getTouch(0).getPos()).normalized();
   
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#warning USE ZRENDER IN THE FUTURE
@@ -80,10 +78,9 @@ public class CameraMouseWheelHandler extends CameraEventHandler
       {
         factor *= -1;
       }
-  
       double dist = dists.get(0);
       Vector3D translation = dir.normalized().times(dist * factor);
-  
+
       cam.translateCamera(translation);
     }
   
