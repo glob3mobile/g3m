@@ -153,6 +153,7 @@ void Downloader_win8::cancelRequest(long long requestId){
 				_queuedHandlers.erase(url);
 			}
 			found = true;
+			break;
 		}
 	}
 
@@ -163,6 +164,7 @@ void Downloader_win8::cancelRequest(long long requestId){
 			Downloader_win8_Handler* handler = it->second;
 			if (handler->cancelListenerForRequestId(requestId)) {
 				found = true;
+				break;
 			}
 		}
 	}
@@ -232,6 +234,5 @@ const std::string Downloader_win8::statistics(){
 
 
 Downloader_win8::~Downloader_win8(){
-
 	stop();
 }
