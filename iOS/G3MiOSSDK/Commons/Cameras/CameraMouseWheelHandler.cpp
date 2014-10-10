@@ -10,6 +10,18 @@
 #include "Camera.hpp"
 #include "TouchEvent.hpp"
 
+bool CameraMouseWheelHandler::onTouchEvent(const G3MEventContext *eventContext,
+                  const TouchEvent* touchEvent,
+                  CameraContext *cameraContext){
+  
+  if (touchEvent->getType() == MouseWheelChanged){
+    onMouseWheel(eventContext, *touchEvent, cameraContext);
+    return true;
+  }
+  return false;
+
+}
+
 
 void CameraMouseWheelHandler::onMouseWheel(const G3MEventContext *eventContext,
                                            const TouchEvent& touchEvent,

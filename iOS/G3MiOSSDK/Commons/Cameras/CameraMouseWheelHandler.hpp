@@ -26,7 +26,7 @@ public:
   
   bool onTouchEvent(const G3MEventContext *eventContext,
                     const TouchEvent* touchEvent,
-                    CameraContext *cameraContext){return false;}
+                    CameraContext *cameraContext);
   
   void render(const G3MRenderContext* rc,
               CameraContext *cameraContext){}

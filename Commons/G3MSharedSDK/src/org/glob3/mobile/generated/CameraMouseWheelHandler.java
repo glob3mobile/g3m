@@ -32,7 +32,11 @@ public class CameraMouseWheelHandler extends CameraEventHandler
 
   public final boolean onTouchEvent(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
   {
-     return false;
+	  if (touchEvent.getType() == TouchEventType.MouseWheelChanged){
+		    onMouseWheel(eventContext, touchEvent, cameraContext);
+		    return true;
+		  }
+		  return false;
   }
 
   public final void render(G3MRenderContext rc, CameraContext cameraContext)
