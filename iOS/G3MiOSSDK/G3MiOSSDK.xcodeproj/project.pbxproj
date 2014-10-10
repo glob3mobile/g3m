@@ -514,6 +514,7 @@
 		D8EEF3B91577924D003FEB5E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8EEF3B81577924D003FEB5E /* Foundation.framework */; };
 		D8F0C70B17B52702002A89E0 /* GenericQuadTree.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8F0C70A17B52701002A89E0 /* GenericQuadTree.cpp */; };
 		D8F2EBAD18994A7B001B6103 /* CoordinateSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8F2EBAB18994A7B001B6103 /* CoordinateSystem.cpp */; };
+		D8F6166019E7DE8500825A2D /* CameraMouseWheelHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8F6165E19E7DE8500825A2D /* CameraMouseWheelHandler.cpp */; };
 		D8FBCA981797F88300DBBB90 /* GLGlobalState.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8FBCA971797F87900DBBB90 /* GLGlobalState.hpp */; };
 		E705123C165E782C00AEADB9 /* PlanetRendererBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E705123A165E782C00AEADB9 /* PlanetRendererBuilder.cpp */; };
 		E7051242165E916000AEADB9 /* G3MBuilder_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = E7051240165E916000AEADB9 /* G3MBuilder_iOS.mm */; };
@@ -1821,6 +1822,8 @@
 		D8F0C70A17B52701002A89E0 /* GenericQuadTree.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = GenericQuadTree.cpp; path = Commons/Basic/GenericQuadTree.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		D8F2EBAB18994A7B001B6103 /* CoordinateSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = CoordinateSystem.cpp; path = Commons/Geometry/CoordinateSystem.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		D8F2EBAC18994A7B001B6103 /* CoordinateSystem.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = CoordinateSystem.hpp; path = Commons/Geometry/CoordinateSystem.hpp; sourceTree = "<group>"; };
+		D8F6165E19E7DE8500825A2D /* CameraMouseWheelHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CameraMouseWheelHandler.cpp; path = Commons/Cameras/CameraMouseWheelHandler.cpp; sourceTree = "<group>"; };
+		D8F6165F19E7DE8500825A2D /* CameraMouseWheelHandler.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = CameraMouseWheelHandler.hpp; path = Commons/Cameras/CameraMouseWheelHandler.hpp; sourceTree = "<group>"; };
 		D8FBCA971797F87900DBBB90 /* GLGlobalState.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; path = GLGlobalState.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		D8FEDAC615E7BD23007633A0 /* IMathUtils.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = IMathUtils.hpp; path = Commons/Interfaces/IMathUtils.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		D8FEDAC815E7C219007633A0 /* MathUtils_iOS.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = MathUtils_iOS.hpp; path = Specific/Derived/MathUtils_iOS.hpp; sourceTree = "<group>"; };
@@ -2374,6 +2377,8 @@
 				FBC2309817972F4F009343FC /* CameraEffects.hpp */,
 				D8C486CE17E205E7000EAFC9 /* InitialCameraPositionProvider.cpp */,
 				D8C486CF17E205E7000EAFC9 /* InitialCameraPositionProvider.hpp */,
+				D8F6165E19E7DE8500825A2D /* CameraMouseWheelHandler.cpp */,
+				D8F6165F19E7DE8500825A2D /* CameraMouseWheelHandler.hpp */,
 			);
 			name = Cameras;
 			sourceTree = "<group>";
@@ -3211,6 +3216,7 @@
 				CF1E85B817E797BC005BDE80 /* CartoCSSParser.cpp in Sources */,
 				CF1E85BB17E799F8005BDE80 /* CartoCSSSymbolizer.cpp in Sources */,
 				CF22263C17E8F47000280C66 /* CartoCSSTokens.cpp in Sources */,
+				D8F6166019E7DE8500825A2D /* CameraMouseWheelHandler.cpp in Sources */,
 				CFA2EEEE17EA0B1100EB4526 /* CartoCSSLexer.cpp in Sources */,
 				CFE6046D1904448900E6C78B /* TileImageProvider.cpp in Sources */,
 			);

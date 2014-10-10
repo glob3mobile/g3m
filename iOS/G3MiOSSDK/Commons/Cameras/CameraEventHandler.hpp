@@ -41,6 +41,10 @@ public:
                     const TouchEvent& touchEvent,
                     CameraContext *cameraContext) = 0;
   
+  virtual void onMouseWheel(const G3MEventContext *eventContext,
+                            const TouchEvent& touchEvent,
+                            CameraContext *cameraContext){}
+  
 };
 
 #endif
