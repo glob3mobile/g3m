@@ -39,7 +39,7 @@ void CameraMouseWheelHandler::onMouseWheel(const G3MEventContext *eventContext,
   if (dists.size() > 0){     //Research other behaviours as Google Earth
 
     const double delta = touchEvent.getMouseWheelDelta();
-    double factor = 0.01;
+    double factor = 0.1;
     if (delta < 0){
       factor *= -1;
     }

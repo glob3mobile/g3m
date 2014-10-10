@@ -22,6 +22,9 @@ bool CameraSingleDragHandler::onTouchEvent(const G3MEventContext *eventContext,
   // only one finger needed
   if (touchEvent->getTouchCount()!=1) return false;
   if (touchEvent->getTapCount()>1) return false;
+  if (touchEvent->getType() == MouseWheelChanged){
+    return false;
+  }
 
   switch (touchEvent->getType()) {
     case Down:
