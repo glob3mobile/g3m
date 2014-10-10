@@ -75,7 +75,7 @@ public class CameraMouseWheelHandler extends CameraEventHandler
     {
   
       final double delta = touchEvent.getMouseWheelDelta();
-      double factor = 0.01;
+      double factor = 0.1;
       if (delta < 0)
       {
         factor *= -1;

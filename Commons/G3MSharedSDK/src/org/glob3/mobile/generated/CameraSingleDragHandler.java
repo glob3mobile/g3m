@@ -46,6 +46,10 @@ public class CameraSingleDragHandler extends CameraEventHandler
        return false;
     if (touchEvent.getTapCount()>1)
        return false;
+    if (touchEvent.getType() == TouchEventType.MouseWheelChanged)
+    {
+      return false;
+    }
   
     switch (touchEvent.getType())
     {
