@@ -108,7 +108,7 @@ public:
 #endif
   }
 
-  void unset();
+  virtual void unset();
 
   const IGLUniformID* getID(){
 	  return _id;

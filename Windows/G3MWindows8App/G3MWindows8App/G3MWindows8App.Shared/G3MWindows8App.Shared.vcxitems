@@ -32,5 +32,11 @@
     <FxCompile Include="$(MSBuildThisFileDirectory)..\..\..\G3MWindowsSDK\Shaders\NoColorMeshV.hlsl">
       <ShaderType>Vertex</ShaderType>
     </FxCompile>
+    <FxCompile Include="$(MSBuildThisFileDirectory)..\..\..\G3MWindowsSDK\Shaders\TexturedMeshP.hlsl">
+      <ShaderType>Pixel</ShaderType>
+    </FxCompile>
+    <FxCompile Include="$(MSBuildThisFileDirectory)..\..\..\G3MWindowsSDK\Shaders\TexturedMeshV.hlsl">
+      <ShaderType>Vertex</ShaderType>
+    </FxCompile>
   </ItemGroup>
 </Project>

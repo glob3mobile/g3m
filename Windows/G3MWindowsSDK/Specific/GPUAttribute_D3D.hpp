@@ -29,7 +29,10 @@ public:
 
 	virtual ~GPUAttribute_D3D(){
 		_buffer->Release();
+		delete _buffer;
 	}
+
+	void unset(GL* gl);
 
 	D3D11_INPUT_ELEMENT_DESC getIED(){
 		return _ied;

@@ -61,7 +61,7 @@ public:
 	}
 
 
-	void onUnused(GL* gl);
+	//void onUnused(GL* gl);
 	void applyChanges(GL* gl);
 	void getVariables(GL* gl);
 	void deleteShader(GL* gl, int shader) const;

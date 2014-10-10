@@ -19,7 +19,7 @@ public:
 		const std::string& vertexSource,
 		const std::string& fragmentSource);
 
-	void onUnused(GL* gl);
+	//void onUnused(GL* gl);
 	void applyChanges(GL* gl);
 	~GPUProgram_OGL();
 

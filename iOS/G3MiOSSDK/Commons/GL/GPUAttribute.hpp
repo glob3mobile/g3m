@@ -140,7 +140,7 @@ public:
 
 
 
-  void unset(GL* gl) {
+  virtual void unset(GL* gl) {
     if (_value != NULL) {
       _value->_release();
       _value = NULL;

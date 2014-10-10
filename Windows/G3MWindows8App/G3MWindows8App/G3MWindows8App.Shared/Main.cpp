@@ -107,7 +107,8 @@ public:
 		_builder->getPlanetRendererBuilder()->setLayerSet(createLayerset());
 		_builder->getPlanetRendererBuilder()->setForceFirstLevelTilesRenderOnStart(false);
 
-		_builder->getPlanetRendererBuilder()->setDefaultTileBackGroundImage(new DownloaderImageBuilder(URL("file:///deathStarS.png")));
+		//_builder->getPlanetRendererBuilder()->setDefaultTileBackGroundImage(new DownloaderImageBuilder(URL("file:///deathStarS.png")));
+		_builder->getPlanetRendererBuilder()->setDefaultTileBackGroundImage(new DownloaderImageBuilder(URL("http://www.freelogovectors.net/wp-content/uploads/2013/02/sheep-b.png")));
 
 		//Image_win8* image = Image_win8::imageFromFile(URL("file:///deathStarS.png"));
 		

@@ -243,11 +243,6 @@ void GPUProgram_D3D::getShaderAttributes(GL* gl){
 }
 
 
-void GPUProgram_D3D::onUnused(GL* gl){
-	std::string errMsg("TODO: Implementation");
-	throw std::exception(errMsg.c_str());
-}
-
 void GPUProgram_D3D::applyChanges(GL* gl){
 	for (int i = 0; i < _nUniforms; i++) {
 		GPUUniform* uniform = _createdUniforms[i];

@@ -10,6 +10,7 @@
 #include "GPUProgram_D3D.hpp"
 #include "Matrix44D.hpp"
 #include "ShortBuffer_win8.hpp"
+#include "GLTextureId_win8.hpp"
 
 
 void NativeGL_win8::initializeRenderStates() const{
@@ -242,8 +243,22 @@ void NativeGL_win8::pixelStorei(int pname, int param) const{
 }
 
 std::vector<IGLTextureId*> NativeGL_win8::genTextures(int	n) const{
-	std::string errMsg("TODO: Implementation");
-	throw std::exception(errMsg.c_str());
+
+	std::vector<IGLTextureId*> ts;
+
+	for (int i = 0; i < n; i++) {
+		unsigned int textureId = i+1;
+		if (textureId == 0) {
+			ILogger::instance()->logError("Can't create a textureId");
+		}
+		else {
+			ts.push_back(new GLTextureID_win8(textureId));
+		}
+	}
+	return ts;
+
+	//std::string errMsg("TODO: Implementation");
+	//throw std::exception(errMsg.c_str());
 }
 
 void NativeGL_win8::texParameteri(int target, int par, int v) const{

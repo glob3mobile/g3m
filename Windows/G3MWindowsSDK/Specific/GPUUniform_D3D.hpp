@@ -26,8 +26,15 @@ public:
 
 	virtual void createD3D11Buffer() = 0;
 	virtual void applyChanges(GL* gl) = 0;
+	void unset();
+	virtual ~GPUUniform_D3D(){
+		_buffer->Release();
+		delete _buffer;
+#ifdef JAVA_CODE
+		super.dispose();
+#endif
+	}
 
-	//todo Destructor
 };
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
