@@ -21,8 +21,9 @@ public class RenderedSectorCameraConstrainer implements ICameraConstrainer
     // maxHeight is used with different values in two different camera constrainers
     // besides, if next camera is not valid, it's better to swap with current camera
     // instead of changing just one only parameter as position
+    return true;
   
- /*   if (_planetRenderer != null)
+    if (_planetRenderer != null)
     {
       final Sector sector = _planetRenderer.getRenderedSector();
       final Geodetic3D position = nextCamera.getGeodeticPosition();
@@ -52,7 +53,7 @@ public class RenderedSectorCameraConstrainer implements ICameraConstrainer
           nextCamera.copyFrom(previousCamera);
         }
       }
-    }*/
+    }
   
     return true;
   }
