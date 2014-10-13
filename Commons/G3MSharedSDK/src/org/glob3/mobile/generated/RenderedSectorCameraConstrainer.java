@@ -17,12 +17,6 @@ public class RenderedSectorCameraConstrainer implements ICameraConstrainer
 
   public boolean onCameraChange(Planet planet, Camera previousCamera, Camera nextCamera)
   {
-    int talk_to_Diego;
-    // maxHeight is used with different values in two different camera constrainers
-    // besides, if next camera is not valid, it's better to swap with current camera
-    // instead of changing just one only parameter as position
-    return true;
-  
     if (_planetRenderer != null)
     {
       final Sector sector = _planetRenderer.getRenderedSector();
