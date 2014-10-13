@@ -13,11 +13,7 @@
 
 class Info {
 private:
-  
   const std::string _text;
-  
-protected:
-  
   
 public:
   
@@ -29,6 +25,4 @@ public:
   
 };
 
-
-
-#endif /* defined(__G3MiOSSDK__Info__) */
+#endif

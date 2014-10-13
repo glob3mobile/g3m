@@ -192,7 +192,7 @@ popBestProvider(std::vector<ElevationDataProvider*>& ps, const Vector2I& extent)
   double bestRes = extent.squaredLength();
   double selectedRes = IMathUtils::instance()->maxDouble();
   double selectedResDistance = IMathUtils::instance()->maxDouble();
-  IMathUtils *mu = IMathUtils::instance();
+  const IMathUtils *mu = IMathUtils::instance();
 
 
   ElevationDataProvider* provider = NULL;

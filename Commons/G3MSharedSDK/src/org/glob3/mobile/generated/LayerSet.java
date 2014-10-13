@@ -512,7 +512,13 @@ public class LayerSet implements ChangedInfoListener
 
   public final java.util.ArrayList<Info> getInfo()
   {
+    for (int i = 0; i < _infos.size(); i++)
+    {
+      if (_infos.get(i) != null)
+         _infos.get(i).dispose();
+    }
     _infos.clear();
+  
     final int layersCount = _layers.size();
     boolean anyEnabled = false;
     for (int i = 0; i < layersCount; i++)

@@ -174,7 +174,7 @@ public class GEOVectorLayer extends VectorLayer
   {
     if ((_condition == null) || _condition.isAvailable(tile))
     {
-      return (_quadTree.getSector().touchesWith(tile._sector) ? TileImageContribution.fullCoverageTransparent(_transparency) : null);
+      return (_quadTree.getSector().touchesWith(tile._sector) && !_quadTree.isEmpty() ? TileImageContribution.fullCoverageTransparent(_transparency) : null);
     }
     return null;
   }

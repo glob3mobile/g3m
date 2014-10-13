@@ -53,7 +53,7 @@ public class ShapeScaleEffect extends EffectWithDuration
   {
     final double alpha = getAlpha(when);
   
-    IMathUtils mu = IMathUtils.instance();
+    final IMathUtils mu = IMathUtils.instance();
     final double scaleX = mu.linearInterpolation(_fromScaleX, _toScaleX, alpha);
     final double scaleY = mu.linearInterpolation(_fromScaleY, _toScaleY, alpha);
     final double scaleZ = mu.linearInterpolation(_fromScaleZ, _toScaleZ, alpha);
