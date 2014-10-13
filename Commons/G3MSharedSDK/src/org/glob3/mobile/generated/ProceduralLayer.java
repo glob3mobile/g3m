@@ -29,7 +29,7 @@ public abstract class ProceduralLayer extends Layer
                             final String disclaimerInfo) {
     super(transparency, condition, disclaimerInfo);
     _parametersVector.addAll(parametersVector);
-    _selectedLayerTilesRenderParametersIndex = -1;
+    _selectedLayerTilesRenderParametersIndex = 0;
   }
 
   public final java.util.ArrayList<LayerTilesRenderParameters> getLayerTilesRenderParametersVector()
