@@ -42,10 +42,11 @@ private:
   
   mutable double          _dragRadius0;
   mutable double          _dragRadius1;
-  mutable double          _distanceBetweenInitialPoints;
   mutable double          _lastDoubleDragAngle;
-
   
+  
+  MutableMatrix44D createDragMatrix(const Vector3D initialPoint,
+                                    const Vector3D finalPoint) const;
 
 public:
 
@@ -156,7 +157,6 @@ public:
   
   bool isFlat() const { return false; }
 
-  //void beginSingleDrag(const Vector3D& origin, const Vector3D& initialRay) const;
   void beginSingleDrag(const Vector3D& origin, const Vector3D& touchedPosition) const;
   
   MutableMatrix44D singleDrag(const Vector3D& finalRay) const;
@@ -172,21 +172,6 @@ public:
   MutableMatrix44D doubleDrag(const Vector3D& finalRay0,
                               const Vector3D& finalRay1,
                               bool allowRotation) const;
-
-  
- /* void beginDoubleDrag(const Vector3D& origin,
-                       const Vector3D& centerRay,
-                               const Vector3D& initialRay0,
-                               const Vector3D& initialRay1) const;*/
-  /*void beginDoubleDrag(const Vector3D& origin,
-                       const Vector3D& centerRay,
-                       const Vector3D& centerPosition,
-                       const Vector3D& touchedPosition0,
-                       const Vector3D& touchedPosition1) const {}
-
-  MutableMatrix44D doubleDrag(const Vector3D& finalRay0,
-                              const Vector3D& finalRay1,
-                              bool allowRotation) const;*/
 
   Effect* createDoubleTapEffect(const Vector3D& origin,
                                 const Vector3D& centerRay,
@@ -212,10 +197,6 @@ public:
                       height);
   }
   
-  MutableMatrix44D createDragMatrix(const Vector3D initialPoint,
-                                    const Vector3D finalPoint) const;
-
-
 };
 
 #endif
