@@ -528,16 +528,25 @@ public:
   }
   
   void setUniform(GL* gl, const IGLUniformID* id) const {
+#ifdef C_CODE
     this->GPUUniformValueFloat::setUniform(gl, id);
+#endif
+#ifdef JAVA_CODE
+    super.setUniform(gl, id);
+#endif
     _hasChangedSinceLastSetUniform = false;
-    gl->uniform1f(id, _value);
   }
   
   bool isEquals(const GPUUniformValue* v) const {
     if (_hasChangedSinceLastSetUniform && v == this){
       return false;
     }
+#ifdef C_CODE
     return this->GPUUniformValueFloat::isEquals(v);
+#endif
+#ifdef JAVA_CODE
+    return super.isEquals(v);
+#endif
   }
 };
 

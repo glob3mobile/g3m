@@ -26,9 +26,8 @@ public class GPUUniformValueFloatMutable extends GPUUniformValueFloat
 
   public final void setUniform(GL gl, IGLUniformID id)
   {
-    this.GPUUniformValueFloat.setUniform(gl, id);
+    super.setUniform(gl, id);
     _hasChangedSinceLastSetUniform = false;
-    gl.uniform1f(id, _value);
   }
 
   public final boolean isEquals(GPUUniformValue v)
@@ -37,6 +36,6 @@ public class GPUUniformValueFloatMutable extends GPUUniformValueFloat
     {
       return false;
     }
-    return this.GPUUniformValueFloat.isEquals(v);
+    return super.isEquals(v);
   }
 }

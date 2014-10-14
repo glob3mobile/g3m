@@ -153,8 +153,6 @@ public class G3MWebGLTestingApplication implements EntryPoint {
 
 		_widget = builder.createWidget();
 		
-		_widget.getG3MWidget().getPlanetRenderer().setEnable(false);
-		
 		g3mWidgetHolder.add(_widget);
 	}
 
