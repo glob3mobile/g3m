@@ -15,6 +15,7 @@ public final class ByteBuffer_WebGL extends IByteBuffer {
 
 	private JavaScriptObject _webGLBuffer = null;
 	private JavaScriptObject _gl = null;
+	private int _bufferTimeStamp = -1;
 
 	public ByteBuffer_WebGL(final JavaScriptObject data) {
 		_buffer = jsCreateBuffer(data);
@@ -32,6 +33,21 @@ public final class ByteBuffer_WebGL extends IByteBuffer {
 	// put(i, data[i]);
 	// }
 	// }
+
+	@Override
+	public void dispose() {
+		if (_webGLBuffer != null) {
+			jsDeleteWebGLBuffer();
+			_webGLBuffer = null;
+			_gl = null;
+		}
+		super.dispose();
+	}
+
+	private native void jsDeleteWebGLBuffer() /*-{
+		this.@org.glob3.mobile.specific.ByteBuffer_WebGL::_gl
+				.deleteBuffer(this.@org.glob3.mobile.specific.ByteBuffer_WebGL::_webGLBuffer);
+	}-*/;
 
 	public ByteBuffer_WebGL(final byte[] data, final int dataLength) {
 		final JsArrayNumber array = JavaScriptObject.createArray()
@@ -81,7 +97,7 @@ public final class ByteBuffer_WebGL extends IByteBuffer {
 	public native String getAsString() /*-{
 		var result = "";
 		var buffer = this.@org.glob3.mobile.specific.ByteBuffer_WebGL::_buffer;
-		for ( var i = 0; i < buffer.byteLength; i++) {
+		for (var i = 0; i < buffer.byteLength; i++) {
 			result += String.fromCharCode(buffer[i]);
 		}
 		return result;
@@ -115,8 +131,35 @@ public final class ByteBuffer_WebGL extends IByteBuffer {
 		}
 		return _webGLBuffer;
 	}
-	
+
 	private native JavaScriptObject jsCreateWebGLBuffer() /*-{
-		return this.@org.glob3.mobile.specific.ByteBuffer_WebGL::_gl.createBuffer();
+		return this.@org.glob3.mobile.specific.ByteBuffer_WebGL::_gl
+				.createBuffer();
+	}-*/;
+
+	public JavaScriptObject bindVBO(final JavaScriptObject gl) {
+		if (_webGLBuffer == null) {
+			_gl = gl;
+			_webGLBuffer = jsCreateWebGLBuffer();
+		}
+		jsBindWebGLBuffer(gl);
+		if (_bufferTimeStamp != _timestamp) {
+			_bufferTimeStamp = _timestamp;
+			jsDataToVBO(gl);
+		}
+
+		return _webGLBuffer;
+	}
+
+	private native void jsBindWebGLBuffer(final JavaScriptObject gl) /*-{
+		debugger;
+		var buffer = this.@org.glob3.mobile.specific.ByteBuffer_WebGL::_webGLBuffer;
+		gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+	}-*/;
+
+	private native void jsDataToVBO(final JavaScriptObject gl) /*-{
+		debugger;
+		var buffer = this.@org.glob3.mobile.specific.ByteBuffer_WebGL::_buffer;
+		gl.bufferData(gl.ARRAY_BUFFER, buffer, gl.STATIC_DRAW);
 	}-*/;
 }

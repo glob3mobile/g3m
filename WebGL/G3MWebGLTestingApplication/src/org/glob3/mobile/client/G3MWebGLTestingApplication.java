@@ -2,7 +2,6 @@ package org.glob3.mobile.client;
 
 import java.util.ArrayList;
 
-import org.apache.commons.lang.math.RandomUtils;
 import org.glob3.mobile.generated.Angle;
 import org.glob3.mobile.generated.ByteBufferBuilder;
 import org.glob3.mobile.generated.Color;
@@ -41,6 +40,7 @@ import org.glob3.mobile.specific.G3MWidget_WebGL;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.user.client.Random;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.RootPanel;
 
@@ -74,6 +74,12 @@ public class G3MWebGLTestingApplication implements EntryPoint {
 		// 8, // maxConcurrentOperationCount
 		// 10, // delayMillis
 		// proxy));
+		
+	      final LayerSet layerSet = new LayerSet();
+	      final MapBoxLayer mboxTerrainLayer = new MapBoxLayer("examples.map-qogxobv1", TimeInterval.fromDays(30), true, 2);
+	      layerSet.addLayer(mboxTerrainLayer);
+	      builder.getPlanetRendererBuilder().setLayerSet(layerSet);
+
 
 		boolean pointCloud = true;
 		if (pointCloud) { // POINT-CLOUD-MESH
@@ -94,9 +100,9 @@ public class G3MWebGLTestingApplication implements EntryPoint {
 				int g = Random.nextInt(256);
 				int b = Random.nextInt(256);
 
-				bbb.add((byte) r); // R
-				bbb.add((byte) g); // G
-				bbb.add((byte) b); // B
+				bbb.add((byte) 255); // R
+				bbb.add((byte) 0); // G
+				bbb.add((byte) 0); // B
 			}
 
 			IFloatBuffer points = fbb.create();
@@ -146,6 +152,9 @@ public class G3MWebGLTestingApplication implements EntryPoint {
 		}
 
 		_widget = builder.createWidget();
+		
+		_widget.getG3MWidget().getPlanetRenderer().setEnable(false);
+		
 		g3mWidgetHolder.add(_widget);
 	}
 
