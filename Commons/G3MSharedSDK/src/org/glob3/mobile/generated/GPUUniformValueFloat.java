@@ -14,11 +14,11 @@ public class GPUUniformValueFloat extends GPUUniformValue
      _value = d;
   }
 
-  public final void setUniform(GL gl, IGLUniformID id)
+  public void setUniform(GL gl, IGLUniformID id)
   {
     gl.uniform1f(id, _value);
   }
-  public final boolean isEquals(GPUUniformValue v)
+  public boolean isEquals(GPUUniformValue v)
   {
     GPUUniformValueFloat v2 = (GPUUniformValueFloat)v;
     return _value == v2._value;

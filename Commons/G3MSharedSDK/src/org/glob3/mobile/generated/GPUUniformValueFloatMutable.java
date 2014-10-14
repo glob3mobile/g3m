@@ -1,23 +1,5 @@
 package org.glob3.mobile.generated; 
-//class GPUUniformValueFloatMutable : public GPUUniformValueFloat {
-//private:
-//  ~GPUUniformValueFloatMutable() {
-///#ifdef JAVA_CODE
-//    super.dispose();
-///#endif
-//  }
-//
-//public:
-//
-//  GPUUniformValueFloatMutable(float x):
-//  GPUUniformValueFloat(x) {}
-//
-//  void changeValue(float x) {
-//    _value = x;
-//  }
-//};
-
-public class GPUUniformValueFloatMutable extends GPUUniformValue
+public class GPUUniformValueFloatMutable extends GPUUniformValueFloat
 {
   public void dispose()
   {
@@ -26,12 +8,10 @@ public class GPUUniformValueFloatMutable extends GPUUniformValue
 
   private boolean _hasChangedSinceLastSetUniform;
 
-  public float _value;
 
-  public GPUUniformValueFloatMutable(float d)
+  public GPUUniformValueFloatMutable(float x)
   {
-     super(GLType.glFloat());
-     _value = d;
+     super(x);
      _hasChangedSinceLastSetUniform = true;
   }
 
@@ -46,29 +26,17 @@ public class GPUUniformValueFloatMutable extends GPUUniformValue
 
   public final void setUniform(GL gl, IGLUniformID id)
   {
-    gl.uniform1f(id, _value);
+    this.GPUUniformValueFloat.setUniform(gl, id);
     _hasChangedSinceLastSetUniform = false;
+    gl.uniform1f(id, _value);
   }
+
   public final boolean isEquals(GPUUniformValue v)
   {
-
-    if (v == this && _hasChangedSinceLastSetUniform)
+    if (_hasChangedSinceLastSetUniform && v == this)
     {
-      return true;
+      return false;
     }
-
-    GPUUniformValueFloat v2 = (GPUUniformValueFloat)v;
-    return _value == v2._value;
-  }
-
-  public final String description()
-  {
-    IStringBuilder isb = IStringBuilder.newStringBuilder();
-    isb.addString("Uniform Value Float: ");
-    isb.addDouble(_value);
-    String s = isb.getString();
-    if (isb != null)
-       isb.dispose();
-    return s;
+    return this.GPUUniformValueFloat.isEquals(v);
   }
 }
