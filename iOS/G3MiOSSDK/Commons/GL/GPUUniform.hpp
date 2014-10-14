@@ -487,10 +487,10 @@ public:
 
   GPUUniformValueFloat(float d):GPUUniformValue(GLType::glFloat()),_value(d) {}
 
-  void setUniform(GL* gl, const IGLUniformID* id) const {
+  virtual void setUniform(GL* gl, const IGLUniformID* id) const {
     gl->uniform1f(id, _value);
   }
-  bool isEquals(const GPUUniformValue* v) const {
+  virtual bool isEquals(const GPUUniformValue* v) const {
     GPUUniformValueFloat *v2 = (GPUUniformValueFloat *)v;
     return _value == v2->_value;
   }
@@ -505,40 +505,21 @@ public:
   }
 };
 
-//class GPUUniformValueFloatMutable : public GPUUniformValueFloat {
-//private:
-//  ~GPUUniformValueFloatMutable() {
-//#ifdef JAVA_CODE
-//    super.dispose();
-//#endif
-//  }
-//
-//public:
-//
-//  GPUUniformValueFloatMutable(float x):
-//  GPUUniformValueFloat(x) {}
-//
-//  void changeValue(float x) {
-//    _value = x;
-//  }
-//};
-
-class GPUUniformValueFloatMutable : public GPUUniformValue {
-protected:
+class GPUUniformValueFloatMutable : public GPUUniformValueFloat {
+private:
   ~GPUUniformValueFloatMutable() {
 #ifdef JAVA_CODE
     super.dispose();
 #endif
   }
-  
-private:
+
   mutable bool _hasChangedSinceLastSetUniform;
-  
+
 public:
-  float _value;
-  
-  GPUUniformValueFloatMutable(float d):GPUUniformValue(GLType::glFloat()),_value(d), _hasChangedSinceLastSetUniform(true) {}
-  
+
+  GPUUniformValueFloatMutable(float x):
+  GPUUniformValueFloat(x), _hasChangedSinceLastSetUniform(true) {}
+
   void changeValue(float x) {
     if (x != _value){
       _value = x;
@@ -547,28 +528,65 @@ public:
   }
   
   void setUniform(GL* gl, const IGLUniformID* id) const {
-    gl->uniform1f(id, _value);
+    this->GPUUniformValueFloat::setUniform(gl, id);
     _hasChangedSinceLastSetUniform = false;
-  }
-  bool isEquals(const GPUUniformValue* v) const {
-    
-    if (v == this && _hasChangedSinceLastSetUniform){
-      return true;
-    }
-    
-    GPUUniformValueFloat *v2 = (GPUUniformValueFloat *)v;
-    return _value == v2->_value;
+    gl->uniform1f(id, _value);
   }
   
-  std::string description() const {
-    IStringBuilder* isb = IStringBuilder::newStringBuilder();
-    isb->addString("Uniform Value Float: ");
-    isb->addDouble(_value);
-    std::string s = isb->getString();
-    delete isb;
-    return s;
+  bool isEquals(const GPUUniformValue* v) const {
+    if (_hasChangedSinceLastSetUniform && v == this){
+      return false;
+    }
+    return this->GPUUniformValueFloat::isEquals(v);
   }
 };
+
+//class GPUUniformValueFloatMutable : public GPUUniformValue {
+//protected:
+//  ~GPUUniformValueFloatMutable() {
+//#ifdef JAVA_CODE
+//    super.dispose();
+//#endif
+//  }
+//  
+//private:
+//  mutable bool _hasChangedSinceLastSetUniform;
+//  
+//public:
+//  float _value;
+//  
+//  GPUUniformValueFloatMutable(float d):GPUUniformValue(GLType::glFloat()),_value(d), _hasChangedSinceLastSetUniform(true) {}
+//  
+//  void changeValue(float x) {
+//    if (x != _value){
+//      _value = x;
+//      _hasChangedSinceLastSetUniform = true;
+//    }
+//  }
+//  
+//  void setUniform(GL* gl, const IGLUniformID* id) const {
+//    gl->uniform1f(id, _value);
+//    _hasChangedSinceLastSetUniform = false;
+//  }
+//  bool isEquals(const GPUUniformValue* v) const {
+//    
+//    if (v == this && _hasChangedSinceLastSetUniform){
+//      return true;
+//    }
+//    
+//    GPUUniformValueFloat *v2 = (GPUUniformValueFloat *)v;
+//    return _value == v2->_value;
+//  }
+//  
+//  std::string description() const {
+//    IStringBuilder* isb = IStringBuilder::newStringBuilder();
+//    isb->addString("Uniform Value Float: ");
+//    isb->addDouble(_value);
+//    std::string s = isb->getString();
+//    delete isb;
+//    return s;
+//  }
+//};
 
 
 class GPUUniformFloat: public GPUUniform {
