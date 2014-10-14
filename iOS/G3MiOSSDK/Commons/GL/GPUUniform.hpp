@@ -193,10 +193,11 @@ public:
 
   GPUUniformValueVec2Float(float x, float y):GPUUniformValue(GLType::glVec2Float()), _x(x),_y(y) {}
 
-  void setUniform(GL* gl, const IGLUniformID* id) const {
+  virtual void setUniform(GL* gl, const IGLUniformID* id) const {
     gl->uniform2f(id, _x, _y);
   }
-  bool isEquals(const GPUUniformValue* v) const {
+  
+  virtual bool isEquals(const GPUUniformValue* v) const {
     GPUUniformValueVec2Float *v2 = (GPUUniformValueVec2Float *)v;
     return (_x == v2->_x) && (_y == v2->_y);
   }
@@ -297,10 +298,10 @@ public:
   GPUUniformValueVec3Float(float x, float y, float z):
   GPUUniformValue(GLType::glVec3Float()),_x(x),_y(y), _z(z) {}
 
-  void setUniform(GL* gl, const IGLUniformID* id) const {
+  virtual void setUniform(GL* gl, const IGLUniformID* id) const {
     gl->uniform3f(id, _x, _y, _z);
   }
-  bool isEquals(const GPUUniformValue* v) const {
+  virtual bool isEquals(const GPUUniformValue* v) const {
     GPUUniformValueVec3Float *v2 = (GPUUniformValueVec3Float *)v;
     return (_x == v2->_x) && (_y == v2->_y) && (_z == v2->_z);
   }
