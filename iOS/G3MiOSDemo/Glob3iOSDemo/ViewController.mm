@@ -435,7 +435,6 @@ Mesh* createSectorMesh(const Planet* planet,
   builder.addPeriodicalTask(new PeriodicalTask(TimeInterval::fromSeconds(1),
                                                new PointCloudTask(pcm)));
   
-  
   builder.initializeWidget();
   
 }
