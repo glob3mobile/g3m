@@ -1,36 +1,74 @@
 package org.glob3.mobile.generated; 
-public class GPUUniformValueFloatMutable extends GPUUniformValueFloat
+//class GPUUniformValueFloatMutable : public GPUUniformValueFloat {
+//private:
+//  ~GPUUniformValueFloatMutable() {
+///#ifdef JAVA_CODE
+//    super.dispose();
+///#endif
+//  }
+//
+//public:
+//
+//  GPUUniformValueFloatMutable(float x):
+//  GPUUniformValueFloat(x) {}
+//
+//  void changeValue(float x) {
+//    _value = x;
+//  }
+//};
+
+public class GPUUniformValueFloatMutable extends GPUUniformValue
 {
   public void dispose()
   {
     super.dispose();
   }
-  
-  boolean _hasChangedSinceLastGet = false;
 
+  private boolean _hasChangedSinceLastSetUniform;
 
-  public GPUUniformValueFloatMutable(float x)
+  public float _value;
+
+  public GPUUniformValueFloatMutable(float d)
   {
-     super(x);
+     super(GLType.glFloat());
+     _value = d;
+     _hasChangedSinceLastSetUniform = true;
   }
 
   public final void changeValue(float x)
   {
-	  if (x != _value){
-		    _value = x;
-		    _hasChangedSinceLastGet =true;
-	  }
-	  
+    if (x != _value)
+    {
+      _value = x;
+      _hasChangedSinceLastSetUniform = true;
+    }
   }
-  
-  public boolean isEquals(GPUUniformValue v)
+
+  public final void setUniform(GL gl, IGLUniformID id)
   {
-	  if (v == this){
-		  _hasChangedSinceLastGet = false;
-		  return false;
-	  }
-	  
+    gl.uniform1f(id, _value);
+    _hasChangedSinceLastSetUniform = false;
+  }
+  public final boolean isEquals(GPUUniformValue v)
+  {
+
+    if (v == this && _hasChangedSinceLastSetUniform)
+    {
+      return true;
+    }
+
     GPUUniformValueFloat v2 = (GPUUniformValueFloat)v;
     return _value == v2._value;
+  }
+
+  public final String description()
+  {
+    IStringBuilder isb = IStringBuilder.newStringBuilder();
+    isb.addString("Uniform Value Float: ");
+    isb.addDouble(_value);
+    String s = isb.getString();
+    if (isb != null)
+       isb.dispose();
+    return s;
   }
 }
