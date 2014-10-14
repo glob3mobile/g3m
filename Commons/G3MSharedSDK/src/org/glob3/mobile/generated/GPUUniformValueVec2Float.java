@@ -16,11 +16,12 @@ public class GPUUniformValueVec2Float extends GPUUniformValue
      _y = y;
   }
 
-  public final void setUniform(GL gl, IGLUniformID id)
+  public void setUniform(GL gl, IGLUniformID id)
   {
     gl.uniform2f(id, _x, _y);
   }
-  public final boolean isEquals(GPUUniformValue v)
+
+  public boolean isEquals(GPUUniformValue v)
   {
     GPUUniformValueVec2Float v2 = (GPUUniformValueVec2Float)v;
     return (_x == v2._x) && (_y == v2._y);
