@@ -50,6 +50,8 @@ public class MainActivity extends Activity {
 		_g3mWidget.getG3MWidget().setAnimatedCameraPosition(
 				TimeInterval.fromSeconds(5), zurichPos, Angle.zero(),
 				Angle.fromDegrees(-90));
+		
+		_g3mWidget.getG3MWidget().getPlanetRenderer().setEnable(false);
 
 	}
 
