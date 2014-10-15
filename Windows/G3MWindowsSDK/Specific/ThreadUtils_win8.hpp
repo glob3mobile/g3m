@@ -12,7 +12,16 @@
 #include "IThreadUtils.hpp"
 
 class ThreadUtils_win8 : public IThreadUtils{
+
+private:
+	const G3MContext* _context = NULL;
+
 public:
+	
+	void invokeInRendererThread(GTask* task, bool autoDelete) const;
+
+	void invokeInBackground(GTask* task, bool autoDelete) const;
+
 	void onResume(const G3MContext* context);
 
 	void onPause(const G3MContext* context);
@@ -20,11 +29,6 @@ public:
 	void onDestroy(const G3MContext* context);
 
 	void initialize(const G3MContext* context);
-
-	void invokeInRendererThread(GTask* task, bool autoDelete) const;
-
-	void invokeInBackground(GTask* task, bool autoDelete) const;
-
 };
 
 

@@ -26,6 +26,7 @@
 #include "IBufferDownloadListener.hpp"
 
 #include <iostream>
+#include <thread>
 using namespace std;
 
 //-------------------------------------------------------
@@ -314,6 +315,47 @@ void executeDownloaderTests(IDownloader* downloader){
 
 }
 
+class ThreadUtilsExecuteInRenderTestGTask : public GTask {
+private:
+	int _taskNumber = 0;
+
+public:
+	ThreadUtilsExecuteInRenderTestGTask(int taskNumber){
+		_taskNumber = taskNumber;
+	}
+
+	void run(const G3MContext* context) {
+
+		ILogger::instance()->logInfo("Ejecutando task %d, ThreadUtilsExecuteInRenderTestGTask in thread: %d \n", _taskNumber, std::this_thread::get_id());
+	}
+};
+
+class ThreadUtilsExecuteInBackGroundTestGTask : public GTask {
+private:
+	int _taskNumber = 0;
+
+public:
+	ThreadUtilsExecuteInBackGroundTestGTask(int taskNumber){
+		_taskNumber = taskNumber;
+	}
+
+	void run(const G3MContext* context) {
+
+		ILogger::instance()->logInfo("Ejecutando task %d, ThreadUtilsExecuteInBackGroundTestGTask in thread: %d \n", _taskNumber, std::this_thread::get_id());
+	}
+};
+
+void executeThreadUtilsTests(ThreadUtils_win8* tu){
+
+	for (int i = 0; i < 10; i++){
+		tu->invokeInRendererThread(new ThreadUtilsExecuteInRenderTestGTask(i), false);
+	}
+
+	for (int i = 0; i < 10; i++){
+		tu->invokeInBackground(new ThreadUtilsExecuteInBackGroundTestGTask(i), false);
+	}
+}
+
 //-------------------------------------------------------
 
 
@@ -329,8 +371,12 @@ G3MWidget_win8* G3MBuilder_win8::createWidget(){
 }
 
 IThreadUtils* G3MBuilder_win8::createDefaultThreadUtils(){
+	
+	//return NULL;
+	ThreadUtils_win8* tu = new ThreadUtils_win8();
+	executeThreadUtilsTests(tu);
+	return tu;
 	//return new ThreadUtils_win8();
-	return NULL;
 }
 
 Storage* G3MBuilder_win8::createDefaultStorage(){
@@ -347,8 +393,8 @@ IDownloader* G3MBuilder_win8::createDefaultDownloader(){
 	//return new Downloader_win8();
 	const int MAX_CONCURRENT_OPERATION_COUNT = 8;
 	IDownloader* testDownloader = new Downloader_win8(MAX_CONCURRENT_OPERATION_COUNT);
-
-	//executeDownloaderTests(testDownloader);
+	//ILogger::instance()->logInfo("Executing G3MBuilder_win8 in thread: %d", std::this_thread::get_id());
+	executeDownloaderTests(testDownloader);
 	return testDownloader;
 }
 
