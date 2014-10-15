@@ -666,7 +666,7 @@ void PointCloudsRenderer::PointCloudLeafNode::onLevelBuffersDownload(int level,
     _levelsHeightsBuffers[level]  = heightsBuffer;
 
     _currentLoadedLevel = level;
-//    ILogger::instance()->logInfo("node %s changed _currentLoadedLevel=%d (1)", _id.c_str(), _currentLoadedLevel);
+    ILogger::instance()->logInfo("node %s changed _currentLoadedLevel=%d (1)", _id.c_str(), _currentLoadedLevel);
 
     delete _mesh;
     _mesh = NULL;
@@ -872,7 +872,7 @@ long long PointCloudsRenderer::PointCloudLeafNode::rawRender(const PointCloud* p
         _levelsHeightsBuffers[i] = NULL;
       }
       _currentLoadedLevel = _neededLevel;
-//      ILogger::instance()->logInfo("node %s changed _currentLoadedLevel=%d (2)", _id.c_str(), _currentLoadedLevel);
+      ILogger::instance()->logInfo("node %s changed _currentLoadedLevel=%d (2)", _id.c_str(), _currentLoadedLevel);
       delete _mesh;
       _mesh = NULL;
     }
@@ -915,7 +915,7 @@ void PointCloudsRenderer::PointCloudLeafNode::stoppedRendering(const G3MRenderCo
       _levelsHeightsBuffers[i] = NULL;
     }
     _currentLoadedLevel = _preloadedLevel;
-//    ILogger::instance()->logInfo("node %s changed _currentLoadedLevel=%d (3)", _id.c_str(), _currentLoadedLevel);
+    ILogger::instance()->logInfo("node %s changed _currentLoadedLevel=%d (3)", _id.c_str(), _currentLoadedLevel);
   }
 }
 
