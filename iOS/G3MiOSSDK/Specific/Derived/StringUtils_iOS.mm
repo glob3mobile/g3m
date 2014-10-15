@@ -167,6 +167,12 @@ std::string StringUtils_iOS::toString(int value) const {
   return ss.str();
 }
 
+std::string StringUtils_iOS::toString(size_t value) const {
+  std::stringstream ss;
+  ss << value;
+  return ss.str();
+}
+
 std::string StringUtils_iOS::toString(long long value) const {
   std::stringstream ss;
   ss << value;

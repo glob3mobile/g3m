@@ -156,6 +156,8 @@ public:
   virtual long long parseHexInt(const std::string& str) const = 0;
 
   virtual std::string toString(int value) const = 0;
+  
+  virtual std::string toString(size_t value) const = 0;
 
   virtual std::string toString(long long value) const = 0;
 

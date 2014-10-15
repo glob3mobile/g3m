@@ -72,7 +72,7 @@
 
 LocationManager_iOS::LocationManager_iOS()
 {
-  //_location = NULL;
+  _location = NULL;
   //_listeners = new std::vector<const LocationChangedListener*>();
   _locationManager = [[CLLocationManager alloc] init];
   
@@ -157,7 +157,9 @@ void LocationManager_iOS::stop() {
 
 void LocationManager_iOS::setLocation(const double latitude,
                                       const double longitude) {
-  delete _location;
+  if (_location != NULL) {
+    delete _location;
+  }
   _location = NULL;
   _location = new Geodetic2D(Geodetic2D::fromDegrees(latitude, longitude));
   notifyLocationChanged();

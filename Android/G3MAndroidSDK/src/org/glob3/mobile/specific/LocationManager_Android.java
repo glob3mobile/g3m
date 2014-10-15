@@ -6,6 +6,7 @@ import org.glob3.mobile.generated.Activity_Type;
 import org.glob3.mobile.generated.Angle;
 import org.glob3.mobile.generated.Geodetic2D;
 import org.glob3.mobile.generated.ILocationManager;
+import org.glob3.mobile.generated.ILogger;
 
 import android.content.Context;
 import android.location.Criteria;
@@ -17,10 +18,10 @@ import android.os.Bundle;
 
 
 public class LocationManager_Android
-extends
-ILocationManager
-implements
-LocationListener {
+         extends
+            ILocationManager
+         implements
+            LocationListener {
 
 
    private final Context          _context;
@@ -79,20 +80,28 @@ LocationListener {
 
 
    LocationManager_Android(final Context context,
-            final LocationListener locationListener) {
+                           final LocationListener locationListener) {
       _context = context;
       _locationListener = locationListener;
 
       _locationManager = (LocationManager) _context.getSystemService(Context.LOCATION_SERVICE);
       final Criteria req = new Criteria();
-      req.setAccuracy(Criteria.ACCURACY_MEDIUM);
-      req.setAltitudeRequired(true);
+      //      req.setAccuracy(Criteria.ACCURACY_MEDIUM);
+      //      req.setAltitudeRequired(false);
 
-      final String bestProvider = _locationManager.getBestProvider(req, false);
+      final String bestProvider = _locationManager.getBestProvider(req, true);
+
+      _locationManager.getAllProviders();
+      for (int i = 0; i < _locationManager.getAllProviders().size(); i++) {
+         ILogger.instance().logInfo("Provider: " + _locationManager.getAllProviders().get(i));
+      }
+
       if (bestProvider != null) {
+         ILogger.instance().logInfo("BEST Provider is: " + bestProvider);
          _selectedProvider = _locationManager.getProvider(bestProvider);
       }
       else {
+         ILogger.instance().logError("Provider is NULL");
          _selectedProvider = null;
       }
    }
