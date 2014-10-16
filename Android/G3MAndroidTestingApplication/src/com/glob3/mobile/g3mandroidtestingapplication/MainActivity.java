@@ -84,7 +84,7 @@ public class MainActivity extends Activity {
 					.builderWithoutCenter(builder.getPlanet());
 			ByteBufferBuilder bbb = new ByteBufferBuilder();
 
-			for (int i = 0; i < 100; i++) {
+			for (int i = 0; i < 10000; i++) {
 				// Point
 				double lat = ((Math.random() * 18000) - 9000) / 100.0;
 				double lon = ((Math.random() * 36000) - 18000) / 100.0;

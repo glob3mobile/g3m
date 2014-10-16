@@ -60,7 +60,6 @@ public final class NativeGL2_Android extends INativeGL {
 	public void uniform2f(final IGLUniformID loc, final float x, final float y) {
 		checkOpenGLThread();
 		GLES20.glUniform2f(((GLUniformID_Android) loc).getID(), x, y);
-		getError();
 		// ILogger.instance().logInfo("UNIFORM " + ((GLUniformID_Android)
 		// loc).getID() + " " + x + " " + y);
 	}
@@ -69,7 +68,6 @@ public final class NativeGL2_Android extends INativeGL {
 	public void uniform1f(final IGLUniformID loc, final float x) {
 		checkOpenGLThread();
 		GLES20.glUniform1f(((GLUniformID_Android) loc).getID(), x);
-		getError();
 		// ILogger.instance().logInfo("UNIFORM " + ((GLUniformID_Android)
 		// loc).getID() + " " + x);
 	}
@@ -78,7 +76,6 @@ public final class NativeGL2_Android extends INativeGL {
 	public void uniform1i(final IGLUniformID loc, final int v) {
 		checkOpenGLThread();
 		GLES20.glUniform1i(((GLUniformID_Android) loc).getID(), v);
-		getError();
 		// ILogger.instance().logInfo("UNIFORM " + ((GLUniformID_Android)
 		// loc).getID() + " " + v);
 	}
@@ -104,7 +101,6 @@ public final class NativeGL2_Android extends INativeGL {
 				matrix.getColumnMajorFloatArray(), //
 				0 //
 		);
-		getError();
 		// ILogger.instance().logInfo("UNIFORM MATRIX " + ((GLUniformID_Android)
 		// location).getID() + " " + matrix.description() );
 	}
@@ -114,14 +110,12 @@ public final class NativeGL2_Android extends INativeGL {
 			final float blue, final float alpha) {
 		checkOpenGLThread();
 		GLES20.glClearColor(red, green, blue, alpha);
-		getError();
 	}
 
 	@Override
 	public void clear(final int buffers) {
 		checkOpenGLThread();
 		GLES20.glClear(buffers);
-		getError();
 	}
 
 	@Override
@@ -130,7 +124,6 @@ public final class NativeGL2_Android extends INativeGL {
 		checkOpenGLThread();
 		GLES20.glUniform4f(((GLUniformID_Android) location).getID(), v0, v1,
 				v2, v3);
-		getError();
 
 		// ILogger.instance().logInfo("UNIFORM " + ((GLUniformID_Android)
 		// location).getID() + " " + v0 + " " + v1 + " " + v2 + " " + v3);
@@ -140,28 +133,24 @@ public final class NativeGL2_Android extends INativeGL {
 	public void enable(final int feature) {
 		checkOpenGLThread();
 		GLES20.glEnable(feature);
-		getError();
 	}
 
 	@Override
 	public void disable(final int feature) {
 		checkOpenGLThread();
 		GLES20.glDisable(feature);
-		getError();
 	}
 
 	@Override
 	public void polygonOffset(final float factor, final float units) {
 		checkOpenGLThread();
 		GLES20.glPolygonOffset(factor, units);
-		getError();
 	}
 
 	@Override
 	public void lineWidth(final float width) {
 		checkOpenGLThread();
 		GLES20.glLineWidth(width);
-		getError();
 	}
 
 	@Override
@@ -193,7 +182,6 @@ public final class NativeGL2_Android extends INativeGL {
 	public void blendFunc(final int sfactor, final int dfactor) {
 		checkOpenGLThread();
 		GLES20.glBlendFunc(sfactor, dfactor);
-		getError();
 	}
 
 	@Override
@@ -201,7 +189,6 @@ public final class NativeGL2_Android extends INativeGL {
 		checkOpenGLThread();
 		GLES20.glBindTexture(target,
 				((GLTextureId_Android) texture).getGLTextureId());
-		getError();
 	}
 
 	@Override
@@ -210,7 +197,6 @@ public final class NativeGL2_Android extends INativeGL {
 		GLES20.glDeleteTextures(1,
 				new int[] { ((GLTextureId_Android) texture).getGLTextureId() },
 				0);
-		getError();
 		return false;
 	}
 
@@ -218,7 +204,6 @@ public final class NativeGL2_Android extends INativeGL {
 	public void enableVertexAttribArray(final int location) {
 		checkOpenGLThread();
 		GLES20.glEnableVertexAttribArray(location);
-		getError();
 		// ILogger.instance().logInfo("Attrib Enabled " + location);
 	}
 
@@ -226,7 +211,6 @@ public final class NativeGL2_Android extends INativeGL {
 	public void disableVertexAttribArray(final int location) {
 		checkOpenGLThread();
 		GLES20.glDisableVertexAttribArray(location);
-		getError();
 		// ILogger.instance().logInfo("Attrib Disabled " + location);
 	}
 
@@ -234,7 +218,6 @@ public final class NativeGL2_Android extends INativeGL {
 	public void pixelStorei(final int pname, final int param) {
 		checkOpenGLThread();
 		GLES20.glPixelStorei(pname, param);
-		getError();
 	}
 
 	@Override
@@ -252,7 +235,6 @@ public final class NativeGL2_Android extends INativeGL {
 				result.add(new GLTextureId_Android(textureId));
 			}
 		}
-		getError();
 		return result;
 	}
 
@@ -260,35 +242,30 @@ public final class NativeGL2_Android extends INativeGL {
 	public void texParameteri(final int target, final int par, final int v) {
 		checkOpenGLThread();
 		GLES20.glTexParameteri(target, par, v);
-		getError();
 	}
 
 	@Override
 	public void drawArrays(final int mode, final int first, final int count) {
 		checkOpenGLThread();
 		GLES20.glDrawArrays(mode, first, count);
-		getError();
 	}
 
 	@Override
 	public void cullFace(final int c) {
 		checkOpenGLThread();
 		GLES20.glCullFace(c);
-		getError();
 	}
 
 	@Override
 	public void getIntegerv(final int v, final int[] i) {
 		checkOpenGLThread();
 		GLES20.glGetIntegerv(v, i, 0);
-		getError();
 	}
 
 	@Override
 	public void generateMipmap(final int target) {
 		checkOpenGLThread();
 		GLES20.glGenerateMipmap(target);
-		getError();
 	}
 
 	@Override
@@ -312,7 +289,6 @@ public final class NativeGL2_Android extends INativeGL {
 		_currentBoundVBO = buffer_Android.bindAsVBOToGPU(this);
 		GLES20.glVertexAttribPointer(index, size, GLES20.GL_FLOAT, normalized,
 				stride, 0);
-		getError();
 	}
 
 	@Override
@@ -329,8 +305,6 @@ public final class NativeGL2_Android extends INativeGL {
 
 		GLES20.glDrawElements(mode, count, GLES20.GL_UNSIGNED_SHORT,
 				indexBuffer);
-		getError();
-
 		// final ShortBuffer_Android bufferAndroid = (ShortBuffer_Android)
 		// indices;
 		// final int webGLBuffer = bufferAndroid.getGLBuffer();
@@ -352,7 +326,6 @@ public final class NativeGL2_Android extends INativeGL {
 		} else {
 			GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, bitmap, 0);
 		}
-		getError();
 	}
 
 	@Override
@@ -524,7 +497,6 @@ public final class NativeGL2_Android extends INativeGL {
 	public int createProgram() {
 		checkOpenGLThread();
 		int p = GLES20.glCreateProgram();
-		getError();
 		return p;
 		
 	}
@@ -533,7 +505,6 @@ public final class NativeGL2_Android extends INativeGL {
 	public boolean deleteProgram(final int program) {
 		checkOpenGLThread();
 		GLES20.glDeleteProgram(program);
-		getError();
 		return true;
 	}
 
@@ -541,7 +512,6 @@ public final class NativeGL2_Android extends INativeGL {
 	public void attachShader(final int program, final int shader) {
 		checkOpenGLThread();
 		GLES20.glAttachShader(program, shader);
-		getError();
 	}
 
 	@Override
@@ -564,7 +534,6 @@ public final class NativeGL2_Android extends INativeGL {
 		GLES20.glCompileShader(shader);
 		final int[] compiled = new int[1];
 		GLES20.glGetShaderiv(shader, GLES20.GL_COMPILE_STATUS, compiled, 0);
-		getError();
 		return (compiled[0] != 0);
 	}
 
@@ -572,7 +541,6 @@ public final class NativeGL2_Android extends INativeGL {
 	public boolean deleteShader(final int shader) {
 		checkOpenGLThread();
 		GLES20.glDeleteShader(shader);
-		getError();
 		return true;
 	}
 
@@ -585,7 +553,6 @@ public final class NativeGL2_Android extends INativeGL {
 			Log.e("GL2Shaders", "Could not compile shader " + shader + ":");
 			Log.e("GL2Shaders", GLES20.glGetShaderInfoLog(shader));
 		}
-		getError();
 	}
 
 	@Override
@@ -594,7 +561,6 @@ public final class NativeGL2_Android extends INativeGL {
 		GLES20.glLinkProgram(program);
 		final int[] linkStatus = new int[1];
 		GLES20.glGetProgramiv(program, GLES20.GL_LINK_STATUS, linkStatus, 0);
-		getError();
 		return (linkStatus[0] == GLES20.GL_TRUE);
 	}
 
@@ -607,7 +573,6 @@ public final class NativeGL2_Android extends INativeGL {
 			Log.e("GL2Shaders", "Could not link program: ");
 			Log.e("GL2Shaders", GLES20.glGetProgramInfoLog(program));
 		}
-		getError();
 	}
 
 	@Override
@@ -624,7 +589,6 @@ public final class NativeGL2_Android extends INativeGL {
 	public void useProgram(final GPUProgram program) {
 		checkOpenGLThread();
 		GLES20.glUseProgram(program.getProgramID());
-		getError();
 	}
 
 	@Override
@@ -662,7 +626,6 @@ public final class NativeGL2_Android extends INativeGL {
 			final String name) {
 		checkOpenGLThread();
 		GLES20.glBindAttribLocation(program.getProgramID(), loc, name);
-		getError();
 	}
 
 	@Override
@@ -670,7 +633,6 @@ public final class NativeGL2_Android extends INativeGL {
 		checkOpenGLThread();
 		final int[] i = new int[1];
 		GLES20.glGetProgramiv(program.getProgramID(), param, i, 0);
-		getError();
 		return i[0];
 	}
 
@@ -695,7 +657,6 @@ public final class NativeGL2_Android extends INativeGL {
 		nameStr = nameStr.substring(0, length[0]);
 		final int id = GLES20.glGetUniformLocation(program.getProgramID(),
 				nameStr);
-		getError();
 		// ILogger.instance().logInfo("Uniform Name: %s - %d", nameStr, id);
 		switch (type[0]) {
 		case GLES20.GL_FLOAT_MAT4:
@@ -743,7 +704,6 @@ public final class NativeGL2_Android extends INativeGL {
 
 			// ILogger.instance().logInfo("Attribute Name: %s - %d", nameStr,
 			// id);
-			getError();
 			switch (type[0]) {
 			case GLES20.GL_FLOAT_VEC3:
 				return new GPUAttributeVec3Float(nameStr, id);
@@ -767,7 +727,6 @@ public final class NativeGL2_Android extends INativeGL {
 			final float v1, final float v2) {
 		final int loc = ((GLUniformID_Android) location).getID();
 		GLES20.glUniform3f(loc, v0, v1, v2);
-		getError();
 	}
 
 	@Override
@@ -813,7 +772,6 @@ public final class NativeGL2_Android extends INativeGL {
 	@Override
 	public void setActiveTexture(final int i) {
 		GLES20.glActiveTexture(GLES20.GL_TEXTURE0 + i);
-		getError();
 	}
 
 	@Override
@@ -834,7 +792,6 @@ public final class NativeGL2_Android extends INativeGL {
 		_currentBoundVBO = buffer_Android.bindAsVBOToGPU(this);
 		GLES20.glVertexAttribPointer(index, size, GLES20.GL_UNSIGNED_BYTE, normalized,
 				stride, 0);
-		getError();
 	}
 	
 	public void deleteVBO(int x){
