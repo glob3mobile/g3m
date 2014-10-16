@@ -20,6 +20,10 @@
 #include "DirectMesh.hpp"
 #include "IFactory.hpp"
 #include "IDeviceInfo.hpp"
+#include "PointCloudMesh.hpp"
+
+#include "FloatBufferBuilderFromCartesian3D.hpp"
+#include "ByteBufferBuilder.hpp"
 
 void PointCloudsRenderer::PointCloudMetadataDownloadListener::onDownload(const URL& url,
                                                                          IByteBuffer* buffer,
@@ -483,22 +487,53 @@ long long PointCloudsRenderer::PointCloudInnerNode::rawRender(const PointCloud* 
       const float averageX = (float) average._x;
       const float averageY = (float) average._y;
       const float averageZ = (float) average._z;
+      
+      FloatBufferBuilderFromCartesian3D* fbb = FloatBufferBuilderFromCartesian3D::builderWithoutCenter();
+      
+      ByteBufferBuilder bbb;
+      
+      fbb->add(Vector3D((float) (average._x),
+                        (float) (average._y),
+                        (float) (average._z)));
+      
+      bbb.add((unsigned char)255);
+      bbb.add((unsigned char)255);
+      bbb.add((unsigned char)0);
+      
+      
+      IFloatBuffer* pointsBuffer = fbb->create();
+      
+      IByteBuffer* rgbColors = bbb.create();
 
-      IFloatBuffer* pointsBuffer = rc->getFactory()->createFloatBuffer(3);
-      pointsBuffer->rawPut(0, (float) (average._x - averageX) );
-      pointsBuffer->rawPut(1, (float) (average._y - averageY) );
-      pointsBuffer->rawPut(2, (float) (average._z - averageZ) );
+//      IFloatBuffer* pointsBuffer = rc->getFactory()->createFloatBuffer(3);
+//      pointsBuffer->rawPut(0, (float) (average._x - averageX) );
+//      pointsBuffer->rawPut(1, (float) (average._y - averageY) );
+//      pointsBuffer->rawPut(2, (float) (average._z - averageZ) );
+      
+//      IByteBuffer* rgbColors = rc->getFactory()->createByteBuffer(3);
+//      rgbColors->rawPut(0, (unsigned char)255);
+//      rgbColors->rawPut(1, (unsigned char)255);
+//      rgbColors->rawPut(2, (unsigned char)0);
+      
+#warning INTRODUCE CENTER
+      _mesh = new PointCloudMesh(pointsBuffer,
+                                 true,
+                                 rgbColors,
+                                 true,
+                                 pointSize * 2,
+                                 true);
 
-      _mesh = new DirectMesh(GLPrimitive::points(),
-                             true,
-                             Vector3D(averageX, averageY, averageZ),
-                             pointsBuffer,
-                             1,
-                             pointSize * 2,
-                             Color::newFromRGBA(1, 1, 0, 1), // flatColor
-                             NULL, // colors
-                             1,    // colorsIntensity
-                             true);
+//      _mesh = new DirectMesh(GLPrimitive::points(),
+//                             true,
+//                             Vector3D(averageX, averageY, averageZ),
+//                             pointsBuffer,
+//                             1,
+//                             pointSize * 2,
+//                             Color::newFromRGBA(1, 1, 0, 1), // flatColor
+//                             NULL, // colors
+//                             1,    // colorsIntensity
+//                             true);
+      
     }
     _mesh->render(rc, glState);
     renderedCount = 1;

@@ -26,7 +26,7 @@ class FloatBuffer_iOS;
 
 class NativeGL2_iOS: public INativeGL {
   
-  mutable GLuint _currentBoundVBO;
+  mutable int _currentBoundVBO;
   
 public:
   
@@ -135,6 +135,12 @@ public:
   }
 
   int getError() const {
+    
+    int e = glGetError();
+    if (e != GL_NO_ERROR){
+      ILogger::instance()->logError("GLERROR %d", e);
+    }
+    
     return glGetError();
   }
 

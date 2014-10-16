@@ -370,7 +370,6 @@ Mesh* createSectorMesh(const Planet* planet,
   const Planet* planet = builder.getPlanet();
   
   //POINT-CLOUD-MESH
-  
   FloatBufferBuilderFromGeodetic* fbb = FloatBufferBuilderFromGeodetic::builderWithoutCenter(planet);
   ByteBufferBuilder bbb;
   
@@ -385,9 +384,9 @@ Mesh* createSectorMesh(const Planet* planet,
     unsigned char r = (unsigned char)rand() % 256;
     unsigned char g = (unsigned char)rand() % 256;
     unsigned char b = (unsigned char)rand() % 256;
-    bbb.add((unsigned char)r); //R
-    bbb.add((unsigned char)g); //G
-    bbb.add((unsigned char)b); //B
+    bbb.add((unsigned char)0); //R
+    bbb.add((unsigned char)255); //G
+    bbb.add((unsigned char)0); //B
     
   }
   
@@ -411,8 +410,63 @@ Mesh* createSectorMesh(const Planet* planet,
     PointCloudMesh* _mesh;
     int _size;
     bool _growing;
+    Planet const* _planet;
+    MeshRenderer* _mr;
+    
+    int _meshCount;
+    
   public:
-    PointCloudTask(PointCloudMesh* mesh):_mesh(mesh), _size(1), _growing(true){}
+    PointCloudTask(Planet const* planet, MeshRenderer* mr):
+    _mesh(NULL), _size(1), _growing(true), _planet(planet), _mr(mr), _meshCount(0){
+      recreateMesh();
+    }
+    
+    void recreateMesh(){
+      
+      _mr->clearMeshes();
+      _mesh = NULL;
+      
+      for(int k = 0; k < 100; k++){
+        
+        FloatBufferBuilderFromGeodetic* fbb = FloatBufferBuilderFromGeodetic::builderWithoutCenter(_planet);
+        ByteBufferBuilder bbb;
+        
+        for(int i = 0; i < 10; i++){
+          //Point
+          double lat = ((rand() % 18000) - 9000) / 100.0;
+          double lon = ((rand() % 36000) - 18000) / 100.0;
+          double h = rand() % 10000;
+          fbb->add(Angle::fromDegrees(lat), Angle::fromDegrees(lon), h);
+          
+          //Color
+          unsigned char r = (unsigned char)rand() % 256;
+          unsigned char g = (unsigned char)rand() % 256;
+          unsigned char b = (unsigned char)rand() % 256;
+          bbb.add((unsigned char)r); //R
+          bbb.add((unsigned char)g); //G
+          bbb.add((unsigned char)b); //B
+          
+        }
+        
+        IFloatBuffer* points = fbb->create();
+        IByteBuffer* colors = bbb.create();
+        
+        _mesh = new PointCloudMesh(points,
+                                   true,
+                                   colors,
+                                   true,
+                                   10.0,
+                                   false);
+        
+        _meshCount++;
+        
+        delete fbb;
+        
+        _mr->addMesh(_mesh);
+        
+      }
+      
+    }
     
     virtual void run(const G3MContext* context){
       
@@ -426,16 +480,21 @@ Mesh* createSectorMesh(const Planet* planet,
         _growing = true;
       } else if (_size == 10){
         _growing = false;
+        recreateMesh();
+        printf("MESH COUNT %d\n", _meshCount);
       }
       
       _mesh->setPointSize(_size);
     }
   };
   
-  builder.addPeriodicalTask(new PeriodicalTask(TimeInterval::fromSeconds(1),
-                                               new PointCloudTask(pcm)));
+  builder.addPeriodicalTask(new PeriodicalTask(TimeInterval::fromSeconds(0.2),
+                                               new PointCloudTask(builder.getPlanet(), mr)));
+  
   
   builder.initializeWidget();
+  
+  G3MWidget.widget->getPlanetRenderer()->setEnable(false);
   
 }
 
@@ -802,8 +861,54 @@ public:
       PointCloudMesh* _mesh;
       int _size;
       bool _growing;
+      Planet const* _planet;
+      MeshRenderer* _mr;
+      
     public:
-      PointCloudTask(PointCloudMesh* mesh):_mesh(mesh), _size(1), _growing(true){}
+      PointCloudTask(Planet const* planet, MeshRenderer* mr):_mesh(NULL), _size(1), _growing(true), _planet(planet), _mr(mr){}
+      
+      void recreateMesh(){
+        if (_mesh != NULL){
+          delete _mesh;
+          _mesh = NULL;
+        }
+        
+        FloatBufferBuilderFromGeodetic* fbb = FloatBufferBuilderFromGeodetic::builderWithoutCenter(_planet);
+        ByteBufferBuilder bbb;
+        
+        for(int i = 0; i < 100000; i++){
+          //Point
+          double lat = ((rand() % 18000) - 9000) / 100.0;
+          double lon = ((rand() % 36000) - 18000) / 100.0;
+          double h = rand() % 10000;
+          fbb->add(Angle::fromDegrees(lat), Angle::fromDegrees(lon), h);
+          
+          //Color
+          unsigned char r = (unsigned char)rand() % 256;
+          unsigned char g = (unsigned char)rand() % 256;
+          unsigned char b = (unsigned char)rand() % 256;
+          bbb.add((unsigned char)r); //R
+          bbb.add((unsigned char)g); //G
+          bbb.add((unsigned char)b); //B
+          
+        }
+        
+        IFloatBuffer* points = fbb->create();
+        IByteBuffer* colors = bbb.create();
+        
+        _mesh = new PointCloudMesh(points,
+                                   true,
+                                   colors,
+                                   true,
+                                   10.0,
+                                   false);
+        
+        delete fbb;
+        
+        _mr->clearMeshes();
+        _mr->addMesh(_mesh);
+        
+      }
       
       virtual void run(const G3MContext* context){
         
@@ -817,14 +922,16 @@ public:
           _growing = true;
         } else if (_size == 10){
           _growing = false;
+          
+          recreateMesh();
         }
         
         _mesh->setPointSize(_size);
       }
     };
     
-    builder.addPeriodicalTask(new PeriodicalTask(TimeInterval::fromSeconds(1),
-                                                 new PointCloudTask(pcm)));
+    builder.addPeriodicalTask(new PeriodicalTask(TimeInterval::fromSeconds(0.5),
+                                                 new PointCloudTask(builder.getPlanet(), mr)));
     
   }
   

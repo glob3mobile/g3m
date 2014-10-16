@@ -50,6 +50,7 @@ _geometryGLFeature(NULL)
 }
 
 PointCloudMesh::~PointCloudMesh(){
+  printf("DELETING %x\n", (unsigned int)this);
   if (_ownsPoints){
     delete _points;
   }
@@ -79,10 +80,11 @@ void PointCloudMesh::createGLState() {
   _glState->addGLFeature(new ColorGLFeature(_rgbColors,// The attribute is a byte vector of 3 elements RGB
                                             3,            // Our buffer contains elements of 3
                                             0,            // Index 0
-                                            false,        // Not normalized
+                                            false,        // No need to normalize
                                             0,            // Stride 0
                                             true, GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha()),
                          false);
+
 }
 
 void PointCloudMesh::rawRender(const G3MRenderContext* rc,

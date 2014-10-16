@@ -43,7 +43,8 @@ public:
   _size(size),
   _timestamp(-1),
   _id(_nextID++),
-  _vertexBuffer(-1)
+  _vertexBuffer(-1),
+  _vertexBufferTimeStamp(-2)
   {
     if (_values == NULL) {
       ILogger::instance()->logError("Allocating error.");
@@ -60,7 +61,8 @@ public:
   _size(size),
   _timestamp(-1),
   _id(_nextID++),
-  _vertexBuffer(-1)
+  _vertexBuffer(-1),
+  _vertexBufferTimeStamp(-2)
   {
 
   }

@@ -49,13 +49,24 @@ int ByteBuffer_iOS::bindAsVBOToGPU(const INativeGL* gl) const {
   
   _gl = gl;
   
+  _gl->getError();
+  
+  bool gen = false;
+  bool data = false;
+  
   if (_vertexBuffer < 0) {
     _genBufferCounter++;
     //showStatistics();
     _vertexBuffer = _gl->genBuffer();
+    
+    gen = true;
   }
   
+  _gl->getError();
+  
  _gl->bindVBO(_vertexBuffer);
+  
+  _gl->getError();
   
   if (_vertexBufferTimeStamp != _timestamp) {
     _vertexBufferTimeStamp = _timestamp;
@@ -64,6 +75,14 @@ int ByteBuffer_iOS::bindAsVBOToGPU(const INativeGL* gl) const {
     int vboSize = sizeof(unsigned char) * size();
     
     glBufferData(GL_ARRAY_BUFFER, vboSize, vertices, GL_STATIC_DRAW);
+    
+    _gl->getError();
+    
+    data = true;
+  }
+  
+  if (gen && !data){
+    ILogger::instance()->logError("Byte VBO generated without associated data");
   }
   
   return _vertexBuffer;

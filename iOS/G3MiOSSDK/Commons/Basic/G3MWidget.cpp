@@ -37,6 +37,7 @@
 #include "SceneLighting.hpp"
 #include "PlanetRenderer.hpp"
 #include "ErrorRenderer.hpp"
+#include "G3MWidget.hpp"
 
 void G3MWidget::initSingletons(ILogger*            logger,
                                IFactory*           factory,

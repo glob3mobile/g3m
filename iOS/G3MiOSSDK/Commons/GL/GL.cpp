@@ -55,6 +55,8 @@ void GL::drawArrays(int mode,
   //  }
 
   state->applyOnGPU(this, progManager);
+  
+  getError();
 
   _nativeGL->drawArrays(mode,
                         first,
@@ -65,7 +67,6 @@ int GL::getError() {
   //  if (_verbose) {
   //    ILogger::instance()->logInfo("GL::getError()");
   //  }
-
   return _nativeGL->getError();
 }
 

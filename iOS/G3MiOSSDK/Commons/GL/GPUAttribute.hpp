@@ -153,10 +153,10 @@ public:
   void set(const GPUAttributeValue* v) {
     if (v != _value) {
 
-      if (v->_enabled && _type != v->_type) { //type checking
-        ILogger::instance()->logError("Attempting to set attribute " + _name + "with invalid value type.");
-        return;
-      }
+//      if (v->_enabled && _type != v->_type) { //type checking
+//        ILogger::instance()->logError("Attempting to set attribute " + _name + "with invalid value type.");
+//        return;
+//      }
       if (_value == NULL || !_value->isEquals(v)) {
         _dirty = true;
 
@@ -323,7 +323,7 @@ protected:
   
 public:
   GPUAttributeValueVecByte(IByteBuffer* buffer, int attributeSize, int arrayElementSize, int index, int stride, bool normalized):
-  GPUAttributeValue(GLType::glFloat(), attributeSize, arrayElementSize, index, stride, normalized),
+  GPUAttributeValue(GLType::glUnsignedByte(), attributeSize, arrayElementSize, index, stride, normalized),
   _buffer(buffer),
   _timeStamp(buffer->timestamp()),
   _id(buffer->getID()) {}
@@ -490,7 +490,7 @@ private:
   
 public:
   GPUAttributeValueVec3Byte(IByteBuffer* buffer, int arrayElementSize, int index, int stride, bool normalized):
-  GPUAttributeValueVecByte(buffer, 4, arrayElementSize, index, stride, normalized) {}
+  GPUAttributeValueVecByte(buffer, 3, arrayElementSize, index, stride, normalized) {}
 };
 
 #endif

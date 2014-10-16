@@ -46,7 +46,7 @@ public:
   _timestamp(0),
   _values(new float[size]),
   _vertexBuffer(-1),
-  _vertexBufferTimeStamp(-1),
+  _vertexBufferTimeStamp(-2),
   _id(_nextID++),
   _gl(NULL)
   {
@@ -86,7 +86,7 @@ public:
   _size(16),
   _timestamp(0),
   _vertexBuffer(-1),
-  _vertexBufferTimeStamp(-1),
+  _vertexBufferTimeStamp(-2),
   _id(_nextID),
   _gl(NULL)
   {
