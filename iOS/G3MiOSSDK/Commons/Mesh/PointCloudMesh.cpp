@@ -53,7 +53,6 @@ _renderVerticesCount(_nPoints)
 }
 
 PointCloudMesh::~PointCloudMesh(){
-  printf("DELETING %x\n", (unsigned int)this);
   if (_ownsPoints){
     delete _points;
   }

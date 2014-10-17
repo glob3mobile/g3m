@@ -76,6 +76,7 @@ void G3MDemoBuilder::build() {
 
   PointCloudsRenderer* pointCloudsRenderer = new PointCloudsRenderer();
   builder->addRenderer(pointCloudsRenderer);
+  builder->setLogFPS(true);
 //  builder->getPlanetRendererBuilder()->setTileRenderingListener(pointCloudsRenderer->getTileRenderingListener());
 
   GEORenderer* geoRenderer = new GEORenderer(NULL, /* symbolizer */
