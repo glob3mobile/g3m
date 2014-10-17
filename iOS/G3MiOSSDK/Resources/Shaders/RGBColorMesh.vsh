@@ -15,6 +15,6 @@ varying vec4 VertexColor;
 
 void main() {
   gl_Position = uModelview * aPosition;
-  VertexColor = vec4(aRGBColor.x /255.0, aRGBColor.y / 255.0, aRGBColor.z / 255.0, 1.0);
+  VertexColor = vec4(aRGBColor.x, aRGBColor.y, aRGBColor.z, 1.0);
   gl_PointSize = uPointSize;
 }

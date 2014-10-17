@@ -82,7 +82,7 @@ void PointCloudMesh::createGLState() {
   _glState->addGLFeature(new ColorGLFeature(_rgbColors,// The attribute is a byte vector of 3 elements RGB
                                             3,            // Our buffer contains elements of 3
                                             0,            // Index 0
-                                            false,        // No need to normalize
+                                            true,        // No need to normalize
                                             0,            // Stride 0
                                             true, GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha()),
                          false);

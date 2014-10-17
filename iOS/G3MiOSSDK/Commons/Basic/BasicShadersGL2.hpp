@@ -294,7 +294,7 @@ public:
 "varying vec4 VertexColor; \n " + 
 "void main() { \n " + 
 "gl_Position = uModelview * aPosition; \n " + 
-"VertexColor = vec4(aRGBColor.x /255.0, aRGBColor.y / 255.0, aRGBColor.z / 255.0, 1.0); \n " + 
+"VertexColor = vec4(aRGBColor.x, aRGBColor.y, aRGBColor.z, 1.0); \n " + 
 "gl_PointSize = uPointSize; \n " + 
 "} \n ",
  emptyString +  
