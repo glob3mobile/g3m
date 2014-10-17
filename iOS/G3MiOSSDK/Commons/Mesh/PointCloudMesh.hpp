@@ -38,6 +38,8 @@ private:
   mutable BoundingVolume* _boundingVolume;
   
   GeometryGLFeature* _geometryGLFeature;
+  
+  int _renderVerticesCount;
 
   
 public:
@@ -81,6 +83,18 @@ public:
   
   void setPointSize(float v) const{
     _geometryGLFeature->setPointSize(v);
+  }
+  
+  void setRenderVerticesCount(int renderVerticesCount) {
+    if ((renderVerticesCount < 0) ||
+        (renderVerticesCount > getRenderVerticesCount())) {
+      ILogger::instance()->logError("Invalid renderVerticesCount at PointCloudMesh");
+    }
+    _renderVerticesCount = renderVerticesCount;
+  }
+  
+  int getRenderVerticesCount() const {
+    return _renderVerticesCount;
   }
   
 };

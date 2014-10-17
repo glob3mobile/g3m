@@ -22,6 +22,7 @@ class Sector;
 class Frustum;
 class DirectMesh;
 class ByteBufferIterator;
+class PointCloudMesh;
 
 class PointCloudsRenderer : public DefaultRenderer {
 public:
@@ -268,9 +269,9 @@ private:
     const Box*      _bounds;
     IFloatBuffer*   _firstPointsVerticesBuffer;
     IFloatBuffer*   _firstPointsHeightsBuffer;
-    IFloatBuffer*   _firstPointsColorsBuffer;
+    IByteBuffer*   _firstPointsColorsBuffer;
 
-    DirectMesh* _mesh;
+    PointCloudMesh* _mesh;
 
     long long _pointsCount;
 
@@ -286,7 +287,7 @@ private:
     IFloatBuffer** _levelsVerticesBuffers;
     IFloatBuffer** _levelsHeightsBuffers;
 
-    DirectMesh* createMesh(double minHeight,
+    PointCloudMesh* createMesh(double minHeight,
                            double maxHeight,
                            float pointSize);
 

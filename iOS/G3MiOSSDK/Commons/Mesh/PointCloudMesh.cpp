@@ -42,7 +42,8 @@ _nPoints(points->size() / 3),
 _boundingVolume(NULL),
 _glState(new GLState()),
 _geometryGLFeature(NULL),
-_origin(origin)
+_origin(origin),
+_renderVerticesCount(_nPoints)
 {
   if (_nPoints != (rgbColors->size() / 3)){
     ILogger::instance()->logError("Wrong parameters for PointCloudMesh()");
@@ -101,7 +102,7 @@ void PointCloudMesh::rawRender(const G3MRenderContext* rc,
   GL* gl = rc->getGL();
   gl->drawArrays(GLPrimitive::points(),
                  0,
-                 _nPoints,
+                 _renderVerticesCount,
                  _glState,
                  *rc->getGPUProgramManager());
 }

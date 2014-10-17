@@ -219,6 +219,18 @@ public:
     return description();
   }
 #endif
+  
+  unsigned char getRedByte() const{
+    return (unsigned char) (_red * 255);
+  }
+  
+  unsigned char getGreenByte() const{
+    return (unsigned char) (_green * 255);
+  }
+  
+  unsigned char getBlueByte() const{
+    return (unsigned char) (_blue * 255);
+  }
 
 };
 
