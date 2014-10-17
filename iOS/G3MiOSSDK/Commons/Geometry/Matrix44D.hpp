@@ -13,6 +13,8 @@
 
 #include "RCObject.hpp"
 
+class Vector3D;
+
 class Matrix44D: public RCObject {
 private:
   ~Matrix44D();
@@ -93,6 +95,8 @@ public:
                          0, 0, 1, 0,
                          0, 0, 0, 1);
   }
+  
+  static Matrix44D* createTranslationMatrix(const Vector3D& t);
 
 
   bool isScaleMatrix() const;

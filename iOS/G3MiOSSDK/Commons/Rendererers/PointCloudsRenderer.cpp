@@ -492,9 +492,9 @@ long long PointCloudsRenderer::PointCloudInnerNode::rawRender(const PointCloud* 
       
       ByteBufferBuilder bbb;
       
-      fbb->add(Vector3D((float) (average._x),
-                        (float) (average._y),
-                        (float) (average._z)));
+      fbb->add(Vector3D((float) (average._x- averageX),
+                        (float) (average._y- averageY),
+                        (float) (average._z- averageZ)));
       
       bbb.add((unsigned char)255);
       bbb.add((unsigned char)255);
@@ -518,6 +518,7 @@ long long PointCloudsRenderer::PointCloudInnerNode::rawRender(const PointCloud* 
 #warning INTRODUCE CENTER
       _mesh = new PointCloudMesh(pointsBuffer,
                                  true,
+                                 Vector3D(averageX, averageY, averageZ),
                                  rgbColors,
                                  true,
                                  pointSize * 2,

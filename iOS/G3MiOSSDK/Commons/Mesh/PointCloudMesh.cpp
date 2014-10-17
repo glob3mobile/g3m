@@ -27,6 +27,7 @@
 
 PointCloudMesh::PointCloudMesh(IFloatBuffer* points,
                                bool ownsPoints,
+                               const Vector3D& origin,
                                IByteBuffer* rgbColors,
                                bool ownsColors,
                                float pointSize,
@@ -40,7 +41,8 @@ _depthTest(depthTest),
 _nPoints(points->size() / 3),
 _boundingVolume(NULL),
 _glState(new GLState()),
-_geometryGLFeature(NULL)
+_geometryGLFeature(NULL),
+_origin(origin)
 {
   if (_nPoints != (rgbColors->size() / 3)){
     ILogger::instance()->logError("Wrong parameters for PointCloudMesh()");
@@ -84,6 +86,12 @@ void PointCloudMesh::createGLState() {
                                             0,            // Stride 0
                                             true, GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha()),
                          false);
+  
+  if (!_origin.isZero() && !_origin.isNan()){
+    Matrix44D* m = Matrix44D::createTranslationMatrix(_origin);
+    _glState->addGLFeature(new ModelTransformGLFeature(m), false);
+    m->_release();
+  }
 
 }
 

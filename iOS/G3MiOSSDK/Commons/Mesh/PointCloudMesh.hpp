@@ -27,6 +27,7 @@ private:
   bool                    _ownsColors;
   float                   _pointSize;
   bool                    _depthTest;
+  const Vector3D&         _origin;
   
   int                     _nPoints;
   
@@ -43,6 +44,7 @@ public:
   
   PointCloudMesh(IFloatBuffer* points,
                  bool ownsPoints,
+                 const Vector3D& origin,
                  IByteBuffer* rgbColors,
                  bool ownsColors,
                  float pointSize = (float)1.0,

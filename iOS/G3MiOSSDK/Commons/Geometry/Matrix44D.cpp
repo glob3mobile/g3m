@@ -9,6 +9,7 @@
 #include "Matrix44D.hpp"
 
 #include "IFactory.hpp"
+#include "Vector3D.hpp"
 
 Matrix44D::Matrix44D(double m00, double m10, double m20, double m30,
                      double m01, double m11, double m21, double m31,
@@ -210,4 +211,11 @@ bool Matrix44D::isTranslationMatrix() const {
 //                          0, 0, 1, 0,
 //                          x, y, z, 1);
 
+}
+
+Matrix44D* Matrix44D::createTranslationMatrix(const Vector3D& t) {
+  return new Matrix44D(1, 0, 0, 0,
+                          0, 1, 0, 0,
+                          0, 0, 1, 0,
+                          t._x, t._y, t._z, 1);
 }
