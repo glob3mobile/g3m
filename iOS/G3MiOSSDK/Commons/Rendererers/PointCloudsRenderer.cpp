@@ -487,35 +487,17 @@ long long PointCloudsRenderer::PointCloudInnerNode::rawRender(const PointCloud* 
       const float averageX = (float) average._x;
       const float averageY = (float) average._y;
       const float averageZ = (float) average._z;
-      
-      FloatBufferBuilderFromCartesian3D* fbb = FloatBufferBuilderFromCartesian3D::builderWithoutCenter();
-      
-      ByteBufferBuilder bbb;
-      
-      fbb->add(Vector3D((float) (average._x- averageX),
-                        (float) (average._y- averageY),
-                        (float) (average._z- averageZ)));
-      
-      bbb.add((unsigned char)255);
-      bbb.add((unsigned char)255);
-      bbb.add((unsigned char)0);
-      
-      
-      IFloatBuffer* pointsBuffer = fbb->create();
-      
-      IByteBuffer* rgbColors = bbb.create();
 
-//      IFloatBuffer* pointsBuffer = rc->getFactory()->createFloatBuffer(3);
-//      pointsBuffer->rawPut(0, (float) (average._x - averageX) );
-//      pointsBuffer->rawPut(1, (float) (average._y - averageY) );
-//      pointsBuffer->rawPut(2, (float) (average._z - averageZ) );
+      IFloatBuffer* pointsBuffer = rc->getFactory()->createFloatBuffer(3);
+      pointsBuffer->rawPut(0, (float) (average._x - averageX) );
+      pointsBuffer->rawPut(1, (float) (average._y - averageY) );
+      pointsBuffer->rawPut(2, (float) (average._z - averageZ) );
       
-//      IByteBuffer* rgbColors = rc->getFactory()->createByteBuffer(3);
-//      rgbColors->rawPut(0, (unsigned char)255);
-//      rgbColors->rawPut(1, (unsigned char)255);
-//      rgbColors->rawPut(2, (unsigned char)0);
+      IByteBuffer* rgbColors = rc->getFactory()->createByteBuffer(3);
+      rgbColors->rawPut(0, (unsigned char)255);
+      rgbColors->rawPut(1, (unsigned char)255);
+      rgbColors->rawPut(2, (unsigned char)0);
       
-#warning INTRODUCE CENTER
       _mesh = new PointCloudMesh(pointsBuffer,
                                  true,
                                  Vector3D(averageX, averageY, averageZ),
@@ -750,6 +732,8 @@ DirectMesh* PointCloudsRenderer::PointCloudLeafNode::createMesh(double minHeight
         _firstPointsColorsBuffer->rawPut(i4 + 3, color._alpha);
       }
     }
+    
+    
 
     DirectMesh* mesh = new DirectMesh(GLPrimitive::points(),
                                       false,
