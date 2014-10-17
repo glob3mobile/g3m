@@ -17,7 +17,6 @@
 #include "ErrorHandling.hpp"
 #include "IStringBuilder.hpp"
 #include "Camera.hpp"
-#include "DirectMesh.hpp"
 #include "IFactory.hpp"
 #include "IDeviceInfo.hpp"
 #include "PointCloudMesh.hpp"
@@ -737,7 +736,7 @@ PointCloudMesh* PointCloudsRenderer::PointCloudLeafNode::createMesh(double minHe
                                *_average,
                                _firstPointsColorsBuffer,
                                false,
-                               pointSize * 2,
+                               pointSize,
                                true);
     
 
@@ -812,7 +811,7 @@ PointCloudMesh* PointCloudsRenderer::PointCloudLeafNode::createMesh(double minHe
                                             *_average,
                                             colors,
                                             true,
-                                            pointSize * 2,
+                                            pointSize,
                                             true);
 
 //  DirectMesh* mesh = new DirectMesh(GLPrimitive::points(),

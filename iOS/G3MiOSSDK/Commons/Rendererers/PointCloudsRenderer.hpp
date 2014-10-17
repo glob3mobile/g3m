@@ -20,7 +20,6 @@
 class IDownloader;
 class Sector;
 class Frustum;
-class DirectMesh;
 class ByteBufferIterator;
 class PointCloudMesh;
 
