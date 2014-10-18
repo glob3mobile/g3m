@@ -272,7 +272,8 @@ Mesh* EllipsoidShape::createMesh(const G3MRenderContext* rc) {
 }
 
 
-std::vector<double> EllipsoidShape::intersectionsDistances(const Vector3D& origin,
+std::vector<double> EllipsoidShape::intersectionsDistances(const Planet* planet,
+                                                           const Vector3D& origin,
                                                            const Vector3D& direction) const {
   //  MutableMatrix44D* M = createTransformMatrix(_planet);
   //  const Quadric transformedQuadric = _quadric.transformBy(*M);
