@@ -278,8 +278,9 @@ public:
                    const ElevationData* rawElevationData, // Without considering vertical exaggeration
                         double verticalExaggeration) {}
   
-  virtual std::vector<double> intersectionsDistances(const Vector3D& origin,
-                                             const Vector3D& direction) const = 0;
+  virtual std::vector<double> intersectionsDistances(const Planet* planet,
+                                                     const Vector3D& origin,
+                                                     const Vector3D& direction) const = 0;
   
 
 };
