@@ -84,7 +84,7 @@ public class MainActivity extends Activity {
 					.builderWithoutCenter(builder.getPlanet());
 			ByteBufferBuilder bbb = new ByteBufferBuilder();
 
-			for (int i = 0; i < 10000; i++) {
+			for (int i = 0; i < 10; i++) {
 				// Point
 				double lat = ((Math.random() * 18000) - 9000) / 100.0;
 				double lon = ((Math.random() * 36000) - 18000) / 100.0;
@@ -101,7 +101,7 @@ public class MainActivity extends Activity {
 			}
 
 			IFloatBuffer points = fbb.create();
-			IByteBuffer colors = bbb.create();
+			final IByteBuffer colors = bbb.create();
 
 			MeshRenderer mr = new MeshRenderer();
 
@@ -116,6 +116,8 @@ public class MainActivity extends Activity {
 				PointCloudMesh _mesh;
 				int _size = 1;
 				boolean _growing = true;
+				
+				int _pointer = 0;
 
 				public PointCloudTask(PointCloudMesh mesh) {
 					_mesh = mesh;
@@ -137,6 +139,12 @@ public class MainActivity extends Activity {
 					}
 
 					_mesh.setPointSize(_size);
+					
+					if (_pointer < colors.size()){
+						colors.put(_pointer++, (byte) 255);
+						colors.put(_pointer++, (byte) 0);
+						colors.put(_pointer++, (byte) 0);
+					}
 				}
 
 			}

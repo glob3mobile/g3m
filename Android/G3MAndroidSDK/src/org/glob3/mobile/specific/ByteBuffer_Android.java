@@ -11,7 +11,7 @@ import android.opengl.GLES20;
 public final class ByteBuffer_Android extends IByteBuffer {
 
 	// private final ByteBuffer _buffer;
-	private final byte[] _buffer;
+	private byte[] _buffer;
 	private int _timestamp = 0;
 
 	// ID
@@ -45,6 +45,11 @@ public final class ByteBuffer_Android extends IByteBuffer {
 
 	@Override
 	public int size() {
+		
+		if (_byteBuffer != null){
+			return _byteBuffer.capacity();
+		}
+		
 		// return _buffer.capacity();
 		return _buffer.length;
 	}
@@ -56,12 +61,26 @@ public final class ByteBuffer_Android extends IByteBuffer {
 
 	@Override
 	public byte get(final int i) {
+		
+		if (_byteBuffer != null){
+			return _byteBuffer.get(i);
+		}
+		
 		// return _buffer.get(i);
 		return _buffer[i];
 	}
 
 	@Override
 	public void put(final int i, final byte value) {
+		
+		if (_byteBuffer != null){
+			if (_byteBuffer.get(i) != value){
+				_byteBuffer.put(i, value);
+				_timestamp++;
+			}
+			return;
+		}
+		
 		// if (_buffer.get(i) != value) {
 		// _buffer.put(i, value);
 		// _timestamp++;
@@ -74,6 +93,12 @@ public final class ByteBuffer_Android extends IByteBuffer {
 
 	@Override
 	public void rawPut(final int i, final byte value) {
+		
+		if (_byteBuffer != null){
+			_byteBuffer.put(i, value);
+			return;
+		}
+		
 		// _buffer.put(i, value);
 		_buffer[i] = value;
 	}
@@ -83,6 +108,11 @@ public final class ByteBuffer_Android extends IByteBuffer {
 	// }
 
 	public byte[] getBuffer() {
+		
+		if (_byteBuffer != null){
+			return _byteBuffer.array();
+		}
+		
 		return _buffer;
 	}
 
@@ -91,6 +121,8 @@ public final class ByteBuffer_Android extends IByteBuffer {
 			_byteBuffer = ByteBuffer.allocateDirect(_buffer.length);
 			_byteBuffer.put(_buffer);
 			_byteBuffer.position(0);
+			
+			_buffer = null; //DELETING PREVIOUS BUFFER WHEN THE BYTEBUFFER
 		}
 		return _byteBuffer;
 	}
@@ -98,7 +130,7 @@ public final class ByteBuffer_Android extends IByteBuffer {
 	@Override
 	public String description() {
 		// return "ByteBuffer_iOS (size=" + _buffer.capacity() + ")";
-		return "ByteBuffer_iOS (size=" + _buffer.length + ")";
+		return "ByteBuffer_iOS (size=" + size() + ")";
 	}
 
 	@Override
@@ -106,7 +138,7 @@ public final class ByteBuffer_Android extends IByteBuffer {
 		// final byte[] bytes = _buffer.array();
 		// return new String(bytes);
 		try {
-			return new String(_buffer, "UTF-8");
+			return new String(getBuffer(), "UTF-8");
 		} catch (final UnsupportedEncodingException e) {
 			throw new RuntimeException(e);
 		}
@@ -137,8 +169,7 @@ public final class ByteBuffer_Android extends IByteBuffer {
 		}
 
 		if (GLES20.glGetError() != GLES20.GL_NO_ERROR) {
-			ILogger.instance()
-					.logError("Error at ByteBuffer::bindAsVBOToGPU()");
+			ILogger.instance().logError("Error at ByteBuffer::bindAsVBOToGPU()");
 		}
 
 		return _vertexBuffer;
