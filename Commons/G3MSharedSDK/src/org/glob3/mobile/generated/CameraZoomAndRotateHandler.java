@@ -19,7 +19,6 @@ package org.glob3.mobile.generated;
 
 
 
-
 public class CameraZoomAndRotateHandler extends CameraEventHandler
 {
   private double _fingerSep0;
@@ -29,7 +28,7 @@ public class CameraZoomAndRotateHandler extends CameraEventHandler
   private MutableVector3D _centralGlobePoint = new MutableVector3D();
   private MutableVector3D _centralGlobeNormal = new MutableVector3D();
 
-  private void zoom(Camera camera, Vector2I difCurrentPixels)
+  private void zoom(Camera camera, Vector2F difCurrentPixels)
   {
     final double MIN_CAMERA_HEIGHT = 30;
   
@@ -167,22 +166,22 @@ public class CameraZoomAndRotateHandler extends CameraEventHandler
     cameraContext.setCurrentGesture(Gesture.DoubleDrag);
   
     // double dragging
-    _initialPixel0 = touchEvent.getTouch(0).getPos().asMutableVector2I();
-    _initialPixel1 = touchEvent.getTouch(1).getPos().asMutableVector2I();
+    _initialPixel0 = touchEvent.getTouch(0).getPos().asMutableVector2F();
+    _initialPixel1 = touchEvent.getTouch(1).getPos().asMutableVector2F();
     }
   public final void onMove(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
   {
   
-    Vector2I pixel0 = touchEvent.getTouch(0).getPos();
-    Vector2I pixel1 = touchEvent.getTouch(1).getPos();
-    Vector2I difCurrentPixels = pixel1.sub(pixel0);
+    final Vector2F pixel0 = touchEvent.getTouch(0).getPos();
+    final Vector2F pixel1 = touchEvent.getTouch(1).getPos();
+    final Vector2F difCurrentPixels = pixel1.sub(pixel0);
     final Planet planet = eventContext.getPlanet();
   
     // if it is the first move, let's decide if make zoom or rotate
     if (cameraContext.getCurrentGesture() == Gesture.DoubleDrag)
     {
-      Vector2I difPixel0 = pixel0.sub(_initialPixel0.asVector2I());
-      Vector2I difPixel1 = pixel1.sub(_initialPixel1.asVector2I());
+      final Vector2F difPixel0 = pixel0.sub(_initialPixel0.asVector2F());
+      final Vector2F difPixel1 = pixel1.sub(_initialPixel1.asVector2F());
       if ((difPixel0._y<-1 && difPixel1._y>1) || (difPixel0._y>1 && difPixel1._y<-1) || (difPixel0._x<-1 && difPixel1._x>1) || (difPixel0._x>1 && difPixel1._x<-1))
       {
         //printf ("zoom..\n");
@@ -240,10 +239,8 @@ public class CameraZoomAndRotateHandler extends CameraEventHandler
     //printf ("end 2 fingers.  gesture=%d\n", _currentGesture);
   }
 
-  //MutableVector3D _initialPoint;  //Initial point at dragging
-  public MutableVector2I _initialPixel0 = new MutableVector2I(); //Initial pixels at start of gesture
-  public MutableVector2I _initialPixel1 = new MutableVector2I();
-  //MutableVector3D _initialPoint0, _initialPoint1;
+  public MutableVector2F _initialPixel0 = new MutableVector2F(); //Initial pixels at start of gesture
+  public MutableVector2F _initialPixel1 = new MutableVector2F();
   public double _initialFingerSeparation;
   public double _initialFingerInclination;
 

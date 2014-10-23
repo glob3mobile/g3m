@@ -16,7 +16,9 @@ package org.glob3.mobile.generated;
 //
 
 
+
 //class Vector2I;
+//class MutableVector2F;
 
 public class Vector2F
 {
@@ -66,6 +68,36 @@ public class Vector2F
     final double dx = _x - that._x;
     final double dy = _y - that._y;
     return (dx * dx) + (dy * dy);
+  }
+
+  public final Vector2F add(Vector2F that)
+  {
+    return new Vector2F(_x + that._x, _y + that._y);
+  }
+
+  public final Vector2F sub(Vector2F that)
+  {
+    return new Vector2F(_x - that._x, _y - that._y);
+  }
+
+  public final Vector2F div(double d)
+  {
+    return new Vector2F((float)(_x / d), (float)(_y / d));
+  }
+
+  public final double squaredLength()
+  {
+    return (double) _x * _x + _y * _y;
+  }
+
+  public final double length()
+  {
+    return IMathUtils.instance().sqrt(squaredLength());
+  }
+
+  public final MutableVector2F asMutableVector2F()
+  {
+    return new MutableVector2F(_x, _y);
   }
 
 }
