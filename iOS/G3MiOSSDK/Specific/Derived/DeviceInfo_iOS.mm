@@ -14,12 +14,12 @@
 
 
 DeviceInfo_iOS::DeviceInfo_iOS() {
-  //  UIScreen* mainScreen = [UIScreen mainScreen];
-  //
-  //  const float scale = [mainScreen respondsToSelector:@selector(scale)]
-  //  /*                          */ ? [mainScreen scale]
-  //  /*                          */ : 1;
-  const float scale = 1; // doesn't consider the retina factor as the opengl-view doesn't change it size based on retina resolution
+    UIScreen* mainScreen = [UIScreen mainScreen];
+  
+    const float scale = [mainScreen respondsToSelector:@selector(scale)]
+    /*                          */ ? [mainScreen scale]
+    /*                          */ : 1;
+//  const float scale = 1; // doesn't consider the retina factor as the opengl-view doesn't change it size based on retina resolution
 
   if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
     size_t size;

@@ -77,6 +77,8 @@
 		CF02302819119B1E00FD85E0 /* TiledVectorLayerTileImageProvider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF02302619119B1E00FD85E0 /* TiledVectorLayerTileImageProvider.cpp */; };
 		CF02302919119B2C00FD85E0 /* TiledVectorLayerTileImageProvider.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF02302719119B1E00FD85E0 /* TiledVectorLayerTileImageProvider.hpp */; };
 		CF02302A19119B2C00FD85E0 /* TiledVectorLayer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF02302219119B0100FD85E0 /* TiledVectorLayer.hpp */; };
+		CF0421D619F9986D00F5D33F /* MutableVector2F.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF0421D419F9986D00F5D33F /* MutableVector2F.cpp */; };
+		CF0421D719F99ADD00F5D33F /* MutableVector2F.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF0421D519F9986D00F5D33F /* MutableVector2F.hpp */; };
 		CF0755961715B9120084CC14 /* GFont.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF0755941715B9120084CC14 /* GFont.cpp */; };
 		CF0755971715B9570084CC14 /* GFont.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF0755951715B9120084CC14 /* GFont.hpp */; };
 		CF07DD0D175D32CC00839F5D /* Color.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF07DD0B175D32CC00839F5D /* Color.cpp */; };
@@ -720,6 +722,7 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				CF0421D719F99ADD00F5D33F /* MutableVector2F.hpp in CopyFiles */,
 				CFBD815719A3E1D500F1A8C4 /* PointCloudsRenderer.hpp in CopyFiles */,
 				44E3C43019C1ADB800857275 /* Info.hpp in CopyFiles */,
 				44EE3CE019A60D2F00DDEF2B /* DefaultChessCanvasImageBuilder.hpp in CopyFiles */,
@@ -1217,6 +1220,8 @@
 		CF02302719119B1E00FD85E0 /* TiledVectorLayerTileImageProvider.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = TiledVectorLayerTileImageProvider.hpp; path = Commons/Basic/TiledVectorLayerTileImageProvider.hpp; sourceTree = "<group>"; };
 		CF024DC616A84F330051255C /* VisibleSectorListener.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = VisibleSectorListener.hpp; path = Commons/Rendererers/VisibleSectorListener.hpp; sourceTree = "<group>"; };
 		CF03683416A499F0006CE160 /* LabelPosition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LabelPosition.h; path = Commons/Basic/LabelPosition.h; sourceTree = "<group>"; };
+		CF0421D419F9986D00F5D33F /* MutableVector2F.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MutableVector2F.cpp; path = Commons/Geometry/MutableVector2F.cpp; sourceTree = "<group>"; };
+		CF0421D519F9986D00F5D33F /* MutableVector2F.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = MutableVector2F.hpp; path = Commons/Geometry/MutableVector2F.hpp; sourceTree = "<group>"; };
 		CF0755941715B9120084CC14 /* GFont.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GFont.cpp; path = Commons/Basic/GFont.cpp; sourceTree = "<group>"; };
 		CF0755951715B9120084CC14 /* GFont.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = GFont.hpp; path = Commons/Basic/GFont.hpp; sourceTree = "<group>"; };
 		CF07DD0B175D32CC00839F5D /* Color.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = Color.cpp; path = Commons/Basic/Color.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
@@ -2189,6 +2194,8 @@
 				D8228EBC157F7F6100BBAF60 /* MutableMatrix44D.hpp */,
 				CF7A78EA159B9BE300074422 /* MutableVector2D.cpp */,
 				CF7A78EB159B9BE300074422 /* MutableVector2D.hpp */,
+				CF0421D419F9986D00F5D33F /* MutableVector2F.cpp */,
+				CF0421D519F9986D00F5D33F /* MutableVector2F.hpp */,
 				CF0A8181163303E800036277 /* MutableVector2I.cpp */,
 				CF0A8182163303E800036277 /* MutableVector2I.hpp */,
 				D84D5A2F157E0EAA000C5E35 /* MutableVector3D.cpp */,
@@ -3077,6 +3084,7 @@
 				CF8AE0061702049F00FE9F56 /* GEOLine2DStyle.cpp in Sources */,
 				CF8AE0071702049F00FE9F56 /* GEOLine2DMeshSymbol.cpp in Sources */,
 				CF8AE0081702049F00FE9F56 /* GEOMultiLine2DMeshSymbol.cpp in Sources */,
+				CF0421D619F9986D00F5D33F /* MutableVector2F.cpp in Sources */,
 				CF8AE0091702049F00FE9F56 /* GEOStyle.cpp in Sources */,
 				CF8AE00A1702049F00FE9F56 /* GEOSymbol.cpp in Sources */,
 				CF8AE00B1702049F00FE9F56 /* GEOSymbolizer.cpp in Sources */,

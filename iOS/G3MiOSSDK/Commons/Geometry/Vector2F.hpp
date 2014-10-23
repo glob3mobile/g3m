@@ -10,7 +10,9 @@
 #define __G3MiOSSDK__Vector2F__
 
 #include "IMathUtils.hpp"
+
 class Vector2I;
+class MutableVector2F;
 
 class Vector2F {
 private:
@@ -49,7 +51,19 @@ public:
   const double squaredDistanceTo(const Vector2I& that) const;
 
   const double squaredDistanceTo(const Vector2F& that) const;
-  
+
+  Vector2F add(const Vector2F& that) const;
+
+  Vector2F sub(const Vector2F& that) const;
+
+  Vector2F div(double d) const;
+
+  double squaredLength() const;
+
+  double length() const;
+
+  MutableVector2F asMutableVector2F() const;
+
 };
 
 #endif

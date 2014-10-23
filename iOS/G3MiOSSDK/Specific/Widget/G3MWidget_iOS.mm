@@ -123,9 +123,10 @@ autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
                                     [NSNumber numberWithBool:FALSE], kEAGLDrawablePropertyRetainedBacking, kEAGLColorFormatRGBA8, kEAGLDrawablePropertyColorFormat, nil];
 //    // for retina display
 //    eaglLayer.contentsScale = 2;
-//    if ([[UIScreen mainScreen] respondsToSelector:@selector(displayLinkWithTarget:selector:)]) {
-//      eaglLayer.contentsScale = [UIScreen mainScreen].scale;
-//    }
+    if ([[UIScreen mainScreen] respondsToSelector:@selector(displayLinkWithTarget:selector:)]) {
+      CGFloat scale = [UIScreen mainScreen].scale;
+      eaglLayer.contentsScale = scale;
+    }
 
     // create GL object
     _renderer = [[ES2Renderer alloc] init];
@@ -178,19 +179,18 @@ autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
 }
 
 - (IBAction)handleLongPress:(UIGestureRecognizer *)sender {
-  //  printf ("Longpress. state=%d\n", sender.state);
-  //
-  //  if (sender.state == UIGestureRecognizerStateEnded) {
-  //    NSLog(@"LONG PRESS");
-  //  }
-
   if (sender.state == 1) {
+    CGFloat scale = 1;
+    if ([[UIScreen mainScreen] respondsToSelector:@selector(displayLinkWithTarget:selector:)]) {
+      scale = [UIScreen mainScreen].scale;
+    }
+
     CGPoint tapPoint = [sender locationInView:sender.view];
 
     std::vector<const Touch*> pointers = std::vector<const Touch*>();
-    Touch *touch = new Touch(Vector2I((int) tapPoint.x,
-                                      (int) tapPoint.y),
-                             Vector2I(0, 0),
+    Touch *touch = new Touch(Vector2F(tapPoint.x * scale,
+                                      tapPoint.y * scale),
+                             Vector2F(0, 0),
                              1);
     pointers.push_back(touch);
 
@@ -210,10 +210,16 @@ autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
 - (void)layoutSubviews {
   [super layoutSubviews];
 
+  CGFloat scale = 1;
+  if ([[UIScreen mainScreen] respondsToSelector:@selector(displayLinkWithTarget:selector:)]) {
+    scale = [UIScreen mainScreen].scale;
+  }
+
   CGSize size = [self frame].size;
-  const int width  = (int) size.width;
-  const int height = (int) size.height;
+  const int width  = (int) (size.width * scale);
+  const int height = (int) (size.height * scale);
   //NSLog(@"ResizeViewportEvent: %dx%d", width, height);
+
 
   G3MWidget* widget = [self widget];
   if (widget) {
@@ -288,6 +294,11 @@ autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
 - (void) touchesBegan: (NSSet*) touches
             withEvent: (UIEvent*) event
 {
+  CGFloat scale = 1;
+  if ([[UIScreen mainScreen] respondsToSelector:@selector(displayLinkWithTarget:selector:)]) {
+    scale = [UIScreen mainScreen].scale;
+  }
+
   NSSet *allTouches = [event touchesForView:self];
 
   std::vector<const Touch*> pointers = std::vector<const Touch*>();
@@ -299,10 +310,10 @@ autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
     CGPoint previous        = [uiTouch previousLocationInView:self];
     unsigned char tapCount  = (unsigned char) [uiTouch tapCount];
 
-    Touch* touch = new Touch(Vector2I((int) current.x,
-                                      (int) current.y),
-                             Vector2I((int) previous.x,
-                                      (int) previous.y),
+    Touch* touch = new Touch(Vector2F(current.x * scale,
+                                      current.y * scale),
+                             Vector2F(previous.x * scale,
+                                      previous.y * scale),
                              tapCount);
 
     pointers.push_back(touch);
@@ -318,7 +329,11 @@ autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
 - (void) touchesMoved: (NSSet*) touches
             withEvent: (UIEvent*) event
 {
-  //NSSet *allTouches = [event allTouches];
+  CGFloat scale = 1;
+  if ([[UIScreen mainScreen] respondsToSelector:@selector(displayLinkWithTarget:selector:)]) {
+    scale = [UIScreen mainScreen].scale;
+  }
+
   NSSet *allTouches = [event touchesForView:self];
 
   std::vector<const Touch*> pointers = std::vector<const Touch*>();
@@ -329,10 +344,10 @@ autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
     CGPoint current  = [uiTouch locationInView:self];
     CGPoint previous = [uiTouch previousLocationInView:self];
 
-    Touch* touch = new Touch(Vector2I((int) current.x,
-                                      (int) current.y),
-                             Vector2I((int) previous.x,
-                                      (int) previous.y));
+    Touch* touch = new Touch(Vector2F(current.x * scale,
+                                      current.y * scale),
+                             Vector2F(previous.x * scale,
+                                      previous.y * scale));
 
     pointers.push_back(touch);
   }
@@ -345,9 +360,9 @@ autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
     if ((pointers.size() == 2) &&
         (_lastTouchEvent->getTouchCount() == 2)) {
 
-      const Vector2I current0 = pointers[0]->getPrevPos();
-      const Vector2I last0 = _lastTouchEvent->getTouch(0)->getPos();
-      const Vector2I last1 = _lastTouchEvent->getTouch(1)->getPos();
+      const Vector2F current0 = pointers[0]->getPrevPos();
+      const Vector2F last0 = _lastTouchEvent->getTouch(0)->getPos();
+      const Vector2F last1 = _lastTouchEvent->getTouch(1)->getPos();
       delete _lastTouchEvent;
       const double dist0 = current0.sub(last0).squaredLength();
       const double dist1 = current0.sub(last1).squaredLength();
@@ -376,7 +391,11 @@ autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
 - (void) touchesEnded: (NSSet*) touches
             withEvent: (UIEvent*) event
 {
-  //NSSet *allTouches = [event allTouches];
+  CGFloat scale = 1;
+  if ([[UIScreen mainScreen] respondsToSelector:@selector(displayLinkWithTarget:selector:)]) {
+    scale = [UIScreen mainScreen].scale;
+  }
+
   NSSet *allTouches = [event touchesForView:self];
 
   std::vector<const Touch*> pointers = std::vector<const Touch*>();
@@ -390,10 +409,10 @@ autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
 
     [uiTouch timestamp];
 
-    Touch *touch = new Touch(Vector2I((int) current.x,
-                                      (int) current.y),
-                             Vector2I((int) previous.x,
-                                      (int) previous.y));
+    Touch *touch = new Touch(Vector2F(current.x * scale,
+                                      current.y * scale),
+                             Vector2F(previous.x * scale,
+                                      previous.y * scale));
 
     pointers.push_back(touch);
   }
