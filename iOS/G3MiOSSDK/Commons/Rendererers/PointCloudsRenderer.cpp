@@ -726,9 +726,10 @@ PointCloudMesh* PointCloudsRenderer::PointCloudLeafNode::createMesh(double minHe
                                                 mu->round(wheelSize * alpha) );
 
         const int i4 = i*4;
-        _firstPointsColorsBuffer->rawPut(i3 + 0, color.getRedByte());
-        _firstPointsColorsBuffer->rawPut(i3 + 1, color.getGreenByte());
-        _firstPointsColorsBuffer->rawPut(i3 + 2, color.getBlueByte());
+        _firstPointsColorsBuffer->rawPut(i4 + 0, color.getRedByte());
+        _firstPointsColorsBuffer->rawPut(i4 + 1, color.getGreenByte());
+        _firstPointsColorsBuffer->rawPut(i4 + 2, color.getBlueByte());
+        _firstPointsColorsBuffer->rawPut(i4 + 2, (unsigned char) 255);
       }
     }
     
@@ -772,7 +773,7 @@ PointCloudMesh* PointCloudsRenderer::PointCloudLeafNode::createMesh(double minHe
     cursor += levelVerticesBuffers->size();
   }
 
-  IByteBuffer* colors   = IFactory::instance()->createByteBuffer( pointsCount * 3);
+  IByteBuffer* colors   = IFactory::instance()->createByteBuffer( pointsCount * 4);
   const double deltaHeight = maxHeight - minHeight;
   const int firstPointsCount = firstPointsVerticesBufferSize / 3;
 
@@ -783,10 +784,11 @@ PointCloudMesh* PointCloudsRenderer::PointCloudLeafNode::createMesh(double minHe
     const Color color = baseColor.wheelStep(wheelSize,
                                             mu->round(wheelSize * alpha) );
 
-    const int i3 = i*3;
-    colors->rawPut(i3 + 0, color.getRedByte());
-    colors->rawPut(i3 + 1, color.getGreenByte());
-    colors->rawPut(i3 + 2, color.getBlueByte());
+    const int i4 = i*4;
+    colors->rawPut(i4 + 0, color.getRedByte());
+    colors->rawPut(i4 + 1, color.getGreenByte());
+    colors->rawPut(i4 + 2, color.getBlueByte());
+    colors->rawPut(i4 + 2, (unsigned char) 255);
   }
 
   cursor = firstPointsCount * 3;
