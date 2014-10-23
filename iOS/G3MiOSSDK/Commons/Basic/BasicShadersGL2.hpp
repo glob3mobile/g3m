@@ -285,16 +285,16 @@ public:
 "} \n ");
     this->add(sourcesNoColorMesh);
 
-    GPUProgramSources sourcesRGBColorMesh("RGBColorMesh",
+    GPUProgramSources sourcesRGBAColorMesh("RGBAColorMesh",
  emptyString +  
 "attribute vec4 aPosition; \n " + 
-"attribute vec3 aRGBColor; \n " + 
+"attribute vec4 aRGBAColor; \n " + 
 "uniform mat4 uModelview; \n " + 
 "uniform float uPointSize; \n " + 
 "varying vec4 VertexColor; \n " + 
 "void main() { \n " + 
 "gl_Position = uModelview * aPosition; \n " + 
-"VertexColor = vec4(aRGBColor.x, aRGBColor.y, aRGBColor.z, 1.0); \n " + 
+"VertexColor = vec4(aRGBAColor.x, aRGBAColor.y, aRGBAColor.z, aRGBAColor.w); \n " + 
 "gl_PointSize = uPointSize; \n " + 
 "} \n ",
  emptyString +  
@@ -302,7 +302,7 @@ public:
 "void main() { \n " + 
 "gl_FragColor = VertexColor; \n " + 
 "} \n ");
-    this->add(sourcesRGBColorMesh);
+    this->add(sourcesRGBAColorMesh);
 
     GPUProgramSources sourcesShader("Shader",
  emptyString +  

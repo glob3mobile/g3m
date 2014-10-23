@@ -5,7 +5,7 @@
 //
 
 attribute vec4 aPosition;
-attribute vec3 aRGBColor;
+attribute vec4 aRGBAColor;
 
 uniform mat4 uModelview;
 
@@ -15,6 +15,6 @@ varying vec4 VertexColor;
 
 void main() {
   gl_Position = uModelview * aPosition;
-  VertexColor = vec4(aRGBColor.x, aRGBColor.y, aRGBColor.z, 1.0);
+  VertexColor = vec4(aRGBAColor.x, aRGBAColor.y, aRGBAColor.z, aRGBAColor.w);
   gl_PointSize = uPointSize;
 }

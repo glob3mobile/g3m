@@ -1796,8 +1796,8 @@
 		D8FBCA971797F87900DBBB90 /* GLGlobalState.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; path = GLGlobalState.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		D8FDBDED19DAB67F00471141 /* PointCloudMesh.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PointCloudMesh.cpp; path = Commons/Mesh/PointCloudMesh.cpp; sourceTree = "<group>"; };
 		D8FDBDEE19DAB67F00471141 /* PointCloudMesh.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = PointCloudMesh.hpp; path = Commons/Mesh/PointCloudMesh.hpp; sourceTree = "<group>"; };
-		D8FDBDF019DAD00200471141 /* RGBColorMesh.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = RGBColorMesh.fsh; sourceTree = "<group>"; };
-		D8FDBDF119DAD00200471141 /* RGBColorMesh.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = RGBColorMesh.vsh; sourceTree = "<group>"; };
+		D8FDBDF019DAD00200471141 /* RGBAColorMesh.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = RGBAColorMesh.fsh; sourceTree = "<group>"; };
+		D8FDBDF119DAD00200471141 /* RGBAColorMesh.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = RGBAColorMesh.vsh; sourceTree = "<group>"; };
 		D8FEDAC615E7BD23007633A0 /* IMathUtils.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = IMathUtils.hpp; path = Commons/Interfaces/IMathUtils.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		D8FEDAC815E7C219007633A0 /* MathUtils_iOS.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = MathUtils_iOS.hpp; path = Specific/Derived/MathUtils_iOS.hpp; sourceTree = "<group>"; };
 		D8FFA4C1183D03CE004E4AF3 /* TransformedTexCoorTexturedMesh_DirectionLight.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = TransformedTexCoorTexturedMesh_DirectionLight.fsh; sourceTree = "<group>"; };
@@ -2758,8 +2758,8 @@
 		E70B56E016D3CCCD00C5FFFB /* Shaders */ = {
 			isa = PBXGroup;
 			children = (
-				D8FDBDF019DAD00200471141 /* RGBColorMesh.fsh */,
-				D8FDBDF119DAD00200471141 /* RGBColorMesh.vsh */,
+				D8FDBDF019DAD00200471141 /* RGBAColorMesh.fsh */,
+				D8FDBDF119DAD00200471141 /* RGBAColorMesh.vsh */,
 				D8B5533F18800D5A00C1B3B3 /* FullTransformedTexCoorMultiTexturedMesh.fsh */,
 				D8B5534018800D5A00C1B3B3 /* FullTransformedTexCoorMultiTexturedMesh.vsh */,
 				D8CE5D36173BB68200C7AAE6 /* Billboard.fsh */,

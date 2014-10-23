@@ -50,6 +50,7 @@ enum GPUAttributeKey{
   TEXTURE_COORDS_2 = 4,
   TEXTURE_COORDS_3 = 5,
   RGB_COLOR = 6,
+  RGBA_COLOR = 7
 };
 
 class GPUVariable {

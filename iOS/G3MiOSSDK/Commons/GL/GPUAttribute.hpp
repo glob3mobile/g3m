@@ -493,4 +493,17 @@ public:
   GPUAttributeValueVecByte(buffer, 3, arrayElementSize, index, stride, normalized) {}
 };
 
+class GPUAttributeValueVec4Byte: public GPUAttributeValueVecByte {
+private:
+  ~GPUAttributeValueVec4Byte() {
+#ifdef JAVA_CODE
+    super.dispose();
+#endif
+  }
+  
+public:
+  GPUAttributeValueVec4Byte(IByteBuffer* buffer, int arrayElementSize, int index, int stride, bool normalized):
+  GPUAttributeValueVecByte(buffer, 4, arrayElementSize, index, stride, normalized) {}
+};
+
 #endif

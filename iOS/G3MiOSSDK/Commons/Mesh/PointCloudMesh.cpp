@@ -34,7 +34,7 @@ PointCloudMesh::PointCloudMesh(IFloatBuffer* points,
                                bool depthTest):
 _points(points),
 _ownsPoints(ownsPoints),
-_rgbColors(rgbColors),
+_rgbaColors(rgbColors),
 _ownsColors(ownsColors),
 _pointSize(pointSize),
 _depthTest(depthTest),
@@ -57,7 +57,7 @@ PointCloudMesh::~PointCloudMesh(){
     delete _points;
   }
   if (_ownsColors){
-    delete _rgbColors;
+    delete _rgbaColors;
   }
   _glState->_release();
   delete _boundingVolume;
@@ -79,8 +79,8 @@ void PointCloudMesh::createGLState() {
   _glState->addGLFeature(_geometryGLFeature,
                          false);
   
-  _glState->addGLFeature(new ColorGLFeature(_rgbColors,// The attribute is a byte vector of 3 elements RGB
-                                            3,            // Our buffer contains elements of 3
+  _glState->addGLFeature(new ColorGLFeature(_rgbaColors,// The attribute is a byte vector of 4 elements RGBA
+                                            4,            // Our buffer contains elements of 4
                                             0,            // Index 0
                                             true,        // No need to normalize
                                             0,            // Stride 0

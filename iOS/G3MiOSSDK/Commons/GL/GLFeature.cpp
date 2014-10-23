@@ -304,8 +304,8 @@ ColorGLFeature::ColorGLFeature(IByteBuffer* colors,
                int dFactor):
 GLColorGroupFeature(GLF_COLOR, 3, blend, sFactor, dFactor)
 {
-  GPUAttributeValueVec3Byte* value = new GPUAttributeValueVec3Byte(colors, arrayElementSize, index, stride, normalized);
-  _values->addAttributeValue(RGB_COLOR, value, false);
+  GPUAttributeValueVec4Byte* value = new GPUAttributeValueVec4Byte(colors, arrayElementSize, index, stride, normalized);
+  _values->addAttributeValue(RGBA_COLOR, value, false);
 }
 
 FlatColorGLFeature::FlatColorGLFeature(const Color& color,

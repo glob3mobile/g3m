@@ -23,7 +23,7 @@ class PointCloudMesh: public Mesh{
 private:
   IFloatBuffer*           _points;
   bool                    _ownsPoints;
-  IByteBuffer*            _rgbColors;
+  IByteBuffer*            _rgbaColors;
   bool                    _ownsColors;
   float                   _pointSize;
   bool                    _depthTest;
@@ -47,7 +47,7 @@ public:
   PointCloudMesh(IFloatBuffer* points,
                  bool ownsPoints,
                  const Vector3D& origin,
-                 IByteBuffer* rgbColors,
+                 IByteBuffer* rgbaColors,
                  bool ownsColors,
                  float pointSize = (float)1.0,
                  bool depthTest = true);
