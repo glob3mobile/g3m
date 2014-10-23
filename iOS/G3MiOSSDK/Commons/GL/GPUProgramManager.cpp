@@ -57,8 +57,16 @@ GPUProgram* GPUProgramManager::getNewProgram(GL* gl, int uniformsCode, int attri
   
   const bool hasRGBColor = GPUVariable::hasAttribute(attributesCode, RGB_COLOR);
   
+  const bool hasRGBAColor = GPUVariable::hasAttribute(attributesCode, RGBA_COLOR);
+  
+
+  
   if (hasRGBColor){
     return compileProgramWithName(gl, "RGBColorMesh");
+  }
+  
+  if (hasRGBAColor){
+    return compileProgramWithName(gl, "RGBAColorMesh");
   }
 
   if (billboard) {

@@ -384,9 +384,11 @@ Mesh* createSectorMesh(const Planet* planet,
     unsigned char r = (unsigned char)rand() % 256;
     unsigned char g = (unsigned char)rand() % 256;
     unsigned char b = (unsigned char)rand() % 256;
+    unsigned char a = 255;
     bbb.add((unsigned char)0); //R
     bbb.add((unsigned char)255); //G
     bbb.add((unsigned char)0); //B
+    bbb.add(a); //A
     
   }
   
@@ -397,6 +399,7 @@ Mesh* createSectorMesh(const Planet* planet,
   
   PointCloudMesh* pcm = new PointCloudMesh(points,
                                            true,
+                                           Vector3D::zero,
                                            colors,
                                            true,
                                            10.0,
@@ -453,6 +456,7 @@ Mesh* createSectorMesh(const Planet* planet,
         
         _mesh = new PointCloudMesh(points,
                                    true,
+                                   Vector3D::zero,
                                    colors,
                                    true,
                                    10.0,
@@ -848,6 +852,7 @@ public:
     
     PointCloudMesh* pcm = new PointCloudMesh(points,
                                              true,
+                                             Vector3D::zero,
                                              colors,
                                              true,
                                              10.0,
@@ -890,6 +895,7 @@ public:
           bbb.add((unsigned char)r); //R
           bbb.add((unsigned char)g); //G
           bbb.add((unsigned char)b); //B
+          bbb.add((unsigned char)255); //A
           
         }
         
@@ -898,6 +904,7 @@ public:
         
         _mesh = new PointCloudMesh(points,
                                    true,
+                                   Vector3D::zero,
                                    colors,
                                    true,
                                    10.0,

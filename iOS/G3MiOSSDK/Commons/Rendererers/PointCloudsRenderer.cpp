@@ -492,15 +492,16 @@ long long PointCloudsRenderer::PointCloudInnerNode::rawRender(const PointCloud* 
       pointsBuffer->rawPut(1, (float) (average._y - averageY) );
       pointsBuffer->rawPut(2, (float) (average._z - averageZ) );
       
-      IByteBuffer* rgbColors = rc->getFactory()->createByteBuffer(3);
-      rgbColors->rawPut(0, (unsigned char)255);
-      rgbColors->rawPut(1, (unsigned char)255);
-      rgbColors->rawPut(2, (unsigned char)0);
+      IByteBuffer* rgbaColors = rc->getFactory()->createByteBuffer(3);
+      rgbaColors->rawPut(0, (unsigned char)255);
+      rgbaColors->rawPut(1, (unsigned char)255);
+      rgbaColors->rawPut(2, (unsigned char)0);
+      rgbaColors->rawPut(2, (unsigned char)255);
       
       _mesh = new PointCloudMesh(pointsBuffer,
                                  true,
                                  Vector3D(averageX, averageY, averageZ),
-                                 rgbColors,
+                                 rgbaColors,
                                  true,
                                  pointSize * 2,
                                  true);
@@ -716,7 +717,7 @@ PointCloudMesh* PointCloudsRenderer::PointCloudLeafNode::createMesh(double minHe
     if (_firstPointsColorsBuffer == NULL) {
       const double deltaHeight = maxHeight - minHeight;
 
-      _firstPointsColorsBuffer = IFactory::instance()->createByteBuffer(firstPointsCount * 3);
+      _firstPointsColorsBuffer = IFactory::instance()->createByteBuffer(firstPointsCount * 4);
       for (int i = 0; i < firstPointsCount; i++) {
         const float height = _firstPointsHeightsBuffer->get(i);
         const float alpha = (float) ((height - minHeight) / deltaHeight);
@@ -724,7 +725,7 @@ PointCloudMesh* PointCloudsRenderer::PointCloudLeafNode::createMesh(double minHe
         const Color color = baseColor.wheelStep(wheelSize,
                                                 mu->round(wheelSize * alpha) );
 
-        const int i3 = i*3;
+        const int i4 = i*4;
         _firstPointsColorsBuffer->rawPut(i3 + 0, color.getRedByte());
         _firstPointsColorsBuffer->rawPut(i3 + 1, color.getGreenByte());
         _firstPointsColorsBuffer->rawPut(i3 + 2, color.getBlueByte());
