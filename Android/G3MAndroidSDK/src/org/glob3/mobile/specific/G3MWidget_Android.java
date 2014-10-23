@@ -37,7 +37,7 @@ import org.glob3.mobile.generated.TimeInterval;
 import org.glob3.mobile.generated.Touch;
 import org.glob3.mobile.generated.TouchEvent;
 import org.glob3.mobile.generated.TouchEventType;
-import org.glob3.mobile.generated.Vector2I;
+import org.glob3.mobile.generated.Vector2F;
 import org.glob3.mobile.generated.WidgetUserData;
 
 import android.opengl.GLSurfaceView;
@@ -49,10 +49,10 @@ import android.view.MotionEvent;
 
 
 public final class G3MWidget_Android
-         extends
-            GLSurfaceView
-         implements
-            OnGestureListener {
+extends
+GLSurfaceView
+implements
+OnGestureListener {
 
    private G3MWidget                  _g3mWidget;
    private ES2Renderer                _es2renderer;
@@ -78,7 +78,7 @@ public final class G3MWidget_Android
          final Thread currentThread = Thread.currentThread();
          if (currentThread != _openGLThread) {
             throw new RuntimeException("OpenGL code executed from a Non-OpenGL thread.  (OpenGLThread=" + _openGLThread
-                                       + ", CurrentThread=" + currentThread + ")");
+                     + ", CurrentThread=" + currentThread + ")");
          }
       }
    }
@@ -223,7 +223,7 @@ public final class G3MWidget_Android
    public void onLongPress(final MotionEvent e) {
       final MotionEvent.PointerCoords pc = new MotionEvent.PointerCoords();
       e.getPointerCoords(0, pc);
-      final Touch t = new Touch(new Vector2I((int) pc.x, (int) pc.y), new Vector2I(0, 0));
+      final Touch t = new Touch(new Vector2F(pc.x, pc.y), new Vector2F(0, 0));
       final TouchEvent te = TouchEvent.create(TouchEventType.LongPress, t);
 
       queueEvent(new Runnable() {
@@ -291,7 +291,7 @@ public final class G3MWidget_Android
 
       factory.add(new GPUProgramSources("FlatColor+DirectionLight", GL2Shaders._FlatColorMesh_DirectionLightVertexShader,
                GL2Shaders._FlatColorMesh_DirectionLightFragmentShader));
-      */
+       */
 
       return new GPUProgramManager(factory);
    }
