@@ -492,11 +492,11 @@ long long PointCloudsRenderer::PointCloudInnerNode::rawRender(const PointCloud* 
       pointsBuffer->rawPut(1, (float) (average._y - averageY) );
       pointsBuffer->rawPut(2, (float) (average._z - averageZ) );
       
-      IByteBuffer* rgbaColors = rc->getFactory()->createByteBuffer(3);
+      IByteBuffer* rgbaColors = rc->getFactory()->createByteBuffer(4);
       rgbaColors->rawPut(0, (unsigned char)255);
       rgbaColors->rawPut(1, (unsigned char)255);
       rgbaColors->rawPut(2, (unsigned char)0);
-      rgbaColors->rawPut(2, (unsigned char)255);
+      rgbaColors->rawPut(3, (unsigned char)255);
       
       _mesh = new PointCloudMesh(pointsBuffer,
                                  true,
@@ -729,7 +729,7 @@ PointCloudMesh* PointCloudsRenderer::PointCloudLeafNode::createMesh(double minHe
         _firstPointsColorsBuffer->rawPut(i4 + 0, color.getRedByte());
         _firstPointsColorsBuffer->rawPut(i4 + 1, color.getGreenByte());
         _firstPointsColorsBuffer->rawPut(i4 + 2, color.getBlueByte());
-        _firstPointsColorsBuffer->rawPut(i4 + 2, (unsigned char) 255);
+        _firstPointsColorsBuffer->rawPut(i4 + 3, (unsigned char) 255);
       }
     }
     
@@ -788,10 +788,10 @@ PointCloudMesh* PointCloudsRenderer::PointCloudLeafNode::createMesh(double minHe
     colors->rawPut(i4 + 0, color.getRedByte());
     colors->rawPut(i4 + 1, color.getGreenByte());
     colors->rawPut(i4 + 2, color.getBlueByte());
-    colors->rawPut(i4 + 2, (unsigned char) 255);
+    colors->rawPut(i4 + 3, (unsigned char) 255);
   }
 
-  cursor = firstPointsCount * 3;
+  cursor = firstPointsCount * 4;
   for (int level = _preloadedLevel+1; level <= _currentLoadedLevel; level++) {
     IFloatBuffer* levelHeightsBuffers = _levelsHeightsBuffers[level];
     for (int i = 0; i < _levelsPointsCount[level]; i++) {
@@ -801,10 +801,11 @@ PointCloudMesh* PointCloudsRenderer::PointCloudLeafNode::createMesh(double minHe
       const Color color = baseColor.wheelStep(wheelSize,
                                               mu->round(wheelSize * alpha) );
 
-      const int offset = cursor + i*3;
+      const int offset = cursor + i*4;
       colors->rawPut(offset + 0, color.getRedByte());
       colors->rawPut(offset + 1, color.getGreenByte());
       colors->rawPut(offset + 2, color.getBlueByte());
+      colors->rawPut(offset + 3, (unsigned char) 255);
     }
     cursor += _levelsPointsCount[level] * 3;
   }

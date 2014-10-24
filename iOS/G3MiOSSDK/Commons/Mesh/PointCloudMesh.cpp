@@ -28,13 +28,13 @@
 PointCloudMesh::PointCloudMesh(IFloatBuffer* points,
                                bool ownsPoints,
                                const Vector3D& origin,
-                               IByteBuffer* rgbColors,
+                               IByteBuffer* rgbaColors,
                                bool ownsColors,
                                float pointSize,
                                bool depthTest):
 _points(points),
 _ownsPoints(ownsPoints),
-_rgbaColors(rgbColors),
+_rgbaColors(rgbaColors),
 _ownsColors(ownsColors),
 _pointSize(pointSize),
 _depthTest(depthTest),
@@ -45,7 +45,7 @@ _geometryGLFeature(NULL),
 _origin(origin),
 _renderVerticesCount(_nPoints)
 {
-  if (_nPoints != (rgbColors->size() / 3)){
+  if (_nPoints != (_rgbaColors->size() / 4)){
     ILogger::instance()->logError("Wrong parameters for PointCloudMesh()");
   }
   
@@ -79,10 +79,10 @@ void PointCloudMesh::createGLState() {
   _glState->addGLFeature(_geometryGLFeature,
                          false);
   
-  _glState->addGLFeature(new ColorGLFeature(_rgbaColors,// The attribute is a byte vector of 4 elements RGBA
+  _glState->addGLFeature(new ColorGLFeature(_rgbaColors,  // The attribute is a byte vector of 4 elements RGBA
                                             4,            // Our buffer contains elements of 4
                                             0,            // Index 0
-                                            true,        // No need to normalize
+                                            true,         // Need to normalize
                                             0,            // Stride 0
                                             true, GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha()),
                          false);
