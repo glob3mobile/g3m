@@ -701,7 +701,7 @@ public class PointCloudsRenderer extends DefaultRenderer
             _levelsHeightsBuffers[i] = null;
           }
           _currentLoadedLevel = _neededLevel;
-    //      ILogger::instance()->logInfo("node %s changed _currentLoadedLevel=%d (2)", _id.c_str(), _currentLoadedLevel);
+          ILogger.instance().logInfo("node %s changed _currentLoadedLevel=%d (2)", _id, _currentLoadedLevel);
           if (_mesh != null)
              _mesh.dispose();
           _mesh = null;
@@ -832,7 +832,7 @@ public class PointCloudsRenderer extends DefaultRenderer
           _levelsHeightsBuffers[i] = null;
         }
         _currentLoadedLevel = _preloadedLevel;
-    //    ILogger::instance()->logInfo("node %s changed _currentLoadedLevel=%d (3)", _id.c_str(), _currentLoadedLevel);
+        ILogger.instance().logInfo("node %s changed _currentLoadedLevel=%d (3)", _id, _currentLoadedLevel);
       }
     }
 
@@ -880,7 +880,7 @@ public class PointCloudsRenderer extends DefaultRenderer
         _levelsHeightsBuffers[level] = heightsBuffer;
     
         _currentLoadedLevel = level;
-    //    ILogger::instance()->logInfo("node %s changed _currentLoadedLevel=%d (1)", _id.c_str(), _currentLoadedLevel);
+        ILogger.instance().logInfo("node %s changed _currentLoadedLevel=%d (1)", _id, _currentLoadedLevel);
     
         if (_mesh != null)
            _mesh.dispose();
