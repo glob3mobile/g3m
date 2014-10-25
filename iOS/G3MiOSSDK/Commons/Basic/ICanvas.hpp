@@ -31,9 +31,22 @@ enum StrokeJoin {
 
 class ICanvas {
 protected:
+  const bool _scaleToDeviceResolution;
+
   int _canvasWidth;
   int _canvasHeight;
+
   GFont* _currentFont;
+
+
+  ICanvas(bool scaleToDeviceResolution) :
+  _scaleToDeviceResolution(scaleToDeviceResolution),
+  _canvasWidth(-1),
+  _canvasHeight(-1),
+  _currentFont(NULL)
+  {
+  }
+
 
   bool isInitialized() const {
     return (_canvasWidth > 0) && (_canvasHeight > 0);
@@ -141,13 +154,6 @@ protected:
 
 
 public:
-  ICanvas() :
-  _canvasWidth(-1),
-  _canvasHeight(-1),
-  _currentFont(NULL)
-  {
-  }
-
   virtual ~ICanvas();
 
   /**

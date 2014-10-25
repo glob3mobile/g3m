@@ -38,19 +38,19 @@ private:
 
 public:
 
-  static const GFont serif(float size   = 20,
+  static const GFont serif(float size   = 18,
                            bool  bold   = false,
                            bool  italic = false) {
     return GFont(GFont::SERIF, size, bold, italic);
   }
 
-  static const GFont sansSerif(float size   = 20,
+  static const GFont sansSerif(float size   = 18,
                                bool  bold   = false,
                                bool  italic = false) {
     return GFont(GFont::SANS_SERIF, size, bold, italic);
   }
 
-  static const GFont monospaced(float size   = 20,
+  static const GFont monospaced(float size   = 18,
                                 bool  bold   = false,
                                 bool  italic = false) {
     return GFont(GFont::MONOSPACED, size, bold, italic);

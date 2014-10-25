@@ -15,6 +15,8 @@
 
 class Canvas_iOS : public ICanvas {
 private:
+  CGFloat _scale;
+
   CGContextRef _context;
   UIFont*      _currentUIFont;
 
@@ -137,7 +139,8 @@ protected:
 
 
 public:
-  Canvas_iOS() :
+  Canvas_iOS(bool scaleToDeviceResolution) :
+  ICanvas(scaleToDeviceResolution),
   _context(NULL),
   _currentUIFont(nil),
   _path(NULL),

@@ -45,15 +45,36 @@ void Canvas_iOS::tryToSetCurrentFontToContext() {
 void Canvas_iOS::_initialize(int width, int height) {
   CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
 
+#warning Diego at work
+  _scale = 1;
+  if (_scaleToDeviceResolution) {
+    if ([[UIScreen mainScreen] respondsToSelector:@selector(displayLinkWithTarget:selector:)]) {
+      _scale = [UIScreen mainScreen].scale;
+    }
+  }
+
+  const int w = (int) ((width  * _scale) + 0.5);
+  const int h = (int) ((height * _scale) + 0.5);
+
   _context = CGBitmapContextCreate(NULL,       // memory created by Quartz
-                                   width,
-                                   height,
+                                   w,
+                                   h,
                                    8,          // bits per component
-                                   width * 4,  // bitmap bytes per row: 4 bytes per pixel
+                                   w * 4,  // bitmap bytes per row: 4 bytes per pixel
                                    colorSpace,
                                    kCGImageAlphaPremultipliedLast);
 
+  if (_scale != 1) {
+    CGContextScaleCTM(_context, _scale, _scale);
+  }
+
   CGColorSpaceRelease( colorSpace );
+
+  CGContextSetAllowsAntialiasing(_context, true);
+  CGContextSetAllowsFontSmoothing(_context, true);
+  CGContextSetInterpolationQuality(_context, kCGInterpolationHigh);
+  CGContextSetShouldAntialias(_context, true);
+
 
   if (_context == NULL) {
     ILogger::instance()->logError("Can't create CGContext");
@@ -316,13 +337,8 @@ UIFont* Canvas_iOS::createUIFont(const GFont& font) {
     return nil;
   }
 
-  CGFloat scale = 1;
-  if ([[UIScreen mainScreen] respondsToSelector:@selector(displayLinkWithTarget:selector:)]) {
-    scale = [UIScreen mainScreen].scale;
-  }
-
   return [UIFont fontWithName: fontName
-                         size: font.getSize() * scale];
+                         size: font.getSize() * _scale];
 }
 
 void Canvas_iOS::_setFont(const GFont& font) {
@@ -346,6 +362,7 @@ void Canvas_iOS::_fillText(const std::string& text,
   CGContextSaveGState(_context);
   CGContextTranslateCTM(_context, 0.0f, _canvasHeight);
   CGContextScaleCTM(_context, 1.0f, -1.0f);
+//  CGContextScaleCTM(_context, _scale, -_scale);
 
   NSString* nsText = [NSString stringWithCppString: text.c_str()];
 

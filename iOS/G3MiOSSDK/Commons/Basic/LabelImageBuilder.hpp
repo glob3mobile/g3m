@@ -41,16 +41,18 @@ private:
 public:
 
   LabelImageBuilder(const std::string& text,
-                    const GFont&       font            = GFont::sansSerif(),
-                    const float        margin          = 0,
-                    const Color&       color           = Color::white(),
-                    const Color&       shadowColor     = Color::transparent(),
-                    const float        shadowBlur      = 0,
-                    const float        shadowOffsetX   = 0,
-                    const float        shadowOffsetY   = 0,
-                    const Color&       backgroundColor = Color::transparent(),
-                    const float        cornerRadius    = 0,
-                    const bool         isMutable       = false) :
+                    const bool         scaleToDeviceResolution = true,
+                    const GFont&       font                    = GFont::sansSerif(),
+                    const float        margin                  = 0,
+                    const Color&       color                   = Color::white(),
+                    const Color&       shadowColor             = Color::transparent(),
+                    const float        shadowBlur              = 0,
+                    const float        shadowOffsetX           = 0,
+                    const float        shadowOffsetY           = 0,
+                    const Color&       backgroundColor         = Color::transparent(),
+                    const float        cornerRadius            = 0,
+                    const bool         isMutable               = false) :
+  AbstractImageBuilder(scaleToDeviceResolution),
   _text(text),
   _font(font),
   _margin(margin),

@@ -36,7 +36,7 @@ void IImageUtils::scale(int width,
                       autodelete);
   }
   else {
-    ICanvas* canvas = IFactory::instance()->createCanvas();
+    ICanvas* canvas = IFactory::instance()->createCanvas(false);
     canvas->initialize(width, height);
 
     canvas->drawImage(image,
@@ -61,7 +61,7 @@ void IImageUtils::subImage(const IImage* image,
                       autodelete);
   }
   else {
-    ICanvas* canvas = IFactory::instance()->createCanvas();
+    ICanvas* canvas = IFactory::instance()->createCanvas(false);
 
     const IMathUtils* mu = IMathUtils::instance();
     canvas->initialize(mu->round(rect._width),
@@ -115,7 +115,7 @@ void IImageUtils::combine(int width,
   }
 
 
-  ICanvas* canvas = IFactory::instance()->createCanvas();
+  ICanvas* canvas = IFactory::instance()->createCanvas(false);
   canvas->initialize(width, height);
 
   for (int i = 0; i < imagesSize ; i++) {

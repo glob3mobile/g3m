@@ -32,7 +32,7 @@ ICanvas* CanvasImageBuilder::getCanvas(const G3MContext* context) {
 
     const IFactory* factory = context->getFactory();
 
-    _canvas = factory->createCanvas();
+    _canvas = factory->createCanvas(_scaleToDeviceResolution);
     _canvas->initialize(_width, _height);
     _canvasWidth = _width;
     _canvasHeight = _height;

@@ -27,7 +27,9 @@ protected:
   const int _width;
   const int _height;
 
-  CanvasImageBuilder(int width, int height) :
+  CanvasImageBuilder(int width, int height,
+                     bool scaleToDeviceResolution) :
+  AbstractImageBuilder(scaleToDeviceResolution),
   _width(width),
   _height(height),
   _canvas(NULL),

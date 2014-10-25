@@ -77,12 +77,15 @@ public:
                                 URL("http://openweathermap.org/img/w/" + icon),
                                 position,
                                 RELATIVE_TO_GROUND,
-                                0,
-                                true,
-                                14);
+                                0,                              // minDistanceToCamera
+                                true,                           // labelBottom
+                                13,                             // labelFontSize
+                                Color::newFromRGBA(1, 1, 1, 1), // labelFontColor
+                                Color::newFromRGBA(0, 0, 0, 1), // labelShadowColor
+                                -10                             // labelGapSize
+                                );
 
           _scene->addMark(mark);
-
         }
       }
 
@@ -125,17 +128,21 @@ void G3MMarkersDemoScene::rawActivate(const G3MContext* context) {
 
   IDownloader* downloader = context->getDownloader();
 
-  _requestId = downloader->requestBuffer(URL("http://openweathermap.org/data/2.1/find/city?bbox=-80,-180,80,180,4&cluster=yes"),
+  _requestId = downloader->requestBuffer(//URL("http://openweathermap.org/data/2.1/find/city?bbox=-80,-180,80,180,4&cluster=yes"),
+                                         URL("http://openweathermap.org/data/2.1/find/city?cluster=yes"),
                                          DownloadPriority::HIGHEST,
                                          TimeInterval::fromHours(1),
                                          true,
                                          new G3MMarkersDemoScene_BufferDownloadListener(this),
                                          true);
 
-  g3mWidget->setAnimatedCameraPosition(Geodetic3D::fromDegrees(23.2, 5.5, 3643920),
-                                       Angle::zero(), // heading
-                                       //Angle::fromDegrees(30) // pitch
-                                       Angle::fromDegrees(30 - 90) // pitch
+  g3mWidget->setAnimatedCameraPosition(//Geodetic3D::fromDegrees(23.2, 5.5, 3643920),
+                                       Geodetic3D::fromDegrees(53.597834071333302575,
+                                                               -2.2514959129763907342,
+                                                               146127),
+                                       Angle::zero(),          // heading
+                                       //Angle::fromDegrees(-60) // pitch
+                                       Angle::fromDegrees(-27) // pitch
                                        );
 }
 

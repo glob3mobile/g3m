@@ -109,7 +109,7 @@ void GEOVectorTileImageProvider::rasterize(const TileImageContribution* contribu
                                            int resolutionHeight,
                                            TileImageListener* listener,
                                            bool deleteListener) {
-  ICanvas* canvas = IFactory::instance()->createCanvas();
+  ICanvas* canvas = IFactory::instance()->createCanvas(false);
   canvas->initialize(resolutionWidth, resolutionHeight);
 
   GEORasterProjection* projection = new GEORasterProjection(tileSector,

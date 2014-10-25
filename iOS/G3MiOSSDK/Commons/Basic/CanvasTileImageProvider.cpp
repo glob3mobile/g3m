@@ -35,7 +35,7 @@ ICanvas* CanvasTileImageProvider::getCanvas(int width,
       (_canvasHeight != height)) {
     delete _canvas;
 
-    _canvas = IFactory::instance()->createCanvas();
+    _canvas = IFactory::instance()->createCanvas(false);
     _canvas->initialize(width, height);
 
     _canvasWidth  = width;

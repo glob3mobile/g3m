@@ -437,7 +437,7 @@ void DTT_TileImageListener::imageCreated(const std::string&           tileId,
     
     //ILogger::instance()->logInfo("DTT_TileImageListener received image that does not fit tile. Building new Image....");
     
-    ICanvas* canvas = IFactory::instance()->createCanvas();
+    ICanvas* canvas = IFactory::instance()->createCanvas(false);
     
     const int _width =  _tileTextureResolution._x;
     

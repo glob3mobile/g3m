@@ -78,7 +78,7 @@ void LabelImageBuilder::build(const G3MContext* context,
                               IImageBuilderListener* listener,
                               bool deleteListener) {
 
-  ICanvas* canvas = context->getFactory()->createCanvas();
+  ICanvas* canvas = context->getFactory()->createCanvas(_scaleToDeviceResolution);
 
   canvas->setFont(_font);
 

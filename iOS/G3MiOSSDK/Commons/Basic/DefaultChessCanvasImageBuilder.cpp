@@ -16,7 +16,7 @@ DefaultChessCanvasImageBuilder::DefaultChessCanvasImageBuilder(int width,
                                                                const Color& backgroundColor,
                                                                const Color& boxColor,
                                                                int splits) :
-  CanvasImageBuilder(width, height),
+  CanvasImageBuilder(width, height, false),
   _backgroundColor(backgroundColor),
   _boxColor(boxColor),
   _splits(splits)

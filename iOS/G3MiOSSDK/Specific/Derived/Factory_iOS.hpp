@@ -98,8 +98,8 @@ public:
     return new ShortBuffer_iOS(size);
   }
 
-  ICanvas* createCanvas() const {
-    return new Canvas_iOS();
+  ICanvas* createCanvas(bool scaleToDeviceResolution) const {
+    return new Canvas_iOS(scaleToDeviceResolution);
   }
 
   IWebSocket* createWebSocket(const URL& url,

@@ -230,7 +230,7 @@ void CompositeTileImageProvider::Composer::mixResult() {
     return;
   }
 
-  ICanvas* canvas = IFactory::instance()->createCanvas();
+  ICanvas* canvas = IFactory::instance()->createCanvas(false);
 
   canvas->initialize(_width, _height);
   

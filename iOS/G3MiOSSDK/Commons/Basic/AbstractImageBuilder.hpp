@@ -18,10 +18,13 @@ private:
   ChangedListener* _listener;
 
 protected:
+  const bool _scaleToDeviceResolution;
+
   void changed();
 
 public:
-  AbstractImageBuilder() :
+  AbstractImageBuilder(bool scaleToDeviceResolution) :
+  _scaleToDeviceResolution(scaleToDeviceResolution),
   _listener(NULL)
   {
   }

@@ -85,7 +85,7 @@ void ChessboardTileImageProvider::create(const Tile* tile,
     const int width = resolution._x;
     const int height = resolution._y;
 
-    ICanvas* canvas = IFactory::instance()->createCanvas();
+    ICanvas* canvas = IFactory::instance()->createCanvas(false);
     canvas->initialize(width, height);
 
     canvas->setFillColor(_backgroundColor);

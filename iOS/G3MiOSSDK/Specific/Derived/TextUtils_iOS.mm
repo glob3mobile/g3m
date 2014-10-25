@@ -96,9 +96,14 @@ void TextUtils_iOS::labelImage(const IImage* image,
                      autodelete);
   }
   else {
+    CGFloat scale = 1;
+    if ([[UIScreen mainScreen] respondsToSelector:@selector(displayLinkWithTarget:selector:)]) {
+      scale = [UIScreen mainScreen].scale;
+    }
+
     NSString* text = [NSString stringWithCppString: label];
 
-    UIFont *font = [UIFont systemFontOfSize: fontSize];
+    UIFont *font = [UIFont systemFontOfSize: fontSize * scale];
     CGSize textSize = [text sizeWithFont: font];
 
     CGSize labelSize = (shadowColor == NULL) ? textSize : CGSizeMake(textSize.width + 2,

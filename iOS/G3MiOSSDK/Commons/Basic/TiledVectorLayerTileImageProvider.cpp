@@ -64,7 +64,7 @@ void TiledVectorLayerTileImageProvider::GEOJSONBufferRasterizer::rasterizeGEOObj
 
 void TiledVectorLayerTileImageProvider::GEOJSONBufferRasterizer::runInBackground(const G3MContext* context) {
   if (_imageAssembler != NULL) {
-    _canvas = IFactory::instance()->createCanvas();
+    _canvas = IFactory::instance()->createCanvas(false);
     _canvas->initialize(_imageWidth, _imageHeight);
 
     if (_geoObjectHolder != NULL) {
