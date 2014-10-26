@@ -54,7 +54,7 @@ public class ChessboardTileImageProvider extends TileImageProvider
       final int width = resolution._x;
       final int height = resolution._y;
   
-      ICanvas canvas = IFactory.instance().createCanvas();
+      ICanvas canvas = IFactory.instance().createCanvas(false);
       canvas.initialize(width, height);
   
       canvas.setFillColor(_backgroundColor);

@@ -50,7 +50,7 @@ public class GFont
   }
   public static GFont serif()
   {
-     return serif(20, false, false);
+     return serif(18, false, false);
   }
   public static GFont serif(float size, boolean bold, boolean italic)
   {
@@ -67,7 +67,7 @@ public class GFont
   }
   public static GFont sansSerif()
   {
-     return sansSerif(20, false, false);
+     return sansSerif(18, false, false);
   }
   public static GFont sansSerif(float size, boolean bold, boolean italic)
   {
@@ -84,7 +84,7 @@ public class GFont
   }
   public static GFont monospaced()
   {
-     return monospaced(20, false, false);
+     return monospaced(18, false, false);
   }
   public static GFont monospaced(float size, boolean bold, boolean italic)
   {

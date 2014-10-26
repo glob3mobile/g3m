@@ -22,6 +22,8 @@ public abstract class AbstractImageBuilder implements IImageBuilder
 {
   private ChangedListener _listener;
 
+  protected final boolean _scaleToDeviceResolution;
+
   protected final void changed()
   {
     if (_listener != null)
@@ -30,8 +32,9 @@ public abstract class AbstractImageBuilder implements IImageBuilder
     }
   }
 
-  public AbstractImageBuilder()
+  public AbstractImageBuilder(boolean scaleToDeviceResolution)
   {
+     _scaleToDeviceResolution = scaleToDeviceResolution;
      _listener = null;
   }
 

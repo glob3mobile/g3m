@@ -33,7 +33,7 @@ public abstract class CanvasImageBuilder extends AbstractImageBuilder
   
       final IFactory factory = context.getFactory();
   
-      _canvas = factory.createCanvas();
+      _canvas = factory.createCanvas(_scaleToDeviceResolution);
       _canvas.initialize(_width, _height);
       _canvasWidth = _width;
       _canvasHeight = _height;
@@ -52,8 +52,9 @@ public abstract class CanvasImageBuilder extends AbstractImageBuilder
   protected final int _width;
   protected final int _height;
 
-  protected CanvasImageBuilder(int width, int height)
+  protected CanvasImageBuilder(int width, int height, boolean scaleToDeviceResolution)
   {
+     super(scaleToDeviceResolution);
      _width = width;
      _height = height;
      _canvas = null;
