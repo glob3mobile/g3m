@@ -30,9 +30,6 @@ public:
 	virtual ~GPUUniform_D3D(){
 		_buffer->Release();
 		delete _buffer;
-#ifdef JAVA_CODE
-		super.dispose();
-#endif
 	}
 
 };
@@ -41,9 +38,9 @@ public:
 //GPUUniformBool_D3D
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 class GPUUniformBool_D3D : public GPUUniform_D3D {
-	struct cbBool
+	Float4Align struct cbBool
 	{
-		Float4Align int value;
+		 int value;
 	};
 
 private:
@@ -99,11 +96,11 @@ public:
 //GPUUniformVec3Float_D3D
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 class GPUUniformVec3Float_D3D : public GPUUniform_D3D{
-	struct cbFloat3
+	Float4Align struct cbFloat3
 	{
-		Float4Align float _x;
-		Float4Align float _y;
-		Float4Align float _z;
+		 float _x;
+		 float _y;
+		 float _z;
 	};
 private:
 	cbFloat3 _valueStruct;
@@ -121,10 +118,11 @@ public:
 //GPUUniformVec2Float_D3D
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 class GPUUniformVec2Float_D3D : public GPUUniform_D3D{
-	struct cbFloat2
+	Float4Align struct cbFloat2
+	//struct cbFloat2
 	{
-		Float4Align float _x;
-		Float4Align float _y;
+		 float _x;
+		 float _y;
 	};
 private:
 	cbFloat2 _valueStruct;
@@ -142,9 +140,9 @@ public:
 //GPUUniformFloat_D3D
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 class GPUUniformFloat_D3D : public GPUUniform_D3D{
-	struct cbFloat
+	Float4Align struct cbFloat
 	{
-		Float4Align float value;
+		 float value;
 	};
 
 private:
@@ -158,5 +156,19 @@ public:
 	void createD3D11Buffer();
 	void applyChanges(GL* gl);
 };
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//GPUUniformSampler2D_D3D
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+class GPUUniformSampler2D_D3D : public GPUUniform_D3D{
+public:
+	GPUUniformSampler2D_D3D(const std::string&name, IGLUniformID* id, NativeGL_win8* ngl) : GPUUniform_D3D(name, id, GLType::glInt(), ngl){
+
+	}
+	~GPUUniformSampler2D_D3D(){}
+	void createD3D11Buffer();
+	void applyChanges(GL* gl);
+};
+
 
 #endif

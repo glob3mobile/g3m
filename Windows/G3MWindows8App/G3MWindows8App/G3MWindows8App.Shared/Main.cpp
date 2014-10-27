@@ -16,6 +16,7 @@
 #include "TileTexturizer.hpp"
 #include "DefaultTileTexturizer.hpp"
 #include "Image_win8.hpp"
+#include "OSMLayer.hpp"
 
 
 
@@ -101,14 +102,17 @@ public:
 
 		G3MBuilder_win8* _builder = new G3MBuilder_win8();
 		//_builder->setInitializationTask(new RueditaTask(), TRUE);
-		//_builder.getPlanetRendererBuilder().setLayerSet(createLayerSet());
 		//PlanetRendererBuilder* pbuilder = _builder->
 		//_builder->setDownloader(new DummyDownloader());
 		_builder->getPlanetRendererBuilder()->setLayerSet(createLayerset());
 		_builder->getPlanetRendererBuilder()->setForceFirstLevelTilesRenderOnStart(false);
+		_builder->getPlanetRendererBuilder()->setIncrementalTileQuality(true);
+		_builder->getPlanetRendererBuilder()->setQuality(QUALITY_LOW);
+		//_builder->getPlanetRendererBuilder()->setPlanetRendererParameters(getRenderTilesParameters());
 
-		//_builder->getPlanetRendererBuilder()->setDefaultTileBackGroundImage(new DownloaderImageBuilder(URL("file:///deathStarS.png")));
-		_builder->getPlanetRendererBuilder()->setDefaultTileBackGroundImage(new DownloaderImageBuilder(URL("http://www.freelogovectors.net/wp-content/uploads/2013/02/sheep-b.png")));
+		_builder->getPlanetRendererBuilder()->setDefaultTileBackGroundImage(new DownloaderImageBuilder(URL("file:///deathStarS.png")));
+		//_builder->getPlanetRendererBuilder()->setDefaultTileBackGroundImage(new DownloaderImageBuilder(URL("http://b.tile.openstreetmap.org/2/2/3.png")));
+		//_builder->getPlanetRendererBuilder()->setDefaultTileBackGroundImage(new DownloaderImageBuilder(URL("http://www.freelogovectors.net/wp-content/uploads/2013/02/sheep-b.png")));
 
 		//Image_win8* image = Image_win8::imageFromFile(URL("file:///deathStarS.png"));
 		
@@ -124,12 +128,36 @@ private:
 	LayerSet* createLayerset(){
 		LayerSet* ls = new LayerSet();
 
-		WMSLayer* layer = new WMSLayer("bmng200405", URL::nullURL(), WMSServerVersion::WMS_1_1_0,
-			Sector::fullSphere(), "image/jpeg", "EPSG:4326", "", false, new LevelTileCondition(0, 1),
-			TimeInterval::fromDays(30), true);
+		//Not working layer (in order to only show default background image)
+		/*WMSLayer* layer = new WMSLayer("bmng200405", URL::nullURL(), WMSServerVersion::WMS_1_1_0,
+			Sector::fullSphere(), "image/png", "EPSG:4326", "", false, new LevelTileCondition(0, 0),
+			TimeInterval::fromDays(30), true);*/
+
+		WMSLayer* layer = new WMSLayer("bmng200405",
+			URL("http://www.nasa.network.com/wms?", false),
+			WMS_1_1_0,
+			Sector::fullSphere(),
+			"image/png",
+			"EPSG:4326",
+			"",
+			false,
+			new LevelTileCondition(0, 0),
+			TimeInterval::fromDays(30),
+			true);
+
+
 
 		ls->addLayer(layer);
 		return ls;
+	}
+
+	TilesRenderParameters* getRenderTilesParameters(){
+		return new TilesRenderParameters(
+			false,//renderDebug
+			false,//useTilesSplitBudget
+			false,//forceFirstLevelTilesRenderOnStart
+			false,//incrementalTileQuality
+			QUALITY_LOW);
 	}
 	/////////////////////////////
 	//End Testing

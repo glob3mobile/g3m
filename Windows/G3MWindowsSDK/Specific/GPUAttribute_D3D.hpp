@@ -46,7 +46,7 @@ public:
 		return _value->_index;
 	}
 
-	void setDirty(boolean isDirty){
+	void setDirty(bool isDirty){
 		_dirty = isDirty;
 	}
 
@@ -54,7 +54,7 @@ public:
 	virtual void setInputLayoutDesc() = 0;
 	void set(const GPUAttributeValue* v);
 	virtual void createD3D11Buffer();
-	virtual void updateBuffer() = 0;
+	//virtual void updateBuffer() = 0;
 
 };
 
@@ -71,7 +71,7 @@ public:
 	}
 
 	void setInputLayoutDesc();
-	void updateBuffer();
+	//void updateBuffer();
 };
 
 class GPUAttributeVec2Float_D3D : public GPUAttribute_D3D{
@@ -86,7 +86,7 @@ public:
 	}
 
 	void setInputLayoutDesc();
-	void updateBuffer();
+	//void updateBuffer();
 };
 
 class GPUAttributeVec3Float_D3D : public GPUAttribute_D3D{
@@ -117,7 +117,7 @@ public:
 
 	void setInputLayoutDesc();
 	void createD3D11Buffer();
-	void updateBuffer();
+	//void updateBuffer();
 };
 
 #endif

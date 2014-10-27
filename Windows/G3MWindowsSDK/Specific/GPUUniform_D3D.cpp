@@ -11,8 +11,10 @@ void GPUUniform_D3D::unset() {
 		_value->_release();
 		_value = NULL;
 	}
-	_buffer->Release();
-	_buffer = NULL;
+	/*if (_buffer != NULL){
+		_buffer->Release();
+		_buffer = NULL;
+	}*/
 	_dirty = false;
 }
 
@@ -109,6 +111,11 @@ void GPUUniformMatrix4f_D3D::applyChanges(GL* gl){
 	//_ngl->getDeviceContext()->UpdateSubresource(_buffer, 0, NULL, matrixValue->getMatrixValue()->getRowMajorFloatArray(), 0, 0);
 
 	D3D11_MAPPED_SUBRESOURCE MSData;
+	if (_buffer == NULL){
+		ILogger::instance()->logError("_buffer is NULL (MAT4x4U)");
+		std::string errMsg("_buffer is NULL (MAT4x4U)");
+		throw std::exception(errMsg.c_str());
+	}
 	if (SUCCEEDED(_ngl->getDeviceContext()->Map(_buffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &MSData)))
 	{
 		// copy data over to constant buffer
@@ -160,6 +167,11 @@ void GPUUniformVec4Float_D3D::applyChanges(GL* gl){
 	_valueStruct._w = floatValue->getWValue();
 
 	D3D11_MAPPED_SUBRESOURCE MSData;
+	if (_buffer == NULL){
+		ILogger::instance()->logError("_buffer is NULL (4FloatU)");
+		std::string errMsg("_buffer is NULL (4FloatU)");
+		throw std::exception(errMsg.c_str());
+	}
 	if (SUCCEEDED(_ngl->getDeviceContext()->Map(_buffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &MSData)))
 	{
 		// copy data over to constant buffer
@@ -211,6 +223,11 @@ void GPUUniformVec3Float_D3D::applyChanges(GL* gl){
 	_valueStruct._z = floatValue->getZValue();
 
 	D3D11_MAPPED_SUBRESOURCE MSData;
+	if (_buffer == NULL){
+		ILogger::instance()->logError("_buffer is NULL (3FloatU)");
+		std::string errMsg("_buffer is NULL (3FloatU)");
+		throw std::exception(errMsg.c_str());
+	}
 	if (SUCCEEDED(_ngl->getDeviceContext()->Map(_buffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &MSData)))
 	{
 		// copy data over to constant buffer
@@ -259,6 +276,11 @@ void GPUUniformVec2Float_D3D::applyChanges(GL* gl){
 	_valueStruct._y = floatValue->getYValue();
 
 	D3D11_MAPPED_SUBRESOURCE MSData;
+	if (_buffer == NULL){
+		ILogger::instance()->logError("_buffer is NULL (2FloatU)");
+		std::string errMsg("_buffer is NULL (2FloatU)");
+		throw std::exception(errMsg.c_str());
+	}
 	if (SUCCEEDED(_ngl->getDeviceContext()->Map(_buffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &MSData)))
 	{
 		// copy data over to constant buffer
@@ -308,6 +330,11 @@ void GPUUniformFloat_D3D::applyChanges(GL* gl){
 
 
 	D3D11_MAPPED_SUBRESOURCE MSData;
+	if (_buffer == NULL){
+		ILogger::instance()->logError("_buffer is NULL (1FloatU)");
+		std::string errMsg("_buffer is NULL (1FloatU)");
+		throw std::exception(errMsg.c_str());
+	}
 	if (SUCCEEDED(_ngl->getDeviceContext()->Map(_buffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &MSData)))
 	{
 		// copy data over to constant buffer
@@ -322,4 +349,15 @@ void GPUUniformFloat_D3D::applyChanges(GL* gl){
 	}
 	GLUniformID_win8* id8 = (GLUniformID_win8*)getID();
 	_ngl->getDeviceContext()->VSSetConstantBuffers(id8->getID(), 1, &_buffer);
+}
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//GPUUniformSampler2D_D3D
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void GPUUniformSampler2D_D3D::createD3D11Buffer(){
+
+}
+void GPUUniformSampler2D_D3D::applyChanges(GL* gl){
+
 }

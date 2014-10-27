@@ -47,12 +47,12 @@ public class MainActivity
    private G3MWidget_Android createWidget() {
       final G3MBuilder_Android builder = new G3MBuilder_Android(this);
 
-      builder.getPlanetRendererBuilder().setLayerSet(createLayerset());
+      //builder.getPlanetRendererBuilder().setLayerSet(createLayerset());
       builder.getPlanetRendererBuilder().setForceFirstLevelTilesRenderOnStart(false);
 
       builder.getPlanetRendererBuilder().setDefaultTileBackGroundImage(
-      //               new DownloaderImageBuilder(new URL("http://www.freelogovectors.net/wp-content/uploads/2013/02/sheep-b.png")));
-               new DownloaderImageBuilder(new URL("file:///deathStarS.png")));
+               new DownloaderImageBuilder(new URL("http://www.freelogovectors.net/wp-content/uploads/2013/02/sheep-b.png")));
+      // new DownloaderImageBuilder(new URL("file:///deathStarS.png")));
 
       // builder.getPlanetRendererBuilder().setRenderDebug(true);
       // builder.getPlanetRendererBuilder().setLogTilesPetitions(true);
