@@ -75,21 +75,7 @@ GPUProgram_OGL* GPUProgram_OGL::createProgram(GL* gl,
 	return p;
 }
 
-void GPUProgram_OGL::onUnused(GL* gl) {
-	//ILogger::instance()->logInfo("GPUProgram %s unused", _name.c_str());
 
-	for (int i = 0; i < _nUniforms; i++) {
-		if (_createdUniforms[i] != NULL) { //Texture Samplers return null
-			_createdUniforms[i]->unset();
-		}
-	}
-
-	for (int i = 0; i < _nAttributes; i++) {
-		if (_createdAttributes[i] != NULL) {
-			_createdAttributes[i]->unset(gl);
-		}
-	}
-}
 
 /**
 Must be called before drawing to apply Uniforms and Attributes new values

@@ -68,6 +68,7 @@ private:
 	mutable D3D11_RENDER_TARGET_BLEND_DESC _rtblendDesc;
 	mutable bool _blendDescChanged = true;
 
+	mutable ID3D11SamplerState* _samplerState;
 	mutable D3D11_SAMPLER_DESC _samplerDesc;
 	mutable bool _samplerDescChanged = true;
 
@@ -75,6 +76,12 @@ private:
 
 	mutable int _sourceBlendColor = 1;
 	mutable int _destBlendColor = 1;
+
+	//textures
+	mutable unsigned int _currentTexture = -1;
+	//mutable D3D11_SUBRESOURCE_DATA* _dataSets;
+	mutable ID3D11Texture2D** _textures;
+	mutable ID3D11ShaderResourceView** _resourceViews;
 
 
 public:

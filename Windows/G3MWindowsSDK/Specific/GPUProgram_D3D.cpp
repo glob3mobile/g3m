@@ -13,13 +13,14 @@
 #include "GLUniformID_win8.hpp"
 #include "ILogger.hpp"
 #include "GPUUniform_D3D.hpp"
-#include "GPUAttribute_D3D.hpp""
+#include "GPUAttribute_D3D.hpp"
 
 
 GPUProgram_D3D::GPUProgram_D3D(GL* gl,
 	const std::string& name,
 	NativeGL_win8* ngl){
 
+	//Map that maps HLSL Semantics to data types -> should be moved to NativeGL_win8
 	m["BINORMAL"] = FLOAT4;
 	m["BLENDWEIGHT"] = FLOAT1;
 	m["COLOR"] = FLOAT4;
@@ -41,8 +42,10 @@ GPUProgram_D3D::GPUProgram_D3D(GL* gl,
 	hr=_ngl->getDevice()->CreateVertexShader(_vsData->Data, _vsData->Length, nullptr, &_vshader);
 	if (FAILED(hr)){
 		ILogger::instance()->logError("Error while creating Vertex shader " + vertexShaderName);
-		std::string errMsg("Error while creating Vertex shader");
-		throw std::exception(errMsg.c_str());
+		throw Platform::Exception::CreateException(hr);
+	}
+	else{
+		ILogger::instance()->logInfo("Loaded vertexShader with name " + name);
 	}
 
 	//Load pre-compiled pixel shader file
@@ -51,8 +54,10 @@ GPUProgram_D3D::GPUProgram_D3D(GL* gl,
 	hr=_ngl->getDevice()->CreatePixelShader(_psData->Data, _psData->Length, nullptr, &_pshader);
 	if (FAILED(hr)){
 		ILogger::instance()->logError("Error while creating Pixel shader " + pixelShaderName);
-		std::string errMsg("Error while creating Pixel shader");
-		throw std::exception(errMsg.c_str());
+		throw Platform::Exception::CreateException(hr);
+	}
+	else{
+		ILogger::instance()->logInfo("Loaded pixelShader with name " + name);
 	}
 
 	getVariables(gl);
@@ -61,8 +66,12 @@ GPUProgram_D3D::GPUProgram_D3D(GL* gl,
 }
 
 GPUProgram_D3D::~GPUProgram_D3D(){
-	std::string errMsg("TODO: Implementation");
-	throw std::exception(errMsg.c_str());
+
+	_vshader->Release();
+	_pshader->Release();
+	_inputLayout->Release();
+	delete _vsData;
+	delete _psData;
 }
 
 void GPUProgram_D3D::getVariables(GL* gl){
@@ -77,45 +86,79 @@ void GPUProgram_D3D::getShaderUniforms(GL* gl){
 	for (int i = 0; i < 32; i++) {
 		_uniforms[i] = NULL;
 	}
-
-	//Uniforms -> constant buffers
-	//1. Vertex Shader Uniforms
 	_uniformsCode = 0;
-	HRESULT hr = S_OK;
+	//Get array of uniforms from both vertex and pixel shader
+	GPUUniform_D3D** createdVSUniforms = getVSUniforms();
+	GPUUniform_D3D** createdPSUniforms = getPSUniforms();
+
+	//Combine all the uniforms
+	_nUniforms = _nvsUniforms + _npsUniforms;
+	_createdUniforms = new GPUUniform*[_nUniforms];
+	for (int i = 0; i < _nvsUniforms; i++){
+		_createdUniforms[i] = createdVSUniforms[i];
+	}
+	for (int i = 0; i < _npsUniforms; i++){
+		_createdUniforms[i + _nvsUniforms] = createdPSUniforms[i];
+	}
+	delete [] createdPSUniforms;
+	delete [] createdVSUniforms;
+}
+
+
+//Read back "Uniforms" (aka constant buffers) from compiled VERTEX shader
+GPUUniform_D3D** GPUProgram_D3D::getVSUniforms(){
+
+	HRESULT hr;
 	ID3D11ShaderReflection* vsReflector = NULL;
 	hr = D3DReflect(_vsData->Data, _vsData->Length, IID_ID3D11ShaderReflection, (void**)&vsReflector);
 	if (FAILED(hr)){
-		ILogger::instance()->logError("Error while calling D3DReflect");
-		std::string errMsg("Error while calling D3DReflect");
-		throw std::exception(errMsg.c_str());
+		ILogger::instance()->logError("Error while calling D3DReflect on Vertex Shader");
+		throw Platform::Exception::CreateException(hr);
 	}
 	D3D11_SHADER_DESC vsdesc;
-	vsReflector->GetDesc(&vsdesc);
+	hr = vsReflector->GetDesc(&vsdesc);
+	if (FAILED(hr)){
+		ILogger::instance()->logError("Error while getting Vertex Shader Description");
+		throw Platform::Exception::CreateException(hr);
+	}
 
-	int _nvsUniforms = vsdesc.ConstantBuffers;
+	_nvsUniforms = vsdesc.ConstantBuffers;
 	int counter = 0;
-	//GPUUniform** _createdVSUniforms = new GPUUniform*[_nvsUniforms];
-	GPUUniform_D3D** _createdVSUniforms = new GPUUniform_D3D*[_nvsUniforms];
-	//ILogger::instance()->logInfo("--Vertex Shader has %i Uniforms.", _nvsUniforms);
+	//Create array of uniforms
+	GPUUniform_D3D** createdVSUniforms = new GPUUniform_D3D*[_nvsUniforms];
 	for (int i = 0; i < _nvsUniforms; i++) {
-		//get the cbuffer i
+
+		//get the cbuffer (->Uniform) i
 		ID3D11ShaderReflectionConstantBuffer* constBuffer = vsReflector->GetConstantBufferByIndex(i);
+
 		//get its description
 		D3D11_SHADER_BUFFER_DESC cbufferdesc;
-		constBuffer->GetDesc(&cbufferdesc);
-		//std::string name = cbufferdesc.Name;
-		//ILogger::instance()->logInfo("Name of the constant buffer: " + name);
+		hr = constBuffer->GetDesc(&cbufferdesc);
+		if (FAILED(hr)){
+			ILogger::instance()->logError("Error while getting Description of Vertex Shader Constant Buffer %i", i);
+			throw Platform::Exception::CreateException(hr);
+		}
+
+		//Since we are doing one cBuffer per uniform, this loop should only run once...
 		for (UINT j = 0; j < cbufferdesc.Variables; j++){
 
 			//Extract variable (and corresponding _desc) from cBuffer
 			ID3D11ShaderReflectionVariable* cbufferVariable = constBuffer->GetVariableByIndex(j);
 			D3D11_SHADER_VARIABLE_DESC cbufferVariable_desc;
-			cbufferVariable->GetDesc(&cbufferVariable_desc);
+			hr = cbufferVariable->GetDesc(&cbufferVariable_desc);
+			if (FAILED(hr)){
+				ILogger::instance()->logError("Error while getting Decription of Vertex Shader Constant Buffer variable description");
+				throw Platform::Exception::CreateException(hr);
+			}
 
-
+			//Extract Type description
 			ID3D11ShaderReflectionType* pType = cbufferVariable->GetType();
-			D3D11_SHADER_TYPE_DESC type_desc;   
-			pType->GetDesc(&type_desc);
+			D3D11_SHADER_TYPE_DESC type_desc;
+			hr = pType->GetDesc(&type_desc);
+			if (FAILED(hr)){
+				ILogger::instance()->logError("Error while getting Decription of Vertex Shader cBuffer type description");
+				throw Platform::Exception::CreateException(hr);
+			}
 
 			//get the name from the variableDesc
 			std::string vname = cbufferVariable_desc.Name;
@@ -129,51 +172,88 @@ void GPUProgram_D3D::getShaderUniforms(GL* gl){
 				const int code = GPUVariable::getUniformCode(u->_key);
 				_uniformsCode = _uniformsCode | code;
 			}
-			_createdVSUniforms[counter++] = u; //Adding to created uniforms array
+			createdVSUniforms[counter++] = u; //Adding to created uniforms array
+
 		}
 	}
+	return createdVSUniforms;
+}
 
-	//2. Pixel Shader Uniforms
+//Read back "Uniforms" (aka constant buffers) from compiled PIXEL shader
+GPUUniform_D3D** GPUProgram_D3D::getPSUniforms(){
+	HRESULT hr;
 	ID3D11ShaderReflection* psReflector = NULL;
 	hr = D3DReflect(_psData->Data, _psData->Length, IID_ID3D11ShaderReflection, (void**)&psReflector);
 	if (FAILED(hr)){
 		ILogger::instance()->logError("Error while calling D3DReflect");
-		std::string errMsg("Error while calling D3DReflect");
-		throw std::exception(errMsg.c_str());
+		throw Platform::Exception::CreateException(hr);
 	}
-	D3D11_SHADER_DESC psdesc;
-	psReflector->GetDesc(&psdesc);
 
-	int _npsUniforms = psdesc.ConstantBuffers;
-	counter = 0;
-	GPUUniform_D3D** _createdPSUniforms = new GPUUniform_D3D*[_npsUniforms];
-	//ILogger::instance()->logInfo("--Pixel Shader has %i Uniforms.", _npsUniforms);
+	D3D11_SHADER_DESC psdesc;
+	hr = psReflector->GetDesc(&psdesc);
+	if (FAILED(hr)){
+		ILogger::instance()->logError("Error while getting Pixel Shader Description");
+		throw Platform::Exception::CreateException(hr);
+	}
+
+	//find out if/how many samplers are present, and their names
+	int boundres = psdesc.BoundResources;
+	ILogger::instance()->logInfo("pixel shader bound resources: %i", boundres);
+	int numSamplers = 0;
+	std::string samplername;  //TODO: more than 1 sampler
+	for (int i = 0; i < boundres; i++){
+		D3D11_SHADER_INPUT_BIND_DESC sibd;
+		hr = psReflector->GetResourceBindingDesc(i, &sibd);
+		if (FAILED(hr)){
+			ILogger::instance()->logError("Error getResourceBindingDesc slot %i ", i);
+			throw Platform::Exception::CreateException(hr);
+		}
+		if (sibd.Type == D3D_SIT_SAMPLER){
+			numSamplers++;
+			samplername = sibd.Name;
+			ILogger::instance()->logInfo("Sampler at resource slot %i with name: " + samplername, i);
+		}		
+	}
+	
+	_npsUniforms = psdesc.ConstantBuffers;
+	int counter = 0;
+	GPUUniform_D3D** createdPSUniforms = new GPUUniform_D3D*[_npsUniforms + numSamplers];
 	for (int i = 0; i < _npsUniforms; i++) {
 		//get the cbuffer i
 		ID3D11ShaderReflectionConstantBuffer* constBuffer = psReflector->GetConstantBufferByIndex(i);
 		//get its description
 		D3D11_SHADER_BUFFER_DESC cbufferdesc;
-		constBuffer->GetDesc(&cbufferdesc);
+		hr = constBuffer->GetDesc(&cbufferdesc);
+		if (FAILED(hr)){
+			ILogger::instance()->logError("Error while getting Description of Pixel Shader Constant Buffer %i", i);
+			throw Platform::Exception::CreateException(hr);
+		}
 		std::string name = cbufferdesc.Name;
-		ILogger::instance()->logInfo("Name of the constant buffer: " + name);
 		for (UINT j = 0; j < cbufferdesc.Variables; j++){
 
 			//Extract variable (and corresponding _desc) from cBuffer
 			ID3D11ShaderReflectionVariable* cbufferVariable = constBuffer->GetVariableByIndex(j);
 			D3D11_SHADER_VARIABLE_DESC cbufferVariable_desc;
-			cbufferVariable->GetDesc(&cbufferVariable_desc);
+			hr = cbufferVariable->GetDesc(&cbufferVariable_desc);
+			if (FAILED(hr)){
+				ILogger::instance()->logError("Error while getting Decription of Pixel Shader Constant Buffer variable description");
+				throw Platform::Exception::CreateException(hr);
+			}
 
-
+			//Extract Type description
 			ID3D11ShaderReflectionType* pType = cbufferVariable->GetType();
 			D3D11_SHADER_TYPE_DESC type_desc;
-			pType->GetDesc(&type_desc);
+			hr = pType->GetDesc(&type_desc);
+			if (FAILED(hr)){
+				ILogger::instance()->logError("Error while getting Decription of Pixel Shader cBuffer type description");
+				throw Platform::Exception::CreateException(hr);
+			}
 
 			//get the name from the variableDesc
 			std::string vname = cbufferVariable_desc.Name;
-			//ILogger::instance()->logInfo("Name of the variable: " + vname);
 			int vsize = cbufferVariable_desc.Size;
-			//ILogger::instance()->logInfo("Size of the variable: %i", vsize);
 
+			//Create the uniform and add to list
 			GPUUniform_D3D* u = createUniform(vname, vsize, type_desc.Class, type_desc.Type, i);
 			if (u != NULL) {
 				_uniforms[u->getIndex()] = u;
@@ -181,22 +261,24 @@ void GPUProgram_D3D::getShaderUniforms(GL* gl){
 				const int code = GPUVariable::getUniformCode(u->_key);
 				_uniformsCode = _uniformsCode | code;
 			}
-			_createdPSUniforms[counter++] = u; //Adding to created uniforms array
+			createdPSUniforms[counter++] = u; //Adding to created uniforms array
 		}
 	}
-	//3. Combine all the uniforms
-	_nUniforms = _nvsUniforms + _npsUniforms;
-	_createdUniforms = new GPUUniform*[_nUniforms];
-	for (int i = 0; i < _nvsUniforms; i++){
-		_createdUniforms[i] = _createdVSUniforms[i];
+	//Add sampler uniforms (if any)
+	for (int i = 0; i < numSamplers; i++){
+		GPUUniform_D3D* samplerUniform = new GPUUniformSampler2D_D3D(samplername, new GLUniformID_win8(666), _ngl);
+		_uniforms[samplerUniform->getIndex()] = samplerUniform;
+		const int code = GPUVariable::getUniformCode(samplerUniform->_key);
+		_uniformsCode = _uniformsCode | code;
+		createdPSUniforms[counter++] = samplerUniform;
 	}
-	for (int i = 0; i < _npsUniforms; i++){
-		_createdUniforms[i + _nvsUniforms] = _createdPSUniforms[i];
-	}
-	delete _createdPSUniforms;
-	delete _createdVSUniforms;
+	_npsUniforms += numSamplers;
+
+	return createdPSUniforms;
 }
 
+
+//Currently only checks for vertex shader Attributes, as all pixel shaders used so far do not have any attributes
 void GPUProgram_D3D::getShaderAttributes(GL* gl){
 	for (int i = 0; i < 32; i++) {
 		_attributes[i] = NULL;
@@ -204,51 +286,62 @@ void GPUProgram_D3D::getShaderAttributes(GL* gl){
 
 	//Vertex shader attributes
 	_attributesCode = 0;
-	HRESULT hr = S_OK;
+	HRESULT hr;
 	ID3D11ShaderReflection* vsReflector = NULL;
 	hr = D3DReflect(_vsData->Data, _vsData->Length, IID_ID3D11ShaderReflection, (void**)&vsReflector);
 	if (FAILED(hr)){
 		ILogger::instance()->logError("Error while calling D3DReflect");
-		std::string errMsg("Error while calling D3DReflect");
-		throw std::exception(errMsg.c_str());
+		throw Platform::Exception::CreateException(hr);
 	}
 	D3D11_SHADER_DESC vsdesc;
-	vsReflector->GetDesc(&vsdesc);
+	hr = vsReflector->GetDesc(&vsdesc);
+	if (FAILED(hr)){
+		ILogger::instance()->logError("Error while getting Vertex Shader Description (getShaderAttributes)");
+		throw Platform::Exception::CreateException(hr);
+	}
 
 	_nAttributes = vsdesc.InputParameters;
 	int counter = 0;
+	//Create array of attributes
 	_createdAttributes = new GPUAttribute*[_nAttributes];
 	D3D11_INPUT_ELEMENT_DESC* _ieds = new D3D11_INPUT_ELEMENT_DESC[_nAttributes];
-	//ILogger::instance()->logInfo("--Vertex Shader has %i Attributes.", _nAttributes);
 	for (int i = 0; i < _nAttributes; i++) {
 		D3D11_SIGNATURE_PARAMETER_DESC input_desc;
-		vsReflector->GetInputParameterDesc(i, &input_desc);
+		hr = vsReflector->GetInputParameterDesc(i, &input_desc);
+		if (FAILED(hr)){
+			ILogger::instance()->logError("Error while getting Vertex Shader Input Paramter Desc (getShaderAttributes)");
+			throw Platform::Exception::CreateException(hr);
+		}
+		//Get name and semantic index
 		std::string iname = input_desc.SemanticName;
 		int semanticIndex = input_desc.SemanticIndex;
-		ILogger::instance()->logInfo("InputAttributeIndex: %i", semanticIndex);
 
 		GPUAttribute_D3D* a = createAttribute(iname, i, semanticIndex);
 		if (a != NULL) {
 			_attributes[a->getIndex()] = a;
 			const int code = GPUVariable::getAttributeCode(a->_key);
 			_attributesCode = _attributesCode | code;
+			//get the input element description from each created Attribute
 			_ieds[i] = a->getIED();		
 		}
 
 		_createdAttributes[counter++] = a;
 	}
 
-	_ngl->getDevice()->CreateInputLayout(_ieds, _nAttributes, _vsData->Data, _vsData->Length, &_inputLayout);
+
+	//Create and set Input Layout
+	hr = _ngl->getDevice()->CreateInputLayout(_ieds, _nAttributes, _vsData->Data, _vsData->Length, &_inputLayout);
+	if (FAILED(hr)){
+		ILogger::instance()->logError("Error While creating Input Layout for Attributes");
+		throw Platform::Exception::CreateException(hr);
+	}
 	_ngl->getDeviceContext()->IASetInputLayout(_inputLayout);
 }
 
 
-void GPUProgram_D3D::onUnused(GL* gl){
-	std::string errMsg("TODO: Implementation");
-	throw std::exception(errMsg.c_str());
-}
-
 void GPUProgram_D3D::applyChanges(GL* gl){
+
+	//Apply uniforms
 	for (int i = 0; i < _nUniforms; i++) {
 		GPUUniform* uniform = _createdUniforms[i];
 		if (uniform != NULL) { //Texture Samplers return null
@@ -256,7 +349,7 @@ void GPUProgram_D3D::applyChanges(GL* gl){
 		}
 	}
 
-
+	//Apply attributes
 	ID3D11Buffer** buffers = new ID3D11Buffer*[_nAttributes];
 	unsigned int* strides = new unsigned int[_nAttributes];
 	unsigned int* offsets = new unsigned int[_nAttributes];
@@ -272,8 +365,6 @@ void GPUProgram_D3D::applyChanges(GL* gl){
 	}
 	_ngl->getDeviceContext()->IASetInputLayout(_inputLayout);
 	_ngl->getDeviceContext()->IASetVertexBuffers(0, _nAttributes, buffers, strides, offsets);
-	//_ngl->getDeviceContext()->VSSetShader(_vshader, nullptr, 0);
-	//_ngl->getDeviceContext()->PSSetShader(_pshader, nullptr, 0);
 	delete[] buffers;
 	delete[] strides;
 	delete[] offsets;
@@ -320,15 +411,9 @@ GPUUniform_D3D* GPUProgram_D3D::createUniform(std::string name, int size, int kl
 }
 
 GPUAttribute_D3D* GPUProgram_D3D::createAttribute(std::string name, int id, int semanticIndex){
-	ILogger::instance()->logInfo("attributeName : "+name);
 	int type;
-	try {
-		type = m.at(name);     // map::at throws an out-of-range
-	}
-	catch (const std::out_of_range& oor) {
-		ILogger::instance()->logError("Unknown attribute semantic : " + name);
-		type = -1;
-	}
+	type = m.at(name);     // TODO need to catch it if type does not exist!!
+
 
 
 	if (type == -1 || type == 0){
@@ -351,6 +436,7 @@ GPUAttribute_D3D* GPUProgram_D3D::createAttribute(std::string name, int id, int 
 	}
 }
 
+//Load pre-compiled shader (*.cso) file from disk 
 Platform::Array<byte>^ GPUProgram_D3D::loadShaderFile(std::string File)
 {
 	Platform::Array<byte>^ FileData = nullptr;
@@ -375,7 +461,5 @@ Platform::Array<byte>^ GPUProgram_D3D::loadShaderFile(std::string File)
 		std::string errMsg("Error while loading shader file " + File);
 		throw std::exception(errMsg.c_str());
 	}
-
-
 	return FileData;
 }

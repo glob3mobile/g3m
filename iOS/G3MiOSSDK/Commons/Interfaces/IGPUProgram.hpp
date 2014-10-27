@@ -73,7 +73,7 @@ public:
 	int getProgramID() const{ return _programID; }
 
 	virtual void onUsed(){}; //previous implementation did nothing...
-	virtual void onUnused(GL* gl) = 0;
+	void onUnused(GL* gl);
 	virtual void applyChanges(GL* gl) = 0;
 	virtual void deleteShader(GL* gl, int shader) const = 0;
 	virtual void deleteProgram(GL* gl, const IGPUProgram* p) = 0;

@@ -10,10 +10,19 @@
 #include "GPUProgram_D3D.hpp"
 #include "Matrix44D.hpp"
 #include "ShortBuffer_win8.hpp"
+#include "GLTextureId_win8.hpp"
+
+#include "Image_win8.hpp"
 
 
+//Method gets called by constructor and sets initial values for
+// - rasterizerState
+// - blendState
+// - samplerState
 void NativeGL_win8::initializeRenderStates() const{
-	_rasterizerDesc.FillMode = D3D11_FILL_WIREFRAME;
+	_rasterizerDesc.FillMode = D3D11_FILL_SOLID;
+	_rasterizerDesc.CullMode = D3D11_CULL_NONE;
+	_rasterizerDesc.FrontCounterClockwise = TRUE;
 
 	_rtblendDesc.BlendOp = D3D11_BLEND_OP_ADD;
 	_rtblendDesc.BlendOpAlpha = D3D11_BLEND_OP_ADD;
@@ -21,9 +30,22 @@ void NativeGL_win8::initializeRenderStates() const{
 	_rtblendDesc.DestBlendAlpha = D3D11_BLEND_ZERO;
 	_rtblendDesc.RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
 
+	_samplerDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+	_samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_CLAMP;
+	_samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_CLAMP;
+	_samplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_CLAMP;
+	_samplerDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
+	_samplerDesc.MinLOD = 0;
+	_samplerDesc.MaxLOD = D3D11_FLOAT32_MAX;
+	_samplerDesc.BorderColor[0] = 0.0f;
+	_samplerDesc.BorderColor[1] = 0.0f;
+	_samplerDesc.BorderColor[2] = 0.0f;
+	_samplerDesc.BorderColor[3] = 0.0f;
+
 }
 
 //Method should be called by any Draw-method
+//Applies state changes (if there have been any changes)
 void NativeGL_win8::setRenderState() const{
 	if (_rasterizerStateChanged){
 		_device->CreateRasterizerState1(&_rasterizerDesc, &_rasterizerState);
@@ -37,6 +59,12 @@ void NativeGL_win8::setRenderState() const{
 		_device->CreateBlendState(&_blendDesc, &_blendState);
 		_deviceContext->OMSetBlendState(_blendState, NULL, 0xffffffff);
 		_blendDescChanged = false;
+	}
+
+	if (_samplerDescChanged){
+		_device->CreateSamplerState(&_samplerDesc, &_samplerState);
+		_deviceContext->PSSetSamplers(0, 1, &_samplerState);
+		_samplerDescChanged = false;
 	}
 	
 }
@@ -128,6 +156,8 @@ void NativeGL_win8::disable(int feature) const{
 	}
 }
 
+
+//Supposedly should work (uncomment the commented part). Has never been tested
 void NativeGL_win8::polygonOffset(float factor, float units) const{
 	//_rasterizerDesc->SlopeScaledDepthBias = factor;
 	//_rasterizerDesc->DepthBias = units / 1ef6;
@@ -177,19 +207,24 @@ void NativeGL_win8::drawElements(int mode, int count, IShortBuffer* indices) con
 	}
 
 	//size has not changed, just update with new values
-	// TODO: Only update if necessary
 	else{
 		_deviceContext->UpdateSubresource(_indexBuffer, 0, NULL, values, 0, 0);
 	}
 
-	// set RenderStates
+	// apply render state changes
 	setRenderState();
+
 	// Set the buffer.
 	_deviceContext->IASetIndexBuffer(_indexBuffer, DXGI_FORMAT_R16_UINT, 0);
+
 	// Set Toppology (tringles, triangleStrip, lines, etc...)
 	_deviceContext->IASetPrimitiveTopology((D3D11_PRIMITIVE_TOPOLOGY)mode);
+	
 	//Draw
 	_deviceContext->DrawIndexed(count, 0, 0);
+
+	_indexBuffer->Release();
+	//_indexBuffer = NULL;
 	
 }
 
@@ -216,13 +251,19 @@ void NativeGL_win8::blendFunc(int sfactor, int dfactor) const{
 	}
 }
 
-void NativeGL_win8::bindTexture(int target, const IGLTextureId* texture) const{
-	std::string errMsg("TODO: Implementation");
-	throw std::exception(errMsg.c_str());
-}
+
 
 bool NativeGL_win8::deleteTexture(const IGLTextureId* texture) const{
-	std::string errMsg("TODO: Implementation");
+
+	GLTextureID_win8* id = (GLTextureID_win8*)texture;
+	unsigned int toDelete = id->getID() - 1;
+	if (_textures[toDelete] != NULL){
+		_textures[toDelete]->Release();
+		_textures[toDelete] = NULL;
+		return true;
+	}
+	ILogger::instance()->logError("NativeGL_win8->deleteTexture: Texture to delete not found!");
+	std::string errMsg("Texture not found!");
 	throw std::exception(errMsg.c_str());
 }
 
@@ -236,29 +277,127 @@ void NativeGL_win8::disableVertexAttribArray(int location) const{
 	throw std::exception(errMsg.c_str());
 }
 
-void NativeGL_win8::pixelStorei(int pname, int param) const{
-	std::string errMsg("TODO: Implementation");
-	throw std::exception(errMsg.c_str());
-}
+
 
 std::vector<IGLTextureId*> NativeGL_win8::genTextures(int	n) const{
-	std::string errMsg("TODO: Implementation");
-	throw std::exception(errMsg.c_str());
+
+	std::vector<IGLTextureId*> ts;
+	_textures = new ID3D11Texture2D*[n];
+
+	for (int i = 0; i < n; i++) {
+		_textures[i] = NULL;
+
+		unsigned int textureId = i+1;
+		if (textureId == 0) {
+			ILogger::instance()->logError("Can't create a textureId");
+		}
+		else {
+			ts.push_back(new GLTextureID_win8(textureId));
+		}
+	}
+
+	return ts;
 }
 
+//Not used (does nothing). Will be needed for multi-texturing
+void NativeGL_win8::setActiveTexture(int i) const{
+	//set i as active texture
+	if (i != 0){
+		ILogger::instance()->logInfo("set Active Texture : %i", i);
+	}
+}
+
+//Sets the current texture (if it has already been created)
+void NativeGL_win8::bindTexture(int target, const IGLTextureId* texture) const{
+	
+	GLTextureID_win8* id = (GLTextureID_win8*)texture;
+	ILogger::instance()->logInfo("bind Texture : %d", id->getID());
+
+	_currentTexture = id->getID()-1;
+
+	if (_textures[_currentTexture] != NULL){
+		ID3D11ShaderResourceView *texv;
+		_device->CreateShaderResourceView(_textures[_currentTexture], NULL, &texv);
+		_deviceContext->PSSetShaderResources(0, 1, &texv);
+		texv->Release();
+	}
+
+}
+
+//Not in use
+void NativeGL_win8::pixelStorei(int pname, int param) const{
+	//ILogger::instance()->logInfo("calling pixelstorei");
+	//std::string errMsg("TODO: Implementation");
+	//throw std::exception(errMsg.c_str());
+}
+
+//Not implemented yet. Should set samplerDesc values
 void NativeGL_win8::texParameteri(int target, int par, int v) const{
-	std::string errMsg("TODO: Implementation");
-	throw std::exception(errMsg.c_str());
+
+	ILogger::instance()->logInfo("calling texParamteri");
+
+	//Set sampler desc here
+	//std::string errMsg("TODO: Implementation");
+	//throw std::exception(errMsg.c_str());
 }
 
+//Create a Texture
+//Creates a ID3D11Texture2D and stores it in array
 void NativeGL_win8::texImage2D(const IImage* image, int format) const{
-	std::string errMsg("TODO: Implementation");
-	throw std::exception(errMsg.c_str());
+	ILogger::instance()->logInfo("calling NativeGL_win8::texImage2D");
+
+	HRESULT hr;
+	Image_win8* wimage = (Image_win8*)image;
+	D3D11_TEXTURE2D_DESC texDesc;
+	ZeroMemory(&texDesc, sizeof(texDesc));
+	texDesc.Width = wimage->getWidth();
+	texDesc.Height = wimage->getHeight();
+	texDesc.MipLevels = texDesc.ArraySize = 1;
+	texDesc.Format = wimage->getFormat();
+	texDesc.SampleDesc.Count = 1;
+	texDesc.Usage = D3D11_USAGE_DYNAMIC;
+	texDesc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
+	texDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+	texDesc.MiscFlags = 0;
+
+
+	// Verify our target format is supported by the current device
+	UINT support = 0;
+	hr = _device->CheckFormatSupport(texDesc.Format, &support);
+	if (FAILED(hr) || !(support & D3D11_FORMAT_SUPPORT_TEXTURE2D))
+	{
+		ILogger::instance()->logWarning("Pixel format not supported!!");
+		texDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+	}
+
+	//get the raw pixel data array
+	ByteBuffer_win8* buffer = (ByteBuffer_win8*)wimage->getBitmapBuffer(wimage->getBitmap());
+	byte* bufferArray;
+	bufferArray = buffer->getPointer();
+
+	//Create a subResource from pixel data
+	D3D11_SUBRESOURCE_DATA texData;
+	texData.pSysMem = bufferArray;
+	texData.SysMemPitch = (wimage->getWidth()*wimage->getBPP() +7) /8;
+	texData.SysMemSlicePitch = texData.SysMemPitch * wimage->getHeight(); //0;
+
+	//Create the texture using the subresource and Textures Desc
+	ID3D11Texture2D *pTexture = NULL;
+	hr = _device->CreateTexture2D(&texDesc, &texData, &pTexture);
+	if (FAILED(hr)){
+		std::string errMsg("Error while calling CreateTexture2D");
+		throw std::exception(errMsg.c_str());
+	}
+	_textures[_currentTexture] = pTexture;
+
+	//It appears that the just created texture has to be bound manually... (probably should not be like this...)
+	bindTexture(0, new GLTextureID_win8(_currentTexture + 1));
 }
 
+//Not implemented yet
 void NativeGL_win8::generateMipmap(int target) const{
-	std::string errMsg("TODO: Implementation");
-	throw std::exception(errMsg.c_str());
+	//std::string errMsg("TODO: Implementation");
+	//throw std::exception(errMsg.c_str());
 }
 
 void NativeGL_win8::drawArrays(int mode, int first, int count) const{
@@ -409,6 +548,7 @@ int NativeGL_win8::TextureParameter_MagFilter() const{
 }
 
 int NativeGL_win8::TextureParameter_WrapS() const{
+	//_samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_MODE::D3D11_TEXTURE_ADDRESS_WRAP;
 	return D3D11_TEXTURE_ADDRESS_MODE::D3D11_TEXTURE_ADDRESS_WRAP;
 }
 
@@ -572,7 +712,4 @@ void NativeGL_win8::depthMask(bool v) const{
 	throw std::exception(errMsg.c_str());
 }
 
-void NativeGL_win8::setActiveTexture(int i) const{
-	std::string errMsg("TODO: Implementation");
-	throw std::exception(errMsg.c_str());
-}
+

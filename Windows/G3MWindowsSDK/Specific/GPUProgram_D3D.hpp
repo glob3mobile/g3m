@@ -36,12 +36,16 @@ private:
 	ID3D11InputLayout* _inputLayout;
 	Platform::Array<byte>^ _vsData;
 	Platform::Array<byte>^ _psData;
+	int _nvsUniforms = 0; //number of vertex shader uniforms
+	int _npsUniforms = 0; //number of pixel shader uniforms (including samplers)
 
 	//todo: move to NativeGL
 	std::map<std::string, AttributeType> m;
 
 	Platform::Array<byte>^ loadShaderFile(std::string File);
 	void getShaderUniforms(GL* gl);
+	GPUUniform_D3D** getVSUniforms();
+	GPUUniform_D3D** getPSUniforms();
 	void getShaderAttributes(GL* gl);
 	GPUUniform_D3D* createUniform(std::string name, int size, int klasse, int type, int id);
 	GPUAttribute_D3D* createAttribute(std::string name, int id, int semanticIndex);
@@ -61,7 +65,7 @@ public:
 	}
 
 
-	void onUnused(GL* gl);
+	//void onUnused(GL* gl);
 	void applyChanges(GL* gl);
 	void getVariables(GL* gl);
 	void deleteShader(GL* gl, int shader) const;
