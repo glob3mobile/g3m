@@ -224,6 +224,18 @@ public:
 
 };
 
+class ElevationDataProviderReadyListener {
+public:
+#ifdef C_CODE
+  virtual ~ElevationDataProviderReadyListener() { }
+#endif
+#ifdef JAVA_CODE
+  void dispose();
+#endif
+  
+  virtual void onReady() = 0;
+};
+
 
 class PlanetRenderer: public DefaultRenderer, ChangedListener, ChangedInfoListener, SurfaceElevationProvider {
 private:
@@ -334,6 +346,10 @@ private:
 
   TileCache* _tileCache;
   bool _deleteTexturesOfInvisibleTiles;
+  
+  ElevationDataProviderReadyListener* _elevationDataProviderReadyListener;
+  bool _elevationDataProviderReadyListenerAutoDelete;
+
 public:
   PlanetRenderer(TileTessellator*             tessellator,
                  ElevationDataProvider*       elevationDataProvider,
@@ -534,6 +550,8 @@ public:
   static std::vector<LODAugmentedSector> _lODAugmentedSectors;
   
   void addLODAugmentedForSector(const Sector& sector, double factor);
+  
+  void setElevationDataProviderReadyListener(ElevationDataProviderReadyListener* srl, bool autodelete);
   
 };
 

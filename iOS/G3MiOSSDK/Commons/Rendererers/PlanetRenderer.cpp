@@ -156,7 +156,9 @@ _renderTileMeshes(renderTileMeshes),
 _logTilesPetitions(logTilesPetitions),
 _tileRenderingListener(tileRenderingListener),
 _deleteTexturesOfInvisibleTiles(deleteTexturesOfInvisibleTiles),
-_touchEventTypeOfTerrainTouchListener(touchEventTypeOfTerrainTouchListener)
+_touchEventTypeOfTerrainTouchListener(touchEventTypeOfTerrainTouchListener),
+_elevationDataProviderReadyListenerAutoDelete(true),
+_elevationDataProviderReadyListener(NULL)
 {
   _context = NULL;
   _layerSet->setChangeListener(this);
@@ -448,6 +450,18 @@ void PlanetRenderer::initialize(const G3MContext* context) {
 }
 
 RenderState PlanetRenderer::getRenderState(const G3MRenderContext* rc) {
+  
+  if (_elevationDataProvider != NULL) {
+    if (!_elevationDataProvider->isReadyToRender(rc)) {
+      return RenderState::busy();
+    } else{
+      _elevationDataProviderReadyListener->onReady();
+      if (_elevationDataProviderReadyListenerAutoDelete){
+        delete _elevationDataProviderReadyListener;
+      }
+    }
+  }
+  
   const LayerTilesRenderParameters* layerTilesRenderParameters = getLayerTilesRenderParameters();
   if (layerTilesRenderParameters == NULL) {
     if (_errors.empty()) {
@@ -462,12 +476,6 @@ RenderState PlanetRenderer::getRenderState(const G3MRenderContext* rc) {
   const RenderState layerSetRenderState = _layerSet->getRenderState();
   if (layerSetRenderState._type != RENDER_READY) {
     return layerSetRenderState;
-  }
-  
-  if (_elevationDataProvider != NULL) {
-    if (!_elevationDataProvider->isReadyToRender(rc)) {
-      return RenderState::busy();
-    }
   }
   
   if (_firstLevelTilesJustCreated) {
@@ -1302,4 +1310,12 @@ void PlanetRenderer::addLODAugmentedForSector(const Sector& sector, double facto
   _lODAugmentedSectors.push_back(LODAugmentedSector(sector, factor));
 }
 
-
+void PlanetRenderer::setElevationDataProviderReadyListener(ElevationDataProviderReadyListener* srl, bool autodelete) {
+  
+  if (_elevationDataProviderReadyListener != NULL && _elevationDataProviderReadyListenerAutoDelete){
+    delete _elevationDataProviderReadyListener;
+  }
+  
+  _elevationDataProviderReadyListener = srl;
+  _elevationDataProviderReadyListenerAutoDelete = autodelete;
+}

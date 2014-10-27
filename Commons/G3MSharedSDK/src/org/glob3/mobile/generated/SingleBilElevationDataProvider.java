@@ -165,5 +165,9 @@ public class SingleBilElevationDataProvider extends ElevationDataProvider
   {
     return new Vector2I(_extentWidth, _extentHeight);
   }
+  
+  public final ElevationData getBaseElevationData(){
+	  return _elevationData;
+  }
 
 }
