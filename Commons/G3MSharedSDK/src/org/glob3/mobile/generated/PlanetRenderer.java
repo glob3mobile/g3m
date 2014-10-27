@@ -413,6 +413,10 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
 
   private TileCache _tileCache;
   private boolean _deleteTexturesOfInvisibleTiles;
+
+  private ElevationDataProviderReadyListener _elevationDataProviderReadyListener;
+  private boolean _elevationDataProviderReadyListenerAutoDelete;
+
   public PlanetRenderer(TileTessellator tessellator, ElevationDataProvider elevationDataProvider, boolean ownsElevationDataProvider, float verticalExaggeration, TileTexturizer texturizer, LayerSet layerSet, TilesRenderParameters tilesRenderParameters, boolean showStatistics, long tileDownloadPriority, Sector renderedSector, boolean renderTileMeshes, boolean logTilesPetitions, TileRenderingListener tileRenderingListener, ChangedRendererInfoListener changedInfoListener, int sizeOfTileCache, boolean deleteTexturesOfInvisibleTiles, TouchEventType touchEventTypeOfTerrainTouchListener)
                                  //                               TileRasterizer*              tileRasterizer,
   //_tileRasterizer(tileRasterizer),
@@ -444,6 +448,8 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
      _tileRenderingListener = tileRenderingListener;
      _deleteTexturesOfInvisibleTiles = deleteTexturesOfInvisibleTiles;
      _touchEventTypeOfTerrainTouchListener = touchEventTypeOfTerrainTouchListener;
+     _elevationDataProviderReadyListenerAutoDelete = true;
+     _elevationDataProviderReadyListener = null;
     _context = null;
     _layerSet.setChangeListener(this);
     _layerSet.setChangedInfoListener(this);
@@ -799,6 +805,24 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
 
   public final RenderState getRenderState(G3MRenderContext rc)
   {
+  
+    if (_elevationDataProvider != null)
+    {
+      if (!_elevationDataProvider.isReadyToRender(rc))
+      {
+        return RenderState.busy();
+      }
+      else
+      {
+        _elevationDataProviderReadyListener.onReady();
+        if (_elevationDataProviderReadyListenerAutoDelete)
+        {
+          if (_elevationDataProviderReadyListener != null)
+             _elevationDataProviderReadyListener.dispose();
+        }
+      }
+    }
+  
     final LayerTilesRenderParameters layerTilesRenderParameters = getLayerTilesRenderParameters();
     if (layerTilesRenderParameters == null)
     {
@@ -819,14 +843,6 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
     if (layerSetRenderState._type != RenderState_Type.RENDER_READY)
     {
       return layerSetRenderState;
-    }
-  
-    if (_elevationDataProvider != null)
-    {
-      if (!_elevationDataProvider.isReadyToRender(rc))
-      {
-        return RenderState.busy();
-      }
     }
   
     if (_firstLevelTilesJustCreated)
@@ -1317,6 +1333,19 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
   public final void addLODAugmentedForSector(Sector sector, double factor)
   {
     _lODAugmentedSectors.add(new LODAugmentedSector(sector, factor));
+  }
+
+  public final void setElevationDataProviderReadyListener(ElevationDataProviderReadyListener srl, boolean autodelete)
+  {
+  
+    if (_elevationDataProviderReadyListener != null && _elevationDataProviderReadyListenerAutoDelete)
+    {
+      if (_elevationDataProviderReadyListener != null)
+         _elevationDataProviderReadyListener.dispose();
+    }
+  
+    _elevationDataProviderReadyListener = srl;
+    _elevationDataProviderReadyListenerAutoDelete = autodelete;
   }
 
 }
