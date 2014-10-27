@@ -105,6 +105,12 @@ public class G3MWidget implements ChangedRendererInfoListener
       if (_infoDisplay != null)
          _infoDisplay.dispose();
     }
+  
+    if (_sceneReadyListener != null && _sceneReadyListenerAutoDelete)
+    {
+      if (_sceneReadyListener != null)
+         _sceneReadyListener.dispose();
+    }
   }
 
   public final void render(int width, int height)
@@ -204,6 +210,20 @@ public class G3MWidget implements ChangedRendererInfoListener
     switch (renderStateType)
     {
       case RENDER_READY:
+  
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning Calling Listener to notify main renderer gets ready
+        if (_sceneReadyListener != null)
+        {
+          _sceneReadyListener.onReady();
+          if (_sceneReadyListenerAutoDelete)
+          {
+            if (_sceneReadyListener != null)
+               _sceneReadyListener.dispose();
+          }
+          _sceneReadyListener = null;
+        }
+  
         setSelectedRenderer(_mainRenderer);
         _cameraRenderer.render(_renderContext, _rootState);
   
@@ -792,6 +812,19 @@ public class G3MWidget implements ChangedRendererInfoListener
     }
   }
 
+  public final void setSceneReadyListener(SceneReadyListener srl, boolean autodelete)
+  {
+  
+    if (_sceneReadyListener != null && _sceneReadyListenerAutoDelete)
+    {
+      if (_sceneReadyListener != null)
+         _sceneReadyListener.dispose();
+    }
+  
+    _sceneReadyListener = srl;
+    _sceneReadyListenerAutoDelete = autodelete;
+  }
+
   private IStorage _storage;
   private IDownloader _downloader;
   private IThreadUtils _threadUtils;
@@ -865,6 +898,9 @@ public class G3MWidget implements ChangedRendererInfoListener
 
   private int _zRenderCounter; //-1 means Frame Buffer does not contain Z; Z of referenced frame otherwise
 
+  private SceneReadyListener _sceneReadyListener;
+  private boolean _sceneReadyListenerAutoDelete;
+
   private G3MWidget(GL gl, IStorage storage, IDownloader downloader, IThreadUtils threadUtils, ICameraActivityListener cameraActivityListener, Planet planet, java.util.ArrayList<ICameraConstrainer> cameraConstrainers, CameraRenderer cameraRenderer, Renderer mainRenderer, ProtoRenderer busyRenderer, ErrorRenderer errorRenderer, Renderer hudRenderer, Color backgroundColor, boolean logFPS, boolean logDownloaderStatistics, GInitializationTask initializationTask, boolean autoDeleteInitializationTask, java.util.ArrayList<PeriodicalTask> periodicalTasks, GPUProgramManager gpuProgramManager, SceneLighting sceneLighting, InitialCameraPositionProvider initialCameraPositionProvider, InfoDisplay infoDisplay)
   {
      _frameTasksExecutor = new FrameTasksExecutor();
@@ -913,6 +949,7 @@ public class G3MWidget implements ChangedRendererInfoListener
      _nFramesBeetweenProgramsCleanUp = 500;
      _zRenderCounter = -1;
      _infoDisplay = infoDisplay;
+     _sceneReadyListener = null;
     _effectsScheduler.initialize(_context);
     _cameraRenderer.initialize(_context);
     _mainRenderer.initialize(_context);
