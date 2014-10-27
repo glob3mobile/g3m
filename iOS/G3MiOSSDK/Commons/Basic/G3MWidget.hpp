@@ -90,6 +90,19 @@ public:
   }
 };
 
+class SceneReadyListener {
+public:
+#ifdef C_CODE
+  virtual ~SceneReadyListener() { }
+#endif
+#ifdef JAVA_CODE
+  void dispose();
+#endif
+  
+  virtual void onReady() = 0;
+};
+
+
 
 class G3MWidget : public ChangedRendererInfoListener {
 public:
@@ -260,6 +273,8 @@ public:
   
   void changedRendererInfo(const int rendererIdentifier, const std::vector<std::string>& info);
   
+  void setSceneReadyListener(SceneReadyListener* srl, bool autodelete);
+  
 private:
   IStorage*                _storage;
   IDownloader*             _downloader;
@@ -333,6 +348,9 @@ private:
   InfoDisplay* _infoDisplay;
 
   long _zRenderCounter; //-1 means Frame Buffer does not contain Z; Z of referenced frame otherwise
+  
+  SceneReadyListener* _sceneReadyListener;
+  bool _sceneReadyListenerAutoDelete;
 
   G3MWidget(GL*                              gl,
             IStorage*                        storage,

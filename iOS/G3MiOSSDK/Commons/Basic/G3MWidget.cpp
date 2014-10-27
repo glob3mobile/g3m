@@ -138,7 +138,8 @@ _initialCameraPositionHasBeenSet(false),
 _forceBusyRenderer(false),
 _nFramesBeetweenProgramsCleanUp(500),
 _zRenderCounter(-1),
-_infoDisplay(infoDisplay)
+_infoDisplay(infoDisplay),
+_sceneReadyListener(NULL)
 {
   _effectsScheduler->initialize(_context);
   _cameraRenderer->initialize(_context);
@@ -287,6 +288,10 @@ G3MWidget::~G3MWidget() {
   
   if(_infoDisplay != NULL) {
     delete _infoDisplay;
+  }
+  
+  if (_sceneReadyListener != NULL && _sceneReadyListenerAutoDelete){
+    delete _sceneReadyListener;
   }
 }
 
@@ -621,6 +626,16 @@ void G3MWidget::render(int width, int height) {
 
   switch (renderStateType) {
     case RENDER_READY:
+      
+#warning Calling Listener to notify main renderer gets ready
+      if (_sceneReadyListener != NULL){
+        _sceneReadyListener->onReady();
+        if (_sceneReadyListenerAutoDelete){
+          delete _sceneReadyListener;
+        }
+        _sceneReadyListener = NULL;
+      }
+      
       setSelectedRenderer(_mainRenderer);
       _cameraRenderer->render(_renderContext, _rootState);
       
@@ -940,5 +955,16 @@ void G3MWidget::changedRendererInfo(const int rendererIdentifier, const std::vec
     ILogger::instance()->logWarning("Render Infos are changing and InfoDisplay is NULL");
   }
 }
+
+void G3MWidget::setSceneReadyListener(SceneReadyListener* srl, bool autodelete) {
+  
+  if (_sceneReadyListener != NULL && _sceneReadyListenerAutoDelete){
+    delete _sceneReadyListener;
+  }
+  
+  _sceneReadyListener = srl;
+  _sceneReadyListenerAutoDelete = autodelete;
+}
+
 
 
