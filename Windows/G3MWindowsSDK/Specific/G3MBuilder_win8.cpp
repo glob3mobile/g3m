@@ -170,7 +170,7 @@ public:
 
 		Image_win8* ii = (Image_win8*)(image);
 		std::string desc = ii->description();
-		ILogger::instance()->logInfo("Ya he descargado la imagen: \"%s\"\n", desc.c_str());
+		ILogger::instance()->logInfo("Ya he descargado la imagen: \"%s\", en el thread: %d \n", desc.c_str(), std::this_thread::get_id());
 
 		Image_win8::exportToFile(_imgURL, ii);
 		ILogger::instance()->logInfo("Ya he guardado la imagen %s \n",_imgURL.getPath().c_str());
@@ -208,7 +208,7 @@ public:
 
 		ILogger::instance()->logInfo("Llamando a Test_BufferDownloadListener \n");
 
-		ILogger::instance()->logInfo("Ya he descargado el buffer %s", _bufferURL.getPath().c_str());
+		ILogger::instance()->logInfo("Ya he descargado el buffer %s, en el thread: %d", _bufferURL.getPath().c_str(), std::this_thread::get_id());
 		ILogger::instance()->logInfo("Longitud de los datos: %d \n", buffer->size());
 		//ByteBuffer_win8* sb = (ByteBuffer_win8*)buffer;
 		//ILogger::instance()->logInfo("CONTENIDO: \"%s\"\n", reinterpret_cast<const char*>(sb->getPointer()));
@@ -232,6 +232,9 @@ public:
 void executeDownloaderTests(IDownloader* downloader){
 
 	ILogger::instance()->logInfo("Ejecutando test del downloader..");
+
+	//const std::string BASE_URL = "http://192.168.1.26/";
+	const std::string BASE_URL = "http://192.168.1.37/";
 
 	const TimeInterval timeToExpire = TimeInterval::fromDays(20);
 	const StringUtils_win8* sUtils = (StringUtils_win8*)IStringUtils::instance();
@@ -257,14 +260,14 @@ void executeDownloaderTests(IDownloader* downloader){
 	std::string recoveredImgStr = sUtils->toStringStd(recoveredImgName);
 	const URL recoveredImgUrl = URL(recoveredImgStr);
 
-	const URL requestedImgUrl = URL("http://192.168.1.26/images/" + imgName);
+	const URL requestedImgUrl = URL(BASE_URL + "images/" + imgName);
 
 	downloader->requestImage(requestedImgUrl, 23, timeToExpire, true, new Test_IImageDownloadListener(recoveredImgUrl), true);
 
 
 	//-- Test downloading geojson and then ??? --------
 	std::string fileName = "countries.geojson";
-	const URL requestedDataUrl = URL("http://192.168.1.26/" + fileName);
+	const URL requestedDataUrl = URL(BASE_URL + fileName);
 
 	downloader->requestBuffer(requestedDataUrl, 23, timeToExpire, true, new Test_BufferDownloadListener(requestedDataUrl), true);
 
@@ -285,7 +288,7 @@ void executeDownloaderTests(IDownloader* downloader){
 	for (int i = 1; i <= 15; i++){
 		std::string nameI = name + std::to_string(i);
 		std::string imgNameI = nameI + "." + ext;
-		const URL requestedImgUrlI = URL("http://192.168.1.26/images/" + imgNameI);
+		const URL requestedImgUrlI = URL(BASE_URL + "images/" + imgNameI);
 
 		Platform::String^ imgHatNameI = sUtils->toStringHat(nameI + "_downloaded");
 		Platform::String^ recoveredImgNameI = Platform::String::Concat(tmpPath, imgHatNameI);
@@ -303,7 +306,7 @@ void executeDownloaderTests(IDownloader* downloader){
 	//-- Test downloading 15 geojson and then ??? --------
 	for (int i = 1; i <= 15; i++){
 		std::string fileGeoName = "countries" + to_string(i) + ".geojson";
-		const URL requestedGeoUrl = URL("http://192.168.1.26/" + fileGeoName);
+		const URL requestedGeoUrl = URL(BASE_URL + fileGeoName);
 		
 		long long rid = downloader->requestBuffer(requestedGeoUrl, 23, timeToExpire, true, new Test_BufferDownloadListener(requestedGeoUrl), true);
 		ILogger::instance()->logInfo("Request id geojson pedido: %d \n", rid);
@@ -345,14 +348,14 @@ public:
 	}
 };
 
-void executeThreadUtilsTests(ThreadUtils_win8* tu){
+void executeThreadUtilsTests(IThreadUtils* tUtils){
 
 	for (int i = 0; i < 10; i++){
-		tu->invokeInRendererThread(new ThreadUtilsExecuteInRenderTestGTask(i), false);
+		tUtils->invokeInRendererThread(new ThreadUtilsExecuteInRenderTestGTask(i), false);
 	}
 
 	for (int i = 0; i < 10; i++){
-		tu->invokeInBackground(new ThreadUtilsExecuteInBackGroundTestGTask(i), false);
+		tUtils->invokeInBackground(new ThreadUtilsExecuteInBackGroundTestGTask(i), false);
 	}
 }
 
@@ -370,12 +373,14 @@ G3MWidget_win8* G3MBuilder_win8::createWidget(){
 	return _nativeWidget;
 }
 
+
 IThreadUtils* G3MBuilder_win8::createDefaultThreadUtils(){
 	
 	//return NULL;
-	ThreadUtils_win8* tu = new ThreadUtils_win8();
-	executeThreadUtilsTests(tu);
-	return tu;
+	//ThreadUtils_win8* tu = new ThreadUtils_win8();
+	IThreadUtils* tUtils = new ThreadUtils_win8();
+	//executeThreadUtilsTests(tUtils);
+	return tUtils;
 	//return new ThreadUtils_win8();
 }
 
@@ -394,7 +399,7 @@ IDownloader* G3MBuilder_win8::createDefaultDownloader(){
 	const int MAX_CONCURRENT_OPERATION_COUNT = 8;
 	IDownloader* testDownloader = new Downloader_win8(MAX_CONCURRENT_OPERATION_COUNT);
 	//ILogger::instance()->logInfo("Executing G3MBuilder_win8 in thread: %d", std::this_thread::get_id());
-	executeDownloaderTests(testDownloader);
+	//executeDownloaderTests(testDownloader);
 	return testDownloader;
 }
 

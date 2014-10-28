@@ -51,6 +51,10 @@ public:
 
 	int getBufferSize() const;
 
+	IByteBuffer* getBitmapBuffer() const;
+
+	static int getBppFromPixelFormat(WICPixelFormatGUID pPixelFormat);
+
 	//-- only for testing, remove later -----------------------------------
 	static Image_win8* imageFromFile(const URL& fileUrl);
 	static bool exportToFile(const URL& fileUrl, const Image_win8* image);

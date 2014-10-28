@@ -23,7 +23,8 @@ using namespace Windows::Storage::Streams;
 using namespace Windows::Storage;
 using namespace concurrency;
 
-using namespace Windows::Web::Http;
+using namespace Windows::Web;
+using namespace Windows::System;
 
 
 //===================== class Listener_win8_Entry implementation ========================================
@@ -234,16 +235,15 @@ long long Downloader_win8_Handler::priority(){
 void Downloader_win8_Handler::runWithDownloader(Downloader_win8* downloader){
 
 	if (_g3mURL->isFileProtocol()) {
-		
+
 		std::string filePath = _g3mURL->getPath().substr(URL::FILE_PROTOCOL.length());
 		Platform::String^ fileLocalPath = getLocalPath(_sUtils->toStringHat(filePath));
 
 		//--http://msdn.microsoft.com/en-us/library/windows/apps/windows.storage.applicationdata.localfolder
 
-		concurrency::task<StorageFile^> readFileOperation(StorageFile::GetFileFromPathAsync(fileLocalPath));
+		concurrency::task<StorageFile^> readFileOperation(StorageFile::GetFileFromPathAsync(fileLocalPath), concurrency::task_continuation_context::use_arbitrary());
 		readFileOperation.then([this, downloader](StorageFile^ file)
 		{
-			//return FileIO::ReadTextAsync(file);
 			//ILogger::instance()->logInfo("Executing read File protocol GetFileFromPathAsync in thread: %d", std::this_thread::get_id());
 			return FileIO::ReadBufferAsync(file);
 		}).then([this, downloader](concurrency::task<Streams::IBuffer^> previousOperation) {
@@ -251,7 +251,7 @@ void Downloader_win8_Handler::runWithDownloader(Downloader_win8* downloader){
 			try {
 				int statusCode = 0;
 				IByteBuffer* byteBuffer = NULL;
-				ILogger::instance()->logInfo("Executing read File protocol previousOperation in thread: %d", std::this_thread::get_id());
+				//ILogger::instance()->logInfo("Executing read File protocol previousOperation in thread: %d", std::this_thread::get_id());
 				//previousOperation.wait();
 				Streams::IBuffer^ buffer = previousOperation.get();
 				//--http://stackoverflow.com/questions/11853838/getting-an-array-of-bytes-out-of-windowsstoragestreamsibuffer
@@ -274,17 +274,35 @@ void Downloader_win8_Handler::runWithDownloader(Downloader_win8* downloader){
 			}
 			catch (...) {
 				ILogger::instance()->logError("Downloader error getting data from local file: %s \n", _g3mURL->getPath().c_str());
+				int statusCode = 404;
+				downloader->removeDownloadingHandlerForUrl(this->_g3mURL->getPath());
+				this->runResponseTask(statusCode, NULL);
+			}
+		}).then([=](concurrency::task<void> t) // Exception handler task
+		{ //--http://stackoverflow.com/questions/15119897/exception-handling-winrt-c-concurrency-async-tasks
+		  //--http://msdn.microsoft.com/en-us/library/windows/apps/hh780559.aspx
+			try {
+				t.get();
+				// .get() didn't throw, so we succeeded.
+			}
+			catch (...) { // (Platform::COMException^ e
+				// handle error
+				ILogger::instance()->logError("Downloader error getting data from local file: %s \n", _g3mURL->getPath().c_str());
+				int statusCode = 404;
+				downloader->removeDownloadingHandlerForUrl(this->_g3mURL->getPath());
+				this->runResponseTask(statusCode, NULL);
 			}
 		});
 	}
 	else{
 		//ILogger::instance()->logInfo("Haciendo peticion a HttpClient..");
-		Windows::Web::Http::HttpClient^ client = ref new Windows::Web::Http::HttpClient();
-		try {
-			//auto responseMessage = client->GetAsync(_winURL)->GetResults();
-			concurrency::task<HttpResponseMessage^> getDataAsyncOperation(client->GetAsync(_winURL));
-			getDataAsyncOperation.then([this, downloader](HttpResponseMessage^ responseMessage)
-			{
+		Http::HttpClient^ client = ref new Http::HttpClient();
+
+		//auto responseMessage = client->GetAsync(_winURL)->GetResults();
+		concurrency::task<Http::HttpResponseMessage^> getDataAsyncOperation(client->GetAsync(_winURL), concurrency::task_continuation_context::use_arbitrary());
+		getDataAsyncOperation.then([this, downloader](Http::HttpResponseMessage^ responseMessage)
+		{
+			try {
 				//ILogger::instance()->logInfo("Executing read http response in thread: %d", std::this_thread::get_id());
 				int statusCode = 0;
 				IByteBuffer* byteBuffer = NULL;
@@ -307,18 +325,30 @@ void Downloader_win8_Handler::runWithDownloader(Downloader_win8* downloader){
 				// inform downloader to remove myself, to avoid adding new Listener
 				downloader->removeDownloadingHandlerForUrl(this->_g3mURL->getPath());
 				this->runResponseTask(statusCode, byteBuffer);
-				//std::thread th(&Downloader_win8_Handler::runResponseTask, this, statusCode, byteBuffer); //TODO: make sense to start another thread if is running in async task???
-				//th.detach();
-			});
-		}
-		catch (...) {
-			ILogger::instance()->logError("Downloader error getting data from URL= %s \n", _g3mURL->getPath().c_str());
-		}
+			}
+			catch (...) {
+				ILogger::instance()->logError("Downloader error getting data from URL= %s \n", _g3mURL->getPath().c_str());
+				int statusCode = 404;
+				downloader->removeDownloadingHandlerForUrl(this->_g3mURL->getPath());
+				this->runResponseTask(statusCode, NULL);
+			}
+		}).then([=](concurrency::task<void> t) // Exception handler task
+		{ //--http://stackoverflow.com/questions/15119897/exception-handling-winrt-c-concurrency-async-tasks
+		  //--http://msdn.microsoft.com/en-us/library/windows/apps/hh780559.aspx
+			try {
+					t.get();
+				// .get() didn't throw, so we succeeded.
+			}
+			catch (...) { // (Platform::COMException^ e
+				// handle error
+				ILogger::instance()->logError("Downloader error. Unnable to retrieve data from URL= %s \n", _g3mURL->getPath().c_str());
+				int statusCode = 404;
+				downloader->removeDownloadingHandlerForUrl(this->_g3mURL->getPath());
+				this->runResponseTask(statusCode, NULL);
+			}
+		});
 	}
 }
-
-
-//context.getThreadUtils().invokeInRendererThread(new ProcessResponseGTask(statusCode, data, image), true);
 
 
 void Downloader_win8_Handler::runResponseTask(const int statusCode, IByteBuffer* buffer) {

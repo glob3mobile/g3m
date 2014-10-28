@@ -27,8 +27,8 @@ private:
 
 	std::mutex _lock;
 
-	Windows::Foundation::IAsyncAction^ _workerThread;
-	Windows::System::Threading::WorkItemHandler^ _workItem;
+	//Windows::Foundation::IAsyncAction^ _workerThread;
+	//Windows::System::Threading::WorkItemHandler^ _workItem;
 
 	concurrency::task<void> createTask();
 	void run();

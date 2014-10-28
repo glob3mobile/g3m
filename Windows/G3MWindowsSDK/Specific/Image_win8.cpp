@@ -62,7 +62,8 @@ std::string getContainerFormatExtension(GUID containerFormat){
 	return NULL;
 }
 
-UINT getbppFromPixelFormat(WICPixelFormatGUID pPixelFormat){
+
+int Image_win8::getBppFromPixelFormat(WICPixelFormatGUID pPixelFormat){
 
 	if (GUID_WICPixelFormatDontCare == pPixelFormat){
 		return 0;
@@ -157,59 +158,59 @@ UINT getStride(
 }
 
 
-IByteBuffer* getBitmapBuffer(IWICBitmap* bitmap) {
-
-	if (bitmap == nullptr){
-		return NULL;
-	}
-
-	UINT uiWidth = 0;
-	UINT uiHeight = 0;
-	IWICImagingFactory *pFactory = NULL;
-	
-	IWICBitmapLock *pLock = NULL;
-	BYTE *pv = NULL;
-	UINT cbBufferSize = 0;
-
-	HRESULT	hr = CoCreateInstance(
-			CLSID_WICImagingFactory,
-			NULL,
-			CLSCTX_INPROC_SERVER,
-			IID_IWICImagingFactory,
-			(LPVOID*)&pFactory
-			);
-
-	if (SUCCEEDED(hr)){
-		hr = bitmap->GetSize(&uiWidth, &uiHeight);
-	}
-
-	if (SUCCEEDED(hr)){
-		WICRect rcLock;
-		rcLock = WICRect{ 0, 0, uiWidth, uiHeight };
-		
-		if (SUCCEEDED(hr)){
-			hr = bitmap->Lock(&rcLock, WICBitmapLockRead, &pLock);
-		}
-
-		if (SUCCEEDED(hr)){
-			hr = pLock->GetDataPointer(&cbBufferSize, &pv);
-			// Release the bitmap lock.
-			pLock->Release();
-		}
-	}
-
-	if (!SUCCEEDED(hr)){
-		ILogger::instance()->logError("Unnable to retrieve bitmap data buffer");
-		return NULL;
-	}
-
-	if (pFactory){
-		pFactory->Release();
-	}
-
-	IByteBuffer* bitmapBuffer = IFactory::instance()->createByteBuffer(pv, cbBufferSize);
-	return bitmapBuffer;
-}
+//IByteBuffer* getBitmapBuffer(IWICBitmap* bitmap) {
+//
+//	if (bitmap == nullptr){
+//		return NULL;
+//	}
+//
+//	UINT uiWidth = 0;
+//	UINT uiHeight = 0;
+//	IWICImagingFactory *pFactory = NULL;
+//	
+//	IWICBitmapLock *pLock = NULL;
+//	BYTE *pv = NULL;
+//	UINT cbBufferSize = 0;
+//
+//	HRESULT	hr = CoCreateInstance(
+//			CLSID_WICImagingFactory,
+//			NULL,
+//			CLSCTX_INPROC_SERVER,
+//			IID_IWICImagingFactory,
+//			(LPVOID*)&pFactory
+//			);
+//
+//	if (SUCCEEDED(hr)){
+//		hr = bitmap->GetSize(&uiWidth, &uiHeight);
+//	}
+//
+//	if (SUCCEEDED(hr)){
+//		WICRect rcLock;
+//		rcLock = WICRect{ 0, 0, uiWidth, uiHeight };
+//		
+//		if (SUCCEEDED(hr)){
+//			hr = bitmap->Lock(&rcLock, WICBitmapLockRead, &pLock);
+//		}
+//
+//		if (SUCCEEDED(hr)){
+//			hr = pLock->GetDataPointer(&cbBufferSize, &pv);
+//			// Release the bitmap lock.
+//			pLock->Release();
+//		}
+//	}
+//
+//	if (!SUCCEEDED(hr)){
+//		ILogger::instance()->logError("Unnable to retrieve bitmap data buffer");
+//		return NULL;
+//	}
+//
+//	if (pFactory){
+//		pFactory->Release();
+//	}
+//
+//	IByteBuffer* bitmapBuffer = IFactory::instance()->createByteBuffer(pv, cbBufferSize);
+//	return bitmapBuffer;
+//}
 
 
 Image_win8::Image_win8(IWICBitmap* image, IByteBuffer* sourceBuffer)
@@ -297,6 +298,62 @@ IImage* Image_win8::shallowCopy() const{
 }
 
 
+IByteBuffer* Image_win8::getBitmapBuffer() const {
+
+	if (_image == nullptr){
+		return NULL;
+	}
+
+	UINT uiWidth = 0;
+	UINT uiHeight = 0;
+	IWICImagingFactory *pFactory = NULL;
+
+	IWICBitmapLock *pLock = NULL;
+	BYTE *pv = NULL;
+	UINT cbBufferSize = 0;
+
+	HRESULT	hr = CoCreateInstance(
+		CLSID_WICImagingFactory,
+		NULL,
+		CLSCTX_INPROC_SERVER,
+		IID_IWICImagingFactory,
+		(LPVOID*)&pFactory
+		);
+
+	if (SUCCEEDED(hr)){
+		hr = _image->GetSize(&uiWidth, &uiHeight);
+	}
+
+	if (SUCCEEDED(hr)){
+		WICRect rcLock;
+		rcLock = WICRect{ 0, 0, uiWidth, uiHeight };
+
+		if (SUCCEEDED(hr)){
+			hr = _image->Lock(&rcLock, WICBitmapLockRead, &pLock);
+		}
+
+		if (SUCCEEDED(hr)){
+			hr = pLock->GetDataPointer(&cbBufferSize, &pv);
+			// Release the bitmap lock.
+			pLock->Release();
+		}
+	}
+
+	if (!SUCCEEDED(hr)){
+		ILogger::instance()->logError("Unnable to retrieve bitmap data buffer");
+		return NULL;
+	}
+
+	if (pFactory){
+		pFactory->Release();
+	}
+
+	IByteBuffer* bitmapBuffer = IFactory::instance()->createByteBuffer(pv, cbBufferSize);
+
+	return bitmapBuffer;
+}
+
+
 
 IByteBuffer* Image_win8::createImageBuffer() const{
 	
@@ -329,7 +386,8 @@ IByteBuffer* Image_win8::createImageBuffer() const{
 	}
 	 
 	// getBitmapBuffer
-	IByteBuffer* bitmapBuffer = getBitmapBuffer(_image);
+	//IByteBuffer* bitmapBuffer = getBitmapBuffer(_image);
+	IByteBuffer* bitmapBuffer = getBitmapBuffer();
 	
 	//-- reserve memory for output data
 	int outputLength = bitmapBuffer->size();
