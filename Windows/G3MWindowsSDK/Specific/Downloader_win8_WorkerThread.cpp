@@ -27,21 +27,15 @@ Downloader_win8_WorkerThread::Downloader_win8_WorkerThread(Downloader_win8* down
 }
 
 
-concurrency::task<void>  Downloader_win8_WorkerThread::createTask(){
-
-	concurrency::task<void> thisTask = concurrency::create_task([this]
-	{
-		this->run();
-	});
-	
-	return thisTask;
-}
-
 void Downloader_win8_WorkerThread::start(){
 	
 	//_workerThread = Threading::ThreadPool::RunAsync(_workItem, Threading::WorkItemPriority::Low);
+	//createTask();
 
-	createTask();
+	concurrency::create_task([this]
+	{
+		this->run();
+	});
 }
 
 void Downloader_win8_WorkerThread::stop(){

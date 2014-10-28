@@ -29,8 +29,8 @@ private:
 
 	//Windows::Foundation::IAsyncAction^ _workerThread;
 	//Windows::System::Threading::WorkItemHandler^ _workItem;
+	//concurrency::task<void> createTask();
 
-	concurrency::task<void> createTask();
 	void run();
 
 public:
