@@ -104,6 +104,11 @@ public class Mark implements SurfaceElevationListener
 
   private MutableVector3D _markCameraVector = new MutableVector3D();
 
+  private IDownloader _downloader;
+
+  private long _requestIconImageId;
+
+
   /**
    * Creates a marker with icon and label
    */
@@ -355,6 +360,11 @@ public class Mark implements SurfaceElevationListener
   public void dispose()
   {
   
+    if (!_textureSolved && _requestIconImageId > 0)
+    {
+      _downloader.cancelRequest(_requestIconImageId);
+    }
+  
     if (_position != null)
        _position.dispose();
   
@@ -408,6 +418,8 @@ public class Mark implements SurfaceElevationListener
 
   public final void initialize(G3MContext context, long downloadPriority)
   {
+    _downloader = context.getDownloader();
+    _requestIconImageId = -1;
     if (_altitudeMode == AltitudeMode.RELATIVE_TO_GROUND)
     {
       _surfaceElevationProvider = context.getSurfaceElevationProvider();
@@ -422,9 +434,10 @@ public class Mark implements SurfaceElevationListener
       final boolean hasIconURL = (_iconURL._path.length() != 0);
       if (hasIconURL)
       {
-        IDownloader downloader = context.getDownloader();
   
-        downloader.requestImage(_iconURL, downloadPriority, TimeInterval.fromDays(30), true, new IconDownloadListener(this, _label, _labelBottom, _labelFontSize, _labelFontColor, _labelShadowColor, _labelGapSize), true);
+        IconDownloadListener list = new IconDownloadListener(this, _label, _labelBottom, _labelFontSize, _labelFontColor, _labelShadowColor, _labelGapSize);
+  
+        _requestIconImageId = _downloader.requestImage(_iconURL, downloadPriority, TimeInterval.fromDays(30), true, list, true);
       }
       else
       {

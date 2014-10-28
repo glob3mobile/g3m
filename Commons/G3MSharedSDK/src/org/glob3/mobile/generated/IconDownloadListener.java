@@ -33,7 +33,10 @@ public class IconDownloadListener extends IImageDownloadListener
     }
     else
     {
-      _mark.onTextureDownload(image);
+      if (_mark != null)
+      {
+        _mark.onTextureDownload(image);
+      }
     }
   }
 
