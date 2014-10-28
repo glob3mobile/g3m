@@ -1,3 +1,4 @@
+
 //
 //  Mark.cpp
 //  G3MiOSSDK
@@ -106,7 +107,9 @@ public:
                                          true);
     }
     else {
-      _mark->onTextureDownload(image);
+      if (_mark) {
+        _mark->onTextureDownload(image);
+      }
     }
   }
 
@@ -292,6 +295,8 @@ _normalAtMarkPosition(NULL)
 
 void Mark::initialize(const G3MContext* context,
                       long long downloadPriority) {
+  _downloader = context->getDownloader();
+  _requestIconImageId = -1;
   if (_altitudeMode == RELATIVE_TO_GROUND) {
     _surfaceElevationProvider = context->getSurfaceElevationProvider();
     if (_surfaceElevationProvider != NULL) {
@@ -304,19 +309,20 @@ void Mark::initialize(const G3MContext* context,
   if (!_textureSolved) {
     const bool hasIconURL = ( _iconURL._path.length() != 0 );
     if (hasIconURL) {
-      IDownloader* downloader = context->getDownloader();
 
-      downloader->requestImage(_iconURL,
+      IconDownloadListener* list = new IconDownloadListener(this,
+                               _label,
+                               _labelBottom,
+                               _labelFontSize,
+                               _labelFontColor,
+                               _labelShadowColor,
+                               _labelGapSize);
+      
+      _requestIconImageId = _downloader->requestImage(_iconURL,
                                downloadPriority,
                                TimeInterval::fromDays(30),
                                true,
-                               new IconDownloadListener(this,
-                                                        _label,
-                                                        _labelBottom,
-                                                        _labelFontSize,
-                                                        _labelFontColor,
-                                                        _labelShadowColor,
-                                                        _labelGapSize),
+                               list,
                                true);
     }
     else {
@@ -364,6 +370,10 @@ bool Mark::isReady() const {
 
 Mark::~Mark() {
 
+  if (!_textureSolved && _requestIconImageId > 0) {
+    _downloader->cancelRequest(_requestIconImageId);
+  }
+  
   delete _position;
 
   delete _normalAtMarkPosition;

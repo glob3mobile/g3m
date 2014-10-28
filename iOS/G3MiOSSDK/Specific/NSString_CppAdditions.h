@@ -14,4 +14,6 @@
 
 - (std::string) toCppString;
 
++ (NSString*) convertHTML: (const std::string&) string;
+
 @end

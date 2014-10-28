@@ -27,7 +27,7 @@ enum Activity_Type {
 
 class LocationChangedListener {
 public:
-  virtual void onLocationChanged(Geodetic2D* newLocation) = 0;
+  virtual void onLocationChanged(Geodetic2D& newLocation) = 0;
 #ifdef C_CODE
   virtual ~LocationChangedListener() { }
 #endif

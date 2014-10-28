@@ -141,6 +141,11 @@ private:
   Vector3D* _normalAtMarkPosition;
 
   MutableVector3D _markCameraVector;
+  
+  IDownloader* _downloader;
+  
+  long long _requestIconImageId;
+
 
 public:
   /**

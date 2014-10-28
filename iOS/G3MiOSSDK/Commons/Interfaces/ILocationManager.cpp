@@ -19,7 +19,7 @@ void ILocationManager::notifyLocationChanged() {
   if (_listeners != NULL) {
     const size_t size = _listeners->size();
     for (size_t i = 0; i < size; i++) {
-      _listeners->at(i)->onLocationChanged(getLocation());
+      _listeners->at(i)->onLocationChanged(*getLocation());
     }
   }
 }

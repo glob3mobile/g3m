@@ -24,4 +24,25 @@
   return [self cStringUsingEncoding: NSUTF8StringEncoding];
 }
 
+
++ (NSString *)convertHTML:(const std::string&) string {
+  NSString* html = [NSString stringWithCppString:string];
+  NSScanner *myScanner;
+  NSString *text = nil;
+  myScanner = [NSScanner scannerWithString:html];
+  
+  while ([myScanner isAtEnd] == NO) {
+    
+    [myScanner scanUpToString:@"<" intoString:NULL] ;
+    
+    [myScanner scanUpToString:@">" intoString:&text] ;
+    
+    html = [html stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"%@>", text] withString:@""];
+  }
+  //
+  html = [html stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+  
+  return html;
+}
+
 @end
