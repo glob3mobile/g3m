@@ -158,10 +158,11 @@ const URL TiledVectorLayer::createURL(const Tile* tile) const {
 
   const Vector2I tileTextureResolution = parameters->_tileTextureResolution;
 
-  const int level   = tile->_level;
-  const int column  = tile->_column;
-  const int numRows = (int) (parameters->_topSectorSplitsByLatitude * _mu->pow(2.0, level));
-  const int row     = numRows - tile->_row - 1;
+  const size_t level   = tile->_level;
+  const size_t column  = tile->_column;
+  const size_t numRows = (size_t) (parameters->_topSectorSplitsByLatitude * _mu->pow(2.0, level));
+  const size_t tileRow = tile->_row;
+  const size_t row     = numRows - tileRow - 1;
 
   const double north = MercatorUtils::latitudeToMeters( sector._upper._latitude );
   const double south = MercatorUtils::latitudeToMeters( sector._lower._latitude );
@@ -173,7 +174,7 @@ const URL TiledVectorLayer::createURL(const Tile* tile) const {
   path = _su->replaceSubstring(path, "{height}",         _su->toString( tileTextureResolution._y          ) );
   path = _su->replaceSubstring(path, "{x}",              _su->toString( column                            ) );
   path = _su->replaceSubstring(path, "{y}",              _su->toString( row                               ) );
-  path = _su->replaceSubstring(path, "{y2}",             _su->toString( tile->_row                        ) );
+  path = _su->replaceSubstring(path, "{y2}",             _su->toString( tileRow                        ) );
   path = _su->replaceSubstring(path, "{level}",          _su->toString( level                             ) );
   path = _su->replaceSubstring(path, "{lowerLatitude}",  _su->toString( sector._lower._latitude._degrees  ) );
   path = _su->replaceSubstring(path, "{lowerLongitude}", _su->toString( sector._lower._longitude._degrees ) );

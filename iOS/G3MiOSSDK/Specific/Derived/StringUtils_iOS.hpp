@@ -60,9 +60,9 @@ public:
   int indexOfFirstNonChar(const std::string& string,
                           const std::string& chars,
                           int fromIndex) const;
-
-  std::string toString(size_t value) const;
   
+  std::string toString(size_t value) const;
+
   std::string toString(int value) const;
 
   std::string toString(long long value) const;
