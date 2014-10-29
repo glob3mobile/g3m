@@ -69,7 +69,7 @@ public class TriangleSetParser
       double b = color.get(2).asNumber().value() / 255.0;
   
   
-      IndexedMesh im = new IndexedMesh(GLPrimitive.triangles(), true, fbb.getCenter(), fbb.create(), sbb.create(), 10.0, 1, Color.newFromRGBA((float)r, (float)g, (float)b, 0.5), null, 0.0, false);
+      IndexedMesh im = new IndexedMesh(GLPrimitive.triangles(), true, fbb.getCenter(), fbb.create(), sbb.create(), (float)10.0, (float)1, Color.newFromRGBA((float)r, (float)g, (float)b, (float) 0.5), null, (float)0.0, false);
   
       cm.addMesh(im);
   
