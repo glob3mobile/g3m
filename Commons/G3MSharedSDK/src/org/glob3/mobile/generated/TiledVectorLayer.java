@@ -71,7 +71,8 @@ public class TiledVectorLayer extends VectorLayer
     final int level = tile._level;
     final int column = tile._column;
     final int numRows = (int)(parameters._topSectorSplitsByLatitude * _mu.pow(2.0, level));
-    final int row = numRows - tile._row - 1;
+    final int tileRow = tile._row;
+    final int row = numRows - tileRow - 1;
   
     final double north = MercatorUtils.latitudeToMeters(sector._upper._latitude);
     final double south = MercatorUtils.latitudeToMeters(sector._lower._latitude);
@@ -83,7 +84,7 @@ public class TiledVectorLayer extends VectorLayer
     path = _su.replaceSubstring(path, "{height}", _su.toString(tileTextureResolution._y));
     path = _su.replaceSubstring(path, "{x}", _su.toString(column));
     path = _su.replaceSubstring(path, "{y}", _su.toString(row));
-    path = _su.replaceSubstring(path, "{y2}", _su.toString(tile._row));
+    path = _su.replaceSubstring(path, "{y2}", _su.toString(tileRow));
     path = _su.replaceSubstring(path, "{level}", _su.toString(level));
     path = _su.replaceSubstring(path, "{lowerLatitude}", _su.toString(sector._lower._latitude._degrees));
     path = _su.replaceSubstring(path, "{lowerLongitude}", _su.toString(sector._lower._longitude._degrees));
