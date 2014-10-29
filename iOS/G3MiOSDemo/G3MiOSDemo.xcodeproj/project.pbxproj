@@ -65,6 +65,10 @@
 		D82397E819AF421100BCF3D7 /* A1900DC.json in Resources */ = {isa = PBXBuildFile; fileRef = D82397E719AF421100BCF3D7 /* A1900DC.json */; };
 		D8317203186C5BAD00522E1B /* simpleStencil.png in Resources */ = {isa = PBXBuildFile; fileRef = D8317202186C5BAD00522E1B /* simpleStencil.png */; };
 		D882B1CD171D77C000C2AD9C /* full-earth-256x256.bil in Resources */ = {isa = PBXBuildFile; fileRef = D882B1CC171D76AD00C2AD9C /* full-earth-256x256.bil */; };
+		D8BCF3B619FFDBF800EB6F22 /* gc_triangles.json in Resources */ = {isa = PBXBuildFile; fileRef = D8BCF3B519FFDBF800EB6F22 /* gc_triangles.json */; };
+		D8BCF3B819FFDE5900EB6F22 /* A1800DC_triangles.json in Resources */ = {isa = PBXBuildFile; fileRef = D8BCF3B719FFDE5900EB6F22 /* A1800DC_triangles.json */; };
+		D8BCF3BA19FFE18500EB6F22 /* A1900DC_triangles.json in Resources */ = {isa = PBXBuildFile; fileRef = D8BCF3B919FFE18500EB6F22 /* A1900DC_triangles.json */; };
+		D8BCF3BC19FFF79800EB6F22 /* A1800DC_triangles.bson in Resources */ = {isa = PBXBuildFile; fileRef = D8BCF3BB19FFF79800EB6F22 /* A1800DC_triangles.bson */; };
 		D8E93BE01588A171009D497C /* world.jpg in Resources */ = {isa = PBXBuildFile; fileRef = D8E93BDF1588A171009D497C /* world.jpg */; };
 		D8EEF38B1577920B003FEB5E /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8EEF38A1577920B003FEB5E /* UIKit.framework */; };
 		D8EEF38D1577920B003FEB5E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8EEF38C1577920B003FEB5E /* Foundation.framework */; };
@@ -171,6 +175,10 @@
 		D82397E719AF421100BCF3D7 /* A1900DC.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = A1900DC.json; sourceTree = "<group>"; };
 		D8317202186C5BAD00522E1B /* simpleStencil.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = simpleStencil.png; sourceTree = "<group>"; };
 		D882B1CC171D76AD00C2AD9C /* full-earth-256x256.bil */ = {isa = PBXFileReference; lastKnownFileType = file; path = "full-earth-256x256.bil"; sourceTree = "<group>"; };
+		D8BCF3B519FFDBF800EB6F22 /* gc_triangles.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = gc_triangles.json; sourceTree = "<group>"; };
+		D8BCF3B719FFDE5900EB6F22 /* A1800DC_triangles.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = A1800DC_triangles.json; sourceTree = "<group>"; };
+		D8BCF3B919FFE18500EB6F22 /* A1900DC_triangles.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = A1900DC_triangles.json; sourceTree = "<group>"; };
+		D8BCF3BB19FFF79800EB6F22 /* A1800DC_triangles.bson */ = {isa = PBXFileReference; lastKnownFileType = file; path = A1800DC_triangles.bson; sourceTree = "<group>"; };
 		D8E93BDF1588A171009D497C /* world.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = world.jpg; sourceTree = "<group>"; };
 		D8EEF3861577920B003FEB5E /* G3MiOSDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = G3MiOSDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D8EEF38A1577920B003FEB5E /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
@@ -301,6 +309,10 @@
 		D8EEF4271577B0D6003FEB5E /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				D8BCF3BB19FFF79800EB6F22 /* A1800DC_triangles.bson */,
+				D8BCF3B919FFE18500EB6F22 /* A1900DC_triangles.json */,
+				D8BCF3B719FFDE5900EB6F22 /* A1800DC_triangles.json */,
+				D8BCF3B519FFDBF800EB6F22 /* gc_triangles.json */,
 				D82397E519AF256900BCF3D7 /* A1800DC.json */,
 				CFE26D6718A154D700253709 /* 3d_2-0.json */,
 				CFE26D6818A154D700253709 /* 3d_2-1.json */,
@@ -454,9 +466,11 @@
 				CF883B841591053100AEE39C /* mark.png in Resources */,
 				CF8E9887180D98DC00A08208 /* pointcloud in Resources */,
 				CFB57D9F1860DAD900D5B094 /* Compass_rose_browns_00.png in Resources */,
+				D8BCF3B819FFDE5900EB6F22 /* A1800DC_triangles.json in Resources */,
 				D82397E619AF256900BCF3D7 /* A1800DC.json in Resources */,
 				CCD7885415D9A3FA0065A7E1 /* ProgressWheel.png in Resources */,
 				CF0FC6F21899B86B005988D7 /* 3d_.json in Resources */,
+				D8BCF3BC19FFF79800EB6F22 /* A1800DC_triangles.bson in Resources */,
 				A717C99615EBA71D00EEC830 /* mercator.jpg in Resources */,
 				CF4968F81889810100D1C35E /* CompassHeadings.png in Resources */,
 				CFE26D6018A153DB00253709 /* 3d_1.json in Resources */,
@@ -476,6 +490,7 @@
 				E71B153F1626D27F003D1013 /* Icon-Small@2x.png in Resources */,
 				E71B15401626D27F003D1013 /* Icon.png in Resources */,
 				E71B15411626D27F003D1013 /* Icon@2x.png in Resources */,
+				D8BCF3BA19FFE18500EB6F22 /* A1900DC_triangles.json in Resources */,
 				CFE3DBB1164B0E7D00910037 /* seymour-plane.json in Resources */,
 				CFEA76681666DCB000E89BC7 /* images in Resources */,
 				CF0223831668318600024B73 /* geojson in Resources */,
@@ -510,6 +525,7 @@
 				CF8C0EBB16FC99C400DBEDE4 /* cc3d4326.json in Resources */,
 				CFE26D6418A1547B00253709 /* 3d_1-1.json in Resources */,
 				CFC04FC4185FA00400E7494A /* hud2.png in Resources */,
+				D8BCF3B619FFDBF800EB6F22 /* gc_triangles.json in Resources */,
 				CF0FC6EE1899A443005988D7 /* g3mesh.json in Resources */,
 				E70B224D1700DBA300172DF3 /* A320.bson in Resources */,
 				CF9B5AD7175FC167002FB1B3 /* full-earth-2048x1024.bil in Resources */,

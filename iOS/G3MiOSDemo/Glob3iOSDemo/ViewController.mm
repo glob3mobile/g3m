@@ -143,6 +143,9 @@
 #import <G3MiOSSDK/GEO2DPolygonData.hpp>
 #import <G3MiOSSDK/ChessboardLayer.hpp>
 #import <G3MiOSSDK/GEORectangleRasterSymbol.hpp>
+#import <G3MiOSSDK/JSONNumber.hpp>
+
+#import <G3MiOSSDK/TriangleSetParser.hpp>
 
 
 //class TestVisibleSectorListener : public VisibleSectorListener {
@@ -980,7 +983,7 @@ public:
     
   }
   
-  if (true){ //GeaCrone
+  if (false){ //GeaCrone
     
     class GeaCronSymbolizer: public GEOSymbolizer{
       Color _color;
@@ -1014,7 +1017,6 @@ public:
       }
       std::vector<GEOSymbol*>* createSymbols(const GEO2DMultiPolygonGeometry* geometry) const{ return NULL;}
     };
-    
     
     MeshRenderer* mr1 = new MeshRenderer();
     MeshRenderer* mr2 = new MeshRenderer();
@@ -1095,6 +1097,207 @@ public:
     
     
   }
+  
+  
+  if (true){ //GeaCron-Triangles
+    
+    NSString* geojsonName = @"A1800DC_triangles";
+    NSString *geoJSONFilePath = [[NSBundle mainBundle] pathForResource: geojsonName
+                                                                ofType: @"json"];
+    if (geoJSONFilePath) {
+      NSString *nsGEOJSON = [NSString stringWithContentsOfFile: geoJSONFilePath
+                                                      encoding: NSMacOSRomanStringEncoding
+                                                         error: nil];
+      
+      
+      
+      if (nsGEOJSON) {
+        
+        MeshRenderer* mr1 = new MeshRenderer();
+        std::string json = [nsGEOJSON UTF8String];
+        
+        Mesh* mesh = TriangleSetParser::parseJSONString(json, planet);
+        mr1->addMesh(mesh);
+        
+        builder.addRenderer(mr1);
+        
+      }
+    }
+  }
+  
+  if (false){ //GeaCron-Triangles-Bson
+    MeshRenderer* mr1 = new MeshRenderer();
+    
+    class BSONInitTask: public GInitializationTask{
+      
+      class BSONListener: public IBufferDownloadListener{
+        
+        Planet const* _planet;
+        MeshRenderer* _mr;
+        
+      public:
+        BSONListener(MeshRenderer* mr, const Planet* planet):_mr(mr),_planet(planet){}
+        
+        void onDownload(const URL& url,
+                        IByteBuffer* buffer,
+                        bool expired){
+          ILogger::instance()->logInfo("BSON DOWNLOADED");
+          
+          Mesh* mesh = TriangleSetParser::parseBSON(*buffer, _planet);
+          _mr->addMesh(mesh);
+          
+        }
+        void onError(const URL& url){}
+        void onCancel(const URL& url){}
+        void onCanceledDownload(const URL& url,
+                                IByteBuffer* buffer,
+                                bool expired){}
+        
+      };
+      
+      Planet const* _planet;
+      MeshRenderer* _mr;
+      
+    public:
+      BSONInitTask(MeshRenderer* mr, const Planet* planet):_planet(planet), _mr(mr){}
+      
+      bool isDone(const G3MContext* context){
+        return true;
+      }
+      
+      void run(const G3MContext* context){
+        context->getDownloader()->requestBuffer(URL("file:///A1800DC_triangles.bson"), 10000,
+                                                TimeInterval::forever(), true,
+                                                new BSONListener(_mr, _planet), true);
+      }
+    };
+    
+    builder.addRenderer(mr1);
+    builder.setInitializationTask(new BSONInitTask(mr1, planet), true);
+  }
+  //
+  //
+  //      MeshRenderer* mr1 = new MeshRenderer();
+  //
+  //      class BSONInitTask: public GInitializationTask{
+  
+  
+  //        class BSONListener: public IBufferDownloadListener{
+  //          void onDownload(const URL& url,
+  //                          IByteBuffer* buffer,
+  //                          bool expired){
+  //            ILogger::instance()->logInfo("BSON DOWNLOADED");
+  //
+  //          }
+  //          void onError(const URL& url){}
+  //          void onCancel(const URL& url){}
+  //          void onCanceledDownload(const URL& url,
+  //                                  IByteBuffer* buffer,
+  //                                  bool expired){}
+  //
+  //        };
+  //
+  //        bool isDone(const G3MContext* context){
+  //
+  //
+  ////          context->getDownloader()->requestBuffer(URL("file:///A1800DC_triangles.bson"), 10000,
+  ////                                                  TimeInterval::forever(), true,
+  ////                                                  new BSONListener(), true);
+  //          return true;
+  //        }
+  //      };
+  //
+  //      builder.setInitializationTask(new BSONInitTask(), true);
+  
+  //
+  //      {
+  //        NSString* geojsonName = @"A1800DC_triangles";
+  //        NSString *geoJSONFilePath = [[NSBundle mainBundle] pathForResource: geojsonName
+  //                                                                    ofType: @"bson"];
+  //        if (geoJSONFilePath) {
+  //          NSString *nsGEOJSON = [NSString stringWithContentsOfFile: geoJSONFilePath
+  //                                                          encoding: NSMacOSRomanStringEncoding
+  //                                                             error: nil];
+  //
+  //
+  //
+  //          if (nsGEOJSON) {
+  //            std::string geoJSON = [nsGEOJSON UTF8String];
+  //
+  //
+  //
+  //            BSONParser bsonParser;
+  //            const JSONObject* obj = (JSONObject*)bsonParser->parse(geoJSON);
+  //            const JSONArray* tss = obj->get("triangleSets")->asArray();
+  //
+  //            for(int i = 0; i < tss->size(); i++){
+  //              JSONObject* ts = (JSONObject*) tss->get(i);
+  //              JSONArray* coord = (JSONArray*) ts->get("coordinates");
+  //              JSONArray* indices = (JSONArray*) ts->get("indices");
+  //              JSONArray* color = (JSONArray*) ts->get("color");
+  //
+  //              FloatBufferBuilderFromGeodetic* fbb = FloatBufferBuilderFromGeodetic::builderWithFirstVertexAsCenter(planet);
+  //              for (int j = 0; j < coord->size(); j+=2) {
+  //                double lat = coord->get(j)->asNumber()->value();
+  //                double lon = coord->get(j+1)->asNumber()->value();
+  //                fbb->add(Angle::fromDegrees(lon), //LAT
+  //                         Angle::fromDegrees(lat), //LON
+  //                         0);
+  //              }
+  //
+  //              short maxIndex = 0;
+  //              ShortBufferBuilder sbb;
+  //              for (int j = 0; j < indices->size(); j++) {
+  //                short index = indices->get(j)->asNumber()->value();
+  //
+  //                if (index > maxIndex){
+  //                  maxIndex = index;
+  //                }
+  //
+  //                if (index < 0){
+  //                  printf("OH OH");
+  //                }
+  //
+  //                sbb.add(index);
+  //              }
+  //
+  //              if (maxIndex * 3 != fbb->size()){
+  //                printf("OH OH");
+  //              }
+  //
+  //              double r = color->get(0)->asNumber()->value();
+  //              double g = color->get(1)->asNumber()->value();
+  //              double b = color->get(2)->asNumber()->value();
+  //
+  //
+  //              IndexedMesh* im = new IndexedMesh(GLPrimitive::triangles(),
+  //                                                true,
+  //                                                fbb->getCenter(),
+  //                                                fbb->create(),
+  //                                                sbb.create(),
+  //                                                10.0,
+  //                                                1,
+  //                                                Color::newFromRGBA(r/255.0,g/255.0,b/255.0, 0.5),
+  //                                                NULL,
+  //                                                0.0,
+  //                                                false);
+  //
+  //              mr1->addMesh(im);
+  //
+  //            }
+  //
+  //
+  //
+  //            builder.addRenderer(mr1);
+  //
+  //          }
+  //        }
+  //      }
+  
+  
+  
+  //  }
+  
   
   {
     //Test método chulo
