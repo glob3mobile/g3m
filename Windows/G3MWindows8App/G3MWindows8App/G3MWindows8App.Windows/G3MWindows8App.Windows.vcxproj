@@ -96,7 +96,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
     <PackageCertificateKeyFile>G3MWindows8App.Windows_TemporaryKey.pfx</PackageCertificateKeyFile>
-    <NuGetPackageImportStamp>522d9c63</NuGetPackageImportStamp>
+    <NuGetPackageImportStamp>40db385d</NuGetPackageImportStamp>
   </PropertyGroup>
   <Import Project="..\G3MWindows8App.Shared\G3MWindows8App.Shared.vcxitems" Label="Shared" />
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">
@@ -202,6 +202,7 @@
       <FileType>Document</FileType>
     </None>
     <None Include="G3MWindows8App.Windows_TemporaryKey.pfx" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\G3MWindowsSDK\G3MWindowsSDK\G3MWindowsSDK.Windows\G3MWindowsSDK.Windows.vcxproj">

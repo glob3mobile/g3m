@@ -22,7 +22,7 @@
 void NativeGL_win8::initializeRenderStates() const{
 	_rasterizerDesc.FillMode = D3D11_FILL_SOLID;
 	_rasterizerDesc.CullMode = D3D11_CULL_NONE;
-	_rasterizerDesc.FrontCounterClockwise = TRUE;
+	_rasterizerDesc.FrontCounterClockwise = FALSE;
 
 	_rtblendDesc.BlendOp = D3D11_BLEND_OP_ADD;
 	_rtblendDesc.BlendOpAlpha = D3D11_BLEND_OP_ADD;

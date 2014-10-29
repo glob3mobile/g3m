@@ -30,5 +30,6 @@
   <ItemGroup>
     <None Include="G3MWindows8App.Windows_TemporaryKey.pfx" />
     <None Include="ColorMeshV.cso" />
+    <None Include="packages.config" />
   </ItemGroup>
 </Project>

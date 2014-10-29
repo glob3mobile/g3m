@@ -103,7 +103,7 @@
     </Link>
   </ItemDefinitionGroup>
   <PropertyGroup Label="UserMacros">
-    <NuGetPackageImportStamp>2a6c55f8</NuGetPackageImportStamp>
+    <NuGetPackageImportStamp>01d1be3a</NuGetPackageImportStamp>
   </PropertyGroup>
   <ItemGroup>
     <Image Include="Assets\Logo.scale-240.png" />
@@ -122,6 +122,9 @@
     <ProjectReference Include="..\..\..\G3MWindowsSDK\G3MWindowsSDK\G3MWindowsSDK.WindowsPhone\G3MWindowsSDK.WindowsPhone.vcxproj">
       <Project>{31702219-f9f2-4445-977f-61a7d524ba11}</Project>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -25,11 +25,11 @@ GPUProgram_D3D::GPUProgram_D3D(GL* gl,
 	m["BLENDWEIGHT"] = FLOAT1;
 	m["COLOR"] = FLOAT4;
 	m["NORMAL"] = FLOAT4;
-	m["POSITION"] = FLOAT4;
+	m["POSITION"] = FLOAT3;
 	m["POSITIONT"] = FLOAT4;
 	m["PSIZE"] = FLOAT1;
 	m["TANGENT"] = FLOAT4;
-	m["TEXCOORD"] = FLOAT4;
+	m["TEXCOORD"] = FLOAT2;
 
 	_name = name;
 	_gl = gl;

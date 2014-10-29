@@ -1,6 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\..\..\G3MWindows8App\packages\directxtk_windowsphone_8_1.2014.07.15.1\build\native\directxtk_windowsphone_8_1.props" Condition="Exists('..\..\..\G3MWindows8App\packages\directxtk_windowsphone_8_1.2014.07.15.1\build\native\directxtk_windowsphone_8_1.props')" />
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|ARM">
       <Configuration>Debug</Configuration>
@@ -77,7 +76,7 @@
     <Import Project="$(ExtensionSDKDirectoryRoot)\WindowsPhoneApp\v$(TargetPlatformVersion)\ExtensionSDKs\SQLite.WP81\3.8.6\DesignTime\CommonConfiguration\Neutral\SQLite.WP81.props" Condition="exists('$(ExtensionSDKDirectoryRoot)\WindowsPhoneApp\v$(TargetPlatformVersion)\ExtensionSDKs\SQLite.WP81\3.8.6\DesignTime\CommonConfiguration\Neutral\SQLite.WP81.props')" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros">
-    <NuGetPackageImportStamp>a5994d9e</NuGetPackageImportStamp>
+    <NuGetPackageImportStamp>253e9f91</NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <GenerateManifest>false</GenerateManifest>
@@ -105,7 +104,7 @@
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
       <GenerateWindowsMetadata>false</GenerateWindowsMetadata>
     </Link>
-    <Lib> 
+    <Lib>
       <AdditionalDependencies>sqlite3.lib;windowscodecs.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
@@ -148,7 +147,6 @@
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
-    <Import Project="..\..\..\G3MWindows8App\packages\directxtk_windowsphone_8_1.2014.07.15.1\build\native\directxtk_windowsphone_8_1.targets" Condition="Exists('..\..\..\G3MWindows8App\packages\directxtk_windowsphone_8_1.2014.07.15.1\build\native\directxtk_windowsphone_8_1.targets')" />
     <Import Project="..\..\..\G3MWindows8App\packages\sqlite.redist.3.8.4.2\build\native\sqlite.redist.targets" Condition="Exists('..\..\..\G3MWindows8App\packages\sqlite.redist.3.8.4.2\build\native\sqlite.redist.targets')" />
     <Import Project="..\..\..\G3MWindows8App\packages\sqlite.3.8.4.2\build\native\sqlite.targets" Condition="Exists('..\..\..\G3MWindows8App\packages\sqlite.3.8.4.2\build\native\sqlite.targets')" />
   </ImportGroup>
@@ -156,8 +154,6 @@
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\..\..\G3MWindows8App\packages\directxtk_windowsphone_8_1.2014.07.15.1\build\native\directxtk_windowsphone_8_1.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\G3MWindows8App\packages\directxtk_windowsphone_8_1.2014.07.15.1\build\native\directxtk_windowsphone_8_1.props'))" />
-    <Error Condition="!Exists('..\..\..\G3MWindows8App\packages\directxtk_windowsphone_8_1.2014.07.15.1\build\native\directxtk_windowsphone_8_1.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\G3MWindows8App\packages\directxtk_windowsphone_8_1.2014.07.15.1\build\native\directxtk_windowsphone_8_1.targets'))" />
     <Error Condition="!Exists('..\..\..\G3MWindows8App\packages\sqlite.redist.3.8.4.2\build\native\sqlite.redist.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\G3MWindows8App\packages\sqlite.redist.3.8.4.2\build\native\sqlite.redist.targets'))" />
     <Error Condition="!Exists('..\..\..\G3MWindows8App\packages\sqlite.3.8.4.2\build\native\sqlite.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\G3MWindows8App\packages\sqlite.3.8.4.2\build\native\sqlite.targets'))" />
   </Target>

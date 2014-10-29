@@ -81,7 +81,7 @@ public:
                                           topSectorSplitsByLatitude,
                                           topSectorSplitsByLongitude,
                                           firstLevel,
-                                          maxLevel,
+                                          0,//maxLevel,
                                           LayerTilesRenderParameters::defaultTileTextureResolution(),
                                           LayerTilesRenderParameters::defaultTileMeshResolution(),
                                           mercator);

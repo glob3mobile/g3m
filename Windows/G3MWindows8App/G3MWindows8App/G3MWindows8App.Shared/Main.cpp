@@ -110,9 +110,9 @@ public:
 		_builder->getPlanetRendererBuilder()->setQuality(QUALITY_LOW);
 		//_builder->getPlanetRendererBuilder()->setPlanetRendererParameters(getRenderTilesParameters());
 
-		_builder->getPlanetRendererBuilder()->setDefaultTileBackGroundImage(new DownloaderImageBuilder(URL("file:///deathStarS.png")));
+		//_builder->getPlanetRendererBuilder()->setDefaultTileBackGroundImage(new DownloaderImageBuilder(URL("file:///deathStarS.png")));
 		//_builder->getPlanetRendererBuilder()->setDefaultTileBackGroundImage(new DownloaderImageBuilder(URL("http://b.tile.openstreetmap.org/2/2/3.png")));
-		//_builder->getPlanetRendererBuilder()->setDefaultTileBackGroundImage(new DownloaderImageBuilder(URL("http://www.freelogovectors.net/wp-content/uploads/2013/02/sheep-b.png")));
+		_builder->getPlanetRendererBuilder()->setDefaultTileBackGroundImage(new DownloaderImageBuilder(URL("http://www.freelogovectors.net/wp-content/uploads/2013/02/sheep-b.png")));
 
 		//Image_win8* image = Image_win8::imageFromFile(URL("file:///deathStarS.png"));
 		
