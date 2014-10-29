@@ -184,7 +184,19 @@ public class EllipsoidalPlanet extends Planet
     }
     while (mu.abs(s) > 1e-10);
   
-    return new Vector3D(position._x / da, position._y / db, position._z / dc);
+    Vector3D res = new Vector3D(position._x / da, position._y / db, position._z / dc);
+  
+    /*
+    {
+      //Novel method by José Miguel Santana
+      Vector3D spherePos = position.div(_ellipsoid._radii);
+      Vector3D normSpherePos = spherePos.normalized();
+      Vector3D finalRes = normSpherePos.times(_ellipsoid._radii);
+      return finalRes;
+    }
+     */
+  
+    return res;
   }
 
   public final Vector3D scaleToGeocentricSurface(Vector3D position)
