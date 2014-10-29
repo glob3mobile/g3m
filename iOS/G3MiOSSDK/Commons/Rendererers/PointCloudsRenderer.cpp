@@ -498,7 +498,7 @@ long long PointCloudsRenderer::PointCloudInnerNode::rawRender(const PointCloud* 
                              Color::newFromRGBA(1, 1, 0, 1), // flatColor
                              NULL, // colors
                              1,    // colorsIntensity
-                             true);
+                             false);
     }
     _mesh->render(rc, glState);
     renderedCount = 1;
@@ -724,7 +724,7 @@ DirectMesh* PointCloudsRenderer::PointCloudLeafNode::createMesh(double minHeight
                                       NULL,                     // flatColor
                                       _firstPointsColorsBuffer, // colors
                                       1,                        // colorsIntensity
-                                      true);
+                                      false);
     mesh->setRenderVerticesCount( mu->min(_neededPoints, firstPointsCount) );
 
     return mesh;
@@ -792,7 +792,7 @@ DirectMesh* PointCloudsRenderer::PointCloudLeafNode::createMesh(double minHeight
                                     NULL,   // flatColor
                                     colors, // colors
                                     1,      // colorsIntensity
-                                    true);
+                                    false);
   // mesh->setRenderVerticesCount( mu->min(_neededPoints, firstPointsCount) );
   mesh->setRenderVerticesCount( pointsCount );
 
