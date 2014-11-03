@@ -13,6 +13,7 @@
 #include <thread>
 #include <mutex>
 #include <chrono>
+#include <ppltasks.h>
 //#include <sched.h>
 
 class Downloader_win8;
@@ -26,8 +27,11 @@ private:
 
 	std::mutex _lock;
 
-	Windows::Foundation::IAsyncAction^ _workerThread;
-	//Windows::System::Threading::ThreadPoolTimer^ _periodicTimer;
+	//Windows::Foundation::IAsyncAction^ _workerThread;
+	//Windows::System::Threading::WorkItemHandler^ _workItem;
+	//concurrency::task<void> createTask();
+
+	void run();
 
 public:
 	Downloader_win8_WorkerThread(Downloader_win8* downloader);
@@ -37,8 +41,6 @@ public:
 	void stop();
 
 	bool isStopping();
-
-	void run();
 
 	~Downloader_win8_WorkerThread();
 };

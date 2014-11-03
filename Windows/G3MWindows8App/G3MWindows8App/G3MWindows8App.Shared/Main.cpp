@@ -87,7 +87,8 @@ public:
 			if (renderer->isInitialized()){
 				renderer->render();
 			}
-			
+			//auto UIDispacher = Windows::UI::Core::CoreWindow::GetForCurrentThread()->Dispatcher;
+			Windows::UI::Core::CoreWindow::GetForCurrentThread()->Dispatcher->ProcessEvents(Windows::UI::Core::CoreProcessEventsOption::ProcessAllIfPresent);
 		} //nasty way to create a game loop
 	};
 
