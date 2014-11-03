@@ -64,7 +64,7 @@ public:
                     bool expired);
     
     void onError(const URL& url){
-        ILogger::instance()->logError("The requested pano could not be found!");    
+        ILogger::instance()->logError("The requested pano could not be found! ->"+url.description());
     }
     
     void onCancel(const URL& url){}
