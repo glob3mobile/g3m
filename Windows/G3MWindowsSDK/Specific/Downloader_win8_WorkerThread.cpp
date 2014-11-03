@@ -12,28 +12,13 @@
 //#include <WinBase.h>
 //#include <Sched>
 //#include <pthread.h>
+//#include <ppltasks.h>
+//#include <concrt.h>
+//#include <concrtrm.h>
 
 //using namespace Windows::System::Threading;
 using namespace Windows::System;
-
-//bool Downloader_win8_WorkerThread::setPriorityBellowNormal(){
-//	
-//	//thread::native_handle_type nhandlet= this->native_handle();
-//	//std::this_thread::
-//
-//	//std::thread::native_handle handle = _worker.native_handle();
-//	//_worker.native_handle();
-//
-//	//std::thread::native_handle handle = this->native_handle();
-//	/*::Concurrency::details::
-//	::Concurrency::details::_GetConcurrency()
-//	::Concurrency::details::_Context::
-//	::Concurrency::details::_Scheduler::
-//	::Concurrency::details::_CurrentScheduler::*/
-//	
-//	return false;
-//}
-
+//using namespace ::Concurrency;
 
 Downloader_win8_WorkerThread::Downloader_win8_WorkerThread(Downloader_win8* downloader) :
 	_downloader(downloader)
@@ -43,27 +28,14 @@ Downloader_win8_WorkerThread::Downloader_win8_WorkerThread(Downloader_win8* down
 
 
 void Downloader_win8_WorkerThread::start(){
+	
+	//_workerThread = Threading::ThreadPool::RunAsync(_workItem, Threading::WorkItemPriority::Low);
+	//createTask();
 
-	//std::thread _worker(&Downloader_win8_WorkerThread::run, this);
-	//_worker.detach();
-
-	auto workItem = ref new Threading::WorkItemHandler(
-		[this](IAsyncAction^ workItem)
+	concurrency::create_task([this]
 	{
 		this->run();
 	});
-
-	_workerThread = Threading::ThreadPool::RunAsync(workItem, Threading::WorkItemPriority::Low);
-
-	//auto elapsedHandler = ref new Threading::TimerElapsedHandler([this](Threading::ThreadPoolTimer^ source)
-	//{
-	//	this->run();
-	//});
-	//
-	//TimeSpan period;
-	//period.Duration = 25 * 10000; // 25 ms
-	//
-	//_periodicTimer = Threading::ThreadPoolTimer::CreatePeriodicTimer(elapsedHandler, period);
 }
 
 void Downloader_win8_WorkerThread::stop(){
@@ -81,18 +53,6 @@ bool Downloader_win8_WorkerThread::isStopping(){
 	return result;
 }
 
-//void Downloader_win8_WorkerThread::run(){
-//
-//	while (!isStopping()) {
-//
-//		Downloader_win8_Handler* handler = this->_downloader->getHandlerToRun();
-//		if (handler) {
-//			ILogger::instance()->logInfo("Executing in thread runwithDownloader. Thread: %d", std::this_thread::get_id());
-//			handler->runWithDownloader(this->_downloader);
-//		}
-//	}
-//	_periodicTimer->Cancel();
-//}
 
 void Downloader_win8_WorkerThread::run(){
 
@@ -100,20 +60,65 @@ void Downloader_win8_WorkerThread::run(){
 
 		Downloader_win8_Handler* handler = this->_downloader->getHandlerToRun();
 		if (handler) {
-			//ILogger::instance()->logInfo("Executing in thread runwithDownloader. Thread: %d", _workerThread->Id);
+			//ILogger::instance()->logInfo("Executing Downloader_win8_WorkerThread in thread: %d",std::this_thread::get_id());
 			handler->runWithDownloader(this->_downloader);
 		}
 		else {
 			// sleep for 25 milliseconds
-			//ILogger::instance()->logInfo("Sleeping in thread.. %d", _workerThread->Id);
+			//ILogger::instance()->logInfo("Sleeping Downloader_win8_WorkerThread in thread: %d", std::this_thread::get_id());
 			std::this_thread::sleep_for(std::chrono::milliseconds(25)); //TODO: is this a valid option in Windows Store apps??
-			//-- http://blogs.msdn.com/b/devosaure/archive/2012/03/23/asynchronisme-et-scenarios-hybrides-avec-le-nouveau-runtime-windows-winrt.aspx
+			//--http://blogs.msdn.com/b/devosaure/archive/2012/03/23/asynchronisme-et-scenarios-hybrides-avec-le-nouveau-runtime-windows-winrt.aspx
 		}
 	}
 }
 
 Downloader_win8_WorkerThread::~Downloader_win8_WorkerThread(){
 	//TODO: ?
-	_workerThread->Close();
-	delete _workerThread;
+	//_workerThread->Close();
+	//delete _workerThread;
+	//delete _workItem;
 }
+
+
+//=================================================================================
+//==					TESTS
+//=================================================================================
+
+//Downloader_win8_WorkerThread::Downloader_win8_WorkerThread(Downloader_win8* downloader) :
+//_downloader(downloader)
+//{
+//	_stopping = false;
+//
+//	_workItem = ref new Threading::WorkItemHandler(
+//		[this](IAsyncAction^ workItem)
+//	{
+//		this->createTask();
+//	}, Platform::CallbackContext::Any);
+//}
+
+
+//concurrency::task<void>  Downloader_win8_WorkerThread::createTask(){
+//
+//	concurrency::task<void> thisTask = concurrency::create_task([this]
+//	{
+//		this->run();
+//	});
+//
+//	return thisTask;
+//}
+
+//void Downloader_win8_WorkerThread::start(){
+//
+//	//std::thread _worker(&Downloader_win8_WorkerThread::run, this);
+//	//_worker.detach();
+//
+//	/*_workItem = ref new Threading::WorkItemHandler(
+//	[this](IAsyncAction^ workItem)
+//	{
+//	this->doRun();
+//	}, Platform::CallbackContext::Any);*/
+//
+//	_workerThread = Threading::ThreadPool::RunAsync(_workItem, Threading::WorkItemPriority::Low);
+//
+//	//this->doRun();
+//}

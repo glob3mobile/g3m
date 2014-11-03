@@ -195,9 +195,10 @@ public:
 
 	int getBufferSize() const;
 
-	IByteBuffer* getBitmapBuffer(IWICBitmap* bitmap) const;
+	IByteBuffer* getBitmapBuffer() const;
 
-	//HRESULT createTextureAndResource(ID3D11Device* d3dDevice, ID3D11Resource** texture, ID3D11ShaderResourceView** textureView) const;
+	static int getBppFromPixelFormat(WICPixelFormatGUID pPixelFormat);
+
 
 	//-- only for testing, remove later -----------------------------------
 	static Image_win8* imageFromFile(const URL& fileUrl);

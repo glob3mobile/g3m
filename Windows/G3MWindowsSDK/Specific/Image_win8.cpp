@@ -64,7 +64,8 @@ std::string getContainerFormatExtension(GUID containerFormat){
 	return NULL;
 }
 
-UINT getbppFromPixelFormat(WICPixelFormatGUID pPixelFormat){
+
+int Image_win8::getBppFromPixelFormat(WICPixelFormatGUID pPixelFormat){
 
 	if (GUID_WICPixelFormatDontCare == pPixelFormat){
 		return 0;
@@ -158,60 +159,6 @@ UINT getStride(
 	return stride;
 }
 
-
-IByteBuffer* Image_win8::getBitmapBuffer(IWICBitmap* bitmap) const{
-
-	if (bitmap == nullptr){
-		return NULL;
-	}
-
-	UINT uiWidth = 0;
-	UINT uiHeight = 0;
-	IWICImagingFactory *pFactory = NULL;
-	
-	IWICBitmapLock *pLock = NULL;
-	BYTE *pv = NULL;
-	UINT cbBufferSize = 0;
-
-	HRESULT	hr = CoCreateInstance(
-			CLSID_WICImagingFactory,
-			NULL,
-			CLSCTX_INPROC_SERVER,
-			IID_IWICImagingFactory,
-			(LPVOID*)&pFactory
-			);
-
-	if (SUCCEEDED(hr)){
-		hr = bitmap->GetSize(&uiWidth, &uiHeight);
-	}
-
-	if (SUCCEEDED(hr)){
-		WICRect rcLock;
-		rcLock = WICRect{ 0, 0, uiWidth, uiHeight };
-		
-		if (SUCCEEDED(hr)){
-			hr = bitmap->Lock(&rcLock, WICBitmapLockRead, &pLock);
-		}
-
-		if (SUCCEEDED(hr)){
-			hr = pLock->GetDataPointer(&cbBufferSize, &pv);
-			// Release the bitmap lock.
-			pLock->Release();
-		}
-	}
-
-	if (!SUCCEEDED(hr)){
-		ILogger::instance()->logError("Unnable to retrieve bitmap data buffer");
-		return NULL;
-	}
-
-	if (pFactory){
-		pFactory->Release();
-	}
-
-	IByteBuffer* bitmapBuffer = IFactory::instance()->createByteBuffer(pv, cbBufferSize);
-	return bitmapBuffer;
-}
 
 
 Image_win8::Image_win8(IWICBitmap* image, IByteBuffer* sourceBuffer)
@@ -327,6 +274,62 @@ IImage* Image_win8::shallowCopy() const{
 }
 
 
+IByteBuffer* Image_win8::getBitmapBuffer() const {
+
+	if (_image == nullptr){
+		return NULL;
+	}
+
+	UINT uiWidth = 0;
+	UINT uiHeight = 0;
+	IWICImagingFactory *pFactory = NULL;
+
+	IWICBitmapLock *pLock = NULL;
+	BYTE *pv = NULL;
+	UINT cbBufferSize = 0;
+
+	HRESULT	hr = CoCreateInstance(
+		CLSID_WICImagingFactory,
+		NULL,
+		CLSCTX_INPROC_SERVER,
+		IID_IWICImagingFactory,
+		(LPVOID*)&pFactory
+		);
+
+	if (SUCCEEDED(hr)){
+		hr = _image->GetSize(&uiWidth, &uiHeight);
+	}
+
+	if (SUCCEEDED(hr)){
+		WICRect rcLock;
+		rcLock = WICRect{ 0, 0, uiWidth, uiHeight };
+
+		if (SUCCEEDED(hr)){
+			hr = _image->Lock(&rcLock, WICBitmapLockRead, &pLock);
+		}
+
+		if (SUCCEEDED(hr)){
+			hr = pLock->GetDataPointer(&cbBufferSize, &pv);
+			// Release the bitmap lock.
+			pLock->Release();
+		}
+	}
+
+	if (!SUCCEEDED(hr)){
+		ILogger::instance()->logError("Unnable to retrieve bitmap data buffer");
+		return NULL;
+	}
+
+	if (pFactory){
+		pFactory->Release();
+	}
+
+	IByteBuffer* bitmapBuffer = IFactory::instance()->createByteBuffer(pv, cbBufferSize);
+
+	return bitmapBuffer;
+}
+
+
 
 IByteBuffer* Image_win8::createImageBuffer() const{
 	
@@ -359,7 +362,8 @@ IByteBuffer* Image_win8::createImageBuffer() const{
 	}
 	 
 	// getBitmapBuffer
-	IByteBuffer* bitmapBuffer = getBitmapBuffer(_image);
+	//IByteBuffer* bitmapBuffer = getBitmapBuffer(_image);
+	IByteBuffer* bitmapBuffer = getBitmapBuffer();
 	
 	//-- reserve memory for output data
 	int outputLength = bitmapBuffer->size();
@@ -544,106 +548,6 @@ IWICBitmap* Image_win8::imageWithData(IByteBuffer* imgData){
 	return pBitmap;
 }
 
-/*HRESULT Image_win8::createTextureAndResource(ID3D11Device* d3dDevice, ID3D11Resource** texture, ID3D11ShaderResourceView** textureView) const{
-
-	if (!d3dDevice || (!texture && !textureView)){
-		return E_INVALIDARG;
-	}
-
-	IWICImagingFactory* pFactory = NULL;
-	IWICStream* pIWICStream = NULL;
-	IWICBitmapDecoder* pIDecoder = NULL;
-	IWICBitmapFrameDecode *pIDecoderFrame = NULL;
-
-
-	HRESULT hr = CoCreateInstance(
-		CLSID_WICImagingFactory,
-		NULL,
-		CLSCTX_INPROC_SERVER,
-		IID_IWICImagingFactory,
-		(LPVOID*)&pFactory
-		);
-
-	// Create a WIC stream to map onto the memory.
-	if (SUCCEEDED(hr)){
-		hr = pFactory->CreateStream(&pIWICStream);
-	}
-	BYTE* data = ((ByteBuffer_win8*)_sourceBuffer)->getPointer();
-	int dataLength = _sourceBuffer->size();
-
-	// Initialize the stream with the memory pointer and size.
-	if (SUCCEEDED(hr)){
-		hr = pIWICStream->InitializeFromMemory(
-			data,
-			dataLength);
-	}
-
-	// Create a decoder for the stream.
-	if (SUCCEEDED(hr)){
-		hr = pFactory->CreateDecoderFromStream(
-			pIWICStream,                   // The stream to use to create the decoder
-			NULL,                          // Do not prefer a particular vendor
-			WICDecodeMetadataCacheOnLoad,  // Cache metadata when needed
-			&pIDecoder);                   // Pointer to the decoder
-	}
-
-
-	if (SUCCEEDED(hr)){
-		hr = pIDecoder->GetFrame(0, &pIDecoderFrame);
-	}
-
-	size_t maxsize;
-	switch (d3dDevice->GetFeatureLevel())
-	{
-	case D3D_FEATURE_LEVEL_9_1:
-	case D3D_FEATURE_LEVEL_9_2:
-		maxsize = 2048;
-		break;
-
-	case D3D_FEATURE_LEVEL_9_3:
-		maxsize = 4096;
-		break;
-
-	case D3D_FEATURE_LEVEL_10_0:
-	case D3D_FEATURE_LEVEL_10_1:
-		maxsize = 8192;
-		break;
-
-	default:
-		maxsize = D3D11_REQ_TEXTURE2D_U_OR_V_DIMENSION;
-		break;
-	}
-
-	// Determine format
-	WICPixelFormatGUID pixelFormat;
-	hr = pIDecoderFrame->GetPixelFormat(&pixelFormat);
-	if (FAILED(hr))
-		return hr;
-
-	WICPixelFormatGUID convertGUID;
-	memcpy(&convertGUID, &pixelFormat, sizeof(WICPixelFormatGUID));
-
-	size_t bpp = 0;
-
-	DXGI_FORMAT format = _WICToDXGI(pixelFormat);
-	bpp = getbppFromPixelFormat(pixelFormat);
-
-	if ((format == DXGI_FORMAT_R32G32B32_FLOAT) && textureView != 0)
-	{
-		// Special case test for optional device support for autogen mipchains for R32G32B32_FLOAT 
-		UINT fmtSupport = 0;
-		hr = d3dDevice->CheckFormatSupport(DXGI_FORMAT_R32G32B32_FLOAT, &fmtSupport);
-		if (FAILED(hr) || !(fmtSupport & D3D11_FORMAT_SUPPORT_MIP_AUTOGEN))
-		{
-			// Use R32G32B32A32_FLOAT instead which is required for Feature Level 10.0 and up
-			memcpy(&convertGUID, &GUID_WICPixelFormat128bppRGBAFloat, sizeof(WICPixelFormatGUID));
-			format = DXGI_FORMAT_R32G32B32A32_FLOAT;
-			bpp = 128;
-		}
-	}
-
-
-}*/
 
 
 int Image_win8::getBufferSize() const{
