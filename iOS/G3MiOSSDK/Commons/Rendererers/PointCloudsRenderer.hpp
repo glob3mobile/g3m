@@ -589,6 +589,9 @@ public:
 
   void render(const G3MRenderContext* rc,
               GLState* glState);
+  
+  void zRender(const G3MRenderContext* rc,
+               GLState* glState){}
 
   void onResizeViewportEvent(const G3MEventContext* ec,
                              int width, int height) {

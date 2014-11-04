@@ -148,6 +148,7 @@
 #import <G3MiOSSDK/DebugTileImageProvider.hpp>
 #import <G3MiOSSDK/GEOVectorLayer.hpp>
 #import <G3MiOSSDK/Info.hpp>
+#import <G3MiOSSDK/PointCloudsRenderer.hpp>
 
 #include <typeinfo>
 
@@ -1202,7 +1203,6 @@ public:
   if (false){ //SECTOR CACERES
     builder.setShownSector(Sector::fromDegrees(                                                                                 39.4642996294239623,                                                                                -6.3829977122432933,                                                                                  39.4829891936013553,-6.3645288909498845).shrinkedByPercent(-30));
   }
-
 
   if (false) {
     //  meshRenderer->loadJSONPointCloud(URL("file:///pointcloud/points.json"),
