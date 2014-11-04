@@ -19,22 +19,13 @@ package org.glob3.mobile.generated;
 
 public class DirectMesh extends AbstractMesh
 {
-<<<<<<< HEAD
+  private int _renderVerticesCount;
+
   protected final void rawRender(G3MRenderContext rc, GLState glState, RenderType renderType)
   {
     GL gl = rc.getGL();
   
-    final int verticesCount = getVertexCount();
-    gl.drawArrays(_primitive, 0, verticesCount, glState, rc.getGPUProgramManager(), renderType);
-=======
-  private int _renderVerticesCount;
-
-  protected final void rawRender(G3MRenderContext rc)
-  {
-    GL gl = rc.getGL();
-  
-    gl.drawArrays(_primitive, 0, _renderVerticesCount, _glState, rc.getGPUProgramManager());
->>>>>>> purgatory
+    gl.drawArrays(_primitive, 0, _renderVerticesCount, _glState, rc.getGPUProgramManager(), renderType);
   }
 
 //  Mesh* createNormalsMesh() const;

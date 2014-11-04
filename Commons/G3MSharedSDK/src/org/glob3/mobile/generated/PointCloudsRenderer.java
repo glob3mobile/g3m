@@ -24,7 +24,7 @@ package org.glob3.mobile.generated;
 //class DirectMesh;
 //class ByteBufferIterator;
 
-public class PointCloudsRenderer extends DefaultRenderer
+public abstract class PointCloudsRenderer extends DefaultRenderer
 {
 
   public abstract static class PointCloudMetadataListener

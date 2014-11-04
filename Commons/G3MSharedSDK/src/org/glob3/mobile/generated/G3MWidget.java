@@ -691,9 +691,11 @@ public class G3MWidget implements ChangedRendererInfoListener
       //ILogger::instance()->logInfo("Z = %f - DIST CAM: %f\n", z, _currentCamera->getCartesianPosition().sub(pos).length());
       //ILogger::instance()->logInfo("GEO: %s\n", _planet->toGeodetic2D(pos).description().c_str());
   
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning ASK AGUSTIN
       // update ground height in camera class
-      _nextCamera.setGroundHeightFromCartesianPoint(pos);
-      _currentCamera.setGroundHeightFromCartesianPoint(pos);
+  //    _nextCamera->setGroundHeightFromCartesianPoint(pos);
+  //    _currentCamera->setGroundHeightFromCartesianPoint(pos);
       return pos;
     }
     else

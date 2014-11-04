@@ -268,7 +268,7 @@ public class Plane
   public final Vector2D rotationAngleAroundZAxisToFixPointInRadians(Vector3D point)
   {
   
-    IMathUtils mu = IMathUtils.instance();
+    final IMathUtils mu = IMathUtils.instance();
     double a = _normal._x;
     double b = _normal._y;
     double c = _normal._z;

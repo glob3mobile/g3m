@@ -601,5 +601,4 @@ public class SphericalPlanet extends Planet
   {
     return "Spherical";
   }
-
 }

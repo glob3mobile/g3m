@@ -78,9 +78,10 @@ public class CameraMouseWheelHandler extends CameraEventHandler
       {
         factor *= -1;
       }
+  
       double dist = dists.get(0);
       Vector3D translation = dir.normalized().times(dist * factor);
-
+  
       cam.translateCamera(translation);
     }
   

@@ -731,9 +731,14 @@ public class Camera
 
   private FrustumData calculateFrustumData()
   {
-    final double heightFromGround = getHeightFromGround();
+  //  const double heightFromGround = getHeightFromGround();
+  //
+  //  double zNear = heightFromGround * 0.1;
   
-    double zNear = heightFromGround * 0.1;
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning ASK AGUSTIN
+    final double height = getGeodeticPosition()._height;
+    double zNear = height * 0.1;
   
     //printf ("computing new znear=%.3f.  Height from ground =%.2f\n", zNear, heightFromGround);
   
