@@ -347,9 +347,10 @@ Vector3D G3MWidget::getScenePositionForPixel(int x, int y){
     //ILogger::instance()->logInfo("Z = %f - DIST CAM: %f\n", z, _currentCamera->getCartesianPosition().sub(pos).length());
     //ILogger::instance()->logInfo("GEO: %s\n", _planet->toGeodetic2D(pos).description().c_str());
     
+#warning ASK AGUSTIN
     // update ground height in camera class
-    _nextCamera->setGroundHeightFromCartesianPoint(pos);
-    _currentCamera->setGroundHeightFromCartesianPoint(pos);
+//    _nextCamera->setGroundHeightFromCartesianPoint(pos);
+//    _currentCamera->setGroundHeightFromCartesianPoint(pos);
     return pos;
   } else{
     //ILogger::instance()->logInfo("NO Z");

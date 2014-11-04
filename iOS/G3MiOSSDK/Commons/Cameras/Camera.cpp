@@ -333,9 +333,13 @@ void Camera::setPointOfView(const Geodetic3D& center,
 }
 
 FrustumData Camera::calculateFrustumData() const {
-  const double heightFromGround = getHeightFromGround();
+//  const double heightFromGround = getHeightFromGround();
+//  
+//  double zNear = heightFromGround * 0.1;
   
-  double zNear = heightFromGround * 0.1;
+#warning ASK AGUSTIN
+  const double height = getGeodeticPosition()._height;
+  double zNear = height * 0.1;
 
   //printf ("computing new znear=%.3f.  Height from ground =%.2f\n", zNear, heightFromGround);
   
