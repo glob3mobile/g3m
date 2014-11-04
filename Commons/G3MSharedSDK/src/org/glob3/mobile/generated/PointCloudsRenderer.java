@@ -24,7 +24,7 @@ package org.glob3.mobile.generated;
 //class DirectMesh;
 //class ByteBufferIterator;
 
-public abstract class PointCloudsRenderer extends DefaultRenderer
+public class PointCloudsRenderer extends DefaultRenderer
 {
 
   public abstract static class PointCloudMetadataListener
@@ -1393,6 +1393,10 @@ public abstract class PointCloudsRenderer extends DefaultRenderer
         cloud.render(rc, _glState, frustum, nowInMS);
       }
     }
+  }
+
+  public final void zRender(G3MRenderContext rc, GLState glState)
+  {
   }
 
   public final void onResizeViewportEvent(G3MEventContext ec, int width, int height)
