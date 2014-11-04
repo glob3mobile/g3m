@@ -533,6 +533,7 @@ TileImageProvider* LayerSet::getTileImageProvider(const G3MRenderContext* rc,
 }
 
 const std::vector<const Info*> LayerSet::getInfo() {
+#warning ASK DIEGO
 //  for (unsigned int i = 0; i < _infos.size(); i++) {
   //  delete _infos[i];
 //  }
