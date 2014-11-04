@@ -26,12 +26,10 @@ class TilesStatistics;
 class ElevationDataProvider;
 class ITimer;
 class GLState;
-//class TileRasterizer;
 class LayerSet;
 class ITexturizerData;
 class PlanetTileTessellatorData;
 class PlanetRenderer;
-class TileRenderingListener;
 class TileKey;
 class Geodetic3D;
 
@@ -89,9 +87,6 @@ private:
                      const LayerTilesRenderParameters* layerTilesRenderParameters);
   
   inline bool isVisible(const G3MRenderContext* rc,
-                        //const Planet* planet,
-                        //const Vector3D& cameraNormalizedPosition,
-                        //double cameraAngle2HorizonInRadians,
                         const Frustum* cameraFrustumInModelCoordinates,
                         ElevationDataProvider* elevationDataProvider,
                         const Sector* renderedSector,
@@ -117,7 +112,6 @@ private:
                         TileTexturizer* texturizer,
                         ElevationDataProvider* elevationDataProvider,
                         const TileTessellator* tessellator,
-                        //                        TileRasterizer* tileRasterizer,
                         const LayerTilesRenderParameters* layerTilesRenderParameters,
                         const LayerSet* layerSet,
                         const TilesRenderParameters* tilesRenderParameters,
@@ -170,14 +164,10 @@ private:
                                           const TilesRenderParameters* tilesRenderParameters);
   
   bool _rendered;
-  TileRenderingListener* _tileRenderingListener;
   
   static std::string createTileId(int level,
                                   int row,
                                   int column);
-  
-  void setRendered(const bool rendered, TileRenderingListener* tileRenderingListener);
-  
   
 public:
   const Sector      _sector;
@@ -213,7 +203,6 @@ public:
                                TileTexturizer* texturizer,
                                ElevationDataProvider* elevationDataProvider,
                                const TileTessellator* tessellator,
-                               //                               TileRasterizer* tileRasterizer,
                                const LayerTilesRenderParameters* layerTilesRenderParameters,
                                const LayerSet* layerSet,
                                const TilesRenderParameters* tilesRenderParameters,
@@ -221,34 +210,6 @@ public:
                                long long tileDownloadPriority,
                                float verticalExaggeration,
                                bool logTilesPetitions);
-  
-//  //RETURN ISRAWRENDER
-//  bool render(const G3MRenderContext* rc,
-//              const GLState& parentState,
-//              std::vector<Tile*>* toVisitInNextIteration,
-//              //const Planet* planet,
-//              //const Vector3D& cameraNormalizedPosition,
-//              //double cameraAngle2HorizonInRadians,
-//              const Frustum* cameraFrustumInModelCoordinates,
-//              TilesStatistics* tilesStatistics,
-//              const float verticalExaggeration,
-//              const LayerTilesRenderParameters* layerTilesRenderParameters,
-//              TileTexturizer* texturizer,
-//              const TilesRenderParameters* tilesRenderParameters,
-//              ITimer* lastSplitTimer,
-//              ElevationDataProvider* elevationDataProvider,
-//              const TileTessellator* tessellator,
-//              //              TileRasterizer* tileRasterizer,
-//              const LayerSet* layerSet,
-//              const Sector* renderedSector,
-//              bool forceFullRender,
-//              long long tileDownloadPriority,
-//              double texWidth,
-//              double texHeight,
-//              double nowInMS,
-//              const bool renderTileMeshes,
-//              bool logTilesPetitions,
-//              TileRenderingListener* tileRenderingListener);
   
   void updateQuadTree(const G3MRenderContext* rc,
                       std::list<Tile*>& renderedTiles,
@@ -271,7 +232,8 @@ public:
                       double texWidthSquared,
                       double texHeightSquared,
                       double nowInMS,
-                      TileRenderingListener* tileRenderingListener);
+                      std::vector<const Tile*>* tilesStartedRendering,
+                      std::vector<std::string>* tilesStoppedRendering);
   
   
   void performRawRender(const G3MRenderContext* rc,
@@ -296,6 +258,33 @@ public:
   //  const std::string getId() const;
   
   
+//=======
+//
+//  void render(const G3MRenderContext* rc,
+//              const GLState& parentState,
+//              std::vector<Tile*>* toVisitInNextIteration,
+//              const Frustum* cameraFrustumInModelCoordinates,
+//              TilesStatistics* tilesStatistics,
+//              const float verticalExaggeration,
+//              const LayerTilesRenderParameters* layerTilesRenderParameters,
+//              TileTexturizer* texturizer,
+//              const TilesRenderParameters* tilesRenderParameters,
+//              ITimer* lastSplitTimer,
+//              ElevationDataProvider* elevationDataProvider,
+//              const TileTessellator* tessellator,
+//              const LayerSet* layerSet,
+//              const Sector* renderedSector,
+//              bool forceFullRender,
+//              long long tileDownloadPriority,
+//              double texWidth,
+//              double texHeight,
+//              double nowInMS,
+//              const bool renderTileMeshes,
+//              bool logTilesPetitions,
+//              std::vector<const Tile*>* tilesStartedRendering,
+//              std::vector<std::string>* tilesStoppedRendering);
+//
+//>>>>>>> purgatory
   void setTextureSolved(bool textureSolved);
   
   bool isTextureSolved() const {
@@ -327,13 +316,15 @@ public:
   void setTessellatorData(PlanetTileTessellatorData* tessellatorData);
   
   const Tile* getDeepestTileContaining(const Geodetic3D& position) const;
-  
-  void prune(TileTexturizer*        texturizer,
-             ElevationDataProvider* elevationDataProvider);
-  
+
+  void prune(TileTexturizer*           texturizer,
+             ElevationDataProvider*    elevationDataProvider,
+             std::vector<std::string>* tilesStoppedRendering);
+
   void toBeDeleted(TileTexturizer*        texturizer,
-                   ElevationDataProvider* elevationDataProvider);
-  
+                   ElevationDataProvider* elevationDataProvider,
+                   std::vector<std::string>* tilesStoppedRendering);
+
   const std::string description() const;
 #ifdef JAVA_CODE
   @Override

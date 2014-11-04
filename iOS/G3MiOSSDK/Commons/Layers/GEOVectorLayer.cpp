@@ -18,31 +18,31 @@
 GEOVectorLayer::GEOVectorLayer(const std::vector<const LayerTilesRenderParameters*>& parametersVector,
                                const float                                           transparency,
                                const LayerCondition*                                 condition,
-                               const std::string&                                    disclaimerInfo) :
+                               std::vector<const Info*>*                       layerInfo) :
 VectorLayer(parametersVector,
             transparency,
             condition,
-            disclaimerInfo),
+            layerInfo),
 _tileImageProvider(NULL)
 {
 
 }
 
 
-GEOVectorLayer::GEOVectorLayer(const int             mercatorFirstLevel,
-                               const int             mercatorMaxLevel,
-                               const int             wgs84firstLevel,
-                               const int             wgs84maxLevel,
-                               const float           transparency,
-                               const LayerCondition* condition,
-                               const std::string&    disclaimerInfo) :
+GEOVectorLayer::GEOVectorLayer(const int                        mercatorFirstLevel,
+                               const int                        mercatorMaxLevel,
+                               const int                        wgs84firstLevel,
+                               const int                        wgs84maxLevel,
+                               const float                      transparency,
+                               const LayerCondition*            condition,
+                               std::vector<const Info*>*  layerInfo) :
 VectorLayer(LayerTilesRenderParameters::createDefaultMultiProjection(mercatorFirstLevel,
                                                                      mercatorMaxLevel,
                                                                      wgs84firstLevel,
                                                                      wgs84maxLevel),
             transparency,
             condition,
-            disclaimerInfo),
+            layerInfo),
 _tileImageProvider(NULL)
 {
 
@@ -52,6 +52,7 @@ _tileImageProvider(NULL)
 GEOVectorLayer::~GEOVectorLayer() {
   //  delete _symbolizer;
   if (_tileImageProvider != NULL) {
+    _tileImageProvider->layerDeleted(this);
     _tileImageProvider->_release();
   }
 #ifdef JAVA_CODE
@@ -87,13 +88,6 @@ void GEOVectorLayer::addSymbol(const GEORasterSymbol* symbol) {
   }
 }
 
-std::vector<Petition*> GEOVectorLayer::createTileMapPetitions(const G3MRenderContext* rc,
-                                                              const LayerTilesRenderParameters* layerTilesRenderParameters,
-                                                              const Tile* tile) const {
-  std::vector<Petition*> petitions;
-  return petitions;
-}
-
 RenderState GEOVectorLayer::getRenderState() {
   return RenderState::ready();
 }
@@ -117,9 +111,14 @@ TileImageProvider* GEOVectorLayer::createTileImageProvider(const G3MRenderContex
 
 const TileImageContribution* GEOVectorLayer::contribution(const Tile* tile) const {
   if ((_condition == NULL) || _condition->isAvailable(tile)) {
-    return (_quadTree.getSector().touchesWith(tile->_sector)
+    return (_quadTree.getSector().touchesWith(tile->_sector) && !_quadTree.isEmpty()
             ? TileImageContribution::fullCoverageTransparent(_transparency)
             : NULL);
   }
   return NULL;
+}
+
+const std::vector<URL*> GEOVectorLayer::getDownloadURLs(const Tile* tile) const {
+  std::vector<URL*> result;
+  return result;
 }

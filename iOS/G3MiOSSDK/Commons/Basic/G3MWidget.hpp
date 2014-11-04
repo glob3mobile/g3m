@@ -255,7 +255,7 @@ public:
     return _infoDisplay;
   }
   
-  void changedRendererInfo(const int rendererIdentifier, const std::vector<std::string>& info);
+  void changedRendererInfo(const int rendererIdentifier, const std::vector<const Info*> info);
   
 private:
   IStorage*                _storage;

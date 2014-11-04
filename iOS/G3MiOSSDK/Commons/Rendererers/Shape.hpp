@@ -278,13 +278,16 @@ public:
                    const ElevationData* rawElevationData, // Without considering vertical exaggeration
                         double verticalExaggeration) {}
   
-  virtual std::vector<double> intersectionsDistances(const Vector3D& origin,
-                                             const Vector3D& direction) const = 0;
+//  virtual std::vector<double> intersectionsDistances(const Vector3D& origin,
+//                                             const Vector3D& direction) const = 0;
 
   void zRender(const G3MRenderContext* rc, GLState* parentState, bool renderNotReadyShapes);
 
   virtual void zRawRender(const G3MRenderContext* rc, GLState* parentGLState) = 0;
 
+  virtual std::vector<double> intersectionsDistances(const Planet* planet,
+                                                     const Vector3D& origin,
+                                                     const Vector3D& direction) const = 0;
 
 };
 

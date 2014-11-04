@@ -15,7 +15,7 @@ void ShapeScaleEffect::doStep(const G3MRenderContext* rc,
                               const TimeInterval& when) {
   const double alpha = getAlpha(when);
 
-  IMathUtils* mu = IMathUtils::instance();
+  const IMathUtils* mu = IMathUtils::instance();
   const double scaleX = mu->linearInterpolation(_fromScaleX, _toScaleX, alpha);
   const double scaleY = mu->linearInterpolation(_fromScaleY, _toScaleY, alpha);
   const double scaleZ = mu->linearInterpolation(_fromScaleZ, _toScaleZ, alpha);

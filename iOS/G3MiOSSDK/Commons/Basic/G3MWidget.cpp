@@ -190,6 +190,14 @@ _infoDisplay(infoDisplay)
                                         _gpuProgramManager,
                                         _surfaceElevationProvider);
 
+
+//#ifdef C_CODE
+//  delete _rendererState;
+//  _rendererState = new RenderState( calculateRendererState() );
+//#endif
+//#ifdef JAVA_CODE
+//  _rendererState = calculateRendererState();
+//#endif
 }
 
 
@@ -932,13 +940,13 @@ bool G3MWidget::setRenderedSector(const Sector& sector) {
 //  }
 //}
 
-void G3MWidget::changedRendererInfo(const int rendererIdentifier, const std::vector<std::string>& info) {
+void G3MWidget::changedRendererInfo(const int rendererIdentifier, const std::vector<const Info*> info) {
   if(_infoDisplay != NULL){
     _infoDisplay->changedInfo(info);
   }
-  else {
-    ILogger::instance()->logWarning("Render Infos are changing and InfoDisplay is NULL");
-  }
+//  else {
+//    ILogger::instance()->logWarning("Render Infos are changing and InfoDisplay is NULL");
+//  }
 }
 
 

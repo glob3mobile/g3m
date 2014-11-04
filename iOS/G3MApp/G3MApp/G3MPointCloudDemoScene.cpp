@@ -40,27 +40,10 @@ private:
 
   static double normalize(double value,
                           double max,
-                          double min,
-                          double new_max,
-                          double new_min) {
-    return (((value - min) / (max - min)) * (new_max - new_min)) + new_min;
+                          double min) {
+    return ((value - min) / (max - min));
   }
 
-  static Color interpolateColor(const Color& from,
-                                const Color& middle,
-                                const Color& to,
-                                double d) {
-    if (d <= 0) {
-      return from;
-    }
-    if (d >= 1) {
-      return to;
-    }
-    if (d <= 0.5) {
-      return from.mixedWith(middle, d * 2);
-    }
-    return middle.mixedWith(to, (d - 0.5f) * 2);
-  }
 
 public:
   G3MPointCloudDemoScene_ParserAsyncTask(G3MPointCloudDemoScene* scene,
@@ -124,11 +107,11 @@ public:
                       Angle::fromDegrees(lonDegrees),
                       height - 150);
 
-        const Color interpolatedColor = interpolateColor(fromColor,
-                                                         middleColor,
-                                                         toColor,
-                                                         normalize(height, minHeight, (averageHeight * 1.5), 1, 0)
-                                                         );
+        const Color interpolatedColor = Color::interpolateColor(fromColor,
+                                                                middleColor,
+                                                                toColor,
+                                                                normalize(height, minHeight, (averageHeight * 1.5))
+                                                                );
         colors.add(interpolatedColor);
       }
 

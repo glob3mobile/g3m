@@ -6,19 +6,22 @@ public class MapBoo_HUDRenderer extends DefaultRenderer
   {
     _hudImageRenderer = new HUDImageRenderer(new HUDInfoRenderer_ImageFactory());
   }
+
   public void dispose()
   {
     if (_hudImageRenderer != null)
        _hudImageRenderer.dispose();
   }
-  public final void updateInfo(java.util.ArrayList<String> info)
+
+  public final void updateInfo(java.util.ArrayList<Info> info)
   {
     HUDInfoRenderer_ImageFactory factory = (HUDInfoRenderer_ImageFactory)(_hudImageRenderer.getImageFactory());
-    if (factory.setInfos(info))
+    if (factory.setInfo(info))
     {
       _hudImageRenderer.recreateImage();
     }
   }
+
   public final void initialize(G3MContext context)
   {
     _hudImageRenderer.initialize(context);

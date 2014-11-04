@@ -1050,7 +1050,6 @@ public abstract class IG3MBuilder
     ShapesRenderer shapesRenderer = createShapesRenderer ? this.createShapesRenderer() : null;
     MarksRenderer marksRenderer = createMarksRenderer ? this.createMarksRenderer() : null;
     GEOVectorLayer geoVectorLayer = createGEOVectorLayer ? getPlanetRendererBuilder().createGEOVectorLayer() : null;
-    //  GEOTileRasterizer* geoTileRasterizer = createGEOVectorLayer ? getPlanetRendererBuilder()->createGEOTileRasterizer() : NULL;
   
     GEORenderer geoRenderer = new GEORenderer(symbolizer, meshRenderer, shapesRenderer, marksRenderer, geoVectorLayer);
     addRenderer(geoRenderer);

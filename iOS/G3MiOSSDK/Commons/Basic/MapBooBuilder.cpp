@@ -12,7 +12,6 @@
 #include "CompositeRenderer.hpp"
 #include "PlanetRenderer.hpp"
 #include "PlanetTileTessellator.hpp"
-//#include "MultiLayerTileTexturizer.hpp"
 #include "DefaultTileTexturizer.hpp"
 #include "TilesRenderParameters.hpp"
 #include "DownloadPriority.hpp"
@@ -52,6 +51,10 @@
 #include "ErrorHandling.hpp"
 #include "ICanvas.hpp"
 #include "ICanvasUtils.hpp"
+#include "DownloaderImageBuilder.hpp"
+
+#include "LevelTileCondition.hpp"
+#include "Info.hpp"
 
 const std::string MapBoo_CameraPosition::description() const {
   IStringBuilder* isb = IStringBuilder::newStringBuilder();
@@ -487,14 +490,16 @@ bool MapBooBuilder::onTerrainTouch(const G3MEventContext* ec,
   return true;
 }
 
+
+
 PlanetRenderer* MapBooBuilder::createPlanetRenderer() {
   const bool skirted = true;
   TileTessellator* tessellator = new PlanetTileTessellator(skirted, Sector::fullSphere());
 
   ElevationDataProvider* elevationDataProvider = NULL;
   const float verticalExaggeration = 1;
-  TileTexturizer* texturizer = new DefaultTileTexturizer();
-//  TileRasterizer* tileRasterizer = NULL;
+  
+  TileTexturizer* texturizer = new DefaultTileTexturizer(new DownloaderImageBuilder(URL("http://www.mapboo.com/web/img/tileNotFound.jpg")));
 
   const bool renderDebug = false;
   const bool useTilesSplitBudget = true;
@@ -507,6 +512,7 @@ PlanetRenderer* MapBooBuilder::createPlanetRenderer() {
                                                                       forceFirstLevelTilesRenderOnStart,
                                                                       incrementalTileQuality,
                                                                       quality);
+  
 
   const bool showStatistics = false;
   long long tileDownloadPriority = DownloadPriority::HIGHER;
@@ -527,7 +533,6 @@ PlanetRenderer* MapBooBuilder::createPlanetRenderer() {
                                               true,
                                               verticalExaggeration,
                                               texturizer,
-//                                              tileRasterizer,
                                               _layerSet,
                                               parameters,
                                               showStatistics,
@@ -640,7 +645,7 @@ BingMapsLayer* MapBooBuilder::parseBingMapsLayer(const JSONObject* jsonLayer,
                            25, // maxLevel
                            1, // transparency
                            NULL, // condition
-                           ""); // disclaimerInfo
+                           new std::vector<const Info*>()); // disclaimerInfo
 }
 
 CartoDBLayer* MapBooBuilder::parseCartoDBLayer(const JSONObject* jsonLayer,
@@ -656,7 +661,7 @@ CartoDBLayer* MapBooBuilder::parseCartoDBLayer(const JSONObject* jsonLayer,
                           1, // transparency
                           transparent, // isTransparent
                           NULL, // condition,
-                          ""); // disclaimerInfo
+                          new std::vector<const Info*>()); // disclaimerInfo
 }
 
 MapBoxLayer* MapBooBuilder::parseMapBoxLayer(const JSONObject* jsonLayer,
@@ -670,7 +675,7 @@ MapBoxLayer* MapBooBuilder::parseMapBoxLayer(const JSONObject* jsonLayer,
                          19, // maxLevel
                          1, // transparency
                          NULL, // condition
-                         ""); // disclaimerInfo
+                         new std::vector<const Info*>()); // disclaimerInfo
 }
 
 WMSLayer* MapBooBuilder::parseWMSLayer(const JSONObject* jsonLayer,
@@ -741,12 +746,20 @@ URLTemplateLayer* MapBooBuilder::parseURLTemplateLayer(const JSONObject* jsonLay
                                            TimeInterval::fromDays(30));
   }
   else {
-    result = URLTemplateLayer::newWGS84(urlTemplate,
-                                        sector,
-                                        transparent,
-                                        firstLevel,
-                                        maxLevel,
-                                        TimeInterval::fromDays(30));
+//    result = URLTemplateLayer::newWGS84(urlTemplate,
+//                                        sector,
+//                                        transparent,
+//                                        firstLevel,
+//                                        maxLevel,
+//                                        TimeInterval::fromDays(30));
+    
+    result = new URLTemplateLayer(urlTemplate,
+                                  sector,
+                                  transparent,
+                                  TimeInterval::fromDays(30),
+                                  true,
+                                  new LevelTileCondition(firstLevel, maxLevel),
+                                  LayerTilesRenderParameters::createDefaultWGS84(sector, 1, maxLevel));
   }
 
   return result;
@@ -778,7 +791,7 @@ Layer* MapBooBuilder::parseLayer(const JSONBaseObject* jsonBaseObjectLayer) cons
                          2, // initialLevel,
                          1, // transparency,
                          NULL, // condition,
-                         ""); //disclaimerInfo
+                         new std::vector<const Info*>()); //disclaimerInfo
   }
   else if (layerType.compare("MapQuest") == 0) {
     layer = parseMapQuestLayer(jsonLayer, defaultTimeToCache);
@@ -806,7 +819,7 @@ Layer* MapBooBuilder::parseLayer(const JSONBaseObject* jsonBaseObjectLayer) cons
   
   const std::string layerAttribution = jsonLayer->getAsString("attribution", "");
   if (layerAttribution.compare("") != 0) {
-    layer->setInfo(layerAttribution);
+    layer->addInfo(new Info(layerAttribution));
   }
   return layer;
 }
@@ -2149,7 +2162,15 @@ const void MapBooBuilder::requestGetFeatureInfo(const Tile* tile,
 void HUDInfoRenderer_ImageFactory::drawOn(ICanvas* canvas,
                                           int width,
                                           int height) {
-  ICanvasUtils::drawStringsOn(_infos,
+  
+  std::vector<std::string> strings;
+  
+  const int size = _info.size();
+  for (int i = 0; i < size; i++)
+  {
+    strings.push_back(_info.at(i)->getText());
+  }
+  ICanvasUtils::drawStringsOn(strings,
                               canvas,
                               width,
                               height,
@@ -2164,8 +2185,8 @@ void HUDInfoRenderer_ImageFactory::drawOn(ICanvas* canvas,
                               5);
 }
 
-bool HUDInfoRenderer_ImageFactory::isEquals(const std::vector<std::string>& v1,
-                                            const std::vector<std::string>& v2) const {
+bool HUDInfoRenderer_ImageFactory::isEquals(const std::vector<const Info*> v1,
+                                            const std::vector<const Info*> v2) const {
   const int size1 = v1.size();
   const int size2 = v2.size();
   if (size1 != size2) {
@@ -2173,8 +2194,8 @@ bool HUDInfoRenderer_ImageFactory::isEquals(const std::vector<std::string>& v1,
   }
   
   for (int i = 0; i < size1; i++) {
-    const std::string str1 = v1[i];
-    const std::string str2 = v2[i];
+    const Info* str1 = v1[i];
+    const Info* str2 = v2[i];
     if (str1 != str2) {
       return false;
     }
@@ -2182,19 +2203,19 @@ bool HUDInfoRenderer_ImageFactory::isEquals(const std::vector<std::string>& v1,
   return true;
 }
 
-bool HUDInfoRenderer_ImageFactory::setInfos(const std::vector<std::string>& infos) {
-  if ( isEquals(_infos, infos) ) {
+bool HUDInfoRenderer_ImageFactory::setInfo(const std::vector<const Info*> info) {
+  if ( isEquals(_info, info) ) {
     return false;
   }
   
-  _infos.clear();
+  _info.clear();
 #ifdef C_CODE
-  _infos.insert(_infos.end(),
-                 infos.begin(),
-                 infos.end());
+  _info.insert(_info.end(),
+                 info.begin(),
+                 info.end());
 #endif
 #ifdef JAVA_CODE
-  _infos.addAll(infos);
+  _info.addAll(info);
 #endif
 
   return true;
@@ -2208,9 +2229,9 @@ MapBoo_HUDRenderer::~MapBoo_HUDRenderer() {
   delete _hudImageRenderer;
 }
 
-void MapBoo_HUDRenderer::updateInfo(const std::vector<std::string> &info) {
+void MapBoo_HUDRenderer::updateInfo(const std::vector<const Info*> info) {
   HUDInfoRenderer_ImageFactory* factory = (HUDInfoRenderer_ImageFactory*) (_hudImageRenderer->getImageFactory());
-  if (factory->setInfos(info)) {
+  if (factory->setInfo(info)) {
     _hudImageRenderer->recreateImage();
   }
 }

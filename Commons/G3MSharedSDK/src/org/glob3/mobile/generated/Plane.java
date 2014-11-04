@@ -149,7 +149,7 @@ public class Plane
       return Angle.zero();
     }
   
-    IMathUtils mu = IMathUtils.instance();
+    final IMathUtils mu = IMathUtils.instance();
   
     //Vector values
   

@@ -19,13 +19,13 @@ public class TilesRenderParameters
     switch (quality)
     {
       case QUALITY_LOW:
-        _texturePixelsPerInch = 128 / 2;
+        _texturePixelsPerInch = 64;
         break;
       case QUALITY_MEDIUM:
-        _texturePixelsPerInch = 256 / 2;
+        _texturePixelsPerInch = 128;
         break;
       default: //HIGH
-        _texturePixelsPerInch = 512 / 2;
+        _texturePixelsPerInch = 256;
         break;
     }
   }

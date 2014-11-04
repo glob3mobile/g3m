@@ -254,6 +254,22 @@ const std::string Sector::description() const {
   return s;
 }
 
+const std::string Sector::id() const {
+  IStringBuilder* isb = IStringBuilder::newStringBuilder();
+  isb->addString("Sector|");
+  isb->addDouble(_lower._latitude._degrees);
+  isb->addString("|");
+  isb->addDouble(_lower._longitude._degrees);
+  isb->addString("|");
+  isb->addDouble(_upper._latitude._degrees);
+  isb->addString("|");
+  isb->addDouble(_upper._longitude._degrees);
+  isb->addString("|");
+  const std::string s = isb->getString();
+  delete isb;
+  return s;
+}
+
 const Vector2D Sector::div(const Sector& that) const {
   const double scaleX = _deltaLongitude.div(that._deltaLongitude);
   const double scaleY = _deltaLatitude.div(that._deltaLatitude);

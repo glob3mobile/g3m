@@ -16,11 +16,18 @@
 #include "Context.hpp"
 #include "TileImageProvider.hpp"
 #include "CompositeTileImageProvider.hpp"
+#include "Color.hpp"
+#include "Info.hpp"
 
 LayerSet::~LayerSet() {
   for (unsigned int i = 0; i < _layers.size(); i++) {
     delete _layers[i];
   }
+  
+  for (unsigned int i = 0; i < _infos.size(); i++) {
+    delete _infos[i];
+  }
+  
   if (_tileImageProvider != NULL) {
     _tileImageProvider->_release();
   }
@@ -58,6 +65,13 @@ void LayerSet::setChangeListener(ChangedListener* listener) {
     ILogger::instance()->logError("Listener already set");
   }
   _listener = listener;
+}
+
+void LayerSet::setTileImageProvider(TileImageProvider* tileImageProvider) {
+  if (_tileImageProvider != NULL) {
+    ILogger::instance()->logError("TileImageProvider already set");
+  }
+  _tileImageProvider = tileImageProvider;
 }
 
 
@@ -136,7 +150,7 @@ void LayerSet::addLayer(Layer* layer) {
   }
 
   layersChanged();
-  changedInfo(layer->getInfos());
+  changedInfo(layer->getInfo());
 }
 
 void LayerSet::removeAllLayers(const bool deleteLayers) {
@@ -410,7 +424,8 @@ public:
 };
 
 
-LayerTilesRenderParameters* LayerSet::checkAndComposeLayerTilesRenderParameters(const std::vector<Layer*>& enableLayers,
+LayerTilesRenderParameters* LayerSet::checkAndComposeLayerTilesRenderParameters(const bool forceFirstLevelTilesRenderOnStart,
+                                                                                const std::vector<Layer*>& enableLayers,
                                                                                 std::vector<std::string>& errors) const {
 
   MutableLayerTilesRenderParameters mutableLayerTilesRenderParameters;
@@ -442,7 +457,7 @@ LayerTilesRenderParameters* LayerSet::checkAndComposeLayerTilesRenderParameters(
       return NULL;
     }
   }
-
+  
   return mutableLayerTilesRenderParameters.create(errors);
 }
 
@@ -459,7 +474,7 @@ LayerTilesRenderParameters* LayerSet::createLayerTilesRenderParameters(const boo
     return NULL;
   }
 
-  return checkAndComposeLayerTilesRenderParameters(enableLayers, errors);
+  return checkAndComposeLayerTilesRenderParameters(forceFirstLevelTilesRenderOnStart, enableLayers, errors);
 }
 
 void LayerSet::takeLayersFrom(LayerSet* that) {
@@ -478,48 +493,6 @@ void LayerSet::takeLayersFrom(LayerSet* that) {
   for (int i = 0; i < thatSize; i++) {
     addLayer( thatLayers[i] );
   }
-}
-
-std::vector<Petition*> LayerSet::createTileMapPetitions(const G3MRenderContext* rc,
-                                                        const LayerTilesRenderParameters* layerTilesRenderParameters,
-                                                        const Tile* tile) const {
-  std::vector<Petition*> petitions;
-#warning REMOVE createTileMapPetitions??
-//  const int layersSize = _layers.size();
-//  for (int i = 0; i < layersSize; i++) {
-//    Layer* layer = _layers[i];
-//    if (layer->isAvailable(tile)) {
-//#ifdef C_CODE
-//      const Tile* petitionTile = tile;
-//#else
-//      Tile* petitionTile = tile;
-//#endif
-//      const int maxLevel = layer->getLayerTilesRenderParameters()->_maxLevel;
-//      while ((petitionTile->_level > maxLevel) && (petitionTile != NULL)) {
-//        petitionTile = petitionTile->getParent();
-//      }
-//
-//      if (petitionTile == NULL) {
-//        ILogger::instance()->logError("Can't find a valid tile for petitions");
-//      }
-//
-//      std::vector<Petition*> tilePetitions = layer->createTileMapPetitions(rc,
-//                                                                           layerTilesRenderParameters,
-//                                                                           petitionTile);
-//
-//      const int tilePetitionsSize = tilePetitions.size();
-//      for (int j = 0; j < tilePetitionsSize; j++) {
-//        petitions.push_back( tilePetitions[j] );
-//      }
-//    }
-//  }
-//
-//  if (petitions.empty()) {
-//    rc->getLogger()->logWarning("Can't create map petitions for tile %s",
-//                                tile->_id.c_str());
-//  }
-
-  return petitions;
 }
 
 TileImageProvider* LayerSet::createTileImageProvider(const G3MRenderContext* rc,
@@ -547,7 +520,7 @@ TileImageProvider* LayerSet::createTileImageProvider(const G3MRenderContext* rc,
       }
     }
   }
-
+  
   return (compositeTileImageProvider == NULL) ? singleTileImageProvider : compositeTileImageProvider;
 }
 
@@ -559,20 +532,32 @@ TileImageProvider* LayerSet::getTileImageProvider(const G3MRenderContext* rc,
   return _tileImageProvider;
 }
 
-const std::vector<std::string> LayerSet::getInfo() {
+const std::vector<const Info*> LayerSet::getInfo() {
+//  for (unsigned int i = 0; i < _infos.size(); i++) {
+  //  delete _infos[i];
+//  }
   _infos.clear();
+
   const int layersCount = _layers.size();
+  bool anyEnabled = false;
   for (int i = 0; i < layersCount; i++) {
     Layer* layer = _layers[i];
     if (layer->isEnable()) {
-      const std::string layerInfo = layer->getInfo();
-      _infos.push_back(layerInfo);
+      anyEnabled = true;
+      const std::vector<const Info*> layerInfo = layer->getInfo();
+      const int infoSize = layerInfo.size();
+      for (int j = 0; j < infoSize; j++) {
+        _infos.push_back(layerInfo[j]);
+      }
     }
+  }
+  if (!anyEnabled) {
+    _infos.push_back(new Info("Can't find any enabled Layer at this zoom level"));
   }
   return _infos;
 }
 
-void LayerSet::changedInfo(const std::vector<std::string>& info) {
+void LayerSet::changedInfo(const std::vector<const Info*> info) {
   if (_changedInfoListener != NULL) {
     _changedInfoListener->changedInfo(getInfo());
   }
@@ -584,5 +569,7 @@ void LayerSet::setChangedInfoListener(ChangedInfoListener* changedInfoListener) 
     return;
   }
   _changedInfoListener = changedInfoListener;
-  changedInfo(getInfo());
+  if (_changedInfoListener != NULL) {
+    _changedInfoListener->changedInfo(getInfo());
+  }
 }

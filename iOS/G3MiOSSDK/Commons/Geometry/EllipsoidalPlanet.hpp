@@ -203,6 +203,10 @@ public:
                       height);
   }
 
+  const std::string getType() const {
+    return "Ellipsoidal";
+  }
+
 };
 
 #endif

@@ -400,7 +400,7 @@ public abstract class Shape implements SurfaceElevationListener, EffectTarget
   {
   }
 
-  public abstract java.util.ArrayList<Double> intersectionsDistances(Vector3D origin, Vector3D direction);
+  public abstract java.util.ArrayList<Double> intersectionsDistances(Planet planet, Vector3D origin, Vector3D direction);
 
   public final void zRender(G3MRenderContext rc, GLState parentGLState, boolean renderNotReadyShapes)
   {

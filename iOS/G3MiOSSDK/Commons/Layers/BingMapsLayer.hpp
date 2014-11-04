@@ -64,9 +64,9 @@ private:
                        const int zoomMin,
                        const int zoomMax);
   
-  const std::string getQuadkey(const int level,
-                               const int column,
-                               const int row) const;
+  static const std::string getQuadKey(const int level,
+                                      const int column,
+                                      const int row);
   
 protected:
   std::string getLayerType() const {
@@ -88,7 +88,8 @@ protected:
   const URL createURL(const Tile* tile) const;
   
 public:
-  
+  static const std::string getQuadKey(const Tile* tile);
+
   /**
    imagerySet: "Aerial", "AerialWithLabels", "Road", "OrdnanceSurvey" or "CollinsBart". See class BingMapType for constants.
    key: Bing Maps key. See http://msdn.microsoft.com/en-us/library/gg650598.aspx
@@ -101,7 +102,7 @@ public:
                 const int             maxLevel       = 25,
                 const float           transparency   = 1,
                 const LayerCondition* condition      = NULL,
-                const std::string&    disclaimerInfo = "");
+                std::vector<const Info*>*  layerInfo = new std::vector<const Info*>());
   
   BingMapsLayer(const std::string&    imagerySet,
                 const std::string&    culture,
@@ -112,15 +113,11 @@ public:
                 const int             maxLevel       = 25,
                 const float           transparency   = 1,
                 const LayerCondition* condition      = NULL,
-                const std::string&    disclaimerInfo = "");
+                std::vector<const Info*>*  layerInfo = new std::vector<const Info*>());
   
   URL getFeatureInfoURL(const Geodetic2D& position,
                         const Sector& sector) const;
-  
-  std::vector<Petition*> createTileMapPetitions(const G3MRenderContext* rc,
-                                                const LayerTilesRenderParameters* layerTilesRenderParameters,
-                                                const Tile* tile) const;
-  
+    
   bool isReady() const;
   
   void initialize(const G3MContext* context);

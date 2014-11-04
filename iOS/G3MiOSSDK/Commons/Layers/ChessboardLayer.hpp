@@ -31,11 +31,11 @@ public:
                   const Sector&                                        dataSector      = Sector::fullSphere(),
                   const float                                          transparency    = 1.0f,
                   const LayerCondition*                                condition       = NULL,
-                  const std::string&                                   disclaimerInfo  = "") :
+                  std::vector<const Info*>*                      layerInfo       = new std::vector<const Info*>()) :
   ProceduralLayer(parametersVector,
                   transparency,
                   condition,
-                  disclaimerInfo),
+                  layerInfo),
   _dataSector(dataSector),
   _backgroundColor(backgroundColor),
   _boxColor(boxColor),
@@ -53,7 +53,7 @@ public:
                   const Sector&         dataSector         = Sector::fullSphere(),
                   const float           transparency       = 1.0f,
                   const LayerCondition* condition          = NULL,
-                  const std::string&    disclaimerInfo     = "");
+                  std::vector<const Info*>* layerInfo= new std::vector<const Info*>());
 
   std::string getLayerType() const {
     return "ChessboardLayer";
@@ -64,10 +64,6 @@ public:
   const Sector getDataSector() const {
     return _dataSector;
   }
-
-  std::vector<Petition*> createTileMapPetitions(const G3MRenderContext* rc,
-                                                const LayerTilesRenderParameters* layerTilesRenderParameters,
-                                                const Tile* tile) const;
 
   const std::string description() const {
     return "[ChessboardLayer]";
@@ -82,6 +78,8 @@ public:
                                              const LayerTilesRenderParameters* layerTilesRenderParameters) const;
 
   bool rawIsEquals(const Layer* that) const;
+
+  const std::vector<URL*> getDownloadURLs(const Tile* tile) const;
 
 };
 

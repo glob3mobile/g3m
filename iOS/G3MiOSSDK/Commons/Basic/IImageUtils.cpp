@@ -63,7 +63,7 @@ void IImageUtils::subImage(const IImage* image,
   else {
     ICanvas* canvas = IFactory::instance()->createCanvas();
 
-    IMathUtils* mu = IMathUtils::instance();
+    const IMathUtils* mu = IMathUtils::instance();
     canvas->initialize(mu->round(rect._width),
                        mu->round(rect._height));
 

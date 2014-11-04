@@ -104,9 +104,9 @@ private:
   //Position + cull + depth + polygonoffset + linewidth
   GPUAttributeValueVec4Float* _position;
 
-  const bool _depthTestEnabled;
-  const bool _cullFace;
-  const int _culledFace;
+  const bool  _depthTestEnabled;
+  const bool  _cullFace;
+  const int   _culledFace;
   const bool  _polygonOffsetFill;
   const float _polygonOffsetFactor;
   const float _polygonOffsetUnits;

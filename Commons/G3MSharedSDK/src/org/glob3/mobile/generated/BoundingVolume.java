@@ -17,6 +17,7 @@ package org.glob3.mobile.generated;
 //class Box;
 //class Sphere;
 //class GLState;
+//class Color;
 
 public abstract class BoundingVolume
 {
@@ -31,7 +32,7 @@ public abstract class BoundingVolume
   //virtual Vector3D intersectionWithRay(const Vector3D& origin,
   //                                     const Vector3D& direction) const = 0;
 
-  public abstract void render(G3MRenderContext rc, GLState parentState);
+  public abstract void render(G3MRenderContext rc, GLState parentState, Color color);
 
   public abstract boolean touches(BoundingVolume that);
   public abstract boolean touchesBox(Box that);

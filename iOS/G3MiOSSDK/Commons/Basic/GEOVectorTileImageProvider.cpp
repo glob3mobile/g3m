@@ -16,6 +16,8 @@
 #include "TileImageListener.hpp"
 #include "GEORasterProjection.hpp"
 #include "TileImageContribution.hpp"
+#include "ErrorHandling.hpp"
+
 
 GEOVectorTileImageProvider::GEOVectorTileImageProvider(const GEOVectorLayer* layer) :
 _layer(layer)
@@ -23,7 +25,7 @@ _layer(layer)
 }
 
 const TileImageContribution* GEOVectorTileImageProvider::contribution(const Tile* tile) {
-  return _layer->contribution(tile);
+  return (_layer == NULL) ? NULL : _layer->contribution(tile);
 }
 
 
@@ -176,4 +178,11 @@ void GEOVectorTileImageProvider::rasterizerDeleted(const std::string& tileId) {
 #ifdef JAVA_CODE
   _rasterizers.remove(tileId);
 #endif
+}
+
+void GEOVectorTileImageProvider::layerDeleted(const GEOVectorLayer* layer) {
+  if (layer != _layer) {
+    THROW_EXCEPTION("Logic error");
+  }
+  _layer = NULL;
 }

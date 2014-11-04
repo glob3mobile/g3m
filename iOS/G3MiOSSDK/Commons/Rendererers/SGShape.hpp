@@ -73,7 +73,8 @@ public:
     return _isTransparent;
   }
   
-  std::vector<double> intersectionsDistances(const Vector3D& origin,
+  std::vector<double> intersectionsDistances(const Planet* planet,
+                                             const Vector3D& origin,
                                              const Vector3D& direction) const
   {
     std::vector<double> intersections;
