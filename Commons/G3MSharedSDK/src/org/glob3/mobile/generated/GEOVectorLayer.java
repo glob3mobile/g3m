@@ -174,7 +174,7 @@ public class GEOVectorLayer extends VectorLayer
   {
     if ((_condition == null) || _condition.isAvailable(tile))
     {
-      return (_quadTree.getSector().touchesWith(tile._sector) ? TileImageContribution.fullCoverageTransparent(_transparency) : null);
+      return (_quadTree.getSector().touchesWith(tile._sector) && !_quadTree.isEmpty() ? TileImageContribution.fullCoverageTransparent(_transparency) : null);
     }
     return null;
   }
@@ -182,6 +182,12 @@ public class GEOVectorLayer extends VectorLayer
   public final QuadTree getQuadTree()
   {
     return _quadTree;
+  }
+
+  public final java.util.ArrayList<URL> getDownloadURLs(Tile tile)
+  {
+    java.util.ArrayList<URL> result = new java.util.ArrayList<URL>();
+    return result;
   }
 
 }

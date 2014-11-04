@@ -58,7 +58,7 @@ public class Vector2I
 
   public final Vector2I div(double v)
   {
-    IMathUtils mu = IMathUtils.instance();
+    final IMathUtils mu = IMathUtils.instance();
     return new Vector2I(mu.toInt(_x / v), mu.toInt(_y / v));
   }
 
