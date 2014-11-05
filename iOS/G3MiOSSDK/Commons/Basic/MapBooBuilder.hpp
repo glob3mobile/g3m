@@ -531,7 +531,7 @@ public:
     
   }
   
-  void changedInfo(const std::vector<const Info*> info){
+  void changedInfo(const std::vector<const Info*>& info){
     _mapBooHUDRenderer->updateInfo(info);
     
   }

@@ -1858,12 +1858,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-<<<<<<< HEAD
 				4460758119DA9D290000CCD6 /* CoreLocation.framework in Frameworks */,
-				D8EEF3B91577924D003FEB5E /* Foundation.framework in Frameworks */,
-				CF4027E51770E85500D5A80C /* Security.framework in Frameworks */,
-=======
->>>>>>> point-cloud
 				CF4027E31770E84E00D5A80C /* CFNetwork.framework in Frameworks */,
 				CF4027E51770E85500D5A80C /* Security.framework in Frameworks */,
 				44AFBB1F19D4271B00EB78E9 /* OpenGLES.framework in Frameworks */,
@@ -2750,16 +2745,13 @@
 		D8EEF3B71577924D003FEB5E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-<<<<<<< HEAD
 				4460758019DA9D290000CCD6 /* CoreLocation.framework */,
-=======
 				44AFBB2819D4286C00EB78E9 /* CoreData.framework */,
 				44AFBB2619D4276000EB78E9 /* QuartzCore.framework */,
 				44AFBB2419D4275100EB78E9 /* libsqlite3.dylib */,
 				44AFBB2219D4273A00EB78E9 /* CoreGraphics.framework */,
 				44AFBB2019D4272F00EB78E9 /* UIKit.framework */,
 				44AFBB1E19D4271B00EB78E9 /* OpenGLES.framework */,
->>>>>>> point-cloud
 				CF4027E21770E84E00D5A80C /* CFNetwork.framework */,
 				D8EEF3B81577924D003FEB5E /* Foundation.framework */,
 				CFCCFE0A16F506210082F383 /* GLKit.framework */,

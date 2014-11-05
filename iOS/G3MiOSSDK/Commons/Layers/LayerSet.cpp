@@ -532,7 +532,7 @@ TileImageProvider* LayerSet::getTileImageProvider(const G3MRenderContext* rc,
   return _tileImageProvider;
 }
 
-const std::vector<const Info*> LayerSet::getInfo() {
+const std::vector<const Info*>& LayerSet::getInfo() {
   for (unsigned int i = 0; i < _infos.size(); i++) {
     delete _infos[i];
   }
@@ -557,7 +557,7 @@ const std::vector<const Info*> LayerSet::getInfo() {
   return _infos;
 }
 
-void LayerSet::changedInfo(const std::vector<const Info*> info) {
+void LayerSet::changedInfo(const std::vector<const Info*>& info) {
   if (_changedInfoListener != NULL) {
     _changedInfoListener->changedInfo(getInfo());
   }

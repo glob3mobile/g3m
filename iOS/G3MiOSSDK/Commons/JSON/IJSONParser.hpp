@@ -30,6 +30,8 @@ public:
   static IJSONParser* instance() {
     return _instance;
   }
+  
+  const static std::string escapeHtmlText(const std::string& text);
 
   virtual ~IJSONParser() {
   }

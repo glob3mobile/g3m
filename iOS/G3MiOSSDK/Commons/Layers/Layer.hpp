@@ -127,11 +127,11 @@ public:
   virtual TileImageProvider* createTileImageProvider(const G3MRenderContext* rc,
                                                      const LayerTilesRenderParameters* layerTilesRenderParameters) const = 0;
 
-  void setInfo(const std::vector<const Info*> info) const;
+  void setInfo(const std::vector<const Info*>& info) const;
   
-  const std::vector<const Info*> getInfo() const;
+  const std::vector<const Info*>& getInfo() const;
   
-  void addInfo(const std::vector<const Info*> info);
+  void addInfo(const std::vector<const Info*>& info);
   
   void addInfo(const Info* info);
 
