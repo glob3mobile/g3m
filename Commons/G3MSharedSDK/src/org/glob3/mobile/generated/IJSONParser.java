@@ -38,6 +38,21 @@ public abstract class IJSONParser
     return _instance;
   }
 
+  public static String escapeHtmlText(String text)
+  {
+    final IStringUtils su = IStringUtils.instance();
+    String result = su.replaceSubstring(text, "/", "\\/");
+    result = su.replaceSubstring(result, "\"", "\\\"");
+    result = su.replaceSubstring(result, "\n", "");
+    result = su.replaceSubstring(result, "\t", "");
+    result = su.replaceSubstring(result, "\r", "");
+  
+  
+  
+  
+    return result;
+  }
+
   public void dispose()
   {
   }
