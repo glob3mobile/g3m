@@ -506,14 +506,6 @@ public class LayerSet implements ChangedInfoListener
 
   public final java.util.ArrayList<Info> getInfo()
   {
-<<<<<<< HEAD
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning ASK DIEGO
-  //  for (unsigned int i = 0; i < _infos.size(); i++) {
-    //  delete _infos[i];
-  //  }
-=======
->>>>>>> purgatory
     _infos.clear();
     final int layersCount = _layers.size();
     boolean anyEnabled = false;
