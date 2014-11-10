@@ -237,12 +237,6 @@ public class LayerSet implements ChangedInfoListener
          _layers.get(i).dispose();
     }
   
-    for (int i = 0; i < _infos.size(); i++)
-    {
-      if (_infos.get(i) != null)
-         _infos.get(i).dispose();
-    }
-  
     if (_tileImageProvider != null)
     {
       _tileImageProvider._release();
@@ -512,13 +506,15 @@ public class LayerSet implements ChangedInfoListener
 
   public final java.util.ArrayList<Info> getInfo()
   {
+<<<<<<< HEAD
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#warning ASK DIEGO
   //  for (unsigned int i = 0; i < _infos.size(); i++) {
     //  delete _infos[i];
   //  }
+=======
+>>>>>>> purgatory
     _infos.clear();
-  
     final int layersCount = _layers.size();
     boolean anyEnabled = false;
     for (int i = 0; i < layersCount; i++)
