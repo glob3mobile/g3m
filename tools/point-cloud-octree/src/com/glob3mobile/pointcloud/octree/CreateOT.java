@@ -26,7 +26,6 @@ public class CreateOT {
       System.out.println("CreateOT 0.1");
       System.out.println("------------\n");
 
-
       //      final File sourceTXTDirectory = new File(System.getProperty("user.dir"));
       //      final GProjection sourceProjection = GProjection.EPSG_26918;
       //
