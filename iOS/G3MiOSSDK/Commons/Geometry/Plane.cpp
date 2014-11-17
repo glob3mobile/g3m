@@ -65,7 +65,7 @@ Angle Plane::vectorRotationForAxis(const Vector3D& vector, const Vector3D& axis)
     return Angle::zero();
   }
 
-  IMathUtils* mu = IMathUtils::instance();
+  const IMathUtils* mu = IMathUtils::instance();
 
   //Vector values
 

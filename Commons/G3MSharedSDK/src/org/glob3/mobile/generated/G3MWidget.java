@@ -683,10 +683,9 @@ public class G3MWidget implements ChangedRendererInfoListener
     {
       _infoDisplay.changedInfo(info);
     }
-    else
-    {
-      ILogger.instance().logWarning("Render Infos are changing and InfoDisplay is NULL");
-    }
+  //  else {
+  //    ILogger::instance()->logWarning("Render Infos are changing and InfoDisplay is NULL");
+  //  }
   }
 
   private IStorage _storage;

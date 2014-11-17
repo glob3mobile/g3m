@@ -26,7 +26,7 @@ double Sphere::projectedArea(const G3MRenderContext* rc) const {
 
 Mesh* Sphere::createWireframeMesh(const Color& color,
                                   short resolution) const {
-  IMathUtils* mu = IMathUtils::instance();
+  const IMathUtils* mu = IMathUtils::instance();
   const double delta = PI / (resolution-1);
 
   // create vertices

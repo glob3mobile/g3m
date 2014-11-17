@@ -81,3 +81,8 @@ bool ChessboardLayer::rawIsEquals(const Layer* that) const {
   
   return _dataSector.isEquals(t->_dataSector);
 }
+
+const std::vector<URL*> ChessboardLayer::getDownloadURLs(const Tile* tile) const {
+  std::vector<URL*> result;
+  return result;
+}

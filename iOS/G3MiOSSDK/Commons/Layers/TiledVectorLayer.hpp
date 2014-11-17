@@ -129,7 +129,9 @@ public:
 
   void setSymbolizer(const GEORasterSymbolizer* symbolizer,
                      bool deletePrevious);
-  
+
+  const std::vector<URL*> getDownloadURLs(const Tile* tile) const;
+
 };
 
 #endif

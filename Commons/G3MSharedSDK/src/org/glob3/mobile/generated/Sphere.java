@@ -30,7 +30,7 @@ public class Sphere extends BoundingVolume
   
   private Mesh createWireframeMesh(Color color, short resolution)
   {
-    IMathUtils mu = IMathUtils.instance();
+    final IMathUtils mu = IMathUtils.instance();
     final double delta = DefineConstants.PI / (resolution-1);
   
     // create vertices

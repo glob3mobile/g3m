@@ -19,10 +19,7 @@ package org.glob3.mobile.generated;
 
 public class Info
 {
-
   private final String _text;
-
-
 
 
   public Info(String text)

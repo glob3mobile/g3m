@@ -40,6 +40,11 @@
 		4460758219DAA1410000CCD6 /* ILocationManager.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4460756F19D97C690000CCD6 /* ILocationManager.hpp */; };
 		4460758319DAA1840000CCD6 /* LocationManager_iOS.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4460757219D982EF0000CCD6 /* LocationManager_iOS.hpp */; };
 		44A0049417550C7300C6686D /* ICameraActivityListener.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = 44A00492175500B900C6686D /* ICameraActivityListener.hpp */; };
+		44AFBB1F19D4271B00EB78E9 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 44AFBB1E19D4271B00EB78E9 /* OpenGLES.framework */; };
+		44AFBB2119D4272F00EB78E9 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 44AFBB2019D4272F00EB78E9 /* UIKit.framework */; };
+		44AFBB2319D4273A00EB78E9 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 44AFBB2219D4273A00EB78E9 /* CoreGraphics.framework */; };
+		44AFBB2719D4276000EB78E9 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 44AFBB2619D4276000EB78E9 /* QuartzCore.framework */; };
+		44AFBB2919D4286C00EB78E9 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 44AFBB2819D4286C00EB78E9 /* CoreData.framework */; };
 		44D33CEE18DB07BC0027B892 /* ProtoRenderer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = 44D33CEC18DB06D50027B892 /* ProtoRenderer.hpp */; };
 		44D922721998D1EA0066D180 /* DefaultInfoDisplay.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 44D922701998D1EA0066D180 /* DefaultInfoDisplay.cpp */; };
 		44D922731998D69D0066D180 /* DefaultInfoDisplay.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = 44D922711998D1EA0066D180 /* DefaultInfoDisplay.hpp */; };
@@ -1152,6 +1157,12 @@
 		4460758019DA9D290000CCD6 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		44846F7B16C0FF6700D067BB /* ITileVisitor.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = ITileVisitor.hpp; path = Commons/Interfaces/ITileVisitor.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		44A00492175500B900C6686D /* ICameraActivityListener.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = ICameraActivityListener.hpp; path = Commons/Interfaces/ICameraActivityListener.hpp; sourceTree = "<group>"; };
+		44AFBB1E19D4271B00EB78E9 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
+		44AFBB2019D4272F00EB78E9 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		44AFBB2219D4273A00EB78E9 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		44AFBB2419D4275100EB78E9 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
+		44AFBB2619D4276000EB78E9 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		44AFBB2819D4286C00EB78E9 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		44D33CEC18DB06D50027B892 /* ProtoRenderer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = ProtoRenderer.hpp; path = Commons/Rendererers/ProtoRenderer.hpp; sourceTree = "<group>"; };
 		44D922701998D1EA0066D180 /* DefaultInfoDisplay.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = DefaultInfoDisplay.cpp; path = Commons/Basic/DefaultInfoDisplay.cpp; sourceTree = "<group>"; };
 		44D922711998D1EA0066D180 /* DefaultInfoDisplay.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = DefaultInfoDisplay.hpp; path = Commons/Basic/DefaultInfoDisplay.hpp; sourceTree = "<group>"; };
@@ -1848,9 +1859,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				4460758119DA9D290000CCD6 /* CoreLocation.framework in Frameworks */,
-				D8EEF3B91577924D003FEB5E /* Foundation.framework in Frameworks */,
-				CF4027E51770E85500D5A80C /* Security.framework in Frameworks */,
 				CF4027E31770E84E00D5A80C /* CFNetwork.framework in Frameworks */,
+				CF4027E51770E85500D5A80C /* Security.framework in Frameworks */,
+				44AFBB1F19D4271B00EB78E9 /* OpenGLES.framework in Frameworks */,
+				44AFBB2719D4276000EB78E9 /* QuartzCore.framework in Frameworks */,
+				44AFBB2919D4286C00EB78E9 /* CoreData.framework in Frameworks */,
+				44AFBB2319D4273A00EB78E9 /* CoreGraphics.framework in Frameworks */,
+				44AFBB2119D4272F00EB78E9 /* UIKit.framework in Frameworks */,
+				D8EEF3B91577924D003FEB5E /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2730,6 +2746,12 @@
 			isa = PBXGroup;
 			children = (
 				4460758019DA9D290000CCD6 /* CoreLocation.framework */,
+				44AFBB2819D4286C00EB78E9 /* CoreData.framework */,
+				44AFBB2619D4276000EB78E9 /* QuartzCore.framework */,
+				44AFBB2419D4275100EB78E9 /* libsqlite3.dylib */,
+				44AFBB2219D4273A00EB78E9 /* CoreGraphics.framework */,
+				44AFBB2019D4272F00EB78E9 /* UIKit.framework */,
+				44AFBB1E19D4271B00EB78E9 /* OpenGLES.framework */,
 				CF4027E21770E84E00D5A80C /* CFNetwork.framework */,
 				D8EEF3B81577924D003FEB5E /* Foundation.framework */,
 				CFCCFE0A16F506210082F383 /* GLKit.framework */,
@@ -2827,7 +2849,7 @@
 		D8EEF3AC1577924D003FEB5E /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0600;
+				LastUpgradeCheck = 0610;
 			};
 			buildConfigurationList = D8EEF3AF1577924D003FEB5E /* Build configuration list for PBXProject "G3MiOSSDK" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -3189,7 +3211,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD)";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
@@ -3230,7 +3251,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD)";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
@@ -3265,7 +3285,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD)";
 				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = YES;
 				CLANG_WARN__EXIT_TIME_DESTRUCTORS = NO;
 				DSTROOT = /tmp/Glob3iOSSDK.dst;
@@ -3295,7 +3314,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD)";
 				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = YES;
 				CLANG_WARN__EXIT_TIME_DESTRUCTORS = NO;
 				DSTROOT = /tmp/Glob3iOSSDK.dst;

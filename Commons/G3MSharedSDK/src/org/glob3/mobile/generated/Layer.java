@@ -69,7 +69,6 @@ public abstract class Layer
 
   protected final java.util.ArrayList<Info> _layerInfo;
 
-
   protected float _transparency;
   protected final LayerCondition _condition;
 
@@ -325,5 +324,7 @@ public abstract class Layer
   {
     _layerInfo.add(info);
   }
+
+  public abstract java.util.ArrayList<URL> getDownloadURLs(Tile tile);
 
 }

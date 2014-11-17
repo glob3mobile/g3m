@@ -81,6 +81,8 @@ public:
                          IImageDownloadListener* listener,
                          bool deleteListener) const;
 
+  const std::vector<URL*> getDownloadURLs(const Tile* tile) const;
+
 };
 
 #endif

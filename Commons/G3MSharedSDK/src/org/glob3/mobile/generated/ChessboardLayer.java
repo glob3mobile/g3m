@@ -174,4 +174,10 @@ public class ChessboardLayer extends ProceduralLayer
     return _dataSector.isEquals(t._dataSector);
   }
 
+  public final java.util.ArrayList<URL> getDownloadURLs(Tile tile)
+  {
+    java.util.ArrayList<URL> result = new java.util.ArrayList<URL>();
+    return result;
+  }
+
 }

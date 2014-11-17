@@ -53,10 +53,6 @@ _pointCloudsRenderer(pointCloudsRenderer),
 _selectedScene(NULL),
 _context(NULL)
 {
-#warning Put the demo back to its position
-  _scenes.push_back( new G3MStreamingPointCloud1DemoScene(this) );
-  _scenes.push_back( new G3MStreamingPointCloud2DemoScene(this) );
-
   _scenes.push_back( new G3MRasterLayersDemoScene(this) );
   _scenes.push_back( new G3MScenarioDEMDemoScene(this) );
   _scenes.push_back( new G3MVectorialDemoScene(this) );
@@ -67,6 +63,8 @@ _context(NULL)
   _scenes.push_back( new G3MCameraDemoScene(this) );
   _scenes.push_back( new G3MIsosurfaceDemoScene(this) );
   _scenes.push_back( new G3MTiledVectorDemoScene(this) );
+  _scenes.push_back( new G3MStreamingPointCloud1DemoScene(this) );
+  _scenes.push_back( new G3MStreamingPointCloud2DemoScene(this) );
 }
 
 void G3MDemoModel::initializeG3MContext(const G3MContext* context) {

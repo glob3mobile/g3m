@@ -44,7 +44,7 @@ public:
     _instance = factory;
   }
 
-  static IFactory* instance() {
+  static const IFactory* instance() {
     return _instance;
   }
 

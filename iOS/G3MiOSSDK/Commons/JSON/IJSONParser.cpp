@@ -7,5 +7,20 @@
 //
 
 #include "IJSONParser.hpp"
+#include "IStringUtils.hpp"
 
 IJSONParser* IJSONParser::_instance = NULL;
+
+const std::string IJSONParser::escapeHtmlText(const std::string &text) {
+  const IStringUtils* su = IStringUtils::instance();
+  std::string result = su->replaceSubstring(text, "/", "\\/");
+  result = su->replaceSubstring(result, "\"", "\\\"");
+  result = su->replaceSubstring(result, "\n", "");
+  result = su->replaceSubstring(result, "\t", "");
+  result = su->replaceSubstring(result, "\r", "");
+
+
+
+  
+  return result;
+}

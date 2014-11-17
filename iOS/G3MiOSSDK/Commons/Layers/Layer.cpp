@@ -168,7 +168,7 @@ bool Layer::onLayerTouchEventListener(const G3MEventContext* ec,
   return false;
 }
 
-void Layer::setInfo(const std::vector<const Info*> info) const {
+void Layer::setInfo(const std::vector<const Info*>& info) const {
   _layerInfo->clear();
 #ifdef C_CODE
   _layerInfo->insert(_layerInfo->end(),
@@ -181,7 +181,7 @@ void Layer::setInfo(const std::vector<const Info*> info) const {
 
 }
 
-void Layer::addInfo(const std::vector<const Info*> info){
+void Layer::addInfo(const std::vector<const Info*>& info){
 #ifdef C_CODE
   _layerInfo->insert(_layerInfo->end(),
                info.begin(),
@@ -202,7 +202,7 @@ void Layer::addInfo(const Info* info){
 }
 
 
-const std::vector<const Info*> Layer::getInfo() const {
+const std::vector<const Info*>& Layer::getInfo() const {
   return *_layerInfo;
 }
 
