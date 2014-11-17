@@ -23,10 +23,9 @@ public class LocationManager_Android
          implements
             LocationListener {
 
-
    private final Context          _context;
    private final LocationManager  _locationManager;
-   private final LocationProvider _selectedProvider;
+   private LocationProvider       _selectedProvider;
    private final LocationListener _locationListener;
 
    private Geodetic2D             _location = null;
@@ -85,10 +84,14 @@ public class LocationManager_Android
       _locationListener = locationListener;
 
       _locationManager = (LocationManager) _context.getSystemService(Context.LOCATION_SERVICE);
-      final Criteria req = new Criteria();
-      //      req.setAccuracy(Criteria.ACCURACY_MEDIUM);
-      //      req.setAltitudeRequired(false);
+      selectProvider();
+   }
 
+
+   private void selectProvider() {
+      final Criteria req = new Criteria();
+      //    req.setAccuracy(Criteria.ACCURACY_MEDIUM);
+      //    req.setAltitudeRequired(false);
       final String bestProvider = _locationManager.getBestProvider(req, true);
 
       _locationManager.getAllProviders();
@@ -96,7 +99,7 @@ public class LocationManager_Android
          ILogger.instance().logInfo("Provider: " + _locationManager.getAllProviders().get(i));
       }
 
-      if (bestProvider != null) {
+      if ((bestProvider != null) && !bestProvider.equals(LocationManager.PASSIVE_PROVIDER)) {
          ILogger.instance().logInfo("BEST Provider is: " + bestProvider);
          _selectedProvider = _locationManager.getProvider(bestProvider);
       }
@@ -109,17 +112,18 @@ public class LocationManager_Android
 
    @Override
    public String getProvider() {
-      if (_selectedProvider != null) {
-         return _selectedProvider.getName();
+      if (_selectedProvider == null) {
+         selectProvider();
       }
 
-      return null;
+      return (_selectedProvider != null) ? _selectedProvider.getName() : null;
    }
 
 
    @Override
    public boolean serviceIsEneabled() {
-      return _locationManager.isProviderEnabled(getProvider());
+      final String locProvider = getProvider();
+      return (locProvider != null) ? _locationManager.isProviderEnabled(locProvider) : false;
    }
 
 
