@@ -137,16 +137,16 @@ class LODSortingTask
                         final List<Geodetic3D> points) {
       final int pointsSize = points.size();
 
-      final List<Integer> sortedVertices = new ArrayList<Integer>(pointsSize);
+      final List<Integer> sortedIndices = new ArrayList<Integer>(pointsSize);
       final LinkedList<Integer> lodIndices = new LinkedList<Integer>();
 
       if (pointsSize == 1) {
          // just one vertex, no need to sort
          lodIndices.add(0);
-         sortedVertices.add(0);
+         sortedIndices.add(0);
       }
       else {
-         sortPoints(points, sortedVertices, lodIndices);
+         sortPoints(points, sortedIndices, lodIndices);
       }
 
       //      System.out.println(nodeID + //
@@ -154,14 +154,6 @@ class LODSortingTask
       //               ", points=" + pointsSize + //
       //               ", lodIndices=" + lodIndices);
 
-      //      final int _DGD_AT_WORK;
-      //      while (lodIndices.size() > 1) {
-      //         final int candidateLevel = lodIndices.peekFirst();
-      //         if (candidateLevel > 128) {
-      //            break;
-      //         }
-      //         lodIndices.pollFirst();
-      //      }
 
       final int lodLevels = lodIndices.size();
       _sumLevelsCount += lodLevels;
@@ -184,7 +176,7 @@ class LODSortingTask
          //         System.out.println("Extracting point for level " + level + " range=" + fromIndexI + "->" + toIndexI + " (size="
          //                            + levelPointsSize + ")");
          for (int indexI = fromIndexI; indexI <= toIndexI; indexI++) {
-            final int index = sortedVertices.get(indexI);
+            final int index = sortedIndices.get(indexI);
             final Geodetic3D point = points.get(index);
             levelPoints.add(point);
          }
@@ -210,7 +202,7 @@ class LODSortingTask
 
    //   private void createDebugImage(final Node node,
    //                                 final List<Geodetic3D> points,
-   //                                 final List<Integer> sortedVertices,
+   //                                 final List<Integer> sortedIndices,
    //                                 final List<Integer> lodIndices,
    //                                 final double minHeight,
    //                                 final double maxHeight) {
@@ -238,7 +230,7 @@ class LODSortingTask
    //      //                  while (cursor <= lodIndex) {
    //      //                     // g.setColor(new Color(levelColor.getRed(), levelColor.getGreen(), levelColor.getBlue(), 1));
    //      //                     g.setColor(levelColor);
-   //      //                     final Geodetic3D point = points.get(sortedVertices.get(cursor));
+   //      //                     final Geodetic3D point = points.get(sortedIndices.get(cursor));
    //      //                     final int x = Math.round((float) (sector.getUCoordinate(point._longitude) * width));
    //      //                     final int y = Math.round((float) (sector.getVCoordinate(point._latitude) * height));
    //      //                     g.drawRect(x, y, 1, 1);
@@ -270,7 +262,7 @@ class LODSortingTask
    //         g.setColor(Color.WHITE);
    //         cursor = 0;
    //         while (cursor <= maxLODIndex) {
-   //            final Geodetic3D point = points.get(sortedVertices.get(cursor));
+   //            final Geodetic3D point = points.get(sortedIndices.get(cursor));
    //
    //            final float alpha = (float) ((point._height - minHeight) / deltaHeight);
    //            final GColorF color = ProcessOT.interpolateColorFromRamp(GColorF.BLUE, ProcessOT.RAMP, alpha);
@@ -307,7 +299,7 @@ class LODSortingTask
 
 
    private static void sortPoints(final List<Geodetic3D> points,
-                                  final List<Integer> sortedVertices,
+                                  final List<Integer> sortedIndices,
                                   final List<Integer> lodIndices) {
 
       final KDTree tree = new KDTree(points, 2);
@@ -338,14 +330,14 @@ class LODSortingTask
             if (_lastDepth != depth) {
                _lastDepth = depth;
 
-               final int sortedVerticesCount = sortedVertices.size();
-               if (sortedVerticesCount > 0) {
-                  lodIndices.add(sortedVerticesCount - 1);
+               final int sortedIndicesCount = sortedIndices.size();
+               if (sortedIndicesCount > 0) {
+                  lodIndices.add(sortedIndicesCount - 1);
                }
             }
 
             for (final int vertexIndex : vertexIndexes) {
-               sortedVertices.add(vertexIndex);
+               sortedIndices.add(vertexIndex);
             }
          }
 
@@ -356,69 +348,11 @@ class LODSortingTask
       };
       tree.breadthFirstAcceptVisitor(visitor);
 
-      final int sortedVerticesCount = sortedVertices.size();
-      if (sortedVerticesCount > 0) {
-         lodIndices.add(sortedVerticesCount - 1);
+      final int sortedIndicesCount = sortedIndices.size();
+      if (sortedIndicesCount > 0) {
+         lodIndices.add(sortedIndicesCount - 1);
       }
    }
-
-
-   //   private static void sortPoints(final List<Geodetic3D> points,
-   //                                  final List<Integer> sortedVertices,
-   //                                  final List<Integer> lodIndices) {
-   //
-   //      final int maxPointsPerLeaf = 4;
-   //      final QuadTree tree = new QuadTree(points, maxPointsPerLeaf);
-   //
-   //      final QuadTreeVisitor visitor = new QuadTreeVisitor() {
-   //         private int _lastDepth = 0;
-   //
-   //
-   //         @Override
-   //         public void startVisiting(final QuadTree tree1) {
-   //         }
-   //
-   //
-   //         @Override
-   //         public void visitInnerNode(final QuadInnerNode innerNode) {
-   //            pushVertexIndex(innerNode.getVertexIndexes(), innerNode.getDepth());
-   //         }
-   //
-   //
-   //         @Override
-   //         public void visitLeafNode(final QuadLeafNode leafNode) {
-   //            pushVertexIndex(leafNode.getVertexIndexes(), leafNode.getDepth());
-   //         }
-   //
-   //
-   //         private void pushVertexIndex(final int[] vertexIndexes,
-   //                                      final int depth) {
-   //            if (_lastDepth != depth) {
-   //               _lastDepth = depth;
-   //
-   //               final int sortedVerticesCount = sortedVertices.size();
-   //               if (sortedVerticesCount > 0) {
-   //                  lodIndices.add(sortedVerticesCount - 1);
-   //               }
-   //            }
-   //
-   //            for (final int vertexIndex : vertexIndexes) {
-   //               sortedVertices.add(vertexIndex);
-   //            }
-   //         }
-   //
-   //
-   //         @Override
-   //         public void endVisiting(final QuadTree tree1) {
-   //         }
-   //      };
-   //      tree.breadthFirstAcceptVisitor(visitor);
-   //
-   //      final int sortedVerticesCount = sortedVertices.size();
-   //      if (sortedVerticesCount > 0) {
-   //         lodIndices.add(sortedVerticesCount - 1);
-   //      }
-   //   }
 
 
    @Override

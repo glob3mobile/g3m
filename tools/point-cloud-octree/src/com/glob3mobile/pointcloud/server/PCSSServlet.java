@@ -40,8 +40,8 @@ import es.igosoftware.util.XStringTokenizer;
 
 
 public class PCSSServlet
-         extends
-            HttpServlet {
+extends
+HttpServlet {
    private static final long serialVersionUID = 1L;
 
 
@@ -262,8 +262,8 @@ public class PCSSServlet
 
 
    private static List<NodeMetadata> getNodesMetadata(final PersistentLOD db,
-            final Planet planet,
-            final float verticalExaggeration) {
+                                                      final Planet planet,
+                                                      final float verticalExaggeration) {
       final List<NodeMetadata> result = new ArrayList<PCSSServlet.NodeMetadata>(10000);
 
       db.acceptDepthFirstVisitor(null, new PersistentLOD.Visitor() {
@@ -441,7 +441,7 @@ public class PCSSServlet
 
          os.write(getHeaderArray(_statistics));
 
-         os.write(toLittleEndiang(_nodes.size()));
+         os.write(toLittleEndian(_nodes.size()));
 
          for (final NodeMetadata node : _nodes) {
             os.write(getNodeArray(_planet, node, _verticalExaggeration));
@@ -544,7 +544,7 @@ public class PCSSServlet
       final byte intLevelsCount = toByte(intLevels.size());
 
       final int bufferSize = //
-      ByteBufferUtils.sizeOf(idLength) + //
+               ByteBufferUtils.sizeOf(idLength) + //
                idLength + //
                ByteBufferUtils.sizeOf(byteLevelsCount) + //
                ByteBufferUtils.sizeOf(shortLevelsCount) + //
@@ -589,7 +589,7 @@ public class PCSSServlet
    }
 
 
-   private static byte[] toLittleEndiang(final int value) {
+   private static byte[] toLittleEndian(final int value) {
       final ByteBuffer buffer = ByteBuffer.allocate(4).order(ByteOrder.LITTLE_ENDIAN);
       buffer.putInt(value);
       return buffer.array();
@@ -604,7 +604,7 @@ public class PCSSServlet
       final double averageHeight = statistics.getAverageHeight();
 
       final int bufferSize = //
-               ByteBufferUtils.sizeOf(pointsCount) + //
+      ByteBufferUtils.sizeOf(pointsCount) + //
                ByteBufferUtils.sizeOf(sector) + //
                ByteBufferUtils.sizeOf(minHeight) + //
                ByteBufferUtils.sizeOf(maxHeight) + //
