@@ -217,6 +217,15 @@ public class PointCloudsRenderer extends DefaultRenderer
         _mesh.render(rc, glState);
         renderedCount = 1;
       }
+      else
+      {
+        if (_mesh != null)
+        {
+          if (_mesh != null)
+             _mesh.dispose();
+          _mesh = null;
+        }
+      }
     
       return renderedCount;
     }
@@ -582,9 +591,11 @@ public class PointCloudsRenderer extends DefaultRenderer
       for (int level = _preloadedLevel+1; level <= _currentLoadedLevel; level++)
       {
         IFloatBuffer levelVerticesBuffers = _levelsVerticesBuffers[level];
-        vertices.rawPut(cursor, levelVerticesBuffers);
-    
-        cursor += levelVerticesBuffers.size();
+        if (levelVerticesBuffers != null)
+        {
+          vertices.rawPut(cursor, levelVerticesBuffers);
+          cursor += levelVerticesBuffers.size();
+        }
       }
     
       IFloatBuffer colors = IFactory.instance().createFloatBuffer(pointsCount * 4);
@@ -609,20 +620,23 @@ public class PointCloudsRenderer extends DefaultRenderer
       for (int level = _preloadedLevel+1; level <= _currentLoadedLevel; level++)
       {
         IFloatBuffer levelHeightsBuffers = _levelsHeightsBuffers[level];
-        for (int i = 0; i < _levelsPointsCount[level]; i++)
+        if (levelHeightsBuffers != null)
         {
-          final float height = levelHeightsBuffers.get(i);
-          final float alpha = (float)((height - minHeight) / deltaHeight);
+          for (int i = 0; i < _levelsPointsCount[level]; i++)
+          {
+            final float height = levelHeightsBuffers.get(i);
+            final float alpha = (float)((height - minHeight) / deltaHeight);
     
-          final Color color = baseColor.wheelStep(wheelSize, mu.round(wheelSize * alpha));
+            final Color color = baseColor.wheelStep(wheelSize, mu.round(wheelSize * alpha));
     
-          final int offset = cursor + i *4;
-          colors.rawPut(offset + 0, color._red);
-          colors.rawPut(offset + 1, color._green);
-          colors.rawPut(offset + 2, color._blue);
-          colors.rawPut(offset + 3, color._alpha);
+            final int offset = cursor + i *4;
+            colors.rawPut(offset + 0, color._red);
+            colors.rawPut(offset + 1, color._green);
+            colors.rawPut(offset + 2, color._blue);
+            colors.rawPut(offset + 3, color._alpha);
+          }
+          cursor += _levelsPointsCount[level] * 4;
         }
-        cursor += _levelsPointsCount[level] * 4;
       }
     
       DirectMesh mesh = new DirectMesh(GLPrimitive.points(), true, _average, vertices, 1, pointSize, null, colors, 1, false); // colorsIntensity -  colors -  flatColor
@@ -714,7 +728,8 @@ public class PointCloudsRenderer extends DefaultRenderer
         _mesh = createMesh(minHeight, maxHeight, pointSize);
       }
       _mesh.render(rc, glState);
-      //getBounds()->render(rc, glState, Color::blue());
+    ///#warning remove debug code
+    //  getBounds()->render(rc, glState, Color::blue());
       return _mesh.getRenderVerticesCount();
     }
 
@@ -802,6 +817,7 @@ public class PointCloudsRenderer extends DefaultRenderer
       {
     //    ILogger::instance()->logInfo("Canceling level request");
         rc.getDownloader().cancelRequest(_loadingLevelRequestID);
+        _loadingLevelRequestID = -1;
       }
     
       if (_mesh != null)
@@ -1087,7 +1103,7 @@ public class PointCloudsRenderer extends DefaultRenderer
 
     public final void onDownload(URL url, IByteBuffer buffer, boolean expired)
     {
-      ILogger.instance().logInfo("Downloaded metadata for \"%s\" (bytes=%ld)", _pointCloud.getCloudName(), buffer.size());
+      ILogger.instance().logInfo("Downloaded metadata for \"%s\" (bytes=%d)", _pointCloud.getCloudName(), buffer.size());
     
       _threadUtils.invokeAsyncTask(new PointCloudMetadataParserAsyncTask(_pointCloud, buffer), true);
     }
@@ -1249,13 +1265,13 @@ public class PointCloudsRenderer extends DefaultRenderer
       if (_rootNode != null)
       {
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning TODO
+//#warning TODO: make plugable the colorization of the cloud
         final long renderedCount = _rootNode.render(this, rc, glState, frustum, _minHeight, _averageHeight * 3, _pointSize, nowInMS);
         // const long long renderedCount = _rootNode->render(this, rc, glState, frustum, _minHeight, _maxHeight, _pointSize, nowInMS);
     
         if (_lastRenderedCount != renderedCount)
         {
-          ILogger.instance().logInfo("\"%s\": Rendered %ld points", _cloudName, renderedCount);
+          ILogger.instance().logInfo("\"%s\": Rendered %d points", _cloudName, renderedCount);
           _lastRenderedCount = renderedCount;
         }
       }
