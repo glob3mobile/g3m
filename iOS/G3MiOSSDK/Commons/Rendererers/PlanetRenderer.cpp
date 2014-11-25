@@ -455,9 +455,11 @@ RenderState PlanetRenderer::getRenderState(const G3MRenderContext* rc) {
     if (!_elevationDataProvider->isReadyToRender(rc)) {
       return RenderState::busy();
     } else{
-      _elevationDataProviderReadyListener->onReady();
-      if (_elevationDataProviderReadyListenerAutoDelete){
-        delete _elevationDataProviderReadyListener;
+      if (_elevationDataProviderReadyListener != NULL){
+        _elevationDataProviderReadyListener->onReady();
+        if (_elevationDataProviderReadyListenerAutoDelete){
+          delete _elevationDataProviderReadyListener;
+        }
       }
     }
   }
