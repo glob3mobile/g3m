@@ -1139,6 +1139,8 @@ public class PointCloudsRenderer extends DefaultRenderer
     private PointCloudMetadataListener _metadataListener;
     private boolean _deleteListener;
 
+    private final boolean _verbose;
+
     private boolean _downloadingMetadata;
     private boolean _errorDownloadingMetadata;
     private boolean _errorParsingMetadata;
@@ -1154,7 +1156,7 @@ public class PointCloudsRenderer extends DefaultRenderer
 
     private long _lastRenderedCount;
 
-    public PointCloud(URL serverURL, String cloudName, float verticalExaggeration, float pointSize, long downloadPriority, TimeInterval timeToCache, boolean readExpired, PointCloudMetadataListener metadataListener, boolean deleteListener)
+    public PointCloud(URL serverURL, String cloudName, float verticalExaggeration, float pointSize, long downloadPriority, TimeInterval timeToCache, boolean readExpired, PointCloudMetadataListener metadataListener, boolean deleteListener, boolean verbose)
     {
        _serverURL = serverURL;
        _cloudName = cloudName;
@@ -1165,6 +1167,7 @@ public class PointCloudsRenderer extends DefaultRenderer
        _readExpired = readExpired;
        _metadataListener = metadataListener;
        _deleteListener = deleteListener;
+       _verbose = verbose;
        _downloadingMetadata = false;
        _errorDownloadingMetadata = false;
        _errorParsingMetadata = false;
@@ -1271,7 +1274,10 @@ public class PointCloudsRenderer extends DefaultRenderer
     
         if (_lastRenderedCount != renderedCount)
         {
-          ILogger.instance().logInfo("\"%s\": Rendered %d points", _cloudName, renderedCount);
+          if (_verbose)
+          {
+            ILogger.instance().logInfo("\"%s\": Rendered %d points", _cloudName, renderedCount);
+          }
           _lastRenderedCount = renderedCount;
         }
       }
@@ -1416,46 +1422,54 @@ public class PointCloudsRenderer extends DefaultRenderer
 
   }
 
+  public final void addPointCloud(URL serverURL, String cloudName, float pointSize, float verticalExaggeration, PointCloudMetadataListener metadataListener, boolean deleteListener)
+  {
+     addPointCloud(serverURL, cloudName, pointSize, verticalExaggeration, metadataListener, deleteListener, false);
+  }
   public final void addPointCloud(URL serverURL, String cloudName, float pointSize, float verticalExaggeration, PointCloudMetadataListener metadataListener)
   {
-     addPointCloud(serverURL, cloudName, pointSize, verticalExaggeration, metadataListener, true);
+     addPointCloud(serverURL, cloudName, pointSize, verticalExaggeration, metadataListener, true, false);
   }
   public final void addPointCloud(URL serverURL, String cloudName, float pointSize, float verticalExaggeration)
   {
-     addPointCloud(serverURL, cloudName, pointSize, verticalExaggeration, null, true);
+     addPointCloud(serverURL, cloudName, pointSize, verticalExaggeration, null, true, false);
   }
   public final void addPointCloud(URL serverURL, String cloudName, float pointSize)
   {
-     addPointCloud(serverURL, cloudName, pointSize, 1.0f, null, true);
+     addPointCloud(serverURL, cloudName, pointSize, 1.0f, null, true, false);
   }
   public final void addPointCloud(URL serverURL, String cloudName)
   {
-     addPointCloud(serverURL, cloudName, 2.0f, 1.0f, null, true);
+     addPointCloud(serverURL, cloudName, 2.0f, 1.0f, null, true, false);
   }
-  public final void addPointCloud(URL serverURL, String cloudName, float pointSize, float verticalExaggeration, PointCloudMetadataListener metadataListener, boolean deleteListener)
+  public final void addPointCloud(URL serverURL, String cloudName, float pointSize, float verticalExaggeration, PointCloudMetadataListener metadataListener, boolean deleteListener, boolean verbose)
   {
-    addPointCloud(serverURL, cloudName, DownloadPriority.MEDIUM, TimeInterval.fromDays(30), true, pointSize, verticalExaggeration, metadataListener, deleteListener);
+    addPointCloud(serverURL, cloudName, DownloadPriority.MEDIUM, TimeInterval.fromDays(30), true, pointSize, verticalExaggeration, metadataListener, deleteListener, verbose);
   }
 
+  public final void addPointCloud(URL serverURL, String cloudName, long downloadPriority, TimeInterval timeToCache, boolean readExpired, float pointSize, float verticalExaggeration, PointCloudMetadataListener metadataListener, boolean deleteListener)
+  {
+     addPointCloud(serverURL, cloudName, downloadPriority, timeToCache, readExpired, pointSize, verticalExaggeration, metadataListener, deleteListener, false);
+  }
   public final void addPointCloud(URL serverURL, String cloudName, long downloadPriority, TimeInterval timeToCache, boolean readExpired, float pointSize, float verticalExaggeration, PointCloudMetadataListener metadataListener)
   {
-     addPointCloud(serverURL, cloudName, downloadPriority, timeToCache, readExpired, pointSize, verticalExaggeration, metadataListener, true);
+     addPointCloud(serverURL, cloudName, downloadPriority, timeToCache, readExpired, pointSize, verticalExaggeration, metadataListener, true, false);
   }
   public final void addPointCloud(URL serverURL, String cloudName, long downloadPriority, TimeInterval timeToCache, boolean readExpired, float pointSize, float verticalExaggeration)
   {
-     addPointCloud(serverURL, cloudName, downloadPriority, timeToCache, readExpired, pointSize, verticalExaggeration, null, true);
+     addPointCloud(serverURL, cloudName, downloadPriority, timeToCache, readExpired, pointSize, verticalExaggeration, null, true, false);
   }
   public final void addPointCloud(URL serverURL, String cloudName, long downloadPriority, TimeInterval timeToCache, boolean readExpired, float pointSize)
   {
-     addPointCloud(serverURL, cloudName, downloadPriority, timeToCache, readExpired, pointSize, 1.0f, null, true);
+     addPointCloud(serverURL, cloudName, downloadPriority, timeToCache, readExpired, pointSize, 1.0f, null, true, false);
   }
   public final void addPointCloud(URL serverURL, String cloudName, long downloadPriority, TimeInterval timeToCache, boolean readExpired)
   {
-     addPointCloud(serverURL, cloudName, downloadPriority, timeToCache, readExpired, 2.0f, 1.0f, null, true);
+     addPointCloud(serverURL, cloudName, downloadPriority, timeToCache, readExpired, 2.0f, 1.0f, null, true, false);
   }
-  public final void addPointCloud(URL serverURL, String cloudName, long downloadPriority, TimeInterval timeToCache, boolean readExpired, float pointSize, float verticalExaggeration, PointCloudMetadataListener metadataListener, boolean deleteListener)
+  public final void addPointCloud(URL serverURL, String cloudName, long downloadPriority, TimeInterval timeToCache, boolean readExpired, float pointSize, float verticalExaggeration, PointCloudMetadataListener metadataListener, boolean deleteListener, boolean verbose)
   {
-    PointCloud pointCloud = new PointCloud(serverURL, cloudName, verticalExaggeration, pointSize, downloadPriority, timeToCache, readExpired, metadataListener, deleteListener);
+    PointCloud pointCloud = new PointCloud(serverURL, cloudName, verticalExaggeration, pointSize, downloadPriority, timeToCache, readExpired, metadataListener, deleteListener, verbose);
     if (_context != null)
     {
       pointCloud.initialize(_context);
