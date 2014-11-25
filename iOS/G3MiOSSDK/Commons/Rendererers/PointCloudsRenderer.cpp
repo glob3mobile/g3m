@@ -408,12 +408,14 @@ void PointCloudsRenderer::PointCloud::render(const G3MRenderContext* rc,
     // const long long renderedCount = _rootNode->render(this, rc, glState, frustum, _minHeight, _maxHeight, _pointSize, nowInMS);
 
     if (_lastRenderedCount != renderedCount) {
+      if (_verbose) {
 #ifdef C_CODE
-      ILogger::instance()->logInfo("\"%s\": Rendered %ld points", _cloudName.c_str(), renderedCount);
+        ILogger::instance()->logInfo("\"%s\": Rendered %ld points", _cloudName.c_str(), renderedCount);
 #endif
 #ifdef JAVA_CODE
-      ILogger.instance().logInfo("\"%s\": Rendered %d points", _cloudName, renderedCount);
+        ILogger.instance().logInfo("\"%s\": Rendered %d points", _cloudName, renderedCount);
 #endif
+      }
       _lastRenderedCount = renderedCount;
     }
   }
@@ -1014,7 +1016,8 @@ void PointCloudsRenderer::addPointCloud(const URL& serverURL,
                                         float pointSize,
                                         float verticalExaggeration,
                                         PointCloudMetadataListener* metadataListener,
-                                        bool deleteListener) {
+                                        bool deleteListener,
+                                        bool verbose) {
   addPointCloud(serverURL,
                 cloudName,
                 DownloadPriority::MEDIUM,
@@ -1023,7 +1026,8 @@ void PointCloudsRenderer::addPointCloud(const URL& serverURL,
                 pointSize,
                 verticalExaggeration,
                 metadataListener,
-                deleteListener);
+                deleteListener,
+                verbose);
 }
 
 void PointCloudsRenderer::addPointCloud(const URL& serverURL,
@@ -1034,7 +1038,8 @@ void PointCloudsRenderer::addPointCloud(const URL& serverURL,
                                         float pointSize,
                                         float verticalExaggeration,
                                         PointCloudMetadataListener* metadataListener,
-                                        bool deleteListener) {
+                                        bool deleteListener,
+                                        bool verbose) {
   PointCloud* pointCloud = new PointCloud(serverURL,
                                           cloudName,
                                           verticalExaggeration,
@@ -1043,7 +1048,8 @@ void PointCloudsRenderer::addPointCloud(const URL& serverURL,
                                           timeToCache,
                                           readExpired,
                                           metadataListener,
-                                          deleteListener);
+                                          deleteListener,
+                                          verbose);
   if (_context != NULL) {
     pointCloud->initialize(_context);
   }

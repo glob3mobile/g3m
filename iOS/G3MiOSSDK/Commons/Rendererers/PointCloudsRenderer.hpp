@@ -488,6 +488,8 @@ private:
     PointCloudMetadataListener* _metadataListener;
     bool _deleteListener;
 
+    const bool _verbose;
+
     bool _downloadingMetadata;
     bool _errorDownloadingMetadata;
     bool _errorParsingMetadata;
@@ -512,7 +514,8 @@ private:
                const TimeInterval& timeToCache,
                bool readExpired,
                PointCloudMetadataListener* metadataListener,
-               bool deleteListener) :
+               bool deleteListener,
+               bool verbose) :
     _serverURL(serverURL),
     _cloudName(cloudName),
     _verticalExaggeration(verticalExaggeration),
@@ -522,6 +525,7 @@ private:
     _readExpired(readExpired),
     _metadataListener(metadataListener),
     _deleteListener(deleteListener),
+    _verbose(verbose),
     _downloadingMetadata(false),
     _errorDownloadingMetadata(false),
     _errorParsingMetadata(false),
@@ -600,7 +604,8 @@ public:
                      float pointSize = 2.0f,
                      float verticalExaggeration = 1.0f,
                      PointCloudMetadataListener* metadataListener = NULL,
-                     bool deleteListener = true);
+                     bool deleteListener = true,
+                     bool verbose = false);
 
   void addPointCloud(const URL& serverURL,
                      const std::string& cloudName,
@@ -610,7 +615,8 @@ public:
                      float pointSize = 2.0f,
                      float verticalExaggeration = 1.0f,
                      PointCloudMetadataListener* metadataListener = NULL,
-                     bool deleteListener = true);
+                     bool deleteListener = true,
+                     bool verbose = false);
   
   void removeAllPointClouds();
 
