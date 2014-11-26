@@ -305,10 +305,12 @@ public class ByteBufferUtils {
                           final Planet planet,
                           final List<Geodetic3D> points,
                           final GVector3F average,
-                          final float verticalExaggeration) {
+                          final float verticalExaggeration,
+                          final double deltaHeight) {
       buffer.putInt(points.size());
       for (final Geodetic3D point : points) {
-         final GVector3D cartesian = planet.toCartesian(point, verticalExaggeration);
+         final GVector3D cartesian = planet.toCartesian(point._latitude, point._longitude, point._height + deltaHeight,
+                  verticalExaggeration);
          put(buffer, cartesian, average);
       }
    }

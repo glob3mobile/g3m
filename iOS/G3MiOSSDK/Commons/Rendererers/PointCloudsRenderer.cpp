@@ -63,6 +63,7 @@ void PointCloudsRenderer::PointCloud::initialize(const G3MContext* context) {
                         _cloudName +
                         "?planet=" + planetType +
                         "&verticalExaggeration=" + IStringUtils::instance()->toString(_verticalExaggeration) +
+                        "&deltaHeight=" + IStringUtils::instance()->toString(_deltaHeight) +
                         "&format=binary");
 
   ILogger::instance()->logInfo("Downloading metadata for \"%s\"", _cloudName.c_str());
@@ -590,6 +591,7 @@ long long PointCloudsRenderer::PointCloud::requestBufferForLevel(const G3MRender
                 "/" + IStringUtils::instance()->toString(level) +
                 "?planet=" + planetType +
                 "&verticalExaggeration=" + IStringUtils::instance()->toString(_verticalExaggeration) +
+                "&deltaHeight=" + IStringUtils::instance()->toString(_deltaHeight) +
                 "&format=binary");
 
   //  ILogger::instance()->logInfo("Downloading metadata for \"%s\"", _cloudName.c_str());
@@ -1019,6 +1021,7 @@ void PointCloudsRenderer::addPointCloud(const URL& serverURL,
                                         ColorPolicy colorPolicy,
                                         float pointSize,
                                         float verticalExaggeration,
+                                        double deltaHeight,
                                         PointCloudMetadataListener* metadataListener,
                                         bool deleteListener,
                                         bool verbose) {
@@ -1030,6 +1033,7 @@ void PointCloudsRenderer::addPointCloud(const URL& serverURL,
                 colorPolicy,
                 pointSize,
                 verticalExaggeration,
+                deltaHeight,
                 metadataListener,
                 deleteListener,
                 verbose);
@@ -1043,12 +1047,14 @@ void PointCloudsRenderer::addPointCloud(const URL& serverURL,
                                         ColorPolicy colorPolicy,
                                         float pointSize,
                                         float verticalExaggeration,
+                                        double deltaHeight,
                                         PointCloudMetadataListener* metadataListener,
                                         bool deleteListener,
                                         bool verbose) {
   PointCloud* pointCloud = new PointCloud(serverURL,
                                           cloudName,
                                           verticalExaggeration,
+                                          deltaHeight,
                                           colorPolicy,
                                           pointSize,
                                           downloadPriority,

@@ -46,6 +46,8 @@ void G3MStreamingPointCloud2DemoScene::rawActivate(const G3MContext *context) {
 
   const float pointSize = 2;
   const float verticalExaggeration = 1;
+  //const double deltaHeight = -202;
+  const double deltaHeight = -263;
 
   PlanetRenderer* planetRenderer = model->getPlanetRenderer();
   planetRenderer->setVerticalExaggeration(verticalExaggeration);
@@ -76,10 +78,11 @@ void G3MStreamingPointCloud2DemoScene::rawActivate(const G3MContext *context) {
                                                  DownloadPriority::LOWER,
                                                  TimeInterval::zero(),
                                                  //TimeInterval::fromDays(30),
-                                                 false,
+                                                 true,
                                                  PointCloudsRenderer::MIN_MAX_HEIGHT,
                                                  pointSize,
                                                  verticalExaggeration,
+                                                 deltaHeight,
                                                  new G3MStreamingPointCloud2DemoScene_PointCloudMetadataListener(g3mWidget),
                                                  true);
 }

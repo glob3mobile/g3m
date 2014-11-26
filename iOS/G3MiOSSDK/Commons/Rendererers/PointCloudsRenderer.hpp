@@ -482,6 +482,7 @@ private:
 #endif
     const std::string _cloudName;
     const float _verticalExaggeration;
+    const double _deltaHeight;
 
     const long long    _downloadPriority;
 #ifdef C_CODE
@@ -517,6 +518,7 @@ private:
     PointCloud(const URL& serverURL,
                const std::string& cloudName,
                float verticalExaggeration,
+               double deltaHeight,
                ColorPolicy colorPolicy,
                float pointSize,
                long long downloadPriority,
@@ -528,6 +530,7 @@ private:
     _serverURL(serverURL),
     _cloudName(cloudName),
     _verticalExaggeration(verticalExaggeration),
+    _deltaHeight(deltaHeight),
     _colorPolicy(colorPolicy),
     _pointSize(pointSize),
     _downloadPriority(downloadPriority),
@@ -614,6 +617,7 @@ public:
                      ColorPolicy colorPolicy,
                      float pointSize = 2.0f,
                      float verticalExaggeration = 1.0f,
+                     double deltaHeight = 0,
                      PointCloudMetadataListener* metadataListener = NULL,
                      bool deleteListener = true,
                      bool verbose = false);
@@ -626,6 +630,7 @@ public:
                      ColorPolicy colorPolicy,
                      float pointSize = 2.0f,
                      float verticalExaggeration = 1.0f,
+                     double deltaHeight = 0,
                      PointCloudMetadataListener* metadataListener = NULL,
                      bool deleteListener = true,
                      bool verbose = false);
