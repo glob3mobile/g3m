@@ -46,8 +46,7 @@ void G3MStreamingPointCloud2DemoScene::rawActivate(const G3MContext *context) {
 
   const float pointSize = 2;
   const float verticalExaggeration = 1;
-  //const double deltaHeight = -202;
-  const double deltaHeight = -263;
+  const double deltaHeight = -202;
 
   PlanetRenderer* planetRenderer = model->getPlanetRenderer();
   planetRenderer->setVerticalExaggeration(verticalExaggeration);
@@ -72,8 +71,7 @@ void G3MStreamingPointCloud2DemoScene::rawActivate(const G3MContext *context) {
   model->getLayerSet()->addLayer(layer);
 
 //#warning TODO cache
-  model->getPointCloudsRenderer()->addPointCloud(//URL("http://glob3mobile.dyndns.org:8080"),
-                                                 URL("http://192.168.1.7:8080"),
+  model->getPointCloudsRenderer()->addPointCloud(URL("http://glob3mobile.dyndns.org:8080"),
                                                  //"Loudoun-VA_fragment_LOD",
                                                  "minnesota_LOD",
                                                  DownloadPriority::LOWER,
