@@ -6,6 +6,7 @@ import org.glob3.mobile.generated.Angle;
 import org.glob3.mobile.generated.DownloadPriority;
 import org.glob3.mobile.generated.Geodetic3D;
 import org.glob3.mobile.generated.PointCloudsRenderer;
+import org.glob3.mobile.generated.PointCloudsRenderer.ColorPolicy;
 import org.glob3.mobile.generated.PointCloudsRenderer.PointCloudMetadataListener;
 import org.glob3.mobile.generated.TimeInterval;
 import org.glob3.mobile.generated.URL;
@@ -64,15 +65,22 @@ public class MainActivity
       final boolean readExpired = false;
       final float pointSize = 2;
       final float verticalExaggeration = 1;
+      final double deltaHeight = 0;
       final PointCloudMetadataListener metadataListener = null;
       final boolean deleteListener = true;
 
       pcr.addPointCloud( //
-               serverURL, cloudName, //
-               downloadPriority, timeToCache, readExpired, //
+               serverURL, //
+               cloudName, //
+               downloadPriority, //
+               timeToCache, //
+               readExpired, //
+               ColorPolicy.MIN_AVERAGE3_HEIGHT, //
                pointSize, //
                verticalExaggeration, //
-               metadataListener, deleteListener);
+               deltaHeight, //
+               metadataListener, //
+               deleteListener);
 
 
       builder.addRenderer(pcr);
