@@ -158,6 +158,7 @@ public class PCSSServlet
 
                   final GVector3D cartesian = planet.toCartesian(point._latitude, point._longitude, point._height + deltaHeight,
                            verticalExaggeration);
+
                   sumX += cartesian._x;
                   sumY += cartesian._y;
                   sumZ += cartesian._z;
@@ -198,7 +199,7 @@ public class PCSSServlet
       super.init(config);
 
       _cloudDirectory = new File(System.getProperty("user.dir"));
-      //_cloudDirectory = new File("/Volumes/My Passport/_LIDAR_COPY");
+      // _cloudDirectory = new File("/Volumes/My Passport/_minnesota_lidar_/db");
 
       log("initialization of " + getClass() + " at " + _cloudDirectory);
    }
@@ -275,7 +276,7 @@ public class PCSSServlet
    private static List<NodeMetadata> getNodesMetadata(final PersistentLOD db,
             final Planet planet,
             final float verticalExaggeration,
-                                                      final double deltaHeight) {
+            final double deltaHeight) {
       final List<NodeMetadata> result = new ArrayList<PCSSServlet.NodeMetadata>(10000);
 
       db.acceptDepthFirstVisitor(null, new PersistentLOD.Visitor() {
@@ -305,6 +306,7 @@ public class PCSSServlet
                for (final Geodetic3D point : points) {
                   final GVector3D cartesian = planet.toCartesian(point._latitude, point._longitude, point._height + deltaHeight,
                            verticalExaggeration);
+
                   final double x = cartesian._x;
                   final double y = cartesian._y;
                   final double z = cartesian._z;
@@ -475,7 +477,7 @@ public class PCSSServlet
                                                  final float verticalExaggeration,
                                                  final double deltaHeight) {
       synchronized (_metadataCache) {
-         final String key = db.getCloudName() + "/" + planet + "/" + verticalExaggeration;
+         final String key = db.getCloudName() + "/" + planet + "/" + verticalExaggeration + "/" + deltaHeight;
          MetadataEntry entry = _metadataCache.get(key);
          if (entry == null) {
             entry = new MetadataEntry( //
@@ -799,7 +801,6 @@ public class PCSSServlet
          final String formatName = request.getParameter("format");
          final String verticalExaggerationStr = request.getParameter("verticalExaggeration");
          final float verticalExaggeration = getFloat(verticalExaggerationStr);
-
          final String deltaHeightStr = request.getParameter("deltaHeight");
          final double deltaHeight = getDouble(deltaHeightStr);
 
@@ -813,6 +814,9 @@ public class PCSSServlet
          }
          else if (Float.isNaN(verticalExaggeration)) {
             error(response, "verticalExaggeration parameter invalid or missing: " + verticalExaggerationStr);
+         }
+         else if (Double.isNaN(deltaHeight)) {
+            error(response, "deltaHeight parameter invalid or missing: " + deltaHeightStr);
          }
          else {
             sendMetadata(db, planet, format, verticalExaggeration, deltaHeight, response);
@@ -828,7 +832,6 @@ public class PCSSServlet
             final String formatName = request.getParameter("format");
             final String verticalExaggerationStr = request.getParameter("verticalExaggeration");
             final float verticalExaggeration = getFloat(verticalExaggerationStr);
-
             final String deltaHeightStr = request.getParameter("deltaHeight");
             final double deltaHeight = getDouble(deltaHeightStr);
 
@@ -842,6 +845,9 @@ public class PCSSServlet
             }
             else if (Float.isNaN(verticalExaggeration)) {
                error(response, "verticalExaggeration parameter invalid or missing: " + verticalExaggerationStr);
+            }
+            else if (Double.isNaN(deltaHeight)) {
+               error(response, "deltaHeight parameter invalid or missing: " + deltaHeightStr);
             }
             else {
                sendNodeLevelPoints(db, planet, format, nodeID, level, verticalExaggeration, deltaHeight, response);

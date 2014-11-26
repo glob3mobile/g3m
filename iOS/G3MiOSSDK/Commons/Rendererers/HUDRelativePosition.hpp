@@ -24,7 +24,7 @@ public:
 
   enum Anchor {
     VIEWPORT_WIDTH,
-    VIEWPORT_HEIGTH
+    VIEWPORT_HEIGHT
   };
 
 private:
