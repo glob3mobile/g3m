@@ -370,10 +370,11 @@ void PointCloudsRenderer::PointCloud::parsedMetadata(long long pointsCount,
   ILogger::instance()->logInfo("Parsed metadata for \"%s\"", _cloudName.c_str());
 
   if (_metadataListener != NULL) {
-    _metadataListener->onMetadata(pointsCount,
+    _metadataListener->onMetadata(_pointsCount,
                                   *sector,
-                                  minHeight,
-                                  maxHeight);
+                                  _minHeight,
+                                  _maxHeight,
+                                  _averageHeight);
     if (_deleteListener) {
       delete _metadataListener;
     }
@@ -404,7 +405,9 @@ void PointCloudsRenderer::PointCloud::render(const G3MRenderContext* rc,
                                              long long nowInMS) {
   if (_rootNode != NULL) {
 #warning TODO: make plugable the colorization of the cloud
-    const long long renderedCount = _rootNode->render(this, rc, glState, frustum, _minHeight, _averageHeight * 3, _pointSize, nowInMS);
+    const double maxHeight = (_colorPolicy == MIN_MAX_HEIGHT) ? _maxHeight : _averageHeight * 3;
+    const long long renderedCount = _rootNode->render(this, rc, glState, frustum, _minHeight, maxHeight, _pointSize, nowInMS);
+    // const long long renderedCount = _rootNode->render(this, rc, glState, frustum, _minHeight, _averageHeight * 3, _pointSize, nowInMS);
     // const long long renderedCount = _rootNode->render(this, rc, glState, frustum, _minHeight, _maxHeight, _pointSize, nowInMS);
 
     if (_lastRenderedCount != renderedCount) {
@@ -1013,6 +1016,7 @@ RenderState PointCloudsRenderer::getRenderState(const G3MRenderContext* rc) {
 
 void PointCloudsRenderer::addPointCloud(const URL& serverURL,
                                         const std::string& cloudName,
+                                        ColorPolicy colorPolicy,
                                         float pointSize,
                                         float verticalExaggeration,
                                         PointCloudMetadataListener* metadataListener,
@@ -1023,6 +1027,7 @@ void PointCloudsRenderer::addPointCloud(const URL& serverURL,
                 DownloadPriority::MEDIUM,
                 TimeInterval::fromDays(30),
                 true,
+                colorPolicy,
                 pointSize,
                 verticalExaggeration,
                 metadataListener,
@@ -1035,6 +1040,7 @@ void PointCloudsRenderer::addPointCloud(const URL& serverURL,
                                         long long downloadPriority,
                                         const TimeInterval& timeToCache,
                                         bool readExpired,
+                                        ColorPolicy colorPolicy,
                                         float pointSize,
                                         float verticalExaggeration,
                                         PointCloudMetadataListener* metadataListener,
@@ -1043,6 +1049,7 @@ void PointCloudsRenderer::addPointCloud(const URL& serverURL,
   PointCloud* pointCloud = new PointCloud(serverURL,
                                           cloudName,
                                           verticalExaggeration,
+                                          colorPolicy,
                                           pointSize,
                                           downloadPriority,
                                           timeToCache,

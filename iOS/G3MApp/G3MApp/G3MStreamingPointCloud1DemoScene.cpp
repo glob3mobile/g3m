@@ -32,7 +32,8 @@ public:
   void onMetadata(long long pointsCount,
                   const Sector& sector,
                   double minHeight,
-                  double maxHeight) {
+                  double maxHeight,
+                  double averageHeight) {
     _g3mWidget->setAnimatedCameraPosition( Geodetic3D::fromDegrees(39.068479748852752209, -77.602316923351310152, 70000) );
   }
 
@@ -66,6 +67,7 @@ void G3MStreamingPointCloud1DemoScene::rawActivate(const G3MContext *context) {
                                                  DownloadPriority::LOWER,
                                                  TimeInterval::zero(),
                                                  false,
+                                                 PointCloudsRenderer::MIN_AVERAGE3_HEIGHT,
                                                  pointSize,
                                                  verticalExaggeration,
                                                  new G3MStreamingPointCloud1DemoScene_PointCloudMetadataListener(g3mWidget),

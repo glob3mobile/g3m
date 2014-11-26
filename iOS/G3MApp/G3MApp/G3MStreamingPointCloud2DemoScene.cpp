@@ -32,7 +32,8 @@ public:
   void onMetadata(long long pointsCount,
                   const Sector& sector,
                   double minHeight,
-                  double maxHeight) {
+                  double maxHeight,
+                  double averageHeight) {
     _g3mWidget->setAnimatedCameraPosition( Geodetic3D::fromDegrees(39.084024168630392637, -77.643438514919708382, 11000) );
   }
 
@@ -70,10 +71,13 @@ void G3MStreamingPointCloud2DemoScene::rawActivate(const G3MContext *context) {
 
 //#warning TODO cache
   model->getPointCloudsRenderer()->addPointCloud(URL("http://glob3mobile.dyndns.org:8080"),
-                                                 "Loudoun-VA_fragment_LOD",
+                                                 //"Loudoun-VA_fragment_LOD",
+                                                 "minnesota_LOD",
                                                  DownloadPriority::LOWER,
                                                  TimeInterval::zero(),
+                                                 //TimeInterval::fromDays(30),
                                                  false,
+                                                 PointCloudsRenderer::MIN_MAX_HEIGHT,
                                                  pointSize,
                                                  verticalExaggeration,
                                                  new G3MStreamingPointCloud2DemoScene_PointCloudMetadataListener(g3mWidget),
