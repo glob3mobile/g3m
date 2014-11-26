@@ -406,7 +406,13 @@ void PointCloudsRenderer::PointCloud::render(const G3MRenderContext* rc,
                                              long long nowInMS) {
   if (_rootNode != NULL) {
 #warning TODO: make plugable the colorization of the cloud
+#ifdef C_CODE
     const double maxHeight = (_colorPolicy == MIN_MAX_HEIGHT) ? _maxHeight : _averageHeight * 3;
+#endif
+#ifdef JAVA_CODE
+    final double maxHeight = (_colorPolicy == ColorPolicy.MIN_MAX_HEIGHT) ? _maxHeight : _averageHeight * 3;
+#endif
+
     const long long renderedCount = _rootNode->render(this, rc, glState, frustum, _minHeight, maxHeight, _pointSize, nowInMS);
     // const long long renderedCount = _rootNode->render(this, rc, glState, frustum, _minHeight, _averageHeight * 3, _pointSize, nowInMS);
     // const long long renderedCount = _rootNode->render(this, rc, glState, frustum, _minHeight, _maxHeight, _pointSize, nowInMS);
