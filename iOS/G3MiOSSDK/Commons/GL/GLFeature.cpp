@@ -39,7 +39,7 @@ GLFeature(NO_GROUP, GLF_BILLBOARD)
 void BillboardGLFeature::applyOnGlobalGLState(GLGlobalState* state)  const {
   state->disableDepthTest();
   state->disableCullFace();
-  state->disPolygonOffsetFill();
+  state->disablePolygonOffsetFill();
 }
 
 GeometryGLFeature::GeometryGLFeature(IFloatBuffer* buffer,
@@ -92,7 +92,7 @@ void GeometryGLFeature::applyOnGlobalGLState(GLGlobalState* state) const {
     state->enablePolygonOffsetFill(_polygonOffsetFactor, _polygonOffsetUnits);
   }
   else {
-    state->disPolygonOffsetFill();
+    state->disablePolygonOffsetFill();
   }
 
   state->setLineWidth(_lineWidth);

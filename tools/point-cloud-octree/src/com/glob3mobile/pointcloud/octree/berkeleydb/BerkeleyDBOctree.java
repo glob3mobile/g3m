@@ -39,7 +39,7 @@ public class BerkeleyDBOctree
    // private static final ILogger LOGGER              = GLogger.instance();
    // private static final Charset UTF8                = Charset.forName("UTF-8");
 
-   private static final int    DEFAULT_BUFFER_SIZE          = 64 * 1024;
+   private static final int    DEFAULT_MAX_BUFFER_SIZE      = 64 * 1024;
    private static final int    DEFAULT_MAX_POINTS_PER_TITLE = 64 * 1024;
    private static final String NODE_DATABASE_NAME           = "Node";
    private static final String NODE_DATA_DATABASE_NAME      = "NodeData";
@@ -68,7 +68,7 @@ public class BerkeleyDBOctree
                                        final String cloudName,
                                        final boolean createIfNotExists,
                                        final long cacheSizeInBytes) {
-      return open(cloudDirectory, cloudName, createIfNotExists, DEFAULT_BUFFER_SIZE, DEFAULT_MAX_POINTS_PER_TITLE,
+      return open(cloudDirectory, cloudName, createIfNotExists, DEFAULT_MAX_BUFFER_SIZE, DEFAULT_MAX_POINTS_PER_TITLE,
                cacheSizeInBytes);
    }
 
@@ -76,11 +76,11 @@ public class BerkeleyDBOctree
    public static PersistentOctree open(final File cloudDirectory,
                                        final String cloudName,
                                        final boolean createIfNotExists,
-                                       final int bufferSize,
+                                       final int maxBufferSize,
                                        final int maxPointsPerTitle,
                                        final long cacheSizeInBytes) {
 
-      return new BerkeleyDBOctree(cloudDirectory, cloudName, createIfNotExists, bufferSize, maxPointsPerTitle, false,
+      return new BerkeleyDBOctree(cloudDirectory, cloudName, createIfNotExists, maxBufferSize, maxPointsPerTitle, false,
                cacheSizeInBytes);
    }
 
@@ -95,7 +95,7 @@ public class BerkeleyDBOctree
    private final String           _cloudName;
 
    private final List<Geodetic3D> _buffer;
-   private final int              _bufferSize;
+   private final int              _maxBufferSize;
    private final int              _maxPointsPerTitle;
    private double                 _minLatitudeInRadians;
    private double                 _minLongitudeInRadians;
@@ -117,7 +117,7 @@ public class BerkeleyDBOctree
    private BerkeleyDBOctree(final File cloudDirectory,
                             final String cloudName,
                             final boolean createIfNotExists,
-                            final int bufferSize,
+                            final int maxBufferSize,
                             final int maxPointsPerTitle,
                             final boolean readOnly,
                             final long cacheSizeInBytes) {
@@ -134,8 +134,8 @@ public class BerkeleyDBOctree
       _readOnly = readOnly;
       _cloudName = cloudName;
 
-      _bufferSize = bufferSize;
-      _buffer = new ArrayList<>(bufferSize);
+      _maxBufferSize = maxBufferSize;
+      _buffer = new ArrayList<>(maxBufferSize);
       resetBufferBounds();
 
       _maxPointsPerTitle = maxPointsPerTitle;
@@ -233,7 +233,7 @@ public class BerkeleyDBOctree
       }
 
 
-      if (_buffer.size() == _bufferSize) {
+      if (_buffer.size() == _maxBufferSize) {
          flush();
       }
    }
@@ -587,7 +587,7 @@ public class BerkeleyDBOctree
          System.out.println("   Heights: " + _minHeight + "/" + _maxHeight + " (delta=" + (_maxHeight - _minHeight) + ")");
          System.out.println("   Nodes: " + _nodesCount);
          System.out.println("   Depth: " + _minDepth + "/" + _maxDepth + ", Average=" + ((float) _sumDepth / _nodesCount));
-         System.out.println("   Points/Node: Average=" + ((float) _pointsCount / _nodesCount) + //
+         System.out.println("   Points/Node: Average=" + ((float) getAveragePointsPerNode()) + //
                   ", Min=" + _minPointsCountPerNode + //
                   ", Max=" + _maxPointsCountPerNode);
          System.out.println("======================================================================");
@@ -631,8 +631,13 @@ public class BerkeleyDBOctree
 
       @Override
       public int getMaxPointsPerNode() {
-         // TODO Auto-generated method stub
          return _maxPointsCountPerNode;
+      }
+
+
+      @Override
+      public double getAveragePointsPerNode() {
+         return (double) _pointsCount / _nodesCount;
       }
 
    }

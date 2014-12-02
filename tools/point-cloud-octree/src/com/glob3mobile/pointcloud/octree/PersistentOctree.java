@@ -18,6 +18,12 @@ public interface PersistentOctree
       String getID();
 
 
+      Sector getSector();
+
+
+      int getDepth();
+
+
       int getPointsCount();
 
 
@@ -27,10 +33,6 @@ public interface PersistentOctree
       Geodetic3D getAveragePoint();
 
 
-      Sector getSector();
-
-
-      int getDepth();
    }
 
 
@@ -65,6 +67,9 @@ public interface PersistentOctree
 
 
       int getMaxPointsPerNode();
+
+
+      double getAveragePointsPerNode();
    }
 
 

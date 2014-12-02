@@ -24,6 +24,7 @@ class ShapesRenderer;
 class PlanetRenderer;
 class GEORenderer;
 class PointCloudsRenderer;
+class HUDRenderer;
 
 class G3MDemoModel {
 private:
@@ -38,6 +39,7 @@ private:
   MarksRenderer*       _marksRenderer;
   GEORenderer*         _geoRenderer;
   PointCloudsRenderer* _pointCloudsRenderer;
+  HUDRenderer*         _hudRenderer;
 
   G3MDemoScene*              _selectedScene;
   std::vector<G3MDemoScene*> _scenes;
@@ -52,7 +54,8 @@ public:
                ShapesRenderer*      shapesRenderer,
                MarksRenderer*       marksRenderer,
                GEORenderer*         geoRenderer,
-               PointCloudsRenderer* pointCloudsRenderer);
+               PointCloudsRenderer* pointCloudsRenderer,
+               HUDRenderer*         hudRenderer);
 
 
   void initializeG3MWidget(G3MWidget* g3mWidget);
@@ -85,6 +88,10 @@ public:
 
   PointCloudsRenderer* getPointCloudsRenderer() const {
     return _pointCloudsRenderer;
+  }
+
+  HUDRenderer* getHUDRenderer() const {
+    return _hudRenderer;
   }
 
   PlanetRenderer* getPlanetRenderer() const;

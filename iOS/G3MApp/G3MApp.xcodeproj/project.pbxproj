@@ -13,6 +13,10 @@
 		CF3F8FDF183526AE00589B4C /* G3MDemoBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF3F8FDD183526AE00589B4C /* G3MDemoBuilder.cpp */; };
 		CF3F8FE7183576AF00589B4C /* MainStoryboard-iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CF3F8FE6183576AF00589B4C /* MainStoryboard-iPad.storyboard */; };
 		CF3F8FEA1835867D00589B4C /* G3MSelectDemoSceneViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = CF3F8FE91835867D00589B4C /* G3MSelectDemoSceneViewController.mm */; };
+		CF483EC51A2E5D5100B70D7E /* G3MHUDDemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF483EC31A2E5D5100B70D7E /* G3MHUDDemoScene.cpp */; };
+		CF483EC91A2E62A100B70D7E /* CompassHeadings.png in Resources */ = {isa = PBXBuildFile; fileRef = CF483EC81A2E62A100B70D7E /* CompassHeadings.png */; };
+		CF483ECB1A2E62B600B70D7E /* altimeter-ruler-1536x113.png in Resources */ = {isa = PBXBuildFile; fileRef = CF483ECA1A2E62B600B70D7E /* altimeter-ruler-1536x113.png */; };
+		CF483ECD1A2E62C400B70D7E /* widget-background.png in Resources */ = {isa = PBXBuildFile; fileRef = CF483ECC1A2E62C400B70D7E /* widget-background.png */; };
 		CF6920B11837EA35007409D8 /* G3MDemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF6920AF1837EA35007409D8 /* G3MDemoScene.cpp */; };
 		CF6920B41837F1CA007409D8 /* G3MRasterLayersDemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF6920B21837F1CA007409D8 /* G3MRasterLayersDemoScene.cpp */; };
 		CF6920B71837F26B007409D8 /* G3MVectorialDemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF6920B51837F26B007409D8 /* G3MVectorialDemoScene.cpp */; };
@@ -116,6 +120,11 @@
 		CF3F8FE6183576AF00589B4C /* MainStoryboard-iPad.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = "MainStoryboard-iPad.storyboard"; sourceTree = "<group>"; };
 		CF3F8FE81835867D00589B4C /* G3MSelectDemoSceneViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = G3MSelectDemoSceneViewController.h; sourceTree = "<group>"; };
 		CF3F8FE91835867D00589B4C /* G3MSelectDemoSceneViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = G3MSelectDemoSceneViewController.mm; sourceTree = "<group>"; };
+		CF483EC31A2E5D5100B70D7E /* G3MHUDDemoScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = G3MHUDDemoScene.cpp; sourceTree = "<group>"; };
+		CF483EC41A2E5D5100B70D7E /* G3MHUDDemoScene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = G3MHUDDemoScene.hpp; sourceTree = "<group>"; };
+		CF483EC81A2E62A100B70D7E /* CompassHeadings.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = CompassHeadings.png; sourceTree = "<group>"; };
+		CF483ECA1A2E62B600B70D7E /* altimeter-ruler-1536x113.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "altimeter-ruler-1536x113.png"; sourceTree = "<group>"; };
+		CF483ECC1A2E62C400B70D7E /* widget-background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "widget-background.png"; sourceTree = "<group>"; };
 		CF6920AF1837EA35007409D8 /* G3MDemoScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = G3MDemoScene.cpp; sourceTree = "<group>"; };
 		CF6920B01837EA35007409D8 /* G3MDemoScene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = G3MDemoScene.hpp; sourceTree = "<group>"; };
 		CF6920B21837F1CA007409D8 /* G3MRasterLayersDemoScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = G3MRasterLayersDemoScene.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
@@ -283,6 +292,8 @@
 				CFBD815119A3D9F600F1A8C4 /* G3MStreamingPointCloud1DemoScene.hpp */,
 				CFD3BE3B19D3324F00FE2D5A /* G3MStreamingPointCloud2DemoScene.cpp */,
 				CFD3BE3C19D3324F00FE2D5A /* G3MStreamingPointCloud2DemoScene.hpp */,
+				CF483EC31A2E5D5100B70D7E /* G3MHUDDemoScene.cpp */,
+				CF483EC41A2E5D5100B70D7E /* G3MHUDDemoScene.hpp */,
 			);
 			name = DemoBuilder;
 			sourceTree = "<group>";
@@ -401,6 +412,9 @@
 		E7D1B7F116D2750400AF47C1 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				CF483ECC1A2E62C400B70D7E /* widget-background.png */,
+				CF483ECA1A2E62B600B70D7E /* altimeter-ruler-1536x113.png */,
+				CF483EC81A2E62A100B70D7E /* CompassHeadings.png */,
 				CF6E184B19D35ADD002B456A /* loudoun_4326_300.bil */,
 				CF37F5F0183D26500050CAEF /* 0576.bil */,
 				CFE3B3F1183C07C50078C796 /* isosurface-mesh.json */,
@@ -527,10 +541,13 @@
 				CF37F5F5183D355E0050CAEF /* MainStoryboard-iPhone.storyboard in Resources */,
 				E7D1B63C16D2462B00AF47C1 /* Default-Landscape.png in Resources */,
 				CFE3B3D7183AD2CB0078C796 /* A320.bson in Resources */,
+				CF483EC91A2E62A100B70D7E /* CompassHeadings.png in Resources */,
 				E7D1B63D16D2462B00AF47C1 /* Default-Landscape@2x.png in Resources */,
 				E7D1B63E16D2462B00AF47C1 /* Default-Portrait.png in Resources */,
 				CFE3B3E6183ADAFF0078C796 /* eifel in Resources */,
 				E7D1B63F16D2462B00AF47C1 /* Default-Portrait@2x.png in Resources */,
+				CF483ECB1A2E62B600B70D7E /* altimeter-ruler-1536x113.png in Resources */,
+				CF483ECD1A2E62C400B70D7E /* widget-background.png in Resources */,
 				CFE3B3DE183ADAA00078C796 /* sphinx.bson in Resources */,
 				E7D1B64016D2462B00AF47C1 /* Icon-72.png in Resources */,
 				E7D1B64116D2462B00AF47C1 /* Icon-72@2x.png in Resources */,
@@ -586,6 +603,7 @@
 				E7D1B61916D2436700AF47C1 /* G3MAppDelegate.m in Sources */,
 				E7D1B62816D2436700AF47C1 /* G3MViewController.mm in Sources */,
 				CF6920B71837F26B007409D8 /* G3MVectorialDemoScene.cpp in Sources */,
+				CF483EC51A2E5D5100B70D7E /* G3MHUDDemoScene.cpp in Sources */,
 				CFD3BE3D19D3324F00FE2D5A /* G3MStreamingPointCloud2DemoScene.cpp in Sources */,
 				CF3F8FDF183526AE00589B4C /* G3MDemoBuilder.cpp in Sources */,
 				CFE3B3CB183ABAC70078C796 /* G3M3DSymbologyDemoScene.cpp in Sources */,
