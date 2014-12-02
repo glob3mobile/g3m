@@ -22,6 +22,7 @@ import org.glob3.mobile.generated.MarksRenderer;
 import org.glob3.mobile.generated.MeshRenderer;
 import org.glob3.mobile.generated.Planet;
 import org.glob3.mobile.generated.PointCloudsRenderer;
+import org.glob3.mobile.generated.PointCloudsRenderer.ColorPolicy;
 import org.glob3.mobile.generated.PointCloudsRenderer.PointCloudMetadataListener;
 import org.glob3.mobile.generated.Sector;
 import org.glob3.mobile.generated.Shape;
@@ -148,15 +149,22 @@ public class MainActivity
       final boolean readExpired = false;
       final float pointSize = 2;
       final float verticalExaggeration = 1;
+      final double deltaHeight = 0;
       final PointCloudMetadataListener metadataListener = null;
       final boolean deleteListener = true;
 
       pcr.addPointCloud( //
-               serverURL, cloudName, //
-               downloadPriority, timeToCache, readExpired, //
+               serverURL, //
+               cloudName, //
+               downloadPriority, //
+               timeToCache, //
+               readExpired, //
+               ColorPolicy.MIN_AVERAGE3_HEIGHT, //
                pointSize, //
                verticalExaggeration, //
-               metadataListener, deleteListener);
+               deltaHeight, //
+               metadataListener, //
+               deleteListener);
 
 
 
