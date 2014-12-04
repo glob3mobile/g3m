@@ -11,8 +11,7 @@
 
 #include "AbstractMeshShape.hpp"
 #include "Ellipsoid.hpp"
-#include "Planet.hpp"
-#include "Quadric.hpp"
+#include "Vector3D.hpp"
 
 
 class Color;
@@ -22,6 +21,9 @@ class FloatBufferBuilderFromCartesian3D;
 class TextureIDReference;
 
 class IGLTextureId;
+class G3MRenderContext;
+
+class OrientedBox;
 
 #include "URL.hpp"
 
@@ -29,13 +31,13 @@ class IGLTextureId;
 class EllipsoidShape : public AbstractMeshShape {
 private:
   
+  OrientedBox* _boundingVolume;
+  
 #ifdef C_CODE
   const Ellipsoid* _ellipsoid;
-//  const Quadric    _quadric;
 #endif
 #ifdef JAVA_CODE
   private Ellipsoid _ellipsoid;
-//  private final Quadric _quadric;
 #endif
 
   URL _textureURL;
@@ -46,7 +48,9 @@ private:
 
   const short _resolution;
 
-  const float _borderWidth;
+  float _borderWidth;
+  float _originalBorderWidth;
+
   
   const bool _texturedInside;
 
@@ -56,6 +60,8 @@ private:
 
   Color* _surfaceColor;
   Color* _borderColor;
+  Color* _originalBorderColor;
+
 
   Mesh* createBorderMesh(const G3MRenderContext* rc,
                          FloatBufferBuilderFromGeodetic *vertices);
@@ -77,7 +83,8 @@ private:
 
 protected:
   Mesh* createMesh(const G3MRenderContext* rc);
-
+  BoundingVolume* getBoundingVolume(const G3MRenderContext *rc);
+  
 public:
   EllipsoidShape(Geodetic3D* position,
                  AltitudeMode altitudeMode,
@@ -88,28 +95,10 @@ public:
                  bool mercator,
                  const Color& surfaceColor,
                  Color* borderColor = NULL,
-                 bool withNormals = true) :
-  AbstractMeshShape(position, altitudeMode),
-  _ellipsoid(new Ellipsoid(Vector3D::zero, radius)),
-//  _quadric(Quadric::fromEllipsoid(_ellipsoid)),
-  _textureURL(URL("", false)),
-  _resolution(resolution < 3 ? 3 : resolution),
-  _borderWidth(borderWidth),
-  _texturedInside(texturedInside),
-  _mercator(mercator),
-  _surfaceColor(new Color(surfaceColor)),
-  _borderColor(borderColor),
-  _textureRequested(false),
-  _textureImage(NULL),
-  _withNormals(withNormals),
-  _texId(NULL)
-  {
-
-  }
+                 bool withNormals = true);
 
   EllipsoidShape(Geodetic3D* position,
                  AltitudeMode altitudeMode,
-                 const Planet* planet,
                  const URL& textureURL,
                  const Vector3D& radius,
                  short resolution,
@@ -118,33 +107,62 @@ public:
                  bool mercator,
                  bool withNormals = true) :
   AbstractMeshShape(position, altitudeMode),
-  _ellipsoid(new Ellipsoid(Vector3D::zero, radius)),
-//  _quadric(Quadric::fromEllipsoid(_ellipsoid)),
+#warning EY SOLO PROBANDO CAMBIAR YA!!!!
+  _ellipsoid(NULL /*new Ellipsoid(Vector3D::zero, radius) */),
+  _boundingVolume(NULL),
   _textureURL(textureURL),
   _resolution(resolution < 3 ? 3 : resolution),
   _borderWidth(borderWidth),
+  _originalBorderWidth(borderWidth),
   _texturedInside(texturedInside),
   _mercator(mercator),
   _surfaceColor(NULL),
   _borderColor(NULL),
+  _originalBorderColor(NULL),
   _textureRequested(false),
   _textureImage(NULL),
   _withNormals(withNormals),
   _texId(NULL)
   {
-    
   }
 
 
   ~EllipsoidShape();
+  
+  void setBorderColor(Color* color) {
+    delete _borderColor;
+    _borderColor = color;
+    cleanMesh();
+  }
+  
+  void setBorderWidth(float borderWidth) {
+    if (_borderWidth != borderWidth) {
+      _borderWidth = borderWidth;
+      cleanMesh();
+    }
+  }
+
 
   void imageDownloaded(IImage* image);
   
   
   std::vector<double> intersectionsDistances(const Planet* planet,
+                                             const Camera* camera,
                                              const Vector3D& origin,
-                                             const Vector3D& direction) const;
-  
+                                             const Vector3D& direction);
+
+  bool isVisible(const G3MRenderContext *rc);
+    
+  void setSelectedDrawMode(bool mode) {
+    if (mode) {
+      setBorderWidth(5);
+      setBorderColor(Color::newFromRGBA(1, 1, 0, 1));
+    } else {
+      setBorderWidth(_originalBorderWidth);
+      if (_originalBorderColor!=NULL)
+        setBorderColor(new Color(*_originalBorderColor));
+    }
+  }
 };
 
 #endif

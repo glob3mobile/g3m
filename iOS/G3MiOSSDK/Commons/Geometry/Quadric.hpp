@@ -47,6 +47,10 @@ public:
     return Quadric(T.multiply(Q).multiply(I));
   }
   
+  Quadric transformBy(const MutableMatrix44D& inverse, const MutableMatrix44D& transpose) const {
+    return Quadric(transpose.multiply(Q).multiply(inverse));
+  }
+
   std::vector<double> intersectionsDistances(const Vector3D& origin,
                                              const Vector3D& direction) const;
 };

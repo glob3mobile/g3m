@@ -545,6 +545,17 @@ public class Camera
     return sector.contains(position._latitude, position._longitude) && height >= position._height;
   }
 
+  // data to compute frustum
+  public final FrustumData getFrustumData()
+  {
+    if (_dirtyFlags._frustumDataDirty)
+    {
+      _dirtyFlags._frustumDataDirty = false;
+      _frustumData = calculateFrustumData();
+    }
+    return _frustumData;
+  }
+
   public final void setGroundHeightFromCartesianPoint(Vector3D point)
   {
     _groundHeight = _planet.toGeodetic3D(point)._height;
@@ -695,17 +706,6 @@ public class Camera
       _up.copyFrom(v);
       _dirtyFlags.setAll(true);
     }
-  }
-
-  // data to compute frustum
-  private FrustumData getFrustumData()
-  {
-    if (_dirtyFlags._frustumDataDirty)
-    {
-      _dirtyFlags._frustumDataDirty = false;
-      _frustumData = calculateFrustumData();
-    }
-    return _frustumData;
   }
 
   // intersection of view direction with globe in(x,y,z)

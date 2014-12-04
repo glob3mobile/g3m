@@ -192,7 +192,9 @@ public class GPUProgramManager
       if (p.getAttributesCode() != attributesCode || p.getUniformsCode() != uniformsCode)
       {
         ///#warning GIVE MORE DETAIL
-        ILogger.instance().logError("New compiled program does not match GL state.");
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning MESSAGE SUPRESSED FOR SHAPES WITH LIGHT AND NO TEXTURED YET (ONLY AT THIS BRANCH)
+        //ILogger::instance()->logError("New compiled program does not match GL state.");
       }
     }
   

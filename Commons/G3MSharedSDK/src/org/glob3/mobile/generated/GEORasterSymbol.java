@@ -31,11 +31,28 @@ public abstract class GEORasterSymbol extends GEOSymbol implements QuadTree_Cont
   private final int _minTileLevel;
   private final int _maxTileLevel;
 
+  //const Sector* _sector;
+
+  //static std::vector<std::vector<Geodetic2D*>*>* copyCoordinatesArray(const std::vector<std::vector<Geodetic2D*>*>* coordinatesArray);
+
+//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
+//  static Sector calculateSectorFromCoordinates(java.util.ArrayList<Geodetic2D> coordinates);
+//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
+//  static Sector calculateSectorFromCoordinatesArray(java.util.ArrayList<java.util.ArrayList<Geodetic2D>> coordinatesArray);
+
+  protected GEORasterSymbol(Sector sector, int minTileLevel, int maxTileLevel)
+  {
+     _minTileLevel = minTileLevel;
+     _maxTileLevel = maxTileLevel;
+  }
+
   protected GEORasterSymbol(int minTileLevel, int maxTileLevel)
   {
      _minTileLevel = minTileLevel;
      _maxTileLevel = maxTileLevel;
   }
+
+
 
   protected final void rasterLine(GEO2DCoordinatesData coordinatesData, ICanvas canvas, GEORasterProjection projection)
   {
@@ -224,6 +241,16 @@ public abstract class GEORasterSymbol extends GEOSymbol implements QuadTree_Cont
     {
       rawRasterize(canvas, projection);
     }
+  }
+
+  // useless, it's here only to make the C++ => Java translator creates an interface intead of an empty class
+  public final void unusedMethod()
+  {
+  }
+
+  public static java.util.ArrayList<Geodetic2D> copyCoordinates(java.util.ArrayList<Geodetic2D> coordinates)
+  {
+    return coordinates;
   }
 
 }

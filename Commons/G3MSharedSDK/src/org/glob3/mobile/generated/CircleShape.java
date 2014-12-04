@@ -73,6 +73,11 @@ public class CircleShape extends AbstractMeshShape
   
     return result;
   }
+  protected final BoundingVolume getBoundingVolume(G3MRenderContext rc)
+  {
+      int __TODO_getBoundingVolume_Method;
+      return (BoundingVolume)null;
+    }
 
   public CircleShape(Geodetic3D position, AltitudeMode altitudeMode, float radius, Color color, int steps)
   {
@@ -121,10 +126,24 @@ public class CircleShape extends AbstractMeshShape
     }
   }
 
+<<<<<<< HEAD
   public final java.util.ArrayList<Double> intersectionsDistances(Planet planet, Vector3D origin, Vector3D direction)
+=======
+  public final java.util.ArrayList<Double> intersectionsDistances(Planet planet, Camera camera, Vector3D origin, Vector3D direction)
+>>>>>>> demo-vectorial-cotesa-gus
   {
     java.util.ArrayList<Double> intersections = new java.util.ArrayList<Double>();
     return intersections;
+  }
+
+  public final boolean isVisible(G3MRenderContext rc)
+  {
+    int __TODO_isVisible_Method;
+    return true;
+  }
+
+  public final void setSelectedDrawMode(boolean mode)
+  {
   }
 
 

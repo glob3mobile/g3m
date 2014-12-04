@@ -18,6 +18,9 @@ package org.glob3.mobile.generated;
 
 
 //class MutableMatrix44D;
+//class G3MRenderContext;
+//class BoundingVolume;
+
 
 
 
@@ -46,16 +49,6 @@ public abstract class Shape implements SurfaceElevationListener, EffectTarget
 //  const Planet* _planet;
 
   private MutableMatrix44D _transformMatrix;
-  private MutableMatrix44D getTransformMatrix(Planet planet)
-  {
-    if (_transformMatrix == null)
-    {
-      _transformMatrix = createTransformMatrix(planet);
-      _glState.clearGLFeatureGroup(GLFeatureGroupName.CAMERA_GROUP);
-      _glState.addGLFeature(new ModelTransformGLFeature(_transformMatrix.asMatrix44D()), false);
-    }
-    return _transformMatrix;
-  }
 
   private java.util.ArrayList<ShapePendingEffect> _pendingEffects = new java.util.ArrayList<ShapePendingEffect>();
 
@@ -66,16 +59,7 @@ public abstract class Shape implements SurfaceElevationListener, EffectTarget
   private SurfaceElevationProvider _surfaceElevationProvider;
   private double _surfaceElevation;
 
-  protected void cleanTransformMatrix()
-  {
-    if (_transformMatrix != null)
-       _transformMatrix.dispose();
-    _transformMatrix = null;
-  }
-
-
-
-  public final MutableMatrix44D createTransformMatrix(Planet planet)
+  private MutableMatrix44D createTransformMatrix(Planet planet)
   {
   
     double altitude = _position._height;
@@ -85,18 +69,35 @@ public abstract class Shape implements SurfaceElevationListener, EffectTarget
     }
   
     Geodetic3D positionWithSurfaceElevation = new Geodetic3D(_position._latitude, _position._longitude, altitude);
+    final Vector3D scale = new Vector3D(_scaleX, _scaleY, _scaleZ);
+    final Vector3D translation = new Vector3D(_translationX, _translationY, _translationZ);
   
-    final MutableMatrix44D geodeticTransform = (_position == null) ? MutableMatrix44D.identity() : planet.createGeodeticTransformMatrix(positionWithSurfaceElevation);
-  
-    final MutableMatrix44D headingRotation = MutableMatrix44D.createRotationMatrix(_heading, Vector3D.downZ());
-    final MutableMatrix44D pitchRotation = MutableMatrix44D.createRotationMatrix(_pitch, Vector3D.upX());
-    final MutableMatrix44D rollRotation = MutableMatrix44D.createRotationMatrix(_roll, Vector3D.upY());
-    final MutableMatrix44D scale = MutableMatrix44D.createScaleMatrix(_scaleX, _scaleY, _scaleZ);
-    final MutableMatrix44D translation = MutableMatrix44D.createTranslationMatrix(_translationX, _translationY, _translationZ);
-    final MutableMatrix44D localTransform = headingRotation.multiply(pitchRotation).multiply(rollRotation).multiply(translation).multiply(scale);
-  
-    return new MutableMatrix44D(geodeticTransform.multiply(localTransform));
+    return new MutableMatrix44D(planet.createTransformMatrix(positionWithSurfaceElevation, _heading, _pitch, _roll, scale, translation));
   }
+
+  private boolean _selected;
+
+
+  protected void cleanTransformMatrix()
+  {
+    if (_transformMatrix != null)
+       _transformMatrix.dispose();
+    _transformMatrix = null;
+  }
+  protected final MutableMatrix44D getTransformMatrix(Planet planet)
+  {
+    if (_transformMatrix == null)
+    {
+      _transformMatrix = createTransformMatrix(planet);
+      _glState.clearGLFeatureGroup(GLFeatureGroupName.CAMERA_GROUP);
+      _glState.addGLFeature(new ModelTransformGLFeature(_transformMatrix.asMatrix44D()), false);
+    }
+    return _transformMatrix;
+  }
+
+  protected abstract BoundingVolume getBoundingVolume(G3MRenderContext rc);
+
+
 
   public Shape(Geodetic3D position, AltitudeMode altitudeMode)
   {
@@ -115,6 +116,7 @@ public abstract class Shape implements SurfaceElevationListener, EffectTarget
      _enable = true;
      _surfaceElevation = 0;
      _glState = new GLState();
+     _selected = false;
      _surfaceElevationProvider = null;
 
   }
@@ -355,9 +357,19 @@ public abstract class Shape implements SurfaceElevationListener, EffectTarget
         _pendingEffects.clear();
       }
   
-      getTransformMatrix(rc.getPlanet()); //Applying transform to _glState
-      _glState.setParent(parentGLState);
-      rawRender(rc, _glState, renderNotReadyShapes);
+      if (isVisible(rc))
+      {
+        getTransformMatrix(rc.getPlanet()); //Applying transform to _glState
+        _glState.setParent(parentGLState);
+        rawRender(rc, _glState, renderNotReadyShapes);
+        if (isSelected())
+        {
+          BoundingVolume boundingVolume = getBoundingVolume(rc);
+          if (boundingVolume != null)
+            boundingVolume.render(rc, _glState);
+        }
+  
+      }
     }
   }
 
@@ -400,8 +412,47 @@ public abstract class Shape implements SurfaceElevationListener, EffectTarget
   {
   }
 
+<<<<<<< HEAD
 //  virtual std::vector<double> intersectionsDistances(const Vector3D& origin,
 //                                             const Vector3D& direction) const = 0;
+=======
+  public abstract java.util.ArrayList<Double> intersectionsDistances(Planet planet, Camera camera, Vector3D origin, Vector3D direction);
+
+  public abstract boolean isVisible(G3MRenderContext rc);
+
+  public abstract void setSelectedDrawMode(boolean mode);
+
+
+  public final void select()
+  {
+    _selected = true;
+    setSelectedDrawMode(true);
+  }
+
+  public final void unselect()
+  {
+    _selected = false;
+    setSelectedDrawMode(false);
+  }
+
+  public final boolean isSelected()
+  {
+     return _selected;
+  }
+
+  public abstract GEORasterSymbol createRasterSymbolIfNeeded();
+
+  public java.util.ArrayList<Geodetic2D> getCopyRasterCoordinates()
+  {
+    java.util.ArrayList<Geodetic2D> emptyList = new java.util.ArrayList<Geodetic2D>();
+    return emptyList;
+  }
+
+  public boolean isRaster()
+  {
+    return false;
+  }
+>>>>>>> demo-vectorial-cotesa-gus
 
   public final void zRender(G3MRenderContext rc, GLState parentGLState, boolean renderNotReadyShapes)
   {
@@ -429,6 +480,17 @@ public abstract class Shape implements SurfaceElevationListener, EffectTarget
 
   public abstract void zRawRender(G3MRenderContext rc, GLState parentGLState);
 
+<<<<<<< HEAD
   public abstract java.util.ArrayList<Double> intersectionsDistances(Planet planet, Vector3D origin, Vector3D direction);
+=======
+  public double getLength()
+  {
+    return 0;
+  }
+>>>>>>> demo-vectorial-cotesa-gus
 
+  public double getArea()
+  {
+    return 0;
+  }
 }

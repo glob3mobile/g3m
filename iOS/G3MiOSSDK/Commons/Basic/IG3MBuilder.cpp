@@ -33,6 +33,7 @@
 #include "ShapesRenderer.hpp"
 #include "MarksRenderer.hpp"
 #include "HUDErrorRenderer.hpp"
+#include "ShapesEditorRenderer.hpp"
 
 IG3MBuilder::IG3MBuilder() :
 _gl(NULL),
@@ -57,6 +58,7 @@ _logDownloaderStatistics(false),
 _userData(NULL),
 _sceneLighting(NULL),
 _shownSector(NULL),
+_shapesEditorRenderer(NULL),
 _infoDisplay(NULL)
 {
 }
@@ -752,7 +754,9 @@ G3MWidget* IG3MBuilder::create() {
 
   delete _shownSector;
   _shownSector = NULL;
-
+  
+  g3mWidget->setShapesEditorRenderer(_shapesEditorRenderer);
+  
   return g3mWidget;
 }
 
@@ -884,6 +888,25 @@ GEORenderer* IG3MBuilder::createGEORenderer(GEOSymbolizer* symbolizer,
 }
 
 
+ShapesEditorRenderer* IG3MBuilder::createShapesEditorRenderer()
+{
+  #warning MIRAR CON AGUSTIN
+  // Tile rasterizer to create raster shapes
+//  GEOTileRasterizer* geoTileRasterizer = new GEOTileRasterizer();
+
+//  getPlanetRendererBuilder()->addTileRasterizer(geoTileRasterizer);
+//  
+//  /*// shapesRenderer to render pointshapes whwen modifying shape vertices
+//  ShapesRenderer* vertexRenderer = new ShapesRenderer;
+//  vertexRenderer->setShapeTouchListener(new SimpleShapeSelectionListener, true);
+//  addRenderer(vertexRenderer);*/
+//  
+//  // creating shape Editor Renderer
+//  _shapesEditorRenderer = new ShapesEditorRenderer(geoTileRasterizer);
+//  addRenderer(_shapesEditorRenderer);
+  return _shapesEditorRenderer;
+}
+
 void IG3MBuilder::setInfoDisplay(InfoDisplay *infoDisplay) {
   if (_infoDisplay != NULL) {
     ILogger::instance()->logError("LOGIC ERROR: infoDisplay already initialized");
@@ -895,5 +918,6 @@ void IG3MBuilder::setInfoDisplay(InfoDisplay *infoDisplay) {
 InfoDisplay* IG3MBuilder::getInfoDisplay() const {
   return _infoDisplay;
 }
+
 
 

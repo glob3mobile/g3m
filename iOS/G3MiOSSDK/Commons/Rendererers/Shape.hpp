@@ -14,6 +14,9 @@
 #include "Vector3D.hpp"
 
 class MutableMatrix44D;
+class G3MRenderContext;
+class BoundingVolume;
+
 
 #include "Effects.hpp"
 #include <vector>
@@ -47,7 +50,6 @@ private:
 //  const Planet* _planet;
 
   mutable MutableMatrix44D* _transformMatrix;
-  MutableMatrix44D* getTransformMatrix(const Planet* planet) const;
   
   std::vector<ShapePendingEffect*> _pendingEffects;
 
@@ -58,14 +60,20 @@ private:
   SurfaceElevationProvider* _surfaceElevationProvider;
   double _surfaceElevation;
   
+  MutableMatrix44D* createTransformMatrix(const Planet* planet) const;
+  
+  bool _selected;
+
+  
 protected:
   virtual void cleanTransformMatrix();
+  MutableMatrix44D* getTransformMatrix(const Planet* planet) const;
 
+  virtual BoundingVolume* getBoundingVolume(const G3MRenderContext *rc) = 0;
+  
   
 public:
   
-  MutableMatrix44D* createTransformMatrix(const Planet* planet) const;
-
   Shape(Geodetic3D* position,
         AltitudeMode altitudeMode) :
   _position( position ),
@@ -83,6 +91,7 @@ public:
   _enable(true),
   _surfaceElevation(0),
   _glState(new GLState()),
+  _selected(false),
   _surfaceElevationProvider(NULL)
   {
     
@@ -278,16 +287,50 @@ public:
                    const ElevationData* rawElevationData, // Without considering vertical exaggeration
                         double verticalExaggeration) {}
   
-//  virtual std::vector<double> intersectionsDistances(const Vector3D& origin,
-//                                             const Vector3D& direction) const = 0;
+  virtual std::vector<double> intersectionsDistances(const Planet* planet,
+                                                     const Camera* camera,
+                                                     const Vector3D& origin,
+                                                     const Vector3D& direction) = 0;
+  
+  virtual bool isVisible(const G3MRenderContext *rc) = 0;
+  
+  virtual void setSelectedDrawMode(bool mode) = 0;
+  
+  
+  void select() {
+    _selected = true;
+    setSelectedDrawMode(true);
+  }
+  
+  void unselect() {
+    _selected = false;
+    setSelectedDrawMode(false);
+  }
 
+  bool isSelected() { return _selected; }
+  
+  virtual GEORasterSymbol* createRasterSymbolIfNeeded() const = 0;
+  
+  virtual std::vector<Geodetic2D*> getCopyRasterCoordinates() const {
+    std::vector<Geodetic2D*> emptyList;
+    return emptyList;
+  }
+  
+  virtual bool isRaster() const {
+    return false;
+  }
+  
   void zRender(const G3MRenderContext* rc, GLState* parentState, bool renderNotReadyShapes);
 
   virtual void zRawRender(const G3MRenderContext* rc, GLState* parentGLState) = 0;
 
-  virtual std::vector<double> intersectionsDistances(const Planet* planet,
-                                                     const Vector3D& origin,
-                                                     const Vector3D& direction) const = 0;
+  virtual double getLength() const {
+    return 0;
+  }
+  
+  virtual double getArea() const {
+    return 0;
+  }
 
 };
 

@@ -17,6 +17,8 @@ package org.glob3.mobile.generated;
 
 
 
+//class OrientedBox;
+
 
 public class BoxShape extends AbstractMeshShape
 {
@@ -24,19 +26,26 @@ public class BoxShape extends AbstractMeshShape
   private double _extentY;
   private double _extentZ;
 
+<<<<<<< HEAD
   private final Quadric _frontQuadric;
   private final Quadric _backQuadric;
   private final Quadric _leftQuadric;
   private final Quadric _rightQuadric;
   private final Quadric _topQuadric;
   private final Quadric _bottomQuadric;
+=======
+
+  private OrientedBox _boundingVolume;
+>>>>>>> demo-vectorial-cotesa-gus
 
   private float _borderWidth;
+  private float _originalBorderWidth;
 
   private boolean _useNormals;
 
   private Color _surfaceColor;
   private Color _borderColor;
+  private Color _originalBorderColor;
 
   private Mesh createBorderMesh(G3MRenderContext rc)
   {
@@ -196,6 +205,16 @@ public class BoxShape extends AbstractMeshShape
   
     return surface;
   }
+  protected final BoundingVolume getBoundingVolume(G3MRenderContext rc)
+  {
+    if (_boundingVolume == null)
+    {
+      final Vector3D upper = getExtent().times(0.5);
+      final Vector3D lower = upper.times(-1);
+      _boundingVolume = new OrientedBox(lower, upper, getTransformMatrix(rc.getPlanet()));
+    }
+    return _boundingVolume;
+  }
 
   public BoxShape(Geodetic3D position, AltitudeMode altitudeMode, Vector3D extent, float borderWidth, Color surfaceColor, Color borderColor)
   {
@@ -208,6 +227,7 @@ public class BoxShape extends AbstractMeshShape
   public BoxShape(Geodetic3D position, AltitudeMode altitudeMode, Vector3D extent, float borderWidth, Color surfaceColor, Color borderColor, boolean useNormals)
   {
      super(position, altitudeMode);
+     _boundingVolume = null;
      _extentX = extent._x;
      _extentY = extent._y;
      _extentZ = extent._z;
@@ -218,8 +238,10 @@ public class BoxShape extends AbstractMeshShape
      _topQuadric = Quadric.fromPlane(0, 0, 1, -extent._z/2);
      _bottomQuadric = Quadric.fromPlane(0, 0, -1, -extent._z/2);
      _borderWidth = borderWidth;
+     _originalBorderWidth = borderWidth;
      _surfaceColor = new Color(surfaceColor);
      _borderColor = borderColor;
+     _originalBorderColor = (borderColor!=null)? new Color(borderColor) : null;
      _useNormals = useNormals;
 
   }
@@ -230,8 +252,19 @@ public class BoxShape extends AbstractMeshShape
        _surfaceColor.dispose();
     if (_borderColor != null)
        _borderColor.dispose();
+<<<<<<< HEAD
 
   super.dispose();
+=======
+    if (_originalBorderColor != null)
+       _originalBorderColor.dispose();
+    if (_boundingVolume != null)
+      if (_boundingVolume != null)
+         _boundingVolume.dispose();
+  
+    super.dispose();
+  
+>>>>>>> demo-vectorial-cotesa-gus
   }
 
   public final void setExtent(Vector3D extent)
@@ -275,6 +308,7 @@ public class BoxShape extends AbstractMeshShape
     }
   }
 
+<<<<<<< HEAD
   public final java.util.ArrayList<Double> intersectionsDistances(Planet planet, Vector3D origin, Vector3D direction)
   {
     java.util.ArrayList<Double> distances = new java.util.ArrayList<Double>();
@@ -364,6 +398,31 @@ public class BoxShape extends AbstractMeshShape
     }
   
     return distances;
+=======
+  public final java.util.ArrayList<Double> intersectionsDistances(Planet planet, Camera camera, Vector3D origin, Vector3D direction)
+  {
+    return _boundingVolume.intersectionsDistances(origin, direction);
+  }
+
+  public final boolean isVisible(G3MRenderContext rc)
+  {
+    return getBoundingVolume(rc).touchesFrustum(rc.getCurrentCamera().getFrustumInModelCoordinates());
+  }
+
+  public final void setSelectedDrawMode(boolean mode)
+  {
+    if (mode)
+    {
+      setBorderWidth(7);
+      setBorderColor(Color.newFromRGBA(1, 1, 0, 1));
+    }
+    else
+    {
+      setBorderWidth(_originalBorderWidth);
+      if (_originalBorderColor!=null)
+        setBorderColor(new Color(_originalBorderColor));
+    }
+>>>>>>> demo-vectorial-cotesa-gus
   }
 
 }

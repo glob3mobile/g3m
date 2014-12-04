@@ -42,6 +42,12 @@ public:
   _mesh(NULL)
   {
   }
+  
+  Box(const Box* other):
+  _lower(other->_lower),
+  _upper(other->_upper),
+  _mesh(NULL)
+  {}
 
   ~Box();
   

@@ -22,14 +22,51 @@
 #include "TexturedMesh.hpp"
 #include "Sector.hpp"
 #include "MercatorUtils.hpp"
+#include "OrientedBox.hpp"
+#include "Camera.hpp"
+#include "Quadric.hpp"
 #include "TextureIDReference.hpp"
 #include "SimpleTextureMapping.hpp"
+
+EllipsoidShape::EllipsoidShape(Geodetic3D* position,
+               AltitudeMode altitudeMode,
+               const Vector3D& radius,
+               short resolution,
+               float borderWidth,
+               bool texturedInside,
+               bool mercator,
+               const Color& surfaceColor,
+               Color* borderColor,
+               bool withNormals) :
+AbstractMeshShape(position, altitudeMode),
+_ellipsoid(new Ellipsoid(Vector3D::zero, radius)),
+_boundingVolume(NULL),
+_textureURL(URL("", false)),
+_resolution(resolution < 3 ? 3 : resolution),
+_borderWidth(borderWidth),
+_originalBorderWidth(borderWidth),
+_texturedInside(texturedInside),
+_mercator(mercator),
+_surfaceColor(new Color(surfaceColor)),
+_borderColor(borderColor),
+_originalBorderColor((borderColor!=NULL)? new Color(*borderColor) : NULL),
+_textureRequested(false),
+_textureImage(NULL),
+_withNormals(withNormals),
+_texId(NULL)
+{
+  
+}
 
 
 EllipsoidShape::~EllipsoidShape() {
   delete _ellipsoid;
   delete _surfaceColor;
   delete _borderColor;
+  delete _originalBorderColor;
+  if (_boundingVolume)
+    delete _boundingVolume;
+
 
   delete _texId; //Releasing texture
 
@@ -273,11 +310,30 @@ Mesh* EllipsoidShape::createMesh(const G3MRenderContext* rc) {
 
 
 std::vector<double> EllipsoidShape::intersectionsDistances(const Planet* planet,
+                                                           const Camera* camera,
                                                            const Vector3D& origin,
-                                                           const Vector3D& direction) const {
-  //  MutableMatrix44D* M = createTransformMatrix(_planet);
-  //  const Quadric transformedQuadric = _quadric.transformBy(*M);
-  //  delete M;
-  //  return transformedQuadric.intersectionsDistances(origin, direction);
-  return std::vector<double>();
+                                                           const Vector3D& direction) {
+  MutableMatrix44D* M = getTransformMatrix(planet);
+  const Quadric transformedQuadric = Quadric::fromEllipsoid(_ellipsoid).transformBy(*M);
+  std::vector<double> distances = transformedQuadric.intersectionsDistances(origin, direction);
+  std::vector<double> closerDistance;
+  if (!distances.empty())
+    closerDistance.push_back(distances[0]);
+  return closerDistance;
+}
+
+
+bool EllipsoidShape::isVisible(const G3MRenderContext *rc)
+{
+  return getBoundingVolume(rc)->touchesFrustum(rc->getCurrentCamera()->getFrustumInModelCoordinates());
+}
+
+BoundingVolume* EllipsoidShape::getBoundingVolume(const G3MRenderContext *rc)
+{
+  if (_boundingVolume == NULL) {
+    const Vector3D upper = _ellipsoid->getRadii();
+    const Vector3D lower = upper.times(-1);
+    _boundingVolume = new OrientedBox(lower, upper, *getTransformMatrix(rc->getPlanet()));
+  }
+  return _boundingVolume;
 }

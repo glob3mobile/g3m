@@ -497,6 +497,7 @@ public class LayerSet implements ChangedInfoListener
       ILogger.instance().logError("Changed Info Listener of LayerSet already set");
       return;
     }
+    ILogger.instance().logInfo("Changed Info Listener of LayerSet set ok");
     _changedInfoListener = changedInfoListener;
     if (_changedInfoListener != null)
     {

@@ -41,6 +41,48 @@ public:
 };
 
 
+class ShapeTouchListener {
+public:
+  virtual ~ShapeTouchListener() {
+  }
+  
+  virtual bool touchedShape(Shape* shape) = 0;
+};
+
+
+class SimpleShapeSelectionListener : public ShapeTouchListener {
+private:
+  Shape* _selectedShape = NULL;
+  
+public:
+  
+  virtual bool touchedShape(Shape* shape) {
+    if (_selectedShape == NULL) {
+      shape->select();
+      _selectedShape = shape;
+    } else {
+      if (_selectedShape==shape) {
+        shape->unselect();
+        _selectedShape = NULL;
+      } else {
+        _selectedShape->unselect();
+        _selectedShape = shape;
+        shape->select();
+      }
+    }
+    return true;
+  }
+  
+  Shape* getSelectedShape() const {
+    return _selectedShape;
+  }
+};
+
+
+//class ShapesRenderer : public LeafRenderer {
+
+//class ShapesRenderer : public LeafRenderer {
+
 class ShapesRenderer : public DefaultRenderer {
 private:
   class LoadQueueItem {
@@ -97,6 +139,10 @@ private:
   const bool _renderNotReadyShapes;
 
   std::vector<Shape*> _shapes;
+  
+  ShapeTouchListener* _shapeTouchListener;
+  bool               _autoDeleteShapeTouchListener;
+
 
 #ifdef C_CODE
   const Camera*     _lastCamera;
@@ -111,7 +157,7 @@ private:
   void updateGLState(const G3MRenderContext* rc);
 
   std::vector<LoadQueueItem*> _loadQueue;
-
+  
   void drainLoadQueue();
   
   void cleanLoadQueue();
@@ -128,6 +174,11 @@ private:
                      ShapeLoadListener*  listener,
                      bool                deleteListener,
                      bool                isBSON);
+  
+#warning NEEDS REDO AGUSTIN
+//protected:
+//  GEOTileRasterizer* _geoTileRasterizer;
+
 
 public:
 
@@ -135,10 +186,27 @@ public:
   _renderNotReadyShapes(renderNotReadyShapes),
   _glState(new GLState()),
   _glStateTransparent(new GLState()),
-  _lastCamera(NULL)
+  _lastCamera(NULL),
+  _autoDeleteShapeTouchListener(false),
+  _shapeTouchListener(NULL)
+  //,
+//  _geoTileRasterizer(NULL)
   {
-    _context = NULL;
   }
+  
+//  ShapesRenderer(GEOTileRasterizer* geoTileRasterizer):
+//  _geoTileRasterizer(geoTileRasterizer),
+//  _renderNotReadyShapes(true),
+////  _context(NULL),
+//  _glState(new GLState()),
+//  _glStateTransparent(new GLState()),
+//  _lastCamera(NULL),
+//  _autoDeleteShapeTouchListener(false),
+//  _shapeTouchListener(NULL)
+//  {
+//    _context = NULL;
+//  }
+  
 
   ~ShapesRenderer() {
     const int shapesCount = _shapes.size();
@@ -149,6 +217,12 @@ public:
 
     _glState->_release();
     _glStateTransparent->_release();
+    
+    if ( _autoDeleteShapeTouchListener ) {
+      delete _shapeTouchListener;
+    }
+    _shapeTouchListener = NULL;
+
 
 #ifdef JAVA_CODE
     super.dispose();
@@ -156,12 +230,16 @@ public:
 
   }
 
-  void addShape(Shape* shape) {
+  //virtual void addShape(Shape* shape);
+
+  virtual void addShape(Shape* shape);
+  
+/*  void addShape(Shape* shape) {
     _shapes.push_back(shape);
     if (_context != NULL) {
       shape->initialize(_context);
     }
-  }
+  }*/
 
   void removeShape(Shape* shape);
 
@@ -192,8 +270,8 @@ public:
   void render(const G3MRenderContext* rc, GLState* glState);
 
   std::vector<ShapeDistance> intersectionsDistances(const Planet* planet,
-                                                    const Vector3D& origin,
-                                                    const Vector3D& direction) const;
+                                                    const Camera* camera,
+                                                    const Vector2I& pixel) const;
 
   void loadJSONSceneJS(const URL&          url,
                        long long           priority,
@@ -256,6 +334,9 @@ public:
   }
 
   void zRender(const G3MRenderContext* rc, GLState* glState);
+  
+  void setShapeTouchListener(ShapeTouchListener* shapeTouchListener,
+                             bool autoDelete);
   
 };
 

@@ -102,45 +102,74 @@ public class G3MWidget_WebGL
 
 
    private native void exportJSFunctions() /*-{
-                                           var that = this;
-                                           if (!$wnd.G3M) {
-                                           $wnd.G3M = {};
-                                           }
 
-                                           //	$wnd.Geodetic3D = $entry(@org.glob3.mobile.generated.Geodetic3D::new(Lorg/glob3/mobile/generated/Angle;Lorg/glob3/mobile/generated/Angle;D));
-                                           //	$wnd.setAnimatedCameraPosition = $entry(function (widget, position) {
-                                           //		widget.@org.glob3.mobile.specific.G3MWidget_WebGL::setAnimatedCameraPosition(Lorg/glob3/mobile/generated/Geodetic3D;)(position);
-                                           //	});
-                                           //	$wnd.angleFromDegrees = $entry(function (degrees) {
-                                           //		return @org.glob3.mobile.generated.Angle::fromDegrees(D)(degrees);
-                                           //	});
+		var that = this;
+		if (!$wnd.G3M) {
+			$wnd.G3M = {};
+		}
 
-                                           $wnd.G3M.takeScreenshotAsImage = $entry(function() {
-                                           return that.@org.glob3.mobile.specific.G3MWidget_WebGL::takeScreenshotAsImage()();
-                                           });
-                                           $wnd.G3M.takeScreenshotAsBase64 = $entry(function() {
-                                           return that.@org.glob3.mobile.specific.G3MWidget_WebGL::takeScreenshotAsBase64()();
-                                           });
-                                           $wnd.G3M.getCameraData = $entry(function() {
-                                           return that.@org.glob3.mobile.specific.G3MWidget_WebGL::getCameraData()();
-                                           });
-                                           // temp Java function with parameters and return value to test JS function calls
-                                           $wnd.G3M.newGeodetic3D = $entry(function(latitude, longitude, height) {
-                                           return that.@org.glob3.mobile.specific.G3MWidget_WebGL::newGeodetic3D(DDD)(latitude, longitude, height);
-                                           });
-                                           $wnd.G3M.moveCameraTo = $entry(function(position) {
-                                           //return that.@org.glob3.mobile.specific.G3MWidget_WebGL::moveToSpain()();
-                                           //return that.@org.glob3.mobile.specific.G3MWidget_WebGL::moveToSpain(D)(height);
-                                           //return that.@org.glob3.mobile.specific.G3MWidget_WebGL::moveCameraTo(DDD)(latitude, longitude, height);
-                                           that.@org.glob3.mobile.specific.G3MWidget_WebGL::moveCameraTo(Lorg/glob3/mobile/generated/Geodetic3D;)(position);
-                                           });
-                                           }-*/;
+		//	$wnd.Geodetic3D = $entry(@org.glob3.mobile.generated.Geodetic3D::new(Lorg/glob3/mobile/generated/Angle;Lorg/glob3/mobile/generated/Angle;D));
+		//	$wnd.setAnimatedCameraPosition = $entry(function (widget, position) {
+		//		widget.@org.glob3.mobile.specific.G3MWidget_WebGL::setAnimatedCameraPosition(Lorg/glob3/mobile/generated/Geodetic3D;)(position);
+		//	});
+		//	$wnd.angleFromDegrees = $entry(function (degrees) {
+		//		return @org.glob3.mobile.generated.Angle::fromDegrees(D)(degrees);
+		//	});
+
+		$wnd.G3M.takeScreenshotAsImage = $entry(function() {
+			return that.@org.glob3.mobile.specific.G3MWidget_WebGL::takeScreenshotAsImage()();
+		});
+		$wnd.G3M.takeScreenshotAsBase64 = $entry(function() {
+			return that.@org.glob3.mobile.specific.G3MWidget_WebGL::takeScreenshotAsBase64()();
+		});
+		$wnd.G3M.getCameraData = $entry(function() {
+			return that.@org.glob3.mobile.specific.G3MWidget_WebGL::getCameraData()();
+		});
+		// temp Java function with parameters and return value to test JS function calls
+		$wnd.G3M.newGeodetic3D = $entry(function(latitude, longitude, height) {
+			return that.@org.glob3.mobile.specific.G3MWidget_WebGL::newGeodetic3D(DDD)(latitude, longitude, height);
+		});
+		$wnd.G3M.moveCameraTo = $entry(function(position) {
+			//return that.@org.glob3.mobile.specific.G3MWidget_WebGL::moveToSpain()();
+			//return that.@org.glob3.mobile.specific.G3MWidget_WebGL::moveToSpain(D)(height);
+			//return that.@org.glob3.mobile.specific.G3MWidget_WebGL::moveCameraTo(DDD)(latitude, longitude, height);
+			that.@org.glob3.mobile.specific.G3MWidget_WebGL::moveCameraTo(Lorg/glob3/mobile/generated/Geodetic3D;)(position);
+		});
+		$wnd.G3M.newColor = $entry(function(red, green, blue, alpha) {
+			return that.@org.glob3.mobile.specific.G3MWidget_WebGL::newColor(FFFF)(red, green, blue, alpha);
+		});		
+		$wnd.G3M.startLineCreation = $entry(function(width, color) {
+			that.@org.glob3.mobile.specific.G3MWidget_WebGL::startLineCreation(FLorg/glob3/mobile/generated/Color;)(width, color);
+		});		
+		$wnd.G3M.startPolygonCreation = $entry(function(width, borderColor, surfaceColor) {
+			that.@org.glob3.mobile.specific.G3MWidget_WebGL::startPolygonCreation(FLorg/glob3/mobile/generated/Color;Lorg/glob3/mobile/generated/Color;)(width, borderColor, surfaceColor);
+		});		
+		$wnd.G3M.endPolygonCreation = $entry(function() {
+			that.@org.glob3.mobile.specific.G3MWidget_WebGL::endPolygonCreation()();
+		});		
+   }-*/;
 
 
-   public void moveCameraTo(final Geodetic3D position) {
-      _g3mWidget.setAnimatedCameraPosition(TimeInterval.fromSeconds(5), position);
+
+   public Color newColor(float red, float green, float blue, float alpha) {
+	   return Color.fromRGBA(red, green, blue, alpha);
    }
 
+   public void startLineCreation(float width, Color color) {
+	   _g3mWidget.getShapesEditorRenderer().startLine(width, color);
+   }
+
+   public void startPolygonCreation(float borderWidth, Color borderColor, Color surfaceColor) {
+	   _g3mWidget.getShapesEditorRenderer().startPolygon(borderWidth, borderColor, surfaceColor);
+   }
+
+   public void endPolygonCreation() {
+	   _g3mWidget.getShapesEditorRenderer().endPolygon();   
+   }
+
+   public void moveCameraTo(final Geodetic3D position) {
+	      _g3mWidget.setAnimatedCameraPosition(TimeInterval.fromSeconds(5), position);
+	   }
 
    public Geodetic3D newGeodetic3D(final double latitude,
                                    final double longitude,

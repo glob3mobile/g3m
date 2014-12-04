@@ -43,6 +43,13 @@ public:
   _dF((float) d)
   {
   }
+  
+  static Plane fromPointAndNormal(const Vector3D& point0,
+                                  const Vector3D& normal) {
+    const Vector3D myNormal = normal.normalized();
+    const double d = -myNormal.dot(point0);
+    return Plane(myNormal, d);
+  }
 
   Plane(const Vector3D& normal,
         const Vector3D& point):

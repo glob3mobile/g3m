@@ -12,6 +12,7 @@
 //#include "GPUProgramState.hpp"
 
 #include "SGShape.hpp"
+#include "Box.hpp"
 
 SGNode::~SGNode() {
   const int childrenCount = _children.size();
@@ -84,6 +85,24 @@ void SGNode::render(const G3MRenderContext* rc, const GLState* parentGLState, bo
   else {
     ILogger::instance()->logError("NO GLSTATE");
   }
+}
+
+Box* SGNode::getCopyBoundingBox() {
+  Box* boundingBox = NULL;
+  for (int i=0; i<_children.size(); i++) {
+    Box* boundBoxChild = _children[i]->getCopyBoundingBox();
+    if (boundBoxChild != NULL) {
+      if (boundingBox == NULL)
+        boundingBox = boundBoxChild;
+        else {
+          Box* tempBox = boundingBox->mergedWithBox(boundBoxChild);
+          delete boundingBox;
+          delete boundBoxChild;
+          boundingBox = tempBox;
+        }
+    }
+  }
+  return boundingBox;
 }
 
 void SGNode::zRender(const G3MRenderContext* rc,

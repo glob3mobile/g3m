@@ -119,6 +119,12 @@ public class QuadShape extends AbstractMeshShape
   
     return new TexturedMesh(im, true, texMap, true, true);
   }
+  protected final BoundingVolume getBoundingVolume(G3MRenderContext rc)
+  {
+    int __TODO_getBoundingVolume_Method;
+    return (BoundingVolume)null;
+  }
+
 
   public QuadShape(Geodetic3D position, AltitudeMode altitudeMode, URL textureURL, float width, float height, boolean withNormals)
   {
@@ -175,10 +181,24 @@ public class QuadShape extends AbstractMeshShape
     cleanMesh();
   }
 
+<<<<<<< HEAD
   public final java.util.ArrayList<Double> intersectionsDistances(Planet planet, Vector3D origin, Vector3D direction)
+=======
+  public final java.util.ArrayList<Double> intersectionsDistances(Planet planet, Camera camera, Vector3D origin, Vector3D direction)
+>>>>>>> demo-vectorial-cotesa-gus
   {
     java.util.ArrayList<Double> intersections = new java.util.ArrayList<Double>();
     return intersections;
+  }
+
+  public final boolean isVisible(G3MRenderContext rc)
+  {
+    int __TODO_isVisible_Method;
+    return true;
+  }
+
+  public final void setSelectedDrawMode(boolean mode)
+  {
   }
 
 }

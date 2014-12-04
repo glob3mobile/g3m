@@ -50,6 +50,8 @@ class G3MRenderContext;
 class Vector3D;
 //class InfoDisplay;
 
+class ShapesEditorRenderer;
+
 #include <vector>
 #include <string>
 
@@ -181,7 +183,13 @@ public:
   WidgetUserData* getUserData() const {
     return _userData;
   }
-
+  
+  void setShapesEditorRenderer(ShapesEditorRenderer* shapesEditorRenderer);
+  
+  ShapesEditorRenderer* getShapesEditorRenderer() {
+    return _shapesEditorRenderer;
+  }
+  
   void addPeriodicalTask(PeriodicalTask* periodicalTask);
 
   void addPeriodicalTask(const TimeInterval& interval,
@@ -291,6 +299,10 @@ private:
   ErrorRenderer*      _errorRenderer;
   Renderer*           _hudRenderer;
   RenderState*        _rendererState;
+  //Renderer*           _selectedRenderer;
+  
+  ShapesEditorRenderer* _shapesEditorRenderer;
+  
   ProtoRenderer*      _selectedRenderer;
 
   EffectsScheduler*   _effectsScheduler;

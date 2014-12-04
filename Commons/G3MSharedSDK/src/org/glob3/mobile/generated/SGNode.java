@@ -23,6 +23,7 @@ package org.glob3.mobile.generated;
 //class SGShape;
 //class GLGlobalState;
 //class GPUProgramState;
+//class Box;
 
 public class SGNode
 {
@@ -162,6 +163,30 @@ public class SGNode
   public String description()
   {
     return "SGNode";
+  }
+
+  public Box getCopyBoundingBox()
+  {
+    Box boundingBox = null;
+    for (int i = 0; i<_children.size(); i++)
+    {
+      Box boundBoxChild = _children.get(i).getCopyBoundingBox();
+      if (boundBoxChild != null)
+      {
+        if (boundingBox == null)
+          boundingBox = boundBoxChild;
+          else
+          {
+            Box tempBox = boundingBox.mergedWithBox(boundBoxChild);
+            if (boundingBox != null)
+               boundingBox.dispose();
+            if (boundBoxChild != null)
+               boundBoxChild.dispose();
+            boundingBox = tempBox;
+          }
+      }
+    }
+    return boundingBox;
   }
 
   public void zRawRender(G3MRenderContext rc, GLState parentState)

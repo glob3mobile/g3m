@@ -32,7 +32,24 @@ const Planet* Planet::createFlatEarth() {
   return new FlatPlanet(Vector2D(4*6378137.0, 2*6378137.0));
 }
 
-CoordinateSystem Planet::getCoordinateSystemAt(const Geodetic3D& geo) const {
+MutableMatrix44D Planet::createTransformMatrix(const Geodetic3D& position,
+                                               const Angle& heading,
+                                               const Angle& pitch,
+                                               const Angle& roll,
+                                               const Vector3D& scale,
+                                               const Vector3D& translation) const
+{
+  const MutableMatrix44D geodeticTransform  = createGeodeticTransformMatrix(position);
+  const MutableMatrix44D headingRotation    = MutableMatrix44D::createRotationMatrix(heading, Vector3D::downZ());
+  const MutableMatrix44D pitchRotation      = MutableMatrix44D::createRotationMatrix(pitch,   Vector3D::upX());
+  const MutableMatrix44D rollRotation       = MutableMatrix44D::createRotationMatrix(roll,    Vector3D::upY());
+  const MutableMatrix44D scaleM             = MutableMatrix44D::createScaleMatrix(scale._x, scale._y, scale._z);
+  const MutableMatrix44D translationM       = MutableMatrix44D::createTranslationMatrix(translation._x, translation._y, translation._z);
+  const MutableMatrix44D localTransform     = headingRotation.multiply(pitchRotation).multiply(rollRotation).multiply(translationM).multiply(scaleM);
+  return MutableMatrix44D(geodeticTransform.multiply(localTransform));
+}
+
+CoordinateSystem Planet::getCoordinateSystemAt(const Geodetic3D& geo) const{
 
   Vector3D origin = toCartesian(geo);
   Vector3D z = centricSurfaceNormal(origin);

@@ -37,7 +37,8 @@ bool SQLiteStorage_iOS::addSkipBackupAttributeToItemAtPath(NSString* path) {
                                 forKey: NSURLIsExcludedFromBackupKey
                                  error: &error];
   if (!success) {
-    NSLog(@"Error excluding %@ from backup %@", url, error);
+#warning THIS MESSAGE IS SHOWING ALL THE TIME EVEN IN PURGATORY
+    //NSLog(@"Error excluding %@ from backup %@", url, error);
   }
   return success;
 }

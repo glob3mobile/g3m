@@ -17,7 +17,6 @@ class IFloatBuffer;
 class IIntBuffer;
 class IShortBuffer;
 class IByteBuffer;
-class ILogger;
 class IImageListener;
 class ICanvas;
 class IWebSocket;

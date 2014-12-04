@@ -516,13 +516,14 @@ SGGeometryNode* SceneJSShapesParser::createGeometryNode(const JSONObject* jsonOb
     return NULL;
   }
   processedKeys++;
-  int verticesCount = jsPositions->size();
+
+ int verticesCount = jsPositions->size();
   IFloatBuffer* vertices = IFactory::instance()->createFloatBuffer(verticesCount);
   for (int i = 0; i < verticesCount; i++) {
     vertices->put(i, (float) jsPositions->getAsNumber(i)->value());
     _statistics->computeVertex();
   }
-
+  
   const JSONArray* jsColors = jsonObject->getAsArray("colors");
   IFloatBuffer* colors = NULL;
   if (jsColors != NULL) {

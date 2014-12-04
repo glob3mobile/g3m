@@ -18,6 +18,47 @@
 #include "Vector3D.hpp"
 #include "Vector2F.hpp"
 
+
+SGGeometryNode::SGGeometryNode(const std::string& id,
+                               const std::string& sId,
+                               int                primitive,
+                               IFloatBuffer*      vertices,
+                               IFloatBuffer*      colors,
+                               IFloatBuffer*      uv,
+                               IFloatBuffer*      normals,
+                               IShortBuffer*      indices) :
+SGNode(id, sId),
+_primitive(primitive),
+_vertices(vertices),
+_colors(colors),
+_uv(uv),
+_normals(normals),
+_indices(indices),
+_glState(new GLState())
+{
+  createGLState();
+  
+  // compute boundingBox
+  float xmin=1e10, ymin=1e10, zmin=1e10, xmax=-1e10, ymax=-1e10, zmax=-1e10;
+  int verticesCount = vertices->size() / 3;
+  for (int i = 0; i < verticesCount*3; i+=3) {
+    float x = vertices->get(i);
+    float y = vertices->get(i+1);
+    float z = vertices->get(i+2);
+    if (x<xmin) xmin = x;
+    if (y<ymin) ymin = y;
+    if (z<zmin) zmin = z;
+    if (x>xmax) xmax = x;
+    if (y>ymax) ymax = y;
+    if (z>zmax) zmax = z;
+  }
+  const Vector3D lower = Vector3D(xmin, ymin, zmin);
+  const Vector3D upper = Vector3D(xmax, ymax, zmax);
+  _boundingBox = new Box(lower, upper);
+}
+
+
+
 SGGeometryNode::~SGGeometryNode() {
   delete _vertices;
   delete _colors;
@@ -26,6 +67,8 @@ SGGeometryNode::~SGGeometryNode() {
   delete _indices;
 
   _glState->_release();
+  
+  delete _boundingBox;
 
 #ifdef JAVA_CODE
   super.dispose();

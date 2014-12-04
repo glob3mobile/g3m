@@ -57,6 +57,8 @@ package org.glob3.mobile.generated;
 //class Vector3D;
 //class InfoDisplay;
 
+//class ShapesEditorRenderer;
+
 
 
 //class G3MContext;

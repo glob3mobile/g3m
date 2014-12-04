@@ -124,7 +124,13 @@ public:
 
   virtual void applyCameraConstrainers(const Camera* previousCamera,
                                        Camera* nextCamera) const = 0;
-
+  
+  MutableMatrix44D createTransformMatrix(const Geodetic3D& position,
+                                         const Angle& heading,
+                                         const Angle& pitch,
+                                         const Angle& roll,
+                                         const Vector3D& scale,
+                                         const Vector3D& translation) const;
   virtual Geodetic3D getDefaultCameraPosition(const Sector& rendereSector) const = 0;
 
   CoordinateSystem getCoordinateSystemAt(const Geodetic3D& geo) const;

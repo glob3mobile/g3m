@@ -21,30 +21,33 @@ import org.glob3.mobile.generated.CameraRenderer;
 import org.glob3.mobile.generated.CameraRotationHandler;
 import org.glob3.mobile.generated.CameraSingleDragHandler;
 import org.glob3.mobile.generated.Color;
+<<<<<<< HEAD
 import org.glob3.mobile.generated.DownloadPriority;
 import org.glob3.mobile.generated.ElevationDataProvider;
 <<<<<<< HEAD
+=======
+import org.glob3.mobile.generated.ElevationDataProvider;
+import org.glob3.mobile.generated.EllipsoidShape;
+>>>>>>> demo-vectorial-cotesa-gus
 import org.glob3.mobile.generated.G3MContext;
 import org.glob3.mobile.generated.G3MWidget;
+import org.glob3.mobile.generated.GEOTileRasterizer;
 import org.glob3.mobile.generated.GInitializationTask;
+import org.glob3.mobile.generated.GeoMeter;
 import org.glob3.mobile.generated.Geodetic2D;
 import org.glob3.mobile.generated.Geodetic3D;
-import org.glob3.mobile.generated.HUDQuadWidget;
-import org.glob3.mobile.generated.HUDRelativePosition;
-import org.glob3.mobile.generated.HUDRelativeSize;
-import org.glob3.mobile.generated.HUDRenderer;
 import org.glob3.mobile.generated.IDownloader;
 import org.glob3.mobile.generated.IImage;
 import org.glob3.mobile.generated.IImageDownloadListener;
 import org.glob3.mobile.generated.ILogger;
 import org.glob3.mobile.generated.LayerSet;
-import org.glob3.mobile.generated.LayerTilesRenderParameters;
 import org.glob3.mobile.generated.LevelTileCondition;
-import org.glob3.mobile.generated.MapBoxLayer;
+import org.glob3.mobile.generated.LineShape;
 import org.glob3.mobile.generated.MapQuestLayer;
 import org.glob3.mobile.generated.Mark;
 import org.glob3.mobile.generated.MarksRenderer;
 import org.glob3.mobile.generated.MeshRenderer;
+<<<<<<< HEAD
 import org.glob3.mobile.generated.BingMapType;
 import org.glob3.mobile.generated.BingMapsLayer;
 import org.glob3.mobile.generated.Color;
@@ -71,15 +74,29 @@ import org.glob3.mobile.generated.Planet;
 import org.glob3.mobile.generated.PointCloudsRenderer;
 import org.glob3.mobile.generated.PointCloudsRenderer.ColorPolicy;
 import org.glob3.mobile.generated.PointCloudsRenderer.PointCloudMetadataListener;
+=======
+import org.glob3.mobile.generated.Planet;
+import org.glob3.mobile.generated.PointShape;
+import org.glob3.mobile.generated.RasterLineShape;
+import org.glob3.mobile.generated.RasterPolygonShape;
+import org.glob3.mobile.generated.SGShape;
+import org.glob3.mobile.generated.SceneJSShapesParser;
+>>>>>>> demo-vectorial-cotesa-gus
 import org.glob3.mobile.generated.Sector;
 import org.glob3.mobile.generated.Shape;
+import org.glob3.mobile.generated.ShapeLoadListener;
+import org.glob3.mobile.generated.ShapeTouchListener;
 import org.glob3.mobile.generated.ShapesRenderer;
 import org.glob3.mobile.generated.SingleBilElevationDataProvider;
 import org.glob3.mobile.generated.TimeInterval;
 import org.glob3.mobile.generated.URL;
-import org.glob3.mobile.generated.URLTemplateLayer;
 import org.glob3.mobile.generated.Vector2I;
 import org.glob3.mobile.generated.Vector3D;
+<<<<<<< HEAD
+=======
+import org.glob3.mobile.generated.WMSLayer;
+import org.glob3.mobile.generated.WMSServerVersion;
+>>>>>>> demo-vectorial-cotesa-gus
 import org.glob3.mobile.specific.G3MBuilder_Android;
 import org.glob3.mobile.specific.G3MWidget_Android;
 <<<<<<< HEAD
@@ -112,7 +129,6 @@ public class MainActivity extends Activity {
 		cameraRenderer.addHandler(new CameraDoubleDragHandler(
 				allowRotationInDoubleDrag));
 		// cameraRenderer.addHandler(new CameraZoomAndRotateHandler());
-
 		cameraRenderer.addHandler(new CameraRotationHandler());
 		cameraRenderer.addHandler(new CameraDoubleTapHandler());
 
@@ -135,6 +151,38 @@ public class MainActivity extends Activity {
 		setContentView(R.layout.activity_main);
 
 		final G3MBuilder_Android builder = new G3MBuilder_Android(this);
+
+		// defaultTest(builder);
+		testingVectorialGeometry();
+
+		_placeHolder = (RelativeLayout) findViewById(R.id.g3mWidgetHolder);
+		_placeHolder.addView(_g3mWidget);
+
+		/*
+		 * super.onCreate(savedInstanceState);
+		 * 
+		 * requestWindowFeature(Window.FEATURE_NO_TITLE);
+		 * getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+		 * WindowManager.LayoutParams.FLAG_FULLSCREEN);
+		 * 
+		 * setContentView(R.layout.activity_main);
+		 * 
+		 * 
+		 * // _g3mWidget = createWidget(); _g3mWidget = sanjayTesting();
+		 * 
+		 * final RelativeLayout placeHolder = (RelativeLayout)
+		 * findViewById(R.id.g3mWidgetHolder); placeHolder.addView(_g3mWidget);
+		 * 
+		 * 
+		 * final Geodetic3D zurichPos = Geodetic3D.fromDegrees(40, -75, 80000);
+		 * _g3mWidget
+		 * .getG3MWidget().setAnimatedCameraPosition(TimeInterval.fromSeconds
+		 * (5), zurichPos, Angle.zero(), Angle.fromDegrees(-90));
+		 */
+
+	}
+
+	private void defaultTest(G3MBuilder_Android builder) {
 
 		// const Planet* planet = Planet::createEarth();
 		// const Planet* planet = Planet::createSphericalEarth();
@@ -170,6 +218,11 @@ public class MainActivity extends Activity {
 		builder.getPlanetRendererBuilder().setElevationDataProvider(
 				elevationDataProvider);
 		builder.getPlanetRendererBuilder().setVerticalExaggeration(4.0f);
+
+		_g3mWidget = builder.createWidget();
+	}
+
+	private void testCache(G3MBuilder_Android builder) {
 
 		// BEGINNING OF CODE FOR LOADING STORAGE
 		if (false) {
@@ -247,34 +300,6 @@ public class MainActivity extends Activity {
 
 			// END OF CODE FOR PRECACHING AREA
 		}
-		
-		_g3mWidget = builder.createWidget();
-
-		_placeHolder = (RelativeLayout) findViewById(R.id.g3mWidgetHolder);
-		_placeHolder.addView(_g3mWidget);
-
-		/*
-		 * super.onCreate(savedInstanceState);
-		 * 
-		 * requestWindowFeature(Window.FEATURE_NO_TITLE);
-		 * getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-		 * WindowManager.LayoutParams.FLAG_FULLSCREEN);
-		 * 
-		 * setContentView(R.layout.activity_main);
-		 * 
-		 * 
-		 * // _g3mWidget = createWidget(); _g3mWidget = sanjayTesting();
-		 * 
-		 * final RelativeLayout placeHolder = (RelativeLayout)
-		 * findViewById(R.id.g3mWidgetHolder); placeHolder.addView(_g3mWidget);
-		 * 
-		 * 
-		 * final Geodetic3D zurichPos = Geodetic3D.fromDegrees(40, -75, 80000);
-		 * _g3mWidget
-		 * .getG3MWidget().setAnimatedCameraPosition(TimeInterval.fromSeconds
-		 * (5), zurichPos, Angle.zero(), Angle.fromDegrees(-90));
-		 */
-
 	}
 
 	private G3MWidget_Android sanjayTesting() {
@@ -426,6 +451,320 @@ public class MainActivity extends Activity {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
+	}
+
+	public void testingGeometer() {
+		// measure distance from Las Palmas to Madrid
+		Geodetic2D g1 = Geodetic2D.fromDegrees(28.129064150616994,
+				-15.423265639110468); // LP
+		Geodetic2D g2 = Geodetic2D.fromDegrees(40.41677540051771,
+				-3.7037901976145804); // MADRID
+		double dist = GeoMeter.getDistance(g1, g2);
+		ILogger.instance().logInfo("Distance Las Palmas - Madrid: %.3f Km\n",
+				dist * 1e-3);
+
+		// measure area of Gran Canaria island
+		java.util.ArrayList<Geodetic2D> polygon = new java.util.ArrayList<Geodetic2D>();
+		polygon.add(new Geodetic2D(Angle.fromDegrees(28.1801128508277), Angle
+				.fromDegrees(-15.401893797679804)));
+		polygon.add(new Geodetic2D(Angle.fromDegrees(28.0468737992174), Angle
+				.fromDegrees(-15.412880125804804)));
+		polygon.add(new Geodetic2D(Angle.fromDegrees(27.993531872334557), Angle
+				.fromDegrees(-15.368934813304804)));
+		polygon.add(new Geodetic2D(Angle.fromDegrees(27.864917930859935), Angle
+				.fromDegrees(-15.38404101447668)));
+		polygon.add(new Geodetic2D(Angle.fromDegrees(27.80419790643659), Angle
+				.fromDegrees(-15.43347949103918)));
+		polygon.add(new Geodetic2D(Angle.fromDegrees(27.743443929681458), Angle
+				.fromDegrees(-15.569435301586054)));
+		polygon.add(new Geodetic2D(Angle.fromDegrees(27.75559743885222), Angle
+				.fromDegrees(-15.687538328929804)));
+		polygon.add(new Geodetic2D(Angle.fromDegrees(27.835776559501845), Angle
+				.fromDegrees(-15.791908446117304)));
+		polygon.add(new Geodetic2D(Angle.fromDegrees(27.91468298115362), Angle
+				.fromDegrees(-15.83722704963293)));
+		polygon.add(new Geodetic2D(Angle.fromDegrees(28.021418448958062), Angle
+				.fromDegrees(-15.81525439338293)));
+		polygon.add(new Geodetic2D(Angle.fromDegrees(28.088074450524935), Angle
+				.fromDegrees(-15.71363085822668)));
+		polygon.add(new Geodetic2D(Angle.fromDegrees(28.17406012312459), Angle
+				.fromDegrees(-15.70264453010168)));
+		polygon.add(new Geodetic2D(Angle.fromDegrees(28.172849536482957), Angle
+				.fromDegrees(-15.629860106273554)));
+		polygon.add(new Geodetic2D(Angle.fromDegrees(28.149845787838487), Angle
+				.fromDegrees(-15.47193163947668)));
+		double area = GeoMeter.getArea(polygon);
+		ILogger.instance()
+				.logInfo("Gran Canaria area: %.3f Km2\n", area * 1e-6);
+	}
+
+	public void testElevationNavigation() {
+		final G3MBuilder_Android builder = new G3MBuilder_Android(this);
+
+		// const Planet* planet = Planet::createEarth();
+		// const Planet* planet = Planet::createSphericalEarth();
+		final Planet planet = Planet.createFlatEarth();
+		builder.setPlanet(planet);
+
+		// set camera handlers
+		CameraRenderer cameraRenderer = createCameraRenderer();
+		builder.setCameraRenderer(cameraRenderer);
+
+		// create shape
+		ShapesRenderer shapesRenderer = new ShapesRenderer();
+		Shape box = new BoxShape(new Geodetic3D(Angle.fromDegrees(28.4),
+				Angle.fromDegrees(-16.4), 0), AltitudeMode.ABSOLUTE,
+				new Vector3D(3000, 3000, 20000), 2, Color.fromRGBA(1.0f, 1.0f,
+						0.0f, 0.5f),
+				Color.newFromRGBA(0.0f, 0.75f, 0.0f, 0.75f));
+		shapesRenderer.addShape(box);
+		builder.addRenderer(shapesRenderer);
+
+		// create wmslayer from Grafcan
+		LayerSet layerSet = new LayerSet();
+		WMSLayer grafcanLIDAR = new WMSLayer("LIDAR_MTL", new URL(
+				"http://idecan1.grafcan.es/ServicioWMS/MTL?", false),
+				WMSServerVersion.WMS_1_1_0, Sector.fullSphere(),// gcSector,
+				"image/jpeg", "EPSG:4326", "", false, new LevelTileCondition(0,
+						17), TimeInterval.fromDays(30), true);
+		layerSet.addLayer(grafcanLIDAR);
+		builder.getPlanetRendererBuilder().setLayerSet(layerSet);
+
+		// create elevations for Tenerife from bil file
+		Sector sector = Sector.fromDegrees(27.967811065876, // min latitude
+				-17.0232177085356, // min longitude
+				28.6103464294992, // max latitude
+				-16.0019401695656); // max longitude
+		Vector2I extent = new Vector2I(256, 256); // image resolution
+		URL url = new URL(
+				"http://serdis.dis.ulpgc.es/~atrujill/glob3m/IGO/Tenerife-256x256.bil",
+				false);
+		ElevationDataProvider elevationDataProvider = new SingleBilElevationDataProvider(
+				url, sector, extent);
+		builder.getPlanetRendererBuilder().setElevationDataProvider(
+				elevationDataProvider);
+		builder.getPlanetRendererBuilder().setVerticalExaggeration(2.0f);
+
+		_g3mWidget = builder.createWidget();
+
+		// set frustumCullingFactor
+		_g3mWidget.getPlanetRenderer().setFrustumCullingFactor(2.0f);
+
+		// set camera looking at Tenerife
+		Geodetic3D position = new Geodetic3D(Angle.fromDegrees(27.60),
+				Angle.fromDegrees(-16.54), 55000.0);
+		_g3mWidget.setCameraPosition(position);
+		_g3mWidget.setCameraPitch(Angle.fromDegrees(-50.0));
+	}
+
+	private void testingVectorialGeometry() {
+		final G3MBuilder_Android builder = new G3MBuilder_Android(this);
+		// builder.getPlanetRendererBuilder().setRenderDebug(true);
+
+		// GeoTileRasterizer is needed to draw RasterShapes
+		GEOTileRasterizer geoTileRasterizer = new GEOTileRasterizer();
+		// builder.getPlanetRendererBuilder().addTileRasterizer(geoTileRasterizer);
+
+		Planet planet = Planet.createFlatEarth();
+		builder.setPlanet(planet);
+
+		// testing Geometer
+		testingGeometer();
+
+		// set camera handlers
+		CameraRenderer cameraRenderer = createCameraRenderer();
+		builder.setCameraRenderer(cameraRenderer);
+
+		final ShapesRenderer shapesRenderer = new ShapesRenderer(
+				geoTileRasterizer);
+		builder.addRenderer(shapesRenderer);
+
+		final LayerSet layerSet = new LayerSet();
+		// layerSet.addLayer(new MapBoxLayer("examples.map-9ijuk24y",
+		// TimeInterval.fromDays(30)));
+		layerSet.addLayer(MapQuestLayer.newOSM(TimeInterval.fromDays(30)));
+		builder.getPlanetRendererBuilder().setLayerSet(layerSet);
+
+		if (true) {
+			// testing selecting shapes
+			final double factor = 3000;
+			final Vector3D radius1 = new Vector3D(factor, factor, factor);
+			final Vector3D radius2 = new Vector3D(factor * 1.5, factor * 1.5,
+					factor * 1.5);
+			final Vector3D radiusBox = new Vector3D(factor, factor * 1.5,
+					factor * 2);
+
+			Shape box1 = new BoxShape(new Geodetic3D(Angle.fromDegrees(39.70),
+					Angle.fromDegrees(2.80), radiusBox._z / 2),
+					AltitudeMode.ABSOLUTE, radiusBox, 0, Color.fromRGBA(0, 1,
+							0, 1));
+			shapesRenderer.addShape(box1);
+
+			Shape ellipsoid1 = new EllipsoidShape(new Geodetic3D(
+					Angle.fromDegrees(39.80), Angle.fromDegrees(2.90),
+					radius1._z), AltitudeMode.ABSOLUTE, new URL(
+					"file:///world.jpg", false), radius1, (short) 32,
+					(short) 0, false, false);
+			shapesRenderer.addShape(ellipsoid1);
+
+			Shape mercator1 = new EllipsoidShape(
+					new Geodetic3D(Angle.fromDegrees(39.60),
+							Angle.fromDegrees(3), radius2._x),
+					AltitudeMode.ABSOLUTE, new URL(
+							"file:///mercator_debug.png", false), radius2,
+					(short) 32, (short) 0, false, true);
+			shapesRenderer.addShape(mercator1);
+
+			// DRAWING POINTS
+			{
+				Shape point = new PointShape(new Geodetic3D(
+						Angle.fromDegrees(39.70), Angle.fromDegrees(3.30),
+						radiusBox._z), AltitudeMode.ABSOLUTE, 8,
+						Color.fromRGBA(0, 0, 1, 1));
+				shapesRenderer.addShape(point);
+			}
+			{
+				Shape point = new PointShape(new Geodetic3D(
+						Angle.fromDegrees(39.55), Angle.fromDegrees(3.40),
+						radiusBox._z), AltitudeMode.ABSOLUTE, 6,
+						Color.fromRGBA(0, 0, 1, 1));
+				shapesRenderer.addShape(point);
+			}
+			{
+				Shape point = new PointShape(new Geodetic3D(
+						Angle.fromDegrees(39.70), Angle.fromDegrees(3.50),
+						radiusBox._z), AltitudeMode.ABSOLUTE, 4,
+						Color.fromRGBA(0, 0, 1, 1));
+				shapesRenderer.addShape(point);
+			}
+
+			// DRAWING LINES
+			{
+				Shape line = new LineShape(new Geodetic3D(
+						Angle.fromDegrees(39.69), Angle.fromDegrees(3.31),
+						radiusBox._z), new Geodetic3D(Angle.fromDegrees(39.56),
+						Angle.fromDegrees(3.39), radiusBox._z),
+						AltitudeMode.ABSOLUTE, 5, Color.fromRGBA(1, 0.5f, 0, 1));
+				shapesRenderer.addShape(line);
+			}
+			{
+				Shape line = new LineShape(new Geodetic3D(
+						Angle.fromDegrees(39.56), Angle.fromDegrees(3.41),
+						radiusBox._z), new Geodetic3D(Angle.fromDegrees(39.69),
+						Angle.fromDegrees(3.49), radiusBox._z),
+						AltitudeMode.ABSOLUTE, 5, Color.fromRGBA(1, 0.5f, 0, 1));
+				shapesRenderer.addShape(line);
+			}
+			{
+				Shape line = new LineShape(new Geodetic3D(
+						Angle.fromDegrees(39.70), Angle.fromDegrees(3.31),
+						radiusBox._z), new Geodetic3D(Angle.fromDegrees(39.70),
+						Angle.fromDegrees(3.49), radiusBox._z),
+						AltitudeMode.ABSOLUTE, 5, Color.fromRGBA(1, 0.5f, 0, 1));
+				shapesRenderer.addShape(line);
+			}
+
+			// DRAWING RASTER LINES
+			{
+				Shape rasterLine = new RasterLineShape(new Geodetic2D(
+						Angle.fromDegrees(39.40), Angle.fromDegrees(2.70)),
+						new Geodetic2D(Angle.fromDegrees(39.40), Angle
+								.fromDegrees(3.00)), 2, Color.fromRGBA(0, 0, 1,
+								1));
+				shapesRenderer.addShape(rasterLine);
+			}
+
+			// DRAWING RASTER POLYGON
+			{
+				java.util.ArrayList<Geodetic2D> vertices = new java.util.ArrayList<Geodetic2D>();
+				vertices.add(new Geodetic2D(Angle.fromDegrees(39.50), Angle
+						.fromDegrees(3.10)));
+				vertices.add(new Geodetic2D(Angle.fromDegrees(39.38), Angle
+						.fromDegrees(3.20)));
+				vertices.add(new Geodetic2D(Angle.fromDegrees(39.40), Angle
+						.fromDegrees(3.28)));
+				vertices.add(new Geodetic2D(Angle.fromDegrees(39.60), Angle
+						.fromDegrees(3.25)));
+
+				Shape pol1 = new RasterPolygonShape(vertices, 2, Color.green(),
+						Color.fromRGBA(1, 1, 1, 0.6f));
+				shapesRenderer.addShape(pol1);
+			}
+
+			// DRAWING JSON
+			boolean selectableAirplane = true;
+			if (selectableAirplane) {
+				shapesRenderer.loadJSONSceneJS(
+						new URL("file:///seymour-plane.json", false),
+						"file:///",
+						false,
+						new Geodetic3D(Angle.fromDegrees(39.70), Angle
+								.fromDegrees(2.60), 7 * factor),
+						AltitudeMode.ABSOLUTE, new ShapeLoadListener() {
+
+							@Override
+							public void onBeforeAddShape(final SGShape shape) {
+								double scale = factor / 5;
+								shape.setScale(scale, scale, scale);
+								shape.setPitch(Angle.fromDegrees(120));
+								shape.setHeading(Angle.fromDegrees(-110));
+							}
+
+							@Override
+							public void onAfterAddShape(final SGShape shape) {
+							}
+
+							@Override
+							public void dispose() {
+								// TODO Auto-generated method stub
+
+							}
+						});
+			}
+
+			// adding touch listener
+			ShapeTouchListener myShapeTouchListener = new ShapeTouchListener() {
+				Shape _selectedShape = null;
+
+				public boolean touchedShape(Shape shape) {
+
+					if (_selectedShape == null) {
+						shape.select();
+						_selectedShape = shape;
+					} else {
+						if (_selectedShape == shape) {
+							shape.unselect();
+							_selectedShape = null;
+						} else {
+							_selectedShape.unselect();
+							_selectedShape = shape;
+							shape.select();
+						}
+					}
+
+					if (_selectedShape != null)
+						ILogger.instance()
+								.logInfo(
+										"Shape length = %.3f Km.   Shape area = %.3f Km2\n",
+										shape.getLength() * 1e-3,
+										shape.getArea() * 1e-6);
+
+					return true;
+				}
+			};
+
+			shapesRenderer.setShapeTouchListener(myShapeTouchListener, true);
+		}
+
+		_g3mWidget = builder.createWidget();
+
+		if (true) {
+			Geodetic3D position = new Geodetic3D(Angle.fromDegrees(39.08),
+					Angle.fromDegrees(2.90), 113000);
+			_g3mWidget.setCameraPosition(position);
+			_g3mWidget.setCameraHeading(Angle.fromDegrees(-5.0));
+			_g3mWidget.setCameraPitch(Angle.fromDegrees(24.0 - 90.0));
+		}
 	}
 
 }

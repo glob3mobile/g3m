@@ -323,6 +323,15 @@ public:
   bool isPositionWithin(const Sector& sector, double height) const;
   bool isCenterOfViewWithin(const Sector& sector, double height) const;
   
+  // data to compute frustum
+  FrustumData getFrustumData() const {
+    if (_dirtyFlags._frustumDataDirty) {
+      _dirtyFlags._frustumDataDirty = false;
+      _frustumData = calculateFrustumData();
+    }
+    return _frustumData;
+  }
+
   void setGroundHeightFromCartesianPoint(const Vector3D& point) {
     _groundHeight = _planet->toGeodetic3D(point)._height;
   }
@@ -416,15 +425,6 @@ private:
       _up.copyFrom(v);
       _dirtyFlags.setAll(true);
     }
-  }
-
-  // data to compute frustum
-  FrustumData getFrustumData() const {
-    if (_dirtyFlags._frustumDataDirty) {
-      _dirtyFlags._frustumDataDirty = false;
-      _frustumData = calculateFrustumData();
-    }
-    return _frustumData;
   }
 
   // intersection of view direction with globe in(x,y,z)

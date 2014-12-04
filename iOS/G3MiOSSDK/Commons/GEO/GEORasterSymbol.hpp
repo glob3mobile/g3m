@@ -28,12 +28,29 @@ private:
   const int _maxTileLevel;
 
 protected:
+  //const Sector* _sector;
+
+  //static std::vector<std::vector<Geodetic2D*>*>* copyCoordinatesArray(const std::vector<std::vector<Geodetic2D*>*>* coordinatesArray);
+
+  static Sector* calculateSectorFromCoordinates(const std::vector<Geodetic2D*>* coordinates);
+  static Sector* calculateSectorFromCoordinatesArray(const std::vector<std::vector<Geodetic2D*>*>* coordinatesArray);
+
+  GEORasterSymbol(const Sector* sector,
+                  const int minTileLevel,
+                  const int maxTileLevel) :
+  _minTileLevel(minTileLevel),
+  _maxTileLevel(maxTileLevel)
+  {
+  }
+  
   GEORasterSymbol(const int minTileLevel,
                   const int maxTileLevel) :
   _minTileLevel(minTileLevel),
   _maxTileLevel(maxTileLevel)
   {
   }
+  
+  
 
   void rasterLine(const GEO2DCoordinatesData* coordinates,
                   ICanvas*                    canvas,
@@ -71,7 +88,13 @@ public:
   void rasterize(ICanvas*                   canvas,
                  const GEORasterProjection* projection,
                  int tileLevel) const;
-  
+
+  // useless, it's here only to make the C++ => Java translator creates an interface intead of an empty class
+  void unusedMethod() const {
+  }
+
+  static std::vector<Geodetic2D*>* copyCoordinates(const std::vector<Geodetic2D*>* coordinates);
+
 };
 
 #endif

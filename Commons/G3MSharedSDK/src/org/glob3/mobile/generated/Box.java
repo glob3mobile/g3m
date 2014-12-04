@@ -67,6 +67,13 @@ public class Box extends BoundingVolume
      _mesh = null;
   }
 
+  public Box(Box other)
+  {
+     _lower = new Vector3D(other._lower);
+     _upper = new Vector3D(other._upper);
+     _mesh = null;
+  }
+
   public void dispose()
   {
     if (_mesh != null)

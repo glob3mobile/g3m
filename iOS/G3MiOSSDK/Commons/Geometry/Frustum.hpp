@@ -15,6 +15,7 @@
 #include "BoundingVolume.hpp"
 
 class Box;
+class OrientedBox;
 
 class FrustumData {
 public:
@@ -168,6 +169,8 @@ public:
   bool contains(const Vector3D& point) const;
   
   bool touchesWithBox(const Box *box) const;
+  
+  bool touchesWithOrientedBox(const OrientedBox* orientedBox) const;
   
   Frustum* transformedBy_P(const MutableMatrix44D& matrix) const {
     return new Frustum(this, matrix, matrix.inversed());

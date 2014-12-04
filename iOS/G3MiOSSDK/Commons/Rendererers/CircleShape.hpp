@@ -22,6 +22,10 @@ private:
 
 protected:
   Mesh* createMesh(const G3MRenderContext* rc);
+  BoundingVolume* getBoundingVolume(const G3MRenderContext *rc){
+      int __TODO_getBoundingVolume_Method;
+      return (BoundingVolume*)NULL;
+    }
 
 public:
   CircleShape(Geodetic3D* position,
@@ -64,12 +68,21 @@ public:
   }
   
   std::vector<double> intersectionsDistances(const Planet* planet,
+                                             const Camera* camera,
                                              const Vector3D& origin,
-                                             const Vector3D& direction) const {
+                                             const Vector3D& direction)
+  {
+#warning TODO
     std::vector<double> intersections;
     return intersections;
   }
 
+  bool isVisible(const G3MRenderContext *rc) {
+    int __TODO_isVisible_Method;
+    return true;
+  }
+  
+  void setSelectedDrawMode(bool mode) {}
 
 };
 

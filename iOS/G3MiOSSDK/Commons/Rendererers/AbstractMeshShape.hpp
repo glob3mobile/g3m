@@ -48,6 +48,11 @@ public:
   virtual ~AbstractMeshShape();
 
   bool isTransparent(const G3MRenderContext* rc);
+  
+  GEORasterSymbol* createRasterSymbolIfNeeded() const {
+    return NULL;
+  }
+
 
   void zRawRender(const G3MRenderContext* rc, GLState* parentGLState);
 };

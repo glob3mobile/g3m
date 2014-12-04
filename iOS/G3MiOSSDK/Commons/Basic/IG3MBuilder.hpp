@@ -36,6 +36,7 @@ class MeshRenderer;
 class ShapesRenderer;
 class MarksRenderer;
 class ErrorRenderer;
+class ShapesEditorRenderer;
 class InfoDisplay;
 
 
@@ -67,6 +68,8 @@ private:
   std::vector<GPUProgramSources>    _sources;
   SceneLighting*                    _sceneLighting;
   Sector*                           _shownSector;
+  
+  ShapesEditorRenderer*             _shapesEditorRenderer;
   InfoDisplay*                      _infoDisplay;
 
   GL*                               getGL();
@@ -208,6 +211,7 @@ public:
 
   MarksRenderer* createMarksRenderer();
   
+  ShapesEditorRenderer* createShapesEditorRenderer();
   void setInfoDisplay(InfoDisplay* infoDisplay);
 };
 

@@ -507,6 +507,18 @@ public class G3MWidget implements ChangedRendererInfoListener
     return _userData;
   }
 
+  public final void setShapesEditorRenderer(ShapesEditorRenderer shapesEditorRenderer)
+  {
+    _shapesEditorRenderer = shapesEditorRenderer;
+    if (_shapesEditorRenderer != null)
+      _shapesEditorRenderer.activateEdition(getPlanetRenderer());
+  }
+
+  public final ShapesEditorRenderer getShapesEditorRenderer()
+  {
+    return _shapesEditorRenderer;
+  }
+
   public final void addPeriodicalTask(PeriodicalTask periodicalTask)
   {
     _periodicalTasks.add(periodicalTask);
@@ -841,6 +853,10 @@ public class G3MWidget implements ChangedRendererInfoListener
   private ErrorRenderer _errorRenderer;
   private Renderer _hudRenderer;
   private RenderState _rendererState;
+  //Renderer*           _selectedRenderer;
+
+  private ShapesEditorRenderer _shapesEditorRenderer;
+
   private ProtoRenderer _selectedRenderer;
 
   private EffectsScheduler _effectsScheduler;
@@ -948,6 +964,7 @@ public class G3MWidget implements ChangedRendererInfoListener
      _initialCameraPositionHasBeenSet = false;
      _forceBusyRenderer = false;
      _nFramesBeetweenProgramsCleanUp = 500;
+     _shapesEditorRenderer = null;
      _zRenderCounter = -1;
      _infoDisplay = infoDisplay;
      _sceneReadyListener = null;

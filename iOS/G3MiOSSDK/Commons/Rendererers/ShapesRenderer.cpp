@@ -113,24 +113,6 @@ void ShapesRenderer::render(const G3MRenderContext* rc, GLState* glState) {
   }
 }
 
-void ShapesRenderer::removeShape(Shape* shape) {
-  int pos = -1;
-  const int shapesSize = _shapes.size();
-  for (int i = 0; i < shapesSize; i++) {
-    if (_shapes[i] == shape) {
-      pos = i;
-      break;
-    }
-  }
-  if (pos != -1) {
-#ifdef C_CODE
-    _shapes.erase(_shapes.begin() + pos);
-#endif
-#ifdef JAVA_CODE
-    _shapes.remove(pos);
-#endif
-  }
-}
 
 void ShapesRenderer::removeAllShapes(bool deleteShapes) {
   if (deleteShapes) {
@@ -157,13 +139,16 @@ public:
 
 
 std::vector<ShapeDistance> ShapesRenderer::intersectionsDistances(const Planet* planet,
-                                                                  const Vector3D& origin,
-                                                                  const Vector3D& direction) const
+                                                                  const Camera* camera,
+                                                                  const Vector2I& pixel) const
 {
+  const Vector3D origin = camera->getCartesianPosition();
+  const Vector3D direction = camera->pixel2Ray(pixel);
   std::vector<ShapeDistance> shapeDistances;
   for (int n=0; n<_shapes.size(); n++) {
     Shape* shape = _shapes[n];
-    std::vector<double> distances = shape->intersectionsDistances(planet, origin, direction);
+    std::vector<double> distances = shape->intersectionsDistances(planet, camera, origin, direction);
+    
     for (int i=0; i<distances.size(); i++) {
       shapeDistances.push_back(ShapeDistance(distances[i], shape));
     }
@@ -193,34 +178,25 @@ std::vector<ShapeDistance> ShapesRenderer::intersectionsDistances(const Planet* 
 bool ShapesRenderer::onTouchEvent(const G3MEventContext* ec,
                                   const TouchEvent* touchEvent)
 {
+  bool handled = false;
   if (_lastCamera != NULL) {
     if (touchEvent->getTouchCount() ==1 &&
-        touchEvent->getTapCount()==1 &&
+        touchEvent->getTapCount()<=1 &&
         touchEvent->getType()==Down) {
-      const Vector3D origin = _lastCamera->getCartesianPosition();
       const Vector2I pixel = touchEvent->getTouch(0)->getPos();
-      const Vector3D direction = _lastCamera->pixel2Ray(pixel);
-      const Planet* planet = ec->getPlanet();
-      if (!direction.isNan()) {
-        std::vector<ShapeDistance> shapeDistances = intersectionsDistances(planet, origin, direction);
 
-        if (!shapeDistances.empty()) {
-          //        printf ("Found %d intersections with shapes:\n",
-          //                (int)shapeDistances.size());
-          for (int i=0; i<shapeDistances.size(); i++) {
-//            printf ("   %d: shape %x to distance %f\n",
-//                    i+1,
-//                    (unsigned int)shapeDistances[i]._shape,
-//                    shapeDistances[i]._distance);
-          }
-        }
-      } else {
-        ILogger::instance()->logWarning("ShapesRenderer::onTouchEvent: direction ( - _lastCamera->pixel2Ray(pixel) - ) is NaN");
+      std::vector<ShapeDistance> shapeDistances = intersectionsDistances(ec->getPlanet(),
+                                                                         _lastCamera,
+                                                                         pixel);
+
+      if (!shapeDistances.empty()) {
+        //printf ("Found %d intersections with shapes:\n", (int)shapeDistances.size());
+        if (_shapeTouchListener != NULL)
+            handled = _shapeTouchListener->touchedShape(shapeDistances[0]._shape);
       }
-      
     }
   }
-  return false;
+  return handled;
 }
 
 void ShapesRenderer::drainLoadQueue() {
@@ -564,6 +540,17 @@ void ShapesRenderer::requestBuffer(const URL&          url,
   
 }
 
+
+void ShapesRenderer::setShapeTouchListener(ShapeTouchListener* shapeTouchListener,
+                                          bool autoDelete) {
+  if ( _autoDeleteShapeTouchListener ) {
+    delete _shapeTouchListener;
+  }
+  
+  _shapeTouchListener = shapeTouchListener;
+  _autoDeleteShapeTouchListener = autoDelete;
+}
+
 void ShapesRenderer::zRender(const G3MRenderContext* rc, GLState* glState){
 
   GLState* state = new GLState();
@@ -595,3 +582,39 @@ void ShapesRenderer::disableAll() {
     shape->setEnable(false);
   }
 }
+
+
+void ShapesRenderer::addShape(Shape* shape) {
+  _shapes.push_back(shape);
+  if (_context != NULL) {
+    shape->initialize(_context);
+  }
+#warning NEEDS REDO
+//  if (_geoTileRasterizer) {
+//    GEORasterSymbol* geoRasterSymbol = shape->createRasterSymbolIfNeeded();
+//    if (geoRasterSymbol != NULL)
+//      _geoTileRasterizer->addSymbol(geoRasterSymbol);
+//  }
+}
+
+
+void ShapesRenderer::removeShape(Shape* shape)
+{
+  int pos = -1;
+  const int size = _shapes.size();
+  for (int i = 0; i < size; i++) {
+    if (_shapes[i] == shape) {
+      pos = i;
+      break;
+    }
+  }
+  if (pos != -1) {
+#ifdef C_CODE
+    _shapes.erase(_shapes.begin() + pos);
+#endif
+#ifdef JAVA_CODE
+    _shapes.remove(pos);
+#endif
+  }
+}
+

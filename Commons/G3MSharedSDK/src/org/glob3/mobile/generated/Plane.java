@@ -41,6 +41,13 @@ public class Plane
      _dF = (float) d;
   }
 
+  public static Plane fromPointAndNormal(Vector3D point0, Vector3D normal)
+  {
+    final Vector3D myNormal = normal.normalized();
+    final double d = -myNormal.dot(point0);
+    return new Plane(myNormal, d);
+  }
+
   public Plane(Vector3D normal, Vector3D point)
   {
      _normal = new Vector3D(normal.normalized());

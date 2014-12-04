@@ -12,10 +12,12 @@
 #include "SGNode.hpp"
 
 #include "GLState.hpp"
+#include "Box.hpp"
 
 class IFloatBuffer;
 class IShortBuffer;
 class GPUProgramState;
+
 
 class SGGeometryNode : public SGNode {
 private:
@@ -28,6 +30,8 @@ private:
   
   GLState* _glState;
   void createGLState();
+  
+  Box* _boundingBox;
 
 public:
 
@@ -38,19 +42,8 @@ public:
                  IFloatBuffer*      colors,
                  IFloatBuffer*      uv,
                  IFloatBuffer*      normals,
-                 IShortBuffer*      indices) :
-  SGNode(id, sId),
-  _primitive(primitive),
-  _vertices(vertices),
-  _colors(colors),
-  _uv(uv),
-  _normals(normals),
-  _indices(indices),
-  _glState(new GLState())
-  {
-    createGLState();
-  }
-
+                 IShortBuffer*      indices);
+  
   ~SGGeometryNode();
 
   void rawRender(const G3MRenderContext* rc, const GLState* glState);
@@ -70,6 +63,10 @@ public:
 
   virtual const GLState* createZRenderState(const G3MRenderContext* rc,
                                             const GLState* parentState);
+  
+  Box* getCopyBoundingBox() {
+    return new Box(_boundingBox);
+  }
   
 };
 
