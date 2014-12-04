@@ -116,6 +116,13 @@ public:
   const Vector2I getMinResolution() const {
     return Vector2I(_extentWidth, _extentHeight);
   }
+  
+  ElevationData* getElevationData() const{
+    if (_elevationDataResolved){
+      return _elevationData;
+    }
+    return NULL;
+  }
 
 };
 
