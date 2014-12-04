@@ -119,8 +119,10 @@ public class ShapesRenderer extends DefaultRenderer
   
   }
 
-
-  protected GEOTileRasterizer _geoTileRasterizer;
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning NEEDS REDO AGUSTIN
+//protected:
+//  GEOTileRasterizer* _geoTileRasterizer;
 
 
 
@@ -129,6 +131,8 @@ public class ShapesRenderer extends DefaultRenderer
      this(true);
   }
   public ShapesRenderer(boolean renderNotReadyShapes)
+  //,
+//  _geoTileRasterizer(NULL)
   {
      _renderNotReadyShapes = renderNotReadyShapes;
      _glState = new GLState();
@@ -136,21 +140,20 @@ public class ShapesRenderer extends DefaultRenderer
      _lastCamera = null;
      _autoDeleteShapeTouchListener = false;
      _shapeTouchListener = null;
-     _geoTileRasterizer = null;
   }
 
-  public ShapesRenderer(GEOTileRasterizer geoTileRasterizer)
-//  _context(NULL),
-  {
-     _geoTileRasterizer = geoTileRasterizer;
-     _renderNotReadyShapes = true;
-     _glState = new GLState();
-     _glStateTransparent = new GLState();
-     _lastCamera = null;
-     _autoDeleteShapeTouchListener = false;
-     _shapeTouchListener = null;
-    _context = null;
-  }
+//  ShapesRenderer(GEOTileRasterizer* geoTileRasterizer):
+//  _geoTileRasterizer(geoTileRasterizer),
+//  _renderNotReadyShapes(true),
+////  _context(NULL),
+//  _glState(new GLState()),
+//  _glStateTransparent(new GLState()),
+//  _lastCamera(NULL),
+//  _autoDeleteShapeTouchListener(false),
+//  _shapeTouchListener(NULL)
+//  {
+//    _context = NULL;
+//  }
 
 
   public void dispose()
@@ -187,12 +190,13 @@ public class ShapesRenderer extends DefaultRenderer
     {
       shape.initialize(_context);
     }
-    if (_geoTileRasterizer != null)
-    {
-      GEORasterSymbol geoRasterSymbol = shape.createRasterSymbolIfNeeded();
-      if (geoRasterSymbol != null)
-        _geoTileRasterizer.addSymbol(geoRasterSymbol);
-    }
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning NEEDS REDO
+  //  if (_geoTileRasterizer) {
+  //    GEORasterSymbol* geoRasterSymbol = shape->createRasterSymbolIfNeeded();
+  //    if (geoRasterSymbol != NULL)
+  //      _geoTileRasterizer->addSymbol(geoRasterSymbol);
+  //  }
   }
 
 /*  void addShape(Shape* shape) {
@@ -315,59 +319,15 @@ public class ShapesRenderer extends DefaultRenderer
       if (touchEvent.getTouchCount() == 1 && touchEvent.getTapCount()<=1 && touchEvent.getType() == TouchEventType.Down)
       {
         final Vector2I pixel = touchEvent.getTouch(0).getPos();
-<<<<<<< HEAD
-        final Vector3D direction = _lastCamera.pixel2Ray(pixel);
-        final Planet planet = ec.getPlanet();
-        if (!direction.isNan())
-        {
-          java.util.ArrayList<ShapeDistance> shapeDistances = intersectionsDistances(planet, origin, direction);
   
-          if (!shapeDistances.isEmpty())
-          {
-            //        printf ("Found %d intersections with shapes:\n",
-            //                (int)shapeDistances.size());
-            for (int i = 0; i<shapeDistances.size(); i++)
-            {
-  //            printf ("   %d: shape %x to distance %f\n",
-  //                    i+1,
-  //                    (unsigned int)shapeDistances[i]._shape,
-  //                    shapeDistances[i]._distance);
-            }
-          }
-        }
-        else
-=======
-  //<<<<<<< HEAD
         java.util.ArrayList<ShapeDistance> shapeDistances = intersectionsDistances(ec.getPlanet(), _lastCamera, pixel);
   
         if (!shapeDistances.isEmpty())
->>>>>>> demo-vectorial-cotesa-gus
         {
           //printf ("Found %d intersections with shapes:\n", (int)shapeDistances.size());
           if (_shapeTouchListener != null)
               handled = _shapeTouchListener.touchedShape(shapeDistances.get(0)._shape);
         }
-  
-  //=======
-  //      const Vector3D direction = _lastCamera->pixel2Ray(pixel);
-  //      if (!direction.isNan()) {
-  //        std::vector<ShapeDistance> shapeDistances = intersectionsDistances(origin, direction);
-  //
-  //        if (!shapeDistances.empty()) {
-  //          //        printf ("Found %d intersections with shapes:\n",
-  //          //                (int)shapeDistances.size());
-  //          for (int i=0; i<shapeDistances.size(); i++) {
-  //            //          printf ("   %d: shape %x to distance %f\n",
-  //            //                  i+1,
-  //            //                  (unsigned int)shapeDistances[i]._shape,
-  //            //                  shapeDistances[i]._distance);
-  //          }
-  //        }
-  //      } else {
-  //        ILogger::instance()->logWarning("ShapesRenderer::onTouchEvent: direction ( - _lastCamera->pixel2Ray(pixel) - ) is NaN");
-  //      }
-  //
-  //>>>>>>> senderos-gc
       }
     }
     return handled;
@@ -413,11 +373,7 @@ public class ShapesRenderer extends DefaultRenderer
     }
   }
 
-<<<<<<< HEAD
-  public final java.util.ArrayList<ShapeDistance> intersectionsDistances(Planet planet, Vector3D origin, Vector3D direction)
-=======
   public final java.util.ArrayList<ShapeDistance> intersectionsDistances(Planet planet, Camera camera, Vector2I pixel)
->>>>>>> demo-vectorial-cotesa-gus
   {
     final Vector3D origin = camera.getCartesianPosition();
     final Vector3D direction = camera.pixel2Ray(pixel);
@@ -425,11 +381,8 @@ public class ShapesRenderer extends DefaultRenderer
     for (int n = 0; n<_shapes.size(); n++)
     {
       Shape shape = _shapes.get(n);
-<<<<<<< HEAD
-      java.util.ArrayList<Double> distances = shape.intersectionsDistances(planet, origin, direction);
-=======
       java.util.ArrayList<Double> distances = shape.intersectionsDistances(planet, camera, origin, direction);
->>>>>>> demo-vectorial-cotesa-gus
+  
       for (int i = 0; i<distances.size(); i++)
       {
         shapeDistances.add(new ShapeDistance(distances.get(i), shape));

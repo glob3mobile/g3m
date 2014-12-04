@@ -113,15 +113,6 @@ public class PointShape extends AbstractMeshShape
     }
   }
 
-  public final java.util.ArrayList<Double> intersectionsDistances(Planet planet, Camera camera, Vector3D origin, Vector3D direction)
-  {
-    if (_boundingVolume != null)
-      if (_boundingVolume != null)
-         _boundingVolume.dispose();
-    _boundingVolume = computeOrientedBox(planet, camera);
-    return _boundingVolume.intersectionsDistances(origin, direction);
-  }
-
   public final boolean isVisible(G3MRenderContext rc)
   {
     return true;
@@ -138,6 +129,15 @@ public class PointShape extends AbstractMeshShape
     {
       setColor(new Color(_originalColor));
     }
+  }
+
+  public final java.util.ArrayList<Double> intersectionsDistances(Planet planet, Camera camera, Vector3D origin, Vector3D direction)
+  {
+    if (_boundingVolume != null)
+      if (_boundingVolume != null)
+         _boundingVolume.dispose();
+    _boundingVolume = computeOrientedBox(planet, camera);
+    return _boundingVolume.intersectionsDistances(origin, direction);
   }
 
 }

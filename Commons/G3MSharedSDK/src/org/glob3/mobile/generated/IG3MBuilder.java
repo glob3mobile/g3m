@@ -1090,11 +1090,11 @@ public abstract class IG3MBuilder
 
   public final ShapesEditorRenderer createShapesEditorRenderer()
   {
-  
-    // Tile rasterizer to create raster shapes
-    GEOTileRasterizer geoTileRasterizer = new GEOTileRasterizer();
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning MIRAR CON AGUSTIN
+    //#warning MIRAR CON AGUSTIN
+    // Tile rasterizer to create raster shapes
+  //  GEOTileRasterizer* geoTileRasterizer = new GEOTileRasterizer();
+  
   //  getPlanetRendererBuilder()->addTileRasterizer(geoTileRasterizer);
   //
   //  /*// shapesRenderer to render pointshapes whwen modifying shape vertices

@@ -262,4 +262,5 @@ public class RasterPolygonShape extends Shape
     java.util.ArrayList<Geodetic2D> coordinates = getCopyRasterCoordinates();
     return IMathUtils.instance().abs(GeoMeter.getArea(coordinates));
   }
+
 }

@@ -105,14 +105,17 @@ public class OrientedBox extends BoundingVolume
     return 0;
   }
 
-  public final void render(G3MRenderContext rc, GLState parentState)
+  public final void render(G3MRenderContext rc, GLState parentState, Color color)
   {
     if (_mesh == null)
     {
-      createMesh(Color.newFromRGBA(1.0f, 0.0f, 1.0f, 1.0f));
+      createMesh(new Color(color)); //Color::newFromRGBA(1.0f, 0.0f, 1.0f, 1.0f)
     }
     _mesh.render(rc, parentState);
   }
+
+//  void render(const G3MRenderContext* rc,
+//              const GLState& parentState) const;
 
   public final boolean touches(BoundingVolume that)
   {

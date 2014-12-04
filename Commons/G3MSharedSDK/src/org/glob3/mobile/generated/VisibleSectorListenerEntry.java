@@ -1,11 +1,4 @@
 package org.glob3.mobile.generated; 
-<<<<<<< HEAD
-///#include "TileRasterizer.hpp"
-
-
-
-=======
->>>>>>> zrender-touchhandlers
 public class VisibleSectorListenerEntry
 {
   private VisibleSectorListener _listener;

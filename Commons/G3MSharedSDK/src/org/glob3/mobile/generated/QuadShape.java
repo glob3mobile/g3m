@@ -181,11 +181,7 @@ public class QuadShape extends AbstractMeshShape
     cleanMesh();
   }
 
-<<<<<<< HEAD
-  public final java.util.ArrayList<Double> intersectionsDistances(Planet planet, Vector3D origin, Vector3D direction)
-=======
   public final java.util.ArrayList<Double> intersectionsDistances(Planet planet, Camera camera, Vector3D origin, Vector3D direction)
->>>>>>> demo-vectorial-cotesa-gus
   {
     java.util.ArrayList<Double> intersections = new java.util.ArrayList<Double>();
     return intersections;

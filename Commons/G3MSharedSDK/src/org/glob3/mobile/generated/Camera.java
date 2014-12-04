@@ -751,7 +751,6 @@ public class Camera
   //  const double heightFromGround = getHeightFromGround();
   //
   //  double zNear = heightFromGround * 0.1;
-  
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#warning ASK AGUSTIN
     final double height = getGeodeticPosition()._height;

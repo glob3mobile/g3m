@@ -292,17 +292,18 @@ public class EllipsoidShape extends AbstractMeshShape
      _textureImage = null;
      _withNormals = withNormals;
      _texId = null;
-
+  
   }
 
   public EllipsoidShape(Geodetic3D position, AltitudeMode altitudeMode, URL textureURL, Vector3D radius, short resolution, float borderWidth, boolean texturedInside, boolean mercator)
   {
      this(position, altitudeMode, textureURL, radius, resolution, borderWidth, texturedInside, mercator, true);
   }
-  public EllipsoidShape(Geodetic3D position, AltitudeMode altitudeMode, URL textureURL, Vector3D radius, short resolution, float borderWidth, boolean texturedInside, boolean mercator, boolean withNormals)
+  public EllipsoidShape(Geodetic3D position, AltitudeMode altitudeMode, URL textureURL, Vector3D radius, short resolution, float borderWidth, boolean texturedInside, boolean mercator, boolean withNormals) //new Ellipsoid(Vector3D::zero, radius)
   {
      super(position, altitudeMode);
-     _ellipsoid = new Ellipsoid(Vector3D.zero, radius);
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+     //#warning EY SOLO PROBANDO CAMBIAR YA!!!! _ellipsoid = null;
      _boundingVolume = null;
      _textureURL = new URL(textureURL);
      _resolution = resolution < 3 ? 3 : resolution;
@@ -317,7 +318,6 @@ public class EllipsoidShape extends AbstractMeshShape
      _textureImage = null;
      _withNormals = withNormals;
      _texId = null;
-
   }
 
 
@@ -366,9 +366,6 @@ public class EllipsoidShape extends AbstractMeshShape
   }
 
 
-<<<<<<< HEAD
-  public final java.util.ArrayList<Double> intersectionsDistances(Planet planet, Vector3D origin, Vector3D direction)
-=======
   public final java.util.ArrayList<Double> intersectionsDistances(Planet planet, Camera camera, Vector3D origin, Vector3D direction)
   {
     MutableMatrix44D M = getTransformMatrix(planet);
@@ -386,7 +383,6 @@ public class EllipsoidShape extends AbstractMeshShape
   }
 
   public final void setSelectedDrawMode(boolean mode)
->>>>>>> demo-vectorial-cotesa-gus
   {
     if (mode)
     {
@@ -400,6 +396,4 @@ public class EllipsoidShape extends AbstractMeshShape
         setBorderColor(new Color(_originalBorderColor));
     }
   }
-
-
 }

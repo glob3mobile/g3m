@@ -100,7 +100,9 @@ public class ShapesEditorRenderer extends ShapesRenderer
   
     _creatingShape = false;
     clearVertexShapes();
-    super._geoTileRasterizer.clear();
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning CHECK WITH AGUSTIN
+  //  ShapesRenderer::_geoTileRasterizer->clear();
     addRasterShapes();
   
     java.util.ArrayList<Geodetic2D> coordinates = _shapeInCreation._coordinates;
@@ -203,7 +205,9 @@ public class ShapesEditorRenderer extends ShapesRenderer
   
     // clean vertex and raster shapes
     removeRasterShapesFromShapesRenderer();
-    super._geoTileRasterizer.clear();
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning REVISAR AGUSTIN
+  //  ShapesRenderer::_geoTileRasterizer->clear();
   
     // modify vertex
     if (_rasterShapes.get(_selectedRasterShape)._coordinates.get(_selectedVertex) != null)
@@ -237,7 +241,9 @@ public class ShapesEditorRenderer extends ShapesRenderer
     // if value is null and raster shapes were removed, must be recovered
     if (value<0 && _rasterShapes.get(0)._shape == null)
     {
-      super._geoTileRasterizer.clear();
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning REVISAR AGUSTIN
+  //    ShapesRenderer::_geoTileRasterizer->clear();
       addRasterShapes();
     }
   

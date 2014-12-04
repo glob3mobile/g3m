@@ -30,12 +30,10 @@ package org.glob3.mobile.generated;
 //class ElevationDataProvider;
 //class ITimer;
 //class GLState;
-//class TileRasterizer;
 //class LayerSet;
 //class ITexturizerData;
 //class PlanetTileTessellatorData;
 //class PlanetRenderer;
-//class TileRenderingListener;
 //class TileKey;
 //class Geodetic3D;
 

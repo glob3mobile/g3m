@@ -46,12 +46,23 @@ public class PlanetRendererBuilder
   private ElevationDataProvider _elevationDataProvider;
   private float _verticalExaggeration;
 
-//  TileRasterizer* getTileRasterizer();
-
 
   /**
-<<<<<<< HEAD
-=======
+   * Returns the _tileTessellator.
+   *
+   * @return _tileTessellator: TileTessellator*
+   */
+  private TileTessellator getTileTessellator()
+  {
+    if (_tileTessellator == null)
+    {
+      _tileTessellator = createTileTessellator();
+    }
+  
+    return _tileTessellator;
+  }
+
+  /**
    * Returns the _texturizer.
    *
    * @return _texturizer: TileTexturizer*
@@ -68,7 +79,6 @@ public class PlanetRendererBuilder
 
 
   /**
->>>>>>> zrender-touchhandlers
    * Returns the _layerSet.
    *
    * @return _layerSet: LayerSet*
@@ -271,49 +281,6 @@ public class PlanetRendererBuilder
     return _defaultTileBackGroundImage;
   }
 
-<<<<<<< HEAD
-  /**
-   * Returns the _tileTessellator.
-   *
-   * @return _tileTessellator: TileTessellator*
-   */
-  private TileTessellator getTileTessellator()
-  {
-    if (_tileTessellator == null)
-    {
-      _tileTessellator = createTileTessellator();
-    }
-  
-    return _tileTessellator;
-  }
-
-
-  /**
-   * Returns the _texturizer.
-   *
-   * @return _texturizer: TileTexturizer*
-   */
-  private TileTexturizer getTexturizer()
-  {
-    if (_texturizer == null)
-    {
-      //    _texturizer = new MultiLayerTileTexturizer();
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning Diego at work!
-      _texturizer = new DefaultTileTexturizer();
-    }
-  
-    return _texturizer;
-  }
-
-  ///#include "MultiLayerTileTexturizer.hpp"
-  ///#include "TileRasterizer.hpp"
-  
-  
-  ///#include "CompositeTileRasterizer.hpp"
-  
-=======
->>>>>>> zrender-touchhandlers
   public PlanetRendererBuilder()
   {
      _showStatistics = false;
@@ -380,11 +347,7 @@ public class PlanetRendererBuilder
       layerSet.addLayer(geoVectorLayer);
     }
   
-<<<<<<< HEAD
     PlanetRenderer planetRenderer = new PlanetRenderer(getTileTessellator(), getElevationDataProvider(), true, getVerticalExaggeration(), getTexturizer(), layerSet, getParameters(), getShowStatistics(), getTileDownloadPriority(), getRenderedSector(), getRenderTileMeshes(), getLogTilesPetitions(), getTileRenderingListener(), getChangedRendererInfoListener(), _tileCacheSize, _deleteTexturesOfInvisibleTiles, getTouchEventTypeOfTerrainTouchListener());
-=======
-    PlanetRenderer planetRenderer = new PlanetRenderer(getTileTessellator(), getElevationDataProvider(), true, getVerticalExaggeration(), getTexturizer(), layerSet, getParameters(), getShowStatistics(), getTileDownloadPriority(), getRenderedSector(), getRenderTileMeshes(), getLogTilesPetitions(), getTileRenderingListener(), getChangedRendererInfoListener(), getTouchEventTypeOfTerrainTouchListener());
->>>>>>> zrender-touchhandlers
   
     for (int i = 0; i < getVisibleSectorListeners().size(); i++)
     {
@@ -529,17 +492,6 @@ public class PlanetRendererBuilder
     _renderedSector = new Sector(sector);
   }
 
-<<<<<<< HEAD
-
-  //GEOTileRasterizer* PlanetRendererBuilder::createGEOTileRasterizer() {
-  //  GEOTileRasterizer* geoTileRasterizer = new GEOTileRasterizer();
-  //  addTileRasterizer(geoTileRasterizer);
-  //  return geoTileRasterizer;
-  //}
-  
-  
-=======
->>>>>>> zrender-touchhandlers
   public final GEOVectorLayer createGEOVectorLayer()
   {
     GEOVectorLayer geoVectorLayer = new GEOVectorLayer();

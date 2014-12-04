@@ -366,7 +366,7 @@ public abstract class Shape implements SurfaceElevationListener, EffectTarget
         {
           BoundingVolume boundingVolume = getBoundingVolume(rc);
           if (boundingVolume != null)
-            boundingVolume.render(rc, _glState);
+            boundingVolume.render(rc, _glState, Color.red());
         }
   
       }
@@ -412,10 +412,6 @@ public abstract class Shape implements SurfaceElevationListener, EffectTarget
   {
   }
 
-<<<<<<< HEAD
-//  virtual std::vector<double> intersectionsDistances(const Vector3D& origin,
-//                                             const Vector3D& direction) const = 0;
-=======
   public abstract java.util.ArrayList<Double> intersectionsDistances(Planet planet, Camera camera, Vector3D origin, Vector3D direction);
 
   public abstract boolean isVisible(G3MRenderContext rc);
@@ -452,7 +448,6 @@ public abstract class Shape implements SurfaceElevationListener, EffectTarget
   {
     return false;
   }
->>>>>>> demo-vectorial-cotesa-gus
 
   public final void zRender(G3MRenderContext rc, GLState parentGLState, boolean renderNotReadyShapes)
   {
@@ -480,17 +475,14 @@ public abstract class Shape implements SurfaceElevationListener, EffectTarget
 
   public abstract void zRawRender(G3MRenderContext rc, GLState parentGLState);
 
-<<<<<<< HEAD
-  public abstract java.util.ArrayList<Double> intersectionsDistances(Planet planet, Vector3D origin, Vector3D direction);
-=======
   public double getLength()
   {
     return 0;
   }
->>>>>>> demo-vectorial-cotesa-gus
 
   public double getArea()
   {
     return 0;
   }
+
 }

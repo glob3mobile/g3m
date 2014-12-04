@@ -21,20 +21,19 @@ public class GetTilesURLVisitor implements ITileVisitor
 
   public final void visitTile(java.util.ArrayList<Layer> layers, Tile tile)
   {
-
-
-    for (int i = 0; i < layers.size(); i++)
-    {
-
-
-      GlobalMembersPlanetRenderer.TILES_VISITED[tile._level]++;
-
-      java.util.ArrayList<Petition> pets = layers.get(i).createTileMapPetitions(_renderContext, _ltrp, tile);
-      for (int j = 0; j < pets.size(); j++)
-      {
-        _urls.addLast(pets.get(j).getURL().getPath());
-      }
-    }
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning NEEDS_REDO
+//
+//    for (int i = 0; i < layers.size(); i++) {
+//
+//
+//      TILES_VISITED[tile->_level]++;
+//
+//      std::vector<Petition*> pets = layers[i]->createTileMapPetitions(_renderContext, _ltrp, tile);
+//      for (int j = 0; j < pets.size(); j++) {
+//        _urls.push_back( pets[j]->getURL().getPath() );
+//      }
+//    }
 
   }
 

@@ -23,7 +23,6 @@ package org.glob3.mobile.generated;
 //class IIntBuffer;
 //class IShortBuffer;
 //class IByteBuffer;
-//class ILogger;
 //class IImageListener;
 //class ICanvas;
 //class IWebSocket;
