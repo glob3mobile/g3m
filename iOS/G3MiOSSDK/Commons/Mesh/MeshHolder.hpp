@@ -39,6 +39,10 @@ public:
 #endif
 
   }
+    
+  const Vector3D getCenter() const {
+    return _mesh->getCenter();
+  }
 
   int getVertexCount() const {
     return _mesh->getVertexCount();

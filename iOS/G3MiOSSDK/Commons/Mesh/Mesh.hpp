@@ -37,6 +37,8 @@ public:
   virtual ~Mesh() {
   }
   
+  virtual const Vector3D getCenter() const = 0;
+    
   virtual int getVertexCount() const = 0;
   
   virtual const Vector3D getVertex(int i) const = 0;

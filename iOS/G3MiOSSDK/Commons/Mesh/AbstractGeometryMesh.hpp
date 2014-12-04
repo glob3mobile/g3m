@@ -60,6 +60,8 @@ public:
   
   BoundingVolume* getBoundingVolume() const;
   
+  const Vector3D getCenter() const;
+    
   int getVertexCount() const;
   
   const Vector3D getVertex(int i) const;

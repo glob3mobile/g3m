@@ -115,6 +115,10 @@ BoundingVolume* AbstractGeometryMesh::getBoundingVolume() const {
   return _extent;
 }
 
+const Vector3D AbstractGeometryMesh::getCenter() const {
+    return _center;
+}
+
 const Vector3D AbstractGeometryMesh::getVertex(int i) const {
   const int p = i * 3;
   return Vector3D(_vertices->get(p  ) + _center._x,
