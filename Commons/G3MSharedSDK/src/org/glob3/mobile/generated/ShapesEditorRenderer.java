@@ -131,9 +131,11 @@ public class ShapesEditorRenderer extends ShapesRenderer
 
   public int _selectedRasterShape;
 
-  public ShapesEditorRenderer(GEOTileRasterizer geoTileRasterizer)
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning REDO AGUSTIN
+  public ShapesEditorRenderer()
+  //ShapesRenderer(geoTileRasterizer),
   {
-     super(geoTileRasterizer);
      _shapeTouchListener = new MyShapeSelectionListener(this);
      _activatedEdition = false;
      _selectedVertex = -1;
