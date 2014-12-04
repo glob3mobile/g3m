@@ -88,7 +88,8 @@ private:
 public:
   int _selectedRasterShape;
 
-  ShapesEditorRenderer(GEOTileRasterizer* geoTileRasterizer);
+#warning REDO AGUSTIN
+  ShapesEditorRenderer(/*GEOTileRasterizer* geoTileRasterizer*/);
 
   void addShape(Shape* shape);
   

@@ -84,8 +84,8 @@ public:
 
 
 
-ShapesEditorRenderer::ShapesEditorRenderer(GEOTileRasterizer* geoTileRasterizer):
-ShapesRenderer(geoTileRasterizer),
+ShapesEditorRenderer::ShapesEditorRenderer(/*GEOTileRasterizer* geoTileRasterizer*/):
+//ShapesRenderer(geoTileRasterizer),
 _shapeTouchListener(new MyShapeSelectionListener(this)),
 _activatedEdition(false),
 _selectedVertex(-1),
