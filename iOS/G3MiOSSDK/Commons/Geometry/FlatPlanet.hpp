@@ -33,7 +33,6 @@ private:
   mutable double          _dragHeight0;
   mutable MutableVector3D _initialPoint1;
   mutable double          _dragHeight1;
-  mutable double          _distanceBetweenInitialPoints;
   mutable MutableVector3D _centerPoint;
 
   mutable double          _correctionT2;
@@ -129,7 +128,6 @@ public:
   
   bool isFlat() const { return true; }
   
-  //void beginSingleDrag(const Vector3D& origin, const Vector3D& initialRay) const;
   void beginSingleDrag(const Vector3D& origin, const Vector3D& touchedPosition) const;
   
   MutableMatrix44D singleDrag(const Vector3D& finalRay) const;
@@ -142,9 +140,6 @@ public:
                        const Vector3D& touchedPosition0,
                        const Vector3D& touchedPosition1) const;
   
-  MutableMatrix44D doubleDrag_old(const Vector3D& finalRay0,
-                              const Vector3D& finalRay1,
-                              bool allowRotation) const;
   MutableMatrix44D doubleDrag(const Vector3D& finalRay0,
                               const Vector3D& finalRay1,
                               bool allowRotation) const;
@@ -171,6 +166,10 @@ public:
 
     return Geodetic3D(rendereSector._center,
                       height);
+  }
+
+  const std::string getType() const {
+    return "Flat";
   }
 
 };

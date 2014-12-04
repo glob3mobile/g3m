@@ -41,12 +41,18 @@ public:
     _referenceCounter++;
   }
 
-  void _release() const {
+  bool _release() const {
     if (--_referenceCounter == 0) {
       _suicide();
+      return true;
     }
+    return false;
   }
-  
+
+  long _getReferenceCounter() const {
+    return _referenceCounter;
+  }
+
 };
 
 #endif

@@ -1,5 +1,6 @@
 package com.glob3.mobile.g3mandroidtestingapplication;
 
+<<<<<<< HEAD
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -7,18 +8,22 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.LinkedList;
 
+=======
+>>>>>>> zrender-touchhandlers
 import org.glob3.mobile.generated.AltitudeMode;
 import org.glob3.mobile.generated.Angle;
+import org.glob3.mobile.generated.BingMapType;
+import org.glob3.mobile.generated.BingMapsLayer;
 import org.glob3.mobile.generated.BoxShape;
 import org.glob3.mobile.generated.CameraDoubleDragHandler;
 import org.glob3.mobile.generated.CameraDoubleTapHandler;
 import org.glob3.mobile.generated.CameraRenderer;
 import org.glob3.mobile.generated.CameraRotationHandler;
 import org.glob3.mobile.generated.CameraSingleDragHandler;
-import org.glob3.mobile.generated.CameraZoomAndRotateHandler;
 import org.glob3.mobile.generated.Color;
-import org.glob3.mobile.generated.DownloaderImageBuilder;
+import org.glob3.mobile.generated.DownloadPriority;
 import org.glob3.mobile.generated.ElevationDataProvider;
+<<<<<<< HEAD
 import org.glob3.mobile.generated.G3MContext;
 import org.glob3.mobile.generated.G3MWidget;
 import org.glob3.mobile.generated.GInitializationTask;
@@ -55,30 +60,33 @@ import org.glob3.mobile.generated.GEOGeometry;
 import org.glob3.mobile.generated.GEOPolygonRasterSymbol;
 import org.glob3.mobile.generated.GEORasterSymbol;
 import org.glob3.mobile.generated.GEORasterSymbolizer;
+=======
+>>>>>>> zrender-touchhandlers
 import org.glob3.mobile.generated.Geodetic2D;
 import org.glob3.mobile.generated.Geodetic3D;
-import org.glob3.mobile.generated.JSONObject;
 import org.glob3.mobile.generated.LayerSet;
-import org.glob3.mobile.generated.LevelTileCondition;
-import org.glob3.mobile.generated.Mark;
 import org.glob3.mobile.generated.MarksRenderer;
+import org.glob3.mobile.generated.MeshRenderer;
 import org.glob3.mobile.generated.Planet;
+import org.glob3.mobile.generated.PointCloudsRenderer;
+import org.glob3.mobile.generated.PointCloudsRenderer.ColorPolicy;
+import org.glob3.mobile.generated.PointCloudsRenderer.PointCloudMetadataListener;
 import org.glob3.mobile.generated.Sector;
 import org.glob3.mobile.generated.Shape;
 import org.glob3.mobile.generated.ShapesRenderer;
 import org.glob3.mobile.generated.SingleBilElevationDataProvider;
-import org.glob3.mobile.generated.TiledVectorLayer;
 import org.glob3.mobile.generated.TimeInterval;
 import org.glob3.mobile.generated.URL;
 import org.glob3.mobile.generated.URLTemplateLayer;
 import org.glob3.mobile.generated.Vector2I;
 import org.glob3.mobile.generated.Vector3D;
-import org.glob3.mobile.generated.URLTemplateLayer;
-import org.glob3.mobile.generated.WMSLayer;
-import org.glob3.mobile.generated.WMSServerVersion;
 import org.glob3.mobile.specific.G3MBuilder_Android;
 import org.glob3.mobile.specific.G3MWidget_Android;
+<<<<<<< HEAD
 import org.glob3.mobile.specific.SQLiteStorage_Android;
+=======
+import org.glob3.mobile.generated.PointCloudsRenderer;
+>>>>>>> zrender-touchhandlers
 
 import android.app.Activity;
 import android.content.res.AssetManager;
@@ -95,6 +103,7 @@ public class MainActivity extends Activity {
 
 	G3MBuilder_Android builder = null;
 
+<<<<<<< HEAD
 	public CameraRenderer createCameraRenderer() {
 		CameraRenderer cameraRenderer = new CameraRenderer();
 		final boolean useInertia = true;
@@ -109,6 +118,10 @@ public class MainActivity extends Activity {
 
 		return cameraRenderer;
 	}
+=======
+   G3MBuilder_Android builder = null;
+   MarksRenderer marksRenderer = new MarksRenderer(false);
+>>>>>>> zrender-touchhandlers
 
 	@Override
 	protected void onCreate(final Bundle savedInstanceState) {
@@ -313,6 +326,7 @@ public class MainActivity extends Activity {
 
 	// layerSet.addLayer(MapQuestLayer.newOSM(TimeInterval.fromDays(30)));
 
+<<<<<<< HEAD
 	private LayerSet createLayerSet() {
 		final LayerSet layerSet = new LayerSet();
 		// layerSet.addLayer(MapQuestLayer.newOSM(TimeInterval.fromDays(30)));
@@ -323,6 +337,14 @@ public class MainActivity extends Activity {
 				"AnU5uta7s5ql_HTrRZcPLI4_zotvNefEeSxIClF1Jf7eS-mLig1jluUdCoecV7jc", //
 				TimeInterval.fromDays(30));
 		layerSet.addLayer(rasterLayer);
+=======
+      _g3mWidget = createWidget();
+
+      final RelativeLayout placeHolder = (RelativeLayout) findViewById(R.id.g3mWidgetHolder);
+
+
+      placeHolder.addView(_g3mWidget);
+>>>>>>> zrender-touchhandlers
 
 		final String urlTemplate = "http://192.168.1.2/ne_10m_admin_0_countries-Levels10/{level}/{y}/{x}.geojson";
 
@@ -339,6 +361,7 @@ public class MainActivity extends Activity {
 				Angle.fromDegrees(47.803029), //
 				Angle.fromDegrees(10.492264));
 
+<<<<<<< HEAD
 		final Sector sector = new Sector(lower, upper);
 
 		// final GEORasterSymbolizer symbolizer = new SampleRasterSymbolizer();
@@ -350,10 +373,42 @@ public class MainActivity extends Activity {
 		 * transparency new LevelTileCondition(15, 21), // condition "" //
 		 * disclaimerInfo ); layerSet.addLayer(tiledVectorLayer);
 		 */
+=======
+   private G3MWidget_Android createWidget() {
+      final G3MBuilder_Android builder = new G3MBuilder_Android(this);
+
+      final PointCloudsRenderer pcr = new PointCloudsRenderer();
+
+      final URL serverURL = new URL("http://glob3mobile.dyndns.org:8080");
+      //  final String cloudName = "Loudoun-VA_simplified2_LOD";
+      final String cloudName = "Loudoun-VA_fragment_LOD";
+      final long downloadPriority = DownloadPriority.LOWER;
+      final TimeInterval timeToCache = TimeInterval.zero();
+      final boolean readExpired = false;
+      final float pointSize = 2;
+      final float verticalExaggeration = 1;
+      final double deltaHeight = 0;
+      final PointCloudMetadataListener metadataListener = null;
+      final boolean deleteListener = true;
+
+      pcr.addPointCloud( //
+               serverURL, //
+               cloudName, //
+               downloadPriority, //
+               timeToCache, //
+               readExpired, //
+               ColorPolicy.MIN_AVERAGE3_HEIGHT, //
+               pointSize, //
+               verticalExaggeration, //
+               deltaHeight, //
+               metadataListener, //
+               deleteListener);
+>>>>>>> zrender-touchhandlers
 
 		return layerSet;
 	}
 
+<<<<<<< HEAD
 	/*
 	 * // set elevations final Sector sector =
 	 * Sector.fromDegrees(27.967811065876, -17.0232177085356, 28.6103464294992,
@@ -376,9 +431,12 @@ public class MainActivity extends Activity {
 }
 
 // BEGINNING OF CODE FOR PRECACHING AREA
+=======
+>>>>>>> zrender-touchhandlers
 
 class PrecacherInitializationTask extends GInitializationTask {
 
+<<<<<<< HEAD
 	private class PrecacherDownloadListener extends IImageDownloadListener {
 
 		PrecacherInitializationTask _task;
@@ -403,6 +461,12 @@ class PrecacherInitializationTask extends GInitializationTask {
 		@Override
 		public void onCancel(URL url) {
 			// TODO Auto-generated method stub
+=======
+   }
+   
+      final LayerSet layerSet = new LayerSet();
+      //layerSet.addLayer(MapQuestLayer.newOSM(TimeInterval.fromDays(30)));
+>>>>>>> zrender-touchhandlers
 
 		}
 
@@ -469,6 +533,7 @@ class PrecacherInitializationTask extends GInitializationTask {
 	public boolean isDone(G3MContext context) {
 		return _done;
 	}
+
 
 }
 

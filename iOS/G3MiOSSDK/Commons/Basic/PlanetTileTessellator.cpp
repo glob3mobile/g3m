@@ -327,7 +327,7 @@ double PlanetTileTessellator::createSurface(const Sector& tileSector,
   const double mercatorDeltaGlobalV = mercatorLowerGlobalV - mercatorUpperGlobalV;
 
   //VERTICES///////////////////////////////////////////////////////////////
-  IMathUtils* mu = IMathUtils::instance();
+  const IMathUtils* mu = IMathUtils::instance();
   double minElevation = mu->maxDouble();
   double maxElevation = mu->minDouble();
   double averageElevation = 0;

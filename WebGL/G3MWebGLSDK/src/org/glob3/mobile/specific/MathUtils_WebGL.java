@@ -315,6 +315,27 @@ public final class MathUtils_WebGL
 
 
    @Override
+   public float rawIntBitsToFloat(final int value) {
+      final int[] byteArray = new int[4];
+
+      byteArray[0] = value & 0xFF;
+      byteArray[1] = (value >> 8) & 0xFF;
+      byteArray[2] = (value >> 16) & 0xFF;
+      byteArray[3] = (value >> 24) & 0xFF;
+
+      return byteArrayToFloat(byteArray);
+   }
+
+
+   private native float byteArrayToFloat(final int[] byteArray) /*-{
+		var uint8Array = new Uint8Array(byteArray);
+		var floatView = new Float32Array(uint8Array.buffer);
+
+		return floatView[0];
+   }-*/;
+
+
+   @Override
    public double sinh(final double v) {
       return Math.sinh(v);
    }
@@ -402,4 +423,6 @@ public final class MathUtils_WebGL
                      final float f2) {
       return f1 % f2;
    }
+
+
 }

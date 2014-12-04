@@ -191,6 +191,14 @@ _sceneReadyListener(NULL)
                                         _gpuProgramManager,
                                         _surfaceElevationProvider);
 
+
+//#ifdef C_CODE
+//  delete _rendererState;
+//  _rendererState = new RenderState( calculateRendererState() );
+//#endif
+//#ifdef JAVA_CODE
+//  _rendererState = calculateRendererState();
+//#endif
 }
 
 
@@ -344,9 +352,10 @@ Vector3D G3MWidget::getScenePositionForPixel(int x, int y){
     //ILogger::instance()->logInfo("Z = %f - DIST CAM: %f\n", z, _currentCamera->getCartesianPosition().sub(pos).length());
     //ILogger::instance()->logInfo("GEO: %s\n", _planet->toGeodetic2D(pos).description().c_str());
     
+#warning ASK AGUSTIN
     // update ground height in camera class
-    _nextCamera->setGroundHeightFromCartesianPoint(pos);
-    _currentCamera->setGroundHeightFromCartesianPoint(pos);
+//    _nextCamera->setGroundHeightFromCartesianPoint(pos);
+//    _currentCamera->setGroundHeightFromCartesianPoint(pos);
     return pos;
   } else{
     //ILogger::instance()->logInfo("NO Z");
@@ -947,13 +956,13 @@ bool G3MWidget::setRenderedSector(const Sector& sector) {
 //  }
 //}
 
-void G3MWidget::changedRendererInfo(const int rendererIdentifier, const std::vector<std::string>& info) {
+void G3MWidget::changedRendererInfo(const int rendererIdentifier, const std::vector<const Info*> info) {
   if(_infoDisplay != NULL){
     _infoDisplay->changedInfo(info);
   }
-  else {
-    ILogger::instance()->logWarning("Render Infos are changing and InfoDisplay is NULL");
-  }
+//  else {
+//    ILogger::instance()->logWarning("Render Infos are changing and InfoDisplay is NULL");
+//  }
 }
 
 void G3MWidget::setSceneReadyListener(SceneReadyListener* srl, bool autodelete) {

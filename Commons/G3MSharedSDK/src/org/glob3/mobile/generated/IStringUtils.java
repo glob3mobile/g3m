@@ -142,6 +142,8 @@ public abstract class IStringUtils
 
   public abstract String toString(double value);
 
+  public abstract String toString(float value);
+
   public abstract double parseDouble(String str);
 
 }

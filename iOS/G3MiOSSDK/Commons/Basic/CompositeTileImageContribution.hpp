@@ -38,12 +38,27 @@ private:
 #ifdef JAVA_CODE
   private final java.util.ArrayList<ChildContribution> _contributions;
 #endif
-
-  CompositeTileImageContribution(const std::vector<const ChildContribution*>& contributions) :
-  TileImageContribution(false, 1),
+  
+  CompositeTileImageContribution(const std::vector<const ChildContribution*>& contributions, const bool transparent) :
+  TileImageContribution(transparent, 1.0f),
   _contributions(contributions)
   {
+    
+    
   }
+  
+  
+//  CompositeTileImageContribution(const std::vector<const ChildContribution*>& contributions,
+//                                 const Sector& sector,
+//                                 bool isFullCoverage,
+//                                 bool isTransparent,
+//                                 float alpha) :
+//  TileImageContribution(sector, isFullCoverage, isTransparent, alpha),
+//  _contributions(contributions)
+//  {
+//    
+//    
+//  }
 
 protected:
   ~CompositeTileImageContribution();
@@ -62,7 +77,6 @@ public:
     return _contributions.get(index);
 #endif
   }
-  
 };
 
 #endif

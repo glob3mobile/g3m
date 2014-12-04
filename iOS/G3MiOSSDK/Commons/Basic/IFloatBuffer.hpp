@@ -26,7 +26,16 @@ public:
   virtual void rawPut(int i, float value) = 0;
 
   virtual void rawAdd(int i, float value) = 0;
-  
+
+  virtual void rawPut(int i,
+                      const IFloatBuffer* srcBuffer,
+                      int srcFromIndex,
+                      int count) = 0;
+
+  void rawPut(int i,
+              const IFloatBuffer* srcBuffer) {
+    rawPut(i, srcBuffer, 0, srcBuffer->size());
+  }
 };
 
 #endif

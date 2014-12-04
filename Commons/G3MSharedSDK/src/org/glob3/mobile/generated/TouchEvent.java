@@ -81,4 +81,9 @@ public class TouchEvent
     }
   }
 
+  public final double getMouseWheelDelta()
+  {
+    return _wheelDelta;
+  }
+
 }

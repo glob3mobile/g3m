@@ -18,7 +18,7 @@
 #include "IFactory.hpp"
 #include "ICanvas.hpp"
 #include "GEORasterProjection.hpp"
-
+#include "ErrorHandling.hpp"
 
 TiledVectorLayerTileImageProvider::GEOJSONBufferRasterizer::~GEOJSONBufferRasterizer() {
   if (_imageAssembler != NULL) {
@@ -377,7 +377,7 @@ void TiledVectorLayerTileImageProvider::ImageAssembler::deletedRasterizer() {
 }
 
 const TileImageContribution* TiledVectorLayerTileImageProvider::contribution(const Tile* tile) {
-  return _layer->contribution(tile);
+  return (_layer == NULL) ? NULL : _layer->contribution(tile);
 }
 
 void TiledVectorLayerTileImageProvider::create(const Tile* tile,
@@ -498,4 +498,11 @@ const TiledVectorLayerTileImageProvider::GEOObjectHolder* TiledVectorLayerTileIm
     }
   }
   return NULL;
+}
+
+void TiledVectorLayerTileImageProvider::layerDeleted(const TiledVectorLayer* layer) {
+  if (layer != _layer) {
+    THROW_EXCEPTION("Logic error");
+  }
+  _layer = NULL;
 }

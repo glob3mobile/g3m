@@ -50,12 +50,19 @@ public class RCObject
     _referenceCounter++;
   }
 
-  public final void _release()
+  public final boolean _release()
   {
     if (--_referenceCounter == 0)
     {
       _suicide();
+      return true;
     }
+    return false;
+  }
+
+  public final int _getReferenceCounter()
+  {
+    return _referenceCounter;
   }
 
 }

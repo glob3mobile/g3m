@@ -23,7 +23,6 @@ package org.glob3.mobile.generated;
 //class MarksRenderer;
 //class ShapesRenderer;
 //class GEOVectorLayer;
-//class GEOTileRasterizer;
 //class GEORenderer_ObjectSymbolizerPair;
 
 public class GEORenderer extends DefaultRenderer
@@ -89,7 +88,6 @@ public class GEORenderer extends DefaultRenderer
   private MeshRenderer _meshRenderer;
   private ShapesRenderer _shapesRenderer;
   private MarksRenderer _marksRenderer;
-//  GEOTileRasterizer* _geoTileRasterizer;
   private GEOVectorLayer _geoVectorLayer;
 
   private java.util.ArrayList<LoadQueueItem> _loadQueue = new java.util.ArrayList<LoadQueueItem>();
@@ -114,8 +112,6 @@ public class GEORenderer extends DefaultRenderer
 
    */
   public GEORenderer(GEOSymbolizer defaultSymbolizer, MeshRenderer meshRenderer, ShapesRenderer shapesRenderer, MarksRenderer marksRenderer, GEOVectorLayer geoVectorLayer)
-//              GEOTileRasterizer*   geoTileRasterizer
-//  _geoTileRasterizer(geoTileRasterizer)
   {
      _defaultSymbolizer = defaultSymbolizer;
      _meshRenderer = meshRenderer;
@@ -222,10 +218,6 @@ public class GEORenderer extends DefaultRenderer
   {
     return _shapesRenderer;
   }
-
-//  GEOTileRasterizer* getGEOTileRasterizer() const {
-//    return _geoTileRasterizer;
-//  }
 
   public final GEOVectorLayer getGEOVectorLayer()
   {

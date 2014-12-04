@@ -715,9 +715,11 @@ public class G3MWidget implements ChangedRendererInfoListener
       //ILogger::instance()->logInfo("Z = %f - DIST CAM: %f\n", z, _currentCamera->getCartesianPosition().sub(pos).length());
       //ILogger::instance()->logInfo("GEO: %s\n", _planet->toGeodetic2D(pos).description().c_str());
   
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning ASK AGUSTIN
       // update ground height in camera class
-      _nextCamera.setGroundHeightFromCartesianPoint(pos);
-      _currentCamera.setGroundHeightFromCartesianPoint(pos);
+  //    _nextCamera->setGroundHeightFromCartesianPoint(pos);
+  //    _currentCamera->setGroundHeightFromCartesianPoint(pos);
       return pos;
     }
     else
@@ -800,16 +802,15 @@ public class G3MWidget implements ChangedRendererInfoListener
   //  }
   //}
   
-  public final void changedRendererInfo(int rendererIdentifier, java.util.ArrayList<String> info)
+  public final void changedRendererInfo(int rendererIdentifier, java.util.ArrayList<Info> info)
   {
     if(_infoDisplay != null)
     {
       _infoDisplay.changedInfo(info);
     }
-    else
-    {
-      ILogger.instance().logWarning("Render Infos are changing and InfoDisplay is NULL");
-    }
+  //  else {
+  //    ILogger::instance()->logWarning("Render Infos are changing and InfoDisplay is NULL");
+  //  }
   }
 
   public final void setSceneReadyListener(SceneReadyListener srl, boolean autodelete)
@@ -987,6 +988,14 @@ public class G3MWidget implements ChangedRendererInfoListener
   
     _renderContext = new G3MRenderContext(this, _frameTasksExecutor, IFactory.instance(), IStringUtils.instance(), _threadUtils, ILogger.instance(), IMathUtils.instance(), IJSONParser.instance(), _planet, _gl, _currentCamera, _nextCamera, _texturesHandler, _downloader, _effectsScheduler, IFactory.instance().createTimer(), _storage, _gpuProgramManager, _surfaceElevationProvider);
   
+  
+  ///#ifdef C_CODE
+  //  delete _rendererState;
+  //  _rendererState = new RenderState( calculateRendererState() );
+  ///#endif
+  ///#ifdef JAVA_CODE
+  //  _rendererState = calculateRendererState();
+  ///#endif
   }
 
   private void notifyTouchEvent(G3MEventContext ec, TouchEvent touchEvent)

@@ -220,12 +220,15 @@ private:
     void imageCreated(const IImage* image,
                       const std::string& imageId);
 
-//    void geoObjectDownloaded(const GEOObject* geoObject,
-//                             const GEORasterSymbolizer* symbolizer);
   };
 
 
+#ifdef C_CODE
   const TiledVectorLayer* _layer;
+#endif
+#ifdef JAVA_CODE
+  private TiledVectorLayer _layer;
+#endif
   IDownloader*            _downloader;
   const IThreadUtils*     _threadUtils;
 
@@ -260,8 +263,6 @@ private:
   };
 
   std::list<CacheEntry*> _geoObjectsCache;
-//  long long _geoObjectsCacheRequests;
-//  long long _geoObjectsCacheHits;
 
 protected:
   ~TiledVectorLayerTileImageProvider();
@@ -274,11 +275,10 @@ public:
   _layer(layer),
   _downloader(downloader),
   _threadUtils(threadUtils)
-//  _geoObjectsCacheRequests(0),
-//  _geoObjectsCacheHits(0)
   {
   }
 
+  void layerDeleted(const TiledVectorLayer* layer);
 
   const TileImageContribution* contribution(const Tile* tile);
 

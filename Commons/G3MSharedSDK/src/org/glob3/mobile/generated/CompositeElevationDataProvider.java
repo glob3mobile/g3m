@@ -129,6 +129,12 @@ public class CompositeElevationDataProvider extends ElevationDataProvider
     
       double bestRes = extent.squaredLength();
       double selectedRes = IMathUtils.instance().maxDouble();
+<<<<<<< HEAD
+=======
+      double selectedResDistance = IMathUtils.instance().maxDouble();
+      final IMathUtils mu = IMathUtils.instance();
+    
+>>>>>>> zrender-touchhandlers
     
       ElevationDataProvider provider = null;
     

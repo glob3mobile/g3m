@@ -134,7 +134,7 @@ public:
   Vector3D getCenter() {
     return Vector3D(_cx, _cy, _cz);
   }
-  
+
 };
 
 #endif

@@ -25,9 +25,9 @@ class Geodetic2D;
 class G3MContext;
 class Sector;
 class LayerTouchEvent;
-class Petition;
 class TileImageProvider;
 
+#include "Info.hpp"
 
 class Layer {
 private:
@@ -41,11 +41,9 @@ protected:
 
   bool _enable;
 
-  std::string              _disclaimerInfo;
-  std::vector<std::string> _infos;
+  std::vector<const Info*>* _layerInfo;
 
-
-  float           _transparency;
+  float                 _transparency;
   const LayerCondition* _condition;
 
   void notifyChanges() const;
@@ -54,7 +52,7 @@ protected:
 
   Layer(float           transparency,
         const LayerCondition* condition,
-        const std::string&    disclaimerInfo);
+        std::vector<const Info*>* layerInfo);
 
   virtual std::string getLayerType() const = 0;
 
@@ -125,22 +123,20 @@ public:
   const std::string getTitle() const;
 
   void setTitle(const std::string& title);
-
-  virtual std::vector<Petition*> createTileMapPetitions(const G3MRenderContext* rc,
-                                                        const LayerTilesRenderParameters* layerTilesRenderParameters,
-                                                        const Tile* tile) const = 0;
-
+  
   virtual TileImageProvider* createTileImageProvider(const G3MRenderContext* rc,
                                                      const LayerTilesRenderParameters* layerTilesRenderParameters) const = 0;
 
-  const std::string getInfo() const {
-    return _disclaimerInfo;
-  }
+  void setInfo(const std::vector<const Info*>& info) const;
+  
+  const std::vector<const Info*>& getInfo() const;
+  
+  void addInfo(const std::vector<const Info*>& info);
+  
+  void addInfo(const Info* info);
 
-  void setInfo(const std::string& disclaimerInfo);
-  
-  const std::vector<std::string> getInfos();
-  
+  virtual const std::vector<URL*> getDownloadURLs(const Tile* tile) const = 0;
+
 };
 
 #endif

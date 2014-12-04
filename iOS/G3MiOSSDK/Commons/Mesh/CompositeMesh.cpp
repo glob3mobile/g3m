@@ -70,7 +70,9 @@ BoundingVolume* CompositeMesh::calculateBoundingVolume() const {
   BoundingVolume* result = _children[0]->getBoundingVolume();
   for (int i = 1; i < childrenCount; i++) {
     Mesh* child = _children[i];
-    result = result->mergedWith( child->getBoundingVolume() );
+    BoundingVolume* newResult = result->mergedWith( child->getBoundingVolume() );
+    delete result;
+    result = newResult;
   }
 
   return result;

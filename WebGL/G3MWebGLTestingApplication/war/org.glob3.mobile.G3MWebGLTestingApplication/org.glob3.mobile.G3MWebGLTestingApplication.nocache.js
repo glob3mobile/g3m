@@ -1,6 +1,19 @@
 function org_glob3_mobile_G3MWebGLTestingApplication(){
+<<<<<<< HEAD
   var $intern_0 = '', $intern_24 = '" for "gwt:onLoadErrorFn"', $intern_22 = '" for "gwt:onPropertyErrorFn"', $intern_7 = '"><\/script>', $intern_9 = '#', $intern_11 = '/', $intern_44 = ':', $intern_39 = ':1', $intern_40 = ':2', $intern_41 = ':3', $intern_42 = ':4', $intern_43 = ':5', $intern_6 = '<script id="', $intern_19 = '=', $intern_10 = '?', $intern_21 = 'Bad handler "', $intern_45 = 'DOMContentLoaded', $intern_38 = 'E51AC59B2A0D5BE718DEB485940B961F', $intern_8 = 'SCRIPT', $intern_36 = 'Single-script hosted mode not yet implemented. See issue ', $intern_5 = '__gwt_marker_org.glob3.mobile.G3MWebGLTestingApplication', $intern_12 = 'base', $intern_14 = 'clear.cache.gif', $intern_18 = 'content', $intern_33 = 'gecko', $intern_34 = 'gecko1_8', $intern_1 = 'gwt.codesvr=', $intern_2 = 'gwt.hosted=', $intern_3 = 'gwt.hybrid', $intern_23 = 'gwt:onLoadErrorFn', $intern_20 = 'gwt:onPropertyErrorFn', $intern_17 = 'gwt:property', $intern_37 = 'http://code.google.com/p/google-web-toolkit/issues/detail?id=2079', $intern_32 = 'ie6', $intern_31 = 'ie8', $intern_30 = 'ie9', $intern_13 = 'img', $intern_15 = 'meta', $intern_29 = 'msie', $intern_16 = 'name', $intern_26 = 'opera', $intern_4 = 'org.glob3.mobile.G3MWebGLTestingApplication', $intern_28 = 'safari', $intern_35 = 'unknown', $intern_25 = 'user.agent', $intern_27 = 'webkit';
   var $wnd = window, $doc = document, gwtOnLoad, bodyDone, base = $intern_0, metaProps = {}, values = [], providers = [], answers = [], softPermutationId = 0, onLoadErrorFunc, propertyErrorFunc;
+=======
+<<<<<<< HEAD
+  var $intern_0 = '', $intern_36 = '" for "gwt:onLoadErrorFn"', $intern_34 = '" for "gwt:onPropertyErrorFn"', $intern_21 = '"><\/script>', $intern_10 = '#', $intern_62 = '.cache.html', $intern_12 = '/', $intern_24 = '//', $intern_55 = '05BEF79ACC2CC3302EFE1328FE45626C', $intern_56 = '27E9F55AF028509577DE27FE79EC8B27', $intern_57 = '65D119845C5050FD610B0E8E05E87F54', $intern_61 = ':', $intern_28 = '::', $intern_64 = '<script defer="defer">org_glob3_mobile_G3MWebGLTestingApplication.onInjectionDone(\'org.glob3.mobile.G3MWebGLTestingApplication\')<\/script>', $intern_20 = '<script id="', $intern_31 = '=', $intern_11 = '?', $intern_58 = 'B266D40B0FBCD364E6CD205DAD258E36', $intern_59 = 'B65B378D92ACFD68CC219D59D62F65BB', $intern_33 = 'Bad handler "', $intern_63 = 'DOMContentLoaded', $intern_60 = 'FC57E285A045B2B9D9D1A915316B3CBA', $intern_22 = 'SCRIPT', $intern_19 = '__gwt_marker_org.glob3.mobile.G3MWebGLTestingApplication', $intern_23 = 'base', $intern_15 = 'baseUrl', $intern_4 = 'begin', $intern_3 = 'bootstrap', $intern_14 = 'clear.cache.gif', $intern_30 = 'content', $intern_9 = 'end', $intern_49 = 'gecko', $intern_50 = 'gecko1_8', $intern_5 = 'gwt.codesvr=', $intern_6 = 'gwt.hosted=', $intern_7 = 'gwt.hybrid', $intern_35 = 'gwt:onLoadErrorFn', $intern_32 = 'gwt:onPropertyErrorFn', $intern_29 = 'gwt:property', $intern_53 = 'hosted.html?org_glob3_mobile_G3MWebGLTestingApplication', $intern_48 = 'ie6', $intern_47 = 'ie8', $intern_46 = 'ie9', $intern_37 = 'iframe', $intern_13 = 'img', $intern_38 = "javascript:''", $intern_52 = 'loadExternalRefs', $intern_25 = 'meta', $intern_40 = 'moduleRequested', $intern_8 = 'moduleStartup', $intern_45 = 'msie', $intern_26 = 'name', $intern_42 = 'opera', $intern_1 = 'org.glob3.mobile.G3MWebGLTestingApplication', $intern_17 = 'org.glob3.mobile.G3MWebGLTestingApplication.nocache.js', $intern_27 = 'org.glob3.mobile.G3MWebGLTestingApplication::', $intern_39 = 'position:absolute;width:0;height:0;border:none', $intern_44 = 'safari', $intern_16 = 'script', $intern_54 = 'selectingPermutation', $intern_2 = 'startup', $intern_18 = 'undefined', $intern_51 = 'unknown', $intern_41 = 'user.agent', $intern_43 = 'webkit';
+=======
+  var $intern_0 = '', $intern_36 = '" for "gwt:onLoadErrorFn"', $intern_34 = '" for "gwt:onPropertyErrorFn"', $intern_21 = '"><\/script>', $intern_10 = '#', $intern_60 = '.cache.html', $intern_12 = '/', $intern_24 = '//', $intern_54 = '1FA96B336B156526DCEE9370C8371CC3', $intern_55 = '2904CAF09EA41157A7E60C54FFDC2B43', $intern_56 = '5B1D13F9F7CE668F16E3871A8450E18A', $intern_57 = '86EB7A2AB773904D43EB08DCC8C9C194', $intern_58 = '98328DCC2ED83A9B32708D86C2271F61', $intern_59 = ':', $intern_28 = '::', $intern_62 = '<script defer="defer">org_glob3_mobile_G3MWebGLTestingApplication.onInjectionDone(\'org.glob3.mobile.G3MWebGLTestingApplication\')<\/script>', $intern_20 = '<script id="', $intern_31 = '=', $intern_11 = '?', $intern_33 = 'Bad handler "', $intern_61 = 'DOMContentLoaded', $intern_22 = 'SCRIPT', $intern_19 = '__gwt_marker_org.glob3.mobile.G3MWebGLTestingApplication', $intern_23 = 'base', $intern_15 = 'baseUrl', $intern_4 = 'begin', $intern_3 = 'bootstrap', $intern_14 = 'clear.cache.gif', $intern_30 = 'content', $intern_9 = 'end', $intern_48 = 'gecko', $intern_49 = 'gecko1_8', $intern_5 = 'gwt.codesvr=', $intern_6 = 'gwt.hosted=', $intern_7 = 'gwt.hybrid', $intern_35 = 'gwt:onLoadErrorFn', $intern_32 = 'gwt:onPropertyErrorFn', $intern_29 = 'gwt:property', $intern_52 = 'hosted.html?org_glob3_mobile_G3MWebGLTestingApplication', $intern_45 = 'ie10', $intern_47 = 'ie8', $intern_46 = 'ie9', $intern_37 = 'iframe', $intern_13 = 'img', $intern_38 = "javascript:''", $intern_51 = 'loadExternalRefs', $intern_25 = 'meta', $intern_40 = 'moduleRequested', $intern_8 = 'moduleStartup', $intern_44 = 'msie', $intern_26 = 'name', $intern_1 = 'org.glob3.mobile.G3MWebGLTestingApplication', $intern_17 = 'org.glob3.mobile.G3MWebGLTestingApplication.nocache.js', $intern_27 = 'org.glob3.mobile.G3MWebGLTestingApplication::', $intern_39 = 'position:absolute;width:0;height:0;border:none', $intern_43 = 'safari', $intern_16 = 'script', $intern_53 = 'selectingPermutation', $intern_2 = 'startup', $intern_18 = 'undefined', $intern_50 = 'unknown', $intern_41 = 'user.agent', $intern_42 = 'webkit';
+>>>>>>> wheel-handler
+  var $wnd = window, $doc = document, $stats = $wnd.__gwtStatsEvent?function(a){
+    return $wnd.__gwtStatsEvent(a);
+  }
+  :null, $sessionId = $wnd.__gwtStatsSessionId?$wnd.__gwtStatsSessionId:null, scriptsDone, loadDone, bodyDone, base = $intern_0, metaProps = {}, values = [], providers = [], answers = [], softPermutationId = 0, onLoadErrorFunc, propertyErrorFunc;
+  $stats && $stats({moduleName:$intern_1, sessionId:$sessionId, subSystem:$intern_2, evtGroup:$intern_3, millis:(new Date).getTime(), type:$intern_4});
+>>>>>>> zrender-touchhandlers
   if (!$wnd.__gwt_stylesLoaded) {
     $wnd.__gwt_stylesLoaded = {};
   }
@@ -195,6 +208,7 @@ function org_glob3_mobile_G3MWebGLTestingApplication(){
     alert($intern_36 + $intern_37);
     return;
   }
+<<<<<<< HEAD
   computeScriptBase();
   processMetas();
   try {
@@ -209,6 +223,35 @@ function org_glob3_mobile_G3MWebGLTestingApplication(){
     var idx = strongName.indexOf($intern_44);
     if (idx != -1) {
       softPermutationId = Number(strongName.substring(idx + 1));
+=======
+  $stats && $stats({moduleName:$intern_1, sessionId:$sessionId, subSystem:$intern_2, evtGroup:$intern_3, millis:(new Date).getTime(), type:$intern_54});
+  if (!isHostedMode()) {
+    try {
+<<<<<<< HEAD
+      unflattenKeylistIntoAnswers([$intern_46], $intern_55);
+      unflattenKeylistIntoAnswers([$intern_44], $intern_56);
+      unflattenKeylistIntoAnswers([$intern_50], $intern_57);
+      unflattenKeylistIntoAnswers([$intern_47], $intern_58);
+      unflattenKeylistIntoAnswers([$intern_42], $intern_59);
+      unflattenKeylistIntoAnswers([$intern_48], $intern_60);
+=======
+      unflattenKeylistIntoAnswers([$intern_45], $intern_54);
+      unflattenKeylistIntoAnswers([$intern_49], $intern_55);
+      unflattenKeylistIntoAnswers([$intern_43], $intern_56);
+      unflattenKeylistIntoAnswers([$intern_47], $intern_57);
+      unflattenKeylistIntoAnswers([$intern_46], $intern_58);
+>>>>>>> wheel-handler
+      strongName = answers[computePropValue($intern_41)];
+      var idx = strongName.indexOf($intern_61);
+      if (idx != -1) {
+        softPermutationId = Number(strongName.substring(idx + 1));
+        strongName = strongName.substring(0, idx);
+      }
+      initialHtml = strongName + $intern_62;
+    }
+     catch (e) {
+      return;
+>>>>>>> zrender-touchhandlers
     }
   }
    catch (e) {

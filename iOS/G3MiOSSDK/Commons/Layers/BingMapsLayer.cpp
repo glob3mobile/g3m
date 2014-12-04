@@ -13,7 +13,6 @@
 #include "Tile.hpp"
 #include "IStringBuilder.hpp"
 #include "IStringUtils.hpp"
-#include "Petition.hpp"
 #include "IDownloader.hpp"
 #include "DownloadPriority.hpp"
 #include "IBufferDownloadListener.hpp"
@@ -24,6 +23,7 @@
 #include "LayerCondition.hpp"
 #include "Context.hpp"
 #include "RenderState.hpp"
+#include "Info.hpp"
 
 BingMapsLayer::BingMapsLayer(const std::string&    imagerySet,
                              const std::string&    key,
@@ -33,13 +33,13 @@ BingMapsLayer::BingMapsLayer(const std::string&    imagerySet,
                              const int             maxLevel,
                              const float           transparency,
                              const LayerCondition* condition,
-                             const std::string&    disclaimerInfo) :
+                             std::vector<const Info*>*  layerInfo) :
 RasterLayer(timeToCache,
             readExpired,
             NULL,
             transparency,
             condition,
-            disclaimerInfo),
+            layerInfo),
 _imagerySet(imagerySet),
 _culture("en-US"),
 _key(key),
@@ -58,13 +58,13 @@ BingMapsLayer::BingMapsLayer(const std::string&    imagerySet,
                              const int             maxLevel,
                              const float           transparency,
                              const LayerCondition* condition,
-                             const std::string&    disclaimerInfo) :
+                             std::vector<const Info*>*  layerInfo) :
 RasterLayer(timeToCache,
             readExpired,
             NULL,
             transparency,
             condition,
-            disclaimerInfo),
+            layerInfo),
 _imagerySet(imagerySet),
 _culture(culture),
 _key(key),
@@ -237,7 +237,7 @@ void BingMapsLayer::processMetadata(const std::string& brandLogoUri,
                                     const int zoomMax) {
   _brandLogoUri = brandLogoUri;
   _copyright = copyright;
-  _disclaimerInfo = copyright;
+  addInfo(new Info(copyright));
   _imageUrl = imageUrl;
   _imageUrlSubdomains = imageUrlSubdomains;
   
@@ -272,13 +272,14 @@ URL BingMapsLayer::getFeatureInfoURL(const Geodetic2D& position,
   return URL();
 }
 
-const std::string BingMapsLayer::getQuadkey(const int zoom,
+const std::string BingMapsLayer::getQuadKey(const int zoom,
                                             const int column,
-                                            const int row) const {
+                                            const int row) {
   IStringBuilder* isb = IStringBuilder::newStringBuilder();
   
   for (int i = 1; i <= zoom; i++) {
-    const int t = (((row >> (zoom - i)) & 1) << 1) | ((column >> (zoom - i)) & 1);
+    const int zoom_i = (zoom - i);
+    const int t = (((row >> zoom_i) & 1) << 1) | ((column >> zoom_i) & 1);
     isb->addInt(t);
   }
   
@@ -289,41 +290,11 @@ const std::string BingMapsLayer::getQuadkey(const int zoom,
   return result;
 }
 
-std::vector<Petition*> BingMapsLayer::createTileMapPetitions(const G3MRenderContext* rc,
-                                                             const LayerTilesRenderParameters* layerTilesRenderParameters,
-                                                             const Tile* tile) const {
-  std::vector<Petition*> petitions;
-  
-  const IStringUtils* su = IStringUtils::instance();
-  
+const std::string BingMapsLayer::getQuadKey(const Tile* tile) {
   const int level   = tile->_level;
-  const int column  = tile->_column;
   const int numRows = (int) IMathUtils::instance()->pow(2.0, level);
   const int row     = numRows - tile->_row - 1;
-  
-  const int subdomainsSize = _imageUrlSubdomains.size();
-  std::string subdomain = "";
-  if (subdomainsSize > 0) {
-    // select subdomain based on fixed data (instead of round-robin) to be cache friendly
-    const int subdomainsIndex =  IMathUtils::instance()->abs(level + column + row) % subdomainsSize;
-    subdomain = _imageUrlSubdomains[subdomainsIndex];
-  }
-  
-  const std::string quadkey = getQuadkey(level, column, row);
-  
-  std::string path = _imageUrl;
-  path = su->replaceSubstring(path, "{subdomain}", subdomain);
-  path = su->replaceSubstring(path, "{quadkey}",   quadkey);
-  path = su->replaceSubstring(path, "{culture}",   _culture);
-  
-  petitions.push_back( new Petition(tile->_sector,
-                                    URL(path, false),
-                                    getTimeToCache(),
-                                    getReadExpired(),
-                                    true,
-                                    _transparency) );
-  
-  return petitions;
+  return getQuadKey(level, tile->_column, row);
 }
 
 const URL BingMapsLayer::createURL(const Tile* tile) const {
@@ -342,7 +313,7 @@ const URL BingMapsLayer::createURL(const Tile* tile) const {
     subdomain = _imageUrlSubdomains[subdomainsIndex];
   }
   
-  const std::string quadkey = getQuadkey(level, column, row);
+  const std::string quadkey = getQuadKey(level, column, row);
   
   std::string path = _imageUrl;
   path = su->replaceSubstring(path, "{subdomain}", subdomain);
@@ -388,7 +359,7 @@ BingMapsLayer* BingMapsLayer::copy() const {
                            _maxLevel,
                            _transparency,
                            (_condition == NULL) ? NULL : _condition->copy(),
-                           _disclaimerInfo);
+                           _layerInfo);
 }
 
 RenderState BingMapsLayer::getRenderState() {

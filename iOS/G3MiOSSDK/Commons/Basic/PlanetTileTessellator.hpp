@@ -156,10 +156,6 @@ public:
                             const Tile* tile,
                             const Color& colorDebug) const;
 
-  bool isReady(const G3MRenderContext* rc) const {
-    return true;
-  }
-
   IFloatBuffer* createTextCoords(const Vector2I& resolution,
                                  const Tile* tile) const;
 

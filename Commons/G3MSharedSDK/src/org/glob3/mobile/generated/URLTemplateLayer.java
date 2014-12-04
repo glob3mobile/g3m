@@ -24,6 +24,7 @@ public class URLTemplateLayer extends RasterLayer
 {
   private final String _urlTemplate;
   private final boolean _isTransparent;
+  private final boolean _tiled;
 
   private IMathUtils   _mu;
   private IStringUtils _su;
@@ -110,21 +111,13 @@ public class URLTemplateLayer extends RasterLayer
     {
       return null;
     }
-    else if (_dataSector.fullContains(requestedImageSector) && (tile == tileP))
+  
+    if (tile == tileP && (_dataSector.fullContains(requestedImageSector) || _tiled))
     {
-      //Most common case tile of suitable level being fully coveraged by layer
       return ((_isTransparent || (_transparency < 1)) ? TileImageContribution.fullCoverageTransparent(_transparency) : TileImageContribution.fullCoverageOpaque());
     }
-    else
-    {
-      final Sector contributionSector = _dataSector.intersection(requestedImageSector);
-      if (contributionSector.hasNoArea())
-      {
-        return null;
-      }
   
-      return ((_isTransparent || (_transparency < 1)) ? TileImageContribution.partialCoverageTransparent(contributionSector, _transparency) : TileImageContribution.partialCoverageOpaque(contributionSector));
-    }
+    return ((_isTransparent || (_transparency < 1)) ? TileImageContribution.partialCoverageTransparent(requestedImageSector, _transparency) : TileImageContribution.partialCoverageOpaque(requestedImageSector));
   }
 
   protected final URL createURL(Tile tile)
@@ -175,62 +168,63 @@ public class URLTemplateLayer extends RasterLayer
 
   public static URLTemplateLayer newMercator(String urlTemplate, Sector dataSector, boolean isTransparent, int firstLevel, int maxLevel, TimeInterval timeToCache, boolean readExpired, float transparency, LayerCondition condition)
   {
-     return newMercator(urlTemplate, dataSector, isTransparent, firstLevel, maxLevel, timeToCache, readExpired, transparency, condition, "");
+     return newMercator(urlTemplate, dataSector, isTransparent, firstLevel, maxLevel, timeToCache, readExpired, transparency, condition, new java.util.ArrayList<Info>());
   }
   public static URLTemplateLayer newMercator(String urlTemplate, Sector dataSector, boolean isTransparent, int firstLevel, int maxLevel, TimeInterval timeToCache, boolean readExpired, float transparency)
   {
-     return newMercator(urlTemplate, dataSector, isTransparent, firstLevel, maxLevel, timeToCache, readExpired, transparency, null, "");
+     return newMercator(urlTemplate, dataSector, isTransparent, firstLevel, maxLevel, timeToCache, readExpired, transparency, null, new java.util.ArrayList<Info>());
   }
   public static URLTemplateLayer newMercator(String urlTemplate, Sector dataSector, boolean isTransparent, int firstLevel, int maxLevel, TimeInterval timeToCache, boolean readExpired)
   {
-     return newMercator(urlTemplate, dataSector, isTransparent, firstLevel, maxLevel, timeToCache, readExpired, 1, null, "");
+     return newMercator(urlTemplate, dataSector, isTransparent, firstLevel, maxLevel, timeToCache, readExpired, 1, null, new java.util.ArrayList<Info>());
   }
   public static URLTemplateLayer newMercator(String urlTemplate, Sector dataSector, boolean isTransparent, int firstLevel, int maxLevel, TimeInterval timeToCache)
   {
-     return newMercator(urlTemplate, dataSector, isTransparent, firstLevel, maxLevel, timeToCache, true, 1, null, "");
+     return newMercator(urlTemplate, dataSector, isTransparent, firstLevel, maxLevel, timeToCache, true, 1, null, new java.util.ArrayList<Info>());
   }
-  public static URLTemplateLayer newMercator(String urlTemplate, Sector dataSector, boolean isTransparent, int firstLevel, int maxLevel, TimeInterval timeToCache, boolean readExpired, float transparency, LayerCondition condition, String disclaimerInfo)
+  public static URLTemplateLayer newMercator(String urlTemplate, Sector dataSector, boolean isTransparent, int firstLevel, int maxLevel, TimeInterval timeToCache, boolean readExpired, float transparency, LayerCondition condition, java.util.ArrayList<Info> layerInfo)
   {
-    return new URLTemplateLayer(urlTemplate, dataSector, isTransparent, timeToCache, readExpired, (condition == null) ? new LevelTileCondition(firstLevel, maxLevel) : condition, LayerTilesRenderParameters.createDefaultMercator(2, maxLevel), transparency, disclaimerInfo);
+    return new URLTemplateLayer(urlTemplate, dataSector, isTransparent, timeToCache, readExpired, (condition == null) ? new LevelTileCondition(firstLevel, maxLevel) : condition, LayerTilesRenderParameters.createDefaultMercator(2, maxLevel), transparency, layerInfo);
   }
 
   public static URLTemplateLayer newWGS84(String urlTemplate, Sector dataSector, boolean isTransparent, int firstLevel, int maxLevel, TimeInterval timeToCache, boolean readExpired, LayerCondition condition, float transparency)
   {
-     return newWGS84(urlTemplate, dataSector, isTransparent, firstLevel, maxLevel, timeToCache, readExpired, condition, transparency, "");
+     return newWGS84(urlTemplate, dataSector, isTransparent, firstLevel, maxLevel, timeToCache, readExpired, condition, transparency, new java.util.ArrayList<Info>());
   }
   public static URLTemplateLayer newWGS84(String urlTemplate, Sector dataSector, boolean isTransparent, int firstLevel, int maxLevel, TimeInterval timeToCache, boolean readExpired, LayerCondition condition)
   {
-     return newWGS84(urlTemplate, dataSector, isTransparent, firstLevel, maxLevel, timeToCache, readExpired, condition, 1, "");
+     return newWGS84(urlTemplate, dataSector, isTransparent, firstLevel, maxLevel, timeToCache, readExpired, condition, 1, new java.util.ArrayList<Info>());
   }
   public static URLTemplateLayer newWGS84(String urlTemplate, Sector dataSector, boolean isTransparent, int firstLevel, int maxLevel, TimeInterval timeToCache, boolean readExpired)
   {
-     return newWGS84(urlTemplate, dataSector, isTransparent, firstLevel, maxLevel, timeToCache, readExpired, null, 1, "");
+     return newWGS84(urlTemplate, dataSector, isTransparent, firstLevel, maxLevel, timeToCache, readExpired, null, 1, new java.util.ArrayList<Info>());
   }
   public static URLTemplateLayer newWGS84(String urlTemplate, Sector dataSector, boolean isTransparent, int firstLevel, int maxLevel, TimeInterval timeToCache)
   {
-     return newWGS84(urlTemplate, dataSector, isTransparent, firstLevel, maxLevel, timeToCache, true, null, 1, "");
+     return newWGS84(urlTemplate, dataSector, isTransparent, firstLevel, maxLevel, timeToCache, true, null, 1, new java.util.ArrayList<Info>());
   }
-  public static URLTemplateLayer newWGS84(String urlTemplate, Sector dataSector, boolean isTransparent, int firstLevel, int maxLevel, TimeInterval timeToCache, boolean readExpired, LayerCondition condition, float transparency, String disclaimerInfo)
+  public static URLTemplateLayer newWGS84(String urlTemplate, Sector dataSector, boolean isTransparent, int firstLevel, int maxLevel, TimeInterval timeToCache, boolean readExpired, LayerCondition condition, float transparency, java.util.ArrayList<Info> layerInfo)
   {
-    return new URLTemplateLayer(urlTemplate, dataSector, isTransparent, timeToCache, readExpired, (condition == null) ? new LevelTileCondition(firstLevel, maxLevel) : condition, LayerTilesRenderParameters.createDefaultWGS84(dataSector, firstLevel, maxLevel), transparency, disclaimerInfo);
+    return new URLTemplateLayer(urlTemplate, dataSector, isTransparent, timeToCache, readExpired, (condition == null) ? new LevelTileCondition(firstLevel, maxLevel) : condition, LayerTilesRenderParameters.createDefaultWGS84(dataSector, firstLevel, maxLevel), transparency, layerInfo);
   }
 
   public URLTemplateLayer(String urlTemplate, Sector dataSector, boolean isTransparent, TimeInterval timeToCache, boolean readExpired, LayerCondition condition, LayerTilesRenderParameters parameters, float transparency)
   {
-     this(urlTemplate, dataSector, isTransparent, timeToCache, readExpired, condition, parameters, transparency, "");
+     this(urlTemplate, dataSector, isTransparent, timeToCache, readExpired, condition, parameters, transparency, new java.util.ArrayList<Info>());
   }
   public URLTemplateLayer(String urlTemplate, Sector dataSector, boolean isTransparent, TimeInterval timeToCache, boolean readExpired, LayerCondition condition, LayerTilesRenderParameters parameters)
   {
-     this(urlTemplate, dataSector, isTransparent, timeToCache, readExpired, condition, parameters, 1, "");
+     this(urlTemplate, dataSector, isTransparent, timeToCache, readExpired, condition, parameters, 1, new java.util.ArrayList<Info>());
   }
-  public URLTemplateLayer(String urlTemplate, Sector dataSector, boolean isTransparent, TimeInterval timeToCache, boolean readExpired, LayerCondition condition, LayerTilesRenderParameters parameters, float transparency, String disclaimerInfo)
+  public URLTemplateLayer(String urlTemplate, Sector dataSector, boolean isTransparent, TimeInterval timeToCache, boolean readExpired, LayerCondition condition, LayerTilesRenderParameters parameters, float transparency, java.util.ArrayList<Info> layerInfo)
   {
-     super(timeToCache, readExpired, parameters, transparency, condition, disclaimerInfo);
+     super(timeToCache, readExpired, parameters, transparency, condition, layerInfo);
      _urlTemplate = urlTemplate;
      _dataSector = new Sector(dataSector);
      _isTransparent = isTransparent;
      _su = null;
      _mu = null;
+     _tiled = true;
   }
 
   public final String description()
@@ -240,35 +234,12 @@ public class URLTemplateLayer extends RasterLayer
 
   public final URLTemplateLayer copy()
   {
-    return new URLTemplateLayer(_urlTemplate, _dataSector, _isTransparent, _timeToCache, _readExpired, (_condition == null) ? null : _condition.copy(), _parameters.copy(), _transparency, _disclaimerInfo);
+    return new URLTemplateLayer(_urlTemplate, _dataSector, _isTransparent, _timeToCache, _readExpired, (_condition == null) ? null : _condition.copy(), _parameters.copy(), _transparency, _layerInfo);
   }
 
   public final URL getFeatureInfoURL(Geodetic2D position, Sector sector)
   {
     return new URL();
-  }
-
-  public final java.util.ArrayList<Petition> createTileMapPetitions(G3MRenderContext rc, LayerTilesRenderParameters layerTilesRenderParameters, Tile tile)
-  {
-    java.util.ArrayList<Petition> petitions = new java.util.ArrayList<Petition>();
-  
-    final Sector tileSector = tile._sector;
-    if (!_dataSector.touchesWith(tileSector))
-    {
-      return petitions;
-    }
-  
-    final Sector sector = tileSector.intersection(_dataSector);
-    if (sector._deltaLatitude.isZero() || sector._deltaLongitude.isZero())
-    {
-      return petitions;
-    }
-  
-    final String path = getPath(layerTilesRenderParameters, tile, sector);
-  
-    petitions.add(new Petition(sector, new URL(path, false), _timeToCache, _readExpired, _isTransparent, _transparency));
-  
-    return petitions;
   }
 
   public final RenderState getRenderState()

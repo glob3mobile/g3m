@@ -12,11 +12,15 @@
 #include "Layer.hpp"
 
 #include "TileImageContribution.hpp"
+#include "TimeInterval.hpp"
 class IDownloader;
 class IImageDownloadListener;
-#include "TimeInterval.hpp"
+class RasterLayerTileImageProvider;
 
 class RasterLayer : public Layer {
+private:
+  mutable RasterLayerTileImageProvider* _tileImageProvider;
+
 protected:
 #ifdef C_CODE
   const LayerTilesRenderParameters* _parameters;
@@ -38,7 +42,7 @@ protected:
               const LayerTilesRenderParameters* parameters,
               const float                       transparency,
               const LayerCondition*             condition,
-              const std::string&                disclaimerInfo);
+              std::vector<const Info*>*         layerInfo);
 
   const TimeInterval getTimeToCache() const {
     return _timeToCache;
@@ -76,6 +80,8 @@ public:
                          bool logDownloadActivity,
                          IImageDownloadListener* listener,
                          bool deleteListener) const;
+
+  const std::vector<URL*> getDownloadURLs(const Tile* tile) const;
 
 };
 

@@ -11,9 +11,13 @@
 
 class LayerSet;
 class GEOVectorLayer;
+class IImageBuilder;
 
 #include "TilesRenderParameters.hpp"
 #include "PlanetRenderer.hpp"
+#include "DefaultChessCanvasImageBuilder.hpp"
+#include "DownloaderImageBuilder.hpp"
+
 
 
 class PlanetRendererBuilder {
@@ -39,7 +43,8 @@ private:
   ElevationDataProvider* _elevationDataProvider;
   float _verticalExaggeration;
 
-//  TileRasterizer* getTileRasterizer();
+  TileTessellator* getTileTessellator();
+  TileTexturizer* getTexturizer();
 
   LayerSet* getLayerSet();
   TilesRenderParameters* getParameters();
@@ -80,9 +85,10 @@ private:
   
   TouchEventType getTouchEventTypeOfTerrainTouchListener();
   
-  TileTessellator* getTileTessellator();
+  IImageBuilder* _defaultTileBackGroundImage = NULL;
   
-  TileTexturizer* getTexturizer();
+  IImageBuilder* getDefaultTileBackGroundImageBuilder() const;
+
 public:
   PlanetRendererBuilder();
   ~PlanetRendererBuilder();
@@ -132,6 +138,8 @@ public:
   void setDeleteTexturesOfInvisibleTiles(bool x);
   
   void setTouchEventTypeOfTerrainTouchListener(TouchEventType _touchEventTypeOfTerrainTouchListener);
+  
+  void setDefaultTileBackGroundImage(IImageBuilder* defaultTileBackGroundImage);
 };
 
 #endif

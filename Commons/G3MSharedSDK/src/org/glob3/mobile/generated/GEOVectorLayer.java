@@ -19,64 +19,65 @@ package org.glob3.mobile.generated;
 
 
 //class TileImageContribution;
+//class GEOVectorTileImageProvider;
 
 public class GEOVectorLayer extends VectorLayer
 {
   private QuadTree _quadTree = new QuadTree();
 
-  private TileImageProvider _tileImageProvider;
+  private GEOVectorTileImageProvider _tileImageProvider;
 
 
   public GEOVectorLayer(java.util.ArrayList<LayerTilesRenderParameters> parametersVector, float transparency, LayerCondition condition)
   {
-     this(parametersVector, transparency, condition, "");
+     this(parametersVector, transparency, condition, new java.util.ArrayList<Info>());
   }
   public GEOVectorLayer(java.util.ArrayList<LayerTilesRenderParameters> parametersVector, float transparency)
   {
-     this(parametersVector, transparency, null, "");
+     this(parametersVector, transparency, null, new java.util.ArrayList<Info>());
   }
   public GEOVectorLayer(java.util.ArrayList<LayerTilesRenderParameters> parametersVector)
   {
-     this(parametersVector, 1.0f, null, "");
+     this(parametersVector, 1.0f, null, new java.util.ArrayList<Info>());
   }
-  public GEOVectorLayer(java.util.ArrayList<LayerTilesRenderParameters> parametersVector, float transparency, LayerCondition condition, String disclaimerInfo)
+  public GEOVectorLayer(java.util.ArrayList<LayerTilesRenderParameters> parametersVector, float transparency, LayerCondition condition, java.util.ArrayList<Info> layerInfo)
   {
-     super(parametersVector, transparency, condition, disclaimerInfo);
+     super(parametersVector, transparency, condition, layerInfo);
      _tileImageProvider = null;
   
   }
 
   public GEOVectorLayer(int mercatorFirstLevel, int mercatorMaxLevel, int wgs84firstLevel, int wgs84maxLevel, float transparency, LayerCondition condition)
   {
-     this(mercatorFirstLevel, mercatorMaxLevel, wgs84firstLevel, wgs84maxLevel, transparency, condition, "");
+     this(mercatorFirstLevel, mercatorMaxLevel, wgs84firstLevel, wgs84maxLevel, transparency, condition, new java.util.ArrayList<Info>());
   }
   public GEOVectorLayer(int mercatorFirstLevel, int mercatorMaxLevel, int wgs84firstLevel, int wgs84maxLevel, float transparency)
   {
-     this(mercatorFirstLevel, mercatorMaxLevel, wgs84firstLevel, wgs84maxLevel, transparency, null, "");
+     this(mercatorFirstLevel, mercatorMaxLevel, wgs84firstLevel, wgs84maxLevel, transparency, null, new java.util.ArrayList<Info>());
   }
   public GEOVectorLayer(int mercatorFirstLevel, int mercatorMaxLevel, int wgs84firstLevel, int wgs84maxLevel)
   {
-     this(mercatorFirstLevel, mercatorMaxLevel, wgs84firstLevel, wgs84maxLevel, 1.0f, null, "");
+     this(mercatorFirstLevel, mercatorMaxLevel, wgs84firstLevel, wgs84maxLevel, 1.0f, null, new java.util.ArrayList<Info>());
   }
   public GEOVectorLayer(int mercatorFirstLevel, int mercatorMaxLevel, int wgs84firstLevel)
   {
-     this(mercatorFirstLevel, mercatorMaxLevel, wgs84firstLevel, 18, 1.0f, null, "");
+     this(mercatorFirstLevel, mercatorMaxLevel, wgs84firstLevel, 18, 1.0f, null, new java.util.ArrayList<Info>());
   }
   public GEOVectorLayer(int mercatorFirstLevel, int mercatorMaxLevel)
   {
-     this(mercatorFirstLevel, mercatorMaxLevel, 0, 18, 1.0f, null, "");
+     this(mercatorFirstLevel, mercatorMaxLevel, 0, 18, 1.0f, null, new java.util.ArrayList<Info>());
   }
   public GEOVectorLayer(int mercatorFirstLevel)
   {
-     this(mercatorFirstLevel, 18, 0, 18, 1.0f, null, "");
+     this(mercatorFirstLevel, 18, 0, 18, 1.0f, null, new java.util.ArrayList<Info>());
   }
   public GEOVectorLayer()
   {
-     this(2, 18, 0, 18, 1.0f, null, "");
+     this(2, 18, 0, 18, 1.0f, null, new java.util.ArrayList<Info>());
   }
-  public GEOVectorLayer(int mercatorFirstLevel, int mercatorMaxLevel, int wgs84firstLevel, int wgs84maxLevel, float transparency, LayerCondition condition, String disclaimerInfo)
+  public GEOVectorLayer(int mercatorFirstLevel, int mercatorMaxLevel, int wgs84firstLevel, int wgs84maxLevel, float transparency, LayerCondition condition, java.util.ArrayList<Info> layerInfo)
   {
-     super(LayerTilesRenderParameters.createDefaultMultiProjection(mercatorFirstLevel, mercatorMaxLevel, wgs84firstLevel, wgs84maxLevel), transparency, condition, disclaimerInfo);
+     super(LayerTilesRenderParameters.createDefaultMultiProjection(mercatorFirstLevel, mercatorMaxLevel, wgs84firstLevel, wgs84maxLevel), transparency, condition, layerInfo);
      _tileImageProvider = null;
   
   }
@@ -86,6 +87,7 @@ public class GEOVectorLayer extends VectorLayer
     //  delete _symbolizer;
     if (_tileImageProvider != null)
     {
+      _tileImageProvider.layerDeleted(this);
       _tileImageProvider._release();
     }
     super.dispose();
@@ -110,12 +112,6 @@ public class GEOVectorLayer extends VectorLayer
   public final URL getFeatureInfoURL(Geodetic2D position, Sector sector)
   {
     return new URL();
-  }
-
-  public final java.util.ArrayList<Petition> createTileMapPetitions(G3MRenderContext rc, LayerTilesRenderParameters layerTilesRenderParameters, Tile tile)
-  {
-    java.util.ArrayList<Petition> petitions = new java.util.ArrayList<Petition>();
-    return petitions;
   }
 
   public final RenderState getRenderState()
@@ -178,7 +174,7 @@ public class GEOVectorLayer extends VectorLayer
   {
     if ((_condition == null) || _condition.isAvailable(tile))
     {
-      return (_quadTree.getSector().touchesWith(tile._sector) ? TileImageContribution.fullCoverageTransparent(_transparency) : null);
+      return (_quadTree.getSector().touchesWith(tile._sector) && !_quadTree.isEmpty() ? TileImageContribution.fullCoverageTransparent(_transparency) : null);
     }
     return null;
   }
@@ -186,6 +182,12 @@ public class GEOVectorLayer extends VectorLayer
   public final QuadTree getQuadTree()
   {
     return _quadTree;
+  }
+
+  public final java.util.ArrayList<URL> getDownloadURLs(Tile tile)
+  {
+    java.util.ArrayList<URL> result = new java.util.ArrayList<URL>();
+    return result;
   }
 
 }

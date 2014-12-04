@@ -24,40 +24,41 @@ package org.glob3.mobile.generated;
 
 public class Box extends BoundingVolume
 {
-  private final Vector3D _lower ;
-  private final Vector3D _upper ;
-
-  private java.util.ArrayList<Vector3D> _cornersD = null; // cache for getCorners() method
-  private java.util.ArrayList<Vector3F> _cornersF = null; // cache for getCornersF() method
 
   private Mesh _mesh;
-  private void createMesh(Color color)
+  private Mesh createMesh(Color color)
   {
-  
-    float[] v = { (float) _lower._x, (float) _lower._y, (float) _lower._z, (float) _lower._x, (float) _upper._y, (float) _lower._z, (float) _lower._x, (float) _upper._y, (float) _upper._z, (float) _lower._x, (float) _lower._y, (float) _upper._z, (float) _upper._x, (float) _lower._y, (float) _lower._z, (float) _upper._x, (float) _upper._y, (float) _lower._z, (float) _upper._x, (float) _upper._y, (float) _upper._z, (float) _upper._x, (float) _lower._y, (float) _upper._z };
+    double[] v = { _lower._x, _lower._y, _lower._z, _lower._x, _upper._y, _lower._z, _lower._x, _upper._y, _upper._z, _lower._x, _lower._y, _upper._z, _upper._x, _lower._y, _lower._z, _upper._x, _upper._y, _lower._z, _upper._x, _upper._y, _upper._z, _upper._x, _lower._y, _upper._z };
   
     short[] i = { 0, 1, 1, 2, 2, 3, 3, 0, 1, 5, 5, 6, 6, 2, 2, 1, 5, 4, 4, 7, 7, 6, 6, 5, 4, 0, 0, 3, 3, 7, 7, 4, 3, 2, 2, 6, 6, 7, 7, 3, 0, 1, 1, 5, 5, 4, 4, 0 };
   
     FloatBufferBuilderFromCartesian3D vertices = FloatBufferBuilderFromCartesian3D.builderWithFirstVertexAsCenter();
-    ShortBufferBuilder indices = new ShortBufferBuilder();
-  
     final int numVertices = 8;
-    for (int n = 0; n<numVertices; n++)
+    for (int n = 0; n < numVertices; n++)
     {
       vertices.add(v[n *3], v[n *3+1], v[n *3+2]);
     }
   
+    ShortBufferBuilder indices = new ShortBufferBuilder();
     final int numIndices = 48;
-    for (int n = 0; n<numIndices; n++)
+    for (int n = 0; n < numIndices; n++)
     {
       indices.add(i[n]);
     }
   
-    _mesh = new IndexedMesh(GLPrimitive.lines(), true, vertices.getCenter(), vertices.create(), indices.create(), 1, 1, color);
+    Mesh mesh = new IndexedMesh(GLPrimitive.lines(), true, vertices.getCenter(), vertices.create(), indices.create(), 2, 1, new Color(color));
   
     if (vertices != null)
        vertices.dispose();
+  
+    return mesh;
   }
+
+  public final Vector3D _lower ;
+  public final Vector3D _upper ;
+
+  private java.util.ArrayList<Vector3D> _cornersD = null; // cache for getCorners() method
+  private java.util.ArrayList<Vector3F> _cornersF = null; // cache for getCornersF() method
 
   public Box(Vector3D lower, Vector3D upper)
   {
@@ -271,11 +272,11 @@ public class Box extends BoundingVolume
     return Vector3D.nan();
   }
 
-  public final void render(G3MRenderContext rc, GLState parentState)
+  public final void render(G3MRenderContext rc, GLState parentState, Color color)
   {
     if (_mesh == null)
     {
-      createMesh(Color.newFromRGBA(1.0f, 0.0f, 1.0f, 1.0f));
+      _mesh = createMesh(color);
     }
     _mesh.render(rc, parentState);
   }
@@ -331,7 +332,7 @@ public class Box extends BoundingVolume
     return that.mergedWithBox(this);
   }
 
-  public final BoundingVolume mergedWithBox(Box that)
+  public final Box mergedWithBox(Box that)
   {
     final IMathUtils mu = IMathUtils.instance();
   
@@ -412,6 +413,20 @@ public class Box extends BoundingVolume
       _cornersArray[7] = new Vector3F((float) _upper._x, (float) _upper._y, (float) _upper._z);
     }
     return _cornersArray;
+  }
+
+  public final String description()
+  {
+    IStringBuilder isb = IStringBuilder.newStringBuilder();
+    isb.addString("[Box ");
+    isb.addString(_lower.description());
+    isb.addString(" / ");
+    isb.addString(_upper.description());
+    isb.addString("]");
+    final String s = isb.getString();
+    if (isb != null)
+       isb.dispose();
+    return s;
   }
 
 }

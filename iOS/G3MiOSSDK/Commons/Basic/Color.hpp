@@ -76,6 +76,11 @@ public:
                                            float brightness,
                                            float alpha);
 
+  static Color interpolateColor(const Color& from,
+                                const Color& middle,
+                                const Color& to,
+                                float d);
+
   static Color transparent() {
     return Color::fromRGBA(0, 0, 0, 0);
   }

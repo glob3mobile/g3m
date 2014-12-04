@@ -77,4 +77,13 @@ public class GEO2DPolygonGeometry extends GEOGeometry2D
     return new GEO2DPolygonGeometry(_polygonData);
   }
 
+  public final boolean contain(Geodetic2D point)
+  {
+    if (_polygonData != null)
+    {
+      return _polygonData.contains(point);
+    }
+    return false;
+  }
+
 }

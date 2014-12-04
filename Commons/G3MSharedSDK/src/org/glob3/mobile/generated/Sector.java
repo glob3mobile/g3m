@@ -372,6 +372,23 @@ public class Sector
       return longitude.clampedTo(_lower._longitude, _upper._longitude);
     }
 
+    public final String id()
+    {
+      IStringBuilder isb = IStringBuilder.newStringBuilder();
+      isb.addString("Sector|");
+      isb.addDouble(_lower._latitude._degrees);
+      isb.addString("|");
+      isb.addDouble(_lower._longitude._degrees);
+      isb.addString("|");
+      isb.addDouble(_upper._latitude._degrees);
+      isb.addString("|");
+      isb.addDouble(_upper._longitude._degrees);
+      isb.addString("|");
+      final String s = isb.getString();
+      if (isb != null)
+         isb.dispose();
+      return s;
+    }
     public final String description()
     {
       IStringBuilder isb = IStringBuilder.newStringBuilder();

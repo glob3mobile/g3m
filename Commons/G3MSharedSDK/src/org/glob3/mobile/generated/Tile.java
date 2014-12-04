@@ -1,4 +1,45 @@
 package org.glob3.mobile.generated; 
+<<<<<<< HEAD
+=======
+//
+//  Tile.cpp
+//  G3MiOSSDK
+//
+//  Created by Agustin Trujillo Pino on 12/06/12.
+//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
+//
+
+//
+//  Tile.hpp
+//  G3MiOSSDK
+//
+//  Created by Agustin Trujillo Pino on 12/06/12.
+//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
+//
+
+
+
+//class TileTexturizer;
+//class Mesh;
+//class TileElevationDataRequest;
+//class BoundingVolume;
+//class Vector3D;
+//class TilesRenderParameters;
+//class LayerTilesRenderParameters;
+//class Frustum;
+//class TilesStatistics;
+//class ElevationDataProvider;
+//class ITimer;
+//class GLState;
+//class LayerSet;
+//class ITexturizerData;
+//class PlanetTileTessellatorData;
+//class PlanetRenderer;
+//class TileKey;
+//class Geodetic3D;
+
+
+>>>>>>> zrender-touchhandlers
 public class Tile
 {
   private TileTexturizer _texturizer;
@@ -53,10 +94,6 @@ public class Tile
       return;
     }
   
-    //  delete _middleWestPoint;
-    //  delete _middleEastPoint;
-    //  delete _middleNorthPoint;
-    //  delete _middleSouthPoint;
     if (_northWestPoint != null)
        _northWestPoint.dispose();
     if (_northEastPoint != null)
@@ -68,17 +105,6 @@ public class Tile
   
   
     final double mediumHeight = _tileTessellatorMeshData._averageHeight;
-  
-    //  const Geodetic2D center = _sector.getCenter();
-    //  const Geodetic3D gN( Geodetic2D(_sector.getNorth(), center._longitude), mediumHeight);
-    //  const Geodetic3D gS( Geodetic2D(_sector.getSouth(), center._longitude), mediumHeight);
-    //  const Geodetic3D gW( Geodetic2D(center._latitude, _sector.getWest()), mediumHeight);
-    //  const Geodetic3D gE( Geodetic2D(center._latitude, _sector.getEast()), mediumHeight);
-    //
-    //  _middleNorthPoint = new Vector3D(planet->toCartesian(gN));
-    //  _middleSouthPoint = new Vector3D(planet->toCartesian(gS));
-    //  _middleEastPoint = new Vector3D(planet->toCartesian(gE));
-    //  _middleWestPoint = new Vector3D(planet->toCartesian(gW));
   
     _northWestPoint = new Vector3D(planet.toCartesian(_sector.getNW(), mediumHeight));
     _northEastPoint = new Vector3D(planet.toCartesian(_sector.getNE(), mediumHeight));
@@ -94,6 +120,10 @@ public class Tile
 
   private void prepareTestLODData(Planet planet)
   {
+<<<<<<< HEAD
+=======
+  
+>>>>>>> zrender-touchhandlers
     if ((_northWestPoint == null) || (_northEastPoint == null) || (_southWestPoint == null) || (_southEastPoint == null))
     {
       ILogger.instance().logError("Error in Tile::prepareTestLODData");
@@ -170,10 +200,14 @@ public class Tile
     return _debugMesh;
   }
 
+<<<<<<< HEAD
   private boolean isVisible(G3MRenderContext rc, Frustum cameraFrustumInModelCoordinates, Frustum cameraWiderFrustumInModelCoordinates, ElevationDataProvider elevationDataProvider, Sector renderedSector, TileTessellator tessellator, LayerTilesRenderParameters layerTilesRenderParameters, TilesRenderParameters tilesRenderParameters)
                        //const Planet* planet,
                        //const Vector3D& cameraNormalizedPosition,
                        //double cameraAngle2HorizonInRadians,
+=======
+  private boolean isVisible(G3MRenderContext rc, Frustum cameraFrustumInModelCoordinates, ElevationDataProvider elevationDataProvider, Sector renderedSector, TileTessellator tessellator, LayerTilesRenderParameters layerTilesRenderParameters, TilesRenderParameters tilesRenderParameters)
+>>>>>>> zrender-touchhandlers
   {
   
   
@@ -186,9 +220,6 @@ public class Tile
   
       return ((boundingVolume != null) && boundingVolume.touchesFrustum(cameraWiderFrustumInModelCoordinates));
   }
-                        //const Planet* planet,
-                        //const Vector3D& cameraNormalizedPosition,
-                        //double cameraAngle2HorizonInRadians,
 
   private boolean _lastMeetsRenderCriteriaResult;
   private double _lastMeetsRenderCriteriaTimeInMS;
@@ -279,7 +310,6 @@ public class Tile
   //int MAX_LOD = -1;
   
   private void rawRender(G3MRenderContext rc, GLState glState, TileTexturizer texturizer, ElevationDataProvider elevationDataProvider, TileTessellator tessellator, LayerTilesRenderParameters layerTilesRenderParameters, LayerSet layerSet, TilesRenderParameters tilesRenderParameters, boolean forceFullRender, long tileDownloadPriority, boolean logTilesPetitions)
-                       //                     TileRasterizer* tileRasterizer,
   {
   
     Mesh tessellatorMesh = getTessellatorMesh(rc, elevationDataProvider, tessellator, layerTilesRenderParameters, tilesRenderParameters);
@@ -299,7 +329,6 @@ public class Tile
       if (needsToCallTexturizer)
       {
         _texturizedMesh = texturizer.texturize(rc, tessellator, layerTilesRenderParameters, layerSet, forceFullRender, tileDownloadPriority, this, tessellatorMesh, _texturizedMesh, logTilesPetitions);
-                                                //                                              tileRasterizer,
       }
   
       if (_texturizedMesh != null)
@@ -320,7 +349,6 @@ public class Tile
     //  const BoundingVolume* boundingVolume = getBoundingVolume(rc, trc);
     //  boundingVolume->render(rc, parentState);
   }
-                        //                        TileRasterizer* tileRasterizer,
 
   private void debugRender(G3MRenderContext rc, GLState glState, TileTessellator tessellator, LayerTilesRenderParameters layerTilesRenderParameters)
   {
@@ -331,6 +359,7 @@ public class Tile
     }
   }
 
+<<<<<<< HEAD
   //<<<<<<< HEAD
   //
   //void Tile::setRendered(const bool rendered, TileRenderingListener* tileRenderingListener){
@@ -355,6 +384,12 @@ public class Tile
   //                  const Planet* planet,
   //                  const Vector3D& cameraNormalizedPosition,
   //                  double cameraAngle2HorizonInRadians,
+=======
+
+  //void Tile::render(const G3MRenderContext* rc,
+  //                  const GLState& parentState,
+  //                  std::vector<Tile*>* toVisitInNextIteration,
+>>>>>>> zrender-touchhandlers
   //                  const Frustum* cameraFrustumInModelCoordinates,
   //                  const Frustum* cameraWiderFrustumInModelCoordinates,
   //                  TilesStatistics* tilesStatistics,
@@ -365,7 +400,10 @@ public class Tile
   //                  ITimer* lastSplitTimer,
   //                  ElevationDataProvider* elevationDataProvider,
   //                  const TileTessellator* tessellator,
+<<<<<<< HEAD
   //                  TileRasterizer* tileRasterizer,
+=======
+>>>>>>> zrender-touchhandlers
   //                  const LayerSet* layerSet,
   //                  const Sector* renderedSector,
   //                  bool forceFullRender,
@@ -375,21 +413,27 @@ public class Tile
   //                  double nowInMS,
   //                  const bool renderTileMeshes,
   //                  bool logTilesPetitions,
-  //                  TileRenderingListener* tileRenderingListener) {
-  //  
+  //                  std::vector<const Tile*>* tilesStartedRendering,
+  //                  std::vector<std::string>* tilesStoppedRendering) {
+  //
   //  tilesStatistics->computeTileProcessed(this);
-  //  
+  //
   //  if (verticalExaggeration != _verticalExaggeration) {
   //    // TODO: verticalExaggeration changed, invalidate tileExtent, Mesh, etc.
   //    _verticalExaggeration = verticalExaggeration;
   //  }
-  //  
+  //
   //  bool rendered = false;
+<<<<<<< HEAD
   //  
   //  if (isVisible(rc,
   //                planet,
   //                cameraNormalizedPosition,
   //                cameraAngle2HorizonInRadians,
+=======
+  //
+  //  if (isVisible(rc,
+>>>>>>> zrender-touchhandlers
   //                cameraFrustumInModelCoordinates,
   //                cameraWiderFrustumInModelCoordinates,
   //                elevationDataProvider,
@@ -398,9 +442,9 @@ public class Tile
   //                layerTilesRenderParameters,
   //                tilesRenderParameters)) {
   //    setIsVisible(true, texturizer);
-  //    
+  //
   //    tilesStatistics->computeVisibleTile(this);
-  //    
+  //
   //    const bool isRawRender = (
   //                              (toVisitInNextIteration == NULL) ||
   //                              meetsRenderCriteria(rc,
@@ -414,13 +458,13 @@ public class Tile
   //                                                  nowInMS) ||
   //                              (tilesRenderParameters->_incrementalTileQuality && !_textureSolved)
   //                              );
-  //    
+  //
   //    if (isRawRender) {
-  //      
+  //
   //      const long long tileTexturePriority = (tilesRenderParameters->_incrementalTileQuality
   //                                             ? tileDownloadPriority + layerTilesRenderParameters->_maxLevel - _level
   //                                             : tileDownloadPriority + _level);
-  //      
+  //
   //      rendered = true;
   //      if (renderTileMeshes) {
   //        rawRender(rc,
@@ -428,7 +472,10 @@ public class Tile
   //                  texturizer,
   //                  elevationDataProvider,
   //                  tessellator,
+<<<<<<< HEAD
   //                  tileRasterizer,
+=======
+>>>>>>> zrender-touchhandlers
   //                  layerTilesRenderParameters,
   //                  layerSet,
   //                  tilesRenderParameters,
@@ -439,10 +486,10 @@ public class Tile
   //      if (tilesRenderParameters->_renderDebug) {
   //        debugRender(rc, &parentState, tessellator, layerTilesRenderParameters);
   //      }
-  //      
+  //
   //      tilesStatistics->computeTileRenderered(this);
-  //      
-  //      prune(texturizer, elevationDataProvider);
+  //
+  //      prune(texturizer, elevationDataProvider, tilesStoppedRendering);
   //      //TODO: AVISAR CAMBIO DE TERRENO
   //    }
   //    else {
@@ -451,18 +498,20 @@ public class Tile
   //        lastSplitTimer->start();
   //        _justCreatedSubtiles = false;
   //      }
+<<<<<<< HEAD
   //      
   //      const int subTilesSize = (int)subTiles->size();
+=======
+  //
+  //      const int subTilesSize = subTiles->size();
+>>>>>>> zrender-touchhandlers
   //      for (int i = 0; i < subTilesSize; i++) {
   //        Tile* subTile = subTiles->at(i);
   //        toVisitInNextIteration->push_back(subTile);
   //      }
   //    }
-  //    
-  //    setRendered(rendered, tileRenderingListener);
-  //    
-  //    return isRawRender; //RETURN ISRAWRENDER
   //  }
+<<<<<<< HEAD
   //
   //  //Not rendering, prunning will be performed
   //  
@@ -631,6 +680,32 @@ public class Tile
   ////  
   ////}
   //>>>>>>> zrender-touchhandlers
+=======
+  //  else {
+  //    setIsVisible(false, texturizer);
+  //
+  //    prune(texturizer, elevationDataProvider, tilesStoppedRendering);
+  //    //TODO: AVISAR CAMBIO DE TERRENO
+  //  }
+  //
+  //  if (_rendered != rendered) {
+  //    _rendered = rendered;
+  //
+  //    if (_rendered) {
+  //      if (tilesStartedRendering != NULL) {
+  //        tilesStartedRendering->push_back(this);
+  //      }
+  //    }
+  //    else {
+  //      if (tilesStoppedRendering != NULL) {
+  //        tilesStoppedRendering->push_back(_id);
+  //      }
+  //    }
+  //  }
+  //  
+  //}
+  //>>>>>>> purgatory
+>>>>>>> zrender-touchhandlers
   
   private Tile createSubTile(Angle lowerLat, Angle lowerLon, Angle upperLat, Angle upperLon, int level, int row, int column, boolean setParent)
   {
@@ -720,17 +795,19 @@ public class Tile
 //  void setRendered(boolean rendered, TileRenderingListener tileRenderingListener);
 
   private boolean _rendered;
-  private TileRenderingListener _tileRenderingListener;
 
   private static String createTileId(int level, int row, int column)
   {
     return level + "/" + row + "/" + column;
   }
 
+<<<<<<< HEAD
   private TileCache _tileCache;
   private boolean _deleteTextureWhenNotVisible;
 
 
+=======
+>>>>>>> zrender-touchhandlers
   public final Sector _sector ;
   public final boolean _mercator;
   public final int _level;
@@ -776,7 +853,6 @@ public class Tile
      _eastArcSegmentRatioSquared = 0;
      _westArcSegmentRatioSquared = 0;
      _rendered = false;
-     _tileRenderingListener = null;
      _id = createTileId(level, row, column);
      _tileCache = tileCache;
      _deleteTextureWhenNotVisible = deleteTextureWhenNotVisible;
@@ -784,15 +860,6 @@ public class Tile
 
   public void dispose()
   {
-    prune(null, null);
-  
-    if (_tileRenderingListener != null)
-    {
-      if (_rendered)
-      {
-        _tileRenderingListener.stopRendering(this);
-      }
-    }
   
     if (_debugMesh != null)
        _debugMesh.dispose();
@@ -890,7 +957,6 @@ public class Tile
   }
 
   public final void prepareForFullRendering(G3MRenderContext rc, TileTexturizer texturizer, ElevationDataProvider elevationDataProvider, TileTessellator tessellator, LayerTilesRenderParameters layerTilesRenderParameters, LayerSet layerSet, TilesRenderParameters tilesRenderParameters, boolean forceFullRender, long tileDownloadPriority, float verticalExaggeration, boolean logTilesPetitions)
-                                     //                                   TileRasterizer* tileRasterizer,
   {
   
     //You have to set _verticalExaggertion
@@ -914,10 +980,10 @@ public class Tile
       if (needsToCallTexturizer)
       {
         _texturizedMesh = texturizer.texturize(rc, tessellator, layerTilesRenderParameters, layerSet, forceFullRender, tileDownloadPriority, this, tessellatorMesh, _texturizedMesh, logTilesPetitions);
-                                                //                                              tileRasterizer,
       }
     }
   }
+<<<<<<< HEAD
                                //                               TileRasterizer* tileRasterizer,
 //<<<<<<< HEAD
 //
@@ -986,6 +1052,10 @@ public class Tile
               //              TileRasterizer* tileRasterizer,
 
   public final void updateQuadTree(G3MRenderContext rc, java.util.LinkedList<Tile> renderedTiles, Planet planet, Vector3D cameraNormalizedPosition, double cameraAngle2HorizonInRadians, Frustum cameraFrustumInModelCoordinates, Frustum cameraWiderFrustumInModelCoordinates, TilesStatistics tilesStatistics, float verticalExaggeration, LayerTilesRenderParameters layerTilesRenderParameters, TileTexturizer texturizer, TilesRenderParameters tilesRenderParameters, ITimer lastSplitTimer, ElevationDataProvider elevationDataProvider, TileTessellator tessellator, LayerSet layerSet, Sector renderedSector, boolean isForcedFullRender, long texturePriority, double texWidthSquared, double texHeightSquared, double nowInMS, TileRenderingListener tileRenderingListener)
+=======
+
+  public final void updateQuadTree(G3MRenderContext rc, java.util.LinkedList<Tile> renderedTiles, Planet planet, Vector3D cameraNormalizedPosition, double cameraAngle2HorizonInRadians, Frustum cameraFrustumInModelCoordinates, TilesStatistics tilesStatistics, float verticalExaggeration, LayerTilesRenderParameters layerTilesRenderParameters, TileTexturizer texturizer, TilesRenderParameters tilesRenderParameters, ITimer lastSplitTimer, ElevationDataProvider elevationDataProvider, TileTessellator tessellator, LayerSet layerSet, Sector renderedSector, boolean isForcedFullRender, long texturePriority, double texWidthSquared, double texHeightSquared, double nowInMS, java.util.ArrayList<Tile> tilesStartedRendering, java.util.ArrayList<String> tilesStoppedRendering)
+>>>>>>> zrender-touchhandlers
   {
     tilesStatistics.computeTileProcessed(this);
   
@@ -1013,7 +1083,7 @@ public class Tile
   
         renderedTiles.addLast(this);
   
-        prune(texturizer, elevationDataProvider);
+        prune(texturizer, elevationDataProvider, tilesStoppedRendering);
         //TODO: AVISAR CAMBIO DE TERRENO
   
       }
@@ -1042,7 +1112,11 @@ public class Tile
         {
           Tile subTile = subTiles.get(i);
   
+<<<<<<< HEAD
           subTile.updateQuadTree(rc, renderedTiles, planet, cameraNormalizedPosition, cameraAngle2HorizonInRadians, cameraFrustumInModelCoordinates, cameraWiderFrustumInModelCoordinates, tilesStatistics, verticalExaggeration, layerTilesRenderParameters, texturizer, tilesRenderParameters, lastSplitTimer, elevationDataProvider, tessellator, layerSet, renderedSector, isForcedFullRender, texturePriority, texWidthSquared, texHeightSquared, nowInMS, tileRenderingListener);
+=======
+          subTile.updateQuadTree(rc, renderedTiles, planet, cameraNormalizedPosition, cameraAngle2HorizonInRadians, cameraFrustumInModelCoordinates, tilesStatistics, verticalExaggeration, layerTilesRenderParameters, texturizer, tilesRenderParameters, lastSplitTimer, elevationDataProvider, tessellator, layerSet, renderedSector, isForcedFullRender, texturePriority, texWidthSquared, texHeightSquared, nowInMS, tilesStartedRendering, tilesStoppedRendering);
+>>>>>>> zrender-touchhandlers
                                      /* parentState,*/
         }
       }
@@ -1051,27 +1125,27 @@ public class Tile
     {
       setIsVisible(false, texturizer);
   
-      prune(texturizer, elevationDataProvider);
+      prune(texturizer, elevationDataProvider, tilesStoppedRendering);
       //TODO: AVISAR CAMBIO DE TERRENO
     }
   
     if (_rendered != rendered)
     {
       _rendered = rendered;
-  
-      if (tileRenderingListener != null)
-      {
         if (_rendered)
         {
-          tileRenderingListener.startRendering(this);
-          _tileRenderingListener = tileRenderingListener;
+          if (tilesStartedRendering != null)
+          {
+            tilesStartedRendering.add(this);
+          }
         }
         else
         {
-          tileRenderingListener.stopRendering(this);
-          _tileRenderingListener = null;
+          if (tilesStoppedRendering != null)
+          {
+            tilesStoppedRendering.add(_id);
+          }
         }
-      }
     }
   
   }
@@ -1110,6 +1184,33 @@ public class Tile
   //  const std::string getId() const;
 
 
+//=======
+//
+//  void render(const G3MRenderContext* rc,
+//              const GLState& parentState,
+//              std::vector<Tile*>* toVisitInNextIteration,
+//              const Frustum* cameraFrustumInModelCoordinates,
+//              TilesStatistics* tilesStatistics,
+//              const float verticalExaggeration,
+//              const LayerTilesRenderParameters* layerTilesRenderParameters,
+//              TileTexturizer* texturizer,
+//              const TilesRenderParameters* tilesRenderParameters,
+//              ITimer* lastSplitTimer,
+//              ElevationDataProvider* elevationDataProvider,
+//              const TileTessellator* tessellator,
+//              const LayerSet* layerSet,
+//              const Sector* renderedSector,
+//              bool forceFullRender,
+//              long long tileDownloadPriority,
+//              double texWidth,
+//              double texHeight,
+//              double nowInMS,
+//              const bool renderTileMeshes,
+//              bool logTilesPetitions,
+//              std::vector<const Tile*>* tilesStartedRendering,
+//              std::vector<std::string>* tilesStoppedRendering);
+//
+//>>>>>>> purgatory
   public final void setTextureSolved(boolean textureSolved)
   {
     if (textureSolved != _textureSolved)
@@ -1215,8 +1316,13 @@ public class Tile
     return null;
   }
 
-  public final void prune(TileTexturizer texturizer, ElevationDataProvider elevationDataProvider)
+  public final void prune(TileTexturizer texturizer, ElevationDataProvider elevationDataProvider, java.util.ArrayList<String> tilesStoppedRendering)
   {
+  //  if (texturizer == NULL && elevationDataProvider == NULL && _subtiles != NULL) {
+  ///#warning remove debug code
+  //    printf("break point\n");
+  //  }
+  
     if (_subtiles != null)
     {
       //Notifying elevation event when LOD decreases
@@ -1229,6 +1335,7 @@ public class Tile
   
         subtile.setIsVisible(false, texturizer);
   
+<<<<<<< HEAD
         subtile.prune(texturizer, elevationDataProvider);
   
         if (_tileCache == null)
@@ -1243,6 +1350,10 @@ public class Tile
              subtile.dispose();
         }
         else
+=======
+        subtile.prune(texturizer, elevationDataProvider, tilesStoppedRendering);
+        if (texturizer != null)
+>>>>>>> zrender-touchhandlers
         {
           _tileCache.clearTile(subtile);
         }
@@ -1255,8 +1366,18 @@ public class Tile
     }
   }
 
-  public final void toBeDeleted(TileTexturizer texturizer, ElevationDataProvider elevationDataProvider)
+  public final void toBeDeleted(TileTexturizer texturizer, ElevationDataProvider elevationDataProvider, java.util.ArrayList<String> tilesStoppedRendering)
   {
+    if (_rendered)
+    {
+      if (tilesStoppedRendering != null)
+      {
+        tilesStoppedRendering.add(_id);
+      }
+    }
+  
+    prune(texturizer, elevationDataProvider, tilesStoppedRendering);
+  
     if (texturizer != null)
     {
       texturizer.tileToBeDeleted(this, _texturizedMesh);

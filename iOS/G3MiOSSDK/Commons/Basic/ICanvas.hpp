@@ -87,7 +87,9 @@ protected:
                           float offsetY) = 0;
 
   virtual void _removeShadow() = 0;
-
+  
+  virtual void _clearRect(float left, float top,
+                          float width, float height) = 0;
 
   virtual void _createImage(IImageListener* listener,
                             bool autodelete) = 0;
@@ -101,9 +103,17 @@ protected:
 
   virtual void _drawImage(const IImage* image,
                           float destLeft, float destTop) = 0;
+  
+  virtual void _drawImage(const IImage* image,
+                          float destLeft, float destTop,
+                          float transparency) = 0;
 
   virtual void _drawImage(const IImage* image,
                           float destLeft, float destTop, float destWidth, float destHeight) = 0;
+  
+  virtual void _drawImage(const IImage* image,
+                          float destLeft, float destTop, float destWidth, float destHeight,
+                          float transparency) = 0;
 
   virtual void _drawImage(const IImage* image,
                           float srcLeft, float srcTop, float srcWidth, float srcHeight,
@@ -190,7 +200,9 @@ public:
                  float offsetY);
 
   void removeShadow();
-
+  
+  void clearRect(float left, float top,
+                 float width, float height);
 
   void fillRectangle(float left, float top,
                      float width, float height);
@@ -221,9 +233,17 @@ public:
 
   void drawImage(const IImage* image,
                  float destLeft, float destTop);
+  
+  void drawImage(const IImage* image,
+                 float destLeft, float destTop,
+                 float transparency);
 
   void drawImage(const IImage* image,
                  float destLeft, float destTop, float destWidth, float destHeight);
+  
+  void drawImage(const IImage* image,
+                          float destLeft, float destTop, float destWidth, float destHeight,
+                          float transparency);
 
   void drawImage(const IImage* image,
                  float srcLeft, float srcTop, float srcWidth, float srcHeight,

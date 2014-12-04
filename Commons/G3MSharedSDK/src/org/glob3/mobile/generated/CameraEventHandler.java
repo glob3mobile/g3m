@@ -36,4 +36,8 @@ public abstract class CameraEventHandler
 
   }
 
+  public void onMouseWheel(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
+  {
+  }
+
 }

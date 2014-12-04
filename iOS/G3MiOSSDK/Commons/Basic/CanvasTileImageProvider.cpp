@@ -42,6 +42,7 @@ ICanvas* CanvasTileImageProvider::getCanvas(int width,
     _canvasHeight = height;
   }
   else {
+    _canvas->clearRect(0, 0, width, height);
     _canvas->setFillColor(*_transparent);
     _canvas->fillRectangle(0, 0, width, height);
   }

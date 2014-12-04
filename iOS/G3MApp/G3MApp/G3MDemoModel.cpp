@@ -11,7 +11,6 @@
 #include <G3MiOSSDK/LayerSet.hpp>
 #include <G3MiOSSDK/ILogger.hpp>
 #include <G3MiOSSDK/GEORenderer.hpp>
-#include <G3MiOSSDK/GEOTileRasterizer.hpp>
 #include <G3MiOSSDK/MarksRenderer.hpp>
 #include <G3MiOSSDK/MeshRenderer.hpp>
 #include <G3MiOSSDK/ShapesRenderer.hpp>
@@ -19,6 +18,7 @@
 #include <G3MiOSSDK/G3MWidget.hpp>
 #include <G3MiOSSDK/PlanetRenderer.hpp>
 #include <G3MiOSSDK/GEOVectorLayer.hpp>
+#include <G3MiOSSDK/PointCloudsRenderer.hpp>
 
 #include "G3MDemoScene.hpp"
 #include "G3MDemoListener.hpp"
@@ -32,13 +32,16 @@
 #include "G3MIsosurfaceDemoScene.hpp"
 #include "G3MScenarioDEMDemoScene.hpp"
 #include "G3MTiledVectorDemoScene.hpp"
+#include "G3MStreamingPointCloud1DemoScene.hpp"
+#include "G3MStreamingPointCloud2DemoScene.hpp"
 
-G3MDemoModel::G3MDemoModel(G3MDemoListener* listener,
-                           LayerSet*        layerSet,
-                           MeshRenderer*    meshRenderer,
-                           ShapesRenderer*  shapesRenderer,
-                           MarksRenderer*   marksRenderer,
-                           GEORenderer*     geoRenderer) :
+G3MDemoModel::G3MDemoModel(G3MDemoListener*     listener,
+                           LayerSet*            layerSet,
+                           MeshRenderer*        meshRenderer,
+                           ShapesRenderer*      shapesRenderer,
+                           MarksRenderer*       marksRenderer,
+                           GEORenderer*         geoRenderer,
+                           PointCloudsRenderer* pointCloudsRenderer) :
 _listener(listener),
 _g3mWidget(NULL),
 _layerSet(layerSet),
@@ -46,6 +49,7 @@ _meshRenderer(meshRenderer),
 _shapesRenderer(shapesRenderer),
 _marksRenderer(marksRenderer),
 _geoRenderer(geoRenderer),
+_pointCloudsRenderer(pointCloudsRenderer),
 _selectedScene(NULL),
 _context(NULL)
 {
@@ -59,6 +63,8 @@ _context(NULL)
   _scenes.push_back( new G3MCameraDemoScene(this) );
   _scenes.push_back( new G3MIsosurfaceDemoScene(this) );
   _scenes.push_back( new G3MTiledVectorDemoScene(this) );
+  _scenes.push_back( new G3MStreamingPointCloud1DemoScene(this) );
+  _scenes.push_back( new G3MStreamingPointCloud2DemoScene(this) );
 }
 
 void G3MDemoModel::initializeG3MContext(const G3MContext* context) {
@@ -93,6 +99,7 @@ void G3MDemoModel::reset() {
   getMarksRenderer()->removeAllMarks();
   getMeshRenderer()->clearMeshes();
   getShapesRenderer()->removeAllShapes(true);
+  getPointCloudsRenderer()->removeAllPointClouds();
 
   _layerSet->removeAllLayers(true);
 }

@@ -872,7 +872,6 @@ GEORenderer* IG3MBuilder::createGEORenderer(GEOSymbolizer* symbolizer,
   ShapesRenderer* shapesRenderer = createShapesRenderer ? this->createShapesRenderer() : NULL;
   MarksRenderer*  marksRenderer  = createMarksRenderer  ? this->createMarksRenderer()  : NULL;
   GEOVectorLayer* geoVectorLayer = createGEOVectorLayer ? getPlanetRendererBuilder()->createGEOVectorLayer() : NULL;
-  //  GEOTileRasterizer* geoTileRasterizer = createGEOVectorLayer ? getPlanetRendererBuilder()->createGEOTileRasterizer() : NULL;
 
   GEORenderer* geoRenderer = new GEORenderer(symbolizer,
                                              meshRenderer,
