@@ -1,117 +1,38 @@
-
-
 package org.glob3.mobile.client;
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-import java.util.ArrayList;
-
-<<<<<<< HEAD
-import org.glob3.mobile.generated.*;
-=======
 import org.glob3.mobile.generated.AltitudeMode;
 import org.glob3.mobile.generated.Angle;
 import org.glob3.mobile.generated.BoxShape;
-import org.glob3.mobile.generated.BusyMeshRenderer;
-import org.glob3.mobile.generated.CameraDoubleDragHandler;
-import org.glob3.mobile.generated.CameraDoubleTapHandler;
-import org.glob3.mobile.generated.CameraRenderer;
-import org.glob3.mobile.generated.CameraRotationHandler;
-import org.glob3.mobile.generated.CameraSingleDragHandler;
-import org.glob3.mobile.generated.CircleShape;
+import org.glob3.mobile.generated.Camera;
 import org.glob3.mobile.generated.Color;
-import org.glob3.mobile.generated.CompositeRenderer;
-import org.glob3.mobile.generated.DirectMesh;
 import org.glob3.mobile.generated.ElevationDataProvider;
-import org.glob3.mobile.generated.EllipsoidShape;
-import org.glob3.mobile.generated.ErrorRenderer;
-import org.glob3.mobile.generated.FixedFocusSceneLighting;
-import org.glob3.mobile.generated.FloatBufferBuilderFromColor;
-import org.glob3.mobile.generated.FloatBufferBuilderFromGeodetic;
 import org.glob3.mobile.generated.G3MContext;
-import org.glob3.mobile.generated.G3MEventContext;
-import org.glob3.mobile.generated.G3MWidget;
-import org.glob3.mobile.generated.GEO2DLineRasterStyle;
-import org.glob3.mobile.generated.GEO2DLineStringGeometry;
-import org.glob3.mobile.generated.GEO2DMultiLineStringGeometry;
-import org.glob3.mobile.generated.GEO2DMultiPolygonGeometry;
-import org.glob3.mobile.generated.GEO2DPointGeometry;
-import org.glob3.mobile.generated.GEO2DPolygonData;
-import org.glob3.mobile.generated.GEO2DPolygonGeometry;
-import org.glob3.mobile.generated.GEO2DSurfaceRasterStyle;
-import org.glob3.mobile.generated.GEOGeometry;
-import org.glob3.mobile.generated.GEOLineRasterSymbol;
-import org.glob3.mobile.generated.GEOMultiLineRasterSymbol;
-import org.glob3.mobile.generated.GEOPolygonRasterSymbol;
-import org.glob3.mobile.generated.GEORenderer;
-import org.glob3.mobile.generated.GEOSymbol;
-import org.glob3.mobile.generated.GEOSymbolizer;
-import org.glob3.mobile.generated.GEOTileRasterizer;
 import org.glob3.mobile.generated.GInitializationTask;
-import org.glob3.mobile.generated.GLPrimitive;
-import org.glob3.mobile.generated.GTask;
 import org.glob3.mobile.generated.Geodetic2D;
 import org.glob3.mobile.generated.Geodetic3D;
-import org.glob3.mobile.generated.HUDErrorRenderer;
 import org.glob3.mobile.generated.IBufferDownloadListener;
 import org.glob3.mobile.generated.IByteBuffer;
-import org.glob3.mobile.generated.ICameraActivityListener;
 import org.glob3.mobile.generated.ICameraConstrainer;
 import org.glob3.mobile.generated.IDownloader;
-import org.glob3.mobile.generated.IImage;
-import org.glob3.mobile.generated.IImageDownloadListener;
-import org.glob3.mobile.generated.IImageListener;
-import org.glob3.mobile.generated.IImageUtils;
 import org.glob3.mobile.generated.IJSONParser;
-import org.glob3.mobile.generated.IStorage;
-import org.glob3.mobile.generated.IThreadUtils;
-import org.glob3.mobile.generated.InitialCameraPositionProvider;
 import org.glob3.mobile.generated.JSONArray;
 import org.glob3.mobile.generated.JSONBaseObject;
 import org.glob3.mobile.generated.JSONObject;
-import org.glob3.mobile.generated.LayerSet;
-import org.glob3.mobile.generated.LayerTilesRenderParameters;
-import org.glob3.mobile.generated.LayerTouchEvent;
-import org.glob3.mobile.generated.LayerTouchEventListener;
-import org.glob3.mobile.generated.LevelTileCondition;
 import org.glob3.mobile.generated.Mark;
-import org.glob3.mobile.generated.MarkTouchListener;
 import org.glob3.mobile.generated.MarksRenderer;
-import org.glob3.mobile.generated.Mesh;
-import org.glob3.mobile.generated.MeshRenderer;
-import org.glob3.mobile.generated.PeriodicalTask;
 import org.glob3.mobile.generated.Planet;
-import org.glob3.mobile.generated.PlanetRenderer;
-import org.glob3.mobile.generated.PlanetRendererBuilder;
-import org.glob3.mobile.generated.QuadShape;
-import org.glob3.mobile.generated.RectangleF;
-import org.glob3.mobile.generated.Renderer;
-import org.glob3.mobile.generated.SceneLighting;
 import org.glob3.mobile.generated.Sector;
 import org.glob3.mobile.generated.Shape;
 import org.glob3.mobile.generated.ShapesRenderer;
-import org.glob3.mobile.generated.SimpleCameraConstrainer;
-import org.glob3.mobile.generated.SimpleInitialCameraPositionProvider;
-import org.glob3.mobile.generated.SingleBillElevationDataProvider;
-import org.glob3.mobile.generated.StrokeCap;
-import org.glob3.mobile.generated.StrokeJoin;
 import org.glob3.mobile.generated.TimeInterval;
 import org.glob3.mobile.generated.URL;
 import org.glob3.mobile.generated.Vector2I;
 import org.glob3.mobile.generated.Vector3D;
-import org.glob3.mobile.generated.WMSLayer;
-import org.glob3.mobile.generated.WMSServerVersion;
-import org.glob3.mobile.generated.WidgetUserData;
->>>>>>> origin/purgatory
-import org.glob3.mobile.specific.Downloader_WebGL;
-=======
->>>>>>> origin/purgatory
-=======
->>>>>>> senderos-gc
 import org.glob3.mobile.specific.G3MBuilder_WebGL;
 import org.glob3.mobile.specific.G3MWidget_WebGL;
 
 import com.google.gwt.core.client.EntryPoint;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.RootPanel;
 
@@ -122,7 +43,7 @@ public class G3MWebGLDemo
 
    private static final String _g3mWidgetHolderId = "g3mWidgetHolder";
    private G3MWidget_WebGL     _widget            = null;
-
+   
 
    @Override
    public void onModuleLoad() {
@@ -143,121 +64,11 @@ public class G3MWebGLDemo
       g3mWidgetHolder.add(_widget);
    }
 
-
-<<<<<<< HEAD
-<<<<<<< HEAD
-   private GInitializationTask createMarkersInitializationTask() {
-      final GInitializationTask initializationTask = new GInitializationTask() {
-
-         @Override
-         public void run(final G3MContext context) {
-
-            final IDownloader downloader = context.getDownloader();
-
-            final IBufferDownloadListener listener = new IBufferDownloadListener() {
-
-               @Override
-               public void onDownload(final URL url,
-                                      final IByteBuffer buffer,
-                                      final boolean expired) {
-
-                  final String response = buffer.getAsString();
-                  final IJSONParser parser = context.getJSONParser();
-                  final JSONBaseObject jsonObject = parser.parse(response);
-                  final JSONObject object = jsonObject.asObject();
-                  final JSONArray list = object.getAsArray("list");
-                  for (int i = 0; i < list.size(); i++) {
-
-                     final JSONObject city = list.getAsObject(i);
-
-                     final JSONObject coords = city.getAsObject("coord");
-                     final Geodetic2D position = new Geodetic2D(Angle.fromDegrees(coords.getAsNumber("lat").value()),
-                              Angle.fromDegrees(coords.getAsNumber("lon").value()));
-                     final JSONArray weather = city.getAsArray("weather");
-                     final JSONObject weatherObject = weather.getAsObject(0);
-
-                     String icon = "";
-                     if (weatherObject.getAsString("icon", "DOUBLE").equals("DOUBLE")) {
-                        icon = "" + (int) weatherObject.getAsNumber("icon").value() + "d.png";
-                        if (icon.length() < 7) {
-                           icon = "0" + icon;
-                        }
-                     }
-                     else {
-                        icon = weatherObject.getAsString("icon", "DOUBLE") + ".png";
-                     }
-
-                     _markersRenderer.addMark(new Mark(//
-                              city.getAsString("name", ""), //
-                              new URL("http://openweathermap.org/img/w/" + icon, false), //
-                              new Geodetic3D(position, 0), //
-                              AltitudeMode.RELATIVE_TO_GROUND, 0, //
-                              true, //
-                              14, //
-                              Color.white(), //
-                              Color.black(), //
-                              2));
-                  }
-
-                  _markersParsed = true;
-               }
-
-
-               @Override
-               public void onError(final URL url) {
-                  Window.alert("Error retrieving weather data");
-               }
-
-
-               @Override
-               public void onCancel(final URL url) {
-                  // DO Nothing
-               }
-
-
-               @Override
-               public void onCanceledDownload(final URL url,
-                                              final IByteBuffer data,
-                                              final boolean expired) {
-                  // Do Nothing
-               }
-            };
-
-            downloader.requestBuffer( //
-                     new URL("http://openweathermap.org/data/2.1/find/city?bbox=-80,-180,80,180,4&cluster=yes", false), //
-                     0, //
-                     TimeInterval.fromHours(1.0), //
-                     false, listener, //
-                     false);
-         }
-
-			final ErrorRenderer errorRenderer = new HUDErrorRenderer();
-			_widget.initWidget(//
-					storage, //
-					downloader, //
-					threadUtils, //
-					cameraActivityListener, //
-					planet, //
-					cameraConstraints, //
-					cameraRenderer, //
-					mainRenderer, //
-					busyRenderer, //
-					errorRenderer, //
-					backgroundColor, //
-					logFPS, //
-					logDownloaderStatistics, //
-					initializationTask, //
-					autoDeleteInitializationTask, //
-					periodicalTasks, //
-					userData, //
-					lighting, //
-					initialCameraPositionProvider);
-		}
-	}
-
-
 	private GInitializationTask createMarkersInitializationTask() {
 		final GInitializationTask initializationTask = new GInitializationTask() {
+			private MarksRenderer _marksRenderer = new MarksRenderer(true);
+			private boolean _marksParsed;
+			private boolean _markersParsed;
 
 			@Override
 			public void run(final G3MContext context) {
@@ -265,6 +76,10 @@ public class G3MWebGLDemo
 				final IDownloader downloader = context.getDownloader();
 
 				final IBufferDownloadListener listener = new IBufferDownloadListener() {
+
+					private MarksRenderer _markersRenderer;
+					private boolean _markersParsed;
+
 
 					@Override
 					public void onDownload(final URL url,
@@ -1047,7 +862,6 @@ public class G3MWebGLDemo
       }
 
       // camera constrainer
-<<<<<<< HEAD
       if (false) {
          final ICameraConstrainer myCameraConstrainer = new ICameraConstrainer() {
             private boolean firstTime = true;
@@ -1086,47 +900,6 @@ public class G3MWebGLDemo
          builder.addCameraConstraint(myCameraConstrainer);
          builder.setPlanet(Planet.createFlatEarth());
       }
-=======
-      //      if (false) {
-      //         final ICameraConstrainer myCameraConstrainer = new ICameraConstrainer() {
-      //            private boolean firstTime = true;
-      //
-      //
-      //            @Override
-      //            public void dispose() {
-      //            }
-      //
-      //
-      //            @Override
-      //            public boolean onCameraChange(final Planet planet,
-      //                                          final Camera previousCamera,
-      //                                          final Camera nextCamera) {
-      //               if (firstTime) {
-      //                  final Geodetic3D position = new Geodetic3D(Angle.fromDegrees(28), Angle.fromDegrees(-16), 4e5);
-      //                  nextCamera.setGeodeticPosition(position);
-      //                  firstTime = false;
-      //               }
-      //               else {
-      //                  final double maxHeight = 5e5;
-      //                  final double minLat = 26.5, maxLat = 30.5, minLon = -19.5, maxLon = -12.5;
-      //                  final Geodetic3D cameraPosition = nextCamera.getGeodeticPosition();
-      //                  final double lat = cameraPosition._latitude._degrees;
-      //                  final double lon = cameraPosition._longitude._degrees;
-      //                  final double pitch = nextCamera.getPitch()._degrees;
-      //                  final double heading = nextCamera.getHeading()._degrees;
-      //                  if ((cameraPosition._height > maxHeight) || (lon < minLon) || (lon > maxLon) || (lat < minLat)
-      //                      || (lat > maxLat) || (pitch > 0.01) || (Math.abs(heading) > 0.01)) {
-      //                     nextCamera.copyFrom(previousCamera);
-      //                  }
-      //               }
-      //               return true;
-      //            }
-      //         };
-      //         builder.addCameraConstraint(myCameraConstrainer);
-      //         builder.setPlanet(Planet.createFlatEarth());
-      //      }
->>>>>>> origin/purgatory
-
 
       _widget = builder.createWidget();
       
