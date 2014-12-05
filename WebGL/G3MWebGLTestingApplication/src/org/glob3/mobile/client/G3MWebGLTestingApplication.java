@@ -62,13 +62,13 @@ public class G3MWebGLTestingApplication
 
       final G3MBuilder_WebGL builder = new G3MBuilder_WebGL();
 
-      builder.getPlanetRendererBuilder().setLayerSet(createLayerSet());
+      //builder.getPlanetRendererBuilder().setLayerSet(createLayerSet());
 
-      final String proxy = null; // "http://galileo.glob3mobile.com/" + "proxy.php?url="
-      builder.setDownloader(new Downloader_WebGL( //
-               8, // maxConcurrentOperationCount
-               10, // delayMillis
-               proxy));
+//      final String proxy = null; // "http://galileo.glob3mobile.com/" + "proxy.php?url="
+//      builder.setDownloader(new Downloader_WebGL( //
+//               8, // maxConcurrentOperationCount
+//               10, // delayMillis
+//               proxy));
 
       _widget = builder.createWidget();
       g3mWidgetHolder.add(_widget);

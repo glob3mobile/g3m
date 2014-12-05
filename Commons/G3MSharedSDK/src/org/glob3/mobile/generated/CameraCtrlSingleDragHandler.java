@@ -48,6 +48,9 @@ public class CameraCtrlSingleDragHandler extends CameraEventHandler
 
   public final boolean onTouchEvent(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
   {
+
+	    
+	    ILogger.instance().logError("HERE WE TRY!!!");
     // only one finger needed and Ctrl
     if (!touchEvent.isCtrlPressed())
     {
@@ -71,6 +74,8 @@ public class CameraCtrlSingleDragHandler extends CameraEventHandler
       default:
         break;
     }
+    
+    ILogger.instance().logError("HERE WE GO!!!");
   
     return true;
   }
@@ -90,11 +95,14 @@ public class CameraCtrlSingleDragHandler extends CameraEventHandler
     if (!touchEvent.isCtrlPressed())
     {
       cameraContext.setCurrentGesture(Gesture.None);
+      ILogger.instance().logError("HERE WE DONT GO!!!");
       return;
     }
   
-    if (cameraContext.getCurrentGesture()!=Gesture.CtrlDrag)
+    if (cameraContext.getCurrentGesture()!=Gesture.CtrlDrag){
+        ILogger.instance().logError("HERE WE GO 2!!!");
        return;
+    }
   
     Camera cam = cameraContext.getNextCamera();
     TaitBryanAngles angles = cam.getHeadingPitchRoll();
@@ -106,6 +114,9 @@ public class CameraCtrlSingleDragHandler extends CameraEventHandler
     final float heading = (((float)delta._x) / cam.getViewPortWidth()) * (_maxHeadingMovementInDegrees * 0.5f);
     final float pitch = (((float)delta._x) / cam.getViewPortWidth()) * (_maxPitchMovementInDegrees * 0.5f);
   
+    ILogger.instance().logError("HERE WE GO !!!" + heading + " " + pitch);
+    
+    
     cam.setHeadingPitchRoll(angles._heading.add(Angle.fromDegrees(heading)), angles._pitch.add(Angle.fromDegrees(pitch)), angles._roll);
   }
   public final void onUp(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
