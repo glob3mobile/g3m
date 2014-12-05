@@ -25,6 +25,11 @@ CompositeMesh::~CompositeMesh() {
 
 }
 
+const Vector3D CompositeMesh::getCenter() const {
+    // TODO: calc average of child mesh centers
+    return Vector3D(0.0, 0.0, 0.0);
+}
+
 int CompositeMesh::getVertexCount() const {
   int result = 0;
   const int childrenCount = _children.size();

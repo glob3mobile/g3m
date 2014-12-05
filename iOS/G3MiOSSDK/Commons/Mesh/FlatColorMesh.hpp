@@ -64,6 +64,10 @@ public:
   BoundingVolume* getBoundingVolume()  const {
     return (_mesh == NULL) ? NULL : _mesh->getBoundingVolume();
   }
+    
+  const Vector3D getCenter() const {
+    return _mesh->getCenter();
+  }
   
   int getVertexCount() const {
     return _mesh->getVertexCount();
