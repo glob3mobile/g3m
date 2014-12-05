@@ -202,8 +202,10 @@ public final class MotionEventProcessor {
       }
 
       _previousMousePosition = currentMousePosition;
+      
+      ILogger.instance().logError("MOUSE MOVE " + event.getAltKey());
 
-      return TouchEvent.create(TouchEventType.Move, touches, event.getShiftKey(), event.getCtrlKey(), 0);
+      return TouchEvent.create(TouchEventType.Move, touches, event.getShiftKey(), event.getAltKey(), 0);
    }
 
 
@@ -225,7 +227,7 @@ public final class MotionEventProcessor {
 
       _previousMousePosition = currentMousePosition;
       
-      return TouchEvent.create(TouchEventType.Down, touches, event.getShiftKey(), event.getCtrlKey(), 0);
+      return TouchEvent.create(TouchEventType.Down, touches, event.getShiftKey(), event.getAltKey(), 0);
    }
 
 
@@ -252,7 +254,7 @@ public final class MotionEventProcessor {
       }
       _previousMousePosition = currentMousePosition;
 
-      return TouchEvent.create(touchType, touches, event.getShiftKey(), event.getCtrlKey(), 0);
+      return TouchEvent.create(touchType, touches, event.getShiftKey(), event.getAltKey(), 0);
    }
 
 

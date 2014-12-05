@@ -70,7 +70,7 @@ void CameraCtrlSingleDragHandler::onMove(const G3MEventContext *eventContext,
   const Vector2I delta = t->getPos().sub(t->getPrevPos());
   
   const float heading = (((float)delta._x) / cam->getViewPortWidth()) * (_maxHeadingMovementInDegrees * 0.5f);
-  const float pitch = (((float)delta._x) / cam->getViewPortWidth()) * (_maxPitchMovementInDegrees * 0.5f);
+  const float pitch = (((float)delta._y) / cam->getViewPortHeight()) * (_maxPitchMovementInDegrees * 0.5f);
   
   cam->setHeadingPitchRoll(angles._heading.add(Angle::fromDegrees(heading)),
                            angles._pitch.add(Angle::fromDegrees(pitch)),

@@ -48,9 +48,6 @@ public class CameraCtrlSingleDragHandler extends CameraEventHandler
 
   public final boolean onTouchEvent(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
   {
-
-	    
-	    ILogger.instance().logError("HERE WE TRY!!!");
     // only one finger needed and Ctrl
     if (!touchEvent.isCtrlPressed())
     {
@@ -75,8 +72,6 @@ public class CameraCtrlSingleDragHandler extends CameraEventHandler
         break;
     }
     
-    ILogger.instance().logError("HERE WE GO!!!");
-  
     return true;
   }
 
@@ -110,13 +105,10 @@ public class CameraCtrlSingleDragHandler extends CameraEventHandler
     final Touch t = touchEvent.getTouch(0);
   
     final Vector2I delta = t.getPos().sub(t.getPrevPos());
-  
+
     final float heading = (((float)delta._x) / cam.getViewPortWidth()) * (_maxHeadingMovementInDegrees * 0.5f);
-    final float pitch = (((float)delta._x) / cam.getViewPortWidth()) * (_maxPitchMovementInDegrees * 0.5f);
-  
-    ILogger.instance().logError("HERE WE GO !!!" + heading + " " + pitch);
-    
-    
+    final float pitch = (((float)delta._y) / cam.getViewPortHeight()) * (_maxPitchMovementInDegrees * 0.5f);
+
     cam.setHeadingPitchRoll(angles._heading.add(Angle.fromDegrees(heading)), angles._pitch.add(Angle.fromDegrees(pitch)), angles._roll);
   }
   public final void onUp(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
