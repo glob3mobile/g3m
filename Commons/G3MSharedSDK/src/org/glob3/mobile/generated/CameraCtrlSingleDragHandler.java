@@ -71,7 +71,7 @@ public class CameraCtrlSingleDragHandler extends CameraEventHandler
       default:
         break;
     }
-    
+  
     return true;
   }
 
@@ -90,14 +90,11 @@ public class CameraCtrlSingleDragHandler extends CameraEventHandler
     if (!touchEvent.isCtrlPressed())
     {
       cameraContext.setCurrentGesture(Gesture.None);
-      ILogger.instance().logError("HERE WE DONT GO!!!");
       return;
     }
   
-    if (cameraContext.getCurrentGesture()!=Gesture.CtrlDrag){
-        ILogger.instance().logError("HERE WE GO 2!!!");
+    if (cameraContext.getCurrentGesture()!=Gesture.CtrlDrag)
        return;
-    }
   
     Camera cam = cameraContext.getNextCamera();
     TaitBryanAngles angles = cam.getHeadingPitchRoll();
@@ -105,10 +102,10 @@ public class CameraCtrlSingleDragHandler extends CameraEventHandler
     final Touch t = touchEvent.getTouch(0);
   
     final Vector2I delta = t.getPos().sub(t.getPrevPos());
-
+  
     final float heading = (((float)delta._x) / cam.getViewPortWidth()) * (_maxHeadingMovementInDegrees * 0.5f);
     final float pitch = (((float)delta._y) / cam.getViewPortHeight()) * (_maxPitchMovementInDegrees * 0.5f);
-
+  
     cam.setHeadingPitchRoll(angles._heading.add(Angle.fromDegrees(heading)), angles._pitch.add(Angle.fromDegrees(pitch)), angles._roll);
   }
   public final void onUp(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)

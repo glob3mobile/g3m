@@ -41,12 +41,10 @@ public class CameraSingleDragHandler extends CameraEventHandler
 
   public final boolean onTouchEvent(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
   {
-	    if (touchEvent.isCtrlPressed())
-	    {
-	       return false;
-	    }
-	  
-	  
+    if (touchEvent.isCtrlPressed())
+    {
+       return false;
+    }
     // only one finger needed
     if (touchEvent.getTouchCount()!=1)
        return false;
