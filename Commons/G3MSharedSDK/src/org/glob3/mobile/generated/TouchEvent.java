@@ -81,4 +81,9 @@ public class TouchEvent
     }
   }
 
+  public final boolean isCtrlPressed()
+  {
+    return _ctrlPressed;
+  }
+
 }

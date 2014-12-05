@@ -36,7 +36,8 @@ public enum Gesture
   Drag,
   Zoom,
   Rotate,
-  DoubleDrag;
+  DoubleDrag,
+  CtrlDrag;
 
    public int getValue()
    {
