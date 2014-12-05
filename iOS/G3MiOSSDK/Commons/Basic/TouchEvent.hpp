@@ -139,6 +139,10 @@ public:
       delete _touchs[i];
     }
   }
+  
+  bool isCtrlPressed() const{
+    return _ctrlPressed;
+  }
 
 };
 

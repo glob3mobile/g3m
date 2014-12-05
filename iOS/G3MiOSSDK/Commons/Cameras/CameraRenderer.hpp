@@ -34,7 +34,8 @@ enum Gesture {
   Drag,
   Zoom,
   Rotate,
-  DoubleDrag
+  DoubleDrag,
+  CtrlDrag
 };
 
 class CameraContext {

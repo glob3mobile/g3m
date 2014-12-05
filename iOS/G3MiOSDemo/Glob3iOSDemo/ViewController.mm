@@ -1308,7 +1308,7 @@ public:
                                                                     HUDRelativePosition::RIGHT,
                                                                     10),
                                             new HUDRelativePosition(0.5,
-                                                                    HUDRelativePosition::VIEWPORT_HEIGTH,
+                                                                    HUDRelativePosition::VIEWPORT_HEIGHT,
                                                                     HUDRelativePosition::MIDDLE),
                                             new HUDRelativeSize(0.22,
                                                                 HUDRelativeSize::VIEWPORT_MIN_AXIS),
@@ -1335,7 +1335,7 @@ public:
                                              new HUDAbsolutePosition(10),
                                              new HUDAbsolutePosition(10),
                                              new HUDRelativeSize(1, HUDRelativeSize::BITMAP_WIDTH),
-                                             new HUDRelativeSize(1, HUDRelativeSize::BITMAP_HEIGTH) );
+                                             new HUDRelativeSize(1, HUDRelativeSize::BITMAP_HEIGHT) );
     hudRenderer->addWidget(label);
 
     HUDQuadWidget* compass2 = new HUDQuadWidget(//new DownloaderImageBuilder(URL("file:///Compass_rose_browns_00_transparent.png")),
@@ -1344,7 +1344,7 @@ public:
                                                                         HUDRelativePosition::VIEWPORT_WIDTH,
                                                                         HUDRelativePosition::CENTER),
                                                 new HUDRelativePosition(0.5,
-                                                                        HUDRelativePosition::VIEWPORT_HEIGTH,
+                                                                        HUDRelativePosition::VIEWPORT_HEIGHT,
                                                                         HUDRelativePosition::MIDDLE),
                                                 new HUDRelativeSize(0.25,  // 0.5,
                                                                     HUDRelativeSize::VIEWPORT_MIN_AXIS),
@@ -1362,7 +1362,7 @@ public:
                                                                      HUDRelativePosition::LEFT,
                                                                      10),
                                              new HUDRelativePosition(0.5,
-                                                                     HUDRelativePosition::VIEWPORT_HEIGTH,
+                                                                     HUDRelativePosition::VIEWPORT_HEIGHT,
                                                                      HUDRelativePosition::MIDDLE),
                                              new HUDRelativeSize(2 * (113.0 / 1536.0),
                                                                  HUDRelativeSize::VIEWPORT_MIN_AXIS),
