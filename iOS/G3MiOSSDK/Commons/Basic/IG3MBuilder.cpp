@@ -33,7 +33,7 @@
 #include "ShapesRenderer.hpp"
 #include "MarksRenderer.hpp"
 #include "HUDErrorRenderer.hpp"
-#include "CameraCtrlSingleDragHandler.hpp"
+#include "CameraAltSingleDragHandler.hpp"
 
 IG3MBuilder::IG3MBuilder() :
 _gl(NULL),
@@ -768,7 +768,7 @@ CameraRenderer* IG3MBuilder::createDefaultCameraRenderer() {
   cameraRenderer->addHandler(new CameraDoubleDragHandler());
   cameraRenderer->addHandler(new CameraRotationHandler());
   cameraRenderer->addHandler(new CameraDoubleTapHandler());
-  cameraRenderer->addHandler(new CameraCtrlSingleDragHandler());
+  cameraRenderer->addHandler(new CameraAltSingleDragHandler());
 
   return cameraRenderer;
 }

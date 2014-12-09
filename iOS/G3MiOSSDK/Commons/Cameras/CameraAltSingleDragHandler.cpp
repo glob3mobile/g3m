@@ -1,12 +1,12 @@
 //
-//  CameraCtrlSingleDragHandler.cpp
+//  CameraAltSingleDragHandler.cpp
 //  G3MiOSSDK
 //
 //  Created by Jose Miguel SN on 5/12/14.
 //
 //
 
-#include "CameraCtrlSingleDragHandler.hpp"
+#include "CameraAltSingleDragHandler.hpp"
 #include "MutableVector2D.hpp"
 #include "TouchEvent.hpp"
 #include "CameraRenderer.hpp"
@@ -17,7 +17,7 @@
 #include "Vector2I.hpp"
 
 
-bool CameraCtrlSingleDragHandler::onTouchEvent(const G3MEventContext *eventContext,
+bool CameraAltSingleDragHandler::onTouchEvent(const G3MEventContext *eventContext,
                                            const TouchEvent* touchEvent,
                                            CameraContext *cameraContext)
 {
@@ -43,7 +43,7 @@ bool CameraCtrlSingleDragHandler::onTouchEvent(const G3MEventContext *eventConte
 }
 
 
-void CameraCtrlSingleDragHandler::onDown(const G3MEventContext *eventContext,
+void CameraAltSingleDragHandler::onDown(const G3MEventContext *eventContext,
                                      const TouchEvent& touchEvent,
                                      CameraContext *cameraContext) {
   
@@ -51,7 +51,7 @@ void CameraCtrlSingleDragHandler::onDown(const G3MEventContext *eventContext,
 }
 
 
-void CameraCtrlSingleDragHandler::onMove(const G3MEventContext *eventContext,
+void CameraAltSingleDragHandler::onMove(const G3MEventContext *eventContext,
                                      const TouchEvent& touchEvent,
                                      CameraContext *cameraContext) {
   
@@ -72,18 +72,27 @@ void CameraCtrlSingleDragHandler::onMove(const G3MEventContext *eventContext,
   const float heading = (((float)delta._x) / cam->getViewPortWidth()) * (_maxHeadingMovementInDegrees * 0.5f);
   const float pitch = (((float)delta._y) / cam->getViewPortHeight()) * (_maxPitchMovementInDegrees * 0.5f);
   
-  cam->setHeadingPitchRoll(angles._heading.add(Angle::fromDegrees(heading)),
-                           angles._pitch.add(Angle::fromDegrees(pitch)),
+  double finalHeading = angles._heading._degrees + heading;
+  
+  double finalPitch = angles._pitch._degrees + pitch;
+  if (finalPitch < -90){ //Boundaries
+    finalPitch = -90;
+  } else if (finalPitch > 90){
+    finalPitch = 90;
+  }
+  
+  cam->setHeadingPitchRoll(Angle::fromDegrees(finalHeading),
+                           Angle::fromDegrees(finalPitch),
                            angles._roll);
 }
 
 
-void CameraCtrlSingleDragHandler::onUp(const G3MEventContext *eventContext,
+void CameraAltSingleDragHandler::onUp(const G3MEventContext *eventContext,
                                    const TouchEvent& touchEvent,
                                    CameraContext *cameraContext) {
   cameraContext->setCurrentGesture(None);
 }
 
-void CameraCtrlSingleDragHandler::render(const G3MRenderContext* rc, CameraContext *cameraContext)
+void CameraAltSingleDragHandler::render(const G3MRenderContext* rc, CameraContext *cameraContext)
 {
 }

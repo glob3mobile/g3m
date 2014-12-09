@@ -1,32 +1,32 @@
 //
-//  CameraCtrlSingleDragHandler.h
+//  CameraAltSingleDragHandler.h
 //  G3MiOSSDK
 //
 //  Created by Jose Miguel SN on 5/12/14.
 //
 //
 
-#ifndef __G3MiOSSDK__CameraCtrlSingleDragHandler__
-#define __G3MiOSSDK__CameraCtrlSingleDragHandler__
+#ifndef __G3MiOSSDK__CameraAltSingleDragHandler__
+#define __G3MiOSSDK__CameraAltSingleDragHandler__
 
 #include <stdio.h>
 
 #include "CameraEventHandler.hpp"
 
 
-class CameraCtrlSingleDragHandler: public CameraEventHandler {
+class CameraAltSingleDragHandler: public CameraEventHandler {
   
   const float _maxHeadingMovementInDegrees;
   const float _maxPitchMovementInDegrees;
   
 public:
-  CameraCtrlSingleDragHandler(float maxHeadingMovementInDegrees = 360,
+  CameraAltSingleDragHandler(float maxHeadingMovementInDegrees = 360,
                               float maxPitchMovementInDegrees = 180):
   _maxHeadingMovementInDegrees(maxHeadingMovementInDegrees),
   _maxPitchMovementInDegrees(maxPitchMovementInDegrees)
   {}
   
-  ~CameraCtrlSingleDragHandler() {
+  ~CameraAltSingleDragHandler() {
 #ifdef JAVA_CODE
     super.dispose();
 #endif
@@ -53,4 +53,4 @@ public:
 };
 
 
-#endif /* defined(__G3MiOSSDK__CameraCtrlSingleDragHandler__) */
+#endif /* defined(__G3MiOSSDK__CameraAltSingleDragHandler__) */
