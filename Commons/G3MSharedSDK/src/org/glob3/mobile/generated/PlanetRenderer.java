@@ -814,11 +814,14 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
       }
       else
       {
-        _elevationDataProviderReadyListener.onReady();
-        if (_elevationDataProviderReadyListenerAutoDelete)
+        if (_elevationDataProviderReadyListener != null)
         {
-          if (_elevationDataProviderReadyListener != null)
-             _elevationDataProviderReadyListener.dispose();
+          _elevationDataProviderReadyListener.onReady();
+          if (_elevationDataProviderReadyListenerAutoDelete)
+          {
+            if (_elevationDataProviderReadyListener != null)
+               _elevationDataProviderReadyListener.dispose();
+          }
         }
       }
     }

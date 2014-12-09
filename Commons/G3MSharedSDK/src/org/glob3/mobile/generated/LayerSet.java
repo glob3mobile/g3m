@@ -474,39 +474,38 @@ public class LayerSet implements ChangedInfoListener
     java.util.ArrayList<Petition> petitions = new java.util.ArrayList<Petition>();
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#warning REMOVE createTileMapPetitions??
-  //  const int layersSize = _layers.size();
-  //  for (int i = 0; i < layersSize; i++) {
-  //    Layer* layer = _layers[i];
-  //    if (layer->isAvailable(tile)) {
-  ///#ifdef C_CODE
-  //      const Tile* petitionTile = tile;
-  ///#else
-  //      Tile* petitionTile = tile;
-  ///#endif
-  //      const int maxLevel = layer->getLayerTilesRenderParameters()->_maxLevel;
-  //      while ((petitionTile->_level > maxLevel) && (petitionTile != NULL)) {
-  //        petitionTile = petitionTile->getParent();
-  //      }
-  //
-  //      if (petitionTile == NULL) {
-  //        ILogger::instance()->logError("Can't find a valid tile for petitions");
-  //      }
-  //
-  //      std::vector<Petition*> tilePetitions = layer->createTileMapPetitions(rc,
-  //                                                                           layerTilesRenderParameters,
-  //                                                                           petitionTile);
-  //
-  //      const int tilePetitionsSize = tilePetitions.size();
-  //      for (int j = 0; j < tilePetitionsSize; j++) {
-  //        petitions.push_back( tilePetitions[j] );
-  //      }
-  //    }
-  //  }
-  //
-  //  if (petitions.empty()) {
-  //    rc->getLogger()->logWarning("Can't create map petitions for tile %s",
-  //                                tile->_id.c_str());
-  //  }
+    final int layersSize = _layers.size();
+    for (int i = 0; i < layersSize; i++)
+    {
+      Layer layer = _layers.get(i);
+      if (layer.isAvailable(tile))
+      {
+        Tile petitionTile = tile;
+        final int maxLevel = layer.getLayerTilesRenderParameters()._maxLevel;
+        while ((petitionTile._level > maxLevel) && (petitionTile != null))
+        {
+          petitionTile = petitionTile.getParent();
+        }
+  
+        if (petitionTile == null)
+        {
+          ILogger.instance().logError("Can't find a valid tile for petitions");
+        }
+  
+        java.util.ArrayList<Petition> tilePetitions = layer.createTileMapPetitions(rc, layerTilesRenderParameters, petitionTile);
+  
+        final int tilePetitionsSize = tilePetitions.size();
+        for (int j = 0; j < tilePetitionsSize; j++)
+        {
+          petitions.add(tilePetitions.get(j));
+        }
+      }
+    }
+  
+    if (petitions.isEmpty())
+    {
+      rc.getLogger().logWarning("Can't create map petitions for tile %s", tile._id);
+    }
   
     return petitions;
   }
