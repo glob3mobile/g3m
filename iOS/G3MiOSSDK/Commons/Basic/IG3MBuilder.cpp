@@ -107,7 +107,7 @@ GL* IG3MBuilder::getGL() {
   if (!_gl) {
     ILogger::instance()->logError("LOGIC ERROR: gl not initialized");
   }
-
+  
   return _gl;
 }
 
@@ -120,7 +120,7 @@ IStorage* IG3MBuilder::getStorage() {
   if (!_storage) {
     _storage = createDefaultStorage();
   }
-
+  
   return _storage;
 }
 
@@ -133,7 +133,7 @@ IDownloader* IG3MBuilder::getDownloader() {
   if (!_downloader) {
     _downloader = createDefaultDownloader();
   }
-
+  
   return _downloader;
 }
 
@@ -146,7 +146,7 @@ IThreadUtils* IG3MBuilder::getThreadUtils() {
   if (!_threadUtils) {
     _threadUtils = createDefaultThreadUtils();
   }
-
+  
   return _threadUtils;
 }
 
@@ -182,7 +182,7 @@ std::vector<ICameraConstrainer*>* IG3MBuilder::getCameraConstraints() {
   if (!_cameraConstraints) {
     _cameraConstraints = createDefaultCameraConstraints();
   }
-
+  
   return _cameraConstraints;
 }
 
@@ -196,7 +196,7 @@ CameraRenderer* IG3MBuilder::getCameraRenderer() {
   if (!_cameraRenderer) {
     _cameraRenderer = createDefaultCameraRenderer();
   }
-
+  
   return _cameraRenderer;
 }
 
@@ -209,7 +209,7 @@ ProtoRenderer* IG3MBuilder::getBusyRenderer() {
   if (!_busyRenderer) {
     _busyRenderer = new BusyMeshRenderer(Color::newFromRGBA((float)0, (float)0, (float)0, (float)1));
   }
-
+  
   return _busyRenderer;
 }
 
@@ -217,7 +217,7 @@ ErrorRenderer* IG3MBuilder::getErrorRenderer() {
   if (!_errorRenderer) {
     _errorRenderer = new HUDErrorRenderer();
   }
-
+  
   return _errorRenderer;
 }
 
@@ -234,7 +234,7 @@ Color* IG3MBuilder::getBackgroundColor() {
   if (!_backgroundColor) {
     _backgroundColor = Color::newFromRGBA((float)0, (float)0.1, (float)0.2, (float)1);
   }
-
+  
   return _backgroundColor;
 }
 
@@ -247,7 +247,7 @@ PlanetRendererBuilder* IG3MBuilder::getPlanetRendererBuilder() {
   if (!_planetRendererBuilder) {
     _planetRendererBuilder = new PlanetRendererBuilder();
   }
-
+  
   return _planetRendererBuilder;
 }
 
@@ -669,11 +669,11 @@ void IG3MBuilder::setUserData(WidgetUserData *userData) {
  * @return G3MWidget*
  */
 G3MWidget* IG3MBuilder::create() {
-
-
+  
+  
   Sector shownSector = getShownSector();
   getPlanetRendererBuilder()->setRenderedSector(shownSector); //Shown sector
-
+  
   /**
    * If any renderers were set or added, the main renderer will be a composite renderer.
    *    If the renderers list does not contain a planetRenderer, it will be created and added.
@@ -693,15 +693,11 @@ G3MWidget* IG3MBuilder::create() {
   else {
     mainRenderer = getPlanetRendererBuilder()->create();
   }
-
-  const Geodetic3D initialCameraPosition = getPlanet()->getDefaultCameraPosition(shownSector);
   
-  /*
-   //Undesired behaviour for senderos-gc
+  const Geodetic3D initialCameraPosition = getPlanet()->getDefaultCameraPosition(shownSector);
   addCameraConstraint(new RenderedSectorCameraConstrainer(mainRenderer->getPlanetRenderer(),
                                                           initialCameraPosition._height * 1.2));
-   */
-
+  
   InitialCameraPositionProvider* icpp = new SimpleInitialCameraPositionProvider();
   
   G3MWidget * g3mWidget = G3MWidget::create(getGL(),
@@ -726,12 +722,12 @@ G3MWidget* IG3MBuilder::create() {
                                             getSceneLighting(),
                                             icpp,
                                             getInfoDisplay());
-
+  
   g3mWidget->setUserData(getUserData());
-
-
+  
+  
   //mainRenderer->getPlanetRenderer()->initializeChangedInfoListener(g3mWidget);
-
+  
   _gl = NULL;
   _storage = NULL;
   _downloader = NULL;
@@ -750,10 +746,10 @@ G3MWidget* IG3MBuilder::create() {
   delete _periodicalTasks;
   _periodicalTasks = NULL;
   _userData = NULL;
-
+  
   delete _shownSector;
   _shownSector = NULL;
-
+  
   return g3mWidget;
 }
 
@@ -761,7 +757,7 @@ std::vector<ICameraConstrainer*>* IG3MBuilder::createDefaultCameraConstraints() 
   std::vector<ICameraConstrainer*>* cameraConstraints = new std::vector<ICameraConstrainer*>;
   SimpleCameraConstrainer* scc = new SimpleCameraConstrainer();
   cameraConstraints->push_back(scc);
-
+  
   return cameraConstraints;
 }
 
@@ -773,19 +769,19 @@ CameraRenderer* IG3MBuilder::createDefaultCameraRenderer() {
   cameraRenderer->addHandler(new CameraRotationHandler());
   cameraRenderer->addHandler(new CameraDoubleTapHandler());
   cameraRenderer->addHandler(new CameraAltSingleDragHandler());
-
+  
   return cameraRenderer;
 }
 
 std::vector<PeriodicalTask*>* IG3MBuilder::createDefaultPeriodicalTasks() {
   std::vector<PeriodicalTask*>* periodicalTasks = new std::vector<PeriodicalTask*>;
-
+  
   return periodicalTasks;
 }
 
 std::vector<Renderer*>* IG3MBuilder::createDefaultRenderers() {
   std::vector<Renderer*>* renderers = new std::vector<Renderer*>;
-
+  
   return renderers;
 }
 
@@ -869,20 +865,19 @@ GEORenderer* IG3MBuilder::createGEORenderer(GEOSymbolizer* symbolizer,
                                             bool createShapesRenderer,
                                             bool createMarksRenderer,
                                             bool createGEOVectorLayer) {
-
+  
   MeshRenderer*   meshRenderer   = createMeshRenderer   ? this->createMeshRenderer()   : NULL;
   ShapesRenderer* shapesRenderer = createShapesRenderer ? this->createShapesRenderer() : NULL;
   MarksRenderer*  marksRenderer  = createMarksRenderer  ? this->createMarksRenderer()  : NULL;
   GEOVectorLayer* geoVectorLayer = createGEOVectorLayer ? getPlanetRendererBuilder()->createGEOVectorLayer() : NULL;
-  //  GEOTileRasterizer* geoTileRasterizer = createGEOVectorLayer ? getPlanetRendererBuilder()->createGEOTileRasterizer() : NULL;
-
+  
   GEORenderer* geoRenderer = new GEORenderer(symbolizer,
                                              meshRenderer,
                                              shapesRenderer,
                                              marksRenderer,
                                              geoVectorLayer);
   addRenderer(geoRenderer);
-
+  
   return geoRenderer;
 }
 
