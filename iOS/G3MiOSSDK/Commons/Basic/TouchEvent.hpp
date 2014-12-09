@@ -65,6 +65,7 @@ private:
   const std::vector<const Touch*>  _touchs;
   const bool                       _shiftPressed;
   const bool                       _ctrlPressed;
+  const bool                       _altPressed;
   const double                     _wheelDelta;
 
 
@@ -72,11 +73,13 @@ private:
              const std::vector<const Touch*> touchs,
              bool shift,
              bool ctrl,
+             bool alt,
              double wheelDelta) :
   _eventType(type),
   _touchs(touchs),
   _shiftPressed(shift),
   _ctrlPressed(ctrl),
+  _altPressed(alt),
   _wheelDelta(wheelDelta)
   {
   }
@@ -87,20 +90,22 @@ public:
   _touchs(other._touchs),
   _shiftPressed(other._shiftPressed),
   _ctrlPressed(other._ctrlPressed),
+  _altPressed(other._altPressed),
   _wheelDelta(other._wheelDelta) {
   }
 
   static TouchEvent* create(const TouchEventType& type,
                             const std::vector<const Touch*> touchs) {
-    return new TouchEvent(type, touchs, false, false, 0.0);
+    return new TouchEvent(type, touchs, false, false, false, 0.0);
   }
 
   static TouchEvent* create(const TouchEventType& type,
                             const std::vector<const Touch*> touchs,
                             bool shift,
                             bool ctrl,
+                            bool alt,
                             double wheelDelta) {
-    return new TouchEvent(type, touchs, shift, ctrl, wheelDelta);
+    return new TouchEvent(type, touchs, shift, ctrl, alt, wheelDelta);
   }
 
   static TouchEvent* create(const TouchEventType& type,
@@ -114,10 +119,11 @@ public:
                             const Touch* touch,
                             bool shift,
                             bool ctrl,
+                            bool alt,
                             double wheelDelta) {
     const std::vector<const Touch*> touchs(1, touch);
 
-    return create(type, touchs, shift, ctrl, wheelDelta);
+    return create(type, touchs, shift, ctrl, alt, wheelDelta);
   }
 
   TouchEventType getType() const {
@@ -142,6 +148,10 @@ public:
   
   bool isCtrlPressed() const{
     return _ctrlPressed;
+  }
+  
+  bool isAltPressed() const{
+    return _altPressed;
   }
 
 };
