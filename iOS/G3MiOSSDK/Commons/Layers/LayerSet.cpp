@@ -494,7 +494,7 @@ std::vector<Petition*> LayerSet::createTileMapPetitions(const G3MRenderContext* 
 #else
       Tile* petitionTile = tile;
 #endif
-      const int maxLevel = layer->getLayerTilesRenderParameters()->_maxLevel;
+      const int maxLevel = layer->getLayerTilesRenderParametersVector().at(0)->_maxLevel;
       while ((petitionTile->_level > maxLevel) && (petitionTile != NULL)) {
         petitionTile = petitionTile->getParent();
       }
