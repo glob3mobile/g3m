@@ -3,6 +3,7 @@
 package org.glob3.mobile.specific;
 
 import org.glob3.mobile.generated.BasicShadersGL2;
+import org.glob3.mobile.generated.CameraAltSingleDragHandler;
 import org.glob3.mobile.generated.CameraDoubleDragHandler;
 import org.glob3.mobile.generated.CameraDoubleTapHandler;
 import org.glob3.mobile.generated.CameraRenderer;
@@ -85,6 +86,7 @@ protected CameraRenderer createDefaultCameraRenderer() {
 	  cameraRenderer.addHandler(new CameraDoubleDragHandler(allowRotationInDoubleDrag));
 	  cameraRenderer.addHandler(new CameraRotationHandler());
 	  cameraRenderer.addHandler(new CameraDoubleTapHandler());
+	  cameraRenderer.addHandler(new CameraAltSingleDragHandler());
 	  
 	  return cameraRenderer;
 }
