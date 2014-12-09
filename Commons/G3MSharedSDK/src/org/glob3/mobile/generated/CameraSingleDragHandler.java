@@ -42,6 +42,8 @@ public class CameraSingleDragHandler extends CameraEventHandler
   public final boolean onTouchEvent(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
   {
     // only one finger needed
+    if (touchEvent.isAltPressed())
+       return false;
     if (touchEvent.getTouchCount()!=1)
        return false;
     if (touchEvent.getTapCount()>1)
