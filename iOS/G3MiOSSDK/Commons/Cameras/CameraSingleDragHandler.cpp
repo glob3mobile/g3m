@@ -19,7 +19,7 @@ bool CameraSingleDragHandler::onTouchEvent(const G3MEventContext *eventContext,
                                            const TouchEvent* touchEvent, 
                                            CameraContext *cameraContext) 
 {
-  if (touchEvent->isCtrlPressed()){ return false;}
+  if (touchEvent->isAltPressed()){ return false;}
   // only one finger needed
   if (touchEvent->getTouchCount()!=1) return false;
   if (touchEvent->getTapCount()>1) return false;

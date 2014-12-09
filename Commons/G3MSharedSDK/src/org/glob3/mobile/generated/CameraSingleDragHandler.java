@@ -41,7 +41,7 @@ public class CameraSingleDragHandler extends CameraEventHandler
 
   public final boolean onTouchEvent(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
   {
-    if (touchEvent.isCtrlPressed())
+    if (touchEvent.isAltPressed())
     {
        return false;
     }
