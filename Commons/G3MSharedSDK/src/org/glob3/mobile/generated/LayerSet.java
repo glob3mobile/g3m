@@ -481,7 +481,7 @@ public class LayerSet implements ChangedInfoListener
       if (layer.isAvailable(tile))
       {
         Tile petitionTile = tile;
-        final int maxLevel = layer.getLayerTilesRenderParameters()._maxLevel;
+        final int maxLevel = layer.getLayerTilesRenderParametersVector().get(0)._maxLevel;
         while ((petitionTile._level > maxLevel) && (petitionTile != null))
         {
           petitionTile = petitionTile.getParent();
