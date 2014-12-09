@@ -49,7 +49,7 @@ public class CameraAltSingleDragHandler extends CameraEventHandler
   public final boolean onTouchEvent(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
   {
     // only one finger needed and Ctrl
-    if (!touchEvent.isCtrlPressed())
+    if (!touchEvent.isAltPressed())
     {
        return false;
     }
@@ -87,7 +87,7 @@ public class CameraAltSingleDragHandler extends CameraEventHandler
   public final void onMove(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
   {
   
-    if (!touchEvent.isCtrlPressed())
+    if (!touchEvent.isAltPressed())
     {
       cameraContext.setCurrentGesture(Gesture.None);
       return;

@@ -22,7 +22,7 @@ bool CameraAltSingleDragHandler::onTouchEvent(const G3MEventContext *eventContex
                                            CameraContext *cameraContext)
 {
   // only one finger needed and Ctrl
-  if (!touchEvent->isCtrlPressed()){ return false;}
+  if (!touchEvent->isAltPressed()){ return false;}
   if (touchEvent->getTouchCount()!=1) return false;
   if (touchEvent->getTapCount()>1) return false;
   
@@ -55,7 +55,7 @@ void CameraAltSingleDragHandler::onMove(const G3MEventContext *eventContext,
                                      const TouchEvent& touchEvent,
                                      CameraContext *cameraContext) {
   
-  if (!touchEvent.isCtrlPressed()){
+  if (!touchEvent.isAltPressed()){
     cameraContext->setCurrentGesture(None);
     return;
   }
