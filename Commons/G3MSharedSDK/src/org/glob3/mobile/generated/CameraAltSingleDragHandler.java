@@ -1,6 +1,6 @@
 package org.glob3.mobile.generated; 
 //
-//  CameraCtrlSingleDragHandler.cpp
+//  CameraAltSingleDragHandler.cpp
 //  G3MiOSSDK
 //
 //  Created by Jose Miguel SN on 5/12/14.
@@ -8,7 +8,7 @@ package org.glob3.mobile.generated;
 //
 
 //
-//  CameraCtrlSingleDragHandler.h
+//  CameraAltSingleDragHandler.h
 //  G3MiOSSDK
 //
 //  Created by Jose Miguel SN on 5/12/14.
@@ -19,21 +19,21 @@ package org.glob3.mobile.generated;
 
 
 
-public class CameraCtrlSingleDragHandler extends CameraEventHandler
+public class CameraAltSingleDragHandler extends CameraEventHandler
 {
 
   private final float _maxHeadingMovementInDegrees;
   private final float _maxPitchMovementInDegrees;
 
-  public CameraCtrlSingleDragHandler(float maxHeadingMovementInDegrees)
+  public CameraAltSingleDragHandler(float maxHeadingMovementInDegrees)
   {
      this(maxHeadingMovementInDegrees, 180);
   }
-  public CameraCtrlSingleDragHandler()
+  public CameraAltSingleDragHandler()
   {
      this(360, 180);
   }
-  public CameraCtrlSingleDragHandler(float maxHeadingMovementInDegrees, float maxPitchMovementInDegrees)
+  public CameraAltSingleDragHandler(float maxHeadingMovementInDegrees, float maxPitchMovementInDegrees)
   {
      _maxHeadingMovementInDegrees = maxHeadingMovementInDegrees;
      _maxPitchMovementInDegrees = maxPitchMovementInDegrees;
@@ -106,7 +106,19 @@ public class CameraCtrlSingleDragHandler extends CameraEventHandler
     final float heading = (((float)delta._x) / cam.getViewPortWidth()) * (_maxHeadingMovementInDegrees * 0.5f);
     final float pitch = (((float)delta._y) / cam.getViewPortHeight()) * (_maxPitchMovementInDegrees * 0.5f);
   
-    cam.setHeadingPitchRoll(angles._heading.add(Angle.fromDegrees(heading)), angles._pitch.add(Angle.fromDegrees(pitch)), angles._roll);
+    double finalHeading = angles._heading._degrees + heading;
+  
+    double finalPitch = angles._pitch._degrees + pitch;
+    if (finalPitch < -90) //Boundaries
+    {
+      finalPitch = -90;
+    }
+    else if (finalPitch > 90)
+    {
+      finalPitch = 90;
+    }
+  
+    cam.setHeadingPitchRoll(Angle.fromDegrees(finalHeading), Angle.fromDegrees(finalPitch), angles._roll);
   }
   public final void onUp(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
   {
