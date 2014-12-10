@@ -22,6 +22,7 @@ import com.google.gwt.dom.client.NativeEvent;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
+import com.google.gwt.user.client.Window;
 
 
 public final class MotionEventProcessor {
@@ -283,29 +284,11 @@ public final class MotionEventProcessor {
    private void processMouseWheel(final int delta,
                                   final int x,
                                   final int y) {
-      //      log(LogLevel.InfoLevel, " delta=" + delta + " x=" + x + " y=" + y);
-
-      final Vector2I beginFirstPosition = new Vector2I(x - 10, y);
-      final Vector2I beginSecondPosition = new Vector2I(x + 10, y);
-
-      final ArrayList<Touch> beginTouches = new ArrayList<Touch>(2);
-      beginTouches.add(new Touch(beginFirstPosition, beginFirstPosition));
-      beginTouches.add(new Touch(beginSecondPosition, beginSecondPosition));
-
-
-      final Vector2I endFirstPosition = new Vector2I(beginFirstPosition._x - delta, beginFirstPosition._y);
-      final Vector2I endSecondPosition = new Vector2I(beginSecondPosition._x + delta, beginSecondPosition._y);
-
-      final ArrayList<Touch> endTouches = new ArrayList<Touch>(2);
-      endTouches.add(new Touch(endFirstPosition, beginFirstPosition));
-      endTouches.add(new Touch(endSecondPosition, beginSecondPosition));
-
-      dispatchEvents( //
-              TouchEvent.create(TouchEventType.Down, beginTouches), //
-              TouchEvent.create(TouchEventType.Move, beginTouches), //
-               TouchEvent.create(TouchEventType.Move, endTouches), //
-               TouchEvent.create(TouchEventType.Up, endTouches) //
-      );
+	   double dd = (double) delta;
+	   final ArrayList<Touch> touches = new ArrayList<Touch>(2);
+	   touches.add(new Touch(new Vector2I(x,y), new Vector2I(x,y)));
+	   TouchEvent te = TouchEvent.create(TouchEventType.MouseWheelChanged, touches, false, false, dd);
+	   dispatchEvents( te );
 
       _previousMousePosition = new Vector2I(x, y);
    }

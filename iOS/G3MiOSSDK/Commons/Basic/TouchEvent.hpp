@@ -55,7 +55,8 @@ enum TouchEventType {
   Up,
   Move,
   LongPress,
-  DownUp
+  DownUp,
+  MouseWheelChanged
 };
 
 
@@ -138,6 +139,10 @@ public:
     for (unsigned int i = 0; i < _touchs.size(); i++) {
       delete _touchs[i];
     }
+  }
+  
+  double getMouseWheelDelta() const{
+    return _wheelDelta;
   }
 
 };

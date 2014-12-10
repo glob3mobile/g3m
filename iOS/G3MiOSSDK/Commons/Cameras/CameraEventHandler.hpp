@@ -40,7 +40,7 @@ public:
   virtual void onUp(const G3MEventContext *eventContext,
                     const TouchEvent& touchEvent,
                     CameraContext *cameraContext) = 0;
-  
+
   virtual void setDebugMeshRenderer(MeshRenderer* meshRenderer) {
     
   }

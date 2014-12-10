@@ -112,6 +112,7 @@ protected:
   virtual CameraRenderer* createDefaultCameraRenderer() = 0;
 
 
+  virtual CameraRenderer*  createDefaultCameraRenderer(); //WEBGL VERSION WILL OVERRIDE
 
 public:
   IG3MBuilder();

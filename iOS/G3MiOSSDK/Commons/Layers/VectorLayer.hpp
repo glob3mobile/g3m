@@ -28,7 +28,7 @@ protected:
               const std::string&                                    disclaimerInfo) :
   Layer(transparency, condition, disclaimerInfo),
   _parametersVector(parametersVector),
-  _selectedLayerTilesRenderParametersIndex(-1)
+  _selectedLayerTilesRenderParametersIndex(0)
   {
   }
 #endif
@@ -39,7 +39,7 @@ protected:
                         final String disclaimerInfo) {
     super(transparency, condition, disclaimerInfo);
     _parametersVector.addAll(parametersVector);
-    _selectedLayerTilesRenderParametersIndex = -1;
+    _selectedLayerTilesRenderParametersIndex = 0;
   }
 #endif
 
