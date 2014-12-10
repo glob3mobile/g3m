@@ -121,10 +121,10 @@ public class G3MWebGLTestingApplication
          // initialize a default widget by using a builder
          //initDefaultWithBuilder();
     	  
-    	  //testBranch_zrender_touchhandlers();
+    	  testBranch_zrender_touchhandlers();
     	  //testBILGC();
     	  //testBandama();
-    	  testGeacron();
+    	  //testGeacron();
     	  
          // initialize a customized widget by using a builder
          //initCustomizedWithBuilder();
