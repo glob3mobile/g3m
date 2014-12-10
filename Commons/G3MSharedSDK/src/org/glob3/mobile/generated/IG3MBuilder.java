@@ -463,7 +463,6 @@ public abstract class IG3MBuilder
   protected abstract IStorage createDefaultStorage();
   protected abstract IDownloader createDefaultDownloader();
 
-
   protected CameraRenderer createDefaultCameraRenderer()
   {
     CameraRenderer cameraRenderer = new CameraRenderer();
