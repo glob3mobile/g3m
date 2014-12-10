@@ -462,7 +462,6 @@ public abstract class IG3MBuilder
   protected abstract IThreadUtils createDefaultThreadUtils();
   protected abstract IStorage createDefaultStorage();
   protected abstract IDownloader createDefaultDownloader();
-  protected abstract CameraRenderer createDefaultCameraRenderer();
 
 
   protected CameraRenderer createDefaultCameraRenderer()
