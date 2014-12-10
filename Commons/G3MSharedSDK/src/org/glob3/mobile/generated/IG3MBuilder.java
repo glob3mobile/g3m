@@ -417,12 +417,7 @@ public abstract class IG3MBuilder
     }
   
     final Geodetic3D initialCameraPosition = getPlanet().getDefaultCameraPosition(shownSector);
-  
-    /*
-     //Undesired behaviour for senderos-gc
-    addCameraConstraint(new RenderedSectorCameraConstrainer(mainRenderer->getPlanetRenderer(),
-                                                            initialCameraPosition._height * 1.2));
-     */
+    addCameraConstraint(new RenderedSectorCameraConstrainer(mainRenderer.getPlanetRenderer(), initialCameraPosition._height * 1.2));
   
     InitialCameraPositionProvider icpp = new SimpleInitialCameraPositionProvider();
   
@@ -1053,7 +1048,6 @@ public abstract class IG3MBuilder
     ShapesRenderer shapesRenderer = createShapesRenderer ? this.createShapesRenderer() : null;
     MarksRenderer marksRenderer = createMarksRenderer ? this.createMarksRenderer() : null;
     GEOVectorLayer geoVectorLayer = createGEOVectorLayer ? getPlanetRendererBuilder().createGEOVectorLayer() : null;
-    //  GEOTileRasterizer* geoTileRasterizer = createGEOVectorLayer ? getPlanetRendererBuilder()->createGEOTileRasterizer() : NULL;
   
     GEORenderer geoRenderer = new GEORenderer(symbolizer, meshRenderer, shapesRenderer, marksRenderer, geoVectorLayer);
     addRenderer(geoRenderer);

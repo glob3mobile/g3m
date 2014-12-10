@@ -3,6 +3,7 @@
 package org.glob3.mobile.specific;
 
 import org.glob3.mobile.generated.BasicShadersGL2;
+import org.glob3.mobile.generated.CameraAltSingleDragHandler;
 import org.glob3.mobile.generated.CameraDoubleDragHandler;
 import org.glob3.mobile.generated.CameraDoubleTapHandler;
 import org.glob3.mobile.generated.CameraMouseWheelHandler;
@@ -77,20 +78,18 @@ public class G3MBuilder_WebGL
 
       return downloader;
    }
-   
-   @Override
-   protected CameraRenderer createDefaultCameraRenderer()
-   {
-	   ILogger.instance().logInfo("Creating Camera Renderer for WebGL handling");
-     CameraRenderer cameraRenderer = new CameraRenderer();
-     final boolean useInertia = true;
-     cameraRenderer.addHandler(new CameraSingleDragHandler(useInertia));
-     //cameraRenderer.addHandler(new CameraDoubleDragHandler());
-     cameraRenderer.addHandler(new CameraRotationHandler());
-     cameraRenderer.addHandler(new CameraDoubleTapHandler());
-     cameraRenderer.addHandler(new CameraMouseWheelHandler());
-   
-     return cameraRenderer;
-   }
+
+@Override
+protected CameraRenderer createDefaultCameraRenderer() {
+	  CameraRenderer cameraRenderer = new CameraRenderer();
+	  final boolean useInertia = true;
+	  cameraRenderer.addHandler(new CameraSingleDragHandler(useInertia));
+	  cameraRenderer.addHandler(new CameraRotationHandler());
+	  cameraRenderer.addHandler(new CameraDoubleTapHandler());
+	  cameraRenderer.addHandler(new CameraMouseWheelHandler());
+	  cameraRenderer.addHandler(new CameraAltSingleDragHandler());
+	  
+	  return cameraRenderer;
+}
 
 }

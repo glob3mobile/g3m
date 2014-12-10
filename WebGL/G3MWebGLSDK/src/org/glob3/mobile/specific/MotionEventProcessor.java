@@ -203,8 +203,9 @@ public final class MotionEventProcessor {
       }
 
       _previousMousePosition = currentMousePosition;
-
-      return TouchEvent.create(TouchEventType.Move, touches);
+      
+      return TouchEvent.create(TouchEventType.Move, touches, 
+    		  event.getShiftKey(), event.getCtrlKey(), event.getAltKey(), 0);
    }
 
 
@@ -225,8 +226,9 @@ public final class MotionEventProcessor {
       }
 
       _previousMousePosition = currentMousePosition;
-
-      return TouchEvent.create(TouchEventType.Down, touches);
+      
+      return TouchEvent.create(TouchEventType.Down, touches, 
+    		  event.getShiftKey(), event.getCtrlKey(), event.getAltKey(), 0);
    }
 
 
@@ -253,7 +255,8 @@ public final class MotionEventProcessor {
       }
       _previousMousePosition = currentMousePosition;
 
-      return TouchEvent.create(touchType, touches);
+      return TouchEvent.create(TouchEventType.Up, touches, 
+    		  event.getShiftKey(), event.getCtrlKey(), event.getAltKey(), 0);
    }
 
 
@@ -287,7 +290,7 @@ public final class MotionEventProcessor {
 	   double dd = (double) delta;
 	   final ArrayList<Touch> touches = new ArrayList<Touch>(2);
 	   touches.add(new Touch(new Vector2I(x,y), new Vector2I(x,y)));
-	   TouchEvent te = TouchEvent.create(TouchEventType.MouseWheelChanged, touches, false, false, dd);
+	   TouchEvent te = TouchEvent.create(TouchEventType.MouseWheelChanged, touches, false, false, false, dd);
 	   dispatchEvents( te );
 
       _previousMousePosition = new Vector2I(x, y);
