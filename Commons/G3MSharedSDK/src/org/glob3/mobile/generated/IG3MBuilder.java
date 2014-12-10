@@ -300,7 +300,6 @@ public abstract class IG3MBuilder
   
     return cameraConstraints;
   }
-
   private java.util.ArrayList<Renderer> createDefaultRenderers()
   {
     java.util.ArrayList<Renderer> renderers = new java.util.ArrayList<Renderer>();
@@ -463,6 +462,8 @@ public abstract class IG3MBuilder
   protected abstract IThreadUtils createDefaultThreadUtils();
   protected abstract IStorage createDefaultStorage();
   protected abstract IDownloader createDefaultDownloader();
+  protected abstract CameraRenderer createDefaultCameraRenderer();
+
 
   protected CameraRenderer createDefaultCameraRenderer()
   {

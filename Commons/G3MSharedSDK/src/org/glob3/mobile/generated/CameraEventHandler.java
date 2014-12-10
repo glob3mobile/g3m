@@ -33,6 +33,7 @@ public abstract class CameraEventHandler
 
   public void setDebugMeshRenderer(MeshRenderer meshRenderer)
   {
+
   }
 
 }
