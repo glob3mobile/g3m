@@ -88,6 +88,7 @@ public class TouchEvent
   {
     return _wheelDelta;
   }
+
   public final boolean isCtrlPressed()
   {
     return _ctrlPressed;
