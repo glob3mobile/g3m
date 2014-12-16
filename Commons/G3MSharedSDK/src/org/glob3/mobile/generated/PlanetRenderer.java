@@ -5,7 +5,7 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
   private ElevationDataProvider _elevationDataProvider;
   private boolean _ownsElevationDataProvider;
   private TileTexturizer _texturizer;
-//  TileRasterizer*              _tileRasterizer;
+  //  TileRasterizer*              _tileRasterizer;
   private LayerSet _layerSet;
   private final TilesRenderParameters _tilesRenderParameters;
   private final boolean _showStatistics;
@@ -386,32 +386,82 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
   
     for (int i = 0; i < routes.size(); i++)
     {
+  
+  
       final java.util.LinkedList<Geodetic2D> route = routes.get(i);
+      java.util.Iterator<Geodetic2D> iterator = route.iterator();
   
+      Geodetic2D geoA = null;
+      Geodetic2D geoB = iterator.next();
   
-    java.util.Iterator<Geodetic2D> iterator = route.iterator();
+      while (iterator.hasNext())
+      {
+        geoA = geoB;
+        geoB = iterator.next();
   
-  	Geodetic2D geoA = null;
-  	Geodetic2D geoB = iterator.next();
+        final Vector2D A = new Vector2D(geoA._longitude._radians, geoA._latitude._radians);
+        final Vector2D B = new Vector2D(geoB._longitude._radians, geoB._latitude._radians);
   
-    while (iterator.hasNext())
+        double dist = center.distanceToSegment(A, B);
+  
+        if (dist <= angularDistanceFromCenterInRadians)
+        {
+          return true;
+        }
+      }
+  
+    }
+  
+    return false;
+  }
+
+  private java.util.ArrayList<Vector2D> routesToRadiansPoints(java.util.ArrayList< java.util.LinkedList<Geodetic2D> > routes)
+  {
+  
+    java.util.ArrayList<Vector2D> points = new java.util.ArrayList<Vector2D>();
+  
+    for (int i = 0; i < routes.size(); i++)
     {
-      geoA = geoB;
-      geoB = iterator.next();
   
-      final Vector2D A = new Vector2D(geoA._longitude._radians, geoA._latitude._radians);
-      final Vector2D B = new Vector2D(geoB._longitude._radians, geoB._latitude._radians);
   
+      final java.util.LinkedList<Geodetic2D> route = routes.get(i);
+      java.util.Iterator<Geodetic2D> iterator = route.iterator();
+  
+      Geodetic2D geoA = null;
+      Geodetic2D geoB = iterator.next();
+  
+      while (iterator.hasNext())
+      {
+        geoA = geoB;
+        geoB = iterator.next();
+  
+        final Vector2D A = new Vector2D(geoA._longitude._radians, geoA._latitude._radians);
+        final Vector2D B = new Vector2D(geoB._longitude._radians, geoB._latitude._radians);
+  
+        points.add(A);
+        points.add(B);
+      }
+  
+    }
+  
+    return points;
+  }
+  private boolean sectorCloseToRadianPoints(Sector sector, java.util.ArrayList<Vector2D> points, double angularDistanceFromCenterInRadians)
+  {
+  
+    Geodetic2D geoCenter = sector.getCenter();
+    Vector2D center = new Vector2D(geoCenter._longitude._radians, geoCenter._latitude._radians);
+  
+    for (int i = 0; i < points.size(); i+=2)
+    {
+      Vector2D A = points.get(i);
+      Vector2D B = points.get(i+1);
       double dist = center.distanceToSegment(A, B);
-  
       if (dist <= angularDistanceFromCenterInRadians)
       {
         return true;
       }
     }
-  
-    }
-  
     return false;
   }
 
@@ -468,7 +518,7 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
     _frustumCullingFactor = 1.0F;
     _tileCache = sizeOfTileCache < 1? null : new TileCache(sizeOfTileCache);
   }
-//                 TileRasterizer*              tileRasterizer,
+                 //                 TileRasterizer*              tileRasterizer,
 
   public void dispose()
   {
@@ -559,7 +609,7 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
       {
         Tile tile = _firstLevelTiles.get(i);
         tile.performRawRender(rc, _glState, _texturizer, _elevationDataProvider, _tessellator, _layerTilesRenderParameters, _layerSet, _tilesRenderParameters, _firstRender, _tileDownloadPriority, _statistics, _logTilesPetitions);
-  //                             _tileRasterizer,
+                               //                             _tileRasterizer,
       }
     }
     else
@@ -572,7 +622,7 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
         Tile tile = iter.next();
   
         tile.performRawRender(rc, _glState, _texturizer, _elevationDataProvider, _tessellator, _layerTilesRenderParameters, _layerSet, _tilesRenderParameters, _firstRender, _tileDownloadPriority, _statistics, _logTilesPetitions);
-  //                             _tileRasterizer,
+                               //                             _tileRasterizer,
         //=======
         //
         //  const IDeviceInfo* deviceInfo = IFactory::instance()->getDeviceInfo();
@@ -774,12 +824,12 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
         {
           ILogger.instance().logInfo("Camera position=%s heading=%f pitch=%f", _lastCamera.getGeodeticPosition().description(), _lastCamera.getHeading()._degrees, _lastCamera.getPitch()._degrees);
   
-  //        ILogger::instance()->logInfo("Touched on %s", tile->description().c_str());
-  //        Vector3D NW = planet->toCartesian(tile->_sector.getNW());
-  //        Vector3D SW = planet->toCartesian(tile->_sector.getSW());
-  //        double distanceNS = NW.distanceTo(SW);
-  //        double distancePerVertex = distanceNS / (tile->getLastTileMeshResolution()._y-1);
-  //        ILogger::instance()->logInfo("-- Tile level %d: approx. 1 vertex every %f meters\n", tile->_level, distancePerVertex);
+          //        ILogger::instance()->logInfo("Touched on %s", tile->description().c_str());
+          //        Vector3D NW = planet->toCartesian(tile->_sector.getNW());
+          //        Vector3D SW = planet->toCartesian(tile->_sector.getSW());
+          //        double distanceNS = NW.distanceTo(SW);
+          //        double distancePerVertex = distanceNS / (tile->getLastTileMeshResolution()._y-1);
+          //        ILogger::instance()->logInfo("-- Tile level %d: approx. 1 vertex every %f meters\n", tile->_level, distancePerVertex);
   
           if (_texturizer.onTerrainTouchEvent(ec, position, tile, _layerSet))
           {
@@ -1001,7 +1051,7 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
 
   /**
    Add a listener for notification of visible-sector changes.
-
+   
    @param stabilizationInterval How many time the visible-sector has to be settled (without changes) before triggering the event.  Useful for avoid process while the camera is being moved (as in animations).  If stabilizationInterval is zero, the event is triggered immediately.
    */
   public final void addVisibleSectorListener(VisibleSectorListener listener, TimeInterval stabilizationInterval)
@@ -1011,7 +1061,7 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
 
   /**
    Add a listener for notification of visible-sector changes.
-
+   
    The event is triggered immediately without waiting for the visible-sector get settled.
    */
   public final void addVisibleSectorListener(VisibleSectorListener listener)
@@ -1246,6 +1296,12 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
       }
     }
   
+    java.util.ArrayList<Vector2D> points = null;
+    if (routes != null)
+    {
+      routesToRadiansPoints(routes);
+    }
+  
     while (!_tiles.isEmpty())
     {
       Tile tile = _tiles.getFirst();
@@ -1256,9 +1312,9 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
       {
   
         //Checking Route if any
-        if (routes != null)
+        if (points != null)
         {
-          if (!sectorCloseToRoute(tile._sector, routes, tile._sector.getDeltaRadiusInRadians() * 4.0))
+          if (!sectorCloseToRadianPoints(tile._sector, points, tile._sector.getDeltaRadiusInRadians() * 4.0))
           {
             continue;
           }
@@ -1277,7 +1333,7 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
           java.util.ArrayList<Tile> newTiles = tile.getSubTiles();
           for (int i = 0; i < newTiles.size(); i++)
           {
-            _tiles.addLast(newTiles.get(i));        
+            _tiles.addLast(newTiles.get(i));
           }
         }
   
@@ -1288,6 +1344,16 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
     {
       ILogger.instance().logInfo("TILES_VISITED LOD:%d -> %d\n", i, GlobalMembersPlanetRenderer.TILES_VISITED[i]);
       //printf("TILES_VISITED LOD:%d -> %d\n", i, TILES_VISITED[i]);
+    }
+  
+    if (points != null)
+    {
+      for (int i = 0; i < points.size(); i++)
+      {
+        if (points.get(i) != null)
+           points.get(i).dispose();
+      }
+      points = null;
     }
   
     return urls;
