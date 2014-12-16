@@ -339,7 +339,7 @@ private:
 
   void addLayerSetURLForSector(std::list<URL>& urls, const Tile* tile) const;
   bool sectorCloseToRoute(const Sector& sector,
-                          const std::list<Geodetic2D>& route,
+                          const std::vector< std::list<Geodetic2D>* >& routes,
                           double angularDistanceFromCenterInRadians) const;
   
   float _frustumCullingFactor;
@@ -523,7 +523,7 @@ public:
   std::list<URL> getResourcesURL(const Sector& sector,
                                  int minLOD,
                                  int maxLOD,
-                                 const std::list<Geodetic2D>* route = NULL);
+                                 const std::vector< std::list<Geodetic2D>* >* routes = NULL);
 
   int getNumberOfRenderedTiles() const;
     

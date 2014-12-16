@@ -3252,6 +3252,8 @@ public:
         std::list<Geodetic2D> route;
         route.push_back(_lower);
         route.push_back(_upper);
+        std::vector<std::list<Geodetic2D>* > routes;
+        routes.push_back(&route);
         
         _urls = [_iosWidget widget]->getPlanetRenderer()->getTilesURL(_lower, _upper, _level);
         
@@ -3259,7 +3261,7 @@ public:
         
         std::list<URL> urls = [_iosWidget widget]->getPlanetRenderer()->getResourcesURL(Sector(_lower, _upper),
                                                                                         0, _level,
-                                                                                        &route);
+                                                                                        &routes);
         
         ILogger::instance()->logInfo("Retrieving %d images.", urls.size());
         _urls.clear();

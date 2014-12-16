@@ -1049,11 +1049,14 @@ void PlanetRenderer::addLayerSetURLForSector(std::list<URL>& urls, const Tile* t
 }
 
 bool PlanetRenderer::sectorCloseToRoute(const Sector& sector,
-                                        const std::list<Geodetic2D>& route,
+                                        const std::vector< std::list<Geodetic2D>* >& routes,
                                         double angularDistanceFromCenterInRadians) const{
 
   Geodetic2D geoCenter = sector.getCenter();
   Vector2D center(geoCenter._longitude._radians, geoCenter._latitude._radians);
+  
+  for (int i = 0; i < routes.size(); i++) {
+    const std::list<Geodetic2D>& route = *routes[i];
 
 #ifdef C_CODE
   std::list<Geodetic2D>::const_iterator itA = route.begin();
@@ -1096,6 +1099,8 @@ bool PlanetRenderer::sectorCloseToRoute(const Sector& sector,
     }
   }
 #endif
+    
+  }
 
   return false;
 }
@@ -1103,7 +1108,7 @@ bool PlanetRenderer::sectorCloseToRoute(const Sector& sector,
 std::list<URL> PlanetRenderer::getResourcesURL(const Sector& sector,
                                                int minLOD,
                                                int maxLOD,
-                                               const std::list<Geodetic2D>* route){
+                                               const std::vector< std::list<Geodetic2D>* >* routes){
 
   for (int i = 0; i < 20; i++) {
     TILES_VISITED[i] = 0;
@@ -1127,8 +1132,8 @@ std::list<URL> PlanetRenderer::getResourcesURL(const Sector& sector,
     if (tile->_sector.touchesWith(sector)){
 
       //Checking Route if any
-      if (route != NULL){
-        if (!sectorCloseToRoute(tile->_sector, *route,
+      if (routes != NULL){
+        if (!sectorCloseToRoute(tile->_sector, *routes,
                                 tile->_sector.getDeltaRadiusInRadians() * 4.0)){
           continue;
         }
