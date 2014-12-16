@@ -228,7 +228,7 @@ public class PointCloudsRenderer extends DefaultRenderer
           pointsBuffer.rawPut(1, (float)(average._y - averageY));
           pointsBuffer.rawPut(2, (float)(average._z - averageZ));
     
-          _mesh = new DirectMesh(GLPrimitive.points(), true, new Vector3D(averageX, averageY, averageZ), pointsBuffer, 1, pointSize * 2, Color.newFromRGBA(1, 1, 0, 1), null, 1, false); // colorsIntensity -  colors -  flatColor
+          _mesh = new DirectMesh(GLPrimitive.points(), true, new Vector3D(averageX, averageY, averageZ), pointsBuffer, 1, pointSize * 2, Color.newFromRGBA(1, 1, 0, 1), null, 1, true); // colorsIntensity -  colors -  flatColor
         }
         _mesh.render(rc, glState);
         renderedCount = 1;
@@ -588,7 +588,7 @@ public class PointCloudsRenderer extends DefaultRenderer
           }
         }
     
-        DirectMesh mesh = new DirectMesh(GLPrimitive.points(), false, _average, _firstPointsVerticesBuffer, 1, pointSize, null, _firstPointsColorsBuffer, 1, false); // colorsIntensity -  colors -  flatColor
+        DirectMesh mesh = new DirectMesh(GLPrimitive.points(), false, _average, _firstPointsVerticesBuffer, 1, pointSize, null, _firstPointsColorsBuffer, 1, true); // colorsIntensity -  colors -  flatColor
         mesh.setRenderVerticesCount(mu.min(_neededPoints, firstPointsCount));
     
         return mesh;
@@ -655,7 +655,7 @@ public class PointCloudsRenderer extends DefaultRenderer
         }
       }
     
-      DirectMesh mesh = new DirectMesh(GLPrimitive.points(), true, _average, vertices, 1, pointSize, null, colors, 1, false); // colorsIntensity -  colors -  flatColor
+      DirectMesh mesh = new DirectMesh(GLPrimitive.points(), true, _average, vertices, 1, pointSize, null, colors, 1, true); // colorsIntensity -  colors -  flatColor
       // mesh->setRenderVerticesCount( mu->min(_neededPoints, firstPointsCount) );
       mesh.setRenderVerticesCount(pointsCount);
     

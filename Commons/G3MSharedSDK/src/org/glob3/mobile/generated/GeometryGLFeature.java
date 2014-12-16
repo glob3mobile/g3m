@@ -67,7 +67,7 @@ public class GeometryGLFeature extends GLFeature
     }
     else
     {
-      state.disPolygonOffsetFill();
+      state.disablePolygonOffsetFill();
     }
   
     state.setLineWidth(_lineWidth);

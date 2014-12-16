@@ -688,6 +688,18 @@ public class G3MWidget implements ChangedRendererInfoListener
   //  }
   }
 
+  public final void removeAllPeriodicalTasks()
+  {
+    for (int i = 0; i < _periodicalTasks.size(); i++)
+    {
+      PeriodicalTask periodicalTask = _periodicalTasks.get(i);
+      if (periodicalTask != null)
+         periodicalTask.dispose();
+    }
+    _periodicalTasks.clear();
+  }
+
+
   private IStorage _storage;
   private IDownloader _downloader;
   private IThreadUtils _threadUtils;
