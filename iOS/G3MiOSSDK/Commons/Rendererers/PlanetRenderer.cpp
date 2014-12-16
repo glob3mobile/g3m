@@ -1238,12 +1238,14 @@ std::list<URL> PlanetRenderer::getResourcesURL(const Sector& sector,
     //printf("TILES_VISITED LOD:%d -> %d\n", i, TILES_VISITED[i]);
   }
   
+#ifdef C_CODE
   if (points != NULL){
     for (int i = 0; i < points->size(); i++) {
       delete points->at(i);
     }
     delete points;
   }
+#endif
   
   return urls;
 }

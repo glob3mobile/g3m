@@ -1346,16 +1346,6 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
       //printf("TILES_VISITED LOD:%d -> %d\n", i, TILES_VISITED[i]);
     }
   
-    if (points != null)
-    {
-      for (int i = 0; i < points.size(); i++)
-      {
-        if (points.get(i) != null)
-           points.get(i).dispose();
-      }
-      points = null;
-    }
-  
     return urls;
   }
 
