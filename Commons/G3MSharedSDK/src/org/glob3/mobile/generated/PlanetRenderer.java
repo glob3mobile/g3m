@@ -378,11 +378,15 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
          petitions.get(i).dispose();
     }
   }
-  private boolean sectorCloseToRoute(Sector sector, java.util.LinkedList<Geodetic2D> route, double angularDistanceFromCenterInRadians)
+  private boolean sectorCloseToRoute(Sector sector, java.util.ArrayList< java.util.LinkedList<Geodetic2D> > routes, double angularDistanceFromCenterInRadians)
   {
   
     Geodetic2D geoCenter = sector.getCenter();
     Vector2D center = new Vector2D(geoCenter._longitude._radians, geoCenter._latitude._radians);
+  
+    for (int i = 0; i < routes.size(); i++)
+    {
+      final java.util.LinkedList<Geodetic2D> route = *routes.get(i);
   
   
     java.util.Iterator<Geodetic2D> iterator = route.iterator();
@@ -404,6 +408,8 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
       {
         return true;
       }
+    }
+  
     }
   
     return false;
@@ -1220,7 +1226,7 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
   {
      return getResourcesURL(sector, minLOD, maxLOD, null);
   }
-  public final java.util.LinkedList<URL> getResourcesURL(Sector sector, int minLOD, int maxLOD, java.util.LinkedList<Geodetic2D> route)
+  public final java.util.LinkedList<URL> getResourcesURL(Sector sector, int minLOD, int maxLOD, java.util.ArrayList< java.util.LinkedList<Geodetic2D> > routes)
   {
   
     for (int i = 0; i < 20; i++)
@@ -1250,9 +1256,9 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
       {
   
         //Checking Route if any
-        if (route != null)
+        if (routes != null)
         {
-          if (!sectorCloseToRoute(tile._sector, route, tile._sector.getDeltaRadiusInRadians() * 4.0))
+          if (!sectorCloseToRoute(tile._sector, routes, tile._sector.getDeltaRadiusInRadians() * 4.0))
           {
             continue;
           }
