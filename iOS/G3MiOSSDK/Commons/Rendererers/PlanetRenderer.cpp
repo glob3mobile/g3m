@@ -633,14 +633,14 @@ void PlanetRenderer::updateGLState(const G3MRenderContext* rc) {
 
 void PlanetRenderer::render(const G3MRenderContext* rc,
                             GLState* glState) {
-
+  
   const LayerTilesRenderParameters* layerTilesRenderParameters = getLayerTilesRenderParameters();
   if (layerTilesRenderParameters == NULL) {
     return;
   }
-
+  
   updateGLState(rc);
-
+  
   _glState->setParent(glState);
   
   // Saving camera for use in onTouchEvent
@@ -660,7 +660,7 @@ void PlanetRenderer::render(const G3MRenderContext* rc,
                              _texturizer,
                              _elevationDataProvider,
                              _tessellator,
-//                             _tileRasterizer,
+                             //                             _tileRasterizer,
                              _layerTilesRenderParameters,
                              _layerSet,
                              _tilesRenderParameters,
@@ -683,7 +683,7 @@ void PlanetRenderer::render(const G3MRenderContext* rc,
                              _texturizer,
                              _elevationDataProvider,
                              _tessellator,
-//                             _tileRasterizer,
+                             //                             _tileRasterizer,
                              _layerTilesRenderParameters,
                              _layerSet,
                              _tilesRenderParameters,
@@ -870,7 +870,7 @@ bool PlanetRenderer::onTouchEvent(const G3MEventContext* ec,
     //      const Vector3D origin = _lastCamera->getCartesianPosition();
     //      positionCartesian = new Vector3D(planet->closestIntersection(origin, ray));
     //    }
-
+    
     if (positionCartesian == NULL || positionCartesian->isNan()) {
       /*
        =======
@@ -893,14 +893,14 @@ bool PlanetRenderer::onTouchEvent(const G3MEventContext* ec,
                                      _lastCamera->getGeodeticPosition().description().c_str(),
                                      _lastCamera->getHeading()._degrees,
                                      _lastCamera->getPitch()._degrees);
-
-//        ILogger::instance()->logInfo("Touched on %s", tile->description().c_str());
-//        Vector3D NW = planet->toCartesian(tile->_sector.getNW());
-//        Vector3D SW = planet->toCartesian(tile->_sector.getSW());
-//        double distanceNS = NW.distanceTo(SW);
-//        double distancePerVertex = distanceNS / (tile->getLastTileMeshResolution()._y-1);
-//        ILogger::instance()->logInfo("-- Tile level %d: approx. 1 vertex every %f meters\n", tile->_level, distancePerVertex);
-
+        
+        //        ILogger::instance()->logInfo("Touched on %s", tile->description().c_str());
+        //        Vector3D NW = planet->toCartesian(tile->_sector.getNW());
+        //        Vector3D SW = planet->toCartesian(tile->_sector.getSW());
+        //        double distanceNS = NW.distanceTo(SW);
+        //        double distancePerVertex = distanceNS / (tile->getLastTileMeshResolution()._y-1);
+        //        ILogger::instance()->logInfo("-- Tile level %d: approx. 1 vertex every %f meters\n", tile->_level, distancePerVertex);
+        
         if (_texturizer->onTerrainTouchEvent(ec, position, tile, _layerSet)) {
           return true;
         }
@@ -983,59 +983,59 @@ int TILES_VISITED[20];
 
 class GetTilesURLVisitor: public ITileVisitor{
   const G3MRenderContext* _renderContext;
-
+  
   const LayerTilesRenderParameters* _ltrp;
-
+  
 public:
-
-
+  
+  
   mutable std::list<std::string> _urls;
-
+  
   GetTilesURLVisitor(const G3MRenderContext* renderContext,
                      const LayerTilesRenderParameters* ltrp):
   _renderContext(renderContext),
   _ltrp(ltrp){}
-
+  
   ~GetTilesURLVisitor(){}
-
+  
   void visitTile(std::vector<Layer*>& layers, const Tile* tile) const{
-
-
+    
+    
     for (int i = 0; i < layers.size(); i++) {
-
-
+      
+      
       TILES_VISITED[tile->_level]++;
-
+      
       std::vector<Petition*> pets = layers[i]->createTileMapPetitions(_renderContext, _ltrp, tile);
       for (int j = 0; j < pets.size(); j++) {
         _urls.push_back( pets[j]->getURL().getPath() );
       }
     }
-
+    
   }
-
+  
 };
 
 
 std::list<std::string> PlanetRenderer::getTilesURL(Geodetic2D lower, Geodetic2D upper, int maxLOD){
-
+  
   for (int i = 0; i < 20; i++) {
     TILES_VISITED[i] = 0;
   }
-
+  
   Sector sector(lower, upper);
   const LayerTilesRenderParameters* parameters = getLayerTilesRenderParameters();
   GetTilesURLVisitor* visitor = new GetTilesURLVisitor(_renderContext, _layerTilesRenderParameters);
-
+  
   acceptTileVisitor(visitor, sector, parameters->_firstLevel, maxLOD);
-
+  
   std::list<std::string> urls = visitor->_urls;
-
+  
   for (int i = 0; i < 20; i++) {
     ILogger::instance()->logInfo("TILES_VISITED LOD:%d -> %d\n", i, TILES_VISITED[i]);
     //printf("TILES_VISITED LOD:%d -> %d\n", i, TILES_VISITED[i]);
   }
-
+  
   delete visitor;
   return urls;
 }
@@ -1051,73 +1051,143 @@ void PlanetRenderer::addLayerSetURLForSector(std::list<URL>& urls, const Tile* t
 bool PlanetRenderer::sectorCloseToRoute(const Sector& sector,
                                         const std::vector< std::list<Geodetic2D>* >& routes,
                                         double angularDistanceFromCenterInRadians) const{
-
+  
   Geodetic2D geoCenter = sector.getCenter();
   Vector2D center(geoCenter._longitude._radians, geoCenter._latitude._radians);
   
   for (int i = 0; i < routes.size(); i++) {
-
+    
 #ifdef C_CODE
     
-  const std::list<Geodetic2D>& route = *routes[i];
-  std::list<Geodetic2D>::const_iterator itA = route.begin();
-  std::list<Geodetic2D>::const_iterator itB = route.begin()++;
+    const std::list<Geodetic2D>& route = *routes[i];
+    std::list<Geodetic2D>::const_iterator itA = route.begin();
+    std::list<Geodetic2D>::const_iterator itB = route.begin()++;
+    
+    while (itB != route.end()) {
+      const Vector2D A(itA->_longitude._radians, itA->_latitude._radians);
+      const Vector2D B(itB->_longitude._radians, itB->_latitude._radians);
+      
+      double dist = center.distanceToSegment(A, B);
+      
+      if (dist <= angularDistanceFromCenterInRadians){
+        return true;
+      }
+      
+      itA = itB;
+      itB++;
+    }
+#endif
+    
+#ifdef JAVA_CODE
+    final java.util.LinkedList<Geodetic2D> route = routes.get(i);
+    java.util.Iterator<Geodetic2D> iterator = route.iterator();
+    
+    Geodetic2D geoA = null;
+    Geodetic2D geoB = iterator.next();
+    
+    while (iterator.hasNext())
+    {
+      geoA = geoB;
+      geoB = iterator.next();
+      
+      final Vector2D A = new Vector2D(geoA._longitude._radians, geoA._latitude._radians);
+      final Vector2D B = new Vector2D(geoB._longitude._radians, geoB._latitude._radians);
+      
+      double dist = center.distanceToSegment(A, B);
+      
+      if (dist <= angularDistanceFromCenterInRadians)
+      {
+        return true;
+      }
+    }
+#endif
+    
+  }
+  
+  return false;
+}
 
-  while (itB != route.end()) {
-    const Vector2D A(itA->_longitude._radians, itA->_latitude._radians);
-    const Vector2D B(itB->_longitude._radians, itB->_latitude._radians);
-
-    double dist = center.distanceToSegment(A, B);
-
+bool PlanetRenderer::sectorCloseToRadianPoints(const Sector& sector,
+                                               const std::vector<Vector2D*>* points,
+                                               double angularDistanceFromCenterInRadians) const{
+  
+  Geodetic2D geoCenter = sector.getCenter();
+  Vector2D center(geoCenter._longitude._radians, geoCenter._latitude._radians);
+  
+  for (int i = 0; i < points->size(); i+=2) {
+    Vector2D* A = points->at(i);
+    Vector2D* B = points->at(i+1);
+    double dist = center.distanceToSegment(*A, *B);
     if (dist <= angularDistanceFromCenterInRadians){
       return true;
     }
-
-    itA = itB;
-    itB++;
   }
-#endif
+  return false;
+}
 
-#ifdef JAVA_CODE
-  final java.util.LinkedList<Geodetic2D> route = routes.get(i);
-  java.util.Iterator<Geodetic2D> iterator = route.iterator();
 
-	Geodetic2D geoA = null;
-	Geodetic2D geoB = iterator.next();
 
-  while (iterator.hasNext())
-  {
-    geoA = geoB;
-    geoB = iterator.next();
-
-    final Vector2D A = new Vector2D(geoA._longitude._radians, geoA._latitude._radians);
-    final Vector2D B = new Vector2D(geoB._longitude._radians, geoB._latitude._radians);
-
-    double dist = center.distanceToSegment(A, B);
-
-    if (dist <= angularDistanceFromCenterInRadians)
-    {
-      return true;
+std::vector<Vector2D*>* PlanetRenderer::routesToRadiansPoints(const std::vector< std::list<Geodetic2D>* >& routes) const{
+  
+  std::vector<Vector2D*>* points = new std::vector<Vector2D*>();
+  
+  for (int i = 0; i < routes.size(); i++) {
+    
+#ifdef C_CODE
+    
+    const std::list<Geodetic2D>& route = *routes[i];
+    std::list<Geodetic2D>::const_iterator itA = route.begin();
+    std::list<Geodetic2D>::const_iterator itB = route.begin()++;
+    
+    while (itB != route.end()) {
+      Vector2D* A = new Vector2D(itA->_longitude._radians, itA->_latitude._radians);
+      Vector2D* B = new Vector2D(itB->_longitude._radians, itB->_latitude._radians);
+      
+      points->push_back(A);
+      points->push_back(B);
+      
+      itA = itB;
+      itB++;
     }
-  }
+#endif
+    
+#ifdef JAVA_CODE
+    final java.util.LinkedList<Geodetic2D> route = routes.get(i);
+    java.util.Iterator<Geodetic2D> iterator = route.iterator();
+    
+    Geodetic2D geoA = null;
+    Geodetic2D geoB = iterator.next();
+    
+    while (iterator.hasNext())
+    {
+      geoA = geoB;
+      geoB = iterator.next();
+      
+      final Vector2D A = new Vector2D(geoA._longitude._radians, geoA._latitude._radians);
+      final Vector2D B = new Vector2D(geoB._longitude._radians, geoB._latitude._radians);
+      
+      points.add(A);
+      points.add(B);
+    }
 #endif
     
   }
-
-  return false;
+  
+  return points;
 }
+
 
 std::list<URL> PlanetRenderer::getResourcesURL(const Sector& sector,
                                                int minLOD,
                                                int maxLOD,
                                                const std::vector< std::list<Geodetic2D>* >* routes){
-
+  
   for (int i = 0; i < 20; i++) {
     TILES_VISITED[i] = 0;
   }
-
+  
   std::list<URL> urls;
-
+  
   std::list<Tile*> _tiles;  //List of tiles to check
   const int ftSize = _firstLevelTiles.size();
   for (int i = 0; i < ftSize; i++) {
@@ -1125,28 +1195,33 @@ std::list<URL> PlanetRenderer::getResourcesURL(const Sector& sector,
       _tiles.push_back(_firstLevelTiles[i]);
     }
   }
-
+  
+  std::vector<Vector2D*>* points = NULL;
+  if (routes != NULL){
+    routesToRadiansPoints(*routes);
+  }
+  
   while (!_tiles.empty()) {
     Tile* tile = _tiles.front();
     _tiles.pop_front();
-
-
+    
+    
     if (tile->_sector.touchesWith(sector)){
-
+      
       //Checking Route if any
-      if (routes != NULL){
-        if (!sectorCloseToRoute(tile->_sector, *routes,
+      if (points != NULL){
+        if (!sectorCloseToRadianPoints(tile->_sector, points,
                                 tile->_sector.getDeltaRadiusInRadians() * 4.0)){
           continue;
         }
       }
-
+      
       if (tile->_level >= minLOD){
         TILES_VISITED[tile->_level]++;
-
+        
         addLayerSetURLForSector(urls, tile);
       }
-
+      
       if (tile->_level < maxLOD){
         //std::vector<Tile*>* newTiles = tile->getSubTiles(_layerTilesRenderParameters->_mercator);
         std::vector<Tile*>* newTiles = tile->getSubTiles();
@@ -1154,15 +1229,22 @@ std::list<URL> PlanetRenderer::getResourcesURL(const Sector& sector,
           _tiles.push_back(newTiles->at(i));
         }
       }
-
+      
     }
   }
-
+  
   for (int i = 0; i < 20; i++) {
     ILogger::instance()->logInfo("TILES_VISITED LOD:%d -> %d\n", i, TILES_VISITED[i]);
     //printf("TILES_VISITED LOD:%d -> %d\n", i, TILES_VISITED[i]);
   }
-
+  
+  if (points != NULL){
+    for (int i = 0; i < points->size(); i++) {
+      delete points->at(i);
+    }
+    delete points;
+  }
+  
   return urls;
 }
 
@@ -1215,7 +1297,7 @@ std::list<Tile*>* PlanetRenderer::getRenderedTilesList(const G3MRenderContext* r
     double cameraAngle2HorizonInRadians            = _lastCamera->getAngle2HorizonInRadians();
     const Frustum* cameraFrustumInModelCoordinates = _lastCamera->getFrustumInModelCoordinates();
     const Frustum* cameraWiderFrustumInModelCoordinates = _lastCamera->getWiderFrustumInModelCoordinates(_frustumCullingFactor);
-
+    
     _renderedTiles.clear();
     
     //Texture Size for every tile
@@ -1235,28 +1317,28 @@ std::list<Tile*>* PlanetRenderer::getRenderedTilesList(const G3MRenderContext* r
     
     for (int i = 0; i < firstLevelTilesCount; i++) {
       _firstLevelTiles[i]->updateQuadTree(rc,
-                                             _renderedTiles,
-                                             planet,
-                                             cameraNormalizedPosition,
-                                             cameraAngle2HorizonInRadians,
-                                             cameraFrustumInModelCoordinates,
-                                             cameraWiderFrustumInModelCoordinates,
-                                             &_statistics,
-                                             _verticalExaggeration,
-                                             layerTilesRenderParameters,
-                                             _texturizer,
-                                             _tilesRenderParameters,
-                                             _lastSplitTimer,
-                                             _elevationDataProvider,
-                                             _tessellator,
-                                             _layerSet,
-                                             _renderedSector,
-                                             _firstRender, // if first render, force full render
-                                             _tileDownloadPriority,
-                                             texWidthSquared,
-                                             texHeightSquared,
-                                             nowInMS,
-                                             _tileRenderingListener);
+                                          _renderedTiles,
+                                          planet,
+                                          cameraNormalizedPosition,
+                                          cameraAngle2HorizonInRadians,
+                                          cameraFrustumInModelCoordinates,
+                                          cameraWiderFrustumInModelCoordinates,
+                                          &_statistics,
+                                          _verticalExaggeration,
+                                          layerTilesRenderParameters,
+                                          _texturizer,
+                                          _tilesRenderParameters,
+                                          _lastSplitTimer,
+                                          _elevationDataProvider,
+                                          _tessellator,
+                                          _layerSet,
+                                          _renderedSector,
+                                          _firstRender, // if first render, force full render
+                                          _tileDownloadPriority,
+                                          texWidthSquared,
+                                          texHeightSquared,
+                                          nowInMS,
+                                          _tileRenderingListener);
     }
   } else{
     //ILogger::instance()->logInfo("Reusing Render Tiles List");
@@ -1299,14 +1381,14 @@ int PlanetRenderer::getNumberOfRenderedTiles() const{
 //std::vector<std::string> PlanetRenderer::getInfo() {
 //  _info.clear();
 //  std::vector<std::string> info = _layerSet->getInfo();
-//  
+//
 //#ifdef C_CODE
 //      _info.insert(_info.end(),info.begin(), info.end());
 //#endif
 //#ifdef JAVA_CODE
 //      _infos.add(info);
 //#endif
-//  
+//
 //  return _info;
 //}
 

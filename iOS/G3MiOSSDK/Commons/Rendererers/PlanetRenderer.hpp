@@ -56,79 +56,79 @@ private:
   long _tilesProcessed;
   long _tilesVisible;
   long _tilesRendered;
-
+  
   static const int _maxLOD = 128;
-
+  
   int _tilesProcessedByLevel[_maxLOD];
   int _tilesVisibleByLevel[_maxLOD];
   int _tilesRenderedByLevel[_maxLOD];
-
+  
   int _buildersStartsInFrame;
-
+  
   double _visibleLowerLatitudeDegrees;
   double _visibleLowerLongitudeDegrees;
   double _visibleUpperLatitudeDegrees;
   double _visibleUpperLongitudeDegrees;
-
+  
 public:
-
+  
   TilesStatistics()
   {
     clear();
   }
-
+  
   ~TilesStatistics() {
   }
-
+  
   void clear() {
     _tilesProcessed = 0;
     _tilesVisible = 0;
     _tilesRendered = 0;
     _buildersStartsInFrame = 0;
-
+    
     const IMathUtils* mu = IMathUtils::instance();
     _visibleLowerLatitudeDegrees  = mu->maxDouble();
     _visibleLowerLongitudeDegrees = mu->maxDouble();
     _visibleUpperLatitudeDegrees  = mu->minDouble();
     _visibleUpperLongitudeDegrees = mu->minDouble();
-
+    
     for (int i = 0; i < _maxLOD; i++) {
       _tilesProcessedByLevel[i] = 0;
       _tilesVisibleByLevel[i]   = 0;
       _tilesRenderedByLevel[i]  = 0;
     }
   }
-
+  
   int getBuildersStartsInFrame() const {
     return _buildersStartsInFrame;
   }
-
+  
   void computeBuilderStartInFrame() {
     _buildersStartsInFrame++;
   }
-
+  
   void computeTileProcessed(Tile* tile) {
     _tilesProcessed++;
-
+    
     const int level = tile->_level;
     _tilesProcessedByLevel[level] = _tilesProcessedByLevel[level] + 1;
   }
-
+  
   void computeVisibleTile(Tile* tile) {
     _tilesVisible++;
-
+    
     const int level = tile->_level;
     _tilesVisibleByLevel[level] = _tilesVisibleByLevel[level] + 1;
   }
-
+  
   void computeRenderedSector(Tile* tile) {
     const Sector sector = tile->_sector;
-
+    
     const double lowerLatitudeDegrees  = sector._lower._latitude._degrees;
     const double lowerLongitudeDegrees = sector._lower._longitude._degrees;
     const double upperLatitudeDegrees  = sector._upper._latitude._degrees;
     const double upperLongitudeDegrees = sector._upper._longitude._degrees;
-
+    
     if (lowerLatitudeDegrees < _visibleLowerLatitudeDegrees) {
       _visibleLowerLatitudeDegrees = lowerLatitudeDegrees;
     }
@@ -141,7 +141,7 @@ public:
     if (upperLatitudeDegrees > _visibleUpperLatitudeDegrees) {
       _visibleUpperLatitudeDegrees = upperLatitudeDegrees;
     }
-
+    
     if (lowerLongitudeDegrees < _visibleLowerLongitudeDegrees) {
       _visibleLowerLongitudeDegrees = lowerLongitudeDegrees;
     }
@@ -155,16 +155,16 @@ public:
       _visibleUpperLongitudeDegrees = upperLongitudeDegrees;
     }
   }
-
+  
   void computeTileRenderered(Tile* tile) {
     _tilesRendered++;
-
+    
     const int level = tile->_level;
     _tilesRenderedByLevel[level] = _tilesRenderedByLevel[level] + 1;
-
+    
     computeRenderedSector(tile);
   }
-
+  
   Sector* updateVisibleSector(Sector* visibleSector) const {
     if ((visibleSector == NULL) ||
         (visibleSector->_lower._latitude._degrees  != _visibleLowerLatitudeDegrees)  ||
@@ -172,12 +172,12 @@ public:
         (visibleSector->_upper._latitude._degrees  != _visibleUpperLatitudeDegrees)  ||
         (visibleSector->_upper._longitude._degrees != _visibleUpperLongitudeDegrees) ) {
       delete visibleSector;
-
+      
       if ((_visibleLowerLatitudeDegrees  > _visibleUpperLatitudeDegrees) ||
           (_visibleLowerLongitudeDegrees > _visibleUpperLongitudeDegrees)) {
         return NULL;
       }
-
+      
       return new Sector(Geodetic2D::fromDegrees(_visibleLowerLatitudeDegrees,
                                                 _visibleLowerLongitudeDegrees),
                         Geodetic2D::fromDegrees(_visibleUpperLatitudeDegrees,
@@ -185,7 +185,7 @@ public:
     }
     return visibleSector;
   }
-
+  
   static std::string asLogString(const int m[], const int nMax) {
     bool first = true;
     IStringBuilder* isb = IStringBuilder::newStringBuilder();
@@ -204,12 +204,12 @@ public:
         isb->addInt(counter);
       }
     }
-
+    
     std::string s = isb->getString();
     delete isb;
     return s;
   }
-
+  
   void log(const ILogger* logger) const {
     logger->logInfo("Tiles processed:%d (%s), visible:%d (%s), rendered:%d (%s).",
                     _tilesProcessed, asLogString(_tilesProcessedByLevel, _maxLOD).c_str(),
@@ -220,8 +220,8 @@ public:
     //                    _tilesVisible,
     //                    _tilesRendered);
   }
-
-
+  
+  
 };
 
 class ElevationDataProviderReadyListener {
@@ -243,69 +243,69 @@ private:
   ElevationDataProvider*       _elevationDataProvider;
   bool                         _ownsElevationDataProvider;
   TileTexturizer*              _texturizer;
-//  TileRasterizer*              _tileRasterizer;
+  //  TileRasterizer*              _tileRasterizer;
   LayerSet*                    _layerSet;
   const TilesRenderParameters* _tilesRenderParameters;
   const bool                   _showStatistics;
   const bool                   _logTilesPetitions;
   ITileVisitor*                _tileVisitor = NULL;
-
+  
   TileRenderingListener*       _tileRenderingListener;
-
+  
   TilesStatistics _statistics;
-
+  
 #ifdef C_CODE
   const Camera*     _lastCamera;
 #endif
 #ifdef JAVA_CODE
   private Camera     _lastCamera;
 #endif
-
+  
   std::vector<Tile*> _firstLevelTiles;
   bool               _firstLevelTilesJustCreated;
   bool               _allFirstLevelTilesAreTextureSolved;
-
+  
   ITimer* _lastSplitTimer; // timer to start every time a tile get splitted into subtiles
-
+  
   void clearFirstLevelTiles();
   void createFirstLevelTiles(const G3MContext* context);
   void createFirstLevelTiles(std::vector<Tile*>& firstLevelTiles,
                              Tile* tile,
                              int firstLevel) const;
-
+  
   void sortTiles(std::vector<Tile*>& firstLevelTiles) const;
-
+  
   bool _firstRender;
-
+  
   void pruneFirstLevelTiles();
-
+  
   Sector* _lastVisibleSector;
-
+  
   std::vector<VisibleSectorListenerEntry*> _visibleSectorListeners;
-
+  
   void visitTilesTouchesWith(const Sector& sector,
                              const int topLevel,
                              const int maxLevel);
-
+  
   void visitSubTilesTouchesWith(std::vector<Layer*> layers,
                                 Tile* tile,
                                 const Sector& sectorToVisit,
                                 const int topLevel,
                                 const int maxLevel);
-
+  
   long long _tileDownloadPriority;
-
+  
   float _verticalExaggeration;
-
+  
   bool _recreateTilesPending;
-
+  
   GLState* _glState;
   void updateGLState(const G3MRenderContext* rc);
-
+  
   SurfaceElevationProvider_Tree _elevationListenersTree;
-
+  
   bool _renderTileMeshes;
-
+  
   Sector* _renderedSector;
   //  bool _validLayerTilesRenderParameters;
   bool _layerTilesRenderParametersDirty;
@@ -316,9 +316,9 @@ private:
   private LayerTilesRenderParameters _layerTilesRenderParameters;
 #endif
   std::vector<std::string> _errors;
-
+  
   std::vector<TerrainTouchListener*> _terrainTouchListeners;
-
+  
 #ifdef C_CODE
   const G3MRenderContext* _renderContext;
 #endif
@@ -326,37 +326,42 @@ private:
   G3MRenderContext _renderContext;
 #endif
   //  std::list<Tile*> _tilesRenderedInLastFrame;
-
+  
   long long _renderedTilesListFrame;
   std::list<Tile*> _renderedTiles;
   std::list<Tile*>* getRenderedTilesList(const G3MRenderContext* rc);
   
   TouchEventType _touchEventTypeOfTerrainTouchListener;
-
-
+  
+  
   std::vector<Tile*> _toVisit;
   std::vector<Tile*> _toVisitInNextIteration;
-
+  
   void addLayerSetURLForSector(std::list<URL>& urls, const Tile* tile) const;
   bool sectorCloseToRoute(const Sector& sector,
                           const std::vector< std::list<Geodetic2D>* >& routes,
                           double angularDistanceFromCenterInRadians) const;
   
+  std::vector<Vector2D*>* routesToRadiansPoints(const std::vector< std::list<Geodetic2D>* >& routes) const;
+  bool sectorCloseToRadianPoints(const Sector& sector,
+                                 const std::vector<Vector2D*>* points,
+                                 double angularDistanceFromCenterInRadians) const;
+  
   float _frustumCullingFactor;
-
+  
   TileCache* _tileCache;
   bool _deleteTexturesOfInvisibleTiles;
   
   ElevationDataProviderReadyListener* _elevationDataProviderReadyListener;
   bool _elevationDataProviderReadyListenerAutoDelete;
-
+  
 public:
   PlanetRenderer(TileTessellator*             tessellator,
                  ElevationDataProvider*       elevationDataProvider,
                  bool                         ownsElevationDataProvider,
                  float                        verticalExaggeration,
                  TileTexturizer*              texturizer,
-//                 TileRasterizer*              tileRasterizer,
+                 //                 TileRasterizer*              tileRasterizer,
                  LayerSet*                    layerSet,
                  const TilesRenderParameters* tilesRenderParameters,
                  bool                         showStatistics,
@@ -369,23 +374,23 @@ public:
                  int sizeOfTileCache,
                  bool deleteTexturesOfInvisibleTiles,
                  TouchEventType _touchEventTypeOfTerrainTouchListener);
-
+  
   ~PlanetRenderer();
-
+  
   void initialize(const G3MContext* context);
-
+  
   void render(const G3MRenderContext* rc, GLState* glState);
-
+  
   bool onTouchEvent(const G3MEventContext* ec,
                     const TouchEvent* touchEvent);
-
+  
   void onResizeViewportEvent(const G3MEventContext* ec,
                              int width, int height) {
-
+    
   }
-
+  
   RenderState getRenderState(const G3MRenderContext* rc);
-
+  
   void acceptTileVisitor(ITileVisitor* tileVisitor,
                          const Sector& sector,
                          const int topLevel,
@@ -393,19 +398,19 @@ public:
     _tileVisitor = tileVisitor;
     visitTilesTouchesWith(sector, topLevel, maxLevel);
   }
-
+  
   void start(const G3MRenderContext* rc) {
     _firstRender = true;
   }
-
+  
   void stop(const G3MRenderContext* rc) {
     _firstRender = false;
   }
-
+  
   void onPause(const G3MContext* context) {
     recreateTiles();
   }
-
+  
   void setEnable(bool enable) {
 #ifdef C_CODE
     DefaultRenderer::setEnable(enable);
@@ -413,40 +418,40 @@ public:
 #ifdef JAVA_CODE
     super.setEnable(enable);
 #endif
-
+    
     if (!enable) {
       pruneFirstLevelTiles();
     }
   }
-
+  
   void changed();
-
+  
   void recreateTiles();
-
+  
   /**
    Answer the visible-sector, it can be null if globe was not yet rendered.
    */
   const Sector* getVisibleSector() const {
     return _lastVisibleSector;
   }
-
+  
   /**
    Add a listener for notification of visible-sector changes.
-
+   
    @param stabilizationInterval How many time the visible-sector has to be settled (without changes) before triggering the event.  Useful for avoid process while the camera is being moved (as in animations).  If stabilizationInterval is zero, the event is triggered immediately.
    */
   void addVisibleSectorListener(VisibleSectorListener* listener,
                                 const TimeInterval& stabilizationInterval);
-
+  
   /**
    Add a listener for notification of visible-sector changes.
-
+   
    The event is triggered immediately without waiting for the visible-sector get settled.
    */
   void addVisibleSectorListener(VisibleSectorListener* listener) {
     addVisibleSectorListener(listener, TimeInterval::zero());
   }
-
+  
   /**
    * Set the download-priority used by Tiles (for downloading textures).
    *
@@ -455,7 +460,7 @@ public:
   void setTileDownloadPriority(long long tileDownloadPriority) {
     _tileDownloadPriority = tileDownloadPriority;
   }
-
+  
   /**
    * Return the current value for the download priority of textures
    *
@@ -464,69 +469,69 @@ public:
   long long getTileDownloadPriority() const {
     return _tileDownloadPriority;
   }
-
+  
   /**
    * @see Renderer#isPlanetRenderer()
    */
   bool isPlanetRenderer() {
     return true;
   }
-
+  
   SurfaceElevationProvider* getSurfaceElevationProvider() {
     return (_elevationDataProvider == NULL) ? NULL : this;
   }
-
+  
   PlanetRenderer* getPlanetRenderer() {
     return this;
   }
-
+  
   void addListener(const Angle& latitude,
                    const Angle& longitude,
                    SurfaceElevationListener* listener);
-
+  
   void addListener(const Geodetic2D& position,
                    SurfaceElevationListener* listener);
-
+  
   bool removeListener(SurfaceElevationListener* listener);
-
+  
   void sectorElevationChanged(ElevationData* elevationData) const;
-
+  
   const Sector* getRenderedSector() const {
     return _renderedSector;
   }
-
+  
   bool setRenderedSector(const Sector& sector);
-
+  
   void addTerrainTouchListener(TerrainTouchListener* listener);
-
+  
   std::list<std::string> getTilesURL(Geodetic2D lower, Geodetic2D upper, int maxLOD);
-
+  
   void zRender(const G3MRenderContext* rc, GLState* glState);
-
+  
   void setElevationDataProvider(ElevationDataProvider* elevationDataProvider,
                                 bool owned);
-
+  
   void setVerticalExaggeration(float verticalExaggeration);
-
+  
   ElevationDataProvider* getElevationDataProvider() const {
     return _elevationDataProvider;
   }
-
+  
   void setRenderTileMeshes(bool renderTileMeshes) {
     _renderTileMeshes = renderTileMeshes;
   }
-
+  
   bool getRenderTileMeshes() const {
     return _renderTileMeshes;
   }
-
+  
   std::list<URL> getResourcesURL(const Sector& sector,
                                  int minLOD,
                                  int maxLOD,
                                  const std::vector< std::list<Geodetic2D>* >* routes = NULL);
-
+  
   int getNumberOfRenderedTiles() const;
-    
+  
   const LayerTilesRenderParameters* getLayerTilesRenderParameters();
   
   
