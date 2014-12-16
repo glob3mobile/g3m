@@ -1056,9 +1056,10 @@ bool PlanetRenderer::sectorCloseToRoute(const Sector& sector,
   Vector2D center(geoCenter._longitude._radians, geoCenter._latitude._radians);
   
   for (int i = 0; i < routes.size(); i++) {
-    const std::list<Geodetic2D>& route = *routes[i];
 
 #ifdef C_CODE
+    
+  const std::list<Geodetic2D>& route = *routes[i];
   std::list<Geodetic2D>::const_iterator itA = route.begin();
   std::list<Geodetic2D>::const_iterator itB = route.begin()++;
 
@@ -1078,6 +1079,7 @@ bool PlanetRenderer::sectorCloseToRoute(const Sector& sector,
 #endif
 
 #ifdef JAVA_CODE
+  final java.util.LinkedList<Geodetic2D> route = routes.get(i);
   java.util.Iterator<Geodetic2D> iterator = route.iterator();
 
 	Geodetic2D geoA = null;

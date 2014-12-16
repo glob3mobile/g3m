@@ -386,7 +386,7 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
   
     for (int i = 0; i < routes.size(); i++)
     {
-      final java.util.LinkedList<Geodetic2D> route = *routes.get(i);
+      final java.util.LinkedList<Geodetic2D> route = routes.get(i);
   
   
     java.util.Iterator<Geodetic2D> iterator = route.iterator();
@@ -1277,7 +1277,7 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
           java.util.ArrayList<Tile> newTiles = tile.getSubTiles();
           for (int i = 0; i < newTiles.size(); i++)
           {
-            _tiles.addLast(newTiles.get(i));
+            _tiles.addLast(newTiles.get(i));        
           }
         }
   
