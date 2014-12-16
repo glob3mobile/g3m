@@ -1198,7 +1198,7 @@ std::list<URL> PlanetRenderer::getResourcesURL(const Sector& sector,
   
   std::vector<Vector2D*>* points = NULL;
   if (routes != NULL){
-    routesToRadiansPoints(*routes);
+    points = routesToRadiansPoints(*routes);
   }
   
   while (!_tiles.empty()) {

@@ -1299,7 +1299,7 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
     java.util.ArrayList<Vector2D> points = null;
     if (routes != null)
     {
-      routesToRadiansPoints(routes);
+    	points = routesToRadiansPoints(routes);
     }
   
     while (!_tiles.isEmpty())
