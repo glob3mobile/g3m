@@ -1299,7 +1299,7 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
     java.util.ArrayList<Vector2D> points = null;
     if (routes != null)
     {
-    	points = routesToRadiansPoints(routes);
+      points = routesToRadiansPoints(routes);
     }
   
     while (!_tiles.isEmpty())
@@ -1345,6 +1345,92 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
       ILogger.instance().logInfo("TILES_VISITED LOD:%d -> %d\n", i, GlobalMembersPlanetRenderer.TILES_VISITED[i]);
       //printf("TILES_VISITED LOD:%d -> %d\n", i, TILES_VISITED[i]);
     }
+  
+  
+    return urls;
+  }
+
+  public final java.util.LinkedList<URL> getResourcesURL(Sector sector, double minLongitudeMetersOfPixels)
+  {
+     return getResourcesURL(sector, minLongitudeMetersOfPixels, null);
+  }
+  public final java.util.LinkedList<URL> getResourcesURL(Sector sector, double minLongitudeMetersOfPixels, java.util.ArrayList< java.util.LinkedList<Geodetic2D> > routes)
+  {
+  
+    double meterPerLonDegree = 200000000.0 / 180.0;
+  
+    final double minLongitudeRadiansOfPixels = minLongitudeMetersOfPixels * meterPerLonDegree;
+  
+    final double lonPixelsPerTile = getLayerTilesRenderParameters()._tileMeshResolution._x;
+  
+    for (int i = 0; i < 20; i++)
+    {
+      GlobalMembersPlanetRenderer.TILES_VISITED[i] = 0;
+    }
+  
+    java.util.LinkedList<URL> urls = new java.util.LinkedList<URL>();
+  
+    java.util.LinkedList<Tile> _tiles = new java.util.LinkedList<Tile>(); //List of tiles to check
+    final int ftSize = _firstLevelTiles.size();
+    for (int i = 0; i < ftSize; i++)
+    {
+      if (_firstLevelTiles.get(i)._sector.touchesWith(sector))
+      {
+        _tiles.addLast(_firstLevelTiles.get(i));
+      }
+    }
+  
+    java.util.ArrayList<Vector2D> points = null;
+    if (routes != null)
+    {
+      points = routesToRadiansPoints(routes);
+    }
+  
+    while (!_tiles.isEmpty())
+    {
+      Tile tile = _tiles.getFirst();
+      _tiles.removeFirst();
+  
+      final double pixelLonRadians = tile._sector._deltaLongitude._radians / lonPixelsPerTile;
+      if (pixelLonRadians < minLongitudeRadiansOfPixels)
+      {
+        continue;
+      }
+  
+      if (tile._sector.touchesWith(sector))
+      {
+  
+        //Checking Route if any
+        if (points != null)
+        {
+          if (!sectorCloseToRadianPoints(tile._sector, points, tile._sector.getDeltaRadiusInRadians() * 4.0))
+          {
+            continue;
+          }
+        }
+  
+        GlobalMembersPlanetRenderer.TILES_VISITED[tile._level]++;
+  
+        addLayerSetURLForSector(urls, tile);
+  
+        java.util.ArrayList<Tile> newTiles = tile.getSubTiles();
+        for (int i = 0; i < newTiles.size(); i++)
+        {
+          _tiles.addLast(newTiles.get(i));
+        }
+  
+      }
+    }
+  
+    for (int i = 0; i < 20; i++)
+    {
+      if (GlobalMembersPlanetRenderer.TILES_VISITED[i] != 0)
+      {
+        ILogger.instance().logInfo("TILES_VISITED LOD:%d -> %d\n", i, GlobalMembersPlanetRenderer.TILES_VISITED[i]);
+      }
+      //printf("TILES_VISITED LOD:%d -> %d\n", i, TILES_VISITED[i]);
+    }
+  
   
     return urls;
   }
