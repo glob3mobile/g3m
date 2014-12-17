@@ -531,7 +531,8 @@ public:
                                  const std::vector< std::list<Geodetic2D>* >* routes = NULL);
   
   std::list<URL> getResourcesURL(const Sector& sector,
-                                 double minLongitudeMetersOfPixels,
+                                 const Planet* planet,
+                                 double minPixelSize,
                                  const std::vector< std::list<Geodetic2D>* >* routes = NULL);
   
   int getNumberOfRenderedTiles() const;

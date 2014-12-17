@@ -1253,15 +1253,10 @@ std::list<URL> PlanetRenderer::getResourcesURL(const Sector& sector,
 
 
 std::list<URL> PlanetRenderer::getResourcesURL(const Sector& sector,
-                                               double minLongitudeMetersOfPixels,
+                                               const Planet* planet,
+                                               double minPixelSize,
                                                const std::vector< std::list<Geodetic2D>* >* routes){
-  
-  double meterPerLonDegree = 200000000.0 / 180.0;
-  
-  const double minLongitudeRadiansOfPixels = minLongitudeMetersOfPixels * meterPerLonDegree;
-  
-  const double lonPixelsPerTile = getLayerTilesRenderParameters()->_tileMeshResolution._x;
-  
+
   for (int i = 0; i < 20; i++) {
     TILES_VISITED[i] = 0;
   }
@@ -1281,12 +1276,18 @@ std::list<URL> PlanetRenderer::getResourcesURL(const Sector& sector,
     points = routesToRadiansPoints(*routes);
   }
   
+  double diagonalPixels = IMathUtils::instance()->sqrt((double)(getLayerTilesRenderParameters()->_tileTextureResolution._x ^2 +
+                                                                getLayerTilesRenderParameters()->_tileTextureResolution._y ^2));
+  
   while (!_tiles.empty()) {
     Tile* tile = _tiles.front();
     _tiles.pop_front();
     
-    const double pixelLonRadians = tile->_sector._deltaLongitude._radians / lonPixelsPerTile;
-    if (pixelLonRadians < minLongitudeRadiansOfPixels){
+    const double tileSize = planet->toCartesian(tile->_sector._lower).distanceTo(planet->toCartesian(tile->_sector._upper));
+    
+    const double pixelSize = tileSize / diagonalPixels;
+    
+    if (pixelSize < minPixelSize){
       continue;
     }
     

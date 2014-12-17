@@ -1354,14 +1354,14 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
   {
      return getResourcesURL(sector, minLongitudeMetersOfPixels, null);
   }
-  public final java.util.LinkedList<URL> getResourcesURL(Sector sector, double minLongitudeMetersOfPixels, java.util.ArrayList< java.util.LinkedList<Geodetic2D> > routes)
+  public final java.util.LinkedList<URL> getResourcesURL(Sector sector, Planet planet, double minLongitudeMetersOfPixels, java.util.ArrayList< java.util.LinkedList<Geodetic2D> > routes)
   {
   
-    double meterPerLonDegree = 200000000.0 / 180.0;
+    double meterPerLonDegree = 20000000.0 / 180.0;
   
-    final double minLongitudeRadiansOfPixels = minLongitudeMetersOfPixels * meterPerLonDegree;
+    final double minLongitudeRadiansOfPixels = minLongitudeMetersOfPixels / meterPerLonDegree;
   
-    final double lonPixelsPerTile = getLayerTilesRenderParameters()._tileMeshResolution._x;
+    final double lonPixelsPerTile = getLayerTilesRenderParameters()._tileTextureResolution._x;
   
     for (int i = 0; i < 20; i++)
     {
@@ -1390,6 +1390,10 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
     {
       Tile tile = _tiles.getFirst();
       _tiles.removeFirst();
+      
+      ////
+      double dis = planet.toCartesian(tile._sector._lower).distanceTo(planet.toCartesian(tile._sector._upper));
+      ////
   
       final double pixelLonRadians = tile._sector._deltaLongitude._radians / lonPixelsPerTile;
       if (pixelLonRadians < minLongitudeRadiansOfPixels)
