@@ -1211,7 +1211,7 @@ std::list<URL> PlanetRenderer::getResourcesURL(const Sector& sector,
       //Checking Route if any
       if (points != NULL){
         if (!sectorCloseToRadianPoints(tile->_sector, points,
-                                tile->_sector.getDeltaRadiusInRadians() * 4.0)){
+                                       tile->_sector.getDeltaRadiusInRadians() * 4.0)){
           continue;
         }
       }
@@ -1235,6 +1235,87 @@ std::list<URL> PlanetRenderer::getResourcesURL(const Sector& sector,
   
   for (int i = 0; i < 20; i++) {
     ILogger::instance()->logInfo("TILES_VISITED LOD:%d -> %d\n", i, TILES_VISITED[i]);
+    //printf("TILES_VISITED LOD:%d -> %d\n", i, TILES_VISITED[i]);
+  }
+  
+#ifdef C_CODE
+  if (points != NULL){
+    for (int i = 0; i < points->size(); i++) {
+      delete points->at(i);
+    }
+    delete points;
+  }
+#endif
+  
+  return urls;
+}
+
+
+
+std::list<URL> PlanetRenderer::getResourcesURL(const Sector& sector,
+                                               double minLongitudeMetersOfPixels,
+                                               const std::vector< std::list<Geodetic2D>* >* routes){
+  
+  double meterPerLonDegree = 200000000.0 / 180.0;
+  
+  const double minLongitudeRadiansOfPixels = minLongitudeMetersOfPixels * meterPerLonDegree;
+  
+  const double lonPixelsPerTile = getLayerTilesRenderParameters()->_tileMeshResolution._x;
+  
+  for (int i = 0; i < 20; i++) {
+    TILES_VISITED[i] = 0;
+  }
+  
+  std::list<URL> urls;
+  
+  std::list<Tile*> _tiles;  //List of tiles to check
+  const int ftSize = _firstLevelTiles.size();
+  for (int i = 0; i < ftSize; i++) {
+    if (_firstLevelTiles[i]->_sector.touchesWith(sector)){
+      _tiles.push_back(_firstLevelTiles[i]);
+    }
+  }
+  
+  std::vector<Vector2D*>* points = NULL;
+  if (routes != NULL){
+    points = routesToRadiansPoints(*routes);
+  }
+  
+  while (!_tiles.empty()) {
+    Tile* tile = _tiles.front();
+    _tiles.pop_front();
+    
+    const double pixelLonRadians = tile->_sector._deltaLongitude._radians / lonPixelsPerTile;
+    if (pixelLonRadians < minLongitudeRadiansOfPixels){
+      continue;
+    }
+    
+    if (tile->_sector.touchesWith(sector)){
+      
+      //Checking Route if any
+      if (points != NULL){
+        if (!sectorCloseToRadianPoints(tile->_sector, points,
+                                       tile->_sector.getDeltaRadiusInRadians() * 4.0)){
+          continue;
+        }
+      }
+      
+      TILES_VISITED[tile->_level]++;
+      
+      addLayerSetURLForSector(urls, tile);
+      
+      std::vector<Tile*>* newTiles = tile->getSubTiles();
+      for (int i = 0; i < newTiles->size(); i++) {
+        _tiles.push_back(newTiles->at(i));
+      }
+      
+    }
+  }
+  
+  for (int i = 0; i < 20; i++) {
+    if (TILES_VISITED[i] != 0){
+      ILogger::instance()->logInfo("TILES_VISITED LOD:%d -> %d\n", i, TILES_VISITED[i]);
+    }
     //printf("TILES_VISITED LOD:%d -> %d\n", i, TILES_VISITED[i]);
   }
   

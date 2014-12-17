@@ -530,6 +530,10 @@ public:
                                  int maxLOD,
                                  const std::vector< std::list<Geodetic2D>* >* routes = NULL);
   
+  std::list<URL> getResourcesURL(const Sector& sector,
+                                 double minLongitudeMetersOfPixels,
+                                 const std::vector< std::list<Geodetic2D>* >* routes = NULL);
+  
   int getNumberOfRenderedTiles() const;
   
   const LayerTilesRenderParameters* getLayerTilesRenderParameters();
