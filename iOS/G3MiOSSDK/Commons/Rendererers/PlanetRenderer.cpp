@@ -1276,8 +1276,7 @@ std::list<URL> PlanetRenderer::getResourcesURL(const Sector& sector,
     points = routesToRadiansPoints(*routes);
   }
   
-  double diagonalPixels = IMathUtils::instance()->sqrt((double)(getLayerTilesRenderParameters()->_tileTextureResolution._x ^2 +
-                                                                getLayerTilesRenderParameters()->_tileTextureResolution._y ^2));
+  double diagonalPixels = getLayerTilesRenderParameters()->_tileTextureResolution.length();
   
   while (!_tiles.empty()) {
     Tile* tile = _tiles.front();

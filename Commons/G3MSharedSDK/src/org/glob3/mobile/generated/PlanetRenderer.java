@@ -1379,9 +1379,9 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
     {
       points = routesToRadiansPoints(routes);
     }
-  
-    double diagonalPixels = IMathUtils.instance().sqrt((double)(getLayerTilesRenderParameters()._tileTextureResolution._x ^2 + getLayerTilesRenderParameters()._tileTextureResolution._y ^2));
-  
+    
+    double diagonalPixels = getLayerTilesRenderParameters()._tileTextureResolution.length();
+    
     while (!_tiles.isEmpty())
     {
       Tile tile = _tiles.getFirst();
