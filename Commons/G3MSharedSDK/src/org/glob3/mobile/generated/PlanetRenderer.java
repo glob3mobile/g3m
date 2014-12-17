@@ -1350,18 +1350,12 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
     return urls;
   }
 
-  public final java.util.LinkedList<URL> getResourcesURL(Sector sector, double minLongitudeMetersOfPixels)
+  public final java.util.LinkedList<URL> getResourcesURL(Sector sector, Planet planet, double minPixelSize)
   {
-     return getResourcesURL(sector, minLongitudeMetersOfPixels, null);
+     return getResourcesURL(sector, planet, minPixelSize, null);
   }
-  public final java.util.LinkedList<URL> getResourcesURL(Sector sector, Planet planet, double minLongitudeMetersOfPixels, java.util.ArrayList< java.util.LinkedList<Geodetic2D> > routes)
+  public final java.util.LinkedList<URL> getResourcesURL(Sector sector, Planet planet, double minPixelSize, java.util.ArrayList< java.util.LinkedList<Geodetic2D> > routes)
   {
-  
-    double meterPerLonDegree = 20000000.0 / 180.0;
-  
-    final double minLongitudeRadiansOfPixels = minLongitudeMetersOfPixels / meterPerLonDegree;
-  
-    final double lonPixelsPerTile = getLayerTilesRenderParameters()._tileTextureResolution._x;
   
     for (int i = 0; i < 20; i++)
     {
@@ -1386,17 +1380,18 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
       points = routesToRadiansPoints(routes);
     }
   
+    double diagonalPixels = IMathUtils.instance().sqrt((double)(getLayerTilesRenderParameters()._tileTextureResolution._x ^2 + getLayerTilesRenderParameters()._tileTextureResolution._y ^2));
+  
     while (!_tiles.isEmpty())
     {
       Tile tile = _tiles.getFirst();
       _tiles.removeFirst();
-      
-      ////
-      double dis = planet.toCartesian(tile._sector._lower).distanceTo(planet.toCartesian(tile._sector._upper));
-      ////
   
-      final double pixelLonRadians = tile._sector._deltaLongitude._radians / lonPixelsPerTile;
-      if (pixelLonRadians < minLongitudeRadiansOfPixels)
+      final double tileSize = planet.toCartesian(tile._sector._lower).distanceTo(planet.toCartesian(tile._sector._upper));
+  
+      final double pixelSize = tileSize / diagonalPixels;
+  
+      if (pixelSize < minPixelSize)
       {
         continue;
       }
