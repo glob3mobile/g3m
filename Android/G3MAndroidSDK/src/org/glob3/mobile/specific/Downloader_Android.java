@@ -43,7 +43,7 @@ public final class Downloader_Android
    private G3MContext                                       _context;
 
 
-   Downloader_Android(final int maxConcurrentOperationCount,
+   public Downloader_Android(final int maxConcurrentOperationCount,
                       final TimeInterval connectTimeout,
                       final TimeInterval readTimeout,
                       final Context appContext) {

@@ -19,7 +19,7 @@ public final class Logger_Android
    private final Locale _locale = new Locale("myLocale");
 
 
-   Logger_Android(final LogLevel level) {
+   public Logger_Android(final LogLevel level) {
       super(level);
    }
 

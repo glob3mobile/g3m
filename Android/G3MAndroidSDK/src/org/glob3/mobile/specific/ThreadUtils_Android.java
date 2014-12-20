@@ -26,7 +26,7 @@ public final class ThreadUtils_Android
    private final List<Runnable>     _rendererThreadQueue = new ArrayList<Runnable>();
 
 
-   ThreadUtils_Android(final G3MWidget_Android widgetAndroid) {
+   public ThreadUtils_Android(final G3MWidget_Android widgetAndroid) {
       if (widgetAndroid == null) {
          throw new IllegalArgumentException("widgetAndroid can't be null");
       }
