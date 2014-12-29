@@ -157,6 +157,8 @@
 #import <G3MiOSSDK/ChessboardLayer.hpp>
 #import <G3MiOSSDK/GEORectangleRasterSymbol.hpp>
 #import <G3MiOSSDK/GEOVectorLayer.hpp>
+
+#import <G3MiOSSDK/LoDShape.hpp>
 //class TestVisibleSectorListener : public VisibleSectorListener {
 //public:
 //  void onVisibleSectorChange(const Sector& visibleSector,
@@ -4445,7 +4447,8 @@ public:
 
 - (void) loadAirplane: (ShapesRenderer*) shapesRenderer{
   
-  if (true) {
+    SGShape* seymourPlane, *bigPlane;
+  
     NSString *planeFilePath = [[NSBundle mainBundle] pathForResource: @"seymour-plane"
                                                               ofType: @"json"];
     if (planeFilePath) {
@@ -4456,7 +4459,7 @@ public:
         std::string planeJSON = [nsPlaneJSON UTF8String];
         
         //Airplane 1
-        SGShape* plane = SceneJSShapesParser::parseFromJSON(planeJSON,
+        seymourPlane = SceneJSShapesParser::parseFromJSON(planeJSON,
                                                           URL::FILE_PROTOCOL + "/" ,
                                                           false,
                                                           new Geodetic3D(Angle::fromDegrees(40),
@@ -4468,13 +4471,13 @@ public:
         
         
         
-        plane->setScale(1000);
-        plane->setPitch(Angle::fromDegrees(120));
-        plane->setHeading(Angle::fromDegrees(-110));
-        shapesRenderer->addShape(plane);
+        seymourPlane->setScale(1000);
+        seymourPlane->setPitch(Angle::fromDegrees(120));
+        seymourPlane->setHeading(Angle::fromDegrees(-110));
+        shapesRenderer->addShape(seymourPlane);
         
-        //Airplane 2
-        SGNode* node = plane->getNode();
+        //Airplane 2 (using previously loaded SG)
+        SGNode* node = seymourPlane->getNode();
         SGShape* plane2 = new SGShape(node, URL::FILE_PROTOCOL + "/", false, new Geodetic3D(Angle::fromDegrees(40.2),
                                                                       Angle::fromDegrees(3.2),
                                                                       6000), ABSOLUTE);
@@ -4484,9 +4487,73 @@ public:
         plane2->setHeading(Angle::fromDegrees(-110));
         shapesRenderer->addShape(plane2);
         
+
+        
+        
       }
     }
+  
+  /////////////////////////////////////////
+  
+  NSString *planeFilePath2 = [[NSBundle mainBundle] pathForResource: @"A320"
+                                                            ofType: @"json"];
+  if (planeFilePath) {
+    NSString *nsPlaneJSON = [NSString stringWithContentsOfFile: planeFilePath2
+                                                      encoding: NSUTF8StringEncoding
+                                                         error: nil];
+    if (nsPlaneJSON) {
+      std::string planeJSON = [nsPlaneJSON UTF8String];
+      
+      //Airplane 1
+      bigPlane = SceneJSShapesParser::parseFromJSON(planeJSON,
+                                                          URL::FILE_PROTOCOL + "textures-A320/",
+                                                          false,
+                                                          new Geodetic3D(Angle::fromDegrees(40),
+                                                                         Angle::fromDegrees(2.8),
+                                                                         5000),
+                                                          ABSOLUTE);
+      
+      bigPlane->setScale(500);
+      bigPlane->setPitch(Angle::fromDegrees(90));
+      bigPlane->setHeading(Angle::fromDegrees(-110));
+      shapesRenderer->addShape(bigPlane);
+    }
   }
+  
+  ///////////////////////////////
+  
+  //Airplane 3 (with LOD)
+  
+  std::vector<LoDLevel*> lodLevels;
+  LoDLevel* ll1 = new LoDLevel(seymourPlane->getNode(), URL::FILE_PROTOCOL + "/", 100000, false);
+  LoDLevel* ll2 = new LoDLevel(bigPlane->getNode(), URL::FILE_PROTOCOL + "textures-A320/", 200000, false);
+  lodLevels.push_back(ll1);
+  lodLevels.push_back(ll2);
+  
+  LoDShape* planeWithLOD = new LoDShape(lodLevels,
+                                        new Geodetic3D(Angle::fromDegrees(40.4),
+                                                       Angle::fromDegrees(3.4),
+                                                       5000),
+                                        ABSOLUTE);
+  
+  planeWithLOD->setScale(1000);
+  planeWithLOD->setPitch(Angle::fromDegrees(120));
+  planeWithLOD->setHeading(Angle::fromDegrees(-110));
+  
+  shapesRenderer->addShape(planeWithLOD);
+
+  
+//  SceneJSShapesParser::par
+//
+//  loadBSONSceneJS(URL("file:///A320.bson"),
+//                  URL::FILE_PROTOCOL + "textures-A320/",
+//                  false,
+//                  new Geodetic3D(Angle::fromDegreesMinutesSeconds(38, 53, 42.24),
+//                                 Angle::fromDegreesMinutesSeconds(-77, 2, 10.92),
+//                                 10000),
+//                  ABSOLUTE,
+//                  new PlaneShapeLoadListener(),
+//                  true);
   
   
 }

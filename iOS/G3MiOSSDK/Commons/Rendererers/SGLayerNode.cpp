@@ -82,7 +82,9 @@ void SGLayerNode::onImageDownload(const IImage* image) {
 
 URL SGLayerNode::getURL() const {
   IStringBuilder* isb = IStringBuilder::newStringBuilder();
-  isb->addString(_shape->getURIPrefix());
+  if (_shape != NULL){
+    isb->addString(_shape->getURIPrefix());
+  }
   isb->addString(_uri);
   const std::string path = isb->getString();
   delete isb;
