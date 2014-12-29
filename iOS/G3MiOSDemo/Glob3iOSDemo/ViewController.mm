@@ -4443,6 +4443,54 @@ public:
   }
 }
 
+- (void) loadAirplane: (ShapesRenderer*) shapesRenderer{
+  
+  if (true) {
+    NSString *planeFilePath = [[NSBundle mainBundle] pathForResource: @"seymour-plane"
+                                                              ofType: @"json"];
+    if (planeFilePath) {
+      NSString *nsPlaneJSON = [NSString stringWithContentsOfFile: planeFilePath
+                                                        encoding: NSUTF8StringEncoding
+                                                           error: nil];
+      if (nsPlaneJSON) {
+        std::string planeJSON = [nsPlaneJSON UTF8String];
+        
+        //Airplane 1
+        SGShape* plane = SceneJSShapesParser::parseFromJSON(planeJSON,
+                                                          URL::FILE_PROTOCOL + "/" ,
+                                                          false,
+                                                          new Geodetic3D(Angle::fromDegrees(40),
+                                                                         Angle::fromDegrees(3),
+                                                                         5000),
+                                                          ABSOLUTE);
+        
+
+        
+        
+        
+        plane->setScale(1000);
+        plane->setPitch(Angle::fromDegrees(120));
+        plane->setHeading(Angle::fromDegrees(-110));
+        shapesRenderer->addShape(plane);
+        
+        //Airplane 2
+        SGNode* node = plane->getNode();
+        SGShape* plane2 = new SGShape(node, URL::FILE_PROTOCOL + "/", false, new Geodetic3D(Angle::fromDegrees(40.2),
+                                                                      Angle::fromDegrees(3.2),
+                                                                      6000), ABSOLUTE);
+        
+        plane2->setScale(1000);
+        plane2->setPitch(Angle::fromDegrees(120));
+        plane2->setHeading(Angle::fromDegrees(-110));
+        shapesRenderer->addShape(plane2);
+        
+      }
+    }
+  }
+  
+  
+}
+
 
 - (void) testingVectorialGeometry
 {
@@ -4475,6 +4523,8 @@ public:
   
   ShapesRenderer* shapesRenderer = [self createSampleShapesRenderer: geoTileRasterizer];
   builder.addRenderer(shapesRenderer);
+  
+  [self loadAirplane:shapesRenderer];
   
   // initialization
   builder.initializeWidget();
