@@ -1,10 +1,13 @@
 package com.glob3.mobile.g3mandroidtestingapplication;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.LinkedList;
 
 import org.glob3.mobile.generated.AltitudeMode;
@@ -34,6 +37,8 @@ import org.glob3.mobile.generated.ILogger;
 import org.glob3.mobile.generated.LayerSet;
 import org.glob3.mobile.generated.LevelTileCondition;
 import org.glob3.mobile.generated.LineShape;
+import org.glob3.mobile.generated.LoDLevel;
+import org.glob3.mobile.generated.LoDShape;
 import org.glob3.mobile.generated.MapQuestLayer;
 import org.glob3.mobile.generated.Mark;
 import org.glob3.mobile.generated.MarksRenderer;
@@ -42,8 +47,8 @@ import org.glob3.mobile.generated.Planet;
 import org.glob3.mobile.generated.PointShape;
 import org.glob3.mobile.generated.RasterLineShape;
 import org.glob3.mobile.generated.RasterPolygonShape;
+import org.glob3.mobile.generated.SGNode;
 import org.glob3.mobile.generated.SGShape;
-import org.glob3.mobile.generated.SceneJSShapesParser;
 import org.glob3.mobile.generated.Sector;
 import org.glob3.mobile.generated.Shape;
 import org.glob3.mobile.generated.ShapeLoadListener;
@@ -465,6 +470,198 @@ public class MainActivity extends Activity {
 		_g3mWidget.setCameraPitch(Angle.fromDegrees(-50.0));
 	}
 
+	private String loadFromAssets(String file) {
+		StringBuilder buf = new StringBuilder();
+		InputStream json;
+		try {
+			json = getAssets().open(file);
+			BufferedReader in = new BufferedReader(new InputStreamReader(json,
+					"UTF-8"));
+			String str;
+
+			while ((str = in.readLine()) != null) {
+				buf.append(str);
+			}
+
+			in.close();
+			return buf.toString();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+
+	}
+
+	public static SGShape seymourPlane = null, A320Plane = null;
+
+	private void loadAirplane(final ShapesRenderer shapesRenderer) {
+
+		shapesRenderer.loadJSONSceneJS(new URL("file:///seymour-plane.json",
+				false), "file:///", false, new Geodetic3D(
+				Angle.fromDegrees(40), Angle.fromDegrees(3), 5000),
+				AltitudeMode.ABSOLUTE, new ShapeLoadListener() {
+
+					@Override
+					public void onBeforeAddShape(final SGShape shape) {
+						seymourPlane = shape;
+						double scale = 1000;
+						shape.setScale(scale, scale, scale);
+						shape.setPitch(Angle.fromDegrees(120));
+						shape.setHeading(Angle.fromDegrees(-110));
+
+						// Airplane 2 (using previously loaded SG)
+						SGNode node = shape.getNode();
+						SGShape plane2 = new SGShape(node, "file:///", false,
+								new Geodetic3D(Angle.fromDegrees(40.2), Angle
+										.fromDegrees(3.2), 6000),
+								AltitudeMode.ABSOLUTE);
+
+						plane2.setScale(1000);
+						plane2.setPitch(Angle.fromDegrees(120));
+						plane2.setHeading(Angle.fromDegrees(-110));
+						shapesRenderer.addShape(plane2);
+
+						// Adding gray plane
+						shapesRenderer.loadBSONSceneJS(new URL(
+								"file:///A320.bson", false),
+								"file:///textures-A320/", false, Geodetic3D
+										.fromDegrees(40, 2.8, 500),
+								AltitudeMode.ABSOLUTE, new ShapeLoadListener() {
+
+									@Override
+									public void onBeforeAddShape(SGShape shape) {
+										A320Plane = shape;
+
+										shape.setScale(1000);
+										shape.setPitch(Angle.fromDegrees(120));
+										shape.setHeading(Angle
+												.fromDegrees(-110));
+
+										// LoD plane
+										ArrayList<LoDLevel> lodLevels = new ArrayList<LoDLevel>();
+										LoDLevel ll1 = new LoDLevel(seymourPlane.getNode(),
+												"file:///", 
+												100000, // Optimum distance for drawing
+												false);
+										LoDLevel ll2 = new LoDLevel(A320Plane.getNode(),
+												"file:///textures-A320/",
+												200000, // Optimum distance for drawing
+												false);
+										lodLevels.add(ll1);
+										lodLevels.add(ll2);
+
+										LoDShape planeWithLOD = new LoDShape(
+												lodLevels, Geodetic3D
+														.fromDegrees(40.4, 3.4,
+																5000),
+												AltitudeMode.ABSOLUTE);
+
+										planeWithLOD.setScale(1000);
+										planeWithLOD.setPitch(Angle
+												.fromDegrees(120));
+										planeWithLOD.setHeading(Angle
+												.fromDegrees(-110));
+
+										shapesRenderer.addShape(planeWithLOD);
+
+									}
+
+									@Override
+									public void onAfterAddShape(SGShape shape) {
+										// TODO Auto-generated method stub
+
+									}
+
+									@Override
+									public void dispose() {
+										// TODO Auto-generated method stub
+
+									}
+								});
+					}
+
+					@Override
+					public void dispose() {
+						// TODO Auto-generated method stub
+
+					}
+
+					@Override
+					public void onAfterAddShape(SGShape shape) {
+						// TODO Auto-generated method stub
+
+					}
+				});
+
+		// SGShape seymourPlane, bigPlane;
+		//
+		// String seymourString = loadFromAssets("seymour-plane.json");
+		//
+		// // Airplane 1
+		// seymourPlane = SceneJSShapesParser.parseFromJSON(seymourString,
+		// "file:///", false,
+		// new Geodetic3D(Angle.fromDegrees(40), Angle.fromDegrees(3),
+		// 5000), AltitudeMode.ABSOLUTE);
+		//
+		// seymourPlane.setScale(1000);
+		// seymourPlane.setPitch(Angle.fromDegrees(120));
+		// seymourPlane.setHeading(Angle.fromDegrees(-110));
+		// shapesRenderer.addShape(seymourPlane);
+		//
+		// // Airplane 2 (using previously loaded SG)
+		// SGNode node = seymourPlane.getNode();
+		// SGShape plane2 = new SGShape(node, "file:///", false, new Geodetic3D(
+		// Angle.fromDegrees(40.2), Angle.fromDegrees(3.2), 6000),
+		// AltitudeMode.ABSOLUTE);
+		//
+		// plane2.setScale(1000);
+		// plane2.setPitch(Angle.fromDegrees(120));
+		// plane2.setHeading(Angle.fromDegrees(-110));
+		// shapesRenderer.addShape(plane2);
+
+		/*
+		 * /////////////////////////////////////////
+		 * 
+		 * NSString *planeFilePath2 = [[NSBundle mainBundle] pathForResource:
+		 * 
+		 * @"A320" ofType: @"json"]; if (planeFilePath) { NSString *nsPlaneJSON
+		 * = [NSString stringWithContentsOfFile: planeFilePath2 encoding:
+		 * NSUTF8StringEncoding error: nil]; if (nsPlaneJSON) { std::string
+		 * planeJSON = [nsPlaneJSON UTF8String];
+		 * 
+		 * //Airplane 1 bigPlane = SceneJSShapesParser::parseFromJSON(planeJSON,
+		 * URL::FILE_PROTOCOL + "textures-A320/", false, new
+		 * Geodetic3D(Angle::fromDegrees(40), Angle::fromDegrees(2.8), 5000),
+		 * ABSOLUTE);
+		 * 
+		 * bigPlane->setScale(500); bigPlane->setPitch(Angle::fromDegrees(90));
+		 * bigPlane->setHeading(Angle::fromDegrees(-110));
+		 * shapesRenderer->addShape(bigPlane); } }
+		 * 
+		 * ///////////////////////////////
+		 * 
+		 * //Airplane 3 (with LOD)
+		 * 
+		 * std::vector<LoDLevel*> lodLevels; LoDLevel* ll1 = new
+		 * LoDLevel(seymourPlane->getNode(), URL::FILE_PROTOCOL + "/", 100000,
+		 * false); LoDLevel* ll2 = new LoDLevel(bigPlane->getNode(),
+		 * URL::FILE_PROTOCOL + "textures-A320/", 200000, false);
+		 * lodLevels.push_back(ll1); lodLevels.push_back(ll2);
+		 * 
+		 * LoDShape* planeWithLOD = new LoDShape(lodLevels, new
+		 * Geodetic3D(Angle::fromDegrees(40.4), Angle::fromDegrees(3.4), 5000),
+		 * ABSOLUTE);
+		 * 
+		 * planeWithLOD->setScale(1000);
+		 * planeWithLOD->setPitch(Angle::fromDegrees(120));
+		 * planeWithLOD->setHeading(Angle::fromDegrees(-110));
+		 * 
+		 * shapesRenderer->addShape(planeWithLOD);
+		 */
+
+	}
+
 	private void testingVectorialGeometry() {
 		final G3MBuilder_Android builder = new G3MBuilder_Android(this);
 		// builder.getPlanetRendererBuilder().setRenderDebug(true);
@@ -486,6 +683,8 @@ public class MainActivity extends Activity {
 		final ShapesRenderer shapesRenderer = new ShapesRenderer(
 				geoTileRasterizer);
 		builder.addRenderer(shapesRenderer);
+
+		loadAirplane(shapesRenderer);
 
 		final LayerSet layerSet = new LayerSet();
 		// layerSet.addLayer(new MapBoxLayer("examples.map-9ijuk24y",
