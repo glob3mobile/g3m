@@ -68,7 +68,10 @@ public class SGLayerNode extends SGNode
   private URL getURL()
   {
     IStringBuilder isb = IStringBuilder.newStringBuilder();
-    isb.addString(_shape.getURIPrefix());
+    if (_shape != null)
+    {
+      isb.addString(_shape.getURIPrefix());
+    }
     isb.addString(_uri);
     final String path = isb.getString();
     if (isb != null)
