@@ -43,13 +43,14 @@ public class GenericQuadTree_Node
   
     //Split elements by sector
     java.util.ArrayList<GenericQuadTree_Element> elementsToBeInserted = _elements;
-    _elements.clear();
+
     final int size = elementsToBeInserted.size();
     for (int i = 0; i < size; i++)
     {
       this.add(elementsToBeInserted.get(i), maxElementsPerNode, maxDepth, childAreaProportion);
     }
   
+    _elements.clear();
   
     //  const int size = _elements.size();
     //  for (int i = 0; i < size; i++) {

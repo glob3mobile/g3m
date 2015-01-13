@@ -60,12 +60,12 @@ void GenericQuadTree_Node::splitNode(int maxElementsPerNode,
 
   //Split elements by sector
   std::vector<GenericQuadTree_Element*> elementsToBeInserted = _elements;
-  _elements.clear();
+
   const int size = elementsToBeInserted.size();
   for (int i = 0; i < size; i++) {
     this->add(elementsToBeInserted[i], maxElementsPerNode, maxDepth, childAreaProportion);
   }
-
+  _elements.clear();
 
   //  const int size = _elements.size();
   //  for (int i = 0; i < size; i++) {
