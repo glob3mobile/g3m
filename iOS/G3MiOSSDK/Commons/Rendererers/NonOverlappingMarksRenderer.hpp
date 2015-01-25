@@ -13,22 +13,39 @@
 
 #include "DefaultRenderer.hpp"
 #include "Geodetic3D.hpp"
-#include "Vector2D.hpp"
+#include "Vector2F.hpp"
+#include "Vector3D.hpp"
 
 class IImageBuilder;
 class Geodetic3D;
 class Vector2D;
+class Camera;
+class Planet;
 
 
 class NonOverlappingMark{
   IImageBuilder* _imageBuilder;
   float _springLengthInPixels;
+
+  mutable Vector3D* _cartesianPos;
   Geodetic3D _geoPosition;
   
-  Vector2D* _anchorScreenPos;
-  Vector2D* _screenPos;
+  float _dX, _dY; //Velocity vector (pixels per second)
+  Vector2F* _anchorScreenPos;
+  Vector2F* _screenPos;
 public:
+  
   NonOverlappingMark(IImageBuilder* imageBuilder, Geodetic3D& position, float springLengthInPixels);
+  
+  Vector3D getCartesianPosition(const Planet* planet) const;
+  
+  void computeScreenPos(const Camera* cam, const Planet* planet);
+  
+  Vector2F* getScreenPos() const{ return _screenPos;}
+  
+  void applyCoulombsLaw(const NonOverlappingMark* that); //EM
+  
+  void applyHookesLaw(const NonOverlappingMark* that);   //Spring
   
 };
 
@@ -37,6 +54,8 @@ class NonOverlappingMarksRenderer: public DefaultRenderer{
   int _maxVisibleMarks;
   
   std::vector<NonOverlappingMark*> _marks;
+  
+  std::vector<NonOverlappingMark*> getMarksToBeRendered(const Camera* cam, const Planet* planet) const;
   
   
 public:
