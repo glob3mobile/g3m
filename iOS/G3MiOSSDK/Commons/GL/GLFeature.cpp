@@ -117,13 +117,17 @@ Geometry2DGLFeature::Geometry2DGLFeature(IFloatBuffer* buffer,
                                          int stride,
                                          float lineWidth,
                                          bool needsPointSize,
-                                         float pointSize) :
+                                         float pointSize,
+                                         const Vector2F& translation) :
 GLFeature(NO_GROUP, GLF_GEOMETRY),
 _lineWidth(lineWidth)
 {
   
   _position = new GPUAttributeValueVec2Float(buffer, arrayElementSize, index, stride, normalized);
   _values->addAttributeValue(POSITION_2D, _position, false);
+  
+  _translation =  new GPUUniformValueVec2FloatMutable(translation._x, translation._y);
+  _values->addUniformValue(TRANSLATION_2D, _translation, false);
   
   if (needsPointSize) {
     _values->addUniformValue(POINT_SIZE, new GPUUniformValueFloat(pointSize), false);

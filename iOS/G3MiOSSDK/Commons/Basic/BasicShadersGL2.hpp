@@ -360,8 +360,15 @@ public:
 "attribute vec2 aTextureCoord; \n " + 
 "uniform float uPointSize; \n " + 
 "varying vec2 TextureCoordOut; \n " + 
+"uniform vec2 uTranslation2D; \n " + 
+"uniform vec2 uViewPortExtent; \n " + 
 "void main() { \n " + 
-"gl_Position = vec4(aPosition2D.x, aPosition2D.y, 0, 1); \n " + 
+"vec2 pixel = aPosition2D; \n " + 
+"pixel.x -= uViewPortExtent.x / 2.0; \n " + 
+"pixel.y += uViewPortExtent.y / 2.0; \n " + 
+"gl_Position = vec4((pixel.x + uTranslation2D.x) / (uViewPortExtent.x / 2.0), \n " + 
+"(pixel.y - uTranslation2D.y) / (uViewPortExtent.y / 2.0), \n " + 
+"0, 1); \n " + 
 "TextureCoordOut = aTextureCoord; \n " + 
 "gl_PointSize = uPointSize; \n " + 
 "} \n ",

@@ -24,6 +24,23 @@ class Camera;
 class Planet;
 class GLState;
 class IImage;
+class TextureIDReference;
+class Geometry2DGLFeature;
+
+class MarkWidget{
+  GLState* _glState;
+  Geometry2DGLFeature* _geo2Dfeature;
+  
+public:
+  MarkWidget(const TextureIDReference* texID,
+             float width, float height,
+             float viewportWidth, float viewportHeight);
+  
+  void render(const G3MRenderContext* rc, GLState* glState);
+  
+  void setScreenPos(float x, float y);
+  
+};
 
 
 class NonOverlappingMark{
@@ -59,9 +76,13 @@ class NonOverlappingMark{
     
   };
   
+  MarkWidget* _widget;
+  
 public:
   
-  NonOverlappingMark(IImageBuilder* imageBuilder, Geodetic3D& position, float springLengthInPixels);
+  NonOverlappingMark(IImageBuilder* imageBuilder,
+                     const Geodetic3D& position,
+                     float springLengthInPixels);
   
   Vector3D getCartesianPosition(const Planet* planet) const;
   

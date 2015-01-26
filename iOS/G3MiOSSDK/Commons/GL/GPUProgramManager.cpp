@@ -57,12 +57,13 @@ GPUProgram* GPUProgramManager::getNewProgram(GL* gl, int uniformsCode, int attri
   
   const bool is2D = GPUVariable::hasAttribute(attributesCode, POSITION_2D);
 
-  if (billboard) {
-    return compileProgramWithName(gl, "Billboard");
-  }
   
   if (is2D){
     return compileProgramWithName(gl, "Textured2DMesh");
+  }
+  
+  if (billboard) {
+    return compileProgramWithName(gl, "Billboard");
   }
 
   if (flatColor && !texture && !color) {

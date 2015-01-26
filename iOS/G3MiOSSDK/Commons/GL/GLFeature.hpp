@@ -149,6 +149,8 @@ class Geometry2DGLFeature: public GLFeature {
   
   ~Geometry2DGLFeature();
   
+  GPUUniformValueVec2FloatMutable* _translation;
+  
   public:
   
   Geometry2DGLFeature(IFloatBuffer* buffer,
@@ -158,7 +160,12 @@ class Geometry2DGLFeature: public GLFeature {
                     int stride,
                     float lineWidth,
                     bool needsPointSize,
-                    float pointSize);
+                    float pointSize,
+                    const Vector2F& translation);
+  
+  void setTranslation(float x, float y){
+    _translation->changeValue(x, y);
+  }
   
   
   void applyOnGlobalGLState(GLGlobalState* state) const ;

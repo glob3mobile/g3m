@@ -348,11 +348,15 @@ Mesh* createSectorMesh(const Planet* planet,
   NonOverlappingMarksRenderer* nomr = new NonOverlappingMarksRenderer(20);
   builder.addRenderer(nomr);
   
-  Geodetic3D pos = Geodetic3D::fromDegrees(0, 0, 0);
-  NonOverlappingMark* mark = new NonOverlappingMark(new DownloaderImageBuilder(URL("file:///CompassHeadings.png")),
-                                                    pos,
+  NonOverlappingMark* mark = new NonOverlappingMark(new DownloaderImageBuilder(URL("file:///Icon-Small-50.png")),
+                                                    Geodetic3D::fromDegrees(0, 0, 0),
                                                     10.0);
   nomr->addMark(mark);
+  
+  NonOverlappingMark* mark2 = new NonOverlappingMark(new DownloaderImageBuilder(URL("file:///Icon-Small-50.png")),
+                                                    Geodetic3D::fromDegrees(45, 0, 0),
+                                                    10.0);
+  nomr->addMark(mark2);
   
   
   builder.initializeWidget();
