@@ -357,15 +357,19 @@ public:
     GPUProgramSources sourcesTextured2DMesh("Textured2DMesh",
  emptyString +  
 "attribute vec2 aPosition2D; \n " + 
+"attribute vec2 aTextureCoord; \n " + 
 "uniform float uPointSize; \n " + 
+"varying vec2 TextureCoordOut; \n " + 
 "void main() { \n " + 
 "gl_Position = vec4(aPosition2D.x, aPosition2D.y, 0, 1); \n " + 
+"TextureCoordOut = aTextureCoord; \n " + 
 "gl_PointSize = uPointSize; \n " + 
 "} \n ",
  emptyString +  
 "varying mediump vec2 TextureCoordOut; \n " + 
+"uniform sampler2D Sampler; \n " + 
 "void main() { \n " + 
-"gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0); //RED \n " + 
+"gl_FragColor = texture2D(Sampler, TextureCoordOut); \n " + 
 "} \n ");
     this->add(sourcesTextured2DMesh);
 

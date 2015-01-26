@@ -15,6 +15,7 @@
 #include "Geodetic3D.hpp"
 #include "Vector2F.hpp"
 #include "Vector3D.hpp"
+#include "IImageBuilderListener.hpp"
 
 class IImageBuilder;
 class Geodetic3D;
@@ -38,7 +39,26 @@ class NonOverlappingMark{
   
   GLState* _glState;
   
-  IImage* _image;
+  const IImage* _image;
+  std::string _imageName;
+  
+  class NonOverlappingMarkImageListener: public IImageBuilderListener{
+    NonOverlappingMark* _mark;
+  public:
+    NonOverlappingMarkImageListener(NonOverlappingMark* mark):_mark(mark){}
+    
+    virtual void imageCreated(const IImage*      image,
+                              const std::string& imageName){
+      _mark->_image = image;
+      _mark->_imageName = imageName;
+    }
+    
+    virtual void onError(const std::string& error){
+      ILogger::instance()->logError(error);
+    }
+    
+  };
+  
 public:
   
   NonOverlappingMark(IImageBuilder* imageBuilder, Geodetic3D& position, float springLengthInPixels);

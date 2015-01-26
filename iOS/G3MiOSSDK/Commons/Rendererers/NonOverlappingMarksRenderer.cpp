@@ -70,150 +70,138 @@ void NonOverlappingMark::applyHookesLaw(const NonOverlappingMark* that){   //Spr
 }
 
 /*
-
-Mesh* NonOverlappingMark::createMesh(const G3MRenderContext* rc) {
-  if (_image == NULL) {
-    return NULL;
-  }
-  
-  const bool hasBackground = (_backgroundImageBuilder != NULL);
-  
-  if (hasBackground && (_backgroundImage == NULL)) {
-    return NULL;
-  }
-  
-  TexturesHandler* texturesHandler = rc->getTexturesHandler();
-  
-  const TextureIDReference* textureID = texturesHandler->getTextureIDReference(_image,
-                                                                               GLFormat::rgba(),
-                                                                               _imageName,
-                                                                               false);
-  if (textureID == NULL) {
-    rc->getLogger()->logError("Can't upload texture to GPU");
-    return NULL;
-  }
-  
-#ifdef C_CODE
-  const TextureIDReference* backgroundTextureID = NULL;
-#endif
-#ifdef JAVA_CODE
-  TextureIDReference backgroundTextureID = null;
-#endif
-  if (hasBackground) {
-    backgroundTextureID = texturesHandler->getTextureIDReference(_backgroundImage,
-                                                                 GLFormat::rgba(),
-                                                                 _backgroundImageName,
-                                                                 false);
-    
-    if (backgroundTextureID == NULL) {
-      delete textureID;
-      
-      rc->getLogger()->logError("Can't background upload texture to GPU");
-      return NULL;
-    }
-  }
-  
-  const Camera* camera = rc->getCurrentCamera();
-  const int viewPortWidth  = camera->getViewPortWidth();
-  const int viewPortHeight = camera->getViewPortHeight();
-  
-  const float width  = _widthSize->getSize(viewPortWidth, viewPortHeight, _imageWidth, _imageHeight);
-  const float height = _heightSize->getSize(viewPortWidth, viewPortHeight, _imageWidth, _imageHeight);
-  
-  const float x = _xPosition->getPosition(viewPortWidth, viewPortHeight, width, height);
-  const float y = _yPosition->getPosition(viewPortWidth, viewPortHeight, width, height);
-  
-  FloatBufferBuilderFromCartesian3D* vertices = FloatBufferBuilderFromCartesian3D::builderWithoutCenter();
-  vertices->add( x,       height+y, 0 );
-  vertices->add( x,       y,        0 );
-  vertices->add( width+x, height+y, 0 );
-  vertices->add( width+x, y,        0 );
-  
-  FloatBufferBuilderFromCartesian2D texCoords;
-  texCoords.add( 0, 0 );
-  texCoords.add( 0, 1 );
-  texCoords.add( 1, 0 );
-  texCoords.add( 1, 1 );
-  
-  DirectMesh* dm = new DirectMesh(GLPrimitive::triangleStrip(),
-                                  true,
-                                  vertices->getCenter(),
-                                  vertices->create(),
-                                  1,
-                                  1);
-  
-  delete vertices;
-  
-  if (hasBackground) {
-    _textureMapping = new MultiTextureMapping(textureID,
-                                              texCoords.create(),
-                                              true,
-                                              true,
-                                              backgroundTextureID,
-                                              texCoords.create(),
-                                              true,
-                                              true,
-                                              _texCoordsTranslationU,
-                                              _texCoordsTranslationV,
-                                              _texCoordsScaleU,
-                                              _texCoordsScaleV,
-                                              _texCoordsRotationInRadians,
-                                              _texCoordsRotationCenterU,
-                                              _texCoordsRotationCenterV);
-  }
-  else {
-    _textureMapping = new SimpleTextureMapping(textureID,
-                                               texCoords.create(),
-                                               true,
-                                               true,
-                                               _texCoordsTranslationU,
-                                               _texCoordsTranslationV,
-                                               _texCoordsScaleU,
-                                               _texCoordsScaleV,
-                                               _texCoordsRotationInRadians,
-                                               _texCoordsRotationCenterU,
-                                               _texCoordsRotationCenterV);
-  }
-  
-  return new TexturedMesh(dm, true, _textureMapping, true, true);
-}
+ 
+ Mesh* NonOverlappingMark::createMesh(const G3MRenderContext* rc) {
+ if (_image == NULL) {
+ return NULL;
+ }
+ 
+ const bool hasBackground = (_backgroundImageBuilder != NULL);
+ 
+ if (hasBackground && (_backgroundImage == NULL)) {
+ return NULL;
+ }
+ 
+ TexturesHandler* texturesHandler = rc->getTexturesHandler();
+ 
+ const TextureIDReference* textureID = texturesHandler->getTextureIDReference(_image,
+ GLFormat::rgba(),
+ _imageName,
+ false);
+ if (textureID == NULL) {
+ rc->getLogger()->logError("Can't upload texture to GPU");
+ return NULL;
+ }
+ 
+ #ifdef C_CODE
+ const TextureIDReference* backgroundTextureID = NULL;
+ #endif
+ #ifdef JAVA_CODE
+ TextureIDReference backgroundTextureID = null;
+ #endif
+ if (hasBackground) {
+ backgroundTextureID = texturesHandler->getTextureIDReference(_backgroundImage,
+ GLFormat::rgba(),
+ _backgroundImageName,
+ false);
+ 
+ if (backgroundTextureID == NULL) {
+ delete textureID;
+ 
+ rc->getLogger()->logError("Can't background upload texture to GPU");
+ return NULL;
+ }
+ }
+ 
+ const Camera* camera = rc->getCurrentCamera();
+ const int viewPortWidth  = camera->getViewPortWidth();
+ const int viewPortHeight = camera->getViewPortHeight();
+ 
+ const float width  = _widthSize->getSize(viewPortWidth, viewPortHeight, _imageWidth, _imageHeight);
+ const float height = _heightSize->getSize(viewPortWidth, viewPortHeight, _imageWidth, _imageHeight);
+ 
+ const float x = _xPosition->getPosition(viewPortWidth, viewPortHeight, width, height);
+ const float y = _yPosition->getPosition(viewPortWidth, viewPortHeight, width, height);
+ 
+ FloatBufferBuilderFromCartesian3D* vertices = FloatBufferBuilderFromCartesian3D::builderWithoutCenter();
+ vertices->add( x,       height+y, 0 );
+ vertices->add( x,       y,        0 );
+ vertices->add( width+x, height+y, 0 );
+ vertices->add( width+x, y,        0 );
+ 
+ FloatBufferBuilderFromCartesian2D texCoords;
+ texCoords.add( 0, 0 );
+ texCoords.add( 0, 1 );
+ texCoords.add( 1, 0 );
+ texCoords.add( 1, 1 );
+ 
+ DirectMesh* dm = new DirectMesh(GLPrimitive::triangleStrip(),
+ true,
+ vertices->getCenter(),
+ vertices->create(),
+ 1,
+ 1);
+ 
+ delete vertices;
+ 
+ if (hasBackground) {
+ _textureMapping = new MultiTextureMapping(textureID,
+ texCoords.create(),
+ true,
+ true,
+ backgroundTextureID,
+ texCoords.create(),
+ true,
+ true,
+ _texCoordsTranslationU,
+ _texCoordsTranslationV,
+ _texCoordsScaleU,
+ _texCoordsScaleV,
+ _texCoordsRotationInRadians,
+ _texCoordsRotationCenterU,
+ _texCoordsRotationCenterV);
+ }
+ else {
+ _textureMapping = new SimpleTextureMapping(textureID,
+ texCoords.create(),
+ true,
+ true,
+ _texCoordsTranslationU,
+ _texCoordsTranslationV,
+ _texCoordsScaleU,
+ _texCoordsScaleV,
+ _texCoordsRotationInRadians,
+ _texCoordsRotationCenterU,
+ _texCoordsRotationCenterV);
+ }
+ 
+ return new TexturedMesh(dm, true, _textureMapping, true, true);
+ }
+ 
+ 
+ void NonOverlappingMark::render(const G3MRenderContext* rc, GLState* glState){
+ 
+ }
+ 
+ */
 
 
 void NonOverlappingMark::render(const G3MRenderContext* rc, GLState* glState){
-
-}
-
-*/
-
-
-void NonOverlappingMark::render(const G3MRenderContext* rc, GLState* glState){
   
-  //  (IFloatBuffer* buffer,
-  //   int arrayElementSize,
-  //   int index,
-  //   bool normalized,
-  //   int stride,
-  //   float lineWidth,
-  //   bool needsPointSize,
-  //   float pointSize) :
+  _imageBuilder->build(rc, new NonOverlappingMark::NonOverlappingMarkImageListener(this), true);
+  if (_image == NULL){
+    return;
+  }
   
-  
-  //_glState->setParent(glState);
   
   if (_glState->getNumberOfGLFeatures() == 0){
+
     
     FloatBufferBuilderFromCartesian2D pos2D;
-//    pos2D.add(1,1);
-//    pos2D.add(1,0);
-//    pos2D.add(0,1);
-//    pos2D.add(0,0);
-    
-    
     pos2D.add( 0.0f, 0.0f); //vertex 1
     pos2D.add( 0.0f, 1.0f); //vertex 2
     pos2D.add( 1.0f, 0.0f); //vertex 3
     pos2D.add( 1.0f, 1.0f); //vertex 4
-    
     
     _glState->addGLFeature(new Geometry2DGLFeature(pos2D.create(),
                                                    2,
@@ -224,9 +212,30 @@ void NonOverlappingMark::render(const G3MRenderContext* rc, GLState* glState){
                                                    true,
                                                    10.0),
                            false);
+    
+    
+    const TextureIDReference* textureID = rc->getTexturesHandler()->getTextureIDReference(_image,
+                                                                                          GLFormat::rgba(),
+                                                                                          _imageName,
+                                                                                          false);
+    
+    FloatBufferBuilderFromCartesian2D texCoords;
+    texCoords.add( 0.0f, 0.0f); //vertex 1
+    texCoords.add( 0.0f, 1.0f); //vertex 2
+    texCoords.add( 1.0f, 0.0f); //vertex 3
+    texCoords.add( 1.0f, 1.0f); //vertex 4
+    
+    SimpleTextureMapping* textureMapping = new SimpleTextureMapping(textureID,
+                                                                    texCoords.create(),
+                                                                    true,
+                                                                    true);
+    
+    textureMapping->modifyGLState(*_glState);
   }
   
   rc->getGL()->drawArrays(GLPrimitive::triangleStrip(), 0, 4, _glState, *(rc->getGPUProgramManager()));
+  
+  
   
 }
 
