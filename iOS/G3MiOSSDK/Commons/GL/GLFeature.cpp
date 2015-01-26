@@ -99,6 +99,7 @@ void GeometryGLFeature::applyOnGlobalGLState(GLGlobalState* state) const {
 }
 
 
+
 GeometryGLFeature::~GeometryGLFeature() {
   //  _position->_release();
 
@@ -106,6 +107,43 @@ GeometryGLFeature::~GeometryGLFeature() {
   super.dispose();
 #endif
 }
+
+
+///////////////////////////////
+Geometry2DGLFeature::Geometry2DGLFeature(IFloatBuffer* buffer,
+                                         int arrayElementSize,
+                                         int index,
+                                         bool normalized,
+                                         int stride,
+                                         float lineWidth,
+                                         bool needsPointSize,
+                                         float pointSize) :
+GLFeature(NO_GROUP, GLF_GEOMETRY),
+_lineWidth(lineWidth)
+{
+  
+  _position = new GPUAttributeValueVec2Float(buffer, arrayElementSize, index, stride, normalized);
+  _values->addAttributeValue(POSITION_2D, _position, false);
+  
+  if (needsPointSize) {
+    _values->addUniformValue(POINT_SIZE, new GPUUniformValueFloat(pointSize), false);
+  }
+}
+
+void Geometry2DGLFeature::applyOnGlobalGLState(GLGlobalState* state) const {
+  state->enableCullFace(GLCullFace::front());
+  state->setLineWidth(_lineWidth);
+}
+
+Geometry2DGLFeature::~Geometry2DGLFeature() {
+  //  _position->_release();
+  
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+}
+
+/////////////////////////////////
 
 void TextureGLFeature::createBasicValues(IFloatBuffer* texCoords,
                                          int arrayElementSize,

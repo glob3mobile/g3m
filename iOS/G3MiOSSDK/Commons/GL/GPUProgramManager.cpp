@@ -54,9 +54,15 @@ GPUProgram* GPUProgramManager::getNewProgram(GL* gl, int uniformsCode, int attri
 
   const bool hasTexture2 = GPUVariable::hasUniform(uniformsCode, SAMPLER2);
 //  const bool hasTexture3 = GPUVariable::hasUniform(uniformsCode, SAMPLER3);
+  
+  const bool is2D = GPUVariable::hasAttribute(attributesCode, POSITION_2D);
 
   if (billboard) {
     return compileProgramWithName(gl, "Billboard");
+  }
+  
+  if (is2D){
+    return compileProgramWithName(gl, "Textured2DMesh");
   }
 
   if (flatColor && !texture && !color) {

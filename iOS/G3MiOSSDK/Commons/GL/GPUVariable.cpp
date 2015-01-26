@@ -182,6 +182,10 @@ GPUAttributeKey GPUVariable::getAttributeKey(const std::string& name) {
   if (name.compare("aNormal") == 0) {
     return NORMAL;
   }
+  
+  if (name.compare("aPosition2D") == 0) {
+    return POSITION_2D;
+  }
 
   return UNRECOGNIZED_ATTRIBUTE;
 }

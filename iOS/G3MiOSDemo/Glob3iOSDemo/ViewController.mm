@@ -146,6 +146,8 @@
 #import <G3MiOSSDK/GEOVectorLayer.hpp>
 #import <G3MiOSSDK/Info.hpp>
 
+#import <G3MiOSSDK/NonOverlappingMarksRenderer.hpp>
+
 #include <typeinfo>
 
 
@@ -327,31 +329,31 @@ Mesh* createSectorMesh(const Planet* planet,
 {
   G3MBuilder_iOS builder([self G3MWidget]);
   
-  HUDRenderer* hudRenderer = new HUDRenderer();
-  
-  HUDQuadWidget* quad = new HUDQuadWidget( new DownloaderImageBuilder(URL("file:///CompassHeadings.png")),
-                                           new HUDRelativePosition(0.5,
-                                                                   HUDRelativePosition::VIEWPORT_WIDTH,
-                                                                   HUDRelativePosition::CENTER),
-                                              new HUDRelativePosition(0.5,
-                                                                      HUDRelativePosition::VIEWPORT_HEIGHT,
-                                                                      HUDRelativePosition::MIDDLE),
-                                              new HUDRelativeSize(0.1, HUDRelativeSize::VIEWPORT_MIN_AXIS),
-                                              new HUDRelativeSize(0.1, HUDRelativeSize::VIEWPORT_MIN_AXIS));
-  
-  hudRenderer->addWidget(quad);
-  
-  builder.addRenderer(hudRenderer);
-  
-//  LayerSet* layerSet = new LayerSet();
-//  //  layerSet->addLayer(MapQuestLayer::newOSM(TimeInterval::fromDays(30), true, 10));
-//  layerSet->addLayer(MapQuestLayer::newOSM(TimeInterval::fromDays(30)));
-//  builder.getPlanetRendererBuilder()->setLayerSet(layerSet);
+//  HUDRenderer* hudRenderer = new HUDRenderer();
 //  
-//  const Sector sector = Sector::fromDegrees(40.1540143280790858, -5.8664874640814313,
-//                                            40.3423148480663158, -5.5116079822178570);
+//  HUDQuadWidget* quad = new HUDQuadWidget( new DownloaderImageBuilder(URL("file:///CompassHeadings.png")),
+//                                           new HUDRelativePosition(0.5,
+//                                                                   HUDRelativePosition::VIEWPORT_WIDTH,
+//                                                                   HUDRelativePosition::CENTER),
+//                                              new HUDRelativePosition(0.5,
+//                                                                      HUDRelativePosition::VIEWPORT_HEIGHT,
+//                                                                      HUDRelativePosition::MIDDLE),
+//                                              new HUDRelativeSize(0.1, HUDRelativeSize::VIEWPORT_MIN_AXIS),
+//                                              new HUDRelativeSize(0.1, HUDRelativeSize::VIEWPORT_MIN_AXIS));
 //  
-//  builder.setShownSector(sector);
+//  hudRenderer->addWidget(quad);
+//  
+//  builder.addRenderer(hudRenderer);
+  
+  NonOverlappingMarksRenderer* nomr = new NonOverlappingMarksRenderer(20);
+  builder.addRenderer(nomr);
+  
+  Geodetic3D pos = Geodetic3D::fromDegrees(0, 0, 0);
+  NonOverlappingMark* mark = new NonOverlappingMark(new DownloaderImageBuilder(URL("file:///CompassHeadings.png")),
+                                                    pos,
+                                                    10.0);
+  nomr->addMark(mark);
+  
   
   builder.initializeWidget();
 }

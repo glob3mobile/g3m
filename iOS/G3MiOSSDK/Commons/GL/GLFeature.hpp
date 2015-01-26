@@ -97,6 +97,8 @@ public:
   void applyOnGlobalGLState(GLGlobalState* state)  const {}
 };
 
+/////////////////////////////////////////////////////////
+
 
 class GeometryGLFeature: public GLFeature {
 private:
@@ -135,6 +137,35 @@ public:
 
 };
 ///////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+class Geometry2DGLFeature: public GLFeature {
+  private:
+  //Position + cull + depth + polygonoffset + linewidth
+  GPUAttributeValueVec2Float* _position;
+  
+  const float _lineWidth;
+  
+  ~Geometry2DGLFeature();
+  
+  public:
+  
+  Geometry2DGLFeature(IFloatBuffer* buffer,
+                    int arrayElementSize,
+                    int index,
+                    bool normalized,
+                    int stride,
+                    float lineWidth,
+                    bool needsPointSize,
+                    float pointSize);
+  
+  
+  void applyOnGlobalGLState(GLGlobalState* state) const ;
+  
+};
+///////////////////////////////////////////////////////////////////////////////////////////
+
 
 class GLCameraGroupFeature: public GLFeature {
 private:

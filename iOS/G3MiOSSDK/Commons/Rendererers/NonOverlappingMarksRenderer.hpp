@@ -21,6 +21,8 @@ class Geodetic3D;
 class Vector2D;
 class Camera;
 class Planet;
+class GLState;
+class IImage;
 
 
 class NonOverlappingMark{
@@ -33,6 +35,10 @@ class NonOverlappingMark{
   float _dX, _dY; //Velocity vector (pixels per second)
   Vector2F* _anchorScreenPos;
   Vector2F* _screenPos;
+  
+  GLState* _glState;
+  
+  IImage* _image;
 public:
   
   NonOverlappingMark(IImageBuilder* imageBuilder, Geodetic3D& position, float springLengthInPixels);
@@ -42,6 +48,8 @@ public:
   void computeScreenPos(const Camera* cam, const Planet* planet);
   
   Vector2F* getScreenPos() const{ return _screenPos;}
+  
+  void render(const G3MRenderContext* rc, GLState* glState);
   
   void applyCoulombsLaw(const NonOverlappingMark* that); //EM
   
@@ -68,7 +76,7 @@ public:
   }
   
   virtual void render(const G3MRenderContext* rc,
-                      GLState* glState) = 0;
+                      GLState* glState);
   
   virtual bool onTouchEvent(const G3MEventContext* ec,
                             const TouchEvent* touchEvent) {
@@ -76,7 +84,7 @@ public:
   }
   
   virtual void onResizeViewportEvent(const G3MEventContext* ec,
-                                     int width, int height) = 0;
+                                     int width, int height){}
   
   virtual void start(const G3MRenderContext* rc) {
     

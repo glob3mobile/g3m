@@ -354,6 +354,21 @@ public:
 "} \n ");
     this->add(sourcesShader);
 
+    GPUProgramSources sourcesTextured2DMesh("Textured2DMesh",
+ emptyString +  
+"attribute vec2 aPosition2D; \n " + 
+"uniform float uPointSize; \n " + 
+"void main() { \n " + 
+"gl_Position = vec4(aPosition2D.x, aPosition2D.y, 0, 1); \n " + 
+"gl_PointSize = uPointSize; \n " + 
+"} \n ",
+ emptyString +  
+"varying mediump vec2 TextureCoordOut; \n " + 
+"void main() { \n " + 
+"gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0); //RED \n " + 
+"} \n ");
+    this->add(sourcesTextured2DMesh);
+
     GPUProgramSources sourcesTexturedMesh("TexturedMesh",
  emptyString +  
 "attribute vec4 aPosition; \n " + 
