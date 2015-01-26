@@ -95,7 +95,6 @@ _screenPos(NULL),
 _cartesianPos(NULL),
 _dX(0),
 _dY(0),
-_glState(new GLState()),
 _image(NULL),
 _widget(NULL)
 {

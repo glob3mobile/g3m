@@ -54,8 +54,6 @@ class NonOverlappingMark{
   Vector2F* _anchorScreenPos;
   Vector2F* _screenPos;
   
-  GLState* _glState;
-  
   const IImage* _image;
   std::string _imageName;
   
