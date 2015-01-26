@@ -76,6 +76,8 @@ class NonOverlappingMark{
   
   MarkWidget* _widget;
   
+  MarkWidget* _anchorWidget;
+  
 public:
   
   NonOverlappingMark(IImageBuilder* imageBuilder,
@@ -84,7 +86,7 @@ public:
   
   Vector3D getCartesianPosition(const Planet* planet) const;
   
-  void computeScreenPos(const Camera* cam, const Planet* planet);
+  void computeAnchorScreenPos(const Camera* cam, const Planet* planet);
   
   Vector2F* getScreenPos() const{ return _screenPos;}
   
@@ -92,7 +94,14 @@ public:
   
   void applyCoulombsLaw(const NonOverlappingMark* that); //EM
   
-  void applyHookesLaw(const NonOverlappingMark* that);   //Spring
+  void applyHookesLaw();   //Spring
+  
+  void applyForce(float x, float y){
+    _dX += x;
+    _dY += y;
+  }
+  
+  void updatePositionWithCurrentForce(double elapsedMS);
   
 };
 
@@ -103,6 +112,8 @@ class NonOverlappingMarksRenderer: public DefaultRenderer{
   std::vector<NonOverlappingMark*> _marks;
   
   std::vector<NonOverlappingMark*> getMarksToBeRendered(const Camera* cam, const Planet* planet) const;
+  
+  long long _lastPositionsUpdatedTime;
   
   
 public:

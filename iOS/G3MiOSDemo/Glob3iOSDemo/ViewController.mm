@@ -350,12 +350,12 @@ Mesh* createSectorMesh(const Planet* planet,
   
   NonOverlappingMark* mark = new NonOverlappingMark(new DownloaderImageBuilder(URL("file:///Icon-Small-50.png")),
                                                     Geodetic3D::fromDegrees(0, 0, 0),
-                                                    10.0);
+                                                    100.0);
   nomr->addMark(mark);
   
   NonOverlappingMark* mark2 = new NonOverlappingMark(new DownloaderImageBuilder(URL("file:///Icon-Small-50.png")),
                                                     Geodetic3D::fromDegrees(45, 0, 0),
-                                                    10.0);
+                                                    100.0);
   nomr->addMark(mark2);
   
   
