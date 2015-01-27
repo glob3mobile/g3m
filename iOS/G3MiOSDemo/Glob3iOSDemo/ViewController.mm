@@ -12,6 +12,7 @@
 #import <G3MiOSSDK/G3MBuilder_iOS.hpp>
 #import <G3MiOSSDK/VisibleSectorListener.hpp>
 #import <G3MiOSSDK/MarksRenderer.hpp>
+#import <G3MiOSSDK/PhysicalMarksRenderer.hpp>
 #import <G3MiOSSDK/ShapesRenderer.hpp>
 #import <G3MiOSSDK/ShapesEditorRenderer.hpp>
 #import <G3MiOSSDK/GEORenderer.hpp>
@@ -286,7 +287,8 @@ Mesh* createSectorMesh(const Planet* planet,
   [super viewDidLoad];
   
   // Tests for Cotesa
-  [self testingVectorialGeometry];
+  //[self testingVectorialGeometry];
+  [self testingPhysicalMarks];
   //[self testElevationNavigation];
 
   
@@ -4483,6 +4485,77 @@ public:
     Geodetic3D position(Geodetic3D(Angle::fromDegrees(39.08), Angle::fromDegrees(2.90), 113000));
     [self G3MWidget].widget->setCameraPosition(position);
     [self G3MWidget].widget->setCameraHeading(Angle::fromDegrees(-5));
+    [self G3MWidget].widget->setCameraPitch(Angle::fromDegrees(24-90));
+  }
+}
+
+
+- (void) testingPhysicalMarks
+{
+  G3MBuilder_iOS builder([self G3MWidget]);
+  
+  GEOTileRasterizer* geoTileRasterizer = new GEOTileRasterizer();
+  //  builder.getPlanetRendererBuilder()->addTileRasterizer(geoTileRasterizer);
+  
+  builder.setCameraRenderer([self createCameraRenderer]);
+  
+  //const Planet* planet = Planet::createEarth();
+  const Planet* planet = Planet::createSphericalEarth();
+  //const Planet* planet = Planet::createFlatEarth();
+  builder.setPlanet(planet);
+  
+  Color* bgColor = Color::newFromRGBA(0.0f, 0.1f, 0.2f, 1.0f);
+  builder.setBackgroundColor(bgColor);
+  
+  bool useElevations = false;
+  if (useElevations) {
+    [self initializeElevationDataProvider: builder];
+  }
+  
+  // testing Geometer class
+  [self testingGeometer];
+  
+  LayerSet* layerSet = new LayerSet();
+  layerSet->addLayer( MapQuestLayer::newOSM(TimeInterval::fromDays(30)) );
+  builder.getPlanetRendererBuilder()->setLayerSet(layerSet);
+  
+  ShapesRenderer* shapesRenderer = new ShapesRenderer(geoTileRasterizer);
+  {
+    double height = 100;
+    Shape* line = new LineShape(new Geodetic3D(Angle::fromDegrees(40.62),
+                                               Angle::fromDegrees(-74.02),
+                                               height),
+                                new Geodetic3D(Angle::fromDegrees(40.82),
+                                               Angle::fromDegrees(-74.02),
+                                               height),
+                                ABSOLUTE,
+                                2,
+                                Color::fromRGBA(0, 0, 0, 1));
+    shapesRenderer->addShape(line);
+  }
+  
+  
+  builder.addRenderer(shapesRenderer);
+  
+  // marks
+  PhysicalMarksRenderer* marksRenderer = new PhysicalMarksRenderer(false);
+  builder.addRenderer(marksRenderer);
+  Mark* m1 = new Mark("Hotel 1",
+                      URL("http://www.lahuelladelblog.com/images/Facebook.png", false),
+                      Geodetic3D(Angle::fromDegrees(40.72), Angle::fromDegrees(-74.02), 0),
+                      ABSOLUTE);
+  marksRenderer->addMark(m1);
+  Geodetic3D position = Geodetic3D(Angle::fromDegrees(40.82), Angle::fromDegrees(-74.02), 0);
+  std::vector<Mark*> marks = marksRenderer->getMarks();
+  marks[0]->setPosition(position);
+  
+  // initialization
+  builder.initializeWidget();
+  
+  if (true) {
+    Geodetic3D position(Geodetic3D(Angle::fromDegrees(40.62), Angle::fromDegrees(-74.02), 23500));
+    [self G3MWidget].widget->setCameraPosition(position);
+    //[self G3MWidget].widget->setCameraHeading(Angle::fromDegrees(-5));
     [self G3MWidget].widget->setCameraPitch(Angle::fromDegrees(24-90));
   }
 }

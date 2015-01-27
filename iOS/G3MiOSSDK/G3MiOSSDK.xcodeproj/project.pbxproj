@@ -62,6 +62,8 @@
 		CCC2A03415CA6C7D00923850 /* GLErrorRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CCC2A02115CA6C7D00923850 /* GLErrorRenderer.cpp */; };
 		CCC2A03615CA6C7D00923850 /* MarksRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CCC2A02315CA6C7D00923850 /* MarksRenderer.cpp */; };
 		CCC2A03F15CA6C7D00923850 /* PlanetRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CCC2A02C15CA6C7D00923850 /* PlanetRenderer.cpp */; };
+		CCCB41F41A77B88000F10E19 /* PhysicalMarksRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CCCB41F21A77B88000F10E19 /* PhysicalMarksRenderer.cpp */; };
+		CCCB41F51A77BAF600F10E19 /* PhysicalMarksRenderer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CCCB41F31A77B88000F10E19 /* PhysicalMarksRenderer.hpp */; };
 		CCF45F531743AD320037CA28 /* SphericalPlanet.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CCF45F521743AB0A0037CA28 /* SphericalPlanet.hpp */; };
 		CCF45F541743AD420037CA28 /* EllipsoidalPlanet.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CCF45F501743A6030037CA28 /* EllipsoidalPlanet.hpp */; };
 		CCF45F551743AE620037CA28 /* SphericalPlanet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CCF45F511743AB0A0037CA28 /* SphericalPlanet.cpp */; };
@@ -736,6 +738,7 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				CCCB41F51A77BAF600F10E19 /* PhysicalMarksRenderer.hpp in CopyFiles */,
 				FB3DC51419504181006E6363 /* SubviewElevationData.hpp in CopyFiles */,
 				FB3DC51319504140006E6363 /* SurfaceElevationProvider.hpp in CopyFiles */,
 				CC786E8818586A1B00369669 /* ShapesEditorRenderer.hpp in CopyFiles */,
@@ -1223,6 +1226,8 @@
 		CCC2A02715CA6C7D00923850 /* Renderer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Renderer.hpp; path = Commons/Rendererers/Renderer.hpp; sourceTree = "<group>"; };
 		CCC2A02C15CA6C7D00923850 /* PlanetRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = PlanetRenderer.cpp; path = Commons/Rendererers/PlanetRenderer.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CCC2A02D15CA6C7D00923850 /* PlanetRenderer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = PlanetRenderer.hpp; path = Commons/Rendererers/PlanetRenderer.hpp; sourceTree = "<group>"; };
+		CCCB41F21A77B88000F10E19 /* PhysicalMarksRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PhysicalMarksRenderer.cpp; path = Commons/Rendererers/PhysicalMarksRenderer.cpp; sourceTree = "<group>"; };
+		CCCB41F31A77B88000F10E19 /* PhysicalMarksRenderer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = PhysicalMarksRenderer.hpp; path = Commons/Rendererers/PhysicalMarksRenderer.hpp; sourceTree = "<group>"; };
 		CCF45F501743A6030037CA28 /* EllipsoidalPlanet.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = EllipsoidalPlanet.hpp; path = Commons/Geometry/EllipsoidalPlanet.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CCF45F511743AB0A0037CA28 /* SphericalPlanet.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = SphericalPlanet.cpp; path = Commons/Geometry/SphericalPlanet.cpp; sourceTree = "<group>"; };
 		CCF45F521743AB0A0037CA28 /* SphericalPlanet.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = SphericalPlanet.hpp; path = Commons/Geometry/SphericalPlanet.hpp; sourceTree = "<group>"; };
@@ -2470,6 +2475,8 @@
 				CF527E1E162E33F500E0BDE0 /* DefaultRenderer.hpp */,
 				CCC2A02315CA6C7D00923850 /* MarksRenderer.cpp */,
 				CCC2A02415CA6C7D00923850 /* MarksRenderer.hpp */,
+				CCCB41F21A77B88000F10E19 /* PhysicalMarksRenderer.cpp */,
+				CCCB41F31A77B88000F10E19 /* PhysicalMarksRenderer.hpp */,
 				E87424B0169F4B9400C8A227 /* MarkTouchListener.hpp */,
 				CFF76BE3168614AD00F658CC /* MeshRenderer.cpp */,
 				CFF76BE4168614AD00F658CC /* MeshRenderer.hpp */,
@@ -3212,6 +3219,7 @@
 				FB3DC50F19503E94006E6363 /* SubviewElevationData.cpp in Sources */,
 				CF7B07B117F5D8D400FE363D /* HUDImageRenderer.cpp in Sources */,
 				CF0755961715B9120084CC14 /* GFont.cpp in Sources */,
+				CCCB41F41A77B88000F10E19 /* PhysicalMarksRenderer.cpp in Sources */,
 				CF15759E1864C1570059312A /* HUDRelativePosition.cpp in Sources */,
 				CF6D723B17184D620043C74B /* CanvasElement.cpp in Sources */,
 				CF6D724717185CF20043C74B /* GroupCanvasElement.cpp in Sources */,
