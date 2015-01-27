@@ -89,8 +89,8 @@ class NonOverlappingMark{
   Geodetic3D _geoPosition;
   
   float _dX, _dY; //Velocity vector (pixels per second)
-  Vector2F* _anchorScreenPos;
-  Vector2F* _screenPos;
+  //Vector2F* _anchorScreenPos;
+  //Vector2F* _screenPos;
   
   MarkWidget _widget;
   MarkWidget _anchorWidget;
@@ -106,8 +106,8 @@ public:
   
   void computeAnchorScreenPos(const Camera* cam, const Planet* planet);
   
-  Vector2F* getScreenPos() const{ return _screenPos;}
-  Vector2F* getAnchorScreenPos() const{ return _anchorScreenPos;}
+  Vector2F getScreenPos() const{ return _widget.getScreenPos();}
+  Vector2F getAnchorScreenPos() const{ return _anchorWidget.getScreenPos();}
   
   void render(const G3MRenderContext* rc, GLState* glState);
   

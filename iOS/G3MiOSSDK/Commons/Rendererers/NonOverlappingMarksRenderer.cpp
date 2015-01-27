@@ -40,7 +40,9 @@ _image(NULL),
 _imageBuilder(imageBuilder),
 _viewportExtent(NULL),
 _geo2Dfeature(NULL),
-_glState(NULL)
+_glState(NULL),
+_x(NANF),
+_y(NANF)
 {
 }
 
@@ -81,7 +83,7 @@ void MarkWidget::prepareWidget(const IImage* image,
                                           1.0,
                                           true,
                                           10.0,
-                                          Vector2F(0.0,0.0));
+                                          Vector2F(_x, _y));
   
   _glState->addGLFeature(_geo2Dfeature,
                          false);
@@ -112,7 +114,9 @@ void MarkWidget::render(const G3MRenderContext *rc, GLState *glState){
 }
 
 void MarkWidget::setScreenPos(float x, float y){
-  _geo2Dfeature->setTranslation(x, y);
+  if (_geo2Dfeature != NULL){
+    _geo2Dfeature->setTranslation(x, y);
+  }
   _x = x;
   _y = y;
 }
@@ -132,8 +136,6 @@ _imageBuilderWidget(imageBuilderWidget),
 _imageBuilderAnchor(imageBuilderAnchor),
 _geoPosition(position),
 _springLengthInPixels(springLengthInPixels),
-_anchorScreenPos(NULL),
-_screenPos(NULL),
 _cartesianPos(NULL),
 _dX(0),
 _dY(0),
@@ -151,21 +153,19 @@ Vector3D NonOverlappingMark::getCartesianPosition(const Planet* planet) const{
 }
 
 void NonOverlappingMark::computeAnchorScreenPos(const Camera* cam, const Planet* planet){
-  if (_anchorScreenPos != NULL){
-    delete _anchorScreenPos;
-  }
   
-  _anchorScreenPos = new Vector2F(cam->point2Pixel(getCartesianPosition(planet)));
+  Vector2F sp(cam->point2Pixel(getCartesianPosition(planet)));
+  _anchorWidget.setScreenPos(sp._x, sp._y);
   
-  if (_screenPos == NULL){
-    _screenPos = new Vector2F(_anchorScreenPos->_x, _anchorScreenPos->_y + 0.01);
+  if (_widget.getScreenPos().isNaN()){
+    _widget.setScreenPos(sp._x, sp._y + _springLengthInPixels);
   }
 }
 
 
 void NonOverlappingMark::applyCoulombsLaw(NonOverlappingMark* that){ //EM
   
-  Vector2F d = _screenPos->sub(*that->_screenPos);
+  Vector2F d = getScreenPos().sub(that->getScreenPos());
   double distance = d.length()  + 0.001;
   Vector2F direction = d.div((float)distance);
   
@@ -191,7 +191,7 @@ void NonOverlappingMark::applyCoulombsLaw(NonOverlappingMark* that){ //EM
 
 void NonOverlappingMark::applyHookesLaw(){   //Spring
   
-  Vector2F d = _screenPos->sub(*_anchorScreenPos);
+  Vector2F d = getScreenPos().sub(getAnchorScreenPos());
   double mod = d.length();
   double displacement = _springLengthInPixels - mod;
   Vector2F direction = d.div((float)mod);
@@ -214,8 +214,8 @@ void NonOverlappingMark::render(const G3MRenderContext* rc, GLState* glState){
   
   if (_widget.isReady() && _anchorWidget.isReady()){
     
-    _anchorWidget.setScreenPos(_anchorScreenPos->_x, _anchorScreenPos->_y);
-    _widget.setScreenPos(_screenPos->_x, _screenPos->_y);
+    //_anchorWidget.setScreenPos(_anchorScreenPos->_x, _anchorScreenPos->_y);
+    //_widget.setScreenPos(_screenPos->_x, _screenPos->_y);
     //printf("%f, %f\n", _screenPos->_x, _screenPos->_y);
     
     _widget.render(rc, glState);
@@ -239,16 +239,14 @@ void NonOverlappingMark::updatePositionWithCurrentForce(double elapsedMS, float 
   if (Vector2F(_dX, _dY).length() > 0.5){ //STOP CONDITION
     
     //FORCE APPLIED
-    float x = _screenPos->_x + _dX;
-    float y = _screenPos->_y + _dY;
+    float x = getScreenPos()._x + _dX;
+    float y = getScreenPos()._y + _dY;
     
     //CLAMP
     x = mu->clamp(x, 0, viewportWidth);
     y = mu->clamp(y, 0, viewportHeight);
     
-    Vector2F* newScreenPos = new Vector2F(x,y);
-    delete _screenPos;
-    _screenPos = newScreenPos;
+    _widget.setScreenPos(x, y);
   }
   
   //Resetting Force
@@ -306,11 +304,11 @@ void NonOverlappingMarksRenderer::renderConnectorLines(const G3MRenderContext* r
   FloatBufferBuilderFromCartesian2D pos2D;
   
   for (int i = 0; i < _visibleMarks.size(); i++){
-    Vector2F *sp = _visibleMarks[i]->getScreenPos();
-    Vector2F *asp = _visibleMarks[i]->getAnchorScreenPos();
+    Vector2F sp = _visibleMarks[i]->getScreenPos();
+    Vector2F asp = _visibleMarks[i]->getAnchorScreenPos();
     
-    pos2D.add(sp->_x, -sp->_y);
-    pos2D.add(asp->_x, -asp->_y);
+    pos2D.add(sp._x, -sp._y);
+    pos2D.add(asp._x, -asp._y);
     
   }
   

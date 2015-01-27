@@ -55,6 +55,10 @@ public:
                     _y + v._y);
   }
   
+  bool isNaN() const{
+    return ISNAN(_x) || ISNAN(_y);
+  }
+  
   Vector2F sub(const Vector2F& v) const {
     return Vector2F(_x - v._x,
                     _y - v._y);
