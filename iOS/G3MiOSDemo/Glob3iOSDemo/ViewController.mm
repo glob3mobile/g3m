@@ -4519,39 +4519,35 @@ public:
   layerSet->addLayer( MapQuestLayer::newOSM(TimeInterval::fromDays(30)) );
   builder.getPlanetRendererBuilder()->setLayerSet(layerSet);
   
+  // shape y regular mark renderer
   ShapesRenderer* shapesRenderer = new ShapesRenderer(geoTileRasterizer);
+  
+  const int numMarks = 3;
+  double coordinates[numMarks][2] = {
+    {40.72, -74.02},
+    {40.74, -74.06},
+    {40.76, -74.00}
+  };
   
   // physical marks
   PhysicalMarksRenderer* physicalMarksRenderer = new PhysicalMarksRenderer(false, shapesRenderer);
-  builder.addRenderer(physicalMarksRenderer);
-  Mark* pm1 = new Mark("Hotel 1",
-                       URL("http://www.lahuelladelblog.com/images/Facebook.png", false),
-                       Geodetic3D(Angle::fromDegrees(40.78), Angle::fromDegrees(-74.02), 0),
-                       ABSOLUTE);
-  physicalMarksRenderer->addMark(pm1, Geodetic3D(Angle::fromDegrees(40.72), Angle::fromDegrees(-74.02),0));
-  Mark* pm2 = new Mark("Hotel 2",
-                       URL("http://www.lahuelladelblog.com/images/Facebook.png", false),
-                       Geodetic3D(Angle::fromDegrees(40.80), Angle::fromDegrees(-74.06), 0),
-                       ABSOLUTE);
-  physicalMarksRenderer->addMark(pm2, Geodetic3D(Angle::fromDegrees(40.74), Angle::fromDegrees(-74.06),0));
-  
-  builder.addRenderer(shapesRenderer);
-
-  // regular marks
   MarksRenderer* marksRenderer = new MarksRenderer(false);
-  builder.addRenderer(marksRenderer);
-  Mark* rm1 = new Mark("Hotel 1",
-                       URL("http://www.yx.cl/images/reply/punto-rojo.png", false),
-                       Geodetic3D(Angle::fromDegrees(40.72), Angle::fromDegrees(-74.02), 0),
-                       ABSOLUTE);
-  marksRenderer->addMark(rm1);
-  Mark* rm2 = new Mark("Hotel 2",
-                       URL("http://www.yx.cl/images/reply/punto-rojo.png", false),
-                       Geodetic3D(Angle::fromDegrees(40.74), Angle::fromDegrees(-74.06), 0),
-                       ABSOLUTE);
-  marksRenderer->addMark(rm2);
+  for (int i=0; i<numMarks; i++) {
+    Geodetic3D geoPos = Geodetic3D(Angle::fromDegrees(coordinates[i][0]), Angle::fromDegrees(coordinates[i][1]), 0);
+    Mark* pm = new Mark("Hotel 1", URL("http://www.lahuelladelblog.com/images/Facebook.png", false),
+                        geoPos, ABSOLUTE);
+    physicalMarksRenderer->addMark(pm);
+    Mark* rm = new Mark("Hotel 1", URL("http://www.yx.cl/images/reply/punto-rojo.png", false),
+                        geoPos, ABSOLUTE);
+    marksRenderer->addMark(rm);
+  }
   
+  // add renderers
+  builder.addRenderer(marksRenderer);
   builder.addRenderer(physicalMarksRenderer);
+  builder.addRenderer(shapesRenderer);
+  builder.addRenderer(physicalMarksRenderer);
+  
   
   // initialization
   builder.initializeWidget();

@@ -63,7 +63,7 @@ public:
   
   virtual void render(const G3MRenderContext* rc, GLState* glState);
   
-  void addMark(Mark* mark, Geodetic3D anchor);
+  void addMark(Mark* mark);
   
   void removeMark(Mark* mark);
   

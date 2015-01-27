@@ -84,8 +84,8 @@ void PhysicalMarksRenderer::onChangedContext() {
   }
 }
 
-void PhysicalMarksRenderer::addMark(Mark* mark, Geodetic3D anchor) {
-  _anchors.push_back(new Geodetic3D(anchor));
+void PhysicalMarksRenderer::addMark(Mark* mark) {
+  _anchors.push_back(new Geodetic3D(mark->getPosition()));
   _marks.push_back(mark);
   if (_context != NULL) {
     mark->initialize(_context, _downloadPriority);
