@@ -26,10 +26,12 @@ class GLState;
 class IImage;
 class TextureIDReference;
 class Geometry2DGLFeature;
+class ViewportExtentGLFeature;
 
 class MarkWidget{
   GLState* _glState;
   Geometry2DGLFeature* _geo2Dfeature;
+  ViewportExtentGLFeature* _viewportExtent;
   
 public:
   MarkWidget(const TextureIDReference* texID,
@@ -39,6 +41,8 @@ public:
   void render(const G3MRenderContext* rc, GLState* glState);
   
   void setScreenPos(float x, float y);
+  
+  void onResizeViewportEvent(int width, int height);
   
 };
 
@@ -103,6 +107,8 @@ public:
   
   void updatePositionWithCurrentForce(double elapsedMS);
   
+  void onResizeViewportEvent(int width, int height);
+  
 };
 
 class NonOverlappingMarksRenderer: public DefaultRenderer{
@@ -133,8 +139,7 @@ public:
     return false;
   }
   
-  virtual void onResizeViewportEvent(const G3MEventContext* ec,
-                                     int width, int height){}
+  virtual void onResizeViewportEvent(const G3MEventContext* ec, int width, int height);
   
   virtual void start(const G3MRenderContext* rc) {
     

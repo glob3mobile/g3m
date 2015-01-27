@@ -73,7 +73,9 @@ MarkWidget::MarkWidget(const TextureIDReference* texID,
                                                                     true,
                                                                     true);
   
-  _glState->addGLFeature(new ViewportExtentGLFeature((int)viewportWidth, (int)viewportHeight), false);
+  _viewportExtent = new ViewportExtentGLFeature((int)viewportWidth, (int)viewportHeight);
+  
+    _glState->addGLFeature(_viewportExtent, false);
     
     textureMapping->modifyGLState(*_glState);
 }
@@ -84,6 +86,10 @@ void MarkWidget::render(const G3MRenderContext *rc, GLState *glState){
 
 void MarkWidget::setScreenPos(float x, float y){
   _geo2Dfeature->setTranslation(x, y);
+}
+
+void MarkWidget::onResizeViewportEvent(int width, int height){
+  _viewportExtent->changeExtent(width, height);
 }
 
 #pragma mark NonOverlappingMark
@@ -207,6 +213,15 @@ void NonOverlappingMark::updatePositionWithCurrentForce(double elapsedMS){
   
 }
 
+void NonOverlappingMark::onResizeViewportEvent(int width, int height){
+  if (_widget != NULL){
+    _widget->onResizeViewportEvent(width, height);
+  }
+  if (_anchorWidget != NULL){
+    _anchorWidget->onResizeViewportEvent(width, height);
+  }
+}
+
 #pragma-mark Renderer
 
 NonOverlappingMarksRenderer::NonOverlappingMarksRenderer(int maxVisibleMarks):
@@ -273,4 +288,11 @@ void NonOverlappingMarksRenderer::render(const G3MRenderContext* rc, GLState* gl
   
   _lastPositionsUpdatedTime = now;
   
+}
+
+void NonOverlappingMarksRenderer::onResizeViewportEvent(const G3MEventContext* ec, int width, int height){
+  for (int i = 0; i < _marks.size(); i++) {
+    _marks[i]->onResizeViewportEvent(width, height);
+  }
+
 }

@@ -90,11 +90,16 @@ private:
     super.dispose();
 #endif
   }
+  
+  GPUUniformValueVec2FloatMutable* _extent;
 
 public:
   ViewportExtentGLFeature(int viewportWidth,
                           int viewportHeight);
   void applyOnGlobalGLState(GLGlobalState* state)  const {}
+  
+  void changeExtent(int viewportWidth,
+                    int viewportHeight);
 };
 
 /////////////////////////////////////////////////////////

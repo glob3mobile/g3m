@@ -14,9 +14,16 @@ ViewportExtentGLFeature::ViewportExtentGLFeature(int viewportWidth,
                                                  int viewportHeight) :
 GLFeature(NO_GROUP, GLF_VIEWPORT_EXTENT)
 {
+  _extent = new GPUUniformValueVec2FloatMutable(viewportWidth, viewportHeight);
+  
   _values->addUniformValue(VIEWPORT_EXTENT,
-                           new GPUUniformValueVec2Float(viewportWidth, viewportHeight),
+                           _extent,
                            false);
+}
+
+void ViewportExtentGLFeature::changeExtent(int viewportWidth,
+                                           int viewportHeight){
+  _extent->changeValue(viewportWidth, viewportHeight);
 }
 
 BillboardGLFeature::BillboardGLFeature(const Vector3D& position,
