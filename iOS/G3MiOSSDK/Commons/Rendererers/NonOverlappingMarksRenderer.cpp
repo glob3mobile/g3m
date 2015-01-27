@@ -130,7 +130,28 @@ void NonOverlappingMark::computeAnchorScreenPos(const Camera* cam, const Planet*
 }
 
 
-void NonOverlappingMark::applyCoulombsLaw(const NonOverlappingMark* that){ //EM
+void NonOverlappingMark::applyCoulombsLaw(NonOverlappingMark* that){ //EM
+  
+  Vector2F d = _screenPos->sub(*that->_screenPos);
+  double distance = d.length()  + 0.001;
+  Vector2F direction = d.div((float)distance);
+  
+  float repulsion = 1.0;
+  
+  float strength = repulsion / (distance * distance);
+  
+  Vector2F force = direction.times(strength);
+  
+  this->applyForce(force._x, force._y);
+  that->applyForce(-force._x, -force._y);
+  
+//  var d = point1.p.subtract(point2.p);
+//  var distance = d.magnitude() + 0.1; // avoid massive forces at small distances (and divide by zero)
+//  var direction = d.normalise();
+//  
+//  // apply force to each end point
+//  point1.applyForce(direction.multiply(this.repulsion).divide(distance * distance * 0.5));
+//  point2.applyForce(direction.multiply(this.repulsion).divide(distance * distance * -0.5));
   
 }
 
@@ -268,6 +289,10 @@ void NonOverlappingMarksRenderer::render(const G3MRenderContext* rc, GLState* gl
   //Compute Mark Forces
   for (int i = 0; i < visibleMarks.size(); i++) {
     visibleMarks[i]->applyHookesLaw();
+    
+    for (int j = i+1; j < visibleMarks.size(); j++) {
+      visibleMarks[i]->applyCoulombsLaw(visibleMarks[j]);
+    }
   }
   
   //Draw Lines

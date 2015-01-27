@@ -358,6 +358,11 @@ Mesh* createSectorMesh(const Planet* planet,
                                                     100.0);
   nomr->addMark(mark2);
   
+  NonOverlappingMark* mark3 = new NonOverlappingMark(new DownloaderImageBuilder(URL("file:///Icon-Small-50.png")),
+                                                     Geodetic3D::fromDegrees(28.203895, -15.528694, 0),
+                                                     100.0);
+  nomr->addMark(mark3);
+  
   
   builder.initializeWidget();
 }

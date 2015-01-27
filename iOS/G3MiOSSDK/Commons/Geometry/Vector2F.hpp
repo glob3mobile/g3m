@@ -50,9 +50,19 @@ public:
 
   const double squaredDistanceTo(const Vector2F& that) const;
   
+  Vector2F add(const Vector2F& v) const {
+    return Vector2F(_x + v._x,
+                    _y + v._y);
+  }
+  
   Vector2F sub(const Vector2F& v) const {
     return Vector2F(_x - v._x,
                     _y - v._y);
+  }
+  
+  Vector2F times(const float magnitude) const {
+    return Vector2F(_x * magnitude,
+                    _y * magnitude);
   }
   
   Vector2F div(float v) const {
