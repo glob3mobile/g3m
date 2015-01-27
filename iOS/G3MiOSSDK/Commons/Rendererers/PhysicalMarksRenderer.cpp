@@ -27,6 +27,7 @@
 #include "GPUProgram.hpp"
 #include "GPUProgramManager.hpp"
 #include "Vector2F.hpp"
+#include "LineShape.hpp"
 
 void PhysicalMarksRenderer::setMarkTouchListener(MarkTouchListener* markTouchListener,
                                          bool autoDelete) {
@@ -38,8 +39,10 @@ void PhysicalMarksRenderer::setMarkTouchListener(MarkTouchListener* markTouchLis
   _autoDeleteMarkTouchListener = autoDelete;
 }
 
-PhysicalMarksRenderer::PhysicalMarksRenderer(bool readyWhenMarksReady) :
+PhysicalMarksRenderer::PhysicalMarksRenderer(bool readyWhenMarksReady,
+                                             ShapesRenderer *shapesRenderer) :
 _readyWhenMarksReady(readyWhenMarksReady),
+_shapesRenderer(shapesRenderer),
 _lastCamera(NULL),
 _markTouchListener(NULL),
 _autoDeleteMarkTouchListener(false),
@@ -81,7 +84,8 @@ void PhysicalMarksRenderer::onChangedContext() {
   }
 }
 
-void PhysicalMarksRenderer::addMark(Mark* mark) {
+void PhysicalMarksRenderer::addMark(Mark* mark, Geodetic3D anchor) {
+  _anchors.push_back(new Geodetic3D(anchor));
   _marks.push_back(mark);
   if (_context != NULL) {
     mark->initialize(_context, _downloadPriority);
@@ -207,6 +211,10 @@ IFloatBuffer* PhysicalMarksRenderer::getBillboardTexCoords() {
 
 void PhysicalMarksRenderer::render(const G3MRenderContext* rc, GLState* glState) {
   const int marksSize = _marks.size();
+  
+  
+  
+  
   if (marksSize > 0) {
     const Camera* camera = rc->getCurrentCamera();
     _lastCamera = camera; // Saving camera for use in onTouchEvent
@@ -221,15 +229,27 @@ void PhysicalMarksRenderer::render(const G3MRenderContext* rc, GLState* glState)
     
     IFloatBuffer* billboardTexCoord = getBillboardTexCoords();
     
-    
     Vector2I pixel = Vector2I(100, 0);
-    const Geodetic3D point = planet->toGeodetic3D(camera->pixel2PlanetPoint(pixel));
+    const Geodetic2D point = planet->toGeodetic2D(camera->pixel2PlanetPoint(pixel));
+    
+    _shapesRenderer->removeAllShapes();
+    
+    Shape* line = new LineShape(new Geodetic3D(_anchors[0]->_latitude, _anchors[0]->_longitude, cameraHeight/100),
+                                new Geodetic3D(point, cameraHeight/100),
+                                ABSOLUTE,
+                                5,
+                                Color::fromRGBA(0, 0, 0, 1));
+    _shapesRenderer->addShape(line);
+    printf("mark render\n");
     
     
-    
+
     for (int i = 0; i < marksSize; i++) {
       Mark* mark = _marks[i];
-      //mark->setPosition(point);
+      
+      mark->setPosition(Geodetic3D(point,0));
+      
+
       if (mark->isReady()) {
         mark->render(rc,
                      cameraPosition,

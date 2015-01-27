@@ -4520,34 +4520,25 @@ public:
   builder.getPlanetRendererBuilder()->setLayerSet(layerSet);
   
   ShapesRenderer* shapesRenderer = new ShapesRenderer(geoTileRasterizer);
-  {
-    double height = 100;
-    Shape* line = new LineShape(new Geodetic3D(Angle::fromDegrees(40.62),
-                                               Angle::fromDegrees(-74.02),
-                                               height),
-                                new Geodetic3D(Angle::fromDegrees(40.82),
-                                               Angle::fromDegrees(-74.02),
-                                               height),
-                                ABSOLUTE,
-                                2,
-                                Color::fromRGBA(0, 0, 0, 1));
-    shapesRenderer->addShape(line);
-  }
-  
-  
   builder.addRenderer(shapesRenderer);
   
-  // marks
-  PhysicalMarksRenderer* marksRenderer = new PhysicalMarksRenderer(false);
-  builder.addRenderer(marksRenderer);
-  Mark* m1 = new Mark("Hotel 1",
+  // physical marks
+  PhysicalMarksRenderer* physicalMarksRenderer = new PhysicalMarksRenderer(false, shapesRenderer);
+  builder.addRenderer(physicalMarksRenderer);
+  Mark* pm1 = new Mark("Hotel 1",
                       URL("http://www.lahuelladelblog.com/images/Facebook.png", false),
+                      Geodetic3D(Angle::fromDegrees(40.78), Angle::fromDegrees(-74.02), 0),
+                      ABSOLUTE);
+  physicalMarksRenderer->addMark(pm1, Geodetic3D(Angle::fromDegrees(40.72), Angle::fromDegrees(-74.02),0));
+  
+  // regular marks
+  MarksRenderer* marksRenderer = new MarksRenderer(false);
+  builder.addRenderer(marksRenderer);
+  Mark* rm1 = new Mark("Hotel 1",
+                      URL("http://www.yx.cl/images/reply/punto-rojo.png", false),
                       Geodetic3D(Angle::fromDegrees(40.72), Angle::fromDegrees(-74.02), 0),
                       ABSOLUTE);
-  marksRenderer->addMark(m1);
-  Geodetic3D position = Geodetic3D(Angle::fromDegrees(40.82), Angle::fromDegrees(-74.02), 0);
-  std::vector<Mark*> marks = marksRenderer->getMarks();
-  marks[0]->setPosition(position);
+  marksRenderer->addMark(rm1);
   
   // initialization
   builder.initializeWidget();

@@ -15,6 +15,7 @@
 //#include "GPUProgramState.hpp"
 
 #include "GLState.hpp"
+#include "ShapesRenderer.hpp"
 
 class Mark;
 class Camera;
@@ -44,9 +45,14 @@ private:
   IFloatBuffer* _billboardTexCoords;
   IFloatBuffer* getBillboardTexCoords();
   
+  ShapesRenderer *_shapesRenderer;
+  
+  std::vector<Geodetic3D*> _anchors;
+  
 public:
   
-  PhysicalMarksRenderer(bool readyWhenMarksReady);
+  PhysicalMarksRenderer(bool readyWhenMarksReady,
+                        ShapesRenderer *shapesRenderer);
   
   void setMarkTouchListener(MarkTouchListener* markTouchListener,
                             bool autoDelete);
@@ -57,7 +63,7 @@ public:
   
   virtual void render(const G3MRenderContext* rc, GLState* glState);
   
-  void addMark(Mark* mark);
+  void addMark(Mark* mark, Geodetic3D anchor);
   
   void removeMark(Mark* mark);
   
@@ -97,6 +103,8 @@ public:
     
   }
   void zRender(const G3MRenderContext* rc, GLState* glState){}
+  
+  std::vector<Mark*> getMarks() { return _marks; }
   
 };
 
