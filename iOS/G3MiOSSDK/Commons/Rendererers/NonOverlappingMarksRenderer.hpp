@@ -39,6 +39,8 @@ class MarkWidget{
   IImageBuilder* _imageBuilder;
   TexturesHandler* _texHandler;
   
+  float _x, _y; //Screen position
+  
   class WidgetImageListener: public IImageBuilderListener{
     MarkWidget* _widget;
   public:
@@ -67,6 +69,7 @@ public:
   void render(const G3MRenderContext* rc, GLState* glState);
   
   void setScreenPos(float x, float y);
+  Vector2F getScreenPos() const{ return Vector2F(_x, _y);}
   
   void onResizeViewportEvent(int width, int height);
   

@@ -113,6 +113,8 @@ void MarkWidget::render(const G3MRenderContext *rc, GLState *glState){
 
 void MarkWidget::setScreenPos(float x, float y){
   _geo2Dfeature->setTranslation(x, y);
+  _x = x;
+  _y = y;
 }
 
 void MarkWidget::onResizeViewportEvent(int width, int height){
