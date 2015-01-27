@@ -135,8 +135,8 @@ _screenPos(NULL),
 _cartesianPos(NULL),
 _dX(0),
 _dY(0),
-_widget(NULL),
-_anchorWidget(NULL)
+_widget(_imageBuilderWidget),
+_anchorWidget(_imageBuilderAnchor)
 {
   
 }
@@ -210,27 +210,18 @@ void NonOverlappingMark::applyHookesLaw(){   //Spring
 
 void NonOverlappingMark::render(const G3MRenderContext* rc, GLState* glState){
   
-  if (_widget == NULL){
-    _widget = new MarkWidget(_imageBuilderWidget);
+  if (_widget.isReady() && _anchorWidget.isReady()){
     
-    _widget->init(rc, rc->getCurrentCamera()->getViewPortWidth(), rc->getCurrentCamera()->getViewPortHeight());
-  }
-  
-  if (_anchorWidget == NULL){
-    _anchorWidget = new MarkWidget(_imageBuilderAnchor);
-    
-    _anchorWidget->init(rc, rc->getCurrentCamera()->getViewPortWidth(), rc->getCurrentCamera()->getViewPortHeight());
-  }
-  
-  if (_widget->isReady() && _anchorWidget->isReady()){
-    
-    _anchorWidget->setScreenPos(_anchorScreenPos->_x, _anchorScreenPos->_y);
-    _widget->setScreenPos(_screenPos->_x, _screenPos->_y);
+    _anchorWidget.setScreenPos(_anchorScreenPos->_x, _anchorScreenPos->_y);
+    _widget.setScreenPos(_screenPos->_x, _screenPos->_y);
     //printf("%f, %f\n", _screenPos->_x, _screenPos->_y);
     
-    _widget->render(rc, glState);
+    _widget.render(rc, glState);
     
-    _anchorWidget->render(rc, glState);
+    _anchorWidget.render(rc, glState);
+  } else{
+    _widget.init(rc, rc->getCurrentCamera()->getViewPortWidth(), rc->getCurrentCamera()->getViewPortHeight());
+    _anchorWidget.init(rc, rc->getCurrentCamera()->getViewPortWidth(), rc->getCurrentCamera()->getViewPortHeight());
   }
   
   
@@ -265,12 +256,8 @@ void NonOverlappingMark::updatePositionWithCurrentForce(double elapsedMS, float 
 }
 
 void NonOverlappingMark::onResizeViewportEvent(int width, int height){
-  if (_widget != NULL){
-    _widget->onResizeViewportEvent(width, height);
-  }
-  if (_anchorWidget != NULL){
-    _anchorWidget->onResizeViewportEvent(width, height);
-  }
+    _widget.onResizeViewportEvent(width, height);
+    _anchorWidget.onResizeViewportEvent(width, height);
 }
 
 #pragma-mark Renderer

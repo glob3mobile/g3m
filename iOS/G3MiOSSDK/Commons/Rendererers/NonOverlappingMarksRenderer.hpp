@@ -89,8 +89,8 @@ class NonOverlappingMark{
   Vector2F* _anchorScreenPos;
   Vector2F* _screenPos;
   
-  MarkWidget* _widget;
-  MarkWidget* _anchorWidget;
+  MarkWidget _widget;
+  MarkWidget _anchorWidget;
   
 public:
   
