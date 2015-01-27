@@ -35,19 +35,25 @@
 
 #pragma mark MarkWidget
 
-MarkWidget::MarkWidget(IImageBuilder* imageBuilder,
-                       const G3MRenderContext *rc,
-                       float viewportWidth, float viewportHeight):
+MarkWidget::MarkWidget(IImageBuilder* imageBuilder):
 _image(NULL),
-_imageBuilder(imageBuilder)
+_imageBuilder(imageBuilder),
+_viewportExtent(NULL),
+_geo2Dfeature(NULL),
+_glState(NULL)
 {
-  _glState = new GLState();
-  _viewportExtent = new ViewportExtentGLFeature((int)viewportWidth, (int)viewportHeight);
-  
-  _texHandler = rc->getTexturesHandler();
-  _imageBuilder->build(rc, new WidgetImageListener(this), true);
-  
-  _glState->addGLFeature(_viewportExtent, false);
+}
+
+void MarkWidget::init(const G3MRenderContext *rc, float viewportWidth, float viewportHeight){
+  if (_glState == NULL){
+    _glState = new GLState();
+    _viewportExtent = new ViewportExtentGLFeature((int)viewportWidth, (int)viewportHeight);
+    
+    _texHandler = rc->getTexturesHandler();
+    _imageBuilder->build(rc, new WidgetImageListener(this), true);
+    
+    _glState->addGLFeature(_viewportExtent, false);
+  }
 }
 
 void MarkWidget::prepareWidget(const IImage* image,
@@ -110,7 +116,9 @@ void MarkWidget::setScreenPos(float x, float y){
 }
 
 void MarkWidget::onResizeViewportEvent(int width, int height){
-  _viewportExtent->changeExtent(width, height);
+  if (_viewportExtent != NULL){
+    _viewportExtent->changeExtent(width, height);
+  }
 }
 
 #pragma mark NonOverlappingMark
@@ -203,17 +211,15 @@ void NonOverlappingMark::applyHookesLaw(){   //Spring
 void NonOverlappingMark::render(const G3MRenderContext* rc, GLState* glState){
   
   if (_widget == NULL){
-    _widget = new MarkWidget(_imageBuilderWidget,
-                             rc,
-                             rc->getCurrentCamera()->getViewPortWidth(),
-                             rc->getCurrentCamera()->getViewPortHeight());
+    _widget = new MarkWidget(_imageBuilderWidget);
+    
+    _widget->init(rc, rc->getCurrentCamera()->getViewPortWidth(), rc->getCurrentCamera()->getViewPortHeight());
   }
   
   if (_anchorWidget == NULL){
-    _anchorWidget = new MarkWidget(_imageBuilderAnchor,
-                                   rc,
-                                   rc->getCurrentCamera()->getViewPortWidth(),
-                                   rc->getCurrentCamera()->getViewPortHeight());
+    _anchorWidget = new MarkWidget(_imageBuilderAnchor);
+    
+    _anchorWidget->init(rc, rc->getCurrentCamera()->getViewPortWidth(), rc->getCurrentCamera()->getViewPortHeight());
   }
   
   if (_widget->isReady() && _anchorWidget->isReady()){

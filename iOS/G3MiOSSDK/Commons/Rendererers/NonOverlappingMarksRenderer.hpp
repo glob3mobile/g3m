@@ -59,9 +59,10 @@ class MarkWidget{
                      const std::string& imageName);
   
 public:
-  MarkWidget(IImageBuilder* imageBuilder,
-             const G3MRenderContext *rc,
-             float viewportWidth, float viewportHeight);
+  MarkWidget(IImageBuilder* imageBuilder);
+  
+  void init(const G3MRenderContext *rc,
+            float viewportWidth, float viewportHeight);
   
   void render(const G3MRenderContext* rc, GLState* glState);
   
