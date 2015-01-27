@@ -4535,6 +4535,8 @@ public:
                        ABSOLUTE);
   physicalMarksRenderer->addMark(pm2, Geodetic3D(Angle::fromDegrees(40.74), Angle::fromDegrees(-74.06),0));
   
+  builder.addRenderer(shapesRenderer);
+
   // regular marks
   MarksRenderer* marksRenderer = new MarksRenderer(false);
   builder.addRenderer(marksRenderer);
@@ -4549,8 +4551,7 @@ public:
                        ABSOLUTE);
   marksRenderer->addMark(rm2);
   
-  builder.addRenderer(shapesRenderer);
-
+  builder.addRenderer(physicalMarksRenderer);
   
   // initialization
   builder.initializeWidget();

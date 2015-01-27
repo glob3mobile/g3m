@@ -248,13 +248,17 @@ void PhysicalMarksRenderer::render(const G3MRenderContext* rc, GLState* glState)
       
 
       if (mark->isReady()) {
-        mark->render(rc,
-                     cameraPosition,
-                     cameraHeight,
-                     _glState,
-                     planet,
-                     gl,
-                     billboardTexCoord);
+        
+        const Vector2F pixel = camera->point2Pixel(planet->toCartesian(*_anchors[i]));
+        if (pixel._x>0 && pixel._x<camera->getViewPortWidth() &&
+            pixel._y>0 && pixel._y<camera->getViewPortHeight())
+          mark->render(rc,
+                       cameraPosition,
+                       cameraHeight,
+                       _glState,
+                       planet,
+                       gl,
+                       billboardTexCoord);
       }
     }
   }
