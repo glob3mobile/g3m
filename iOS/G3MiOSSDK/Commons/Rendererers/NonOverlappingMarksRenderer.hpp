@@ -63,6 +63,8 @@ class MarkWidget{
 public:
   MarkWidget(IImageBuilder* imageBuilder);
   
+  ~MarkWidget();
+  
   void init(const G3MRenderContext *rc,
             float viewportWidth, float viewportHeight);
   
@@ -81,16 +83,12 @@ public:
 
 
 class NonOverlappingMark{
-  IImageBuilder* _imageBuilderWidget;
-  IImageBuilder* _imageBuilderAnchor;
   float _springLengthInPixels;
 
   mutable Vector3D* _cartesianPos;
   Geodetic3D _geoPosition;
   
   float _dX, _dY; //Velocity vector (pixels per second)
-  //Vector2F* _anchorScreenPos;
-  //Vector2F* _screenPos;
   
   MarkWidget _widget;
   MarkWidget _anchorWidget;
@@ -101,6 +99,8 @@ public:
                      IImageBuilder* imageBuilderAnchor,
                      const Geodetic3D& position,
                      float springLengthInPixels);
+  
+  ~NonOverlappingMark();
   
   Vector3D getCartesianPosition(const Planet* planet) const;
   
@@ -140,9 +140,15 @@ class NonOverlappingMarksRenderer: public DefaultRenderer{
   GLState * _connectorsGLState;
   void renderConnectorLines(const G3MRenderContext* rc);
   
+  void computeForces(const Camera* cam, const Planet* planet);
+  void renderMarks(const G3MRenderContext* rc, GLState* glState);
+  void applyForces(long long now, const Camera* cam);
+  
   
 public:
   NonOverlappingMarksRenderer(int maxVisibleMarks = 30);
+  
+  ~NonOverlappingMarksRenderer();
   
   void addMark(NonOverlappingMark* mark);
   

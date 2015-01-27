@@ -46,6 +46,13 @@ _y(NANF)
 {
 }
 
+MarkWidget::~MarkWidget()
+{
+  delete _image;
+  delete _imageBuilder;
+  _glState->_release();
+}
+
 void MarkWidget::init(const G3MRenderContext *rc, float viewportWidth, float viewportHeight){
   if (_glState == NULL){
     _glState = new GLState();
@@ -132,17 +139,20 @@ void MarkWidget::onResizeViewportEvent(int width, int height){
 NonOverlappingMark::NonOverlappingMark(IImageBuilder* imageBuilderWidget,
                                        IImageBuilder* imageBuilderAnchor,
                                        const Geodetic3D& position, float springLengthInPixels):
-_imageBuilderWidget(imageBuilderWidget),
-_imageBuilderAnchor(imageBuilderAnchor),
 _geoPosition(position),
 _springLengthInPixels(springLengthInPixels),
 _cartesianPos(NULL),
 _dX(0),
 _dY(0),
-_widget(_imageBuilderWidget),
-_anchorWidget(_imageBuilderAnchor)
+_widget(imageBuilderWidget),
+_anchorWidget(imageBuilderAnchor)
 {
   
+}
+
+NonOverlappingMark::~NonOverlappingMark()
+{
+  delete _cartesianPos;
 }
 
 Vector3D NonOverlappingMark::getCartesianPosition(const Planet* planet) const{
@@ -271,6 +281,14 @@ _connectorsGLState(NULL)
 }
 
 
+NonOverlappingMarksRenderer::~NonOverlappingMarksRenderer(){
+  _connectorsGLState->_release();
+  
+  for (int i = 0; i < _marks.size(); i++) {
+    delete _marks[i];
+  }
+}
+
 void NonOverlappingMarksRenderer::addMark(NonOverlappingMark* mark){
   _marks.push_back(mark);
   
@@ -329,15 +347,11 @@ void NonOverlappingMarksRenderer::renderConnectorLines(const G3MRenderContext* r
   rc->getGL()->drawArrays(GLPrimitive::lines(), 0, pos2D.size()/2, _connectorsGLState, *(rc->getGPUProgramManager()));
 }
 
-void NonOverlappingMarksRenderer::render(const G3MRenderContext* rc, GLState* glState){
-  
-  const Camera* cam = rc->getCurrentCamera();
-  
-  computeMarksToBeRendered(rc->getCurrentCamera(), rc->getPlanet());
+void NonOverlappingMarksRenderer::computeForces(const Camera* cam, const Planet* planet){
   
   //Compute Mark Anchor Screen Positions
   for (int i = 0; i < _visibleMarks.size(); i++) {
-    _visibleMarks[i]->computeAnchorScreenPos(cam, rc->getPlanet());
+    _visibleMarks[i]->computeAnchorScreenPos(cam, planet);
   }
   
   //Compute Mark Forces
@@ -348,19 +362,19 @@ void NonOverlappingMarksRenderer::render(const G3MRenderContext* rc, GLState* gl
       _visibleMarks[i]->applyCoulombsLaw(_visibleMarks[j]);
     }
   }
-  
+}
+
+void NonOverlappingMarksRenderer::renderMarks(const G3MRenderContext *rc, GLState *glState){
   //Draw Lines
-  
-  //Draw Anchors
-  
-  //Draw Marks
-  
   renderConnectorLines(rc);
+  
+  //Draw Anchors and Marks
   for (int i = 0; i < _visibleMarks.size(); i++) {
     _visibleMarks[i]->render(rc, glState);
   }
-  
-  long long now = rc->getFrameStartTimer()->nowInMilliseconds();
+}
+
+void NonOverlappingMarksRenderer::applyForces(long long now, const Camera* cam){
   
   //Update Position based on last Forces
   for (int i = 0; i < _visibleMarks.size(); i++) {
@@ -369,7 +383,20 @@ void NonOverlappingMarksRenderer::render(const G3MRenderContext* rc, GLState* gl
   }
   
   _lastPositionsUpdatedTime = now;
+}
+
+void NonOverlappingMarksRenderer::render(const G3MRenderContext* rc, GLState* glState){
+
+  const Camera* cam = rc->getCurrentCamera();
+  const Planet* planet = rc->getPlanet();
   
+  computeMarksToBeRendered(cam, planet);
+  
+  computeForces(cam, planet);
+  
+  renderMarks(rc, glState);
+  
+  applyForces(rc->getFrameStartTimer()->nowInMilliseconds(), cam);
 }
 
 void NonOverlappingMarksRenderer::onResizeViewportEvent(const G3MEventContext* ec, int width, int height){
