@@ -210,11 +210,13 @@ IFloatBuffer* PhysicalMarksRenderer::getBillboardTexCoords() {
 }
 
 
-std::vector<Vector2F*> layoutMarksGraph(std::vector<Vector2F*> anchors)
+std::vector<Vector2F*> layoutMarksGraph(std::vector<Vector2F*> anchors, Vector2F minCorner, Vector2F maxCorner)
 {
   std::vector<float> posX;    std::vector<float> posY;
   std::vector<float> forceX;  std::vector<float> forceY;
   std::vector<float> velX;    std::vector<float> velY;
+  
+  printf("maxcorner=(%f,%f)\n", maxCorner._x, maxCorner._y);
   
   
   // initialization
@@ -227,7 +229,8 @@ std::vector<Vector2F*> layoutMarksGraph(std::vector<Vector2F*> anchors)
   float sumForces = 10000;
   int iter = 0;
   while (sumForces>1) {
-    printf ("\nIteracion %d:\n", iter++);
+    iter++;
+    //printf ("\nIteracion %d:\n", iter);
     sumForces = 0;
   
     // process velocities
@@ -239,6 +242,12 @@ std::vector<Vector2F*> layoutMarksGraph(std::vector<Vector2F*> anchors)
       // compute atraction to anchors
       forceX[i] = atrFactor * (anchors[i]->_x-posX[i]);
       forceY[i] = atrFactor * (anchors[i]->_y-posY[i]);
+      
+      // compute repulsion to margins
+      forceX[i] += repFactor / (posX[i]-minCorner._x);
+      forceX[i] += repFactor / (posX[i]-maxCorner._x);
+      //forceY[i] += repFactor / (posY[i]-minCorner._y);
+      //forceY[i] += repFactor / (posY[i]-maxCorner._y);
       
       // compute repulsion to other marks
       for (int j=0; j<anchors.size(); j++) {
@@ -254,7 +263,7 @@ std::vector<Vector2F*> layoutMarksGraph(std::vector<Vector2F*> anchors)
       sumForces += forceX[i]*forceX[i] + forceY[i]*forceY[i];
     }
     
-    printf("sumforces=%f\n", fabs(sumForces));
+    //printf("sumforces=%f\n", fabs(sumForces));
     
     // set new positions
     for (int i=0; i<anchors.size(); i++) {
@@ -262,7 +271,8 @@ std::vector<Vector2F*> layoutMarksGraph(std::vector<Vector2F*> anchors)
       //posY[i] += velY[i];
       posX[i] += forceX[i];
       posY[i] += forceY[i];
-      printf ("punto %d: (%.1f, %.1f). Anchor = (%.1f, %.1f)\n", i, posX[i], posY[i], anchors[i]->_x, anchors[i]->_y);
+      if (iter==1)
+      printf ("punto %d: (%.1f, %.1f). Force = (%.1f, %.1f)\n", i, posX[i], posY[i], forceX[i], forceY[i]);
     }
   }
   
@@ -307,7 +317,11 @@ void PhysicalMarksRenderer::render(const G3MRenderContext* rc, GLState* glState)
       }
     }
     
-    std::vector<Vector2F*> pixels = layoutMarksGraph(anchors);
+    int sizeMarkIcon = 64;
+    Vector2F maxCorner = Vector2F(camera->getViewPortWidth()+2*sizeMarkIcon,
+                                  camera->getViewPortHeight()+2*sizeMarkIcon);
+    std::vector<Vector2F*> pixels = layoutMarksGraph(anchors, Vector2F(0,0), maxCorner);
+                                                     
     
     int n=0;
     for (int i = 0; i < marksSize; i++) {
