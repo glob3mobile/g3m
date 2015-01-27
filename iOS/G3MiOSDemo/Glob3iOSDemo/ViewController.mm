@@ -4534,10 +4534,12 @@ public:
   MarksRenderer* marksRenderer = new MarksRenderer(false);
   for (int i=0; i<numMarks; i++) {
     Geodetic3D geoPos = Geodetic3D(Angle::fromDegrees(coordinates[i][0]), Angle::fromDegrees(coordinates[i][1]), 0);
-    Mark* pm = new Mark("Hotel 1", URL("http://www.lahuelladelblog.com/images/Facebook.png", false),
+    char name[100];
+    sprintf(name, "Hotel %d", i+1);
+    Mark* pm = new Mark(name, URL("http://www.lahuelladelblog.com/images/Facebook.png", false),
                         geoPos, ABSOLUTE);
     physicalMarksRenderer->addMark(pm);
-    Mark* rm = new Mark("Hotel 1", URL("http://www.yx.cl/images/reply/punto-rojo.png", false),
+    Mark* rm = new Mark("", URL("http://www.yx.cl/images/reply/punto-rojo.png", false),
                         geoPos, ABSOLUTE);
     marksRenderer->addMark(rm);
   }

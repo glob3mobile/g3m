@@ -210,13 +210,67 @@ IFloatBuffer* PhysicalMarksRenderer::getBillboardTexCoords() {
 }
 
 
-std::vector<Vector2F*> layoutMarksGraph(std::vector<Vector2F*> anchors, std::vector<Vector2F*> floating)
+std::vector<Vector2F*> layoutMarksGraph(std::vector<Vector2F*> anchors)
 {
-  std::vector<Vector2F*> pixels;
-  for (int i=0; i<floating.size(); i++) {
-    pixels.push_back(new Vector2F(anchors[i]->_x+100,anchors[i]->_y+100));
+  std::vector<float> posX;    std::vector<float> posY;
+  std::vector<float> forceX;  std::vector<float> forceY;
+  std::vector<float> velX;    std::vector<float> velY;
+  
+  
+  // initialization
+  for (int i=0; i<anchors.size(); i++) {
+    posX.push_back(anchors[i]->_x+100);   posY.push_back(anchors[i]->_y-300);
+    forceX.push_back(0);              forceY.push_back(0);
+    velX.push_back(0);                velY.push_back(0);
   }
-  return pixels;
+  
+  float sumForces = 10000;
+  int iter = 0;
+  while (sumForces>1) {
+    printf ("\nIteracion %d:\n", iter++);
+    sumForces = 0;
+  
+    // process velocities
+    float repFactor = 1e4;
+    float atrFactor = 0.5;
+    float friction = 0.7;
+    for (int i=0; i<anchors.size(); i++) {
+      
+      // compute atraction to anchors
+      forceX[i] = atrFactor * (anchors[i]->_x-posX[i]);
+      forceY[i] = atrFactor * (anchors[i]->_y-posY[i]);
+      
+      // compute repulsion to other marks
+      for (int j=0; j<anchors.size(); j++) {
+        if (i!=j) {
+          float dist2 = (posX[j]-posX[i])*(posX[j]-posX[i])+(posY[j]-posY[i])*(posY[j]-posY[i]);
+          forceX[i] += repFactor * (posX[i]-posX[j]) / dist2;
+          forceY[i] += repFactor * (posY[i]-posY[j]) / dist2;
+        }
+      }
+      velX[i] = (velX[i]+forceX[i]) * friction;
+      velY[i] = (velY[i]+forceY[i]) * friction;
+      
+      sumForces += forceX[i]*forceX[i] + forceY[i]*forceY[i];
+    }
+    
+    printf("sumforces=%f\n", fabs(sumForces));
+    
+    // set new positions
+    for (int i=0; i<anchors.size(); i++) {
+      //posX[i] += velX[i];
+      //posY[i] += velY[i];
+      posX[i] += forceX[i];
+      posY[i] += forceY[i];
+      printf ("punto %d: (%.1f, %.1f). Anchor = (%.1f, %.1f)\n", i, posX[i], posY[i], anchors[i]->_x, anchors[i]->_y);
+    }
+  }
+  
+  std::vector<Vector2F*> posOut;
+  for (int i=0; i<anchors.size(); i++) {
+    posOut.push_back(new Vector2F(posX[i], posY[i]));
+  }
+  return posOut;
 }
 
 
@@ -241,19 +295,19 @@ void PhysicalMarksRenderer::render(const G3MRenderContext* rc, GLState* glState)
     _shapesRenderer->removeAllShapes();
     
     std::vector<Vector2F*> anchors;
-    std::vector<Vector2F*> floating;
+    //std::vector<Vector2F*> floating;
     
     for (int i = 0; i < marksSize; i++) {
       const Vector2F pixelAnchor = camera->point2Pixel(planet->toCartesian(*_anchors[i]));
       if (pixelAnchor._x>0 && pixelAnchor._x<camera->getViewPortWidth() &&
           pixelAnchor._y>0 && pixelAnchor._y<camera->getViewPortHeight()) {
         anchors.push_back(new Vector2F(pixelAnchor));
-        Vector2F pixelFloating = camera->point2Pixel(planet->toCartesian(_marks[i]->getPosition()));
-        floating.push_back(new Vector2F(pixelFloating));
+        //Vector2F pixelFloating = camera->point2Pixel(planet->toCartesian(_marks[i]->getPosition()));
+        //floating.push_back(new Vector2F(pixelFloating));
       }
     }
     
-    std::vector<Vector2F*> pixels = layoutMarksGraph(anchors, floating);
+    std::vector<Vector2F*> pixels = layoutMarksGraph(anchors);
     
     int n=0;
     for (int i = 0; i < marksSize; i++) {
@@ -287,7 +341,7 @@ void PhysicalMarksRenderer::render(const G3MRenderContext* rc, GLState* glState)
     
     for (int i=0; i<pixels.size(); i++) {
       delete anchors[i];
-      delete floating[i];
+      //delete floating[i];
       delete pixels[i];
     }
   }
