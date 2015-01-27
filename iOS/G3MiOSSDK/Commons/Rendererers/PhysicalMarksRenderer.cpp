@@ -229,24 +229,21 @@ void PhysicalMarksRenderer::render(const G3MRenderContext* rc, GLState* glState)
     
     IFloatBuffer* billboardTexCoord = getBillboardTexCoords();
     
-    Vector2I pixel = Vector2I(100, 0);
-    const Geodetic2D point = planet->toGeodetic2D(camera->pixel2PlanetPoint(pixel));
-    
+    Vector2I pixels[] = {Vector2I(400, 200), Vector2I(600,400)};
     _shapesRenderer->removeAllShapes();
-    
-    Shape* line = new LineShape(new Geodetic3D(_anchors[0]->_latitude, _anchors[0]->_longitude, cameraHeight/100),
-                                new Geodetic3D(point, cameraHeight/100),
-                                ABSOLUTE,
-                                5,
-                                Color::fromRGBA(0, 0, 0, 1));
-    _shapesRenderer->addShape(line);
-    printf("mark render\n");
-    
-    
 
+
+    
     for (int i = 0; i < marksSize; i++) {
       Mark* mark = _marks[i];
       
+      const Geodetic2D point = planet->toGeodetic2D(camera->pixel2PlanetPoint(pixels[i]));
+      Shape* line = new LineShape(new Geodetic3D(_anchors[i]->_latitude, _anchors[i]->_longitude, cameraHeight/100),
+                                  new Geodetic3D(point, cameraHeight/100),
+                                  ABSOLUTE,
+                                  5,
+                                  Color::fromRGBA(0, 0, 0, 1));
+      _shapesRenderer->addShape(line);
       mark->setPosition(Geodetic3D(point,0));
       
 
