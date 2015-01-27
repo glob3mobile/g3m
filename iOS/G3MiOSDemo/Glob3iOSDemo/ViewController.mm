@@ -348,20 +348,23 @@ Mesh* createSectorMesh(const Planet* planet,
   NonOverlappingMarksRenderer* nomr = new NonOverlappingMarksRenderer(20);
   builder.addRenderer(nomr);
   
-  NonOverlappingMark* mark = new NonOverlappingMark(new DownloaderImageBuilder(URL("file:///Icon-Small-50.png")),
-                                                    Geodetic3D::fromDegrees(0, 0, 0),
+  NonOverlappingMark* mark = new NonOverlappingMark(new DownloaderImageBuilder(URL("file:///g3m-marker.png")),
+                                                    new DownloaderImageBuilder(URL("file:///anchorWidget.png")),
+                                                    Geodetic3D::fromDegrees(28.131817, -15.440219, 0),
                                                     100.0);
   nomr->addMark(mark);
   
-  NonOverlappingMark* mark2 = new NonOverlappingMark(new DownloaderImageBuilder(URL("file:///Icon-Small-50.png")),
-                                                    Geodetic3D::fromDegrees(45, 0, 0),
+  NonOverlappingMark* mark2 = new NonOverlappingMark(new DownloaderImageBuilder(URL("file:///g3m-marker.png")),
+                                                     new DownloaderImageBuilder(URL("file:///anchorWidget.png")),
+                                                    Geodetic3D::fromDegrees(28.947345, -13.523105, 0),
                                                     100.0);
   nomr->addMark(mark2);
   
-  NonOverlappingMark* mark3 = new NonOverlappingMark(new DownloaderImageBuilder(URL("file:///Icon-Small-50.png")),
-                                                     Geodetic3D::fromDegrees(28.203895, -15.528694, 0),
-                                                     100.0);
-  nomr->addMark(mark3);
+//  NonOverlappingMark* mark3 = new NonOverlappingMark(new DownloaderImageBuilder(URL("file:///g3m-marker.png")),
+//                                                     new DownloaderImageBuilder(URL("file:///anchorWidget.png")),
+//                                                     Geodetic3D::fromDegrees(28.473802, -13.859360, 0),
+//                                                     100.0);
+//  nomr->addMark(mark3);
   
   
   builder.initializeWidget();

@@ -27,15 +27,40 @@ class IImage;
 class TextureIDReference;
 class Geometry2DGLFeature;
 class ViewportExtentGLFeature;
+class TexturesHandler;
 
 class MarkWidget{
   GLState* _glState;
   Geometry2DGLFeature* _geo2Dfeature;
   ViewportExtentGLFeature* _viewportExtent;
   
+  const IImage* _image;
+  std::string _imageName;
+  IImageBuilder* _imageBuilder;
+  TexturesHandler* _texHandler;
+  
+  class WidgetImageListener: public IImageBuilderListener{
+    MarkWidget* _widget;
+  public:
+    WidgetImageListener(MarkWidget* widget):_widget(widget){}
+    
+    virtual void imageCreated(const IImage*      image,
+                              const std::string& imageName){
+      _widget->prepareWidget(image, imageName);
+    }
+    
+    virtual void onError(const std::string& error){
+      ILogger::instance()->logError(error);
+    }
+    
+  };
+  
+  void prepareWidget(const IImage*      image,
+                     const std::string& imageName);
+  
 public:
-  MarkWidget(const TextureIDReference* texID,
-             float width, float height,
+  MarkWidget(IImageBuilder* imageBuilder,
+             const G3MRenderContext *rc,
              float viewportWidth, float viewportHeight);
   
   void render(const G3MRenderContext* rc, GLState* glState);
@@ -44,11 +69,16 @@ public:
   
   void onResizeViewportEvent(int width, int height);
   
+  bool isReady() const{
+    return _image != NULL;
+  }
+  
 };
 
 
 class NonOverlappingMark{
-  IImageBuilder* _imageBuilder;
+  IImageBuilder* _imageBuilderWidget;
+  IImageBuilder* _imageBuilderAnchor;
   float _springLengthInPixels;
 
   mutable Vector3D* _cartesianPos;
@@ -58,33 +88,13 @@ class NonOverlappingMark{
   Vector2F* _anchorScreenPos;
   Vector2F* _screenPos;
   
-  const IImage* _image;
-  std::string _imageName;
-  
-  class NonOverlappingMarkImageListener: public IImageBuilderListener{
-    NonOverlappingMark* _mark;
-  public:
-    NonOverlappingMarkImageListener(NonOverlappingMark* mark):_mark(mark){}
-    
-    virtual void imageCreated(const IImage*      image,
-                              const std::string& imageName){
-      _mark->_image = image;
-      _mark->_imageName = imageName;
-    }
-    
-    virtual void onError(const std::string& error){
-      ILogger::instance()->logError(error);
-    }
-    
-  };
-  
   MarkWidget* _widget;
-  
   MarkWidget* _anchorWidget;
   
 public:
   
-  NonOverlappingMark(IImageBuilder* imageBuilder,
+  NonOverlappingMark(IImageBuilder* imageBuilderWidget,
+                     IImageBuilder* imageBuilderAnchor,
                      const Geodetic3D& position,
                      float springLengthInPixels);
   
