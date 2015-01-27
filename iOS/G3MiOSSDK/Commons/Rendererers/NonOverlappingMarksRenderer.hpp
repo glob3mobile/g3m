@@ -103,6 +103,7 @@ public:
   void computeAnchorScreenPos(const Camera* cam, const Planet* planet);
   
   Vector2F* getScreenPos() const{ return _screenPos;}
+  Vector2F* getAnchorScreenPos() const{ return _anchorScreenPos;}
   
   void render(const G3MRenderContext* rc, GLState* glState);
   
@@ -115,7 +116,7 @@ public:
     _dY += y;
   }
   
-  void updatePositionWithCurrentForce(double elapsedMS);
+  void updatePositionWithCurrentForce(double elapsedMS, float viewportWidth, float viewportHeight);
   
   void onResizeViewportEvent(int width, int height);
   
@@ -125,11 +126,15 @@ class NonOverlappingMarksRenderer: public DefaultRenderer{
   
   int _maxVisibleMarks;
   
+  std::vector<NonOverlappingMark*> _visibleMarks;
   std::vector<NonOverlappingMark*> _marks;
   
-  std::vector<NonOverlappingMark*> getMarksToBeRendered(const Camera* cam, const Planet* planet) const;
+  void computeMarksToBeRendered(const Camera* cam, const Planet* planet);
   
   long long _lastPositionsUpdatedTime;
+  
+  GLState * _connectorsGLState;
+  void renderConnectorLines(const G3MRenderContext* rc);
   
   
 public:

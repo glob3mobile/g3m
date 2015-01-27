@@ -59,6 +59,9 @@ GPUProgram* GPUProgramManager::getNewProgram(GL* gl, int uniformsCode, int attri
 
   
   if (is2D){
+    if (flatColor){
+      return compileProgramWithName(gl, "FlatColor2DMesh");
+    }
     return compileProgramWithName(gl, "Textured2DMesh");
   }
   

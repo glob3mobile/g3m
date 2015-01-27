@@ -1674,6 +1674,8 @@
 		D80A286A1746474E0058CEC3 /* EllipsoidalPlanet.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = EllipsoidalPlanet.cpp; path = Commons/Geometry/EllipsoidalPlanet.cpp; sourceTree = "<group>"; };
 		D80A286F1746572E0058CEC3 /* GLState.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = GLState.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		D80A28701746572E0058CEC3 /* GLState.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GLState.hpp; sourceTree = "<group>"; };
+		D80C8B4A1A77B94E00E67587 /* FlatColor2DMesh.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = FlatColor2DMesh.fsh; sourceTree = "<group>"; };
+		D80C8B4B1A77B94E00E67587 /* FlatColor2DMesh.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = FlatColor2DMesh.vsh; sourceTree = "<group>"; };
 		D80D3A5D160A0A47004831C5 /* IGLUniformID.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = IGLUniformID.hpp; path = Commons/Interfaces/IGLUniformID.hpp; sourceTree = "<group>"; };
 		D80D521115EE2B0100ACEA16 /* IMathUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IMathUtils.cpp; path = Commons/Interfaces/IMathUtils.cpp; sourceTree = "<group>"; };
 		D80D525515EE66D700ACEA16 /* INativeGL.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = INativeGL.hpp; path = Commons/Interfaces/INativeGL.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
@@ -2780,6 +2782,8 @@
 		E70B56E016D3CCCD00C5FFFB /* Shaders */ = {
 			isa = PBXGroup;
 			children = (
+				D80C8B4A1A77B94E00E67587 /* FlatColor2DMesh.fsh */,
+				D80C8B4B1A77B94E00E67587 /* FlatColor2DMesh.vsh */,
 				D8CA641C1A75282200B9EABC /* Textured2DMesh.fsh */,
 				D8CA641D1A75282200B9EABC /* Textured2DMesh.vsh */,
 				D8B5533F18800D5A00C1B3B3 /* FullTransformedTexCoorMultiTexturedMesh.fsh */,

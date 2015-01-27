@@ -124,6 +124,28 @@ public:
 "} \n ");
     this->add(sourcesDefault);
 
+    GPUProgramSources sourcesFlatColor2DMesh("FlatColor2DMesh",
+ emptyString +  
+"attribute vec2 aPosition2D; \n " + 
+"uniform float uPointSize; \n " + 
+"uniform vec2 uTranslation2D; \n " + 
+"uniform vec2 uViewPortExtent; \n " + 
+"void main() { \n " + 
+"vec2 pixel = aPosition2D; \n " + 
+"pixel.x -= uViewPortExtent.x / 2.0; \n " + 
+"pixel.y += uViewPortExtent.y / 2.0; \n " + 
+"gl_Position = vec4((pixel.x + uTranslation2D.x) / (uViewPortExtent.x / 2.0), \n " + 
+"(pixel.y - uTranslation2D.y) / (uViewPortExtent.y / 2.0), \n " + 
+"0, 1); \n " + 
+"gl_PointSize = uPointSize; \n " + 
+"} \n ",
+ emptyString +  
+"uniform lowp vec4 uFlatColor; \n " + 
+"void main() { \n " + 
+"gl_FragColor = uFlatColor; \n " + 
+"} \n ");
+    this->add(sourcesFlatColor2DMesh);
+
     GPUProgramSources sourcesFlatColorMesh("FlatColorMesh",
  emptyString +  
 "attribute vec4 aPosition; \n " + 

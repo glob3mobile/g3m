@@ -459,7 +459,9 @@ private:
 
 public:
   FlatColorGLFeature(const Color& color,
-                     bool blend, int sFactor, int dFactor);
+                     bool blend = false,
+                     int sFactor = GLBlendFactor::srcAlpha(),
+                     int dFactor = GLBlendFactor::oneMinusSrcAlpha());
   void applyOnGlobalGLState(GLGlobalState* state) const {
     blendingOnGlobalGLState(state);
   }
