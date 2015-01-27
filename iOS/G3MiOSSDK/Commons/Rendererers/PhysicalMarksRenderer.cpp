@@ -209,11 +209,20 @@ IFloatBuffer* PhysicalMarksRenderer::getBillboardTexCoords() {
   return _billboardTexCoords;
 }
 
+
+std::vector<Vector2F*> layoutMarksGraph(std::vector<Vector2F*> anchors, std::vector<Vector2F*> floating)
+{
+  std::vector<Vector2F*> pixels;
+  for (int i=0; i<floating.size(); i++) {
+    pixels.push_back(new Vector2F(anchors[i]->_x+100,anchors[i]->_y+100));
+  }
+  return pixels;
+}
+
+
+
 void PhysicalMarksRenderer::render(const G3MRenderContext* rc, GLState* glState) {
   const int marksSize = _marks.size();
-  
-  
-  
   
   if (marksSize > 0) {
     const Camera* camera = rc->getCurrentCamera();
@@ -229,29 +238,42 @@ void PhysicalMarksRenderer::render(const G3MRenderContext* rc, GLState* glState)
     
     IFloatBuffer* billboardTexCoord = getBillboardTexCoords();
     
-    Vector2I pixels[] = {Vector2I(400, 200), Vector2I(600,400)};
     _shapesRenderer->removeAllShapes();
-
-
     
+    std::vector<Vector2F*> anchors;
+    std::vector<Vector2F*> floating;
+    
+    for (int i = 0; i < marksSize; i++) {
+      const Vector2F pixelAnchor = camera->point2Pixel(planet->toCartesian(*_anchors[i]));
+      if (pixelAnchor._x>0 && pixelAnchor._x<camera->getViewPortWidth() &&
+          pixelAnchor._y>0 && pixelAnchor._y<camera->getViewPortHeight()) {
+        anchors.push_back(new Vector2F(pixelAnchor));
+        Vector2F pixelFloating = camera->point2Pixel(planet->toCartesian(_marks[i]->getPosition()));
+        floating.push_back(new Vector2F(pixelFloating));
+      }
+    }
+    
+    std::vector<Vector2F*> pixels = layoutMarksGraph(anchors, floating);
+    
+    int n=0;
     for (int i = 0; i < marksSize; i++) {
       Mark* mark = _marks[i];
       
-      const Geodetic2D point = planet->toGeodetic2D(camera->pixel2PlanetPoint(pixels[i]));
-      Shape* line = new LineShape(new Geodetic3D(_anchors[i]->_latitude, _anchors[i]->_longitude, cameraHeight/100),
-                                  new Geodetic3D(point, cameraHeight/100),
-                                  ABSOLUTE,
-                                  5,
-                                  Color::fromRGBA(0, 0, 0, 1));
-      _shapesRenderer->addShape(line);
-      mark->setPosition(Geodetic3D(point,0));
-      
-
-      if (mark->isReady()) {
+      const Vector2F pixel = camera->point2Pixel(planet->toCartesian(*_anchors[i]));
+      if (pixel._x>0 && pixel._x<camera->getViewPortWidth() &&
+          pixel._y>0 && pixel._y<camera->getViewPortHeight()) {
         
-        const Vector2F pixel = camera->point2Pixel(planet->toCartesian(*_anchors[i]));
-        if (pixel._x>0 && pixel._x<camera->getViewPortWidth() &&
-            pixel._y>0 && pixel._y<camera->getViewPortHeight())
+        const Geodetic2D point = planet->toGeodetic2D(camera->pixel2PlanetPoint(Vector2I((int)pixels[n]->_x,(int)pixels[n]->_y)));
+        n++;
+        Shape* line = new LineShape(new Geodetic3D(_anchors[i]->_latitude, _anchors[i]->_longitude, cameraHeight/100),
+                                    new Geodetic3D(point, cameraHeight/100),
+                                    ABSOLUTE,
+                                    5,
+                                    Color::fromRGBA(0, 0, 0, 1));
+        _shapesRenderer->addShape(line);
+        mark->setPosition(Geodetic3D(point,0));
+        
+        if (mark->isReady()) {
           mark->render(rc,
                        cameraPosition,
                        cameraHeight,
@@ -259,11 +281,17 @@ void PhysicalMarksRenderer::render(const G3MRenderContext* rc, GLState* glState)
                        planet,
                        gl,
                        billboardTexCoord);
+        }
       }
+    }
+    
+    for (int i=0; i<pixels.size(); i++) {
+      delete anchors[i];
+      delete floating[i];
+      delete pixels[i];
     }
   }
 }
-
 
 void PhysicalMarksRenderer::updateGLState(const G3MRenderContext* rc) {
   const Camera* cam = rc->getCurrentCamera();
