@@ -223,21 +223,21 @@ std::vector<Vector2F*> layoutMarksGraph(std::vector<Vector2F*> anchors, Vector2F
     velX.push_back(0);                velY.push_back(0);
   }
   
-  float sumForces = 10000;
+  float sumForces = 1e10;
   float prevSumForces = 2*sumForces;
   int iter = 0;
   float offsetMarginX = (maxCorner._x - minCorner._x) * 0.1;
   float offsetMarginY = (maxCorner._y - minCorner._y) * 0.1;
   
-//  while (sumForces<prevSumForces && iter<100) {
-while (sumForces>anchors.size() && iter<100) {
+  while (sumForces<prevSumForces && iter<100) {
+//while (sumForces>anchors.size() && iter<200) {
     iter++;
     //printf ("\nIteracion %d:\n", iter);
     prevSumForces = sumForces;
     sumForces = 0;
   
     // process velocities
-    float repFactor = 1e4;
+    float repFactor = 3e4/anchors.size();
     float repMarginFactor = 1e4;
     float atrFactor = 0.5;
     float friction = 0.7;
