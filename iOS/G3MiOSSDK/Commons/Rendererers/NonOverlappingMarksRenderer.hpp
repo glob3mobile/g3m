@@ -96,6 +96,7 @@ class NonOverlappingMark{
   Geodetic3D _geoPosition;
   
   float _dX, _dY; //Velocity vector (pixels per second)
+  float _fX, _fY; //Applied Force
   
   MarkWidget _widget;
   MarkWidget _anchorWidget;
@@ -110,8 +111,8 @@ public:
                      IImageBuilder* imageBuilderAnchor,
                      const Geodetic3D& position,
                      float springLengthInPixels = 10.0f,
-                     float springK = 20.0f,
-                     float electricCharge = 2500.0f,
+                     float springK = 200.0f,
+                     float electricCharge = 3000.0f,
                      float maxWidgetSpeedInPixels = 20.0f);
   
   ~NonOverlappingMark();
@@ -126,19 +127,20 @@ public:
   void render(const G3MRenderContext* rc, GLState* glState);
   
   void applyCoulombsLaw(NonOverlappingMark* that); //EM
+  void applyCoulombsLawFromAnchor(NonOverlappingMark* that);
   
   void applyHookesLaw();   //Spring
   
   void applyForce(float x, float y){
-    _dX += x;
-    _dY += y;
+    _fX += x;
+    _fY += y;
   }
   
   void updatePositionWithCurrentForce(double elapsedMS, float viewportWidth, float viewportHeight);
   
   void onResizeViewportEvent(int width, int height);
   
-  void resetWidgetPositionAndVelocity(){ _widget.resetPosition(); _dX = 0; _dY = 0;}
+  void resetWidgetPositionVelocityAndForce(){ _widget.resetPosition(); _dX = 0; _dY = 0; _fX = 0; _fY = 0;}
   
 };
 

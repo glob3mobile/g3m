@@ -378,17 +378,17 @@ Mesh* createSectorMesh(const Planet* planet,
                                                      100.0);
   nomr->addMark(mark7);
   
-  for(int i = 0; i < 50; i++){
-    
-    double lat = ((rand() % 18000) - 9000) / 100.0;
-    double lon = ((rand() % 36000) - 18000) / 100.0;
-    
-    NonOverlappingMark* mark = new NonOverlappingMark(new DownloaderImageBuilder(URL("file:///g3m-marker.png")),
-                                                       new DownloaderImageBuilder(URL("file:///anchorWidget.png")),
-                                                       Geodetic3D::fromDegrees(lat, lon, 0),
-                                                       100.0);
-    nomr->addMark(mark);
-  }
+//  for(int i = 0; i < 50; i++){
+//    
+//    double lat = ((rand() % 18000) - 9000) / 100.0;
+//    double lon = ((rand() % 36000) - 18000) / 100.0;
+//    
+//    NonOverlappingMark* mark = new NonOverlappingMark(new DownloaderImageBuilder(URL("file:///g3m-marker.png")),
+//                                                       new DownloaderImageBuilder(URL("file:///anchorWidget.png")),
+//                                                       Geodetic3D::fromDegrees(lat, lon, 0),
+//                                                       100.0);
+//    nomr->addMark(mark);
+//  }
   
   
   builder.initializeWidget();

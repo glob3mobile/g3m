@@ -155,6 +155,8 @@ _springLengthInPixels(springLengthInPixels),
 _cartesianPos(NULL),
 _dX(0),
 _dY(0),
+_fX(0),
+_fY(0),
 _widget(imageBuilderWidget),
 _anchorWidget(imageBuilderAnchor),
 _springK(springK),
@@ -182,7 +184,7 @@ void NonOverlappingMark::computeAnchorScreenPos(const Camera* cam, const Planet*
   _anchorWidget.setScreenPos(sp._x, sp._y);
   
   if (_widget.getScreenPos().isNaN()){
-    _widget.setScreenPos(sp._x, sp._y + _springLengthInPixels);
+    _widget.setScreenPos(sp._x, sp._y + 0.01);
   }
 }
 
@@ -201,19 +203,6 @@ void NonOverlappingMark::applyCoulombsLaw(NonOverlappingMark* that){ //EM
   this->applyForce(force._x, force._y);
   that->applyForce(-force._x, -force._y);
   
-  //REPELLING FROM ANCHORS AS WELL
-  
-  Vector2F dAnchor = getScreenPos().sub(that->getAnchorScreenPos());
-  double distanceAnchor = dAnchor.length()  + 0.001;
-  Vector2F directionAnchor = dAnchor.div((float)distanceAnchor);
-  
-  float strengthAnchor = (float)(this->_electricCharge * that->_electricCharge / (distanceAnchor * distanceAnchor));
-  
-  Vector2F forceAnchor = directionAnchor.times(strengthAnchor);
-  printf("FC %f, %f\n", forceAnchor._x, forceAnchor._y);
-  
-  this->applyForce(forceAnchor._x, forceAnchor._y);
-  
   //  var d = point1.p.subtract(point2.p);
   //  var distance = d.magnitude() + 0.1; // avoid massive forces at small distances (and divide by zero)
   //  var direction = d.normalise();
@@ -222,6 +211,20 @@ void NonOverlappingMark::applyCoulombsLaw(NonOverlappingMark* that){ //EM
   //  point1.applyForce(direction.multiply(this.repulsion).divide(distance * distance * 0.5));
   //  point2.applyForce(direction.multiply(this.repulsion).divide(distance * distance * -0.5));
   
+}
+
+void NonOverlappingMark::applyCoulombsLawFromAnchor(NonOverlappingMark* that){ //EM
+
+  Vector2F dAnchor = getScreenPos().sub(that->getAnchorScreenPos());
+  double distanceAnchor = dAnchor.length()  + 0.001;
+  Vector2F directionAnchor = dAnchor.div((float)distanceAnchor);
+  
+  float strengthAnchor = (float)(this->_electricCharge * that->_electricCharge / (distanceAnchor * distanceAnchor));
+  
+  Vector2F forceAnchor = directionAnchor.times(strengthAnchor);
+  //printf("FC %f, %f\n", forceAnchor._x, forceAnchor._y);
+  
+  this->applyForce(forceAnchor._x, forceAnchor._y);
 }
 
 void NonOverlappingMark::applyHookesLaw(){   //Spring
@@ -266,42 +269,71 @@ void NonOverlappingMark::render(const G3MRenderContext* rc, GLState* glState){
 
 void NonOverlappingMark::updatePositionWithCurrentForce(double elapsedMS, float viewportWidth, float viewportHeight){
   
-  _dX *= (elapsedMS / 1000);
-  _dY *= (elapsedMS / 1000);
+  Vector2D oldVelocity(_dX, _dY);
+  Vector2D force(_fX, _fY);
   
-  Vector2F displacement(_dX, _dY);
-  double dist = displacement.length();
+  //Assuming Widget Mass = 1.0
+  double time = elapsedMS / 1000;
+  Vector2D velocity = oldVelocity.add(force.times(time)).times(0.85);
+  
+  Vector2F position = _widget.getScreenPos();
 
-  if (dist > 0.5){ //STOP CONDITION
-    
-    if (dist > _maxWidgetSpeedInPixels){ //MaxSpeed
-      Vector2F fd = displacement.times(_maxWidgetSpeedInPixels / (float)dist);
-      _dX = fd._x;
-      _dY = fd._y;
-    }
-
-    //FORCE APPLIED
-    float x = getScreenPos()._x + _dX;
-    float y = getScreenPos()._y + _dY;
-    
-    //CLAMP
-    float hw = _widget.getHalfWidth();
-    float hh = _widget.getHalfHeight();
-    const IMathUtils* mu = IMathUtils::instance();
-    x = mu->clamp(x, hw, viewportWidth - hw);
-    y = mu->clamp(y, hh, viewportHeight - hh);
-    
-    if (y > viewportWidth || y < 0){
-      int a = 0;
-      a++;
-    }
-    
-    _widget.setScreenPos(x, y);
+  float newX = (float)(position._x + velocity._x * time);
+  float newY = (float)(position._y + velocity._y * time);
+  
+  float hw = _widget.getHalfWidth();
+  float hh = _widget.getHalfHeight();
+  const IMathUtils* mu = IMathUtils::instance();
+  newX = mu->clamp(newX, hw, viewportWidth - hw);
+  newY = mu->clamp(newY, hh, viewportHeight - hh);
+  
+  _widget.setScreenPos(newX, newY);
+  
+  _fX = 0;
+  _fY = 0;
+  
+  if (velocity.length() < 5.0){
+    _dX = 0.0;
+    _dY = 0.0;
   }
   
-  //Resetting Force
-  _dY = 0.0;
-  _dY = 0.0;
+//  
+//  _dX *= (elapsedMS / 1000);
+//  _dY *= (elapsedMS / 1000);
+//  
+//  Vector2F displacement(_dX, _dY);
+//  double dist = displacement.length();
+//
+//  if (dist > 0.5){ //STOP CONDITION
+//    
+//    if (dist > _maxWidgetSpeedInPixels){ //MaxSpeed
+//      Vector2F fd = displacement.times(_maxWidgetSpeedInPixels / (float)dist);
+//      _dX = fd._x;
+//      _dY = fd._y;
+//    }
+//
+//    //FORCE APPLIED
+//    float x = getScreenPos()._x + _dX;
+//    float y = getScreenPos()._y + _dY;
+//    
+//    //CLAMP
+//    float hw = _widget.getHalfWidth();
+//    float hh = _widget.getHalfHeight();
+//    const IMathUtils* mu = IMathUtils::instance();
+//    x = mu->clamp(x, hw, viewportWidth - hw);
+//    y = mu->clamp(y, hh, viewportHeight - hh);
+//    
+//    if (y > viewportWidth || y < 0){
+//      int a = 0;
+//      a++;
+//    }
+//    
+//    _widget.setScreenPos(x, y);
+//  }
+//  
+//  //Resetting Force
+//  _dY = 0.0;
+//  _dY = 0.0;
   
 }
 
@@ -349,7 +381,7 @@ void NonOverlappingMarksRenderer::computeMarksToBeRendered(const Camera* cam, co
     }
     else{
       //Resetting marks location of invisible anchors
-      m->resetWidgetPositionAndVelocity();
+      m->resetWidgetPositionVelocityAndForce();
     }
   }
 }
@@ -400,10 +432,17 @@ void NonOverlappingMarksRenderer::computeForces(const Camera* cam, const Planet*
   
   //Compute Mark Forces
   for (int i = 0; i < _visibleMarks.size(); i++) {
-    _visibleMarks[i]->applyHookesLaw();
+    NonOverlappingMark* mark = _visibleMarks[i];
+    mark->applyHookesLaw();
     
     for (int j = i+1; j < _visibleMarks.size(); j++) {
-      _visibleMarks[i]->applyCoulombsLaw(_visibleMarks[j]);
+      mark->applyCoulombsLaw(_visibleMarks[j]);
+    }
+    
+    for (int j = 0; j < _visibleMarks.size(); j++) {
+      if (i != j){
+        mark->applyCoulombsLawFromAnchor(_visibleMarks[j]);
+      }
     }
   }
 }
