@@ -4523,7 +4523,7 @@ public:
   ShapesRenderer* shapesRenderer = new ShapesRenderer(geoTileRasterizer);
   
   const int numMarks = 3;
-  double coordinates[numMarks][2] = {
+  double coordinates[numMarks][3] = {
     {40.72, -74.02},
     {40.74, -74.06},
     {40.76, -74.00}
