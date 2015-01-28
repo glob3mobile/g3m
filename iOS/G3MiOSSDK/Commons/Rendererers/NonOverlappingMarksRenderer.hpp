@@ -75,6 +75,7 @@ public:
   
   void setScreenPos(float x, float y);
   Vector2F getScreenPos() const{ return Vector2F(_x, _y);}
+  void resetPosition();
   
   float getHalfWidth() const{ return _halfWidth;}
   float getHalfHeight() const{ return _halfHeight;}
@@ -101,6 +102,7 @@ class NonOverlappingMark{
   
   const float _springK;
   const float _electricCharge;
+  const float _maxWidgetSpeedInPixels;
   
 public:
   
@@ -108,8 +110,9 @@ public:
                      IImageBuilder* imageBuilderAnchor,
                      const Geodetic3D& position,
                      float springLengthInPixels = 10.0f,
-                     float springK = 10.0f,
-                     float electricCharge = 5000.0f);
+                     float springK = 20.0f,
+                     float electricCharge = 2500.0f,
+                     float maxWidgetSpeedInPixels = 20.0f);
   
   ~NonOverlappingMark();
   
@@ -134,6 +137,8 @@ public:
   void updatePositionWithCurrentForce(double elapsedMS, float viewportWidth, float viewportHeight);
   
   void onResizeViewportEvent(int width, int height);
+  
+  void resetWidgetPositionAndVelocity(){ _widget.resetPosition(); _dX = 0; _dY = 0;}
   
 };
 

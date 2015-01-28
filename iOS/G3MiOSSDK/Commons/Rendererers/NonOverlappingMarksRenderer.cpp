@@ -42,7 +42,9 @@ _viewportExtent(NULL),
 _geo2Dfeature(NULL),
 _glState(NULL),
 _x(NANF),
-_y(NANF)
+_y(NANF),
+_halfHeight(0),
+_halfWidth(0)
 {
 }
 
@@ -125,6 +127,14 @@ void MarkWidget::setScreenPos(float x, float y){
   _y = y;
 }
 
+void MarkWidget::resetPosition(){
+  if (_geo2Dfeature != NULL){
+    _geo2Dfeature->setTranslation(0,0);
+  }
+  _x = NANF;
+  _y = NANF;
+}
+
 void MarkWidget::onResizeViewportEvent(int width, int height){
   if (_viewportExtent != NULL){
     _viewportExtent->changeExtent(width, height);
@@ -138,7 +148,8 @@ NonOverlappingMark::NonOverlappingMark(IImageBuilder* imageBuilderWidget,
                                        const Geodetic3D& position,
                                        float springLengthInPixels,
                                        float springK,
-                                       float electricCharge):
+                                       float electricCharge,
+                                       float maxWidgetSpeedInPixels):
 _geoPosition(position),
 _springLengthInPixels(springLengthInPixels),
 _cartesianPos(NULL),
@@ -147,7 +158,8 @@ _dY(0),
 _widget(imageBuilderWidget),
 _anchorWidget(imageBuilderAnchor),
 _springK(springK),
-_electricCharge(electricCharge)
+_electricCharge(electricCharge),
+_maxWidgetSpeedInPixels(maxWidgetSpeedInPixels)
 {
   
 }
@@ -188,6 +200,19 @@ void NonOverlappingMark::applyCoulombsLaw(NonOverlappingMark* that){ //EM
   
   this->applyForce(force._x, force._y);
   that->applyForce(-force._x, -force._y);
+  
+  //REPELLING FROM ANCHORS AS WELL
+  
+  Vector2F dAnchor = getScreenPos().sub(that->getAnchorScreenPos());
+  double distanceAnchor = dAnchor.length()  + 0.001;
+  Vector2F directionAnchor = dAnchor.div((float)distanceAnchor);
+  
+  float strengthAnchor = (float)(this->_electricCharge * that->_electricCharge / (distanceAnchor * distanceAnchor));
+  
+  Vector2F forceAnchor = directionAnchor.times(strengthAnchor);
+  printf("FC %f, %f\n", forceAnchor._x, forceAnchor._y);
+  
+  this->applyForce(forceAnchor._x, forceAnchor._y);
   
   //  var d = point1.p.subtract(point2.p);
   //  var distance = d.magnitude() + 0.1; // avoid massive forces at small distances (and divide by zero)
@@ -249,9 +274,8 @@ void NonOverlappingMark::updatePositionWithCurrentForce(double elapsedMS, float 
 
   if (dist > 0.5){ //STOP CONDITION
     
-    float maxSpeed = 10.0;
-    if (dist > maxSpeed){ //MaxSpeed
-      Vector2F fd = displacement.times(maxSpeed / (float)dist);
+    if (dist > _maxWidgetSpeedInPixels){ //MaxSpeed
+      Vector2F fd = displacement.times(_maxWidgetSpeedInPixels / (float)dist);
       _dX = fd._x;
       _dY = fd._y;
     }
@@ -266,6 +290,11 @@ void NonOverlappingMark::updatePositionWithCurrentForce(double elapsedMS, float 
     const IMathUtils* mu = IMathUtils::instance();
     x = mu->clamp(x, hw, viewportWidth - hw);
     y = mu->clamp(y, hh, viewportHeight - hh);
+    
+    if (y > viewportWidth || y < 0){
+      int a = 0;
+      a++;
+    }
     
     _widget.setScreenPos(x, y);
   }
@@ -309,14 +338,18 @@ void NonOverlappingMarksRenderer::computeMarksToBeRendered(const Camera* cam, co
   
   _visibleMarks.clear();
   
+  const Frustum* frustrum = cam->getFrustumInModelCoordinates();
+  
   for (int i = 0; i < _marks.size(); i++) {
     NonOverlappingMark* m = _marks[i];
     
-    if (cam->getFrustumInModelCoordinates()->contains(m->getCartesianPosition(planet)) ){
+    if (_visibleMarks.size() < _maxVisibleMarks &&
+        frustrum->contains(m->getCartesianPosition(planet))){
       _visibleMarks.push_back(m);
-      if (_visibleMarks.size() == _maxVisibleMarks){
-        break;
-      }
+    }
+    else{
+      //Resetting marks location of invisible anchors
+      m->resetWidgetPositionAndVelocity();
     }
   }
 }
