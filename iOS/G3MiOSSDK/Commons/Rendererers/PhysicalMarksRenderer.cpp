@@ -247,11 +247,11 @@ while (sumForces>anchors.size() && iter<100) {
       forceX[i] = atrFactor * (anchors[i]->_x-posX[i]);
       forceY[i] = atrFactor * (anchors[i]->_y-posY[i]);
       
-      // compute repulsion to margins
+      /*// compute repulsion to margins
       forceX[i] += repMarginFactor / (posX[i]-minCorner._x+offsetMarginX);
       forceX[i] += repMarginFactor / (posX[i]-maxCorner._x-offsetMarginX);
       forceY[i] += repMarginFactor / (posY[i]-minCorner._y+offsetMarginY);
-      forceY[i] += repMarginFactor / (posY[i]-maxCorner._y-offsetMarginY);
+      forceY[i] += repMarginFactor / (posY[i]-maxCorner._y-offsetMarginY);*/
       
       // compute repulsion to other marks
       for (int j=0; j<anchors.size(); j++) {
@@ -275,6 +275,10 @@ while (sumForces>anchors.size() && iter<100) {
       //posY[i] += velY[i];
       posX[i] += forceX[i];
       posY[i] += forceY[i];
+      if (posX[i]<64) posX[i]=64;
+      if (posX[i]>maxCorner._x-64) posX[i]=maxCorner._x-64;
+      if (posY[i]<64) posY[i]=64;
+      if (posY[i]>maxCorner._y-64) posY[i]=maxCorner._y-64;
     }
   }
   
