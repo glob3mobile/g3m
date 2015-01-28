@@ -55,10 +55,10 @@ MarkWidget::~MarkWidget()
   _glState->_release();
 }
 
-void MarkWidget::init(const G3MRenderContext *rc, float viewportWidth, float viewportHeight){
+void MarkWidget::init(const G3MRenderContext *rc, int viewportWidth, int viewportHeight){
   if (_glState == NULL){
     _glState = new GLState();
-    _viewportExtent = new ViewportExtentGLFeature((int)viewportWidth, (int)viewportHeight);
+    _viewportExtent = new ViewportExtentGLFeature(viewportWidth, viewportHeight);
     
     _texHandler = rc->getTexturesHandler();
     _imageBuilder->build(rc, new WidgetImageListener(this), true);
@@ -274,7 +274,11 @@ void NonOverlappingMark::updatePositionWithCurrentForce(double elapsedMS, float 
   
   //Assuming Widget Mass = 1.0
   double time = elapsedMS / 1000;
-  Vector2D velocity = oldVelocity.add(force.times(time)).times(0.85);
+  Vector2D velocity = oldVelocity.add(force.times(time)).times(0.85); //Plus force, resistence 0.85
+  
+  if (velocity.length() > _maxWidgetSpeedInPixels){
+    
+  }
   
   Vector2F position = _widget.getScreenPos();
 

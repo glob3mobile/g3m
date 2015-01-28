@@ -69,7 +69,7 @@ public:
   ~MarkWidget();
   
   void init(const G3MRenderContext *rc,
-            float viewportWidth, float viewportHeight);
+            int viewportWidth, int viewportHeight);
   
   void render(const G3MRenderContext* rc, GLState* glState);
   
