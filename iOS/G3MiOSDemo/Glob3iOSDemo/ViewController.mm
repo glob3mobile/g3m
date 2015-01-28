@@ -329,24 +329,7 @@ Mesh* createSectorMesh(const Planet* planet,
 {
   G3MBuilder_iOS builder([self G3MWidget]);
   
-//  HUDRenderer* hudRenderer = new HUDRenderer();
-//  
-//  HUDQuadWidget* quad = new HUDQuadWidget( new DownloaderImageBuilder(URL("file:///CompassHeadings.png")),
-//                                           new HUDRelativePosition(0.5,
-//                                                                   HUDRelativePosition::VIEWPORT_WIDTH,
-//                                                                   HUDRelativePosition::CENTER),
-//                                              new HUDRelativePosition(0.5,
-//                                                                      HUDRelativePosition::VIEWPORT_HEIGHT,
-//                                                                      HUDRelativePosition::MIDDLE),
-//                                              new HUDRelativeSize(0.1, HUDRelativeSize::VIEWPORT_MIN_AXIS),
-//                                              new HUDRelativeSize(0.1, HUDRelativeSize::VIEWPORT_MIN_AXIS));
-//  
-//  hudRenderer->addWidget(quad);
-//  
-//  builder.addRenderer(hudRenderer);
-  
   LayerSet* layerSet = new LayerSet();
-  //  layerSet->addLayer(MapQuestLayer::newOSM(TimeInterval::fromDays(30), true, 10));
   layerSet->addLayer(MapQuestLayer::newOSM(TimeInterval::fromDays(30)));
   builder.getPlanetRendererBuilder()->setLayerSet(layerSet);
   
@@ -394,6 +377,18 @@ Mesh* createSectorMesh(const Planet* planet,
                                                      Geodetic3D::fromDegrees(27.810709, -17.917639, 0),
                                                      100.0);
   nomr->addMark(mark7);
+  
+  for(int i = 0; i < 50; i++){
+    
+    double lat = ((rand() % 18000) - 9000) / 100.0;
+    double lon = ((rand() % 36000) - 18000) / 100.0;
+    
+    NonOverlappingMark* mark = new NonOverlappingMark(new DownloaderImageBuilder(URL("file:///g3m-marker.png")),
+                                                       new DownloaderImageBuilder(URL("file:///anchorWidget.png")),
+                                                       Geodetic3D::fromDegrees(lat, lon, 0),
+                                                       100.0);
+    nomr->addMark(mark);
+  }
   
   
   builder.initializeWidget();

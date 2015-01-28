@@ -39,6 +39,9 @@ class MarkWidget{
   IImageBuilder* _imageBuilder;
   TexturesHandler* _texHandler;
   
+  float _halfWidth;
+  float _halfHeight;
+  
   float _x, _y; //Screen position
   
   class WidgetImageListener: public IImageBuilderListener{
@@ -73,6 +76,9 @@ public:
   void setScreenPos(float x, float y);
   Vector2F getScreenPos() const{ return Vector2F(_x, _y);}
   
+  float getHalfWidth() const{ return _halfWidth;}
+  float getHalfHeight() const{ return _halfHeight;}
+  
   void onResizeViewportEvent(int width, int height);
   
   bool isReady() const{
@@ -84,7 +90,7 @@ public:
 
 class NonOverlappingMark{
   float _springLengthInPixels;
-
+  
   mutable Vector3D* _cartesianPos;
   Geodetic3D _geoPosition;
   
@@ -93,12 +99,17 @@ class NonOverlappingMark{
   MarkWidget _widget;
   MarkWidget _anchorWidget;
   
+  const float _springK;
+  const float _electricCharge;
+  
 public:
   
   NonOverlappingMark(IImageBuilder* imageBuilderWidget,
                      IImageBuilder* imageBuilderAnchor,
                      const Geodetic3D& position,
-                     float springLengthInPixels);
+                     float springLengthInPixels = 10.0f,
+                     float springK = 10.0f,
+                     float electricCharge = 5000.0f);
   
   ~NonOverlappingMark();
   
@@ -185,7 +196,7 @@ public:
   virtual bool isPlanetRenderer() {
     return false;
   }
-
+  
   
 };
 

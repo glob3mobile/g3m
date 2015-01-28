@@ -67,20 +67,17 @@ void MarkWidget::init(const G3MRenderContext *rc, float viewportWidth, float vie
 
 void MarkWidget::prepareWidget(const IImage* image,
                                const std::string& imageName){
-  
-  
-  
   _image = image;
   _imageName = imageName;
   
-  float width = image->getWidth() / 2;
-  float height = image->getHeight() / 2;
+  _halfWidth = image->getWidth() / 2;
+  _halfHeight = image->getHeight() / 2;
   
   FloatBufferBuilderFromCartesian2D pos2D;
-  pos2D.add( -width, -height); //vertex 1
-  pos2D.add( -width, height); //vertex 2
-  pos2D.add( width, -height); //vertex 3
-  pos2D.add( width, height); //vertex 4
+  pos2D.add( -_halfWidth, -_halfHeight); //vertex 1
+  pos2D.add( -_halfWidth, _halfHeight); //vertex 2
+  pos2D.add( _halfWidth, -_halfHeight); //vertex 3
+  pos2D.add( _halfWidth, _halfHeight); //vertex 4
   
   _geo2Dfeature = new Geometry2DGLFeature(pos2D.create(),
                                           2,
@@ -138,14 +135,19 @@ void MarkWidget::onResizeViewportEvent(int width, int height){
 
 NonOverlappingMark::NonOverlappingMark(IImageBuilder* imageBuilderWidget,
                                        IImageBuilder* imageBuilderAnchor,
-                                       const Geodetic3D& position, float springLengthInPixels):
+                                       const Geodetic3D& position,
+                                       float springLengthInPixels,
+                                       float springK,
+                                       float electricCharge):
 _geoPosition(position),
 _springLengthInPixels(springLengthInPixels),
 _cartesianPos(NULL),
 _dX(0),
 _dY(0),
 _widget(imageBuilderWidget),
-_anchorWidget(imageBuilderAnchor)
+_anchorWidget(imageBuilderAnchor),
+_springK(springK),
+_electricCharge(electricCharge)
 {
   
 }
@@ -179,9 +181,7 @@ void NonOverlappingMark::applyCoulombsLaw(NonOverlappingMark* that){ //EM
   double distance = d.length()  + 0.001;
   Vector2F direction = d.div((float)distance);
   
-  float charge = 5000.0;
-  
-  float strength = (float)(charge * charge / (distance * distance));
+  float strength = (float)(this->_electricCharge * that->_electricCharge / (distance * distance));
   
   Vector2F force = direction.times(strength);
   //printf("FC %f, %f\n", force._x, force._y);
@@ -206,10 +206,11 @@ void NonOverlappingMark::applyHookesLaw(){   //Spring
   double displacement = _springLengthInPixels - mod;
   Vector2F direction = d.div((float)mod);
   
-  float springK = 10.0;
-  applyForce((float)(direction._x * springK * displacement),
-             (float)(direction._y * springK * displacement));
+  float force = (float)(_springK * displacement);
   
+  applyForce((float)(direction._x * force),
+             (float)(direction._y * force));
+
   //  var d = spring.point2.p.subtract(spring.point1.p); // the direction of the spring
   //  var displacement = spring.length - d.magnitude();
   //  var direction = d.normalise();
@@ -217,7 +218,6 @@ void NonOverlappingMark::applyHookesLaw(){   //Spring
   //  // apply force to each end point
   //  spring.point1.applyForce(direction.multiply(spring.k * displacement * -0.5));
   //  spring.point2.applyForce(direction.multiply(spring.k * displacement * 0.5));
-  
 }
 
 void NonOverlappingMark::render(const G3MRenderContext* rc, GLState* glState){
@@ -244,17 +244,28 @@ void NonOverlappingMark::updatePositionWithCurrentForce(double elapsedMS, float 
   _dX *= (elapsedMS / 1000);
   _dY *= (elapsedMS / 1000);
   
-  const IMathUtils* mu = IMathUtils::instance();
-  
-  if (Vector2F(_dX, _dY).length() > 0.5){ //STOP CONDITION
+  Vector2F displacement(_dX, _dY);
+  double dist = displacement.length();
+
+  if (dist > 0.5){ //STOP CONDITION
     
+    float maxSpeed = 10.0;
+    if (dist > maxSpeed){ //MaxSpeed
+      Vector2F fd = displacement.times(maxSpeed / (float)dist);
+      _dX = fd._x;
+      _dY = fd._y;
+    }
+
     //FORCE APPLIED
     float x = getScreenPos()._x + _dX;
     float y = getScreenPos()._y + _dY;
     
     //CLAMP
-    x = mu->clamp(x, 0, viewportWidth);
-    y = mu->clamp(y, 0, viewportHeight);
+    float hw = _widget.getHalfWidth();
+    float hh = _widget.getHalfHeight();
+    const IMathUtils* mu = IMathUtils::instance();
+    x = mu->clamp(x, hw, viewportWidth - hw);
+    y = mu->clamp(y, hh, viewportHeight - hh);
     
     _widget.setScreenPos(x, y);
   }
