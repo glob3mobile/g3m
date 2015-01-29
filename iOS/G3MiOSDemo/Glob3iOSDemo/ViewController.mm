@@ -329,6 +329,9 @@ Mesh* createSectorMesh(const Planet* planet,
 {
   G3MBuilder_iOS builder([self G3MWidget]);
   
+  Vector2D::intersectionOfTwoLines(Vector2D(0,0), Vector2D(10,10),
+                                   Vector2D(10,0), Vector2D(-10, 10));
+  
   LayerSet* layerSet = new LayerSet();
   layerSet->addLayer(MapQuestLayer::newOSM(TimeInterval::fromDays(30)));
   builder.getPlanetRendererBuilder()->setLayerSet(layerSet);

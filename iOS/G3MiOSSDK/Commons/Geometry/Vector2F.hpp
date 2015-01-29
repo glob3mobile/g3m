@@ -81,6 +81,8 @@ public:
     return _x * _x + _y * _y ;
   }
   
+  Vector2F clampLength(float min, float max) const;
+  
 };
 
 #endif

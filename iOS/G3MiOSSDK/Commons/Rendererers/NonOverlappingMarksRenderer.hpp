@@ -105,6 +105,8 @@ class NonOverlappingMark{
   MarkWidget _anchorWidget;
   
   const float _springK;
+  const float _maxSpringLength;
+  const float _minSpringLength;
   const float _electricCharge;
   const float _anchorElectricCharge;
   const float _maxWidgetSpeedInPixelsPerSecond;
@@ -118,6 +120,8 @@ public:
                      const Geodetic3D& position,
                      float springLengthInPixels = 10.0f,
                      float springK = 200.0f,
+                     float maxSpringLength = 200.0f,
+                     float minSpringLength = 10.0,
                      float electricCharge = 3000.0f,
                      float anchorElectricCharge = 1500.0f,
                      float maxWidgetSpeedInPixelsPerSecond = 1000.0f,

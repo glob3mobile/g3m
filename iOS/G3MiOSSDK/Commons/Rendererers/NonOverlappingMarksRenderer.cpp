@@ -146,7 +146,7 @@ void MarkWidget::clampPositionInsideScreen(int viewportWidth, int viewportHeight
   const IMathUtils* mu = IMathUtils::instance();
   float x = mu->clamp(_x, _halfWidth + margin, viewportWidth - _halfWidth - margin);
   float y = mu->clamp(_y, _halfHeight + margin, viewportHeight - _halfHeight - margin);
-
+  
   setScreenPos(x, y);
 }
 
@@ -157,6 +157,8 @@ NonOverlappingMark::NonOverlappingMark(IImageBuilder* imageBuilderWidget,
                                        const Geodetic3D& position,
                                        float springLengthInPixels,
                                        float springK,
+                                       float maxSpringLength,
+                                       float minSpringLength,
                                        float electricCharge,
                                        float anchorElectricCharge,
                                        float maxWidgetSpeedInPixelsPerSecond,
@@ -172,6 +174,8 @@ _fY(0),
 _widget(imageBuilderWidget),
 _anchorWidget(imageBuilderAnchor),
 _springK(springK),
+_maxSpringLength(maxSpringLength),
+_minSpringLength(minSpringLength),
 _electricCharge(electricCharge),
 _maxWidgetSpeedInPixelsPerSecond(maxWidgetSpeedInPixelsPerSecond),
 _anchorElectricCharge(anchorElectricCharge),
@@ -213,7 +217,6 @@ void NonOverlappingMark::applyCoulombsLaw(NonOverlappingMark* that){ //EM
   float strength = (float)(this->_electricCharge * that->_electricCharge / (distance * distance));
   
   Vector2F force = direction.times(strength);
-  //printf("FC %f, %f\n", force._x, force._y);
   
   this->applyForce(force._x, force._y);
   that->applyForce(-force._x, -force._y);
@@ -302,15 +305,18 @@ void NonOverlappingMark::updatePositionWithCurrentForce(double elapsedMS, float 
   }
   
   //Update position
-  if (_dX != 0.0 || _dY != 0.0){
-    Vector2F position = _widget.getScreenPos();
-    
-    float newX = position._x + (_dX * time);
-    float newY = position._y + (_dY * time);
-    
-    _widget.setScreenPos(newX, newY);
-    _widget.clampPositionInsideScreen((int)viewportWidth, (int)viewportHeight, 0); // pixels of margin
-  }
+  Vector2F position = _widget.getScreenPos();
+  
+  float newX = position._x + (_dX * time);
+  float newY = position._y + (_dY * time);
+  
+  Vector2F anchorPos = _anchorWidget.getScreenPos();
+  
+  Vector2F spring = Vector2F(newX,newY).sub(anchorPos).clampLength(_minSpringLength, _maxSpringLength);
+  Vector2F finalPos = anchorPos.add(spring);
+  
+  _widget.setScreenPos(finalPos._x, finalPos._y);
+  _widget.clampPositionInsideScreen((int)viewportWidth, (int)viewportHeight, 5); // 5 pixels of margin
   
 }
 
@@ -457,9 +463,9 @@ void NonOverlappingMarksRenderer::render(const G3MRenderContext* rc, GLState* gl
   
   computeForces(cam, planet);
   
-  renderMarks(rc, glState);
-  
   applyForces(rc->getFrameStartTimer()->nowInMilliseconds(), cam);
+  
+  renderMarks(rc, glState);
 }
 
 void NonOverlappingMarksRenderer::onResizeViewportEvent(const G3MEventContext* ec, int width, int height){
