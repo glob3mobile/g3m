@@ -4522,8 +4522,8 @@ public:
   // shape y regular mark renderer
   ShapesRenderer* shapesRenderer = new ShapesRenderer(geoTileRasterizer);
   
-  const int numMarks = 5;
-  double coordinates[numMarks][3] = {
+  const int numMarks = 20;
+/* double coordinates[numMarks][3] = {
     {40.72, -74.02},
     {40.74, -74.06},
     {40.76, -74.00},
@@ -4531,11 +4531,14 @@ public:
     {40.73, -74.05}
   };
   
+*/
   // physical marks
   PhysicalMarksRenderer* physicalMarksRenderer = new PhysicalMarksRenderer(false, shapesRenderer);
   MarksRenderer* marksRenderer = new MarksRenderer(false);
   for (int i=0; i<numMarks; i++) {
-    Geodetic3D geoPos = Geodetic3D(Angle::fromDegrees(coordinates[i][0]), Angle::fromDegrees(coordinates[i][1]), 0);
+    double x = 40.72 + 0.2 * (rand()%100 * 0.01 - 0.5);
+    double y = -74.00 + 0.2 * (rand()%100 * 0.01 - 0.5);
+    Geodetic3D geoPos = Geodetic3D(Angle::fromDegrees(x), Angle::fromDegrees(y), 0);
     char name[100];
     sprintf(name, "Hotel %d", i+1);
     Mark* pm = new Mark(name, URL("http://www.lahuelladelblog.com/images/Facebook.png", false),
