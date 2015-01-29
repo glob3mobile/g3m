@@ -210,6 +210,8 @@ IFloatBuffer* PhysicalMarksRenderer::getBillboardTexCoords() {
 }
 
 
+std::vector<Vector2F*> prev;
+
 std::vector<Vector2F*> layoutMarksGraph(std::vector<Vector2F*> anchors, Vector2F minCorner, Vector2F maxCorner)
 {
   std::vector<float> posX;    std::vector<float> posY;
@@ -223,6 +225,11 @@ std::vector<Vector2F*> layoutMarksGraph(std::vector<Vector2F*> anchors, Vector2F
   int iter = 0;
   float offsetMarginX = (maxCorner._x - minCorner._x) * 0.1;
   float offsetMarginY = (maxCorner._y - minCorner._y) * 0.1;
+  float repFactor = 5e4 / anchors.size();
+  float repMarginFactor = repFactor;
+  float atrFactor = 0.5;
+  float friction = 0.5;
+
   
   // compute centroid
   // OJO: habrá que mirar casos con más de uno
@@ -236,7 +243,7 @@ std::vector<Vector2F*> layoutMarksGraph(std::vector<Vector2F*> anchors, Vector2F
   centerY /= anchors.size();
   
   for (int i=0; i<anchors.size(); i++) {
-    float vx = anchors[i]->_x - centerX;
+/*    float vx = anchors[i]->_x - centerX;
     float vy = anchors[i]->_y - centerY;
     float mod = sqrt(vx*vx+vy*vy);
     posX.push_back(anchors[i]->_x + (maxCorner._x*0.2)*vx/mod);
@@ -244,24 +251,30 @@ std::vector<Vector2F*> layoutMarksGraph(std::vector<Vector2F*> anchors, Vector2F
     if (posX[i]<64) posX[i]=64;
     if (posX[i]>maxCorner._x-64) posX[i]=maxCorner._x-64;
     if (posY[i]<64) posY[i]=64;
-    if (posY[i]>maxCorner._y-64) posY[i]=maxCorner._y-64;
+    if (posY[i]>maxCorner._y-64) posY[i]=maxCorner._y-64;*/
+    
+    if (prev.empty()) {
+      posX.push_back(anchors[i]->_x);
+      posY.push_back(anchors[i]->_y);
+    } else {
+      posX.push_back(prev[i]->_x);
+      posY.push_back(prev[i]->_y);
+    }
+    
     forceX.push_back(0);              forceY.push_back(0);
     velX.push_back(0);                velY.push_back(0);
   }
 
   
-  while (/*sumForces<prevSumForces &&*/ iter<100) {
-//while (sumForces>anchors.size() && iter<200) {
+  while (sumForces<prevSumForces && iter<200) {
+ //while (sumForces>anchors.size() && iter<100) {
     iter++;
+   //friction *= 0.09;
     //printf ("\nIteracion %d:\n", iter);
     prevSumForces = sumForces;
     sumForces = 0;
   
     // process velocities
-    float repFactor = 5e4 / anchors.size();
-    float repMarginFactor = 1e4;
-    float atrFactor = 0.5;
-    float friction = 0.7;
     for (int i=0; i<anchors.size(); i++) {
       
       // compute atraction to anchors
@@ -285,8 +298,8 @@ std::vector<Vector2F*> layoutMarksGraph(std::vector<Vector2F*> anchors, Vector2F
             printf("isnan\n");
         }
       }
-      velX[i] = (velX[i]+forceX[i]) * friction;
-      velY[i] = (velY[i]+forceY[i]) * friction;
+      //velX[i] = (velX[i]+forceX[i]) * friction;
+      //velY[i] = (velY[i]+forceY[i]) * friction;
       
       sumForces += forceX[i]*forceX[i] + forceY[i]*forceY[i];
     }
@@ -297,12 +310,19 @@ std::vector<Vector2F*> layoutMarksGraph(std::vector<Vector2F*> anchors, Vector2F
     for (int i=0; i<anchors.size(); i++) {
       //posX[i] += velX[i];
       //posY[i] += velY[i];
-      posX[i] += forceX[i];
-      posY[i] += forceY[i];
+      
+      posX[i] += friction * forceX[i];
+      posY[i] += friction * forceY[i];
       if (posX[i]<64) posX[i]=64;
       if (posX[i]>maxCorner._x-64) posX[i]=maxCorner._x-64;
       if (posY[i]<64) posY[i]=64;
       if (posY[i]>maxCorner._y-64) posY[i]=maxCorner._y-64;
+      
+/*      float newPosX = posX[i]+forceX[i];
+      if (newPosX>64 && newPosX<maxCorner._x-64) posX[i] = newPosX;
+      float newPosY = posY[i]+forceY[i];
+      if (newPosY>64 && newPosY<maxCorner._y-64) posY[i] = newPosY;*/
+
       if (isnan(posX[i]) || isnan(posY[i]))
         printf("isnan!!\n");
     }
@@ -317,6 +337,18 @@ std::vector<Vector2F*> layoutMarksGraph(std::vector<Vector2F*> anchors, Vector2F
   for (int i=0; i<anchors.size(); i++) {
     posOut.push_back(new Vector2F(posX[i], posY[i]));
   }
+  
+  if (!prev.empty()) {
+    for (int i=0; i<anchors.size(); i++) {
+      delete prev[i];
+    }
+  }
+  prev.clear();
+  for (int i=0; i<anchors.size(); i++) {
+    prev.push_back(new Vector2F(*posOut[i]));
+  }
+  
+  
   return posOut;
 }
 

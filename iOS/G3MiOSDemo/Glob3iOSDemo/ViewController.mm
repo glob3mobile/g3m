@@ -4536,8 +4536,8 @@ public:
   PhysicalMarksRenderer* physicalMarksRenderer = new PhysicalMarksRenderer(false, shapesRenderer);
   MarksRenderer* marksRenderer = new MarksRenderer(false);
   for (int i=0; i<numMarks; i++) {
-    double x = 40.72 + 0.2 * (rand()%100 * 0.01 - 0.5);
-    double y = -74.00 + 0.2 * (rand()%100 * 0.01 - 0.5);
+    double x = 40.72 + 0.02 * (rand()%100 * 0.01 - 0.5);
+    double y = -74.00 + 0.02 * (rand()%100 * 0.01 - 0.5);
     Geodetic3D geoPos = Geodetic3D(Angle::fromDegrees(x), Angle::fromDegrees(y), 0);
     char name[100];
     sprintf(name, "Hotel %d", i+1);
