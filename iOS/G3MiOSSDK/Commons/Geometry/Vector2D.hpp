@@ -38,8 +38,6 @@ public:
     
   }
   
-  Vector2D normalized() const;
-  
   double length() const {
     return IMathUtils::instance()->sqrt(squaredLength());
   }

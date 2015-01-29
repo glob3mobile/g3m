@@ -86,6 +86,9 @@ public:
     return _image != NULL;
   }
   
+  void clampPositionInsideScreen(int viewportWidth, int viewportHeight, int margin);
+  void getClampedScreenPosition(int viewportWidth, int viewportHeight, int margin);
+  
 };
 
 
@@ -104,7 +107,9 @@ class NonOverlappingMark{
   const float _springK;
   const float _electricCharge;
   const float _anchorElectricCharge;
-  const float _maxWidgetSpeedInPixels;
+  const float _maxWidgetSpeedInPixelsPerSecond;
+  const float _resistanceFactor;
+  const float _minWidgetSpeedInPixelsPerSecond;
   
 public:
   
@@ -115,7 +120,9 @@ public:
                      float springK = 200.0f,
                      float electricCharge = 3000.0f,
                      float anchorElectricCharge = 1500.0f,
-                     float maxWidgetSpeedInPixels = 20.0f);
+                     float maxWidgetSpeedInPixelsPerSecond = 1000.0f,
+                     float minWidgetSpeedInPixelsPerSecond = 35.0f,
+                     float resistanceFactor = 0.65f);
   
   ~NonOverlappingMark();
   

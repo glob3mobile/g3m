@@ -141,6 +141,15 @@ void MarkWidget::onResizeViewportEvent(int width, int height){
   }
 }
 
+
+void MarkWidget::clampPositionInsideScreen(int viewportWidth, int viewportHeight, int margin){
+  const IMathUtils* mu = IMathUtils::instance();
+  float x = mu->clamp(_x, _halfWidth + margin, viewportWidth - _halfWidth - margin);
+  float y = mu->clamp(_y, _halfHeight + margin, viewportHeight - _halfHeight - margin);
+
+  setScreenPos(x, y);
+}
+
 #pragma mark NonOverlappingMark
 
 NonOverlappingMark::NonOverlappingMark(IImageBuilder* imageBuilderWidget,
@@ -150,7 +159,9 @@ NonOverlappingMark::NonOverlappingMark(IImageBuilder* imageBuilderWidget,
                                        float springK,
                                        float electricCharge,
                                        float anchorElectricCharge,
-                                       float maxWidgetSpeedInPixels):
+                                       float maxWidgetSpeedInPixelsPerSecond,
+                                       float minWidgetSpeedInPixelsPerSecond,
+                                       float resistanceFactor):
 _geoPosition(position),
 _springLengthInPixels(springLengthInPixels),
 _cartesianPos(NULL),
@@ -162,8 +173,10 @@ _widget(imageBuilderWidget),
 _anchorWidget(imageBuilderAnchor),
 _springK(springK),
 _electricCharge(electricCharge),
-_maxWidgetSpeedInPixels(maxWidgetSpeedInPixels),
-_anchorElectricCharge(anchorElectricCharge)
+_maxWidgetSpeedInPixelsPerSecond(maxWidgetSpeedInPixelsPerSecond),
+_anchorElectricCharge(anchorElectricCharge),
+_resistanceFactor(resistanceFactor),
+_minWidgetSpeedInPixelsPerSecond(minWidgetSpeedInPixelsPerSecond)
 {
   
 }
@@ -186,7 +199,7 @@ void NonOverlappingMark::computeAnchorScreenPos(const Camera* cam, const Planet*
   _anchorWidget.setScreenPos(sp._x, sp._y);
   
   if (_widget.getScreenPos().isNaN()){
-    _widget.setScreenPos(sp._x, sp._y + 0.01);
+    _widget.setScreenPos(sp._x, sp._y + 0.01f);
   }
 }
 
@@ -216,15 +229,12 @@ void NonOverlappingMark::applyCoulombsLaw(NonOverlappingMark* that){ //EM
 }
 
 void NonOverlappingMark::applyCoulombsLawFromAnchor(NonOverlappingMark* that){ //EM
-
+  
   Vector2F dAnchor = getScreenPos().sub(that->getAnchorScreenPos());
   double distanceAnchor = dAnchor.length()  + 0.001;
   Vector2F directionAnchor = dAnchor.div((float)distanceAnchor);
   
   float strengthAnchor = (float)(this->_electricCharge * that->_anchorElectricCharge / (distanceAnchor * distanceAnchor));
-  
-//  Vector2F forceAnchor = directionAnchor.times(strengthAnchor);
-  //printf("FC %f, %f\n", forceAnchor._x, forceAnchor._y);
   
   this->applyForce(directionAnchor._x * strengthAnchor,
                    directionAnchor._y * strengthAnchor);
@@ -241,7 +251,7 @@ void NonOverlappingMark::applyHookesLaw(){   //Spring
   
   applyForce((float)(direction._x * force),
              (float)(direction._y * force));
-
+  
   //  var d = spring.point2.p.subtract(spring.point1.p); // the direction of the spring
   //  var displacement = spring.length - d.magnitude();
   //  var direction = d.normalise();
@@ -254,20 +264,12 @@ void NonOverlappingMark::applyHookesLaw(){   //Spring
 void NonOverlappingMark::render(const G3MRenderContext* rc, GLState* glState){
   
   if (_widget.isReady() && _anchorWidget.isReady()){
-    
-    //_anchorWidget.setScreenPos(_anchorScreenPos->_x, _anchorScreenPos->_y);
-    //_widget.setScreenPos(_screenPos->_x, _screenPos->_y);
-    //printf("%f, %f\n", _screenPos->_x, _screenPos->_y);
-    
     _widget.render(rc, glState);
-    
     _anchorWidget.render(rc, glState);
   } else{
     _widget.init(rc, rc->getCurrentCamera()->getViewPortWidth(), rc->getCurrentCamera()->getViewPortHeight());
     _anchorWidget.init(rc, rc->getCurrentCamera()->getViewPortWidth(), rc->getCurrentCamera()->getViewPortHeight());
   }
-  
-  
 }
 
 void NonOverlappingMark::updatePositionWithCurrentForce(double elapsedMS, float viewportWidth, float viewportHeight){
@@ -276,77 +278,45 @@ void NonOverlappingMark::updatePositionWithCurrentForce(double elapsedMS, float 
   Vector2D force(_fX, _fY);
   
   //Assuming Widget Mass = 1.0
-  double time = elapsedMS / 1000;
-  Vector2D velocity = oldVelocity.add(force.times(time)).times(0.85); //Plus force, resistence 0.85
+  float time = (float)(elapsedMS / 1000.0);
+  Vector2D velocity = oldVelocity.add(force.times(time)).times(_resistanceFactor); //Resistance force applied as x0.85
   
-  if (velocity.length() > _maxWidgetSpeedInPixels){
-    
-  }
-  
-  Vector2F position = _widget.getScreenPos();
-
-  float newX = (float)(position._x + velocity._x * time);
-  float newY = (float)(position._y + velocity._y * time);
-  
-  float hw = _widget.getHalfWidth();
-  float hh = _widget.getHalfHeight();
-  const IMathUtils* mu = IMathUtils::instance();
-  newX = mu->clamp(newX, hw, viewportWidth - hw);
-  newY = mu->clamp(newY, hh, viewportHeight - hh);
-  
-  _widget.setScreenPos(newX, newY);
-  
+  //Force has been applied and must be reset
   _fX = 0;
   _fY = 0;
   
-  if (velocity.length() < 5.0){
-    _dX = 0.0;
-    _dY = 0.0;
+  //Clamping Velocity
+  double velocityPPS = velocity.length();
+  if (velocityPPS > _maxWidgetSpeedInPixelsPerSecond){
+    _dX = (float)(velocity._x * (_maxWidgetSpeedInPixelsPerSecond / velocityPPS));
+    _dY = (float)(velocity._y * (_maxWidgetSpeedInPixelsPerSecond / velocityPPS));
+  } else{
+    if (velocityPPS < _minWidgetSpeedInPixelsPerSecond){
+      _dX = 0.0;
+      _dY = 0.0;
+    } else{
+      //Normal case
+      _dX = (float)velocity._x;
+      _dY = (float)velocity._y;
+    }
   }
   
-//  
-//  _dX *= (elapsedMS / 1000);
-//  _dY *= (elapsedMS / 1000);
-//  
-//  Vector2F displacement(_dX, _dY);
-//  double dist = displacement.length();
-//
-//  if (dist > 0.5){ //STOP CONDITION
-//    
-//    if (dist > _maxWidgetSpeedInPixels){ //MaxSpeed
-//      Vector2F fd = displacement.times(_maxWidgetSpeedInPixels / (float)dist);
-//      _dX = fd._x;
-//      _dY = fd._y;
-//    }
-//
-//    //FORCE APPLIED
-//    float x = getScreenPos()._x + _dX;
-//    float y = getScreenPos()._y + _dY;
-//    
-//    //CLAMP
-//    float hw = _widget.getHalfWidth();
-//    float hh = _widget.getHalfHeight();
-//    const IMathUtils* mu = IMathUtils::instance();
-//    x = mu->clamp(x, hw, viewportWidth - hw);
-//    y = mu->clamp(y, hh, viewportHeight - hh);
-//    
-//    if (y > viewportWidth || y < 0){
-//      int a = 0;
-//      a++;
-//    }
-//    
-//    _widget.setScreenPos(x, y);
-//  }
-//  
-//  //Resetting Force
-//  _dY = 0.0;
-//  _dY = 0.0;
+  //Update position
+  if (_dX != 0.0 || _dY != 0.0){
+    Vector2F position = _widget.getScreenPos();
+    
+    float newX = position._x + (_dX * time);
+    float newY = position._y + (_dY * time);
+    
+    _widget.setScreenPos(newX, newY);
+    _widget.clampPositionInsideScreen((int)viewportWidth, (int)viewportHeight, 0); // pixels of margin
+  }
   
 }
 
 void NonOverlappingMark::onResizeViewportEvent(int width, int height){
-    _widget.onResizeViewportEvent(width, height);
-    _anchorWidget.onResizeViewportEvent(width, height);
+  _widget.onResizeViewportEvent(width, height);
+  _anchorWidget.onResizeViewportEvent(width, height);
 }
 
 #pragma-mark Renderer
@@ -466,17 +436,20 @@ void NonOverlappingMarksRenderer::renderMarks(const G3MRenderContext *rc, GLStat
 
 void NonOverlappingMarksRenderer::applyForces(long long now, const Camera* cam){
   
-  //Update Position based on last Forces
-  for (int i = 0; i < _visibleMarks.size(); i++) {
-    _visibleMarks[i]->updatePositionWithCurrentForce(now - _lastPositionsUpdatedTime,
-                                                     cam->getViewPortWidth(), cam->getViewPortHeight());
+  if (_lastPositionsUpdatedTime != 0){ //If not First frame
+    
+    //Update Position based on last Forces
+    for (int i = 0; i < _visibleMarks.size(); i++) {
+      _visibleMarks[i]->updatePositionWithCurrentForce(now - _lastPositionsUpdatedTime,
+                                                       cam->getViewPortWidth(), cam->getViewPortHeight());
+    }
   }
   
   _lastPositionsUpdatedTime = now;
 }
 
 void NonOverlappingMarksRenderer::render(const G3MRenderContext* rc, GLState* glState){
-
+  
   const Camera* cam = rc->getCurrentCamera();
   const Planet* planet = rc->getPlanet();
   
