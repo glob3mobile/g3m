@@ -336,7 +336,7 @@ Mesh* createSectorMesh(const Planet* planet,
   layerSet->addLayer(MapQuestLayer::newOSM(TimeInterval::fromDays(30)));
   builder.getPlanetRendererBuilder()->setLayerSet(layerSet);
   
-  NonOverlappingMarksRenderer* nomr = new NonOverlappingMarksRenderer(20);
+  NonOverlappingMarksRenderer* nomr = new NonOverlappingMarksRenderer(30);
   builder.addRenderer(nomr);
   
   NonOverlappingMark* mark = new NonOverlappingMark(new DownloaderImageBuilder(URL("file:///g3m-marker.png")),

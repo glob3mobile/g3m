@@ -119,14 +119,14 @@ public:
                      IImageBuilder* imageBuilderAnchor,
                      const Geodetic3D& position,
                      float springLengthInPixels = 10.0f,
-                     float springK = 200.0f,
-                     float maxSpringLength = 200.0f,
-                     float minSpringLength = 10.0,
-                     float electricCharge = 3000.0f,
-                     float anchorElectricCharge = 1500.0f,
+                     float springK = 1.0f,
+                     float maxSpringLength = 100.0f,
+                     float minSpringLength = 5.0f,
+                     float electricCharge = 30000.0f,
+                     float anchorElectricCharge = 20000.0f,
                      float maxWidgetSpeedInPixelsPerSecond = 1000.0f,
                      float minWidgetSpeedInPixelsPerSecond = 35.0f,
-                     float resistanceFactor = 0.65f);
+                     float resistanceFactor = 0.95f);
   
   ~NonOverlappingMark();
   
