@@ -48,6 +48,7 @@ private:
   ShapesRenderer *_shapesRenderer;
   
   std::vector<Geodetic3D*> _anchors;
+  std::vector<Vector2F*> _pixels;
   
 public:
   

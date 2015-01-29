@@ -4522,7 +4522,7 @@ public:
   // shape y regular mark renderer
   ShapesRenderer* shapesRenderer = new ShapesRenderer(geoTileRasterizer);
   
-  const int numMarks = 3;
+  const int numMarks = 10;
 /* double coordinates[numMarks][3] = {
     {40.72, -74.02},
     {40.74, -74.06},

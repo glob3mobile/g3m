@@ -86,6 +86,7 @@ void PhysicalMarksRenderer::onChangedContext() {
 
 void PhysicalMarksRenderer::addMark(Mark* mark) {
   _anchors.push_back(new Geodetic3D(mark->getPosition()));
+  _pixels.push_back(NULL);
   _marks.push_back(mark);
   if (_context != NULL) {
     mark->initialize(_context, _downloadPriority);
@@ -210,9 +211,11 @@ IFloatBuffer* PhysicalMarksRenderer::getBillboardTexCoords() {
 }
 
 
-std::vector<Vector2F*> prev;
+//std::vector<Vector2F*> prev;
 
-std::vector<Vector2F*> layoutMarksGraph(std::vector<Vector2F*> anchors, Vector2F minCorner, Vector2F maxCorner)
+std::vector<Vector2F*> layoutMarksGraph(std::vector<Vector2F*> anchors,
+                                        std::vector<Vector2F*> prevPos,
+                                        Vector2F minCorner, Vector2F maxCorner)
 {
   std::vector<float> posX;    std::vector<float> posY;
   std::vector<float> forceX;  std::vector<float> forceY;
@@ -253,12 +256,21 @@ std::vector<Vector2F*> layoutMarksGraph(std::vector<Vector2F*> anchors, Vector2F
     if (posY[i]<64) posY[i]=64;
     if (posY[i]>maxCorner._y-64) posY[i]=maxCorner._y-64;*/
     
-    if (prev.empty()) {
+/*    if (prev.empty()) {
       posX.push_back(anchors[i]->_x);
       posY.push_back(anchors[i]->_y);
     } else {
       posX.push_back(prev[i]->_x);
       posY.push_back(prev[i]->_y);
+    }*/
+    
+    
+    if (prevPos[i]!=NULL) {
+      posX.push_back(prevPos[i]->_x);
+      posY.push_back(prevPos[i]->_y);
+    } else {
+      posX.push_back(anchors[i]->_x);
+      posY.push_back(anchors[i]->_y);
     }
     
     forceX.push_back(0);              forceY.push_back(0);
@@ -311,18 +323,43 @@ std::vector<Vector2F*> layoutMarksGraph(std::vector<Vector2F*> anchors, Vector2F
       //posX[i] += velX[i];
       //posY[i] += velY[i];
       
-      posX[i] += friction * forceX[i];
-      posY[i] += friction * forceY[i];
-      if (posX[i]<64) posX[i]=64;
-      if (posX[i]>maxCorner._x-64) posX[i]=maxCorner._x-64;
-      if (posY[i]<64) posY[i]=64;
-      if (posY[i]>maxCorner._y-64) posY[i]=maxCorner._y-64;
+//      posX[i] += friction * forceX[i];
+//      posY[i] += friction * forceY[i];
+//      if (posX[i]<64) posX[i]=64;
+//      if (posX[i]>maxCorner._x-64) posX[i]=maxCorner._x-64;
+//      if (posY[i]<64) posY[i]=64;
+//      if (posY[i]>maxCorner._y-64) posY[i]=maxCorner._y-64;
       
-/*      float newPosX = posX[i]+forceX[i];
-      if (newPosX>64 && newPosX<maxCorner._x-64) posX[i] = newPosX;
-      float newPosY = posY[i]+forceY[i];
-      if (newPosY>64 && newPosY<maxCorner._y-64) posY[i] = newPosY;*/
+      if (iter==1)
+      printf("iter %d force= (%f %f)\n",iter,forceX[i],forceY[i]);
+      
+      float modForce = sqrt(forceX[i]*forceX[i]+forceY[i]*forceY[i]);
+      if (modForce>10) {
+        forceX[i] *= 10/modForce;
+        forceY[i] *= 10/modForce;
+      }
+      
+      if (isnan(forceX[i]))
+        printf("isnan\n");
+ 
+      
+      if (isnan(posX[i]) || isnan(posY[i]))
+        printf("isnan!!\n");
 
+      float newPosX = posX[i]+friction*forceX[i];
+      float newPosY = posY[i]+friction*forceY[i];
+      if (newPosX<64) {
+        float f = (65-posX[i]) / forceX[i];
+        if (isnan(f))
+          printf("isnan\n");
+        posX[i] = 65;
+        posY[i] += f * forceY[i];
+      } else {
+        posX[i] += friction * forceX[i];
+        posY[i] += friction * forceY[i];
+      }
+
+    
       if (isnan(posX[i]) || isnan(posY[i]))
         printf("isnan!!\n");
     }
@@ -338,6 +375,7 @@ std::vector<Vector2F*> layoutMarksGraph(std::vector<Vector2F*> anchors, Vector2F
     posOut.push_back(new Vector2F(posX[i], posY[i]));
   }
   
+ /*
   if (!prev.empty()) {
     for (int i=0; i<anchors.size(); i++) {
       delete prev[i];
@@ -347,11 +385,142 @@ std::vector<Vector2F*> layoutMarksGraph(std::vector<Vector2F*> anchors, Vector2F
   for (int i=0; i<anchors.size(); i++) {
     prev.push_back(new Vector2F(*posOut[i]));
   }
+  */
   
   
   return posOut;
 }
 
+std::vector<Vector2F*> layoutMarksGraph2(std::vector<Vector2F*> anchors,
+                                         std::vector<Vector2F*> prevPos,
+                                         Vector2F minCorner, Vector2F maxCorner)
+{
+  std::vector<float> posX;    std::vector<float> posY;
+  std::vector<float> forceX;  std::vector<float> forceY;
+  std::vector<float> velX;    std::vector<float> velY;
+  
+  // initialization
+  
+  float sumForces = 1e10;
+  float prevSumForces = 2*sumForces;
+  int iter = 0;
+  float offsetMarginX = (maxCorner._x - minCorner._x) * 0.1;
+  float offsetMarginY = (maxCorner._y - minCorner._y) * 0.1;
+  float repFactor = 5e4 / anchors.size();
+  float repMarginFactor = repFactor;
+  float atrFactor = 0.5;
+  float friction = 0.5;
+  
+  
+  for (int i=0; i<anchors.size(); i++) {
+    
+    if (prevPos[i]!=NULL) {
+      posX.push_back(prevPos[i]->_x);
+      posY.push_back(prevPos[i]->_y);
+    } else {
+      posX.push_back(anchors[i]->_x);
+      posY.push_back(anchors[i]->_y);
+    }
+    
+    forceX.push_back(0);              forceY.push_back(0);
+    velX.push_back(0);                velY.push_back(0);
+  }
+  
+  
+  while (sumForces<prevSumForces && iter<200) {
+    //while (sumForces>anchors.size() && iter<100) {
+    iter++;
+    //friction *= 0.09;
+    //printf ("\nIteracion %d:\n", iter);
+    prevSumForces = sumForces;
+    sumForces = 0;
+    
+    // process velocities
+    for (int i=0; i<anchors.size(); i++) {
+      
+      // compute atraction to anchors
+      forceX[i] = atrFactor * (anchors[i]->_x-posX[i]);
+      forceY[i] = atrFactor * (anchors[i]->_y-posY[i]);
+      
+      /*// compute repulsion to margins
+       forceX[i] += repMarginFactor / (posX[i]-minCorner._x+offsetMarginX);
+       forceX[i] += repMarginFactor / (posX[i]-maxCorner._x-offsetMarginX);
+       forceY[i] += repMarginFactor / (posY[i]-minCorner._y+offsetMarginY);
+       forceY[i] += repMarginFactor / (posY[i]-maxCorner._y-offsetMarginY);*/
+      
+      // compute repulsion to other marks
+      for (int j=0; j<anchors.size(); j++) {
+        if (i!=j) {
+          float dist2 = (posX[j]-posX[i])*(posX[j]-posX[i])+(posY[j]-posY[i])*(posY[j]-posY[i]);
+          if (dist2 < 1) dist2 = 1;
+          forceX[i] += repFactor * (posX[i]-posX[j]) / dist2;
+          forceY[i] += repFactor * (posY[i]-posY[j]) / dist2;
+          if (isnan(forceX[i]))
+            printf("isnan\n");
+        }
+      }
+      velX[i] = (velX[i]+forceX[i]) * friction;
+      velY[i] = (velY[i]+forceY[i]) * friction;
+      
+      sumForces += forceX[i]*forceX[i] + forceY[i]*forceY[i];
+    }
+    
+    //printf("sumforces=%f\n", fabs(sumForces));
+    
+    // set new positions
+    for (int i=0; i<anchors.size(); i++) {
+      //posX[i] += velX[i];
+      //posY[i] += velY[i];
+      
+      //      posX[i] += friction * forceX[i];
+      //      posY[i] += friction * forceY[i];
+      //      if (posX[i]<64) posX[i]=64;
+      //      if (posX[i]>maxCorner._x-64) posX[i]=maxCorner._x-64;
+      //      if (posY[i]<64) posY[i]=64;
+      //      if (posY[i]>maxCorner._y-64) posY[i]=maxCorner._y-64;
+      
+      float newPosX = posX[i]+friction*forceX[i];
+      float newPosY = posY[i]+friction*forceY[i];
+      if (newPosX<64) {
+        float f = (64-posX[i]) / forceX[i];
+        posX[i] = 64;
+        posY[i] += f * forceY[i];
+      } else {
+        posX[i] += friction * forceX[i];
+        posY[i] += friction * forceY[i];
+      }
+      
+      
+      if (isnan(posX[i]) || isnan(posY[i]))
+        printf("isnan!!\n");
+    }
+  }
+  
+  //  printf ("punto %d: (%.1f, %.1f). Force = (%.1f, %.1f)\n", i, posX[i], posY[i], forceX[i], forceY[i]);
+  if (iter>20)
+    printf ("Iters=%d.  Num=%d\n", iter, anchors.size());
+  
+  
+  std::vector<Vector2F*> posOut;
+  for (int i=0; i<anchors.size(); i++) {
+    posOut.push_back(new Vector2F(posX[i], posY[i]));
+  }
+  
+  /*
+   if (!prev.empty()) {
+   for (int i=0; i<anchors.size(); i++) {
+   delete prev[i];
+   }
+   }
+   prev.clear();
+   for (int i=0; i<anchors.size(); i++) {
+   prev.push_back(new Vector2F(*posOut[i]));
+   }
+   */
+  
+  
+  return posOut;
+}
 
 
 void PhysicalMarksRenderer::render(const G3MRenderContext* rc, GLState* glState) {
@@ -388,19 +557,22 @@ void PhysicalMarksRenderer::render(const G3MRenderContext* rc, GLState* glState)
     
     Vector2F maxCorner = Vector2F(camera->getViewPortWidth(),
                                   camera->getViewPortHeight());
-    std::vector<Vector2F*> pixels = layoutMarksGraph(anchors, Vector2F(0,0), maxCorner);
+    std::vector<Vector2F*> pixels = layoutMarksGraph(anchors, _pixels, Vector2F(0,0), maxCorner);
                                                      
     
     int n=0;
     for (int i = 0; i < marksSize; i++) {
       Mark* mark = _marks[i];
+      if (_pixels[i]!=NULL) {
+        delete _pixels[i];
+        _pixels[i] = NULL;
+      }
       
       const Vector2F pixel = camera->point2Pixel(planet->toCartesian(*_anchors[i]));
       if (pixel._x>0 && pixel._x<camera->getViewPortWidth() &&
           pixel._y>0 && pixel._y<camera->getViewPortHeight()) {
         
         const Geodetic2D point = planet->toGeodetic2D(camera->pixel2PlanetPoint(Vector2I((int)pixels[n]->_x,(int)pixels[n]->_y)));
-        n++;
         Shape* line = new LineShape(new Geodetic3D(_anchors[i]->_latitude, _anchors[i]->_longitude, cameraHeight/100),
                                     new Geodetic3D(point, cameraHeight/100),
                                     ABSOLUTE,
@@ -408,6 +580,9 @@ void PhysicalMarksRenderer::render(const G3MRenderContext* rc, GLState* glState)
                                     Color::fromRGBA(0, 0, 0, 1));
         _shapesRenderer->addShape(line);
         mark->setPosition(Geodetic3D(point,0));
+        
+        _pixels[i] = new Vector2F(*pixels[n]);
+        n++;
         
         if (mark->isReady()) {
           mark->render(rc,
