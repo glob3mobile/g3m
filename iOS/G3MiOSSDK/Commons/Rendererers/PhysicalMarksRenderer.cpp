@@ -323,14 +323,6 @@ std::vector<Vector2F*> layoutMarksGraph(std::vector<Vector2F*> anchors,
       //posX[i] += velX[i];
       //posY[i] += velY[i];
       
-//      posX[i] += friction * forceX[i];
-//      posY[i] += friction * forceY[i];
-//      if (posX[i]<64) posX[i]=64;
-//      if (posX[i]>maxCorner._x-64) posX[i]=maxCorner._x-64;
-//      if (posY[i]<64) posY[i]=64;
-//      if (posY[i]>maxCorner._y-64) posY[i]=maxCorner._y-64;
-      
-      
       float modForce = sqrt(forceX[i]*forceX[i]+forceY[i]*forceY[i]);
       if (modForce>10) {
         forceX[i] *= 10/modForce;
@@ -340,10 +332,15 @@ std::vector<Vector2F*> layoutMarksGraph(std::vector<Vector2F*> anchors,
       if (isnan(forceX[i]))
         printf("isnan\n");
  
-      
-      if (isnan(posX[i]) || isnan(posY[i]))
-        printf("isnan!!\n");
 
+      posX[i] += friction * forceX[i];
+      posY[i] += friction * forceY[i];
+      if (posX[i]<64) posX[i]=64;
+      if (posX[i]>maxCorner._x-64) posX[i]=maxCorner._x-64;
+      if (posY[i]<64) posY[i]=64;
+      if (posY[i]>maxCorner._y-64) posY[i]=maxCorner._y-64;
+      
+/*
       float newPosX = posX[i]+friction*forceX[i];
       float newPosY = posY[i]+friction*forceY[i];
       if (newPosX<64) {
@@ -356,7 +353,7 @@ std::vector<Vector2F*> layoutMarksGraph(std::vector<Vector2F*> anchors,
         posX[i] += friction * forceX[i];
         posY[i] += friction * forceY[i];
       }
-
+*/
     
       if (isnan(posX[i]) || isnan(posY[i]))
         printf("isnan!!\n");
