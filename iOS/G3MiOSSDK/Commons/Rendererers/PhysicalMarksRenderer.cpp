@@ -217,11 +217,6 @@ std::vector<Vector2F*> layoutMarksGraph(std::vector<Vector2F*> anchors, Vector2F
   std::vector<float> velX;    std::vector<float> velY;
   
   // initialization
-  for (int i=0; i<anchors.size(); i++) {
-    posX.push_back(anchors[i]->_x);   posY.push_back(anchors[i]->_y);
-    forceX.push_back(0);              forceY.push_back(0);
-    velX.push_back(0);                velY.push_back(0);
-  }
   
   float sumForces = 1e10;
   float prevSumForces = 2*sumForces;
@@ -229,7 +224,33 @@ std::vector<Vector2F*> layoutMarksGraph(std::vector<Vector2F*> anchors, Vector2F
   float offsetMarginX = (maxCorner._x - minCorner._x) * 0.1;
   float offsetMarginY = (maxCorner._y - minCorner._y) * 0.1;
   
-  while (sumForces<prevSumForces && iter<100) {
+  // compute centroid
+  // OJO: habrá que mirar casos con más de uno
+  float centerX = 0;
+  float centerY = 0;
+  for (int i=0; i<anchors.size(); i++) {
+    centerX += anchors[i]->_x;
+    centerY += anchors[i]->_y;
+  }
+  centerX /= anchors.size();
+  centerY /= anchors.size();
+  
+  for (int i=0; i<anchors.size(); i++) {
+    float vx = anchors[i]->_x - centerX;
+    float vy = anchors[i]->_y - centerY;
+    float mod = sqrt(vx*vx+vy*vy);
+    posX.push_back(anchors[i]->_x + (maxCorner._x*0.2)*vx/mod);
+    posY.push_back(anchors[i]->_y + (maxCorner._y*0.2)*vy/mod);
+    if (posX[i]<64) posX[i]=64;
+    if (posX[i]>maxCorner._x-64) posX[i]=maxCorner._x-64;
+    if (posY[i]<64) posY[i]=64;
+    if (posY[i]>maxCorner._y-64) posY[i]=maxCorner._y-64;
+    forceX.push_back(0);              forceY.push_back(0);
+    velX.push_back(0);                velY.push_back(0);
+  }
+
+  
+  while (/*sumForces<prevSumForces &&*/ iter<100) {
 //while (sumForces>anchors.size() && iter<200) {
     iter++;
     //printf ("\nIteracion %d:\n", iter);
@@ -237,7 +258,7 @@ std::vector<Vector2F*> layoutMarksGraph(std::vector<Vector2F*> anchors, Vector2F
     sumForces = 0;
   
     // process velocities
-    float repFactor = 3e4/anchors.size();
+    float repFactor = 5e4 / anchors.size();
     float repMarginFactor = 1e4;
     float atrFactor = 0.5;
     float friction = 0.7;
@@ -257,8 +278,11 @@ std::vector<Vector2F*> layoutMarksGraph(std::vector<Vector2F*> anchors, Vector2F
       for (int j=0; j<anchors.size(); j++) {
         if (i!=j) {
           float dist2 = (posX[j]-posX[i])*(posX[j]-posX[i])+(posY[j]-posY[i])*(posY[j]-posY[i]);
+          if (dist2 < 1) dist2 = 1;
           forceX[i] += repFactor * (posX[i]-posX[j]) / dist2;
           forceY[i] += repFactor * (posY[i]-posY[j]) / dist2;
+          if (isnan(forceX[i]))
+            printf("isnan\n");
         }
       }
       velX[i] = (velX[i]+forceX[i]) * friction;
@@ -279,12 +303,14 @@ std::vector<Vector2F*> layoutMarksGraph(std::vector<Vector2F*> anchors, Vector2F
       if (posX[i]>maxCorner._x-64) posX[i]=maxCorner._x-64;
       if (posY[i]<64) posY[i]=64;
       if (posY[i]>maxCorner._y-64) posY[i]=maxCorner._y-64;
+      if (isnan(posX[i]) || isnan(posY[i]))
+        printf("isnan!!\n");
     }
   }
   
 //  printf ("punto %d: (%.1f, %.1f). Force = (%.1f, %.1f)\n", i, posX[i], posY[i], forceX[i], forceY[i]);
   if (iter>20)
-    printf ("Iters=%d\n", iter);
+    printf ("Iters=%d.  Num=%d\n", iter, anchors.size());
 
   
   std::vector<Vector2F*> posOut;
