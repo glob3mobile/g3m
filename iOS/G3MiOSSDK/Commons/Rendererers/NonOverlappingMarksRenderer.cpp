@@ -149,6 +149,7 @@ NonOverlappingMark::NonOverlappingMark(IImageBuilder* imageBuilderWidget,
                                        float springLengthInPixels,
                                        float springK,
                                        float electricCharge,
+                                       float anchorElectricCharge,
                                        float maxWidgetSpeedInPixels):
 _geoPosition(position),
 _springLengthInPixels(springLengthInPixels),
@@ -161,7 +162,8 @@ _widget(imageBuilderWidget),
 _anchorWidget(imageBuilderAnchor),
 _springK(springK),
 _electricCharge(electricCharge),
-_maxWidgetSpeedInPixels(maxWidgetSpeedInPixels)
+_maxWidgetSpeedInPixels(maxWidgetSpeedInPixels),
+_anchorElectricCharge(anchorElectricCharge)
 {
   
 }
@@ -219,12 +221,13 @@ void NonOverlappingMark::applyCoulombsLawFromAnchor(NonOverlappingMark* that){ /
   double distanceAnchor = dAnchor.length()  + 0.001;
   Vector2F directionAnchor = dAnchor.div((float)distanceAnchor);
   
-  float strengthAnchor = (float)(this->_electricCharge * that->_electricCharge / (distanceAnchor * distanceAnchor));
+  float strengthAnchor = (float)(this->_electricCharge * that->_anchorElectricCharge / (distanceAnchor * distanceAnchor));
   
-  Vector2F forceAnchor = directionAnchor.times(strengthAnchor);
+//  Vector2F forceAnchor = directionAnchor.times(strengthAnchor);
   //printf("FC %f, %f\n", forceAnchor._x, forceAnchor._y);
   
-  this->applyForce(forceAnchor._x, forceAnchor._y);
+  this->applyForce(directionAnchor._x * strengthAnchor,
+                   directionAnchor._y * strengthAnchor);
 }
 
 void NonOverlappingMark::applyHookesLaw(){   //Spring

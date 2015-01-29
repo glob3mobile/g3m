@@ -103,6 +103,7 @@ class NonOverlappingMark{
   
   const float _springK;
   const float _electricCharge;
+  const float _anchorElectricCharge;
   const float _maxWidgetSpeedInPixels;
   
 public:
@@ -113,6 +114,7 @@ public:
                      float springLengthInPixels = 10.0f,
                      float springK = 200.0f,
                      float electricCharge = 3000.0f,
+                     float anchorElectricCharge = 1500.0f,
                      float maxWidgetSpeedInPixels = 20.0f);
   
   ~NonOverlappingMark();
