@@ -73,7 +73,7 @@ public class NonOverlappingMark
      _dY = 0F;
      _fX = 0F;
      _fY = 0F;
-     _widget = new <type missing>(imageBuilderWidget, touchListener);
+     _widget = imageBuilderWidget;
      _anchorWidget = imageBuilderAnchor;
      _springK = springK;
      _maxSpringLength = maxSpringLength;
@@ -83,6 +83,11 @@ public class NonOverlappingMark
      _anchorElectricCharge = anchorElectricCharge;
      _resistanceFactor = resistanceFactor;
      _minWidgetSpeedInPixelsPerSecond = minWidgetSpeedInPixelsPerSecond;
+  
+    if (touchListener != null)
+    {
+      _widget.setTouchListener(touchListener);
+    }
   
   }
 

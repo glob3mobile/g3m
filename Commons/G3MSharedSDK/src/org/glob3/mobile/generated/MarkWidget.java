@@ -80,10 +80,6 @@ public class MarkWidget
 
   public MarkWidget(IImageBuilder imageBuilder)
   {
-     this(imageBuilder, null);
-  }
-  public MarkWidget(IImageBuilder imageBuilder, MarkWidgetTouchListener touchListener)
-  {
      _image = null;
      _imageBuilder = imageBuilder;
      _viewportExtent = null;
@@ -93,7 +89,7 @@ public class MarkWidget
      _y = java.lang.Float.NaN;
      _halfHeight = 0F;
      _halfWidth = 0F;
-     _touchListener = touchListener;
+     _touchListener = null;
   }
 
   public void dispose()
@@ -192,6 +188,16 @@ public class MarkWidget
       return true;
     }
     return false;
+  }
+
+  public final void setTouchListener(MarkWidgetTouchListener tl)
+  {
+    if (_touchListener != null && _touchListener != tl)
+    {
+      if (_touchListener != null)
+         _touchListener.dispose();
+    }
+    _touchListener = tl;
   }
 
 }
