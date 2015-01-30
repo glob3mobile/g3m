@@ -11,8 +11,8 @@ public class NonOverlappingMark
   private float _fX; //Applied Force
   private float _fY;
 
-  private MarkWidget _widget = new MarkWidget();
-  private MarkWidget _anchorWidget = new MarkWidget();
+  private MarkWidget _widget;// = new MarkWidget();
+  private MarkWidget _anchorWidget;// = new MarkWidget();
 
   private final float _springK;
   private final float _maxSpringLength;

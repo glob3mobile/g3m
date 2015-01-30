@@ -56,11 +56,11 @@ public class NonOverlappingMarksRenderer extends DefaultRenderer
   
     }
   
-    _connectorsGLState.addGLFeature(new Geometry2DGLFeature(pos2D.create(), 2, 0, true, 0, 3.0, true, 10.0, new Vector2F(0.0,0.0)), false);
+    _connectorsGLState.addGLFeature(new Geometry2DGLFeature(pos2D.create(), 2, 0, true, 0, 3.0f, true, 10.0f, new Vector2F(0.0f,0.0f)), false);
   
     _connectorsGLState.addGLFeature(new ViewportExtentGLFeature((int)rc.getCurrentCamera().getViewPortWidth(), (int)rc.getCurrentCamera().getViewPortHeight()), false);
   
-    rc.getGL().drawArrays(GLPrimitive.lines(), 0, pos2D.size()/2, _connectorsGLState, *(rc.getGPUProgramManager()));
+    rc.getGL().drawArrays(GLPrimitive.lines(), 0, pos2D.size()/2, _connectorsGLState, rc.getGPUProgramManager());
   }
 
   private void computeForces(Camera cam, Planet planet)

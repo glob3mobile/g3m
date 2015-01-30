@@ -36,7 +36,7 @@ public class MarkWidget
   private Geometry2DGLFeature _geo2Dfeature;
   private ViewportExtentGLFeature _viewportExtent;
 
-  private final IImage _image;
+  private IImage _image;
   private String _imageName;
   private IImageBuilder _imageBuilder;
   private TexturesHandler _texHandler;
@@ -65,6 +65,12 @@ public class MarkWidget
       ILogger.instance().logError(error);
     }
 
+	@Override
+	public void dispose() {
+		// TODO Auto-generated method stub
+		
+	}
+
   }
 
   private void prepareWidget(IImage image, String imageName)
@@ -81,7 +87,7 @@ public class MarkWidget
     pos2D.add(_halfWidth, -_halfHeight); //vertex 3
     pos2D.add(_halfWidth, _halfHeight); //vertex 4
   
-    _geo2Dfeature = new Geometry2DGLFeature(pos2D.create(), 2, 0, true, 0, 1.0, true, 10.0, new Vector2F(_x, _y));
+    _geo2Dfeature = new Geometry2DGLFeature(pos2D.create(), 2, 0, true, 0, 1.0f, true, 10.0f, new Vector2F(_x, _y));
   
     _glState.addGLFeature(_geo2Dfeature, false);
   
@@ -138,7 +144,7 @@ public class MarkWidget
 
   public final void render(G3MRenderContext rc, GLState glState)
   {
-    rc.getGL().drawArrays(GLPrimitive.triangleStrip(), 0, 4, _glState, *(rc.getGPUProgramManager()));
+    rc.getGL().drawArrays(GLPrimitive.triangleStrip(), 0, 4, _glState, rc.getGPUProgramManager());
   }
 
   public final void setScreenPos(float x, float y)

@@ -33,8 +33,12 @@ class MarkWidget{
   GLState* _glState;
   Geometry2DGLFeature* _geo2Dfeature;
   ViewportExtentGLFeature* _viewportExtent;
-  
+#ifdef C_CODE
   const IImage* _image;
+#endif
+#ifdef JAVA_CODE
+  private IImage _image;
+#endif
   std::string _imageName;
   IImageBuilder* _imageBuilder;
   TexturesHandler* _texHandler;
@@ -48,6 +52,8 @@ class MarkWidget{
     MarkWidget* _widget;
   public:
     WidgetImageListener(MarkWidget* widget):_widget(widget){}
+    
+    ~WidgetImageListener() {}
     
     virtual void imageCreated(const IImage*      image,
                               const std::string& imageName){
@@ -101,8 +107,14 @@ class NonOverlappingMark{
   float _dX, _dY; //Velocity vector (pixels per second)
   float _fX, _fY; //Applied Force
   
+#ifdef C_CODE
   MarkWidget _widget;
   MarkWidget _anchorWidget;
+#endif
+#ifdef JAVA_CODE
+  private MarkWidget _widget;
+  private MarkWidget _anchorWidget;
+#endif
   
   const float _springK;
   const float _maxSpringLength;

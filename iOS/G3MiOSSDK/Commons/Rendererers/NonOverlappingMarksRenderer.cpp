@@ -86,9 +86,9 @@ void MarkWidget::prepareWidget(const IImage* image,
                                           0,
                                           true,
                                           0,
-                                          1.0,
+                                          1.0f,
                                           true,
-                                          10.0,
+                                          10.0f,
                                           Vector2F(_x, _y));
   
   _glState->addGLFeature(_geo2Dfeature,
@@ -116,7 +116,7 @@ void MarkWidget::prepareWidget(const IImage* image,
 }
 
 void MarkWidget::render(const G3MRenderContext *rc, GLState *glState){
-  rc->getGL()->drawArrays(GLPrimitive::triangleStrip(), 0, 4, _glState, *(rc->getGPUProgramManager()));
+  rc->getGL()->drawArrays(GLPrimitive::triangleStrip(), 0, 4, _glState, *rc->getGPUProgramManager());
 }
 
 void MarkWidget::setScreenPos(float x, float y){
@@ -394,16 +394,16 @@ void NonOverlappingMarksRenderer::renderConnectorLines(const G3MRenderContext* r
                                                             0,
                                                             true,
                                                             0,
-                                                            3.0,
+                                                            3.0f,
                                                             true,
-                                                            10.0,
-                                                            Vector2F(0.0,0.0)),
+                                                            10.0f,
+                                                            Vector2F(0.0f,0.0f)),
                                    false);
   
   _connectorsGLState->addGLFeature(new ViewportExtentGLFeature((int)rc->getCurrentCamera()->getViewPortWidth(),
                                                                (int)rc->getCurrentCamera()->getViewPortHeight()), false);
   
-  rc->getGL()->drawArrays(GLPrimitive::lines(), 0, pos2D.size()/2, _connectorsGLState, *(rc->getGPUProgramManager()));
+  rc->getGL()->drawArrays(GLPrimitive::lines(), 0, pos2D.size()/2, _connectorsGLState, *rc->getGPUProgramManager());
 }
 
 void NonOverlappingMarksRenderer::computeForces(const Camera* cam, const Planet* planet){
