@@ -73,8 +73,8 @@ public class NonOverlappingMark
      _dY = 0F;
      _fX = 0F;
      _fY = 0F;
-     _widget = imageBuilderWidget;
-     _anchorWidget = imageBuilderAnchor;
+     _widget = new MarkWidget(imageBuilderWidget);
+     _anchorWidget = new MarkWidget(imageBuilderAnchor);
      _springK = springK;
      _maxSpringLength = maxSpringLength;
      _minSpringLength = minSpringLength;
