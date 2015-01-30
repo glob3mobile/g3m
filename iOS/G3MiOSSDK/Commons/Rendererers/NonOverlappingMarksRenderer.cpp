@@ -36,7 +36,7 @@
 
 #pragma mark MarkWidget
 
-MarkWidget::MarkWidget(IImageBuilder* imageBuilder, MarkWidgetTouchListener* touchListener):
+MarkWidget::MarkWidget(IImageBuilder* imageBuilder):
 _image(NULL),
 _imageBuilder(imageBuilder),
 _viewportExtent(NULL),
@@ -46,7 +46,7 @@ _x(NANF),
 _y(NANF),
 _halfHeight(0),
 _halfWidth(0),
-_touchListener(touchListener)
+_touchListener(NULL)
 {
 }
 
@@ -188,7 +188,7 @@ _dX(0),
 _dY(0),
 _fX(0),
 _fY(0),
-_widget(imageBuilderWidget, touchListener),
+_widget(imageBuilderWidget),
 _anchorWidget(imageBuilderAnchor),
 _springK(springK),
 _maxSpringLength(maxSpringLength),
@@ -199,6 +199,10 @@ _anchorElectricCharge(anchorElectricCharge),
 _resistanceFactor(resistanceFactor),
 _minWidgetSpeedInPixelsPerSecond(minWidgetSpeedInPixelsPerSecond)
 {
+  
+  if (touchListener != NULL){
+    _widget.setTouchListener(touchListener);
+  }
   
 }
 

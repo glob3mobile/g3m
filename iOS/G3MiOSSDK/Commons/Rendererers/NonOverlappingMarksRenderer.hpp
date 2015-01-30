@@ -83,7 +83,7 @@ class MarkWidget{
                      const std::string& imageName);
   
 public:
-  MarkWidget(IImageBuilder* imageBuilder, MarkWidgetTouchListener* touchListener = NULL);
+  MarkWidget(IImageBuilder* imageBuilder);
   
   ~MarkWidget();
   
@@ -108,6 +108,13 @@ public:
   void clampPositionInsideScreen(int viewportWidth, int viewportHeight, int margin);
   
   bool onTouchEvent(float x, float y);
+  
+  void setTouchListener(MarkWidgetTouchListener* tl){
+    if (_touchListener != NULL && _touchListener != tl){
+      delete _touchListener;
+    }
+    _touchListener = tl;
+  }
   
 };
 
