@@ -1,4 +1,7 @@
 package org.glob3.mobile.generated; 
+/////////////////////////////////////////////////////////
+
+
 public class GeometryGLFeature extends GLFeature
 {
   //Position + cull + depth + polygonoffset + linewidth
