@@ -32,10 +32,11 @@
 #include "ITimer.hpp"
 #include "IFactory.hpp"
 #include "IMathUtils.hpp"
+#include "TouchEvent.hpp"
 
 #pragma mark MarkWidget
 
-MarkWidget::MarkWidget(IImageBuilder* imageBuilder):
+MarkWidget::MarkWidget(IImageBuilder* imageBuilder, MarkWidgetTouchListener* touchListener):
 _image(NULL),
 _imageBuilder(imageBuilder),
 _viewportExtent(NULL),
@@ -44,7 +45,8 @@ _glState(NULL),
 _x(NANF),
 _y(NANF),
 _halfHeight(0),
-_halfWidth(0)
+_halfWidth(0),
+_touchListener(touchListener)
 {
 }
 
@@ -52,6 +54,8 @@ MarkWidget::~MarkWidget()
 {
   delete _image;
   delete _imageBuilder;
+  delete _touchListener;
+  
   _glState->_release();
 }
 
@@ -150,11 +154,24 @@ void MarkWidget::clampPositionInsideScreen(int viewportWidth, int viewportHeight
   setScreenPos(x, y);
 }
 
+bool MarkWidget::onTouchEvent(float x, float y){
+  const IMathUtils* mu = IMathUtils::instance();
+  if (mu->isBetween(x, _x - _halfWidth, _x + _halfWidth) &&
+      mu->isBetween(y, _y - _halfHeight, _y + _halfHeight)){
+    if (_touchListener != NULL){
+      _touchListener->touchedMark(this, x, y);
+    }
+    return true;
+  }
+  return false;
+}
+
 #pragma mark NonOverlappingMark
 
 NonOverlappingMark::NonOverlappingMark(IImageBuilder* imageBuilderWidget,
                                        IImageBuilder* imageBuilderAnchor,
                                        const Geodetic3D& position,
+                                       MarkWidgetTouchListener* touchListener,
                                        float springLengthInPixels,
                                        float springK,
                                        float maxSpringLength,
@@ -171,7 +188,7 @@ _dX(0),
 _dY(0),
 _fX(0),
 _fY(0),
-_widget(imageBuilderWidget),
+_widget(imageBuilderWidget, touchListener),
 _anchorWidget(imageBuilderAnchor),
 _springK(springK),
 _maxSpringLength(maxSpringLength),
@@ -325,6 +342,10 @@ void NonOverlappingMark::onResizeViewportEvent(int width, int height){
   _anchorWidget.onResizeViewportEvent(width, height);
 }
 
+bool NonOverlappingMark::onTouchEvent(float x, float y){
+  return _widget.onTouchEvent(x, y);
+}
+
 #pragma-mark Renderer
 
 NonOverlappingMarksRenderer::NonOverlappingMarksRenderer(int maxVisibleMarks):
@@ -473,4 +494,18 @@ void NonOverlappingMarksRenderer::onResizeViewportEvent(const G3MEventContext* e
     _marks[i]->onResizeViewportEvent(width, height);
   }
   
+}
+
+bool NonOverlappingMarksRenderer::onTouchEvent(const G3MEventContext* ec, const TouchEvent* touchEvent) {
+  
+  if (touchEvent->getTapCount() == 1){
+    const float x = touchEvent->getTouch(0)->getPos()._x;
+    const float y = touchEvent->getTouch(0)->getPos()._y;
+    for (int i = 0; i < _visibleMarks.size(); i++) {
+      if (_visibleMarks[i]->onTouchEvent(x,y)){
+        return true;
+      }
+    }
+  }
+  return false;
 }
