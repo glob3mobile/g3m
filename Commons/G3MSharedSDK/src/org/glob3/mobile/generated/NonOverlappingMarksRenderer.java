@@ -171,6 +171,19 @@ public class NonOverlappingMarksRenderer extends DefaultRenderer
 
   public boolean onTouchEvent(G3MEventContext ec, TouchEvent touchEvent)
   {
+  
+    if (touchEvent.getTapCount() == 1)
+    {
+      final float x = touchEvent.getTouch(0).getPos()._x;
+      final float y = touchEvent.getTouch(0).getPos()._y;
+      for (int i = 0; i < _visibleMarks.size(); i++)
+      {
+        if (_visibleMarks.get(i).onTouchEvent(x, y))
+        {
+          return true;
+        }
+      }
+    }
     return false;
   }
 

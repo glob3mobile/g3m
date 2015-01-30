@@ -1,41 +1,9 @@
 package org.glob3.mobile.generated; 
-//
-//  NonOverlappingMarksRenderer.cpp
-//  G3MiOSSDK
-//
-//  Created by Jose Miguel SN on 23/1/15.
-//
-//
-
-//
-//  NonOverlappingMarksRenderer.h
-//  G3MiOSSDK
-//
-//  Created by Jose Miguel SN on 23/1/15.
-//
-//
-
-
-
-
-//class IImageBuilder;
-//class Geodetic3D;
-//class Vector2D;
-//class Camera;
-//class Planet;
-//class GLState;
-//class IImage;
-//class TextureIDReference;
-//class Geometry2DGLFeature;
-//class ViewportExtentGLFeature;
-//class TexturesHandler;
-
 public class MarkWidget
 {
   private GLState _glState;
   private Geometry2DGLFeature _geo2Dfeature;
   private ViewportExtentGLFeature _viewportExtent;
-
   private IImage _image;
   private String _imageName;
   private IImageBuilder _imageBuilder;
@@ -47,12 +15,22 @@ public class MarkWidget
   private float _x; //Screen position
   private float _y;
 
+  private MarkWidgetTouchListener _touchListener;
+
   private static class WidgetImageListener implements IImageBuilderListener
   {
     private MarkWidget _widget;
     public WidgetImageListener(MarkWidget widget)
     {
+       this(widget, null);
+    }
+    public WidgetImageListener(MarkWidget widget, MarkWidgetTouchListener touchListener)
+    {
        _widget = widget;
+    }
+
+    public void dispose()
+    {
     }
 
     public void imageCreated(IImage image, String imageName)
@@ -64,12 +42,6 @@ public class MarkWidget
     {
       ILogger.instance().logError(error);
     }
-
-	@Override
-	public void dispose() {
-		// TODO Auto-generated method stub
-		
-	}
 
   }
 
@@ -108,6 +80,10 @@ public class MarkWidget
 
   public MarkWidget(IImageBuilder imageBuilder)
   {
+     this(imageBuilder, null);
+  }
+  public MarkWidget(IImageBuilder imageBuilder, MarkWidgetTouchListener touchListener)
+  {
      _image = null;
      _imageBuilder = imageBuilder;
      _viewportExtent = null;
@@ -117,14 +93,17 @@ public class MarkWidget
      _y = java.lang.Float.NaN;
      _halfHeight = 0F;
      _halfWidth = 0F;
+     _touchListener = touchListener;
   }
 
   public void dispose()
   {
-    if (_image != null)
-       _image.dispose();
+    _image = null;
     if (_imageBuilder != null)
        _imageBuilder.dispose();
+    if (_touchListener != null)
+       _touchListener.dispose();
+  
     _glState._release();
   }
 
@@ -200,7 +179,19 @@ public class MarkWidget
   
     setScreenPos(x, y);
   }
-//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
-//  void getClampedScreenPosition(int viewportWidth, int viewportHeight, int margin);
+
+  public final boolean onTouchEvent(float x, float y)
+  {
+    final IMathUtils mu = IMathUtils.instance();
+    if (mu.isBetween(x, _x - _halfWidth, _x + _halfWidth) && mu.isBetween(y, _y - _halfHeight, _y + _halfHeight))
+    {
+      if (_touchListener != null)
+      {
+        _touchListener.touchedMark(this, x, y);
+      }
+      return true;
+    }
+    return false;
+  }
 
 }
