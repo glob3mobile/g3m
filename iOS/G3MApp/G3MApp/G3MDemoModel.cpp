@@ -20,6 +20,7 @@
 #include <G3MiOSSDK/GEOVectorLayer.hpp>
 #include <G3MiOSSDK/PointCloudsRenderer.hpp>
 #include <G3MiOSSDK/HUDRenderer.hpp>
+#include <G3MiOSSDK/NonOverlappingMarksRenderer.hpp>
 
 #include "G3MDemoScene.hpp"
 #include "G3MDemoListener.hpp"
@@ -36,15 +37,18 @@
 #include "G3MStreamingPointCloud1DemoScene.hpp"
 #include "G3MStreamingPointCloud2DemoScene.hpp"
 #include "G3MHUDDemoScene.hpp"
+#include "G3MNonOverlappingMarksDemoScene.hpp"
 
-G3MDemoModel::G3MDemoModel(G3MDemoListener*     listener,
-                           LayerSet*            layerSet,
-                           MeshRenderer*        meshRenderer,
-                           ShapesRenderer*      shapesRenderer,
-                           MarksRenderer*       marksRenderer,
-                           GEORenderer*         geoRenderer,
-                           PointCloudsRenderer* pointCloudsRenderer,
-                           HUDRenderer*         hudRenderer) :
+
+G3MDemoModel::G3MDemoModel(G3MDemoListener*             listener,
+                           LayerSet*                    layerSet,
+                           MeshRenderer*                meshRenderer,
+                           ShapesRenderer*              shapesRenderer,
+                           MarksRenderer*               marksRenderer,
+                           GEORenderer*                 geoRenderer,
+                           PointCloudsRenderer*         pointCloudsRenderer,
+                           HUDRenderer*                 hudRenderer,
+                           NonOverlappingMarksRenderer* nonOverlappingMarksRenderer) :
 _listener(listener),
 _g3mWidget(NULL),
 _layerSet(layerSet),
@@ -54,6 +58,7 @@ _marksRenderer(marksRenderer),
 _geoRenderer(geoRenderer),
 _pointCloudsRenderer(pointCloudsRenderer),
 _hudRenderer(hudRenderer),
+_nonOverlappingMarksRenderer(nonOverlappingMarksRenderer),
 _selectedScene(NULL),
 _context(NULL)
 {
@@ -70,6 +75,7 @@ _context(NULL)
   _scenes.push_back( new G3MStreamingPointCloud1DemoScene(this) );
   _scenes.push_back( new G3MStreamingPointCloud2DemoScene(this) );
   _scenes.push_back( new G3MHUDDemoScene(this) );
+  _scenes.push_back( new G3MNonOverlappingMarksDemoScene(this) );
 }
 
 void G3MDemoModel::initializeG3MContext(const G3MContext* context) {
@@ -108,6 +114,8 @@ void G3MDemoModel::reset() {
   getShapesRenderer()->removeAllShapes(true);
   getPointCloudsRenderer()->removeAllPointClouds();
   getHUDRenderer()->removeAllWidgets();
+
+  getNonOverlappingMarksRenderer()->removeAllMarks();
 
   _layerSet->removeAllLayers(true);
 }

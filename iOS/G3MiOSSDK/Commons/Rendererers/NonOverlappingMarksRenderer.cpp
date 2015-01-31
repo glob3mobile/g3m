@@ -371,7 +371,14 @@ NonOverlappingMarksRenderer::~NonOverlappingMarksRenderer(){
 
 void NonOverlappingMarksRenderer::addMark(NonOverlappingMark* mark){
   _marks.push_back(mark);
-  
+}
+
+void NonOverlappingMarksRenderer::removeAllMarks() {
+  const int marksSize = _marks.size();
+  for (int i = 0; i < marksSize; i++) {
+    delete _marks[i];
+  }
+  _marks.clear();
 }
 
 void NonOverlappingMarksRenderer::computeMarksToBeRendered(const Camera* cam, const Planet* planet) {

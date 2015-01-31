@@ -222,7 +222,9 @@ public:
   ~NonOverlappingMarksRenderer();
   
   void addMark(NonOverlappingMark* mark);
-  
+
+  void removeAllMarks();
+
   virtual RenderState getRenderState(const G3MRenderContext* rc) {
     return RenderState::ready();
   }
