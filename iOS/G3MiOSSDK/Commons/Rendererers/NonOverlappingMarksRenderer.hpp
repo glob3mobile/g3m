@@ -9,8 +9,6 @@
 #ifndef __G3MiOSSDK__NonOverlappingMarksRenderer__
 #define __G3MiOSSDK__NonOverlappingMarksRenderer__
 
-#include <stdio.h>
-
 #include "DefaultRenderer.hpp"
 #include "Geodetic3D.hpp"
 #include "Vector2F.hpp"
@@ -263,4 +261,4 @@ public:
   
 };
 
-#endif /* defined(__G3MiOSSDK__NonOverlappingMarksRenderer__) */
+#endif
