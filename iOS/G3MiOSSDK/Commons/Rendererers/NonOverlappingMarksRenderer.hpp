@@ -129,6 +129,7 @@ class NonOverlappingMark{
   float _fX, _fY; //Applied Force
   
 #ifdef C_CODE
+#warning JM -> I think they have to be pointers (MarkWidget*) and manually delete them from the destructor, so the java-translator can generate the .dispose() calls
   MarkWidget _widget;
   MarkWidget _anchorWidget;
 #endif
