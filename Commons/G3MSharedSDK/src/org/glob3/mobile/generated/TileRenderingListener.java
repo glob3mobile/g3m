@@ -17,6 +17,4 @@ public abstract class TileRenderingListener
   }
 
   public abstract void changedTilesRendering(java.util.ArrayList<Tile> tilesStartedRendering, java.util.ArrayList<String> tilesStoppedRendering);
-    public abstract void tileStopRender();
-
 }
