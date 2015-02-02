@@ -8,6 +8,7 @@
 
 #include "NonOverlappingMarkers3DRenderer.hpp"
 
-int add(int x, int y) {
-    return x + y;
-}
+
+    int NonOverlappingMarkers3DRenderer::add(int x, int y) {
+        return x + y;
+    }

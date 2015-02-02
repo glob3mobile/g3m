@@ -9,6 +9,9 @@
 #ifndef __G3MiOSSDK__NonOverlappingMarkers3DRenderer__
 #define __G3MiOSSDK__NonOverlappingMarkers3DRenderer__
 
-#include <iostream>
+class NonOverlappingMarkers3DRenderer {
+    
+    int add(int x, int y);
+};
 
 #endif /* defined(__G3MiOSSDK__NonOverlappingMarkers3DRenderer__) */

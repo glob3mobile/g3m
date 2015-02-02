@@ -509,6 +509,7 @@
 		D8F0C70B17B52702002A89E0 /* GenericQuadTree.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8F0C70A17B52701002A89E0 /* GenericQuadTree.cpp */; };
 		D8F2EBAD18994A7B001B6103 /* CoordinateSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8F2EBAB18994A7B001B6103 /* CoordinateSystem.cpp */; };
 		D8FBCA981797F88300DBBB90 /* GLGlobalState.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8FBCA971797F87900DBBB90 /* GLGlobalState.hpp */; };
+		DF3AD13A1A7F17B3000F7BFE /* NonOverlappingMarkers3DRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DF3AD1381A7F17B3000F7BFE /* NonOverlappingMarkers3DRenderer.cpp */; };
 		E705123C165E782C00AEADB9 /* PlanetRendererBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E705123A165E782C00AEADB9 /* PlanetRendererBuilder.cpp */; };
 		E7051242165E916000AEADB9 /* G3MBuilder_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = E7051240165E916000AEADB9 /* G3MBuilder_iOS.mm */; };
 		E71AA049191AACE400834D69 /* ICanvasUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E71AA047191AACE400834D69 /* ICanvasUtils.cpp */; };
@@ -1806,6 +1807,8 @@
 		D8FEDAC815E7C219007633A0 /* MathUtils_iOS.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = MathUtils_iOS.hpp; path = Specific/Derived/MathUtils_iOS.hpp; sourceTree = "<group>"; };
 		D8FFA4C1183D03CE004E4AF3 /* TransformedTexCoorTexturedMesh_DirectionLight.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = TransformedTexCoorTexturedMesh_DirectionLight.fsh; sourceTree = "<group>"; };
 		D8FFA4C2183D03CE004E4AF3 /* TransformedTexCoorTexturedMesh_DirectionLight.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = TransformedTexCoorTexturedMesh_DirectionLight.vsh; sourceTree = "<group>"; };
+		DF3AD1381A7F17B3000F7BFE /* NonOverlappingMarkers3DRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NonOverlappingMarkers3DRenderer.cpp; sourceTree = "<group>"; };
+		DF3AD1391A7F17B3000F7BFE /* NonOverlappingMarkers3DRenderer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = NonOverlappingMarkers3DRenderer.hpp; sourceTree = "<group>"; };
 		E705123A165E782C00AEADB9 /* PlanetRendererBuilder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PlanetRendererBuilder.cpp; path = Commons/Basic/PlanetRendererBuilder.cpp; sourceTree = "<group>"; };
 		E705123B165E782C00AEADB9 /* PlanetRendererBuilder.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = PlanetRendererBuilder.hpp; path = Commons/Basic/PlanetRendererBuilder.hpp; sourceTree = "<group>"; };
 		E705123F165E916000AEADB9 /* G3MBuilder_iOS.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = G3MBuilder_iOS.hpp; path = Specific/Derived/G3MBuilder_iOS.hpp; sourceTree = "<group>"; };
@@ -2418,6 +2421,8 @@
 				4435E3DA19072F140064A7D7 /* ProtoRenderer.cpp */,
 				CFBD815419A3E0E100F1A8C4 /* PointCloudsRenderer.cpp */,
 				CFBD815519A3E0E100F1A8C4 /* PointCloudsRenderer.hpp */,
+				DF3AD1381A7F17B3000F7BFE /* NonOverlappingMarkers3DRenderer.cpp */,
+				DF3AD1391A7F17B3000F7BFE /* NonOverlappingMarkers3DRenderer.hpp */,
 			);
 			name = Renderers;
 			sourceTree = "<group>";
@@ -2986,6 +2991,7 @@
 				4435E3D919072EDA0064A7D7 /* Renderer.cpp in Sources */,
 				CFE3DBAC164AFDB000910037 /* JSONString.cpp in Sources */,
 				CF485F8918511C250013795B /* AndTileCondition.cpp in Sources */,
+				DF3AD13A1A7F17B3000F7BFE /* NonOverlappingMarkers3DRenderer.cpp in Sources */,
 				CF4CA477164C669D009BB7EB /* SGNode.cpp in Sources */,
 				CFC3BCC9164C6C7300A8D37D /* SGShape.cpp in Sources */,
 				CF2412AB191FD87C00B796FB /* GEO2DCoordinatesData.cpp in Sources */,
