@@ -191,6 +191,10 @@ public:
   
   bool onTouchEvent(float x, float y);
   
+  bool isMoving() const{
+    return (_dX*_dX + _dY*_dY) > _minWidgetSpeedInPixelsPerSecond * _minWidgetSpeedInPixelsPerSecond;
+  }
+  
 };
 
 class NonOverlappingMarksRenderer: public DefaultRenderer{
@@ -250,6 +254,8 @@ public:
   virtual bool isPlanetRenderer() {
     return false;
   }
+  
+  bool marksAreMoving() const;
   
   
 };

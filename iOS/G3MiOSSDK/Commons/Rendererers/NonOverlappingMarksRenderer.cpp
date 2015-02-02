@@ -513,3 +513,12 @@ bool NonOverlappingMarksRenderer::onTouchEvent(const G3MEventContext* ec, const 
   }
   return false;
 }
+
+bool NonOverlappingMarksRenderer::marksAreMoving() const{
+  for (int i = 0; i < _visibleMarks.size(); i++) {
+    if (_visibleMarks[i]->isMoving()){
+      return true;
+    }
+  }
+  return false;
+}
