@@ -6,4 +6,8 @@
 //
 //
 
-#include "NonOverlappingMarkers3DRenderer.h"
+#include "NonOverlappingMarkers3DRenderer.hpp"
+
+int add(int x, int y) {
+    return x + y;
+}
