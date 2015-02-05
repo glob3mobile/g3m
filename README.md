@@ -328,10 +328,3 @@ Our roadmap is changing continously, and we are open to change the order of new 
 License
 =======
 G3M is released under a 2 [clauses BSD license](https://github.com/glob3mobile/g3m/blob/purgatory/LICENSE.txt) Except for the Blender plugin exporter which is available under the GPL 2.0 License.:
-
-
-
-<a href="https://scan.coverity.com/projects/4148">
-  <img alt="Coverity Scan Build Status"
-       src="https://scan.coverity.com/projects/4148/badge.svg"/>
-</a>
