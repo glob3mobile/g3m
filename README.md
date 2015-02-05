@@ -331,3 +331,7 @@ G3M is released under a 2 [clauses BSD license](https://github.com/glob3mobile/g
 
 
 
+<a href="https://scan.coverity.com/projects/4148">
+  <img alt="Coverity Scan Build Status"
+       src="https://scan.coverity.com/projects/4148/badge.svg"/>
+</a>
