@@ -418,6 +418,8 @@ Mesh* createSectorMesh(const Planet* planet,
     nomr->addMark(mark);
   }
   
+  nomr->setEnable(false);
+  
   builder.initializeWidget();
 }
 

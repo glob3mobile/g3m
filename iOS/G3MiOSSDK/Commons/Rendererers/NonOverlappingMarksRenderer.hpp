@@ -155,7 +155,7 @@ public:
                      float springLengthInPixels = 10.0f,
                      float springK = 1.0f,
                      float maxSpringLength = 100.0f,
-                     float minSpringLength = 5.0f,
+                     float minSpringLength = 40.0f,
                      float electricCharge = 3000.0f,
                      float anchorElectricCharge = 1500.0f,
                      float maxWidgetSpeedInPixelsPerSecond = 1000.0f,
@@ -192,7 +192,8 @@ public:
   bool onTouchEvent(float x, float y);
   
   bool isMoving() const{
-    return (_dX*_dX + _dY*_dY) > _minWidgetSpeedInPixelsPerSecond * _minWidgetSpeedInPixelsPerSecond;
+    float velocitySquared = ((_dX*_dX) + (_dY*_dY));
+    return velocitySquared > (_minWidgetSpeedInPixelsPerSecond * _minWidgetSpeedInPixelsPerSecond);
   }
   
 };

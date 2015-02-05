@@ -484,11 +484,38 @@ void NonOverlappingMarksRenderer::render(const G3MRenderContext* rc, GLState* gl
   const Camera* cam = rc->getCurrentCamera();
   const Planet* planet = rc->getPlanet();
   
-  computeMarksToBeRendered(cam, planet);
-  
-  computeForces(cam, planet);
-  
-  applyForces(rc->getFrameStartTimer()->nowInMilliseconds(), cam);
+  if (bool instantConvergence = true){
+    
+    float timeStep = 40;
+    int maxIterations = 20;
+    
+    computeMarksToBeRendered(cam, planet);
+    
+    computeForces(cam, planet);
+    
+    applyForces(_lastPositionsUpdatedTime + timeStep, cam);
+    
+    int iteration = 0;
+    while (marksAreMoving() && iteration < maxIterations) {
+      
+      computeForces(cam, planet);
+      
+      applyForces(_lastPositionsUpdatedTime + timeStep, cam);
+      iteration++;
+      
+    }
+    if (iteration != 0){
+      printf("ITER: %d\n", iteration);
+    }
+    
+  } else{
+    
+    computeMarksToBeRendered(cam, planet);
+    
+    computeForces(cam, planet);
+    
+    applyForces(rc->getFrameStartTimer()->nowInMilliseconds(), cam);
+  }
   
   renderMarks(rc, glState);
 }
@@ -517,6 +544,7 @@ bool NonOverlappingMarksRenderer::onTouchEvent(const G3MEventContext* ec, const 
 bool NonOverlappingMarksRenderer::marksAreMoving() const{
   for (int i = 0; i < _visibleMarks.size(); i++) {
     if (_visibleMarks[i]->isMoving()){
+      //      printf("Mark %d is moving", i);
       return true;
     }
   }
