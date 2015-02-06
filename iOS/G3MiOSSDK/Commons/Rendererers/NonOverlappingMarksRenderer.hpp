@@ -71,12 +71,12 @@ class MarkWidget {
 
     ~WidgetImageListener() {}
 
-    virtual void imageCreated(const IImage*      image,
-                              const std::string& imageName) {
+    void imageCreated(const IImage*      image,
+                      const std::string& imageName) {
       _widget->prepareWidget(image, imageName);
     }
 
-    virtual void onError(const std::string& error) {
+    void onError(const std::string& error) {
       ILogger::instance()->logError(error);
     }
 
@@ -236,41 +236,40 @@ public:
 
   void removeAllMarks();
 
-  virtual RenderState getRenderState(const G3MRenderContext* rc) {
+  RenderState getRenderState(const G3MRenderContext* rc) {
     return RenderState::ready();
   }
 
-  virtual void render(const G3MRenderContext* rc,
-                      GLState* glState);
+  void render(const G3MRenderContext* rc,
+              GLState* glState);
 
-  virtual bool onTouchEvent(const G3MEventContext* ec,
-                            const TouchEvent* touchEvent);
+  bool onTouchEvent(const G3MEventContext* ec,
+                    const TouchEvent* touchEvent);
 
-  virtual void onResizeViewportEvent(const G3MEventContext* ec, int width, int height);
+  void onResizeViewportEvent(const G3MEventContext* ec, int width, int height);
 
-  virtual void start(const G3MRenderContext* rc) {
-
-  }
-
-  virtual void stop(const G3MRenderContext* rc) {
+  void start(const G3MRenderContext* rc) {
 
   }
 
-  virtual SurfaceElevationProvider* getSurfaceElevationProvider() {
+  void stop(const G3MRenderContext* rc) {
+
+  }
+
+  SurfaceElevationProvider* getSurfaceElevationProvider() {
     return NULL;
   }
 
-  virtual PlanetRenderer* getPlanetRenderer() {
+  PlanetRenderer* getPlanetRenderer() {
     return NULL;
   }
-
-  virtual bool isPlanetRenderer() {
+  
+  bool isPlanetRenderer() {
     return false;
   }
-
+  
   bool marksAreMoving() const;
-
-
+  
 };
 
 #endif
