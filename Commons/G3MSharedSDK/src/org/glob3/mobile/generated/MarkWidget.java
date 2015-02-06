@@ -33,12 +33,12 @@ public class MarkWidget
     {
     }
 
-    public void imageCreated(IImage image, String imageName)
+    public final void imageCreated(IImage image, String imageName)
     {
       _widget.prepareWidget(image, imageName);
     }
 
-    public void onError(String error)
+    public final void onError(String error)
     {
       ILogger.instance().logError(error);
     }

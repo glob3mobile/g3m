@@ -176,12 +176,12 @@ public class NonOverlappingMarksRenderer extends DefaultRenderer
     _marks.clear();
   }
 
-  public RenderState getRenderState(G3MRenderContext rc)
+  public final RenderState getRenderState(G3MRenderContext rc)
   {
     return RenderState.ready();
   }
 
-  public void render(G3MRenderContext rc, GLState glState)
+  public final void render(G3MRenderContext rc, GLState glState)
   {
   
     final Camera camera = rc.getCurrentCamera();
@@ -218,7 +218,7 @@ public class NonOverlappingMarksRenderer extends DefaultRenderer
     renderMarks(rc, glState);
   }
 
-  public boolean onTouchEvent(G3MEventContext ec, TouchEvent touchEvent)
+  public final boolean onTouchEvent(G3MEventContext ec, TouchEvent touchEvent)
   {
   
     if (touchEvent.getTapCount() == 1)
@@ -237,7 +237,7 @@ public class NonOverlappingMarksRenderer extends DefaultRenderer
     return false;
   }
 
-  public void onResizeViewportEvent(G3MEventContext ec, int width, int height)
+  public final void onResizeViewportEvent(G3MEventContext ec, int width, int height)
   {
     final int marksSize = _marks.size();
     for (int i = 0; i < marksSize; i++)
@@ -246,27 +246,27 @@ public class NonOverlappingMarksRenderer extends DefaultRenderer
     }
   }
 
-  public void start(G3MRenderContext rc)
+  public final void start(G3MRenderContext rc)
   {
 
   }
 
-  public void stop(G3MRenderContext rc)
+  public final void stop(G3MRenderContext rc)
   {
 
   }
 
-  public SurfaceElevationProvider getSurfaceElevationProvider()
-  {
-    return null;
-  }
-
-  public PlanetRenderer getPlanetRenderer()
+  public final SurfaceElevationProvider getSurfaceElevationProvider()
   {
     return null;
   }
 
-  public boolean isPlanetRenderer()
+  public final PlanetRenderer getPlanetRenderer()
+  {
+    return null;
+  }
+
+  public final boolean isPlanetRenderer()
   {
     return false;
   }
@@ -284,7 +284,6 @@ public class NonOverlappingMarksRenderer extends DefaultRenderer
     }
     return false;
   }
-
 
 }
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
