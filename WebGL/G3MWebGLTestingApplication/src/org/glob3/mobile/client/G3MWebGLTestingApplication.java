@@ -17,9 +17,10 @@ import org.glob3.mobile.generated.GEOGeometry;
 import org.glob3.mobile.generated.GEOPolygonRasterSymbol;
 import org.glob3.mobile.generated.GEORasterSymbol;
 import org.glob3.mobile.generated.GEORasterSymbolizer;
+import org.glob3.mobile.generated.Geodetic3D;
 import org.glob3.mobile.generated.JSONObject;
 import org.glob3.mobile.generated.LayerSet;
-import org.glob3.mobile.generated.MapBoxLayer;
+import org.glob3.mobile.generated.MapQuestLayer;
 import org.glob3.mobile.generated.MarksRenderer;
 import org.glob3.mobile.generated.Sector;
 import org.glob3.mobile.generated.ShapesRenderer;
@@ -32,6 +33,7 @@ import org.glob3.mobile.specific.G3MBuilder_WebGL;
 import org.glob3.mobile.specific.G3MWidget_WebGL;
 
 import com.google.gwt.core.client.EntryPoint;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.RootPanel;
 
@@ -42,7 +44,7 @@ public class G3MWebGLTestingApplication
 
    private final String         _g3mWidgetHolderId = "g3mWidgetHolder";
 
-   private G3MWidget_WebGL      _widget            = null;
+   private static G3MWidget_WebGL      _widget            = null;
 
    private final boolean        _markersParsed     = false;
    private MarksRenderer        _markersRenderer;
@@ -69,40 +71,54 @@ public class G3MWebGLTestingApplication
                8, // maxConcurrentOperationCount
                10, // delayMillis
                proxy));
-
+      
       _widget = builder.createWidget();
       g3mWidgetHolder.add(_widget);
+      
+      exportJS();
    }
+   
+   public static void setLatLonHeight(double lat, double lon, double height){
+	    _widget.setCameraPosition(Geodetic3D.fromDegrees(lat, lon, height));
+   }
+   
+   private native void exportJS() /*-{
+		$wnd.setCameraLatLonHeight= function(lat, lon, height){
+			@org.glob3.mobile.client.G3MWebGLTestingApplication::setLatLonHeight(DDD)(lat, lon, height);
+		}
+   }-*/;
 
 
    private LayerSet createLayerSet() {
-      final LayerSet layerSet = new LayerSet();
-      //      layerSet.addLayer(MapQuestLayer.newOSM(TimeInterval.fromDays(30)));
+	      final LayerSet layerSet = new LayerSet();
+	      //      layerSet.addLayer(MapQuestLayer.newOSM(TimeInterval.fromDays(30)));
 
-      layerSet.addLayer(new MapBoxLayer("examples.map-9ijuk24y", TimeInterval.fromDays(30)));
-
-
-      final String urlTemplate = "http://192.168.1.2/ne_10m_admin_0_countries-Levels10/{level}/{y}/{x}.geojson";
-      final int firstLevel = 2;
-      final int maxLevel = 10;
-
-      final GEORasterSymbolizer symbolizer = new SampleRasterSymbolizer();
-
-      final TiledVectorLayer tiledVectorLayer = TiledVectorLayer.newMercator( //
-               symbolizer, //
-               urlTemplate, //
-               Sector.fullSphere(), // sector
-               firstLevel, //
-               maxLevel, //
-               TimeInterval.fromDays(30), // timeToCache
-               true, // readExpired
-               1, // transparency
-               null // condition
-      );
-      layerSet.addLayer(tiledVectorLayer);
+	     // layerSet.addLayer(new MapBoxLayer("examples.map-9ijuk24y", TimeInterval.fromDays(30)));
+	      
+	      layerSet.addLayer(MapQuestLayer.newOSM(TimeInterval.fromDays(30)));
 
 
-      return layerSet;
+	      final String urlTemplate = "http://192.168.1.2/ne_10m_admin_0_countries-Levels10/{level}/{y}/{x}.geojson";
+	      final int firstLevel = 2;
+	      final int maxLevel = 10;
+
+	      final GEORasterSymbolizer symbolizer = new SampleRasterSymbolizer();
+
+	      final TiledVectorLayer tiledVectorLayer = TiledVectorLayer.newMercator( //
+	               symbolizer, //
+	               urlTemplate, //
+	               Sector.fullSphere(), // sector
+	               firstLevel, //
+	               maxLevel, //
+	               TimeInterval.fromDays(30), // timeToCache
+	               true, // readExpired
+	               1, // transparency
+	               null // condition
+	      );
+	     // layerSet.addLayer(tiledVectorLayer);
+
+
+	      return layerSet;
    }
 
    private static class SampleRasterSymbolizer

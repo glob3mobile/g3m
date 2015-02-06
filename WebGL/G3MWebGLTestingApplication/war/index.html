@@ -11,6 +11,9 @@
 <!--                                           -->
 <script type="text/javascript"
 	src="org.glob3.mobile.G3MWebGLTestingApplication/org.glob3.mobile.G3MWebGLTestingApplication.nocache.js"></script>
+	
+	
+    <script src="https://js.leapmotion.com/leap-0.6.4.js"></script>
 </head>
 
 <body>
@@ -42,6 +45,40 @@
     	_onLoadG3MListener = func;
     }
 	</script>
+	
+	  <script type="text/javascript">
+    // Leap.loop uses browser's requestAnimationFrame
+    var options = { enableGestures: true };
+    
+    var lat = 0;
+    var lon = 0;
+    var h = 10000000;
+    
+    // Main Leap Loop
+    Leap.loop(options, function(frame) {
+    
+    	if (frame.hands.length > 0){
+    		if (frame.hands.length == 1){
+    			var hand = frame.hands[0];
+    			if (hand.type == "right"){
+    				lon+= 0.1;
+    			}
+    			if (hand.type == "left"){
+    				lon-= 0.1;
+    			}
+    		}
+    		
+    		
+    		if (frame.hands.length == 2){
+    			h *= 0.999;
+    		}
+    		
+    		setCameraLatLonHeight(lat, lon, h);
+    	}
+    	
+    });
+    
+    </script>
 	
 </body>
 </html>
