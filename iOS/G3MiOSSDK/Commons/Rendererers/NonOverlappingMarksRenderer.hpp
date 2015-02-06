@@ -159,7 +159,7 @@ public:
                      float electricCharge = 3000.0f,
                      float anchorElectricCharge = 1500.0f,
                      float maxWidgetSpeedInPixelsPerSecond = 1000.0f,
-                     float minWidgetSpeedInPixelsPerSecond = 35.0f,
+                     float minWidgetSpeedInPixelsPerSecond = 70.0f,
                      float resistanceFactor = 0.95f);
   
   ~NonOverlappingMark();
@@ -200,7 +200,8 @@ public:
 
 class NonOverlappingMarksRenderer: public DefaultRenderer{
   
-  int _maxVisibleMarks;
+  const int _maxVisibleMarks;
+  const int _maxConvergenceSteps;
   
   std::vector<NonOverlappingMark*> _visibleMarks;
   std::vector<NonOverlappingMark*> _marks;
@@ -218,7 +219,8 @@ class NonOverlappingMarksRenderer: public DefaultRenderer{
   
   
 public:
-  NonOverlappingMarksRenderer(int maxVisibleMarks = 30);
+  NonOverlappingMarksRenderer(int maxVisibleMarks = 30,
+                              int maxConvergenceSteps = -1); //-1 means the system will be free to behave as a physical system on real time
   
   ~NonOverlappingMarksRenderer();
   

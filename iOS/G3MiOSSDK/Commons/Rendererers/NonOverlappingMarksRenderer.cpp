@@ -352,8 +352,10 @@ bool NonOverlappingMark::onTouchEvent(float x, float y){
 
 #pragma-mark Renderer
 
-NonOverlappingMarksRenderer::NonOverlappingMarksRenderer(int maxVisibleMarks):
+NonOverlappingMarksRenderer::NonOverlappingMarksRenderer(int maxVisibleMarks,
+                                                         int maxConvergenceSteps):
 _maxVisibleMarks(maxVisibleMarks),
+_maxConvergenceSteps(maxConvergenceSteps),
 _lastPositionsUpdatedTime(0),
 _connectorsGLState(NULL)
 {
@@ -484,10 +486,11 @@ void NonOverlappingMarksRenderer::render(const G3MRenderContext* rc, GLState* gl
   const Camera* cam = rc->getCurrentCamera();
   const Planet* planet = rc->getPlanet();
   
-  if (bool instantConvergence = true){
+  if (_maxConvergenceSteps > 0){
     
-    float timeStep = 40;
-    int maxIterations = 20;
+    //Looking for convergence on _maxConvergenceSteps
+    
+    long long timeStep = 40;
     
     computeMarksToBeRendered(cam, planet);
     
@@ -496,24 +499,16 @@ void NonOverlappingMarksRenderer::render(const G3MRenderContext* rc, GLState* gl
     applyForces(_lastPositionsUpdatedTime + timeStep, cam);
     
     int iteration = 0;
-    while (marksAreMoving() && iteration < maxIterations) {
-      
+    while (marksAreMoving() && iteration < _maxConvergenceSteps) {
       computeForces(cam, planet);
-      
       applyForces(_lastPositionsUpdatedTime + timeStep, cam);
       iteration++;
-      
-    }
-    if (iteration != 0){
-      printf("ITER: %d\n", iteration);
     }
     
   } else{
-    
+    //Real Time
     computeMarksToBeRendered(cam, planet);
-    
     computeForces(cam, planet);
-    
     applyForces(rc->getFrameStartTimer()->nowInMilliseconds(), cam);
   }
   
