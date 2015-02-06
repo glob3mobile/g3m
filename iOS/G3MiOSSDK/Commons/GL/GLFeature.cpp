@@ -109,6 +109,7 @@ void GeometryGLFeature::applyOnGlobalGLState(GLGlobalState* state) const {
 
 GeometryGLFeature::~GeometryGLFeature() {
   //  _position->_release();
+#warning JM -> it looks like this class is leaking IFloatBuffer* buffer
 
 #ifdef JAVA_CODE
   super.dispose();

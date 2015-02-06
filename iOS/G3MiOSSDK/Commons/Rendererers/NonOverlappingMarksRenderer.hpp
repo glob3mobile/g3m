@@ -9,8 +9,6 @@
 #ifndef __G3MiOSSDK__NonOverlappingMarksRenderer__
 #define __G3MiOSSDK__NonOverlappingMarksRenderer__
 
-#include <stdio.h>
-
 #include "DefaultRenderer.hpp"
 #include "Geodetic3D.hpp"
 #include "Vector2F.hpp"
@@ -129,6 +127,7 @@ class NonOverlappingMark{
   float _fX, _fY; //Applied Force
   
 #ifdef C_CODE
+#warning JM -> I think they have to be pointers (MarkWidget*) and manually delete them from the destructor, so the java-translator can generate the .dispose() calls
   MarkWidget _widget;
   MarkWidget _anchorWidget;
 #endif
@@ -225,7 +224,9 @@ public:
   ~NonOverlappingMarksRenderer();
   
   void addMark(NonOverlappingMark* mark);
-  
+
+  void removeAllMarks();
+
   virtual RenderState getRenderState(const G3MRenderContext* rc) {
     return RenderState::ready();
   }
@@ -263,4 +264,4 @@ public:
   
 };
 
-#endif /* defined(__G3MiOSSDK__NonOverlappingMarksRenderer__) */
+#endif
