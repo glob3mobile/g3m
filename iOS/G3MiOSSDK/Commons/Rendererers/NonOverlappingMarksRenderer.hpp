@@ -152,11 +152,11 @@ public:
                      const Geodetic3D& position,
                      MarkWidgetTouchListener* touchListener = NULL,
                      float springLengthInPixels = 10.0f,
-                     float springK = 1.0f,
+                     float springK = 70.0f,
                      float maxSpringLength = 100.0f,
                      float minSpringLength = 40.0f,
-                     float electricCharge = 3000.0f,
-                     float anchorElectricCharge = 1500.0f,
+                     float electricCharge = 1500.0f,
+                     float anchorElectricCharge = 750.0f,
                      float maxWidgetSpeedInPixelsPerSecond = 1000.0f,
                      float minWidgetSpeedInPixelsPerSecond = 70.0f,
                      float resistanceFactor = 0.95f);
@@ -219,7 +219,7 @@ class NonOverlappingMarksRenderer: public DefaultRenderer{
   
 public:
   NonOverlappingMarksRenderer(int maxVisibleMarks = 30,
-                              int maxConvergenceSteps = -1); //-1 means the system will be free to behave as a physical system on real time
+                              int maxConvergenceSteps = -1); // < 0 means real time
   
   ~NonOverlappingMarksRenderer();
   
