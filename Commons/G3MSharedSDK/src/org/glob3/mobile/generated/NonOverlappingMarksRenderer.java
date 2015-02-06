@@ -2,7 +2,8 @@ package org.glob3.mobile.generated;
 public class NonOverlappingMarksRenderer extends DefaultRenderer
 {
 
-  private int _maxVisibleMarks;
+  private final int _maxVisibleMarks;
+  private final int _maxConvergenceSteps;
 
   private java.util.ArrayList<NonOverlappingMark> _visibleMarks = new java.util.ArrayList<NonOverlappingMark>();
   private java.util.ArrayList<NonOverlappingMark> _marks = new java.util.ArrayList<NonOverlappingMark>();
@@ -120,13 +121,18 @@ public class NonOverlappingMarksRenderer extends DefaultRenderer
   }
 
 
-  public NonOverlappingMarksRenderer()
-  {
-     this(30);
-  }
   public NonOverlappingMarksRenderer(int maxVisibleMarks)
   {
+     this(maxVisibleMarks, -1);
+  }
+  public NonOverlappingMarksRenderer()
+  {
+     this(30, -1);
+  }
+  public NonOverlappingMarksRenderer(int maxVisibleMarks, int maxConvergenceSteps)
+  {
      _maxVisibleMarks = maxVisibleMarks;
+     _maxConvergenceSteps = maxConvergenceSteps;
      _lastPositionsUpdatedTime = 0;
      _connectorsGLState = null;
   
@@ -146,7 +152,17 @@ public class NonOverlappingMarksRenderer extends DefaultRenderer
   public final void addMark(NonOverlappingMark mark)
   {
     _marks.add(mark);
-  
+  }
+
+  public final void removeAllMarks()
+  {
+    final int marksSize = _marks.size();
+    for (int i = 0; i < marksSize; i++)
+    {
+      if (_marks.get(i) != null)
+         _marks.get(i).dispose();
+    }
+    _marks.clear();
   }
 
   public RenderState getRenderState(G3MRenderContext rc)
@@ -160,11 +176,35 @@ public class NonOverlappingMarksRenderer extends DefaultRenderer
     final Camera cam = rc.getCurrentCamera();
     final Planet planet = rc.getPlanet();
   
-    computeMarksToBeRendered(cam, planet);
+    if (_maxConvergenceSteps > 0)
+    {
   
-    computeForces(cam, planet);
+      //Looking for convergence on _maxConvergenceSteps
   
-    applyForces(rc.getFrameStartTimer().nowInMilliseconds(), cam);
+      long timeStep = 40;
+  
+      computeMarksToBeRendered(cam, planet);
+  
+      computeForces(cam, planet);
+  
+      applyForces(_lastPositionsUpdatedTime + timeStep, cam);
+  
+      int iteration = 0;
+      while (marksAreMoving() && iteration < _maxConvergenceSteps)
+      {
+        computeForces(cam, planet);
+        applyForces(_lastPositionsUpdatedTime + timeStep, cam);
+        iteration++;
+      }
+  
+    }
+    else
+    {
+      //Real Time
+      computeMarksToBeRendered(cam, planet);
+      computeForces(cam, planet);
+      applyForces(rc.getFrameStartTimer().nowInMilliseconds(), cam);
+    }
   
     renderMarks(rc, glState);
   }
@@ -218,6 +258,19 @@ public class NonOverlappingMarksRenderer extends DefaultRenderer
 
   public boolean isPlanetRenderer()
   {
+    return false;
+  }
+
+  public final boolean marksAreMoving()
+  {
+    for (int i = 0; i < _visibleMarks.size(); i++)
+    {
+      if (_visibleMarks.get(i).isMoving())
+      {
+        //      printf("Mark %d is moving", i);
+        return true;
+      }
+    }
     return false;
   }
 

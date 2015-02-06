@@ -30,39 +30,39 @@ public class NonOverlappingMark
   }
   public NonOverlappingMark(IImageBuilder imageBuilderWidget, IImageBuilder imageBuilderAnchor, Geodetic3D position, MarkWidgetTouchListener touchListener, float springLengthInPixels, float springK, float maxSpringLength, float minSpringLength, float electricCharge, float anchorElectricCharge, float maxWidgetSpeedInPixelsPerSecond)
   {
-     this(imageBuilderWidget, imageBuilderAnchor, position, touchListener, springLengthInPixels, springK, maxSpringLength, minSpringLength, electricCharge, anchorElectricCharge, maxWidgetSpeedInPixelsPerSecond, 35.0f, 0.95f);
+     this(imageBuilderWidget, imageBuilderAnchor, position, touchListener, springLengthInPixels, springK, maxSpringLength, minSpringLength, electricCharge, anchorElectricCharge, maxWidgetSpeedInPixelsPerSecond, 70.0f, 0.95f);
   }
   public NonOverlappingMark(IImageBuilder imageBuilderWidget, IImageBuilder imageBuilderAnchor, Geodetic3D position, MarkWidgetTouchListener touchListener, float springLengthInPixels, float springK, float maxSpringLength, float minSpringLength, float electricCharge, float anchorElectricCharge)
   {
-     this(imageBuilderWidget, imageBuilderAnchor, position, touchListener, springLengthInPixels, springK, maxSpringLength, minSpringLength, electricCharge, anchorElectricCharge, 1000.0f, 35.0f, 0.95f);
+     this(imageBuilderWidget, imageBuilderAnchor, position, touchListener, springLengthInPixels, springK, maxSpringLength, minSpringLength, electricCharge, anchorElectricCharge, 1000.0f, 70.0f, 0.95f);
   }
   public NonOverlappingMark(IImageBuilder imageBuilderWidget, IImageBuilder imageBuilderAnchor, Geodetic3D position, MarkWidgetTouchListener touchListener, float springLengthInPixels, float springK, float maxSpringLength, float minSpringLength, float electricCharge)
   {
-     this(imageBuilderWidget, imageBuilderAnchor, position, touchListener, springLengthInPixels, springK, maxSpringLength, minSpringLength, electricCharge, 1500.0f, 1000.0f, 35.0f, 0.95f);
+     this(imageBuilderWidget, imageBuilderAnchor, position, touchListener, springLengthInPixels, springK, maxSpringLength, minSpringLength, electricCharge, 750.0f, 1000.0f, 70.0f, 0.95f);
   }
   public NonOverlappingMark(IImageBuilder imageBuilderWidget, IImageBuilder imageBuilderAnchor, Geodetic3D position, MarkWidgetTouchListener touchListener, float springLengthInPixels, float springK, float maxSpringLength, float minSpringLength)
   {
-     this(imageBuilderWidget, imageBuilderAnchor, position, touchListener, springLengthInPixels, springK, maxSpringLength, minSpringLength, 3000.0f, 1500.0f, 1000.0f, 35.0f, 0.95f);
+     this(imageBuilderWidget, imageBuilderAnchor, position, touchListener, springLengthInPixels, springK, maxSpringLength, minSpringLength, 1500.0f, 750.0f, 1000.0f, 70.0f, 0.95f);
   }
   public NonOverlappingMark(IImageBuilder imageBuilderWidget, IImageBuilder imageBuilderAnchor, Geodetic3D position, MarkWidgetTouchListener touchListener, float springLengthInPixels, float springK, float maxSpringLength)
   {
-     this(imageBuilderWidget, imageBuilderAnchor, position, touchListener, springLengthInPixels, springK, maxSpringLength, 5.0f, 3000.0f, 1500.0f, 1000.0f, 35.0f, 0.95f);
+     this(imageBuilderWidget, imageBuilderAnchor, position, touchListener, springLengthInPixels, springK, maxSpringLength, 40.0f, 1500.0f, 750.0f, 1000.0f, 70.0f, 0.95f);
   }
   public NonOverlappingMark(IImageBuilder imageBuilderWidget, IImageBuilder imageBuilderAnchor, Geodetic3D position, MarkWidgetTouchListener touchListener, float springLengthInPixels, float springK)
   {
-     this(imageBuilderWidget, imageBuilderAnchor, position, touchListener, springLengthInPixels, springK, 100.0f, 5.0f, 3000.0f, 1500.0f, 1000.0f, 35.0f, 0.95f);
+     this(imageBuilderWidget, imageBuilderAnchor, position, touchListener, springLengthInPixels, springK, 100.0f, 40.0f, 1500.0f, 750.0f, 1000.0f, 70.0f, 0.95f);
   }
   public NonOverlappingMark(IImageBuilder imageBuilderWidget, IImageBuilder imageBuilderAnchor, Geodetic3D position, MarkWidgetTouchListener touchListener, float springLengthInPixels)
   {
-     this(imageBuilderWidget, imageBuilderAnchor, position, touchListener, springLengthInPixels, 1.0f, 100.0f, 5.0f, 3000.0f, 1500.0f, 1000.0f, 35.0f, 0.95f);
+     this(imageBuilderWidget, imageBuilderAnchor, position, touchListener, springLengthInPixels, 70.0f, 100.0f, 40.0f, 1500.0f, 750.0f, 1000.0f, 70.0f, 0.95f);
   }
   public NonOverlappingMark(IImageBuilder imageBuilderWidget, IImageBuilder imageBuilderAnchor, Geodetic3D position, MarkWidgetTouchListener touchListener)
   {
-     this(imageBuilderWidget, imageBuilderAnchor, position, touchListener, 10.0f, 1.0f, 100.0f, 5.0f, 3000.0f, 1500.0f, 1000.0f, 35.0f, 0.95f);
+     this(imageBuilderWidget, imageBuilderAnchor, position, touchListener, 10.0f, 70.0f, 100.0f, 40.0f, 1500.0f, 750.0f, 1000.0f, 70.0f, 0.95f);
   }
   public NonOverlappingMark(IImageBuilder imageBuilderWidget, IImageBuilder imageBuilderAnchor, Geodetic3D position)
   {
-     this(imageBuilderWidget, imageBuilderAnchor, position, null, 10.0f, 1.0f, 100.0f, 5.0f, 3000.0f, 1500.0f, 1000.0f, 35.0f, 0.95f);
+     this(imageBuilderWidget, imageBuilderAnchor, position, null, 10.0f, 70.0f, 100.0f, 40.0f, 1500.0f, 750.0f, 1000.0f, 70.0f, 0.95f);
   }
   public NonOverlappingMark(IImageBuilder imageBuilderWidget, IImageBuilder imageBuilderAnchor, Geodetic3D position, MarkWidgetTouchListener touchListener, float springLengthInPixels, float springK, float maxSpringLength, float minSpringLength, float electricCharge, float anchorElectricCharge, float maxWidgetSpeedInPixelsPerSecond, float minWidgetSpeedInPixelsPerSecond, float resistanceFactor)
   {
@@ -274,6 +274,12 @@ public class NonOverlappingMark
   public final boolean onTouchEvent(float x, float y)
   {
     return _widget.onTouchEvent(x, y);
+  }
+
+  public final boolean isMoving()
+  {
+    float velocitySquared = ((_dX *_dX) + (_dY *_dY));
+    return velocitySquared > (_minWidgetSpeedInPixelsPerSecond * _minWidgetSpeedInPixelsPerSecond);
   }
 
 }
