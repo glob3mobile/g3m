@@ -167,7 +167,7 @@ public class MarkWidget
     return _image != null;
   }
 
-  public final void clampPositionInsideScreen(int viewportWidth, int viewportHeight, int margin)
+  public final void clampPositionInsideScreen(int viewportWidth, int viewportHeight, float margin)
   {
     final IMathUtils mu = IMathUtils.instance();
     float x = mu.clamp(_x, _halfWidth + margin, viewportWidth - _halfWidth - margin);

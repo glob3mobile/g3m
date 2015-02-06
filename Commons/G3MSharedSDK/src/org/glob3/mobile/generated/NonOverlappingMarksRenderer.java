@@ -3,6 +3,7 @@ public class NonOverlappingMarksRenderer extends DefaultRenderer
 {
 
   private final int _maxVisibleMarks;
+  private final float _viewportMargin;
   private final int _maxConvergenceSteps;
 
   private java.util.ArrayList<NonOverlappingMark> _visibleMarks = new java.util.ArrayList<NonOverlappingMark>();
@@ -10,12 +11,12 @@ public class NonOverlappingMarksRenderer extends DefaultRenderer
 
   private void computeMarksToBeRendered(Camera cam, Planet planet)
   {
-  
     _visibleMarks.clear();
   
     final Frustum frustrum = cam.getFrustumInModelCoordinates();
   
-    for (int i = 0; i < _marks.size(); i++)
+    final int marksSize = _marks.size();
+    for (int i = 0; i < marksSize; i++)
     {
       NonOverlappingMark m = _marks.get(i);
   
@@ -47,17 +48,17 @@ public class NonOverlappingMarksRenderer extends DefaultRenderer
   
     FloatBufferBuilderFromCartesian2D pos2D = new FloatBufferBuilderFromCartesian2D();
   
-    for (int i = 0; i < _visibleMarks.size(); i++)
+    final int visibleMarksSize = _visibleMarks.size();
+    for (int i = 0; i < visibleMarksSize; i++)
     {
       Vector2F sp = _visibleMarks.get(i).getScreenPos();
       Vector2F asp = _visibleMarks.get(i).getAnchorScreenPos();
   
       pos2D.add(sp._x, -sp._y);
       pos2D.add(asp._x, -asp._y);
-  
     }
   
-    _connectorsGLState.addGLFeature(new Geometry2DGLFeature(pos2D.create(), 2, 0, true, 0, 3.0f, true, 10.0f, new Vector2F(0.0f,0.0f)), false);
+    _connectorsGLState.addGLFeature(new Geometry2DGLFeature(pos2D.create(), 2, 0, true, 0, 3.0f, true, 10.0f, Vector2F.zero()), false);
   
     _connectorsGLState.addGLFeature(new ViewportExtentGLFeature((int)rc.getCurrentCamera().getViewPortWidth(), (int)rc.getCurrentCamera().getViewPortHeight()), false);
   
@@ -66,25 +67,26 @@ public class NonOverlappingMarksRenderer extends DefaultRenderer
 
   private void computeForces(Camera cam, Planet planet)
   {
+    final int visibleMarksSize = _visibleMarks.size();
   
     //Compute Mark Anchor Screen Positions
-    for (int i = 0; i < _visibleMarks.size(); i++)
+    for (int i = 0; i < visibleMarksSize; i++)
     {
       _visibleMarks.get(i).computeAnchorScreenPos(cam, planet);
     }
   
     //Compute Mark Forces
-    for (int i = 0; i < _visibleMarks.size(); i++)
+    for (int i = 0; i < visibleMarksSize; i++)
     {
       NonOverlappingMark mark = _visibleMarks.get(i);
       mark.applyHookesLaw();
   
-      for (int j = i+1; j < _visibleMarks.size(); j++)
+      for (int j = i+1; j < visibleMarksSize; j++)
       {
         mark.applyCoulombsLaw(_visibleMarks.get(j));
       }
   
-      for (int j = 0; j < _visibleMarks.size(); j++)
+      for (int j = 0; j < visibleMarksSize; j++)
       {
         if (i != j)
         {
@@ -99,21 +101,28 @@ public class NonOverlappingMarksRenderer extends DefaultRenderer
     renderConnectorLines(rc);
   
     //Draw Anchors and Marks
-    for (int i = 0; i < _visibleMarks.size(); i++)
+    final int visibleMarksSize = _visibleMarks.size();
+    for (int i = 0; i < visibleMarksSize; i++)
     {
       _visibleMarks.get(i).render(rc, glState);
     }
   }
-  private void applyForces(long now, Camera cam)
+  private void applyForces(long now, Camera camera)
   {
   
     if (_lastPositionsUpdatedTime != 0) //If not First frame
     {
   
+      final int viewPortWidth = camera.getViewPortWidth();
+      final int viewPortHeight = camera.getViewPortHeight();
+  
+      final double elapsedMS = now - _lastPositionsUpdatedTime;
+  
       //Update Position based on last Forces
-      for (int i = 0; i < _visibleMarks.size(); i++)
+      final int visibleMarksSize = _visibleMarks.size();
+      for (int i = 0; i < visibleMarksSize; i++)
       {
-        _visibleMarks.get(i).updatePositionWithCurrentForce(now - _lastPositionsUpdatedTime, cam.getViewPortWidth(), cam.getViewPortHeight());
+        _visibleMarks.get(i).updatePositionWithCurrentForce(elapsedMS, viewPortWidth, viewPortHeight, _viewportMargin);
       }
     }
   
@@ -121,17 +130,18 @@ public class NonOverlappingMarksRenderer extends DefaultRenderer
   }
 
 
+  public NonOverlappingMarksRenderer(int maxVisibleMarks, float viewportMargin)
+  {
+     this(maxVisibleMarks, viewportMargin, -1);
+  }
   public NonOverlappingMarksRenderer(int maxVisibleMarks)
   {
-     this(maxVisibleMarks, -1);
+     this(maxVisibleMarks, 5, -1);
   }
-  public NonOverlappingMarksRenderer()
-  {
-     this(30, -1);
-  }
-  public NonOverlappingMarksRenderer(int maxVisibleMarks, int maxConvergenceSteps)
+  public NonOverlappingMarksRenderer(int maxVisibleMarks, float viewportMargin, int maxConvergenceSteps)
   {
      _maxVisibleMarks = maxVisibleMarks;
+     _viewportMargin = viewportMargin;
      _maxConvergenceSteps = maxConvergenceSteps;
      _lastPositionsUpdatedTime = 0;
      _connectorsGLState = null;
@@ -142,7 +152,8 @@ public class NonOverlappingMarksRenderer extends DefaultRenderer
   {
     _connectorsGLState._release();
   
-    for (int i = 0; i < _marks.size(); i++)
+    final int marksSize = _marks.size();
+    for (int i = 0; i < marksSize; i++)
     {
       if (_marks.get(i) != null)
          _marks.get(i).dispose();
@@ -173,37 +184,35 @@ public class NonOverlappingMarksRenderer extends DefaultRenderer
   public void render(G3MRenderContext rc, GLState glState)
   {
   
-    final Camera cam = rc.getCurrentCamera();
+    final Camera camera = rc.getCurrentCamera();
     final Planet planet = rc.getPlanet();
   
     if (_maxConvergenceSteps > 0)
     {
-  
       //Looking for convergence on _maxConvergenceSteps
   
       long timeStep = 40;
   
-      computeMarksToBeRendered(cam, planet);
+      computeMarksToBeRendered(camera, planet);
   
-      computeForces(cam, planet);
+      computeForces(camera, planet);
   
-      applyForces(_lastPositionsUpdatedTime + timeStep, cam);
+      applyForces(_lastPositionsUpdatedTime + timeStep, camera);
   
       int iteration = 0;
       while (marksAreMoving() && iteration < _maxConvergenceSteps)
       {
-        computeForces(cam, planet);
-        applyForces(_lastPositionsUpdatedTime + timeStep, cam);
+        computeForces(camera, planet);
+        applyForces(_lastPositionsUpdatedTime + timeStep, camera);
         iteration++;
       }
-  
     }
     else
     {
       //Real Time
-      computeMarksToBeRendered(cam, planet);
-      computeForces(cam, planet);
-      applyForces(rc.getFrameStartTimer().nowInMilliseconds(), cam);
+      computeMarksToBeRendered(camera, planet);
+      computeForces(camera, planet);
+      applyForces(rc.getFrameStartTimer().nowInMilliseconds(), camera);
     }
   
     renderMarks(rc, glState);
@@ -216,7 +225,8 @@ public class NonOverlappingMarksRenderer extends DefaultRenderer
     {
       final float x = touchEvent.getTouch(0).getPos()._x;
       final float y = touchEvent.getTouch(0).getPos()._y;
-      for (int i = 0; i < _visibleMarks.size(); i++)
+      final int visibleMarksSize = _visibleMarks.size();
+      for (int i = 0; i < visibleMarksSize; i++)
       {
         if (_visibleMarks.get(i).onTouchEvent(x, y))
         {
@@ -229,11 +239,11 @@ public class NonOverlappingMarksRenderer extends DefaultRenderer
 
   public void onResizeViewportEvent(G3MEventContext ec, int width, int height)
   {
-    for (int i = 0; i < _marks.size(); i++)
+    final int marksSize = _marks.size();
+    for (int i = 0; i < marksSize; i++)
     {
       _marks.get(i).onResizeViewportEvent(width, height);
     }
-  
   }
 
   public void start(G3MRenderContext rc)
@@ -263,7 +273,8 @@ public class NonOverlappingMarksRenderer extends DefaultRenderer
 
   public final boolean marksAreMoving()
   {
-    for (int i = 0; i < _visibleMarks.size(); i++)
+    final int visibleMarksSize = _visibleMarks.size();
+    for (int i = 0; i < visibleMarksSize; i++)
     {
       if (_visibleMarks.get(i).isMoving())
       {
