@@ -360,42 +360,42 @@ Mesh* createSectorMesh(const Planet* planet,
                                                     new DownloaderImageBuilder(URL("file:///anchorWidget.png")),
                                                     Geodetic3D::fromDegrees(28.131817, -15.440219, 0),
                                                     new MyMarkWidgetTouchListener(),
-                                                    100.0);
+                                                    10.0);
   nomr->addMark(mark);
   
   NonOverlappingMark* mark2 = new NonOverlappingMark(new DownloaderImageBuilder(URL("file:///g3m-marker.png")),
                                                      new DownloaderImageBuilder(URL("file:///anchorWidget.png")),
                                                      Geodetic3D::fromDegrees(28.947345, -13.523105, 0),
                                                      new MyMarkWidgetTouchListener(),
-                                                     100.0);
+                                                     10.0);
   nomr->addMark(mark2);
   
   NonOverlappingMark* mark3 = new NonOverlappingMark(new DownloaderImageBuilder(URL("file:///g3m-marker.png")),
                                                      new DownloaderImageBuilder(URL("file:///anchorWidget.png")),
                                                      Geodetic3D::fromDegrees(28.473802, -13.859360, 0),
                                                      new MyMarkWidgetTouchListener(),
-                                                     100.0);
+                                                     10.0);
   nomr->addMark(mark3);
   
   NonOverlappingMark* mark4 = new NonOverlappingMark(new DownloaderImageBuilder(URL("file:///g3m-marker.png")),
                                                      new DownloaderImageBuilder(URL("file:///anchorWidget.png")),
                                                      Geodetic3D::fromDegrees(28.467706, -16.251426, 0),
                                                      new MyMarkWidgetTouchListener(),
-                                                     100.0);
+                                                     10.0);
   nomr->addMark(mark4);
   
   NonOverlappingMark* mark5 = new NonOverlappingMark(new DownloaderImageBuilder(URL("file:///g3m-marker.png")),
                                                      new DownloaderImageBuilder(URL("file:///anchorWidget.png")),
                                                      Geodetic3D::fromDegrees(28.701819, -17.762003, 0),
                                                      new MyMarkWidgetTouchListener(),
-                                                     100.0);
+                                                     10.0);
   nomr->addMark(mark5);
   
   NonOverlappingMark* mark6 = new NonOverlappingMark(new DownloaderImageBuilder(URL("file:///g3m-marker.png")),
                                                      new DownloaderImageBuilder(URL("file:///anchorWidget.png")),
                                                      Geodetic3D::fromDegrees(28.086595, -17.105796, 0),
                                                      new MyMarkWidgetTouchListener(),
-                                                     100.0);
+                                                     10.0);
   nomr->addMark(mark6);
   
   NonOverlappingMark* mark7 = new NonOverlappingMark(new DownloaderImageBuilder(URL("file:///g3m-marker.png")),

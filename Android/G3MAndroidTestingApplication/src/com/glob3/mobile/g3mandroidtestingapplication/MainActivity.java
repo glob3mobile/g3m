@@ -4,7 +4,14 @@ package com.glob3.mobile.g3mandroidtestingapplication;
 
 import org.glob3.mobile.generated.Angle;
 import org.glob3.mobile.generated.DownloadPriority;
+import org.glob3.mobile.generated.DownloaderImageBuilder;
 import org.glob3.mobile.generated.Geodetic3D;
+import org.glob3.mobile.generated.ILogger;
+import org.glob3.mobile.generated.LayerSet;
+import org.glob3.mobile.generated.MapQuestLayer;
+import org.glob3.mobile.generated.MarkWidget;
+import org.glob3.mobile.generated.NonOverlappingMark;
+import org.glob3.mobile.generated.NonOverlappingMarksRenderer;
 import org.glob3.mobile.generated.PointCloudsRenderer;
 import org.glob3.mobile.generated.PointCloudsRenderer.ColorPolicy;
 import org.glob3.mobile.generated.PointCloudsRenderer.PointCloudMetadataListener;
@@ -13,6 +20,7 @@ import org.glob3.mobile.generated.URL;
 import org.glob3.mobile.specific.G3MBuilder_Android;
 import org.glob3.mobile.specific.G3MWidget_Android;
 
+import android.R.bool;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.Window;
@@ -37,7 +45,7 @@ public class MainActivity
       setContentView(R.layout.activity_main);
 
 
-      _g3mWidget = createWidget();
+      _g3mWidget = createWidgetNonOverlappingMarks();//createWidget();
 
       final RelativeLayout placeHolder = (RelativeLayout) findViewById(R.id.g3mWidgetHolder);
 
@@ -95,6 +103,46 @@ public class MainActivity
 
       return builder.createWidget();
    }
+   
+   private void addNonOverlappingMark(NonOverlappingMarksRenderer nomr, double lat, double lon){
+	   NonOverlappingMark mark = new NonOverlappingMark(new DownloaderImageBuilder(new URL("file:///g3m-marker.png")),
+               new DownloaderImageBuilder(new URL("file:///anchorWidget.png")),
+               Geodetic3D.fromDegrees(lat, lon, 0),
+               new MyMarkWidgetTouchListener(),
+               100.0);
+	   nomr.addMark(mark);
+   }
+   
+   private G3MWidget_Android createWidgetNonOverlappingMarks() {
+	      final G3MBuilder_Android builder = new G3MBuilder_Android(this);
+	      
+	      LayerSet layerSet = new LayerSet();
+	      layerSet.addLayer(MapQuestLayer.newOSM(TimeInterval.fromDays(30)));
+	      builder.getPlanetRendererBuilder().setLayerSet(layerSet);
+	      
+	      NonOverlappingMarksRenderer nomr = new NonOverlappingMarksRenderer(30);
+	      builder.addRenderer(nomr);
+	      
+	      class MyMarkWidgetTouchListener implements MarkWidgetTouchListener{
+	        public MyMarkWidgetTouchListener(){
+	          
+	        }
+	        
+	        bool touchedMark(MarkWidget mark, float x, float y){
+	          ILogger.instance().logInfo("ISLAND SELECTED");
+	        }
+	      };
+	      
+	      addNonOverlappingMark(nomr, 28.131817, -15.440219);
+	      addNonOverlappingMark(nomr, 28.947345, -13.523105);
+	      addNonOverlappingMark(nomr, 28.473802, -13.859360);
+	      addNonOverlappingMark(nomr, 28.467706, -16.251426);
+	      addNonOverlappingMark(nomr, 28.701819, -17.762003);
+	      addNonOverlappingMark(nomr, 28.086595, -17.105796);
+	      addNonOverlappingMark(nomr, 27.810709, -17.917639);
+
+	      return builder.createWidget();
+	   }
 
 
    //   private static class SampleRasterSymbolizer
