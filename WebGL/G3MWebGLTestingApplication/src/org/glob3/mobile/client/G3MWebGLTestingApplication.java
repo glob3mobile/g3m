@@ -33,6 +33,7 @@ import org.glob3.mobile.specific.G3MBuilder_WebGL;
 import org.glob3.mobile.specific.G3MWidget_WebGL;
 
 import com.google.gwt.core.client.EntryPoint;
+import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.RootPanel;
@@ -79,12 +80,29 @@ public class G3MWebGLTestingApplication
    }
    
    public static void setLatLonHeight(double lat, double lon, double height){
-	    _widget.setCameraPosition(Geodetic3D.fromDegrees(lat, lon, height));
+	    //_widget.setCameraPosition(Geodetic3D.fromDegrees(lat, lon, height));
+	    
+	    _widget.getNextCamera().setGeodeticPosition(Geodetic3D.fromDegrees(lat, lon, height));
+   }
+   
+   public static Geodetic3D getCameraData(){
+	   return _widget.getG3MWidget().getCurrentCamera().getGeodeticPosition();
    }
    
    private native void exportJS() /*-{
 		$wnd.setCameraLatLonHeight= function(lat, lon, height){
 			@org.glob3.mobile.client.G3MWebGLTestingApplication::setLatLonHeight(DDD)(lat, lon, height);
+		}
+		
+		$wnd.getCameraData= function(){
+			
+			var g = @org.glob3.mobile.client.G3MWebGLTestingApplication::getCameraData()();
+			var result = new Object();
+			result.latitude = g.@org.glob3.mobile.generated.Geodetic3D::_latitude.@org.glob3.mobile.generated.Angle::_degrees;
+            result.longitude = g.@org.glob3.mobile.generated.Geodetic3D::_longitude.@org.glob3.mobile.generated.Angle::_degrees;
+            result.height = g.@org.glob3.mobile.generated.Geodetic3D::_height;
+			
+			return result;
 		}
    }-*/;
 

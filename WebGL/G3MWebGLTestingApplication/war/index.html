@@ -50,14 +50,18 @@
     // Leap.loop uses browser's requestAnimationFrame
     var options = { enableGestures: true };
     
-    var lat = 0;
-    var lon = 0;
-    var h = 10000000;
     
+    var h = 1000000;// p.height;
     // Main Leap Loop
     Leap.loop(options, function(frame) {
     
     	if (frame.hands.length > 0){
+    		var p = getCameraData();
+    		
+    		var lat = p.latitude;
+    		var lon = p.longitude;
+    		
+    	
     		if (frame.hands.length == 1){
     			var hand = frame.hands[0];
     			if (hand.type == "right"){
@@ -70,10 +74,15 @@
     		
     		
     		if (frame.hands.length == 2){
-    			h *= 0.999;
-    		}
+    			h = h *  0.9;
+    			
+    			
+    		console.log(lat + " " + lon + " " + h);
     		
     		setCameraLatLonHeight(lat, lon, h);
+    		}
+    		
+    		
     	}
     	
     });
