@@ -213,7 +213,8 @@ class NonOverlappingMarksRenderer: public DefaultRenderer{
   std::vector<NonOverlappingMark*> _visibleMarks;
   std::vector<NonOverlappingMark*> _marks;
 
-  void computeMarksToBeRendered(const Camera* cam, const Planet* planet);
+  void computeMarksToBeRendered(const Camera* camera,
+                                const Planet* planet);
 
   long long _lastPositionsUpdatedTime;
 

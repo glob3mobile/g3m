@@ -166,11 +166,19 @@ public:
   }
 
   const Vector3D getCartesianPosition() const { return _position.asVector3D(); }
-  const MutableVector3D getCartesianPositionMutable() const { return _position; }
+//  const MutableVector3D getCartesianPositionMutable() const { return _position; }
+  void getCartesianPositionMutable(MutableVector3D& result) const {
+    result.copyFrom(_position);
+  }
+
   const Vector3D getNormalizedPosition() const { return _normalizedPosition.asVector3D(); }
   const Vector3D getCenter() const { return _center.asVector3D(); }
   const Vector3D getUp() const { return _up.asVector3D(); }
-  const MutableVector3D getUpMutable() const { return _up; }
+//  const MutableVector3D getUpMutable() const { return _up; }
+  void getUpMutable(MutableVector3D& result) const {
+    result.copyFrom(_up);
+  }
+  
   const Geodetic3D getGeodeticCenterOfView() const { return *_getGeodeticCenterOfView(); }
   const Vector3D getXYZCenterOfView() const { return _getCartesianCenterOfView().asVector3D(); }
   const Vector3D getViewDirection() const {

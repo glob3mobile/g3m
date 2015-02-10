@@ -387,10 +387,11 @@ void NonOverlappingMarksRenderer::removeAllMarks() {
   _marks.clear();
 }
 
-void NonOverlappingMarksRenderer::computeMarksToBeRendered(const Camera* cam, const Planet* planet) {
+void NonOverlappingMarksRenderer::computeMarksToBeRendered(const Camera* camera,
+                                                           const Planet* planet) {
   _visibleMarks.clear();
 
-  const Frustum* frustrum = cam->getFrustumInModelCoordinates();
+  const Frustum* frustrum = camera->getFrustumInModelCoordinates();
 
   const int marksSize = _marks.size();
   for (int i = 0; i < marksSize; i++) {
@@ -402,6 +403,7 @@ void NonOverlappingMarksRenderer::computeMarksToBeRendered(const Camera* cam, co
     }
     else {
       //Resetting marks location of invisible anchors
+#warning Do we really need this?
       m->resetWidgetPositionVelocityAndForce();
     }
   }
@@ -503,19 +505,15 @@ void NonOverlappingMarksRenderer::applyForces(long long now, const Camera* camer
 }
 
 void NonOverlappingMarksRenderer::render(const G3MRenderContext* rc, GLState* glState) {
-
   const Camera* camera = rc->getCurrentCamera();
   const Planet* planet = rc->getPlanet();
 
+  computeMarksToBeRendered(camera, planet);
+  computeForces(camera, planet);
+
   if (_maxConvergenceSteps > 0) {
     //Looking for convergence on _maxConvergenceSteps
-
     long long timeStep = 40;
-
-    computeMarksToBeRendered(camera, planet);
-
-    computeForces(camera, planet);
-
     applyForces(_lastPositionsUpdatedTime + timeStep, camera);
 
     int iteration = 0;
@@ -527,8 +525,6 @@ void NonOverlappingMarksRenderer::render(const G3MRenderContext* rc, GLState* gl
   }
   else {
     //Real Time
-    computeMarksToBeRendered(camera, planet);
-    computeForces(camera, planet);
     applyForces(rc->getFrameStartTimer()->nowInMilliseconds(), camera);
   }
 
