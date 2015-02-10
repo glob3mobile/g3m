@@ -1266,11 +1266,14 @@ public class G3MWebGLTestingApplication
 		   ElevationDataProvider elevationDataProvider = new SingleBilElevationDataProvider(url, sector, extent);
 		   builder.getPlanetRendererBuilder().setElevationDataProvider(elevationDataProvider);	  
 		   builder.getPlanetRendererBuilder().setVerticalExaggeration(1.0f);
-
+		   
+		   // camera constrainers
+		   builder.addCameraConstraint(new MyCameraConstrainer());
+		   
 		   _widget = builder.createWidget();
 		   
 		   // set camera looking at Gran Canaria
-		   Geodetic3D position = new Geodetic3D(Angle.fromDegrees(27.976), Angle.fromDegrees(-15.591), 60000);
+		   Geodetic3D position = new Geodetic3D(Angle.fromDegrees(27.976), Angle.fromDegrees(-15.591), 80000);
 		   _widget.setCameraPosition(position);
 		   //_widget.setCameraHeading(Angle.fromDegrees(-35.65));
 		   //_widget.setCameraPitch(Angle.fromDegrees(-64.75));

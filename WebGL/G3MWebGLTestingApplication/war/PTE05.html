@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Capas wms del PTE05</title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="">
+          <meta name="author" content="">
+            
+            
+            <!-- Le styles -->
+            <!--<link href="../assets/css/bootstrap.css" rel="stylesheet">-->
+            <style>
+              body {
+                padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+              }
+            </style>
+            <!--<link href="../assets/css/bootstrap-responsive.css" rel="stylesheet">-->
+            
+            <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+            <!--[if lt IE 9]>
+             <script src="../assets/js/html5shiv.js"></script>
+             <![endif]-->
+            
+            <!-- Fav and touch icons -->
+            <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../assets/ico/apple-touch-icon-144-precomposed.png">
+              <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../assets/ico/apple-touch-icon-114-precomposed.png">
+                <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../assets/ico/apple-touch-icon-72-precomposed.png">
+                  <link rel="apple-touch-icon-precomposed" href="../assets/ico/apple-touch-icon-57-precomposed.png">
+                    <link rel="shortcut icon" href="../assets/ico/favicon.png">
+                      <!-- Bootstrap -->
+                      <link href="http://serdis.dis.ulpgc.es/~atrujill/glob3m/Tutorial/css/bootstrap.min.css" rel="stylesheet" media="screen">
+                        </head>
+  <body>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="brand" <a href="index.html"> Glob3 Mobile API - Ejemplo capas WMS</a>
+          <div class="nav-collapse collapse">
+            <ul class="nav">
+              <!--
+               <li class="active"><a href="#">Home</a></li>
+               <li><a href="#about">About</a></li>
+               <li><a href="#contact">Contact</a></li>
+               -->
+            </ul>
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+    
+    <div id="div1" class="container">
+      
+      <h2>Ejemplo de mostrar capas WMS incluidas en el PTE05 del Cabildo de Gran Canaria</h2>
+      
+      <p>Esta demo muestra cómo se pueden incluir todas las capas WMS que se quieran sobre el globo, por medio de transparencias. Actualmente se están mostrando las siguientes capas:</p>
+      
+      <ul>
+        
+        <li><p>Capa Ortoexpress como capa base, sobre la que se pintará el resto</p></li>
+        <li><p>Capa de predominancia de la Movilidad en viario (líneas en violeta)</p></li>
+        <li><p>Catálogo de Áreas de Sensibilidad Ecológica (zonas verdes semitransparentes)</p></li>
+        <li><p>Ámbitos de Predominancia Agrícola-urbano (líneas amarillas)</p></li>
+        <br>
+      </ul>
+      
+      <p>Para manejar el globo se usan estos controles:</p>
+      <ul>
+        <li><p>Botón izquierdo apretado del ratón para trasladar el terreno</p></li>
+        <li><p>Boton izquierdo del ratón aprentado + tecla Shift para abatir la cámara (moviendo ratón en vertical)</p></li>
+        <li><p>Boton izquierdo del ratón aprentado + tecla Alt para orbitar alrededor de nuestra posición</p></li>
+        <li><p>Rueda del ratón para hacer zoom adelante y atrás</p></li>
+        <br>
+      </ul>
+
+
+      <script type="text/javascript">
+        var _onLoadG3MListener = null;
+        
+        function onLoadG3M() {
+          // the G3M objets is already loaded
+          if (_onLoadG3MListener != null)
+          _onLoadG3MListener();
+        }
+      
+      function setOnLoadG3MListener(func) {
+        _onLoadG3MListener = func;
+      }
+      </script>
+      
+      <p> </p>
+      
+      <!----
+       <input id="myButton1" type="button" value="Move to Spain" onClick="moveCameraTo(40,-5,2e6);"
+       class="btn btn-primary btn-small">
+       <input id="myButton2" type="button" value="Move to New York" onClick="moveCameraTo(40.73,-74.01,5e4);"
+       class="btn btn-primary btn-small">
+       -->
+      
+      <!---
+       <p> Voy a meter una imagen </p>
+       <P ALIGN="LEFT">&nbsp;</P>
+       <P><img src="./img/ejemplo.jpg" border="0" width="300"></a></p>
+       <P ALIGN="LEFT">&nbsp;</P>
+       -->
+      
+      <!-- Así se inserta el componente G3M -->
+      <table align="left" width=100%><tr><td>
+        <iframe id="myObject" src="index.html" width="800" height="600"> </iframe>
+      </td></tr><tr><td><br></td></tr></table>
+      
+      
+      
+      <script type="text/javascript">
+        function onLoadG3M() {
+          // the G3M objets is already loaded
+        }
+      </script>
+      
+      
+      <script>
+        //alert(document.getElementById("includedDiv").firstChild.nodeValue);
+        //alert((document.getElementById("obj")).document.getElementById("includedDiv").firstChild.nodeValue);
+        //alert(document.getElementById("obj")["includedDiv"]);
+        //OK: alert(document.getElementById("myObject"));
+        //alert(document.getElementById("myObject").contentDocument.getElementById("myGlobe"));
+        
+        //window.onload = function() {
+        //   var warWindow = document.getElementById("myObject").contentWindow;
+        //  var G3M = warWindow.G3M;
+        //};
+        </script>
+      
+      
+      
+      <p><br><br></p>
+    </div> <!-- /container -->
+    
+    
+    <!-- Le javascript
+     ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <!--
+     <script src="../assets/js/jquery.js"></script>
+     <script src="../assets/js/bootstrap-transition.js"></script>
+     <script src="../assets/js/bootstrap-alert.js"></script>
+     <script src="../assets/js/bootstrap-modal.js"></script>
+     <script src="../assets/js/bootstrap-dropdown.js"></script>
+     <script src="../assets/js/bootstrap-scrollspy.js"></script>
+     <script src="../assets/js/bootstrap-tab.js"></script>
+     <script src="../assets/js/bootstrap-tooltip.js"></script>
+     <script src="../assets/js/bootstrap-popover.js"></script>
+     <script src="../assets/js/bootstrap-button.js"></script>
+     <script src="../assets/js/bootstrap-collapse.js"></script>
+     <script src="../assets/js/bootstrap-carousel.js"></script>
+     <script src="../assets/js/bootstrap-typeahead.js"></script>-->
+    
+  </body>
+</html>
