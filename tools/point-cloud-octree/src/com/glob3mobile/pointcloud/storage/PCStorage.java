@@ -5,13 +5,13 @@ package com.glob3mobile.pointcloud.storage;
 
 import java.awt.Color;
 
-import com.glob3mobile.pointcloud.octree.Classification;
+import com.glob3mobile.pointcloud.Classification;
 import com.glob3mobile.utils.Geodetic3D;
 
 
 public interface PCStorage
-extends
-AutoCloseable {
+         extends
+            AutoCloseable {
 
    boolean hasIntensity();
 

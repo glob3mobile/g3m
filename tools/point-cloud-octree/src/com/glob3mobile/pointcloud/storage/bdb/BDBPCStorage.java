@@ -7,7 +7,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.glob3mobile.pointcloud.octree.Classification;
+import com.glob3mobile.pointcloud.Classification;
 import com.glob3mobile.pointcloud.octree.berkeleydb.TileHeader;
 import com.glob3mobile.pointcloud.storage.PCStorage;
 import com.glob3mobile.utils.Geodetic3D;
@@ -21,8 +21,8 @@ import com.sleepycat.je.TransactionConfig;
 
 
 public class BDBPCStorage
-         implements
-            PCStorage {
+implements
+PCStorage {
 
 
    private static final float          NO_Intensity            = Float.NaN;
@@ -236,7 +236,7 @@ public class BDBPCStorage
                         final Color color) {
       if (!_hasIntensity || !_hasClassification || !_hasColor) {
          throw new RuntimeException("Can't add Position/Intensity/Classification/Color, This Storage needs: "
-                                    + getShapeDescription());
+                  + getShapeDescription());
       }
       rawAddPoint(position, intensity, classification, color);
    }
