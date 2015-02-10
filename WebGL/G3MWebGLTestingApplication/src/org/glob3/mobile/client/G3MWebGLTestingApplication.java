@@ -1276,7 +1276,7 @@ public class G3MWebGLTestingApplication
 		   Geodetic3D position = new Geodetic3D(Angle.fromDegrees(27.976), Angle.fromDegrees(-15.591), 80000);
 		   _widget.setCameraPosition(position);
 		   //_widget.setCameraHeading(Angle.fromDegrees(-35.65));
-		   //_widget.setCameraPitch(Angle.fromDegrees(-64.75));
+		   //_widget.setCameraPitch(Angle.fromDegrees(-30));
 	  }
 
 	   public void testBandama() {

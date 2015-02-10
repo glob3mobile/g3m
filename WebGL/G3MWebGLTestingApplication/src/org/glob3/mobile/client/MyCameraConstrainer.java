@@ -1,8 +1,10 @@
 package org.glob3.mobile.client;
 
+import org.glob3.mobile.generated.Angle;
 import org.glob3.mobile.generated.Camera;
 import org.glob3.mobile.generated.Geodetic3D;
 import org.glob3.mobile.generated.ICameraConstrainer;
+import org.glob3.mobile.generated.ILogger;
 import org.glob3.mobile.generated.Planet;
 
 
@@ -18,10 +20,14 @@ public class MyCameraConstrainer implements ICameraConstrainer
 
 		final double radii = planet.getRadii().maxAxis();
 		final double maxHeight = radii *9;
-		final double minHeight = 30000;
+		final double minHeight = 10;
+		final double maxPitch = -15;
 
 		final Geodetic3D cameraPosition = nextCamera.getGeodeticPosition();
 		final double cameraHeight = cameraPosition._height;
+		final double cameraPitch = nextCamera.getPitch()._degrees;
+		
+		//ILogger.instance().logInfo("pitch=" + cameraPitch);
 
 		if (cameraHeight > maxHeight)
 		{
@@ -30,12 +36,20 @@ public class MyCameraConstrainer implements ICameraConstrainer
 	                                      cameraPosition._longitude,
 	                                      maxHeight);*/
 		}
-		else if (cameraHeight < minHeight)
+		if (cameraHeight < minHeight)
 		{
 			nextCamera.copyFrom(previousCamera);
 			/*nextCamera->setGeodeticPosition(cameraPosition._latitude,
 	                                      cameraPosition._longitude,
 	                                      minHeight);*/
+		}
+		if (cameraPitch > maxPitch)
+		{
+			//nextCamera.copyFrom(previousCamera);
+			double prevHeight = previousCamera.getGeodeticPosition()._height;
+			Angle prevPitch = previousCamera.getPitch();
+			nextCamera.setGeodeticPosition(cameraPosition.asGeodetic2D(), prevHeight);
+			nextCamera.setPitch(prevPitch);
 		}
 
 		return true;
