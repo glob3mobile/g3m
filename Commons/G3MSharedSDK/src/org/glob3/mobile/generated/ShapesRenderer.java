@@ -302,7 +302,8 @@ public class ShapesRenderer extends DefaultRenderer
     // Saving camera for use in onTouchEvent
     _lastCamera = rc.getCurrentCamera();
   
-    final MutableVector3D cameraPosition = rc.getCurrentCamera().getCartesianPositionMutable();
+    MutableVector3D cameraPosition = new MutableVector3D();
+    rc.getCurrentCamera().getCartesianPositionMutable(cameraPosition);
   
     //Setting camera matrixes
     updateGLState(rc);

@@ -10,6 +10,9 @@ public class TextureGLFeature extends GLColorGroupFeature
 
   private final int _target;
 
+
+  /////////////////////////////////
+  
   private void createBasicValues(IFloatBuffer texCoords, int arrayElementSize, int index, boolean normalized, int stride)
   {
     GPUAttributeValueVec2Float value = new GPUAttributeValueVec2Float(texCoords, arrayElementSize, index, stride, normalized);

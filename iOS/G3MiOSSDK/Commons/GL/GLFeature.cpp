@@ -14,9 +14,16 @@ ViewportExtentGLFeature::ViewportExtentGLFeature(int viewportWidth,
                                                  int viewportHeight) :
 GLFeature(NO_GROUP, GLF_VIEWPORT_EXTENT)
 {
+  _extent = new GPUUniformValueVec2FloatMutable(viewportWidth, viewportHeight);
+  
   _values->addUniformValue(VIEWPORT_EXTENT,
-                           new GPUUniformValueVec2Float(viewportWidth, viewportHeight),
+                           _extent,
                            false);
+}
+
+void ViewportExtentGLFeature::changeExtent(int viewportWidth,
+                                           int viewportHeight){
+  _extent->changeValue(viewportWidth, viewportHeight);
 }
 
 BillboardGLFeature::BillboardGLFeature(const Vector3D& position,
@@ -99,13 +106,56 @@ void GeometryGLFeature::applyOnGlobalGLState(GLGlobalState* state) const {
 }
 
 
+
 GeometryGLFeature::~GeometryGLFeature() {
   //  _position->_release();
+#warning JM -> it looks like this class is leaking IFloatBuffer* buffer
 
 #ifdef JAVA_CODE
   super.dispose();
 #endif
 }
+
+
+///////////////////////////////
+Geometry2DGLFeature::Geometry2DGLFeature(IFloatBuffer* buffer,
+                                         int arrayElementSize,
+                                         int index,
+                                         bool normalized,
+                                         int stride,
+                                         float lineWidth,
+                                         bool needsPointSize,
+                                         float pointSize,
+                                         const Vector2F& translation) :
+GLFeature(NO_GROUP, GLF_GEOMETRY),
+_lineWidth(lineWidth)
+{
+  
+  _position = new GPUAttributeValueVec2Float(buffer, arrayElementSize, index, stride, normalized);
+  _values->addAttributeValue(POSITION_2D, _position, false);
+  
+  _translation =  new GPUUniformValueVec2FloatMutable(translation._x, translation._y);
+  _values->addUniformValue(TRANSLATION_2D, _translation, false);
+  
+  if (needsPointSize) {
+    _values->addUniformValue(POINT_SIZE, new GPUUniformValueFloat(pointSize), false);
+  }
+}
+
+void Geometry2DGLFeature::applyOnGlobalGLState(GLGlobalState* state) const {
+  state->enableCullFace(GLCullFace::front());
+  state->setLineWidth(_lineWidth);
+}
+
+Geometry2DGLFeature::~Geometry2DGLFeature() {
+  //  _position->_release();
+  
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+}
+
+/////////////////////////////////
 
 void TextureGLFeature::createBasicValues(IFloatBuffer* texCoords,
                                          int arrayElementSize,
