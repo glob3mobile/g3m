@@ -179,10 +179,12 @@ public class Camera
   {
      return _position.asVector3D();
   }
-  public final MutableVector3D getCartesianPositionMutable()
+//  const MutableVector3D getCartesianPositionMutable() const { return _position; }
+  public final void getCartesianPositionMutable(MutableVector3D result)
   {
-     return _position;
+    result.copyFrom(_position);
   }
+
   public final Vector3D getNormalizedPosition()
   {
      return _normalizedPosition.asVector3D();
@@ -195,10 +197,12 @@ public class Camera
   {
      return _up.asVector3D();
   }
-  public final MutableVector3D getUpMutable()
+//  const MutableVector3D getUpMutable() const { return _up; }
+  public final void getUpMutable(MutableVector3D result)
   {
-     return _up;
+    result.copyFrom(_up);
   }
+
   public final Geodetic3D getGeodeticCenterOfView()
   {
      return _getGeodeticCenterOfView();

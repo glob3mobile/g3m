@@ -9,11 +9,11 @@ public class NonOverlappingMarksRenderer extends DefaultRenderer
   private java.util.ArrayList<NonOverlappingMark> _visibleMarks = new java.util.ArrayList<NonOverlappingMark>();
   private java.util.ArrayList<NonOverlappingMark> _marks = new java.util.ArrayList<NonOverlappingMark>();
 
-  private void computeMarksToBeRendered(Camera cam, Planet planet)
+  private void computeMarksToBeRendered(Camera camera, Planet planet)
   {
     _visibleMarks.clear();
   
-    final Frustum frustrum = cam.getFrustumInModelCoordinates();
+    final Frustum frustrum = camera.getFrustumInModelCoordinates();
   
     final int marksSize = _marks.size();
     for (int i = 0; i < marksSize; i++)
@@ -27,6 +27,8 @@ public class NonOverlappingMarksRenderer extends DefaultRenderer
       else
       {
         //Resetting marks location of invisible anchors
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning Do we really need this?
         m.resetWidgetPositionVelocityAndForce();
       }
     }
@@ -183,20 +185,16 @@ public class NonOverlappingMarksRenderer extends DefaultRenderer
 
   public final void render(G3MRenderContext rc, GLState glState)
   {
-  
     final Camera camera = rc.getCurrentCamera();
     final Planet planet = rc.getPlanet();
+  
+    computeMarksToBeRendered(camera, planet);
+    computeForces(camera, planet);
   
     if (_maxConvergenceSteps > 0)
     {
       //Looking for convergence on _maxConvergenceSteps
-  
       long timeStep = 40;
-  
-      computeMarksToBeRendered(camera, planet);
-  
-      computeForces(camera, planet);
-  
       applyForces(_lastPositionsUpdatedTime + timeStep, camera);
   
       int iteration = 0;
@@ -210,8 +208,6 @@ public class NonOverlappingMarksRenderer extends DefaultRenderer
     else
     {
       //Real Time
-      computeMarksToBeRendered(camera, planet);
-      computeForces(camera, planet);
       applyForces(rc.getFrameStartTimer().nowInMilliseconds(), camera);
     }
   
