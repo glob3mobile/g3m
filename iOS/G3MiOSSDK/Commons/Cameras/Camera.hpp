@@ -42,7 +42,7 @@ public:
   bool _frustumMCDirty;
 
   CameraDirtyFlags() {
-    setAll(true);
+    setAllDirty();
   }
 
   void copyFrom(const CameraDirtyFlags& other) {
@@ -87,16 +87,17 @@ public:
   }
 #endif
 
-  void setAll(bool value) {
-    _frustumDataDirty           = value;
-    _projectionMatrixDirty      = value;
-    _modelMatrixDirty           = value;
-    _modelViewMatrixDirty       = value;
-    _cartesianCenterOfViewDirty = value;
-    _geodeticCenterOfViewDirty  = value;
-    _frustumDirty               = value;
-    _frustumMCDirty             = value;
+  void setAllDirty() {
+    _frustumDataDirty           = true;
+    _projectionMatrixDirty      = true;
+    _modelMatrixDirty           = true;
+    _modelViewMatrixDirty       = true;
+    _cartesianCenterOfViewDirty = true;
+    _geodeticCenterOfViewDirty  = true;
+    _frustumDirty               = true;
+    _frustumMCDirty             = true;
   }
+
 };
 
 
@@ -232,7 +233,7 @@ public:
       _position.copyFrom(v);
       delete _geodeticPosition;
       _geodeticPosition = NULL;
-      _dirtyFlags.setAll(true);
+      _dirtyFlags.setAllDirty();
       const double distanceToPlanetCenter = _position.length();
       const double planetRadius = distanceToPlanetCenter - getGeodeticPosition()._height;
       _angle2Horizon = acos(planetRadius/distanceToPlanetCenter);
@@ -389,7 +390,7 @@ private:
     if (!v.equalTo(_center)) {
       //      _center = MutableVector3D(v);
       _center.copyFrom(v);
-      _dirtyFlags.setAll(true);
+      _dirtyFlags.setAllDirty();
     }
   }
 
@@ -397,7 +398,7 @@ private:
     if (!v.equalTo(_up)) {
       //      _up = MutableVector3D(v);
       _up.copyFrom(v);
-      _dirtyFlags.setAll(true);
+      _dirtyFlags.setAllDirty();
     }
   }
 
