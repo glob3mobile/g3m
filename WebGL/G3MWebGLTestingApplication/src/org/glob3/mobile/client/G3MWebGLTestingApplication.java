@@ -1243,6 +1243,20 @@ public class G3MWebGLTestingApplication
 	               0.5f);
 		   layerSet.addLayer(PTE05_CATASE);
 
+		   WMSLayer PTE05_03APA = new WMSLayer("O3_APA",
+	               new URL("http://ide2.idegrancanaria.es/wms/PTE_05?", false),
+	               WMSServerVersion.WMS_1_1_0,
+	               Sector.fullSphere(),
+	               "image/png",
+	               "EPSG:4326",
+	               "",
+	               true,
+	               new LevelTileCondition(0, 19),
+	               TimeInterval.fromDays(30),
+	               true,
+	               ltrp);
+		   layerSet.addLayer(PTE05_03APA);
+
 		   builder.getPlanetRendererBuilder().setLayerSet(layerSet);
 		   	   
 		   // create elevations for GC
@@ -1256,7 +1270,7 @@ public class G3MWebGLTestingApplication
 		   _widget = builder.createWidget();
 		   
 		   // set camera looking at Gran Canaria
-		   Geodetic3D position = new Geodetic3D(Angle.fromDegrees(27.976), Angle.fromDegrees(-15.591), 50000);
+		   Geodetic3D position = new Geodetic3D(Angle.fromDegrees(27.976), Angle.fromDegrees(-15.591), 60000);
 		   _widget.setCameraPosition(position);
 		   //_widget.setCameraHeading(Angle.fromDegrees(-35.65));
 		   //_widget.setCameraPitch(Angle.fromDegrees(-64.75));
