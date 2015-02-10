@@ -121,10 +121,11 @@ public class G3MWebGLTestingApplication
          // initialize a default widget by using a builder
          //initDefaultWithBuilder();
     	  
-    	  testBranch_zrender_touchhandlers();
+    	  //testBranch_zrender_touchhandlers();
     	  //testBILGC();
     	  //testBandama();
     	  //testGeacron();
+    	  testPTE05Layers();
     	  
          // initialize a customized widget by using a builder
          //initCustomizedWithBuilder();
@@ -1184,6 +1185,81 @@ public class G3MWebGLTestingApplication
 		   _widget.setCameraPosition(position);
 		   _widget.setCameraHeading(Angle.fromDegrees(-35.65));
 		   _widget.setCameraPitch(Angle.fromDegrees(-64.75));
+	  }
+
+	   public void testPTE05Layers() {
+		   final G3MBuilder_WebGL builder = new G3MBuilder_WebGL();
+
+		   //const Planet* planet = Planet::createEarth();
+		   //const Planet* planet = Planet::createSphericalEarth();
+		   final Planet planet = Planet.createFlatEarth();
+		   builder.setPlanet(planet);
+		   
+		   // wms layer
+			final LayerTilesRenderParameters ltrp = new LayerTilesRenderParameters(Sector.fullSphere(), 2, 4, 0, 19, 
+					new Vector2I(256, 256), 
+					new Vector2I(16,16), false);
+		   LayerSet	layerSet = new LayerSet();
+		   WMSLayer grafcanOrto = new WMSLayer("WMS_OrtoExpress",
+	               new URL("http://idecan1.grafcan.es/ServicioWMS/OrtoExpress?", false),
+	               WMSServerVersion.WMS_1_1_0,
+	               Sector.fullSphere(),
+	               "image/jpeg",
+	               "EPSG:4326",
+	               "",
+	               false,
+	               new LevelTileCondition(0, 19),
+	               TimeInterval.fromDays(30),
+	               true,
+	               ltrp);
+		   layerSet.addLayer(grafcanOrto);
+		   
+		   WMSLayer PTE05_03APM = new WMSLayer("O3_APM",
+	               new URL("http://ide2.idegrancanaria.es/wms/PTE_05?", false),
+	               WMSServerVersion.WMS_1_1_0,
+	               Sector.fullSphere(),
+	               "image/png",
+	               "EPSG:4326",
+	               "",
+	               true,
+	               new LevelTileCondition(0, 19),
+	               TimeInterval.fromDays(30),
+	               true,
+	               ltrp);
+		   layerSet.addLayer(PTE05_03APM);
+
+		   WMSLayer PTE05_CATASE = new WMSLayer("CATASE",
+	               new URL("http://ide2.idegrancanaria.es/wms/CAT_ASE?", false),
+	               WMSServerVersion.WMS_1_1_0,
+	               Sector.fullSphere(),
+	               "image/png",
+	               "EPSG:4326",
+	               "",
+	               true,
+	               new LevelTileCondition(0, 19),
+	               TimeInterval.fromDays(30),
+	               true,
+	               ltrp,
+	               0.5f);
+		   layerSet.addLayer(PTE05_CATASE);
+
+		   builder.getPlanetRendererBuilder().setLayerSet(layerSet);
+		   	   
+		   // create elevations for GC
+		   Sector sector = Sector.fromDegrees(27.7116484957735, -15.90589160041418, 28.225913322423995, -15.32910937385168 );
+		   Vector2I extent = new Vector2I(1000, 1000);                             // bil resolution
+		   URL url = new URL("http://serdis.dis.ulpgc.es/~atrujill/glob3m/Fiware/gc2.bil", false);
+		   ElevationDataProvider elevationDataProvider = new SingleBilElevationDataProvider(url, sector, extent);
+		   builder.getPlanetRendererBuilder().setElevationDataProvider(elevationDataProvider);	  
+		   builder.getPlanetRendererBuilder().setVerticalExaggeration(1.0f);
+
+		   _widget = builder.createWidget();
+		   
+		   // set camera looking at Gran Canaria
+		   Geodetic3D position = new Geodetic3D(Angle.fromDegrees(27.976), Angle.fromDegrees(-15.591), 50000);
+		   _widget.setCameraPosition(position);
+		   //_widget.setCameraHeading(Angle.fromDegrees(-35.65));
+		   //_widget.setCameraPitch(Angle.fromDegrees(-64.75));
 	  }
 
 	   public void testBandama() {
