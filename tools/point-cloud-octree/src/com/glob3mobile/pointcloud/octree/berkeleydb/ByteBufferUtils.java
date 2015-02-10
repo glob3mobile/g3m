@@ -6,9 +6,9 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.glob3mobile.pointcloud.Planet;
-import com.glob3mobile.pointcloud.octree.Geodetic3D;
-import com.glob3mobile.pointcloud.octree.Sector;
+import com.glob3mobile.utils.Geodetic3D;
+import com.glob3mobile.utils.Planet;
+import com.glob3mobile.utils.Sector;
 
 import es.igosoftware.euclid.bounding.GAxisAlignedBox;
 import es.igosoftware.euclid.vector.GVector3D;
@@ -200,8 +200,8 @@ public class ByteBufferUtils {
 
 
    public static List<Geodetic3D> getPoints(final ByteBuffer buffer,
-                                            final Format format,
-                                            final int pointsCount) {
+            final Format format,
+            final int pointsCount) {
       switch (format) {
          case LatLonHeight:
             final List<Geodetic3D> points = new ArrayList<Geodetic3D>(pointsCount);
@@ -234,9 +234,9 @@ public class ByteBufferUtils {
 
 
    public static List<Geodetic3D> getPoints(final ByteBuffer buffer,
-            final Format format,
-            final int pointsCount,
-            final Geodetic3D averagePoint) {
+                                            final Format format,
+                                            final int pointsCount,
+                                            final Geodetic3D averagePoint) {
       switch (format) {
          case LatLonHeight:
             final List<Geodetic3D> points = new ArrayList<Geodetic3D>(pointsCount);

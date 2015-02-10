@@ -1,6 +1,6 @@
 
 
-package com.glob3mobile.pointcloud.octree;
+package com.glob3mobile.utils;
 
 import java.io.Serializable;
 

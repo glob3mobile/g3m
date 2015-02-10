@@ -1,17 +1,18 @@
 
 
-package com.glob3mobile.pointcloud;
+package com.glob3mobile.utils;
 
-import com.glob3mobile.pointcloud.octree.Angle;
-import com.glob3mobile.pointcloud.octree.Geodetic3D;
+import com.glob3mobile.utils.Angle;
+import com.glob3mobile.utils.Geodetic3D;
+import com.glob3mobile.utils.Planet;
 
 import es.igosoftware.euclid.vector.GVector2D;
 import es.igosoftware.euclid.vector.GVector3D;
 
 
 public class FlatPlanet
-implements
-Planet {
+         implements
+            Planet {
    public static final Planet EARTH = new FlatPlanet(new GVector2D(4 * 6378137.0, 2 * 6378137.0));
 
    private final GVector2D    _size;

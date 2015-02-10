@@ -21,16 +21,16 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.glob3mobile.pointcloud.EllipsoidalPlanet;
-import com.glob3mobile.pointcloud.FlatPlanet;
-import com.glob3mobile.pointcloud.Planet;
-import com.glob3mobile.pointcloud.SphericalPlanet;
-import com.glob3mobile.pointcloud.octree.Geodetic3D;
 import com.glob3mobile.pointcloud.octree.PersistentLOD;
-import com.glob3mobile.pointcloud.octree.Sector;
-import com.glob3mobile.pointcloud.octree.Utils;
 import com.glob3mobile.pointcloud.octree.berkeleydb.BerkeleyDBLOD;
 import com.glob3mobile.pointcloud.octree.berkeleydb.ByteBufferUtils;
+import com.glob3mobile.utils.EllipsoidalPlanet;
+import com.glob3mobile.utils.FlatPlanet;
+import com.glob3mobile.utils.Geodetic3D;
+import com.glob3mobile.utils.Planet;
+import com.glob3mobile.utils.Sector;
+import com.glob3mobile.utils.SphericalPlanet;
+import com.glob3mobile.utils.Utils;
 
 import es.igosoftware.euclid.bounding.GAxisAlignedBox;
 import es.igosoftware.euclid.vector.GVector3D;

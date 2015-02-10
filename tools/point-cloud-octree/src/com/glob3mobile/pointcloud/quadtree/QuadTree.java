@@ -5,9 +5,9 @@ package com.glob3mobile.pointcloud.quadtree;
 import java.util.Arrays;
 import java.util.List;
 
-import com.glob3mobile.pointcloud.FlatPlanet;
 import com.glob3mobile.pointcloud.PositionsSet;
-import com.glob3mobile.pointcloud.octree.Geodetic3D;
+import com.glob3mobile.utils.FlatPlanet;
+import com.glob3mobile.utils.Geodetic3D;
 
 
 public class QuadTree {

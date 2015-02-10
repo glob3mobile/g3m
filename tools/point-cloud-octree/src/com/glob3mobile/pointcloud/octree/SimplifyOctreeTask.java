@@ -16,14 +16,16 @@ import com.glob3mobile.pointcloud.kdtree.KDLeafNode;
 import com.glob3mobile.pointcloud.kdtree.KDTree;
 import com.glob3mobile.pointcloud.kdtree.KDTreeVisitor;
 import com.glob3mobile.pointcloud.octree.berkeleydb.BerkeleyDBOctree;
+import com.glob3mobile.utils.Geodetic3D;
+import com.glob3mobile.utils.Sector;
 
 import es.igosoftware.util.GProgress;
 import es.igosoftware.util.GStringUtils;
 
 
 public class SimplifyOctreeTask
-implements
-            PersistentOctree.Visitor {
+         implements
+PersistentOctree.Visitor {
 
    private final String     _sourceCloudName;
    private final File       _cloudDirectory;
@@ -67,7 +69,7 @@ implements
                                     final long elapsed,
                                     final long estimatedMsToFinish) {
             System.out.println("- Simplifying \"" + _sourceCloudName + "\" "
-                     + progressString(stepsDone, percent, elapsed, estimatedMsToFinish));
+                               + progressString(stepsDone, percent, elapsed, estimatedMsToFinish));
          }
       };
    }
@@ -89,7 +91,7 @@ implements
 
          System.out.println();
          System.out.println("Source points=" + _sourcePointsCount + ", Simplified Points=" + simplifiedPointsCount + " ("
-                            + GStringUtils.formatPercent(simplifiedPointsCount, _sourcePointsCount) + ")");
+                  + GStringUtils.formatPercent(simplifiedPointsCount, _sourcePointsCount) + ")");
       }
    }
 
@@ -223,9 +225,9 @@ implements
                                      //final int level,
                                      final Sector sector,
                                      final List<Geodetic3D> points
-                                     //final double minHeight,
-                                     //final double maxHeight
-            ) {
+   //final double minHeight,
+   //final double maxHeight
+   ) {
       final int imageWidth = 1024;
       final int imageHeight = 1024;
 

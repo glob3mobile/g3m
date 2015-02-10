@@ -4,10 +4,13 @@ package com.glob3mobile.pointcloud.octree;
 
 import java.util.List;
 
+import com.glob3mobile.utils.Geodetic3D;
+import com.glob3mobile.utils.Sector;
+
 
 public interface PersistentLOD
-         extends
-            AutoCloseable {
+extends
+AutoCloseable {
 
 
    public static interface NodeLevel {

@@ -11,6 +11,7 @@ import java.io.InputStreamReader;
 import java.util.zip.GZIPInputStream;
 
 import com.glob3mobile.pointcloud.octree.berkeleydb.BerkeleyDBOctree;
+import com.glob3mobile.utils.Geodetic3D;
 
 import es.igosoftware.euclid.projection.GProjection;
 import es.igosoftware.euclid.vector.GVector2D;
