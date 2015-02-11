@@ -210,7 +210,7 @@ public class GLGlobalState
     _polygonOffsetFactor = factor;
     _polygonOffsetUnits = units;
   }
-  public final void disPolygonOffsetFill()
+  public final void disablePolygonOffsetFill()
   {
     _polygonOffsetFill = false;
   }

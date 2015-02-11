@@ -19,6 +19,8 @@
 #include <G3MiOSSDK/MarksRenderer.hpp>
 #include <G3MiOSSDK/GEORenderer.hpp>
 #include <G3MiOSSDK/PointCloudsRenderer.hpp>
+#include <G3MiOSSDK/HUDRenderer.hpp>
+#include <G3MiOSSDK/NonOverlappingMarksRenderer.hpp>
 
 #include "G3MDemoModel.hpp"
 
@@ -85,6 +87,12 @@ void G3MDemoBuilder::build() {
                                              NULL  /* geoVectorLayer */);
   builder->addRenderer(geoRenderer);
 
+  HUDRenderer* hudRenderer = new HUDRenderer();
+  builder->setHUDRenderer(hudRenderer);
+
+  NonOverlappingMarksRenderer* nonOverlappingMarksRenderer = new NonOverlappingMarksRenderer(30);
+  builder->addRenderer(nonOverlappingMarksRenderer);
+
   _initialized = true;
   _model = new G3MDemoModel(_listener,
                             layerSet,
@@ -92,7 +100,9 @@ void G3MDemoBuilder::build() {
                             shapesRenderer,
                             marksRenderer,
                             geoRenderer,
-                            pointCloudsRenderer);
+                            pointCloudsRenderer,
+                            hudRenderer,
+                            nonOverlappingMarksRenderer);
 
   builder->setInitializationTask(new G3MDemoInitializationTask(_model), true);
 }

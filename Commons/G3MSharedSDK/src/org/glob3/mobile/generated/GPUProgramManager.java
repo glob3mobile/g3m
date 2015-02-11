@@ -74,6 +74,18 @@ public class GPUProgramManager
     final boolean hasTexture2 = GPUVariable.hasUniform(uniformsCode, GPUUniformKey.SAMPLER2);
   //  const bool hasTexture3 = GPUVariable::hasUniform(uniformsCode, SAMPLER3);
   
+    final boolean is2D = GPUVariable.hasAttribute(attributesCode, GPUAttributeKey.POSITION_2D);
+  
+  
+    if (is2D)
+    {
+      if (flatColor)
+      {
+        return compileProgramWithName(gl, "FlatColor2DMesh");
+      }
+      return compileProgramWithName(gl, "Textured2DMesh");
+    }
+  
     if (billboard)
     {
       return compileProgramWithName(gl, "Billboard");

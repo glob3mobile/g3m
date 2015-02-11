@@ -448,6 +448,8 @@
 		D81BA17115CBF19F004EF0B0 /* GL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D81BA16F15CBF19E004EF0B0 /* GL.cpp */; };
 		D81D2072160748EA009A8BA6 /* GLConstants.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D81D2071160748EA009A8BA6 /* GLConstants.cpp */; };
 		D8228EBF157F7F7900BBAF60 /* MutableMatrix44D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8228EBE157F7F7900BBAF60 /* MutableMatrix44D.cpp */; };
+		D842D9AF1A727FAF008D55E4 /* NonOverlappingMarksRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D842D9AD1A727FAF008D55E4 /* NonOverlappingMarksRenderer.cpp */; };
+		D842D9B01A72906A008D55E4 /* NonOverlappingMarksRenderer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D842D9AE1A727FAF008D55E4 /* NonOverlappingMarksRenderer.hpp */; };
 		D84D5A31157E0EAA000C5E35 /* MutableVector3D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D84D5A2F157E0EAA000C5E35 /* MutableVector3D.cpp */; };
 		D856FBFD189BB5610053F514 /* CoordinateSystem.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8F2EBAC18994A7B001B6103 /* CoordinateSystem.hpp */; };
 		D8715C1E17032AC700CF7BE2 /* GPUProgram.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8715C1C17032AC700CF7BE2 /* GPUProgram.cpp */; };
@@ -724,6 +726,7 @@
 			files = (
 				D8C2444D1A0799CF00BFA7F8 /* ErrorHandling.hpp in CopyFiles */,
 				D8D3A25E183631BB007A784A /* BasicShadersGL2.hpp in CopyFiles */,
+				D842D9B01A72906A008D55E4 /* NonOverlappingMarksRenderer.hpp in CopyFiles */,
 				CFBD815719A3E1D500F1A8C4 /* PointCloudsRenderer.hpp in CopyFiles */,
 				44E3C43019C1ADB800857275 /* Info.hpp in CopyFiles */,
 				44EE3CE019A60D2F00DDEF2B /* DefaultChessCanvasImageBuilder.hpp in CopyFiles */,
@@ -1670,6 +1673,8 @@
 		D80A286A1746474E0058CEC3 /* EllipsoidalPlanet.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = EllipsoidalPlanet.cpp; path = Commons/Geometry/EllipsoidalPlanet.cpp; sourceTree = "<group>"; };
 		D80A286F1746572E0058CEC3 /* GLState.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = GLState.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		D80A28701746572E0058CEC3 /* GLState.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GLState.hpp; sourceTree = "<group>"; };
+		D80C8B4A1A77B94E00E67587 /* FlatColor2DMesh.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = FlatColor2DMesh.fsh; sourceTree = "<group>"; };
+		D80C8B4B1A77B94E00E67587 /* FlatColor2DMesh.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = FlatColor2DMesh.vsh; sourceTree = "<group>"; };
 		D80D3A5D160A0A47004831C5 /* IGLUniformID.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = IGLUniformID.hpp; path = Commons/Interfaces/IGLUniformID.hpp; sourceTree = "<group>"; };
 		D80D521115EE2B0100ACEA16 /* IMathUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IMathUtils.cpp; path = Commons/Interfaces/IMathUtils.cpp; sourceTree = "<group>"; };
 		D80D525515EE66D700ACEA16 /* INativeGL.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = INativeGL.hpp; path = Commons/Interfaces/INativeGL.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
@@ -1692,6 +1697,8 @@
 		D8228EBE157F7F7900BBAF60 /* MutableMatrix44D.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = MutableMatrix44D.cpp; path = Commons/Geometry/MutableMatrix44D.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		D83171F3186C52CD00522E1B /* TransformedTexCoorMultiTexturedMesh.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = TransformedTexCoorMultiTexturedMesh.vsh; sourceTree = "<group>"; };
 		D83171F4186C52CD00522E1B /* TransformedTexCoorMultiTexturedMesh.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = TransformedTexCoorMultiTexturedMesh.fsh; sourceTree = "<group>"; };
+		D842D9AD1A727FAF008D55E4 /* NonOverlappingMarksRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = NonOverlappingMarksRenderer.cpp; path = Commons/Rendererers/NonOverlappingMarksRenderer.cpp; sourceTree = "<group>"; };
+		D842D9AE1A727FAF008D55E4 /* NonOverlappingMarksRenderer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = NonOverlappingMarksRenderer.hpp; path = Commons/Rendererers/NonOverlappingMarksRenderer.hpp; sourceTree = "<group>"; };
 		D84625D51777291F00FC4862 /* TexturedMesh.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = TexturedMesh.fsh; sourceTree = "<group>"; };
 		D84625D61777291F00FC4862 /* TexturedMesh.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = TexturedMesh.vsh; sourceTree = "<group>"; };
 		D84625DD177732A900FC4862 /* ColorMesh.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = ColorMesh.fsh; sourceTree = "<group>"; };
@@ -1781,6 +1788,8 @@
 		D8C486CE17E205E7000EAFC9 /* InitialCameraPositionProvider.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = InitialCameraPositionProvider.cpp; path = Commons/Basic/InitialCameraPositionProvider.cpp; sourceTree = "<group>"; };
 		D8C486CF17E205E7000EAFC9 /* InitialCameraPositionProvider.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = InitialCameraPositionProvider.hpp; path = Commons/Basic/InitialCameraPositionProvider.hpp; sourceTree = "<group>"; };
 		D8C912D915F9FE78003F92A4 /* FloatBufferBuilderFromColor.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = FloatBufferBuilderFromColor.hpp; path = Commons/Basic/FloatBufferBuilderFromColor.hpp; sourceTree = "<group>"; };
+		D8CA641C1A75282200B9EABC /* Textured2DMesh.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = Textured2DMesh.fsh; sourceTree = "<group>"; };
+		D8CA641D1A75282200B9EABC /* Textured2DMesh.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = Textured2DMesh.vsh; sourceTree = "<group>"; };
 		D8CD6F7815A6FFAC00279BE7 /* IBufferDownloadListener.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = IBufferDownloadListener.hpp; path = Commons/Downloader/IBufferDownloadListener.hpp; sourceTree = "<group>"; };
 		D8CD74D615F8D3F000B801CC /* SimpleFloatBufferBuilder.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = SimpleFloatBufferBuilder.hpp; path = Commons/Basic/SimpleFloatBufferBuilder.hpp; sourceTree = "<group>"; };
 		D8CD74D815F8D56800B801CC /* FloatBufferBuilderFromCartesian3D.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = FloatBufferBuilderFromCartesian3D.hpp; path = Commons/Basic/FloatBufferBuilderFromCartesian3D.hpp; sourceTree = "<group>"; };
@@ -2429,6 +2438,8 @@
 				4435E3DA19072F140064A7D7 /* ProtoRenderer.cpp */,
 				CFBD815419A3E0E100F1A8C4 /* PointCloudsRenderer.cpp */,
 				CFBD815519A3E0E100F1A8C4 /* PointCloudsRenderer.hpp */,
+				D842D9AD1A727FAF008D55E4 /* NonOverlappingMarksRenderer.cpp */,
+				D842D9AE1A727FAF008D55E4 /* NonOverlappingMarksRenderer.hpp */,
 			);
 			name = Renderers;
 			sourceTree = "<group>";
@@ -2788,6 +2799,10 @@
 				D87DFC7117CF5EA70036C466 /* FlatColorMesh_DirectionLight.vsh */,
 				D89ABFA917CCD31F00E25A0C /* TexturedMesh_DirectionLight.fsh */,
 				D89ABFAA17CCD31F00E25A0C /* TexturedMesh_DirectionLight.vsh */,
+				D80C8B4A1A77B94E00E67587 /* FlatColor2DMesh.fsh */,
+				D80C8B4B1A77B94E00E67587 /* FlatColor2DMesh.vsh */,
+				D8CA641C1A75282200B9EABC /* Textured2DMesh.fsh */,
+				D8CA641D1A75282200B9EABC /* Textured2DMesh.vsh */,
 				D8B5533F18800D5A00C1B3B3 /* FullTransformedTexCoorMultiTexturedMesh.fsh */,
 				D8B5534018800D5A00C1B3B3 /* FullTransformedTexCoorMultiTexturedMesh.vsh */,
 				D8CE5D36173BB68200C7AAE6 /* Billboard.fsh */,
@@ -2981,6 +2996,7 @@
 				CFD314531631FFAD00B54ED3 /* Vector2I.cpp in Sources */,
 				44131129190A504600C83A00 /* NullStorage.cpp in Sources */,
 				CF0A8183163303E800036277 /* MutableVector2I.cpp in Sources */,
+				D842D9AF1A727FAF008D55E4 /* NonOverlappingMarksRenderer.cpp in Sources */,
 				CFCEFF26163476F100FC4AB0 /* RectangleI.cpp in Sources */,
 				CFCEFF4D163721EA00FC4AB0 /* TrailsRenderer.cpp in Sources */,
 				CFA0BB62163DCFF6009185FE /* ShapesRenderer.cpp in Sources */,

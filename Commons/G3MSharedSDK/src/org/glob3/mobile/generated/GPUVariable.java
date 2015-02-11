@@ -100,6 +100,7 @@ public class GPUVariable
       return GPUUniformKey.SAMPLER3;
     }
   
+<<<<<<< HEAD
     if (name.compareTo("uDepthFar") == 0)
     {
       return GPUUniformKey.DEPTH_FAR;
@@ -112,6 +113,13 @@ public class GPUVariable
   
     ILogger.instance().logError("UNRECOGNIZED UNIFORM - ", name);
   
+=======
+    if (name.compareTo("uTranslation2D") == 0)
+    {
+      return GPUUniformKey.TRANSLATION_2D;
+    }
+  
+>>>>>>> wheel-handler
     return GPUUniformKey.UNRECOGNIZED_UNIFORM;
   }
   public static GPUAttributeKey getAttributeKey(String name)
@@ -147,7 +155,14 @@ public class GPUVariable
       return GPUAttributeKey.NORMAL;
     }
   
+<<<<<<< HEAD
     ILogger.instance().logError("UNRECOGNIZED ATTRIBUTE - ", name);
+=======
+    if (name.compareTo("aPosition2D") == 0)
+    {
+      return GPUAttributeKey.POSITION_2D;
+    }
+>>>>>>> wheel-handler
   
     return GPUAttributeKey.UNRECOGNIZED_ATTRIBUTE;
   }

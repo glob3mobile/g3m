@@ -800,9 +800,9 @@ public class PCSSServlet
          final String planetName = request.getParameter("planet");
          final String formatName = request.getParameter("format");
          final String verticalExaggerationStr = request.getParameter("verticalExaggeration");
-         final float verticalExaggeration = getFloat(verticalExaggerationStr);
+         final float verticalExaggeration = getFloat(verticalExaggerationStr, 1);
          final String deltaHeightStr = request.getParameter("deltaHeight");
-         final double deltaHeight = getDouble(deltaHeightStr);
+         final double deltaHeight = getDouble(deltaHeightStr, 0);
 
          final Planet planet = getPlanet(planetName);
          final ResponseFormat format = ResponseFormat.get(formatName);
@@ -831,9 +831,9 @@ public class PCSSServlet
             final String planetName = request.getParameter("planet");
             final String formatName = request.getParameter("format");
             final String verticalExaggerationStr = request.getParameter("verticalExaggeration");
-            final float verticalExaggeration = getFloat(verticalExaggerationStr);
+            final float verticalExaggeration = getFloat(verticalExaggerationStr, 1);
             final String deltaHeightStr = request.getParameter("deltaHeight");
-            final double deltaHeight = getDouble(deltaHeightStr);
+            final double deltaHeight = getDouble(deltaHeightStr, 0);
 
             final Planet planet = getPlanet(planetName);
             final ResponseFormat format = ResponseFormat.get(formatName);
@@ -863,30 +863,32 @@ public class PCSSServlet
    }
 
 
-   private static float getFloat(final String str) {
+   private static float getFloat(final String str,
+                                 final float defaultValue) {
       if (str == null) {
-         return Float.NaN;
+         return defaultValue;
       }
 
       try {
          return Float.parseFloat(str);
       }
       catch (final NumberFormatException e) {
-         return Float.NaN;
+         return defaultValue;
       }
    }
 
 
-   private static double getDouble(final String str) {
+   private static double getDouble(final String str,
+                                   final double defaultValue) {
       if (str == null) {
-         return Double.NaN;
+         return defaultValue;
       }
 
       try {
          return Double.parseDouble(str);
       }
       catch (final NumberFormatException e) {
-         return Double.NaN;
+         return defaultValue;
       }
    }
 

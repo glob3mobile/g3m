@@ -68,4 +68,53 @@ public class Vector2F
     return (dx * dx) + (dy * dy);
   }
 
+  public final Vector2F add(Vector2F v)
+  {
+    return new Vector2F(_x + v._x, _y + v._y);
+  }
+
+  public final boolean isNaN()
+  {
+    return (_x != _x) || (_y != _y);
+  }
+
+  public final Vector2F sub(Vector2F v)
+  {
+    return new Vector2F(_x - v._x, _y - v._y);
+  }
+
+  public final Vector2F times(float magnitude)
+  {
+    return new Vector2F(_x * magnitude, _y * magnitude);
+  }
+
+  public final Vector2F div(float v)
+  {
+    return new Vector2F(_x / v, _y / v);
+  }
+
+  public final double length()
+  {
+    return IMathUtils.instance().sqrt(squaredLength());
+  }
+
+  public final double squaredLength()
+  {
+    return _x * _x + _y * _y;
+  }
+
+  public final Vector2F clampLength(float min, float max)
+  {
+    float length = (float) this.length();
+    if (length < min)
+    {
+      return this.times(min / length);
+    }
+    if (length > max)
+    {
+      return this.times(max / length);
+    }
+    return this;
+  }
+
 }

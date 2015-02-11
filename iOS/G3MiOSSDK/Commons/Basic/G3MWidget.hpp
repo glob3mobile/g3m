@@ -256,7 +256,10 @@ public:
   }
   
   void changedRendererInfo(const int rendererIdentifier, const std::vector<const Info*> info);
-  
+
+  void removeAllPeriodicalTasks();
+
+
 private:
   IStorage*                _storage;
   IDownloader*             _downloader;

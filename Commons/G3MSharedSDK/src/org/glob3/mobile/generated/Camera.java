@@ -52,7 +52,7 @@ public class Camera
      _tanHalfHorizontalFieldOfView = java.lang.Double.NaN;
      _rollInRadians = 0;
     resizeViewport(0, 0);
-    _dirtyFlags.setAll(true);
+    _dirtyFlags.setAllDirty();
   }
 
   public void dispose()
@@ -71,16 +71,11 @@ public class Camera
 
   public final void copyFrom(Camera that)
   {
-    //TODO: IMPROVE PERFORMANCE
     _viewPortWidth = that._viewPortWidth;
     _viewPortHeight = that._viewPortHeight;
   
     _planet = that._planet;
   
-  //  _position = MutableVector3D(that._position);
-  //  _center   = MutableVector3D(that._center);
-  //  _up       = MutableVector3D(that._up);
-  //  _normalizedPosition = MutableVector3D(that._normalizedPosition);
     _position.copyFrom(that._position);
     _center.copyFrom(that._center);
     _up.copyFrom(that._up);
@@ -94,7 +89,6 @@ public class Camera
     _modelMatrix.copyValue(that._modelMatrix);
     _modelViewMatrix.copyValue(that._modelViewMatrix);
   
-  //  _cartesianCenterOfView = MutableVector3D(that._cartesianCenterOfView);
     _cartesianCenterOfView.copyFrom(that._cartesianCenterOfView);
   
     _geodeticCenterOfView = that._geodeticCenterOfView;
@@ -121,7 +115,7 @@ public class Camera
     _viewPortWidth = width;
     _viewPortHeight = height;
   
-    _dirtyFlags.setAll(true);
+    _dirtyFlags.setAllDirty();
   }
 
   public final Vector3D pixel2Ray(Vector2I pixel)
@@ -212,10 +206,11 @@ public class Camera
   {
      return _position.asVector3D();
   }
-  public final MutableVector3D getCartesianPositionMutable()
+  public final void getCartesianPositionMutable(MutableVector3D result)
   {
-     return _position;
+    result.copyFrom(_position);
   }
+
   public final Vector3D getNormalizedPosition()
   {
      return _normalizedPosition.asVector3D();
@@ -228,10 +223,11 @@ public class Camera
   {
      return _up.asVector3D();
   }
-  public final MutableVector3D getUpMutable()
+  public final void getUpMutable(MutableVector3D result)
   {
-     return _up;
+    result.copyFrom(_up);
   }
+
   public final Geodetic3D getGeodeticCenterOfView()
   {
      return _getGeodeticCenterOfView();
@@ -353,7 +349,7 @@ public class Camera
       setCartesianPosition(new MutableVector3D(_planet.getRadii().maxAxis() * 5, 0, 0));
       setUp(new MutableVector3D(0, 0, 1));
     }
-    _dirtyFlags.setAll(true);
+    _dirtyFlags.setAllDirty();
   }
 
   public final void setCartesianPosition(MutableVector3D v)
@@ -365,7 +361,7 @@ public class Camera
       if (_geodeticPosition != null)
          _geodeticPosition.dispose();
       _geodeticPosition = null;
-      _dirtyFlags.setAll(true);
+      _dirtyFlags.setAllDirty();
       final double distanceToPlanetCenter = _position.length();
       final double planetRadius = distanceToPlanetCenter - getGeodeticPosition()._height;
       _angle2Horizon = Math.acos(planetRadius/distanceToPlanetCenter);
@@ -465,7 +461,7 @@ public class Camera
     setCartesianPosition(position.asMutableVector3D());
     setCenter(cartesianCenter.asMutableVector3D());
     setUp(finalUp.asMutableVector3D());
-    //  _dirtyFlags.setAll(true);
+    //  _dirtyFlags.setAllDirty();
   }
 
   public final void forceMatrixCreation()
@@ -515,7 +511,7 @@ public class Camera
   
     setUp(_up.transformedBy(M, 0.0));
   
-    //_dirtyFlags.setAll(true);
+    //_dirtyFlags.setAllDirty();
   }
 
   public final boolean isPositionWithin(Sector sector, double height)
@@ -666,7 +662,7 @@ public class Camera
     {
       //      _center = MutableVector3D(v);
       _center.copyFrom(v);
-      _dirtyFlags.setAll(true);
+      _dirtyFlags.setAllDirty();
     }
   }
 
@@ -676,7 +672,7 @@ public class Camera
     {
       //      _up = MutableVector3D(v);
       _up.copyFrom(v);
-      _dirtyFlags.setAll(true);
+      _dirtyFlags.setAllDirty();
     }
   }
 
@@ -838,7 +834,7 @@ public class Camera
     _center.addInPlace(rs._y);
   //  _up = rs._z.asMutableVector3D();
     _up.copyFrom(rs._z);
-    _dirtyFlags.setAll(true); //Recalculate Everything
+    _dirtyFlags.setAllDirty(); //Recalculate Everything
   }
 
 }

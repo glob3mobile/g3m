@@ -34,7 +34,14 @@ public:
                   double minHeight,
                   double maxHeight,
                   double averageHeight) {
-    _g3mWidget->setAnimatedCameraPosition( Geodetic3D::fromDegrees(39.084024168630392637, -77.643438514919708382, 11000) );
+    // _g3mWidget->setAnimatedCameraPosition( Geodetic3D::fromDegrees(39.084024168630392637, -77.643438514919708382, 11000) );
+
+    _g3mWidget->setAnimatedCameraPosition(TimeInterval::fromSeconds(5),
+                                          Geodetic3D::fromDegrees(44.950996472837502438,
+                                                                  -93.098090960367656521,
+                                                                  301.5960958814906121),
+                                          Angle::zero(),
+                                          Angle::fromDegrees(-26));
   }
 
 };
