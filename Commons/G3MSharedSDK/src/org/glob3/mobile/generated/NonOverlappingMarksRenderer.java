@@ -64,7 +64,7 @@ public class NonOverlappingMarksRenderer extends DefaultRenderer
   
     _connectorsGLState.addGLFeature(new ViewportExtentGLFeature((int)rc.getCurrentCamera().getViewPortWidth(), (int)rc.getCurrentCamera().getViewPortHeight()), false);
   
-    rc.getGL().drawArrays(GLPrimitive.lines(), 0, pos2D.size()/2, _connectorsGLState, rc.getGPUProgramManager());
+    rc.getGL().drawArrays(GLPrimitive.lines(), 0, pos2D.size()/2, _connectorsGLState, rc.getGPUProgramManager(), RenderType.REGULAR_RENDER);
   }
 
   private void computeForces(Camera cam, Planet planet)
@@ -279,6 +279,10 @@ public class NonOverlappingMarksRenderer extends DefaultRenderer
       }
     }
     return false;
+  }
+
+  public final void zRender(G3MRenderContext rc, GLState glState)
+  {
   }
 
 }

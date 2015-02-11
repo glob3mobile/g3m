@@ -119,7 +119,7 @@ public class MarkWidget
 
   public final void render(G3MRenderContext rc, GLState glState)
   {
-    rc.getGL().drawArrays(GLPrimitive.triangleStrip(), 0, 4, _glState, rc.getGPUProgramManager());
+    rc.getGL().drawArrays(GLPrimitive.triangleStrip(), 0, 4, _glState, rc.getGPUProgramManager(), RenderType.REGULAR_RENDER);
   }
 
   public final void setScreenPos(float x, float y)
