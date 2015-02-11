@@ -9,6 +9,7 @@
 #include "CameraMouseWheelHandler.hpp"
 #include "Camera.hpp"
 #include "TouchEvent.hpp"
+#include "G3MWidget.hpp"
 
 bool CameraMouseWheelHandler::onTouchEvent(const G3MEventContext *eventContext,
                   const TouchEvent* touchEvent,
@@ -27,26 +28,49 @@ void CameraMouseWheelHandler::onMouseWheel(const G3MEventContext *eventContext,
                                            const TouchEvent& touchEvent,
                                            CameraContext *cameraContext){
   Camera* cam = cameraContext->getNextCamera();
-  const Planet* planet = eventContext->getPlanet();
   
-  const Vector3D dir = cam->pixel2Ray(touchEvent.getTouch(0)->getPos()).normalized();
+  Vector2I pixel = touchEvent.getTouch(0)->getPos();
+  Vector3D touchedPosition = eventContext->getWidget()->getScenePositionForPixel(pixel._x, pixel._y);
   
-#warning USE ZRENDER IN THE FUTURE
-  std::vector<double> dists = planet->intersectionsDistances(cam->getCartesianPosition(), dir);
-  
-  if (dists.size() > 0){     //Research other behaviours as Google Earth
-
+  if (!touchedPosition.isNan()){
+    
+    const Vector3D dir = cam->pixel2Ray(pixel).normalized();
+    
+    double dist = touchedPosition.distanceTo(cam->getCartesianPosition());
+    
     const double delta = touchEvent.getMouseWheelDelta();
     double factor = 0.1;
     if (delta < 0){
       factor *= -1;
     }
     
-    double dist = dists.at(0);
     Vector3D translation = dir.normalized().times(dist * factor);
     
     cam->translateCamera(translation);
+    
   }
+  
+  //NO ZRENDER
+  
+//  const Planet* planet = eventContext->getPlanet();
+//  const Vector3D dir = cam->pixel2Ray(touchEvent.getTouch(0)->getPos()).normalized();
+//  
+//#warning USE ZRENDER IN THE FUTURE
+//  std::vector<double> dists = planet->intersectionsDistances(cam->getCartesianPosition(), dir);
+//  
+//  if (dists.size() > 0){     //Research other behaviours as Google Earth
+//
+//    const double delta = touchEvent.getMouseWheelDelta();
+//    double factor = 0.1;
+//    if (delta < 0){
+//      factor *= -1;
+//    }
+//    
+//    double dist = dists.at(0);
+//    Vector3D translation = dir.normalized().times(dist * factor);
+//    
+//    cam->translateCamera(translation);
+//  }
   
   
 }
