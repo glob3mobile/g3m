@@ -74,6 +74,8 @@ public class ColumnLayoutImageBuilder extends LayoutImageBuilder
       canvas.setFillColor(Color.red());
       canvas.fillRectangle(0, 0, width, height);
   
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning TODO : margin, border, padding, background color?, borderRadius?
       float cursorTop = height;
       for (int i = 0; i < resultsSize; i++)
       {
@@ -95,7 +97,7 @@ public class ColumnLayoutImageBuilder extends LayoutImageBuilder
     for (int i = 0; i < resultsSize; i++)
     {
       ChildResult result = results.get(i);
-      result = null;
+      result.dispose();
     }
   
   }
