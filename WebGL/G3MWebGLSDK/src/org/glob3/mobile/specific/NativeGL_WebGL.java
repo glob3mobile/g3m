@@ -797,8 +797,6 @@ public final class NativeGL_WebGL extends INativeGL {
 
 	@Override
 	public native Vector2F getDepthRange() /*-{
-		debugger;
-
 		var gl = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl;
 
 		var range = gl.getParameter(gl.DEPTH_RANGE);
