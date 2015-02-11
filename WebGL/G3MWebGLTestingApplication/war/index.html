@@ -51,7 +51,6 @@
     var options = { enableGestures: true };
     
     
-    var h = 1000000;// p.height;
     // Main Leap Loop
     Leap.loop(options, function(frame) {
     
@@ -60,6 +59,7 @@
     		
     		var lat = p.latitude;
     		var lon = p.longitude;
+    		var h = p.height;
     		
     	
     		if (frame.hands.length == 1){
@@ -79,10 +79,9 @@
     			
     		console.log(lat + " " + lon + " " + h);
     		
-    		setCameraLatLonHeight(lat, lon, h);
     		}
     		
-    		
+    		setCameraLatLonHeight(lat, lon, h);
     	}
     	
     });
