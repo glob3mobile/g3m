@@ -111,6 +111,11 @@ public abstract class LayoutImageBuilder extends AbstractImageBuilder
        _childIndex = childIndex;
     }
 
+    public void dispose()
+    {
+
+    }
+
     public final void imageCreated(IImage image, String imageName)
     {
       _childrenResult.childImageCreated(image, imageName, _childIndex);

@@ -22,8 +22,8 @@ public class ColumnLayoutImageBuilder extends LayoutImageBuilder
   protected final void doLayout(G3MContext context, IImageBuilderListener listener, boolean deleteListener, java.util.ArrayList<ChildResult> results)
   {
     boolean anyError = false;
-    String error;
-    String imageName;
+    String error = "";
+    String imageName = "";
   
     int maxWidth = 0;
     int accumulatedHeight = 0;
