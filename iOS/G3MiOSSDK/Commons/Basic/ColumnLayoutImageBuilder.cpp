@@ -107,6 +107,7 @@ void ColumnLayoutImageBuilder::doLayout(const G3MContext* context,
     canvas->setFillColor(Color::red());
     canvas->fillRectangle(0, 0, width, height);
 
+#warning TODO : margin, border, padding, background color?, borderRadius?
     float cursorTop = height;
     for (int i = 0; i < resultsSize; i++) {
       ChildResult* result = results[i];
