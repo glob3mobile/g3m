@@ -18,6 +18,8 @@ package org.glob3.mobile.generated;
 
 //class LayerSet;
 //class GEOVectorLayer;
+//class IImageBuilder;
+
 
 
 
@@ -26,7 +28,6 @@ public class PlanetRendererBuilder
 
   private TileTessellator _tileTessellator;
   private TileTexturizer _texturizer;
-//  std::vector<TileRasterizer*> _tileRasterizers;
   private java.util.ArrayList<GEOVectorLayer> _geoVectorLayers = new java.util.ArrayList<GEOVectorLayer>();
 
   private LayerSet _layerSet;
@@ -60,24 +61,6 @@ public class PlanetRendererBuilder
     return _tileTessellator;
   }
 
-  //TileRasterizer* PlanetRendererBuilder::getTileRasterizer() {
-  //  const int tileRasterizersSize = _tileRasterizers.size();
-  //
-  //  if (tileRasterizersSize == 0) {
-  //    return NULL;
-  //  }
-  //
-  //  if (tileRasterizersSize == 1) {
-  //    return _tileRasterizers[0];
-  //  }
-  //
-  //  CompositeTileRasterizer* result = new CompositeTileRasterizer();
-  //  for (int i = 0; i < tileRasterizersSize; i++) {
-  //    result->addTileRasterizer(_tileRasterizers[i]);
-  //  }
-  //  return result;
-  //}
-  
   /**
    * Returns the _texturizer.
    *
@@ -87,15 +70,11 @@ public class PlanetRendererBuilder
   {
     if (_texturizer == null)
     {
-  //    _texturizer = new MultiLayerTileTexturizer();
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning Diego at work!
-      _texturizer = new DefaultTileTexturizer();
+      _texturizer = new DefaultTileTexturizer(this.getDefaultTileBackGroundImageBuilder());
     }
   
     return _texturizer;
   }
-//  TileRasterizer* getTileRasterizer();
 
 
   /**
@@ -276,13 +255,17 @@ public class PlanetRendererBuilder
     return _touchEventTypeOfTerrainTouchListener;
   }
 
+  private IImageBuilder _defaultTileBackGroundImage = null;
 
-  ///#include "MultiLayerTileTexturizer.hpp"
-  ///#include "TileRasterizer.hpp"
-  
-  
-  ///#include "CompositeTileRasterizer.hpp"
-  
+  private IImageBuilder getDefaultTileBackGroundImageBuilder()
+  {
+    if (_defaultTileBackGroundImage == null)
+    {
+      return new DefaultChessCanvasImageBuilder(256, 256, Color.black(), Color.white(), 4);
+    }
+    return _defaultTileBackGroundImage;
+  }
+
   public PlanetRendererBuilder()
   {
      _showStatistics = false;
@@ -316,12 +299,6 @@ public class PlanetRendererBuilder
     if (_texturizer != null)
        _texturizer.dispose();
   
-  //  const int tileRasterizersSize = _tileRasterizers.size();
-  //  for (int i = 0 ; i < tileRasterizersSize; i++) {
-  //    TileRasterizer* tileRasterizer = _tileRasterizers[i];
-  //    delete tileRasterizer;
-  //  }
-  
     final int geoVectorLayersSize = _geoVectorLayers.size();
     for (int i = 0; i < geoVectorLayersSize; i++)
     {
@@ -353,7 +330,6 @@ public class PlanetRendererBuilder
     }
   
     PlanetRenderer planetRenderer = new PlanetRenderer(getTileTessellator(), getElevationDataProvider(), true, getVerticalExaggeration(), getTexturizer(), layerSet, getParameters(), getShowStatistics(), getTileDownloadPriority(), getRenderedSector(), getRenderTileMeshes(), getLogTilesPetitions(), getTileRenderingListener(), getChangedRendererInfoListener(), getTouchEventTypeOfTerrainTouchListener());
-  //                                                      getTileRasterizer(),
   
     for (int i = 0; i < getVisibleSectorListeners().size(); i++)
     {
@@ -377,7 +353,6 @@ public class PlanetRendererBuilder
   
     _tileRenderingListener = null;
   
-  //  _tileRasterizers.clear();
     _geoVectorLayers.clear();
   
     return planetRenderer;
@@ -391,11 +366,6 @@ public class PlanetRendererBuilder
     }
     _tileTessellator = tileTessellator;
   }
-
-  //void PlanetRendererBuilder::addTileRasterizer(TileRasterizer* tileRasterizer) {
-  //  _tileRasterizers.push_back(tileRasterizer);
-  //}
-  
   public final void setTileTexturizer(TileTexturizer tileTexturizer)
   {
     if (_texturizer != null)
@@ -405,7 +375,6 @@ public class PlanetRendererBuilder
     }
     _texturizer = tileTexturizer;
   }
-//  void addTileRasterizer(TileRasterizer* tileRasterizer);
   public final void setLayerSet(LayerSet layerSet)
   {
     if (_layerSet != null)
@@ -488,16 +457,6 @@ public class PlanetRendererBuilder
     _renderedSector = new Sector(sector);
   }
 
-//  GEOTileRasterizer* createGEOTileRasterizer();
-
-
-  //GEOTileRasterizer* PlanetRendererBuilder::createGEOTileRasterizer() {
-  //  GEOTileRasterizer* geoTileRasterizer = new GEOTileRasterizer();
-  //  addTileRasterizer(geoTileRasterizer);
-  //  return geoTileRasterizer;
-  //}
-  
-  
   public final GEOVectorLayer createGEOVectorLayer()
   {
     GEOVectorLayer geoVectorLayer = new GEOVectorLayer();
@@ -550,16 +509,19 @@ public class PlanetRendererBuilder
     if (_changedInfoListener != null)
     {
       ILogger.instance().logError("LOGIC ERROR: ChangedInfoListener in Planet Render Builder already set");
+      return;
     }
-    else
-    {
-      _changedInfoListener = changedInfoListener;
-      ILogger.instance().logError("LOGIC INFO: ChangedInfoListener in Planet Render Builder set OK");
-    }
+    _changedInfoListener = changedInfoListener;
+    ILogger.instance().logInfo("LOGIC INFO: ChangedInfoListener in Planet Render Builder set OK");
   }
 
   public final void setTouchEventTypeOfTerrainTouchListener(TouchEventType touchEventTypeOfTerrainTouchListener)
   {
     _touchEventTypeOfTerrainTouchListener = touchEventTypeOfTerrainTouchListener;
+  }
+
+  public final void setDefaultTileBackGroundImage(IImageBuilder defaultTileBackGroundImage)
+  {
+    _defaultTileBackGroundImage = defaultTileBackGroundImage;
   }
 }

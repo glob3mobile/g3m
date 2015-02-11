@@ -18,6 +18,9 @@
 #include <G3MiOSSDK/ShapesRenderer.hpp>
 #include <G3MiOSSDK/MarksRenderer.hpp>
 #include <G3MiOSSDK/GEORenderer.hpp>
+#include <G3MiOSSDK/PointCloudsRenderer.hpp>
+#include <G3MiOSSDK/HUDRenderer.hpp>
+#include <G3MiOSSDK/NonOverlappingMarksRenderer.hpp>
 
 #include "G3MDemoModel.hpp"
 
@@ -31,6 +34,7 @@ _model(NULL)
 
 G3MDemoBuilder::~G3MDemoBuilder() {
 }
+
 
 class G3MDemoInitializationTask : public GInitializationTask {
 private:
@@ -58,13 +62,10 @@ void G3MDemoBuilder::build() {
 
   IG3MBuilder* builder = getG3MBuilder();
 
-//  builder->getPlanetRendererBuilder()->setRenderDebug(true);
-//  builder->getPlanetRendererBuilder()->setRenderTileMeshes(false);
+  //builder->getPlanetRendererBuilder()->setRenderDebug(true);
 
   LayerSet* layerSet = new LayerSet();
   builder->getPlanetRendererBuilder()->setLayerSet(layerSet);
-
-//  GEORenderer* geoRenderer = builder->createGEORenderer(NULL);
 
   MeshRenderer* meshRenderer = new MeshRenderer();
   builder->addRenderer(meshRenderer);
@@ -75,6 +76,10 @@ void G3MDemoBuilder::build() {
   MarksRenderer* marksRenderer = new MarksRenderer(false);
   builder->addRenderer(marksRenderer);
 
+  PointCloudsRenderer* pointCloudsRenderer = new PointCloudsRenderer();
+  builder->addRenderer(pointCloudsRenderer);
+//  builder->getPlanetRendererBuilder()->setTileRenderingListener(pointCloudsRenderer->getTileRenderingListener());
+
   GEORenderer* geoRenderer = new GEORenderer(NULL, /* symbolizer */
                                              meshRenderer,
                                              shapesRenderer,
@@ -82,14 +87,22 @@ void G3MDemoBuilder::build() {
                                              NULL  /* geoVectorLayer */);
   builder->addRenderer(geoRenderer);
 
+  HUDRenderer* hudRenderer = new HUDRenderer();
+  builder->setHUDRenderer(hudRenderer);
+
+  NonOverlappingMarksRenderer* nonOverlappingMarksRenderer = new NonOverlappingMarksRenderer(30);
+  builder->addRenderer(nonOverlappingMarksRenderer);
+
   _initialized = true;
-//  _model = new G3MDemoModel(_listener, layerSet, geoRenderer);
   _model = new G3MDemoModel(_listener,
                             layerSet,
                             meshRenderer,
                             shapesRenderer,
                             marksRenderer,
-                            geoRenderer);
+                            geoRenderer,
+                            pointCloudsRenderer,
+                            hudRenderer,
+                            nonOverlappingMarksRenderer);
 
   builder->setInitializationTask(new G3MDemoInitializationTask(_model), true);
 }

@@ -20,7 +20,12 @@ class IDownloader;
 
 class RasterLayerTileImageProvider : public TileImageProvider {
 private:
+#ifdef C_CODE
   const RasterLayer* _layer;
+#endif
+#ifdef JAVA_CODE
+  private RasterLayer _layer;
+#endif
   IDownloader*       _downloader;
 
   std::map<const std::string, long long> _requestsIdsPerTile;
@@ -52,6 +57,8 @@ public:
 
 
   void requestFinish(const std::string& tileId);
+
+  void layerDeleted(const RasterLayer* layer);
 
 };
 

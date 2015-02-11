@@ -97,7 +97,6 @@ public class SimpleRasterLayerBuilder
                "png", // imageFormat
                TimeInterval.fromDays(90), // timeToCache
                true, // readExpired
-               Sector.fullSphere(), // sector
                2, // initialLevel
                17, // maxLevel
                true // isTransparent

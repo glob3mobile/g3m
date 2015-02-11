@@ -28,9 +28,9 @@ public class Sphere extends BoundingVolume
   //  return Vector2I::zero();
   //}
   
-  private void createWireframeMesh(Color color, short resolution)
+  private Mesh createWireframeMesh(Color color, short resolution)
   {
-    IMathUtils mu = IMathUtils.instance();
+    final IMathUtils mu = IMathUtils.instance();
     final double delta = DefineConstants.PI / (resolution-1);
   
     // create vertices
@@ -76,10 +76,12 @@ public class Sphere extends BoundingVolume
       indices.add((short)(j));
     }
   
-    _mesh = new IndexedMesh(GLPrimitive.lines(), true, vertices.getCenter(), vertices.create(), indices.create(), 1, 1, color);
+    Mesh mesh = new IndexedMesh(GLPrimitive.lines(), true, vertices.getCenter(), vertices.create(), indices.create(), 1, 1, new Color(color));
   
     if (vertices != null)
        vertices.dispose();
+  
+    return mesh;
   }
 
 
@@ -125,11 +127,11 @@ public class Sphere extends BoundingVolume
   }
 //  Vector2I projectedExtent(const G3MRenderContext* rc) const;
 
-  public final void render(G3MRenderContext rc, GLState parentState)
+  public final void render(G3MRenderContext rc, GLState parentState, Color color)
   {
     if (_mesh == null)
     {
-      createWireframeMesh(Color.newFromRGBA(1.0f, 1.0f, 0.0f, 1.0f), (short) 16);
+      _mesh = createWireframeMesh(color, (short) 16);
     }
     _mesh.render(rc, parentState);
   }

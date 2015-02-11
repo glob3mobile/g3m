@@ -16,27 +16,28 @@
 #include "QuadTree.hpp"
 
 class TileImageContribution;
+class GEOVectorTileImageProvider;
 
 class GEOVectorLayer : public VectorLayer {
 private:
   QuadTree _quadTree;
 
-  mutable TileImageProvider* _tileImageProvider;
+  mutable GEOVectorTileImageProvider* _tileImageProvider;
 
 public:
 
   GEOVectorLayer(const std::vector<const LayerTilesRenderParameters*>& parametersVector,
                  const float                                           transparency   = 1.0f,
                  const LayerCondition*                                 condition      = NULL,
-                 const std::string&                                    disclaimerInfo = "");
+                 std::vector<const Info*>*                             layerInfo      = new std::vector<const Info*>());
 
-  GEOVectorLayer(const int             mercatorFirstLevel = 2,
-                 const int             mercatorMaxLevel   = 18,
-                 const int             wgs84firstLevel    = 0,
-                 const int             wgs84maxLevel      = 18,
-                 const float           transparency       = 1.0f,
-                 const LayerCondition* condition          = NULL,
-                 const std::string&    disclaimerInfo     = "");
+  GEOVectorLayer(const int                        mercatorFirstLevel = 2,
+                 const int                        mercatorMaxLevel   = 18,
+                 const int                        wgs84firstLevel    = 0,
+                 const int                        wgs84maxLevel      = 18,
+                 const float                      transparency       = 1.0f,
+                 const LayerCondition*            condition          = NULL,
+                 std::vector<const Info*>*       layerInfo           = new std::vector<const Info*>());
 
   ~GEOVectorLayer();
 
@@ -54,10 +55,6 @@ public:
                         const Sector& sector) const {
     return URL();
   }
-
-  std::vector<Petition*> createTileMapPetitions(const G3MRenderContext* rc,
-                                                const LayerTilesRenderParameters* layerTilesRenderParameters,
-                                                const Tile* tile) const;
 
   RenderState getRenderState();
 
@@ -78,6 +75,8 @@ public:
     return _quadTree;
   }
 
+  const std::vector<URL*> getDownloadURLs(const Tile* tile) const;
+  
 };
 
 #endif

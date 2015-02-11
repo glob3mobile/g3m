@@ -125,6 +125,9 @@ public:
   virtual Geodetic3D getDefaultCameraPosition(const Sector& rendereSector) const = 0;
 
   CoordinateSystem getCoordinateSystemAt(const Geodetic3D& geo) const;
+
+  virtual const std::string getType() const = 0;
+
 };
 
 #endif

@@ -18,7 +18,7 @@ class IDownloader;
 class IBufferDownloadListener;
 class IStringUtils;
 class GEORasterSymbolizer;
-
+class TiledVectorLayerTileImageProvider;
 
 class TiledVectorLayer : public VectorLayer {
 private:
@@ -46,7 +46,7 @@ private:
   private IMathUtils   _mu;
   private IStringUtils _su;
 #endif
-  mutable TileImageProvider* _tileImageProvider;
+  mutable TiledVectorLayerTileImageProvider* _tileImageProvider;
 
   TiledVectorLayer(const GEORasterSymbolizer*                            symbolizer,
                    const std::string&                                    urlTemplate,
@@ -56,7 +56,7 @@ private:
                    const bool                                            readExpired,
                    const float                                           transparency,
                    const LayerCondition*                                 condition,
-                   const std::string&                                    disclaimerInfo);
+                   std::vector<const Info*>*                             layerInfo);
 
   const URL createURL(const Tile* tile) const;
 
@@ -79,7 +79,7 @@ public:
                                        const bool                 readExpired    = true,
                                        const float                transparency   = 1,
                                        const LayerCondition*      condition      = NULL,
-                                       const std::string&         disclaimerInfo = "");
+                                       std::vector<const Info*>* layerInfo = new std::vector<const Info*>());
 
   ~TiledVectorLayer();
 
@@ -93,10 +93,6 @@ public:
   TiledVectorLayer* copy() const;
 
   const TileImageContribution* contribution(const Tile* tile) const;
-
-  std::vector<Petition*> createTileMapPetitions(const G3MRenderContext* rc,
-                                                const LayerTilesRenderParameters* layerTilesRenderParameters,
-                                                const Tile* tile) const;
 
   TileImageProvider* createTileImageProvider(const G3MRenderContext* rc,
                                              const LayerTilesRenderParameters* layerTilesRenderParameters) const;
@@ -133,7 +129,9 @@ public:
 
   void setSymbolizer(const GEORasterSymbolizer* symbolizer,
                      bool deletePrevious);
-  
+
+  const std::vector<URL*> getDownloadURLs(const Tile* tile) const;
+
 };
 
 #endif

@@ -45,7 +45,8 @@ public:
   }
 
   GEO2DMultiPolygonGeometry* deepCopy() const;
-
+  
+  bool contain(const Geodetic2D& point) const;
 };
 
 #endif

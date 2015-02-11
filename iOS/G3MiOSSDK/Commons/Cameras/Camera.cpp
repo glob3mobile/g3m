@@ -24,21 +24,16 @@ void Camera::initialize(const G3MContext* context) {
     setCartesianPosition( MutableVector3D(_planet->getRadii().maxAxis() * 5, 0, 0) );
     setUp(MutableVector3D(0, 0, 1));
   }
-  _dirtyFlags.setAll(true);
+  _dirtyFlags.setAllDirty();
 }
 
 
 void Camera::copyFrom(const Camera &that) {
-  //TODO: IMPROVE PERFORMANCE
   _viewPortWidth  = that._viewPortWidth;
   _viewPortHeight = that._viewPortHeight;
 
   _planet = that._planet;
 
-//  _position = MutableVector3D(that._position);
-//  _center   = MutableVector3D(that._center);
-//  _up       = MutableVector3D(that._up);
-//  _normalizedPosition = MutableVector3D(that._normalizedPosition);
   _position.copyFrom(that._position);
   _center.copyFrom(that._center);
   _up.copyFrom(that._up);
@@ -57,7 +52,6 @@ void Camera::copyFrom(const Camera &that) {
   _modelMatrix.copyValue(that._modelMatrix);
   _modelViewMatrix.copyValue(that._modelViewMatrix);
 
-//  _cartesianCenterOfView = MutableVector3D(that._cartesianCenterOfView);
   _cartesianCenterOfView.copyFrom(that._cartesianCenterOfView);
 
 #ifdef C_CODE
@@ -120,14 +114,14 @@ _tanHalfHorizontalFieldOfView(NAND),
 _rollInRadians(0)
 {
   resizeViewport(0, 0);
-  _dirtyFlags.setAll(true);
+  _dirtyFlags.setAllDirty();
 }
 
 void Camera::resizeViewport(int width, int height) {
   _viewPortWidth  = width;
   _viewPortHeight = height;
 
-  _dirtyFlags.setAll(true);
+  _dirtyFlags.setAllDirty();
 }
 
 void Camera::print() {
@@ -215,7 +209,7 @@ void Camera::applyTransform(const MutableMatrix44D& M) {
 
   setUp(  _up.transformedBy(M, 0.0) );
 
-  //_dirtyFlags.setAll(true);
+  //_dirtyFlags.setAllDirty();
 }
 
 void Camera::dragCamera(const Vector3D& p0, const Vector3D& p1) {
@@ -299,7 +293,7 @@ void Camera::setPointOfView(const Geodetic3D& center,
   setCartesianPosition(position.asMutableVector3D());
   setCenter(cartesianCenter.asMutableVector3D());
   setUp(finalUp.asMutableVector3D());
-  //  _dirtyFlags.setAll(true);
+  //  _dirtyFlags.setAllDirty();
 }
 
 FrustumData Camera::calculateFrustumData() const {
@@ -420,7 +414,7 @@ void Camera::setCameraCoordinateSystem(const CoordinateSystem& rs) {
   _center.addInPlace(rs._y);
 //  _up = rs._z.asMutableVector3D();
   _up.copyFrom(rs._z);
-  _dirtyFlags.setAll(true);  //Recalculate Everything
+  _dirtyFlags.setAllDirty();  //Recalculate Everything
 }
 
 TaitBryanAngles Camera::getHeadingPitchRoll() const {

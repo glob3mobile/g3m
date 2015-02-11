@@ -27,7 +27,7 @@ OSMLayer* OSMLayer::copy() const {
                       _initialLevel,
                       _transparency,
                       (_condition == NULL) ? NULL : _condition->copy(),
-                      _disclaimerInfo);
+                      _layerInfo);
 }
 
 RenderState OSMLayer::getRenderState() {

@@ -192,6 +192,10 @@
       NSString* filePath = [[NSBundle mainBundle] pathForResource: fileName
                                                            ofType: fileExt];
       data = [NSData dataWithContentsOfFile:filePath];
+      if (!data) {
+        data = [NSData dataWithContentsOfURL:_nsURL];
+      }
+
       statusCode = (data) ? 200 : 404;
     }
     else {
@@ -251,6 +255,8 @@
           [[entry listener] onErrorURL: url];
         }
       }
+
+      [_listeners removeAllObjects];
       
       [_lock unlock];
     });

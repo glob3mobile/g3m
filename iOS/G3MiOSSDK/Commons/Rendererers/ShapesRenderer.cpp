@@ -83,7 +83,8 @@ void ShapesRenderer::render(const G3MRenderContext* rc, GLState* glState) {
   // Saving camera for use in onTouchEvent
   _lastCamera = rc->getCurrentCamera();
 
-  const MutableVector3D cameraPosition = rc->getCurrentCamera()->getCartesianPositionMutable();
+  MutableVector3D cameraPosition;
+  rc->getCurrentCamera()->getCartesianPositionMutable(cameraPosition);
 
   //Setting camera matrixes
   updateGLState(rc);
@@ -156,13 +157,14 @@ public:
 
 
 
-std::vector<ShapeDistance> ShapesRenderer::intersectionsDistances(const Vector3D& origin,
+std::vector<ShapeDistance> ShapesRenderer::intersectionsDistances(const Planet* planet,
+                                                                  const Vector3D& origin,
                                                                   const Vector3D& direction) const
 {
   std::vector<ShapeDistance> shapeDistances;
   for (int n=0; n<_shapes.size(); n++) {
     Shape* shape = _shapes[n];
-    std::vector<double> distances = shape->intersectionsDistances(origin, direction);
+    std::vector<double> distances = shape->intersectionsDistances(planet, origin, direction);
     for (int i=0; i<distances.size(); i++) {
       shapeDistances.push_back(ShapeDistance(distances[i], shape));
     }
@@ -199,17 +201,18 @@ bool ShapesRenderer::onTouchEvent(const G3MEventContext* ec,
       const Vector3D origin = _lastCamera->getCartesianPosition();
       const Vector2I pixel = touchEvent->getTouch(0)->getPos();
       const Vector3D direction = _lastCamera->pixel2Ray(pixel);
+      const Planet* planet = ec->getPlanet();
       if (!direction.isNan()) {
-        std::vector<ShapeDistance> shapeDistances = intersectionsDistances(origin, direction);
-        
+        std::vector<ShapeDistance> shapeDistances = intersectionsDistances(planet, origin, direction);
+
         if (!shapeDistances.empty()) {
           //        printf ("Found %d intersections with shapes:\n",
           //                (int)shapeDistances.size());
           for (int i=0; i<shapeDistances.size(); i++) {
-            //          printf ("   %d: shape %x to distance %f\n",
-            //                  i+1,
-            //                  (unsigned int)shapeDistances[i]._shape,
-            //                  shapeDistances[i]._distance);
+//            printf ("   %d: shape %x to distance %f\n",
+//                    i+1,
+//                    (unsigned int)shapeDistances[i]._shape,
+//                    shapeDistances[i]._distance);
           }
         }
       } else {

@@ -243,8 +243,11 @@ public:
     return _infoDisplay;
   }
   
-  void changedRendererInfo(const int rendererIdentifier, const std::vector<std::string>& info);
-  
+  void changedRendererInfo(const int rendererIdentifier, const std::vector<const Info*> info);
+
+  void removeAllPeriodicalTasks();
+
+
 private:
   IStorage*                _storage;
   IDownloader*             _downloader;

@@ -19,21 +19,26 @@
 
 RasterLayer::~RasterLayer() {
   delete _parameters;
+  if (_tileImageProvider != NULL) {
+    _tileImageProvider->layerDeleted(this);
+    _tileImageProvider->_release();
+  }
 #ifdef JAVA_CODE
   super.dispose();
 #endif
 }
 
-RasterLayer::RasterLayer(const TimeInterval&               timeToCache,
-                         const bool                        readExpired,
-                         const LayerTilesRenderParameters* parameters,
-                         const float                       transparency,
-                         const LayerCondition*             condition,
-                         const std::string&                disclaimerInfo) :
-Layer(transparency, condition, disclaimerInfo),
+RasterLayer::RasterLayer(const TimeInterval&                    timeToCache,
+                         const bool                             readExpired,
+                         const LayerTilesRenderParameters*      parameters,
+                         const float                            transparency,
+                         const LayerCondition*                  condition,
+                         std::vector<const Info*>*              layerInfo) :
+Layer(transparency, condition, layerInfo),
 _timeToCache(timeToCache),
 _readExpired(readExpired),
-_parameters(parameters)
+_parameters(parameters),
+_tileImageProvider(NULL)
 {
 }
 
@@ -58,7 +63,11 @@ bool RasterLayer::isEquals(const Layer* that) const {
 
 TileImageProvider* RasterLayer::createTileImageProvider(const G3MRenderContext* rc,
                                                         const LayerTilesRenderParameters* layerTilesRenderParameters) const {
-  return new RasterLayerTileImageProvider(this, rc->getDownloader());
+  if (_tileImageProvider == NULL) {
+    _tileImageProvider = new RasterLayerTileImageProvider(this, rc->getDownloader());;
+  }
+  _tileImageProvider->_retain();
+  return _tileImageProvider;
 }
 
 const TileImageContribution* RasterLayer::contribution(const Tile* tile) const {
@@ -120,4 +129,10 @@ const Tile* RasterLayer::getParentTileOfSuitableLevel(const Tile* tile) const {
 
 void RasterLayer::selectLayerTilesRenderParameters(int index) {
   THROW_EXCEPTION("Logic error");
+}
+
+const std::vector<URL*> RasterLayer::getDownloadURLs(const Tile* tile) const {
+  std::vector<URL*> result;
+  result.push_back( new URL(createURL(tile)) );
+  return result;
 }

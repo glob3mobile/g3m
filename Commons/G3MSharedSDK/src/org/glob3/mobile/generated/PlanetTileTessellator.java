@@ -106,7 +106,7 @@ public class PlanetTileTessellator extends TileTessellator
     final double mercatorDeltaGlobalV = mercatorLowerGlobalV - mercatorUpperGlobalV;
   
     //VERTICES///////////////////////////////////////////////////////////////
-    IMathUtils mu = IMathUtils.instance();
+    final IMathUtils mu = IMathUtils.instance();
     double minElevation = mu.maxDouble();
     double maxElevation = mu.minDouble();
     double averageElevation = 0;
@@ -482,11 +482,6 @@ public class PlanetTileTessellator extends TileTessellator
        vertices.dispose();
   
     return result;
-  }
-
-  public final boolean isReady(G3MRenderContext rc)
-  {
-    return true;
   }
 
   public final IFloatBuffer createTextCoords(Vector2I rawResolution, Tile tile)

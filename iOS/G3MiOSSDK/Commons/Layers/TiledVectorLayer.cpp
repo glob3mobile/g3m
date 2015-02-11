@@ -27,8 +27,8 @@ TiledVectorLayer::TiledVectorLayer(const GEORasterSymbolizer*                   
                                    const bool                                            readExpired,
                                    const float                                           transparency,
                                    const LayerCondition*                                 condition,
-                                   const std::string&                                    disclaimerInfo) :
-VectorLayer(parametersVector, transparency, condition, disclaimerInfo),
+                                   std::vector<const Info*>*                             layerInfo) :
+VectorLayer(parametersVector, transparency, condition, layerInfo),
 _symbolizer(symbolizer),
 _urlTemplate(urlTemplate),
 _dataSector(dataSector),
@@ -43,6 +43,7 @@ _mu(NULL)
 TiledVectorLayer::~TiledVectorLayer() {
   delete _symbolizer;
   if (_tileImageProvider != NULL) {
+    _tileImageProvider->layerDeleted(this);
     _tileImageProvider->_release();
   }
 #ifdef JAVA_CODE
@@ -61,16 +62,16 @@ void TiledVectorLayer::setSymbolizer(const GEORasterSymbolizer* symbolizer,
   }
 }
 
-TiledVectorLayer* TiledVectorLayer::newMercator(const GEORasterSymbolizer* symbolizer,
-                                                const std::string&         urlTemplate,
-                                                const Sector&              dataSector,
-                                                const int                  firstLevel,
-                                                const int                  maxLevel,
-                                                const TimeInterval&        timeToCache,
-                                                const bool                 readExpired,
-                                                const float                transparency,
-                                                const LayerCondition*      condition,
-                                                const std::string&         disclaimerInfo) {
+TiledVectorLayer* TiledVectorLayer::newMercator(const GEORasterSymbolizer*      symbolizer,
+                                                const std::string&              urlTemplate,
+                                                const Sector&                   dataSector,
+                                                const int                       firstLevel,
+                                                const int                       maxLevel,
+                                                const TimeInterval&             timeToCache,
+                                                const bool                      readExpired,
+                                                const float                     transparency,
+                                                const LayerCondition*           condition,
+                                                std::vector<const Info*>*       layerInfo) {
   std::vector<const LayerTilesRenderParameters*> parametersVector;
   parametersVector.push_back( LayerTilesRenderParameters::createDefaultMercator(firstLevel, maxLevel) );
   return new TiledVectorLayer(symbolizer,
@@ -81,7 +82,7 @@ TiledVectorLayer* TiledVectorLayer::newMercator(const GEORasterSymbolizer* symbo
                               readExpired,
                               transparency,
                               condition,
-                              disclaimerInfo);
+                              layerInfo);
 }
 
 URL TiledVectorLayer::getFeatureInfoURL(const Geodetic2D& position,
@@ -117,14 +118,7 @@ TiledVectorLayer* TiledVectorLayer::copy() const {
                               _readExpired,
                               _transparency,
                               (_condition == NULL) ? NULL : _condition->copy(),
-                              _disclaimerInfo);
-}
-
-std::vector<Petition*> TiledVectorLayer::createTileMapPetitions(const G3MRenderContext* rc,
-                                                                const LayerTilesRenderParameters* layerTilesRenderParameters,
-                                                                const Tile* tile) const {
-  std::vector<Petition*> petitions;
-  return petitions;
+                              _layerInfo);
 }
 
 TileImageProvider* TiledVectorLayer::createTileImageProvider(const G3MRenderContext* rc,
@@ -210,4 +204,10 @@ TiledVectorLayer::RequestGEOJSONBufferData* TiledVectorLayer::getRequestGEOJSONB
   return new RequestGEOJSONBufferData(createURL(tile),
                                       _timeToCache,
                                       _readExpired);
+}
+
+const std::vector<URL*> TiledVectorLayer::getDownloadURLs(const Tile* tile) const {
+  std::vector<URL*> result;
+  result.push_back( new URL(createURL(tile)) );
+  return result;
 }

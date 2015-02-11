@@ -21,7 +21,7 @@ public class BingMapsLayer extends RasterLayer
   {
     _brandLogoUri = brandLogoUri;
     _copyright = copyright;
-    _disclaimerInfo = copyright;
+    addInfo(new Info(copyright));
     _imageUrl = imageUrl;
     _imageUrlSubdomains = imageUrlSubdomains;
   
@@ -32,13 +32,14 @@ public class BingMapsLayer extends RasterLayer
     setParameters(new LayerTilesRenderParameters(Sector.fullSphere(), 1, 1, mu.max(zoomMin, _initialLevel), mu.min(zoomMax, _maxLevel), new Vector2I(imageWidth, imageHeight), LayerTilesRenderParameters.defaultTileMeshResolution(), true));
   }
 
-  private String getQuadkey(int zoom, int column, int row)
+  private static String getQuadKey(int zoom, int column, int row)
   {
     IStringBuilder isb = IStringBuilder.newStringBuilder();
   
     for (int i = 1; i <= zoom; i++)
     {
-      final int t = (((row >> (zoom - i)) & 1) << 1) | ((column >> (zoom - i)) & 1);
+      final int zoom_i = (zoom - i);
+      final int t = (((row >> zoom_i) & 1) << 1) | ((column >> zoom_i) & 1);
       isb.addInt(t);
     }
   
@@ -129,7 +130,7 @@ public class BingMapsLayer extends RasterLayer
       subdomain = _imageUrlSubdomains.get(subdomainsIndex);
     }
   
-    final String quadkey = getQuadkey(level, column, row);
+    final String quadkey = getQuadKey(level, column, row);
   
     String path = _imageUrl;
     path = su.replaceSubstring(path, "{subdomain}", subdomain);
@@ -139,6 +140,13 @@ public class BingMapsLayer extends RasterLayer
     return new URL(path, false);
   }
 
+  public static String getQuadKey(Tile tile)
+  {
+    final int level = tile._level;
+    final int numRows = (int) IMathUtils.instance().pow(2.0, level);
+    final int row = numRows - tile._row - 1;
+    return getQuadKey(level, tile._column, row);
+  }
 
   /**
    imagerySet: "Aerial", "AerialWithLabels", "Road", "OrdnanceSurvey" or "CollinsBart". See class BingMapType for constants.
@@ -146,31 +154,31 @@ public class BingMapsLayer extends RasterLayer
    */
   public BingMapsLayer(String imagerySet, String key, TimeInterval timeToCache, boolean readExpired, int initialLevel, int maxLevel, float transparency, LayerCondition condition)
   {
-     this(imagerySet, key, timeToCache, readExpired, initialLevel, maxLevel, transparency, condition, "");
+     this(imagerySet, key, timeToCache, readExpired, initialLevel, maxLevel, transparency, condition, new java.util.ArrayList<Info>());
   }
   public BingMapsLayer(String imagerySet, String key, TimeInterval timeToCache, boolean readExpired, int initialLevel, int maxLevel, float transparency)
   {
-     this(imagerySet, key, timeToCache, readExpired, initialLevel, maxLevel, transparency, null, "");
+     this(imagerySet, key, timeToCache, readExpired, initialLevel, maxLevel, transparency, null, new java.util.ArrayList<Info>());
   }
   public BingMapsLayer(String imagerySet, String key, TimeInterval timeToCache, boolean readExpired, int initialLevel, int maxLevel)
   {
-     this(imagerySet, key, timeToCache, readExpired, initialLevel, maxLevel, 1, null, "");
+     this(imagerySet, key, timeToCache, readExpired, initialLevel, maxLevel, 1, null, new java.util.ArrayList<Info>());
   }
   public BingMapsLayer(String imagerySet, String key, TimeInterval timeToCache, boolean readExpired, int initialLevel)
   {
-     this(imagerySet, key, timeToCache, readExpired, initialLevel, 25, 1, null, "");
+     this(imagerySet, key, timeToCache, readExpired, initialLevel, 25, 1, null, new java.util.ArrayList<Info>());
   }
   public BingMapsLayer(String imagerySet, String key, TimeInterval timeToCache, boolean readExpired)
   {
-     this(imagerySet, key, timeToCache, readExpired, 2, 25, 1, null, "");
+     this(imagerySet, key, timeToCache, readExpired, 2, 25, 1, null, new java.util.ArrayList<Info>());
   }
   public BingMapsLayer(String imagerySet, String key, TimeInterval timeToCache)
   {
-     this(imagerySet, key, timeToCache, true, 2, 25, 1, null, "");
+     this(imagerySet, key, timeToCache, true, 2, 25, 1, null, new java.util.ArrayList<Info>());
   }
-  public BingMapsLayer(String imagerySet, String key, TimeInterval timeToCache, boolean readExpired, int initialLevel, int maxLevel, float transparency, LayerCondition condition, String disclaimerInfo)
+  public BingMapsLayer(String imagerySet, String key, TimeInterval timeToCache, boolean readExpired, int initialLevel, int maxLevel, float transparency, LayerCondition condition, java.util.ArrayList<Info> layerInfo)
   {
-     super(timeToCache, readExpired, null, transparency, condition, disclaimerInfo);
+     super(timeToCache, readExpired, null, transparency, condition, layerInfo);
      _imagerySet = imagerySet;
      _culture = "en-US";
      _key = key;
@@ -181,31 +189,31 @@ public class BingMapsLayer extends RasterLayer
 
   public BingMapsLayer(String imagerySet, String culture, String key, TimeInterval timeToCache, boolean readExpired, int initialLevel, int maxLevel, float transparency, LayerCondition condition)
   {
-     this(imagerySet, culture, key, timeToCache, readExpired, initialLevel, maxLevel, transparency, condition, "");
+     this(imagerySet, culture, key, timeToCache, readExpired, initialLevel, maxLevel, transparency, condition, new java.util.ArrayList<Info>());
   }
   public BingMapsLayer(String imagerySet, String culture, String key, TimeInterval timeToCache, boolean readExpired, int initialLevel, int maxLevel, float transparency)
   {
-     this(imagerySet, culture, key, timeToCache, readExpired, initialLevel, maxLevel, transparency, null, "");
+     this(imagerySet, culture, key, timeToCache, readExpired, initialLevel, maxLevel, transparency, null, new java.util.ArrayList<Info>());
   }
   public BingMapsLayer(String imagerySet, String culture, String key, TimeInterval timeToCache, boolean readExpired, int initialLevel, int maxLevel)
   {
-     this(imagerySet, culture, key, timeToCache, readExpired, initialLevel, maxLevel, 1, null, "");
+     this(imagerySet, culture, key, timeToCache, readExpired, initialLevel, maxLevel, 1, null, new java.util.ArrayList<Info>());
   }
   public BingMapsLayer(String imagerySet, String culture, String key, TimeInterval timeToCache, boolean readExpired, int initialLevel)
   {
-     this(imagerySet, culture, key, timeToCache, readExpired, initialLevel, 25, 1, null, "");
+     this(imagerySet, culture, key, timeToCache, readExpired, initialLevel, 25, 1, null, new java.util.ArrayList<Info>());
   }
   public BingMapsLayer(String imagerySet, String culture, String key, TimeInterval timeToCache, boolean readExpired)
   {
-     this(imagerySet, culture, key, timeToCache, readExpired, 2, 25, 1, null, "");
+     this(imagerySet, culture, key, timeToCache, readExpired, 2, 25, 1, null, new java.util.ArrayList<Info>());
   }
   public BingMapsLayer(String imagerySet, String culture, String key, TimeInterval timeToCache)
   {
-     this(imagerySet, culture, key, timeToCache, true, 2, 25, 1, null, "");
+     this(imagerySet, culture, key, timeToCache, true, 2, 25, 1, null, new java.util.ArrayList<Info>());
   }
-  public BingMapsLayer(String imagerySet, String culture, String key, TimeInterval timeToCache, boolean readExpired, int initialLevel, int maxLevel, float transparency, LayerCondition condition, String disclaimerInfo)
+  public BingMapsLayer(String imagerySet, String culture, String key, TimeInterval timeToCache, boolean readExpired, int initialLevel, int maxLevel, float transparency, LayerCondition condition, java.util.ArrayList<Info> layerInfo)
   {
-     super(timeToCache, readExpired, null, transparency, condition, disclaimerInfo);
+     super(timeToCache, readExpired, null, transparency, condition, layerInfo);
      _imagerySet = imagerySet;
      _culture = culture;
      _key = key;
@@ -217,38 +225,6 @@ public class BingMapsLayer extends RasterLayer
   public final URL getFeatureInfoURL(Geodetic2D position, Sector sector)
   {
     return new URL();
-  }
-
-  public final java.util.ArrayList<Petition> createTileMapPetitions(G3MRenderContext rc, LayerTilesRenderParameters layerTilesRenderParameters, Tile tile)
-  {
-    java.util.ArrayList<Petition> petitions = new java.util.ArrayList<Petition>();
-  
-    final IStringUtils su = IStringUtils.instance();
-  
-    final int level = tile._level;
-    final int column = tile._column;
-    final int numRows = (int) IMathUtils.instance().pow(2.0, level);
-    final int row = numRows - tile._row - 1;
-  
-    final int subdomainsSize = _imageUrlSubdomains.size();
-    String subdomain = "";
-    if (subdomainsSize > 0)
-    {
-      // select subdomain based on fixed data (instead of round-robin) to be cache friendly
-      final int subdomainsIndex = IMathUtils.instance().abs(level + column + row) % subdomainsSize;
-      subdomain = _imageUrlSubdomains.get(subdomainsIndex);
-    }
-  
-    final String quadkey = getQuadkey(level, column, row);
-  
-    String path = _imageUrl;
-    path = su.replaceSubstring(path, "{subdomain}", subdomain);
-    path = su.replaceSubstring(path, "{quadkey}", quadkey);
-    path = su.replaceSubstring(path, "{culture}", _culture);
-  
-    petitions.add(new Petition(tile._sector, new URL(path, false), getTimeToCache(), getReadExpired(), true, _transparency));
-  
-    return petitions;
   }
 
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
@@ -399,7 +375,7 @@ public class BingMapsLayer extends RasterLayer
 
   public final BingMapsLayer copy()
   {
-    return new BingMapsLayer(_imagerySet, _culture, _key, _timeToCache, _readExpired, _initialLevel, _maxLevel, _transparency, (_condition == null) ? null : _condition.copy(), _disclaimerInfo);
+    return new BingMapsLayer(_imagerySet, _culture, _key, _timeToCache, _readExpired, _initialLevel, _maxLevel, _transparency, (_condition == null) ? null : _condition.copy(), _layerInfo);
   }
 
   public final RenderState getRenderState()

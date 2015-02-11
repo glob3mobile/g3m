@@ -32,11 +32,15 @@ AbstractMesh(primitive,
              depthTest,
              normals)
 {
+  _renderVerticesCount = vertices->size() / 3;
 }
 
 void DirectMesh::rawRender(const G3MRenderContext* rc) const {
   GL* gl = rc->getGL();
 
-  const int verticesCount = getVertexCount();
-  gl->drawArrays(_primitive, 0, verticesCount, _glState, *rc->getGPUProgramManager());
+  gl->drawArrays(_primitive,
+                 0,
+                 _renderVerticesCount,
+                 _glState,
+                 *rc->getGPUProgramManager());
 }

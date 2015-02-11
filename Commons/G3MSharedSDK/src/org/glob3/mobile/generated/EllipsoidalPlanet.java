@@ -637,4 +637,9 @@ public class EllipsoidalPlanet extends Planet
     return new Geodetic3D(rendereSector._center, height);
   }
 
+  public final String getType()
+  {
+    return "Ellipsoidal";
+  }
+
 }

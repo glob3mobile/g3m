@@ -11,9 +11,13 @@
 
 class LayerSet;
 class GEOVectorLayer;
+class IImageBuilder;
 
 #include "TilesRenderParameters.hpp"
 #include "PlanetRenderer.hpp"
+#include "DefaultChessCanvasImageBuilder.hpp"
+#include "DownloaderImageBuilder.hpp"
+
 
 
 class PlanetRendererBuilder {
@@ -21,7 +25,6 @@ class PlanetRendererBuilder {
 private:
   TileTessellator* _tileTessellator;
   TileTexturizer* _texturizer;
-//  std::vector<TileRasterizer*> _tileRasterizers;
   std::vector<GEOVectorLayer*> _geoVectorLayers;
 
   LayerSet* _layerSet;
@@ -41,7 +44,6 @@ private:
 
   TileTessellator* getTileTessellator();
   TileTexturizer* getTexturizer();
-//  TileRasterizer* getTileRasterizer();
 
   LayerSet* getLayerSet();
   TilesRenderParameters* getParameters();
@@ -78,6 +80,10 @@ private:
   TouchEventType _touchEventTypeOfTerrainTouchListener;
   
   TouchEventType getTouchEventTypeOfTerrainTouchListener();
+  
+  IImageBuilder* _defaultTileBackGroundImage = NULL;
+  
+  IImageBuilder* getDefaultTileBackGroundImageBuilder() const;
 
 public:
   PlanetRendererBuilder();
@@ -85,7 +91,6 @@ public:
   PlanetRenderer* create();
   void setTileTessellator(TileTessellator* tileTessellator);
   void setTileTexturizer(TileTexturizer* tileTexturizer);
-//  void addTileRasterizer(TileRasterizer* tileRasterizer);
   void setLayerSet(LayerSet* layerSet);
   void setPlanetRendererParameters(TilesRenderParameters* parameters);
   void setShowStatistics(const bool showStatistics);
@@ -106,8 +111,6 @@ public:
 
   void setRenderedSector(const Sector& sector);
 
-//  GEOTileRasterizer* createGEOTileRasterizer();
-
   GEOVectorLayer* createGEOVectorLayer();
 
   Quality getQuality() const;
@@ -126,6 +129,8 @@ public:
   void setChangedRendererInfoListener(ChangedRendererInfoListener* changedInfoListener);
   
   void setTouchEventTypeOfTerrainTouchListener(TouchEventType _touchEventTypeOfTerrainTouchListener);
+  
+  void setDefaultTileBackGroundImage(IImageBuilder* defaultTileBackGroundImage);
 };
 
 #endif

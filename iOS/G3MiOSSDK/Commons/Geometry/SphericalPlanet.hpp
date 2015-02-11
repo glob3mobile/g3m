@@ -174,6 +174,10 @@ public:
                       height);
   }
 
+  const std::string getType() const {
+    return "Spherical";
+  }
+
 };
 
 #endif

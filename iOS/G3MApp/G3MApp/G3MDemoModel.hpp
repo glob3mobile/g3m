@@ -15,17 +15,17 @@
 class G3MDemoListener;
 class G3MDemoScene;
 class LayerSet;
-//class GEORenderer;
 class G3MWidget;
 class G3MContext;
-//class GEOTileRasterizer;
 class GEOVectorLayer;
 class MarksRenderer;
 class MeshRenderer;
 class ShapesRenderer;
 class PlanetRenderer;
-
 class GEORenderer;
+class PointCloudsRenderer;
+class HUDRenderer;
+class NonOverlappingMarksRenderer;
 
 class G3MDemoModel {
 private:
@@ -34,11 +34,14 @@ private:
   G3MDemoListener* _listener;
 
 
-  LayerSet*       _layerSet;
-  MeshRenderer*   _meshRenderer;
-  ShapesRenderer* _shapesRenderer;
-  MarksRenderer*  _marksRenderer;
-  GEORenderer*    _geoRenderer;
+  LayerSet*                    _layerSet;
+  MeshRenderer*                _meshRenderer;
+  ShapesRenderer*              _shapesRenderer;
+  MarksRenderer*               _marksRenderer;
+  GEORenderer*                 _geoRenderer;
+  PointCloudsRenderer*         _pointCloudsRenderer;
+  HUDRenderer*                 _hudRenderer;
+  NonOverlappingMarksRenderer* _nonOverlappingMarksRenderer;
 
   G3MDemoScene*              _selectedScene;
   std::vector<G3MDemoScene*> _scenes;
@@ -47,12 +50,15 @@ private:
 
 public:
 
-  G3MDemoModel(G3MDemoListener* listener,
-               LayerSet*        layerSet,
-               MeshRenderer*    meshRenderer,
-               ShapesRenderer*  shapesRenderer,
-               MarksRenderer*   marksRenderer,
-               GEORenderer*     geoRenderer);
+  G3MDemoModel(G3MDemoListener*             listener,
+               LayerSet*                    layerSet,
+               MeshRenderer*                meshRenderer,
+               ShapesRenderer*              shapesRenderer,
+               MarksRenderer*               marksRenderer,
+               GEORenderer*                 geoRenderer,
+               PointCloudsRenderer*         pointCloudsRenderer,
+               HUDRenderer*                 hudRenderer,
+               NonOverlappingMarksRenderer* nonOverlappingMarksRenderer);
 
 
   void initializeG3MWidget(G3MWidget* g3mWidget);
@@ -81,6 +87,18 @@ public:
 
   ShapesRenderer* getShapesRenderer() const {
     return _shapesRenderer;
+  }
+
+  PointCloudsRenderer* getPointCloudsRenderer() const {
+    return _pointCloudsRenderer;
+  }
+
+  HUDRenderer* getHUDRenderer() const {
+    return _hudRenderer;
+  }
+
+  NonOverlappingMarksRenderer* getNonOverlappingMarksRenderer() const {
+    return _nonOverlappingMarksRenderer;
   }
 
   PlanetRenderer* getPlanetRenderer() const;

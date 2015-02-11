@@ -187,6 +187,14 @@ _infoDisplay(infoDisplay)
                                         _gpuProgramManager,
                                         _surfaceElevationProvider);
 
+
+//#ifdef C_CODE
+//  delete _rendererState;
+//  _rendererState = new RenderState( calculateRendererState() );
+//#endif
+//#ifdef JAVA_CODE
+//  _rendererState = calculateRendererState();
+//#endif
 }
 
 
@@ -285,6 +293,14 @@ G3MWidget::~G3MWidget() {
   if(_infoDisplay != NULL) {
     delete _infoDisplay;
   }
+}
+
+void G3MWidget::removeAllPeriodicalTasks() {
+  for (int i = 0; i < _periodicalTasks.size(); i++) {
+    PeriodicalTask* periodicalTask =  _periodicalTasks[i];
+    delete periodicalTask;
+  }
+  _periodicalTasks.clear();
 }
 
 void G3MWidget::notifyTouchEvent(const G3MEventContext &ec,
@@ -838,13 +854,13 @@ bool G3MWidget::setRenderedSector(const Sector& sector) {
 //  }
 //}
 
-void G3MWidget::changedRendererInfo(const int rendererIdentifier, const std::vector<std::string>& info) {
+void G3MWidget::changedRendererInfo(const int rendererIdentifier, const std::vector<const Info*> info) {
   if(_infoDisplay != NULL){
     _infoDisplay->changedInfo(info);
   }
-  else {
-    ILogger::instance()->logWarning("Render Infos are changing and InfoDisplay is NULL");
-  }
+//  else {
+//    ILogger::instance()->logWarning("Render Infos are changing and InfoDisplay is NULL");
+//  }
 }
 
 

@@ -127,7 +127,12 @@ public:
 
 
 private:
+#ifdef C_CODE
   const GEOVectorLayer* _layer;
+#endif
+#ifdef JAVA_CODE
+  private GEOVectorLayer _layer;
+#endif
 
   std::map<const std::string, GEORasterizerFrameTask*> _rasterizers;
 
@@ -159,7 +164,9 @@ public:
                  int resolutionHeight,
                  TileImageListener* listener,
                  bool deleteListener);
-  
+
+  void layerDeleted(const GEOVectorLayer* layer);
+
 };
 
 #endif

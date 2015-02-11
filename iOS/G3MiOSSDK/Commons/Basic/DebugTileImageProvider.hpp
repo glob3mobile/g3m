@@ -13,6 +13,11 @@
 
 #include "IImageListener.hpp"
 
+#include "GFont.hpp"
+#include "Color.hpp"
+
+class Sector;
+
 class DebugTileImageProvider : public CanvasTileImageProvider {
 private:
   class ImageListener : public IImageListener {
@@ -41,6 +46,25 @@ private:
     void imageCreated(const IImage* image);
 
   };
+  
+#ifdef C_CODE
+  const GFont _font;
+#endif
+#ifdef JAVA_CODE
+  private final GFont _font;
+#endif
+  const Color _color;
+  
+  const bool _showIDLabel;
+  const bool _showSectorLabels;
+  const bool _showTileBounds;
+  
+  std::string getIDLabel(const Tile* tile) const;
+  
+  std::string getSectorLabel1(const Sector& sector) const;
+  std::string getSectorLabel2(const Sector& sector) const;
+  std::string getSectorLabel3(const Sector& sector) const;
+  std::string getSectorLabel4(const Sector& sector) const;
 
 protected:
   virtual ~DebugTileImageProvider() {
@@ -50,6 +74,15 @@ protected:
   }
 
 public:
+  
+  DebugTileImageProvider();
+  
+  DebugTileImageProvider(const GFont& font,
+                         const Color& color,
+                         bool showIDLabel,
+                         bool showSectorLabels,
+                         bool showTileBounds);
+
 
   const TileImageContribution* contribution(const Tile* tile);
 

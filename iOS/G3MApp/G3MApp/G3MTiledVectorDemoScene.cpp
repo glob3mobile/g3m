@@ -181,7 +181,6 @@ public:
   }
 };
 
-
 void G3MTiledVectorDemoScene::rawActivate(const G3MContext* context) {
   G3MDemoModel* model     = getModel();
   G3MWidget*    g3mWidget = model->getG3MWidget();
@@ -196,14 +195,12 @@ void G3MTiledVectorDemoScene::rawActivate(const G3MContext* context) {
 
   model->getLayerSet()->addLayer(rasterLayer);
 
-//  const std::string urlTemplate = "http://glob3mobile.dyndns.org/vectorial/swiss-buildings/{level}/{x}/{y}.geojson";
-//  const std::string urlTemplate = "http://glob3mobile.dyndns.org/vectorial/swiss-buildings-bson-new/{level}/{x}/{y}.bson";
-  const std::string urlTemplate = "http://192.168.1.12/vectorial/swiss-buildings-bson-new/{level}/{x}/{y}.bson";
+  const std::string urlTemplate = "http://glob3mobile.dyndns.org/vectorial/swiss-buildings-bson-new/{level}/{x}/{y}.bson";
+
   const Sector swissSector = Sector::fromDegrees(45.8176852, 5.956216,
                                                  47.803029, 10.492264);
   const int firstLevel = 2;
   const int maxLevel = 16;
-//  const int maxLevel = 17;
 
   const GEORasterSymbolizer* symbolizer = new PinkishRasterSymbolizer();
 
@@ -217,15 +214,15 @@ void G3MTiledVectorDemoScene::rawActivate(const G3MContext* context) {
                                                     1,                          // transparency
                                                     //new LevelTileCondition(15, 21),
                                                     new LevelTileCondition(10, 21),
-                                                    ""                          // disclaimerInfo
+                                                    new std::vector<const Info*>()                          // disclaimerInfo
                                                     );
+
   model->getLayerSet()->addLayer(_tiledVectorLayer);
 
   g3mWidget->setAnimatedCameraPosition(TimeInterval::fromSeconds(5),
                                        Geodetic3D::fromDegrees(47.371716253228562721, 8.5409432031508725203, 1040),
                                        Angle::zero(),
                                        Angle::fromDegrees(-90));
-
 }
 
 void G3MTiledVectorDemoScene::rawSelectOption(const std::string& option,
@@ -243,6 +240,6 @@ void G3MTiledVectorDemoScene::rawSelectOption(const std::string& option,
 
 void G3MTiledVectorDemoScene::deactivate(const G3MContext* context) {
   _tiledVectorLayer = NULL;
-
+  
   G3MDemoScene::deactivate(context);
 }

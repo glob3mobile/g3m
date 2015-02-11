@@ -57,6 +57,7 @@ public abstract class ICanvas
 
   protected abstract void _removeShadow();
 
+  protected abstract void _clearRect(float left, float top, float width, float height);
 
   protected abstract void _createImage(IImageListener listener, boolean autodelete);
 
@@ -68,7 +69,11 @@ public abstract class ICanvas
 
   protected abstract void _drawImage(IImage image, float destLeft, float destTop);
 
+  protected abstract void _drawImage(IImage image, float destLeft, float destTop, float transparency);
+
   protected abstract void _drawImage(IImage image, float destLeft, float destTop, float destWidth, float destHeight);
+
+  protected abstract void _drawImage(IImage image, float destLeft, float destTop, float destWidth, float destHeight, float transparency);
 
   protected abstract void _drawImage(IImage image, float srcLeft, float srcTop, float srcWidth, float srcHeight, float destLeft, float destTop, float destWidth, float destHeight);
 
@@ -210,6 +215,11 @@ public abstract class ICanvas
     _removeShadow();
   }
 
+  public final void clearRect(float left, float top, float width, float height)
+  {
+    checkInitialized();
+    _clearRect(left, top, width, height);
+  }
 
   public final void fillRectangle(float left, float top, float width, float height)
   {
@@ -266,10 +276,22 @@ public abstract class ICanvas
     _drawImage(image, destLeft, destTop);
   }
 
+  public final void drawImage(IImage image, float destLeft, float destTop, float transparency)
+  {
+    checkInitialized();
+    _drawImage(image, destLeft, destTop, transparency);
+  }
+
   public final void drawImage(IImage image, float destLeft, float destTop, float destWidth, float destHeight)
   {
     checkInitialized();
     _drawImage(image, destLeft, destTop, destWidth, destHeight);
+  }
+
+  public final void drawImage(IImage image, float destLeft, float destTop, float destWidth, float destHeight, float transparency)
+  {
+    checkInitialized();
+    _drawImage(image, destLeft, destTop, destWidth, destHeight, transparency);
   }
 
   public final void drawImage(IImage image, float srcLeft, float srcTop, float srcWidth, float srcHeight, float destLeft, float destTop, float destWidth, float destHeight)
@@ -292,20 +314,24 @@ public abstract class ICanvas
     {
       ILogger.instance().logError("Invalid source rectangle in drawImage");
     }
-  
-    if (transparency <= 0.0)
-    {
-      return;
-    }
-  
-    if (transparency >= 1.0)
-    {
-      _drawImage(image, srcLeft, srcTop, srcWidth, srcHeight, destLeft, destTop, destWidth, destHeight, transparency);
-    }
     else
     {
-      _drawImage(image, srcLeft, srcTop, srcWidth, srcHeight, destLeft, destTop, destWidth, destHeight, transparency);
+      if (transparency <= 0.0)
+      {
+        return;
+      }
+  
+      if (transparency >= 1.0)
+      {
+        _drawImage(image, srcLeft, srcTop, srcWidth, srcHeight, destLeft, destTop, destWidth, destHeight);
+      }
+      else
+      {
+        _drawImage(image, srcLeft, srcTop, srcWidth, srcHeight, destLeft, destTop, destWidth, destHeight, transparency);
+      }
+  
     }
+  
   
   }
 

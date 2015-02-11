@@ -179,6 +179,12 @@ std::string StringUtils_iOS::toString(double value) const {
   return ss.str();
 }
 
+std::string StringUtils_iOS::toString(float value) const {
+  std::stringstream ss;
+  ss << value;
+  return ss.str();
+}
+
 double StringUtils_iOS::parseDouble(const std::string& str) const {
   return atof(str.c_str());
 }

@@ -46,8 +46,8 @@ public abstract class MapBooBuilder
   
     ElevationDataProvider elevationDataProvider = null;
     final float verticalExaggeration = 1F;
-    TileTexturizer texturizer = new DefaultTileTexturizer();
-  //  TileRasterizer* tileRasterizer = NULL;
+  
+    TileTexturizer texturizer = new DefaultTileTexturizer(new DownloaderImageBuilder(new URL("http://www.mapboo.com/web/img/tileNotFound.jpg")));
   
     final boolean renderDebug = false;
     final boolean useTilesSplitBudget = true;
@@ -56,6 +56,7 @@ public abstract class MapBooBuilder
     final Quality quality = Quality.QUALITY_LOW;
   
     final TilesRenderParameters parameters = new TilesRenderParameters(renderDebug, useTilesSplitBudget, forceFirstLevelTilesRenderOnStart, incrementalTileQuality, quality);
+  
   
     final boolean showStatistics = false;
     long tileDownloadPriority = DownloadPriority.HIGHER;
@@ -72,7 +73,6 @@ public abstract class MapBooBuilder
     TouchEventType touchEventTypeOfTerrainTouchListener = TouchEventType.DownUp;
   
     PlanetRenderer result = new PlanetRenderer(tessellator, elevationDataProvider, true, verticalExaggeration, texturizer, _layerSet, parameters, showStatistics, tileDownloadPriority, renderedSector, renderTileMeshes, logTilesPetitions, tileRenderingListener, changedRendererInfoListener, touchEventTypeOfTerrainTouchListener);
-  //                                              tileRasterizer,
   
     if (_enableNotifications)
     {
@@ -203,7 +203,7 @@ public abstract class MapBooBuilder
     Layer layer;
     if (layerType.compareTo("OSM") == 0)
     {
-      layer = new OSMLayer(defaultTimeToCache, true, 2, 1, null, ""); //disclaimerInfo -  condition, -  transparency, -  initialLevel, -  readExpired,
+      layer = new OSMLayer(defaultTimeToCache, true, 2, 1, null, new java.util.ArrayList<Info>()); //disclaimerInfo -  condition, -  transparency, -  initialLevel, -  readExpired,
     }
     else if (layerType.compareTo("MapQuest") == 0)
     {
@@ -239,7 +239,7 @@ public abstract class MapBooBuilder
     final String layerAttribution = jsonLayer.getAsString("attribution", "");
     if (layerAttribution.compareTo("") != 0)
     {
-      layer.setInfo(layerAttribution);
+      layer.addInfo(new Info(layerAttribution));
     }
     return layer;
   }
@@ -261,7 +261,7 @@ public abstract class MapBooBuilder
     final String key = jsonLayer.getAsString("key", "");
     final String imagerySet = jsonLayer.getAsString("imagerySet", "Aerial");
   
-    return new BingMapsLayer(imagerySet, key, timeToCache, true, 2, 25, 1, null, ""); // disclaimerInfo -  condition -  transparency -  maxLevel -  initialLevel -  readExpired
+    return new BingMapsLayer(imagerySet, key, timeToCache, true, 2, 25, 1, null, new java.util.ArrayList<Info>()); // disclaimerInfo -  condition -  transparency -  maxLevel -  initialLevel -  readExpired
   }
 
   private CartoDBLayer parseCartoDBLayer(JSONObject jsonLayer, boolean transparent, TimeInterval timeToCache)
@@ -269,7 +269,7 @@ public abstract class MapBooBuilder
     final String userName = jsonLayer.getAsString("userName", "");
     final String table = jsonLayer.getAsString("table", "");
   
-    return new CartoDBLayer(userName, table, timeToCache, true, 1, transparent, null, ""); // disclaimerInfo -  condition, -  isTransparent -  transparency -  readExpired
+    return new CartoDBLayer(userName, table, timeToCache, true, 1, transparent, null, new java.util.ArrayList<Info>()); // disclaimerInfo -  condition, -  isTransparent -  transparency -  readExpired
   }
 
 
@@ -277,7 +277,7 @@ public abstract class MapBooBuilder
   {
     final String mapKey = jsonLayer.getAsString("mapKey", "");
   
-    return new MapBoxLayer(mapKey, timeToCache, true, 1, 19, 1, null, ""); // disclaimerInfo -  condition -  transparency -  maxLevel -  initialLevel -  readExpired
+    return new MapBoxLayer(mapKey, timeToCache, true, 1, 19, 1, null, new java.util.ArrayList<Info>()); // disclaimerInfo -  condition -  transparency -  maxLevel -  initialLevel -  readExpired
   }
 
   private WMSLayer parseWMSLayer(JSONObject jsonLayer, boolean transparent)
@@ -334,7 +334,14 @@ public abstract class MapBooBuilder
     }
     else
     {
-      result = URLTemplateLayer.newWGS84(urlTemplate, sector, transparent, firstLevel, maxLevel, TimeInterval.fromDays(30));
+  //    result = URLTemplateLayer::newWGS84(urlTemplate,
+  //                                        sector,
+  //                                        transparent,
+  //                                        firstLevel,
+  //                                        maxLevel,
+  //                                        TimeInterval::fromDays(30));
+  
+      result = new URLTemplateLayer(urlTemplate, sector, transparent, TimeInterval.fromDays(30), true, new LevelTileCondition(firstLevel, maxLevel), LayerTilesRenderParameters.createDefaultWGS84(sector, 1, maxLevel));
     }
   
     return result;

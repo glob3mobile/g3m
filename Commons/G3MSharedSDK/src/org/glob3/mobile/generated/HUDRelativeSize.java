@@ -22,11 +22,11 @@ public class HUDRelativeSize extends HUDSize
   public enum Reference
   {
     VIEWPORT_WIDTH,
-    VIEWPORT_HEIGTH,
+    VIEWPORT_HEIGHT,
     VIEWPORT_MIN_AXIS,
     VIEWPORT_MAX_AXIS,
     BITMAP_WIDTH,
-    BITMAP_HEIGTH,
+    BITMAP_HEIGHT,
     BITMAP_MIN_AXIS,
     BITMAP_MAX_AXIS;
 
@@ -58,7 +58,7 @@ public class HUDRelativeSize extends HUDSize
       case VIEWPORT_WIDTH:
         return _factor * viewPortWidth;
   
-      case VIEWPORT_HEIGTH:
+      case VIEWPORT_HEIGHT:
         return _factor * viewPortHeight;
   
       case VIEWPORT_MIN_AXIS:
@@ -71,7 +71,7 @@ public class HUDRelativeSize extends HUDSize
       case BITMAP_WIDTH:
         return _factor * bitmapWidth;
   
-      case BITMAP_HEIGTH:
+      case BITMAP_HEIGHT:
         return _factor * bitmapHeight;
   
       case BITMAP_MIN_AXIS:

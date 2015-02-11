@@ -50,7 +50,7 @@ public:
     _instance = math;
   }
 
-  static IMathUtils* instance() {
+  static const IMathUtils* instance() {
     return _instance;
   }
 
@@ -190,6 +190,8 @@ public:
 
   virtual long long doubleToRawLongBits(double value) const = 0;
   virtual double rawLongBitsToDouble(long long value) const = 0;
+
+  virtual float rawIntBitsToFloat(int value) const = 0;
 
   virtual double clamp(double value,
                        double min,

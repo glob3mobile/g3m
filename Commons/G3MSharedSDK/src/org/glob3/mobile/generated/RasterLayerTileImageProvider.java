@@ -24,7 +24,7 @@ package org.glob3.mobile.generated;
 
 public class RasterLayerTileImageProvider extends TileImageProvider
 {
-  private final RasterLayer _layer;
+  private RasterLayer _layer;
   private IDownloader _downloader;
 
   private final java.util.HashMap<String, Long> _requestsIdsPerTile = new java.util.HashMap<String, Long>();
@@ -47,7 +47,7 @@ public class RasterLayerTileImageProvider extends TileImageProvider
 
   public final TileImageContribution contribution(Tile tile)
   {
-    return _layer.contribution(tile);
+    return (_layer == null) ? null : _layer.contribution(tile);
   }
 
   public final void create(Tile tile, TileImageContribution contribution, Vector2I resolution, long tileDownloadPriority, boolean logDownloadActivity, TileImageListener listener, boolean deleteListener, FrameTasksExecutor frameTasksExecutor)
@@ -74,6 +74,15 @@ public class RasterLayerTileImageProvider extends TileImageProvider
   public final void requestFinish(String tileId)
   {
     _requestsIdsPerTile.remove(tileId);
+  }
+
+  public final void layerDeleted(RasterLayer layer)
+  {
+    if (layer != _layer)
+    {
+      throw new RuntimeException("Logic error");
+    }
+    _layer = null;
   }
 
 }

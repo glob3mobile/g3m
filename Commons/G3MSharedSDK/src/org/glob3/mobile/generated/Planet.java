@@ -145,4 +145,7 @@ public abstract class Planet
   
     return new CoordinateSystem(x,y,z, origin);
   }
+
+  public abstract String getType();
+
 }

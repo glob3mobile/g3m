@@ -265,9 +265,10 @@ public class ShapesRenderer extends DefaultRenderer
         final Vector3D origin = _lastCamera.getCartesianPosition();
         final Vector2I pixel = touchEvent.getTouch(0).getPos();
         final Vector3D direction = _lastCamera.pixel2Ray(pixel);
+        final Planet planet = ec.getPlanet();
         if (!direction.isNan())
         {
-          java.util.ArrayList<ShapeDistance> shapeDistances = intersectionsDistances(origin, direction);
+          java.util.ArrayList<ShapeDistance> shapeDistances = intersectionsDistances(planet, origin, direction);
   
           if (!shapeDistances.isEmpty())
           {
@@ -275,10 +276,10 @@ public class ShapesRenderer extends DefaultRenderer
             //                (int)shapeDistances.size());
             for (int i = 0; i<shapeDistances.size(); i++)
             {
-              //          printf ("   %d: shape %x to distance %f\n",
-              //                  i+1,
-              //                  (unsigned int)shapeDistances[i]._shape,
-              //                  shapeDistances[i]._distance);
+  //            printf ("   %d: shape %x to distance %f\n",
+  //                    i+1,
+  //                    (unsigned int)shapeDistances[i]._shape,
+  //                    shapeDistances[i]._distance);
             }
           }
         }
@@ -301,7 +302,8 @@ public class ShapesRenderer extends DefaultRenderer
     // Saving camera for use in onTouchEvent
     _lastCamera = rc.getCurrentCamera();
   
-    final MutableVector3D cameraPosition = rc.getCurrentCamera().getCartesianPositionMutable();
+    MutableVector3D cameraPosition = new MutableVector3D();
+    rc.getCurrentCamera().getCartesianPositionMutable(cameraPosition);
   
     //Setting camera matrixes
     updateGLState(rc);
@@ -332,13 +334,13 @@ public class ShapesRenderer extends DefaultRenderer
     }
   }
 
-  public final java.util.ArrayList<ShapeDistance> intersectionsDistances(Vector3D origin, Vector3D direction)
+  public final java.util.ArrayList<ShapeDistance> intersectionsDistances(Planet planet, Vector3D origin, Vector3D direction)
   {
     java.util.ArrayList<ShapeDistance> shapeDistances = new java.util.ArrayList<ShapeDistance>();
     for (int n = 0; n<_shapes.size(); n++)
     {
       Shape shape = _shapes.get(n);
-      java.util.ArrayList<Double> distances = shape.intersectionsDistances(origin, direction);
+      java.util.ArrayList<Double> distances = shape.intersectionsDistances(planet, origin, direction);
       for (int i = 0; i<distances.size(); i++)
       {
         shapeDistances.add(new ShapeDistance(distances.get(i), shape));

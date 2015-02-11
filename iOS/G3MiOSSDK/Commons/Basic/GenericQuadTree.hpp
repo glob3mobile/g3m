@@ -11,7 +11,7 @@
 
 #include "Sector.hpp"
 #include "Geodetic2D.hpp"
-#include "GEOTileRasterizer.hpp"
+#include "GEOVectorTileImageProvider.hpp"
 
 class GenericQuadTree_Node;
 
@@ -207,7 +207,7 @@ public:
     return n;
   }
 
-  void symbolize(GEOTileRasterizer* geoTileRasterizer) const;
+  void symbolize(GEOVectorLayer* geoVectorLayer) const;
 
   void getGeodetics(std::vector<Geodetic2D*>& geo) const;
   void getSectors(std::vector<Sector*>& sectors) const;
@@ -258,7 +258,7 @@ public:
 
   bool acceptNodeVisitor(GenericQuadTreeNodeVisitor& visitor) const;
 
-  void symbolize(GEOTileRasterizer* geoTileRasterizer) const;
+  void symbolize(GEOVectorLayer* geoVectorLayer) const;
 
   std::vector<Geodetic2D*> getGeodetics() const {
     std::vector<Geodetic2D*> geo;
@@ -432,9 +432,9 @@ public:
     return i % max;
   }
   
-  static void run(int nElements, GEOTileRasterizer* rasterizer);
+  static void run(int nElements, GEOVectorLayer* geoVectorLayer);
   
-  static void run(GenericQuadTree& tree, GEOTileRasterizer* rasterizer);
+  static void run(GenericQuadTree& tree, GEOVectorLayer* geoVectorLayer);
   
 };
 

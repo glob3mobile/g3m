@@ -11,6 +11,8 @@
 #include "GEOLineRasterSymbol.hpp"
 #include "ICanvas.hpp"
 
+#include "GEOVectorLayer.hpp"
+
 #pragma mark NODE
 
 GenericQuadTree_Node::~GenericQuadTree_Node() {
@@ -359,7 +361,7 @@ void GenericQuadTree_Node::increaseNodeSector(GenericQuadTree_Element* element) 
   _sector = new Sector(s.mergedWith(element->getSector()));
 }
 
-void GenericQuadTree_Node::symbolize(GEOTileRasterizer* geoTileRasterizer) const {
+void GenericQuadTree_Node::symbolize(GEOVectorLayer* geoVectorLayer) const {
 
   if (_elements.size() > 0) {
     std::vector<Geodetic2D*>* coordinates = new std::vector<Geodetic2D*>();
@@ -391,12 +393,12 @@ void GenericQuadTree_Node::symbolize(GEOTileRasterizer* geoTileRasterizer) const
     GEOLineRasterSymbol * symbol = new GEOLineRasterSymbol(coordinatesData, ls);
     coordinatesData->_release();
 
-    geoTileRasterizer->addSymbol(symbol);
+    geoVectorLayer->addSymbol(symbol);
   }
 
   if (_children != NULL) {
     for (int i = 0; i < 4; i++) {
-      _children[i]->symbolize(geoTileRasterizer);
+      _children[i]->symbolize(geoVectorLayer);
     }
   }
 
@@ -497,9 +499,9 @@ bool GenericQuadTree::acceptNodeVisitor(GenericQuadTreeNodeVisitor& visitor) con
   return false;
 }
 
-void GenericQuadTree::symbolize(GEOTileRasterizer* geoTileRasterizer) const {
+void GenericQuadTree::symbolize(GEOVectorLayer* geoVectorLayer) const {
   if (_root != NULL) {
-    _root->symbolize(geoTileRasterizer);
+    _root->symbolize(geoVectorLayer);
   }
 }
 
@@ -511,7 +513,7 @@ void GenericQuadTree::symbolize(GEOTileRasterizer* geoTileRasterizer) const {
 int GenericQuadTree_TESTER::_nComparisons = 0;
 int GenericQuadTree_TESTER::_nElements = 0;
 
-void GenericQuadTree_TESTER::run(int nElements,  GEOTileRasterizer* rasterizer) {
+void GenericQuadTree_TESTER::run(int nElements,  GEOVectorLayer* geoVectorLayer) {
 
   _nElements = 0;
   _nComparisons = 0;
@@ -580,8 +582,12 @@ void GenericQuadTree_TESTER::run(int nElements,  GEOTileRasterizer* rasterizer) 
   NodeVisitor_TESTER nodeVis;
   tree.acceptNodeVisitor(nodeVis);
 
-  if (rasterizer != NULL) {
-    tree.symbolize(rasterizer);
+//  if (rasterizer != NULL) {
+//    tree.symbolize(rasterizer);
+//  }
+  
+  if (geoVectorLayer != NULL) {
+    tree.symbolize(geoVectorLayer);
   }
 
   double c_e = (float)_nComparisons / _nElements;
@@ -589,7 +595,7 @@ void GenericQuadTree_TESTER::run(int nElements,  GEOTileRasterizer* rasterizer) 
 
 }
 
-void GenericQuadTree_TESTER::run(GenericQuadTree& tree, GEOTileRasterizer* rasterizer) {
+void GenericQuadTree_TESTER::run(GenericQuadTree& tree, GEOVectorLayer* geoVectorLayer) {
 
   _nElements = 0;
   _nComparisons = 0;
@@ -625,8 +631,8 @@ void GenericQuadTree_TESTER::run(GenericQuadTree& tree, GEOTileRasterizer* raste
   NodeVisitor_TESTER nodeVis;
   tree.acceptNodeVisitor(nodeVis);
   
-  if (rasterizer != NULL) {
-    tree.symbolize(rasterizer);
+  if (geoVectorLayer != NULL) {
+    tree.symbolize(geoVectorLayer);
   }
   
   double c_e = (float)_nComparisons / _nElements;

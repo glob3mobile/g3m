@@ -2,12 +2,14 @@
 
 package org.glob3.mobile.specific;
 
+import java.io.UnsupportedEncodingException;
+
 import org.glob3.mobile.generated.IByteBuffer;
 
 
 public final class ByteBuffer_Android
-         extends
-            IByteBuffer {
+extends
+IByteBuffer {
 
    //private final ByteBuffer _buffer;
    private final byte[] _buffer;
@@ -94,7 +96,12 @@ public final class ByteBuffer_Android
    public String getAsString() {
       //      final byte[] bytes = _buffer.array();
       //      return new String(bytes);
-      return new String(_buffer);
+      try {
+         return new String(_buffer, "UTF-8");
+      }
+      catch (final UnsupportedEncodingException e) {
+         throw new RuntimeException(e);
+      }
    }
 
 
