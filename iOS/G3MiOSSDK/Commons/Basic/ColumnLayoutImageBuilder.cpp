@@ -130,7 +130,12 @@ void ColumnLayoutImageBuilder::doLayout(const G3MContext* context,
 #warning delete images??
   for (int i = 0; i < resultsSize; i++) {
     ChildResult* result = results[i];
+#ifdef C_CODE
     delete result;
+#endif
+#ifdef JAVA_CODE
+    result.dispose();
+#endif
   }
   
 }
