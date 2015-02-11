@@ -93,6 +93,10 @@ protected:
     {
     }
 
+    ~LayoutImageBuilderChildListener() {
+      
+    }
+
     void imageCreated(const IImage*      image,
                       const std::string& imageName) {
       _childrenResult->childImageCreated(image, imageName, _childIndex);
