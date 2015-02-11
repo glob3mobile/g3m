@@ -7,11 +7,35 @@ import java.awt.Color;
 
 import com.glob3mobile.pointcloud.Classification;
 import com.glob3mobile.utils.Geodetic3D;
+import com.glob3mobile.utils.Sector;
 
 
 public interface PCStorage
-         extends
-            AutoCloseable {
+extends
+AutoCloseable {
+
+   public interface Node {
+
+      String getID();
+
+
+      Sector getSector();
+
+
+      int getDepth();
+
+
+      int getPointsCount();
+
+
+      //      List<Geodetic3D> getPoints();
+
+
+      Geodetic3D getAveragePoint();
+
+
+   }
+
 
    boolean hasIntensity();
 

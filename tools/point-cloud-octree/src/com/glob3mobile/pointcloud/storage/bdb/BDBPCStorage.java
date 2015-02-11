@@ -14,8 +14,11 @@ import com.glob3mobile.utils.Geodetic3D;
 import com.glob3mobile.utils.Sector;
 import com.sleepycat.je.Database;
 import com.sleepycat.je.DatabaseConfig;
+import com.sleepycat.je.DatabaseEntry;
 import com.sleepycat.je.Environment;
 import com.sleepycat.je.EnvironmentConfig;
+import com.sleepycat.je.LockMode;
+import com.sleepycat.je.OperationStatus;
 import com.sleepycat.je.Transaction;
 import com.sleepycat.je.TransactionConfig;
 
@@ -359,5 +362,39 @@ PCStorage {
       _sumLongitudeInRadians = 0.0;
       _sumHeight = 0.0;
    }
+
+
+   BDBPCStorageNode readNode(final Transaction txn,
+                             final byte[] id,
+                             final boolean loadPoints) {
+      final DatabaseEntry keyEntry = new DatabaseEntry(id);
+      final DatabaseEntry dataEntry = new DatabaseEntry();
+
+      final OperationStatus status = _nodeDB.get(txn, keyEntry, dataEntry, LockMode.DEFAULT);
+      switch (status) {
+         case SUCCESS:
+            return BDBPCStorageNode.fromDB(txn, this, id, dataEntry.getData(), loadPoints);
+         case NOTFOUND:
+            return null;
+         default:
+            throw new RuntimeException("Status not supported: " + status);
+      }
+   }
+
+
+   Database getNodeDB() {
+      return _nodeDB;
+   }
+
+
+   Database getNodeDataDB() {
+      return _nodeDataDB;
+   }
+
+
+   int getMaxPointsPerTile() {
+      return _maxPointsPerTitle;
+   }
+
 
 }
