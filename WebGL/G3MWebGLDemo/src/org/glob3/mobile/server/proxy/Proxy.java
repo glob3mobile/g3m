@@ -20,8 +20,8 @@ import javax.servlet.http.HttpServletResponse;
 
 
 public class Proxy
-extends
-HttpServlet {
+         extends
+            HttpServlet {
 
    /**
     *
