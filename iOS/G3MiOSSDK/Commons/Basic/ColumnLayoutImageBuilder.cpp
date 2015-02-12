@@ -123,11 +123,11 @@ void ColumnLayoutImageBuilder::doLayout(const G3MContext* context,
     const int margin2  = _margin*2;
     const int padding2 = _padding*2;
 
-    const int width  = maxWidth          + margin2 + padding2;
-    const int height = accumulatedHeight + margin2 + padding2 + (resultsSize-1)*_childrenSeparation;
+    const int canvasWidth  = maxWidth          + margin2 + padding2;
+    const int canvasHeight = accumulatedHeight + margin2 + padding2 + (resultsSize-1)*_childrenSeparation;
 
     ICanvas* canvas = context->getFactory()->createCanvas();
-    canvas->initialize(width, height);
+    canvas->initialize(canvasWidth, canvasHeight);
 
 //#warning remove debug code
 //    canvas->setFillColor(Color::red());
@@ -136,10 +136,17 @@ void ColumnLayoutImageBuilder::doLayout(const G3MContext* context,
     if (!_backgroundColor.isFullTransparent()) {
       canvas->setFillColor(_backgroundColor);
       if (_cornerRadius > 0) {
-        canvas->fillRoundedRectangle(_margin, _margin, width-margin2, height-margin2, _cornerRadius);
+        canvas->fillRoundedRectangle(_margin,
+                                     _margin,
+                                     canvasWidth  - margin2,
+                                     canvasHeight - margin2,
+                                     _cornerRadius);
       }
       else {
-        canvas->fillRectangle(_margin, _margin, width-margin2, height-margin2);
+        canvas->fillRectangle(_margin,
+                              _margin,
+                              canvasWidth  - margin2,
+                              canvasHeight - margin2);
       }
     }
 
@@ -147,24 +154,31 @@ void ColumnLayoutImageBuilder::doLayout(const G3MContext* context,
       canvas->setLineColor(_borderColor);
       canvas->setLineWidth(_borderWidth);
       if (_cornerRadius > 0) {
-        canvas->strokeRoundedRectangle(_margin, _margin, width-margin2, height-margin2, _cornerRadius);
+        canvas->strokeRoundedRectangle(_margin,
+                                       _margin,
+                                       canvasWidth  - margin2,
+                                       canvasHeight - margin2,
+                                       _cornerRadius);
       }
       else {
-        canvas->strokeRectangle(_margin, _margin, width-margin2, height-margin2);
+        canvas->strokeRectangle(_margin,
+                                _margin,
+                                canvasWidth  - margin2,
+                                canvasHeight - margin2);
       }
     }
 
-    float cursorTop = height - _margin - _padding;
+    float cursorTop = _margin + _padding;
     for (int i = 0; i < resultsSize; i++) {
       ChildResult* result = results[i];
       const IImage* image = result->_image;
+      const int imageWidth  = image->getWidth();
+      const int imageHeight = image->getHeight();
 
-      const float destLeft = ((float) (width - image->getWidth()) / 2.0f);
-      cursorTop -= image->getHeight();
-      canvas->drawImage(image,
-                        destLeft,
-                        cursorTop);
-      cursorTop -= _childrenSeparation;
+      const float left = ((float) (canvasWidth - imageWidth) / 2.0f);
+      canvas->drawImage(image, left, cursorTop);
+      //canvas->strokeRectangle(left, cursorTop, imageWidth, imageHeight);
+      cursorTop += imageHeight + _childrenSeparation;
     }
 
     canvas->createImage(new ColumnLayoutImageBuilder_IImageListener(imageName,
