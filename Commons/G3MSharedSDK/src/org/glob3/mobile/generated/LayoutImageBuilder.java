@@ -131,10 +131,16 @@ public abstract class LayoutImageBuilder extends AbstractImageBuilder
   protected java.util.ArrayList<IImageBuilder> _children = new java.util.ArrayList<IImageBuilder>();
 
   protected final int _margin;
-  protected final int _borderWidth;
+
+  protected final float _borderWidth;
   protected final Color _borderColor ;
+
   protected final int _padding;
 
+  protected final Color _backgroundColor ;
+  protected final float _cornerRadius;
+
+  protected final int _childrenSeparation;
 
   /*
    | margin
@@ -143,21 +149,27 @@ public abstract class LayoutImageBuilder extends AbstractImageBuilder
    |       content
    */
 
-  protected LayoutImageBuilder(java.util.ArrayList<IImageBuilder> children, int margin, int borderWidth, Color borderColor, int padding)
+  protected LayoutImageBuilder(java.util.ArrayList<IImageBuilder> children, int margin, float borderWidth, Color borderColor, int padding, Color backgroundColor, float cornerRadius, int childrenSeparation)
   {
      _children = children;
      _margin = margin;
      _borderWidth = borderWidth;
      _borderColor = new Color(borderColor);
      _padding = padding;
+     _backgroundColor = new Color(backgroundColor);
+     _cornerRadius = cornerRadius;
+     _childrenSeparation = childrenSeparation;
   }
 
-  protected LayoutImageBuilder(IImageBuilder child0, IImageBuilder child1, int margin, int borderWidth, Color borderColor, int padding)
+  protected LayoutImageBuilder(IImageBuilder child0, IImageBuilder child1, int margin, float borderWidth, Color borderColor, int padding, Color backgroundColor, float cornerRadius, int childrenSeparation)
   {
      _margin = margin;
      _borderWidth = borderWidth;
      _borderColor = new Color(borderColor);
      _padding = padding;
+     _backgroundColor = new Color(backgroundColor);
+     _cornerRadius = cornerRadius;
+     _childrenSeparation = childrenSeparation;
     _children.add(child0);
     _children.add(child1);
   }
