@@ -27,7 +27,7 @@ public:
                            int            padding            = 0,
                            const Color&   backgroundColor    = Color::transparent(),
                            float          cornerRadius       = 0.0f,
-                           int            childrenSeparation = 0.0f);
+                           int            childrenSeparation = 0);
 
   ColumnLayoutImageBuilder(IImageBuilder* child0,
                            IImageBuilder* child1,
@@ -37,7 +37,7 @@ public:
                            int            padding            = 0,
                            const Color&   backgroundColor    = Color::transparent(),
                            float          cornerRadius       = 0.0f,
-                           int            childrenSeparation = 0.0f);
+                           int            childrenSeparation = 0);
 
 };
 
