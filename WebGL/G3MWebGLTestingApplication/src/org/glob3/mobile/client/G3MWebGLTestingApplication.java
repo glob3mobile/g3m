@@ -1744,9 +1744,11 @@ public class G3MWebGLTestingApplication
 	               new LevelTileCondition(0, 19),
 	               TimeInterval.fromDays(30),
 	               true,
-	               ltrp);
+	               null);
 		   grafcanOrto.setTitle("WMS_OrtoExpress");
 		   testPTE_layerSet.addLayer(grafcanOrto);
+		   
+		   int layerFirstLOD = 8;
 		   
 		   //Tipos de paisaje
 		   WMSLayer PTE05_O2_TPL = new WMSLayer("O2_TPL",
@@ -1757,10 +1759,10 @@ public class G3MWebGLTestingApplication
 	               "EPSG:4326",
 	               "",
 	               true,
-	               new LevelTileCondition(0, 19),
+	               new LevelTileCondition(layerFirstLOD, 19),
 	               TimeInterval.fromDays(30),
 	               true,
-	               ltrp,
+	               null,
 	               0.5f);
 		   PTE05_O2_TPL.setTitle("TipoLitoral");
 		   PTE05_O2_TPL.setEnable(false);
@@ -1774,10 +1776,10 @@ public class G3MWebGLTestingApplication
 	               "EPSG:4326",
 	               "",
 	               true,
-	               new LevelTileCondition(0, 19),
+	               new LevelTileCondition(layerFirstLOD, 19),
 	               TimeInterval.fromDays(30),
 	               true,
-	               ltrp,
+	               null,
 	               0.5f);
 		   PTE05_O2_TPN.setTitle("TipoNatural");
 		   PTE05_O2_TPN.setEnable(false);
@@ -1791,10 +1793,10 @@ public class G3MWebGLTestingApplication
 	               "EPSG:4326",
 	               "",
 	               true,
-	               new LevelTileCondition(0, 19),
+	               new LevelTileCondition(layerFirstLOD, 19),
 	               TimeInterval.fromDays(30),
 	               true,
-	               ltrp,
+	               null,
 	               0.5f);
 		   PTE05_O2_TPR.setTitle("TipoRural");
 		   PTE05_O2_TPR.setEnable(false);
@@ -1808,10 +1810,10 @@ public class G3MWebGLTestingApplication
 	               "EPSG:4326",
 	               "",
 	               true,
-	               new LevelTileCondition(0, 19),
+	               new LevelTileCondition(layerFirstLOD, 19),
 	               TimeInterval.fromDays(30),
 	               true,
-	               ltrp,
+	               null,
 	               0.5f);
 		   PTE05_O2_TPU.setTitle("TipoUrbano");
 		   PTE05_O2_TPU.setEnable(false);
@@ -1825,10 +1827,10 @@ public class G3MWebGLTestingApplication
 	               "EPSG:4326",
 	               "",
 	               true,
-	               new LevelTileCondition(0, 19),
+	               new LevelTileCondition(layerFirstLOD, 19),
 	               TimeInterval.fromDays(30),
 	               true,
-	               ltrp,
+	               null,
 	               0.5f);
 		   PTE05_O2_TPM.setTitle("TipoAntropizado");
 		   PTE05_O2_TPM.setEnable(false);
@@ -1842,10 +1844,10 @@ public class G3MWebGLTestingApplication
 	               "EPSG:4326",
 	               "",
 	               true,
-	               new LevelTileCondition(0, 19),
+	               new LevelTileCondition(layerFirstLOD, 19),
 	               TimeInterval.fromDays(30),
 	               true,
-	               ltrp,
+	               null,
 	               1.0f);
 		   PTE05_O2_TPV.setTitle("TipoViario");
 		   PTE05_O2_TPV.setEnable(false);
@@ -1861,10 +1863,10 @@ public class G3MWebGLTestingApplication
 	               "EPSG:4326",
 	               "",
 	               true,
-	               new LevelTileCondition(0, 19),
+	               new LevelTileCondition(layerFirstLOD, 19),
 	               TimeInterval.fromDays(30),
 	               true,
-	               ltrp,
+	               null,
 	               1.0f);
 		   PTE05_O3_EPA.setTitle("PredRural");
 		   PTE05_O3_EPA.setEnable(false);
@@ -1878,10 +1880,10 @@ public class G3MWebGLTestingApplication
 	               "EPSG:4326",
 	               "",
 	               true,
-	               new LevelTileCondition(0, 19),
+	               new LevelTileCondition(layerFirstLOD, 19),
 	               TimeInterval.fromDays(30),
 	               true,
-	               ltrp,
+	               null,
 	               1.0f);
 		   PTE05_O3_EPN.setTitle("PredNatural");
 		   PTE05_O3_EPN.setEnable(false);
@@ -1897,10 +1899,10 @@ public class G3MWebGLTestingApplication
 	               "EPSG:4326",
 	               "",
 	               true,
-	               new LevelTileCondition(0, 19),
+	               new LevelTileCondition(layerFirstLOD, 19),
 	               TimeInterval.fromDays(30),
 	               true,
-	               ltrp,
+	               null,
 	               1.0f);
 		   PTE05_O1_UAP.setTitle("UnidadesAmbientales");
 		   PTE05_O1_UAP.setEnable(false);
@@ -1915,10 +1917,10 @@ public class G3MWebGLTestingApplication
 	               "EPSG:4326",
 	               "",
 	               true,
-	               new LevelTileCondition(0, 19),
+	               new LevelTileCondition(layerFirstLOD, 19),
 	               TimeInterval.fromDays(30),
 	               true,
-	               ltrp,
+	               null,
 	               0.5f);
 		   PTE05_CATASE.setTitle("ASE");
 		   PTE05_CATASE.setEnable(false);
@@ -1934,10 +1936,10 @@ public class G3MWebGLTestingApplication
 	               "EPSG:4326",
 	               "",
 	               true,
-	               new LevelTileCondition(0, 19),
+	               new LevelTileCondition(layerFirstLOD, 19),
 	               TimeInterval.fromDays(30),
 	               true,
-	               ltrp,
+	               null,
 	               1.0f);
 		   PTE05_LIMMUN.setTitle("Municipios");
 		   PTE05_LIMMUN.setEnable(false);
@@ -1953,10 +1955,10 @@ public class G3MWebGLTestingApplication
 	               "EPSG:4326",
 	               "",
 	               true,
-	               new LevelTileCondition(0, 19),
+	               new LevelTileCondition(layerFirstLOD, 19),
 	               TimeInterval.fromDays(30),
 	               true,
-	               ltrp,
+	               null,
 	               0.5f);
 		   PTE05_VEG_MC.setTitle("VegMatorral");
 		   PTE05_VEG_MC.setEnable(false);
@@ -1970,10 +1972,10 @@ public class G3MWebGLTestingApplication
 	               "EPSG:4326",
 	               "",
 	               true,
-	               new LevelTileCondition(0, 19),
+	               new LevelTileCondition(layerFirstLOD, 19),
 	               TimeInterval.fromDays(30),
 	               true,
-	               ltrp,
+	               null,
 	               0.5f);
 		   PTE05_VEG_BP.setTitle("VegPinar");
 		   PTE05_VEG_BP.setEnable(false);
@@ -1987,10 +1989,10 @@ public class G3MWebGLTestingApplication
 	               "EPSG:4326",
 	               "",
 	               true,
-	               new LevelTileCondition(0, 19),
+	               new LevelTileCondition(layerFirstLOD, 19),
 	               TimeInterval.fromDays(30),
 	               true,
-	               ltrp,
+	               null,
 	               0.5f);
 		   PTE05_VEG_BM.setTitle("VegMonteverde");
 		   PTE05_VEG_BM.setEnable(false);
@@ -2004,10 +2006,10 @@ public class G3MWebGLTestingApplication
 	               "EPSG:4326",
 	               "",
 	               true,
-	               new LevelTileCondition(0, 19),
+	               new LevelTileCondition(layerFirstLOD, 19),
 	               TimeInterval.fromDays(30),
 	               true,
-	               ltrp,
+	               null,
 	               0.5f);
 		   PTE05_VEG_BT.setTitle("VegTermofilo");
 		   PTE05_VEG_BT.setEnable(false);
@@ -2023,10 +2025,10 @@ public class G3MWebGLTestingApplication
 	               "EPSG:4326",
 	               "",
 	               true,
-	               new LevelTileCondition(0, 19),
+	               new LevelTileCondition(layerFirstLOD, 19),
 	               TimeInterval.fromDays(30),
 	               true,
-	               ltrp,
+	               null,
 	               0.5f);
 		   PTE05_ZEC_TER.setTitle("ZecTerrestre");
 		   PTE05_ZEC_TER.setEnable(false);
@@ -2040,10 +2042,10 @@ public class G3MWebGLTestingApplication
 	               "EPSG:4326",
 	               "",
 	               true,
-	               new LevelTileCondition(0, 19),
+	               new LevelTileCondition(layerFirstLOD, 19),
 	               TimeInterval.fromDays(30),
 	               true,
-	               ltrp,
+	               null,
 	               0.5f);
 		   PTE05_ZEC_MAR .setTitle("ZecMaritimo");
 		   PTE05_ZEC_MAR .setEnable(false);
@@ -2087,7 +2089,7 @@ public class G3MWebGLTestingApplication
 		   URL url = new URL("http://serdis.dis.ulpgc.es/~atrujill/glob3m/Fiware/gc2.bil", false);
 		   ElevationDataProvider elevationDataProvider = new SingleBilElevationDataProvider(url, sector, extent);
 		   builder.getPlanetRendererBuilder().setElevationDataProvider(elevationDataProvider);	  
-		   builder.getPlanetRendererBuilder().setVerticalExaggeration(1.0f);
+		   builder.getPlanetRendererBuilder().setVerticalExaggeration(1.5f);
 		   
 		   // camera constrainers
 		   builder.addCameraConstraint(new MyCameraConstrainer());

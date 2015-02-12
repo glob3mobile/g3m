@@ -58,7 +58,7 @@ public class CameraMouseWheelHandler extends CameraEventHandler
   {
   }
 
-  public final void onMouseWheel(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
+ /* public final void onMouseWheel(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
   {
     Camera cam = cameraContext.getNextCamera();
     final Planet planet = eventContext.getPlanet();
@@ -84,6 +84,59 @@ public class CameraMouseWheelHandler extends CameraEventHandler
   
       cam.translateCamera(translation);
     }
+  
+  
+  }
+*/
+  
+  public final void onMouseWheel(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
+  {
+    Camera cam = cameraContext.getNextCamera();
+  
+    Vector2I pixel = touchEvent.getTouch(0).getPos();
+    Vector3D touchedPosition = eventContext.getWidget().getScenePositionForPixel(pixel._x, pixel._y);
+  
+    if (!touchedPosition.isNan())
+    {
+  
+      final Vector3D dir = cam.pixel2Ray(pixel).normalized();
+  
+      double dist = touchedPosition.distanceTo(cam.getCartesianPosition());
+  
+      final double delta = touchEvent.getMouseWheelDelta();
+      double factor = 0.1;
+      if (delta < 0)
+      {
+        factor *= -1;
+      }
+  
+      Vector3D translation = dir.normalized().times(dist * factor);
+  
+      cam.translateCamera(translation);
+  
+    }
+  
+    //NO ZRENDER
+  
+  //  const Planet* planet = eventContext->getPlanet();
+  //  const Vector3D dir = cam->pixel2Ray(touchEvent.getTouch(0)->getPos()).normalized();
+  //
+  ///#warning USE ZRENDER IN THE FUTURE
+  //  std::vector<double> dists = planet->intersectionsDistances(cam->getCartesianPosition(), dir);
+  //
+  //  if (dists.size() > 0){     //Research other behaviours as Google Earth
+  //
+  //    const double delta = touchEvent.getMouseWheelDelta();
+  //    double factor = 0.1;
+  //    if (delta < 0){
+  //      factor *= -1;
+  //    }
+  //
+  //    double dist = dists.at(0);
+  //    Vector3D translation = dir.normalized().times(dist * factor);
+  //
+  //    cam->translateCamera(translation);
+  //  }
   
   
   }
