@@ -125,7 +125,8 @@ public class G3MWebGLTestingApplication
     	  //testBILGC();
     	  //testBandama();
     	  //testGeacron();
-    	  testPTE05Layers();
+    	  //testPTE05Layers();
+    	  testPTE05Chano();
     	  
          // initialize a customized widget by using a builder
          //initCustomizedWithBuilder();
@@ -1713,5 +1714,411 @@ public class G3MWebGLTestingApplication
 	   _widget.setCameraPosition(position);
 	   _widget.setCameraPitch(Angle.fromDegrees(-50.0));
   }
+
+	   // *********************************
+	   // PTE5 - Chano
+	   // ********************************
+	   
+	   public static LayerSet testPTE_layerSet;
+	   
+	   public void testPTE05Chano() {
+		   final G3MBuilder_WebGL builder = new G3MBuilder_WebGL();
+		   final Planet planet = Planet.createFlatEarth();
+		   builder.setPlanet(planet);
+		   
+		   final LayerTilesRenderParameters ltrp = new LayerTilesRenderParameters(Sector.fullSphere(), 2, 4, 0, 19, 
+				   new Vector2I(256, 256), 
+				   new Vector2I(16,16), false);
+		   
+		   testPTE_layerSet = new LayerSet();
+		   
+		   //OrtoExpress
+		   WMSLayer grafcanOrto = new WMSLayer("WMS_OrtoExpress",
+	               new URL("http://idecan1.grafcan.es/ServicioWMS/OrtoExpress?", false),
+	               WMSServerVersion.WMS_1_1_0,
+	               Sector.fullSphere(),
+	               "image/jpeg",
+	               "EPSG:4326",
+	               "",
+	               false,
+	               new LevelTileCondition(0, 19),
+	               TimeInterval.fromDays(30),
+	               true,
+	               ltrp);
+		   grafcanOrto.setTitle("WMS_OrtoExpress");
+		   testPTE_layerSet.addLayer(grafcanOrto);
+		   
+		   //Tipos de paisaje
+		   WMSLayer PTE05_O2_TPL = new WMSLayer("O2_TPL",
+	               new URL("http://ide2.idegrancanaria.es/wms/PTE_05?", false),
+	               WMSServerVersion.WMS_1_1_0,
+	               Sector.fullSphere(),
+	               "image/png",
+	               "EPSG:4326",
+	               "",
+	               true,
+	               new LevelTileCondition(0, 19),
+	               TimeInterval.fromDays(30),
+	               true,
+	               ltrp,
+	               0.5f);
+		   PTE05_O2_TPL.setTitle("TipoLitoral");
+		   PTE05_O2_TPL.setEnable(false);
+		   testPTE_layerSet.addLayer(PTE05_O2_TPL);
+		   
+		   WMSLayer PTE05_O2_TPN = new WMSLayer("O2_TPN",
+	               new URL("http://ide2.idegrancanaria.es/wms/PTE_05?", false),
+	               WMSServerVersion.WMS_1_1_0,
+	               Sector.fullSphere(),
+	               "image/png",
+	               "EPSG:4326",
+	               "",
+	               true,
+	               new LevelTileCondition(0, 19),
+	               TimeInterval.fromDays(30),
+	               true,
+	               ltrp,
+	               0.5f);
+		   PTE05_O2_TPN.setTitle("TipoNatural");
+		   PTE05_O2_TPN.setEnable(false);
+		   testPTE_layerSet.addLayer(PTE05_O2_TPN);
+		   
+		   WMSLayer PTE05_O2_TPR = new WMSLayer("O2_TPR",
+	               new URL("http://ide2.idegrancanaria.es/wms/PTE_05?", false),
+	               WMSServerVersion.WMS_1_1_0,
+	               Sector.fullSphere(),
+	               "image/png",
+	               "EPSG:4326",
+	               "",
+	               true,
+	               new LevelTileCondition(0, 19),
+	               TimeInterval.fromDays(30),
+	               true,
+	               ltrp,
+	               0.5f);
+		   PTE05_O2_TPR.setTitle("TipoRural");
+		   PTE05_O2_TPR.setEnable(false);
+		   testPTE_layerSet.addLayer(PTE05_O2_TPR);
+		   
+		   WMSLayer PTE05_O2_TPU = new WMSLayer("O2_TPU",
+	               new URL("http://ide2.idegrancanaria.es/wms/PTE_05?", false),
+	               WMSServerVersion.WMS_1_1_0,
+	               Sector.fullSphere(),
+	               "image/png",
+	               "EPSG:4326",
+	               "",
+	               true,
+	               new LevelTileCondition(0, 19),
+	               TimeInterval.fromDays(30),
+	               true,
+	               ltrp,
+	               0.5f);
+		   PTE05_O2_TPU.setTitle("TipoUrbano");
+		   PTE05_O2_TPU.setEnable(false);
+		   testPTE_layerSet.addLayer(PTE05_O2_TPU);
+		   
+		   WMSLayer PTE05_O2_TPM = new WMSLayer("O2_TPM",
+	               new URL("http://ide2.idegrancanaria.es/wms/PTE_05?", false),
+	               WMSServerVersion.WMS_1_1_0,
+	               Sector.fullSphere(),
+	               "image/png",
+	               "EPSG:4326",
+	               "",
+	               true,
+	               new LevelTileCondition(0, 19),
+	               TimeInterval.fromDays(30),
+	               true,
+	               ltrp,
+	               0.5f);
+		   PTE05_O2_TPM.setTitle("TipoAntropizado");
+		   PTE05_O2_TPM.setEnable(false);
+		   testPTE_layerSet.addLayer(PTE05_O2_TPM);
+		   
+		   WMSLayer PTE05_O2_TPV = new WMSLayer("O2_TPV",
+	               new URL("http://ide2.idegrancanaria.es/wms/PTE_05?", false),
+	               WMSServerVersion.WMS_1_1_0,
+	               Sector.fullSphere(),
+	               "image/png",
+	               "EPSG:4326",
+	               "",
+	               true,
+	               new LevelTileCondition(0, 19),
+	               TimeInterval.fromDays(30),
+	               true,
+	               ltrp,
+	               1.0f);
+		   PTE05_O2_TPV.setTitle("TipoViario");
+		   PTE05_O2_TPV.setEnable(false);
+		   testPTE_layerSet.addLayer(PTE05_O2_TPV);
+		   
+		 //Actuaciones estructurantes: Predominancias.
+		   
+		   WMSLayer PTE05_O3_EPA = new WMSLayer("O3_EPA",
+	               new URL("http://ide2.idegrancanaria.es/wms/PTE_05?", false),
+	               WMSServerVersion.WMS_1_1_0,
+	               Sector.fullSphere(),
+	               "image/png",
+	               "EPSG:4326",
+	               "",
+	               true,
+	               new LevelTileCondition(0, 19),
+	               TimeInterval.fromDays(30),
+	               true,
+	               ltrp,
+	               1.0f);
+		   PTE05_O3_EPA.setTitle("PredRural");
+		   PTE05_O3_EPA.setEnable(false);
+		   testPTE_layerSet.addLayer(PTE05_O3_EPA);
+		   
+		   WMSLayer PTE05_O3_EPN = new WMSLayer("O3_EPN",
+	               new URL("http://ide2.idegrancanaria.es/wms/PTE_05?", false),
+	               WMSServerVersion.WMS_1_1_0,
+	               Sector.fullSphere(),
+	               "image/png",
+	               "EPSG:4326",
+	               "",
+	               true,
+	               new LevelTileCondition(0, 19),
+	               TimeInterval.fromDays(30),
+	               true,
+	               ltrp,
+	               1.0f);
+		   PTE05_O3_EPN.setTitle("PredNatural");
+		   PTE05_O3_EPN.setEnable(false);
+		   testPTE_layerSet.addLayer(PTE05_O3_EPN);
+		   
+		   // Unidades ambientales
+		   
+		   WMSLayer PTE05_O1_UAP = new WMSLayer("O1_UAP",
+	               new URL("http://ide2.idegrancanaria.es/wms/PTE_05?", false),
+	               WMSServerVersion.WMS_1_1_0,
+	               Sector.fullSphere(),
+	               "image/png",
+	               "EPSG:4326",
+	               "",
+	               true,
+	               new LevelTileCondition(0, 19),
+	               TimeInterval.fromDays(30),
+	               true,
+	               ltrp,
+	               1.0f);
+		   PTE05_O1_UAP.setTitle("UnidadesAmbientales");
+		   PTE05_O1_UAP.setEnable(false);
+		   testPTE_layerSet.addLayer(PTE05_O1_UAP);
+
+		   //ASE
+		   WMSLayer PTE05_CATASE = new WMSLayer("CATASE",
+	               new URL("http://ide2.idegrancanaria.es/wms/CAT_ASE?", false),
+	               WMSServerVersion.WMS_1_1_0,
+	               Sector.fullSphere(),
+	               "image/png",
+	               "EPSG:4326",
+	               "",
+	               true,
+	               new LevelTileCondition(0, 19),
+	               TimeInterval.fromDays(30),
+	               true,
+	               ltrp,
+	               0.5f);
+		   PTE05_CATASE.setTitle("ASE");
+		   PTE05_CATASE.setEnable(false);
+		   testPTE_layerSet.addLayer(PTE05_CATASE);
+		   
+		   // Municipios
+		   
+		   WMSLayer PTE05_LIMMUN = new WMSLayer("LIMMUN",
+	               new URL("http://ide2.idegrancanaria.es/wms/LIM_MUN?", false),
+	               WMSServerVersion.WMS_1_1_0,
+	               Sector.fullSphere(),
+	               "image/png",
+	               "EPSG:4326",
+	               "",
+	               true,
+	               new LevelTileCondition(0, 19),
+	               TimeInterval.fromDays(30),
+	               true,
+	               ltrp,
+	               1.0f);
+		   PTE05_LIMMUN.setTitle("Municipios");
+		   PTE05_LIMMUN.setEnable(false);
+		   testPTE_layerSet.addLayer(PTE05_LIMMUN);
+		   
+		   // VegetaciÛn (cuando ten)
+		   
+		   WMSLayer PTE05_VEG_MC = new WMSLayer("MatorralCostero",
+	               new URL("http://193.145.136.179:8081/geoserver/Paisajes/wms?", false),
+	               WMSServerVersion.WMS_1_1_0,
+	               Sector.fullSphere(),
+	               "image/png",
+	               "EPSG:4326",
+	               "",
+	               true,
+	               new LevelTileCondition(0, 19),
+	               TimeInterval.fromDays(30),
+	               true,
+	               ltrp,
+	               0.5f);
+		   PTE05_VEG_MC.setTitle("VegMatorral");
+		   PTE05_VEG_MC.setEnable(false);
+		   testPTE_layerSet.addLayer(PTE05_VEG_MC);
+		   
+		   WMSLayer PTE05_VEG_BP = new WMSLayer("BosquePinar",
+	               new URL("http://193.145.136.179:8081/geoserver/Paisajes/wms?", false),
+	               WMSServerVersion.WMS_1_1_0,
+	               Sector.fullSphere(),
+	               "image/png",
+	               "EPSG:4326",
+	               "",
+	               true,
+	               new LevelTileCondition(0, 19),
+	               TimeInterval.fromDays(30),
+	               true,
+	               ltrp,
+	               0.5f);
+		   PTE05_VEG_BP.setTitle("VegPinar");
+		   PTE05_VEG_BP.setEnable(false);
+		   testPTE_layerSet.addLayer(PTE05_VEG_BP);
+		   
+		   WMSLayer PTE05_VEG_BM = new WMSLayer("BosqueMonteverde",
+	               new URL("http://193.145.136.179:8081/geoserver/Paisajes/wms?", false),
+	               WMSServerVersion.WMS_1_1_0,
+	               Sector.fullSphere(),
+	               "image/png",
+	               "EPSG:4326",
+	               "",
+	               true,
+	               new LevelTileCondition(0, 19),
+	               TimeInterval.fromDays(30),
+	               true,
+	               ltrp,
+	               0.5f);
+		   PTE05_VEG_BM.setTitle("VegMonteverde");
+		   PTE05_VEG_BM.setEnable(false);
+		   testPTE_layerSet.addLayer(PTE05_VEG_BM);
+		   
+		   WMSLayer PTE05_VEG_BT = new WMSLayer("BosqueTermofilo",
+	               new URL("http://193.145.136.179:8081/geoserver/Paisajes/wms?", false),
+	               WMSServerVersion.WMS_1_1_0,
+	               Sector.fullSphere(),
+	               "image/png",
+	               "EPSG:4326",
+	               "",
+	               true,
+	               new LevelTileCondition(0, 19),
+	               TimeInterval.fromDays(30),
+	               true,
+	               ltrp,
+	               0.5f);
+		   PTE05_VEG_BT.setTitle("VegTermofilo");
+		   PTE05_VEG_BT.setEnable(false);
+		   testPTE_layerSet.addLayer(PTE05_VEG_BT);
+		   
+		   // ZEC
+		   
+		   WMSLayer PTE05_ZEC_TER = new WMSLayer("ZEC_TER",
+	               new URL("http://ide2.idegrancanaria.es/wms/ZEC?", false),
+	               WMSServerVersion.WMS_1_1_0,
+	               Sector.fullSphere(),
+	               "image/png",
+	               "EPSG:4326",
+	               "",
+	               true,
+	               new LevelTileCondition(0, 19),
+	               TimeInterval.fromDays(30),
+	               true,
+	               ltrp,
+	               0.5f);
+		   PTE05_ZEC_TER.setTitle("ZecTerrestre");
+		   PTE05_ZEC_TER.setEnable(false);
+		   testPTE_layerSet.addLayer(PTE05_ZEC_TER);
+		   
+		   WMSLayer PTE05_ZEC_MAR = new WMSLayer("ZEC_MAR",
+	               new URL("http://ide2.idegrancanaria.es/wms/ZEC?", false),
+	               WMSServerVersion.WMS_1_1_0,
+	               Sector.fullSphere(),
+	               "image/png",
+	               "EPSG:4326",
+	               "",
+	               true,
+	               new LevelTileCondition(0, 19),
+	               TimeInterval.fromDays(30),
+	               true,
+	               ltrp,
+	               0.5f);
+		   PTE05_ZEC_MAR .setTitle("ZecMaritimo");
+		   PTE05_ZEC_MAR .setEnable(false);
+		   testPTE_layerSet.addLayer(PTE05_ZEC_MAR );
+		   
+		   /*
+		   WMSLayer PTE05_03APM = new WMSLayer("O3_APM",
+	               new URL("http://ide2.idegrancanaria.es/wms/PTE_05?", false),
+	               WMSServerVersion.WMS_1_1_0,
+	               Sector.fullSphere(),
+	               "image/png",
+	               "EPSG:4326",
+	               "",
+	               true,
+	               new LevelTileCondition(0, 19),
+	               TimeInterval.fromDays(30),
+	               true,
+	               ltrp);
+		   layerSet.addLayer(PTE05_03APM);
+
+		   WMSLayer PTE05_03APA = new WMSLayer("O3_APA",
+	               new URL("http://ide2.idegrancanaria.es/wms/PTE_05?", false),
+	               WMSServerVersion.WMS_1_1_0,
+	               Sector.fullSphere(),
+	               "image/png",
+	               "EPSG:4326",
+	               "",
+	               true,
+	               new LevelTileCondition(0, 19),
+	               TimeInterval.fromDays(30),
+	               true,
+	               ltrp);
+		   layerSet.addLayer(PTE05_03APA);
+		   */
+
+		   builder.getPlanetRendererBuilder().setLayerSet(testPTE_layerSet);
+		   	   
+		   // create elevations for GC
+		   Sector sector = Sector.fromDegrees(27.7116484957735, -15.90589160041418, 28.225913322423995, -15.32910937385168 );
+		   Vector2I extent = new Vector2I(1000, 1000);                             // bil resolution
+		   URL url = new URL("http://serdis.dis.ulpgc.es/~atrujill/glob3m/Fiware/gc2.bil", false);
+		   ElevationDataProvider elevationDataProvider = new SingleBilElevationDataProvider(url, sector, extent);
+		   builder.getPlanetRendererBuilder().setElevationDataProvider(elevationDataProvider);	  
+		   builder.getPlanetRendererBuilder().setVerticalExaggeration(1.0f);
+		   
+		   // camera constrainers
+		   builder.addCameraConstraint(new MyCameraConstrainer());
+		   
+		   testPTE05_exportJavaFunctions();
+		   
+		   _widget = builder.createWidget();
+		   
+		   // set camera looking at Gran Canaria
+		   Geodetic3D position = new Geodetic3D(Angle.fromDegrees(27.976), Angle.fromDegrees(-15.591), 80000);
+		   _widget.setCameraPosition(position);
+	  }
+	   
+	   public static void testPTE05Chano_changeLayers (String layerName){
+		   Layer layer = testPTE_layerSet.getLayerByTitle(layerName);
+		   if (layer != null) {
+			   if (layer.isEnable()) layer.setEnable(false);
+			   else layer.setEnable(true);
+		   }
+	   }
+	   
+	   private native void testPTE05_exportJavaFunctions() /*-{
+		var that = this;
+		if (!$wnd.G3M) {
+			$wnd.G3M = {};
+		}
+
+		// here we set all my function headings
+		$wnd.G3M.changeLayerStatus = @org.glob3.mobile.client.G3MWebGLTestingApplication::testPTE05Chano_changeLayers(Ljava/lang/String;);
+		
+}-*/;
+
 
 }

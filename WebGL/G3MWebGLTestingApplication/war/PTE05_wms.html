@@ -1,0 +1,77 @@
+<!doctype html>
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<title>Capas wms del PTE05</title>
+
+<!--                                           -->
+<!-- This script loads your compiled module.   -->
+<!-- If you add any GWT meta tags, they must   -->
+<!-- be added before this line.                -->
+<!--                                           -->
+ 
+<script type="text/javascript"
+	src="org.glob3.mobile.G3MWebGLTestingApplication/org.glob3.mobile.G3MWebGLTestingApplication.nocache.js"></script>
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src="http://code.jquery.com/ui/1.11.1/jquery-ui.js"></script>
+<link type="text/css" rel="stylesheet" href="PTE05_css/jquery-ui.css"/>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+<link type="text/css" rel="stylesheet" href="PTE05_css/PTE05_wms.css">
+<script src="PTE05_js/pte05_wms.js"></script>
+</head>
+
+
+<body>
+	<div id="mainContainer" class="container-fluid">
+		<div class="row">
+			<div class="col-sm-2" id="activationContainer">
+				<h2> PTE - 5 </h2>
+				<h3> Tipos de paisaje </h3>
+				<div class="chooser"> <input class="layerChecker" type="checkbox" name="layerOption" onchange='window.G3M.changeLayerStatus("TipoLitoral");' /><p> Litoral </p> </div>
+				<div class="chooser"> <input class="layerChecker" type="checkbox" name="layerOption" onchange='window.G3M.changeLayerStatus("TipoNatural");' /><p> Natural </p> </div>
+				<div class="chooser"> <input class="layerChecker" type="checkbox" name="layerOption" onchange='window.G3M.changeLayerStatus("TipoUrbano");' /><p> Urbano </p> </div>
+				<div class="chooser"> <input class="layerChecker" type="checkbox" name="layerOption" onchange='window.G3M.changeLayerStatus("TipoRural");' /><p> Rural </p> </div>
+				<div class="chooser"> <input class="layerChecker" type="checkbox" name="layerOption" onchange='window.G3M.changeLayerStatus("TipoViario");' /><p> Infraestructura viaria </p> </div>
+				<div class="chooser"> <input class="layerChecker" type="checkbox" name="layerOption" onchange='window.G3M.changeLayerStatus("TipoAntropizado");' /><p> Antropizado mixto / indefinido </p> </div>
+				<h3> Estrategias de proyecto </h3>
+				<div class="chooser"> <input class="layerChecker" type="checkbox" name="layerOption" onchange='window.G3M.changeLayerStatus("PredNatural");' /><p> Predominancia de lo natural </p> </div>
+				<div class="chooser"> <input class="layerChecker" type="checkbox" name="layerOption" onchange='window.G3M.changeLayerStatus("PredRural");' /><p> Predominancia de lo rural </p> </div>
+				<h3> Unidades ambientales de paisaje </h3>
+				<div class="chooser"> <input class="layerChecker" type="checkbox" name="layerOption" onchange='window.G3M.changeLayerStatus("UnidadesAmbientales");' /><p> Unidades ambientales </p> </div>
+				<h3> Áreas de sensibilidad ecológica </h3>
+				<div class="chooser"> <input class="layerChecker" type="checkbox" name="layerOption" onchange='window.G3M.changeLayerStatus("ASE");' /><p> ASE </p> </div>
+				<h3> Pisos climáticos de vegetación </h3>
+				<div class="chooser"> <input class="layerChecker" type="checkbox" name="layerOption" onchange='window.G3M.changeLayerStatus("VegPinar");' /><p> Pinar </p> </div>
+				<div class="chooser"> <input class="layerChecker" type="checkbox" name="layerOption" onchange='window.G3M.changeLayerStatus("VegMonteverde");' /><p> Monteverde </p> </div>
+				<div class="chooser"> <input class="layerChecker" type="checkbox" name="layerOption" onchange='window.G3M.changeLayerStatus("VegTermofilo");' /><p> Bosque termófilo </p> </div>
+				<div class="chooser"> <input class="layerChecker" type="checkbox" name="layerOption" onchange='window.G3M.changeLayerStatus("VegMatorral");' /><p> Matorral costero </p> </div>
+				<h3> Términos municipales </h3>
+				<div class="chooser"> <input class="layerChecker" type="checkbox" name="layerOption" onchange='window.G3M.changeLayerStatus("Municipios");' /><p> Municipios </p> </div>
+				<h3> Zonas de Especial Conservación </h3>
+				<div class="chooser"> <input class="layerChecker" type="checkbox" name="layerOption" onchange='window.G3M.changeLayerStatus("ZecMaritimo");' /><p> Marítimas </p> </div>
+				<div class="chooser"> <input class="layerChecker" type="checkbox" name="layerOption" onchange='window.G3M.changeLayerStatus("ZecTerrestre");' /><p> Terrestres </p> </div>
+				
+			</div>
+			<div class="col-sm-10" id="g3mWidgetHolder"></div>
+		</div>
+	</div>
+	<div id="globeMarkDialog" style="display:none;"></div>
+	<script type="text/javascript">
+	var _onLoadG3MListener = null;
+
+    function onLoadG3M() {
+    	// the G3M objets is already loaded
+    	if (_onLoadG3MListener != null)
+    		_onLoadG3MListener();
+    }
+
+    function setOnLoadG3MListener(func) {
+    	_onLoadG3MListener = func;
+    }
+	</script>
+	
+</body>
+</html>

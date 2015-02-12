@@ -1,0 +1,39 @@
+html, body {
+	margin: 0px !important;
+	padding: 0px !important;
+	height: 100%;
+}
+
+#g3mWidgetHolder {
+	padding:0px;
+	margin:0px;
+	overflow: hidden;
+}
+
+#activationContainer{
+	padding:0px;
+	margin:0px;
+	overflow-y: scroll;
+	font-size: 80%;
+	padding-left: 1em;
+	padding-right: 1em;
+}
+
+.layerChecker {
+	margin-right: 1em !important;
+}
+
+h3 {
+	font-size: 18px;
+}
+
+h2 {
+	text-align: center;
+}
+
+canvas:focus {
+	border: none !important;
+	outline: none !important;
+}
+
+.chooser input, .chooser p { display: inline-block; }
