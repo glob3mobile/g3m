@@ -174,7 +174,6 @@ void ColumnLayoutImageBuilder::doLayout(const G3MContext* context,
     delete canvas;
   }
 
-#warning delete images??
   for (int i = 0; i < resultsSize; i++) {
     ChildResult* result = results[i];
 #ifdef C_CODE
