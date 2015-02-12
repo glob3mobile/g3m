@@ -111,10 +111,16 @@ protected:
   std::vector<IImageBuilder*> _children;
 
   const int   _margin;
-  const int   _borderWidth;
+
+  const float _borderWidth;
   const Color _borderColor;
+
   const int   _padding;
 
+  const Color _backgroundColor;
+  const float _cornerRadius;
+
+  const int _childrenSeparation;
 
   /*
    | margin
@@ -124,28 +130,40 @@ protected:
    */
 
   LayoutImageBuilder(const std::vector<IImageBuilder*>& children,
-                     int margin,
-                     int borderWidth,
-                     const Color& borderColor,
-                     int padding) :
+                     int            margin,
+                     float          borderWidth,
+                     const Color&   borderColor,
+                     int            padding,
+                     const Color&   backgroundColor,
+                     float          cornerRadius,
+                     int            childrenSeparation) :
   _children(children),
   _margin(margin),
   _borderWidth(borderWidth),
   _borderColor(borderColor),
-  _padding(padding)
+  _padding(padding),
+  _backgroundColor(backgroundColor),
+  _cornerRadius(cornerRadius),
+  _childrenSeparation(childrenSeparation)
   {
   }
 
   LayoutImageBuilder(IImageBuilder* child0,
                      IImageBuilder* child1,
-                     int margin,
-                     int borderWidth,
-                     const Color& borderColor,
-                     int padding) :
+                     int            margin,
+                     float          borderWidth,
+                     const Color&   borderColor,
+                     int            padding,
+                     const Color&   backgroundColor,
+                     const float    cornerRadius,
+                     int            childrenSeparation) :
   _margin(margin),
   _borderWidth(borderWidth),
   _borderColor(borderColor),
-  _padding(padding)
+  _padding(padding),
+  _backgroundColor(backgroundColor),
+  _cornerRadius(cornerRadius),
+  _childrenSeparation(childrenSeparation)
   {
     _children.push_back(child0);
     _children.push_back(child1);

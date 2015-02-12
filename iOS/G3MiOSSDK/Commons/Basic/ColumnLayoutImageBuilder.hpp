@@ -21,17 +21,23 @@ protected:
 public:
 
   ColumnLayoutImageBuilder(const std::vector<IImageBuilder*>& children,
-                           int margin = 4,
-                           int borderWidth = 0,
-                           const Color& borderColor = Color::transparent(),
-                           int padding = 2);
+                           int            margin             = 0,
+                           float          borderWidth        = 0.0f,
+                           const Color&   borderColor        = Color::transparent(),
+                           int            padding            = 0,
+                           const Color&   backgroundColor    = Color::transparent(),
+                           float          cornerRadius       = 0.0f,
+                           int            childrenSeparation = 0.0f);
 
   ColumnLayoutImageBuilder(IImageBuilder* child0,
                            IImageBuilder* child1,
-                           int margin = 4,
-                           int borderWidth = 0,
-                           const Color& borderColor = Color::transparent(),
-                           int padding = 2);
+                           int            margin             = 0,
+                           float          borderWidth        = 0.0f,
+                           const Color&   borderColor        = Color::transparent(),
+                           int            padding            = 0,
+                           const Color&   backgroundColor    = Color::transparent(),
+                           float          cornerRadius       = 0.0f,
+                           int            childrenSeparation = 0.0f);
 
 };
 
