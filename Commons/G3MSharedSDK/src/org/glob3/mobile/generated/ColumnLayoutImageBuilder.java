@@ -68,11 +68,11 @@ public class ColumnLayoutImageBuilder extends LayoutImageBuilder
       final int margin2 = _margin *2;
       final int padding2 = _padding *2;
   
-      final int width = maxWidth + margin2 + padding2;
-      final int height = accumulatedHeight + margin2 + padding2 + (resultsSize-1)*_childrenSeparation;
+      final int canvasWidth = maxWidth + margin2 + padding2;
+      final int canvasHeight = accumulatedHeight + margin2 + padding2 + (resultsSize-1)*_childrenSeparation;
   
       ICanvas canvas = context.getFactory().createCanvas();
-      canvas.initialize(width, height);
+      canvas.initialize(canvasWidth, canvasHeight);
   
   ///#warning remove debug code
   //    canvas->setFillColor(Color::red());
@@ -83,11 +83,11 @@ public class ColumnLayoutImageBuilder extends LayoutImageBuilder
         canvas.setFillColor(_backgroundColor);
         if (_cornerRadius > 0)
         {
-          canvas.fillRoundedRectangle(_margin, _margin, width-margin2, height-margin2, _cornerRadius);
+          canvas.fillRoundedRectangle(_margin, _margin, canvasWidth - margin2, canvasHeight - margin2, _cornerRadius);
         }
         else
         {
-          canvas.fillRectangle(_margin, _margin, width-margin2, height-margin2);
+          canvas.fillRectangle(_margin, _margin, canvasWidth - margin2, canvasHeight - margin2);
         }
       }
   
@@ -97,24 +97,26 @@ public class ColumnLayoutImageBuilder extends LayoutImageBuilder
         canvas.setLineWidth(_borderWidth);
         if (_cornerRadius > 0)
         {
-          canvas.strokeRoundedRectangle(_margin, _margin, width-margin2, height-margin2, _cornerRadius);
+          canvas.strokeRoundedRectangle(_margin, _margin, canvasWidth - margin2, canvasHeight - margin2, _cornerRadius);
         }
         else
         {
-          canvas.strokeRectangle(_margin, _margin, width-margin2, height-margin2);
+          canvas.strokeRectangle(_margin, _margin, canvasWidth - margin2, canvasHeight - margin2);
         }
       }
   
-      float cursorTop = height - _margin - _padding;
+      float cursorTop = _margin + _padding;
       for (int i = 0; i < resultsSize; i++)
       {
         ChildResult result = results.get(i);
         final IImage image = result._image;
+        final int imageWidth = image.getWidth();
+        final int imageHeight = image.getHeight();
   
-        final float destLeft = ((float)(width - image.getWidth()) / 2.0f);
-        cursorTop -= image.getHeight();
-        canvas.drawImage(image, destLeft, cursorTop);
-        cursorTop -= _childrenSeparation;
+        final float left = ((float)(canvasWidth - imageWidth) / 2.0f);
+        canvas.drawImage(image, left, cursorTop);
+        //canvas->strokeRectangle(left, cursorTop, imageWidth, imageHeight);
+        cursorTop += imageHeight + _childrenSeparation;
       }
   
       canvas.createImage(new ColumnLayoutImageBuilder_IImageListener(imageName, listener, deleteListener), true);
