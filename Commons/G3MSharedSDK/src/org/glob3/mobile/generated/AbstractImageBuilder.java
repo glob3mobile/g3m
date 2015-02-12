@@ -41,7 +41,7 @@ public abstract class AbstractImageBuilder implements IImageBuilder
 
   public final void setChangeListener(ChangedListener changeListener)
   {
-    if (changeListener != null)
+    if (_changeListener != null)
     {
       throw new RuntimeException("changeListener already set!");
     }
