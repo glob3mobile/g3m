@@ -161,11 +161,11 @@ void Canvas_iOS::_removeShadow() {
 
 void Canvas_iOS::_clearRect(float left, float top,
                             float width, float height) {
-  
-  
-  
+
+
+
   CGContextClearRect(_context, CGRectMake(left, _canvasHeight - top,
-                                                               width, -height));
+                                          width, -height));
 }
 
 void Canvas_iOS::_createImage(IImageListener* listener,
@@ -203,20 +203,20 @@ void Canvas_iOS::drawRoundedRectangle(float left, float top,
   CGRect rrect = CGRectMake(left, _canvasHeight - top,
                             width, -height);
 
-	const CGFloat minx = CGRectGetMinX(rrect);
+  const CGFloat minx = CGRectGetMinX(rrect);
   const CGFloat midx = CGRectGetMidX(rrect);
   const CGFloat maxx = CGRectGetMaxX(rrect);
-	const CGFloat miny = CGRectGetMinY(rrect);
+  const CGFloat miny = CGRectGetMinY(rrect);
   const CGFloat midy = CGRectGetMidY(rrect);
   const CGFloat maxy = CGRectGetMaxY(rrect);
 
-	CGContextMoveToPoint(_context, minx, midy);
-	CGContextAddArcToPoint(_context, minx, miny, midx, miny, radius);
-	CGContextAddArcToPoint(_context, maxx, miny, maxx, midy, radius);
-	CGContextAddArcToPoint(_context, maxx, maxy, midx, maxy, radius);
-	CGContextAddArcToPoint(_context, minx, maxy, minx, midy, radius);
-	CGContextClosePath(_context);
-	CGContextDrawPath(_context, mode);
+  CGContextMoveToPoint(_context, minx, midy);
+  CGContextAddArcToPoint(_context, minx, miny, midx, miny, radius);
+  CGContextAddArcToPoint(_context, maxx, miny, maxx, midy, radius);
+  CGContextAddArcToPoint(_context, maxx, maxy, midx, maxy, radius);
+  CGContextAddArcToPoint(_context, minx, maxy, minx, midy, radius);
+  CGContextClosePath(_context);
+  CGContextDrawPath(_context, mode);
 }
 
 void Canvas_iOS::_fillRoundedRectangle(float left, float top,
@@ -357,7 +357,7 @@ void Canvas_iOS::_drawImage(const IImage* image,
                             float destLeft, float destTop) {
   UIImage* uiImage = ((Image_iOS*) image)->getUIImage();
   CGImage* cgImage = [uiImage CGImage];
-  
+
   CGContextDrawImage(_context,
                      CGRectMake(destLeft,
                                 destTop,
@@ -371,16 +371,16 @@ void Canvas_iOS::_drawImage(const IImage* image,
                             float transparency) {
   UIImage* uiImage = ((Image_iOS*) image)->getUIImage();
   CGImage* cgImage = [uiImage CGImage];
-  
+
   CGContextSetAlpha(_context, transparency);
-  
+
   CGContextDrawImage(_context,
                      CGRectMake(destLeft,
                                 destTop,
                                 image->getWidth(),
                                 image->getHeight()),
                      cgImage);
-  
+
   CGContextSetAlpha(_context, 1.0);
 }
 
@@ -400,20 +400,20 @@ void Canvas_iOS::_drawImage(const IImage* image,
 void Canvas_iOS::_drawImage(const IImage* image,
                             float destLeft, float destTop, float destWidth, float destHeight,
                             float transparency) {
-  
+
   UIImage* uiImage = ((Image_iOS*) image)->getUIImage();
   CGImage* cgImage = [uiImage CGImage];
 
   CGContextSetAlpha(_context, transparency);
 
-  
+
   CGContextDrawImage(_context,
                      CGRectMake(destLeft,
                                 destTop,
                                 destWidth,
                                 destHeight),
                      cgImage);
-  
+
   CGContextSetAlpha(_context, 1.0);
 }
 
@@ -429,9 +429,9 @@ void Canvas_iOS::_drawImage(const IImage* image,
                                destWidth,
                                destHeight);
 
-  if ((srcLeft == 0) &&
-      (srcTop == 0) &&
-      (srcWidth == image->getWidth()) &&
+  if ((srcLeft   == 0) &&
+      (srcTop    == 0) &&
+      (srcWidth  == image->getWidth()) &&
       (srcHeight == image->getHeight())) {
     CGContextDrawImage(_context,
                        destRect,
@@ -440,7 +440,7 @@ void Canvas_iOS::_drawImage(const IImage* image,
   else {
     // Cropping image
     CGRect cropRect = CGRectMake(srcLeft,
-                                // _canvasHeight - (srcTop + srcHeight), // Bottom
+                                 // _canvasHeight - (srcTop + srcHeight), // Bottom
                                  srcTop,
                                  srcWidth,
                                  srcHeight);
