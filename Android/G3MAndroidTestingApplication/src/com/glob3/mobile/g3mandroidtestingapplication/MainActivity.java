@@ -4,9 +4,7 @@ package com.glob3.mobile.g3mandroidtestingapplication;
 
 import org.glob3.mobile.generated.ColumnLayoutImageBuilder;
 import org.glob3.mobile.generated.DownloaderImageBuilder;
-import org.glob3.mobile.generated.GFont;
 import org.glob3.mobile.generated.Geodetic3D;
-import org.glob3.mobile.generated.LabelImageBuilder;
 import org.glob3.mobile.generated.NonOverlappingMark;
 import org.glob3.mobile.generated.NonOverlappingMarksRenderer;
 import org.glob3.mobile.generated.URL;
@@ -21,8 +19,8 @@ import android.widget.RelativeLayout;
 
 
 public class MainActivity
-extends
-Activity {
+         extends
+            Activity {
 
    private G3MWidget_Android _g3mWidget;
 
@@ -65,8 +63,9 @@ Activity {
 
       final ColumnLayoutImageBuilder imageBuilderWidget = new ColumnLayoutImageBuilder( //
                new DownloaderImageBuilder(markBitmapURL), //
-               new LabelImageBuilder(label, GFont.monospaced(50, true)) //
-      );
+               //new LabelImageBuilder(label, GFont.monospaced(50, true)) //
+               new DownloaderImageBuilder(anchorBitmapURL) //
+               );
 
       return new NonOverlappingMark( //
                imageBuilderWidget, //

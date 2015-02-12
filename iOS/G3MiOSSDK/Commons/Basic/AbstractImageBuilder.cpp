@@ -19,7 +19,7 @@ void AbstractImageBuilder::changed() {
 }
 
 void AbstractImageBuilder::setChangeListener(ChangedListener* changeListener) {
-  if (changeListener != NULL) {
+  if (_changeListener != NULL) {
     THROW_EXCEPTION("changeListener already set!");
   }
   _changeListener = changeListener;
