@@ -13,10 +13,8 @@
 #include <G3MiOSSDK/NonOverlappingMarksRenderer.hpp>
 #include <G3MiOSSDK/DownloaderImageBuilder.hpp>
 #include <G3MiOSSDK/G3MWidget.hpp>
-
 #include <G3MiOSSDK/LabelImageBuilder.hpp>
 #include <G3MiOSSDK/ColumnLayoutImageBuilder.hpp>
-
 
 #include "G3MDemoModel.hpp"
 

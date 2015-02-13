@@ -187,6 +187,8 @@
 		CF527E1F162E33F500E0BDE0 /* DefaultRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF527E1D162E33F500E0BDE0 /* DefaultRenderer.cpp */; };
 		CF547B4A196C45C9002DBBDD /* GEOVectorLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF547B48196C45C9002DBBDD /* GEOVectorLayer.cpp */; };
 		CF547B4B196C4921002DBBDD /* GEOVectorLayer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF547B49196C45C9002DBBDD /* GEOVectorLayer.hpp */; };
+		CF55133C1A8E6A6000097906 /* StaticImageBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF55133A1A8E6A6000097906 /* StaticImageBuilder.cpp */; };
+		CF55133D1A8E6AC200097906 /* StaticImageBuilder.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF55133B1A8E6A6000097906 /* StaticImageBuilder.hpp */; };
 		CF59DF8F15C04AFC002173EC /* ILogger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF59DF8E15C04AFC002173EC /* ILogger.cpp */; };
 		CF5A8A321656B67F00508C38 /* BoxShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF5A8A301656B67F00508C38 /* BoxShape.cpp */; };
 		CF5C1195178C76F2000ED715 /* BoundingArea.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF5C1193178C76F2000ED715 /* BoundingArea.cpp */; };
@@ -726,6 +728,7 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				CF55133D1A8E6AC200097906 /* StaticImageBuilder.hpp in CopyFiles */,
 				CFAB53F61A8BCE5800DD0099 /* LayoutImageBuilder.hpp in CopyFiles */,
 				CFAB53F71A8BCE5800DD0099 /* ColumnLayoutImageBuilder.hpp in CopyFiles */,
 				D842D9B01A72906A008D55E4 /* NonOverlappingMarksRenderer.hpp in CopyFiles */,
@@ -1361,6 +1364,8 @@
 		CF527E1E162E33F500E0BDE0 /* DefaultRenderer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = DefaultRenderer.hpp; path = Commons/Rendererers/DefaultRenderer.hpp; sourceTree = "<group>"; };
 		CF547B48196C45C9002DBBDD /* GEOVectorLayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GEOVectorLayer.cpp; sourceTree = "<group>"; };
 		CF547B49196C45C9002DBBDD /* GEOVectorLayer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GEOVectorLayer.hpp; sourceTree = "<group>"; };
+		CF55133A1A8E6A6000097906 /* StaticImageBuilder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = StaticImageBuilder.cpp; path = Commons/Basic/StaticImageBuilder.cpp; sourceTree = "<group>"; };
+		CF55133B1A8E6A6000097906 /* StaticImageBuilder.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = StaticImageBuilder.hpp; path = Commons/Basic/StaticImageBuilder.hpp; sourceTree = "<group>"; };
 		CF59DF8E15C04AFC002173EC /* ILogger.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ILogger.cpp; path = Commons/Interfaces/ILogger.cpp; sourceTree = "<group>"; };
 		CF5A8A301656B67F00508C38 /* BoxShape.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = BoxShape.cpp; path = Commons/Rendererers/BoxShape.cpp; sourceTree = "<group>"; };
 		CF5A8A311656B67F00508C38 /* BoxShape.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = BoxShape.hpp; path = Commons/Rendererers/BoxShape.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
@@ -2137,6 +2142,8 @@
 				CF1F55DE1876F5E70019E8A5 /* LabelImageBuilder.hpp */,
 				CF1F55E118772FC80019E8A5 /* AbstractImageBuilder.cpp */,
 				CF1F55E218772FC80019E8A5 /* AbstractImageBuilder.hpp */,
+				CF55133A1A8E6A6000097906 /* StaticImageBuilder.cpp */,
+				CF55133B1A8E6A6000097906 /* StaticImageBuilder.hpp */,
 				CF290D53187F1695000BE644 /* TextureIDReference.cpp */,
 				CF290D54187F1695000BE644 /* TextureIDReference.hpp */,
 				CF9F74DD18805470008D65F7 /* CanvasImageBuilder.cpp */,
@@ -2923,6 +2930,7 @@
 				CCB2566415B5F58500079B96 /* Box.cpp in Sources */,
 				D895CA1E1861C33A00AE8291 /* IImageUtils.cpp in Sources */,
 				D87EC5C715BEB12F00E38C36 /* LayerSet.cpp in Sources */,
+				CF55133C1A8E6A6000097906 /* StaticImageBuilder.cpp in Sources */,
 				CFE6046319043BEF00E6C78B /* ErrorRenderer.cpp in Sources */,
 				D87EC5C915BEB12F00E38C36 /* WMSLayer.cpp in Sources */,
 				CF59DF8F15C04AFC002173EC /* ILogger.cpp in Sources */,
