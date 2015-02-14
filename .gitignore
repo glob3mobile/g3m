@@ -73,3 +73,9 @@ WebGL/G3MWebGLTestingApplication/war/WEB-INF/classes/
 WebGL/G3MWebGLTestingApplication/war/WEB-INF/deploy/
 
 *.xccheckout
+
+WebGL/G3MWebGLDemo/war/WEB-INF/lib/
+WebGL/G3MWebGLTemplate/war/WEB-INF/lib/
+WebGL/G3MWebGLTestingApplication/war/WEB-INF/lib/
+
+tools/point-cloud-octree/bin/
