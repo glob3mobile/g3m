@@ -143,6 +143,8 @@ class NonOverlappingMark{
   const float _minWidgetSpeedInPixelsPerSecond;
   const float _resistanceFactor;
 
+  std::string _id;
+
 public:
 
   NonOverlappingMark(IImageBuilder* imageBuilderWidget,
@@ -158,6 +160,14 @@ public:
                      float minWidgetSpeedInPixelsPerSecond = 5.0f,
                      float maxWidgetSpeedInPixelsPerSecond = 1000.0f,
                      float resistanceFactor = 0.95f);
+
+  void setID(const std::string& id) {
+    _id = id;
+  }
+
+  const std::string getID() const {
+    return _id;
+  }
 
   ~NonOverlappingMark();
 
