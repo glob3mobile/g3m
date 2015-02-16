@@ -55,10 +55,10 @@ public class MainActivity
 
       placeHolder.addView(_g3mWidget);
 
-      //      _g3mWidget.setAnimatedCameraPosition(Geodetic3D.fromDegrees(28.034468668529083146, -15.904092315837871752, 1634079));
+      _g3mWidget.setAnimatedCameraPosition(Geodetic3D.fromDegrees(28.034468668529083146, -15.904092315837871752, 1634079));
 
-      // Buenos Aires, there we go!
-      _g3mWidget.setAnimatedCameraPosition(Geodetic3D.fromDegrees(-34.615047738942699596, -58.4447233540403559, 35000));
+      //      // Buenos Aires, there we go!
+      //      _g3mWidget.setAnimatedCameraPosition(Geodetic3D.fromDegrees(-34.615047738942699596, -58.4447233540403559, 35000));
    }
 
 
@@ -75,13 +75,12 @@ public class MainActivity
 
    private static NonOverlappingMark createMark(final String label,
                                                 final Geodetic3D position) {
-      // final URL markBitmapURL = new URL("file:///g3m-marker.png");
+      final URL markBitmapURL = new URL("file:///g3m-marker.png");
       final URL anchorBitmapURL = new URL("file:///anchorWidget.png");
 
       final ColumnLayoutImageBuilder imageBuilderWidget = new ColumnLayoutImageBuilder( //
-               //new DownloaderImageBuilder(markBitmapURL), //
-               new LabelImageBuilder(label, GFont.monospaced(50, true)), //
-               new DownloaderImageBuilder(anchorBitmapURL) //
+               new DownloaderImageBuilder(markBitmapURL), //
+               new LabelImageBuilder(label, GFont.monospaced()) //
       );
 
       return new NonOverlappingMark( //
