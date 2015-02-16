@@ -77,7 +77,7 @@ _context(NULL)
   _scenes.push_back( new G3MHUDDemoScene(this) );
   _scenes.push_back( new G3MNonOverlappingMarksDemoScene(this) );
 
-//  _scenes.push_back( new G3MCanvas2DDemoScene(this) );
+  _scenes.push_back( new G3MCanvas2DDemoScene(this) );
 }
 
 void G3MDemoModel::initializeG3MContext(const G3MContext* context) {

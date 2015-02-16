@@ -89,25 +89,29 @@ public:
 
     canvas->setFont(GFont::monospaced());
     canvas->setFillColor(Color::black());
-    canvas->fillText("0,0", 0, 0);
-    canvas->fillText("w,h", width, height);
+//    canvas->fillText("0,0", 0, 0);
+//    canvas->fillText("w,h", width, height);
+
+    for (int i = 0; i < steps; i++) {
+      canvas->fillText("Hellow World", leftStep*i, topStep*i);
+    }
 
 #warning Diego at work!
-    canvas->drawImage(image, width / 4, height / 4);       // ok
-    // canvas->drawImage(image, width / 4, height / 4, 0.5);  // ok
+    canvas->drawImage(image, width / 8,     height / 8);       // ok
+    canvas->drawImage(image, width / 8 * 3, height / 8, 0.5);  // ok
 
-    // canvas->drawImage(image, width / 4, height / 4, image->getWidth()*2, image->getHeight()*2); // ok
-    // canvas->drawImage(image, width / 4, height / 4, image->getWidth()*2, image->getHeight()*2, 0.5); //ok
+    canvas->drawImage(image, width / 8,     height / 8 * 3, image->getWidth()*2, image->getHeight()*2); // ok
+    canvas->drawImage(image, width / 8 * 3, height / 8 * 3, image->getWidth()*2, image->getHeight()*2, 0.5); //ok
 
     // ok
-    // canvas->drawImage(image,
-    //                   0, 0, image->getWidth(), image->getHeight(),
-    //                   width / 4, height / 4, image->getWidth()*2, image->getHeight()*2);
+    canvas->drawImage(image,
+                      0, 0, image->getWidth(), image->getHeight(),
+                      width / 8 * 5, height / 8 * 5, image->getWidth()*2, image->getHeight()*2);
     // ok
-    // canvas->drawImage(image,
-    //                   0, 0, image->getWidth(), image->getHeight(),
-    //                   width / 4, height / 4, image->getWidth()*2, image->getHeight()*2,
-    //                   0.5);
+    canvas->drawImage(image,
+                      0, 0, image->getWidth(), image->getHeight(),
+                      width / 8 * 7, height / 8 * 7, image->getWidth()*2, image->getHeight()*2,
+                      0.5);
 
     canvas->createImage(new G3MCanvas2DDemoScene_ImageListener(_shapesRenderer),
                         true);

@@ -361,7 +361,8 @@ _viewportMargin(viewportMargin),
 _maxConvergenceSteps(maxConvergenceSteps),
 _lastPositionsUpdatedTime(0),
 _connectorsGLState(NULL),
-_visibleMarksIDsBuilder( IStringBuilder::newStringBuilder() )
+_visibleMarksIDsBuilder( IStringBuilder::newStringBuilder() ),
+_visibleMarksIDs("")
 {
 
 }
