@@ -1,17 +1,22 @@
 package org.glob3.mobile.generated; 
 public class NonOverlappingMarksRenderer extends DefaultRenderer
 {
-
   private final int _maxVisibleMarks;
   private final float _viewportMargin;
   private final int _maxConvergenceSteps;
 
-  private java.util.ArrayList<NonOverlappingMark> _visibleMarks = new java.util.ArrayList<NonOverlappingMark>();
   private java.util.ArrayList<NonOverlappingMark> _marks = new java.util.ArrayList<NonOverlappingMark>();
+
+  private java.util.ArrayList<NonOverlappingMark> _visibleMarks = new java.util.ArrayList<NonOverlappingMark>();
+  private IStringBuilder _visibleMarksIDsBuilder;
+  private String _visibleMarksIDs;
+
+  private java.util.ArrayList<NonOverlappingMarksVisibilityListener> _visibilityListeners = new java.util.ArrayList<NonOverlappingMarksVisibilityListener>();
 
   private void computeMarksToBeRendered(Camera camera, Planet planet)
   {
     _visibleMarks.clear();
+    _visibleMarksIDsBuilder.clear();
   
     final Frustum frustrum = camera.getFrustumInModelCoordinates();
   
@@ -23,6 +28,9 @@ public class NonOverlappingMarksRenderer extends DefaultRenderer
       if (_visibleMarks.size() < _maxVisibleMarks && frustrum.contains(m.getCartesianPosition(planet)))
       {
         _visibleMarks.add(m);
+  
+        _visibleMarksIDsBuilder.addInt(i);
+        _visibleMarksIDsBuilder.addString("/");
       }
       else
       {
@@ -30,6 +38,16 @@ public class NonOverlappingMarksRenderer extends DefaultRenderer
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#warning Do we really need this?
         m.resetWidgetPositionVelocityAndForce();
+      }
+    }
+  
+    final String currentVisibleMarksIDs = _visibleMarksIDsBuilder.getString();
+    if (!_visibleMarksIDs.equals(currentVisibleMarksIDs))
+    {
+      _visibleMarksIDs = currentVisibleMarksIDs;
+      for (int i = 0; i < _visibilityListeners.size(); i++)
+      {
+        _visibilityListeners.get(i).onVisibilityChange(_visibleMarks);
       }
     }
   }
@@ -147,6 +165,7 @@ public class NonOverlappingMarksRenderer extends DefaultRenderer
      _maxConvergenceSteps = maxConvergenceSteps;
      _lastPositionsUpdatedTime = 0;
      _connectorsGLState = null;
+     _visibleMarksIDsBuilder = IStringBuilder.newStringBuilder();
   
   }
 
@@ -160,6 +179,15 @@ public class NonOverlappingMarksRenderer extends DefaultRenderer
       if (_marks.get(i) != null)
          _marks.get(i).dispose();
     }
+  
+    for (int i = 0; i < _visibilityListeners.size(); i++)
+    {
+      if (_visibilityListeners.get(i) != null)
+         _visibilityListeners.get(i).dispose();
+    }
+  
+    if (_visibleMarksIDsBuilder != null)
+       _visibleMarksIDsBuilder.dispose();
   }
 
   public final void addMark(NonOverlappingMark mark)
@@ -176,6 +204,21 @@ public class NonOverlappingMarksRenderer extends DefaultRenderer
          _marks.get(i).dispose();
     }
     _marks.clear();
+  }
+
+  public final void addVisibilityListener(NonOverlappingMarksVisibilityListener listener)
+  {
+    _visibilityListeners.add(listener);
+  }
+
+  public final void removeAllListeners()
+  {
+    for (int i = 0; i < _visibilityListeners.size(); i++)
+    {
+      if (_visibilityListeners.get(i) != null)
+         _visibilityListeners.get(i).dispose();
+    }
+    _visibilityListeners.clear();
   }
 
   public final RenderState getRenderState(G3MRenderContext rc)

@@ -49,6 +49,8 @@ public abstract class IStringBuilder
   public abstract IStringBuilder addString(String s);
   public abstract IStringBuilder addBool(boolean b);
 
+  public abstract IStringBuilder clear();
+
   public abstract String getString();
 
   // a virtual destructor is needed for conversion to Java
