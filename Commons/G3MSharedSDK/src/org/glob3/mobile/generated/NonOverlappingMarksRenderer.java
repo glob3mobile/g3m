@@ -166,6 +166,7 @@ public class NonOverlappingMarksRenderer extends DefaultRenderer
      _lastPositionsUpdatedTime = 0;
      _connectorsGLState = null;
      _visibleMarksIDsBuilder = IStringBuilder.newStringBuilder();
+     _visibleMarksIDs = "";
   
   }
 
