@@ -204,14 +204,35 @@ public:
 
 };
 
-class NonOverlappingMarksRenderer: public DefaultRenderer{
 
+class NonOverlappingMarksVisibilityListener {
+public:
+#ifdef C_CODE
+  virtual ~NonOverlappingMarksVisibilityListener() {
+  }
+#endif
+#ifdef JAVA_CODE
+  void dispose();
+#endif
+
+  virtual void onVisibilityChange(const std::vector<NonOverlappingMark*> visible) = 0;
+
+};
+
+
+class NonOverlappingMarksRenderer: public DefaultRenderer{
+private:
   const int _maxVisibleMarks;
   const float _viewportMargin;
   const int _maxConvergenceSteps;
 
-  std::vector<NonOverlappingMark*> _visibleMarks;
   std::vector<NonOverlappingMark*> _marks;
+
+  std::vector<NonOverlappingMark*> _visibleMarks;
+  IStringBuilder* _visibleMarksIDsBuilder;
+  std::string     _visibleMarksIDs;
+
+  std::vector<NonOverlappingMarksVisibilityListener*> _visibilityListeners;
 
   void computeMarksToBeRendered(const Camera* camera,
                                 const Planet* planet);
@@ -236,6 +257,12 @@ public:
   void addMark(NonOverlappingMark* mark);
 
   void removeAllMarks();
+
+  void addVisibilityListener(NonOverlappingMarksVisibilityListener* listener) {
+    _visibilityListeners.push_back(listener);
+  }
+
+  void removeAllListeners();
 
   RenderState getRenderState(const G3MRenderContext* rc) {
     return RenderState::ready();

@@ -118,6 +118,7 @@ void G3MDemoModel::reset() {
   getHUDRenderer()->removeAllWidgets();
 
   getNonOverlappingMarksRenderer()->removeAllMarks();
+  getNonOverlappingMarksRenderer()->removeAllListeners();
 
   _layerSet->removeAllLayers(true);
 }
