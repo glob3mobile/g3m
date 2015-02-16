@@ -23,6 +23,8 @@ public class NonOverlappingMark
   private final float _minWidgetSpeedInPixelsPerSecond;
   private final float _resistanceFactor;
 
+  private String _id;
+
 
   public NonOverlappingMark(IImageBuilder imageBuilderWidget, IImageBuilder imageBuilderAnchor, Geodetic3D position, MarkWidgetTouchListener touchListener, float springLengthInPixels, float springK, float minSpringLength, float maxSpringLength, float electricCharge, float anchorElectricCharge, float minWidgetSpeedInPixelsPerSecond, float maxWidgetSpeedInPixelsPerSecond)
   {
@@ -89,6 +91,16 @@ public class NonOverlappingMark
       _widget.setTouchListener(touchListener);
     }
   
+  }
+
+  public final void setID(String id)
+  {
+    _id = id;
+  }
+
+  public final String getID()
+  {
+    return _id;
   }
 
   public void dispose()
