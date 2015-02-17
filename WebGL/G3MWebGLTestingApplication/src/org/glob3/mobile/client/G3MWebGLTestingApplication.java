@@ -4,6 +4,8 @@ package org.glob3.mobile.client;
 
 import org.glob3.mobile.generated.AltitudeMode;
 import org.glob3.mobile.generated.Color;
+import org.glob3.mobile.generated.ColumnLayoutImageBuilder;
+import org.glob3.mobile.generated.DownloaderImageBuilder;
 import org.glob3.mobile.generated.G3MContext;
 import org.glob3.mobile.generated.GFont;
 import org.glob3.mobile.generated.GInitializationTask;
@@ -12,8 +14,11 @@ import org.glob3.mobile.generated.ICanvas;
 import org.glob3.mobile.generated.IImage;
 import org.glob3.mobile.generated.IImageDownloadListener;
 import org.glob3.mobile.generated.IImageListener;
+import org.glob3.mobile.generated.LabelImageBuilder;
 import org.glob3.mobile.generated.LayerSet;
 import org.glob3.mobile.generated.MapQuestLayer;
+import org.glob3.mobile.generated.NonOverlappingMark;
+import org.glob3.mobile.generated.NonOverlappingMarksRenderer;
 import org.glob3.mobile.generated.QuadShape;
 import org.glob3.mobile.generated.ShapesRenderer;
 import org.glob3.mobile.generated.TimeInterval;
@@ -28,8 +33,8 @@ import com.google.gwt.user.client.ui.RootPanel;
 
 
 public class G3MWebGLTestingApplication
-implements
-EntryPoint {
+         implements
+            EntryPoint {
    private static final String _g3mWidgetHolderId = "g3mWidgetHolder";
    private G3MWidget_WebGL     _g3mWidget         = null;
 
@@ -49,8 +54,39 @@ EntryPoint {
       g3mWidgetHolder.add(_g3mWidget);
 
 
-      // Buenos Aires, there we go!
-      _g3mWidget.setAnimatedCameraPosition(Geodetic3D.fromDegrees(-34.615047738942699596, -58.4447233540403559, 35000));
+      //      // Buenos Aires, there we go!
+      //      _g3mWidget.setAnimatedCameraPosition(Geodetic3D.fromDegrees(-34.615047738942699596, -58.4447233540403559, 35000));
+
+      // Canarias
+      _g3mWidget.setAnimatedCameraPosition(Geodetic3D.fromDegrees(28.034468668529083146, -15.904092315837871752, 1634079));
+   }
+
+
+   private static NonOverlappingMark createMark(final Geodetic3D position) {
+      final URL markBitmapURL = new URL("/g3m-marker.png");
+      final URL anchorBitmapURL = new URL("/anchorWidget.png");
+
+      return new NonOverlappingMark( //
+               new DownloaderImageBuilder(markBitmapURL), //
+               new DownloaderImageBuilder(anchorBitmapURL), //
+               position);
+   }
+
+
+   private static NonOverlappingMark createMark(final String label,
+                                                final Geodetic3D position) {
+      final URL markBitmapURL = new URL("/g3m-marker.png");
+      final URL anchorBitmapURL = new URL("/anchorWidget.png");
+
+      final ColumnLayoutImageBuilder imageBuilderWidget = new ColumnLayoutImageBuilder( //
+               new DownloaderImageBuilder(markBitmapURL), //
+               new LabelImageBuilder(label, GFont.monospaced()) //
+      );
+
+      return new NonOverlappingMark( //
+               imageBuilderWidget, //
+               new DownloaderImageBuilder(anchorBitmapURL), //
+               position);
    }
 
 
@@ -69,7 +105,19 @@ EntryPoint {
                proxy));
 
 
-      final boolean testCanvas = true;
+      final NonOverlappingMarksRenderer renderer = new NonOverlappingMarksRenderer(30);
+      builder.addRenderer(renderer);
+
+      renderer.addMark(createMark("Label #1", Geodetic3D.fromDegrees(28.131817, -15.440219, 0)));
+      renderer.addMark(createMark(Geodetic3D.fromDegrees(28.947345, -13.523105, 0)));
+      renderer.addMark(createMark(Geodetic3D.fromDegrees(28.473802, -13.859360, 0)));
+      renderer.addMark(createMark(Geodetic3D.fromDegrees(28.467706, -16.251426, 0)));
+      renderer.addMark(createMark(Geodetic3D.fromDegrees(28.701819, -17.762003, 0)));
+      renderer.addMark(createMark(Geodetic3D.fromDegrees(28.086595, -17.105796, 0)));
+      renderer.addMark(createMark(Geodetic3D.fromDegrees(27.810709, -17.917639, 0)));
+
+
+      final boolean testCanvas = false;
       if (testCanvas) {
          final ShapesRenderer shapesRenderer = new ShapesRenderer();
          builder.addRenderer(shapesRenderer);
@@ -173,7 +221,7 @@ EntryPoint {
 
 
                context.getDownloader().requestImage( //
-                        // new URL("file:///g3m-marker.png"), //
+                        // new URL("/g3m-marker.png"), //
                         new URL("/g3m-marker.png"), //
                         1, // priority, //
                         TimeInterval.zero(), //
