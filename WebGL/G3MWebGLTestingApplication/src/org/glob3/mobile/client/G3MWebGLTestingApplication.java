@@ -33,8 +33,9 @@ import com.google.gwt.user.client.ui.RootPanel;
 
 
 public class G3MWebGLTestingApplication
-         implements
-            EntryPoint {
+implements
+EntryPoint {
+
    private static final String _g3mWidgetHolderId = "g3mWidgetHolder";
    private G3MWidget_WebGL     _g3mWidget         = null;
 
@@ -46,16 +47,14 @@ public class G3MWebGLTestingApplication
 
    @Override
    public void onModuleLoad() {
-      //initCustomizedWithBuilder();
-
       final Panel g3mWidgetHolder = RootPanel.get(_g3mWidgetHolderId);
 
       _g3mWidget = createWidget();
       g3mWidgetHolder.add(_g3mWidget);
 
 
-      //      // Buenos Aires, there we go!
-      //      _g3mWidget.setAnimatedCameraPosition(Geodetic3D.fromDegrees(-34.615047738942699596, -58.4447233540403559, 35000));
+      // // Buenos Aires, there we go!
+      // _g3mWidget.setAnimatedCameraPosition(Geodetic3D.fromDegrees(-34.615047738942699596, -58.4447233540403559, 35000));
 
       // Canarias
       _g3mWidget.setAnimatedCameraPosition(Geodetic3D.fromDegrees(28.034468668529083146, -15.904092315837871752, 1634079));
@@ -81,7 +80,7 @@ public class G3MWebGLTestingApplication
       final ColumnLayoutImageBuilder imageBuilderWidget = new ColumnLayoutImageBuilder( //
                new DownloaderImageBuilder(markBitmapURL), //
                new LabelImageBuilder(label, GFont.monospaced()) //
-      );
+               );
 
       return new NonOverlappingMark( //
                imageBuilderWidget, //
@@ -127,7 +126,6 @@ public class G3MWebGLTestingApplication
             @Override
             public void run(final G3MContext context) {
 
-
                final IImageDownloadListener listener = new IImageDownloadListener() {
                   @Override
                   public void onError(final URL url) {
@@ -162,27 +160,31 @@ public class G3MWebGLTestingApplication
 
                      canvas.setFont(GFont.monospaced());
                      canvas.setFillColor(Color.black());
-                     //                  canvas.fillText("0,0", 0, 0);
-                     //                  canvas.fillText("w,h", width, height);
+                     // canvas.fillText("0,0", 0, 0);
+                     // canvas.fillText("w,h", width, height);
                      for (int i = 0; i < steps; i++) {
                         canvas.fillText("Hellow World", leftStep * i, topStep * i);
                      }
 
 
-                     canvas.drawImage(image, width / 8, height / 8); // ok
-                     canvas.drawImage(image, (width / 8) * 3, height / 8, 0.5f); // ok
+                     final float width8 = (float) width / 8;
+                     final float height8 = (float) height / 8;
+                     canvas.drawImage(image, width8, height8); // ok
+                     canvas.drawImage(image, width8 * 3, height8, 0.5f); // ok
 
-                     canvas.drawImage(image, width / 8, (height / 8) * 3, image.getWidth() * 2, image.getHeight() * 2); // ok
-                     canvas.drawImage(image, (width / 8) * 3, (height / 8) * 3, image.getWidth() * 2, image.getHeight() * 2, 0.5f); //ok
+                     final int imageWidth = image.getWidth();
+                     final int imageHeight = image.getHeight();
+                     canvas.drawImage(image, width8, height8 * 3, imageWidth * 2, imageHeight * 2); // ok
+                     canvas.drawImage(image, width8 * 3, height8 * 3, imageWidth * 2, imageHeight * 2, 0.5f); //ok
 
                      // ok
                      canvas.drawImage(image, //
-                              0, 0, image.getWidth(), image.getHeight(), //
-                              (width / 8) * 5, (height / 8) * 5, image.getWidth() * 2, image.getHeight() * 2);
+                              0, 0, imageWidth, imageHeight, //
+                              width8 * 5, height8 * 5, imageWidth * 2, imageHeight * 2);
                      // ok
                      canvas.drawImage(image, //
-                              0, 0, image.getWidth(), image.getHeight(), //
-                              (width / 8) * 7, (height / 8) * 7, image.getWidth() * 2, image.getHeight() * 2, //
+                              0, 0, imageWidth, imageHeight, //
+                              width8 * 7, height8 * 7, imageWidth * 2, imageHeight * 2, //
                               0.5f);
 
 
@@ -221,7 +223,6 @@ public class G3MWebGLTestingApplication
 
 
                context.getDownloader().requestImage( //
-                        // new URL("/g3m-marker.png"), //
                         new URL("/g3m-marker.png"), //
                         1, // priority, //
                         TimeInterval.zero(), //
