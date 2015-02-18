@@ -80,3 +80,5 @@ WebGL/G3MWebGLTestingApplication/war/WEB-INF/lib/
 
 tools/point-cloud-octree/bin/
 .settings
+
+tools/externals/poly2tri-java/bin/
