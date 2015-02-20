@@ -39,6 +39,9 @@
 		4460758119DA9D290000CCD6 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4460758019DA9D290000CCD6 /* CoreLocation.framework */; };
 		4460758219DAA1410000CCD6 /* ILocationManager.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4460756F19D97C690000CCD6 /* ILocationManager.hpp */; };
 		4460758319DAA1840000CCD6 /* LocationManager_iOS.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4460757219D982EF0000CCD6 /* LocationManager_iOS.hpp */; };
+		448F53111A24A1F100A817B8 /* base64.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF4027D71770E7B900D5A80C /* base64.h */; };
+		448F53121A24A1F100A817B8 /* NSData+SRB64Additions.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF4027D81770E7B900D5A80C /* NSData+SRB64Additions.h */; };
+		448F53131A24A1F100A817B8 /* SRWebSocket.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF4027DB1770E7B900D5A80C /* SRWebSocket.h */; };
 		44A0049417550C7300C6686D /* ICameraActivityListener.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = 44A00492175500B900C6686D /* ICameraActivityListener.hpp */; };
 		44AFBB1F19D4271B00EB78E9 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 44AFBB1E19D4271B00EB78E9 /* OpenGLES.framework */; };
 		44AFBB2119D4272F00EB78E9 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 44AFBB2019D4272F00EB78E9 /* UIKit.framework */; };
@@ -725,6 +728,9 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				448F53111A24A1F100A817B8 /* base64.h in CopyFiles */,
+				448F53121A24A1F100A817B8 /* NSData+SRB64Additions.h in CopyFiles */,
+				448F53131A24A1F100A817B8 /* SRWebSocket.h in CopyFiles */,
 				4460758319DAA1840000CCD6 /* LocationManager_iOS.hpp in CopyFiles */,
 				4460758219DAA1410000CCD6 /* ILocationManager.hpp in CopyFiles */,
 				CFBD815719A3E1D500F1A8C4 /* PointCloudsRenderer.hpp in CopyFiles */,
@@ -1138,6 +1144,7 @@
 		38D786E51587B446003BBC75 /* Tile.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = Tile.cpp; path = Commons/Basic/Tile.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		38D786E71587B52F003BBC75 /* Sector.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Sector.hpp; path = Commons/Geometry/Sector.hpp; sourceTree = "<group>"; };
 		44131127190A504600C83A00 /* NullStorage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = NullStorage.cpp; path = Commons/Downloader/NullStorage.cpp; sourceTree = "<group>"; };
+		4413B4B61A24D3A20035B534 /* Script.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = Script.sh; sourceTree = "<group>"; };
 		441C28BB1733D413007DC83F /* ShapeFullPositionEffect.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ShapeFullPositionEffect.cpp; path = Commons/Rendererers/ShapeFullPositionEffect.cpp; sourceTree = "<group>"; };
 		441C28BC1733D413007DC83F /* ShapeFullPositionEffect.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = ShapeFullPositionEffect.hpp; path = Commons/Rendererers/ShapeFullPositionEffect.hpp; sourceTree = "<group>"; };
 		4435E3CB19052B860064A7D7 /* InfoDisplay.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = InfoDisplay.cpp; path = Commons/Basic/InfoDisplay.cpp; sourceTree = "<group>"; };
@@ -2725,6 +2732,7 @@
 		D8EEF3AA1577924D003FEB5E = {
 			isa = PBXGroup;
 			children = (
+				4413B4B61A24D3A20035B534 /* Script.sh */,
 				E70B56DF16D3CCCD00C5FFFB /* Resources */,
 				383BD3881577EDE30012AC53 /* Commons */,
 				D8EEF3B71577924D003FEB5E /* Frameworks */,
@@ -3312,14 +3320,14 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_PARAMETER = NO;
 				HEADER_SEARCH_PATHS = "$(BUILT_PRODUCTS_DIR)/**";
-				IPHONEOS_DEPLOYMENT_TARGET = 5.1.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				OTHER_LDFLAGS = "-ObjC";
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = YES;
 				PRODUCT_NAME = G3MiOSSDK;
 				RUN_CLANG_STATIC_ANALYZER = YES;
 				SKIP_INSTALL = YES;
 				STRIP_STYLE = "non-global";
-				VALID_ARCHS = "armv7 armv7s arm64";
+				VALID_ARCHS = "armv7 armv7s arm64 x86_64 i386";
 			};
 			name = Debug;
 		};
@@ -3344,14 +3352,14 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_PARAMETER = NO;
 				HEADER_SEARCH_PATHS = "$(BUILT_PRODUCTS_DIR)/**";
-				IPHONEOS_DEPLOYMENT_TARGET = 5.1.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				OTHER_LDFLAGS = "-ObjC";
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = YES;
 				PRODUCT_NAME = G3MiOSSDK;
 				RUN_CLANG_STATIC_ANALYZER = YES;
 				SKIP_INSTALL = YES;
 				STRIP_STYLE = "non-global";
-				VALID_ARCHS = "armv7 armv7s arm64";
+				VALID_ARCHS = "armv7 armv7s arm64 x86_64 i386";
 			};
 			name = Release;
 		};
