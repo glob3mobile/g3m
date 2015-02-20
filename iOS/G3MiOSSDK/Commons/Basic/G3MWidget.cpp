@@ -295,6 +295,14 @@ G3MWidget::~G3MWidget() {
   }
 }
 
+void G3MWidget::removeAllPeriodicalTasks() {
+  for (int i = 0; i < _periodicalTasks.size(); i++) {
+    PeriodicalTask* periodicalTask =  _periodicalTasks[i];
+    delete periodicalTask;
+  }
+  _periodicalTasks.clear();
+}
+
 void G3MWidget::notifyTouchEvent(const G3MEventContext &ec,
                                  const TouchEvent* touchEvent) const {
   const RenderState_Type renderStateType = _rendererState->_type;

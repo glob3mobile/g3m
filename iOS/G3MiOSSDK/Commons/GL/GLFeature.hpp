@@ -90,12 +90,19 @@ private:
     super.dispose();
 #endif
   }
+  
+  GPUUniformValueVec2FloatMutable* _extent;
 
 public:
   ViewportExtentGLFeature(int viewportWidth,
                           int viewportHeight);
   void applyOnGlobalGLState(GLGlobalState* state)  const {}
+  
+  void changeExtent(int viewportWidth,
+                    int viewportHeight);
 };
+
+/////////////////////////////////////////////////////////
 
 
 class GeometryGLFeature: public GLFeature {
@@ -135,6 +142,42 @@ public:
 
 };
 ///////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+class Geometry2DGLFeature: public GLFeature {
+  private:
+  //Position + cull + depth + polygonoffset + linewidth
+  GPUAttributeValueVec2Float* _position;
+  
+  const float _lineWidth;
+  
+  ~Geometry2DGLFeature();
+  
+  GPUUniformValueVec2FloatMutable* _translation;
+  
+  public:
+  
+  Geometry2DGLFeature(IFloatBuffer* buffer,
+                    int arrayElementSize,
+                    int index,
+                    bool normalized,
+                    int stride,
+                    float lineWidth,
+                    bool needsPointSize,
+                    float pointSize,
+                    const Vector2F& translation);
+  
+  void setTranslation(float x, float y){
+    _translation->changeValue(x, y);
+  }
+  
+  
+  void applyOnGlobalGLState(GLGlobalState* state) const ;
+  
+};
+///////////////////////////////////////////////////////////////////////////////////////////
+
 
 class GLCameraGroupFeature: public GLFeature {
 private:
@@ -416,7 +459,9 @@ private:
 
 public:
   FlatColorGLFeature(const Color& color,
-                     bool blend, int sFactor, int dFactor);
+                     bool blend = false,
+                     int sFactor = GLBlendFactor::srcAlpha(),
+                     int dFactor = GLBlendFactor::oneMinusSrcAlpha());
   void applyOnGlobalGLState(GLGlobalState* state) const {
     blendingOnGlobalGLState(state);
   }

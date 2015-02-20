@@ -24,8 +24,8 @@ import com.sleepycat.je.Transaction;
 
 
 public class BerkeleyDBOctreeNode
-         implements
-            PersistentOctree.Node {
+implements
+PersistentOctree.Node {
 
 
    private static double _upperLimitInDegrees = 85.0511287798;
@@ -139,10 +139,10 @@ public class BerkeleyDBOctreeNode
    @Override
    public String toString() {
       return "MercatorTile [id=" + getID() + //
-             ", depth=" + getDepth() + //
-             ", points=" + _pointsCount + //
-             ", sector=" + _sector + //
-             "]";
+               ", depth=" + getDepth() + //
+               ", points=" + _pointsCount + //
+               ", sector=" + _sector + //
+               "]";
    }
 
 
@@ -152,11 +152,11 @@ public class BerkeleyDBOctreeNode
       final byte formatID = format._formatID;
 
       final int entrySize = ByteBufferUtils.sizeOf(version) + //
-                            ByteBufferUtils.sizeOf(subversion) + //
-                            ByteBufferUtils.sizeOf(_sector) + //
-                            ByteBufferUtils.sizeOf(_pointsCount) + //
-                            ByteBufferUtils.sizeOf(format, _averagePoint) + //
-                            ByteBufferUtils.sizeOf(formatID);
+               ByteBufferUtils.sizeOf(subversion) + //
+               ByteBufferUtils.sizeOf(_sector) + //
+               ByteBufferUtils.sizeOf(_pointsCount) + //
+               ByteBufferUtils.sizeOf(format, _averagePoint) + //
+               ByteBufferUtils.sizeOf(formatID);
 
       final ByteBuffer byteBuffer = ByteBuffer.allocate(entrySize);
       byteBuffer.put(version);
@@ -194,9 +194,9 @@ public class BerkeleyDBOctreeNode
 
 
    private static List<BerkeleyDBOctreeNode> getDescendants(final Transaction txn,
-                                                            final BerkeleyDBOctree octree,
-                                                            final byte[] id,
-                                                            final boolean loadPoints) {
+            final BerkeleyDBOctree octree,
+            final byte[] id,
+            final boolean loadPoints) {
       final List<BerkeleyDBOctreeNode> result = new ArrayList<BerkeleyDBOctreeNode>();
 
       final Database nodeDB = octree.getNodeDB();
@@ -231,7 +231,7 @@ public class BerkeleyDBOctreeNode
 
       //      final int REMOVE_DEBUG_CODE;
       //      for (final BerkeleyDBMercatorTile descendant : result) {
-      //         if (!Utils.hasSamePrefix(id, descendant._id)) {
+         //         if (!Utils.hasSamePrefix(id, descendant._id)) {
       //            throw new RuntimeException("Logic error");
       //         }
       //         if (!Utils.isGreaterThan(descendant._id, id)) {
@@ -308,7 +308,7 @@ public class BerkeleyDBOctreeNode
 
 
    private static List<TileHeader> descendantsHeadersOfLevel(final TileHeader header,
-                                                             final int level) {
+            final int level) {
       final List<TileHeader> result = new ArrayList<TileHeader>();
       descendantsHeadersOfLevel(result, level, header);
       return result;
@@ -344,7 +344,7 @@ public class BerkeleyDBOctreeNode
 
       if (getPoints().size() >= _octree.getMaxPointsPerTile()) {
          System.out.println("***** logic error, tile " + getID() + " has more points than threshold (" + getPoints().size() + ">"
-                            + _octree.getMaxPointsPerTile() + ")");
+                  + _octree.getMaxPointsPerTile() + ")");
       }
 
 
@@ -379,9 +379,9 @@ public class BerkeleyDBOctreeNode
 
       if ((ancestor != null) || !descendants.isEmpty()) {
          System.out.println("***** INVARIANT FAILED: " + //
-                            "for tile=" + Utils.toIDString(_id) + //
-                            ", ancestor=" + ancestor + //
-                            ", descendants=" + descendants);
+                  "for tile=" + Utils.toIDString(_id) + //
+                  ", ancestor=" + ancestor + //
+                  ", descendants=" + descendants);
       }
    }
 
@@ -505,8 +505,14 @@ public class BerkeleyDBOctreeNode
 
    private void remove(final Transaction txn) {
       final DatabaseEntry key = new DatabaseEntry(_id);
-      _octree.getNodeDB().delete(txn, key);
-      _octree.getNodeDataDB().delete(txn, key);
+      OperationStatus status = _octree.getNodeDB().delete(txn, key);
+      if (status != OperationStatus.SUCCESS) {
+         throw new RuntimeException("Unsupported status=" + status);
+      }
+      status = _octree.getNodeDataDB().delete(txn, key);
+      if (status != OperationStatus.SUCCESS) {
+         throw new RuntimeException("Unsupported status=" + status);
+      }
    }
 
 

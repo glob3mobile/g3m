@@ -170,7 +170,7 @@ public:
     _polygonOffsetFactor = factor;
     _polygonOffsetUnits = units;
   }
-  void disPolygonOffsetFill() {
+  void disablePolygonOffsetFill() {
     _polygonOffsetFill = false;
   }
   

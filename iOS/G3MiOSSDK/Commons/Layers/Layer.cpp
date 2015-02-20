@@ -7,7 +7,6 @@
 //
 
 #include "Layer.hpp"
-
 #include "LayerCondition.hpp"
 #include "LayerSet.hpp"
 #include "LayerTouchEventListener.hpp"
@@ -35,11 +34,15 @@ void Layer::setTransparency(float transparency) {
 
 Layer::~Layer() {
   delete _condition;
+  
+  const size_t numInfos = _layerInfo->size();
+  for (size_t i = 0; i < numInfos; i++) {
+    const Info* inf = _layerInfo->at(i);
+    delete inf;
+  }
+  _layerInfo->clear();
 #ifdef C_CODE
   delete _layerInfo;
-#endif
-#ifdef JAVA_CODE
-  _layerInfo.clear();
 #endif
 }
 
@@ -169,6 +172,11 @@ bool Layer::onLayerTouchEventListener(const G3MEventContext* ec,
 }
 
 void Layer::setInfo(const std::vector<const Info*>& info) const {
+  const size_t numInfos = _layerInfo->size();
+  for (size_t i = 0; i < numInfos; i++) {
+    const Info* inf = _layerInfo->at(i);
+    delete inf;
+  }
   _layerInfo->clear();
 #ifdef C_CODE
   _layerInfo->insert(_layerInfo->end(),

@@ -26,8 +26,8 @@ class G3MContext;
 class Sector;
 class LayerTouchEvent;
 class TileImageProvider;
-class Info;
 
+#include "Info.hpp"
 
 class Layer {
 private:

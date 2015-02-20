@@ -24,10 +24,6 @@ LayerSet::~LayerSet() {
     delete _layers[i];
   }
   
-  for (unsigned int i = 0; i < _infos.size(); i++) {
-    delete _infos[i];
-  }
-  
   if (_tileImageProvider != NULL) {
     _tileImageProvider->_release();
   }
@@ -532,12 +528,8 @@ TileImageProvider* LayerSet::getTileImageProvider(const G3MRenderContext* rc,
   return _tileImageProvider;
 }
 
-const std::vector<const Info*>& LayerSet::getInfo() {
-  for (unsigned int i = 0; i < _infos.size(); i++) {
-    delete _infos[i];
-  }
+const std::vector<const Info*> LayerSet::getInfo() {
   _infos.clear();
-
   const int layersCount = _layers.size();
   bool anyEnabled = false;
   for (int i = 0; i < layersCount; i++) {

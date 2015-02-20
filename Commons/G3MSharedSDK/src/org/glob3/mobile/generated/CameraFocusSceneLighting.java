@@ -38,7 +38,8 @@ public class CameraFocusSceneLighting extends SceneLighting
   //  const Vector3D camDir = camera->getViewDirectionMutable();
   //  MutableVector3D camDir;
     camera.getViewDirectionInto(_camDir);
-    final MutableVector3D up = camera.getUpMutable();
+    MutableVector3D up = new MutableVector3D();
+    camera.getUpMutable(up);
     if ((_cameraDirX == _camDir.x()) && (_cameraDirY == _camDir.y()) && (_cameraDirZ == _camDir.z()) && (_upX == up.x()) && (_upY == up.y()) && (_upZ == up.z()))
     {
       return;

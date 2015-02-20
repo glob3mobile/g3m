@@ -54,83 +54,95 @@ public class ProcessOT {
       System.out.println("ProcessOT 0.1");
       System.out.println("-------------\n");
 
-      // final File cloudDirectory = new File(System.getProperty("user.dir"));
-      final File cloudDirectory = new File("/Volumes/My Passport/_LIDAR_COPY");
+      //      // final File cloudDirectory = new File(System.getProperty("user.dir"));
+      //      final File cloudDirectory = new File("/Volumes/My Passport/_LIDAR_COPY");
+      //
+      //
+      //      final String completeSourceCloudName = "Loudoun-VA";
+      //      //final String sourceCloudName = "Loudoun-VA_simplified";
+      //      final String simplifiedCloudName = completeSourceCloudName + "_simplified2";
+      //      //final String sourceCloudName = simplifiedCloudName;
+      //      final String fragmentCloudName = completeSourceCloudName + "_fragment";
+      //      final String sourceCloudName = fragmentCloudName;
+      //      final String lodCloudName = sourceCloudName + "_LOD";
 
 
-      final String completeSourceCloudName = "Loudoun-VA";
-      //final String sourceCloudName = "Loudoun-VA_simplified";
-      final String simplifiedCloudName = completeSourceCloudName + "_simplified2";
-      //final String sourceCloudName = simplifiedCloudName;
-      final String fragmentCloudName = completeSourceCloudName + "_fragment";
-      final String sourceCloudName = fragmentCloudName;
+      //      final File cloudDirectory = new File("/Volumes/My Passport/_belgium_lidar_/db");
+      //
+      //      final String sourceCloudName = "Wallonia-Belgium";
+      //      final String lodCloudName = sourceCloudName + "_LOD";
+
+
+      final File cloudDirectory = new File("/Volumes/My Passport/_minnesota_lidar_/db");
+
+      final String sourceCloudName = "minnesota";
       final String lodCloudName = sourceCloudName + "_LOD";
 
 
       final long cacheSizeInBytes = 4 * 1024 * 1024 * 1024;
 
-      final boolean createSimplifiedCloudName = false;
+      //      final boolean createSimplifiedCloudName = false;
       final boolean createMapForSourceOT = false;
-      final boolean createLOD = false;
+      final boolean createLOD = true;
       final boolean showLODStats = true;
       final boolean drawSampleLODNode = false;
 
-      final boolean createFragmentCloudName = false;
+      //      final boolean createFragmentCloudName = false;
+      //
+      //      if (createFragmentCloudName) {
+      //         try (final PersistentOctree sourceOctree = BerkeleyDBOctree.openReadOnly(cloudDirectory, completeSourceCloudName,
+      //                  cacheSizeInBytes)) {
+      //            final PersistentOctree.Statistics statistics = sourceOctree.getStatistics(true);
+      //            statistics.show();
+      //
+      //
+      //            //            // cantera
+      //            //            final Sector sector = Sector.fromDegrees( //
+      //            //                     39.051968051473274102, -77.5404852494428809, //
+      //            //                     39.095519409073318684, -77.497507593275656745);
+      //            //            // - processing for "Loudoun-VA" [ done ] 45819 steps [Finished in 5s] 8.9kB/sec (avr=8.9kB/sec)
+      //            //            // Total points: 43447637, nodes: 45819, full: 1285, edges: 148
+      //
+      //
+      //            final Sector sector = Sector.fromDegrees( //
+      //                     39.058452085532550768, -77.692590169281558587, //
+      //                     39.107394637653797531, -77.594653167458375265);
+      //            // - processing "Loudoun-VA" [ done ] 88296 steps [Finished in 11m 57s] 123.2B/sec (avr=123.2B/sec)
+      //            // Total points: 119809579, nodes: 88296, full: 3757, edges: 244
+      //            // Avr Density=5.933766718645362E-10 / 7.644235651407404E-10
+      //
+      //            final int maxPointsPerTitle = 256 * 1024;
+      //
+      //            sourceOctree.acceptDepthFirstVisitor( //
+      //                     sector, //
+      //                     new FragmentCreator(cloudDirectory, fragmentCloudName, sector, cacheSizeInBytes, maxPointsPerTitle));
+      //         }
+      //      }
 
-      if (createFragmentCloudName) {
-         try (final PersistentOctree sourceOctree = BerkeleyDBOctree.openReadOnly(cloudDirectory, completeSourceCloudName,
-                  cacheSizeInBytes)) {
-            final PersistentOctree.Statistics statistics = sourceOctree.getStatistics(true);
-            statistics.show();
-
-
-            //            // cantera
-            //            final Sector sector = Sector.fromDegrees( //
-            //                     39.051968051473274102, -77.5404852494428809, //
-            //                     39.095519409073318684, -77.497507593275656745);
-            //            // - processing for "Loudoun-VA" [ done ] 45819 steps [Finished in 5s] 8.9kB/sec (avr=8.9kB/sec)
-            //            // Total points: 43447637, nodes: 45819, full: 1285, edges: 148
-
-
-            final Sector sector = Sector.fromDegrees( //
-                     39.058452085532550768, -77.692590169281558587, //
-                     39.107394637653797531, -77.594653167458375265);
-            // - processing "Loudoun-VA" [ done ] 88296 steps [Finished in 11m 57s] 123.2B/sec (avr=123.2B/sec)
-            // Total points: 119809579, nodes: 88296, full: 3757, edges: 244
-            // Avr Density=5.933766718645362E-10 / 7.644235651407404E-10
-
-            final int maxPointsPerTitle = 256 * 1024;
-
-            sourceOctree.acceptDepthFirstVisitor( //
-                     sector, //
-                     new FragmentCreator(cloudDirectory, fragmentCloudName, sector, cacheSizeInBytes, maxPointsPerTitle));
-         }
-      }
-
-      if (createSimplifiedCloudName) {
-         try (final PersistentOctree sourceOctree = BerkeleyDBOctree.openReadOnly(cloudDirectory, completeSourceCloudName,
-                  cacheSizeInBytes)) {
-            final PersistentOctree.Statistics statistics = sourceOctree.getStatistics(true);
-            statistics.show();
-
-            final long sourcePointsCount = statistics.getPointsCount();
-
-            final int maxPointsPerTitle = 256 * 1024;
-            final float resultSizeFactor = 0.06f;
-            //            final float resultSizeFactor = 0.1f;
-
-            final SimplifyOctreeTask visitor = new SimplifyOctreeTask( //
-                     completeSourceCloudName, //
-                     cloudDirectory, //
-                     simplifiedCloudName, //
-                     cacheSizeInBytes, //
-                     sourcePointsCount, //
-                     resultSizeFactor, //
-                     maxPointsPerTitle);
-            sourceOctree.acceptDepthFirstVisitor(visitor);
-         }
-         System.out.println();
-      }
+      //      if (createSimplifiedCloudName) {
+      //         try (final PersistentOctree sourceOctree = BerkeleyDBOctree.openReadOnly(cloudDirectory, completeSourceCloudName,
+      //                  cacheSizeInBytes)) {
+      //            final PersistentOctree.Statistics statistics = sourceOctree.getStatistics(true);
+      //            statistics.show();
+      //
+      //            final long sourcePointsCount = statistics.getPointsCount();
+      //
+      //            final int maxPointsPerTitle = 256 * 1024;
+      //            final float resultSizeFactor = 0.06f;
+      //            //            final float resultSizeFactor = 0.1f;
+      //
+      //            final SimplifyOctreeTask visitor = new SimplifyOctreeTask( //
+      //                     completeSourceCloudName, //
+      //                     cloudDirectory, //
+      //                     simplifiedCloudName, //
+      //                     cacheSizeInBytes, //
+      //                     sourcePointsCount, //
+      //                     resultSizeFactor, //
+      //                     maxPointsPerTitle);
+      //            sourceOctree.acceptDepthFirstVisitor(visitor);
+      //         }
+      //         System.out.println();
+      //      }
 
       if (createMapForSourceOT) {
          try (final PersistentOctree sourceOctree = BerkeleyDBOctree.openReadOnly(cloudDirectory, sourceCloudName,

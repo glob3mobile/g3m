@@ -42,7 +42,7 @@ public class HUDRelativePosition extends HUDPosition
   public enum Anchor
   {
     VIEWPORT_WIDTH,
-    VIEWPORT_HEIGTH;
+    VIEWPORT_HEIGHT;
 
      public int getValue()
      {
