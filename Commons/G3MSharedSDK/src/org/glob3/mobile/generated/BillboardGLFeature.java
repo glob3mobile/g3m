@@ -18,6 +18,6 @@ public class BillboardGLFeature extends GLFeature
   {
     state.disableDepthTest();
     state.disableCullFace();
-    state.disPolygonOffsetFill();
+    state.disablePolygonOffsetFill();
   }
 }

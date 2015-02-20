@@ -64,7 +64,8 @@ void CameraFocusSceneLighting::modifyGLState(GLState* glState, const G3MRenderCo
 //  const Vector3D camDir = camera->getViewDirectionMutable();
 //  MutableVector3D camDir;
   camera->getViewDirectionInto(_camDir);
-  const MutableVector3D up = camera->getUpMutable();
+  MutableVector3D up;
+  camera->getUpMutable(up);
   if ((_cameraDirX == _camDir.x()) &&
       (_cameraDirY == _camDir.y()) &&
       (_cameraDirZ == _camDir.z()) &&

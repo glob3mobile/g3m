@@ -204,7 +204,8 @@ void MarksRenderer::render(const G3MRenderContext* rc, GLState* glState) {
 
     _lastCamera = camera; // Saving camera for use in onTouchEvent
 
-    const MutableVector3D cameraPosition = camera->getCartesianPositionMutable();
+    MutableVector3D cameraPosition;
+    camera->getCartesianPositionMutable(cameraPosition);
     const double cameraHeight = camera->getGeodeticPosition()._height;
 
     updateGLState(rc);

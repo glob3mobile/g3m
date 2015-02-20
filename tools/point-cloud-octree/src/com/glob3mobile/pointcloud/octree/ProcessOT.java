@@ -67,10 +67,17 @@ public class ProcessOT {
       //      final String lodCloudName = sourceCloudName + "_LOD";
 
 
-      final File cloudDirectory = new File("/Volumes/My Passport/_belgium_lidar_/db");
+      //      final File cloudDirectory = new File("/Volumes/My Passport/_belgium_lidar_/db");
+      //
+      //      final String sourceCloudName = "Wallonia-Belgium";
+      //      final String lodCloudName = sourceCloudName + "_LOD";
 
-      final String sourceCloudName = "Wallonia-Belgium";
+
+      final File cloudDirectory = new File("/Volumes/My Passport/_minnesota_lidar_/db");
+
+      final String sourceCloudName = "minnesota";
       final String lodCloudName = sourceCloudName + "_LOD";
+
 
       final long cacheSizeInBytes = 4 * 1024 * 1024 * 1024;
 
@@ -238,7 +245,7 @@ public class ProcessOT {
                         public void informProgress(final long stepsDone,
                                                    final long elapsed) {
                            System.out.println("- gathering statistics for \"" + lodDB.getCloudName() + "\""
-                                              + progressString(stepsDone, elapsed));
+                                    + progressString(stepsDone, elapsed));
                         }
                      };
                   }
@@ -283,8 +290,8 @@ public class ProcessOT {
                      System.out.println("     Points/Node: " + ((float) _pointsCounter / _nodesCounter));
                      System.out.println("     Points/Level: " + ((float) _pointsCounter / _levelsCounter));
                      System.out.println("   Density/Node: Average=" + (_sumDensity / _nodesCounter) + //
-                                        ", Min=" + _minDensity + //
-                                        ", Max=" + _maxDensity);
+                              ", Min=" + _minDensity + //
+                              ", Max=" + _maxDensity);
                      System.out.println("======================================================================");
                   }
                };

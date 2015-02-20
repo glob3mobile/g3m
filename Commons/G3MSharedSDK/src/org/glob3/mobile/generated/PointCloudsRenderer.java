@@ -26,6 +26,22 @@ package org.glob3.mobile.generated;
 
 public class PointCloudsRenderer extends DefaultRenderer
 {
+  public enum ColorPolicy
+  {
+    MIN_MAX_HEIGHT,
+    MIN_AVERAGE3_HEIGHT;
+
+     public int getValue()
+     {
+        return this.ordinal();
+     }
+
+     public static ColorPolicy forValue(int value)
+     {
+        return values()[value];
+     }
+  }
+
 
   public abstract static class PointCloudMetadataListener
   {
@@ -33,7 +49,7 @@ public class PointCloudsRenderer extends DefaultRenderer
     {
     }
 
-    public abstract void onMetadata(long pointsCount, Sector sector, double minHeight, double maxHeight);
+    public abstract void onMetadata(long pointsCount, Sector sector, double minHeight, double maxHeight, double averageHeight);
   }
 
 
@@ -212,10 +228,19 @@ public class PointCloudsRenderer extends DefaultRenderer
           pointsBuffer.rawPut(1, (float)(average._y - averageY));
           pointsBuffer.rawPut(2, (float)(average._z - averageZ));
     
-          _mesh = new DirectMesh(GLPrimitive.points(), true, new Vector3D(averageX, averageY, averageZ), pointsBuffer, 1, pointSize * 2, Color.newFromRGBA(1, 1, 0, 1), null, 1, false); // colorsIntensity -  colors -  flatColor
+          _mesh = new DirectMesh(GLPrimitive.points(), true, new Vector3D(averageX, averageY, averageZ), pointsBuffer, 1, pointSize * 2, Color.newFromRGBA(1, 1, 0, 1), null, 1, true); // colorsIntensity -  colors -  flatColor
         }
         _mesh.render(rc, glState);
         renderedCount = 1;
+      }
+      else
+      {
+        if (_mesh != null)
+        {
+          if (_mesh != null)
+             _mesh.dispose();
+          _mesh = null;
+        }
       }
     
       return renderedCount;
@@ -563,7 +588,7 @@ public class PointCloudsRenderer extends DefaultRenderer
           }
         }
     
-        DirectMesh mesh = new DirectMesh(GLPrimitive.points(), false, _average, _firstPointsVerticesBuffer, 1, pointSize, null, _firstPointsColorsBuffer, 1, false); // colorsIntensity -  colors -  flatColor
+        DirectMesh mesh = new DirectMesh(GLPrimitive.points(), false, _average, _firstPointsVerticesBuffer, 1, pointSize, null, _firstPointsColorsBuffer, 1, true); // colorsIntensity -  colors -  flatColor
         mesh.setRenderVerticesCount(mu.min(_neededPoints, firstPointsCount));
     
         return mesh;
@@ -582,9 +607,11 @@ public class PointCloudsRenderer extends DefaultRenderer
       for (int level = _preloadedLevel+1; level <= _currentLoadedLevel; level++)
       {
         IFloatBuffer levelVerticesBuffers = _levelsVerticesBuffers[level];
-        vertices.rawPut(cursor, levelVerticesBuffers);
-    
-        cursor += levelVerticesBuffers.size();
+        if (levelVerticesBuffers != null)
+        {
+          vertices.rawPut(cursor, levelVerticesBuffers);
+          cursor += levelVerticesBuffers.size();
+        }
       }
     
       IFloatBuffer colors = IFactory.instance().createFloatBuffer(pointsCount * 4);
@@ -609,23 +636,26 @@ public class PointCloudsRenderer extends DefaultRenderer
       for (int level = _preloadedLevel+1; level <= _currentLoadedLevel; level++)
       {
         IFloatBuffer levelHeightsBuffers = _levelsHeightsBuffers[level];
-        for (int i = 0; i < _levelsPointsCount[level]; i++)
+        if (levelHeightsBuffers != null)
         {
-          final float height = levelHeightsBuffers.get(i);
-          final float alpha = (float)((height - minHeight) / deltaHeight);
+          for (int i = 0; i < _levelsPointsCount[level]; i++)
+          {
+            final float height = levelHeightsBuffers.get(i);
+            final float alpha = (float)((height - minHeight) / deltaHeight);
     
-          final Color color = baseColor.wheelStep(wheelSize, mu.round(wheelSize * alpha));
+            final Color color = baseColor.wheelStep(wheelSize, mu.round(wheelSize * alpha));
     
-          final int offset = cursor + i *4;
-          colors.rawPut(offset + 0, color._red);
-          colors.rawPut(offset + 1, color._green);
-          colors.rawPut(offset + 2, color._blue);
-          colors.rawPut(offset + 3, color._alpha);
+            final int offset = cursor + i *4;
+            colors.rawPut(offset + 0, color._red);
+            colors.rawPut(offset + 1, color._green);
+            colors.rawPut(offset + 2, color._blue);
+            colors.rawPut(offset + 3, color._alpha);
+          }
+          cursor += _levelsPointsCount[level] * 4;
         }
-        cursor += _levelsPointsCount[level] * 4;
       }
     
-      DirectMesh mesh = new DirectMesh(GLPrimitive.points(), true, _average, vertices, 1, pointSize, null, colors, 1, false); // colorsIntensity -  colors -  flatColor
+      DirectMesh mesh = new DirectMesh(GLPrimitive.points(), true, _average, vertices, 1, pointSize, null, colors, 1, true); // colorsIntensity -  colors -  flatColor
       // mesh->setRenderVerticesCount( mu->min(_neededPoints, firstPointsCount) );
       mesh.setRenderVerticesCount(pointsCount);
     
@@ -714,7 +744,8 @@ public class PointCloudsRenderer extends DefaultRenderer
         _mesh = createMesh(minHeight, maxHeight, pointSize);
       }
       _mesh.render(rc, glState);
-      //getBounds()->render(rc, glState, Color::blue());
+    ///#warning remove debug code
+    //  getBounds()->render(rc, glState, Color::blue());
       return _mesh.getRenderVerticesCount();
     }
 
@@ -802,6 +833,7 @@ public class PointCloudsRenderer extends DefaultRenderer
       {
     //    ILogger::instance()->logInfo("Canceling level request");
         rc.getDownloader().cancelRequest(_loadingLevelRequestID);
+        _loadingLevelRequestID = -1;
       }
     
       if (_mesh != null)
@@ -1087,7 +1119,7 @@ public class PointCloudsRenderer extends DefaultRenderer
 
     public final void onDownload(URL url, IByteBuffer buffer, boolean expired)
     {
-      ILogger.instance().logInfo("Downloaded metadata for \"%s\" (bytes=%ld)", _pointCloud.getCloudName(), buffer.size());
+      ILogger.instance().logInfo("Downloaded metadata for \"%s\" (bytes=%d)", _pointCloud.getCloudName(), buffer.size());
     
       _threadUtils.invokeAsyncTask(new PointCloudMetadataParserAsyncTask(_pointCloud, buffer), true);
     }
@@ -1110,11 +1142,13 @@ public class PointCloudsRenderer extends DefaultRenderer
   }
 
 
+
   private static class PointCloud
   {
     private final URL _serverURL;
     private final String _cloudName;
     private final float _verticalExaggeration;
+    private final double _deltaHeight;
 
     private final long _downloadPriority;
     private final TimeInterval _timeToCache;
@@ -1122,6 +1156,9 @@ public class PointCloudsRenderer extends DefaultRenderer
 
     private PointCloudMetadataListener _metadataListener;
     private boolean _deleteListener;
+
+    private final ColorPolicy _colorPolicy;
+    private final boolean _verbose;
 
     private boolean _downloadingMetadata;
     private boolean _errorDownloadingMetadata;
@@ -1138,17 +1175,20 @@ public class PointCloudsRenderer extends DefaultRenderer
 
     private long _lastRenderedCount;
 
-    public PointCloud(URL serverURL, String cloudName, float verticalExaggeration, float pointSize, long downloadPriority, TimeInterval timeToCache, boolean readExpired, PointCloudMetadataListener metadataListener, boolean deleteListener)
+    public PointCloud(URL serverURL, String cloudName, float verticalExaggeration, double deltaHeight, ColorPolicy colorPolicy, float pointSize, long downloadPriority, TimeInterval timeToCache, boolean readExpired, PointCloudMetadataListener metadataListener, boolean deleteListener, boolean verbose)
     {
        _serverURL = serverURL;
        _cloudName = cloudName;
        _verticalExaggeration = verticalExaggeration;
+       _deltaHeight = deltaHeight;
+       _colorPolicy = colorPolicy;
        _pointSize = pointSize;
        _downloadPriority = downloadPriority;
        _timeToCache = timeToCache;
        _readExpired = readExpired;
        _metadataListener = metadataListener;
        _deleteListener = deleteListener;
+       _verbose = verbose;
        _downloadingMetadata = false;
        _errorDownloadingMetadata = false;
        _errorParsingMetadata = false;
@@ -1185,7 +1225,7 @@ public class PointCloudsRenderer extends DefaultRenderer
     
       final String planetType = context.getPlanet().getType();
     
-      final URL metadataURL = new URL(_serverURL, _cloudName + "?planet=" + planetType + "&verticalExaggeration=" + IStringUtils.instance().toString(_verticalExaggeration) + "&format=binary");
+      final URL metadataURL = new URL(_serverURL, _cloudName + "?planet=" + planetType + "&verticalExaggeration=" + IStringUtils.instance().toString(_verticalExaggeration) + "&deltaHeight=" + IStringUtils.instance().toString(_deltaHeight) + "&format=binary");
     
       ILogger.instance().logInfo("Downloading metadata for \"%s\"", _cloudName);
     
@@ -1233,7 +1273,7 @@ public class PointCloudsRenderer extends DefaultRenderer
     
       if (_metadataListener != null)
       {
-        _metadataListener.onMetadata(pointsCount, sector, minHeight, maxHeight);
+        _metadataListener.onMetadata(_pointsCount, sector, _minHeight, _maxHeight, _averageHeight);
         if (_deleteListener)
         {
           if (_metadataListener != null)
@@ -1249,13 +1289,19 @@ public class PointCloudsRenderer extends DefaultRenderer
       if (_rootNode != null)
       {
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning TODO
-        final long renderedCount = _rootNode.render(this, rc, glState, frustum, _minHeight, _averageHeight * 3, _pointSize, nowInMS);
+//#warning TODO: make plugable the colorization of the cloud
+        final double maxHeight = (_colorPolicy == ColorPolicy.MIN_MAX_HEIGHT) ? _maxHeight : _averageHeight * 3;
+    
+        final long renderedCount = _rootNode.render(this, rc, glState, frustum, _minHeight, maxHeight, _pointSize, nowInMS);
+        // const long long renderedCount = _rootNode->render(this, rc, glState, frustum, _minHeight, _averageHeight * 3, _pointSize, nowInMS);
         // const long long renderedCount = _rootNode->render(this, rc, glState, frustum, _minHeight, _maxHeight, _pointSize, nowInMS);
     
         if (_lastRenderedCount != renderedCount)
         {
-          ILogger.instance().logInfo("\"%s\": Rendered %ld points", _cloudName, renderedCount);
+          if (_verbose)
+          {
+            ILogger.instance().logInfo("\"%s\": Rendered %d points", _cloudName, renderedCount);
+          }
           _lastRenderedCount = renderedCount;
         }
       }
@@ -1266,7 +1312,7 @@ public class PointCloudsRenderer extends DefaultRenderer
     
       final String planetType = rc.getPlanet().getType();
     
-      final URL url = new URL(_serverURL, _cloudName + "/" + nodeID + "/" + IStringUtils.instance().toString(level) + "?planet=" + planetType + "&verticalExaggeration=" + IStringUtils.instance().toString(_verticalExaggeration) + "&format=binary");
+      final URL url = new URL(_serverURL, _cloudName + "/" + nodeID + "/" + IStringUtils.instance().toString(level) + "?planet=" + planetType + "&verticalExaggeration=" + IStringUtils.instance().toString(_verticalExaggeration) + "&deltaHeight=" + IStringUtils.instance().toString(_deltaHeight) + "&format=binary");
     
       //  ILogger::instance()->logInfo("Downloading metadata for \"%s\"", _cloudName.c_str());
     
@@ -1400,46 +1446,62 @@ public class PointCloudsRenderer extends DefaultRenderer
 
   }
 
-  public final void addPointCloud(URL serverURL, String cloudName, float pointSize, float verticalExaggeration, PointCloudMetadataListener metadataListener)
+  public final void addPointCloud(URL serverURL, String cloudName, ColorPolicy colorPolicy, float pointSize, float verticalExaggeration, double deltaHeight, PointCloudMetadataListener metadataListener, boolean deleteListener)
   {
-     addPointCloud(serverURL, cloudName, pointSize, verticalExaggeration, metadataListener, true);
+     addPointCloud(serverURL, cloudName, colorPolicy, pointSize, verticalExaggeration, deltaHeight, metadataListener, deleteListener, false);
   }
-  public final void addPointCloud(URL serverURL, String cloudName, float pointSize, float verticalExaggeration)
+  public final void addPointCloud(URL serverURL, String cloudName, ColorPolicy colorPolicy, float pointSize, float verticalExaggeration, double deltaHeight, PointCloudMetadataListener metadataListener)
   {
-     addPointCloud(serverURL, cloudName, pointSize, verticalExaggeration, null, true);
+     addPointCloud(serverURL, cloudName, colorPolicy, pointSize, verticalExaggeration, deltaHeight, metadataListener, true, false);
   }
-  public final void addPointCloud(URL serverURL, String cloudName, float pointSize)
+  public final void addPointCloud(URL serverURL, String cloudName, ColorPolicy colorPolicy, float pointSize, float verticalExaggeration, double deltaHeight)
   {
-     addPointCloud(serverURL, cloudName, pointSize, 1.0f, null, true);
+     addPointCloud(serverURL, cloudName, colorPolicy, pointSize, verticalExaggeration, deltaHeight, null, true, false);
   }
-  public final void addPointCloud(URL serverURL, String cloudName)
+  public final void addPointCloud(URL serverURL, String cloudName, ColorPolicy colorPolicy, float pointSize, float verticalExaggeration)
   {
-     addPointCloud(serverURL, cloudName, 2.0f, 1.0f, null, true);
+     addPointCloud(serverURL, cloudName, colorPolicy, pointSize, verticalExaggeration, 0, null, true, false);
   }
-  public final void addPointCloud(URL serverURL, String cloudName, float pointSize, float verticalExaggeration, PointCloudMetadataListener metadataListener, boolean deleteListener)
+  public final void addPointCloud(URL serverURL, String cloudName, ColorPolicy colorPolicy, float pointSize)
   {
-    addPointCloud(serverURL, cloudName, DownloadPriority.MEDIUM, TimeInterval.fromDays(30), true, pointSize, verticalExaggeration, metadataListener, deleteListener);
+     addPointCloud(serverURL, cloudName, colorPolicy, pointSize, 1.0f, 0, null, true, false);
+  }
+  public final void addPointCloud(URL serverURL, String cloudName, ColorPolicy colorPolicy)
+  {
+     addPointCloud(serverURL, cloudName, colorPolicy, 2.0f, 1.0f, 0, null, true, false);
+  }
+  public final void addPointCloud(URL serverURL, String cloudName, ColorPolicy colorPolicy, float pointSize, float verticalExaggeration, double deltaHeight, PointCloudMetadataListener metadataListener, boolean deleteListener, boolean verbose)
+  {
+    addPointCloud(serverURL, cloudName, DownloadPriority.MEDIUM, TimeInterval.fromDays(30), true, colorPolicy, pointSize, verticalExaggeration, deltaHeight, metadataListener, deleteListener, verbose);
   }
 
-  public final void addPointCloud(URL serverURL, String cloudName, long downloadPriority, TimeInterval timeToCache, boolean readExpired, float pointSize, float verticalExaggeration, PointCloudMetadataListener metadataListener)
+  public final void addPointCloud(URL serverURL, String cloudName, long downloadPriority, TimeInterval timeToCache, boolean readExpired, ColorPolicy colorPolicy, float pointSize, float verticalExaggeration, double deltaHeight, PointCloudMetadataListener metadataListener, boolean deleteListener)
   {
-     addPointCloud(serverURL, cloudName, downloadPriority, timeToCache, readExpired, pointSize, verticalExaggeration, metadataListener, true);
+     addPointCloud(serverURL, cloudName, downloadPriority, timeToCache, readExpired, colorPolicy, pointSize, verticalExaggeration, deltaHeight, metadataListener, deleteListener, false);
   }
-  public final void addPointCloud(URL serverURL, String cloudName, long downloadPriority, TimeInterval timeToCache, boolean readExpired, float pointSize, float verticalExaggeration)
+  public final void addPointCloud(URL serverURL, String cloudName, long downloadPriority, TimeInterval timeToCache, boolean readExpired, ColorPolicy colorPolicy, float pointSize, float verticalExaggeration, double deltaHeight, PointCloudMetadataListener metadataListener)
   {
-     addPointCloud(serverURL, cloudName, downloadPriority, timeToCache, readExpired, pointSize, verticalExaggeration, null, true);
+     addPointCloud(serverURL, cloudName, downloadPriority, timeToCache, readExpired, colorPolicy, pointSize, verticalExaggeration, deltaHeight, metadataListener, true, false);
   }
-  public final void addPointCloud(URL serverURL, String cloudName, long downloadPriority, TimeInterval timeToCache, boolean readExpired, float pointSize)
+  public final void addPointCloud(URL serverURL, String cloudName, long downloadPriority, TimeInterval timeToCache, boolean readExpired, ColorPolicy colorPolicy, float pointSize, float verticalExaggeration, double deltaHeight)
   {
-     addPointCloud(serverURL, cloudName, downloadPriority, timeToCache, readExpired, pointSize, 1.0f, null, true);
+     addPointCloud(serverURL, cloudName, downloadPriority, timeToCache, readExpired, colorPolicy, pointSize, verticalExaggeration, deltaHeight, null, true, false);
   }
-  public final void addPointCloud(URL serverURL, String cloudName, long downloadPriority, TimeInterval timeToCache, boolean readExpired)
+  public final void addPointCloud(URL serverURL, String cloudName, long downloadPriority, TimeInterval timeToCache, boolean readExpired, ColorPolicy colorPolicy, float pointSize, float verticalExaggeration)
   {
-     addPointCloud(serverURL, cloudName, downloadPriority, timeToCache, readExpired, 2.0f, 1.0f, null, true);
+     addPointCloud(serverURL, cloudName, downloadPriority, timeToCache, readExpired, colorPolicy, pointSize, verticalExaggeration, 0, null, true, false);
   }
-  public final void addPointCloud(URL serverURL, String cloudName, long downloadPriority, TimeInterval timeToCache, boolean readExpired, float pointSize, float verticalExaggeration, PointCloudMetadataListener metadataListener, boolean deleteListener)
+  public final void addPointCloud(URL serverURL, String cloudName, long downloadPriority, TimeInterval timeToCache, boolean readExpired, ColorPolicy colorPolicy, float pointSize)
   {
-    PointCloud pointCloud = new PointCloud(serverURL, cloudName, verticalExaggeration, pointSize, downloadPriority, timeToCache, readExpired, metadataListener, deleteListener);
+     addPointCloud(serverURL, cloudName, downloadPriority, timeToCache, readExpired, colorPolicy, pointSize, 1.0f, 0, null, true, false);
+  }
+  public final void addPointCloud(URL serverURL, String cloudName, long downloadPriority, TimeInterval timeToCache, boolean readExpired, ColorPolicy colorPolicy)
+  {
+     addPointCloud(serverURL, cloudName, downloadPriority, timeToCache, readExpired, colorPolicy, 2.0f, 1.0f, 0, null, true, false);
+  }
+  public final void addPointCloud(URL serverURL, String cloudName, long downloadPriority, TimeInterval timeToCache, boolean readExpired, ColorPolicy colorPolicy, float pointSize, float verticalExaggeration, double deltaHeight, PointCloudMetadataListener metadataListener, boolean deleteListener, boolean verbose)
+  {
+    PointCloud pointCloud = new PointCloud(serverURL, cloudName, verticalExaggeration, deltaHeight, colorPolicy, pointSize, downloadPriority, timeToCache, readExpired, metadataListener, deleteListener, verbose);
     if (_context != null)
     {
       pointCloud.initialize(_context);
