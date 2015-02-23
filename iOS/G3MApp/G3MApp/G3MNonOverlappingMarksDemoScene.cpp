@@ -18,12 +18,14 @@
 
 #include "G3MDemoModel.hpp"
 
+
 class G3MNonOverlappingMarksDemoScene_VisibilityListener : public NonOverlappingMarksVisibilityListener {
 public:
-  void onVisibilityChange(const std::vector<NonOverlappingMark*> visible) {
+  void onVisibilityChange(const std::vector<NonOverlappingMark*>& visible) {
 
   }
 };
+
 
 void G3MNonOverlappingMarksDemoScene::rawActivate(const G3MContext* context) {
   G3MDemoModel* model     = getModel();

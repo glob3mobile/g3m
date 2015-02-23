@@ -225,7 +225,7 @@ public:
   void dispose();
 #endif
 
-  virtual void onVisibilityChange(const std::vector<NonOverlappingMark*> visible) = 0;
+  virtual void onVisibilityChange(const std::vector<NonOverlappingMark*>& visible) = 0;
 
 };
 
