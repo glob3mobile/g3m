@@ -59,6 +59,7 @@ JavaDesktop/G3MJavaDesktopSDK/bin/
 Commons/G3MSharedSDK/bin
 
 iOS/G3MiOSSDK/Commons/Debug
+iOS/G3MiOSSDK/build/
 
 WebGL/G3MWebGLTemplate/.gwt/
 WebGL/G3MWebGLTemplate/gwt-unitCache/
