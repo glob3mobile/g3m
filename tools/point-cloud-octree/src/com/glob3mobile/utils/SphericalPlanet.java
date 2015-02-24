@@ -1,17 +1,14 @@
 
 
-package com.glob3mobile.pointcloud;
+package com.glob3mobile.utils;
 
-
-import com.glob3mobile.pointcloud.octree.Angle;
-import com.glob3mobile.pointcloud.octree.Geodetic3D;
 
 import es.igosoftware.euclid.vector.GVector3D;
 
 
 public class SphericalPlanet
-         implements
-            Planet {
+implements
+Planet {
 
    public static final Planet EARTH = new SphericalPlanet(6378137.0);
 

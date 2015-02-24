@@ -360,7 +360,9 @@ _maxVisibleMarks(maxVisibleMarks),
 _viewportMargin(viewportMargin),
 _maxConvergenceSteps(maxConvergenceSteps),
 _lastPositionsUpdatedTime(0),
-_connectorsGLState(NULL)
+_connectorsGLState(NULL),
+_visibleMarksIDsBuilder( IStringBuilder::newStringBuilder() ),
+_visibleMarksIDs("")
 {
 
 }
@@ -373,6 +375,19 @@ NonOverlappingMarksRenderer::~NonOverlappingMarksRenderer() {
   for (int i = 0; i < marksSize; i++) {
     delete _marks[i];
   }
+
+  for (int i = 0; i < _visibilityListeners.size(); i++) {
+    delete _visibilityListeners[i];
+  }
+
+  delete _visibleMarksIDsBuilder;
+}
+
+void NonOverlappingMarksRenderer::removeAllListeners() {
+  for (int i = 0; i < _visibilityListeners.size(); i++) {
+    delete _visibilityListeners[i];
+  }
+  _visibilityListeners.clear();
 }
 
 void NonOverlappingMarksRenderer::addMark(NonOverlappingMark* mark) {
@@ -390,6 +405,7 @@ void NonOverlappingMarksRenderer::removeAllMarks() {
 void NonOverlappingMarksRenderer::computeMarksToBeRendered(const Camera* camera,
                                                            const Planet* planet) {
   _visibleMarks.clear();
+  _visibleMarksIDsBuilder->clear();
 
   const Frustum* frustrum = camera->getFrustumInModelCoordinates();
 
@@ -400,11 +416,22 @@ void NonOverlappingMarksRenderer::computeMarksToBeRendered(const Camera* camera,
     if (_visibleMarks.size() < _maxVisibleMarks &&
         frustrum->contains(m->getCartesianPosition(planet))) {
       _visibleMarks.push_back(m);
+
+      _visibleMarksIDsBuilder->addInt(i);
+      _visibleMarksIDsBuilder->addString("/");
     }
     else {
       //Resetting marks location of invisible anchors
 #warning Do we really need this?
       m->resetWidgetPositionVelocityAndForce();
+    }
+  }
+
+  const std::string currentVisibleMarksIDs = _visibleMarksIDsBuilder->getString();
+  if (_visibleMarksIDs != currentVisibleMarksIDs) {
+    _visibleMarksIDs = currentVisibleMarksIDs;
+    for (int i = 0; i < _visibilityListeners.size(); i++) {
+      _visibilityListeners.at(i)->onVisibilityChange(_visibleMarks);
     }
   }
 }

@@ -257,7 +257,9 @@ public final class Canvas_Android
    protected void _fillText(final String text,
                             final float left,
                             final float top) {
-      _canvas.drawText(text, left, top, _fillPaint);
+      final Rect textBounds = _rect;
+      _fillPaint.getTextBounds(text, 0, text.length(), textBounds);
+      _canvas.drawText(text, left, top - textBounds.top, _fillPaint);
    }
 
 
@@ -313,7 +315,7 @@ public final class Canvas_Android
 
       final Paint paint = new Paint();
       paint.setAlpha(Math.round(255 * transparency));
-      _canvas.drawBitmap(bitmap, null, dst, null);
+      _canvas.drawBitmap(bitmap, null, dst, paint);
    }
 
 

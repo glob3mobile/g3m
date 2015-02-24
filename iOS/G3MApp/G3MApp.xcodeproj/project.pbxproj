@@ -32,6 +32,8 @@
 		CF8B1A581837DC69004D3902 /* G3MDemoListener.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF8B1A561837DC69004D3902 /* G3MDemoListener.cpp */; };
 		CFB806E21837D4D300DB4B3B /* G3MDemoBuilder_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = CFB806E01837D4D300DB4B3B /* G3MDemoBuilder_iOS.mm */; };
 		CFBD815219A3D9F600F1A8C4 /* G3MStreamingPointCloud1DemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFBD815019A3D9F600F1A8C4 /* G3MStreamingPointCloud1DemoScene.cpp */; };
+		CFC192D81A8D2E5F00FA89B3 /* G3MCanvas2DDemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFC192D61A8D2E5F00FA89B3 /* G3MCanvas2DDemoScene.cpp */; };
+		CFC192DB1A8D3A7C00FA89B3 /* colorgrid.jpg in Resources */ = {isa = PBXBuildFile; fileRef = CFC192DA1A8D3A7C00FA89B3 /* colorgrid.jpg */; };
 		CFC59BAC176F68DB002806D6 /* full-earth-2048x1024.bil in Resources */ = {isa = PBXBuildFile; fileRef = CFC59BAB176F68DB002806D6 /* full-earth-2048x1024.bil */; };
 		CFD3BE3D19D3324F00FE2D5A /* G3MStreamingPointCloud2DemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFD3BE3B19D3324F00FE2D5A /* G3MStreamingPointCloud2DemoScene.cpp */; };
 		CFE3B3C7183A99070078C796 /* G3MMarkersDemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFE3B3C5183A99070078C796 /* G3MMarkersDemoScene.cpp */; };
@@ -152,6 +154,9 @@
 		CFB806E11837D4D300DB4B3B /* G3MDemoBuilder_iOS.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; path = G3MDemoBuilder_iOS.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CFBD815019A3D9F600F1A8C4 /* G3MStreamingPointCloud1DemoScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = G3MStreamingPointCloud1DemoScene.cpp; sourceTree = "<group>"; };
 		CFBD815119A3D9F600F1A8C4 /* G3MStreamingPointCloud1DemoScene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = G3MStreamingPointCloud1DemoScene.hpp; sourceTree = "<group>"; };
+		CFC192D61A8D2E5F00FA89B3 /* G3MCanvas2DDemoScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = G3MCanvas2DDemoScene.cpp; sourceTree = "<group>"; };
+		CFC192D71A8D2E5F00FA89B3 /* G3MCanvas2DDemoScene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = G3MCanvas2DDemoScene.hpp; sourceTree = "<group>"; };
+		CFC192DA1A8D3A7C00FA89B3 /* colorgrid.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = colorgrid.jpg; sourceTree = "<group>"; };
 		CFC59BAB176F68DB002806D6 /* full-earth-2048x1024.bil */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "full-earth-2048x1024.bil"; sourceTree = "<group>"; };
 		CFD3BE3B19D3324F00FE2D5A /* G3MStreamingPointCloud2DemoScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = G3MStreamingPointCloud2DemoScene.cpp; sourceTree = "<group>"; };
 		CFD3BE3C19D3324F00FE2D5A /* G3MStreamingPointCloud2DemoScene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = G3MStreamingPointCloud2DemoScene.hpp; sourceTree = "<group>"; };
@@ -303,6 +308,8 @@
 				CF483EC41A2E5D5100B70D7E /* G3MHUDDemoScene.hpp */,
 				CFF9D2041A7C4903005429A6 /* G3MNonOverlappingMarksDemoScene.cpp */,
 				CFF9D2051A7C4903005429A6 /* G3MNonOverlappingMarksDemoScene.hpp */,
+				CFC192D61A8D2E5F00FA89B3 /* G3MCanvas2DDemoScene.cpp */,
+				CFC192D71A8D2E5F00FA89B3 /* G3MCanvas2DDemoScene.hpp */,
 			);
 			name = DemoBuilder;
 			sourceTree = "<group>";
@@ -421,6 +428,7 @@
 		E7D1B7F116D2750400AF47C1 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				CFC192DA1A8D3A7C00FA89B3 /* colorgrid.jpg */,
 				CFF9D20B1A7C5048005429A6 /* g3m-marker.png */,
 				CFF9D2091A7C5014005429A6 /* anchorWidget.png */,
 				CF483ECC1A2E62C400B70D7E /* widget-background.png */,
@@ -570,6 +578,7 @@
 				CF6920C418394DB6007409D8 /* restaurants_monaco.geojson in Resources */,
 				E7D1B64316D2462B00AF47C1 /* Icon-Small-50@2x.png in Resources */,
 				E7D1B64416D2462B00AF47C1 /* Icon-Small.png in Resources */,
+				CFC192DB1A8D3A7C00FA89B3 /* colorgrid.jpg in Resources */,
 				E7D1B64516D2462B00AF47C1 /* Icon-Small@2x.png in Resources */,
 				E7D1B64616D2462B00AF47C1 /* Icon.png in Resources */,
 				CFE3B3E5183ADAFF0078C796 /* arc in Resources */,
@@ -630,6 +639,7 @@
 				CF6920B11837EA35007409D8 /* G3MDemoScene.cpp in Sources */,
 				CFB806E21837D4D300DB4B3B /* G3MDemoBuilder_iOS.mm in Sources */,
 				CFE3B3EF183C05F70078C796 /* G3MIsosurfaceDemoScene.cpp in Sources */,
+				CFC192D81A8D2E5F00FA89B3 /* G3MCanvas2DDemoScene.cpp in Sources */,
 				CF8B1A541837DBFA004D3902 /* G3MDemoModel.cpp in Sources */,
 				CFBD815219A3D9F600F1A8C4 /* G3MStreamingPointCloud1DemoScene.cpp in Sources */,
 				CF6920BA18392D51007409D8 /* G3MDemoContext.cpp in Sources */,

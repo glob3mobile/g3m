@@ -1,13 +1,11 @@
 
 
-package com.glob3mobile.pointcloud.octree;
+package com.glob3mobile.utils;
 
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-import com.glob3mobile.pointcloud.Planet;
 
 import es.igosoftware.euclid.colors.GColorF;
 import es.igosoftware.euclid.vector.GVector3D;
@@ -178,8 +176,8 @@ public class Utils {
 
 
    public static List<GVector3D> toCartesian(final Planet planet,
-                                             final List<Geodetic3D> positions,
-                                             final float verticalExaggeration) {
+            final List<Geodetic3D> positions,
+            final float verticalExaggeration) {
       final List<GVector3D> result = new ArrayList<GVector3D>(positions.size());
       for (final Geodetic3D position : positions) {
          result.add(planet.toCartesian(position, verticalExaggeration));
