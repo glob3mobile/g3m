@@ -195,6 +195,8 @@
 		CF527E1F162E33F500E0BDE0 /* DefaultRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF527E1D162E33F500E0BDE0 /* DefaultRenderer.cpp */; };
 		CF547B4A196C45C9002DBBDD /* GEOVectorLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF547B48196C45C9002DBBDD /* GEOVectorLayer.cpp */; };
 		CF547B4B196C4921002DBBDD /* GEOVectorLayer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF547B49196C45C9002DBBDD /* GEOVectorLayer.hpp */; };
+		CF55133C1A8E6A6000097906 /* StaticImageBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF55133A1A8E6A6000097906 /* StaticImageBuilder.cpp */; };
+		CF55133D1A8E6AC200097906 /* StaticImageBuilder.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF55133B1A8E6A6000097906 /* StaticImageBuilder.hpp */; };
 		CF59DF8F15C04AFC002173EC /* ILogger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF59DF8E15C04AFC002173EC /* ILogger.cpp */; };
 		CF5A8A321656B67F00508C38 /* BoxShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF5A8A301656B67F00508C38 /* BoxShape.cpp */; };
 		CF5C1195178C76F2000ED715 /* BoundingArea.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF5C1193178C76F2000ED715 /* BoundingArea.cpp */; };
@@ -316,6 +318,10 @@
 		CFAA530517AAFE3D002A9204 /* InterpolatedSubviewElevationData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFAA530317AAFE3C002A9204 /* InterpolatedSubviewElevationData.cpp */; };
 		CFAA530617AAFE9E002A9204 /* DecimatedSubviewElevationData.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFAA530117AAFDCE002A9204 /* DecimatedSubviewElevationData.hpp */; };
 		CFAA530717AAFE9E002A9204 /* InterpolatedSubviewElevationData.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFAA530417AAFE3C002A9204 /* InterpolatedSubviewElevationData.hpp */; };
+		CFAB53F21A8BCD9B00DD0099 /* LayoutImageBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFAB53F01A8BCD9B00DD0099 /* LayoutImageBuilder.cpp */; };
+		CFAB53F51A8BCDFF00DD0099 /* ColumnLayoutImageBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFAB53F31A8BCDFF00DD0099 /* ColumnLayoutImageBuilder.cpp */; };
+		CFAB53F61A8BCE5800DD0099 /* LayoutImageBuilder.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFAB53F11A8BCD9B00DD0099 /* LayoutImageBuilder.hpp */; };
+		CFAB53F71A8BCE5800DD0099 /* ColumnLayoutImageBuilder.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFAB53F41A8BCDFF00DD0099 /* ColumnLayoutImageBuilder.hpp */; };
 		CFAB754C17AC455300852FA7 /* SurfaceElevationProvider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFAB754A17AC455300852FA7 /* SurfaceElevationProvider.cpp */; };
 		CFAB754D17AC45CF00852FA7 /* SurfaceElevationProvider.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFAB754B17AC455300852FA7 /* SurfaceElevationProvider.hpp */; };
 		CFAB754E17AC510400852FA7 /* GLState.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D80A28701746572E0058CEC3 /* GLState.hpp */; };
@@ -735,6 +741,9 @@
 				448F53131A24A1F100A817B8 /* SRWebSocket.h in CopyFiles */,
 				4460758319DAA1840000CCD6 /* LocationManager_iOS.hpp in CopyFiles */,
 				4460758219DAA1410000CCD6 /* ILocationManager.hpp in CopyFiles */,
+				CF55133D1A8E6AC200097906 /* StaticImageBuilder.hpp in CopyFiles */,
+				CFAB53F61A8BCE5800DD0099 /* LayoutImageBuilder.hpp in CopyFiles */,
+				CFAB53F71A8BCE5800DD0099 /* ColumnLayoutImageBuilder.hpp in CopyFiles */,
 				D842D9B01A72906A008D55E4 /* NonOverlappingMarksRenderer.hpp in CopyFiles */,
 				CFBD815719A3E1D500F1A8C4 /* PointCloudsRenderer.hpp in CopyFiles */,
 				44E3C43019C1ADB800857275 /* Info.hpp in CopyFiles */,
@@ -1374,6 +1383,8 @@
 		CF527E1E162E33F500E0BDE0 /* DefaultRenderer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = DefaultRenderer.hpp; path = Commons/Rendererers/DefaultRenderer.hpp; sourceTree = "<group>"; };
 		CF547B48196C45C9002DBBDD /* GEOVectorLayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GEOVectorLayer.cpp; sourceTree = "<group>"; };
 		CF547B49196C45C9002DBBDD /* GEOVectorLayer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GEOVectorLayer.hpp; sourceTree = "<group>"; };
+		CF55133A1A8E6A6000097906 /* StaticImageBuilder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = StaticImageBuilder.cpp; path = Commons/Basic/StaticImageBuilder.cpp; sourceTree = "<group>"; };
+		CF55133B1A8E6A6000097906 /* StaticImageBuilder.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = StaticImageBuilder.hpp; path = Commons/Basic/StaticImageBuilder.hpp; sourceTree = "<group>"; };
 		CF59DF8E15C04AFC002173EC /* ILogger.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ILogger.cpp; path = Commons/Interfaces/ILogger.cpp; sourceTree = "<group>"; };
 		CF5A8A301656B67F00508C38 /* BoxShape.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = BoxShape.cpp; path = Commons/Rendererers/BoxShape.cpp; sourceTree = "<group>"; };
 		CF5A8A311656B67F00508C38 /* BoxShape.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = BoxShape.hpp; path = Commons/Rendererers/BoxShape.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
@@ -1527,6 +1538,10 @@
 		CFAA530117AAFDCE002A9204 /* DecimatedSubviewElevationData.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = DecimatedSubviewElevationData.hpp; path = Commons/Basic/DecimatedSubviewElevationData.hpp; sourceTree = "<group>"; };
 		CFAA530317AAFE3C002A9204 /* InterpolatedSubviewElevationData.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = InterpolatedSubviewElevationData.cpp; path = Commons/Basic/InterpolatedSubviewElevationData.cpp; sourceTree = "<group>"; };
 		CFAA530417AAFE3C002A9204 /* InterpolatedSubviewElevationData.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = InterpolatedSubviewElevationData.hpp; path = Commons/Basic/InterpolatedSubviewElevationData.hpp; sourceTree = "<group>"; };
+		CFAB53F01A8BCD9B00DD0099 /* LayoutImageBuilder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = LayoutImageBuilder.cpp; path = Commons/Basic/LayoutImageBuilder.cpp; sourceTree = "<group>"; };
+		CFAB53F11A8BCD9B00DD0099 /* LayoutImageBuilder.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = LayoutImageBuilder.hpp; path = Commons/Basic/LayoutImageBuilder.hpp; sourceTree = "<group>"; };
+		CFAB53F31A8BCDFF00DD0099 /* ColumnLayoutImageBuilder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ColumnLayoutImageBuilder.cpp; path = Commons/Basic/ColumnLayoutImageBuilder.cpp; sourceTree = "<group>"; };
+		CFAB53F41A8BCDFF00DD0099 /* ColumnLayoutImageBuilder.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = ColumnLayoutImageBuilder.hpp; path = Commons/Basic/ColumnLayoutImageBuilder.hpp; sourceTree = "<group>"; };
 		CFAB754A17AC455300852FA7 /* SurfaceElevationProvider.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SurfaceElevationProvider.cpp; path = Commons/Basic/SurfaceElevationProvider.cpp; sourceTree = "<group>"; };
 		CFAB754B17AC455300852FA7 /* SurfaceElevationProvider.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = SurfaceElevationProvider.hpp; path = Commons/Basic/SurfaceElevationProvider.hpp; sourceTree = "<group>"; };
 		CFAC9E9D18CE277D00EE57EF /* GEOLabelRasterSymbol.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GEOLabelRasterSymbol.cpp; path = Commons/GEO/GEOLabelRasterSymbol.cpp; sourceTree = "<group>"; };
@@ -2149,6 +2164,8 @@
 				CF1F55DE1876F5E70019E8A5 /* LabelImageBuilder.hpp */,
 				CF1F55E118772FC80019E8A5 /* AbstractImageBuilder.cpp */,
 				CF1F55E218772FC80019E8A5 /* AbstractImageBuilder.hpp */,
+				CF55133A1A8E6A6000097906 /* StaticImageBuilder.cpp */,
+				CF55133B1A8E6A6000097906 /* StaticImageBuilder.hpp */,
 				CF290D53187F1695000BE644 /* TextureIDReference.cpp */,
 				CF290D54187F1695000BE644 /* TextureIDReference.hpp */,
 				CF9F74DD18805470008D65F7 /* CanvasImageBuilder.cpp */,
@@ -2185,6 +2202,10 @@
 				44EE3CDE19A60A3B00DDEF2B /* DefaultChessCanvasImageBuilder.hpp */,
 				44E3C42919B53B4100857275 /* Info.cpp */,
 				44E3C42A19B53B4100857275 /* Info.hpp */,
+				CFAB53F01A8BCD9B00DD0099 /* LayoutImageBuilder.cpp */,
+				CFAB53F11A8BCD9B00DD0099 /* LayoutImageBuilder.hpp */,
+				CFAB53F31A8BCDFF00DD0099 /* ColumnLayoutImageBuilder.cpp */,
+				CFAB53F41A8BCDFF00DD0099 /* ColumnLayoutImageBuilder.hpp */,
 			);
 			name = Basic;
 			sourceTree = "<group>";
@@ -2901,6 +2922,7 @@
 				383BD3851577EDDB0012AC53 /* ES2Renderer.mm in Sources */,
 				383BD3871577EDDB0012AC53 /* G3MWidget_iOS.mm in Sources */,
 				383BD3971577EE500012AC53 /* Context.cpp in Sources */,
+				CFAB53F51A8BCDFF00DD0099 /* ColumnLayoutImageBuilder.cpp in Sources */,
 				383BD3991577EE500012AC53 /* G3MWidget.cpp in Sources */,
 				383BD39C1577EE500012AC53 /* TouchEvent.cpp in Sources */,
 				383BD3AB1577EE5A0012AC53 /* Angle.cpp in Sources */,
@@ -2934,6 +2956,7 @@
 				CCB2566415B5F58500079B96 /* Box.cpp in Sources */,
 				D895CA1E1861C33A00AE8291 /* IImageUtils.cpp in Sources */,
 				D87EC5C715BEB12F00E38C36 /* LayerSet.cpp in Sources */,
+				CF55133C1A8E6A6000097906 /* StaticImageBuilder.cpp in Sources */,
 				CFE6046319043BEF00E6C78B /* ErrorRenderer.cpp in Sources */,
 				D87EC5C915BEB12F00E38C36 /* WMSLayer.cpp in Sources */,
 				CF59DF8F15C04AFC002173EC /* ILogger.cpp in Sources */,
@@ -3201,6 +3224,7 @@
 				CF2DF7D9178DECF100FF5FF0 /* GEOMultiLineRasterSymbol.cpp in Sources */,
 				CF2A47C5178F211200901857 /* GEORasterProjection.cpp in Sources */,
 				CFBD67AD179DBB7F0056A2BD /* GEO2DLineRasterStyle.cpp in Sources */,
+				CFAB53F21A8BCD9B00DD0099 /* LayoutImageBuilder.cpp in Sources */,
 				CFBD67B2179F04160056A2BD /* GEO2DPolygonGeometry.cpp in Sources */,
 				CF3C7E55190C138B00ED051F /* CompositeTileImageContribution.cpp in Sources */,
 				CFBD67B9179F09380056A2BD /* GEOPolygonRasterSymbol.cpp in Sources */,

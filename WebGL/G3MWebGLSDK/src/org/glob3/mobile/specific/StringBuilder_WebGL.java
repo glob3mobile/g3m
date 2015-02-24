@@ -6,8 +6,8 @@ import org.glob3.mobile.generated.IStringBuilder;
 
 
 public final class StringBuilder_WebGL
-         extends
-            IStringBuilder {
+extends
+IStringBuilder {
 
    private String _string = "";
 
@@ -62,6 +62,13 @@ public final class StringBuilder_WebGL
    @Override
    public IStringBuilder addLong(final long l) {
       _string += l;
+      return this;
+   }
+
+
+   @Override
+   public IStringBuilder clear() {
+      _string = "";
       return this;
    }
 

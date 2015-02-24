@@ -6,8 +6,8 @@ import org.glob3.mobile.generated.IStringBuilder;
 
 
 public final class StringBuilder_JavaDesktop
-         extends
-            IStringBuilder {
+extends
+IStringBuilder {
 
    private final StringBuilder _builder = new StringBuilder();
 
@@ -62,6 +62,13 @@ public final class StringBuilder_JavaDesktop
    @Override
    public IStringBuilder addLong(final long l) {
       _builder.append(l);
+      return this;
+   }
+
+
+   @Override
+   public IStringBuilder clear() {
+      _builder.delete(0, _builder.length());
       return this;
    }
 

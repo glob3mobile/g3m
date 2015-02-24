@@ -24,7 +24,7 @@ protected:
   }
 
 public:
-  
+
   StringBuilder_iOS() {
     _oss.precision(20);
   }
@@ -63,6 +63,11 @@ public:
     return _oss.str();
   }
 
+  IStringBuilder* clear() {
+    _oss.str(std::string());
+    return this;
+  }
+  
 };
 
 #endif

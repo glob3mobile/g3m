@@ -20,32 +20,32 @@ package org.glob3.mobile.generated;
 
 public abstract class AbstractImageBuilder implements IImageBuilder
 {
-  private ChangedListener _listener;
+  private ChangedListener _changeListener;
 
   protected final void changed()
   {
-    if (_listener != null)
+    if (_changeListener != null)
     {
-      _listener.changed();
+      _changeListener.changed();
     }
   }
 
   public AbstractImageBuilder()
   {
-     _listener = null;
+     _changeListener = null;
   }
 
   public void dispose()
   {
   }
 
-  public final void setChangeListener(ChangedListener listener)
+  public final void setChangeListener(ChangedListener changeListener)
   {
-    if (_listener != null)
+    if (_changeListener != null)
     {
-      throw new RuntimeException("listener already set!");
+      throw new RuntimeException("changeListener already set!");
     }
-    _listener = listener;
+    _changeListener = changeListener;
   }
 
 }
