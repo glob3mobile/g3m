@@ -32,13 +32,8 @@ class NonOverlappingMark;
 
 class NonOverlappingMarkTouchListener {
 public:
-#ifdef C_CODE
   virtual ~NonOverlappingMarkTouchListener() {
   }
-#endif
-#ifdef JAVA_CODE
-  void dispose();
-#endif
 
   virtual bool touchedMark(const NonOverlappingMark* mark,
                            const Vector2F& touchedPixel) = 0;
