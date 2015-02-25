@@ -32,7 +32,7 @@ package org.glob3.mobile.generated;
 //class NonOverlappingMark;
 
 
-public interface MarkWidgetTouchListener
+public interface NonOverlappingMarkTouchListener
 {
   void dispose();
 

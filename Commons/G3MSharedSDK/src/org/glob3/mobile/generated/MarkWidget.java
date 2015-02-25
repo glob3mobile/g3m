@@ -20,10 +20,6 @@ public class MarkWidget
     private MarkWidget _widget;
     public WidgetImageListener(MarkWidget widget)
     {
-       this(widget, null);
-    }
-    public WidgetImageListener(MarkWidget widget, MarkWidgetTouchListener touchListener)
-    {
        _widget = widget;
     }
 

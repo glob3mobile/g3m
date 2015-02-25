@@ -13,7 +13,7 @@ public class NonOverlappingMarksRenderer extends DefaultRenderer
 
   private java.util.ArrayList<NonOverlappingMarksVisibilityListener> _visibilityListeners = new java.util.ArrayList<NonOverlappingMarksVisibilityListener>();
 
-  private MarkWidgetTouchListener _touchListener;
+  private NonOverlappingMarkTouchListener _touchListener;
 
   private void computeMarksToBeRendered(Camera camera, Planet planet)
   {
@@ -368,7 +368,7 @@ public class NonOverlappingMarksRenderer extends DefaultRenderer
     return false;
   }
 
-  public final void setTouchListener(MarkWidgetTouchListener touchListener)
+  public final void setTouchListener(NonOverlappingMarkTouchListener touchListener)
   {
     if (_touchListener != null && _touchListener != touchListener)
     {
@@ -381,20 +381,6 @@ public class NonOverlappingMarksRenderer extends DefaultRenderer
 }
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#pragma mark MarkWidget
-
-//bool MarkWidget::onTouchEvent(const NonOverlappingMark* mark,
-//                              float x, float y) {
-//  const IMathUtils* mu = IMathUtils::instance();
-//  if (mu->isBetween(x, _x - _halfWidth, _x + _halfWidth) &&
-//      mu->isBetween(y, _y - _halfHeight, _y + _halfHeight)) {
-//    if (_touchListener != NULL) {
-//      if (_touchListener->touchedMark(mark, x, y)) {
-//        return true;
-//      }
-//    }
-//  }
-//  return false;
-//}
 
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#pragma mark NonOverlappingMark
