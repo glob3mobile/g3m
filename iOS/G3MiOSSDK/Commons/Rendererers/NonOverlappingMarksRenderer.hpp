@@ -30,10 +30,10 @@ class TexturesHandler;
 class NonOverlappingMark;
 
 
-class MarkWidgetTouchListener {
+class NonOverlappingMarkTouchListener {
 public:
 #ifdef C_CODE
-  virtual ~MarkWidgetTouchListener() {
+  virtual ~NonOverlappingMarkTouchListener() {
   }
 #endif
 #ifdef JAVA_CODE
@@ -67,8 +67,7 @@ class MarkWidget {
   class WidgetImageListener: public IImageBuilderListener {
     MarkWidget* _widget;
   public:
-    WidgetImageListener(MarkWidget* widget,
-                        MarkWidgetTouchListener *touchListener = NULL) :
+    WidgetImageListener(MarkWidget* widget) :
     _widget(widget)
     {
     }
@@ -140,14 +139,14 @@ private:
 
   std::string _id;
 
-  MarkWidgetTouchListener* _touchListener;
+  NonOverlappingMarkTouchListener* _touchListener;
 
 public:
 
   NonOverlappingMark(IImageBuilder* imageBuilderWidget,
                      IImageBuilder* imageBuilderAnchor,
                      const Geodetic3D& position,
-                     MarkWidgetTouchListener* touchListener = NULL,
+                     NonOverlappingMarkTouchListener* touchListener = NULL,
                      float springLengthInPixels = 100.0f,
                      float springK = 70.0f,
                      float minSpringLength = 0.0f,
@@ -244,7 +243,7 @@ private:
 
   std::vector<NonOverlappingMarksVisibilityListener*> _visibilityListeners;
 
-  MarkWidgetTouchListener* _touchListener;
+  NonOverlappingMarkTouchListener* _touchListener;
 
   void computeMarksToBeRendered(const Camera* camera,
                                 const Planet* planet);
@@ -310,7 +309,7 @@ public:
   
   bool marksAreMoving() const;
   
-  void setTouchListener(MarkWidgetTouchListener* touchListener);
+  void setTouchListener(NonOverlappingMarkTouchListener* touchListener);
 
 };
 

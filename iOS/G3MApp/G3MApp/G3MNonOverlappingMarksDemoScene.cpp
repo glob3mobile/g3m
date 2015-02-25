@@ -26,7 +26,7 @@ public:
   }
 };
 
-class G3MNonOverlappingMarksDemoScene_MarkWidgetTouchListener : public MarkWidgetTouchListener {
+class G3MNonOverlappingMarksDemoScene_NonOverlappingMarkTouchListener : public NonOverlappingMarkTouchListener {
 public:
   bool touchedMark(const NonOverlappingMark* mark,
                    const Vector2F& touchedPixel) {
@@ -46,7 +46,7 @@ void G3MNonOverlappingMarksDemoScene::rawActivate(const G3MContext* context) {
   NonOverlappingMarksRenderer* renderer = model->getNonOverlappingMarksRenderer();
 
   renderer->addVisibilityListener(new G3MNonOverlappingMarksDemoScene_VisibilityListener());
-  renderer->setTouchListener(new G3MNonOverlappingMarksDemoScene_MarkWidgetTouchListener());
+  renderer->setTouchListener(new G3MNonOverlappingMarksDemoScene_NonOverlappingMarkTouchListener());
 
   const URL markBitmapURL("file:///g3m-marker.png");
   const URL anchorBitmapURL("file:///anchorWidget.png");

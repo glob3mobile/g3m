@@ -160,26 +160,12 @@ void MarkWidget::clampPositionInsideScreen(int viewportWidth, int viewportHeight
   setScreenPos(x, y);
 }
 
-//bool MarkWidget::onTouchEvent(const NonOverlappingMark* mark,
-//                              float x, float y) {
-//  const IMathUtils* mu = IMathUtils::instance();
-//  if (mu->isBetween(x, _x - _halfWidth, _x + _halfWidth) &&
-//      mu->isBetween(y, _y - _halfHeight, _y + _halfHeight)) {
-//    if (_touchListener != NULL) {
-//      if (_touchListener->touchedMark(mark, x, y)) {
-//        return true;
-//      }
-//    }
-//  }
-//  return false;
-//}
-
 #pragma mark NonOverlappingMark
 
 NonOverlappingMark::NonOverlappingMark(IImageBuilder* imageBuilderWidget,
                                        IImageBuilder* imageBuilderAnchor,
                                        const Geodetic3D& position,
-                                       MarkWidgetTouchListener* touchListener,
+                                       NonOverlappingMarkTouchListener* touchListener,
                                        float springLengthInPixels,
                                        float springK,
                                        float minSpringLength,
@@ -646,7 +632,7 @@ bool NonOverlappingMarksRenderer::marksAreMoving() const{
   return false;
 }
 
-void NonOverlappingMarksRenderer::setTouchListener(MarkWidgetTouchListener* touchListener) {
+void NonOverlappingMarksRenderer::setTouchListener(NonOverlappingMarkTouchListener* touchListener) {
   if (_touchListener != NULL && _touchListener != touchListener) {
     delete _touchListener;
   }
