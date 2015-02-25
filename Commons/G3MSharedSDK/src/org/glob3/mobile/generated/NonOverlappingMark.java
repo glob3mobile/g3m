@@ -25,6 +25,8 @@ public class NonOverlappingMark
 
   private String _id;
 
+  private MarkWidgetTouchListener _touchListener;
+
 
   public NonOverlappingMark(IImageBuilder imageBuilderWidget, IImageBuilder imageBuilderAnchor, Geodetic3D position, MarkWidgetTouchListener touchListener, float springLengthInPixels, float springK, float minSpringLength, float maxSpringLength, float electricCharge, float anchorElectricCharge, float minWidgetSpeedInPixelsPerSecond, float maxWidgetSpeedInPixelsPerSecond)
   {
@@ -83,14 +85,9 @@ public class NonOverlappingMark
      _minWidgetSpeedInPixelsPerSecond = minWidgetSpeedInPixelsPerSecond;
      _maxWidgetSpeedInPixelsPerSecond = maxWidgetSpeedInPixelsPerSecond;
      _resistanceFactor = resistanceFactor;
+     _touchListener = touchListener;
     _widget = new MarkWidget(imageBuilderWidget);
     _anchorWidget = new MarkWidget(imageBuilderAnchor);
-  
-    if (touchListener != null)
-    {
-      _widget.setTouchListener(touchListener);
-    }
-  
   }
 
   public final void setID(String id)
@@ -105,6 +102,9 @@ public class NonOverlappingMark
 
   public void dispose()
   {
+    if (_touchListener != null)
+       _touchListener.dispose();
+  
     if (_widget != null)
        _widget.dispose();
     if (_anchorWidget != null)
@@ -281,15 +281,28 @@ public class NonOverlappingMark
     _fY = 0F;
   }
 
-  public final boolean onTouchEvent(float x, float y)
-  {
-    return _widget.onTouchEvent(x, y);
-  }
-
   public final boolean isMoving()
   {
     float velocitySquared = ((_dX *_dX) + (_dY *_dY));
     return velocitySquared > (_minWidgetSpeedInPixelsPerSecond * _minWidgetSpeedInPixelsPerSecond);
+  }
+
+  public final int getWidth()
+  {
+    return _widget.getWidth();
+  }
+  public final int getHeight()
+  {
+    return _widget.getHeight();
+  }
+
+  public final boolean onTouchEvent(Vector2F touchedPixel)
+  {
+    if (_touchListener != null)
+    {
+      return _touchListener.touchedMark(this, touchedPixel);
+    }
+    return false;
   }
 
 }

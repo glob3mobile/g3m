@@ -71,7 +71,7 @@ public class CameraDoubleTapHandler extends CameraEventHandler
     Effect* effect = new DoubleTapEffect(TimeInterval::fromSeconds(0.75), axis, angle, distance);
     */
   
-    final Vector2I pixel = touchEvent.getTouch(0).getPos();
+    final Vector2F pixel = touchEvent.getTouch(0).getPos();
     final Planet planet = eventContext.getPlanet();
     Camera camera = cameraContext.getNextCamera();
     Effect effect = planet.createDoubleTapEffect(camera.getCartesianPosition(), camera.getViewDirection(), camera.pixel2Ray(pixel));

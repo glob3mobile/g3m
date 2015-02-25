@@ -29,13 +29,12 @@ package org.glob3.mobile.generated;
 //class ViewportExtentGLFeature;
 //class TexturesHandler;
 
-//class MarkWidget;
+//class NonOverlappingMark;
 
-public abstract class MarkWidgetTouchListener
+
+public interface MarkWidgetTouchListener
 {
-  public void dispose()
-  {
-  }
+  void dispose();
 
-  public abstract boolean touchedMark(MarkWidget mark, float x, float y);
+  boolean touchedMark(NonOverlappingMark mark, Vector2F touchedPixel);
 }
