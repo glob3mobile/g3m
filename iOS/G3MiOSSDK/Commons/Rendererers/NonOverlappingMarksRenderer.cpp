@@ -33,6 +33,7 @@
 #include "IFactory.hpp"
 #include "IMathUtils.hpp"
 #include "TouchEvent.hpp"
+#include "RectangleF.hpp"
 
 #pragma mark MarkWidget
 
@@ -45,8 +46,7 @@ _glState(NULL),
 _x(NANF),
 _y(NANF),
 _halfHeight(0),
-_halfWidth(0),
-_touchListener(NULL)
+_halfWidth(0)
 {
 }
 
@@ -54,7 +54,6 @@ MarkWidget::~MarkWidget()
 {
   delete _image;
   delete _imageBuilder;
-  delete _touchListener;
 
   _glState->_release();
 }
@@ -145,6 +144,13 @@ void MarkWidget::onResizeViewportEvent(int width, int height) {
   }
 }
 
+int MarkWidget::getWidth() const {
+  return _image == NULL ? 0 : _image->getWidth();
+}
+
+int MarkWidget::getHeight() const {
+  return _image == NULL ? 0 : _image->getHeight();
+}
 
 void MarkWidget::clampPositionInsideScreen(int viewportWidth, int viewportHeight, float margin) {
   const IMathUtils* mu = IMathUtils::instance();
@@ -154,17 +160,19 @@ void MarkWidget::clampPositionInsideScreen(int viewportWidth, int viewportHeight
   setScreenPos(x, y);
 }
 
-bool MarkWidget::onTouchEvent(float x, float y) {
-  const IMathUtils* mu = IMathUtils::instance();
-  if (mu->isBetween(x, _x - _halfWidth, _x + _halfWidth) &&
-      mu->isBetween(y, _y - _halfHeight, _y + _halfHeight)) {
-    if (_touchListener != NULL) {
-      _touchListener->touchedMark(this, x, y);
-    }
-    return true;
-  }
-  return false;
-}
+//bool MarkWidget::onTouchEvent(const NonOverlappingMark* mark,
+//                              float x, float y) {
+//  const IMathUtils* mu = IMathUtils::instance();
+//  if (mu->isBetween(x, _x - _halfWidth, _x + _halfWidth) &&
+//      mu->isBetween(y, _y - _halfHeight, _y + _halfHeight)) {
+//    if (_touchListener != NULL) {
+//      if (_touchListener->touchedMark(mark, x, y)) {
+//        return true;
+//      }
+//    }
+//  }
+//  return false;
+//}
 
 #pragma mark NonOverlappingMark
 
@@ -195,18 +203,16 @@ _electricCharge(electricCharge),
 _anchorElectricCharge(anchorElectricCharge),
 _minWidgetSpeedInPixelsPerSecond(minWidgetSpeedInPixelsPerSecond),
 _maxWidgetSpeedInPixelsPerSecond(maxWidgetSpeedInPixelsPerSecond),
-_resistanceFactor(resistanceFactor)
+_resistanceFactor(resistanceFactor),
+_touchListener(touchListener)
 {
   _widget = new MarkWidget(imageBuilderWidget);
   _anchorWidget = new MarkWidget(imageBuilderAnchor);
-
-  if (touchListener != NULL) {
-    _widget->setTouchListener(touchListener);
-  }
-
 }
 
 NonOverlappingMark::~NonOverlappingMark() {
+  delete _touchListener;
+
   delete _widget;
   delete _anchorWidget;
   delete _cartesianPos;
@@ -347,8 +353,11 @@ void NonOverlappingMark::onResizeViewportEvent(int width, int height) {
   _anchorWidget->onResizeViewportEvent(width, height);
 }
 
-bool NonOverlappingMark::onTouchEvent(float x, float y) {
-  return _widget->onTouchEvent(x, y);
+bool NonOverlappingMark::onTouchEvent(const Vector2F& touchedPixel) {
+  if (_touchListener != NULL) {
+    return _touchListener->touchedMark(this, touchedPixel);
+  }
+  return false;
 }
 
 #pragma-mark Renderer
@@ -362,7 +371,8 @@ _maxConvergenceSteps(maxConvergenceSteps),
 _lastPositionsUpdatedTime(0),
 _connectorsGLState(NULL),
 _visibleMarksIDsBuilder( IStringBuilder::newStringBuilder() ),
-_visibleMarksIDs("")
+_visibleMarksIDs(""),
+_touchListener(NULL)
 {
 
 }
@@ -565,28 +575,80 @@ void NonOverlappingMarksRenderer::onResizeViewportEvent(const G3MEventContext* e
   }
 }
 
-bool NonOverlappingMarksRenderer::onTouchEvent(const G3MEventContext* ec, const TouchEvent* touchEvent) {
+int NonOverlappingMark::getWidth() const {
+  return _widget->getWidth();
+}
 
-  if (touchEvent->getTapCount() == 1) {
-    const float x = touchEvent->getTouch(0)->getPos()._x;
-    const float y = touchEvent->getTouch(0)->getPos()._y;
+int NonOverlappingMark::getHeight() const {
+  return _widget->getHeight();
+}
+
+bool NonOverlappingMarksRenderer::onTouchEvent(const G3MEventContext* ec, const TouchEvent* touchEvent) {
+  bool handled = false;
+
+  if ( touchEvent->getType() == DownUp ) {
+    const Vector2F touchedPixel = touchEvent->getTouch(0)->getPos();
+
+    double minSqDistance = IMathUtils::instance()->maxDouble();
+    NonOverlappingMark* nearestMark = NULL;
+
     const int visibleMarksSize = _visibleMarks.size();
     for (int i = 0; i < visibleMarksSize; i++) {
-      if (_visibleMarks[i]->onTouchEvent(x, y)) {
-        return true;
+      NonOverlappingMark* mark = _visibleMarks[i];
+
+      const int markWidth = mark->getWidth();
+      if (markWidth <= 0) {
+        continue;
+      }
+
+      const int markHeight = mark->getHeight();
+      if (markHeight <= 0) {
+        continue;
+      }
+
+      const Vector2F markPixel = mark->getScreenPos();
+
+      const RectangleF markPixelBounds(markPixel._x - ((float) markWidth / 2),
+                                       markPixel._y - ((float) markHeight / 2),
+                                       markWidth,
+                                       markHeight);
+
+      if (markPixelBounds.contains(touchedPixel._x, touchedPixel._y)) {
+        const double sqDistance = markPixel.squaredDistanceTo(touchedPixel);
+        if (sqDistance < minSqDistance) {
+          nearestMark = mark;
+          minSqDistance = sqDistance;
+        }
       }
     }
+
+    if (nearestMark != NULL) {
+      handled = nearestMark->onTouchEvent(touchedPixel);
+      if (!handled) {
+        if (_touchListener != NULL) {
+          handled = _touchListener->touchedMark(nearestMark, touchedPixel);
+        }
+      }
+    }
+
   }
-  return false;
+
+  return handled;
 }
 
 bool NonOverlappingMarksRenderer::marksAreMoving() const{
   const int visibleMarksSize = _visibleMarks.size();
   for (int i = 0; i < visibleMarksSize; i++) {
     if (_visibleMarks[i]->isMoving()) {
-      //      printf("Mark %d is moving", i);
       return true;
     }
   }
   return false;
+}
+
+void NonOverlappingMarksRenderer::setTouchListener(MarkWidgetTouchListener* touchListener) {
+  if (_touchListener != NULL && _touchListener != touchListener) {
+    delete _touchListener;
+  }
+  _touchListener = touchListener;
 }

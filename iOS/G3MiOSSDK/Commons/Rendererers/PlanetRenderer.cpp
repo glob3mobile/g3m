@@ -790,7 +790,7 @@ bool PlanetRenderer::onTouchEvent(const G3MEventContext* ec,
   }
 
   if ( touchEvent->getType() == _touchEventTypeOfTerrainTouchListener ) {
-    const Vector2I pixel = touchEvent->getTouch(0)->getPos();
+    const Vector2F pixel = touchEvent->getTouch(0)->getPos();
     const Vector3D ray = _lastCamera->pixel2Ray(pixel);
     const Vector3D origin = _lastCamera->getCartesianPosition();
 
