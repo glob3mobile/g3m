@@ -32,9 +32,11 @@ package org.glob3.mobile.generated;
 //class NonOverlappingMark;
 
 
-public interface NonOverlappingMarkTouchListener
+public abstract class NonOverlappingMarkTouchListener
 {
-  void dispose();
+  public void dispose()
+  {
+  }
 
-  boolean touchedMark(NonOverlappingMark mark, Vector2F touchedPixel);
+  public abstract boolean touchedMark(NonOverlappingMark mark, Vector2F touchedPixel);
 }
