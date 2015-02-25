@@ -36,8 +36,8 @@ import android.widget.RelativeLayout;
 
 
 public class MainActivity
-extends
-Activity {
+         extends
+            Activity {
 
    private G3MWidget_Android _g3mWidget;
 
@@ -83,7 +83,7 @@ Activity {
       final ColumnLayoutImageBuilder imageBuilderWidget = new ColumnLayoutImageBuilder( //
                new DownloaderImageBuilder(markBitmapURL), //
                new LabelImageBuilder(label, GFont.monospaced()) //
-               );
+      );
 
       return new NonOverlappingMark( //
                imageBuilderWidget, //
@@ -109,11 +109,6 @@ Activity {
                                     final Vector2F touchedPixel) {
             System.out.println("Touched on pixel=" + touchedPixel + ", mark=" + mark);
             return true;
-         }
-
-
-         @Override
-         public void dispose() {
          }
       });
 
