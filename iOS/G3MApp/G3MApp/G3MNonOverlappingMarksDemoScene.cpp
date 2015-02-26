@@ -53,29 +53,29 @@ void G3MNonOverlappingMarksDemoScene::rawActivate(const G3MContext* context) {
 
 
 
-  //  NonOverlappingMark* mark1 = new NonOverlappingMark(new DownloaderImageBuilder(markBitmapURL),
-  //                                                     new DownloaderImageBuilder(anchorBitmapURL),
-  //                                                     Geodetic3D::fromDegrees(28.131817, -15.440219, 0));
-  NonOverlappingMark* mark1 = new NonOverlappingMark(new ColumnLayoutImageBuilder(new DownloaderImageBuilder(markBitmapURL),
-                                                                                  new LabelImageBuilder("$118",
-                                                                                                        GFont::sansSerif(),
-                                                                                                        4,
-                                                                                                        Color::black(),
-                                                                                                        Color::transparent(),
-                                                                                                        0,0,0,
-                                                                                                        Color::white(),
-                                                                                                        4
-                                                                                                        ),
-                                                                                  0,              // margin
-                                                                                  0.5,            // borderWidth,
-                                                                                  Color::black(), // borderColor
-                                                                                  4,              // padding
-                                                                                  Color::gray(),  // backgroundColor
-                                                                                  8,              // cornerRadius
-                                                                                  2               // childrenSeparation
-                                                                                  ),
+  NonOverlappingMark* mark1 = new NonOverlappingMark(new DownloaderImageBuilder(markBitmapURL),
                                                      new DownloaderImageBuilder(anchorBitmapURL),
                                                      Geodetic3D::fromDegrees(28.131817, -15.440219, 0));
+//  NonOverlappingMark* mark1 = new NonOverlappingMark(new ColumnLayoutImageBuilder(new DownloaderImageBuilder(markBitmapURL),
+//                                                                                  new LabelImageBuilder("$118",
+//                                                                                                        GFont::sansSerif(),
+//                                                                                                        4,
+//                                                                                                        Color::black(),
+//                                                                                                        Color::transparent(),
+//                                                                                                        0,0,0,
+//                                                                                                        Color::white(),
+//                                                                                                        4
+//                                                                                                        ),
+//                                                                                  0,              // margin
+//                                                                                  0.5,            // borderWidth,
+//                                                                                  Color::black(), // borderColor
+//                                                                                  4,              // padding
+//                                                                                  Color::gray(),  // backgroundColor
+//                                                                                  8,              // cornerRadius
+//                                                                                  2               // childrenSeparation
+//                                                                                  ),
+//                                                     new DownloaderImageBuilder(anchorBitmapURL),
+//                                                     Geodetic3D::fromDegrees(28.131817, -15.440219, 0));
   renderer->addMark(mark1);
 
   NonOverlappingMark* mark2 = new NonOverlappingMark(new DownloaderImageBuilder(markBitmapURL),
@@ -107,6 +107,18 @@ void G3MNonOverlappingMarksDemoScene::rawActivate(const G3MContext* context) {
                                                      new DownloaderImageBuilder(anchorBitmapURL),
                                                      Geodetic3D::fromDegrees(27.810709, -17.917639, 0));
   renderer->addMark(mark7);
+
+
+//  for(int i = 0; i < 1000; i++){
+//    double lat = ((rand() % 18000) - 9000) / 100.0;
+//    double lon = ((rand() % 36000) - 18000) / 100.0;
+//
+//    NonOverlappingMark* mark = new NonOverlappingMark(new DownloaderImageBuilder(URL("file:///g3m-marker.png")),
+//                                                      new DownloaderImageBuilder(URL("file:///anchorWidget.png")),
+//                                                      Geodetic3D::fromDegrees(lat, lon, 0));
+//    renderer->addMark(mark);
+//  }
+
 
 
   // Canarias, here we go!
