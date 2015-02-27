@@ -47,18 +47,19 @@ _halfWidth(0)
 {
 }
 
-MarkWidget::~MarkWidget()
-{
+MarkWidget::~MarkWidget() {
   delete _image;
   delete _imageBuilder;
 
-  _glState->_release();
+  if (_glState != NULL) {
+    _glState->_release();
+  }
 }
 
-void MarkWidget::init(const G3MRenderContext *rc, int viewportWidth, int viewportHeight) {
+void MarkWidget::init(const G3MRenderContext* rc) {
   if (_glState == NULL) {
     _glState = new GLState();
-    _viewportExtent = new ViewportExtentGLFeature(viewportWidth, viewportHeight);
+    _viewportExtent = new ViewportExtentGLFeature(rc->getCurrentCamera());
 
     _texHandler = rc->getTexturesHandler();
     _imageBuilder->build(rc, new WidgetImageListener(this), true);
@@ -116,7 +117,11 @@ void MarkWidget::prepareWidget(const IImage* image,
 }
 
 void MarkWidget::render(const G3MRenderContext *rc, GLState *glState) {
-  rc->getGL()->drawArrays(GLPrimitive::triangleStrip(), 0, 4, _glState, *rc->getGPUProgramManager());
+  rc->getGL()->drawArrays(GLPrimitive::triangleStrip(),
+                          0, // first
+                          4, // count
+                          _glState,
+                          *rc->getGPUProgramManager());
 }
 
 void MarkWidget::setAndClampScreenPos(float x, float y,
@@ -162,14 +167,6 @@ int MarkWidget::getHeight() const {
   return _image == NULL ? 0 : _image->getHeight();
 }
 
-//void MarkWidget::clampPositionInsideScreen(int viewportWidth, int viewportHeight, float margin) {
-//  const IMathUtils* mu = IMathUtils::instance();
-//  float x = mu->clamp(_x, _halfWidth  + margin, viewportWidth  - _halfWidth  - margin);
-//  float y = mu->clamp(_y, _halfHeight + margin, viewportHeight - _halfHeight - margin);
-//
-//  setScreenPos(x, y);
-//}
-
 NonOverlappingMark::NonOverlappingMark(IImageBuilder* imageBuilderWidget,
                                        IImageBuilder* imageBuilderAnchor,
                                        const Geodetic3D& position,
@@ -213,8 +210,8 @@ Vector3D NonOverlappingMark::getCartesianPosition(const Planet* planet) const {
   return *_cartesianPos;
 }
 
-void NonOverlappingMark::computeAnchorScreenPos(const Camera* cam, const Planet* planet) {
-  Vector2F sp(cam->point2Pixel(getCartesianPosition(planet)));
+void NonOverlappingMark::computeAnchorScreenPos(const Camera* camera, const Planet* planet) {
+  Vector2F sp(camera->point2Pixel(getCartesianPosition(planet)));
   _anchorWidget->setScreenPos(sp._x, sp._y);
 
   if (_widget->getScreenPos().isNaN()) {
@@ -222,10 +219,9 @@ void NonOverlappingMark::computeAnchorScreenPos(const Camera* cam, const Planet*
   }
 }
 
-
 void NonOverlappingMark::applyCoulombsLaw(NonOverlappingMark* that) {
   Vector2F d = getScreenPos().sub(that->getScreenPos());
-  double distance = d.length()  + 0.001;
+  double distance = d.length() + 0.001;
   Vector2F direction = d.div((float)distance);
 
   float strength = (float)(this->_electricCharge * that->_electricCharge / (distance * distance));
@@ -238,7 +234,7 @@ void NonOverlappingMark::applyCoulombsLaw(NonOverlappingMark* that) {
 
 void NonOverlappingMark::applyCoulombsLawFromAnchor(NonOverlappingMark* that) {
   Vector2F dAnchor = getScreenPos().sub(that->getAnchorScreenPos());
-  double distanceAnchor = dAnchor.length()  + 0.001;
+  double distanceAnchor = dAnchor.length() + 0.001;
   Vector2F directionAnchor = dAnchor.div((float)distanceAnchor);
 
   float strengthAnchor = (float)(this->_electricCharge * that->_anchorElectricCharge / (distanceAnchor * distanceAnchor));
@@ -259,23 +255,12 @@ void NonOverlappingMark::applyHookesLaw() {   //Spring
              direction._y * force);
 }
 
-//void NonOverlappingMark::render(const G3MRenderContext* rc, GLState* glState) {
-//  if (_widget->isReady() && _anchorWidget->isReady()) {
-//    _widget->render(rc, glState);
-//    _anchorWidget->render(rc, glState);
-//  }
-//  else {
-//    _widget->init(rc, rc->getCurrentCamera()->getViewPortWidth(), rc->getCurrentCamera()->getViewPortHeight());
-//    _anchorWidget->init(rc, rc->getCurrentCamera()->getViewPortWidth(), rc->getCurrentCamera()->getViewPortHeight());
-//  }
-//}
-
 void NonOverlappingMark::renderWidget(const G3MRenderContext* rc, GLState* glState) {
   if (_widget->isReady()) {
     _widget->render(rc, glState);
   }
   else {
-    _widget->init(rc, rc->getCurrentCamera()->getViewPortWidth(), rc->getCurrentCamera()->getViewPortHeight());
+    _widget->init(rc);
   }
 }
 
@@ -284,10 +269,9 @@ void NonOverlappingMark::renderAnchorWidget(const G3MRenderContext* rc, GLState*
     _anchorWidget->render(rc, glState);
   }
   else {
-    _anchorWidget->init(rc, rc->getCurrentCamera()->getViewPortWidth(), rc->getCurrentCamera()->getViewPortHeight());
+    _anchorWidget->init(rc);
   }
 }
-
 
 void NonOverlappingMark::updatePositionWithCurrentForce(float timeInSeconds,
                                                         int viewportWidth,
@@ -303,20 +287,24 @@ void NonOverlappingMark::updatePositionWithCurrentForce(float timeInSeconds,
   _force.set(0, 0);
 
   //Update position
-  Vector2F position = _widget->getScreenPos();
+  Vector2F widgetPosition = _widget->getScreenPos();
 
-  float newX = position._x + (_speed.x() * timeInSeconds);
-  float newY = position._y + (_speed.y() * timeInSeconds);
+  const float newX = widgetPosition._x + (_speed.x() * timeInSeconds);
+  const float newY = widgetPosition._y + (_speed.y() * timeInSeconds);
 
-  Vector2F anchorPos = _anchorWidget->getScreenPos();
+  Vector2F anchorPosition = _anchorWidget->getScreenPos();
 
-  Vector2F spring = Vector2F(newX,newY).sub(anchorPos).clampLength(_minSpringLength, _maxSpringLength);
-  Vector2F finalPos = anchorPos.add(spring);
+  Vector2F spring = Vector2F(newX,newY).sub(anchorPosition).clampLength(_minSpringLength, _maxSpringLength);
+  Vector2F finalPos = anchorPosition.add(spring);
 
-//  _widget->setScreenPos(finalPos._x, finalPos._y);
-//  _widget->clampPositionInsideScreen(viewportWidth, viewportHeight, viewportMargin);
-  _widget->setAndClampScreenPos(finalPos._x, finalPos._y,
-                                viewportWidth, viewportHeight, viewportMargin);
+//  Vector2F finalPos(newX, newY);
+//#warning Diego at work!
+
+  _widget->setAndClampScreenPos(finalPos._x,
+                                finalPos._y,
+                                viewportWidth,
+                                viewportHeight,
+                                viewportMargin);
 }
 
 void NonOverlappingMark::onResizeViewportEvent(int width, int height) {
@@ -343,7 +331,6 @@ _touchListener(NULL)
 {
 
 }
-
 
 NonOverlappingMarksRenderer::~NonOverlappingMarksRenderer() {
   _connectorsGLState->_release();
@@ -399,7 +386,7 @@ void NonOverlappingMarksRenderer::computeMarksToBeRendered(const Camera* camera,
       _visibleMarksIDsBuilder->addString("/");
     }
     else {
-      //Resetting marks location of invisible anchors
+      // Resetting marks location of invisible anchors
 #warning Do we really need this?
       m->resetWidgetPositionVelocityAndForce();
     }
@@ -418,7 +405,8 @@ void NonOverlappingMarksRenderer::renderConnectorLines(const G3MRenderContext* r
   if (_connectorsGLState == NULL) {
     _connectorsGLState = new GLState();
 
-    _connectorsGLState->addGLFeature(new FlatColorGLFeature(Color::black()), false);
+    _connectorsGLState->addGLFeature(new FlatColorGLFeature(Color::black()),
+                                     false);
   }
 
   _connectorsGLState->clearGLFeatureGroup(NO_GROUP);
@@ -427,36 +415,41 @@ void NonOverlappingMarksRenderer::renderConnectorLines(const G3MRenderContext* r
 
   const int visibleMarksSize = _visibleMarks.size();
   for (int i = 0; i < visibleMarksSize; i++) {
-    Vector2F sp = _visibleMarks[i]->getScreenPos();
-    Vector2F asp = _visibleMarks[i]->getAnchorScreenPos();
+    const Vector2F sp = _visibleMarks[i]->getScreenPos();
+    const Vector2F asp = _visibleMarks[i]->getAnchorScreenPos();
 
     pos2D.add(sp._x, -sp._y);
     pos2D.add(asp._x, -asp._y);
   }
 
-  _connectorsGLState->addGLFeature( new Geometry2DGLFeature(pos2D.create(),
-                                                            2,
-                                                            0,
-                                                            true,
-                                                            0,
-                                                            3.0f,
-                                                            true,
-                                                            10.0f,
-                                                            Vector2F::zero()),
+  _connectorsGLState->addGLFeature(new Geometry2DGLFeature(pos2D.create(),  // buffer
+                                                           2,               // arrayElementSize
+                                                           0,               // index
+                                                           true,            // normalized
+                                                           0,               // stride
+                                                           3.0f,            // lineWidth
+                                                           true,            // needsPointSize
+                                                           10.0f,           // pointSize
+                                                           Vector2F::zero() // translation
+                                                           ),
                                    false);
 
-  _connectorsGLState->addGLFeature(new ViewportExtentGLFeature(rc->getCurrentCamera()->getViewPortWidth(),
-                                                               rc->getCurrentCamera()->getViewPortHeight()), false);
+  _connectorsGLState->addGLFeature(new ViewportExtentGLFeature(rc->getCurrentCamera()),
+                                   false);
 
-  rc->getGL()->drawArrays(GLPrimitive::lines(), 0, pos2D.size()/2, _connectorsGLState, *rc->getGPUProgramManager());
+  rc->getGL()->drawArrays(GLPrimitive::lines(),
+                          0,                    // first
+                          pos2D.size()/2,       // count
+                          _connectorsGLState,
+                          *rc->getGPUProgramManager());
 }
 
-void NonOverlappingMarksRenderer::computeForces(const Camera* cam, const Planet* planet) {
+void NonOverlappingMarksRenderer::computeForces(const Camera* camera, const Planet* planet) {
   const int visibleMarksSize = _visibleMarks.size();
 
   //Compute Mark Anchor Screen Positions
   for (int i = 0; i < visibleMarksSize; i++) {
-    _visibleMarks[i]->computeAnchorScreenPos(cam, planet);
+    _visibleMarks[i]->computeAnchorScreenPos(camera, planet);
   }
 
   //Compute Mark Forces

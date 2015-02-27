@@ -14,8 +14,20 @@ ViewportExtentGLFeature::ViewportExtentGLFeature(int viewportWidth,
                                                  int viewportHeight) :
 GLFeature(NO_GROUP, GLF_VIEWPORT_EXTENT)
 {
-  _extent = new GPUUniformValueVec2FloatMutable(viewportWidth, viewportHeight);
-  
+  _extent = new GPUUniformValueVec2FloatMutable(viewportWidth,
+                                                viewportHeight);
+
+  _values->addUniformValue(VIEWPORT_EXTENT,
+                           _extent,
+                           false);
+}
+
+ViewportExtentGLFeature::ViewportExtentGLFeature(const Camera* camera) :
+GLFeature(NO_GROUP, GLF_VIEWPORT_EXTENT)
+{
+  _extent = new GPUUniformValueVec2FloatMutable(camera->getViewPortWidth(),
+                                                camera->getViewPortHeight());
+
   _values->addUniformValue(VIEWPORT_EXTENT,
                            _extent,
                            false);
@@ -397,14 +409,14 @@ void TextureCoordsGLFeature::applyOnGlobalGLState(GLGlobalState* state) const {
 
 }
 
-ProjectionGLFeature::ProjectionGLFeature(const Camera* cam):
-GLCameraGroupFeature(cam->getProjectionMatrix44D(), GLF_PROJECTION) {}
+ProjectionGLFeature::ProjectionGLFeature(const Camera* camera):
+GLCameraGroupFeature(camera->getProjectionMatrix44D(), GLF_PROJECTION) {}
 
-ModelGLFeature::ModelGLFeature(const Camera* cam):
-GLCameraGroupFeature(cam->getModelMatrix44D(), GLF_MODEL) {}
+ModelGLFeature::ModelGLFeature(const Camera* camera):
+GLCameraGroupFeature(camera->getModelMatrix44D(), GLF_MODEL) {}
 
-ModelViewGLFeature::ModelViewGLFeature(const Camera* cam):
-GLCameraGroupFeature(cam->getModelViewMatrix44D(), GLF_MODEL_VIEW) {}
+ModelViewGLFeature::ModelViewGLFeature(const Camera* camera):
+GLCameraGroupFeature(camera->getModelViewMatrix44D(), GLF_MODEL_VIEW) {}
 
 DirectionLightGLFeature::DirectionLightGLFeature(const Vector3D& diffuseLightDirection,
                                                  const Color& diffuseLightColor,

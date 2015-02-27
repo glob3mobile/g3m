@@ -96,6 +96,9 @@ private:
 public:
   ViewportExtentGLFeature(int viewportWidth,
                           int viewportHeight);
+
+  ViewportExtentGLFeature(const Camera* camera);
+
   void applyOnGlobalGLState(GLGlobalState* state)  const {}
   
   void changeExtent(int viewportWidth,
@@ -236,7 +239,7 @@ public:
   {
   }
 
-  ModelViewGLFeature(const Camera* cam);
+  ModelViewGLFeature(const Camera* camera);
 };
 
 class ModelGLFeature: public GLCameraGroupFeature {
@@ -253,7 +256,7 @@ public:
   {
   }
 
-  ModelGLFeature(const Camera* cam);
+  ModelGLFeature(const Camera* camera);
 };
 
 class ProjectionGLFeature: public GLCameraGroupFeature {
@@ -270,7 +273,7 @@ public:
   {
   }
 
-  ProjectionGLFeature(const Camera* cam);
+  ProjectionGLFeature(const Camera* camera);
 };
 
 class ModelTransformGLFeature: public GLCameraGroupFeature {

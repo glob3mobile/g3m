@@ -90,8 +90,7 @@ public:
 
   ~MarkWidget();
 
-  void init(const G3MRenderContext *rc,
-            int viewportWidth, int viewportHeight);
+  void init(const G3MRenderContext* rc);
 
   void render(const G3MRenderContext* rc, GLState* glState);
 
@@ -112,7 +111,6 @@ public:
   int getWidth() const;
   int getHeight() const;
 
-//  void clampPositionInsideScreen(int viewportWidth, int viewportHeight, float margin);
 };
 
 
@@ -166,7 +164,7 @@ public:
 
   Vector3D getCartesianPosition(const Planet* planet) const;
 
-  void computeAnchorScreenPos(const Camera* cam, const Planet* planet);
+  void computeAnchorScreenPos(const Camera* camera, const Planet* planet);
 
   Vector2F getScreenPos() const       { return _widget->getScreenPos(); }
   Vector2F getAnchorScreenPos() const { return _anchorWidget->getScreenPos(); }
@@ -237,7 +235,7 @@ private:
   GLState * _connectorsGLState;
   void renderConnectorLines(const G3MRenderContext* rc);
 
-  void computeForces(const Camera* cam, const Planet* planet);
+  void computeForces(const Camera* camera, const Planet* planet);
   void renderMarks(const G3MRenderContext* rc, GLState* glState);
   void applyForces(long long now, const Camera* camera);
 
