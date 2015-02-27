@@ -48,20 +48,20 @@ public class MarkWidget
     _halfHeight = image.getHeight() / 2;
   
     FloatBufferBuilderFromCartesian2D pos2D = new FloatBufferBuilderFromCartesian2D();
-    pos2D.add(-_halfWidth, -_halfHeight); //vertex 1
-    pos2D.add(-_halfWidth, _halfHeight); //vertex 2
-    pos2D.add(_halfWidth, -_halfHeight); //vertex 3
-    pos2D.add(_halfWidth, _halfHeight); //vertex 4
+    pos2D.add(-_halfWidth, -_halfHeight); // vertex 1
+    pos2D.add(-_halfWidth, _halfHeight); // vertex 2
+    pos2D.add(_halfWidth, -_halfHeight); // vertex 3
+    pos2D.add(_halfWidth, _halfHeight); // vertex 4
   
     _geo2Dfeature = new Geometry2DGLFeature(pos2D.create(), 2, 0, true, 0, 1.0f, true, 10.0f, new Vector2F(_x, _y));
   
     _glState.addGLFeature(_geo2Dfeature, false);
   
     FloatBufferBuilderFromCartesian2D texCoords = new FloatBufferBuilderFromCartesian2D();
-    texCoords.add(0.0f, 1.0f); //vertex 1
-    texCoords.add(0.0f, 0.0f); //vertex 2
-    texCoords.add(1.0f, 1.0f); //vertex 3
-    texCoords.add(1.0f, 0.0f); //vertex 4
+    texCoords.add(0.0f, 1.0f); // vertex 1
+    texCoords.add(0.0f, 0.0f); // vertex 2
+    texCoords.add(1.0f, 1.0f); // vertex 3
+    texCoords.add(1.0f, 0.0f); // vertex 4
   
     final TextureIDReference textureID = _texHandler.getTextureIDReference(_image, GLFormat.rgba(), _imageName, false);
   
@@ -113,6 +113,20 @@ public class MarkWidget
     rc.getGL().drawArrays(GLPrimitive.triangleStrip(), 0, 4, _glState, rc.getGPUProgramManager());
   }
 
+  public final void setAndClampScreenPos(float x, float y, int viewportWidth, int viewportHeight, float margin)
+  {
+    final IMathUtils mu = IMathUtils.instance();
+    final float xx = mu.clamp(x, _halfWidth + margin, viewportWidth - _halfWidth - margin);
+    final float yy = mu.clamp(y, _halfHeight + margin, viewportHeight - _halfHeight - margin);
+  
+    if (_geo2Dfeature != null)
+    {
+      _geo2Dfeature.setTranslation(xx, yy);
+    }
+    _x = xx;
+    _y = yy;
+  }
+
   public final void setScreenPos(float x, float y)
   {
     if (_geo2Dfeature != null)
@@ -122,6 +136,7 @@ public class MarkWidget
     _x = x;
     _y = y;
   }
+
   public final Vector2F getScreenPos()
   {
      return new Vector2F(_x, _y);
@@ -158,12 +173,5 @@ public class MarkWidget
     return _image == null ? 0 : _image.getHeight();
   }
 
-  public final void clampPositionInsideScreen(int viewportWidth, int viewportHeight, float margin)
-  {
-    final IMathUtils mu = IMathUtils.instance();
-    float x = mu.clamp(_x, _halfWidth + margin, viewportWidth - _halfWidth - margin);
-    float y = mu.clamp(_y, _halfHeight + margin, viewportHeight - _halfHeight - margin);
-  
-    setScreenPos(x, y);
-  }
+//  void clampPositionInsideScreen(int viewportWidth, int viewportHeight, float margin);
 }

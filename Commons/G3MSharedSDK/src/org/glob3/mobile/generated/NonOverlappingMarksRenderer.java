@@ -3,7 +3,6 @@ public class NonOverlappingMarksRenderer extends DefaultRenderer
 {
   private final int _maxVisibleMarks;
   private final float _viewportMargin;
-  private final int _maxConvergenceSteps;
 
   private java.util.ArrayList<NonOverlappingMark> _marks = new java.util.ArrayList<NonOverlappingMark>();
 
@@ -82,7 +81,7 @@ public class NonOverlappingMarksRenderer extends DefaultRenderer
   
     _connectorsGLState.addGLFeature(new Geometry2DGLFeature(pos2D.create(), 2, 0, true, 0, 3.0f, true, 10.0f, Vector2F.zero()), false);
   
-    _connectorsGLState.addGLFeature(new ViewportExtentGLFeature((int)rc.getCurrentCamera().getViewPortWidth(), (int)rc.getCurrentCamera().getViewPortHeight()), false);
+    _connectorsGLState.addGLFeature(new ViewportExtentGLFeature(rc.getCurrentCamera().getViewPortWidth(), rc.getCurrentCamera().getViewPortHeight()), false);
   
     rc.getGL().drawArrays(GLPrimitive.lines(), 0, pos2D.size()/2, _connectorsGLState, rc.getGPUProgramManager());
   }
@@ -119,14 +118,21 @@ public class NonOverlappingMarksRenderer extends DefaultRenderer
   }
   private void renderMarks(G3MRenderContext rc, GLState glState)
   {
-    //Draw Lines
+    // Draw Lines
     renderConnectorLines(rc);
   
-    //Draw Anchors and Marks
     final int visibleMarksSize = _visibleMarks.size();
+  
+    // draw all the widgets in a shot to avoid OpenGL state changes
     for (int i = 0; i < visibleMarksSize; i++)
     {
-      _visibleMarks.get(i).render(rc, glState);
+      _visibleMarks.get(i).renderWidget(rc, glState);
+    }
+  
+    // draw all the anchorwidgets in a shot to avoid OpenGL state changes
+    for (int i = 0; i < visibleMarksSize; i++)
+    {
+      _visibleMarks.get(i).renderAnchorWidget(rc, glState);
     }
   }
   private void applyForces(long now, Camera camera)
@@ -139,12 +145,13 @@ public class NonOverlappingMarksRenderer extends DefaultRenderer
       final int viewPortHeight = camera.getViewPortHeight();
   
       final double elapsedMS = now - _lastPositionsUpdatedTime;
+      final float timeInSeconds = (float)(elapsedMS / 1000.0);
   
       //Update Position based on last Forces
       final int visibleMarksSize = _visibleMarks.size();
       for (int i = 0; i < visibleMarksSize; i++)
       {
-        _visibleMarks.get(i).updatePositionWithCurrentForce(elapsedMS, viewPortWidth, viewPortHeight, _viewportMargin);
+        _visibleMarks.get(i).updatePositionWithCurrentForce(timeInSeconds, viewPortWidth, viewPortHeight, _viewportMargin);
       }
     }
   
@@ -152,19 +159,14 @@ public class NonOverlappingMarksRenderer extends DefaultRenderer
   }
 
 
-  public NonOverlappingMarksRenderer(int maxVisibleMarks, float viewportMargin)
-  {
-     this(maxVisibleMarks, viewportMargin, -1);
-  }
   public NonOverlappingMarksRenderer(int maxVisibleMarks)
   {
-     this(maxVisibleMarks, 5, -1);
+     this(maxVisibleMarks, 5);
   }
-  public NonOverlappingMarksRenderer(int maxVisibleMarks, float viewportMargin, int maxConvergenceSteps)
+  public NonOverlappingMarksRenderer(int maxVisibleMarks, float viewportMargin)
   {
      _maxVisibleMarks = maxVisibleMarks;
      _viewportMargin = viewportMargin;
-     _maxConvergenceSteps = maxConvergenceSteps;
      _lastPositionsUpdatedTime = 0;
      _connectorsGLState = null;
      _visibleMarksIDsBuilder = IStringBuilder.newStringBuilder();
@@ -237,26 +239,7 @@ public class NonOverlappingMarksRenderer extends DefaultRenderer
   
     computeMarksToBeRendered(camera, planet);
     computeForces(camera, planet);
-  
-    if (_maxConvergenceSteps > 0)
-    {
-      //Looking for convergence on _maxConvergenceSteps
-      long timeStep = 40;
-      applyForces(_lastPositionsUpdatedTime + timeStep, camera);
-  
-      int iteration = 0;
-      while (marksAreMoving() && iteration < _maxConvergenceSteps)
-      {
-        computeForces(camera, planet);
-        applyForces(_lastPositionsUpdatedTime + timeStep, camera);
-        iteration++;
-      }
-    }
-    else
-    {
-      //Real Time
-      applyForces(rc.getFrameStartTimer().nowInMilliseconds(), camera);
-    }
+    applyForces(rc.getFrameStartTimer().nowInMilliseconds(), camera);
   
     renderMarks(rc, glState);
   }
@@ -330,44 +313,6 @@ public class NonOverlappingMarksRenderer extends DefaultRenderer
     }
   }
 
-  public final void start(G3MRenderContext rc)
-  {
-
-  }
-
-  public final void stop(G3MRenderContext rc)
-  {
-
-  }
-
-  public final SurfaceElevationProvider getSurfaceElevationProvider()
-  {
-    return null;
-  }
-
-  public final PlanetRenderer getPlanetRenderer()
-  {
-    return null;
-  }
-
-  public final boolean isPlanetRenderer()
-  {
-    return false;
-  }
-
-  public final boolean marksAreMoving()
-  {
-    final int visibleMarksSize = _visibleMarks.size();
-    for (int i = 0; i < visibleMarksSize; i++)
-    {
-      if (_visibleMarks.get(i).isMoving())
-      {
-        return true;
-      }
-    }
-    return false;
-  }
-
   public final void setTouchListener(NonOverlappingMarkTouchListener touchListener)
   {
     if (_touchListener != null && _touchListener != touchListener)
@@ -379,11 +324,3 @@ public class NonOverlappingMarksRenderer extends DefaultRenderer
   }
 
 }
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#pragma mark MarkWidget
-
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#pragma mark NonOverlappingMark
-
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#pragma-mark Renderer

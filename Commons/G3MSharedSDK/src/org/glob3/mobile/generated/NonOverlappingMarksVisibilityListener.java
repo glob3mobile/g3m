@@ -1,8 +1,9 @@
 package org.glob3.mobile.generated; 
-public interface NonOverlappingMarksVisibilityListener
+public abstract class NonOverlappingMarksVisibilityListener
 {
-  void dispose();
+  public void dispose()
+  {
+  }
 
-  void onVisibilityChange(java.util.ArrayList<NonOverlappingMark> visible);
-
+  public abstract void onVisibilityChange(java.util.ArrayList<NonOverlappingMark> visible);
 }

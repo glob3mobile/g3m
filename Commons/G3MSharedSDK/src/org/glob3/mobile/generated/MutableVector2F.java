@@ -27,21 +27,18 @@ public class MutableVector2F
   {
      _x = 0F;
      _y = 0F;
-
   }
 
   public MutableVector2F(float x, float y)
   {
      _x = x;
      _y = y;
-
   }
 
   public MutableVector2F(MutableVector2F that)
   {
      _x = that._x;
      _y = that._y;
-
   }
 
   public MutableVector2F(Vector2F that)
@@ -49,6 +46,24 @@ public class MutableVector2F
      _x = that._x;
      _y = that._y;
   
+  }
+
+  public final void set(float x, float y)
+  {
+    _x = x;
+    _y = y;
+  }
+
+  public final void add(float x, float y)
+  {
+    _x += x;
+    _y += y;
+  }
+
+  public final void times(float k)
+  {
+    _x *= k;
+    _y *= k;
   }
 
   public final MutableVector2F copyFrom(MutableVector2F that)
@@ -77,4 +92,5 @@ public class MutableVector2F
   {
     return new Vector2F(_x, _y);
   }
+
 }
