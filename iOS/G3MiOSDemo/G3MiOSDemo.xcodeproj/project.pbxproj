@@ -62,6 +62,7 @@
 		CFE3DBB1164B0E7D00910037 /* seymour-plane.json in Resources */ = {isa = PBXBuildFile; fileRef = CFE3DBB0164B0E7D00910037 /* seymour-plane.json */; };
 		CFEA76681666DCB000E89BC7 /* images in Resources */ = {isa = PBXBuildFile; fileRef = CFEA76671666DCB000E89BC7 /* images */; };
 		CFF95F7D158A748F00B56E11 /* plane.png in Resources */ = {isa = PBXBuildFile; fileRef = CFF95F7C158A748F00B56E11 /* plane.png */; };
+		D80654A71AA0A57200227212 /* CacheFiller.mm in Sources */ = {isa = PBXBuildFile; fileRef = D80654A61AA0A57200227212 /* CacheFiller.mm */; };
 		D8317203186C5BAD00522E1B /* simpleStencil.png in Resources */ = {isa = PBXBuildFile; fileRef = D8317202186C5BAD00522E1B /* simpleStencil.png */; };
 		D882B1CD171D77C000C2AD9C /* full-earth-256x256.bil in Resources */ = {isa = PBXBuildFile; fileRef = D882B1CC171D76AD00C2AD9C /* full-earth-256x256.bil */; };
 		D8D3A26318363C58007A784A /* FlatColorMesh_DirectionLight.fsh in Sources */ = {isa = PBXBuildFile; fileRef = D8D3A25F18363C58007A784A /* FlatColorMesh_DirectionLight.fsh */; };
@@ -173,6 +174,8 @@
 		CFE3DBB0164B0E7D00910037 /* seymour-plane.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "seymour-plane.json"; sourceTree = "<group>"; };
 		CFEA76671666DCB000E89BC7 /* images */ = {isa = PBXFileReference; lastKnownFileType = folder; path = images; sourceTree = "<group>"; };
 		CFF95F7C158A748F00B56E11 /* plane.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = plane.png; sourceTree = "<group>"; };
+		D80654A61AA0A57200227212 /* CacheFiller.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CacheFiller.mm; sourceTree = "<group>"; };
+		D80654A81AA0A5AD00227212 /* CacheFiller.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CacheFiller.h; sourceTree = "<group>"; };
 		D8317202186C5BAD00522E1B /* simpleStencil.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = simpleStencil.png; sourceTree = "<group>"; };
 		D882B1CC171D76AD00C2AD9C /* full-earth-256x256.bil */ = {isa = PBXFileReference; lastKnownFileType = file; path = "full-earth-256x256.bil"; sourceTree = "<group>"; };
 		D8D3A25F18363C58007A784A /* FlatColorMesh_DirectionLight.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = FlatColorMesh_DirectionLight.fsh; sourceTree = "<group>"; };
@@ -283,6 +286,8 @@
 				D8EEF3A21577920B003FEB5E /* ViewController.h */,
 				D8EEF3A31577920B003FEB5E /* ViewController.mm */,
 				D8EEF3911577920B003FEB5E /* Supporting Files */,
+				D80654A61AA0A57200227212 /* CacheFiller.mm */,
+				D80654A81AA0A5AD00227212 /* CacheFiller.h */,
 			);
 			name = G3MiOSDemo;
 			path = Glob3iOSDemo;
@@ -540,6 +545,7 @@
 			files = (
 				D8D3A26418363C58007A784A /* FlatColorMesh_DirectionLight.vsh in Sources */,
 				D8D3A26318363C58007A784A /* FlatColorMesh_DirectionLight.fsh in Sources */,
+				D80654A71AA0A57200227212 /* CacheFiller.mm in Sources */,
 				D8D3A26518363C58007A784A /* TexturedMesh_DirectionLight.fsh in Sources */,
 				D8EEF3971577920B003FEB5E /* main.m in Sources */,
 				D8D3A26618363C58007A784A /* TexturedMesh_DirectionLight.vsh in Sources */,

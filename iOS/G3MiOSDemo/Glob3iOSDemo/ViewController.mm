@@ -150,6 +150,8 @@
 #import <G3MiOSSDK/GEORectangleRasterSymbol.hpp>
 #import <G3MiOSSDK/GEOVectorLayer.hpp>
 
+#import "CacheFiller.h"
+
 //class TestVisibleSectorListener : public VisibleSectorListener {
 //public:
 //  void onVisibleSectorChange(const Sector& visibleSector,
@@ -319,6 +321,9 @@ Mesh* createSectorMesh(const Planet* planet,
    [[self G3MWidget] widget]->addPeriodicalTask(TimeInterval::fromMilliseconds(100),
    new CameraRollChangerTask([[self G3MWidget] widget]));
    */
+  
+  CacheFiller* cacheFiller = [[CacheFiller alloc] initWithDBPath:@""];
+  
   
 }
 
