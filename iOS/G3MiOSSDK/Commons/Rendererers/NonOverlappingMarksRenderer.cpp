@@ -12,7 +12,6 @@
 #include "Planet.hpp"
 #include "GLState.hpp"
 #include "FloatBufferBuilderFromCartesian2D.hpp"
-
 #include "Context.hpp"
 #include "TexturesHandler.hpp"
 #include "Camera.hpp"
@@ -34,8 +33,6 @@
 #include "IMathUtils.hpp"
 #include "TouchEvent.hpp"
 #include "RectangleF.hpp"
-
-#pragma mark MarkWidget
 
 MarkWidget::MarkWidget(IImageBuilder* imageBuilder):
 _image(NULL),
@@ -79,10 +76,10 @@ void MarkWidget::prepareWidget(const IImage* image,
   _halfHeight = image->getHeight() / 2;
 
   FloatBufferBuilderFromCartesian2D pos2D;
-  pos2D.add( -_halfWidth, -_halfHeight); //vertex 1
-  pos2D.add( -_halfWidth, _halfHeight); //vertex 2
-  pos2D.add( _halfWidth, -_halfHeight); //vertex 3
-  pos2D.add( _halfWidth, _halfHeight); //vertex 4
+  pos2D.add( -_halfWidth, -_halfHeight);  // vertex 1
+  pos2D.add( -_halfWidth,  _halfHeight);  // vertex 2
+  pos2D.add(  _halfWidth, -_halfHeight);  // vertex 3
+  pos2D.add(  _halfWidth,  _halfHeight);  // vertex 4
 
   _geo2Dfeature = new Geometry2DGLFeature(pos2D.create(),
                                           2,
@@ -98,10 +95,10 @@ void MarkWidget::prepareWidget(const IImage* image,
                          false);
 
   FloatBufferBuilderFromCartesian2D texCoords;
-  texCoords.add( 0.0f, 1.0f); //vertex 1
-  texCoords.add( 0.0f, 0.0f); //vertex 2
-  texCoords.add( 1.0f, 1.0f); //vertex 3
-  texCoords.add( 1.0f, 0.0f); //vertex 4
+  texCoords.add( 0.0f, 1.0f); // vertex 1
+  texCoords.add( 0.0f, 0.0f); // vertex 2
+  texCoords.add( 1.0f, 1.0f); // vertex 3
+  texCoords.add( 1.0f, 0.0f); // vertex 4
 
   const TextureIDReference* textureID = _texHandler->getTextureIDReference(_image,
                                                                            GLFormat::rgba(),
@@ -120,6 +117,19 @@ void MarkWidget::prepareWidget(const IImage* image,
 
 void MarkWidget::render(const G3MRenderContext *rc, GLState *glState) {
   rc->getGL()->drawArrays(GLPrimitive::triangleStrip(), 0, 4, _glState, *rc->getGPUProgramManager());
+}
+
+void MarkWidget::setAndClampScreenPos(float x, float y,
+                                      int viewportWidth, int viewportHeight, float margin) {
+  const IMathUtils* mu = IMathUtils::instance();
+  const float xx = mu->clamp(x, _halfWidth  + margin, viewportWidth  - _halfWidth  - margin);
+  const float yy = mu->clamp(y, _halfHeight + margin, viewportHeight - _halfHeight - margin);
+
+  if (_geo2Dfeature != NULL) {
+    _geo2Dfeature->setTranslation(xx, yy);
+  }
+  _x = xx;
+  _y = yy;
 }
 
 void MarkWidget::setScreenPos(float x, float y) {
@@ -152,15 +162,13 @@ int MarkWidget::getHeight() const {
   return _image == NULL ? 0 : _image->getHeight();
 }
 
-void MarkWidget::clampPositionInsideScreen(int viewportWidth, int viewportHeight, float margin) {
-  const IMathUtils* mu = IMathUtils::instance();
-  float x = mu->clamp(_x, _halfWidth  + margin, viewportWidth  - _halfWidth  - margin);
-  float y = mu->clamp(_y, _halfHeight + margin, viewportHeight - _halfHeight - margin);
-
-  setScreenPos(x, y);
-}
-
-#pragma mark NonOverlappingMark
+//void MarkWidget::clampPositionInsideScreen(int viewportWidth, int viewportHeight, float margin) {
+//  const IMathUtils* mu = IMathUtils::instance();
+//  float x = mu->clamp(_x, _halfWidth  + margin, viewportWidth  - _halfWidth  - margin);
+//  float y = mu->clamp(_y, _halfHeight + margin, viewportHeight - _halfHeight - margin);
+//
+//  setScreenPos(x, y);
+//}
 
 NonOverlappingMark::NonOverlappingMark(IImageBuilder* imageBuilderWidget,
                                        IImageBuilder* imageBuilderAnchor,
@@ -172,23 +180,17 @@ NonOverlappingMark::NonOverlappingMark(IImageBuilder* imageBuilderWidget,
                                        float maxSpringLength,
                                        float electricCharge,
                                        float anchorElectricCharge,
-                                       float minWidgetSpeedInPixelsPerSecond,
-                                       float maxWidgetSpeedInPixelsPerSecond,
                                        float resistanceFactor):
 _cartesianPos(NULL),
-_dX(0),
-_dY(0),
-_fX(0),
-_fY(0),
+_speed(MutableVector2F::zero()),
+_force(MutableVector2F::zero()),
 _geoPosition(position),
 _springLengthInPixels(springLengthInPixels),
 _springK(springK),
-_minSpringLength( minSpringLength > 0 ? minSpringLength : (springLengthInPixels * 0.85f) ),
-_maxSpringLength( maxSpringLength > 0 ? maxSpringLength : (springLengthInPixels * 1.15f) ),
+_minSpringLength( minSpringLength > 0 ? minSpringLength : (springLengthInPixels * 0.25f) ),
+_maxSpringLength( maxSpringLength > 0 ? maxSpringLength : (springLengthInPixels * 1.25f) ),
 _electricCharge(electricCharge),
 _anchorElectricCharge(anchorElectricCharge),
-_minWidgetSpeedInPixelsPerSecond(minWidgetSpeedInPixelsPerSecond),
-_maxWidgetSpeedInPixelsPerSecond(maxWidgetSpeedInPixelsPerSecond),
 _resistanceFactor(resistanceFactor),
 _touchListener(touchListener)
 {
@@ -221,8 +223,7 @@ void NonOverlappingMark::computeAnchorScreenPos(const Camera* cam, const Planet*
 }
 
 
-void NonOverlappingMark::applyCoulombsLaw(NonOverlappingMark* that) { //EM
-
+void NonOverlappingMark::applyCoulombsLaw(NonOverlappingMark* that) {
   Vector2F d = getScreenPos().sub(that->getScreenPos());
   double distance = d.length()  + 0.001;
   Vector2F direction = d.div((float)distance);
@@ -231,21 +232,11 @@ void NonOverlappingMark::applyCoulombsLaw(NonOverlappingMark* that) { //EM
 
   Vector2F force = direction.times(strength);
 
-  this->applyForce(force._x, force._y);
+  this->applyForce( force._x,  force._y);
   that->applyForce(-force._x, -force._y);
-
-  //  var d = point1.p.subtract(point2.p);
-  //  var distance = d.magnitude() + 0.1; // avoid massive forces at small distances (and divide by zero)
-  //  var direction = d.normalise();
-  //
-  //  // apply force to each end point
-  //  point1.applyForce(direction.multiply(this.repulsion).divide(distance * distance * 0.5));
-  //  point2.applyForce(direction.multiply(this.repulsion).divide(distance * distance * -0.5));
-
 }
 
-void NonOverlappingMark::applyCoulombsLawFromAnchor(NonOverlappingMark* that) { //EM
-
+void NonOverlappingMark::applyCoulombsLawFromAnchor(NonOverlappingMark* that) {
   Vector2F dAnchor = getScreenPos().sub(that->getAnchorScreenPos());
   double distanceAnchor = dAnchor.length()  + 0.001;
   Vector2F directionAnchor = dAnchor.div((float)distanceAnchor);
@@ -257,7 +248,6 @@ void NonOverlappingMark::applyCoulombsLawFromAnchor(NonOverlappingMark* that) { 
 }
 
 void NonOverlappingMark::applyHookesLaw() {   //Spring
-
   Vector2F d = getScreenPos().sub(getAnchorScreenPos());
   double mod = d.length();
   double displacement = _springLengthInPixels - mod;
@@ -265,73 +255,68 @@ void NonOverlappingMark::applyHookesLaw() {   //Spring
 
   float force = (float)(_springK * displacement);
 
-  applyForce((float)(direction._x * force),
-             (float)(direction._y * force));
-
-  //  var d = spring.point2.p.subtract(spring.point1.p); // the direction of the spring
-  //  var displacement = spring.length - d.magnitude();
-  //  var direction = d.normalise();
-  //
-  //  // apply force to each end point
-  //  spring.point1.applyForce(direction.multiply(spring.k * displacement * -0.5));
-  //  spring.point2.applyForce(direction.multiply(spring.k * displacement * 0.5));
+  applyForce(direction._x * force,
+             direction._y * force);
 }
 
-void NonOverlappingMark::render(const G3MRenderContext* rc, GLState* glState) {
+//void NonOverlappingMark::render(const G3MRenderContext* rc, GLState* glState) {
+//  if (_widget->isReady() && _anchorWidget->isReady()) {
+//    _widget->render(rc, glState);
+//    _anchorWidget->render(rc, glState);
+//  }
+//  else {
+//    _widget->init(rc, rc->getCurrentCamera()->getViewPortWidth(), rc->getCurrentCamera()->getViewPortHeight());
+//    _anchorWidget->init(rc, rc->getCurrentCamera()->getViewPortWidth(), rc->getCurrentCamera()->getViewPortHeight());
+//  }
+//}
 
-  if (_widget->isReady() && _anchorWidget->isReady()) {
+void NonOverlappingMark::renderWidget(const G3MRenderContext* rc, GLState* glState) {
+  if (_widget->isReady()) {
     _widget->render(rc, glState);
-    _anchorWidget->render(rc, glState);
-  } else{
+  }
+  else {
     _widget->init(rc, rc->getCurrentCamera()->getViewPortWidth(), rc->getCurrentCamera()->getViewPortHeight());
+  }
+}
+
+void NonOverlappingMark::renderAnchorWidget(const G3MRenderContext* rc, GLState* glState) {
+  if (_anchorWidget->isReady()) {
+    _anchorWidget->render(rc, glState);
+  }
+  else {
     _anchorWidget->init(rc, rc->getCurrentCamera()->getViewPortWidth(), rc->getCurrentCamera()->getViewPortHeight());
   }
 }
 
-void NonOverlappingMark::updatePositionWithCurrentForce(double elapsedMS,
+
+void NonOverlappingMark::updatePositionWithCurrentForce(float timeInSeconds,
                                                         int viewportWidth,
                                                         int viewportHeight,
                                                         float viewportMargin) {
 
-  Vector2D oldVelocity(_dX, _dY);
-  Vector2D force(_fX, _fY);
-
-  //Assuming Widget Mass = 1.0
-  float time = (float)(elapsedMS / 1000.0);
-  Vector2D velocity = oldVelocity.add(force.times(time)).times(_resistanceFactor);
+  _speed.add(_force.x() * timeInSeconds,
+             _force.y() * timeInSeconds);
+  _speed.times(_resistanceFactor);
 
   //Force has been applied and must be reset
-  _fX = 0;
-  _fY = 0;
-
-  //Clamping Velocity
-  double velocityPPS = velocity.length();
-  if (velocityPPS > _maxWidgetSpeedInPixelsPerSecond) {
-    _dX = (float)(velocity._x * (_maxWidgetSpeedInPixelsPerSecond / velocityPPS));
-    _dY = (float)(velocity._y * (_maxWidgetSpeedInPixelsPerSecond / velocityPPS));
-  }
-  else if (velocityPPS < _minWidgetSpeedInPixelsPerSecond) {
-    _dX = 0.0;
-    _dY = 0.0;
-  }
-  else {
-    _dX = (float)velocity._x;
-    _dY = (float)velocity._y;
-  }
+#warning It's needed?
+  _force.set(0, 0);
 
   //Update position
   Vector2F position = _widget->getScreenPos();
 
-  float newX = position._x + (_dX * time);
-  float newY = position._y + (_dY * time);
+  float newX = position._x + (_speed.x() * timeInSeconds);
+  float newY = position._y + (_speed.y() * timeInSeconds);
 
   Vector2F anchorPos = _anchorWidget->getScreenPos();
 
   Vector2F spring = Vector2F(newX,newY).sub(anchorPos).clampLength(_minSpringLength, _maxSpringLength);
   Vector2F finalPos = anchorPos.add(spring);
 
-  _widget->setScreenPos(finalPos._x, finalPos._y);
-  _widget->clampPositionInsideScreen(viewportWidth, viewportHeight, viewportMargin);
+//  _widget->setScreenPos(finalPos._x, finalPos._y);
+//  _widget->clampPositionInsideScreen(viewportWidth, viewportHeight, viewportMargin);
+  _widget->setAndClampScreenPos(finalPos._x, finalPos._y,
+                                viewportWidth, viewportHeight, viewportMargin);
 }
 
 void NonOverlappingMark::onResizeViewportEvent(int width, int height) {
@@ -346,14 +331,10 @@ bool NonOverlappingMark::onTouchEvent(const Vector2F& touchedPixel) {
   return false;
 }
 
-#pragma-mark Renderer
-
 NonOverlappingMarksRenderer::NonOverlappingMarksRenderer(int maxVisibleMarks,
-                                                         float viewportMargin,
-                                                         int maxConvergenceSteps):
+                                                         float viewportMargin):
 _maxVisibleMarks(maxVisibleMarks),
 _viewportMargin(viewportMargin),
-_maxConvergenceSteps(maxConvergenceSteps),
 _lastPositionsUpdatedTime(0),
 _connectorsGLState(NULL),
 _visibleMarksIDsBuilder( IStringBuilder::newStringBuilder() ),
@@ -463,8 +444,8 @@ void NonOverlappingMarksRenderer::renderConnectorLines(const G3MRenderContext* r
                                                             Vector2F::zero()),
                                    false);
 
-  _connectorsGLState->addGLFeature(new ViewportExtentGLFeature((int)rc->getCurrentCamera()->getViewPortWidth(),
-                                                               (int)rc->getCurrentCamera()->getViewPortHeight()), false);
+  _connectorsGLState->addGLFeature(new ViewportExtentGLFeature(rc->getCurrentCamera()->getViewPortWidth(),
+                                                               rc->getCurrentCamera()->getViewPortHeight()), false);
 
   rc->getGL()->drawArrays(GLPrimitive::lines(), 0, pos2D.size()/2, _connectorsGLState, *rc->getGPUProgramManager());
 }
@@ -495,13 +476,19 @@ void NonOverlappingMarksRenderer::computeForces(const Camera* cam, const Planet*
 }
 
 void NonOverlappingMarksRenderer::renderMarks(const G3MRenderContext *rc, GLState *glState) {
-  //Draw Lines
+  // Draw Lines
   renderConnectorLines(rc);
 
-  //Draw Anchors and Marks
   const int visibleMarksSize = _visibleMarks.size();
+
+  // draw all the widgets in a shot to avoid OpenGL state changes
   for (int i = 0; i < visibleMarksSize; i++) {
-    _visibleMarks[i]->render(rc, glState);
+    _visibleMarks[i]->renderWidget(rc, glState);
+  }
+
+  // draw all the anchorwidgets in a shot to avoid OpenGL state changes
+  for (int i = 0; i < visibleMarksSize; i++) {
+    _visibleMarks[i]->renderAnchorWidget(rc, glState);
   }
 }
 
@@ -513,11 +500,12 @@ void NonOverlappingMarksRenderer::applyForces(long long now, const Camera* camer
     const int viewPortHeight = camera->getViewPortHeight();
 
     const double elapsedMS = now - _lastPositionsUpdatedTime;
+    const float timeInSeconds = (float) (elapsedMS / 1000.0);
 
     //Update Position based on last Forces
     const int visibleMarksSize = _visibleMarks.size();
     for (int i = 0; i < visibleMarksSize; i++) {
-      _visibleMarks[i]->updatePositionWithCurrentForce(elapsedMS,
+      _visibleMarks[i]->updatePositionWithCurrentForce(timeInSeconds,
                                                        viewPortWidth,
                                                        viewPortHeight,
                                                        _viewportMargin);
@@ -533,23 +521,7 @@ void NonOverlappingMarksRenderer::render(const G3MRenderContext* rc, GLState* gl
 
   computeMarksToBeRendered(camera, planet);
   computeForces(camera, planet);
-
-  if (_maxConvergenceSteps > 0) {
-    //Looking for convergence on _maxConvergenceSteps
-    long long timeStep = 40;
-    applyForces(_lastPositionsUpdatedTime + timeStep, camera);
-
-    int iteration = 0;
-    while (marksAreMoving() && iteration < _maxConvergenceSteps) {
-      computeForces(camera, planet);
-      applyForces(_lastPositionsUpdatedTime + timeStep, camera);
-      iteration++;
-    }
-  }
-  else {
-    //Real Time
-    applyForces(rc->getFrameStartTimer()->nowInMilliseconds(), camera);
-  }
+  applyForces(rc->getFrameStartTimer()->nowInMilliseconds(), camera);
 
   renderMarks(rc, glState);
 }
@@ -620,16 +592,6 @@ bool NonOverlappingMarksRenderer::onTouchEvent(const G3MEventContext* ec, const 
   }
 
   return handled;
-}
-
-bool NonOverlappingMarksRenderer::marksAreMoving() const{
-  const int visibleMarksSize = _visibleMarks.size();
-  for (int i = 0; i < visibleMarksSize; i++) {
-    if (_visibleMarks[i]->isMoving()) {
-      return true;
-    }
-  }
-  return false;
 }
 
 void NonOverlappingMarksRenderer::setTouchListener(NonOverlappingMarkTouchListener* touchListener) {

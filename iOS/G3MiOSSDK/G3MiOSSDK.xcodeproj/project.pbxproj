@@ -226,6 +226,7 @@
 		CF6FE3F01899852300C05775 /* G3MMeshMaterial.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF6FE3EE1899852300C05775 /* G3MMeshMaterial.cpp */; };
 		CF6FE3F11899A2AC00C05775 /* G3MMeshParser.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF6FE3EC1899812800C05775 /* G3MMeshParser.hpp */; };
 		CF6FE3F21899A2AC00C05775 /* G3MMeshMaterial.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF6FE3EF1899852300C05775 /* G3MMeshMaterial.hpp */; };
+		CF701B471A9F93B9007C6B3F /* MutableVector2F.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF1918A91A9E5B2C00BF433C /* MutableVector2F.hpp */; };
 		CF708F301836A43500AAB0B1 /* NormalsUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF708F2E1836A43500AAB0B1 /* NormalsUtils.cpp */; };
 		CF73BFDB15E114E3001CE412 /* FrameTasksExecutor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF73BFD915E114E3001CE412 /* FrameTasksExecutor.cpp */; };
 		CF75C39516E92CDF00F7EE9F /* HereLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF75C39316E92CDF00F7EE9F /* HereLayer.cpp */; };
@@ -729,6 +730,7 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				CF701B471A9F93B9007C6B3F /* MutableVector2F.hpp in CopyFiles */,
 				CF55133D1A8E6AC200097906 /* StaticImageBuilder.hpp in CopyFiles */,
 				CFAB53F61A8BCE5800DD0099 /* LayoutImageBuilder.hpp in CopyFiles */,
 				CFAB53F71A8BCE5800DD0099 /* ColumnLayoutImageBuilder.hpp in CopyFiles */,

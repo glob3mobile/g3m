@@ -14,6 +14,7 @@
 #include "Vector2F.hpp"
 #include "Vector3D.hpp"
 #include "IImageBuilderListener.hpp"
+#include "MutableVector2F.hpp"
 
 class IImageBuilder;
 class Geodetic3D;
@@ -41,6 +42,7 @@ public:
 
 
 class MarkWidget {
+private:
   GLState* _glState;
   Geometry2DGLFeature* _geo2Dfeature;
   ViewportExtentGLFeature* _viewportExtent;
@@ -93,7 +95,11 @@ public:
 
   void render(const G3MRenderContext* rc, GLState* glState);
 
+  void setAndClampScreenPos(float x, float y,
+                            int viewportWidth, int viewportHeight, float margin);
+
   void setScreenPos(float x, float y);
+
   Vector2F getScreenPos() const{ return Vector2F(_x, _y); }
   void resetPosition();
 
@@ -106,7 +112,7 @@ public:
   int getWidth() const;
   int getHeight() const;
 
-  void clampPositionInsideScreen(int viewportWidth, int viewportHeight, float margin);
+//  void clampPositionInsideScreen(int viewportWidth, int viewportHeight, float margin);
 };
 
 
@@ -117,8 +123,8 @@ private:
   mutable Vector3D* _cartesianPos;
   Geodetic3D _geoPosition;
 
-  float _dX, _dY; //Velocity vector (pixels per second)
-  float _fX, _fY; //Applied Force
+  MutableVector2F _speed;
+  MutableVector2F _force;
 
   MarkWidget* _widget;
   MarkWidget* _anchorWidget;
@@ -128,8 +134,6 @@ private:
   const float _minSpringLength;
   const float _electricCharge;
   const float _anchorElectricCharge;
-  const float _maxWidgetSpeedInPixelsPerSecond;
-  const float _minWidgetSpeedInPixelsPerSecond;
   const float _resistanceFactor;
 
   std::string _id;
@@ -148,8 +152,6 @@ public:
                      float maxSpringLength = 0.0f,
                      float electricCharge = 3000.0f,
                      float anchorElectricCharge = 2000.0f,
-                     float minWidgetSpeedInPixelsPerSecond = 5.0f,
-                     float maxWidgetSpeedInPixelsPerSecond = 1000.0f,
                      float resistanceFactor = 0.95f);
 
   void setID(const std::string& id) {
@@ -169,19 +171,20 @@ public:
   Vector2F getScreenPos() const       { return _widget->getScreenPos(); }
   Vector2F getAnchorScreenPos() const { return _anchorWidget->getScreenPos(); }
 
-  void render(const G3MRenderContext* rc, GLState* glState);
+//  void render(const G3MRenderContext* rc, GLState* glState);
+  void renderWidget(const G3MRenderContext* rc, GLState* glState);
+  void renderAnchorWidget(const G3MRenderContext* rc, GLState* glState);
 
-  void applyCoulombsLaw(NonOverlappingMark* that); //EM
+  void applyCoulombsLaw(NonOverlappingMark* that);
   void applyCoulombsLawFromAnchor(NonOverlappingMark* that);
 
   void applyHookesLaw();   //Spring
 
   void applyForce(float x, float y) {
-    _fX += x;
-    _fY += y;
+    _force.add(x, y);
   }
 
-  void updatePositionWithCurrentForce(double elapsedMS,
+  void updatePositionWithCurrentForce(float timeInSeconds,
                                       int viewportWidth,
                                       int viewportHeight,
                                       float viewportMargin);
@@ -190,15 +193,8 @@ public:
 
   void resetWidgetPositionVelocityAndForce() {
     _widget->resetPosition();
-    _dX = 0;
-    _dY = 0;
-    _fX = 0;
-    _fY = 0;
-  }
-
-  bool isMoving() const{
-    float velocitySquared = ((_dX*_dX) + (_dY*_dY));
-    return velocitySquared > (_minWidgetSpeedInPixelsPerSecond * _minWidgetSpeedInPixelsPerSecond);
+    _speed.set(0, 0);
+    _force.set(0, 0);
   }
 
   int getWidth() const;
@@ -211,24 +207,17 @@ public:
 
 class NonOverlappingMarksVisibilityListener {
 public:
-#ifdef C_CODE
   virtual ~NonOverlappingMarksVisibilityListener() {
   }
-#endif
-#ifdef JAVA_CODE
-  void dispose();
-#endif
 
   virtual void onVisibilityChange(const std::vector<NonOverlappingMark*>& visible) = 0;
-
 };
 
 
-class NonOverlappingMarksRenderer: public DefaultRenderer{
+class NonOverlappingMarksRenderer: public DefaultRenderer {
 private:
   const int _maxVisibleMarks;
   const float _viewportMargin;
-  const int _maxConvergenceSteps;
 
   std::vector<NonOverlappingMark*> _marks;
 
@@ -255,8 +244,7 @@ private:
 
 public:
   NonOverlappingMarksRenderer(int maxVisibleMarks,
-                              float viewportMargin = 5,
-                              int maxConvergenceSteps = -1); // < 0 means real time
+                              float viewportMargin = 5);
 
   ~NonOverlappingMarksRenderer();
 
@@ -282,30 +270,8 @@ public:
 
   void onResizeViewportEvent(const G3MEventContext* ec, int width, int height);
 
-  void start(const G3MRenderContext* rc) {
-
-  }
-
-  void stop(const G3MRenderContext* rc) {
-
-  }
-
-  SurfaceElevationProvider* getSurfaceElevationProvider() {
-    return NULL;
-  }
-
-  PlanetRenderer* getPlanetRenderer() {
-    return NULL;
-  }
-  
-  bool isPlanetRenderer() {
-    return false;
-  }
-  
-  bool marksAreMoving() const;
-  
   void setTouchListener(NonOverlappingMarkTouchListener* touchListener);
-
+  
 };
 
 #endif
