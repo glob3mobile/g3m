@@ -145,7 +145,11 @@ public class NonOverlappingMarksRenderer extends DefaultRenderer
       final int viewPortHeight = camera.getViewPortHeight();
   
       final double elapsedMS = now - _lastPositionsUpdatedTime;
-      final float timeInSeconds = (float)(elapsedMS / 1000.0);
+      float timeInSeconds = (float)(elapsedMS / 1000.0);
+      if (timeInSeconds > 0.03)
+      {
+        timeInSeconds = 0.03f;
+      }
   
       //Update Position based on last Forces
       final int visibleMarksSize = _visibleMarks.size();
@@ -210,6 +214,7 @@ public class NonOverlappingMarksRenderer extends DefaultRenderer
          _marks.get(i).dispose();
     }
     _marks.clear();
+    _visibleMarks.clear();
   }
 
   public final void addVisibilityListener(NonOverlappingMarksVisibilityListener listener)
