@@ -377,6 +377,7 @@ void NonOverlappingMarksRenderer::removeAllMarks() {
     delete _marks[i];
   }
   _marks.clear();
+  _visibleMarks.clear();
 }
 
 void NonOverlappingMarksRenderer::computeMarksToBeRendered(const Camera* camera,
@@ -500,7 +501,10 @@ void NonOverlappingMarksRenderer::applyForces(long long now, const Camera* camer
     const int viewPortHeight = camera->getViewPortHeight();
 
     const double elapsedMS = now - _lastPositionsUpdatedTime;
-    const float timeInSeconds = (float) (elapsedMS / 1000.0);
+    float timeInSeconds = (float) (elapsedMS / 1000.0);
+    if (timeInSeconds > 0.03) {
+      timeInSeconds = 0.03f;
+    }
 
     //Update Position based on last Forces
     const int visibleMarksSize = _visibleMarks.size();
