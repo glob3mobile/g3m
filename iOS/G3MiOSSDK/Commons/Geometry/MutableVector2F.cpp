@@ -20,3 +20,12 @@ _y(that._y)
 Vector2F MutableVector2F::asVector2F() const {
   return Vector2F(_x, _y);
 }
+
+MutableVector2F MutableVector2F::nan() {
+  return MutableVector2F(NANF, NANF);
+}
+
+bool MutableVector2F::isNan() const {
+  return (ISNAN(_x) ||
+          ISNAN(_y));
+}

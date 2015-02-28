@@ -93,7 +93,11 @@ public:
 
   void init(const G3MRenderContext* rc);
 
-  void render(const G3MRenderContext* rc, GLState* glState);
+  void render(const G3MRenderContext* rc,
+              GLState* glState
+//              float x,
+//              float y
+              );
 
   void setAndClampScreenPos(float x,
                             float y,
@@ -121,6 +125,9 @@ public:
 class NonOverlappingMark {
 private:
   float _springLengthInPixels;
+
+//  MutableVector2F _widgetScreenPosition;
+//  MutableVector2F _anchorScreenPosition;
 
   mutable Vector3D* _cartesianPos;
   Geodetic3D _geoPosition;
@@ -168,7 +175,8 @@ public:
 
   Vector3D getCartesianPosition(const Planet* planet) const;
 
-  void computeAnchorScreenPos(const Camera* camera, const Planet* planet);
+  void computeAnchorScreenPos(const Camera* camera,
+                              const Planet* planet);
 
   Vector2F getScreenPos() const       { return _widget->getScreenPos(); }
   Vector2F getAnchorScreenPos() const { return _anchorWidget->getScreenPos(); }
@@ -197,6 +205,7 @@ public:
 
   void resetWidgetPositionVelocityAndForce() {
     _widget->resetPosition();
+//    _widgetScreenPosition.put(NANF, NANF);
     _speed.set(0, 0);
     _force.set(0, 0);
   }

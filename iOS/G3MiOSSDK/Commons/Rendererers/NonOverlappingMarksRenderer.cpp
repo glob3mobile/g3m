@@ -118,7 +118,8 @@ void MarkWidget::prepareWidget(const IImage* image,
   textureMapping->modifyGLState(*_glState);
 }
 
-void MarkWidget::render(const G3MRenderContext *rc, GLState *glState) {
+void MarkWidget::render(const G3MRenderContext *rc,
+                        GLState *glState) {
   rc->getGL()->drawArrays(GLPrimitive::triangleStrip(),
                           0,   // first
                           4,   // count
@@ -184,6 +185,8 @@ NonOverlappingMark::NonOverlappingMark(IImageBuilder* imageBuilderWidget,
                                        float anchorElectricCharge,
                                        float resistanceFactor):
 _cartesianPos(NULL),
+//_widgetScreenPosition(MutableVector2F::nan()),
+//_anchorScreenPosition(MutableVector2F::nan()),
 _speed(MutableVector2F::zero()),
 _force(MutableVector2F::zero()),
 _geoPosition(position),
@@ -215,11 +218,18 @@ Vector3D NonOverlappingMark::getCartesianPosition(const Planet* planet) const {
   return *_cartesianPos;
 }
 
-void NonOverlappingMark::computeAnchorScreenPos(const Camera* camera, const Planet* planet) {
+void NonOverlappingMark::computeAnchorScreenPos(const Camera* camera,
+                                                const Planet* planet) {
+//#error getCartesian without garbage
   Vector2F sp(camera->point2Pixel(getCartesianPosition(planet)));
+//  _anchorScreenPosition.put(sp._x, sp._y);
+//  if (_widgetScreenPosition.isNan()) {
+//    _widgetScreenPosition.put(sp._x, sp._y + 0.01f);
+//  }
+
   _anchorWidget->setScreenPos(sp._x, sp._y);
 
-  if (_widget->getScreenPos().isNaN()) {
+  if (_widget->getScreenPos().isNan()) {
     _widget->setScreenPos(sp._x, sp._y + 0.01f);
   }
 }

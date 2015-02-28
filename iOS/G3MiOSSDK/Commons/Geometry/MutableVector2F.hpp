@@ -62,6 +62,8 @@ public:
     return MutableVector2F(0, 0);
   }
 
+  static MutableVector2F nan();
+
   float x() const {
     return _x;
   }
@@ -71,6 +73,8 @@ public:
   }
 
   Vector2F asVector2F() const;
+
+  bool isNan() const;
 
 };
 
