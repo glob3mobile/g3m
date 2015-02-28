@@ -13,6 +13,8 @@ public class NonOverlappingMarksRenderer extends DefaultRenderer
 
   private java.util.ArrayList<NonOverlappingMarksVisibilityListener> _visibilityListeners = new java.util.ArrayList<NonOverlappingMarksVisibilityListener>();
 
+  private NonOverlappingMarkTouchListener _touchListener;
+
   private void computeMarksToBeRendered(Camera camera, Planet planet)
   {
     _visibleMarks.clear();
@@ -167,6 +169,7 @@ public class NonOverlappingMarksRenderer extends DefaultRenderer
      _connectorsGLState = null;
      _visibleMarksIDsBuilder = IStringBuilder.newStringBuilder();
      _visibleMarksIDs = "";
+     _touchListener = null;
   
   }
 
@@ -260,21 +263,62 @@ public class NonOverlappingMarksRenderer extends DefaultRenderer
 
   public final boolean onTouchEvent(G3MEventContext ec, TouchEvent touchEvent)
   {
+    boolean handled = false;
   
-    if (touchEvent.getTapCount() == 1)
+    if (touchEvent.getType() == TouchEventType.DownUp)
     {
-      final float x = touchEvent.getTouch(0).getPos()._x;
-      final float y = touchEvent.getTouch(0).getPos()._y;
+      final Vector2F touchedPixel = touchEvent.getTouch(0).getPos();
+  
+      double minSqDistance = IMathUtils.instance().maxDouble();
+      NonOverlappingMark nearestMark = null;
+  
       final int visibleMarksSize = _visibleMarks.size();
       for (int i = 0; i < visibleMarksSize; i++)
       {
-        if (_visibleMarks.get(i).onTouchEvent(x, y))
+        NonOverlappingMark mark = _visibleMarks.get(i);
+  
+        final int markWidth = mark.getWidth();
+        if (markWidth <= 0)
         {
-          return true;
+          continue;
+        }
+  
+        final int markHeight = mark.getHeight();
+        if (markHeight <= 0)
+        {
+          continue;
+        }
+  
+        final Vector2F markPixel = mark.getScreenPos();
+  
+        final RectangleF markPixelBounds = new RectangleF(markPixel._x - ((float) markWidth / 2), markPixel._y - ((float) markHeight / 2), markWidth, markHeight);
+  
+        if (markPixelBounds.contains(touchedPixel._x, touchedPixel._y))
+        {
+          final double sqDistance = markPixel.squaredDistanceTo(touchedPixel);
+          if (sqDistance < minSqDistance)
+          {
+            nearestMark = mark;
+            minSqDistance = sqDistance;
+          }
         }
       }
+  
+      if (nearestMark != null)
+      {
+        handled = nearestMark.onTouchEvent(touchedPixel);
+        if (!handled)
+        {
+          if (_touchListener != null)
+          {
+            handled = _touchListener.touchedMark(nearestMark, touchedPixel);
+          }
+        }
+      }
+  
     }
-    return false;
+  
+    return handled;
   }
 
   public final void onResizeViewportEvent(G3MEventContext ec, int width, int height)
@@ -318,11 +362,20 @@ public class NonOverlappingMarksRenderer extends DefaultRenderer
     {
       if (_visibleMarks.get(i).isMoving())
       {
-        //      printf("Mark %d is moving", i);
         return true;
       }
     }
     return false;
+  }
+
+  public final void setTouchListener(NonOverlappingMarkTouchListener touchListener)
+  {
+    if (_touchListener != null && _touchListener != touchListener)
+    {
+      if (_touchListener != null)
+         _touchListener.dispose();
+    }
+    _touchListener = touchListener;
   }
 
 }

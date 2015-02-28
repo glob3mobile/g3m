@@ -199,7 +199,7 @@ bool ShapesRenderer::onTouchEvent(const G3MEventContext* ec,
         touchEvent->getTapCount()==1 &&
         touchEvent->getType()==Down) {
       const Vector3D origin = _lastCamera->getCartesianPosition();
-      const Vector2I pixel = touchEvent->getTouch(0)->getPos();
+      const Vector2F pixel = touchEvent->getTouch(0)->getPos();
       const Vector3D direction = _lastCamera->pixel2Ray(pixel);
       const Planet* planet = ec->getPlanet();
       if (!direction.isNan()) {

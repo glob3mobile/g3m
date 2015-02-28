@@ -15,16 +15,10 @@ public class MarkWidget
   private float _x; //Screen position
   private float _y;
 
-  private MarkWidgetTouchListener _touchListener;
-
   private static class WidgetImageListener implements IImageBuilderListener
   {
     private MarkWidget _widget;
     public WidgetImageListener(MarkWidget widget)
-    {
-       this(widget, null);
-    }
-    public WidgetImageListener(MarkWidget widget, MarkWidgetTouchListener touchListener)
     {
        _widget = widget;
     }
@@ -89,7 +83,6 @@ public class MarkWidget
      _y = java.lang.Float.NaN;
      _halfHeight = 0F;
      _halfWidth = 0F;
-     _touchListener = null;
   }
 
   public void dispose()
@@ -97,8 +90,6 @@ public class MarkWidget
     _image = null;
     if (_imageBuilder != null)
        _imageBuilder.dispose();
-    if (_touchListener != null)
-       _touchListener.dispose();
   
     _glState._release();
   }
@@ -145,15 +136,6 @@ public class MarkWidget
     _y = java.lang.Float.NaN;
   }
 
-  public final float getHalfWidth()
-  {
-     return _halfWidth;
-  }
-  public final float getHalfHeight()
-  {
-     return _halfHeight;
-  }
-
   public final void onResizeViewportEvent(int width, int height)
   {
     if (_viewportExtent != null)
@@ -167,6 +149,15 @@ public class MarkWidget
     return _image != null;
   }
 
+  public final int getWidth()
+  {
+    return _image == null ? 0 : _image.getWidth();
+  }
+  public final int getHeight()
+  {
+    return _image == null ? 0 : _image.getHeight();
+  }
+
   public final void clampPositionInsideScreen(int viewportWidth, int viewportHeight, float margin)
   {
     final IMathUtils mu = IMathUtils.instance();
@@ -175,29 +166,4 @@ public class MarkWidget
   
     setScreenPos(x, y);
   }
-
-  public final boolean onTouchEvent(float x, float y)
-  {
-    final IMathUtils mu = IMathUtils.instance();
-    if (mu.isBetween(x, _x - _halfWidth, _x + _halfWidth) && mu.isBetween(y, _y - _halfHeight, _y + _halfHeight))
-    {
-      if (_touchListener != null)
-      {
-        _touchListener.touchedMark(this, x, y);
-      }
-      return true;
-    }
-    return false;
-  }
-
-  public final void setTouchListener(MarkWidgetTouchListener tl)
-  {
-    if (_touchListener != null && _touchListener != tl)
-    {
-      if (_touchListener != null)
-         _touchListener.dispose();
-    }
-    _touchListener = tl;
-  }
-
 }

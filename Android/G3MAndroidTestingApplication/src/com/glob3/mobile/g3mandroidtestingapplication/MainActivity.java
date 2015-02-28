@@ -17,12 +17,14 @@ import org.glob3.mobile.generated.IImageListener;
 import org.glob3.mobile.generated.LabelImageBuilder;
 import org.glob3.mobile.generated.LayerSet;
 import org.glob3.mobile.generated.NonOverlappingMark;
+import org.glob3.mobile.generated.NonOverlappingMarkTouchListener;
 import org.glob3.mobile.generated.NonOverlappingMarksRenderer;
 import org.glob3.mobile.generated.OSMLayer;
 import org.glob3.mobile.generated.QuadShape;
 import org.glob3.mobile.generated.ShapesRenderer;
 import org.glob3.mobile.generated.TimeInterval;
 import org.glob3.mobile.generated.URL;
+import org.glob3.mobile.generated.Vector2F;
 import org.glob3.mobile.specific.G3MBuilder_Android;
 import org.glob3.mobile.specific.G3MWidget_Android;
 
@@ -100,6 +102,15 @@ public class MainActivity
 
       final NonOverlappingMarksRenderer renderer = new NonOverlappingMarksRenderer(30);
       builder.addRenderer(renderer);
+
+      renderer.setTouchListener(new NonOverlappingMarkTouchListener() {
+         @Override
+         public boolean touchedMark(final NonOverlappingMark mark,
+                                    final Vector2F touchedPixel) {
+            System.out.println("Touched on pixel=" + touchedPixel + ", mark=" + mark);
+            return true;
+         }
+      });
 
       renderer.addMark(createMark("Label #1", Geodetic3D.fromDegrees(28.131817, -15.440219, 0)));
       renderer.addMark(createMark(Geodetic3D.fromDegrees(28.947345, -13.523105, 0)));
