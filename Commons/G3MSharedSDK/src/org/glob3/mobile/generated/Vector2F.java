@@ -73,7 +73,7 @@ public class Vector2F
     return new Vector2F(_x + v._x, _y + v._y);
   }
 
-  public final boolean isNaN()
+  public final boolean isNan()
   {
     return (_x != _x) || (_y != _y);
   }

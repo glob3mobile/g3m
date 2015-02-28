@@ -35,7 +35,7 @@ public class NonOverlappingMarksRenderer extends DefaultRenderer
       }
       else
       {
-        //Resetting marks location of invisible anchors
+        // Resetting marks location of invisible anchors
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#warning Do we really need this?
         m.resetWidgetPositionVelocityAndForce();
@@ -72,28 +72,28 @@ public class NonOverlappingMarksRenderer extends DefaultRenderer
     final int visibleMarksSize = _visibleMarks.size();
     for (int i = 0; i < visibleMarksSize; i++)
     {
-      Vector2F sp = _visibleMarks.get(i).getScreenPos();
-      Vector2F asp = _visibleMarks.get(i).getAnchorScreenPos();
+      final Vector2F sp = _visibleMarks.get(i).getScreenPos();
+      final Vector2F asp = _visibleMarks.get(i).getAnchorScreenPos();
   
       pos2D.add(sp._x, -sp._y);
       pos2D.add(asp._x, -asp._y);
     }
   
-    _connectorsGLState.addGLFeature(new Geometry2DGLFeature(pos2D.create(), 2, 0, true, 0, 3.0f, true, 10.0f, Vector2F.zero()), false);
+    _connectorsGLState.addGLFeature(new Geometry2DGLFeature(pos2D.create(), 2, 0, true, 0, 3.0f, true, 10.0f, Vector2F.zero()), false); // translation -  pointSize -  needsPointSize -  lineWidth -  stride -  normalized -  index -  arrayElementSize -  buffer
   
-    _connectorsGLState.addGLFeature(new ViewportExtentGLFeature(rc.getCurrentCamera().getViewPortWidth(), rc.getCurrentCamera().getViewPortHeight()), false);
+    _connectorsGLState.addGLFeature(new ViewportExtentGLFeature(rc.getCurrentCamera()), false);
   
-    rc.getGL().drawArrays(GLPrimitive.lines(), 0, pos2D.size()/2, _connectorsGLState, rc.getGPUProgramManager());
+    rc.getGL().drawArrays(GLPrimitive.lines(), 0, pos2D.size()/2, _connectorsGLState, rc.getGPUProgramManager()); // count -  first
   }
 
-  private void computeForces(Camera cam, Planet planet)
+  private void computeForces(Camera camera, Planet planet)
   {
     final int visibleMarksSize = _visibleMarks.size();
   
     //Compute Mark Anchor Screen Positions
     for (int i = 0; i < visibleMarksSize; i++)
     {
-      _visibleMarks.get(i).computeAnchorScreenPos(cam, planet);
+      _visibleMarks.get(i).computeAnchorScreenPos(camera, planet);
     }
   
     //Compute Mark Forces
@@ -123,30 +123,33 @@ public class NonOverlappingMarksRenderer extends DefaultRenderer
   
     final int visibleMarksSize = _visibleMarks.size();
   
-    // draw all the widgets in a shot to avoid OpenGL state changes
-    for (int i = 0; i < visibleMarksSize; i++)
-    {
-      _visibleMarks.get(i).renderWidget(rc, glState);
-    }
+  //  // draw all the springs in a shot to avoid OpenGL state changes
+  //  for (int i = 0; i < visibleMarksSize; i++) {
+  //    _visibleMarks[i]->renderSpring(rc, glState);
+  //  }
   
     // draw all the anchorwidgets in a shot to avoid OpenGL state changes
     for (int i = 0; i < visibleMarksSize; i++)
     {
       _visibleMarks.get(i).renderAnchorWidget(rc, glState);
     }
+  
+    // draw all the widgets in a shot to avoid OpenGL state changes
+    for (int i = 0; i < visibleMarksSize; i++)
+    {
+      _visibleMarks.get(i).renderWidget(rc, glState);
+    }
   }
   private void applyForces(long now, Camera camera)
   {
-  
     if (_lastPositionsUpdatedTime != 0) //If not First frame
     {
-  
       final int viewPortWidth = camera.getViewPortWidth();
       final int viewPortHeight = camera.getViewPortHeight();
   
       final double elapsedMS = now - _lastPositionsUpdatedTime;
       float timeInSeconds = (float)(elapsedMS / 1000.0);
-      if (timeInSeconds > 0.03)
+      if (timeInSeconds > 0.03f)
       {
         timeInSeconds = 0.03f;
       }
@@ -161,7 +164,6 @@ public class NonOverlappingMarksRenderer extends DefaultRenderer
   
     _lastPositionsUpdatedTime = now;
   }
-
 
   public NonOverlappingMarksRenderer(int maxVisibleMarks)
   {

@@ -3,6 +3,9 @@ public class NonOverlappingMark
 {
   private float _springLengthInPixels;
 
+//  MutableVector2F _widgetScreenPosition;
+//  MutableVector2F _anchorScreenPosition;
+
   private Vector3D _cartesianPos;
   private Geodetic3D _geoPosition ;
 
@@ -24,15 +27,6 @@ public class NonOverlappingMark
   private NonOverlappingMarkTouchListener _touchListener;
 
 
-
-  //void MarkWidget::clampPositionInsideScreen(int viewportWidth, int viewportHeight, float margin) {
-  //  const IMathUtils* mu = IMathUtils::instance();
-  //  float x = mu->clamp(_x, _halfWidth  + margin, viewportWidth  - _halfWidth  - margin);
-  //  float y = mu->clamp(_y, _halfHeight + margin, viewportHeight - _halfHeight - margin);
-  //
-  //  setScreenPos(x, y);
-  //}
-  
   public NonOverlappingMark(IImageBuilder imageBuilderWidget, IImageBuilder imageBuilderAnchor, Geodetic3D position, NonOverlappingMarkTouchListener touchListener, float springLengthInPixels, float springK, float minSpringLength, float maxSpringLength, float electricCharge, float anchorElectricCharge)
   {
      this(imageBuilderWidget, imageBuilderAnchor, position, touchListener, springLengthInPixels, springK, minSpringLength, maxSpringLength, electricCharge, anchorElectricCharge, 0.95f);
@@ -66,6 +60,8 @@ public class NonOverlappingMark
      this(imageBuilderWidget, imageBuilderAnchor, position, null, 100.0f, 70.0f, 0.0f, 0.0f, 3000.0f, 2000.0f, 0.95f);
   }
   public NonOverlappingMark(IImageBuilder imageBuilderWidget, IImageBuilder imageBuilderAnchor, Geodetic3D position, NonOverlappingMarkTouchListener touchListener, float springLengthInPixels, float springK, float minSpringLength, float maxSpringLength, float electricCharge, float anchorElectricCharge, float resistanceFactor)
+  //_widgetScreenPosition(MutableVector2F::nan()),
+  //_anchorScreenPosition(MutableVector2F::nan()),
   {
      _cartesianPos = null;
      _speed = new MutableVector2F(MutableVector2F.zero());
@@ -115,12 +111,18 @@ public class NonOverlappingMark
     return _cartesianPos;
   }
 
-  public final void computeAnchorScreenPos(Camera cam, Planet planet)
+  public final void computeAnchorScreenPos(Camera camera, Planet planet)
   {
-    Vector2F sp = new Vector2F(cam.point2Pixel(getCartesianPosition(planet)));
+  ///#error getCartesian without garbage
+    Vector2F sp = new Vector2F(camera.point2Pixel(getCartesianPosition(planet)));
+  //  _anchorScreenPosition.put(sp._x, sp._y);
+  //  if (_widgetScreenPosition.isNan()) {
+  //    _widgetScreenPosition.put(sp._x, sp._y + 0.01f);
+  //  }
+  
     _anchorWidget.setScreenPos(sp._x, sp._y);
   
-    if (_widget.getScreenPos().isNaN())
+    if (_widget.getScreenPos().isNan())
     {
       _widget.setScreenPos(sp._x, sp._y + 0.01f);
     }
@@ -135,19 +137,6 @@ public class NonOverlappingMark
      return _anchorWidget.getScreenPos();
   }
 
-//  void render(const G3MRenderContext* rc, GLState* glState);
-
-  //void NonOverlappingMark::render(const G3MRenderContext* rc, GLState* glState) {
-  //  if (_widget->isReady() && _anchorWidget->isReady()) {
-  //    _widget->render(rc, glState);
-  //    _anchorWidget->render(rc, glState);
-  //  }
-  //  else {
-  //    _widget->init(rc, rc->getCurrentCamera()->getViewPortWidth(), rc->getCurrentCamera()->getViewPortHeight());
-  //    _anchorWidget->init(rc, rc->getCurrentCamera()->getViewPortWidth(), rc->getCurrentCamera()->getViewPortHeight());
-  //  }
-  //}
-  
   public final void renderWidget(G3MRenderContext rc, GLState glState)
   {
     if (_widget.isReady())
@@ -156,9 +145,10 @@ public class NonOverlappingMark
     }
     else
     {
-      _widget.init(rc, rc.getCurrentCamera().getViewPortWidth(), rc.getCurrentCamera().getViewPortHeight());
+      _widget.init(rc);
     }
   }
+
   public final void renderAnchorWidget(G3MRenderContext rc, GLState glState)
   {
     if (_anchorWidget.isReady())
@@ -167,7 +157,7 @@ public class NonOverlappingMark
     }
     else
     {
-      _anchorWidget.init(rc, rc.getCurrentCamera().getViewPortWidth(), rc.getCurrentCamera().getViewPortHeight());
+      _anchorWidget.init(rc);
     }
   }
 
@@ -224,18 +214,19 @@ public class NonOverlappingMark
     _force.set(0, 0);
   
     //Update position
-    Vector2F position = _widget.getScreenPos();
+    Vector2F widgetPosition = _widget.getScreenPos();
   
-    float newX = position._x + (_speed.x() * timeInSeconds);
-    float newY = position._y + (_speed.y() * timeInSeconds);
+    final float newX = widgetPosition._x + (_speed.x() * timeInSeconds);
+    final float newY = widgetPosition._y + (_speed.y() * timeInSeconds);
   
-    Vector2F anchorPos = _anchorWidget.getScreenPos();
+    Vector2F anchorPosition = _anchorWidget.getScreenPos();
   
-    Vector2F spring = new Vector2F(newX,newY).sub(anchorPos).clampLength(_minSpringLength, _maxSpringLength);
-    Vector2F finalPos = anchorPos.add(spring);
+    Vector2F spring = new Vector2F(newX,newY).sub(anchorPosition).clampLength(_minSpringLength, _maxSpringLength);
+    Vector2F finalPos = anchorPosition.add(spring);
   
-  //  _widget->setScreenPos(finalPos._x, finalPos._y);
-  //  _widget->clampPositionInsideScreen(viewportWidth, viewportHeight, viewportMargin);
+  //  Vector2F finalPos(newX, newY);
+  ///#warning Diego at work!
+  
     _widget.setAndClampScreenPos(finalPos._x, finalPos._y, viewportWidth, viewportHeight, viewportMargin);
   }
 
@@ -248,6 +239,7 @@ public class NonOverlappingMark
   public final void resetWidgetPositionVelocityAndForce()
   {
     _widget.resetPosition();
+//    _widgetScreenPosition.put(NANF, NANF);
     _speed.set(0, 0);
     _force.set(0, 0);
   }

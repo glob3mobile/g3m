@@ -12,7 +12,8 @@ public class MarkWidget
   private float _halfWidth;
   private float _halfHeight;
 
-  private float _x; //Screen position
+  // Screen position
+  private float _x;
   private float _y;
 
   private static class WidgetImageListener implements IImageBuilderListener
@@ -36,7 +37,6 @@ public class MarkWidget
     {
       ILogger.instance().logError(error);
     }
-
   }
 
   private void prepareWidget(IImage image, String imageName)
@@ -52,6 +52,8 @@ public class MarkWidget
     pos2D.add(-_halfWidth, _halfHeight); // vertex 2
     pos2D.add(_halfWidth, -_halfHeight); // vertex 3
     pos2D.add(_halfWidth, _halfHeight); // vertex 4
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning TODO: share vertices for marks of the same size?
   
     _geo2Dfeature = new Geometry2DGLFeature(pos2D.create(), 2, 0, true, 0, 1.0f, true, 10.0f, new Vector2F(_x, _y));
   
@@ -65,6 +67,8 @@ public class MarkWidget
   
     final TextureIDReference textureID = _texHandler.getTextureIDReference(_image, GLFormat.rgba(), _imageName, false);
   
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning TODO: share unit texCoords
     SimpleTextureMapping textureMapping = new SimpleTextureMapping(textureID, texCoords.create(), true, true);
   
   
@@ -91,15 +95,18 @@ public class MarkWidget
     if (_imageBuilder != null)
        _imageBuilder.dispose();
   
-    _glState._release();
+    if (_glState != null)
+    {
+      _glState._release();
+    }
   }
 
-  public final void init(G3MRenderContext rc, int viewportWidth, int viewportHeight)
+  public final void init(G3MRenderContext rc)
   {
     if (_glState == null)
     {
       _glState = new GLState();
-      _viewportExtent = new ViewportExtentGLFeature(viewportWidth, viewportHeight);
+      _viewportExtent = new ViewportExtentGLFeature(rc.getCurrentCamera());
   
       _texHandler = rc.getTexturesHandler();
       _imageBuilder.build(rc, new WidgetImageListener(this), true);
@@ -110,8 +117,10 @@ public class MarkWidget
 
   public final void render(G3MRenderContext rc, GLState glState)
   {
-    rc.getGL().drawArrays(GLPrimitive.triangleStrip(), 0, 4, _glState, rc.getGPUProgramManager());
+    rc.getGL().drawArrays(GLPrimitive.triangleStrip(), 0, 4, _glState, rc.getGPUProgramManager()); // count -  first
   }
+//              float x,
+//              float y
 
   public final void setAndClampScreenPos(float x, float y, int viewportWidth, int viewportHeight, float margin)
   {
@@ -173,5 +182,4 @@ public class MarkWidget
     return _image == null ? 0 : _image.getHeight();
   }
 
-//  void clampPositionInsideScreen(int viewportWidth, int viewportHeight, float margin);
 }

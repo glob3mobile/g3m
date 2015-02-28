@@ -78,6 +78,11 @@ public class MutableVector2F
     return new MutableVector2F(0, 0);
   }
 
+  public static MutableVector2F nan()
+  {
+    return new MutableVector2F(java.lang.Float.NaN, java.lang.Float.NaN);
+  }
+
   public final float x()
   {
     return _x;
@@ -91,6 +96,11 @@ public class MutableVector2F
   public final Vector2F asVector2F()
   {
     return new Vector2F(_x, _y);
+  }
+
+  public final boolean isNan()
+  {
+    return ((_x != _x) || (_y != _y));
   }
 
 }
