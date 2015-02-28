@@ -59,7 +59,9 @@ private:
   float _halfWidth;
   float _halfHeight;
 
-  float _x, _y; //Screen position
+  // Screen position
+  float _x;
+  float _y;
 
   class WidgetImageListener: public IImageBuilderListener {
     MarkWidget* _widget;
@@ -79,7 +81,6 @@ private:
     void onError(const std::string& error) {
       ILogger::instance()->logError(error);
     }
-
   };
 
   void prepareWidget(const IImage*      image,
@@ -94,12 +95,15 @@ public:
 
   void render(const G3MRenderContext* rc, GLState* glState);
 
-  void setAndClampScreenPos(float x, float y,
-                            int viewportWidth, int viewportHeight, float margin);
+  void setAndClampScreenPos(float x,
+                            float y,
+                            int viewportWidth,
+                            int viewportHeight,
+                            float margin);
 
   void setScreenPos(float x, float y);
 
-  Vector2F getScreenPos() const{ return Vector2F(_x, _y); }
+  Vector2F getScreenPos() const { return Vector2F(_x, _y); }
   void resetPosition();
 
   void onResizeViewportEvent(int width, int height);
@@ -169,9 +173,11 @@ public:
   Vector2F getScreenPos() const       { return _widget->getScreenPos(); }
   Vector2F getAnchorScreenPos() const { return _anchorWidget->getScreenPos(); }
 
-//  void render(const G3MRenderContext* rc, GLState* glState);
-  void renderWidget(const G3MRenderContext* rc, GLState* glState);
-  void renderAnchorWidget(const G3MRenderContext* rc, GLState* glState);
+  void renderWidget(const G3MRenderContext* rc,
+                    GLState* glState);
+
+  void renderAnchorWidget(const G3MRenderContext* rc,
+                          GLState* glState);
 
   void applyCoulombsLaw(NonOverlappingMark* that);
   void applyCoulombsLawFromAnchor(NonOverlappingMark* that);
@@ -214,7 +220,7 @@ public:
 
 class NonOverlappingMarksRenderer: public DefaultRenderer {
 private:
-  const int _maxVisibleMarks;
+  const int   _maxVisibleMarks;
   const float _viewportMargin;
 
   std::vector<NonOverlappingMark*> _marks;
@@ -236,9 +242,9 @@ private:
   void renderConnectorLines(const G3MRenderContext* rc);
 
   void computeForces(const Camera* camera, const Planet* planet);
-  void renderMarks(const G3MRenderContext* rc, GLState* glState);
+  void renderMarks(const G3MRenderContext* rc,
+                   GLState* glState);
   void applyForces(long long now, const Camera* camera);
-
 
 public:
   NonOverlappingMarksRenderer(int maxVisibleMarks,
@@ -266,8 +272,10 @@ public:
   bool onTouchEvent(const G3MEventContext* ec,
                     const TouchEvent* touchEvent);
 
-  void onResizeViewportEvent(const G3MEventContext* ec, int width, int height);
-
+  void onResizeViewportEvent(const G3MEventContext* ec,
+                             int width,
+                             int height);
+  
   void setTouchListener(NonOverlappingMarkTouchListener* touchListener);
   
 };

@@ -70,17 +70,18 @@ void MarkWidget::init(const G3MRenderContext* rc) {
 
 void MarkWidget::prepareWidget(const IImage* image,
                                const std::string& imageName) {
-  _image = image;
+  _image     = image;
   _imageName = imageName;
 
-  _halfWidth = image->getWidth() / 2;
+  _halfWidth  = image->getWidth() / 2;
   _halfHeight = image->getHeight() / 2;
 
   FloatBufferBuilderFromCartesian2D pos2D;
-  pos2D.add( -_halfWidth, -_halfHeight);  // vertex 1
-  pos2D.add( -_halfWidth,  _halfHeight);  // vertex 2
-  pos2D.add(  _halfWidth, -_halfHeight);  // vertex 3
-  pos2D.add(  _halfWidth,  _halfHeight);  // vertex 4
+  pos2D.add( -_halfWidth, -_halfHeight );   // vertex 1
+  pos2D.add( -_halfWidth,  _halfHeight );   // vertex 2
+  pos2D.add(  _halfWidth, -_halfHeight );   // vertex 3
+  pos2D.add(  _halfWidth,  _halfHeight );   // vertex 4
+#warning TODO: share vertices for marks of the same size?
 
   _geo2Dfeature = new Geometry2DGLFeature(pos2D.create(),
                                           2,
@@ -96,16 +97,17 @@ void MarkWidget::prepareWidget(const IImage* image,
                          false);
 
   FloatBufferBuilderFromCartesian2D texCoords;
-  texCoords.add( 0.0f, 1.0f); // vertex 1
-  texCoords.add( 0.0f, 0.0f); // vertex 2
-  texCoords.add( 1.0f, 1.0f); // vertex 3
-  texCoords.add( 1.0f, 0.0f); // vertex 4
+  texCoords.add( 0.0f, 1.0f );   // vertex 1
+  texCoords.add( 0.0f, 0.0f );   // vertex 2
+  texCoords.add( 1.0f, 1.0f );   // vertex 3
+  texCoords.add( 1.0f, 0.0f );   // vertex 4
 
   const TextureIDReference* textureID = _texHandler->getTextureIDReference(_image,
                                                                            GLFormat::rgba(),
                                                                            _imageName,
                                                                            false);
 
+#warning TODO: share unit texCoords
   SimpleTextureMapping* textureMapping = new SimpleTextureMapping(textureID,
                                                                   texCoords.create(),
                                                                   true,
@@ -118,14 +120,17 @@ void MarkWidget::prepareWidget(const IImage* image,
 
 void MarkWidget::render(const G3MRenderContext *rc, GLState *glState) {
   rc->getGL()->drawArrays(GLPrimitive::triangleStrip(),
-                          0, // first
-                          4, // count
+                          0,   // first
+                          4,   // count
                           _glState,
                           *rc->getGPUProgramManager());
 }
 
-void MarkWidget::setAndClampScreenPos(float x, float y,
-                                      int viewportWidth, int viewportHeight, float margin) {
+void MarkWidget::setAndClampScreenPos(float x,
+                                      float y,
+                                      int viewportWidth,
+                                      int viewportHeight,
+                                      float margin) {
   const IMathUtils* mu = IMathUtils::instance();
   const float xx = mu->clamp(x, _halfWidth  + margin, viewportWidth  - _halfWidth  - margin);
   const float yy = mu->clamp(y, _halfHeight + margin, viewportHeight - _halfHeight - margin);
@@ -255,7 +260,8 @@ void NonOverlappingMark::applyHookesLaw() {   //Spring
              direction._y * force);
 }
 
-void NonOverlappingMark::renderWidget(const G3MRenderContext* rc, GLState* glState) {
+void NonOverlappingMark::renderWidget(const G3MRenderContext* rc,
+                                      GLState* glState) {
   if (_widget->isReady()) {
     _widget->render(rc, glState);
   }
@@ -264,7 +270,8 @@ void NonOverlappingMark::renderWidget(const G3MRenderContext* rc, GLState* glSta
   }
 }
 
-void NonOverlappingMark::renderAnchorWidget(const G3MRenderContext* rc, GLState* glState) {
+void NonOverlappingMark::renderAnchorWidget(const G3MRenderContext* rc,
+                                            GLState* glState) {
   if (_anchorWidget->isReady()) {
     _anchorWidget->render(rc, glState);
   }
@@ -469,33 +476,37 @@ void NonOverlappingMarksRenderer::computeForces(const Camera* camera, const Plan
   }
 }
 
-void NonOverlappingMarksRenderer::renderMarks(const G3MRenderContext *rc, GLState *glState) {
+void NonOverlappingMarksRenderer::renderMarks(const G3MRenderContext *rc,
+                                              GLState *glState) {
   // Draw Lines
   renderConnectorLines(rc);
 
   const int visibleMarksSize = _visibleMarks.size();
 
-  // draw all the widgets in a shot to avoid OpenGL state changes
-  for (int i = 0; i < visibleMarksSize; i++) {
-    _visibleMarks[i]->renderWidget(rc, glState);
-  }
+//  // draw all the springs in a shot to avoid OpenGL state changes
+//  for (int i = 0; i < visibleMarksSize; i++) {
+//    _visibleMarks[i]->renderSpring(rc, glState);
+//  }
 
   // draw all the anchorwidgets in a shot to avoid OpenGL state changes
   for (int i = 0; i < visibleMarksSize; i++) {
     _visibleMarks[i]->renderAnchorWidget(rc, glState);
   }
+
+  // draw all the widgets in a shot to avoid OpenGL state changes
+  for (int i = 0; i < visibleMarksSize; i++) {
+    _visibleMarks[i]->renderWidget(rc, glState);
+  }
 }
 
 void NonOverlappingMarksRenderer::applyForces(long long now, const Camera* camera) {
-
   if (_lastPositionsUpdatedTime != 0) { //If not First frame
-
     const int viewPortWidth  = camera->getViewPortWidth();
     const int viewPortHeight = camera->getViewPortHeight();
 
     const double elapsedMS = now - _lastPositionsUpdatedTime;
     float timeInSeconds = (float) (elapsedMS / 1000.0);
-    if (timeInSeconds > 0.03) {
+    if (timeInSeconds > 0.03f) {
       timeInSeconds = 0.03f;
     }
 
@@ -523,7 +534,9 @@ void NonOverlappingMarksRenderer::render(const G3MRenderContext* rc, GLState* gl
   renderMarks(rc, glState);
 }
 
-void NonOverlappingMarksRenderer::onResizeViewportEvent(const G3MEventContext* ec, int width, int height) {
+void NonOverlappingMarksRenderer::onResizeViewportEvent(const G3MEventContext* ec,
+                                                        int width,
+                                                        int height) {
   const int marksSize = _marks.size();
   for (int i = 0; i < marksSize; i++) {
     _marks[i]->onResizeViewportEvent(width, height);
