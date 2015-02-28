@@ -19,9 +19,24 @@
                             encoding: NSUTF8StringEncoding];
 }
 
++ (std::string) cppPercentEncodedUrlString: (const std::string&) url {
+  return [[[NSString stringWithCString: url.c_str()
+                       encoding: NSUTF8StringEncoding] stringByAddingPercentEscapesUsingEncoding: NSUTF8StringEncoding] toCppString];
+}
+
 - (std::string) toCppString
 {
   return [self cStringUsingEncoding: NSUTF8StringEncoding];
+}
+
+- (NSString *)urlEncode
+{
+  return (__bridge_transfer NSString *) CFURLCreateStringByAddingPercentEscapes(
+                                                                                NULL,
+                                                                                (__bridge CFStringRef) self,
+                                                                                NULL,
+                                                                                (CFStringRef) @"!*'();:@&=+$,/?%#[]",
+                                                                                kCFStringEncodingUTF8);
 }
 
 

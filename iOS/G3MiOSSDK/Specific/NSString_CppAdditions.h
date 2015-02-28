@@ -12,7 +12,11 @@
 
 + (NSString*) stringWithCppString: (const std::string&) string;
 
+- (NSString *)urlEncode;
+
 - (std::string) toCppString;
+
++ (std::string) cppPercentEncodedUrlString: (const std::string&) url;
 
 + (NSString*) convertHTML: (const std::string&) string;
 
