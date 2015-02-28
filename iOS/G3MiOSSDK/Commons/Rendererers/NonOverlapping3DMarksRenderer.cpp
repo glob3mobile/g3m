@@ -380,54 +380,22 @@ void NonOverlapping3DMark::applyCoulombsLaw(NonOverlapping3DMark *that, const Pl
     
     this->applyForce(force._x, force._y, force._z);
     that->applyForce(-force._x, -force._y, -force._z);
-    //get distance
-    //get strength
-    //get force
-    //apply force
 }
-
-/*void NonOverlapping3DMark::applyCoulombsLaw(NonOverlapping3DMark* that){ //EM
-    
-    Vector2F d = getScreenPos().sub(that->getScreenPos());
-    double distance = d.length()  + 0.001;
-    Vector2F direction = d.div((float)distance);
-    
-    float strength = (float)(this->_electricCharge * that->_electricCharge / (distance * distance));
-    
-    Vector2F force = direction.times(strength);
-    
-    this->applyForce(force._x, force._y);
-    that->applyForce(-force._x, -force._y);
-    
-    //  var d = point1.p.subtract(point2.p);
-    //  var distance = d.magnitude() + 0.1; // avoid massive forces at small distances (and divide by zero)
-    //  var direction = d.normalise();
-    //
-    //  // apply force to each end point
-    //  point1.applyForce(direction.multiply(this.repulsion).divide(distance * distance * 0.5));
-    //  point2.applyForce(direction.multiply(this.repulsion).divide(distance * distance * -0.5));
-    
-}*/
 
 void NonOverlapping3DMark::applyCoulombsLawFromAnchor(NonOverlapping3DMark* that, const Planet* planet){ //EM
     
-    //Vector2F dAnchor = getScreenPos().sub(that->getAnchorScreenPos());
-   //  Vector2F dAnchor = getScreenPos().sub(that->getScreenPos());
     Vector3D dAnchor = getCartesianPosition(planet).sub(that->getCartesianPosition(planet));
 
     double distanceAnchor = dAnchor.length()  + 0.001;
     Vector3D directionAnchor = dAnchor.div((float)distanceAnchor);
-    
-   // float strengthAnchor = (float)(this->_electricCharge * that->_anchorElectricCharge / (distanceAnchor * distanceAnchor));
-     float strengthAnchor = (float)(this->_electricCharge * that->_electricCharge / (distanceAnchor * distanceAnchor));
+
+    float strengthAnchor = (float)(this->_electricCharge * that->_electricCharge / (distanceAnchor * distanceAnchor));
     
     this->applyForce(directionAnchor._x * strengthAnchor,
                      directionAnchor._y * strengthAnchor, directionAnchor._z);
 }
 
 void NonOverlapping3DMark::applyHookesLaw(const Planet* planet){   //Spring
-    
-    //Vector2F d = getScreenPos().sub(getAnchorScreenPos());
     if(getAnchor()) {
         Vector3D d = getCartesianPosition(planet).sub(getAnchor()->getCartesianPosition(planet));
         double mod = d.length();
@@ -439,39 +407,7 @@ void NonOverlapping3DMark::applyHookesLaw(const Planet* planet){   //Spring
         applyForce((float)(direction._x * force),
                    (float)(direction._y * force), (float) direction._z * force);
     }
-    
-    //  var d = spring.point2.p.subtract(spring.point1.p); // the direction of the spring
-    //  var displacement = spring.length - d.magnitude();
-    //  var direction = d.normalise();
-    //
-    //  // apply force to each end point
-    //  spring.point1.applyForce(direction.multiply(spring.k * displacement * -0.5));
-    //  spring.point2.applyForce(direction.multiply(spring.k * displacement * 0.5));
 }
-
-/*void NonOverlapping3DMark::applyHookesLaw(){   //Spring
-    
-    //Vector2F d = getScreenPos().sub(getAnchorScreenPos());
-    if(getAnchor()) {
-    Vector2F d = getScreenPos().sub(getAnchor()->getScreenPos());
-    double mod = d.length();
-    double displacement = _springLengthInPixels - mod;
-    Vector2F direction = d.div((float)mod);
-    
-    float force = (float)(_springK * displacement);
-    
-    applyForce((float)(direction._x * force),
-               (float)(direction._y * force));
-    }
-    
-    //  var d = spring.point2.p.subtract(spring.point1.p); // the direction of the spring
-    //  var displacement = spring.length - d.magnitude();
-    //  var direction = d.normalise();
-    //
-    //  // apply force to each end point
-    //  spring.point1.applyForce(direction.multiply(spring.k * displacement * -0.5));
-    //  spring.point2.applyForce(direction.multiply(spring.k * displacement * 0.5));
-}*/
 
 void NonOverlapping3DMark::render(const G3MRenderContext* rc, GLState* glState){
     
@@ -773,8 +709,8 @@ Geodetic3D NonOverlapping3DMark::getPos() const {
 }
 
 void NonOverlapping3DMarksRenderer::renderMarks(const G3MRenderContext *rc, GLState *glState){
-    //Draw Lines
-    renderConnectorLines(rc);
+
+    //renderConnectorLines(rc);
     
     //Draw Anchors and Marks
     for (int i = 0; i < _visibleMarks.size(); i++) {
@@ -819,7 +755,7 @@ void NonOverlapping3DMarksRenderer::render(const G3MRenderContext* rc, GLState* 
     
     computeForces(cam, _planet);
     
-    applyForces(rc->getFrameStartTimer()->nowInMilliseconds(), cam);
+   // applyForces(rc->getFrameStartTimer()->nowInMilliseconds(), cam);
     
     renderMarks(rc, glState);
 }

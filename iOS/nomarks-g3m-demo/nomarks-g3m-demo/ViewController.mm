@@ -24,6 +24,9 @@
 #include "JSONArray.hpp"
 #include "DownloaderImageBuilder.hpp"
 #include <vector.h>
+#include "Planet.hpp"
+#include "EllipsoidalPlanet.hpp"
+#include "CameraDoubleDragHandler.hpp"
 
 @interface ViewController ()
 
@@ -35,23 +38,27 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
     G3MBuilder_iOS builder([self g3mwidget]);
+    //EllipsoidalPlanet *p = new EllipsoidalPlanet(Ellipsoid(Vector3D(0,0,0), Vector3D(1000,1000,1000)));
+    //builder.setPlanet(p);
+    
     MarksRenderer *marksRenderer = new MarksRenderer(true);
-    NonOverlapping3DMarksRenderer *forceGraphRenderer = new NonOverlapping3DMarksRenderer(2);
+    NonOverlapping3DMarksRenderer *forceGraphRenderer = new NonOverlapping3DMarksRenderer(3);
     DownloaderImageBuilder *imageBuilder = new DownloaderImageBuilder(URL("http://www.freelogovectors.net/wp-content/uploads/2013/02/sheep-b.png"));
          DownloaderImageBuilder *imageBuilder2 = new DownloaderImageBuilder(URL("http://www.freelogovectors.net/wp-content/uploads/2013/02/sheep-b.png"));
        DownloaderImageBuilder *imageBuilder3 = new DownloaderImageBuilder(URL("http://www.freelogovectors.net/wp-content/uploads/2013/02/sheep-b.png"));
-    NonOverlapping3DMark *anchor = new NonOverlapping3DMark(imageBuilder, Geodetic3D::fromDegrees(10, 10, 5));
-    NonOverlapping3DMark *node = new NonOverlapping3DMark(imageBuilder2, Geodetic3D::fromDegrees(0, 0, 3));
-    NonOverlapping3DMark *node2 = new NonOverlapping3DMark(imageBuilder3, Geodetic3D::fromDegrees(10, 20, 3));
+    NonOverlapping3DMark *anchor = new NonOverlapping3DMark(imageBuilder, Geodetic3D::fromDegrees(10, 10, 1));
+    NonOverlapping3DMark *node = new NonOverlapping3DMark(imageBuilder2, Geodetic3D::fromDegrees(0, 0, 1));
+    NonOverlapping3DMark *node2 = new NonOverlapping3DMark(imageBuilder3, Geodetic3D::fromDegrees(10, 20, 1));
    // node->addAnchor(anchor);
     forceGraphRenderer->addMark(node);
     forceGraphRenderer->addMark(anchor);
     forceGraphRenderer->addMark(node2);
-   
+
     builder.addRenderer(marksRenderer);
     builder.addRenderer(forceGraphRenderer);
     //const IThreadUtils* _threadUtils;
     builder.setInitializationTask(new initialization(marksRenderer), true);
+
     builder.initializeWidget();
 }
 
