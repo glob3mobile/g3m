@@ -361,8 +361,6 @@ void Canvas_iOS::_drawImage(const IImage* image,
 
   CGContextDrawImage(_context,
                      CGRectMake(destLeft,
-                                //destTop,
-#warning Testing!
                                 _canvasHeight - (destTop + image->getHeight()),
                                 image->getWidth(),
                                 image->getHeight()),
@@ -379,8 +377,6 @@ void Canvas_iOS::_drawImage(const IImage* image,
 
   CGContextDrawImage(_context,
                      CGRectMake(destLeft,
-                                //destTop,
-#warning Testing!
                                 _canvasHeight - (destTop + image->getHeight()),
                                 image->getWidth(),
                                 image->getHeight()),
@@ -396,8 +392,6 @@ void Canvas_iOS::_drawImage(const IImage* image,
 
   CGContextDrawImage(_context,
                      CGRectMake(destLeft,
-                                //destTop,
-#warning Testing!
                                 _canvasHeight - (destTop + destHeight),
                                 destWidth,
                                 destHeight),
@@ -416,8 +410,6 @@ void Canvas_iOS::_drawImage(const IImage* image,
 
   CGContextDrawImage(_context,
                      CGRectMake(destLeft,
-                                //destTop,
-#warning Testing!
                                 _canvasHeight - (destTop + destHeight),
                                 destWidth,
                                 destHeight),
@@ -433,8 +425,7 @@ void Canvas_iOS::_drawImage(const IImage* image,
   CGImage* cgImage = [uiImage CGImage];
 
   CGRect destRect = CGRectMake(destLeft,
-                               //destTop,
-                               _canvasHeight - (destTop + destHeight), // Bottom
+                               _canvasHeight - (destTop + destHeight),
                                destWidth,
                                destHeight);
 
@@ -449,7 +440,6 @@ void Canvas_iOS::_drawImage(const IImage* image,
   else {
     // Cropping image
     CGRect cropRect = CGRectMake(srcLeft,
-                                 // _canvasHeight - (srcTop + srcHeight), // Bottom
                                  srcTop,
                                  srcWidth,
                                  srcHeight);
@@ -472,14 +462,13 @@ void Canvas_iOS::_drawImage(const IImage* image,
   CGImage* cgImage = [uiImage CGImage];
 
   CGRect destRect = CGRectMake(destLeft,
-                               //destTop,
-                               _canvasHeight - (destTop + destHeight), // Bottom
+                               _canvasHeight - (destTop + destHeight),
                                destWidth,
                                destHeight);
 
-  if ((srcLeft == 0) &&
-      (srcTop == 0) &&
-      (srcWidth == image->getWidth()) &&
+  if ((srcLeft   == 0) &&
+      (srcTop    == 0) &&
+      (srcWidth  == image->getWidth()) &&
       (srcHeight == image->getHeight())) {
 
     CGContextSetAlpha(_context, transparency);

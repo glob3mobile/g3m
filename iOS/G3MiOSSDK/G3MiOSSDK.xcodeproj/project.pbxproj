@@ -104,6 +104,7 @@
 		CF1871C017036EC600092888 /* GEOMeshSymbol.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF1871BE17036DD700092888 /* GEOMeshSymbol.hpp */; };
 		CF1871CA1703983C00092888 /* GEOShapeSymbol.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF1871C81703983B00092888 /* GEOShapeSymbol.cpp */; };
 		CF1871CC170398BC00092888 /* GEOShapeSymbol.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF1871C91703983C00092888 /* GEOShapeSymbol.hpp */; };
+		CF1918AA1A9E5B2C00BF433C /* MutableVector2F.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF1918A81A9E5B2C00BF433C /* MutableVector2F.cpp */; };
 		CF1B62D319055B7900AB01A9 /* TilesRenderParameters.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF1B62D219055B7900AB01A9 /* TilesRenderParameters.cpp */; };
 		CF1E62F8186CB7BB00EB1B6C /* HUDSize.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF1E62F6186CB7BB00EB1B6C /* HUDSize.cpp */; };
 		CF1E62FB186CB8D200EB1B6C /* HUDAbsoluteSize.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF1E62F9186CB8D200EB1B6C /* HUDAbsoluteSize.cpp */; };
@@ -1271,6 +1272,8 @@
 		CF1871BE17036DD700092888 /* GEOMeshSymbol.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = GEOMeshSymbol.hpp; path = Commons/GEO/GEOMeshSymbol.hpp; sourceTree = "<group>"; };
 		CF1871C81703983B00092888 /* GEOShapeSymbol.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GEOShapeSymbol.cpp; path = Commons/GEO/GEOShapeSymbol.cpp; sourceTree = "<group>"; };
 		CF1871C91703983C00092888 /* GEOShapeSymbol.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = GEOShapeSymbol.hpp; path = Commons/GEO/GEOShapeSymbol.hpp; sourceTree = "<group>"; };
+		CF1918A81A9E5B2C00BF433C /* MutableVector2F.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MutableVector2F.cpp; path = Commons/Geometry/MutableVector2F.cpp; sourceTree = "<group>"; };
+		CF1918A91A9E5B2C00BF433C /* MutableVector2F.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = MutableVector2F.hpp; path = Commons/Geometry/MutableVector2F.hpp; sourceTree = "<group>"; };
 		CF1B62D219055B7900AB01A9 /* TilesRenderParameters.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TilesRenderParameters.cpp; path = Commons/Rendererers/TilesRenderParameters.cpp; sourceTree = "<group>"; };
 		CF1E62F6186CB7BB00EB1B6C /* HUDSize.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = HUDSize.cpp; path = Commons/Rendererers/HUDSize.cpp; sourceTree = "<group>"; };
 		CF1E62F7186CB7BB00EB1B6C /* HUDSize.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = HUDSize.hpp; path = Commons/Rendererers/HUDSize.hpp; sourceTree = "<group>"; };
@@ -2281,6 +2284,8 @@
 				D8F2EBAC18994A7B001B6103 /* CoordinateSystem.hpp */,
 				D8173EC818A3A2D6001E7B57 /* TaitBryanAngles.cpp */,
 				D8173EC918A3A2D6001E7B57 /* TaitBryanAngles.hpp */,
+				CF1918A81A9E5B2C00BF433C /* MutableVector2F.cpp */,
+				CF1918A91A9E5B2C00BF433C /* MutableVector2F.hpp */,
 			);
 			name = Geometry;
 			sourceTree = "<group>";
@@ -3156,6 +3161,7 @@
 				CF1871BF17036DD800092888 /* GEOMeshSymbol.cpp in Sources */,
 				CF1F55DF1876F5E70019E8A5 /* LabelImageBuilder.cpp in Sources */,
 				CF423A2817F7A0A000F50525 /* HUDErrorRenderer.cpp in Sources */,
+				CF1918AA1A9E5B2C00BF433C /* MutableVector2F.cpp in Sources */,
 				CF1871CA1703983C00092888 /* GEOShapeSymbol.cpp in Sources */,
 				CF83D50617049AB9009A39A5 /* GEOMarkSymbol.cpp in Sources */,
 				CFA59ECB171467890095E2EF /* ICanvas.cpp in Sources */,

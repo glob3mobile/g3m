@@ -44,8 +44,8 @@ void CameraDoubleDragHandler::onDown(const G3MEventContext *eventContext,
   Camera *camera = cameraContext->getNextCamera();
   _camera0.copyFrom(*camera);
   // double dragging
-  const Vector2I pixel0 = touchEvent.getTouch(0)->getPos();
-  const Vector2I pixel1 = touchEvent.getTouch(1)->getPos();
+  const Vector2F pixel0 = touchEvent.getTouch(0)->getPos();
+  const Vector2F pixel1 = touchEvent.getTouch(1)->getPos();
   
   const Vector3D& initialRay0 = _camera0.pixel2Ray(pixel0);
   const Vector3D& initialRay1 = _camera0.pixel2Ray(pixel1);
@@ -68,8 +68,8 @@ void CameraDoubleDragHandler::onMove(const G3MEventContext *eventContext,
 
   // compute transformation matrix
   const Planet* planet = eventContext->getPlanet();
-  const Vector2I pixel0 = touchEvent.getTouch(0)->getPos();
-  const Vector2I pixel1 = touchEvent.getTouch(1)->getPos();
+  const Vector2F pixel0 = touchEvent.getTouch(0)->getPos();
+  const Vector2F pixel1 = touchEvent.getTouch(1)->getPos();
   const Vector3D& initialRay0 = _camera0.pixel2Ray(pixel0);
   const Vector3D& initialRay1 = _camera0.pixel2Ray(pixel1);
   

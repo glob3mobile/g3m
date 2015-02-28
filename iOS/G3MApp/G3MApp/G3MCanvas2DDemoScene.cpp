@@ -96,7 +96,6 @@ public:
       canvas->fillText("Hellow World", leftStep*i, topStep*i);
     }
 
-#warning Diego at work!
     canvas->drawImage(image, width / 8,     height / 8);       // ok
     canvas->drawImage(image, width / 8 * 3, height / 8, 0.5);  // ok
 

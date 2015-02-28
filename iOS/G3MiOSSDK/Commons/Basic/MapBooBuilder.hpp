@@ -102,7 +102,7 @@ public:
 
   virtual void onTerrainTouch(MapBooBuilder*         builder,
                               const G3MEventContext* ec,
-                              const Vector2I&        pixel,
+                              const Vector2F&        pixel,
                               const Camera*          camera,
                               const Geodetic3D&      position,
                               const Tile*            tile) = 0;
@@ -845,7 +845,7 @@ public:
 
   /** Private to MapbooBuilder, don't call it */
   bool onTerrainTouch(const G3MEventContext* ec,
-                      const Vector2I&        pixel,
+                      const Vector2F&        pixel,
                       const Camera*          camera,
                       const Geodetic3D&      position,
                       const Tile*            tile);

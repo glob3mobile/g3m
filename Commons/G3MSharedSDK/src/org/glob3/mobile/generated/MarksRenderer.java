@@ -212,7 +212,7 @@ public class MarksRenderer extends DefaultRenderer
   
       if (_lastCamera != null)
       {
-        final Vector2I touchedPixel = touchEvent.getTouch(0).getPos();
+        final Vector2F touchedPixel = touchEvent.getTouch(0).getPos();
         final Planet planet = ec.getPlanet();
   
         double minSqDistance = IMathUtils.instance().maxDouble();
@@ -232,14 +232,14 @@ public class MarksRenderer extends DefaultRenderer
             continue;
           }
   
-          final int textureWidth = mark.getTextureWidth();
-          if (textureWidth <= 0)
+          final int markWidth = mark.getTextureWidth();
+          if (markWidth <= 0)
           {
             continue;
           }
   
-          final int textureHeight = mark.getTextureHeight();
-          if (textureHeight <= 0)
+          final int markHeight = mark.getTextureHeight();
+          if (markHeight <= 0)
           {
             continue;
           }
@@ -247,7 +247,7 @@ public class MarksRenderer extends DefaultRenderer
           final Vector3D cartesianMarkPosition = mark.getCartesianPosition(planet);
           final Vector2F markPixel = _lastCamera.point2Pixel(cartesianMarkPosition);
   
-          final RectangleF markPixelBounds = new RectangleF(markPixel._x - (textureWidth / 2), markPixel._y - (textureHeight / 2), textureWidth, textureHeight);
+          final RectangleF markPixelBounds = new RectangleF(markPixel._x - ((float) markWidth / 2), markPixel._y - ((float) markHeight / 2), markWidth, markHeight);
   
           if (markPixelBounds.contains(touchedPixel._x, touchedPixel._y))
           {

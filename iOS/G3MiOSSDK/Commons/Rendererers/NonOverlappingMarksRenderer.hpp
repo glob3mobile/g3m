@@ -27,15 +27,16 @@ class Geometry2DGLFeature;
 class ViewportExtentGLFeature;
 class TexturesHandler;
 
-class MarkWidget;
+class NonOverlappingMark;
 
-class MarkWidgetTouchListener {
+
+class NonOverlappingMarkTouchListener {
 public:
-  virtual ~MarkWidgetTouchListener() {
+  virtual ~NonOverlappingMarkTouchListener() {
   }
 
-  virtual bool touchedMark(MarkWidget* mark,
-                           float x, float y) = 0;
+  virtual bool touchedMark(const NonOverlappingMark* mark,
+                           const Vector2F& touchedPixel) = 0;
 };
 
 
@@ -58,13 +59,10 @@ class MarkWidget {
 
   float _x, _y; //Screen position
 
-  MarkWidgetTouchListener* _touchListener;
-
   class WidgetImageListener: public IImageBuilderListener {
     MarkWidget* _widget;
   public:
-    WidgetImageListener(MarkWidget* widget,
-                        MarkWidgetTouchListener *touchListener = NULL) :
+    WidgetImageListener(MarkWidget* widget) :
     _widget(widget)
     {
     }
@@ -99,30 +97,21 @@ public:
   Vector2F getScreenPos() const{ return Vector2F(_x, _y); }
   void resetPosition();
 
-  float getHalfWidth() const  { return _halfWidth; }
-  float getHalfHeight() const { return _halfHeight; }
-
   void onResizeViewportEvent(int width, int height);
 
   bool isReady() const{
     return _image != NULL;
   }
 
+  int getWidth() const;
+  int getHeight() const;
+
   void clampPositionInsideScreen(int viewportWidth, int viewportHeight, float margin);
-
-  bool onTouchEvent(float x, float y);
-
-  void setTouchListener(MarkWidgetTouchListener* tl) {
-    if (_touchListener != NULL && _touchListener != tl) {
-      delete _touchListener;
-    }
-    _touchListener = tl;
-  }
-
 };
 
 
-class NonOverlappingMark{
+class NonOverlappingMark {
+private:
   float _springLengthInPixels;
 
   mutable Vector3D* _cartesianPos;
@@ -145,12 +134,14 @@ class NonOverlappingMark{
 
   std::string _id;
 
+  NonOverlappingMarkTouchListener* _touchListener;
+
 public:
 
   NonOverlappingMark(IImageBuilder* imageBuilderWidget,
                      IImageBuilder* imageBuilderAnchor,
                      const Geodetic3D& position,
-                     MarkWidgetTouchListener* touchListener = NULL,
+                     NonOverlappingMarkTouchListener* touchListener = NULL,
                      float springLengthInPixels = 100.0f,
                      float springK = 70.0f,
                      float minSpringLength = 0.0f,
@@ -205,12 +196,15 @@ public:
     _fY = 0;
   }
 
-  bool onTouchEvent(float x, float y);
-
   bool isMoving() const{
     float velocitySquared = ((_dX*_dX) + (_dY*_dY));
     return velocitySquared > (_minWidgetSpeedInPixelsPerSecond * _minWidgetSpeedInPixelsPerSecond);
   }
+
+  int getWidth() const;
+  int getHeight() const;
+
+  bool onTouchEvent(const Vector2F& touchedPixel);
 
 };
 
@@ -243,6 +237,8 @@ private:
   std::string     _visibleMarksIDs;
 
   std::vector<NonOverlappingMarksVisibilityListener*> _visibilityListeners;
+
+  NonOverlappingMarkTouchListener* _touchListener;
 
   void computeMarksToBeRendered(const Camera* camera,
                                 const Planet* planet);
@@ -308,6 +304,8 @@ public:
   
   bool marksAreMoving() const;
   
+  void setTouchListener(NonOverlappingMarkTouchListener* touchListener);
+
 };
 
 #endif
