@@ -294,7 +294,6 @@ void NonOverlappingMark::updatePositionWithCurrentForce(float timeInSeconds,
                                                         int viewportWidth,
                                                         int viewportHeight,
                                                         float viewportMargin) {
-
   _speed.add(_force.x() * timeInSeconds,
              _force.y() * timeInSeconds);
   _speed.times(_resistanceFactor);
@@ -495,7 +494,7 @@ void NonOverlappingMarksRenderer::renderMarks(const G3MRenderContext *rc,
 
 //  // draw all the springs in a shot to avoid OpenGL state changes
 //  for (int i = 0; i < visibleMarksSize; i++) {
-//    _visibleMarks[i]->renderSpring(rc, glState);
+//    _visibleMarks[i]->renderSpringWidget(rc, glState);
 //  }
 
   // draw all the anchorwidgets in a shot to avoid OpenGL state changes
