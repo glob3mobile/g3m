@@ -301,18 +301,16 @@ void NonOverlappingMark::renderSpringWidget(const G3MRenderContext* rc,
                                             GLState* glState) {
 #warning Diego at work
 
+  const Vector2F sp  = getScreenPos();
+  const Vector2F asp = getAnchorScreenPos();
+
   if (_springGLState == NULL) {
     _springGLState = new GLState();
 
     _springGLState->addGLFeature(new FlatColorGLFeature(Color::black()),
                                  false);
 
-//    _springGLState->clearGLFeatureGroup(NO_GROUP);
-
     _springVertices = rc->getFactory()->createFloatBuffer(2 * 2);
-
-    const Vector2F sp  = getScreenPos();
-    const Vector2F asp = getAnchorScreenPos();
 
     _springVertices->rawPut(0, sp._x);
     _springVertices->rawPut(1, -sp._y);
@@ -336,9 +334,6 @@ void NonOverlappingMark::renderSpringWidget(const G3MRenderContext* rc,
                                  false);
   }
   else {
-    const Vector2F sp  = getScreenPos();
-    const Vector2F asp = getAnchorScreenPos();
-
     _springVertices->rawPut(0, sp._x);
     _springVertices->rawPut(1, -sp._y);
     _springVertices->rawPut(2, asp._x);
