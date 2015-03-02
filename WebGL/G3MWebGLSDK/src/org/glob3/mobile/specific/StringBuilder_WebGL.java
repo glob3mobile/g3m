@@ -6,8 +6,8 @@ import org.glob3.mobile.generated.IStringBuilder;
 
 
 public final class StringBuilder_WebGL
-extends
-IStringBuilder {
+         extends
+            IStringBuilder {
 
    private String _string = "";
 
@@ -70,6 +70,12 @@ IStringBuilder {
    public IStringBuilder clear() {
       _string = "";
       return this;
+   }
+
+
+   @Override
+   public boolean contentEqualsTo(final String that) {
+      return _string.equals(that);
    }
 
 }
