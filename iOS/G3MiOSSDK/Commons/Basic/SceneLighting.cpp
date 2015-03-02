@@ -119,7 +119,7 @@ void CameraFocusSceneLighting::modifyGLState(GLState* glState, const G3MRenderCo
   _cameraDirY = _camDir.y();
   _cameraDirZ = _camDir.z();
 
-  _upX = up.x();
-  _upY = up.y();
-  _upZ = up.z();
+  _upX = _up.x();
+  _upY = _up.y();
+  _upZ = _up.z();
 }
