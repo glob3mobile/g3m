@@ -20,8 +20,8 @@ package org.glob3.mobile.generated;
 
 public class MutableVector2F
 {
-  private float _x;
-  private float _y;
+  public float _x;
+  public float _y;
 
   public MutableVector2F()
   {
@@ -81,16 +81,6 @@ public class MutableVector2F
   public static MutableVector2F nan()
   {
     return new MutableVector2F(java.lang.Float.NaN, java.lang.Float.NaN);
-  }
-
-  public final float x()
-  {
-    return _x;
-  }
-
-  public final float y()
-  {
-    return _y;
   }
 
   public final Vector2F asVector2F()

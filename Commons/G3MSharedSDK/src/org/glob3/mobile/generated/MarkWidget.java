@@ -150,6 +150,11 @@ public class MarkWidget
   {
      return new Vector2F(_x, _y);
   }
+  public final void getScreenPosition(MutableVector2F result)
+  {
+    result.set(_x, _y);
+  }
+
   public final void resetPosition()
   {
     if (_geo2Dfeature != null)

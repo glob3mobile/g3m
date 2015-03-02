@@ -104,6 +104,8 @@ public class NonOverlappingMark
 
   public final Vector3D getCartesianPosition(Planet planet)
   {
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning toCartesian without garbage
     if (_cartesianPos == null)
     {
       _cartesianPos = new Vector3D(planet.toCartesian(_geoPosition));
@@ -113,7 +115,6 @@ public class NonOverlappingMark
 
   public final void computeAnchorScreenPos(Camera camera, Planet planet)
   {
-  ///#error getCartesian without garbage
     Vector2F sp = new Vector2F(camera.point2Pixel(getCartesianPosition(planet)));
   //  _anchorScreenPosition.put(sp._x, sp._y);
   //  if (_widgetScreenPosition.isNan()) {
@@ -204,8 +205,7 @@ public class NonOverlappingMark
 
   public final void updatePositionWithCurrentForce(float timeInSeconds, int viewportWidth, int viewportHeight, float viewportMargin)
   {
-  
-    _speed.add(_force.x() * timeInSeconds, _force.y() * timeInSeconds);
+    _speed.add(_force._x * timeInSeconds, _force._y * timeInSeconds);
     _speed.times(_resistanceFactor);
   
     //Force has been applied and must be reset
@@ -216,18 +216,15 @@ public class NonOverlappingMark
     //Update position
     Vector2F widgetPosition = _widget.getScreenPos();
   
-    final float newX = widgetPosition._x + (_speed.x() * timeInSeconds);
-    final float newY = widgetPosition._y + (_speed.y() * timeInSeconds);
+    final float newX = widgetPosition._x + (_speed._x * timeInSeconds);
+    final float newY = widgetPosition._y + (_speed._y * timeInSeconds);
   
     Vector2F anchorPosition = _anchorWidget.getScreenPos();
   
-    Vector2F spring = new Vector2F(newX,newY).sub(anchorPosition).clampLength(_minSpringLength, _maxSpringLength);
-    Vector2F finalPos = anchorPosition.add(spring);
+  //  Vector2F spring = Vector2F(newX,newY).sub(anchorPosition).clampLength(_minSpringLength, _maxSpringLength);
+    Vector2F spring = new Vector2F(newX - anchorPosition._x, newY - anchorPosition._y).clampLength(_minSpringLength, _maxSpringLength);
   
-  //  Vector2F finalPos(newX, newY);
-  ///#warning Diego at work!
-  
-    _widget.setAndClampScreenPos(finalPos._x, finalPos._y, viewportWidth, viewportHeight, viewportMargin);
+    _widget.setAndClampScreenPos(anchorPosition._x + spring._x, anchorPosition._y + spring._y, viewportWidth, viewportHeight, viewportMargin);
   }
 
   public final void onResizeViewportEvent(int width, int height)

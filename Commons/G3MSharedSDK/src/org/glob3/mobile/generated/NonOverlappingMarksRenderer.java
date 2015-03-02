@@ -125,7 +125,7 @@ public class NonOverlappingMarksRenderer extends DefaultRenderer
   
   //  // draw all the springs in a shot to avoid OpenGL state changes
   //  for (int i = 0; i < visibleMarksSize; i++) {
-  //    _visibleMarks[i]->renderSpring(rc, glState);
+  //    _visibleMarks[i]->renderSpringWidget(rc, glState);
   //  }
   
     // draw all the anchorwidgets in a shot to avoid OpenGL state changes
