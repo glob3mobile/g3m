@@ -212,6 +212,7 @@ NonOverlappingMark::~NonOverlappingMark() {
 }
 
 Vector3D NonOverlappingMark::getCartesianPosition(const Planet* planet) const {
+#warning toCartesian without garbage
   if (_cartesianPos == NULL) {
     _cartesianPos = new Vector3D(planet->toCartesian(_geoPosition));
   }
@@ -220,7 +221,6 @@ Vector3D NonOverlappingMark::getCartesianPosition(const Planet* planet) const {
 
 void NonOverlappingMark::computeAnchorScreenPos(const Camera* camera,
                                                 const Planet* planet) {
-//#error getCartesian without garbage
   Vector2F sp(camera->point2Pixel(getCartesianPosition(planet)));
 //  _anchorScreenPosition.put(sp._x, sp._y);
 //  if (_widgetScreenPosition.isNan()) {
@@ -294,8 +294,8 @@ void NonOverlappingMark::updatePositionWithCurrentForce(float timeInSeconds,
                                                         int viewportWidth,
                                                         int viewportHeight,
                                                         float viewportMargin) {
-  _speed.add(_force.x() * timeInSeconds,
-             _force.y() * timeInSeconds);
+  _speed.add(_force._x * timeInSeconds,
+             _force._y * timeInSeconds);
   _speed.times(_resistanceFactor);
 
   //Force has been applied and must be reset
@@ -305,19 +305,16 @@ void NonOverlappingMark::updatePositionWithCurrentForce(float timeInSeconds,
   //Update position
   Vector2F widgetPosition = _widget->getScreenPos();
 
-  const float newX = widgetPosition._x + (_speed.x() * timeInSeconds);
-  const float newY = widgetPosition._y + (_speed.y() * timeInSeconds);
+  const float newX = widgetPosition._x + (_speed._x * timeInSeconds);
+  const float newY = widgetPosition._y + (_speed._y * timeInSeconds);
 
   Vector2F anchorPosition = _anchorWidget->getScreenPos();
 
-  Vector2F spring = Vector2F(newX,newY).sub(anchorPosition).clampLength(_minSpringLength, _maxSpringLength);
-  Vector2F finalPos = anchorPosition.add(spring);
+//  Vector2F spring = Vector2F(newX,newY).sub(anchorPosition).clampLength(_minSpringLength, _maxSpringLength);
+  Vector2F spring = Vector2F(newX - anchorPosition._x, newY - anchorPosition._y).clampLength(_minSpringLength, _maxSpringLength);
 
-//  Vector2F finalPos(newX, newY);
-//#warning Diego at work!
-
-  _widget->setAndClampScreenPos(finalPos._x,
-                                finalPos._y,
+  _widget->setAndClampScreenPos(anchorPosition._x + spring._x,
+                                anchorPosition._y + spring._y,
                                 viewportWidth,
                                 viewportHeight,
                                 viewportMargin);

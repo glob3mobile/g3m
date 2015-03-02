@@ -12,11 +12,10 @@
 class Vector2F;
 
 class MutableVector2F {
-private:
+public:
   float _x;
   float _y;
 
-public:
   MutableVector2F() :
   _x(0),
   _y(0)
@@ -63,14 +62,6 @@ public:
   }
 
   static MutableVector2F nan();
-
-  float x() const {
-    return _x;
-  }
-
-  float y() const {
-    return _y;
-  }
 
   Vector2F asVector2F() const;
 

@@ -108,6 +108,10 @@ public:
   void setScreenPos(float x, float y);
 
   Vector2F getScreenPos() const { return Vector2F(_x, _y); }
+  void getScreenPosition(MutableVector2F& result) const {
+    result.set(_x, _y);
+  }
+
   void resetPosition();
 
   void onResizeViewportEvent(int width, int height);
