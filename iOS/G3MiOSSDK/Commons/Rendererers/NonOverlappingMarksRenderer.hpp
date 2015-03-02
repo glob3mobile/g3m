@@ -258,9 +258,6 @@ private:
 
   long long _lastPositionsUpdatedTime;
 
-//  GLState* _connectorsGLState;
-//  void renderConnectorLines(const G3MRenderContext* rc);
-
   void computeForces(const Camera* camera, const Planet* planet);
   void renderMarks(const G3MRenderContext* rc,
                    GLState* glState);
