@@ -339,10 +339,10 @@ void NonOverlappingMark::renderSpringWidget(const G3MRenderContext* rc,
     const Vector2F sp  = getScreenPos();
     const Vector2F asp = getAnchorScreenPos();
 
-    _springVertices->put(0, sp._x);
-    _springVertices->put(1, -sp._y);
-    _springVertices->put(2, asp._x);
-    _springVertices->put(3, -asp._y);
+    _springVertices->rawPut(0, sp._x);
+    _springVertices->rawPut(1, -sp._y);
+    _springVertices->rawPut(2, asp._x);
+    _springVertices->put(3, -asp._y); // last put (not rawPut) to update the timestamp
   }
 
   rc->getGL()->drawArrays(GLPrimitive::lines(),
