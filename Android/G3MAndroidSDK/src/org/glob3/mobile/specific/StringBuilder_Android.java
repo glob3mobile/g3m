@@ -6,8 +6,8 @@ import org.glob3.mobile.generated.IStringBuilder;
 
 
 public final class StringBuilder_Android
-extends
-IStringBuilder {
+         extends
+            IStringBuilder {
 
    private final StringBuilder _builder = new StringBuilder();
 
@@ -68,7 +68,7 @@ IStringBuilder {
 
    @Override
    public IStringBuilder clear() {
-      _builder.delete(0, _builder.length());
+      _builder.setLength(0);
       return this;
    }
 

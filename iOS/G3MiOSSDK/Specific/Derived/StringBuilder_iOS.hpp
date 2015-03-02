@@ -67,7 +67,11 @@ public:
     _oss.str(std::string());
     return this;
   }
-  
+
+  bool contentEqualsTo(const std::string& that) const {
+    return _oss.str() == that;
+  }
+
 };
 
 #endif
