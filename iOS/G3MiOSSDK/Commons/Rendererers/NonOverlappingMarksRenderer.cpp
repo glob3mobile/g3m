@@ -37,7 +37,7 @@
 MarkWidget::MarkWidget(IImageBuilder* imageBuilder):
 _image(NULL),
 _imageBuilder(imageBuilder),
-_viewportExtent(NULL),
+_viewportExtentGLFeature(NULL),
 _geo2Dfeature(NULL),
 _glState(NULL),
 _x(NANF),
@@ -59,12 +59,12 @@ MarkWidget::~MarkWidget() {
 void MarkWidget::init(const G3MRenderContext* rc) {
   if (_glState == NULL) {
     _glState = new GLState();
-    _viewportExtent = new ViewportExtentGLFeature(rc->getCurrentCamera());
+    _viewportExtentGLFeature = new ViewportExtentGLFeature(rc->getCurrentCamera());
 
     _texHandler = rc->getTexturesHandler();
     _imageBuilder->build(rc, new WidgetImageListener(this), true);
 
-    _glState->addGLFeature(_viewportExtent, false);
+    _glState->addGLFeature(_viewportExtentGLFeature, false);
   }
 }
 
@@ -160,8 +160,8 @@ void MarkWidget::resetPosition() {
 }
 
 void MarkWidget::onResizeViewportEvent(int width, int height) {
-  if (_viewportExtent != NULL) {
-    _viewportExtent->changeExtent(width, height);
+  if (_viewportExtentGLFeature != NULL) {
+    _viewportExtentGLFeature->changeExtent(width, height);
   }
 }
 
@@ -197,7 +197,10 @@ _maxSpringLength( maxSpringLength > 0 ? maxSpringLength : (springLengthInPixels 
 _electricCharge(electricCharge),
 _anchorElectricCharge(anchorElectricCharge),
 _resistanceFactor(resistanceFactor),
-_touchListener(touchListener)
+_touchListener(touchListener),
+_springGLState(NULL),
+_springVertices(NULL),
+_springViewportExtentGLFeature(NULL)
 {
   _widget = new MarkWidget(imageBuilderWidget);
   _anchorWidget = new MarkWidget(imageBuilderAnchor);
@@ -209,6 +212,10 @@ NonOverlappingMark::~NonOverlappingMark() {
   delete _widget;
   delete _anchorWidget;
   delete _cartesianPos;
+
+  if (_springGLState != NULL) {
+    _springGLState->_release();
+  }
 }
 
 Vector3D NonOverlappingMark::getCartesianPosition(const Planet* planet) const {
@@ -290,6 +297,62 @@ void NonOverlappingMark::renderAnchorWidget(const G3MRenderContext* rc,
   }
 }
 
+void NonOverlappingMark::renderSpringWidget(const G3MRenderContext* rc,
+                                            GLState* glState) {
+#warning Diego at work
+
+  if (_springGLState == NULL) {
+    _springGLState = new GLState();
+
+    _springGLState->addGLFeature(new FlatColorGLFeature(Color::black()),
+                                 false);
+
+//    _springGLState->clearGLFeatureGroup(NO_GROUP);
+
+    _springVertices = rc->getFactory()->createFloatBuffer(2 * 2);
+
+    const Vector2F sp  = getScreenPos();
+    const Vector2F asp = getAnchorScreenPos();
+
+    _springVertices->rawPut(0, sp._x);
+    _springVertices->rawPut(1, -sp._y);
+    _springVertices->rawPut(2, asp._x);
+    _springVertices->rawPut(3, -asp._y);
+
+    _springGLState->addGLFeature(new Geometry2DGLFeature(_springVertices,  // buffer
+                                                         2,                // arrayElementSize
+                                                         0,                // index
+                                                         true,             // normalized
+                                                         0,                // stride
+                                                         3.0f,             // lineWidth
+                                                         true,             // needsPointSize
+                                                         2.0f,             // pointSize
+                                                         Vector2F::zero()  // translation
+                                                         ),
+                                 false);
+
+    _springViewportExtentGLFeature = new ViewportExtentGLFeature(rc->getCurrentCamera());
+    _springGLState->addGLFeature(_springViewportExtentGLFeature,
+                                 false);
+  }
+  else {
+    const Vector2F sp  = getScreenPos();
+    const Vector2F asp = getAnchorScreenPos();
+
+    _springVertices->put(0, sp._x);
+    _springVertices->put(1, -sp._y);
+    _springVertices->put(2, asp._x);
+    _springVertices->put(3, -asp._y);
+  }
+
+  rc->getGL()->drawArrays(GLPrimitive::lines(),
+                          0,                    // first
+                          2,                    // count
+                          _springGLState,
+                          *rc->getGPUProgramManager());
+  
+}
+
 void NonOverlappingMark::updatePositionWithCurrentForce(float timeInSeconds,
                                                         int viewportWidth,
                                                         int viewportHeight,
@@ -323,6 +386,10 @@ void NonOverlappingMark::updatePositionWithCurrentForce(float timeInSeconds,
 void NonOverlappingMark::onResizeViewportEvent(int width, int height) {
   _widget->onResizeViewportEvent(width, height);
   _anchorWidget->onResizeViewportEvent(width, height);
+
+  if (_springViewportExtentGLFeature != NULL) {
+    _springViewportExtentGLFeature->changeExtent(width, height);
+  }
 }
 
 bool NonOverlappingMark::onTouchEvent(const Vector2F& touchedPixel) {
@@ -337,7 +404,7 @@ NonOverlappingMarksRenderer::NonOverlappingMarksRenderer(int maxVisibleMarks,
 _maxVisibleMarks(maxVisibleMarks),
 _viewportMargin(viewportMargin),
 _lastPositionsUpdatedTime(0),
-_connectorsGLState(NULL),
+//_connectorsGLState(NULL),
 _visibleMarksIDsBuilder( IStringBuilder::newStringBuilder() ),
 _visibleMarksIDs(""),
 _touchListener(NULL)
@@ -346,7 +413,7 @@ _touchListener(NULL)
 }
 
 NonOverlappingMarksRenderer::~NonOverlappingMarksRenderer() {
-  _connectorsGLState->_release();
+//  _connectorsGLState->_release();
 
   const int marksSize = _marks.size();
   for (int i = 0; i < marksSize; i++) {
@@ -414,48 +481,48 @@ void NonOverlappingMarksRenderer::computeMarksToBeRendered(const Camera* camera,
   }
 }
 
-void NonOverlappingMarksRenderer::renderConnectorLines(const G3MRenderContext* rc) {
-  if (_connectorsGLState == NULL) {
-    _connectorsGLState = new GLState();
-
-    _connectorsGLState->addGLFeature(new FlatColorGLFeature(Color::black()),
-                                     false);
-  }
-
-  _connectorsGLState->clearGLFeatureGroup(NO_GROUP);
-
-  FloatBufferBuilderFromCartesian2D pos2D;
-
-  const int visibleMarksSize = _visibleMarks.size();
-  for (int i = 0; i < visibleMarksSize; i++) {
-    const Vector2F sp = _visibleMarks[i]->getScreenPos();
-    const Vector2F asp = _visibleMarks[i]->getAnchorScreenPos();
-
-    pos2D.add(sp._x, -sp._y);
-    pos2D.add(asp._x, -asp._y);
-  }
-
-  _connectorsGLState->addGLFeature(new Geometry2DGLFeature(pos2D.create(),  // buffer
-                                                           2,               // arrayElementSize
-                                                           0,               // index
-                                                           true,            // normalized
-                                                           0,               // stride
-                                                           3.0f,            // lineWidth
-                                                           true,            // needsPointSize
-                                                           10.0f,           // pointSize
-                                                           Vector2F::zero() // translation
-                                                           ),
-                                   false);
-
-  _connectorsGLState->addGLFeature(new ViewportExtentGLFeature(rc->getCurrentCamera()),
-                                   false);
-
-  rc->getGL()->drawArrays(GLPrimitive::lines(),
-                          0,                    // first
-                          pos2D.size()/2,       // count
-                          _connectorsGLState,
-                          *rc->getGPUProgramManager());
-}
+//void NonOverlappingMarksRenderer::renderConnectorLines(const G3MRenderContext* rc) {
+//  if (_connectorsGLState == NULL) {
+//    _connectorsGLState = new GLState();
+//
+//    _connectorsGLState->addGLFeature(new FlatColorGLFeature(Color::black()),
+//                                     false);
+//  }
+//
+//  _connectorsGLState->clearGLFeatureGroup(NO_GROUP);
+//
+//  FloatBufferBuilderFromCartesian2D pos2D;
+//
+//  const int visibleMarksSize = _visibleMarks.size();
+//  for (int i = 0; i < visibleMarksSize; i++) {
+//    const Vector2F sp = _visibleMarks[i]->getScreenPos();
+//    const Vector2F asp = _visibleMarks[i]->getAnchorScreenPos();
+//
+//    pos2D.add(sp._x, -sp._y);
+//    pos2D.add(asp._x, -asp._y);
+//  }
+//
+//  _connectorsGLState->addGLFeature(new Geometry2DGLFeature(pos2D.create(),  // buffer
+//                                                           2,               // arrayElementSize
+//                                                           0,               // index
+//                                                           true,            // normalized
+//                                                           0,               // stride
+//                                                           3.0f,            // lineWidth
+//                                                           true,            // needsPointSize
+//                                                           1.0f,            // pointSize
+//                                                           Vector2F::zero() // translation
+//                                                           ),
+//                                   false);
+//
+//  _connectorsGLState->addGLFeature(new ViewportExtentGLFeature(rc->getCurrentCamera()),
+//                                   false);
+//
+//  rc->getGL()->drawArrays(GLPrimitive::lines(),
+//                          0,                    // first
+//                          pos2D.size()/2,       // count
+//                          _connectorsGLState,
+//                          *rc->getGPUProgramManager());
+//}
 
 void NonOverlappingMarksRenderer::computeForces(const Camera* camera, const Planet* planet) {
   const int visibleMarksSize = _visibleMarks.size();
@@ -484,24 +551,26 @@ void NonOverlappingMarksRenderer::computeForces(const Camera* camera, const Plan
 
 void NonOverlappingMarksRenderer::renderMarks(const G3MRenderContext *rc,
                                               GLState *glState) {
-  // Draw Lines
-  renderConnectorLines(rc);
-
   const int visibleMarksSize = _visibleMarks.size();
 
-//  // draw all the springs in a shot to avoid OpenGL state changes
-//  for (int i = 0; i < visibleMarksSize; i++) {
-//    _visibleMarks[i]->renderSpringWidget(rc, glState);
-//  }
+  if (visibleMarksSize > 0) {
+    // Draw Lines
+//    renderConnectorLines(rc);
 
-  // draw all the anchorwidgets in a shot to avoid OpenGL state changes
-  for (int i = 0; i < visibleMarksSize; i++) {
-    _visibleMarks[i]->renderAnchorWidget(rc, glState);
-  }
+    // draw all the springs in a shot to avoid OpenGL state changes
+    for (int i = 0; i < visibleMarksSize; i++) {
+      _visibleMarks[i]->renderSpringWidget(rc, glState);
+    }
 
-  // draw all the widgets in a shot to avoid OpenGL state changes
-  for (int i = 0; i < visibleMarksSize; i++) {
-    _visibleMarks[i]->renderWidget(rc, glState);
+    // draw all the anchorwidgets in a shot to avoid OpenGL state changes
+    for (int i = 0; i < visibleMarksSize; i++) {
+      _visibleMarks[i]->renderAnchorWidget(rc, glState);
+    }
+
+    // draw all the widgets in a shot to avoid OpenGL state changes
+    for (int i = 0; i < visibleMarksSize; i++) {
+      _visibleMarks[i]->renderWidget(rc, glState);
+    }
   }
 }
 

@@ -45,7 +45,7 @@ class MarkWidget {
 private:
   GLState* _glState;
   Geometry2DGLFeature* _geo2Dfeature;
-  ViewportExtentGLFeature* _viewportExtent;
+  ViewportExtentGLFeature* _viewportExtentGLFeature;
 #ifdef C_CODE
   const IImage* _image;
 #endif
@@ -142,6 +142,10 @@ private:
   MarkWidget* _widget;
   MarkWidget* _anchorWidget;
 
+  GLState* _springGLState;
+  IFloatBuffer* _springVertices;
+  ViewportExtentGLFeature* _springViewportExtentGLFeature;
+
   const float _springK;
   const float _maxSpringLength;
   const float _minSpringLength;
@@ -189,6 +193,9 @@ public:
                     GLState* glState);
 
   void renderAnchorWidget(const G3MRenderContext* rc,
+                          GLState* glState);
+
+  void renderSpringWidget(const G3MRenderContext* rc,
                           GLState* glState);
 
   void applyCoulombsLaw(NonOverlappingMark* that);
@@ -251,8 +258,8 @@ private:
 
   long long _lastPositionsUpdatedTime;
 
-  GLState * _connectorsGLState;
-  void renderConnectorLines(const G3MRenderContext* rc);
+//  GLState* _connectorsGLState;
+//  void renderConnectorLines(const G3MRenderContext* rc);
 
   void computeForces(const Camera* camera, const Planet* planet);
   void renderMarks(const G3MRenderContext* rc,
