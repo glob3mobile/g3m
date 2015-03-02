@@ -15,6 +15,10 @@ public class NonOverlappingMark
   private MarkWidget _widget;
   private MarkWidget _anchorWidget;
 
+  private GLState _springGLState;
+  private IFloatBuffer _springVertices;
+  private ViewportExtentGLFeature _springViewportExtentGLFeature;
+
   private final float _springK;
   private final float _maxSpringLength;
   private final float _minSpringLength;
@@ -75,6 +79,9 @@ public class NonOverlappingMark
      _anchorElectricCharge = anchorElectricCharge;
      _resistanceFactor = resistanceFactor;
      _touchListener = touchListener;
+     _springGLState = null;
+     _springVertices = null;
+     _springViewportExtentGLFeature = null;
     _widget = new MarkWidget(imageBuilderWidget);
     _anchorWidget = new MarkWidget(imageBuilderAnchor);
   }
@@ -100,6 +107,11 @@ public class NonOverlappingMark
        _anchorWidget.dispose();
     if (_cartesianPos != null)
        _cartesianPos.dispose();
+  
+    if (_springGLState != null)
+    {
+      _springGLState._release();
+    }
   }
 
   public final Vector3D getCartesianPosition(Planet planet)
@@ -160,6 +172,49 @@ public class NonOverlappingMark
     {
       _anchorWidget.init(rc);
     }
+  }
+
+  public final void renderSpringWidget(G3MRenderContext rc, GLState glState)
+  {
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning Diego at work
+  
+    if (_springGLState == null)
+    {
+      _springGLState = new GLState();
+  
+      _springGLState.addGLFeature(new FlatColorGLFeature(Color.black()), false);
+  
+  //    _springGLState->clearGLFeatureGroup(NO_GROUP);
+  
+      _springVertices = rc.getFactory().createFloatBuffer(2 * 2);
+  
+      final Vector2F sp = getScreenPos();
+      final Vector2F asp = getAnchorScreenPos();
+  
+      _springVertices.rawPut(0, sp._x);
+      _springVertices.rawPut(1, -sp._y);
+      _springVertices.rawPut(2, asp._x);
+      _springVertices.rawPut(3, -asp._y);
+  
+      _springGLState.addGLFeature(new Geometry2DGLFeature(_springVertices, 2, 0, true, 0, 3.0f, true, 2.0f, Vector2F.zero()), false); // translation -  pointSize -  needsPointSize -  lineWidth -  stride -  normalized -  index -  arrayElementSize -  buffer
+  
+      _springViewportExtentGLFeature = new ViewportExtentGLFeature(rc.getCurrentCamera());
+      _springGLState.addGLFeature(_springViewportExtentGLFeature, false);
+    }
+    else
+    {
+      final Vector2F sp = getScreenPos();
+      final Vector2F asp = getAnchorScreenPos();
+  
+      _springVertices.put(0, sp._x);
+      _springVertices.put(1, -sp._y);
+      _springVertices.put(2, asp._x);
+      _springVertices.put(3, -asp._y);
+    }
+  
+    rc.getGL().drawArrays(GLPrimitive.lines(), 0, 2, _springGLState, rc.getGPUProgramManager()); // count -  first
+  
   }
 
   public final void applyCoulombsLaw(NonOverlappingMark that)
@@ -231,6 +286,11 @@ public class NonOverlappingMark
   {
     _widget.onResizeViewportEvent(width, height);
     _anchorWidget.onResizeViewportEvent(width, height);
+  
+    if (_springViewportExtentGLFeature != null)
+    {
+      _springViewportExtentGLFeature.changeExtent(width, height);
+    }
   }
 
   public final void resetWidgetPositionVelocityAndForce()

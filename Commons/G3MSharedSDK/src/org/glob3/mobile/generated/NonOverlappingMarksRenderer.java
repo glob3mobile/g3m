@@ -55,37 +55,53 @@ public class NonOverlappingMarksRenderer extends DefaultRenderer
 
   private long _lastPositionsUpdatedTime;
 
-  private GLState _connectorsGLState;
-  private void renderConnectorLines(G3MRenderContext rc)
-  {
-    if (_connectorsGLState == null)
-    {
-      _connectorsGLState = new GLState();
-  
-      _connectorsGLState.addGLFeature(new FlatColorGLFeature(Color.black()), false);
-    }
-  
-    _connectorsGLState.clearGLFeatureGroup(GLFeatureGroupName.NO_GROUP);
-  
-    FloatBufferBuilderFromCartesian2D pos2D = new FloatBufferBuilderFromCartesian2D();
-  
-    final int visibleMarksSize = _visibleMarks.size();
-    for (int i = 0; i < visibleMarksSize; i++)
-    {
-      final Vector2F sp = _visibleMarks.get(i).getScreenPos();
-      final Vector2F asp = _visibleMarks.get(i).getAnchorScreenPos();
-  
-      pos2D.add(sp._x, -sp._y);
-      pos2D.add(asp._x, -asp._y);
-    }
-  
-    _connectorsGLState.addGLFeature(new Geometry2DGLFeature(pos2D.create(), 2, 0, true, 0, 3.0f, true, 10.0f, Vector2F.zero()), false); // translation -  pointSize -  needsPointSize -  lineWidth -  stride -  normalized -  index -  arrayElementSize -  buffer
-  
-    _connectorsGLState.addGLFeature(new ViewportExtentGLFeature(rc.getCurrentCamera()), false);
-  
-    rc.getGL().drawArrays(GLPrimitive.lines(), 0, pos2D.size()/2, _connectorsGLState, rc.getGPUProgramManager()); // count -  first
-  }
+//  GLState* _connectorsGLState;
+//  void renderConnectorLines(const G3MRenderContext* rc);
 
+
+  //void NonOverlappingMarksRenderer::renderConnectorLines(const G3MRenderContext* rc) {
+  //  if (_connectorsGLState == NULL) {
+  //    _connectorsGLState = new GLState();
+  //
+  //    _connectorsGLState->addGLFeature(new FlatColorGLFeature(Color::black()),
+  //                                     false);
+  //  }
+  //
+  //  _connectorsGLState->clearGLFeatureGroup(NO_GROUP);
+  //
+  //  FloatBufferBuilderFromCartesian2D pos2D;
+  //
+  //  const int visibleMarksSize = _visibleMarks.size();
+  //  for (int i = 0; i < visibleMarksSize; i++) {
+  //    const Vector2F sp = _visibleMarks[i]->getScreenPos();
+  //    const Vector2F asp = _visibleMarks[i]->getAnchorScreenPos();
+  //
+  //    pos2D.add(sp._x, -sp._y);
+  //    pos2D.add(asp._x, -asp._y);
+  //  }
+  //
+  //  _connectorsGLState->addGLFeature(new Geometry2DGLFeature(pos2D.create(),  // buffer
+  //                                                           2,               // arrayElementSize
+  //                                                           0,               // index
+  //                                                           true,            // normalized
+  //                                                           0,               // stride
+  //                                                           3.0f,            // lineWidth
+  //                                                           true,            // needsPointSize
+  //                                                           1.0f,            // pointSize
+  //                                                           Vector2F::zero() // translation
+  //                                                           ),
+  //                                   false);
+  //
+  //  _connectorsGLState->addGLFeature(new ViewportExtentGLFeature(rc->getCurrentCamera()),
+  //                                   false);
+  //
+  //  rc->getGL()->drawArrays(GLPrimitive::lines(),
+  //                          0,                    // first
+  //                          pos2D.size()/2,       // count
+  //                          _connectorsGLState,
+  //                          *rc->getGPUProgramManager());
+  //}
+  
   private void computeForces(Camera camera, Planet planet)
   {
     final int visibleMarksSize = _visibleMarks.size();
@@ -118,26 +134,30 @@ public class NonOverlappingMarksRenderer extends DefaultRenderer
   }
   private void renderMarks(G3MRenderContext rc, GLState glState)
   {
-    // Draw Lines
-    renderConnectorLines(rc);
-  
     final int visibleMarksSize = _visibleMarks.size();
   
-  //  // draw all the springs in a shot to avoid OpenGL state changes
-  //  for (int i = 0; i < visibleMarksSize; i++) {
-  //    _visibleMarks[i]->renderSpringWidget(rc, glState);
-  //  }
-  
-    // draw all the anchorwidgets in a shot to avoid OpenGL state changes
-    for (int i = 0; i < visibleMarksSize; i++)
+    if (visibleMarksSize > 0)
     {
-      _visibleMarks.get(i).renderAnchorWidget(rc, glState);
-    }
+      // Draw Lines
+  //    renderConnectorLines(rc);
   
-    // draw all the widgets in a shot to avoid OpenGL state changes
-    for (int i = 0; i < visibleMarksSize; i++)
-    {
-      _visibleMarks.get(i).renderWidget(rc, glState);
+      // draw all the springs in a shot to avoid OpenGL state changes
+      for (int i = 0; i < visibleMarksSize; i++)
+      {
+        _visibleMarks.get(i).renderSpringWidget(rc, glState);
+      }
+  
+      // draw all the anchorwidgets in a shot to avoid OpenGL state changes
+      for (int i = 0; i < visibleMarksSize; i++)
+      {
+        _visibleMarks.get(i).renderAnchorWidget(rc, glState);
+      }
+  
+      // draw all the widgets in a shot to avoid OpenGL state changes
+      for (int i = 0; i < visibleMarksSize; i++)
+      {
+        _visibleMarks.get(i).renderWidget(rc, glState);
+      }
     }
   }
   private void applyForces(long now, Camera camera)
@@ -170,11 +190,11 @@ public class NonOverlappingMarksRenderer extends DefaultRenderer
      this(maxVisibleMarks, 5);
   }
   public NonOverlappingMarksRenderer(int maxVisibleMarks, float viewportMargin)
+  //_connectorsGLState(NULL),
   {
      _maxVisibleMarks = maxVisibleMarks;
      _viewportMargin = viewportMargin;
      _lastPositionsUpdatedTime = 0;
-     _connectorsGLState = null;
      _visibleMarksIDsBuilder = IStringBuilder.newStringBuilder();
      _visibleMarksIDs = "";
      _touchListener = null;
@@ -183,7 +203,7 @@ public class NonOverlappingMarksRenderer extends DefaultRenderer
 
   public void dispose()
   {
-    _connectorsGLState._release();
+  //  _connectorsGLState->_release();
   
     final int marksSize = _marks.size();
     for (int i = 0; i < marksSize; i++)

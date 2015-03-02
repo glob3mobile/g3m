@@ -3,7 +3,7 @@ public class MarkWidget
 {
   private GLState _glState;
   private Geometry2DGLFeature _geo2Dfeature;
-  private ViewportExtentGLFeature _viewportExtent;
+  private ViewportExtentGLFeature _viewportExtentGLFeature;
   private IImage _image;
   private String _imageName;
   private IImageBuilder _imageBuilder;
@@ -80,7 +80,7 @@ public class MarkWidget
   {
      _image = null;
      _imageBuilder = imageBuilder;
-     _viewportExtent = null;
+     _viewportExtentGLFeature = null;
      _geo2Dfeature = null;
      _glState = null;
      _x = java.lang.Float.NaN;
@@ -106,12 +106,12 @@ public class MarkWidget
     if (_glState == null)
     {
       _glState = new GLState();
-      _viewportExtent = new ViewportExtentGLFeature(rc.getCurrentCamera());
+      _viewportExtentGLFeature = new ViewportExtentGLFeature(rc.getCurrentCamera());
   
       _texHandler = rc.getTexturesHandler();
       _imageBuilder.build(rc, new WidgetImageListener(this), true);
   
-      _glState.addGLFeature(_viewportExtent, false);
+      _glState.addGLFeature(_viewportExtentGLFeature, false);
     }
   }
 
@@ -167,9 +167,9 @@ public class MarkWidget
 
   public final void onResizeViewportEvent(int width, int height)
   {
-    if (_viewportExtent != null)
+    if (_viewportExtentGLFeature != null)
     {
-      _viewportExtent.changeExtent(width, height);
+      _viewportExtentGLFeature.changeExtent(width, height);
     }
   }
 
