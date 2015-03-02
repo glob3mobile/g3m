@@ -176,8 +176,8 @@ public class NonOverlappingMark
 
   public final void renderSpringWidget(G3MRenderContext rc, GLState glState)
   {
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning Diego at work
+    final Vector2F sp = getScreenPos();
+    final Vector2F asp = getAnchorScreenPos();
   
     if (_springGLState == null)
     {
@@ -185,13 +185,7 @@ public class NonOverlappingMark
   
       _springGLState.addGLFeature(new FlatColorGLFeature(Color.black()), false);
   
-  //    _springGLState->clearGLFeatureGroup(NO_GROUP);
-  
       _springVertices = rc.getFactory().createFloatBuffer(2 * 2);
-  
-      final Vector2F sp = getScreenPos();
-      final Vector2F asp = getAnchorScreenPos();
-  
       _springVertices.rawPut(0, sp._x);
       _springVertices.rawPut(1, -sp._y);
       _springVertices.rawPut(2, asp._x);
@@ -204,9 +198,6 @@ public class NonOverlappingMark
     }
     else
     {
-      final Vector2F sp = getScreenPos();
-      final Vector2F asp = getAnchorScreenPos();
-  
       _springVertices.put(0, sp._x);
       _springVertices.put(1, -sp._y);
       _springVertices.put(2, asp._x);
@@ -214,7 +205,6 @@ public class NonOverlappingMark
     }
   
     rc.getGL().drawArrays(GLPrimitive.lines(), 0, 2, _springGLState, rc.getGPUProgramManager()); // count -  first
-  
   }
 
   public final void applyCoulombsLaw(NonOverlappingMark that)
