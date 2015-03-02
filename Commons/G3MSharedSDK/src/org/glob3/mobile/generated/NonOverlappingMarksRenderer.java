@@ -42,15 +42,23 @@ public class NonOverlappingMarksRenderer extends DefaultRenderer
       }
     }
   
-    final String currentVisibleMarksIDs = _visibleMarksIDsBuilder.getString();
-    if (!_visibleMarksIDs.equals(currentVisibleMarksIDs))
+  //  const std::string currentVisibleMarksIDs = _visibleMarksIDsBuilder->getString();
+  //  if (_visibleMarksIDs != currentVisibleMarksIDs) {
+  //    _visibleMarksIDs = currentVisibleMarksIDs;
+  //    for (int i = 0; i < _visibilityListeners.size(); i++) {
+  //      _visibilityListeners.at(i)->onVisibilityChange(_visibleMarks);
+  //    }
+  //  }
+  
+    if (!_visibleMarksIDsBuilder.contentEqualsTo(_visibleMarksIDs))
     {
-      _visibleMarksIDs = currentVisibleMarksIDs;
+      _visibleMarksIDs = _visibleMarksIDsBuilder.getString();
       for (int i = 0; i < _visibilityListeners.size(); i++)
       {
         _visibilityListeners.get(i).onVisibilityChange(_visibleMarks);
       }
     }
+  
   }
 
   private long _lastPositionsUpdatedTime;
