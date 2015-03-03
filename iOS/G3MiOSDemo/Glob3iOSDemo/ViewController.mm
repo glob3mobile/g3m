@@ -317,15 +317,15 @@ Mesh* createSectorMesh(const Planet* planet,
   //                                                       Angle::fromDegrees(-5.714247),
   //                                                       Angle::fromDegrees(-5.297620));
   
-  [[self G3MWidget] startAnimation];
+  //[[self G3MWidget] startAnimation];
   
   /*
    [[self G3MWidget] widget]->addPeriodicalTask(TimeInterval::fromMilliseconds(100),
    new CameraRollChangerTask([[self G3MWidget] widget]));
    */
-
-    
-
+  
+  
+  
   
   
   
@@ -430,32 +430,51 @@ public:
 
 - (void) testCacheFiller
 {
-  G3MBuilder_iOS builder([self G3MWidget]);
   
-  NSString* dbPath = [CacheFiller copyDBFromBundleToDocuments:@"g3m" ofType: @"cache"];
-    if (dbPath != nil){
-    
-    CacheFiller* cacheFiller = [[CacheFiller alloc] initWithDBPath:dbPath];
-    //[cacheFiller saveImagesWithURLsInFile:@"urls" ofType:@"txt"];
-    
-      NSDictionary * args = [NSDictionary dictionaryWithObjectsAndKeys:
-                             @"urls", @"urlFileName",
-                             @"txt", @"fileExtension",
-                             nil];
-      
-      NSDictionary *dictionary = [NSDictionary dictionaryWithObjectsAndKeys:
-                                  [NSNumber numberWithInt:atIndex],@"AtIndex",arr,@"ImagesUrl", nil];
-      
-      [cacheFiller performSelectorInBackground:@selector(saveImagesWithURLsInFile:ofType:)
-                                    withObject:[NSArray arrayWithObjects:@"urls", @"txt", nil]];
-      
-    [cacheFiller close];
-    
-  }
+  G3MBuilder_iOS builder([self G3MWidget]);
   
   SQLiteStorage_iOS* storage= new SQLiteStorage_iOS("g3m.cache");
   builder.setStorage(storage);
   builder.initializeWidget();
+  
+  UIActivityIndicatorView* aiv = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+  [aiv setColor:[UIColor grayColor]];
+  aiv.center = self.view.center;
+  [self.view addSubview:aiv];
+  [aiv startAnimating];
+  
+  // Obtenemos la cola de segundo plano
+  dispatch_queue_t backgroundQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
+  
+  // Invocamos en modo asíncrono un bloque en la cola que hemos recuperado
+  dispatch_async(backgroundQueue, ^{
+    
+    NSString* dbPath = [CacheFiller copyDBFromBundleToDocuments:@"g3m" ofType: @"cache"];
+    if (dbPath != nil){
+      
+      CacheFiller* cacheFiller = [[CacheFiller alloc] initWithDBPath:dbPath];
+      [cacheFiller saveImagesWithURLsInFile:@"urls" ofType:@"txt"];
+      [cacheFiller close];
+    }
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+      [aiv stopAnimating];
+      [[self G3MWidget] startAnimation];
+    });
+    
+  });
+  
+}
+
+-(void) startSimplestWidget{
+  G3MBuilder_iOS builder([self G3MWidget]);
+  
+  SQLiteStorage_iOS* storage= new SQLiteStorage_iOS("g3m.cache");
+  builder.setStorage(storage);
+  builder.initializeWidget();
+  
+  
+  [[self G3MWidget] startAnimation];
 }
 
 
@@ -566,7 +585,7 @@ public:
 - (void) initCustomizedWithBuilder
 {
   G3MBuilder_iOS builder([self G3MWidget]);
-
+  
   //  builder.getPlanetRendererBuilder()->setTileRenderingListener(new SampleTileRenderingListener());
   
 #warning BEGINNING OF CODE FOR LOADING STORAGE
@@ -595,15 +614,15 @@ public:
   
   GEOTileRasterizer* geoTileRasterizer = new GEOTileRasterizer();
   
-
-
-//  builder.getPlanetRendererBuilder()->setTileRenderingListener(new SampleTileRenderingListener());
-
+  
+  
+  //  builder.getPlanetRendererBuilder()->setTileRenderingListener(new SampleTileRenderingListener());
+  
   //GEOTileRasterizer* geoTileRasterizer = new GEOTileRasterizer();
-
+  
   //builder.getPlanetRendererBuilder()->addTileRasterizer(new DebugTileRasterizer());
   //builder.getPlanetRendererBuilder()->addTileRasterizer(geoTileRasterizer);
-//  builder.getPlanetRendererBuilder()->addTileRasterizer(geoTileRasterizer);
+  //  builder.getPlanetRendererBuilder()->addTileRasterizer(geoTileRasterizer);
   
   bool showingPNOA = false;
   if (showingPNOA){
@@ -614,11 +633,11 @@ public:
     coordinates->push_back( new Geodetic2D( sector.getNE() ) );
     coordinates->push_back( new Geodetic2D( sector.getSE() ) );
     coordinates->push_back( new Geodetic2D( sector.getSW() ) );
-
+    
     float dashLengths[] = {};
     int dashCount = 0;
     Color c = Color::red();
-
+    
     GEO2DLineRasterStyle ls(c, //const Color&     color,
                             (float)1.0, //const float      width,
                             CAP_ROUND, // const StrokeCap  cap,
@@ -627,7 +646,7 @@ public:
                             dashLengths,//float            dashLengths[],
                             dashCount,//const int        dashCount,
                             0);//const int        dashPhase) :
-
+    
     
     
     const GEO2DCoordinatesData* coordinatesData = new GEO2DCoordinatesData(coordinates);
@@ -639,7 +658,7 @@ public:
   
   //#warning Diego at work!
   //  builder.getPlanetRendererBuilder()->setShowStatistics(true);
-
+  
   //const Planet* planet = Planet::createEarth();
   //const Planet* planet = Planet::createSphericalEarth();
   const Planet* planet = Planet::createFlatEarth();
@@ -661,7 +680,7 @@ public:
   //                                  true, //
   //                                  NULL)
   //                     );
-
+  
   bool useElevations = false;
   if (useElevations) {
     [self initializeElevationDataProvider: builder];
@@ -669,7 +688,7 @@ public:
   
   builder.getPlanetRendererBuilder()->setLayerSet(layerSet);
   builder.getPlanetRendererBuilder()->setPlanetRendererParameters([self createPlanetRendererParameters]);
-
+  
   builder.getPlanetRendererBuilder()->setIncrementalTileQuality(true);
   
   /* Renderer* busyRenderer = new BusyMeshRenderer(Color::newFromRGBA((float)0, (float)0.1, (float)0.2, (float)1));
@@ -748,14 +767,14 @@ public:
   
   MarksRenderer* marksRenderer = [self createMarksRenderer];
   builder.addRenderer(marksRenderer);
-
+  
   GEORenderer* geoRenderer;
   
   if (false) {
     geoRenderer = [self createGEORendererMeshRenderer: meshRenderer
                                        shapesRenderer: shapesRenderer
                                         marksRenderer: marksRenderer
-                                    geoVectorLayer: NULL
+                                       geoVectorLayer: NULL
                                                planet: builder.getPlanet()];
     builder.addRenderer(geoRenderer);
     GInitializationTask* initializationTask = [self createSampleInitializationTask: shapesRenderer
@@ -782,9 +801,9 @@ public:
     light->setLightDirectionsMeshRenderer(meshRenderer);
     builder.setSceneLighting(light);
   }
-
+  
   if (false) { //HUD
-
+    
     HUDRenderer* hudRenderer = new HUDRenderer();
     builder.setHUDRenderer(hudRenderer);
     
@@ -988,7 +1007,7 @@ public:
         }
         const std::string degreesText = IStringUtils::instance()->toString( IMathUtils::instance()->round( degrees )  );
         _labelBuilder->setText( "     " + degreesText );
-
+        
         //        _compass1->setTexCoordsRotation(_angleInRadians,
         //                                        0.5f, 0.5f);
         _compass2->setTexCoordsRotation(-_angleInRadians,
@@ -1150,7 +1169,7 @@ public:
   [self G3MWidget].widget->getPlanetRenderer()->setFrustumCullingFactor(1.0);
   
   Geodetic3D position = Geodetic3D(Angle::fromDegrees(27.60), Angle::fromDegrees(-16.54), 55000);
-
+  
   [self G3MWidget].widget->setCameraPosition(position);
   //[self G3MWidget].widget->setCameraPitch(Angle::fromDegrees(-50));
   
@@ -1412,10 +1431,10 @@ public:
   const bool useInertia = true;
   cameraRenderer->addHandler(new CameraSingleDragHandler(useInertia));
   const bool allowRotationInDoubleDrag = true;
-
+  
   cameraRenderer->addHandler(new CameraDoubleDragHandler(allowRotationInDoubleDrag));
   //cameraRenderer->addHandler(new CameraZoomAndRotateHandler());
-
+  
   cameraRenderer->addHandler(new CameraRotationHandler());
   cameraRenderer->addHandler(new CameraDoubleTapHandler());
   
@@ -1435,13 +1454,13 @@ public:
 class SampleRasterSymbolizer : public GEORasterSymbolizer {
 private:
   static GEO2DLineRasterStyle createPolygonLineRasterStyle(const GEOGeometry* geometry) {
-
+    
     const JSONObject* properties = geometry->getFeature()->getProperties();
     
     const int colorIndex = (int) properties->getAsNumber("mapcolor7", 0);
     
     const Color color = Color::fromRGBA(0.7, 0, 0, 0.5).wheelStep(7, colorIndex).muchLighter().muchLighter();
-
+    
     float dashLengths[] = {};
     int dashCount = 0;
     
@@ -1456,18 +1475,18 @@ private:
   }
   
   static GEO2DSurfaceRasterStyle createPolygonSurfaceRasterStyle(const GEOGeometry* geometry) {
-
+    
     const JSONObject* properties = geometry->getFeature()->getProperties();
     
     const int colorIndex = (int) properties->getAsNumber("mapcolor7", 0);
     
     const Color color = Color::fromRGBA(0.7, 0, 0, 0.5).wheelStep(7, colorIndex);
-
+    
     return GEO2DSurfaceRasterStyle( color );
   }
   
   static GEO2DLineRasterStyle createLineRasterStyle(const GEOGeometry* geometry) {
-
+    
     const JSONObject* properties = geometry->getFeature()->getProperties();
     
     const std::string type = properties->getAsString("type", "");
@@ -1526,51 +1545,21 @@ private:
                                 dashCount,
                                 0);
   }
-
-    static GEO2DLineRasterStyle createPointLineRasterStyle(const GEOGeometry* geometry) {
+  
+  static GEO2DLineRasterStyle createPointLineRasterStyle(const GEOGeometry* geometry) {
+    
+    const JSONObject* properties = geometry->getFeature()->getProperties();
+    const std::string geoType = properties->getAsString("lodType", "");
+    
+    if(geoType != ""){
+      if (geoType=="LINESTRING" || geoType=="MULTILINESTRING"){
+        const Color color = Color::fromRGBA(0.85, 0.5, 0.5, 0.75).muchDarker();
         
-        const JSONObject* properties = geometry->getFeature()->getProperties();
-        const std::string geoType = properties->getAsString("lodType", "");
-        
-        if(geoType != ""){
-            if (geoType=="LINESTRING" || geoType=="MULTILINESTRING"){
-                const Color color = Color::fromRGBA(0.85, 0.5, 0.5, 0.75).muchDarker();
-                
-                //const Color color = Color::fromRGBA(0.1, 1.0, 0.1, 0.95);
-                float dashLengths[] = {};
-                int dashCount = 0;
-                
-                return GEO2DLineRasterStyle(color,
-                                            1,
-                                            CAP_ROUND,
-                                            JOIN_ROUND,
-                                            1,
-                                            dashLengths,
-                                            dashCount,
-                                            0);
-            }
-            else if(geoType=="POLYGON" || geoType=="MULTIPOLYGON"){
-                return createPolygonLineRasterStyle(geometry);
-//                const Color color = Color::fromRGBA(0.1, 1.0, 0.1, 0.95);
-//                float dashLengths[] = {};
-//                int dashCount = 0;
-//                
-//                return GEO2DLineRasterStyle(color,
-//                                            1,
-//                                            CAP_ROUND,
-//                                            JOIN_ROUND,
-//                                            1,
-//                                            dashLengths,
-//                                            dashCount,
-//                                            0);
-            }
-        }
-        
-        // for POINTS and MULTIPOINTS
+        //const Color color = Color::fromRGBA(0.1, 1.0, 0.1, 0.95);
         float dashLengths[] = {};
         int dashCount = 0;
         
-        return GEO2DLineRasterStyle(Color::white(),
+        return GEO2DLineRasterStyle(color,
                                     1,
                                     CAP_ROUND,
                                     JOIN_ROUND,
@@ -1578,33 +1567,63 @@ private:
                                     dashLengths,
                                     dashCount,
                                     0);
+      }
+      else if(geoType=="POLYGON" || geoType=="MULTIPOLYGON"){
+        return createPolygonLineRasterStyle(geometry);
+        //                const Color color = Color::fromRGBA(0.1, 1.0, 0.1, 0.95);
+        //                float dashLengths[] = {};
+        //                int dashCount = 0;
+        //
+        //                return GEO2DLineRasterStyle(color,
+        //                                            1,
+        //                                            CAP_ROUND,
+        //                                            JOIN_ROUND,
+        //                                            1,
+        //                                            dashLengths,
+        //                                            dashCount,
+        //                                            0);
+      }
     }
     
-    static GEO2DSurfaceRasterStyle createPointSurfaceRasterStyle(const GEOGeometry* geometry) {
+    // for POINTS and MULTIPOINTS
+    float dashLengths[] = {};
+    int dashCount = 0;
+    
+    return GEO2DLineRasterStyle(Color::white(),
+                                1,
+                                CAP_ROUND,
+                                JOIN_ROUND,
+                                1,
+                                dashLengths,
+                                dashCount,
+                                0);
+  }
+  
+  static GEO2DSurfaceRasterStyle createPointSurfaceRasterStyle(const GEOGeometry* geometry) {
+    
+    const JSONObject* properties = geometry->getFeature()->getProperties();
+    const std::string geoType = properties->getAsString("lodType", "");
+    
+    if(geoType != ""){
+      if (geoType=="LINESTRING" || geoType=="MULTILINESTRING"){
+        const Color color = Color::fromRGBA(0.85, 0.5, 0.5, 0.75).muchDarker();
         
-        const JSONObject* properties = geometry->getFeature()->getProperties();
-        const std::string geoType = properties->getAsString("lodType", "");
+        //const Color color = Color::fromRGBA(0.1, 1.0, 0.1, 0.95);
         
-        if(geoType != ""){
-            if (geoType=="LINESTRING" || geoType=="MULTILINESTRING"){
-                const Color color = Color::fromRGBA(0.85, 0.5, 0.5, 0.75).muchDarker();
-                
-                //const Color color = Color::fromRGBA(0.1, 1.0, 0.1, 0.95);
-                
-                return GEO2DSurfaceRasterStyle(color);
-            }
-            else if(geoType=="POLYGON" || geoType=="MULTIPOLYGON"){
-                return createPolygonSurfaceRasterStyle(geometry);
-//                const Color color = Color::fromRGBA(0.1, 1.0, 0.1, 0.95);
-//                
-//                return GEO2DSurfaceRasterStyle(color);
-            }
-        }
-        
-        // for POINTS and MULTIPOINTS
-        return GEO2DSurfaceRasterStyle(Color::white());
+        return GEO2DSurfaceRasterStyle(color);
+      }
+      else if(geoType=="POLYGON" || geoType=="MULTIPOLYGON"){
+        return createPolygonSurfaceRasterStyle(geometry);
+        //                const Color color = Color::fromRGBA(0.1, 1.0, 0.1, 0.95);
+        //
+        //                return GEO2DSurfaceRasterStyle(color);
+      }
     }
-
+    
+    // for POINTS and MULTIPOINTS
+    return GEO2DSurfaceRasterStyle(Color::white());
+  }
+  
 public:
   GEORasterSymbolizer* copy() const {
     return new SampleRasterSymbolizer();
@@ -1615,14 +1634,14 @@ public:
     std::vector<GEORasterSymbol*>* symbols = new std::vector<GEORasterSymbol*>();
     std::vector<Geodetic2D*>* coordinates = new std::vector<Geodetic2D*>();
     coordinates->push_back(new Geodetic2D(geometry->getPosition()));
-      
+    
     GEO2DPolygonData* rectangleData = new GEO2DPolygonData(coordinates, NULL);
-      
+    
     symbols->push_back( new GEORectangleRasterSymbol(rectangleData,
-                                                    Vector2F(3.0f,3.0f),
-                                                    createPointLineRasterStyle(geometry),
-                                                    createPointSurfaceRasterStyle(geometry)));
-      
+                                                     Vector2F(3.0f,3.0f),
+                                                     createPointLineRasterStyle(geometry),
+                                                     createPointSurfaceRasterStyle(geometry)));
+    
     return symbols;
   }
   
@@ -1753,7 +1772,7 @@ public:
     //                                    TimeInterval::fromDays(30),
     //                                    true);
     //layerSet->addLayer(bing);
-
+    
     WMSLayer *pnoa = new WMSLayer("PNOA",
                                   URL("http://www.idee.es/wms/PNOA/PNOA", false),
                                   WMS_1_1_0,
@@ -1769,7 +1788,7 @@ public:
                                   1);
     layerSet->addLayer(pnoa);
   }
-
+  
   if (false) {
 #warning Diego at work!
     layerSet->addLayer(new MapBoxLayer("examples.map-9ijuk24y",
@@ -2918,18 +2937,18 @@ public:
 - (GEORenderer*) createGEORendererMeshRenderer: (MeshRenderer*) meshRenderer
                                 shapesRenderer: (ShapesRenderer*) shapesRenderer
                                  marksRenderer: (MarksRenderer*) marksRenderer
-                             geoVectorLayer: (GEOVectorLayer*) geoVectorLayer
+                                geoVectorLayer: (GEOVectorLayer*) geoVectorLayer
                                         planet: (const Planet*) planet
 {
   GEOSymbolizer* symbolizer = new SampleSymbolizer(planet);
-
+  
   GEORenderer* geoRenderer = new GEORenderer(symbolizer,
                                              meshRenderer,
                                              shapesRenderer,
                                              marksRenderer,
                                              geoVectorLayer);
   
-
+  
   return geoRenderer;
 }
 
@@ -4062,17 +4081,17 @@ public:
   builder.getPlanetRendererBuilder()->setElevationDataProvider(elevationDataProvider);
   float verticalExaggeration = 2.0f;
   builder.getPlanetRendererBuilder()->setVerticalExaggeration(verticalExaggeration);
-
+  
   // create camera renderers
   CameraRenderer* cameraRenderer = [self createCameraRenderer];
   builder.setCameraRenderer(cameraRenderer);
   
   /* webgl optimization
-  bool testingTileCache = true;
-  if (testingTileCache){
-    builder.getPlanetRendererBuilder()->setTileCacheSize(200);
-    builder.getPlanetRendererBuilder()->setDeleteTexturesOfInvisibleTiles(false);
-  }*/
+   bool testingTileCache = true;
+   if (testingTileCache){
+   builder.getPlanetRendererBuilder()->setTileCacheSize(200);
+   builder.getPlanetRendererBuilder()->setDeleteTexturesOfInvisibleTiles(false);
+   }*/
   
   // initialization
   builder.initializeWidget();
@@ -4116,18 +4135,18 @@ public:
   
   // create elevations for Bandama
   Sector bandamaBilSector = Sector::fromDegrees (28.0186134922002,                  // min latitude
-                                         -15.466485021954,                // min longitude
-                                         28.0501903939333,                 // max latitude
-                                         -15.4475303331328);               // max longitude
+                                                 -15.466485021954,                // min longitude
+                                                 28.0501903939333,                 // max latitude
+                                                 -15.4475303331328);               // max longitude
   Vector2I bandamaExtent = Vector2I(371, 702);           // image resolution
   URL bandamaurl = URL("file:///mdt1_bandama.bil", false);
   ElevationDataProvider* elevationDataProviderBandama = new SingleBilElevationDataProvider(bandamaurl, bandamaBilSector, bandamaExtent);
   
   // create elevations for GC
   Sector gcSector = Sector::fromDegrees (27.7116484957735,                  // min latitude
-                                       -15.90589160041418,                // min longitude
-                                       28.225913322423995,                 // max latitude
-                                       -15.32910937385168);               // max longitude
+                                         -15.90589160041418,                // min longitude
+                                         28.225913322423995,                 // max latitude
+                                         -15.32910937385168);               // max longitude
   Vector2I extent = Vector2I(1000, 1000);           // image resolution
   URL url = URL("file:///gc.bil", false);
   ElevationDataProvider* elevationDataProviderGC = new SingleBilElevationDataProvider(url, gcSector, extent);
@@ -4140,7 +4159,7 @@ public:
   float verticalExaggeration = 1.0f;
   builder.getPlanetRendererBuilder()->setVerticalExaggeration(verticalExaggeration);
   
- // create camera renderers
+  // create camera renderers
   CameraRenderer* cameraRenderer = [self createCameraRenderer];
   builder.setCameraRenderer(cameraRenderer);
   

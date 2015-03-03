@@ -43,7 +43,7 @@
     
     [_lock lock];
     
-    TimeInterval timeToExpires = TimeInterval::forever();
+    TimeInterval timeToExpires = TimeInterval::fromDays(999999999);
     
     NSString* statement = [NSString stringWithFormat:@"INSERT OR REPLACE INTO %@ (name, contents, expiration) VALUES (?, ?, ?)", @"image2"];
     
