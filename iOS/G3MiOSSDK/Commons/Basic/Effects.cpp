@@ -35,7 +35,7 @@ void EffectsScheduler::cancelAllEffects() {
   }
 
   // backward iteration, to remove from bottom to top
-  for (size_t i = indicesToRemove.size() - 1; i >= 0; i--) {
+  for (int i = indicesToRemove.size() - 1; i >= 0; i--) {
     const size_t indexToRemove = indicesToRemove[i];
     EffectRun* effectRun = _effectsRuns[indexToRemove];
     delete effectRun;
@@ -86,7 +86,7 @@ void EffectsScheduler::cancelAllEffectsFor(EffectTarget* target) {
   }
 
   // backward iteration, to remove from bottom to top
-  for (size_t i = indicesToRemove.size() - 1; i >= 0; i--) {
+  for (int i = indicesToRemove.size() - 1; i >= 0; i--) {
     const size_t indexToRemove = indicesToRemove[i];
     EffectRun* effectRun = _effectsRuns[indexToRemove];
     delete effectRun;
