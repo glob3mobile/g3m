@@ -42,14 +42,6 @@ public class NonOverlappingMarksRenderer extends DefaultRenderer
       }
     }
   
-  //  const std::string currentVisibleMarksIDs = _visibleMarksIDsBuilder->getString();
-  //  if (_visibleMarksIDs != currentVisibleMarksIDs) {
-  //    _visibleMarksIDs = currentVisibleMarksIDs;
-  //    for (int i = 0; i < _visibilityListeners.size(); i++) {
-  //      _visibilityListeners.at(i)->onVisibilityChange(_visibleMarks);
-  //    }
-  //  }
-  
     if (!_visibleMarksIDsBuilder.contentEqualsTo(_visibleMarksIDs))
     {
       _visibleMarksIDs = _visibleMarksIDsBuilder.getString();
@@ -63,53 +55,6 @@ public class NonOverlappingMarksRenderer extends DefaultRenderer
 
   private long _lastPositionsUpdatedTime;
 
-//  GLState* _connectorsGLState;
-//  void renderConnectorLines(const G3MRenderContext* rc);
-
-
-  //void NonOverlappingMarksRenderer::renderConnectorLines(const G3MRenderContext* rc) {
-  //  if (_connectorsGLState == NULL) {
-  //    _connectorsGLState = new GLState();
-  //
-  //    _connectorsGLState->addGLFeature(new FlatColorGLFeature(Color::black()),
-  //                                     false);
-  //  }
-  //
-  //  _connectorsGLState->clearGLFeatureGroup(NO_GROUP);
-  //
-  //  FloatBufferBuilderFromCartesian2D pos2D;
-  //
-  //  const int visibleMarksSize = _visibleMarks.size();
-  //  for (int i = 0; i < visibleMarksSize; i++) {
-  //    const Vector2F sp = _visibleMarks[i]->getScreenPos();
-  //    const Vector2F asp = _visibleMarks[i]->getAnchorScreenPos();
-  //
-  //    pos2D.add(sp._x, -sp._y);
-  //    pos2D.add(asp._x, -asp._y);
-  //  }
-  //
-  //  _connectorsGLState->addGLFeature(new Geometry2DGLFeature(pos2D.create(),  // buffer
-  //                                                           2,               // arrayElementSize
-  //                                                           0,               // index
-  //                                                           true,            // normalized
-  //                                                           0,               // stride
-  //                                                           3.0f,            // lineWidth
-  //                                                           true,            // needsPointSize
-  //                                                           1.0f,            // pointSize
-  //                                                           Vector2F::zero() // translation
-  //                                                           ),
-  //                                   false);
-  //
-  //  _connectorsGLState->addGLFeature(new ViewportExtentGLFeature(rc->getCurrentCamera()),
-  //                                   false);
-  //
-  //  rc->getGL()->drawArrays(GLPrimitive::lines(),
-  //                          0,                    // first
-  //                          pos2D.size()/2,       // count
-  //                          _connectorsGLState,
-  //                          *rc->getGPUProgramManager());
-  //}
-  
   private void computeForces(Camera camera, Planet planet)
   {
     final int visibleMarksSize = _visibleMarks.size();
@@ -143,12 +88,8 @@ public class NonOverlappingMarksRenderer extends DefaultRenderer
   private void renderMarks(G3MRenderContext rc, GLState glState)
   {
     final int visibleMarksSize = _visibleMarks.size();
-  
     if (visibleMarksSize > 0)
     {
-      // Draw Lines
-  //    renderConnectorLines(rc);
-  
       // draw all the springs in a shot to avoid OpenGL state changes
       for (int i = 0; i < visibleMarksSize; i++)
       {
