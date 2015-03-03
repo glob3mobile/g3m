@@ -22,6 +22,12 @@
 
 - (void) saveImage:(NSString*) url;
 
+-(void) saveImagesWithURLsInFile:(NSString*) urlFileName ofType:(NSString*) fileExtension;
+
++(NSString*) copyDBFromBundleToDocuments:(NSString*) urlFileName ofType:(NSString*) fileExtension;
+
+-(void) close;
+
 @end
 
 

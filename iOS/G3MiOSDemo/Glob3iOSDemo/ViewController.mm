@@ -286,7 +286,9 @@ Mesh* createSectorMesh(const Planet* planet,
   
   //[self initCustomizedWithBuilder];
   
-  [self testGCElevations];
+  //[self testGCElevations];
+  
+  [self testCacheFiller];
   //[self testElevationNavigation];
   
   //  [self initWithMapBooBuilder];
@@ -321,8 +323,10 @@ Mesh* createSectorMesh(const Planet* planet,
    [[self G3MWidget] widget]->addPeriodicalTask(TimeInterval::fromMilliseconds(100),
    new CameraRollChangerTask([[self G3MWidget] widget]));
    */
+
+    
+
   
-  CacheFiller* cacheFiller = [[CacheFiller alloc] initWithDBPath:@""];
   
   
 }
@@ -421,6 +425,36 @@ public:
 - (void) initWithDefaultBuilder
 {
   G3MBuilder_iOS builder([self G3MWidget]);
+  builder.initializeWidget();
+}
+
+- (void) testCacheFiller
+{
+  G3MBuilder_iOS builder([self G3MWidget]);
+  
+  NSString* dbPath = [CacheFiller copyDBFromBundleToDocuments:@"g3m" ofType: @"cache"];
+    if (dbPath != nil){
+    
+    CacheFiller* cacheFiller = [[CacheFiller alloc] initWithDBPath:dbPath];
+    //[cacheFiller saveImagesWithURLsInFile:@"urls" ofType:@"txt"];
+    
+      NSDictionary * args = [NSDictionary dictionaryWithObjectsAndKeys:
+                             @"urls", @"urlFileName",
+                             @"txt", @"fileExtension",
+                             nil];
+      
+      NSDictionary *dictionary = [NSDictionary dictionaryWithObjectsAndKeys:
+                                  [NSNumber numberWithInt:atIndex],@"AtIndex",arr,@"ImagesUrl", nil];
+      
+      [cacheFiller performSelectorInBackground:@selector(saveImagesWithURLsInFile:ofType:)
+                                    withObject:[NSArray arrayWithObjects:@"urls", @"txt", nil]];
+      
+    [cacheFiller close];
+    
+  }
+  
+  SQLiteStorage_iOS* storage= new SQLiteStorage_iOS("g3m.cache");
+  builder.setStorage(storage);
   builder.initializeWidget();
 }
 

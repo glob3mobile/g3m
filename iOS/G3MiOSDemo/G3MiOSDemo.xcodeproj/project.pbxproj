@@ -63,6 +63,8 @@
 		CFEA76681666DCB000E89BC7 /* images in Resources */ = {isa = PBXBuildFile; fileRef = CFEA76671666DCB000E89BC7 /* images */; };
 		CFF95F7D158A748F00B56E11 /* plane.png in Resources */ = {isa = PBXBuildFile; fileRef = CFF95F7C158A748F00B56E11 /* plane.png */; };
 		D80654A71AA0A57200227212 /* CacheFiller.mm in Sources */ = {isa = PBXBuildFile; fileRef = D80654A61AA0A57200227212 /* CacheFiller.mm */; };
+		D80BD06C1AA478680047C41D /* g3m.cache in Resources */ = {isa = PBXBuildFile; fileRef = D80BD06B1AA477A80047C41D /* g3m.cache */; };
+		D80BD06E1AA478CB0047C41D /* urls.txt in Resources */ = {isa = PBXBuildFile; fileRef = D80BD06D1AA478CB0047C41D /* urls.txt */; };
 		D8317203186C5BAD00522E1B /* simpleStencil.png in Resources */ = {isa = PBXBuildFile; fileRef = D8317202186C5BAD00522E1B /* simpleStencil.png */; };
 		D882B1CD171D77C000C2AD9C /* full-earth-256x256.bil in Resources */ = {isa = PBXBuildFile; fileRef = D882B1CC171D76AD00C2AD9C /* full-earth-256x256.bil */; };
 		D8D3A26318363C58007A784A /* FlatColorMesh_DirectionLight.fsh in Sources */ = {isa = PBXBuildFile; fileRef = D8D3A25F18363C58007A784A /* FlatColorMesh_DirectionLight.fsh */; };
@@ -176,6 +178,8 @@
 		CFF95F7C158A748F00B56E11 /* plane.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = plane.png; sourceTree = "<group>"; };
 		D80654A61AA0A57200227212 /* CacheFiller.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CacheFiller.mm; sourceTree = "<group>"; };
 		D80654A81AA0A5AD00227212 /* CacheFiller.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CacheFiller.h; sourceTree = "<group>"; };
+		D80BD06B1AA477A80047C41D /* g3m.cache */ = {isa = PBXFileReference; lastKnownFileType = file; path = g3m.cache; sourceTree = "<group>"; };
+		D80BD06D1AA478CB0047C41D /* urls.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = urls.txt; sourceTree = "<group>"; };
 		D8317202186C5BAD00522E1B /* simpleStencil.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = simpleStencil.png; sourceTree = "<group>"; };
 		D882B1CC171D76AD00C2AD9C /* full-earth-256x256.bil */ = {isa = PBXFileReference; lastKnownFileType = file; path = "full-earth-256x256.bil"; sourceTree = "<group>"; };
 		D8D3A25F18363C58007A784A /* FlatColorMesh_DirectionLight.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = FlatColorMesh_DirectionLight.fsh; sourceTree = "<group>"; };
@@ -315,6 +319,8 @@
 		D8EEF4271577B0D6003FEB5E /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				D80BD06D1AA478CB0047C41D /* urls.txt */,
+				D80BD06B1AA477A80047C41D /* g3m.cache */,
 				FB3DC51F195D6E02006E6363 /* mdt1_bandama.bil */,
 				FB3DC51D195D6722006E6363 /* gc.bil */,
 				CFE26D6718A154D700253709 /* 3d_2-0.json */,
@@ -461,6 +467,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D80BD06C1AA478680047C41D /* g3m.cache in Resources */,
 				D882B1CD171D77C000C2AD9C /* full-earth-256x256.bil in Resources */,
 				CF09A94E16A0A0F500E72811 /* test.bson in Resources */,
 				D8EEF3951577920B003FEB5E /* InfoPlist.strings in Resources */,
@@ -478,6 +485,7 @@
 				FB3DC520195D6E02006E6363 /* mdt1_bandama.bil in Resources */,
 				CFE26D6018A153DB00253709 /* 3d_1.json in Resources */,
 				E71B15371626D27F003D1013 /* Default-Landscape.png in Resources */,
+				D80BD06E1AA478CB0047C41D /* urls.txt in Resources */,
 				E71B15381626D27F003D1013 /* Default-Landscape@2x.png in Resources */,
 				E71B15391626D27F003D1013 /* Default-Portrait.png in Resources */,
 				CF935B4C18006CCB0032A9C8 /* washington-memorial-normals.json in Resources */,
