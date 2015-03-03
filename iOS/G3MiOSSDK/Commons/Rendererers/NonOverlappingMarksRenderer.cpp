@@ -451,7 +451,7 @@ void NonOverlappingMarksRenderer::computeMarksToBeRendered(const Camera* camera,
         frustrum->contains(m->getCartesianPosition(planet))) {
       _visibleMarks.push_back(m);
 
-      _visibleMarksIDsBuilder->addInt((int) i);
+      _visibleMarksIDsBuilder->addLong(i);
       _visibleMarksIDsBuilder->addString("/");
     }
     else {

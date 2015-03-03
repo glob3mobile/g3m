@@ -128,7 +128,7 @@ public:
     return _touchs[i];
   }
 
-  int getTouchCount() const {
+  size_t getTouchCount() const {
     return _touchs.size();
   }
 
