@@ -27,9 +27,8 @@ class TextureIDReference;
 class Geometry2DGLFeature;
 class ViewportExtentGLFeature;
 class TexturesHandler;
-
 class NonOverlappingMark;
-
+class SimpleTextureMapping;
 
 class NonOverlappingMarkTouchListener {
 public:
@@ -55,6 +54,9 @@ private:
   std::string _imageName;
   IImageBuilder* _imageBuilder;
   TexturesHandler* _texHandler;
+
+  IFloatBuffer*         _vertices;
+  SimpleTextureMapping* _textureMapping;
 
   float _halfWidth;
   float _halfHeight;

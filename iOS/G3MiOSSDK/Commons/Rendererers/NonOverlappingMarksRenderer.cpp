@@ -43,13 +43,18 @@ _glState(NULL),
 _x(NANF),
 _y(NANF),
 _halfHeight(0),
-_halfWidth(0)
+_halfWidth(0),
+_vertices(NULL),
+_textureMapping(NULL)
 {
 }
 
 MarkWidget::~MarkWidget() {
   delete _image;
   delete _imageBuilder;
+
+  delete _vertices;
+  delete _textureMapping;
 
   if (_glState != NULL) {
     _glState->_release();
@@ -76,6 +81,10 @@ void MarkWidget::prepareWidget(const IImage* image,
   _halfWidth  = image->getWidth() / 2;
   _halfHeight = image->getHeight() / 2;
 
+  if (_vertices != NULL) {
+    delete _vertices;
+  }
+
   FloatBufferBuilderFromCartesian2D pos2D;
   pos2D.add( -_halfWidth, -_halfHeight );   // vertex 1
   pos2D.add( -_halfWidth,  _halfHeight );   // vertex 2
@@ -83,7 +92,8 @@ void MarkWidget::prepareWidget(const IImage* image,
   pos2D.add(  _halfWidth,  _halfHeight );   // vertex 4
 #warning TODO: share vertices for marks of the same size?
 
-  _geo2Dfeature = new Geometry2DGLFeature(pos2D.create(),
+  _vertices = pos2D.create();
+  _geo2Dfeature = new Geometry2DGLFeature(_vertices,
                                           2,
                                           0,
                                           true,
@@ -108,12 +118,15 @@ void MarkWidget::prepareWidget(const IImage* image,
                                                                            false);
 
 #warning TODO: share unit texCoords
-  SimpleTextureMapping* textureMapping = new SimpleTextureMapping(textureID,
-                                                                  texCoords.create(),
-                                                                  true,
-                                                                  true);
+  if (_textureMapping != NULL) {
+    delete _textureMapping;
+  }
+  _textureMapping = new SimpleTextureMapping(textureID,
+                                             texCoords.create(),
+                                             true,
+                                             true);
 
-  textureMapping->modifyGLState(*_glState);
+  _textureMapping->modifyGLState(*_glState);
 }
 
 void MarkWidget::render(const G3MRenderContext *rc,
