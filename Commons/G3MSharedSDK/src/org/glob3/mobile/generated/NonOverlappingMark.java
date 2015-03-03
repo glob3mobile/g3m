@@ -112,6 +112,9 @@ public class NonOverlappingMark
     {
       _springGLState._release();
     }
+  
+    if (_springVertices != null)
+       _springVertices.dispose();
   }
 
   public final Vector3D getCartesianPosition(Planet planet)

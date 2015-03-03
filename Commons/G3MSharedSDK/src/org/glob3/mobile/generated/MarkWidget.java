@@ -71,8 +71,6 @@ public class MarkWidget
 //#warning TODO: share unit texCoords
     SimpleTextureMapping textureMapping = new SimpleTextureMapping(textureID, texCoords.create(), true, true);
   
-  
-  
     textureMapping.modifyGLState(_glState);
   }
 
