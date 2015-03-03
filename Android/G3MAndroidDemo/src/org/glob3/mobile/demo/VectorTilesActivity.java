@@ -44,8 +44,8 @@ import android.widget.RelativeLayout;
 
 
 public class VectorTilesActivity
-         extends
-            Activity {
+extends
+Activity {
 
 
    private G3MWidget_Android _g3mWidget;
@@ -105,17 +105,17 @@ public class VectorTilesActivity
       final int maxLevel = 17;
 
 
-      // SWITZERLAND      
+      // SWITZERLAND
       //      final Geodetic2D lower = new Geodetic2D( //
       //               Angle.fromDegrees(45.8176852), //
       //               Angle.fromDegrees(5.956216));
       //      final Geodetic2D upper = new Geodetic2D( //
       //               Angle.fromDegrees(47.803029), //
       //               Angle.fromDegrees(10.492264));
-      //      
+      //
 
 
-      //SCOTLAND       
+      //SCOTLAND
       final Geodetic2D lower = new Geodetic2D( //
                Angle.fromDegrees(54.7226296), //
                Angle.fromDegrees(-7.6536084));
@@ -139,7 +139,7 @@ public class VectorTilesActivity
                1, // transparency
                new LevelTileCondition(10, 21), // condition
                new ArrayList<Info>() // disclaimerInfo
-      );
+               );
       layerSet.addLayer(tiledVectorLayer);
 
 
@@ -148,8 +148,8 @@ public class VectorTilesActivity
 
 
    private static class SampleRasterSymbolizer
-            extends
-               GEORasterSymbolizer {
+   extends
+   GEORasterSymbolizer {
 
       private static final Color FROM_COLOR = Color.fromRGBA(0.7f, 0, 0, 0.5f);
 
@@ -164,7 +164,8 @@ public class VectorTilesActivity
       }
 
 
-      private static GEO2DSurfaceRasterStyle createPolygonSurfaceRasterStyle(final GEOGeometry geometry) {
+      private static GEO2DSurfaceRasterStyle createPolygonSurfaceRasterStyle(@SuppressWarnings("unused")
+      final GEOGeometry geometry) {
          //          final JSONObject properties = geometry.getFeature().getProperties();
          //         final int colorIndex = (int) properties.getAsNumber("mapcolor7", 0);
          final Color color = FROM_COLOR.wheelStep(7, _colorIndex);
@@ -203,7 +204,7 @@ public class VectorTilesActivity
                   geometry.getPolygonData(), //
                   createPolygonLineRasterStyle(geometry), //
                   createPolygonSurfaceRasterStyle(geometry) //
-         );
+                  );
          symbols.add(symbol);
          return symbols;
       }

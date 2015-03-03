@@ -388,7 +388,7 @@ bool NonOverlappingMark::onTouchEvent(const Vector2F& touchedPixel) {
   return false;
 }
 
-NonOverlappingMarksRenderer::NonOverlappingMarksRenderer(int maxVisibleMarks,
+NonOverlappingMarksRenderer::NonOverlappingMarksRenderer(size_t maxVisibleMarks,
                                                          float viewportMargin):
 _maxVisibleMarks(maxVisibleMarks),
 _viewportMargin(viewportMargin),
@@ -404,12 +404,12 @@ _touchListener(NULL)
 NonOverlappingMarksRenderer::~NonOverlappingMarksRenderer() {
 //  _connectorsGLState->_release();
 
-  const int marksSize = _marks.size();
-  for (int i = 0; i < marksSize; i++) {
+  const size_t marksSize = _marks.size();
+  for (size_t i = 0; i < marksSize; i++) {
     delete _marks[i];
   }
 
-  for (int i = 0; i < _visibilityListeners.size(); i++) {
+  for (size_t i = 0; i < _visibilityListeners.size(); i++) {
     delete _visibilityListeners[i];
   }
 
@@ -417,7 +417,7 @@ NonOverlappingMarksRenderer::~NonOverlappingMarksRenderer() {
 }
 
 void NonOverlappingMarksRenderer::removeAllListeners() {
-  for (int i = 0; i < _visibilityListeners.size(); i++) {
+  for (size_t i = 0; i < _visibilityListeners.size(); i++) {
     delete _visibilityListeners[i];
   }
   _visibilityListeners.clear();
@@ -428,8 +428,8 @@ void NonOverlappingMarksRenderer::addMark(NonOverlappingMark* mark) {
 }
 
 void NonOverlappingMarksRenderer::removeAllMarks() {
-  const int marksSize = _marks.size();
-  for (int i = 0; i < marksSize; i++) {
+  const size_t marksSize = _marks.size();
+  for (size_t i = 0; i < marksSize; i++) {
     delete _marks[i];
   }
   _marks.clear();
@@ -443,15 +443,15 @@ void NonOverlappingMarksRenderer::computeMarksToBeRendered(const Camera* camera,
 
   const Frustum* frustrum = camera->getFrustumInModelCoordinates();
 
-  const int marksSize = _marks.size();
-  for (int i = 0; i < marksSize; i++) {
+  const size_t marksSize = _marks.size();
+  for (size_t i = 0; i < marksSize; i++) {
     NonOverlappingMark* m = _marks[i];
 
     if (_visibleMarks.size() < _maxVisibleMarks &&
         frustrum->contains(m->getCartesianPosition(planet))) {
       _visibleMarks.push_back(m);
 
-      _visibleMarksIDsBuilder->addInt(i);
+      _visibleMarksIDsBuilder->addInt((int) i);
       _visibleMarksIDsBuilder->addString("/");
     }
     else {
@@ -471,23 +471,23 @@ void NonOverlappingMarksRenderer::computeMarksToBeRendered(const Camera* camera,
 }
 
 void NonOverlappingMarksRenderer::computeForces(const Camera* camera, const Planet* planet) {
-  const int visibleMarksSize = _visibleMarks.size();
+  const size_t visibleMarksSize = _visibleMarks.size();
 
   //Compute Mark Anchor Screen Positions
-  for (int i = 0; i < visibleMarksSize; i++) {
+  for (size_t i = 0; i < visibleMarksSize; i++) {
     _visibleMarks[i]->computeAnchorScreenPos(camera, planet);
   }
 
   //Compute Mark Forces
-  for (int i = 0; i < visibleMarksSize; i++) {
+  for (size_t i = 0; i < visibleMarksSize; i++) {
     NonOverlappingMark* mark = _visibleMarks[i];
     mark->applyHookesLaw();
 
-    for (int j = i+1; j < visibleMarksSize; j++) {
+    for (size_t j = i+1; j < visibleMarksSize; j++) {
       mark->applyCoulombsLaw(_visibleMarks[j]);
     }
 
-    for (int j = 0; j < visibleMarksSize; j++) {
+    for (size_t j = 0; j < visibleMarksSize; j++) {
       if (i != j) {
         mark->applyCoulombsLawFromAnchor(_visibleMarks[j]);
       }
@@ -497,20 +497,20 @@ void NonOverlappingMarksRenderer::computeForces(const Camera* camera, const Plan
 
 void NonOverlappingMarksRenderer::renderMarks(const G3MRenderContext *rc,
                                               GLState *glState) {
-  const int visibleMarksSize = _visibleMarks.size();
+  const size_t visibleMarksSize = _visibleMarks.size();
   if (visibleMarksSize > 0) {
     // draw all the springs in a shot to avoid OpenGL state changes
-    for (int i = 0; i < visibleMarksSize; i++) {
+    for (size_t i = 0; i < visibleMarksSize; i++) {
       _visibleMarks[i]->renderSpringWidget(rc, glState);
     }
 
     // draw all the anchorwidgets in a shot to avoid OpenGL state changes
-    for (int i = 0; i < visibleMarksSize; i++) {
+    for (size_t i = 0; i < visibleMarksSize; i++) {
       _visibleMarks[i]->renderAnchorWidget(rc, glState);
     }
 
     // draw all the widgets in a shot to avoid OpenGL state changes
-    for (int i = 0; i < visibleMarksSize; i++) {
+    for (size_t i = 0; i < visibleMarksSize; i++) {
       _visibleMarks[i]->renderWidget(rc, glState);
     }
   }
@@ -528,8 +528,8 @@ void NonOverlappingMarksRenderer::applyForces(long long now, const Camera* camer
     }
 
     //Update Position based on last Forces
-    const int visibleMarksSize = _visibleMarks.size();
-    for (int i = 0; i < visibleMarksSize; i++) {
+    const size_t visibleMarksSize = _visibleMarks.size();
+    for (size_t i = 0; i < visibleMarksSize; i++) {
       _visibleMarks[i]->updatePositionWithCurrentForce(timeInSeconds,
                                                        viewPortWidth,
                                                        viewPortHeight,
@@ -554,8 +554,8 @@ void NonOverlappingMarksRenderer::render(const G3MRenderContext* rc, GLState* gl
 void NonOverlappingMarksRenderer::onResizeViewportEvent(const G3MEventContext* ec,
                                                         int width,
                                                         int height) {
-  const int marksSize = _marks.size();
-  for (int i = 0; i < marksSize; i++) {
+  const size_t marksSize = _marks.size();
+  for (size_t i = 0; i < marksSize; i++) {
     _marks[i]->onResizeViewportEvent(width, height);
   }
 }
@@ -577,8 +577,8 @@ bool NonOverlappingMarksRenderer::onTouchEvent(const G3MEventContext* ec, const 
     double minSqDistance = IMathUtils::instance()->maxDouble();
     NonOverlappingMark* nearestMark = NULL;
 
-    const int visibleMarksSize = _visibleMarks.size();
-    for (int i = 0; i < visibleMarksSize; i++) {
+    const size_t visibleMarksSize = _visibleMarks.size();
+    for (size_t i = 0; i < visibleMarksSize; i++) {
       NonOverlappingMark* mark = _visibleMarks[i];
 
       const int markWidth = mark->getWidth();

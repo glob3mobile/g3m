@@ -240,8 +240,8 @@ public:
 
 class NonOverlappingMarksRenderer: public DefaultRenderer {
 private:
-  const int   _maxVisibleMarks;
-  const float _viewportMargin;
+  const size_t _maxVisibleMarks;
+  const float  _viewportMargin;
 
   std::vector<NonOverlappingMark*> _marks;
 
@@ -264,7 +264,7 @@ private:
   void applyForces(long long now, const Camera* camera);
 
 public:
-  NonOverlappingMarksRenderer(int maxVisibleMarks,
+  NonOverlappingMarksRenderer(size_t maxVisibleMarks,
                               float viewportMargin = 5);
 
   ~NonOverlappingMarksRenderer();
