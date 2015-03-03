@@ -28,9 +28,8 @@ package org.glob3.mobile.generated;
 //class Geometry2DGLFeature;
 //class ViewportExtentGLFeature;
 //class TexturesHandler;
-
 //class NonOverlappingMark;
-
+//class SimpleTextureMapping;
 
 public abstract class NonOverlappingMarkTouchListener
 {

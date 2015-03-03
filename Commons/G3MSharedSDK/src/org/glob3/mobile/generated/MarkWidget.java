@@ -9,6 +9,9 @@ public class MarkWidget
   private IImageBuilder _imageBuilder;
   private TexturesHandler _texHandler;
 
+  private IFloatBuffer _vertices;
+  private SimpleTextureMapping _textureMapping;
+
   private float _halfWidth;
   private float _halfHeight;
 
@@ -47,6 +50,12 @@ public class MarkWidget
     _halfWidth = image.getWidth() / 2;
     _halfHeight = image.getHeight() / 2;
   
+    if (_vertices != null)
+    {
+      if (_vertices != null)
+         _vertices.dispose();
+    }
+  
     FloatBufferBuilderFromCartesian2D pos2D = new FloatBufferBuilderFromCartesian2D();
     pos2D.add(-_halfWidth, -_halfHeight); // vertex 1
     pos2D.add(-_halfWidth, _halfHeight); // vertex 2
@@ -55,7 +64,8 @@ public class MarkWidget
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#warning TODO: share vertices for marks of the same size?
   
-    _geo2Dfeature = new Geometry2DGLFeature(pos2D.create(), 2, 0, true, 0, 1.0f, true, 10.0f, new Vector2F(_x, _y));
+    _vertices = pos2D.create();
+    _geo2Dfeature = new Geometry2DGLFeature(_vertices, 2, 0, true, 0, 1.0f, true, 10.0f, new Vector2F(_x, _y));
   
     _glState.addGLFeature(_geo2Dfeature, false);
   
@@ -69,9 +79,14 @@ public class MarkWidget
   
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#warning TODO: share unit texCoords
-    SimpleTextureMapping textureMapping = new SimpleTextureMapping(textureID, texCoords.create(), true, true);
+    if (_textureMapping != null)
+    {
+      if (_textureMapping != null)
+         _textureMapping.dispose();
+    }
+    _textureMapping = new SimpleTextureMapping(textureID, texCoords.create(), true, true);
   
-    textureMapping.modifyGLState(_glState);
+    _textureMapping.modifyGLState(_glState);
   }
 
   public MarkWidget(IImageBuilder imageBuilder)
@@ -85,6 +100,8 @@ public class MarkWidget
      _y = java.lang.Float.NaN;
      _halfHeight = 0F;
      _halfWidth = 0F;
+     _vertices = null;
+     _textureMapping = null;
   }
 
   public void dispose()
@@ -92,6 +109,11 @@ public class MarkWidget
     _image = null;
     if (_imageBuilder != null)
        _imageBuilder.dispose();
+  
+    if (_vertices != null)
+       _vertices.dispose();
+    if (_textureMapping != null)
+       _textureMapping.dispose();
   
     if (_glState != null)
     {
