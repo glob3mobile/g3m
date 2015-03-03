@@ -113,8 +113,6 @@ void MarkWidget::prepareWidget(const IImage* image,
                                                                   true,
                                                                   true);
 
-
-
   textureMapping->modifyGLState(*_glState);
 }
 
@@ -216,6 +214,8 @@ NonOverlappingMark::~NonOverlappingMark() {
   if (_springGLState != NULL) {
     _springGLState->_release();
   }
+
+  delete _springVertices;
 }
 
 Vector3D NonOverlappingMark::getCartesianPosition(const Planet* planet) const {

@@ -531,20 +531,15 @@ TileImageProvider* LayerSet::getTileImageProvider(const G3MRenderContext* rc,
 const std::vector<const Info*> LayerSet::getInfo() {
   _infos.clear();
   const int layersCount = _layers.size();
-  bool anyEnabled = false;
   for (int i = 0; i < layersCount; i++) {
     Layer* layer = _layers[i];
     if (layer->isEnable()) {
-      anyEnabled = true;
       const std::vector<const Info*> layerInfo = layer->getInfo();
       const int infoSize = layerInfo.size();
       for (int j = 0; j < infoSize; j++) {
         _infos.push_back(layerInfo[j]);
       }
     }
-  }
-  if (!anyEnabled) {
-    _infos.push_back(new Info("Can't find any enabled Layer at this zoom level"));
   }
   return _infos;
 }
