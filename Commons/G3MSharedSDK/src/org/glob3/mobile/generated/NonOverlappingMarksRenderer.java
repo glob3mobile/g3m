@@ -30,7 +30,7 @@ public class NonOverlappingMarksRenderer extends DefaultRenderer
       {
         _visibleMarks.add(m);
   
-        _visibleMarksIDsBuilder.addInt(i);
+        _visibleMarksIDsBuilder.addInt((int) i);
         _visibleMarksIDsBuilder.addString("/");
       }
       else

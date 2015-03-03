@@ -61,40 +61,47 @@ public class MutableMatrix44D
      _matrix44D = null;
   }
 
-  private MutableMatrix44D copyFrom(MutableMatrix44D that)
+
+  //
+  //MutableMatrix44D& MutableMatrix44D::operator=(const MutableMatrix44D &that) {
+  //  if (this != &that) {
+  //    _m00 = that._m00;
+  //    _m01 = that._m01;
+  //    _m02 = that._m02;
+  //    _m03 = that._m03;
+  //
+  //    _m10 = that._m10;
+  //    _m11 = that._m11;
+  //    _m12 = that._m12;
+  //    _m13 = that._m13;
+  //
+  //    _m20 = that._m20;
+  //    _m21 = that._m21;
+  //    _m22 = that._m22;
+  //    _m23 = that._m23;
+  //
+  //    _m30 = that._m30;
+  //    _m31 = that._m31;
+  //    _m32 = that._m32;
+  //    _m33 = that._m33;
+  //
+  //    _isValid = that._isValid;
+  //
+  //    if (_matrix44D != NULL) {
+  //      _matrix44D->_release();
+  //      _matrix44D = NULL;
+  //    }
+  //  }
+  //
+  //  return *this;
+  //}
+  
+  private MutableMatrix44D.~MutableMatrix44D()
   {
-    if (this != that)
+    if (_matrix44D != null)
     {
-      _m00 = that._m00;
-      _m01 = that._m01;
-      _m02 = that._m02;
-      _m03 = that._m03;
-  
-      _m10 = that._m10;
-      _m11 = that._m11;
-      _m12 = that._m12;
-      _m13 = that._m13;
-  
-      _m20 = that._m20;
-      _m21 = that._m21;
-      _m22 = that._m22;
-      _m23 = that._m23;
-  
-      _m30 = that._m30;
-      _m31 = that._m31;
-      _m32 = that._m32;
-      _m33 = that._m33;
-  
-      _isValid = that._isValid;
-  
-      if (_matrix44D != null)
-      {
-        _matrix44D._release();
-        _matrix44D = null;
-      }
+      _matrix44D._release();
     }
-  
-    return this;
   }
 
 
@@ -269,13 +276,8 @@ public class MutableMatrix44D
     return ((_m00 == m._m00) && (_m01 == m._m01) && (_m02 == m._m02) && (_m03 == m._m03) && (_m10 == m._m10) && (_m11 == m._m11) && (_m12 == m._m12) && (_m13 == m._m13) && (_m20 == m._m20) && (_m21 == m._m21) && (_m22 == m._m22) && (_m23 == m._m23) && (_m30 == m._m30) && (_m31 == m._m31) && (_m32 == m._m32) && (_m33 == m._m33));
   }
 
-  public void dispose()
-  {
-    if (_matrix44D != null)
-    {
-      _matrix44D._release();
-    }
-  }
+//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
+//  public void dispose()
 
   public static MutableMatrix44D identity()
   {
