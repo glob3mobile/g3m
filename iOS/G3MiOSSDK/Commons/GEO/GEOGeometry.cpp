@@ -9,15 +9,12 @@
 #include "GEOGeometry.hpp"
 #include "GEOSymbol.hpp"
 #include "GEOFeature.hpp"
+#include "ErrorHandling.hpp"
 
 
 void GEOGeometry::setFeature(GEOFeature* feature) const {
-//  if (_feature != feature) {
-//    delete _feature;
-//    _feature = feature;
-//  }
   if (_feature != NULL) {
-    printf("break point on me\n");
+    THROW_EXCEPTION("Logic error");
   }
   _feature = feature;
 }
