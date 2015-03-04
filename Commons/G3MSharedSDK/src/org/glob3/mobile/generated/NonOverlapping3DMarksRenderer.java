@@ -26,7 +26,7 @@ public class NonOverlapping3DMarksRenderer extends DefaultRenderer
             else
             {
                 //Resetting marks location of invisible anchors
-                m.resetWidgetPositionVelocityAndForce();
+                m.resetShapePositionVelocityAndForce();
             }
         }
     }
@@ -36,6 +36,8 @@ public class NonOverlapping3DMarksRenderer extends DefaultRenderer
     private GLState _connectorsGLState;
     private void renderConnectorLines(G3MRenderContext rc)
     {
+        //TODO
+    
         /*if (_connectorsGLState == NULL){
             _connectorsGLState = new GLState();
         
@@ -127,21 +129,15 @@ public class NonOverlapping3DMarksRenderer extends DefaultRenderer
     }
     private void renderMarks(G3MRenderContext rc, GLState glState)
     {
-        //Draw Lines
-        renderConnectorLines(rc);
+    
+        //renderConnectorLines(rc);
     
         //Draw Anchors and Marks
         for (int i = 0; i < _visibleMarks.size(); i++)
         {
-           // _visibleMarks[i]->getShape()->setTranslation(_visibleMarks[i]->getCartesianPosition(_planet));
             _visibleMarks.get(i).render(rc, glState);
         }
     }
-
-    /*MarkWidget NonOverlapping3DMark::getWidget() const {
-        return _widget;
-    }*/
-    
     private void applyForces(long now, Camera cam)
     {
     
@@ -213,20 +209,19 @@ public class NonOverlapping3DMarksRenderer extends DefaultRenderer
         _planet = rc.getPlanet();
     
         //TODO: get rid of this stuff
-        for(int i = 0; i < _visibleMarks.size(); i++)
-        {
-            _visibleMarks.get(i).getShape().setPosition(Geodetic3D.fromDegrees(0, 0, 1));
-            _visibleMarks.get(i).getShape().setTranslation(_visibleMarks.get(i).getCartesianPosition(_planet));
-        }
+        /*for(int i = 0; i < _visibleMarks.size(); i++) {
+            _visibleMarks[i]->getShape()->setPosition(Geodetic3D::fromDegrees(0, 0, 1));
+            _visibleMarks[i]->getShape()->setTranslation(_visibleMarks[i]->getCartesianPosition(_planet));
+        }*/
     
         //todo: add this back
     
         //computeMarksToBeRendered(cam, _planet);
-        _visibleMarks = _marks;
+        _visibleMarks = _marks; //temporary
     
-        computeForces(cam, _planet);
+        //computeForces(cam, _planet);
     
-        applyForces(rc.getFrameStartTimer().nowInMilliseconds(), cam);
+      //  applyForces(rc->getFrameStartTimer()->nowInMilliseconds(), cam);
     
         renderMarks(rc, glState);
     }
