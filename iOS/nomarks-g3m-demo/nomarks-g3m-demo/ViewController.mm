@@ -27,6 +27,10 @@
 #include "Planet.hpp"
 #include "EllipsoidalPlanet.hpp"
 #include "CameraDoubleDragHandler.hpp"
+#include "Vector3D.hpp"
+#include "Shape.hpp"
+#include "Color.hpp"
+#include "EllipsoidShape.hpp"
 
 @interface ViewController ()
 
@@ -40,19 +44,39 @@
     G3MBuilder_iOS builder([self g3mwidget]);
     //EllipsoidalPlanet *p = new EllipsoidalPlanet(Ellipsoid(Vector3D(0,0,0), Vector3D(1000,1000,1000)));
     //builder.setPlanet(p);
+    Shape* sphere = new EllipsoidShape(new Geodetic3D(Angle::fromDegrees(0),
+                                                              Angle::fromDegrees(0),
+                                                              5),
+                                               ABSOLUTE,
+                                               Vector3D(100, 100, 100),
+                                               16,
+                                               0,
+                                               false,
+                                               false,
+                                               Color::fromRGBA(1, 0, 0, .5));
+    
+    Shape* anchor_sphere = new EllipsoidShape(new Geodetic3D(Angle::fromDegrees(0),
+                                                      Angle::fromDegrees(0),
+                                                      5),
+                                       ABSOLUTE,
+                                       Vector3D(100, 100, 100),
+                                       16,
+                                       0,
+                                       false,
+                                       false,
+                                       Color::fromRGBA(0, 1, 0, .5));
+    anchor_sphere->setScale(1000);
+    sphere->setScale(1000);
     
     MarksRenderer *marksRenderer = new MarksRenderer(true);
     NonOverlapping3DMarksRenderer *forceGraphRenderer = new NonOverlapping3DMarksRenderer(3);
-    DownloaderImageBuilder *imageBuilder = new DownloaderImageBuilder(URL("http://www.freelogovectors.net/wp-content/uploads/2013/02/sheep-b.png"));
-         DownloaderImageBuilder *imageBuilder2 = new DownloaderImageBuilder(URL("http://www.freelogovectors.net/wp-content/uploads/2013/02/sheep-b.png"));
-       DownloaderImageBuilder *imageBuilder3 = new DownloaderImageBuilder(URL("http://www.freelogovectors.net/wp-content/uploads/2013/02/sheep-b.png"));
-    NonOverlapping3DMark *anchor = new NonOverlapping3DMark(imageBuilder, Geodetic3D::fromDegrees(10, 10, 1));
-    NonOverlapping3DMark *node = new NonOverlapping3DMark(imageBuilder2, Geodetic3D::fromDegrees(0, 0, 1));
-    NonOverlapping3DMark *node2 = new NonOverlapping3DMark(imageBuilder3, Geodetic3D::fromDegrees(10, 20, 1));
+    NonOverlapping3DMark *anchor = new NonOverlapping3DMark(anchor_sphere, sphere, Geodetic3D::fromDegrees(5, 5, 2));
+    NonOverlapping3DMark *node = new NonOverlapping3DMark(anchor_sphere, sphere, Geodetic3D::fromDegrees(0, 0, 1));
+   // NonOverlapping3DMark *node2 = new NonOverlapping3DMark(imageBuilder3, Geodetic3D::fromDegrees(10, 20, 1));
    // node->addAnchor(anchor);
     forceGraphRenderer->addMark(node);
     forceGraphRenderer->addMark(anchor);
-    forceGraphRenderer->addMark(node2);
+   // forceGraphRenderer->addMark(node2);
 
     builder.addRenderer(marksRenderer);
     builder.addRenderer(forceGraphRenderer);

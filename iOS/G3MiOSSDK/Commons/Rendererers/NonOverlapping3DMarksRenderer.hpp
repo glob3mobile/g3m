@@ -16,114 +16,22 @@
 #include "Vector3D.hpp"
 #include "IImageBuilderListener.hpp"
 #include "Shape.hpp"
+#include "ShapesRenderer.hpp"
 
-class IImageBuilder;
 class Geodetic3D;
 class Vector2D;
 class Camera;
 class Planet;
 class GLState;
-class IImage;
-class TextureIDReference;
-class Geometry2DGLFeature;
-class ViewportExtentGLFeature;
-class TexturesHandler;
 
-class MarkWidget;
 
-class MarkWidgetTouchListener {
+class ShapeTouchListener {
 public:
-    virtual ~MarkWidgetTouchListener() {
+    virtual ~ShapeTouchListener() {
     }
     
-    virtual bool touchedMark(MarkWidget* mark, float x, float y) = 0;
+    virtual bool touchedShape(Shape* shape, float x, float y) = 0;
 };
-
-
-class MarkWidget{
-    GLState* _glState;
-    Geometry2DGLFeature* _geo2Dfeature;
-    ViewportExtentGLFeature* _viewportExtent;
-#ifdef C_CODE
-    const IImage* _image;
-#endif
-#ifdef JAVA_CODE
-    private IImage _image;
-#endif
-    std::string _imageName;
-    IImageBuilder* _imageBuilder;
-    TexturesHandler* _texHandler;
-  //  const Planet* _planet;
-    
-    float _halfWidth;
-    float _halfHeight;
-    
-    //float _x, _y; //Screen position
-    
-    MarkWidgetTouchListener* _touchListener;
-    
-    class WidgetImageListener: public IImageBuilderListener{
-        MarkWidget* _widget;
-    public:
-        WidgetImageListener(MarkWidget* widget, MarkWidgetTouchListener *touchListener = NULL):_widget(widget){}
-        
-        ~WidgetImageListener() {}
-        
-        virtual void imageCreated(const IImage*      image,
-                                  const std::string& imageName){
-            _widget->prepareWidget(image, imageName);
-        }
-        
-        virtual void onError(const std::string& error){
-            ILogger::instance()->logError(error);
-        }
-        
-    };
-    
-    void prepareWidget(const IImage*      image,
-                       const std::string& imageName);
-    
-public:
-    MarkWidget(IImageBuilder* imageBuilder);
-    
-    ~MarkWidget();
-    
-    //const Planet* getPlanet();
-    
-    void init(const G3MRenderContext *rc,
-              int viewportWidth, int viewportHeight);
-    
-    void render(const G3MRenderContext* rc, GLState* glState);
-    
-    //void setScreenPos(float x, float y, float z);
-    void set3DPos(float x, float y, float z);
-    //void setScreenPos3d(Geodetic3D &geo3d);
-    
-   // Vector2F getScreenPos() const{ return Vector2F(_x, _y);}
-    void resetPosition();
-    
-    float getHalfWidth() const{ return _halfWidth;}
-    float getHalfHeight() const{ return _halfHeight;}
-    
-    void onResizeViewportEvent(int width, int height);
-    
-    bool isReady() const{
-        return _image != NULL;
-    }
-    
-    void clampPositionInsideScreen(int viewportWidth, int viewportHeight, int margin);
-    
-    bool onTouchEvent(float x, float y);
-    
-    void setTouchListener(MarkWidgetTouchListener* tl){
-        if (_touchListener != NULL && _touchListener != tl){
-            delete _touchListener;
-        }
-        _touchListener = tl;
-    }
-    
-};
-
 
 class NonOverlapping3DMark{
    
@@ -133,6 +41,11 @@ class NonOverlapping3DMark{
     //may be anchors and some may not be.
     bool _isAnchor;
     bool _isVisited; //for graph traversals
+    
+    //shape for anchor and regular nodes:
+    Shape* _anchorShape;
+    Shape* _nodeShape;
+    ShapesRenderer* _shapesRenderer;
     
     //nodes can have multiple nodes they are attached to, call these neighbors
     //edges go from this node to neighbor nodes
@@ -147,21 +60,10 @@ class NonOverlapping3DMark{
     float _dX, _dY, _dZ; //Velocity vector (pixels per second)
     float _fX, _fY, _fZ; //Applied Force
     
-#ifdef C_CODE
-    MarkWidget _widget;
-   // MarkWidget _anchorWidget; //got rid of anchor widget.
-    //let anchor widgets just be special nonoverlapping3dmarks
-#endif
-#ifdef JAVA_CODE
-    private MarkWidget _widget;
-  //  private MarkWidget _anchorWidget;
-#endif
-    
     const float _springK;
     const float _maxSpringLength;
     const float _minSpringLength;
     const float _electricCharge;
-    //const float _anchorElectricCharge; //use regular electric charge
     const float _maxWidgetSpeedInPixelsPerSecond;
     const float _resistanceFactor;
     const float _minWidgetSpeedInPixelsPerSecond;
@@ -169,9 +71,9 @@ class NonOverlapping3DMark{
     
 public:
     
-    NonOverlapping3DMark(IImageBuilder* imageBuilderWidget,
+    NonOverlapping3DMark(Shape* anchorShape, Shape* nodeShape,
                        const Geodetic3D& position,
-                       MarkWidgetTouchListener* touchListener = NULL,
+                       ShapeTouchListener* touchListener = NULL,
                        float springLengthInPixels = 10.0f,
                        float springK = 1.0f,
                        float maxSpringLength = 100.0f,
@@ -198,7 +100,6 @@ public:
     //MarkWidget getWidget() const;
     
     Vector3D clampVector(Vector3D &v, float min, float max) const;
-    
     
     Vector3D getCartesianPosition(const Planet* planet) const;
     
@@ -229,7 +130,7 @@ public:
     
     void onResizeViewportEvent(int width, int height);
     
-    void resetWidgetPositionVelocityAndForce(){ _widget.resetPosition(); _dX = 0; _dY = 0; _dZ = 0; _fX = 0; _fY = 0; _fZ =0;}
+    void resetShapePositionVelocityAndForce();
     
     bool onTouchEvent(float x, float y);
     
