@@ -39,6 +39,7 @@
 #include "G3MHUDDemoScene.hpp"
 #include "G3MNonOverlappingMarksDemoScene.hpp"
 #include "G3MCanvas2DDemoScene.hpp"
+#include "G3MAugmentedRealityDemoScene.hpp"
 
 G3MDemoModel::G3MDemoModel(G3MDemoListener*             listener,
                            LayerSet*                    layerSet,
@@ -76,6 +77,7 @@ _context(NULL)
   _scenes.push_back( new G3MStreamingPointCloud2DemoScene(this) );
   _scenes.push_back( new G3MHUDDemoScene(this) );
   _scenes.push_back( new G3MNonOverlappingMarksDemoScene(this) );
+  _scenes.push_back( new G3MAugmentedRealityDemoScene(this) );
 
   // _scenes.push_back( new G3MCanvas2DDemoScene(this) );
 }
