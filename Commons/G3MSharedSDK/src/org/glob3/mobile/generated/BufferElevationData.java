@@ -44,11 +44,6 @@ public abstract class BufferElevationData extends ElevationData
   {
     final int index = ((_height-1-y) * _width) + x;
   
-  //  if ( (index < 0) || (index >= _bufferSize) ) {
-  //    printf("break point on me\n");
-  //    return IMathUtils::instance()->NanD();
-  //  }
-  
     return getValueInBufferAt(index) + _deltaHeight;
   }
 

@@ -771,10 +771,6 @@ public class Tile
 
   public final void prune(TileTexturizer texturizer, ElevationDataProvider elevationDataProvider, java.util.ArrayList<String> tilesStoppedRendering)
   {
-  //  if (texturizer == NULL && elevationDataProvider == NULL && _subtiles != NULL) {
-  ///#warning remove debug code
-  //    printf("break point\n");
-  //  }
   
     if (_subtiles != null)
     {
@@ -957,10 +953,6 @@ public class Tile
         ElevationData subView = createElevationDataSubviewFromAncestor(ancestor);
         setElevationData(subView, ancestor._level);
       }
-    }
-    else
-    {
-      System.out.print("break point on me\n");
     }
   }
 
