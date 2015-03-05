@@ -188,9 +188,9 @@ void Camera::setGeodeticPositionStablePitch(const Geodetic3D& g3d) {
   if (dragMatrix.isValid()) applyTransform(dragMatrix);
 }
 
-const Vector3D Camera::pixel2Ray(const Vector2I& pixel) const {
-  const double px = pixel._x + 0.5;
-  const double py = _viewPortHeight - pixel._y - 0.5;
+const Vector3D Camera::pixel2Ray(const Vector2F& pixel) const {
+  const float px = pixel._x;
+  const float py = _viewPortHeight - pixel._y;
   const Vector3D pixel3D(px, py, 0);
 
   const Vector3D obj = getModelViewMatrix().unproject(pixel3D,
@@ -203,7 +203,7 @@ const Vector3D Camera::pixel2Ray(const Vector2I& pixel) const {
   return obj.sub(_position.asVector3D());
 }
 
-const Vector3D Camera::pixel2PlanetPoint(const Vector2I& pixel) const {
+const Vector3D Camera::pixel2PlanetPoint(const Vector2F& pixel) const {
   return _planet->closestIntersection(_position.asVector3D(), pixel2Ray(pixel));
 }
 
@@ -292,8 +292,8 @@ Vector3D Camera::getHorizontalVector() {
   return Vector3D(M.get0(), M.get4(), M.get8());
 }
 
-Angle Camera::compute3DAngularDistance(const Vector2I& pixel0,
-                                       const Vector2I& pixel1) {
+Angle Camera::compute3DAngularDistance(const Vector2F& pixel0,
+                                       const Vector2F& pixel1) {
   const Vector3D point0 = pixel2PlanetPoint(pixel0);
   if (point0.isNan()) {
     return Angle::nan();

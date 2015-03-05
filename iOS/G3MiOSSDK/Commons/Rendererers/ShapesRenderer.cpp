@@ -60,21 +60,21 @@ RenderState ShapesRenderer::getRenderState(const G3MRenderContext* rc) {
 
 void ShapesRenderer::updateGLState(const G3MRenderContext* rc) {
 
-  const Camera* cam = rc->getCurrentCamera();
+  const Camera* camera = rc->getCurrentCamera();
   ModelViewGLFeature* f = (ModelViewGLFeature*) _glState->getGLFeature(GLF_MODEL_VIEW);
   if (f == NULL) {
-    _glState->addGLFeature(new ModelViewGLFeature(cam), true);
+    _glState->addGLFeature(new ModelViewGLFeature(camera), true);
   }
   else {
-    f->setMatrix(cam->getModelViewMatrix44D());
+    f->setMatrix(camera->getModelViewMatrix44D());
   }
 
   f = (ModelViewGLFeature*) _glStateTransparent->getGLFeature(GLF_MODEL_VIEW);
   if (f == NULL) {
-    _glStateTransparent->addGLFeature(new ModelViewGLFeature(cam), true);
+    _glStateTransparent->addGLFeature(new ModelViewGLFeature(camera), true);
   }
   else {
-    f->setMatrix(cam->getModelViewMatrix44D());
+    f->setMatrix(camera->getModelViewMatrix44D());
   }
 
 }
@@ -199,7 +199,7 @@ bool ShapesRenderer::onTouchEvent(const G3MEventContext* ec,
         touchEvent->getTapCount()==1 &&
         touchEvent->getType()==Down) {
       const Vector3D origin = _lastCamera->getCartesianPosition();
-      const Vector2I pixel = touchEvent->getTouch(0)->getPos();
+      const Vector2F pixel = touchEvent->getTouch(0)->getPos();
       const Vector3D direction = _lastCamera->pixel2Ray(pixel);
       const Planet* planet = ec->getPlanet();
       if (!direction.isNan()) {

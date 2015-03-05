@@ -1,9 +1,6 @@
 
 
-package com.glob3mobile.pointcloud;
-
-import com.glob3mobile.pointcloud.octree.Angle;
-import com.glob3mobile.pointcloud.octree.Geodetic3D;
+package com.glob3mobile.utils;
 
 import es.igosoftware.euclid.vector.GVector3D;
 

@@ -50,9 +50,9 @@ public:
     _sources.push_back(ps);
   }
 
-  const GPUProgramSources* get(const std::string& name) const{
-    const int size = _sources.size();
-    for (int i = 0; i < size; i++) {
+  const GPUProgramSources* get(const std::string& name) const {
+    const size_t size = _sources.size();
+    for (size_t i = 0; i < size; i++) {
       if (_sources[i]._name.compare(name) == 0) {
         return &(_sources[i]);
       }
@@ -60,7 +60,7 @@ public:
     return NULL;
   }
 
-  int size() const {
+  size_t size() const {
     return _sources.size();
   }
 

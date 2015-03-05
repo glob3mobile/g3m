@@ -299,15 +299,15 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
   private void updateGLState(G3MRenderContext rc)
   {
   
-    final Camera cam = rc.getCurrentCamera();
+    final Camera camera = rc.getCurrentCamera();
     ModelViewGLFeature f = (ModelViewGLFeature) _glState.getGLFeature(GLFeatureID.GLF_MODEL_VIEW);
     if (f == null)
     {
-      _glState.addGLFeature(new ModelViewGLFeature(cam), true);
+      _glState.addGLFeature(new ModelViewGLFeature(camera), true);
     }
     else
     {
-      f.setMatrix(cam.getModelViewMatrix44D());
+      f.setMatrix(camera.getModelViewMatrix44D());
     }
   }
 
@@ -570,9 +570,15 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
   
     if (touchEvent.getType() == _touchEventTypeOfTerrainTouchListener)
     {
+<<<<<<< HEAD
       final Vector2I pixel = touchEvent.getTouch(0).getPos();
   
       Vector3D positionCartesian = null;
+=======
+      final Vector2F pixel = touchEvent.getTouch(0).getPos();
+      final Vector3D ray = _lastCamera.pixel2Ray(pixel);
+      final Vector3D origin = _lastCamera.getCartesianPosition();
+>>>>>>> purgatory
   
       final Planet planet = ec.getPlanet();
   

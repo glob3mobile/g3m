@@ -19,7 +19,7 @@ class HUDRenderer : public DefaultRenderer {
 private:
 
   std::vector<HUDWidget*> _widgets;
-  int                     _widgetsSize;
+  size_t                  _widgetsSize;
 
   GLState*                _glState;
 

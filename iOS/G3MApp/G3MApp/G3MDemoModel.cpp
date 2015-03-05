@@ -38,7 +38,7 @@
 #include "G3MStreamingPointCloud2DemoScene.hpp"
 #include "G3MHUDDemoScene.hpp"
 #include "G3MNonOverlappingMarksDemoScene.hpp"
-
+#include "G3MCanvas2DDemoScene.hpp"
 
 G3MDemoModel::G3MDemoModel(G3MDemoListener*             listener,
                            LayerSet*                    layerSet,
@@ -76,6 +76,8 @@ _context(NULL)
   _scenes.push_back( new G3MStreamingPointCloud2DemoScene(this) );
   _scenes.push_back( new G3MHUDDemoScene(this) );
   _scenes.push_back( new G3MNonOverlappingMarksDemoScene(this) );
+
+  // _scenes.push_back( new G3MCanvas2DDemoScene(this) );
 }
 
 void G3MDemoModel::initializeG3MContext(const G3MContext* context) {
@@ -116,6 +118,7 @@ void G3MDemoModel::reset() {
   getHUDRenderer()->removeAllWidgets();
 
   getNonOverlappingMarksRenderer()->removeAllMarks();
+  getNonOverlappingMarksRenderer()->removeAllListeners();
 
   _layerSet->removeAllLayers(true);
 }

@@ -32,15 +32,15 @@
 
 - (void) close;
 
-- (NSInteger) integerColumnByIndex: (NSInteger) index;
+- (NSInteger) integerColumnByIndex: (int) index;
 
-- (NSString*) stringColumnByIndex: (NSInteger) index;
+- (NSString*) stringColumnByIndex: (int) index;
 
-- (NSData*) dataColumnByIndex: (NSInteger) index;
+- (NSData*) dataColumnByIndex: (int) index;
 
-- (double) doubleColumnByIndex: (NSInteger) index;
+- (double) doubleColumnByIndex: (int) index;
 
-- (BOOL)isNullColumnByIndex: (NSInteger) index;
+- (BOOL)isNullColumnByIndex: (int) index;
 
 @end
 

@@ -26,7 +26,6 @@ public class Geometry2DGLFeature extends GLFeature
   {
      super(GLFeatureGroupName.NO_GROUP, GLFeatureID.GLF_GEOMETRY);
      _lineWidth = lineWidth;
-  
     _position = new GPUAttributeValueVec2Float(buffer, arrayElementSize, index, stride, normalized);
     _values.addAttributeValue(GPUAttributeKey.POSITION_2D, _position, false);
   

@@ -133,6 +133,21 @@ public class Camera
   
     return obj.sub(_position.asVector3D());
   }
+  public final Vector3D pixel2Ray(Vector2F pixel)
+  {
+    final float px = pixel._x;
+    final float py = _viewPortHeight - pixel._y;
+    final Vector3D pixel3D = new Vector3D(px, py, 0);
+  
+    final Vector3D obj = getModelViewMatrix().unproject(pixel3D, 0, 0, _viewPortWidth, _viewPortHeight);
+    if (obj.isNan())
+    {
+      ILogger.instance().logWarning("Pixel to Ray return NaN");
+      return obj;
+    }
+  
+    return obj.sub(_position.asVector3D());
+  }
 
   //void Camera::render(const G3MRenderContext* rc,
   //                    const GLGlobalState& parentState) const {
@@ -246,7 +261,7 @@ public class Camera
 
   public final void getViewDirectionInto(MutableVector3D result)
   {
-    result.put(_center.x() - _position.x(), _center.y() - _position.y(), _center.z() - _position.z());
+    result.set(_center.x() - _position.x(), _center.y() - _position.y(), _center.z() - _position.z());
   }
 
 

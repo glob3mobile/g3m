@@ -93,6 +93,11 @@ public:
                                                      direction,
                                                      _sphere._radius);
   }
+  
+  void geodeticSurfaceNormal(const Angle& latitude,
+                             const Angle& longitude,
+                             MutableVector3D& result) const;
+
   std::vector<double> intersectionsDistances(double originX,
                                              double originY,
                                              double originZ,
@@ -121,6 +126,35 @@ public:
     return toCartesian(geodetic._latitude,
                        geodetic._longitude,
                        height);
+  }
+
+  void toCartesian(const Angle& latitude,
+                   const Angle& longitude,
+                   const double height,
+                   MutableVector3D& result) const;
+
+  void toCartesian(const Geodetic3D& geodetic,
+                   MutableVector3D& result) const {
+    toCartesian(geodetic._latitude,
+                geodetic._longitude,
+                geodetic._height,
+                result);
+  }
+
+  void toCartesian(const Geodetic2D& geodetic,
+                   MutableVector3D& result) const {
+    toCartesian(geodetic._latitude,
+                geodetic._longitude,
+                0,
+                result);
+  }
+  void toCartesian(const Geodetic2D& geodetic,
+                   const double height,
+                   MutableVector3D& result) const {
+    toCartesian(geodetic._latitude,
+                geodetic._longitude,
+                height,
+                result);
   }
 
   Geodetic2D toGeodetic2D(const Vector3D& position) const;

@@ -11,6 +11,8 @@ import javax.imageio.ImageIO;
 
 import com.glob3mobile.pointcloud.octree.PersistentOctree.Node;
 import com.glob3mobile.pointcloud.octree.PersistentOctree.Statistics;
+import com.glob3mobile.utils.Sector;
+import com.glob3mobile.utils.Utils;
 
 import es.igosoftware.euclid.colors.GColorF;
 import es.igosoftware.util.GProgress;

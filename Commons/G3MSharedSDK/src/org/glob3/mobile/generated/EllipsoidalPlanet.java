@@ -53,7 +53,7 @@ public class EllipsoidalPlanet extends Planet
 
   public void dispose()
   {
-  super.dispose();
+    super.dispose();
   }
 
   public final Vector3D getRadii()
@@ -93,10 +93,20 @@ public class EllipsoidalPlanet extends Planet
     return geodeticSurfaceNormal(geodetic._latitude, geodetic._longitude);
   }
 
+<<<<<<< HEAD
   public final java.util.ArrayList<Double> intersectionsDistances(Vector3D origin, Vector3D direction)
   {
     return Ellipsoid.intersectionCenteredEllipsoidWithRay(origin, direction, _ellipsoid.getOneOverRadiiSquared());
   }
+=======
+  public final void geodeticSurfaceNormal(Angle latitude, Angle longitude, MutableVector3D result)
+  {
+    final double cosLatitude = java.lang.Math.cos(latitude._radians);
+  
+    result.set(cosLatitude * java.lang.Math.cos(longitude._radians), cosLatitude * java.lang.Math.sin(longitude._radians), java.lang.Math.sin(latitude._radians));
+  }
+
+>>>>>>> purgatory
   public final java.util.ArrayList<Double> intersectionsDistances(double originX, double originY, double originZ, double directionX, double directionY, double directionZ)
   {
     return _ellipsoid.intersectionsDistances(originX, originY, originZ, directionX, directionY, directionZ);
@@ -126,6 +136,40 @@ public class EllipsoidalPlanet extends Planet
   public final Vector3D toCartesian(Geodetic2D geodetic, double height)
   {
     return toCartesian(geodetic._latitude, geodetic._longitude, height);
+  }
+
+  public final void toCartesian(Angle latitude, Angle longitude, double height, MutableVector3D result)
+  {
+    geodeticSurfaceNormal(latitude, longitude, result);
+    final double nX = result.x();
+    final double nY = result.y();
+    final double nZ = result.z();
+  
+    final double kX = nX * _ellipsoid._radiiSquared._x;
+    final double kY = nY * _ellipsoid._radiiSquared._y;
+    final double kZ = nZ * _ellipsoid._radiiSquared._z;
+  
+    final double gamma = IMathUtils.instance().sqrt((kX * nX) + (kY * nY) + (kZ * nZ));
+  
+    final double rSurfaceX = kX / gamma;
+    final double rSurfaceY = kY / gamma;
+    final double rSurfaceZ = kZ / gamma;
+  
+    result.set(rSurfaceX + (nX * height), rSurfaceY + (nY * height), rSurfaceZ + (nZ * height));
+  }
+
+  public final void toCartesian(Geodetic3D geodetic, MutableVector3D result)
+  {
+    toCartesian(geodetic._latitude, geodetic._longitude, geodetic._height, result);
+  }
+
+  public final void toCartesian(Geodetic2D geodetic, MutableVector3D result)
+  {
+    toCartesian(geodetic._latitude, geodetic._longitude, 0, result);
+  }
+  public final void toCartesian(Geodetic2D geodetic, double height, MutableVector3D result)
+  {
+    toCartesian(geodetic._latitude, geodetic._longitude, height, result);
   }
 
   public final Geodetic2D toGeodetic2D(Vector3D positionOnEllipsoidalPlanet)

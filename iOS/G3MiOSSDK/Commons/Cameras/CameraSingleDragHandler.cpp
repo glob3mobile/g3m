@@ -54,25 +54,8 @@ void CameraSingleDragHandler::onDown(const G3MEventContext *eventContext,
 
   // dragging
   const Vector2F pixel = touchEvent.getTouch(0)->getPos();
-
-  Vector3D touchedPosition = eventContext->getWidget()->getScenePositionForPixel(pixel._x, pixel._y);
-  
-  //Geodetic3D geoPos = eventContext->getPlanet()->toGeodetic3D(v);
-  //printf("ZBUFFER EN %f, %f, %f\n ", geoPos._latitude._degrees, geoPos._longitude._degrees, geoPos._height);
-/*
-  eventContext->getPlanet()->beginSingleDrag(_camera0.getCartesianPosition(),
-                                             _camera0.pixel2Ray(pixel));*/
+  Vector3D touchedPosition = eventContext->getWidget()->getScenePositionForPixel((int)pixel._x, (int)pixel._y);
     eventContext->getPlanet()->beginSingleDrag(_camera0.getCartesianPosition(), touchedPosition);
-  
-/*
-=======
-  const Vector3D& initialRay = _camera0.pixel2Ray(pixel);
-  if (!initialRay.isNan()) {
-    cameraContext->setCurrentGesture(Drag);
-    eventContext->getPlanet()->beginSingleDrag(_camera0.getCartesianPosition(),initialRay);
-  }
->>>>>>> origin/purgatory
- */
 }
 
 
@@ -85,7 +68,7 @@ void CameraSingleDragHandler::onMove(const G3MEventContext *eventContext,
   //check finalRay
   
   Vector2F tp = touchEvent.getTouch(0)->getPos();
-  const Vector3D& finalRay = _camera0.pixel2Ray(Vector2I(tp._x, tp._y));
+  const Vector3D& finalRay = _camera0.pixel2Ray(Vector2F(tp._x, tp._y));
   if (finalRay.isNan()) return;
   
   // compute transformation matrix

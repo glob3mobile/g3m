@@ -20,7 +20,7 @@ class FlatPlanet: public Planet {
 private:
   const Vector2D _size;
   const Vector3D _radii;
-
+  
   mutable MutableVector3D _origin;
   mutable MutableVector3D _initialPoint;
   mutable double          _dragHeight;
@@ -34,10 +34,10 @@ private:
   mutable MutableVector3D _initialPoint1;
   mutable double          _dragHeight1;
   mutable MutableVector3D _centerPoint;
-
+  
   mutable double          _correctionT2;
   mutable MutableVector3D _correctedCenterPoint;
-
+  
   mutable double          _lastDoubleDragAngle;
   
 public:
@@ -64,6 +64,11 @@ public:
     return Vector3D(0, 0, 1);
   }
   
+  void geodeticSurfaceNormal(const Angle& latitude,
+                             const Angle& longitude,
+                             MutableVector3D& result) const {
+    result.set(0, 0, 1);
+  }
   
   Vector3D geodeticSurfaceNormal(const Angle& latitude,
                                  const Angle& longitude) const;
@@ -82,18 +87,21 @@ public:
                                              double directionX,
                                              double directionY,
                                              double directionZ) const;
-
+  
   Vector3D toCartesian(const Angle& latitude,
                        const Angle& longitude,
-                       const double height) const;
-  
-  Vector3D toCartesian(const Geodetic3D& geodetic) const {
-    const double x = geodetic._longitude._degrees * _size._x / 360.0;
-    const double y = geodetic._latitude._degrees * _size._y / 180.0;
-    return Vector3D(x, y, geodetic._height);
+                       const double height) const {
+    const double x = longitude._degrees * _size._x / 360.0;
+    const double y = latitude._degrees  * _size._y / 180.0;
+    return Vector3D(x, y, height);
   }
   
-    
+  Vector3D toCartesian(const Geodetic3D& geodetic) const {
+    return toCartesian(geodetic._latitude,
+                       geodetic._longitude,
+                       geodetic._height);
+  }
+  
   Vector3D toCartesian(const Geodetic2D& geodetic) const {
     return toCartesian(geodetic._latitude,
                        geodetic._longitude,
@@ -107,6 +115,39 @@ public:
                        height);
   }
   
+  void toCartesian(const Angle& latitude,
+                   const Angle& longitude,
+                   const double height,
+                   MutableVector3D& result) const {
+    const double x = longitude._degrees * _size._x / 360.0;
+    const double y = latitude._degrees  * _size._y / 180.0;
+    result.set(x, y, height);
+  }
+  
+  void toCartesian(const Geodetic3D& geodetic,
+                   MutableVector3D& result) const {
+    toCartesian(geodetic._latitude,
+                geodetic._longitude,
+                geodetic._height,
+                result);
+  }
+  void toCartesian(const Geodetic2D& geodetic,
+                   MutableVector3D& result) const {
+    toCartesian(geodetic._latitude,
+                geodetic._longitude,
+                0.0,
+                result);
+  }
+  
+  void toCartesian(const Geodetic2D& geodetic,
+                   const double height,
+                   MutableVector3D& result) const {
+    toCartesian(geodetic._latitude,
+                geodetic._longitude,
+                height,
+                result);
+  }
+  
   Geodetic2D toGeodetic2D(const Vector3D& position) const;
   
   Geodetic3D toGeodetic3D(const Vector3D& position) const;
@@ -114,7 +155,7 @@ public:
   Vector3D scaleToGeodeticSurface(const Vector3D& position) const;
   
   Vector3D scaleToGeocentricSurface(const Vector3D& position) const;
-    
+  
   Geodetic2D getMidPoint (const Geodetic2D& P0, const Geodetic2D& P1) const;
   
   
@@ -147,31 +188,31 @@ public:
   Effect* createDoubleTapEffect(const Vector3D& origin,
                                 const Vector3D& centerRay,
                                 const Vector3D& touchedPosition) const;
-
+  
   double distanceToHorizon(const Vector3D& position) const;
-
+  
   MutableMatrix44D drag(const Geodetic3D& origin, const Geodetic3D& destination) const;
   
   Vector3D getNorth() const {
     return Vector3D::upY();
   }
-
+  
   void applyCameraConstrainers(const Camera* previousCamera,
                                Camera* nextCamera) const;
-
+  
   Geodetic3D getDefaultCameraPosition(const Sector& rendereSector) const {
     const Vector3D asw = toCartesian(rendereSector.getSW());
     const Vector3D ane = toCartesian(rendereSector.getNE());
     const double height = asw.sub(ane).length() * 1.9;
-
+    
     return Geodetic3D(rendereSector._center,
                       height);
   }
-
+  
   const std::string getType() const {
     return "Flat";
   }
-
+  
 };
 
 

@@ -135,7 +135,8 @@ void MarkWidget::render(const G3MRenderContext *rc,
                           0,   // first
                           4,   // count
                           _glState,
-                          *rc->getGPUProgramManager());
+                          *rc->getGPUProgramManager(),
+                          REGULAR_RENDER);
 }
 
 void MarkWidget::setAndClampScreenPos(float x,
@@ -352,7 +353,8 @@ void NonOverlappingMark::renderSpringWidget(const G3MRenderContext* rc,
                           0,                    // first
                           2,                    // count
                           _springGLState,
-                          *rc->getGPUProgramManager());
+                          *rc->getGPUProgramManager(),
+                          REGULAR_RENDER);
 }
 
 void NonOverlappingMark::updatePositionWithCurrentForce(float timeInSeconds,

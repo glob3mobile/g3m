@@ -3,28 +3,26 @@ public class MarkWidget
 {
   private GLState _glState;
   private Geometry2DGLFeature _geo2Dfeature;
-  private ViewportExtentGLFeature _viewportExtent;
+  private ViewportExtentGLFeature _viewportExtentGLFeature;
   private IImage _image;
   private String _imageName;
   private IImageBuilder _imageBuilder;
   private TexturesHandler _texHandler;
 
+  private IFloatBuffer _vertices;
+  private SimpleTextureMapping _textureMapping;
+
   private float _halfWidth;
   private float _halfHeight;
 
-  private float _x; //Screen position
+  // Screen position
+  private float _x;
   private float _y;
-
-  private MarkWidgetTouchListener _touchListener;
 
   private static class WidgetImageListener implements IImageBuilderListener
   {
     private MarkWidget _widget;
     public WidgetImageListener(MarkWidget widget)
-    {
-       this(widget, null);
-    }
-    public WidgetImageListener(MarkWidget widget, MarkWidgetTouchListener touchListener)
     {
        _widget = widget;
     }
@@ -42,7 +40,6 @@ public class MarkWidget
     {
       ILogger.instance().logError(error);
     }
-
   }
 
   private void prepareWidget(IImage image, String imageName)
@@ -53,43 +50,58 @@ public class MarkWidget
     _halfWidth = image.getWidth() / 2;
     _halfHeight = image.getHeight() / 2;
   
-    FloatBufferBuilderFromCartesian2D pos2D = new FloatBufferBuilderFromCartesian2D();
-    pos2D.add(-_halfWidth, -_halfHeight); //vertex 1
-    pos2D.add(-_halfWidth, _halfHeight); //vertex 2
-    pos2D.add(_halfWidth, -_halfHeight); //vertex 3
-    pos2D.add(_halfWidth, _halfHeight); //vertex 4
+    if (_vertices != null)
+    {
+      if (_vertices != null)
+         _vertices.dispose();
+    }
   
-    _geo2Dfeature = new Geometry2DGLFeature(pos2D.create(), 2, 0, true, 0, 1.0f, true, 10.0f, new Vector2F(_x, _y));
+    FloatBufferBuilderFromCartesian2D pos2D = new FloatBufferBuilderFromCartesian2D();
+    pos2D.add(-_halfWidth, -_halfHeight); // vertex 1
+    pos2D.add(-_halfWidth, _halfHeight); // vertex 2
+    pos2D.add(_halfWidth, -_halfHeight); // vertex 3
+    pos2D.add(_halfWidth, _halfHeight); // vertex 4
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning TODO: share vertices for marks of the same size?
+  
+    _vertices = pos2D.create();
+    _geo2Dfeature = new Geometry2DGLFeature(_vertices, 2, 0, true, 0, 1.0f, true, 10.0f, new Vector2F(_x, _y));
   
     _glState.addGLFeature(_geo2Dfeature, false);
   
     FloatBufferBuilderFromCartesian2D texCoords = new FloatBufferBuilderFromCartesian2D();
-    texCoords.add(0.0f, 1.0f); //vertex 1
-    texCoords.add(0.0f, 0.0f); //vertex 2
-    texCoords.add(1.0f, 1.0f); //vertex 3
-    texCoords.add(1.0f, 0.0f); //vertex 4
+    texCoords.add(0.0f, 1.0f); // vertex 1
+    texCoords.add(0.0f, 0.0f); // vertex 2
+    texCoords.add(1.0f, 1.0f); // vertex 3
+    texCoords.add(1.0f, 0.0f); // vertex 4
   
     final TextureIDReference textureID = _texHandler.getTextureIDReference(_image, GLFormat.rgba(), _imageName, false);
   
-    SimpleTextureMapping textureMapping = new SimpleTextureMapping(textureID, texCoords.create(), true, true);
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning TODO: share unit texCoords
+    if (_textureMapping != null)
+    {
+      if (_textureMapping != null)
+         _textureMapping.dispose();
+    }
+    _textureMapping = new SimpleTextureMapping(textureID, texCoords.create(), true, true);
   
-  
-  
-    textureMapping.modifyGLState(_glState);
+    _textureMapping.modifyGLState(_glState);
   }
 
   public MarkWidget(IImageBuilder imageBuilder)
   {
      _image = null;
      _imageBuilder = imageBuilder;
-     _viewportExtent = null;
+     _viewportExtentGLFeature = null;
      _geo2Dfeature = null;
      _glState = null;
      _x = java.lang.Float.NaN;
      _y = java.lang.Float.NaN;
      _halfHeight = 0F;
      _halfWidth = 0F;
-     _touchListener = null;
+     _vertices = null;
+     _textureMapping = null;
   }
 
   public void dispose()
@@ -97,29 +109,55 @@ public class MarkWidget
     _image = null;
     if (_imageBuilder != null)
        _imageBuilder.dispose();
-    if (_touchListener != null)
-       _touchListener.dispose();
   
-    _glState._release();
+    if (_vertices != null)
+       _vertices.dispose();
+    if (_textureMapping != null)
+       _textureMapping.dispose();
+  
+    if (_glState != null)
+    {
+      _glState._release();
+    }
   }
 
-  public final void init(G3MRenderContext rc, int viewportWidth, int viewportHeight)
+  public final void init(G3MRenderContext rc)
   {
     if (_glState == null)
     {
       _glState = new GLState();
-      _viewportExtent = new ViewportExtentGLFeature(viewportWidth, viewportHeight);
+      _viewportExtentGLFeature = new ViewportExtentGLFeature(rc.getCurrentCamera());
   
       _texHandler = rc.getTexturesHandler();
       _imageBuilder.build(rc, new WidgetImageListener(this), true);
   
-      _glState.addGLFeature(_viewportExtent, false);
+      _glState.addGLFeature(_viewportExtentGLFeature, false);
     }
   }
 
   public final void render(G3MRenderContext rc, GLState glState)
   {
+<<<<<<< HEAD
     rc.getGL().drawArrays(GLPrimitive.triangleStrip(), 0, 4, _glState, rc.getGPUProgramManager(), RenderType.REGULAR_RENDER);
+=======
+    rc.getGL().drawArrays(GLPrimitive.triangleStrip(), 0, 4, _glState, rc.getGPUProgramManager()); // count -  first
+  }
+//              float x,
+//              float y
+
+  public final void setAndClampScreenPos(float x, float y, int viewportWidth, int viewportHeight, float margin)
+  {
+    final IMathUtils mu = IMathUtils.instance();
+    final float xx = mu.clamp(x, _halfWidth + margin, viewportWidth - _halfWidth - margin);
+    final float yy = mu.clamp(y, _halfHeight + margin, viewportHeight - _halfHeight - margin);
+  
+    if (_geo2Dfeature != null)
+    {
+      _geo2Dfeature.setTranslation(xx, yy);
+    }
+    _x = xx;
+    _y = yy;
+>>>>>>> purgatory
   }
 
   public final void setScreenPos(float x, float y)
@@ -131,10 +169,16 @@ public class MarkWidget
     _x = x;
     _y = y;
   }
+
   public final Vector2F getScreenPos()
   {
      return new Vector2F(_x, _y);
   }
+  public final void getScreenPosition(MutableVector2F result)
+  {
+    result.set(_x, _y);
+  }
+
   public final void resetPosition()
   {
     if (_geo2Dfeature != null)
@@ -145,20 +189,11 @@ public class MarkWidget
     _y = java.lang.Float.NaN;
   }
 
-  public final float getHalfWidth()
-  {
-     return _halfWidth;
-  }
-  public final float getHalfHeight()
-  {
-     return _halfHeight;
-  }
-
   public final void onResizeViewportEvent(int width, int height)
   {
-    if (_viewportExtent != null)
+    if (_viewportExtentGLFeature != null)
     {
-      _viewportExtent.changeExtent(width, height);
+      _viewportExtentGLFeature.changeExtent(width, height);
     }
   }
 
@@ -167,37 +202,13 @@ public class MarkWidget
     return _image != null;
   }
 
-  public final void clampPositionInsideScreen(int viewportWidth, int viewportHeight, float margin)
+  public final int getWidth()
   {
-    final IMathUtils mu = IMathUtils.instance();
-    float x = mu.clamp(_x, _halfWidth + margin, viewportWidth - _halfWidth - margin);
-    float y = mu.clamp(_y, _halfHeight + margin, viewportHeight - _halfHeight - margin);
-  
-    setScreenPos(x, y);
+    return _image == null ? 0 : _image.getWidth();
   }
-
-  public final boolean onTouchEvent(float x, float y)
+  public final int getHeight()
   {
-    final IMathUtils mu = IMathUtils.instance();
-    if (mu.isBetween(x, _x - _halfWidth, _x + _halfWidth) && mu.isBetween(y, _y - _halfHeight, _y + _halfHeight))
-    {
-      if (_touchListener != null)
-      {
-        _touchListener.touchedMark(this, x, y);
-      }
-      return true;
-    }
-    return false;
-  }
-
-  public final void setTouchListener(MarkWidgetTouchListener tl)
-  {
-    if (_touchListener != null && _touchListener != tl)
-    {
-      if (_touchListener != null)
-         _touchListener.dispose();
-    }
-    _touchListener = tl;
+    return _image == null ? 0 : _image.getHeight();
   }
 
 }

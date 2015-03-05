@@ -32,7 +32,7 @@ public:
   _prevPos(other._prevPos),
   _tapCount(other._tapCount)
   {}
-  
+
   Touch(const Vector2F& pos,
         const Vector2F& prev,
         const unsigned char tapCount=(unsigned char)0):
@@ -40,7 +40,7 @@ public:
   _prevPos(prev),
   _tapCount(tapCount)
   { }
-  
+
   const Vector2F getPos() const { return _pos; }
   const Vector2F getPrevPos() const { return _prevPos; }
   const unsigned char getTapCount() const { return _tapCount; }
@@ -128,7 +128,7 @@ public:
   const Touch* getTouch(int i) const {
     return _touchs[i];
   }
-  
+
   size_t getTouchCount() const {
     return _touchs.size();
   }
@@ -140,6 +140,11 @@ public:
       delete _touchs[i];
     }
   }
+  
+  double getMouseWheelDelta() const{
+    return _wheelDelta;
+  }
+
   
 };
 

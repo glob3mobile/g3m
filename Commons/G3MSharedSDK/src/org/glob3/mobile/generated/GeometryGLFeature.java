@@ -35,7 +35,6 @@ public class GeometryGLFeature extends GLFeature
      _polygonOffsetFactor = polygonOffsetFactor;
      _polygonOffsetUnits = polygonOffsetUnits;
      _lineWidth = lineWidth;
-  
     _position = new GPUAttributeValueVec4Float(buffer, arrayElementSize, index, stride, normalized);
     _values.addAttributeValue(GPUAttributeKey.POSITION, _position, false);
   

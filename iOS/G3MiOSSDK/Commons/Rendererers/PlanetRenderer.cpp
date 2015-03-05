@@ -646,14 +646,13 @@ void PlanetRenderer::visitSubTilesTouchesWith(std::vector<Layer*> layers,
 }
 
 void PlanetRenderer::updateGLState(const G3MRenderContext* rc) {
-  
-  const Camera* cam = rc->getCurrentCamera();
+  const Camera* camera = rc->getCurrentCamera();
   ModelViewGLFeature* f = (ModelViewGLFeature*) _glState->getGLFeature(GLF_MODEL_VIEW);
   if (f == NULL) {
-    _glState->addGLFeature(new ModelViewGLFeature(cam), true);
+    _glState->addGLFeature(new ModelViewGLFeature(camera), true);
   }
   else {
-    f->setMatrix(cam->getModelViewMatrix44D());
+    f->setMatrix(camera->getModelViewMatrix44D());
   }
 }
 
@@ -750,41 +749,27 @@ bool PlanetRenderer::onTouchEvent(const G3MEventContext* ec,
   if (_lastCamera == NULL) {
     return false;
   }
-
+  
   if ( touchEvent->getType() == _touchEventTypeOfTerrainTouchListener ) {
-    const Vector2I pixel = touchEvent->getTouch(0)->getPos();
-    
-    Vector3D* positionCartesian = NULL;
+    const Vector2F pixel = touchEvent->getTouch(0)->getPos();
+    const Vector3D ray = _lastCamera->pixel2Ray(pixel);
+    const Vector3D origin = _lastCamera->getCartesianPosition();
     
     const Planet* planet = ec->getPlanet();
     
-    //    if (ec->getWidget() != NULL){
-    positionCartesian = new Vector3D(ec->getWidget()->getScenePositionForPixel(pixel._x, pixel._y));
-    //    } else{
-    //      const Vector3D ray = _lastCamera->pixel2Ray(pixel);
-    //      const Vector3D origin = _lastCamera->getCartesianPosition();
-    //      positionCartesian = new Vector3D(planet->closestIntersection(origin, ray));
-    //    }
-    
-    if (positionCartesian == NULL || positionCartesian->isNan()) {
-      /*
-       =======
-       const Vector3D positionCartesian = planet->closestIntersection(origin, ray);
-       if (positionCartesian.isNan()) {
-       ILogger::instance()->logWarning("PlanetRenderer::onTouchEvent: positionCartesian ( - planet->closestIntersection(origin, ray) - ) is NaN");
-       >>>>>>> origin/purgatory
-       */
-      
+    const Vector3D positionCartesian = planet->closestIntersection(origin, ray);
+    if (positionCartesian.isNan()) {
+      ILogger::instance()->logWarning("PlanetRenderer::onTouchEvent: positionCartesian ( - planet->closestIntersection(origin, ray) - ) is NaN");
       return false;
     }
     
-    Geodetic3D position = planet->toGeodetic3D(*positionCartesian);
+    const Geodetic3D position = planet->toGeodetic3D(positionCartesian);
     
     const int firstLevelTilesCount = _firstLevelTiles.size();
     for (int i = 0; i < firstLevelTilesCount; i++) {
       const Tile* tile = _firstLevelTiles[i]->getDeepestTileContaining(position);
       if (tile != NULL) {
-
+        
         const Vector2I& tileDimension = Vector2I(256, 256);
         const Vector2I& normalizedPixel = tile->getNormalizedPixelsFromPosition(position.asGeodetic2D(), tileDimension);
         ILogger::instance()->logInfo("Touched on %s", tile->description().c_str());

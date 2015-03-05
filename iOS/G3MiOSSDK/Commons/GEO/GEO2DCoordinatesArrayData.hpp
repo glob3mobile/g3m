@@ -28,7 +28,7 @@ protected:
 public:
   GEO2DCoordinatesArrayData(std::vector<std::vector<Geodetic2D*>*>* coordinatesArray);
 
-  int size() const {
+  size_t size() const {
     return (_coordinatesArray == NULL) ? 0 : _coordinatesArray->size();
   }
 

@@ -149,10 +149,11 @@ public:
 
   void resizeViewport(int width, int height);
 
-  const Vector3D pixel2Ray(const Vector2I& pixel) const;
+  const Vector3D pixel2Ray(const Vector2F& pixel) const;
+
   const Vector3D pixel2Ray(const Vector3D& pixel3D) const;
 
-  const Vector3D pixel2PlanetPoint(const Vector2I& pixel) const;
+  const Vector3D pixel2PlanetPoint(const Vector2F& pixel) const;
 
   const Vector2F point2Pixel(const Vector3D& point) const;
   const Vector2F point2Pixel(const Vector3F& point) const;
@@ -192,7 +193,7 @@ public:
   }
 
   const void getViewDirectionInto(MutableVector3D& result) const {
-    result.put(_center.x() - _position.x(),
+    result.set(_center.x() - _position.x(),
                _center.y() - _position.y(),
                _center.z() - _position.z());
   }
@@ -224,8 +225,8 @@ public:
 
   Vector3D getHorizontalVector();
 
-  Angle compute3DAngularDistance(const Vector2I& pixel0,
-                                 const Vector2I& pixel1);
+  Angle compute3DAngularDistance(const Vector2F& pixel0,
+                                 const Vector2F& pixel1);
 
   void initialize(const G3MContext* context);
 

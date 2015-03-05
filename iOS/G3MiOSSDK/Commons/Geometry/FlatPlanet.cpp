@@ -45,11 +45,11 @@ std::vector<double> FlatPlanet::intersectionsDistances(double originX,
   return intersections;
 }
 
-Vector3D FlatPlanet::toCartesian(const Angle& latitude,
-                                 const Angle& longitude,
-                                 const double height) const {
-  return toCartesian(Geodetic3D(latitude, longitude, height));
-}
+//Vector3D FlatPlanet::toCartesian(const Angle& latitude,
+//                                 const Angle& longitude,
+//                                 const double height) const {
+//  return toCartesian(Geodetic3D(latitude, longitude, height));
+//}
 
 Geodetic2D FlatPlanet::toGeodetic2D(const Vector3D& position) const {
   const double longitude = position._x * 360.0 / _size._x;

@@ -50,8 +50,8 @@ void CameraZoomAndRotateHandler::onDown(const G3MEventContext *eventContext,
   cameraContext->setCurrentGesture(DoubleDrag);
   
   // double dragging
-  _initialPixel0 = touchEvent.getTouch(0)->getPos().asMutableVector2I();
-  _initialPixel1 = touchEvent.getTouch(1)->getPos().asMutableVector2I();
+  _initialPixel0 = MutableVector2F(touchEvent.getTouch(0)->getPos());
+  _initialPixel1 = MutableVector2F(touchEvent.getTouch(1)->getPos());
   }
 
 
@@ -66,8 +66,8 @@ void CameraZoomAndRotateHandler::onMove(const G3MEventContext *eventContext,
 
   // if it is the first move, let's decide if make zoom or rotate
   if (cameraContext->getCurrentGesture() == DoubleDrag) {
-    Vector2I difPixel0 = pixel0.sub(_initialPixel0.asVector2I());
-    Vector2I difPixel1 = pixel1.sub(_initialPixel1.asVector2I());
+    Vector2F difPixel0 = pixel0.sub(_initialPixel0.asVector2F());
+    Vector2F difPixel1 = pixel1.sub(_initialPixel1.asVector2F());
     if ((difPixel0._y<-1 && difPixel1._y>1) || (difPixel0._y>1 && difPixel1._y<-1) ||
         (difPixel0._x<-1 && difPixel1._x>1) || (difPixel0._x>1 && difPixel1._x<-1)) {
       //printf ("zoom..\n");
@@ -173,7 +173,7 @@ void CameraZoomAndRotateHandler::render(const G3MRenderContext* rc,
 
 
 
-void CameraZoomAndRotateHandler::zoom(Camera* camera, Vector2I difCurrentPixels)
+void CameraZoomAndRotateHandler::zoom(Camera* camera, const Vector2F& difCurrentPixels)
 {
   const double MIN_CAMERA_HEIGHT = 30;
   

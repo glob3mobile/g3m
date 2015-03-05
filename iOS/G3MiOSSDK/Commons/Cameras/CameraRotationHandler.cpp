@@ -63,7 +63,8 @@ void CameraRotationHandler::onDown(const G3MEventContext *eventContext,
   Vector2F pixel1 = touchEvent.getTouch(1)->getPos();
   Vector2F pixel2 = touchEvent.getTouch(2)->getPos();
   Vector2F averagePixel = pixel0.add(pixel1).add(pixel2).div(3);
-  _pivotPixel = MutableVector2I(averagePixel._x, averagePixel._y);
+
+  _pivotPixel = MutableVector2F(averagePixel._x, averagePixel._y);
   //_lastYValid = _initialPixel.y();
   
   // compute center of view
@@ -109,7 +110,7 @@ void CameraRotationHandler::onMove(const G3MEventContext *eventContext,
   // vertical rotation around normal vector to globe
   Camera *camera = cameraContext->getNextCamera();
   camera->copyFrom(_camera0);
-  Angle angle_v             = Angle::fromDegrees((_pivotPixel.x()-cm._x)*0.25);
+  Angle angle_v             = Angle::fromDegrees((_pivotPixel._x-cm._x)*0.25);
   camera->rotateWithAxisAndPoint(normal, _pivotPoint.asVector3D(), angle_v);
   
   // compute angle between normal and view direction
@@ -118,7 +119,7 @@ void CameraRotationHandler::onMove(const G3MEventContext *eventContext,
   double initialAngle = mu->acos(dot) / PI * 180;
   
   // rotate more than 85 degrees or less than 0 degrees is not allowed
-  double delta = (cm._y - _pivotPixel.y()) * 0.25;
+  double delta = (cm._y - _pivotPixel._y) * 0.25;
   double finalAngle = initialAngle + delta;
   if (finalAngle > 85)  delta = 85 - initialAngle;
   if (finalAngle < 0)   delta = -initialAngle;
@@ -145,7 +146,7 @@ void CameraRotationHandler::onUp(const G3MEventContext *eventContext,
                                  CameraContext *cameraContext) 
 {
   cameraContext->setCurrentGesture(None);
-  _pivotPixel = MutableVector2I::zero();
+  _pivotPixel = MutableVector2F::zero();
 }
 
 
