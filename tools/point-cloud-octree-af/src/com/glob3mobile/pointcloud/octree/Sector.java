@@ -4,32 +4,35 @@ import java.io.Serializable;
 import java.util.List;
 
 public class Sector implements Serializable {
-
+	private static final double MINHEIGHT = 0;
+	private static final double MAXHEIGHT = 100000;
 	private static final long serialVersionUID = 1L;
 
 	public static final Sector FULL_SPHERE = Sector.fromDegrees(-90, -180, 90,
-			180);
+			180, MINHEIGHT, MAXHEIGHT);
 
 	public static Sector fromDegrees(final double minLatitudeInDegrees,
 			final double minLongitudeInDegrees,
 			final double maxLatitudeInDegrees,
-			final double maxLongitudeInDegrees) {
+			final double maxLongitudeInDegrees, final double minHeight,
+			final double maxHeight) {
 		final Geodetic2D lower = Geodetic2D.fromDegrees(minLatitudeInDegrees,
 				minLongitudeInDegrees);
 		final Geodetic2D upper = Geodetic2D.fromDegrees(maxLatitudeInDegrees,
 				maxLongitudeInDegrees);
-		return new Sector(lower, upper);
+		return new Sector(lower, upper, minHeight, maxHeight);
 	}
 
 	public static Sector fromRadians(final double minLatitudeInRadians,
 			final double minLongitudeInRadians,
 			final double maxLatitudeInRadians,
-			final double maxLongitudeInRadians) {
+			final double maxLongitudeInRadians, final double minHeight,
+			final double maxHeight) {
 		final Geodetic2D lower = Geodetic2D.fromRadians(minLatitudeInRadians,
 				minLongitudeInRadians);
 		final Geodetic2D upper = Geodetic2D.fromRadians(maxLatitudeInRadians,
 				maxLongitudeInRadians);
-		return new Sector(lower, upper);
+		return new Sector(lower, upper, minHeight, maxHeight);
 	}
 
 	public static Sector getBounds(final List<Geodetic3D> points) {
@@ -44,10 +47,14 @@ public class Sector implements Serializable {
 		double maxLatitudeInRadians = firstPoint._latitude._radians;
 		double maxLongitudeInRadians = firstPoint._longitude._radians;
 
+		double minHeight = firstPoint._height;
+		double maxHeight = firstPoint._height;
+
 		for (int i = 1; i < points.size(); i++) {
 			final Geodetic3D point = points.get(i);
 			final double latitudeInRadians = point._latitude._radians;
 			final double longitudeInRadians = point._longitude._radians;
+			final double height = point._height;
 
 			if (latitudeInRadians < minLatitudeInRadians) {
 				minLatitudeInRadians = latitudeInRadians;
@@ -62,11 +69,19 @@ public class Sector implements Serializable {
 			if (longitudeInRadians > maxLongitudeInRadians) {
 				maxLongitudeInRadians = longitudeInRadians;
 			}
+			if (height < minHeight) {
+				minHeight = height;
+			} else if (height > maxHeight) {
+				maxHeight = height;
+			}
 		}
 
-		return Sector.fromRadians( //
-				minLatitudeInRadians, minLongitudeInRadians, //
-				maxLatitudeInRadians, maxLongitudeInRadians);
+		return Sector.fromRadians(
+				//
+				minLatitudeInRadians,
+				minLongitudeInRadians, //
+				maxLatitudeInRadians, maxLongitudeInRadians, minHeight,
+				maxHeight);
 	}
 
 	public final Geodetic2D _lower;
