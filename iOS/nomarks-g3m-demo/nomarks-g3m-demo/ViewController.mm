@@ -46,9 +46,9 @@
     //builder.setPlanet(p);
     Shape* sphere = new EllipsoidShape(new Geodetic3D(Angle::fromDegrees(0),
                                                               Angle::fromDegrees(0),
-                                                              5),
+                                                              40),
                                                ABSOLUTE,
-                                               Vector3D(100, 100, 100),
+                                               Vector3D(100000, 100000, 100000),
                                                16,
                                                0,
                                                false,
@@ -57,23 +57,24 @@
     
     Shape* anchor_sphere = new EllipsoidShape(new Geodetic3D(Angle::fromDegrees(0),
                                                       Angle::fromDegrees(0),
-                                                      5),
+                                                      40),
                                        ABSOLUTE,
-                                       Vector3D(100, 100, 100),
+                                       Vector3D(100000, 100000, 100000),
                                        16,
                                        0,
                                        false,
                                        false,
                                        Color::fromRGBA(0, 1, 0, .5));
-    anchor_sphere->setScale(1000);
-    sphere->setScale(1000);
+   // anchor_sphere->setScale(1000);
+    //sphere->setScale(1000);
     
     MarksRenderer *marksRenderer = new MarksRenderer(true);
     NonOverlapping3DMarksRenderer *forceGraphRenderer = new NonOverlapping3DMarksRenderer(3);
-    NonOverlapping3DMark *anchor = new NonOverlapping3DMark(anchor_sphere, sphere, Geodetic3D::fromDegrees(5, 5, 2));
-    NonOverlapping3DMark *node = new NonOverlapping3DMark(anchor_sphere, sphere, Geodetic3D::fromDegrees(0, 0, 1));
+    NonOverlapping3DMark *anchor = new NonOverlapping3DMark(anchor_sphere, sphere, Geodetic3D::fromDegrees(.5, .5, 5));
+    NonOverlapping3DMark *node = new NonOverlapping3DMark(sphere, anchor_sphere, Geodetic3D::fromDegrees(2, 2, 7));
    // NonOverlapping3DMark *node2 = new NonOverlapping3DMark(imageBuilder3, Geodetic3D::fromDegrees(10, 20, 1));
-   // node->addAnchor(anchor);
+    node->addAnchor(anchor);
+   // node->addNeighbor(anchor);
     forceGraphRenderer->addMark(node);
     forceGraphRenderer->addMark(anchor);
    // forceGraphRenderer->addMark(node2);
@@ -84,6 +85,9 @@
     builder.setInitializationTask(new initialization(marksRenderer), true);
 
     builder.initializeWidget();
+    
+   // delete sphere;
+  // delete anchor_sphere;
 }
 
 // Start animation when view has appeared

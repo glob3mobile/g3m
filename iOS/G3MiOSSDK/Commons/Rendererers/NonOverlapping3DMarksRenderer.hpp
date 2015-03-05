@@ -52,13 +52,14 @@ class NonOverlapping3DMark{
     std::vector<NonOverlapping3DMark*> _neighbors;
     NonOverlapping3DMark* _anchor; //anchor also included in neighbors. node can only have one anchor
     
-    float _springLengthInPixels;
+    float _springLengthInMeters;
     
     mutable Vector3D* _cartesianPos;
     Geodetic3D _geoPosition;
     
     float _dX, _dY, _dZ; //Velocity vector (pixels per second)
     float _fX, _fY, _fZ; //Applied Force
+    float _tX, _tY, _tZ; //current translation (cumulative dX, dY, dX)
     
     const float _springK;
     const float _maxSpringLength;
@@ -74,11 +75,11 @@ public:
     NonOverlapping3DMark(Shape* anchorShape, Shape* nodeShape,
                        const Geodetic3D& position,
                        ShapeTouchListener* touchListener = NULL,
-                       float springLengthInPixels = 10.0f,
+                       float springLengthInMeters = 1000.0f,
                        float springK = 1.0f,
-                       float maxSpringLength = 100.0f,
-                       float minSpringLength = 5.0f,
-                       float electricCharge = 3000.0f,
+                       float maxSpringLength = 10000.0f,
+                       float minSpringLength = 500.0f,
+                       float electricCharge = 1000.0f, //was 3000
                        float maxWidgetSpeedInPixelsPerSecond = 1000.0f,
                        float minWidgetSpeedInPixelsPerSecond = 35.0f,
                        float resistanceFactor = 0.95f);

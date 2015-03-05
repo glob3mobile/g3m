@@ -36,6 +36,7 @@
 #include "Shape.hpp"
 #include <queue>
 #include <vector>
+#include "EllipsoidShape.hpp"
 
 #pragma mark NonOverlappingMark
 
@@ -43,7 +44,7 @@ NonOverlapping3DMark::NonOverlapping3DMark(Shape* anchorShape,
                                            Shape* nodeShape,
                                        const Geodetic3D& position,
                                        ShapeTouchListener* touchListener,
-                                       float springLengthInPixels,
+                                       float springLengthInMeters,
                                        float springK,
                                        float maxSpringLength,
                                        float minSpringLength,
@@ -52,7 +53,7 @@ NonOverlapping3DMark::NonOverlapping3DMark(Shape* anchorShape,
                                        float minWidgetSpeedInPixelsPerSecond,
                                        float resistanceFactor):
 _geoPosition(position),
-_springLengthInPixels(springLengthInPixels),
+_springLengthInMeters(springLengthInMeters),
 _cartesianPos(NULL),
 _dX(0),
 _dY(0),
@@ -60,31 +61,66 @@ _dZ(0),
 _fX(0),
 _fY(0),
 _fZ(0),
+_tX(0),
+_tY(0),
+_tZ(0),
 _springK(springK),
 _maxSpringLength(maxSpringLength),
 _minSpringLength(minSpringLength),
 _electricCharge(electricCharge),
 _maxWidgetSpeedInPixelsPerSecond(maxWidgetSpeedInPixelsPerSecond),
 _resistanceFactor(resistanceFactor),
-_minWidgetSpeedInPixelsPerSecond(minWidgetSpeedInPixelsPerSecond),
-_anchorShape(anchorShape),
-_nodeShape(nodeShape)
+_minWidgetSpeedInPixelsPerSecond(minWidgetSpeedInPixelsPerSecond)
+
 {
+    
+    //Initialize shape to something
+    _anchorShape = new EllipsoidShape(new Geodetic3D(Angle::fromDegrees(0),
+                                                     Angle::fromDegrees(0),
+                                                     5),
+                                      ABSOLUTE,
+                                      Vector3D(100000, 100000, 100000),
+                                      16,
+                                      0,
+                                      false,
+                                      false,
+                                      Color::fromRGBA(1, 1, 1, .5));
+
+    _nodeShape = new EllipsoidShape(new Geodetic3D(Angle::fromDegrees(0),
+                                                   Angle::fromDegrees(0),
+                                                   5),
+                                    ABSOLUTE,
+                                    Vector3D(100000, 100000, 100000),
+                                    16,
+                                    0,
+                                    false,
+                                    false,
+                                    Color::fromRGBA(1, 1, 1, .5));
+    
+    //set value of shape to the thing passed in
+   // *_anchorShape = *anchorShape;
+   // *_nodeShape = *nodeShape;
+
+    ( _nodeShape)->setPosition(_geoPosition);
+    (_anchorShape)->setPosition(_geoPosition);
+    
     _shapesRenderer = new ShapesRenderer();
-    _shapesRenderer->addShape(nodeShape);
-    _nodeShape->setPosition(_geoPosition);
-    _anchorShape->setPosition(_geoPosition);
+    _shapesRenderer->addShape(_nodeShape);
+
 }
 
 NonOverlapping3DMark::~NonOverlapping3DMark()
 {
     delete _cartesianPos;
+    delete _anchorShape;
+    delete _nodeShape;
 }
 
 Vector3D NonOverlapping3DMark::getCartesianPosition(const Planet* planet) const{
-    if (_cartesianPos == NULL){
-        _cartesianPos = new Vector3D(planet->toCartesian(_geoPosition));
-    }
+   // if (_cartesianPos == NULL){
+        Vector3D translation = Vector3D(_tX, _tY, _tZ);
+        _cartesianPos = new Vector3D(planet->toCartesian(_geoPosition).add(translation));
+    //}
     return *_cartesianPos;
 }
 
@@ -106,7 +142,7 @@ void NonOverlapping3DMark::addAnchor(NonOverlapping3DMark* anchor) {
 
 void NonOverlapping3DMark::setAsAnchor() {
     _isAnchor = true;
-    _shapesRenderer->removeAllShapes();
+    _shapesRenderer->removeAllShapes(false); //no.. this deletes shapes
     _shapesRenderer->addShape(_anchorShape);
 }
 
@@ -124,7 +160,7 @@ void NonOverlapping3DMark::applyCoulombsLaw(NonOverlapping3DMark *that, const Pl
     Vector3D force = direction.times(strength);
     
     this->applyForce(force._x, force._y, force._z);
-    that->applyForce(-force._x, -force._y, -force._z);
+   // that->applyForce(-force._x, -force._y, -force._z);
 }
 
 void NonOverlapping3DMark::applyCoulombsLawFromAnchor(NonOverlapping3DMark* that, const Planet* planet){ //EM
@@ -141,10 +177,11 @@ void NonOverlapping3DMark::applyCoulombsLawFromAnchor(NonOverlapping3DMark* that
 }
 
 void NonOverlapping3DMark::applyHookesLaw(const Planet* planet){   //Spring
-    if(getAnchor()) {
-        Vector3D d = getCartesianPosition(planet).sub(getAnchor()->getCartesianPosition(planet));
+    //if(getAnchor() != NULL) {
+    for(int i = 0; i < this->_neighbors.size(); i++) {
+        Vector3D d = getCartesianPosition(planet).sub(_neighbors[i]->getCartesianPosition(planet));
         double mod = d.length();
-        double displacement = _springLengthInPixels - mod;
+        double displacement = _springLengthInMeters - mod;
         Vector3D direction = d.div((float)mod);
         
         float force = (float)(_springK * displacement);
@@ -152,6 +189,7 @@ void NonOverlapping3DMark::applyHookesLaw(const Planet* planet){   //Spring
         applyForce((float)(direction._x * force),
                    (float)(direction._y * force), (float) direction._z * force);
     }
+   // }
 }
 
 void NonOverlapping3DMark::render(const G3MRenderContext* rc, GLState* glState){
@@ -173,7 +211,7 @@ void NonOverlapping3DMark::updatePositionWithCurrentForce(double elapsedMS, floa
     Vector3D force(_fX, _fY, _fZ);
     
     //Assuming Widget Mass = 1.0
-    float time = (float)(elapsedMS / 1000.0);
+    float time = (float)(elapsedMS);// / 1000.0);
     Vector3D velocity = oldVelocity.add(force.times(time)).times(_resistanceFactor); //Resistance force applied as x0.85
     
     //Force has been applied and must be reset
@@ -202,14 +240,37 @@ void NonOverlapping3DMark::updatePositionWithCurrentForce(double elapsedMS, floa
     }
     
     //Update position
-    //Vector2F position = _widget.getScreenPos();
     Vector3D position = getCartesianPosition(planet);
     
     float newX = position._x + (_dX * time);
     float newY = position._y + (_dY * time);
     float newZ = position._z + (_dZ * time);
     
-    if(this->getAnchor() != NULL) {
+    //update translation
+    _tX+=_dX*time;
+    _tY+=_dY*time;
+    _tZ+=_dZ*time;
+    
+    Vector3D translation = Vector3D(_tX, _tY, _tZ);
+    
+    //find the maximum, but clamped spring length
+    float springx = 0;
+    float springy = 0;
+    float springz = 0;
+    
+    for(int i = 0; i < _neighbors.size(); i++) {
+        Vector3D anchorPos = _neighbors[i]->getCartesianPosition(planet);
+        Vector3D temp_spring = Vector3D(newX,newY, newZ).sub(anchorPos);
+        Vector3D spring = clampVector(temp_spring, _minSpringLength, _maxSpringLength);
+        if(spring.length() > Vector3D(springx, springy, springz).length()) {
+            springx = spring._x;
+            springy = spring._y;
+            springz = spring._z;
+        }
+    }
+
+  /* if(this->getAnchor() != NULL) {
+   
     Vector3D anchorPos = getAnchor()->getCartesianPosition(planet);//getScreenPos();
         
     Vector3D temp_spring = Vector3D(newX,newY, newZ).sub(anchorPos);
@@ -219,8 +280,10 @@ void NonOverlapping3DMark::updatePositionWithCurrentForce(double elapsedMS, floa
     _nodeShape->setTranslation(finalPos);
    // _widget.set3DPos(  finalPos._x, finalPos._y, finalPos._z);
     //_widget.clampPositionInsideScreen((int)viewportWidth, (int)viewportHeight, 5); // 5 pixels of margin
-    }
-    
+   }
+   */
+    _anchorShape->setTranslation(translation);
+    _nodeShape->setTranslation(translation); //TODO: spring??
     //TODO: update this with new graph stuffs
     
 }
@@ -377,10 +440,10 @@ void NonOverlapping3DMarksRenderer::computeForces(const Camera* cam, const Plane
     //Compute Mark Anchor Screen Positions
     /*for (int i = 0; i < _anchors.size(); i++) {
         _anchors[i]->computeAnchorScreenPos(cam, planet);
-    }
+    }*/
     
     //Compute Mark Forces
-    for (int i = 0; i < _visibleMarks.size(); i++) {
+   /* for (int i = 0; i < _visibleMarks.size(); i++) {
         NonOverlapping3DMark* mark = _visibleMarks[i];
         mark->applyHookesLaw(planet);
         
@@ -396,6 +459,17 @@ void NonOverlapping3DMarksRenderer::computeForces(const Camera* cam, const Plane
             _anchors[i]->applyCoulombsLaw(mark, planet);
         }
     }*/
+    
+    for (int i = 0; i < _visibleMarks.size(); i++) {
+        NonOverlapping3DMark* mark = _visibleMarks[i];
+        if(!mark->isAnchor()) {
+           mark->applyHookesLaw(planet);
+            
+            for (int j = i+1; j < _visibleMarks.size(); j++) {
+                    mark->applyCoulombsLaw(_visibleMarks[j], planet);
+                }
+            }
+    }
 }
 
 Shape* NonOverlapping3DMark::getShape() {
@@ -447,9 +521,9 @@ void NonOverlapping3DMarksRenderer::render(const G3MRenderContext* rc, GLState* 
     //computeMarksToBeRendered(cam, _planet);
     _visibleMarks = _marks; //temporary
     
-    //computeForces(cam, _planet);
+    computeForces(cam, _planet);
     
-  //  applyForces(rc->getFrameStartTimer()->nowInMilliseconds(), cam);
+    applyForces(rc->getFrameStartTimer()->nowInMilliseconds(), cam);
     
     renderMarks(rc, glState);
 }
