@@ -107,17 +107,17 @@ public class NonOverlapping3DMarksRenderer extends DefaultRenderer
         //Compute Mark Anchor Screen Positions
         /*for (int i = 0; i < _anchors.size(); i++) {
             _anchors[i]->computeAnchorScreenPos(cam, planet);
-        }
-        
+        }*/
+    
         //Compute Mark Forces
-        for (int i = 0; i < _visibleMarks.size(); i++) {
+       /* for (int i = 0; i < _visibleMarks.size(); i++) {
             NonOverlapping3DMark* mark = _visibleMarks[i];
             mark->applyHookesLaw(planet);
-        
+       
             for (int j = i+1; j < _visibleMarks.size(); j++) {
                 mark->applyCoulombsLaw(_visibleMarks[j], planet);
             }
-        
+       
             for (int j = 0; j < _visibleMarks.size(); j++) {
                 if (i != j && !_visibleMarks[j]->hasAnchor()){
                     mark->applyCoulombsLawFromAnchor(_visibleMarks[j]);
@@ -126,6 +126,20 @@ public class NonOverlapping3DMarksRenderer extends DefaultRenderer
                 _anchors[i]->applyCoulombsLaw(mark, planet);
             }
         }*/
+    
+        for (int i = 0; i < _visibleMarks.size(); i++)
+        {
+            NonOverlapping3DMark mark = _visibleMarks.get(i);
+            if(!mark.isAnchor())
+            {
+               mark.applyHookesLaw(planet);
+    
+                for (int j = i+1; j < _visibleMarks.size(); j++)
+                {
+                        mark.applyCoulombsLaw(_visibleMarks.get(j), planet);
+                    }
+                }
+        }
     }
     private void renderMarks(G3MRenderContext rc, GLState glState)
     {
@@ -219,9 +233,9 @@ public class NonOverlapping3DMarksRenderer extends DefaultRenderer
         //computeMarksToBeRendered(cam, _planet);
         _visibleMarks = _marks; //temporary
     
-        //computeForces(cam, _planet);
+        computeForces(cam, _planet);
     
-      //  applyForces(rc->getFrameStartTimer()->nowInMilliseconds(), cam);
+        applyForces(rc.getFrameStartTimer().nowInMilliseconds(), cam);
     
         renderMarks(rc, glState);
     }
