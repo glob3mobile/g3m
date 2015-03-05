@@ -53,7 +53,7 @@ void CameraSingleDragHandler::onDown(const G3MEventContext *eventContext,
   cameraContext->setCurrentGesture(Drag);
 
   // dragging
-  const Vector2I pixel = touchEvent.getTouch(0)->getPos();
+  const Vector2F pixel = touchEvent.getTouch(0)->getPos();
 
   Vector3D touchedPosition = eventContext->getWidget()->getScenePositionForPixel(pixel._x, pixel._y);
   
@@ -83,7 +83,9 @@ void CameraSingleDragHandler::onMove(const G3MEventContext *eventContext,
   if (cameraContext->getCurrentGesture()!=Drag) return;
   
   //check finalRay
-  const Vector3D& finalRay = _camera0.pixel2Ray(touchEvent.getTouch(0)->getPos());
+  
+  Vector2F tp = touchEvent.getTouch(0)->getPos();
+  const Vector3D& finalRay = _camera0.pixel2Ray(Vector2I(tp._x, tp._y));
   if (finalRay.isNan()) return;
   
   // compute transformation matrix
@@ -106,8 +108,8 @@ void CameraSingleDragHandler::onUp(const G3MEventContext *eventContext,
   // test if animation is needed
   if (_useInertia) {
     const Touch *touch = touchEvent.getTouch(0);
-    const Vector2I currPixel = touch->getPos();
-    const Vector2I prevPixel = touch->getPrevPos();
+    const Vector2F currPixel = touch->getPos();
+    const Vector2F prevPixel = touch->getPrevPos();
     const double desp        = currPixel.sub(prevPixel).length();
 
     const float delta = IFactory::instance()->getDeviceInfo()->getPixelsInMM(0.2f);

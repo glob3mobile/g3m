@@ -59,9 +59,9 @@ void CameraZoomAndRotateHandler::onMove(const G3MEventContext *eventContext,
                                      const TouchEvent& touchEvent,
                                      CameraContext *cameraContext) {
   
-  Vector2I pixel0 = touchEvent.getTouch(0)->getPos();
-  Vector2I pixel1 = touchEvent.getTouch(1)->getPos();
-  Vector2I difCurrentPixels = pixel1.sub(pixel0);
+  Vector2F pixel0 = touchEvent.getTouch(0)->getPos();
+  Vector2F pixel1 = touchEvent.getTouch(1)->getPos();
+  Vector2F difCurrentPixels = pixel1.sub(pixel0);
   const Planet* planet = eventContext->getPlanet();
 
   // if it is the first move, let's decide if make zoom or rotate
