@@ -335,7 +335,7 @@ Mesh* createSectorMesh(const Planet* planet,
   mr = new MeshRenderer();
   builder.addRenderer(mr);
   
-  planet = Planet::createFlatEarth();
+  planet = Planet::createSphericalEarth();
   
   builder.setPlanet(planet);
   builder.initializeWidget();
@@ -374,17 +374,32 @@ const Planet* planet;
   double z = q.z / sqrt(1-q.w*q.w);
   Vector3D axis(x, y, z);
   
+  
+  CoordinateSystem global = CoordinateSystem::global();
+  
   CoordinateSystem cs(Vector3D(0,0,1),
                       Vector3D(1,0,0),
                       planet->toCartesian(Geodetic3D::fromDegrees(28.133441, -15.423952, 1000)));
   
-  CoordinateSystem cs2 = cs.applyTransform(MutableMatrix44D::createRotationMatrix(angle, axis));
   
-  Mesh* m = cs2.createMesh(1000, Color::red(), Color::blue(), Color::green());
+  CoordinateSystem cs2 = global.applyRotation(MutableMatrix44D::createRotationMatrix(angle, axis));
+  CoordinateSystem cs3 = cs2.applyRotation(cs.getRotationMatrix()).changeOrigin(cs._origin);
+  
+  
+  Mesh* m = cs3.createMesh(1000, Color::red(), Color::blue(), Color::green());
   mr->clearMeshes();
   mr->addMesh(m);
   
-  //c->applyTransform(MutableMatrix44D::createRotationMatrix(angle, axis));
+  TaitBryanAngles a3 = cs3.getTaitBryanAngles(CoordinateSystem::global());
+  
+  [G3MWidget widget]->getNextCamera()->setHeadingPitchRoll(a3._heading, a3._pitch, a3._roll);
+  
+  /*
+  
+  CoordinateSystem cs2 = global.applyRotation(cs.getRotationMatrix());
+  int a = 0;
+  a++;
+   */
 }
 
 -(void) tick{
@@ -406,7 +421,7 @@ const Planet* planet;
   MutableMatrix44D* matrix = [self matrix:[_dO getRotationMatrix]];
   matrix->print("Matrix", ILogger::instance());
   
-  CoordinateSystem cs2 = cs.applyTransform(*matrix);
+  CoordinateSystem cs2 = cs.applyRotation(*matrix);
   
   //CoordinateSystem cs2 = cs.applyTransform(MutableMatrix44D::createRotationMatrix(angle, axis));
   

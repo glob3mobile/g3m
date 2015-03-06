@@ -49,7 +49,9 @@ public:
 
   bool isEqualsTo(const CoordinateSystem& that) const;
   
-  CoordinateSystem applyTransform(const MutableMatrix44D& m) const;
+  CoordinateSystem applyRotation(const MutableMatrix44D& m) const;
+  
+  MutableMatrix44D getRotationMatrix() const;
 
 };
 

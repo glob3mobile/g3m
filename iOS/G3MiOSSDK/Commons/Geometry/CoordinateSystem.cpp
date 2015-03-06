@@ -209,10 +209,20 @@ bool CoordinateSystem::isEqualsTo(const CoordinateSystem& that) const {
 }
 
 
-CoordinateSystem CoordinateSystem::applyTransform(const MutableMatrix44D& m) const{
+CoordinateSystem CoordinateSystem::applyRotation(const MutableMatrix44D& m) const{
   
   return CoordinateSystem(_x.transformedBy(m, 1.0),
                           _y.transformedBy(m, 1.0),
                           _z.transformedBy(m, 1.0),
                           _origin);//.transformedBy(m, 1.0));
+}
+
+
+MutableMatrix44D CoordinateSystem::getRotationMatrix() const{
+  
+  return MutableMatrix44D(_x._x, _x._y, _x._z, 0,
+                          _y._x, _y._y, _y._z, 0,
+                          _z._x, _z._y, _z._z, 0,
+                          0,0,0,1);
+  
 }
