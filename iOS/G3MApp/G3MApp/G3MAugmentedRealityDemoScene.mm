@@ -117,6 +117,7 @@ void G3MAugmentedRealityDemoScene::rawActivate(const G3MContext* context) {
 
 
   _motionManager = [[CMMotionManager alloc] init];
+  _motionManager.deviceMotionUpdateInterval = 10.0 / 1000.0; // 10ms
   [_motionManager startDeviceMotionUpdatesUsingReferenceFrame:CMAttitudeReferenceFrameXTrueNorthZVertical];
 
 
