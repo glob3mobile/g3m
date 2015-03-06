@@ -208,3 +208,11 @@ bool CoordinateSystem::isEqualsTo(const CoordinateSystem& that) const {
   return _x.isEquals(that._x) && _y.isEquals(that._y) && _z.isEquals(that._z);
 }
 
+
+CoordinateSystem CoordinateSystem::applyTransform(const MutableMatrix44D& m) const{
+  
+  return CoordinateSystem(_x.transformedBy(m, 1.0),
+                          _y.transformedBy(m, 1.0),
+                          _z.transformedBy(m, 1.0),
+                          _origin);//.transformedBy(m, 1.0));
+}
