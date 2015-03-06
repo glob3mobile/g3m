@@ -157,7 +157,10 @@ public class NonOverlappingMark
   {
     if (_widget.isReady())
     {
-      _widget.render(rc, glState);
+      if (_anchorWidget.isReady())
+      {
+        _widget.render(rc, glState);
+      }
     }
     else
     {
@@ -169,7 +172,10 @@ public class NonOverlappingMark
   {
     if (_anchorWidget.isReady())
     {
-      _anchorWidget.render(rc, glState);
+      if (_widget.isReady())
+      {
+        _anchorWidget.render(rc, glState);
+      }
     }
     else
     {
@@ -179,6 +185,11 @@ public class NonOverlappingMark
 
   public final void renderSpringWidget(G3MRenderContext rc, GLState glState)
   {
+    if (!_widget.isReady() || !_anchorWidget.isReady())
+    {
+      return;
+    }
+  
     final Vector2F sp = getScreenPos();
     final Vector2F asp = getAnchorScreenPos();
   
