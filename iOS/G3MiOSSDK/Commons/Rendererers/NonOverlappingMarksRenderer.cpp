@@ -78,8 +78,8 @@ void MarkWidget::prepareWidget(const IImage* image,
   _image     = image;
   _imageName = imageName;
 
-  _halfWidth  = image->getWidth() / 2;
-  _halfHeight = image->getHeight() / 2;
+  _halfWidth  = (float) image->getWidth()  / 2.0f;
+  _halfHeight = (float) image->getHeight() / 2.0f;
 
   if (_vertices != NULL) {
     delete _vertices;
@@ -293,7 +293,9 @@ void NonOverlappingMark::applyHookesLaw() {   //Spring
 void NonOverlappingMark::renderWidget(const G3MRenderContext* rc,
                                       GLState* glState) {
   if (_widget->isReady()) {
-    _widget->render(rc, glState);
+    if (_anchorWidget->isReady()) {
+      _widget->render(rc, glState);
+    }
   }
   else {
     _widget->init(rc);
@@ -303,7 +305,9 @@ void NonOverlappingMark::renderWidget(const G3MRenderContext* rc,
 void NonOverlappingMark::renderAnchorWidget(const G3MRenderContext* rc,
                                             GLState* glState) {
   if (_anchorWidget->isReady()) {
-    _anchorWidget->render(rc, glState);
+    if (_widget->isReady()) {
+      _anchorWidget->render(rc, glState);
+    }
   }
   else {
     _anchorWidget->init(rc);
@@ -312,6 +316,10 @@ void NonOverlappingMark::renderAnchorWidget(const G3MRenderContext* rc,
 
 void NonOverlappingMark::renderSpringWidget(const G3MRenderContext* rc,
                                             GLState* glState) {
+  if (!_widget->isReady() || !_anchorWidget->isReady()) {
+    return;
+  }
+
   const Vector2F sp  = getScreenPos();
   const Vector2F asp = getAnchorScreenPos();
 

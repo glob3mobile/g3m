@@ -47,8 +47,8 @@ public class MarkWidget
     _image = image;
     _imageName = imageName;
   
-    _halfWidth = image.getWidth() / 2;
-    _halfHeight = image.getHeight() / 2;
+    _halfWidth = (float) image.getWidth() / 2.0f;
+    _halfHeight = (float) image.getHeight() / 2.0f;
   
     if (_vertices != null)
     {
