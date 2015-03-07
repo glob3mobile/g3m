@@ -16,9 +16,8 @@ void DefaultHUDInfoRenderer_ImageFactory::drawOn(ICanvas* canvas,
                                           int height) {
   std::vector<std::string> strings;
   
-  const int size = _info.size();
-  for (int i = 0; i < size; i++)
-  {
+  const size_t size = _info.size();
+  for (size_t i = 0; i < size; i++) {
     strings.push_back(_info.at(i)->getText());
   }
   ICanvasUtils::drawStringsOn(strings,
@@ -38,13 +37,13 @@ void DefaultHUDInfoRenderer_ImageFactory::drawOn(ICanvas* canvas,
 
 bool DefaultHUDInfoRenderer_ImageFactory::isEquals(const std::vector<const Info*> v1,
                                                    const std::vector<const Info*> v2) const {
-  const int size1 = v1.size();
-  const int size2 = v2.size();
+  const size_t size1 = v1.size();
+  const size_t size2 = v2.size();
   if (size1 != size2) {
     return false;
   }
   
-  for (int i = 0; i < size1; i++) {
+  for (size_t i = 0; i < size1; i++) {
     const Info* str1 = v1[i];
     const Info* str2 = v2[i];
     if (str1 != str2) {

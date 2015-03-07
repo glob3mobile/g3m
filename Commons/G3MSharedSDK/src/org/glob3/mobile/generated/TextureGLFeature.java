@@ -61,7 +61,6 @@ public class TextureGLFeature extends GLColorGroupFeature
      _scale = null;
      _rotationCenter = null;
      _rotationAngle = null;
-  
     createBasicValues(texCoords, arrayElementSize, index, normalized, stride);
   
     setTranslation(translateU, translateV);
@@ -82,9 +81,7 @@ public class TextureGLFeature extends GLColorGroupFeature
      _scale = null;
      _rotationCenter = null;
      _rotationAngle = null;
-  
     createBasicValues(texCoords, arrayElementSize, index, normalized, stride);
-  
   }
 
   public final void setTranslation(float u, float v)
@@ -126,11 +123,9 @@ public class TextureGLFeature extends GLColorGroupFeature
         _scale.changeValue(u, v);
       }
     }
-  
   }
   public final void setRotationAngleInRadiansAndRotationCenter(float angle, float u, float v)
   {
-  
     if (_rotationAngle == null || _rotationCenter == null)
     {
       if (angle != 0.0)

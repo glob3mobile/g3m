@@ -14,6 +14,7 @@
 #include "Vector2F.hpp"
 #include "Vector3D.hpp"
 #include "IImageBuilderListener.hpp"
+#include "MutableVector2F.hpp"
 
 class IImageBuilder;
 class Geodetic3D;
@@ -26,9 +27,8 @@ class TextureIDReference;
 class Geometry2DGLFeature;
 class ViewportExtentGLFeature;
 class TexturesHandler;
-
 class NonOverlappingMark;
-
+class SimpleTextureMapping;
 
 class NonOverlappingMarkTouchListener {
 public:
@@ -41,9 +41,10 @@ public:
 
 
 class MarkWidget {
+private:
   GLState* _glState;
   Geometry2DGLFeature* _geo2Dfeature;
-  ViewportExtentGLFeature* _viewportExtent;
+  ViewportExtentGLFeature* _viewportExtentGLFeature;
 #ifdef C_CODE
   const IImage* _image;
 #endif
@@ -54,10 +55,15 @@ class MarkWidget {
   IImageBuilder* _imageBuilder;
   TexturesHandler* _texHandler;
 
+  IFloatBuffer*         _vertices;
+  SimpleTextureMapping* _textureMapping;
+
   float _halfWidth;
   float _halfHeight;
 
-  float _x, _y; //Screen position
+  // Screen position
+  float _x;
+  float _y;
 
   class WidgetImageListener: public IImageBuilderListener {
     MarkWidget* _widget;
@@ -77,7 +83,6 @@ class MarkWidget {
     void onError(const std::string& error) {
       ILogger::instance()->logError(error);
     }
-
   };
 
   void prepareWidget(const IImage*      image,
@@ -88,13 +93,27 @@ public:
 
   ~MarkWidget();
 
-  void init(const G3MRenderContext *rc,
-            int viewportWidth, int viewportHeight);
+  void init(const G3MRenderContext* rc);
 
-  void render(const G3MRenderContext* rc, GLState* glState);
+  void render(const G3MRenderContext* rc,
+              GLState* glState
+//              float x,
+//              float y
+              );
+
+  void setAndClampScreenPos(float x,
+                            float y,
+                            int viewportWidth,
+                            int viewportHeight,
+                            float margin);
 
   void setScreenPos(float x, float y);
-  Vector2F getScreenPos() const{ return Vector2F(_x, _y); }
+
+  Vector2F getScreenPos() const { return Vector2F(_x, _y); }
+  void getScreenPosition(MutableVector2F& result) const {
+    result.set(_x, _y);
+  }
+
   void resetPosition();
 
   void onResizeViewportEvent(int width, int height);
@@ -106,7 +125,6 @@ public:
   int getWidth() const;
   int getHeight() const;
 
-  void clampPositionInsideScreen(int viewportWidth, int viewportHeight, float margin);
 };
 
 
@@ -114,22 +132,27 @@ class NonOverlappingMark {
 private:
   float _springLengthInPixels;
 
+//  MutableVector2F _widgetScreenPosition;
+//  MutableVector2F _anchorScreenPosition;
+
   mutable Vector3D* _cartesianPos;
   Geodetic3D _geoPosition;
 
-  float _dX, _dY; //Velocity vector (pixels per second)
-  float _fX, _fY; //Applied Force
+  MutableVector2F _speed;
+  MutableVector2F _force;
 
   MarkWidget* _widget;
   MarkWidget* _anchorWidget;
+
+  GLState* _springGLState;
+  IFloatBuffer* _springVertices;
+  ViewportExtentGLFeature* _springViewportExtentGLFeature;
 
   const float _springK;
   const float _maxSpringLength;
   const float _minSpringLength;
   const float _electricCharge;
   const float _anchorElectricCharge;
-  const float _maxWidgetSpeedInPixelsPerSecond;
-  const float _minWidgetSpeedInPixelsPerSecond;
   const float _resistanceFactor;
 
   std::string _id;
@@ -148,8 +171,6 @@ public:
                      float maxSpringLength = 0.0f,
                      float electricCharge = 3000.0f,
                      float anchorElectricCharge = 2000.0f,
-                     float minWidgetSpeedInPixelsPerSecond = 5.0f,
-                     float maxWidgetSpeedInPixelsPerSecond = 1000.0f,
                      float resistanceFactor = 0.95f);
 
   void setID(const std::string& id) {
@@ -164,24 +185,31 @@ public:
 
   Vector3D getCartesianPosition(const Planet* planet) const;
 
-  void computeAnchorScreenPos(const Camera* cam, const Planet* planet);
+  void computeAnchorScreenPos(const Camera* camera,
+                              const Planet* planet);
 
   Vector2F getScreenPos() const       { return _widget->getScreenPos(); }
   Vector2F getAnchorScreenPos() const { return _anchorWidget->getScreenPos(); }
 
-  void render(const G3MRenderContext* rc, GLState* glState);
+  void renderWidget(const G3MRenderContext* rc,
+                    GLState* glState);
 
-  void applyCoulombsLaw(NonOverlappingMark* that); //EM
+  void renderAnchorWidget(const G3MRenderContext* rc,
+                          GLState* glState);
+
+  void renderSpringWidget(const G3MRenderContext* rc,
+                          GLState* glState);
+
+  void applyCoulombsLaw(NonOverlappingMark* that);
   void applyCoulombsLawFromAnchor(NonOverlappingMark* that);
 
   void applyHookesLaw();   //Spring
 
   void applyForce(float x, float y) {
-    _fX += x;
-    _fY += y;
+    _force.add(x, y);
   }
 
-  void updatePositionWithCurrentForce(double elapsedMS,
+  void updatePositionWithCurrentForce(float timeInSeconds,
                                       int viewportWidth,
                                       int viewportHeight,
                                       float viewportMargin);
@@ -190,15 +218,9 @@ public:
 
   void resetWidgetPositionVelocityAndForce() {
     _widget->resetPosition();
-    _dX = 0;
-    _dY = 0;
-    _fX = 0;
-    _fY = 0;
-  }
-
-  bool isMoving() const{
-    float velocitySquared = ((_dX*_dX) + (_dY*_dY));
-    return velocitySquared > (_minWidgetSpeedInPixelsPerSecond * _minWidgetSpeedInPixelsPerSecond);
+//    _widgetScreenPosition.put(NANF, NANF);
+    _speed.set(0, 0);
+    _force.set(0, 0);
   }
 
   int getWidth() const;
@@ -211,24 +233,17 @@ public:
 
 class NonOverlappingMarksVisibilityListener {
 public:
-#ifdef C_CODE
   virtual ~NonOverlappingMarksVisibilityListener() {
   }
-#endif
-#ifdef JAVA_CODE
-  void dispose();
-#endif
 
   virtual void onVisibilityChange(const std::vector<NonOverlappingMark*>& visible) = 0;
-
 };
 
 
-class NonOverlappingMarksRenderer: public DefaultRenderer{
+class NonOverlappingMarksRenderer: public DefaultRenderer {
 private:
-  const int _maxVisibleMarks;
-  const float _viewportMargin;
-  const int _maxConvergenceSteps;
+  const size_t _maxVisibleMarks;
+  const float  _viewportMargin;
 
   std::vector<NonOverlappingMark*> _marks;
 
@@ -245,18 +260,14 @@ private:
 
   long long _lastPositionsUpdatedTime;
 
-  GLState * _connectorsGLState;
-  void renderConnectorLines(const G3MRenderContext* rc);
-
-  void computeForces(const Camera* cam, const Planet* planet);
-  void renderMarks(const G3MRenderContext* rc, GLState* glState);
+  void computeForces(const Camera* camera, const Planet* planet);
+  void renderMarks(const G3MRenderContext* rc,
+                   GLState* glState);
   void applyForces(long long now, const Camera* camera);
 
-
 public:
-  NonOverlappingMarksRenderer(int maxVisibleMarks,
-                              float viewportMargin = 5,
-                              int maxConvergenceSteps = -1); // < 0 means real time
+  NonOverlappingMarksRenderer(size_t maxVisibleMarks,
+                              float viewportMargin = 5);
 
   ~NonOverlappingMarksRenderer();
 
@@ -280,32 +291,12 @@ public:
   bool onTouchEvent(const G3MEventContext* ec,
                     const TouchEvent* touchEvent);
 
-  void onResizeViewportEvent(const G3MEventContext* ec, int width, int height);
-
-  void start(const G3MRenderContext* rc) {
-
-  }
-
-  void stop(const G3MRenderContext* rc) {
-
-  }
-
-  SurfaceElevationProvider* getSurfaceElevationProvider() {
-    return NULL;
-  }
-
-  PlanetRenderer* getPlanetRenderer() {
-    return NULL;
-  }
-  
-  bool isPlanetRenderer() {
-    return false;
-  }
-  
-  bool marksAreMoving() const;
+  void onResizeViewportEvent(const G3MEventContext* ec,
+                             int width,
+                             int height);
   
   void setTouchListener(NonOverlappingMarkTouchListener* touchListener);
-
+  
 };
 
 #endif

@@ -88,7 +88,7 @@ public:
 
   void initialize(const G3MContext* context) const;
 
-  int size() const {
+  size_t size() const {
     return _layers.size();
   }
 
@@ -99,7 +99,7 @@ public:
   void setTileImageProvider(TileImageProvider* tileImageProvider);
 
 
-  Layer* getLayer(int index) const;
+  Layer* getLayer(size_t index) const;
 
   Layer* getLayerByTitle(const std::string& title) const;
 

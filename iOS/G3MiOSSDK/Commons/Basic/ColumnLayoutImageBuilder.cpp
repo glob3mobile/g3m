@@ -92,8 +92,8 @@ void ColumnLayoutImageBuilder::doLayout(const G3MContext* context,
   int maxWidth = 0;
   int accumulatedHeight = 0;
 
-  const int resultsSize = results.size();
-  for (int i = 0; i < resultsSize; i++) {
+  const size_t resultsSize = results.size();
+  for (size_t i = 0; i < resultsSize; i++) {
     ChildResult* result = results[i];
     const IImage* image = result->_image;
 
@@ -124,7 +124,7 @@ void ColumnLayoutImageBuilder::doLayout(const G3MContext* context,
     const int padding2 = _padding*2;
 
     const int canvasWidth  = maxWidth          + margin2 + padding2;
-    const int canvasHeight = accumulatedHeight + margin2 + padding2 + (resultsSize-1)*_childrenSeparation;
+    const int canvasHeight = accumulatedHeight + margin2 + padding2 + ((int)resultsSize-1)*_childrenSeparation;
 
     ICanvas* canvas = context->getFactory()->createCanvas();
     canvas->initialize(canvasWidth, canvasHeight);

@@ -69,7 +69,7 @@ public class ColumnLayoutImageBuilder extends LayoutImageBuilder
       final int padding2 = _padding *2;
   
       final int canvasWidth = maxWidth + margin2 + padding2;
-      final int canvasHeight = accumulatedHeight + margin2 + padding2 + (resultsSize-1)*_childrenSeparation;
+      final int canvasHeight = accumulatedHeight + margin2 + padding2 + ((int)resultsSize-1)*_childrenSeparation;
   
       ICanvas canvas = context.getFactory().createCanvas();
       canvas.initialize(canvasWidth, canvasHeight);

@@ -12,33 +12,44 @@
 class Vector2F;
 
 class MutableVector2F {
-private:
+public:
   float _x;
   float _y;
 
-public:
   MutableVector2F() :
   _x(0),
   _y(0)
   {
-
   }
 
   MutableVector2F(float x, float y) :
   _x(x),
   _y(y)
   {
-
   }
 
   MutableVector2F(const MutableVector2F& that) :
   _x(that._x),
   _y(that._y)
   {
-
   }
 
   MutableVector2F(const Vector2F& that);
+
+  void set(float x, float y) {
+    _x = x;
+    _y = y;
+  }
+
+  void add(float x, float y) {
+    _x += x;
+    _y += y;
+  }
+  
+  void times(float k) {
+    _x *= k;
+    _y *= k;
+  }
 
   MutableVector2F& operator=(const MutableVector2F& that) {
     _x = that._x;
@@ -50,17 +61,12 @@ public:
     return MutableVector2F(0, 0);
   }
 
-  float x() const {
-    return _x;
-  }
-
-  float y() const {
-    return _y;
-  }
+  static MutableVector2F nan();
 
   Vector2F asVector2F() const;
+
+  bool isNan() const;
+
 };
 
-
 #endif
-

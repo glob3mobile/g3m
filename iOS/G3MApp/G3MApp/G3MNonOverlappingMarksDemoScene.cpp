@@ -109,12 +109,12 @@ void G3MNonOverlappingMarksDemoScene::rawActivate(const G3MContext* context) {
   renderer->addMark(mark7);
 
 
-//  for(int i = 0; i < 1000; i++){
+//  for(int i = 0; i < 2000; i++){
 //    double lat = ((rand() % 18000) - 9000) / 100.0;
 //    double lon = ((rand() % 36000) - 18000) / 100.0;
 //
-//    NonOverlappingMark* mark = new NonOverlappingMark(new DownloaderImageBuilder(URL("file:///g3m-marker.png")),
-//                                                      new DownloaderImageBuilder(URL("file:///anchorWidget.png")),
+//    NonOverlappingMark* mark = new NonOverlappingMark(new DownloaderImageBuilder(markBitmapURL),
+//                                                      new DownloaderImageBuilder(anchorBitmapURL),
 //                                                      Geodetic3D::fromDegrees(lat, lon, 0));
 //    renderer->addMark(mark);
 //  }

@@ -188,8 +188,8 @@ autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
     CGPoint tapPoint = [sender locationInView:sender.view];
 
     std::vector<const Touch*> pointers = std::vector<const Touch*>();
-    Touch *touch = new Touch(Vector2F(tapPoint.x,
-                                      tapPoint.y),
+    Touch *touch = new Touch(Vector2F((float)tapPoint.x,
+                                      (float)tapPoint.y),
                              Vector2F::zero(),
                              1);
     pointers.push_back(touch);
@@ -299,10 +299,10 @@ autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
     CGPoint previous        = [uiTouch previousLocationInView:self];
     unsigned char tapCount  = (unsigned char) [uiTouch tapCount];
 
-    Touch* touch = new Touch(Vector2F(current.x,
-                                      current.y),
-                             Vector2F(previous.x,
-                                      previous.y),
+    Touch* touch = new Touch(Vector2F((float)current.x,
+                                      (float)current.y),
+                             Vector2F((float)previous.x,
+                                      (float)previous.y),
                              tapCount);
 
     pointers.push_back(touch);
@@ -329,10 +329,10 @@ autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
     CGPoint current  = [uiTouch locationInView:self];
     CGPoint previous = [uiTouch previousLocationInView:self];
 
-    Touch* touch = new Touch(Vector2F(current.x,
-                                      current.y),
-                             Vector2F(previous.x,
-                                      previous.y));
+    Touch* touch = new Touch(Vector2F((float)current.x,
+                                      (float)current.y),
+                             Vector2F((float)previous.x,
+                                      (float)previous.y));
 
     pointers.push_back(touch);
   }
@@ -390,10 +390,10 @@ autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
 
     [uiTouch timestamp];
 
-    Touch *touch = new Touch(Vector2F(current.x,
-                                      current.y),
-                             Vector2F(previous.x,
-                                      previous.y));
+    Touch *touch = new Touch(Vector2F((float)current.x,
+                                      (float)current.y),
+                             Vector2F((float)previous.x,
+                                      (float)previous.y));
 
     pointers.push_back(touch);
   }

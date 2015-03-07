@@ -191,7 +191,7 @@ public:
   }
 
   const void getViewDirectionInto(MutableVector3D& result) const {
-    result.put(_center.x() - _position.x(),
+    result.set(_center.x() - _position.x(),
                _center.y() - _position.y(),
                _center.z() - _position.z());
   }

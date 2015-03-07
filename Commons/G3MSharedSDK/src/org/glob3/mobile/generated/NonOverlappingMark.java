@@ -3,24 +3,27 @@ public class NonOverlappingMark
 {
   private float _springLengthInPixels;
 
+//  MutableVector2F _widgetScreenPosition;
+//  MutableVector2F _anchorScreenPosition;
+
   private Vector3D _cartesianPos;
   private Geodetic3D _geoPosition ;
 
-  private float _dX; //Velocity vector (pixels per second)
-  private float _dY;
-  private float _fX; //Applied Force
-  private float _fY;
+  private MutableVector2F _speed = new MutableVector2F();
+  private MutableVector2F _force = new MutableVector2F();
 
   private MarkWidget _widget;
   private MarkWidget _anchorWidget;
+
+  private GLState _springGLState;
+  private IFloatBuffer _springVertices;
+  private ViewportExtentGLFeature _springViewportExtentGLFeature;
 
   private final float _springK;
   private final float _maxSpringLength;
   private final float _minSpringLength;
   private final float _electricCharge;
   private final float _anchorElectricCharge;
-  private final float _maxWidgetSpeedInPixelsPerSecond;
-  private final float _minWidgetSpeedInPixelsPerSecond;
   private final float _resistanceFactor;
 
   private String _id;
@@ -28,64 +31,57 @@ public class NonOverlappingMark
   private NonOverlappingMarkTouchListener _touchListener;
 
 
-  public NonOverlappingMark(IImageBuilder imageBuilderWidget, IImageBuilder imageBuilderAnchor, Geodetic3D position, NonOverlappingMarkTouchListener touchListener, float springLengthInPixels, float springK, float minSpringLength, float maxSpringLength, float electricCharge, float anchorElectricCharge, float minWidgetSpeedInPixelsPerSecond, float maxWidgetSpeedInPixelsPerSecond)
-  {
-     this(imageBuilderWidget, imageBuilderAnchor, position, touchListener, springLengthInPixels, springK, minSpringLength, maxSpringLength, electricCharge, anchorElectricCharge, minWidgetSpeedInPixelsPerSecond, maxWidgetSpeedInPixelsPerSecond, 0.95f);
-  }
-  public NonOverlappingMark(IImageBuilder imageBuilderWidget, IImageBuilder imageBuilderAnchor, Geodetic3D position, NonOverlappingMarkTouchListener touchListener, float springLengthInPixels, float springK, float minSpringLength, float maxSpringLength, float electricCharge, float anchorElectricCharge, float minWidgetSpeedInPixelsPerSecond)
-  {
-     this(imageBuilderWidget, imageBuilderAnchor, position, touchListener, springLengthInPixels, springK, minSpringLength, maxSpringLength, electricCharge, anchorElectricCharge, minWidgetSpeedInPixelsPerSecond, 1000.0f, 0.95f);
-  }
   public NonOverlappingMark(IImageBuilder imageBuilderWidget, IImageBuilder imageBuilderAnchor, Geodetic3D position, NonOverlappingMarkTouchListener touchListener, float springLengthInPixels, float springK, float minSpringLength, float maxSpringLength, float electricCharge, float anchorElectricCharge)
   {
-     this(imageBuilderWidget, imageBuilderAnchor, position, touchListener, springLengthInPixels, springK, minSpringLength, maxSpringLength, electricCharge, anchorElectricCharge, 5.0f, 1000.0f, 0.95f);
+     this(imageBuilderWidget, imageBuilderAnchor, position, touchListener, springLengthInPixels, springK, minSpringLength, maxSpringLength, electricCharge, anchorElectricCharge, 0.95f);
   }
   public NonOverlappingMark(IImageBuilder imageBuilderWidget, IImageBuilder imageBuilderAnchor, Geodetic3D position, NonOverlappingMarkTouchListener touchListener, float springLengthInPixels, float springK, float minSpringLength, float maxSpringLength, float electricCharge)
   {
-     this(imageBuilderWidget, imageBuilderAnchor, position, touchListener, springLengthInPixels, springK, minSpringLength, maxSpringLength, electricCharge, 2000.0f, 5.0f, 1000.0f, 0.95f);
+     this(imageBuilderWidget, imageBuilderAnchor, position, touchListener, springLengthInPixels, springK, minSpringLength, maxSpringLength, electricCharge, 2000.0f, 0.95f);
   }
   public NonOverlappingMark(IImageBuilder imageBuilderWidget, IImageBuilder imageBuilderAnchor, Geodetic3D position, NonOverlappingMarkTouchListener touchListener, float springLengthInPixels, float springK, float minSpringLength, float maxSpringLength)
   {
-     this(imageBuilderWidget, imageBuilderAnchor, position, touchListener, springLengthInPixels, springK, minSpringLength, maxSpringLength, 3000.0f, 2000.0f, 5.0f, 1000.0f, 0.95f);
+     this(imageBuilderWidget, imageBuilderAnchor, position, touchListener, springLengthInPixels, springK, minSpringLength, maxSpringLength, 3000.0f, 2000.0f, 0.95f);
   }
   public NonOverlappingMark(IImageBuilder imageBuilderWidget, IImageBuilder imageBuilderAnchor, Geodetic3D position, NonOverlappingMarkTouchListener touchListener, float springLengthInPixels, float springK, float minSpringLength)
   {
-     this(imageBuilderWidget, imageBuilderAnchor, position, touchListener, springLengthInPixels, springK, minSpringLength, 0.0f, 3000.0f, 2000.0f, 5.0f, 1000.0f, 0.95f);
+     this(imageBuilderWidget, imageBuilderAnchor, position, touchListener, springLengthInPixels, springK, minSpringLength, 0.0f, 3000.0f, 2000.0f, 0.95f);
   }
   public NonOverlappingMark(IImageBuilder imageBuilderWidget, IImageBuilder imageBuilderAnchor, Geodetic3D position, NonOverlappingMarkTouchListener touchListener, float springLengthInPixels, float springK)
   {
-     this(imageBuilderWidget, imageBuilderAnchor, position, touchListener, springLengthInPixels, springK, 0.0f, 0.0f, 3000.0f, 2000.0f, 5.0f, 1000.0f, 0.95f);
+     this(imageBuilderWidget, imageBuilderAnchor, position, touchListener, springLengthInPixels, springK, 0.0f, 0.0f, 3000.0f, 2000.0f, 0.95f);
   }
   public NonOverlappingMark(IImageBuilder imageBuilderWidget, IImageBuilder imageBuilderAnchor, Geodetic3D position, NonOverlappingMarkTouchListener touchListener, float springLengthInPixels)
   {
-     this(imageBuilderWidget, imageBuilderAnchor, position, touchListener, springLengthInPixels, 70.0f, 0.0f, 0.0f, 3000.0f, 2000.0f, 5.0f, 1000.0f, 0.95f);
+     this(imageBuilderWidget, imageBuilderAnchor, position, touchListener, springLengthInPixels, 70.0f, 0.0f, 0.0f, 3000.0f, 2000.0f, 0.95f);
   }
   public NonOverlappingMark(IImageBuilder imageBuilderWidget, IImageBuilder imageBuilderAnchor, Geodetic3D position, NonOverlappingMarkTouchListener touchListener)
   {
-     this(imageBuilderWidget, imageBuilderAnchor, position, touchListener, 100.0f, 70.0f, 0.0f, 0.0f, 3000.0f, 2000.0f, 5.0f, 1000.0f, 0.95f);
+     this(imageBuilderWidget, imageBuilderAnchor, position, touchListener, 100.0f, 70.0f, 0.0f, 0.0f, 3000.0f, 2000.0f, 0.95f);
   }
   public NonOverlappingMark(IImageBuilder imageBuilderWidget, IImageBuilder imageBuilderAnchor, Geodetic3D position)
   {
-     this(imageBuilderWidget, imageBuilderAnchor, position, null, 100.0f, 70.0f, 0.0f, 0.0f, 3000.0f, 2000.0f, 5.0f, 1000.0f, 0.95f);
+     this(imageBuilderWidget, imageBuilderAnchor, position, null, 100.0f, 70.0f, 0.0f, 0.0f, 3000.0f, 2000.0f, 0.95f);
   }
-  public NonOverlappingMark(IImageBuilder imageBuilderWidget, IImageBuilder imageBuilderAnchor, Geodetic3D position, NonOverlappingMarkTouchListener touchListener, float springLengthInPixels, float springK, float minSpringLength, float maxSpringLength, float electricCharge, float anchorElectricCharge, float minWidgetSpeedInPixelsPerSecond, float maxWidgetSpeedInPixelsPerSecond, float resistanceFactor)
+  public NonOverlappingMark(IImageBuilder imageBuilderWidget, IImageBuilder imageBuilderAnchor, Geodetic3D position, NonOverlappingMarkTouchListener touchListener, float springLengthInPixels, float springK, float minSpringLength, float maxSpringLength, float electricCharge, float anchorElectricCharge, float resistanceFactor)
+  //_widgetScreenPosition(MutableVector2F::nan()),
+  //_anchorScreenPosition(MutableVector2F::nan()),
   {
      _cartesianPos = null;
-     _dX = 0F;
-     _dY = 0F;
-     _fX = 0F;
-     _fY = 0F;
+     _speed = new MutableVector2F(MutableVector2F.zero());
+     _force = new MutableVector2F(MutableVector2F.zero());
      _geoPosition = new Geodetic3D(position);
      _springLengthInPixels = springLengthInPixels;
      _springK = springK;
-     _minSpringLength = minSpringLength > 0 ? minSpringLength : (springLengthInPixels * 0.85f);
-     _maxSpringLength = maxSpringLength > 0 ? maxSpringLength : (springLengthInPixels * 1.15f);
+     _minSpringLength = minSpringLength > 0 ? minSpringLength : (springLengthInPixels * 0.25f);
+     _maxSpringLength = maxSpringLength > 0 ? maxSpringLength : (springLengthInPixels * 1.25f);
      _electricCharge = electricCharge;
      _anchorElectricCharge = anchorElectricCharge;
-     _minWidgetSpeedInPixelsPerSecond = minWidgetSpeedInPixelsPerSecond;
-     _maxWidgetSpeedInPixelsPerSecond = maxWidgetSpeedInPixelsPerSecond;
      _resistanceFactor = resistanceFactor;
      _touchListener = touchListener;
+     _springGLState = null;
+     _springVertices = null;
+     _springViewportExtentGLFeature = null;
     _widget = new MarkWidget(imageBuilderWidget);
     _anchorWidget = new MarkWidget(imageBuilderAnchor);
   }
@@ -111,10 +107,20 @@ public class NonOverlappingMark
        _anchorWidget.dispose();
     if (_cartesianPos != null)
        _cartesianPos.dispose();
+  
+    if (_springGLState != null)
+    {
+      _springGLState._release();
+    }
+  
+    if (_springVertices != null)
+       _springVertices.dispose();
   }
 
   public final Vector3D getCartesianPosition(Planet planet)
   {
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning toCartesian without garbage
     if (_cartesianPos == null)
     {
       _cartesianPos = new Vector3D(planet.toCartesian(_geoPosition));
@@ -122,12 +128,17 @@ public class NonOverlappingMark
     return _cartesianPos;
   }
 
-  public final void computeAnchorScreenPos(Camera cam, Planet planet)
+  public final void computeAnchorScreenPos(Camera camera, Planet planet)
   {
-    Vector2F sp = new Vector2F(cam.point2Pixel(getCartesianPosition(planet)));
+    Vector2F sp = new Vector2F(camera.point2Pixel(getCartesianPosition(planet)));
+  //  _anchorScreenPosition.put(sp._x, sp._y);
+  //  if (_widgetScreenPosition.isNan()) {
+  //    _widgetScreenPosition.put(sp._x, sp._y + 0.01f);
+  //  }
+  
     _anchorWidget.setScreenPos(sp._x, sp._y);
   
-    if (_widget.getScreenPos().isNaN())
+    if (_widget.getScreenPos().isNan())
     {
       _widget.setScreenPos(sp._x, sp._y + 0.01f);
     }
@@ -142,24 +153,76 @@ public class NonOverlappingMark
      return _anchorWidget.getScreenPos();
   }
 
-  public final void render(G3MRenderContext rc, GLState glState)
+  public final void renderWidget(G3MRenderContext rc, GLState glState)
   {
-  
-    if (_widget.isReady() && _anchorWidget.isReady())
+    if (_widget.isReady())
     {
-      _widget.render(rc, glState);
-      _anchorWidget.render(rc, glState);
+      if (_anchorWidget.isReady())
+      {
+        _widget.render(rc, glState);
+      }
     }
     else
     {
-      _widget.init(rc, rc.getCurrentCamera().getViewPortWidth(), rc.getCurrentCamera().getViewPortHeight());
-      _anchorWidget.init(rc, rc.getCurrentCamera().getViewPortWidth(), rc.getCurrentCamera().getViewPortHeight());
+      _widget.init(rc);
     }
+  }
+
+  public final void renderAnchorWidget(G3MRenderContext rc, GLState glState)
+  {
+    if (_anchorWidget.isReady())
+    {
+      if (_widget.isReady())
+      {
+        _anchorWidget.render(rc, glState);
+      }
+    }
+    else
+    {
+      _anchorWidget.init(rc);
+    }
+  }
+
+  public final void renderSpringWidget(G3MRenderContext rc, GLState glState)
+  {
+    if (!_widget.isReady() || !_anchorWidget.isReady())
+    {
+      return;
+    }
+  
+    final Vector2F sp = getScreenPos();
+    final Vector2F asp = getAnchorScreenPos();
+  
+    if (_springGLState == null)
+    {
+      _springGLState = new GLState();
+  
+      _springGLState.addGLFeature(new FlatColorGLFeature(Color.black()), false);
+  
+      _springVertices = rc.getFactory().createFloatBuffer(2 * 2);
+      _springVertices.rawPut(0, sp._x);
+      _springVertices.rawPut(1, -sp._y);
+      _springVertices.rawPut(2, asp._x);
+      _springVertices.rawPut(3, -asp._y);
+  
+      _springGLState.addGLFeature(new Geometry2DGLFeature(_springVertices, 2, 0, true, 0, 3.0f, true, 2.0f, Vector2F.zero()), false); // translation -  pointSize -  needsPointSize -  lineWidth -  stride -  normalized -  index -  arrayElementSize -  buffer
+  
+      _springViewportExtentGLFeature = new ViewportExtentGLFeature(rc.getCurrentCamera());
+      _springGLState.addGLFeature(_springViewportExtentGLFeature, false);
+    }
+    else
+    {
+      _springVertices.put(0, sp._x);
+      _springVertices.put(1, -sp._y);
+      _springVertices.put(2, asp._x);
+      _springVertices.put(3, -asp._y);
+    }
+  
+    rc.getGL().drawArrays(GLPrimitive.lines(), 0, 2, _springGLState, rc.getGPUProgramManager()); // count -  first
   }
 
   public final void applyCoulombsLaw(NonOverlappingMark that)
   {
-  
     Vector2F d = getScreenPos().sub(that.getScreenPos());
     double distance = d.length() + 0.001;
     Vector2F direction = d.div((float)distance);
@@ -170,19 +233,9 @@ public class NonOverlappingMark
   
     this.applyForce(force._x, force._y);
     that.applyForce(-force._x, -force._y);
-  
-    //  var d = point1.p.subtract(point2.p);
-    //  var distance = d.magnitude() + 0.1; // avoid massive forces at small distances (and divide by zero)
-    //  var direction = d.normalise();
-    //
-    //  // apply force to each end point
-    //  point1.applyForce(direction.multiply(this.repulsion).divide(distance * distance * 0.5));
-    //  point2.applyForce(direction.multiply(this.repulsion).divide(distance * distance * -0.5));
-  
   }
   public final void applyCoulombsLawFromAnchor(NonOverlappingMark that)
   {
-  
     Vector2F dAnchor = getScreenPos().sub(that.getAnchorScreenPos());
     double distanceAnchor = dAnchor.length() + 0.001;
     Vector2F directionAnchor = dAnchor.div((float)distanceAnchor);
@@ -194,7 +247,6 @@ public class NonOverlappingMark
 
   public final void applyHookesLaw()
   {
-  
     Vector2F d = getScreenPos().sub(getAnchorScreenPos());
     double mod = d.length();
     double displacement = _springLengthInPixels - mod;
@@ -202,89 +254,55 @@ public class NonOverlappingMark
   
     float force = (float)(_springK * displacement);
   
-    applyForce((float)(direction._x * force), (float)(direction._y * force));
-  
-    //  var d = spring.point2.p.subtract(spring.point1.p); // the direction of the spring
-    //  var displacement = spring.length - d.magnitude();
-    //  var direction = d.normalise();
-    //
-    //  // apply force to each end point
-    //  spring.point1.applyForce(direction.multiply(spring.k * displacement * -0.5));
-    //  spring.point2.applyForce(direction.multiply(spring.k * displacement * 0.5));
+    applyForce(direction._x * force, direction._y * force);
   }
 
   public final void applyForce(float x, float y)
   {
-    _fX += x;
-    _fY += y;
+    _force.add(x, y);
   }
 
-  public final void updatePositionWithCurrentForce(double elapsedMS, int viewportWidth, int viewportHeight, float viewportMargin)
+  public final void updatePositionWithCurrentForce(float timeInSeconds, int viewportWidth, int viewportHeight, float viewportMargin)
   {
-  
-    Vector2D oldVelocity = new Vector2D(_dX, _dY);
-    Vector2D force = new Vector2D(_fX, _fY);
-  
-    //Assuming Widget Mass = 1.0
-    float time = (float)(elapsedMS / 1000.0);
-    Vector2D velocity = oldVelocity.add(force.times(time)).times(_resistanceFactor);
+    _speed.add(_force._x * timeInSeconds, _force._y * timeInSeconds);
+    _speed.times(_resistanceFactor);
   
     //Force has been applied and must be reset
-    _fX = 0F;
-    _fY = 0F;
-  
-    //Clamping Velocity
-    double velocityPPS = velocity.length();
-    if (velocityPPS > _maxWidgetSpeedInPixelsPerSecond)
-    {
-      _dX = (float)(velocity._x * (_maxWidgetSpeedInPixelsPerSecond / velocityPPS));
-      _dY = (float)(velocity._y * (_maxWidgetSpeedInPixelsPerSecond / velocityPPS));
-    }
-    else if (velocityPPS < _minWidgetSpeedInPixelsPerSecond)
-    {
-      _dX = 0.0F;
-      _dY = 0.0F;
-    }
-    else
-    {
-      _dX = (float)velocity._x;
-      _dY = (float)velocity._y;
-    }
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning It's needed?
+    _force.set(0, 0);
   
     //Update position
-    Vector2F position = _widget.getScreenPos();
+    Vector2F widgetPosition = _widget.getScreenPos();
   
-    float newX = position._x + (_dX * time);
-    float newY = position._y + (_dY * time);
+    final float newX = widgetPosition._x + (_speed._x * timeInSeconds);
+    final float newY = widgetPosition._y + (_speed._y * timeInSeconds);
   
-    Vector2F anchorPos = _anchorWidget.getScreenPos();
+    Vector2F anchorPosition = _anchorWidget.getScreenPos();
   
-    Vector2F spring = new Vector2F(newX,newY).sub(anchorPos).clampLength(_minSpringLength, _maxSpringLength);
-    Vector2F finalPos = anchorPos.add(spring);
+  //  Vector2F spring = Vector2F(newX,newY).sub(anchorPosition).clampLength(_minSpringLength, _maxSpringLength);
+    Vector2F spring = new Vector2F(newX - anchorPosition._x, newY - anchorPosition._y).clampLength(_minSpringLength, _maxSpringLength);
   
-    _widget.setScreenPos(finalPos._x, finalPos._y);
-    _widget.clampPositionInsideScreen(viewportWidth, viewportHeight, viewportMargin);
+    _widget.setAndClampScreenPos(anchorPosition._x + spring._x, anchorPosition._y + spring._y, viewportWidth, viewportHeight, viewportMargin);
   }
 
   public final void onResizeViewportEvent(int width, int height)
   {
     _widget.onResizeViewportEvent(width, height);
     _anchorWidget.onResizeViewportEvent(width, height);
+  
+    if (_springViewportExtentGLFeature != null)
+    {
+      _springViewportExtentGLFeature.changeExtent(width, height);
+    }
   }
 
   public final void resetWidgetPositionVelocityAndForce()
   {
     _widget.resetPosition();
-    _dX = 0F;
-    _dY = 0F;
-    _fX = 0F;
-    _fY = 0F;
-  }
-
-  public final boolean isMoving()
-  {
-    float velocitySquared = ((_dX *_dX) + (_dY *_dY));
-    return velocitySquared > (_minWidgetSpeedInPixelsPerSecond * _minWidgetSpeedInPixelsPerSecond);
+//    _widgetScreenPosition.put(NANF, NANF);
+    _speed.set(0, 0);
+    _force.set(0, 0);
   }
 
   public final int getWidth()

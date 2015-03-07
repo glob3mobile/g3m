@@ -20,8 +20,8 @@ _sector(NULL)
   }
   else {
     _coordinatesArray = new std::vector<const GEO2DCoordinatesData*>;
-    const int size = coordinatesArray->size();
-    for (int i = 0; i < size; i++) {
+    const size_t size = coordinatesArray->size();
+    for (size_t i = 0; i < size; i++) {
       std::vector<Geodetic2D*>* coordinates = coordinatesArray->at(i);
       if (coordinates != NULL) {
         _coordinatesArray->push_back( new GEO2DCoordinatesData(coordinates) );
@@ -33,8 +33,8 @@ _sector(NULL)
 
 GEO2DCoordinatesArrayData::~GEO2DCoordinatesArrayData() {
   if (_coordinatesArray != NULL) {
-    const int coordinatesArrayCount = _coordinatesArray->size();
-    for (int i = 0; i < coordinatesArrayCount; i++) {
+    const size_t coordinatesArrayCount = _coordinatesArray->size();
+    for (size_t i = 0; i < coordinatesArrayCount; i++) {
       const GEO2DCoordinatesData* coordinates = _coordinatesArray->at(i);
       //if (coordinates != NULL) {
         coordinates->_release();
@@ -64,11 +64,11 @@ Sector* GEO2DCoordinatesArrayData::calculateSector() const {
   double minLonInRadians = maxDouble;
   double maxLonInRadians = minDouble;
 
-  const int coordinatesArrayCount = _coordinatesArray->size();
-  for (int i = 0; i < coordinatesArrayCount; i++) {
+  const size_t coordinatesArrayCount = _coordinatesArray->size();
+  for (size_t i = 0; i < coordinatesArrayCount; i++) {
     const GEO2DCoordinatesData* coordinates = _coordinatesArray->at(i);
-    const int coordinatesCount = coordinates->size();
-    for (int j = 0; j < coordinatesCount; j++) {
+    const size_t coordinatesCount = coordinates->size();
+    for (size_t j = 0; j < coordinatesCount; j++) {
       const Geodetic2D* coordinate = coordinates->get(j);
 
       const double latInRadians = coordinate->_latitude._radians;
@@ -124,8 +124,8 @@ const Sector* GEO2DCoordinatesArrayData::getSector() const {
 long long GEO2DCoordinatesArrayData::getCoordinatesCount() const {
   long long result = 0;
   if (_coordinatesArray != NULL) {
-    const int coordinatesArrayCount = _coordinatesArray->size();
-    for (int i = 0; i < coordinatesArrayCount; i++) {
+    const size_t coordinatesArrayCount = _coordinatesArray->size();
+    for (size_t i = 0; i < coordinatesArrayCount; i++) {
       const GEO2DCoordinatesData* coordinates = _coordinatesArray->at(i);
       result += coordinates->getCoordinatesCount();
     }

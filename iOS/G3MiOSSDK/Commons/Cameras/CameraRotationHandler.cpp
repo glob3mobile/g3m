@@ -96,7 +96,7 @@ void CameraRotationHandler::onMove(const G3MEventContext *eventContext,
   // vertical rotation around normal vector to globe
   Camera *camera = cameraContext->getNextCamera();
   camera->copyFrom(_camera0);
-  Angle angle_v             = Angle::fromDegrees((_pivotPixel.x()-cm._x)*0.25);
+  Angle angle_v             = Angle::fromDegrees((_pivotPixel._x-cm._x)*0.25);
   camera->rotateWithAxisAndPoint(normal, _pivotPoint.asVector3D(), angle_v);
   
   // compute angle between normal and view direction
@@ -105,7 +105,7 @@ void CameraRotationHandler::onMove(const G3MEventContext *eventContext,
   double initialAngle = mu->acos(dot) / PI * 180;
   
   // rotate more than 85 degrees or less than 0 degrees is not allowed
-  double delta = (cm._y - _pivotPixel.y()) * 0.25;
+  double delta = (cm._y - _pivotPixel._y) * 0.25;
   double finalAngle = initialAngle + delta;
   if (finalAngle > 85)  delta = 85 - initialAngle;
   if (finalAngle < 0)   delta = -initialAngle;

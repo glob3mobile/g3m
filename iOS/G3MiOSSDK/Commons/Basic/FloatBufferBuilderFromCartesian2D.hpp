@@ -21,8 +21,8 @@ public:
   }
   
   void add(const Vector2F& vector) {
-    _values.push_back( (float) vector._x );
-    _values.push_back( (float) vector._y );
+    _values.push_back( vector._x );
+    _values.push_back( vector._y );
   }
   
   void add(float x, float y) {

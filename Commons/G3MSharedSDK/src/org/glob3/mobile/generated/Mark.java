@@ -562,7 +562,7 @@ public class Mark implements SurfaceElevationListener
   
   //  const Vector3D markCameraVector = markPosition->sub(cameraPosition);
   //  _markCameraVector.putSub(markPosition, cameraPosition);
-    _markCameraVector.put(markPosition._x - cameraPosition.x(), markPosition._y - cameraPosition.y(), markPosition._z - cameraPosition.z());
+    _markCameraVector.set(markPosition._x - cameraPosition.x(), markPosition._y - cameraPosition.y(), markPosition._z - cameraPosition.z());
   
     // mark will be renderered only if is renderable by distance and placed on a visible globe area
     boolean renderableByDistance;

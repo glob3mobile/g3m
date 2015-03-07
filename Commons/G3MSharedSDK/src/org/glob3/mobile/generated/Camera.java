@@ -228,7 +228,7 @@ public class Camera
 
   public final void getViewDirectionInto(MutableVector3D result)
   {
-    result.put(_center.x() - _position.x(), _center.y() - _position.y(), _center.z() - _position.z());
+    result.set(_center.x() - _position.x(), _center.y() - _position.y(), _center.z() - _position.z());
   }
 
 

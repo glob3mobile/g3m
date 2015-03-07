@@ -61,24 +61,23 @@ _meshRenderer(NULL)
 
 void CameraFocusSceneLighting::modifyGLState(GLState* glState, const G3MRenderContext* rc) {
   const Camera* camera = rc->getCurrentCamera();
-//  const Vector3D camDir = camera->getViewDirectionMutable();
-//  MutableVector3D camDir;
+
   camera->getViewDirectionInto(_camDir);
-  MutableVector3D up;
-  camera->getUpMutable(up);
+  camera->getUpMutable(_up);
+
   if ((_cameraDirX == _camDir.x()) &&
       (_cameraDirY == _camDir.y()) &&
       (_cameraDirZ == _camDir.z()) &&
-      (_upX == up.x()) &&
-      (_upY == up.y()) &&
-      (_upZ == up.z())) {
+      (_upX == _up.x()) &&
+      (_upY == _up.y()) &&
+      (_upZ == _up.z())) {
     return;
   }
 
   const MutableVector3D cameraVector = _camDir.times(-1);
 
   //Light slightly different of camera position
-  const MutableVector3D rotationLightDirAxis = up.cross(cameraVector);
+  const MutableVector3D rotationLightDirAxis = _up.cross(cameraVector);
   const MutableVector3D lightDir = cameraVector.rotateAroundAxis(rotationLightDirAxis,
                                                                  Angle::fromDegrees(45.0));
 
@@ -119,8 +118,8 @@ void CameraFocusSceneLighting::modifyGLState(GLState* glState, const G3MRenderCo
   _cameraDirX = _camDir.x();
   _cameraDirY = _camDir.y();
   _cameraDirZ = _camDir.z();
-  
-  _upX = up.x();
-  _upY = up.y();
-  _upZ = up.z();
+
+  _upX = _up.x();
+  _upY = _up.y();
+  _upZ = _up.z();
 }

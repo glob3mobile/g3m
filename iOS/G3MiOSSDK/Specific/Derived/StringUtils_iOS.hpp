@@ -22,22 +22,22 @@ public:
                   const std::string& prefix) const;
 
 
-  int indexOf(const std::string& string,
-              const std::string& search) const;
+  size_t indexOf(const std::string& string,
+                 const std::string& search) const;
 
-  int indexOf(const std::string& string,
-              const std::string& search,
-              int fromIndex) const;
+  size_t indexOf(const std::string& string,
+                 const std::string& search,
+                 size_t fromIndex) const;
 
-  int indexOf(const std::string& string,
-              const std::string& search,
-              int fromIndex,
-              int endIndex) const;
+  size_t indexOf(const std::string& string,
+                 const std::string& search,
+                 size_t fromIndex,
+                 size_t endIndex) const;
 
 
   std::string substring(const std::string& string,
-                        int beginIndex,
-                        int endIndex) const;
+                        size_t beginIndex,
+                        size_t endIndex) const;
 
   std::string rtrim(const std::string& string) const;
 
@@ -51,16 +51,17 @@ public:
 
   long long parseHexInt(const std::string& str) const;
 
-  int indexOfFirstNonBlank(const std::string& string,
-                           int fromIndex) const;
+  size_t indexOfFirstNonBlank(const std::string& string,
+                              size_t fromIndex) const;
 
-//  int indexOfFirstBlank(const std::string& string,
-//                        int fromIndex) const;
+  //  size_t indexOfFirstBlank(const std::string& string,
+  //                        size_t fromIndex) const;
 
-  int indexOfFirstNonChar(const std::string& string,
-                          const std::string& chars,
-                          int fromIndex) const;
-  
+
+  size_t indexOfFirstNonChar(const std::string& string,
+                             const std::string& chars,
+                             size_t fromIndex) const;
+
   std::string toString(size_t value) const;
 
   std::string toString(int value) const;
@@ -70,9 +71,9 @@ public:
   std::string toString(double value) const;
 
   std::string toString(float value) const;
-
+  
   double parseDouble(const std::string& str) const;
-
+  
 };
 
 #endif
