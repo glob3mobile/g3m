@@ -1833,23 +1833,7 @@
 				D895CA1D1861C33A00AE8291 /* IImageUtils.cpp */,
 				D895CA1C1861C32300AE8291 /* IImageUtils.hpp */,
 				D87D3A2B183B96930014C96D /* BasicShadersGL2.hpp */,
-				D87F4D75183BBEEF00C57835 /* SingleBillElevationDataProvider.cpp */,
-				D87F4D76183BBEEF00C57835 /* SingleBillElevationDataProvider.hpp */,
-				D80FAADD17CB82ED00ACD249 /* SceneLighting.hpp */,
-				D80FAADE17CB82EE00ACD249 /* SceneLighting.cpp */,
-				D8F0C70917B52701002A89E0 /* GenericQuadTree.hpp */,
-				D8F0C70A17B52701002A89E0 /* GenericQuadTree.cpp */,
-				D89D9CC6172E95370058CA9D /* TileElevationDataRequest.cpp */,
-				D89D9CC7172E95370058CA9D /* TileElevationDataRequest.hpp */,
-				D89D9CC8172E95370058CA9D /* CompositeElevationData.cpp */,
-				D89D9CC9172E95370058CA9D /* CompositeElevationData.hpp */,
-				D89D9CCA172E95370058CA9D /* CompositeElevationDataProvider.cpp */,
-				D89D9CCB172E95370058CA9D /* CompositeElevationDataProvider.hpp */,
 				CF6D7243171859C40043C74B /* BalloonCanvasElement.hpp */,
-				CF35A20516D3D44E00D795D8 /* BilParser.cpp */,
-				CF35A20616D3D44E00D795D8 /* BilParser.hpp */,
-				CF27B15E16D93DC90000A415 /* BufferElevationData.cpp */,
-				CF27B15F16D93DC90000A415 /* BufferElevationData.hpp */,
 				CF4FAAC11695C66F009734CA /* ByteBufferBuilder.cpp */,
 				CF4FAAC21695C66F009734CA /* ByteBufferBuilder.hpp */,
 				CF7EDA0316948302002C760A /* ByteBufferIterator.cpp */,
@@ -1857,18 +1841,6 @@
 				D8EB78831637F6B500C4EB57 /* CameraGoToPositionEffect.hpp */,
 				CF6D723917184D620043C74B /* CanvasElement.cpp */,
 				CF6D723A17184D620043C74B /* CanvasElement.hpp */,
-				CF2A47BF178EF92B00901857 /* CanvasTileRasterizer.cpp */,
-				CF2A47C0178EF92B00901857 /* CanvasTileRasterizer.hpp */,
-				CFA2EEEC17EA0B1100EB4526 /* CartoCSSLexer.cpp */,
-				CFA2EEED17EA0B1100EB4526 /* CartoCSSLexer.hpp */,
-				CF1E85B617E797BC005BDE80 /* CartoCSSParser.cpp */,
-				CF1E85B717E797BC005BDE80 /* CartoCSSParser.hpp */,
-				CF1E85B917E799F8005BDE80 /* CartoCSSSymbolizer.cpp */,
-				CF1E85BA17E799F8005BDE80 /* CartoCSSSymbolizer.hpp */,
-				CF22263A17E8F46F00280C66 /* CartoCSSTokens.cpp */,
-				CF22263B17E8F47000280C66 /* CartoCSSTokens.hpp */,
-				CFADEB6B17A42C75001914B2 /* ChangedListener.cpp */,
-				CFADEB6C17A42C75001914B2 /* ChangedListener.hpp */,
 				CF07DD0B175D32CC00839F5D /* Color.cpp */,
 				CFF95F761588E82200B56E11 /* Color.hpp */,
 				CF6D724A171861770043C74B /* ColumnCanvasElement.cpp */,
@@ -1879,10 +1851,6 @@
 				D89D9CCB172E95370058CA9D /* CompositeElevationDataProvider.hpp */,
 				383BD38E1577EE500012AC53 /* Context.cpp */,
 				383BD38F1577EE500012AC53 /* Context.hpp */,
-				CF5363E1178B44AC00EE3D49 /* DebugTileRasterizer.cpp */,
-				CF5363E2178B44AC00EE3D49 /* DebugTileRasterizer.hpp */,
-				CFAA530017AAFDCE002A9204 /* DecimatedSubviewElevationData.cpp */,
-				CFAA530117AAFDCE002A9204 /* DecimatedSubviewElevationData.hpp */,
 				E7EC944316C4F43300B32D9F /* DownloadPriority.cpp */,
 				E7EC944416C4F43300B32D9F /* DownloadPriority.hpp */,
 				CF31CBF0158776120085E8F1 /* Effects.cpp */,
@@ -1899,8 +1867,6 @@
 				D8C912D915F9FE78003F92A4 /* FloatBufferBuilderFromColor.hpp */,
 				CFD3D8A016CFDD0000CE9242 /* FloatBufferBuilderFromGeodetic.cpp */,
 				D8CD74DD15F8DE9500B801CC /* FloatBufferBuilderFromGeodetic.hpp */,
-				CFDA835716D6698700295F96 /* FloatBufferElevationData.cpp */,
-				CFDA835816D6698700295F96 /* FloatBufferElevationData.hpp */,
 				CF73BFD915E114E3001CE412 /* FrameTasksExecutor.cpp */,
 				CF73BFDA15E114E3001CE412 /* FrameTasksExecutor.hpp */,
 				383BD3901577EE500012AC53 /* G3MWidget.cpp */,
@@ -1926,8 +1892,6 @@
 				CF6873A915F77FFC002EDFD0 /* IIntBuffer.hpp */,
 				CF7E626415F7DD740086B71D /* IntBufferBuilder.cpp */,
 				CF7E626515F7DD740086B71D /* IntBufferBuilder.hpp */,
-				CFAA530317AAFE3C002A9204 /* InterpolatedSubviewElevationData.cpp */,
-				CFAA530417AAFE3C002A9204 /* InterpolatedSubviewElevationData.hpp */,
 				CFBD42D916AA151100663F21 /* IShortBuffer.cpp */,
 				CFBD42DA16AA151100663F21 /* IShortBuffer.hpp */,
 				CF90F6BF16C4069C00B309C2 /* ITexturizerData.cpp */,
@@ -1942,8 +1906,6 @@
 				CFC3F8F917510DA700986630 /* MapBooBuilder.hpp */,
 				CF0C3969157F988100646A2F /* Mark.cpp */,
 				CF0C3967157F987200646A2F /* Mark.hpp */,
-				CFEBDF1C16E8C9C70063B49F /* MercatorUtils.cpp */,
-				CFEBDF1D16E8C9C80063B49F /* MercatorUtils.hpp */,
 				CFA71BE315D2E85600F8C78D /* MultiLayerTileTexturizer.cpp */,
 				CFA71BE115D2E84300F8C78D /* MultiLayerTileTexturizer.hpp */,
 				CF9592AC1652E28500CB7AC8 /* OrderedRenderable.cpp */,
@@ -1955,25 +1917,15 @@
 				E705123B165E782C00AEADB9 /* PlanetRendererBuilder.hpp */,
 				CF9AEBC1159B3FEA004C3558 /* PlanetTileTessellator.cpp */,
 				CF9AEBC0159B3FDD004C3558 /* PlanetTileTessellator.hpp */,
-				CF2DF7D0178DEA8900FF5FF0 /* QuadTree.cpp */,
-				CF2DF7D1178DEA8900FF5FF0 /* QuadTree.hpp */,
 				CFF8C4BB15DEB6A70034A576 /* RCObject.cpp */,
 				CFF8C4BC15DEB6A70034A576 /* RCObject.hpp */,
-				CF423A2B17F8874E00F50525 /* RenderState.cpp */,
-				CF423A2C17F8874E00F50525 /* RenderState.hpp */,
 				D80FAADE17CB82EE00ACD249 /* SceneLighting.cpp */,
 				D80FAADD17CB82ED00ACD249 /* SceneLighting.hpp */,
 				CF923CA216AB126D00D04301 /* ShortBufferBuilder.cpp */,
 				CF923CA316AB126D00D04301 /* ShortBufferBuilder.hpp */,
-				CF27B16216D93F2B0000A415 /* ShortBufferElevationData.cpp */,
-				CF27B16316D93F2C0000A415 /* ShortBufferElevationData.hpp */,
 				D8CD74D615F8D3F000B801CC /* SimpleFloatBufferBuilder.hpp */,
 				D87F4D75183BBEEF00C57835 /* SingleBillElevationDataProvider.cpp */,
 				D87F4D76183BBEEF00C57835 /* SingleBillElevationDataProvider.hpp */,
-				CFDA836016D6776B00295F96 /* SubviewElevationData.cpp */,
-				CFDA836116D6776B00295F96 /* SubviewElevationData.hpp */,
-				CFAB754A17AC455300852FA7 /* SurfaceElevationProvider.cpp */,
-				CFAB754B17AC455300852FA7 /* SurfaceElevationProvider.hpp */,
 				CF6D723E171854F50043C74B /* TextCanvasElement.cpp */,
 				CF6D723F171854F50043C74B /* TextCanvasElement.hpp */,
 				CF883B811590984900AEE39C /* TexturesHandler.cpp */,
@@ -1984,12 +1936,8 @@
 				D89D9CC7172E95370058CA9D /* TileElevationDataRequest.hpp */,
 				CFD0021915D3C94C00735FD8 /* TileKey.cpp */,
 				CFD0021A15D3C94C00735FD8 /* TileKey.hpp */,
-				CF5363DD178B3D1900EE3D49 /* TileRasterizer.cpp */,
-				CF5363DE178B3D1900EE3D49 /* TileRasterizer.hpp */,
 				D80D525815EE698E00ACEA16 /* TileTessellator.cpp */,
 				CF9AEBBD159B3B95004C3558 /* TileTessellator.hpp */,
-				CF8D0BFD15AF0D32005B5433 /* TileTexturizer.cpp */,
-				CF8D0BFB15AF0D23005B5433 /* TileTexturizer.hpp */,
 				CFF95F741588DF0A00B56E11 /* TimeInterval.hpp */,
 				383BD3931577EE500012AC53 /* TouchEvent.cpp */,
 				383BD3941577EE500012AC53 /* TouchEvent.hpp */,
@@ -2096,7 +2044,6 @@
 				CC41E39D15B1FD1300B5581C /* Plane.hpp */,
 				D80A28691746474E0058CEC3 /* Planet.cpp */,
 				383BD3A61577EE5A0012AC53 /* Planet.hpp */,
-				D87EC5D215BEC73400E38C36 /* Rectangle.hpp */,
 				D89FBD7A172543D100FFA541 /* RectangleF.hpp */,
 				D87EC5D215BEC73400E38C36 /* Rectangle.hpp */,
 				CFCEFF24163476F100FC4AB0 /* RectangleI.cpp */,
@@ -2149,7 +2096,6 @@
 				CF59DF8E15C04AFC002173EC /* ILogger.cpp */,
 				383BD3B91577EE630012AC53 /* ILogger.hpp */,
 				D80D521115EE2B0100ACEA16 /* IMathUtils.cpp */,
-				D8FEDAC615E7BD23007633A0 /* IMathUtils.hpp */,
 				D80D525515EE66D700ACEA16 /* INativeGL.hpp */,
 				E745CC7716484A9900819711 /* IStorage.cpp */,
 				382D4B95159DC26B00FE9296 /* IStorage.hpp */,
@@ -3112,6 +3058,7 @@
 				ARCHS = (
 					armv7s,
 					armv7,
+					arm64,
 				);
 				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = YES;
 				DSTROOT = /tmp/Glob3iOSSDK.dst;
@@ -3132,7 +3079,7 @@
 				PRODUCT_NAME = G3MiOSSDK;
 				RUN_CLANG_STATIC_ANALYZER = YES;
 				SKIP_INSTALL = YES;
-				VALID_ARCHS = "armv7 armv7s";
+				VALID_ARCHS = "armv7 armv7s arm64";
 			};
 			name = Debug;
 		};
@@ -3143,6 +3090,7 @@
 				ARCHS = (
 					armv7s,
 					armv7,
+					arm64,
 				);
 				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = YES;
 				DSTROOT = /tmp/Glob3iOSSDK.dst;
@@ -3163,7 +3111,7 @@
 				PRODUCT_NAME = G3MiOSSDK;
 				RUN_CLANG_STATIC_ANALYZER = YES;
 				SKIP_INSTALL = YES;
-				VALID_ARCHS = "armv7 armv7s";
+				VALID_ARCHS = "armv7 armv7s arm64";
 			};
 			name = Release;
 		};

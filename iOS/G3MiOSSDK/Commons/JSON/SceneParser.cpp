@@ -151,9 +151,12 @@ void SceneParser::parserJSONWMSLayer(LayerSet* layerSet, const JSONObject* jsonL
   IStringBuilder *layersName = IStringBuilder::newStringBuilder();
   
   for (int i = 0; i<jsonItems->size(); i++) {
-    if (jsonItems->getAsObject(i)->getAsBoolean(STATUS)->value()) {
-      layersName->addString(jsonItems->getAsObject(i)->getAsString(NAME)->value());
-      layersName->addString(",");
+    const JSONObject* jsOBJ = jsonItems->getAsObject(i);
+    if (jsOBJ != NULL) {
+      if (jsOBJ->getAsNumber(STATUS, 0) == 1 || jsOBJ->getAsBoolean(STATUS, false)) {
+        layersName->addString(jsOBJ->getAsString(NAME)->value());
+        layersName->addString(",");
+      }
     }
   }
   std::string layersSecuence = layersName->getString();
@@ -183,7 +186,7 @@ void SceneParser::parserJSONWMSLayer(LayerSet* layerSet, const JSONObject* jsonL
 
 void SceneParser::parserJSONTMSLayer(LayerSet* layerSet, const JSONObject* jsonLayer){
   cout << "Parsing TMS Layer " << jsonLayer->getAsString(NAME)->value() << "..." << endl;
-  
+  cout << "Parsing TMS Layer " << jsonLayer->description() << "..." << endl;
   const std::string jsonURL = jsonLayer->getAsString(DATASOURCE)->value();
   
   const int jsonSplitsLat = atoi(jsonLayer->getAsString(SPLITSLATITUDE)->value().c_str());
@@ -196,16 +199,19 @@ void SceneParser::parserJSONTMSLayer(LayerSet* layerSet, const JSONObject* jsonL
   std::string format = getFormat(transparent);
   
   LevelTileCondition* levelTileCondition = getLevelCondition(jsonLayer->getAsString(MINLEVEL),jsonLayer->getAsString(MAXLEVEL));
-
+  
   Sector sector = getSector(jsonLayer->getAsObject(BBOX));
   
   const JSONArray* jsonItems = jsonLayer->getAsArray(ITEMS);
   IStringBuilder *layersName = IStringBuilder::newStringBuilder();
   
   for (int i = 0; i<jsonItems->size(); i++) {
-    if (jsonItems->getAsObject(i)->getAsBoolean(STATUS)->value()) {
-      layersName->addString(jsonItems->getAsObject(i)->getAsString(NAME)->value());
-      layersName->addString(",");
+    const JSONObject* jsOBJ = jsonItems->getAsObject(i);
+    if (jsOBJ != NULL) {
+      if (jsOBJ->getAsNumber(STATUS, 0) == 1 || jsOBJ->getAsBoolean(STATUS, false)) {
+        layersName->addString(jsOBJ->getAsString(NAME)->value());
+        layersName->addString(",");
+      }
     }
   }
   std::string layersSecuence = layersName->getString();
@@ -281,8 +287,8 @@ Sector SceneParser::getSector(const JSONObject* jsonBBOX){
     }
     if (minx < maxx && miny < maxy) {
       return Sector(Geodetic2D(Angle::fromDegrees(miny), Angle::fromDegrees(minx)),
-             Geodetic2D(Angle::fromDegrees(maxy), Angle::fromDegrees(maxx)));
-
+                    Geodetic2D(Angle::fromDegrees(maxy), Angle::fromDegrees(maxx)));
+      
     }
   }
   return Sector::fullSphere();
@@ -354,7 +360,7 @@ void SceneParser::parserGEOJSONLayer(LayerSet* layerSet, const JSONObject* jsonL
       url->addString("/");
       url->addString(namefile);
     }
-  
+    
     std::string basicname;
     if (iISU->indexOf(namefile,".") != -1) {
       basicname = iISU->substring(namefile, 0, iISU->indexOf(namefile, "."));
@@ -364,7 +370,7 @@ void SceneParser::parserGEOJSONLayer(LayerSet* layerSet, const JSONObject* jsonL
     }
     
     /////
-
+    
     const std::string namefileTruncated = iISU->capitalize(iISU->replaceSubstring(basicname, "_", " "));
     
     std::string nameFileFormatted;
