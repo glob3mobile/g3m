@@ -47,7 +47,6 @@ public:
   _locationManager(locationManager),
   _motionManager(motionManager)
   {
-
   }
 
   void run(const G3MContext* context) {
@@ -57,26 +56,31 @@ public:
 
     CLLocationDirection trueHeading = [heading trueHeading];
 
+    CMAttitude* attitude = [motion attitude];
+    double roll  = [attitude roll];
+    double pitch = [attitude pitch];
+    double yaw   = [attitude yaw];
+
+
     UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
-    double angle;
+    double headingInDegrees;
+    double pitchRadians;
     if (orientation == UIInterfaceOrientationLandscapeLeft) {
-      angle = trueHeading - 90;
+      headingInDegrees = -trueHeading + 90;
+      pitchRadians = (2*PI - roll) - PI/2;
     }
     else if (orientation == UIInterfaceOrientationLandscapeRight) {
-      angle = trueHeading + 90;
+      headingInDegrees = -trueHeading - 90;
+      pitchRadians = roll - PI/2;
     }
     else if (orientation == UIInterfaceOrientationPortraitUpsideDown) {
-      angle = trueHeading + 180;
+      headingInDegrees = -trueHeading - 180;
+      pitchRadians = (2*PI -pitch) - PI/2;
     }
     else{
-      angle = trueHeading;
+      headingInDegrees = -trueHeading;
+      pitchRadians = pitch - PI/2;
     }
-
-    CMAttitude* attitude = [motion attitude];
-    double rollRadians  = [attitude roll];
-    double pitchRadians = [attitude pitch];
-    double yawRadians   = [attitude yaw];
-
 
     CLLocationCoordinate2D coordinate = [location coordinate];
     CLLocationDistance altitude = [location altitude];
@@ -84,13 +88,15 @@ public:
 
     Camera* camera = _g3mWidget->getNextCamera();
 
-    camera->setHeading( Angle::fromDegrees( -angle ) );
-    camera->setPitch( Angle::fromRadians( pitchRadians - PI/2 ) );
-    //    camera->setRoll( Angle::fromRadians(rollRadians) );
+//    //    camera->setRoll( Angle::fromRadians(rollRadians) );
+
+    camera->setHeading( Angle::fromDegrees( headingInDegrees ) );
+
+    camera->setPitch( Angle::fromRadians( pitchRadians ) );
 
     camera->setGeodeticPosition( Geodetic3D::fromDegrees(coordinate.latitude,
                                                          coordinate.longitude,
-                                                         altitude) );
+                                                         altitude + 500) );
   }
 };
 
@@ -109,7 +115,7 @@ void G3MAugmentedRealityDemoScene::rawActivate(const G3MContext* context) {
 
   _locationManager = [[CLLocationManager alloc] init];
   _locationManager.desiredAccuracy = kCLLocationAccuracyBest;
-  _locationManager.headingFilter = 0.1;
+  _locationManager.headingFilter = 0.001;
   [_locationManager requestAlwaysAuthorization];
 
   [_locationManager startUpdatingHeading];
@@ -117,6 +123,7 @@ void G3MAugmentedRealityDemoScene::rawActivate(const G3MContext* context) {
 
 
   _motionManager = [[CMMotionManager alloc] init];
+  _motionManager.showsDeviceMovementDisplay = YES;
   _motionManager.deviceMotionUpdateInterval = 10.0 / 1000.0; // 10ms
   [_motionManager startDeviceMotionUpdatesUsingReferenceFrame:CMAttitudeReferenceFrameXTrueNorthZVertical];
 
