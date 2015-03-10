@@ -7,6 +7,7 @@
 //
 
 #import "DeviceOrientation.h"
+#import <G3MiOSSDK/Angle.hpp>
 
 @implementation DeviceOrientation
 
@@ -30,19 +31,22 @@
 -(CMAttitude*) getAttitude{
   
   CMAttitude* attitude = _mm.deviceMotion.attitude;
-  printf("PITCH %f\n", attitude.pitch * (180/3.1415));
-  printf("ROLL %f\n", attitude.roll * (180/3.1415));
-  printf("YAW %f\n", attitude.yaw * (180/3.1415));
+  
+  double pitch = Angle::fromRadians(attitude.pitch).getNormalizedDegrees();
+  double roll = Angle::fromRadians(attitude.roll).getNormalizedDegrees();
+  double yaw = Angle::fromRadians(attitude.yaw).getNormalizedDegrees();
+  
+  printf("PITCH %f\n", pitch);
+  printf("ROLL %f\n", roll);
+  printf("YAW %f\n", yaw);
   printf("---------------\n");
-  
-  
   
   return attitude;
 }
 
 -(CMQuaternion) getQuaternion{
   CMQuaternion q = _mm.deviceMotion.attitude.quaternion;
-  printf("X: %f Y: %f Z: %f W: %f\n", q.x, q.y, q.z, q.w);
+  //printf("X: %f Y: %f Z: %f W: %f\n", q.x, q.y, q.z, q.w);
   return q;
 }
 
@@ -60,7 +64,7 @@
   
   UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
   
-  const double PI = 3.141592;
+  //const double PI = 3.141592;
   const double pi2 = PI/2;
   const double pi23 = 2*PI/3;
   

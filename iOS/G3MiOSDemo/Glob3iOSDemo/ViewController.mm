@@ -148,7 +148,10 @@
 
 #import <G3MiOSSDK/NonOverlappingMarksRenderer.hpp>
 
+#import <G3MiOSSDK/Quaternion.hpp>
+
 #include <typeinfo>
+
 
 
 
@@ -322,7 +325,7 @@ Mesh* createSectorMesh(const Planet* planet,
   
   _dO = [[DeviceOrientation alloc] init];
   
-  [NSTimer scheduledTimerWithTimeInterval:0.1
+  [NSTimer scheduledTimerWithTimeInterval:0.05
                                    target:self
                                  selector:@selector(tickQuaternion)
                                  userInfo:nil
@@ -367,43 +370,80 @@ const Planet* planet;
 -(void) tickQuaternion{
 
   CMQuaternion q = [_dO getQuaternion];
-
-  Angle angle = Angle::fromRadians(2 * acos(q.w));
-  double x = q.x / sqrt(1-q.w*q.w);
-  double y = q.y / sqrt(1-q.w*q.w);
-  double z = q.z / sqrt(1-q.w*q.w);
-  Vector3D axis(x, y, z);
   
+  Quaternion quaternion(q.x, q.y, q.z, q.w);
+//  Angle angle = quaternion.getRotationAngle();
+//  Vector3D axis = quaternion.getRotationAxis();
+
+//  Angle angle = Angle::fromRadians(2 * acos(q.w));
+//  double x = q.x / sqrt(1-q.w*q.w);
+//  double y = q.y / sqrt(1-q.w*q.w);
+//  double z = q.z / sqrt(1-q.w*q.w);
+//  Vector3D axis(x, y, z);
+  
+//  MutableMatrix44D quaternionRM = MutableMatrix44D::createRotationMatrix(angle, axis);
+  
+  MutableMatrix44D quaternionRM = quaternion.getRotationMatrix();
   
   CoordinateSystem global = CoordinateSystem::global();
+  CoordinateSystem local = planet->getCoordinateSystemAt(Geodetic3D::fromDegrees(28.133441, -15.423952, 1000));
+  MutableMatrix44D localRM = local.getRotationMatrix();
   
-  CoordinateSystem cs(Vector3D(0,0,1),
-                      Vector3D(1,0,0),
-                      planet->toCartesian(Geodetic3D::fromDegrees(28.133441, -15.423952, 1000)));
-  
-  
-  CoordinateSystem cs2 = global.applyRotation(MutableMatrix44D::createRotationMatrix(angle, axis));
-  CoordinateSystem cs3 = cs2.applyRotation(cs.getRotationMatrix()).changeOrigin(cs._origin);
-  
-  
-  Mesh* m = cs3.createMesh(1000, Color::red(), Color::blue(), Color::green());
+  CoordinateSystem final = global.applyRotation(localRM.multiply(quaternionRM) ).changeOrigin(local._origin);
+  /*
+  Mesh* m = final.createMesh(1000, Color::red(), Color::blue(), Color::green());
   mr->clearMeshes();
   mr->addMesh(m);
+  */
+  CoordinateSystem camCS(final._z.times(-1), //ViewDirection
+                         final._y,            //Up
+                         final._origin);       //Origin
   
-  TaitBryanAngles a3 = cs3.getTaitBryanAngles(CoordinateSystem::global());
-  
-  [G3MWidget widget]->getNextCamera()->setHeadingPitchRoll(a3._heading, a3._pitch, a3._roll);
-  
+  [G3MWidget widget]->getNextCamera()->setCameraCoordinateSystem(camCS);
   /*
+  TaitBryanAngles tba = final.getTaitBryanAngles(local);
+  //printf("TBA: H: %f, P: %f, R: %f\n", tba._heading._degrees, tba._pitch._degrees, tba._roll._degrees);
   
-  CoordinateSystem cs2 = global.applyRotation(cs.getRotationMatrix());
-  int a = 0;
-  a++;
-   */
+  double heading = tba._heading.getNormalizedDegrees();
+  double pitch = tba._pitch.getNormalizedDegrees();
+  double roll = tba._roll.getNormalizedDegrees();
+  printf("TBA: H: %f, P: %f, R: %f\n", heading, pitch, roll);
+  
+  //For portrait
+  
+  //if roll is closer to 0 than 180 then pitch is negative = looking to the ground
+  Angle distTo0 = tba._roll.distanceTo(Angle::zero());
+  Angle distTo180 = tba._roll.distanceTo(Angle::fromDegrees(180));
+  bool negativePitch = distTo0.lowerThan(distTo180);
+  
+  //printf("PITCH NEGATIVE: %d", negativePitch);
+  
+  double camHeading = negativePitch? heading + 90 : heading - 90;
+  double camPitch = negativePitch? pitch - 90 : 90 - pitch;
+  double camRoll = 0;
+  
+  //printf("CAM: H: %f, P: %f, R: %f\n", camHeading, camPitch, camRoll);
+  
+  //For Portrait
+//  [G3MWidget widget]->setCameraHeadingPitchRoll(Angle::fromDegrees(camHeading),        //Heading
+//                                                Angle::fromDegrees(camPitch),           //Pitch
+//                                                Angle::fromDegrees(camRoll));       //Roll
+*/
 }
 
+-(void) tick2{
+  CMAttitude* attitude = [_dO getAttitude];
+  
+  double pitch = Angle::fromRadians(attitude.pitch).getNormalizedDegrees();
+  double roll = Angle::fromRadians(attitude.roll).getNormalizedDegrees();
+  double yaw = Angle::fromRadians(attitude.yaw).getNormalizedDegrees();
+}
+
+
 -(void) tick{
-  //  CMAttitude* attitude = [_dO getAttitude];
+    CMAttitude* attitude = [_dO getAttitude];
+  
+  /*
   //
   //  double pitch = [_dO getPitchInRadians];
   //  if (pitch == pitch){
@@ -429,13 +469,16 @@ const Planet* planet;
   mr->clearMeshes();
   mr->addMesh(m);
   
+  
   //c->applyTransform(MutableMatrix44D::createRotationMatrix(angle, axis));
+   
+   */
 }
 
 
-//- (NSUInteger)supportedInterfaceOrientations{
-//  return UIInterfaceOrientationPortrait;
-//}
+- (NSUInteger) supportedInterfaceOrientations{
+  return UIInterfaceOrientationMaskPortrait;
+}
 
 //
 //- (void) initWithNonOverlappingMarks

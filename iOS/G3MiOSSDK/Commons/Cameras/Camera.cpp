@@ -460,3 +460,9 @@ double Camera::getEstimatedPixelDistance(const Vector3D& point0,
   const double distanceInMeters = frustumData._znear * IMathUtils::instance()->tan(angleInRadians/2);
   return distanceInMeters * _viewPortHeight / frustumData._top;
 }
+
+void Camera::setCameraCoordinateSystem(const Vector3D& viewDirection,
+                               const Vector3D& up){
+  
+#warning TODO_JM
+}

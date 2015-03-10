@@ -460,6 +460,8 @@
 		D842D9AF1A727FAF008D55E4 /* NonOverlappingMarksRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D842D9AD1A727FAF008D55E4 /* NonOverlappingMarksRenderer.cpp */; };
 		D842D9B01A72906A008D55E4 /* NonOverlappingMarksRenderer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D842D9AE1A727FAF008D55E4 /* NonOverlappingMarksRenderer.hpp */; };
 		D84D5A31157E0EAA000C5E35 /* MutableVector3D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D84D5A2F157E0EAA000C5E35 /* MutableVector3D.cpp */; };
+		D84E2BAC1AAEF782007433ED /* Quaternion.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D84E2BAA1AAEF782007433ED /* Quaternion.cpp */; };
+		D84E2BAD1AAEF957007433ED /* Quaternion.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D84E2BAB1AAEF782007433ED /* Quaternion.hpp */; };
 		D856FBFD189BB5610053F514 /* CoordinateSystem.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8F2EBAC18994A7B001B6103 /* CoordinateSystem.hpp */; };
 		D8715C1E17032AC700CF7BE2 /* GPUProgram.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8715C1C17032AC700CF7BE2 /* GPUProgram.cpp */; };
 		D874D08E18900B1600610F85 /* SingleBilElevationDataProvider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D874D08D18900B1600610F85 /* SingleBilElevationDataProvider.cpp */; };
@@ -730,6 +732,7 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				D84E2BAD1AAEF957007433ED /* Quaternion.hpp in CopyFiles */,
 				CF701B471A9F93B9007C6B3F /* MutableVector2F.hpp in CopyFiles */,
 				CF55133D1A8E6AC200097906 /* StaticImageBuilder.hpp in CopyFiles */,
 				CFAB53F61A8BCE5800DD0099 /* LayoutImageBuilder.hpp in CopyFiles */,
@@ -1726,6 +1729,8 @@
 		D84625DE177732A900FC4862 /* ColorMesh.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = ColorMesh.vsh; sourceTree = "<group>"; };
 		D84D5A2F157E0EAA000C5E35 /* MutableVector3D.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MutableVector3D.cpp; path = Commons/Geometry/MutableVector3D.cpp; sourceTree = "<group>"; };
 		D84D5A30157E0EAA000C5E35 /* MutableVector3D.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = MutableVector3D.hpp; path = Commons/Geometry/MutableVector3D.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
+		D84E2BAA1AAEF782007433ED /* Quaternion.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Quaternion.cpp; path = Commons/Geometry/Quaternion.cpp; sourceTree = "<group>"; };
+		D84E2BAB1AAEF782007433ED /* Quaternion.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Quaternion.hpp; path = Commons/Geometry/Quaternion.hpp; sourceTree = "<group>"; };
 		D8715C1C17032AC700CF7BE2 /* GPUProgram.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GPUProgram.cpp; sourceTree = "<group>"; };
 		D8715C1D17032AC700CF7BE2 /* GPUProgram.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GPUProgram.hpp; sourceTree = "<group>"; };
 		D8715C1F170344FB00CF7BE2 /* GPUAttribute.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; path = GPUAttribute.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
@@ -2266,6 +2271,8 @@
 				D8173EC918A3A2D6001E7B57 /* TaitBryanAngles.hpp */,
 				CF1918A81A9E5B2C00BF433C /* MutableVector2F.cpp */,
 				CF1918A91A9E5B2C00BF433C /* MutableVector2F.hpp */,
+				D84E2BAA1AAEF782007433ED /* Quaternion.cpp */,
+				D84E2BAB1AAEF782007433ED /* Quaternion.hpp */,
 			);
 			name = Geometry;
 			sourceTree = "<group>";
@@ -2935,6 +2942,7 @@
 				CCB2565015B5A33A00079B96 /* TexturedMesh.cpp in Sources */,
 				CF6CCE3919254B7500AA3ED7 /* ProceduralLayer.cpp in Sources */,
 				CCB2566415B5F58500079B96 /* Box.cpp in Sources */,
+				D84E2BAC1AAEF782007433ED /* Quaternion.cpp in Sources */,
 				D895CA1E1861C33A00AE8291 /* IImageUtils.cpp in Sources */,
 				D87EC5C715BEB12F00E38C36 /* LayerSet.cpp in Sources */,
 				CF55133C1A8E6A6000097906 /* StaticImageBuilder.cpp in Sources */,

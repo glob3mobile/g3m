@@ -65,7 +65,7 @@
 		D80C8B491A77B44000E67587 /* anchorWidget.png in Resources */ = {isa = PBXBuildFile; fileRef = D80C8B481A77B44000E67587 /* anchorWidget.png */; };
 		D8317203186C5BAD00522E1B /* simpleStencil.png in Resources */ = {isa = PBXBuildFile; fileRef = D8317202186C5BAD00522E1B /* simpleStencil.png */; };
 		D83D604A1AA89BC0002EA2B8 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D83D60491AA89BC0002EA2B8 /* CoreMotion.framework */; };
-		D83D604D1AA89D75002EA2B8 /* DeviceOrientation.m in Sources */ = {isa = PBXBuildFile; fileRef = D83D604C1AA89D75002EA2B8 /* DeviceOrientation.m */; };
+		D83D604D1AA89D75002EA2B8 /* DeviceOrientation.mm in Sources */ = {isa = PBXBuildFile; fileRef = D83D604C1AA89D75002EA2B8 /* DeviceOrientation.mm */; };
 		D882B1CD171D77C000C2AD9C /* full-earth-256x256.bil in Resources */ = {isa = PBXBuildFile; fileRef = D882B1CC171D76AD00C2AD9C /* full-earth-256x256.bil */; };
 		D8E93BE01588A171009D497C /* world.jpg in Resources */ = {isa = PBXBuildFile; fileRef = D8E93BDF1588A171009D497C /* world.jpg */; };
 		D8EEF38B1577920B003FEB5E /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8EEF38A1577920B003FEB5E /* UIKit.framework */; };
@@ -174,7 +174,7 @@
 		D8317202186C5BAD00522E1B /* simpleStencil.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = simpleStencil.png; sourceTree = "<group>"; };
 		D83D60491AA89BC0002EA2B8 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
 		D83D604B1AA89D75002EA2B8 /* DeviceOrientation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DeviceOrientation.h; sourceTree = "<group>"; };
-		D83D604C1AA89D75002EA2B8 /* DeviceOrientation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DeviceOrientation.m; sourceTree = "<group>"; };
+		D83D604C1AA89D75002EA2B8 /* DeviceOrientation.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = DeviceOrientation.mm; sourceTree = "<group>"; };
 		D882B1CC171D76AD00C2AD9C /* full-earth-256x256.bil */ = {isa = PBXFileReference; lastKnownFileType = file; path = "full-earth-256x256.bil"; sourceTree = "<group>"; };
 		D8E93BDF1588A171009D497C /* world.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = world.jpg; sourceTree = "<group>"; };
 		D8EEF3861577920B003FEB5E /* G3MiOSDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = G3MiOSDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -281,7 +281,7 @@
 				D8EEF3A31577920B003FEB5E /* ViewController.mm */,
 				D8EEF3911577920B003FEB5E /* Supporting Files */,
 				D83D604B1AA89D75002EA2B8 /* DeviceOrientation.h */,
-				D83D604C1AA89D75002EA2B8 /* DeviceOrientation.m */,
+				D83D604C1AA89D75002EA2B8 /* DeviceOrientation.mm */,
 			);
 			name = G3MiOSDemo;
 			path = Glob3iOSDemo;
@@ -537,7 +537,7 @@
 			files = (
 				D8EEF3971577920B003FEB5E /* main.m in Sources */,
 				D8EEF39B1577920B003FEB5E /* AppDelegate.m in Sources */,
-				D83D604D1AA89D75002EA2B8 /* DeviceOrientation.m in Sources */,
+				D83D604D1AA89D75002EA2B8 /* DeviceOrientation.mm in Sources */,
 				D8EEF3A41577920B003FEB5E /* ViewController.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
