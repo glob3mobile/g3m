@@ -366,8 +366,6 @@ const Planet* planet;
   
 }
 
-UIDeviceOrientation _lastDeviceOrientation = UIDeviceOrientationUnknown;
-
 -(void) changeCameraTick{
   
   Camera* camera = [G3MWidget widget]->getNextCamera();
@@ -391,22 +389,16 @@ UIDeviceOrientation _lastDeviceOrientation = UIDeviceOrientationUnknown;
     ILogger::instance()->logError("Invalid device attitude, skipping.");
   }
   
-  UIDeviceOrientation orientation = [[UIDevice currentDevice] orientation];// UIDeviceOrientationPortraitUpsideDown; //Changing manually
-  
-  if (orientation == UIDeviceOrientationFaceUp || orientation == UIDeviceOrientationFaceDown){
-    orientation = _lastDeviceOrientation;
-  }
-  _lastDeviceOrientation = orientation;
-  
+  UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
+
   /*
    Mesh* m = final.createMesh(1000, Color::red(), Color::green(), Color::blue());
    mr->clearMeshes();
    mr->addMesh(m);
    */
   
-  
   switch (orientation) {
-    case UIDeviceOrientationPortrait:
+    case UIInterfaceOrientationPortrait:
     {
      
       CoordinateSystem camCS(final._z.times(-1), //ViewDirection
@@ -418,7 +410,7 @@ UIDeviceOrientation _lastDeviceOrientation = UIDeviceOrientationUnknown;
       break;
     }
       
-    case UIDeviceOrientationPortraitUpsideDown:
+    case UIInterfaceOrientationPortraitUpsideDown:
     {
       
       CoordinateSystem camCS(final._z.times(-1), //ViewDirection
@@ -430,7 +422,7 @@ UIDeviceOrientation _lastDeviceOrientation = UIDeviceOrientationUnknown;
       break;
     }
       
-    case UIDeviceOrientationLandscapeRight:
+    case UIInterfaceOrientationLandscapeLeft:
     {
 
       CoordinateSystem camCS(final._z.times(-1), //ViewDirection
@@ -441,7 +433,7 @@ UIDeviceOrientation _lastDeviceOrientation = UIDeviceOrientationUnknown;
       break;
     }
       
-    case UIDeviceOrientationLandscapeLeft:
+    case UIInterfaceOrientationLandscapeRight:
     {
 
       CoordinateSystem camCS(final._z.times(-1), //ViewDirection
