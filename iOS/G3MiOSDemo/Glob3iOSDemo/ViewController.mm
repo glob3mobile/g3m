@@ -327,7 +327,7 @@ Mesh* createSectorMesh(const Planet* planet,
   
   [NSTimer scheduledTimerWithTimeInterval:0.05
                                    target:self
-                                 selector:@selector(tickQuaternion)
+                                 selector:@selector(changeCameraTick)
                                  userInfo:nil
                                   repeats:YES];
   
@@ -357,14 +357,9 @@ Mesh* createSectorMesh(const Planet* planet,
 MeshRenderer* mr;
 const Planet* planet;
 
--(MutableMatrix44D*) matrix:(CMRotationMatrix) m{
+-(MutableMatrix44D) matrix:(CMRotationMatrix) m{
   
-  //  return new MutableMatrix44D(m.m11, m.m21, m.m31, 0,
-  //                              m.m12, m.m22, m.m23, 0,
-  //                              m.m13, m.m23, m.m33, 0,
-  //                              0, 0, 0, 1);
-  
-  return new MutableMatrix44D(m.m11, m.m12, m.m13, 0,
+  return MutableMatrix44D(m.m11, m.m12, m.m13, 0,
                               m.m21, m.m22, m.m23, 0,
                               m.m31, m.m32, m.m33, 0,
                               0, 0, 0, 1);
@@ -373,33 +368,28 @@ const Planet* planet;
 
 UIDeviceOrientation _lastDeviceOrientation = UIDeviceOrientationUnknown;
 
--(void) tickQuaternion{
+-(void) changeCameraTick{
   
-  //CMQuaternion q = [_dO getQuaternion];
-  
-  //Quaternion quaternion(q.x, q.y, q.z, q.w);
-  //  Angle angle = quaternion.getRotationAngle();
-  //  Vector3D axis = quaternion.getRotationAxis();
-  
-  //  Angle angle = Angle::fromRadians(2 * acos(q.w));
-  //  double x = q.x / sqrt(1-q.w*q.w);
-  //  double y = q.y / sqrt(1-q.w*q.w);
-  //  double z = q.z / sqrt(1-q.w*q.w);
-  //  Vector3D axis(x, y, z);
-  
-  //  MutableMatrix44D quaternionRM = MutableMatrix44D::createRotationMatrix(angle, axis);
-  
+  Camera* camera = [G3MWidget widget]->getNextCamera();
+  Geodetic3D camPosition = camera->getGeodeticPosition();
   
   CMRotationMatrix matrixR = [_dO getRotationMatrix];
   
-  MutableMatrix44D* quaternionRM =  [self matrix:matrixR];//quaternion.getRotationMatrix();
+  MutableMatrix44D quaternionRM =  [self matrix:matrixR];//quaternion.getRotationMatrix();
   
   CoordinateSystem global = CoordinateSystem::global();
-  CoordinateSystem local = planet->getCoordinateSystemAt(Geodetic3D::fromDegrees(28.133441, -15.423952, 1000));
+  CoordinateSystem local = planet->getCoordinateSystemAt(camPosition);
   MutableMatrix44D localRM = local.getRotationMatrix();
   
-  CoordinateSystem final = global.applyRotation(localRM.multiply(*quaternionRM) ).changeOrigin(local._origin);
-  delete quaternionRM;
+  CoordinateSystem unorientedFinal = global.applyRotation(localRM.multiply(quaternionRM) ).changeOrigin(local._origin);
+  
+  Vector3D planetNormal = planet->geodeticSurfaceNormal(unorientedFinal._origin);
+  
+  CoordinateSystem final = unorientedFinal.applyRotation(MutableMatrix44D::createRotationMatrix(Angle::fromDegrees(90), planetNormal));
+  
+  if (!final.isConsistent()){
+    ILogger::instance()->logError("Invalid device attitude, skipping.");
+  }
   
   UIDeviceOrientation orientation = [[UIDevice currentDevice] orientation];// UIDeviceOrientationPortraitUpsideDown; //Changing manually
   
@@ -408,22 +398,21 @@ UIDeviceOrientation _lastDeviceOrientation = UIDeviceOrientationUnknown;
   }
   _lastDeviceOrientation = orientation;
   
+  /*
+   Mesh* m = final.createMesh(1000, Color::red(), Color::green(), Color::blue());
+   mr->clearMeshes();
+   mr->addMesh(m);
+   */
+  
   
   switch (orientation) {
     case UIDeviceOrientationPortrait:
     {
-      Vector3D planetNormal = planet->geodeticSurfaceNormal(final._origin);
+     
+      CoordinateSystem camCS(final._z.times(-1), //ViewDirection
+                             final._y,            //Up
+                             final._origin);       //Origin
       
-      CoordinateSystem final2 = final.applyRotation(MutableMatrix44D::createRotationMatrix(Angle::fromDegrees(90), planetNormal));
-      
-      CoordinateSystem camCS(final2._z.times(-1), //ViewDirection
-                             final2._y,            //Up
-                             final2._origin);       //Origin
-      /*
-       Mesh* m = final2.createMesh(1000, Color::red(), Color::green(), Color::blue());
-       mr->clearMeshes();
-       mr->addMesh(m);
-      */
       [G3MWidget widget]->getNextCamera()->setCameraCoordinateSystem(camCS);
       
       break;
@@ -431,18 +420,11 @@ UIDeviceOrientation _lastDeviceOrientation = UIDeviceOrientationUnknown;
       
     case UIDeviceOrientationPortraitUpsideDown:
     {
-      Vector3D planetNormal = planet->geodeticSurfaceNormal(final._origin);
       
-      CoordinateSystem final2 = final.applyRotation(MutableMatrix44D::createRotationMatrix(Angle::fromDegrees(90), planetNormal));
-      
-      CoordinateSystem camCS(final2._z.times(-1), //ViewDirection
-                             final2._y.times(-1),            //Up
-                             final2._origin);       //Origin
-      /*
-       Mesh* m = final2.createMesh(1000, Color::red(), Color::green(), Color::blue());
-       mr->clearMeshes();
-       mr->addMesh(m);
-       */
+      CoordinateSystem camCS(final._z.times(-1), //ViewDirection
+                             final._y.times(-1),            //Up
+                             final._origin);       //Origin
+
       [G3MWidget widget]->getNextCamera()->setCameraCoordinateSystem(camCS);
       
       break;
@@ -450,17 +432,10 @@ UIDeviceOrientation _lastDeviceOrientation = UIDeviceOrientationUnknown;
       
     case UIDeviceOrientationLandscapeRight:
     {
-      Vector3D planetNormal = planet->geodeticSurfaceNormal(final._origin);
-      
-      CoordinateSystem final2 = final.applyRotation(MutableMatrix44D::createRotationMatrix(Angle::fromDegrees(90), planetNormal));
-      /*
-       Mesh* m = final2.createMesh(1000, Color::red(), Color::green(), Color::blue());
-       mr->clearMeshes();
-       mr->addMesh(m);
-       */
-      CoordinateSystem camCS(final2._z.times(-1), //ViewDirection
-                             final2._x.times(-1),            //Up
-                             final2._origin);       //Origin
+
+      CoordinateSystem camCS(final._z.times(-1), //ViewDirection
+                             final._x.times(-1),            //Up
+                             final._origin);       //Origin
       
       [G3MWidget widget]->getNextCamera()->setCameraCoordinateSystem(camCS);
       break;
@@ -468,56 +443,19 @@ UIDeviceOrientation _lastDeviceOrientation = UIDeviceOrientationUnknown;
       
     case UIDeviceOrientationLandscapeLeft:
     {
-      Vector3D planetNormal = planet->geodeticSurfaceNormal(final._origin);
-      
-      CoordinateSystem final2 = final.applyRotation(MutableMatrix44D::createRotationMatrix(Angle::fromDegrees(90), planetNormal));
-      /*
-       Mesh* m = final2.createMesh(1000, Color::red(), Color::green(), Color::blue());
-       mr->clearMeshes();
-       mr->addMesh(m);
-       */
-      CoordinateSystem camCS(final2._z.times(-1), //ViewDirection
-                             final2._x,            //Up
-                             final2._origin);       //Origin
+
+      CoordinateSystem camCS(final._z.times(-1), //ViewDirection
+                             final._x,            //Up
+                             final._origin);       //Origin
       
       [G3MWidget widget]->getNextCamera()->setCameraCoordinateSystem(camCS);
       break;
     }
       
     default:
+      ILogger::instance()->logInfo("Unexpected Interface Orientation");
       break;
   }
-  
-  
-  /*
-   TaitBryanAngles tba = final.getTaitBryanAngles(local);
-   //printf("TBA: H: %f, P: %f, R: %f\n", tba._heading._degrees, tba._pitch._degrees, tba._roll._degrees);
-   
-   double heading = tba._heading.getNormalizedDegrees();
-   double pitch = tba._pitch.getNormalizedDegrees();
-   double roll = tba._roll.getNormalizedDegrees();
-   printf("TBA: H: %f, P: %f, R: %f\n", heading, pitch, roll);
-   
-   //For portrait
-   
-   //if roll is closer to 0 than 180 then pitch is negative = looking to the ground
-   Angle distTo0 = tba._roll.distanceTo(Angle::zero());
-   Angle distTo180 = tba._roll.distanceTo(Angle::fromDegrees(180));
-   bool negativePitch = distTo0.lowerThan(distTo180);
-   
-   //printf("PITCH NEGATIVE: %d", negativePitch);
-   
-   double camHeading = negativePitch? heading + 90 : heading - 90;
-   double camPitch = negativePitch? pitch - 90 : 90 - pitch;
-   double camRoll = 0;
-   
-   //printf("CAM: H: %f, P: %f, R: %f\n", camHeading, camPitch, camRoll);
-   
-   //For Portrait
-   //  [G3MWidget widget]->setCameraHeadingPitchRoll(Angle::fromDegrees(camHeading),        //Heading
-   //                                                Angle::fromDegrees(camPitch),           //Pitch
-   //                                                Angle::fromDegrees(camRoll));       //Roll
-   */
 }
 
 
@@ -531,6 +469,153 @@ UIDeviceOrientation _lastDeviceOrientation = UIDeviceOrientationUnknown;
 }
 
 
+//
+//-(void) tickQuaternion{
+//  
+//  //CMQuaternion q = [_dO getQuaternion];
+//  
+//  //Quaternion quaternion(q.x, q.y, q.z, q.w);
+//  //  Angle angle = quaternion.getRotationAngle();
+//  //  Vector3D axis = quaternion.getRotationAxis();
+//  
+//  //  Angle angle = Angle::fromRadians(2 * acos(q.w));
+//  //  double x = q.x / sqrt(1-q.w*q.w);
+//  //  double y = q.y / sqrt(1-q.w*q.w);
+//  //  double z = q.z / sqrt(1-q.w*q.w);
+//  //  Vector3D axis(x, y, z);
+//  
+//  //  MutableMatrix44D quaternionRM = MutableMatrix44D::createRotationMatrix(angle, axis);
+//  
+//  
+//  CMRotationMatrix matrixR = [_dO getRotationMatrix];
+//  
+//  MutableMatrix44D* quaternionRM =  [self matrix:matrixR];//quaternion.getRotationMatrix();
+//  
+//  CoordinateSystem global = CoordinateSystem::global();
+//  CoordinateSystem local = planet->getCoordinateSystemAt(Geodetic3D::fromDegrees(28.133441, -15.423952, 1000));
+//  MutableMatrix44D localRM = local.getRotationMatrix();
+//  
+//  CoordinateSystem final = global.applyRotation(localRM.multiply(*quaternionRM) ).changeOrigin(local._origin);
+//  delete quaternionRM;
+//  
+//  UIDeviceOrientation orientation = [[UIDevice currentDevice] orientation];// UIDeviceOrientationPortraitUpsideDown; //Changing manually
+//  
+//  if (orientation == UIDeviceOrientationFaceUp || orientation == UIDeviceOrientationFaceDown){
+//    orientation = _lastDeviceOrientation;
+//  }
+//  _lastDeviceOrientation = orientation;
+//  
+//  
+//  switch (orientation) {
+//    case UIDeviceOrientationPortrait:
+//    {
+//      Vector3D planetNormal = planet->geodeticSurfaceNormal(final._origin);
+//      
+//      CoordinateSystem final = final.applyRotation(MutableMatrix44D::createRotationMatrix(Angle::fromDegrees(90), planetNormal));
+//      
+//      CoordinateSystem camCS(final._z.times(-1), //ViewDirection
+//                             final._y,            //Up
+//                             final._origin);       //Origin
+//      /*
+//       Mesh* m = final.createMesh(1000, Color::red(), Color::green(), Color::blue());
+//       mr->clearMeshes();
+//       mr->addMesh(m);
+//      */
+//      [G3MWidget widget]->getNextCamera()->setCameraCoordinateSystem(camCS);
+//      
+//      break;
+//    }
+//      
+//    case UIDeviceOrientationPortraitUpsideDown:
+//    {
+//      Vector3D planetNormal = planet->geodeticSurfaceNormal(final._origin);
+//      
+//      CoordinateSystem final = final.applyRotation(MutableMatrix44D::createRotationMatrix(Angle::fromDegrees(90), planetNormal));
+//      
+//      CoordinateSystem camCS(final._z.times(-1), //ViewDirection
+//                             final._y.times(-1),            //Up
+//                             final._origin);       //Origin
+//      /*
+//       Mesh* m = final.createMesh(1000, Color::red(), Color::green(), Color::blue());
+//       mr->clearMeshes();
+//       mr->addMesh(m);
+//       */
+//      [G3MWidget widget]->getNextCamera()->setCameraCoordinateSystem(camCS);
+//      
+//      break;
+//    }
+//      
+//    case UIDeviceOrientationLandscapeRight:
+//    {
+//      Vector3D planetNormal = planet->geodeticSurfaceNormal(final._origin);
+//      
+//      CoordinateSystem final = final.applyRotation(MutableMatrix44D::createRotationMatrix(Angle::fromDegrees(90), planetNormal));
+//      /*
+//       Mesh* m = final.createMesh(1000, Color::red(), Color::green(), Color::blue());
+//       mr->clearMeshes();
+//       mr->addMesh(m);
+//       */
+//      CoordinateSystem camCS(final._z.times(-1), //ViewDirection
+//                             final._x.times(-1),            //Up
+//                             final._origin);       //Origin
+//      
+//      [G3MWidget widget]->getNextCamera()->setCameraCoordinateSystem(camCS);
+//      break;
+//    }
+//      
+//    case UIDeviceOrientationLandscapeLeft:
+//    {
+//      Vector3D planetNormal = planet->geodeticSurfaceNormal(final._origin);
+//      
+//      CoordinateSystem final = final.applyRotation(MutableMatrix44D::createRotationMatrix(Angle::fromDegrees(90), planetNormal));
+//      /*
+//       Mesh* m = final.createMesh(1000, Color::red(), Color::green(), Color::blue());
+//       mr->clearMeshes();
+//       mr->addMesh(m);
+//       */
+//      CoordinateSystem camCS(final._z.times(-1), //ViewDirection
+//                             final._x,            //Up
+//                             final._origin);       //Origin
+//      
+//      [G3MWidget widget]->getNextCamera()->setCameraCoordinateSystem(camCS);
+//      break;
+//    }
+//      
+//    default:
+//      break;
+//  }
+//  
+//  
+//  /*
+//   TaitBryanAngles tba = final.getTaitBryanAngles(local);
+//   //printf("TBA: H: %f, P: %f, R: %f\n", tba._heading._degrees, tba._pitch._degrees, tba._roll._degrees);
+//   
+//   double heading = tba._heading.getNormalizedDegrees();
+//   double pitch = tba._pitch.getNormalizedDegrees();
+//   double roll = tba._roll.getNormalizedDegrees();
+//   printf("TBA: H: %f, P: %f, R: %f\n", heading, pitch, roll);
+//   
+//   //For portrait
+//   
+//   //if roll is closer to 0 than 180 then pitch is negative = looking to the ground
+//   Angle distTo0 = tba._roll.distanceTo(Angle::zero());
+//   Angle distTo180 = tba._roll.distanceTo(Angle::fromDegrees(180));
+//   bool negativePitch = distTo0.lowerThan(distTo180);
+//   
+//   //printf("PITCH NEGATIVE: %d", negativePitch);
+//   
+//   double camHeading = negativePitch? heading + 90 : heading - 90;
+//   double camPitch = negativePitch? pitch - 90 : 90 - pitch;
+//   double camRoll = 0;
+//   
+//   //printf("CAM: H: %f, P: %f, R: %f\n", camHeading, camPitch, camRoll);
+//   
+//   //For Portrait
+//   //  [G3MWidget widget]->setCameraHeadingPitchRoll(Angle::fromDegrees(camHeading),        //Heading
+//   //                                                Angle::fromDegrees(camPitch),           //Pitch
+//   //                                                Angle::fromDegrees(camRoll));       //Roll
+//   */
+//}
 
 //-(void) tick2{
 //  CMAttitude* attitude = [_dO getAttitude];
