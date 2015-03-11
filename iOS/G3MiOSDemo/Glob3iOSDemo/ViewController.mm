@@ -371,6 +371,8 @@ const Planet* planet;
   
 }
 
+UIDeviceOrientation _lastDeviceOrientation = UIDeviceOrientationUnknown;
+
 -(void) tickQuaternion{
   
   //CMQuaternion q = [_dO getQuaternion];
@@ -390,7 +392,6 @@ const Planet* planet;
   
   CMRotationMatrix matrixR = [_dO getRotationMatrix];
   
-  
   MutableMatrix44D* quaternionRM =  [self matrix:matrixR];//quaternion.getRotationMatrix();
   
   CoordinateSystem global = CoordinateSystem::global();
@@ -398,8 +399,15 @@ const Planet* planet;
   MutableMatrix44D localRM = local.getRotationMatrix();
   
   CoordinateSystem final = global.applyRotation(localRM.multiply(*quaternionRM) ).changeOrigin(local._origin);
+  delete quaternionRM;
   
-  UIDeviceOrientation orientation = UIDeviceOrientationLandscapeLeft; //Changing manually
+  UIDeviceOrientation orientation = [[UIDevice currentDevice] orientation];// UIDeviceOrientationPortraitUpsideDown; //Changing manually
+  
+  if (orientation == UIDeviceOrientationFaceUp || orientation == UIDeviceOrientationFaceDown){
+    orientation = _lastDeviceOrientation;
+  }
+  _lastDeviceOrientation = orientation;
+  
   
   switch (orientation) {
     case UIDeviceOrientationPortrait:
@@ -421,7 +429,26 @@ const Planet* planet;
       break;
     }
       
-    case UIDeviceOrientationLandscapeLeft:
+    case UIDeviceOrientationPortraitUpsideDown:
+    {
+      Vector3D planetNormal = planet->geodeticSurfaceNormal(final._origin);
+      
+      CoordinateSystem final2 = final.applyRotation(MutableMatrix44D::createRotationMatrix(Angle::fromDegrees(90), planetNormal));
+      
+      CoordinateSystem camCS(final2._z.times(-1), //ViewDirection
+                             final2._y.times(-1),            //Up
+                             final2._origin);       //Origin
+      /*
+       Mesh* m = final2.createMesh(1000, Color::red(), Color::green(), Color::blue());
+       mr->clearMeshes();
+       mr->addMesh(m);
+       */
+      [G3MWidget widget]->getNextCamera()->setCameraCoordinateSystem(camCS);
+      
+      break;
+    }
+      
+    case UIDeviceOrientationLandscapeRight:
     {
       Vector3D planetNormal = planet->geodeticSurfaceNormal(final._origin);
       
@@ -439,7 +466,7 @@ const Planet* planet;
       break;
     }
       
-    case UIDeviceOrientationLandscapeRight:
+    case UIDeviceOrientationLandscapeLeft:
     {
       Vector3D planetNormal = planet->geodeticSurfaceNormal(final._origin);
       
@@ -450,7 +477,7 @@ const Planet* planet;
        mr->addMesh(m);
        */
       CoordinateSystem camCS(final2._z.times(-1), //ViewDirection
-                             final2._x.times(-1),            //Up
+                             final2._x,            //Up
                              final2._origin);       //Origin
       
       [G3MWidget widget]->getNextCamera()->setCameraCoordinateSystem(camCS);
@@ -493,21 +520,16 @@ const Planet* planet;
    */
 }
 
-/*
+
 -(NSUInteger)supportedInterfaceOrientations {
-  return UIInterfaceOrientationMaskPortrait || UIInterfaceOrientationMaskLandscape;
+  return UIInterfaceOrientationMaskAll;
 }
 
+
 -(BOOL)shouldAutorotate {
-  if([[UIDevice currentDevice] orientation] == UIInterfaceOrientationLandscapeLeft)
-  {
-    return YES;
-  }
-  else{
-    return NO;
-  }
+  return YES;
 }
-*/
+
 
 
 //-(void) tick2{
