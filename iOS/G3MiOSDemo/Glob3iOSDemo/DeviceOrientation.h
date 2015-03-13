@@ -16,6 +16,10 @@
 }
 
 -(id) init;
+-(void) stop;
+-(void) restart;
+
+
 -(CMAttitude*) getAttitude;
 -(double) getPitchInRadians;
 

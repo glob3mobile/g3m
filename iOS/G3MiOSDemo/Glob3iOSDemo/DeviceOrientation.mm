@@ -28,6 +28,16 @@
   return self;
 }
 
+-(void) stop{
+  [_mm stopDeviceMotionUpdates];
+}
+
+-(void) restart{
+  [_mm stopDeviceMotionUpdates];
+  // Attitude that is referenced to true north
+  [_mm startDeviceMotionUpdatesUsingReferenceFrame:CMAttitudeReferenceFrameXTrueNorthZVertical];
+}
+
 -(CMAttitude*) getAttitude{
   
   CMAttitude* attitude = _mm.deviceMotion.attitude;

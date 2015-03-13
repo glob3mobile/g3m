@@ -325,32 +325,100 @@ Mesh* createSectorMesh(const Planet* planet,
   
   _dO = [[DeviceOrientation alloc] init];
   
-  [NSTimer scheduledTimerWithTimeInterval:0.05
-                                   target:self
-                                 selector:@selector(changeCameraTick)
-                                 userInfo:nil
-                                  repeats:YES];
+//  [NSTimer scheduledTimerWithTimeInterval:0.05
+//                                   target:self
+//                                 selector:@selector(changeCameraTick)
+//                                 userInfo:nil
+//                                  repeats:YES];
+  
+  
+  class DeviceOrientationCameraConstrainer: public ICameraConstrainer{
+    ViewController* _vc;
+  public:
+    
+    DeviceOrientationCameraConstrainer(ViewController* vc):_vc(vc){};
+    
+    bool onCameraChange(const Planet* planet,
+                        const Camera* previousCamera,
+                        Camera* nextCamera) const{
+      [_vc changeCameraTick];
+      return true;
+    }
+  };
   
   
   
   G3MBuilder_iOS builder([self G3MWidget]);
   
+  builder.addCameraConstraint(new DeviceOrientationCameraConstrainer(self));
+
+  
+  planet = Planet::createSphericalEarth();
+  
+  
   mr = new MeshRenderer();
   builder.addRenderer(mr);
   
-  planet = Planet::createSphericalEarth();
+  mr->addMesh([self createStarDome]);
   
   builder.setPlanet(planet);
   builder.initializeWidget();
   [[self G3MWidget] startAnimation];
   
   
-  [G3MWidget widget]->setCameraPosition(Geodetic3D::fromDegrees(28.129396,-15.4249822,10000));
+  [G3MWidget widget]->setCameraPosition(Geodetic3D::fromDegrees(27.973105, -15.597545,1000));
   
   /*
    [[self G3MWidget] widget]->addPeriodicalTask(TimeInterval::fromMilliseconds(100),
    new CameraRollChangerTask([[self G3MWidget] widget]));
    */
+  
+}
+
+-(Mesh*) createStarDome{
+  
+  FloatBufferBuilderFromCartesian3D* fbb = FloatBufferBuilderFromCartesian3D::builderWithFirstVertexAsCenter();
+  
+  
+  double domeHeight = 1e5;
+  
+  CoordinateSystem local = planet->getCoordinateSystemAt(Geodetic3D::fromDegrees(27.973105, -15.597545,0)); //GRAN CANARIA
+  
+  Vector3D north = local._y;
+  Vector3D normal = local._z;
+  Vector3D altitudeRotationAxis = local._x;
+  Vector3D origin = local._origin;
+  
+  Vector3D startingStarPos = origin.add(local._y.normalized().times(domeHeight));
+  
+  
+  for(int i = 0; i < 1000; i++){
+    
+    //Defining stars by true-north azimuth (heading) and altitude http://en.wikipedia.org/wiki/Azimuth
+    Angle azimuth = Angle::fromDegrees((rand() % 36000) / 100.0);
+    Angle altitude = Angle::fromDegrees((rand() % 9000) / 100.0);
+    
+    MutableMatrix44D mAltitude = MutableMatrix44D::createGeneralRotationMatrix(altitude, altitudeRotationAxis, origin);
+    MutableMatrix44D mAzimuth = MutableMatrix44D::createGeneralRotationMatrix(azimuth, normal, origin);
+    //MutableMatrix44D m = mAltitude.multiply(mAzimuth);
+    MutableMatrix44D m = mAzimuth.multiply(mAltitude);
+    
+    Vector3D starPos = startingStarPos.transformedBy(m, 1.0);
+    
+    fbb->add(starPos);
+  }
+  
+  return new DirectMesh(GLPrimitive::points(),
+                        true,
+                        fbb->getCenter(),
+                        fbb->create(),
+                        1.0,
+                        3.0,
+                        Color::newFromRGBA(1.0, 1.0, 1.0, 1.0),
+                        NULL,
+                        1.0f,
+                        false,
+                        NULL);
   
 }
 
@@ -360,9 +428,9 @@ const Planet* planet;
 -(MutableMatrix44D) matrix:(CMRotationMatrix) m{
   
   return MutableMatrix44D(m.m11, m.m12, m.m13, 0,
-                              m.m21, m.m22, m.m23, 0,
-                              m.m31, m.m32, m.m33, 0,
-                              0, 0, 0, 1);
+                          m.m21, m.m22, m.m23, 0,
+                          m.m31, m.m32, m.m33, 0,
+                          0, 0, 0, 1);
   
 }
 
@@ -390,7 +458,7 @@ const Planet* planet;
   }
   
   UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
-
+  
   /*
    Mesh* m = final.createMesh(1000, Color::red(), Color::green(), Color::blue());
    mr->clearMeshes();
@@ -400,7 +468,7 @@ const Planet* planet;
   switch (orientation) {
     case UIInterfaceOrientationPortrait:
     {
-     
+      
       CoordinateSystem camCS(final._z.times(-1), //ViewDirection
                              final._y,            //Up
                              final._origin);       //Origin
@@ -416,7 +484,7 @@ const Planet* planet;
       CoordinateSystem camCS(final._z.times(-1), //ViewDirection
                              final._y.times(-1),            //Up
                              final._origin);       //Origin
-
+      
       [G3MWidget widget]->getNextCamera()->setCameraCoordinateSystem(camCS);
       
       break;
@@ -424,7 +492,7 @@ const Planet* planet;
       
     case UIInterfaceOrientationLandscapeLeft:
     {
-
+      
       CoordinateSystem camCS(final._z.times(-1), //ViewDirection
                              final._x.times(-1),            //Up
                              final._origin);       //Origin
@@ -435,7 +503,7 @@ const Planet* planet;
       
     case UIInterfaceOrientationLandscapeRight:
     {
-
+      
       CoordinateSystem camCS(final._z.times(-1), //ViewDirection
                              final._x,            //Up
                              final._origin);       //Origin
@@ -463,48 +531,48 @@ const Planet* planet;
 
 //
 //-(void) tickQuaternion{
-//  
+//
 //  //CMQuaternion q = [_dO getQuaternion];
-//  
+//
 //  //Quaternion quaternion(q.x, q.y, q.z, q.w);
 //  //  Angle angle = quaternion.getRotationAngle();
 //  //  Vector3D axis = quaternion.getRotationAxis();
-//  
+//
 //  //  Angle angle = Angle::fromRadians(2 * acos(q.w));
 //  //  double x = q.x / sqrt(1-q.w*q.w);
 //  //  double y = q.y / sqrt(1-q.w*q.w);
 //  //  double z = q.z / sqrt(1-q.w*q.w);
 //  //  Vector3D axis(x, y, z);
-//  
+//
 //  //  MutableMatrix44D quaternionRM = MutableMatrix44D::createRotationMatrix(angle, axis);
-//  
-//  
+//
+//
 //  CMRotationMatrix matrixR = [_dO getRotationMatrix];
-//  
+//
 //  MutableMatrix44D* quaternionRM =  [self matrix:matrixR];//quaternion.getRotationMatrix();
-//  
+//
 //  CoordinateSystem global = CoordinateSystem::global();
 //  CoordinateSystem local = planet->getCoordinateSystemAt(Geodetic3D::fromDegrees(28.133441, -15.423952, 1000));
 //  MutableMatrix44D localRM = local.getRotationMatrix();
-//  
+//
 //  CoordinateSystem final = global.applyRotation(localRM.multiply(*quaternionRM) ).changeOrigin(local._origin);
 //  delete quaternionRM;
-//  
+//
 //  UIDeviceOrientation orientation = [[UIDevice currentDevice] orientation];// UIDeviceOrientationPortraitUpsideDown; //Changing manually
-//  
+//
 //  if (orientation == UIDeviceOrientationFaceUp || orientation == UIDeviceOrientationFaceDown){
 //    orientation = _lastDeviceOrientation;
 //  }
 //  _lastDeviceOrientation = orientation;
-//  
-//  
+//
+//
 //  switch (orientation) {
 //    case UIDeviceOrientationPortrait:
 //    {
 //      Vector3D planetNormal = planet->geodeticSurfaceNormal(final._origin);
-//      
+//
 //      CoordinateSystem final = final.applyRotation(MutableMatrix44D::createRotationMatrix(Angle::fromDegrees(90), planetNormal));
-//      
+//
 //      CoordinateSystem camCS(final._z.times(-1), //ViewDirection
 //                             final._y,            //Up
 //                             final._origin);       //Origin
@@ -514,16 +582,16 @@ const Planet* planet;
 //       mr->addMesh(m);
 //      */
 //      [G3MWidget widget]->getNextCamera()->setCameraCoordinateSystem(camCS);
-//      
+//
 //      break;
 //    }
-//      
+//
 //    case UIDeviceOrientationPortraitUpsideDown:
 //    {
 //      Vector3D planetNormal = planet->geodeticSurfaceNormal(final._origin);
-//      
+//
 //      CoordinateSystem final = final.applyRotation(MutableMatrix44D::createRotationMatrix(Angle::fromDegrees(90), planetNormal));
-//      
+//
 //      CoordinateSystem camCS(final._z.times(-1), //ViewDirection
 //                             final._y.times(-1),            //Up
 //                             final._origin);       //Origin
@@ -533,14 +601,14 @@ const Planet* planet;
 //       mr->addMesh(m);
 //       */
 //      [G3MWidget widget]->getNextCamera()->setCameraCoordinateSystem(camCS);
-//      
+//
 //      break;
 //    }
-//      
+//
 //    case UIDeviceOrientationLandscapeRight:
 //    {
 //      Vector3D planetNormal = planet->geodeticSurfaceNormal(final._origin);
-//      
+//
 //      CoordinateSystem final = final.applyRotation(MutableMatrix44D::createRotationMatrix(Angle::fromDegrees(90), planetNormal));
 //      /*
 //       Mesh* m = final.createMesh(1000, Color::red(), Color::green(), Color::blue());
@@ -550,15 +618,15 @@ const Planet* planet;
 //      CoordinateSystem camCS(final._z.times(-1), //ViewDirection
 //                             final._x.times(-1),            //Up
 //                             final._origin);       //Origin
-//      
+//
 //      [G3MWidget widget]->getNextCamera()->setCameraCoordinateSystem(camCS);
 //      break;
 //    }
-//      
+//
 //    case UIDeviceOrientationLandscapeLeft:
 //    {
 //      Vector3D planetNormal = planet->geodeticSurfaceNormal(final._origin);
-//      
+//
 //      CoordinateSystem final = final.applyRotation(MutableMatrix44D::createRotationMatrix(Angle::fromDegrees(90), planetNormal));
 //      /*
 //       Mesh* m = final.createMesh(1000, Color::red(), Color::green(), Color::blue());
@@ -568,40 +636,40 @@ const Planet* planet;
 //      CoordinateSystem camCS(final._z.times(-1), //ViewDirection
 //                             final._x,            //Up
 //                             final._origin);       //Origin
-//      
+//
 //      [G3MWidget widget]->getNextCamera()->setCameraCoordinateSystem(camCS);
 //      break;
 //    }
-//      
+//
 //    default:
 //      break;
 //  }
-//  
-//  
+//
+//
 //  /*
 //   TaitBryanAngles tba = final.getTaitBryanAngles(local);
 //   //printf("TBA: H: %f, P: %f, R: %f\n", tba._heading._degrees, tba._pitch._degrees, tba._roll._degrees);
-//   
+//
 //   double heading = tba._heading.getNormalizedDegrees();
 //   double pitch = tba._pitch.getNormalizedDegrees();
 //   double roll = tba._roll.getNormalizedDegrees();
 //   printf("TBA: H: %f, P: %f, R: %f\n", heading, pitch, roll);
-//   
+//
 //   //For portrait
-//   
+//
 //   //if roll is closer to 0 than 180 then pitch is negative = looking to the ground
 //   Angle distTo0 = tba._roll.distanceTo(Angle::zero());
 //   Angle distTo180 = tba._roll.distanceTo(Angle::fromDegrees(180));
 //   bool negativePitch = distTo0.lowerThan(distTo180);
-//   
+//
 //   //printf("PITCH NEGATIVE: %d", negativePitch);
-//   
+//
 //   double camHeading = negativePitch? heading + 90 : heading - 90;
 //   double camPitch = negativePitch? pitch - 90 : 90 - pitch;
 //   double camRoll = 0;
-//   
+//
 //   //printf("CAM: H: %f, P: %f, R: %f\n", camHeading, camPitch, camRoll);
-//   
+//
 //   //For Portrait
 //   //  [G3MWidget widget]->setCameraHeadingPitchRoll(Angle::fromDegrees(camHeading),        //Heading
 //   //                                                Angle::fromDegrees(camPitch),           //Pitch
@@ -4614,11 +4682,15 @@ const Planet* planet;
 - (void)viewDidAppear:(BOOL)animated
 {
   [super viewDidAppear:animated];
+  
+  [_dO restart];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
 {
   [super viewWillDisappear:animated];
+  
+  [_dO stop];
 }
 
 - (void)viewDidDisappear:(BOOL)animated
