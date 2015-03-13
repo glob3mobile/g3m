@@ -126,7 +126,8 @@ public class G3MWebGLTestingApplication
     	  //testBandama();
     	  //testGeacron();
     	  //testPTE05Layers();
-    	  testPTE05Chano();
+    	  //testPTE05Chano();
+    	  testLaPalma();
     	  
          // initialize a customized widget by using a builder
          //initCustomizedWithBuilder();
@@ -1143,6 +1144,56 @@ public class G3MWebGLTestingApplication
 	  return cameraRenderer;
 	}
 	
+	
+	   public void testLaPalma() {
+		   final G3MBuilder_WebGL builder = new G3MBuilder_WebGL();
+
+		   //const Planet* planet = Planet::createEarth();
+		   //const Planet* planet = Planet::createSphericalEarth();
+		   final Planet planet = Planet.createFlatEarth();
+		   builder.setPlanet(planet);
+		   
+		   // wms layer
+		final LayerTilesRenderParameters ltrp = new LayerTilesRenderParameters(Sector.fullSphere(), 2, 4, 0, 19, 
+					new Vector2I(256, 256), 
+					new Vector2I(16,16), false);
+		   LayerSet	layerSet = new LayerSet();
+		   WMSLayer grafcanLIDAR = new WMSLayer("LIDAR_MTL",
+				   new URL("http://idecan1.grafcan.es/ServicioWMS/MTL?", false),
+				   WMSServerVersion.WMS_1_1_0,
+				   Sector.fullSphere(),//gcSector,
+				   "image/jpeg",
+				   "EPSG:4326",
+				   "",
+				   false,
+				   new LevelTileCondition(0, 17),
+				   TimeInterval.fromDays(30),
+				   true,
+				   ltrp);
+		   layerSet.addLayer(grafcanLIDAR);
+		   builder.getPlanetRendererBuilder().setLayerSet(layerSet);
+		   	   
+		   // create elevations for La Palma
+		   Sector sector = Sector.fromDegrees(28.47, -18.00, 28.85, -17.74);
+		   Vector2I extent = new Vector2I(780, 1140);                             // bil resolution
+		   URL url = new URL("http://serdis.dis.ulpgc.es/~atrujill/glob3m/LaPalma/LaPalma780x1140.bil", false);
+		   ElevationDataProvider elevationDataProvider = new SingleBilElevationDataProvider(url, sector, extent);
+		   builder.getPlanetRendererBuilder().setElevationDataProvider(elevationDataProvider);	  
+		   builder.getPlanetRendererBuilder().setVerticalExaggeration(1.0f);
+
+		   // background color
+		   Color bgColor = Color.newFromRGBA(0.0f, 0.4f, 0.8f, 1.0f);
+		   builder.setBackgroundColor(bgColor);
+		   
+		   _widget = builder.createWidget();
+		   
+		   // set camera looking at Tenerife
+		   Geodetic3D position = new Geodetic3D(Angle.fromDegrees(28.070), Angle.fromDegrees(-15.478), 9291.1);
+		   _widget.setCameraPosition(position);
+		   _widget.setCameraHeading(Angle.fromDegrees(-35.65));
+		   _widget.setCameraPitch(Angle.fromDegrees(-64.75));
+	  }
+
 	   public void testBILGC() {
 		   final G3MBuilder_WebGL builder = new G3MBuilder_WebGL();
 
