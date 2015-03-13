@@ -4179,8 +4179,18 @@ public:
   Color* bgColor = Color::newFromRGBA(0.0f, 0.4f, 0.8f, 1.0f);
   builder.setBackgroundColor(bgColor);
   
+  // markers
+  MarksRenderer* marksRenderer = new MarksRenderer(false);
+  {
+    Mark* m = new Mark("", URL("http://serdis.dis.ulpgc.es/~atrujill/glob3m/LaPalma/restaurante64.png", false),  Geodetic3D(Angle::fromDegrees(28.675), Angle::fromDegrees(-17.889), 0), RELATIVE_TO_GROUND);
+    marksRenderer->addMark(m);
+  }
+  {
+    Mark* m = new Mark("", URL("http://serdis.dis.ulpgc.es/~atrujill/glob3m/LaPalma/restaurante64.png", false),  Geodetic3D(Angle::fromDegrees(28.678), Angle::fromDegrees(-17.8632), 10), RELATIVE_TO_GROUND);
+    marksRenderer->addMark(m);
+  }
+  builder.addRenderer(marksRenderer);
   
-  // initialization
   builder.initializeWidget();
   
   // set frustumCullingFactor
