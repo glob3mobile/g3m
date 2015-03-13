@@ -284,7 +284,8 @@ Mesh* createSectorMesh(const Planet* planet,
   
   //[self initCustomizedWithBuilder];
   
-  [self testGCElevations];
+  [self testLaPalma];
+  //[self testGCElevations];
   //[self testElevationNavigation];
   
   //  [self initWithMapBooBuilder];
@@ -4123,6 +4124,73 @@ public:
   [self G3MWidget].widget->setCameraPosition(position);
   [self G3MWidget].widget->setCameraPitch(Angle::fromDegrees(-34.25));
   [self G3MWidget].widget->setCameraHeading(Angle::fromDegrees(35.07));
+}
+
+
+- (void) testLaPalma
+{
+  G3MBuilder_iOS builder([self G3MWidget]);
+  
+  //const Planet* planet = Planet::createEarth();
+  //const Planet* planet = Planet::createSphericalEarth();
+  const Planet* planet = Planet::createFlatEarth();
+  builder.setPlanet(planet);
+  
+  // debug
+  //builder.getPlanetRendererBuilder()->setRenderDebug(true);
+  
+  // create wmslayer from Grafcan
+  LayerSet* layerSet = new LayerSet();
+  WMSLayer* grafcanLIDAR = new WMSLayer("LIDAR_MTL",
+                                        URL("http://idecan1.grafcan.es/ServicioWMS/MTL?", false),
+                                        WMS_1_1_0,
+                                        Sector::fullSphere(),//gcSector,
+                                        "image/jpeg",
+                                        "EPSG:4326",
+                                        "",
+                                        false,
+                                        new LevelTileCondition(0, 17),
+                                        TimeInterval::fromDays(30),
+                                        true);
+  layerSet->addLayer(grafcanLIDAR);
+  builder.getPlanetRendererBuilder()->setLayerSet(layerSet);
+  
+  // create elevations for La Palma
+  Sector sector = Sector::fromDegrees (28.47, -18.00, 28.85, -17.74);
+  Vector2I extent = Vector2I(780, 1140);           // image resolution
+  URL url = URL("http://serdis.dis.ulpgc.es/~atrujill/glob3m/LaPalma/LaPalma780x1140.bil", false);
+  ElevationDataProvider* elevationDataProvider = new SingleBilElevationDataProvider(url, sector, extent);
+  builder.getPlanetRendererBuilder()->setElevationDataProvider(elevationDataProvider);
+  float verticalExaggeration = 1.0f;
+  builder.getPlanetRendererBuilder()->setVerticalExaggeration(verticalExaggeration);
+  
+  // create camera renderers
+  //CameraRenderer* cameraRenderer = [self createCameraRenderer];
+  //builder.setCameraRenderer(cameraRenderer);
+  
+  /* webgl optimization
+   bool testingTileCache = true;
+   if (testingTileCache){
+   builder.getPlanetRendererBuilder()->setTileCacheSize(200);
+   builder.getPlanetRendererBuilder()->setDeleteTexturesOfInvisibleTiles(false);
+   }*/
+  
+  // background color
+  Color* bgColor = Color::newFromRGBA(0.0f, 0.4f, 0.8f, 1.0f);
+  builder.setBackgroundColor(bgColor);
+  
+  
+  // initialization
+  builder.initializeWidget();
+  
+  // set frustumCullingFactor
+  [self G3MWidget].widget->getPlanetRenderer()->setFrustumCullingFactor(1.0);
+  
+  // set camera looking at GC
+  Geodetic3D position = Geodetic3D(Angle::fromDegrees(28.5991), Angle::fromDegrees(-17.8705), 1065.401);
+  [self G3MWidget].widget->setCameraPosition(position);
+  [self G3MWidget].widget->setCameraPitch(Angle::fromDegrees(-5.01));
+  [self G3MWidget].widget->setCameraHeading(Angle::fromDegrees(4.35));
 }
 
 @end

@@ -10,24 +10,31 @@ import org.glob3.mobile.generated.Planet;
 
 public class MyCameraConstrainer implements ICameraConstrainer
 {
-
+	float _maxPitch;
+	
+	public MyCameraConstrainer(float maxPitch)
+	{
+		_maxPitch = maxPitch;
+	}
+	
 	public void dispose()
 	{
 	}
 
 	public boolean onCameraChange(Planet planet, Camera previousCamera, Camera nextCamera)
 	{
-
 		final double radii = planet.getRadii().maxAxis();
 		final double maxHeight = radii *9;
 		final double minHeight = 10;
-		final double maxPitch = -15;
 
 		final Geodetic3D cameraPosition = nextCamera.getGeodeticPosition();
 		final double cameraHeight = cameraPosition._height;
 		final double cameraPitch = nextCamera.getPitch()._degrees;
 		
-		//ILogger.instance().logInfo("pitch=" + cameraPitch);
+		ILogger.instance().logInfo("camera pos = %f %f %f", cameraPosition._latitude._degrees,
+				cameraPosition._longitude._degrees, cameraPosition._height);
+		ILogger.instance().logInfo("heading=" + nextCamera.getHeading()._degrees +
+				"   pitch=" + cameraPitch + "<" + _maxPitch);
 
 		if (cameraHeight > maxHeight)
 		{
@@ -43,7 +50,7 @@ public class MyCameraConstrainer implements ICameraConstrainer
 	                                      cameraPosition._longitude,
 	                                      minHeight);*/
 		}
-		if (cameraPitch > maxPitch)
+		if (cameraPitch > _maxPitch)
 		{
 			//nextCamera.copyFrom(previousCamera);
 			double prevHeight = previousCamera.getGeodeticPosition()._height;

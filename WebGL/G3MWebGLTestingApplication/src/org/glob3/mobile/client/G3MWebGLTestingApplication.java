@@ -1185,13 +1185,16 @@ public class G3MWebGLTestingApplication
 		   Color bgColor = Color.newFromRGBA(0.0f, 0.4f, 0.8f, 1.0f);
 		   builder.setBackgroundColor(bgColor);
 		   
+		   // camera constrainers
+		   builder.addCameraConstraint(new MyCameraConstrainer(-5));
+
 		   _widget = builder.createWidget();
 		   
 		   // set camera looking at Tenerife
-		   Geodetic3D position = new Geodetic3D(Angle.fromDegrees(28.070), Angle.fromDegrees(-15.478), 9291.1);
+		   Geodetic3D position = new Geodetic3D(Angle.fromDegrees(28.5991), Angle.fromDegrees(-17.8705), 1500);
 		   _widget.setCameraPosition(position);
-		   _widget.setCameraHeading(Angle.fromDegrees(-35.65));
-		   _widget.setCameraPitch(Angle.fromDegrees(-64.75));
+		   _widget.setCameraHeading(Angle.fromDegrees(4.35));
+		   _widget.setCameraPitch(Angle.fromDegrees(-5.01));
 	  }
 
 	   public void testBILGC() {
@@ -1320,7 +1323,7 @@ public class G3MWebGLTestingApplication
 		   builder.getPlanetRendererBuilder().setVerticalExaggeration(1.0f);
 		   
 		   // camera constrainers
-		   builder.addCameraConstraint(new MyCameraConstrainer());
+		   builder.addCameraConstraint(new MyCameraConstrainer(-15));
 		   
 		   _widget = builder.createWidget();
 		   
@@ -2143,7 +2146,7 @@ public class G3MWebGLTestingApplication
 		   builder.getPlanetRendererBuilder().setVerticalExaggeration(1.5f);
 		   
 		   // camera constrainers
-		   builder.addCameraConstraint(new MyCameraConstrainer());
+		   builder.addCameraConstraint(new MyCameraConstrainer(-15));
 		   
 		   testPTE05_exportJavaFunctions();
 		   
