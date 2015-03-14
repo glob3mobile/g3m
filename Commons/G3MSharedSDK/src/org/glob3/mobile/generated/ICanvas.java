@@ -343,11 +343,11 @@ public abstract class ICanvas
   
     if (transparency <= 0.0)
     {
-      return _drawRoundImage(image, radius, 0.0);
+      return _drawRoundImage(image, radius, 0.0f);
     }
     else if (transparency >= 1.0)
     {
-      return _drawRoundImage(image, radius, 1.0);
+      return _drawRoundImage(image, radius, 1.0f);
     }
     else
     {
@@ -361,11 +361,11 @@ public abstract class ICanvas
   
     if (transparency <= 0.0)
     {
-      return _drawRoundedImage(image, radius, 0.0);
+      return _drawRoundedImage(image, radius, 0.0f);
     }
     else if (transparency >= 1.0)
     {
-      return _drawRoundedImage(image, radius, 1.0);
+      return _drawRoundedImage(image, radius, 1.0f);
     }
     else
     {
