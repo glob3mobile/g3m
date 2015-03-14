@@ -4181,6 +4181,9 @@ public:
   
   // markers
   MarksRenderer* marksRenderer = new MarksRenderer(false);
+/*  std::vector<Geodetic2D*>* coordinates = new std::vector<Geodetic2D*>();
+  coordinates->push_back( new Geodetic2D( sector.getSW() ) );*/
+
   {
     Mark* m = new Mark("", URL("http://serdis.dis.ulpgc.es/~atrujill/glob3m/LaPalma/restaurante64.png", false),  Geodetic3D(Angle::fromDegrees(28.675), Angle::fromDegrees(-17.889), 0), RELATIVE_TO_GROUND);
     marksRenderer->addMark(m);
@@ -4201,6 +4204,7 @@ public:
   [self G3MWidget].widget->setCameraPosition(position);
   [self G3MWidget].widget->setCameraPitch(Angle::fromDegrees(-5.01));
   [self G3MWidget].widget->setCameraHeading(Angle::fromDegrees(4.35));
+  [self G3MWidget].widget->setMarksRenderer(marksRenderer);
 }
 
 @end

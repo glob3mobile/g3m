@@ -318,6 +318,7 @@ void G3MWidget::notifyTouchEvent(const G3MEventContext &ec,
           if (_cameraActivityListener != NULL) {
             _cameraActivityListener->touchEventHandled();
           }
+          
         }
       }
       break;
@@ -353,6 +354,7 @@ Vector3D G3MWidget::getScenePositionForPixel(int x, int y){
     return Vector3D::nan();
   }
 }
+
 
 
 Vector3D G3MWidget::getScenePositionForCentralPixel() {
@@ -445,8 +447,9 @@ void G3MWidget::zRender(){
 
   if (_zRenderCounter == -1 || _zRenderCounter != _renderCounter){
     _zRenderCounter = _renderCounter;
+    ILogger::instance()->logInfo("haciendo zrender counter = %d\n", _zRenderCounter);
   } else{
-    //ILogger::instance()->logInfo("Recycling Z Render");
+    ILogger::instance()->logInfo("Recycling Z Render");
     return; //NO NEED OF RENDERING AGAIN
   }
 

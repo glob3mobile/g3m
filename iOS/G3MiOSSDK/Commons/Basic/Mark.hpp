@@ -106,6 +106,8 @@ private:
    * Default value: FALSE
    */
   const bool        _autoDeleteListener;
+  
+  bool _visible;
 
 #ifdef C_CODE
   const TextureIDReference* _textureId;
@@ -143,6 +145,11 @@ private:
   MutableVector3D _markCameraVector;
 
 public:
+  
+  void setVisible(bool visible) {
+    _visible = visible;
+  }
+  
   /**
    * Creates a marker with icon and label
    */

@@ -104,7 +104,7 @@ void CameraDoubleDragHandler::onMove(const G3MEventContext *eventContext,
                                      CameraContext *cameraContext) {
   
   if (cameraContext->getCurrentGesture() != DoubleDrag) return;
-
+  
   // compute transformation matrix
   const Planet* planet = eventContext->getPlanet();
   const Vector2I pixel0 = touchEvent.getTouch(0)->getPos();

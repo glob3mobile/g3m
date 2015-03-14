@@ -16,6 +16,7 @@
 #include "IFactory.hpp"
 
 #include "G3MWidget.hpp"
+#include "Planet.hpp"
 
 bool CameraSingleDragHandler::onTouchEvent(const G3MEventContext *eventContext,
                                            const TouchEvent* touchEvent, 

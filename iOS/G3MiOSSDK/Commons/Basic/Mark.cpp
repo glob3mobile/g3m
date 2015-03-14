@@ -24,6 +24,8 @@
 #include "TextureIDReference.hpp"
 #include "ErrorHandling.hpp"
 
+#include "G3MWidget.hpp"
+
 class MarkLabelImageListener : public IImageListener {
 private:
   IImage* _iconImage;
@@ -167,7 +169,8 @@ _imageID( iconURL._path + "_" + label ),
 _surfaceElevationProvider(NULL),
 _currentSurfaceElevation(0.0),
 _glState(NULL),
-_normalAtMarkPosition(NULL)
+_normalAtMarkPosition(NULL),
+_visible(true)
 {
 
 }
@@ -208,7 +211,8 @@ _imageID( "_" + label ),
 _surfaceElevationProvider(NULL),
 _currentSurfaceElevation(0.0),
 _glState(NULL),
-_normalAtMarkPosition(NULL)
+_normalAtMarkPosition(NULL),
+_visible(true)
 {
 
 }
@@ -246,7 +250,8 @@ _imageID( iconURL._path + "_" ),
 _surfaceElevationProvider(NULL),
 _currentSurfaceElevation(0.0),
 _glState(NULL),
-_normalAtMarkPosition(NULL)
+_normalAtMarkPosition(NULL),
+_visible(true)
 {
 
 }
@@ -285,7 +290,8 @@ _imageID( imageID ),
 _surfaceElevationProvider(NULL),
 _currentSurfaceElevation(0.0),
 _glState(NULL),
-_normalAtMarkPosition(NULL)
+_normalAtMarkPosition(NULL),
+_visible(true)
 {
 
 }
@@ -454,6 +460,8 @@ void Mark::render(const G3MRenderContext* rc,
                   const Planet* planet,
                   GL* gl,
                   IFloatBuffer* billboardTexCoords) {
+  
+  if (!_visible) return;
 
   const Vector3D* markPosition = getCartesianPosition(planet);
 

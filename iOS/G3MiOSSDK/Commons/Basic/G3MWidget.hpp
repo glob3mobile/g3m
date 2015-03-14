@@ -64,6 +64,8 @@ class G3MContext;
 class GLGlobalState;
 class SceneLighting;
 
+class MarksRenderer;
+
 class Sector;
 
 class WidgetUserData {
@@ -275,6 +277,14 @@ public:
   
   void setSceneReadyListener(SceneReadyListener* srl, bool autodelete);
   
+  void setMarksRenderer(MarksRenderer* marksRenderer) {
+    _marksRenderer = marksRenderer;
+  }
+  
+  MarksRenderer* getMarksRenderer() {
+    return _marksRenderer;
+  }
+  
 private:
   IStorage*                _storage;
   IDownloader*             _downloader;
@@ -292,6 +302,8 @@ private:
   Renderer*           _hudRenderer;
   RenderState*        _rendererState;
   ProtoRenderer*      _selectedRenderer;
+  
+  MarksRenderer*      _marksRenderer;
 
   EffectsScheduler*   _effectsScheduler;
 

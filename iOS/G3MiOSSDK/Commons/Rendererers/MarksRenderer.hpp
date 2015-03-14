@@ -46,6 +46,10 @@ private:
 
 public:
 
+  std::vector<Mark*> getMarks() {
+    return _marks;
+  }
+  
   MarksRenderer(bool readyWhenMarksReady);
 
   void setMarkTouchListener(MarkTouchListener* markTouchListener,
