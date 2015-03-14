@@ -79,6 +79,10 @@ public abstract class ICanvas
 
   protected abstract void _drawImage(IImage image, float srcLeft, float srcTop, float srcWidth, float srcHeight, float destLeft, float destTop, float destWidth, float destHeight, float transparency);
 
+  protected abstract IImage _drawRoundImage(IImage image, float radius, float transparency);
+
+  protected abstract IImage _drawRoundedImage(IImage image, float radius, float transparency);
+
 
   protected abstract void _beginPath();
 
@@ -133,7 +137,7 @@ public abstract class ICanvas
 
   /**
    Returns the size of the text if it were to be rendered with the actual font on a single line.
-
+   
    NOTE: The current font has to be set before calling this method.
    NOTE: No need to initialize the canvas before calling this method.
    */
@@ -145,7 +149,7 @@ public abstract class ICanvas
 
   /**
    Set the actual font.
-
+   
    NOTE: No need to initialize the canvas before calling this method.
    */
   public final void setFont(GFont font)
@@ -331,8 +335,42 @@ public abstract class ICanvas
       }
   
     }
+  }
+
+  public final IImage drawRoundImage(IImage image, float radius, float transparency)
+  {
+    checkInitialized();
   
+    if (transparency <= 0.0)
+    {
+      return _drawRoundImage(image, radius, 0.0);
+    }
+    else if (transparency >= 1.0)
+    {
+      return _drawRoundImage(image, radius, 1.0);
+    }
+    else
+    {
+      return _drawRoundImage(image, radius, transparency);
+    }
+  }
+
+  public final IImage drawRoundedImage(IImage image, float radius, float transparency)
+  {
+    checkInitialized();
   
+    if (transparency <= 0.0)
+    {
+      return _drawRoundedImage(image, radius, 0.0);
+    }
+    else if (transparency >= 1.0)
+    {
+      return _drawRoundedImage(image, radius, 1.0);
+    }
+    else
+    {
+      return _drawRoundedImage(image, radius, transparency);
+    }
   }
 
   public final int getWidth()
