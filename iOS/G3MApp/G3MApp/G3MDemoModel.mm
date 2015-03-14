@@ -78,7 +78,6 @@ _context(NULL)
   _scenes.push_back( new G3MHUDDemoScene(this) );
   _scenes.push_back( new G3MNonOverlappingMarksDemoScene(this) );
   _scenes.push_back( new G3MAugmentedRealityDemoScene(this) );
-
   // _scenes.push_back( new G3MCanvas2DDemoScene(this) );
 }
 
