@@ -75,7 +75,7 @@ public:
            const bool                        readExpired,
            const LayerTilesRenderParameters* parameters     = NULL,
            const float                       transparency   = 1,
-           std::vector<const Info*>*   layerInfo      = new std::vector<const Info*>());
+           std::vector<const Info*>*         layerInfo      = new std::vector<const Info*>());
 
   WMSLayer(const std::string&                mapLayer,
            const URL&                        mapServerURL,
@@ -90,7 +90,7 @@ public:
            const bool                        readExpired,
            const LayerTilesRenderParameters* parameters     = NULL,
            const float                       transparency   = 1,
-           std::vector<const Info*>*   layerInfo = new std::vector<const Info*>());
+           std::vector<const Info*>*         layerInfo = new std::vector<const Info*>());
 
   URL getFeatureInfoURL(const Geodetic2D& g,
                         const Sector& sector) const;
