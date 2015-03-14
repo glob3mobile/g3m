@@ -482,4 +482,57 @@ public final class Canvas_Android
    }
 
 
+   @Override
+   protected IImage _drawRoundImage(final IImage image,
+                                    final float radius,
+                                    final float transparency) {
+      final Bitmap bitmap = ((Image_Android) image).getBitmap();
+
+
+      final Rect src = _rect;
+      src.set(Math.round(0), //
+               Math.round(0), //
+               Math.round(bitmap.getWidth()), // Right
+               Math.round(bitmap.getHeight())); // Bottom
+
+      final RectF dst = _rectF;
+      dst.set(0, //
+               0, //
+               radius, // Right
+               radius); // Bottom
+
+      final Paint paint = new Paint();
+      paint.setAlpha((int) (255 * transparency));
+
+
+      final Path path = new Path();
+      path.addCircle(radius, radius, (radius / 2), Path.Direction.CCW);
+      _canvas.clipPath(path);
+
+      _canvas.drawBitmap(bitmap, src, dst, paint);
+
+      return new Image_Android(_bitmap, null);
+   }
+
+
+   @Override
+   protected IImage _drawRoundedImage(final IImage image,
+                                      final float radius,
+                                      final float transparency) {
+      final Bitmap sourceBitmap = ((Image_Android) image).getBitmap();
+
+
+      final int targetWidth = (int) radius * 2;
+      final int targetHeight = (int) radius * 2;
+
+      final Path path = new Path();
+      path.addCircle(((float) targetWidth - 1) / 2, ((float) targetHeight - 1) / 2,
+               (Math.min(((float) targetWidth), ((float) targetHeight)) / 2), Path.Direction.CCW);
+
+      _canvas.clipPath(path);
+      _canvas.drawBitmap(sourceBitmap, new Rect(0, 0, sourceBitmap.getWidth(), sourceBitmap.getHeight()), new Rect(0, 0,
+               targetWidth, targetHeight), null);
+
+      return new Image_Android(_bitmap, null);
+   }
 }

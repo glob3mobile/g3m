@@ -257,11 +257,11 @@ IImage* ICanvas::drawRoundImage(const IImage* image,
   if (transparency <= 0.0) {
     return _drawRoundImage(image,
                            radius,
-                           0.0);
+                           0.0f);
   } else if (transparency >= 1.0) {
     return _drawRoundImage(image,
                            radius,
-                           1.0);
+                           1.0f);
   }
   else {
     return _drawRoundImage(image,
@@ -278,11 +278,11 @@ IImage* ICanvas::drawRoundedImage(const IImage* image,
   if (transparency <= 0.0) {
     return _drawRoundedImage(image,
                              radius,
-                             0.0);
+                             0.0f);
   } else if (transparency >= 1.0) {
     return _drawRoundedImage(image,
                              radius,
-                             1.0);
+                             1.0f);
   }
   else {
     return _drawRoundedImage(image,
