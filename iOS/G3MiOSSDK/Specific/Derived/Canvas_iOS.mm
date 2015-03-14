@@ -501,6 +501,113 @@ void Canvas_iOS::_drawImage(const IImage* image,
 
 }
 
+IImage* Canvas_iOS::_drawRoundImage(const IImage* image,
+                                    float radius,
+                                    float transparency) {
+  UIImage* uiImage = ((Image_iOS*) image)->getUIImage();
+  CGImage* cgImage = [uiImage CGImage];
+  
+  CGContextSetAlpha(_context, transparency);
+  
+  // This function returns a newImage, based on image, that has been:
+  // - scaled to fit in (CGRect) rect
+  // - and cropped within a circle of radius: rectWidth/2
+  
+  
+  
+  //Get the width and heights
+  CGFloat imageWidth = uiImage.size.width;
+  CGFloat imageHeight = uiImage.size.height;
+  CGFloat rectWidth = radius*2;
+  CGFloat rectHeight = radius*2;
+  
+  
+  //Calculate the centre of the circle
+  CGFloat imageCentreX = radius;
+  CGFloat imageCentreY = radius;
+  
+  // Create and CLIP to a CIRCULAR Path
+  // (This could be replaced with any closed path if you want a different shaped clip)
+  CGContextBeginPath (_context);
+  CGContextAddArc (_context, imageCentreX, imageCentreY, radius, 0, 2*(float)M_PI, 0);
+  CGContextClosePath (_context);
+  CGContextClip (_context);
+  
+  CGRect destRect = CGRectMake(0,
+                               _canvasHeight - rectHeight,
+                               rectWidth,
+                               rectHeight);
+  
+  CGContextDrawImage(_context,
+                     destRect,
+                     cgImage);
+  
+  
+  CGImageRef cgResultImage = CGBitmapContextCreateImage(_context);
+  UIImage* resultImage = [UIImage imageWithCGImage: cgResultImage];
+  CFRelease(cgResultImage);
+  
+  IImage* result = new Image_iOS(resultImage, NULL);
+  
+  return result;
+}
+
+IImage* Canvas_iOS::_drawRoundedImage(const IImage* image,
+                                      float radius,
+                                      float transparency) {
+  UIImage* uiImage = ((Image_iOS*) image)->getUIImage();
+  
+  
+  // This function returns a newImage, based on image, that has been:
+  // - scaled to fit in (CGRect) rect
+  // - and cropped within a circle of radius: rectWidth/2
+  
+  
+  //Get the width and heights
+  CGFloat imageWidth = uiImage.size.width;
+  CGFloat imageHeight = uiImage.size.height;
+  CGFloat rectWidth = radius*2;
+  CGFloat rectHeight = radius*2;
+  
+  //Create the bitmap graphics context
+  UIGraphicsBeginImageContextWithOptions(CGSizeMake(rectWidth, rectHeight), NO, 0.0);
+  CGContextRef context = UIGraphicsGetCurrentContext();
+  
+  CGContextSetAlpha(context, transparency);
+  
+  
+  //Calculate the scale factor
+  CGFloat scaleFactorX = rectWidth/imageWidth;
+  CGFloat scaleFactorY = rectHeight/imageHeight;
+  
+  //Calculate the centre of the circle
+  CGFloat imageCentreX = radius;
+  CGFloat imageCentreY = radius;
+  
+  // Create and CLIP to a CIRCULAR Path
+  // (This could be replaced with any closed path if you want a different shaped clip)
+  CGContextBeginPath (context);
+  CGContextAddArc (context, imageCentreX, imageCentreY, radius, 0, 2*(float)M_PI, 0);
+  CGContextClosePath (context);
+  CGContextClip (context);
+  
+  //Set the SCALE factor for the graphics context
+  //All future draw calls will be scaled by this factor
+  
+  CGContextScaleCTM (context, scaleFactorX, scaleFactorY);
+  
+  // Draw the IMAGE
+  CGRect myRect = CGRectMake(0, 0, imageWidth, imageHeight);
+  [uiImage drawInRect:myRect];
+  
+  CGContextScaleCTM (context, 1/scaleFactorX, 1/scaleFactorY);
+  
+  UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
+  UIGraphicsEndImageContext();
+  
+  return new Image_iOS(newImage, NULL);
+}
+
 void Canvas_iOS::_beginPath() {
   if (_path != NULL) {
     CGPathRelease(_path);

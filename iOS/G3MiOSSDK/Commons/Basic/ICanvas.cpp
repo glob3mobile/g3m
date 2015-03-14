@@ -246,9 +246,51 @@ void ICanvas::drawImage(const IImage* image,
     }
 
   }
-
-  
 }
+
+
+IImage* ICanvas::drawRoundImage(const IImage* image,
+                                float radius,
+                                float transparency) {
+  checkInitialized();
+  
+  if (transparency <= 0.0) {
+    return _drawRoundImage(image,
+                           radius,
+                           0.0);
+  } else if (transparency >= 1.0) {
+    return _drawRoundImage(image,
+                           radius,
+                           1.0);
+  }
+  else {
+    return _drawRoundImage(image,
+                           radius,
+                           transparency);
+  }
+}
+
+IImage* ICanvas::drawRoundedImage(const IImage* image,
+                                  float radius,
+                                  float transparency) {
+  checkInitialized();
+  
+  if (transparency <= 0.0) {
+    return _drawRoundedImage(image,
+                             radius,
+                             0.0);
+  } else if (transparency >= 1.0) {
+    return _drawRoundedImage(image,
+                             radius,
+                             1.0);
+  }
+  else {
+    return _drawRoundedImage(image,
+                             radius,
+                             transparency);
+  }
+}
+
 
 void ICanvas::beginPath() {
   checkInitialized();
