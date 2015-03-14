@@ -93,15 +93,17 @@ void MarkWidget::prepareWidget(const IImage* image,
 #warning TODO: share vertices for marks of the same size?
 
   _vertices = pos2D.create();
-  _geo2Dfeature = new Geometry2DGLFeature(_vertices,
-                                          2,
-                                          0,
-                                          true,
-                                          0,
-                                          1.0f,
-                                          true,
-                                          10.0f,
-                                          Vector2F(_x, _y));
+
+  _geo2Dfeature = new Geometry2DGLFeature(_vertices,       // buffer
+                                          2,               // arrayElementSize
+                                          0,               // index
+                                          true,            // normalized
+                                          0,               // stride
+                                          3.0f,            // lineWidth
+                                          true,            // needsPointSize
+                                          1.0f,            // pointSize
+                                          Vector2F(_x, _y) // translation
+                                          );
 
   _glState->addGLFeature(_geo2Dfeature,
                          false);
@@ -341,7 +343,7 @@ void NonOverlappingMark::renderSpringWidget(const G3MRenderContext* rc,
                                                          0,                // stride
                                                          3.0f,             // lineWidth
                                                          true,             // needsPointSize
-                                                         2.0f,             // pointSize
+                                                         1.0f,             // pointSize
                                                          Vector2F::zero()  // translation
                                                          ),
                                  false);

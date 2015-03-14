@@ -386,16 +386,18 @@ void GPUProgram::setGPUUniformValue(int key, GPUUniformValue* v) {
   GPUUniform* u = _uniforms[key];
   if (u == NULL) {
     ILogger::instance()->logError("Uniform [key=%d] not found", key);
-    return;
   }
-  u->set(v);
+  else {
+    u->set(v);
+  }
 }
 
 void GPUProgram::setGPUAttributeValue(int key, GPUAttributeValue* v) {
   GPUAttribute* a = _attributes[key];
   if (a == NULL) {
     ILogger::instance()->logError("Attribute [key=%d] not found", key);
-    return;
   }
-  a->set(v);
+  else {
+    a->set(v);
+  }
 }
