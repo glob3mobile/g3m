@@ -114,7 +114,8 @@ void G3MAugmentedRealityDemoScene::rawActivate(const G3MContext* context) {
 
 
   _locationManager = [[CLLocationManager alloc] init];
-  _locationManager.desiredAccuracy = kCLLocationAccuracyBest;
+  _locationManager.desiredAccuracy = kCLLocationAccuracyBestForNavigation;
+  _locationManager.distanceFilter = kCLDistanceFilterNone;
   _locationManager.headingFilter = 0.001;
   [_locationManager requestAlwaysAuthorization];
 
