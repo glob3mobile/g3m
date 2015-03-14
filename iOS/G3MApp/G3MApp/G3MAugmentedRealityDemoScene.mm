@@ -77,7 +77,7 @@ public:
       headingInDegrees = -trueHeading - 180;
       pitchRadians = (2*PI -pitch) - PI/2;
     }
-    else{
+    else {
       headingInDegrees = -trueHeading;
       pitchRadians = pitch - PI/2;
     }
