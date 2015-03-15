@@ -77,10 +77,10 @@ public class Main {
          }
 
          //final boolean firstLine = (result == "");
-         result += "\"" + StringEscapeUtils.escapeJava(line) + " \\n \"";
+         result += "\"" + StringEscapeUtils.escapeJava(line) + "\\n\"";
 
          if (i < (lines.length - 1)) {
-            result += " + \n";
+            result += " +\n";
          }
 
       }
