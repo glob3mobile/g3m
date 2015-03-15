@@ -57,8 +57,7 @@ bool CameraRenderer::onTouchEvent(const G3MEventContext* ec,
       Vector3D* posMark = marks[i]->getCartesianPosition(ec->getPlanet());
       Vector2F pixel = _cameraContext->getNextCamera()->point2Pixel(*posMark);
       Vector3D posZRender = ec->getWidget()->getScenePositionForPixel((int)(pixel._x+0.5),(int)(pixel._y+0.5));
-      double distance = posMark->distanceTo(posZRender);
-      double cameraDistance = _cameraContext->getNextCamera()->getCartesianPosition().distanceTo(*posMark);
+      /*
       printf("marca %d: \n",i);
       Geodetic3D geoMark = ec->getPlanet()->toGeodetic3D(*posMark);
       printf("   posMark en %f %f %f   Geo=%f %f %f\n", posMark->_x, posMark->_y, posMark->_z,
@@ -69,21 +68,15 @@ bool CameraRenderer::onTouchEvent(const G3MEventContext* ec,
       double distanceLatLon = sqrt((geoMark._latitude._degrees-geoZRender._latitude._degrees)*
                                    (geoMark._latitude._degrees-geoZRender._latitude._degrees)+
                                    (geoMark._longitude._degrees-geoZRender._longitude._degrees)*
-                                   (geoMark._longitude._degrees-geoZRender._longitude._degrees));
+                                   (geoMark._longitude._degrees-geoZRender._longitude._degrees));*/
       
       double distCamMark = cameraPos.distanceTo(*posMark);
       double distCamTerrain = cameraPos.distanceTo(posZRender);
-      printf ("distCanMark=%f   distCamTerrain=%f   Factor=%f\n",
-              distCamMark, distCamTerrain, distCamMark/distCamTerrain);
-      
-      //printf("   distancia latlon= %f,  distancia = %f   distancia camara=%f\n",distanceLatLon, distance, cameraDistance);
-      
-      
+      //printf ("distCanMark=%f   distCamTerrain=%f   Factor=%f\n", distCamMark, distCamTerrain, distCamMark/distCamTerrain);
       if (distCamMark/distCamTerrain<1.2)
         marks[i]->setVisible(true);
       else
         marks[i]->setVisible(false);
-
     }
     
     // this call is needed at this point. I don't know why

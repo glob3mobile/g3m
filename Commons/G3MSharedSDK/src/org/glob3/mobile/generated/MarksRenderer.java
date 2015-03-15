@@ -333,4 +333,9 @@ public class MarksRenderer extends DefaultRenderer
   {
   }
 
+
+  java.util.ArrayList<Mark> getMarks() {
+    return _marks;
+  }
+
 }

@@ -1097,5 +1097,16 @@ public class G3MWidget implements ChangedRendererInfoListener
       _selectedRenderer.start(_renderContext);
     }
   }
+  
+  MarksRenderer _marksRenderer;
+  
+  public void setMarksRenderer(MarksRenderer marksRenderer) {
+	    _marksRenderer = marksRenderer;
+	  }
+	  
+  public MarksRenderer getMarksRenderer() {
+	    return _marksRenderer;
+	  }
+
 
 }

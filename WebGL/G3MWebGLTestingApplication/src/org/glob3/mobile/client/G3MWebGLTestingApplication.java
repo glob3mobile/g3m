@@ -2171,13 +2171,28 @@ public class G3MWebGLTestingApplication
 		   // markers
 		   final MarksRenderer marksRenderer = new MarksRenderer(false);
 		   {
-			   final Mark m = new Mark("", new URL("http://serdis.dis.ulpgc.es/~atrujill/glob3m/LaPalma/restaurante64.png", false), //
+			   final Mark m = new Mark("", new URL("http://serdis.dis.ulpgc.es/~atrujill/glob3m/LaPalma/restauranteCentrado.png", false), //
 					   new Geodetic3D(Angle.fromDegrees(28.675), Angle.fromDegrees(-17.889), 0), AltitudeMode.RELATIVE_TO_GROUND);
 			   marksRenderer.addMark(m);
 		   }
 		   {
-			   final Mark m = new Mark("", new URL("http://serdis.dis.ulpgc.es/~atrujill/glob3m/LaPalma/restaurante64.png", false), //
+			   final Mark m = new Mark("", new URL("http://serdis.dis.ulpgc.es/~atrujill/glob3m/LaPalma/restauranteCentrado.png", false), //
 					   new Geodetic3D(Angle.fromDegrees(28.678), Angle.fromDegrees(-17.8632), 0), AltitudeMode.RELATIVE_TO_GROUND);
+			   marksRenderer.addMark(m);
+		   }
+		   {
+			   final Mark m = new Mark("", new URL("http://serdis.dis.ulpgc.es/~atrujill/glob3m/LaPalma/restauranteCentrado.png", false), //
+					   new Geodetic3D(Angle.fromDegrees(28.752439), Angle.fromDegrees(-17.889393), 0), AltitudeMode.RELATIVE_TO_GROUND);
+			   marksRenderer.addMark(m);
+		   }
+		   {
+			   final Mark m = new Mark("", new URL("http://serdis.dis.ulpgc.es/~atrujill/glob3m/LaPalma/restauranteCentrado.png", false), //
+					   new Geodetic3D(Angle.fromDegrees(28.730464), Angle.fromDegrees(-17.833088), 0), AltitudeMode.RELATIVE_TO_GROUND);
+			   marksRenderer.addMark(m);
+		   }
+		   {
+			   final Mark m = new Mark("", new URL("http://serdis.dis.ulpgc.es/~atrujill/glob3m/LaPalma/restauranteCentrado.png", false), //
+					   new Geodetic3D(Angle.fromDegrees(28.692524), Angle.fromDegrees(-17.833088), 0), AltitudeMode.RELATIVE_TO_GROUND);
 			   marksRenderer.addMark(m);
 		   }
 		   builder.addRenderer(marksRenderer);
@@ -2189,6 +2204,8 @@ public class G3MWebGLTestingApplication
 		   _widget.setCameraPosition(position);
 		   _widget.setCameraHeading(Angle.fromDegrees(4.35));
 		   _widget.setCameraPitch(Angle.fromDegrees(-5.01));
+		   
+		   _widget.getG3MWidget().setMarksRenderer(marksRenderer);
 	  }
 
 
