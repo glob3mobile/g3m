@@ -511,7 +511,10 @@ public final class Canvas_Android
 
       _canvas.drawBitmap(bitmap, src, dst, paint);
 
-      return new Image_Android(_bitmap, null);
+
+      final Bitmap resultBitmap = Bitmap.createBitmap(_bitmap);
+
+      return new Image_Android(resultBitmap, null);
    }
 
 
@@ -533,6 +536,8 @@ public final class Canvas_Android
       _canvas.drawBitmap(sourceBitmap, new Rect(0, 0, sourceBitmap.getWidth(), sourceBitmap.getHeight()), new Rect(0, 0,
                targetWidth, targetHeight), null);
 
-      return new Image_Android(_bitmap, null);
+      final Bitmap resultBitmap = Bitmap.createBitmap(_bitmap);
+
+      return new Image_Android(resultBitmap, null);
    }
 }
