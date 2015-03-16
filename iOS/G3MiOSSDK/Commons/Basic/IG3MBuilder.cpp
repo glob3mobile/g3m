@@ -33,6 +33,7 @@
 #include "ShapesRenderer.hpp"
 #include "MarksRenderer.hpp"
 #include "HUDErrorRenderer.hpp"
+#include "DefaultInfoDisplay.hpp"
 
 IG3MBuilder::IG3MBuilder() :
 _gl(NULL),
@@ -698,7 +699,16 @@ G3MWidget* IG3MBuilder::create() {
                                                           initialCameraPosition._height * 1.2));
 
   InitialCameraPositionProvider* icpp = new SimpleInitialCameraPositionProvider();
-  
+
+  InfoDisplay* infoDisplay = getInfoDisplay();
+  if (infoDisplay == NULL) {
+    Default_HUDRenderer* hud = new Default_HUDRenderer();
+
+    infoDisplay = new DefaultInfoDisplay(hud);
+
+    addRenderer(hud);
+  }
+
   G3MWidget * g3mWidget = G3MWidget::create(getGL(),
                                             getStorage(),
                                             getDownloader(),
@@ -720,7 +730,7 @@ G3MWidget* IG3MBuilder::create() {
                                             getGPUProgramManager(),
                                             getSceneLighting(),
                                             icpp,
-                                            getInfoDisplay());
+                                            infoDisplay);
 
   g3mWidget->setUserData(getUserData());
 
