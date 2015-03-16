@@ -59,7 +59,7 @@ public:
     CMAttitude* attitude = [motion attitude];
     double roll  = [attitude roll];
     double pitch = [attitude pitch];
-    double yaw   = [attitude yaw];
+//    double yaw   = [attitude yaw];
 
 
     UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
