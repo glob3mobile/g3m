@@ -214,6 +214,7 @@ _touchListener(touchListener),
 _springGLState(NULL),
 _springVertices(NULL),
 _springViewportExtentGLFeature(NULL)
+//_enclosingRadius(0)
 {
   _widget = new MarkWidget(imageBuilderWidget);
   _anchorWidget = new MarkWidget(imageBuilderAnchor);
@@ -252,18 +253,24 @@ void NonOverlappingMark::computeAnchorScreenPos(const Camera* camera,
   _anchorWidget->setScreenPos(sp._x, sp._y);
 
   if (_widget->getScreenPos().isNan()) {
+#warning select different offset positions
     _widget->setScreenPos(sp._x, sp._y + 0.01f);
   }
 }
 
 void NonOverlappingMark::applyCoulombsLaw(NonOverlappingMark* that) {
-  Vector2F d = getScreenPos().sub(that->getScreenPos());
-  double distance = d.length() + 0.001;
+  const Vector2F d = getScreenPos().sub(that->getScreenPos());
+//  double distance = d.length() - this->_enclosingRadius/3 - that->_enclosingRadius/3;
+//  if (distance <= 0) {
+//    distance = d.length() + 0.001;
+//  }
+
+  const double distance = d.length() + 0.001;
   Vector2F direction = d.div((float)distance);
 
   float strength = (float)(this->_electricCharge * that->_electricCharge / (distance * distance));
 
-  Vector2F force = direction.times(strength);
+  const Vector2F force = direction.times(strength);
 
   this->applyForce( force._x,  force._y);
   that->applyForce(-force._x, -force._y);
@@ -272,6 +279,11 @@ void NonOverlappingMark::applyCoulombsLaw(NonOverlappingMark* that) {
 void NonOverlappingMark::applyCoulombsLawFromAnchor(NonOverlappingMark* that) {
   Vector2F dAnchor = getScreenPos().sub(that->getAnchorScreenPos());
   double distanceAnchor = dAnchor.length() + 0.001;
+//  double distanceAnchor = dAnchor.length() - this->_enclosingRadius/3;
+//  if (distanceAnchor <= 0) {
+//    distanceAnchor = dAnchor.length() + 0.001;
+//  }
+
   Vector2F directionAnchor = dAnchor.div((float)distanceAnchor);
 
   float strengthAnchor = (float)(this->_electricCharge * that->_anchorElectricCharge / (distanceAnchor * distanceAnchor));
@@ -297,6 +309,11 @@ void NonOverlappingMark::renderWidget(const G3MRenderContext* rc,
   if (_widget->isReady()) {
     if (_anchorWidget->isReady()) {
       _widget->render(rc, glState);
+//      if (_enclosingRadius == 0) {
+//        const float w = _widget->getWidth();
+//        const float h = _widget->getHeight();
+//        _enclosingRadius = IMathUtils::instance()->sqrt( w*w + h*h ) / 2;
+//      }
     }
   }
   else {
