@@ -674,6 +674,15 @@ G3MWidget* IG3MBuilder::create() {
   Sector shownSector = getShownSector();
   getPlanetRendererBuilder()->setRenderedSector(shownSector); //Shown sector
 
+  InfoDisplay* infoDisplay = getInfoDisplay();
+  if (infoDisplay == NULL) {
+    Default_HUDRenderer* hud = new Default_HUDRenderer();
+
+    infoDisplay = new DefaultInfoDisplay(hud);
+
+    addRenderer(hud);
+  }
+
   /**
    * If any renderers were set or added, the main renderer will be a composite renderer.
    *    If the renderers list does not contain a planetRenderer, it will be created and added.
@@ -699,15 +708,6 @@ G3MWidget* IG3MBuilder::create() {
                                                           initialCameraPosition._height * 1.2));
 
   InitialCameraPositionProvider* icpp = new SimpleInitialCameraPositionProvider();
-
-  InfoDisplay* infoDisplay = getInfoDisplay();
-  if (infoDisplay == NULL) {
-    Default_HUDRenderer* hud = new Default_HUDRenderer();
-
-    infoDisplay = new DefaultInfoDisplay(hud);
-
-    addRenderer(hud);
-  }
 
   G3MWidget * g3mWidget = G3MWidget::create(getGL(),
                                             getStorage(),
