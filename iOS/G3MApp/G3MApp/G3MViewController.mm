@@ -19,6 +19,8 @@
 #include "G3MDemoModel.hpp"
 #include "G3MDemoScene.hpp"
 #include "G3MDemoListener.hpp"
+#import "GAI.h"
+#import "GAIDictionaryBuilder.h"
 
 @implementation G3MViewController
 
@@ -66,6 +68,14 @@ public:
 
 -(void) onChangedScene:(const G3MDemoScene*) scene
 {
+  id<GAITracker> tracker = [[GAI sharedInstance] defaultTracker];
+
+  [tracker send:[[GAIDictionaryBuilder createEventWithCategory: @"DemoScene"
+                                                        action: [NSString stringWithCString: scene->getName().c_str()
+                                                                                   encoding: NSUTF8StringEncoding]
+                                                         label: nil
+                                                         value: nil] build]];
+
   [self.demoSelector setTitle: [NSString stringWithCppString: scene->getName()]
                      forState: UIControlStateNormal];
 
@@ -77,6 +87,15 @@ public:
 -(void) onChangedOption:(const std::string&) option
                 inScene:(const G3MDemoScene*) scene
 {
+  id<GAITracker> tracker = [[GAI sharedInstance] defaultTracker];
+
+  [tracker send:[[GAIDictionaryBuilder createEventWithCategory: @"DemoSceneOption"
+                                                        action: [NSString stringWithCString: scene->getName().c_str()
+                                                                                   encoding: NSUTF8StringEncoding]
+                                                         label: [NSString stringWithCString: option.c_str()
+                                                                                   encoding: NSUTF8StringEncoding]
+                                                         value: nil] build]];
+
   [self.optionSelector setTitle: [NSString stringWithCppString: option]
                        forState: UIControlStateNormal];
 }
@@ -140,6 +159,11 @@ public:
 {
   [super didReceiveMemoryWarning];
   // Dispose of any resources that can be recreated.
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+  [super viewWillAppear:animated];
+  self.screenName = @"Main Screen";
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue
