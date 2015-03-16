@@ -147,11 +147,12 @@ _tileRenderingListener(tileRenderingListener),
 _touchEventTypeOfTerrainTouchListener(touchEventTypeOfTerrainTouchListener)
 {
   _context = NULL;
+  
+  _changedInfoListener = changedInfoListener;
+
   _layerSet->setChangeListener(this);
   
   _layerSet->setChangedInfoListener(this);
-
-  _changedInfoListener = changedInfoListener;
 
   if (_tileRenderingListener == NULL) {
     _tilesStartedRendering = NULL;
