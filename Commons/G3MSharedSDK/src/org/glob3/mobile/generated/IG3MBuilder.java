@@ -403,6 +403,16 @@ public abstract class IG3MBuilder
     Sector shownSector = getShownSector();
     getPlanetRendererBuilder().setRenderedSector(shownSector); //Shown sector
   
+    InfoDisplay infoDisplay = getInfoDisplay();
+    if (infoDisplay == null)
+    {
+      Default_HUDRenderer hud = new Default_HUDRenderer();
+  
+      infoDisplay = new DefaultInfoDisplay(hud);
+  
+      addRenderer(hud);
+    }
+  
     /**
      * If any renderers were set or added, the main renderer will be a composite renderer.
      *    If the renderers list does not contain a planetRenderer, it will be created and added.
@@ -431,16 +441,6 @@ public abstract class IG3MBuilder
     addCameraConstraint(new RenderedSectorCameraConstrainer(mainRenderer.getPlanetRenderer(), initialCameraPosition._height * 1.2));
   
     InitialCameraPositionProvider icpp = new SimpleInitialCameraPositionProvider();
-  
-    InfoDisplay infoDisplay = getInfoDisplay();
-    if (infoDisplay == null)
-    {
-      Default_HUDRenderer hud = new Default_HUDRenderer();
-  
-      infoDisplay = new DefaultInfoDisplay(hud);
-  
-      addRenderer(hud);
-    }
   
     G3MWidget g3mWidget = G3MWidget.create(getGL(), getStorage(), getDownloader(), getThreadUtils(), getCameraActivityListener(), getPlanet(), getCameraConstraints(), getCameraRenderer(), mainRenderer, getBusyRenderer(), getErrorRenderer(), getHUDRenderer(), getBackgroundColor(), getLogFPS(), getLogDownloaderStatistics(), getInitializationTask(), getAutoDeleteInitializationTask(), getPeriodicalTasks(), getGPUProgramManager(), getSceneLighting(), icpp, infoDisplay);
   
