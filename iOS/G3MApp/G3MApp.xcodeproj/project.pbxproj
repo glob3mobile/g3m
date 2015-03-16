@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		CF162FDF1AB7396D00673D44 /* libGoogleAnalyticsServices.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CF162FDE1AB7396D00673D44 /* libGoogleAnalyticsServices.a */; };
+		CF162FE21AB739C800673D44 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CF162FE11AB739C800673D44 /* SystemConfiguration.framework */; };
+		CF162FE41AB739D700673D44 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = CF162FE31AB739D700673D44 /* libz.dylib */; };
 		CF37F5EE183D239A0050CAEF /* G3MScenarioDEMDemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF37F5EC183D239A0050CAEF /* G3MScenarioDEMDemoScene.cpp */; };
 		CF37F5F1183D26500050CAEF /* 0576.bil in Resources */ = {isa = PBXBuildFile; fileRef = CF37F5F0183D26500050CAEF /* 0576.bil */; };
 		CF37F5F5183D355E0050CAEF /* MainStoryboard-iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CF37F5F4183D355E0050CAEF /* MainStoryboard-iPhone.storyboard */; };
@@ -120,6 +123,19 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		CF162FD41AB7396D00673D44 /* GAI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GAI.h; sourceTree = "<group>"; };
+		CF162FD51AB7396D00673D44 /* GAIDictionaryBuilder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GAIDictionaryBuilder.h; sourceTree = "<group>"; };
+		CF162FD61AB7396D00673D44 /* GAIEcommerceFields.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GAIEcommerceFields.h; sourceTree = "<group>"; };
+		CF162FD71AB7396D00673D44 /* GAIEcommerceProduct.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GAIEcommerceProduct.h; sourceTree = "<group>"; };
+		CF162FD81AB7396D00673D44 /* GAIEcommerceProductAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GAIEcommerceProductAction.h; sourceTree = "<group>"; };
+		CF162FD91AB7396D00673D44 /* GAIEcommercePromotion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GAIEcommercePromotion.h; sourceTree = "<group>"; };
+		CF162FDA1AB7396D00673D44 /* GAIFields.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GAIFields.h; sourceTree = "<group>"; };
+		CF162FDB1AB7396D00673D44 /* GAILogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GAILogger.h; sourceTree = "<group>"; };
+		CF162FDC1AB7396D00673D44 /* GAITrackedViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GAITrackedViewController.h; sourceTree = "<group>"; };
+		CF162FDD1AB7396D00673D44 /* GAITracker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GAITracker.h; sourceTree = "<group>"; };
+		CF162FDE1AB7396D00673D44 /* libGoogleAnalyticsServices.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libGoogleAnalyticsServices.a; sourceTree = "<group>"; };
+		CF162FE11AB739C800673D44 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		CF162FE31AB739D700673D44 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		CF37F5EC183D239A0050CAEF /* G3MScenarioDEMDemoScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = G3MScenarioDEMDemoScene.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CF37F5ED183D239A0050CAEF /* G3MScenarioDEMDemoScene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = G3MScenarioDEMDemoScene.hpp; sourceTree = "<group>"; };
 		CF37F5F0183D26500050CAEF /* 0576.bil */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = 0576.bil; sourceTree = "<group>"; };
@@ -257,13 +273,16 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CF162FE41AB739D700673D44 /* libz.dylib in Frameworks */,
+				CF162FE21AB739C800673D44 /* SystemConfiguration.framework in Frameworks */,
+				E7D1B65416D24EE000AF47C1 /* CoreData.framework in Frameworks */,
 				CFB136D01AA779830013EDE1 /* CoreMotion.framework in Frameworks */,
 				CFB136CE1AA7573D0013EDE1 /* CoreLocation.framework in Frameworks */,
 				E7D1B60B16D2436700AF47C1 /* Foundation.framework in Frameworks */,
+				CF162FDF1AB7396D00673D44 /* libGoogleAnalyticsServices.a in Frameworks */,
 				CFF64D4518329FB7006ABFF6 /* Security.framework in Frameworks */,
 				CFF64D4718329FC8006ABFF6 /* CFNetwork.framework in Frameworks */,
 				CFF64D4918329FE6006ABFF6 /* libicucore.dylib in Frameworks */,
-				E7D1B65416D24EE000AF47C1 /* CoreData.framework in Frameworks */,
 				E7D1B65216D24E7300AF47C1 /* libsqlite3.dylib in Frameworks */,
 				E75321CB16D3DF6200CB3F8D /* libG3MiOSSDK.a in Frameworks */,
 				E7D1B65816D24EEE00AF47C1 /* QuartzCore.framework in Frameworks */,
@@ -276,6 +295,24 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		CF162FD31AB7396D00673D44 /* GoogleAnalytics */ = {
+			isa = PBXGroup;
+			children = (
+				CF162FD41AB7396D00673D44 /* GAI.h */,
+				CF162FD51AB7396D00673D44 /* GAIDictionaryBuilder.h */,
+				CF162FD61AB7396D00673D44 /* GAIEcommerceFields.h */,
+				CF162FD71AB7396D00673D44 /* GAIEcommerceProduct.h */,
+				CF162FD81AB7396D00673D44 /* GAIEcommerceProductAction.h */,
+				CF162FD91AB7396D00673D44 /* GAIEcommercePromotion.h */,
+				CF162FDA1AB7396D00673D44 /* GAIFields.h */,
+				CF162FDB1AB7396D00673D44 /* GAILogger.h */,
+				CF162FDC1AB7396D00673D44 /* GAITrackedViewController.h */,
+				CF162FDD1AB7396D00673D44 /* GAITracker.h */,
+				CF162FDE1AB7396D00673D44 /* libGoogleAnalyticsServices.a */,
+			);
+			path = GoogleAnalytics;
+			sourceTree = "<group>";
+		};
 		CF6920AD1837E7EE007409D8 /* DemoBuilder */ = {
 			isa = PBXGroup;
 			children = (
@@ -367,6 +404,8 @@
 		E7D1B60716D2436700AF47C1 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				CF162FE31AB739D700673D44 /* libz.dylib */,
+				CF162FE11AB739C800673D44 /* SystemConfiguration.framework */,
 				CFB136CF1AA779830013EDE1 /* CoreMotion.framework */,
 				CFB136CD1AA7573D0013EDE1 /* CoreLocation.framework */,
 				CFF64D4818329FE6006ABFF6 /* libicucore.dylib */,
@@ -387,6 +426,7 @@
 		E7D1B60E16D2436700AF47C1 /* G3MApp */ = {
 			isa = PBXGroup;
 			children = (
+				CF162FD31AB7396D00673D44 /* GoogleAnalytics */,
 				CF6920AD1837E7EE007409D8 /* DemoBuilder */,
 				E7D1B61716D2436700AF47C1 /* G3MAppDelegate.h */,
 				E7D1B61816D2436700AF47C1 /* G3MAppDelegate.m */,
@@ -760,6 +800,10 @@
 				);
 				INFOPLIST_FILE = "G3MApp/G3MApp-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/G3MApp/GoogleAnalytics",
+				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
@@ -780,6 +824,10 @@
 				"GCC_PREPROCESSOR_DEFINITIONS[arch=*]" = C_CODE;
 				INFOPLIST_FILE = "G3MApp/G3MApp-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/G3MApp/GoogleAnalytics",
+				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
