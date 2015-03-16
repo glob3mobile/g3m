@@ -371,11 +371,11 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
      _tileRenderingListener = tileRenderingListener;
      _touchEventTypeOfTerrainTouchListener = touchEventTypeOfTerrainTouchListener;
     _context = null;
+    _changedInfoListener = changedInfoListener;
+  
     _layerSet.setChangeListener(this);
   
     _layerSet.setChangedInfoListener(this);
-  
-    _changedInfoListener = changedInfoListener;
   
     if (_tileRenderingListener == null)
     {
