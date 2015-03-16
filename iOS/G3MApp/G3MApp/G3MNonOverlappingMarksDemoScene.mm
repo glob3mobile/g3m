@@ -134,7 +134,9 @@ void G3MNonOverlappingMarksDemoScene::rawActivate(const G3MContext* context) {
   G3MDemoModel* model     = getModel();
   G3MWidget*    g3mWidget = model->getG3MWidget();
 
-
+//#warning Testing infos
+  std::vector<const Info*>* layerInfo = new std::vector<const Info*>();
+//  layerInfo->push_back( new Info("(C) Stamen") );
   URLTemplateLayer* layer = URLTemplateLayer::newMercator(//"http://c.tile.stamen.com/toner/{level}/{x}/{y}.png",
                                                           "http://c.tile.stamen.com/watercolor/{level}/{x}/{y}.png",
                                                           Sector::fullSphere(),
@@ -142,7 +144,10 @@ void G3MNonOverlappingMarksDemoScene::rawActivate(const G3MContext* context) {
                                                           1,
                                                           18,
                                                           TimeInterval::fromDays(30),
-                                                          true);
+                                                          true,
+                                                          1, // transparency
+                                                          NULL, // condition
+                                                          layerInfo);
   model->getLayerSet()->addLayer(layer);
 
   NonOverlappingMarksRenderer* renderer = model->getNonOverlappingMarksRenderer();

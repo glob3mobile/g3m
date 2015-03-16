@@ -147,11 +147,11 @@ _tileRenderingListener(tileRenderingListener),
 _touchEventTypeOfTerrainTouchListener(touchEventTypeOfTerrainTouchListener)
 {
   _context = NULL;
-  
+
   _changedInfoListener = changedInfoListener;
 
   _layerSet->setChangeListener(this);
-  
+
   _layerSet->setChangedInfoListener(this);
 
   if (_tileRenderingListener == NULL) {
@@ -526,7 +526,7 @@ RenderState PlanetRenderer::getRenderState(const G3MRenderContext* rc) {
 
     _allFirstLevelTilesAreTextureSolved = true;
   }
-  
+
   return RenderState::ready();
 }
 
@@ -683,7 +683,7 @@ void PlanetRenderer::render(const G3MRenderContext* rc,
                    _tilesStoppedRendering);
     }
 
-    
+
   }
   else {
 #ifdef C_CODE
@@ -748,7 +748,7 @@ void PlanetRenderer::render(const G3MRenderContext* rc,
 #endif
     }
   }
-  
+
   _firstRender = false;
 
   if (_showStatistics) {
@@ -936,10 +936,10 @@ void PlanetRenderer::setChangedRendererInfoListener(ChangedRendererInfoListener*
   if (_changedInfoListener != NULL) {
     ILogger::instance()->logWarning("Changed Renderer Info Listener of PlanetRenderer already set");
   }
-  
+
   _rendererIdentifier = rendererIdentifier;
   _changedInfoListener = changedInfoListener;
-  
+
   if(_changedInfoListener != NULL) {
     _changedInfoListener->changedRendererInfo(rendererIdentifier, _layerSet->getInfo());
   }
