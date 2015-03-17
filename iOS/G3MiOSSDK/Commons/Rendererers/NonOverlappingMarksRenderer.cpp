@@ -253,8 +253,10 @@ void NonOverlappingMark::computeAnchorScreenPos(const Camera* camera,
   _anchorWidget->setScreenPos(sp._x, sp._y);
 
   if (_widget->getScreenPos().isNan()) {
-#warning select different offset positions
-    _widget->setScreenPos(sp._x, sp._y + 0.01f);
+    const float deltaX = (float) (IMathUtils::instance()->nextRandomDouble() * 2 - 1);
+    const float deltaY = (float) (IMathUtils::instance()->nextRandomDouble() * 2 - 1);
+    _widget->setScreenPos(sp._x + deltaX,
+                          sp._y + deltaY);
   }
 }
 
