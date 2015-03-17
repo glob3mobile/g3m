@@ -323,13 +323,14 @@ Mesh* createSectorMesh(const Planet* planet,
   //
   
   
+  //  [NSTimer scheduledTimerWithTimeInterval:0.05
+  //                                   target:self
+  //                                 selector:@selector(changeCameraTick)
+  //                                 userInfo:nil
+  //                                  repeats:YES];
+  
   _dO = [[DeviceOrientation alloc] init];
   
-//  [NSTimer scheduledTimerWithTimeInterval:0.05
-//                                   target:self
-//                                 selector:@selector(changeCameraTick)
-//                                 userInfo:nil
-//                                  repeats:YES];
   
   
   class DeviceOrientationCameraConstrainer: public ICameraConstrainer{
@@ -361,6 +362,12 @@ Mesh* createSectorMesh(const Planet* planet,
   
   mr->addMesh([self createStarDome]);
   
+
+  /*
+   [[self G3MWidget] widget]->addPeriodicalTask(TimeInterval::fromMilliseconds(100),
+   new CameraRollChangerTask([[self G3MWidget] widget]));
+   */
+  
   builder.setPlanet(planet);
   builder.initializeWidget();
   [[self G3MWidget] startAnimation];
@@ -368,10 +375,6 @@ Mesh* createSectorMesh(const Planet* planet,
   
   [G3MWidget widget]->setCameraPosition(Geodetic3D::fromDegrees(27.973105, -15.597545,1000));
   
-  /*
-   [[self G3MWidget] widget]->addPeriodicalTask(TimeInterval::fromMilliseconds(100),
-   new CameraRollChangerTask([[self G3MWidget] widget]));
-   */
   
 }
 
