@@ -58,15 +58,11 @@ public class VerticalOrbitEffect extends EffectWithDuration
 	    // horizontal rotation over the original camera horizontal axix
 	    Vector3D u = camera.getHorizontalVector();
 	    double delta = alpha * (_finalPitch-initialPitch);
-	    camera.rotateWithAxisAndPoint(u, _pivotPoint.asVector3D(), Angle.fromDegrees(delta));
-	  
-	 
-	    
+	    camera.rotateWithAxisAndPoint(u, _pivotPoint.asVector3D(), Angle.fromDegrees(delta));    
 	}
 
 	public final void stop(G3MRenderContext rc, TimeInterval when)
 	{
-		Camera camera = rc.getNextCamera();
 	}
 
 	public final void cancel(TimeInterval when)
