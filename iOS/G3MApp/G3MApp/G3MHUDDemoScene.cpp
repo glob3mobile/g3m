@@ -161,7 +161,7 @@ public:
 
 
 void G3MHUDDemoScene::rawActivate(const G3MContext *context) {
-#Warning Problems with HUD
+#warning Problems with HUD
 
   G3MDemoModel* model     = getModel();
   G3MWidget*    g3mWidget = model->getG3MWidget();
