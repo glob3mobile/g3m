@@ -1,5 +1,6 @@
 package org.glob3.mobile.client;
 
+import org.glob3.mobile.generated.EffectTarget;
 import org.glob3.mobile.generated.Sector;
 import org.glob3.mobile.specific.G3MWidget_WebGL;
 
@@ -31,6 +32,9 @@ public class MyG3MWidget_WebGL extends G3MWidget_WebGL {
 			$wnd.G3M.setLODAugmentedFactor = $entry(function(factor) {
 				that.@org.glob3.mobile.client.MyG3MWidget_WebGL::setLODAugmentedFactor(D)(factor);
 			});
+			$wnd.G3M.switchTo2DView = $entry(function() {
+				that.@org.glob3.mobile.client.MyG3MWidget_WebGL::switchTo2DView()();
+			});
 	   }-*/;
 
 	   private int doble(final int numero) {
@@ -39,5 +43,11 @@ public class MyG3MWidget_WebGL extends G3MWidget_WebGL {
 	   
 	   public void setLODAugmentedFactor (final double factor) {
 		   getPlanetRenderer().addLODAugmentedForSector(_sector, factor);
+	   }
+	   
+	   public void switchTo2DView() {
+		   ViewChangeFrom3DTo2D effect = new ViewChangeFrom3DTo2D();
+		   EffectTarget target = getNextCamera().getEffectTarget();
+		   getG3MContext().getEffectsScheduler().startEffect(effect, target);
 	   }
 }
