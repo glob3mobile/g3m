@@ -2,6 +2,7 @@ package org.glob3.mobile.client;
 
 import org.glob3.mobile.generated.EffectTarget;
 import org.glob3.mobile.generated.Sector;
+import org.glob3.mobile.generated.TimeInterval;
 import org.glob3.mobile.specific.G3MWidget_WebGL;
 
 
@@ -46,7 +47,7 @@ public class MyG3MWidget_WebGL extends G3MWidget_WebGL {
 	   }
 	   
 	   public void switchTo2DView() {
-		   ViewChangeFrom3DTo2D effect = new ViewChangeFrom3DTo2D();
+		   ViewChangeFrom3DTo2D effect = new ViewChangeFrom3DTo2D(TimeInterval.fromSeconds(1));
 		   EffectTarget target = getNextCamera().getEffectTarget();
 		   getG3MContext().getEffectsScheduler().startEffect(effect, target);
 	   }

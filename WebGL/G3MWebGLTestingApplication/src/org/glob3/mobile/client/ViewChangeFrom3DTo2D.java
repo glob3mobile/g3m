@@ -16,14 +16,12 @@ import org.glob3.mobile.generated.Vector3D;
 public class ViewChangeFrom3DTo2D extends EffectWithDuration
 {
 	private MutableVector3D _pivotPoint ;
-	private double _initialPitch;
 	private Camera _camera0;
 
-	public ViewChangeFrom3DTo2D()
+	public ViewChangeFrom3DTo2D(TimeInterval duration)
 	{
-		super(TimeInterval.fromSeconds(2), true);
+		super(duration, true);
 		_pivotPoint = null;
-		_initialPitch = 0;
 		_camera0 = null;
 	}
 
@@ -32,7 +30,6 @@ public class ViewChangeFrom3DTo2D extends EffectWithDuration
 		super.start(rc, when);
 		_pivotPoint = rc.getWidget().getFirstValidScenePositionForCentralColumn().asMutableVector3D();
 		_camera0 = new Camera(rc.getNextCamera());
-		_initialPitch = rc.getNextCamera().getPitch()._degrees;
 		
 		/*Geodetic3D geo = rc.getPlanet().toGeodetic3D(_pivotPoint.asVector3D());
 		ILogger.instance().logInfo("pivot point =%f %f %f", 
@@ -43,21 +40,22 @@ public class ViewChangeFrom3DTo2D extends EffectWithDuration
 	public final void doStep(G3MRenderContext rc, TimeInterval when)
 	{
 		final double alpha = getAlpha(when);
-		Camera camera = rc.getNextCamera();
-		camera.copyFrom(_camera0);
 		final IMathUtils mu = IMathUtils.instance();
 
-	    // compute normal to Initial point
-	    Vector3D normal = rc.getPlanet().geodeticSurfaceNormal(_pivotPoint);
-	  
+		// reset camera to camera0
+		Camera camera = rc.getNextCamera();
+		camera.copyFrom(_camera0);
+		double initialPitch = rc.getNextCamera().getPitch()._degrees;
+
 	    // compute angle between normal and view direction
 	    Vector3D view = camera.getViewDirection();
+	    Vector3D normal = rc.getPlanet().geodeticSurfaceNormal(_pivotPoint);
 	    double dot = normal.normalized().dot(view.normalized().times(-1));
 	    double initialAngle = mu.acos(dot) / 3.14159 * 180;
 	  	  
 	    // horizontal rotation over the original camera horizontal axix
 	    Vector3D u = camera.getHorizontalVector();
-	    double delta = alpha*10;
+	    double delta = alpha * (-90-initialPitch);
 	    camera.rotateWithAxisAndPoint(u, _pivotPoint.asVector3D(), Angle.fromDegrees(delta));
 	  
 	 
