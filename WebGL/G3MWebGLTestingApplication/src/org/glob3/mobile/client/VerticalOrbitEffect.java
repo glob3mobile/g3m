@@ -13,16 +13,18 @@ import org.glob3.mobile.generated.TimeInterval;
 import org.glob3.mobile.generated.Vector2I;
 import org.glob3.mobile.generated.Vector3D;
 
-public class ViewChangeFrom3DTo2D extends EffectWithDuration
+public class VerticalOrbitEffect extends EffectWithDuration
 {
 	private MutableVector3D _pivotPoint ;
 	private Camera _camera0;
+	private double _finalPitch;
 
-	public ViewChangeFrom3DTo2D(TimeInterval duration)
+	public VerticalOrbitEffect(Angle pitch, TimeInterval duration)
 	{
 		super(duration, true);
 		_pivotPoint = null;
 		_camera0 = null;
+		_finalPitch = pitch._degrees;
 	}
 
 	public final void start(G3MRenderContext rc, TimeInterval when)
@@ -55,7 +57,7 @@ public class ViewChangeFrom3DTo2D extends EffectWithDuration
 	  	  
 	    // horizontal rotation over the original camera horizontal axix
 	    Vector3D u = camera.getHorizontalVector();
-	    double delta = alpha * (-90-initialPitch);
+	    double delta = alpha * (_finalPitch-initialPitch);
 	    camera.rotateWithAxisAndPoint(u, _pivotPoint.asVector3D(), Angle.fromDegrees(delta));
 	  
 	 

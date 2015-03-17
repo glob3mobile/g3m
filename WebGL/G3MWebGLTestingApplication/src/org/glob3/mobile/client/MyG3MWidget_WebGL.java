@@ -1,5 +1,6 @@
 package org.glob3.mobile.client;
 
+import org.glob3.mobile.generated.Angle;
 import org.glob3.mobile.generated.EffectTarget;
 import org.glob3.mobile.generated.Sector;
 import org.glob3.mobile.generated.TimeInterval;
@@ -33,8 +34,8 @@ public class MyG3MWidget_WebGL extends G3MWidget_WebGL {
 			$wnd.G3M.setLODAugmentedFactor = $entry(function(factor) {
 				that.@org.glob3.mobile.client.MyG3MWidget_WebGL::setLODAugmentedFactor(D)(factor);
 			});
-			$wnd.G3M.switchTo2DView = $entry(function() {
-				that.@org.glob3.mobile.client.MyG3MWidget_WebGL::switchTo2DView()();
+			$wnd.G3M.orbitToPitch = $entry(function(pitch, seconds) {
+				that.@org.glob3.mobile.client.MyG3MWidget_WebGL::orbitToPitch(DD)(pitch, seconds);
 			});
 	   }-*/;
 
@@ -46,8 +47,9 @@ public class MyG3MWidget_WebGL extends G3MWidget_WebGL {
 		   getPlanetRenderer().addLODAugmentedForSector(_sector, factor);
 	   }
 	   
-	   public void switchTo2DView() {
-		   ViewChangeFrom3DTo2D effect = new ViewChangeFrom3DTo2D(TimeInterval.fromSeconds(1));
+	   public void orbitToPitch(double pitch, double seconds) {
+		   VerticalOrbitEffect effect = new VerticalOrbitEffect(Angle.fromDegrees(pitch),
+				   TimeInterval.fromSeconds(seconds));
 		   EffectTarget target = getNextCamera().getEffectTarget();
 		   getG3MContext().getEffectsScheduler().startEffect(effect, target);
 	   }
