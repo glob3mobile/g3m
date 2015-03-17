@@ -246,6 +246,8 @@ public:
     return fracPart * denominator;
   }
 
+  /** answer a double value in the range 0.0 (inclusive) and 1.0 (exclusive) */
+  virtual double nextRandomDouble() const = 0;
 
 };
 
