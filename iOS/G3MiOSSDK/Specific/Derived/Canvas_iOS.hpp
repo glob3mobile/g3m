@@ -22,6 +22,8 @@ private:
   CGAffineTransform _transform;
 
   CGColorRef createCGColor(const Color& color);
+  
+  BOOL _savingContextState;
 
   void drawRoundedRectangle(float left, float top,
                             float width, float height,
@@ -95,6 +97,11 @@ protected:
 
   void _fillText(const std::string& text,
                  float left, float top);
+  
+  void _circularClipping(float radius,
+                         float left, float top);
+  
+  void _restoreCanvas();
   
   void _drawImage(const IImage* image,
                   float destLeft, float destTop);

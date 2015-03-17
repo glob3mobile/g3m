@@ -176,6 +176,17 @@ void ICanvas::fillText(const std::string& text,
   _fillText(text, left, top);
 }
 
+void ICanvas::circularClipping(float radius,
+                           float left, float top) {
+  checkInitialized();
+  _circularClipping(radius, left, top);
+}
+
+void ICanvas::restoreCanvas() {
+  checkInitialized();
+  _restoreCanvas();
+}
+
 void ICanvas::drawImage(const IImage* image,
                         float destLeft, float destTop) {
   checkInitialized();

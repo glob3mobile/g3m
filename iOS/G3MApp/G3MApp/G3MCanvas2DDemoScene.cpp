@@ -70,6 +70,9 @@ public:
     const int height = 1024;
     canvas->initialize(width, height);
 
+    canvas->circularClipping(300, 0, 1024);
+
+    
     canvas->setFillColor(Color::fromRGBA(1, 1, 0, 0.5));
     canvas->fillRectangle(0, 0, width, height);
     canvas->setLineWidth(4);
@@ -82,10 +85,23 @@ public:
 
     canvas->setLineWidth(1);
     canvas->setFillColor(Color::fromRGBA(0, 0, 0, 0.75));
+    
+    //canvas->clipCircular(100, 50, 1024);
+
+    canvas->restoreCanvas();
+    
+    canvas->circularClipping(300, 100, 924);
+
     for (int i = 1; i < steps; i++) {
       canvas->fillRectangle(0, topStep*i, width, 1);
       canvas->fillRectangle(leftStep*i, 0, 1, height);
     }
+
+    canvas->restoreCanvas();
+    canvas->setLineColor(Color::red());
+    canvas->setLineWidth(3.0);
+    canvas->strokeRoundedRectangle(100, 100, 600, 600, 300);
+    
 
     canvas->setFont(GFont::monospaced());
     canvas->setFillColor(Color::black());
@@ -103,9 +119,15 @@ public:
     canvas->drawImage(image, width / 8 * 3, height / 8 * 3, image->getWidth()*2, image->getHeight()*2, 0.5); //ok
 
     // ok
+    
+    canvas->circularClipping(image->getWidth()/2, width / 8 * 5, height - (height / 8 * 5));
+
+    
     canvas->drawImage(image,
                       0, 0, image->getWidth(), image->getHeight(),
                       width / 8 * 5, height / 8 * 5, image->getWidth()*2, image->getHeight()*2);
+    canvas->restoreCanvas();
+
     // ok
     canvas->drawImage(image,
                       0, 0, image->getWidth(), image->getHeight(),

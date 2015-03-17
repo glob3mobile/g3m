@@ -101,6 +101,12 @@ protected:
   virtual void _fillText(const std::string& text,
                          float left, float top) = 0;
   
+  virtual void _circularClipping(float radius,
+                                 float left, float top) = 0;
+  
+  virtual void _restoreCanvas() = 0;
+
+  
   virtual void _drawImage(const IImage* image,
                           float destLeft, float destTop) = 0;
   
@@ -238,6 +244,12 @@ public:
   
   void fillText(const std::string& text,
                 float left, float top);
+  
+  void circularClipping(float radius,
+                        float left, float top);
+  
+  void restoreCanvas();
+
   
   void drawImage(const IImage* image,
                  float destLeft, float destTop);

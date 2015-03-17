@@ -55,6 +55,8 @@ void Canvas_iOS::_initialize(int width, int height) {
 
   CGColorSpaceRelease( colorSpace );
 
+  _savingContextState = FALSE;
+  
   if (_context == NULL) {
     ILogger::instance()->logError("Can't create CGContext");
     return;
@@ -351,6 +353,27 @@ void Canvas_iOS::_fillText(const std::string& text,
   CGContextRestoreGState(_context);
 
   UIGraphicsPopContext();
+}
+
+void Canvas_iOS::_circularClipping(float radius,
+                                   float left, float top) {
+  if (!_savingContextState) {
+    CGContextSaveGState(_context);
+    _savingContextState = TRUE;
+  }
+  CGContextAddArc (_context, left+radius, top-radius, radius, 0, 2*(float)M_PI, 0);
+  CGContextClip (_context);
+
+  //
+  //CGContextRestoreGState(_context);
+
+}
+
+void Canvas_iOS::_restoreCanvas() {
+  if (_savingContextState) {
+    CGContextRestoreGState(_context);
+    _savingContextState = FALSE;
+  }
 }
 
 
