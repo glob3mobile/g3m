@@ -2126,7 +2126,10 @@ public class G3MWebGLTestingApplication
 
 	   
 	   public void testLaPalma() {
-		   final G3MBuilder_WebGL builder = new G3MBuilder_WebGL();
+		   final MyG3MWidget_WebGL widgetJS = new MyG3MWidget_WebGL();
+		   final G3MBuilder_WebGL builder = new G3MBuilder_WebGL(widgetJS);
+
+		   //final G3MBuilder_WebGL builder = new G3MBuilder_WebGL();
 
 		   //const Planet* planet = Planet::createEarth();
 		   //const Planet* planet = Planet::createSphericalEarth();
