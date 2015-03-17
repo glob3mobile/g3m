@@ -143,9 +143,9 @@ public class NonOverlappingMark
   
     if (_widget.getScreenPos().isNan())
     {
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning select different offset positions
-      _widget.setScreenPos(sp._x, sp._y + 0.01f);
+      final float deltaX = (float)(IMathUtils.instance().nextRandomDouble() * 2 - 1);
+      final float deltaY = (float)(IMathUtils.instance().nextRandomDouble() * 2 - 1);
+      _widget.setScreenPos(sp._x + deltaX, sp._y + deltaY);
     }
   }
 
