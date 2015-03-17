@@ -72,6 +72,7 @@ public class CameraRenderer implements ProtoRenderer
         ec.getEffectsScheduler().cancelAllEffectsFor(target);
       }
       
+      // apply zrender to marks
       Vector3D cameraPos = _cameraContext.getNextCamera().getCartesianPosition();
       MarksRenderer marksRenderer = ec.getWidget().getMarksRenderer();
       java.util.ArrayList<Mark> marks = marksRenderer.getMarks();

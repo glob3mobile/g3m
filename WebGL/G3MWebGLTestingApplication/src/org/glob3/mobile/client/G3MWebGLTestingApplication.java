@@ -2185,12 +2185,12 @@ public class G3MWebGLTestingApplication
 		   }
 		   {
 			   final Mark m = new Mark("", new URL("http://serdis.dis.ulpgc.es/~atrujill/glob3m/LaPalma/restauranteCentrado.png", false), //
-					   new Geodetic3D(Angle.fromDegrees(28.752439), Angle.fromDegrees(-17.889393), 0), AltitudeMode.RELATIVE_TO_GROUND);
+					   new Geodetic3D(Angle.fromDegrees(28.749), Angle.fromDegrees(-17.889393), 0), AltitudeMode.RELATIVE_TO_GROUND);
 			   marksRenderer.addMark(m);
 		   }
 		   {
 			   final Mark m = new Mark("", new URL("http://serdis.dis.ulpgc.es/~atrujill/glob3m/LaPalma/restauranteCentrado.png", false), //
-					   new Geodetic3D(Angle.fromDegrees(28.730464), Angle.fromDegrees(-17.833088), 0), AltitudeMode.RELATIVE_TO_GROUND);
+					   new Geodetic3D(Angle.fromDegrees(28.725), Angle.fromDegrees(-17.833088), 0), AltitudeMode.RELATIVE_TO_GROUND);
 			   marksRenderer.addMark(m);
 		   }
 		   {
