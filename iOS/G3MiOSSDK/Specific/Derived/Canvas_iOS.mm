@@ -126,9 +126,10 @@ void Canvas_iOS::_setLineDash(float lengths[],
                               int count,
                               float phase) {
   //#warning UNCOMMENT
-  CGContextSetLineDash(_context,
+  /*CGContextSetLineDash(_context,
                        phase,
-                       lengths, count);
+                       lengths, count);*/
+  printf("ERROR de compilacion en Canvas_iOS::_setLineDash");
 }
 
 void Canvas_iOS::_setShadow(const Color& color,
