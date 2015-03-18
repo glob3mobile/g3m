@@ -2457,6 +2457,13 @@ public class G3MWebGLTestingApplication
 					   neueLayer.setEnable(!actived);
 					   return;
 				   }
+				   float trans;
+				   if (name.charAt(0)=='V')
+					   trans=1.0f;
+				   else
+					   trans=0.5f;
+				   ILogger.instance().logInfo("name=%s char0=%c trans=%f", name, name.charAt(0), trans);
+				   
 				  WMSLayer andereNeueLayer = new WMSLayer(name,
 							new URL(url, false),
 			                WMSServerVersion.WMS_1_1_0,
@@ -2469,7 +2476,7 @@ public class G3MWebGLTestingApplication
 			                TimeInterval.fromDays(36500),
 			                true,
 			                ltrp,
-			                0.5f);
+			                trans);
 				   andereNeueLayer.setTitle(name);
 				   testPTE_layerSet.addLayer(andereNeueLayer);
 				
