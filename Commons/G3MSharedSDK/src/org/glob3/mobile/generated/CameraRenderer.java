@@ -86,8 +86,8 @@ public class CameraRenderer implements ProtoRenderer
     		  Vector2F pixel = _cameraContext.getNextCamera().point2Pixel(posMark);
     		  Vector3D posZRender = ec.getWidget().getScenePositionForPixel((int)(pixel._x+0.5),(int)(pixel._y+0.5));
     		  double distCamTerrain = cameraPos.distanceTo(posZRender);
-    		  ILogger.instance().logInfo("marca %d. distCanMark=%f   distCamTerrain=%f   Factor=%f\n", 
-    			  i, distCamMark, distCamTerrain, distCamMark/distCamTerrain);
+    		  /*ILogger.instance().logInfo("marca %d. distCanMark=%f   distCamTerrain=%f   Factor=%f\n", 
+    			  i, distCamMark, distCamTerrain, distCamMark/distCamTerrain);*/
     		  if (distCamMark/distCamTerrain<1.2)
     			  mark.setVisible(true);
     		  else

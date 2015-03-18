@@ -2198,8 +2198,36 @@ public class G3MWebGLTestingApplication
 					   new Geodetic3D(Angle.fromDegrees(28.692524), Angle.fromDegrees(-17.833088), 0), AltitudeMode.RELATIVE_TO_GROUND);
 			   marksRenderer.addMark(m);
 		   }*/
+		   {
+			   final Mark m = new Mark("Pico Birigoyo", new URL("http://serdis.dis.ulpgc.es/~atrujill/glob3m/LaPalma/restauranteCentrado.png", false), //
+				   new Geodetic3D(Angle.fromDegrees(28.604999), Angle.fromDegrees(-17.840834), 0), AltitudeMode.RELATIVE_TO_GROUND,
+				   4.5e+06, true, 20, Color.newFromRGBA(1, 1, 1, 1), Color.newFromRGBA(0, 0, 0, 1), -60, null, true, null, false);
+			   marksRenderer.addMark(m);
+		   }
 		   builder.addRenderer(marksRenderer);
 		    
+		   // barquito en el muelle
+		   ShapesRenderer shapesRenderer = new ShapesRenderer();
+		   shapesRenderer.loadJSONSceneJS(new URL("models/Crucero 3d.json",false), 1000, 
+					TimeInterval.forever(), true, 
+					"models/", false, 
+					Geodetic3D.fromDegrees(28.676419, -17.766057, 0),
+					AltitudeMode.ABSOLUTE, new ShapeLoadListener() {
+
+						@Override
+						public void onBeforeAddShape(SGShape shape) {
+							shape.setPitch(Angle.fromDegrees(90));
+							shape.setHeading(Angle.fromDegrees(170));
+							shape.setScale(10);
+						}
+
+						@Override
+						public void onAfterAddShape(SGShape shape) {}
+
+						@Override
+						public void dispose() {}
+					}, false);
+		   builder.addRenderer(shapesRenderer);
 
 		   _widget = builder.createWidget();
 		   
@@ -2211,7 +2239,7 @@ public class G3MWebGLTestingApplication
 		   
 		   _widget.getG3MWidget().setMarksRenderer(marksRenderer);
 		   
-		   //Drawing some wells ...
+		   // leyendo lista de pozos de un json bajado de Open Data La Palma
 		   PozosLaPalmaParser jsonParser = new PozosLaPalmaParser(_widget.getG3MContext().getDownloader(),
 				   marksRenderer,
 				   "jsonLaPalma/pozosLaPalma.json");
