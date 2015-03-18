@@ -67,7 +67,6 @@ public class MarkWidget
     _vertices = pos2D.create();
   
     _geo2Dfeature = new Geometry2DGLFeature(_vertices, 2, 0, true, 0, 3.0f, true, 1.0f, new Vector2F(_x, _y)); // translation -  pointSize -  needsPointSize -  lineWidth -  stride -  normalized -  index -  arrayElementSize -  buffer
-  
     _glState.addGLFeature(_geo2Dfeature, false);
   
     FloatBufferBuilderFromCartesian2D texCoords = new FloatBufferBuilderFromCartesian2D();
@@ -138,13 +137,10 @@ public class MarkWidget
 
   public final void render(G3MRenderContext rc, GLState glState)
   {
-<<<<<<< HEAD
-    rc.getGL().drawArrays(GLPrimitive.triangleStrip(), 0, 4, _glState, rc.getGPUProgramManager(), RenderType.REGULAR_RENDER);
-=======
-    rc.getGL().drawArrays(GLPrimitive.triangleStrip(), 0, 4, _glState, rc.getGPUProgramManager()); // count -  first
+    rc.getGL().drawArrays(GLPrimitive.triangleStrip(), 0, 4, _glState, rc.getGPUProgramManager(), RenderType.REGULAR_RENDER); // count -  first
   }
-//              float x,
-//              float y
+  //              float x,
+  //              float y
 
   public final void setAndClampScreenPos(float x, float y, int viewportWidth, int viewportHeight, float margin)
   {
@@ -158,7 +154,6 @@ public class MarkWidget
     }
     _x = xx;
     _y = yy;
->>>>>>> purgatory
   }
 
   public final void setScreenPos(float x, float y)

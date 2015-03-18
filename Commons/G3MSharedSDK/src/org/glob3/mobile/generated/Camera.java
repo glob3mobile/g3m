@@ -118,21 +118,6 @@ public class Camera
     _dirtyFlags.setAllDirty();
   }
 
-  public final Vector3D pixel2Ray(Vector2I pixel)
-  {
-    final double px = pixel._x + 0.5;
-    final double py = _viewPortHeight - pixel._y - 0.5;
-    final Vector3D pixel3D = new Vector3D(px, py, 0);
-  
-    final Vector3D obj = getModelViewMatrix().unproject(pixel3D, 0, 0, _viewPortWidth, _viewPortHeight);
-    if (obj.isNan())
-    {
-      ILogger.instance().logWarning("Pixel to Ray return NaN");
-      return obj;
-    }
-  
-    return obj.sub(_position.asVector3D());
-  }
   public final Vector3D pixel2Ray(Vector2F pixel)
   {
     final float px = pixel._x;
@@ -148,6 +133,7 @@ public class Camera
   
     return obj.sub(_position.asVector3D());
   }
+
 
   //void Camera::render(const G3MRenderContext* rc,
   //                    const GLGlobalState& parentState) const {
@@ -166,7 +152,7 @@ public class Camera
     return obj.sub(_position.asVector3D());
   }
 
-  public final Vector3D pixel2PlanetPoint(Vector2I pixel)
+  public final Vector3D pixel2PlanetPoint(Vector2F pixel)
   {
     return _planet.closestIntersection(_position.asVector3D(), pixel2Ray(pixel));
   }
@@ -334,7 +320,7 @@ public class Camera
     return new Vector3D(M.get0(), M.get4(), M.get8());
   }
 
-  public final Angle compute3DAngularDistance(Vector2I pixel0, Vector2I pixel1)
+  public final Angle compute3DAngularDistance(Vector2F pixel0, Vector2F pixel1)
   {
     final Vector3D point0 = pixel2PlanetPoint(pixel0);
     if (point0.isNan())

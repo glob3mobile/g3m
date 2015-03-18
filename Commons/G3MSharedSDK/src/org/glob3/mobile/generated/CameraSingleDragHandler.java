@@ -102,35 +102,9 @@ public class CameraSingleDragHandler extends CameraEventHandler
     cameraContext.setCurrentGesture(Gesture.Drag);
   
     // dragging
-<<<<<<< HEAD
-    final Vector2I pixel = touchEvent.getTouch(0).getPos();
-  
-    Vector3D touchedPosition = eventContext.getWidget().getScenePositionForPixel(pixel._x, pixel._y);
-  
-    //Geodetic3D geoPos = eventContext->getPlanet()->toGeodetic3D(v);
-    //printf("ZBUFFER EN %f, %f, %f\n ", geoPos._latitude._degrees, geoPos._longitude._degrees, geoPos._height);
-  /*
-    eventContext->getPlanet()->beginSingleDrag(_camera0.getCartesianPosition(),
-                                               _camera0.pixel2Ray(pixel));*/
-      eventContext.getPlanet().beginSingleDrag(_camera0.getCartesianPosition(), touchedPosition);
-  
-  /*
-  =======
-    const Vector3D& initialRay = _camera0.pixel2Ray(pixel);
-    if (!initialRay.isNan()) {
-      cameraContext->setCurrentGesture(Drag);
-      eventContext->getPlanet()->beginSingleDrag(_camera0.getCartesianPosition(),initialRay);
-=======
     final Vector2F pixel = touchEvent.getTouch(0).getPos();
-    final Vector3D initialRay = _camera0.pixel2Ray(pixel);
-    if (!initialRay.isNan())
-    {
-      cameraContext.setCurrentGesture(Gesture.Drag);
-      eventContext.getPlanet().beginSingleDrag(_camera0.getCartesianPosition(), initialRay);
->>>>>>> purgatory
-    }
-  >>>>>>> origin/purgatory
-   */
+    Vector3D touchedPosition = eventContext.getWidget().getScenePositionForPixel((int)pixel._x, (int)pixel._y);
+      eventContext.getPlanet().beginSingleDrag(_camera0.getCartesianPosition(), touchedPosition);
   }
   public final void onMove(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
   {
@@ -139,7 +113,9 @@ public class CameraSingleDragHandler extends CameraEventHandler
        return;
   
     //check finalRay
-    final Vector3D finalRay = _camera0.pixel2Ray(touchEvent.getTouch(0).getPos());
+  
+    Vector2F tp = touchEvent.getTouch(0).getPos();
+    final Vector3D finalRay = _camera0.pixel2Ray(new Vector2F(tp._x, tp._y));
     if (finalRay.isNan())
        return;
   

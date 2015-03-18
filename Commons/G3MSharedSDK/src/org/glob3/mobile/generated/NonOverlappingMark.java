@@ -3,8 +3,8 @@ public class NonOverlappingMark
 {
   private float _springLengthInPixels;
 
-//  MutableVector2F _widgetScreenPosition;
-//  MutableVector2F _anchorScreenPosition;
+  //  MutableVector2F _widgetScreenPosition;
+  //  MutableVector2F _anchorScreenPosition;
 
   private Vector3D _cartesianPos;
   private Geodetic3D _geoPosition ;
@@ -29,8 +29,6 @@ public class NonOverlappingMark
   private String _id;
 
   private NonOverlappingMarkTouchListener _touchListener;
-
-//  float _enclosingRadius;
 
 
   public NonOverlappingMark(IImageBuilder imageBuilderWidget, IImageBuilder imageBuilderAnchor, Geodetic3D position, NonOverlappingMarkTouchListener touchListener, float springLengthInPixels, float springK, float minSpringLength, float maxSpringLength, float electricCharge, float anchorElectricCharge)
@@ -134,10 +132,10 @@ public class NonOverlappingMark
   public final void computeAnchorScreenPos(Camera camera, Planet planet)
   {
     Vector2F sp = new Vector2F(camera.point2Pixel(getCartesianPosition(planet)));
-  //  _anchorScreenPosition.put(sp._x, sp._y);
-  //  if (_widgetScreenPosition.isNan()) {
-  //    _widgetScreenPosition.put(sp._x, sp._y + 0.01f);
-  //  }
+    //  _anchorScreenPosition.put(sp._x, sp._y);
+    //  if (_widgetScreenPosition.isNan()) {
+    //    _widgetScreenPosition.put(sp._x, sp._y + 0.01f);
+    //  }
   
     _anchorWidget.setScreenPos(sp._x, sp._y);
   
@@ -228,7 +226,7 @@ public class NonOverlappingMark
       _springVertices.put(3, -asp._y);
     }
   
-    rc.getGL().drawArrays(GLPrimitive.lines(), 0, 2, _springGLState, rc.getGPUProgramManager()); // count -  first
+    rc.getGL().drawArrays(GLPrimitive.lines(), 0, 2, _springGLState, rc.getGPUProgramManager(), RenderType.REGULAR_RENDER); // count -  first
   }
 
   public final void applyCoulombsLaw(NonOverlappingMark that)
@@ -243,7 +241,6 @@ public class NonOverlappingMark
     Vector2F direction = d.div((float)distance);
   
     float strength = (float)(this._electricCharge * that._electricCharge / (distance * distance));
-  
     final Vector2F force = direction.times(strength);
   
     this.applyForce(force._x, force._y);
@@ -300,7 +297,7 @@ public class NonOverlappingMark
   
     Vector2F anchorPosition = _anchorWidget.getScreenPos();
   
-  //  Vector2F spring = Vector2F(newX,newY).sub(anchorPosition).clampLength(_minSpringLength, _maxSpringLength);
+    //  Vector2F spring = Vector2F(newX,newY).sub(anchorPosition).clampLength(_minSpringLength, _maxSpringLength);
     Vector2F spring = new Vector2F(newX - anchorPosition._x, newY - anchorPosition._y).clampLength(_minSpringLength, _maxSpringLength);
   
     _widget.setAndClampScreenPos(anchorPosition._x + spring._x, anchorPosition._y + spring._y, viewportWidth, viewportHeight, viewportMargin);
@@ -320,7 +317,7 @@ public class NonOverlappingMark
   public final void resetWidgetPositionVelocityAndForce()
   {
     _widget.resetPosition();
-//    _widgetScreenPosition.put(NANF, NANF);
+    //    _widgetScreenPosition.put(NANF, NANF);
     _speed.set(0, 0);
     _force.set(0, 0);
   }

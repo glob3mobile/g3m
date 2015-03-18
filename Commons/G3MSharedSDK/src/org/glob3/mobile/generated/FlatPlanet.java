@@ -36,10 +36,6 @@ public class FlatPlanet extends Planet
   private MutableVector3D _initialPoint1 = new MutableVector3D();
   private double _dragHeight1;
   private MutableVector3D _centerPoint = new MutableVector3D();
-<<<<<<< HEAD
-=======
-  //  mutable double          _angleBetweenInitialRays;
->>>>>>> purgatory
 
   private double _correctionT2;
   private MutableVector3D _correctedCenterPoint = new MutableVector3D();

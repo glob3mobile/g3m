@@ -298,7 +298,6 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
   private GLState _glState;
   private void updateGLState(G3MRenderContext rc)
   {
-  
     final Camera camera = rc.getCurrentCamera();
     ModelViewGLFeature f = (ModelViewGLFeature) _glState.getGLFeature(GLFeatureID.GLF_MODEL_VIEW);
     if (f == null)
@@ -420,12 +419,7 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
     _changedInfoListener = changedInfoListener;
   
     _layerSet.setChangeListener(this);
-  
     _layerSet.setChangedInfoListener(this);
-<<<<<<< HEAD
-    _changedInfoListener = changedInfoListener;
-=======
->>>>>>> purgatory
   
     if (_tileRenderingListener == null)
     {
@@ -575,40 +569,20 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
   
     if (touchEvent.getType() == _touchEventTypeOfTerrainTouchListener)
     {
-<<<<<<< HEAD
-      final Vector2I pixel = touchEvent.getTouch(0).getPos();
-  
-      Vector3D positionCartesian = null;
-=======
       final Vector2F pixel = touchEvent.getTouch(0).getPos();
       final Vector3D ray = _lastCamera.pixel2Ray(pixel);
       final Vector3D origin = _lastCamera.getCartesianPosition();
->>>>>>> purgatory
   
       final Planet planet = ec.getPlanet();
   
-      //    if (ec->getWidget() != NULL){
-      positionCartesian = new Vector3D(ec.getWidget().getScenePositionForPixel(pixel._x, pixel._y));
-      //    } else{
-      //      const Vector3D ray = _lastCamera->pixel2Ray(pixel);
-      //      const Vector3D origin = _lastCamera->getCartesianPosition();
-      //      positionCartesian = new Vector3D(planet->closestIntersection(origin, ray));
-      //    }
-  
-      if (positionCartesian == null || positionCartesian.isNan())
+      final Vector3D positionCartesian = planet.closestIntersection(origin, ray);
+      if (positionCartesian.isNan())
       {
-        /*
-         =======
-         const Vector3D positionCartesian = planet->closestIntersection(origin, ray);
-         if (positionCartesian.isNan()) {
-         ILogger::instance()->logWarning("PlanetRenderer::onTouchEvent: positionCartesian ( - planet->closestIntersection(origin, ray) - ) is NaN");
-         >>>>>>> origin/purgatory
-         */
-  
+        ILogger.instance().logWarning("PlanetRenderer::onTouchEvent: positionCartesian ( - planet->closestIntersection(origin, ray) - ) is NaN");
         return false;
       }
   
-      Geodetic3D position = planet.toGeodetic3D(positionCartesian);
+      final Geodetic3D position = planet.toGeodetic3D(positionCartesian);
   
       final int firstLevelTilesCount = _firstLevelTiles.size();
       for (int i = 0; i < firstLevelTilesCount; i++)
@@ -716,42 +690,6 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
           tile.prepareForFullRendering(rc, _texturizer, _elevationDataProvider, _tessellator, layerTilesRenderParameters, _layerSet, _tilesRenderParameters, true, _tileDownloadPriority, _verticalExaggeration, _logTilesPetitions); // forceFullRender
         }
       }
-  //<<<<<<< HEAD
-  //
-  //    if (_texturizer != NULL) {
-  //      for (int i = 0; i < firstLevelTilesCount; i++) {
-  //        Tile* tile = _firstLevelTiles[i];
-  //        _texturizer->justCreatedTopTile(rc, tile, _layerSet);
-  //      }
-  //    }
-  //  }
-  //
-  //  if (_tilesRenderParameters->_forceFirstLevelTilesRenderOnStart) {
-  //    if (!_allFirstLevelTilesAreTextureSolved) {
-  //      const int firstLevelTilesCount = _firstLevelTiles.size();
-  //      for (int i = 0; i < firstLevelTilesCount; i++) {
-  //        Tile* tile = _firstLevelTiles[i];
-  //        if (!tile->isTextureSolved()) {
-  //          return RenderState::busy();
-  //        }
-  //      }
-  //
-  //      if (_tessellator != NULL) {
-  //        if (!_tessellator->isReady(rc)) {
-  //          return RenderState::busy();
-  //        }
-  //      }
-  //
-  //      if (_texturizer != NULL) {
-  //        const RenderState texturizerRenderState = _texturizer->getRenderState(_layerSet);
-  //        if (texturizerRenderState._type != RENDER_READY) {
-  //          return texturizerRenderState;
-  //        }
-  //      }
-  //
-  //      _allFirstLevelTilesAreTextureSolved = true;
-  //    }
-  //=======
   
       for (int i = 0; i < firstLevelTilesCount; i++)
       {
@@ -773,7 +711,6 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
       }
   
       _allFirstLevelTilesAreTextureSolved = true;
-  //>>>>>>> purgatory
     }
   
     return RenderState.ready();

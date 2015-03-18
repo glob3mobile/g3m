@@ -62,8 +62,8 @@ public class CameraMouseWheelHandler extends CameraEventHandler
   {
     Camera cam = cameraContext.getNextCamera();
   
-    Vector2I pixel = touchEvent.getTouch(0).getPos();
-    Vector3D touchedPosition = eventContext.getWidget().getScenePositionForPixel(pixel._x, pixel._y);
+    Vector2F pixel = touchEvent.getTouch(0).getPos();
+    Vector3D touchedPosition = eventContext.getWidget().getScenePositionForPixel((int)pixel._x, (int)pixel._y);
   
     if (!touchedPosition.isNan())
     {

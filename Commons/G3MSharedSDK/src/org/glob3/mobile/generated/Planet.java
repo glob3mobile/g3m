@@ -54,13 +54,9 @@ public abstract class Planet
   public abstract Vector3D geodeticSurfaceNormal(Geodetic3D geodetic);
   public abstract Vector3D geodeticSurfaceNormal(Geodetic2D geodetic);
 
-<<<<<<< HEAD
-  public java.util.ArrayList<Double> intersectionsDistances(Vector3D origin, Vector3D direction)
-=======
   public abstract void geodeticSurfaceNormal(Angle latitude, Angle longitude, MutableVector3D result);
 
   public final java.util.ArrayList<Double> intersectionsDistances(Vector3D origin, Vector3D direction)
->>>>>>> purgatory
   {
     return intersectionsDistances(origin._x, origin._y, origin._z, direction._x, direction._y, direction._z);
   }

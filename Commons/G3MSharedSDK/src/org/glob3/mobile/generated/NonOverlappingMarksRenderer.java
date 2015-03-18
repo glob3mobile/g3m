@@ -1,5 +1,5 @@
 package org.glob3.mobile.generated; 
-public class NonOverlappingMarksRenderer extends DefaultRenderer
+public abstract class NonOverlappingMarksRenderer extends DefaultRenderer
 {
   private final int _maxVisibleMarks;
   private final float _viewportMargin;
@@ -51,14 +51,6 @@ public class NonOverlappingMarksRenderer extends DefaultRenderer
       }
     }
   
-<<<<<<< HEAD
-    _connectorsGLState.addGLFeature(new Geometry2DGLFeature(pos2D.create(), 2, 0, true, 0, 3.0f, true, 10.0f, Vector2F.zero()), false);
-  
-    _connectorsGLState.addGLFeature(new ViewportExtentGLFeature((int)rc.getCurrentCamera().getViewPortWidth(), (int)rc.getCurrentCamera().getViewPortHeight()), false);
-  
-    rc.getGL().drawArrays(GLPrimitive.lines(), 0, pos2D.size()/2, _connectorsGLState, rc.getGPUProgramManager(), RenderType.REGULAR_RENDER);
-=======
->>>>>>> purgatory
   }
 
   private long _lastPositionsUpdatedTime;
@@ -160,7 +152,7 @@ public class NonOverlappingMarksRenderer extends DefaultRenderer
 
   public void dispose()
   {
-  //  _connectorsGLState->_release();
+    //  _connectorsGLState->_release();
   
     final int marksSize = _marks.size();
     for (int i = 0; i < marksSize; i++)
@@ -307,20 +299,4 @@ public class NonOverlappingMarksRenderer extends DefaultRenderer
     _touchListener = touchListener;
   }
 
-<<<<<<< HEAD
-  public final void zRender(G3MRenderContext rc, GLState glState)
-  {
-  }
-
 }
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#pragma mark MarkWidget
-
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#pragma mark NonOverlappingMark
-
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#pragma-mark Renderer
-=======
-}
->>>>>>> purgatory

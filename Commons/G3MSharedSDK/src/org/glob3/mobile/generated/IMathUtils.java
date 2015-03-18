@@ -248,7 +248,6 @@ public abstract class IMathUtils
     return fracPart * denominator;
   }
 
-<<<<<<< HEAD
   public final Vector2D solveSecondDegreeEquation(double A, double B, double C)
   {
   
@@ -263,9 +262,7 @@ public abstract class IMathUtils
   
     return new Vector2D((-B + squareRoot) / A2, (-B - squareRoot) / A2);
   }
-=======
+
   /** answer a double value in the range 0.0 (inclusive) and 1.0 (exclusive) */
   public abstract double nextRandomDouble();
->>>>>>> purgatory
-
 }
