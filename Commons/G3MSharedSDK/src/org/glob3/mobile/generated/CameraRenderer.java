@@ -77,19 +77,24 @@ public class CameraRenderer implements ProtoRenderer
       MarksRenderer marksRenderer = ec.getWidget().getMarksRenderer();
       java.util.ArrayList<Mark> marks = marksRenderer.getMarks();
       for (int i=0; i<marks.size(); i++) {
-        Vector3D posMark = marks.get(i).getCartesianPosition(ec.getPlanet());
-        Vector2F pixel = _cameraContext.getNextCamera().point2Pixel(posMark);
-        Vector3D posZRender = ec.getWidget().getScenePositionForPixel((int)(pixel._x+0.5),(int)(pixel._y+0.5));
-        double distCamMark = cameraPos.distanceTo(posMark);
-        double distCamTerrain = cameraPos.distanceTo(posZRender);
-        ILogger.instance().logInfo("marca %d. distCanMark=%f   distCamTerrain=%f   Factor=%f\n", 
-        		i, distCamMark, distCamTerrain, distCamMark/distCamTerrain);
-        if (distCamMark/distCamTerrain<1.2)
-          marks.get(i).setVisible(true);
-        else
-          marks.get(i).setVisible(false);
+    	  Mark mark = marks.get(i);
+		  Vector3D posMark = mark.getCartesianPosition(ec.getPlanet());
+		  double distCamMark = cameraPos.distanceTo(posMark);
+    	  if (mark.getMinDistanceToCamera() < distCamMark)
+    		  mark.setVisible(false);
+    	  else {
+    		  Vector2F pixel = _cameraContext.getNextCamera().point2Pixel(posMark);
+    		  Vector3D posZRender = ec.getWidget().getScenePositionForPixel((int)(pixel._x+0.5),(int)(pixel._y+0.5));
+    		  double distCamTerrain = cameraPos.distanceTo(posZRender);
+    		  ILogger.instance().logInfo("marca %d. distCanMark=%f   distCamTerrain=%f   Factor=%f\n", 
+    			  i, distCamMark, distCamTerrain, distCamMark/distCamTerrain);
+    		  if (distCamMark/distCamTerrain<1.2)
+    			  mark.setVisible(true);
+    		  else
+    			  mark.setVisible(false);
+    	  }
       }
-      
+
       // this call is needed at this point. I don't know why
       ec.getWidget().getScenePositionForCentralPixel();
   
