@@ -144,6 +144,7 @@
 #import <G3MiOSSDK/TiledVectorLayer.hpp>
 #import <G3MiOSSDK/GEORasterSymbolizer.hpp>
 #import <G3MiOSSDK/GEO2DPolygonData.hpp>
+#import <G3MiOSSDK/Geodetic3D.hpp>
 
 #import <G3MiOSSDK/DirectMesh.hpp>
 #import <G3MiOSSDK/ChessboardLayer.hpp>
@@ -4192,7 +4193,36 @@ public:
     Mark* m = new Mark("", URL("http://serdis.dis.ulpgc.es/~atrujill/glob3m/LaPalma/restauranteCentrado.png", false),  Geodetic3D(Angle::fromDegrees(28.678), Angle::fromDegrees(-17.8632), 10), RELATIVE_TO_GROUND);
     marksRenderer->addMark(m);
   }
+  {
+    Mark* m = new Mark("Pico Birigoyo", URL("http://serdis.dis.ulpgc.es/~atrujill/glob3m/LaPalma/restauranteCentrado.png", false),
+                       Geodetic3D(Angle::fromDegrees(28.604999), Angle::fromDegrees(-17.840834), 0), RELATIVE_TO_GROUND,
+                       4.5e+06, true, 20, Color::newFromRGBA(1, 1, 1, 1), Color::newFromRGBA(0, 0, 0, 1), -60, NULL, true, NULL, false);
+    marksRenderer->addMark(m);
+  }
   builder.addRenderer(marksRenderer);
+  
+  // barquito en el muelle
+  class myShapeLoadListener: public ShapeLoadListener {
+  public:
+    ~myShapeLoadListener() { }
+    void onBeforeAddShape(SGShape* shape) {
+      shape->setPitch(Angle::fromDegrees(90));
+      shape->setHeading(Angle::fromDegrees(170));
+      shape->setScale(10);
+      }
+
+    void onAfterAddShape(SGShape* shape) {}
+  };
+  
+  ShapesRenderer* shapesRenderer = new ShapesRenderer();
+  Geodetic3D* pos = new Geodetic3D(Angle::fromDegrees(28.676419), Angle::fromDegrees(-17.766057), 0.0);
+  shapesRenderer->loadJSONSceneJS(URL("http://serdis.dis.ulpgc.es/~atrujill/glob3m/LaPalma/war_final/models/Crucero%203d.json",false), 1000,
+                                  TimeInterval::forever(), true,
+                                 "", false,
+                                 pos,
+                                 ABSOLUTE, new myShapeLoadListener, false);
+  builder.addRenderer(shapesRenderer);
+
   
   builder.initializeWidget();
   
