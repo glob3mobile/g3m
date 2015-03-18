@@ -86,13 +86,6 @@ public:
     return geodeticSurfaceNormal(geodetic._latitude, geodetic._longitude);
   }
 
-  std::vector<double> intersectionsDistances(const Vector3D& origin,
-                                             const Vector3D& direction) const {
-    return Ellipsoid::intersectionCenteredEllipsoidWithRay(origin,
-                                                           direction,
-                                                           _ellipsoid.getOneOverRadiiSquared());
-  }
-
   void geodeticSurfaceNormal(const Angle& latitude,
                              const Angle& longitude,
                              MutableVector3D& result) const;
