@@ -120,7 +120,7 @@ public:
 
   const std::vector<const Info*> getInfo();
 
-  void changedInfo(const std::vector<const Info*> info);
+  void changedInfo(const std::vector<const Info*>& info);
   
 };
 
