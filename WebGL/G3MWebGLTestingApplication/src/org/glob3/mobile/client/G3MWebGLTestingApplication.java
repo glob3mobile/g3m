@@ -2171,9 +2171,9 @@ public class G3MWebGLTestingApplication
 		   // camera constrainers
 		   //builder.addCameraConstraint(new MyCameraConstrainer(-5));
 		   
-		   // markers
+		   // markers viejos para imitar la web de las jornadas
 		   final MarksRenderer marksRenderer = new MarksRenderer(false);
-		   {
+		   /*{
 			   final Mark m = new Mark("", new URL("http://serdis.dis.ulpgc.es/~atrujill/glob3m/LaPalma/restauranteCentrado.png", false), //
 					   new Geodetic3D(Angle.fromDegrees(28.675), Angle.fromDegrees(-17.889), 0), AltitudeMode.RELATIVE_TO_GROUND);
 			   marksRenderer.addMark(m);
@@ -2197,8 +2197,9 @@ public class G3MWebGLTestingApplication
 			   final Mark m = new Mark("", new URL("http://serdis.dis.ulpgc.es/~atrujill/glob3m/LaPalma/restauranteCentrado.png", false), //
 					   new Geodetic3D(Angle.fromDegrees(28.692524), Angle.fromDegrees(-17.833088), 0), AltitudeMode.RELATIVE_TO_GROUND);
 			   marksRenderer.addMark(m);
-		   }
+		   }*/
 		   builder.addRenderer(marksRenderer);
+		    
 
 		   _widget = builder.createWidget();
 		   
@@ -2209,6 +2210,12 @@ public class G3MWebGLTestingApplication
 		   _widget.setCameraPitch(Angle.fromDegrees(-5.01));
 		   
 		   _widget.getG3MWidget().setMarksRenderer(marksRenderer);
+		   
+		   //Drawing some wells ...
+		   PozosLaPalmaParser jsonParser = new PozosLaPalmaParser(_widget.getG3MContext().getDownloader(),
+				   marksRenderer,
+				   "jsonLaPalma/pozosLaPalma.json");
+		   
 	  }
 
 
