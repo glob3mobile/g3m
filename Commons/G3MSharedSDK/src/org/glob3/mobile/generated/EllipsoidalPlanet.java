@@ -94,11 +94,6 @@ public class EllipsoidalPlanet extends Planet
     return geodeticSurfaceNormal(geodetic._latitude, geodetic._longitude);
   }
 
-  public final java.util.ArrayList<Double> intersectionsDistances(Vector3D origin, Vector3D direction)
-  {
-    return Ellipsoid.intersectionCenteredEllipsoidWithRay(origin, direction, _ellipsoid.getOneOverRadiiSquared());
-  }
-
   public final void geodeticSurfaceNormal(Angle latitude, Angle longitude, MutableVector3D result)
   {
     final double cosLatitude = java.lang.Math.cos(latitude._radians);
