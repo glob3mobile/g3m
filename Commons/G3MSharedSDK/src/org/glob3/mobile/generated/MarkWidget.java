@@ -47,8 +47,8 @@ public class MarkWidget
     _image = image;
     _imageName = imageName;
   
-    _halfWidth = image.getWidth() / 2;
-    _halfHeight = image.getHeight() / 2;
+    _halfWidth = (float) image.getWidth() / 2.0f;
+    _halfHeight = (float) image.getHeight() / 2.0f;
   
     if (_vertices != null)
     {
@@ -65,7 +65,8 @@ public class MarkWidget
 //#warning TODO: share vertices for marks of the same size?
   
     _vertices = pos2D.create();
-    _geo2Dfeature = new Geometry2DGLFeature(_vertices, 2, 0, true, 0, 1.0f, true, 10.0f, new Vector2F(_x, _y));
+  
+    _geo2Dfeature = new Geometry2DGLFeature(_vertices, 2, 0, true, 0, 3.0f, true, 1.0f, new Vector2F(_x, _y)); // translation -  pointSize -  needsPointSize -  lineWidth -  stride -  normalized -  index -  arrayElementSize -  buffer
   
     _glState.addGLFeature(_geo2Dfeature, false);
   

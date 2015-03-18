@@ -158,7 +158,7 @@ private:
   std::string _id;
   
   NonOverlappingMarkTouchListener* _touchListener;
-  
+
 public:
   
   NonOverlappingMark(IImageBuilder* imageBuilderWidget,

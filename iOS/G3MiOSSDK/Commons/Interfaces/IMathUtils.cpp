@@ -7,7 +7,6 @@
 //
 
 #include "IMathUtils.hpp"
-
 #include "Vector2D.hpp"
 
 IMathUtils* IMathUtils::_instance = NULL;

@@ -150,10 +150,10 @@ _tileRenderingListener(tileRenderingListener),
 _touchEventTypeOfTerrainTouchListener(touchEventTypeOfTerrainTouchListener)
 {
   _context = NULL;
-  _layerSet->setChangeListener(this);
-  
-  _layerSet->setChangedInfoListener(this);
   _changedInfoListener = changedInfoListener;
+
+  _layerSet->setChangeListener(this);
+  _layerSet->setChangedInfoListener(this);
 
   if (_tileRenderingListener == NULL) {
     _tilesStartedRendering = NULL;
@@ -511,42 +511,6 @@ RenderState PlanetRenderer::getRenderState(const G3MRenderContext* rc) {
                                       _logTilesPetitions);
       }
     }
-//<<<<<<< HEAD
-//    
-//    if (_texturizer != NULL) {
-//      for (int i = 0; i < firstLevelTilesCount; i++) {
-//        Tile* tile = _firstLevelTiles[i];
-//        _texturizer->justCreatedTopTile(rc, tile, _layerSet);
-//      }
-//    }
-//  }
-//  
-//  if (_tilesRenderParameters->_forceFirstLevelTilesRenderOnStart) {
-//    if (!_allFirstLevelTilesAreTextureSolved) {
-//      const int firstLevelTilesCount = _firstLevelTiles.size();
-//      for (int i = 0; i < firstLevelTilesCount; i++) {
-//        Tile* tile = _firstLevelTiles[i];
-//        if (!tile->isTextureSolved()) {
-//          return RenderState::busy();
-//        }
-//      }
-//      
-//      if (_tessellator != NULL) {
-//        if (!_tessellator->isReady(rc)) {
-//          return RenderState::busy();
-//        }
-//      }
-//      
-//      if (_texturizer != NULL) {
-//        const RenderState texturizerRenderState = _texturizer->getRenderState(_layerSet);
-//        if (texturizerRenderState._type != RENDER_READY) {
-//          return texturizerRenderState;
-//        }
-//      }
-//      
-//      _allFirstLevelTilesAreTextureSolved = true;
-//    }
-//=======
 
     for (int i = 0; i < firstLevelTilesCount; i++) {
       Tile* tile = _firstLevelTiles[i];
@@ -564,9 +528,8 @@ RenderState PlanetRenderer::getRenderState(const G3MRenderContext* rc) {
     }
 
     _allFirstLevelTilesAreTextureSolved = true;
-//>>>>>>> purgatory
   }
-  
+
   return RenderState::ready();
 }
 
@@ -994,10 +957,10 @@ void PlanetRenderer::setChangedRendererInfoListener(ChangedRendererInfoListener*
   if (_changedInfoListener != NULL) {
     ILogger::instance()->logWarning("Changed Renderer Info Listener of PlanetRenderer already set");
   }
-  
+
   _rendererIdentifier = rendererIdentifier;
   _changedInfoListener = changedInfoListener;
-  
+
   if(_changedInfoListener != NULL) {
     _changedInfoListener->changedRendererInfo(rendererIdentifier, _layerSet->getInfo());
   }
