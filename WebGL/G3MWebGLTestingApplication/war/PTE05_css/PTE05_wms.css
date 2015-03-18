@@ -4,13 +4,14 @@ html, body {
 	height: 100%;
 }
 
-#g3mWidgetHolder {
+#g3m_frame {
 	padding:0px;
 	margin:0px;
 	overflow: hidden;
+	border: none;
 }
 
-#activationContainer{
+#ideContainer{
 	padding:0px;
 	margin:0px;
 	overflow-y: scroll;
@@ -19,16 +20,18 @@ html, body {
 	padding-right: 1em;
 }
 
+.ideContainerTitle, .ideContainerSubtitle {
+	font-weight: bold;
+	margin-top: 1em;
+	margin-bottom: 1em;
+}
+
+.ideContainerTitle {
+	font-size: 14px;
+}
+
 .layerChecker {
 	margin-right: 1em !important;
-}
-
-h3 {
-	font-size: 18px;
-}
-
-h2 {
-	text-align: center;
 }
 
 canvas:focus {
@@ -36,4 +39,23 @@ canvas:focus {
 	outline: none !important;
 }
 
-.chooser input, .chooser p { display: inline-block; }
+.unselectable {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.chooser input, .chooser p { display: inline-block; margin: 0; vertical-align: middle;}
+.chooser {margin-bottom:0.5em; margin-left:2em;}
+.secondLevel { padding-left: 2em; }
+.folderTitle {vertical-align:middle; margin-left: 0.75em; }
+
+#APALegend, #APNLegend {display:none; margin-bottom:0.5em; margin-left:2.5em;}
+#pte05Folder, #AEFolder, #paisajeFolder, #VegFolder, #epFolder {margin-bottom:0.5em;}
+#pte05Content, #AEContent, #paisajeContent, #VegContent, #epContent {
+	/*display: none; */
+	margin-bottom:0.5em;
+}

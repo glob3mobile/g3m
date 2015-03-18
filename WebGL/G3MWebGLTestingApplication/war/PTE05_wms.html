@@ -9,9 +9,6 @@
 <!-- If you add any GWT meta tags, they must   -->
 <!-- be added before this line.                -->
 <!--                                           -->
- 
-<script type="text/javascript"
-	src="org.glob3.mobile.G3MWebGLTestingApplication/org.glob3.mobile.G3MWebGLTestingApplication.nocache.js"></script>
 
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 <script src="http://code.jquery.com/ui/1.11.1/jquery-ui.js"></script>
@@ -26,52 +23,52 @@
 
 <body>
 	<div id="mainContainer" class="container-fluid">
-		<div class="row">
-			<div class="col-sm-10" id="g3mWidgetHolder"></div>
-			<div class="col-sm-2" id="activationContainer">
-				<h2> PTE - 5 </h2>
-				<h3> Tipos de paisaje </h3>
-				<div class="chooser"> <input class="layerChecker" type="checkbox" name="layerOption" onchange='window.G3M.changeLayerStatus("TipoLitoral");' /><p> Litoral </p> </div>
-				<div class="chooser"> <input class="layerChecker" type="checkbox" name="layerOption" onchange='window.G3M.changeLayerStatus("TipoNatural");' /><p> Natural </p> </div>
-				<div class="chooser"> <input class="layerChecker" type="checkbox" name="layerOption" onchange='window.G3M.changeLayerStatus("TipoUrbano");' /><p> Urbano </p> </div>
-				<div class="chooser"> <input class="layerChecker" type="checkbox" name="layerOption" onchange='window.G3M.changeLayerStatus("TipoRural");' /><p> Rural </p> </div>
-				<div class="chooser"> <input class="layerChecker" type="checkbox" name="layerOption" onchange='window.G3M.changeLayerStatus("TipoViario");' /><p> Infraestructura viaria </p> </div>
-				<div class="chooser"> <input class="layerChecker" type="checkbox" name="layerOption" onchange='window.G3M.changeLayerStatus("TipoAntropizado");' /><p> Antropizado mixto / indefinido </p> </div>
-				<h3> Estrategias de proyecto </h3>
-				<div class="chooser"> <input class="layerChecker" type="checkbox" name="layerOption" onchange='window.G3M.changeLayerStatus("PredNatural");' /><p> Predominancia de lo natural </p> </div>
-				<div class="chooser"> <input class="layerChecker" type="checkbox" name="layerOption" onchange='window.G3M.changeLayerStatus("PredRural");' /><p> Predominancia de lo rural </p> </div>
-				<h3> Unidades ambientales de paisaje </h3>
-				<div class="chooser"> <input class="layerChecker" type="checkbox" name="layerOption" onchange='window.G3M.changeLayerStatus("UnidadesAmbientales");' /><p> Unidades ambientales </p> </div>
-				<h3> Áreas de sensibilidad ecológica </h3>
-				<div class="chooser"> <input class="layerChecker" type="checkbox" name="layerOption" onchange='window.G3M.changeLayerStatus("ASE");' /><p> ASE </p> </div>
-				<h3> Pisos climáticos de vegetación </h3>
-				<div class="chooser"> <input class="layerChecker" type="checkbox" name="layerOption" onchange='window.G3M.changeLayerStatus("VegPinar");' /><p> Pinar </p> </div>
-				<div class="chooser"> <input class="layerChecker" type="checkbox" name="layerOption" onchange='window.G3M.changeLayerStatus("VegMonteverde");' /><p> Monteverde </p> </div>
-				<div class="chooser"> <input class="layerChecker" type="checkbox" name="layerOption" onchange='window.G3M.changeLayerStatus("VegTermofilo");' /><p> Bosque termófilo </p> </div>
-				<div class="chooser"> <input class="layerChecker" type="checkbox" name="layerOption" onchange='window.G3M.changeLayerStatus("VegMatorral");' /><p> Matorral costero </p> </div>
-				<h3> Términos municipales </h3>
-				<div class="chooser"> <input class="layerChecker" type="checkbox" name="layerOption" onchange='window.G3M.changeLayerStatus("Municipios");' /><p> Municipios </p> </div>
-				<h3> Zonas de Especial Conservación </h3>
-				<div class="chooser"> <input class="layerChecker" type="checkbox" name="layerOption" onchange='window.G3M.changeLayerStatus("ZecMaritimo");' /><p> Marítimas </p> </div>
-				<div class="chooser"> <input class="layerChecker" type="checkbox" name="layerOption" onchange='window.G3M.changeLayerStatus("ZecTerrestre");' /><p> Terrestres </p> </div>
+		<div class="row unselectable">
+			<iframe id="g3m_frame" class="col-sm-8" src="globo.html"></iframe>
+			<div class="col-sm-4" id="ideContainer">
+				<p class="ideContainerTitle"> Contenido </p>
+				<div class="chooser"> <input class="layerChecker" type="checkbox" name="layerOption" onchange='myG3M.addWMSLayer("http://ide2.idegrancanaria.es/wms/LIM_MUN?","LIMMUN");' /><p> Términos municipales </p> </div>
+				<div class="chooser"> <input class="layerChecker" type="checkbox" name="layerOption" onchange='myG3M.addWMSLayer("http://idecan1.grafcan.es/ServicioWMS/MDSombras?","mdsombras");' /><p> Modelo de Sombras </p> </div>
+				<div id="pte05Folder" > <img id="pte05Lock" src="images/menos.gif" /> <img src="images/carpeta.gif" /> <span class="folderTitle"> PLAN TERRITORIAL ESPECIAL DEL PAISAJE DE G.C. (PTE-5) </span> </div>
+				<div id="pte05Content">
+					<div class="chooser secondLevel"> <input class="layerChecker" type="checkbox" name="layerOption" onchange='myG3M.addWMSLayer("http://ide2.idegrancanaria.es/wms/PTE_05?","O1_UAP");' /><p> Unidades ambientales </p> </div>
+					<div id="paisajeFolder" class="secondLevel"> <img id="paisajeLock" src="images/menos.gif" /> <img src="images/carpeta.gif" /> <span class="folderTitle"> TIPO DE PAISAJE </span> </div>
+					<div id="paisajeContent" class="secondLevel">
+						<div class="chooser secondLevel"> <input class="layerChecker" type="checkbox" name="layerOption" onchange='myG3M.addWMSLayer("http://ide2.idegrancanaria.es/wms/PTE_05?","O2_TPN");' /><p> Natural </p> </div>
+						<div class="chooser secondLevel"> <input class="layerChecker" type="checkbox" name="layerOption" onchange='myG3M.addWMSLayer("http://ide2.idegrancanaria.es/wms/PTE_05?","O2_TPL");' /><p> Litoral </p> </div>
+						<div class="chooser secondLevel"> <input class="layerChecker" type="checkbox" name="layerOption" onchange='myG3M.addWMSLayer("http://ide2.idegrancanaria.es/wms/PTE_05?","O2_TPR");' /><p> Rural </p> </div>
+						<div class="chooser secondLevel"> <input class="layerChecker" type="checkbox" name="layerOption" onchange='myG3M.addWMSLayer("http://ide2.idegrancanaria.es/wms/PTE_05?","O2_TPU");' /><p> Urbano </p> </div>
+						<div class="chooser secondLevel"> <input class="layerChecker" type="checkbox" name="layerOption" onchange='myG3M.addWMSLayer("http://ide2.idegrancanaria.es/wms/PTE_05?","O2_TPV");' /><p> Infraestructuras </p> </div>
+						<div class="chooser secondLevel"> <input class="layerChecker" type="checkbox" name="layerOption" onchange='myG3M.addWMSLayer("http://ide2.idegrancanaria.es/wms/PTE_05?","O2_TPM");' /><p> Mixto e indeterminado </p> </div>
+					</div>
+					<div id="AEFolder" class="secondLevel"> <img id="AELock" src="images/menos.gif" /> <img src="images/carpeta.gif" /> <span class="folderTitle"> ACTUACIONES ESTRUCTURANTES </span> </div>
+					<div id="AEContent" class="secondLevel">
+						<div class="chooser secondLevel"> <input class="layerChecker" type="checkbox" checked name="layerOption" onchange='myG3M.addWMSLayer("http://ide2.idegrancanaria.es/wms/PTE_05?","O3_APN");changeAPNLegendStatus();' /><p> Ámbito de predominancia de lo natural </p> </div>
+						<img id="APNLegend" class="secondLevel" src="http://ide2.idegrancanaria.es/wms/PTE_05?version=1.1.1&service=WMS&request=GetLegendGraphic&layer=O3_APN&format=image/png" />
+						<div class="chooser secondLevel"> <input class="layerChecker" type="checkbox" checked name="layerOption" onchange='myG3M.addWMSLayer("http://ide2.idegrancanaria.es/wms/PTE_05?","O3_APA");changeAPALegendStatus();' /><p> Ámbito de predominancia agrícola-urbano </p> </div>
+						<img id="APALegend" class="secondLevel" src="http://ide2.idegrancanaria.es/wms/PTE_05?version=1.1.1&service=WMS&request=GetLegendGraphic&layer=O3_APA&format=image/png" />
+						<div class="chooser secondLevel"> <input class="layerChecker" type="checkbox" checked name="layerOption" onchange='myG3M.addWMSLayer("http://ide2.idegrancanaria.es/wms/PTE_05?","O3_APM");' /><p> Ámbito de predominancia de la movilidad viaria</p> </div>
+						<div class="chooser secondLevel"> <input class="layerChecker" type="checkbox" checked name="layerOption" onchange='myG3M.addWMSLayer("http://ide2.idegrancanaria.es/wms/PTE_05?","O3_API");' /><p> Ámbito de predominancia del impacto </p> </div>
+					</div>
+					<div id="VegFolder" class="secondLevel"> <img id="VegLock" src="images/menos.gif" /> <img src="images/carpeta.gif" /> <span class="folderTitle"> VEGETACION </span> </div>
+					<div id="VegContent" class="secondLevel">
+						<div class="chooser secondLevel"> <input class="layerChecker" type="checkbox" name="layerOption" onchange='myG3M.addWMSLayer("http://xan.singularfactory.com:8080/geoserver/paisajes/wms?","paisajes:Paisajes_pinar");' /><p> Pinar </p> </div>
+						<div class="chooser secondLevel"> <input class="layerChecker" type="checkbox" name="layerOption" onchange='myG3M.addWMSLayer("http://xan.singularfactory.com:8080/geoserver/paisajes/wms?","paisajes:Paisajes_monteverde");' /><p> Monteverde </p> </div>
+						<div class="chooser secondLevel"> <input class="layerChecker" type="checkbox" name="layerOption" onchange='myG3M.addWMSLayer("http://xan.singularfactory.com:8080/geoserver/paisajes/wms?","paisajes:Paisajes_termofilo");' /><p> Bosque Termófilo </p> </div>
+						<div class="chooser secondLevel"> <input class="layerChecker" type="checkbox" name="layerOption" onchange='myG3M.addWMSLayer("http://xan.singularfactory.com:8080/geoserver/paisajes/wms?","paisajes:Matorral_Costero");' /><p> Matorral Costero </p> </div>
+					</div>
+				</div>
 				
+				<div id="epFolder" > <img id="epLock" src="images/menos.gif" /> <img src="images/carpeta.gif" /> <span class="folderTitle"> ESPACIOS PROTEGIDOS </span> </div>
+				<div id="epContent">
+					<div class="chooser secondLevel"> <input class="layerChecker" type="checkbox" name="layerOption" onchange='myG3M.addWMSLayer("http://ide2.idegrancanaria.es/wms/ZEC?","ZEC_MAR");' /><p> Zonas de especial conservación marítimas </p> </div>
+					<div class="chooser secondLevel"> <input class="layerChecker" type="checkbox" name="layerOption" onchange='myG3M.addWMSLayer("http://ide2.idegrancanaria.es/wms/ZEC?","ZEC_TER");' /><p> Zonas de especial conservación terrestres </p> </div>
+					<div class="chooser secondLevel"> <input class="layerChecker" type="checkbox" name="layerOption" onchange='myG3M.addWMSLayer("http://ide2.idegrancanaria.es/wms/CAT_ASE?","CATASE");' /><p> Áreas de sensibilidad ecológica </p> </div>
+					<div class="chooser secondLevel"> <input class="layerChecker" type="checkbox" name="layerOption" onchange='myG3M.addWMSLayer("http://ide2.idegrancanaria.es/wms/ORD_ENP?","ENPLIM");' /><p> Espacios naturales protegidos </p> </div>
+				</div>
 			</div>
 		</div>
 	</div>
 	<div id="globeMarkDialog" style="display:none;"></div>
-	<script type="text/javascript">
-	var _onLoadG3MListener = null;
-
-    function onLoadG3M() {
-    	// the G3M objets is already loaded
-    	if (_onLoadG3MListener != null)
-    		_onLoadG3MListener();
-    }
-
-    function setOnLoadG3MListener(func) {
-    	_onLoadG3MListener = func;
-    }
-	</script>
-	
 </body>
 </html>

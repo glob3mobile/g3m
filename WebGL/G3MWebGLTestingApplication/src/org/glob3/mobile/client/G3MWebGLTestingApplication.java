@@ -88,7 +88,7 @@ public class G3MWebGLTestingApplication
 
    private final String         _g3mWidgetHolderId = "g3mWidgetHolder";
 
-   private G3MWidget_WebGL      _widget            = null;
+   private static G3MWidget_WebGL      _widget            = null;
 
    private final boolean        _markersParsed     = false;
    private MarksRenderer        _markersRenderer;
@@ -127,7 +127,8 @@ public class G3MWebGLTestingApplication
     	  //testGeacron();
     	  //testPTE05Layers();
     	  //testPTE05Chano();
-    	  testLaPalma();
+    	  //testLaPalma();
+    	  testLaPalma_Chano();	// para usar con LaPalmaDemo.html
     	  
          // initialize a customized widget by using a builder
          //initCustomizedWithBuilder();
@@ -2245,6 +2246,289 @@ public class G3MWebGLTestingApplication
 				   "jsonLaPalma/pozosLaPalma.json");
 		   
 	  }
+
+	   /* --------------------------------------------------------- */
+	   //                      Test La Palma Chano
+	   /* --------------------------------------------------------- */
+	   
+	   
+	   static MarksRenderer LaPalmaMarksRenderer;
+	   
+	   public void testLaPalma_Chano (){
+		   final MyG3MWidget_WebGL widgetJS = new MyG3MWidget_WebGL();
+		   final G3MBuilder_WebGL builder = new G3MBuilder_WebGL(widgetJS);
+
+		   final Planet planet = Planet.createFlatEarth();
+		   builder.setPlanet(planet);
+		   
+		   final LayerTilesRenderParameters ltrp = new LayerTilesRenderParameters(Sector.fullSphere(), 2, 4, 0, 19, 
+					new Vector2I(256, 256), 
+					new Vector2I(16,16), false);
+
+		   testPTE_layerSet = new LayerSet();
+		   
+		   // create elevations for La Palma
+		   Sector sector = Sector.fromDegrees(28.47, -18.00, 28.85, -17.74);
+		   Vector2I extent = new Vector2I(780, 1140);                             // bil resolution
+		   URL url = new URL("http://serdis.dis.ulpgc.es/~atrujill/glob3m/LaPalma/LaPalma780x1140.bil", false);
+		   ElevationDataProvider elevationDataProvider = new SingleBilElevationDataProvider(url, sector, extent);
+		   builder.getPlanetRendererBuilder().setElevationDataProvider(elevationDataProvider);	  
+		   builder.getPlanetRendererBuilder().setVerticalExaggeration(1.0f);
+
+		   // background color
+		   Color bgColor = Color.newFromRGBA(0.0f, 0.4f, 0.8f, 1.0f);
+		   builder.setBackgroundColor(bgColor);
+
+		   WMSLayer grafcanLIDAR = new WMSLayer("LIDAR_MTL",
+				   new URL("http://idecan1.grafcan.es/ServicioWMS/MTL?", false),
+				   WMSServerVersion.WMS_1_1_0,
+				   Sector.fullSphere(),//gcSector,
+				   "image/jpeg",
+				   "EPSG:4326",
+				   "",
+				   false,
+				   new LevelTileCondition(0, 17),
+				   TimeInterval.fromDays(30),
+				   true,
+				   ltrp);
+		   testPTE_layerSet.addLayer(grafcanLIDAR);
+		   grafcanLIDAR.setTitle("LIDAR_MTL");
+		   builder.getPlanetRendererBuilder().setLayerSet(testPTE_layerSet);
+		   
+		   WMSLayer grafcanOrto = new WMSLayer("WMS_OrtoExpress",
+	               new URL("http://idecan1.grafcan.es/ServicioWMS/OrtoExpress?", false),
+	               WMSServerVersion.WMS_1_1_0,
+	               Sector.fullSphere(),
+	               "image/jpeg",
+	               "EPSG:4326",
+	               "",
+	               false,
+	               new LevelTileCondition(0, 19),
+	               TimeInterval.fromDays(30),
+	               true,
+	               null);
+		   grafcanOrto.setTitle("WMS_OrtoExpress");
+		   grafcanOrto.setEnable(false);
+		   testPTE_layerSet.addLayer(grafcanOrto);
+		   
+		   WMSLayer Sombras = new WMSLayer("mdsombras",
+	               new URL("http://idecan1.grafcan.es/ServicioWMS/MDSombras?", false),
+	               WMSServerVersion.WMS_1_1_0,
+	               Sector.fullSphere(),
+	               "image/jpeg",
+	               "EPSG:4326",
+	               "",
+	               false,
+	               new LevelTileCondition(0, 19),
+	               TimeInterval.fromDays(30),
+	               true,
+	               ltrp);
+		   Sombras.setTitle("mdsombras");
+		   Sombras.setEnable(false);
+		   testPTE_layerSet.addLayer(Sombras);
+		   
+		   WMSLayer Hipsometrico = new WMSLayer("HIPSO",
+	               new URL("http://idecan1.grafcan.es/ServicioWMS/Hipsometrico?", false),
+	               WMSServerVersion.WMS_1_1_0,
+	               Sector.fullSphere(),
+	               "image/jpeg",
+	               "EPSG:4326",
+	               "",
+	               false,
+	               new LevelTileCondition(0, 19),
+	               TimeInterval.fromDays(30),
+	               true,
+	               ltrp);
+		   Hipsometrico.setTitle("HIPSO");
+		   Hipsometrico.setEnable(false);
+		   testPTE_layerSet.addLayer(Hipsometrico);
+		   
+		   WMSLayer EENN = new WMSLayer("EENN",
+	               new URL("http://idecan2.grafcan.es/ServicioWMS/EspNat?", false),
+	               WMSServerVersion.WMS_1_1_0,
+	               Sector.fullSphere(),
+	               "image/png",
+	               "EPSG:4326",
+	               "",
+	               false,
+	               new LevelTileCondition(0, 19),
+	               TimeInterval.fromDays(30),
+	               true,
+	               ltrp,
+	               0.5f);
+		   EENN.setTitle("EENN");
+		   EENN.setEnable(false);
+		   testPTE_layerSet.addLayer(EENN);
+		   
+		   WMSLayer Callejero = new WMSLayer("TOPO",
+				   new URL(
+							"http://idecan2.grafcan.es/ServicioWMS/Callejero?", false), WMSServerVersion.WMS_1_1_0,
+							Sector.fullSphere(), "image/png", "EPSG:4326", "", true,
+							new LevelTileCondition(0, 17), TimeInterval.fromDays(36500), true, ltrp, (float)0.75);
+		   Callejero.setTitle("TOPO");
+		   Callejero.setEnable(false);
+		   testPTE_layerSet.addLayer(Callejero);
+		   
+		   // barquito en el muelle
+		   ShapesRenderer shapesRenderer = new ShapesRenderer();
+		   shapesRenderer.loadJSONSceneJS(new URL("models/Crucero 3d.json",false), 1000, 
+					TimeInterval.forever(), true, 
+					"models/", false, 
+					Geodetic3D.fromDegrees(28.676419, -17.766057, 0),
+					AltitudeMode.ABSOLUTE, new ShapeLoadListener() {
+
+						@Override
+						public void onBeforeAddShape(SGShape shape) {
+							shape.setPitch(Angle.fromDegrees(90));
+							shape.setHeading(Angle.fromDegrees(170));
+							shape.setScale(10);
+						}
+
+						@Override
+						public void onAfterAddShape(SGShape shape) {}
+
+						@Override
+						public void dispose() {}
+					}, false);
+		   builder.addRenderer(shapesRenderer);
+
+		   LaPalmaMarksRenderer = new MarksRenderer(true);
+		   builder.addRenderer(LaPalmaMarksRenderer);
+
+		   // marcas adicionales
+		   {
+			   final Mark m = new Mark("Pico Birigoyo", new URL("http://serdis.dis.ulpgc.es/~atrujill/glob3m/LaPalma/restauranteCentrado.png", false), //
+				   new Geodetic3D(Angle.fromDegrees(28.604999), Angle.fromDegrees(-17.840834), 0), AltitudeMode.RELATIVE_TO_GROUND,
+				   4.5e+06, true, 20, Color.newFromRGBA(1, 1, 1, 1), Color.newFromRGBA(0, 0, 0, 1), -60, null, true, null, false);
+			   LaPalmaMarksRenderer.addMark(m);
+		   }
+
+		   //The Proxy Lines
+		   //final String proxy =  "proxy.php?url=";
+		   //builder.setDownloader(new Downloader_WebGL( 8, 10, proxy));
+
+		   
+		   /*Sector sector = Sector.fromDegrees(28.47, -18.00, 28.85, -17.74);
+		   Vector2I extent = new Vector2I(780, 1140);                             // bil resolution
+		   URL url = new URL("http://serdis.dis.ulpgc.es/~atrujill/glob3m/LaPalma/LaPalma780x1140.bil", false);
+		   ElevationDataProvider elevationDataProvider = new SingleBilElevationDataProvider(url, sector, extent);
+		   builder.getPlanetRendererBuilder().setElevationDataProvider(elevationDataProvider);	  
+		   builder.getPlanetRendererBuilder().setVerticalExaggeration(1.0f);*/
+		   		   
+		   testLaPalmaChano_exportJavaFunctions();
+
+		   _widget = builder.createWidget();
+		   
+		   // set camera looking at La Palma
+		   Geodetic3D position = new Geodetic3D(Angle.fromDegrees(28.5991), Angle.fromDegrees(-17.8705), 1500);
+		   _widget.setCameraPosition(position);
+		   _widget.setCameraHeading(Angle.fromDegrees(4.35));
+		   _widget.setCameraPitch(Angle.fromDegrees(-5.01));
+		   
+		   _widget.getG3MWidget().setMarksRenderer(LaPalmaMarksRenderer);
+
+		   
+		   //Drawing some wells ...
+		   PozosLaPalmaParser jsonParser = new PozosLaPalmaParser(_widget.getG3MContext().getDownloader(),
+				   LaPalmaMarksRenderer,
+				   "jsonLaPalma/pozosLaPalma.json");
+		   
+	   }
+	   
+	   private static void testLaPalmaChano_activeMarks(){
+		   if (LaPalmaMarksRenderer.isEnable()) LaPalmaMarksRenderer.setEnable(false);
+		   else LaPalmaMarksRenderer.setEnable(true);
+	   }
+	   
+	   private static void testLaPalmaChano_activeThematicLayers(final String url, final String name){
+		   //Porque hay que borrar la anterior antes de poner la nueva.
+		   GTask layerLoaderTask = new GTask() {
+			   
+			   final LayerTilesRenderParameters ltrp = new LayerTilesRenderParameters(Sector.fullSphere(), 2, 4, 0, 19, 
+						new Vector2I(256, 256), 
+						new Vector2I(16,16), false);
+
+			@Override
+			public void run(G3MContext context) {
+				   Layer neueLayer =  testPTE_layerSet.getLayerByTitle(name);
+				   
+				   if (neueLayer != null) {
+					   boolean actived = neueLayer.isEnable();
+					   neueLayer.setEnable(!actived);
+					   return;
+				   }
+				  WMSLayer andereNeueLayer = new WMSLayer(name,
+							new URL(url, false),
+			                WMSServerVersion.WMS_1_1_0,
+			                Sector.fullSphere(),//vegetationSector,
+			                "image/png",
+			                "EPSG:4326",
+			                "",
+			                true,
+			                new LevelTileCondition(8,19),
+			                TimeInterval.fromDays(36500),
+			                true,
+			                ltrp,
+			                0.5f);
+				   andereNeueLayer.setTitle(name);
+				   testPTE_layerSet.addLayer(andereNeueLayer);
+				
+			}
+			   
+		   };
+		   _widget.getG3MContext().getThreadUtils().invokeInRendererThread(layerLoaderTask, true);
+	
+	   }
+	   
+	   private static void testLaPalmaChano_activeBaseLayers(final String name){
+		   GTask layerLoaderTask = new GTask() {
+
+			@Override
+			public void run(G3MContext context) {
+				// TODO Auto-generated method stub
+				Layer layer =  testPTE_layerSet.getLayerByTitle(name);
+				if (layer != null){
+					layer.setEnable(true);
+					if (name.contains("LIDAR_MTL")) {
+						testPTE_layerSet.getLayerByTitle("WMS_OrtoExpress").setEnable(false);
+						testPTE_layerSet.getLayerByTitle("HIPSO").setEnable(false);
+						testPTE_layerSet.getLayerByTitle("mdsombras").setEnable(false);
+					}
+					if (name.contains("WMS_OrtoExpress")) {
+						testPTE_layerSet.getLayerByTitle("LIDAR_MTL").setEnable(false);
+						testPTE_layerSet.getLayerByTitle("HIPSO").setEnable(false);
+						testPTE_layerSet.getLayerByTitle("mdsombras").setEnable(false);
+					}
+					if (name.contains("HIPSO")) {
+						testPTE_layerSet.getLayerByTitle("WMS_OrtoExpress").setEnable(false);
+						testPTE_layerSet.getLayerByTitle("LIDAR_MTL").setEnable(false);
+						testPTE_layerSet.getLayerByTitle("mdsombras").setEnable(false);
+					}
+					if (name.contains("mdsombras")) {
+						testPTE_layerSet.getLayerByTitle("WMS_OrtoExpress").setEnable(false);
+						testPTE_layerSet.getLayerByTitle("HIPSO").setEnable(false);
+						testPTE_layerSet.getLayerByTitle("LIDAR_MTL").setEnable(false);
+					}
+				}
+				
+			}
+			   
+		   };
+		   _widget.getG3MContext().getThreadUtils().invokeInRendererThread(layerLoaderTask, true);
+	   }
+	   
+	   private native void testLaPalmaChano_exportJavaFunctions() /*-{
+		var that = this;
+		if (!$wnd.G3M) {
+			$wnd.G3M = {};
+		}
+
+		// here we set all my function headings
+		$wnd.G3M.changeBaseLayerStatus = @org.glob3.mobile.client.G3MWebGLTestingApplication::testLaPalmaChano_activeBaseLayers(Ljava/lang/String;);
+		$wnd.G3M.changeThematicLayerStatus = @org.glob3.mobile.client.G3MWebGLTestingApplication::testLaPalmaChano_activeThematicLayers(Ljava/lang/String;Ljava/lang/String;);
+		$wnd.G3M.changeMarkStatus = @org.glob3.mobile.client.G3MWebGLTestingApplication::testLaPalmaChano_activeMarks();
+	}-*/;
+
 
 
 }
