@@ -20,6 +20,8 @@
 #include "Ellipsoid.hpp"
 #include "Sector.hpp"
 
+#include "SphericalPlanet.hpp"
+
 class EllipsoidalPlanet: public Planet {
 private:
 
@@ -44,10 +46,7 @@ private:
   mutable double          _angleBetweenInitialPoints;
   mutable bool            _validSingleDrag;
   
-  mutable double          _dragRadius0;
-  mutable double          _dragRadius1;
-  mutable double          _lastDoubleDragAngle;
-
+  mutable SphericalPlanet* _sphericalPlanetDoubleDragDelegate; //Same math applied for Double Drag
 
 public:
 
@@ -57,6 +56,7 @@ public:
 #ifdef JAVA_CODE
     super.dispose();
 #endif
+    delete _sphericalPlanetDoubleDragDelegate;
   }
 
   Vector3D getRadii() const {

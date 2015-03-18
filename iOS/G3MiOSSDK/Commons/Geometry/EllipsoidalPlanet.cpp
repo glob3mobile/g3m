@@ -15,7 +15,8 @@
 
 
 EllipsoidalPlanet::EllipsoidalPlanet(const Ellipsoid& ellipsoid):
-_ellipsoid(ellipsoid)
+_ellipsoid(ellipsoid),
+_sphericalPlanetDoubleDragDelegate(NULL)
 {
 }
 
@@ -398,17 +399,11 @@ void EllipsoidalPlanet::beginDoubleDrag(const Vector3D& origin,
                      const Vector3D& centerPosition,
                      const Vector3D& touchedPosition0,
                      const Vector3D& touchedPosition1) const{
-  _origin = origin.asMutableVector3D();
-  _centerRay = centerRay.asMutableVector3D();
-  _initialPoint0 = touchedPosition0.asMutableVector3D();
-  
-  double radius = _ellipsoid._radii.maxAxis();
-  
-  _dragRadius0 = radius + toGeodetic3D(touchedPosition0)._height;
-  _initialPoint1 = touchedPosition1.asMutableVector3D();
-  _dragRadius1 = radius + toGeodetic3D(touchedPosition1)._height;
-  _centerPoint = centerPosition.asMutableVector3D();
-  _lastDoubleDragAngle = 0;
+
+  if (_sphericalPlanetDoubleDragDelegate == NULL){
+    _sphericalPlanetDoubleDragDelegate = new SphericalPlanet(Sphere(Vector3D::zero, _ellipsoid._radii.maxAxis()));
+  }
+  _sphericalPlanetDoubleDragDelegate->beginDoubleDrag(origin, centerRay, centerPosition, touchedPosition0, touchedPosition1);
 }
 
 
@@ -416,96 +411,7 @@ MutableMatrix44D EllipsoidalPlanet::doubleDrag(const Vector3D& finalRay0,
                                                const Vector3D& finalRay1,
                                                bool allowRotation) const
 {
-  // test if initialPoints are valid
-  if (_initialPoint0.isNan() || _initialPoint1.isNan())
-    return MutableMatrix44D::invalid();
-  
-  // init params
-  const IMathUtils* mu = IMathUtils::instance();
-  const Vector3D origin = _origin.asVector3D();
-  MutableVector3D positionCamera = _origin;
-  
-  // compute final points
-  Vector3D finalPoint0 = Sphere::closestIntersectionCenteredSphereWithRay(origin,
-                                                                          finalRay0, _dragRadius0); // A1
-  if (finalPoint0.isNan()) return MutableMatrix44D::invalid();
-  
-  // drag initial point 0 to final point 0
-  
-  //Creating final spherical drag matrix
-  const Vector3D rotationAxis = _initialPoint0.cross(finalPoint0.asMutableVector3D()).asVector3D();
-  double sinus = rotationAxis.length()/_initialPoint0.length()/finalPoint0.length();
-  const Angle rotationDelta = Angle::fromRadians(-IMathUtils::instance()->asin(sinus));
-  if (rotationDelta.isNan()){
-    ILogger::instance()->logError("Problem at first step of EllipsoidalPlanet::doubleDrag()");
-    return MutableMatrix44D::invalid();
-  }
-  MutableMatrix44D matrix = MutableMatrix44D::createRotationMatrix(rotationDelta, rotationAxis);
-  
-  // transform points to set axis origin in initialPoint0
-  // (en el mundo plano es solo una traslacion)
-  // (en el esférico será un cambio de sistema de referencia: traslacion + rotacion, usando el sistema local normal en ese punto)
-  {
-    Vector3D draggedCameraPos = positionCamera.transformedBy(matrix, 1.0).asVector3D();
-    Vector3D finalPoint1 = Sphere::closestIntersectionCenteredSphereWithRay(draggedCameraPos,
-                                                                            finalRay1.transformedBy(matrix, 0), _dragRadius1); // B1
-    
-    //Taking whole system to origin
-    MutableMatrix44D M = createGeodeticTransformMatrix(toGeodetic3D(_initialPoint0.asVector3D()));
-    MutableMatrix44D transform = M.inversed();
-
-    Vector3D transformedInitialPoint1 = _initialPoint1.transformedBy(transform, 1.0).asVector3D();
-    Vector3D transformedFinalPoint1 = finalPoint1.transformedBy(transform, 1.0);
-    Vector3D transformedCameraPos = draggedCameraPos.transformedBy(transform, 1.0);
-    Vector3D v0 = transformedFinalPoint1.sub(transformedCameraPos);
-    
-    //Angles to rotate transformedInitialPoint1 to adjust the plane that contains origin, TFP1 and TCP
-    Vector3D planeNormal = transformedCameraPos.cross(v0).normalized();
-    Plane plane(planeNormal, v0);
-    Vector2D angles = plane.rotationAngleAroundZAxisToFixPointInRadians(transformedInitialPoint1);
-    
-    //Selecting best angle to rotate (smallest)
-    double angulo1 = angles._x;
-    double angulo2 = angles._y;
-    double dif1 = Angle::distanceBetweenAnglesInRadians(angulo1, _lastDoubleDragAngle);
-    double dif2 = Angle::distanceBetweenAnglesInRadians(angulo2, _lastDoubleDragAngle);
-    _lastDoubleDragAngle = (dif1 < dif2)? angulo1 : angulo2;
-    
-    //Creating rotating matrix
-    Vector3D normal0 = geodeticSurfaceNormal(_initialPoint0);
-    MutableMatrix44D rotation = MutableMatrix44D::createGeneralRotationMatrix(Angle::fromRadians(-_lastDoubleDragAngle),normal0, _initialPoint0.asVector3D());
-    matrix.copyValueOfMultiplication(rotation, matrix);// = rotation.multiply(matrix);
-    
-  }
-  
-  // zoom camera (see chuleta en pdf)
-  // ahora mismo lo que se hace es buscar cuánto acercar para que el angulo de las dos parejas de vectores
-  // sea el mismo
-  {
-    Vector3D P0   = positionCamera.transformedBy(matrix, 1.0).asVector3D();
-    Vector3D B    = _initialPoint1.asVector3D();
-    Vector3D B0   = B.sub(P0);
-    Vector3D Ra   = finalRay0.transformedBy(matrix, 0.0).normalized();
-    Vector3D Rb   = finalRay1.transformedBy(matrix, 0.0).normalized();
-    double b      = -2 * (B0.dot(Ra));
-    double c      = B0.squaredLength();
-    double k      = Ra.dot(B0);
-    double RaRb2  = Ra.dot(Rb) * Ra.dot(Rb);
-    double at     = RaRb2 - 1;
-    double bt     = b*RaRb2 + 2*k;
-    double ct     = c*RaRb2 - k*k;
-    
-    Vector2D sol = mu->solveSecondDegreeEquation(at, bt, ct);
-    if (sol.isNan()){
-      return MutableMatrix44D::invalid();
-    }
-    double t = sol._x;
-    
-    MutableMatrix44D zoom = MutableMatrix44D::createTranslationMatrix(Ra.times(t));
-    matrix.copyValueOfMultiplication(zoom, matrix);// = zoom.multiply(matrix);
-  }
-  
-  return matrix;
+  return _sphericalPlanetDoubleDragDelegate->doubleDrag(finalRay0, finalRay1, allowRotation);
 }
 
 
