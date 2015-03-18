@@ -86,13 +86,6 @@ public:
   Vector3D geodeticSurfaceNormal(const Geodetic2D& geodetic) const {
     return geodeticSurfaceNormal(geodetic._latitude, geodetic._longitude);
   }
-
-  std::vector<double> intersectionsDistances(const Vector3D& origin,
-                                             const Vector3D& direction) const {
-    return Sphere::intersectionCenteredSphereWithRay(origin,
-                                                     direction,
-                                                     _sphere._radius);
-  }
   
   void geodeticSurfaceNormal(const Angle& latitude,
                              const Angle& longitude,
