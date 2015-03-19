@@ -150,6 +150,8 @@
 
 #import <G3MiOSSDK/Quaternion.hpp>
 
+#import "StarDomeRenderer.hpp"
+
 #include <typeinfo>
 
 
@@ -354,13 +356,20 @@ Mesh* createSectorMesh(const Planet* planet,
   builder.addCameraConstraint(new DeviceOrientationCameraConstrainer(self));
 
   
-  planet = Planet::createSphericalEarth();
+  planet = Planet::createEarth();
   
   
   mr = new MeshRenderer();
   builder.addRenderer(mr);
   
-  mr->addMesh([self createStarDome]);
+  //mr->addMesh([self createStarDome]);
+  
+  std::vector<Star> stars;
+  for(int i = 0; i < 100; i++){
+    stars.push_back(Star((rand() % 36000) / 100.0, (rand() % 9000) / 100.0, Color::white()));
+  }
+
+  builder.addRenderer(new StarDomeRenderer(stars));
   
 
   /*
@@ -373,7 +382,8 @@ Mesh* createSectorMesh(const Planet* planet,
   [[self G3MWidget] startAnimation];
   
   
-  [G3MWidget widget]->setCameraPosition(Geodetic3D::fromDegrees(27.973105, -15.597545,1000));
+  [G3MWidget widget]->setCameraPosition(Geodetic3D::fromDegrees(27.973105, -15.597545, 1000));
+  [G3MWidget widget]->setCameraPitch(Angle::fromDegrees(-30));
   
   
 }
