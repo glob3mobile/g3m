@@ -90,7 +90,7 @@ void G3MDemoBuilder::build() {
   HUDRenderer* hudRenderer = new HUDRenderer();
   builder->setHUDRenderer(hudRenderer);
 
-  NonOverlappingMarksRenderer* nonOverlappingMarksRenderer = new NonOverlappingMarksRenderer(30);
+  NonOverlappingMarksRenderer* nonOverlappingMarksRenderer = new NonOverlappingMarksRenderer(10);
   builder->addRenderer(nonOverlappingMarksRenderer);
 
   _initialized = true;
