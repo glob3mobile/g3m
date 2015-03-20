@@ -120,7 +120,7 @@ bool StarDomeRenderer::onTouchEvent(const G3MEventContext* ec, const TouchEvent*
 
 void StarDomeRenderer::selectStar(const Angle& trueNorthAzimuthInDegrees, const Angle& altitudeInDegrees){
   
-  double minDist = 2.5; //No star will be selected above this threshold
+  double minDist = 4; //No star will be selected above this threshold
   int index = -1;
   
   int size = _stars.size();
