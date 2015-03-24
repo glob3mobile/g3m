@@ -59,7 +59,7 @@ public:
     CMAttitude* attitude = [motion attitude];
     double roll  = [attitude roll];
     double pitch = [attitude pitch];
-    double yaw   = [attitude yaw];
+//    double yaw   = [attitude yaw];
 
 
     UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
@@ -77,7 +77,7 @@ public:
       headingInDegrees = -trueHeading - 180;
       pitchRadians = (2*PI -pitch) - PI/2;
     }
-    else{
+    else {
       headingInDegrees = -trueHeading;
       pitchRadians = pitch - PI/2;
     }
@@ -114,7 +114,8 @@ void G3MAugmentedRealityDemoScene::rawActivate(const G3MContext* context) {
 
 
   _locationManager = [[CLLocationManager alloc] init];
-  _locationManager.desiredAccuracy = kCLLocationAccuracyBest;
+  _locationManager.desiredAccuracy = kCLLocationAccuracyBestForNavigation;
+  _locationManager.distanceFilter = kCLDistanceFilterNone;
   _locationManager.headingFilter = 0.001;
   [_locationManager requestAlwaysAuthorization];
 

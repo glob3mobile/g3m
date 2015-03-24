@@ -482,9 +482,11 @@ public class GPUProgram
     if (u == null)
     {
       ILogger.instance().logError("Uniform [key=%d] not found", key);
-      return;
     }
-    u.set(v);
+    else
+    {
+      u.set(v);
+    }
   }
   public final void setGPUAttributeValue(int key, GPUAttributeValue v)
   {
@@ -492,9 +494,11 @@ public class GPUProgram
     if (a == null)
     {
       ILogger.instance().logError("Attribute [key=%d] not found", key);
-      return;
     }
-    a.set(v);
+    else
+    {
+      a.set(v);
+    }
   }
 
   public final void addReference()

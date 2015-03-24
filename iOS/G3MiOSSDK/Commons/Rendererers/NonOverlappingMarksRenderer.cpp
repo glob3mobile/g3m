@@ -93,15 +93,17 @@ void MarkWidget::prepareWidget(const IImage* image,
 #warning TODO: share vertices for marks of the same size?
 
   _vertices = pos2D.create();
-  _geo2Dfeature = new Geometry2DGLFeature(_vertices,
-                                          2,
-                                          0,
-                                          true,
-                                          0,
-                                          1.0f,
-                                          true,
-                                          10.0f,
-                                          Vector2F(_x, _y));
+
+  _geo2Dfeature = new Geometry2DGLFeature(_vertices,       // buffer
+                                          2,               // arrayElementSize
+                                          0,               // index
+                                          true,            // normalized
+                                          0,               // stride
+                                          3.0f,            // lineWidth
+                                          true,            // needsPointSize
+                                          1.0f,            // pointSize
+                                          Vector2F(_x, _y) // translation
+                                          );
 
   _glState->addGLFeature(_geo2Dfeature,
                          false);
@@ -212,6 +214,7 @@ _touchListener(touchListener),
 _springGLState(NULL),
 _springVertices(NULL),
 _springViewportExtentGLFeature(NULL)
+//_enclosingRadius(0)
 {
   _widget = new MarkWidget(imageBuilderWidget);
   _anchorWidget = new MarkWidget(imageBuilderAnchor);
@@ -250,18 +253,26 @@ void NonOverlappingMark::computeAnchorScreenPos(const Camera* camera,
   _anchorWidget->setScreenPos(sp._x, sp._y);
 
   if (_widget->getScreenPos().isNan()) {
-    _widget->setScreenPos(sp._x, sp._y + 0.01f);
+    const float deltaX = (float) (IMathUtils::instance()->nextRandomDouble() * 2 - 1);
+    const float deltaY = (float) (IMathUtils::instance()->nextRandomDouble() * 2 - 1);
+    _widget->setScreenPos(sp._x + deltaX,
+                          sp._y + deltaY);
   }
 }
 
 void NonOverlappingMark::applyCoulombsLaw(NonOverlappingMark* that) {
-  Vector2F d = getScreenPos().sub(that->getScreenPos());
-  double distance = d.length() + 0.001;
+  const Vector2F d = getScreenPos().sub(that->getScreenPos());
+//  double distance = d.length() - this->_enclosingRadius/3 - that->_enclosingRadius/3;
+//  if (distance <= 0) {
+//    distance = d.length() + 0.001;
+//  }
+
+  const double distance = d.length() + 0.001;
   Vector2F direction = d.div((float)distance);
 
   float strength = (float)(this->_electricCharge * that->_electricCharge / (distance * distance));
 
-  Vector2F force = direction.times(strength);
+  const Vector2F force = direction.times(strength);
 
   this->applyForce( force._x,  force._y);
   that->applyForce(-force._x, -force._y);
@@ -270,6 +281,11 @@ void NonOverlappingMark::applyCoulombsLaw(NonOverlappingMark* that) {
 void NonOverlappingMark::applyCoulombsLawFromAnchor(NonOverlappingMark* that) {
   Vector2F dAnchor = getScreenPos().sub(that->getAnchorScreenPos());
   double distanceAnchor = dAnchor.length() + 0.001;
+//  double distanceAnchor = dAnchor.length() - this->_enclosingRadius/3;
+//  if (distanceAnchor <= 0) {
+//    distanceAnchor = dAnchor.length() + 0.001;
+//  }
+
   Vector2F directionAnchor = dAnchor.div((float)distanceAnchor);
 
   float strengthAnchor = (float)(this->_electricCharge * that->_anchorElectricCharge / (distanceAnchor * distanceAnchor));
@@ -295,6 +311,11 @@ void NonOverlappingMark::renderWidget(const G3MRenderContext* rc,
   if (_widget->isReady()) {
     if (_anchorWidget->isReady()) {
       _widget->render(rc, glState);
+//      if (_enclosingRadius == 0) {
+//        const float w = _widget->getWidth();
+//        const float h = _widget->getHeight();
+//        _enclosingRadius = IMathUtils::instance()->sqrt( w*w + h*h ) / 2;
+//      }
     }
   }
   else {
@@ -341,7 +362,7 @@ void NonOverlappingMark::renderSpringWidget(const G3MRenderContext* rc,
                                                          0,                // stride
                                                          3.0f,             // lineWidth
                                                          true,             // needsPointSize
-                                                         2.0f,             // pointSize
+                                                         1.0f,             // pointSize
                                                          Vector2F::zero()  // translation
                                                          ),
                                  false);
@@ -372,7 +393,6 @@ void NonOverlappingMark::updatePositionWithCurrentForce(float timeInSeconds,
   _speed.times(_resistanceFactor);
 
   //Force has been applied and must be reset
-#warning It's needed?
   _force.set(0, 0);
 
   //Update position

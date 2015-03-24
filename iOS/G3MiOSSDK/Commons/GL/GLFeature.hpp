@@ -149,35 +149,35 @@ public:
 
 
 class Geometry2DGLFeature: public GLFeature {
-  private:
+private:
   //Position + cull + depth + polygonoffset + linewidth
   GPUAttributeValueVec2Float* _position;
-  
+
   const float _lineWidth;
-  
+
   ~Geometry2DGLFeature();
-  
+
   GPUUniformValueVec2FloatMutable* _translation;
-  
-  public:
-  
+
+public:
+
   Geometry2DGLFeature(IFloatBuffer* buffer,
-                    int arrayElementSize,
-                    int index,
-                    bool normalized,
-                    int stride,
-                    float lineWidth,
-                    bool needsPointSize,
-                    float pointSize,
-                    const Vector2F& translation);
-  
+                      int arrayElementSize,
+                      int index,
+                      bool normalized,
+                      int stride,
+                      float lineWidth,
+                      bool needsPointSize,
+                      float pointSize,
+                      const Vector2F& translation);
+
   void setTranslation(float x, float y){
     _translation->changeValue(x, y);
   }
-  
-  
+
+
   void applyOnGlobalGLState(GLGlobalState* state) const ;
-  
+
 };
 ///////////////////////////////////////////////////////////////////////////////////////////
 

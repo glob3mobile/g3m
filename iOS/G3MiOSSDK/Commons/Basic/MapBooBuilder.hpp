@@ -479,14 +479,14 @@ protected:
               int width,
               int height);
   
-  bool isEquals(const std::vector<const Info*> v1,
-                const std::vector<const Info*> v2) const;
+  bool isEquals(const std::vector<const Info*>& v1,
+                const std::vector<const Info*>& v2) const;
   
 public:
   ~HUDInfoRenderer_ImageFactory() {
   }
   
-  bool setInfo(const std::vector<const Info*> info);
+  bool setInfo(const std::vector<const Info*>& info);
 };
 
 class MapBoo_HUDRenderer : public DefaultRenderer {
@@ -497,7 +497,7 @@ public:
   
   ~MapBoo_HUDRenderer();
   
-  void updateInfo(const std::vector<const Info*> info);
+  void updateInfo(const std::vector<const Info*>& info);
   
   void initialize(const G3MContext* context);
   

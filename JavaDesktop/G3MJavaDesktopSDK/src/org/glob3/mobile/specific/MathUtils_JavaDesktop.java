@@ -2,12 +2,16 @@
 
 package org.glob3.mobile.specific;
 
+import java.util.Random;
+
 import org.glob3.mobile.generated.IMathUtils;
 
 
 public class MathUtils_JavaDesktop
-extends
-IMathUtils {
+         extends
+            IMathUtils {
+
+   private final Random _random = new Random();
 
 
    @Override
@@ -372,4 +376,9 @@ IMathUtils {
       return Float.intBitsToFloat(value);
    }
 
+
+   @Override
+   public double nextRandomDouble() {
+      return _random.nextDouble();
+   }
 }
