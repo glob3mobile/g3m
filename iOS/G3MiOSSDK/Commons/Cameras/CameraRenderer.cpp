@@ -52,35 +52,37 @@ bool CameraRenderer::onTouchEvent(const G3MEventContext* ec,
 
     Vector3D cameraPos = _cameraContext->getNextCamera()->getCartesianPosition();
     MarksRenderer* marksRenderer = ec->getWidget()->getMarksRenderer();
-    std::vector<Mark*> marks = marksRenderer->getMarks();
-    for (int i=0; i<marks.size(); i++) {
-      Vector3D* posMark = marks[i]->getCartesianPosition(ec->getPlanet());
-      Vector2F pixel = _cameraContext->getNextCamera()->point2Pixel(*posMark);
-      Vector3D posZRender = ec->getWidget()->getScenePositionForPixel((int)(pixel._x+0.5),(int)(pixel._y+0.5));
-      /*
-      printf("marca %d: \n",i);
-      Geodetic3D geoMark = ec->getPlanet()->toGeodetic3D(*posMark);
-      printf("   posMark en %f %f %f   Geo=%f %f %f\n", posMark->_x, posMark->_y, posMark->_z,
-             geoMark._latitude._degrees, geoMark._longitude._degrees, geoMark._height);
-      Geodetic3D geoZRender = ec->getPlanet()->toGeodetic3D(posZRender);
-      printf("   posZrender en %f %f %f   Geo=%f %f %f\n", posZRender._x, posZRender._y, posZRender._z,
-             geoZRender._latitude._degrees, geoZRender._longitude._degrees, geoZRender._height);
-      double distanceLatLon = sqrt((geoMark._latitude._degrees-geoZRender._latitude._degrees)*
-                                   (geoMark._latitude._degrees-geoZRender._latitude._degrees)+
-                                   (geoMark._longitude._degrees-geoZRender._longitude._degrees)*
-                                   (geoMark._longitude._degrees-geoZRender._longitude._degrees));*/
+    if (marksRenderer) {
+      std::vector<Mark*> marks = marksRenderer->getMarks();
+      for (int i=0; i<marks.size(); i++) {
+        Vector3D* posMark = marks[i]->getCartesianPosition(ec->getPlanet());
+        Vector2F pixel = _cameraContext->getNextCamera()->point2Pixel(*posMark);
+        Vector3D posZRender = ec->getWidget()->getScenePositionForPixel((int)(pixel._x+0.5),(int)(pixel._y+0.5));
+        /*
+         printf("marca %d: \n",i);
+         Geodetic3D geoMark = ec->getPlanet()->toGeodetic3D(*posMark);
+         printf("   posMark en %f %f %f   Geo=%f %f %f\n", posMark->_x, posMark->_y, posMark->_z,
+         geoMark._latitude._degrees, geoMark._longitude._degrees, geoMark._height);
+         Geodetic3D geoZRender = ec->getPlanet()->toGeodetic3D(posZRender);
+         printf("   posZrender en %f %f %f   Geo=%f %f %f\n", posZRender._x, posZRender._y, posZRender._z,
+         geoZRender._latitude._degrees, geoZRender._longitude._degrees, geoZRender._height);
+         double distanceLatLon = sqrt((geoMark._latitude._degrees-geoZRender._latitude._degrees)*
+         (geoMark._latitude._degrees-geoZRender._latitude._degrees)+
+         (geoMark._longitude._degrees-geoZRender._longitude._degrees)*
+         (geoMark._longitude._degrees-geoZRender._longitude._degrees));*/
+        
+        double distCamMark = cameraPos.distanceTo(*posMark);
+        double distCamTerrain = cameraPos.distanceTo(posZRender);
+        //printf ("distCanMark=%f   distCamTerrain=%f   Factor=%f\n", distCamMark, distCamTerrain, distCamMark/distCamTerrain);
+        if (distCamMark/distCamTerrain<1.2)
+          marks[i]->setVisible(true);
+        else
+          marks[i]->setVisible(false);
+      }
       
-      double distCamMark = cameraPos.distanceTo(*posMark);
-      double distCamTerrain = cameraPos.distanceTo(posZRender);
-      //printf ("distCanMark=%f   distCamTerrain=%f   Factor=%f\n", distCamMark, distCamTerrain, distCamMark/distCamTerrain);
-      if (distCamMark/distCamTerrain<1.2)
-        marks[i]->setVisible(true);
-      else
-        marks[i]->setVisible(false);
+      // this call is needed at this point. I don't know why
+      ec->getWidget()->getScenePositionForCentralPixel();
     }
-    
-    // this call is needed at this point. I don't know why
-    ec->getWidget()->getScenePositionForCentralPixel();
     
     // pass the event to all the handlers
     const int handlersSize = _handlers.size();

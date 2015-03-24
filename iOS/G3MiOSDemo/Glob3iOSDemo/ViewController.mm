@@ -285,9 +285,9 @@ Mesh* createSectorMesh(const Planet* planet,
   
   //[self initCustomizedWithBuilder];
   
-  [self testLaPalma];
+  //[self testLaPalma];
   //[self testGCElevations];
-  //[self testElevationNavigation];
+  [self testElevationNavigation];
   
   //  [self initWithMapBooBuilder];
   
