@@ -287,7 +287,8 @@ Mesh* createSectorMesh(const Planet* planet,
   
   //[self testLaPalma];
   //[self testGCElevations];
-  [self testElevationNavigation];
+  //[self testElevationNavigation];
+  [self testDoubleDragRollProblem];
   
   //  [self initWithMapBooBuilder];
   
@@ -4236,5 +4237,49 @@ public:
   [self G3MWidget].widget->setCameraHeading(Angle::fromDegrees(4.35));
   [self G3MWidget].widget->setMarksRenderer(marksRenderer);
 }
+
+
+
+- (void) testDoubleDragRollProblem
+{
+  G3MBuilder_iOS builder([self G3MWidget]);
+  
+  //const Planet* planet = Planet::createEarth();
+  const Planet* planet = Planet::createSphericalEarth();
+  //const Planet* planet = Planet::createFlatEarth();
+  builder.setPlanet(planet);
+  
+  // create elevations for Tenerife from bil file
+  Sector sector = Sector::fromDegrees (27.967811065876,                  // min latitude
+                                       -17.0232177085356,                // min longitude
+                                       28.6103464294992,                 // max latitude
+                                       -16.0019401695656);               // max longitude
+  int elevationWidth = 256;
+  int elevationHeight = 256;
+  Vector2I extent = Vector2I(elevationWidth, elevationHeight);           // image resolution
+  URL url = URL("file:///Tenerife-256x256.bil", false);
+  ElevationDataProvider* elevationDataProvider = new SingleBilElevationDataProvider(url, sector, extent);
+  builder.getPlanetRendererBuilder()->setElevationDataProvider(elevationDataProvider);
+  float verticalExaggeration = 2.0f;
+  builder.getPlanetRendererBuilder()->setVerticalExaggeration(verticalExaggeration);
+  
+  // create camera renderers
+  CameraRenderer* cameraRenderer = [self createCameraRenderer];
+  builder.setCameraRenderer(cameraRenderer);
+  
+  // initialization
+  builder.initializeWidget();
+  
+  // set frustumCullingFactor
+  [self G3MWidget].widget->getPlanetRenderer()->setFrustumCullingFactor(2.0);
+  
+  /*
+   // set camera looking at Tenerife
+  Geodetic3D position = Geodetic3D(Angle::fromDegrees(27.60), Angle::fromDegrees(-16.54), 55000);
+  [self G3MWidget].widget->setCameraPosition(position);
+  [self G3MWidget].widget->setCameraPitch(Angle::fromDegrees(-50));
+   */
+}
+
 
 @end
