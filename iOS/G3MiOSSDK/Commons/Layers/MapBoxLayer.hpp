@@ -45,20 +45,19 @@ public:
               const int             maxLevel       = 19,
               const float           transparency   = 1,
               const LayerCondition* condition      = NULL,
-              const std::string&    disclaimerInfo = "") :
+              std::vector<const Info*>*  layerInfo = new std::vector<const Info*>()) :
   MercatorTiledLayer("http://",
                      "tiles.mapbox.com/v3/" + mapKey,
                      getSubdomains(),
                      "png",
                      timeToCache,
                      readExpired,
-                     Sector::fullSphere(),
                      initialLevel,
                      maxLevel,
                      false, // isTransparent
                      transparency,
                      condition,
-                     disclaimerInfo),
+                     layerInfo),
   _mapKey(mapKey)
   {
   }

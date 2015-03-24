@@ -52,27 +52,27 @@ public:
   virtual std::string toUpperCase(const std::string& string) const = 0;
 
 
-  virtual int indexOf(const std::string& string,
-                      const std::string& search) const = 0;
+  virtual size_t indexOf(const std::string& string,
+                         const std::string& search) const = 0;
 
-  virtual int indexOf(const std::string& string,
-                      const std::string& search,
-                      int fromIndex) const = 0;
-  
-  virtual int indexOf(const std::string& string,
-                      const std::string& search,
-                      int fromIndex,
-                      int endIndex) const = 0;
+  virtual size_t indexOf(const std::string& string,
+                         const std::string& search,
+                         size_t fromIndex) const = 0;
 
-  virtual int indexOfFirstNonBlank(const std::string& string,
-                                   int fromIndex) const = 0;
-  
-//  virtual int indexOfFirstBlank(const std::string& string,
-//                                int fromIndex) const = 0;
+  virtual size_t indexOf(const std::string& string,
+                         const std::string& search,
+                         size_t fromIndex,
+                         size_t endIndex) const = 0;
 
-  virtual int indexOfFirstNonChar(const std::string& string,
-                                  const std::string& chars,
-                                  int fromIndex) const = 0;
+  virtual size_t indexOfFirstNonBlank(const std::string& string,
+                                      size_t fromIndex) const = 0;
+
+  //  virtual size_t indexOfFirstBlank(const std::string& string,
+  //                                size_t fromIndex) const = 0;
+
+  virtual size_t indexOfFirstNonChar(const std::string& string,
+                                     const std::string& chars,
+                                     size_t fromIndex) const = 0;
 
   /*
    Returns a new string that is a substring of this string. The substring begins at the
@@ -80,11 +80,11 @@ public:
    of the substring is endIndex-beginIndex.
    */
   virtual std::string substring(const std::string& string,
-                                int beginIndex,
-                                int endIndex) const = 0;
+                                size_t beginIndex,
+                                size_t endIndex) const = 0;
 
   virtual std::string substring(const std::string& string,
-                                int beginIndex) const {
+                                size_t beginIndex) const {
     //    return substring(string, beginIndex, string.size() + 1);
     return substring(string, beginIndex, string.size());
   }
@@ -92,14 +92,14 @@ public:
   virtual std::string replaceSubstring(const std::string& originalString,
                                        const std::string& searchString,
                                        const std::string& replaceString,
-                                       int beginIndex,
-                                       int endIndex2) const {
-    int startIndex = indexOf(originalString, searchString, beginIndex, endIndex2);
+                                       size_t beginIndex,
+                                       size_t endIndex2) const {
+    size_t startIndex = indexOf(originalString, searchString, beginIndex, endIndex2);
     //The part to replace was not found. Return original String
     if (startIndex == -1) {
       return originalString;
     }
-    const int endReplacedIndex = startIndex + searchString.size();
+    const size_t endReplacedIndex = startIndex + searchString.size();
     const std::string left = substring(originalString, 0, startIndex);
     const std::string right = substring(originalString, endReplacedIndex);
     const std::string result = left + replaceString + right;
@@ -123,21 +123,6 @@ public:
                             replaceString,
                             0,
                             originalString.size());
-//    int startIndex = indexOf(originalString, searchString);
-//    //The part to replace was not found. Return original String
-//    if (startIndex == -1) {
-//      return originalString;
-//    }
-//    const int endIndex = startIndex + searchString.size();
-//    const std::string left = substring(originalString, 0, startIndex);
-//    const std::string right = substring(originalString, endIndex);
-//    const std::string result = left + replaceString + right;
-//    startIndex = indexOf(result, searchString);
-//    if (startIndex != -1) {
-//      //recursive call to replace other ocurrences
-//      return replaceSubstring(result, searchString, replaceString);
-//    }
-//    return result;
   }
 
   virtual std::string left(const std::string& string,
@@ -160,9 +145,11 @@ public:
   virtual std::string toString(long long value) const = 0;
 
   virtual std::string toString(double value) const = 0;
-
+  
+  virtual std::string toString(float value) const = 0;
+  
   virtual double parseDouble(const std::string& str) const = 0;
-
+  
 };
 
 #endif

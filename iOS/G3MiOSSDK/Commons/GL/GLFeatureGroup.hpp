@@ -61,7 +61,7 @@ public:
 
   void add(const GLFeatureSet* fs);
 
-  int size() const{
+  int size() const {
     return _nFeatures;
   }
 

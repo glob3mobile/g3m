@@ -19,17 +19,24 @@ package org.glob3.mobile.generated;
 
 //class IDownloader;
 //class IImageDownloadListener;
+//class RasterLayerTileImageProvider;
 
 public abstract class RasterLayer extends Layer
 {
+  private RasterLayerTileImageProvider _tileImageProvider;
+
+  protected LayerTilesRenderParameters _parameters;
+
   protected final TimeInterval _timeToCache;
   protected final boolean _readExpired;
 
-  protected RasterLayer(TimeInterval timeToCache, boolean readExpired, LayerTilesRenderParameters parameters, float transparency, LayerCondition condition, String disclaimerInfo)
+  protected RasterLayer(TimeInterval timeToCache, boolean readExpired, LayerTilesRenderParameters parameters, float transparency, LayerCondition condition, java.util.ArrayList<Info> layerInfo)
   {
-     super(parameters, transparency, condition, disclaimerInfo);
+     super(transparency, condition, layerInfo);
      _timeToCache = timeToCache;
      _readExpired = readExpired;
+     _parameters = parameters;
+     _tileImageProvider = null;
   }
 
   protected final TimeInterval getTimeToCache()
@@ -45,6 +52,53 @@ public abstract class RasterLayer extends Layer
   protected abstract TileImageContribution rawContribution(Tile tile);
 
   protected abstract URL createURL(Tile tile);
+
+  protected final void setParameters(LayerTilesRenderParameters parameters)
+  {
+    if (_parameters != parameters)
+    {
+      _parameters = null;
+      _parameters = parameters;
+      notifyChanges();
+    }
+  }
+
+  public void dispose()
+  {
+    _parameters = null;
+    if (_tileImageProvider != null)
+    {
+      _tileImageProvider.layerDeleted(this);
+      _tileImageProvider._release();
+    }
+    super.dispose();
+  }
+
+  protected final Tile getParentTileOfSuitableLevel(Tile tile)
+  {
+    final int maxLevel = _parameters._maxLevel;
+    Tile result = tile;
+    while ((result != null) && (result._level > maxLevel))
+    {
+      result = result.getParent();
+    }
+    return result;
+  }
+
+  public final java.util.ArrayList<LayerTilesRenderParameters> getLayerTilesRenderParametersVector()
+  {
+    final java.util.ArrayList<LayerTilesRenderParameters> parametersVector = new java.util.ArrayList<LayerTilesRenderParameters>();
+    if (_parameters != null)
+    {
+      parametersVector.add(_parameters);
+    }
+    return parametersVector;
+  }
+
+  public final void selectLayerTilesRenderParameters(int index)
+  {
+    throw new RuntimeException("Logic error");
+  }
 
   public final boolean isEquals(Layer that)
   {
@@ -70,7 +124,12 @@ public abstract class RasterLayer extends Layer
 
   public final TileImageProvider createTileImageProvider(G3MRenderContext rc, LayerTilesRenderParameters layerTilesRenderParameters)
   {
-    return new RasterLayerTileImageProvider(this, rc.getDownloader());
+    if (_tileImageProvider == null)
+    {
+      _tileImageProvider = new RasterLayerTileImageProvider(this, rc.getDownloader());
+    }
+    _tileImageProvider._retain();
+    return _tileImageProvider;
   }
 
   public final TileImageContribution contribution(Tile tile)
@@ -92,6 +151,13 @@ public abstract class RasterLayer extends Layer
       ILogger.instance().logInfo("Downloading %s", url._path);
     }
     return downloader.requestImage(url, tileDownloadPriority, _timeToCache, _readExpired, listener, deleteListener);
+  }
+
+  public final java.util.ArrayList<URL> getDownloadURLs(Tile tile)
+  {
+    java.util.ArrayList<URL> result = new java.util.ArrayList<URL>();
+    result.add(new URL(createURL(tile)));
+    return result;
   }
 
 }

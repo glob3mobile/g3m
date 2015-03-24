@@ -13,6 +13,7 @@
 #include "SQLiteStorage_iOS.hpp"
 #include "GPUProgramManager.hpp"
 #include "BasicShadersGL2.hpp"
+#include "Info.hpp"
 
 MapBooBuilder_iOS::MapBooBuilder_iOS(G3MWidget_iOS* nativeWidget,
                                      const URL& serverURL,

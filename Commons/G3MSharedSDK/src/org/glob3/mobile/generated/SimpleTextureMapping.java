@@ -103,7 +103,6 @@ public class SimpleTextureMapping extends TransformableTextureMapping
       }
       else
       {
-  
         state.clearGLFeatureGroup(GLFeatureGroupName.COLOR_GROUP);
         if ((_scaleU != 1) || (_scaleV != 1) || (_translationU != 0) || (_translationV != 0) || (_rotationInRadians != 0))
         {

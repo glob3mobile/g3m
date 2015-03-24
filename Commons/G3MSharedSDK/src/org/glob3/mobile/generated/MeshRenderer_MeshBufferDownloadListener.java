@@ -40,12 +40,16 @@ public class MeshRenderer_MeshBufferDownloadListener extends IBufferDownloadList
   {
     ILogger.instance().logError("Error downloading \"%s\"", url._path);
 
+    if (_listener != null)
+    {
+      _listener.onError(url);
+    }
+
     if (_deleteListener)
     {
       if (_listener != null)
          _listener.dispose();
     }
-    _color = null;
   }
 
   public final void onCancel(URL url)
@@ -57,7 +61,6 @@ public class MeshRenderer_MeshBufferDownloadListener extends IBufferDownloadList
       if (_listener != null)
          _listener.dispose();
     }
-    _color = null;
   }
 
   public final void onCanceledDownload(URL url, IByteBuffer buffer, boolean expired)
@@ -67,6 +70,7 @@ public class MeshRenderer_MeshBufferDownloadListener extends IBufferDownloadList
 
   public void dispose()
   {
+    _color = null;
     _color = null;
   }
 

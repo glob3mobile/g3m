@@ -41,30 +41,30 @@ bool StringUtils_iOS::beginsWith(const std::string& string,
   return string.compare(0, prefix.size(), prefix) == 0;
 }
 
-int StringUtils_iOS::indexOf(const std::string& string,
-                             const std::string& search) const {
-  const int pos = string.find(search);
+size_t StringUtils_iOS::indexOf(const std::string& string,
+                                const std::string& search) const {
+  const size_t pos = string.find(search);
   if (pos == std::string::npos) {
     return -1;
   }
   return pos;
 }
 
-int StringUtils_iOS::indexOf(const std::string& string,
-                             const std::string& search,
-                             int fromIndex) const {
-  const int pos = string.find(search, fromIndex);
+size_t StringUtils_iOS::indexOf(const std::string& string,
+                                const std::string& search,
+                                size_t fromIndex) const {
+  const size_t pos = string.find(search, fromIndex);
   if (pos == std::string::npos) {
     return -1;
   }
   return pos;
 }
 
-int StringUtils_iOS::indexOf(const std::string& string,
-                             const std::string& search,
-                             int fromIndex,
-                             int endIndex) const {
-  const int pos = string.find(search, fromIndex);
+size_t StringUtils_iOS::indexOf(const std::string& string,
+                                const std::string& search,
+                                size_t fromIndex,
+                                size_t endIndex) const {
+  const size_t pos = string.find(search, fromIndex);
   if ((pos == std::string::npos) ||
       (pos > endIndex)) {
     return -1;
@@ -73,8 +73,8 @@ int StringUtils_iOS::indexOf(const std::string& string,
 }
 
 std::string StringUtils_iOS::substring(const std::string& string,
-                                       int beginIndex,
-                                       int endIndex) const {
+                                       size_t beginIndex,
+                                       size_t endIndex) const {
   return string.substr(beginIndex, endIndex - beginIndex);
 }
 
@@ -101,8 +101,8 @@ std::string StringUtils_iOS::rtrim(const std::string& string) const {
 
 bool StringUtils_iOS::endsWith(const std::string& string,
                                const std::string& suffix) const {
-  const int stringLength = string.length();
-  const int suffixLength = suffix.length();
+  const size_t stringLength = string.length();
+  const size_t suffixLength = suffix.length();
   if (stringLength >= suffixLength) {
     return (string.compare(stringLength - suffixLength, suffixLength, suffix) == 0);
   }
@@ -127,10 +127,10 @@ long long StringUtils_iOS::parseHexInt(const std::string& str) const {
   return result;
 }
 
-int StringUtils_iOS::indexOfFirstNonBlank(const std::string& string,
-                                          int fromIndex) const {
-  const int stringLen = string.length();
-  for (int i = fromIndex ; i < stringLen; i++) {
+size_t StringUtils_iOS::indexOfFirstNonBlank(const std::string& string,
+                                             size_t fromIndex) const {
+  const size_t stringLen = string.length();
+  for (size_t i = fromIndex ; i < stringLen; i++) {
     if (!std::isspace( string[i] )) {
       return i;
     }
@@ -149,11 +149,11 @@ int StringUtils_iOS::indexOfFirstNonBlank(const std::string& string,
 //  return -1;
 //}
 
-int StringUtils_iOS::indexOfFirstNonChar(const std::string& string,
-                                         const std::string& chars,
-                                         int fromIndex) const {
-  const int stringLen = string.length();
-  for (int i = fromIndex ; i < stringLen; i++) {
+size_t StringUtils_iOS::indexOfFirstNonChar(const std::string& string,
+                                            const std::string& chars,
+                                            size_t fromIndex) const {
+  const size_t stringLen = string.length();
+  for (size_t i = fromIndex ; i < stringLen; i++) {
     if (chars.find(string[i]) != std::string::npos) {
       return i;
     }
@@ -174,6 +174,12 @@ std::string StringUtils_iOS::toString(long long value) const {
 }
 
 std::string StringUtils_iOS::toString(double value) const {
+  std::stringstream ss;
+  ss << value;
+  return ss.str();
+}
+
+std::string StringUtils_iOS::toString(float value) const {
   std::stringstream ss;
   ss << value;
   return ss.str();

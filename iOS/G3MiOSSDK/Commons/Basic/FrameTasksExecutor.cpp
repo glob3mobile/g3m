@@ -55,6 +55,9 @@ bool FrameTasksExecutor::canExecutePreRenderStep(const G3MRenderContext* rc,
 }
 
 void FrameTasksExecutor::doPreRenderCycle(const G3MRenderContext* rc) {
+  if (_tasks.empty()) {
+    return;
+  }
 
   // remove canceled tasks
   int canceledCounter = 0;

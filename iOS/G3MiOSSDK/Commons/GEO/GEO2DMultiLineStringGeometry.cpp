@@ -18,6 +18,13 @@ GEO2DMultiLineStringGeometry::GEO2DMultiLineStringGeometry(std::vector<std::vect
   _coordinatesArrayData = (coordinatesArray == NULL) ? NULL : new GEO2DCoordinatesArrayData(coordinatesArray);
 }
 
+GEO2DMultiLineStringGeometry::GEO2DMultiLineStringGeometry(const GEO2DCoordinatesArrayData* coordinatesArrayData) :
+_coordinatesArrayData(coordinatesArrayData)
+{
+  if (_coordinatesArrayData != NULL) {
+    _coordinatesArrayData->_retain();
+  }
+}
 
 GEO2DMultiLineStringGeometry::~GEO2DMultiLineStringGeometry() {
   if (_coordinatesArrayData != NULL) {
@@ -38,5 +45,9 @@ std::vector<GEORasterSymbol*>* GEO2DMultiLineStringGeometry::createRasterSymbols
 }
 
 long long GEO2DMultiLineStringGeometry::getCoordinatesCount() const {
-  return _coordinatesArrayData->getCoordinatesCount();
+  return (_coordinatesArrayData == NULL) ? 0 : _coordinatesArrayData->getCoordinatesCount();
+}
+
+GEO2DMultiLineStringGeometry* GEO2DMultiLineStringGeometry::deepCopy() const {
+  return new GEO2DMultiLineStringGeometry(_coordinatesArrayData);
 }

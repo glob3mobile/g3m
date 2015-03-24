@@ -9,12 +9,12 @@
 #include "ChildRenderer.hpp"
 
 
-void ChildRenderer::addInfo(std::string& inf) {
+void ChildRenderer::addInfo(const Info* inf) {
   _info.push_back(inf);
 }
 
 
-void ChildRenderer::setInfo(const std::vector<std::string>& info) {
+void ChildRenderer::setInfo(const std::vector<const Info*>& info) {
   _info.clear();
 #ifdef C_CODE
   _info.insert(_info.end(),

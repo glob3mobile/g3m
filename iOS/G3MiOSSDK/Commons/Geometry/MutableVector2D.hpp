@@ -23,7 +23,7 @@ public:
   
   MutableVector2D(): _x(0.0), _y(0.0) {}
   
-  Vector2D asVector2D() const{ 
+  Vector2D asVector2D() const { 
     Vector2D v(_x, _y);
     return v;
   }
@@ -41,7 +41,7 @@ public:
     return MutableVector2D(NAND, NAND);
   }
   
-  bool isEquals(double x, double y) const{
+  bool isEquals(double x, double y) const {
     return _x == x && _y == y;
   }
   

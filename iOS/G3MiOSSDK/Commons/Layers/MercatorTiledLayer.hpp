@@ -25,13 +25,11 @@ protected:
 #endif
   const std::string _imageFormat;
 
-  const Sector _dataSector;
-
   const int    _initialLevel;
   const int    _maxLevel;
   const bool   _isTransparent;
 
-  virtual std::string getLayerType() const{
+  virtual std::string getLayerType() const {
     return "MercatorTiled";
   }
 
@@ -48,20 +46,15 @@ public:
                      const std::string&              imageFormat,
                      const TimeInterval&             timeToCache,
                      const bool                      readExpired,
-                     const Sector&                   dataSector,
                      const int                       initialLevel,
                      const int                       maxLevel,
                      const bool                      isTransparent  = false,
                      const float                     transparency   = 1,
                      const LayerCondition*           condition      = NULL,
-                     const std::string&              disclaimerInfo = "");
+                     std::vector<const Info*>*       layerInfo      = new std::vector<const Info*>());
 
   URL getFeatureInfoURL(const Geodetic2D& position,
                         const Sector& sector) const;
-
-  std::vector<Petition*> createTileMapPetitions(const G3MRenderContext* rc,
-                                                const LayerTilesRenderParameters* layerTilesRenderParameters,
-                                                const Tile* tile) const;
 
   virtual const std::string description() const;
 
@@ -70,7 +63,7 @@ public:
   virtual RenderState getRenderState();
 
   const Sector getDataSector() const {
-    return _dataSector;
+    return Sector::fullSphere();
   }
 
 };

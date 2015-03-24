@@ -10,6 +10,7 @@
 #define __G3MiOSSDK__ChangedRendererInfoListener__
 
 class Renderer;
+class Info;
 
 #include <vector>
 
@@ -23,7 +24,8 @@ public:
   void dispose();
 #endif
   
-  virtual void changedRendererInfo(const int rendererIdentifier, const std::vector<std::string>& info) = 0;
+  virtual void changedRendererInfo(const int rendererIdentifier,
+                                   const std::vector<const Info*>& info) = 0;
   
  };
 

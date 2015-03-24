@@ -125,12 +125,21 @@ void Canvas_iOS::_setLineMiterLimit(float limit) {
 void Canvas_iOS::_setLineDash(float lengths[],
                               int count,
                               float phase) {
-//#warning UNCOMMENT
+#if __LP64__
+  double* lengthsD = new double[count];
+  for (int i = 0; i < count; i++) {
+    lengthsD[i] = lengths[i];
+  }
+  CGContextSetLineDash(_context,
+                       phase,
+                       lengthsD, count);
+  delete [] lengthsD;
+#else
   CGContextSetLineDash(_context,
                        phase,
                        lengths, count);
+#endif
 }
-
 void Canvas_iOS::_setShadow(const Color& color,
                             float blur,
                             float offsetX,
@@ -150,12 +159,20 @@ void Canvas_iOS::_removeShadow() {
                               NULL);
 }
 
+void Canvas_iOS::_clearRect(float left, float top,
+                            float width, float height) {
+
+
+
+  CGContextClearRect(_context, CGRectMake(left, _canvasHeight - top,
+                                          width, -height));
+}
+
 void Canvas_iOS::_createImage(IImageListener* listener,
                               bool autodelete) {
   CGImageRef cgImage = CGBitmapContextCreateImage(_context);
   UIImage* image = [UIImage imageWithCGImage: cgImage];
   CFRelease(cgImage);
-
 
   IImage* result = new Image_iOS(image, NULL);
   listener->imageCreated(result);
@@ -186,20 +203,20 @@ void Canvas_iOS::drawRoundedRectangle(float left, float top,
   CGRect rrect = CGRectMake(left, _canvasHeight - top,
                             width, -height);
 
-	const CGFloat minx = CGRectGetMinX(rrect);
+  const CGFloat minx = CGRectGetMinX(rrect);
   const CGFloat midx = CGRectGetMidX(rrect);
   const CGFloat maxx = CGRectGetMaxX(rrect);
-	const CGFloat miny = CGRectGetMinY(rrect);
+  const CGFloat miny = CGRectGetMinY(rrect);
   const CGFloat midy = CGRectGetMidY(rrect);
   const CGFloat maxy = CGRectGetMaxY(rrect);
 
-	CGContextMoveToPoint(_context, minx, midy);
-	CGContextAddArcToPoint(_context, minx, miny, midx, miny, radius);
-	CGContextAddArcToPoint(_context, maxx, miny, maxx, midy, radius);
-	CGContextAddArcToPoint(_context, maxx, maxy, midx, maxy, radius);
-	CGContextAddArcToPoint(_context, minx, maxy, minx, midy, radius);
-	CGContextClosePath(_context);
-	CGContextDrawPath(_context, mode);
+  CGContextMoveToPoint(_context, minx, midy);
+  CGContextAddArcToPoint(_context, minx, miny, midx, miny, radius);
+  CGContextAddArcToPoint(_context, maxx, miny, maxx, midy, radius);
+  CGContextAddArcToPoint(_context, maxx, maxy, midx, maxy, radius);
+  CGContextAddArcToPoint(_context, minx, maxy, minx, midy, radius);
+  CGContextClosePath(_context);
+  CGContextDrawPath(_context, mode);
 }
 
 void Canvas_iOS::_fillRoundedRectangle(float left, float top,
@@ -335,6 +352,7 @@ void Canvas_iOS::_fillText(const std::string& text,
   UIGraphicsPopContext();
 }
 
+
 void Canvas_iOS::_drawImage(const IImage* image,
                             float destLeft, float destTop) {
   UIImage* uiImage = ((Image_iOS*) image)->getUIImage();
@@ -342,43 +360,77 @@ void Canvas_iOS::_drawImage(const IImage* image,
 
   CGContextDrawImage(_context,
                      CGRectMake(destLeft,
-#warning DIEGO Not same behaviour as _drawImage(const IImage* image, srcRect, srcDest) that inverts Y
-                                destTop,
+                                _canvasHeight - (destTop + image->getHeight()),
                                 image->getWidth(),
                                 image->getHeight()),
                      cgImage);
 }
 
 void Canvas_iOS::_drawImage(const IImage* image,
-                            float destLeft, float destTop, float destWidth, float destHeight) {
+                            float destLeft, float destTop,
+                            float transparency) {
+  UIImage* uiImage = ((Image_iOS*) image)->getUIImage();
+  CGImage* cgImage = [uiImage CGImage];
 
+  CGContextSetAlpha(_context, transparency);
+
+  CGContextDrawImage(_context,
+                     CGRectMake(destLeft,
+                                _canvasHeight - (destTop + image->getHeight()),
+                                image->getWidth(),
+                                image->getHeight()),
+                     cgImage);
+
+  CGContextSetAlpha(_context, 1.0);
+}
+
+void Canvas_iOS::_drawImage(const IImage* image,
+                            float destLeft, float destTop, float destWidth, float destHeight) {
   UIImage* uiImage = ((Image_iOS*) image)->getUIImage();
   CGImage* cgImage = [uiImage CGImage];
 
   CGContextDrawImage(_context,
                      CGRectMake(destLeft,
-#warning DIEGO Not same behaviour as _drawImage(const IImage* image, srcRect, srcDest) that inverts Y
-                                destTop,
+                                _canvasHeight - (destTop + destHeight),
                                 destWidth,
                                 destHeight),
                      cgImage);
 }
 
 void Canvas_iOS::_drawImage(const IImage* image,
-                            float srcLeft, float srcTop, float srcWidth, float srcHeight,
-                            float destLeft, float destTop, float destWidth, float destHeight) {
+                            float destLeft, float destTop, float destWidth, float destHeight,
+                            float transparency) {
 
   UIImage* uiImage = ((Image_iOS*) image)->getUIImage();
   CGImage* cgImage = [uiImage CGImage];
 
+  CGContextSetAlpha(_context, transparency);
+
+
+  CGContextDrawImage(_context,
+                     CGRectMake(destLeft,
+                                _canvasHeight - (destTop + destHeight),
+                                destWidth,
+                                destHeight),
+                     cgImage);
+
+  CGContextSetAlpha(_context, 1.0);
+}
+
+void Canvas_iOS::_drawImage(const IImage* image,
+                            float srcLeft, float srcTop, float srcWidth, float srcHeight,
+                            float destLeft, float destTop, float destWidth, float destHeight) {
+  UIImage* uiImage = ((Image_iOS*) image)->getUIImage();
+  CGImage* cgImage = [uiImage CGImage];
+
   CGRect destRect = CGRectMake(destLeft,
-                               _canvasHeight - (destTop + destHeight), // Bottom
+                               _canvasHeight - (destTop + destHeight),
                                destWidth,
                                destHeight);
 
-  if ((srcLeft == 0) &&
-      (srcTop == 0) &&
-      (srcWidth == image->getWidth()) &&
+  if ((srcLeft   == 0) &&
+      (srcTop    == 0) &&
+      (srcWidth  == image->getWidth()) &&
       (srcHeight == image->getHeight())) {
     CGContextDrawImage(_context,
                        destRect,
@@ -405,21 +457,20 @@ void Canvas_iOS::_drawImage(const IImage* image,
                             float srcLeft, float srcTop, float srcWidth, float srcHeight,
                             float destLeft, float destTop, float destWidth, float destHeight,
                             float transparency) {
-
   UIImage* uiImage = ((Image_iOS*) image)->getUIImage();
   CGImage* cgImage = [uiImage CGImage];
 
   CGRect destRect = CGRectMake(destLeft,
-                               _canvasHeight - (destTop + destHeight), // Bottom
+                               _canvasHeight - (destTop + destHeight),
                                destWidth,
                                destHeight);
 
-  if ((srcLeft == 0) &&
-      (srcTop == 0) &&
-      (srcWidth == image->getWidth()) &&
+  if ((srcLeft   == 0) &&
+      (srcTop    == 0) &&
+      (srcWidth  == image->getWidth()) &&
       (srcHeight == image->getHeight())) {
 
-    CGContextSetAlpha(_context, (float)transparency);
+    CGContextSetAlpha(_context, transparency);
 
     CGContextDrawImage(_context,
                        destRect,
@@ -441,13 +492,6 @@ void Canvas_iOS::_drawImage(const IImage* image,
     CGContextDrawImage(_context,
                        destRect,
                        cgCropImage);
-      
-      
-//      printf("Cropping image(%d, %d) to %f, %f, %f, %f\n", image->getWidth(), image->getHeight(), srcLeft, srcTop, srcWidth, srcHeight);
-//      printf("Painting image(%d, %d) to %f, %f, %f, %f\n", image->getWidth(), image->getHeight(),
-//             destLeft, _canvasHeight - (destTop + destHeight),
-//             destWidth,
-//             destHeight);
 
     CGContextSetAlpha(_context, 1.0);
 

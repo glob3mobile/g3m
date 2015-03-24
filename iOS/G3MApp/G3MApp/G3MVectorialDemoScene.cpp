@@ -27,6 +27,8 @@
 #include <G3MiOSSDK/PlanetRenderer.hpp>
 #include <G3MiOSSDK/SingleBilElevationDataProvider.hpp>
 #include <G3MiOSSDK/MarkTouchListener.hpp>
+#include <G3MiOSSDK/GEOVectorLayer.hpp>
+
 
 class G3MVectorialDemoScene_RestaurantMarkTouchListener : public MarkTouchListener {
 private:
@@ -164,13 +166,17 @@ void G3MVectorialDemoScene::rawActivate(const G3MContext* context) {
 
   g3mWidget->setBackgroundColor(Color::fromRGBA(0.19f, 0.23f, 0.21f, 1.0f));
 
-  MapBoxLayer* layer = new MapBoxLayer("examples.map-qogxobv1",
-                                       TimeInterval::fromDays(30),
-                                       true,
-                                       13);
-  model->getLayerSet()->addLayer(layer);
+  MapBoxLayer* rasterLayer = new MapBoxLayer("examples.map-qogxobv1",
+                                             TimeInterval::fromDays(30),
+                                             true,
+                                             13);
+  model->getLayerSet()->addLayer(rasterLayer);
+
+  GEOVectorLayer* vectorLayer = new GEOVectorLayer();
+  model->getLayerSet()->addLayer(vectorLayer);
 
   GEORenderer* geoRenderer = model->getGEORenderer();
+  geoRenderer->setGEOVectorLayer(vectorLayer, false);
   geoRenderer->loadJSON(URL("file:///buildings_monaco.geojson"),   new G3MVectorialDemoScene_GEOSymbolizer(model));
   geoRenderer->loadJSON(URL("file:///roads_monaco.geojson"),       new G3MVectorialDemoScene_GEOSymbolizer(model));
   geoRenderer->loadJSON(URL("file:///restaurants_monaco.geojson"), new G3MVectorialDemoScene_GEOSymbolizer(model));

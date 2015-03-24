@@ -11,7 +11,7 @@
 #include "IStringBuilder.hpp"
 
 double CompositeElevationData::getElevationAt(int x,
-                                              int y) const{
+                                              int y) const {
   const int size = _data.size();
   for (int i = 0; i < size; i++) {
     const double h = _data[i]->getElevationAt(x, y);
@@ -53,7 +53,7 @@ void CompositeElevationData::addElevationData(ElevationData* data) {
   }
 }
 
-const std::string CompositeElevationData::description(bool detailed) const{
+const std::string CompositeElevationData::description(bool detailed) const {
   IStringBuilder* isb = IStringBuilder::newStringBuilder();
   isb->addString("(CompositeElevationData extent=");
   isb->addInt(_width);
@@ -78,7 +78,7 @@ const std::string CompositeElevationData::description(bool detailed) const{
   return s;
 }
 
-Vector3D CompositeElevationData::getMinMaxAverageElevations() const{
+Vector3D CompositeElevationData::getMinMaxAverageElevations() const {
   const IMathUtils* mu = IMathUtils::instance();
   double minHeight = mu->maxDouble();
   double maxHeight = mu->minDouble();

@@ -10,8 +10,7 @@
 </script>
 g3m
 ===
-[![githalytics.com alpha](https://cruel-carlota.pagodabox.com/54960ae0d94d09fa885cfceb159b9427 "githalytics.com")](http://githalytics.com/glob3mobile/g3m)
-[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/glob3mobile/g3m/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
 ##The multiplatform advanced visualization framework
 ###G3M is a **framework** developed and designed to: 
 
@@ -273,6 +272,9 @@ There are another different projects developed that are used for demo purpose an
 + <a href="http://meteorite.glob3mobile.com">Meteorite</a>
 + <a href="http://xeovisor3d.glob3mobile.com/example.html">Xeovisor3D</a>
 + <a href="http://wb.glob3mobile.com/">World Bank GFDRR Demo</a>
++ <a href="http://radar3d.glob3mobile.com/">Radar Isosurfaces. Moore Tornado</a>
++ <a href="http://galileo.glob3mobile.com/">Galileo</a>
+
 
 ###Augmented reality and google glasses
 [Augmented reality on google glass](http://glasses.mobilemaptools.com)
@@ -326,6 +328,3 @@ Our roadmap is changing continously, and we are open to change the order of new 
 License
 =======
 G3M is released under a 2 [clauses BSD license](https://github.com/glob3mobile/g3m/blob/purgatory/LICENSE.txt) Except for the Blender plugin exporter which is available under the GPL 2.0 License.:
-
-
-

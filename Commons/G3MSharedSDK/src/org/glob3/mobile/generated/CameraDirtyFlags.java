@@ -40,7 +40,7 @@ public class CameraDirtyFlags
 
   public CameraDirtyFlags()
   {
-    setAll(true);
+    setAllDirty();
   }
 
   public final void copyFrom(CameraDirtyFlags other)
@@ -94,15 +94,16 @@ public class CameraDirtyFlags
     return description();
   }
 
-  public final void setAll(boolean value)
+  public final void setAllDirty()
   {
-    _frustumDataDirty = value;
-    _projectionMatrixDirty = value;
-    _modelMatrixDirty = value;
-    _modelViewMatrixDirty = value;
-    _cartesianCenterOfViewDirty = value;
-    _geodeticCenterOfViewDirty = value;
-    _frustumDirty = value;
-    _frustumMCDirty = value;
+    _frustumDataDirty = true;
+    _projectionMatrixDirty = true;
+    _modelMatrixDirty = true;
+    _modelViewMatrixDirty = true;
+    _cartesianCenterOfViewDirty = true;
+    _geodeticCenterOfViewDirty = true;
+    _frustumDirty = true;
+    _frustumMCDirty = true;
   }
+
 }

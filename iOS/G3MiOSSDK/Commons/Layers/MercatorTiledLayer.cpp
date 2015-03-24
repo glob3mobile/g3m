@@ -12,10 +12,10 @@
 #include "LayerTilesRenderParameters.hpp"
 #include "Tile.hpp"
 #include "IStringBuilder.hpp"
-#include "Petition.hpp"
 #include "LayerCondition.hpp"
 #include "TimeInterval.hpp"
 #include "RenderState.hpp"
+#include "URL.hpp"
 
 
 /*
@@ -28,13 +28,12 @@ MercatorTiledLayer::MercatorTiledLayer(const std::string&              protocol,
                                        const std::string&              imageFormat,
                                        const TimeInterval&             timeToCache,
                                        const bool                      readExpired,
-                                       const Sector&                   dataSector,
                                        const int                       initialLevel,
                                        const int                       maxLevel,
                                        const bool                      isTransparent,
                                        const float                     transparency,
                                        const LayerCondition*           condition,
-                                       const std::string&              disclaimerInfo) :
+                                       std::vector<const Info*>*       layerInfo) :
 RasterLayer(timeToCache,
             readExpired,
             new LayerTilesRenderParameters(Sector::fullSphere(),
@@ -47,90 +46,20 @@ RasterLayer(timeToCache,
                                            true),
             transparency,
             condition,
-            disclaimerInfo),
+            layerInfo),
 _protocol(protocol),
 _domain(domain),
 _subdomains(subdomains),
 _imageFormat(imageFormat),
 _initialLevel(initialLevel),
 _maxLevel(maxLevel),
-_isTransparent(isTransparent),
-_dataSector(dataSector)
+_isTransparent(isTransparent)
 {
 }
 
 URL MercatorTiledLayer::getFeatureInfoURL(const Geodetic2D& position,
                                           const Sector& sector) const {
   return URL();
-}
-
-std::vector<Petition*> MercatorTiledLayer::createTileMapPetitions(const G3MRenderContext* rc,
-                                                                  const LayerTilesRenderParameters* layerTilesRenderParameters,
-                                                                  const Tile* tile) const {
-  const IMathUtils* mu = IMathUtils::instance();
-
-  std::vector<Petition*> petitions;
-
-  const Sector tileSector = tile->_sector;
-  if (!_dataSector.touchesWith(tileSector)) {
-    return petitions;
-  }
-
-  const Sector sector = tileSector.intersection(_dataSector);
-  if (sector._deltaLatitude.isZero() ||
-      sector._deltaLongitude.isZero() ) {
-    return petitions;
-  }
-
-  // http://[abc].tile.openstreetmap.org/zoom/x/y.png
-  // http://[abc].tiles.mapbox.com/v3/examples.map-vyofok3q/9/250/193.png
-
-  const int level   = tile->_level;
-  const int column  = tile->_column;
-  const int numRows = (int) mu->pow(2.0, level);
-  const int row     = numRows - tile->_row - 1;
-
-  IStringBuilder* isb = IStringBuilder::newStringBuilder();
-
-  isb->addString(_protocol);
-
-  const int subdomainsSize = _subdomains.size();
-  if (subdomainsSize > 0) {
-    // select subdomain based on fixed data (instead of round-robin) to be cache friendly
-    const int subdomainsIndex =  mu->abs(level + column + row) % subdomainsSize;
-#ifdef C_CODE
-    isb->addString(_subdomains[subdomainsIndex]);
-#endif
-#ifdef JAVA_CODE
-    isb.addString(_subdomains.get(subdomainsIndex));
-#endif
-  }
-
-  isb->addString(_domain);
-  isb->addString("/");
-
-  isb->addInt(level);
-  isb->addString("/");
-
-  isb->addInt(column);
-  isb->addString("/");
-
-  isb->addInt(row);
-  isb->addString(".");
-  isb->addString(_imageFormat);
-
-  const std::string path = isb->getString();
-
-  delete isb;
-
-  petitions.push_back( new Petition(tileSector,
-                                    URL(path, false),
-                                    getTimeToCache(),
-                                    getReadExpired(),
-                                    true,
-                                    _transparency) );
-
-  return petitions;
 }
 
 const URL MercatorTiledLayer::createURL(const Tile* tile) const {
@@ -188,13 +117,12 @@ MercatorTiledLayer* MercatorTiledLayer::copy() const {
                                 _imageFormat,
                                 _timeToCache,
                                 _readExpired,
-                                _dataSector,
                                 _initialLevel,
                                 _maxLevel,
                                 _isTransparent,
                                 _transparency,
                                 (_condition == NULL) ? NULL : _condition->copy(),
-                                _disclaimerInfo);
+                                _layerInfo);
 }
 
 bool MercatorTiledLayer::rawIsEquals(const Layer* that) const {
@@ -211,11 +139,7 @@ bool MercatorTiledLayer::rawIsEquals(const Layer* that) const {
   if (_imageFormat != t->_imageFormat) {
     return false;
   }
-
-  if (!_dataSector.isEquals(t->_dataSector)) {
-    return false;
-  }
-
+  
   if (_initialLevel != t->_initialLevel) {
     return false;
   }
@@ -253,10 +177,20 @@ RenderState MercatorTiledLayer::getRenderState() {
 }
 
 const TileImageContribution* MercatorTiledLayer::rawContribution(const Tile* tile) const {
-//  return ((_transparency < 1)
-//          ? TileImageContribution::fullCoverageTransparent(_transparency)
-//          : TileImageContribution::fullCoverageOpaque());
-  return ((_isTransparent || (_transparency < 1))
-          ? TileImageContribution::fullCoverageTransparent(_transparency)
-          : TileImageContribution::fullCoverageOpaque());
+  const Tile* tileP = getParentTileOfSuitableLevel(tile);
+  if (tileP == NULL) {
+    return NULL;
+  }
+  
+  if (tile == tileP) {
+    //Most common case tile of suitable level being fully coveraged by layer
+    return ((_transparency < 1)
+            ? TileImageContribution::fullCoverageTransparent(_transparency)
+            : TileImageContribution::fullCoverageOpaque());
+  }
+  
+  const Sector requestedImageSector = tileP->_sector;
+  return ((_transparency < 1)
+          ? TileImageContribution::partialCoverageTransparent(requestedImageSector, _transparency)
+          : TileImageContribution::partialCoverageOpaque(requestedImageSector));
 }

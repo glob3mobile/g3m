@@ -38,7 +38,7 @@ public:
 
   const Sector* getSector() const;
 
-  int size() const {
+  size_t size() const {
     return (_coordinates == NULL) ? 0 : _coordinates->size();
   }
 

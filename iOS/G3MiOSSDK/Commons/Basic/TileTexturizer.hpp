@@ -19,7 +19,6 @@ class G3MContext;
 class TilesRenderParameters;
 class Geodetic3D;
 class LayerSet;
-class TileRasterizer;
 class LayerTilesRenderParameters;
 class G3MEventContext;
 
@@ -35,7 +34,6 @@ public:
 
   virtual Mesh* texturize(const G3MRenderContext* rc,
                           const TileTessellator* tessellator,
-                          TileRasterizer* tileRasterizer,
                           const LayerTilesRenderParameters* layerTilesRenderParameters,
                           const LayerSet* layerSet,
                           bool forceFullRender,

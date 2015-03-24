@@ -28,6 +28,7 @@ public:
   void dispose();
 #endif
 
+  virtual void onError(const URL& url) = 0;
   virtual void onBeforeAddMesh(Mesh* mesh) = 0;
   virtual void onAfterAddMesh(Mesh* mesh) = 0;
 };

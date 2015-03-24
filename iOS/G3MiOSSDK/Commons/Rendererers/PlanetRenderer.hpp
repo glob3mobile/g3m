@@ -11,7 +11,6 @@
 
 class Tile;
 class TileTessellator;
-class TileTexturizer;
 class LayerSet;
 class VisibleSectorListenerEntry;
 class VisibleSectorListener;
@@ -19,6 +18,7 @@ class ElevationDataProvider;
 class LayerTilesRenderParameters;
 class TerrainTouchListener;
 class ChangedInfoListener;
+class TileRenderingListener;
 
 #include "IStringBuilder.hpp"
 #include "DefaultRenderer.hpp"
@@ -29,11 +29,11 @@ class ChangedInfoListener;
 #include "ITileVisitor.hpp"
 #include "SurfaceElevationProvider.hpp"
 #include "ChangedListener.hpp"
+#include "TouchEvent.hpp"
 
 
 
 class EllipsoidShape;
-class TileRasterizer;
 
 
 class TilesStatistics {
@@ -212,7 +212,6 @@ private:
   ElevationDataProvider*       _elevationDataProvider;
   bool                         _ownsElevationDataProvider;
   TileTexturizer*              _texturizer;
-  TileRasterizer*              _tileRasterizer;
   LayerSet*                    _layerSet;
   const TilesRenderParameters* _tilesRenderParameters;
   const bool                   _showStatistics;
@@ -220,6 +219,8 @@ private:
   ITileVisitor*                _tileVisitor = NULL;
 
   TileRenderingListener*       _tileRenderingListener;
+  std::vector<const Tile*>*    _tilesStartedRendering;
+  std::vector<std::string>*    _tilesStoppedRendering;
 
   TilesStatistics _statistics;
 
@@ -290,13 +291,18 @@ private:
 
   std::vector<TerrainTouchListener*> _terrainTouchListeners;
   
+  TouchEventType _touchEventTypeOfTerrainTouchListener;
+
+
+  std::vector<Tile*> _toVisit;
+  std::vector<Tile*> _toVisitInNextIteration;
+
 public:
   PlanetRenderer(TileTessellator*             tessellator,
                  ElevationDataProvider*       elevationDataProvider,
                  bool                         ownsElevationDataProvider,
                  float                        verticalExaggeration,
                  TileTexturizer*              texturizer,
-                 TileRasterizer*              tileRasterizer,
                  LayerSet*                    layerSet,
                  const TilesRenderParameters* tilesRenderParameters,
                  bool                         showStatistics,
@@ -305,7 +311,8 @@ public:
                  const bool                   renderTileMeshes,
                  const bool                   logTilesPetitions,
                  TileRenderingListener*       tileRenderingListener,
-                 ChangedRendererInfoListener* changedInfoListener);
+                 ChangedRendererInfoListener* changedInfoListener,
+                 TouchEventType               touchEventTypeOfTerrainTouchListener);
 
   ~PlanetRenderer();
 
@@ -428,7 +435,7 @@ public:
 
   void sectorElevationChanged(ElevationData* elevationData) const;
 
-  const Sector* getRenderedSector() const{
+  const Sector* getRenderedSector() const {
     return _renderedSector;
   }
 
@@ -440,7 +447,7 @@ public:
                                 bool owned);
   void setVerticalExaggeration(float verticalExaggeration);
 
-  ElevationDataProvider* getElevationDataProvider() const{
+  ElevationDataProvider* getElevationDataProvider() const {
     return _elevationDataProvider;
   }
 
@@ -452,11 +459,17 @@ public:
     return _renderTileMeshes;
   }
   
-  void changedInfo(const std::vector<std::string>& info) {
+  void changedInfo(const std::vector<const Info*>& info) {
     if (_changedInfoListener != NULL) {
       _changedInfoListener->changedRendererInfo(_rendererIdentifier, info);
     }
   }
+
+  float getVerticalExaggeration() const {
+    return _verticalExaggeration;
+  }
+  
+  void setChangedRendererInfoListener(ChangedRendererInfoListener* changedInfoListener, const int rendererIdentifier);
   
 };
 

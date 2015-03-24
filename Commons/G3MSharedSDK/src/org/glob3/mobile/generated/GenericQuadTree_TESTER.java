@@ -59,7 +59,7 @@ public class GenericQuadTree_TESTER
 
     public final boolean visitElement(Sector sector, Object element)
     {
-       return false;
+      return false;
     }
 
     public final boolean visitElement(Geodetic2D geodetic, Object element)
@@ -174,7 +174,7 @@ public class GenericQuadTree_TESTER
     return i % max;
   }
 
-  public static void run(int nElements, GEOTileRasterizer rasterizer)
+  public static void run(int nElements, GEOVectorLayer geoVectorLayer)
   {
   
     _nElements = 0;
@@ -211,7 +211,6 @@ public class GenericQuadTree_TESTER
       }
       else
       {
-  
         Geodetic2D geo = Geodetic2D.fromDegrees(minLat, minLon);
         geos.add(new Geodetic2D(geo));
         String desc = "GEODETIC ELEMENT " + geo.description();
@@ -242,9 +241,13 @@ public class GenericQuadTree_TESTER
     NodeVisitor_TESTER nodeVis = new NodeVisitor_TESTER();
     tree.acceptNodeVisitor(nodeVis);
   
-    if (rasterizer != null)
+  //  if (rasterizer != NULL) {
+  //    tree.symbolize(rasterizer);
+  //  }
+  
+    if (geoVectorLayer != null)
     {
-      tree.symbolize(rasterizer);
+      tree.symbolize(geoVectorLayer);
     }
   
     double c_e = (float)_nComparisons / _nElements;
@@ -252,7 +255,7 @@ public class GenericQuadTree_TESTER
   
   }
 
-  public static void run(GenericQuadTree tree, GEOTileRasterizer rasterizer)
+  public static void run(GenericQuadTree tree, GEOVectorLayer geoVectorLayer)
   {
   
     _nElements = 0;
@@ -283,9 +286,9 @@ public class GenericQuadTree_TESTER
     NodeVisitor_TESTER nodeVis = new NodeVisitor_TESTER();
     tree.acceptNodeVisitor(nodeVis);
   
-    if (rasterizer != null)
+    if (geoVectorLayer != null)
     {
-      tree.symbolize(rasterizer);
+      tree.symbolize(geoVectorLayer);
     }
   
     double c_e = (float)_nComparisons / _nElements;

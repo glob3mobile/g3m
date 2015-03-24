@@ -181,6 +181,23 @@ public class Color
   
   }
 
+  public static Color interpolateColor(Color from, Color middle, Color to, float d)
+  {
+    if (d <= 0)
+    {
+      return from;
+    }
+    if (d >= 1)
+    {
+      return to;
+    }
+    if (d <= 0.5)
+    {
+      return from.mixedWith(middle, d * 2);
+    }
+    return middle.mixedWith(to, (d - 0.5f) * 2);
+  }
+
   public static Color transparent()
   {
     return Color.fromRGBA(0, 0, 0, 0);

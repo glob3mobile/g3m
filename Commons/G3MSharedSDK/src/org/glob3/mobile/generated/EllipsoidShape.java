@@ -195,7 +195,7 @@ public class EllipsoidShape extends AbstractMeshShape
       }
     }
   
-    final EllipsoidalPlanet ellipsoid = new EllipsoidalPlanet(new Ellipsoid(Vector3D.zero, _ellipsoid.getRadii()));
+    final EllipsoidalPlanet ellipsoid = new EllipsoidalPlanet(new Ellipsoid(Vector3D.zero, _ellipsoid._radii));
     final Sector sector = new Sector(Sector.fullSphere());
   
     FloatBufferBuilderFromGeodetic vertices = FloatBufferBuilderFromGeodetic.builderWithGivenCenter(ellipsoid, Vector3D.zero);
@@ -320,7 +320,7 @@ public class EllipsoidShape extends AbstractMeshShape
   }
 
 
-  public final java.util.ArrayList<Double> intersectionsDistances(Vector3D origin, Vector3D direction)
+  public final java.util.ArrayList<Double> intersectionsDistances(Planet planet, Vector3D origin, Vector3D direction)
   {
     //  MutableMatrix44D* M = createTransformMatrix(_planet);
     //  const Quadric transformedQuadric = _quadric.transformBy(*M);

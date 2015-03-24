@@ -8,8 +8,8 @@ import com.google.gwt.core.client.JavaScriptObject;
 
 
 public final class FloatBuffer_WebGL
-         extends
-            IFloatBuffer {
+extends
+IFloatBuffer {
 
    private final JavaScriptObject _buffer;
    private int                    _timestamp       = 0;
@@ -60,7 +60,8 @@ public final class FloatBuffer_WebGL
 
 
    private native JavaScriptObject jsCreateWebGLBuffer() /*-{
-		return this.@org.glob3.mobile.specific.FloatBuffer_WebGL::_gl.createBuffer();
+		return this.@org.glob3.mobile.specific.FloatBuffer_WebGL::_gl
+				.createBuffer();
    }-*/;
 
 
@@ -204,6 +205,21 @@ public final class FloatBuffer_WebGL
 
 
    @Override
+   public void rawPut(final int i,
+                      final IFloatBuffer srcBuffer,
+                      final int srcFromIndex,
+                      final int count) {
+      if ((i < 0) || ((i + count) > size())) {
+         throw new RuntimeException("buffer put error");
+      }
+
+      for (int j = 0; j < count; j++) {
+         rawPut(i + j, srcBuffer.get(srcFromIndex + j));
+      }
+   }
+
+
+   @Override
    public native void rawAdd(final int i,
                              final float value) /*-{
 		var buffer = this.@org.glob3.mobile.specific.FloatBuffer_WebGL::_buffer;
@@ -241,5 +257,6 @@ public final class FloatBuffer_WebGL
    public long getID() {
       return _id;
    }
+
 
 }

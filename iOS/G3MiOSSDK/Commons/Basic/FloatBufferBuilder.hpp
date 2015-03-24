@@ -92,11 +92,11 @@ public:
   virtual ~FloatBufferBuilder() {
   }
 
-  int size() const{
+  size_t size() const {
     return _values.size();
   }
 
-  Vector2D getVector2D(int i) const{
+  Vector2D getVector2D(int i) const {
     int pos = i * 2;
 #ifdef C_CODE
     return Vector2D(_values[pos], _values[pos + 1]);
@@ -106,7 +106,7 @@ public:
 #endif
   }
 
-  Vector3D getVector3D(int i) const{
+  Vector3D getVector3D(int i) const {
     int pos = i * 3;
 #ifdef C_CODE
     return Vector3D(_values[pos], _values[pos + 1], _values[pos+2]);

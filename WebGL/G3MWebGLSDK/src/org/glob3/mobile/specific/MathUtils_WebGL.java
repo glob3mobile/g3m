@@ -2,12 +2,17 @@
 
 package org.glob3.mobile.specific;
 
+import java.util.Random;
+
 import org.glob3.mobile.generated.IMathUtils;
 
 
 public final class MathUtils_WebGL
-         extends
-            IMathUtils {
+extends
+IMathUtils {
+
+   private final Random _random = new Random();
+
 
    @Override
    public double sin(final double v) {
@@ -276,16 +281,16 @@ public final class MathUtils_WebGL
       final int b8 = byteArray[7] & 0xFF;
 
       return (b1) | ((long) b2 << 8) | ((long) b3 << 16) | ((long) b4 << 24) | ((long) b5 << 32) | ((long) b6 << 40)
-             | ((long) b7 << 48) | ((long) b8 << 56);
+               | ((long) b7 << 48) | ((long) b8 << 56);
    }
 
 
    private native byte[] doubleToByteArray(final double value) /*-{
-		var buffer = new ArrayBuffer(8);
-		var doubleView = new Float64Array(buffer);
-		doubleView[0] = value;
+        var buffer = new ArrayBuffer(8);
+        var doubleView = new Float64Array(buffer);
+        doubleView[0] = value;
 
-		return (new Uint8Array(buffer));
+        return (new Uint8Array(buffer));
    }-*/;
 
 
@@ -307,10 +312,31 @@ public final class MathUtils_WebGL
 
 
    private native double byteArrayToDouble(final int[] byteArray) /*-{
-		var uint8Array = new Uint8Array(byteArray);
-		var doubleView = new Float64Array(uint8Array.buffer);
+        var uint8Array = new Uint8Array(byteArray);
+        var doubleView = new Float64Array(uint8Array.buffer);
 
-		return doubleView[0];
+        return doubleView[0];
+   }-*/;
+
+
+   @Override
+   public float rawIntBitsToFloat(final int value) {
+      final int[] byteArray = new int[4];
+
+      byteArray[0] = value & 0xFF;
+      byteArray[1] = (value >> 8) & 0xFF;
+      byteArray[2] = (value >> 16) & 0xFF;
+      byteArray[3] = (value >> 24) & 0xFF;
+
+      return byteArrayToFloat(byteArray);
+   }
+
+
+   private native float byteArrayToFloat(final int[] byteArray) /*-{
+        var uint8Array = new Uint8Array(byteArray);
+        var floatView = new Float32Array(uint8Array.buffer);
+
+        return floatView[0];
    }-*/;
 
 
@@ -402,4 +428,12 @@ public final class MathUtils_WebGL
                      final float f2) {
       return f1 % f2;
    }
+
+
+   @Override
+   public double nextRandomDouble() {
+      return _random.nextDouble();
+   }
+
+
 }

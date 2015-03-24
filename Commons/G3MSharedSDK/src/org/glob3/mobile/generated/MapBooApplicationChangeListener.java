@@ -56,6 +56,9 @@ package org.glob3.mobile.generated;
 //class Vector2I;
 //class URLTemplateLayer;
 //class Sector;
+//class IByteBuffer;
+//class IBufferDownloadListener;
+
 
 
 
@@ -85,6 +88,8 @@ public abstract class MapBooApplicationChangeListener
 
   public abstract void onWebSocketClose(G3MContext context);
 
-  public abstract void onTerrainTouch(MapBooBuilder builder, G3MEventContext ec, Vector2I pixel, Camera camera, Geodetic3D position, Tile tile);
+  public abstract void onTerrainTouch(MapBooBuilder builder, G3MEventContext ec, Vector2F pixel, Camera camera, Geodetic3D position, Tile tile);
+
+  public abstract void onFeatureInfoReceived(IByteBuffer buffer);
 
 }

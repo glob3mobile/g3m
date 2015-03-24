@@ -65,7 +65,25 @@ public class GEO2DPolygonGeometry extends GEOGeometry2D
 
   public final long getCoordinatesCount()
   {
-    return _polygonData.getCoordinatesCount();
+    return (_polygonData == null) ? 0 : _polygonData.getCoordinatesCount();
+  }
+
+  public final GEO2DPolygonGeometry deepCopy()
+  {
+    if (_polygonData != null)
+    {
+      _polygonData._retain();
+    }
+    return new GEO2DPolygonGeometry(_polygonData);
+  }
+
+  public final boolean contain(Geodetic2D point)
+  {
+    if (_polygonData != null)
+    {
+      return _polygonData.contains(point);
+    }
+    return false;
   }
 
 }

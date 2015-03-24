@@ -15,23 +15,33 @@
 class G3MDemoListener;
 class G3MDemoScene;
 class LayerSet;
-class GEORenderer;
 class G3MWidget;
 class G3MContext;
-class GEOTileRasterizer;
+class GEOVectorLayer;
 class MarksRenderer;
 class MeshRenderer;
 class ShapesRenderer;
 class PlanetRenderer;
+class GEORenderer;
+class PointCloudsRenderer;
+class HUDRenderer;
+class NonOverlappingMarksRenderer;
 
 class G3MDemoModel {
 private:
-  G3MDemoListener* _listener;
-
   G3MWidget* _g3mWidget;
 
-  LayerSet*       _layerSet;
-  GEORenderer*    _geoRenderer;
+  G3MDemoListener* _listener;
+
+
+  LayerSet*                    _layerSet;
+  MeshRenderer*                _meshRenderer;
+  ShapesRenderer*              _shapesRenderer;
+  MarksRenderer*               _marksRenderer;
+  GEORenderer*                 _geoRenderer;
+  PointCloudsRenderer*         _pointCloudsRenderer;
+  HUDRenderer*                 _hudRenderer;
+  NonOverlappingMarksRenderer* _nonOverlappingMarksRenderer;
 
   G3MDemoScene*              _selectedScene;
   std::vector<G3MDemoScene*> _scenes;
@@ -40,9 +50,16 @@ private:
 
 public:
 
-  G3MDemoModel(G3MDemoListener* listener,
-               LayerSet* layerSet,
-               GEORenderer* geoRenderer);
+  G3MDemoModel(G3MDemoListener*             listener,
+               LayerSet*                    layerSet,
+               MeshRenderer*                meshRenderer,
+               ShapesRenderer*              shapesRenderer,
+               MarksRenderer*               marksRenderer,
+               GEORenderer*                 geoRenderer,
+               PointCloudsRenderer*         pointCloudsRenderer,
+               HUDRenderer*                 hudRenderer,
+               NonOverlappingMarksRenderer* nonOverlappingMarksRenderer);
+
 
   void initializeG3MWidget(G3MWidget* g3mWidget);
 
@@ -60,13 +77,29 @@ public:
     return _geoRenderer;
   }
 
-  GEOTileRasterizer* getGEOTileRasterizer() const;
+  MarksRenderer* getMarksRenderer() const {
+    return _marksRenderer;
+  }
 
-  MarksRenderer* getMarksRenderer() const;
+  MeshRenderer* getMeshRenderer() const {
+    return _meshRenderer;
+  }
 
-  MeshRenderer* getMeshRenderer() const;
+  ShapesRenderer* getShapesRenderer() const {
+    return _shapesRenderer;
+  }
 
-  ShapesRenderer* getShapesRenderer() const;
+  PointCloudsRenderer* getPointCloudsRenderer() const {
+    return _pointCloudsRenderer;
+  }
+
+  HUDRenderer* getHUDRenderer() const {
+    return _hudRenderer;
+  }
+
+  NonOverlappingMarksRenderer* getNonOverlappingMarksRenderer() const {
+    return _nonOverlappingMarksRenderer;
+  }
 
   PlanetRenderer* getPlanetRenderer() const;
 

@@ -52,12 +52,12 @@ Vector3D Plane::intersectionXYPlaneWithRay(const Vector3D& origin,
   return point;
 }
 
-bool Plane::isVectorParallel(const Vector3D& vector) const{
+bool Plane::isVectorParallel(const Vector3D& vector) const {
   const double d = _normal.dot(vector);
   return (ISNAN(d) || IMathUtils::instance()->abs(d) < 0.01);
 }
 
-Angle Plane::vectorRotationForAxis(const Vector3D& vector, const Vector3D& axis) const{
+Angle Plane::vectorRotationForAxis(const Vector3D& vector, const Vector3D& axis) const {
 
   //Check Agustin Trujillo's document that explains how this algorithm works
 
@@ -65,7 +65,7 @@ Angle Plane::vectorRotationForAxis(const Vector3D& vector, const Vector3D& axis)
     return Angle::zero();
   }
 
-  IMathUtils* mu = IMathUtils::instance();
+  const IMathUtils* mu = IMathUtils::instance();
 
   //Vector values
 

@@ -41,17 +41,40 @@ public class CompositeTileImageContribution extends TileImageContribution
 
   public static TileImageContribution create(java.util.ArrayList<ChildContribution> contributions)
   {
-    return (contributions.size() == 0) ? null : new CompositeTileImageContribution(contributions);
+    if (contributions.isEmpty())
+    {
+      return null;
+    }
+  
+    //if first contribution is opaque, then composite is opaque.
+    final ChildContribution firsChild = contributions.get(0);
+  
+    return new CompositeTileImageContribution(contributions, firsChild._contribution.isOpaque());
   }
 
 
   private final java.util.ArrayList<ChildContribution> _contributions;
 
-  private CompositeTileImageContribution(java.util.ArrayList<ChildContribution> contributions)
+  private CompositeTileImageContribution(java.util.ArrayList<ChildContribution> contributions, boolean transparent)
   {
-     super(false, 1);
+     super(transparent, 1.0f);
      _contributions = contributions;
+
+
   }
+
+
+//  CompositeTileImageContribution(const std::vector<const ChildContribution*>& contributions,
+//                                 const Sector& sector,
+//                                 bool isFullCoverage,
+//                                 bool isTransparent,
+//                                 float alpha) :
+//  TileImageContribution(sector, isFullCoverage, isTransparent, alpha),
+//  _contributions(contributions)
+//  {
+//    
+//    
+//  }
 
   public void dispose()
   {
@@ -74,5 +97,4 @@ public class CompositeTileImageContribution extends TileImageContribution
   {
     return _contributions.get(index);
   }
-
 }

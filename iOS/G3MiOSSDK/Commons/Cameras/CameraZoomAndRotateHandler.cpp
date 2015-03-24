@@ -48,8 +48,8 @@ void CameraZoomAndRotateHandler::onDown(const G3MEventContext *eventContext,
   cameraContext->setCurrentGesture(DoubleDrag);
   
   // double dragging
-  _initialPixel0 = touchEvent.getTouch(0)->getPos().asMutableVector2I();
-  _initialPixel1 = touchEvent.getTouch(1)->getPos().asMutableVector2I();
+  _initialPixel0 = MutableVector2F(touchEvent.getTouch(0)->getPos());
+  _initialPixel1 = MutableVector2F(touchEvent.getTouch(1)->getPos());
   }
 
 
@@ -57,15 +57,15 @@ void CameraZoomAndRotateHandler::onMove(const G3MEventContext *eventContext,
                                      const TouchEvent& touchEvent,
                                      CameraContext *cameraContext) {
   
-  Vector2I pixel0 = touchEvent.getTouch(0)->getPos();
-  Vector2I pixel1 = touchEvent.getTouch(1)->getPos();
-  Vector2I difCurrentPixels = pixel1.sub(pixel0);
+  Vector2F pixel0 = touchEvent.getTouch(0)->getPos();
+  Vector2F pixel1 = touchEvent.getTouch(1)->getPos();
+  Vector2F difCurrentPixels = pixel1.sub(pixel0);
   const Planet* planet = eventContext->getPlanet();
 
   // if it is the first move, let's decide if make zoom or rotate
   if (cameraContext->getCurrentGesture() == DoubleDrag) {
-    Vector2I difPixel0 = pixel0.sub(_initialPixel0.asVector2I());
-    Vector2I difPixel1 = pixel1.sub(_initialPixel1.asVector2I());
+    Vector2F difPixel0 = pixel0.sub(_initialPixel0.asVector2F());
+    Vector2F difPixel1 = pixel1.sub(_initialPixel1.asVector2F());
     if ((difPixel0._y<-1 && difPixel1._y>1) || (difPixel0._y>1 && difPixel1._y<-1) ||
         (difPixel0._x<-1 && difPixel1._x>1) || (difPixel0._x>1 && difPixel1._x<-1)) {
       //printf ("zoom..\n");
@@ -79,8 +79,10 @@ void CameraZoomAndRotateHandler::onMove(const G3MEventContext *eventContext,
       // compute intersection of view direction with the globe
       Vector3D intersection = planet->closestIntersection(_camera0.getCartesianPosition(), _camera0.getViewDirection());
       if (!intersection.isNan()) {
-        _centralGlobePoint = intersection.asMutableVector3D();
-        _centralGlobeNormal = planet->geodeticSurfaceNormal(_centralGlobePoint).asMutableVector3D();
+//        _centralGlobePoint = intersection.asMutableVector3D();
+        _centralGlobePoint.copyFrom(intersection);
+//        _centralGlobeNormal = planet->geodeticSurfaceNormal(_centralGlobePoint).asMutableVector3D();
+        _centralGlobeNormal.copyFrom(planet->geodeticSurfaceNormal(_centralGlobePoint));
         _fingerSep0 = sqrt((difCurrentPixels._x*difCurrentPixels._x+difCurrentPixels._y*difCurrentPixels._y));
         _lastAngle = _angle0 = atan2(difCurrentPixels._y, difCurrentPixels._x);
         cameraContext->setCurrentGesture(Zoom);
@@ -168,7 +170,7 @@ void CameraZoomAndRotateHandler::render(const G3MRenderContext* rc,
 
 
 
-void CameraZoomAndRotateHandler::zoom(Camera* camera, Vector2I difCurrentPixels)
+void CameraZoomAndRotateHandler::zoom(Camera* camera, const Vector2F& difCurrentPixels)
 {
   const double MIN_CAMERA_HEIGHT = 30;
   

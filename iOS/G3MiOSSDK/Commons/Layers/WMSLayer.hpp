@@ -75,7 +75,7 @@ public:
            const bool                        readExpired,
            const LayerTilesRenderParameters* parameters     = NULL,
            const float                       transparency   = 1,
-           const std::string&                disclaimerInfo = "");
+           std::vector<const Info*>*         layerInfo      = new std::vector<const Info*>());
 
   WMSLayer(const std::string&                mapLayer,
            const URL&                        mapServerURL,
@@ -90,15 +90,10 @@ public:
            const bool                        readExpired,
            const LayerTilesRenderParameters* parameters     = NULL,
            const float                       transparency   = 1,
-           const std::string&                disclaimerInfo = "");
-
-  std::vector<Petition*> createTileMapPetitions(const G3MRenderContext* rc,
-                                                const LayerTilesRenderParameters* layerTilesRenderParameters,
-                                                const Tile* tile) const;
+           std::vector<const Info*>*         layerInfo = new std::vector<const Info*>());
 
   URL getFeatureInfoURL(const Geodetic2D& g,
                         const Sector& sector) const;
-
 
   void setExtraParameter(const std::string& extraParameter) {
     _extraParameter = extraParameter;

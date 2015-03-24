@@ -220,6 +220,11 @@ private:
   void processFinishedEffects(const G3MRenderContext* rc,
                               const TimeInterval& when);
 
+#ifdef JAVA_CODE
+  final java.util.ArrayList<EffectRun> _effectsToStop   = new java.util.ArrayList<EffectRun>();
+  final java.util.ArrayList<EffectRun> _effectsToCancel = new java.util.ArrayList<EffectRun>();
+#endif
+
 public:
   EffectsScheduler() :
   _effectsRuns(std::vector<EffectRun*>())

@@ -36,9 +36,9 @@
     _stmt = NULL;
     if (![db prepareSql: sql
             inStatement: &_stmt]) {
-      NSLog(@"Can't prepare statement \"%@\", error=(%i:%@)",
+      NSLog(@"Can't prepare statement \"%@\", error=(%li:%@)",
             sql,
-            [_db errorCode],
+            (long)[_db errorCode],
             [_db errorMessage]);
       return nil;
     }
@@ -86,13 +86,13 @@
   [self close];
 }
 
-- (BOOL) isNullColumnByIndex: (NSInteger) index
+- (BOOL) isNullColumnByIndex: (int) index
 {
   int columnType = sqlite3_column_type(_stmt, index);
 	return (columnType == SQLITE_NULL);
 }
 
-- (NSInteger) integerColumnByIndex: (NSInteger) index
+- (NSInteger) integerColumnByIndex: (int) index
 {
   int columnType = sqlite3_column_type(_stmt, index);
 
@@ -103,7 +103,7 @@
   return sqlite3_column_int(_stmt, index);
 }
 
-- (NSString*) stringColumnByIndex: (NSInteger) index
+- (NSString*) stringColumnByIndex: (int) index
 {
   int columnType = sqlite3_column_type(_stmt, index);
 
@@ -114,14 +114,14 @@
   return [NSString stringWithUTF8String:(const char* ) sqlite3_column_text(_stmt, index)];
 }
 
-- (NSData*) dataColumnByIndex: (NSInteger) index
+- (NSData*) dataColumnByIndex: (int) index
 {
   NSInteger blobLength = sqlite3_column_bytes(_stmt, index);
   return [NSData dataWithBytes: sqlite3_column_blob(_stmt, index)
                         length: (NSUInteger)blobLength];
 }
 
-- (double) doubleColumnByIndex: (NSInteger) index
+- (double) doubleColumnByIndex: (int) index
 {
   int columnType = sqlite3_column_type(_stmt, index);
 
@@ -232,7 +232,7 @@
 				break;
 			}
 
-      usleep(10000 /* 10ms */);
+      usleep(1000 /* 1ms */);
 		}
     else {
 			NSLog(@"SQLite Prepare Failed: %s", sqlite3_errmsg(_db));
@@ -297,7 +297,7 @@
 				break;
 			}
 
-      usleep(10000 /* 10ms */);
+      usleep(1000 /* 1ms */);
 		}
     else {
 			NSLog(@"SQLite Prepare Failed: %s", sqlite3_errmsg(_db));
@@ -373,7 +373,7 @@
 				break;
 			}
 
-      usleep(10000 /* 10ms */);
+      usleep(1000 /* 1ms */);
 		}
     else {
 			NSLog(@"SQLite Step Failed: %s", sqlite3_errmsg(_db));

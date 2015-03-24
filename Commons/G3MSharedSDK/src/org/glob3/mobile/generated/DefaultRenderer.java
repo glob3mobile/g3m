@@ -28,9 +28,9 @@ public abstract class DefaultRenderer implements Renderer
 
   private boolean _enable;
 
-  private java.util.ArrayList<String> _info = new java.util.ArrayList<String>();
+  private final java.util.ArrayList<Info> _info = new java.util.ArrayList<Info>();
 
-  private void notifyChangedInfo(java.util.ArrayList<String> info)
+  private void notifyChangedInfo(java.util.ArrayList<Info> info)
   {
     if(_changedInfoListener!= null)
     {
@@ -66,6 +66,14 @@ public abstract class DefaultRenderer implements Renderer
     _changedInfoListener = null;
   }
 
+  protected void onChangedContext()
+  {
+  }
+
+  protected void onLostContext()
+  {
+  }
+
 
   public final boolean isEnable()
   {
@@ -79,18 +87,15 @@ public abstract class DefaultRenderer implements Renderer
       _enable = enable;
       if(_changedInfoListener!= null)
       {
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning vtp ask dgd: empty vector?
         if(isEnable())
         {
           notifyChangedInfo(_info);
         }
         else
         {
-          final java.util.ArrayList<String> info = new java.util.ArrayList<String>();
+          final java.util.ArrayList<Info> info = new java.util.ArrayList<Info>();
           _changedInfoListener.changedRendererInfo(_rendererIdentifier, info);
         }
-  
       }
     }
   }
@@ -117,14 +122,6 @@ public abstract class DefaultRenderer implements Renderer
   {
     _context = null;
     onLostContext();
-  }
-
-  public void onChangedContext()
-  {
-  }
-
-  public void onLostContext()
-  {
   }
 
 
@@ -167,20 +164,20 @@ public abstract class DefaultRenderer implements Renderer
     return false;
   }
 
-  public final void setInfo(java.util.ArrayList<String> info)
+  public final void setInfo(java.util.ArrayList<Info> info)
   {
     _info.clear();
     _info.addAll(info);
     notifyChangedInfo(_info);
   }
 
-  public final void addInfo(java.util.ArrayList<String> info)
+  public final void addInfo(java.util.ArrayList<Info> info)
   {
     _info.addAll(info);
     notifyChangedInfo(_info);
   }
 
-  public final void addInfo(String info)
+  public final void addInfo(Info info)
   {
     _info.add(info);
     notifyChangedInfo(_info);
@@ -189,7 +186,7 @@ public abstract class DefaultRenderer implements Renderer
 
 
 
-  public final void setChangedRendererInfoListener(ChangedRendererInfoListener changedInfoListener, int rendererIdentifier)
+  public void setChangedRendererInfoListener(ChangedRendererInfoListener changedInfoListener, int rendererIdentifier)
   {
     if (_changedInfoListener != null)
     {
@@ -200,7 +197,6 @@ public abstract class DefaultRenderer implements Renderer
       _changedInfoListener = changedInfoListener;
       _rendererIdentifier = rendererIdentifier;
       notifyChangedInfo(_info);
-      ILogger.instance().logInfo("Changed Renderer Info Listener of DefaultRenderer set ok");
     }
   }
 }

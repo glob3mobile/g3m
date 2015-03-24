@@ -50,7 +50,7 @@ public class Camera
      _tanHalfHorizontalFieldOfView = java.lang.Double.NaN;
      _rollInRadians = 0;
     resizeViewport(0, 0);
-    _dirtyFlags.setAll(true);
+    _dirtyFlags.setAllDirty();
   }
 
   public void dispose()
@@ -69,42 +69,33 @@ public class Camera
 
   public final void copyFrom(Camera that)
   {
-    //TODO: IMPROVE PERFORMANCE
     _viewPortWidth = that._viewPortWidth;
     _viewPortHeight = that._viewPortHeight;
   
     _planet = that._planet;
   
-    _position = new MutableVector3D(that._position);
-    _center = new MutableVector3D(that._center);
-    _up = new MutableVector3D(that._up);
-    _normalizedPosition = new MutableVector3D(that._normalizedPosition);
+    _position.copyFrom(that._position);
+    _center.copyFrom(that._center);
+    _up.copyFrom(that._up);
+    _normalizedPosition.copyFrom(that._normalizedPosition);
   
     _dirtyFlags.copyFrom(that._dirtyFlags);
   
-    _frustumData = new FrustumData(that._frustumData);
+    _frustumData = that._frustumData;
   
     _projectionMatrix.copyValue(that._projectionMatrix);
     _modelMatrix.copyValue(that._modelMatrix);
     _modelViewMatrix.copyValue(that._modelViewMatrix);
   
-    _cartesianCenterOfView = new MutableVector3D(that._cartesianCenterOfView);
+    _cartesianCenterOfView.copyFrom(that._cartesianCenterOfView);
   
-    if (_geodeticCenterOfView != null)
-       _geodeticCenterOfView.dispose();
-    _geodeticCenterOfView = (that._geodeticCenterOfView == null) ? null : new Geodetic3D(that._geodeticCenterOfView);
+    _geodeticCenterOfView = that._geodeticCenterOfView;
   
-    if (_frustum != null)
-       _frustum.dispose();
-    _frustum = (that._frustum == null) ? null : new Frustum(that._frustum);
+    _frustum = that._frustum;
   
-    if (_frustumInModelCoordinates != null)
-       _frustumInModelCoordinates.dispose();
-    _frustumInModelCoordinates = (that._frustumInModelCoordinates == null) ? null : new Frustum(that._frustumInModelCoordinates);
+    _frustumInModelCoordinates = that._frustumInModelCoordinates;
   
-    if (_geodeticPosition != null)
-       _geodeticPosition.dispose();
-    _geodeticPosition = ((that._geodeticPosition == null) ? null : new Geodetic3D(that._geodeticPosition));
+    _geodeticPosition = that._geodeticPosition;
     _angle2Horizon = that._angle2Horizon;
   
     _tanHalfVerticalFieldOfView = that._tanHalfVerticalFieldOfView;
@@ -122,7 +113,7 @@ public class Camera
     _viewPortWidth = width;
     _viewPortHeight = height;
   
-    _dirtyFlags.setAll(true);
+    _dirtyFlags.setAllDirty();
   }
 
   public final Vector3D pixel2Ray(Vector2I pixel)
@@ -134,6 +125,22 @@ public class Camera
     final Vector3D obj = getModelViewMatrix().unproject(pixel3D, 0, 0, _viewPortWidth, _viewPortHeight);
     if (obj.isNan())
     {
+      ILogger.instance().logWarning("Pixel to Ray return NaN");
+      return obj;
+    }
+  
+    return obj.sub(_position.asVector3D());
+  }
+  public final Vector3D pixel2Ray(Vector2F pixel)
+  {
+    final float px = pixel._x;
+    final float py = _viewPortHeight - pixel._y;
+    final Vector3D pixel3D = new Vector3D(px, py, 0);
+  
+    final Vector3D obj = getModelViewMatrix().unproject(pixel3D, 0, 0, _viewPortWidth, _viewPortHeight);
+    if (obj.isNan())
+    {
+      ILogger.instance().logWarning("Pixel to Ray return NaN");
       return obj;
     }
   
@@ -181,6 +188,11 @@ public class Camera
   {
      return _position.asVector3D();
   }
+  public final void getCartesianPositionMutable(MutableVector3D result)
+  {
+    result.copyFrom(_position);
+  }
+
   public final Vector3D getNormalizedPosition()
   {
      return _normalizedPosition.asVector3D();
@@ -193,6 +205,11 @@ public class Camera
   {
      return _up.asVector3D();
   }
+  public final void getUpMutable(MutableVector3D result)
+  {
+    result.copyFrom(_up);
+  }
+
   public final Geodetic3D getGeodeticCenterOfView()
   {
      return _getGeodeticCenterOfView();
@@ -203,8 +220,17 @@ public class Camera
   }
   public final Vector3D getViewDirection()
   {
-     return _center.sub(_position).asVector3D();
+    // return _center.sub(_position).asVector3D();
+
+    // perform the substraction inlinde to avoid a temporary MutableVector3D instance
+    return new Vector3D(_center.x() - _position.x(), _center.y() - _position.y(), _center.z() - _position.z());
   }
+
+  public final void getViewDirectionInto(MutableVector3D result)
+  {
+    result.set(_center.x() - _position.x(), _center.y() - _position.y(), _center.z() - _position.z());
+  }
+
 
   public final void dragCamera(Vector3D p0, Vector3D p1)
   {
@@ -289,7 +315,7 @@ public class Camera
       return Angle.nan();
     }
   
-    return point0.angleBetween(point1);
+    return Vector3D.angleBetween(point0, point1);
   }
 
   public final void initialize(G3MContext context)
@@ -305,22 +331,25 @@ public class Camera
       setCartesianPosition(new MutableVector3D(_planet.getRadii().maxAxis() * 5, 0, 0));
       setUp(new MutableVector3D(0, 0, 1));
     }
-    _dirtyFlags.setAll(true);
+    _dirtyFlags.setAllDirty();
   }
 
   public final void setCartesianPosition(MutableVector3D v)
   {
     if (!v.equalTo(_position))
     {
-      _position = new MutableVector3D(v);
+      //      _position = MutableVector3D(v);
+      _position.copyFrom(v);
       if (_geodeticPosition != null)
          _geodeticPosition.dispose();
       _geodeticPosition = null;
-      _dirtyFlags.setAll(true);
+      _dirtyFlags.setAllDirty();
       final double distanceToPlanetCenter = _position.length();
       final double planetRadius = distanceToPlanetCenter - getGeodeticPosition()._height;
       _angle2Horizon = Math.acos(planetRadius/distanceToPlanetCenter);
-      _normalizedPosition = _position.normalized();
+      //      _normalizedPosition = _position.normalized();
+      _normalizedPosition.copyFrom(_position);
+      _normalizedPosition.normalize();
     }
   }
 
@@ -414,13 +443,15 @@ public class Camera
     setCartesianPosition(position.asMutableVector3D());
     setCenter(cartesianCenter.asMutableVector3D());
     setUp(finalUp.asMutableVector3D());
-    //  _dirtyFlags.setAll(true);
+    //  _dirtyFlags.setAllDirty();
   }
 
   public final void forceMatrixCreation()
   {
-    //MutableMatrix44D projectionMatrix = MutableMatrix44D::createProjectionMatrix(_frustumData);
-    //getFrustumData();
+    getGeodeticCenterOfView();
+    //getXYZCenterOfView();
+    _getCartesianCenterOfView();
+    getFrustumInModelCoordinates();
     getProjectionMatrix44D();
     getModelMatrix44D();
     getModelViewMatrix().asMatrix44D();
@@ -462,7 +493,7 @@ public class Camera
   
     setUp(_up.transformedBy(M, 0.0));
   
-    //_dirtyFlags.setAll(true);
+    //_dirtyFlags.setAllDirty();
   }
 
   public final boolean isPositionWithin(Sector sector, double height)
@@ -533,13 +564,21 @@ public class Camera
 
   public final double getEstimatedPixelDistance(Vector3D point0, Vector3D point1)
   {
-    final Vector3D ray0 = _position.sub(point0);
-    final Vector3D ray1 = _position.sub(point1);
-    final double angleInRadians = ray1.angleInRadiansBetween(ray0);
+  //  const Vector3D ray0 = _position.sub(point0);
+  //  const Vector3D ray1 = _position.sub(point1);
+  //  const double angleInRadians = ray1.angleInRadiansBetween(ray0);
+  
+    _ray0.putSub(_position, point0);
+    _ray1.putSub(_position, point1);
+    final double angleInRadians = MutableVector3D.angleInRadiansBetween(_ray1, _ray0);
     final FrustumData frustumData = getFrustumData();
     final double distanceInMeters = frustumData._znear * IMathUtils.instance().tan(angleInRadians/2);
     return distanceInMeters * _viewPortHeight / frustumData._top;
   }
+
+
+  private MutableVector3D _ray0 = new MutableVector3D();
+  private MutableVector3D _ray1 = new MutableVector3D();
 
   //  const Angle getHeading(const Vector3D& normal) const;
 
@@ -591,8 +630,9 @@ public class Camera
   {
     if (!v.equalTo(_center))
     {
-      _center = new MutableVector3D(v);
-      _dirtyFlags.setAll(true);
+      //      _center = MutableVector3D(v);
+      _center.copyFrom(v);
+      _dirtyFlags.setAllDirty();
     }
   }
 
@@ -600,8 +640,9 @@ public class Camera
   {
     if (!v.equalTo(_up))
     {
-      _up = new MutableVector3D(v);
-      _dirtyFlags.setAll(true);
+      //      _up = MutableVector3D(v);
+      _up.copyFrom(v);
+      _dirtyFlags.setAllDirty();
     }
   }
 
@@ -622,7 +663,8 @@ public class Camera
     if (_dirtyFlags._cartesianCenterOfViewDirty)
     {
       _dirtyFlags._cartesianCenterOfViewDirty = false;
-      _cartesianCenterOfView = centerOfViewOnPlanet().asMutableVector3D();
+      //      _cartesianCenterOfView = centerOfViewOnPlanet().asMutableVector3D();
+      _cartesianCenterOfView.copyFrom(centerOfViewOnPlanet());
     }
     return _cartesianCenterOfView;
   }
@@ -719,7 +761,7 @@ public class Camera
     if (_dirtyFlags._projectionMatrixDirty)
     {
       _dirtyFlags._projectionMatrixDirty = false;
-      _projectionMatrix = MutableMatrix44D.createProjectionMatrix(getFrustumData());
+      _projectionMatrix.copyValue(MutableMatrix44D.createProjectionMatrix(getFrustumData()));
     }
     return _projectionMatrix;
   }
@@ -730,7 +772,7 @@ public class Camera
     if (_dirtyFlags._modelMatrixDirty)
     {
       _dirtyFlags._modelMatrixDirty = false;
-      _modelMatrix = MutableMatrix44D.createModelMatrix(_position, _center, _up);
+      _modelMatrix.copyValue(MutableMatrix44D.createModelMatrix(_position, _center, _up));
     }
     return _modelMatrix;
   }
@@ -741,18 +783,20 @@ public class Camera
     if (_dirtyFlags._modelViewMatrixDirty)
     {
       _dirtyFlags._modelViewMatrixDirty = false;
-      _modelViewMatrix = getProjectionMatrix().multiply(getModelMatrix());
+      //_modelViewMatrix.copyValue(getProjectionMatrix().multiply(getModelMatrix()));
+      _modelViewMatrix.copyValueOfMultiplication(getProjectionMatrix(), getModelMatrix());
     }
     return _modelViewMatrix;
   }
 
-
-
   private void setCameraCoordinateSystem(CoordinateSystem rs)
   {
-    _center = _position.add(rs._y.asMutableVector3D());
-    _up = rs._z.asMutableVector3D();
-    _dirtyFlags.setAll(true); //Recalculate Everything
+  //  _center = _position.add(rs._y.asMutableVector3D());
+    _center.copyFrom(_position);
+    _center.addInPlace(rs._y);
+  //  _up = rs._z.asMutableVector3D();
+    _up.copyFrom(rs._z);
+    _dirtyFlags.setAllDirty(); //Recalculate Everything
   }
 
 }

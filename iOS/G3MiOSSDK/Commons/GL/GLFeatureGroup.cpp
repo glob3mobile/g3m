@@ -62,7 +62,8 @@ void GLFeatureSet::clearFeatures(GLFeatureGroupName g) {
       for (int j = i; j < _nFeatures; j++) {
         if (j+1 >= MAX_CONCURRENT_FEATURES_PER_GROUP) {
           _features[j] = NULL;
-        } else{
+        }
+        else {
           _features[j] = _features[j+1];
         }
       }
@@ -82,7 +83,8 @@ void GLFeatureSet::clearFeatures() {
     for (int j = i; j < _nFeatures; j++) {
       if (j+1 >= MAX_CONCURRENT_FEATURES_PER_GROUP) {
         _features[j] = NULL;
-      } else{
+      }
+      else {
         _features[j] = _features[j+1];
       }
     }
@@ -218,13 +220,15 @@ void GLFeatureCameraGroup::apply(const GLFeatureSet& features,
     prov->_release();
   }
 
-  Matrix44DProvider* modelViewProvider = modelViewHolderBuilder.create();
+  if (modelViewHolderBuilder.size() > 0){
+    Matrix44DProvider* modelViewProvider = modelViewHolderBuilder.create();
 
-  vs.addUniformValue(MODELVIEW,
-                     new GPUUniformValueMatrix4(modelViewProvider),
-                     false);
+    vs.addUniformValue(MODELVIEW,
+                       new GPUUniformValueMatrix4(modelViewProvider),
+                       false);
 
-  modelViewProvider->_release();
+    modelViewProvider->_release();
+  }
 
 #ifdef JAVA_CODE
   modelViewHolderBuilder.dispose();

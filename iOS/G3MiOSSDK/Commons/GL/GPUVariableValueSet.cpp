@@ -30,7 +30,7 @@ void GPUVariableValueSet::combineWith(const GPUVariableValueSet* vs) {
   }
 }
 
-void GPUVariableValueSet::applyValuesToProgram(GPUProgram* prog) const{
+void GPUVariableValueSet::applyValuesToProgram(GPUProgram* prog) const {
   for (int i = 0; i <= _highestUniformKey; i++) {
     GPUUniformValue* u = _uniformValues[i];
     if (u != NULL) {
@@ -62,7 +62,7 @@ GPUVariableValueSet::~GPUVariableValueSet() {
   }
 }
 
-int GPUVariableValueSet::getUniformsCode() const{
+int GPUVariableValueSet::getUniformsCode() const {
   if (_uniformsCode == 0) {
     for (int i = 0; i <= _highestUniformKey; i++) {
       if (_uniformValues[i] != NULL) {
@@ -73,7 +73,7 @@ int GPUVariableValueSet::getUniformsCode() const{
   return _uniformsCode;
 }
 
-int GPUVariableValueSet::getAttributesCode() const{
+int GPUVariableValueSet::getAttributesCode() const {
   if (_attributeCode == 0) {
     for (int i = 0; i <= _highestAttributeKey; i++) {
       if (_attributeValues[i] != NULL) {

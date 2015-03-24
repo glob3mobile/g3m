@@ -308,44 +308,42 @@ public class G3MWidget implements ChangedRendererInfoListener
   
     G3MEventContext ec = new G3MEventContext(IFactory.instance(), IStringUtils.instance(), _threadUtils, ILogger.instance(), IMathUtils.instance(), IJSONParser.instance(), _planet, _downloader, _effectsScheduler, _storage, _surfaceElevationProvider);
   
+      // notify the original event
+      notifyTouchEvent(ec, touchEvent);
   
-    // notify the original event
-    notifyTouchEvent(ec, touchEvent);
-  
-  
-    // creates DownUp event when a Down is immediately followed by an Up
-    if (touchEvent.getTouchCount() == 1)
-    {
-      final TouchEventType eventType = touchEvent.getType();
-      if (eventType == TouchEventType.Down)
+      // creates DownUp event when a Down is immediately followed by an Up
+      //ILogger::instance()->logInfo("Touch Event: %i. Taps: %i. Touchs: %i",touchEvent->getType(), touchEvent->getTapCount(), touchEvent->getTouchCount());
+      if (touchEvent.getTouchCount() == 1)
       {
-        _clickOnProcess = true;
+        final TouchEventType eventType = touchEvent.getType();
+        if (eventType == TouchEventType.Down)
+        {
+          _clickOnProcess = true;
+        }
+        else
+        {
+          if (eventType == TouchEventType.Up)
+          {
+            if (_clickOnProcess)
+            {
+  
+              final Touch touch = touchEvent.getTouch(0);
+              final TouchEvent downUpEvent = TouchEvent.create(TouchEventType.DownUp, new Touch(touch));
+  
+              notifyTouchEvent(ec, downUpEvent);
+  
+              if (downUpEvent != null)
+                 downUpEvent.dispose();
+            }
+          }
+          _clickOnProcess = false;
+        }
       }
       else
       {
-        if (eventType == TouchEventType.Up)
-        {
-          if (_clickOnProcess)
-          {
-  
-            final Touch touch = touchEvent.getTouch(0);
-            final TouchEvent downUpEvent = TouchEvent.create(TouchEventType.DownUp, new Touch(touch));
-  
-            notifyTouchEvent(ec, downUpEvent);
-  
-            if (downUpEvent != null)
-               downUpEvent.dispose();
-          }
-        }
         _clickOnProcess = false;
       }
     }
-    else
-    {
-      _clickOnProcess = false;
-    }
-  
-  }
 
   public final void onResizeViewportEvent(int width, int height)
   {
@@ -679,17 +677,28 @@ public class G3MWidget implements ChangedRendererInfoListener
   //  }
   //}
   
-  public final void changedRendererInfo(int rendererIdentifier, java.util.ArrayList<String> info)
+  public final void changedRendererInfo(int rendererIdentifier, java.util.ArrayList<Info> info)
   {
     if(_infoDisplay != null)
     {
       _infoDisplay.changedInfo(info);
     }
-    else
-    {
-      ILogger.instance().logWarning("Render Infos are changing and InfoDisplay is NULL");
-    }
+  //  else {
+  //    ILogger::instance()->logWarning("Render Infos are changing and InfoDisplay is NULL");
+  //  }
   }
+
+  public final void removeAllPeriodicalTasks()
+  {
+    for (int i = 0; i < _periodicalTasks.size(); i++)
+    {
+      PeriodicalTask periodicalTask = _periodicalTasks.get(i);
+      if (periodicalTask != null)
+         periodicalTask.dispose();
+    }
+    _periodicalTasks.clear();
+  }
+
 
   private IStorage _storage;
   private IDownloader _downloader;
@@ -846,6 +855,14 @@ public class G3MWidget implements ChangedRendererInfoListener
   
     _renderContext = new G3MRenderContext(_frameTasksExecutor, IFactory.instance(), IStringUtils.instance(), _threadUtils, ILogger.instance(), IMathUtils.instance(), IJSONParser.instance(), _planet, _gl, _currentCamera, _nextCamera, _texturesHandler, _downloader, _effectsScheduler, IFactory.instance().createTimer(), _storage, _gpuProgramManager, _surfaceElevationProvider);
   
+  
+  ///#ifdef C_CODE
+  //  delete _rendererState;
+  //  _rendererState = new RenderState( calculateRendererState() );
+  ///#endif
+  ///#ifdef JAVA_CODE
+  //  _rendererState = calculateRendererState();
+  ///#endif
   }
 
   private void notifyTouchEvent(G3MEventContext ec, TouchEvent touchEvent)

@@ -44,7 +44,7 @@ public class TextureHolder
     isb.addString("(#");
     isb.addString(_glTextureId.description());
     isb.addString(", counter=");
-    isb.addInt(_referenceCounter);
+    isb.addLong(_referenceCounter);
     isb.addString(")");
     final String s = isb.getString();
     if (isb != null)

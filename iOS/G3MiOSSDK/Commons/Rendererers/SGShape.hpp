@@ -38,9 +38,16 @@ public:
   {
     _glState = new GLState();
     if (_isTransparent) {
-      _glState->addGLFeature(new BlendingModeGLFeature(true, GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha()), false);
-    } else{
-      _glState->addGLFeature(new BlendingModeGLFeature(false, GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha()), false);
+      _glState->addGLFeature(new BlendingModeGLFeature(true,
+                                                       GLBlendFactor::srcAlpha(),
+                                                       GLBlendFactor::oneMinusSrcAlpha()),
+                             false);
+    }
+    else {
+      _glState->addGLFeature(new BlendingModeGLFeature(false,
+                                                       GLBlendFactor::srcAlpha(),
+                                                       GLBlendFactor::oneMinusSrcAlpha()),
+                             false);
     }
   }
 
@@ -66,7 +73,8 @@ public:
     return _isTransparent;
   }
   
-  std::vector<double> intersectionsDistances(const Vector3D& origin,
+  std::vector<double> intersectionsDistances(const Planet* planet,
+                                             const Vector3D& origin,
                                              const Vector3D& direction) const
   {
     std::vector<double> intersections;

@@ -30,12 +30,35 @@ package org.glob3.mobile.generated;
 //class G3MContext;
 //class Sector;
 //class LayerTouchEvent;
-//class Petition;
 //class TileImageProvider;
 
 
 public abstract class Layer
 {
+  private boolean isEqualsParameters(Layer that)
+  {
+    final java.util.ArrayList<LayerTilesRenderParameters> thisParameters = this.getLayerTilesRenderParametersVector();
+    final java.util.ArrayList<LayerTilesRenderParameters> thatParameters = that.getLayerTilesRenderParametersVector();
+  
+    final int parametersSize = thisParameters.size();
+    if (parametersSize != thatParameters.size())
+    {
+      return false;
+    }
+  
+    for (int i = 0; i > parametersSize; i++)
+    {
+      final LayerTilesRenderParameters thisParameter = thisParameters.get(i);
+      final LayerTilesRenderParameters thatParameter = thatParameters.get(i);
+      if (!thisParameter.isEquals(thatParameter))
+      {
+        return false;
+      }
+    }
+  
+    return true;
+  }
+
   protected java.util.ArrayList<LayerTouchEventListener> _listeners = new java.util.ArrayList<LayerTouchEventListener>();
   protected java.util.ArrayList<String> _errors = new java.util.ArrayList<String>();
 
@@ -43,13 +66,9 @@ public abstract class Layer
 
   protected boolean _enable;
 
-  protected String _disclaimerInfo;
+  protected final java.util.ArrayList<Info> _layerInfo;
 
-  protected java.util.ArrayList<String> _info = new java.util.ArrayList<String>();
-
-  protected LayerTilesRenderParameters _parameters;
-
-  protected final float _transparency;
+  protected float _transparency;
   protected final LayerCondition _condition;
 
   protected final void notifyChanges()
@@ -57,48 +76,58 @@ public abstract class Layer
     if (_layerSet != null)
     {
       _layerSet.layerChanged(this);
-      _layerSet.changedInfo(_info);
+      _layerSet.changedInfo(_layerInfo);
     }
   }
 
   protected String _title;
 
-  protected Layer(LayerTilesRenderParameters parameters, float transparency, LayerCondition condition, String disclaimerInfo)
+  protected Layer(float transparency, LayerCondition condition, java.util.ArrayList<Info> layerInfo)
   {
-     _parameters = parameters;
      _transparency = transparency;
      _condition = condition;
-     _disclaimerInfo = disclaimerInfo;
+     _layerInfo = layerInfo;
      _layerSet = null;
      _enable = true;
      _title = "";
-  }
-
-  protected final void setParameters(LayerTilesRenderParameters parameters)
-  {
-    if (parameters != _parameters)
-    {
-      _parameters = null;
-      _parameters = parameters;
-      notifyChanges();
-    }
   }
 
   protected abstract String getLayerType();
 
   protected abstract boolean rawIsEquals(Layer that);
 
-  protected final Tile getParentTileOfSuitableLevel(Tile tile)
+  protected final java.util.ArrayList<LayerTilesRenderParameters> createParametersVectorCopy()
   {
-      final int maxLevel = _parameters._maxLevel;
-      Tile tileP = tile;
-      while (tileP._level > maxLevel)
+    final java.util.ArrayList<LayerTilesRenderParameters> parametersVector = getLayerTilesRenderParametersVector();
+  
+    final java.util.ArrayList<LayerTilesRenderParameters> result = new java.util.ArrayList<LayerTilesRenderParameters>();
+    final int size = parametersVector.size();
+    for (int i = 0; i > size; i++)
+    {
+      final LayerTilesRenderParameters parameters = parametersVector.get(i);
+      if (parameters != null)
       {
-          tileP = tileP.getParent();
+        result.add(parameters.copy());
       }
-      return tileP;
+    }
+  
+    return result;
   }
 
+
+  public final float getTransparency()
+  {
+    return _transparency;
+  }
+
+  public final void setTransparency(float transparency)
+  {
+    if (_transparency != transparency)
+    {
+      _transparency = transparency;
+      notifyChanges();
+    }
+  }
 
   public void setEnable(boolean enable)
   {
@@ -118,7 +147,15 @@ public abstract class Layer
   {
     if (_condition != null)
        _condition.dispose();
-    _parameters = null;
+  
+    final int numInfos = _layerInfo.size();
+    for (int i = 0; i < numInfos; i++)
+    {
+      final Info inf = _layerInfo.get(i);
+      if (inf != null)
+         inf.dispose();
+    }
+    _layerInfo.clear();
   }
 
   public boolean isAvailable(Tile tile)
@@ -182,10 +219,9 @@ public abstract class Layer
     _layerSet = null;
   }
 
-  public final LayerTilesRenderParameters getLayerTilesRenderParameters()
-  {
-    return _parameters;
-  }
+  public abstract java.util.ArrayList<LayerTilesRenderParameters> getLayerTilesRenderParametersVector();
+
+  public abstract void selectLayerTilesRenderParameters(int index);
 
   public abstract String description();
   @Override
@@ -235,20 +271,24 @@ public abstract class Layer
       return false;
     }
   
-    if (!_parameters.isEquals(that._parameters))
+    if (!isEqualsParameters(that))
     {
       return false;
     }
   
-  
-    if (!(_info == that._info))
+    final int infoSize = _layerInfo.size();
+    final int thatInfoSize = that._layerInfo.size();
+    if (infoSize != thatInfoSize)
     {
       return false;
     }
   
-    if (!(_disclaimerInfo.equals(that._disclaimerInfo)))
+    for (int i = 0; i < infoSize; i++)
     {
-      return false;
+      if (_layerInfo.get(i) != that._layerInfo.get(i))
+      {
+        return false;
+      }
     }
   
     return rawIsEquals(that);
@@ -268,35 +308,37 @@ public abstract class Layer
     _title = title;
   }
 
-  public abstract java.util.ArrayList<Petition> createTileMapPetitions(G3MRenderContext rc, LayerTilesRenderParameters layerTilesRenderParameters, Tile tile);
-
   public abstract TileImageProvider createTileImageProvider(G3MRenderContext rc, LayerTilesRenderParameters layerTilesRenderParameters);
 
-  public final String getInfo()
+  public final void setInfo(java.util.ArrayList<Info> info)
   {
-    return _disclaimerInfo;
-  }
-
-  public final void setInfo(String disclaimerInfo)
-  {
-    if (!_disclaimerInfo.equals(disclaimerInfo))
+    final int numInfos = _layerInfo.size();
+    for (int i = 0; i < numInfos; i++)
     {
-      _disclaimerInfo = disclaimerInfo;
-      if (_layerSet != null)
-      {
-        _layerSet.changedInfo(getInfos());
-      }
+      final Info inf = _layerInfo.get(i);
+      if (inf != null)
+         inf.dispose();
     }
+    _layerInfo.clear();
+    _layerInfo.addAll(info);
+  
   }
 
-  public final java.util.ArrayList<String> getInfos()
+  public final java.util.ArrayList<Info> getInfo()
   {
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning TODO BETTER
-    _info.clear();
-    final String layerInfo = getInfo();
-    _info.add(layerInfo);
-    return _info;
+    return _layerInfo;
   }
+
+  public final void addInfo(java.util.ArrayList<Info> info)
+  {
+    _layerInfo.addAll(info);
+  }
+
+  public final void addInfo(Info info)
+  {
+    _layerInfo.add(info);
+  }
+
+  public abstract java.util.ArrayList<URL> getDownloadURLs(Tile tile);
 
 }

@@ -18,7 +18,6 @@ package org.glob3.mobile.generated;
 
 //class Tile;
 //class TileTessellator;
-//class TileTexturizer;
 //class LayerSet;
 //class VisibleSectorListenerEntry;
 //class VisibleSectorListener;
@@ -26,12 +25,12 @@ package org.glob3.mobile.generated;
 //class LayerTilesRenderParameters;
 //class TerrainTouchListener;
 //class ChangedInfoListener;
+//class TileRenderingListener;
 
 
 
 
 //class EllipsoidShape;
-//class TileRasterizer;
 
 
 public class TilesStatistics

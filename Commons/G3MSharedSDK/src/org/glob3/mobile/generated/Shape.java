@@ -173,17 +173,25 @@ public abstract class Shape implements SurfaceElevationListener, EffectTarget
     return _roll;
   }
 
-  public final void setPosition(Geodetic3D position, AltitudeMode altitudeMode)
-  {
-    if (_position != null)
-       _position.dispose();
-    _position = position;
-    _altitudeMode = altitudeMode;
-    cleanTransformMatrix();
-  }
+//  void setPosition(Geodetic3D* position,
+//                   AltitudeMode altitudeMode);
 
+
+  //void Shape::setPosition(Geodetic3D* position,
+  //                        AltitudeMode altitudeMode) {
+  //  delete _position;
+  //  _position = position;
+  //  _altitudeMode = altitudeMode;
+  //  cleanTransformMatrix();
+  //}
+  
   public final void setPosition(Geodetic3D position)
   {
+    if (_altitudeMode == AltitudeMode.RELATIVE_TO_GROUND)
+    {
+      throw new RuntimeException("Position change with (_altitudeMode == RELATIVE_TO_GROUND) not supported");
+    }
+  
     if (_position != null)
        _position.dispose();
     _position = position;
@@ -205,13 +213,21 @@ public abstract class Shape implements SurfaceElevationListener, EffectTarget
     addShapeEffect(effect);
   }
 
-  public final void setAnimatedPosition(TimeInterval duration, Geodetic3D position, Angle pitch, Angle heading, Angle roll)
+  public final void setAnimatedPosition(TimeInterval duration, Geodetic3D position, Angle pitch, Angle heading, Angle roll, boolean linearInterpolation, boolean forceToPositionOnCancel)
   {
-     setAnimatedPosition(duration, position, pitch, heading, roll, false);
+     setAnimatedPosition(duration, position, pitch, heading, roll, linearInterpolation, forceToPositionOnCancel, true);
   }
   public final void setAnimatedPosition(TimeInterval duration, Geodetic3D position, Angle pitch, Angle heading, Angle roll, boolean linearInterpolation)
   {
-    Effect effect = new ShapeFullPositionEffect(duration, this, _position, position, _pitch, pitch, _heading, heading, _roll, roll, linearInterpolation);
+     setAnimatedPosition(duration, position, pitch, heading, roll, linearInterpolation, true, true);
+  }
+  public final void setAnimatedPosition(TimeInterval duration, Geodetic3D position, Angle pitch, Angle heading, Angle roll)
+  {
+     setAnimatedPosition(duration, position, pitch, heading, roll, false, true, true);
+  }
+  public final void setAnimatedPosition(TimeInterval duration, Geodetic3D position, Angle pitch, Angle heading, Angle roll, boolean linearInterpolation, boolean forceToPositionOnCancel, boolean forceToPositionOnStop)
+  {
+    Effect effect = new ShapeFullPositionEffect(duration, this, _position, position, _pitch, pitch, _heading, heading, _roll, roll, linearInterpolation, forceToPositionOnCancel, forceToPositionOnStop);
     addShapeEffect(effect);
   }
 
@@ -384,7 +400,7 @@ public abstract class Shape implements SurfaceElevationListener, EffectTarget
   {
   }
 
-  public abstract java.util.ArrayList<Double> intersectionsDistances(Vector3D origin, Vector3D direction);
+  public abstract java.util.ArrayList<Double> intersectionsDistances(Planet planet, Vector3D origin, Vector3D direction);
 
 
 }

@@ -65,4 +65,17 @@ public final class StringBuilder_WebGL
       return this;
    }
 
+
+   @Override
+   public IStringBuilder clear() {
+      _string = "";
+      return this;
+   }
+
+
+   @Override
+   public boolean contentEqualsTo(final String that) {
+      return _string.equals(that);
+   }
+
 }

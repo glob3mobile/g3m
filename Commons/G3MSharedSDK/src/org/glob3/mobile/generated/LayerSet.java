@@ -27,7 +27,6 @@ package org.glob3.mobile.generated;
 //class G3MEventContext;
 //class Geodetic3D;
 //class RenderState;
-//class Petition;
 
 
 public class LayerSet implements ChangedInfoListener
@@ -40,7 +39,8 @@ public class LayerSet implements ChangedInfoListener
 
   //  mutable LayerTilesRenderParameters* _layerTilesRenderParameters;
   private java.util.ArrayList<String> _errors = new java.util.ArrayList<String>();
-  private java.util.ArrayList<String> _infos = new java.util.ArrayList<String>();
+
+  private final java.util.ArrayList<Info> _infos = new java.util.ArrayList<Info>();
 
   private void layersChanged()
   {
@@ -94,6 +94,132 @@ public class LayerSet implements ChangedInfoListener
     return (compositeTileImageProvider == null) ? singleTileImageProvider : compositeTileImageProvider;
   }
 
+  private boolean checkLayersDataSector(boolean forceFirstLevelTilesRenderOnStart, java.util.ArrayList<String> errors)
+  {
+  
+    if (forceFirstLevelTilesRenderOnStart)
+    {
+      Sector biggestDataSector = null;
+  
+      final int layersCount = _layers.size();
+      double biggestArea = 0;
+      for (int i = 0; i < layersCount; i++)
+      {
+        Layer layer = _layers.get(i);
+        if (layer.isEnable())
+        {
+          final double layerArea = layer.getDataSector().getAngularAreaInSquaredDegrees();
+          if (layerArea > biggestArea)
+          {
+            if (biggestDataSector != null)
+               biggestDataSector.dispose();
+            biggestDataSector = new Sector(layer.getDataSector());
+            biggestArea = layerArea;
+          }
+        }
+      }
+  
+      if (biggestDataSector != null)
+      {
+        boolean dataSectorsInconsistency = false;
+        for (int i = 0; i < layersCount; i++)
+        {
+          Layer layer = _layers.get(i);
+          if (layer.isEnable())
+          {
+            if (!biggestDataSector.fullContains(layer.getDataSector()))
+            {
+              dataSectorsInconsistency = true;
+              break;
+            }
+          }
+        }
+  
+        if (biggestDataSector != null)
+           biggestDataSector.dispose();
+  
+        if (dataSectorsInconsistency)
+        {
+          errors.add("Inconsistency in layers data sectors");
+          return false;
+        }
+      }
+    }
+  
+    return true;
+  }
+
+  private boolean checkLayersRenderState(java.util.ArrayList<String> errors, java.util.ArrayList<Layer> enableLayers)
+  {
+    boolean layerSetNotReadyFlag = false;
+    for (int i = 0; i < _layers.size(); i++)
+    {
+      Layer layer = _layers.get(i);
+  
+      if (layer.isEnable())
+      {
+        enableLayers.add(layer);
+  
+        final RenderState layerRenderState = layer.getRenderState();
+        final RenderState_Type layerRenderStateType = layerRenderState._type;
+        if (layerRenderStateType != RenderState_Type.RENDER_READY)
+        {
+          if (layerRenderStateType == RenderState_Type.RENDER_ERROR)
+          {
+            final java.util.ArrayList<String> layerErrors = layerRenderState.getErrors();
+            errors.addAll(layerErrors);
+          }
+          layerSetNotReadyFlag = true;
+        }
+      }
+    }
+  
+    return !layerSetNotReadyFlag;
+  }
+
+  private LayerTilesRenderParameters checkAndComposeLayerTilesRenderParameters(boolean forceFirstLevelTilesRenderOnStart, java.util.ArrayList<Layer> enableLayers, java.util.ArrayList<String> errors)
+  {
+  
+    MutableLayerTilesRenderParameters mutableLayerTilesRenderParameters = new MutableLayerTilesRenderParameters();
+  
+    java.util.ArrayList<Layer> multiProjectionLayers = new java.util.ArrayList<Layer>();
+  
+    for (int i = 0; i < enableLayers.size(); i++)
+    {
+      Layer layer = enableLayers.get(i);
+  
+      final java.util.ArrayList<LayerTilesRenderParameters> layerParametersVector = layer.getLayerTilesRenderParametersVector();
+  
+      final int layerParametersVectorSize = layerParametersVector.size();
+      if (layerParametersVectorSize == 0)
+      {
+        continue;
+      }
+      else if (layerParametersVectorSize == 1)
+      {
+        if (!mutableLayerTilesRenderParameters.update(layerParametersVector.get(0), errors))
+        {
+          return null;
+        }
+      }
+      else
+      {
+        multiProjectionLayers.add(layer);
+      }
+    }
+  
+    for (int i = 0; i < multiProjectionLayers.size(); i++)
+    {
+      Layer layer = multiProjectionLayers.get(i);
+      if (!mutableLayerTilesRenderParameters.update(layer, errors))
+      {
+        return null;
+      }
+    }
+  
+    return mutableLayerTilesRenderParameters.create(errors);
+  }
+
   public LayerSet()
   //  _layerTilesRenderParameters(NULL),
   {
@@ -110,7 +236,11 @@ public class LayerSet implements ChangedInfoListener
       if (_layers.get(i) != null)
          _layers.get(i).dispose();
     }
-    _tileImageProvider._release();
+  
+    if (_tileImageProvider != null)
+    {
+      _tileImageProvider._release();
+    }
   }
 
   public final void removeAllLayers(boolean deleteLayers)
@@ -146,7 +276,7 @@ public class LayerSet implements ChangedInfoListener
     }
   
     layersChanged();
-    changedInfo(layer.getInfos());
+    changedInfo(layer.getInfo());
   }
 
   public final boolean onTerrainTouchEvent(G3MEventContext ec, Geodetic3D position, Tile tile)
@@ -240,6 +370,16 @@ public class LayerSet implements ChangedInfoListener
     _listener = listener;
   }
 
+  public final void setTileImageProvider(TileImageProvider tileImageProvider)
+  {
+    if (_tileImageProvider != null)
+    {
+      ILogger.instance().logError("TileImageProvider already set");
+    }
+    _tileImageProvider = tileImageProvider;
+  }
+
+
   public final Layer getLayer(int index)
   {
     if (index < _layers.size())
@@ -265,189 +405,19 @@ public class LayerSet implements ChangedInfoListener
 
   public final LayerTilesRenderParameters createLayerTilesRenderParameters(boolean forceFirstLevelTilesRenderOnStart, java.util.ArrayList<String> errors)
   {
-    Sector topSector = null;
-    int topSectorSplitsByLatitude = 0;
-    int topSectorSplitsByLongitude = 0;
-    int firstLevel = 0;
-    int maxLevel = 0;
-    int tileTextureWidth = 0;
-    int tileTextureHeight = 0;
-    int tileMeshWidth = 0;
-    int tileMeshHeight = 0;
-    boolean mercator = false;
-    Sector biggestDataSector = null;
   
-    boolean layerSetNotReadyFlag = false;
-    boolean first = true;
-    final int layersCount = _layers.size();
-  
-    if (forceFirstLevelTilesRenderOnStart && layersCount > 0)
-    {
-      double biggestArea = 0;
-      for (int i = 0; i < layersCount; i++)
-      {
-        Layer layer = _layers.get(i);
-        if (layer.isEnable())
-        {
-          final double layerArea = layer.getDataSector().getAngularAreaInSquaredDegrees();
-          if (layerArea > biggestArea)
-          {
-            if (biggestDataSector != null)
-               biggestDataSector.dispose();
-            biggestDataSector = new Sector(layer.getDataSector());
-            biggestArea = layerArea;
-          }
-        }
-      }
-      if (biggestDataSector != null)
-      {
-        boolean dataSectorsInconsistency = false;
-        for (int i = 0; i < layersCount; i++)
-        {
-          Layer layer = _layers.get(i);
-          if (layer.isEnable())
-          {
-            if (!biggestDataSector.fullContains(layer.getDataSector()))
-            {
-              dataSectorsInconsistency = true;
-              break;
-            }
-          }
-        }
-        if (dataSectorsInconsistency)
-        {
-          errors.add("Inconsistency in layers data sectors");
-          return null;
-        }
-      }
-      if (biggestDataSector != null)
-         biggestDataSector.dispose();
-    }
-  
-    for (int i = 0; i < layersCount; i++)
-    {
-      Layer layer = _layers.get(i);
-  
-      if (layer.isEnable())
-      {
-        final RenderState layerRenderState = layer.getRenderState();
-        final RenderState_Type layerRenderStateType = layerRenderState._type;
-        if (layerRenderStateType != RenderState_Type.RENDER_READY)
-        {
-          if (layerRenderStateType == RenderState_Type.RENDER_ERROR)
-          {
-            final java.util.ArrayList<String> layerErrors = layerRenderState.getErrors();
-            errors.addAll(layerErrors);
-          }
-          layerSetNotReadyFlag = true;
-        }
-        else
-        {
-          final LayerTilesRenderParameters layerParam = layer.getLayerTilesRenderParameters();
-  
-          if (layerParam == null)
-          {
-            continue;
-          }
-  
-          if (first)
-          {
-            first = false;
-  
-            topSector = new Sector(layerParam._topSector);
-            topSectorSplitsByLatitude = layerParam._topSectorSplitsByLatitude;
-            topSectorSplitsByLongitude = layerParam._topSectorSplitsByLongitude;
-            firstLevel = layerParam._firstLevel;
-            maxLevel = layerParam._maxLevel;
-            tileTextureWidth = layerParam._tileTextureResolution._x;
-            tileTextureHeight = layerParam._tileTextureResolution._y;
-            tileMeshWidth = layerParam._tileMeshResolution._x;
-            tileMeshHeight = layerParam._tileMeshResolution._y;
-            mercator = layerParam._mercator;
-          }
-          else
-          {
-            if (mercator != layerParam._mercator)
-            {
-              errors.add("Inconsistency in Layer's Parameters: mercator");
-              if (topSector != null)
-                 topSector.dispose();
-              return null;
-            }
-  
-            if (!topSector.isEquals(layerParam._topSector))
-            {
-              errors.add("Inconsistency in Layer's Parameters: topSector");
-              if (topSector != null)
-                 topSector.dispose();
-              return null;
-            }
-  
-            if (topSectorSplitsByLatitude != layerParam._topSectorSplitsByLatitude)
-            {
-              errors.add("Inconsistency in Layer's Parameters: topSectorSplitsByLatitude");
-              if (topSector != null)
-                 topSector.dispose();
-              return null;
-            }
-  
-            if (topSectorSplitsByLongitude != layerParam._topSectorSplitsByLongitude)
-            {
-              errors.add("Inconsistency in Layer's Parameters: topSectorSplitsByLongitude");
-              if (topSector != null)
-                 topSector.dispose();
-              return null;
-            }
-  
-            if ((tileTextureWidth != layerParam._tileTextureResolution._x) || (tileTextureHeight != layerParam._tileTextureResolution._y))
-            {
-              errors.add("Inconsistency in Layer's Parameters: tileTextureResolution");
-              if (topSector != null)
-                 topSector.dispose();
-              return null;
-            }
-  
-            if ((tileMeshWidth != layerParam._tileMeshResolution._x) || (tileMeshHeight != layerParam._tileMeshResolution._y))
-            {
-              errors.add("Inconsistency in Layer's Parameters: tileMeshResolution");
-              if (topSector != null)
-                 topSector.dispose();
-              return null;
-            }
-  
-            if (maxLevel < layerParam._maxLevel)
-            {
-              ILogger.instance().logWarning("Inconsistency in Layer's Parameters: maxLevel (upgrading from %d to %d)", maxLevel, layerParam._maxLevel);
-              maxLevel = layerParam._maxLevel;
-            }
-  
-            if (firstLevel < layerParam._firstLevel)
-            {
-              ILogger.instance().logWarning("Inconsistency in Layer's Parameters: firstLevel (upgrading from %d to %d)", firstLevel, layerParam._firstLevel);
-              firstLevel = layerParam._firstLevel;
-            }
-  
-          }
-        }
-      }
-    }
-  
-    if (layerSetNotReadyFlag)
+    if (!checkLayersDataSector(forceFirstLevelTilesRenderOnStart, errors))
     {
       return null;
     }
-    if (first)
+  
+    java.util.ArrayList<Layer> enableLayers = new java.util.ArrayList<Layer>();
+    if (!checkLayersRenderState(errors, enableLayers))
     {
-      errors.add("Can't find any enabled Layer");
       return null;
     }
   
-    LayerTilesRenderParameters parameters = new LayerTilesRenderParameters(topSector, topSectorSplitsByLatitude, topSectorSplitsByLongitude, firstLevel, maxLevel, new Vector2I(tileTextureWidth, tileTextureHeight), new Vector2I(tileMeshWidth, tileMeshHeight), mercator);
-  
-    if (topSector != null)
-       topSector.dispose();
-  
-    return parameters;
+    return checkAndComposeLayerTilesRenderParameters(forceFirstLevelTilesRenderOnStart, enableLayers, errors);
   }
 
   public final boolean isEquals(LayerSet that)
@@ -510,46 +480,6 @@ public class LayerSet implements ChangedInfoListener
     }
   }
 
-  public final java.util.ArrayList<Petition> createTileMapPetitions(G3MRenderContext rc, LayerTilesRenderParameters layerTilesRenderParameters, Tile tile)
-  {
-    java.util.ArrayList<Petition> petitions = new java.util.ArrayList<Petition>();
-  
-    final int layersSize = _layers.size();
-    for (int i = 0; i < layersSize; i++)
-    {
-      Layer layer = _layers.get(i);
-      if (layer.isAvailable(tile))
-      {
-        Tile petitionTile = tile;
-        final int maxLevel = layer.getLayerTilesRenderParameters()._maxLevel;
-        while ((petitionTile._level > maxLevel) && (petitionTile != null))
-        {
-          petitionTile = petitionTile.getParent();
-        }
-  
-        if (petitionTile == null)
-        {
-          ILogger.instance().logError("Can't find a valid tile for petitions");
-        }
-  
-        java.util.ArrayList<Petition> tilePetitions = layer.createTileMapPetitions(rc, layerTilesRenderParameters, petitionTile);
-  
-        final int tilePetitionsSize = tilePetitions.size();
-        for (int j = 0; j < tilePetitionsSize; j++)
-        {
-          petitions.add(tilePetitions.get(j));
-        }
-      }
-    }
-  
-    if (petitions.isEmpty())
-    {
-      rc.getLogger().logWarning("Can't create map petitions for tile %s", tile._id);
-    }
-  
-    return petitions;
-  }
-
   public final TileImageProvider getTileImageProvider(G3MRenderContext rc, LayerTilesRenderParameters layerTilesRenderParameters)
   {
     if (_tileImageProvider == null)
@@ -567,12 +497,14 @@ public class LayerSet implements ChangedInfoListener
       ILogger.instance().logError("Changed Info Listener of LayerSet already set");
       return;
     }
-    ILogger.instance().logError("Changed Info Listener of LayerSet set ok");
     _changedInfoListener = changedInfoListener;
-    changedInfo(getInfo());
+    if (_changedInfoListener != null)
+    {
+      _changedInfoListener.changedInfo(getInfo());
+    }
   }
 
-  public final java.util.ArrayList<String> getInfo()
+  public final java.util.ArrayList<Info> getInfo()
   {
     _infos.clear();
     final int layersCount = _layers.size();
@@ -581,14 +513,18 @@ public class LayerSet implements ChangedInfoListener
       Layer layer = _layers.get(i);
       if (layer.isEnable())
       {
-        final String layerInfo = layer.getInfo();
-        _infos.add(layerInfo);
+        final java.util.ArrayList<Info> layerInfo = layer.getInfo();
+        final int infoSize = layerInfo.size();
+        for (int j = 0; j < infoSize; j++)
+        {
+          _infos.add(layerInfo.get(j));
+        }
       }
     }
     return _infos;
   }
 
-  public final void changedInfo(java.util.ArrayList<String> info)
+  public final void changedInfo(java.util.ArrayList<Info> info)
   {
     if (_changedInfoListener != null)
     {

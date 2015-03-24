@@ -110,6 +110,14 @@ public class Vector3D
 
   public final Vector3D normalized()
   {
+    if (isNan())
+    {
+      return nan();
+    }
+    if (isZero())
+    {
+      return zero;
+    }
     final double d = length();
     return new Vector3D(_x / d, _y / d, _z / d);
   }
@@ -149,6 +157,11 @@ public class Vector3D
     return new Vector3D(_x - v._x, _y - v._y, _z - v._z);
   }
 
+  public final Vector3D sub(MutableVector3D v)
+  {
+    return new Vector3D(_x - v.x(), _y - v.y(), _z - v.z());
+  }
+
   public final Vector3D sub(double d)
   {
     return new Vector3D(_x - d, _y - d, _z - d);
@@ -181,24 +194,11 @@ public class Vector3D
 
   public final Angle angleBetween(Vector3D other)
   {
-    return Angle.fromRadians(angleInRadiansBetween(other));
+    return Angle.fromRadians(Vector3D.angleInRadiansBetween(this, other));
   }
   public final double angleInRadiansBetween(Vector3D other)
   {
-    final Vector3D v1 = normalized();
-    final Vector3D v2 = other.normalized();
-  
-    double c = v1.dot(v2);
-    if (c > 1.0)
-    {
-      c = 1.0;
-    }
-    else if (c < -1.0)
-    {
-      c = -1.0;
-    }
-  
-    return IMathUtils.instance().acos(c);
+    return angleInRadiansBetween(this, other);
   }
   public final Angle signedAngleBetween(Vector3D other, Vector3D up)
   {
@@ -211,14 +211,75 @@ public class Vector3D
     return angle.times(-1);
   }
 
+  public static double normalizedDot(Vector3D a, Vector3D b)
+  {
+    final double aLength = a.length();
+    final double a_x = a._x / aLength;
+    final double a_y = a._y / aLength;
+    final double a_z = a._z / aLength;
+  
+    final double bLength = b.length();
+    final double b_x = b._x / bLength;
+    final double b_y = b._y / bLength;
+    final double b_z = b._z / bLength;
+  
+    return ((a_x * b_x) + (a_y * b_y) + (a_z * b_z));
+  }
+
+  public static double normalizedDot(Vector3D a, MutableVector3D b)
+  {
+    final double aLength = a.length();
+    final double a_x = a._x / aLength;
+    final double a_y = a._y / aLength;
+    final double a_z = a._z / aLength;
+  
+    final double bLength = b.length();
+    final double b_x = b.x() / bLength;
+    final double b_y = b.y() / bLength;
+    final double b_z = b.z() / bLength;
+  
+    return ((a_x * b_x) + (a_y * b_y) + (a_z * b_z));
+  }
+
+  public static double angleInRadiansBetween(Vector3D a, Vector3D b)
+  {
+    double c = Vector3D.normalizedDot(a, b);
+    if (c > 1.0)
+    {
+      c = 1.0;
+    }
+    else if (c < -1.0)
+    {
+      c = -1.0;
+    }
+    return IMathUtils.instance().acos(c);
+  }
+
+  public static double angleInRadiansBetween(Vector3D a, MutableVector3D b)
+  {
+    double c = Vector3D.normalizedDot(a, b);
+    if (c > 1.0)
+    {
+      c = 1.0;
+    }
+    else if (c < -1.0)
+    {
+      c = -1.0;
+    }
+    return IMathUtils.instance().acos(c);
+  }
+
+  public static Angle angleBetween(Vector3D a, Vector3D b)
+  {
+    return Angle.fromRadians(angleInRadiansBetween(a, b));
+  }
+
   public final Vector3D rotateAroundAxis(Vector3D axis, Angle theta)
   {
     final double u = axis._x;
     final double v = axis._y;
     final double w = axis._z;
   
-  //  const double cosTheta = theta.cosinus();
-  //  const double sinTheta = theta.sinus();
     final double cosTheta = java.lang.Math.cos(theta._radians);
     final double sinTheta = java.lang.Math.sin(theta._radians);
   

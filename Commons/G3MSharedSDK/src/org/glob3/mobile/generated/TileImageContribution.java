@@ -55,6 +55,17 @@ public class TileImageContribution extends RCObject
        _alpha = alpha;
     }
 
+//  TileImageContribution(const Sector& sector,
+//                        bool isFullCoverage,
+//                        bool isTransparent,
+//                        float alpha) :
+//  _isFullCoverage(isFullCoverage),
+//  _sector(sector),
+//  _isTransparent(isTransparent),
+//  _alpha(alpha)
+//  {
+//  }
+
     public void dispose()
     {
         super.dispose();
@@ -130,7 +141,7 @@ public class TileImageContribution extends RCObject
 
     public final boolean isFullCoverageAndOpaque()
     {
-        return _isFullCoverage && !_isTransparent && (_alpha >= 0.99);
+        return _isFullCoverage && !_isTransparent && isOpaque();
     }
 
     public final boolean isFullCoverage()
@@ -148,8 +159,9 @@ public class TileImageContribution extends RCObject
         return (_alpha >= 0.99);
     }
 
-    //  bool isTransparent() const {
-    //    return _isTransparent;
-    //  }
+    public final boolean isTransparent()
+    {
+        return _isTransparent;
+    }
 
 }

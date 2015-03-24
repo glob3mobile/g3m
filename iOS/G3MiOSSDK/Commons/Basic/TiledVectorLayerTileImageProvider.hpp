@@ -21,6 +21,7 @@ class GEORasterSymbolizer;
 #include "Vector2I.hpp"
 #include "Sector.hpp"
 #include "IImageListener.hpp"
+#include <list>
 
 class TiledVectorLayerTileImageProvider : public TileImageProvider {
 private:
@@ -42,13 +43,24 @@ private:
     void imageCreated(const IImage* image);
   };
 
+  class GEOObjectHolder;
+
   class GEOJSONBufferRasterizer : public GAsyncTask {
   private:
-    ImageAssembler* _imageAssembler;
-    IByteBuffer*    _buffer;
-    ICanvas*        _canvas;
-    const int       _imageWidth;
-    const int       _imageHeight;
+#ifdef C_CODE
+    const URL       _url;
+#endif
+#ifdef JAVA_CODE
+    private final URL _url;
+#endif
+    ImageAssembler*        _imageAssembler;
+    IByteBuffer*           _buffer;
+    const GEOObjectHolder* _geoObjectHolder;
+    GEOObject*             _geoObject;
+    const bool             _geoObjectFromCache;
+    ICanvas*               _canvas;
+    const int              _imageWidth;
+    const int              _imageHeight;
 
 #ifdef C_CODE
     const GEORasterSymbolizer* _symbolizer;
@@ -56,32 +68,40 @@ private:
 #ifdef JAVA_CODE
     private GEORasterSymbolizer _symbolizer;
 #endif
-    const Sector _tileSector;
-    const bool   _tileIsMercator;
-    const int    _tileLevel;
+    const std::string _tileId;
+    const Sector      _tileSector;
+    const bool        _tileIsMercator;
+    const int         _tileLevel;
 
-    const std::string _imageId;
+    void rasterizeGEOObject(const GEOObject* geoObject);
+
 
   public:
-    GEOJSONBufferRasterizer(ImageAssembler* imageAssembler,
-                            IByteBuffer* buffer,
-                            const int imageWidth,
-                            const int imageHeight,
+    GEOJSONBufferRasterizer(ImageAssembler*            imageAssembler,
+                            const URL&                 url,
+                            IByteBuffer*               buffer,          // buffer or
+                            const GEOObjectHolder*     geoObjectHolder, // GEOObjectHolder, never both
+                            const int                  imageWidth,
+                            const int                  imageHeight,
                             const GEORasterSymbolizer* symbolizer,
-                            const Sector& tileSector,
-                            const bool   tileIsMercator,
-                            const int    tileLevel,
-                            const std::string& imageId) :
+                            const std::string&         tileId,
+                            const Sector&              tileSector,
+                            const bool                 tileIsMercator,
+                            const int                  tileLevel) :
     _imageAssembler(imageAssembler),
+    _url(url),
     _buffer(buffer),
+    _geoObjectHolder(geoObjectHolder),
+    _geoObjectFromCache( geoObjectHolder != NULL ),
     _imageWidth(imageWidth),
     _imageHeight(imageHeight),
     _symbolizer(symbolizer),
+    _tileId(tileId),
     _tileSector(tileSector),
     _tileIsMercator(tileIsMercator),
     _tileLevel(tileLevel),
-    _imageId(imageId),
-    _canvas(NULL)
+    _canvas(NULL),
+    _geoObject(NULL)
     {
     }
 
@@ -187,25 +207,65 @@ private:
 
     void cancel();
 
-    void bufferDownloaded(IByteBuffer* buffer,
-                          const std::string& imageId);
+    void bufferDownloaded(const URL& url,
+                          IByteBuffer* buffer);
     void bufferDownloadError(const URL& url);
     void bufferDownloadCanceled();
 
-    void rasterizedGEOObject(ICanvas* canvas,
-                             const std::string& imageId);
+    void rasterizedGEOObject(const URL& url,
+                             GEOObject* geoObject,
+                             ICanvas* canvas);
     void deletedRasterizer();
 
     void imageCreated(const IImage* image,
                       const std::string& imageId);
+
   };
 
 
+#ifdef C_CODE
   const TiledVectorLayer* _layer;
+#endif
+#ifdef JAVA_CODE
+  private TiledVectorLayer _layer;
+#endif
   IDownloader*            _downloader;
   const IThreadUtils*     _threadUtils;
 
   std::map<const std::string, ImageAssembler*> _assemblers;
+
+  class GEOObjectHolder : public RCObject {
+  public:
+    const GEOObject* _geoObject;
+
+    GEOObjectHolder(const GEOObject* geoObject) :
+    _geoObject(geoObject)
+    {
+    }
+
+    ~GEOObjectHolder();
+
+  };
+
+  class CacheEntry {
+  public:
+    const std::string      _path;
+    const GEOObjectHolder* _geoObjectHolder;
+
+    CacheEntry(const std::string& path,
+               const GEOObject*   geoObject) :
+    _path(path),
+    _geoObjectHolder(new GEOObjectHolder(geoObject))
+    {
+    }
+
+    ~CacheEntry();
+  };
+
+  std::list<CacheEntry*> _geoObjectsCache;
+
+protected:
+  ~TiledVectorLayerTileImageProvider();
 
 public:
 
@@ -218,6 +278,7 @@ public:
   {
   }
 
+  void layerDeleted(const TiledVectorLayer* layer);
 
   const TileImageContribution* contribution(const Tile* tile);
 
@@ -233,6 +294,10 @@ public:
   void cancel(const std::string& tileId);
 
   void requestFinish(const std::string& tileId);
+
+  const GEOObjectHolder* getGEOObjectFor(const URL& url);
+  void takeGEOObjectFor(const URL& url,
+                        GEOObject* geoObject);
 
 };
 

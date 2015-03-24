@@ -425,32 +425,27 @@ public class GPUProgram
     {
       u = getGPUUniformBool(name);
     }
+    else if (type == GLType.glVec2Float())
+    {
+      u = getGPUUniformVec2Float(name);
+    }
+    else if (type == GLType.glVec4Float())
+    {
+      u = getGPUUniformVec4Float(name);
+    }
+    else if (type == GLType.glFloat())
+    {
+      u = getGPUUniformFloat(name);
+    }
+    else if (type == GLType.glMatrix4Float())
+    {
+      u = getGPUUniformMatrix4Float(name);
+    }
     else
     {
-      if (type == GLType.glVec2Float())
-      {
-        u = getGPUUniformVec2Float(name);
-      }
-      else
-      {
-        if (type == GLType.glVec4Float())
-        {
-          u = getGPUUniformVec4Float(name);
-        }
-        else
-        {
-          if (type == GLType.glFloat())
-          {
-            u = getGPUUniformFloat(name);
-          }
-          else
-            if (type == GLType.glMatrix4Float())
-            {
-              u = getGPUUniformMatrix4Float(name);
-            }
-        }
-      }
+      ILogger.instance().logError("Invalid uniform type");
     }
+  
     return u;
   }
 
@@ -486,20 +481,34 @@ public class GPUProgram
     GPUUniform u = _uniforms[key];
     if (u == null)
     {
+<<<<<<< HEAD
       ILogger.instance().logError("Uniform [key=%d] not found in program %s", key, _name);
       return;
+=======
+      ILogger.instance().logError("Uniform [key=%d] not found", key);
+>>>>>>> purgatory
     }
-    u.set(v);
+    else
+    {
+      u.set(v);
+    }
   }
   public final void setGPUAttributeValue(int key, GPUAttributeValue v)
   {
     GPUAttribute a = _attributes[key];
     if (a == null)
     {
+<<<<<<< HEAD
       ILogger.instance().logError("Attribute [key=%d] not found in program %s", key, _name);
       return;
+=======
+      ILogger.instance().logError("Attribute [key=%d] not found", key);
+>>>>>>> purgatory
     }
-    a.set(v);
+    else
+    {
+      a.set(v);
+    }
   }
 
   public final void addReference()

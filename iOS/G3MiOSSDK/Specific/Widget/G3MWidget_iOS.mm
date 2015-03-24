@@ -75,7 +75,7 @@ autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
                                                               Color::white());
 
   InitialCameraPositionProvider* icpp = new SimpleInitialCameraPositionProvider();
-  
+    
   _widgetVP = G3MWidget::create([_renderer getGL],
                                 storage,
                                 downloader,
@@ -188,9 +188,9 @@ autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
     CGPoint tapPoint = [sender locationInView:sender.view];
 
     std::vector<const Touch*> pointers = std::vector<const Touch*>();
-    Touch *touch = new Touch(Vector2I((int) tapPoint.x,
-                                      (int) tapPoint.y),
-                             Vector2I(0, 0),
+    Touch *touch = new Touch(Vector2F((float)tapPoint.x,
+                                      (float)tapPoint.y),
+                             Vector2F::zero(),
                              1);
     pointers.push_back(touch);
 
@@ -299,10 +299,10 @@ autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
     CGPoint previous        = [uiTouch previousLocationInView:self];
     unsigned char tapCount  = (unsigned char) [uiTouch tapCount];
 
-    Touch* touch = new Touch(Vector2I((int) current.x,
-                                      (int) current.y),
-                             Vector2I((int) previous.x,
-                                      (int) previous.y),
+    Touch* touch = new Touch(Vector2F((float)current.x,
+                                      (float)current.y),
+                             Vector2F((float)previous.x,
+                                      (float)previous.y),
                              tapCount);
 
     pointers.push_back(touch);
@@ -329,10 +329,10 @@ autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
     CGPoint current  = [uiTouch locationInView:self];
     CGPoint previous = [uiTouch previousLocationInView:self];
 
-    Touch* touch = new Touch(Vector2I((int) current.x,
-                                      (int) current.y),
-                             Vector2I((int) previous.x,
-                                      (int) previous.y));
+    Touch* touch = new Touch(Vector2F((float)current.x,
+                                      (float)current.y),
+                             Vector2F((float)previous.x,
+                                      (float)previous.y));
 
     pointers.push_back(touch);
   }
@@ -345,9 +345,9 @@ autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
     if ((pointers.size() == 2) &&
         (_lastTouchEvent->getTouchCount() == 2)) {
 
-      const Vector2I current0 = pointers[0]->getPrevPos();
-      const Vector2I last0 = _lastTouchEvent->getTouch(0)->getPos();
-      const Vector2I last1 = _lastTouchEvent->getTouch(1)->getPos();
+      const Vector2F current0 = pointers[0]->getPrevPos();
+      const Vector2F last0 = _lastTouchEvent->getTouch(0)->getPos();
+      const Vector2F last1 = _lastTouchEvent->getTouch(1)->getPos();
       delete _lastTouchEvent;
       const double dist0 = current0.sub(last0).squaredLength();
       const double dist1 = current0.sub(last1).squaredLength();
@@ -390,10 +390,10 @@ autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
 
     [uiTouch timestamp];
 
-    Touch *touch = new Touch(Vector2I((int) current.x,
-                                      (int) current.y),
-                             Vector2I((int) previous.x,
-                                      (int) previous.y));
+    Touch *touch = new Touch(Vector2F((float)current.x,
+                                      (float)current.y),
+                             Vector2F((float)previous.x,
+                                      (float)previous.y));
 
     pointers.push_back(touch);
   }

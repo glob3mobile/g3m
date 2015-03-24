@@ -22,7 +22,7 @@ package org.glob3.mobile.generated;
 //class MeshRenderer;
 //class MarksRenderer;
 //class ShapesRenderer;
-//class GEOTileRasterizer;
+//class GEOVectorLayer;
 //class GEORenderer_ObjectSymbolizerPair;
 
 public class GEORenderer extends DefaultRenderer
@@ -88,7 +88,7 @@ public class GEORenderer extends DefaultRenderer
   private MeshRenderer _meshRenderer;
   private ShapesRenderer _shapesRenderer;
   private MarksRenderer _marksRenderer;
-  private GEOTileRasterizer _geoTileRasterizer;
+  private GEOVectorLayer _geoVectorLayer;
 
   private java.util.ArrayList<LoadQueueItem> _loadQueue = new java.util.ArrayList<LoadQueueItem>();
 
@@ -108,15 +108,16 @@ public class GEORenderer extends DefaultRenderer
    meshRenderer:   Can be NULL as long as no GEOMarkSymbol is used in any symbolizer.
    shapesRenderer: Can be NULL as long as no GEOShapeSymbol is used in any symbolizer.
    marksRenderer:  Can be NULL as long as no GEOMeshSymbol is used in any symbolizer.
+   geoVectorLayer: Can be NULL as long as no GEORasterSymbol is used in any symbolizer.
 
    */
-  public GEORenderer(GEOSymbolizer defaultSymbolizer, MeshRenderer meshRenderer, ShapesRenderer shapesRenderer, MarksRenderer marksRenderer, GEOTileRasterizer geoTileRasterizer)
+  public GEORenderer(GEOSymbolizer defaultSymbolizer, MeshRenderer meshRenderer, ShapesRenderer shapesRenderer, MarksRenderer marksRenderer, GEOVectorLayer geoVectorLayer)
   {
      _defaultSymbolizer = defaultSymbolizer;
      _meshRenderer = meshRenderer;
      _shapesRenderer = shapesRenderer;
      _marksRenderer = marksRenderer;
-     _geoTileRasterizer = geoTileRasterizer;
+     _geoVectorLayer = geoVectorLayer;
     initialize(null);
   }
 
@@ -188,7 +189,7 @@ public class GEORenderer extends DefaultRenderer
         {
           final GEOSymbolizer symbolizer = (pair._symbolizer == null) ? _defaultSymbolizer : pair._symbolizer;
   
-          pair._geoObject.symbolize(rc, symbolizer, _meshRenderer, _shapesRenderer, _marksRenderer, _geoTileRasterizer);
+          pair._geoObject.symbolize(rc, symbolizer, _meshRenderer, _shapesRenderer, _marksRenderer, _geoVectorLayer);
         }
   
         if (pair != null)
@@ -218,9 +219,22 @@ public class GEORenderer extends DefaultRenderer
     return _shapesRenderer;
   }
 
-  public final GEOTileRasterizer getGEOTileRasterizer()
+  public final GEOVectorLayer getGEOVectorLayer()
   {
-    return _geoTileRasterizer;
+    return _geoVectorLayer;
+  }
+
+  public final void setGEOVectorLayer(GEOVectorLayer geoVectorLayer, boolean deletePrevious)
+  {
+    if (geoVectorLayer != _geoVectorLayer)
+    {
+      if (deletePrevious)
+      {
+        if (_geoVectorLayer != null)
+           _geoVectorLayer.dispose();
+      }
+      _geoVectorLayer = geoVectorLayer;
+    }
   }
 
   public final void loadJSON(URL url)
@@ -283,9 +297,9 @@ public class GEORenderer extends DefaultRenderer
     {
       _marksRenderer.setEnable(enable);
     }
-    if (_geoTileRasterizer != null)
+    if (_geoVectorLayer != null)
     {
-      _geoTileRasterizer.setEnable(enable);
+      _geoVectorLayer.setEnable(enable);
     }
   }
 

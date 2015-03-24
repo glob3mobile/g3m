@@ -59,7 +59,6 @@ public class Geodetic3D
 
   public void dispose()
   {
-
   }
 
   public final Geodetic2D asGeodetic2D()

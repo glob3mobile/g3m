@@ -117,8 +117,8 @@
 
   [_lock lock];
 
-  const int listenersCount = [_listeners count];
-  for (int i = 0; i < listenersCount; i++) {
+  const size_t listenersCount = [_listeners count];
+  for (size_t i = 0; i < listenersCount; i++) {
     ListenerEntry* entry = [_listeners objectAtIndex: i];
     if ([entry requestId] == requestId) {
       [entry cancel];
@@ -139,8 +139,8 @@
 
   [_lock lock];
 
-  const int listenersCount = [_listeners count];
-  for (int i = 0; i < listenersCount; i++) {
+  const size_t listenersCount = [_listeners count];
+  for (size_t i = 0; i < listenersCount; i++) {
     ListenerEntry* entry = [_listeners objectAtIndex: i];
     if ([entry requestId] == requestId) {
       [[entry listener] onCancel:*_url];
@@ -192,6 +192,10 @@
       NSString* filePath = [[NSBundle mainBundle] pathForResource: fileName
                                                            ofType: fileExt];
       data = [NSData dataWithContentsOfFile:filePath];
+      if (!data) {
+        data = [NSData dataWithContentsOfURL:_nsURL];
+      }
+
       statusCode = (data) ? 200 : 404;
     }
     else {
@@ -223,7 +227,7 @@
                                       [[_nsURL absoluteString] UTF8String]);
       }
 
-      const int listenersCount = [_listeners count];
+      const size_t listenersCount = [_listeners count];
 
       const URL url( [[_nsURL absoluteString] cStringUsingEncoding:NSUTF8StringEncoding] , false);
 
@@ -247,10 +251,12 @@
       else {
         for (int i = 0; i < listenersCount; i++) {
           ListenerEntry* entry = [_listeners objectAtIndex: i];
-          
+
           [[entry listener] onErrorURL: url];
         }
       }
+      
+      [_listeners removeAllObjects];
       
       [_lock unlock];
     });

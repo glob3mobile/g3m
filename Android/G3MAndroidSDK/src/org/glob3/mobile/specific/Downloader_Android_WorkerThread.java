@@ -60,7 +60,7 @@ public final class Downloader_Android_WorkerThread
          }
          else {
             try {
-               Thread.sleep(25);
+               Thread.sleep(250);
             }
             catch (final InterruptedException e) {
                Log.e(getClass().getName(), "InterruptedException worker: " + this.toString());

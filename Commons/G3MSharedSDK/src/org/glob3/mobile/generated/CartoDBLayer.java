@@ -48,27 +48,27 @@ public class CartoDBLayer extends MercatorTiledLayer
 
   public CartoDBLayer(String userName, String table, TimeInterval timeToCache, boolean readExpired, float transparency, boolean isTransparent, LayerCondition condition)
   {
-     this(userName, table, timeToCache, readExpired, transparency, isTransparent, condition, "");
+     this(userName, table, timeToCache, readExpired, transparency, isTransparent, condition, new java.util.ArrayList<Info>());
   }
   public CartoDBLayer(String userName, String table, TimeInterval timeToCache, boolean readExpired, float transparency, boolean isTransparent)
   {
-     this(userName, table, timeToCache, readExpired, transparency, isTransparent, null, "");
+     this(userName, table, timeToCache, readExpired, transparency, isTransparent, null, new java.util.ArrayList<Info>());
   }
   public CartoDBLayer(String userName, String table, TimeInterval timeToCache, boolean readExpired, float transparency)
   {
-     this(userName, table, timeToCache, readExpired, transparency, false, null, "");
+     this(userName, table, timeToCache, readExpired, transparency, false, null, new java.util.ArrayList<Info>());
   }
   public CartoDBLayer(String userName, String table, TimeInterval timeToCache, boolean readExpired)
   {
-     this(userName, table, timeToCache, readExpired, 1, false, null, "");
+     this(userName, table, timeToCache, readExpired, 1, false, null, new java.util.ArrayList<Info>());
   }
   public CartoDBLayer(String userName, String table, TimeInterval timeToCache)
   {
-     this(userName, table, timeToCache, true, 1, false, null, "");
+     this(userName, table, timeToCache, true, 1, false, null, new java.util.ArrayList<Info>());
   }
-  public CartoDBLayer(String userName, String table, TimeInterval timeToCache, boolean readExpired, float transparency, boolean isTransparent, LayerCondition condition, String disclaimerInfo)
+  public CartoDBLayer(String userName, String table, TimeInterval timeToCache, boolean readExpired, float transparency, boolean isTransparent, LayerCondition condition, java.util.ArrayList<Info> layerInfo)
   {
-     super("http://", "tiles.cartocdn.com/" + userName + "/tiles/" + table, getSubdomains(), "png", timeToCache, readExpired, Sector.fullSphere(), 2, 17, isTransparent, transparency, condition, disclaimerInfo);
+     super("http://", "tiles.cartocdn.com/" + userName + "/tiles/" + table, getSubdomains(), "png", timeToCache, readExpired, 2, 17, isTransparent, transparency, condition, layerInfo);
      _userName = userName;
      _table = table;
   }
@@ -85,7 +85,7 @@ public class CartoDBLayer extends MercatorTiledLayer
 
   public final CartoDBLayer copy()
   {
-    return new CartoDBLayer(_userName, _table, _timeToCache, _readExpired, _transparency, _isTransparent, (_condition == null) ? null : _condition.copy(), _disclaimerInfo);
+    return new CartoDBLayer(_userName, _table, _timeToCache, _readExpired, _transparency, _isTransparent, (_condition == null) ? null : _condition.copy(), _layerInfo);
   }
 
   public final RenderState getRenderState()
