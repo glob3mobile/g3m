@@ -16,7 +16,7 @@ GLFeature(NO_GROUP, GLF_VIEWPORT_EXTENT)
 {
   _extent = new GPUUniformValueVec2FloatMutable(viewportWidth,
                                                 viewportHeight);
-
+  
   _values->addUniformValue(VIEWPORT_EXTENT,
                            _extent,
                            false);
@@ -27,7 +27,7 @@ GLFeature(NO_GROUP, GLF_VIEWPORT_EXTENT)
 {
   _extent = new GPUUniformValueVec2FloatMutable(camera->getViewPortWidth(),
                                                 camera->getViewPortHeight());
-
+  
   _values->addUniformValue(VIEWPORT_EXTENT,
                            _extent,
                            false);
@@ -40,11 +40,18 @@ void ViewportExtentGLFeature::changeExtent(int viewportWidth,
 
 BillboardGLFeature::BillboardGLFeature(const Vector3D& position,
                                        int textureWidth,
-                                       int textureHeight) :
+                                       int textureHeight,
+                                       float anchorU, float anchorV) :
 GLFeature(NO_GROUP, GLF_BILLBOARD)
 {
-  _size = new GPUUniformValueVec2FloatMutable(textureWidth, textureHeight);
   
+  _anchor = new GPUUniformValueVec2FloatMutable(anchorU, anchorV);
+  _values->addUniformValue(BILLBOARD_ANCHOR,
+                           _anchor,
+                           false);
+  
+  
+  _size = new GPUUniformValueVec2FloatMutable(textureWidth, textureHeight);
   _values->addUniformValue(TEXTURE_EXTENT,
                            _size,
                            false);
@@ -140,10 +147,10 @@ _lineWidth(lineWidth)
 {
   _position = new GPUAttributeValueVec2Float(buffer, arrayElementSize, index, stride, normalized);
   _values->addAttributeValue(POSITION_2D, _position, false);
-
+  
   _translation =  new GPUUniformValueVec2FloatMutable(translation._x, translation._y);
   _values->addUniformValue(TRANSLATION_2D, _translation, false);
-
+  
   if (needsPointSize) {
     _values->addUniformValue(POINT_SIZE, new GPUUniformValueFloat(pointSize), false);
   }

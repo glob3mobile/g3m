@@ -20,6 +20,8 @@
 #include "GLState.hpp"
 #include "SurfaceElevationProvider.hpp"
 #include "MutableVector3D.hpp"
+#include "GTask.hpp"
+#include "PeriodicalTask.hpp"
 
 class IImage;
 class IFloatBuffer;
@@ -150,6 +152,10 @@ private:
   void clearGLState();
 
   MutableVector3D _markCameraVector;
+  
+  float _anchorU;
+  float _anchorV;
+  BillboardGLFeature* _billboardGLF;
 
 public:
   /**
@@ -288,7 +294,60 @@ public:
   
   void setTextureCoordinatesTransformation(const Vector2F& translation,
                                            const Vector2F& scaling);
+  
+  void setMarkAnchor(float anchorU, float anchorV);
 
 };
+
+class TextureAtlasMarkAnimationTask: public PeriodicalTask{
+  
+  class TextureAtlasMarkAnimationGTask: public GTask{
+    Mark* _mark;
+    int _cols;
+    int _rows;
+    int _nFrames;
+    
+    int _currentFrame;
+    
+    float _scaleX;
+    float _scaleY;
+  public:
+    
+    ~TextureAtlasMarkAnimationGTask(){}
+    
+    TextureAtlasMarkAnimationGTask(Mark* mark, int nColumn, int nRows, int nFrames):
+    _mark(mark), _currentFrame(0), _cols(nColumn), _rows(nRows), _nFrames(nFrames)
+    {
+      //    _mark->setOnScreenSize(Vector2F(100,100));
+      
+      _scaleX = 1.0f / _cols;
+      _scaleY = 1.0f / _rows;
+    }
+    
+    
+    virtual void run(const G3MContext* context){
+      int row = _currentFrame / _cols;
+      int col = _currentFrame % _cols;
+      
+      float transX = col * (1.0f / _cols);
+      float transY = row * (1.0f / _rows);
+      //        printf("FRAME:%d, R:%d, C:%d -> %f %f\n", _currentFrame, row, col, transX, transY);
+      
+      _mark->setTextureCoordinatesTransformation(Vector2F(transX,transY), Vector2F(_scaleX, _scaleY));
+      _currentFrame = (_currentFrame+1) % _nFrames;
+    }
+    
+  };
+  
+  
+public:
+  TextureAtlasMarkAnimationTask(Mark* mark, int nColumn, int nRows, int nFrames, const TimeInterval& frameTime):
+  PeriodicalTask(frameTime, new TextureAtlasMarkAnimationGTask(mark, nColumn, nRows, nFrames))
+  {
+  }
+};
+
+
+
 
 #endif

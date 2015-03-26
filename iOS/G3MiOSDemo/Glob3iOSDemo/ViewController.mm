@@ -1327,51 +1327,70 @@ public:
                                 NULL,
                                 false);
     
-    
-    class SpriteTask: public GTask{
-      Mark* _mark;
-      int _cols;
-      int _rows;
-      int _nFrames;
-      
-      int _currentFrame;
-      
-      float _scaleX;
-      float _scaleY;
-    public:
-      SpriteTask(Mark* mark, int nColumn, int nRows, int nFrames):
-      _mark(mark), _currentFrame(0), _cols(nColumn), _rows(nRows), _nFrames(nFrames)
-      {
-        _mark->setOnScreenSize(Vector2F(100,100));
-        
-        _scaleX = 1.0 / _cols;
-        _scaleY = 1.0 / _rows;
-      }
-      
-      
-      virtual void run(const G3MContext* context){
-        int row = _currentFrame / _cols;
-        int col = _currentFrame % _cols;
-        
-        float transX = col * (1.0 / _cols);
-        float transY = row * (1.0 / _rows);
-        
-
-        
-//        printf("FRAME:%d, R:%d, C:%d -> %f %f\n", _currentFrame, row, col, transX, transY);
-        
-        _mark->setTextureCoordinatesTransformation(Vector2F(transX,transY), Vector2F(_scaleX, _scaleY));
-        
-        _currentFrame = (_currentFrame+1) % _nFrames;
-        
-        _mark->setOnScreenSize(Vector2F(_currentFrame,_currentFrame));
-      }
-      
-    };
+    Mark* animMark2 = new Mark(URL(URL::FILE_PROTOCOL + "radar-sprite.png"),
+                              Geodetic3D::fromDegrees( 28.099999998178312, -15.41699999885168, 0),
+                              ABSOLUTE,
+                              4.5e+06,
+                              NULL,
+                              true,
+                              NULL,
+                              false);
+    animMark2->setTextureCoordinatesTransformation(Vector2F(0,0), Vector2F(0.25, 0.5));
+    animMark2->setOnScreenSize(Vector2F(100,100));
+    marksRenderer->addMark(animMark2);
     
     
-    builder.addPeriodicalTask(new PeriodicalTask(TimeInterval::fromMilliseconds(100),
-                                                 new SpriteTask(animMark, 4, 2, 7)));
+    
+//    class SpriteTask: public GTask{
+//      Mark* _mark;
+//      int _cols;
+//      int _rows;
+//      int _nFrames;
+//      
+//      int _currentFrame;
+//      
+//      float _scaleX;
+//      float _scaleY;
+//    public:
+//      SpriteTask(Mark* mark, int nColumn, int nRows, int nFrames):
+//      _mark(mark), _currentFrame(0), _cols(nColumn), _rows(nRows), _nFrames(nFrames)
+//      {
+//        _mark->setOnScreenSize(Vector2F(100,100));
+//        
+//        _scaleX = 1.0 / _cols;
+//        _scaleY = 1.0 / _rows;
+//      }
+//      
+//      
+//      virtual void run(const G3MContext* context){
+//        int row = _currentFrame / _cols;
+//        int col = _currentFrame % _cols;
+//        
+//        float transX = col * (1.0 / _cols);
+//        float transY = row * (1.0 / _rows);
+//        
+//
+//        
+////        printf("FRAME:%d, R:%d, C:%d -> %f %f\n", _currentFrame, row, col, transX, transY);
+//        
+//        _mark->setTextureCoordinatesTransformation(Vector2F(transX,transY), Vector2F(_scaleX, _scaleY));
+//        
+//        _currentFrame = (_currentFrame+1) % _nFrames;
+//        
+//        _mark->setOnScreenSize(Vector2F(_currentFrame,_currentFrame));
+//        
+//        _mark->setMarkAnchor(0.0, 1.0);
+//      }
+//      
+//    };
+    
+    
+//    builder.addPeriodicalTask(new PeriodicalTask(TimeInterval::fromMilliseconds(100),
+//                                                 new SpriteTask(animMark, 4, 2, 7)));
+    
+    animMark->setOnScreenSize(Vector2F(100,100));
+    animMark->setMarkAnchor(0.0, 0.0);
+    builder.addPeriodicalTask(new TextureAtlasMarkAnimationTask(animMark, 4, 2, 7, TimeInterval::fromMilliseconds(100)));
 
     
     marksRenderer->addMark(animMark);

@@ -77,17 +77,23 @@ private:
   }
   
   GPUUniformValueVec2FloatMutable* _size;
+  GPUUniformValueVec2FloatMutable* _anchor;
   
 public:
   BillboardGLFeature(const Vector3D& position,
                      int textureWidth,
-                     int textureHeight);
+                     int textureHeight,
+                     float anchorU, float anchorV);
   
   void applyOnGlobalGLState(GLGlobalState* state) const;
   
   void changeSize(int textureWidth,
                   int textureHeight){
     _size->changeValue(textureWidth, textureHeight);
+  }
+  
+  void changeAnchor(float anchorU, float anchorV){
+    _anchor->changeValue(anchorU, anchorV);
   }
 };
 

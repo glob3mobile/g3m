@@ -170,7 +170,10 @@ _glState(NULL),
 _normalAtMarkPosition(NULL),
 _textureSizeSetExternally(false),
 _hasTCTransformations(false),
-_textureGLF(NULL)
+_textureGLF(NULL),
+_anchorU(0.5),
+_anchorV(0.5),
+_billboardGLF(NULL)
 {
   
 }
@@ -214,7 +217,10 @@ _glState(NULL),
 _normalAtMarkPosition(NULL),
 _textureSizeSetExternally(false),
 _textureGLF(NULL),
-_hasTCTransformations(false)
+_hasTCTransformations(false),
+_anchorU(0.5),
+_anchorV(0.5),
+_billboardGLF(NULL)
 {
   
 }
@@ -255,7 +261,10 @@ _glState(NULL),
 _normalAtMarkPosition(NULL),
 _textureSizeSetExternally(false),
 _textureGLF(NULL),
-_hasTCTransformations(false)
+_hasTCTransformations(false),
+_anchorU(0.5),
+_anchorV(0.5),
+_billboardGLF(NULL)
 {
   
 }
@@ -296,7 +305,10 @@ _currentSurfaceElevation(0.0),
 _glState(NULL),
 _normalAtMarkPosition(NULL),
 _textureSizeSetExternally(false),
-_hasTCTransformations(false)
+_hasTCTransformations(false),
+_anchorU(0.5),
+_anchorV(0.5),
+_billboardGLF(NULL)
 {
   
 }
@@ -442,9 +454,12 @@ double Mark::getMinDistanceToCamera() {
 void Mark::createGLState(const Planet* planet,
                          IFloatBuffer* billboardTexCoords) {
   _glState = new GLState();
+  
+  _billboardGLF = new BillboardGLFeature(*getCartesianPosition(planet),
+                                         _textureWidth, _textureHeight,
+                                         _anchorU, _anchorV);
 
-  _glState->addGLFeature(new BillboardGLFeature(*getCartesianPosition(planet),
-                                                _textureWidth, _textureHeight),
+  _glState->addGLFeature(_billboardGLF,
                          false);
   
   if (_textureId != NULL) {
@@ -651,4 +666,12 @@ void Mark::setTextureCoordinatesTransformation(const Vector2F& translation,
     
   }
   
+}
+
+void Mark::setMarkAnchor(float anchorU, float anchorV){
+  if (_billboardGLF != NULL){
+    _billboardGLF->changeAnchor(anchorU, anchorV);
+  }
+  _anchorU = anchorU;
+  _anchorV = anchorV;
 }
