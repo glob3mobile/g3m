@@ -46,6 +46,8 @@ public:
         //Create a list of Geodetic
         std::vector<Geodetic3D*> coords;
         
+        Geodetic3D c = Geodetic3D::fromDegrees(40.782, -73.980, 1000);
+        coords.push_back(&c);
         //Gets the type field from the JSON building data
         const JSONObject* buildings = jsonBuildingData->asObject();
         const JSONArray* features = buildings->getAsArray("features");
@@ -54,31 +56,39 @@ public:
             const JSONObject* geometry = feature->getAsObject("geometry");
             const JSONArray* coordArray = geometry->getAsArray("coordinates");
             
-            //TODO: get all the coordinates in geometry
-            double lon = coordArray->getAsArray(0)->getAsArray(0)->getAsNumber(0, 0);
-            double lat = coordArray->getAsArray(0)->getAsArray(0)->getAsNumber(1, 0);
+            double averageLon = 0;
+            double averageLat = 0;
+            //TODO: get all the coordinates in geometry. We are getting the average instead.
+            
+            for (int j = 0; j < coordArray->size(); j++) {
+                double lon = coordArray->getAsArray(0)->getAsArray(j)->getAsNumber(0, 0);
+                double lat = coordArray->getAsArray(0)->getAsArray(j)->getAsNumber(1, 0);
+                averageLon += lon;
+                averageLat += lat;
+            }
             double height = 0;
+            averageLon /= coordArray->size();
+            averageLat /= coordArray->size();
+            Geodetic3D tempCoord = Geodetic3D::fromDegrees(averageLat, averageLon, height);
             
-            Geodetic3D tempCoord = Geodetic3D::fromDegrees(lat, lon, height);
-            coords.push_back(&tempCoord);
-            //std::string name = feature->getAsString("type", "");
-            //TODO finish parsing all the other fields from building data
-        }
-        
-        //TODO: Put a mark on all the coordinates in coords vector list
-        for (int i = 0; i < coords.size(); i++) {
-            
-            URL iconurl = URL::URL("http://iconizer.net/files/Farm-fresh/orig/building.png");
+            //Create and add the mark
+            URL iconurl = URL::URL("http://files.softicons.com/download/toolbar-icons/fatcow-hosting-icons-by-fatcow/png/16/building.png");
             double minDistanceToCamera = 0;
             MarkUserData* userData = new MarkUserData::MarkUserData();
-            bool autoDeleteUserData = true;
+            bool autoDeleteUserData = false;
             MarkTouchListener* marksListener = NULL;
-            bool autoDeleteListener = true;
-            Mark* mark = new Mark(iconurl, *coords.at(i), ABSOLUTE, minDistanceToCamera, userData, autoDeleteUserData, marksListener, autoDeleteListener);
+            bool autoDeleteListener = false;
+            Mark* mark = new Mark(iconurl, tempCoord, ABSOLUTE, minDistanceToCamera, userData, autoDeleteUserData, marksListener, autoDeleteListener);
             
             _scene->addMark(mark);
+            //TODO finish parsing all the other fields from building data
+            
         }
         
+        //Freeing memory allocations
+        delete jsonBuildingData;
+        delete jParser;
+        delete buffer;
     }
 
     void onError(const URL& url) {
@@ -119,6 +129,7 @@ void G3MOSMBuildingsDemoScene::rawActivate(const G3MContext* context) {
    
     IDownloader* downloader = context->getDownloader();
     
+    //This URL is temporary and will eventually be generalized for any x,y,z
     _requestId = downloader->requestBuffer(URL("http://data.osmbuildings.org/0.2/rkc8ywdl/tile/14/4825/6156.json"),
                                            DownloadPriority::HIGHEST,
                                            TimeInterval::fromHours(1),
@@ -126,7 +137,9 @@ void G3MOSMBuildingsDemoScene::rawActivate(const G3MContext* context) {
                                            new G3MOSMBuildingsDemoScene_BufferDownloadListener(this),
                                            deleteListener);
     
-    g3mWidget->setAnimatedCameraPosition(Geodetic3D::fromDegrees(13, 52, 3643920),
+    //Positioning the camera close to New York because of the request buffer URL.
+    //TODO change the positioning and the URL when needed
+    g3mWidget->setAnimatedCameraPosition(Geodetic3D::fromDegrees(40, -73, 10000),
                                          Angle::zero(), // heading
                                          Angle::fromDegrees(30 - 90) // pitch
                                          );
