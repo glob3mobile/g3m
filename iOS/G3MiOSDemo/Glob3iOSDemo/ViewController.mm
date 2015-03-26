@@ -1326,22 +1326,25 @@ public:
                                 true,
                                 NULL,
                                 false);
-    
-    Mark* animMark2 = new Mark(URL(URL::FILE_PROTOCOL + "radar-sprite.png"),
-                              Geodetic3D::fromDegrees( 28.099999998178312, -15.41699999885168, 0),
-                              ABSOLUTE,
-                              4.5e+06,
-                              NULL,
-                              true,
-                              NULL,
-                              false);
-    animMark2->setTextureCoordinatesTransformation(Vector2F(0,0), Vector2F(0.25, 0.5));
-    animMark2->setOnScreenSizeOnPixels(100,100);
-    animMark2->setMarkAnchor(1.0, 1.0);
-    marksRenderer->addMark(animMark2);
-    
+
     animMark->setOnScreenSizeOnProportionToImage(0.05, 0.1);
     builder.addPeriodicalTask(new TextureAtlasMarkAnimationTask(animMark, 4, 2, 7, TimeInterval::fromMilliseconds(100)));
+    
+    
+    Mark* animMark2 = new Mark(URL(URL::FILE_PROTOCOL + "radar-sprite.png"),
+                               Geodetic3D::fromDegrees( 28.099999998178312, -15.41699999885168, 0),
+                               ABSOLUTE,
+                               4.5e+06,
+                               NULL,
+                               true,
+                               NULL,
+                               false);
+    
+    animMark2->setTextureCoordinatesTransformation(Vector2F(0,0), Vector2F(0.25, 0.5));
+    animMark2->setOnScreenSizeOnPixels(100,100);
+    animMark2->setMarkAnchor(0.5, 1.0);
+    marksRenderer->addMark(animMark2);
+    builder.addPeriodicalTask(new TextureAtlasMarkAnimationTask(animMark2, 4, 2, 7, TimeInterval::fromMilliseconds(100)));
 
     
     marksRenderer->addMark(animMark);
