@@ -173,7 +173,10 @@ _hasTCTransformations(false),
 _textureGLF(NULL),
 _anchorU(0.5),
 _anchorV(0.5),
-_billboardGLF(NULL)
+_billboardGLF(NULL),
+_textureHeightProportion(1.0),
+_textureWidthProportion(1.0),
+_textureProportionSetExternally(false)
 {
   
 }
@@ -220,7 +223,10 @@ _textureGLF(NULL),
 _hasTCTransformations(false),
 _anchorU(0.5),
 _anchorV(0.5),
-_billboardGLF(NULL)
+_billboardGLF(NULL),
+_textureHeightProportion(1.0),
+_textureWidthProportion(1.0),
+_textureProportionSetExternally(false)
 {
   
 }
@@ -264,7 +270,10 @@ _textureGLF(NULL),
 _hasTCTransformations(false),
 _anchorU(0.5),
 _anchorV(0.5),
-_billboardGLF(NULL)
+_billboardGLF(NULL),
+_textureHeightProportion(1.0),
+_textureWidthProportion(1.0),
+_textureProportionSetExternally(false)
 {
   
 }
@@ -308,7 +317,9 @@ _textureSizeSetExternally(false),
 _hasTCTransformations(false),
 _anchorU(0.5),
 _anchorV(0.5),
-_billboardGLF(NULL)
+_billboardGLF(NULL),
+_textureHeightProportion(1.0),
+_textureWidthProportion(1.0)
 {
   
 }
@@ -381,7 +392,13 @@ void Mark::onTextureDownload(const IImage* image) {
   if (!_textureSizeSetExternally){
     _textureWidth = _textureImage->getWidth();
     _textureHeight = _textureImage->getHeight();
+    
+    if (_textureProportionSetExternally){
+      _textureWidth *= _textureWidthProportion;
+      _textureHeight *= _textureHeightProportion;
+    }
   }
+
 }
 
 bool Mark::isReady() const {
@@ -456,7 +473,7 @@ void Mark::createGLState(const Planet* planet,
   _glState = new GLState();
   
   _billboardGLF = new BillboardGLFeature(*getCartesianPosition(planet),
-                                         _textureWidth, _textureHeight,
+                                         (int)_textureWidth, (int)_textureHeight,
                                          _anchorU, _anchorV);
 
   _glState->addGLFeature(_billboardGLF,
@@ -624,10 +641,10 @@ void Mark::setPosition(const Geodetic3D& position) {
   clearGLState();
 }
 
-void Mark::setOnScreenSize(const Vector2F& size){
+void Mark::setOnScreenSizeOnPixels(int width, int height){
   
-  _textureWidth = (int)size._x;
-  _textureHeight = (int)size._y;
+  _textureWidth = width;
+  _textureHeight = height;
   _textureSizeSetExternally = true;
   
   if (_glState != NULL){
@@ -636,9 +653,19 @@ void Mark::setOnScreenSize(const Vector2F& size){
       b->changeSize((int)_textureWidth*10, (int)_textureHeight*10);
     }
   }
+}
+
+void Mark::setOnScreenSizeOnProportionToImage(float width, float height){
+  _textureWidthProportion = width;
+  _textureHeightProportion = height;
+  _textureProportionSetExternally = true;
   
-  
-//  clearGLState();
+  if (_glState != NULL){
+    BillboardGLFeature* b = (BillboardGLFeature*) _glState->getGLFeature(GLF_BILLBOARD);
+    if (b != NULL){
+      b->changeSize((int)(_textureWidth*_textureWidthProportion), (int)(_textureHeight*_textureHeightProportion));
+    }
+  }
 }
 
 void Mark::setTextureCoordinatesTransformation(const Vector2F& translation,

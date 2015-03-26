@@ -127,7 +127,10 @@ private:
 #endif
   float               _textureWidth;
   float               _textureHeight;
+  float               _textureWidthProportion;
+  float               _textureHeightProportion;
   bool              _textureSizeSetExternally;
+  bool              _textureProportionSetExternally;
   const std::string _imageID;
   
   bool _hasTCTransformations;
@@ -290,7 +293,8 @@ public:
 
   void setPosition(const Geodetic3D& position);
   
-  void setOnScreenSize(const Vector2F& size);
+  void setOnScreenSizeOnPixels(int width, int height);
+  void setOnScreenSizeOnProportionToImage(float width, float height);
   
   void setTextureCoordinatesTransformation(const Vector2F& translation,
                                            const Vector2F& scaling);
