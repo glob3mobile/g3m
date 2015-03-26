@@ -495,9 +495,9 @@ void Mark::createGLState(const Planet* planet,
                      _translationTCY,
                      _scalingTCX,
                      _scalingTCY,
-                     0.0,
-                     0.0,
-                     0.0);
+                     0.0f,
+                     0.0f,
+                     0.0f);
     } else{
       _textureGLF = new TextureGLFeature(_textureId->getID(),
                                          billboardTexCoords,

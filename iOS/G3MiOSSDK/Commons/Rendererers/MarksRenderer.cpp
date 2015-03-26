@@ -131,12 +131,12 @@ bool MarksRenderer::onTouchEvent(const G3MEventContext* ec,
           continue;
         }
 
-        const int markWidth = mark->getTextureWidth();
+        const int markWidth = (int)mark->getTextureWidth();
         if (markWidth <= 0) {
           continue;
         }
 
-        const int markHeight = mark->getTextureHeight();
+        const int markHeight = (int)mark->getTextureHeight();
         if (markHeight <= 0) {
           continue;
         }
