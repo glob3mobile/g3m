@@ -35,6 +35,7 @@
 #include "G3MTiledVectorDemoScene.hpp"
 #include "G3MStreamingPointCloud1DemoScene.hpp"
 #include "G3MStreamingPointCloud2DemoScene.hpp"
+#include "G3MOSMBuildingsDemoScene.hpp"
 #include "G3MHUDDemoScene.hpp"
 
 G3MDemoModel::G3MDemoModel(G3MDemoListener*     listener,
@@ -57,7 +58,9 @@ _hudRenderer(hudRenderer),
 _selectedScene(NULL),
 _context(NULL)
 {
+    //Place new demo scenes here to run in app passing in this DemoModel
   _scenes.push_back( new G3MRasterLayersDemoScene(this) );
+  _scenes.push_back( new G3MOSMBuildingsDemoScene(this) );
   _scenes.push_back( new G3MScenarioDEMDemoScene(this) );
   _scenes.push_back( new G3MVectorialDemoScene(this) );
   _scenes.push_back( new G3MMarkersDemoScene(this) );
@@ -70,6 +73,7 @@ _context(NULL)
   _scenes.push_back( new G3MStreamingPointCloud1DemoScene(this) );
   _scenes.push_back( new G3MStreamingPointCloud2DemoScene(this) );
   _scenes.push_back( new G3MHUDDemoScene(this) );
+  _scenes.push_back( new G3MMarkersDemoScene(this) );
 }
 
 void G3MDemoModel::initializeG3MContext(const G3MContext* context) {

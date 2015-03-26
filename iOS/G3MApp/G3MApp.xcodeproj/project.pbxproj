@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		75ECCE6E1AC4447E001F4544 /* G3MOSMBuildingsDemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75ECCE6C1AC4447E001F4544 /* G3MOSMBuildingsDemoScene.cpp */; };
 		CF37F5EE183D239A0050CAEF /* G3MScenarioDEMDemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF37F5EC183D239A0050CAEF /* G3MScenarioDEMDemoScene.cpp */; };
 		CF37F5F1183D26500050CAEF /* 0576.bil in Resources */ = {isa = PBXBuildFile; fileRef = CF37F5F0183D26500050CAEF /* 0576.bil */; };
 		CF37F5F5183D355E0050CAEF /* MainStoryboard-iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CF37F5F4183D355E0050CAEF /* MainStoryboard-iPhone.storyboard */; };
@@ -111,6 +112,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		75ECCE6C1AC4447E001F4544 /* G3MOSMBuildingsDemoScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = G3MOSMBuildingsDemoScene.cpp; sourceTree = "<group>"; };
 		CF37F5EC183D239A0050CAEF /* G3MScenarioDEMDemoScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = G3MScenarioDEMDemoScene.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CF37F5ED183D239A0050CAEF /* G3MScenarioDEMDemoScene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = G3MScenarioDEMDemoScene.hpp; sourceTree = "<group>"; };
 		CF37F5F0183D26500050CAEF /* 0576.bil */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = 0576.bil; sourceTree = "<group>"; };
@@ -294,6 +296,7 @@
 				CFD3BE3C19D3324F00FE2D5A /* G3MStreamingPointCloud2DemoScene.hpp */,
 				CF483EC31A2E5D5100B70D7E /* G3MHUDDemoScene.cpp */,
 				CF483EC41A2E5D5100B70D7E /* G3MHUDDemoScene.hpp */,
+				75ECCE6C1AC4447E001F4544 /* G3MOSMBuildingsDemoScene.cpp */,
 			);
 			name = DemoBuilder;
 			sourceTree = "<group>";
@@ -608,6 +611,7 @@
 				CF3F8FDF183526AE00589B4C /* G3MDemoBuilder.cpp in Sources */,
 				CFE3B3CB183ABAC70078C796 /* G3M3DSymbologyDemoScene.cpp in Sources */,
 				CF37F5EE183D239A0050CAEF /* G3MScenarioDEMDemoScene.cpp in Sources */,
+				75ECCE6E1AC4447E001F4544 /* G3MOSMBuildingsDemoScene.cpp in Sources */,
 				CF6920B41837F1CA007409D8 /* G3MRasterLayersDemoScene.cpp in Sources */,
 				CFF30256192816250049BEF4 /* G3MTiledVectorDemoScene.cpp in Sources */,
 				CF3F8FEA1835867D00589B4C /* G3MSelectDemoSceneViewController.mm in Sources */,
