@@ -99,12 +99,14 @@ public class TextureGLFeature extends GLColorGroupFeature
     }
     else
     {
-  //    if (u == 0.0 && v == 0.0) {
-  //      _values->removeUniformValue(TRANSLATION_TEXTURE_COORDS);
-  //    }
-  //    else{
+      if (u == 0.0 && v == 0.0)
+      {
+        _values.removeUniformValue(GPUUniformKey.TRANSLATION_TEXTURE_COORDS);
+      }
+      else
+      {
         _translation.changeValue(u, v);
-  //    }
+      }
     }
   }
   public final void setScale(float u, float v)
@@ -117,22 +119,14 @@ public class TextureGLFeature extends GLColorGroupFeature
     }
     else
     {
-<<<<<<< HEAD
-  
-  //    if (u == 1.0 && v == 1.0) {
-  //      _values->removeUniformValue(SCALE_TEXTURE_COORDS);
-  //    }
-  //    else{
-=======
       if (u == 1.0 && v == 1.0)
       {
         _values.removeUniformValue(GPUUniformKey.SCALE_TEXTURE_COORDS);
       }
       else
       {
->>>>>>> purgatory
         _scale.changeValue(u, v);
-  //    }
+      }
     }
   }
   public final void setRotationAngleInRadiansAndRotationCenter(float angle, float u, float v)
