@@ -50,12 +50,12 @@ public:
     
   }
   
-  double getTrueNorthAzimuthInDegrees() const{
+  double getTrueNorthAzimuthInDegrees(double siderealTime) const{
 #warning TODO
     return _declination;
   }
   
-  double getAltitude() const{
+  double getAltitude(double siderealTime) const{
 #warning TODO
     return _ascencion;
   }
@@ -80,9 +80,10 @@ public:
   }
   
   double distanceInDegrees(const Angle& trueNorthAzimuthInDegrees,
-                           const Angle& altitudeInDegrees){
-    return Angle::fromDegrees(getAltitude()).distanceTo(altitudeInDegrees)._degrees +
-    Angle::fromDegrees(getTrueNorthAzimuthInDegrees()).distanceTo(trueNorthAzimuthInDegrees)._degrees;
+                           const Angle& altitudeInDegrees,
+                           double siderealTime){
+    return Angle::fromDegrees(getAltitude(siderealTime)).distanceTo(altitudeInDegrees)._degrees +
+    Angle::fromDegrees(getTrueNorthAzimuthInDegrees(siderealTime)).distanceTo(trueNorthAzimuthInDegrees)._degrees;
   }
   
 };
@@ -99,11 +100,20 @@ class StarDomeRenderer : public DefaultRenderer {
   
   const std::string _name;
   
+  Geodetic3D* _position;
+  
 public:
   
   StarDomeRenderer(std::string& name, std::vector<Star> stars):
-  _starsShape(NULL), _glState(new GLState()), _stars(stars), _currentCamera(NULL), _name(name)
+  _starsShape(NULL), _glState(new GLState()), _stars(stars), _currentCamera(NULL), _name(name),_position(NULL)
   {
+  }
+  
+  static double getSiderealTime(double placeLongitudeInDegrees, double clockTime, double thetaZero){
+    double I = 366.2422 / 365.2422;
+    double TU = clockTime - IMathUtils::instance()->round(placeLongitudeInDegrees);
+    
+    return thetaZero + TU * I + placeLongitudeInDegrees;
   }
   
   void initialize(const G3MContext* context);

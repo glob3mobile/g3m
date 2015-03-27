@@ -32,12 +32,16 @@ void StarDomeRenderer::initialize(const G3MContext* context) {
   
   Vector3D startingStarPos = origin.add(north.normalized().times(domeHeight));
   
+  _position = new Geodetic3D( Geodetic3D::fromDegrees(27.973105, -15.597545, 500));
+#warning TODO
+  double siderealTime = getSiderealTime(_position->_longitude._degrees, 0, 0);
+  
   int size = _stars.size();
   for(int i = 0; i < size; i++){
     
     //Defining stars by true-north azimuth (heading) and altitude http://en.wikipedia.org/wiki/Azimuth
-    Angle azimuth = Angle::fromDegrees(_stars[i].getTrueNorthAzimuthInDegrees());
-    Angle altitude = Angle::fromDegrees(_stars[i].getAltitude());
+    Angle azimuth = Angle::fromDegrees(_stars[i].getTrueNorthAzimuthInDegrees(siderealTime));
+    Angle altitude = Angle::fromDegrees(_stars[i].getAltitude(siderealTime));
     
     MutableMatrix44D mAltitude = MutableMatrix44D::createGeneralRotationMatrix(altitude, altitudeRotationAxis, origin);
     MutableMatrix44D mAzimuth = MutableMatrix44D::createGeneralRotationMatrix(azimuth, azimuthRotationAxis, origin);
@@ -83,7 +87,7 @@ void StarDomeRenderer::initialize(const G3MContext* context) {
   
   delete fbb;
   
-  _starsShape = new StarsMeshShape(new Geodetic3D(Geodetic3D::fromDegrees(27.973105, -15.597545, 500)),
+  _starsShape = new StarsMeshShape(_position,
                                    ABSOLUTE,
                                    cm);
   
@@ -100,6 +104,9 @@ void StarDomeRenderer::render(const G3MRenderContext* rc, GLState* glState){
   else {
     f->setMatrix(_currentCamera->getModelViewMatrix44D());
   }
+  
+  delete _position;
+  _position = new Geodetic3D(_currentCamera->getGeodeticPosition());
   
   _starsShape->setPosition(_currentCamera->getGeodeticPosition());
   
@@ -137,13 +144,16 @@ bool StarDomeRenderer::onTouchEvent(const G3MEventContext* ec, const TouchEvent*
 
 void StarDomeRenderer::selectStar(const Angle& trueNorthAzimuthInDegrees, const Angle& altitudeInDegrees){
   
+#warning TODO
+  double siderealTime = getSiderealTime(_position->_longitude._degrees, 0, 0);
+  
   double minDist = 4; //No star will be selected above this threshold
   int index = -1;
   
   int size = _stars.size();
   for(int i = 0; i < size; i++){
     
-    double dist = _stars[i].distanceInDegrees(trueNorthAzimuthInDegrees, altitudeInDegrees);
+    double dist = _stars[i].distanceInDegrees(trueNorthAzimuthInDegrees, altitudeInDegrees, siderealTime);
     
     //printf("STAR %d AZIMUTH: %f, ALTITUDE: %f -> %f\n", i, _stars[i]._trueNorthAzimuthInDegrees, _stars[i]._altitudeInDegrees, dist);
 
