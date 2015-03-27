@@ -108,7 +108,7 @@ void StarDomeRenderer::render(const G3MRenderContext* rc, GLState* glState){
   delete _position;
   _position = new Geodetic3D(_currentCamera->getGeodeticPosition());
   
-  _starsShape->setPosition(_currentCamera->getGeodeticPosition());
+  _starsShape->setPosition(*_position);
   
   _starsShape->render(rc, _glState, true);
   
