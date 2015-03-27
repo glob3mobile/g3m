@@ -87,7 +87,7 @@ void StarDomeRenderer::initialize(const G3MContext* context) {
   
   delete fbb;
   
-  _starsShape = new StarsMeshShape(_position,
+  _starsShape = new StarsMeshShape(new Geodetic3D(*_position),
                                    ABSOLUTE,
                                    cm);
   
