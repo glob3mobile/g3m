@@ -15,6 +15,7 @@
 #include "MeshShape.hpp"
 #include "Color.hpp"
 #include <vector>
+#include <string>
 
 class StarsMeshShape: public MeshShape{
 public:
@@ -33,18 +34,30 @@ public:
 };
 
 class Star{
+  
+  const double _ascencion;
+  const double _declination;
+  
 public:
-  const double _trueNorthAzimuthInDegrees;
-  const double _altitudeInDegrees;
   Color* _color;
   
-  Star(double trueNorthAzimuthInDegrees,
-       double altitudeInDegrees,
+  Star(double ascencion,
+       double declination,
        const Color& color):
-  _trueNorthAzimuthInDegrees(trueNorthAzimuthInDegrees),
-  _altitudeInDegrees(altitudeInDegrees),
+  _ascencion(ascencion),
+  _declination(declination),
   _color(new Color(color)){
     
+  }
+  
+  double getTrueNorthAzimuthInDegrees() const{
+#warning TODO
+    return _declination;
+  }
+  
+  double getAltitude() const{
+#warning TODO
+    return _ascencion;
   }
   
   ~Star(){
@@ -52,12 +65,12 @@ public:
   }
   
   Star& operator=(const Star& s){
-    return *(new Star(s._trueNorthAzimuthInDegrees, s._altitudeInDegrees, *s._color));
+    return *(new Star(s._ascencion, s._declination, *s._color));
   }
   
   Star(const Star& s):
-  _trueNorthAzimuthInDegrees(s._trueNorthAzimuthInDegrees),
-  _altitudeInDegrees(s._altitudeInDegrees),
+  _ascencion(s._ascencion),
+  _declination(s._declination),
   _color(new Color(*s._color)){
     
   }
@@ -68,8 +81,8 @@ public:
   
   double distanceInDegrees(const Angle& trueNorthAzimuthInDegrees,
                            const Angle& altitudeInDegrees){
-    return Angle::fromDegrees(_altitudeInDegrees).distanceTo(altitudeInDegrees)._degrees +
-    Angle::fromDegrees(_trueNorthAzimuthInDegrees).distanceTo(trueNorthAzimuthInDegrees)._degrees;
+    return Angle::fromDegrees(getAltitude()).distanceTo(altitudeInDegrees)._degrees +
+    Angle::fromDegrees(getTrueNorthAzimuthInDegrees()).distanceTo(trueNorthAzimuthInDegrees)._degrees;
   }
   
 };
@@ -84,10 +97,12 @@ class StarDomeRenderer : public DefaultRenderer {
   
   const Camera* _currentCamera;
   
+  const std::string _name;
+  
 public:
   
-  StarDomeRenderer(std::vector<Star> stars):
-  _starsShape(NULL), _glState(new GLState()), _stars(stars), _currentCamera(NULL)
+  StarDomeRenderer(std::string& name, std::vector<Star> stars):
+  _starsShape(NULL), _glState(new GLState()), _stars(stars), _currentCamera(NULL), _name(name)
   {
   }
   

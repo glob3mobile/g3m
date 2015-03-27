@@ -63,6 +63,7 @@
 		CFEA76681666DCB000E89BC7 /* images in Resources */ = {isa = PBXBuildFile; fileRef = CFEA76671666DCB000E89BC7 /* images */; };
 		CFF95F7D158A748F00B56E11 /* plane.png in Resources */ = {isa = PBXBuildFile; fileRef = CFF95F7C158A748F00B56E11 /* plane.png */; };
 		D80C8B491A77B44000E67587 /* anchorWidget.png in Resources */ = {isa = PBXBuildFile; fileRef = D80C8B481A77B44000E67587 /* anchorWidget.png */; };
+		D80DF37C1AC5642900A7D92A /* stars.csv in Resources */ = {isa = PBXBuildFile; fileRef = D80DF37B1AC5642900A7D92A /* stars.csv */; };
 		D83165EE1ABAD435002A8451 /* StarDomeRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D83165EC1ABAD435002A8451 /* StarDomeRenderer.cpp */; };
 		D8317203186C5BAD00522E1B /* simpleStencil.png in Resources */ = {isa = PBXBuildFile; fileRef = D8317202186C5BAD00522E1B /* simpleStencil.png */; };
 		D83D604A1AA89BC0002EA2B8 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D83D60491AA89BC0002EA2B8 /* CoreMotion.framework */; };
@@ -172,6 +173,7 @@
 		CFEA76671666DCB000E89BC7 /* images */ = {isa = PBXFileReference; lastKnownFileType = folder; path = images; sourceTree = "<group>"; };
 		CFF95F7C158A748F00B56E11 /* plane.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = plane.png; sourceTree = "<group>"; };
 		D80C8B481A77B44000E67587 /* anchorWidget.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = anchorWidget.png; sourceTree = "<group>"; };
+		D80DF37B1AC5642900A7D92A /* stars.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = stars.csv; sourceTree = "<group>"; };
 		D83165EC1ABAD435002A8451 /* StarDomeRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = StarDomeRenderer.cpp; sourceTree = "<group>"; };
 		D83165ED1ABAD435002A8451 /* StarDomeRenderer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = StarDomeRenderer.hpp; sourceTree = "<group>"; };
 		D8317202186C5BAD00522E1B /* simpleStencil.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = simpleStencil.png; sourceTree = "<group>"; };
@@ -314,6 +316,7 @@
 		D8EEF4271577B0D6003FEB5E /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				D80DF37B1AC5642900A7D92A /* stars.csv */,
 				D80C8B481A77B44000E67587 /* anchorWidget.png */,
 				4415B4AA19CC26B800E73D38 /* countries.geojson */,
 				CFE26D6718A154D700253709 /* 3d_2-0.json */,
@@ -523,6 +526,7 @@
 				4415B4AB19CC26B800E73D38 /* countries.geojson in Resources */,
 				CF8C0EBB16FC99C400DBEDE4 /* cc3d4326.json in Resources */,
 				CFE26D6418A1547B00253709 /* 3d_1-1.json in Resources */,
+				D80DF37C1AC5642900A7D92A /* stars.csv in Resources */,
 				CFC04FC4185FA00400E7494A /* hud2.png in Resources */,
 				CF0FC6EE1899A443005988D7 /* g3mesh.json in Resources */,
 				E70B224D1700DBA300172DF3 /* A320.bson in Resources */,

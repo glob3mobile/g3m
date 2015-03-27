@@ -16,6 +16,7 @@
 #include "Camera.hpp"
 #include "TouchEvent.hpp"
 #include "CoordinateSystem.hpp"
+#include "CompositeMesh.hpp"
 
 void StarDomeRenderer::initialize(const G3MContext* context) {
   
@@ -35,8 +36,8 @@ void StarDomeRenderer::initialize(const G3MContext* context) {
   for(int i = 0; i < size; i++){
     
     //Defining stars by true-north azimuth (heading) and altitude http://en.wikipedia.org/wiki/Azimuth
-    Angle azimuth = Angle::fromDegrees(_stars[i]._trueNorthAzimuthInDegrees);
-    Angle altitude = Angle::fromDegrees(_stars[i]._altitudeInDegrees);
+    Angle azimuth = Angle::fromDegrees(_stars[i].getTrueNorthAzimuthInDegrees());
+    Angle altitude = Angle::fromDegrees(_stars[i].getAltitude());
     
     MutableMatrix44D mAltitude = MutableMatrix44D::createGeneralRotationMatrix(altitude, altitudeRotationAxis, origin);
     MutableMatrix44D mAzimuth = MutableMatrix44D::createGeneralRotationMatrix(azimuth, azimuthRotationAxis, origin);
@@ -64,11 +65,27 @@ void StarDomeRenderer::initialize(const G3MContext* context) {
                                   true,
                                   NULL);
   
+  DirectMesh* lines = new DirectMesh(GLPrimitive::lineStrip(),
+                                  true,
+                                  fbb->getCenter(),
+                                  fbb->create(),
+                                  1.0,
+                                  4.0,
+                                  Color::newFromRGBA(1.0, 0.0, 1.0, 1.0),
+                                  NULL,
+                                  1.0f,
+                                  true,
+                                  NULL);
+  
+  CompositeMesh* cm = new CompositeMesh();
+  cm->addMesh(lines);
+  cm->addMesh(dm);
+  
   delete fbb;
   
   _starsShape = new StarsMeshShape(new Geodetic3D(Geodetic3D::fromDegrees(27.973105, -15.597545, 500)),
                                    ABSOLUTE,
-                                   dm);
+                                   cm);
   
   _starsShape->initialize(context);
 }

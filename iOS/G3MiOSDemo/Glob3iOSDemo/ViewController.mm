@@ -331,6 +331,7 @@ Mesh* createSectorMesh(const Planet* planet,
   //                                 userInfo:nil
   //                                  repeats:YES];
   
+  
   _dO = [[DeviceOrientation alloc] init];
   
   
@@ -354,7 +355,7 @@ Mesh* createSectorMesh(const Planet* planet,
   G3MBuilder_iOS builder([self G3MWidget]);
   
   builder.addCameraConstraint(new DeviceOrientationCameraConstrainer(self));
-
+  
   
   planet = Planet::createEarth();
   
@@ -362,16 +363,20 @@ Mesh* createSectorMesh(const Planet* planet,
   mr = new MeshRenderer();
   builder.addRenderer(mr);
   
+  
+  
+  [self readStars: &builder];
+  
   //mr->addMesh([self createStarDome]);
+//  
+//  std::vector<Star> stars;
+//  for(int i = 0; i < 100; i++){
+//    stars.push_back(Star((rand() % 36000) / 100.0, (rand() % 9000) / 100.0, Color::white()));
+//  }
+//  
+//  builder.addRenderer(new StarDomeRenderer(stars));
   
-  std::vector<Star> stars;
-  for(int i = 0; i < 100; i++){
-    stars.push_back(Star((rand() % 36000) / 100.0, (rand() % 9000) / 100.0, Color::white()));
-  }
-
-  builder.addRenderer(new StarDomeRenderer(stars));
   
-
   /*
    [[self G3MWidget] widget]->addPeriodicalTask(TimeInterval::fromMilliseconds(100),
    new CameraRollChangerTask([[self G3MWidget] widget]));
@@ -444,6 +449,72 @@ const Planet* planet;
                           m.m21, m.m22, m.m23, 0,
                           m.m31, m.m32, m.m33, 0,
                           0, 0, 0, 1);
+  
+}
+
+-(double) getNumFromArray:(NSArray*) array index:(int) i{
+  NSString* string = [array objectAtIndex:i];
+  string = [string stringByReplacingOccurrencesOfString:@"," withString:@"."];
+  return [string doubleValue];
+}
+
+-(double) toDegressHours:(double) h minutes:(double) m seconds:(double) s{
+  
+  return h * 15.0 + m * (15.0/60.0) + s * (15.0/3600.0);
+  
+}
+
+-(void) readStars: (IG3MBuilder*) builder{
+  
+  NSString *csvPath = [[NSBundle mainBundle] pathForResource: @"stars" ofType: @"csv"];
+  
+  if (csvPath) {
+    NSString *csv = [NSString stringWithContentsOfFile: csvPath
+                                              encoding: NSMacOSRomanStringEncoding
+                                                 error: nil];
+    
+    NSArray* lines = [csv componentsSeparatedByString:@"\r"];
+    
+    NSString* constelationName = nil;
+    std::vector<Star> stars;
+    
+    for(unsigned int i = 0; i < [lines count]; i++){
+      NSString* line = [lines objectAtIndex:i];
+      
+      NSArray* comp = [line componentsSeparatedByString:@";"];
+      if ([line rangeOfString:@";;"].location != NSNotFound){ //CONSTELATION
+        
+        if (constelationName != nil && stars.size() > 0){
+          //PUSHING CONSTELATION
+          std::string name = [constelationName UTF8String];
+          StarDomeRenderer* sdr = new StarDomeRenderer(name, stars);
+          builder->addRenderer(sdr);
+        }
+        
+        
+        constelationName = [comp objectAtIndex:0];
+        NSLog(@"CONSTELATION %@", [comp objectAtIndex:0]);
+      } else{ //STAR
+        NSString* name = [comp objectAtIndex:0];
+        
+        double altitude = [self toDegressHours:[self getNumFromArray:comp index:1]
+                                       minutes:[self getNumFromArray:comp index:2]
+                                       seconds:[self getNumFromArray:comp index:3]];
+        
+        double declination = [self toDegressHours:[self getNumFromArray:comp index:4]
+                                          minutes:[self getNumFromArray:comp index:5]
+                                          seconds:[self getNumFromArray:comp index:6]];
+        
+        stars.push_back(Star(declination, altitude, Color::white()));
+        
+        NSLog(@"STAR %@ %f %f", name, altitude, declination);
+        
+      }
+      
+    }
+    
+    
+  }
   
 }
 
