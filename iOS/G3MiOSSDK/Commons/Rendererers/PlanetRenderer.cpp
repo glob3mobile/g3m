@@ -569,7 +569,9 @@ void PlanetRenderer::visitTilesTouchesWith(const Sector& sector,
     for (int i = 0; i < firstLevelTilesCount; i++) {
       Tile* tile = _firstLevelTiles[i];
       if (tile->_sector.touchesWith(sector)) {
-        _tileVisitor->visitTile(layers, tile);
+        if ((tile->_level >= firstLevelToVisit)) {
+          _tileVisitor->visitTile(layers, tile);
+        }
         visitSubTilesTouchesWith(layers,
                                  tile,
                                  sector,

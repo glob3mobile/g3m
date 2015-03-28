@@ -21,7 +21,7 @@ public:
 #endif
     
   virtual void visitTile(std::vector<Layer*>& layers,
-                         const Tile* tile) const = 0;
+                         const Tile* tile) = 0;
 };
 
 #endif
