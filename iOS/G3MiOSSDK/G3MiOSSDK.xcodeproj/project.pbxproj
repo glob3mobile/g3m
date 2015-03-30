@@ -1861,6 +1861,7 @@
 		FB2B1B2617F880B5006307EC /* Quadric.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Quadric.hpp; path = Commons/Geometry/Quadric.hpp; sourceTree = "<group>"; };
 		FB31AE3416F76AE500C415FF /* LayoutUtils.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = LayoutUtils.hpp; path = Commons/Geometry/LayoutUtils.hpp; sourceTree = "<group>"; };
 		FB31AE3516F76B4C00C415FF /* LayoutUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = LayoutUtils.cpp; path = Commons/Geometry/LayoutUtils.cpp; sourceTree = "<group>"; };
+		FB38D2C71AC95FE40017EB56 /* CameraOrbitToPitchEffect.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = CameraOrbitToPitchEffect.hpp; path = Commons/Basic/CameraOrbitToPitchEffect.hpp; sourceTree = "<group>"; };
 		FB6D00A416CBFF3A009BF93D /* EllipsoidShape.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = EllipsoidShape.cpp; path = Commons/Rendererers/EllipsoidShape.cpp; sourceTree = "<group>"; };
 		FB6D00A716CBFF4F009BF93D /* EllipsoidShape.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = EllipsoidShape.hpp; path = Commons/Rendererers/EllipsoidShape.hpp; sourceTree = "<group>"; };
 		FBBDBCDA17AB940C00077004 /* FlatPlanet.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = FlatPlanet.cpp; path = Commons/Geometry/FlatPlanet.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
@@ -2008,6 +2009,7 @@
 				CF7EDA0316948302002C760A /* ByteBufferIterator.cpp */,
 				CF7EDA0416948302002C760A /* ByteBufferIterator.hpp */,
 				D8EB78831637F6B500C4EB57 /* CameraGoToPositionEffect.hpp */,
+				FB38D2C71AC95FE40017EB56 /* CameraOrbitToPitchEffect.hpp */,
 				CF6D723917184D620043C74B /* CanvasElement.cpp */,
 				CF6D723A17184D620043C74B /* CanvasElement.hpp */,
 				CF07DD0B175D32CC00839F5D /* Color.cpp */,

@@ -223,6 +223,8 @@ public:
                                  const Angle& toPitch,
                                  const bool linearTiming  = false,
                                  const bool linearHeight  = false);
+  
+  void orbitCameraToPitch(Angle pitch, TimeInterval duration) const;
 
   void cancelCameraAnimation();
 

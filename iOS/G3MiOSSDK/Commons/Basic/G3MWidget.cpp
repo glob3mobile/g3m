@@ -24,6 +24,7 @@
 #include "GLConstants.hpp"
 #include "PeriodicalTask.hpp"
 #include "CameraGoToPositionEffect.hpp"
+#include "CameraOrbitToPitchEffect.hpp"
 #include "CameraRenderer.hpp"
 #include "IStorage.hpp"
 #include "OrderedRenderable.hpp"
@@ -320,6 +321,11 @@ void G3MWidget::notifyTouchEvent(const G3MEventContext &ec,
           }
           
         }
+        else {
+          // test orbitToPitch when touching with 4 fingers
+          orbitCameraToPitch(Angle::fromDegrees(-90), TimeInterval::fromSeconds(1));
+        }
+
       }
       break;
     }
@@ -849,6 +855,12 @@ void G3MWidget::setAnimatedCameraPosition(const TimeInterval& interval,
                             fromPitch,    pitch,
                             linearTiming,
                             linearHeight);
+}
+
+void G3MWidget::orbitCameraToPitch(Angle pitch,
+                                   TimeInterval duration) const {
+  _effectsScheduler->startEffect(new CameraOrbitToPitchEffect(pitch, duration),
+                                 _nextCamera->getEffectTarget());
 }
 
 void G3MWidget::setAnimatedCameraPosition(const TimeInterval& interval,
