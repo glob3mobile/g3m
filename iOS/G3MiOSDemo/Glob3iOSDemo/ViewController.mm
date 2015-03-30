@@ -4235,7 +4235,9 @@ public:
   [self G3MWidget].widget->setCameraPosition(position);
   [self G3MWidget].widget->setCameraPitch(Angle::fromDegrees(-5.01));
   [self G3MWidget].widget->setCameraHeading(Angle::fromDegrees(4.35));
-  [self G3MWidget].widget->setMarksRenderer(marksRenderer);
+  
+  // activate zrender for Marks
+  [self G3MWidget].widget->activateZRenderForMarks(marksRenderer);
 }
 
 

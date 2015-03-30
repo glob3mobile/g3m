@@ -277,7 +277,7 @@ public:
   
   void setSceneReadyListener(SceneReadyListener* srl, bool autodelete);
   
-  void setMarksRenderer(MarksRenderer* marksRenderer) {
+  void activateZRenderForMarks(MarksRenderer* marksRenderer) {
     _marksRenderer = marksRenderer;
   }
   
