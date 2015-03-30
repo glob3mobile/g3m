@@ -25,6 +25,10 @@ public:
   _finalPitch(pitch._degrees)
   {
   }
+  
+  ~CameraOrbitToPitchEffect() {
+    delete _camera0;
+  }
 
   void start(const G3MRenderContext* rc,
              const TimeInterval& when) {
