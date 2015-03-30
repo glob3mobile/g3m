@@ -337,10 +337,11 @@ public class G3MWidget implements ChangedRendererInfoListener
     if (_zRenderCounter == -1 || _zRenderCounter != _renderCounter)
     {
       _zRenderCounter = _renderCounter;
+      ILogger.instance().logInfo("haciendo zrender counter = %d\n", _zRenderCounter);
     }
     else
     {
-      //ILogger::instance()->logInfo("Recycling Z Render");
+      ILogger.instance().logInfo("Recycling Z Render");
       return; //NO NEED OF RENDERING AGAIN
     }
   
@@ -641,6 +642,11 @@ public class G3MWidget implements ChangedRendererInfoListener
     _effectsScheduler.startEffect(new CameraGoToPositionEffect(interval, fromPosition, finalToPosition, fromHeading, toHeading, fromPitch, toPitch, linearTiming, linearHeight), _nextCamera.getEffectTarget());
   }
 
+  public final void orbitCameraToPitch(Angle pitch, TimeInterval duration)
+  {
+    _effectsScheduler.startEffect(new CameraOrbitToPitchEffect(pitch, duration), _nextCamera.getEffectTarget());
+  }
+
   public final void cancelCameraAnimation()
   {
     EffectTarget target = _nextCamera.getEffectTarget();
@@ -825,6 +831,16 @@ public class G3MWidget implements ChangedRendererInfoListener
     _sceneReadyListenerAutoDelete = autodelete;
   }
 
+  public final void activateZRenderForMarks(MarksRenderer marksRenderer)
+  {
+    _marksRenderer = marksRenderer;
+  }
+
+  public final MarksRenderer getMarksRenderer()
+  {
+    return _marksRenderer;
+  }
+
   private IStorage _storage;
   private IDownloader _downloader;
   private IThreadUtils _threadUtils;
@@ -841,6 +857,8 @@ public class G3MWidget implements ChangedRendererInfoListener
   private Renderer _hudRenderer;
   private RenderState _rendererState;
   private ProtoRenderer _selectedRenderer;
+
+  private MarksRenderer _marksRenderer;
 
   private EffectsScheduler _effectsScheduler;
 
@@ -1020,7 +1038,14 @@ public class G3MWidget implements ChangedRendererInfoListener
             {
               _cameraActivityListener.touchEventHandled();
             }
+  
           }
+          else
+          {
+            // test orbitToPitch when touching with 4 fingers
+            orbitCameraToPitch(Angle.fromDegrees(-90), TimeInterval.fromSeconds(1));
+          }
+  
         }
         break;
       }
@@ -1097,16 +1122,5 @@ public class G3MWidget implements ChangedRendererInfoListener
       _selectedRenderer.start(_renderContext);
     }
   }
-  
-  MarksRenderer _marksRenderer;
-  
-  public void setMarksRenderer(MarksRenderer marksRenderer) {
-	    _marksRenderer = marksRenderer;
-	  }
-	  
-  public MarksRenderer getMarksRenderer() {
-	    return _marksRenderer;
-	  }
-
 
 }

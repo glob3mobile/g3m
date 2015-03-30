@@ -75,6 +75,11 @@ public class MarksRenderer extends DefaultRenderer
   }
 
 
+  public final java.util.ArrayList<Mark> getMarks()
+  {
+    return _marks;
+  }
+
   public MarksRenderer(boolean readyWhenMarksReady)
   {
      _readyWhenMarksReady = readyWhenMarksReady;
@@ -331,11 +336,6 @@ public class MarksRenderer extends DefaultRenderer
   }
   public final void zRender(G3MRenderContext rc, GLState glState)
   {
-  }
-
-
-  java.util.ArrayList<Mark> getMarks() {
-    return _marks;
   }
 
 }

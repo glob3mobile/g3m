@@ -63,6 +63,8 @@ package org.glob3.mobile.generated;
 //class GLGlobalState;
 //class SceneLighting;
 
+//class MarksRenderer;
+
 //class Sector;
 
 public class WidgetUserData

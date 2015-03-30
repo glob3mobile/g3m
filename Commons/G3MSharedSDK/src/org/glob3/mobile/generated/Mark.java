@@ -70,6 +70,8 @@ public class Mark implements SurfaceElevationListener
    */
   private final boolean _autoDeleteListener;
 
+  private boolean _visible;
+
   private TextureIDReference _textureId;
 
   private Vector3D _cartesianPosition;
@@ -103,6 +105,12 @@ public class Mark implements SurfaceElevationListener
   private Vector3D _normalAtMarkPosition;
 
   private MutableVector3D _markCameraVector = new MutableVector3D();
+
+
+  public final void setVisible(boolean visible)
+  {
+    _visible = visible;
+  }
 
   /**
    * Creates a marker with icon and label
@@ -176,6 +184,7 @@ public class Mark implements SurfaceElevationListener
      _glState = null;
      _normalAtMarkPosition = null;
      _visible = true;
+  
   }
 
   /**
@@ -242,6 +251,7 @@ public class Mark implements SurfaceElevationListener
      _glState = null;
      _normalAtMarkPosition = null;
      _visible = true;
+  
   }
 
   /**
@@ -295,7 +305,8 @@ public class Mark implements SurfaceElevationListener
      _currentSurfaceElevation = 0.0;
      _glState = null;
      _normalAtMarkPosition = null;
-     _visible = true;  
+     _visible = true;
+  
   }
 
   /**
@@ -349,7 +360,8 @@ public class Mark implements SurfaceElevationListener
      _currentSurfaceElevation = 0.0;
      _glState = null;
      _normalAtMarkPosition = null;
-     _visible = true;  
+     _visible = true;
+  
   }
 
   public void dispose()
@@ -545,8 +557,9 @@ public class Mark implements SurfaceElevationListener
   public final void render(G3MRenderContext rc, MutableVector3D cameraPosition, double cameraHeight, GLState parentGLState, Planet planet, GL gl, IFloatBuffer billboardTexCoords)
   {
   
-	  if (_visible==false) return;
-
+    if (!_visible)
+       return;
+  
     final Vector3D markPosition = getCartesianPosition(planet);
   
   //  const Vector3D markCameraVector = markPosition->sub(cameraPosition);
@@ -571,7 +584,6 @@ public class Mark implements SurfaceElevationListener
     {
       boolean occludedByHorizon = false;
   
-      /*
       if (_position._height > cameraHeight)
       {
         // Computing horizon culling
@@ -595,8 +607,7 @@ public class Mark implements SurfaceElevationListener
   //      occludedByHorizon = (_normalAtMarkPosition->angleInRadiansBetween(markCameraVector) <= HALF_PI);
         occludedByHorizon = (Vector3D.angleInRadiansBetween(_normalAtMarkPosition, _markCameraVector) <= DefineConstants.HALF_PI);
       }
-  */
-      
+  
       if (!occludedByHorizon)
       {
         if ((_textureId == null) && (_textureImage != null))
@@ -672,11 +683,5 @@ public class Mark implements SurfaceElevationListener
       _glState = null;
     }
   }
-  
-  boolean _visible;
-  void setVisible(boolean visible) {
-	    _visible = visible;
-	  }
-
 
 }
