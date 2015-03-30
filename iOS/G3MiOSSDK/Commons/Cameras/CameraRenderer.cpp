@@ -55,7 +55,10 @@ bool CameraRenderer::onTouchEvent(const G3MEventContext* ec,
     if (marksRenderer) {
       std::vector<Mark*> marks = marksRenderer->getMarks();
       for (int i=0; i<marks.size(); i++) {
-        Vector3D* posMark = marks[i]->getCartesianPosition(ec->getPlanet());
+        Mark* mark = marks[i];
+        Vector3D* posMark = mark->getCartesianPosition(ec->getPlanet());
+        double distCamMark = cameraPos.distanceTo(*posMark);
+        if (distCamMark > mark->getMinDistanceToCamera()) continue;
         Vector2F pixel = _cameraContext->getNextCamera()->point2Pixel(*posMark);
         Vector3D posZRender = ec->getWidget()->getScenePositionForPixel((int)(pixel._x+0.5),(int)(pixel._y+0.5));
         /*
@@ -71,13 +74,12 @@ bool CameraRenderer::onTouchEvent(const G3MEventContext* ec,
          (geoMark._longitude._degrees-geoZRender._longitude._degrees)*
          (geoMark._longitude._degrees-geoZRender._longitude._degrees));*/
         
-        double distCamMark = cameraPos.distanceTo(*posMark);
         double distCamTerrain = cameraPos.distanceTo(posZRender);
         //printf ("distCanMark=%f   distCamTerrain=%f   Factor=%f\n", distCamMark, distCamTerrain, distCamMark/distCamTerrain);
         if (distCamMark/distCamTerrain<1.2)
-          marks[i]->setVisible(true);
+          mark->setVisible(true);
         else
-          marks[i]->setVisible(false);
+          mark->setVisible(false);
       }
       
       // this call is needed at this point. I don't know why
