@@ -337,11 +337,11 @@ public class G3MWidget implements ChangedRendererInfoListener
     if (_zRenderCounter == -1 || _zRenderCounter != _renderCounter)
     {
       _zRenderCounter = _renderCounter;
-      //ILogger.instance().logInfo("haciendo zrender counter = %d\n", _zRenderCounter);
+      //ILogger::instance()->logInfo("haciendo zrender counter = %d\n", _zRenderCounter);
     }
     else
     {
-      //ILogger.instance().logInfo("Recycling Z Render");
+      //ILogger::instance()->logInfo("Recycling Z Render");
       return; //NO NEED OF RENDERING AGAIN
     }
   
