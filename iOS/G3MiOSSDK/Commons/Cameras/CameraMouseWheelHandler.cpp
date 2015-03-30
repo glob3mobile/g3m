@@ -9,6 +9,7 @@
 #include "CameraMouseWheelHandler.hpp"
 #include "Camera.hpp"
 #include "TouchEvent.hpp"
+#include "G3MWidget.hpp"
 
 bool CameraMouseWheelHandler::onTouchEvent(const G3MEventContext *eventContext,
                   const TouchEvent* touchEvent,
@@ -23,7 +24,7 @@ bool CameraMouseWheelHandler::onTouchEvent(const G3MEventContext *eventContext,
 }
 
 
-void CameraMouseWheelHandler::onMouseWheel(const G3MEventContext *eventContext,
+/*void CameraMouseWheelHandler::onMouseWheel(const G3MEventContext *eventContext,
                                            const TouchEvent& touchEvent,
                                            CameraContext *cameraContext){
   Camera* cam = cameraContext->getNextCamera();
@@ -46,7 +47,28 @@ void CameraMouseWheelHandler::onMouseWheel(const G3MEventContext *eventContext,
     Vector3D translation = dir.normalized().times(dist * factor);
     
     cam->translateCamera(translation);
+  }*/
+
+
+void CameraMouseWheelHandler::onMouseWheel(const G3MEventContext *eventContext,
+                                           const TouchEvent& touchEvent,
+                                           CameraContext *cameraContext){
+  Camera* cam = cameraContext->getNextCamera();
+  const Vector2I pixel = touchEvent.getTouch(0)->getPos();
+  Vector3D touchedPosition = eventContext->getWidget()->getScenePositionForPixel(pixel._x, pixel._y);
+  
+  if (!touchedPosition.isNan())
+  {
+    const Vector3D dir = cam->pixel2Ray(pixel).normalized();
+    double dist = touchedPosition.distanceTo(cam->getCartesianPosition());
+    const double delta = touchEvent.getMouseWheelDelta();
+    double factor = 0.1;
+    if (delta < 0)
+    {
+      factor *= -1;
+    }
+    
+    Vector3D translation = dir.normalized().times(dist * factor);
+    cam->translateCamera(translation);
   }
-  
-  
 }
