@@ -34,7 +34,8 @@ public:
              const TimeInterval& when) {
     EffectWithDuration::start(rc, when);
 		_pivotPoint = rc->getWidget()->getFirstValidScenePositionForCentralColumn().asMutableVector3D();
-		_camera0 = new Camera(*(rc->getNextCamera()));
+    Camera* nextCamera = rc->getNextCamera();
+		_camera0 = new Camera(*nextCamera);
 		
 		/*Geodetic3D geo = rc.getPlanet().toGeodetic3D(_pivotPoint.asVector3D());
      ILogger.instance().logInfo("pivot point =%f %f %f",
