@@ -34,8 +34,8 @@ public class MyG3MWidget_WebGL extends G3MWidget_WebGL {
 			$wnd.G3M.setLODAugmentedFactor = $entry(function(factor) {
 				that.@org.glob3.mobile.client.MyG3MWidget_WebGL::setLODAugmentedFactor(D)(factor);
 			});
-			$wnd.G3M.orbitToPitch = $entry(function(pitch, seconds) {
-				that.@org.glob3.mobile.client.MyG3MWidget_WebGL::orbitToPitch(DD)(pitch, seconds);
+			$wnd.G3M.orbiCameratToPitch = $entry(function(pitch, seconds) {
+				that.@org.glob3.mobile.client.MyG3MWidget_WebGL::orbitCameraToPitch(DD)(pitch, seconds);
 			});
 	   }-*/;
 
@@ -47,11 +47,14 @@ public class MyG3MWidget_WebGL extends G3MWidget_WebGL {
 		   getPlanetRenderer().addLODAugmentedForSector(_sector, factor);
 	   }
 	   
-	   public void orbitToPitch(double pitch, double seconds) {
+	   public void orbitCameraToPitch(double pitch, double seconds) {
+		   /*
 		   VerticalOrbitEffect effect = new VerticalOrbitEffect(Angle.fromDegrees(pitch),
 				   TimeInterval.fromSeconds(seconds));
 		   EffectTarget target = getNextCamera().getEffectTarget();
-		   getG3MContext().getEffectsScheduler().startEffect(effect, target);
+		   getG3MContext().getEffectsScheduler().startEffect(effect, target);*/
+		   getG3MContext().getWidget().orbitCameraToPitch(Angle.fromDegrees(pitch), 
+				   TimeInterval.fromSeconds(seconds));
 	   }
 
 }

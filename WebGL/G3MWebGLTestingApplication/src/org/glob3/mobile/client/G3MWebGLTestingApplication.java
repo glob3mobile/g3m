@@ -2238,7 +2238,7 @@ public class G3MWebGLTestingApplication
 		   _widget.setCameraHeading(Angle.fromDegrees(4.35));
 		   _widget.setCameraPitch(Angle.fromDegrees(-5.01));
 		   
-		   _widget.getG3MWidget().setMarksRenderer(marksRenderer);
+		   _widget.getG3MWidget().activateZRenderForMarks(marksRenderer);
 		   
 		   // leyendo lista de pozos de un json bajado de Open Data La Palma
 		   PozosLaPalmaParser jsonParser = new PozosLaPalmaParser(_widget.getG3MContext().getDownloader(),
@@ -2425,7 +2425,7 @@ public class G3MWebGLTestingApplication
 		   _widget.setCameraHeading(Angle.fromDegrees(4.35));
 		   _widget.setCameraPitch(Angle.fromDegrees(-5.01));
 		   
-		   _widget.getG3MWidget().setMarksRenderer(LaPalmaMarksRenderer);
+		   _widget.getG3MWidget().activateZRenderForMarks(LaPalmaMarksRenderer);
 
 		   
 		   //Drawing some wells ...
