@@ -90,11 +90,11 @@ bool CameraRenderer::onTouchEvent(const G3MEventContext* ec,
       if (_handlers[i]->onTouchEvent(ec, touchEvent, _cameraContext)) {
         
         
-        
+  /*
         TaitBryanAngles angles = _cameraContext->getNextCamera()->getHeadingPitchRoll();
         printf ("angulos camera: pitch=%:2f  heading=%.2f   roll=%.2f\n",
                 angles._pitch._degrees, angles._heading._degrees, angles._roll._degrees);
-        
+  */      
         
         return true;
       }
