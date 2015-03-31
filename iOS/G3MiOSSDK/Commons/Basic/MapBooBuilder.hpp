@@ -102,7 +102,7 @@ public:
 
   virtual void onTerrainTouch(MapBooBuilder*         builder,
                               const G3MEventContext* ec,
-                              const Vector2I&        pixel,
+                              const Vector2F&        pixel,
                               const Camera*          camera,
                               const Geodetic3D&      position,
                               const Tile*            tile) = 0;
@@ -479,14 +479,14 @@ protected:
               int width,
               int height);
   
-  bool isEquals(const std::vector<const Info*> v1,
-                const std::vector<const Info*> v2) const;
+  bool isEquals(const std::vector<const Info*>& v1,
+                const std::vector<const Info*>& v2) const;
   
 public:
   ~HUDInfoRenderer_ImageFactory() {
   }
   
-  bool setInfo(const std::vector<const Info*> info);
+  bool setInfo(const std::vector<const Info*>& info);
 };
 
 class MapBoo_HUDRenderer : public DefaultRenderer {
@@ -497,7 +497,7 @@ public:
   
   ~MapBoo_HUDRenderer();
   
-  void updateInfo(const std::vector<const Info*> info);
+  void updateInfo(const std::vector<const Info*>& info);
   
   void initialize(const G3MContext* context);
   
@@ -531,7 +531,7 @@ public:
     
   }
   
-  void changedInfo(const std::vector<const Info*> info){
+  void changedInfo(const std::vector<const Info*>& info){
     _mapBooHUDRenderer->updateInfo(info);
     
   }
@@ -845,7 +845,7 @@ public:
 
   /** Private to MapbooBuilder, don't call it */
   bool onTerrainTouch(const G3MEventContext* ec,
-                      const Vector2I&        pixel,
+                      const Vector2F&        pixel,
                       const Camera*          camera,
                       const Geodetic3D&      position,
                       const Tile*            tile);

@@ -39,13 +39,9 @@ public abstract class GEOGeometry extends GEOObject
 
   public final void setFeature(GEOFeature feature)
   {
-  //  if (_feature != feature) {
-  //    delete _feature;
-  //    _feature = feature;
-  //  }
     if (_feature != null)
     {
-      System.out.print("break point on me\n");
+      throw new RuntimeException("Logic error");
     }
     _feature = feature;
   }

@@ -32,17 +32,19 @@ public:
   }
   
   virtual Vector3D getRadii() const = 0;
+
   virtual Vector3D centricSurfaceNormal(const Vector3D& positionOnEllipsoid) const = 0;
+
   virtual Vector3D geodeticSurfaceNormal(const Vector3D& positionOnEllipsoid) const = 0;
-  
   virtual Vector3D geodeticSurfaceNormal(const MutableVector3D& positionOnEllipsoid) const = 0;
-  
-  
   virtual Vector3D geodeticSurfaceNormal(const Angle& latitude,
                                          const Angle& longitude) const = 0;
-  
   virtual Vector3D geodeticSurfaceNormal(const Geodetic3D& geodetic) const = 0;
   virtual Vector3D geodeticSurfaceNormal(const Geodetic2D& geodetic) const = 0;
+
+  virtual void geodeticSurfaceNormal(const Angle& latitude,
+                                     const Angle& longitude,
+                                     MutableVector3D& result) const = 0;
 
   std::vector<double> intersectionsDistances(const Vector3D& origin,
                                              const Vector3D& direction) const;
@@ -60,11 +62,24 @@ public:
   virtual Vector3D toCartesian(const Angle& latitude,
                                const Angle& longitude,
                                const double height) const = 0;
-  
   virtual Vector3D toCartesian(const Geodetic3D& geodetic) const = 0;
   virtual Vector3D toCartesian(const Geodetic2D& geodetic) const = 0;
   virtual Vector3D toCartesian(const Geodetic2D& geodetic,
                                const double height) const = 0;
+
+  virtual void toCartesian(const Angle& latitude,
+                           const Angle& longitude,
+                           const double height,
+                           MutableVector3D& result) const = 0;
+  virtual void toCartesian(const Geodetic3D& geodetic,
+                           MutableVector3D& result) const = 0;
+  virtual void toCartesian(const Geodetic2D& geodetic,
+                           MutableVector3D& result) const = 0;
+  virtual void toCartesian(const Geodetic2D& geodetic,
+                           const double height,
+                           MutableVector3D& result) const = 0;
+
+
   virtual Geodetic2D toGeodetic2D(const Vector3D& positionOnEllipsoid) const = 0;
   
   virtual Geodetic3D toGeodetic3D(const Vector3D& position) const = 0;

@@ -21,7 +21,7 @@ public class Main {
                                              + "  BasicShadersGL2(){\n" + "#ifdef C_CODE\n"
                                              + "    std::string emptyString = \"\";\n" + "#endif\n" + "#ifdef JAVA_CODE\n"
                                              + "    String emptyString = \"\";\n" + "#endif\n" + "\n" + "ADDING_SHADERS"
-                                             + "  }\n" + "\n" + "};\n" + "#endif";
+                                             + "  }\n" + "\n" + "};\n" + "#endif\n";
 
    private static String _addProgramSource = "    GPUProgramSources sourcesShader_Name(\"Shader_Name\",\n Shader_Vertex,\n Shader_Fragment);\n"
                                              + "    this->add(sourcesShader_Name);\n\n";
@@ -77,10 +77,10 @@ public class Main {
          }
 
          //final boolean firstLine = (result == "");
-         result += "\"" + StringEscapeUtils.escapeJava(line) + " \\n \"";
+         result += "\"" + StringEscapeUtils.escapeJava(line) + "\\n\"";
 
          if (i < (lines.length - 1)) {
-            result += " + \n";
+            result += " +\n";
          }
 
       }

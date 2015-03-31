@@ -508,13 +508,11 @@ public class LayerSet implements ChangedInfoListener
   {
     _infos.clear();
     final int layersCount = _layers.size();
-    boolean anyEnabled = false;
     for (int i = 0; i < layersCount; i++)
     {
       Layer layer = _layers.get(i);
       if (layer.isEnable())
       {
-        anyEnabled = true;
         final java.util.ArrayList<Info> layerInfo = layer.getInfo();
         final int infoSize = layerInfo.size();
         for (int j = 0; j < infoSize; j++)
@@ -522,10 +520,6 @@ public class LayerSet implements ChangedInfoListener
           _infos.add(layerInfo.get(j));
         }
       }
-    }
-    if (!anyEnabled)
-    {
-      _infos.add(new Info("Can't find any enabled Layer at this zoom level"));
     }
     return _infos;
   }

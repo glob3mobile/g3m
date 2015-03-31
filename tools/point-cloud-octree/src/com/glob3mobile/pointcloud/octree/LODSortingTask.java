@@ -14,6 +14,9 @@ import com.glob3mobile.pointcloud.kdtree.KDTree;
 import com.glob3mobile.pointcloud.kdtree.KDTreeVisitor;
 import com.glob3mobile.pointcloud.octree.berkeleydb.BerkeleyDBLOD;
 import com.glob3mobile.pointcloud.octree.berkeleydb.TileHeader;
+import com.glob3mobile.utils.Geodetic3D;
+import com.glob3mobile.utils.Sector;
+import com.glob3mobile.utils.Utils;
 
 import es.igosoftware.util.GProgress;
 

@@ -34,7 +34,7 @@ public class FlatPlanet extends Planet
   private MutableVector3D _initialPoint1 = new MutableVector3D();
   private double _distanceBetweenInitialPoints;
   private MutableVector3D _centerPoint = new MutableVector3D();
-//  mutable double          _angleBetweenInitialRays;
+  //  mutable double          _angleBetweenInitialRays;
 
 
 
@@ -70,6 +70,10 @@ public class FlatPlanet extends Planet
     return new Vector3D(0, 0, 1);
   }
 
+  public final void geodeticSurfaceNormal(Angle latitude, Angle longitude, MutableVector3D result)
+  {
+    result.set(0, 0, 1);
+  }
 
   public final Vector3D geodeticSurfaceNormal(Angle latitude, Angle longitude)
   {
@@ -108,16 +112,15 @@ public class FlatPlanet extends Planet
 
   public final Vector3D toCartesian(Angle latitude, Angle longitude, double height)
   {
-    return toCartesian(new Geodetic3D(latitude, longitude, height));
+    final double x = longitude._degrees * _size._x / 360.0;
+    final double y = latitude._degrees * _size._y / 180.0;
+    return new Vector3D(x, y, height);
   }
 
   public final Vector3D toCartesian(Geodetic3D geodetic)
   {
-    final double x = geodetic._longitude._degrees * _size._x / 360.0;
-    final double y = geodetic._latitude._degrees * _size._y / 180.0;
-    return new Vector3D(x, y, geodetic._height);
+    return toCartesian(geodetic._latitude, geodetic._longitude, geodetic._height);
   }
-
 
   public final Vector3D toCartesian(Geodetic2D geodetic)
   {
@@ -129,6 +132,34 @@ public class FlatPlanet extends Planet
     return toCartesian(geodetic._latitude, geodetic._longitude, height);
   }
 
+  public final void toCartesian(Angle latitude, Angle longitude, double height, MutableVector3D result)
+  {
+    final double x = longitude._degrees * _size._x / 360.0;
+    final double y = latitude._degrees * _size._y / 180.0;
+    result.set(x, y, height);
+  }
+
+  public final void toCartesian(Geodetic3D geodetic, MutableVector3D result)
+  {
+    toCartesian(geodetic._latitude, geodetic._longitude, geodetic._height, result);
+  }
+  public final void toCartesian(Geodetic2D geodetic, MutableVector3D result)
+  {
+    toCartesian(geodetic._latitude, geodetic._longitude, 0.0, result);
+  }
+
+  public final void toCartesian(Geodetic2D geodetic, double height, MutableVector3D result)
+  {
+    toCartesian(geodetic._latitude, geodetic._longitude, height, result);
+  }
+
+
+  //Vector3D FlatPlanet::toCartesian(const Angle& latitude,
+  //                                 const Angle& longitude,
+  //                                 const double height) const {
+  //  return toCartesian(Geodetic3D(latitude, longitude, height));
+  //}
+  
   public final Geodetic2D toGeodetic2D(Vector3D position)
   {
     final double longitude = position._x * 360.0 / _size._x;

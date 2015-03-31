@@ -220,13 +220,15 @@ void GLFeatureCameraGroup::apply(const GLFeatureSet& features,
     prov->_release();
   }
 
-  Matrix44DProvider* modelViewProvider = modelViewHolderBuilder.create();
+  if (modelViewHolderBuilder.size() > 0){
+    Matrix44DProvider* modelViewProvider = modelViewHolderBuilder.create();
 
-  vs.addUniformValue(MODELVIEW,
-                     new GPUUniformValueMatrix4(modelViewProvider),
-                     false);
+    vs.addUniformValue(MODELVIEW,
+                       new GPUUniformValueMatrix4(modelViewProvider),
+                       false);
 
-  modelViewProvider->_release();
+    modelViewProvider->_release();
+  }
 
 #ifdef JAVA_CODE
   modelViewHolderBuilder.dispose();
