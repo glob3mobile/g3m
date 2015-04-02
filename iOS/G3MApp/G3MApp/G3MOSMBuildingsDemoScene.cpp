@@ -27,6 +27,9 @@
 
 #include "G3MDemoModel.hpp"
 
+#define METERS_PER_LEVEL 3
+#define DEFAULT_HEIGHT 0
+#define DEFAULT_LEVEL 0
 
 class G3MOSMBuildingsDemoScene_BufferDownloadListener : public IBufferDownloadListener {
 private:
@@ -56,6 +59,20 @@ public:
         const JSONArray* features = buildings->getAsArray("features");
         for (int i=0; i < features->size(); i++) {
             const JSONObject* feature = features->getAsObject(i);
+            
+            //Parse for height and level
+            const JSONObject* properties = feature->getAsObject("properties");
+            double height = DEFAULT_HEIGHT; //Set the height to default
+            double level = DEFAULT_LEVEL;   //Set the level to default
+            if (properties != NULL) {
+                height = properties->getAsNumber("height", DEFAULT_HEIGHT);
+                level = properties->getAsNumber("levels", DEFAULT_LEVEL);
+            }
+            if (height == DEFAULT_HEIGHT && level != DEFAULT_LEVEL) {
+                height = level * METERS_PER_LEVEL;
+            }
+            
+            //Parse for latitute and longitude
             const JSONObject* geometry = feature->getAsObject("geometry");
             const JSONArray* coordArray = geometry->getAsArray("coordinates");
             
@@ -69,9 +86,9 @@ public:
                 averageLon += lon;
                 averageLat += lat;
             }
-            double height = 0;
             averageLon /= coordArray->size();
             averageLat /= coordArray->size();
+            
             Geodetic3D tempCoord = Geodetic3D::fromDegrees(averageLat, averageLon, height);
             
             //Create and add the mark
