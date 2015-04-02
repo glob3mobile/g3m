@@ -22,6 +22,8 @@
 #include <G3MiOSSDK/IStringUtils.hpp>
 #include <G3MiOSSDK/MarksRenderer.hpp>
 #include <G3MiOSSDK/BingMapsLayer.hpp>
+#include <math.h>
+#include <stdio.h>
 
 #include "G3MDemoModel.hpp"
 
@@ -29,6 +31,7 @@
 class G3MOSMBuildingsDemoScene_BufferDownloadListener : public IBufferDownloadListener {
 private:
     G3MOSMBuildingsDemoScene* _scene;
+    std::string iconURL = "http://files.softicons.com/download/toolbar-icons/fatcow-hosting-icons-by-fatcow/png/16/building.png";
 public:
     G3MOSMBuildingsDemoScene_BufferDownloadListener(G3MOSMBuildingsDemoScene* scene) :
     _scene(scene)
@@ -72,7 +75,7 @@ public:
             Geodetic3D tempCoord = Geodetic3D::fromDegrees(averageLat, averageLon, height);
             
             //Create and add the mark
-            URL iconurl = URL::URL("http://files.softicons.com/download/toolbar-icons/fatcow-hosting-icons-by-fatcow/png/16/building.png");
+            URL iconurl = URL::URL(iconURL);
             double minDistanceToCamera = 0;
             MarkUserData* userData = new MarkUserData::MarkUserData();
             bool autoDeleteUserData = false;
@@ -90,7 +93,7 @@ public:
         delete jParser;
         delete buffer;
     }
-
+    
     void onError(const URL& url) {
         ILogger::instance()->logError("Error downloading \"%s\"", url.getPath().c_str());
     }
@@ -126,11 +129,12 @@ void G3MOSMBuildingsDemoScene::rawActivate(const G3MContext* context) {
                                              "AnU5uta7s5ql_HTrRZcPLI4_zotvNefEeSxIClF1Jf7eS-mLig1jluUdCoecV7jc",
                                              TimeInterval::fromDays(30));
     model->getLayerSet()->addLayer(layer);
-   
+    
     IDownloader* downloader = context->getDownloader();
     
     //This URL is temporary and will eventually be generalized for any x,y,z
-    _requestId = downloader->requestBuffer(URL("http://data.osmbuildings.org/0.2/rkc8ywdl/tile/14/4825/6156.json"),
+    _requestId = downloader->requestBuffer(URL(getURLFromTile(G3MOSMBuildingsDemoScene::row, G3MOSMBuildingsDemoScene::col
+                                                              , G3MOSMBuildingsDemoScene::level)),
                                            DownloadPriority::HIGHEST,
                                            TimeInterval::fromHours(1),
                                            readExpired,
@@ -152,6 +156,47 @@ void G3MOSMBuildingsDemoScene::deactivate(const G3MContext* context) {
 }
 
 void G3MOSMBuildingsDemoScene::rawSelectOption(const std::string& option,
-                                          int optionIndex) {
+                                               int optionIndex) {
     
 }
+
+/*
+ * We won't finish implementing this function until we find a use for it.
+ *
+ * get2DCoordsFromTile: gets the latitude and longitude from the tile index
+ 
+ Geodetic2D* G3MOSMBuildingsDemoScene::get2DCoordsFromTile(int xIndex, int yIndex, int zoom) {
+ //Checks for valid tile data
+ if(xIndex < 0 || yIndex < 0 || zoom > 19 || zoom < 0) {
+ return NULL;
+ }
+ double lon = 360*(xIndex/(1<<zoom)) - 180;
+ }
+ */
+
+/*
+ * Formatting the OSM Url to get buildings for a specific tile (row, column, zoom)
+ */
+std::string G3MOSMBuildingsDemoScene::getURLFromTile(int xIndex, int yIndex, int zoom) {
+    char charbuf[2048]; //Standard length of URL
+    std::sprintf(charbuf,  G3MOSMBuildingsDemoScene::url.c_str(), G3MOSMBuildingsDemoScene::dataKey.c_str(), zoom, xIndex, yIndex);
+    std::string buf = charbuf;
+    return buf;
+}
+
+/*
+ * This is the x-coordinate of the tile. Longitude must be in degrees.
+ */
+int G3MOSMBuildingsDemoScene::getTileRowFrom2DCoords(double lon, int zoom) {
+    double xTile = floor((lon + 180) / 360 * (1 << zoom));
+    return xTile;
+}
+
+/*
+ * This is the y-coordinate of the tile. Latitude must be in degrees.
+ */
+int G3MOSMBuildingsDemoScene::getTileColFrom2DCoords(double lat, int zoom) {
+    double yTile = floor((1 - log10(tan(lat * PI/180 + 1) / cos(lat * PI/180)) / PI) / 2 * (1 << zoom));
+    return yTile;
+}
+
