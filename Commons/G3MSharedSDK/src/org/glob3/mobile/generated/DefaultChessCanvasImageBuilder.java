@@ -1,4 +1,6 @@
 package org.glob3.mobile.generated; 
+import java.util.*;
+
 //
 //  DefaultChessCanvasImageBuilder.cpp
 //  G3MiOSSDK

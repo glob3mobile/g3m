@@ -1,4 +1,6 @@
 package org.glob3.mobile.generated; 
+import java.util.*;
+
 public class NonOverlapping3DMarksRenderer extends DefaultRenderer
 {
 
@@ -12,6 +14,22 @@ public class NonOverlapping3DMarksRenderer extends DefaultRenderer
     private void computeMarksToBeRendered(Camera cam, Planet planet)
     {
         _visibleMarks.clear();
+    
+        //Initialize shape to something
+      /* Shape* _shape = new EllipsoidShape(new Geodetic3D(Angle::fromDegrees(0),
+                                                          Angle::fromDegrees(0),
+                                                          5),
+                                           ABSOLUTE,
+                                           Vector3D(100000, 100000, 100000),
+                                           16,
+                                           0,
+                                           false,
+                                           false,
+                                           Color::fromRGBA(1, 1, 1, .5));
+      
+      
+        NonOverlapping3DMark* center = new NonOverlapping3DMark(_shape, _shape, Geodetic3D::fromDegrees(0, 0, -_planet->getRadii()._x));
+        _visibleMarks.push_back(center);*/
     
         final Frustum frustrum = cam.getFrustumInModelCoordinates();
     
@@ -36,7 +54,9 @@ public class NonOverlapping3DMarksRenderer extends DefaultRenderer
     private GLState _connectorsGLState;
     private void renderConnectorLines(G3MRenderContext rc)
     {
-        //TODO
+        //TODO - cylinders? lines? project 3d line onto 2d?
+    
+    
     
         /*if (_connectorsGLState == NULL){
             _connectorsGLState = new GLState();
@@ -134,9 +154,11 @@ public class NonOverlapping3DMarksRenderer extends DefaultRenderer
             {
                mark.applyHookesLaw(planet);
     
-                for (int j = i+1; j < _visibleMarks.size(); j++)
+                for (int j = 0; j < _visibleMarks.size(); j++)
                 {
-                        mark.applyCoulombsLaw(_visibleMarks.get(j), planet);
+                    if(i == j)
+                       continue;
+                    mark.applyCoulombsLaw(_visibleMarks.get(j), planet);
                     }
                 }
         }
@@ -144,7 +166,7 @@ public class NonOverlapping3DMarksRenderer extends DefaultRenderer
     private void renderMarks(G3MRenderContext rc, GLState glState)
     {
     
-        //renderConnectorLines(rc);
+        renderConnectorLines(rc);
     
         //Draw Anchors and Marks
         for (int i = 0; i < _visibleMarks.size(); i++)
@@ -179,7 +201,6 @@ public class NonOverlapping3DMarksRenderer extends DefaultRenderer
        _maxVisibleMarks = maxVisibleMarks;
        _lastPositionsUpdatedTime = 0;
        _connectorsGLState = null;
-    
     }
 
     public void dispose()
@@ -222,6 +243,97 @@ public class NonOverlapping3DMarksRenderer extends DefaultRenderer
         final Camera cam = rc.getCurrentCamera();
         _planet = rc.getPlanet();
     
+            ShapesRenderer sr = new ShapesRenderer();
+            MeshRenderer _meshrender = new MeshRenderer();
+    
+    
+        //TODO: edges working as expected. Midpoint seems to be correct, but not being drawn in the right position.
+        for(int i = 0; i < _visibleMarks.size(); i++)
+        {
+    
+            for(int j = 0; j < _visibleMarks.get(i).getNeighbors().size(); j++)
+            {
+                NonOverlapping3DMark neighbor = _visibleMarks.get(i).getNeighbors().get(j);
+                Vector3D p1 = _visibleMarks.get(i).getCartesianPosition(_planet);
+                Vector3D p2 = neighbor.getCartesianPosition(_planet);
+                Vector3D mid = (p2.add(p1)).times(0.5);
+                Vector3D mid2 = new Vector3D(mid._x, mid._y, mid._z);
+    
+                Geodetic3D p1g = new Geodetic3D(_planet.toGeodetic3D(p1));
+                Geodetic3D p2g = new Geodetic3D(_planet.toGeodetic3D(p2));
+                Geodetic3D midg = p1g.add(p2g).div(2.0f);
+    
+                Geodetic3D position = new Geodetic3D(_planet.toGeodetic3D(mid2)); //midpoint
+                //Geodetic3D *position = new Geodetic3D(midg);
+    
+                Vector3D extent = new Vector3D(10000, 1000, p1.distanceTo(p2));
+                //todo: rotation, mark as visited, don't allocate memory
+                float borderWidth = 2F;
+                Color col = Color.fromRGBA(1, 1, 1, 1);
+    
+               QuadShape q = new QuadShape(position, AltitudeMode.ABSOLUTE, null, p1.distanceTo(p2), 1e5, false);
+               sr.addShape(q);
+    
+    
+               // Mesh* _mesh = l.createMesh();
+    
+    
+               // cr.create
+              //  _meshrender.addMesh(_mesh);
+              /*  BoxShape* line = new BoxShape(position, ABSOLUTE, extent, borderWidth, col, NULL, true);
+                Vector3D dir = (p1.sub(p2)).normalized();
+                float a = acos(dir._x);
+                float b = acos(dir._y);
+                float c = acos(dir._z);
+                Angle alpha = Angle::fromRadians(a);
+                Angle beta = Angle::fromRadians(b);
+                Angle gamma = Angle::fromRadians(c);
+                //line->setPitch(alpha);
+                //line->setRoll(beta);
+                //line->setHeading(gamma);
+                //line->setPosition(*position);
+              
+                sr.addShape(line);*/
+    
+              //  FloatBufferBuilderFromCartesian3D(, p1);//what is first argument?
+               // FloatBufferBuilder *f = new FloatBufferBuilder();
+                //IFloatBuffer* buf = f->create()
+               /* IFloatBuffer* buf = FloatBufferBuilderFromCartesian3D(<#FloatBufferBuilder::CenterStrategy centerStrategy#>, <#const Vector3D &center#>)
+               
+               
+               
+                Mesh* m = new DirectMesh(0,
+                                         true,
+                                         p1.add(p2).div(2.0),
+                                         IFloatBuffer* vertices,
+                                         float lineWidth,
+                                         2,
+                                         NULL,
+                                         NULL,
+                                         0.0,
+                                         true,
+                                        NULL));*/
+                //Shape* mesh = new MeshShape();
+        /*Shape *line = new BoxShape(position, ABSOLUTE, extent, borderWidth, col, NULL, true);
+        Vector3D dir = p1.sub(p2).normalized();
+        float a = acos(dir._x);
+        float b = acos(dir._y);
+        float c = acos(dir._z);
+        Angle alpha = Angle::fromRadians(a);
+        Angle beta = Angle::fromRadians(b);
+        Angle gamma = Angle::fromRadians(c);
+        line->setPitch(alpha);
+        line->setRoll(beta);
+        line->setHeading(gamma);
+    
+        sr.addShape(line);*/
+    
+            }
+        }
+    
+        sr.render(rc, glState);
+        //_meshrender.render(rc, glState);
+        sr.removeAllShapes();
         //TODO: get rid of this stuff
         /*for(int i = 0; i < _visibleMarks.size(); i++) {
             _visibleMarks[i]->getShape()->setPosition(Geodetic3D::fromDegrees(0, 0, 1));
@@ -293,9 +405,3 @@ public class NonOverlapping3DMarksRenderer extends DefaultRenderer
     }
 
 }
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#pragma mark NonOverlappingMark
-
-
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#pragma-mark Renderer
