@@ -37,6 +37,14 @@
 #include <queue>
 #include <vector>
 #include "EllipsoidShape.hpp"
+#include "BoxShape.cpp"
+#include "Mesh.hpp"
+#include "MeshShape.hpp"
+#include "IFloatBuffer.hpp"
+#include "FloatBufferBuilder.hpp"
+#include "MeshRenderer.hpp"
+#include "GEOLine2DMeshSymbol.hpp"
+#include "QuadShape.cpp"
 
 #pragma mark NonOverlappingMark
 
@@ -84,7 +92,7 @@ _minWidgetSpeedInPixelsPerSecond(minWidgetSpeedInPixelsPerSecond)
                                       0,
                                       false,
                                       false,
-                                      Color::fromRGBA(1, 1, 1, .5));
+                                      Color::fromRGBA(.5, 1, .5, .9));
 
     _nodeShape = new EllipsoidShape(new Geodetic3D(Angle::fromDegrees(0),
                                                    Angle::fromDegrees(0),
@@ -95,7 +103,7 @@ _minWidgetSpeedInPixelsPerSecond(minWidgetSpeedInPixelsPerSecond)
                                     0,
                                     false,
                                     false,
-                                    Color::fromRGBA(1, 1, 1, .5));
+                                    Color::fromRGBA(.5, 0, .5, .9));
     
     //set value of shape to the thing passed in
    // *_anchorShape = *anchorShape;
@@ -118,8 +126,18 @@ NonOverlapping3DMark::~NonOverlapping3DMark()
 
 Vector3D NonOverlapping3DMark::getCartesianPosition(const Planet* planet) const{
    // if (_cartesianPos == NULL){
-        Vector3D translation = Vector3D(_tX, _tY, _tZ);
+    Vector3D translation = Vector3D(_tX, _tY, _tZ);
+    if(this->getAnchor()) {
+        _cartesianPos = new Vector3D(getAnchor()->getCartesianPosition(planet).add(translation));
+        _anchorShape->setPosition(planet->toGeodetic3D(*_cartesianPos));
+        _nodeShape->setPosition(planet->toGeodetic3D(*_cartesianPos));
+
+    }
+    else {
         _cartesianPos = new Vector3D(planet->toCartesian(_geoPosition).add(translation));
+        _anchorShape->setPosition(planet->toGeodetic3D(*_cartesianPos));
+        _nodeShape->setPosition(planet->toGeodetic3D(*_cartesianPos));
+    }
     //}
     return *_cartesianPos;
 }
@@ -152,15 +170,35 @@ NonOverlapping3DMark* NonOverlapping3DMark::getAnchor() const {
 
 void NonOverlapping3DMark::applyCoulombsLaw(NonOverlapping3DMark *that, const Planet* planet){
     //get 3d positionf or both
-    Vector3D d = getCartesianPosition(planet).sub(that->getCartesianPosition(planet)).normalized();
+    Vector3D pos = getCartesianPosition(planet);
+    Vector3D d = getCartesianPosition(planet).sub(that->getCartesianPosition(planet));//.normalized();
+
     float distance = d.length();
     Vector3D direction = d.normalized();
+    //float k = 5;
+    float strength = (float) (this->_electricCharge * that->_electricCharge/(distance*distance));
+    if(distance < .01) { //right on top of each other, pull them apart by a small random force before doing actual calculation
+        strength = 1;
+        Vector3D force = (Vector3D(rand() % 5, rand() % 5, rand() % 5)).times(strength);
+        this->applyForce(force._x, force._y, force._z);
+}
+    else {
+         Vector3D force = direction.times(strength);
+         this->applyForce(force._x, force._y, force._z);
+    }
+
+    //force from center of planet: - TODO: it's making it go in the z direction instead of x direction?? why?
+    Vector3D d2 =(getCartesianPosition(planet)).normalized();
+    float distance2 = d2.length();
+    float planetCharge = 1;
+    Vector3D direction2 = d2.normalized();
+    float strength2 = (float) ( planetCharge / distance2*distance2);
+    Vector3D force2 = direction2.times(strength2);
     
-    float strength = (float) (this->_electricCharge * that->_electricCharge/distance*distance);
-    Vector3D force = direction.times(strength);
+    this->applyForce(force2._z, force2._y, force2._x); //why does it do what is expected only if I swap x and z...?
+  //  this->applyForce(force._x, force._y, force._z);
     
-    this->applyForce(force._x, force._y, force._z);
-   // that->applyForce(-force._x, -force._y, -force._z);
+    
 }
 
 void NonOverlapping3DMark::applyCoulombsLawFromAnchor(NonOverlapping3DMark* that, const Planet* planet){ //EM
@@ -182,17 +220,20 @@ void NonOverlapping3DMark::applyHookesLaw(const Planet* planet){   //Spring
         Vector3D d = getCartesianPosition(planet).sub(_neighbors[i]->getCartesianPosition(planet));
         double mod = d.length();
         double displacement = _springLengthInMeters - mod;
+        if(abs(mod) > 100) { //only do this if distance is above some threshold
         Vector3D direction = d.div((float)mod);
-        
-        float force = (float)(_springK * displacement);
+      // float k = _electricCharge/5;
+        float force = (float)(_springK * displacement)/1000000;
         
         applyForce((float)(direction._x * force),
-                   (float)(direction._y * force), (float) direction._z * force);
+                   (float)(direction._y * force), (float) direction._z * force); //swap x and z here??
+        }
     }
    // }
 }
 
 void NonOverlapping3DMark::render(const G3MRenderContext* rc, GLState* glState){
+    getCartesianPosition(rc->getPlanet());
     _shapesRenderer->render(rc, glState);
 }
 Vector3D NonOverlapping3DMark::clampVector(Vector3D &v, float min, float max) const {
@@ -214,13 +255,14 @@ void NonOverlapping3DMark::updatePositionWithCurrentForce(double elapsedMS, floa
     float time = (float)(elapsedMS);// / 1000.0);
     Vector3D velocity = oldVelocity.add(force.times(time)).times(_resistanceFactor); //Resistance force applied as x0.85
     
-    //Force has been applied and must be reset
-    _fX = 0;
-    _fY = 0;
-    _fZ = 0;
+    //testing this out:
+    _dX = (float) velocity._x;
+    _dY = (float) velocity._y;
+    _dZ = (float) velocity._z;
+    
     
     //Clamping Velocity
-    double velocityPPS = velocity.length();
+   /* double velocityPPS = velocity.length();
     if (velocityPPS > _maxWidgetSpeedInPixelsPerSecond){
         _dX = (float)(velocity._x * (_maxWidgetSpeedInPixelsPerSecond / velocityPPS));
         _dY = (float)(velocity._y * (_maxWidgetSpeedInPixelsPerSecond / velocityPPS));
@@ -237,7 +279,7 @@ void NonOverlapping3DMark::updatePositionWithCurrentForce(double elapsedMS, floa
             _dY = (float)velocity._y;
             _dZ = (float)velocity._z;
         }
-    }
+    }*/
     
     //Update position
     Vector3D position = getCartesianPosition(planet);
@@ -251,23 +293,31 @@ void NonOverlapping3DMark::updatePositionWithCurrentForce(double elapsedMS, floa
     _tY+=_dY*time;
     _tZ+=_dZ*time;
     
+
+    //clamp translation
+    //Vector3D temp_translation = Vector3D(_tX, _tY, _tZ);
+   // Vector3D translation = clampVector(temp_translation, -1000000000, 1000000000);
     Vector3D translation = Vector3D(_tX, _tY, _tZ);
     
-    //find the maximum, but clamped spring length
+    
+    
+    //find the maximum, but clamped spring length - TODO this is wrong
     float springx = 0;
     float springy = 0;
     float springz = 0;
     
-    for(int i = 0; i < _neighbors.size(); i++) {
+    //TODO
+   /* for(int i = 0; i < _neighbors.size(); i++) {
         Vector3D anchorPos = _neighbors[i]->getCartesianPosition(planet);
-        Vector3D temp_spring = Vector3D(newX,newY, newZ).sub(anchorPos);
+        Vector3D temp_spring = Vector3D(newX,newY,newZ).sub(anchorPos);
         Vector3D spring = clampVector(temp_spring, _minSpringLength, _maxSpringLength);
         if(spring.length() > Vector3D(springx, springy, springz).length()) {
             springx = spring._x;
             springy = spring._y;
             springz = spring._z;
         }
-    }
+    }*/
+    
 
   /* if(this->getAnchor() != NULL) {
    
@@ -284,7 +334,12 @@ void NonOverlapping3DMark::updatePositionWithCurrentForce(double elapsedMS, floa
    */
     _anchorShape->setTranslation(translation);
     _nodeShape->setTranslation(translation); //TODO: spring??
-    //TODO: update this with new graph stuffs
+    
+    //Force has been applied and must be reset
+    _fX = 0;
+    _fY = 0;
+    _fZ = 0;
+    
     
 }
 
@@ -325,7 +380,6 @@ _maxVisibleMarks(maxVisibleMarks),
 _lastPositionsUpdatedTime(0),
 _connectorsGLState(NULL)
 {
-    
 }
 
 
@@ -345,12 +399,29 @@ void NonOverlapping3DMarksRenderer::addMark(NonOverlapping3DMark* mark){
     
 }
 void NonOverlapping3DMark::resetShapePositionVelocityAndForce(){
-     _dX = 0; _dY = 0; _dZ = 0; _fX = 0; _fY = 0; _fZ =0;
+     _dX = 0; _dY = 0; _dZ = 0; _fX = 0; _fY = 0; _fZ = 0;
+     _tX = 0; _tY = 0; _tZ = 0;
     _anchorShape->setPosition(_geoPosition);
     _nodeShape->setPosition(_geoPosition);
  }
 void NonOverlapping3DMarksRenderer::computeMarksToBeRendered(const Camera* cam, const Planet* planet) {
     _visibleMarks.clear();
+    
+    //Initialize shape to something
+  /* Shape* _shape = new EllipsoidShape(new Geodetic3D(Angle::fromDegrees(0),
+                                                      Angle::fromDegrees(0),
+                                                      5),
+                                       ABSOLUTE,
+                                       Vector3D(100000, 100000, 100000),
+                                       16,
+                                       0,
+                                       false,
+                                       false,
+                                       Color::fromRGBA(1, 1, 1, .5));
+    
+    
+    NonOverlapping3DMark* center = new NonOverlapping3DMark(_shape, _shape, Geodetic3D::fromDegrees(0, 0, -_planet->getRadii()._x));
+    _visibleMarks.push_back(center);*/
     
     const Frustum* frustrum = cam->getFrustumInModelCoordinates();
     
@@ -370,7 +441,9 @@ void NonOverlapping3DMarksRenderer::computeMarksToBeRendered(const Camera* cam, 
 
 
 void NonOverlapping3DMarksRenderer::renderConnectorLines(const G3MRenderContext* rc){
-    //TODO
+    //TODO - cylinders? lines? project 3d line onto 2d?
+    
+    
     
     /*if (_connectorsGLState == NULL){
         _connectorsGLState = new GLState();
@@ -435,6 +508,8 @@ void NonOverlapping3DMarksRenderer::renderConnectorLines(const G3MRenderContext*
     rc->getGL()->drawArrays(GLPrimitive::lines(), 0, pos2D.size()/2, _connectorsGLState, *rc->getGPUProgramManager());*/
 }
 
+
+
 void NonOverlapping3DMarksRenderer::computeForces(const Camera* cam, const Planet* planet){
     
     //Compute Mark Anchor Screen Positions
@@ -465,8 +540,9 @@ void NonOverlapping3DMarksRenderer::computeForces(const Camera* cam, const Plane
         if(!mark->isAnchor()) {
            mark->applyHookesLaw(planet);
             
-            for (int j = i+1; j < _visibleMarks.size(); j++) {
-                    mark->applyCoulombsLaw(_visibleMarks[j], planet);
+            for (int j = 0; j < _visibleMarks.size(); j++) {
+                if(i == j) continue;
+                mark->applyCoulombsLaw(_visibleMarks[j], planet);
                 }
             }
     }
@@ -483,7 +559,7 @@ Geodetic3D NonOverlapping3DMark::getPos() const {
 
 void NonOverlapping3DMarksRenderer::renderMarks(const G3MRenderContext *rc, GLState *glState){
     
-    //renderConnectorLines(rc);
+    renderConnectorLines(rc);
     
     //Draw Anchors and Marks
     for (int i = 0; i < _visibleMarks.size(); i++) {
@@ -506,10 +582,99 @@ void NonOverlapping3DMarksRenderer::applyForces(long long now, const Camera* cam
 }
 
 void NonOverlapping3DMarksRenderer::render(const G3MRenderContext* rc, GLState* glState){
-    
+
     const Camera* cam = rc->getCurrentCamera();
     _planet = rc->getPlanet();
+  
+        ShapesRenderer sr = ShapesRenderer();
+        MeshRenderer _meshrender = MeshRenderer();
     
+    
+    //TODO: edges working as expected. Midpoint seems to be correct, but not being drawn in the right position.
+    for(int i = 0; i < _visibleMarks.size(); i++) {
+      
+        for(int j = 0; j < _visibleMarks[i]->getNeighbors().size(); j++) {
+            NonOverlapping3DMark* neighbor = _visibleMarks[i]->getNeighbors()[j];
+            Vector3D p1 =_visibleMarks[i]->getCartesianPosition(_planet);
+            Vector3D p2 = neighbor->getCartesianPosition(_planet);
+            Vector3D mid = (p2.add(p1)).times(0.5);
+            Vector3D mid2 = Vector3D(mid._x, mid._y, mid._z);
+            
+            Geodetic3D p1g = Geodetic3D(_planet->toGeodetic3D(p1));
+            Geodetic3D p2g = Geodetic3D(_planet->toGeodetic3D(p2));
+            Geodetic3D midg = p1g.add(p2g).div(2.0f);
+            
+            Geodetic3D *position = new Geodetic3D(_planet->toGeodetic3D(mid2)); //midpoint
+            //Geodetic3D *position = new Geodetic3D(midg);
+            
+            Vector3D extent = Vector3D(10000, 1000, p1.distanceTo(p2));
+            //todo: rotation, mark as visited, don't allocate memory
+            float borderWidth = 2;
+            Color col = Color::fromRGBA(1, 1, 1, 1);
+         
+           QuadShape* q = new QuadShape(position, ABSOLUTE, NULL, p1.distanceTo(p2), 1e5, false);
+           sr.addShape(q);
+           
+       
+           // Mesh* _mesh = l.createMesh();
+            
+            
+           // cr.create
+          //  _meshrender.addMesh(_mesh);
+          /*  BoxShape* line = new BoxShape(position, ABSOLUTE, extent, borderWidth, col, NULL, true);
+            Vector3D dir = (p1.sub(p2)).normalized();
+            float a = acos(dir._x);
+            float b = acos(dir._y);
+            float c = acos(dir._z);
+            Angle alpha = Angle::fromRadians(a);
+            Angle beta = Angle::fromRadians(b);
+            Angle gamma = Angle::fromRadians(c);
+            //line->setPitch(alpha);
+            //line->setRoll(beta);
+            //line->setHeading(gamma);
+            //line->setPosition(*position);
+            
+            sr.addShape(line);*/
+    
+          //  FloatBufferBuilderFromCartesian3D(, p1);//what is first argument?
+           // FloatBufferBuilder *f = new FloatBufferBuilder();
+            //IFloatBuffer* buf = f->create()
+           /* IFloatBuffer* buf = FloatBufferBuilderFromCartesian3D(<#FloatBufferBuilder::CenterStrategy centerStrategy#>, <#const Vector3D &center#>)
+            
+            
+            
+            Mesh* m = new DirectMesh(0,
+                                     true,
+                                     p1.add(p2).div(2.0),
+                                     IFloatBuffer* vertices,
+                                     float lineWidth,
+                                     2,
+                                     NULL,
+                                     NULL,
+                                     0.0,
+                                     true,
+                                    NULL));*/
+            //Shape* mesh = new MeshShape();
+    /*Shape *line = new BoxShape(position, ABSOLUTE, extent, borderWidth, col, NULL, true);
+    Vector3D dir = p1.sub(p2).normalized();
+    float a = acos(dir._x);
+    float b = acos(dir._y);
+    float c = acos(dir._z);
+    Angle alpha = Angle::fromRadians(a);
+    Angle beta = Angle::fromRadians(b);
+    Angle gamma = Angle::fromRadians(c);
+    line->setPitch(alpha);
+    line->setRoll(beta);
+    line->setHeading(gamma);
+
+    sr.addShape(line);*/
+
+        }
+    }
+    
+    sr.render(rc, glState);
+    //_meshrender.render(rc, glState);
+    sr.removeAllShapes();
     //TODO: get rid of this stuff
     /*for(int i = 0; i < _visibleMarks.size(); i++) {
         _visibleMarks[i]->getShape()->setPosition(Geodetic3D::fromDegrees(0, 0, 1));

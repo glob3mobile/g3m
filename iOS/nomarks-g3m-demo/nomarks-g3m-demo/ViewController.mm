@@ -53,7 +53,7 @@
                                                0,
                                                false,
                                                false,
-                                               Color::fromRGBA(1, 0, 0, .5));
+                                               Color::fromRGBA(1, 0, 0, .9));
     
     Shape* anchor_sphere = new EllipsoidShape(new Geodetic3D(Angle::fromDegrees(0),
                                                       Angle::fromDegrees(0),
@@ -64,20 +64,23 @@
                                        0,
                                        false,
                                        false,
-                                       Color::fromRGBA(0, 1, 0, .5));
+                                       Color::fromRGBA(0, 1, 0, .9));
    // anchor_sphere->setScale(1000);
     //sphere->setScale(1000);
     
     MarksRenderer *marksRenderer = new MarksRenderer(true);
-    NonOverlapping3DMarksRenderer *forceGraphRenderer = new NonOverlapping3DMarksRenderer(3);
-    NonOverlapping3DMark *anchor = new NonOverlapping3DMark(anchor_sphere, sphere, Geodetic3D::fromDegrees(.5, .5, 5));
-    NonOverlapping3DMark *node = new NonOverlapping3DMark(sphere, anchor_sphere, Geodetic3D::fromDegrees(2, 2, 7));
-   // NonOverlapping3DMark *node2 = new NonOverlapping3DMark(imageBuilder3, Geodetic3D::fromDegrees(10, 20, 1));
+    NonOverlapping3DMarksRenderer *forceGraphRenderer = new NonOverlapping3DMarksRenderer(4);
+    NonOverlapping3DMark *anchor = new NonOverlapping3DMark(anchor_sphere, sphere, Geodetic3D::fromDegrees(0, 0, 5e5));
+    NonOverlapping3DMark *node = new NonOverlapping3DMark(sphere, anchor_sphere, Geodetic3D::fromDegrees(4, 0, 5e5));
+     NonOverlapping3DMark *node2 = new NonOverlapping3DMark(sphere, anchor_sphere, Geodetic3D::fromDegrees(0, 4, 5));
+    NonOverlapping3DMark *node3 = new NonOverlapping3DMark(sphere, anchor_sphere, Geodetic3D::fromDegrees(30, 30, 3));
     node->addAnchor(anchor);
-   // node->addNeighbor(anchor);
+    node2->addAnchor(anchor);
+   // node3->addNeighbor(anchor);
     forceGraphRenderer->addMark(node);
     forceGraphRenderer->addMark(anchor);
-   // forceGraphRenderer->addMark(node2);
+    forceGraphRenderer->addMark(node2);
+    //forceGraphRenderer->addMark(node3);
 
     builder.addRenderer(marksRenderer);
     builder.addRenderer(forceGraphRenderer);

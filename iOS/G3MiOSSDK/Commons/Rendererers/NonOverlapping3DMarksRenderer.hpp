@@ -76,10 +76,10 @@ public:
                        const Geodetic3D& position,
                        ShapeTouchListener* touchListener = NULL,
                        float springLengthInMeters = 1000.0f,
-                       float springK = 1.0f,
-                       float maxSpringLength = 10000.0f,
-                       float minSpringLength = 500.0f,
-                       float electricCharge = 1000.0f, //was 3000
+                       float springK = 7.0f,
+                       float maxSpringLength = 0.0f,
+                       float minSpringLength = 0.0f,
+                       float electricCharge = 3000000.0f, //was 3000
                        float maxWidgetSpeedInPixelsPerSecond = 1000.0f,
                        float minWidgetSpeedInPixelsPerSecond = 35.0f,
                        float resistanceFactor = 0.95f);
