@@ -13,6 +13,8 @@
 
 #include "MutableMatrix44D.hpp"
 
+#include <vector>
+
 class MutableVector3D;
 class Vector3F;
 
@@ -108,7 +110,7 @@ public:
   }
 
   bool isPerpendicularTo(const Vector3D& v) const {
-    return IMathUtils::instance()->abs(_x * v._x + _y * v._y + _z * v._z) < 0.00001;
+    return IMathUtils::instance()->abs(_x * v._x + _y * v._y + _z * v._z) < 0.001;
   }
   
   Vector3D add(const Vector3D& v) const {
@@ -218,6 +220,8 @@ public:
   const double distanceTo(const Vector3D& that) const;
 
   Vector3F asVector3F() const;
+  
+  std::vector<double> rotationAngleInRadiansToYZPlane(const Vector3D& rotationAxis, const Vector3D& rotationPoint) const;
 
 };
 

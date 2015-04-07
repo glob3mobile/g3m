@@ -223,6 +223,11 @@ public:
     return Geodetic3D(rendereSector._center,
                       height);
   }
+  
+  mutable MutableVector3D _finalPoint0;
+  mutable MutableVector3D _finalPoint1;
+  
+  void correctPitchAfterDoubleDrag(Camera* camera) const;
 
   const std::string getType() const {
     return "Spherical";

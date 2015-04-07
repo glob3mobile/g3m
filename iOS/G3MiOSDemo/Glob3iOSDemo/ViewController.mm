@@ -318,6 +318,7 @@ Mesh* createSectorMesh(const Planet* planet,
   //
   
   G3MBuilder_iOS builder([self G3MWidget]);
+  builder.setPlanet(Planet::createSphericalEarth());
   
   //builder.setPlanet(Planet::createFlatEarth());
   builder.initializeWidget();

@@ -228,3 +228,57 @@ Vector3D Vector3D::sub(const MutableVector3D& v) const {
                   _y - v.y(),
                   _z - v.z());
 }
+
+//double Power(double x, double p){
+//  return IMathUtils::instance()->pow(x, p);
+//}
+//
+//double Sqrt(double x){
+//  return IMathUtils::instance()->sqrt(x);
+//}
+//
+//double ArcTan(double x, double y){
+//  return IMathUtils::instance()->atan2(x, y);
+//}
+//
+//double ArcCos(double x){
+//  return IMathUtils::instance()->acos(x);
+//}
+
+std::vector<double> Vector3D::rotationAngleInRadiansToYZPlane(const Vector3D& rotationAxis, const Vector3D& rotationPoint) const{
+  
+  std::vector<double> sol;
+  
+  Vector3D axis = rotationAxis.times(1.0/rotationAxis.length());
+  double x = _x, y = _y, z = _z;
+  double a = rotationPoint._x, b = rotationPoint._y, c = rotationPoint._z;
+  double u = axis._x, v = axis._y, w = axis._z;
+  
+  ////http://inside.mines.edu/fs_home/gmurray/ArbitraryAxisRotation/ 6.2
+  //////MATHEMATICA CODE
+  
+  const IMathUtils* mu = IMathUtils::instance();
+  double j = a*(v*v + w*w) - u*(b*v + c*w - u*x - v*y - w*z);
+  double i = -(c*v) + b*w - w*y + v*z;
+  
+//  double s1 = -ArcCos((Power(j,2) - j*x - Sqrt(Power(i,2)*(Power(i,2) - 2*j*x + Power(x,2))))/(Power(i,2) + Power(j - x,2)));
+//  double s2 = -ArcCos((Power(j,2) - j*x + Sqrt(Power(i,2)*(Power(i,2) + x*(-2*j + x))))/(Power(i,2) + Power(j - x,2)));
+  
+  double s1 = (j*j - j*x - mu->sqrt(i*i*(i*i - 2*j*x + x*x)))/(i*i + (j - x) * (j - x));
+  double s2 = (j*j - j*x + mu->sqrt(i*i*(i*i + x*(-2*j + x))))/(i*i + (j - x) * (j - x));
+
+  
+  //x = j*(1 - Cos(t)) + x*Cos(t) + i*Sqrt(1 - Power(Cos(t),2));
+  if (mu->abs(j*(1 - s1) + x*s1 + i*mu->sqrt(1 - s1*s1)) < 0.0001){
+    sol.push_back(mu->acos(s1));
+    sol.push_back(-mu->acos(s1));
+  }
+  if (mu->abs(j*(1 - s2) + x*s2 + i*mu->sqrt(1 - s2*s2)) < 0.0001){
+    sol.push_back(mu->acos(s2));
+    sol.push_back(-mu->acos(s2));
+  }
+  
+  return sol;
+  
+  
+}

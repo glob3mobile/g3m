@@ -145,6 +145,8 @@ public:
   CoordinateSystem getCoordinateSystemAt(const Geodetic3D& geo) const;
 
   virtual const std::string getType() const = 0;
+  
+  virtual void correctPitchAfterDoubleDrag(Camera* camera) const{}
 
 };
 
