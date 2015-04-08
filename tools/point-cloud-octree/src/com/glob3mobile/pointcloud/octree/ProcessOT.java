@@ -15,6 +15,8 @@ import javax.imageio.ImageIO;
 
 import com.glob3mobile.pointcloud.octree.berkeleydb.BerkeleyDBLOD;
 import com.glob3mobile.pointcloud.octree.berkeleydb.BerkeleyDBOctree;
+import com.glob3mobile.utils.Geodetic3D;
+import com.glob3mobile.utils.Sector;
 
 import es.igosoftware.util.GUndeterminateProgress;
 
@@ -245,7 +247,7 @@ public class ProcessOT {
                         public void informProgress(final long stepsDone,
                                                    final long elapsed) {
                            System.out.println("- gathering statistics for \"" + lodDB.getCloudName() + "\""
-                                    + progressString(stepsDone, elapsed));
+                                              + progressString(stepsDone, elapsed));
                         }
                      };
                   }
@@ -290,8 +292,8 @@ public class ProcessOT {
                      System.out.println("     Points/Node: " + ((float) _pointsCounter / _nodesCounter));
                      System.out.println("     Points/Level: " + ((float) _pointsCounter / _levelsCounter));
                      System.out.println("   Density/Node: Average=" + (_sumDensity / _nodesCounter) + //
-                              ", Min=" + _minDensity + //
-                              ", Max=" + _maxDensity);
+                                        ", Min=" + _minDensity + //
+                                        ", Max=" + _maxDensity);
                      System.out.println("======================================================================");
                   }
                };

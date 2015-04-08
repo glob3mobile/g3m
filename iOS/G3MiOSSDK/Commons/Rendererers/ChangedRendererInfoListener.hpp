@@ -24,7 +24,8 @@ public:
   void dispose();
 #endif
   
-  virtual void changedRendererInfo(const int rendererIdentifier, const std::vector<const Info*> info) = 0;
+  virtual void changedRendererInfo(const int rendererIdentifier,
+                                   const std::vector<const Info*>& info) = 0;
   
  };
 

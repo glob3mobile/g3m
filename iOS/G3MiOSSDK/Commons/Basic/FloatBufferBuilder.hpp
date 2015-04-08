@@ -92,7 +92,7 @@ public:
   virtual ~FloatBufferBuilder() {
   }
 
-  int size() const {
+  size_t size() const {
     return _values.size();
   }
 

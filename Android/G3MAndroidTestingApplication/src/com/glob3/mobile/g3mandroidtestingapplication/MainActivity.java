@@ -2,14 +2,29 @@
 
 package com.glob3.mobile.g3mandroidtestingapplication;
 
-import org.glob3.mobile.generated.Angle;
-import org.glob3.mobile.generated.DownloadPriority;
+import org.glob3.mobile.generated.AltitudeMode;
+import org.glob3.mobile.generated.Color;
+import org.glob3.mobile.generated.ColumnLayoutImageBuilder;
+import org.glob3.mobile.generated.DownloaderImageBuilder;
+import org.glob3.mobile.generated.G3MContext;
+import org.glob3.mobile.generated.GFont;
+import org.glob3.mobile.generated.GInitializationTask;
 import org.glob3.mobile.generated.Geodetic3D;
-import org.glob3.mobile.generated.PointCloudsRenderer;
-import org.glob3.mobile.generated.PointCloudsRenderer.ColorPolicy;
-import org.glob3.mobile.generated.PointCloudsRenderer.PointCloudMetadataListener;
+import org.glob3.mobile.generated.ICanvas;
+import org.glob3.mobile.generated.IImage;
+import org.glob3.mobile.generated.IImageDownloadListener;
+import org.glob3.mobile.generated.IImageListener;
+import org.glob3.mobile.generated.LabelImageBuilder;
+import org.glob3.mobile.generated.LayerSet;
+import org.glob3.mobile.generated.NonOverlappingMark;
+import org.glob3.mobile.generated.NonOverlappingMarkTouchListener;
+import org.glob3.mobile.generated.NonOverlappingMarksRenderer;
+import org.glob3.mobile.generated.OSMLayer;
+import org.glob3.mobile.generated.QuadShape;
+import org.glob3.mobile.generated.ShapesRenderer;
 import org.glob3.mobile.generated.TimeInterval;
 import org.glob3.mobile.generated.URL;
+import org.glob3.mobile.generated.Vector2F;
 import org.glob3.mobile.specific.G3MBuilder_Android;
 import org.glob3.mobile.specific.G3MWidget_Android;
 
@@ -36,206 +51,199 @@ public class MainActivity
 
       setContentView(R.layout.activity_main);
 
-
       _g3mWidget = createWidget();
 
       final RelativeLayout placeHolder = (RelativeLayout) findViewById(R.id.g3mWidgetHolder);
 
-
       placeHolder.addView(_g3mWidget);
 
+      _g3mWidget.setAnimatedCameraPosition(Geodetic3D.fromDegrees(28.034468668529083146, -15.904092315837871752, 1634079));
 
-      final Geodetic3D zurichPos = Geodetic3D.fromDegrees(40, -75, 80000);
-      _g3mWidget.getG3MWidget().setAnimatedCameraPosition(TimeInterval.fromSeconds(5), zurichPos, Angle.zero(),
-               Angle.fromDegrees(-90));
+      //      // Buenos Aires, there we go!
+      //      _g3mWidget.setAnimatedCameraPosition(Geodetic3D.fromDegrees(-34.615047738942699596, -58.4447233540403559, 35000));
+   }
 
+
+   private static NonOverlappingMark createMark(final Geodetic3D position) {
+      final URL markBitmapURL = new URL("file:///g3m-marker.png");
+      final URL anchorBitmapURL = new URL("file:///anchorWidget.png");
+
+      return new NonOverlappingMark( //
+               new DownloaderImageBuilder(markBitmapURL), //
+               new DownloaderImageBuilder(anchorBitmapURL), //
+               position);
+   }
+
+
+   private static NonOverlappingMark createMark(final String label,
+                                                final Geodetic3D position) {
+      final URL markBitmapURL = new URL("file:///g3m-marker.png");
+      final URL anchorBitmapURL = new URL("file:///anchorWidget.png");
+
+      final ColumnLayoutImageBuilder imageBuilderWidget = new ColumnLayoutImageBuilder( //
+               new DownloaderImageBuilder(markBitmapURL), //
+               new LabelImageBuilder(label, GFont.monospaced()) //
+      );
+
+      return new NonOverlappingMark( //
+               imageBuilderWidget, //
+               new DownloaderImageBuilder(anchorBitmapURL), //
+               position);
    }
 
 
    private G3MWidget_Android createWidget() {
       final G3MBuilder_Android builder = new G3MBuilder_Android(this);
 
-      final PointCloudsRenderer pcr = new PointCloudsRenderer();
-
-      final URL serverURL = new URL("http://glob3mobile.dyndns.org:8080");
-      //  final String cloudName = "Loudoun-VA_simplified2_LOD";
-      final String cloudName = "Loudoun-VA_fragment_LOD";
-      final long downloadPriority = DownloadPriority.LOWER;
-      final TimeInterval timeToCache = TimeInterval.zero();
-      final boolean readExpired = false;
-      final float pointSize = 2;
-      final float verticalExaggeration = 1;
-      final double deltaHeight = 0;
-      final PointCloudMetadataListener metadataListener = null;
-      final boolean deleteListener = true;
-
-      pcr.addPointCloud( //
-               serverURL, //
-               cloudName, //
-               downloadPriority, //
-               timeToCache, //
-               readExpired, //
-               ColorPolicy.MIN_AVERAGE3_HEIGHT, //
-               pointSize, //
-               verticalExaggeration, //
-               deltaHeight, //
-               metadataListener, //
-               deleteListener);
+      final LayerSet layerSet = new LayerSet();
+      layerSet.addLayer(new OSMLayer(TimeInterval.fromDays(30)));
+      builder.getPlanetRendererBuilder().setLayerSet(layerSet);
 
 
-      builder.addRenderer(pcr);
+      final NonOverlappingMarksRenderer renderer = new NonOverlappingMarksRenderer(30);
+      builder.addRenderer(renderer);
 
-      //      final TimeInterval connectTimeout = TimeInterval.fromSeconds(60);
-      //      final TimeInterval readTimeout = TimeInterval.fromSeconds(65);
-      //      final boolean saveInBackground = true;
+      renderer.setTouchListener(new NonOverlappingMarkTouchListener() {
+         @Override
+         public boolean touchedMark(final NonOverlappingMark mark,
+                                    final Vector2F touchedPixel) {
+            System.out.println("Touched on pixel=" + touchedPixel + ", mark=" + mark);
+            return true;
+         }
+      });
 
-      //      builder.getPlanetRendererBuilder().setLayerSet(createLayerSet());
-      // builder.getPlanetRendererBuilder().setRenderDebug(true);
-      // builder.getPlanetRendererBuilder().setLogTilesPetitions(true);
+      renderer.addMark(createMark("Label #1", Geodetic3D.fromDegrees(28.131817, -15.440219, 0)));
+      renderer.addMark(createMark(Geodetic3D.fromDegrees(28.947345, -13.523105, 0)));
+      renderer.addMark(createMark(Geodetic3D.fromDegrees(28.473802, -13.859360, 0)));
+      renderer.addMark(createMark(Geodetic3D.fromDegrees(28.467706, -16.251426, 0)));
+      renderer.addMark(createMark(Geodetic3D.fromDegrees(28.701819, -17.762003, 0)));
+      renderer.addMark(createMark(Geodetic3D.fromDegrees(28.086595, -17.105796, 0)));
+      renderer.addMark(createMark(Geodetic3D.fromDegrees(27.810709, -17.917639, 0)));
+
+
+      final boolean testCanvas = false;
+      if (testCanvas) {
+         final ShapesRenderer shapesRenderer = new ShapesRenderer();
+         builder.addRenderer(shapesRenderer);
+
+
+         builder.setInitializationTask(new GInitializationTask() {
+            @Override
+            public void run(final G3MContext context) {
+
+
+               final IImageDownloadListener listener = new IImageDownloadListener() {
+                  @Override
+                  public void onError(final URL url) {
+                  }
+
+
+                  @Override
+                  public void onDownload(final URL url,
+                                         final IImage image,
+                                         final boolean expired) {
+
+                     final ICanvas canvas = context.getFactory().createCanvas();
+                     final int width = 1024;
+                     final int height = 1024;
+                     canvas.initialize(width, height);
+
+                     canvas.setFillColor(Color.fromRGBA(1f, 1f, 0f, 0.5f));
+                     canvas.fillRectangle(0, 0, width, height);
+                     canvas.setLineWidth(4);
+                     canvas.setLineColor(Color.black());
+                     canvas.strokeRectangle(0, 0, width, height);
+
+                     final int steps = 8;
+                     final float leftStep = (float) width / steps;
+                     final float topStep = (float) height / steps;
+
+                     canvas.setLineWidth(1);
+                     canvas.setFillColor(Color.fromRGBA(0f, 0f, 0f, 0.75f));
+                     for (int i = 1; i < steps; i++) {
+                        canvas.fillRectangle(0, topStep * i, width, 1);
+                        canvas.fillRectangle(leftStep * i, 0, 1, height);
+                     }
+
+                     canvas.setFont(GFont.monospaced());
+                     canvas.setFillColor(Color.black());
+                     //                  canvas.fillText("0,0", 0, 0);
+                     //                  canvas.fillText("w,h", width, height);
+                     for (int i = 0; i < steps; i++) {
+                        canvas.fillText("Hellow World", leftStep * i, topStep * i);
+                     }
+
+                     //                  canvas.drawImage(image, width / 4, height / 4); // ok
+
+                     canvas.drawImage(image, width / 8, height / 8); // ok
+                     canvas.drawImage(image, (width / 8) * 3, height / 8, 0.5f); // ok
+
+                     canvas.drawImage(image, width / 8, (height / 8) * 3, image.getWidth() * 2, image.getHeight() * 2); // ok
+                     canvas.drawImage(image, (width / 8) * 3, (height / 8) * 3, image.getWidth() * 2, image.getHeight() * 2, 0.5f); //ok
+
+                     // ok
+                     canvas.drawImage(image, //
+                              0, 0, image.getWidth(), image.getHeight(), //
+                              (width / 8) * 5, (height / 8) * 5, image.getWidth() * 2, image.getHeight() * 2);
+                     // ok
+                     canvas.drawImage(image, //
+                              0, 0, image.getWidth(), image.getHeight(), //
+                              (width / 8) * 7, (height / 8) * 7, image.getWidth() * 2, image.getHeight() * 2, //
+                              0.5f);
+
+
+                     canvas.createImage(new IImageListener() {
+                        @Override
+                        public void imageCreated(final IImage canvasImage) {
+                           final QuadShape quad = new QuadShape( //
+                                    Geodetic3D.fromDegrees(-34.615047738942699596, -58.4447233540403559, 1000), //
+                                    AltitudeMode.ABSOLUTE, //
+                                    canvasImage, //
+                                    canvasImage.getWidth() * 15.0f, //
+                                    canvasImage.getHeight() * 15.0f, //
+                                    true);
+
+                           shapesRenderer.addShape(quad);
+                        }
+                     }, true);
+
+                     canvas.dispose();
+
+                     image.dispose();
+                  }
+
+
+                  @Override
+                  public void onCanceledDownload(final URL url,
+                                                 final IImage image,
+                                                 final boolean expired) {
+                  }
+
+
+                  @Override
+                  public void onCancel(final URL url) {
+                  }
+               };
+
+
+               context.getDownloader().requestImage( //
+                        new URL("file:///g3m-marker.png"), //
+                        1, // priority, //
+                        TimeInterval.zero(), //
+                        false, //
+                        listener, //
+                        true);
+            }
+
+
+            @Override
+            public boolean isDone(final G3MContext context) {
+               return true;
+            }
+         });
+      }
+
 
       return builder.createWidget();
    }
-
-
-   //   private static class SampleRasterSymbolizer
-   //   extends
-   //   GEORasterSymbolizer {
-   //
-   //      private static final Color FROM_COLOR = Color.fromRGBA(0.7f, 0, 0, 0.5f);
-   //
-   //
-   //      private static GEO2DLineRasterStyle createPolygonLineRasterStyle(final GEOGeometry geometry) {
-   //         final JSONObject properties = geometry.getFeature().getProperties();
-   //         final int colorIndex = (int) properties.getAsNumber("mapcolor7", 0);
-   //         final Color color = FROM_COLOR.wheelStep(7, colorIndex).muchLighter().muchLighter();
-   //         final float dashLengths[] = {};
-   //         final int dashCount = 0;
-   //         return new GEO2DLineRasterStyle(color, 2, StrokeCap.CAP_ROUND, StrokeJoin.JOIN_ROUND, 1, dashLengths, dashCount, 0);
-   //      }
-   //
-   //
-   //      private static GEO2DSurfaceRasterStyle createPolygonSurfaceRasterStyle(final GEOGeometry geometry) {
-   //         final JSONObject properties = geometry.getFeature().getProperties();
-   //         final int colorIndex = (int) properties.getAsNumber("mapcolor7", 0);
-   //         final Color color = FROM_COLOR.wheelStep(7, colorIndex);
-   //         return new GEO2DSurfaceRasterStyle(color);
-   //      }
-   //
-   //
-   //      @Override
-   //      public GEORasterSymbolizer copy() {
-   //         return new SampleRasterSymbolizer();
-   //      }
-   //
-   //
-   //      @Override
-   //      public ArrayList<GEORasterSymbol> createSymbols(final GEO2DPointGeometry geometry) {
-   //         return null;
-   //      }
-   //
-   //
-   //      @Override
-   //      public ArrayList<GEORasterSymbol> createSymbols(final GEO2DLineStringGeometry geometry) {
-   //         return null;
-   //      }
-   //
-   //
-   //      @Override
-   //      public ArrayList<GEORasterSymbol> createSymbols(final GEO2DMultiLineStringGeometry geometry) {
-   //         return null;
-   //      }
-   //
-   //
-   //      @Override
-   //      public ArrayList<GEORasterSymbol> createSymbols(final GEO2DPolygonGeometry geometry) {
-   //         final ArrayList<GEORasterSymbol> symbols = new ArrayList<GEORasterSymbol>();
-   //         final GEOPolygonRasterSymbol symbol = new GEOPolygonRasterSymbol( //
-   //                  geometry.getPolygonData(), //
-   //                  createPolygonLineRasterStyle(geometry), //
-   //                  createPolygonSurfaceRasterStyle(geometry) //
-   //                  );
-   //         symbols.add(symbol);
-   //         return symbols;
-   //      }
-   //
-   //
-   //      @Override
-   //      public ArrayList<GEORasterSymbol> createSymbols(final GEO2DMultiPolygonGeometry geometry) {
-   //         final ArrayList<GEORasterSymbol> symbols = new ArrayList<GEORasterSymbol>();
-   //
-   //         final GEO2DLineRasterStyle lineStyle = createPolygonLineRasterStyle(geometry);
-   //         final GEO2DSurfaceRasterStyle surfaceStyle = createPolygonSurfaceRasterStyle(geometry);
-   //
-   //         for (final GEO2DPolygonData polygonData : geometry.getPolygonsData()) {
-   //            symbols.add(new GEOPolygonRasterSymbol(polygonData, lineStyle, surfaceStyle));
-   //         }
-   //
-   //
-   //         layerSet.createLayerTilesRenderParameters(forceFirstLevelTilesRenderOnStart, new ArrayList<String>());
-   //
-   //
-   //         final WMSLayer pnoa = new WMSLayer("PNOA", new URL("http://www.idee.es/wms/PNOA/PNOA", false), WMSServerVersion.WMS_1_1_0,
-   //                  Sector.fromDegrees(40.1640143280790858, -5.8564874640814313, 40.3323148480663158, -5.5216079822178570),
-   //                  "image/png", "EPSG:4326", "", true, null, TimeInterval.fromDays(0), true, null, 1);
-   //
-   //
-   //         final WMSLayer blueMarble = new WMSLayer("bmng200405", new URL("http://www.nasa.network.com/wms?", false),
-   //                  WMSServerVersion.WMS_1_1_0, //
-   //                  Sector.fromDegrees(40.1240143280790858, -5.8964874640814313, 40.3723148480663158, -5.4816079822178570),//
-   //                  //               Sector.fromDegrees(0, -90, 45, 0),
-   //                  "image/jpeg", "EPSG:4326", "", false, null, //new LevelTileCondition(0, 6),
-   //                  //NULL,
-   //                  TimeInterval.fromDays(0), true, null, 1);
-   //         layerSet.addLayer(blueMarble);
-   //         layerSet.addLayer(pnoa);
-   //
-   //         layerSet.setTileImageProvider(new DebugTileImageProvider());
-   //
-   //         builder.getPlanetRendererBuilder().setLayerSet(layerSet);
-   //         builder.getPlanetRendererBuilder().setRenderDebug(true);
-   //
-   //         builder.getPlanetRendererBuilder().setDefaultTileBackGroundImage(
-   //                  new DownloaderImageBuilder(new URL("http://www.freelogovectors.net/wp-content/uploads/2013/02/sheep-b.png")));
-   //
-   //         //  builder.getPlanetRendererBuilder()->setDefaultTileBackGroundImage(new DownloaderImageBuilder(URL("http://192.168.1.127:8080/web/img/tileNotFound.jpg")));
-   //         //  const Sector sector = Sector::fromDegrees(40.1540143280790858, -5.8664874640814313,
-   //         //                                                40.3423148480663158, -5.5116079822178570);
-   //         //
-   //         final Default_HUDRenderer hudRenderer = new Default_HUDRenderer();
-   //         final InfoDisplay infoDisplay = new DefaultInfoDisplay(hudRenderer);
-   //         //infoDisplay->showDisplay();
-   //
-   //         builder.setHUDRenderer(hudRenderer);
-   //         builder.setInfoDisplay(infoDisplay);
-   //
-   //         final TiledVectorLayer tiledVectorLayer = TiledVectorLayer.newMercator( //
-   //                  symbolizer, //
-   //                  urlTemplate, //
-   //                  sector, // sector
-   //                  firstLevel, //
-   //                  maxLevel, //
-   //                  TimeInterval.fromDays(30), // timeToCache
-   //                  true, // readExpired
-   //                  1, // transparency
-   //                  new LevelTileCondition(15, 21), // condition
-   //                  "" // disclaimerInfo
-   //                  );
-   //         // layerSet.addLayer(tiledVectorLayer);
-   //
-   //         // builder.getPlanetRendererBuilder().setRenderDebug(true);
-   //         // builder.getPlanetRendererBuilder().setLogTilesPetitions(true);
-   //
-   //         return builder.createWidget();
-   //      }
-   //
-   //
-   //      @Override
-   //      public boolean onCreateOptionsMenu(final Menu menu) {
-   //         // Inflate the menu; this adds items to the action bar if it is present.
-   //         getMenuInflater().inflate(R.menu.main, menu);
-   //         return true;
-   //      }
-   //
-   //   }
-
 }

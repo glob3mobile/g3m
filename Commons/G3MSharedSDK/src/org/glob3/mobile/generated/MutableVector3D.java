@@ -51,7 +51,7 @@ public class MutableVector3D
      _z = v._z;
   }
 
-  public final void put(double x, double y, double z)
+  public final void set(double x, double y, double z)
   {
     _x = x;
     _y = y;

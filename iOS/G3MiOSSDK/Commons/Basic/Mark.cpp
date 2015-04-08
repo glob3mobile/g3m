@@ -459,7 +459,7 @@ void Mark::render(const G3MRenderContext* rc,
 
 //  const Vector3D markCameraVector = markPosition->sub(cameraPosition);
 //  _markCameraVector.putSub(markPosition, cameraPosition);
-  _markCameraVector.put(markPosition->_x - cameraPosition.x(),
+  _markCameraVector.set(markPosition->_x - cameraPosition.x(),
                         markPosition->_y - cameraPosition.y(),
                         markPosition->_z - cameraPosition.z());
 

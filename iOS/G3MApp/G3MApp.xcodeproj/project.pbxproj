@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		75ECCE6E1AC4447E001F4544 /* G3MOSMBuildingsDemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75ECCE6C1AC4447E001F4544 /* G3MOSMBuildingsDemoScene.cpp */; };
+		CF162FDF1AB7396D00673D44 /* libGoogleAnalyticsServices.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CF162FDE1AB7396D00673D44 /* libGoogleAnalyticsServices.a */; };
+		CF162FE21AB739C800673D44 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CF162FE11AB739C800673D44 /* SystemConfiguration.framework */; };
+		CF162FE41AB739D700673D44 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = CF162FE31AB739D700673D44 /* libz.dylib */; };
 		CF37F5EE183D239A0050CAEF /* G3MScenarioDEMDemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF37F5EC183D239A0050CAEF /* G3MScenarioDEMDemoScene.cpp */; };
 		CF37F5F1183D26500050CAEF /* 0576.bil in Resources */ = {isa = PBXBuildFile; fileRef = CF37F5F0183D26500050CAEF /* 0576.bil */; };
 		CF37F5F5183D355E0050CAEF /* MainStoryboard-iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CF37F5F4183D355E0050CAEF /* MainStoryboard-iPhone.storyboard */; };
@@ -29,10 +32,15 @@
 		CF6920C918394F56007409D8 /* restaurant-48x48.png in Resources */ = {isa = PBXBuildFile; fileRef = CF6920C818394F56007409D8 /* restaurant-48x48.png */; };
 		CF6920CC1839679B007409D8 /* G3MSelectOptionViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = CF6920CB1839679B007409D8 /* G3MSelectOptionViewController.mm */; };
 		CF6E184C19D35ADD002B456A /* loudoun_4326_300.bil in Resources */ = {isa = PBXBuildFile; fileRef = CF6E184B19D35ADD002B456A /* loudoun_4326_300.bil */; };
-		CF8B1A541837DBFA004D3902 /* G3MDemoModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF8B1A521837DBFA004D3902 /* G3MDemoModel.cpp */; };
+		CF8B1A541837DBFA004D3902 /* G3MDemoModel.mm in Sources */ = {isa = PBXBuildFile; fileRef = CF8B1A521837DBFA004D3902 /* G3MDemoModel.mm */; };
 		CF8B1A581837DC69004D3902 /* G3MDemoListener.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF8B1A561837DC69004D3902 /* G3MDemoListener.cpp */; };
+		CFB136CB1AA74FA00013EDE1 /* G3MAugmentedRealityDemoScene.mm in Sources */ = {isa = PBXBuildFile; fileRef = CFB136C91AA74FA00013EDE1 /* G3MAugmentedRealityDemoScene.mm */; };
+		CFB136CE1AA7573D0013EDE1 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CFB136CD1AA7573D0013EDE1 /* CoreLocation.framework */; };
+		CFB136D01AA779830013EDE1 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CFB136CF1AA779830013EDE1 /* CoreMotion.framework */; };
 		CFB806E21837D4D300DB4B3B /* G3MDemoBuilder_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = CFB806E01837D4D300DB4B3B /* G3MDemoBuilder_iOS.mm */; };
 		CFBD815219A3D9F600F1A8C4 /* G3MStreamingPointCloud1DemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFBD815019A3D9F600F1A8C4 /* G3MStreamingPointCloud1DemoScene.cpp */; };
+		CFC192D81A8D2E5F00FA89B3 /* G3MCanvas2DDemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFC192D61A8D2E5F00FA89B3 /* G3MCanvas2DDemoScene.cpp */; };
+		CFC192DB1A8D3A7C00FA89B3 /* colorgrid.jpg in Resources */ = {isa = PBXBuildFile; fileRef = CFC192DA1A8D3A7C00FA89B3 /* colorgrid.jpg */; };
 		CFC59BAC176F68DB002806D6 /* full-earth-2048x1024.bil in Resources */ = {isa = PBXBuildFile; fileRef = CFC59BAB176F68DB002806D6 /* full-earth-2048x1024.bil */; };
 		CFD3BE3D19D3324F00FE2D5A /* G3MStreamingPointCloud2DemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFD3BE3B19D3324F00FE2D5A /* G3MStreamingPointCloud2DemoScene.cpp */; };
 		CFE3B3C7183A99070078C796 /* G3MMarkersDemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFE3B3C5183A99070078C796 /* G3MMarkersDemoScene.cpp */; };
@@ -58,6 +66,10 @@
 		CFF64D4518329FB7006ABFF6 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CFF64D4418329FB7006ABFF6 /* Security.framework */; };
 		CFF64D4718329FC8006ABFF6 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CFF64D4618329FC8006ABFF6 /* CFNetwork.framework */; };
 		CFF64D4918329FE6006ABFF6 /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = CFF64D4818329FE6006ABFF6 /* libicucore.dylib */; };
+		CFF9D2061A7C4903005429A6 /* G3MNonOverlappingMarksDemoScene.mm in Sources */ = {isa = PBXBuildFile; fileRef = CFF9D2041A7C4903005429A6 /* G3MNonOverlappingMarksDemoScene.mm */; };
+		CFF9D20A1A7C5014005429A6 /* anchorWidget.png in Resources */ = {isa = PBXBuildFile; fileRef = CFF9D2091A7C5014005429A6 /* anchorWidget.png */; };
+		CFF9D20C1A7C5048005429A6 /* g3m-marker.png in Resources */ = {isa = PBXBuildFile; fileRef = CFF9D20B1A7C5048005429A6 /* g3m-marker.png */; };
+		CFFCD2C91AD2C748004C7112 /* BuenosAires-Wikipedia.json in Resources */ = {isa = PBXBuildFile; fileRef = CFFCD2C81AD2C748004C7112 /* BuenosAires-Wikipedia.json */; };
 		E75321CB16D3DF6200CB3F8D /* libG3MiOSSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E7D1B64F16D24DE800AF47C1 /* libG3MiOSSDK.a */; };
 		E780A3CD16D29EA5000F0395 /* map-on-96x48.png in Resources */ = {isa = PBXBuildFile; fileRef = E780A3C716D29EA5000F0395 /* map-on-96x48.png */; };
 		E780A3CE16D29EA5000F0395 /* marker-wikipedia-48x48.png in Resources */ = {isa = PBXBuildFile; fileRef = E780A3C816D29EA5000F0395 /* marker-wikipedia-48x48.png */; };
@@ -113,6 +125,19 @@
 
 /* Begin PBXFileReference section */
 		75ECCE6C1AC4447E001F4544 /* G3MOSMBuildingsDemoScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = G3MOSMBuildingsDemoScene.cpp; sourceTree = "<group>"; };
+		CF162FD41AB7396D00673D44 /* GAI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GAI.h; sourceTree = "<group>"; };
+		CF162FD51AB7396D00673D44 /* GAIDictionaryBuilder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GAIDictionaryBuilder.h; sourceTree = "<group>"; };
+		CF162FD61AB7396D00673D44 /* GAIEcommerceFields.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GAIEcommerceFields.h; sourceTree = "<group>"; };
+		CF162FD71AB7396D00673D44 /* GAIEcommerceProduct.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GAIEcommerceProduct.h; sourceTree = "<group>"; };
+		CF162FD81AB7396D00673D44 /* GAIEcommerceProductAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GAIEcommerceProductAction.h; sourceTree = "<group>"; };
+		CF162FD91AB7396D00673D44 /* GAIEcommercePromotion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GAIEcommercePromotion.h; sourceTree = "<group>"; };
+		CF162FDA1AB7396D00673D44 /* GAIFields.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GAIFields.h; sourceTree = "<group>"; };
+		CF162FDB1AB7396D00673D44 /* GAILogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GAILogger.h; sourceTree = "<group>"; };
+		CF162FDC1AB7396D00673D44 /* GAITrackedViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GAITrackedViewController.h; sourceTree = "<group>"; };
+		CF162FDD1AB7396D00673D44 /* GAITracker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GAITracker.h; sourceTree = "<group>"; };
+		CF162FDE1AB7396D00673D44 /* libGoogleAnalyticsServices.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libGoogleAnalyticsServices.a; sourceTree = "<group>"; };
+		CF162FE11AB739C800673D44 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		CF162FE31AB739D700673D44 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		CF37F5EC183D239A0050CAEF /* G3MScenarioDEMDemoScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = G3MScenarioDEMDemoScene.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CF37F5ED183D239A0050CAEF /* G3MScenarioDEMDemoScene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = G3MScenarioDEMDemoScene.hpp; sourceTree = "<group>"; };
 		CF37F5F0183D26500050CAEF /* 0576.bil */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = 0576.bil; sourceTree = "<group>"; };
@@ -143,14 +168,21 @@
 		CF6920CA1839679B007409D8 /* G3MSelectOptionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = G3MSelectOptionViewController.h; sourceTree = "<group>"; };
 		CF6920CB1839679B007409D8 /* G3MSelectOptionViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = G3MSelectOptionViewController.mm; sourceTree = "<group>"; };
 		CF6E184B19D35ADD002B456A /* loudoun_4326_300.bil */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = loudoun_4326_300.bil; sourceTree = "<group>"; };
-		CF8B1A521837DBFA004D3902 /* G3MDemoModel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = G3MDemoModel.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
+		CF8B1A521837DBFA004D3902 /* G3MDemoModel.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; lineEnding = 0; path = G3MDemoModel.mm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CF8B1A531837DBFA004D3902 /* G3MDemoModel.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = G3MDemoModel.hpp; sourceTree = "<group>"; };
 		CF8B1A561837DC69004D3902 /* G3MDemoListener.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = G3MDemoListener.cpp; sourceTree = "<group>"; };
 		CF8B1A571837DC69004D3902 /* G3MDemoListener.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = G3MDemoListener.hpp; sourceTree = "<group>"; };
+		CFB136C91AA74FA00013EDE1 /* G3MAugmentedRealityDemoScene.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = G3MAugmentedRealityDemoScene.mm; sourceTree = "<group>"; };
+		CFB136CA1AA74FA00013EDE1 /* G3MAugmentedRealityDemoScene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = G3MAugmentedRealityDemoScene.hpp; sourceTree = "<group>"; };
+		CFB136CD1AA7573D0013EDE1 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		CFB136CF1AA779830013EDE1 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
 		CFB806E01837D4D300DB4B3B /* G3MDemoBuilder_iOS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = G3MDemoBuilder_iOS.mm; sourceTree = "<group>"; };
 		CFB806E11837D4D300DB4B3B /* G3MDemoBuilder_iOS.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; path = G3MDemoBuilder_iOS.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CFBD815019A3D9F600F1A8C4 /* G3MStreamingPointCloud1DemoScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = G3MStreamingPointCloud1DemoScene.cpp; sourceTree = "<group>"; };
 		CFBD815119A3D9F600F1A8C4 /* G3MStreamingPointCloud1DemoScene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = G3MStreamingPointCloud1DemoScene.hpp; sourceTree = "<group>"; };
+		CFC192D61A8D2E5F00FA89B3 /* G3MCanvas2DDemoScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = G3MCanvas2DDemoScene.cpp; sourceTree = "<group>"; };
+		CFC192D71A8D2E5F00FA89B3 /* G3MCanvas2DDemoScene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = G3MCanvas2DDemoScene.hpp; sourceTree = "<group>"; };
+		CFC192DA1A8D3A7C00FA89B3 /* colorgrid.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = colorgrid.jpg; sourceTree = "<group>"; };
 		CFC59BAB176F68DB002806D6 /* full-earth-2048x1024.bil */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "full-earth-2048x1024.bil"; sourceTree = "<group>"; };
 		CFD3BE3B19D3324F00FE2D5A /* G3MStreamingPointCloud2DemoScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = G3MStreamingPointCloud2DemoScene.cpp; sourceTree = "<group>"; };
 		CFD3BE3C19D3324F00FE2D5A /* G3MStreamingPointCloud2DemoScene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = G3MStreamingPointCloud2DemoScene.hpp; sourceTree = "<group>"; };
@@ -184,6 +216,11 @@
 		CFF64D4418329FB7006ABFF6 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		CFF64D4618329FC8006ABFF6 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		CFF64D4818329FE6006ABFF6 /* libicucore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.dylib; path = usr/lib/libicucore.dylib; sourceTree = SDKROOT; };
+		CFF9D2041A7C4903005429A6 /* G3MNonOverlappingMarksDemoScene.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = G3MNonOverlappingMarksDemoScene.mm; sourceTree = "<group>"; };
+		CFF9D2051A7C4903005429A6 /* G3MNonOverlappingMarksDemoScene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = G3MNonOverlappingMarksDemoScene.hpp; sourceTree = "<group>"; };
+		CFF9D2091A7C5014005429A6 /* anchorWidget.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = anchorWidget.png; sourceTree = "<group>"; };
+		CFF9D20B1A7C5048005429A6 /* g3m-marker.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "g3m-marker.png"; sourceTree = "<group>"; };
+		CFFCD2C81AD2C748004C7112 /* BuenosAires-Wikipedia.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "BuenosAires-Wikipedia.json"; sourceTree = "<group>"; };
 		E780A3C716D29EA5000F0395 /* map-on-96x48.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "map-on-96x48.png"; sourceTree = "<group>"; };
 		E780A3C816D29EA5000F0395 /* marker-wikipedia-48x48.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "marker-wikipedia-48x48.png"; sourceTree = "<group>"; };
 		E780A3C916D29EA5000F0395 /* marker-wikipedia-72x72.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "marker-wikipedia-72x72.png"; sourceTree = "<group>"; };
@@ -238,11 +275,16 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CF162FE41AB739D700673D44 /* libz.dylib in Frameworks */,
+				CF162FE21AB739C800673D44 /* SystemConfiguration.framework in Frameworks */,
+				E7D1B65416D24EE000AF47C1 /* CoreData.framework in Frameworks */,
+				CFB136D01AA779830013EDE1 /* CoreMotion.framework in Frameworks */,
+				CFB136CE1AA7573D0013EDE1 /* CoreLocation.framework in Frameworks */,
 				E7D1B60B16D2436700AF47C1 /* Foundation.framework in Frameworks */,
+				CF162FDF1AB7396D00673D44 /* libGoogleAnalyticsServices.a in Frameworks */,
 				CFF64D4518329FB7006ABFF6 /* Security.framework in Frameworks */,
 				CFF64D4718329FC8006ABFF6 /* CFNetwork.framework in Frameworks */,
 				CFF64D4918329FE6006ABFF6 /* libicucore.dylib in Frameworks */,
-				E7D1B65416D24EE000AF47C1 /* CoreData.framework in Frameworks */,
 				E7D1B65216D24E7300AF47C1 /* libsqlite3.dylib in Frameworks */,
 				E75321CB16D3DF6200CB3F8D /* libG3MiOSSDK.a in Frameworks */,
 				E7D1B65816D24EEE00AF47C1 /* QuartzCore.framework in Frameworks */,
@@ -255,6 +297,24 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		CF162FD31AB7396D00673D44 /* GoogleAnalytics */ = {
+			isa = PBXGroup;
+			children = (
+				CF162FD41AB7396D00673D44 /* GAI.h */,
+				CF162FD51AB7396D00673D44 /* GAIDictionaryBuilder.h */,
+				CF162FD61AB7396D00673D44 /* GAIEcommerceFields.h */,
+				CF162FD71AB7396D00673D44 /* GAIEcommerceProduct.h */,
+				CF162FD81AB7396D00673D44 /* GAIEcommerceProductAction.h */,
+				CF162FD91AB7396D00673D44 /* GAIEcommercePromotion.h */,
+				CF162FDA1AB7396D00673D44 /* GAIFields.h */,
+				CF162FDB1AB7396D00673D44 /* GAILogger.h */,
+				CF162FDC1AB7396D00673D44 /* GAITrackedViewController.h */,
+				CF162FDD1AB7396D00673D44 /* GAITracker.h */,
+				CF162FDE1AB7396D00673D44 /* libGoogleAnalyticsServices.a */,
+			);
+			path = GoogleAnalytics;
+			sourceTree = "<group>";
+		};
 		CF6920AD1837E7EE007409D8 /* DemoBuilder */ = {
 			isa = PBXGroup;
 			children = (
@@ -272,7 +332,7 @@
 				CF6920B918392D51007409D8 /* G3MDemoContext.hpp */,
 				CF8B1A561837DC69004D3902 /* G3MDemoListener.cpp */,
 				CF8B1A571837DC69004D3902 /* G3MDemoListener.hpp */,
-				CF8B1A521837DBFA004D3902 /* G3MDemoModel.cpp */,
+				CF8B1A521837DBFA004D3902 /* G3MDemoModel.mm */,
 				CF8B1A531837DBFA004D3902 /* G3MDemoModel.hpp */,
 				CF6920AF1837EA35007409D8 /* G3MDemoScene.cpp */,
 				CF6920B01837EA35007409D8 /* G3MDemoScene.hpp */,
@@ -297,6 +357,12 @@
 				CF483EC31A2E5D5100B70D7E /* G3MHUDDemoScene.cpp */,
 				CF483EC41A2E5D5100B70D7E /* G3MHUDDemoScene.hpp */,
 				75ECCE6C1AC4447E001F4544 /* G3MOSMBuildingsDemoScene.cpp */,
+				CFF9D2041A7C4903005429A6 /* G3MNonOverlappingMarksDemoScene.mm */,
+				CFF9D2051A7C4903005429A6 /* G3MNonOverlappingMarksDemoScene.hpp */,
+				CFC192D61A8D2E5F00FA89B3 /* G3MCanvas2DDemoScene.cpp */,
+				CFC192D71A8D2E5F00FA89B3 /* G3MCanvas2DDemoScene.hpp */,
+				CFB136C91AA74FA00013EDE1 /* G3MAugmentedRealityDemoScene.mm */,
+				CFB136CA1AA74FA00013EDE1 /* G3MAugmentedRealityDemoScene.hpp */,
 			);
 			name = DemoBuilder;
 			sourceTree = "<group>";
@@ -341,6 +407,10 @@
 		E7D1B60716D2436700AF47C1 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				CF162FE31AB739D700673D44 /* libz.dylib */,
+				CF162FE11AB739C800673D44 /* SystemConfiguration.framework */,
+				CFB136CF1AA779830013EDE1 /* CoreMotion.framework */,
+				CFB136CD1AA7573D0013EDE1 /* CoreLocation.framework */,
 				CFF64D4818329FE6006ABFF6 /* libicucore.dylib */,
 				CFF64D4618329FC8006ABFF6 /* CFNetwork.framework */,
 				CFF64D4418329FB7006ABFF6 /* Security.framework */,
@@ -359,6 +429,7 @@
 		E7D1B60E16D2436700AF47C1 /* G3MApp */ = {
 			isa = PBXGroup;
 			children = (
+				CF162FD31AB7396D00673D44 /* GoogleAnalytics */,
 				CF6920AD1837E7EE007409D8 /* DemoBuilder */,
 				E7D1B61716D2436700AF47C1 /* G3MAppDelegate.h */,
 				E7D1B61816D2436700AF47C1 /* G3MAppDelegate.m */,
@@ -415,6 +486,10 @@
 		E7D1B7F116D2750400AF47C1 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				CFFCD2C81AD2C748004C7112 /* BuenosAires-Wikipedia.json */,
+				CFC192DA1A8D3A7C00FA89B3 /* colorgrid.jpg */,
+				CFF9D20B1A7C5048005429A6 /* g3m-marker.png */,
+				CFF9D2091A7C5014005429A6 /* anchorWidget.png */,
 				CF483ECC1A2E62C400B70D7E /* widget-background.png */,
 				CF483ECA1A2E62B600B70D7E /* altimeter-ruler-1536x113.png */,
 				CF483EC81A2E62A100B70D7E /* CompassHeadings.png */,
@@ -562,6 +637,7 @@
 				CF6920C418394DB6007409D8 /* restaurants_monaco.geojson in Resources */,
 				E7D1B64316D2462B00AF47C1 /* Icon-Small-50@2x.png in Resources */,
 				E7D1B64416D2462B00AF47C1 /* Icon-Small.png in Resources */,
+				CFC192DB1A8D3A7C00FA89B3 /* colorgrid.jpg in Resources */,
 				E7D1B64516D2462B00AF47C1 /* Icon-Small@2x.png in Resources */,
 				E7D1B64616D2462B00AF47C1 /* Icon.png in Resources */,
 				CFE3B3E5183ADAFF0078C796 /* arc in Resources */,
@@ -578,9 +654,11 @@
 				E780A3CF16D29EA5000F0395 /* marker-wikipedia-72x72.png in Resources */,
 				E780A3D016D29EA5000F0395 /* play.png in Resources */,
 				E780A3D116D29EA5000F0395 /* satellite-on-96x48.png in Resources */,
+				CFF9D20A1A7C5014005429A6 /* anchorWidget.png in Resources */,
 				E780A3D216D29EA5000F0395 /* stop.png in Resources */,
 				CF6920C718394E44007409D8 /* restaurant-96x96.png in Resources */,
 				CFE3B3CD183ABD8B0078C796 /* uscitieslite.geojson in Resources */,
+				CFFCD2C91AD2C748004C7112 /* BuenosAires-Wikipedia.json in Resources */,
 				E780A3DB16D29FAA000F0395 /* A320.json in Resources */,
 				E780A3DC16D29FAA000F0395 /* A320-NWA.png in Resources */,
 				CF6920C318394DB6007409D8 /* buildings_monaco.geojson in Resources */,
@@ -589,6 +667,7 @@
 				CF3F8FE7183576AF00589B4C /* MainStoryboard-iPad.storyboard in Resources */,
 				E780A3DE16D29FAA000F0395 /* NWA.png in Resources */,
 				CFC59BAC176F68DB002806D6 /* full-earth-2048x1024.bil in Resources */,
+				CFF9D20C1A7C5048005429A6 /* g3m-marker.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -604,6 +683,7 @@
 				CFE3B3D5183AD04A0078C796 /* G3M3DModelDemoScene.cpp in Sources */,
 				CFE3B3D0183AC7D20078C796 /* G3MPointCloudDemoScene.cpp in Sources */,
 				E7D1B61916D2436700AF47C1 /* G3MAppDelegate.m in Sources */,
+				CFF9D2061A7C4903005429A6 /* G3MNonOverlappingMarksDemoScene.mm in Sources */,
 				E7D1B62816D2436700AF47C1 /* G3MViewController.mm in Sources */,
 				CF6920B71837F26B007409D8 /* G3MVectorialDemoScene.cpp in Sources */,
 				CF483EC51A2E5D5100B70D7E /* G3MHUDDemoScene.cpp in Sources */,
@@ -620,10 +700,12 @@
 				CF6920B11837EA35007409D8 /* G3MDemoScene.cpp in Sources */,
 				CFB806E21837D4D300DB4B3B /* G3MDemoBuilder_iOS.mm in Sources */,
 				CFE3B3EF183C05F70078C796 /* G3MIsosurfaceDemoScene.cpp in Sources */,
-				CF8B1A541837DBFA004D3902 /* G3MDemoModel.cpp in Sources */,
+				CFC192D81A8D2E5F00FA89B3 /* G3MCanvas2DDemoScene.cpp in Sources */,
+				CF8B1A541837DBFA004D3902 /* G3MDemoModel.mm in Sources */,
 				CFBD815219A3D9F600F1A8C4 /* G3MStreamingPointCloud1DemoScene.cpp in Sources */,
 				CF6920BA18392D51007409D8 /* G3MDemoContext.cpp in Sources */,
 				CF8B1A581837DC69004D3902 /* G3MDemoListener.cpp in Sources */,
+				CFB136CB1AA74FA00013EDE1 /* G3MAugmentedRealityDemoScene.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -648,6 +730,7 @@
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
@@ -665,6 +748,8 @@
 				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_PEDANTIC = NO;
+				GCC_WARN_SHADOW = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
@@ -681,6 +766,7 @@
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
@@ -691,6 +777,8 @@
 				COPY_PHASE_STRIP = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_PEDANTIC = NO;
+				GCC_WARN_SHADOW = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
@@ -716,6 +804,10 @@
 				);
 				INFOPLIST_FILE = "G3MApp/G3MApp-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/G3MApp/GoogleAnalytics",
+				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
@@ -736,6 +828,10 @@
 				"GCC_PREPROCESSOR_DEFINITIONS[arch=*]" = C_CODE;
 				INFOPLIST_FILE = "G3MApp/G3MApp-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/G3MApp/GoogleAnalytics",
+				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";

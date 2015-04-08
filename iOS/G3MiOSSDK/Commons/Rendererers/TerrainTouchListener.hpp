@@ -13,7 +13,7 @@ class G3MEventContext;
 class Camera;
 class Geodetic3D;
 class Tile;
-class Vector2I;
+class Vector2F;
 
 class TerrainTouchListener {
 public:
@@ -25,7 +25,7 @@ public:
 #endif
 
   virtual bool onTerrainTouch(const G3MEventContext* ec,
-                              const Vector2I&        pixel,
+                              const Vector2F&        pixel,
                               const Camera*          camera,
                               const Geodetic3D&      position,
                               const Tile*            tile) = 0;
