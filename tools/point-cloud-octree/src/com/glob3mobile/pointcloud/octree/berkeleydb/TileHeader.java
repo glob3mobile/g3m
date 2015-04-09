@@ -2,10 +2,10 @@
 
 package com.glob3mobile.pointcloud.octree.berkeleydb;
 
-import com.glob3mobile.utils.Angle;
-import com.glob3mobile.utils.Geodetic2D;
-import com.glob3mobile.utils.Sector;
-import com.glob3mobile.utils.Utils;
+import com.glob3mobile.pointcloud.octree.Angle;
+import com.glob3mobile.pointcloud.octree.Geodetic2D;
+import com.glob3mobile.pointcloud.octree.Sector;
+import com.glob3mobile.pointcloud.octree.Utils;
 
 
 public class TileHeader {
