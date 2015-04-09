@@ -14,7 +14,8 @@
 
 SphericalPlanet::SphericalPlanet(const Sphere& sphere):
 _sphere(sphere),
-_radii( Vector3D(sphere._radius, sphere._radius, sphere._radius) )
+_radii( Vector3D(sphere._radius, sphere._radius, sphere._radius) ),
+_lastCorrectingRollAngle(0)
 {
 }
 
@@ -360,6 +361,7 @@ void SphericalPlanet::beginDoubleDrag(const Vector3D& origin,
   _dragRadius1 = _sphere._radius + toGeodetic3D(touchedPosition1)._height;
   _centerPoint = centerPosition.asMutableVector3D();
   _lastDoubleDragAngle = 0;
+  _lastCorrectingRollAngle = 0;
 }
 
 
@@ -367,10 +369,6 @@ MutableMatrix44D SphericalPlanet::doubleDrag(const Vector3D& finalRay0,
                                              const Vector3D& finalRay1,
                                              bool allowRotation) const
 {
-  
-  _finalPoint0.set(NAND, NAND, NAND);
-  _finalPoint1.set(NAND, NAND, NAND);
-  
   // test if initialPoints are valid
   if (_initialPoint0.isNan() || _initialPoint1.isNan())
     return MutableMatrix44D::invalid();
@@ -421,11 +419,6 @@ MutableMatrix44D SphericalPlanet::doubleDrag(const Vector3D& finalRay0,
     Vector3D normal0 = geodeticSurfaceNormal(_initialPoint0);
     MutableMatrix44D rotation = MutableMatrix44D::createGeneralRotationMatrix(Angle::fromRadians(-_lastDoubleDragAngle),normal0, _initialPoint0.asVector3D());
     matrix.copyValueOfMultiplication(rotation, matrix);// = rotation.multiply(matrix);
-    
-    
-    _finalPoint0.copyFrom(finalPoint0);
-    _finalPoint1.copyFrom(finalPoint1);
-    
   }
   
   // zoom camera (see chuleta en pdf)
@@ -524,135 +517,71 @@ void SphericalPlanet::applyCameraConstrainers(const Camera* previousCamera,
   
 }
 
-//double Power(double x, double p){
-//  return IMathUtils::instance()->pow(x, p);
-//}
-//
-//double Sqrt(double x){
-//  return IMathUtils::instance()->sqrt(x);
-//}
-//
-//double ArcTan(double x, double y){
-//  return IMathUtils::instance()->atan2(x, y);
-//}
-//
-//double ArcCos(double x){
-//  return IMathUtils::instance()->acos(x);
-//}
-
-bool probarAngulo(double rad, Vector3D planetCenterCS, Vector3D axisCS, Vector3D rotationPointCS){
+void SphericalPlanet::correctPitchAfterDoubleDrag(Camera* camera, const Vector2F& finalPixel0, const Vector2F& finalPixel1) const{
   
-  if (rad == rad){
-    printf("");
-    
-    Angle rotAngle = Angle::fromRadians(rad);
-    
-    
-    MutableMatrix44D m = MutableMatrix44D::createGeneralRotationMatrix(rotAngle, axisCS, rotationPointCS);
-    
-    Vector3D res = planetCenterCS.transformedBy(m, 1.0);
-    
-    //printf("ANGLE: %f, RES: %s\n", rad, res.description().c_str());
-    return (res._x < 0.1);
-  } else{
-    //printf("ANGULO NAN\n");
-    return false;
+  Vector3D finalPoint0 = camera->pixel2PlanetPoint(finalPixel0);
+  Vector3D finalPoint1 = camera->pixel2PlanetPoint(finalPixel1);
+  if (finalPoint0.isNan() || finalPoint1.isNan()){
+    return;
   }
-}
+  
+  Vector2F pixel0ini = camera->point2Pixel(finalPoint0);
+  Vector2F pixel1ini = camera->point2Pixel(finalPoint1);
 
-bool probarAnguloENPLANO(double rad, Vector3D planetCenterCS, Vector3D axisCS, Vector3D rotationPointCS, Plane plane){
   
-  if (rad == rad){
-    printf("");
-    
-    Angle rotAngle = Angle::fromRadians(rad);
-    MutableMatrix44D m = MutableMatrix44D::createGeneralRotationMatrix(rotAngle, axisCS, rotationPointCS);
-    
-    Vector3D res = planetCenterCS.transformedBy(m, 1.0);
-    double d = plane.signedDistance(res);
-    if (d > 1 ||
-        d < -1){
-      return false;
-    } else{
-      return true;
-    }
-    
-    printf("ANGLE: %f, RES: %s\n", rad, res.description().c_str());
-  } else{
-    printf("ANGULO NAN\n");
-    return false;
-  }
-}
-
-void SphericalPlanet::correctPitchAfterDoubleDrag(Camera* camera) const{
-  
-  printf("CORRECTING\n");
-  
-  
-  Vector3D axis = _finalPoint0.sub(_finalPoint1).asVector3D();
+  Vector3D axis = finalPoint0.sub(finalPoint1);
   
   //Taking axis to camera coordinate system
   MutableMatrix44D csm( *camera->getModelMatrix44D() );
-  Vector3D axisCSNN = axis.transformedBy(csm, 0.0); //ROTATION AXIS
-  Vector3D axisCS = axisCSNN.times(1.0 / axisCSNN.length());
-  Vector3D rotationPointCS = _finalPoint0.asVector3D().transformedBy(csm, 1.0); //ROTATION POINT
+  Vector3D axisCS = axis.transformedBy(csm, 0.0).normalized(); //ROTATION AXIS
+  Vector3D rotationPointCS = finalPoint0.transformedBy(csm, 1.0); //ROTATION POINT
   Vector3D planetCenterCS = Vector3D::zero.transformedBy(csm, 1.0); //Point to be dragged
   
   //The angle should take the planet center to the center of the view (Plane ZY) -> X = 0
  
   std::vector<double> angs = planetCenterCS.rotationAngleInRadiansToYZPlane(axisCS, rotationPointCS);
   if (angs.size() > 0){
-    double ang = IMathUtils::instance()->abs(angs[0]) < IMathUtils::instance()->abs(angs[1])? angs[0] : angs[1];
     
-    //Vector3D finalAxis = axis.times(1.0 / axis.length());
+    Angle a0 = Angle::fromRadians(angs[0]);
+    Angle a1 = Angle::fromRadians(angs[1]);
+    Angle last = Angle::fromRadians(_lastCorrectingRollAngle);
     
-    MutableMatrix44D m = MutableMatrix44D::createGeneralRotationMatrix(Angle::fromRadians(-ang), axis, _finalPoint0.asVector3D());
+    Angle* angle = a0.distanceTo(last)._radians < a1.distanceTo(last)._radians? &a0 : &a1;
+
+    if (angle->distanceTo(last)._degrees > 20){
+      printf("CORRECTED ROLL JUMPED %f DEGREES\n", angle->distanceTo(last)._degrees);
+    }
+    
+    //    printf("CORRECTING ROLL %f GRAD\n", angle->_degrees);
+    MutableMatrix44D m = MutableMatrix44D::createGeneralRotationMatrix(angle->times(-1), axis, finalPoint0);
+    
     
     camera->applyTransform(m);
-  }
-  
-  
-  
-  
-  //probarAngulo(ang, planetCenterCS, axisCS, rotationPointCS);
-  
-  ///////
-//  double ang;
-//  if (probarAngulo(s1, planetCenterCS, axisCS, rotationPointCS)){
-//    ang = s1;
-//    printf("%f\n", ang);
-//  }
-//  if (probarAngulo(-s1, planetCenterCS, axisCS, rotationPointCS)){
-//    ang = -s1;
-//    
-//    printf("%f\n", ang);
-//  }
-//  if (probarAngulo(s2, planetCenterCS, axisCS, rotationPointCS)){
-//    ang = s2;
-//    
-//    printf("%f\n", ang);
-//  }
-//  if (probarAngulo(-s2, planetCenterCS, axisCS, rotationPointCS)){
-//    ang = -s2;
-//    
-//    printf("%f\n", ang);
-//  }
-  ////////
-  
-  //Vector3D finalAxis = axis.times(1.0 / axis.length());
-  //Plane camPlane = Plane(camera->getUp().times(camera->getViewDirection()), camera->getCartesianPosition());
-  //probarAnguloENPLANO(ang, Vector3D::zero, finalAxis, _finalPoint0.asVector3D(), camPlane);
-  
-  
-  //if (probarAngulo(ang, planetCenterCS, axisCS, rotationPointCS)){
+    _lastCorrectingRollAngle = angle->_radians;
     
-    //printf("CORRECTED ROLL ANG = %f\n", ang);
-//    MutableMatrix44D m = MutableMatrix44D::createGeneralRotationMatrix(Angle::fromRadians(-ang), finalAxis, _finalPoint0.asVector3D());
-//  
-//    camera->applyTransform(m);
-  
-  //}
-  
+    ///////
+    
+//    MutableMatrix44D csm2( *camera->getModelMatrix44D() );
+//    Vector3D rotationPointCS2 = finalPoint0.transformedBy(csm2, 1.0);
+//    
+//    if (rotationPointCS.distanceTo(rotationPointCS2) > 10){
+//      printf("ERRROR\n");
+//    }
+//    
+//    Vector2F pixel0fin = camera->point2Pixel(finalPoint0);
+//    Vector2F pixel1fin = camera->point2Pixel(finalPoint1);
+//    
+//    if (pixel0fin.sub(pixel0ini).length() > 5){
+//      printf("ERROR0\n");
+//    }
+//    if (pixel1fin.sub(pixel1ini).length() > 5){
+//      printf("ERROR1\n");
+//    }
+
+    
+  } else{
+    printf("CAN'T CORRECT ROLL FOR THIS FRAME\n");
+  }
 }
 
 

@@ -249,7 +249,7 @@ std::vector<double> Vector3D::rotationAngleInRadiansToYZPlane(const Vector3D& ro
   
   std::vector<double> sol;
   
-  Vector3D axis = rotationAxis.times(1.0/rotationAxis.length());
+  Vector3D axis = rotationAxis.normalized();
   double x = _x, y = _y, z = _z;
   double a = rotationPoint._x, b = rotationPoint._y, c = rotationPoint._z;
   double u = axis._x, v = axis._y, w = axis._z;
@@ -269,29 +269,35 @@ std::vector<double> Vector3D::rotationAngleInRadiansToYZPlane(const Vector3D& ro
   
 #define func(t) (a*(v*v+w*w)-u*(b*v+c*w-u*x-v*y-w*z))*(1-mu->cos[t])+(x*mu->cos[t])+(-c*v+b*w-w*y+v*z)*mu->sin[t]
 
+  float validError = 1.0f;
+  
   double t = mu->acos(s1);
   double p = (a*(v*v+w*w)-u*(b*v+c*w-u*x-v*y-w*z))*(1-mu->cos(t))+(x*mu->cos(t))+(-c*v+b*w-w*y+v*z)*mu->sin(t);
-  if (mu->isBetween((float)p, -0.1f, 0.1f)){
+  if (mu->isBetween((float)p, -validError, validError)){
     sol.push_back(t);
   }
+//  printf("X = %f\n", p);
   
   t = -t;
   p = (a*(v*v+w*w)-u*(b*v+c*w-u*x-v*y-w*z))*(1-mu->cos(t))+(x*mu->cos(t))+(-c*v+b*w-w*y+v*z)*mu->sin(t);
-  if (mu->isBetween((float)p, -0.1f, 0.1f)){
+  if (mu->isBetween((float)p, -validError, validError)){
     sol.push_back(t);
   }
+//  printf("X = %f\n", p);
   
   t = mu->acos(s2);
   p = (a*(v*v+w*w)-u*(b*v+c*w-u*x-v*y-w*z))*(1-mu->cos(t))+(x*mu->cos(t))+(-c*v+b*w-w*y+v*z)*mu->sin(t);
-  if (mu->isBetween((float)p, -0.1f, 0.1f)){
+  if (mu->isBetween((float)p, -validError, validError)){
     sol.push_back(t);
   }
+//  printf("X = %f\n", p);
   
   t = -t;
   p = (a*(v*v+w*w)-u*(b*v+c*w-u*x-v*y-w*z))*(1-mu->cos(t))+(x*mu->cos(t))+(-c*v+b*w-w*y+v*z)*mu->sin(t);
-  if (mu->isBetween((float)p, -0.1f, 0.1f)){
+  if (mu->isBetween((float)p, -validError, validError)){
     sol.push_back(t);
   }
+//  printf("X = %f\n", p);
   
   
   

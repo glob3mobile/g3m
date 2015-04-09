@@ -224,10 +224,11 @@ public:
                       height);
   }
   
-  mutable MutableVector3D _finalPoint0;
-  mutable MutableVector3D _finalPoint1;
+//  mutable MutableVector3D _finalPoint0;
+//  mutable MutableVector3D _finalPoint1;
+  mutable double _lastCorrectingRollAngle;
   
-  void correctPitchAfterDoubleDrag(Camera* camera) const;
+  void correctPitchAfterDoubleDrag(Camera* camera, const Vector2F& finalPixel0, const Vector2F& finalPixel1) const;
 
   const std::string getType() const {
     return "Spherical";

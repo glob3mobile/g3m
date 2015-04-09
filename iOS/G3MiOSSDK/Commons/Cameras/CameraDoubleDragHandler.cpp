@@ -108,6 +108,9 @@ void CameraDoubleDragHandler::onMove(const G3MEventContext *eventContext,
   Camera *camera = cameraContext->getNextCamera();
   camera->copyFrom(_camera0);
   camera->applyTransform(matrix);
+  
+  
+  eventContext->getPlanet()->correctPitchAfterDoubleDrag(camera, pixel0, pixel1);
 }
 
 
@@ -116,9 +119,9 @@ void CameraDoubleDragHandler::onUp(const G3MEventContext *eventContext,
                                    CameraContext *cameraContext) 
 {
   
-#warning MAKING TESTS
-  Camera *camera = cameraContext->getNextCamera();
-  eventContext->getPlanet()->correctPitchAfterDoubleDrag(camera);
+//#warning MAKING TESTS
+//  Camera *camera = cameraContext->getNextCamera();
+//  eventContext->getPlanet()->correctPitchAfterDoubleDrag(camera);
   
   
   
