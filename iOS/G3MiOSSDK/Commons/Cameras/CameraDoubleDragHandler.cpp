@@ -118,13 +118,6 @@ void CameraDoubleDragHandler::onUp(const G3MEventContext *eventContext,
                                    const TouchEvent& touchEvent, 
                                    CameraContext *cameraContext) 
 {
-  
-//#warning MAKING TESTS
-//  Camera *camera = cameraContext->getNextCamera();
-//  eventContext->getPlanet()->correctPitchAfterDoubleDrag(camera);
-  
-  
-  
   cameraContext->setCurrentGesture(None);
   
   // remove scene points int render debug mode
