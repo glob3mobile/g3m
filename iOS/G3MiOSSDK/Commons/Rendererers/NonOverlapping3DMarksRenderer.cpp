@@ -190,19 +190,15 @@ void NonOverlapping3DMark::applyCoulombsLaw(NonOverlapping3DMark *that, const Pl
     float strength = (float) (this->_electricCharge * that->_electricCharge/(distance*distance));
     if(distance < .01) { //right on top of each other, pull them apart by a small random force before doing actual calculation
         strength = 1;
-#if C_CODE
-        Vector3D force = (Vector3D(rand() % 5, rand() % 5, rand() % 5)).times(strength);
-#endif
-        
-#if JAVACODE
-          Vector3D force = (new Vector3D((Math.random()*100) % 5, (Math.random()* 100) % 5, (Math.random()* 100) % 5)).times(strength);
-#endif
+       // Vector3D force = (Vector3D(rand() % 5, rand() % 5, rand() % 5)).times(strength); //random not working in java
+        Vector3D force = (Vector3D(2, 2, 2)).times(strength);
+
         this->applyForce((float)force._x, (float) force._y, (float) force._z);
         
 }
     else {
          Vector3D force = direction.times(strength);
-         this->applyForce(force._x, force._y, force._z);
+         this->applyForce((float) force._x, (float) force._y, (float) force._z);
     }
 
     //force from center of planet: - TODO: it's making it go in the z direction instead of x direction?? why?
@@ -228,8 +224,8 @@ void NonOverlapping3DMark::applyCoulombsLawFromAnchor(NonOverlapping3DMark* that
 
     float strengthAnchor = (float)(this->_electricCharge * that->_electricCharge / (distanceAnchor * distanceAnchor));
     
-    this->applyForce(directionAnchor._x * strengthAnchor,
-                     directionAnchor._y * strengthAnchor, directionAnchor._z);
+    this->applyForce((float) directionAnchor._x * strengthAnchor,
+                     (float) directionAnchor._y * strengthAnchor, (float) directionAnchor._z);
 }
 
 void NonOverlapping3DMark::applyHookesLaw(const Planet* planet){   //Spring
