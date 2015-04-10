@@ -105,10 +105,10 @@ public class NonOverlapping3DMark
        _resistanceFactor = resistanceFactor;
        _minWidgetSpeedInPixelsPerSecond = minWidgetSpeedInPixelsPerSecond;
     
-        //Initialize shape to something
-        _anchorShape = new EllipsoidShape(new Geodetic3D(Angle.fromDegrees(0), Angle.fromDegrees(0), 5), AltitudeMode.ABSOLUTE, new Vector3D(100000, 100000, 100000), (short) 16, 0, false, false, Color.fromRGBA((float).5,(float) 1, (float).5, (float).9));
+        //Initialize shape to something - TODO use parameter shape
+        _anchorShape = new EllipsoidShape(new Geodetic3D(_geoPosition), AltitudeMode.ABSOLUTE, new Vector3D(100000, 100000, 100000), 16, 0, false, false, Color.fromRGBA(.5, 1, .5, .9));
     
-        _nodeShape = new EllipsoidShape(new Geodetic3D(Angle.fromDegrees(0), Angle.fromDegrees(0), 5), AltitudeMode.ABSOLUTE, new Vector3D(100000, 100000, 100000), (short) 16, 0, false, false, Color.fromRGBA((float).5, (float)0, (float).5, (float) .9));
+        _nodeShape = new EllipsoidShape(new Geodetic3D(_geoPosition), AltitudeMode.ABSOLUTE, new Vector3D(100000, 100000, 100000), 16, 0, false, false, Color.fromRGBA(.5, 0, .5, .9));
     
         //set value of shape to the thing passed in
        // *_anchorShape = *anchorShape;
@@ -160,8 +160,9 @@ public class NonOverlapping3DMark
     public final void setAsAnchor()
     {
         _isAnchor = true;
-        _shapesRenderer.removeAllShapes(false); //no.. this deletes shapes
+        _shapesRenderer.removeAllShapes(false);
         _shapesRenderer.addShape(_anchorShape);
+    
     }
     public final void addNeighbor(NonOverlapping3DMark n)
     {
@@ -173,6 +174,11 @@ public class NonOverlapping3DMark
         anchor.addNeighbor(this);
         _anchor = anchor;
         anchor.setAsAnchor();
+        final Geodetic3D pos = new Geodetic3D(anchor.getPos());
+    
+        //getting around the lack of copy contructor:
+        _geoPosition.sub(_geoPosition);
+        _geoPosition.add(pos);
     }
     public final NonOverlapping3DMark getAnchor()
     {
@@ -189,7 +195,7 @@ public class NonOverlapping3DMark
 
     public final Vector3D clampVector(Vector3D v, float min, float max)
     {
-        float l = (float) v.length();
+        float l = v.length();
         if(l < min)
         {
             return (v.normalized()).times(min);
@@ -198,26 +204,32 @@ public class NonOverlapping3DMark
         {
             return (v.normalized()).times(max);
         }
-		return v;
     }
 
     public final Vector3D getCartesianPosition(Planet planet)
     {
        // if (_cartesianPos == NULL){
         Vector3D translation = new Vector3D(_tX, _tY, _tZ);
-        if (this.getAnchor() != null)
-        {
-            _cartesianPos = new Vector3D(getAnchor().getCartesianPosition(planet).add(translation));
-            _anchorShape.setPosition(planet.toGeodetic3D(_cartesianPos));
-            _nodeShape.setPosition(planet.toGeodetic3D(_cartesianPos));
+       /* if(this->getAnchor()) {
+            _cartesianPos = new Vector3D(getAnchor()->getCartesianPosition(planet).add(translation));
+            _anchorShape->setPosition(planet->toGeodetic3D(*_cartesianPos));
+           // _anchorShape->setTranslation(translation);
+            //_nodeShape->setTranslation(translation);
+            _nodeShape->setPosition(planet->toGeodetic3D(*_cartesianPos));
     
         }
-        else
-        {
-            _cartesianPos = new Vector3D(planet.toCartesian(_geoPosition).add(translation));
-            _anchorShape.setPosition(planet.toGeodetic3D(_cartesianPos));
-            _nodeShape.setPosition(planet.toGeodetic3D(_cartesianPos));
-        }
+        else {*/
+        _cartesianPos = new Vector3D(planet.toCartesian(_geoPosition).add(translation));
+    
+         Geodetic3D gpos = planet.toGeodetic3D(_cartesianPos);
+         Vector3D test = planet.toCartesian(_anchorShape.getPosition());
+        _anchorShape.setPosition(gpos);
+        _nodeShape.setPosition(gpos);
+      /*  _anchorShape->setTranslation(Vector3D(0, 0 ,0));
+        _nodeShape->setTranslation(Vector3D(0, 0 ,0));
+           _anchorShape->setTranslation(translation);
+            _nodeShape->setTranslation(translation);*/
+       // }
         //}
         return _cartesianPos;
     }
@@ -230,7 +242,7 @@ public class NonOverlapping3DMark
 
     public final void render(G3MRenderContext rc, GLState glState)
     {
-        getCartesianPosition(rc.getPlanet());
+        //getCartesianPosition(rc->getPlanet());
         _shapesRenderer.render(rc, glState);
     }
 
@@ -240,31 +252,31 @@ public class NonOverlapping3DMark
         Vector3D pos = getCartesianPosition(planet);
         Vector3D d = getCartesianPosition(planet).sub(that.getCartesianPosition(planet)); //.normalized();
     
-        double distance = d.length();
+        float distance = d.length();
         Vector3D direction = d.normalized();
         //float k = 5;
         float strength = (float)(this._electricCharge * that._electricCharge/(distance *distance));
         if(distance < .01) //right on top of each other, pull them apart by a small random force before doing actual calculation
         {
             strength = 1F;
-            Vector3D force = (new Vector3D(Math.random()*100 % 5, Math.random()*100 % 5, Math.random()*100 % 5)).times(strength);
-            this.applyForce((float) force._x, (float) force._y, (float) force._z);
+            Vector3D force = (new Vector3D(tangible.RandomNumbers.nextNumber() % 5, tangible.RandomNumbers.nextNumber() % 5, tangible.RandomNumbers.nextNumber() % 5)).times(strength);
+            this.applyForce(force._x, force._y, force._z);
     }
         else
         {
              Vector3D force = direction.times(strength);
-             this.applyForce((float) force._x, (float) force._y, (float) force._z);
+             this.applyForce(force._x, force._y, force._z);
         }
     
         //force from center of planet: - TODO: it's making it go in the z direction instead of x direction?? why?
         Vector3D d2 = (getCartesianPosition(planet)).normalized();
-        double distance2 = d2.length();
+        float distance2 = d2.length();
         float planetCharge = 1F;
         Vector3D direction2 = d2.normalized();
         float strength2 = (float)(planetCharge / distance2 *distance2);
         Vector3D force2 = direction2.times(strength2);
     
-        this.applyForce((float) force2._z, (float) force2._y, (float) force2._x); //why does it do what is expected only if I swap x and z...?
+        this.applyForce(force2._x, force2._y, force2._z); //why does it do what is expected only if I swap x and z...?
       //  this->applyForce(force._x, force._y, force._z);
     
     
@@ -279,7 +291,7 @@ public class NonOverlapping3DMark
     
         float strengthAnchor = (float)(this._electricCharge * that._electricCharge / (distanceAnchor * distanceAnchor));
     
-        this.applyForce((float) directionAnchor._x * strengthAnchor, (float) directionAnchor._y * strengthAnchor, (float) directionAnchor._z);
+        this.applyForce(directionAnchor._x * strengthAnchor, directionAnchor._y * strengthAnchor, directionAnchor._z);
     }
 
     public final void applyHookesLaw(Planet planet)
@@ -354,9 +366,9 @@ public class NonOverlapping3DMark
         //Update position
         Vector3D position = getCartesianPosition(planet);
     
-        float newX = (float) position._x + (_dX * time);
-        float newY = (float) position._y + (_dY * time);
-        float newZ = (float) position._z + (_dZ * time);
+        float newX = position._x + (_dX * time);
+        float newY = position._y + (_dY * time);
+        float newZ = position._z + (_dZ * time);
     
         //update translation
         _tX+=_dX *time;
@@ -402,8 +414,8 @@ public class NonOverlapping3DMark
         //_widget.clampPositionInsideScreen((int)viewportWidth, (int)viewportHeight, 5); // 5 pixels of margin
        }
        */
-        _anchorShape.setTranslation(translation);
-        _nodeShape.setTranslation(translation); //TODO: spring??
+      //  _anchorShape->setTranslation(translation);
+       // _nodeShape->setTranslation(translation); //TODO: spring??
     
         //Force has been applied and must be reset
         _fX = 0F;
@@ -429,8 +441,8 @@ public class NonOverlapping3DMark
          _tX = 0F;
          _tY = 0F;
          _tZ = 0F;
-        _anchorShape.setPosition(_geoPosition);
-        _nodeShape.setPosition(_geoPosition);
+       // _anchorShape->setPosition(_geoPosition);
+        //_nodeShape->setPosition(_geoPosition);
      }
 
     public final boolean onTouchEvent(float x, float y)

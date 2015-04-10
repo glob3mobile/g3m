@@ -5,7 +5,7 @@ public class NonOverlapping3DMarksRenderer extends DefaultRenderer
 {
 
     private int _maxVisibleMarks;
-    private Planet _planet;
+    private final Planet _planet;
 
     private java.util.ArrayList<NonOverlapping3DMark> _visibleMarks = new java.util.ArrayList<NonOverlapping3DMark>();
     private java.util.ArrayList<NonOverlapping3DMark> _marks = new java.util.ArrayList<NonOverlapping3DMark>();
@@ -171,6 +171,7 @@ public class NonOverlapping3DMarksRenderer extends DefaultRenderer
         //Draw Anchors and Marks
         for (int i = 0; i < _visibleMarks.size(); i++)
         {
+            _visibleMarks.get(i).getCartesianPosition(rc.getPlanet()); //updates shapes positions
             _visibleMarks.get(i).render(rc, glState);
         }
     }
@@ -269,14 +270,27 @@ public class NonOverlapping3DMarksRenderer extends DefaultRenderer
                 Vector3D extent = new Vector3D(10000, 1000, p1.distanceTo(p2));
                 //todo: rotation, mark as visited, don't allocate memory
                 float borderWidth = 2F;
-                Color col = Color.fromRGBA(1, 1, 1, 1);
+                Color col = Color.fromRGBA(.5, 1, 1, 1);
+    
+                // create vertices
+                FloatBufferBuilderFromCartesian3D vertices = FloatBufferBuilderFromCartesian3D.builderWithoutCenter();
+                vertices.add(p1);
+                vertices.add(p2);
+                ShortBufferBuilder indices = new ShortBufferBuilder();
+                indices.add((short) 0);
+                indices.add((short) 1);
+    
+    
+                Mesh mesh = new IndexedMesh(GLPrimitive.lines(), true, vertices.getCenter(), vertices.create(), indices.create(), 1, 1, new Color(col));
+                _meshrender.addMesh(mesh);
+    
     
             }
         }
     
-        //sr.render(rc, glState);
+       // sr.render(rc, glState);
         _meshrender.render(rc, glState);
-        sr.removeAllShapes();
+       // sr.removeAllShapes();
         //TODO: get rid of this stuff
         /*for(int i = 0; i < _visibleMarks.size(); i++) {
             _visibleMarks[i]->getShape()->setPosition(Geodetic3D::fromDegrees(0, 0, 1));
