@@ -393,7 +393,6 @@ void NonOverlappingMark::updatePositionWithCurrentForce(float timeInSeconds,
   _speed.times(_resistanceFactor);
   
   //Force has been applied and must be reset
-#warning It's needed?
   _force.set(0, 0);
   
   //Update position

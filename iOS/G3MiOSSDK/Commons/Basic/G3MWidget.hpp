@@ -255,7 +255,8 @@ public:
     return _infoDisplay;
   }
   
-  void changedRendererInfo(const int rendererIdentifier, const std::vector<const Info*> info);
+  void changedRendererInfo(const int rendererIdentifier,
+                           const std::vector<const Info*>& info);
 
   void removeAllPeriodicalTasks();
 

@@ -24,14 +24,14 @@ protected:
               int width,
               int height);
   
-  bool isEquals(const std::vector<const Info*> v1,
-                const std::vector<const Info*> v2) const;
+  bool isEquals(const std::vector<const Info*>& v1,
+                const std::vector<const Info*>& v2) const;
   
 public:
   ~DefaultHUDInfoRenderer_ImageFactory() {
   }
   
-  bool setInfo(const std::vector<const Info*> info);
+  bool setInfo(const std::vector<const Info*>& info);
 };
 
 class Default_HUDRenderer : public DefaultRenderer {
@@ -45,7 +45,7 @@ public:
   
   ~Default_HUDRenderer();
   
-  void updateInfo(const std::vector<const Info*> info);
+  void updateInfo(const std::vector<const Info*>& info);
   
   void initialize(const G3MContext* context);
   
@@ -80,9 +80,8 @@ public:
     
   }
   
-  void changedInfo(const std::vector<const Info*> info){
+  void changedInfo(const std::vector<const Info*>& info){
     _defaultHUDRenderer->updateInfo(info);
-    
   }
   
   void showDisplay() {

@@ -544,7 +544,7 @@ const std::vector<const Info*> LayerSet::getInfo() {
   return _infos;
 }
 
-void LayerSet::changedInfo(const std::vector<const Info*> info) {
+void LayerSet::changedInfo(const std::vector<const Info*>& info) {
   if (_changedInfoListener != NULL) {
     _changedInfoListener->changedInfo(getInfo());
   }
