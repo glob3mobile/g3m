@@ -155,4 +155,8 @@ public abstract class Planet
 
   public abstract String getType();
 
+  public void correctPitchAfterDoubleDrag(Camera camera, Vector2F finalPixel0, Vector2F finalPixel1)
+  {
+  }
+
 }

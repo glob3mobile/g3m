@@ -563,6 +563,12 @@ public class EllipsoidalPlanet extends Planet
     return new Geodetic3D(rendereSector._center, height);
   }
 
+
+  public final void correctPitchAfterDoubleDrag(Camera camera, Vector2F finalPixel0, Vector2F finalPixel1)
+  {
+    _sphericalPlanetDoubleDragDelegate.correctPitchAfterDoubleDrag(camera, finalPixel0, finalPixel1);
+  }
+
   public final String getType()
   {
     return "Ellipsoidal";

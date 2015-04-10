@@ -24,12 +24,14 @@ public class CameraDoubleDragHandler extends CameraEventHandler
 
   private MeshRenderer _meshRenderer;
   private boolean _allowRotation;
+  private boolean _fixRollTo0;
 
-  public CameraDoubleDragHandler(boolean allowRotation)
+  public CameraDoubleDragHandler(boolean allowRotation, boolean fixRollTo0)
   {
      _camera0 = new Camera(new Camera());
      _meshRenderer = null;
      _allowRotation = allowRotation;
+     _fixRollTo0 = fixRollTo0;
   }
 
   public void dispose()
@@ -45,7 +47,20 @@ public class CameraDoubleDragHandler extends CameraEventHandler
     if (touchEvent.getTouchCount()!=2)
        return false;
   
-    switch (touchEvent.getType())
+    TouchEventType type = touchEvent.getType();
+  
+    final Vector2F pixel0 = touchEvent.getTouch(0).getPos();
+    final Vector2F pixel1 = touchEvent.getTouch(1).getPos();
+  
+    if (type == TouchEventType.Move && (_camera0.pixel2PlanetPoint(pixel0).isNan() || _camera0.pixel2PlanetPoint(pixel1).isNan()))
+    {
+          //printf("FINGERS OUT OF INITIAL PLANET\n");
+          //FIXING THIS CASE
+          onUp(eventContext, touchEvent, cameraContext);
+          type = TouchEventType.Down;
+    }
+  
+    switch (type)
     {
       case Down:
         onDown(eventContext, touchEvent, cameraContext);
@@ -116,6 +131,7 @@ public class CameraDoubleDragHandler extends CameraEventHandler
     Vector3D touchedPosition1 = widget.getScenePositionForPixel((int)pixel1._x, (int)pixel1._y);
   
   
+  
     cameraContext.setCurrentGesture(Gesture.DoubleDrag);
     eventContext.getPlanet().beginDoubleDrag(_camera0.getCartesianPosition(), _camera0.getViewDirection(), widget.getScenePositionForCentralPixel(), touchedPosition0, touchedPosition1);
   
@@ -151,6 +167,11 @@ public class CameraDoubleDragHandler extends CameraEventHandler
     Camera camera = cameraContext.getNextCamera();
     camera.copyFrom(_camera0);
     camera.applyTransform(matrix);
+  
+    if (_fixRollTo0)
+    {
+      eventContext.getPlanet().correctPitchAfterDoubleDrag(camera, pixel0, pixel1);
+    }
   }
   public final void onUp(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
   {

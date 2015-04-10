@@ -70,6 +70,7 @@ public class SphericalPlanet extends Planet
   {
      _sphere = sphere;
      _radii = new Vector3D(new Vector3D(sphere._radius, sphere._radius, sphere._radius));
+     _lastCorrectingRollAngle = 0;
   }
 
   public void dispose()
@@ -427,7 +428,7 @@ public class SphericalPlanet extends Planet
     if (finalPoint.isNan())
     {
       //printf ("--invalid final point in drag!!\n");
-  //    finalPoint = closestPointToSphere(origin, finalRay).asMutableVector3D();
+      //    finalPoint = closestPointToSphere(origin, finalRay).asMutableVector3D();
       finalPoint.copyFrom(closestPointToSphere(origin, finalRay));
       if (finalPoint.isNan())
       {
@@ -457,6 +458,7 @@ public class SphericalPlanet extends Planet
     _dragRadius1 = _sphere._radius + toGeodetic3D(touchedPosition1)._height;
     _centerPoint = centerPosition.asMutableVector3D();
     _lastDoubleDragAngle = 0;
+    _lastCorrectingRollAngle = 0;
   }
 
   public final MutableMatrix44D doubleDrag(Vector3D finalRay0, Vector3D finalRay1, boolean allowRotation)
@@ -510,7 +512,6 @@ public class SphericalPlanet extends Planet
       Vector3D normal0 = geodeticSurfaceNormal(_initialPoint0);
       MutableMatrix44D rotation = MutableMatrix44D.createGeneralRotationMatrix(Angle.fromRadians(-_lastDoubleDragAngle), normal0, _initialPoint0.asVector3D());
       matrix.copyValueOfMultiplication(rotation, matrix); // = rotation.multiply(matrix);
-  
     }
   
     // zoom camera (see chuleta en pdf)
@@ -618,6 +619,70 @@ public class SphericalPlanet extends Planet
     final double height = asw.sub(ane).length() * 1.9;
 
     return new Geodetic3D(rendereSector._center, height);
+  }
+
+//  mutable MutableVector3D _finalPoint0;
+//  mutable MutableVector3D _finalPoint1;
+  public double _lastCorrectingRollAngle;
+
+  public final void correctPitchAfterDoubleDrag(Camera camera, Vector2F finalPixel0, Vector2F finalPixel1)
+  {
+  
+    Vector3D finalPoint0 = camera.pixel2PlanetPoint(finalPixel0);
+    Vector3D finalPoint1 = camera.pixel2PlanetPoint(finalPixel1);
+    if (finalPoint0.isNan() || finalPoint1.isNan())
+    {
+      return;
+    }
+  
+  //  printf("dist = %f\n", finalPoint0.distanceTo(finalPoint1));
+  
+    Vector3D axis = finalPoint0.sub(finalPoint1);
+  
+    //Taking axis to camera coordinate system
+    MutableMatrix44D csm = new MutableMatrix44D(camera.getModelMatrix44D());
+    Vector3D axisCS = axis.transformedBy(csm, 0.0).normalized(); //ROTATION AXIS
+    Vector3D rotationPointCS = finalPoint0.transformedBy(csm, 1.0); //ROTATION POINT
+    Vector3D planetCenterCS = Vector3D.zero.transformedBy(csm, 1.0); //Point to be dragged
+  
+    //The angle should take the planet center to the center of the view (Plane ZY) -> X = 0
+  
+    double angleInRadians = _lastCorrectingRollAngle;
+  
+    java.util.ArrayList<Double> angs = planetCenterCS.rotationAngleInRadiansToYZPlane(axisCS, rotationPointCS);
+    if (angs.size() > 0)
+    {
+  
+      Angle a0 = Angle.fromRadians(angs.get(0));
+      Angle a1 = Angle.fromRadians(angs.get(1));
+      Angle last = Angle.fromRadians(_lastCorrectingRollAngle);
+  
+      angleInRadians = a0.distanceTo(last)._radians < a1.distanceTo(last)._radians != 0? a0._radians : a1._radians;
+  
+      angleInRadians *= -1; //Inverting for camera
+  
+      //Avoiding jumps
+      double jump = Angle.fromRadians(angleInRadians).distanceTo(Angle.fromRadians(_lastCorrectingRollAngle))._degrees;
+      if (jump > 20)
+      {
+        System.out.printf("CORRECTED ROLL JUMPED %f DEGREES\n", jump);
+        angleInRadians = _lastCorrectingRollAngle;
+      }
+  
+    }
+    else
+    {
+      System.out.print("NONE CORRECT ROLL ANGLE FOR THIS FRAME\n");
+    }
+  
+    Angle angle = Angle.fromRadians(angleInRadians);
+  
+    //printf("CORRECTING ROLL %f GRAD\n", angle->_degrees);
+    MutableMatrix44D m = MutableMatrix44D.createGeneralRotationMatrix(angle, axis, finalPoint0);
+    camera.applyTransform(m);
+  
+    //Storing for next frame
+    _lastCorrectingRollAngle = angle._radians;
   }
 
   public final String getType()
