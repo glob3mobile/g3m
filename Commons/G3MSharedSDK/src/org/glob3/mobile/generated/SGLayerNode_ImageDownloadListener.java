@@ -1,4 +1,6 @@
 package org.glob3.mobile.generated; 
+import java.util.*;
+
 //#define TEXTURES_DOWNLOAD_PRIORITY 1000000
 
 

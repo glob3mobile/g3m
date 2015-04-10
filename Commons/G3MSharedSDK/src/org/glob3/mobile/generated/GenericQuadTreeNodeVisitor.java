@@ -1,4 +1,6 @@
 package org.glob3.mobile.generated; 
+import java.util.*;
+
 //
 //  GenericQuadTree.cpp
 //  G3MiOSSDK

@@ -1,4 +1,6 @@
 package org.glob3.mobile.generated; 
+import java.util.*;
+
 public class NonOverlapping3DMark
 {
 
@@ -58,27 +60,27 @@ public class NonOverlapping3DMark
     }
     public NonOverlapping3DMark(Shape anchorShape, Shape nodeShape, Geodetic3D position, ShapeTouchListener touchListener, float springLengthInMeters, float springK, float maxSpringLength, float minSpringLength)
     {
-       this(anchorShape, nodeShape, position, touchListener, springLengthInMeters, springK, maxSpringLength, minSpringLength, 1000.0f, 1000.0f, 35.0f, 0.95f);
+       this(anchorShape, nodeShape, position, touchListener, springLengthInMeters, springK, maxSpringLength, minSpringLength, 3000000.0f, 1000.0f, 35.0f, 0.95f);
     }
     public NonOverlapping3DMark(Shape anchorShape, Shape nodeShape, Geodetic3D position, ShapeTouchListener touchListener, float springLengthInMeters, float springK, float maxSpringLength)
     {
-       this(anchorShape, nodeShape, position, touchListener, springLengthInMeters, springK, maxSpringLength, 500.0f, 1000.0f, 1000.0f, 35.0f, 0.95f);
+       this(anchorShape, nodeShape, position, touchListener, springLengthInMeters, springK, maxSpringLength, 0.0f, 3000000.0f, 1000.0f, 35.0f, 0.95f);
     }
     public NonOverlapping3DMark(Shape anchorShape, Shape nodeShape, Geodetic3D position, ShapeTouchListener touchListener, float springLengthInMeters, float springK)
     {
-       this(anchorShape, nodeShape, position, touchListener, springLengthInMeters, springK, 10000.0f, 500.0f, 1000.0f, 1000.0f, 35.0f, 0.95f);
+       this(anchorShape, nodeShape, position, touchListener, springLengthInMeters, springK, 0.0f, 0.0f, 3000000.0f, 1000.0f, 35.0f, 0.95f);
     }
     public NonOverlapping3DMark(Shape anchorShape, Shape nodeShape, Geodetic3D position, ShapeTouchListener touchListener, float springLengthInMeters)
     {
-       this(anchorShape, nodeShape, position, touchListener, springLengthInMeters, 1.0f, 10000.0f, 500.0f, 1000.0f, 1000.0f, 35.0f, 0.95f);
+       this(anchorShape, nodeShape, position, touchListener, springLengthInMeters, 7.0f, 0.0f, 0.0f, 3000000.0f, 1000.0f, 35.0f, 0.95f);
     }
     public NonOverlapping3DMark(Shape anchorShape, Shape nodeShape, Geodetic3D position, ShapeTouchListener touchListener)
     {
-       this(anchorShape, nodeShape, position, touchListener, 1000.0f, 1.0f, 10000.0f, 500.0f, 1000.0f, 1000.0f, 35.0f, 0.95f);
+       this(anchorShape, nodeShape, position, touchListener, 1000.0f, 7.0f, 0.0f, 0.0f, 3000000.0f, 1000.0f, 35.0f, 0.95f);
     }
     public NonOverlapping3DMark(Shape anchorShape, Shape nodeShape, Geodetic3D position)
     {
-       this(anchorShape, nodeShape, position, null, 1000.0f, 1.0f, 10000.0f, 500.0f, 1000.0f, 1000.0f, 35.0f, 0.95f);
+       this(anchorShape, nodeShape, position, null, 1000.0f, 7.0f, 0.0f, 0.0f, 3000000.0f, 1000.0f, 35.0f, 0.95f);
     }
     public NonOverlapping3DMark(Shape anchorShape, Shape nodeShape, Geodetic3D position, ShapeTouchListener touchListener, float springLengthInMeters, float springK, float maxSpringLength, float minSpringLength, float electricCharge, float maxWidgetSpeedInPixelsPerSecond, float minWidgetSpeedInPixelsPerSecond, float resistanceFactor)
     
@@ -104,9 +106,9 @@ public class NonOverlapping3DMark
        _minWidgetSpeedInPixelsPerSecond = minWidgetSpeedInPixelsPerSecond;
     
         //Initialize shape to something
-        _anchorShape = new EllipsoidShape(new Geodetic3D(Angle.fromDegrees(0), Angle.fromDegrees(0), 5), AltitudeMode.ABSOLUTE, new Vector3D(100000, 100000, 100000), 16, 0, false, false, Color.fromRGBA(1, 1, 1, .5));
+        _anchorShape = new EllipsoidShape(new Geodetic3D(Angle.fromDegrees(0), Angle.fromDegrees(0), 5), AltitudeMode.ABSOLUTE, new Vector3D(100000, 100000, 100000), 16, 0, false, false, Color.fromRGBA(.5, 1, .5, .9));
     
-        _nodeShape = new EllipsoidShape(new Geodetic3D(Angle.fromDegrees(0), Angle.fromDegrees(0), 5), AltitudeMode.ABSOLUTE, new Vector3D(100000, 100000, 100000), 16, 0, false, false, Color.fromRGBA(1, 1, 1, .5));
+        _nodeShape = new EllipsoidShape(new Geodetic3D(Angle.fromDegrees(0), Angle.fromDegrees(0), 5), AltitudeMode.ABSOLUTE, new Vector3D(100000, 100000, 100000), 16, 0, false, false, Color.fromRGBA(.5, 0, .5, .9));
     
         //set value of shape to the thing passed in
        // *_anchorShape = *anchorShape;
@@ -201,8 +203,20 @@ public class NonOverlapping3DMark
     public final Vector3D getCartesianPosition(Planet planet)
     {
        // if (_cartesianPos == NULL){
-            Vector3D translation = new Vector3D(_tX, _tY, _tZ);
+        Vector3D translation = new Vector3D(_tX, _tY, _tZ);
+        if (this.getAnchor() != null)
+        {
+            _cartesianPos = new Vector3D(getAnchor().getCartesianPosition(planet).add(translation));
+            _anchorShape.setPosition(planet.toGeodetic3D(_cartesianPos));
+            _nodeShape.setPosition(planet.toGeodetic3D(_cartesianPos));
+    
+        }
+        else
+        {
             _cartesianPos = new Vector3D(planet.toCartesian(_geoPosition).add(translation));
+            _anchorShape.setPosition(planet.toGeodetic3D(_cartesianPos));
+            _nodeShape.setPosition(planet.toGeodetic3D(_cartesianPos));
+        }
         //}
         return _cartesianPos;
     }
@@ -215,21 +229,44 @@ public class NonOverlapping3DMark
 
     public final void render(G3MRenderContext rc, GLState glState)
     {
+        getCartesianPosition(rc.getPlanet());
         _shapesRenderer.render(rc, glState);
     }
 
     public final void applyCoulombsLaw(NonOverlapping3DMark that, Planet planet)
     {
         //get 3d positionf or both
-        Vector3D d = getCartesianPosition(planet).sub(that.getCartesianPosition(planet)).normalized();
+        Vector3D pos = getCartesianPosition(planet);
+        Vector3D d = getCartesianPosition(planet).sub(that.getCartesianPosition(planet)); //.normalized();
+    
         float distance = d.length();
         Vector3D direction = d.normalized();
+        //float k = 5;
+        float strength = (float)(this._electricCharge * that._electricCharge/(distance *distance));
+        if(distance < .01) //right on top of each other, pull them apart by a small random force before doing actual calculation
+        {
+            strength = 1F;
+            Vector3D force = (new Vector3D(tangible.RandomNumbers.nextNumber() % 5, tangible.RandomNumbers.nextNumber() % 5, tangible.RandomNumbers.nextNumber() % 5)).times(strength);
+            this.applyForce(force._x, force._y, force._z);
+    }
+        else
+        {
+             Vector3D force = direction.times(strength);
+             this.applyForce(force._x, force._y, force._z);
+        }
     
-        float strength = (float)(this._electricCharge * that._electricCharge/distance *distance);
-        Vector3D force = direction.times(strength);
+        //force from center of planet: - TODO: it's making it go in the z direction instead of x direction?? why?
+        Vector3D d2 = (getCartesianPosition(planet)).normalized();
+        float distance2 = d2.length();
+        float planetCharge = 1F;
+        Vector3D direction2 = d2.normalized();
+        float strength2 = (float)(planetCharge / distance2 *distance2);
+        Vector3D force2 = direction2.times(strength2);
     
-        this.applyForce(force._x, force._y, force._z);
-       // that->applyForce(-force._x, -force._y, -force._z);
+        this.applyForce(force2._z, force2._y, force2._x); //why does it do what is expected only if I swap x and z...?
+      //  this->applyForce(force._x, force._y, force._z);
+    
+    
     }
     public final void applyCoulombsLawFromAnchor(NonOverlapping3DMark that, Planet planet)
     {
@@ -252,11 +289,14 @@ public class NonOverlapping3DMark
             Vector3D d = getCartesianPosition(planet).sub(_neighbors.get(i).getCartesianPosition(planet));
             double mod = d.length();
             double displacement = _springLengthInMeters - mod;
+            if(Math.abs(mod) > 100) //only do this if distance is above some threshold
+            {
             Vector3D direction = d.div((float)mod);
+          // float k = _electricCharge/5;
+            float force = (float)(_springK * displacement)/1000000;
     
-            float force = (float)(_springK * displacement);
-    
-            applyForce((float)(direction._x * force), (float)(direction._y * force), (float) direction._z * force);
+            applyForce((float)(direction._x * force), (float)(direction._y * force), (float) direction._z * force); //swap x and z here??
+            }
         }
        // }
     }
@@ -284,36 +324,31 @@ public class NonOverlapping3DMark
         float time = (float)(elapsedMS); // / 1000.0);
         Vector3D velocity = oldVelocity.add(force.times(time)).times(_resistanceFactor); //Resistance force applied as x0.85
     
-        //Force has been applied and must be reset
-        _fX = 0F;
-        _fY = 0F;
-        _fZ = 0F;
+        //testing this out:
+        _dX = (float) velocity._x;
+        _dY = (float) velocity._y;
+        _dZ = (float) velocity._z;
+    
     
         //Clamping Velocity
-        double velocityPPS = velocity.length();
-        if (velocityPPS > _maxWidgetSpeedInPixelsPerSecond)
-        {
+       /* double velocityPPS = velocity.length();
+        if (velocityPPS > _maxWidgetSpeedInPixelsPerSecond){
             _dX = (float)(velocity._x * (_maxWidgetSpeedInPixelsPerSecond / velocityPPS));
             _dY = (float)(velocity._y * (_maxWidgetSpeedInPixelsPerSecond / velocityPPS));
             _dZ = (float)(velocity._z * (_maxWidgetSpeedInPixelsPerSecond / velocityPPS));
-    
-        }
-        else
-        {
-            if (velocityPPS < _minWidgetSpeedInPixelsPerSecond)
-            {
-                _dX = 0.0F;
-                _dY = 0.0F;
-                _dZ = 0.0F;
-            }
-            else
-            {
+       
+        } else{
+            if (velocityPPS < _minWidgetSpeedInPixelsPerSecond){
+                _dX = 0.0;
+                _dY = 0.0;
+                _dZ = 0.0;
+            } else{
                 //Normal case
                 _dX = (float)velocity._x;
                 _dY = (float)velocity._y;
                 _dZ = (float)velocity._z;
             }
-        }
+        }*/
     
         //Update position
         Vector3D position = getCartesianPosition(planet);
@@ -327,25 +362,31 @@ public class NonOverlapping3DMark
         _tY+=_dY *time;
         _tZ+=_dZ *time;
     
+    
+        //clamp translation
+        //Vector3D temp_translation = Vector3D(_tX, _tY, _tZ);
+       // Vector3D translation = clampVector(temp_translation, -1000000000, 1000000000);
         Vector3D translation = new Vector3D(_tX, _tY, _tZ);
     
-        //find the maximum, but clamped spring length
+    
+    
+        //find the maximum, but clamped spring length - TODO this is wrong
         float springx = 0F;
         float springy = 0F;
         float springz = 0F;
     
-        for(int i = 0; i < _neighbors.size(); i++)
-        {
-            Vector3D anchorPos = _neighbors.get(i).getCartesianPosition(planet);
-            Vector3D temp_spring = new Vector3D(newX,newY, newZ).sub(anchorPos);
+        //TODO
+       /* for(int i = 0; i < _neighbors.size(); i++) {
+            Vector3D anchorPos = _neighbors[i]->getCartesianPosition(planet);
+            Vector3D temp_spring = Vector3D(newX,newY,newZ).sub(anchorPos);
             Vector3D spring = clampVector(temp_spring, _minSpringLength, _maxSpringLength);
-            if(spring.length() > new Vector3D(springx, springy, springz).length())
-            {
+            if(spring.length() > Vector3D(springx, springy, springz).length()) {
                 springx = spring._x;
                 springy = spring._y;
                 springz = spring._z;
             }
-        }
+        }*/
+    
     
       /* if(this->getAnchor() != NULL) {
       
@@ -362,7 +403,12 @@ public class NonOverlapping3DMark
        */
         _anchorShape.setTranslation(translation);
         _nodeShape.setTranslation(translation); //TODO: spring??
-        //TODO: update this with new graph stuffs
+    
+        //Force has been applied and must be reset
+        _fX = 0F;
+        _fY = 0F;
+        _fZ = 0F;
+    
     
     }
 
@@ -379,6 +425,9 @@ public class NonOverlapping3DMark
          _fX = 0F;
          _fY = 0F;
          _fZ = 0F;
+         _tX = 0F;
+         _tY = 0F;
+         _tZ = 0F;
         _anchorShape.setPosition(_geoPosition);
         _nodeShape.setPosition(_geoPosition);
      }

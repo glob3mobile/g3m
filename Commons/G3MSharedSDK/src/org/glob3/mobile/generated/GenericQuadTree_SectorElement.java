@@ -1,4 +1,6 @@
 package org.glob3.mobile.generated; 
+import java.util.*;
+
 public class GenericQuadTree_SectorElement extends GenericQuadTree_Element
 {
   public final Sector _sector ;
