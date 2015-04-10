@@ -17,6 +17,10 @@
 #include <vector>
 #include <string>
 
+#include "IFactory.hpp"
+#include "ITimer.hpp"
+#include "Geodetic3D.hpp"
+
 class StarsMeshShape: public MeshShape{
 public:
   StarsMeshShape(Geodetic3D* position,
@@ -104,12 +108,14 @@ class StarDomeRenderer : public DefaultRenderer {
   
 public:
   
-  StarDomeRenderer(std::string& name, std::vector<Star> stars):
-  _starsShape(NULL), _glState(new GLState()), _stars(stars), _currentCamera(NULL), _name(name),_position(NULL)
+  StarDomeRenderer(std::string& name, std::vector<Star> stars,
+                   const Geodetic3D& position):
+  _starsShape(NULL), _glState(new GLState()), _stars(stars), _currentCamera(NULL), _name(name),_position(new Geodetic3D(position))
   {
   }
   
   static double getSiderealTime(double placeLongitudeInDegrees, double clockTime, double thetaZero){
+    
     double I = 366.2422 / 365.2422;
     double TU = clockTime - IMathUtils::instance()->round(placeLongitudeInDegrees);
     

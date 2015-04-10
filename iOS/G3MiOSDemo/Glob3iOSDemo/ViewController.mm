@@ -364,7 +364,6 @@ Mesh* createSectorMesh(const Planet* planet,
   builder.addRenderer(mr);
   
   
-  
   [self readStars: &builder];
   
   //mr->addMesh([self createStarDome]);
@@ -468,6 +467,8 @@ const Planet* planet;
   
   NSString *csvPath = [[NSBundle mainBundle] pathForResource: @"stars" ofType: @"csv"];
   
+  Geodetic3D gcPosition = Geodetic3D::fromDegrees(27.973105, -15.597545, 500);
+  
   if (csvPath) {
     NSString *csv = [NSString stringWithContentsOfFile: csvPath
                                               encoding: NSMacOSRomanStringEncoding
@@ -487,7 +488,7 @@ const Planet* planet;
         if (constelationName != nil && stars.size() > 0){
           //PUSHING CONSTELATION
           std::string name = [constelationName UTF8String];
-          StarDomeRenderer* sdr = new StarDomeRenderer(name, stars);
+          StarDomeRenderer* sdr = new StarDomeRenderer(name, stars, gcPosition);
           builder->addRenderer(sdr);
         }
         

@@ -32,7 +32,7 @@ void StarDomeRenderer::initialize(const G3MContext* context) {
   
   Vector3D startingStarPos = origin.add(north.normalized().times(domeHeight));
   
-  _position = new Geodetic3D( Geodetic3D::fromDegrees(27.973105, -15.597545, 500));
+//  _position = new Geodetic3D( Geodetic3D::fromDegrees(27.973105, -15.597545, 500));
 #warning TODO
   double siderealTime = getSiderealTime(_position->_longitude._degrees, 0, 0);
   
