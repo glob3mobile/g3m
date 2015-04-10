@@ -1,6 +1,4 @@
 package org.glob3.mobile.generated; 
-import java.util.*;
-
 public class NonOverlapping3DMark
 {
 
@@ -260,22 +258,16 @@ public class NonOverlapping3DMark
         if(distance < .01) //right on top of each other, pull them apart by a small random force before doing actual calculation
         {
             strength = 1F;
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#if C_CODE
-            Vector3D force = (new Vector3D(tangible.RandomNumbers.nextNumber() % 5, tangible.RandomNumbers.nextNumber() % 5, tangible.RandomNumbers.nextNumber() % 5)).times(strength);
-//#endif
+           // Vector3D force = (Vector3D(rand() % 5, rand() % 5, rand() % 5)).times(strength); //random not working in java
+            Vector3D force = (new Vector3D(2, 2, 2)).times(strength);
     
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#if JAVACODE
-              Vector3D force = (new Vector3D((Math.random()*100) % 5, (Math.random()* 100) % 5, (Math.random()* 100) % 5)).times(strength);
-//#endif
             this.applyForce((float)force._x, (float) force._y, (float) force._z);
     
     }
         else
         {
              Vector3D force = direction.times(strength);
-             this.applyForce(force._x, force._y, force._z);
+             this.applyForce((float) force._x, (float) force._y, (float) force._z);
         }
     
         //force from center of planet: - TODO: it's making it go in the z direction instead of x direction?? why?
@@ -301,7 +293,7 @@ public class NonOverlapping3DMark
     
         float strengthAnchor = (float)(this._electricCharge * that._electricCharge / (distanceAnchor * distanceAnchor));
     
-        this.applyForce(directionAnchor._x * strengthAnchor, directionAnchor._y * strengthAnchor, directionAnchor._z);
+        this.applyForce((float) directionAnchor._x * strengthAnchor, (float) directionAnchor._y * strengthAnchor, (float) directionAnchor._z);
     }
 
     public final void applyHookesLaw(Planet planet)

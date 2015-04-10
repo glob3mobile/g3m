@@ -1,6 +1,4 @@
 package org.glob3.mobile.generated; 
-import java.util.*;
-
 //
 //  G3MMeshMaterial.cpp
 //  G3MiOSSDK

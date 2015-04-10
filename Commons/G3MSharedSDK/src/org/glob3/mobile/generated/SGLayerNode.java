@@ -1,6 +1,4 @@
 package org.glob3.mobile.generated; 
-import java.util.*;
-
 //
 //  SGLayerNode.cpp
 //  G3MiOSSDK

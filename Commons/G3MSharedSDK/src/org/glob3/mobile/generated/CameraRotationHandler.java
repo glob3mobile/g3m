@@ -1,6 +1,4 @@
 package org.glob3.mobile.generated; 
-import java.util.*;
-
 //
 //  CameraRotationHandler.cpp
 //  G3MiOSSDK
