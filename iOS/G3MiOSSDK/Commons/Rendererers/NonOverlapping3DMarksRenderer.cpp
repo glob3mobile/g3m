@@ -85,21 +85,21 @@ _minWidgetSpeedInPixelsPerSecond(minWidgetSpeedInPixelsPerSecond)
     //Initialize shape to something - TODO use parameter shape
     _anchorShape = new EllipsoidShape(new Geodetic3D(_geoPosition),
                                       ABSOLUTE,
-                                      Vector3D(100000, 100000, 100000),
-                                      16,
+                                      Vector3D(100000.0, 100000.0, 100000.0),
+                                      (short) 16,
                                       0,
                                       false,
                                       false,
-                                      Color::fromRGBA(.5, 1, .5, .9));
+                                      Color::fromRGBA((float).5, (float)1, (float).5, (float).9));
 
     _nodeShape = new EllipsoidShape(new Geodetic3D(_geoPosition),
                                     ABSOLUTE,
-                                    Vector3D(100000, 100000, 100000),
-                                    16,
+                                    Vector3D(100000.0, 100000.0, 100000.0),
+                                    (short) 16,
                                     0,
                                     false,
                                     false,
-                                    Color::fromRGBA(.5, 0, .5, .9));
+                                    Color::fromRGBA((float).5, (float) 0, (float) .5, (float) .9));
     
     //set value of shape to the thing passed in
    // *_anchorShape = *anchorShape;
@@ -184,14 +184,21 @@ void NonOverlapping3DMark::applyCoulombsLaw(NonOverlapping3DMark *that, const Pl
     Vector3D pos = getCartesianPosition(planet);
     Vector3D d = getCartesianPosition(planet).sub(that->getCartesianPosition(planet));//.normalized();
 
-    float distance = d.length();
+    double distance = d.length();
     Vector3D direction = d.normalized();
     //float k = 5;
     float strength = (float) (this->_electricCharge * that->_electricCharge/(distance*distance));
     if(distance < .01) { //right on top of each other, pull them apart by a small random force before doing actual calculation
         strength = 1;
+#if C_CODE
         Vector3D force = (Vector3D(rand() % 5, rand() % 5, rand() % 5)).times(strength);
-        this->applyForce(force._x, force._y, force._z);
+#endif
+        
+#if JAVACODE
+          Vector3D force = (new Vector3D((Math.random()*100) % 5, (Math.random()* 100) % 5, (Math.random()* 100) % 5)).times(strength);
+#endif
+        this->applyForce((float)force._x, (float) force._y, (float) force._z);
+        
 }
     else {
          Vector3D force = direction.times(strength);
@@ -200,13 +207,13 @@ void NonOverlapping3DMark::applyCoulombsLaw(NonOverlapping3DMark *that, const Pl
 
     //force from center of planet: - TODO: it's making it go in the z direction instead of x direction?? why?
     Vector3D d2 =(getCartesianPosition(planet)).normalized();
-    float distance2 = d2.length();
+    double distance2 = d2.length();
     float planetCharge = 1;
     Vector3D direction2 = d2.normalized();
     float strength2 = (float) ( planetCharge / distance2*distance2);
     Vector3D force2 = direction2.times(strength2);
     
-    this->applyForce(force2._x, force2._y, force2._z); //why does it do what is expected only if I swap x and z...?
+    this->applyForce((float) force2._x, (float) force2._y, (float) force2._z); //why does it do what is expected only if I swap x and z...?
   //  this->applyForce(force._x, force._y, force._z);
     
     
@@ -248,13 +255,14 @@ void NonOverlapping3DMark::render(const G3MRenderContext* rc, GLState* glState){
     _shapesRenderer->render(rc, glState);
 }
 Vector3D NonOverlapping3DMark::clampVector(Vector3D &v, float min, float max) const {
-    float l = v.length();
+    double l = v.length();
     if(l < min) {
         return (v.normalized()).times(min);
     }
     if(l > max) {
         return (v.normalized()).times(max);
     }
+    return v;
 }
 
 void NonOverlapping3DMark::updatePositionWithCurrentForce(double elapsedMS, float viewportWidth, float viewportHeight, const Planet* planet){
@@ -295,9 +303,9 @@ void NonOverlapping3DMark::updatePositionWithCurrentForce(double elapsedMS, floa
     //Update position
     Vector3D position = getCartesianPosition(planet);
     
-    float newX = position._x + (_dX * time);
-    float newY = position._y + (_dY * time);
-    float newZ = position._z + (_dZ * time);
+    float newX = (float) position._x + (_dX * time);
+    float newY = (float) position._y + (_dY * time);
+    float newZ = (float) position._z + (_dZ * time);
     
     //update translation
     _tX+=_dX*time;
@@ -622,7 +630,7 @@ void NonOverlapping3DMarksRenderer::render(const G3MRenderContext* rc, GLState* 
             Vector3D extent = Vector3D(10000, 1000, p1.distanceTo(p2));
             //todo: rotation, mark as visited, don't allocate memory
             float borderWidth = 2;
-            Color col = Color::fromRGBA(.5, 1, 1, 1);
+            Color col = Color::fromRGBA((float) .5, (float) 1, (float) 1, (float) 1);
             
             // create vertices
             FloatBufferBuilderFromCartesian3D* vertices = FloatBufferBuilderFromCartesian3D::builderWithoutCenter();

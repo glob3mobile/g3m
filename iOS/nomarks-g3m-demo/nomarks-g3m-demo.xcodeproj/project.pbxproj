@@ -57,7 +57,7 @@
 		DF2BB6ED1A8E7797004D16D6 /* BilParser.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = BilParser.hpp; sourceTree = "<group>"; };
 		DF2BB6EE1A8E7797004D16D6 /* BufferElevationData.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = BufferElevationData.cpp; sourceTree = "<group>"; };
 		DF2BB6EF1A8E7797004D16D6 /* BufferElevationData.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = BufferElevationData.hpp; sourceTree = "<group>"; };
-		DF2BB6F01A8E7797004D16D6 /* ByteBufferBuilder.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ByteBufferBuilder.cpp; sourceTree = "<group>"; };
+		DF2BB6F01A8E7797004D16D6 /* ByteBufferBuilder.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ByteBufferBuilder.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		DF2BB6F11A8E7797004D16D6 /* ByteBufferBuilder.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ByteBufferBuilder.hpp; sourceTree = "<group>"; };
 		DF2BB6F21A8E7797004D16D6 /* ByteBufferIterator.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ByteBufferIterator.cpp; sourceTree = "<group>"; };
 		DF2BB6F31A8E7797004D16D6 /* ByteBufferIterator.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ByteBufferIterator.hpp; sourceTree = "<group>"; };

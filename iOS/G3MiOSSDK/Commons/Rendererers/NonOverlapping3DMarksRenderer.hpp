@@ -140,7 +140,12 @@ public:
 class NonOverlapping3DMarksRenderer: public DefaultRenderer{
     
     int _maxVisibleMarks;
+#ifdef C_CODE
     const Planet* _planet;
+#endif
+#ifdef JAVA_CODE
+    Planet _planet;
+#endif
     
     std::vector<NonOverlapping3DMark*> _visibleMarks;
     std::vector<NonOverlapping3DMark*> _marks;

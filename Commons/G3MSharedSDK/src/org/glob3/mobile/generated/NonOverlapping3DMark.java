@@ -259,7 +259,7 @@ public class NonOverlapping3DMark
         if(distance < .01) //right on top of each other, pull them apart by a small random force before doing actual calculation
         {
             strength = 1F;
-            Vector3D force = (new Vector3D(tangible.RandomNumbers.nextNumber() % 5, tangible.RandomNumbers.nextNumber() % 5, tangible.RandomNumbers.nextNumber() % 5)).times(strength);
+            Vector3D force = (new Vector3D((Math.random()*100) % 5, (Math.random()* 100) % 5, (Math.random()* 100) % 5)).times(strength);
             this.applyForce(force._x, force._y, force._z);
     }
         else
