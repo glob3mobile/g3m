@@ -122,6 +122,7 @@ public:
             bool autoDeleteListener = false;
             Mark* mark = new Mark(iconurl, tempCoord, ABSOLUTE, minDistanceToCamera, userData, autoDeleteUserData, marksListener, autoDeleteListener);
             
+            // creating bounding box for building
             Box* box = new Box(Vector3D(minLat,minLon,0), Vector3D(maxLat, maxLon, height));
     
                         
