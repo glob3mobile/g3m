@@ -4,12 +4,6 @@ package com.glob3.mobile.POIProxy;
 
 import java.util.ArrayList;
 
-import org.glob3.mobile.generated.Geodetic2D;
-import org.glob3.mobile.generated.IJSONParser;
-import org.glob3.mobile.generated.JSONArray;
-import org.glob3.mobile.generated.JSONObject;
-import org.glob3.mobile.specific.JSONParser_Android;
-
 
 public class PoiProxyUtil {
 

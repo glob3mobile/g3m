@@ -2,29 +2,6 @@
 
 package org.glob3.mobile.demo;
 
-import org.glob3.mobile.generated.AltitudeMode;
-import org.glob3.mobile.generated.Angle;
-import org.glob3.mobile.generated.Color;
-import org.glob3.mobile.generated.G3MContext;
-import org.glob3.mobile.generated.GInitializationTask;
-import org.glob3.mobile.generated.Geodetic2D;
-import org.glob3.mobile.generated.Geodetic3D;
-import org.glob3.mobile.generated.IBufferDownloadListener;
-import org.glob3.mobile.generated.IByteBuffer;
-import org.glob3.mobile.generated.IDownloader;
-import org.glob3.mobile.generated.IJSONParser;
-import org.glob3.mobile.generated.JSONArray;
-import org.glob3.mobile.generated.JSONBaseObject;
-import org.glob3.mobile.generated.JSONObject;
-import org.glob3.mobile.generated.Mark;
-import org.glob3.mobile.generated.MarksRenderer;
-import org.glob3.mobile.generated.ShapesRenderer;
-import org.glob3.mobile.generated.TimeInterval;
-import org.glob3.mobile.generated.URL;
-import org.glob3.mobile.specific.G3MBuilder_Android;
-import org.glob3.mobile.specific.G3MWidget_Android;
-import org.glob3.mobile.specific.JSONParser_Android;
-
 import android.app.Activity;
 import android.os.Bundle;
 import android.widget.LinearLayout;

@@ -4,36 +4,6 @@ package org.glob3.mobile.demo;
 
 import java.util.ArrayList;
 
-import org.glob3.mobile.generated.Angle;
-import org.glob3.mobile.generated.Color;
-import org.glob3.mobile.generated.GEO2DLineRasterStyle;
-import org.glob3.mobile.generated.GEO2DLineStringGeometry;
-import org.glob3.mobile.generated.GEO2DMultiLineStringGeometry;
-import org.glob3.mobile.generated.GEO2DMultiPolygonGeometry;
-import org.glob3.mobile.generated.GEO2DPointGeometry;
-import org.glob3.mobile.generated.GEO2DPolygonData;
-import org.glob3.mobile.generated.GEO2DPolygonGeometry;
-import org.glob3.mobile.generated.GEO2DSurfaceRasterStyle;
-import org.glob3.mobile.generated.GEOGeometry;
-import org.glob3.mobile.generated.GEOPolygonRasterSymbol;
-import org.glob3.mobile.generated.GEORasterSymbol;
-import org.glob3.mobile.generated.GEORasterSymbolizer;
-import org.glob3.mobile.generated.Geodetic2D;
-import org.glob3.mobile.generated.Geodetic3D;
-import org.glob3.mobile.generated.ILogger;
-import org.glob3.mobile.generated.Info;
-import org.glob3.mobile.generated.JSONObject;
-import org.glob3.mobile.generated.LayerSet;
-import org.glob3.mobile.generated.LevelTileCondition;
-import org.glob3.mobile.generated.MapBoxLayer;
-import org.glob3.mobile.generated.Sector;
-import org.glob3.mobile.generated.StrokeCap;
-import org.glob3.mobile.generated.StrokeJoin;
-import org.glob3.mobile.generated.TiledVectorLayer;
-import org.glob3.mobile.generated.TimeInterval;
-import org.glob3.mobile.specific.G3MBuilder_Android;
-import org.glob3.mobile.specific.G3MWidget_Android;
-
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;

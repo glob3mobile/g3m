@@ -643,69 +643,13 @@ void NonOverlapping3DMarksRenderer::render(const G3MRenderContext* rc, GLState* 
                                          new Color(col));
             _meshrender.addMesh(mesh);
          
-         //  QuadShape* q = new QuadShape(position, ABSOLUTE, NULL, p1.distanceTo(p2), 1e5, false);
-          // sr.addShape(q);
-           
-       
-           // Mesh* _mesh = l.createMesh();
-            
-            
-           // cr.create
-          //  _meshrender.addMesh(_mesh);
-          /*  BoxShape* line = new BoxShape(position, ABSOLUTE, extent, borderWidth, col, NULL, true);
-            Vector3D dir = (p1.sub(p2)).normalized();
-            float a = acos(dir._x);
-            float b = acos(dir._y);
-            float c = acos(dir._z);
-            Angle alpha = Angle::fromRadians(a);
-            Angle beta = Angle::fromRadians(b);
-            Angle gamma = Angle::fromRadians(c);
-            //line->setPitch(alpha);
-            //line->setRoll(beta);
-            //line->setHeading(gamma);
-            //line->setPosition(*position);
-            
-            sr.addShape(line);*/
-    
-          //  FloatBufferBuilderFromCartesian3D(, p1);//what is first argument?
-           // FloatBufferBuilder *f = new FloatBufferBuilder();
-            //IFloatBuffer* buf = f->create()
-           /* IFloatBuffer* buf = FloatBufferBuilderFromCartesian3D(<#FloatBufferBuilder::CenterStrategy centerStrategy#>, <#const Vector3D &center#>)
-            
-            
-            
-            Mesh* m = new DirectMesh(0,
-                                     true,
-                                     p1.add(p2).div(2.0),
-                                     IFloatBuffer* vertices,
-                                     float lineWidth,
-                                     2,
-                                     NULL,
-                                     NULL,
-                                     0.0,
-                                     true,
-                                    NULL));*/
-            //Shape* mesh = new MeshShape();
-    /*Shape *line = new BoxShape(position, ABSOLUTE, extent, borderWidth, col, NULL, true);
-    Vector3D dir = p1.sub(p2).normalized();
-    float a = acos(dir._x);
-    float b = acos(dir._y);
-    float c = acos(dir._z);
-    Angle alpha = Angle::fromRadians(a);
-    Angle beta = Angle::fromRadians(b);
-    Angle gamma = Angle::fromRadians(c);
-    line->setPitch(alpha);
-    line->setRoll(beta);
-    line->setHeading(gamma);
-
-    sr.addShape(line);*/
 
         }
     }
     
-    sr.render(rc, glState);
+   // sr.render(rc, glState);
     _meshrender.render(rc, glState);
-    sr.removeAllShapes();
+   // sr.removeAllShapes();
     //TODO: get rid of this stuff
     /*for(int i = 0; i < _visibleMarks.size(); i++) {
         _visibleMarks[i]->getShape()->setPosition(Geodetic3D::fromDegrees(0, 0, 1));

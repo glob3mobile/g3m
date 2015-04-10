@@ -4,33 +4,6 @@ package org.glob3.mobile.demo;
 
 import java.util.ArrayList;
 
-import org.glob3.mobile.generated.AltitudeMode;
-import org.glob3.mobile.generated.BoxShape;
-import org.glob3.mobile.generated.Color;
-import org.glob3.mobile.generated.GEO2DLineRasterStyle;
-import org.glob3.mobile.generated.GEO2DLineStringGeometry;
-import org.glob3.mobile.generated.GEO2DMultiLineStringGeometry;
-import org.glob3.mobile.generated.GEO2DMultiPolygonGeometry;
-import org.glob3.mobile.generated.GEO2DPointGeometry;
-import org.glob3.mobile.generated.GEO2DPolygonData;
-import org.glob3.mobile.generated.GEO2DPolygonGeometry;
-import org.glob3.mobile.generated.GEO2DSurfaceRasterStyle;
-import org.glob3.mobile.generated.GEOGeometry;
-import org.glob3.mobile.generated.GEOLineRasterSymbol;
-import org.glob3.mobile.generated.GEOMarkSymbol;
-import org.glob3.mobile.generated.GEOMultiLineRasterSymbol;
-import org.glob3.mobile.generated.GEOPolygonRasterSymbol;
-import org.glob3.mobile.generated.GEOShapeSymbol;
-import org.glob3.mobile.generated.GEOSymbol;
-import org.glob3.mobile.generated.GEOSymbolizer;
-import org.glob3.mobile.generated.Geodetic3D;
-import org.glob3.mobile.generated.JSONObject;
-import org.glob3.mobile.generated.JSONString;
-import org.glob3.mobile.generated.Mark;
-import org.glob3.mobile.generated.StrokeCap;
-import org.glob3.mobile.generated.StrokeJoin;
-import org.glob3.mobile.generated.Vector3D;
-
 
 public class Symbology {
 

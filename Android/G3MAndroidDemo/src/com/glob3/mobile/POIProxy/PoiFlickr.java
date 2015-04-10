@@ -2,9 +2,6 @@
 
 package com.glob3.mobile.POIProxy;
 
-import org.glob3.mobile.generated.JSONArray;
-import org.glob3.mobile.generated.JSONObject;
-
 
 public class PoiFlickr
          extends

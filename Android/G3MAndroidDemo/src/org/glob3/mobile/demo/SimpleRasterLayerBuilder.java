@@ -4,22 +4,6 @@ package org.glob3.mobile.demo;
 
 import java.util.ArrayList;
 
-import org.glob3.mobile.generated.BingMapType;
-import org.glob3.mobile.generated.BingMapsLayer;
-import org.glob3.mobile.generated.LayerBuilder;
-import org.glob3.mobile.generated.LayerSet;
-import org.glob3.mobile.generated.LevelTileCondition;
-import org.glob3.mobile.generated.MapBoxLayer;
-import org.glob3.mobile.generated.MapQuestLayer;
-import org.glob3.mobile.generated.MercatorTiledLayer;
-import org.glob3.mobile.generated.OSMLayer;
-import org.glob3.mobile.generated.Sector;
-import org.glob3.mobile.generated.TimeInterval;
-import org.glob3.mobile.generated.URL;
-import org.glob3.mobile.generated.URLTemplateLayer;
-import org.glob3.mobile.generated.WMSLayer;
-import org.glob3.mobile.generated.WMSServerVersion;
-
 
 public class SimpleRasterLayerBuilder
          extends
