@@ -525,9 +525,7 @@ void SphericalPlanet::correctPitchAfterDoubleDrag(Camera* camera, const Vector2F
     return;
   }
   
-  Vector2F pixel0ini = camera->point2Pixel(finalPoint0);
-  Vector2F pixel1ini = camera->point2Pixel(finalPoint1);
-
+//  printf("dist = %f\n", finalPoint0.distanceTo(finalPoint1));
   
   Vector3D axis = finalPoint0.sub(finalPoint1);
   
@@ -538,6 +536,8 @@ void SphericalPlanet::correctPitchAfterDoubleDrag(Camera* camera, const Vector2F
   Vector3D planetCenterCS = Vector3D::zero.transformedBy(csm, 1.0); //Point to be dragged
   
   //The angle should take the planet center to the center of the view (Plane ZY) -> X = 0
+  
+  double angleInRadians = _lastCorrectingRollAngle;
  
   std::vector<double> angs = planetCenterCS.rotationAngleInRadiansToYZPlane(axisCS, rotationPointCS);
   if (angs.size() > 0){
@@ -546,42 +546,29 @@ void SphericalPlanet::correctPitchAfterDoubleDrag(Camera* camera, const Vector2F
     Angle a1 = Angle::fromRadians(angs[1]);
     Angle last = Angle::fromRadians(_lastCorrectingRollAngle);
     
-    Angle* angle = a0.distanceTo(last)._radians < a1.distanceTo(last)._radians? &a0 : &a1;
-
-    if (angle->distanceTo(last)._degrees > 20){
-      printf("CORRECTED ROLL JUMPED %f DEGREES\n", angle->distanceTo(last)._degrees);
+    angleInRadians = a0.distanceTo(last)._radians < a1.distanceTo(last)._radians? a0._radians : a1._radians;
+    
+    angleInRadians *= -1; //Inverting for camera
+    
+    //Avoiding jumps
+    double jump = Angle::fromRadians(angleInRadians).distanceTo(Angle::fromRadians(_lastCorrectingRollAngle))._degrees;
+    if (jump > 20){
+      printf("CORRECTED ROLL JUMPED %f DEGREES\n", jump);
+      angleInRadians = _lastCorrectingRollAngle;
     }
     
-    //    printf("CORRECTING ROLL %f GRAD\n", angle->_degrees);
-    MutableMatrix44D m = MutableMatrix44D::createGeneralRotationMatrix(angle->times(-1), axis, finalPoint0);
-    
-    
-    camera->applyTransform(m);
-    _lastCorrectingRollAngle = angle->_radians;
-    
-    ///////
-    
-//    MutableMatrix44D csm2( *camera->getModelMatrix44D() );
-//    Vector3D rotationPointCS2 = finalPoint0.transformedBy(csm2, 1.0);
-//    
-//    if (rotationPointCS.distanceTo(rotationPointCS2) > 10){
-//      printf("ERRROR\n");
-//    }
-//    
-//    Vector2F pixel0fin = camera->point2Pixel(finalPoint0);
-//    Vector2F pixel1fin = camera->point2Pixel(finalPoint1);
-//    
-//    if (pixel0fin.sub(pixel0ini).length() > 5){
-//      printf("ERROR0\n");
-//    }
-//    if (pixel1fin.sub(pixel1ini).length() > 5){
-//      printf("ERROR1\n");
-//    }
-
-    
   } else{
-    printf("CAN'T CORRECT ROLL FOR THIS FRAME\n");
+    printf("NONE CORRECT ROLL ANGLE FOR THIS FRAME\n");
   }
+  
+  Angle angle = Angle::fromRadians(angleInRadians);
+  
+  //printf("CORRECTING ROLL %f GRAD\n", angle->_degrees);
+  MutableMatrix44D m = MutableMatrix44D::createGeneralRotationMatrix(angle, axis, finalPoint0);
+  camera->applyTransform(m);
+  
+  //Storing for next frame
+  _lastCorrectingRollAngle = angle._radians;
 }
 
 

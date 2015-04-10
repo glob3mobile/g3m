@@ -15,6 +15,8 @@
 #include "MeshRenderer.hpp"
 #include "DirectMesh.hpp"
 
+#include "Vector2F.hpp"
+
 
 
 bool CameraDoubleDragHandler::onTouchEvent(const G3MEventContext *eventContext,
@@ -23,8 +25,22 @@ bool CameraDoubleDragHandler::onTouchEvent(const G3MEventContext *eventContext,
 {
   // only one finger needed
   if (touchEvent->getTouchCount()!=2) return false;
+  
+  TouchEventType type = touchEvent->getType();
+  
+  const Vector2F pixel0 = touchEvent->getTouch(0)->getPos();
+  const Vector2F pixel1 = touchEvent->getTouch(1)->getPos();
+
+  if (type == Move &&
+      (_camera0.pixel2PlanetPoint(pixel0).isNan() ||
+       _camera0.pixel2PlanetPoint(pixel1).isNan())){
+        //printf("FINGERS OUT OF INITIAL PLANET\n");
+        //FIXING THIS CASE
+        onUp(eventContext, *touchEvent, cameraContext);
+        type = Down;
+  }
     
-  switch (touchEvent->getType()) {
+  switch (type) {
     case Down:
       onDown(eventContext, *touchEvent, cameraContext);
       break;
@@ -54,6 +70,7 @@ void CameraDoubleDragHandler::onDown(const G3MEventContext *eventContext,
   Vector3D touchedPosition0 = widget->getScenePositionForPixel((int)pixel0._x, (int)pixel0._y);
   const Vector2F pixel1 = touchEvent.getTouch(1)->getPos();
   Vector3D touchedPosition1 = widget->getScenePositionForPixel((int)pixel1._x, (int)pixel1._y);
+  
 
   
   cameraContext->setCurrentGesture(DoubleDrag);
