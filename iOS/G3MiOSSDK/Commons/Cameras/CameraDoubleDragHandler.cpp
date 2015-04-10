@@ -126,8 +126,9 @@ void CameraDoubleDragHandler::onMove(const G3MEventContext *eventContext,
   camera->copyFrom(_camera0);
   camera->applyTransform(matrix);
   
-  
-  eventContext->getPlanet()->correctPitchAfterDoubleDrag(camera, pixel0, pixel1);
+  if (_fixRollTo0){
+    eventContext->getPlanet()->correctPitchAfterDoubleDrag(camera, pixel0, pixel1);
+  }
 }
 
 

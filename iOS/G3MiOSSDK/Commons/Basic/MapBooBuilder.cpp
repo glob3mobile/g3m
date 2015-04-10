@@ -574,7 +574,8 @@ CameraRenderer* MapBooBuilder::createCameraRenderer() {
   const bool useInertia = true;
   cameraRenderer->addHandler(new CameraSingleDragHandler(useInertia));
   const bool allowRotationInDoubleDrag = true;
-  cameraRenderer->addHandler(new CameraDoubleDragHandler(allowRotationInDoubleDrag));
+  const bool fixRollTo0 = true;
+  cameraRenderer->addHandler(new CameraDoubleDragHandler(allowRotationInDoubleDrag, fixRollTo0));
   cameraRenderer->addHandler(new CameraRotationHandler());
   //cameraRenderer->addHandler(new CameraDoubleTapHandler());
 
