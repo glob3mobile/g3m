@@ -18,9 +18,13 @@
 #include <G3MiOSSDK/JSONArray.hpp>
 #include <G3MiOSSDK/JSONNumber.hpp>
 #include <G3MiOSSDK/Mark.hpp>
+#include <G3MiOSSDK/Box.hpp>
+#include <G3MiOSSDK/Mesh.hpp>
+#include <G3MiOSSDK/Color.hpp>
 #include <G3MiOSSDK/Geodetic3D.hpp>
 #include <G3MiOSSDK/IStringUtils.hpp>
 #include <G3MiOSSDK/MarksRenderer.hpp>
+#include <G3MiOSSDK/MeshRenderer.hpp>
 #include <G3MiOSSDK/BingMapsLayer.hpp>
 #include <math.h>
 #include <stdio.h>
@@ -78,6 +82,10 @@ public:
             
             double averageLon = 0;
             double averageLat = 0;
+            double minLat = MAXFLOAT;
+            double minLon = MAXFLOAT;
+            double maxLat = 0;
+            double maxLon = 0;
             //TODO: get all the coordinates in geometry. We are getting the average instead.
             
             for (int j = 0; j < coordArray->size(); j++) {
@@ -85,6 +93,20 @@ public:
                 double lat = coordArray->getAsArray(0)->getAsArray(j)->getAsNumber(1, 0);
                 averageLon += lon;
                 averageLat += lat;
+                
+                // update min/max lat/lon if necessary
+                if (lon > maxLon) {
+                    maxLon = lon;
+                }
+                if (lon < minLon) {
+                    minLon = lon;
+                }
+                if (lat > maxLat) {
+                    maxLat = lat;
+                }
+                if (lat < minLat) {
+                    minLat = lat;
+                }
             }
             averageLon /= coordArray->size();
             averageLat /= coordArray->size();
@@ -100,6 +122,9 @@ public:
             bool autoDeleteListener = false;
             Mark* mark = new Mark(iconurl, tempCoord, ABSOLUTE, minDistanceToCamera, userData, autoDeleteUserData, marksListener, autoDeleteListener);
             
+            Box* box = new Box(Vector3D(minLat,minLon,0), Vector3D(maxLat, maxLon, height));
+    
+                        
             _scene->addMark(mark);
             //TODO finish parsing all the other fields from building data
             
@@ -131,8 +156,11 @@ void G3MOSMBuildingsDemoScene::addMark(Mark* mark) {
     getModel()->getMarksRenderer()->addMark(mark);
 }
 
+void G3MOSMBuildingsDemoScene::addMesh(Mesh* mesh) {
+    getModel()->getMeshRenderer()->addMesh(mesh);
+}
+
 void G3MOSMBuildingsDemoScene::rawActivate(const G3MContext* context) {
-    
     //Used for downloader->requestBuffer call
     bool readExpired = true;
     bool deleteListener = true;

@@ -50,6 +50,8 @@ public:
     
     void deactivate(const G3MContext* context);
     void addMark(Mark* mark);
+    void addMesh(Mesh* mesh);
+
     
 };
 
