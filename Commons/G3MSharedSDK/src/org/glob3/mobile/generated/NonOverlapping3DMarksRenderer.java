@@ -5,7 +5,7 @@ public class NonOverlapping3DMarksRenderer extends DefaultRenderer
 {
 
     private int _maxVisibleMarks;
-    private final Planet _planet;
+    Planet _planet;
 
     private java.util.ArrayList<NonOverlapping3DMark> _visibleMarks = new java.util.ArrayList<NonOverlapping3DMark>();
     private java.util.ArrayList<NonOverlapping3DMark> _marks = new java.util.ArrayList<NonOverlapping3DMark>();
@@ -270,7 +270,7 @@ public class NonOverlapping3DMarksRenderer extends DefaultRenderer
                 Vector3D extent = new Vector3D(10000, 1000, p1.distanceTo(p2));
                 //todo: rotation, mark as visited, don't allocate memory
                 float borderWidth = 2F;
-                Color col = Color.fromRGBA(.5, 1, 1, 1);
+                Color col = Color.fromRGBA((float).5, (float) 1, (float) 1, (float) 1);
     
                 // create vertices
                 FloatBufferBuilderFromCartesian3D vertices = FloatBufferBuilderFromCartesian3D.builderWithoutCenter();
