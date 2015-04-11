@@ -6,7 +6,7 @@
 //
 //
 
-#include "BuildingRendererListener.h"
+#include "BuildingRendererListener.hpp"
 #include "Tile.hpp"
 
 void BuildingRendererListener::changedTilesRendering(const std::vector<const Tile *> *tilesStartedRendering, const std::vector<std::string> *tilesStoppedRendering) {

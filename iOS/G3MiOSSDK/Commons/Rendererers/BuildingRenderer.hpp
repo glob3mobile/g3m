@@ -37,7 +37,23 @@ class ChangedInfoListener;
  */
 class BuildingRenderer : public DefaultRenderer {
 public:
-
+    BuildingRenderer();
+    ~BuildingRenderer();
+    
+    void setEnable(bool enable);
+    void onChangedContext();
+    void onLostContext();
+    void render(const G3MRenderContext* rc,
+                GLState* glState);
+    bool onTouchEvent(const G3MEventContext* ec,
+                              const TouchEvent* touchEvent);
+    void onResizeViewportEvent(const G3MEventContext* ec,
+                                       int width, int height);
+    
+    void start(const G3MRenderContext* rc);
+    
+    void stop(const G3MRenderContext* rc);
+    
 private:
 
 };
