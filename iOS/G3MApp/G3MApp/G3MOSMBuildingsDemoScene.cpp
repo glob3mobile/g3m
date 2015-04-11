@@ -122,7 +122,7 @@ public:
             averageLat /= coordArray->size();
             
             Geodetic3D tempCoord = Geodetic3D::fromDegrees(averageLat, averageLon, height);
-            Geodetic3D buildingCenterBottom = Geodetic3D::fromDegrees(averageLat, averageLon, 0);
+            Geodetic3D* buildingCenterBottom = new Geodetic3D(Angle::fromDegrees(averageLat),Angle::fromDegrees(averageLon), 0);
             
             //Create and add the mark
             URL iconurl = URL::URL(iconURL);
@@ -170,7 +170,7 @@ public:
             float borderWidth = 2;
             bool useNormals = true;
             
-            BoxShape* bs = new BoxShape(&buildingCenterBottom,
+            BoxShape* bs = new BoxShape(buildingCenterBottom,
                                         RELATIVE_TO_GROUND,
                                         Vector3D(x_extent, y_extent, z_extent),
                                         borderWidth,
