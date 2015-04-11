@@ -47,6 +47,7 @@
 		44E3C43019C1ADB800857275 /* Info.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = 44E3C42A19B53B4100857275 /* Info.hpp */; };
 		44EE3CDF19A60A3B00DDEF2B /* DefaultChessCanvasImageBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 44EE3CDD19A60A3B00DDEF2B /* DefaultChessCanvasImageBuilder.cpp */; };
 		44EE3CE019A60D2F00DDEF2B /* DefaultChessCanvasImageBuilder.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = 44EE3CDE19A60A3B00DDEF2B /* DefaultChessCanvasImageBuilder.hpp */; };
+		7556C4C71AD9DC8800EECE81 /* BuildingRendererListener.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7556C4C51AD9DC8800EECE81 /* BuildingRendererListener.cpp */; };
 		A70F5608161B54A400340256 /* IJSONParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A70F5607161B54A400340256 /* IJSONParser.cpp */; };
 		A70F560E161B5CD800340256 /* JSONParser_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = A70F560C161B5CD800340256 /* JSONParser_iOS.mm */; };
 		A70F5612161C4F8F00340256 /* JSONNumber.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A70F5611161C4F8F00340256 /* JSONNumber.cpp */; };
@@ -1173,6 +1174,8 @@
 		44E3C42A19B53B4100857275 /* Info.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Info.hpp; path = Commons/Basic/Info.hpp; sourceTree = "<group>"; };
 		44EE3CDD19A60A3B00DDEF2B /* DefaultChessCanvasImageBuilder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = DefaultChessCanvasImageBuilder.cpp; path = Commons/Basic/DefaultChessCanvasImageBuilder.cpp; sourceTree = "<group>"; };
 		44EE3CDE19A60A3B00DDEF2B /* DefaultChessCanvasImageBuilder.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = DefaultChessCanvasImageBuilder.hpp; path = Commons/Basic/DefaultChessCanvasImageBuilder.hpp; sourceTree = "<group>"; };
+		7556C4C51AD9DC8800EECE81 /* BuildingRendererListener.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = BuildingRendererListener.cpp; path = Commons/Basic/BuildingRendererListener.cpp; sourceTree = "<group>"; };
+		7556C4C61AD9DC8800EECE81 /* BuildingRendererListener.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BuildingRendererListener.h; path = Commons/Basic/BuildingRendererListener.h; sourceTree = "<group>"; };
 		A70F5604161B53D000340256 /* IJSONParser.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; path = IJSONParser.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		A70F5607161B54A400340256 /* IJSONParser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = IJSONParser.cpp; sourceTree = "<group>"; };
 		A70F5609161B5C6000340256 /* JSONParser_iOS.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = JSONParser_iOS.hpp; path = Specific/Derived/JSONParser_iOS.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
@@ -2747,6 +2750,8 @@
 		D8EEF3AA1577924D003FEB5E = {
 			isa = PBXGroup;
 			children = (
+				7556C4C51AD9DC8800EECE81 /* BuildingRendererListener.cpp */,
+				7556C4C61AD9DC8800EECE81 /* BuildingRendererListener.h */,
 				E70B56DF16D3CCCD00C5FFFB /* Resources */,
 				383BD3881577EDE30012AC53 /* Commons */,
 				D8EEF3B71577924D003FEB5E /* Frameworks */,
@@ -3182,6 +3187,7 @@
 				CF60500317724C5C00EB48A6 /* JSONNull.cpp in Sources */,
 				CFF96441190885210044F06D /* CompositeTileImageProvider.cpp in Sources */,
 				D8A6C0D41781D807007BC175 /* Matrix44D.cpp in Sources */,
+				7556C4C71AD9DC8800EECE81 /* BuildingRendererListener.cpp in Sources */,
 				D8B8CE88178D636000EE1B97 /* GLFeature.cpp in Sources */,
 				D8B8CE8B178D63C400EE1B97 /* GLFeatureGroup.cpp in Sources */,
 				CF47E0F51901D66F00410BB5 /* CanvasTileImageProvider.cpp in Sources */,
