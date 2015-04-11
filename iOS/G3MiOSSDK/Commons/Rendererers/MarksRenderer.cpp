@@ -114,7 +114,7 @@ bool MarksRenderer::onTouchEvent(const G3MEventContext* ec,
   if ( touchEvent->getType() == DownUp ) {
 
     if (_lastCamera != NULL) {
-      const Vector2I touchedPixel = touchEvent->getTouch(0)->getPos();
+      const Vector2F touchedPixel = touchEvent->getTouch(0)->getPos();
       const Planet* planet = ec->getPlanet();
 
       double minSqDistance = IMathUtils::instance()->maxDouble();
@@ -131,23 +131,23 @@ bool MarksRenderer::onTouchEvent(const G3MEventContext* ec,
           continue;
         }
 
-        const int textureWidth = mark->getTextureWidth();
-        if (textureWidth <= 0) {
+        const int markWidth = mark->getTextureWidth();
+        if (markWidth <= 0) {
           continue;
         }
 
-        const int textureHeight = mark->getTextureHeight();
-        if (textureHeight <= 0) {
+        const int markHeight = mark->getTextureHeight();
+        if (markHeight <= 0) {
           continue;
         }
 
         const Vector3D* cartesianMarkPosition = mark->getCartesianPosition(planet);
         const Vector2F markPixel = _lastCamera->point2Pixel(*cartesianMarkPosition);
 
-        const RectangleF markPixelBounds(markPixel._x - (textureWidth / 2),
-                                         markPixel._y - (textureHeight / 2),
-                                         textureWidth,
-                                         textureHeight);
+        const RectangleF markPixelBounds(markPixel._x - ((float) markWidth / 2),
+                                         markPixel._y - ((float) markHeight / 2),
+                                         markWidth,
+                                         markHeight);
 
         if (markPixelBounds.contains(touchedPixel._x, touchedPixel._y)) {
           const double sqDistance = markPixel.squaredDistanceTo(touchedPixel);
@@ -204,7 +204,8 @@ void MarksRenderer::render(const G3MRenderContext* rc, GLState* glState) {
 
     _lastCamera = camera; // Saving camera for use in onTouchEvent
 
-    const MutableVector3D cameraPosition = camera->getCartesianPositionMutable();
+    MutableVector3D cameraPosition;
+    camera->getCartesianPositionMutable(cameraPosition);
     const double cameraHeight = camera->getGeodeticPosition()._height;
 
     updateGLState(rc);
@@ -230,19 +231,20 @@ void MarksRenderer::render(const G3MRenderContext* rc, GLState* glState) {
 }
 
 void MarksRenderer::updateGLState(const G3MRenderContext* rc) {
-  const Camera* cam = rc->getCurrentCamera();
+  const Camera* camera = rc->getCurrentCamera();
 
   ModelViewGLFeature* f = (ModelViewGLFeature*) _glState->getGLFeature(GLF_MODEL_VIEW);
   if (f == NULL) {
-    _glState->addGLFeature(new ModelViewGLFeature(cam), true);
+    _glState->addGLFeature(new ModelViewGLFeature(camera), true);
   }
   else {
-    f->setMatrix(cam->getModelViewMatrix44D());
+    f->setMatrix(camera->getModelViewMatrix44D());
   }
 
   if (_glState->getGLFeature(GLF_VIEWPORT_EXTENT) == NULL) {
     _glState->clearGLFeatureGroup(NO_GROUP);
-    _glState->addGLFeature(new ViewportExtentGLFeature(cam->getViewPortWidth(), cam->getViewPortHeight()), false);
+    _glState->addGLFeature(new ViewportExtentGLFeature(camera),
+                           false);
   }
 }
 

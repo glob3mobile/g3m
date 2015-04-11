@@ -38,8 +38,6 @@ public:
     
   }
   
-  Vector2D normalized() const;
-  
   double length() const {
     return IMathUtils::instance()->sqrt(squaredLength());
   }
@@ -118,6 +116,13 @@ public:
     return description();
   }
 #endif
+  
+  static Vector2D intersectionOfTwoLines(const Vector2D& p1, const Vector2D& r1,
+                                         const Vector2D& p2, const Vector2D& r2);
+  
+  double dot(const Vector2D& v) const {
+    return _x * v._x + _y * v._y;
+  }
 
 };
 

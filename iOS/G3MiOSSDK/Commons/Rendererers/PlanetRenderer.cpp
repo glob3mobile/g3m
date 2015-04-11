@@ -147,11 +147,11 @@ _tileRenderingListener(tileRenderingListener),
 _touchEventTypeOfTerrainTouchListener(touchEventTypeOfTerrainTouchListener)
 {
   _context = NULL;
-  _layerSet->setChangeListener(this);
-  
-  _layerSet->setChangedInfoListener(this);
-
   _changedInfoListener = changedInfoListener;
+
+  _layerSet->setChangeListener(this);
+
+  _layerSet->setChangedInfoListener(this);
 
   if (_tileRenderingListener == NULL) {
     _tilesStartedRendering = NULL;
@@ -525,7 +525,7 @@ RenderState PlanetRenderer::getRenderState(const G3MRenderContext* rc) {
 
     _allFirstLevelTilesAreTextureSolved = true;
   }
-  
+
   return RenderState::ready();
 }
 
@@ -606,13 +606,13 @@ void PlanetRenderer::visitSubTilesTouchesWith(std::vector<Layer*> layers,
 
 void PlanetRenderer::updateGLState(const G3MRenderContext* rc) {
 
-  const Camera* cam = rc->getCurrentCamera();
+  const Camera* camera = rc->getCurrentCamera();
   ModelViewGLFeature* f = (ModelViewGLFeature*) _glState->getGLFeature(GLF_MODEL_VIEW);
   if (f == NULL) {
-    _glState->addGLFeature(new ModelViewGLFeature(cam), true);
+    _glState->addGLFeature(new ModelViewGLFeature(camera), true);
   }
   else {
-    f->setMatrix(cam->getModelViewMatrix44D());
+    f->setMatrix(camera->getModelViewMatrix44D());
   }
 }
 
@@ -682,7 +682,7 @@ void PlanetRenderer::render(const G3MRenderContext* rc,
                    _tilesStoppedRendering);
     }
 
-    
+
   }
   else {
 #ifdef C_CODE
@@ -747,7 +747,7 @@ void PlanetRenderer::render(const G3MRenderContext* rc,
 #endif
     }
   }
-  
+
   _firstRender = false;
 
   if (_showStatistics) {
@@ -790,7 +790,7 @@ bool PlanetRenderer::onTouchEvent(const G3MEventContext* ec,
   }
 
   if ( touchEvent->getType() == _touchEventTypeOfTerrainTouchListener ) {
-    const Vector2I pixel = touchEvent->getTouch(0)->getPos();
+    const Vector2F pixel = touchEvent->getTouch(0)->getPos();
     const Vector3D ray = _lastCamera->pixel2Ray(pixel);
     const Vector3D origin = _lastCamera->getCartesianPosition();
 
@@ -935,10 +935,10 @@ void PlanetRenderer::setChangedRendererInfoListener(ChangedRendererInfoListener*
   if (_changedInfoListener != NULL) {
     ILogger::instance()->logWarning("Changed Renderer Info Listener of PlanetRenderer already set");
   }
-  
+
   _rendererIdentifier = rendererIdentifier;
   _changedInfoListener = changedInfoListener;
-  
+
   if(_changedInfoListener != NULL) {
     _changedInfoListener->changedRendererInfo(rendererIdentifier, _layerSet->getInfo());
   }

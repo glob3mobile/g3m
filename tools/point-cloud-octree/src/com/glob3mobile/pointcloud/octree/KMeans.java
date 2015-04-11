@@ -5,7 +5,9 @@ package com.glob3mobile.pointcloud.octree;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.glob3mobile.pointcloud.FlatPlanet;
+import com.glob3mobile.utils.FlatPlanet;
+import com.glob3mobile.utils.Geodetic3D;
+import com.glob3mobile.utils.Utils;
 
 import es.igosoftware.euclid.bounding.GAxisAlignedBox;
 import es.igosoftware.euclid.vector.GVector3D;
@@ -33,8 +35,8 @@ public class KMeans {
 
 
    public static List<Geodetic3D> cluster(final List<Geodetic3D> positions,
-            final int k,
-                                          final float verticalExaggeration) {
+                                          final int k,
+            final float verticalExaggeration) {
       final int positionsSize = positions.size();
       if (k > positionsSize) {
          throw new RuntimeException("Invalid K");

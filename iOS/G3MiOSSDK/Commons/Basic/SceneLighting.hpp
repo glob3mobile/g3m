@@ -41,6 +41,7 @@ class CameraFocusSceneLighting: public SceneLighting {
   double _upX, _upY, _upZ;
 
   MutableVector3D _camDir;
+  MutableVector3D _up;
 
 public:
 

@@ -5,14 +5,16 @@ package com.glob3mobile.pointcloud.octree;
 import java.io.File;
 
 import com.glob3mobile.pointcloud.octree.berkeleydb.BerkeleyDBOctree;
+import com.glob3mobile.utils.Geodetic3D;
+import com.glob3mobile.utils.Sector;
 
 import es.igosoftware.euclid.vector.GVector2D;
 import es.igosoftware.util.GUndeterminateProgress;
 
 
 public class FragmentCreator
-         implements
-            PersistentOctree.Visitor {
+implements
+PersistentOctree.Visitor {
    private final File             _cloudDirectory;
    private final String           _fragmentCloudName;
    private final Sector           _sector;
@@ -134,9 +136,9 @@ public class FragmentCreator
 
 
       System.out.println("== Total points: " + _totalPointsCount + //
-               ", nodes: " + _nodesCount + //
-               ", full: " + _fullNodes + //
-                         ", edges: " + _edgesNodes);
+                         ", nodes: " + _nodesCount + //
+                         ", full: " + _fullNodes + //
+               ", edges: " + _edgesNodes);
 
       final double averageLatitudeDensity = _totalLatitudeDensity / (_fullNodes + _edgesNodes);
       final double averageLongitudeDensity = _totalLongitudeDensity / (_fullNodes + _edgesNodes);

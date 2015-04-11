@@ -403,7 +403,19 @@ public abstract class IG3MBuilder
     Sector shownSector = getShownSector();
     getPlanetRendererBuilder().setRenderedSector(shownSector); //Shown sector
   
-    /**
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning HUDRenderer doesn't work when this code is uncommented
+    InfoDisplay infoDisplay = null;
+  //  InfoDisplay* infoDisplay = getInfoDisplay();
+  //  if (infoDisplay == NULL) {
+  //    Default_HUDRenderer* hud = new Default_HUDRenderer();
+  //
+  //    infoDisplay = new DefaultInfoDisplay(hud);
+  //
+  //    addRenderer(hud);
+  //  }
+  
+    /*
      * If any renderers were set or added, the main renderer will be a composite renderer.
      *    If the renderers list does not contain a planetRenderer, it will be created and added.
      *    The renderers contained in the list, will be added to the main renderer.
@@ -432,7 +444,7 @@ public abstract class IG3MBuilder
   
     InitialCameraPositionProvider icpp = new SimpleInitialCameraPositionProvider();
   
-    G3MWidget g3mWidget = G3MWidget.create(getGL(), getStorage(), getDownloader(), getThreadUtils(), getCameraActivityListener(), getPlanet(), getCameraConstraints(), getCameraRenderer(), mainRenderer, getBusyRenderer(), getErrorRenderer(), getHUDRenderer(), getBackgroundColor(), getLogFPS(), getLogDownloaderStatistics(), getInitializationTask(), getAutoDeleteInitializationTask(), getPeriodicalTasks(), getGPUProgramManager(), getSceneLighting(), icpp, getInfoDisplay());
+    G3MWidget g3mWidget = G3MWidget.create(getGL(), getStorage(), getDownloader(), getThreadUtils(), getCameraActivityListener(), getPlanet(), getCameraConstraints(), getCameraRenderer(), mainRenderer, getBusyRenderer(), getErrorRenderer(), getHUDRenderer(), getBackgroundColor(), getLogFPS(), getLogDownloaderStatistics(), getInitializationTask(), getAutoDeleteInitializationTask(), getPeriodicalTasks(), getGPUProgramManager(), getSceneLighting(), icpp, infoDisplay);
   
     g3mWidget.setUserData(getUserData());
   
