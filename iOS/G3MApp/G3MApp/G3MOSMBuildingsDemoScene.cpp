@@ -122,7 +122,7 @@ public:
             averageLat /= coordArray->size();
             
             Geodetic3D tempCoord = Geodetic3D::fromDegrees(averageLat, averageLon, height);
-            Geodetic3D* buildingCenterBottom = new Geodetic3D(Angle::fromDegrees(averageLat),Angle::fromDegrees(averageLon), 0);
+            Geodetic3D* buildingCenterBottom = new Geodetic3D(Angle::fromDegrees(averageLat),Angle::fromDegrees(averageLon), height/2);
             
             //Create and add the mark
             URL iconurl = URL::URL(iconURL);
@@ -163,12 +163,16 @@ public:
                 absYExtent = maxLat - minLat;
             }
             
-            double x_extent = absXExtent * 200000000;
-            double y_extent = absYExtent * 200000000;
-            double z_extent = (abs(height - 0) + 1) * 10000;
+            double x_extent = (absXExtent+0.0001) * 80000;
+            double y_extent = (absYExtent+0.0001) * 80000;
+            double z_extent = (abs(height) + 1);
             // setting some BoxShape constants
             float borderWidth = 2;
             bool useNormals = true;
+            
+            if (z_extent == 1) {
+                height = 20; //TODO we should be making this the average height but we are hardcoding the value right now.
+            }
             
             BoxShape* bs = new BoxShape(buildingCenterBottom,
                                         RELATIVE_TO_GROUND,
@@ -179,10 +183,10 @@ public:
                                         useNormals);
             
             // Adding box to the demo scene
-            if (i < 10) {
+            //if (x_extent > 0 && y_extent > 0 && z_extent > 0) {
                 _scene->addShape(bs);
-                _scene->addMark(mark);
-            }
+               // _scene->addMark(mark);
+            //}
             //TODO finish parsing all the other fields from building data
             
         }
@@ -249,7 +253,7 @@ void G3MOSMBuildingsDemoScene::rawActivate(const G3MContext* context) {
     
     //Positioning the camera close to New York because of the request buffer URL.
     //TODO change the positioning and the URL when needed
-    g3mWidget->setAnimatedCameraPosition(Geodetic3D::fromDegrees(40, -73, 1000000),
+    g3mWidget->setAnimatedCameraPosition(Geodetic3D::fromDegrees(40.747930906661231631, -73.977181666542492167, 10000),
                                          Angle::zero(), // heading
                                          Angle::fromDegrees(30 - 90) // pitch
                                          );
