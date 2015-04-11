@@ -12,6 +12,7 @@
 #include <stdio.h>
 #include "G3MDemoScene.hpp"
 #include "G3MiOSSDK/Tile.hpp"
+#include "G3MiOSSDK/Shape.hpp"
 
 class Mark;
 
@@ -51,7 +52,7 @@ public:
     void deactivate(const G3MContext* context);
     void addMark(Mark* mark);
     void addMesh(Mesh* mesh);
-
+    void addShape(Shape* shape);
     
 };
 

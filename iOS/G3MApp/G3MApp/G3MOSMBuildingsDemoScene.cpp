@@ -19,12 +19,15 @@
 #include <G3MiOSSDK/JSONNumber.hpp>
 #include <G3MiOSSDK/Mark.hpp>
 #include <G3MiOSSDK/Box.hpp>
+#include <G3MiOSSDK/BoxShape.hpp>
+#include <G3MiOSSDK/Shape.hpp>
 #include <G3MiOSSDK/Mesh.hpp>
 #include <G3MiOSSDK/Color.hpp>
 #include <G3MiOSSDK/Geodetic3D.hpp>
 #include <G3MiOSSDK/IStringUtils.hpp>
 #include <G3MiOSSDK/MarksRenderer.hpp>
 #include <G3MiOSSDK/MeshRenderer.hpp>
+#include <G3MiOSSDK/ShapesRenderer.hpp>
 #include <G3MiOSSDK/BingMapsLayer.hpp>
 #include <math.h>
 #include <stdio.h>
@@ -82,10 +85,17 @@ public:
             
             double averageLon = 0;
             double averageLat = 0;
-            double minLat = MAXFLOAT;
-            double minLon = MAXFLOAT;
+            double minLat = 0;
+            double minLon = 0;
             double maxLat = 0;
             double maxLon = 0;
+            
+            if (coordArray->size() > 0) {
+                minLat = coordArray->getAsArray(0)->getAsArray(0)->getAsNumber(1, 0);
+                maxLat = coordArray->getAsArray(0)->getAsArray(0)->getAsNumber(1, 0);
+                minLon = coordArray->getAsArray(0)->getAsArray(0)->getAsNumber(0, 0);
+                maxLon = coordArray->getAsArray(0)->getAsArray(0)->getAsNumber(0, 0);
+            }
             //TODO: get all the coordinates in geometry. We are getting the average instead.
             
             for (int j = 0; j < coordArray->size(); j++) {
@@ -112,6 +122,7 @@ public:
             averageLat /= coordArray->size();
             
             Geodetic3D tempCoord = Geodetic3D::fromDegrees(averageLat, averageLon, height);
+            Geodetic3D buildingCenterBottom = Geodetic3D::fromDegrees(averageLat, averageLon, 0);
             
             //Create and add the mark
             URL iconurl = URL::URL(iconURL);
@@ -123,10 +134,55 @@ public:
             Mark* mark = new Mark(iconurl, tempCoord, ABSOLUTE, minDistanceToCamera, userData, autoDeleteUserData, marksListener, autoDeleteListener);
             
             // creating bounding box for building
-            Box* box = new Box(Vector3D(minLat,minLon,0), Vector3D(maxLat, maxLon, height));
-    
-                        
-            _scene->addMark(mark);
+            double absXExtent = 0;
+            double absYExtent = 0;
+            
+            if (maxLon < 0) {
+                maxLon = maxLon * -1;
+            }
+            if (maxLat < 0) {
+                maxLat = maxLat * -1;
+            }
+            if (minLon < 0) {
+                minLon = minLon * -1;
+            }
+            if (minLat < 0) {
+                minLat = minLat * -1;
+            }
+            
+            if (maxLon < minLon) {
+                absXExtent = minLon - maxLon;
+            }
+            else {
+                absXExtent = maxLon - minLon;
+            }
+            if (maxLat < minLat) {
+                absYExtent = minLat - maxLat;
+            }
+            else {
+                absYExtent = maxLat - minLat;
+            }
+            
+            double x_extent = absXExtent * 200000000;
+            double y_extent = absYExtent * 200000000;
+            double z_extent = (abs(height - 0) + 1) * 10000;
+            // setting some BoxShape constants
+            float borderWidth = 2;
+            bool useNormals = true;
+            
+            BoxShape* bs = new BoxShape(&buildingCenterBottom,
+                                        RELATIVE_TO_GROUND,
+                                        Vector3D(x_extent, y_extent, z_extent),
+                                        borderWidth,
+                                        Color::fromRGBA(0.99f, 0.8f, 0.08f, 1.0f),
+                                        Color::newFromRGBA(0.35f, 0.28f, 0.03f, 1.0f),
+                                        useNormals);
+            
+            // Adding box to the demo scene
+            if (i < 10) {
+                _scene->addShape(bs);
+                _scene->addMark(mark);
+            }
             //TODO finish parsing all the other fields from building data
             
         }
@@ -161,6 +217,10 @@ void G3MOSMBuildingsDemoScene::addMesh(Mesh* mesh) {
     getModel()->getMeshRenderer()->addMesh(mesh);
 }
 
+void G3MOSMBuildingsDemoScene::addShape(Shape* shape) {
+    getModel()->getShapesRenderer()->addShape(shape);
+}
+
 void G3MOSMBuildingsDemoScene::rawActivate(const G3MContext* context) {
     //Used for downloader->requestBuffer call
     bool readExpired = true;
@@ -189,7 +249,7 @@ void G3MOSMBuildingsDemoScene::rawActivate(const G3MContext* context) {
     
     //Positioning the camera close to New York because of the request buffer URL.
     //TODO change the positioning and the URL when needed
-    g3mWidget->setAnimatedCameraPosition(Geodetic3D::fromDegrees(40, -73, 10000),
+    g3mWidget->setAnimatedCameraPosition(Geodetic3D::fromDegrees(40, -73, 1000000),
                                          Angle::zero(), // heading
                                          Angle::fromDegrees(30 - 90) // pitch
                                          );
