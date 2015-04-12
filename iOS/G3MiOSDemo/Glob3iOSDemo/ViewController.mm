@@ -463,11 +463,29 @@ const Planet* planet;
   
 }
 
+-(double) getClockTimeInDegrees{
+  
+  NSDate *today = [NSDate date];
+  NSCalendar *gregorian = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
+  NSDateComponents *weekdayComponents =
+  [gregorian components:(NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit) fromDate:today];
+  
+  NSInteger h = [weekdayComponents hour];
+  NSInteger m = [weekdayComponents minute];
+  NSInteger s = [weekdayComponents second];
+  
+  printf("%d, %d, %d\n", h,m,s);
+  
+  return Angle::fromHoursMinutesSeconds(h, m, s)._degrees;
+}
+
 -(void) readStars: (IG3MBuilder*) builder{
   
   NSString *csvPath = [[NSBundle mainBundle] pathForResource: @"stars" ofType: @"csv"];
   
   Geodetic3D gcPosition = Geodetic3D::fromDegrees(27.973105, -15.597545, 500);
+  
+  double clockTimeInDegrees = [self getClockTimeInDegrees];
   
   if (csvPath) {
     NSString *csv = [NSString stringWithContentsOfFile: csvPath
@@ -488,7 +506,7 @@ const Planet* planet;
         if (constelationName != nil && stars.size() > 0){
           //PUSHING CONSTELATION
           std::string name = [constelationName UTF8String];
-          StarDomeRenderer* sdr = new StarDomeRenderer(name, stars, gcPosition);
+          StarDomeRenderer* sdr = new StarDomeRenderer(name, stars, gcPosition, clockTimeInDegrees, 15.0);
           builder->addRenderer(sdr);
         }
         

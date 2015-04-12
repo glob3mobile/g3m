@@ -56,6 +56,18 @@ public:
   
   double getTrueNorthAzimuthInDegrees(double siderealTime) const{
 #warning TODO
+    
+    const IMathUtils* mu = IMathUtils::instance();
+    
+    double delta = TO_RADIANS( _declination );
+    double alpha = TO_RADIANS( _ascencion );
+    
+    double azimuth = mu->atan2(-(mu->cos(delta) * mu->cos(90 - phi)*Cos(Degree*(-alpha + tetha))) + Sin(Degree*delta)*Sin(Degree*(90 - phi)),
+                               <#double v#>)
+    
+    
+    //ArcTan(-(Cos(Degree*delta)*Cos(Degree*(90 - phi))*Cos(Degree*(-alpha + tetha))) + Sin(Degree*delta)*Sin(Degree*(90 - phi)),-(Cos(Degree*delta)*Sin(Degree*(-alpha + tetha))))
+    
     return _declination;
   }
   
@@ -105,19 +117,30 @@ class StarDomeRenderer : public DefaultRenderer {
   const std::string _name;
   
   Geodetic3D* _position;
+  double _clockTimeInDegrees;
+  double _siderealTimeOffset;
   
 public:
   
   StarDomeRenderer(std::string& name, std::vector<Star> stars,
-                   const Geodetic3D& position):
-  _starsShape(NULL), _glState(new GLState()), _stars(stars), _currentCamera(NULL), _name(name),_position(new Geodetic3D(position))
+                   const Geodetic3D& position,
+                   double clockTimeInDegrees,
+                   double siderealTimeOffset):
+  _starsShape(NULL),
+  _glState(new GLState()),
+  _stars(stars),
+  _currentCamera(NULL),
+  _name(name),
+  _position(new Geodetic3D(position)),
+  _clockTimeInDegrees(clockTimeInDegrees),
+  _siderealTimeOffset(siderealTimeOffset)
   {
   }
   
-  static double getSiderealTime(double placeLongitudeInDegrees, double clockTime, double thetaZero){
+  static double getSiderealTime(double placeLongitudeInDegrees, double clockTimeInDegrees, double thetaZero){
     
     double I = 366.2422 / 365.2422;
-    double TU = clockTime - IMathUtils::instance()->round(placeLongitudeInDegrees);
+    double TU = clockTimeInDegrees - IMathUtils::instance()->round(placeLongitudeInDegrees);
     
     return thetaZero + TU * I + placeLongitudeInDegrees;
   }
