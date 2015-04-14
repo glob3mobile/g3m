@@ -45,7 +45,7 @@ public class CreateOT {
 
 
       final File sourceTXTDirectory = new File("/Volumes/My Passport/_minnesota_lidar_/txt");
-      final GProjection sourceProjection = GProjection.EPSG_26915;
+      final GProjection sourceProjection = GProjection.EPSG_31370;
 
       final File cloudDirectory = new File("/Volumes/My Passport/_minnesota_lidar_/db");
       final String cloudName = "minnesota";
@@ -55,7 +55,7 @@ public class CreateOT {
       final boolean loadOT = true;
       final boolean renameDone = false;
       final boolean visitOT = false;
-      final boolean showStatisticsOT = false;
+      final boolean showStatisticsOT = true;
 
       if (deleteOT) {
          BerkeleyDBOctree.delete(cloudDirectory, cloudName);

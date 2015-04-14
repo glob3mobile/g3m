@@ -69,16 +69,16 @@ public class ProcessOT {
       //      final String lodCloudName = sourceCloudName + "_LOD";
 
 
-      //      final File cloudDirectory = new File("/Volumes/My Passport/_belgium_lidar_/db");
-      //
-      //      final String sourceCloudName = "Wallonia-Belgium";
-      //      final String lodCloudName = sourceCloudName + "_LOD";
+      final File cloudDirectory = new File("/Volumes/My Passport/_belgium_lidar_/db");
 
-
-      final File cloudDirectory = new File("/Volumes/My Passport/_minnesota_lidar_/db");
-
-      final String sourceCloudName = "minnesota";
+      final String sourceCloudName = "Wallonia-Belgium_simplified2";
       final String lodCloudName = sourceCloudName + "_LOD";
+
+
+      //      final File cloudDirectory = new File("/Volumes/My Passport/_minnesota_lidar_/db");
+      //
+      //      final String sourceCloudName = "minnesota";
+      //      final String lodCloudName = sourceCloudName + "_LOD";
 
 
       final long cacheSizeInBytes = 4 * 1024 * 1024 * 1024;
