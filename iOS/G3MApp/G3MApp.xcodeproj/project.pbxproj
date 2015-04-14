@@ -20,7 +20,6 @@
 		CF483EC91A2E62A100B70D7E /* CompassHeadings.png in Resources */ = {isa = PBXBuildFile; fileRef = CF483EC81A2E62A100B70D7E /* CompassHeadings.png */; };
 		CF483ECB1A2E62B600B70D7E /* altimeter-ruler-1536x113.png in Resources */ = {isa = PBXBuildFile; fileRef = CF483ECA1A2E62B600B70D7E /* altimeter-ruler-1536x113.png */; };
 		CF483ECD1A2E62C400B70D7E /* widget-background.png in Resources */ = {isa = PBXBuildFile; fileRef = CF483ECC1A2E62C400B70D7E /* widget-background.png */; };
-		CF4E4C3D1AB62AAC00351300 /* BuenosAires-Wikipedia.json in Resources */ = {isa = PBXBuildFile; fileRef = CF4E4C3C1AB62AAC00351300 /* BuenosAires-Wikipedia.json */; };
 		CF6920B11837EA35007409D8 /* G3MDemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF6920AF1837EA35007409D8 /* G3MDemoScene.cpp */; };
 		CF6920B41837F1CA007409D8 /* G3MRasterLayersDemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF6920B21837F1CA007409D8 /* G3MRasterLayersDemoScene.cpp */; };
 		CF6920B71837F26B007409D8 /* G3MVectorialDemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF6920B51837F26B007409D8 /* G3MVectorialDemoScene.cpp */; };
@@ -69,6 +68,7 @@
 		CFF9D2061A7C4903005429A6 /* G3MNonOverlappingMarksDemoScene.mm in Sources */ = {isa = PBXBuildFile; fileRef = CFF9D2041A7C4903005429A6 /* G3MNonOverlappingMarksDemoScene.mm */; };
 		CFF9D20A1A7C5014005429A6 /* anchorWidget.png in Resources */ = {isa = PBXBuildFile; fileRef = CFF9D2091A7C5014005429A6 /* anchorWidget.png */; };
 		CFF9D20C1A7C5048005429A6 /* g3m-marker.png in Resources */ = {isa = PBXBuildFile; fileRef = CFF9D20B1A7C5048005429A6 /* g3m-marker.png */; };
+		CFFCD2C91AD2C748004C7112 /* BuenosAires-Wikipedia.json in Resources */ = {isa = PBXBuildFile; fileRef = CFFCD2C81AD2C748004C7112 /* BuenosAires-Wikipedia.json */; };
 		E75321CB16D3DF6200CB3F8D /* libG3MiOSSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E7D1B64F16D24DE800AF47C1 /* libG3MiOSSDK.a */; };
 		E780A3CD16D29EA5000F0395 /* map-on-96x48.png in Resources */ = {isa = PBXBuildFile; fileRef = E780A3C716D29EA5000F0395 /* map-on-96x48.png */; };
 		E780A3CE16D29EA5000F0395 /* marker-wikipedia-48x48.png in Resources */ = {isa = PBXBuildFile; fileRef = E780A3C816D29EA5000F0395 /* marker-wikipedia-48x48.png */; };
@@ -150,7 +150,6 @@
 		CF483EC81A2E62A100B70D7E /* CompassHeadings.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = CompassHeadings.png; sourceTree = "<group>"; };
 		CF483ECA1A2E62B600B70D7E /* altimeter-ruler-1536x113.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "altimeter-ruler-1536x113.png"; sourceTree = "<group>"; };
 		CF483ECC1A2E62C400B70D7E /* widget-background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "widget-background.png"; sourceTree = "<group>"; };
-		CF4E4C3C1AB62AAC00351300 /* BuenosAires-Wikipedia.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = "BuenosAires-Wikipedia.json"; path = "../../../../../../../../Desktop/WP Buenos Aires/BuenosAires-Wikipedia.json"; sourceTree = "<group>"; };
 		CF6920AF1837EA35007409D8 /* G3MDemoScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = G3MDemoScene.cpp; sourceTree = "<group>"; };
 		CF6920B01837EA35007409D8 /* G3MDemoScene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = G3MDemoScene.hpp; sourceTree = "<group>"; };
 		CF6920B21837F1CA007409D8 /* G3MRasterLayersDemoScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = G3MRasterLayersDemoScene.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
@@ -219,6 +218,7 @@
 		CFF9D2051A7C4903005429A6 /* G3MNonOverlappingMarksDemoScene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = G3MNonOverlappingMarksDemoScene.hpp; sourceTree = "<group>"; };
 		CFF9D2091A7C5014005429A6 /* anchorWidget.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = anchorWidget.png; sourceTree = "<group>"; };
 		CFF9D20B1A7C5048005429A6 /* g3m-marker.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "g3m-marker.png"; sourceTree = "<group>"; };
+		CFFCD2C81AD2C748004C7112 /* BuenosAires-Wikipedia.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "BuenosAires-Wikipedia.json"; sourceTree = "<group>"; };
 		E780A3C716D29EA5000F0395 /* map-on-96x48.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "map-on-96x48.png"; sourceTree = "<group>"; };
 		E780A3C816D29EA5000F0395 /* marker-wikipedia-48x48.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "marker-wikipedia-48x48.png"; sourceTree = "<group>"; };
 		E780A3C916D29EA5000F0395 /* marker-wikipedia-72x72.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "marker-wikipedia-72x72.png"; sourceTree = "<group>"; };
@@ -483,7 +483,7 @@
 		E7D1B7F116D2750400AF47C1 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				CF4E4C3C1AB62AAC00351300 /* BuenosAires-Wikipedia.json */,
+				CFFCD2C81AD2C748004C7112 /* BuenosAires-Wikipedia.json */,
 				CFC192DA1A8D3A7C00FA89B3 /* colorgrid.jpg */,
 				CFF9D20B1A7C5048005429A6 /* g3m-marker.png */,
 				CFF9D2091A7C5014005429A6 /* anchorWidget.png */,
@@ -655,7 +655,7 @@
 				E780A3D216D29EA5000F0395 /* stop.png in Resources */,
 				CF6920C718394E44007409D8 /* restaurant-96x96.png in Resources */,
 				CFE3B3CD183ABD8B0078C796 /* uscitieslite.geojson in Resources */,
-				CF4E4C3D1AB62AAC00351300 /* BuenosAires-Wikipedia.json in Resources */,
+				CFFCD2C91AD2C748004C7112 /* BuenosAires-Wikipedia.json in Resources */,
 				E780A3DB16D29FAA000F0395 /* A320.json in Resources */,
 				E780A3DC16D29FAA000F0395 /* A320-NWA.png in Resources */,
 				CF6920C318394DB6007409D8 /* buildings_monaco.geojson in Resources */,
