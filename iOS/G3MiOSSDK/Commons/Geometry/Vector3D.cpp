@@ -41,7 +41,7 @@ Angle Vector3D::signedAngleBetween(const Vector3D& other,
   if (cross(other).dot(up) > 0) {
     return angle;
   }
-
+  
   return angle.times(-1);
 }
 
@@ -51,12 +51,12 @@ double Vector3D::normalizedDot(const Vector3D& a,
   const double a_x = a._x / aLength;
   const double a_y = a._y / aLength;
   const double a_z = a._z / aLength;
-
+  
   const double bLength = b.length();
   const double b_x = b._x / bLength;
   const double b_y = b._y / bLength;
   const double b_z = b._z / bLength;
-
+  
   return ((a_x * b_x) +
           (a_y * b_y) +
           (a_z * b_z));
@@ -68,12 +68,12 @@ double Vector3D::normalizedDot(const Vector3D& a,
   const double a_x = a._x / aLength;
   const double a_y = a._y / aLength;
   const double a_z = a._z / aLength;
-
+  
   const double bLength = b.length();
   const double b_x = b.x() / bLength;
   const double b_y = b.y() / bLength;
   const double b_z = b.z() / bLength;
-
+  
   return ((a_x * b_x) +
           (a_y * b_y) +
           (a_z * b_z));
@@ -112,7 +112,7 @@ Vector3D Vector3D::rotateAroundAxis(const Vector3D& axis,
   
   const double cosTheta = COS(theta._radians);
   const double sinTheta = SIN(theta._radians);
-
+  
   const double ms = axis.squaredLength();
   const double m = IMathUtils::instance()->sqrt(ms);
   
@@ -174,7 +174,7 @@ Vector3D Vector3D::projectionInPlane(const Vector3D& normal) const
 }
 
 Vector3D Vector3D::transformedBy(const MutableMatrix44D &m,
-                       const double homogeneus) const {
+                                 const double homogeneus) const {
   //int __TODO_move_to_matrix;
   return Vector3D(_x * m.get0() + _y * m.get4() + _z * m.get8() + homogeneus * m.get12(),
                   _x * m.get1() + _y * m.get5() + _z * m.get9() + homogeneus * m.get13(),
@@ -182,7 +182,7 @@ Vector3D Vector3D::transformedBy(const MutableMatrix44D &m,
 }
 
 
-const std::string Vector3D::description() const {  
+const std::string Vector3D::description() const {
   IStringBuilder* isb = IStringBuilder::newStringBuilder();
   isb->addString("(V3D ");
   isb->addDouble(_x);
@@ -198,13 +198,13 @@ const std::string Vector3D::description() const {
 
 const Vector3D Vector3D::clamp(const Vector3D& min,
                                const Vector3D& max) const {
-
+  
   const IMathUtils* mu = IMathUtils::instance();
-
+  
   const double x = mu->clamp(_x, min._x, max._x);
   const double y = mu->clamp(_y, min._y, max._y);
   const double z = mu->clamp(_z, min._z, max._z);
-
+  
   return Vector3D(x, y, z);
 }
 
@@ -229,22 +229,65 @@ Vector3D Vector3D::sub(const MutableVector3D& v) const {
                   _z - v.z());
 }
 
-//double Power(double x, double p){
-//  return IMathUtils::instance()->pow(x, p);
-//}
-//
-//double Sqrt(double x){
-//  return IMathUtils::instance()->sqrt(x);
-//}
-//
-//double ArcTan(double x, double y){
-//  return IMathUtils::instance()->atan2(x, y);
-//}
-//
-//double ArcCos(double x){
-//  return IMathUtils::instance()->acos(x);
-//}
-
+/*
+ std::vector<double> Vector3D::rotationAngleInRadiansToYZPlane(const Vector3D& rotationAxis, const Vector3D& rotationPoint) const{
+ 
+ std::vector<double> sol;
+ 
+ Vector3D axis = rotationAxis.normalized();
+ double x = _x, y = _y, z = _z;
+ double a = rotationPoint._x, b = rotationPoint._y, c = rotationPoint._z;
+ double u = axis._x, v = axis._y, w = axis._z;
+ 
+ ////http://inside.mines.edu/fs_home/gmurray/ArbitraryAxisRotation/ 6.2
+ //////MATHEMATICA CODE
+ 
+ const IMathUtils* mu = IMathUtils::instance();
+ double j = a*(v*v + w*w) - u*(b*v + c*w - u*x - v*y - w*z);
+ double i = -(c*v) + b*w - w*y + v*z;
+ 
+ //  double s1 = -Arcmu->cos((mu->pow(j,2) - j*x - mu->sqrt(mu->pow(i,2)*(mu->pow(i,2) - 2*j*x + mu->pow(x,2))))/(mu->pow(i,2) + mu->pow(j - x,2)));
+ //  double s2 = -Arcmu->cos((mu->pow(j,2) - j*x + mu->sqrt(mu->pow(i,2)*(mu->pow(i,2) + x*(-2*j + x))))/(mu->pow(i,2) + mu->pow(j - x,2)));
+ 
+ double s1 = (j*j - j*x - mu->sqrt(i*i*(i*i - 2*j*x + x*x)))/(i*i + (j - x) * (j - x));
+ double s2 = (j*j - j*x + mu->sqrt(i*i*(i*i + x*(-2*j + x))))/(i*i + (j - x) * (j - x));
+ 
+ #define func(t) (a*(v*v+w*w)-u*(b*v+c*w-u*x-v*y-w*z))*(1-mu->cos[t])+(x*mu->cos[t])+(-c*v+b*w-w*y+v*z)*mu->sin[t]
+ 
+ float validError = 1.0f;
+ 
+ double t = mu->acos(s1);
+ double p = (a*(v*v+w*w)-u*(b*v+c*w-u*x-v*y-w*z))*(1-mu->cos(t))+(x*mu->cos(t))+(-c*v+b*w-w*y+v*z)*mu->sin(t);
+ if (mu->isBetween((float)p, -validError, validError)){
+ sol.push_back(t);
+ }
+ //  printf("X = %f\n", p);
+ 
+ t = -t;
+ p = (a*(v*v+w*w)-u*(b*v+c*w-u*x-v*y-w*z))*(1-mu->cos(t))+(x*mu->cos(t))+(-c*v+b*w-w*y+v*z)*mu->sin(t);
+ if (mu->isBetween((float)p, -validError, validError)){
+ sol.push_back(t);
+ }
+ //  printf("X = %f\n", p);
+ 
+ t = mu->acos(s2);
+ p = (a*(v*v+w*w)-u*(b*v+c*w-u*x-v*y-w*z))*(1-mu->cos(t))+(x*mu->cos(t))+(-c*v+b*w-w*y+v*z)*mu->sin(t);
+ if (mu->isBetween((float)p, -validError, validError)){
+ sol.push_back(t);
+ }
+ //  printf("X = %f\n", p);
+ 
+ t = -t;
+ p = (a*(v*v+w*w)-u*(b*v+c*w-u*x-v*y-w*z))*(1-mu->cos(t))+(x*mu->cos(t))+(-c*v+b*w-w*y+v*z)*mu->sin(t);
+ if (mu->isBetween((float)p, -validError, validError)){
+ sol.push_back(t);
+ }
+ //  printf("X = %f\n", p);
+ 
+ return sol;
+ }
+ 
+ */
 std::vector<double> Vector3D::rotationAngleInRadiansToYZPlane(const Vector3D& rotationAxis, const Vector3D& rotationPoint) const{
   
   std::vector<double> sol;
@@ -258,71 +301,44 @@ std::vector<double> Vector3D::rotationAngleInRadiansToYZPlane(const Vector3D& ro
   //////MATHEMATICA CODE
   
   const IMathUtils* mu = IMathUtils::instance();
-  double j = a*(v*v + w*w) - u*(b*v + c*w - u*x - v*y - w*z);
-  double i = -(c*v) + b*w - w*y + v*z;
+  double i =  a*(v*v + w*w) - u*(b*v + c*w - u*x - v*y - w*z);
+  double j =  -(c*v) + b*w - w*y + v*z;
   
-//  double s1 = -ArcCos((Power(j,2) - j*x - Sqrt(Power(i,2)*(Power(i,2) - 2*j*x + Power(x,2))))/(Power(i,2) + Power(j - x,2)));
-//  double s2 = -ArcCos((Power(j,2) - j*x + Sqrt(Power(i,2)*(Power(i,2) + x*(-2*j + x))))/(Power(i,2) + Power(j - x,2)));
+  //ATAN2 switches arguments in comparison to ATAN of Mathematica
   
-  double s1 = (j*j - j*x - mu->sqrt(i*i*(i*i - 2*j*x + x*x)))/(i*i + (j - x) * (j - x));
-  double s2 = (j*j - j*x + mu->sqrt(i*i*(i*i + x*(-2*j + x))))/(i*i + (j - x) * (j - x));
+  double s1 = mu->atan2( -((i - mu->pow(i,3)/(mu->pow(i,2) + mu->pow(j,2) - 2*i*x + mu->pow(x,2)) +
+                            (2*mu->pow(i,2)*x)/(mu->pow(i,2) + mu->pow(j,2) - 2*i*x + mu->pow(x,2)) -
+                            (i*mu->pow(x,2))/(mu->pow(i,2) + mu->pow(j,2) - 2*i*x + mu->pow(x,2)) +
+                            (i*mu->sqrt(mu->pow(j,4) - 2*i*mu->pow(j,2)*x + mu->pow(j,2)*mu->pow(x,2)))/
+                            (mu->pow(i,2) + mu->pow(j,2) - 2*i*x + mu->pow(x,2)) -
+                            (x*mu->sqrt(mu->pow(j,4) - 2*i*mu->pow(j,2)*x + mu->pow(j,2)*mu->pow(x,2)))/
+                            (mu->pow(i,2) + mu->pow(j,2) - 2*i*x + mu->pow(x,2)))/j),
+                        
+                        (mu->pow(i,2) - i*x - mu->sqrt(mu->pow(j,4) - 2*i*mu->pow(j,2)*x + mu->pow(j,2)*mu->pow(x,2)))/
+                        (mu->pow(i,2) + mu->pow(j,2) - 2*i*x + mu->pow(x,2)));
   
-#define func(t) (a*(v*v+w*w)-u*(b*v+c*w-u*x-v*y-w*z))*(1-mu->cos[t])+(x*mu->cos[t])+(-c*v+b*w-w*y+v*z)*mu->sin[t]
-
-  float validError = 1.0f;
+  double s2 = mu->atan2(-((i - mu->pow(i,3)/(mu->pow(i,2) + mu->pow(j,2) - 2*i*x + mu->pow(x,2)) +
+                           (2*mu->pow(i,2)*x)/(mu->pow(i,2) + mu->pow(j,2) - 2*i*x + mu->pow(x,2)) -
+                           (i*mu->pow(x,2))/(mu->pow(i,2) + mu->pow(j,2) - 2*i*x + mu->pow(x,2)) -
+                           (i*mu->sqrt(mu->pow(j,4) - 2*i*mu->pow(j,2)*x + mu->pow(j,2)*mu->pow(x,2)))/
+                           (mu->pow(i,2) + mu->pow(j,2) - 2*i*x + mu->pow(x,2)) +
+                           (x*mu->sqrt(mu->pow(j,4) - 2*i*mu->pow(j,2)*x + mu->pow(j,2)*mu->pow(x,2)))/
+                           (mu->pow(i,2) + mu->pow(j,2) - 2*i*x + mu->pow(x,2)))/j),
+                        
+                        (mu->pow(i,2) - i*x + mu->sqrt(mu->pow(j,4) - 2*i*mu->pow(j,2)*x + mu->pow(j,2)*mu->pow(x,2)))/
+                        (mu->pow(i,2) + mu->pow(j,2) - 2*i*x + mu->pow(x,2)));
   
-  double t = mu->acos(s1);
-  double p = (a*(v*v+w*w)-u*(b*v+c*w-u*x-v*y-w*z))*(1-mu->cos(t))+(x*mu->cos(t))+(-c*v+b*w-w*y+v*z)*mu->sin(t);
-  if (mu->isBetween((float)p, -validError, validError)){
-    sol.push_back(t);
-  }
-//  printf("X = %f\n", p);
-  
-  t = -t;
-  p = (a*(v*v+w*w)-u*(b*v+c*w-u*x-v*y-w*z))*(1-mu->cos(t))+(x*mu->cos(t))+(-c*v+b*w-w*y+v*z)*mu->sin(t);
-  if (mu->isBetween((float)p, -validError, validError)){
-    sol.push_back(t);
-  }
-//  printf("X = %f\n", p);
-  
-  t = mu->acos(s2);
-  p = (a*(v*v+w*w)-u*(b*v+c*w-u*x-v*y-w*z))*(1-mu->cos(t))+(x*mu->cos(t))+(-c*v+b*w-w*y+v*z)*mu->sin(t);
-  if (mu->isBetween((float)p, -validError, validError)){
-    sol.push_back(t);
-  }
-//  printf("X = %f\n", p);
-  
-  t = -t;
-  p = (a*(v*v+w*w)-u*(b*v+c*w-u*x-v*y-w*z))*(1-mu->cos(t))+(x*mu->cos(t))+(-c*v+b*w-w*y+v*z)*mu->sin(t);
-  if (mu->isBetween((float)p, -validError, validError)){
-    sol.push_back(t);
-  }
-//  printf("X = %f\n", p);
+  sol.push_back(s1);
+  sol.push_back(s2);
   
   
-  
-//  //x = j*(1 - Cos(t)) + x*Cos(t) + i*Sqrt(1 - Power(Cos(t),2));
-//  //if (mu->abs(j*(1 - s1) + x*s1 + i*mu->sqrt(1 - s1*s1)) < 0.0001){
-//    double t = mu->acos(s1);
-//    double p = (a*(v*v+w*w)-u*(b*v+c*w-u*x-v*y-w*z))*(1-mu->cos(t))+(x*mu->cos(t))+(-c*v+b*w-w*y+v*z)*mu->sin(t);
-//    if (p == 0){
-//      sol.push_back(t);
-//    }
-//    
-//  t = -t;
-//    p = (a*(v*v+w*w)-u*(b*v+c*w-u*x-v*y-w*z))*(1-mu->cos(t))+(x*mu->cos(t))+(-c*v+b*w-w*y+v*z)*mu->sin(t);
-//    if (p == 0){
-//      sol.push_back(t);
-//    }
-//    
-//    //sol.push_back(-mu->acos(s1));
-//  //}
-//  if (mu->abs(j*(1 - s2) + x*s2 + i*mu->sqrt(1 - s2*s2)) < 0.0001){
-//    sol.push_back(mu->acos(s2));
-//    sol.push_back(-mu->acos(s2));
-//  }
-  
+  //Test
+  /*
+   double t = s1;
+   double Px =  (a*(mu->pow(v,2) + mu->pow(w,2)) - u*(b*v + c*w - u*x - v*y - w*z))*(1 - mu->cos(t)) + x*mu->cos(t) + (-(c*v) + b*w - w*y + v*z)*mu->sin(t);
+   
+   t = s2;
+   Px =  (a*(mu->pow(v,2) + mu->pow(w,2)) - u*(b*v + c*w - u*x - v*y - w*z))*(1 - mu->cos(t)) + x*mu->cos(t) + (-(c*v) + b*w - w*y + v*z)*mu->sin(t);
+   */
   return sol;
-  
-  
 }
