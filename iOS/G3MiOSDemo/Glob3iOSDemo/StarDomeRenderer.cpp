@@ -39,7 +39,7 @@ void StarDomeRenderer::initialize(const G3MContext* context) {
 
   double siderealTime = getSiderealTime(_position->_longitude._degrees, _clockTimeInDegrees, _dayOfTheYear);
   
-  Geodetic3D* posOfFirstStar = NULL;
+  Vector3D* firstStarPos = NULL;
   
   int size = _stars.size();
   for(int i = 0; i < size; i++){
@@ -60,7 +60,7 @@ void StarDomeRenderer::initialize(const G3MContext* context) {
     colors.add(*_stars[i]._color);
     
     if (i == 0){
-      posOfFirstStar = new Geodetic3D(context->getPlanet()->toGeodetic3D(starPos));
+      firstStarPos = new Vector3D(starPos);
     }
     
     //printf("STAR %d COLOR = %s\n", i, _stars[i]._color->description().c_str());
@@ -100,22 +100,32 @@ void StarDomeRenderer::initialize(const G3MContext* context) {
                                    ABSOLUTE,
                                    cm);
   
+  
   _starsShape->initialize(context);
   
   
-  if (_mr != NULL && posOfFirstStar != NULL){
+  if (_mr != NULL && firstStarPos != NULL){
     
     Geodetic3D fake(_position->asGeodetic2D(), _position->_height + 1000);
     
     
+    MutableMatrix44D* m = _starsShape->createTransformMatrix(context->getPlanet());
+    
+    Vector3D pos = firstStarPos->transformedBy(*m, 1.0);
+    
+    Geodetic3D g = context->getPlanet()->toGeodetic3D(pos);
+    
     Mark* mark = new   Mark(_name,
                             //Geodetic3D(_position->asGeodetic2D(), _position->_height + 1000),
-                            *posOfFirstStar,
+                            g,
                             ABSOLUTE,
                             0 //Always visible
                             );
     
     _mr->addMark(mark);
+    
+    delete firstStarPos;
+    delete m;
   }
 }
 
