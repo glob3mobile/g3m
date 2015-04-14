@@ -385,6 +385,8 @@ Mesh* createSectorMesh(const Planet* planet,
   builder.initializeWidget();
   [[self G3MWidget] startAnimation];
   
+  //[G3MWidget widget]->getPlanetRenderer()->setEnable(false);
+  
   
   [G3MWidget widget]->setCameraPosition(Geodetic3D::fromDegrees(27.973105, -15.597545, 1000));
   [G3MWidget widget]->setCameraPitch(Angle::fromDegrees(-30));
@@ -456,7 +458,7 @@ const Planet* planet;
   string = [string stringByReplacingOccurrencesOfString:@"," withString:@"."];
   return [string doubleValue];
 }
-
+/*
 -(double) toDegressHours:(double) h minutes:(double) m seconds:(double) s{
   
   return h * 15.0 + m * (15.0/60.0) + s * (15.0/3600.0);
@@ -468,24 +470,46 @@ const Planet* planet;
   NSDate *today = [NSDate date];
   NSCalendar *gregorian = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
   NSDateComponents *weekdayComponents =
-  [gregorian components:(NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit) fromDate:today];
+  [gregorian components:(NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit | NSDayCalendarUnit) fromDate:today];
   
   NSInteger h = [weekdayComponents hour];
   NSInteger m = [weekdayComponents minute];
   NSInteger s = [weekdayComponents second];
   
+  NSUInteger dayOfYear = [gregorian ordinalityOfUnit:NSDayCalendarUnit
+                                              inUnit:NSYearCalendarUnit forDate:[NSDate date]];
+  
   printf("%d, %d, %d\n", h,m,s);
   
   return Angle::fromHoursMinutesSeconds(h, m, s)._degrees;
 }
-
+*/
 -(void) readStars: (IG3MBuilder*) builder{
+  
+  //CALENDAR STUFF
+  
+  NSDate *today = [NSDate date];
+  NSCalendar *gregorian = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
+  NSDateComponents *weekdayComponents =
+  [gregorian components:(NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit | NSDayCalendarUnit) fromDate:today];
+  
+  NSInteger h = [weekdayComponents hour];
+  NSInteger m = [weekdayComponents minute];
+  NSInteger s = [weekdayComponents second];
+  
+  NSUInteger dayOfYear = [gregorian ordinalityOfUnit:NSDayCalendarUnit
+                                              inUnit:NSYearCalendarUnit forDate:[NSDate date]];
+  
+  double clockTimeInDegrees =  Angle::fromClockHoursMinutesSeconds(h, m, s)._degrees;
+  
+  //////
+  
   
   NSString *csvPath = [[NSBundle mainBundle] pathForResource: @"stars" ofType: @"csv"];
   
   Geodetic3D gcPosition = Geodetic3D::fromDegrees(27.973105, -15.597545, 500);
   
-  double clockTimeInDegrees = [self getClockTimeInDegrees];
+//  double clockTimeInDegrees = [self getClockTimeInDegrees];
   
   if (csvPath) {
     NSString *csv = [NSString stringWithContentsOfFile: csvPath
@@ -506,8 +530,22 @@ const Planet* planet;
         if (constelationName != nil && stars.size() > 0){
           //PUSHING CONSTELATION
           std::string name = [constelationName UTF8String];
-          StarDomeRenderer* sdr = new StarDomeRenderer(name, stars, gcPosition, clockTimeInDegrees, 15.0);
+          
+          Color c = Color::red().wheelStep([lines count], i);
+          
+          MarksRenderer* mr = new MarksRenderer(true);
+          builder->addRenderer(mr);
+          
+          StarDomeRenderer* sdr = new StarDomeRenderer(name, stars, gcPosition, clockTimeInDegrees, dayOfYear, c, mr);
           builder->addRenderer(sdr);
+          
+          stars.clear();
+          
+//          if (name.compare("GEMINIS") != 0){
+//            sdr->setEnable(false);
+//          } else{
+//            sdr->setEnable(true);
+//          }
         }
         
         
@@ -516,17 +554,31 @@ const Planet* planet;
       } else{ //STAR
         NSString* name = [comp objectAtIndex:0];
         
-        double altitude = [self toDegressHours:[self getNumFromArray:comp index:1]
-                                       minutes:[self getNumFromArray:comp index:2]
-                                       seconds:[self getNumFromArray:comp index:3]];
+        Angle ascension = Angle::fromClockHoursMinutesSeconds([self getNumFromArray:comp index:1],
+                                                             [self getNumFromArray:comp index:2],
+                                                             [self getNumFromArray:comp index:3]);
         
-        double declination = [self toDegressHours:[self getNumFromArray:comp index:4]
-                                          minutes:[self getNumFromArray:comp index:5]
-                                          seconds:[self getNumFromArray:comp index:6]];
+        //MAL
+//        Angle declination = Angle::fromClockHoursMinutesSeconds([self getNumFromArray:comp index:4],
+//                                                                [self getNumFromArray:comp index:5],
+//                                                                [self getNumFromArray:comp index:6]);
         
-        stars.push_back(Star(declination, altitude, Color::white()));
+        Angle declination = Angle::fromDegreesMinutesSeconds([self getNumFromArray:comp index:4],
+                                                                [self getNumFromArray:comp index:5],
+                                                                [self getNumFromArray:comp index:6]);
         
-        NSLog(@"STAR %@ %f %f", name, altitude, declination);
+        
+//        double altitude = [self toDegressHours:[self getNumFromArray:comp index:1]
+//                                       minutes:[self getNumFromArray:comp index:2]
+//                                       seconds:[self getNumFromArray:comp index:3]];
+//        
+//        double declination = [self toDegressHours:[self getNumFromArray:comp index:4]
+//                                          minutes:[self getNumFromArray:comp index:5]
+//                                          seconds:[self getNumFromArray:comp index:6]];
+        
+        stars.push_back(Star(ascension._degrees, declination._degrees, Color::white()));
+        
+        NSLog(@"STAR %@ %f %f", name, ascension._degrees, declination._degrees);
         
       }
       

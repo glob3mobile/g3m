@@ -185,6 +185,21 @@ public:
   Angle nearestAngleInInterval(const Angle& min, const Angle& max) const;
 
   Angle distanceTo(const Angle& other) const;
+  
+  static Angle fromClockHoursMinutesSeconds(double hours,
+                                            double minutes,
+                                            double seconds) {
+    const double clockMinToDeg = 15.0 / 60.0;
+    const double clockSecToDeg = clockMinToDeg / 60.0;
+    
+    double hd = hours * 15.0;
+    double md = minutes * clockMinToDeg;
+    double sd = seconds * clockSecToDeg;
+    
+    printf("%f + %f + %f\n", hd, md, sd);
+    
+    return Angle::fromDegrees(hd+md+sd);
+  }
 
   Angle normalized() const {
     double degrees = _degrees;

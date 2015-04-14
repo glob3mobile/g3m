@@ -20,6 +20,8 @@
 #include "IFactory.hpp"
 #include "ITimer.hpp"
 #include "Geodetic3D.hpp"
+#include "Color.hpp"
+#include "MarksRenderer.hpp"
 
 class StarsMeshShape: public MeshShape{
 public:
@@ -54,26 +56,40 @@ public:
     
   }
   
-  double getTrueNorthAzimuthInDegrees(double siderealTime) const{
+  double getTrueNorthAzimuthInDegrees(double siderealTime, const Geodetic2D viewerPosition) const{
+    const IMathUtils* mu = IMathUtils::instance();
+    
+    double delta = TO_RADIANS( _declination );
+    double alpha = TO_RADIANS( _ascencion );
+    double tetha = TO_RADIANS(siderealTime);
+    
+    double phi = (PI / 2) - viewerPosition._latitude._radians; // 90 - phi
+    
+    //ArcTan(-(Cos(Degree*delta)*Cos(Degree*(90 - phi))*Cos(Degree*(-alpha + tetha))) + Sin(Degree*delta)*Sin(Degree*(90 - phi)),-(Cos(Degree*delta)*Sin(Degree*(-alpha + tetha))))
+    
+    double azimuth = mu->atan2(-(mu->cos(delta) * mu->cos(phi)* mu->cos(-alpha + tetha) ) + mu->sin(delta)* mu->sin(phi),
+                               -(mu->cos(delta)* mu->sin(-alpha + tetha)));
+    
+    
+    return TO_DEGREES(azimuth);
+  }
+  
+  double getAltitude(double siderealTime, const Geodetic2D viewerPosition) const{
 #warning TODO
     
     const IMathUtils* mu = IMathUtils::instance();
     
     double delta = TO_RADIANS( _declination );
     double alpha = TO_RADIANS( _ascencion );
+    double tetha = TO_RADIANS(siderealTime);
     
-    double azimuth = mu->atan2(-(mu->cos(delta) * mu->cos(90 - phi)*Cos(Degree*(-alpha + tetha))) + Sin(Degree*delta)*Sin(Degree*(90 - phi)),
-                               <#double v#>)
+    double phi = (PI / 2) - viewerPosition._latitude._radians; // 90 - phi
     
+    //ArcSin(Cos(Degree*(90 - phi))*Sin(Degree*delta) + Cos(Degree*delta)*Cos(Degree*(-alpha + tetha))*Sin(Degree*(90 - phi)))
     
-    //ArcTan(-(Cos(Degree*delta)*Cos(Degree*(90 - phi))*Cos(Degree*(-alpha + tetha))) + Sin(Degree*delta)*Sin(Degree*(90 - phi)),-(Cos(Degree*delta)*Sin(Degree*(-alpha + tetha))))
+    double ascencion = mu->asin(mu->cos(phi)*mu->sin(delta) + mu->cos(delta)*mu->cos(-alpha + tetha)*mu->sin(phi));
     
-    return _declination;
-  }
-  
-  double getAltitude(double siderealTime) const{
-#warning TODO
-    return _ascencion;
+    return TO_DEGREES(ascencion);
   }
   
   ~Star(){
@@ -97,9 +113,10 @@ public:
   
   double distanceInDegrees(const Angle& trueNorthAzimuthInDegrees,
                            const Angle& altitudeInDegrees,
-                           double siderealTime){
-    return Angle::fromDegrees(getAltitude(siderealTime)).distanceTo(altitudeInDegrees)._degrees +
-    Angle::fromDegrees(getTrueNorthAzimuthInDegrees(siderealTime)).distanceTo(trueNorthAzimuthInDegrees)._degrees;
+                           double siderealTime,
+                           const Geodetic2D& viewerPosition){
+    return Angle::fromDegrees(getAltitude(siderealTime, viewerPosition)).distanceTo(altitudeInDegrees)._degrees +
+    Angle::fromDegrees(getTrueNorthAzimuthInDegrees(siderealTime, viewerPosition)).distanceTo(trueNorthAzimuthInDegrees)._degrees;
   }
   
 };
@@ -118,14 +135,24 @@ class StarDomeRenderer : public DefaultRenderer {
   
   Geodetic3D* _position;
   double _clockTimeInDegrees;
-  double _siderealTimeOffset;
+  
+  int _dayOfTheYear;
+  
+  //Theta0 from first to last day of the year 2015
+  static double theta0[];
+  
+  Color _color;
+  
+  MarksRenderer* _mr;
   
 public:
   
   StarDomeRenderer(std::string& name, std::vector<Star> stars,
                    const Geodetic3D& position,
                    double clockTimeInDegrees,
-                   double siderealTimeOffset):
+                   int dayOfTheYear,
+                   Color color,
+                   MarksRenderer* mr = NULL):
   _starsShape(NULL),
   _glState(new GLState()),
   _stars(stars),
@@ -133,11 +160,15 @@ public:
   _name(name),
   _position(new Geodetic3D(position)),
   _clockTimeInDegrees(clockTimeInDegrees),
-  _siderealTimeOffset(siderealTimeOffset)
+  _dayOfTheYear(dayOfTheYear),
+  _color(color),
+  _mr(mr)
   {
   }
   
-  static double getSiderealTime(double placeLongitudeInDegrees, double clockTimeInDegrees, double thetaZero){
+  static double getSiderealTime(double placeLongitudeInDegrees, double clockTimeInDegrees, int dayOfTheYear){
+    
+    double thetaZero = theta0[dayOfTheYear];
     
     double I = 366.2422 / 365.2422;
     double TU = clockTimeInDegrees - IMathUtils::instance()->round(placeLongitudeInDegrees);
@@ -178,6 +209,8 @@ public:
   
   void selectStar(const Angle& trueNorthAzimuthInDegrees,
                   const Angle& altitudeInDegrees);
+  
+  
   
 };
 
