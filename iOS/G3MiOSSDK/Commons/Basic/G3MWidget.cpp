@@ -140,7 +140,8 @@ _forceBusyRenderer(false),
 _nFramesBeetweenProgramsCleanUp(500),
 _zRenderCounter(-1),
 _infoDisplay(infoDisplay),
-_sceneReadyListener(NULL)
+_sceneReadyListener(NULL),
+_marksRenderer(NULL)
 {
   _effectsScheduler->initialize(_context);
   _cameraRenderer->initialize(_context);
