@@ -44,11 +44,15 @@ public class CreateOT {
       //      final String cloudName = "Wallonia-Belgium";
 
 
-      final File sourceTXTDirectory = new File("/Volumes/My Passport/_minnesota_lidar_/txt");
       final GProjection sourceProjection = GProjection.EPSG_31370;
 
-      final File cloudDirectory = new File("/Volumes/My Passport/_minnesota_lidar_/db");
-      final String cloudName = "minnesota";
+      //    final File sourceTXTDirectory = new File("/Volumes/My Passport/_minnesota_lidar_/txt");
+      //    final File cloudDirectory = new File("/Volumes/My Passport/_minnesota_lidar_/db");
+      //    final String cloudName = "minnesota";
+
+      final File sourceTXTDirectory = new File(System.getProperty("user.dir"));
+      final File cloudDirectory = new File(System.getProperty("user.dir"));
+      final String cloudName = "Wallonia";
 
 
       final boolean deleteOT = true;

@@ -248,9 +248,13 @@ public class SimplifyOctreeTask
 
       final long cacheSizeInBytes = 4 * 1024 * 1024 * 1024;
 
-      final File cloudDirectory = new File("/Volumes/My Passport/_belgium_lidar_/db");
-      final String completeSourceCloudName = "Wallonia-Belgium";
-      final String simplifiedCloudName = completeSourceCloudName + "_simplified2";
+      //      final File cloudDirectory = new File("/Volumes/My Passport/_belgium_lidar_/db");
+      //      final String completeSourceCloudName = "Wallonia-Belgium";
+      //      final String simplifiedCloudName = completeSourceCloudName + "_simplified2";
+
+      final File cloudDirectory = new File(System.getProperty("user.dir"));
+      final String completeSourceCloudName = "Wallonia";
+      final String simplifiedCloudName = completeSourceCloudName + "_simplified";
 
 
       try (final PersistentOctree sourceOctree = BerkeleyDBOctree.openReadOnly(cloudDirectory, completeSourceCloudName,

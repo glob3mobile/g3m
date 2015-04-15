@@ -69,9 +69,14 @@ public class ProcessOT {
       //      final String lodCloudName = sourceCloudName + "_LOD";
 
 
-      final File cloudDirectory = new File("/Volumes/My Passport/_belgium_lidar_/db");
+      //      final File cloudDirectory = new File("/Volumes/My Passport/_belgium_lidar_/db");
+      //
+      //      final String sourceCloudName = "Wallonia-Belgium_simplified2";
+      //      final String lodCloudName = sourceCloudName + "_LOD";
 
-      final String sourceCloudName = "Wallonia-Belgium_simplified2";
+      final File cloudDirectory = new File(System.getProperty("user.dir"));
+
+      final String sourceCloudName = "Wallonia_simplified";
       final String lodCloudName = sourceCloudName + "_LOD";
 
 
