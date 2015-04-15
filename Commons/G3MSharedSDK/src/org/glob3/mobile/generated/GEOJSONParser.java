@@ -221,20 +221,38 @@ public class GEOJSONParser
   
     GEOGeometry geo = null;
   
-    final int dimensions = jsCoordinates.getAsArray(0).size();
-    if (dimensions == 2)
+    final JSONArray jsFirstCoordinate = jsCoordinates.getAsArray(0);
+  
+    if (jsFirstCoordinate == null)
     {
-      java.util.ArrayList<Geodetic2D> coordinates = create2DCoordinates(jsCoordinates);
-      if (coordinates != null)
+      if (jsCoordinates.getAsNumber(0) != null)
       {
-        geo = new GEO2DLineStringGeometry(coordinates);
-        _lineStrings2DCount++;
+        // assumes flat format: [ lon, lat, lon, lat ... ]
+        java.util.ArrayList<Geodetic2D> coordinates = createFlat2DCoordinates(jsCoordinates);
+        if (coordinates != null)
+        {
+          geo = new GEO2DLineStringGeometry(coordinates);
+          _lineStrings2DCount++;
+        }
       }
     }
     else
     {
-      ILogger.instance().logError("Invalid coordinates dimensions=%d", dimensions);
-      return null;
+      final int dimensions = jsFirstCoordinate.size();
+      if (dimensions == 2)
+      {
+        java.util.ArrayList<Geodetic2D> coordinates = create2DCoordinates(jsCoordinates);
+        if (coordinates != null)
+        {
+          geo = new GEO2DLineStringGeometry(coordinates);
+          _lineStrings2DCount++;
+        }
+      }
+      else
+      {
+        ILogger.instance().logError("Invalid coordinates dimensions=%d", dimensions);
+        return null;
+      }
     }
   
     return geo;
@@ -399,35 +417,69 @@ public class GEOJSONParser
       return null;
     }
   
-    final int dimensions = jsFirstCoordinates.getAsArray(0).size();
-    if (dimensions == 2)
+    final JSONArray jsFirstCoordinate = jsFirstCoordinates.getAsArray(0);
+    if (jsFirstCoordinate == null)
     {
-      final JSONArray jsCoordinates = jsCoordinatesArray.getAsArray(0);
-      java.util.ArrayList<Geodetic2D> coordinates = create2DCoordinates(jsCoordinates);
-  
-      java.util.ArrayList<java.util.ArrayList<Geodetic2D>> holesCoordinatesArray = new java.util.ArrayList<java.util.ArrayList<Geodetic2D>>();
-      for (int i = 1; i < coordinatesArrayCount; i++)
+      if (jsFirstCoordinates.getAsNumber(0) != null)
       {
-        final JSONArray jsHoleCoordinates = jsCoordinatesArray.getAsArray(i);
-        java.util.ArrayList<Geodetic2D> holeCoordinates = create2DCoordinates(jsHoleCoordinates);
-        if (holeCoordinates != null)
+        // assumes flat format: [ lon, lat, lon, lat ... ]
+        final JSONArray jsCoordinates = jsCoordinatesArray.getAsArray(0);
+        java.util.ArrayList<Geodetic2D> coordinates = createFlat2DCoordinates(jsCoordinates);
+  
+        java.util.ArrayList<java.util.ArrayList<Geodetic2D>> holesCoordinatesArray = new java.util.ArrayList<java.util.ArrayList<Geodetic2D>>();
+        for (int i = 1; i < coordinatesArrayCount; i++)
         {
-          holesCoordinatesArray.add(holeCoordinates);
-          _holesLineStringsInPolygon2DCount++;
+          final JSONArray jsHoleCoordinates = jsCoordinatesArray.getAsArray(i);
+          java.util.ArrayList<Geodetic2D> holeCoordinates = createFlat2DCoordinates(jsHoleCoordinates);
+          if (holeCoordinates != null)
+          {
+            holesCoordinatesArray.add(holeCoordinates);
+            _holesLineStringsInPolygon2DCount++;
+          }
         }
-      }
   
-      if (holesCoordinatesArray.size() == 0)
+        if (holesCoordinatesArray.size() == 0)
+        {
+          holesCoordinatesArray = null;
+          holesCoordinatesArray = null;
+        }
+  
+        _polygon2DCount++;
+        return new GEO2DPolygonData(coordinates, holesCoordinatesArray);
+      }
+    }
+    else
+    {
+      final int dimensions = jsFirstCoordinate.size();
+      if (dimensions == 2)
       {
-        holesCoordinatesArray = null;
-        holesCoordinatesArray = null;
-      }
+        final JSONArray jsCoordinates = jsCoordinatesArray.getAsArray(0);
+        java.util.ArrayList<Geodetic2D> coordinates = create2DCoordinates(jsCoordinates);
   
-      _polygon2DCount++;
-      return new GEO2DPolygonData(coordinates, holesCoordinatesArray);
+        java.util.ArrayList<java.util.ArrayList<Geodetic2D>> holesCoordinatesArray = new java.util.ArrayList<java.util.ArrayList<Geodetic2D>>();
+        for (int i = 1; i < coordinatesArrayCount; i++)
+        {
+          final JSONArray jsHoleCoordinates = jsCoordinatesArray.getAsArray(i);
+          java.util.ArrayList<Geodetic2D> holeCoordinates = create2DCoordinates(jsHoleCoordinates);
+          if (holeCoordinates != null)
+          {
+            holesCoordinatesArray.add(holeCoordinates);
+            _holesLineStringsInPolygon2DCount++;
+          }
+        }
+  
+        if (holesCoordinatesArray.size() == 0)
+        {
+          holesCoordinatesArray = null;
+          holesCoordinatesArray = null;
+        }
+  
+        _polygon2DCount++;
+        return new GEO2DPolygonData(coordinates, holesCoordinatesArray);
+      }
+      ILogger.instance().logError("Invalid coordinates dimensions=%d", dimensions);
     }
   
-    ILogger.instance().logError("Invalid coordinates dimensions=%d", dimensions);
     return null;
   }
 
@@ -453,6 +505,34 @@ public class GEOJSONParser
   
       final double latitudeDegrees = jsCoordinate.getAsNumber(1, 0.0);
       final double longitudeDegrees = jsCoordinate.getAsNumber(0, 0.0);
+  
+      Geodetic2D coordinate = new Geodetic2D(Angle.fromDegrees(latitudeDegrees), Angle.fromDegrees(longitudeDegrees));
+      coordinates.add(coordinate);
+      _coordinates2DCount++;
+    }
+  
+    return coordinates;
+  }
+  private java.util.ArrayList<Geodetic2D> createFlat2DCoordinates(JSONArray jsCoordinates)
+  {
+    if (jsCoordinates == null)
+    {
+      ILogger.instance().logError("Mandatory \"coordinates\" attribute is not present");
+      return null;
+    }
+  
+    final int coordinatesCount = jsCoordinates.size();
+    if (coordinatesCount == 0)
+    {
+      ILogger.instance().logError("Mandatory \"coordinates\" attribute is empty");
+      return null;
+    }
+  
+    java.util.ArrayList<Geodetic2D> coordinates = new java.util.ArrayList<Geodetic2D>();
+    for (int i = 0; i < coordinatesCount; i += 2)
+    {
+      final double latitudeDegrees = jsCoordinates.getAsNumber(i + 0, 0.0);
+      final double longitudeDegrees = jsCoordinates.getAsNumber(i + 1, 0.0);
   
       Geodetic2D coordinate = new Geodetic2D(Angle.fromDegrees(latitudeDegrees), Angle.fromDegrees(longitudeDegrees));
       coordinates.add(coordinate);
