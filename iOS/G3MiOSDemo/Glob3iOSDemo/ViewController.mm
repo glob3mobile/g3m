@@ -1348,6 +1348,12 @@ public:
 
     
     marksRenderer->addMark(animMark);
+    
+    Mark* regMark = new Mark("HELLO ANIMATED MARKS!",
+                               Geodetic3D::fromDegrees( 27.599999998178312, -15.41699999885168, 0),
+                               ABSOLUTE);
+    marksRenderer->addMark(regMark);
+    
   }
 
   GEORenderer* geoRenderer = [self createGEORendererMeshRenderer: meshRenderer
