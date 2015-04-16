@@ -531,8 +531,8 @@ public class GEOJSONParser
     java.util.ArrayList<Geodetic2D> coordinates = new java.util.ArrayList<Geodetic2D>();
     for (int i = 0; i < coordinatesCount; i += 2)
     {
-      final double latitudeDegrees = jsCoordinates.getAsNumber(i + 0, 0.0);
-      final double longitudeDegrees = jsCoordinates.getAsNumber(i + 1, 0.0);
+      final double longitudeDegrees = jsCoordinates.getAsNumber(i + 0, 0.0);
+      final double latitudeDegrees = jsCoordinates.getAsNumber(i + 1, 0.0);
   
       Geodetic2D coordinate = new Geodetic2D(Angle.fromDegrees(latitudeDegrees), Angle.fromDegrees(longitudeDegrees));
       coordinates.add(coordinate);
