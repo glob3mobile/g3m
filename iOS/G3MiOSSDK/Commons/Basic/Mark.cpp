@@ -499,6 +499,16 @@ void Mark::createGLState(const Planet* planet,
                      0.0f,
                      0.0f);
     } else{
+//      _textureGLF = new TextureGLFeature(_textureId->getID(),
+//                                         billboardTexCoords,
+//                                         2,
+//                                         0,
+//                                         false,
+//                                         0,
+//                                         true,
+//                                         GLBlendFactor::srcAlpha(),
+//                                         GLBlendFactor::oneMinusSrcAlpha());
+      
       _textureGLF = new TextureGLFeature(_textureId->getID(),
                                          billboardTexCoords,
                                          2,
@@ -507,7 +517,14 @@ void Mark::createGLState(const Planet* planet,
                                          0,
                                          true,
                                          GLBlendFactor::srcAlpha(),
-                                         GLBlendFactor::oneMinusSrcAlpha());
+                                         GLBlendFactor::oneMinusSrcAlpha(),
+                                         0.0,
+                                         0.0,
+                                         1.0,
+                                         1.0,
+                                         0.0f,
+                                         0.0f,
+                                         0.0f);
     }
     
     _glState->addGLFeature(_textureGLF,
