@@ -153,8 +153,8 @@ std::vector<Geodetic2D*>* GEOJSONParser::createFlat2DCoordinates(const JSONArray
 
   std::vector<Geodetic2D*>* coordinates = new std::vector<Geodetic2D*>();
   for (int i = 0; i < coordinatesCount; i += 2) {
-    const double latitudeDegrees  = jsCoordinates->getAsNumber(i + 0, 0.0);
-    const double longitudeDegrees = jsCoordinates->getAsNumber(i + 1, 0.0);
+    const double longitudeDegrees = jsCoordinates->getAsNumber(i + 0, 0.0);
+    const double latitudeDegrees  = jsCoordinates->getAsNumber(i + 1, 0.0);
 
     Geodetic2D* coordinate = new Geodetic2D(Angle::fromDegrees(latitudeDegrees),
                                             Angle::fromDegrees(longitudeDegrees));
