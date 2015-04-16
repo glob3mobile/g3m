@@ -79,13 +79,26 @@ Vector3D Star::getStarDisplacementInDome(double domeHeight, double siderealTime,
   return starPos;
 }
 
+StarDomeRenderer::~StarDomeRenderer()
+{
+  clear();
+}
+
+
+void StarDomeRenderer::clear(){
+  if (_mr != NULL){
+    _mr->removeAllMarks();
+  }
+  delete _starsShape;
+}
+
 void StarDomeRenderer::initialize(const G3MContext* context) {
   
   FloatBufferBuilderFromCartesian3D* fbb = FloatBufferBuilderFromCartesian3D::builderWithFirstVertexAsCenter();
   FloatBufferBuilderFromColor colors;
   
   const double domeHeight = 1e5;
-
+  
   double siderealTime = getSiderealTime(_position->_longitude._degrees, _clockTimeInDegrees, _dayOfTheYear);
   int size = _stars.size();
   for(int i = 0; i < size; i++){
@@ -137,25 +150,25 @@ void StarDomeRenderer::initialize(const G3MContext* context) {
   if (_mr != NULL){
     
     Vector3D firstStarPos = _stars[0].getStarDisplacementInDome(domeHeight, siderealTime, _position->asGeodetic2D());
-
+    
     //Computing Mark Position
     MutableMatrix44D* m = _starsShape->createTransformMatrix(context->getPlanet());
     
     
     
-        Geodetic3D g = context->getPlanet()->toGeodetic3D(firstStarPos.transformedBy(*m, 1.0));
+    Geodetic3D g = context->getPlanet()->toGeodetic3D(firstStarPos.transformedBy(*m, 1.0));
     
-        Mark* mark = new   Mark(_name,
-                                //Geodetic3D(_position->asGeodetic2D(), _position->_height + 1000),
-                                g,
-                                ABSOLUTE,
-                                0 //Always visible
-                                );
+    Mark* mark = new   Mark(_name,
+                            //Geodetic3D(_position->asGeodetic2D(), _position->_height + 1000),
+                            g,
+                            ABSOLUTE,
+                            0 //Always visible
+                            );
     
     
     mark->setMarkAnchor(0.5, -0.5);
     
-        _mr->addMark(mark);
+    _mr->addMark(mark);
     
     delete m;
   }

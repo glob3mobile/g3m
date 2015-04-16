@@ -141,6 +141,10 @@ public:
   {
   }
   
+  ~StarDomeRenderer();
+  
+  void clear();
+  
   static double getSiderealTime(double placeLongitudeInDegrees, double clockTimeInDegrees, int dayOfTheYear){
     
     double thetaZero = theta0[dayOfTheYear];
@@ -158,9 +162,6 @@ public:
   
   void onResizeViewportEvent(const G3MEventContext* ec,
                              int width, int height) {
-  }
-  
-  virtual ~StarDomeRenderer() {
   }
   
   void start(const G3MRenderContext* rc){}
