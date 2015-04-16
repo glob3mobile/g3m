@@ -291,7 +291,7 @@ Mesh* createSectorMesh(const Planet* planet,
   //[[self G3MWidget] initSingletons];
   // [self initWithoutBuilder];
   
-  //[self initCustomizedWithBuilder];
+  [self initCustomizedWithBuilder];
   
   //[self initTestingTileImageProvider];
   

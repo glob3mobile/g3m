@@ -84,6 +84,11 @@ public class TextureGLFeature extends GLColorGroupFeature
     createBasicValues(texCoords, arrayElementSize, index, normalized, stride);
   }
 
+  public final boolean hasTranslateAndScale()
+  {
+     return _translation != null && _scale != null;
+  }
+
   public final void setTranslation(float u, float v)
   {
     if (_translation == null)

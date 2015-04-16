@@ -35,8 +35,8 @@ void DefaultHUDInfoRenderer_ImageFactory::drawOn(ICanvas* canvas,
                               5);
 }
 
-bool DefaultHUDInfoRenderer_ImageFactory::isEquals(const std::vector<const Info*> v1,
-                                                   const std::vector<const Info*> v2) const {
+bool DefaultHUDInfoRenderer_ImageFactory::isEquals(const std::vector<const Info*>& v1,
+                                                   const std::vector<const Info*>& v2) const {
   const size_t size1 = v1.size();
   const size_t size2 = v2.size();
   if (size1 != size2) {
@@ -53,7 +53,7 @@ bool DefaultHUDInfoRenderer_ImageFactory::isEquals(const std::vector<const Info*
   return true;
 }
 
-bool DefaultHUDInfoRenderer_ImageFactory::setInfo(const std::vector<const Info*> info) {
+bool DefaultHUDInfoRenderer_ImageFactory::setInfo(const std::vector<const Info*>& info) {
   _info.clear();
 #ifdef C_CODE
   _info.insert(_info.end(),
@@ -75,7 +75,7 @@ Default_HUDRenderer::~Default_HUDRenderer() {
   delete _hudImageRenderer;
 }
 
-void Default_HUDRenderer::updateInfo(const std::vector<const Info*> info) {
+void Default_HUDRenderer::updateInfo(const std::vector<const Info*>& info) {
   DefaultHUDInfoRenderer_ImageFactory* factory = (DefaultHUDInfoRenderer_ImageFactory*) (_hudImageRenderer->getImageFactory());
   if (factory->setInfo(info)) {
     _hudImageRenderer->recreateImage();

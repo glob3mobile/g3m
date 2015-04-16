@@ -76,9 +76,19 @@ public class Mark implements SurfaceElevationListener
 
   private boolean _textureSolved;
   private IImage _textureImage;
-  private int _textureWidth;
-  private int _textureHeight;
+  private float _textureWidth;
+  private float _textureHeight;
+  private float _textureWidthProportion;
+  private float _textureHeightProportion;
+  private boolean _textureSizeSetExternally;
+  private boolean _textureProportionSetExternally;
   private final String _imageID;
+
+  private boolean _hasTCTransformations;
+  private float _translationTCX;
+  private float _translationTCY;
+  private float _scalingTCX;
+  private float _scalingTCY;
 
   private boolean _renderedMark;
 
@@ -88,11 +98,23 @@ public class Mark implements SurfaceElevationListener
   {
     _glState = new GLState();
   
-    _glState.addGLFeature(new BillboardGLFeature(getCartesianPosition(planet), _textureWidth, _textureHeight), false);
+    _billboardGLF = new BillboardGLFeature(getCartesianPosition(planet), (int)_textureWidth, (int)_textureHeight, _anchorU, _anchorV);
+  
+    _glState.addGLFeature(_billboardGLF, false);
   
     if (_textureId != null)
     {
-      _glState.addGLFeature(new TextureGLFeature(_textureId.getID(), billboardTexCoords, 2, 0, false, 0, true, GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha()), false);
+  
+      if (_hasTCTransformations)
+      {
+      _textureGLF = new TextureGLFeature(_textureId.getID(), billboardTexCoords, 2, 0, false, 0, true, GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha(), _translationTCX, _translationTCY, _scalingTCX, _scalingTCY, 0.0f, 0.0f, 0.0f);
+      }
+      else
+      {
+        _textureGLF = new TextureGLFeature(_textureId.getID(), billboardTexCoords, 2, 0, false, 0, true, GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha());
+      }
+  
+      _glState.addGLFeature(_textureGLF, false);
     }
   }
 
@@ -102,7 +124,22 @@ public class Mark implements SurfaceElevationListener
 
   private Vector3D _normalAtMarkPosition;
 
+  private TextureGLFeature _textureGLF;
+
+  private void clearGLState()
+  {
+    if (_glState != null)
+    {
+      _glState._release();
+      _glState = null;
+    }
+  }
+
   private MutableVector3D _markCameraVector = new MutableVector3D();
+
+  private float _anchorU;
+  private float _anchorV;
+  private BillboardGLFeature _billboardGLF;
 
   /**
    * Creates a marker with icon and label
@@ -163,8 +200,8 @@ public class Mark implements SurfaceElevationListener
      _textureSolved = false;
      _textureImage = null;
      _renderedMark = false;
-     _textureWidth = 0;
-     _textureHeight = 0;
+     _textureWidth = 0F;
+     _textureHeight = 0F;
      _userData = userData;
      _autoDeleteUserData = autoDeleteUserData;
      _minDistanceToCamera = minDistanceToCamera;
@@ -175,6 +212,15 @@ public class Mark implements SurfaceElevationListener
      _currentSurfaceElevation = 0.0;
      _glState = null;
      _normalAtMarkPosition = null;
+     _textureSizeSetExternally = false;
+     _hasTCTransformations = false;
+     _textureGLF = null;
+     _anchorU = 0.5F;
+     _anchorV = 0.5F;
+     _billboardGLF = null;
+     _textureHeightProportion = 1.0F;
+     _textureWidthProportion = 1.0F;
+     _textureProportionSetExternally = false;
   
   }
 
@@ -229,8 +275,8 @@ public class Mark implements SurfaceElevationListener
      _textureSolved = false;
      _textureImage = null;
      _renderedMark = false;
-     _textureWidth = 0;
-     _textureHeight = 0;
+     _textureWidth = 0F;
+     _textureHeight = 0F;
      _userData = userData;
      _autoDeleteUserData = autoDeleteUserData;
      _minDistanceToCamera = minDistanceToCamera;
@@ -241,6 +287,15 @@ public class Mark implements SurfaceElevationListener
      _currentSurfaceElevation = 0.0;
      _glState = null;
      _normalAtMarkPosition = null;
+     _textureSizeSetExternally = false;
+     _textureGLF = null;
+     _hasTCTransformations = false;
+     _anchorU = 0.5F;
+     _anchorV = 0.5F;
+     _billboardGLF = null;
+     _textureHeightProportion = 1.0F;
+     _textureWidthProportion = 1.0F;
+     _textureProportionSetExternally = false;
   
   }
 
@@ -283,8 +338,8 @@ public class Mark implements SurfaceElevationListener
      _textureSolved = false;
      _textureImage = null;
      _renderedMark = false;
-     _textureWidth = 0;
-     _textureHeight = 0;
+     _textureWidth = 0F;
+     _textureHeight = 0F;
      _userData = userData;
      _autoDeleteUserData = autoDeleteUserData;
      _minDistanceToCamera = minDistanceToCamera;
@@ -295,6 +350,15 @@ public class Mark implements SurfaceElevationListener
      _currentSurfaceElevation = 0.0;
      _glState = null;
      _normalAtMarkPosition = null;
+     _textureSizeSetExternally = false;
+     _textureGLF = null;
+     _hasTCTransformations = false;
+     _anchorU = 0.5F;
+     _anchorV = 0.5F;
+     _billboardGLF = null;
+     _textureHeightProportion = 1.0F;
+     _textureWidthProportion = 1.0F;
+     _textureProportionSetExternally = false;
   
   }
 
@@ -349,6 +413,13 @@ public class Mark implements SurfaceElevationListener
      _currentSurfaceElevation = 0.0;
      _glState = null;
      _normalAtMarkPosition = null;
+     _textureSizeSetExternally = false;
+     _hasTCTransformations = false;
+     _anchorU = 0.5F;
+     _anchorV = 0.5F;
+     _billboardGLF = null;
+     _textureHeightProportion = 1.0F;
+     _textureWidthProportion = 1.0F;
   
   }
 
@@ -476,23 +547,34 @@ public class Mark implements SurfaceElevationListener
        _labelShadowColor.dispose();
   
     _textureImage = image;
-    _textureWidth = _textureImage.getWidth();
-    _textureHeight = _textureImage.getHeight();
+  
+    if (!_textureSizeSetExternally)
+    {
+      _textureWidth = _textureImage.getWidth();
+      _textureHeight = _textureImage.getHeight();
+  
+      if (_textureProportionSetExternally)
+      {
+        _textureWidth *= _textureWidthProportion;
+        _textureHeight *= _textureHeightProportion;
+      }
+    }
+  
   }
 
-  public final int getTextureWidth()
+  public final float getTextureWidth()
   {
     return _textureWidth;
   }
 
-  public final int getTextureHeight()
+  public final float getTextureHeight()
   {
     return _textureHeight;
   }
 
-  public final Vector2I getTextureExtent()
+  public final Vector2F getTextureExtent()
   {
-    return new Vector2I(_textureWidth, _textureHeight);
+    return new Vector2F(_textureWidth, _textureHeight);
   }
 
   public final MarkUserData getUserData()
@@ -547,8 +629,6 @@ public class Mark implements SurfaceElevationListener
   
     final Vector3D markPosition = getCartesianPosition(planet);
   
-  //  const Vector3D markCameraVector = markPosition->sub(cameraPosition);
-  //  _markCameraVector.putSub(markPosition, cameraPosition);
     _markCameraVector.set(markPosition._x - cameraPosition.x(), markPosition._y - cameraPosition.y(), markPosition._z - cameraPosition.z());
   
     // mark will be renderered only if is renderable by distance and placed on a visible globe area
@@ -636,11 +716,7 @@ public class Mark implements SurfaceElevationListener
        _cartesianPosition.dispose();
     _cartesianPosition = null;
   
-    if (_glState != null)
-    {
-      _glState._release();
-      _glState = null;
-    }
+    clearGLState();
   }
 
   public final void elevationChanged(Sector position, ElevationData rawElevationData, double verticalExaggeration) //Without considering vertical exaggeration
@@ -662,11 +738,81 @@ public class Mark implements SurfaceElevationListener
        _cartesianPosition.dispose();
     _cartesianPosition = null;
   
+    clearGLState();
+  }
+
+  public final void setOnScreenSizeOnPixels(int width, int height)
+  {
+  
+    _textureWidth = width;
+    _textureHeight = height;
+    _textureSizeSetExternally = true;
+  
     if (_glState != null)
     {
-      _glState._release();
-      _glState = null;
+      BillboardGLFeature b = (BillboardGLFeature) _glState.getGLFeature(GLFeatureID.GLF_BILLBOARD);
+      if (b != null)
+      {
+        b.changeSize((int)_textureWidth *10, (int)_textureHeight *10);
+      }
     }
+  }
+  public final void setOnScreenSizeOnProportionToImage(float width, float height)
+  {
+    _textureWidthProportion = width;
+    _textureHeightProportion = height;
+    _textureProportionSetExternally = true;
+  
+    if (_glState != null)
+    {
+      BillboardGLFeature b = (BillboardGLFeature) _glState.getGLFeature(GLFeatureID.GLF_BILLBOARD);
+      if (b != null)
+      {
+        b.changeSize((int)(_textureWidth *_textureWidthProportion), (int)(_textureHeight *_textureHeightProportion));
+      }
+    }
+  }
+
+  public final void setTextureCoordinatesTransformation(Vector2F translation, Vector2F scaling)
+  {
+  
+    _translationTCX = translation._x;
+    _translationTCY = translation._y;
+  
+    _scalingTCX = scaling._x;
+    _scalingTCY = scaling._y;
+  
+    if (_translationTCX != 0 || _translationTCY != 0 || _scalingTCX != 1 || _scalingTCY != 1)
+    {
+      _hasTCTransformations = true;
+    }
+  
+    if (_textureGLF != null)
+    {
+  
+      if (!_textureGLF.hasTranslateAndScale())
+      {
+        clearGLState();
+      }
+  
+      _textureGLF.setTranslation(_translationTCX, _translationTCY);
+      _textureGLF.setScale(_scalingTCX, _scalingTCY);
+    }
+    else
+    {
+  
+    }
+  
+  }
+
+  public final void setMarkAnchor(float anchorU, float anchorV)
+  {
+    if (_billboardGLF != null)
+    {
+      _billboardGLF.changeAnchor(anchorU, anchorV);
+    }
+    _anchorU = anchorU;
+    _anchorV = anchorV;
   }
 
 }

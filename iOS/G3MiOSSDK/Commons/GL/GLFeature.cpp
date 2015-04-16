@@ -16,7 +16,7 @@ GLFeature(NO_GROUP, GLF_VIEWPORT_EXTENT)
 {
   _extent = new GPUUniformValueVec2FloatMutable(viewportWidth,
                                                 viewportHeight);
-
+  
   _values->addUniformValue(VIEWPORT_EXTENT,
                            _extent,
                            false);
@@ -27,7 +27,7 @@ GLFeature(NO_GROUP, GLF_VIEWPORT_EXTENT)
 {
   _extent = new GPUUniformValueVec2FloatMutable(camera->getViewPortWidth(),
                                                 camera->getViewPortHeight());
-
+  
   _values->addUniformValue(VIEWPORT_EXTENT,
                            _extent,
                            false);
@@ -40,13 +40,22 @@ void ViewportExtentGLFeature::changeExtent(int viewportWidth,
 
 BillboardGLFeature::BillboardGLFeature(const Vector3D& position,
                                        int textureWidth,
-                                       int textureHeight) :
+                                       int textureHeight,
+                                       float anchorU, float anchorV) :
 GLFeature(NO_GROUP, GLF_BILLBOARD)
 {
-  _values->addUniformValue(TEXTURE_EXTENT,
-                           new GPUUniformValueVec2Float(textureWidth, textureHeight),
+  
+  _anchor = new GPUUniformValueVec2FloatMutable(anchorU, anchorV);
+  _values->addUniformValue(BILLBOARD_ANCHOR,
+                           _anchor,
                            false);
-
+  
+  
+  _size = new GPUUniformValueVec2FloatMutable(textureWidth, textureHeight);
+  _values->addUniformValue(TEXTURE_EXTENT,
+                           _size,
+                           false);
+  
   _values->addUniformValue(BILLBOARD_POSITION,
                            new GPUUniformValueVec4Float((float) position._x,
                                                         (float) position._y,
@@ -85,7 +94,7 @@ _lineWidth(lineWidth)
 {
   _position = new GPUAttributeValueVec4Float(buffer, arrayElementSize, index, stride, normalized);
   _values->addAttributeValue(POSITION, _position, false);
-
+  
   if (needsPointSize) {
     _values->addUniformValue(POINT_SIZE, new GPUUniformValueFloat(pointSize), false);
   }
@@ -98,28 +107,26 @@ void GeometryGLFeature::applyOnGlobalGLState(GLGlobalState* state) const {
   else {
     state->disableDepthTest();
   }
-
+  
   if (_cullFace) {
     state->enableCullFace(_culledFace);
   }
   else {
     state->disableCullFace();
   }
-
+  
   if (_polygonOffsetFill) {
     state->enablePolygonOffsetFill(_polygonOffsetFactor, _polygonOffsetUnits);
   }
   else {
     state->disablePolygonOffsetFill();
   }
-
+  
   state->setLineWidth(_lineWidth);
 }
 
 GeometryGLFeature::~GeometryGLFeature() {
   //  _position->_release();
-#warning JM -> it looks like this class is leaking IFloatBuffer* buffer
-
 #ifdef JAVA_CODE
   super.dispose();
 #endif
@@ -140,10 +147,10 @@ _lineWidth(lineWidth)
 {
   _position = new GPUAttributeValueVec2Float(buffer, arrayElementSize, index, stride, normalized);
   _values->addAttributeValue(POSITION_2D, _position, false);
-
+  
   _translation =  new GPUUniformValueVec2FloatMutable(translation._x, translation._y);
   _values->addUniformValue(TRANSLATION_2D, _translation, false);
-
+  
   if (needsPointSize) {
     _values->addUniformValue(POINT_SIZE, new GPUUniformValueFloat(pointSize), false);
   }
@@ -156,7 +163,6 @@ void Geometry2DGLFeature::applyOnGlobalGLState(GLGlobalState* state) const {
 
 Geometry2DGLFeature::~Geometry2DGLFeature() {
   //  _position->_release();
-
 #ifdef JAVA_CODE
   super.dispose();
 #endif
@@ -174,28 +180,28 @@ void TextureGLFeature::createBasicValues(IFloatBuffer* texCoords,
                                                                      index,
                                                                      stride,
                                                                      normalized);
-
+  
   GPUUniformValueInt* texUnit = new GPUUniformValueInt(_target);
-
+  
   switch (_target) {
     case 0:
       _values->addUniformValue(SAMPLER, texUnit, false);
       _values->addAttributeValue(TEXTURE_COORDS, value, false);
       break;
-
+      
     case 1:
       _values->addUniformValue(SAMPLER2, texUnit, false);
       _values->addAttributeValue(TEXTURE_COORDS_2, value, false);
       break;
-
+      
     case 2:
       _values->addUniformValue(SAMPLER3, texUnit, false);
       _values->addAttributeValue(TEXTURE_COORDS_3, value, false);
       break;
-
+      
     default:
       ILogger::instance()->logError("Wrong texture target.");
-
+      
       break;
   }
 }
@@ -227,7 +233,7 @@ _rotationCenter(NULL),
 _rotationAngle(NULL)
 {
   createBasicValues(texCoords, arrayElementSize, index, normalized, stride);
-
+  
   setTranslation(translateU, translateV);
   setScale(scaleU, scaleV);
   setRotationAngleInRadiansAndRotationCenter(rotationAngleInRadians, rotationCenterU, rotationCenterV);
@@ -257,7 +263,7 @@ _rotationAngle(NULL)
 void TextureGLFeature::setTranslation(float u, float v) {
   if (_translation == NULL) {
     _translation = new GPUUniformValueVec2FloatMutable(u, v);
-
+    
     _values->addUniformValue(TRANSLATION_TEXTURE_COORDS,
                              _translation,
                              false);
@@ -275,7 +281,7 @@ void TextureGLFeature::setTranslation(float u, float v) {
 void TextureGLFeature::setScale(float u, float v) {
   if (_scale == NULL) {
     _scale = new GPUUniformValueVec2FloatMutable(u, v);
-
+    
     _values->addUniformValue(SCALE_TEXTURE_COORDS,
                              _scale,
                              false);
@@ -289,18 +295,17 @@ void TextureGLFeature::setScale(float u, float v) {
     }
   }
 }
-
 void TextureGLFeature::setRotationAngleInRadiansAndRotationCenter(float angle, float u, float v) {
   if (_rotationAngle == NULL || _rotationCenter == NULL) {
     if (angle != 0.0) {
       _rotationCenter = new GPUUniformValueVec2FloatMutable(u, v);
-
+      
       _values->addUniformValue(ROTATION_CENTER_TEXTURE_COORDS,
                                _rotationCenter,
                                false);
-
+      
       _rotationAngle = new GPUUniformValueFloatMutable(angle);
-
+      
       _values->addUniformValue(ROTATION_ANGLE_TEXTURE_COORDS,
                                _rotationAngle,
                                false);
@@ -380,11 +385,11 @@ PriorityGLFeature(COLOR_GROUP, GLF_TEXTURE_COORDS, 4)
                                                                      stride,
                                                                      normalized);
   _values->addAttributeValue(TEXTURE_COORDS, value, false);
-
+  
 #warning ONLY TARGET 0 FOR SGNODES
   GPUUniformValueInt* texUnit = new GPUUniformValueInt(0);
   _values->addUniformValue(SAMPLER, texUnit, false);
-
+  
   if (coordsTransformed) {
     _values->addUniformValue(TRANSLATION_TEXTURE_COORDS,
                              new GPUUniformValueVec2Float(translate._x,
@@ -398,7 +403,6 @@ PriorityGLFeature(COLOR_GROUP, GLF_TEXTURE_COORDS, 4)
 }
 
 void TextureCoordsGLFeature::applyOnGlobalGLState(GLGlobalState* state) const {
-
 }
 
 ProjectionGLFeature::ProjectionGLFeature(const Camera* camera) :
@@ -423,13 +427,13 @@ GLFeature(LIGHTING_GROUP, GLF_DIRECTION_LIGTH)
 {
   _values->addUniformValue(AMBIENT_LIGHT_COLOR,
                            new GPUUniformValueVec3Float(ambientLightColor), false);
-
+  
   Vector3D dirN = diffuseLightDirection.normalized();
-
+  
   _lightDirectionUniformValue = new GPUUniformValueVec3FloatMutable((float) dirN._x,
                                                                     (float) dirN._y,
                                                                     (float) dirN._z);
-
+  
   _values->addUniformValue(DIFFUSE_LIGHT_DIRECTION,
                            _lightDirectionUniformValue,
                            false);

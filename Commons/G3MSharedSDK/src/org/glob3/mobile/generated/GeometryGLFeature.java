@@ -18,9 +18,6 @@ public class GeometryGLFeature extends GLFeature
   public void dispose()
   {
     //  _position->_release();
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning JM->it looks like this class is leaking IFloatBuffer* buffer
-  
     super.dispose();
   }
 

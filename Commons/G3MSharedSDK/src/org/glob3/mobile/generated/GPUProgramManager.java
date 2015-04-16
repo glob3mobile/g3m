@@ -76,6 +76,8 @@ public class GPUProgramManager
   
     final boolean is2D = GPUVariable.hasAttribute(attributesCode, GPUAttributeKey.POSITION_2D);
   
+    final boolean bbAnchor = GPUVariable.hasUniform(uniformsCode, GPUUniformKey.BILLBOARD_ANCHOR);
+  
   
     if (is2D)
     {
@@ -88,6 +90,11 @@ public class GPUProgramManager
   
     if (billboard)
     {
+      if (transformTC || bbAnchor)
+      {
+        return compileProgramWithName(gl, "Billboard_TransformedTexCoor");
+      }
+  
       return compileProgramWithName(gl, "Billboard");
     }
   

@@ -232,13 +232,13 @@ public class MarksRenderer extends DefaultRenderer
             continue;
           }
   
-          final int markWidth = mark.getTextureWidth();
+          final int markWidth = (int)mark.getTextureWidth();
           if (markWidth <= 0)
           {
             continue;
           }
   
-          final int markHeight = mark.getTextureHeight();
+          final int markHeight = (int)mark.getTextureHeight();
           if (markHeight <= 0)
           {
             continue;
