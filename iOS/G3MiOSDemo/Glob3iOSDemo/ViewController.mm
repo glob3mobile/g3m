@@ -352,6 +352,7 @@ Mesh* createSectorMesh(const Planet* planet,
   
   
   
+  
   G3MBuilder_iOS builder([self G3MWidget]);
   
   builder.addCameraConstraint(new DeviceOrientationCameraConstrainer(self));
@@ -385,11 +386,12 @@ Mesh* createSectorMesh(const Planet* planet,
   builder.initializeWidget();
   [[self G3MWidget] startAnimation];
   
-  //[G3MWidget widget]->getPlanetRenderer()->setEnable(false);
+  [G3MWidget widget]->getPlanetRenderer()->setEnable(false);
   
   
   [G3MWidget widget]->setCameraPosition(Geodetic3D::fromDegrees(27.973105, -15.597545, 1000));
-  [G3MWidget widget]->setCameraPitch(Angle::fromDegrees(-30));
+  [G3MWidget widget]->setCameraPitch(Angle::fromDegrees(0));
+  [G3MWidget widget]->setCameraHeading(Angle::fromDegrees(30));
   
   
 }

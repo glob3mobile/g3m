@@ -23,6 +23,11 @@
 #include "Color.hpp"
 #include "MarksRenderer.hpp"
 
+#include "LabelImageBuilder.hpp"
+#include "IImageBuilderListener.hpp"
+#include "MutableVector3D.hpp"
+
+
 class StarsMeshShape: public MeshShape{
 public:
   StarsMeshShape(Geodetic3D* position,
@@ -144,6 +149,22 @@ class StarDomeRenderer : public DefaultRenderer {
   Color _color;
   
   MarksRenderer* _mr;
+  Vector3D* _constelationPos;
+  
+  class MarkLabelListener: public IImageBuilderListener{
+  public:
+    
+    StarDomeRenderer* _sdr;
+    const Planet* _planet;
+    
+    MarkLabelListener(StarDomeRenderer* sdr, const Planet* planet):
+    _sdr(sdr),_planet(planet){}
+    
+    virtual void imageCreated(const IImage*      image,
+                              const std::string& imageName);
+    
+    virtual void onError(const std::string& error){}
+  };
   
 public:
   
@@ -162,7 +183,8 @@ public:
   _clockTimeInDegrees(clockTimeInDegrees),
   _dayOfTheYear(dayOfTheYear),
   _color(color),
-  _mr(mr)
+  _mr(mr),
+  _constelationPos(NULL)
   {
   }
   
