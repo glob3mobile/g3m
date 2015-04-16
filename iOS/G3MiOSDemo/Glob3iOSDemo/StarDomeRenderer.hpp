@@ -61,41 +61,11 @@ public:
     
   }
   
-  double getTrueNorthAzimuthInDegrees(double siderealTime, const Geodetic2D viewerPosition) const{
-    const IMathUtils* mu = IMathUtils::instance();
-    
-    double delta = TO_RADIANS( _declination );
-    double alpha = TO_RADIANS( _ascencion );
-    double tetha = TO_RADIANS(siderealTime);
-    
-    double phi = (PI / 2) - viewerPosition._latitude._radians; // 90 - phi
-    
-    //ArcTan(-(Cos(Degree*delta)*Cos(Degree*(90 - phi))*Cos(Degree*(-alpha + tetha))) + Sin(Degree*delta)*Sin(Degree*(90 - phi)),-(Cos(Degree*delta)*Sin(Degree*(-alpha + tetha))))
-    
-    double azimuth = mu->atan2(-(mu->cos(delta) * mu->cos(phi)* mu->cos(-alpha + tetha) ) + mu->sin(delta)* mu->sin(phi),
-                               -(mu->cos(delta)* mu->sin(-alpha + tetha)));
-    
-    
-    return TO_DEGREES(azimuth);
-  }
+  double getTrueNorthAzimuthInDegrees(double siderealTime, const Geodetic2D viewerPosition) const;
   
-  double getAltitude(double siderealTime, const Geodetic2D viewerPosition) const{
-#warning TODO
-    
-    const IMathUtils* mu = IMathUtils::instance();
-    
-    double delta = TO_RADIANS( _declination );
-    double alpha = TO_RADIANS( _ascencion );
-    double tetha = TO_RADIANS(siderealTime);
-    
-    double phi = (PI / 2) - viewerPosition._latitude._radians; // 90 - phi
-    
-    //ArcSin(Cos(Degree*(90 - phi))*Sin(Degree*delta) + Cos(Degree*delta)*Cos(Degree*(-alpha + tetha))*Sin(Degree*(90 - phi)))
-    
-    double ascencion = mu->asin(mu->cos(phi)*mu->sin(delta) + mu->cos(delta)*mu->cos(-alpha + tetha)*mu->sin(phi));
-    
-    return TO_DEGREES(ascencion);
-  }
+  double getAltitude(double siderealTime, const Geodetic2D viewerPosition) const;
+  
+  Vector3D getStarDisplacementInDome(double domeHeight, double siderealTime, const Geodetic2D& domePos) const;
   
   ~Star(){
     delete _color;
@@ -149,22 +119,6 @@ class StarDomeRenderer : public DefaultRenderer {
   Color _color;
   
   MarksRenderer* _mr;
-  Vector3D* _constelationPos;
-  
-  class MarkLabelListener: public IImageBuilderListener{
-  public:
-    
-    StarDomeRenderer* _sdr;
-    const Planet* _planet;
-    
-    MarkLabelListener(StarDomeRenderer* sdr, const Planet* planet):
-    _sdr(sdr),_planet(planet){}
-    
-    virtual void imageCreated(const IImage*      image,
-                              const std::string& imageName);
-    
-    virtual void onError(const std::string& error){}
-  };
   
 public:
   
@@ -183,8 +137,7 @@ public:
   _clockTimeInDegrees(clockTimeInDegrees),
   _dayOfTheYear(dayOfTheYear),
   _color(color),
-  _mr(mr),
-  _constelationPos(NULL)
+  _mr(mr)
   {
   }
   
