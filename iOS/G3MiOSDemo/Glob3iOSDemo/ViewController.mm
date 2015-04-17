@@ -368,10 +368,21 @@ Mesh* createSectorMesh(const Planet* planet,
     }
   };
   
-  
+  class RotateStarsTask: public GTask{
+    ViewController* _vc;
+  public:
+    RotateStarsTask(ViewController* vc):_vc(vc){}
+    
+    void run(const G3MContext* context){
+      [_vc rotateStars];
+    }
+    
+  };
   
   
   G3MBuilder_iOS builder([self G3MWidget]);
+  
+  builder.addPeriodicalTask(new PeriodicalTask(TimeInterval::fromSeconds(0.1), new RotateStarsTask(self)));
   
   builder.addCameraConstraint(new DeviceOrientationCameraConstrainer(self));
   
@@ -384,21 +395,6 @@ Mesh* createSectorMesh(const Planet* planet,
   
   
   [self readStars: &builder];
-  
-  //mr->addMesh([self createStarDome]);
-//  
-//  std::vector<Star> stars;
-//  for(int i = 0; i < 100; i++){
-//    stars.push_back(Star((rand() % 36000) / 100.0, (rand() % 9000) / 100.0, Color::white()));
-//  }
-//  
-//  builder.addRenderer(new StarDomeRenderer(stars));
-  
-  
-  /*
-   [[self G3MWidget] widget]->addPeriodicalTask(TimeInterval::fromMilliseconds(100),
-   new CameraRollChangerTask([[self G3MWidget] widget]));
-   */
   
   builder.setPlanet(planet);
   builder.initializeWidget();
@@ -417,7 +413,6 @@ Mesh* createSectorMesh(const Planet* planet,
 -(Mesh*) createStarDome{
   
   FloatBufferBuilderFromCartesian3D* fbb = FloatBufferBuilderFromCartesian3D::builderWithFirstVertexAsCenter();
-  
   
   double domeHeight = 1e5;
   
@@ -504,6 +499,21 @@ const Planet* planet;
   return Angle::fromHoursMinutesSeconds(h, m, s)._degrees;
 }
 */
+
+
+std::vector<StarDomeRenderer*> _sdrs;
+
+- (void) rotateStars{
+  
+  for (int i = 0; i < _sdrs.size(); i++){
+    
+    _sdrs[i]->setClockTimeInDegrees(_sdrs[i]->getCurrentClockTimeInDegrees() + 0.6);
+    _sdrs[i]->clear();
+    
+  }
+  
+}
+
 -(void) readStars: (IG3MBuilder*) builder{
   
   //CALENDAR STUFF
@@ -540,7 +550,7 @@ const Planet* planet;
     
     NSString* constelationName = nil;
     std::vector<Star> stars;
-    
+  
     for(unsigned int i = 0; i < [lines count]; i++){
       NSString* line = [lines objectAtIndex:i];
       
@@ -558,6 +568,8 @@ const Planet* planet;
           
           StarDomeRenderer* sdr = new StarDomeRenderer(name, stars, gcPosition, clockTimeInDegrees, dayOfYear, c, mr);
           builder->addRenderer(sdr);
+          
+          _sdrs.push_back(sdr);
           
           stars.clear();
           

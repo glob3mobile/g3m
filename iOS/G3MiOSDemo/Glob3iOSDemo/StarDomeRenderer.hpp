@@ -143,6 +143,14 @@ public:
   
   ~StarDomeRenderer();
   
+  double getCurrentClockTimeInDegrees() const{
+    return _clockTimeInDegrees;
+  }
+  
+  void setClockTimeInDegrees(double v){
+    _clockTimeInDegrees = v;
+  }
+  
   void clear();
   
   static double getSiderealTime(double placeLongitudeInDegrees, double clockTimeInDegrees, int dayOfTheYear){

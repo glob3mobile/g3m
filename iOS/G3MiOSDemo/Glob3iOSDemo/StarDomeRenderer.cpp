@@ -82,6 +82,8 @@ Vector3D Star::getStarDisplacementInDome(double domeHeight, double siderealTime,
 StarDomeRenderer::~StarDomeRenderer()
 {
   clear();
+  _glState->_release();
+  delete _position;
 }
 
 
@@ -90,6 +92,7 @@ void StarDomeRenderer::clear(){
     _mr->removeAllMarks();
   }
   delete _starsShape;
+  _starsShape = NULL;
 }
 
 void StarDomeRenderer::initialize(const G3MContext* context) {
@@ -127,7 +130,7 @@ void StarDomeRenderer::initialize(const G3MContext* context) {
                                      fbb->create(),
                                      1.0,
                                      4.0,
-                                     &_color,
+                                     new Color(_color),
                                      NULL,
                                      1.0f,
                                      true,
@@ -188,6 +191,10 @@ void StarDomeRenderer::render(const G3MRenderContext* rc, GLState* glState){
   
   delete _position;
   _position = new Geodetic3D(_currentCamera->getGeodeticPosition());
+  
+  if (_starsShape == NULL){
+    initialize(rc);
+  }
   
   _starsShape->setPosition(*_position);
   
