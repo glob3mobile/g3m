@@ -67,8 +67,8 @@ public class MainActivity
       placeHolder.addView(_g3mWidget);
 
       
-      _g3mWidget.setAnimatedCameraPosition(new Geodetic3D(_merida, 6000.0), 
-      										TimeInterval.fromSeconds(15.0));
+      _g3mWidget.setAnimatedCameraPosition(new Geodetic3D(_merida, 5000.0), 
+      										TimeInterval.fromSeconds(7.5));
       
       // Camera position=(lat=38.908400780766385d, lon=-6.345933272891653d, height=664.4377440058383)
       
