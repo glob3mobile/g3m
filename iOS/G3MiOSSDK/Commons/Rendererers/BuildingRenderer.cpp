@@ -7,9 +7,16 @@
 //
 
 #include "BuildingRenderer.hpp"
+#include "TileRenderingListener.hpp"
+
+TileRenderingListener* _tileRenderingListener;
 
 BuildingRenderer::BuildingRenderer() {
     
+}
+
+TileRenderingListener* BuildingRenderer::getTileRenderingListener() {
+    return _tileRenderingListener;
 }
 
 void BuildingRenderer::setEnable(bool enable) {

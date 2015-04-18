@@ -31,6 +31,7 @@ class ChangedInfoListener;
 #include "SurfaceElevationProvider.hpp"
 #include "ChangedListener.hpp"
 #include "TouchEvent.hpp"
+#include "TileRenderingListener.hpp"
 
 /*
  * BuildingRenderer renders a given building mesh
@@ -53,6 +54,8 @@ public:
     void start(const G3MRenderContext* rc);
     
     void stop(const G3MRenderContext* rc);
+    
+    TileRenderingListener* getTileRenderingListener();
     
 private:
 
