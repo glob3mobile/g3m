@@ -65,10 +65,12 @@ void G3MStreamingPointCloud1DemoScene::rawActivate(const G3MContext *context) {
 //#warning TODO cache
   model->getPointCloudsRenderer()->addPointCloud(URL("http://glob3mobile.dyndns.org:8080"),
                                                  "Loudoun-VA_simplified2_LOD",
+                                                 //"Wallonia-Belgium_simplified2_LOD",
                                                  DownloadPriority::LOWER,
                                                  TimeInterval::zero(),
                                                  false,
                                                  PointCloudsRenderer::MIN_AVERAGE3_HEIGHT,
+                                                 //PointCloudsRenderer::MIN_MAX_HEIGHT,
                                                  pointSize,
                                                  verticalExaggeration,
                                                  deltaHeight,
