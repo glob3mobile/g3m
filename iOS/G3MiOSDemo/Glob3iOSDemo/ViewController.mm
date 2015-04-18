@@ -319,6 +319,7 @@ Mesh* createSectorMesh(const Planet* planet,
   
   G3MBuilder_iOS builder([self G3MWidget]);
   builder.setPlanet(Planet::createEarth());
+  //builder.setPlanet(Planet::createSphericalEarth());
   
   ElevationDataProvider* elevationDataProvider = new SingleBilElevationDataProvider(URL("file:///full-earth-2048x1024.bil", false),
                                                                                     Sector::fullSphere(),

@@ -40,6 +40,8 @@ private:
   mutable double          _angleBetweenInitialPoints;
   mutable bool            _validSingleDrag;
   
+  mutable double          _prevFactor;
+  
   mutable double          _dragRadius0;
   mutable double          _dragRadius1;
   mutable double          _lastDoubleDragAngle;
@@ -53,6 +55,12 @@ private:
   
   MutableMatrix44D createDragMatrix(const Vector3D initialPoint,
                                     const Vector3D finalPoint) const;
+  
+  double testDoubleDragIteration(double factor,
+                                 const Vector3D& finalRay0,
+                                 const Vector3D& finalRay1,
+                                 MutableMatrix44D& matrix) const;
+  
 
 public:
 
@@ -205,7 +213,7 @@ public:
   MutableMatrix44D doubleDrag(const Vector3D& finalRay0,
                               const Vector3D& finalRay1,
                               bool allowRotation) const;
-
+  
   Effect* createDoubleTapEffect(const Vector3D& origin,
                                 const Vector3D& centerRay,
                                 const Vector3D& touchedPosition) const;
