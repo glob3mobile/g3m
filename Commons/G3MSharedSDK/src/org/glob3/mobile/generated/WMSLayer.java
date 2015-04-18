@@ -308,6 +308,144 @@ public class WMSLayer extends RasterLayer
   }
 
 
+  public static WMSLayer newMercator(String mapLayer, URL mapServerURL, WMSServerVersion mapServerVersion, String queryLayer, URL queryServerURL, WMSServerVersion queryServerVersion, Sector dataSector, String format, String style, boolean isTransparent, int firstLevel, int maxLevel, LayerCondition condition, TimeInterval timeToCache, boolean readExpired, float transparency)
+  {
+     return newMercator(mapLayer, mapServerURL, mapServerVersion, queryLayer, queryServerURL, queryServerVersion, dataSector, format, style, isTransparent, firstLevel, maxLevel, condition, timeToCache, readExpired, transparency, new java.util.ArrayList<Info>());
+  }
+  public static WMSLayer newMercator(String mapLayer, URL mapServerURL, WMSServerVersion mapServerVersion, String queryLayer, URL queryServerURL, WMSServerVersion queryServerVersion, Sector dataSector, String format, String style, boolean isTransparent, int firstLevel, int maxLevel, LayerCondition condition, TimeInterval timeToCache, boolean readExpired)
+  {
+     return newMercator(mapLayer, mapServerURL, mapServerVersion, queryLayer, queryServerURL, queryServerVersion, dataSector, format, style, isTransparent, firstLevel, maxLevel, condition, timeToCache, readExpired, 1, new java.util.ArrayList<Info>());
+  }
+  public static WMSLayer newMercator(String mapLayer, URL mapServerURL, WMSServerVersion mapServerVersion, String queryLayer, URL queryServerURL, WMSServerVersion queryServerVersion, Sector dataSector, String format, String style, boolean isTransparent, int firstLevel, int maxLevel, LayerCondition condition, TimeInterval timeToCache)
+  {
+     return newMercator(mapLayer, mapServerURL, mapServerVersion, queryLayer, queryServerURL, queryServerVersion, dataSector, format, style, isTransparent, firstLevel, maxLevel, condition, timeToCache, true, 1, new java.util.ArrayList<Info>());
+  }
+  public static WMSLayer newMercator(String mapLayer, URL mapServerURL, WMSServerVersion mapServerVersion, String queryLayer, URL queryServerURL, WMSServerVersion queryServerVersion, Sector dataSector, String format, String style, boolean isTransparent, int firstLevel, int maxLevel, LayerCondition condition)
+  {
+     return newMercator(mapLayer, mapServerURL, mapServerVersion, queryLayer, queryServerURL, queryServerVersion, dataSector, format, style, isTransparent, firstLevel, maxLevel, condition, TimeInterval.fromDays(30), true, 1, new java.util.ArrayList<Info>());
+  }
+  public static WMSLayer newMercator(String mapLayer, URL mapServerURL, WMSServerVersion mapServerVersion, String queryLayer, URL queryServerURL, WMSServerVersion queryServerVersion, Sector dataSector, String format, String style, boolean isTransparent, int firstLevel, int maxLevel)
+  {
+     return newMercator(mapLayer, mapServerURL, mapServerVersion, queryLayer, queryServerURL, queryServerVersion, dataSector, format, style, isTransparent, firstLevel, maxLevel, null, TimeInterval.fromDays(30), true, 1, new java.util.ArrayList<Info>());
+  }
+  public static WMSLayer newMercator(String mapLayer, URL mapServerURL, WMSServerVersion mapServerVersion, String queryLayer, URL queryServerURL, WMSServerVersion queryServerVersion, Sector dataSector, String format, String style, boolean isTransparent, int firstLevel)
+  {
+     return newMercator(mapLayer, mapServerURL, mapServerVersion, queryLayer, queryServerURL, queryServerVersion, dataSector, format, style, isTransparent, firstLevel, 17, null, TimeInterval.fromDays(30), true, 1, new java.util.ArrayList<Info>());
+  }
+  public static WMSLayer newMercator(String mapLayer, URL mapServerURL, WMSServerVersion mapServerVersion, String queryLayer, URL queryServerURL, WMSServerVersion queryServerVersion, Sector dataSector, String format, String style, boolean isTransparent)
+  {
+     return newMercator(mapLayer, mapServerURL, mapServerVersion, queryLayer, queryServerURL, queryServerVersion, dataSector, format, style, isTransparent, 2, 17, null, TimeInterval.fromDays(30), true, 1, new java.util.ArrayList<Info>());
+  }
+  public static WMSLayer newMercator(String mapLayer, URL mapServerURL, WMSServerVersion mapServerVersion, String queryLayer, URL queryServerURL, WMSServerVersion queryServerVersion, Sector dataSector, String format, String style, boolean isTransparent, int firstLevel, int maxLevel, LayerCondition condition, TimeInterval timeToCache, boolean readExpired, float transparency, java.util.ArrayList<Info> layerInfo)
+  {
+  //  if (srs.compare("EPSG:4326") == 0) {
+  //    layerTilesRenderParameters = LayerTilesRenderParameters::createDefaultWGS84(0, 17);
+  //  }
+  //  else if (srs.compare("EPSG:3857") == 0) {
+  //    layerTilesRenderParameters = LayerTilesRenderParameters::createDefaultMercator(0, 17);
+  //  }
+    return new WMSLayer(mapLayer, mapServerURL, mapServerVersion, queryLayer, queryServerURL, queryServerVersion, dataSector, format, "EPSG:3857", style, isTransparent, condition, timeToCache, readExpired, LayerTilesRenderParameters.createDefaultMercator(firstLevel, maxLevel), transparency, layerInfo);
+  }
+
+  public static WMSLayer newMercator(String mapLayer, URL mapServerURL, WMSServerVersion mapServerVersion, Sector dataSector, String format, String style, boolean isTransparent, int firstLevel, int maxLevel, LayerCondition condition, TimeInterval timeToCache, boolean readExpired, float transparency)
+  {
+     return newMercator(mapLayer, mapServerURL, mapServerVersion, dataSector, format, style, isTransparent, firstLevel, maxLevel, condition, timeToCache, readExpired, transparency, new java.util.ArrayList<Info>());
+  }
+  public static WMSLayer newMercator(String mapLayer, URL mapServerURL, WMSServerVersion mapServerVersion, Sector dataSector, String format, String style, boolean isTransparent, int firstLevel, int maxLevel, LayerCondition condition, TimeInterval timeToCache, boolean readExpired)
+  {
+     return newMercator(mapLayer, mapServerURL, mapServerVersion, dataSector, format, style, isTransparent, firstLevel, maxLevel, condition, timeToCache, readExpired, 1, new java.util.ArrayList<Info>());
+  }
+  public static WMSLayer newMercator(String mapLayer, URL mapServerURL, WMSServerVersion mapServerVersion, Sector dataSector, String format, String style, boolean isTransparent, int firstLevel, int maxLevel, LayerCondition condition, TimeInterval timeToCache)
+  {
+     return newMercator(mapLayer, mapServerURL, mapServerVersion, dataSector, format, style, isTransparent, firstLevel, maxLevel, condition, timeToCache, true, 1, new java.util.ArrayList<Info>());
+  }
+  public static WMSLayer newMercator(String mapLayer, URL mapServerURL, WMSServerVersion mapServerVersion, Sector dataSector, String format, String style, boolean isTransparent, int firstLevel, int maxLevel, LayerCondition condition)
+  {
+     return newMercator(mapLayer, mapServerURL, mapServerVersion, dataSector, format, style, isTransparent, firstLevel, maxLevel, condition, TimeInterval.fromDays(30), true, 1, new java.util.ArrayList<Info>());
+  }
+  public static WMSLayer newMercator(String mapLayer, URL mapServerURL, WMSServerVersion mapServerVersion, Sector dataSector, String format, String style, boolean isTransparent, int firstLevel, int maxLevel)
+  {
+     return newMercator(mapLayer, mapServerURL, mapServerVersion, dataSector, format, style, isTransparent, firstLevel, maxLevel, null, TimeInterval.fromDays(30), true, 1, new java.util.ArrayList<Info>());
+  }
+  public static WMSLayer newMercator(String mapLayer, URL mapServerURL, WMSServerVersion mapServerVersion, Sector dataSector, String format, String style, boolean isTransparent, int firstLevel)
+  {
+     return newMercator(mapLayer, mapServerURL, mapServerVersion, dataSector, format, style, isTransparent, firstLevel, 17, null, TimeInterval.fromDays(30), true, 1, new java.util.ArrayList<Info>());
+  }
+  public static WMSLayer newMercator(String mapLayer, URL mapServerURL, WMSServerVersion mapServerVersion, Sector dataSector, String format, String style, boolean isTransparent)
+  {
+     return newMercator(mapLayer, mapServerURL, mapServerVersion, dataSector, format, style, isTransparent, 2, 17, null, TimeInterval.fromDays(30), true, 1, new java.util.ArrayList<Info>());
+  }
+  public static WMSLayer newMercator(String mapLayer, URL mapServerURL, WMSServerVersion mapServerVersion, Sector dataSector, String format, String style, boolean isTransparent, int firstLevel, int maxLevel, LayerCondition condition, TimeInterval timeToCache, boolean readExpired, float transparency, java.util.ArrayList<Info> layerInfo)
+  {
+    return new WMSLayer(mapLayer, mapServerURL, mapServerVersion, dataSector, format, "EPSG:3857", style, isTransparent, condition, timeToCache, readExpired, LayerTilesRenderParameters.createDefaultMercator(firstLevel, maxLevel), transparency, layerInfo);
+  }
+
+  public static WMSLayer newWGS84(String mapLayer, URL mapServerURL, WMSServerVersion mapServerVersion, String queryLayer, URL queryServerURL, WMSServerVersion queryServerVersion, Sector dataSector, String format, String style, boolean isTransparent, int firstLevel, int maxLevel, LayerCondition condition, TimeInterval timeToCache, boolean readExpired, float transparency)
+  {
+     return newWGS84(mapLayer, mapServerURL, mapServerVersion, queryLayer, queryServerURL, queryServerVersion, dataSector, format, style, isTransparent, firstLevel, maxLevel, condition, timeToCache, readExpired, transparency, new java.util.ArrayList<Info>());
+  }
+  public static WMSLayer newWGS84(String mapLayer, URL mapServerURL, WMSServerVersion mapServerVersion, String queryLayer, URL queryServerURL, WMSServerVersion queryServerVersion, Sector dataSector, String format, String style, boolean isTransparent, int firstLevel, int maxLevel, LayerCondition condition, TimeInterval timeToCache, boolean readExpired)
+  {
+     return newWGS84(mapLayer, mapServerURL, mapServerVersion, queryLayer, queryServerURL, queryServerVersion, dataSector, format, style, isTransparent, firstLevel, maxLevel, condition, timeToCache, readExpired, 1, new java.util.ArrayList<Info>());
+  }
+  public static WMSLayer newWGS84(String mapLayer, URL mapServerURL, WMSServerVersion mapServerVersion, String queryLayer, URL queryServerURL, WMSServerVersion queryServerVersion, Sector dataSector, String format, String style, boolean isTransparent, int firstLevel, int maxLevel, LayerCondition condition, TimeInterval timeToCache)
+  {
+     return newWGS84(mapLayer, mapServerURL, mapServerVersion, queryLayer, queryServerURL, queryServerVersion, dataSector, format, style, isTransparent, firstLevel, maxLevel, condition, timeToCache, true, 1, new java.util.ArrayList<Info>());
+  }
+  public static WMSLayer newWGS84(String mapLayer, URL mapServerURL, WMSServerVersion mapServerVersion, String queryLayer, URL queryServerURL, WMSServerVersion queryServerVersion, Sector dataSector, String format, String style, boolean isTransparent, int firstLevel, int maxLevel, LayerCondition condition)
+  {
+     return newWGS84(mapLayer, mapServerURL, mapServerVersion, queryLayer, queryServerURL, queryServerVersion, dataSector, format, style, isTransparent, firstLevel, maxLevel, condition, TimeInterval.fromDays(30), true, 1, new java.util.ArrayList<Info>());
+  }
+  public static WMSLayer newWGS84(String mapLayer, URL mapServerURL, WMSServerVersion mapServerVersion, String queryLayer, URL queryServerURL, WMSServerVersion queryServerVersion, Sector dataSector, String format, String style, boolean isTransparent, int firstLevel, int maxLevel)
+  {
+     return newWGS84(mapLayer, mapServerURL, mapServerVersion, queryLayer, queryServerURL, queryServerVersion, dataSector, format, style, isTransparent, firstLevel, maxLevel, null, TimeInterval.fromDays(30), true, 1, new java.util.ArrayList<Info>());
+  }
+  public static WMSLayer newWGS84(String mapLayer, URL mapServerURL, WMSServerVersion mapServerVersion, String queryLayer, URL queryServerURL, WMSServerVersion queryServerVersion, Sector dataSector, String format, String style, boolean isTransparent, int firstLevel)
+  {
+     return newWGS84(mapLayer, mapServerURL, mapServerVersion, queryLayer, queryServerURL, queryServerVersion, dataSector, format, style, isTransparent, firstLevel, 17, null, TimeInterval.fromDays(30), true, 1, new java.util.ArrayList<Info>());
+  }
+  public static WMSLayer newWGS84(String mapLayer, URL mapServerURL, WMSServerVersion mapServerVersion, String queryLayer, URL queryServerURL, WMSServerVersion queryServerVersion, Sector dataSector, String format, String style, boolean isTransparent)
+  {
+     return newWGS84(mapLayer, mapServerURL, mapServerVersion, queryLayer, queryServerURL, queryServerVersion, dataSector, format, style, isTransparent, 1, 17, null, TimeInterval.fromDays(30), true, 1, new java.util.ArrayList<Info>());
+  }
+  public static WMSLayer newWGS84(String mapLayer, URL mapServerURL, WMSServerVersion mapServerVersion, String queryLayer, URL queryServerURL, WMSServerVersion queryServerVersion, Sector dataSector, String format, String style, boolean isTransparent, int firstLevel, int maxLevel, LayerCondition condition, TimeInterval timeToCache, boolean readExpired, float transparency, java.util.ArrayList<Info> layerInfo)
+  {
+    return new WMSLayer(mapLayer, mapServerURL, mapServerVersion, queryLayer, queryServerURL, queryServerVersion, dataSector, format, "EPSG:4326", style, isTransparent, condition, timeToCache, readExpired, LayerTilesRenderParameters.createDefaultWGS84(firstLevel, maxLevel), transparency, layerInfo);
+  }
+
+  public static WMSLayer newWGS84(String mapLayer, URL mapServerURL, WMSServerVersion mapServerVersion, Sector dataSector, String format, String style, boolean isTransparent, int firstLevel, int maxLevel, LayerCondition condition, TimeInterval timeToCache, boolean readExpired, float transparency)
+  {
+     return newWGS84(mapLayer, mapServerURL, mapServerVersion, dataSector, format, style, isTransparent, firstLevel, maxLevel, condition, timeToCache, readExpired, transparency, new java.util.ArrayList<Info>());
+  }
+  public static WMSLayer newWGS84(String mapLayer, URL mapServerURL, WMSServerVersion mapServerVersion, Sector dataSector, String format, String style, boolean isTransparent, int firstLevel, int maxLevel, LayerCondition condition, TimeInterval timeToCache, boolean readExpired)
+  {
+     return newWGS84(mapLayer, mapServerURL, mapServerVersion, dataSector, format, style, isTransparent, firstLevel, maxLevel, condition, timeToCache, readExpired, 1, new java.util.ArrayList<Info>());
+  }
+  public static WMSLayer newWGS84(String mapLayer, URL mapServerURL, WMSServerVersion mapServerVersion, Sector dataSector, String format, String style, boolean isTransparent, int firstLevel, int maxLevel, LayerCondition condition, TimeInterval timeToCache)
+  {
+     return newWGS84(mapLayer, mapServerURL, mapServerVersion, dataSector, format, style, isTransparent, firstLevel, maxLevel, condition, timeToCache, true, 1, new java.util.ArrayList<Info>());
+  }
+  public static WMSLayer newWGS84(String mapLayer, URL mapServerURL, WMSServerVersion mapServerVersion, Sector dataSector, String format, String style, boolean isTransparent, int firstLevel, int maxLevel, LayerCondition condition)
+  {
+     return newWGS84(mapLayer, mapServerURL, mapServerVersion, dataSector, format, style, isTransparent, firstLevel, maxLevel, condition, TimeInterval.fromDays(30), true, 1, new java.util.ArrayList<Info>());
+  }
+  public static WMSLayer newWGS84(String mapLayer, URL mapServerURL, WMSServerVersion mapServerVersion, Sector dataSector, String format, String style, boolean isTransparent, int firstLevel, int maxLevel)
+  {
+     return newWGS84(mapLayer, mapServerURL, mapServerVersion, dataSector, format, style, isTransparent, firstLevel, maxLevel, null, TimeInterval.fromDays(30), true, 1, new java.util.ArrayList<Info>());
+  }
+  public static WMSLayer newWGS84(String mapLayer, URL mapServerURL, WMSServerVersion mapServerVersion, Sector dataSector, String format, String style, boolean isTransparent, int firstLevel)
+  {
+     return newWGS84(mapLayer, mapServerURL, mapServerVersion, dataSector, format, style, isTransparent, firstLevel, 17, null, TimeInterval.fromDays(30), true, 1, new java.util.ArrayList<Info>());
+  }
+  public static WMSLayer newWGS84(String mapLayer, URL mapServerURL, WMSServerVersion mapServerVersion, Sector dataSector, String format, String style, boolean isTransparent)
+  {
+     return newWGS84(mapLayer, mapServerURL, mapServerVersion, dataSector, format, style, isTransparent, 1, 17, null, TimeInterval.fromDays(30), true, 1, new java.util.ArrayList<Info>());
+  }
+  public static WMSLayer newWGS84(String mapLayer, URL mapServerURL, WMSServerVersion mapServerVersion, Sector dataSector, String format, String style, boolean isTransparent, int firstLevel, int maxLevel, LayerCondition condition, TimeInterval timeToCache, boolean readExpired, float transparency, java.util.ArrayList<Info> layerInfo)
+  {
+    return new WMSLayer(mapLayer, mapServerURL, mapServerVersion, dataSector, format, "EPSG:4326", style, isTransparent, condition, timeToCache, readExpired, LayerTilesRenderParameters.createDefaultWGS84(firstLevel, maxLevel), transparency, layerInfo);
+  }
+
   public WMSLayer(String mapLayer, URL mapServerURL, WMSServerVersion mapServerVersion, String queryLayer, URL queryServerURL, WMSServerVersion queryServerVersion, Sector dataSector, String format, String srs, String style, boolean isTransparent, LayerCondition condition, TimeInterval timeToCache, boolean readExpired, LayerTilesRenderParameters parameters, float transparency)
   {
      this(mapLayer, mapServerURL, mapServerVersion, queryLayer, queryServerURL, queryServerVersion, dataSector, format, srs, style, isTransparent, condition, timeToCache, readExpired, parameters, transparency, new java.util.ArrayList<Info>());
