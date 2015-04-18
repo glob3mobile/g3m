@@ -4,15 +4,6 @@ package org.glob3.mobile.demo;
 
 import java.util.Arrays;
 
-import org.glob3.mobile.generated.Angle;
-import org.glob3.mobile.generated.Geodetic3D;
-import org.glob3.mobile.generated.Layer;
-import org.glob3.mobile.generated.LayerSet;
-import org.glob3.mobile.generated.Planet;
-import org.glob3.mobile.generated.TimeInterval;
-import org.glob3.mobile.specific.G3MBuilder_Android;
-import org.glob3.mobile.specific.G3MWidget_Android;
-
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;

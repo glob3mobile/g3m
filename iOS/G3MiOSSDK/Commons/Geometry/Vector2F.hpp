@@ -50,6 +50,39 @@ public:
 
   const double squaredDistanceTo(const Vector2F& that) const;
   
+  Vector2F add(const Vector2F& v) const {
+    return Vector2F(_x + v._x,
+                    _y + v._y);
+  }
+  
+  bool isNaN() const{
+    return ISNAN(_x) || ISNAN(_y);
+  }
+  
+  Vector2F sub(const Vector2F& v) const {
+    return Vector2F(_x - v._x,
+                    _y - v._y);
+  }
+  
+  Vector2F times(const float magnitude) const {
+    return Vector2F(_x * magnitude,
+                    _y * magnitude);
+  }
+  
+  Vector2F div(float v) const {
+    return Vector2F(_x / v, _y / v);
+  }
+  
+  double length() const {
+    return IMathUtils::instance()->sqrt(squaredLength());
+  }
+  
+  double squaredLength() const {
+    return _x * _x + _y * _y ;
+  }
+  
+  Vector2F clampLength(float min, float max) const;
+  
 };
 
 #endif

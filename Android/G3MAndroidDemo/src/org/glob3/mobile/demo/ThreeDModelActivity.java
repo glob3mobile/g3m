@@ -2,20 +2,6 @@
 
 package org.glob3.mobile.demo;
 
-import org.glob3.mobile.generated.AltitudeMode;
-import org.glob3.mobile.generated.Angle;
-import org.glob3.mobile.generated.Color;
-import org.glob3.mobile.generated.Geodetic3D;
-import org.glob3.mobile.generated.LayerSet;
-import org.glob3.mobile.generated.Planet;
-import org.glob3.mobile.generated.SGShape;
-import org.glob3.mobile.generated.ShapeLoadListener;
-import org.glob3.mobile.generated.ShapesRenderer;
-import org.glob3.mobile.generated.TimeInterval;
-import org.glob3.mobile.generated.URL;
-import org.glob3.mobile.specific.G3MBuilder_Android;
-import org.glob3.mobile.specific.G3MWidget_Android;
-
 import android.app.Activity;
 import android.os.Bundle;
 import android.widget.RelativeLayout;

@@ -4,36 +4,6 @@ package org.glob3.mobile.demo;
 
 import java.util.ArrayList;
 
-import org.glob3.mobile.generated.AltitudeMode;
-import org.glob3.mobile.generated.Angle;
-import org.glob3.mobile.generated.Color;
-import org.glob3.mobile.generated.ElevationDataProvider;
-import org.glob3.mobile.generated.GEO2DLineStringGeometry;
-import org.glob3.mobile.generated.GEO2DMultiLineStringGeometry;
-import org.glob3.mobile.generated.GEO2DMultiPolygonGeometry;
-import org.glob3.mobile.generated.GEO2DPointGeometry;
-import org.glob3.mobile.generated.GEO2DPolygonGeometry;
-import org.glob3.mobile.generated.GEOLineRasterSymbol;
-import org.glob3.mobile.generated.GEOMarkSymbol;
-import org.glob3.mobile.generated.GEOPolygonRasterSymbol;
-import org.glob3.mobile.generated.GEORenderer;
-import org.glob3.mobile.generated.GEOSymbol;
-import org.glob3.mobile.generated.GEOSymbolizer;
-import org.glob3.mobile.generated.Geodetic2D;
-import org.glob3.mobile.generated.Geodetic3D;
-import org.glob3.mobile.generated.JSONObject;
-import org.glob3.mobile.generated.LayerSet;
-import org.glob3.mobile.generated.MapBoxLayer;
-import org.glob3.mobile.generated.Mark;
-import org.glob3.mobile.generated.MarkTouchListener;
-import org.glob3.mobile.generated.Sector;
-import org.glob3.mobile.generated.SingleBilElevationDataProvider;
-import org.glob3.mobile.generated.TimeInterval;
-import org.glob3.mobile.generated.URL;
-import org.glob3.mobile.generated.Vector2I;
-import org.glob3.mobile.specific.G3MBuilder_Android;
-import org.glob3.mobile.specific.G3MWidget_Android;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
