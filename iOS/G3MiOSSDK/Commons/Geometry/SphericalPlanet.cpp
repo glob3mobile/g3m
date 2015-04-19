@@ -420,14 +420,18 @@ double SphericalPlanet::testDoubleDragIteration(double factor,
     double angulo2 = angles._y;
     double dif1 = Angle::distanceBetweenAnglesInRadians(angulo1, _lastDoubleDragAngle);
     double dif2 = Angle::distanceBetweenAnglesInRadians(angulo2, _lastDoubleDragAngle);
-    _lastDoubleDragAngle = (dif1 < dif2)? angulo1 : angulo2;
+    double finalAngle = (dif1 < dif2)? angulo1 : angulo2;
+    if (finalAngle != finalAngle) {
+        matrix.copyValue(MutableMatrix44D::invalid());
+        return 0;
+    }
     
-    //Creating rotating matrix
+    //Creating rotation matrix
+    _lastDoubleDragAngle = finalAngle;
     Vector3D normal0 = geodeticSurfaceNormal(_initialPoint0);
     MutableMatrix44D rotation = MutableMatrix44D::createGeneralRotationMatrix(Angle::fromRadians(-_lastDoubleDragAngle),normal0, _initialPoint0.asVector3D());
     matrix.copyValueOfMultiplication(rotation, matrix);// = rotation.multiply(matrix);
   }
-  
   
   {
     Vector3D P0   = positionCamera.transformedBy(matrix, 1.0).asVector3D();
@@ -505,7 +509,7 @@ MutableMatrix44D SphericalPlanet::doubleDrag(const Vector3D& finalRay0,
       minFactor = factor;
   }
   
-  printf("Converge doble drag %d iteraciones con factor=%.3f\n", iter, factor);
+  //printf("Converge doble drag %d iteraciones con factor=%.3f\n", iter, factor);
   
   _prevFactor = factor;
   return matrix;
