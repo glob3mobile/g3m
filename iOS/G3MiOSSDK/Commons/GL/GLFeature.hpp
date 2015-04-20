@@ -81,8 +81,8 @@ private:
   
 public:
   BillboardGLFeature(const Vector3D& position,
-                     int textureWidth,
-                     int textureHeight,
+                     float billboardWidth,
+                     float billboardHeight,
                      float anchorU, float anchorV);
   
   void applyOnGlobalGLState(GLGlobalState* state) const;

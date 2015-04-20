@@ -667,7 +667,7 @@ void Mark::setOnScreenSizeOnPixels(int width, int height){
   if (_glState != NULL){
     BillboardGLFeature* b = (BillboardGLFeature*) _glState->getGLFeature(GLF_BILLBOARD);
     if (b != NULL){
-      b->changeSize((int)_textureWidth*10, (int)_textureHeight*10);
+      b->changeSize((int)_textureWidth, (int)_textureHeight);
     }
   }
 }

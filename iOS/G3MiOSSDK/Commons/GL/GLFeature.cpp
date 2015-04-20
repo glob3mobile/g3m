@@ -39,8 +39,8 @@ void ViewportExtentGLFeature::changeExtent(int viewportWidth,
 }
 
 BillboardGLFeature::BillboardGLFeature(const Vector3D& position,
-                                       int textureWidth,
-                                       int textureHeight,
+                                       float billboardWidth,
+                                       float billboardHeight,
                                        float anchorU, float anchorV) :
 GLFeature(NO_GROUP, GLF_BILLBOARD)
 {
@@ -51,7 +51,7 @@ GLFeature(NO_GROUP, GLF_BILLBOARD)
                            false);
   
   
-  _size = new GPUUniformValueVec2FloatMutable(textureWidth, textureHeight);
+  _size = new GPUUniformValueVec2FloatMutable(billboardWidth, billboardHeight);
   _values->addUniformValue(TEXTURE_EXTENT,
                            _size,
                            false);
