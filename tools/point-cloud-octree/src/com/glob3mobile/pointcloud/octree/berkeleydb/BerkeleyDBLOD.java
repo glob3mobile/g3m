@@ -31,8 +31,8 @@ import es.igosoftware.util.GUndeterminateProgress;
 
 
 public class BerkeleyDBLOD
-implements
-PersistentLOD {
+         implements
+            PersistentLOD {
 
 
    public static PersistentLOD openReadOnly(final File cloudDirectory,
@@ -138,8 +138,8 @@ PersistentLOD {
 
 
    static class BerkeleyDBTransaction
-   implements
-   PersistentLOD.Transaction {
+            implements
+               PersistentLOD.Transaction {
 
       final com.sleepycat.je.Transaction _txn;
 
@@ -496,10 +496,10 @@ PersistentLOD {
 
 
    private static class BerkeleyLODDBStatistics
-   implements
-   PersistentLOD.Visitor,
-   PersistentLOD.Statistics,
-   Serializable {
+            implements
+               PersistentLOD.Visitor,
+               PersistentLOD.Statistics,
+               Serializable {
 
       private static final long      serialVersionUID = 3L;
 
@@ -607,7 +607,7 @@ PersistentLOD {
          System.out.println("   Points: " + _pointsCount);
          System.out.println("   Sector: " + _sector);
          System.out.println("   Heights: " + _minHeight + "/" + _maxHeight + //
-                  " (delta=" + (_maxHeight - _minHeight) + ")" + //
+                            " (delta=" + (_maxHeight - _minHeight) + ")" + //
                             " average=" + ((float) (_sumHeight / _pointsCount)));
          System.out.println("   Nodes: " + _nodesCount);
          System.out.println("    Depth: " + _minDepth + "/" + _maxDepth + ", Average=" + ((float) _sumDepth / _nodesCount));
