@@ -49,7 +49,7 @@
       constellationName = [comp objectAtIndex:0];
       NSLog(@"CONSTELLATION %@", [comp objectAtIndex:0]);
     } else{ //STAR
-      NSString* name = [comp objectAtIndex:0];
+      NSString* name = [comp objectAtIndex:1];
       
       Angle ascension = Angle::fromClockHoursMinutesSeconds([self getNumFromArray:comp index:2],
                                                             [self getNumFromArray:comp index:3],

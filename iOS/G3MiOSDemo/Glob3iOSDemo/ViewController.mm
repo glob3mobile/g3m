@@ -547,81 +547,22 @@ std::vector<StarDomeRenderer*> _sdrs;
                                               encoding: NSMacOSRomanStringEncoding
                                                  error: nil];
     
-    [StarsParser parse:csv];
+    std::vector<Constellation> cs = [StarsParser parse:csv];
     
     
-    
-    NSArray* lines = [csv componentsSeparatedByString:@"\r"];
-    
-    NSString* constelationName = nil;
-    std::vector<Star> stars;
-  
-    for(unsigned int i = 0; i < [lines count]; i++){
-      NSString* line = [lines objectAtIndex:i];
+    for(unsigned int i = 0; i < cs.size(); i++){
+      Constellation c = cs[i];
       
-      NSArray* comp = [line componentsSeparatedByString:@";"];
-      if ([line rangeOfString:@";;"].location != NSNotFound){ //CONSTELATION
-        
-        if (constelationName != nil && stars.size() > 0){
-          //PUSHING CONSTELATION
-          std::string name = [constelationName UTF8String];
-          
-          Color c = Color::red().wheelStep([lines count], i);
-          
-          MarksRenderer* mr = new MarksRenderer(true);
-          builder->addRenderer(mr);
-          
-          StarDomeRenderer* sdr = new StarDomeRenderer(name, stars, gcPosition, clockTimeInDegrees, dayOfYear, c, mr);
-          builder->addRenderer(sdr);
-          
-          _sdrs.push_back(sdr);
-          
-          stars.clear();
-          
-//          if (name.compare("GEMINIS") != 0){
-//            sdr->setEnable(false);
-//          } else{
-//            sdr->setEnable(true);
-//          }
-        }
-        
-        
-        constelationName = [comp objectAtIndex:0];
-        NSLog(@"CONSTELATION %@", [comp objectAtIndex:0]);
-      } else{ //STAR
-        NSString* name = [comp objectAtIndex:0];
-        
-        Angle ascension = Angle::fromClockHoursMinutesSeconds([self getNumFromArray:comp index:1],
-                                                             [self getNumFromArray:comp index:2],
-                                                             [self getNumFromArray:comp index:3]);
-        
-        //MAL
-//        Angle declination = Angle::fromClockHoursMinutesSeconds([self getNumFromArray:comp index:4],
-//                                                                [self getNumFromArray:comp index:5],
-//                                                                [self getNumFromArray:comp index:6]);
-        
-        Angle declination = Angle::fromDegreesMinutesSeconds([self getNumFromArray:comp index:4],
-                                                                [self getNumFromArray:comp index:5],
-                                                                [self getNumFromArray:comp index:6]);
-        
-        
-//        double altitude = [self toDegressHours:[self getNumFromArray:comp index:1]
-//                                       minutes:[self getNumFromArray:comp index:2]
-//                                       seconds:[self getNumFromArray:comp index:3]];
-//        
-//        double declination = [self toDegressHours:[self getNumFromArray:comp index:4]
-//                                          minutes:[self getNumFromArray:comp index:5]
-//                                          seconds:[self getNumFromArray:comp index:6]];
-        
-        stars.push_back(Star(ascension._degrees, declination._degrees, Color::white()));
-        
-        NSLog(@"STAR %@ %f %f", name, ascension._degrees, declination._degrees);
-        
-      }
       
+      MarksRenderer* mr = new MarksRenderer(true);
+      builder->addRenderer(mr);
+      
+      StarDomeRenderer* sdr = new StarDomeRenderer(c._name, c._stars, gcPosition, clockTimeInDegrees, dayOfYear, *c._color, mr);
+      builder->addRenderer(sdr);
+      
+      _sdrs.push_back(sdr);
     }
-    
-    
+
   }
   
 }
