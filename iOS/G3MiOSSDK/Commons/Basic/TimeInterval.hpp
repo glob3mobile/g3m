@@ -6,19 +6,17 @@
 //  Copyright (c) 2012 IGO Software SL. All rights reserved.
 //
 
-#ifndef G3MiOSSDK_TimeInterval_hpp
-#define G3MiOSSDK_TimeInterval_hpp
+#ifndef G3MiOSSDK_TimeInterval
+#define G3MiOSSDK_TimeInterval
 
-#include "IMathUtils.hpp"
+//#include "IMathUtils.hpp"
 
 
 class TimeInterval {
 private:
-
   explicit TimeInterval(const long long milliseconds) :
   _milliseconds(milliseconds)
   {
-
   }
 
 public:
@@ -27,7 +25,6 @@ public:
   TimeInterval(const TimeInterval& other) :
   _milliseconds(other._milliseconds)
   {
-
   }
 
   static TimeInterval fromMilliseconds(const long long milliseconds) {
@@ -50,9 +47,7 @@ public:
     return TimeInterval::fromHours(days * 24.0);
   }
 
-  static TimeInterval forever() {
-    return TimeInterval(IMathUtils::instance()->maxInt64());
-  }
+  static TimeInterval forever();
 
   static TimeInterval zero() {
     return TimeInterval(0);

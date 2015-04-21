@@ -9,7 +9,7 @@
 #ifndef __G3MiOSSDK__GEORenderer__
 #define __G3MiOSSDK__GEORenderer__
 
-#include "LeafRenderer.hpp"
+#include "DefaultRenderer.hpp"
 #include "DownloadPriority.hpp"
 #include "URL.hpp"
 #include "TimeInterval.hpp"
@@ -20,10 +20,10 @@ class GEOSymbolizer;
 class MeshRenderer;
 class MarksRenderer;
 class ShapesRenderer;
-class GEOTileRasterizer;
+class GEOVectorLayer;
 class GEORenderer_ObjectSymbolizerPair;
 
-class GEORenderer : public LeafRenderer {
+class GEORenderer : public DefaultRenderer {
 private:
 
   class LoadQueueItem {
@@ -62,22 +62,18 @@ private:
   };
 
   void drainLoadQueue();
+  
+  void cleanLoadQueue();
+
 
   std::vector<GEORenderer_ObjectSymbolizerPair*> _children;
 
   const GEOSymbolizer* _defaultSymbolizer;
 
-  MeshRenderer*      _meshRenderer;
-  ShapesRenderer*    _shapesRenderer;
-  MarksRenderer*     _marksRenderer;
-  GEOTileRasterizer* _geoTileRasterizer;
-
-#ifdef C_CODE
-  const G3MContext* _context;
-#endif
-#ifdef JAVA_CODE
-  private G3MContext _context;
-#endif
+  MeshRenderer*   _meshRenderer;
+  ShapesRenderer* _shapesRenderer;
+  MarksRenderer*  _marksRenderer;
+  GEOVectorLayer*  _geoVectorLayer;
 
   std::vector<LoadQueueItem*> _loadQueue;
 
@@ -98,20 +94,22 @@ public:
    meshRenderer:   Can be NULL as long as no GEOMarkSymbol is used in any symbolizer.
    shapesRenderer: Can be NULL as long as no GEOShapeSymbol is used in any symbolizer.
    marksRenderer:  Can be NULL as long as no GEOMeshSymbol is used in any symbolizer.
+   geoVectorLayer: Can be NULL as long as no GEORasterSymbol is used in any symbolizer.
 
    */
   GEORenderer(const GEOSymbolizer* defaultSymbolizer,
               MeshRenderer*        meshRenderer,
               ShapesRenderer*      shapesRenderer,
               MarksRenderer*       marksRenderer,
-              GEOTileRasterizer*   geoTileRasterizer) :
+              GEOVectorLayer*      geoVectorLayer
+              ) :
   _defaultSymbolizer(defaultSymbolizer),
   _meshRenderer(meshRenderer),
   _shapesRenderer(shapesRenderer),
   _marksRenderer(marksRenderer),
-  _geoTileRasterizer(geoTileRasterizer),
-  _context(NULL)
+  _geoVectorLayer(geoVectorLayer)
   {
+    initialize(NULL);
   }
 
   virtual ~GEORenderer();
@@ -123,60 +121,37 @@ public:
    */
   void addGEOObject(GEOObject* geoObject,
                     GEOSymbolizer* symbolizer = NULL);
-
-  void onResume(const G3MContext* context) {
-
-  }
-
-  void onPause(const G3MContext* context) {
-
-  }
-
-  void onDestroy(const G3MContext* context) {
-
-  }
-
-  void initialize(const G3MContext* context);
-
-  RenderState getRenderState(const G3MRenderContext* rc) {
-    return RenderState::ready();
-  }
-
-  void render(const G3MRenderContext* rc, GLState* glState);
-
-  bool onTouchEvent(const G3MEventContext* ec,
-                    const TouchEvent* touchEvent) {
-    return false;
-  }
+  
+  void onChangedContext();
+  
+  void onLostContext();
+  
+  void render(const G3MRenderContext* rc,
+              GLState* glState);
 
   void onResizeViewportEvent(const G3MEventContext* ec,
                              int width, int height) {
 
   }
 
-  void start(const G3MRenderContext* rc) {
-
-  }
-
-  void stop(const G3MRenderContext* rc) {
-
-  }
-
-  MeshRenderer* getMeshRenderer() {
+  MeshRenderer* getMeshRenderer() const {
     return _meshRenderer;
   }
 
-  MarksRenderer* getMarksRenderer() {
+  MarksRenderer* getMarksRenderer() const {
     return _marksRenderer;
   }
 
-  ShapesRenderer* getShapesRenderer() {
+  ShapesRenderer* getShapesRenderer() const {
     return _shapesRenderer;
   }
 
-  GEOTileRasterizer* getGEOTileRasterizer() {
-    return _geoTileRasterizer;
+  GEOVectorLayer* getGEOVectorLayer() const {
+    return _geoVectorLayer;
   }
+
+  void setGEOVectorLayer(GEOVectorLayer* geoVectorLayer,
+                         bool deletePrevious);
 
   void loadJSON(const URL& url) {
     loadJSON(url,

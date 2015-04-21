@@ -26,10 +26,10 @@ bool GEOMarkSymbol::symbolize(const G3MRenderContext* rc,
                               MeshRenderer*           meshRenderer,
                               ShapesRenderer*         shapesRenderer,
                               MarksRenderer*          marksRenderer,
-                              GEOTileRasterizer*      geoTileRasterizer) const {
+                              GEOVectorLayer*         geoVectorLayer) const {
   if (_mark != NULL) {
     if (marksRenderer == NULL) {
-      ILogger::instance()->logError("Can't simbolize with Mark, MarksRenderer was not set");
+      ILogger::instance()->logError("Can't symbolize with Mark, MarksRenderer was not set");
       delete _mark;
     }
     else {

@@ -16,24 +16,35 @@ AndTileCondition::~AndTileCondition() {
   }
 }
 
-bool AndTileCondition::isAvailable(const G3MRenderContext* rc,
-                                   const Tile* tile) const {
-  int size = _children.size();
-  for (int i = 0; i < size; i++) {
-    LayerCondition* child = _children[i];
-    if (!child->isAvailable(rc, tile)) {
-      return false;
-    }
-  }
-  return true;
-}
+//bool AndTileCondition::isAvailable(const G3MRenderContext* rc,
+//                                   const Tile* tile) const {
+//  int size = _children.size();
+//  for (int i = 0; i < size; i++) {
+//    LayerCondition* child = _children[i];
+//    if (!child->isAvailable(rc, tile)) {
+//      return false;
+//    }
+//  }
+//  return true;
+//}
+//
+//bool AndTileCondition::isAvailable(const G3MEventContext* ec,
+//                                   const Tile* tile) const {
+//  int size = _children.size();
+//  for (int i = 0; i < size; i++) {
+//    LayerCondition* child = _children[i];
+//    if (!child->isAvailable(ec, tile)) {
+//      return false;
+//    }
+//  }
+//  return true;
+//}
 
-bool AndTileCondition::isAvailable(const G3MEventContext* ec,
-                                   const Tile* tile) const {
+bool AndTileCondition::isAvailable(const Tile* tile) const {
   int size = _children.size();
   for (int i = 0; i < size; i++) {
     LayerCondition* child = _children[i];
-    if (!child->isAvailable(ec, tile)) {
+    if (!child->isAvailable(tile)) {
       return false;
     }
   }

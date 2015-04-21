@@ -134,24 +134,28 @@ GPUUniformKey GPUVariable::getUniformKey(const std::string& name) {
     return BILLBOARD_POSITION;
   }
 
-  if (name.compare("uRotationCenterTexCoord") == 0){
+  if (name.compare("uRotationCenterTexCoord") == 0) {
     return ROTATION_CENTER_TEXTURE_COORDS;
   }
 
-  if (name.compare("uRotationAngleTexCoord") == 0){
+  if (name.compare("uRotationAngleTexCoord") == 0) {
     return ROTATION_ANGLE_TEXTURE_COORDS;
   }
 
-  if (name.compare("Sampler") == 0){
+  if (name.compare("Sampler") == 0) {
     return SAMPLER;
   }
 
-  if (name.compare("Sampler2") == 0){
+  if (name.compare("Sampler2") == 0) {
     return SAMPLER2;
   }
 
-  if (name.compare("Sampler3") == 0){
+  if (name.compare("Sampler3") == 0) {
     return SAMPLER3;
+  }
+  
+  if (name.compare("uTranslation2D") == 0) {
+    return TRANSLATION_2D;
   }
 
   return UNRECOGNIZED_UNIFORM;
@@ -181,6 +185,10 @@ GPUAttributeKey GPUVariable::getAttributeKey(const std::string& name) {
 
   if (name.compare("aNormal") == 0) {
     return NORMAL;
+  }
+  
+  if (name.compare("aPosition2D") == 0) {
+    return POSITION_2D;
   }
 
   return UNRECOGNIZED_ATTRIBUTE;

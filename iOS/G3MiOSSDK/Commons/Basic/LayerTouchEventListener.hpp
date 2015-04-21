@@ -6,8 +6,8 @@
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
-#ifndef G3MiOSSDK_TerrainTouchEventListener_hpp
-#define G3MiOSSDK_TerrainTouchEventListener_hpp
+#ifndef G3MiOSSDK_TerrainTouchEventListener
+#define G3MiOSSDK_TerrainTouchEventListener
 
 #include "Geodetic3D.hpp"
 #include "Sector.hpp"

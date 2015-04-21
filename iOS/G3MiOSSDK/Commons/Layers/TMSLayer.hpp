@@ -9,34 +9,39 @@
 #ifndef __G3MiOSSDK__TMSLayer__
 #define __G3MiOSSDK__TMSLayer__
 
-#include "Layer.hpp"
+#include "RasterLayer.hpp"
+#include "URL.hpp"
+#include "Sector.hpp"
 
 
-class TMSLayer: public Layer {
+class TMSLayer: public RasterLayer {
 private:
-
+  
 #ifdef C_CODE
   const URL _mapServerURL;
 #endif
 #ifdef JAVA_CODE
   private final URL _mapServerURL;
 #endif
-
+  
   const std::string   _mapLayer;
-  Sector              _sector;
+  const Sector        _dataSector;
   const std::string   _format;
   const bool          _isTransparent;
   
 protected:
-  
   std::string getLayerType() const {
-    return "TMS";
+    return "TMSLayer";
   }
   
+  const TileImageContribution* rawContribution(const Tile* tile) const;
+  
+  const URL createURL(const Tile* tile) const;
+  
   bool rawIsEquals(const Layer* that) const;
-
+  
 public:
-
+  
   TMSLayer(const std::string& mapLayer,
            const URL& mapServerURL,
            const Sector& sector,
@@ -46,20 +51,23 @@ public:
            const TimeInterval& timeToCache,
            bool readExpired,
            const LayerTilesRenderParameters* parameters = NULL,
-           float transparency = (float)1.0);
-
-  std::vector<Petition*> createTileMapPetitions(const G3MRenderContext* rc,
-                                                const LayerTilesRenderParameters* layerTilesRenderParameters,
-                                                const Tile* tile) const;
-
+           float transparency = 1,
+           std::vector<const Info*>*  layerInfo = new std::vector<const Info*>());
+  
   URL getFeatureInfoURL(const Geodetic2D& g,
                         const Sector& sector) const;
-
+  
   const std::string description() const;
   
-  TMSLayer* copy() const;
-
   RenderState getRenderState();
+  
+  
+  TMSLayer* copy() const;
+  
+  const Sector getDataSector() const {
+    return _dataSector;
+  }
+  
 };
 
 #endif

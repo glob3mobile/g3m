@@ -37,7 +37,7 @@ public:
                   IImage* image,
                   bool expired) {
     _listener->imageCreated(image,
-                            url.getPath());
+                            url._path);
     if (_deleteListener) {
       delete _listener;
       _listener = NULL;
@@ -45,7 +45,7 @@ public:
   }
 
   void onError(const URL& url) {
-    _listener->onError("Error downloading image from \"" + url.getPath() + "\"");
+    _listener->onError("Error downloading image from \"" + url._path + "\"");
     if (_deleteListener) {
       delete _listener;
       _listener = NULL;
@@ -53,7 +53,7 @@ public:
   }
 
   void onCancel(const URL& url) {
-    _listener->onError("Canceled download image from \"" + url.getPath() + "\"");
+    _listener->onError("Canceled download image from \"" + url._path + "\"");
     if (_deleteListener) {
       delete _listener;
       _listener = NULL;

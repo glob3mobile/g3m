@@ -20,6 +20,8 @@
 #include "MeshRenderer.hpp"
 #include "ShapesRenderer.hpp"
 #include "MarksRenderer.hpp"
+#include "GEOVectorLayer.hpp"
+
 
 class GEORenderer_ObjectSymbolizerPair {
 public:
@@ -81,7 +83,7 @@ void GEORenderer::render(const G3MRenderContext* rc, GLState* glState) {
                                     _meshRenderer,
                                     _shapesRenderer,
                                     _marksRenderer,
-                                    _geoTileRasterizer);
+                                    _geoVectorLayer);
       }
 
       delete pair;
@@ -126,11 +128,14 @@ public:
   ~GEORenderer_GEOObjectParserAsyncTask() {
     delete _buffer;
 //    delete _geoObject;
+#ifdef JAVA_CODE
+    super.dispose();
+#endif
   }
 
   void runInBackground(const G3MContext* context) {
 //    ILogger::instance()->logInfo("Parsing GEOObject buffer from \"%s\" (%db)",
-//                                 _url.getPath().c_str(),
+//                                 _url._path.c_str(),
 //                                 _buffer->size());
 
     if (_isBSON) {
@@ -146,7 +151,7 @@ public:
 
   void onPostExecute(const G3MContext* context) {
     if (_geoObject == NULL) {
-      ILogger::instance()->logError("Error parsing GEOJSON from \"%s\"", _url.getPath().c_str());
+      ILogger::instance()->logError("Error parsing GEOJSON from \"%s\"", _url._path.c_str());
     }
     else {
 //      ILogger::instance()->logInfo("Adding GEOObject to _geoRenderer");
@@ -180,7 +185,7 @@ public:
                   IByteBuffer* buffer,
                   bool expired) {
     ILogger::instance()->logInfo("Downloaded GEOObject buffer from \"%s\" (%db)",
-                                 url.getPath().c_str(),
+                                 url._path.c_str(),
                                  buffer->size());
 
     _threadUtils->invokeAsyncTask(new GEORenderer_GEOObjectParserAsyncTask(url,
@@ -192,11 +197,11 @@ public:
   }
 
   void onError(const URL& url) {
-    ILogger::instance()->logError("Error downloading \"%s\"", url.getPath().c_str());
+    ILogger::instance()->logError("Error downloading \"%s\"", url._path.c_str());
   }
 
   void onCancel(const URL& url) {
-    ILogger::instance()->logInfo("Canceled download of \"%s\"", url.getPath().c_str());
+    ILogger::instance()->logInfo("Canceled download of \"%s\"", url._path.c_str());
   }
 
   void onCanceledDownload(const URL& url,
@@ -212,7 +217,7 @@ void GEORenderer::requestBuffer(const URL& url,
                                 const TimeInterval& timeToCache,
                                 bool readExpired,
                                 bool isBSON) {
-//  ILogger::instance()->logInfo("Requesting GEOObject from \"%s\"", url.getPath().c_str());
+//  ILogger::instance()->logInfo("Requesting GEOObject from \"%s\"", url._path.c_str());
   IDownloader* downloader = _context->getDownloader();
   downloader->requestBuffer(url,
                             priority,
@@ -241,11 +246,25 @@ void GEORenderer::drainLoadQueue() {
   _loadQueue.clear();
 }
 
-void GEORenderer::initialize(const G3MContext* context) {
-  _context = context;
+void GEORenderer::cleanLoadQueue() {
+  const int loadQueueSize = _loadQueue.size();
+  for (int i = 0; i < loadQueueSize; i++) {
+    LoadQueueItem* item = _loadQueue[i];
+    delete item;
+  }
+  
+  _loadQueue.clear();
+}
 
+void GEORenderer::onChangedContext() {
   if (_context != NULL) {
     drainLoadQueue();
+  }
+}
+
+void GEORenderer::onLostContext() {
+  if (_context == NULL) {
+    cleanLoadQueue();
   }
 }
 
@@ -296,7 +315,7 @@ void GEORenderer::loadBSON(const URL& url,
 }
 
 void GEORenderer::setEnable(bool enable) {
-  LeafRenderer::setEnable(enable);
+  DefaultRenderer::setEnable(enable);
 
   if (_meshRenderer) {
     _meshRenderer->setEnable(enable);
@@ -307,7 +326,17 @@ void GEORenderer::setEnable(bool enable) {
   if (_marksRenderer) {
     _marksRenderer->setEnable(enable);
   }
-  if (_geoTileRasterizer) {
-    _geoTileRasterizer->setEnable(enable);
+  if (_geoVectorLayer) {
+    _geoVectorLayer->setEnable(enable);
+  }
+}
+
+void GEORenderer::setGEOVectorLayer(GEOVectorLayer* geoVectorLayer,
+                                    bool deletePrevious) {
+  if (geoVectorLayer != _geoVectorLayer) {
+    if (deletePrevious) {
+      delete _geoVectorLayer;
+    }
+    _geoVectorLayer = geoVectorLayer;
   }
 }

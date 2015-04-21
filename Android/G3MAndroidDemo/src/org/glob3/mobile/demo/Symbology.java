@@ -16,10 +16,10 @@ import org.glob3.mobile.generated.GEO2DPolygonData;
 import org.glob3.mobile.generated.GEO2DPolygonGeometry;
 import org.glob3.mobile.generated.GEO2DSurfaceRasterStyle;
 import org.glob3.mobile.generated.GEOGeometry;
+import org.glob3.mobile.generated.GEOLineRasterSymbol;
 import org.glob3.mobile.generated.GEOMarkSymbol;
 import org.glob3.mobile.generated.GEOMultiLineRasterSymbol;
-import org.glob3.mobile.generated.GEORasterLineSymbol;
-import org.glob3.mobile.generated.GEORasterPolygonSymbol;
+import org.glob3.mobile.generated.GEOPolygonRasterSymbol;
 import org.glob3.mobile.generated.GEOShapeSymbol;
 import org.glob3.mobile.generated.GEOSymbol;
 import org.glob3.mobile.generated.GEOSymbolizer;
@@ -60,7 +60,7 @@ public class Symbology {
                                                 @Override
                                                 public ArrayList<GEOSymbol> createSymbols(final GEO2DLineStringGeometry geometry) {
                                                    final ArrayList<GEOSymbol> symbols = new ArrayList<GEOSymbol>();
-                                                   symbols.add(new GEORasterLineSymbol(geometry.getCoordinates(),
+                                                   symbols.add(new GEOLineRasterSymbol(geometry.getCoordinates(),
                                                             createLineRasterStyle(geometry)));
                                                    return symbols;
                                                 }
@@ -84,7 +84,7 @@ public class Symbology {
                                                 @Override
                                                 public ArrayList<GEOSymbol> createSymbols(final GEO2DPolygonGeometry geometry) {
                                                    final ArrayList<GEOSymbol> symbols = new ArrayList<GEOSymbol>();
-                                                   symbols.add(new GEORasterPolygonSymbol(geometry.getPolygonData(),
+                                                   symbols.add(new GEOPolygonRasterSymbol(geometry.getPolygonData(),
                                                             createPolygonLineRasterStyle(geometry),
                                                             createPolygonSurfaceRasterStyle(geometry)));
 
@@ -102,7 +102,7 @@ public class Symbology {
                                                 @Override
                                                 public ArrayList<GEOSymbol> createSymbols(final GEO2DLineStringGeometry geometry) {
                                                    final ArrayList<GEOSymbol> symbols = new ArrayList<GEOSymbol>();
-                                                   symbols.add(new GEORasterLineSymbol(geometry.getCoordinates(),
+                                                   symbols.add(new GEOLineRasterSymbol(geometry.getCoordinates(),
                                                             createLineRasterStyle(geometry)));
                                                    return symbols;
                                                 }
@@ -194,7 +194,7 @@ public class Symbology {
                                               @Override
                                               public ArrayList<GEOSymbol> createSymbols(final GEO2DLineStringGeometry geometry) {
                                                  final ArrayList<GEOSymbol> symbols = new ArrayList<GEOSymbol>();
-                                                 symbols.add(new GEORasterLineSymbol(geometry.getCoordinates(),
+                                                 symbols.add(new GEOLineRasterSymbol(geometry.getCoordinates(),
                                                           createLineRasterStyle(geometry)));
                                                  return symbols;
                                               }
@@ -239,7 +239,7 @@ public class Symbology {
                                               public ArrayList<GEOSymbol> createSymbols(final GEO2DPolygonGeometry geometry) {
                                                  final ArrayList<GEOSymbol> symbols = new ArrayList<GEOSymbol>(0);
 
-                                                 symbols.add(new GEORasterPolygonSymbol(geometry.getPolygonData(),
+                                                 symbols.add(new GEOPolygonRasterSymbol(geometry.getPolygonData(),
                                                           createPolygonLineRasterStyle(geometry),
                                                           createPolygonSurfaceRasterStyle(geometry)));
 
@@ -259,7 +259,7 @@ public class Symbology {
 
                                                  for (int i = 0; i < polygonsDataSize; i++) {
                                                     final GEO2DPolygonData polygonData = polygonsData.get(i);
-                                                    symbols.add(new GEORasterPolygonSymbol(polygonData, lineStyle, surfaceStyle));
+                                                    symbols.add(new GEOPolygonRasterSymbol(polygonData, lineStyle, surfaceStyle));
 
                                                  }
 
@@ -278,7 +278,7 @@ public class Symbology {
                                               @Override
                                               public ArrayList<GEOSymbol> createSymbols(final GEO2DPolygonGeometry geometry) {
                                                  final ArrayList<GEOSymbol> symbols = new ArrayList<GEOSymbol>();
-                                                 symbols.add(new GEORasterPolygonSymbol(geometry.getPolygonData(),
+                                                 symbols.add(new GEOPolygonRasterSymbol(geometry.getPolygonData(),
                                                           createPolygonLineRasterStyle(geometry),
                                                           createPolygonSurfaceRasterStyle(geometry)));
 
@@ -296,7 +296,7 @@ public class Symbology {
                                               @Override
                                               public ArrayList<GEOSymbol> createSymbols(final GEO2DLineStringGeometry geometry) {
                                                  final ArrayList<GEOSymbol> symbols = new ArrayList<GEOSymbol>();
-                                                 symbols.add(new GEORasterLineSymbol(geometry.getCoordinates(),
+                                                 symbols.add(new GEOLineRasterSymbol(geometry.getCoordinates(),
                                                           createLineRasterStyle(geometry)));
                                                  return symbols;
                                               }

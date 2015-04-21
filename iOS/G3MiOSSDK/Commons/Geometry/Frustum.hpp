@@ -6,8 +6,8 @@
 //  Copyright (c) 2012 Universidad de Las Palmas. All rights reserved.
 //
 
-#ifndef G3MiOSSDK_Frustum_h
-#define G3MiOSSDK_Frustum_h
+#ifndef G3MiOSSDK_Frustum
+#define G3MiOSSDK_Frustum
 
 #include "Vector3D.hpp"
 #include "MutableMatrix44D.hpp"

@@ -63,7 +63,7 @@ void IImageUtils::subImage(const IImage* image,
   else {
     ICanvas* canvas = IFactory::instance()->createCanvas();
 
-    IMathUtils* mu = IMathUtils::instance();
+    const IMathUtils* mu = IMathUtils::instance();
     canvas->initialize(mu->round(rect._width),
                        mu->round(rect._height));
 
@@ -124,11 +124,12 @@ void IImageUtils::combine(int width,
     const RectangleF* dstRect = destRects[i];
     const float transparency = transparencies[i];
 
-    if (transparency == 1.0){
+    if (transparency == 1.0) {
       canvas->drawImage(image,
                         srcRect->_x, srcRect->_y, srcRect->_width, srcRect->_height,
                         dstRect->_x, dstRect->_y, dstRect->_width, dstRect->_height);
-    } else{
+    }
+    else {
       canvas->drawImage(image,
                         srcRect->_x, srcRect->_y, srcRect->_width, srcRect->_height,
                         dstRect->_x, dstRect->_y, dstRect->_width, dstRect->_height,

@@ -125,7 +125,7 @@ void G3MMarkersDemoScene::rawActivate(const G3MContext* context) {
 
   IDownloader* downloader = context->getDownloader();
 
-  _requestId = downloader->requestBuffer(URL("http://openweathermap.org/data/2.1/find/city?bbox=-80,-180,80,180,4&cluster=yes"),
+  _requestId = downloader->requestBuffer(URL("http://openweathermap.org/data/2.5/box/city?bbox=-80,-180,80,180,4&cluster=yes"),
                                          DownloadPriority::HIGHEST,
                                          TimeInterval::fromHours(1),
                                          true,
@@ -134,7 +134,8 @@ void G3MMarkersDemoScene::rawActivate(const G3MContext* context) {
 
   g3mWidget->setAnimatedCameraPosition(Geodetic3D::fromDegrees(23.2, 5.5, 3643920),
                                        Angle::zero(), // heading
-                                       Angle::fromDegrees(30) // pitch
+                                       //Angle::fromDegrees(30) // pitch
+                                       Angle::fromDegrees(30 - 90) // pitch
                                        );
 }
 

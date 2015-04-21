@@ -82,7 +82,7 @@ FloatBuffer_iOS::~FloatBuffer_iOS() {
 
     glDeleteBuffers(1, &_vertexBuffer);
     if (GL_NO_ERROR != glGetError()) {
-      ILogger::instance()->logError("Problem deleting VBO");
+      THROW_EXCEPTION("Problem deleting VBO");
     }
 
     if (_vertexBuffer == _boundVertexBuffer) {
@@ -93,4 +93,21 @@ FloatBuffer_iOS::~FloatBuffer_iOS() {
   delete [] _values;
 
   showStatistics();
+}
+
+
+void FloatBuffer_iOS::rawPut(int i,
+                             const IFloatBuffer* srcBuffer,
+                             int srcFromIndex,
+                             int count) {
+  if (i < 0 || (i + count) > _size) {
+    THROW_EXCEPTION("buffer put error");
+  }
+
+  FloatBuffer_iOS* iosSrcBuffer = (FloatBuffer_iOS*) srcBuffer;
+  for (int j = 0; j < count; j++) {
+//#warning remove debug code
+    _values[i + j] = iosSrcBuffer->_values[srcFromIndex + j];
+    //rawPut(i + j, srcBuffer->get(srcFromIndex + j));
+  }
 }

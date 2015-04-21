@@ -14,7 +14,6 @@
 #include "IImageListener.hpp"
 
 #include <math.h>
-#include "IFactory.hpp"
 #import "NSString_CppAdditions.h"
 
 
@@ -152,10 +151,10 @@ void TextUtils_iOS::labelImage(const IImage* image,
                withFont: font];
     }
 
-    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+    UIImage* resultImage = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
 
-    IImage* result = new Image_iOS(image, NULL);
+    IImage* result = new Image_iOS(resultImage, NULL);
     listener->imageCreated(result);
     if (autodelete) {
       delete listener;

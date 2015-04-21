@@ -16,7 +16,7 @@ float HUDRelativeSize::getSize(int viewPortWidth,
     case VIEWPORT_WIDTH:
       return _factor * viewPortWidth;
 
-    case VIEWPORT_HEIGTH:
+    case VIEWPORT_HEIGHT:
       return _factor * viewPortHeight;
 
     case VIEWPORT_MIN_AXIS:
@@ -29,7 +29,7 @@ float HUDRelativeSize::getSize(int viewPortWidth,
     case BITMAP_WIDTH:
       return _factor * bitmapWidth;
 
-    case BITMAP_HEIGTH:
+    case BITMAP_HEIGHT:
       return _factor * bitmapHeight;
 
     case BITMAP_MIN_AXIS:

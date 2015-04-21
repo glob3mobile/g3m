@@ -25,6 +25,7 @@ class G3MWidget;
 class PlanetRendererBuilder;
 class Planet;
 class Renderer;
+class ProtoRenderer;
 class WidgetUserData;
 class GPUProgramSources;
 class GPUProgramManager;
@@ -36,6 +37,7 @@ class MeshRenderer;
 class ShapesRenderer;
 class MarksRenderer;
 class ErrorRenderer;
+class InfoDisplay;
 
 
 class IG3MBuilder {
@@ -44,12 +46,16 @@ private:
   IDownloader*                      _downloader;
   IThreadUtils*                     _threadUtils;
   ICameraActivityListener*          _cameraActivityListener;
+#ifdef C_CODE
   const Planet*                     _planet;
+#else
+  Planet*                           _planet;
+#endif  
   std::vector<ICameraConstrainer*>* _cameraConstraints;
   CameraRenderer*                   _cameraRenderer;
   Color*                            _backgroundColor;
   PlanetRendererBuilder*            _planetRendererBuilder;
-  Renderer*                         _busyRenderer;
+  ProtoRenderer*                    _busyRenderer;
   ErrorRenderer*                    _errorRenderer;
   Renderer*                         _hudRenderer;
   std::vector<Renderer*>*           _renderers;
@@ -62,6 +68,7 @@ private:
   std::vector<GPUProgramSources>    _sources;
   SceneLighting*                    _sceneLighting;
   Sector*                           _shownSector;
+  InfoDisplay*                      _infoDisplay;
 
   GL*                               getGL();
   IDownloader*                      getDownloader();
@@ -69,7 +76,7 @@ private:
   ICameraActivityListener*          getCameraActivityListener();
   std::vector<ICameraConstrainer*>* getCameraConstraints();
   CameraRenderer*                   getCameraRenderer();
-  Renderer*                         getBusyRenderer();
+  ProtoRenderer*                    getBusyRenderer();
   ErrorRenderer*                    getErrorRenderer();
   Renderer*                         getHUDRenderer() const;
   Color*                            getBackgroundColor();
@@ -86,6 +93,7 @@ private:
   std::vector<Renderer*>*           createDefaultRenderers();
   std::vector<PeriodicalTask*>*     createDefaultPeriodicalTasks();
   Sector                            getShownSector() const;
+  InfoDisplay*                      getInfoDisplay() const;
 
   void pvtSetInitializationTask(GInitializationTask* initializationTask,
                                 const bool autoDeleteInitializationTask);
@@ -130,7 +138,7 @@ public:
 
   void setBackgroundColor(Color* backgroundColor);
 
-  void setBusyRenderer(Renderer* busyRenderer);
+  void setBusyRenderer(ProtoRenderer* busyRenderer);
 
   void setErrorRenderer(ErrorRenderer* errorRenderer);
 
@@ -176,23 +184,23 @@ public:
   void setShownSector(const Sector& sector);
 
   GEORenderer* createGEORenderer(GEOSymbolizer* symbolizer) {
-    const bool createMeshRenderer      = true;
-    const bool createShapesRenderer    = true;
-    const bool createMarksRenderer     = true;
-    const bool createGEOTileRasterizer = true;
+    const bool createMeshRenderer   = true;
+    const bool createShapesRenderer = true;
+    const bool createMarksRenderer  = true;
+    const bool createGEOVectorLayer = true;
 
     return createGEORenderer(symbolizer,
                              createMeshRenderer,
                              createShapesRenderer,
                              createMarksRenderer,
-                             createGEOTileRasterizer);
+                             createGEOVectorLayer);
   }
 
   GEORenderer* createGEORenderer(GEOSymbolizer* symbolizer,
                                  bool createMeshRenderer,
                                  bool createShapesRenderer,
                                  bool createMarksRenderer,
-                                 bool createGEOTileRasterizer);
+                                 bool createGEOVectorLayer);
 
   MeshRenderer* createMeshRenderer();
 
@@ -200,6 +208,7 @@ public:
 
   MarksRenderer* createMarksRenderer();
   
+  void setInfoDisplay(InfoDisplay* infoDisplay);
 };
 
 #endif

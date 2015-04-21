@@ -9,8 +9,6 @@
 #ifndef __G3MiOSSDK__SectorAndHeightCameraConstrainer__
 #define __G3MiOSSDK__SectorAndHeightCameraConstrainer__
 
-#include <iostream>
-
 #include "ICameraConstrainer.hpp"
 #include "Sector.hpp"
 

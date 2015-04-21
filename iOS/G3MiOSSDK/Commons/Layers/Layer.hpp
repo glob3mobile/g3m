@@ -6,29 +6,34 @@
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
-#ifndef G3MiOSSDK_Layer_hpp
-#define G3MiOSSDK_Layer_hpp
+#ifndef G3MiOSSDK_Layer
+#define G3MiOSSDK_Layer
 
 #include <string>
+#include <vector>
 
-#include "Sector.hpp"
-#include "IFactory.hpp"
-#include "Context.hpp"
-#include "URL.hpp"
-#include "LayerTouchEventListener.hpp"
-#include "TimeInterval.hpp"
-#include "Renderer.hpp"
-
-class Petition;
-class Tile;
 class LayerCondition;
+class LayerTouchEventListener;
 class LayerSet;
-class Vector2I;
 class LayerTilesRenderParameters;
+class G3MRenderContext;
+class G3MEventContext;
+class Tile;
+class URL;
+class RenderState;
+class Geodetic2D;
+class G3MContext;
+class Sector;
+class LayerTouchEvent;
+class TileImageProvider;
+
+#include "Info.hpp"
 
 class Layer {
+private:
+  bool isEqualsParameters(const Layer* that) const;
+
 protected:
-  LayerCondition*                       _condition;
   std::vector<LayerTouchEventListener*> _listeners;
   std::vector<std::string>              _errors;
 
@@ -36,59 +41,33 @@ protected:
 
   bool _enable;
 
-  const std::string _name;
+  std::vector<const Info*>* _layerInfo;
 
-#ifdef C_CODE
-  const LayerTilesRenderParameters* _parameters;
-#endif
-#ifdef JAVA_CODE
-  protected LayerTilesRenderParameters _parameters;
-#endif
-
-  const long long _timeToCacheMS;
-  const bool      _readExpired;
+  float                 _transparency;
+  const LayerCondition* _condition;
 
   void notifyChanges() const;
 
   std::string _title;
 
-  const float _transparency;
-
-  Layer(LayerCondition* condition,
-        const std::string& name,
-        const TimeInterval& timeToCache,
-        bool readExpired,
-        const LayerTilesRenderParameters* parameters,
-        float transparency) :
-  _condition(condition),
-  _name(name),
-  _layerSet(NULL),
-  _timeToCacheMS(timeToCache._milliseconds),
-  _readExpired(readExpired),
-  _enable(true),
-  _parameters(parameters),
-  _title(""),
-  _transparency(transparency)
-  {
-
-  }
-
-  void setParameters(const LayerTilesRenderParameters* parameters);
+  Layer(float           transparency,
+        const LayerCondition* condition,
+        std::vector<const Info*>* layerInfo);
 
   virtual std::string getLayerType() const = 0;
 
   virtual bool rawIsEquals(const Layer* that) const = 0;
 
+  const std::vector<const LayerTilesRenderParameters*> createParametersVectorCopy() const;
+
 public:
 
-  const TimeInterval getTimeToCache() const {
-    return TimeInterval::fromMilliseconds(_timeToCacheMS);
+  const float getTransparency() const {
+    return _transparency;
   }
-
-  bool getReadExpired() const {
-    return _readExpired;
-  }
-
+  
+  void setTransparency(float transparency);
+  
   virtual void setEnable(bool enable) {
     if (enable != _enable) {
       _enable = enable;
@@ -102,23 +81,13 @@ public:
 
   virtual ~Layer();
 
-  virtual std::vector<Petition*> createTileMapPetitions(const G3MRenderContext* rc,
-                                                        const LayerTilesRenderParameters* layerTilesRenderParameters,
-                                                        const Tile* tile) const = 0;
-
-  virtual bool isAvailable(const G3MRenderContext* rc,
-                           const Tile* tile) const;
-
-  virtual bool isAvailable(const G3MEventContext* ec,
-                           const Tile* tile) const;
-
-  //  virtual bool isTransparent() const = 0;
+  virtual bool isAvailable(const Tile* tile) const;
 
   virtual URL getFeatureInfoURL(const Geodetic2D& position,
                                 const Sector& sector) const = 0;
 
   virtual RenderState getRenderState() = 0;
-  
+
   virtual void initialize(const G3MContext* context) {
   }
 
@@ -127,40 +96,47 @@ public:
   }
 
   bool onLayerTouchEventListener(const G3MEventContext* ec,
-                                 const LayerTouchEvent& tte) const {
-    const int listenersSize = _listeners.size();
-    for (int i = 0; i < listenersSize; i++) {
-      LayerTouchEventListener* listener = _listeners[i];
-      if (listener != NULL) {
-        if (listener->onTerrainTouch(ec, tte)) {
-          return true;
-        }
-      }
-    }
-    return false;
-  }
+                                 const LayerTouchEvent& tte) const;
 
   void setLayerSet(LayerSet* layerSet);
 
   void removeLayerSet(LayerSet* layerSet);
 
-  const std::string getName();
+  virtual const std::vector<const LayerTilesRenderParameters*> getLayerTilesRenderParametersVector() const = 0;
 
-  const LayerTilesRenderParameters* getLayerTilesRenderParameters() const {
-    return _parameters;
-  }
+  virtual void selectLayerTilesRenderParameters(int index) = 0;
 
   virtual const std::string description() const = 0;
+#ifdef JAVA_CODE
+  @Override
+  public String toString() {
+    return description();
+  }
+#endif
 
-  bool isEquals(const Layer* that) const;
-  
+  virtual bool isEquals(const Layer* that) const;
+
   virtual Layer* copy() const = 0;
 
+  virtual const Sector getDataSector() const = 0;
 
   const std::string getTitle() const;
 
   void setTitle(const std::string& title);
   
+  virtual TileImageProvider* createTileImageProvider(const G3MRenderContext* rc,
+                                                     const LayerTilesRenderParameters* layerTilesRenderParameters) const = 0;
+
+  void setInfo(const std::vector<const Info*>& info) const;
+  
+  const std::vector<const Info*>& getInfo() const;
+  
+  void addInfo(const std::vector<const Info*>& info);
+  
+  void addInfo(const Info* info);
+
+  virtual const std::vector<URL*> getDownloadURLs(const Tile* tile) const = 0;
+
 };
 
 #endif

@@ -45,7 +45,19 @@ void ColumnCanvasElement::rawDrawAt(float left,
 
     const Vector2F childExtent = child->getExtent(canvas);
 
-    const float cursorLeft = left + halfWidth - (childExtent._x / 2);
+    float cursorLeft;
+    switch (_elementAlign) {
+      case Left:
+        cursorLeft = left;
+        break;
+      case Right:
+        cursorLeft = left + extent._x - childExtent._x;
+        break;
+      case Center:
+      default:
+        cursorLeft = left + halfWidth - (childExtent._x / 2);
+        break;
+    }
 
     child->drawAt(cursorLeft, cursorTop, canvas);
     

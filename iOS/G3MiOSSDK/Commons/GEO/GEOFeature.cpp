@@ -12,7 +12,7 @@
 #include "JSONObject.hpp"
 
 GEOFeature::GEOFeature(const JSONBaseObject* id,
-                       GEOGeometry* geometry,
+                       const GEOGeometry* geometry,
                        const JSONObject* properties) :
 _id(id),
 _geometry(geometry),
@@ -27,7 +27,6 @@ GEOFeature::~GEOFeature() {
   delete _id;
   delete _geometry;
   delete _properties;
-
 #ifdef JAVA_CODE
   super.dispose();
 #endif
@@ -38,13 +37,36 @@ void GEOFeature::symbolize(const G3MRenderContext* rc,
                            MeshRenderer*           meshRenderer,
                            ShapesRenderer*         shapesRenderer,
                            MarksRenderer*          marksRenderer,
-                           GEOTileRasterizer*      geoTileRasterizer) const {
+                           GEOVectorLayer*         geoVectorLayer
+                           ) const {
   if (_geometry != NULL) {
     _geometry->symbolize(rc,
                          symbolizer,
                          meshRenderer,
                          shapesRenderer,
                          marksRenderer,
-                         geoTileRasterizer);
+                         geoVectorLayer);
   }
+}
+
+void GEOFeature::rasterize(const GEORasterSymbolizer* symbolizer,
+                           ICanvas* canvas,
+                           const GEORasterProjection* projection,
+                           int tileLevel) const {
+  if (_geometry != NULL) {
+    _geometry->rasterize(symbolizer,
+                         canvas,
+                         projection,
+                         tileLevel);
+  }
+}
+
+long long GEOFeature::getCoordinatesCount() const {
+  return (_geometry == NULL) ? 0 : _geometry->getCoordinatesCount();
+}
+
+GEOFeature* GEOFeature::deepCopy() const {
+  return new GEOFeature((_id         == NULL) ? NULL : _id->deepCopy(),
+                        (_geometry   == NULL) ? NULL : _geometry->deepCopy(),
+                        (_properties == NULL) ? NULL : _properties->deepCopy());
 }

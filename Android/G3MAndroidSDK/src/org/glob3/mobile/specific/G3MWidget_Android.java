@@ -27,6 +27,7 @@ import org.glob3.mobile.generated.IStringBuilder;
 import org.glob3.mobile.generated.IStringUtils;
 import org.glob3.mobile.generated.ITextUtils;
 import org.glob3.mobile.generated.IThreadUtils;
+import org.glob3.mobile.generated.InfoDisplay;
 import org.glob3.mobile.generated.InitialCameraPositionProvider;
 import org.glob3.mobile.generated.LogLevel;
 import org.glob3.mobile.generated.PeriodicalTask;
@@ -36,7 +37,7 @@ import org.glob3.mobile.generated.TimeInterval;
 import org.glob3.mobile.generated.Touch;
 import org.glob3.mobile.generated.TouchEvent;
 import org.glob3.mobile.generated.TouchEventType;
-import org.glob3.mobile.generated.Vector2I;
+import org.glob3.mobile.generated.Vector2F;
 import org.glob3.mobile.generated.WidgetUserData;
 
 import android.opengl.GLSurfaceView;
@@ -48,10 +49,10 @@ import android.view.MotionEvent;
 
 
 public final class G3MWidget_Android
-         extends
-            GLSurfaceView
-         implements
-            OnGestureListener {
+extends
+GLSurfaceView
+implements
+OnGestureListener {
 
    private G3MWidget                  _g3mWidget;
    private ES2Renderer                _es2renderer;
@@ -59,10 +60,27 @@ public final class G3MWidget_Android
    private final MotionEventProcessor _motionEventProcessor = new MotionEventProcessor();
    private final OnDoubleTapListener  _doubleTapListener;
    private final GestureDetector      _gestureDetector;
+   private Thread                     _openGLThread         = null;
 
 
    public G3MWidget_Android(final android.content.Context context) {
       this(context, null);
+   }
+
+
+   private void setOpenGLThread(final Thread openGLThread) {
+      _openGLThread = openGLThread;
+   }
+
+
+   public final void checkOpenGLThread() {
+      if (_openGLThread != null) {
+         final Thread currentThread = Thread.currentThread();
+         if (currentThread != _openGLThread) {
+            throw new RuntimeException("OpenGL code executed from a Non-OpenGL thread.  (OpenGLThread=" + _openGLThread
+                     + ", CurrentThread=" + currentThread + ")");
+         }
+      }
    }
 
 
@@ -85,9 +103,10 @@ public final class G3MWidget_Android
       queueEvent(new Runnable() {
          @Override
          public void run() {
-            final Thread openglThread = Thread.currentThread();
-            ILogger.instance().logInfo("== OpenGL-Thread=%s", openglThread.toString());
-            _es2renderer.setOpenGLThread(openglThread);
+            final Thread openGLThread = Thread.currentThread();
+            ILogger.instance().logInfo("== OpenGL-Thread=%s", openGLThread.toString());
+            _es2renderer.setOpenGLThread(openGLThread);
+            setOpenGLThread(openGLThread);
          }
       });
 
@@ -204,7 +223,7 @@ public final class G3MWidget_Android
    public void onLongPress(final MotionEvent e) {
       final MotionEvent.PointerCoords pc = new MotionEvent.PointerCoords();
       e.getPointerCoords(0, pc);
-      final Touch t = new Touch(new Vector2I((int) pc.x, (int) pc.y), new Vector2I(0, 0));
+      final Touch t = new Touch(new Vector2F(pc.x, pc.y), Vector2F.zero());
       final TouchEvent te = TouchEvent.create(TouchEventType.LongPress, t);
 
       queueEvent(new Runnable() {
@@ -272,7 +291,7 @@ public final class G3MWidget_Android
 
       factory.add(new GPUProgramSources("FlatColor+DirectionLight", GL2Shaders._FlatColorMesh_DirectionLightVertexShader,
                GL2Shaders._FlatColorMesh_DirectionLightFragmentShader));
-      */
+       */
 
       return new GPUProgramManager(factory);
    }
@@ -297,8 +316,8 @@ public final class G3MWidget_Android
                           final java.util.ArrayList<PeriodicalTask> periodicalTasks,
                           final SceneLighting sceneLighting,
                           final InitialCameraPositionProvider initialCameraPositionProvider,
-                          final WidgetUserData userData) {
-
+                          final WidgetUserData userData,
+                          final InfoDisplay infoDisplay) {
 
       _g3mWidget = G3MWidget.create(//
                getGL(), //
@@ -321,7 +340,8 @@ public final class G3MWidget_Android
                periodicalTasks, //
                createGPUProgramManager(), //
                sceneLighting, //
-               initialCameraPositionProvider);
+               initialCameraPositionProvider, //
+               infoDisplay);
 
       _g3mWidget.setUserData(userData);
    }
@@ -424,18 +444,30 @@ public final class G3MWidget_Android
    }
 
 
-   public void setCameraHeading(final Angle angle) {
-      getG3MWidget().setCameraHeading(angle);
-   }
-
-
    public void cancelCameraAnimation() {
       getG3MWidget().cancelCameraAnimation();
    }
 
 
-   public void setCameraPitch(final Angle angle) {
-      getG3MWidget().setCameraPitch(angle);
+   public void setCameraHeading(final Angle heading) {
+      getG3MWidget().setCameraHeading(heading);
+   }
+
+
+   public void setCameraPitch(final Angle pitch) {
+      getG3MWidget().setCameraPitch(pitch);
+   }
+
+
+   public void setCameraRoll(final Angle roll) {
+      getG3MWidget().setCameraRoll(roll);
+   }
+
+
+   public void setCameraHeadingPitchRoll(final Angle heading,
+                                         final Angle pitch,
+                                         final Angle roll) {
+      getG3MWidget().setCameraHeadingPitchRoll(heading, pitch, roll);
    }
 
 

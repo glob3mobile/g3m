@@ -23,6 +23,9 @@ public:
   _g3mWidget(g3mWidget)
   {
   }
+  
+  void onError(const URL& url) {
+  }
 
   void onBeforeAddMesh(Mesh* mesh) {
   }
@@ -30,7 +33,7 @@ public:
   void onAfterAddMesh(Mesh* mesh) {
     _g3mWidget->setAnimatedCameraPosition(Geodetic3D::fromDegrees(31.61, -97.83, 281177),
                                           Angle::zero(),
-                                          Angle::fromDegrees(55));
+                                          Angle::fromDegrees(-45));
   }
 };
 

@@ -12,20 +12,7 @@
 #include <list>
 
 class G3MRenderContext;
-
-
-class FrameTask {
-public:
-  virtual ~FrameTask() {
-
-  }
-  
-  virtual bool isCanceled(const G3MRenderContext* rc) = 0;
-  
-  virtual void execute(const G3MRenderContext* rc) = 0;
-  
-};
-
+class FrameTask;
 
 
 class FrameTasksExecutor {
@@ -35,36 +22,40 @@ private:
   const int       _maximumQueuedTasks;
   const long long _maxTimePerFrameMS;
   const long long _maxTimePerFrameStressedMS;
+  const bool      _debug;
 
-  std::list<FrameTask*> _preRenderTasks;
-  
+  std::list<FrameTask*> _tasks;
+
   inline bool canExecutePreRenderStep(const G3MRenderContext* rc,
                                       int executedTasksCounter);
-  
+
   bool _stressed;
-  
+
+  void showDebugInfo(const G3MRenderContext* rc,
+                     int executedCounter,
+                     int canceledCounter);
+
 public:
   FrameTasksExecutor() :
   _minimumExecutionsPerFrame(1),
-  _maximumExecutionsPerFrame(8),
+  _maximumExecutionsPerFrame(4),
   _maximumQueuedTasks(64),
-  _maxTimePerFrameMS(5),
-  _maxTimePerFrameStressedMS(25),
-  _stressed(false)
+  _maxTimePerFrameMS(10),
+  _maxTimePerFrameStressedMS(20),
+  _stressed(false),
+  _debug(false)
   {
+  }
 
+  void addPreRenderTask(FrameTask* task) {
+    _tasks.push_back(task);
   }
-  
-  void addPreRenderTask(FrameTask* preRenderTask) {
-    _preRenderTasks.push_back(preRenderTask);
-  }
-  
+
   void doPreRenderCycle(const G3MRenderContext* rc);
-  
-  ~FrameTasksExecutor() {
 
+  ~FrameTasksExecutor() {
   }
-  
+
 };
 
 #endif

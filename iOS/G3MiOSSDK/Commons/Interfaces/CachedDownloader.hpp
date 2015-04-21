@@ -26,6 +26,7 @@ private:
   const bool _saveInBackground;
 
   IImageResult getCachedImageResult(const URL& url,
+                                    const TimeInterval& timeToCache,
                                     bool readExpired);
 
   IImageResult* _lastImageResult;

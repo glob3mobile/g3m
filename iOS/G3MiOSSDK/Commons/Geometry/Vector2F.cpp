@@ -21,3 +21,14 @@ const double Vector2F::squaredDistanceTo(const Vector2I& that) const {
   const double dy = _y - that._y;
   return (dx * dx) + (dy * dy);
 }
+
+Vector2F Vector2F::clampLength(float min, float max) const{
+  float length = (float) this->length();
+  if (length < min){
+    return this->times(min / length);
+  }
+  if (length > max){
+    return this->times(max / length);
+  }
+  return *this;
+}

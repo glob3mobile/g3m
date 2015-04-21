@@ -152,11 +152,11 @@ public class Downloader_WebGL_Handler_DefaultImpl
    @Override
    final public void runWithDownloader(final IDownloader downloader) {
 
-      //      log(LogLevel.InfoLevel, ": runWithDownloader url=" + _url.getPath());
+      //      log(LogLevel.InfoLevel, ": runWithDownloader url=" + _url._path);
 
       _dl = (Downloader_WebGL) downloader;
 
-      jsRequest(_url.getPath());
+      jsRequest(_url._path);
 
       //      IThreadUtils.instance().invokeInRendererThread(new ProcessResponseGTask(statusCode, data, this), true);
    }
@@ -187,8 +187,8 @@ public class Downloader_WebGL_Handler_DefaultImpl
          }
       }
       else {
-         log(LogLevel.ErrorLevel,
-                  ": Error runWithDownloader: statusCode=" + statusCode + ", data=" + data + ", url=" + _url.getPath());
+         log(LogLevel.ErrorLevel, ": Error runWithDownloader: statusCode=" + statusCode + ", data=" + data + ", url="
+                                  + _url._path);
 
          for (final ListenerEntry entry : _listeners) {
             entry.onError(_url);
@@ -207,7 +207,7 @@ public class Downloader_WebGL_Handler_DefaultImpl
 		xhr.open("GET", url, true);
 		xhr.responseType = (that.@org.glob3.mobile.specific.Downloader_WebGL_Handler_DefaultImpl::_requestingImage) ? "blob"
 				: "arraybuffer";
-		xhr.setRequestHeader("Cache-Control", "max-age=31536000");
+		//xhr.setRequestHeader("Cache-Control", "max-age=31536000");
 		xhr.onload = function() {
 			if (xhr.readyState == 4) {
 				// inform downloader to remove myself, to avoid adding new Listener
@@ -215,10 +215,12 @@ public class Downloader_WebGL_Handler_DefaultImpl
 				if (xhr.status === 200) {
 					if (that.@org.glob3.mobile.specific.Downloader_WebGL_Handler_DefaultImpl::_requestingImage) {
 						that.@org.glob3.mobile.specific.Downloader_WebGL_Handler_DefaultImpl::jsCreateImageFromBlob(ILcom/google/gwt/core/client/JavaScriptObject;)(xhr.status, xhr.response);
-					} else {
+					}
+					else {
 						that.@org.glob3.mobile.specific.Downloader_WebGL_Handler::processResponse(ILcom/google/gwt/core/client/JavaScriptObject;)(xhr.status, xhr.response);
 					}
-				} else {
+				}
+				else {
 					console.log("Error Retrieving Data!");
 					that.@org.glob3.mobile.specific.Downloader_WebGL_Handler::processResponse(ILcom/google/gwt/core/client/JavaScriptObject;)(xhr.status, null);
 				}

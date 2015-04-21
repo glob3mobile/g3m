@@ -9,6 +9,7 @@
 #include "LayerBuilder.hpp"
 #include "LevelTileCondition.hpp"
 #include "LayerSet.hpp"
+#include "TimeInterval.hpp"
 
 LayerSet* LayerBuilder::createDefaultSatelliteImagery() {
   LayerSet* layerSet = new LayerSet();

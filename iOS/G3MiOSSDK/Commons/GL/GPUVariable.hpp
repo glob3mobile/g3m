@@ -38,7 +38,8 @@ enum GPUUniformKey{
   ROTATION_ANGLE_TEXTURE_COORDS = 17,
   SAMPLER = 18,
   SAMPLER2 = 19,
-  SAMPLER3 = 20
+  SAMPLER3 = 20,
+  TRANSLATION_2D = 21
 };
 
 enum GPUAttributeKey{
@@ -48,7 +49,8 @@ enum GPUAttributeKey{
   COLOR = 2,
   NORMAL = 3,
   TEXTURE_COORDS_2 = 4,
-  TEXTURE_COORDS_3 = 5
+  TEXTURE_COORDS_3 = 5,
+  POSITION_2D = 6
 };
 
 class GPUVariable {

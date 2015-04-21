@@ -14,9 +14,9 @@
 #include <G3MiOSSDK/MapBoxLayer.hpp>
 #include <G3MiOSSDK/GEORenderer.hpp>
 #include <G3MiOSSDK/GEOSymbolizer.hpp>
-#include <G3MiOSSDK/GEORasterPolygonSymbol.hpp>
+#include <G3MiOSSDK/GEOPolygonRasterSymbol.hpp>
 #include <G3MiOSSDK/GEO2DPolygonGeometry.hpp>
-#include <G3MiOSSDK/GEORasterLineSymbol.hpp>
+#include <G3MiOSSDK/GEOLineRasterSymbol.hpp>
 #include <G3MiOSSDK/GEO2DLineStringGeometry.hpp>
 #include <G3MiOSSDK/JSONObject.hpp>
 #include <G3MiOSSDK/GEO2DPointGeometry.hpp>
@@ -25,8 +25,10 @@
 #include <G3MiOSSDK/GEOMarkSymbol.hpp>
 #include <G3MiOSSDK/G3MWidget.hpp>
 #include <G3MiOSSDK/PlanetRenderer.hpp>
-#include <G3MiOSSDK/SingleBillElevationDataProvider.hpp>
+#include <G3MiOSSDK/SingleBilElevationDataProvider.hpp>
 #include <G3MiOSSDK/MarkTouchListener.hpp>
+#include <G3MiOSSDK/GEOVectorLayer.hpp>
+
 
 class G3MVectorialDemoScene_RestaurantMarkTouchListener : public MarkTouchListener {
 private:
@@ -134,7 +136,7 @@ public:
 
   std::vector<GEOSymbol*>* createSymbols(const GEO2DLineStringGeometry* geometry) const {
     std::vector<GEOSymbol*>* symbols = new std::vector<GEOSymbol*>();
-    symbols->push_back(new GEORasterLineSymbol(geometry->getCoordinates(),
+    symbols->push_back(new GEOLineRasterSymbol(geometry->getCoordinates(),
                                                createLineRasterStyle(geometry)));
     return symbols;
   }
@@ -145,7 +147,7 @@ public:
 
   std::vector<GEOSymbol*>* createSymbols(const GEO2DPolygonGeometry* geometry) const {
     std::vector<GEOSymbol*>* symbols = new std::vector<GEOSymbol*>();
-    symbols->push_back(new GEORasterPolygonSymbol(geometry->getPolygonData(),
+    symbols->push_back(new GEOPolygonRasterSymbol(geometry->getPolygonData(),
                                                   createPolygonLineRasterStyle(geometry),
                                                   createPolygonSurfaceRasterStyle(geometry)));
     return symbols;
@@ -164,13 +166,17 @@ void G3MVectorialDemoScene::rawActivate(const G3MContext* context) {
 
   g3mWidget->setBackgroundColor(Color::fromRGBA(0.19f, 0.23f, 0.21f, 1.0f));
 
-  MapBoxLayer* layer = new MapBoxLayer("examples.map-qogxobv1",
-                                       TimeInterval::fromDays(30),
-                                       true,
-                                       13);
-  model->getLayerSet()->addLayer(layer);
+  MapBoxLayer* rasterLayer = new MapBoxLayer("examples.map-qogxobv1",
+                                             TimeInterval::fromDays(30),
+                                             true,
+                                             13);
+  model->getLayerSet()->addLayer(rasterLayer);
+
+  GEOVectorLayer* vectorLayer = new GEOVectorLayer();
+  model->getLayerSet()->addLayer(vectorLayer);
 
   GEORenderer* geoRenderer = model->getGEORenderer();
+  geoRenderer->setGEOVectorLayer(vectorLayer, false);
   geoRenderer->loadJSON(URL("file:///buildings_monaco.geojson"),   new G3MVectorialDemoScene_GEOSymbolizer(model));
   geoRenderer->loadJSON(URL("file:///roads_monaco.geojson"),       new G3MVectorialDemoScene_GEOSymbolizer(model));
   geoRenderer->loadJSON(URL("file:///restaurants_monaco.geojson"), new G3MVectorialDemoScene_GEOSymbolizer(model));
@@ -178,5 +184,5 @@ void G3MVectorialDemoScene::rawActivate(const G3MContext* context) {
   const Sector demSector = Sector::fromDegrees(43.69200778158779, 7.36351850323685,
                                                43.7885865186124,  7.48617349925817);
   
-  g3mWidget->setShownSector(demSector.shrinkedByPercent(0.1f));
+  g3mWidget->setRenderedSector(demSector.shrinkedByPercent(0.1f));
 }

@@ -18,13 +18,13 @@
 #include "JSONParser_iOS.hpp"
 #include "StringBuilder_iOS.hpp"
 #include "TextUtils_iOS.hpp"
-
 #include "GPUProgramManager.hpp"
 #include "SceneLighting.hpp"
 #include "Planet.hpp"
 #include "Sector.hpp"
-
 #include "InitialCameraPositionProvider.hpp"
+#include "InfoDisplay.hpp"
+
 
 @interface G3MWidget_iOS ()
 @property(nonatomic, getter=isAnimating) BOOL animating;
@@ -55,7 +55,7 @@
            cameraConstraints: (std::vector<ICameraConstrainer*>) cameraConstraints
               cameraRenderer: (CameraRenderer*) cameraRenderer
                 mainRenderer: (Renderer*) mainRenderer
-                busyRenderer: (Renderer*) busyRenderer
+                busyRenderer: (ProtoRenderer*) busyRenderer
                errorRenderer: (ErrorRenderer*) errorRenderer
                  hudRenderer: (Renderer*) hudRenderer
              backgroundColor: (Color) backgroundColor
@@ -65,39 +65,41 @@
 autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
              periodicalTasks: (std::vector<PeriodicalTask*>) periodicalTasks
                     userData: (WidgetUserData*) userData
-       initialCameraPosition: (Geodetic3D) initialCameraPosition;
+       initialCameraPosition: (Geodetic3D) initialCameraPosition
+                 infoDisplay: (InfoDisplay*) infoDisplay;
 {
   GPUProgramFactory * gpuProgramFactory = new GPUProgramFactory();
   GPUProgramManager * gpuProgramManager = new GPUProgramManager(gpuProgramFactory);
 
-  SceneLighting* sceneLighting = new CameraFocusSceneLighting(Color::fromRGBA((float)0.3, (float)0.3, (float)0.3, 1.0),
-                                                              Color::yellow());
+  SceneLighting* sceneLighting = new CameraFocusSceneLighting(Color::fromRGBA(0.3f, 0.3f, 0.3f, 1.0f),
+                                                              Color::white());
 
   InitialCameraPositionProvider* icpp = new SimpleInitialCameraPositionProvider();
-  
-    _widgetVP = G3MWidget::create([_renderer getGL],
-                                  storage,
-                                  downloader,
-                                  threadUtils,
-                                  cameraActivityListener,
-                                  planet,
-                                  cameraConstraints,
-                                  cameraRenderer,
-                                  mainRenderer,
-                                  busyRenderer,
-                                  errorRenderer,
-                                  hudRenderer,
-                                  backgroundColor,
-                                  logFPS,
-                                  logDownloaderStatistics,
-                                  initializationTask,
-                                  autoDeleteInitializationTask,
-                                  periodicalTasks,
-                                  gpuProgramManager,//GPUProgramManager
-                                  sceneLighting,    //Scene Lighting
-                                  icpp);
-  
-    [self widget]->setUserData(userData);
+    
+  _widgetVP = G3MWidget::create([_renderer getGL],
+                                storage,
+                                downloader,
+                                threadUtils,
+                                cameraActivityListener,
+                                planet,
+                                cameraConstraints,
+                                cameraRenderer,
+                                mainRenderer,
+                                busyRenderer,
+                                errorRenderer,
+                                hudRenderer,
+                                backgroundColor,
+                                logFPS,
+                                logDownloaderStatistics,
+                                initializationTask,
+                                autoDeleteInitializationTask,
+                                periodicalTasks,
+                                gpuProgramManager,
+                                sceneLighting,
+                                icpp,
+                                infoDisplay);
+
+  [self widget]->setUserData(userData);
 }
 
 - (GL*)getGL {
@@ -112,26 +114,30 @@ autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
 //The EAGL view is stored in the nib file. When it's unarchived it's sent -initWithCoder:
 - (id)initWithCoder:(NSCoder *)coder {
   self = [super initWithCoder:coder];
-  
+
   if (self) {
     // Get the layer
     CAEAGLLayer *eaglLayer = (CAEAGLLayer *) self.layer;
-    
+
     eaglLayer.opaque = TRUE;
     eaglLayer.drawableProperties = [NSDictionary dictionaryWithObjectsAndKeys:
                                     [NSNumber numberWithBool:FALSE], kEAGLDrawablePropertyRetainedBacking, kEAGLColorFormatRGBA8, kEAGLDrawablePropertyColorFormat, nil];
-    
+//    // for retina display
+//    eaglLayer.contentsScale = 2;
+//    if ([[UIScreen mainScreen] respondsToSelector:@selector(displayLinkWithTarget:selector:)]) {
+//      eaglLayer.contentsScale = [UIScreen mainScreen].scale;
+//    }
+
     // create GL object
     _renderer = [[ES2Renderer alloc] init];
     if (!_renderer) {
-      printf("**** ERROR: G3MWidget_iOS Mobile needs Opengl ES 2.0\n");
+      printf("**** ERROR: G3MWidget_iOS Mobile needs OpenGL ES 2.0\n");
       return nil;
     }
     else {
       printf("*** Using Opengl ES 2.0\n\n");
-      glver = OpenGL_2;
     }
-    
+
     bool showOpenGLExtensions = false;
     if (showOpenGLExtensions) {
       NSLog(@"----------------------------------------------------------------------------");
@@ -143,27 +149,29 @@ autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
       }
       NSLog(@"----------------------------------------------------------------------------");
     }
-    
+
     _lastTouchEvent = NULL;
-    
+
     // rest of initialization
     _animating = FALSE;
     _displayLinkSupported = FALSE;
     _animationFrameInterval = 1;
     _displayLink = nil;
     _animationTimer = nil;
-    
+
     self.multipleTouchEnabled = YES; //NECESSARY FOR PROPER PINCH EVENT
-    
+
     // A system version of 3.1 or greater is required to use CADisplayLink. The NSTimer
     // class is used as fallback when it isn't available.
     NSString *reqSysVer = @"3.1";
     NSString *currSysVer = [[UIDevice currentDevice] systemVersion];
-    if ([currSysVer compare:reqSysVer options:NSNumericSearch] != NSOrderedAscending)
+    if ([currSysVer compare:reqSysVer options:NSNumericSearch] != NSOrderedAscending) {
       _displayLinkSupported = TRUE;
-    
+    }
+
     //Detecting LongPress
-    UILongPressGestureRecognizer *longPressRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongPress:)];
+    UILongPressGestureRecognizer *longPressRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self
+                                                                                                      action:@selector(handleLongPress:)];
     longPressRecognizer.minimumPressDuration = 1.0;
     [self addGestureRecognizer:longPressRecognizer];
   }
@@ -176,14 +184,14 @@ autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
   //  if (sender.state == UIGestureRecognizerStateEnded) {
   //    NSLog(@"LONG PRESS");
   //  }
-  
+
   if (sender.state == 1) {
     CGPoint tapPoint = [sender locationInView:sender.view];
-    
+
     std::vector<const Touch*> pointers = std::vector<const Touch*>();
-    Touch *touch = new Touch(Vector2I((int) tapPoint.x,
-                                      (int) tapPoint.y),
-                             Vector2I(0, 0),
+    Touch *touch = new Touch(Vector2F((float)tapPoint.x,
+                                      (float)tapPoint.y),
+                             Vector2F::zero(),
                              1);
     pointers.push_back(touch);
 
@@ -191,7 +199,7 @@ autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
     _lastTouchEvent = TouchEvent::create(LongPress, pointers);
     [self widget]->onTouchEvent(_lastTouchEvent);
   }
-  
+
 }
 
 - (void)drawView:(id)sender {
@@ -234,7 +242,7 @@ autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
   // behavior.
   if (frameInterval >= 1) {
     _animationFrameInterval = frameInterval;
-    
+
     if (_animating) {
       [self stopAnimation];
       [self startAnimation];
@@ -258,7 +266,7 @@ autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
                                                            userInfo:nil
                                                             repeats:TRUE];
     }
-    
+
     self.animating = TRUE;
   }
 }
@@ -273,7 +281,7 @@ autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
       [_animationTimer invalidate];
       self.animationTimer = nil;
     }
-    
+
     self.animating = FALSE;
   }
 }
@@ -282,27 +290,27 @@ autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
             withEvent: (UIEvent*) event
 {
   NSSet *allTouches = [event touchesForView:self];
-  
+
   std::vector<const Touch*> pointers = std::vector<const Touch*>();
 
   NSEnumerator *enumerator = [allTouches objectEnumerator];
-  UITouch *touch = nil;
-  while ((touch = [enumerator nextObject])) {
-    CGPoint current         = [touch locationInView:self];
-    CGPoint previous        = [touch previousLocationInView:self];
-    unsigned char tapCount  = (unsigned char) [touch tapCount];
-    
-    Touch *touch = new Touch(Vector2I((int) current.x,
-                                      (int) current.y),
-                             Vector2I((int) previous.x,
-                                      (int) previous.y),
+  UITouch* uiTouch = nil;
+  while ((uiTouch = [enumerator nextObject])) {
+    CGPoint current         = [uiTouch locationInView:self];
+    CGPoint previous        = [uiTouch previousLocationInView:self];
+    unsigned char tapCount  = (unsigned char) [uiTouch tapCount];
+
+    Touch* touch = new Touch(Vector2F((float)current.x,
+                                      (float)current.y),
+                             Vector2F((float)previous.x,
+                                      (float)previous.y),
                              tapCount);
-    
+
     pointers.push_back(touch);
   }
-  
+
   delete _lastTouchEvent;
-  
+
   _lastTouchEvent = TouchEvent::create(Down, pointers);
   [self widget]->onTouchEvent(_lastTouchEvent);
 }
@@ -317,15 +325,15 @@ autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
   std::vector<const Touch*> pointers = std::vector<const Touch*>();
 
   NSEnumerator *enumerator = [allTouches objectEnumerator];
-  UITouch *touch = nil;
-  while ((touch = [enumerator nextObject])) {
-    CGPoint current  = [touch locationInView:self];
-    CGPoint previous = [touch previousLocationInView:self];
+  UITouch* uiTouch = nil;
+  while ((uiTouch = [enumerator nextObject])) {
+    CGPoint current  = [uiTouch locationInView:self];
+    CGPoint previous = [uiTouch previousLocationInView:self];
 
-    Touch *touch = new Touch(Vector2I((int) current.x,
-                                      (int) current.y),
-                             Vector2I((int) previous.x,
-                                      (int) previous.y));
+    Touch* touch = new Touch(Vector2F((float)current.x,
+                                      (float)current.y),
+                             Vector2F((float)previous.x,
+                                      (float)previous.y));
 
     pointers.push_back(touch);
   }
@@ -338,9 +346,9 @@ autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
     if ((pointers.size() == 2) &&
         (_lastTouchEvent->getTouchCount() == 2)) {
 
-      const Vector2I current0 = pointers[0]->getPrevPos();
-      const Vector2I last0 = _lastTouchEvent->getTouch(0)->getPos();
-      const Vector2I last1 = _lastTouchEvent->getTouch(1)->getPos();
+      const Vector2F current0 = pointers[0]->getPrevPos();
+      const Vector2F last0 = _lastTouchEvent->getTouch(0)->getPos();
+      const Vector2F last1 = _lastTouchEvent->getTouch(1)->getPos();
       delete _lastTouchEvent;
       const double dist0 = current0.sub(last0).squaredLength();
       const double dist1 = current0.sub(last1).squaredLength();
@@ -371,33 +379,33 @@ autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
 {
   //NSSet *allTouches = [event allTouches];
   NSSet *allTouches = [event touchesForView:self];
-  
+
   std::vector<const Touch*> pointers = std::vector<const Touch*>();
   // pointers.reserve([allTouches count]);
-  
+
   NSEnumerator *enumerator = [allTouches objectEnumerator];
-  UITouch *touch = nil;
-  while ((touch = [enumerator nextObject])) {
-    CGPoint current  = [touch locationInView:self];
-    CGPoint previous = [touch previousLocationInView:self];
-    
-    [touch timestamp];
-    
-    Touch *touch = new Touch(Vector2I((int) current.x,
-                                      (int) current.y),
-                             Vector2I((int) previous.x,
-                                      (int) previous.y));
-    
+  UITouch* uiTouch = nil;
+  while ((uiTouch = [enumerator nextObject])) {
+    CGPoint current  = [uiTouch locationInView:self];
+    CGPoint previous = [uiTouch previousLocationInView:self];
+
+    [uiTouch timestamp];
+
+    Touch *touch = new Touch(Vector2F((float)current.x,
+                                      (float)current.y),
+                             Vector2F((float)previous.x,
+                                      (float)previous.y));
+
     pointers.push_back(touch);
   }
-  
+
   delete _lastTouchEvent;
-  
+
   _lastTouchEvent = TouchEvent::create(Up, pointers);
   [self widget]->onTouchEvent(_lastTouchEvent);
 }
 
-- (void)dealloc {
+- (void) dealloc {
   delete _lastTouchEvent;
   [self setRenderer: nil];
   delete (G3MWidget*) _widgetVP;
@@ -415,7 +423,7 @@ autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
   IMathUtils*         mathUtils       = new MathUtils_iOS();
   IJSONParser*        jsonParser      = new JSONParser_iOS();
   ITextUtils*         textUtils       = new TextUtils_iOS();
-  
+
   G3MWidget::initSingletons(logger,
                             factory,
                             stringUtils,
@@ -453,10 +461,6 @@ autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
 - (void)cancelCameraAnimation {
   [self widget]->cancelCameraAnimation();
 }
-
-//- (void)resetCameraPosition {
-//  [self widget]->resetCameraPosition();
-//}
 
 - (WidgetUserData*) userData
 {

@@ -6,8 +6,8 @@
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
-#ifndef G3MiOSSDK_JSONBaseObject_hpp
-#define G3MiOSSDK_JSONBaseObject_hpp
+#ifndef G3MiOSSDK_JSONBaseObject
+#define G3MiOSSDK_JSONBaseObject
 
 class JSONObject;
 class JSONArray;
@@ -43,6 +43,12 @@ public:
   virtual JSONBaseObject* deepCopy() const = 0;
 
   virtual const std::string description() const = 0;
+#ifdef JAVA_CODE
+  @Override
+  public String toString() {
+    return description();
+  }
+#endif
 
   virtual void acceptVisitor(JSONVisitor* visitor) const = 0;
 

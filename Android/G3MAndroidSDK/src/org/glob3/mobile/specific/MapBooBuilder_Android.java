@@ -49,8 +49,9 @@ public class MapBooBuilder_Android
                                 final String sceneId,
                                 final MapBoo_ViewType viewType,
                                 final MapBooApplicationChangeListener applicationListener,
-                                final boolean enableNotifications) {
-      super(serverURL, tubesURL, sceneId, viewType, applicationListener, enableNotifications);
+                                final boolean enableNotifications,
+                                final String token) {
+      super(serverURL, tubesURL, sceneId, viewType, applicationListener, enableNotifications, token);
 
       _nativeWidget = new G3MWidget_Android(context);
    }

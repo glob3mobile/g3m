@@ -32,29 +32,32 @@ protected:
 
 public:
   OSMLayer(const TimeInterval& timeToCache,
-           bool readExpired = true,
-           int initialLevel = 2,
-           LayerCondition* condition = NULL) :
-  MercatorTiledLayer("OpenStreetMap",
-                     "http://",
+           const bool          readExpired  = true,
+           const int           initialLevel = 2,
+           const float         transparency = 1,
+           LayerCondition*     condition    = NULL,
+           std::vector<const Info*>*  layerInfo = new std::vector<const Info*>()) :
+  MercatorTiledLayer("http://",
                      "tile.openstreetmap.org",
                      getSubdomains(),
                      "png",
                      timeToCache,
                      readExpired,
-                     Sector::fullSphere(),
                      initialLevel,
                      18,
-                     condition)
+                     false, // isTransparent
+                     transparency,
+                     condition,
+                     layerInfo)
   {
-
   }
 
   const std::string description() const;
 
   OSMLayer* copy() const;
-  
+
   RenderState getRenderState();
+  
 };
 
 #endif

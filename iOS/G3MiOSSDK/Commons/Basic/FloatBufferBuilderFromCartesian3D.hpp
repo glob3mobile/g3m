@@ -6,8 +6,8 @@
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
-#ifndef G3MiOSSDK_FloatBufferBuilderFromCartesian3D_hpp
-#define G3MiOSSDK_FloatBufferBuilderFromCartesian3D_hpp
+#ifndef G3MiOSSDK_FloatBufferBuilderFromCartesian3D
+#define G3MiOSSDK_FloatBufferBuilderFromCartesian3D
 
 #include "Vector3D.hpp"
 #include "FloatBufferBuilder.hpp"
@@ -133,7 +133,7 @@ public:
   Vector3D getCenter() {
     return Vector3D(_cx, _cy, _cz);
   }
-  
+
 };
 
 #endif

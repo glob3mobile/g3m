@@ -14,7 +14,7 @@
 const std::string URL::description() const {
   IStringBuilder* isb = IStringBuilder::newStringBuilder();
   isb->addString("URL(");
-  isb->addString(getPath());
+  isb->addString(_path);
   isb->addString(")");
   const std::string s = isb->getString();
   delete isb;

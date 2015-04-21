@@ -11,8 +11,6 @@
 
 class IImage;
 
-#include <string>
-
 class IImageListener {
 public:
   virtual ~IImageListener() {
@@ -22,7 +20,6 @@ public:
    Callback method for image-creation.  The image has to be deleted in C++ / and disposed() en Java
    */
   virtual void imageCreated(const IImage* image) = 0;
-
 
 };
 

@@ -1,13 +1,13 @@
 //
-//  GPUUniform.h
+//  GPUUniform.hpp
 //  G3MiOSSDK
 //
 //  Created by Jose Miguel SN on 05/04/13.
 //
 //
 
-#ifndef G3MiOSSDK_GPUUniform_h
-#define G3MiOSSDK_GPUUniform_h
+#ifndef G3MiOSSDK_GPUUniform
+#define G3MiOSSDK_GPUUniform
 
 #include "GL.hpp"
 #include "GLConstants.hpp"
@@ -43,6 +43,13 @@ public:
   virtual bool isEquals(const GPUUniformValue* v) const = 0;
 
   virtual std::string description() const = 0;
+#ifdef JAVA_CODE
+  @Override
+  public String toString() {
+    return description();
+  }
+#endif
+
 };
 
 
@@ -88,12 +95,8 @@ public:
 #endif
   }
 
-//  const std::string getName() const { return _name; }
-//  const IGLUniformID* getID() const { return _id; }
-//  int getType() const { return _type; }
   bool wasSet() const { return _value != NULL; }
   const GPUUniformValue* getSetValue() const { return _value; }
-//  GPUUniformKey getKey() const { return _key;}
 
 
   int getIndex() const {
@@ -141,18 +144,19 @@ public:
 
   GPUUniformValueBool(bool b):GPUUniformValue(GLType::glBool()),_value(b) {}
 
-  void setUniform(GL* gl, const IGLUniformID* id) const{
+  void setUniform(GL* gl, const IGLUniformID* id) const {
     if (_value) {
       gl->uniform1i(id, 1);
-    } else{
+    }
+    else {
       gl->uniform1i(id, 0);
     }
   }
-  bool isEquals(const GPUUniformValue* v) const{
+  bool isEquals(const GPUUniformValue* v) const {
     return _value == ((GPUUniformValueBool*)v)->_value;
   }
 
-  std::string description() const{
+  std::string description() const {
     IStringBuilder* isb = IStringBuilder::newStringBuilder();
     isb->addString("Uniform Value Boolean: ");
     isb->addBool(_value);
@@ -189,15 +193,15 @@ public:
 
   GPUUniformValueVec2Float(float x, float y):GPUUniformValue(GLType::glVec2Float()), _x(x),_y(y) {}
 
-  void setUniform(GL* gl, const IGLUniformID* id) const{
+  void setUniform(GL* gl, const IGLUniformID* id) const {
     gl->uniform2f(id, _x, _y);
   }
-  bool isEquals(const GPUUniformValue* v) const{
+  bool isEquals(const GPUUniformValue* v) const {
     GPUUniformValueVec2Float *v2 = (GPUUniformValueVec2Float *)v;
     return (_x == v2->_x) && (_y == v2->_y);
   }
 
-  std::string description() const{
+  std::string description() const {
     IStringBuilder* isb = IStringBuilder::newStringBuilder();
     isb->addString("Uniform Value Vec2Float: x:");
     isb->addDouble(_x);
@@ -266,15 +270,15 @@ public:
   GPUUniformValueVec3Float(float x, float y, float z):
   GPUUniformValue(GLType::glVec3Float()),_x(x),_y(y), _z(z) {}
 
-  void setUniform(GL* gl, const IGLUniformID* id) const{
+  void setUniform(GL* gl, const IGLUniformID* id) const {
     gl->uniform3f(id, _x, _y, _z);
   }
-  bool isEquals(const GPUUniformValue* v) const{
+  bool isEquals(const GPUUniformValue* v) const {
     GPUUniformValueVec3Float *v2 = (GPUUniformValueVec3Float *)v;
     return (_x == v2->_x) && (_y == v2->_y) && (_z == v2->_z);
   }
 
-  std::string description() const{
+  std::string description() const {
     IStringBuilder* isb = IStringBuilder::newStringBuilder();
     isb->addString("Uniform Value Vec4Float: x:");
     isb->addDouble(_x);
@@ -343,15 +347,15 @@ public:
   GPUUniformValueVec4Float(float x, float y, float z, float w):
   GPUUniformValue(GLType::glVec4Float()),_x(x),_y(y), _z(z), _w(w) {}
 
-  void setUniform(GL* gl, const IGLUniformID* id) const{
+  void setUniform(GL* gl, const IGLUniformID* id) const {
     gl->uniform4f(id, _x, _y, _z, _w);
   }
-  bool isEquals(const GPUUniformValue* v) const{
+  bool isEquals(const GPUUniformValue* v) const {
     GPUUniformValueVec4Float *v2 = (GPUUniformValueVec4Float *)v;
     return (_x == v2->_x) && (_y == v2->_y) && (_z == v2->_z) && (_w == v2->_w);
   }
 
-  std::string description() const{
+  std::string description() const {
     IStringBuilder* isb = IStringBuilder::newStringBuilder();
     isb->addString("Uniform Value Vec4Float: x:");
     isb->addDouble(_x);
@@ -384,20 +388,17 @@ public:
 
 class GPUUniformValueMatrix4:public GPUUniformValue{
 private:
-//  const bool _ownsProvider;
 #ifdef C_CODE
   const Matrix44DProvider* _provider;
   mutable const Matrix44D* _lastModelSet;
 #endif
 #ifdef JAVA_CODE
-  protected Matrix44DProvider _provider = null;
-  protected  Matrix44D _lastModelSet;
+  private Matrix44DProvider _provider;
+  private Matrix44D         _lastModelSet;
 #endif
 
   ~GPUUniformValueMatrix4() {
-    //    if (_ownsProvider) {
     _provider->_release();
-    //    }
     if (_lastModelSet != NULL) {
       _lastModelSet->_release();
     }
@@ -413,7 +414,6 @@ public:
   GPUUniformValue(GLType::glMatrix4Float()),
   _provider(new Matrix44DMultiplicationHolder( providers, nMatrix ) ),
   _lastModelSet(NULL)
-//  _ownsProvider(true)
   {
   }
 
@@ -421,7 +421,6 @@ public:
   GPUUniformValue(GLType::glMatrix4Float()),
   _provider(provider),
   _lastModelSet(NULL)
-//  _ownsProvider(ownsProvider)
   {
     _provider->_retain();
   }
@@ -430,12 +429,10 @@ public:
   GPUUniformValue(GLType::glMatrix4Float()),
   _provider(new Matrix44DHolder(m)),
   _lastModelSet(NULL)
-//  _ownsProvider(true)
   {
   }
 
-  void setUniform(GL* gl, const IGLUniformID* id) const{
-
+  void setUniform(GL* gl, const IGLUniformID* id) const {
     if (_lastModelSet != NULL) {
       _lastModelSet->_release();
     }
@@ -447,7 +444,7 @@ public:
     gl->uniformMatrix4fv(id, false, _lastModelSet);
   }
 
-  bool isEquals(const GPUUniformValue* v) const{
+  bool isEquals(const GPUUniformValue* v) const {
     if (_lastModelSet == ((GPUUniformValueMatrix4 *)v)->_provider->getMatrix()) {
       return true;
     }
@@ -455,15 +452,13 @@ public:
     return false;
   }
 
-  std::string description() const{
+  std::string description() const {
     IStringBuilder* isb = IStringBuilder::newStringBuilder();
     isb->addString("Uniform Value Matrix44D.");
     std::string s = isb->getString();
     delete isb;
     return s;
   }
-
-  //  const Matrix44D* getMatrix() const { return _m;}
 };
 
 
@@ -492,15 +487,15 @@ public:
 
   GPUUniformValueFloat(float d):GPUUniformValue(GLType::glFloat()),_value(d) {}
 
-  void setUniform(GL* gl, const IGLUniformID* id) const{
+  void setUniform(GL* gl, const IGLUniformID* id) const {
     gl->uniform1f(id, _value);
   }
-  bool isEquals(const GPUUniformValue* v) const{
+  bool isEquals(const GPUUniformValue* v) const {
     GPUUniformValueFloat *v2 = (GPUUniformValueFloat *)v;
     return _value == v2->_value;
   }
 
-  std::string description() const{
+  std::string description() const {
     IStringBuilder* isb = IStringBuilder::newStringBuilder();
     isb->addString("Uniform Value Float: ");
     isb->addDouble(_value);
@@ -566,14 +561,14 @@ public:
 
   GPUUniformValueInt(int b):GPUUniformValue(GLType::glInt()),_value(b) {}
 
-  void setUniform(GL* gl, const IGLUniformID* id) const{
+  void setUniform(GL* gl, const IGLUniformID* id) const {
     gl->uniform1i(id, _value);
   }
-  bool isEquals(const GPUUniformValue* v) const{
+  bool isEquals(const GPUUniformValue* v) const {
     return _value == ((GPUUniformValueInt*)v)->_value;
   }
 
-  std::string description() const{
+  std::string description() const {
     IStringBuilder* isb = IStringBuilder::newStringBuilder();
     isb->addString("Uniform Value Integer: ");
     isb->addInt(_value);

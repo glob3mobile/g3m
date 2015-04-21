@@ -6,4 +6,3 @@
 //
 //
 
-#include "GPUProgramFactory.hpp"

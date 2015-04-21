@@ -6,8 +6,8 @@
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
-#ifndef G3MiOSSDK_TexturedMesh_hpp
-#define G3MiOSSDK_TexturedMesh_hpp
+#ifndef G3MiOSSDK_TexturedMesh
+#define G3MiOSSDK_TexturedMesh
 
 #include "Mesh.hpp"
 #include "TextureMapping.hpp"
@@ -85,7 +85,7 @@ public:
   void rawRender(const G3MRenderContext* rc,
                  const GLState* parentState) const;
 
-  void showNormals(bool v) const{
+  void showNormals(bool v) const {
     _mesh->showNormals(v);
   }
 };

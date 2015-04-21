@@ -6,8 +6,8 @@
 //  Copyright (c) 2012 IGO Software SL. All rights reserved.
 //
 
-#ifndef G3MiOSSDK_Mesh_hpp
-#define G3MiOSSDK_Mesh_hpp
+#ifndef G3MiOSSDK_Mesh
+#define G3MiOSSDK_Mesh
 
 #include "Context.hpp"
 #include "BoundingVolume.hpp"

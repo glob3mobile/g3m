@@ -1,5 +1,5 @@
 //
-//  Matrix44DProvider.h
+//  Matrix44DProvider.hpp
 //  G3MiOSSDK
 //
 //  Created by Jose Miguel SN on 23/08/13.
@@ -9,15 +9,13 @@
 #ifndef __G3MiOSSDK__Matrix44DProvider__
 #define __G3MiOSSDK__Matrix44DProvider__
 
-#include <iostream>
-
 #include "RCObject.hpp"
 #include "Matrix44D.hpp"
 
 #include <vector>
 
 
-class Matrix44DProvider: public RCObject{
+class Matrix44DProvider: public RCObject {
 protected:
   virtual ~Matrix44DProvider() {
 #ifdef JAVA_CODE
@@ -28,6 +26,7 @@ protected:
 public:
   virtual const Matrix44D* getMatrix() const = 0;
 };
+
 
 class Matrix44DHolder: public Matrix44DProvider {
 private:
@@ -68,16 +67,17 @@ public:
     }
   }
 
-  const Matrix44D* getMatrix() const{
+  const Matrix44D* getMatrix() const {
     return _matrix;
   }
 };
 
+
 class Matrix44DMultiplicationHolder : public Matrix44DProvider {
 private:
-  const Matrix44D** _matrix;
+  const Matrix44D**         _matrices;
   const Matrix44DProvider** _providers;
-  int _nMatrix;
+  const size_t _matricesSize;
   mutable Matrix44D* _modelview;
 
   void pullMatrixes() const;
@@ -85,25 +85,27 @@ private:
   ~Matrix44DMultiplicationHolder();
 
 public:
-  Matrix44DMultiplicationHolder(const Matrix44DProvider* providers[], int nMatrix);
+  Matrix44DMultiplicationHolder(const Matrix44DProvider* providers[],
+                                size_t matricesSize);
 
   Matrix44D* getMatrix() const;
   
 };
 
-class Matrix44DMultiplicationHolderBuilder{
 
+class Matrix44DMultiplicationHolderBuilder {
+private:
   std::vector<const Matrix44DProvider*> _providers;
-public:
 
+public:
   ~Matrix44DMultiplicationHolderBuilder() {
-    const int providersSize = _providers.size();
-    for (int i = 0; i < providersSize; i++) {
+    const size_t providersSize = _providers.size();
+    for (size_t i = 0; i < providersSize; i++) {
       _providers[i]->_release();
     }
   }
 
-  int size() const{
+  size_t size() const {
     return _providers.size();
   }
   
@@ -113,9 +115,9 @@ public:
   }
 
   Matrix44DMultiplicationHolder* create() const {
-    const int providersSize = _providers.size();
+    const size_t providersSize = _providers.size();
     const Matrix44DProvider* ps[providersSize];
-    for (int i = 0; i < providersSize; i++) {
+    for (size_t i = 0; i < providersSize; i++) {
       ps[i] = _providers[i];
     }
 
@@ -124,5 +126,4 @@ public:
 
 };
 
-
-#endif /* defined(__G3MiOSSDK__Matrix44DProvider__) */
+#endif

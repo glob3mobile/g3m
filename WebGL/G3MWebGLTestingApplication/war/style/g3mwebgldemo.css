@@ -1,0 +1,17 @@
+html, body {
+	margin: 0px;
+	padding: 0px;
+	width: 100%;
+	height: 100%;
+}
+
+#g3mWidgetHolder {
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+}
+
+canvas:focus {
+	border: none !important;
+	outline: none !important;
+}

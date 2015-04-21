@@ -88,7 +88,7 @@ WebSocket_iOS::WebSocket_iOS(const URL& url,
                              bool autodeleteWebSocket) :
 IWebSocket(url, listener, autodeleteListener, autodeleteWebSocket)
 {
-  NSURL* nsURL = [NSURL URLWithString: [NSString stringWithCppString: getURL().getPath()] ];
+  NSURL* nsURL = [NSURL URLWithString: [NSString stringWithCppString: getURL()._path] ];
 
 
   IWebSocketListener* list = getListener();

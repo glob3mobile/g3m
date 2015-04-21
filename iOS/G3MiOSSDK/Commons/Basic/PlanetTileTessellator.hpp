@@ -6,8 +6,8 @@
 //  Copyright (c) 2012 IGO Software SL. All rights reserved.
 //
 
-#ifndef G3MiOSSDK_PlanetTileTessellator_hpp
-#define G3MiOSSDK_PlanetTileTessellator_hpp
+#ifndef G3MiOSSDK_PlanetTileTessellator
+#define G3MiOSSDK_PlanetTileTessellator
 
 #include "TileTessellator.hpp"
 #include <map>
@@ -52,28 +52,28 @@ private:
                                         float verticalExaggeration,
                                         const Geodetic2D& g) const;
 
-  bool needsEastSkirt(const Sector& tileSector) const{
+  bool needsEastSkirt(const Sector& tileSector) const {
     if (_renderedSector == NULL) {
       return true;
     }
     return _renderedSector->_upper._longitude.greaterThan(tileSector._upper._longitude);
   }
 
-  bool needsNorthSkirt(const Sector& tileSector) const{
+  bool needsNorthSkirt(const Sector& tileSector) const {
     if (_renderedSector == NULL) {
       return true;
     }
     return _renderedSector->_upper._latitude.greaterThan(tileSector._upper._latitude);
   }
 
-  bool needsWestSkirt(const Sector& tileSector) const{
+  bool needsWestSkirt(const Sector& tileSector) const {
     if (_renderedSector == NULL) {
       return true;
     }
     return _renderedSector->_lower._longitude.lowerThan(tileSector._lower._longitude);
   }
 
-  bool needsSouthSkirt(const Sector& tileSector) const{
+  bool needsSouthSkirt(const Sector& tileSector) const {
     if (_renderedSector == NULL) {
       return true;
     }
@@ -129,6 +129,8 @@ private:
                         ShortBufferBuilder& indices,
                         FloatBufferBuilderFromCartesian2D& textCoords) const;
 
+  static double skirtDepthForSector(const Planet* planet, const Sector& sector);
+
 public:
 
   PlanetTileTessellator(const bool skirted, const Sector& sector);
@@ -146,7 +148,6 @@ public:
                        Tile* tile,
                        const ElevationData* elevationData,
                        float verticalExaggeration,
-                       bool mercator,
                        bool debug,
                        TileTessellatorMeshData& data) const;
 
@@ -154,18 +155,12 @@ public:
                             const Vector2I& resolution,
                             const Tile* tile) const;
 
-  bool isReady(const G3MRenderContext* rc) const {
-    return true;
-  }
-
   IFloatBuffer* createTextCoords(const Vector2I& resolution,
-                                 const Tile* tile,
-                                 bool mercator) const;
+                                 const Tile* tile) const;
 
   const Vector2F getTextCoord(const Tile* tile,
                               const Angle& latitude,
-                              const Angle& longitude,
-                              bool mercator) const;
+                              const Angle& longitude) const;
 
   void setRenderedSector(const Sector& sector) {
     if (_renderedSector == NULL || !_renderedSector->isEquals(sector)) {
@@ -173,7 +168,8 @@ public:
 
       if (sector.isEquals(Sector::fullSphere())) {
         _renderedSector = NULL;
-      } else{
+      }
+      else {
         _renderedSector = new Sector(sector);
       }
     }

@@ -13,12 +13,9 @@
 #include "Planet.hpp"
 #include "GLConstants.hpp"
 #include "GLGlobalState.hpp"
-#include "IFactory.hpp"
 #include "IFloatBuffer.hpp"
 #include "Camera.hpp"
 #include "FloatBufferBuilderFromCartesian3D.hpp"
-#include "Camera.hpp"
-//#include "CompositeMesh.hpp"
 
 #define MAX_POSITIONS_PER_SEGMENT 128
 
@@ -188,21 +185,21 @@ Trail::~Trail() {
 
 void TrailsRenderer::updateGLState(const G3MRenderContext* rc) {
 
-  const Camera* cam = rc->getCurrentCamera();
+  const Camera* camera = rc->getCurrentCamera();
   if (_projection == NULL) {
-    _projection = new ProjectionGLFeature(cam->getProjectionMatrix44D());
+    _projection = new ProjectionGLFeature(camera->getProjectionMatrix44D());
     _glState->addGLFeature(_projection, true);
   }
   else {
-    _projection->setMatrix(cam->getProjectionMatrix44D());
+    _projection->setMatrix(camera->getProjectionMatrix44D());
   }
 
   if (_model == NULL) {
-    _model = new ModelGLFeature(cam->getModelMatrix44D());
+    _model = new ModelGLFeature(camera->getModelMatrix44D());
     _glState->addGLFeature(_model, true);
   }
   else {
-    _model->setMatrix(cam->getModelMatrix44D());
+    _model->setMatrix(camera->getModelMatrix44D());
   }
 }
 
@@ -263,6 +260,27 @@ void TrailsRenderer::render(const G3MRenderContext* rc, GLState* glState) {
   }
 }
 
-void TrailsRenderer::initialize(const G3MContext* context) {
-}
 
+void TrailsRenderer::removeTrail(Trail* trail,
+                                 bool deleteTrail) {
+  const int trailsCount = _trails.size();
+  int foundIndex = -1;
+  for (int i = 0; i < trailsCount; i++) {
+    Trail* each = _trails[i];
+    if (trail == each) {
+      foundIndex = i;
+      break;
+    }
+  }
+  if (foundIndex >= 0) {
+#ifdef C_CODE
+    _trails.erase(_trails.begin() + foundIndex);
+#endif
+#ifdef JAVA_CODE
+    _trails.remove(foundIndex);
+#endif
+    if (deleteTrail) {
+      delete trail;
+    }
+  }
+}

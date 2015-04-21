@@ -6,17 +6,17 @@
 //  Copyright (c) 2012 IGO Software SL. All rights reserved.
 //
 
-#ifndef G3MiOSSDK_BusyMeshRenderer_hpp
-#define G3MiOSSDK_BusyMeshRenderer_hpp
+#ifndef G3MiOSSDK_BusyMeshRenderer
+#define G3MiOSSDK_BusyMeshRenderer
 
-#include "LeafRenderer.hpp"
+#include "ProtoRenderer.hpp"
 #include "IndexedMesh.hpp"
 #include "Effects.hpp"
 #include "Color.hpp"
 #include "GLState.hpp"
 
 
-class BusyMeshRenderer : public LeafRenderer, EffectTarget {
+class BusyMeshRenderer : public ProtoRenderer, EffectTarget {
 private:
   Mesh    *_mesh;
   double  _degrees;
@@ -49,27 +49,20 @@ public:
 
   }
   
-  void initialize(const G3MContext* context);
-  
-  RenderState getRenderState(const G3MRenderContext* rc) {
-    return RenderState::ready();
+  void initialize(const G3MContext* context) {
+    
   }
-
+ 
   void render(const G3MRenderContext* rc, GLState* glState);
-  
-  bool onTouchEvent(const G3MEventContext* ec,
-                    const TouchEvent* touchEvent) {
-    return false;
-  }
   
   void onResizeViewportEvent(const G3MEventContext* ec,
                              int width, int height) {
     const int halfWidth = width / 2;
     const int halfHeight = height / 2;
-    _projectionMatrix = MutableMatrix44D::createOrthographicProjectionMatrix(-halfWidth,   halfWidth,
-                                                                              -halfHeight, halfHeight,
-                                                                              -halfWidth,  halfWidth);
-
+    _projectionMatrix.copyValue(MutableMatrix44D::createOrthographicProjectionMatrix(-halfWidth,  halfWidth,
+                                                                                     -halfHeight, halfHeight,
+                                                                                     -halfWidth,  halfWidth));
+    
     delete _mesh;
     _mesh = NULL;
   }
@@ -79,10 +72,6 @@ public:
     delete _backgroundColor;
 
     _glState->_release();
-    
-#ifdef JAVA_CODE
-  super.dispose();
-#endif
   }
 
   void incDegrees(double value) {
@@ -90,7 +79,8 @@ public:
     if (_degrees>360) {
       _degrees -= 360;
     }
-    _modelviewMatrix = MutableMatrix44D::createRotationMatrix(Angle::fromDegrees(_degrees), Vector3D(0, 0, -1));
+    _modelviewMatrix.copyValue(MutableMatrix44D::createRotationMatrix(Angle::fromDegrees(_degrees),
+                                                                     Vector3D(0, 0, -1)));
   }
 
   void start(const G3MRenderContext* rc);
@@ -115,6 +105,7 @@ public:
 class BusyMeshEffect : public EffectWithForce {
 private:
   BusyMeshRenderer* _renderer;
+  long long _lastMS;
 
 public:
 
@@ -124,12 +115,21 @@ public:
   { }
 
   void start(const G3MRenderContext* rc,
-             const TimeInterval& when) {}
+             const TimeInterval& when) {
+    _lastMS = when.milliseconds();
+  }
 
   void doStep(const G3MRenderContext* rc,
               const TimeInterval& when) {
     EffectWithForce::doStep(rc, when);
-    _renderer->incDegrees(5);
+
+    const long long now = when.milliseconds();
+    const long long ellapsed = now - _lastMS;
+    _lastMS = now;
+
+    const double deltaDegrees = (360.0 / 1200.0) * ellapsed;
+
+    _renderer->incDegrees(deltaDegrees);
   }
 
   void stop(const G3MRenderContext* rc,

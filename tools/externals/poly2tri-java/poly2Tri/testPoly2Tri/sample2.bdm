@@ -1,0 +1,41 @@
+#Simple Polygon outer bounary vertices oriented in counter clockwise direction.
+4                       #number of vertices;
+0     0                 #coordinates for first vertex;
+10.0  0                 ...
+10.0  10.0
+0     10
+
+#Here are the all vertices for holes oriented in clockwise direction;
+
+#The first hole loop 
+4                        #number of vertices;
+2.5   7.5                #coordinates for first vertex;
+7.5   7.5                #coordinates for second vertex;
+7.5   2.5                ...
+2.5   2.5
+
+
+#The second hole loop
+5                       #number of vertices; 
+5   1                   #coordinates for first vertex;
+6   1                   #coordinates for second vertex;
+6   0.5                 ...
+5   0.5                 ...
+4.0 0.75                ...
+
+#The third hole loop 
+6                       #number of vertices; 
+5   9                   #coordinates for first vertex;
+6   9                   #coordinates for second vertex;
+7 8.5                   ...
+6   8                   ...
+5   8                   ...
+4.0 8.5                 ...
+
+#continue if there are any additional holes.
+...
+...
+...
+continue if there are additional holes;               
+run poly2tri sample.bdm to mesh and check this sample file
+

@@ -4,7 +4,6 @@ package org.glob3.mobile.specific;
 
 import org.glob3.mobile.generated.IBufferDownloadListener;
 import org.glob3.mobile.generated.IByteBuffer;
-import org.glob3.mobile.generated.IFactory;
 import org.glob3.mobile.generated.IImage;
 import org.glob3.mobile.generated.IImageDownloadListener;
 import org.glob3.mobile.generated.ILogger;
@@ -84,7 +83,7 @@ public final class Downloader_Android_ListenerEntry {
 
       if (_imageListener != null) {
          if (image == null) {
-            ILogger.instance().logError("Downloader_Android: Can't create image from data (URL=" + url.getPath() + ")");
+            ILogger.instance().logError("Downloader_Android: Can't create image from data (URL=" + url._path + ")");
             _imageListener.onError(url);
          }
          else {
@@ -104,11 +103,11 @@ public final class Downloader_Android_ListenerEntry {
 
       if (_imageListener != null) {
          if (image == null) {
-            ILogger.instance().logError("Downloader_Android: Can't create image from data (URL=" + url.getPath() + ")");
+            ILogger.instance().logError("Downloader_Android: Can't create image from data (URL=" + url._path + ")");
          }
          else {
             _imageListener.onCanceledDownload(url, image, false);
-            IFactory.instance().deleteImage(image);
+            image.dispose();
          }
       }
    }

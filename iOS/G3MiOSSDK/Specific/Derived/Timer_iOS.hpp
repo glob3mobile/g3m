@@ -1,13 +1,13 @@
 //
-//  Timer_iOS.h
+//  Timer_iOS.hpp
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 12/06/12.
 //  Copyright (c) 2012 IGO Software SL. All rights reserved.
 //
 
-#ifndef G3MiOSSDK_Timer_iOS_h
-#define G3MiOSSDK_Timer_iOS_h
+#ifndef G3MiOSSDK_Timer_iOS
+#define G3MiOSSDK_Timer_iOS
 
 #include "ITimer.hpp"
 
@@ -28,7 +28,11 @@ public:
   TimeInterval now() const {
     return TimeInterval::fromSeconds(nowInSeconds());
   }
-  
+
+  long long nowInMilliseconds() const {
+    return (long long) (nowInSeconds() * 1000.0);
+  }
+
   void start() {
     _startedInSeconds = nowInSeconds();
   }

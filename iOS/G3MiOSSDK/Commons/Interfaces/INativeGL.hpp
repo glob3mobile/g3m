@@ -6,8 +6,8 @@
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
-#ifndef G3MiOSSDK_INativeGL_hpp
-#define G3MiOSSDK_INativeGL_hpp
+#ifndef G3MiOSSDK_INativeGL
+#define G3MiOSSDK_INativeGL
 
 class IFloatBuffer;
 //class IIntBuffer;

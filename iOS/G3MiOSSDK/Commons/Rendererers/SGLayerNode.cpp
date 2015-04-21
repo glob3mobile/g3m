@@ -42,7 +42,7 @@ public:
 
   void onError(const URL& url) {
     ILogger::instance()->logWarning("Can't download texture \"%s\"",
-                                    url.getPath().c_str());
+                                    url._path.c_str());
   }
 
   void onCancel(const URL& url) {
@@ -76,9 +76,7 @@ bool SGLayerNode::isReadyToRender(const G3MRenderContext* rc) {
 }
 
 void SGLayerNode::onImageDownload(const IImage* image) {
-  if (_downloadedImage != NULL) {
-    IFactory::instance()->deleteImage(_downloadedImage);
-  }
+  delete _downloadedImage;
   _downloadedImage = image;
 }
 
@@ -108,13 +106,13 @@ void SGLayerNode::requestImage(const G3MRenderContext* rc) {
 const TextureIDReference* SGLayerNode::getTextureId(const G3MRenderContext* rc) {
   if (_textureId == NULL) {
     if (_downloadedImage != NULL) {
-      const bool hasMipMap = false;
+      const bool generateMipmap = false;
       _textureId = rc->getTexturesHandler()->getTextureIDReference(_downloadedImage,
                                                                    GLFormat::rgba(),
-                                                                   getURL().getPath(),
-                                                                   hasMipMap);
+                                                                   getURL()._path,
+                                                                   generateMipmap);
 
-      IFactory::instance()->deleteImage(_downloadedImage);
+      delete _downloadedImage;
       _downloadedImage = NULL;
     }
   }

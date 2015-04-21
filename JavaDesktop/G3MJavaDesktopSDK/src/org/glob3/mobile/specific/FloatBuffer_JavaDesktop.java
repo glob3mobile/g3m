@@ -130,4 +130,22 @@ public class FloatBuffer_JavaDesktop
    public long getID() {
       throw new RuntimeException("Not implemented");
    }
+
+
+   @Override
+   public void rawPut(final int i,
+                      final IFloatBuffer srcBuffer,
+                      final int srcFromIndex,
+                      final int count) {
+      if ((i < 0) || ((i + count) > size())) {
+         throw new RuntimeException("buffer put error");
+      }
+
+      final FloatBuffer_JavaDesktop nativeSrcBuffer = (FloatBuffer_JavaDesktop) srcBuffer;
+      for (int j = 0; j < count; j++) {
+         _buffer.put(i + j, nativeSrcBuffer._buffer.get(srcFromIndex + j));
+      }
+   }
+
+
 }

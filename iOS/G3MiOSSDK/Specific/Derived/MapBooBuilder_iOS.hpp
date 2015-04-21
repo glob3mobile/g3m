@@ -37,7 +37,8 @@ public:
                     const std::string& applicationId,
                     MapBoo_ViewType viewType,
                     MapBooApplicationChangeListener* applicationListener,
-                    bool enableNotifications);
+                    bool enableNotifications,
+                    const std::string& token);
 
   void initializeWidget();
   

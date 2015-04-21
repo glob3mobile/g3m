@@ -1,13 +1,13 @@
 //
-//  Storage.h
+//  Storage.hpp
 //  G3MiOSSDK
 //
 //  Created by José Miguel S N on 26/06/12.
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
-#ifndef G3MiOSSDK_Storage_h
-#define G3MiOSSDK_Storage_h
+#ifndef G3MiOSSDK_Storage
+#define G3MiOSSDK_Storage
 
 class URL;
 class IByteBuffer;
@@ -33,15 +33,6 @@ public:
 
   ~IImageResult() {
   }
-
-//  IImage* getImage() const {
-//    return _image;
-//  }
-
-//  bool isExpired() const {
-//    return _expired;
-//  }
-  
 };
 
 
@@ -71,26 +62,6 @@ public:
 };
 
 
-//class IStorageImageListener {
-//public:
-//#if C_CODE
-//  virtual ~IStorageImageListener() { }
-//#endif
-//#ifdef JAVA_CODE
-//  void dispose();
-//#endif
-//
-//  /**
-//   Callback method image reading.
-//   The image will be NULL if it doesn't exist
-//   The image has to be deleted in C++ / and disposed() en Java.
-//   */
-//  virtual void imageRead(IImage* image,
-//                         bool expired) = 0;
-//
-//};
-
-
 class IStorage {
 protected:
 #ifdef C_CODE
@@ -117,11 +88,6 @@ public:
 
   virtual IImageResult readImage(const URL& url,
                                  bool readExpired) = 0;
-
-//  virtual void readImage(const URL& url,
-//                         bool readExpired,
-//                         IStorageImageListener* imageListener,
-//                         bool autodeleteImageListener) = 0;
 
   virtual void saveBuffer(const URL& url,
                           const IByteBuffer* buffer,

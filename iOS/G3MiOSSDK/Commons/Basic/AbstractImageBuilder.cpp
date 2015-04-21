@@ -10,16 +10,17 @@
 
 #include "ChangedListener.hpp"
 #include "ILogger.hpp"
+#include "ErrorHandling.hpp"
 
 void AbstractImageBuilder::changed() {
-  if (_listener != NULL) {
-    _listener->changed();
+  if (_changeListener != NULL) {
+    _changeListener->changed();
   }
 }
 
-void AbstractImageBuilder::setChangeListener(ChangedListener* listener) {
-  if (_listener != NULL) {
-    ILogger::instance()->logError("listener already set!");
+void AbstractImageBuilder::setChangeListener(ChangedListener* changeListener) {
+  if (_changeListener != NULL) {
+    THROW_EXCEPTION("changeListener already set!");
   }
-  _listener = listener;
+  _changeListener = changeListener;
 }

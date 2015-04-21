@@ -6,8 +6,8 @@
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
-#ifndef G3MiOSSDK_MutableMatrix44D_hpp
-#define G3MiOSSDK_MutableMatrix44D_hpp
+#ifndef G3MiOSSDK_MutableMatrix44D
+#define G3MiOSSDK_MutableMatrix44D
 
 class FrustumData;
 class Vector3D;
@@ -28,13 +28,10 @@ class MutableVector3D;
 
 #include "Matrix44D.hpp"
 
-//#include "MutableMatrix44D.hpp"
-
 
 class MutableMatrix44D {
 
 private:
-
   //_m23 -> row 2, column 3
   double _m00;
   double _m01;
@@ -53,9 +50,6 @@ private:
   double _m32;
   double _m33;
 
-  //  mutable IFloatBuffer* _columnMajorFloatBuffer;
-  //  mutable float*        _columnMajorFloatArray;
-
   mutable Matrix44D* _matrix44D;
 
   bool _isValid;
@@ -67,9 +61,11 @@ private:
   {
   }
 
+  MutableMatrix44D& operator=(const MutableMatrix44D& that);
+
+
 public:
 
-  //CONTRUCTORS
   //Contructor parameters in column major order
   MutableMatrix44D(double m00, double m10, double m20, double m30,
                    double m01, double m11, double m21, double m31,
@@ -183,7 +179,7 @@ public:
     
   }
 
-  Matrix44D* asMatrix44D() const{
+  Matrix44D* asMatrix44D() const {
     if (_matrix44D == NULL) {
       _matrix44D = new Matrix44D(_m00, _m10, _m20, _m30,
                                  _m01, _m11, _m21, _m31,
@@ -195,7 +191,7 @@ public:
 
   void copyValue(const MutableMatrix44D &m);
 
-  bool isEquals(const MutableMatrix44D& m) const{
+  bool isEquals(const MutableMatrix44D& m) const {
     return (
             (_m00 == m._m00) && (_m01 == m._m01) && (_m02 == m._m02) && (_m03 == m._m03) &&
             (_m10 == m._m10) && (_m11 == m._m11) && (_m12 == m._m12) && (_m13 == m._m13) &&
@@ -203,8 +199,6 @@ public:
             (_m30 == m._m30) && (_m31 == m._m31) && (_m32 == m._m32) && (_m33 == m._m33)
             );
   }
-
-  MutableMatrix44D& operator=(const MutableMatrix44D &m);
 
   ~MutableMatrix44D();
 
@@ -228,7 +222,7 @@ public:
     return _isValid;
   }
 
-  std::string description() const{
+  std::string description() const {
     IStringBuilder* isb = IStringBuilder::newStringBuilder();
     isb->addString("MUTABLE MATRIX 44D: ");
     float* f = asMatrix44D()->getColumnMajorFloatArray();
@@ -240,6 +234,12 @@ public:
     delete isb;
     return s;
   }
+#ifdef JAVA_CODE
+  @Override
+  public String toString() {
+    return description();
+  }
+#endif
 
   void copyValueOfMultiplication(const MutableMatrix44D& m1, const MutableMatrix44D& m2);
 

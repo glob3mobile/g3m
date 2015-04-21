@@ -10,7 +10,6 @@
 
 #include "IStringBuilder.hpp"
 #include "IFloatBuffer.hpp"
-#include "IFactory.hpp"
 #include "Vector3D.hpp"
 #include "Vector2I.hpp"
 
@@ -43,11 +42,6 @@ SubviewElevationData::~SubviewElevationData() {
 double SubviewElevationData::getElevationAt(int x, int y) const {
 
   const int index = ((_height-1-y) * _width) + x;
-
-//  if ( (index < 0) || (index >= _buffer->size()) ) {
-//    printf("break point on me\n");
-//    return IMathUtils::instance()->NanD();
-//  }
 
   return _buffer[index];
 }

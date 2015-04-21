@@ -29,7 +29,7 @@ public final class Downloader_WebGL_Handler_WebkitImpl
 		var xhr = new XMLHttpRequest();
 		xhr.open("GET", url, true);
 		xhr.responseType = "arraybuffer";
-		xhr.setRequestHeader("Cache-Control", "max-age=31536000");
+		//xhr.setRequestHeader("Cache-Control", "max-age=31536000");
 		xhr.onload = function() {
 			if (xhr.readyState == 4) {
 				// inform downloader to remove myself, to avoid adding new Listener
@@ -42,15 +42,18 @@ public final class Downloader_WebGL_Handler_WebkitImpl
 							response = new Blob([ dataView ], {
 								type : 'image/png'
 							});
-						} else {
+						}
+						else {
 							response = new Blob([ xhr.response ]);
 						}
 						that.@org.glob3.mobile.specific.Downloader_WebGL_Handler_DefaultImpl::jsCreateImageFromBlob(ILcom/google/gwt/core/client/JavaScriptObject;)(xhr.status, response);
-					} else {
+					}
+					else {
 						response = xhr.response;
 						that.@org.glob3.mobile.specific.Downloader_WebGL_Handler::processResponse(ILcom/google/gwt/core/client/JavaScriptObject;)(xhr.status, response);
 					}
-				} else {
+				}
+				else {
 					console.log("Error Retrieving Data!");
 					that.@org.glob3.mobile.specific.Downloader_WebGL_Handler::processResponse(ILcom/google/gwt/core/client/JavaScriptObject;)(xhr.status, response);
 				}

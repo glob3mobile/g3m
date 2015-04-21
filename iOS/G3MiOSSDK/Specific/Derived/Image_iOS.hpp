@@ -1,5 +1,5 @@
 //
-//  Image_iOS.h
+//  Image_iOS.hpp
 //  G3MiOSSDK
 //
 //  Created by José Miguel S N on 13/06/12.
@@ -7,8 +7,8 @@
 //
 
 
-#ifndef G3MiOSSDK_Image_iOS_h
-#define G3MiOSSDK_Image_iOS_h
+#ifndef G3MiOSSDK_Image_iOS
+#define G3MiOSSDK_Image_iOS
 
 #import <UIKit/UIKit.h>
 

@@ -12,6 +12,7 @@
 
 #include "ICanvas.hpp"
 #include "Color.hpp"
+#include "ICanvasUtils.hpp"
 #include "ColumnCanvasElement.hpp"
 #include "GFont.hpp"
 #include "TextCanvasElement.hpp"
@@ -44,20 +45,19 @@ void HUDErrorRenderer_ImageFactory::drawOn(ICanvas* canvas,
   canvas->setFillColor(Color::black());
   canvas->fillRectangle(0, 0,
                         width, height);
-
-  ColumnCanvasElement column(Color::fromRGBA(0.9f, 0.4f, 0.4f, 1.0f),
-                             0,  /* margin */
-                             16, /* padding */
-                             8   /* cornerRadius */);
-  const GFont labelFont  = GFont::sansSerif(18);
-  const Color labelColor = Color::white();
-
-  const int errorsSize = _errors.size();
-  for (int i = 0; i < errorsSize; i++) {
-    column.add( new TextCanvasElement(_errors[i], labelFont, labelColor) );
-  }
-
-  column.drawCentered(canvas);
+  ICanvasUtils::drawStringsOn(_errors,
+                              canvas,
+                              width,
+                              height,
+                              Center,
+                              Middle,
+                              Center,
+                              Color::white(),
+                              18,
+                              5,
+                              Color::fromRGBA(0.9f, 0.4f, 0.4f, 1.0f),
+                              Color::transparent(),
+                              16);
 }
 
 bool HUDErrorRenderer_ImageFactory::isEquals(const std::vector<std::string>& v1,
@@ -95,39 +95,17 @@ bool HUDErrorRenderer_ImageFactory::setErrors(const std::vector<std::string>& er
   return true;
 }
 
-HUDErrorRenderer::HUDErrorRenderer() {
+HUDErrorRenderer::HUDErrorRenderer(ErrorMessagesCustomizer* errorMessageCustomizer) {
   _hudImageRenderer = new HUDImageRenderer(new HUDErrorRenderer_ImageFactory());
+  _errorMessageCustomizer = errorMessageCustomizer;
 }
 
 void HUDErrorRenderer::setErrors(const std::vector<std::string>& errors) {
   HUDErrorRenderer_ImageFactory* factory = (HUDErrorRenderer_ImageFactory*) (_hudImageRenderer->getImageFactory());
-  if (factory->setErrors(errors)) {
+  const std::vector<std::string> customizedErrors = (_errorMessageCustomizer != NULL) ? _errorMessageCustomizer->customize(errors) : errors;
+  if (factory->setErrors(customizedErrors)) {
     _hudImageRenderer->recreateImage();
   }
-}
-
-bool HUDErrorRenderer::isEnable() const {
-  return _hudImageRenderer->isEnable();
-}
-
-void HUDErrorRenderer::setEnable(bool enable) {
-  _hudImageRenderer->setEnable(enable);
-}
-
-RenderState HUDErrorRenderer::getRenderState(const G3MRenderContext* rc) {
-  return _hudImageRenderer->getRenderState(rc);
-}
-
-bool HUDErrorRenderer::isPlanetRenderer() {
-  return _hudImageRenderer->isPlanetRenderer();
-}
-
-SurfaceElevationProvider* HUDErrorRenderer::getSurfaceElevationProvider() {
-  return _hudImageRenderer->getSurfaceElevationProvider();
-}
-
-PlanetRenderer* HUDErrorRenderer::getPlanetRenderer() {
-  return _hudImageRenderer->getPlanetRenderer();
 }
 
 void HUDErrorRenderer::initialize(const G3MContext* context) {
@@ -137,11 +115,6 @@ void HUDErrorRenderer::initialize(const G3MContext* context) {
 void HUDErrorRenderer::render(const G3MRenderContext* rc,
                               GLState* glState) {
   _hudImageRenderer->render(rc, glState);
-}
-
-bool HUDErrorRenderer::onTouchEvent(const G3MEventContext* ec,
-                                    const TouchEvent* touchEvent) {
-  return _hudImageRenderer->onTouchEvent(ec, touchEvent);
 }
 
 void HUDErrorRenderer::onResizeViewportEvent(const G3MEventContext* ec,

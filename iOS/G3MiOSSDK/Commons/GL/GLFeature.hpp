@@ -6,8 +6,8 @@
 //  Copyright (c) 2012 Universidad de Las Palmas. All rights reserved.
 //
 
-#ifndef G3MiOSSDK_GLFeature_hpp
-#define G3MiOSSDK_GLFeature_hpp
+#ifndef G3MiOSSDK_GLFeature
+#define G3MiOSSDK_GLFeature
 
 #include "GPUVariableValueSet.hpp"
 #include "GLFeatureGroup.hpp"
@@ -38,13 +38,14 @@ enum GLFeatureID{
 class GLFeature: public RCObject {
 protected:
   ~GLFeature() {
+    delete _values;
 #ifdef JAVA_CODE
     super.dispose();
 #endif
   }
 
 protected:
-  GPUVariableValueSet _values;
+  GPUVariableValueSet* _values;
 
 public:
   const GLFeatureGroupName _group;
@@ -55,10 +56,11 @@ public:
   _group(group),
   _id(id)
   {
+    _values = new GPUVariableValueSet();
   }
 
-  const GPUVariableValueSet* getGPUVariableValueSet() const{
-    return &_values;
+  const GPUVariableValueSet* getGPUVariableValueSet() const {
+    return _values;
   }
 
   virtual void applyOnGlobalGLState(GLGlobalState* state) const = 0;
@@ -88,12 +90,22 @@ private:
     super.dispose();
 #endif
   }
+  
+  GPUUniformValueVec2FloatMutable* _extent;
 
 public:
   ViewportExtentGLFeature(int viewportWidth,
                           int viewportHeight);
+
+  ViewportExtentGLFeature(const Camera* camera);
+
   void applyOnGlobalGLState(GLGlobalState* state)  const {}
+  
+  void changeExtent(int viewportWidth,
+                    int viewportHeight);
 };
+
+/////////////////////////////////////////////////////////
 
 
 class GeometryGLFeature: public GLFeature {
@@ -101,9 +113,9 @@ private:
   //Position + cull + depth + polygonoffset + linewidth
   GPUAttributeValueVec4Float* _position;
 
-  const bool _depthTestEnabled;
-  const bool _cullFace;
-  const int _culledFace;
+  const bool  _depthTestEnabled;
+  const bool  _cullFace;
+  const int   _culledFace;
   const bool  _polygonOffsetFill;
   const float _polygonOffsetFactor;
   const float _polygonOffsetUnits;
@@ -134,11 +146,47 @@ public:
 };
 ///////////////////////////////////////////////////////////////////////////////////////////
 
+
+
+class Geometry2DGLFeature: public GLFeature {
+private:
+  //Position + cull + depth + polygonoffset + linewidth
+  GPUAttributeValueVec2Float* _position;
+
+  const float _lineWidth;
+
+  ~Geometry2DGLFeature();
+
+  GPUUniformValueVec2FloatMutable* _translation;
+
+public:
+
+  Geometry2DGLFeature(IFloatBuffer* buffer,
+                      int arrayElementSize,
+                      int index,
+                      bool normalized,
+                      int stride,
+                      float lineWidth,
+                      bool needsPointSize,
+                      float pointSize,
+                      const Vector2F& translation);
+
+  void setTranslation(float x, float y){
+    _translation->changeValue(x, y);
+  }
+
+
+  void applyOnGlobalGLState(GLGlobalState* state) const ;
+
+};
+///////////////////////////////////////////////////////////////////////////////////////////
+
+
 class GLCameraGroupFeature: public GLFeature {
 private:
 
 #ifdef C_CODE
-  Matrix44DHolder *_matrixHolder;
+  Matrix44DHolder* _matrixHolder;
 #endif
 #ifdef JAVA_CODE
   private Matrix44DHolder _matrixHolder = null;
@@ -170,7 +218,7 @@ public:
     _matrixHolder->setMatrix(matrix);
   }
 
-  const Matrix44DHolder* getMatrixHolder() const{
+  const Matrix44DHolder* getMatrixHolder() const {
     return _matrixHolder;
   }
 
@@ -191,7 +239,7 @@ public:
   {
   }
 
-  ModelViewGLFeature(const Camera* cam);
+  ModelViewGLFeature(const Camera* camera);
 };
 
 class ModelGLFeature: public GLCameraGroupFeature {
@@ -208,7 +256,7 @@ public:
   {
   }
 
-  ModelGLFeature(const Camera* cam);
+  ModelGLFeature(const Camera* camera);
 };
 
 class ProjectionGLFeature: public GLCameraGroupFeature {
@@ -225,7 +273,7 @@ public:
   {
   }
 
-  ProjectionGLFeature(const Camera* cam);
+  ProjectionGLFeature(const Camera* camera);
 };
 
 class ModelTransformGLFeature: public GLCameraGroupFeature {
@@ -363,12 +411,12 @@ public:
   void setScale(float u, float v);
   void setRotationAngleInRadiansAndRotationCenter(float angle, float u, float v);
 
-  int getTarget() const{
+  int getTarget() const {
     return _target;
   }
 
 #ifdef C_CODE
-  IGLTextureId const* getTextureID() const{
+  IGLTextureId const* getTextureID() const {
     return _texID;
   }
 #endif
@@ -399,7 +447,7 @@ public:
                  int sFactor,
                  int dFactor);
 
-  void applyOnGlobalGLState(GLGlobalState* state) const{
+  void applyOnGlobalGLState(GLGlobalState* state) const {
     blendingOnGlobalGLState(state);
   }
 };
@@ -414,8 +462,10 @@ private:
 
 public:
   FlatColorGLFeature(const Color& color,
-                     bool blend, int sFactor, int dFactor);
-  void applyOnGlobalGLState(GLGlobalState* state) const{
+                     bool blend = false,
+                     int sFactor = GLBlendFactor::srcAlpha(),
+                     int dFactor = GLBlendFactor::oneMinusSrcAlpha());
+  void applyOnGlobalGLState(GLGlobalState* state) const {
     blendingOnGlobalGLState(state);
   }
 };
@@ -489,7 +539,7 @@ public:
                           const Color& diffuseLightColor,
                           const Color& ambientLightColor);
 
-  void applyOnGlobalGLState(GLGlobalState* state) const{}
+  void applyOnGlobalGLState(GLGlobalState* state) const {}
 
   void setLightDirection(const Vector3D& lightDir);
 };
@@ -509,7 +559,7 @@ public:
                         bool normalized,
                         int stride);
   
-  void applyOnGlobalGLState(GLGlobalState* state) const{}
+  void applyOnGlobalGLState(GLGlobalState* state) const {}
 };
 
 

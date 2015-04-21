@@ -22,6 +22,7 @@
 #include "Vector2D.hpp"
 #include "Geodetic3D.hpp"
 #include "TextureIDReference.hpp"
+#include "ErrorHandling.hpp"
 
 class MarkLabelImageListener : public IImageListener {
 private:
@@ -38,10 +39,8 @@ public:
   }
 
   void imageCreated(const IImage* image) {
-    if (_iconImage != NULL) {
-      IFactory::instance()->deleteImage(_iconImage);
-      _iconImage = NULL;
-    }
+    delete _iconImage;
+    _iconImage = NULL;
 
     if (image == NULL) {
       _mark->onTextureDownloadError();
@@ -112,12 +111,12 @@ public:
   }
   
   void onError(const URL& url) {
-    ILogger::instance()->logError("Error trying to download image \"%s\"", url.getPath().c_str());
+    ILogger::instance()->logError("Error trying to download image \"%s\"", url._path.c_str());
     _mark->onTextureDownloadError();
   }
   
   void onCancel(const URL& url) {
-    // ILogger::instance()->logError("Download canceled for image \"%s\"", url.getPath().c_str());
+    // ILogger::instance()->logError("Download canceled for image \"%s\"", url._path.c_str());
     _mark->onTextureDownloadError();
   }
   
@@ -129,11 +128,8 @@ public:
 };
 
 
-IFloatBuffer* Mark::_billboardTexCoord = NULL;
-
-
 Mark::Mark(const std::string& label,
-           const URL          iconURL,
+           const URL&         iconURL,
            const Geodetic3D&  position,
            AltitudeMode       altitudeMode,
            double             minDistanceToCamera,
@@ -167,7 +163,7 @@ _autoDeleteUserData(autoDeleteUserData),
 _minDistanceToCamera(minDistanceToCamera),
 _listener(listener),
 _autoDeleteListener(autoDeleteListener),
-_imageID( iconURL.getPath() + "_" + label ),
+_imageID( iconURL._path + "_" + label ),
 _surfaceElevationProvider(NULL),
 _currentSurfaceElevation(0.0),
 _glState(NULL),
@@ -217,7 +213,7 @@ _normalAtMarkPosition(NULL)
   
 }
 
-Mark::Mark(const URL          iconURL,
+Mark::Mark(const URL&         iconURL,
            const Geodetic3D&  position,
            AltitudeMode       altitudeMode,
            double             minDistanceToCamera,
@@ -246,7 +242,7 @@ _autoDeleteUserData(autoDeleteUserData),
 _minDistanceToCamera(minDistanceToCamera),
 _listener(listener),
 _autoDeleteListener(autoDeleteListener),
-_imageID( iconURL.getPath() + "_" ),
+_imageID( iconURL._path + "_" ),
 _surfaceElevationProvider(NULL),
 _currentSurfaceElevation(0.0),
 _glState(NULL),
@@ -258,7 +254,7 @@ _normalAtMarkPosition(NULL)
 Mark::Mark(const IImage*      image,
            const std::string& imageID,
            const Geodetic3D&  position,
-           AltitudeMode altitudeMode,
+           AltitudeMode       altitudeMode,
            double             minDistanceToCamera,
            MarkUserData*      userData,
            bool               autoDeleteUserData,
@@ -296,16 +292,17 @@ _normalAtMarkPosition(NULL)
 
 void Mark::initialize(const G3MContext* context,
                       long long downloadPriority) {
-
-  _surfaceElevationProvider = context->getSurfaceElevationProvider();
-  if (_surfaceElevationProvider != NULL) {
-    _surfaceElevationProvider->addListener(_position->_latitude,
-                                           _position->_longitude,
-                                           this);
+  if (_altitudeMode == RELATIVE_TO_GROUND) {
+    _surfaceElevationProvider = context->getSurfaceElevationProvider();
+    if (_surfaceElevationProvider != NULL) {
+      _surfaceElevationProvider->addListener(_position->_latitude,
+                                             _position->_longitude,
+                                             this);
+    }
   }
 
   if (!_textureSolved) {
-    const bool hasIconURL = ( _iconURL.getPath().length() != 0 );
+    const bool hasIconURL = ( _iconURL._path.length() != 0 );
     if (hasIconURL) {
       IDownloader* downloader = context->getDownloader();
       
@@ -346,7 +343,7 @@ void Mark::onTextureDownloadError() {
   delete _labelShadowColor;
 
   ILogger::instance()->logError("Can't create texture for Mark (iconURL=\"%s\", label=\"%s\")",
-                                _iconURL.getPath().c_str(),
+                                _iconURL._path.c_str(),
                                 _label.c_str());
 }
 
@@ -384,11 +381,10 @@ Mark::~Mark() {
   if (_autoDeleteUserData) {
     delete _userData;
   }
-  if (_textureImage != NULL) {
-    IFactory::instance()->deleteImage(_textureImage);
-  }
 
-  if (_glState != NULL){
+  delete _textureImage;
+
+  if (_glState != NULL) {
     _glState->_release();
   }
 
@@ -429,8 +425,8 @@ double Mark::getMinDistanceToCamera() {
   return _minDistanceToCamera;
 }
 
-void Mark::createGLState(const Planet* planet) {
-
+void Mark::createGLState(const Planet* planet,
+                         IFloatBuffer* billboardTexCoords) {
   _glState = new GLState();
 
   _glState->addGLFeature(new BillboardGLFeature(*getCartesianPosition(planet),
@@ -439,7 +435,7 @@ void Mark::createGLState(const Planet* planet) {
 
   if (_textureId != NULL) {
     _glState->addGLFeature(new TextureGLFeature(_textureId->getID(),
-                                                getBillboardTexCoords(),
+                                                billboardTexCoords,
                                                 2,
                                                 0,
                                                 false,
@@ -451,36 +447,29 @@ void Mark::createGLState(const Planet* planet) {
   }
 }
 
-IFloatBuffer* Mark::getBillboardTexCoords() {
-  if (_billboardTexCoord == NULL) {
-    FloatBufferBuilderFromCartesian2D texCoor;
-    texCoor.add(1,1);
-    texCoor.add(1,0);
-    texCoor.add(0,1);
-    texCoor.add(0,0);
-    _billboardTexCoord = texCoor.create();
-  }
-  return _billboardTexCoord;
-}
-
 void Mark::render(const G3MRenderContext* rc,
-                  const Vector3D& cameraPosition,
+                  const MutableVector3D& cameraPosition,
                   double cameraHeight,
                   const GLState* parentGLState,
                   const Planet* planet,
-                  GL* gl) {
+                  GL* gl,
+                  IFloatBuffer* billboardTexCoords) {
 
   const Vector3D* markPosition = getCartesianPosition(planet);
-  
-  const Vector3D markCameraVector = markPosition->sub(cameraPosition);
 
+//  const Vector3D markCameraVector = markPosition->sub(cameraPosition);
+//  _markCameraVector.putSub(markPosition, cameraPosition);
+  _markCameraVector.set(markPosition->_x - cameraPosition.x(),
+                        markPosition->_y - cameraPosition.y(),
+                        markPosition->_z - cameraPosition.z());
+  
   // mark will be renderered only if is renderable by distance and placed on a visible globe area
   bool renderableByDistance;
   if (_minDistanceToCamera == 0) {
     renderableByDistance = true;
   }
   else {
-    const double squaredDistanceToCamera = markCameraVector.squaredLength();
+    const double squaredDistanceToCamera = _markCameraVector.squaredLength();
     renderableByDistance = ( squaredDistanceToCamera <= (_minDistanceToCamera * _minDistanceToCamera) );
   }
 
@@ -489,44 +478,46 @@ void Mark::render(const G3MRenderContext* rc,
   if (renderableByDistance) {
     bool occludedByHorizon = false;
 
-    if (_position->_height > cameraHeight){
-      //Computing horizon culling
-      const std::vector<double> dists = planet->intersectionsDistances(cameraPosition, markCameraVector);
-      if (dists.size() > 0){
+    if (_position->_height > cameraHeight) {
+      // Computing horizon culling
+      const std::vector<double> dists = planet->intersectionsDistances(cameraPosition.x(),
+                                                                       cameraPosition.y(),
+                                                                       cameraPosition.z(),
+                                                                       _markCameraVector.x(),
+                                                                       _markCameraVector.y(),
+                                                                       _markCameraVector.z());
+      if (dists.size() > 0) {
         const double dist = dists[0];
-        if (dist > 0.0 && dist < 1.0){
+        if (dist > 0.0 && dist < 1.0) {
           occludedByHorizon = true;
         }
       }
-
-    } else{
-      //if camera position is upper than mark we can compute horizon culling in a much simpler way
-      if (_normalAtMarkPosition == NULL){
-        _normalAtMarkPosition = new Vector3D(planet->geodeticSurfaceNormal(*markPosition));
+    }
+    else {
+      // if camera position is upper than mark we can compute horizon culling in a much simpler way
+      if (_normalAtMarkPosition == NULL) {
+        _normalAtMarkPosition = new Vector3D( planet->geodeticSurfaceNormal(*markPosition) );
       }
-      occludedByHorizon = (_normalAtMarkPosition->angleBetween(markCameraVector)._radians <= HALF_PI);
+//      occludedByHorizon = (_normalAtMarkPosition->angleInRadiansBetween(markCameraVector) <= HALF_PI);
+      occludedByHorizon = (Vector3D::angleInRadiansBetween(*_normalAtMarkPosition, _markCameraVector) <= HALF_PI);
     }
 
-
     if (!occludedByHorizon) {
+      if ((_textureId == NULL) && (_textureImage != NULL)) {
+        _textureId = rc->getTexturesHandler()->getTextureIDReference(_textureImage,
+                                                                     GLFormat::rgba(),
+                                                                     _imageID,
+                                                                     false);
 
-      if (_textureId == NULL) {
-        if (_textureImage != NULL) {
-          _textureId = rc->getTexturesHandler()->getTextureIDReference(_textureImage,
-                                                                       GLFormat::rgba(),
-                                                                       _imageID,
-                                                                       false);
-          rc->getFactory()->deleteImage(_textureImage);
-          _textureImage = NULL;
-          createGLState(planet);
-        }
-      } else{
-
+        delete _textureImage;
+        _textureImage = NULL;
+      }
+      
+      if (_textureId != NULL) {
         if (_glState == NULL) {
-          createGLState(planet);    //If GLState was disposed due to elevation change
+          createGLState(planet, billboardTexCoords);  // If GLState was disposed due to elevation change
         }
-
-        _glState->setParent(parentGLState); //Linking with parent
+        _glState->setParent(parentGLState);
 
         rc->getGL()->drawArrays(GLPrimitive::triangleStrip(),
                                 0,
@@ -542,19 +533,42 @@ void Mark::render(const G3MRenderContext* rc,
 }
 
 void Mark::elevationChanged(const Geodetic2D& position,
-                            double rawElevation,            //Without considering vertical exaggeration
+                            double rawElevation,  // Without considering vertical exaggeration
                             double verticalExaggeration) {
 
   if (ISNAN(rawElevation)) {
     _currentSurfaceElevation = 0;    //USING 0 WHEN NO ELEVATION DATA
-  } else{
+  }
+  else {
     _currentSurfaceElevation = rawElevation * verticalExaggeration;
   }
   
   delete _cartesianPosition;
   _cartesianPosition = NULL;
+  
+  if (_glState != NULL) {
+    _glState->_release();
+    _glState = NULL;
+  }
+}
 
-  if (_glState != NULL){
+void Mark::setPosition(const Geodetic3D& position) {
+  if (_altitudeMode == RELATIVE_TO_GROUND) {
+    THROW_EXCEPTION("Position change with (_altitudeMode == RELATIVE_TO_GROUND) not supported");
+  }
+
+  delete _position;
+#ifdef C_CODE
+  _position = new Geodetic3D(position);
+#endif
+#ifdef JAVA_CODE
+  _position = position;
+#endif
+
+  delete _cartesianPosition;
+  _cartesianPosition = NULL;
+
+  if (_glState != NULL) {
     _glState->_release();
     _glState = NULL;
   }

@@ -1,13 +1,13 @@
 //
-//  Extent.h
+//  Extent.hpp
 //  G3MiOSSDK
 //
 //  Created by Agustín Trujillo Pino on 16/07/12.
 //  Copyright (c) 2012 Universidad de Las Palmas. All rights reserved.
 //
 
-#ifndef G3MiOSSDK_Extent_h
-#define G3MiOSSDK_Extent_h
+#ifndef G3MiOSSDK_Extent
+#define G3MiOSSDK_Extent
 
 #include "Context.hpp"
 #include "IMathUtils.hpp"

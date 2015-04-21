@@ -6,8 +6,8 @@
 //  Copyright (c) 2012 IGO Software SL. All rights reserved.
 //
 
-#ifndef G3MiOSSDK_Vector2D_hpp
-#define G3MiOSSDK_Vector2D_hpp
+#ifndef G3MiOSSDK_Vector2D
+#define G3MiOSSDK_Vector2D
 
 #include "IMathUtils.hpp"
 
@@ -37,8 +37,6 @@ public:
   Vector2D(const Vector2D &v): _x(v._x), _y(v._y) {
     
   }
-  
-  Vector2D normalized() const;
   
   double length() const {
     return IMathUtils::instance()->sqrt(squaredLength());
@@ -112,7 +110,20 @@ public:
   }
   
   const std::string description() const;
+#ifdef JAVA_CODE
+  @Override
+  public String toString() {
+    return description();
+  }
+#endif
   
+  static Vector2D intersectionOfTwoLines(const Vector2D& p1, const Vector2D& r1,
+                                         const Vector2D& p2, const Vector2D& r2);
+  
+  double dot(const Vector2D& v) const {
+    return _x * v._x + _y * v._y;
+  }
+
 };
 
 

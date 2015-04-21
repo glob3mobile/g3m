@@ -7,7 +7,7 @@
 //
 
 #include "HUDRenderer.hpp"
-
+#include "RenderState.hpp"
 #include "HUDWidget.hpp"
 
 #include "MutableMatrix44D.hpp"
@@ -18,14 +18,14 @@
 
 HUDRenderer::HUDRenderer(bool readyWhenWidgetsReady) :
 _glState(new GLState()),
-_readyWhenWidgetsReady(readyWhenWidgetsReady),
-_context(NULL)
+_readyWhenWidgetsReady(readyWhenWidgetsReady)
 {
+  _context = NULL;
   _widgetsSize = _widgets.size();
 }
 
 HUDRenderer::~HUDRenderer() {
-  for (int i = 0; i < _widgetsSize; i++) {
+  for (size_t i = 0; i < _widgetsSize; i++) {
     HUDWidget* widget = _widgets[i];
     delete widget;
   }
@@ -37,12 +37,10 @@ HUDRenderer::~HUDRenderer() {
 #endif
 }
 
-void HUDRenderer::initialize(const G3MContext* context) {
-  _context = context;
-
-  for (int i = 0; i < _widgetsSize; i++) {
+void HUDRenderer::onChangedContext() {
+  for (size_t i = 0; i < _widgetsSize; i++) {
     HUDWidget* widget = _widgets[i];
-    widget->initialize(context);
+    widget->initialize(_context);
   }
 }
 
@@ -55,6 +53,17 @@ void HUDRenderer::addWidget(HUDWidget* widget) {
   }
 }
 
+void HUDRenderer::removeAllWidgets() {
+  for (size_t i = 0; i < _widgetsSize; i++) {
+    HUDWidget* widget = _widgets[i];
+    delete widget;
+  }
+  
+  _widgets.clear();
+  _widgetsSize = _widgets.size();
+
+}
+
 RenderState HUDRenderer::getRenderState(const G3MRenderContext* rc) {
   if (_widgetsSize == 0) {
     return RenderState::ready();
@@ -64,7 +73,7 @@ RenderState HUDRenderer::getRenderState(const G3MRenderContext* rc) {
   bool busyFlag  = false;
   bool errorFlag = false;
 
-  for (int i = 0; i < _widgetsSize; i++) {
+  for (size_t i = 0; i < _widgetsSize; i++) {
     HUDWidget* widget = _widgets[i];
     if (widget->isEnable()) {
       const RenderState childRenderState = widget->getRenderState(rc);
@@ -101,11 +110,6 @@ RenderState HUDRenderer::getRenderState(const G3MRenderContext* rc) {
   }
 }
 
-bool HUDRenderer::onTouchEvent(const G3MEventContext* ec,
-                               const TouchEvent* touchEvent) {
-  return false;
-}
-
 
 void HUDRenderer::onResizeViewportEvent(const G3MEventContext* ec,
                                         int width,
@@ -134,7 +138,7 @@ void HUDRenderer::onResizeViewportEvent(const G3MEventContext* ec,
     pr->setMatrix(projectionMatrix.asMatrix44D());
   }
 
-  for (int i = 0; i < _widgetsSize; i++) {
+  for (size_t i = 0; i < _widgetsSize; i++) {
     HUDWidget* widget = _widgets[i];
     widget->onResizeViewportEvent(ec, width, height);
   }
@@ -150,7 +154,7 @@ void HUDRenderer::render(const G3MRenderContext* rc,
 
   nativeGL->depthMask(false);
 
-  for (int i = 0; i < _widgetsSize; i++) {
+  for (size_t i = 0; i < _widgetsSize; i++) {
     HUDWidget* widget = _widgets[i];
     widget->render(rc, _glState);
   }

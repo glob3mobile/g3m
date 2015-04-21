@@ -136,6 +136,15 @@
             android:screenOrientation="portrait"
             android:hardwareAccelerated="true"
              >
+                </activity>
+            <activity
+            android:name="org.glob3.mobile.demo.VectorTilesActivity"
+            android:label="@string/title_activity_shape_symbolizer"
+             android:launchMode="singleTask"
+            android:process=":AA"
+            android:screenOrientation="portrait"
+            android:hardwareAccelerated="true"
+             >
         </activity>
     </application>
 

@@ -6,51 +6,29 @@
 //  Copyright (c) 2012 IGO Software SL. All rights reserved.
 //
 
-#ifndef G3MiOSSDK_GLErrorRenderer_hpp
-#define G3MiOSSDK_GLErrorRenderer_hpp
+#ifndef G3MiOSSDK_GLErrorRenderer
+#define G3MiOSSDK_GLErrorRenderer
 
-#include "LeafRenderer.hpp"
+#include "DefaultRenderer.hpp"
 
-class GLErrorRenderer : public LeafRenderer {
+class GLErrorRenderer : public DefaultRenderer {
 public:
-  
-  void initialize(const G3MContext* context);
   
   void render(const G3MRenderContext* rc,
               GLState* glState);
   
-  bool onTouchEvent(const G3MEventContext* ec,
-                            const TouchEvent* touchEvent);
-  
-  virtual ~GLErrorRenderer();
-  
+  ~GLErrorRenderer() {
+#ifdef JAVA_CODE
+    super.dispose();
+#endif
+  }
   void onResizeViewportEvent(const G3MEventContext* ec,
-                             int width, int height);
-  
-  RenderState getRenderState(const G3MRenderContext* rc) {
-    return RenderState::ready();
-  }
-
-  void start(const G3MRenderContext* rc) {
-    
-  }
-  
-  void stop(const G3MRenderContext* rc) {
-    
-  }
-  
-  void onResume(const G3MContext* context) {
-    
-  }
-  
-  void onPause(const G3MContext* context) {
-    
-  }
-  
-  void onDestroy(const G3MContext* context) {
+                             int width, int height){
 
   }
 
+  
+  
 };
 
 #endif

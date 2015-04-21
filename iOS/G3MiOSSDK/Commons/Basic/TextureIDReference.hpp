@@ -30,7 +30,7 @@ public:
 
   TextureIDReference* createCopy() const;
 
-  const IGLTextureId* getID() const{
+  const IGLTextureId* getID() const {
     return _id;
   }
   

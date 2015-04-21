@@ -6,8 +6,8 @@
 //  Copyright (c) 2012 IGO Software SL. All rights reserved.
 //
 
-#ifndef G3MiOSSDK_Geodetic2D_hpp
-#define G3MiOSSDK_Geodetic2D_hpp
+#ifndef G3MiOSSDK_Geodetic2D
+#define G3MiOSSDK_Geodetic2D
 
 #include "Angle.hpp"
 
@@ -169,7 +169,13 @@ public:
   }
   
   const std::string description() const;
-  
+#ifdef JAVA_CODE
+  @Override
+  public String toString() {
+    return description();
+  }
+#endif
+
   bool isEquals(const Geodetic2D& that) const {
     return _latitude.isEquals(that._latitude) && _longitude.isEquals(that._longitude);
   }

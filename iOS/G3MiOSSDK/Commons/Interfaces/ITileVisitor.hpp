@@ -6,8 +6,8 @@
 //
 //
 
-#ifndef G3MiOSSDK_ITileVisitor_hpp
-#define G3MiOSSDK_ITileVisitor_hpp
+#ifndef G3MiOSSDK_ITileVisitor
+#define G3MiOSSDK_ITileVisitor
 
 #include "Tile.hpp"
 

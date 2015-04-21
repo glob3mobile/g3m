@@ -6,8 +6,8 @@
 //  Copyright (c) 2012 Universidad de Las Palmas. All rights reserved.
 //
 
-#ifndef G3MiOSSDK_CameraSingleDragHandler_h
-#define G3MiOSSDK_CameraSingleDragHandler_h
+#ifndef G3MiOSSDK_CameraSingleDragHandler
+#define G3MiOSSDK_CameraSingleDragHandler
 
 
 #include "CameraEventHandler.hpp"
@@ -21,7 +21,7 @@ class CameraSingleDragHandler: public CameraEventHandler {
   
 public:
   CameraSingleDragHandler(bool useInertia):
-  _camera0(Camera(0, 0)),
+  _camera0(Camera()),
 //  _initialPoint(0,0,0),
 //  _initialPixel(0,0),
   _useInertia(useInertia)

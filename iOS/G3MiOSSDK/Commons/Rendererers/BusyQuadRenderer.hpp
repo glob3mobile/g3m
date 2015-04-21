@@ -6,11 +6,11 @@
 //  Copyright (c) 2012 Universidad de Las Palmas. All rights reserved.
 //
 
-#ifndef G3MiOSSDK_BusyQuadRenderer_hpp
-#define G3MiOSSDK_BusyQuadRenderer_hpp
+#ifndef G3MiOSSDK_BusyQuadRenderer
+#define G3MiOSSDK_BusyQuadRenderer
 
 
-#include "LeafRenderer.hpp"
+#include "ProtoRenderer.hpp"
 #include "Effects.hpp"
 #include "Vector2D.hpp"
 #include "Color.hpp"
@@ -21,7 +21,7 @@
 //***************************************************************
 
 
-class BusyQuadRenderer : public LeafRenderer, EffectTarget {
+class BusyQuadRenderer : public ProtoRenderer, EffectTarget {
 private:
   double      _degrees;
   //  const std::string _textureFilename;
@@ -58,27 +58,20 @@ public:
     createGLState();
   }
   
-  void initialize(const G3MContext* context) {}
-  
-  RenderState getRenderState(const G3MRenderContext* rc) {
-    return RenderState::ready();
+  void initialize(const G3MContext* context) {
+    
   }
-
+  
   void render(const G3MRenderContext* rc,
               GLState* glState);
-  
-  bool onTouchEvent(const G3MEventContext* ec,
-                    const TouchEvent* touchEvent) {
-    return false;
-  }
   
   void onResizeViewportEvent(const G3MEventContext* ec,
                              int width, int height) {
     const int halfWidth = width / 2;
     const int halfHeight = height / 2;
-    _projectionMatrix = MutableMatrix44D::createOrthographicProjectionMatrix(-halfWidth, halfWidth,
-                                                                             -halfHeight, halfHeight,
-                                                                             -halfWidth, halfWidth);
+    _projectionMatrix.copyValue(MutableMatrix44D::createOrthographicProjectionMatrix(-halfWidth, halfWidth,
+                                                                                    -halfHeight, halfHeight,
+                                                                                    -halfWidth, halfWidth));
   }
 
   virtual ~BusyQuadRenderer() {
@@ -89,17 +82,12 @@ public:
     delete _backgroundColor;
 
     _glState->_release();
-    
-#ifdef JAVA_CODE
-  super.dispose();
-#endif
-
   }
   
   void incDegrees(double value) {
     _degrees += value;
     if (_degrees>360) _degrees -= 360;
-    _modelviewMatrix = MutableMatrix44D::createRotationMatrix(Angle::fromDegrees(_degrees), Vector3D(0, 0, 1));
+    _modelviewMatrix.copyValue(MutableMatrix44D::createRotationMatrix(Angle::fromDegrees(_degrees), Vector3D(0, 0, 1)));
   }
   
   void start(const G3MRenderContext* rc);

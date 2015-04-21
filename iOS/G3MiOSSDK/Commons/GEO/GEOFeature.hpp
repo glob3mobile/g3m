@@ -22,17 +22,17 @@ class GEOSymbolizer;
 class GEOFeature : public GEOObject {
 private:
   const JSONBaseObject* _id;
-  GEOGeometry*          _geometry;
+  const GEOGeometry*    _geometry;
   const JSONObject*     _properties;
 
 public:
 
   GEOFeature(const JSONBaseObject* id,
-             GEOGeometry* geometry,
+             const GEOGeometry* geometry,
              const JSONObject* properties);
 
   ~GEOFeature();
-  
+
   const JSONObject* getProperties() const {
     return _properties;
   }
@@ -46,7 +46,17 @@ public:
                  MeshRenderer*           meshRenderer,
                  ShapesRenderer*         shapesRenderer,
                  MarksRenderer*          marksRenderer,
-                 GEOTileRasterizer*      geoTileRasterizer) const;
+                 GEOVectorLayer*         geoVectorLayer
+                 ) const;
+
+  void rasterize(const GEORasterSymbolizer* symbolizer,
+                 ICanvas* canvas,
+                 const GEORasterProjection* projection,
+                 int tileLevel) const;
+
+  long long getCoordinatesCount() const;
+
+  GEOFeature* deepCopy() const;
 
 };
 

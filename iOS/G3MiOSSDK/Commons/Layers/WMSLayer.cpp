@@ -7,82 +7,84 @@
 //
 
 #include "WMSLayer.hpp"
-#include "Tile.hpp"
-#include "Petition.hpp"
 
-#include "IStringBuilder.hpp"
 #include "LayerTilesRenderParameters.hpp"
 #include "MercatorUtils.hpp"
+#include "Tile.hpp"
 #include "LayerCondition.hpp"
+#include "RenderState.hpp"
+#include "TimeInterval.hpp"
 
-WMSLayer::WMSLayer(const std::string& mapLayer,
-                   const URL& mapServerURL,
-                   const WMSServerVersion mapServerVersion,
-                   const std::string& queryLayer,
-                   const URL& queryServerURL,
-                   const WMSServerVersion queryServerVersion,
-                   const Sector& sector,
-                   const std::string& format,
-                   const std::string& srs,
-                   const std::string& style,
-                   const bool isTransparent,
-                   LayerCondition* condition,
-                   const TimeInterval& timeToCache,
-                   bool readExpired,
+WMSLayer::WMSLayer(const std::string&                mapLayer,
+                   const URL&                        mapServerURL,
+                   const WMSServerVersion            mapServerVersion,
+                   const std::string&                queryLayer,
+                   const URL&                        queryServerURL,
+                   const WMSServerVersion            queryServerVersion,
+                   const Sector&                     dataSector,
+                   const std::string&                format,
+                   const std::string&                srs,
+                   const std::string&                style,
+                   const bool                        isTransparent,
+                   const LayerCondition*             condition,
+                   const TimeInterval&               timeToCache,
+                   const bool                        readExpired,
                    const LayerTilesRenderParameters* parameters,
-                   float transparency):
-Layer(condition,
-      mapLayer,
-      timeToCache,
-      readExpired,
-      (parameters == NULL)
-      ? LayerTilesRenderParameters::createDefaultWGS84(Sector::fullSphere())
-      : parameters,
-      transparency),
+                   const float                       transparency,
+                   std::vector<const Info*>*   layerInfo):
+RasterLayer(timeToCache,
+            readExpired,
+            (parameters == NULL)
+            ? LayerTilesRenderParameters::createDefaultWGS84(Sector::fullSphere(), 0, 17)
+            : parameters,
+            transparency,
+            condition,
+            layerInfo),
 _mapLayer(mapLayer),
 _mapServerURL(mapServerURL),
 _mapServerVersion(mapServerVersion),
+_dataSector(dataSector),
 _queryLayer(queryLayer),
 _queryServerURL(queryServerURL),
 _queryServerVersion(queryServerVersion),
-_sector(sector),
 _format(format),
 _srs(srs),
 _style(style),
 _isTransparent(isTransparent),
 _extraParameter("")
 {
-  
+
 }
 
-WMSLayer::WMSLayer(const std::string& mapLayer,
-                   const URL& mapServerURL,
-                   const WMSServerVersion mapServerVersion,
-                   const Sector& sector,
-                   const std::string& format,
-                   const std::string& srs,
-                   const std::string& style,
-                   const bool isTransparent,
-                   LayerCondition* condition,
-                   const TimeInterval& timeToCache,
-                   bool readExpired,
+WMSLayer::WMSLayer(const std::string&                mapLayer,
+                   const URL&                        mapServerURL,
+                   const WMSServerVersion            mapServerVersion,
+                   const Sector&                     dataSector,
+                   const std::string&                format,
+                   const std::string&                srs,
+                   const std::string&                style,
+                   const bool                        isTransparent,
+                   const LayerCondition*             condition,
+                   const TimeInterval&               timeToCache,
+                   const bool                        readExpired,
                    const LayerTilesRenderParameters* parameters,
-                   float transparency):
-Layer(condition,
-      mapLayer,
-      timeToCache,
-      readExpired,
-      (parameters == NULL)
-      ? LayerTilesRenderParameters::createDefaultWGS84(Sector::fullSphere())
-      : parameters,
-      transparency),
+                   const float                       transparency,
+                   std::vector<const Info*>*   layerInfo):
+RasterLayer(timeToCache,
+            readExpired,
+            (parameters == NULL)
+            ? LayerTilesRenderParameters::createDefaultWGS84(Sector::fullSphere(), 0, 17)
+            : parameters,
+            transparency,
+            condition,
+            layerInfo),
 _mapLayer(mapLayer),
 _mapServerURL(mapServerURL),
 _mapServerVersion(mapServerVersion),
+_dataSector(dataSector),
 _queryLayer(mapLayer),
 _queryServerURL(mapServerURL),
 _queryServerVersion(mapServerVersion),
-_sector(sector),
 _format(format),
 _srs(srs),
 _style(style),
@@ -100,31 +102,30 @@ double WMSLayer::toBBOXLatitude(const Angle& latitude) const {
   return (_parameters->_mercator) ? MercatorUtils::latitudeToMeters(latitude) : latitude._degrees;
 }
 
-std::vector<Petition*> WMSLayer::createTileMapPetitions(const G3MRenderContext* rc,
-                                                        const LayerTilesRenderParameters* layerTilesRenderParameters,
-                                                        const Tile* tile) const {
-  std::vector<Petition*> petitions;
+const URL WMSLayer::createURL(const Tile* tile) const {
 
-  const std::string path = _mapServerURL.getPath();
-  if (path.empty()) {
-    return petitions;
-  }
+  const std::string path = _mapServerURL._path;
+  //  if (path.empty()) {
+  //    return petitions;
+  //  }
 
   const Sector tileSector = tile->_sector;
-  if (!_sector.touchesWith(tileSector)) {
-    return petitions;
-  }
-  
-  const Sector sector = tileSector.intersection(_sector);
-  if (sector._deltaLatitude.isZero() ||
-      sector._deltaLongitude.isZero() ) {
-    return petitions;
-  }
+
+  //  if (!_sector.touchesWith(tileSector)) {
+  //    return petitions;
+  //  }
+  //
+  const Sector sector = tileSector.intersection(_dataSector);
+  //  if (sector._deltaLatitude.isZero() ||
+  //      sector._deltaLongitude.isZero() ) {
+  //    return petitions;
+  //  }
 
   //TODO: MUST SCALE WIDTH,HEIGHT
-
-  const Vector2I tileTextureResolution = _parameters->_tileTextureResolution;
   
+  const int width = _parameters->_tileTextureResolution._x;
+  const int height = _parameters->_tileTextureResolution._y;
+
 	//Server name
   std::string req = path;
 	if (req[req.size() - 1] != '?') {
@@ -153,10 +154,9 @@ std::vector<Petition*> WMSLayer::createTileMapPetitions(const G3MRenderContext* 
       IStringBuilder* isb = IStringBuilder::newStringBuilder();
       
       isb->addString("&WIDTH=");
-      isb->addInt(tileTextureResolution._x);
+      isb->addInt(width);
       isb->addString("&HEIGHT=");
-      isb->addInt(tileTextureResolution._y);
-      
+      isb->addInt(height);
       isb->addString("&BBOX=");
       isb->addDouble( toBBOXLatitude( sector._lower._latitude ) );
       isb->addString(",");
@@ -182,10 +182,27 @@ std::vector<Petition*> WMSLayer::createTileMapPetitions(const G3MRenderContext* 
       IStringBuilder* isb = IStringBuilder::newStringBuilder();
       
       isb->addString("&WIDTH=");
-      isb->addInt(tileTextureResolution._x);
+      isb->addInt(width);
       isb->addString("&HEIGHT=");
-      isb->addInt(tileTextureResolution._y);
+      isb->addInt(height);
       
+      
+      
+//      const double widthHeihtFactor  = sector._deltaLongitude.div(sector._deltaLatitude);
+//      if (widthHeihtFactor >= 1) {
+//        isb->addString("&WIDTH=");
+//        isb->addInt(tileTextureResolution._x);
+//        isb->addString("&HEIGHT=");
+//        isb->addInt((int)tileTextureResolution._y/widthHeihtFactor);
+//      } else {
+//        isb->addString("&WIDTH=");
+//        isb->addInt((int)tileTextureResolution._x*widthHeihtFactor);
+//        isb->addString("&HEIGHT=");
+//        isb->addInt(tileTextureResolution._y);
+//      }
+      
+      
+
       isb->addString("&BBOX=");
       isb->addDouble( toBBOXLongitude( sector._lower._longitude ) );
       isb->addString(",");
@@ -194,6 +211,14 @@ std::vector<Petition*> WMSLayer::createTileMapPetitions(const G3MRenderContext* 
       isb->addDouble( toBBOXLongitude( sector._upper._longitude ) );
       isb->addString(",");
       isb->addDouble( toBBOXLatitude( sector._upper._latitude ) );
+      
+//      isb->addDouble( toBBOXLatitude( tileSector._lower._longitude ) );
+//      isb->addString(",");
+//      isb->addDouble( toBBOXLongitude( tileSector._lower._latitude ) );
+//      isb->addString(",");
+//      isb->addDouble( toBBOXLatitude( tileSector._upper._longitude ) );
+//      isb->addString(",");
+//      isb->addDouble( toBBOXLongitude( tileSector._upper._latitude ) );
 
       req += isb->getString();
       delete isb;
@@ -233,29 +258,19 @@ std::vector<Petition*> WMSLayer::createTileMapPetitions(const G3MRenderContext* 
     req += _extraParameter;
   }
 
-  //  printf("Request: %s\n", req.c_str());
-
-  Petition *petition = new Petition(sector,
-                                    URL(req, false),
-                                    getTimeToCache(),
-                                    getReadExpired(),
-                                    _isTransparent,
-                                    _transparency);
-  petitions.push_back(petition);
-  
-	return petitions;
+  return URL(req, false);
 }
 
 URL WMSLayer::getFeatureInfoURL(const Geodetic2D& position,
                                 const Sector& tileSector) const {
-  if (!_sector.touchesWith(tileSector)) {
+  if (!_dataSector.touchesWith(tileSector)) {
     return URL::nullURL();
   }
   
-  const Sector sector = tileSector.intersection(_sector);
-  
+  const Sector intersectionSector = tileSector.intersection(_dataSector);
+
 	//Server name
-  std::string req = _queryServerURL.getPath();
+  std::string req = _queryServerURL._path;
 	if (req[req.size()-1] != '?') {
 		req += '?';
 	}
@@ -294,13 +309,13 @@ URL WMSLayer::getFeatureInfoURL(const Geodetic2D& position,
       isb->addInt(_parameters->_tileTextureResolution._y);
       
       isb->addString("&BBOX=");
-      isb->addDouble( toBBOXLatitude( sector._lower._latitude ) );
+      isb->addDouble( toBBOXLatitude( intersectionSector._lower._latitude ) );
       isb->addString(",");
-      isb->addDouble( toBBOXLongitude( sector._lower._longitude ) );
+      isb->addDouble( toBBOXLongitude( intersectionSector._lower._longitude ) );
       isb->addString(",");
-      isb->addDouble( toBBOXLatitude( sector._upper._latitude ) );
+      isb->addDouble( toBBOXLatitude( intersectionSector._upper._latitude ) );
       isb->addString(",");
-      isb->addDouble( toBBOXLongitude( sector._upper._longitude ) );
+      isb->addDouble( toBBOXLongitude( intersectionSector._upper._longitude ) );
 
       req += isb->getString();
       
@@ -324,13 +339,13 @@ URL WMSLayer::getFeatureInfoURL(const Geodetic2D& position,
       isb->addInt(_parameters->_tileTextureResolution._y);
       
       isb->addString("&BBOX=");
-      isb->addDouble( toBBOXLongitude( sector._lower._longitude ) );
+      isb->addDouble( toBBOXLongitude( intersectionSector._lower._longitude ) );
       isb->addString(",");
-      isb->addDouble( toBBOXLatitude( sector._lower._latitude ) );
+      isb->addDouble( toBBOXLatitude( intersectionSector._lower._latitude ) );
       isb->addString(",");
-      isb->addDouble( toBBOXLongitude( sector._upper._longitude ) );
+      isb->addDouble( toBBOXLongitude( intersectionSector._upper._longitude ) );
       isb->addString(",");
-      isb->addDouble( toBBOXLatitude( sector._upper._latitude ) );
+      isb->addDouble( toBBOXLatitude( intersectionSector._upper._latitude ) );
 
       req += isb->getString();
       
@@ -348,11 +363,11 @@ URL WMSLayer::getFeatureInfoURL(const Geodetic2D& position,
   double u;
   double v;
   if (_parameters->_mercator) {
-    u = sector.getUCoordinate(position._longitude);
+    u = intersectionSector.getUCoordinate(position._longitude);
     v = MercatorUtils::getMercatorV(position._latitude);
   }
   else {
-    const Vector2D uv = sector.getUVCoordinates(position);
+    const Vector2D uv = intersectionSector.getUVCoordinates(position);
     u = uv._x;
     v = uv._y;
   }
@@ -405,7 +420,7 @@ bool WMSLayer::rawIsEquals(const Layer* that) const {
     return false;
   }
 
-  if (!(_sector.isEquals(t->_sector))) {
+  if (!(_dataSector.isEquals(t->_dataSector))) {
     return false;
   }
 
@@ -443,15 +458,17 @@ WMSLayer* WMSLayer::copy() const {
                       _queryLayer,
                       _queryServerURL,
                       _queryServerVersion,
-                      _sector,
+                      _dataSector,
                       _format,
                       _srs,
                       _style,
                       _isTransparent,
                       (_condition == NULL) ? NULL : _condition->copy(),
-                      TimeInterval::fromMilliseconds(_timeToCacheMS),
+                      _timeToCache,
                       _readExpired,
-                      (_parameters == NULL) ? NULL : _parameters->copy());
+                      (_parameters == NULL) ? NULL : _parameters->copy(),
+                      _transparency,
+                      _layerInfo);
 }
 
 RenderState WMSLayer::getRenderState() {
@@ -459,16 +476,47 @@ RenderState WMSLayer::getRenderState() {
   if (_mapLayer.compare("") == 0) {
     _errors.push_back("Missing layer parameter: mapLayer");
   }
-  const std::string mapServerUrl = _mapServerURL.getPath();
+  const std::string mapServerUrl = _mapServerURL._path;
   if (mapServerUrl.compare("") == 0) {
     _errors.push_back("Missing layer parameter: mapServerURL");
   }
   if (_format.compare("") == 0) {
     _errors.push_back("Missing layer parameter: format");
   }
-  
+
   if (_errors.size() > 0) {
     return RenderState::error(_errors);
   }
   return RenderState::ready();
+}
+
+const TileImageContribution* WMSLayer::rawContribution(const Tile* tile) const {
+  const Tile* tileP = getParentTileOfSuitableLevel(tile);
+  if (tileP == NULL) {
+    return NULL;
+  }
+  
+  const Sector requestedImageSector = tileP->_sector;
+
+  if (!_dataSector.touchesWith(requestedImageSector)) {
+    return NULL;
+  }
+ 
+  
+  else if (_dataSector.fullContains(requestedImageSector) && (tile == tileP)) {
+    //Most common case tile of suitable level being fully coveraged by layer
+    return ((_isTransparent || (_transparency < 1))
+            ? TileImageContribution::fullCoverageTransparent(_transparency)
+            : TileImageContribution::fullCoverageOpaque());
+  }
+  else {
+    const Sector contributionSector = _dataSector.intersection(requestedImageSector);
+    if (contributionSector.hasNoArea()){
+      return NULL;
+    }
+
+    return ((_isTransparent || (_transparency < 1))
+            ? TileImageContribution::partialCoverageTransparent(contributionSector, _transparency)
+            : TileImageContribution::partialCoverageOpaque(contributionSector));
+  }
 }

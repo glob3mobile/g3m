@@ -16,7 +16,7 @@
 #include "Camera.hpp"
 #include "GLState.hpp"
 
-void LazyTextureMapping::modifyGLState(GLState& state) const{
+void LazyTextureMapping::modifyGLState(GLState& state) const {
   if (!_initialized) {
     _initializer->initialize();
 
@@ -84,29 +84,29 @@ void LazyTextureMapping::releaseGLTextureId() {
 }
 
 LeveledTexturedMesh::~LeveledTexturedMesh() {
-#ifdef JAVA_CODE
-  synchronized (this) {
-#endif
+//#ifdef JAVA_CODE
+//  synchronized (this) {
+//#endif
 
-    if (_ownedMesh) {
-      delete _mesh;
-    }
-
-    if (_mappings != NULL) {
-      for (int i = 0; i < _mappings->size(); i++) {
-        LazyTextureMapping* mapping = _mappings->at(i);
-        delete mapping;
-      }
-
-      delete _mappings;
-      _mappings = NULL;
-    }
-
-    _glState->_release();
-
-#ifdef JAVA_CODE
+  if (_ownedMesh) {
+    delete _mesh;
   }
-#endif
+
+  if (_mappings != NULL) {
+    for (int i = 0; i < _mappings->size(); i++) {
+      LazyTextureMapping* mapping = _mappings->at(i);
+      delete mapping;
+    }
+
+    delete _mappings;
+//    _mappings = NULL;
+  }
+
+  _glState->_release();
+
+//#ifdef JAVA_CODE
+//  }
+//#endif
 
 #ifdef JAVA_CODE
   super.dispose();
@@ -126,6 +126,10 @@ BoundingVolume* LeveledTexturedMesh::getBoundingVolume() const {
 }
 
 LazyTextureMapping* LeveledTexturedMesh::getCurrentTextureMapping() const {
+  if (_mappings == NULL) {
+    return NULL;
+  }
+
   if (_currentLevel < 0) {
     int newCurrentLevel = -1;
 
@@ -209,7 +213,7 @@ bool LeveledTexturedMesh::isTransparent(const G3MRenderContext* rc) const {
 }
 
 void LeveledTexturedMesh::rawRender(const G3MRenderContext* rc,
-                                    const GLState* parentGLState) const{
+                                    const GLState* parentGLState) const {
   LazyTextureMapping* mapping = getCurrentTextureMapping();
   if (mapping == NULL) {
     ILogger::instance()->logError("LeveledTexturedMesh: No Texture Mapping");

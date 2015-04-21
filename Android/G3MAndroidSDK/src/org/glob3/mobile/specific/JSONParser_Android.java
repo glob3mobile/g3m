@@ -119,7 +119,7 @@ public class JSONParser_Android
             }
          }
          else {
-            ILogger.instance().logWarning("JSONObject emtpy: " + jsonObj.toString());
+            ILogger.instance().logWarning("JSONObject is empty: " + jsonObject.toString());
          }
 
          return result;

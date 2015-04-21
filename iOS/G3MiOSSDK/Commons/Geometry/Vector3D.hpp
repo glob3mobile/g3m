@@ -6,8 +6,8 @@
 //  Copyright (c) 2012 IGO Software SL. All rights reserved.
 //
 
-#ifndef G3MiOSSDK_Vector3D_hpp
-#define G3MiOSSDK_Vector3D_hpp
+#ifndef G3MiOSSDK_Vector3D
+#define G3MiOSSDK_Vector3D
 
 #include "IMathUtils.hpp"
 
@@ -105,6 +105,10 @@ public:
   double dot(const Vector3D& v) const {
     return _x * v._x + _y * v._y + _z * v._z;
   }
+
+  bool isPerpendicularTo(const Vector3D& v) const {
+    return IMathUtils::instance()->abs(_x * v._x + _y * v._y + _z * v._z) < 0.00001;
+  }
   
   Vector3D add(const Vector3D& v) const {
     return Vector3D(_x + v._x,
@@ -123,6 +127,8 @@ public:
                     _y - v._y,
                     _z - v._z);
   }
+
+  Vector3D sub(const MutableVector3D& v) const;
 
   Vector3D sub(double d) const {
     return Vector3D(_x - d,
@@ -161,8 +167,26 @@ public:
   }
   
   Angle angleBetween(const Vector3D& other) const;
+  double angleInRadiansBetween(const Vector3D& other) const;
   Angle signedAngleBetween(const Vector3D& other, const Vector3D& up) const;
-  
+
+  static double normalizedDot(const Vector3D& a,
+                              const Vector3D& b);
+
+  static double normalizedDot(const Vector3D& a,
+                              const MutableVector3D& b);
+
+  static double angleInRadiansBetween(const Vector3D& a,
+                                      const Vector3D& b);
+
+  static double angleInRadiansBetween(const Vector3D& a,
+                                      const MutableVector3D& b);
+
+  static Angle angleBetween(const Vector3D& a,
+                            const Vector3D& b) {
+    return Angle::fromRadians(angleInRadiansBetween(a, b));
+  }
+
   Vector3D rotateAroundAxis(const Vector3D& axis,
                             const Angle& theta) const;
 
@@ -178,6 +202,12 @@ public:
   Vector3D projectionInPlane(const Vector3D& normal) const;
   
   const std::string description() const;
+#ifdef JAVA_CODE
+  @Override
+  public String toString() {
+    return description();
+  }
+#endif
 
   const Vector3D clamp(const Vector3D& min,
                        const Vector3D& max) const;

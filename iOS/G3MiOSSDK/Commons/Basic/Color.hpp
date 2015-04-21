@@ -6,8 +6,8 @@
 //  Copyright (c) 2012 IGO Software SL. All rights reserved.
 //
 
-#ifndef G3MiOSSDK_Color_hpp
-#define G3MiOSSDK_Color_hpp
+#ifndef G3MiOSSDK_Color
+#define G3MiOSSDK_Color
 
 #include <iostream>
 #include <string>
@@ -124,6 +124,11 @@ public:
                                            float brightness,
                                            float alpha);
 
+  static Color interpolateColor(const Color& from,
+                                const Color& middle,
+                                const Color& to,
+                                float d);
+
   static Color transparent() {
     return Color::fromRGBA(0, 0, 0, 0);
   }
@@ -213,7 +218,7 @@ public:
     return Angle::fromRadians( getHueInRadians() );
   }
 
-  Color adjustBrightness(float brightness) {
+  Color adjustBrightness(float brightness) const {
     const float newBrightness = getBrightness() + brightness;
     return Color::fromHueSaturationBrightness(getHueInRadians(),
                                               getSaturation(),
@@ -222,7 +227,7 @@ public:
   }
 
   Color adjustSaturationBrightness(float saturation,
-                                   float brightness) {
+                                   float brightness) const {
     const float newSaturation = getSaturation() + saturation;
     const float newBrightness = getBrightness() + brightness;
     return Color::fromHueSaturationBrightness(getHueInRadians(),
@@ -231,31 +236,37 @@ public:
                                               _alpha);
   }
 
-  Color darker() {
+  Color darker() const {
     return adjustBrightness(-0.08f);
   }
 
-  Color twiceDarker() {
+  Color twiceDarker() const {
     return adjustBrightness(-0.16f);
   }
 
-  Color muchDarker() {
+  Color muchDarker() const {
     return adjustBrightness(-0.64f);
   }
 
-  Color lighter() {
+  Color lighter() const {
     return adjustSaturationBrightness(-0.03f, 0.08f);
   }
 
-  Color twiceLighter() {
+  Color twiceLighter() const {
     return adjustSaturationBrightness(-0.06f, 0.16f);
   }
   
-  Color muchLighter() {
+  Color muchLighter() const {
     return adjustSaturationBrightness(-0.24f, 0.64f);
   }
 
   const std::string description() const;
+#ifdef JAVA_CODE
+  @Override
+  public String toString() {
+    return description();
+  }
+#endif
 
 };
 

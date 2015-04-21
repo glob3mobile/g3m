@@ -10,12 +10,16 @@
 #define __G3MiOSSDK__DirectMesh__
 
 #include "AbstractMesh.hpp"
+#include "ErrorHandling.hpp"
 
 class DirectMesh : public AbstractMesh {
+private:
+  int _renderVerticesCount;
+
 protected:
   void rawRender(const G3MRenderContext* rc) const;
 
-  Mesh* createNormalsMesh() const;
+//  Mesh* createNormalsMesh() const;
 
 
 public:
@@ -25,7 +29,7 @@ public:
              IFloatBuffer* vertices,
              float lineWidth,
              float pointSize,
-             Color* flatColor = NULL,
+             const Color* flatColor = NULL,
              IFloatBuffer* colors = NULL,
              const float colorsIntensity = 0.0f,
              bool depthTest = true,
@@ -33,12 +37,21 @@ public:
 
   ~DirectMesh() {
 #ifdef JAVA_CODE
-  super.dispose();
+    super.dispose();
 #endif
-
   }
-  
-//  void rawRender(const G3MRenderContext* rc, const GLState* parentGLState) const;
+
+  void setRenderVerticesCount(int renderVerticesCount) {
+    if ((renderVerticesCount < 0) ||
+        (renderVerticesCount > getRenderVerticesCount())) {
+      THROW_EXCEPTION("Invalid renderVerticesCount");
+    }
+    _renderVerticesCount = renderVerticesCount;
+  }
+
+  int getRenderVerticesCount() const {
+    return _renderVerticesCount;
+  }
 
 };
 

@@ -82,7 +82,7 @@ public:
 
   IShortBuffer* create() const;
 
-  std::string description() const{
+  std::string description() const {
     IStringBuilder* isb = IStringBuilder::newStringBuilder();
     isb->addString("ShortBufferBuilder: ");
     for (int i = 0; i < (int)_values.size(); i++) {
@@ -100,6 +100,12 @@ public:
     delete isb;
     return s;
   }
+#ifdef JAVA_CODE
+  @Override
+  public String toString() {
+    return description();
+  }
+#endif
 
 };
 

@@ -6,8 +6,8 @@
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
-#ifndef G3MiOSSDK_NativeGL_iOS_hpp
-#define G3MiOSSDK_NativeGL_iOS_hpp
+#ifndef G3MiOSSDK_NativeGL_iOS
+#define G3MiOSSDK_NativeGL_iOS
 
 #include <OpenGLES/ES2/gl.h>
 
@@ -209,7 +209,7 @@ public:
     delete [] data;
   }
 
-  void setActiveTexture(int i) const{
+  void setActiveTexture(int i) const {
     glActiveTexture(GL_TEXTURE0 + i);
   }
 
@@ -283,19 +283,19 @@ public:
     return GL_INT;
   }
   
-  int Type_Vec2Float() const{
+  int Type_Vec2Float() const {
     return GL_FLOAT_VEC2;
   }
-  int Type_Vec3Float() const{
+  int Type_Vec3Float() const {
     return GL_FLOAT_VEC3;
   }
-  virtual int Type_Vec4Float() const{
+  virtual int Type_Vec4Float() const {
     return GL_FLOAT_VEC4;
   }
-  virtual int Type_Bool() const{
+  virtual int Type_Bool() const {
     return GL_BOOL;
   }
-  virtual int Type_Matrix4Float() const{
+  virtual int Type_Matrix4Float() const {
     return GL_FLOAT_MAT4;
   }
 
@@ -390,11 +390,11 @@ public:
     return GL_VIEWPORT;
   }
   
-  int Variable_ActiveAttributes() const{
+  int Variable_ActiveAttributes() const {
     return GL_ACTIVE_ATTRIBUTES;
   }
   
-  virtual int Variable_ActiveUniforms() const{
+  virtual int Variable_ActiveUniforms() const {
     return GL_ACTIVE_UNIFORMS;
   }
 
@@ -410,9 +410,10 @@ public:
     //ILogger::instance()->logInfo("Deleting program id = %d", program);
     glDeleteProgram(program);
 
-    if (glIsProgram(program) == GL_FALSE){
+    if (glIsProgram(program) == GL_FALSE) {
       return true;
-    } else{
+    }
+    else {
       int markedToBeDeleted;
       glGetProgramiv(program, GL_DELETE_STATUS, &markedToBeDeleted);
       return (markedToBeDeleted == GL_TRUE);
@@ -477,17 +478,17 @@ public:
     }
   }
   
-  void bindAttribLocation(const GPUProgram* program, int loc, const std::string& name) const{
+  void bindAttribLocation(const GPUProgram* program, int loc, const std::string& name) const {
     glBindAttribLocation(program->getProgramID(), loc, name.c_str());
   }
   
-  int getProgramiv(const GPUProgram* program, int pname) const{
+  int getProgramiv(const GPUProgram* program, int pname) const {
     int i = 0;
     glGetProgramiv(program->getProgramID(), pname, &i);
     return i;
   }
   
-  GPUAttribute* getActiveAttribute(const GPUProgram* program, int i) const{
+  GPUAttribute* getActiveAttribute(const GPUProgram* program, int i) const {
     GLint maxLength;
     glGetProgramiv(program->getProgramID(), GL_ACTIVE_ATTRIBUTE_MAX_LENGTH, &maxLength);
   
@@ -523,7 +524,7 @@ public:
     }
   }
   
-  GPUUniform* getActiveUniform(const GPUProgram* program, int i) const{
+  GPUUniform* getActiveUniform(const GPUProgram* program, int i) const {
     GLint maxLength;
     glGetProgramiv(program->getProgramID(), GL_ACTIVE_UNIFORM_MAX_LENGTH, &maxLength);
     
@@ -566,7 +567,7 @@ public:
     }
   }
 
-  void depthMask(bool v) const{
+  void depthMask(bool v) const {
     glDepthMask(v);
   }
   

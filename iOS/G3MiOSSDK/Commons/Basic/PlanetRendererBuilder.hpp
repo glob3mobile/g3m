@@ -9,9 +9,15 @@
 #ifndef __G3MiOSSDK__PlanetRendererBuilder__
 #define __G3MiOSSDK__PlanetRendererBuilder__
 
-#include "LayerSet.hpp"
+class LayerSet;
+class GEOVectorLayer;
+class IImageBuilder;
+
 #include "TilesRenderParameters.hpp"
 #include "PlanetRenderer.hpp"
+#include "DefaultChessCanvasImageBuilder.hpp"
+#include "DownloaderImageBuilder.hpp"
+
 
 
 class PlanetRendererBuilder {
@@ -19,7 +25,7 @@ class PlanetRendererBuilder {
 private:
   TileTessellator* _tileTessellator;
   TileTexturizer* _texturizer;
-  std::vector<TileRasterizer*> _tileRasterizers;
+  std::vector<GEOVectorLayer*> _geoVectorLayers;
 
   LayerSet* _layerSet;
   TilesRenderParameters* _parameters;
@@ -31,14 +37,13 @@ private:
   Quality _quality;
   std::vector<VisibleSectorListener*>* _visibleSectorListeners;
   std::vector<long long>* _stabilizationMilliSeconds;
-  long long _texturePriority;
+  long long _tileDownloadPriority;
 
   ElevationDataProvider* _elevationDataProvider;
   float _verticalExaggeration;
 
   TileTessellator* getTileTessellator();
   TileTexturizer* getTexturizer();
-  TileRasterizer* getTileRasterizer();
 
   LayerSet* getLayerSet();
   TilesRenderParameters* getParameters();
@@ -49,7 +54,9 @@ private:
   bool getIncrementalTileQuality();
   std::vector<VisibleSectorListener*>* getVisibleSectorListeners();
   std::vector<long long>* getStabilizationMilliSeconds();
-  long long getTexturePriority();
+  long long getTileDownloadPriority();
+
+  bool _logTilesPetitions;
 
   LayerSet* createLayerSet();
   TilesRenderParameters* createPlanetRendererParameters();
@@ -64,6 +71,19 @@ private:
   bool _renderTileMeshes;
   bool getRenderTileMeshes();
 
+  bool getLogTilesPetitions();
+
+  TileRenderingListener* _tileRenderingListener;
+  
+  ChangedRendererInfoListener* _changedInfoListener;
+  
+  TouchEventType _touchEventTypeOfTerrainTouchListener;
+  
+  TouchEventType getTouchEventTypeOfTerrainTouchListener();
+  
+  IImageBuilder* _defaultTileBackGroundImage = NULL;
+  
+  IImageBuilder* getDefaultTileBackGroundImageBuilder() const;
 
 public:
   PlanetRendererBuilder();
@@ -71,12 +91,11 @@ public:
   PlanetRenderer* create();
   void setTileTessellator(TileTessellator* tileTessellator);
   void setTileTexturizer(TileTexturizer* tileTexturizer);
-  void addTileRasterizer(TileRasterizer* tileRasterizer);
   void setLayerSet(LayerSet* layerSet);
   void setPlanetRendererParameters(TilesRenderParameters* parameters);
   void setShowStatistics(const bool showStatistics);
   void setRenderDebug(const bool renderDebug);
-  void setUseTilesSplitBuget(const bool useTilesSplitBudget);
+  void setUseTilesSplitBudget(const bool useTilesSplitBudget);
   void setForceFirstLevelTilesRenderOnStart(const bool forceFirstLevelTilesRenderOnStart);
   void setIncrementalTileQuality(const bool incrementalTileQuality);
   void addVisibleSectorListener(VisibleSectorListener* listener,
@@ -84,7 +103,7 @@ public:
   void addVisibleSectorListener(VisibleSectorListener* listener) {
     addVisibleSectorListener(listener, TimeInterval::zero());
   }
-  void setTexturePriority(long long texturePriority);
+  void setTileDownloadPriority(long long tileDownloadPriority);
 
   void setElevationDataProvider(ElevationDataProvider* elevationDataProvider);
 
@@ -92,13 +111,26 @@ public:
 
   void setRenderedSector(const Sector& sector);
 
-  GEOTileRasterizer* createGEOTileRasterizer();
+  GEOVectorLayer* createGEOVectorLayer();
 
   Quality getQuality() const;
   void setQuality(Quality quality);
 
   void setRenderTileMeshes(bool renderTileMeshes);
 
+  void setLogTilesPetitions(bool logTilesPetitions);
+
+  void setTileRenderingListener(TileRenderingListener* tileRenderingListener);
+
+  TileRenderingListener* getTileRenderingListener();
+  
+  ChangedRendererInfoListener* getChangedRendererInfoListener();
+  
+  void setChangedRendererInfoListener(ChangedRendererInfoListener* changedInfoListener);
+  
+  void setTouchEventTypeOfTerrainTouchListener(TouchEventType _touchEventTypeOfTerrainTouchListener);
+  
+  void setDefaultTileBackGroundImage(IImageBuilder* defaultTileBackGroundImage);
 };
 
 #endif

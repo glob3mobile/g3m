@@ -15,7 +15,7 @@ class GEOLine2DStyle;
 
 class GEOMultiLine2DMeshSymbol : public GEOMeshSymbol {
 private:
-  const std::vector<std::vector<Geodetic2D*>*>* _coordinatesArray;
+  const std::vector<const std::vector<Geodetic2D*>*>* _coordinatesArray;
 
   const Color _lineColor;
   const float _lineWidth;
@@ -23,7 +23,7 @@ private:
   double _deltaHeight;
 
 public:
-  GEOMultiLine2DMeshSymbol(const std::vector<std::vector<Geodetic2D*>*>* coordinatesArray,
+  GEOMultiLine2DMeshSymbol(const std::vector<const std::vector<Geodetic2D*>*>* coordinatesArray,
                            const GEOLine2DStyle& style,
                            double deltaHeight = 0.0);
 

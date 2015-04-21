@@ -6,8 +6,8 @@
 //  Copyright (c) 2012 IGO Software SL. All rights reserved.
 //
 
-#ifndef G3MiOSSDK_Downloader_iOS_hpp
-#define G3MiOSSDK_Downloader_iOS_hpp
+#ifndef G3MiOSSDK_Downloader_iOS
+#define G3MiOSSDK_Downloader_iOS
 
 #import "Downloader_iOS_WorkerThread.h"
 #import "Downloader_iOS_Handler.h"
@@ -19,7 +19,7 @@ class Downloader_iOS : public IDownloader {
 private:
   NSMutableArray*      _workers;
 
-  NSLock*              _lock;                // synchronization helper
+  NSRecursiveLock*     _lock;                // synchronization helper
   NSMutableDictionary* _downloadingHandlers; // downloads current in progress
   NSMutableDictionary* _queuedHandlers;      // queued downloads
 

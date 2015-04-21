@@ -38,33 +38,36 @@ public:
   // TODO: parse json of layer metadata
   // http://a.tiles.mapbox.com/v3/examples.map-qfyrx5r8.json
 
-  MapBoxLayer(const std::string& mapKey,
-              const TimeInterval& timeToCache,
-              bool readExpired = true,
-              int initialLevel = 1,
-              int maxLevel = 19,
-              LayerCondition* condition = NULL) :
-  MercatorTiledLayer("MapBoxLayer",
-                     "http://",
+  MapBoxLayer(const std::string&    mapKey,
+              const TimeInterval&   timeToCache,
+              const bool            readExpired    = true,
+              const int             initialLevel   = 1,
+              const int             maxLevel       = 19,
+              const float           transparency   = 1,
+              const LayerCondition* condition      = NULL,
+              std::vector<const Info*>*  layerInfo = new std::vector<const Info*>()) :
+  MercatorTiledLayer("http://",
                      "tiles.mapbox.com/v3/" + mapKey,
                      getSubdomains(),
                      "png",
                      timeToCache,
                      readExpired,
-                     Sector::fullSphere(),
                      initialLevel,
                      maxLevel,
-                     condition),
+                     false, // isTransparent
+                     transparency,
+                     condition,
+                     layerInfo),
   _mapKey(mapKey)
   {
-
   }
 
   const std::string description() const;
 
   MapBoxLayer* copy() const;
-  
+
   RenderState getRenderState();
+  
 };
 
 #endif

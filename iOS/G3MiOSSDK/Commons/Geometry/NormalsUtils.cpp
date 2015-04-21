@@ -47,7 +47,7 @@ IFloatBuffer* NormalsUtils::createTriangleSmoothNormals(const IFloatBuffer* vert
   const int verticesSize = vertices->size();
   IFloatBuffer* normals = IFactory::instance()->createFloatBuffer(verticesSize);
   for (int i = 0; i < verticesSize; i++) {
-    normals->rawPut(i, 0);
+    normals->rawPut(i, 0.0f);
   }
 
   const int indicesSize = indices->size();
@@ -81,7 +81,7 @@ IFloatBuffer* NormalsUtils::createTriangleStripSmoothNormals(const IFloatBuffer*
   const int verticesSize = vertices->size();
   IFloatBuffer* normals = IFactory::instance()->createFloatBuffer(verticesSize);
   for (int i = 0; i < verticesSize; i++) {
-    normals->rawPut(i, 0);
+    normals->rawPut(i, 0.0f);
   }
 
   short index0 = indices->get(0);

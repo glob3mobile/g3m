@@ -15,11 +15,11 @@ class HUDRelativeSize : public HUDSize {
 public:
   enum Reference {
     VIEWPORT_WIDTH,
-    VIEWPORT_HEIGTH,
+    VIEWPORT_HEIGHT,
     VIEWPORT_MIN_AXIS,
     VIEWPORT_MAX_AXIS,
     BITMAP_WIDTH,
-    BITMAP_HEIGTH,
+    BITMAP_HEIGHT,
     BITMAP_MIN_AXIS,
     BITMAP_MAX_AXIS
   };

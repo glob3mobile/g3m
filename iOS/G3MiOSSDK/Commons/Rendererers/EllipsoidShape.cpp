@@ -47,15 +47,15 @@ const TextureIDReference* EllipsoidShape::getTextureId(const G3MRenderContext* r
 
     _texId = rc->getTexturesHandler()->getTextureIDReference(_textureImage,
                                                              GLFormat::rgba(),
-                                                             _textureURL.getPath(),
+                                                             _textureURL._path,
                                                              false);
 
-    rc->getFactory()->deleteImage(_textureImage);
+    delete _textureImage;
     _textureImage = NULL;
   }
 
   if (_texId == NULL) {
-    rc->getLogger()->logError("Can't load texture %s", _textureURL.getPath().c_str());
+    rc->getLogger()->logError("Can't load texture %s", _textureURL._path.c_str());
   }
 
   if (_texId == NULL) {
@@ -129,7 +129,8 @@ Mesh* EllipsoidShape::createSurfaceMesh(const G3MRenderContext* rc,
       }
       indices.add((short) ((2*_resolution-2)+(j+1)*delta));
     }
-  } else {
+  }
+  else {
     for (short j=0; j<_resolution-1; j++) {
       if (j>0) indices.add((short) ((j+1)*delta));
       for (short i=0; i<2*_resolution-1; i++) {
@@ -212,7 +213,7 @@ void EllipsoidShape::imageDownloaded(IImage* image) {
 Mesh* EllipsoidShape::createMesh(const G3MRenderContext* rc) {
   if (!_textureRequested) {
     _textureRequested = true;
-    if (_textureURL.getPath().length() != 0) {
+    if (_textureURL._path.length() != 0) {
       rc->getDownloader()->requestImage(_textureURL,
                                         1000000,
                                         TimeInterval::fromDays(30),
@@ -223,8 +224,7 @@ Mesh* EllipsoidShape::createMesh(const G3MRenderContext* rc) {
   }
 
   const EllipsoidalPlanet ellipsoid(Ellipsoid(Vector3D::zero,
-                                              _ellipsoid->getRadii()
-                                              ));
+                                              _ellipsoid->_radii));
   const Sector sector(Sector::fullSphere());
 
   FloatBufferBuilderFromGeodetic* vertices = FloatBufferBuilderFromGeodetic::builderWithGivenCenter(&ellipsoid, Vector3D::zero);
@@ -272,7 +272,8 @@ Mesh* EllipsoidShape::createMesh(const G3MRenderContext* rc) {
 }
 
 
-std::vector<double> EllipsoidShape::intersectionsDistances(const Vector3D& origin,
+std::vector<double> EllipsoidShape::intersectionsDistances(const Planet* planet,
+                                                           const Vector3D& origin,
                                                            const Vector3D& direction) const {
   //  MutableMatrix44D* M = createTransformMatrix(_planet);
   //  const Quadric transformedQuadric = _quadric.transformBy(*M);

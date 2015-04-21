@@ -50,11 +50,19 @@ public:
     const unsigned char b2 = (unsigned char) ((value >>  8) & 0xFF);
     const unsigned char b3 = (unsigned char) ((value >> 16) & 0xFF);
     const unsigned char b4 = (unsigned char) ((value >> 24) & 0xFF);
-    
+
     _values.push_back(b1);
     _values.push_back(b2);
     _values.push_back(b3);
     _values.push_back(b4);
+  }
+
+  void addInt16(short value) {
+    const unsigned char b1 = (unsigned char) ((value      ) & 0xFF);
+    const unsigned char b2 = (unsigned char) ((value >>  8) & 0xFF);
+
+    _values.push_back(b1);
+    _values.push_back(b2);
   }
 
   void setInt32(int i, int value) {

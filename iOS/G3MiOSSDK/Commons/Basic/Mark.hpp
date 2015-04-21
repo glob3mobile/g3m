@@ -6,8 +6,8 @@
 //  Copyright (c) 2012 IGO Software SL. All rights reserved.
 //
 
-#ifndef G3MiOSSDK_Mark_hpp
-#define G3MiOSSDK_Mark_hpp
+#ifndef G3MiOSSDK_Mark
+#define G3MiOSSDK_Mark
 
 #include <string>
 #include "Geodetic3D.hpp"
@@ -18,6 +18,8 @@
 #include "Vector2I.hpp"
 #include "Color.hpp"
 #include "GLState.hpp"
+#include "SurfaceElevationProvider.hpp"
+#include "MutableVector3D.hpp"
 
 class IImage;
 class IFloatBuffer;
@@ -26,9 +28,6 @@ class MarkTouchListener;
 class GLGlobalState;
 class GPUProgramState;
 class TextureIDReference;
-
-#include "SurfaceElevationProvider.hpp"
-
 
 class MarkUserData {
 public:
@@ -129,12 +128,10 @@ private:
 
   bool    _renderedMark;
 
-  static IFloatBuffer* _billboardTexCoord;
 
   GLState* _glState;
-  void createGLState(const Planet* planet);
-
-  static IFloatBuffer* getBillboardTexCoords();
+  void createGLState(const Planet* planet,
+                     IFloatBuffer* billboardTexCoords);
 
   SurfaceElevationProvider* _surfaceElevationProvider;
   double _currentSurfaceElevation;
@@ -142,12 +139,14 @@ private:
 
   Vector3D* _normalAtMarkPosition;
 
+  MutableVector3D _markCameraVector;
+
 public:
   /**
    * Creates a marker with icon and label
    */
   Mark(const std::string& label,
-       const URL          iconURL,
+       const URL&         iconURL,
        const Geodetic3D&  position,
        AltitudeMode       altitudeMode,
        double             minDistanceToCamera=4.5e+06,
@@ -179,7 +178,7 @@ public:
   /**
    * Creates a marker just with icon, without label
    */
-  Mark(const URL          iconURL,
+  Mark(const URL&         iconURL,
        const Geodetic3D&  position,
        AltitudeMode       altitudeMode,
        double             minDistanceToCamera=4.5e+06,
@@ -215,7 +214,7 @@ public:
                   long long downloadPriority);
 
   void render(const G3MRenderContext* rc,
-              const Vector3D& cameraPosition);
+              const MutableVector3D& cameraPosition);
 
   bool isReady() const;
 
@@ -258,11 +257,12 @@ public:
   Vector3D* getCartesianPosition(const Planet* planet);
 
   void render(const G3MRenderContext* rc,
-              const Vector3D& cameraPosition,
+              const MutableVector3D& cameraPosition,
               double cameraHeight,
               const GLState* parentGLState,
               const Planet* planet,
-              GL* gl);
+              GL* gl,
+              IFloatBuffer* billboardTexCoords);
 
   void elevationChanged(const Geodetic2D& position,
                         double rawElevation,            //Without considering vertical exaggeration
@@ -271,6 +271,9 @@ public:
   void elevationChanged(const Sector& position,
                         const ElevationData* rawElevationData, //Without considering vertical exaggeration
                         double verticalExaggeration) {}
+
+  void setPosition(const Geodetic3D& position);
+
 };
 
 #endif

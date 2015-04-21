@@ -6,8 +6,8 @@
 //  Copyright (c) 2012 Universidad de Las Palmas. All rights reserved.
 //
 
-#ifndef G3MiOSSDK_GLGlobalState_hpp
-#define G3MiOSSDK_GLGlobalState_hpp
+#ifndef G3MiOSSDK_GLGlobalState
+#define G3MiOSSDK_GLGlobalState
 
 class IFloatBuffer;
 
@@ -83,7 +83,7 @@ private:
   _clearColorA(parentState._clearColorA)
   {
 
-    for (int i = 0; i < MAX_N_TEXTURES; i++){
+    for (int i = 0; i < MAX_N_TEXTURES; i++) {
       _boundTextureId[i] = parentState._boundTextureId[i];
     }
 
@@ -117,7 +117,7 @@ public:
       ILogger::instance()->logError("GLGlobalState creation before it is available.");
     }
 
-    for (int i = 0; i < MAX_N_TEXTURES; i++){
+    for (int i = 0; i < MAX_N_TEXTURES; i++) {
       _boundTextureId[i] = NULL;
     }
 
@@ -170,13 +170,13 @@ public:
     _polygonOffsetFactor = factor;
     _polygonOffsetUnits = units;
   }
-  void disPolygonOffsetFill() {
+  void disablePolygonOffsetFill() {
     _polygonOffsetFill = false;
   }
   
-  bool getPolygonOffsetFill() const { return _polygonOffsetFill;}
-  float getPolygonOffsetUnits() const { return _polygonOffsetUnits;}
-  float getPolygonOffsetFactor() const { return _polygonOffsetFactor;}
+  bool getPolygonOffsetFill()    const { return _polygonOffsetFill;   }
+  float getPolygonOffsetUnits()  const { return _polygonOffsetUnits;  }
+  float getPolygonOffsetFactor() const { return _polygonOffsetFactor; }
   
   void setBlendFactors(int sFactor, int dFactor) {
     _blendSFactor = sFactor;
@@ -187,14 +187,14 @@ public:
     _boundTextureId[0] = textureId;
   }
   
-  const IGLTextureId* getBoundTexture() const{
+  const IGLTextureId* getBoundTexture() const {
     return _boundTextureId[0];
   }
 
   void bindTexture(int target, const IGLTextureId* textureId) {
 
 
-    if (target > MAX_N_TEXTURES){
+    if (target > MAX_N_TEXTURES) {
       ILogger::instance()->logError("WRONG TARGET FOR TEXTURE");
       return;
     }
@@ -202,7 +202,7 @@ public:
     _boundTextureId[target] = textureId;
   }
 
-  const IGLTextureId* getBoundTexture(int target) const{
+  const IGLTextureId* getBoundTexture(int target) const {
     return _boundTextureId[0];
   }
 

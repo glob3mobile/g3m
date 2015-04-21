@@ -86,7 +86,9 @@ public final class StringUtils_WebGL
       }
       return string;
    }
-              
+
+
+   @Override
    public boolean endsWith(final String string,
                            final String suffix) {
       return string.endsWith(suffix);
@@ -172,5 +174,11 @@ public final class StringUtils_WebGL
    @Override
    public double parseDouble(final String str) {
       return Double.parseDouble(str);
+   }
+
+
+   @Override
+   public String toString(final float value) {
+      return Float.toString(value);
    }
 }

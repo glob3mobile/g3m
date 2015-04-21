@@ -174,4 +174,11 @@ public final class StringUtils_JavaDesktop
    public double parseDouble(final String str) {
       return Double.parseDouble(str);
    }
+
+
+   @Override
+   public String toString(final float value) {
+      return Float.toString(value);
+   }
+
 }

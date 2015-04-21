@@ -18,7 +18,7 @@
 bool GLGlobalState::_initializationAvailable = false;
 
 
-void GLGlobalState::applyChanges(GL* gl, GLGlobalState& currentState) const{
+void GLGlobalState::applyChanges(GL* gl, GLGlobalState& currentState) const {
 
   INativeGL* nativeGL = gl->getNative();
 
@@ -77,8 +77,8 @@ void GLGlobalState::applyChanges(GL* gl, GLGlobalState& currentState) const{
         currentState._polygonOffsetUnits = _polygonOffsetUnits;
         currentState._polygonOffsetFactor = _polygonOffsetFactor;
       }
-
-    } else{
+    }
+    else {
       nativeGL->disable(GLStage::polygonOffsetFill());
     }
   }
@@ -92,7 +92,7 @@ void GLGlobalState::applyChanges(GL* gl, GLGlobalState& currentState) const{
 
   //Texture (After blending factors)
 
-  for (int i = 0; i < MAX_N_TEXTURES; i++){
+  for (int i = 0; i < MAX_N_TEXTURES; i++) {
 
     if (_boundTextureId[i] != NULL) {
       if (currentState._boundTextureId[i] == NULL ||

@@ -6,8 +6,8 @@
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
-#ifndef G3MiOSSDK_FloatBufferBuilderFromColor_hpp
-#define G3MiOSSDK_FloatBufferBuilderFromColor_hpp
+#ifndef G3MiOSSDK_FloatBufferBuilderFromColor
+#define G3MiOSSDK_FloatBufferBuilderFromColor
 
 #include "FloatBufferBuilder.hpp"
 #include "Color.hpp"

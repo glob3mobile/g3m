@@ -67,6 +67,12 @@ public:
   }
     
   const std::string description() const;
+#ifdef JAVA_CODE
+  @Override
+  public String toString() {
+    return description();
+  }
+#endif
 
   Vector4D transformedBy(const MutableMatrix44D &m) const;
 

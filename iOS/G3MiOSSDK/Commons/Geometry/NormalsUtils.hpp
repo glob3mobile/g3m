@@ -12,7 +12,7 @@
 class IFloatBuffer;
 class IShortBuffer;
 
-#include "Vector3F.cpp"
+#include "Vector3F.hpp"
 
 class NormalsUtils {
 private:

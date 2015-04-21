@@ -8,55 +8,50 @@
 
 #include "TMSLayer.hpp"
 
-
 #include "LayerTilesRenderParameters.hpp"
-#include "IStringBuilder.hpp"
-#include "Petition.hpp"
-#include "Tile.hpp"
-#include "ILogger.hpp"
-#include "IStringUtils.hpp"
 #include "LayerCondition.hpp"
+#include "Tile.hpp"
+#include "RenderState.hpp"
+#include "TimeInterval.hpp"
 
 
 TMSLayer::TMSLayer(const std::string& mapLayer,
                    const URL& mapServerURL,
-                   const Sector& sector,
+                   const Sector& dataSector,
                    const std::string& format,
                    const bool isTransparent,
                    LayerCondition* condition,
                    const TimeInterval& timeToCache,
                    bool readExpired,
                    const LayerTilesRenderParameters* parameters,
-                   float transparency):
-
-Layer(condition,
-      mapLayer,
-      timeToCache,
-      readExpired,
-      (parameters == NULL)
-      ? LayerTilesRenderParameters::createDefaultWGS84(sector)
-      : parameters,
-      transparency),
+                   float transparency,
+                   std::vector<const Info*>*  layerInfo):
+RasterLayer(timeToCache,
+            readExpired,
+            (parameters == NULL) ? LayerTilesRenderParameters::createDefaultWGS84(dataSector, 0, 17) : parameters,
+            transparency,
+            condition,
+            layerInfo),
 _mapServerURL(mapServerURL),
 _mapLayer(mapLayer),
-_sector(sector),
+_dataSector(dataSector),
 _format(format),
 _isTransparent(isTransparent)
 {
 }
 
+URL TMSLayer::getFeatureInfoURL(const Geodetic2D& g,
+                                const Sector& sector) const {
+  return URL::nullURL();
+  
+}
 
-std::vector<Petition*> TMSLayer::createTileMapPetitions(const G3MRenderContext* rc,
-                                                        const LayerTilesRenderParameters* layerTilesRenderParameters,
-                                                        const Tile* tile) const {
+const std::string TMSLayer::description() const {
+  return "[TMSLayer]";
+}
 
-  std::vector<Petition*> petitions;
-
-  const Sector tileSector = tile->_sector;
-  if (!_sector.touchesWith(tileSector)) {
-    return petitions;
-  }
-
+const URL TMSLayer::createURL(const Tile* tile) const {
+  
   IStringBuilder* isb = IStringBuilder::newStringBuilder();
   isb->addString(_mapServerURL.getPath());
   isb->addString(_mapLayer);
@@ -68,32 +63,34 @@ std::vector<Petition*> TMSLayer::createTileMapPetitions(const G3MRenderContext* 
   isb->addInt(tile->_row);
   isb->addString(".");
   isb->addString(IStringUtils::instance()->replaceSubstring(_format, "image/", ""));
-
   ILogger::instance()->logInfo(isb->getString());
 
-  Petition *petition = new Petition(tileSector,
-                                    URL(isb->getString(), false),
-                                    getTimeToCache(),
-                                    getReadExpired(),
-                                    _isTransparent,
-                                    _transparency);
-  petitions.push_back(petition);
-
+  
+  URL url(isb->getString(), false);
   delete isb;
   
-	return petitions;
-
+  return url;
 }
 
-URL TMSLayer::getFeatureInfoURL(const Geodetic2D& g,
-                                const Sector& sector) const {
-  return URL::nullURL();
-
+RenderState TMSLayer::getRenderState() {
+  _errors.clear();
+  if (_mapLayer.compare("") == 0) {
+    _errors.push_back("Missing layer parameter: mapLayer");
+  }
+  const std::string mapServerUrl = _mapServerURL._path;
+  if (mapServerUrl.compare("") == 0) {
+    _errors.push_back("Missing layer parameter: mapServerURL");
+  }
+  if (_format.compare("") == 0) {
+    _errors.push_back("Missing layer parameter: format");
+  }
+  
+  if (_errors.size() > 0) {
+    return RenderState::error(_errors);
+  }
+  return RenderState::ready();
 }
 
-const std::string TMSLayer::description() const {
-  return "[TMSLayer]";
-}
 
 bool TMSLayer::rawIsEquals(const Layer* that) const {
   TMSLayer* t = (TMSLayer*) that;
@@ -106,7 +103,7 @@ bool TMSLayer::rawIsEquals(const Layer* that) const {
     return false;
   }
   
-  if (!(_sector.isEquals(t->_sector))) {
+  if (!(_dataSector.isEquals(t->_dataSector))) {
     return false;
   }
   
@@ -123,31 +120,36 @@ bool TMSLayer::rawIsEquals(const Layer* that) const {
 
 TMSLayer* TMSLayer::copy() const {
   return new TMSLayer(_mapLayer,
-                     _mapServerURL,
-                     _sector,
-                     _format,
-                     _isTransparent,
-                     (_condition == NULL) ? NULL : _condition->copy(),
-                     TimeInterval::fromMilliseconds(_timeToCacheMS),
-                     _readExpired,
+                      _mapServerURL,
+                      _dataSector,
+                      _format,
+                      _isTransparent,
+                      (_condition == NULL) ? NULL : _condition->copy(),
+                      _timeToCache,
+                      _readExpired,
                       (_parameters == NULL) ? NULL : _parameters->copy());
 }
 
-RenderState TMSLayer::getRenderState() {
-  _errors.clear();
-  if (_mapLayer.compare("") == 0) {
-    _errors.push_back("Missing layer parameter: mapLayer");
-  }
-  const std::string mapServerUrl = _mapServerURL.getPath();
-  if (mapServerUrl.compare("") == 0) {
-    _errors.push_back("Missing layer parameter: mapServerURL");
-  }
-  if (_format.compare("") == 0) {
-    _errors.push_back("Missing layer parameter: format");
+const TileImageContribution* TMSLayer::rawContribution(const Tile* tile) const {
+  const Tile* tileP = getParentTileOfSuitableLevel(tile);
+  if (tileP == NULL) {
+    return NULL;
   }
   
-  if (_errors.size() > 0) {
-    return RenderState::error(_errors);
+  const Sector requestedImageSector = tileP->_sector;
+  
+  if (!_dataSector.touchesWith(requestedImageSector)) {
+    return NULL;
   }
-  return RenderState::ready();
+  
+  if (tile == tileP && ( _dataSector.fullContains(requestedImageSector))) {
+    return ((_isTransparent || (_transparency < 1))
+            ? TileImageContribution::fullCoverageTransparent(_transparency)
+            : TileImageContribution::fullCoverageOpaque());
+  }
+  
+  return  ((_isTransparent || (_transparency < 1))
+           ? TileImageContribution::partialCoverageTransparent(requestedImageSector, _transparency)
+           : TileImageContribution::partialCoverageOpaque(requestedImageSector));
 }
+

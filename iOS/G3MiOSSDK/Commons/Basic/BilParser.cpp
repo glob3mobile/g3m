@@ -11,7 +11,6 @@
 #include "IByteBuffer.hpp"
 #include "ByteBufferIterator.hpp"
 #include "IShortBuffer.hpp"
-#include "IFactory.hpp"
 #include "ShortBufferElevationData.hpp"
 #include "Vector2I.hpp"
 

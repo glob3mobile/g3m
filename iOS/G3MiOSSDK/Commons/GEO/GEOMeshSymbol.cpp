@@ -49,7 +49,7 @@ Mesh* GEOMeshSymbol::createLine2DMesh(const std::vector<Geodetic2D*>* coordinate
   return result;
 }
 
-Mesh* GEOMeshSymbol::createLines2DMesh(const std::vector<std::vector<Geodetic2D*>*>* coordinatesArray,
+Mesh* GEOMeshSymbol::createLines2DMesh(const std::vector<const std::vector<Geodetic2D*>*>* coordinatesArray,
                                        const Color& lineColor,
                                        float lineWidth,
                                        double deltaHeight,
@@ -61,7 +61,7 @@ Mesh* GEOMeshSymbol::createLines2DMesh(const std::vector<std::vector<Geodetic2D*
   const int coordinatesArrayCount = coordinatesArray->size();
   short index = 0;
   for (int i = 0; i < coordinatesArrayCount; i++) {
-    std::vector<Geodetic2D*>* coordinates = coordinatesArray->at(i);
+    const std::vector<Geodetic2D*>* coordinates = coordinatesArray->at(i);
     const int coordinatesCount = coordinates->size();
     for (int j = 0; j < coordinatesCount; j++) {
       const Geodetic2D* coordinate = coordinates->at(j);
@@ -100,9 +100,9 @@ bool GEOMeshSymbol::symbolize(const G3MRenderContext* rc,
                               MeshRenderer*           meshRenderer,
                               ShapesRenderer*         shapesRenderer,
                               MarksRenderer*          marksRenderer,
-                              GEOTileRasterizer*      geoTileRasterizer) const {
+                              GEOVectorLayer*         geoVectorLayer) const {
   if (meshRenderer == NULL) {
-    ILogger::instance()->logError("Can't simbolize with Mesh, MeshRenderer was not set");
+    ILogger::instance()->logError("Can't symbolize with Mesh, MeshRenderer was not set");
   }
   else {
     Mesh* mesh = createMesh(rc);

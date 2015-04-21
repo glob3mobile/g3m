@@ -21,6 +21,7 @@ import org.glob3.mobile.generated.JSONArray;
 import org.glob3.mobile.generated.JSONBaseObject;
 import org.glob3.mobile.generated.JSONObject;
 import org.glob3.mobile.generated.LayerSet;
+import org.glob3.mobile.generated.MapBoxLayer;
 import org.glob3.mobile.generated.MeshRenderer;
 import org.glob3.mobile.generated.Planet;
 import org.glob3.mobile.generated.TimeInterval;
@@ -181,9 +182,13 @@ public class PointCloudActivity
 
       setContentView(R.layout.activity_point_cloud);
 
-      final LayerSet layerSet = SimpleRasterLayerBuilder.createLayerset();
-      layerSet.disableAllLayers();
-      layerSet.getLayerByTitle("Map Box Aerial").setEnable(true);
+      //      final LayerSet layerSet = SimpleRasterLayerBuilder.createLayerset();
+      //      layerSet.disableAllLayers();
+      //      layerSet.getLayerByTitle("Map Box Aerial").setEnable(true);
+
+      final LayerSet layerSet = new LayerSet();
+      layerSet.addLayer(new MapBoxLayer("examples.map-m0t0lrpu", TimeInterval.fromDays(30), true, 2));
+
 
       _builder = new G3MBuilder_Android(this);
       //      _builder.setPlanet(Planet.createSphericalEarth());

@@ -13,7 +13,6 @@
 
 class GInitializationTask : public GTask {
 public:
-  virtual void run(const G3MContext* context) = 0;
 
   virtual bool isDone(const G3MContext* context) = 0;
 };

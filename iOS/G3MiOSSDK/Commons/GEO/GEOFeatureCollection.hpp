@@ -23,8 +23,10 @@ class GEOFeatureCollection : public GEOObject {
 private:
   std::vector<GEOFeature*> _features;
 
+  static const std::vector<GEOFeature*> copy(const std::vector<GEOFeature*>& features);
+
 public:
-  GEOFeatureCollection(std::vector<GEOFeature*>& features) :
+  GEOFeatureCollection(const std::vector<GEOFeature*>& features) :
   _features(features)
   {
   }
@@ -36,10 +38,24 @@ public:
                  MeshRenderer*           meshRenderer,
                  ShapesRenderer*         shapesRenderer,
                  MarksRenderer*          marksRenderer,
-                 GEOTileRasterizer*      geoTileRasterizer) const;
+                 GEOVectorLayer*         geoVectorLayer) const;
 
-  GEOFeature* get(int i) const{ return _features[i];}
-  int size() const{ return _features.size();}
+  GEOFeature* get(int i) const {
+    return _features[i];
+  }
+  
+  int size() const {
+    return _features.size();
+  }
+
+  void rasterize(const GEORasterSymbolizer* symbolizer,
+                 ICanvas* canvas,
+                 const GEORasterProjection* projection,
+                 int tileLevel) const;
+
+  long long getCoordinatesCount() const;
+
+  GEOFeatureCollection* deepCopy() const;
 
 };
 

@@ -34,7 +34,12 @@ public class ConnectionManager {
 
       final URL url = new URL(requestUrl);
       final HttpURLConnection httpConn = (HttpURLConnection) url.openConnection();
+      httpConn.setConnectTimeout(60000);
+      httpConn.setReadTimeout(65000);
+      httpConn.setUseCaches(false);
+
       final int responseCode = httpConn.getResponseCode();
+
 
       // always check HTTP response code first
       if (responseCode == HttpURLConnection.HTTP_OK) {

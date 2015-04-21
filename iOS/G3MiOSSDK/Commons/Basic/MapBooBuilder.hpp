@@ -21,6 +21,7 @@ class Planet;
 class ICameraConstrainer;
 class CameraRenderer;
 class Renderer;
+class ProtoRenderer;
 class GInitializationTask;
 class PeriodicalTask;
 class Layer;
@@ -49,12 +50,20 @@ class MapBooBuilder;
 class Vector2I;
 class URLTemplateLayer;
 class Sector;
+class IByteBuffer;
+class IBufferDownloadListener;
 
 #include <vector>
 #include <string>
 #include "URL.hpp"
 #include "Color.hpp"
 #include "Geodetic3D.hpp"
+#include "HUDRenderer.hpp"
+#include "InfoDisplay.hpp"
+#include "HUDImageRenderer.hpp"
+#include "GroupCanvasElement.hpp"
+#include "IBufferDownloadListener.hpp"
+
 
 
 class MapBooApplicationChangeListener {
@@ -93,11 +102,69 @@ public:
 
   virtual void onTerrainTouch(MapBooBuilder*         builder,
                               const G3MEventContext* ec,
-                              const Vector2I&        pixel,
+                              const Vector2F&        pixel,
                               const Camera*          camera,
                               const Geodetic3D&      position,
                               const Tile*            tile) = 0;
+  
+  virtual void onFeatureInfoReceived(IByteBuffer* buffer) = 0;
 
+};
+
+class FeatureInfoDownloadListener : public IBufferDownloadListener {
+private:
+  MapBooApplicationChangeListener* _applicationListener;
+public:
+  
+  /**
+   Callback method invoked on a successful download.  The buffer has to be deleted in C++ / .disposed() in Java
+   */
+  void onDownload(const URL& url,
+                  IByteBuffer* buffer,
+                  bool expired) {
+    if (_applicationListener != NULL) {
+      _applicationListener->onFeatureInfoReceived(buffer);
+    }
+  }
+  
+  /**
+   Callback method invoke after an error trying to download url
+   */
+  void onError(const URL& url) {
+    
+  }
+  
+  /**
+   Callback method invoke after canceled request
+   */
+  void onCancel(const URL& url) {
+    
+  }
+  
+  /**
+   This method will be call, before onCancel, when the data arrived before the cancelation.
+   
+   The buffer WILL be deleted/disposed after the method finishs.  If you need to keep the buffer, use shallowCopy() to store a copy of the buffer.
+   */
+  void onCanceledDownload(const URL& url,
+                          IByteBuffer* buffer,
+                          bool expired) {
+    
+  }
+  
+  FeatureInfoDownloadListener(MapBooApplicationChangeListener* applicationListener) : _applicationListener(applicationListener)
+  {
+    
+  }
+  
+  virtual ~FeatureInfoDownloadListener()
+  {
+#ifdef JAVA_CODE
+    super.dispose();
+#endif
+    
+  }
+  
 };
 
 
@@ -142,6 +209,12 @@ public:
   }
 
   const std::string description() const;
+#ifdef JAVA_CODE
+  @Override
+  public String toString() {
+    return description();
+  }
+#endif
 
   ~MapBoo_MultiImage_Level() {
 
@@ -182,7 +255,24 @@ public:
   MapBoo_MultiImage_Level* getBestLevel(int width) const;
 
   const std::string description() const;
+#ifdef JAVA_CODE
+  @Override
+  public String toString() {
+    return description();
+  }
+#endif
 
+  MapBoo_MultiImage* deepCopy() const {
+    const Color averageColor = Color::fromRGBA(_averageColor._red, _averageColor._green, _averageColor._blue, _averageColor._alpha);
+    std::vector<MapBoo_MultiImage_Level*> levels;
+    const int levelsSize = _levels.size();
+    for (int i = 0; i < levelsSize; i++) {
+      const MapBoo_MultiImage_Level* level = _levels.at(i);
+      levels.push_back(new MapBoo_MultiImage_Level(level->getUrl(), level->getWidth(), level->getHeight()));
+    }
+    
+    return new MapBoo_MultiImage(averageColor, levels);
+  }
 };
 
 
@@ -226,6 +316,12 @@ public:
   }
 
   const std::string description() const;
+#ifdef JAVA_CODE
+  @Override
+  public String toString() {
+    return description();
+  }
+#endif
 
 };
 
@@ -241,18 +337,20 @@ private:
   const Sector*                _sector;
   Layer*                       _baseLayer;
   Layer*                       _overlayLayer;
+  const bool                   _queryable;
   const bool                   _hasWarnings;
 
 public:
   MapBoo_Scene(const std::string&           id,
                const std::string&           name,
                const std::string&           description,
-               MapBoo_MultiImage*           screenshot,
+               const MapBoo_MultiImage*     screenshot,
                const Color&                 backgroundColor,
                const MapBoo_CameraPosition* cameraPosition,
-               Sector*                      sector,
+               const Sector*                sector,
                Layer*                       baseLayer,
                Layer*                       overlayLayer,
+               const bool                   queryable,
                const bool                   hasWarnings) :
   _id(id),
   _name(name),
@@ -263,6 +361,7 @@ public:
   _sector(sector),
   _baseLayer(baseLayer),
   _overlayLayer(overlayLayer),
+  _queryable(queryable),
   _hasWarnings(hasWarnings)
   {
   }
@@ -294,6 +393,19 @@ public:
   const Sector* getSector() const {
     return _sector;
   }
+  
+  Layer* getBaseLayer() const {
+    return _baseLayer;
+  }
+  
+  Layer* getOverlayLayer() const {
+    return _overlayLayer;
+  }
+
+  bool isQueryable() const {
+    return _queryable;
+
+  }
 
   bool hasWarnings() const {
     return _hasWarnings;
@@ -304,6 +416,12 @@ public:
   ~MapBoo_Scene();
 
   const std::string description() const;
+#ifdef JAVA_CODE
+  @Override
+  public String toString() {
+    return description();
+  }
+#endif
 
 };
 
@@ -351,6 +469,108 @@ public:
 };
 
 
+class HUDInfoRenderer_ImageFactory : public HUDImageRenderer::CanvasImageFactory {
+private:
+  std::vector<const Info*> _info;
+  
+protected:
+  
+  void drawOn(ICanvas* canvas,
+              int width,
+              int height);
+  
+  bool isEquals(const std::vector<const Info*>& v1,
+                const std::vector<const Info*>& v2) const;
+  
+public:
+  ~HUDInfoRenderer_ImageFactory() {
+  }
+  
+  bool setInfo(const std::vector<const Info*>& info);
+};
+
+class MapBoo_HUDRenderer : public DefaultRenderer {
+private:
+  HUDImageRenderer* _hudImageRenderer;
+public:
+  MapBoo_HUDRenderer();
+  
+  ~MapBoo_HUDRenderer();
+  
+  void updateInfo(const std::vector<const Info*>& info);
+  
+  void initialize(const G3MContext* context);
+  
+  void render(const G3MRenderContext* rc,
+              GLState* glState);
+  
+  void onResizeViewportEvent(const G3MEventContext* ec,
+                             int width, int height);
+  
+  void start(const G3MRenderContext* rc);
+  
+  void stop(const G3MRenderContext* rc);
+  
+  
+  void onResume(const G3MContext* context);
+  
+  void onPause(const G3MContext* context);
+  
+  void onDestroy(const G3MContext* context);
+};
+
+
+class MapBoo_HUDRendererInfoDisplay : public InfoDisplay {
+private:
+  MapBoo_HUDRenderer* _mapBooHUDRenderer;
+public:
+  
+  MapBoo_HUDRendererInfoDisplay(MapBoo_HUDRenderer* mapBooHUDRenderer):
+  _mapBooHUDRenderer(mapBooHUDRenderer)
+  {
+    
+  }
+  
+  void changedInfo(const std::vector<const Info*>& info){
+    _mapBooHUDRenderer->updateInfo(info);
+    
+  }
+  
+  void showDisplay() {
+    _mapBooHUDRenderer->setEnable(true);
+  }
+  
+  void hideDisplay() {
+    _mapBooHUDRenderer->setEnable(false);
+  }
+  
+  bool isShowing() {
+    return _mapBooHUDRenderer->isEnable();
+  }
+  
+#ifdef C_CODE
+  virtual ~MapBoo_HUDRendererInfoDisplay() { }
+#endif
+#ifdef JAVA_CODE
+  public void dispose() { }
+#endif
+
+};
+
+class MapBoo_ErrorRenderer : public DefaultRenderer {
+private:
+  std::vector<std::string> _errors;
+public:
+  MapBoo_ErrorRenderer() {}
+  ~MapBoo_ErrorRenderer() {};
+  void setErrors(const std::vector<std::string>& errors);
+  RenderState getRenderState(const G3MRenderContext* rc);
+  void render(const G3MRenderContext* rc,
+              GLState* glState) {}
+  void onResizeViewportEvent(const G3MEventContext* ec,
+                             int width, int height) {}
+};
+
 class MapBooBuilder {
 private:
 
@@ -366,6 +586,8 @@ private:
   MapBoo_ViewType _viewType;
 
   MapBooApplicationChangeListener* _applicationListener;
+  
+  FeatureInfoDownloadListener* _featureInfoDownloadListener;
 
   const bool _enableNotifications;
 
@@ -378,6 +600,9 @@ private:
   std::vector<MapBoo_Scene*> _applicationScenes;
   std::string                _applicationCurrentSceneId;
   std::string                _lastApplicationCurrentSceneId;
+  
+  int                        _applicationEventId;
+  const std::string          _token;
 
   GL* _gl;
   G3MWidget* _g3mWidget;
@@ -393,6 +618,8 @@ private:
 #endif
 
   bool        _isApplicationTubeOpen;
+    
+  MapBoo_ErrorRenderer* _mbErrorRenderer;
 
   LayerSet* _layerSet;
   PlanetRenderer* createPlanetRenderer();
@@ -402,7 +629,7 @@ private:
 
   CameraRenderer* createCameraRenderer();
 
-  Renderer* createBusyRenderer();
+  ProtoRenderer* createBusyRenderer();
 
   ErrorRenderer* createErrorRenderer();
 
@@ -429,15 +656,18 @@ private:
                                     const TimeInterval& timeToCache) const;
 
   CartoDBLayer* parseCartoDBLayer(const JSONObject* jsonLayer,
+                                  const bool transparent,
                                   const TimeInterval& timeToCache) const;
 
 
   MapBoxLayer* parseMapBoxLayer(const JSONObject* jsonLayer,
                                 const TimeInterval& timeToCache) const;
 
-  WMSLayer* parseWMSLayer(const JSONObject* jsonLayer) const;
+  WMSLayer* parseWMSLayer(const JSONObject* jsonLayer,
+                          const bool transparent) const;
 
-  URLTemplateLayer* parseURLTemplateLayer(const JSONObject* jsonLayer) const;
+  URLTemplateLayer* parseURLTemplateLayer(const JSONObject* jsonLayer,
+                                          const bool transparent) const;
 
   const std::string getApplicationCurrentSceneId();
   const MapBoo_Scene* getApplicationCurrentScene();
@@ -456,7 +686,7 @@ private:
 
   void changedCurrentScene();
   
-  void updateVisibleScene();
+  void updateVisibleScene(const bool cameraPositionChanged);
 
   const std::string getApplicationCurrentSceneCommand() const;
 
@@ -491,14 +721,26 @@ private:
   bool _initialParse;
   
   void fireOnScenesChanged();
+  
+  void setCameraPosition(const MapBoo_CameraPosition* cameraPosition, const bool animated);
+  void setCameraPosition(const MapBoo_CameraPosition* cameraPosition);
+  
+  const std::string getViewAsString() const;
+  
+  const URL createApplicationCurrentSceneURL() const;
 
+  const URL createGetFeatureInfoRestURL(const Tile* tile,
+                                        const Vector2I& size,
+                                        const Vector2I& pixel,
+                                        const Geodetic3D& position);
 protected:
   MapBooBuilder(const URL& serverURL,
                 const URL& tubesURL,
                 const std::string& applicationId,
                 MapBoo_ViewType viewType,
                 MapBooApplicationChangeListener* applicationListener,
-                bool enableNotifications);
+                bool enableNotifications,
+                const std::string& token);
 
   virtual ~MapBooBuilder();
 
@@ -522,9 +764,17 @@ protected:
 
   SceneLighting* createSceneLighting();
 
-  const URL createApplicationRestURL() const;
+  const URL createApplicationPollURL() const;
+  
+  const Sector parseSector(const JSONObject* jsonObject, const std::string& paramName) const;
 
 public:
+  /** Private to MapbooBuilder, don't call it */
+  int getApplicationEventId() const;
+  
+  /** Private to MapbooBuilder, don't call it */
+  void setApplicationEventId(const int eventId);
+  
   /** Private to MapbooBuilder, don't call it */
   int getApplicationTimestamp() const;
 
@@ -548,9 +798,6 @@ public:
 
   /** Private to MapbooBuilder, don't call it */
   void deleteApplicationScene(const std::string& sceneId);
-
-  /** Private to MapbooBuilder, don't call it */
-  void setApplicationScene(MapBoo_Scene* scene);
   
   /** Private to MapbooBuilder, don't call it */
   void setApplicationScenes(const std::vector<MapBoo_Scene*>& applicationScenes);
@@ -560,11 +807,22 @@ public:
 
   /** Private to MapbooBuilder, don't call it */
   const URL createApplicationTubeURL() const;
-
+  
   /** Private to MapbooBuilder, don't call it */
   void parseApplicationJSON(const std::string& json,
                             const URL& url);
+  
+  /** Private to MapbooBuilder, don't call it */
+  void parseApplicationJSON(const JSONObject* jsonBaseObjectLayer,
+                            const URL& url);
+  
+  /** Private to MapbooBuilder, don't call it */
+  void parseApplicationEventsJSON(const std::string& json,
+                            const URL& url);
 
+  /** Private to MapbooBuilder, don't call it */
+  void parseSceneEventAndUpdateScene(const JSONObject* jsonObject);
+                                     
   /** Private to MapbooBuilder, don't call it */
   void openApplicationTube(const G3MContext* context);
 
@@ -587,7 +845,7 @@ public:
 
   /** Private to MapbooBuilder, don't call it */
   bool onTerrainTouch(const G3MEventContext* ec,
-                      const Vector2I&        pixel,
+                      const Vector2F&        pixel,
                       const Camera*          camera,
                       const Geodetic3D&      position,
                       const Tile*            tile);
@@ -617,12 +875,25 @@ public:
   void changeScene(const std::string& sceneId);
   
   void changeScene(const MapBoo_Scene* scene);
-
+  
+  
+  const bool isQueryableCurrentScene() {
+    return getApplicationCurrentScene()->isQueryable();
+  }
 
   const URL getServerURL() const {
     return _serverURL;
   }
-
+  
+  const void requestGetFeatureInfo(const Tile* tile,
+                                   const Vector2I& size,
+                                   const Vector2I& pixel,
+                                   const Geodetic3D& position);
+  
+  /** Private to MapbooBuilder, don't call it */
+  void pollApplicationDataFromServer(const G3MContext* context);
+  
+  const std::string getApplicationId();
 };
 
 #endif

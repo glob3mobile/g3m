@@ -33,10 +33,6 @@ public final class Factory_WebGL
    }
 
 
-   @Override
-   public void deleteTimer(final ITimer timer) {
-   }
-
    // TODO TEMP HACK TO PRELOAD IMAGES
    private final HashMap<String, IImage> _downloadedImages = new HashMap<String, IImage>();
 
@@ -47,14 +43,6 @@ public final class Factory_WebGL
 
       if (((Image_WebGL) img).getImage() != null) {
          _downloadedImages.put(url, img);
-      }
-   }
-
-
-   @Override
-   public void deleteImage(final IImage image) {
-      if (image != null) {
-         image.dispose();
       }
    }
 

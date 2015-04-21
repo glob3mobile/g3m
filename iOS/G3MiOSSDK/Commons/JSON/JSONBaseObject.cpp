@@ -6,11 +6,8 @@
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
-#include "JSONBaseObject.hpp"
-#include "JSONObject.hpp"
-#include "JSONArray.hpp"
-#include "JSONNumber.hpp"
 //#include "ILogger.hpp"
+#include "JSONBaseObject.hpp"
 
 const JSONObject* JSONBaseObject::asObject()  const {
   //ILogger::instance()->logError("The requested Object is not of type JSONObject!");

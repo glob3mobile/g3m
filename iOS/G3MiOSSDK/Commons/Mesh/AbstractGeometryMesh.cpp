@@ -134,9 +134,10 @@ void AbstractGeometryMesh::createGLState() {
                                                0,            //Stride 0
                                                true,         //Depth test
                                                false, 0,
-                                               false, (float)0.0, (float)0.0,
+                                               false, 0, 0,
                                                _lineWidth,
-                                               true, _pointSize), false);
+                                               true, _pointSize),
+                         false);
 
   if (_normals != NULL) {
     _glState->addGLFeature(new VertexNormalGLFeature(_normals, 3, 0, false, 0),
@@ -144,26 +145,28 @@ void AbstractGeometryMesh::createGLState() {
   }
 
   if (_translationMatrix != NULL) {
-    _glState->addGLFeature(new ModelTransformGLFeature(_translationMatrix->asMatrix44D()), false);
+    _glState->addGLFeature(new ModelTransformGLFeature(_translationMatrix->asMatrix44D()),
+                           false);
   }
 }
 
 void AbstractGeometryMesh::rawRender(const G3MRenderContext* rc,
-                                     const GLState* parentGLState) const{
+                                     const GLState* parentGLState) const {
   _glState->setParent(parentGLState);
   rawRender(rc);
 
   //RENDERING NORMALS
-  if (_normals != NULL){
-    if (_showNormals){
-      if (_normalsMesh == NULL){
+  if (_normals != NULL) {
+    if (_showNormals) {
+      if (_normalsMesh == NULL) {
         _normalsMesh = createNormalsMesh();
       }
-      if (_normalsMesh != NULL){
+      if (_normalsMesh != NULL) {
         _normalsMesh->render(rc, parentGLState);
       }
-    } else{
-      if (_normalsMesh != NULL){
+    }
+    else {
+      if (_normalsMesh != NULL) {
         delete _normalsMesh;
         _normalsMesh = NULL;
       }
@@ -172,7 +175,7 @@ void AbstractGeometryMesh::rawRender(const G3MRenderContext* rc,
 }
 
 
-Mesh* AbstractGeometryMesh::createNormalsMesh() const{
+Mesh* AbstractGeometryMesh::createNormalsMesh() const {
 
   DirectMesh* verticesMesh = new DirectMesh(GLPrimitive::points(),
                                             false,

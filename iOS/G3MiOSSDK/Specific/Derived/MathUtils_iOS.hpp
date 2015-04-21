@@ -6,8 +6,8 @@
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
-#ifndef G3MiOSSDK_MathUtils_hpp
-#define G3MiOSSDK_MathUtils_hpp
+#ifndef G3MiOSSDK_MathUtils
+#define G3MiOSSDK_MathUtils
 
 #include <math.h>
 #include <limits>
@@ -150,6 +150,16 @@ public:
     return dal._l;
   }
 
+  float rawIntBitsToFloat(int value) const {
+    union FloatAndInt {
+      float _f;
+      int   _i;
+    } dal;
+
+    dal._i = value;
+    return dal._f;
+  }
+
   double rawLongBitsToDouble(long long value) const {
     union DoubleAndLong {
       double    _d;
@@ -183,7 +193,11 @@ public:
   float fmod(float f1, float f2) const {
     return fmodf(f1, f2);
   }
-  
+
+  double nextRandomDouble() const {
+    return (double)rand() / RAND_MAX;;
+  }
+
 };
 
 #endif

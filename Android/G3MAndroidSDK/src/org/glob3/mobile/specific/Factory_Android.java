@@ -7,7 +7,6 @@ import org.glob3.mobile.generated.ICanvas;
 import org.glob3.mobile.generated.IDeviceInfo;
 import org.glob3.mobile.generated.IFactory;
 import org.glob3.mobile.generated.IFloatBuffer;
-import org.glob3.mobile.generated.IImage;
 import org.glob3.mobile.generated.IIntBuffer;
 import org.glob3.mobile.generated.IShortBuffer;
 import org.glob3.mobile.generated.ITimer;
@@ -34,19 +33,6 @@ public final class Factory_Android
    @Override
    public ITimer createTimer() {
       return new Timer_Android();
-   }
-
-
-   @Override
-   public void deleteTimer(final ITimer timer) {
-   }
-
-
-   @Override
-   public void deleteImage(final IImage image) {
-      if (image != null) {
-         image.dispose();
-      }
    }
 
 

@@ -6,22 +6,21 @@
 //  Copyright (c) 2012 IGO Software SL. All rights reserved.
 //
 
-#ifndef G3MiOSSDK_URL_hpp
-#define G3MiOSSDK_URL_hpp
+#ifndef G3MiOSSDK_URL
+#define G3MiOSSDK_URL
 
 #include <string>
 #include "IStringUtils.hpp"
 
 class URL {
 private:
-  const std::string _path;
   URL& operator=(const URL& that);
 
   static const std::string concatenatePath(const URL& parent,
                                            const std::string& path) {
     const IStringUtils* iu = IStringUtils::instance();
 
-    std::string result = iu->replaceSubstring(parent.getPath() + "/" + path, "//", "/");
+    std::string result = iu->replaceSubstring(parent._path + "/" + path, "//", "/");
     if (iu->beginsWith(result, "http:/")) {
 #ifdef C_CODE
       result = "http://" + iu->substring(result, 6);
@@ -35,6 +34,7 @@ private:
   }
 
 public:
+  const std::string _path;
 
   URL(const URL& that) :
   _path(that._path)
@@ -46,15 +46,15 @@ public:
 
   /**
    Creates an URL.
-   
+
    @param escapePath Escape the given path (true) or take it as it is given (false)
    */
-  URL(const std::string& path,
-      const bool escapePath=false) :
+  explicit URL(const std::string& path,
+               const bool escapePath=false) :
   _path(  escapePath ? escape(path) : path  )
   {
   }
-
+  
   URL(const URL& parent,
       const std::string& path) :
   _path( concatenatePath(parent, path) )
@@ -85,6 +85,12 @@ public:
   bool isFileProtocol() const;
 
   const std::string description() const;
+#ifdef JAVA_CODE
+  @Override
+  public String toString() {
+    return description();
+  }
+#endif
 
   const static std::string escape(const std::string& path);
 

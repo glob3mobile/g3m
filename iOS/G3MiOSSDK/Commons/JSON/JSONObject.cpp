@@ -13,6 +13,10 @@
 #include "JSONString.hpp"
 #include "JSONBoolean.hpp"
 #include "JSONNumber.hpp"
+#include "JSONDouble.hpp"
+#include "JSONFloat.hpp"
+#include "JSONLong.hpp"
+#include "JSONInteger.hpp"
 #include "JSONVisitor.hpp"
 
 JSONObject::~JSONObject() {
@@ -47,6 +51,36 @@ const JSONBaseObject* JSONObject::get(const std::string& key) const {
 void JSONObject::put(const std::string& key,
                      JSONBaseObject* object) {
   _entries[key] = object;
+}
+
+void JSONObject::put(const std::string& key,
+                     const std::string& value) {
+  _entries[key] = new JSONString(value);
+}
+
+void JSONObject::put(const std::string& key,
+                     double value) {
+  _entries[key] = new JSONDouble(value);
+}
+
+void JSONObject::put(const std::string& key,
+                     float value) {
+  _entries[key] = new JSONFloat(value);
+}
+
+void JSONObject::put(const std::string& key,
+                     int value) {
+  _entries[key] = new JSONInteger(value);
+}
+
+void JSONObject::put(const std::string& key,
+                     long long value) {
+  _entries[key] = new JSONLong(value);
+}
+
+void JSONObject::put(const std::string& key,
+                     bool value) {
+  _entries[key] = new JSONBoolean(value);
 }
 
 int JSONObject::size() const {

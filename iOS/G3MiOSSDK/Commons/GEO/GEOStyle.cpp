@@ -6,4 +6,3 @@
 //
 //
 
-#include "GEOStyle.hpp"

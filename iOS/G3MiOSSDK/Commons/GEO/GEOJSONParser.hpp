@@ -61,7 +61,7 @@ private:
   }
     
 
-  GEOObject* pvtParse() const;
+  GEOObject* pvtParse(bool showStatistics) const;
 
   GEOObject* toGEO(const JSONObject* jsonObject) const;
 
@@ -80,14 +80,17 @@ private:
 
   std::vector<Geodetic2D*>* create2DCoordinates(const JSONArray* jsCoordinates) const;
 
-  void showStatistics() const;
+  void showStatisticsToLogger() const;
 
 public:
 
-  static GEOObject* parseJSON(const std::string& json);
-  static GEOObject* parseJSON(const IByteBuffer* json);
+  static GEOObject* parseJSON(const std::string& json,
+                              bool showStatistics = true);
+  static GEOObject* parseJSON(const IByteBuffer* json,
+                              bool showStatistics = true);
   
-  static GEOObject* parseBSON(const IByteBuffer* bson);
+  static GEOObject* parseBSON(const IByteBuffer* bson,
+                              bool showStatistics = true);
 
 };
 

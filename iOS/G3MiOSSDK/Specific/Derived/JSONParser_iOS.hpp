@@ -6,8 +6,8 @@
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
-#ifndef G3MiOSSDK_JSONParser_iOS_hpp
-#define G3MiOSSDK_JSONParser_iOS_hpp
+#ifndef G3MiOSSDK_JSONParser_iOS
+#define G3MiOSSDK_JSONParser_iOS
 
 #import <Foundation/Foundation.h>
 #import <Foundation/NSJSONSerialization.h>
@@ -21,8 +21,8 @@ private:
   JSONBaseObject* convert(NSObject *object,
                           bool nullAsObject);
 
-  JSONBaseObject* parse(NSData* jsonData,
-                        bool nullAsObject);
+  JSONBaseObject* parseNSData(NSData* jsonData,
+                              bool nullAsObject);
 
 public:
   JSONBaseObject* parse(const std::string& string,

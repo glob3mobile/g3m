@@ -1,13 +1,13 @@
 //
-//  Attribute.h
+//  Attribute.hpp
 //  G3MiOSSDK
 //
 //  Created by Jose Miguel SN on 27/03/13.
 //
 //
 
-#ifndef G3MiOSSDK_Attribute_h
-#define G3MiOSSDK_Attribute_h
+#ifndef G3MiOSSDK_Attribute
+#define G3MiOSSDK_Attribute
 
 
 #include "INativeGL.hpp"
@@ -69,6 +69,12 @@ public:
   virtual void setAttribute(GL* gl, const int id) const = 0;
   virtual bool isEquals(const GPUAttributeValue* v) const = 0;
   virtual std::string description() const = 0;
+#ifdef JAVA_CODE
+  @Override
+  public String toString() {
+    return description();
+  }
+#endif
 
 };
 
@@ -93,7 +99,7 @@ public:
   const GPUAttributeKey _key;
 
   virtual ~GPUAttribute() {
-    if (_value != NULL){
+    if (_value != NULL) {
       _value->_release();
     }
 
@@ -114,11 +120,11 @@ public:
   {
   }
 
-  //  const std::string getName() const{ return _name;}
-  //  const int getID() const{ return _id;}
-  //  int getType() const{ return _type;}
-  //  int getSize() const{ return _size;}
-  bool wasSet() const{ return _value != NULL;}
+  //  const std::string getName() const { return _name;}
+  //  const int getID() const { return _id;}
+  //  int getType() const { return _type;}
+  //  int getSize() const { return _size;}
+  bool wasSet() const { return _value != NULL;}
   bool isEnabled() const { return _enabled;}
   //  GPUAttributeKey getKey() const { return _key;}
 
@@ -206,22 +212,22 @@ public:
   GPUAttributeValueDisabled():
   GPUAttributeValue(false) {}
 
-  void setAttribute(GL* gl, const int id) const{
+  void setAttribute(GL* gl, const int id) const {
   }
 
-  bool isEquals(const GPUAttributeValue* v) const{
+  bool isEquals(const GPUAttributeValue* v) const {
     return (v->_enabled == false);
   }
 
-  GPUAttributeValue* shallowCopy() const{
+  GPUAttributeValue* shallowCopy() const {
     return new GPUAttributeValueDisabled();
   }
 
-  std::string description() const{
+  std::string description() const {
     return "Attribute Disabled.";
   }
 
-  GPUAttributeValue* copyOrCreate(GPUAttributeValue* oldAtt) const{
+  GPUAttributeValue* copyOrCreate(GPUAttributeValue* oldAtt) const {
     if (oldAtt == NULL) {
       return new GPUAttributeValueDisabled();
     }
@@ -254,7 +260,7 @@ public:
   _timeStamp(buffer->timestamp()),
   _id(buffer->getID()) {}
 
-  void setAttribute(GL* gl, const int id) const{
+  void setAttribute(GL* gl, const int id) const {
     if (_index != 0) {
       //TODO: Change vertexAttribPointer
       ILogger::instance()->logError("INDEX NO 0");
@@ -263,7 +269,7 @@ public:
     gl->vertexAttribPointer(id, _arrayElementSize, _normalized, _stride, _buffer);
   }
 
-  bool isEquals(const GPUAttributeValue* v) const{
+  bool isEquals(const GPUAttributeValue* v) const {
 
     if (!v->_enabled) {
       return false;          //Is a disabled value
@@ -279,7 +285,7 @@ public:
     return equal;
   }
 
-  std::string description() const{
+  std::string description() const {
 
     IStringBuilder* isb = IStringBuilder::newStringBuilder();
     isb->addString("Attribute Value Float.");

@@ -74,7 +74,7 @@ public:
     isb->addString("(#");
     isb->addString(_glTextureId->description());
     isb->addString(", counter=");
-    isb->addInt(_referenceCounter);
+    isb->addLong(_referenceCounter);
     isb->addString(")");
     const std::string s = isb->getString();
     delete isb;
@@ -100,8 +100,8 @@ public:
 //}
 
 const IGLTextureId* TexturesHandler::getGLTextureIdIfAvailable(const TextureSpec& textureSpec) {
-  const int _textureHoldersSize = _textureHolders.size();
-  for (int i = 0; i < _textureHoldersSize; i++) {
+  const size_t _textureHoldersSize = _textureHolders.size();
+  for (size_t i = 0; i < _textureHoldersSize; i++) {
     TextureHolder* holder = _textureHolders[i];
     if (holder->hasSpec(textureSpec)) {
       holder->retain();
@@ -119,12 +119,12 @@ const IGLTextureId* TexturesHandler::getGLTextureIdIfAvailable(const TextureSpec
 const TextureIDReference* TexturesHandler::getTextureIDReference(const IImage* image,
                                                                  int format,
                                                                  const std::string& name,
-                                                                 bool hasMipMap) {
+                                                                 bool generateMipmap) {
 
-  TextureSpec textureSpec(name,
-                          image->getWidth(),
-                          image->getHeight(),
-                          hasMipMap);
+  const TextureSpec textureSpec(name,
+                                image->getWidth(),
+                                image->getHeight(),
+                                generateMipmap);
 
   const IGLTextureId* previousId = getGLTextureIdIfAvailable(textureSpec);
   if (previousId != NULL) {
@@ -132,7 +132,7 @@ const TextureIDReference* TexturesHandler::getTextureIDReference(const IImage* i
   }
 
   TextureHolder* holder = new TextureHolder(textureSpec);
-  holder->_glTextureId = _gl->uploadTexture(image, format, textureSpec.isMipmap());
+  holder->_glTextureId = _gl->uploadTexture(image, format, textureSpec.generateMipmap());
 
 
   if (_verbose) {

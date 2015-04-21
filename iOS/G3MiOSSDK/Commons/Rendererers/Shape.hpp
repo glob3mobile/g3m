@@ -106,19 +106,10 @@ public:
     return *_roll;
   }
 
-  void setPosition(Geodetic3D* position,
-                   AltitudeMode altitudeMode) {
-    delete _position;
-    _position = position;
-    _altitudeMode = altitudeMode;
-    cleanTransformMatrix();
-  }
+//  void setPosition(Geodetic3D* position,
+//                   AltitudeMode altitudeMode);
 
-  void setPosition(Geodetic3D* position) {
-    delete _position;
-    _position = position;
-    cleanTransformMatrix();
-  }
+  void setPosition(const Geodetic3D& position);
 
   void addShapeEffect(Effect* effect);
   
@@ -131,15 +122,17 @@ public:
                            const Angle& pitch,
                            const Angle& heading,
                            const Angle& roll,
-                           bool linearInterpolation=false);
-  
+                           bool linearInterpolation     = false,
+                           bool forceToPositionOnCancel = true,
+                           bool forceToPositionOnStop   = true);
+
   void setAnimatedPosition(const Geodetic3D& position,
                            bool linearInterpolation=false) {
     setAnimatedPosition(TimeInterval::fromSeconds(3),
                         position,
                         linearInterpolation);
   }
-  
+
   void setHeading(const Angle& heading) {
 #ifdef C_CODE
     delete _heading;
@@ -285,8 +278,9 @@ public:
                    const ElevationData* rawElevationData, // Without considering vertical exaggeration
                         double verticalExaggeration) {}
   
-  virtual std::vector<double> intersectionsDistances(const Vector3D& origin,
-                                             const Vector3D& direction) const = 0;
+  virtual std::vector<double> intersectionsDistances(const Planet* planet,
+                                                     const Vector3D& origin,
+                                                     const Vector3D& direction) const = 0;
   
 
 };
