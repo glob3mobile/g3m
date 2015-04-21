@@ -288,6 +288,13 @@ const URL WMSLayer::createURL(const Tile* tile) const {
     {
       req += "&VERSION=1.3.0";
 
+      if (_srs != "") {
+        req += "&CRS=" + _srs;
+      }
+      else {
+        req += "&CRS=EPSG:4326";
+
+      }
       IStringBuilder* isb = IStringBuilder::newStringBuilder();
 
       isb->addString("&WIDTH=");
@@ -307,8 +314,6 @@ const URL WMSLayer::createURL(const Tile* tile) const {
       req += isb->getString();
       delete isb;
 
-      req += "&CRS=EPSG:4326";
-
       break;
     }
     case WMS_1_1_0:
@@ -317,29 +322,19 @@ const URL WMSLayer::createURL(const Tile* tile) const {
       // default is 1.1.1
       req += "&VERSION=1.1.1";
 
+      if (_srs != "") {
+        req += "&SRS=" + _srs;
+      }
+      else {
+        req += "&SRS=EPSG:4326";
+      }
+
       IStringBuilder* isb = IStringBuilder::newStringBuilder();
       
       isb->addString("&WIDTH=");
       isb->addInt(width);
       isb->addString("&HEIGHT=");
       isb->addInt(height);
-      
-      
-      
-//      const double widthHeihtFactor  = sector._deltaLongitude.div(sector._deltaLatitude);
-//      if (widthHeihtFactor >= 1) {
-//        isb->addString("&WIDTH=");
-//        isb->addInt(tileTextureResolution._x);
-//        isb->addString("&HEIGHT=");
-//        isb->addInt((int)tileTextureResolution._y/widthHeihtFactor);
-//      } else {
-//        isb->addString("&WIDTH=");
-//        isb->addInt((int)tileTextureResolution._x*widthHeihtFactor);
-//        isb->addString("&HEIGHT=");
-//        isb->addInt(tileTextureResolution._y);
-//      }
-      
-      
 
       isb->addString("&BBOX=");
       isb->addDouble( toBBOXLongitude( sector._lower._longitude ) );
@@ -349,14 +344,6 @@ const URL WMSLayer::createURL(const Tile* tile) const {
       isb->addDouble( toBBOXLongitude( sector._upper._longitude ) );
       isb->addString(",");
       isb->addDouble( toBBOXLatitude( sector._upper._latitude ) );
-      
-//      isb->addDouble( toBBOXLatitude( tileSector._lower._longitude ) );
-//      isb->addString(",");
-//      isb->addDouble( toBBOXLongitude( tileSector._lower._latitude ) );
-//      isb->addString(",");
-//      isb->addDouble( toBBOXLatitude( tileSector._upper._longitude ) );
-//      isb->addString(",");
-//      isb->addDouble( toBBOXLongitude( tileSector._upper._latitude ) );
 
       req += isb->getString();
       delete isb;
@@ -367,13 +354,6 @@ const URL WMSLayer::createURL(const Tile* tile) const {
   req += "&LAYERS=" + _mapLayer;
 
 	req += "&FORMAT=" + _format;
-
-  if (_srs != "") {
-    req += "&SRS=" + _srs;
-  }
-	else {
-    req += "&SRS=EPSG:4326";
-  }
 
   //Style
   if (_style != "") {
@@ -426,18 +406,17 @@ URL WMSLayer::getFeatureInfoURL(const Geodetic2D& position,
 
   req += "REQUEST=GetFeatureInfo&SERVICE=WMS";
 
-  //SRS
-  if (_srs != "") {
-    req += "&SRS=" + _srs;
-  }
-	else {
-    req += "&SRS=EPSG:4326";
-  }
 
   switch (_queryServerVersion) {
     case WMS_1_3_0:
     {
       req += "&VERSION=1.3.0";
+      if (_srs != "") {
+        req += "&CRS=" + _srs;
+      }
+      else {
+        req += "&CRS=EPSG:4326";
+      }
 
       IStringBuilder* isb = IStringBuilder::newStringBuilder();
 
@@ -459,8 +438,6 @@ URL WMSLayer::getFeatureInfoURL(const Geodetic2D& position,
 
       delete isb;
 
-      req += "&CRS=EPSG:4326";
-
       break;
     }
     case WMS_1_1_0:
@@ -468,6 +445,13 @@ URL WMSLayer::getFeatureInfoURL(const Geodetic2D& position,
     {
       // default is 1.1.1
       req += "&VERSION=1.1.1";
+
+      if (_srs != "") {
+        req += "&SRS=" + _srs;
+      }
+      else {
+        req += "&SRS=EPSG:4326";
+      }
 
       IStringBuilder* isb = IStringBuilder::newStringBuilder();
 

@@ -428,12 +428,12 @@ LayerTilesRenderParameters* LayerSet::checkAndComposeLayerTilesRenderParameters(
 
   std::vector<Layer*> multiProjectionLayers;
 
-  for (int i = 0; i < enableLayers.size(); i++) {
+  for (size_t i = 0; i < enableLayers.size(); i++) {
     Layer* layer = enableLayers[i];
 
     const std::vector<const LayerTilesRenderParameters*> layerParametersVector = layer->getLayerTilesRenderParametersVector();
 
-    const int layerParametersVectorSize = layerParametersVector.size();
+    const size_t layerParametersVectorSize = layerParametersVector.size();
     if (layerParametersVectorSize == 0) {
       continue;
     }
@@ -447,7 +447,7 @@ LayerTilesRenderParameters* LayerSet::checkAndComposeLayerTilesRenderParameters(
     }
   }
 
-  for (int i = 0; i < multiProjectionLayers.size(); i++) {
+  for (size_t i = 0; i < multiProjectionLayers.size(); i++) {
     Layer* layer = multiProjectionLayers[i];
     if (!mutableLayerTilesRenderParameters.update(layer, errors)) {
       return NULL;
