@@ -151,6 +151,7 @@
 #import <G3MiOSSDK/Quaternion.hpp>
 
 #import "StarDomeRenderer.hpp"
+#import "StarsParser.hpp"
 
 #include <typeinfo>
 
@@ -545,6 +546,10 @@ std::vector<StarDomeRenderer*> _sdrs;
     NSString *csv = [NSString stringWithContentsOfFile: csvPath
                                               encoding: NSMacOSRomanStringEncoding
                                                  error: nil];
+    
+    [StarsParser parse:csv];
+    
+    
     
     NSArray* lines = [csv componentsSeparatedByString:@"\r"];
     

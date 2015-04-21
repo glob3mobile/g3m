@@ -44,6 +44,7 @@ public:
   }
 };
 
+
 class Star{
   
   const double _ascencion;
@@ -95,6 +96,32 @@ public:
   }
   
 };
+
+class Constellation{
+public:
+  std::string _name;
+  std::vector<Star> _stars;
+  std::vector<int> _lines;
+  Color* _color;
+  
+  Constellation(const std::string& name,
+                const Color& color,
+                const std::vector<Star> stars,
+                const std::vector<int>& lines):
+  _name(name), _color(new Color(color)), _stars(stars), _lines(lines){}
+  
+  Constellation(const Constellation& c){
+    _name = c._name;
+    _color = new Color(*c._color);
+    _lines = c._lines;
+    _stars = c._stars;
+  }
+  
+  ~Constellation(){
+    delete _color;
+  }
+};
+
 
 class StarDomeRenderer : public DefaultRenderer {
   
