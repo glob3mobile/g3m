@@ -49,7 +49,9 @@ bool FrameTasksExecutor::canExecutePreRenderStep(const G3MRenderContext* rc,
 }
 
 void FrameTasksExecutor::doPreRenderCycle(const G3MRenderContext* rc) {
-
+  if (_preRenderTasks.empty()) {
+    return;
+  }
   //  int canceledCounter = 0;
   std::list<FrameTask*>::iterator i = _preRenderTasks.begin();
   while (i != _preRenderTasks.end()) {
@@ -65,8 +67,9 @@ void FrameTasksExecutor::doPreRenderCycle(const G3MRenderContext* rc) {
       i.remove();
 #endif
       //      canceledCounter++;
+    } else {
+      i++;
     }
-    i++;
   }
 
   //  if (canceledCounter > 0) {
