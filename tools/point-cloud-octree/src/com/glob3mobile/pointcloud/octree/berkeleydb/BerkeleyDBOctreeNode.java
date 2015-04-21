@@ -424,7 +424,7 @@ public class BerkeleyDBOctreeNode
       final Iterator<Geodetic3D> iterator = points.iterator();
       while (iterator.hasNext()) {
          final Geodetic3D point = iterator.next();
-         if (sector.contains(point._latitude, point._longitude)) {
+         if (sector.contains(point._latitude, point._longitude, point._height, point._height)) {
             extracted.add(point);
 
             sumLatitudeInRadians += point._latitude._radians;
