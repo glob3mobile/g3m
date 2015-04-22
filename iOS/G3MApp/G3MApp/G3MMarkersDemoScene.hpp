@@ -26,7 +26,7 @@ protected:
 public:
 
   G3MMarkersDemoScene(G3MDemoModel* model) :
-  G3MDemoScene(model, "Markers", "", -1),
+  G3MDemoScene(model, "Marks", "", -1),
   _requestId(-1)
   {
   }

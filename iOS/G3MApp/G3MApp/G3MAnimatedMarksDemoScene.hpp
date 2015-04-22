@@ -25,7 +25,7 @@ protected:
 public:
   
   G3MAnimatedMarksDemoScene(G3MDemoModel* model) :
-  G3MDemoScene(model, "Animated Markers", "", -1)
+  G3MDemoScene(model, "Animated Marks", "", -1)
   {
   }
   

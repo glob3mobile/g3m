@@ -495,7 +495,6 @@
 				CFFCD2C81AD2C748004C7112 /* BuenosAires-Wikipedia.json */,
 				D871790F1AE501B100A9A14F /* pin.png */,
 				D871790D1AE500B500A9A14F /* radar-sprite.png */,
-				CF4E4C3C1AB62AAC00351300 /* BuenosAires-Wikipedia.json */,
 				CFC192DA1A8D3A7C00FA89B3 /* colorgrid.jpg */,
 				CFF9D20B1A7C5048005429A6 /* g3m-marker.png */,
 				CFF9D2091A7C5014005429A6 /* anchorWidget.png */,
@@ -575,7 +574,7 @@
 				ORGANIZATIONNAME = "Igo Software SL";
 				TargetAttributes = {
 					E7D1B60416D2436700AF47C1 = {
-						DevelopmentTeam = N847RXR927;
+						DevelopmentTeam = CTLLY45L74;
 					};
 				};
 			};

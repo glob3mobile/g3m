@@ -144,7 +144,7 @@ void Tile::ancestorTexturedSolvedChanged(Tile* ancestor,
   }
 
   if (_subtiles != NULL) {
-    const int subtilesSize = _subtiles->size();
+    const size_t subtilesSize = _subtiles->size();
     for (int i = 0; i < subtilesSize; i++) {
       Tile* subtile = _subtiles->at(i);
       subtile->ancestorTexturedSolvedChanged(ancestor, textureSolved);
