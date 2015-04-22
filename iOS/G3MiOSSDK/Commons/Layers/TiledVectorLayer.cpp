@@ -62,16 +62,16 @@ void TiledVectorLayer::setSymbolizer(const GEORasterSymbolizer* symbolizer,
   }
 }
 
-TiledVectorLayer* TiledVectorLayer::newMercator(const GEORasterSymbolizer*      symbolizer,
-                                                const std::string&              urlTemplate,
-                                                const Sector&                   dataSector,
-                                                const int                       firstLevel,
-                                                const int                       maxLevel,
-                                                const TimeInterval&             timeToCache,
-                                                const bool                      readExpired,
-                                                const float                     transparency,
-                                                const LayerCondition*           condition,
-                                                std::vector<const Info*>*       layerInfo) {
+TiledVectorLayer* TiledVectorLayer::newMercator(const GEORasterSymbolizer* symbolizer,
+                                                const std::string&         urlTemplate,
+                                                const Sector&              dataSector,
+                                                const int                  firstLevel,
+                                                const int                  maxLevel,
+                                                const TimeInterval&        timeToCache,
+                                                const bool                 readExpired,
+                                                const float                transparency,
+                                                const LayerCondition*      condition,
+                                                std::vector<const Info*>*  layerInfo) {
   std::vector<const LayerTilesRenderParameters*> parametersVector;
   parametersVector.push_back( LayerTilesRenderParameters::createDefaultMercator(firstLevel, maxLevel) );
   return new TiledVectorLayer(symbolizer,
