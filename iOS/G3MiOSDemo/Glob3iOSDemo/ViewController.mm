@@ -288,7 +288,7 @@ Mesh* createSectorMesh(const Planet* planet,
   
   //[self initTestingTileImageProvider];
   
-  [self initWithNonOverlappingMarks];
+  [self initWithShapeManagement];
   
   
   //  [self initWithMapBooBuilder];
@@ -325,10 +325,53 @@ Mesh* createSectorMesh(const Planet* planet,
   
 }
 
-- (void) initWithNonOverlappingMarks
+- (void) initWithShapeManagement
 {
   G3MBuilder_iOS builder([self G3MWidget]);
   
+  ShapesRenderer* sr = new ShapesRenderer();
+  builder.addRenderer(sr);
+  
+  if (true) {
+    NSString *planeFilePath = [[NSBundle mainBundle] pathForResource: @"seymour-plane"
+                                                              ofType: @"json"];
+    if (planeFilePath) {
+      NSString *nsPlaneJSON = [NSString stringWithContentsOfFile: planeFilePath
+                                                        encoding: NSUTF8StringEncoding
+                                                           error: nil];
+      if (nsPlaneJSON) {
+        std::string planeJSON = [nsPlaneJSON UTF8String];
+        
+        Shape* plane = SceneJSShapesParser::parseFromJSON(planeJSON,
+                                                          URL::FILE_PROTOCOL + "/" ,
+                                                          false,
+                                                          new Geodetic3D(Angle::fromDegrees(28.127222),
+                                                                         Angle::fromDegrees(-15.431389),
+                                                                         10000),
+                                                          ABSOLUTE);
+        
+        // Washington, DC
+        const double scale = 10000;
+        plane->setScale(scale, scale, scale);
+        sr->addShape(plane);
+        
+      }
+    }
+  }
+
+  
+  
+  builder.initializeWidget();
+  [G3MWidget widget]->setCameraPosition(Geodetic3D(Angle::fromDegrees(28.127222),
+                                                   Angle::fromDegrees(-15.431389),
+                                                   100000));
+}
+
+/*
+- (void) initWithNonOverlappingMarks
+{
+  G3MBuilder_iOS builder([self G3MWidget]);
+ 
   Vector2D::intersectionOfTwoLines(Vector2D(0,0), Vector2D(10,10),
                                    Vector2D(10,0), Vector2D(-10, 10));
   
@@ -422,7 +465,7 @@ Mesh* createSectorMesh(const Planet* planet,
   
   builder.initializeWidget();
 }
-
+*/
 
 class MoveCameraInitializationTask : public GInitializationTask {
 private:
@@ -4195,7 +4238,7 @@ public:
         };
         
         
-        [_iosWidget widget]->getPlanetRenderer()->addTerrainTouchListener(new CameraAnglesTerrainListener(_iosWidget, _meshRenderer));
+//        [_iosWidget widget]->getPlanetRenderer()->addTerrainTouchListener(new CameraAnglesTerrainListener(_iosWidget, _meshRenderer));
         
       }
       
