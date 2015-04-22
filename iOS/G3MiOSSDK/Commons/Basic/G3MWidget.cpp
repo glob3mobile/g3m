@@ -412,7 +412,7 @@ void G3MWidget::onResizeViewportEvent(int width, int height) {
 
 void G3MWidget::resetPeriodicalTasksTimeouts() {
   const size_t periodicalTasksCount = _periodicalTasks.size();
-  for (int i = 0; i < periodicalTasksCount; i++) {
+  for (size_t i = 0; i < periodicalTasksCount; i++) {
     PeriodicalTask* pt = _periodicalTasks[i];
     pt->resetTimeout();
   }
@@ -509,14 +509,14 @@ void G3MWidget::render(int width, int height) {
 
   // Start periodical tasks
   const size_t periodicalTasksCount = _periodicalTasks.size();
-  for (int i = 0; i < periodicalTasksCount; i++) {
+  for (size_t i = 0; i < periodicalTasksCount; i++) {
     PeriodicalTask* pt = _periodicalTasks[i];
     pt->executeIfNecessary(_context);
   }
 
   // give to the CameraContrainers the opportunity to change the nextCamera
   const size_t cameraConstrainersCount = _cameraConstrainers.size();
-  for (int i = 0; i< cameraConstrainersCount; i++) {
+  for (size_t i = 0; i< cameraConstrainersCount; i++) {
     ICameraConstrainer* constrainer = _cameraConstrainers[i];
     constrainer->onCameraChange(_planet,
                                 _currentCamera,
@@ -576,7 +576,7 @@ void G3MWidget::render(int width, int height) {
   std::vector<OrderedRenderable*>* orderedRenderables = _renderContext->getSortedOrderedRenderables();
   if (orderedRenderables != NULL) {
     const size_t orderedRenderablesCount = orderedRenderables->size();
-    for (int i = 0; i < orderedRenderablesCount; i++) {
+    for (size_t i = 0; i < orderedRenderablesCount; i++) {
       OrderedRenderable* orderedRenderable = orderedRenderables->at(i);
       orderedRenderable->render(_renderContext);
       delete orderedRenderable;

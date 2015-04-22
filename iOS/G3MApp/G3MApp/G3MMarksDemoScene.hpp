@@ -1,19 +1,19 @@
 //
-//  G3MMarkersDemoScene.hpp
+//  G3MMarksDemoScene.hpp
 //  G3MApp
 //
 //  Created by Diego Gomez Deck on 11/18/13.
 //  Copyright (c) 2013 Igo Software SL. All rights reserved.
 //
 
-#ifndef __G3MApp__G3MMarkersDemoScene__
-#define __G3MApp__G3MMarkersDemoScene__
+#ifndef __G3MApp__G3MMarksDemoScene__
+#define __G3MApp__G3MMarksDemoScene__
 
 #include "G3MDemoScene.hpp"
 
 class Mark;
 
-class G3MMarkersDemoScene : public G3MDemoScene {
+class G3MMarksDemoScene : public G3MDemoScene {
 private:
   long long _requestId;
 
@@ -25,7 +25,7 @@ protected:
 
 public:
 
-  G3MMarkersDemoScene(G3MDemoModel* model) :
+  G3MMarksDemoScene(G3MDemoModel* model) :
   G3MDemoScene(model, "Marks", "", -1),
   _requestId(-1)
   {

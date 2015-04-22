@@ -145,7 +145,7 @@ void Tile::ancestorTexturedSolvedChanged(Tile* ancestor,
 
   if (_subtiles != NULL) {
     const size_t subtilesSize = _subtiles->size();
-    for (int i = 0; i < subtilesSize; i++) {
+    for (size_t i = 0; i < subtilesSize; i++) {
       Tile* subtile = _subtiles->at(i);
       subtile->ancestorTexturedSolvedChanged(ancestor, textureSolved);
     }
@@ -162,8 +162,8 @@ void Tile::setTextureSolved(bool textureSolved) {
     }
 
     if (_subtiles != NULL) {
-      const int subtilesSize = _subtiles->size();
-      for (int i = 0; i < subtilesSize; i++) {
+      const size_t subtilesSize = _subtiles->size();
+      for (size_t i = 0; i < subtilesSize; i++) {
         Tile* subtile = _subtiles->at(i);
         subtile->ancestorTexturedSolvedChanged(this, _textureSolved);
       }
@@ -523,8 +523,8 @@ void Tile::prune(TileTexturizer*           texturizer,
     //Notifying elevation event when LOD decreases
     _planetRenderer->sectorElevationChanged(_elevationData);
 
-    const int subtilesSize = _subtiles->size();
-    for (int i = 0; i < subtilesSize; i++) {
+    const size_t subtilesSize = _subtiles->size();
+    for (size_t i = 0; i < subtilesSize; i++) {
       Tile* subtile = _subtiles->at(i);
 
       subtile->setIsVisible(false, texturizer);
@@ -672,8 +672,8 @@ void Tile::render(const G3MRenderContext* rc,
         _justCreatedSubtiles = false;
       }
 
-      const int subTilesSize = subTiles->size();
-      for (int i = 0; i < subTilesSize; i++) {
+      const size_t subTilesSize = subTiles->size();
+      for (size_t i = 0; i < subTilesSize; i++) {
         Tile* subTile = subTiles->at(i);
         toVisitInNextIteration->push_back(subTile);
       }
@@ -831,8 +831,8 @@ void Tile::setElevationData(ElevationData* ed, int level) {
     //If the elevation belongs to tile's level, we notify the sub-tree
     if (isElevationDataSolved()) {
       if (_subtiles != NULL) {
-        const int subtilesSize = _subtiles->size();
-        for (int i = 0; i < subtilesSize; i++) {
+        const size_t subtilesSize = _subtiles->size();
+        for (size_t i = 0; i < subtilesSize; i++) {
           Tile* subtile = _subtiles->at(i);
           subtile->ancestorChangedElevationData(this);
         }
@@ -893,8 +893,8 @@ void Tile::ancestorChangedElevationData(Tile* ancestor) {
   }
 
   if (_subtiles != NULL) {
-    const int subtilesSize = _subtiles->size();
-    for (int i = 0; i < subtilesSize; i++) {
+    const size_t subtilesSize = _subtiles->size();
+    for (size_t i = 0; i < subtilesSize; i++) {
       Tile* subtile = _subtiles->at(i);
       subtile->ancestorChangedElevationData(this);
     }

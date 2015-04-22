@@ -142,7 +142,7 @@ public class Mark implements SurfaceElevationListener
   private BillboardGLFeature _billboardGLF;
 
   /**
-   * Creates a marker with icon and label
+   * Creates a mark with icon and label
    */
   public Mark(String label, URL iconURL, Geodetic3D position, AltitudeMode altitudeMode, double minDistanceToCamera, boolean labelBottom, float labelFontSize, Color labelFontColor, Color labelShadowColor, int labelGapSize, MarkUserData userData, boolean autoDeleteUserData, MarkTouchListener listener)
   {
@@ -225,7 +225,7 @@ public class Mark implements SurfaceElevationListener
   }
 
   /**
-   * Creates a marker just with label, without icon
+   * Creates a mark just with label, without icon
    */
   public Mark(String label, Geodetic3D position, AltitudeMode altitudeMode, double minDistanceToCamera, float labelFontSize, Color labelFontColor, Color labelShadowColor, MarkUserData userData, boolean autoDeleteUserData, MarkTouchListener listener)
   {
@@ -300,7 +300,7 @@ public class Mark implements SurfaceElevationListener
   }
 
   /**
-   * Creates a marker just with icon, without label
+   * Creates a mark just with icon, without label
    */
   public Mark(URL iconURL, Geodetic3D position, AltitudeMode altitudeMode, double minDistanceToCamera, MarkUserData userData, boolean autoDeleteUserData, MarkTouchListener listener)
   {
@@ -363,7 +363,7 @@ public class Mark implements SurfaceElevationListener
   }
 
   /**
-   * Creates a marker whith a given pre-renderer IImage
+   * Creates a mark whith a given pre-renderer IImage
    */
   public Mark(IImage image, String imageID, Geodetic3D position, AltitudeMode altitudeMode, double minDistanceToCamera, MarkUserData userData, boolean autoDeleteUserData, MarkTouchListener listener)
   {
@@ -506,7 +506,7 @@ public class Mark implements SurfaceElevationListener
         }
         else
         {
-          ILogger.instance().logWarning("Marker created without label nor icon");
+          ILogger.instance().logWarning("Mark created without label nor icon");
         }
       }
     }
