@@ -46,8 +46,8 @@ public:
 
 RenderState ShapesRenderer::getRenderState(const G3MRenderContext* rc) {
   if (!_renderNotReadyShapes) {
-    const int shapesCount = _shapes.size();
-    for (int i = 0; i < shapesCount; i++) {
+    const size_t shapesCount = _shapes.size();
+    for (size_t i = 0; i < shapesCount; i++) {
       Shape* shape = _shapes[i];
       const bool shapeReady = shape->isReadyToRender(rc);
       if (!shapeReady) {
@@ -93,8 +93,8 @@ void ShapesRenderer::render(const G3MRenderContext* rc, GLState* glState) {
   _glStateTransparent->setParent(glState);
 
 
-  const int shapesCount = _shapes.size();
-  for (int i = 0; i < shapesCount; i++) {
+  const size_t shapesCount = _shapes.size();
+  for (size_t i = 0; i < shapesCount; i++) {
     Shape* shape = _shapes[i];
     if (shape->isEnable()) {
       if (shape->isTransparent(rc)) {
@@ -135,8 +135,8 @@ void ShapesRenderer::removeShape(Shape* shape) {
 
 void ShapesRenderer::removeAllShapes(bool deleteShapes) {
   if (deleteShapes) {
-    const int shapesCount = _shapes.size();
-    for (int i = 0; i < shapesCount; i++) {
+    const size_t shapesCount = _shapes.size();
+    for (size_t i = 0; i < shapesCount; i++) {
       Shape* shape = _shapes[i];
       delete shape;
     }
@@ -226,8 +226,8 @@ bool ShapesRenderer::onTouchEvent(const G3MEventContext* ec,
 
 void ShapesRenderer::drainLoadQueue() {
 
-  const int loadQueueSize = _loadQueue.size();
-  for (int i = 0; i < loadQueueSize; i++) {
+  const size_t loadQueueSize = _loadQueue.size();
+  for (size_t i = 0; i < loadQueueSize; i++) {
     LoadQueueItem* item = _loadQueue[i];
     requestBuffer(item->_url,
                   item->_priority,
@@ -248,8 +248,8 @@ void ShapesRenderer::drainLoadQueue() {
 }
 
 void ShapesRenderer::cleanLoadQueue() {
-  const int loadQueueSize = _loadQueue.size();
-  for (int i = 0; i < loadQueueSize; i++) {
+  const size_t loadQueueSize = _loadQueue.size();
+  for (size_t i = 0; i < loadQueueSize; i++) {
     LoadQueueItem* item = _loadQueue[i];
     delete item;
   }
@@ -258,8 +258,8 @@ void ShapesRenderer::cleanLoadQueue() {
 
 void ShapesRenderer::onChangedContext() {
   if (_context != NULL) {
-    const int shapesCount = _shapes.size();
-    for (int i = 0; i < shapesCount; i++) {
+    const size_t shapesCount = _shapes.size();
+    for (size_t i = 0; i < shapesCount; i++) {
       Shape* shape = _shapes[i];
       shape->initialize(_context);
     }
@@ -566,32 +566,25 @@ void ShapesRenderer::requestBuffer(const URL&          url,
 }
 
 void ShapesRenderer::zRender(const G3MRenderContext* rc, GLState* glState){
-
-  GLState* state = new GLState();
-  const Camera* cam = rc->getCurrentCamera();
-  const Vector3D cameraPosition = rc->getCurrentCamera()->getCartesianPosition();
-
-  state->addGLFeature(new ModelViewGLFeature(cam), true);
-  state->setParent(glState);
-
-  const int shapesCount = _shapes.size();
+  
+  const size_t shapesCount = _shapes.size();
   for (int i = 0; i < shapesCount; i++) {
     Shape* shape = _shapes[i];
-    shape->zRender(rc, state, _renderNotReadyShapes);
+    shape->zRender(rc, _glState, _renderNotReadyShapes);
   }
 }
 
 void ShapesRenderer::enableAll() {
-  const int shapesCount = _shapes.size();
-  for (int i = 0; i < shapesCount; i++) {
+  const size_t shapesCount = _shapes.size();
+  for (size_t i = 0; i < shapesCount; i++) {
     Shape* shape = _shapes[i];
     shape->setEnable(true);
   }
 }
 
 void ShapesRenderer::disableAll() {
-  const int shapesCount = _shapes.size();
-  for (int i = 0; i < shapesCount; i++) {
+  const size_t shapesCount = _shapes.size();
+  for (size_t i = 0; i < shapesCount; i++) {
     Shape* shape = _shapes[i];
     shape->setEnable(false);
   }

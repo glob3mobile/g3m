@@ -147,7 +147,7 @@ void G3MCanvas2DDemoScene::rawActivate(const G3MContext* context) {
 
 
   context->getDownloader()->requestImage(//URL("file:///colorgrid.jpg"),
-                                         URL("file:///g3m-marker.png"),
+                                         URL("file:///g3m-mark.png"),
                                          1, // priority,
                                          TimeInterval::zero(),
                                          false,

@@ -2,22 +2,11 @@
 
 package com.glob3mobile.pointcloud.octree;
 
-import java.awt.Color;
-import java.awt.Graphics2D;
-import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.IOException;
 import java.util.List;
 
-import javax.imageio.ImageIO;
-
-import com.glob3mobile.pointcloud.kdtree.KDInnerNode;
-import com.glob3mobile.pointcloud.kdtree.KDLeafNode;
-import com.glob3mobile.pointcloud.kdtree.KDTree;
-import com.glob3mobile.pointcloud.kdtree.KDTreeVisitor;
 import com.glob3mobile.pointcloud.octree.berkeleydb.BerkeleyDBOctree;
 import com.glob3mobile.utils.Geodetic3D;
-import com.glob3mobile.utils.Sector;
 
 import es.igosoftware.util.GProgress;
 import es.igosoftware.util.GStringUtils;
@@ -25,7 +14,7 @@ import es.igosoftware.util.GStringUtils;
 
 public class SimplifyOctreeTask
          implements
-PersistentOctree.Visitor {
+            PersistentOctree.Visitor {
 
    private final String     _sourceCloudName;
    private final File       _cloudDirectory;
@@ -91,7 +80,7 @@ PersistentOctree.Visitor {
 
          System.out.println();
          System.out.println("Source points=" + _sourcePointsCount + ", Simplified Points=" + simplifiedPointsCount + " ("
-                  + GStringUtils.formatPercent(simplifiedPointsCount, _sourcePointsCount) + ")");
+                            + GStringUtils.formatPercent(simplifiedPointsCount, _sourcePointsCount) + ")");
       }
    }
 
@@ -133,135 +122,165 @@ PersistentOctree.Visitor {
       //      }
 
 
-      final long pointsSize = sourceNode.getPointsCount();
+      final long sourcePointsSize = sourceNode.getPointsCount();
 
       final List<Geodetic3D> points = sourceNode.getPoints();
-      final int targetPointsCount = Math.round(pointsSize * _resultSizeFactor);
+      final int targetPointsCount = Math.round(sourcePointsSize * _resultSizeFactor);
       final List<Geodetic3D> simplifiedPoints = KMeans.cluster(points, targetPointsCount, 1);
 
       for (final Geodetic3D point : simplifiedPoints) {
          _targetOctree.addPoint(point);
       }
 
-      _progress.stepsDone(pointsSize);
+      _progress.stepsDone(sourcePointsSize);
 
-      //      final String id = sourceNode.getID();
-      //      if (pointsSize == 64920) {
-      //         System.out.println("found #" + id);
-      //         final Sector sector = sourceNode.getSector();
-      //         final List<Geodetic3D> points = sourceNode.getPoints();
-      //         generateImage(id, sector, points);
-      //
-      //         final int targetPointsCount = Math.round(pointsSize * _resultSizeFactor);
-      //         final List<Geodetic3D> simplifiedPoints = KMeans.cluster(points, targetPointsCount);
-      //         generateImage(id + "_simplified", sector, simplifiedPoints);
-      //
-      //         return false;
-      //      }
 
       final boolean keepWorking = true;
       return keepWorking;
    }
 
 
-   private static void sortPoints(final List<Geodetic3D> points,
-                                  final List<Integer> sortedVertices,
-                                  final List<Integer> lodIndices) {
+   //   private static void sortPoints(final List<Geodetic3D> points,
+   //                                  final List<Integer> sortedVertices,
+   //                                  final List<Integer> lodIndices) {
+   //
+   //      final KDTree tree = new KDTree(points, 2);
+   //
+   //      final KDTreeVisitor visitor = new KDTreeVisitor() {
+   //         private int _lastDepth = 0;
+   //
+   //
+   //         @Override
+   //         public void startVisiting(final KDTree tree1) {
+   //         }
+   //
+   //
+   //         @Override
+   //         public void visitInnerNode(final KDInnerNode innerNode) {
+   //            pushVertexIndex(innerNode.getVertexIndexes(), innerNode.getDepth());
+   //         }
+   //
+   //
+   //         @Override
+   //         public void visitLeafNode(final KDLeafNode leafNode) {
+   //            pushVertexIndex(leafNode.getVertexIndexes(), leafNode.getDepth());
+   //         }
+   //
+   //
+   //         private void pushVertexIndex(final int[] vertexIndexes,
+   //                                      final int depth) {
+   //            if (_lastDepth != depth) {
+   //               _lastDepth = depth;
+   //
+   //               final int sortedVerticesCount = sortedVertices.size();
+   //               if (sortedVerticesCount > 0) {
+   //                  lodIndices.add(sortedVerticesCount - 1);
+   //               }
+   //            }
+   //
+   //            for (final int vertexIndex : vertexIndexes) {
+   //               sortedVertices.add(vertexIndex);
+   //            }
+   //         }
+   //
+   //
+   //         @Override
+   //         public void endVisiting(final KDTree tree1) {
+   //         }
+   //      };
+   //      tree.breadthFirstAcceptVisitor(visitor);
+   //
+   //      final int sortedVerticesCount = sortedVertices.size();
+   //      if (sortedVerticesCount > 0) {
+   //         lodIndices.add(sortedVerticesCount - 1);
+   //      }
+   //   }
 
-      final KDTree tree = new KDTree(points, 2);
 
-      final KDTreeVisitor visitor = new KDTreeVisitor() {
-         private int _lastDepth = 0;
+   //   private static void generateImage(final String id,
+   //                                     //final int level,
+   //                                     final Sector sector,
+   //                                     final List<Geodetic3D> points
+   //   //final double minHeight,
+   //   //final double maxHeight
+   //   ) {
+   //      final int imageWidth = 1024;
+   //      final int imageHeight = 1024;
+   //
+   //      final BufferedImage image = new BufferedImage(imageWidth, imageHeight, BufferedImage.TYPE_4BYTE_ABGR);
+   //      final Graphics2D g = image.createGraphics();
+   //
+   //      //      g.setColor(Color.WHITE);
+   //      //      g.fillRect(0, 0, imageWidth, imageHeight);
+   //
+   //
+   //      g.setColor(Color.WHITE);
+   //
+   //      //      final double deltaHeight = maxHeight - minHeight;
+   //
+   //      for (final Geodetic3D point : points) {
+   //         //         final float alpha = (float) ((point._height - minHeight) / deltaHeight);
+   //         //         //final GColorF color = GColorF.BLACK.mixedWidth(GColorF.WHITE, alpha);
+   //         //         final GColorF color = ProcessOT.interpolateColorFromRamp(GColorF.BLUE, ProcessOT.RAMP, alpha);
+   //         //         g.setColor(Utils.toAWTColor(color));
+   //
+   //         final int x = Math.round((float) (sector.getUCoordinate(point._longitude) * imageWidth));
+   //         final int y = Math.round((float) (sector.getVCoordinate(point._latitude) * imageHeight));
+   //         g.fillRect(x, y, 1, 1);
+   //      }
+   //
+   //      g.dispose();
+   //
+   //      //      final String imageName = "_DEBUG_" + id + "_L" + level + ".png";
+   //      final String imageName = "_DEBUG_" + id + ".png";
+   //      try {
+   //         ImageIO.write(image, "png", new File(imageName));
+   //      }
+   //      catch (final IOException e) {
+   //         throw new RuntimeException(e);
+   //      }
+   //   }
 
 
-         @Override
-         public void startVisiting(final KDTree tree1) {
-         }
+   public static void main(final String[] args) {
+      System.out.println("SimplifyOctreeTask 0.1");
+      System.out.println("----------------------\n");
+
+      final long cacheSizeInBytes = 4 * 1024 * 1024 * 1024;
+
+      //      final File cloudDirectory = new File("/Volumes/My Passport/_belgium_lidar_/db");
+      //      final String completeSourceCloudName = "Wallonia-Belgium";
+      //      final String simplifiedCloudName = completeSourceCloudName + "_simplified2";
+
+      final File cloudDirectory = new File(System.getProperty("user.dir"));
+      final String completeSourceCloudName = "Wallonia";
+      final String simplifiedCloudName = completeSourceCloudName + "_simplified";
 
 
-         @Override
-         public void visitInnerNode(final KDInnerNode innerNode) {
-            pushVertexIndex(innerNode.getVertexIndexes(), innerNode.getDepth());
-         }
+      try (final PersistentOctree sourceOctree = BerkeleyDBOctree.openReadOnly(cloudDirectory, completeSourceCloudName,
+               cacheSizeInBytes)) {
+         final PersistentOctree.Statistics statistics = sourceOctree.getStatistics(true);
+         statistics.show();
 
+         final long sourcePointsCount = statistics.getPointsCount();
 
-         @Override
-         public void visitLeafNode(final KDLeafNode leafNode) {
-            pushVertexIndex(leafNode.getVertexIndexes(), leafNode.getDepth());
-         }
+         final int maxPointsPerTitle = 256 * 1024;
+         final float resultSizeFactor = 1.0f / 8;
 
-
-         private void pushVertexIndex(final int[] vertexIndexes,
-                                      final int depth) {
-            if (_lastDepth != depth) {
-               _lastDepth = depth;
-
-               final int sortedVerticesCount = sortedVertices.size();
-               if (sortedVerticesCount > 0) {
-                  lodIndices.add(sortedVerticesCount - 1);
-               }
-            }
-
-            for (final int vertexIndex : vertexIndexes) {
-               sortedVertices.add(vertexIndex);
-            }
-         }
-
-
-         @Override
-         public void endVisiting(final KDTree tree1) {
-         }
-      };
-      tree.breadthFirstAcceptVisitor(visitor);
-
-      final int sortedVerticesCount = sortedVertices.size();
-      if (sortedVerticesCount > 0) {
-         lodIndices.add(sortedVerticesCount - 1);
+         final SimplifyOctreeTask visitor = new SimplifyOctreeTask( //
+                  completeSourceCloudName, //
+                  cloudDirectory, //
+                  simplifiedCloudName, //
+                  cacheSizeInBytes, //
+                  sourcePointsCount, //
+                  resultSizeFactor, //
+                  maxPointsPerTitle);
+         sourceOctree.acceptDepthFirstVisitor(visitor);
       }
+
+      System.out.println();
+
    }
 
 
-   private static void generateImage(final String id,
-                                     //final int level,
-                                     final Sector sector,
-                                     final List<Geodetic3D> points
-   //final double minHeight,
-   //final double maxHeight
-   ) {
-      final int imageWidth = 1024;
-      final int imageHeight = 1024;
-
-      final BufferedImage image = new BufferedImage(imageWidth, imageHeight, BufferedImage.TYPE_4BYTE_ABGR);
-      final Graphics2D g = image.createGraphics();
-
-      //      g.setColor(Color.WHITE);
-      //      g.fillRect(0, 0, imageWidth, imageHeight);
-
-
-      g.setColor(Color.WHITE);
-
-      //      final double deltaHeight = maxHeight - minHeight;
-
-      for (final Geodetic3D point : points) {
-         //         final float alpha = (float) ((point._height - minHeight) / deltaHeight);
-         //         //final GColorF color = GColorF.BLACK.mixedWidth(GColorF.WHITE, alpha);
-         //         final GColorF color = ProcessOT.interpolateColorFromRamp(GColorF.BLUE, ProcessOT.RAMP, alpha);
-         //         g.setColor(Utils.toAWTColor(color));
-
-         final int x = Math.round((float) (sector.getUCoordinate(point._longitude) * imageWidth));
-         final int y = Math.round((float) (sector.getVCoordinate(point._latitude) * imageHeight));
-         g.fillRect(x, y, 1, 1);
-      }
-
-      g.dispose();
-
-      //      final String imageName = "_DEBUG_" + id + "_L" + level + ".png";
-      final String imageName = "_DEBUG_" + id + ".png";
-      try {
-         ImageIO.write(image, "png", new File(imageName));
-      }
-      catch (final IOException e) {
-         throw new RuntimeException(e);
-      }
-   }
 }
