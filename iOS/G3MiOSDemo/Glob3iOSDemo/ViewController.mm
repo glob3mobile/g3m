@@ -351,9 +351,17 @@ Mesh* createSectorMesh(const Planet* planet,
                                                           ABSOLUTE);
         
         // Washington, DC
-        const double scale = 10000;
+        const double scale = 1000;
         plane->setScale(scale, scale, scale);
         sr->addShape(plane);
+        
+        plane->setAnimatedPosition(TimeInterval::fromSeconds(20),
+                                   Geodetic3D(Angle::fromDegrees(28.127222),
+                                              Angle::fromDegrees(-15.431389),
+                                              10000),
+                                   Angle::fromDegrees(0),
+                                   Angle::fromDegrees(90),
+                                   Angle::zero());
         
       }
     }

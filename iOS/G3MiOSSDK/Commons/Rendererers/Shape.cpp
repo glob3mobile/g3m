@@ -44,10 +44,6 @@ Shape::~Shape() {
   
   delete _position;
   
-  delete _heading;
-  delete _pitch;
-  delete _roll;
-  
   delete _transformMatrix;
 
   _glState->_release();
@@ -57,6 +53,8 @@ Shape::~Shape() {
       ILogger::instance()->logError("Couldn't remove shape as listener of Surface Elevation Provider.");
     }
   }
+  
+  delete _coordinateSystem;
 }
 
 void Shape::cleanTransformMatrix() {
@@ -77,12 +75,10 @@ MutableMatrix44D* Shape::createTransformMatrix(const Planet* planet) const {
 
   const MutableMatrix44D geodeticTransform   = (_position == NULL) ? MutableMatrix44D::identity() : planet->createGeodeticTransformMatrix(positionWithSurfaceElevation);
 
-  const MutableMatrix44D headingRotation = MutableMatrix44D::createRotationMatrix(*_heading, Vector3D::downZ());
-  const MutableMatrix44D pitchRotation   = MutableMatrix44D::createRotationMatrix(*_pitch,   Vector3D::upX());
-  const MutableMatrix44D rollRotation    = MutableMatrix44D::createRotationMatrix(*_roll,    Vector3D::upY());
+  const MutableMatrix44D hpr = _coordinateSystem->getRotationMatrix();
   const MutableMatrix44D scale           = MutableMatrix44D::createScaleMatrix(_scaleX, _scaleY, _scaleZ);
   const MutableMatrix44D translation     = MutableMatrix44D::createTranslationMatrix(_translationX, _translationY, _translationZ);
-  const MutableMatrix44D localTransform  = headingRotation.multiply(pitchRotation).multiply(rollRotation ).multiply(translation).multiply(scale);
+  const MutableMatrix44D localTransform  = hpr.multiply(translation).multiply(scale);
 
   return new MutableMatrix44D( geodeticTransform.multiply(localTransform) );
 }
@@ -171,9 +167,9 @@ void Shape::setAnimatedPosition(const TimeInterval& duration,
   Effect* effect = new ShapeFullPositionEffect(duration,
                                                this,
                                                *_position, position,
-                                               *_pitch,    pitch,
-                                               *_heading,  heading,
-                                               *_roll,     roll,
+                                               getPitch(),    pitch,
+                                               getHeading(),  heading,
+                                               getRoll(),     roll,
                                                linearInterpolation,
                                                forceToPositionOnCancel,
                                                forceToPositionOnStop);
@@ -194,14 +190,6 @@ void Shape::elevationChanged(const Geodetic2D& position,
   delete _transformMatrix;
   _transformMatrix = NULL;
 }
-
-//void Shape::setPosition(Geodetic3D* position,
-//                        AltitudeMode altitudeMode) {
-//  delete _position;
-//  _position = position;
-//  _altitudeMode = altitudeMode;
-//  cleanTransformMatrix();
-//}
 
 void Shape::setPosition(const Geodetic3D& position) {
   if (_altitudeMode == RELATIVE_TO_GROUND) {

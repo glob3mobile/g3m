@@ -24,6 +24,8 @@ class MutableMatrix44D;
 
 #include "Geodetic3D.hpp"
 
+#include "CoordinateSystem.hpp"
+
 class ShapePendingEffect;
 class GPUProgramState;
 
@@ -32,9 +34,7 @@ private:
   Geodetic3D* _position;
   AltitudeMode _altitudeMode;
   
-  Angle*      _heading;
-  Angle*      _pitch;
-  Angle*      _roll;
+  CoordinateSystem* _coordinateSystem; //For H, P, R
   
   double      _scaleX;
   double      _scaleY;
@@ -43,8 +43,6 @@ private:
   double      _translationX;
   double      _translationY;
   double      _translationZ;
-
-//  const Planet* _planet;
 
   mutable MutableMatrix44D* _transformMatrix;
   MutableMatrix44D* getTransformMatrix(const Planet* planet) const;
@@ -70,9 +68,6 @@ public:
         AltitudeMode altitudeMode) :
   _position( position ),
   _altitudeMode(altitudeMode),
-  _heading( new Angle(Angle::zero()) ),
-  _pitch( new Angle(Angle::zero()) ),
-  _roll( new Angle(Angle::zero()) ),
   _scaleX(1),
   _scaleY(1),
   _scaleZ(1),
@@ -83,7 +78,8 @@ public:
   _enable(true),
   _surfaceElevation(0),
   _glState(new GLState()),
-  _surfaceElevationProvider(NULL)
+  _surfaceElevationProvider(NULL),
+  _coordinateSystem(new CoordinateSystem(CoordinateSystem::global()))
   {
     
   }
@@ -95,19 +91,17 @@ public:
   }
   
   const Angle getHeading() const {
-    return *_heading;
+    //Geo Heading rotates clockwise
+    return _coordinateSystem->getTaitBryanAngles(CoordinateSystem::global())._heading.times(-1);
   }
   
   const Angle getPitch() const {
-    return *_pitch;
+        return _coordinateSystem->getTaitBryanAngles(CoordinateSystem::global())._pitch;
   }
 
   const Angle getRoll() const {
-    return *_roll;
+        return _coordinateSystem->getTaitBryanAngles(CoordinateSystem::global())._roll;
   }
-
-//  void setPosition(Geodetic3D* position,
-//                   AltitudeMode altitudeMode);
 
   void setPosition(const Geodetic3D& position);
 
@@ -134,35 +128,25 @@ public:
   }
 
   void setHeading(const Angle& heading) {
-#ifdef C_CODE
-    delete _heading;
-    _heading = new Angle(heading);
-#endif
-#ifdef JAVA_CODE
-    _heading = heading;
-#endif
+    Angle h = heading.times(-1); //Geo Heading rotates clockwise
+    
+    TaitBryanAngles tba = _coordinateSystem->getTaitBryanAngles(CoordinateSystem::global());
+    delete _coordinateSystem;
+    _coordinateSystem = new CoordinateSystem(CoordinateSystem::global().applyTaitBryanAngles(h, tba._pitch, tba._roll));
     cleanTransformMatrix();
   }
   
   void setPitch(const Angle& pitch) {
-#ifdef C_CODE
-    delete _pitch;
-    _pitch = new Angle(pitch);
-#endif
-#ifdef JAVA_CODE
-    _pitch = pitch;
-#endif
+    TaitBryanAngles tba = _coordinateSystem->getTaitBryanAngles(CoordinateSystem::global());
+    delete _coordinateSystem;
+    _coordinateSystem = new CoordinateSystem(CoordinateSystem::global().applyTaitBryanAngles(tba._heading, pitch, tba._roll));
     cleanTransformMatrix();
   }
 
   void setRoll(const Angle& roll) {
-#ifdef C_CODE
-    delete _roll;
-    _roll = new Angle(roll);
-#endif
-#ifdef JAVA_CODE
-    _roll = roll;
-#endif
+    TaitBryanAngles tba = _coordinateSystem->getTaitBryanAngles(CoordinateSystem::global());
+    delete _coordinateSystem;
+    _coordinateSystem = new CoordinateSystem(CoordinateSystem::global().applyTaitBryanAngles(tba._heading, tba._pitch, roll));
     cleanTransformMatrix();
   }
   
