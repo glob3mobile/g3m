@@ -429,18 +429,11 @@ public class ShapesRenderer extends DefaultRenderer
   public final void zRender(G3MRenderContext rc, GLState glState)
   {
   
-    GLState state = new GLState();
-    final Camera cam = rc.getCurrentCamera();
-    final Vector3D cameraPosition = rc.getCurrentCamera().getCartesianPosition();
-  
-    state.addGLFeature(new ModelViewGLFeature(cam), true);
-    state.setParent(glState);
-  
     final int shapesCount = _shapes.size();
     for (int i = 0; i < shapesCount; i++)
     {
       Shape shape = _shapes.get(i);
-      shape.zRender(rc, state, _renderNotReadyShapes);
+      shape.zRender(rc, _glState, _renderNotReadyShapes);
     }
   }
 

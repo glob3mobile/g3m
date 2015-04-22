@@ -1,5 +1,5 @@
 package org.glob3.mobile.generated; 
-public abstract class NonOverlappingMarksRenderer extends DefaultRenderer
+public class NonOverlappingMarksRenderer extends DefaultRenderer
 {
   private final int _maxVisibleMarks;
   private final float _viewportMargin;
@@ -297,6 +297,10 @@ public abstract class NonOverlappingMarksRenderer extends DefaultRenderer
          _touchListener.dispose();
     }
     _touchListener = touchListener;
+  }
+
+  public final void zRender(G3MRenderContext rc, GLState glState)
+  {
   }
 
 }

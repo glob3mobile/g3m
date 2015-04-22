@@ -552,7 +552,7 @@ public class SphericalPlanet extends Planet
       return MutableMatrix44D.invalid();
   
     // init params
-    final IMathUtils mu = IMathUtils.instance();
+  //  const IMathUtils* mu = IMathUtils::instance();
     MutableMatrix44D matrix = new MutableMatrix44D();
   
     // search min & max factor for translation

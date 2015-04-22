@@ -282,12 +282,8 @@ public class MeshRenderer extends DefaultRenderer
 
   public final void zRender(G3MRenderContext rc, GLState glState)
   {
-    final Camera cam = rc.getCurrentCamera();
-    final Frustum frustum = rc.getCurrentCamera().getFrustumInModelCoordinates();
   
-    GLState state = new GLState();
-    state.addGLFeature(new ModelViewGLFeature(cam), true);
-    state.setParent(glState);
+    final Frustum frustum = rc.getCurrentCamera().getFrustumInModelCoordinates();
   
     final int meshesCount = _meshes.size();
     for (int i = 0; i < meshesCount; i++)
@@ -296,12 +292,9 @@ public class MeshRenderer extends DefaultRenderer
       final BoundingVolume boundingVolume = mesh.getBoundingVolume();
       if (boundingVolume.touchesFrustum(frustum))
       {
-        mesh.zRender(rc, state);
+        mesh.zRender(rc, _glState);
       }
     }
-  
-    state._release();
-  
   }
 
   public final void loadJSONMesh(URL url, Color color, long priority, TimeInterval timeToCache, boolean readExpired, MeshLoadListener listener)
