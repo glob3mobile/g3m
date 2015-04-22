@@ -297,6 +297,8 @@ public:
   
   void setTouchListener(NonOverlappingMarkTouchListener* touchListener);
   
+  void zRender(const G3MRenderContext* rc, GLState* glState){}
+  
 };
 
 #endif

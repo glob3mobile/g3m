@@ -453,7 +453,7 @@ MutableMatrix44D SphericalPlanet::doubleDrag(const Vector3D& finalRay0,
     return MutableMatrix44D::invalid();
   
   // init params
-  const IMathUtils* mu = IMathUtils::instance();
+//  const IMathUtils* mu = IMathUtils::instance();
   MutableMatrix44D matrix;
   
   // search min & max factor for translation

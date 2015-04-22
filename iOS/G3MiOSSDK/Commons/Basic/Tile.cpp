@@ -525,9 +525,9 @@ void Tile::prune(TileTexturizer*           texturizer,
   if (_subtiles != NULL) {
     //Notifying elevation event when LOD decreases
     _planetRenderer->sectorElevationChanged(_elevationData);
-    
-    const int subtilesSize = _subtiles->size();
-    for (int i = 0; i < subtilesSize; i++) {
+
+    const size_t subtilesSize = _subtiles->size();
+    for (size_t i = 0; i < subtilesSize; i++) {
       Tile* subtile = _subtiles->at(i);
       
       subtile->setIsVisible(false, texturizer);
@@ -702,6 +702,107 @@ void Tile::deleteTexturizedMesh(TileTexturizer* texturizer) {
 //  
 //}
 //>>>>>>> purgatory
+//
+//  tilesStatistics->computeTileProcessed(this);
+//
+//  if (verticalExaggeration != _verticalExaggeration) {
+//    // TODO: verticalExaggeration changed, invalidate tileExtent, Mesh, etc.
+//    _verticalExaggeration = verticalExaggeration;
+//  }
+//
+//  bool rendered = false;
+//
+//  if (isVisible(rc,
+//                cameraFrustumInModelCoordinates,
+//                elevationDataProvider,
+//                renderedSector,
+//                tessellator,
+//                layerTilesRenderParameters,
+//                tilesRenderParameters)) {
+//    setIsVisible(true, texturizer);
+//
+//    tilesStatistics->computeVisibleTile(this);
+//
+//    const bool isRawRender = (
+//                              (toVisitInNextIteration == NULL) ||
+//                              meetsRenderCriteria(rc,
+//                                                  layerTilesRenderParameters,
+//                                                  texturizer,
+//                                                  tilesRenderParameters,
+//                                                  tilesStatistics,
+//                                                  lastSplitTimer,
+//                                                  texWidthSquared,
+//                                                  texHeightSquared,
+//                                                  nowInMS) ||
+//                              (tilesRenderParameters->_incrementalTileQuality && !_textureSolved)
+//                              );
+//
+//    if (isRawRender) {
+//
+//      const long long tileTexturePriority = (tilesRenderParameters->_incrementalTileQuality
+//                                             ? tileDownloadPriority + layerTilesRenderParameters->_maxLevel - _level
+//                                             : tileDownloadPriority + _level);
+//
+//      rendered = true;
+//      if (renderTileMeshes) {
+//        rawRender(rc,
+//                  &parentState,
+//                  texturizer,
+//                  elevationDataProvider,
+//                  tessellator,
+//                  layerTilesRenderParameters,
+//                  layerSet,
+//                  tilesRenderParameters,
+//                  forceFullRender,
+//                  tileTexturePriority,
+//                  logTilesPetitions);
+//      }
+//      if (tilesRenderParameters->_renderDebug) {
+//        debugRender(rc, &parentState, tessellator, layerTilesRenderParameters);
+//      }
+//
+//      tilesStatistics->computeTileRenderered(this);
+//
+//      prune(texturizer, elevationDataProvider, tilesStoppedRendering);
+//      //TODO: AVISAR CAMBIO DE TERRENO
+//    }
+//    else {
+//      std::vector<Tile*>* subTiles = getSubTiles();
+//      if (_justCreatedSubtiles) {
+//        lastSplitTimer->start();
+//        _justCreatedSubtiles = false;
+//      }
+//
+//      const size_t subTilesSize = subTiles->size();
+//      for (size_t i = 0; i < subTilesSize; i++) {
+//        Tile* subTile = subTiles->at(i);
+//        toVisitInNextIteration->push_back(subTile);
+//      }
+//    }
+//  }
+//  else {
+//    setIsVisible(false, texturizer);
+//
+//    prune(texturizer, elevationDataProvider, tilesStoppedRendering);
+//    //TODO: AVISAR CAMBIO DE TERRENO
+//  }
+//
+//  if (_rendered != rendered) {
+//    _rendered = rendered;
+//
+//    if (_rendered) {
+//      if (tilesStartedRendering != NULL) {
+//        tilesStartedRendering->push_back(this);
+//      }
+//    }
+//    else {
+//      if (tilesStoppedRendering != NULL) {
+//        tilesStoppedRendering->push_back(_id);
+//      }
+//    }
+//  }
+//  
+//}
 
 Tile* Tile::createSubTile(const Angle& lowerLat, const Angle& lowerLon,
                           const Angle& upperLat, const Angle& upperLon,
