@@ -284,11 +284,11 @@ Mesh* createSectorMesh(const Planet* planet,
   //[[self G3MWidget] initSingletons];
   // [self initWithoutBuilder];
   
-  //[self initCustomizedWithBuilder];
+  [self initCustomizedWithBuilder];
   
   //[self initTestingTileImageProvider];
   
-  [self initWithNonOverlappingMarks];
+  //[self initWithNonOverlappingMarks];
   
   
   //  [self initWithMapBooBuilder];
@@ -339,13 +339,14 @@ Mesh* createSectorMesh(const Planet* planet,
   NonOverlappingMarksRenderer* nomr = new NonOverlappingMarksRenderer(30);
   builder.addRenderer(nomr);
   
-  class MyMarkWidgetTouchListener: public MarkWidgetTouchListener{
+  class MyMarkWidgetTouchListener: public NonOverlappingMarkTouchListener{
   public:
     MyMarkWidgetTouchListener(){
       
     }
     
-    bool touchedMark(MarkWidget* mark, float x, float y){
+    bool touchedMark(const NonOverlappingMark* mark,
+                     const Vector2F& touchedPixel){
       NSString* message = [NSString stringWithFormat: @"Canarias!"];
       UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Island Selected"
                                                       message:message
@@ -353,7 +354,17 @@ Mesh* createSectorMesh(const Planet* planet,
                                             cancelButtonTitle:@"OK"
                                             otherButtonTitles:nil];
       [alert show];
+      return true;
     }
+  };
+  
+  Geodetic3D canarias[] = { Geodetic3D::fromDegrees(28.131817, -15.440219, 0),
+  Geodetic3D::fromDegrees(28.947345, -13.523105, 0),
+  Geodetic3D::fromDegrees(28.473802, -13.859360, 0),
+  Geodetic3D::fromDegrees(28.467706, -16.251426, 0),
+  Geodetic3D::fromDegrees(28.701819, -17.762003, 0),
+  Geodetic3D::fromDegrees(28.086595, -17.105796, 0),
+  Geodetic3D::fromDegrees(27.810709, -17.917639, 0)
   };
   
   NonOverlappingMark* mark = new NonOverlappingMark(new DownloaderImageBuilder(URL("file:///g3m-marker.png")),
@@ -1171,13 +1182,13 @@ public:
   if (showingPNOA){
     Sector sector = Sector::fromDegrees(21, -18, 45, 6);
     std::vector<Geodetic2D*>* coordinates = new std::vector<Geodetic2D*>();
-    
+
     coordinates->push_back( new Geodetic2D( sector.getSW() ) );
     coordinates->push_back( new Geodetic2D( sector.getNW() ) );
     coordinates->push_back( new Geodetic2D( sector.getNE() ) );
     coordinates->push_back( new Geodetic2D( sector.getSE() ) );
     coordinates->push_back( new Geodetic2D( sector.getSW() ) );
-    
+
     //    printf("RESTERIZING: %s\n", _sector->description().c_str());
     
     float dashLengths[] = {};
@@ -1313,6 +1324,47 @@ public:
   MarksRenderer* marksRenderer = [self createMarksRenderer];
   builder.addRenderer(marksRenderer);
   
+  bool testingAnimatedMarks = true;
+  if (testingAnimatedMarks){
+    
+    Mark* animMark = new Mark(URL(URL::FILE_PROTOCOL + "radar-sprite.png"),
+                                Geodetic3D::fromDegrees( 28.099999998178312, -15.41699999885168, 0),
+                                ABSOLUTE,
+                                4.5e+06,
+                                NULL,
+                                true,
+                                NULL,
+                                false);
+
+    animMark->setOnScreenSizeOnProportionToImage(0.05, 0.1);
+    builder.addPeriodicalTask(new TextureAtlasMarkAnimationTask(animMark, 4, 2, 7, TimeInterval::fromMilliseconds(100)));
+    
+    
+    Mark* animMark2 = new Mark(URL(URL::FILE_PROTOCOL + "radar-sprite.png"),
+                               Geodetic3D::fromDegrees( 28.099999998178312, -15.41699999885168, 0),
+                               ABSOLUTE,
+                               4.5e+06,
+                               NULL,
+                               true,
+                               NULL,
+                               false);
+    
+    animMark2->setTextureCoordinatesTransformation(Vector2F(0,0), Vector2F(0.25, 0.5));
+    animMark2->setOnScreenSizeOnPixels(100,100);
+    animMark2->setMarkAnchor(0.5, 1.0);
+    marksRenderer->addMark(animMark2);
+    builder.addPeriodicalTask(new TextureAtlasMarkAnimationTask(animMark2, 4, 2, 7, TimeInterval::fromMilliseconds(100)));
+
+    
+    marksRenderer->addMark(animMark);
+    
+    Mark* regMark = new Mark("HELLO ANIMATED MARKS!",
+                               Geodetic3D::fromDegrees( 27.599999998178312, -15.41699999885168, 0),
+                               ABSOLUTE);
+    marksRenderer->addMark(regMark);
+    
+  }
+
   GEORenderer* geoRenderer = [self createGEORendererMeshRenderer: meshRenderer
                                                   shapesRenderer: shapesRenderer
                                                    marksRenderer: marksRenderer
@@ -4141,11 +4193,11 @@ public:
           CameraAnglesTerrainListener(G3MWidget_iOS* widget, MeshRenderer* mr): _iosWidget(widget), _meshRenderer(mr){}
           
           
-          virtual bool onTerrainTouch(const G3MEventContext* ec,
-                                      const Vector2I&        pixel,
-                                      const Camera*          camera,
-                                      const Geodetic3D&      position,
-                                      const Tile*            tile){
+          bool onTerrainTouch(const G3MEventContext* ec,
+                              const Vector2F&        pixel,
+                              const Camera*          camera,
+                              const Geodetic3D&      position,
+                              const Tile*            tile){
             
             //            [_iosWidget widget]->getNextCamera()->setRoll(Angle::fromDegrees(45));
             //            Camera* cam = [_iosWidget widget]->getNextCamera();

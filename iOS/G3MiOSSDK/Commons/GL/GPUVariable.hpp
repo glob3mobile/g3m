@@ -39,7 +39,8 @@ enum GPUUniformKey{
   SAMPLER = 18,
   SAMPLER2 = 19,
   SAMPLER3 = 20,
-  TRANSLATION_2D = 21
+  TRANSLATION_2D = 21,
+  BILLBOARD_ANCHOR = 22
 };
 
 enum GPUAttributeKey{
