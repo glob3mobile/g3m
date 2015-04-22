@@ -170,7 +170,7 @@ public class CameraDoubleDragHandler extends CameraEventHandler
   
     if (_fixRollTo0)
     {
-      eventContext.getPlanet().correctPitchAfterDoubleDrag(camera, pixel0, pixel1);
+      //eventContext->getPlanet()->correctPitchAfterDoubleDrag(camera, pixel0, pixel1);
     }
   }
   public final void onUp(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
