@@ -76,7 +76,8 @@ public class ProcessOT {
 
       final File cloudDirectory = new File(System.getProperty("user.dir"));
 
-      final String sourceCloudName = "Wallonia_simplified";
+      //      final String sourceCloudName = "Wallonia_simplified";
+      final String sourceCloudName = "Wallonia";
       final String lodCloudName = sourceCloudName + "_LOD";
 
 
