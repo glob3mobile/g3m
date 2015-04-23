@@ -14,7 +14,8 @@ public class RunPCSS {
       System.out.println("--------\n");
 
 
-      final Server server = new Server(8080);
+      final int port = 8082;
+      final Server server = new Server(port);
 
       final ServletHandler handler = new ServletHandler();
       server.setHandler(handler);
