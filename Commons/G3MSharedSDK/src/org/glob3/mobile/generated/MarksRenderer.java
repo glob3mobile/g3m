@@ -101,7 +101,7 @@ public class MarksRenderer extends DefaultRenderer
 
   public void dispose()
   {
-    int marksSize = _marks.size();
+    final int marksSize = _marks.size();
     for (int i = 0; i < marksSize; i++)
     {
       if (_marks.get(i) != null)
@@ -126,7 +126,7 @@ public class MarksRenderer extends DefaultRenderer
 
   public void onChangedContext()
   {
-    int marksSize = _marks.size();
+    final int marksSize = _marks.size();
     for (int i = 0; i < marksSize; i++)
     {
       Mark mark = _marks.get(i);
@@ -287,7 +287,7 @@ public class MarksRenderer extends DefaultRenderer
   {
     if (_readyWhenMarksReady)
     {
-      int marksSize = _marks.size();
+      final int marksSize = _marks.size();
       for (int i = 0; i < marksSize; i++)
       {
         if (!_marks.get(i).isReady())
