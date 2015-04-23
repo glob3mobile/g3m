@@ -1,13 +1,13 @@
 //
-//  NonOverlappingMarkers3DRenderer.cpp
+//  ForceGraphRenderer.hpp
 //  G3MiOSSDK
 //
 //  Created by Stefanie Alfonso on 2/1/15.
 //
 //
 
-#ifndef __G3MiOSSDK__NonOverlapping3DMarksRenderer__
-#define __G3MiOSSDK__NonOverlapping3DMarksRenderer__
+#ifndef __G3MiOSSDK__ForceGraphRenderer__
+#define __G3MiOSSDK__ForceGraphRenderer__
 
 #include <stdio.h>
 #include "DefaultRenderer.hpp"
@@ -33,8 +33,8 @@ public:
     virtual bool touchedShape(Shape* shape, float x, float y) = 0;
 };
 
-class NonOverlapping3DMark{
-   
+class ForceGraphNode{
+    
     /*added things here:*/
     
     //unlike for 2D, not every node has to have an anchor, so make 3D mark a node, where some
@@ -49,55 +49,50 @@ class NonOverlapping3DMark{
     
     //nodes can have multiple nodes they are attached to, call these neighbors
     //edges go from this node to neighbor nodes
-    std::vector<NonOverlapping3DMark*> _neighbors;
-    NonOverlapping3DMark* _anchor; //anchor also included in neighbors. node can only have one anchor
+    std::vector<ForceGraphNode*> _neighbors;
+    ForceGraphNode* _anchor; //anchor also included in neighbors. node can only have one anchor
     
     float _springLengthInMeters;
     
     mutable Vector3D* _cartesianPos;
-    Geodetic3D _geoPosition;
+    const Geodetic3D* _geoPosition;
     
     float _dX, _dY, _dZ; //Velocity vector (pixels per second)
     float _fX, _fY, _fZ; //Applied Force
     float _tX, _tY, _tZ; //current translation (cumulative dX, dY, dX)
     
     const float _springK;
-    const float _maxSpringLength;
     const float _minSpringLength;
     const float _electricCharge;
-    const float _maxWidgetSpeedInPixelsPerSecond;
     const float _resistanceFactor;
-    const float _minWidgetSpeedInPixelsPerSecond;
-   
+    
     
 public:
     
-    NonOverlapping3DMark(Shape* anchorShape, Shape* nodeShape,
-                       const Geodetic3D& position,
-                       ShapeTouchListener* touchListener = NULL,
-                       float springLengthInMeters = 1000.0f,
-                       float springK = 7.0f,
-                       float maxSpringLength = 0.0f,
-                       float minSpringLength = 0.0f,
-                       float electricCharge = 3000000.0f, //was 3000
-                       float maxWidgetSpeedInPixelsPerSecond = 1000.0f,
-                       float minWidgetSpeedInPixelsPerSecond = 35.0f,
-                       float resistanceFactor = 0.95f);
+    ForceGraphNode(Shape* anchorShape, Shape* nodeShape,
+                   const Geodetic3D& position,
+                   ShapeTouchListener* touchListener = NULL,
+                   float springLengthInMeters = 75.0f,
+                   float springK = 15.0f,
+                   float minSpringLength = 10.0f,
+                   float electricCharge = 3500000.0f, //was 3000
+                   float resistanceFactor = 0.80f);
     
-    ~NonOverlapping3DMark();
+    ~ForceGraphNode();
     Geodetic3D getPos() const;
     
     bool isVisited() const;
     bool isAnchor() const;
-    std::vector<NonOverlapping3DMark*> getNeighbors() const;
+    std::vector<ForceGraphNode*>& getNeighbors();
     void setVisited(bool visited);
-    void addEdge(NonOverlapping3DMark* n); //adds edge from this node to specified node
+    void addEdge(ForceGraphNode* n); //adds edge from this node to specified node
     void setAsAnchor(); //sets this node as an anchor, change shape (todo)
-    void addNeighbor(NonOverlapping3DMark* n); //adds n to list of neighbors
-    void addAnchor(NonOverlapping3DMark* anchor); //adds anchor to this node. Makes that node an anchor.
-    NonOverlapping3DMark* getAnchor() const;
-    Shape* getShape()
-    ;
+    void addNeighbor(ForceGraphNode* n); //adds n to list of neighbors
+    void addAnchor(ForceGraphNode* anchor); //adds anchor to this node. Makes that node an anchor.
+    ForceGraphNode* getAnchor() const;
+    Shape* getShape();
+    void setPos(Geodetic3D pos);
+    void setScale(float s);
     //MarkWidget getWidget() const;
     
     Vector3D clampVector(Vector3D &v, float min, float max) const;
@@ -111,8 +106,8 @@ public:
     
     void render(const G3MRenderContext* rc, GLState* glState);
     
-    void applyCoulombsLaw(NonOverlapping3DMark* that, const Planet* planet); //EM
-    void applyCoulombsLawFromAnchor(NonOverlapping3DMark* that, const Planet* planet);
+    void applyCoulombsLaw(ForceGraphNode* that, const Planet* planet, bool planetChargeAdjustment); //EM
+    void applyCoulombsLawFromAnchor(ForceGraphNode* that, const Planet* planet);
     
     void applyHookesLaw(const Planet* planet);   //Spring
     
@@ -137,7 +132,7 @@ public:
     
 };
 
-class NonOverlapping3DMarksRenderer: public DefaultRenderer{
+class ForceGraphRenderer: public DefaultRenderer{
     
     int _maxVisibleMarks;
 #ifdef C_CODE
@@ -147,9 +142,11 @@ class NonOverlapping3DMarksRenderer: public DefaultRenderer{
     Planet _planet;
 #endif
     
-    std::vector<NonOverlapping3DMark*> _visibleMarks;
-    std::vector<NonOverlapping3DMark*> _marks;
-    std::vector<NonOverlapping3DMark*> _anchors;
+    std::vector<ForceGraphNode*> _visibleMarks;
+    std::vector<ForceGraphNode*> _marks;
+    std::vector<ForceGraphNode*> _anchors;
+    ShapesRenderer* _shapesRenderer;
+    bool _firstIteration;
     
     void computeMarksToBeRendered(const Camera* cam, const Planet* planet);
     
@@ -165,11 +162,11 @@ class NonOverlapping3DMarksRenderer: public DefaultRenderer{
     
 public:
     
-    NonOverlapping3DMarksRenderer(int maxVisibleMarks = 30);
+    ForceGraphRenderer(ShapesRenderer* shapesRenderer, int maxVisibleMarks = 30);
     
-    ~NonOverlapping3DMarksRenderer();
+    ~ForceGraphRenderer();
     
-    void addMark(NonOverlapping3DMark* mark);
+    void addMark(ForceGraphNode* mark);
     
     void setAllVisibleAsUnvisited();
     
@@ -207,4 +204,4 @@ public:
     
 };
 
-#endif /* defined(__G3MiOSSDK__NonOverlapping3DMarksRenderer__) */
+#endif /* defined(__G3MiOSSDK__ForceGraphRenderer__) */

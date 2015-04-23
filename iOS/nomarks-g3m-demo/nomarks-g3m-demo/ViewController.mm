@@ -10,7 +10,7 @@
 #import "G3MWidget_iOS.h"
 #import "G3MBuilder_iOS.hpp"
 #include "MarksRenderer.hpp"
-#include "NonOverlapping3DMarksRenderer.hpp"
+#include "ForceGraphRenderer.hpp"
 #include "Geodetic3D.hpp"
 #include "IThreadUtils.hpp"
 #include "JSONObject.hpp"
@@ -31,12 +31,264 @@
 #include "Shape.hpp"
 #include "Color.hpp"
 #include "EllipsoidShape.hpp"
+#include "Sphere.hpp"
+#include "Mesh.hpp"
+#include "FloatBufferBuilderFromCartesian3D.hpp"
+#include "FloatBufferBuilder.hpp"
+#include "ShortBufferBuilder.hpp"
+#include "IndexedMesh.hpp"
+#include "Box.hpp"
 
 @interface ViewController ()
 
 @end
 
 @implementation ViewController
+/*Test one node as anchor and many nodes anchored to it. All nodes connected to each other.
+ They should spread out evenly but still stay above the earth
+ Issues: double adding as neighbor messes things up - need to add a check for existing or a "visited" bool for force calc*/
+void testOneAnchorManyNodes4Clique(Shape* anchor_sphere, Shape* sphere, ForceGraphRenderer* forceGraphRenderer) {
+    
+    ForceGraphNode *anchor = new ForceGraphNode(anchor_sphere, sphere, Geodetic3D::fromDegrees(0, 0, 1.5e5));
+    
+    ForceGraphNode *node = new ForceGraphNode(sphere, anchor_sphere, Geodetic3D::fromDegrees(0, 0, 5));
+    ForceGraphNode *node2 = new ForceGraphNode(sphere, anchor_sphere, Geodetic3D::fromDegrees(0, 50, 0));
+    ForceGraphNode *node3 = new ForceGraphNode(sphere, anchor_sphere, Geodetic3D::fromDegrees(35, 30, 3e5));
+    ForceGraphNode *node4 = new ForceGraphNode(sphere, anchor_sphere, Geodetic3D::fromDegrees(31, 30, 3e5));
+    ForceGraphNode *node5 = new ForceGraphNode(sphere, anchor_sphere, Geodetic3D::fromDegrees(61, 30, 3e5));
+    ForceGraphNode *node6 = new ForceGraphNode(sphere, anchor_sphere, Geodetic3D::fromDegrees(0, 1, 3));
+    ForceGraphNode *node7 = new ForceGraphNode(sphere, anchor_sphere, Geodetic3D::fromDegrees(0, 0, 3));
+    ForceGraphNode *node8 = new ForceGraphNode(sphere, anchor_sphere, Geodetic3D::fromDegrees(0, 0, 3));
+    
+    node->addAnchor(anchor);
+    node2->addAnchor(anchor);
+    node3->addAnchor(anchor);
+    node4->addAnchor(anchor);
+    node5->addAnchor(anchor);
+    node6->addAnchor(anchor);
+    node7->addAnchor(anchor);
+    node8->addAnchor(anchor);
+    
+    node->addNeighbor(node2);
+    node->addNeighbor(node3);
+    node->addNeighbor(node4);
+    node->addNeighbor(node5);
+    node->addNeighbor(node6);
+    node->addNeighbor(node7);
+    node->addNeighbor(node8);
+    
+    node2->addNeighbor(node3);
+    node2->addNeighbor(node4);
+    node2->addNeighbor(node5);
+    node2->addNeighbor(node6);
+    node2->addNeighbor(node7);
+    node2->addNeighbor(node8);
+    
+    node3->addNeighbor(node4);
+    node3->addNeighbor(node5);
+    node3->addNeighbor(node6);
+    node3->addNeighbor(node7);
+    node3->addNeighbor(node8);
+    
+    node4->addNeighbor(node5);
+    node4->addNeighbor(node6);
+    node4->addNeighbor(node7);
+    node4->addNeighbor(node8);
+    
+    forceGraphRenderer->addMark(node);
+    forceGraphRenderer->addMark(anchor);
+    forceGraphRenderer->addMark(node2);
+    forceGraphRenderer->addMark(node3);
+    forceGraphRenderer->addMark(node4);
+    forceGraphRenderer->addMark(node5);
+    forceGraphRenderer->addMark(node6);
+    forceGraphRenderer->addMark(node7);
+    forceGraphRenderer->addMark(node8);
+}
+
+/*Test one node as anchor and many nodes anchored to it. They should spread out evenly but still stay above the earth
+ Issues: move anchor too far down makes the planetForce go crazy?? */
+void testOneAnchorManyNodes(Shape* anchor_sphere, Shape* sphere, ForceGraphRenderer* forceGraphRenderer) {
+    
+    ForceGraphNode *anchor = new ForceGraphNode(anchor_sphere, sphere, Geodetic3D::fromDegrees(-70, 90, 1.5e5));
+    ForceGraphNode *node = new ForceGraphNode(sphere, anchor_sphere, Geodetic3D::fromDegrees(0, 0, 5));
+    ForceGraphNode *node2 = new ForceGraphNode(sphere, anchor_sphere, Geodetic3D::fromDegrees(0, 50, 0));
+    ForceGraphNode *node3 = new ForceGraphNode(sphere, anchor_sphere, Geodetic3D::fromDegrees(31, 30, 3e5));
+    ForceGraphNode *node4 = new ForceGraphNode(sphere, anchor_sphere, Geodetic3D::fromDegrees(31, 30, 3e5));
+    ForceGraphNode *node5 = new ForceGraphNode(sphere, anchor_sphere, Geodetic3D::fromDegrees(31, 30, 3e5));
+    ForceGraphNode *node6 = new ForceGraphNode(sphere, anchor_sphere, Geodetic3D::fromDegrees(0, 1, 3));
+    ForceGraphNode *node7 = new ForceGraphNode(sphere, anchor_sphere, Geodetic3D::fromDegrees(0, 0, 3));
+    ForceGraphNode *node8 = new ForceGraphNode(sphere, anchor_sphere, Geodetic3D::fromDegrees(0, 0, 3));
+    
+    node->addAnchor(anchor);
+    node2->addAnchor(anchor);
+    node3->addAnchor(anchor);
+    node4->addAnchor(anchor);
+    node5->addAnchor(anchor);
+    node6->addAnchor(anchor);
+    node7->addAnchor(anchor);
+    node8->addAnchor(anchor);
+    
+    
+    forceGraphRenderer->addMark(node);
+    forceGraphRenderer->addMark(anchor);
+    forceGraphRenderer->addMark(node2);
+    forceGraphRenderer->addMark(node3);
+    forceGraphRenderer->addMark(node4);
+    forceGraphRenderer->addMark(node5);
+    forceGraphRenderer->addMark(node6);
+    forceGraphRenderer->addMark(node7);
+    forceGraphRenderer->addMark(node8);
+}
+
+/*Test one node as anchor and many nodes anchored to it, some of those nodes have edges between them. They should spread out evenly but still stay above the earth
+ Issues: */
+void testOneAnchorManyNodesCycles(Shape* anchor_sphere, Shape* sphere, ForceGraphRenderer* forceGraphRenderer) {
+    
+    ForceGraphNode *anchor = new ForceGraphNode(anchor_sphere, sphere, Geodetic3D::fromDegrees(45, -20, 1.5e5));
+    
+    ForceGraphNode *node = new ForceGraphNode(sphere, anchor_sphere, Geodetic3D::fromDegrees(40, 0, 5));
+    ForceGraphNode *node2 = new ForceGraphNode(sphere, anchor_sphere, Geodetic3D::fromDegrees(0, 50, 0));
+    ForceGraphNode *node3 = new ForceGraphNode(sphere, anchor_sphere, Geodetic3D::fromDegrees(31, 30, 3e5));
+    ForceGraphNode *node4 = new ForceGraphNode(sphere, anchor_sphere, Geodetic3D::fromDegrees(31, 30, 3e5));
+    ForceGraphNode *node5 = new ForceGraphNode(sphere, anchor_sphere, Geodetic3D::fromDegrees(31, 30, 3e5));
+    ForceGraphNode *node6 = new ForceGraphNode(sphere, anchor_sphere, Geodetic3D::fromDegrees(0, 1, 3));
+    ForceGraphNode *node7 = new ForceGraphNode(sphere, anchor_sphere, Geodetic3D::fromDegrees(0, 0, 3));
+    ForceGraphNode *node8 = new ForceGraphNode(sphere, anchor_sphere, Geodetic3D::fromDegrees(0, 0, 3));
+    
+    node->addAnchor(anchor);
+    node2->addAnchor(anchor);
+    node3->addAnchor(anchor);
+    node4->addAnchor(anchor);
+    node5->addAnchor(anchor);
+    node6->addAnchor(anchor);
+    node7->addAnchor(anchor);
+    node8->addAnchor(anchor);
+    node2->addNeighbor(node3);
+    node3->addNeighbor(node4);
+    
+    
+    forceGraphRenderer->addMark(node);
+    forceGraphRenderer->addMark(anchor);
+    forceGraphRenderer->addMark(node2);
+    forceGraphRenderer->addMark(node3);
+    forceGraphRenderer->addMark(node4);
+    forceGraphRenderer->addMark(node5);
+    forceGraphRenderer->addMark(node6);
+    forceGraphRenderer->addMark(node7);
+    forceGraphRenderer->addMark(node8);
+}
+
+/*Test with a node anchored 180 degrees away from another anchor its neighbor is attached to
+ Testing that edges don't go into the earth - if plenty of nodes in between seems to be less of an issue
+ Issues: wiggles a little bit b/c of changing planetCharge*/
+void testPlanetChargeNodesBetween(Shape* anchor_sphere, Shape* sphere, ForceGraphRenderer* forceGraphRenderer) {
+    
+    ForceGraphNode *anchor = new ForceGraphNode(anchor_sphere, sphere, Geodetic3D::fromDegrees(0, 2, 1.5e5));
+    ForceGraphNode *anchor2 = new ForceGraphNode(anchor_sphere, sphere, Geodetic3D::fromDegrees(70, -180, 1.5e5));
+    ForceGraphNode *node = new ForceGraphNode(sphere, anchor_sphere, Geodetic3D::fromDegrees(40, 0, 5));
+    ForceGraphNode *node2 = new ForceGraphNode(sphere, anchor_sphere, Geodetic3D::fromDegrees(0, 50, 0));
+    ForceGraphNode *node3 = new ForceGraphNode(sphere, anchor_sphere, Geodetic3D::fromDegrees(31, 30, 3e5));
+    ForceGraphNode *node4 = new ForceGraphNode(sphere, anchor_sphere, Geodetic3D::fromDegrees(31, 30, 3e5));
+    ForceGraphNode *node5 = new ForceGraphNode(sphere, anchor_sphere, Geodetic3D::fromDegrees(31, 30, 3e5));
+    ForceGraphNode *node6 = new ForceGraphNode(sphere, anchor_sphere, Geodetic3D::fromDegrees(0, 1, 3));
+    ForceGraphNode *node7 = new ForceGraphNode(sphere, anchor_sphere, Geodetic3D::fromDegrees(0, 0, 3));
+    ForceGraphNode *node8 = new ForceGraphNode(sphere, anchor_sphere, Geodetic3D::fromDegrees(0, 0, 3));
+    
+    node->addAnchor(anchor);
+    node2->addNeighbor(node);
+    node3->addNeighbor(node2);
+    node4->addNeighbor(node3);
+    node5->addNeighbor(node4);
+    node6->addNeighbor(node5);
+    
+    // node->addNeighbor(node6);
+    node7->addNeighbor(node3);
+    node8->addNeighbor(node7);
+    node8->addAnchor(anchor2);
+    node6->addNeighbor(node);
+    
+    
+    forceGraphRenderer->addMark(node);
+    forceGraphRenderer->addMark(anchor);
+    forceGraphRenderer->addMark(node2);
+    forceGraphRenderer->addMark(node3);
+    forceGraphRenderer->addMark(node4);
+    forceGraphRenderer->addMark(node5);
+    forceGraphRenderer->addMark(node6);
+    forceGraphRenderer->addMark(node7);
+    forceGraphRenderer->addMark(node8);
+    forceGraphRenderer->addMark(anchor2);
+}
+
+
+/*Test with a simple graph with node anchored 90 degrees away from another anchor its neighbor is attached to but 2 nodes in between
+ Testing that edges don't go into the earth
+ Issues: min height -> add to planet charge - this makes nodes shake
+ */
+void testPlanetCharge90DegreesNodeBetween(Shape* anchor_sphere, Shape* sphere, ForceGraphRenderer* forceGraphRenderer) {
+    
+    ForceGraphNode *anchor = new ForceGraphNode(anchor_sphere, sphere, Geodetic3D::fromDegrees(0, 0, 1.5e5));
+    ForceGraphNode *anchor2 = new ForceGraphNode(anchor_sphere, sphere, Geodetic3D::fromDegrees(0, 90, 1.5e5));
+    ForceGraphNode *node = new ForceGraphNode(sphere, anchor_sphere, Geodetic3D::fromDegrees(40, 0, 5e7));
+    ForceGraphNode *node2 = new ForceGraphNode(sphere, anchor_sphere, Geodetic3D::fromDegrees(0, 50, 5e8));
+    ForceGraphNode *node3 = new ForceGraphNode(sphere, anchor_sphere, Geodetic3D::fromDegrees(31, 30, 3e5));
+    
+    node->addAnchor(anchor);
+    node3->addAnchor(anchor2);
+    node->addNeighbor(node2);
+    node3->addNeighbor(node2);
+    
+    forceGraphRenderer->addMark(node);
+    forceGraphRenderer->addMark(anchor);
+    forceGraphRenderer->addMark(node2);
+    forceGraphRenderer->addMark(anchor2);
+    forceGraphRenderer->addMark(node3);
+}
+
+/*Test with a simple graph with node anchored 90 degrees away from another anchor its neighbor is attached to but 2 nodes in between
+ Testing that edges don't go into the earth
+ Issues: min height -> add to planet charge - this makes nodes shake
+ */
+void testPlanetCharge90DegreesOneBetween(Shape* anchor_sphere, Shape* sphere, ForceGraphRenderer* forceGraphRenderer) {
+    
+    ForceGraphNode *anchor = new ForceGraphNode(anchor_sphere, sphere, Geodetic3D::fromDegrees(0, 0, 1.5e5));
+    ForceGraphNode *anchor2 = new ForceGraphNode(anchor_sphere, sphere, Geodetic3D::fromDegrees(0, 90, 1.5e5));
+    ForceGraphNode *node = new ForceGraphNode(sphere, anchor_sphere, Geodetic3D::fromDegrees(40, 0, 5e7));
+    ForceGraphNode *node2 = new ForceGraphNode(sphere, anchor_sphere, Geodetic3D::fromDegrees(0, 50, 5e8));
+    
+    node->addAnchor(anchor);
+    node2->addAnchor(anchor2);
+    node->addNeighbor(node2);
+    
+    forceGraphRenderer->addMark(node);
+    forceGraphRenderer->addMark(anchor);
+    forceGraphRenderer->addMark(node2);
+    forceGraphRenderer->addMark(anchor2);
+}
+
+
+
+/*Test with a simple graph with node anchored 360 degrees away from another anchor its neighbor is attached to
+ Testing that edges don't go into the earth
+ Issues: how do we deal with this? Edges go straight into earth.  */
+void testPlanetCharge360Degrees(Shape* anchor_sphere, Shape* sphere, ForceGraphRenderer* forceGraphRenderer) {
+    
+    ForceGraphNode *anchor = new ForceGraphNode(anchor_sphere, sphere, Geodetic3D::fromDegrees(-90, -180, 1.5e5));
+    ForceGraphNode *anchor2 = new ForceGraphNode(anchor_sphere, sphere, Geodetic3D::fromDegrees(90, 180, 1.5e5));
+    ForceGraphNode *node = new ForceGraphNode(sphere, anchor_sphere, Geodetic3D::fromDegrees(40, 0, 5));
+    ForceGraphNode *node2 = new ForceGraphNode(sphere, anchor_sphere, Geodetic3D::fromDegrees(0, 50, 0));
+    
+    node->addAnchor(anchor);
+    node2->addAnchor(anchor2);
+    node->addNeighbor(node2);
+    
+    
+    forceGraphRenderer->addMark(node);
+    forceGraphRenderer->addMark(anchor);
+    forceGraphRenderer->addMark(node2);
+    forceGraphRenderer->addMark(anchor2);
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -45,17 +297,6 @@
     //EllipsoidalPlanet *p = new EllipsoidalPlanet(Ellipsoid(Vector3D(0,0,0), Vector3D(1000,1000,1000)));
     //builder.setPlanet(p);
     Shape* sphere = new EllipsoidShape(new Geodetic3D(Angle::fromDegrees(0),
-                                                              Angle::fromDegrees(0),
-                                                              40),
-                                               ABSOLUTE,
-                                               Vector3D(100000, 100000, 100000),
-                                               16,
-                                               0,
-                                               false,
-                                               false,
-                                               Color::fromRGBA(1, 0, 0, .9));
-    
-    Shape* anchor_sphere = new EllipsoidShape(new Geodetic3D(Angle::fromDegrees(0),
                                                       Angle::fromDegrees(0),
                                                       40),
                                        ABSOLUTE,
@@ -64,39 +305,43 @@
                                        0,
                                        false,
                                        false,
-                                       Color::fromRGBA(0, 1, 0, .9));
-   // anchor_sphere->setScale(1000);
+                                       Color::fromRGBA(1, 0, 0, .9));
+    
+    Shape* anchor_sphere = new EllipsoidShape(new Geodetic3D(Angle::fromDegrees(0),
+                                                             Angle::fromDegrees(0),
+                                                             40),
+                                              ABSOLUTE,
+                                              Vector3D(100000, 100000, 100000),
+                                              16,
+                                              0,
+                                              false,
+                                              false,
+                                              Color::fromRGBA(0, 1, 0, .9));
+    // anchor_sphere->setScale(1000);
     //sphere->setScale(1000);
     
-    MarksRenderer *marksRenderer = new MarksRenderer(true);
-    NonOverlapping3DMarksRenderer *forceGraphRenderer = new NonOverlapping3DMarksRenderer(10);
-    NonOverlapping3DMark *anchor = new NonOverlapping3DMark(anchor_sphere, sphere, Geodetic3D::fromDegrees(0, 0, 5e5));
-    NonOverlapping3DMark *node = new NonOverlapping3DMark(sphere, anchor_sphere, Geodetic3D::fromDegrees(4, 0, 5e5));
-    NonOverlapping3DMark *node2 = new NonOverlapping3DMark(sphere, anchor_sphere, Geodetic3D::fromDegrees(0, 4, 5));
-    NonOverlapping3DMark *node3 = new NonOverlapping3DMark(sphere, anchor_sphere, Geodetic3D::fromDegrees(30, 30, 3));
-    NonOverlapping3DMark *node4 = new NonOverlapping3DMark(sphere, anchor_sphere, Geodetic3D::fromDegrees(30, 30, 3));
-    node->addAnchor(anchor);
-    node2->addAnchor(anchor);
-    node3->addNeighbor(node2);
-    node4->addNeighbor(node);
-
-    forceGraphRenderer->addMark(node);
-    forceGraphRenderer->addMark(anchor);
-    forceGraphRenderer->addMark(node2);
-    forceGraphRenderer->addMark(node3);
-    forceGraphRenderer->addMark(node4);
+    
+    ShapesRenderer* shapesRenderer = new ShapesRenderer();
     
     
-
-    builder.addRenderer(marksRenderer);
+    ForceGraphRenderer *forceGraphRenderer = new ForceGraphRenderer(shapesRenderer, 50);
+    //testOneAnchorManyNodes4Clique(anchor_sphere, sphere, forceGraphRenderer);
+    // testOneAnchorManyNodes(anchor_sphere, sphere, forceGraphRenderer);
+    // testOneAnchorManyNodesCycles(anchor_sphere, sphere, forceGraphRenderer);
+    /* testPlanetCharge90DegreesOneBetween(anchor_sphere, sphere, forceGraphRenderer);
+     testPlanetCharge90DegreesNodeBetween(anchor_sphere, sphere, forceGraphRenderer);
+     testPlanetCharge360Degrees(anchor_sphere, sphere, forceGraphRenderer);
+     testPlanetChargeNodesBetween(anchor_sphere, sphere, forceGraphRenderer);*/
+    
+    
     builder.addRenderer(forceGraphRenderer);
     //const IThreadUtils* _threadUtils;
-    builder.setInitializationTask(new initialization(marksRenderer), true);
-
+    //  builder.setInitializationTask(new initialization(marksRenderer), true);
+    
     builder.initializeWidget();
     
-   // delete sphere;
-  // delete anchor_sphere;
+    // delete sphere;
+    // delete anchor_sphere;
 }
 
 // Start animation when view has appeared
@@ -136,35 +381,6 @@ public:
                     IByteBuffer* buffer,
                     bool expired) {
         
-        /*std::vector<std::string> names;
-         std::vector<Geodetic3D> coords;
-         std::vector<double> pops;*/
-        
-        //parse stuff
-        /* IJSONParser *parse = _parser->instance();
-         const JSONBaseObject *obj = parse->parse(buffer);
-         const JSONObject *featureCollection = obj->asObject();
-         const JSONArray *features = featureCollection->asArray();
-         for(int i = 0; i < features->size(); i++) {
-         const JSONObject *feature = features->getAsObject(i);
-         const JSONObject *properties = feature->getAsObject("properties");
-         const std::string name = properties->getAsString("name", "");
-         const double population = properties->getAsNumber("population", 0);
-         const JSONObject *geometry = feature->getAsObject("geometry");
-         const JSONArray *coordinates = geometry->getAsArray("coordinates");
-         double lat = coordinates->getAsNumber(1, 0);
-         double lon = coordinates->getAsNumber(0, 0);
-         names.push_back(name);
-         coords.push_back(Geodetic3D::fromDegrees(lat, lon, 100));
-         pops.push_back(population);
-         
-         _marksRenderer->addMark(new Mark(name, Geodetic3D::fromDegrees(lat, lon, 0), ABSOLUTE, 0));
-         
-         }
-         
-         delete obj;
-         
-         delete buffer;*/
     }
     
     void onError(const URL& url) {
@@ -205,3 +421,4 @@ public:
 };
 
 @end
+ 

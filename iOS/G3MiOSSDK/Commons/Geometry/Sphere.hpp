@@ -14,16 +14,20 @@
 #include "Mesh.hpp"
 #include "Color.hpp"
 
+class Vector2D;
+class Mesh;
+class Color;
 
 class Sphere : public BoundingVolume {
 private:
 
   mutable Mesh* _mesh;
-  Mesh* createWireframeMesh(const Color& color,
-                            short resolution) const;
+  
 
  
 public:
+  Mesh* createWireframeMesh(const Color& color,
+                              short resolution) const;
   const Vector3D _center;
   const double   _radius;
   const double   _radiusSquared;

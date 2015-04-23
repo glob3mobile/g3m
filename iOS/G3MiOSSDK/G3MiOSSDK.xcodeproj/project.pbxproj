@@ -326,7 +326,6 @@
 		D8EEF3B91577924D003FEB5E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8EEF3B81577924D003FEB5E /* Foundation.framework */; };
 		D8F0C70B17B52702002A89E0 /* GenericQuadTree.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8F0C70A17B52701002A89E0 /* GenericQuadTree.cpp */; };
 		D8F2EBAD18994A7B001B6103 /* CoordinateSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8F2EBAB18994A7B001B6103 /* CoordinateSystem.cpp */; };
-		DF3AD13D1A7F20E3000F7BFE /* NonOverlapping3DMarksRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DF3AD13B1A7F20E3000F7BFE /* NonOverlapping3DMarksRenderer.cpp */; };
 		DF5AE1661A83E849007E02F1 /* FullTransformedTexCoorMultiTexturedMesh.fsh in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8B5533F18800D5A00C1B3B3 /* FullTransformedTexCoorMultiTexturedMesh.fsh */; };
 		DF5AE1671A83E849007E02F1 /* FullTransformedTexCoorMultiTexturedMesh.vsh in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8B5534018800D5A00C1B3B3 /* FullTransformedTexCoorMultiTexturedMesh.vsh */; };
 		DF5AE1681A83E849007E02F1 /* Billboard.fsh in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8CE5D36173BB68200C7AAE6 /* Billboard.fsh */; };
@@ -545,7 +544,6 @@
 		DF5AE23D1A83E85B007E02F1 /* DefaultChessCanvasImageBuilder.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = 44EE3CDE19A60A3B00DDEF2B /* DefaultChessCanvasImageBuilder.hpp */; };
 		DF5AE23E1A83E85B007E02F1 /* Info.cpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = 44E3C42919B53B4100857275 /* Info.cpp */; };
 		DF5AE23F1A83E85B007E02F1 /* Info.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = 44E3C42A19B53B4100857275 /* Info.hpp */; };
-		DF5AE2401A83E869007E02F1 /* SectorAndHeightCameraConstrainer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8B0125517E09ECA00AD743A /* SectorAndHeightCameraConstrainer.hpp */; };
 		DF5AE2411A83E869007E02F1 /* SectorAndHeightCameraConstrainer.cpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8B0125617E09ECA00AD743A /* SectorAndHeightCameraConstrainer.cpp */; };
 		DF5AE2421A83E869007E02F1 /* Camera.cpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CC596F1C15C46D4F008FC230 /* Camera.cpp */; };
 		DF5AE2431A83E869007E02F1 /* Camera.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CC596F1D15C46D4F008FC230 /* Camera.hpp */; };
@@ -885,8 +883,6 @@
 		DF5AE3911A83E86A007E02F1 /* G3MMeshParser.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF6FE3EC1899812800C05775 /* G3MMeshParser.hpp */; };
 		DF5AE3921A83E86A007E02F1 /* G3MMeshMaterial.cpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF6FE3EE1899852300C05775 /* G3MMeshMaterial.cpp */; };
 		DF5AE3931A83E86A007E02F1 /* G3MMeshMaterial.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF6FE3EF1899852300C05775 /* G3MMeshMaterial.hpp */; };
-		DF5AE3941A83E86A007E02F1 /* NonOverlapping3DMarksRenderer.cpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = DF3AD13B1A7F20E3000F7BFE /* NonOverlapping3DMarksRenderer.cpp */; };
-		DF5AE3951A83E86A007E02F1 /* NonOverlapping3DMarksRenderer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = DF3AD13C1A7F20E3000F7BFE /* NonOverlapping3DMarksRenderer.hpp */; };
 		DF5AE3961A83E86A007E02F1 /* MultiTexturedHUDQuadWidget.cpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D88EE1C51869B70C00AED85A /* MultiTexturedHUDQuadWidget.cpp */; };
 		DF5AE3971A83E86A007E02F1 /* MultiTexturedHUDQuadWidget.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D88EE1C61869B70C00AED85A /* MultiTexturedHUDQuadWidget.hpp */; };
 		DF5AE3981A83E86A007E02F1 /* BusyMeshRenderer.cpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CCC2A01B15CA6C7D00923850 /* BusyMeshRenderer.cpp */; };
@@ -1072,6 +1068,9 @@
 		DF5AE44C1A83E86A007E02F1 /* ES2Renderer.mm in CopyFiles */ = {isa = PBXBuildFile; fileRef = 383BD3811577EDDB0012AC53 /* ES2Renderer.mm */; };
 		DF5AE44D1A83E86A007E02F1 /* G3MWidget_iOS.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 383BD3821577EDDB0012AC53 /* G3MWidget_iOS.h */; };
 		DF5AE44E1A83E86A007E02F1 /* G3MWidget_iOS.mm in CopyFiles */ = {isa = PBXBuildFile; fileRef = 383BD3831577EDDB0012AC53 /* G3MWidget_iOS.mm */; };
+		DFD9F0201AE16D5D005D60AC /* SectorAndHeightCameraConstrainer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8B0125517E09ECA00AD743A /* SectorAndHeightCameraConstrainer.hpp */; };
+		DFD9F0231AE16DCA005D60AC /* ForceGraphRenderer.cpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = DFD9F0211AE16DCA005D60AC /* ForceGraphRenderer.cpp */; };
+		DFD9F0241AE16DCA005D60AC /* ForceGraphRenderer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = DFD9F0221AE16DCA005D60AC /* ForceGraphRenderer.hpp */; };
 		E705123C165E782C00AEADB9 /* PlanetRendererBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E705123A165E782C00AEADB9 /* PlanetRendererBuilder.cpp */; };
 		E7051242165E916000AEADB9 /* G3MBuilder_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = E7051240165E916000AEADB9 /* G3MBuilder_iOS.mm */; };
 		E71AA049191AACE400834D69 /* ICanvasUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E71AA047191AACE400834D69 /* ICanvasUtils.cpp */; };
@@ -1096,7 +1095,9 @@
 			dstPath = "include/${PRODUCT_NAME}non";
 			dstSubfolderSpec = 16;
 			files = (
-				DF5AE2401A83E869007E02F1 /* SectorAndHeightCameraConstrainer.hpp in CopyFiles */,
+				DFD9F0231AE16DCA005D60AC /* ForceGraphRenderer.cpp in CopyFiles */,
+				DFD9F0241AE16DCA005D60AC /* ForceGraphRenderer.hpp in CopyFiles */,
+				DFD9F0201AE16D5D005D60AC /* SectorAndHeightCameraConstrainer.hpp in CopyFiles */,
 				DF5AE2411A83E869007E02F1 /* SectorAndHeightCameraConstrainer.cpp in CopyFiles */,
 				DF5AE2421A83E869007E02F1 /* Camera.cpp in CopyFiles */,
 				DF5AE2431A83E869007E02F1 /* Camera.hpp in CopyFiles */,
@@ -1436,8 +1437,6 @@
 				DF5AE3911A83E86A007E02F1 /* G3MMeshParser.hpp in CopyFiles */,
 				DF5AE3921A83E86A007E02F1 /* G3MMeshMaterial.cpp in CopyFiles */,
 				DF5AE3931A83E86A007E02F1 /* G3MMeshMaterial.hpp in CopyFiles */,
-				DF5AE3941A83E86A007E02F1 /* NonOverlapping3DMarksRenderer.cpp in CopyFiles */,
-				DF5AE3951A83E86A007E02F1 /* NonOverlapping3DMarksRenderer.hpp in CopyFiles */,
 				DF5AE3961A83E86A007E02F1 /* MultiTexturedHUDQuadWidget.cpp in CopyFiles */,
 				DF5AE3971A83E86A007E02F1 /* MultiTexturedHUDQuadWidget.hpp in CopyFiles */,
 				DF5AE3981A83E86A007E02F1 /* BusyMeshRenderer.cpp in CopyFiles */,
@@ -2559,6 +2558,8 @@
 		D8FFA4C2183D03CE004E4AF3 /* TransformedTexCoorTexturedMesh_DirectionLight.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = TransformedTexCoorTexturedMesh_DirectionLight.vsh; sourceTree = "<group>"; };
 		DF3AD13B1A7F20E3000F7BFE /* NonOverlapping3DMarksRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = NonOverlapping3DMarksRenderer.cpp; path = Commons/Rendererers/NonOverlapping3DMarksRenderer.cpp; sourceTree = "<group>"; };
 		DF3AD13C1A7F20E3000F7BFE /* NonOverlapping3DMarksRenderer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = NonOverlapping3DMarksRenderer.hpp; path = Commons/Rendererers/NonOverlapping3DMarksRenderer.hpp; sourceTree = "<group>"; };
+		DFD9F0211AE16DCA005D60AC /* ForceGraphRenderer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ForceGraphRenderer.cpp; path = Commons/Rendererers/ForceGraphRenderer.cpp; sourceTree = "<group>"; };
+		DFD9F0221AE16DCA005D60AC /* ForceGraphRenderer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = ForceGraphRenderer.hpp; path = Commons/Rendererers/ForceGraphRenderer.hpp; sourceTree = "<group>"; };
 		E705123A165E782C00AEADB9 /* PlanetRendererBuilder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PlanetRendererBuilder.cpp; path = Commons/Basic/PlanetRendererBuilder.cpp; sourceTree = "<group>"; };
 		E705123B165E782C00AEADB9 /* PlanetRendererBuilder.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = PlanetRendererBuilder.hpp; path = Commons/Basic/PlanetRendererBuilder.hpp; sourceTree = "<group>"; };
 		E705123F165E916000AEADB9 /* G3MBuilder_iOS.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = G3MBuilder_iOS.hpp; path = Specific/Derived/G3MBuilder_iOS.hpp; sourceTree = "<group>"; };
@@ -3463,6 +3464,8 @@
 		D8EEF3AA1577924D003FEB5E = {
 			isa = PBXGroup;
 			children = (
+				DFD9F0211AE16DCA005D60AC /* ForceGraphRenderer.cpp */,
+				DFD9F0221AE16DCA005D60AC /* ForceGraphRenderer.hpp */,
 				E70B56DF16D3CCCD00C5FFFB /* Resources */,
 				383BD3881577EDE30012AC53 /* Commons */,
 				D8EEF3B71577924D003FEB5E /* Frameworks */,
@@ -3741,7 +3744,6 @@
 				4435E3D919072EDA0064A7D7 /* Renderer.cpp in Sources */,
 				CFE3DBAC164AFDB000910037 /* JSONString.cpp in Sources */,
 				CF485F8918511C250013795B /* AndTileCondition.cpp in Sources */,
-				DF3AD13D1A7F20E3000F7BFE /* NonOverlapping3DMarksRenderer.cpp in Sources */,
 				CF4CA477164C669D009BB7EB /* SGNode.cpp in Sources */,
 				CFC3BCC9164C6C7300A8D37D /* SGShape.cpp in Sources */,
 				CF2412AB191FD87C00B796FB /* GEO2DCoordinatesData.cpp in Sources */,
