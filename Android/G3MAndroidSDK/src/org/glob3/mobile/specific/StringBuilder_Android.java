@@ -2,6 +2,9 @@
 
 package org.glob3.mobile.specific;
 
+import java.text.DecimalFormat;
+import java.util.Locale;
+
 import org.glob3.mobile.generated.IStringBuilder;
 
 
@@ -17,10 +20,22 @@ public final class StringBuilder_Android
       return new StringBuilder_Android();
    }
 
-
+/*
    @Override
    public IStringBuilder addDouble(final double d) {
       _builder.append(d);
+      return this;
+   }
+   */
+   
+   
+   @Override
+   public IStringBuilder addDouble(final double d) {
+//Asegurar que se imprima un número con como mucho 8 decimales
+// con un punto como marca de decimales
+       Locale.setDefault(new Locale("en", "US"));
+       DecimalFormat df = new DecimalFormat("#.########"); 
+      _builder.append(df.format(d));
       return this;
    }
 

@@ -26,7 +26,7 @@ protected:
 public:
   
   StringBuilder_iOS() {
-    _oss.precision(20);
+    _oss.precision(10); // 8 digits after the decimal point is enough
   }
 
   IStringBuilder* addBool(bool b) {
