@@ -72,6 +72,7 @@
 		D876E6DA1AE6554700F616DE /* StarsParser.mm in Sources */ = {isa = PBXBuildFile; fileRef = D876E6D91AE6554700F616DE /* StarsParser.mm */; };
 		D876E6DC1AE65A4400F616DE /* stars.csv in Resources */ = {isa = PBXBuildFile; fileRef = D876E6DB1AE65A4400F616DE /* stars.csv */; };
 		D882B1CD171D77C000C2AD9C /* full-earth-256x256.bil in Resources */ = {isa = PBXBuildFile; fileRef = D882B1CC171D76AD00C2AD9C /* full-earth-256x256.bil */; };
+		D8C4723D1AE8F637005254B3 /* stars_links.csv in Resources */ = {isa = PBXBuildFile; fileRef = D8C4723C1AE8F636005254B3 /* stars_links.csv */; };
 		D8E93BE01588A171009D497C /* world.jpg in Resources */ = {isa = PBXBuildFile; fileRef = D8E93BDF1588A171009D497C /* world.jpg */; };
 		D8EEF38B1577920B003FEB5E /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8EEF38A1577920B003FEB5E /* UIKit.framework */; };
 		D8EEF38D1577920B003FEB5E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8EEF38C1577920B003FEB5E /* Foundation.framework */; };
@@ -188,6 +189,7 @@
 		D876E6D91AE6554700F616DE /* StarsParser.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = StarsParser.mm; sourceTree = "<group>"; };
 		D876E6DB1AE65A4400F616DE /* stars.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = stars.csv; sourceTree = "<group>"; };
 		D882B1CC171D76AD00C2AD9C /* full-earth-256x256.bil */ = {isa = PBXFileReference; lastKnownFileType = file; path = "full-earth-256x256.bil"; sourceTree = "<group>"; };
+		D8C4723C1AE8F636005254B3 /* stars_links.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = stars_links.csv; sourceTree = "<group>"; };
 		D8E93BDF1588A171009D497C /* world.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = world.jpg; sourceTree = "<group>"; };
 		D8EEF3861577920B003FEB5E /* G3MiOSDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = G3MiOSDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D8EEF38A1577920B003FEB5E /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
@@ -325,6 +327,7 @@
 		D8EEF4271577B0D6003FEB5E /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				D8C4723C1AE8F636005254B3 /* stars_links.csv */,
 				D84D3C97194753A900D16D69 /* radar-sprite.png */,
 				D80DF37B1AC5642900A7D92A /* stars_old.csv */,
 				D876E6DB1AE65A4400F616DE /* stars.csv */,
@@ -482,6 +485,7 @@
 				CF883B841591053100AEE39C /* mark.png in Resources */,
 				CF8E9887180D98DC00A08208 /* pointcloud in Resources */,
 				CFB57D9F1860DAD900D5B094 /* Compass_rose_browns_00.png in Resources */,
+				D8C4723D1AE8F637005254B3 /* stars_links.csv in Resources */,
 				CCD7885415D9A3FA0065A7E1 /* ProgressWheel.png in Resources */,
 				CF0FC6F21899B86B005988D7 /* 3d_.json in Resources */,
 				A717C99615EBA71D00EEC830 /* mercator.jpg in Resources */,

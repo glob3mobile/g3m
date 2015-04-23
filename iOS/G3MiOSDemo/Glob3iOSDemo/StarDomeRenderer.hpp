@@ -49,17 +49,24 @@ class Star{
   
   const double _ascencion;
   const double _declination;
+  const std::string _name;
   
 public:
   Color* _color;
   
-  Star(double ascencion,
+  Star(const std::string& name,
+       double ascencion,
        double declination,
        const Color& color):
+  _name(name),
   _ascencion(ascencion),
   _declination(declination),
   _color(new Color(color)){
     
+  }
+  
+  std::string getName() const{
+    return _name;
   }
   
   double getTrueNorthAzimuthInDegrees(double siderealTime, const Geodetic2D viewerPosition) const;
@@ -73,10 +80,11 @@ public:
   }
   
   Star& operator=(const Star& s){
-    return *(new Star(s._ascencion, s._declination, *s._color));
+    return *(new Star(s._name, s._ascencion, s._declination, *s._color));
   }
   
   Star(const Star& s):
+  _name(s._name),
   _ascencion(s._ascencion),
   _declination(s._declination),
   _color(new Color(*s._color)){
@@ -131,6 +139,8 @@ class StarDomeRenderer : public DefaultRenderer {
   
   std::vector<Star> _stars;
   
+  std::vector<int> _lines;
+  
   const Camera* _currentCamera;
   
   const std::string _name;
@@ -149,7 +159,7 @@ class StarDomeRenderer : public DefaultRenderer {
   
 public:
   
-  StarDomeRenderer(std::string& name, std::vector<Star> stars,
+  StarDomeRenderer(std::string& name, std::vector<Star> stars, std::vector<int> lines,
                    const Geodetic3D& position,
                    double clockTimeInDegrees,
                    int dayOfTheYear,
@@ -158,6 +168,7 @@ public:
   _starsShape(NULL),
   _glState(new GLState()),
   _stars(stars),
+  _lines(lines),
   _currentCamera(NULL),
   _name(name),
   _position(new Geodetic3D(position)),

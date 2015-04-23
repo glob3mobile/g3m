@@ -16,6 +16,6 @@
 
 }
 
-+ (std::vector<Constellation>) parse:(NSString*) csv;
++ (std::vector<Constellation>) parse:(NSString*) csv withLinks:(NSString*) csvLinks;
 
 @end

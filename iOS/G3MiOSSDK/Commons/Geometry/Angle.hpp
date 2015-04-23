@@ -196,7 +196,7 @@ public:
     double md = minutes * clockMinToDeg;
     double sd = seconds * clockSecToDeg;
     
-    printf("%f + %f + %f\n", hd, md, sd);
+    //printf("%f + %f + %f\n", hd, md, sd);
     
     return Angle::fromDegrees(hd+md+sd);
   }

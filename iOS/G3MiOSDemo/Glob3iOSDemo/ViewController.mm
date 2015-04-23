@@ -383,7 +383,7 @@ Mesh* createSectorMesh(const Planet* planet,
   
   G3MBuilder_iOS builder([self G3MWidget]);
   
-  builder.addPeriodicalTask(new PeriodicalTask(TimeInterval::fromSeconds(0.1), new RotateStarsTask(self)));
+  //builder.addPeriodicalTask(new PeriodicalTask(TimeInterval::fromSeconds(0.1), new RotateStarsTask(self)));
   
   builder.addCameraConstraint(new DeviceOrientationCameraConstrainer(self));
   
@@ -538,6 +538,8 @@ std::vector<StarDomeRenderer*> _sdrs;
   
   NSString *csvPath = [[NSBundle mainBundle] pathForResource: @"stars" ofType: @"csv"];
   
+  NSString *csvLinksPath = [[NSBundle mainBundle] pathForResource: @"stars_links" ofType: @"csv"];
+  
   Geodetic3D gcPosition = Geodetic3D::fromDegrees(27.973105, -15.597545, 500);
   
 //  double clockTimeInDegrees = [self getClockTimeInDegrees];
@@ -547,7 +549,11 @@ std::vector<StarDomeRenderer*> _sdrs;
                                               encoding: NSMacOSRomanStringEncoding
                                                  error: nil];
     
-    std::vector<Constellation> cs = [StarsParser parse:csv];
+    NSString *csv2 = [NSString stringWithContentsOfFile: csvLinksPath
+                                              encoding: NSMacOSRomanStringEncoding
+                                                 error: nil];
+    
+    std::vector<Constellation> cs = [StarsParser parse:csv withLinks:csv2];
     
     
     for(unsigned int i = 0; i < cs.size(); i++){
@@ -557,7 +563,7 @@ std::vector<StarDomeRenderer*> _sdrs;
       MarksRenderer* mr = new MarksRenderer(true);
       builder->addRenderer(mr);
       
-      StarDomeRenderer* sdr = new StarDomeRenderer(c._name, c._stars, gcPosition, clockTimeInDegrees, dayOfYear, *c._color, mr);
+      StarDomeRenderer* sdr = new StarDomeRenderer(c._name, c._stars, c._lines, gcPosition, clockTimeInDegrees, dayOfYear, *c._color, mr);
       builder->addRenderer(sdr);
       
       _sdrs.push_back(sdr);
