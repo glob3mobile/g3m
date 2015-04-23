@@ -65,6 +65,8 @@ public:
     return "SGGeometryNode";
   }
   
+  Vector3D mostDistantVertexFromCenter(const MutableMatrix44D& transformation) const;
+  
 };
 
 #endif

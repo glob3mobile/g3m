@@ -48,6 +48,11 @@ public:
   virtual ~AbstractMeshShape();
 
   bool isTransparent(const G3MRenderContext* rc);
+  
+  virtual Vector3D mostDistantVertexFromCenter() const{
+#warning TODO
+    return Vector3D::zero;
+  }
 };
 
 #endif

@@ -81,6 +81,8 @@ public:
     return intersections;
   }
   
+  Vector3D mostDistantVertexFromCenter() const;
+  
   
 };
 

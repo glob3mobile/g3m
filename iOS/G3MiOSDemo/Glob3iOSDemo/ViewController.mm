@@ -349,11 +349,12 @@ Mesh* createSectorMesh(const Planet* planet,
                                                                          Angle::fromDegrees(-15.431389),
                                                                          10000),
                                                           ABSOLUTE);
-        
         // Washington, DC
-        const double scale = 1000;
+        const double scale = 100;
         plane->setScale(scale, scale, scale);
         sr->addShape(plane);
+        
+        printf("%f\n", plane->createBoundingSphere(builder.getPlanet())._radius);
         
         plane->setAnimatedPosition(TimeInterval::fromSeconds(20),
                                    Geodetic3D(Angle::fromDegrees(28.127222),

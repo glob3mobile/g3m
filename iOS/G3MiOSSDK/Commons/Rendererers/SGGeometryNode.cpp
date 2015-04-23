@@ -75,3 +75,22 @@ void SGGeometryNode::rawRender(const G3MRenderContext* rc, const GLState* glStat
   GL* gl = rc->getGL();
   gl->drawElements(_primitive, _indices, glState, *rc->getGPUProgramManager());
 }
+
+Vector3D SGGeometryNode::mostDistantVertexFromCenter(const MutableMatrix44D& transformation) const{
+  double max = 0;
+  MutableVector3D res(0, 0, 0);
+  for (int i = 0; i < _vertices->size(); i+=3){
+    Vector3D v(_vertices->get(i), _vertices->get(i+1), _vertices->get(i+2));
+    
+    Vector3D v2 = v.transformedBy(transformation, 1.0);
+    double d = v2.squaredLength();
+    if (max < d){
+      max = d;
+      res.copyFrom(v2);
+    }
+  }
+  
+  Vector3D res2 = SGNode::mostDistantVertexFromCenter(transformation);
+  
+  return max > res2.squaredLength()? res.asVector3D() : res2;
+}

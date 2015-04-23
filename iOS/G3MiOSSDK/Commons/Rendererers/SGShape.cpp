@@ -29,3 +29,9 @@ void SGShape::rawRender(const G3MRenderContext* rc,
   _glState->setParent(parentState);
   _node->render(rc, _glState, renderNotReadyShapes);
 }
+
+Vector3D SGShape::mostDistantVertexFromCenter() const{
+  Vector3D v = _node->mostDistantVertexFromCenter(MutableMatrix44D::identity());
+  Vector3D s = getScale();
+  return Vector3D(v._x * s._x, v._y * s._y, v._z * s._z);
+}

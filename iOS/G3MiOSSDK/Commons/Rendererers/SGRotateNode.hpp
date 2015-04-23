@@ -55,6 +55,11 @@ public:
   std::string description() {
     return "SGRotateNode";
   }
+  
+  Vector3D mostDistantVertexFromCenter(const MutableMatrix44D& transformation) const{
+    MutableMatrix44D m = transformation.multiply(_rotationMatrix);
+    return SGNode::mostDistantVertexFromCenter(m);
+  }
 
   
 };

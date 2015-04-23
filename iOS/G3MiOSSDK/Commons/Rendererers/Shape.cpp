@@ -205,3 +205,9 @@ void Shape::setPosition(const Geodetic3D& position) {
 #endif
   cleanTransformMatrix();
 }
+
+
+Sphere Shape::createBoundingSphere(const Planet* planet) const{
+  Sphere sphere(planet->toCartesian(getPosition()), mostDistantVertexFromCenter().length() );
+  return sphere;
+}

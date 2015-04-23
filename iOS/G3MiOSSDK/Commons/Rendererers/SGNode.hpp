@@ -20,6 +20,8 @@ class SGShape;
 class GLGlobalState;
 class GPUProgramState;
 
+#include "MutableVector3D.hpp"
+
 class SGNode {
 protected:
   const std::string _id;
@@ -86,6 +88,21 @@ public:
   virtual std::string description() {
     return "SGNode";
   };
+  
+  virtual Vector3D mostDistantVertexFromCenter(const MutableMatrix44D& transformation) const{
+    double max = 0;
+    MutableVector3D res(0, 0, 0);
+    const size_t s = getChildrenCount();
+    for (int i = 0; i < s; i++) {
+      Vector3D v = getChild(i)->mostDistantVertexFromCenter(transformation);
+      double d = v.squaredLength();
+      if (max < d){
+        max = d;
+        res.copyFrom(v);
+      }
+    }
+    return res.asVector3D();
+  }
 };
 
 #endif

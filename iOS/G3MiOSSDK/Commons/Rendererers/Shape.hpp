@@ -26,6 +26,8 @@ class MutableMatrix44D;
 
 #include "CoordinateSystem.hpp"
 
+#include "Sphere.hpp"
+
 class ShapePendingEffect;
 class GPUProgramState;
 
@@ -266,7 +268,9 @@ public:
                                                      const Vector3D& origin,
                                                      const Vector3D& direction) const = 0;
   
-
+  virtual Vector3D mostDistantVertexFromCenter() const = 0;
+  
+  Sphere createBoundingSphere(const Planet* planet) const;
 };
 
 #endif

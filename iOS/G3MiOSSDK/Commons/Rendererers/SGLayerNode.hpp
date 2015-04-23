@@ -81,6 +81,7 @@ public:
   std::string description() {
     return "SGLayerNode";
   }
+  
 };
 
 #endif

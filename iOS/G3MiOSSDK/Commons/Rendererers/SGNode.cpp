@@ -73,7 +73,7 @@ void SGNode::render(const G3MRenderContext* rc, const GLState* parentGLState, bo
 
     rawRender(rc, glState);
 
-    const int childrenCount = _children.size();
+    const size_t childrenCount = _children.size();
     for (int i = 0; i < childrenCount; i++) {
       SGNode* child = _children[i];
       child->render(rc, glState, renderNotReadyShapes);
