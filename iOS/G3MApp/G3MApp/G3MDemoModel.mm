@@ -36,6 +36,8 @@
 #include "G3MTiledVectorDemoScene.hpp"
 #include "G3MStreamingPointCloud1DemoScene.hpp"
 #include "G3MStreamingPointCloud2DemoScene.hpp"
+#include "G3MOSMMarksDemoScene.hpp"
+#include "G3MOSMBoxDemoScene.hpp"
 #include "G3MOSMBuildingsDemoScene.hpp"
 #include "G3MHUDDemoScene.hpp"
 #include "G3MNonOverlappingMarksDemoScene.hpp"
@@ -66,6 +68,8 @@ _context(NULL)
 {
     //Place new demo scenes here to run in app passing in this DemoModel
   _scenes.push_back( new G3MRasterLayersDemoScene(this) );
+  _scenes.push_back( new G3MOSMMarksDemoScene(this));
+  _scenes.push_back( new G3MOSMBoxDemoScene(this) );
   _scenes.push_back( new G3MOSMBuildingsDemoScene(this) );
   _scenes.push_back( new G3MScenarioDEMDemoScene(this) );
   _scenes.push_back( new G3MVectorialDemoScene(this) );

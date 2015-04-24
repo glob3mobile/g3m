@@ -1,13 +1,13 @@
 //
-//  G3MOSMBuildingsDemoScene.hpp
+//  G3MOSMBoxDemoScene.h
 //  G3MApp
 //
-//  Created by Pratik Prakash on 3/26/15.
+//  Created by Pratik Prakash on 4/23/15.
 //  Copyright (c) 2015 Igo Software SL. All rights reserved.
 //
 
-#ifndef __G3MApp__G3MOSMBuildingsDemoScene__
-#define __G3MApp__G3MOSMBuildingsDemoScene__
+#ifndef __G3MApp__G3MOSMBoxDemoScene__
+#define __G3MApp__G3MOSMBoxDemoScene__
 
 #include <stdio.h>
 #include "G3MDemoScene.hpp"
@@ -16,7 +16,7 @@
 
 class Mark;
 
-class G3MOSMBuildingsDemoScene : public G3MDemoScene {
+class G3MOSMBoxDemoScene : public G3MDemoScene {
 private:
     long long _requestId;
     std::string url = "http://data.osmbuildings.org/0.2/%s/tile/%d/%d/%d.json";
@@ -43,17 +43,17 @@ protected:
     
 public:
     
-    G3MOSMBuildingsDemoScene(G3MDemoModel* model) :
-    G3MDemoScene(model, "OSM Buildings", "", 0),
+    G3MOSMBoxDemoScene(G3MDemoModel* model) :
+    G3MDemoScene(model, "OSM Boxes", "", 0),
     _requestId(-1)
     {
     }
     
     void deactivate(const G3MContext* context);
-    void addMark(Mark* mark);
     void addMesh(Mesh* mesh);
     void addShape(Shape* shape);
     
 };
 
-#endif /* defined(__G3MApp__G3MOSMBuildingsDemoScene__) */
+
+#endif /* defined(__G3MApp__G3MOSMBoxDemoScene__) */

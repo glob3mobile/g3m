@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		75ECCE6E1AC4447E001F4544 /* G3MOSMBuildingsDemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75ECCE6C1AC4447E001F4544 /* G3MOSMBuildingsDemoScene.cpp */; };
+		75F88E061AE9B83D00F9078A /* G3MOSMMarksDemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75F88E041AE9B83D00F9078A /* G3MOSMMarksDemoScene.cpp */; };
+		75F88E0C1AE9B96300F9078A /* G3MOSMBoxDemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75F88E0A1AE9B96300F9078A /* G3MOSMBoxDemoScene.cpp */; };
 		CF162FDF1AB7396D00673D44 /* libGoogleAnalyticsServices.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CF162FDE1AB7396D00673D44 /* libGoogleAnalyticsServices.a */; };
 		CF162FE21AB739C800673D44 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CF162FE11AB739C800673D44 /* SystemConfiguration.framework */; };
 		CF162FE41AB739D700673D44 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = CF162FE31AB739D700673D44 /* libz.dylib */; };
@@ -125,6 +127,10 @@
 
 /* Begin PBXFileReference section */
 		75ECCE6C1AC4447E001F4544 /* G3MOSMBuildingsDemoScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = G3MOSMBuildingsDemoScene.cpp; sourceTree = "<group>"; };
+		75F88E041AE9B83D00F9078A /* G3MOSMMarksDemoScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = G3MOSMMarksDemoScene.cpp; path = G3MApp/G3MOSMMarksDemoScene.cpp; sourceTree = "<group>"; };
+		75F88E051AE9B83D00F9078A /* G3MOSMMarksDemoScene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = G3MOSMMarksDemoScene.hpp; path = G3MApp/G3MOSMMarksDemoScene.hpp; sourceTree = "<group>"; };
+		75F88E0A1AE9B96300F9078A /* G3MOSMBoxDemoScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = G3MOSMBoxDemoScene.cpp; path = G3MApp/G3MOSMBoxDemoScene.cpp; sourceTree = "<group>"; };
+		75F88E0D1AE9B98500F9078A /* G3MOSMBoxDemoScene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = G3MOSMBoxDemoScene.hpp; path = G3MApp/G3MOSMBoxDemoScene.hpp; sourceTree = "<group>"; };
 		CF162FD41AB7396D00673D44 /* GAI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GAI.h; sourceTree = "<group>"; };
 		CF162FD51AB7396D00673D44 /* GAIDictionaryBuilder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GAIDictionaryBuilder.h; sourceTree = "<group>"; };
 		CF162FD61AB7396D00673D44 /* GAIEcommerceFields.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GAIEcommerceFields.h; sourceTree = "<group>"; };
@@ -390,6 +396,10 @@
 		E7D1B5FC16D2436700AF47C1 = {
 			isa = PBXGroup;
 			children = (
+				75F88E0D1AE9B98500F9078A /* G3MOSMBoxDemoScene.hpp */,
+				75F88E0A1AE9B96300F9078A /* G3MOSMBoxDemoScene.cpp */,
+				75F88E041AE9B83D00F9078A /* G3MOSMMarksDemoScene.cpp */,
+				75F88E051AE9B83D00F9078A /* G3MOSMMarksDemoScene.hpp */,
 				E7D1B60E16D2436700AF47C1 /* G3MApp */,
 				E7D1B60716D2436700AF47C1 /* Frameworks */,
 				E7D1B60616D2436700AF47C1 /* Products */,
@@ -683,6 +693,7 @@
 				CFE3B3D5183AD04A0078C796 /* G3M3DModelDemoScene.cpp in Sources */,
 				CFE3B3D0183AC7D20078C796 /* G3MPointCloudDemoScene.cpp in Sources */,
 				E7D1B61916D2436700AF47C1 /* G3MAppDelegate.m in Sources */,
+				75F88E0C1AE9B96300F9078A /* G3MOSMBoxDemoScene.cpp in Sources */,
 				CFF9D2061A7C4903005429A6 /* G3MNonOverlappingMarksDemoScene.mm in Sources */,
 				E7D1B62816D2436700AF47C1 /* G3MViewController.mm in Sources */,
 				CF6920B71837F26B007409D8 /* G3MVectorialDemoScene.cpp in Sources */,
@@ -697,6 +708,7 @@
 				CF3F8FEA1835867D00589B4C /* G3MSelectDemoSceneViewController.mm in Sources */,
 				CFE3B3DC183AD38D0078C796 /* G3MCameraDemoScene.cpp in Sources */,
 				CF6920CC1839679B007409D8 /* G3MSelectOptionViewController.mm in Sources */,
+				75F88E061AE9B83D00F9078A /* G3MOSMMarksDemoScene.cpp in Sources */,
 				CF6920B11837EA35007409D8 /* G3MDemoScene.cpp in Sources */,
 				CFB806E21837D4D300DB4B3B /* G3MDemoBuilder_iOS.mm in Sources */,
 				CFE3B3EF183C05F70078C796 /* G3MIsosurfaceDemoScene.cpp in Sources */,
