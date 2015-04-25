@@ -110,7 +110,7 @@ void testOneAnchorManyNodes4Clique(Shape* anchor_sphere, Shape* sphere, ForceGra
  Issues: move anchor too far down makes the planetForce go crazy?? */
 void testOneAnchorManyNodes(Shape* anchor_sphere, Shape* sphere, ForceGraphRenderer* forceGraphRenderer) {
     
-    ForceGraphNode *anchor = new ForceGraphNode(anchor_sphere, sphere, Geodetic3D::fromDegrees(-70, 90, 1.5e5));
+    ForceGraphNode *anchor = new ForceGraphNode(anchor_sphere, sphere, Geodetic3D::fromDegrees(-50, 90, 1.5e5));
     ForceGraphNode *node = new ForceGraphNode(sphere, anchor_sphere, Geodetic3D::fromDegrees(0, 0, 5));
     ForceGraphNode *node2 = new ForceGraphNode(sphere, anchor_sphere, Geodetic3D::fromDegrees(0, 50, 0));
     ForceGraphNode *node3 = new ForceGraphNode(sphere, anchor_sphere, Geodetic3D::fromDegrees(31, 30, 3e5));
@@ -145,7 +145,7 @@ void testOneAnchorManyNodes(Shape* anchor_sphere, Shape* sphere, ForceGraphRende
  Issues: */
 void testOneAnchorManyNodesCycles(Shape* anchor_sphere, Shape* sphere, ForceGraphRenderer* forceGraphRenderer) {
     
-    ForceGraphNode *anchor = new ForceGraphNode(anchor_sphere, sphere, Geodetic3D::fromDegrees(45, -20, 1.5e5));
+    ForceGraphNode *anchor = new ForceGraphNode(anchor_sphere, sphere, Geodetic3D::fromDegrees(10, -10, 1.5e5));
     
     ForceGraphNode *node = new ForceGraphNode(sphere, anchor_sphere, Geodetic3D::fromDegrees(40, 0, 5));
     ForceGraphNode *node2 = new ForceGraphNode(sphere, anchor_sphere, Geodetic3D::fromDegrees(0, 50, 0));
@@ -184,9 +184,9 @@ void testOneAnchorManyNodesCycles(Shape* anchor_sphere, Shape* sphere, ForceGrap
  Issues: wiggles a little bit b/c of changing planetCharge*/
 void testPlanetChargeNodesBetween(Shape* anchor_sphere, Shape* sphere, ForceGraphRenderer* forceGraphRenderer) {
     
-    ForceGraphNode *anchor = new ForceGraphNode(anchor_sphere, sphere, Geodetic3D::fromDegrees(0, 2, 1.5e5));
-    ForceGraphNode *anchor2 = new ForceGraphNode(anchor_sphere, sphere, Geodetic3D::fromDegrees(70, -180, 1.5e5));
-    ForceGraphNode *node = new ForceGraphNode(sphere, anchor_sphere, Geodetic3D::fromDegrees(40, 0, 5));
+    ForceGraphNode *anchor = new ForceGraphNode(anchor_sphere, sphere, Geodetic3D::fromDegrees(30, -30, 1.5e5));
+    ForceGraphNode *anchor2 = new ForceGraphNode(anchor_sphere, sphere, Geodetic3D::fromDegrees(70, 0, 1.5e5));
+    ForceGraphNode *node = new ForceGraphNode(sphere, anchor_sphere, Geodetic3D::fromDegrees(35, 0, 5));
     ForceGraphNode *node2 = new ForceGraphNode(sphere, anchor_sphere, Geodetic3D::fromDegrees(0, 50, 0));
     ForceGraphNode *node3 = new ForceGraphNode(sphere, anchor_sphere, Geodetic3D::fromDegrees(31, 30, 3e5));
     ForceGraphNode *node4 = new ForceGraphNode(sphere, anchor_sphere, Geodetic3D::fromDegrees(31, 30, 3e5));
@@ -222,14 +222,242 @@ void testPlanetChargeNodesBetween(Shape* anchor_sphere, Shape* sphere, ForceGrap
 }
 
 
+void testPlanetChargeNodesBetween4AnchorsSimple(Shape* anchor_sphere, Shape* sphere, ForceGraphRenderer* forceGraphRenderer) {
+    
+    ForceGraphNode *anchor = new ForceGraphNode(anchor_sphere, sphere, Geodetic3D::fromDegrees(10, 12, 1.5e5));
+    ForceGraphNode *anchor2 = new ForceGraphNode(anchor_sphere, sphere, Geodetic3D::fromDegrees(15, 20, 1.5e5));
+    ForceGraphNode *anchor3 = new ForceGraphNode(anchor_sphere, sphere, Geodetic3D::fromDegrees(11, 3, 1.5e5));
+    ForceGraphNode *anchor4 = new ForceGraphNode(anchor_sphere, sphere, Geodetic3D::fromDegrees(14, 11, 1.5e5));
+    ForceGraphNode *node = new ForceGraphNode(sphere, anchor_sphere, Geodetic3D::fromDegrees(35, 0, 5));
+    ForceGraphNode *node2 = new ForceGraphNode(sphere, anchor_sphere, Geodetic3D::fromDegrees(0, 50, 0));
+    ForceGraphNode *node3 = new ForceGraphNode(sphere, anchor_sphere, Geodetic3D::fromDegrees(31, 30, 3e5));
+    ForceGraphNode *node4 = new ForceGraphNode(sphere, anchor_sphere, Geodetic3D::fromDegrees(31, 30, 3e5));
+    ForceGraphNode *node5 = new ForceGraphNode(sphere, anchor_sphere, Geodetic3D::fromDegrees(31, 30, 3e5));
+    ForceGraphNode *node6 = new ForceGraphNode(sphere, anchor_sphere, Geodetic3D::fromDegrees(0, 1, 3));
+    ForceGraphNode *node7 = new ForceGraphNode(sphere, anchor_sphere, Geodetic3D::fromDegrees(0, 0, 3));
+    ForceGraphNode *node8 = new ForceGraphNode(sphere, anchor_sphere, Geodetic3D::fromDegrees(0, 0, 3));
+        ForceGraphNode *node9 = new ForceGraphNode(sphere, anchor_sphere, Geodetic3D::fromDegrees(0, 0, 3));
+    
+    node->addAnchor(anchor);
+    node2->addAnchor(anchor2);
+    node3->addAnchor(anchor3);
+    node4->addAnchor(anchor4);
+    /*node->addAnchor(anchor);
+    node2->addAnchor(anchor3);
+    node2->addNeighbor(node);
+    node3->addNeighbor(node2);
+    node3->addAnchor(anchor4);
+    node4->addNeighbor(node3);
+    node5->addAnchor(anchor2);
+    node6->addNeighbor(node5);
+    node7->addNeighbor(node3);
+    node8->addNeighbor(node7);
+    node8->addAnchor(anchor);
+    node5->addNeighbor(node3);
+    node6->addNeighbor(node);
+    node9->addAnchor(anchor4);
+    node9->addNeighbor(node2);*/
+    
+    
+    forceGraphRenderer->addMark(node);
+    forceGraphRenderer->addMark(anchor);
+    forceGraphRenderer->addMark(node2);
+    forceGraphRenderer->addMark(node3);
+    forceGraphRenderer->addMark(node4);
+    forceGraphRenderer->addMark(node5);
+    forceGraphRenderer->addMark(node6);
+    forceGraphRenderer->addMark(node7);
+    forceGraphRenderer->addMark(node8);
+     forceGraphRenderer->addMark(node9);
+    forceGraphRenderer->addMark(anchor2);
+    forceGraphRenderer->addMark(anchor3);
+    forceGraphRenderer->addMark(anchor4);
+}
+
+void testPlanetChargeNodesBetween4AnchorsLessSimple(Shape* anchor_sphere, Shape* sphere, ForceGraphRenderer* forceGraphRenderer) {
+    
+    ForceGraphNode *anchor = new ForceGraphNode(anchor_sphere, sphere, Geodetic3D::fromDegrees(20, 22, 1.5e5));
+    ForceGraphNode *anchor2 = new ForceGraphNode(anchor_sphere, sphere, Geodetic3D::fromDegrees(25, 30, 1.5e5));
+    ForceGraphNode *anchor3 = new ForceGraphNode(anchor_sphere, sphere, Geodetic3D::fromDegrees(21, 13, 1.5e5));
+    ForceGraphNode *anchor4 = new ForceGraphNode(anchor_sphere, sphere, Geodetic3D::fromDegrees(24, 21, 1.5e5));
+    ForceGraphNode *node = new ForceGraphNode(sphere, anchor_sphere, Geodetic3D::fromDegrees(35, 0, 5));
+    ForceGraphNode *node2 = new ForceGraphNode(sphere, anchor_sphere, Geodetic3D::fromDegrees(0, 50, 0));
+    ForceGraphNode *node3 = new ForceGraphNode(sphere, anchor_sphere, Geodetic3D::fromDegrees(31, 30, 3e5));
+    ForceGraphNode *node4 = new ForceGraphNode(sphere, anchor_sphere, Geodetic3D::fromDegrees(31, 30, 3e5));
+    ForceGraphNode *node5 = new ForceGraphNode(sphere, anchor_sphere, Geodetic3D::fromDegrees(31, 30, 3e5));
+    ForceGraphNode *node6 = new ForceGraphNode(sphere, anchor_sphere, Geodetic3D::fromDegrees(0, 1, 3));
+    ForceGraphNode *node7 = new ForceGraphNode(sphere, anchor_sphere, Geodetic3D::fromDegrees(0, 0, 3));
+    ForceGraphNode *node8 = new ForceGraphNode(sphere, anchor_sphere, Geodetic3D::fromDegrees(0, 0, 3));
+    ForceGraphNode *node9 = new ForceGraphNode(sphere, anchor_sphere, Geodetic3D::fromDegrees(0, 0, 3));
+    
+    node->addAnchor(anchor);
+    node2->addAnchor(anchor2);
+    node3->addAnchor(anchor3);
+    node4->addAnchor(anchor4);
+    
+    node->addNeighbor(node5);
+    node6->addNeighbor(node6);
+    node6->addAnchor(anchor4);
+    
+    node3->addNeighbor(node7);
+    node7->addNeighbor(node8);
+    node8->addAnchor(anchor2);
+    
+    
+    /*node->addAnchor(anchor);
+     node2->addAnchor(anchor3);
+     node2->addNeighbor(node);
+     node3->addNeighbor(node2);
+     node3->addAnchor(anchor4);
+     node4->addNeighbor(node3);
+     node5->addAnchor(anchor2);
+     node6->addNeighbor(node5);
+     node7->addNeighbor(node3);
+     node8->addNeighbor(node7);
+     node8->addAnchor(anchor);
+     node5->addNeighbor(node3);
+     node6->addNeighbor(node);
+     node9->addAnchor(anchor4);
+     node9->addNeighbor(node2);*/
+    
+    
+    forceGraphRenderer->addMark(node);
+    forceGraphRenderer->addMark(anchor);
+    forceGraphRenderer->addMark(node2);
+    forceGraphRenderer->addMark(node3);
+    forceGraphRenderer->addMark(node4);
+    forceGraphRenderer->addMark(node5);
+    forceGraphRenderer->addMark(node6);
+    forceGraphRenderer->addMark(node7);
+    forceGraphRenderer->addMark(node8);
+    forceGraphRenderer->addMark(node9);
+    forceGraphRenderer->addMark(anchor2);
+    forceGraphRenderer->addMark(anchor3);
+    forceGraphRenderer->addMark(anchor4);
+}
+
+void testPlanetChargeNodesBetween4AnchorsLessSimple2(Shape* anchor_sphere, Shape* sphere, ForceGraphRenderer* forceGraphRenderer) {
+    
+    ForceGraphNode *anchor = new ForceGraphNode(anchor_sphere, sphere, Geodetic3D::fromDegrees(-25, 25, 1.5e5));
+    ForceGraphNode *anchor2 = new ForceGraphNode(anchor_sphere, sphere, Geodetic3D::fromDegrees(-25, 34, 1.5e5));
+    ForceGraphNode *anchor3 = new ForceGraphNode(anchor_sphere, sphere, Geodetic3D::fromDegrees(-24, 17, 1.5e5));
+    ForceGraphNode *anchor4 = new ForceGraphNode(anchor_sphere, sphere, Geodetic3D::fromDegrees(-29, 21, 1.5e5));
+    ForceGraphNode *node = new ForceGraphNode(sphere, anchor_sphere, Geodetic3D::fromDegrees(35, 0, 5));
+    ForceGraphNode *node2 = new ForceGraphNode(sphere, anchor_sphere, Geodetic3D::fromDegrees(0, 50, 0));
+    ForceGraphNode *node3 = new ForceGraphNode(sphere, anchor_sphere, Geodetic3D::fromDegrees(31, 30, 3e5));
+    ForceGraphNode *node4 = new ForceGraphNode(sphere, anchor_sphere, Geodetic3D::fromDegrees(31, 30, 3e5));
+    ForceGraphNode *node5 = new ForceGraphNode(sphere, anchor_sphere, Geodetic3D::fromDegrees(31, 30, 3e5));
+    ForceGraphNode *node6 = new ForceGraphNode(sphere, anchor_sphere, Geodetic3D::fromDegrees(0, 1, 3));
+    ForceGraphNode *node7 = new ForceGraphNode(sphere, anchor_sphere, Geodetic3D::fromDegrees(0, 0, 3));
+    ForceGraphNode *node8 = new ForceGraphNode(sphere, anchor_sphere, Geodetic3D::fromDegrees(0, 0, 3));
+    ForceGraphNode *node9 = new ForceGraphNode(sphere, anchor_sphere, Geodetic3D::fromDegrees(0, 0, 3));
+    
+    node->addAnchor(anchor);
+    node2->addAnchor(anchor2);
+    node3->addAnchor(anchor3);
+    node4->addAnchor(anchor4);
+    
+    node->addNeighbor(node5);
+    node6->addNeighbor(node6);
+    node6->addAnchor(anchor4);
+    
+    node3->addNeighbor(node7);
+    node7->addNeighbor(node8);
+    node8->addAnchor(anchor2);
+    
+    node2->addNeighbor(node9);
+    node9->addNeighbor(node2);
+    node9->addAnchor(anchor3);
+    
+    
+    /*node->addAnchor(anchor);
+     node2->addAnchor(anchor3);
+     node2->addNeighbor(node);
+     node3->addNeighbor(node2);
+     node3->addAnchor(anchor4);
+     node4->addNeighbor(node3);
+     node5->addAnchor(anchor2);
+     node6->addNeighbor(node5);
+     node7->addNeighbor(node3);
+     node8->addNeighbor(node7);
+     node8->addAnchor(anchor);
+     node5->addNeighbor(node3);
+     node6->addNeighbor(node);
+     node9->addAnchor(anchor4);
+     node9->addNeighbor(node2);*/
+    
+    
+    forceGraphRenderer->addMark(node);
+    forceGraphRenderer->addMark(anchor);
+    forceGraphRenderer->addMark(node2);
+    forceGraphRenderer->addMark(node3);
+    forceGraphRenderer->addMark(node4);
+    forceGraphRenderer->addMark(node5);
+    forceGraphRenderer->addMark(node6);
+    forceGraphRenderer->addMark(node7);
+    forceGraphRenderer->addMark(node8);
+    forceGraphRenderer->addMark(node9);
+    forceGraphRenderer->addMark(anchor2);
+    forceGraphRenderer->addMark(anchor3);
+    forceGraphRenderer->addMark(anchor4);
+}
+
+
+
+void testPlanetChargeNodesBetween4Anchors(Shape* anchor_sphere, Shape* sphere, ForceGraphRenderer* forceGraphRenderer) {
+    
+    ForceGraphNode *anchor = new ForceGraphNode(anchor_sphere, sphere, Geodetic3D::fromDegrees(30, -30, 1.5e5));
+    ForceGraphNode *anchor2 = new ForceGraphNode(anchor_sphere, sphere, Geodetic3D::fromDegrees(10, -16, 1.5e5));
+    ForceGraphNode *anchor3 = new ForceGraphNode(anchor_sphere, sphere, Geodetic3D::fromDegrees(70, -100, 1.5e5));
+    ForceGraphNode *node = new ForceGraphNode(sphere, anchor_sphere, Geodetic3D::fromDegrees(40, 0, 5));
+    ForceGraphNode *node2 = new ForceGraphNode(sphere, anchor_sphere, Geodetic3D::fromDegrees(0, 50, 0));
+    ForceGraphNode *node3 = new ForceGraphNode(sphere, anchor_sphere, Geodetic3D::fromDegrees(31, 30, 3e5));
+    ForceGraphNode *node4 = new ForceGraphNode(sphere, anchor_sphere, Geodetic3D::fromDegrees(31, 30, 3e5));
+    ForceGraphNode *node5 = new ForceGraphNode(sphere, anchor_sphere, Geodetic3D::fromDegrees(31, 30, 3e5));
+    ForceGraphNode *node6 = new ForceGraphNode(sphere, anchor_sphere, Geodetic3D::fromDegrees(0, 1, 3));
+    ForceGraphNode *node7 = new ForceGraphNode(sphere, anchor_sphere, Geodetic3D::fromDegrees(0, 0, 3));
+    ForceGraphNode *node8 = new ForceGraphNode(sphere, anchor_sphere, Geodetic3D::fromDegrees(0, 0, 3));
+    
+    node->addAnchor(anchor);
+    node2->addNeighbor(node);
+    node3->addNeighbor(node2);
+    node4->addNeighbor(node3);
+    node5->addNeighbor(node4);
+    node6->addNeighbor(node5);
+    node4->addAnchor(anchor3);
+    node5->addAnchor(anchor3);
+    
+    // node->addNeighbor(node6);
+    node7->addNeighbor(node3);
+    node8->addNeighbor(node7);
+    node8->addAnchor(anchor2);
+    node6->addNeighbor(node);
+    
+    
+    forceGraphRenderer->addMark(node);
+    forceGraphRenderer->addMark(anchor);
+    forceGraphRenderer->addMark(node2);
+    forceGraphRenderer->addMark(node3);
+    forceGraphRenderer->addMark(node4);
+    forceGraphRenderer->addMark(node5);
+    forceGraphRenderer->addMark(node6);
+    forceGraphRenderer->addMark(node7);
+    forceGraphRenderer->addMark(node8);
+    forceGraphRenderer->addMark(anchor2);
+    forceGraphRenderer->addMark(anchor3);
+    
+}
+
+
+
 /*Test with a simple graph with node anchored 90 degrees away from another anchor its neighbor is attached to but 2 nodes in between
  Testing that edges don't go into the earth
  Issues: min height -> add to planet charge - this makes nodes shake
  */
 void testPlanetCharge90DegreesNodeBetween(Shape* anchor_sphere, Shape* sphere, ForceGraphRenderer* forceGraphRenderer) {
     
-    ForceGraphNode *anchor = new ForceGraphNode(anchor_sphere, sphere, Geodetic3D::fromDegrees(0, 0, 1.5e5));
-    ForceGraphNode *anchor2 = new ForceGraphNode(anchor_sphere, sphere, Geodetic3D::fromDegrees(0, 90, 1.5e5));
+    ForceGraphNode *anchor = new ForceGraphNode(anchor_sphere, sphere, Geodetic3D::fromDegrees(40, -40, 1.5e5));
+    ForceGraphNode *anchor2 = new ForceGraphNode(anchor_sphere, sphere, Geodetic3D::fromDegrees(15, 90, 1.5e5));
     ForceGraphNode *node = new ForceGraphNode(sphere, anchor_sphere, Geodetic3D::fromDegrees(40, 0, 5e7));
     ForceGraphNode *node2 = new ForceGraphNode(sphere, anchor_sphere, Geodetic3D::fromDegrees(0, 50, 5e8));
     ForceGraphNode *node3 = new ForceGraphNode(sphere, anchor_sphere, Geodetic3D::fromDegrees(31, 30, 3e5));
@@ -252,7 +480,7 @@ void testPlanetCharge90DegreesNodeBetween(Shape* anchor_sphere, Shape* sphere, F
  */
 void testPlanetCharge90DegreesOneBetween(Shape* anchor_sphere, Shape* sphere, ForceGraphRenderer* forceGraphRenderer) {
     
-    ForceGraphNode *anchor = new ForceGraphNode(anchor_sphere, sphere, Geodetic3D::fromDegrees(0, 0, 1.5e5));
+    ForceGraphNode *anchor = new ForceGraphNode(anchor_sphere, sphere, Geodetic3D::fromDegrees(-5, 25, 1.5e5));
     ForceGraphNode *anchor2 = new ForceGraphNode(anchor_sphere, sphere, Geodetic3D::fromDegrees(0, 90, 1.5e5));
     ForceGraphNode *node = new ForceGraphNode(sphere, anchor_sphere, Geodetic3D::fromDegrees(40, 0, 5e7));
     ForceGraphNode *node2 = new ForceGraphNode(sphere, anchor_sphere, Geodetic3D::fromDegrees(0, 50, 5e8));
@@ -325,13 +553,17 @@ void testPlanetCharge360Degrees(Shape* anchor_sphere, Shape* sphere, ForceGraphR
     
     
     ForceGraphRenderer *forceGraphRenderer = new ForceGraphRenderer(shapesRenderer, 50);
-    //testOneAnchorManyNodes4Clique(anchor_sphere, sphere, forceGraphRenderer);
-    // testOneAnchorManyNodes(anchor_sphere, sphere, forceGraphRenderer);
-    // testOneAnchorManyNodesCycles(anchor_sphere, sphere, forceGraphRenderer);
-    /* testPlanetCharge90DegreesOneBetween(anchor_sphere, sphere, forceGraphRenderer);
-     testPlanetCharge90DegreesNodeBetween(anchor_sphere, sphere, forceGraphRenderer);
-     testPlanetCharge360Degrees(anchor_sphere, sphere, forceGraphRenderer);
-     testPlanetChargeNodesBetween(anchor_sphere, sphere, forceGraphRenderer);*/
+    //testOneAnchorManyNodes4Clique(anchor_sphere, sphere, forceGraphRenderer); //no..
+     testOneAnchorManyNodes(anchor_sphere, sphere, forceGraphRenderer);
+    // testOneAnchorManyNodesCycles(anchor_sphere, sphere, forceGraphRenderer); //sometimes...
+   //  testPlanetCharge90DegreesOneBetween(anchor_sphere, sphere, forceGraphRenderer);
+     //testPlanetCharge90DegreesNodeBetween(anchor_sphere, sphere, forceGraphRenderer);
+  //   testPlanetCharge360Degrees(anchor_sphere, sphere, forceGraphRenderer); //haha
+     testPlanetChargeNodesBetween(anchor_sphere, sphere, forceGraphRenderer);
+    testPlanetChargeNodesBetween4AnchorsSimple(anchor_sphere, sphere, forceGraphRenderer);
+     testPlanetChargeNodesBetween4AnchorsLessSimple(anchor_sphere, sphere, forceGraphRenderer);
+    testPlanetChargeNodesBetween4AnchorsLessSimple2(anchor_sphere, sphere, forceGraphRenderer);
+    
     
     
     builder.addRenderer(forceGraphRenderer);

@@ -54,11 +54,6 @@ public:
 
     _newCounter++;
     showStatistics();
-
-//    if (size == 48 || size == 36) {
-//#warning DGD_At_Work;
-//      printf("break point on me\n");
-//    }
   }
 
   long long getID() const {

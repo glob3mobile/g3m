@@ -20,16 +20,21 @@ _radii( Vector3D(sphere._radius, sphere._radius, sphere._radius) )
 
 Vector3D SphericalPlanet::geodeticSurfaceNormal(const Angle& latitude,
                                                 const Angle& longitude) const {
-//  const double cosLatitude = latitude.cosinus();
-//
-//  return Vector3D(cosLatitude * longitude.cosinus(),
-//                  cosLatitude * longitude.sinus(),
-//                  latitude.sinus());
   const double cosLatitude = COS(latitude._radians);
 
   return Vector3D(cosLatitude * COS(longitude._radians),
                   cosLatitude * SIN(longitude._radians),
                   SIN(latitude._radians));
+}
+
+void SphericalPlanet::geodeticSurfaceNormal(const Angle& latitude,
+                                            const Angle& longitude,
+                                            MutableVector3D& result) const {
+  const double cosLatitude = COS(latitude._radians);
+
+  result.set(cosLatitude * COS(longitude._radians),
+             cosLatitude * SIN(longitude._radians),
+             SIN(latitude._radians));
 }
 
 std::vector<double> SphericalPlanet::intersectionsDistances(double originX,
@@ -82,6 +87,21 @@ Vector3D SphericalPlanet::toCartesian(const Angle& latitude,
                                       const Angle& longitude,
                                       const double height) const {
   return geodeticSurfaceNormal(latitude, longitude).times( _sphere._radius + height);
+}
+
+void SphericalPlanet::toCartesian(const Angle& latitude,
+                                  const Angle& longitude,
+                                  const double height,
+                                  MutableVector3D& result) const {
+  geodeticSurfaceNormal(latitude, longitude, result);
+  const double nX = result.x();
+  const double nY = result.y();
+  const double nZ = result.z();
+
+  const double K = _sphere._radius + height;
+  result.set(nX * K,
+             nY * K,
+             nZ * K);
 }
 
 Geodetic2D SphericalPlanet::toGeodetic2D(const Vector3D& position) const {

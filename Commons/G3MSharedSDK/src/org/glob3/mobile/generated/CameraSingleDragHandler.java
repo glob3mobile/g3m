@@ -96,7 +96,7 @@ public class CameraSingleDragHandler extends CameraEventHandler
     Camera camera = cameraContext.getNextCamera();
     _camera0.copyFrom(camera);
     // dragging
-    final Vector2I pixel = touchEvent.getTouch(0).getPos();
+    final Vector2F pixel = touchEvent.getTouch(0).getPos();
     final Vector3D initialRay = _camera0.pixel2Ray(pixel);
     if (!initialRay.isNan())
     {
@@ -134,8 +134,8 @@ public class CameraSingleDragHandler extends CameraEventHandler
     if (_useInertia)
     {
       final Touch touch = touchEvent.getTouch(0);
-      final Vector2I currPixel = touch.getPos();
-      final Vector2I prevPixel = touch.getPrevPos();
+      final Vector2F currPixel = touch.getPos();
+      final Vector2F prevPixel = touch.getPrevPos();
       final double desp = currPixel.sub(prevPixel).length();
   
       final float delta = IFactory.instance().getDeviceInfo().getPixelsInMM(0.2f);

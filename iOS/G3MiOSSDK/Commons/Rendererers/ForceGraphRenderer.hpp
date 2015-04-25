@@ -85,7 +85,6 @@ public:
     bool isAnchor() const;
     std::vector<ForceGraphNode*>& getNeighbors();
     void setVisited(bool visited);
-    void addEdge(ForceGraphNode* n); //adds edge from this node to specified node
     void setAsAnchor(); //sets this node as an anchor, change shape (todo)
     void addNeighbor(ForceGraphNode* n); //adds n to list of neighbors
     void addAnchor(ForceGraphNode* anchor); //adds anchor to this node. Makes that node an anchor.

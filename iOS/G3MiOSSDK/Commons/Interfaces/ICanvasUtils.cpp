@@ -47,7 +47,8 @@ void ICanvasUtils::drawStringsOn(const std::vector<std::string>& strings,
       }
     }
   }
-  canvas->setShadow(shadowColor, 1.0f, 1.0f, -1.0f);
+//  canvas->setShadow(shadowColor, 1.0f, 1.0f, -1.0f);
+  canvas->setShadow(shadowColor, 1.0f, 0.0f, 0.0f);
 
   ColumnCanvasElement column(backgroundColor,
                              0,  /* margin */

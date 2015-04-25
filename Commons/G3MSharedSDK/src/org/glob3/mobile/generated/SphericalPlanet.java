@@ -73,11 +73,6 @@ public class SphericalPlanet extends Planet
 
   public final Vector3D geodeticSurfaceNormal(Angle latitude, Angle longitude)
   {
-  //  const double cosLatitude = latitude.cosinus();
-  //
-  //  return Vector3D(cosLatitude * longitude.cosinus(),
-  //                  cosLatitude * longitude.sinus(),
-  //                  latitude.sinus());
     final double cosLatitude = java.lang.Math.cos(latitude._radians);
   
     return new Vector3D(cosLatitude * java.lang.Math.cos(longitude._radians), cosLatitude * java.lang.Math.sin(longitude._radians), java.lang.Math.sin(latitude._radians));
@@ -91,6 +86,13 @@ public class SphericalPlanet extends Planet
   public final Vector3D geodeticSurfaceNormal(Geodetic2D geodetic)
   {
     return geodeticSurfaceNormal(geodetic._latitude, geodetic._longitude);
+  }
+
+  public final void geodeticSurfaceNormal(Angle latitude, Angle longitude, MutableVector3D result)
+  {
+    final double cosLatitude = java.lang.Math.cos(latitude._radians);
+  
+    result.set(cosLatitude * java.lang.Math.cos(longitude._radians), cosLatitude * java.lang.Math.sin(longitude._radians), java.lang.Math.sin(latitude._radians));
   }
 
   public final java.util.ArrayList<Double> intersectionsDistances(double originX, double originY, double originZ, double directionX, double directionY, double directionZ)
@@ -157,6 +159,31 @@ public class SphericalPlanet extends Planet
   public final Vector3D toCartesian(Geodetic2D geodetic, double height)
   {
     return toCartesian(geodetic._latitude, geodetic._longitude, height);
+  }
+
+  public final void toCartesian(Angle latitude, Angle longitude, double height, MutableVector3D result)
+  {
+    geodeticSurfaceNormal(latitude, longitude, result);
+    final double nX = result.x();
+    final double nY = result.y();
+    final double nZ = result.z();
+  
+    final double K = _sphere._radius + height;
+    result.set(nX * K, nY * K, nZ * K);
+  }
+
+  public final void toCartesian(Geodetic3D geodetic, MutableVector3D result)
+  {
+    toCartesian(geodetic._latitude, geodetic._longitude, geodetic._height, result);
+  }
+
+  public final void toCartesian(Geodetic2D geodetic, MutableVector3D result)
+  {
+    toCartesian(geodetic._latitude, geodetic._longitude, 0, result);
+  }
+  public final void toCartesian(Geodetic2D geodetic, double height, MutableVector3D result)
+  {
+    toCartesian(geodetic._latitude, geodetic._longitude, height, result);
   }
 
   public final Geodetic2D toGeodetic2D(Vector3D position)

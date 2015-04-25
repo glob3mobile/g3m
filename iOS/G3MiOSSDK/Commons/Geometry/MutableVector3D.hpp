@@ -51,7 +51,7 @@ public:
   {
   }
 
-  void put(const double x,
+  void set(const double x,
            const double y,
            const double z) {
     _x = x;

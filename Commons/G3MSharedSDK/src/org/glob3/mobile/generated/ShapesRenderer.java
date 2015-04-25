@@ -49,25 +49,25 @@ public class ShapesRenderer extends DefaultRenderer
   private void updateGLState(G3MRenderContext rc)
   {
   
-    final Camera cam = rc.getCurrentCamera();
+    final Camera camera = rc.getCurrentCamera();
     ModelViewGLFeature f = (ModelViewGLFeature) _glState.getGLFeature(GLFeatureID.GLF_MODEL_VIEW);
     if (f == null)
     {
-      _glState.addGLFeature(new ModelViewGLFeature(cam), true);
+      _glState.addGLFeature(new ModelViewGLFeature(camera), true);
     }
     else
     {
-      f.setMatrix(cam.getModelViewMatrix44D());
+      f.setMatrix(camera.getModelViewMatrix44D());
     }
   
     f = (ModelViewGLFeature) _glStateTransparent.getGLFeature(GLFeatureID.GLF_MODEL_VIEW);
     if (f == null)
     {
-      _glStateTransparent.addGLFeature(new ModelViewGLFeature(cam), true);
+      _glStateTransparent.addGLFeature(new ModelViewGLFeature(camera), true);
     }
     else
     {
-      f.setMatrix(cam.getModelViewMatrix44D());
+      f.setMatrix(camera.getModelViewMatrix44D());
     }
   
   }
@@ -263,7 +263,7 @@ public class ShapesRenderer extends DefaultRenderer
       if (touchEvent.getTouchCount() == 1 && touchEvent.getTapCount() == 1 && touchEvent.getType() == TouchEventType.Down)
       {
         final Vector3D origin = _lastCamera.getCartesianPosition();
-        final Vector2I pixel = touchEvent.getTouch(0).getPos();
+        final Vector2F pixel = touchEvent.getTouch(0).getPos();
         final Vector3D direction = _lastCamera.pixel2Ray(pixel);
         final Planet planet = ec.getPlanet();
         if (!direction.isNan())
@@ -302,7 +302,8 @@ public class ShapesRenderer extends DefaultRenderer
     // Saving camera for use in onTouchEvent
     _lastCamera = rc.getCurrentCamera();
   
-    final MutableVector3D cameraPosition = rc.getCurrentCamera().getCartesianPositionMutable();
+    MutableVector3D cameraPosition = new MutableVector3D();
+    rc.getCurrentCamera().getCartesianPositionMutable(cameraPosition);
   
     //Setting camera matrixes
     updateGLState(rc);

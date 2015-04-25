@@ -52,7 +52,8 @@ public class ICanvasUtils
         }
       }
     }
-    canvas.setShadow(shadowColor, 1.0f, 1.0f, -1.0f);
+  //  canvas->setShadow(shadowColor, 1.0f, 1.0f, -1.0f);
+    canvas.setShadow(shadowColor, 1.0f, 0.0f, 0.0f);
   
     ColumnCanvasElement column = new ColumnCanvasElement(backgroundColor, 0, padding, cornerRadius, textAlign); // margin
     final GFont labelFont = GFont.sansSerif(fontSize);

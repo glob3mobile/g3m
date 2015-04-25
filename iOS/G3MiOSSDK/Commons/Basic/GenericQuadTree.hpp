@@ -26,18 +26,18 @@ public:
 
 class GenericQuadTreeVisitor {
 
-  mutable int _comparisonsDone;
+  mutable size_t _comparisonsDone;
 
 public:
   GenericQuadTreeVisitor(): _comparisonsDone(0) {}
   virtual ~GenericQuadTreeVisitor() {
   }
 
-  void addComparisonsDoneWhileVisiting(int n) const {
+  void addComparisonsDoneWhileVisiting(size_t n) const {
     _comparisonsDone += n;
   }
 
-  int getNComparisonsDone() const {
+  size_t getNComparisonsDone() const {
     return _comparisonsDone;
   }
 
@@ -189,7 +189,7 @@ public:
     return _depth;
   }
 
-  int getNElements() const {
+  size_t getNElements() const {
     return _elements.size();
   }
 
@@ -197,8 +197,8 @@ public:
     return _children == NULL;
   }
 
-  int getSubtreeNElements() const {
-    int n = _elements.size();
+  size_t getSubtreeNElements() const {
+    size_t n = _elements.size();
     if (_children != NULL) {
       for (int i = 0; i<4;i++) {
         n += _children[i]->getSubtreeNElements();
@@ -355,7 +355,7 @@ class GenericQuadTree_TESTER {
     int _maxDepth;
     int _meanDepth;
 
-    int _maxNEle;
+    size_t _maxNEle;
     int _meanElemDepth;
     int _nNodes;
     int _nElem;

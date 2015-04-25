@@ -12,6 +12,7 @@
 #include "GPUVariableValueSet.hpp"
 #include "GLFeatureGroup.hpp"
 #include "GPUAttribute.hpp"
+#include "Vector2F.hpp"
 
 #include "RCObject.hpp"
 
@@ -74,13 +75,26 @@ private:
     super.dispose();
 #endif
   }
-
+  
+  GPUUniformValueVec2FloatMutable* _size;
+  GPUUniformValueVec2FloatMutable* _anchor;
+  
 public:
   BillboardGLFeature(const Vector3D& position,
-                     int textureWidth,
-                     int textureHeight);
-
+                     float billboardWidth,
+                     float billboardHeight,
+                     float anchorU, float anchorV);
+  
   void applyOnGlobalGLState(GLGlobalState* state) const;
+  
+  void changeSize(int textureWidth,
+                  int textureHeight){
+    _size->changeValue(textureWidth, textureHeight);
+  }
+  
+  void changeAnchor(float anchorU, float anchorV){
+    _anchor->changeValue(anchorU, anchorV);
+  }
 };
 
 class ViewportExtentGLFeature: public GLFeature {
@@ -96,6 +110,9 @@ private:
 public:
   ViewportExtentGLFeature(int viewportWidth,
                           int viewportHeight);
+
+  ViewportExtentGLFeature(const Camera* camera);
+
   void applyOnGlobalGLState(GLGlobalState* state)  const {}
   
   void changeExtent(int viewportWidth,
@@ -146,35 +163,36 @@ public:
 
 
 class Geometry2DGLFeature: public GLFeature {
-  private:
+
+private:
   //Position + cull + depth + polygonoffset + linewidth
   GPUAttributeValueVec2Float* _position;
-  
+
   const float _lineWidth;
-  
+
   ~Geometry2DGLFeature();
-  
+
   GPUUniformValueVec2FloatMutable* _translation;
-  
-  public:
-  
+
+public:
+
   Geometry2DGLFeature(IFloatBuffer* buffer,
-                    int arrayElementSize,
-                    int index,
-                    bool normalized,
-                    int stride,
-                    float lineWidth,
-                    bool needsPointSize,
-                    float pointSize,
-                    const Vector2F& translation);
-  
+                      int arrayElementSize,
+                      int index,
+                      bool normalized,
+                      int stride,
+                      float lineWidth,
+                      bool needsPointSize,
+                      float pointSize,
+                      const Vector2F& translation);
+
   void setTranslation(float x, float y){
     _translation->changeValue(x, y);
   }
-  
-  
+
+
   void applyOnGlobalGLState(GLGlobalState* state) const ;
-  
+
 };
 ///////////////////////////////////////////////////////////////////////////////////////////
 
@@ -236,7 +254,7 @@ public:
   {
   }
 
-  ModelViewGLFeature(const Camera* cam);
+  ModelViewGLFeature(const Camera* camera);
 };
 
 class ModelGLFeature: public GLCameraGroupFeature {
@@ -253,7 +271,7 @@ public:
   {
   }
 
-  ModelGLFeature(const Camera* cam);
+  ModelGLFeature(const Camera* camera);
 };
 
 class ProjectionGLFeature: public GLCameraGroupFeature {
@@ -270,7 +288,7 @@ public:
   {
   }
 
-  ProjectionGLFeature(const Camera* cam);
+  ProjectionGLFeature(const Camera* camera);
 };
 
 class ModelTransformGLFeature: public GLCameraGroupFeature {
@@ -403,6 +421,8 @@ public:
                    int sFactor,
                    int dFactor,
                    int target = 0);
+  
+  bool hasTranslateAndScale() const { return _translation != NULL && _scale != NULL;}
 
   void setTranslation(float u, float v);
   void setScale(float u, float v);

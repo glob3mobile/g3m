@@ -12,10 +12,10 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.glob3mobile.pointcloud.octree.Geodetic3D;
 import com.glob3mobile.pointcloud.octree.PersistentOctree;
-import com.glob3mobile.pointcloud.octree.Sector;
-import com.glob3mobile.pointcloud.octree.Utils;
+import com.glob3mobile.utils.Geodetic3D;
+import com.glob3mobile.utils.Sector;
+import com.glob3mobile.utils.Utils;
 import com.sleepycat.je.Cursor;
 import com.sleepycat.je.CursorConfig;
 import com.sleepycat.je.Database;

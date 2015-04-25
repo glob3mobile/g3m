@@ -481,20 +481,26 @@ public class GPUProgram
     GPUUniform u = _uniforms[key];
     if (u == null)
     {
-      ILogger.instance().logError("Uniform [key=%d] not found", key);
+      ILogger.instance().logError("Uniform [key=%d] not found in program %s", key, _name);
       return;
     }
-    u.set(v);
+    else
+    {
+      u.set(v);
+    }
   }
   public final void setGPUAttributeValue(int key, GPUAttributeValue v)
   {
     GPUAttribute a = _attributes[key];
     if (a == null)
     {
-      ILogger.instance().logError("Attribute [key=%d] not found", key);
+      ILogger.instance().logError("Attribute [key=%d] not found in program %s", key, _name);
       return;
     }
-    a.set(v);
+    else
+    {
+      a.set(v);
+    }
   }
 
   public final void addReference()

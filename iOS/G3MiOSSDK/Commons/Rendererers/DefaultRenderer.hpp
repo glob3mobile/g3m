@@ -25,7 +25,7 @@ private:
   
   std::vector<const Info*> _info;
   
-  void notifyChangedInfo(const std::vector<const Info*> info);
+  void notifyChangedInfo(const std::vector<const Info*>& info);
   
 protected:
   
@@ -124,9 +124,9 @@ public:
     return false;
   }
   
-  void setInfo(const std::vector<const Info*> info);
+  void setInfo(const std::vector<const Info*>& info);
   
-  void addInfo(const std::vector<const Info*> info);
+  void addInfo(const std::vector<const Info*>& info);
   
   void addInfo(const Info* info);
 

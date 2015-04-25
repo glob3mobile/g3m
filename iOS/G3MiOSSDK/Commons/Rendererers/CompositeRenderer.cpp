@@ -21,7 +21,8 @@ void CompositeRenderer::addRenderer(Renderer *renderer) {
   addChildRenderer(new ChildRenderer(renderer));
 }
 
-void CompositeRenderer::addRenderer(Renderer *renderer, const std::vector<const Info*> info) {
+void CompositeRenderer::addRenderer(Renderer *renderer,
+                                    const std::vector<const Info*>& info) {
   addChildRenderer(new ChildRenderer(renderer, info));
 }
 
@@ -228,7 +229,8 @@ void CompositeRenderer::setChangedRendererInfoListener(ChangedRendererInfoListen
   }
 }
 
-void CompositeRenderer::changedRendererInfo(const int rendererIdentifier, const std::vector<const Info*> info) {
+void CompositeRenderer::changedRendererInfo(const int rendererIdentifier,
+                                            const std::vector<const Info*>& info) {
   if(rendererIdentifier >= 0 && rendererIdentifier < _renderersSize) {
     _renderers[rendererIdentifier]->setInfo(info);
   }

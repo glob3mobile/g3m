@@ -15,6 +15,8 @@ import javax.imageio.ImageIO;
 
 import com.glob3mobile.pointcloud.octree.berkeleydb.BerkeleyDBLOD;
 import com.glob3mobile.pointcloud.octree.berkeleydb.BerkeleyDBOctree;
+import com.glob3mobile.utils.Geodetic3D;
+import com.glob3mobile.utils.Sector;
 
 import es.igosoftware.util.GUndeterminateProgress;
 
@@ -69,14 +71,20 @@ public class ProcessOT {
 
       //      final File cloudDirectory = new File("/Volumes/My Passport/_belgium_lidar_/db");
       //
-      //      final String sourceCloudName = "Wallonia-Belgium";
+      //      final String sourceCloudName = "Wallonia-Belgium_simplified2";
       //      final String lodCloudName = sourceCloudName + "_LOD";
 
+      final File cloudDirectory = new File(System.getProperty("user.dir"));
 
-      final File cloudDirectory = new File("/Volumes/My Passport/_minnesota_lidar_/db");
-
-      final String sourceCloudName = "minnesota";
+      //      final String sourceCloudName = "Wallonia_simplified";
+      final String sourceCloudName = "Wallonia";
       final String lodCloudName = sourceCloudName + "_LOD";
+
+
+      //      final File cloudDirectory = new File("/Volumes/My Passport/_minnesota_lidar_/db");
+      //
+      //      final String sourceCloudName = "minnesota";
+      //      final String lodCloudName = sourceCloudName + "_LOD";
 
 
       final long cacheSizeInBytes = 4 * 1024 * 1024 * 1024;
@@ -245,7 +253,7 @@ public class ProcessOT {
                         public void informProgress(final long stepsDone,
                                                    final long elapsed) {
                            System.out.println("- gathering statistics for \"" + lodDB.getCloudName() + "\""
-                                    + progressString(stepsDone, elapsed));
+                                              + progressString(stepsDone, elapsed));
                         }
                      };
                   }
@@ -290,8 +298,8 @@ public class ProcessOT {
                      System.out.println("     Points/Node: " + ((float) _pointsCounter / _nodesCounter));
                      System.out.println("     Points/Level: " + ((float) _pointsCounter / _levelsCounter));
                      System.out.println("   Density/Node: Average=" + (_sumDensity / _nodesCounter) + //
-                              ", Min=" + _minDensity + //
-                              ", Max=" + _maxDensity);
+                                        ", Min=" + _minDensity + //
+                                        ", Max=" + _maxDensity);
                      System.out.println("======================================================================");
                   }
                };

@@ -11,12 +11,12 @@
 
 #include "CameraEventHandler.hpp"
 #include "Camera.hpp"
-#include "MutableVector2I.hpp"
+#include "MutableVector2F.hpp"
 
 class CameraRotationHandler: public CameraEventHandler {
 private:
   MutableVector3D _pivotPoint;    //Initial point at dragging
-  MutableVector2I _pivotPixel;  //Initial pixel at start of gesture
+  MutableVector2F _pivotPixel;  //Initial pixel at start of gesture
 
 //  int _lastYValid;
   Camera _camera0;         //Initial Camera saved on Down event

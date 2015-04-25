@@ -58,7 +58,7 @@ public:
   virtual int indexOf(const std::string& string,
                       const std::string& search,
                       int fromIndex) const = 0;
-  
+
   virtual int indexOf(const std::string& string,
                       const std::string& search,
                       int fromIndex,
@@ -66,9 +66,9 @@ public:
 
   virtual int indexOfFirstNonBlank(const std::string& string,
                                    int fromIndex) const = 0;
-  
-//  virtual int indexOfFirstBlank(const std::string& string,
-//                                int fromIndex) const = 0;
+
+  //  virtual int indexOfFirstBlank(const std::string& string,
+  //                                int fromIndex) const = 0;
 
   virtual int indexOfFirstNonChar(const std::string& string,
                                   const std::string& chars,
@@ -123,21 +123,6 @@ public:
                             replaceString,
                             0,
                             originalString.size());
-//    int startIndex = indexOf(originalString, searchString);
-//    //The part to replace was not found. Return original String
-//    if (startIndex == -1) {
-//      return originalString;
-//    }
-//    const int endIndex = startIndex + searchString.size();
-//    const std::string left = substring(originalString, 0, startIndex);
-//    const std::string right = substring(originalString, endIndex);
-//    const std::string result = left + replaceString + right;
-//    startIndex = indexOf(result, searchString);
-//    if (startIndex != -1) {
-//      //recursive call to replace other ocurrences
-//      return replaceSubstring(result, searchString, replaceString);
-//    }
-//    return result;
   }
 
   virtual std::string left(const std::string& string,
@@ -164,7 +149,7 @@ public:
   virtual std::string toString(float value) const = 0;
 
   virtual double parseDouble(const std::string& str) const = 0;
-
+  
 };
 
 #endif

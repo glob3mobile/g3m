@@ -356,7 +356,7 @@
 		DF2BB81B1A8E7797004D16D6 /* Frustum.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Frustum.cpp; sourceTree = "<group>"; };
 		DF2BB81C1A8E7797004D16D6 /* Frustum.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Frustum.hpp; sourceTree = "<group>"; };
 		DF2BB81D1A8E7797004D16D6 /* Geodetic2D.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Geodetic2D.cpp; sourceTree = "<group>"; };
-		DF2BB81E1A8E7797004D16D6 /* Geodetic2D.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Geodetic2D.hpp; sourceTree = "<group>"; };
+		DF2BB81E1A8E7797004D16D6 /* Geodetic2D.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Geodetic2D.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		DF2BB81F1A8E7797004D16D6 /* Geodetic3D.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Geodetic3D.cpp; sourceTree = "<group>"; };
 		DF2BB8201A8E7797004D16D6 /* Geodetic3D.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Geodetic3D.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		DF2BB8211A8E7797004D16D6 /* LayoutUtils.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = LayoutUtils.cpp; sourceTree = "<group>"; };

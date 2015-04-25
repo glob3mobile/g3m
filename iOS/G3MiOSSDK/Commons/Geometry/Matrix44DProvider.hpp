@@ -77,7 +77,7 @@ class Matrix44DMultiplicationHolder : public Matrix44DProvider {
 private:
   const Matrix44D**         _matrices;
   const Matrix44DProvider** _providers;
-  const int _matricesSize;
+  const size_t _matricesSize;
   mutable Matrix44D* _modelview;
 
   void pullMatrixes() const;
@@ -86,7 +86,7 @@ private:
 
 public:
   Matrix44DMultiplicationHolder(const Matrix44DProvider* providers[],
-                                int matricesSize);
+                                size_t matricesSize);
 
   Matrix44D* getMatrix() const;
   
@@ -99,13 +99,13 @@ private:
 
 public:
   ~Matrix44DMultiplicationHolderBuilder() {
-    const int providersSize = _providers.size();
-    for (int i = 0; i < providersSize; i++) {
+    const size_t providersSize = _providers.size();
+    for (size_t i = 0; i < providersSize; i++) {
       _providers[i]->_release();
     }
   }
 
-  int size() const {
+  size_t size() const {
     return _providers.size();
   }
   
@@ -115,9 +115,9 @@ public:
   }
 
   Matrix44DMultiplicationHolder* create() const {
-    const int providersSize = _providers.size();
+    const size_t providersSize = _providers.size();
     const Matrix44DProvider* ps[providersSize];
-    for (int i = 0; i < providersSize; i++) {
+    for (size_t i = 0; i < providersSize; i++) {
       ps[i] = _providers[i];
     }
 

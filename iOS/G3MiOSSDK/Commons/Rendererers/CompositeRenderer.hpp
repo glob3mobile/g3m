@@ -67,7 +67,8 @@ public:
 
   void addRenderer(Renderer* renderer);
 
-  void addRenderer(Renderer* renderer, const std::vector<const Info*> info);
+  void addRenderer(Renderer* renderer,
+                   const std::vector<const Info*>& info);
   
   void addChildRenderer(ChildRenderer* renderer);
 
@@ -91,7 +92,8 @@ public:
   
   void setChangedRendererInfoListener(ChangedRendererInfoListener* changedInfoListener, const int rendererIdentifier);
   
-  void changedRendererInfo(const int rendererIdentifier, const std::vector<const Info*> info);
+  void changedRendererInfo(const int rendererIdentifier,
+                           const std::vector<const Info*>& info);
   
 };
 

@@ -39,6 +39,6 @@ Vector2D Vector2D::intersectionOfTwoLines(const Vector2D& p1, const Vector2D& r1
   Vector2D out = p2.add(r2.times(u));
   
   return out;
-  
-  
+
 }
+

@@ -5,7 +5,8 @@ package com.glob3mobile.pointcloud;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.glob3mobile.pointcloud.octree.Geodetic3D;
+import com.glob3mobile.utils.Geodetic3D;
+import com.glob3mobile.utils.Planet;
 
 import es.igosoftware.euclid.vector.GVector3D;
 

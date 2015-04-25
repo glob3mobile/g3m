@@ -411,8 +411,8 @@ void G3MWidget::onResizeViewportEvent(int width, int height) {
 
 
 void G3MWidget::resetPeriodicalTasksTimeouts() {
-  const int periodicalTasksCount = _periodicalTasks.size();
-  for (int i = 0; i < periodicalTasksCount; i++) {
+  const size_t periodicalTasksCount = _periodicalTasks.size();
+  for (size_t i = 0; i < periodicalTasksCount; i++) {
     PeriodicalTask* pt = _periodicalTasks[i];
     pt->resetTimeout();
   }
@@ -508,15 +508,15 @@ void G3MWidget::render(int width, int height) {
   }
 
   // Start periodical tasks
-  const int periodicalTasksCount = _periodicalTasks.size();
-  for (int i = 0; i < periodicalTasksCount; i++) {
+  const size_t periodicalTasksCount = _periodicalTasks.size();
+  for (size_t i = 0; i < periodicalTasksCount; i++) {
     PeriodicalTask* pt = _periodicalTasks[i];
     pt->executeIfNecessary(_context);
   }
 
   // give to the CameraContrainers the opportunity to change the nextCamera
-  const int cameraConstrainersCount = _cameraConstrainers.size();
-  for (int i = 0; i< cameraConstrainersCount; i++) {
+  const size_t cameraConstrainersCount = _cameraConstrainers.size();
+  for (size_t i = 0; i< cameraConstrainersCount; i++) {
     ICameraConstrainer* constrainer = _cameraConstrainers[i];
     constrainer->onCameraChange(_planet,
                                 _currentCamera,
@@ -575,8 +575,8 @@ void G3MWidget::render(int width, int height) {
 
   std::vector<OrderedRenderable*>* orderedRenderables = _renderContext->getSortedOrderedRenderables();
   if (orderedRenderables != NULL) {
-    const int orderedRenderablesCount = orderedRenderables->size();
-    for (int i = 0; i < orderedRenderablesCount; i++) {
+    const size_t orderedRenderablesCount = orderedRenderables->size();
+    for (size_t i = 0; i < orderedRenderablesCount; i++) {
       OrderedRenderable* orderedRenderable = orderedRenderables->at(i);
       orderedRenderable->render(_renderContext);
       delete orderedRenderable;
@@ -854,7 +854,8 @@ bool G3MWidget::setRenderedSector(const Sector& sector) {
 //  }
 //}
 
-void G3MWidget::changedRendererInfo(const int rendererIdentifier, const std::vector<const Info*> info) {
+void G3MWidget::changedRendererInfo(const int rendererIdentifier,
+                                    const std::vector<const Info*>& info) {
   if(_infoDisplay != NULL){
     _infoDisplay->changedInfo(info);
   }

@@ -96,9 +96,6 @@ _resistanceFactor(resistanceFactor)
                                     false,
                                     Color::fromRGBA((float).5, (float) 0, (float) .5, (float) .9));
     
-    //set value of shape to the thing passed in
-    // _anchorShape = anchorShape;
-    // _nodeShape = nodeShape;
     
     ( _nodeShape)->setPosition(*_geoPosition);
     (_anchorShape)->setPosition(*_geoPosition);
@@ -118,27 +115,12 @@ ForceGraphNode::~ForceGraphNode()
 Vector3D ForceGraphNode::getCartesianPosition(const Planet* planet) const{
     // if (_cartesianPos == NULL){
     Vector3D translation = Vector3D(_tX, _tY, _tZ);
-    /* if(this->getAnchor()) {
-     _cartesianPos = new Vector3D(getAnchor()->getCartesianPosition(planet).add(translation));
-     _anchorShape->setPosition(planet->toGeodetic3D(*_cartesianPos));
-     // _anchorShape->setTranslation(translation);
-     //_nodeShape->setTranslation(translation);
-     _nodeShape->setPosition(planet->toGeodetic3D(*_cartesianPos));
-     
-     }
-     else {*/
     _cartesianPos = new Vector3D(planet->toCartesian(*_geoPosition).add(translation));
-    
     Geodetic3D gpos = planet->toGeodetic3D(*_cartesianPos);
     Vector3D test = planet->toCartesian(_anchorShape->getPosition());
     _anchorShape->setPosition(gpos);
     _nodeShape->setPosition(gpos);
-    /*  _anchorShape->setTranslation(Vector3D(0, 0 ,0));
-     _nodeShape->setTranslation(Vector3D(0, 0 ,0));
-     _anchorShape->setTranslation(translation);
-     _nodeShape->setTranslation(translation);*/
-    // }
-    //}
+
     return *_cartesianPos;
 }
 
@@ -156,44 +138,6 @@ void ForceGraphNode::addNeighbor(ForceGraphNode* n) {
     std::vector<ForceGraphNode*> neighafter = n->getNeighbors();
     
     
-    /*if(n->isAnchor()) {
-     setPos(n->_geoPosition);
-     }
-     else {*/
-    //   n->setPos(Geodetic3D(Angle::fromDegrees(0), Angle::fromDegrees(0), 5));
-    // }
-    /* const Geodetic3D pos = Geodetic3D(n->getPos());
-     
-     //getting around the lack of copy contructor:
-     _geoPosition.sub(_geoPosition);
-     _geoPosition.add(pos);*/
-    
-}
-
-void ForceGraphNode::addEdge(ForceGraphNode* n) {
-    /* _neighbors.push_back(n);
-     n->addNeighbor(n);
-     
-     const Geodetic3D pos = Geodetic3D(n->getPos());
-     
-     //getting around the lack of copy contructor:
-     _geoPosition.sub(_geoPosition);
-     _geoPosition.add(pos);*/
-    _neighbors.push_back(n);
-    n->getNeighbors().push_back(this);
-    /*if(n->isAnchor()) {
-     setPos(n->_geoPosition);
-     }
-     else {*/
-    n->setPos(Geodetic3D(Angle::fromDegrees(0), Angle::fromDegrees(0), 5));
-    // }
-    /* const Geodetic3D pos = Geodetic3D(n->getPos());
-     
-     //getting around the lack of copy contructor:
-     _geoPosition.sub(_geoPosition);
-     _geoPosition.add(pos);*/
-    
-    
 }
 
 void ForceGraphNode::addAnchor(ForceGraphNode* anchor) {
@@ -207,8 +151,6 @@ void ForceGraphNode::addAnchor(ForceGraphNode* anchor) {
 
 void ForceGraphNode::setAsAnchor() {
     _isAnchor = true;
-    // _shapesRenderer->removeAllShapes(false);
-    //_shapesRenderer->addShape(_anchorShape);
     
 }
 
@@ -234,7 +176,10 @@ void ForceGraphNode::applyCoulombsLaw(ForceGraphNode *that, const Planet* planet
     //this prevents divide by 0 -- "infinite energy"
     if(distance < 5) {
         strength = 100;
-        Vector3D force = (Vector3D(rand() % 5, rand() % 5,rand() % 5)).times(strength); //TODO - random not working in java
+        double r1 = IMathUtils::instance()->nextRandomDouble();
+        double r2 = IMathUtils::instance()->nextRandomDouble();
+        double r3 = IMathUtils::instance()->nextRandomDouble();
+        Vector3D force = (Vector3D(r1*5, r2*5,r3*5)).times(strength); //TODO - random not working in java
         this->applyForce((float)force._x, (float) force._y, (float) force._z);
     }
     else {
@@ -247,7 +192,9 @@ void ForceGraphNode::applyCoulombsLaw(ForceGraphNode *that, const Planet* planet
     
     Vector3D d2 =(getCartesianPosition(planet)).normalized();
     double distance2 = d2.length();
-    float planetCharge = 5;
+    if(distance > 12e6) return;
+    
+    float planetCharge = 2;
     
     //find max difference in angle that 2 nodes are -- gives an idea of how an edge might intersect with the earth:
     float maxDistance = 0;
@@ -275,20 +222,21 @@ void ForceGraphNode::applyCoulombsLaw(ForceGraphNode *that, const Planet* planet
     }
     
     //adjust planet charge according to max angle - these numbers are tentative, need more test cases
-    if(maxAngle > 20) {
-        planetCharge = 20; //picking this so
+    //possibly adjust planet force depending on number of nodes total or in this particular cluster of nodes?
+    if(maxAngle > 30) {
+       // planetCharge = 5; //picking this so
     }
-    if(maxAngle > 35) {
-        planetCharge = 25;
+    if(maxAngle > 45) {
+        planetCharge = 5;
     }
-    if(maxAngle > 60) {
-        planetCharge = 40;
+    if(maxAngle > 90) {
+        planetCharge = 10;
     }
     if(maxAngle > 80) {
         // planetCharge = 70;
     }
     if(planet->toGeodetic3D(pos)._height < 1e5) {
-        // planetCharge*=3;
+         //planetCharge*=3;
     }
     
     Vector3D direction2 = d2.normalized();
@@ -372,7 +320,7 @@ void ForceGraphNode::updatePositionWithCurrentForce(double elapsedMS, float view
     float time = (float)(elapsedMS);// / 1000.0);
     Vector3D velocity = oldVelocity.add(force.times(time)).times(_resistanceFactor); //Resistance force applied as x0.85
     
-    if(oldVelocity.sub(velocity).length() > 10) {//threshold for updating position
+    if(oldVelocity.sub(velocity).length() > 5) {//threshold for updating position
         
         //testing this out:
         _dX = (float) velocity._x;
@@ -412,47 +360,10 @@ void ForceGraphNode::updatePositionWithCurrentForce(double elapsedMS, float view
         _tY+=_dY*time;
         _tZ+=_dZ*time;
         
-        
-        //clamp translation
-        //Vector3D temp_translation = Vector3D(_tX, _tY, _tZ);
-        // Vector3D translation = clampVector(temp_translation, -1000000000, 1000000000);
         Vector3D translation = Vector3D(_tX, _tY, _tZ);
     }
     
-    
-    //find the maximum, but clamped spring length - TODO this is wrong
-    //  float springx = 0;
-    //float springy = 0;
-    //float springz = 0;
-    
-    //TODO
-    /* for(int i = 0; i < _neighbors.size(); i++) {
-     Vector3D anchorPos = _neighbors[i]->getCartesianPosition(planet);
-     Vector3D temp_spring = Vector3D(newX,newY,newZ).sub(anchorPos);
-     Vector3D spring = clampVector(temp_spring, _minSpringLength, 100000000000); //todo: get rid of max spring length here
-     if(spring.length() > Vector3D(springx, springy, springz).length()) {
-     springx = spring._x;
-     springy = spring._y;
-     springz = spring._z;
-     }
-     }
-     */
-    
-    /* if(this->getAnchor() != NULL) {
-     
-     Vector3D anchorPos = getAnchor()->getCartesianPosition(planet);//getScreenPos();
-     
-     Vector3D temp_spring = Vector3D(newX,newY, newZ).sub(anchorPos);
-     Vector3D spring = clampVector(temp_spring, _minSpringLength, _maxSpringLength);
-     Vector3D finalPos = anchorPos.add(spring);
-     _anchorShape->setTranslation(finalPos);
-     _nodeShape->setTranslation(finalPos);
-     // _widget.set3DPos(  finalPos._x, finalPos._y, finalPos._z);
-     //_widget.clampPositionInsideScreen((int)viewportWidth, (int)viewportHeight, 5); // 5 pixels of margin
-     }
-     */
-    //  _anchorShape->setTranslation(translation);
-    // _nodeShape->setTranslation(translation); //TODO: spring??
+
     
     //Force has been applied and must be reset
     _fX = 0;
@@ -517,18 +428,20 @@ void ForceGraphRenderer::addMark(ForceGraphNode* mark){
         _anchors.push_back(mark);
     }
     else if (mark->getAnchor() == NULL) {
+        //place randomly on the globe if it has no anchor
         Geodetic3D p = mark->getPos();
-        double r1 = (double) rand() / RAND_MAX;
-        double r2 = (double) rand() / RAND_MAX; //TODO -replace with java compatible
-        float randlat = -90 + r1*90;
+        double r1 = IMathUtils::instance()->nextRandomDouble();
+        double r2 = IMathUtils::instance()->nextRandomDouble();
+         float randlat = -90 + r1*90;
         float randlon = -180 + r2*180;
         mark->setPos(Geodetic3D(Angle::fromDegrees(randlat), Angle::fromDegrees(randlon), 1e5));
         Geodetic3D pafter = mark->getPos();
         
     }
     else {
-        double r1 = (double) rand() / RAND_MAX;
-        double r2 = (double) rand() / RAND_MAX; //TODO -replace with java compatible
+        //place at a random position close to it's anchor
+        double r1 = IMathUtils::instance()->nextRandomDouble();
+        double r2 = IMathUtils::instance()->nextRandomDouble();
         Geodetic3D small = Geodetic3D::fromDegrees(10*r1, 10*r2, 1);
         mark->setPos(mark->getAnchor()->getPos().add(small));
     }
@@ -550,22 +463,6 @@ void ForceGraphNode::resetShapePositionVelocityAndForce(){
 void ForceGraphRenderer::computeMarksToBeRendered(const Camera* cam, const Planet* planet) {
     _visibleMarks.clear();
     
-    //Initialize shape to something
-    /* Shape* _shape = new EllipsoidShape(new Geodetic3D(Angle::fromDegrees(0),
-     Angle::fromDegrees(0),
-     5),
-     ABSOLUTE,
-     Vector3D(100000, 100000, 100000),
-     16,
-     0,
-     false,
-     false,
-     Color::fromRGBA(1, 1, 1, .5));
-     
-     
-     ForceGraphNode* center = new ForceGraphNode(_shape, _shape, Geodetic3D::fromDegrees(0, 0, -_planet->getRadii()._x));
-     _visibleMarks.push_back(center);*/
-    
     const Frustum* frustrum = cam->getFrustumInModelCoordinates();
     
     for (int i = 0; i < _marks.size(); i++) {
@@ -584,99 +481,14 @@ void ForceGraphRenderer::computeMarksToBeRendered(const Camera* cam, const Plane
 
 
 void ForceGraphRenderer::renderConnectorLines(const G3MRenderContext* rc){
-    //TODO - cylinders? lines? project 3d line onto 2d?
-    
-    
-    
-    /*if (_connectorsGLState == NULL){
-     _connectorsGLState = new GLState();
-     
-     _connectorsGLState->addGLFeature(new FlatColorGLFeature(Color::black()), false);
-     }
-     
-     _connectorsGLState->clearGLFeatureGroup(NO_GROUP);
-     
-     FloatBufferBuilderFromCartesian3D pos3D = FloatBufferBuilderFromCartesian3D(NO_CENTER, Vector3D(0, 0, 0));*/
-    
-    //TODO - traverse to find edges:
-    /*for (int i = 0; i < _visibleMarks.size(); i++){
-     Vector2F sp = _visibleMarks[i]->getScreenPos();
-     // Vector2F asp = _visibleMarks[i]->getScreenPos();
-     
-     pos2D.add(sp._x, -sp._y);
-     //pos2D.add(asp._x, -asp._y);
-     
-     }*/
-    /*std::vector<bool> visited = std::vector<bool>(false);
-     
-     for(int i = 0; i < _visibleMarks.size(); i++) {
-     std::queue<ForceGraphNode*> q;
-     if(!(_visibleMarks[i]->isVisited())) {
-     _visibleMarks[i]->setVisited(true);
-     q.push(_visibleMarks[i]);
-     while(!q.empty()) {
-     Vector3D sp = _visibleMarks[i]->getCartesianPosition(planet);
-     ForceGraphNode* mark = q.front();
-     Vector3F sp2 = mark->getCartesianPosition(planet);
-     pos3D.add(sp._x, -sp._y, sp._z);
-     pos3D.add(sp2._x, -sp2._y, sp._z);
-     for(int j = 0; j < mark->getNeighbors().size(); j++) {
-     ForceGraphNode* n = mark->getNeighbors()[j];
-     if(!(n->isVisited())) {
-     n->setVisited(true);
-     q.push(n);
-     }
-     }
-     mark->setVisited(true);
-     q.pop(); // and mark as visited here
-     }
-     }
-     setAllVisibleAsUnvisited();
-     }*/
-    //TODO
-    /* _connectorsGLState->addGLFeature( new Geometry2DGLFeature(pos2D.create(),
-     2,
-     0,
-     true,
-     0,
-     3.0f,
-     true,
-     10.0f,
-     Vector2F(0.0f,0.0f)),
-     false);
-     
-     _connectorsGLState->addGLFeature(new ViewportExtentGLFeature((int)rc->getCurrentCamera()->getViewPortWidth(),
-     (int)rc->getCurrentCamera()->getViewPortHeight()), false);
-     
-     rc->getGL()->drawArrays(GLPrimitive::lines(), 0, pos2D.size()/2, _connectorsGLState, *rc->getGPUProgramManager());*/
+    //all done in renderMarks
 }
 
 
 
 void ForceGraphRenderer::computeForces(const Camera* cam, const Planet* planet){
     
-    //Compute Mark Anchor Screen Positions
-    /*for (int i = 0; i < _anchors.size(); i++) {
-     _anchors[i]->computeAnchorScreenPos(cam, planet);
-     }*/
     
-    //Compute Mark Forces
-    /* for (int i = 0; i < _visibleMarks.size(); i++) {
-     ForceGraphNode* mark = _visibleMarks[i];
-     mark->applyHookesLaw(planet);
-     
-     for (int j = i+1; j < _visibleMarks.size(); j++) {
-     mark->applyCoulombsLaw(_visibleMarks[j], planet);
-     }
-     
-     for (int j = 0; j < _visibleMarks.size(); j++) {
-     if (i != j && !_visibleMarks[j]->hasAnchor()){
-     mark->applyCoulombsLawFromAnchor(_visibleMarks[j]);
-     }
-     for (int j = 0; j < _anchors.size(); j++) {
-     _anchors[i]->applyCoulombsLaw(mark, planet);
-     }
-     }*/
     int iters = 1;
     //if(_firstIteration) iters = 10; //more iterations to start to get closer looking image
     for(int k = 0; k < iters; k++) {

@@ -158,6 +158,11 @@ GPUUniformKey GPUVariable::getUniformKey(const std::string& name) {
     return TRANSLATION_2D;
   }
 
+  
+  if (name.compare("uBillboardAnchor") == 0) {
+    return BILLBOARD_ANCHOR;
+  }
+
   return UNRECOGNIZED_UNIFORM;
 }
 

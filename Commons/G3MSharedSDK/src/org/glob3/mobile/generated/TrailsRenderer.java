@@ -9,25 +9,25 @@ public class TrailsRenderer extends DefaultRenderer
   private void updateGLState(G3MRenderContext rc)
   {
   
-    final Camera cam = rc.getCurrentCamera();
+    final Camera camera = rc.getCurrentCamera();
     if (_projection == null)
     {
-      _projection = new ProjectionGLFeature(cam.getProjectionMatrix44D());
+      _projection = new ProjectionGLFeature(camera.getProjectionMatrix44D());
       _glState.addGLFeature(_projection, true);
     }
     else
     {
-      _projection.setMatrix(cam.getProjectionMatrix44D());
+      _projection.setMatrix(camera.getProjectionMatrix44D());
     }
   
     if (_model == null)
     {
-      _model = new ModelGLFeature(cam.getModelMatrix44D());
+      _model = new ModelGLFeature(camera.getModelMatrix44D());
       _glState.addGLFeature(_model, true);
     }
     else
     {
-      _model.setMatrix(cam.getModelMatrix44D());
+      _model.setMatrix(camera.getModelMatrix44D());
     }
   }
   private ProjectionGLFeature _projection;

@@ -11,6 +11,7 @@ import java.io.InputStreamReader;
 import java.util.zip.GZIPInputStream;
 
 import com.glob3mobile.pointcloud.octree.berkeleydb.BerkeleyDBOctree;
+import com.glob3mobile.utils.Geodetic3D;
 
 import es.igosoftware.euclid.projection.GProjection;
 import es.igosoftware.euclid.vector.GVector2D;
@@ -43,18 +44,22 @@ public class CreateOT {
       //      final String cloudName = "Wallonia-Belgium";
 
 
-      final File sourceTXTDirectory = new File("/Volumes/My Passport/_minnesota_lidar_/txt");
-      final GProjection sourceProjection = GProjection.EPSG_26915;
+      final GProjection sourceProjection = GProjection.EPSG_31370;
 
-      final File cloudDirectory = new File("/Volumes/My Passport/_minnesota_lidar_/db");
-      final String cloudName = "minnesota";
+      //    final File sourceTXTDirectory = new File("/Volumes/My Passport/_minnesota_lidar_/txt");
+      //    final File cloudDirectory = new File("/Volumes/My Passport/_minnesota_lidar_/db");
+      //    final String cloudName = "minnesota";
+
+      final File sourceTXTDirectory = new File(System.getProperty("user.dir"));
+      final File cloudDirectory = new File(System.getProperty("user.dir"));
+      final String cloudName = "Wallonia";
 
 
       final boolean deleteOT = true;
       final boolean loadOT = true;
       final boolean renameDone = false;
       final boolean visitOT = false;
-      final boolean showStatisticsOT = false;
+      final boolean showStatisticsOT = true;
 
       if (deleteOT) {
          BerkeleyDBOctree.delete(cloudDirectory, cloudName);

@@ -43,27 +43,12 @@ public class GenericQuadTree_Node
   
     //Split elements by sector
     java.util.ArrayList<GenericQuadTree_Element> elementsToBeInserted = _elements;
-    _elements.clear();
     final int size = elementsToBeInserted.size();
     for (int i = 0; i < size; i++)
     {
       this.add(elementsToBeInserted.get(i), maxElementsPerNode, maxDepth, childAreaProportion);
     }
-  
-  
-    //  const int size = _elements.size();
-    //  for (int i = 0; i < size; i++) {
-    //    GenericQuadTree_Element* e = _elements[i];
-    //
-    //    for (int j = 0; j < 4; j++) {
-    //      GenericQuadTree_Node* child = _children[j];
-    //      if (child->add(e, maxElementsPerNode, maxDepth)) {
-    //        break;
-    //      }
-    //    }
-    //  }
-    //
-    //  _elements.clear();
+    _elements.clear();
   }
 
   private GenericQuadTree_Node getBestNodeForInsertion(GenericQuadTree_Element element, double childAreaProportion)

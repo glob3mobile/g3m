@@ -285,7 +285,7 @@ public:
   }
 
   bool onTerrainTouch(const G3MEventContext* ec,
-                      const Vector2I&        pixel,
+                      const Vector2F&        pixel,
                       const Camera*          camera,
                       const Geodetic3D&      position,
                       const Tile*            tile) {
@@ -474,7 +474,7 @@ void MapBooBuilder::sendNotification(const Geodetic2D&  position,
 }
 
 bool MapBooBuilder::onTerrainTouch(const G3MEventContext* ec,
-                                   const Vector2I&        pixel,
+                                   const Vector2F&        pixel,
                                    const Camera*          camera,
                                    const Geodetic3D&      position,
                                    const Tile*            tile) {
@@ -2184,8 +2184,8 @@ void HUDInfoRenderer_ImageFactory::drawOn(ICanvas* canvas,
                               5);
 }
 
-bool HUDInfoRenderer_ImageFactory::isEquals(const std::vector<const Info*> v1,
-                                            const std::vector<const Info*> v2) const {
+bool HUDInfoRenderer_ImageFactory::isEquals(const std::vector<const Info*>& v1,
+                                            const std::vector<const Info*>& v2) const {
   const int size1 = v1.size();
   const int size2 = v2.size();
   if (size1 != size2) {
@@ -2202,7 +2202,7 @@ bool HUDInfoRenderer_ImageFactory::isEquals(const std::vector<const Info*> v1,
   return true;
 }
 
-bool HUDInfoRenderer_ImageFactory::setInfo(const std::vector<const Info*> info) {
+bool HUDInfoRenderer_ImageFactory::setInfo(const std::vector<const Info*>& info) {
   if ( isEquals(_info, info) ) {
     return false;
   }
@@ -2228,7 +2228,7 @@ MapBoo_HUDRenderer::~MapBoo_HUDRenderer() {
   delete _hudImageRenderer;
 }
 
-void MapBoo_HUDRenderer::updateInfo(const std::vector<const Info*> info) {
+void MapBoo_HUDRenderer::updateInfo(const std::vector<const Info*>& info) {
   HUDInfoRenderer_ImageFactory* factory = (HUDInfoRenderer_ImageFactory*) (_hudImageRenderer->getImageFactory());
   if (factory->setInfo(info)) {
     _hudImageRenderer->recreateImage();

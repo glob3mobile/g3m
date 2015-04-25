@@ -28,6 +28,15 @@ Vector3D EllipsoidalPlanet::geodeticSurfaceNormal(const Angle& latitude,
                   SIN(latitude._radians));
 }
 
+void EllipsoidalPlanet::geodeticSurfaceNormal(const Angle& latitude,
+                                              const Angle& longitude,
+                                              MutableVector3D& result) const {
+  const double cosLatitude = COS(latitude._radians);
+
+  result.set(cosLatitude * COS(longitude._radians),
+             cosLatitude * SIN(longitude._radians),
+             SIN(latitude._radians));
+}
 
 Vector3D EllipsoidalPlanet::toCartesian(const Angle& latitude,
                                         const Angle& longitude,
@@ -41,6 +50,32 @@ Vector3D EllipsoidalPlanet::toCartesian(const Angle& latitude,
 
   const Vector3D rSurface = k.div(gamma);
   return rSurface.add(n.times(height));
+}
+
+void EllipsoidalPlanet::toCartesian(const Angle& latitude,
+                                    const Angle& longitude,
+                                    const double height,
+                                    MutableVector3D& result) const {
+  geodeticSurfaceNormal(latitude, longitude, result);
+  const double nX = result.x();
+  const double nY = result.y();
+  const double nZ = result.z();
+
+  const double kX = nX * _ellipsoid._radiiSquared._x;
+  const double kY = nY * _ellipsoid._radiiSquared._y;
+  const double kZ = nZ * _ellipsoid._radiiSquared._z;
+
+  const double gamma = IMathUtils::instance()->sqrt((kX * nX) +
+                                                    (kY * nY) +
+                                                    (kZ * nZ));
+
+  const double rSurfaceX = kX / gamma;
+  const double rSurfaceY = kY / gamma;
+  const double rSurfaceZ = kZ / gamma;
+
+  result.set(rSurfaceX + (nX * height),
+             rSurfaceY + (nY * height),
+             rSurfaceZ + (nZ * height));
 }
 
 Geodetic2D EllipsoidalPlanet::toGeodetic2D(const Vector3D& positionOnEllipsoidalPlanet) const {

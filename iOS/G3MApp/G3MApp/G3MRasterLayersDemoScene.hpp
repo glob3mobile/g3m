@@ -42,8 +42,10 @@ public:
 
     _options.push_back("Bing Aerial");
     _options.push_back("Bing Aerial with Labels");
-  }
 
+    _options.push_back("Uruguay (WMS)");
+  }
+  
 };
 
 #endif

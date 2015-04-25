@@ -54,8 +54,8 @@ public:
   int indexOfFirstNonBlank(const std::string& string,
                            int fromIndex) const;
 
-//  int indexOfFirstBlank(const std::string& string,
-//                        int fromIndex) const;
+  //  int indexOfFirstBlank(const std::string& string,
+  //                        int fromIndex) const;
 
   int indexOfFirstNonChar(const std::string& string,
                           const std::string& chars,
@@ -70,7 +70,7 @@ public:
   std::string toString(float value) const;
 
   double parseDouble(const std::string& str) const;
-
+  
 };
 
 #endif

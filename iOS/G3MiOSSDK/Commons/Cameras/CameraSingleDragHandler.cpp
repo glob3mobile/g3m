@@ -46,7 +46,7 @@ void CameraSingleDragHandler::onDown(const G3MEventContext *eventContext,
   Camera *camera = cameraContext->getNextCamera();
   _camera0.copyFrom(*camera);
   // dragging
-  const Vector2I pixel = touchEvent.getTouch(0)->getPos();
+  const Vector2F pixel = touchEvent.getTouch(0)->getPos();
   const Vector3D& initialRay = _camera0.pixel2Ray(pixel);
   if (!initialRay.isNan()) {
     cameraContext->setCurrentGesture(Drag);
@@ -85,8 +85,8 @@ void CameraSingleDragHandler::onUp(const G3MEventContext *eventContext,
   // test if animation is needed
   if (_useInertia) {
     const Touch *touch = touchEvent.getTouch(0);
-    const Vector2I currPixel = touch->getPos();
-    const Vector2I prevPixel = touch->getPrevPos();
+    const Vector2F currPixel = touch->getPos();
+    const Vector2F prevPixel = touch->getPrevPos();
     const double desp        = currPixel.sub(prevPixel).length();
 
     const float delta = IFactory::instance()->getDeviceInfo()->getPixelsInMM(0.2f);

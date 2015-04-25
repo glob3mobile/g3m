@@ -1741,7 +1741,7 @@ public abstract class MapBooBuilder
   }
 
   /** Private to MapbooBuilder, don't call it */
-  public final boolean onTerrainTouch(G3MEventContext ec, Vector2I pixel, Camera camera, Geodetic3D position, Tile tile)
+  public final boolean onTerrainTouch(G3MEventContext ec, Vector2F pixel, Camera camera, Geodetic3D position, Tile tile)
   {
     if (_applicationListener != null)
     {

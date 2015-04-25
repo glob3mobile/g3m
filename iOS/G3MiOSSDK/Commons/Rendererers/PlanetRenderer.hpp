@@ -459,7 +459,7 @@ public:
     return _renderTileMeshes;
   }
   
-  void changedInfo(const std::vector<const Info*> info) {
+  void changedInfo(const std::vector<const Info*>& info) {
     if (_changedInfoListener != NULL) {
       _changedInfoListener->changedRendererInfo(_rendererIdentifier, info);
     }

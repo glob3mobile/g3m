@@ -12,35 +12,38 @@
 #include <string>
 
 class IStringBuilder {
-  
+
   static IStringBuilder* _instance;
-  
-  
+
+
 protected:
-  
+
   virtual IStringBuilder* getNewInstance() const = 0;
-  
+
 public:
   static void setInstance(IStringBuilder* isb);
-  
+
   static IStringBuilder* newStringBuilder();
-  
+
   virtual IStringBuilder* addDouble(double d) = 0;
   virtual IStringBuilder* addFloat(float f) = 0;
-  
+
   virtual IStringBuilder* addInt(int i) = 0;
   virtual IStringBuilder* addLong(long long l) = 0;
-  
+
   virtual IStringBuilder* addString(const std::string& s) = 0;
   virtual IStringBuilder* addBool(bool b) = 0;
-  
+
+  virtual IStringBuilder* clear() = 0;
+
   virtual const std::string getString() const = 0;
-  
+
   // a virtual destructor is needed for conversion to Java
   virtual ~IStringBuilder() {
   }
+
+  virtual bool contentEqualsTo(const std::string& that) const = 0;
   
 };
-
 
 #endif

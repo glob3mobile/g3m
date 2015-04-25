@@ -20,11 +20,11 @@ import javax.servlet.http.HttpServletResponse;
 
 
 public class Proxy
-         extends
-            HttpServlet {
+extends
+HttpServlet {
 
    /**
-    * 
+    *
     */
    private static final long serialVersionUID = -6020365142488111237L;
 
@@ -61,10 +61,10 @@ public class Proxy
       try {
          final URL url = new URL(reqUrl);
 
-         final Enumeration headerNames = request.getHeaderNames();
+         final Enumeration<String> headerNames = request.getHeaderNames();
          final Map<String, String> headers = new HashMap<String, String>();
          while (headerNames.hasMoreElements()) {
-            final String headerName = (String) headerNames.nextElement();
+            final String headerName = headerNames.nextElement();
             String headerValue = request.getHeader(headerName);
 
             if (headerName.equalsIgnoreCase("Host")) {

@@ -187,7 +187,11 @@ public:
   float fmod(float f1, float f2) const {
     return fmodf(f1, f2);
   }
-  
+
+  double nextRandomDouble() const {
+    return (double)rand() / RAND_MAX;;
+  }
+
 };
 
 #endif

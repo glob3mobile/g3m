@@ -79,11 +79,9 @@ void G3MStreamingPointCloud2DemoScene::rawActivate(const G3MContext *context) {
 
 //#warning TODO cache
   model->getPointCloudsRenderer()->addPointCloud(URL("http://glob3mobile.dyndns.org:8080"),
-                                                 //"Loudoun-VA_fragment_LOD",
                                                  "minnesota_LOD",
                                                  DownloadPriority::LOWER,
                                                  TimeInterval::zero(),
-                                                 //TimeInterval::fromDays(30),
                                                  true,
                                                  PointCloudsRenderer::MIN_MAX_HEIGHT,
                                                  pointSize,

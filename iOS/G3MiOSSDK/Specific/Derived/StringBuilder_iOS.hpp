@@ -24,7 +24,7 @@ protected:
   }
 
 public:
-  
+
   StringBuilder_iOS() {
     _oss.precision(20);
   }
@@ -61,6 +61,15 @@ public:
 
   const std::string getString() const {
     return _oss.str();
+  }
+
+  IStringBuilder* clear() {
+    _oss.str(std::string());
+    return this;
+  }
+
+  bool contentEqualsTo(const std::string& that) const {
+    return _oss.str() == that;
   }
 
 };

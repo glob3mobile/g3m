@@ -24,7 +24,7 @@ void Matrix44DMultiplicationHolder::pullMatrixes() const {
 }
 
 Matrix44DMultiplicationHolder::Matrix44DMultiplicationHolder(const Matrix44DProvider* providers[],
-                                                             int matricesSize):
+                                                             size_t matricesSize):
 _matricesSize(matricesSize),
 _modelview(NULL)
 {

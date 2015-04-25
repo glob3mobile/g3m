@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import org.glob3.mobile.generated.Touch;
 import org.glob3.mobile.generated.TouchEvent;
 import org.glob3.mobile.generated.TouchEventType;
-import org.glob3.mobile.generated.Vector2I;
+import org.glob3.mobile.generated.Vector2F;
 
 import android.view.MotionEvent;
 import android.view.MotionEvent.PointerCoords;
@@ -57,26 +57,26 @@ public final class MotionEventProcessor {
          final PointerCoords pc = new PointerCoords();
          event.getPointerCoords(i, pc);
          // TOUCH EVENT
-         final Vector2I pos = new Vector2I((int) pc.x, (int) pc.y);
+         final Vector2F pos = new Vector2F(pc.x, pc.y);
 
-         Vector2I prevPos = null;
+         Vector2F prevPos = null;
          if (event.getAction() != MotionEvent.ACTION_UP) {
             if (auxEvent._pointersID.contains(pointerID)) {
                final Touch lastT = auxEvent._touchs.get(auxEvent._pointersID.indexOf(pointerID));
-               prevPos = new Vector2I(lastT.getPos()._x, lastT.getPos()._y);
+               prevPos = new Vector2F(lastT.getPos()._x, lastT.getPos()._y);
             }
             else {
-               prevPos = new Vector2I(0, 0);
+               prevPos = Vector2F.zero();
             }
          }
          else {
 
             if (_prevLastEvent._pointersID.contains(pointerID)) {
                final Touch lastT = _prevLastEvent._touchs.get(_prevLastEvent._pointersID.indexOf(pointerID));
-               prevPos = new Vector2I(lastT.getPos()._x, lastT.getPos()._y);
+               prevPos = new Vector2F(lastT.getPos()._x, lastT.getPos()._y);
             }
             else {
-               prevPos = new Vector2I(0, 0);
+               prevPos = Vector2F.zero();
             }
 
          }
@@ -89,7 +89,7 @@ public final class MotionEventProcessor {
 
       // If a move event has not change the position of pointers
       // or if the first two fingers movement just moves one
-      // we dismiss it		
+      // we dismiss it
       if (event.getAction() == MotionEvent.ACTION_MOVE) {
 
          // Log.d("", "TE MOVE");
@@ -157,12 +157,12 @@ public final class MotionEventProcessor {
    public TouchEvent processDoubleTapEvent(final MotionEvent event) {
       final PointerCoords pc = new PointerCoords();
       event.getPointerCoords(0, pc);
-      final Vector2I pos = new Vector2I((int) pc.x, (int) pc.y);
+      final Vector2F pos = new Vector2F(pc.x, pc.y);
       final Touch t = new Touch(pos, pos, (byte) 2);
 
       final TouchEvent te = TouchEvent.create(TouchEventType.Down, t);
 
       return te;
-
    }
+
 }
