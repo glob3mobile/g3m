@@ -26,7 +26,6 @@ public enum GPUUniformKey
   TRANSLATION_2D(21),
   BILLBOARD_ANCHOR(22);
 
-
    private int intValue;
    private static java.util.HashMap<Integer, GPUUniformKey> mappings;
    private static java.util.HashMap<Integer, GPUUniformKey> getMappings()

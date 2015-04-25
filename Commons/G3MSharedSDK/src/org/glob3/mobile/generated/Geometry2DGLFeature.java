@@ -5,6 +5,7 @@ package org.glob3.mobile.generated;
 
 public class Geometry2DGLFeature extends GLFeature
 {
+
   //Position + cull + depth + polygonoffset + linewidth
   private GPUAttributeValueVec2Float _position;
 
@@ -13,10 +14,7 @@ public class Geometry2DGLFeature extends GLFeature
   public void dispose()
   {
     //  _position->_release();
-<<<<<<< HEAD
   
-=======
->>>>>>> b1f79c4f013bd9f74bfc6909987290be4311487b
     super.dispose();
   }
 
@@ -29,10 +27,7 @@ public class Geometry2DGLFeature extends GLFeature
   {
      super(GLFeatureGroupName.NO_GROUP, GLFeatureID.GLF_GEOMETRY);
      _lineWidth = lineWidth;
-<<<<<<< HEAD
   
-=======
->>>>>>> b1f79c4f013bd9f74bfc6909987290be4311487b
     _position = new GPUAttributeValueVec2Float(buffer, arrayElementSize, index, stride, normalized);
     _values.addAttributeValue(GPUAttributeKey.POSITION_2D, _position, false);
   

@@ -14,7 +14,6 @@ public class ViewportExtentGLFeature extends GLFeature
     _extent = new GPUUniformValueVec2FloatMutable(viewportWidth, viewportHeight);
   
     _values.addUniformValue(GPUUniformKey.VIEWPORT_EXTENT, _extent, false);
-
   }
 
   public ViewportExtentGLFeature(Camera camera)
@@ -23,7 +22,6 @@ public class ViewportExtentGLFeature extends GLFeature
     _extent = new GPUUniformValueVec2FloatMutable(camera.getViewPortWidth(), camera.getViewPortHeight());
   
     _values.addUniformValue(GPUUniformKey.VIEWPORT_EXTENT, _extent, false);
-
   }
 
   public final void applyOnGlobalGLState(GLGlobalState state)

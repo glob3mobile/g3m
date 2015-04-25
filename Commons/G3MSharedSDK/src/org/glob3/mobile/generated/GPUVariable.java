@@ -105,7 +105,7 @@ public class GPUVariable
       return GPUUniformKey.TRANSLATION_2D;
     }
   
-
+  
     if (name.compareTo("uBillboardAnchor") == 0)
     {
       return GPUUniformKey.BILLBOARD_ANCHOR;

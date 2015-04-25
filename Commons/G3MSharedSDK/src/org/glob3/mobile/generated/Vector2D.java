@@ -164,7 +164,6 @@ public class Vector2D
   
     return out;
   
-  
   }
 
   public final double dot(Vector2D v)

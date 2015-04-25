@@ -1,6 +1,6 @@
 package org.glob3.mobile.generated; 
 //
-//  NonOverlappingMarkers3DRenderer.cpp
+//  ForceGraphRenderer.cpp
 //  G3MiOSSDK
 //
 //  Created by Stefanie Alfonso on 2/1/15.
@@ -8,7 +8,7 @@ package org.glob3.mobile.generated;
 //
 
 //
-//  NonOverlappingMarkers3DRenderer.cpp
+//  ForceGraphRenderer.hpp
 //  G3MiOSSDK
 //
 //  Created by Stefanie Alfonso on 2/1/15.
