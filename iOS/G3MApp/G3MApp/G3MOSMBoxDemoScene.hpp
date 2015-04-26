@@ -23,9 +23,9 @@ private:
     const std::string dataKey = "rkc8ywdl";
     
     //Hardcoding level, row and col. **TODO Later we will get this from the tile
-    int level = 14;
-    int row = 4825;
-    int col = 6156;
+    int level = 13;//14;
+    int row = 2276;//4825;
+    int col = 3089;//6156;
     
     //Geodetic2D* get2DCoordsFromTile(int xIndex, int yIndex, int zoom); **TODO: Won't implement this until we find a use for it
     std::string getURLFromTile(int xIndex, int yIndex, int zoom);

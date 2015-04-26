@@ -89,8 +89,9 @@ public:
             double minLon = 0;
             double maxLat = 0;
             double maxLon = 0;
+            int coordSize = coordArray->getAsArray(0)->size();
             
-            if (coordArray->size() > 0) {
+            if (coordSize > 0) {
                 minLat = coordArray->getAsArray(0)->getAsArray(0)->getAsNumber(1, 0);
                 maxLat = coordArray->getAsArray(0)->getAsArray(0)->getAsNumber(1, 0);
                 minLon = coordArray->getAsArray(0)->getAsArray(0)->getAsNumber(0, 0);
@@ -98,7 +99,7 @@ public:
             }
             //TODO: get all the coordinates in geometry. We are getting the average instead.
             
-            for (int j = 0; j < coordArray->size(); j++) {
+            for (int j = 0; j < coordSize; j++) {
                 double lon = coordArray->getAsArray(0)->getAsArray(j)->getAsNumber(0, 0);
                 double lat = coordArray->getAsArray(0)->getAsArray(j)->getAsNumber(1, 0);
                 averageLon += lon;
@@ -118,8 +119,8 @@ public:
                     minLat = lat;
                 }
             }
-            averageLon /= coordArray->size();
-            averageLat /= coordArray->size();
+            averageLon /= coordSize;
+            averageLat /= coordSize;
             
             Geodetic3D tempCoord = Geodetic3D::fromDegrees(averageLat, averageLon, height);
             Geodetic3D* buildingCenterBottom = new Geodetic3D(Angle::fromDegrees(averageLat),Angle::fromDegrees(averageLon), height/2);

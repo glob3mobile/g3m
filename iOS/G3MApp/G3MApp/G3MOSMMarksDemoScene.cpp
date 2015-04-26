@@ -32,12 +32,16 @@
 #define DEFAULT_HEIGHT 0
 #define DEFAULT_LEVEL 0
 
-class G3MOSMBuildingsDemoScene_BufferDownloadListener : public IBufferDownloadListener {
+/**
+ * This class implements the IBufferDownloadListener to listen for the download the tile data from OSM 
+    ,parse the JSONobjects, and add the marks to the globe.
+ */
+class G3MOSMMarksDemoScene_BufferDownloadListener : public IBufferDownloadListener {
 private:
     G3MOSMMarksDemoScene* _scene;
     std::string iconURL = "http://files.softicons.com/download/toolbar-icons/fatcow-hosting-icons-by-fatcow/png/16/building.png";
 public:
-    G3MOSMBuildingsDemoScene_BufferDownloadListener(G3MOSMMarksDemoScene* scene) :
+    G3MOSMMarksDemoScene_BufferDownloadListener(G3MOSMMarksDemoScene* scene) :
     _scene(scene)
     {
     }
@@ -79,41 +83,18 @@ public:
             
             double averageLon = 0;
             double averageLat = 0;
-            double minLat = 0;
-            double minLon = 0;
-            double maxLat = 0;
-            double maxLon = 0;
+            int coordSize = coordArray->getAsArray(0)->size();
             
-            if (coordArray->size() > 0) {
-                minLat = coordArray->getAsArray(0)->getAsArray(0)->getAsNumber(1, 0);
-                maxLat = coordArray->getAsArray(0)->getAsArray(0)->getAsNumber(1, 0);
-                minLon = coordArray->getAsArray(0)->getAsArray(0)->getAsNumber(0, 0);
-                maxLon = coordArray->getAsArray(0)->getAsArray(0)->getAsNumber(0, 0);
-            }
             //TODO: get all the coordinates in geometry. We are getting the average instead.
             
-            for (int j = 0; j < coordArray->size(); j++) {
+            for (int j = 0; j < coordSize; j++) {
                 double lon = coordArray->getAsArray(0)->getAsArray(j)->getAsNumber(0, 0);
                 double lat = coordArray->getAsArray(0)->getAsArray(j)->getAsNumber(1, 0);
                 averageLon += lon;
                 averageLat += lat;
-                
-                // update min/max lat/lon if necessary
-                if (lon > maxLon) {
-                    maxLon = lon;
-                }
-                if (lon < minLon) {
-                    minLon = lon;
-                }
-                if (lat > maxLat) {
-                    maxLat = lat;
-                }
-                if (lat < minLat) {
-                    minLat = lat;
-                }
             }
-            averageLon /= coordArray->size();
-            averageLat /= coordArray->size();
+            averageLon /= coordSize;
+            averageLat /= coordSize;
             
             Geodetic3D tempCoord = Geodetic3D::fromDegrees(averageLat, averageLon, height);
             
@@ -179,12 +160,12 @@ void G3MOSMMarksDemoScene::rawActivate(const G3MContext* context) {
                                            DownloadPriority::HIGHEST,
                                            TimeInterval::fromHours(1),
                                            readExpired,
-                                           new G3MOSMBuildingsDemoScene_BufferDownloadListener(this),
+                                           new G3MOSMMarksDemoScene_BufferDownloadListener(this),
                                            deleteListener);
     
     //Positioning the camera close to New York because of the request buffer URL.
     //TODO change the positioning and the URL when needed
-    g3mWidget->setAnimatedCameraPosition(Geodetic3D::fromDegrees(40.747930906661231631, -73.977181666542492167, 10000),
+    g3mWidget->setAnimatedCameraPosition(Geodetic3D::fromDegrees(40.484178154472907352, -79.936819108698855985, 10000),
                                          Angle::zero(), // heading
                                          Angle::fromDegrees(30 - 90) // pitch
                                          );
@@ -200,20 +181,6 @@ void G3MOSMMarksDemoScene::rawSelectOption(const std::string& option,
                                                int optionIndex) {
     
 }
-
-/*
- * We won't finish implementing this function until we find a use for it.
- *
- * get2DCoordsFromTile: gets the latitude and longitude from the tile index
- 
- Geodetic2D* G3MOSMBuildingsDemoScene::get2DCoordsFromTile(int xIndex, int yIndex, int zoom) {
- //Checks for valid tile data
- if(xIndex < 0 || yIndex < 0 || zoom > 19 || zoom < 0) {
- return NULL;
- }
- double lon = 360*(xIndex/(1<<zoom)) - 180;
- }
- */
 
 /*
  * Formatting the OSM Url to get buildings for a specific tile (row, column, zoom)

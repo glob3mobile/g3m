@@ -87,8 +87,9 @@ public:
             double minLon = 0;
             double maxLat = 0;
             double maxLon = 0;
+            int coordSize = coordArray->getAsArray(0)->size();
             
-            if (coordArray->size() > 0) {
+            if (coordSize > 0) {
                 minLat = coordArray->getAsArray(0)->getAsArray(0)->getAsNumber(1, 0);
                 maxLat = coordArray->getAsArray(0)->getAsArray(0)->getAsNumber(1, 0);
                 minLon = coordArray->getAsArray(0)->getAsArray(0)->getAsNumber(0, 0);
@@ -96,7 +97,7 @@ public:
             }
             //TODO: get all the coordinates in geometry. We are getting the average instead.
             
-            for (int j = 0; j < coordArray->size(); j++) {
+            for (int j = 0; j < coordSize; j++) {
                 double lon = coordArray->getAsArray(0)->getAsArray(j)->getAsNumber(0, 0);
                 double lat = coordArray->getAsArray(0)->getAsArray(j)->getAsNumber(1, 0);
                 averageLon += lon;
@@ -116,8 +117,8 @@ public:
                     minLat = lat;
                 }
             }
-            averageLon /= coordArray->size();
-            averageLat /= coordArray->size();
+            averageLon /= coordSize;
+            averageLat /= coordSize;
             
             Geodetic3D tempCoord = Geodetic3D::fromDegrees(averageLat, averageLon, height);
             Geodetic3D* buildingCenterBottom = new Geodetic3D(Angle::fromDegrees(averageLat),Angle::fromDegrees(averageLon), height/2);
@@ -152,8 +153,8 @@ public:
                 absYExtent = maxLat - minLat;
             }
             
-            double x_extent = (absXExtent+0.0001) * 80000;
-            double y_extent = (absYExtent+0.0001) * 80000;
+            double x_extent = (absXExtent) * 32500;
+            double y_extent = (absYExtent) * 32500;
             double z_extent = (abs(height) + 1);
             // setting some BoxShape constants
             float borderWidth = 2;
@@ -237,7 +238,7 @@ void G3MOSMBoxDemoScene::rawActivate(const G3MContext* context) {
     
     //Positioning the camera close to New York because of the request buffer URL.
     //TODO change the positioning and the URL when needed
-    g3mWidget->setAnimatedCameraPosition(Geodetic3D::fromDegrees(40.747930906661231631, -73.977181666542492167, 10000),
+    g3mWidget->setAnimatedCameraPosition(Geodetic3D::fromDegrees(40.484178154472907352, -79.936819108698855985, 10000),
                                          Angle::zero(), // heading
                                          Angle::fromDegrees(30 - 90) // pitch
                                          );
@@ -253,20 +254,6 @@ void G3MOSMBoxDemoScene::rawSelectOption(const std::string& option,
                                                int optionIndex) {
     
 }
-
-/*
- * We won't finish implementing this function until we find a use for it.
- *
- * get2DCoordsFromTile: gets the latitude and longitude from the tile index
- 
- Geodetic2D* G3MOSMBuildingsDemoScene::get2DCoordsFromTile(int xIndex, int yIndex, int zoom) {
- //Checks for valid tile data
- if(xIndex < 0 || yIndex < 0 || zoom > 19 || zoom < 0) {
- return NULL;
- }
- double lon = 360*(xIndex/(1<<zoom)) - 180;
- }
- */
 
 /*
  * Formatting the OSM Url to get buildings for a specific tile (row, column, zoom)
