@@ -106,9 +106,13 @@ public:
   
   virtual void centerGeometryAtZero(){}
   
-  Vector3D getMax();
+  virtual Vector3D getMax(const MutableMatrix44D& transformation);
   
-  Vector3D getMin();
+  virtual Vector3D getMin(const MutableMatrix44D& transformation);
+  
+  Vector3D getCenter(const MutableMatrix44D& transformation){
+    return Vector3D::meanOnAllAxis(getMax(transformation), getMin(transformation));
+  }
   
 };
 

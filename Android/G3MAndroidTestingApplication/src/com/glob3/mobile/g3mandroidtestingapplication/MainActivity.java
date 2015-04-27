@@ -160,7 +160,7 @@ public class MainActivity
 					shape.setPitch(Angle.fromDegrees(90));
 					ILogger.instance().logError("MODEL ADDED AND CENTERED");
 					
-					shape.centerGeometryAtZero();
+					shape.setTranslation(shape.getCenter().times(-1));
 				}
 
 				@Override

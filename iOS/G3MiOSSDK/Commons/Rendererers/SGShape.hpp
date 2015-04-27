@@ -88,7 +88,7 @@ public:
   Vector3D getMin();
   
   Vector3D getCenter(){
-    
+    return Vector3D::meanOnAllAxis(getMax(), getMin());
   }
   
   

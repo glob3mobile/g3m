@@ -86,21 +86,21 @@ void SGNode::render(const G3MRenderContext* rc, const GLState* parentGLState, bo
   }
 }
 
-Vector3D SGNode::getMax(){
+Vector3D SGNode::getMax(const MutableMatrix44D& transformation){
   MutableVector3D res(-9e99,-9e99,-9e99);
   const size_t s = getChildrenCount();
   for (int i = 0; i < s; i++) {
-    Vector3D v = getChild(i)->getMax();
+    Vector3D v = getChild(i)->getMax(transformation);
     res.copyFrom(Vector3D::maxOnAllAxis(v, res.asVector3D()));
   }
   return res.asVector3D();
 }
 
-Vector3D SGNode::getMin(){
+Vector3D SGNode::getMin(const MutableMatrix44D& transformation){
   MutableVector3D res(9e99, 9e99, 9e99);
   const size_t s = getChildrenCount();
   for (int i = 0; i < s; i++) {
-    Vector3D v = getChild(i)->getMin();
+    Vector3D v = getChild(i)->getMin(transformation);
     res.copyFrom(Vector3D::minOnAllAxis(v, res.asVector3D()));
   }
   return res.asVector3D();

@@ -61,9 +61,9 @@ public:
     return SGNode::mostDistantVertexFromCenter(m);
   }
   
-  Vector3D getMax();
+  Vector3D getMax(const MutableMatrix44D& transformation);
   
-  Vector3D getMin();
+  Vector3D getMin(const MutableMatrix44D& transformation);
 
   
 };

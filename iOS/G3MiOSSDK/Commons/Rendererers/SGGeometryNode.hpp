@@ -67,9 +67,9 @@ public:
   
   Vector3D mostDistantVertexFromCenter(const MutableMatrix44D& transformation) const;
   
-  Vector3D getMax();
+  Vector3D getMax(const MutableMatrix44D& transformation);
   
-  Vector3D getMin();
+  Vector3D getMin(const MutableMatrix44D& transformation);
   
 };
 

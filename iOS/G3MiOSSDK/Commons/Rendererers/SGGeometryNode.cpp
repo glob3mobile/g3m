@@ -97,49 +97,53 @@ Vector3D SGGeometryNode::mostDistantVertexFromCenter(const MutableMatrix44D& tra
   return (max > res2.squaredLength())? res.asVector3D() : res2;
 }
 
-Vector3D SGGeometryNode::getMax(){
+Vector3D SGGeometryNode::getMax(const MutableMatrix44D& transformation){
   
   double maxX = 9e99, maxY= 9e99, maxZ= 9e99;
   
   for (int i = 0; i < _vertices->size(); i+=3){
-    double x = _vertices->get(i), y = _vertices->get(i+1), z = _vertices->get(i+2);
+    Vector3D v(_vertices->get(i), _vertices->get(i+1), _vertices->get(i+2));
     
-    if (x > maxX){
-      maxX = x;
+    Vector3D v2 = v.transformedBy(transformation, 1.0);
+    if (v2._x > maxX){
+      maxX = v2._x;
     }
     
-    if (y > maxY){
-      maxY = y;
+    if (v2._y > maxY){
+      maxY = v2._y;
     }
     
-    if (z > maxZ){
-      maxZ = z;
+    if (v2._z > maxZ){
+      maxZ = v2._z;
     }
   }
   
-  return Vector3D(maxX, maxY, maxZ);
+  Vector3D max(maxX, maxY, maxZ);
   
+  return Vector3D::maxOnAllAxis(max, SGNode::getMax(transformation));
 }
 
-Vector3D SGGeometryNode::getMin(){
+Vector3D SGGeometryNode::getMin(const MutableMatrix44D& transformation){
   
   double minX= -9e99, minY= -9e99, minZ= -9e99;
   
   for (int i = 0; i < _vertices->size(); i+=3){
-    double x = _vertices->get(i), y = _vertices->get(i+1), z = _vertices->get(i+2);
+    Vector3D v(_vertices->get(i), _vertices->get(i+1), _vertices->get(i+2));
     
-    if (x < minX){
-      minX = x;
+    Vector3D v2 = v.transformedBy(transformation, 1.0);
+    if (v2._x < minX){
+      minX = v2._x;
     }
     
-    if (y < minY){
-      minY = y;
+    if (v2._y < minY){
+      minY = v2._y;
     }
-    if (z < minZ){
-      minZ = z;
+    if (v2._z < minZ){
+      minZ = v2._z;
     }
   }
   
-  return Vector3D(minX, minY, minZ);
+  Vector3D min(minX, minY, minZ);
   
+  return Vector3D::minOnAllAxis(min, SGNode::getMin(transformation));
 }

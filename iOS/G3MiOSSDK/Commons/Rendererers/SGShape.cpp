@@ -37,13 +37,13 @@ Vector3D SGShape::mostDistantVertexFromCenter() const{
 }
 
 Vector3D SGShape::getMax(){
-  Vector3D v = _node->getMax();
+  Vector3D v = _node->getMax(MutableMatrix44D::identity());
   Vector3D s = getScale();
   return Vector3D(v._x * s._x, v._y * s._y, v._z * s._z);
 }
 
 Vector3D SGShape::getMin(){
-  Vector3D v = _node->getMin();
+  Vector3D v = _node->getMin(MutableMatrix44D::identity());
   Vector3D s = getScale();
   return Vector3D(v._x * s._x, v._y * s._y, v._z * s._z);
 }
