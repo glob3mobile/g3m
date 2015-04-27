@@ -30,6 +30,7 @@ import org.glob3.mobile.generated.ShapesRenderer;
 import org.glob3.mobile.generated.TimeInterval;
 import org.glob3.mobile.generated.URL;
 import org.glob3.mobile.generated.Vector2F;
+import org.glob3.mobile.generated.Vector3D;
 import org.glob3.mobile.specific.G3MBuilder_Android;
 import org.glob3.mobile.specific.G3MWidget_Android;
 
@@ -60,8 +61,9 @@ public class MainActivity
 
       setContentView(R.layout.activity_main);
 
-      _g3mWidget = createWidget();
-
+      //_g3mWidget = createWidgetWithModelOnMerida();
+      _g3mWidget = createWidgetWithModelAtCenter();
+      
       final RelativeLayout placeHolder = (RelativeLayout) findViewById(R.id.g3mWidgetHolder);
 
       placeHolder.addView(_g3mWidget);
@@ -70,11 +72,13 @@ public class MainActivity
       _g3mWidget.setAnimatedCameraPosition(new Geodetic3D(_merida, 5000.0), 
       										TimeInterval.fromSeconds(7.5));
       
+      //_g3mWidget.getG3MWidget().getPlanetRenderer().setEnable(false);
+      
       // Camera position=(lat=38.908400780766385d, lon=-6.345933272891653d, height=664.4377440058383)
       
    }
 
-   private G3MWidget_Android createWidget() {
+   private G3MWidget_Android createWidgetWithModelOnMerida() {
       final G3MBuilder_Android builder = new G3MBuilder_Android(this);
       
 
@@ -117,20 +121,54 @@ public class MainActivity
       
       builder.addRenderer(sr);
       
-//      Shape plane = SceneJSShapesParser.parseFromJSON(planeJSON,
-//                                                        URL::FILE_PROTOCOL + "/" ,
-//                                                        false,
-//                                                        new Geodetic3D(Angle::fromDegrees(28.127222),
-//                                                                       Angle::fromDegrees(-15.431389),
-//                                                                       10000),
-//                                                        ABSOLUTE);
-//      
-//      // Washington, DC
-//      const double scale = 1000;
-//      plane->setScale(scale, scale, scale);
-//      plane->setPitch(Angle::fromDegrees(90));
-//      plane->setHeading(Angle::fromDegrees(0));
-//      _shapesRenderer->addShape(plane);
+      return builder.createWidget();
+   }
+   
+
+   private G3MWidget_Android createWidgetWithModelAtCenter() {
+      final G3MBuilder_Android builder = new G3MBuilder_Android(this);
+      
+
+      final LayerSet layerSet = new LayerSet();
+      layerSet.addLayer(new OSMLayer(TimeInterval.fromDays(30)));
+      builder.getPlanetRendererBuilder().setLayerSet(layerSet);
+      
+      Geodetic3D g = builder.getPlanet().toGeodetic3D(Vector3D.zero);
+      
+      ShapesRenderer sr = new ShapesRenderer();
+      
+      sr.loadJSONSceneJS(new URL(URL.FILE_PROTOCOL + "models/1/1.json"),
+              1000,
+              TimeInterval.forever(),
+              true,
+              URL.FILE_PROTOCOL + "models/1/",
+              false,
+              new Geodetic3D(_museoMerida, -builder.getPlanet().getRadii()._x),
+              AltitudeMode.ABSOLUTE,
+              new ShapeLoadListener(){
+
+				@Override
+				public void dispose() {
+					// TODO Auto-generated method stub
+					
+				}
+
+				@Override
+				public void onBeforeAddShape(SGShape shape) {
+					// TODO Auto-generated method stub
+					shape.setScale(5e5);
+					shape.setPitch(Angle.fromDegrees(90));
+					ILogger.instance().logError("MODEL ADDED");
+				}
+
+				@Override
+				public void onAfterAddShape(SGShape shape) {
+				}
+    	  
+      },
+              true);
+      
+      builder.addRenderer(sr);
       
       return builder.createWidget();
    }

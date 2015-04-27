@@ -18,6 +18,8 @@
 #include "Vector3D.hpp"
 #include "Vector2F.hpp"
 
+#include "FloatBufferBuilder.hpp"
+
 SGGeometryNode::~SGGeometryNode() {
   delete _vertices;
   delete _colors;
@@ -93,4 +95,41 @@ Vector3D SGGeometryNode::mostDistantVertexFromCenter(const MutableMatrix44D& tra
   Vector3D res2 = SGNode::mostDistantVertexFromCenter(transformation);
   
   return max > res2.squaredLength()? res.asVector3D() : res2;
+}
+
+void SGGeometryNode::centerGeometryAtZero(){
+  
+  double maxX = 9e99, maxY= 9e99, maxZ= 9e99, minX= -9e99, minY= -9e99, minZ= -9e99;
+  
+  for (int i = 0; i < _vertices->size(); i+=3){
+    double x = _vertices->get(i), y = _vertices->get(i+1), z = _vertices->get(i+2);
+    
+    if (x > maxX){
+      maxX = x;
+    } else if (x < minX){
+      minX = x;
+    }
+    
+    if (y > maxY){
+      maxY = y;
+    } else if (y < minY){
+      minY = y;
+    }
+    
+    if (z > maxZ){
+      maxZ = z;
+    } else if (z < minZ){
+      minZ = z;
+    }
+  }
+  
+  Vector3D center(maxX-minX,
+                  maxY-minY,
+                  maxZ-minZ);
+  
+  
+  _glState->addGLFeature(new ModelTransformGLFeature(
+                         MutableMatrix44D::createTranslationMatrix(center.times(-1)).asMatrix44D()),
+                         false);
+  
 }

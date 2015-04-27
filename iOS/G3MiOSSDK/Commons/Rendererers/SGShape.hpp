@@ -83,6 +83,8 @@ public:
   
   Vector3D mostDistantVertexFromCenter() const;
   
+  void centerGeometryAtZero();
+  
   
 };
 

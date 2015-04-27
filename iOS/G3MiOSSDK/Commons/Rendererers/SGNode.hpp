@@ -103,6 +103,8 @@ public:
     }
     return res.asVector3D();
   }
+  
+  virtual void centerGeometryAtZero(){}
 };
 
 #endif
