@@ -389,4 +389,21 @@ public class Vector3D
     return IMathUtils.instance().sqrt(squaredDistanceTo(that));
   }
 
+  public static Vector3D maxOnAllAxis(Vector3D v1, Vector3D v2)
+  {
+    final IMathUtils mu = IMathUtils.instance();
+    return new Vector3D(mu.max(v1._x, v2._x), mu.max(v1._y, v2._y), mu.max(v1._z, v2._z));
+  }
+
+  public static Vector3D minOnAllAxis(Vector3D v1, Vector3D v2)
+  {
+    final IMathUtils mu = IMathUtils.instance();
+    return new Vector3D(mu.min(v1._x, v2._x), mu.min(v1._y, v2._y), mu.min(v1._z, v2._z));
+  }
+
+  public static Vector3D meanOnAllAxis(Vector3D v1, Vector3D v2)
+  {
+    return new Vector3D((v1._x + v2._x) / 2.0, (v1._y + v2._y) / 2.0, (v1._z + v2._z) / 2.0);
+  }
+
 }

@@ -63,6 +63,14 @@ public class CoordinateSystem
     }
   }
 
+  public CoordinateSystem(CoordinateSystem cs)
+  {
+     _x = new Vector3D(cs._x);
+     _y = new Vector3D(cs._y);
+     _z = new Vector3D(cs._z);
+     _origin = new Vector3D(cs._origin);
+  }
+
   //For camera
 
   //For camera
@@ -79,14 +87,7 @@ public class CoordinateSystem
     }
   }
 
-  public CoordinateSystem(CoordinateSystem cs) {
-	_x = new Vector3D(cs._x);
-	_y = new Vector3D(cs._y);
-	_z = new Vector3D(cs._z);
-	_origin = new Vector3D(cs._origin);
-}
-
-public final Mesh createMesh(double size, Color xColor, Color yColor, Color zColor)
+  public final Mesh createMesh(double size, Color xColor, Color yColor, Color zColor)
   {
   
     FloatBufferBuilderFromColor colors = new FloatBufferBuilderFromColor();
@@ -246,9 +247,6 @@ public final Mesh createMesh(double size, Color xColor, Color yColor, Color zCol
     return checkConsistency(_x, _y, _z);
   }
 
-public void dispose() {
-	// TODO Auto-generated method stub
-	
-}
+  public void dispose() {}
 
 }

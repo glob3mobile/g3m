@@ -98,9 +98,23 @@ public class SGShape extends Shape
     return new Vector3D(v._x * s._x, v._y * s._y, v._z * s._z);
   }
 
-  public final void centerGeometryAtZero()
+  public final Vector3D getMax()
   {
-    _node.centerGeometryAtZero();
+    Vector3D v = _node.getMax();
+    Vector3D s = getScale();
+    return new Vector3D(v._x * s._x, v._y * s._y, v._z * s._z);
+  }
+
+  public final Vector3D getMin()
+  {
+    Vector3D v = _node.getMin();
+    Vector3D s = getScale();
+    return new Vector3D(v._x * s._x, v._y * s._y, v._z * s._z);
+  }
+
+  public final Vector3D getCenter()
+  {
+
   }
 
 

@@ -126,15 +126,12 @@ public class SGGeometryNode extends SGNode
     return (max > res2.squaredLength())? res.asVector3D() : res2;
   }
 
-  public final void centerGeometryAtZero()
+  public final Vector3D getMax()
   {
   
     double maxX = 9e99;
     double maxY = 9e99;
     double maxZ = 9e99;
-    double minX = -9e99;
-    double minY = -9e99;
-    double minZ = -9e99;
   
     for (int i = 0; i < _vertices.size(); i+=3)
     {
@@ -146,34 +143,51 @@ public class SGGeometryNode extends SGNode
       {
         maxX = x;
       }
-      else if (x < minX)
-      {
-        minX = x;
-      }
   
       if (y > maxY)
       {
         maxY = y;
-      }
-      else if (y < minY)
-      {
-        minY = y;
       }
   
       if (z > maxZ)
       {
         maxZ = z;
       }
-      else if (z < minZ)
+    }
+  
+    return new Vector3D(maxX, maxY, maxZ);
+  
+  }
+
+  public final Vector3D getMin()
+  {
+  
+    double minX = -9e99;
+    double minY = -9e99;
+    double minZ = -9e99;
+  
+    for (int i = 0; i < _vertices.size(); i+=3)
+    {
+      double x = _vertices.get(i);
+      double y = _vertices.get(i+1);
+      double z = _vertices.get(i+2);
+  
+      if (x < minX)
+      {
+        minX = x;
+      }
+  
+      if (y < minY)
+      {
+        minY = y;
+      }
+      if (z < minZ)
       {
         minZ = z;
       }
     }
   
-    Vector3D center = new Vector3D(maxX-minX, maxY-minY, maxZ-minZ);
-  
-  
-    _glState.addGLFeature(new ModelTransformGLFeature(MutableMatrix44D.createTranslationMatrix(center.times(-1)).asMatrix44D()), false);
+    return new Vector3D(minX, minY, minZ);
   
   }
 
