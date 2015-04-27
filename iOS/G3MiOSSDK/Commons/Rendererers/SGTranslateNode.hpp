@@ -54,6 +54,10 @@ public:
     MutableMatrix44D m = transformation.multiply(_translationMatrix);
     return SGNode::mostDistantVertexFromCenter(m);
   }
+  
+  Vector3D getMax();
+  
+  Vector3D getMin();
 
 };
 

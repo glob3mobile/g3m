@@ -36,6 +36,14 @@ Vector3D SGShape::mostDistantVertexFromCenter() const{
   return Vector3D(v._x * s._x, v._y * s._y, v._z * s._z);
 }
 
-void SGShape::centerGeometryAtZero(){
-  _node->centerGeometryAtZero();
+Vector3D SGShape::getMax(){
+  Vector3D v = _node->getMax();
+  Vector3D s = getScale();
+  return Vector3D(v._x * s._x, v._y * s._y, v._z * s._z);
+}
+
+Vector3D SGShape::getMin(){
+  Vector3D v = _node->getMin();
+  Vector3D s = getScale();
+  return Vector3D(v._x * s._x, v._y * s._y, v._z * s._z);
 }

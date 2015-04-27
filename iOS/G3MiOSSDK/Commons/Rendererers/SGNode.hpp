@@ -105,6 +105,11 @@ public:
   }
   
   virtual void centerGeometryAtZero(){}
+  
+  Vector3D getMax();
+  
+  Vector3D getMin();
+  
 };
 
 #endif

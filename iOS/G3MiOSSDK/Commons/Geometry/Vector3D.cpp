@@ -223,3 +223,23 @@ Vector3D Vector3D::sub(const MutableVector3D& v) const {
                   _y - v.y(),
                   _z - v.z());
 }
+
+Vector3D Vector3D::maxOnAllAxis(const Vector3D& v1, const Vector3D& v2){
+  const IMathUtils* mu = IMathUtils::instance();
+  return Vector3D(mu->max(v1._x, v2._x),
+                  mu->max(v1._y, v2._y),
+                  mu->max(v1._z, v2._z));
+}
+
+Vector3D Vector3D::minOnAllAxis(const Vector3D& v1, const Vector3D& v2){
+  const IMathUtils* mu = IMathUtils::instance();
+  return Vector3D(mu->min(v1._x, v2._x),
+                  mu->min(v1._y, v2._y),
+                  mu->min(v1._z, v2._z));
+}
+
+Vector3D Vector3D::meanOnAllAxis(const Vector3D& v1, const Vector3D& v2){
+  return Vector3D((v1._x + v2._x) / 2.0,
+                  (v1._y + v2._y) / 2.0,
+                  (v1._z + v2._z) / 2.0);
+}

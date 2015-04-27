@@ -158,7 +158,9 @@ public class MainActivity
 					// TODO Auto-generated method stub
 					shape.setScale(5e5);
 					shape.setPitch(Angle.fromDegrees(90));
-					ILogger.instance().logError("MODEL ADDED");
+					ILogger.instance().logError("MODEL ADDED AND CENTERED");
+					
+					shape.centerGeometryAtZero();
 				}
 
 				@Override

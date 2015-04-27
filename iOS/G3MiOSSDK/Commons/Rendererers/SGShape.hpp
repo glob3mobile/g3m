@@ -83,7 +83,13 @@ public:
   
   Vector3D mostDistantVertexFromCenter() const;
   
-  void centerGeometryAtZero();
+  Vector3D getMax();
+  
+  Vector3D getMin();
+  
+  Vector3D getCenter(){
+    
+  }
   
   
 };

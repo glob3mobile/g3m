@@ -123,7 +123,7 @@ public class SGGeometryNode extends SGNode
   
     Vector3D res2 = super.mostDistantVertexFromCenter(transformation);
   
-    return max > res2.squaredLength() != 0? res.asVector3D() : res2;
+    return (max > res2.squaredLength())? res.asVector3D() : res2;
   }
 
   public final void centerGeometryAtZero()

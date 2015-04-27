@@ -33,6 +33,9 @@ public:
   static CoordinateSystem global();
 
   CoordinateSystem(const Vector3D& x, const Vector3D& y, const Vector3D& z, const Vector3D& origin);
+  
+  CoordinateSystem(const CoordinateSystem& cs):
+  _x(cs._x), _y(cs._y), _z(cs._z), _origin(cs._origin){}
 
   //For camera
   CoordinateSystem(const Vector3D& viewDirection, const Vector3D& up, const Vector3D& origin);
@@ -54,6 +57,10 @@ public:
   MutableMatrix44D getRotationMatrix() const;
   
   bool isConsistent() const;
+  
+#ifdef JAVA_CODE
+  public void dispose() {}
+#endif
 
 };
 

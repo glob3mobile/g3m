@@ -215,6 +215,12 @@ public:
   const double squaredDistanceTo(const Vector3D& that) const;
 
   const double distanceTo(const Vector3D& that) const;
+  
+  static Vector3D maxOnAllAxis(const Vector3D& v1, const Vector3D& v2);
+  
+  static Vector3D minOnAllAxis(const Vector3D& v1, const Vector3D& v2);
+  
+  static Vector3D meanOnAllAxis(const Vector3D& v1, const Vector3D& v2);
 
 };
 
