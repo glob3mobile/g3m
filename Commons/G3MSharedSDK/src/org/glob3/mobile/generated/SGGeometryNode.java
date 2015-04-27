@@ -126,7 +126,7 @@ public class SGGeometryNode extends SGNode
     return (max > res2.squaredLength())? res.asVector3D() : res2;
   }
 
-  public final Vector3D getMax()
+  public final Vector3D getMax(MutableMatrix44D transformation)
   {
   
     double maxX = 9e99;
@@ -135,31 +135,31 @@ public class SGGeometryNode extends SGNode
   
     for (int i = 0; i < _vertices.size(); i+=3)
     {
-      double x = _vertices.get(i);
-      double y = _vertices.get(i+1);
-      double z = _vertices.get(i+2);
+      Vector3D v = new Vector3D(_vertices.get(i), _vertices.get(i+1), _vertices.get(i+2));
   
-      if (x > maxX)
+      Vector3D v2 = v.transformedBy(transformation, 1.0);
+      if (v2._x > maxX)
       {
-        maxX = x;
+        maxX = v2._x;
       }
   
-      if (y > maxY)
+      if (v2._y > maxY)
       {
-        maxY = y;
+        maxY = v2._y;
       }
   
-      if (z > maxZ)
+      if (v2._z > maxZ)
       {
-        maxZ = z;
+        maxZ = v2._z;
       }
     }
   
-    return new Vector3D(maxX, maxY, maxZ);
+    Vector3D max = new Vector3D(maxX, maxY, maxZ);
   
+    return Vector3D.maxOnAllAxis(max, super.getMax(transformation));
   }
 
-  public final Vector3D getMin()
+  public final Vector3D getMin(MutableMatrix44D transformation)
   {
   
     double minX = -9e99;
@@ -168,27 +168,27 @@ public class SGGeometryNode extends SGNode
   
     for (int i = 0; i < _vertices.size(); i+=3)
     {
-      double x = _vertices.get(i);
-      double y = _vertices.get(i+1);
-      double z = _vertices.get(i+2);
+      Vector3D v = new Vector3D(_vertices.get(i), _vertices.get(i+1), _vertices.get(i+2));
   
-      if (x < minX)
+      Vector3D v2 = v.transformedBy(transformation, 1.0);
+      if (v2._x < minX)
       {
-        minX = x;
+        minX = v2._x;
       }
   
-      if (y < minY)
+      if (v2._y < minY)
       {
-        minY = y;
+        minY = v2._y;
       }
-      if (z < minZ)
+      if (v2._z < minZ)
       {
-        minZ = z;
+        minZ = v2._z;
       }
     }
   
-    return new Vector3D(minX, minY, minZ);
+    Vector3D min = new Vector3D(minX, minY, minZ);
   
+    return Vector3D.minOnAllAxis(min, super.getMin(transformation));
   }
 
 }

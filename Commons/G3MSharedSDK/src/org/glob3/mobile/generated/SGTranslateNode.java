@@ -57,26 +57,30 @@ public class SGTranslateNode extends SGNode
     return super.mostDistantVertexFromCenter(m);
   }
 
-  public final Vector3D getMax()
+  public final Vector3D getMax(MutableMatrix44D transformation)
   {
     MutableVector3D res = new MutableVector3D(-9e99,-9e99,-9e99);
+  
+    MutableMatrix44D t = transformation.multiply(_translationMatrix);
     final int s = getChildrenCount();
     for (int i = 0; i < s; i++)
     {
-      Vector3D v = getChild(i).getMax();
-      res.copyFrom(Vector3D.maxOnAllAxis(v.transformedBy(_translationMatrix, 1.0), res.asVector3D()));
+      Vector3D v = getChild(i).getMax(t);
+      res.copyFrom(Vector3D.maxOnAllAxis(v, res.asVector3D()));
     }
     return res.asVector3D();
   }
 
-  public final Vector3D getMin()
+  public final Vector3D getMin(MutableMatrix44D transformation)
   {
     MutableVector3D res = new MutableVector3D(9e99, 9e99, 9e99);
+  
+    MutableMatrix44D t = transformation.multiply(_translationMatrix);
     final int s = getChildrenCount();
     for (int i = 0; i < s; i++)
     {
-      Vector3D v = getChild(i).getMin();
-      res.copyFrom(Vector3D.minOnAllAxis(v.transformedBy(_translationMatrix, 1.0), res.asVector3D()));
+      Vector3D v = getChild(i).getMin(t);
+      res.copyFrom(Vector3D.minOnAllAxis(v, res.asVector3D()));
     }
     return res.asVector3D();
   }

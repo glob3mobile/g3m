@@ -187,28 +187,33 @@ public class SGNode
   {
   }
 
-  public final Vector3D getMax()
+  public Vector3D getMax(MutableMatrix44D transformation)
   {
     MutableVector3D res = new MutableVector3D(-9e99,-9e99,-9e99);
     final int s = getChildrenCount();
     for (int i = 0; i < s; i++)
     {
-      Vector3D v = getChild(i).getMax();
+      Vector3D v = getChild(i).getMax(transformation);
       res.copyFrom(Vector3D.maxOnAllAxis(v, res.asVector3D()));
     }
     return res.asVector3D();
   }
 
-  public final Vector3D getMin()
+  public Vector3D getMin(MutableMatrix44D transformation)
   {
     MutableVector3D res = new MutableVector3D(9e99, 9e99, 9e99);
     final int s = getChildrenCount();
     for (int i = 0; i < s; i++)
     {
-      Vector3D v = getChild(i).getMin();
+      Vector3D v = getChild(i).getMin(transformation);
       res.copyFrom(Vector3D.minOnAllAxis(v, res.asVector3D()));
     }
     return res.asVector3D();
+  }
+
+  public final Vector3D getCenter(MutableMatrix44D transformation)
+  {
+    return Vector3D.meanOnAllAxis(getMax(transformation), getMin(transformation));
   }
 
 }
