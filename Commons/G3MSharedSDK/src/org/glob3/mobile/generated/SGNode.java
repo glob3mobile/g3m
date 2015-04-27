@@ -24,6 +24,7 @@ package org.glob3.mobile.generated;
 //class GLGlobalState;
 //class GPUProgramState;
 
+
 public class SGNode
 {
   protected final String _id;
@@ -162,5 +163,27 @@ public class SGNode
   public String description()
   {
     return "SGNode";
+  }
+
+  public Vector3D mostDistantVertexFromCenter(MutableMatrix44D transformation)
+  {
+    double max = 0;
+    MutableVector3D res = new MutableVector3D(0, 0, 0);
+    final int s = getChildrenCount();
+    for (int i = 0; i < s; i++)
+    {
+      Vector3D v = getChild(i).mostDistantVertexFromCenter(transformation);
+      double d = v.squaredLength();
+      if (max < d)
+      {
+        max = d;
+        res.copyFrom(v);
+      }
+    }
+    return res.asVector3D();
+  }
+
+  public void centerGeometryAtZero()
+  {
   }
 }

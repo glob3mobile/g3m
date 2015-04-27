@@ -91,5 +91,17 @@ public class SGShape extends Shape
     return intersections;
   }
 
+  public final Vector3D mostDistantVertexFromCenter()
+  {
+    Vector3D v = _node.mostDistantVertexFromCenter(MutableMatrix44D.identity());
+    Vector3D s = getScale();
+    return new Vector3D(v._x * s._x, v._y * s._y, v._z * s._z);
+  }
+
+  public final void centerGeometryAtZero()
+  {
+    _node.centerGeometryAtZero();
+  }
+
 
 }

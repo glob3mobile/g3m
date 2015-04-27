@@ -89,4 +89,11 @@ public abstract class AbstractMeshShape extends Shape
     }
     return mesh.isTransparent(rc);
   }
+
+  public Vector3D mostDistantVertexFromCenter()
+  {
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning TODO
+    return Vector3D.zero;
+  }
 }

@@ -221,4 +221,22 @@ public class CoordinateSystem
     return _x.isEquals(that._x) && _y.isEquals(that._y) && _z.isEquals(that._z);
   }
 
+  public final CoordinateSystem applyRotation(MutableMatrix44D m)
+  {
+  
+    return new CoordinateSystem(_x.transformedBy(m, 1.0), _y.transformedBy(m, 1.0), _z.transformedBy(m, 1.0), _origin); //.transformedBy(m, 1.0));
+  }
+
+  public final MutableMatrix44D getRotationMatrix()
+  {
+  
+    return new MutableMatrix44D(_x._x, _x._y, _x._z, 0, _y._x, _y._y, _y._z, 0, _z._x, _z._y, _z._z, 0, 0,0,0,1);
+  
+  }
+
+  public final boolean isConsistent()
+  {
+    return checkConsistency(_x, _y, _z);
+  }
+
 }

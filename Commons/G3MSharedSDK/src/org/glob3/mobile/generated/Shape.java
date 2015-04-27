@@ -23,6 +23,8 @@ package org.glob3.mobile.generated;
 
 
 
+
+
 //class ShapePendingEffect;
 //class GPUProgramState;
 
@@ -31,9 +33,7 @@ public abstract class Shape implements SurfaceElevationListener, EffectTarget
   private Geodetic3D _position;
   private AltitudeMode _altitudeMode;
 
-  private Angle _heading;
-  private Angle _pitch;
-  private Angle _roll;
+  private CoordinateSystem _coordinateSystem; //For H, P, R
 
   private double _scaleX;
   private double _scaleY;
@@ -42,8 +42,6 @@ public abstract class Shape implements SurfaceElevationListener, EffectTarget
   private double _translationX;
   private double _translationY;
   private double _translationZ;
-
-//  const Planet* _planet;
 
   private MutableMatrix44D _transformMatrix;
   private MutableMatrix44D getTransformMatrix(Planet planet)
@@ -88,12 +86,10 @@ public abstract class Shape implements SurfaceElevationListener, EffectTarget
   
     final MutableMatrix44D geodeticTransform = (_position == null) ? MutableMatrix44D.identity() : planet.createGeodeticTransformMatrix(positionWithSurfaceElevation);
   
-    final MutableMatrix44D headingRotation = MutableMatrix44D.createRotationMatrix(_heading, Vector3D.downZ());
-    final MutableMatrix44D pitchRotation = MutableMatrix44D.createRotationMatrix(_pitch, Vector3D.upX());
-    final MutableMatrix44D rollRotation = MutableMatrix44D.createRotationMatrix(_roll, Vector3D.upY());
+    final MutableMatrix44D hpr = _coordinateSystem.getRotationMatrix();
     final MutableMatrix44D scale = MutableMatrix44D.createScaleMatrix(_scaleX, _scaleY, _scaleZ);
     final MutableMatrix44D translation = MutableMatrix44D.createTranslationMatrix(_translationX, _translationY, _translationZ);
-    final MutableMatrix44D localTransform = headingRotation.multiply(pitchRotation).multiply(rollRotation).multiply(translation).multiply(scale);
+    final MutableMatrix44D localTransform = hpr.multiply(translation).multiply(scale);
   
     return new MutableMatrix44D(geodeticTransform.multiply(localTransform));
   }
@@ -102,9 +98,6 @@ public abstract class Shape implements SurfaceElevationListener, EffectTarget
   {
      _position = position;
      _altitudeMode = altitudeMode;
-     _heading = new Angle(Angle.zero());
-     _pitch = new Angle(Angle.zero());
-     _roll = new Angle(Angle.zero());
      _scaleX = 1;
      _scaleY = 1;
      _scaleZ = 1;
@@ -116,6 +109,7 @@ public abstract class Shape implements SurfaceElevationListener, EffectTarget
      _surfaceElevation = 0;
      _glState = new GLState();
      _surfaceElevationProvider = null;
+     _coordinateSystem = new CoordinateSystem(CoordinateSystem.global());
 
   }
 
@@ -132,13 +126,6 @@ public abstract class Shape implements SurfaceElevationListener, EffectTarget
     if (_position != null)
        _position.dispose();
   
-    if (_heading != null)
-       _heading.dispose();
-    if (_pitch != null)
-       _pitch.dispose();
-    if (_roll != null)
-       _roll.dispose();
-  
     if (_transformMatrix != null)
        _transformMatrix.dispose();
   
@@ -151,6 +138,9 @@ public abstract class Shape implements SurfaceElevationListener, EffectTarget
         ILogger.instance().logError("Couldn't remove shape as listener of Surface Elevation Provider.");
       }
     }
+  
+    if (_coordinateSystem != null)
+       _coordinateSystem.dispose();
   }
 
   public final Geodetic3D getPosition()
@@ -160,31 +150,20 @@ public abstract class Shape implements SurfaceElevationListener, EffectTarget
 
   public final Angle getHeading()
   {
-    return _heading;
+    //Geo Heading rotates clockwise
+    return _coordinateSystem.getTaitBryanAngles(CoordinateSystem.global())._heading.times(-1);
   }
 
   public final Angle getPitch()
   {
-    return _pitch;
+        return _coordinateSystem.getTaitBryanAngles(CoordinateSystem.global())._pitch;
   }
 
   public final Angle getRoll()
   {
-    return _roll;
+        return _coordinateSystem.getTaitBryanAngles(CoordinateSystem.global())._roll;
   }
 
-//  void setPosition(Geodetic3D* position,
-//                   AltitudeMode altitudeMode);
-
-
-  //void Shape::setPosition(Geodetic3D* position,
-  //                        AltitudeMode altitudeMode) {
-  //  delete _position;
-  //  _position = position;
-  //  _altitudeMode = altitudeMode;
-  //  cleanTransformMatrix();
-  //}
-  
   public final void setPosition(Geodetic3D position)
   {
     if (_altitudeMode == AltitudeMode.RELATIVE_TO_GROUND)
@@ -227,7 +206,7 @@ public abstract class Shape implements SurfaceElevationListener, EffectTarget
   }
   public final void setAnimatedPosition(TimeInterval duration, Geodetic3D position, Angle pitch, Angle heading, Angle roll, boolean linearInterpolation, boolean forceToPositionOnCancel, boolean forceToPositionOnStop)
   {
-    Effect effect = new ShapeFullPositionEffect(duration, this, _position, position, _pitch, pitch, _heading, heading, _roll, roll, linearInterpolation, forceToPositionOnCancel, forceToPositionOnStop);
+    Effect effect = new ShapeFullPositionEffect(duration, this, _position, position, getPitch(), pitch, getHeading(), heading, getRoll(), roll, linearInterpolation, forceToPositionOnCancel, forceToPositionOnStop);
     addShapeEffect(effect);
   }
 
@@ -242,19 +221,30 @@ public abstract class Shape implements SurfaceElevationListener, EffectTarget
 
   public final void setHeading(Angle heading)
   {
-    _heading = heading;
+    Angle h = heading.times(-1); //Geo Heading rotates clockwise
+
+    TaitBryanAngles tba = _coordinateSystem.getTaitBryanAngles(CoordinateSystem.global());
+    if (_coordinateSystem != null)
+       _coordinateSystem.dispose();
+    _coordinateSystem = new CoordinateSystem(CoordinateSystem.global().applyTaitBryanAngles(h, tba._pitch, tba._roll));
     cleanTransformMatrix();
   }
 
   public final void setPitch(Angle pitch)
   {
-    _pitch = pitch;
+    TaitBryanAngles tba = _coordinateSystem.getTaitBryanAngles(CoordinateSystem.global());
+    if (_coordinateSystem != null)
+       _coordinateSystem.dispose();
+    _coordinateSystem = new CoordinateSystem(CoordinateSystem.global().applyTaitBryanAngles(tba._heading, pitch, tba._roll));
     cleanTransformMatrix();
   }
 
   public final void setRoll(Angle roll)
   {
-    _roll = roll;
+    TaitBryanAngles tba = _coordinateSystem.getTaitBryanAngles(CoordinateSystem.global());
+    if (_coordinateSystem != null)
+       _coordinateSystem.dispose();
+    _coordinateSystem = new CoordinateSystem(CoordinateSystem.global().applyTaitBryanAngles(tba._heading, tba._pitch, roll));
     cleanTransformMatrix();
   }
 
@@ -402,5 +392,11 @@ public abstract class Shape implements SurfaceElevationListener, EffectTarget
 
   public abstract java.util.ArrayList<Double> intersectionsDistances(Planet planet, Vector3D origin, Vector3D direction);
 
+  public abstract Vector3D mostDistantVertexFromCenter();
 
+  public final Sphere createBoundingSphere(Planet planet)
+  {
+    Sphere sphere = new Sphere(planet.toCartesian(getPosition()), mostDistantVertexFromCenter().length());
+    return sphere;
+  }
 }

@@ -57,5 +57,11 @@ public class SGRotateNode extends SGNode
     return "SGRotateNode";
   }
 
+  public final Vector3D mostDistantVertexFromCenter(MutableMatrix44D transformation)
+  {
+    MutableMatrix44D m = transformation.multiply(_rotationMatrix);
+    return super.mostDistantVertexFromCenter(m);
+  }
+
 
 }

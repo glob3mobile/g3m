@@ -51,4 +51,10 @@ public class SGTranslateNode extends SGNode
     return "SGTranslateNode";
   }
 
+  public final Vector3D mostDistantVertexFromCenter(MutableMatrix44D transformation)
+  {
+    MutableMatrix44D m = transformation.multiply(_translationMatrix);
+    return super.mostDistantVertexFromCenter(m);
+  }
+
 }
