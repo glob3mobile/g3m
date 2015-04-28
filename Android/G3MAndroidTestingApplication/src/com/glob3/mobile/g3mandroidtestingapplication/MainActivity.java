@@ -158,9 +158,11 @@ public class MainActivity
 					// TODO Auto-generated method stub
 					shape.setScale(5e5);
 					shape.setPitch(Angle.fromDegrees(90));
-					ILogger.instance().logError("MODEL ADDED AND CENTERED");
-					
+
 					shape.setTranslation(shape.getCenter().times(-1));
+					Vector3D c = shape.getCenter();
+
+					ILogger.instance().logError("MODEL ADDED AND CENTERED %s", c.description());
 				}
 
 				@Override

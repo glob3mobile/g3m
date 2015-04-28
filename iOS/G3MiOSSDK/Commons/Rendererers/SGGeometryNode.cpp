@@ -99,7 +99,7 @@ Vector3D SGGeometryNode::mostDistantVertexFromCenter(const MutableMatrix44D& tra
 
 Vector3D SGGeometryNode::getMax(const MutableMatrix44D& transformation){
   
-  double maxX = 9e99, maxY= 9e99, maxZ= 9e99;
+  double maxX = -9e99, maxY= -9e99, maxZ= -9e99;
   
   for (int i = 0; i < _vertices->size(); i+=3){
     Vector3D v(_vertices->get(i), _vertices->get(i+1), _vertices->get(i+2));
@@ -125,7 +125,7 @@ Vector3D SGGeometryNode::getMax(const MutableMatrix44D& transformation){
 
 Vector3D SGGeometryNode::getMin(const MutableMatrix44D& transformation){
   
-  double minX= -9e99, minY= -9e99, minZ= -9e99;
+  double minX= 9e99, minY= 9e99, minZ= 9e99;
   
   for (int i = 0; i < _vertices->size(); i+=3){
     Vector3D v(_vertices->get(i), _vertices->get(i+1), _vertices->get(i+2));

@@ -364,6 +364,8 @@ Mesh* createSectorMesh(const Planet* planet,
                                    Angle::fromDegrees(90),
                                    Angle::zero());
         
+        ((SGShape*)plane)->getCenter();
+        
       }
     }
   }

@@ -129,9 +129,9 @@ public class SGGeometryNode extends SGNode
   public final Vector3D getMax(MutableMatrix44D transformation)
   {
   
-    double maxX = 9e99;
-    double maxY = 9e99;
-    double maxZ = 9e99;
+    double maxX = -9e99;
+    double maxY = -9e99;
+    double maxZ = -9e99;
   
     for (int i = 0; i < _vertices.size(); i+=3)
     {
@@ -162,9 +162,9 @@ public class SGGeometryNode extends SGNode
   public final Vector3D getMin(MutableMatrix44D transformation)
   {
   
-    double minX = -9e99;
-    double minY = -9e99;
-    double minZ = -9e99;
+    double minX = 9e99;
+    double minY = 9e99;
+    double minZ = 9e99;
   
     for (int i = 0; i < _vertices.size(); i+=3)
     {
