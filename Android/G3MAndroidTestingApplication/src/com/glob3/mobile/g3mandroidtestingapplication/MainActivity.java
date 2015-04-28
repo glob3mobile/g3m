@@ -4,32 +4,19 @@ package com.glob3.mobile.g3mandroidtestingapplication;
 
 import org.glob3.mobile.generated.AltitudeMode;
 import org.glob3.mobile.generated.Angle;
-import org.glob3.mobile.generated.Color;
-import org.glob3.mobile.generated.ColumnLayoutImageBuilder;
-import org.glob3.mobile.generated.DownloaderImageBuilder;
-import org.glob3.mobile.generated.G3MContext;
-import org.glob3.mobile.generated.GFont;
-import org.glob3.mobile.generated.GInitializationTask;
+import org.glob3.mobile.generated.CameraDoubleDragHandler;
+import org.glob3.mobile.generated.CameraRenderer;
+import org.glob3.mobile.generated.CameraSingleDragHandler;
 import org.glob3.mobile.generated.Geodetic2D;
 import org.glob3.mobile.generated.Geodetic3D;
-import org.glob3.mobile.generated.ICanvas;
-import org.glob3.mobile.generated.IImage;
-import org.glob3.mobile.generated.IImageDownloadListener;
-import org.glob3.mobile.generated.IImageListener;
 import org.glob3.mobile.generated.ILogger;
-import org.glob3.mobile.generated.LabelImageBuilder;
 import org.glob3.mobile.generated.LayerSet;
-import org.glob3.mobile.generated.NonOverlappingMark;
-import org.glob3.mobile.generated.NonOverlappingMarkTouchListener;
-import org.glob3.mobile.generated.NonOverlappingMarksRenderer;
 import org.glob3.mobile.generated.OSMLayer;
-import org.glob3.mobile.generated.QuadShape;
 import org.glob3.mobile.generated.SGShape;
 import org.glob3.mobile.generated.ShapeLoadListener;
 import org.glob3.mobile.generated.ShapesRenderer;
 import org.glob3.mobile.generated.TimeInterval;
 import org.glob3.mobile.generated.URL;
-import org.glob3.mobile.generated.Vector2F;
 import org.glob3.mobile.generated.Vector3D;
 import org.glob3.mobile.specific.G3MBuilder_Android;
 import org.glob3.mobile.specific.G3MWidget_Android;
@@ -69,10 +56,10 @@ public class MainActivity
       placeHolder.addView(_g3mWidget);
 
       
-      _g3mWidget.setAnimatedCameraPosition(new Geodetic3D(_merida, 5000.0), 
-      										TimeInterval.fromSeconds(7.5));
+//      _g3mWidget.setAnimatedCameraPosition(new Geodetic3D(_merida, 5000.0), 
+//      										TimeInterval.fromSeconds(7.5));
       
-      //_g3mWidget.getG3MWidget().getPlanetRenderer().setEnable(false);
+      _g3mWidget.getG3MWidget().getPlanetRenderer().setEnable(false);
       
       // Camera position=(lat=38.908400780766385d, lon=-6.345933272891653d, height=664.4377440058383)
       
@@ -133,7 +120,7 @@ public class MainActivity
       layerSet.addLayer(new OSMLayer(TimeInterval.fromDays(30)));
       builder.getPlanetRendererBuilder().setLayerSet(layerSet);
       
-      Geodetic3D g = builder.getPlanet().toGeodetic3D(Vector3D.zero);
+      Geodetic3D g = Geodetic3D.fromDegrees(0, 0, -builder.getPlanet().getRadii()._x);
       
       ShapesRenderer sr = new ShapesRenderer();
       
@@ -143,7 +130,7 @@ public class MainActivity
               true,
               URL.FILE_PROTOCOL + "models/1/",
               false,
-              new Geodetic3D(_museoMerida, -builder.getPlanet().getRadii()._x),
+              g,
               AltitudeMode.ABSOLUTE,
               new ShapeLoadListener(){
 
@@ -173,6 +160,13 @@ public class MainActivity
               true);
       
       builder.addRenderer(sr);
+      
+      //Controlling model with 1 or 2 fingers
+      CameraRenderer cameraRenderer = new CameraRenderer();
+      boolean useInertia = true;
+      cameraRenderer.addHandler(new CameraSingleDragHandler(useInertia));
+      cameraRenderer.addHandler(new CameraDoubleDragHandler());
+      builder.setCameraRenderer(cameraRenderer);
       
       return builder.createWidget();
    }

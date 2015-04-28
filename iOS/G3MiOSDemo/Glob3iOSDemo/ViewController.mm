@@ -354,7 +354,7 @@ Mesh* createSectorMesh(const Planet* planet,
         plane->setScale(scale, scale, scale);
         sr->addShape(plane);
         
-        printf("%f\n", plane->createBoundingSphere(builder.getPlanet())._radius);
+//        printf("%f\n", plane->createBoundingSphere(builder.getPlanet())._radius);
         
         plane->setAnimatedPosition(TimeInterval::fromSeconds(20),
                                    Geodetic3D(Angle::fromDegrees(28.127222),

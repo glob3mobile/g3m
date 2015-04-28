@@ -700,7 +700,8 @@ public class Camera
     final double height = getGeodeticPosition()._height;
     double zNear = height * 0.1;
   
-    double zFar = _planet.distanceToHorizon(_position.asVector3D());
+    //double zFar = _planet.distanceToHorizon(_position.asVector3D());
+    double zFar = _position.length() * 2;
   
     final double goalRatio = 1000;
     final double ratio = zFar / zNear;
