@@ -12,6 +12,7 @@ import org.glob3.mobile.generated.Geodetic3D;
 import org.glob3.mobile.generated.ILogger;
 import org.glob3.mobile.generated.LayerSet;
 import org.glob3.mobile.generated.OSMLayer;
+import org.glob3.mobile.generated.Planet;
 import org.glob3.mobile.generated.SGShape;
 import org.glob3.mobile.generated.ShapeLoadListener;
 import org.glob3.mobile.generated.ShapesRenderer;
@@ -115,12 +116,15 @@ public class MainActivity
    private G3MWidget_Android createWidgetWithModelAtCenter() {
       final G3MBuilder_Android builder = new G3MBuilder_Android(this);
       
+      Planet planet = Planet.createSphericalEarth();
+      builder.setPlanet(planet);
+      final double radius = planet.getRadii().maxAxis();
 
       final LayerSet layerSet = new LayerSet();
       layerSet.addLayer(new OSMLayer(TimeInterval.fromDays(30)));
       builder.getPlanetRendererBuilder().setLayerSet(layerSet);
       
-      Geodetic3D g = Geodetic3D.fromDegrees(0, 0, -builder.getPlanet().getRadii()._x);
+      Geodetic3D g = Geodetic3D.fromDegrees(0, 0, -radius);
       
       ShapesRenderer sr = new ShapesRenderer();
       
@@ -142,8 +146,8 @@ public class MainActivity
 
 				@Override
 				public void onBeforeAddShape(SGShape shape) {
-					// TODO Auto-generated method stub
-					shape.setScale(5e5);
+					double modelSize = shape.getMax().distanceTo(shape.getMin());
+					shape.setScale(radius*2 / modelSize);
 					shape.setPitch(Angle.fromDegrees(90));
 
 					shape.setTranslation(shape.getCenter().times(-1));
