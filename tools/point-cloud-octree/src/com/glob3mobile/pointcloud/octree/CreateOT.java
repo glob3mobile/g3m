@@ -27,14 +27,14 @@ public class CreateOT {
       System.out.println("CreateOT 0.1");
       System.out.println("------------\n");
 
-      //      final File sourceTXTDirectory = new File(System.getProperty("user.dir"));
-      //      final GProjection sourceProjection = GProjection.EPSG_26918;
-      //
-      //
-      //      final File cloudDirectory = new File(System.getProperty("user.dir"));
-      //      //final File cloudDirectory = new File("/Volumes/My Passport/_LIDAR_COPY");
-      //
-      //      final String cloudName = "Loudoun-VA";
+            final File sourceTXTDirectory = new File("E:/OneDrive/Documents/cmu/12-Spring_2015/practicum/Glob3Mobile/point clouds/txt");
+            final GProjection sourceProjection = GProjection.EPSG_26918;
+      
+      
+            final File cloudDirectory = new File("E:/OneDrive/Documents/cmu/12-Spring_2015/practicum/Glob3Mobile/point clouds/db");
+            //final File cloudDirectory = new File("/Volumes/My Passport/_LIDAR_COPY");
+      
+            final String cloudName = "Loudoun-VA";
 
 
       //      final File sourceTXTDirectory = new File("/Volumes/My Passport/_belgium_lidar_/txt");
@@ -44,15 +44,15 @@ public class CreateOT {
       //      final String cloudName = "Wallonia-Belgium";
 
 
-      final GProjection sourceProjection = GProjection.EPSG_31370;
+//      final GProjection sourceProjection = GProjection.EPSG_31370;
 
       //    final File sourceTXTDirectory = new File("/Volumes/My Passport/_minnesota_lidar_/txt");
       //    final File cloudDirectory = new File("/Volumes/My Passport/_minnesota_lidar_/db");
       //    final String cloudName = "minnesota";
 
-      final File sourceTXTDirectory = new File(System.getProperty("user.dir"));
-      final File cloudDirectory = new File(System.getProperty("user.dir"));
-      final String cloudName = "Wallonia";
+//      final File sourceTXTDirectory = new File(System.getProperty("user.dir"));
+//      final File cloudDirectory = new File(System.getProperty("user.dir"));
+//      final String cloudName = "Wallonia";
 
 
       final boolean deleteOT = true;

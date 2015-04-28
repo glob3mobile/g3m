@@ -150,10 +150,13 @@ public class ByteBufferUtils {
       final double lowerLongitude = buffer.getDouble();
       final double upperLatitude = buffer.getDouble();
       final double upperLongitude = buffer.getDouble();
+      final double minHeight = 0;//buffer.getDouble(); //TODO place heights in buffer
+      final double maxHeight = 10000;//buffer.getDouble();
 
       return Sector.fromRadians(//
                lowerLatitude, lowerLongitude, //
-               upperLatitude, upperLongitude);
+               upperLatitude, upperLongitude,
+               minHeight, maxHeight);
    }
 
 

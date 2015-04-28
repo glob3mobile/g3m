@@ -110,7 +110,7 @@ PersistentOctree.Visitor {
          _totalLongitudeDensity += density._x;
 
          for (final Geodetic3D point : node.getPoints()) {
-            if (_sector.contains(point._latitude, point._longitude)) {
+            if (_sector.contains(point._latitude, point._longitude, point._height, point._height)) {
                _totalPointsCount++;
                _fragmentOctree.addPoint(point);
             }
