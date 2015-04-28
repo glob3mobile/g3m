@@ -238,17 +238,18 @@ public class BerkeleyDBOctree implements PersistentOctree {
 
 			final TileHeader header = TileHeader
 					.deepestEnclosingTileHeader(targetSector);
-			// final TileHeader header = TileHeader.ROOT_TILE_HEADER;
+			//final TileHeader header = TileHeader.ROOT_TILE_HEADER;
 
-			// for (final Geodetic3D point : _buffer) {
-			// if (!targetSector.contains(point._latitude, point._longitude)) {
-			// throw new RuntimeException("Logic Error");
-			// }
-			// if (!header._sector.contains(point._latitude, point._longitude))
-			// {
-			// throw new RuntimeException("Logic Error");
-			// }
-			// }
+			for (final Geodetic3D point : _buffer) {
+				if (!targetSector.contains(point._latitude, point._longitude, point._height, point._height)) {
+					throw new RuntimeException("Logic Error");
+				}
+				if (!header._sector.contains(point._latitude, point._longitude, point._height, point._height))
+				{
+					throw new RuntimeException("Logic Error");
+				}
+			}
+			
 
 			final double averageLatitudeInRadians = _sumLatitudeInRadians
 					/ bufferSize;
