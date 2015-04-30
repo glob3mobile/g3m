@@ -697,16 +697,16 @@ std::vector<StarDomeRenderer*> _sdrs;
 //  CoordinateSystem final = global.applyRotation(localRM.multiply(*quaternionRM) ).changeOrigin(local._origin);
 //  delete quaternionRM;
 //
-//  UIDeviceOrientation orientation = [[UIDevice currentDevice] orientation];// UIDeviceOrientationPortraitUpsideDown; //Changing manually
+//  UIDeviceAttitude orientation = [[UIDevice currentDevice] orientation];// UIDeviceAttitudePortraitUpsideDown; //Changing manually
 //
-//  if (orientation == UIDeviceOrientationFaceUp || orientation == UIDeviceOrientationFaceDown){
+//  if (orientation == UIDeviceAttitudeFaceUp || orientation == UIDeviceAttitudeFaceDown){
 //    orientation = _lastDeviceOrientation;
 //  }
 //  _lastDeviceOrientation = orientation;
 //
 //
 //  switch (orientation) {
-//    case UIDeviceOrientationPortrait:
+//    case UIDeviceAttitudePortrait:
 //    {
 //      Vector3D planetNormal = planet->geodeticSurfaceNormal(final._origin);
 //
@@ -725,7 +725,7 @@ std::vector<StarDomeRenderer*> _sdrs;
 //      break;
 //    }
 //
-//    case UIDeviceOrientationPortraitUpsideDown:
+//    case UIDeviceAttitudePortraitUpsideDown:
 //    {
 //      Vector3D planetNormal = planet->geodeticSurfaceNormal(final._origin);
 //
@@ -744,7 +744,7 @@ std::vector<StarDomeRenderer*> _sdrs;
 //      break;
 //    }
 //
-//    case UIDeviceOrientationLandscapeRight:
+//    case UIDeviceAttitudeLandscapeRight:
 //    {
 //      Vector3D planetNormal = planet->geodeticSurfaceNormal(final._origin);
 //
@@ -762,7 +762,7 @@ std::vector<StarDomeRenderer*> _sdrs;
 //      break;
 //    }
 //
-//    case UIDeviceOrientationLandscapeLeft:
+//    case UIDeviceAttitudeLandscapeLeft:
 //    {
 //      Vector3D planetNormal = planet->geodeticSurfaceNormal(final._origin);
 //
