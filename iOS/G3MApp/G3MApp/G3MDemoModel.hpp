@@ -20,6 +20,7 @@ class G3MContext;
 class GEOVectorLayer;
 class MarksRenderer;
 class MeshRenderer;
+class TrailsRenderer;
 class ShapesRenderer;
 class PlanetRenderer;
 class GEORenderer;
@@ -41,6 +42,7 @@ private:
   GEORenderer*                 _geoRenderer;
   PointCloudsRenderer*         _pointCloudsRenderer;
   HUDRenderer*                 _hudRenderer;
+  TrailsRenderer*              _trailsRenderer;
   NonOverlappingMarksRenderer* _nonOverlappingMarksRenderer;
 
   G3MDemoScene*              _selectedScene;
@@ -58,6 +60,7 @@ public:
                GEORenderer*                 geoRenderer,
                PointCloudsRenderer*         pointCloudsRenderer,
                HUDRenderer*                 hudRenderer,
+               TrailsRenderer*              trailsRenderer,
                NonOverlappingMarksRenderer* nonOverlappingMarksRenderer);
 
 
@@ -95,6 +98,10 @@ public:
 
   HUDRenderer* getHUDRenderer() const {
     return _hudRenderer;
+  }
+    
+  TrailsRenderer* getTrailsRenderer() const {
+        return _trailsRenderer;
   }
 
   NonOverlappingMarksRenderer* getNonOverlappingMarksRenderer() const {

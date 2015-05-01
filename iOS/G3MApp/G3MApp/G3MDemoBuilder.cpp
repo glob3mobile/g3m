@@ -15,6 +15,7 @@
 #include <G3MiOSSDK/GInitializationTask.hpp>
 
 #include <G3MiOSSDK/MeshRenderer.hpp>
+#include <G3MiOSSDK/TrailsRenderer.hpp>
 #include <G3MiOSSDK/ShapesRenderer.hpp>
 #include <G3MiOSSDK/MarksRenderer.hpp>
 #include <G3MiOSSDK/GEORenderer.hpp>
@@ -75,6 +76,9 @@ void G3MDemoBuilder::build() {
 
   MarksRenderer* marksRenderer = new MarksRenderer(false);
   builder->addRenderer(marksRenderer);
+    
+  TrailsRenderer* trailsRenderer = new TrailsRenderer();
+  builder->addRenderer(trailsRenderer);
 
   PointCloudsRenderer* pointCloudsRenderer = new PointCloudsRenderer();
   builder->addRenderer(pointCloudsRenderer);
@@ -102,6 +106,7 @@ void G3MDemoBuilder::build() {
                             geoRenderer,
                             pointCloudsRenderer,
                             hudRenderer,
+                            trailsRenderer,
                             nonOverlappingMarksRenderer);
 
   builder->setInitializationTask(new G3MDemoInitializationTask(_model), true);

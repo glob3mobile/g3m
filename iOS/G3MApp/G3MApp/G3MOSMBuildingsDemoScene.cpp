@@ -27,6 +27,7 @@
 #include <G3MiOSSDK/IStringUtils.hpp>
 #include <G3MiOSSDK/MarksRenderer.hpp>
 #include <G3MiOSSDK/MeshRenderer.hpp>
+#include <G3MiOSSDK/TrailsRenderer.hpp>
 #include <G3MiOSSDK/ShapesRenderer.hpp>
 #include <G3MiOSSDK/BingMapsLayer.hpp>
 #include <math.h>
@@ -63,6 +64,7 @@ public:
         coords.push_back(&c);
         //Gets the type field from the JSON building data
         const JSONObject* buildings = jsonBuildingData->asObject();
+        
         const JSONArray* features = buildings->getAsArray("features");
         for (int i=0; i < features->size(); i++) {
             const JSONObject* feature = features->getAsObject(i);
@@ -91,6 +93,10 @@ public:
             double maxLon = 0;
             int coordSize = coordArray->getAsArray(0)->size();
             
+            //Creates a new trail for the building footprint
+            //TODO the 100s represent ribbonwidth and heightdelta
+            Trail* trail = new Trail(Color::red(), 2, 5);
+            
             if (coordSize > 0) {
                 minLat = coordArray->getAsArray(0)->getAsArray(0)->getAsNumber(1, 0);
                 maxLat = coordArray->getAsArray(0)->getAsArray(0)->getAsNumber(1, 0);
@@ -102,6 +108,11 @@ public:
             for (int j = 0; j < coordSize; j++) {
                 double lon = coordArray->getAsArray(0)->getAsArray(j)->getAsNumber(0, 0);
                 double lat = coordArray->getAsArray(0)->getAsArray(j)->getAsNumber(1, 0);
+                
+                //Add coordinate to the trail
+                Geodetic3D trailCoord = Geodetic3D::fromDegrees(lat, lon, height);
+                trail->addPosition(trailCoord);
+                
                 averageLon += lon;
                 averageLat += lat;
                 
@@ -124,6 +135,8 @@ public:
             
             Geodetic3D tempCoord = Geodetic3D::fromDegrees(averageLat, averageLon, height);
             Geodetic3D* buildingCenterBottom = new Geodetic3D(Angle::fromDegrees(averageLat),Angle::fromDegrees(averageLon), height/2);
+            
+            
             
             //Create and add the mark
             URL iconurl = URL::URL(iconURL);
@@ -185,11 +198,16 @@ public:
             
             // Adding box to the demo scene
             //if (x_extent > 0 && y_extent > 0 && z_extent > 0) {
-                _scene->addShape(bs);
+                //_scene->addShape(bs);
                 _scene->addMark(mark);
+                _scene->addTrail(trail);
             //}
             //TODO finish parsing all the other fields from building data
             
+            //TODO
+            /*
+             
+            */
         }
         
         //Freeing memory allocations
@@ -226,6 +244,10 @@ void G3MOSMBuildingsDemoScene::addShape(Shape* shape) {
     getModel()->getShapesRenderer()->addShape(shape);
 }
 
+void G3MOSMBuildingsDemoScene::addTrail(Trail* trail) {
+    getModel()->getTrailsRenderer()->addTrail(trail);
+}
+
 void G3MOSMBuildingsDemoScene::rawActivate(const G3MContext* context) {
     //Used for downloader->requestBuffer call
     bool readExpired = true;
@@ -254,7 +276,7 @@ void G3MOSMBuildingsDemoScene::rawActivate(const G3MContext* context) {
     
     //Positioning the camera close to New York because of the request buffer URL.
     //TODO change the positioning and the URL when needed
-    g3mWidget->setAnimatedCameraPosition(Geodetic3D::fromDegrees(40.747930906661231631, -73.977181666542492167, 10000),
+    g3mWidget->setAnimatedCameraPosition(Geodetic3D::fromDegrees(40.484178154472907352, -79.936819108698855985, 10000),
                                          Angle::zero(), // heading
                                          Angle::fromDegrees(30 - 90) // pitch
                                          );
@@ -310,4 +332,3 @@ int G3MOSMBuildingsDemoScene::getTileColFrom2DCoords(double lat, int zoom) {
     double yTile = floor((1 - log10(tan(lat * PI/180 + 1) / cos(lat * PI/180)) / PI) / 2 * (1 << zoom));
     return yTile;
 }
-

@@ -13,6 +13,7 @@
 #include "G3MDemoScene.hpp"
 #include "G3MiOSSDK/Tile.hpp"
 #include "G3MiOSSDK/Shape.hpp"
+#include "G3MiOSSDK/TrailsRenderer.hpp"
 
 class Mark;
 
@@ -23,9 +24,9 @@ private:
     const std::string dataKey = "rkc8ywdl";
     
     //Hardcoding level, row and col. **TODO Later we will get this from the tile
-    int level = 14;
-    int row = 4825;
-    int col = 6156;
+    int level = 13;//14;
+    int row = 2276;//4825;
+    int col = 3089;//6156;
     
     //Geodetic2D* get2DCoordsFromTile(int xIndex, int yIndex, int zoom); **TODO: Won't implement this until we find a use for it
     std::string getURLFromTile(int xIndex, int yIndex, int zoom);
@@ -33,7 +34,6 @@ private:
     //Gets the Tile's row and column given a latitude or longitude in degrees as well as a zoom level.
     int getTileRowFrom2DCoords(double lon, int zoom);
     int getTileColFrom2DCoords(double lat, int zoom);
-    
     
 protected:
     void rawActivate(const G3MContext* context);
@@ -53,6 +53,11 @@ public:
     void addMark(Mark* mark);
     void addMesh(Mesh* mesh);
     void addShape(Shape* shape);
+    void addTrail(Trail* trail);
+    
+    //Constants for creating trails
+    float const ribbonWidth = 100.0;
+    float const heightDelta = 100.0;
     
 };
 
