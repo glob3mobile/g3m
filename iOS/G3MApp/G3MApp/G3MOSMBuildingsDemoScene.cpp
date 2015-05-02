@@ -199,7 +199,7 @@ public:
             // Adding box to the demo scene
             //if (x_extent > 0 && y_extent > 0 && z_extent > 0) {
                 //_scene->addShape(bs);
-                _scene->addMark(mark);
+                //_scene->addMark(mark);
                 _scene->addTrail(trail);
             //}
             //TODO finish parsing all the other fields from building data
@@ -276,7 +276,7 @@ void G3MOSMBuildingsDemoScene::rawActivate(const G3MContext* context) {
     
     //Positioning the camera close to New York because of the request buffer URL.
     //TODO change the positioning and the URL when needed
-    g3mWidget->setAnimatedCameraPosition(Geodetic3D::fromDegrees(40.484178154472907352, -79.936819108698855985, 10000),
+    g3mWidget->setAnimatedCameraPosition(Geodetic3D::fromDegrees(40.436951174533987796, -79.945592595314977302, 1089.6270919237167618),
                                          Angle::zero(), // heading
                                          Angle::fromDegrees(30 - 90) // pitch
                                          );
