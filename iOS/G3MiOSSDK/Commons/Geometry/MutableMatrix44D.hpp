@@ -224,11 +224,13 @@ public:
 
   std::string description() const {
     IStringBuilder* isb = IStringBuilder::newStringBuilder();
-    isb->addString("MUTABLE MATRIX 44D: ");
+    isb->setPrecision(2);
+    isb->addString("MUTABLE MATRIX 44D: \n");
     float* f = asMatrix44D()->getColumnMajorFloatArray();
     for (int i = 0; i < 16; i++) {
       isb->addDouble(f[i]);
-      if (i < 15) isb->addString(", ");
+      if (i < 15) isb->addString("\t\t");
+      if ((i+1) % 4 == 0) isb->addString("\n");
     }
     const std::string s = isb->getString();
     delete isb;

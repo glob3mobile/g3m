@@ -395,18 +395,18 @@ Mesh* createSectorMesh(const Planet* planet,
   builder.addRenderer(mr);
   
   
-  [self readStars: &builder];
+//  [self readStars: &builder];
   
   builder.setPlanet(planet);
   builder.initializeWidget();
   [[self G3MWidget] startAnimation];
   
-  [G3MWidget widget]->getPlanetRenderer()->setEnable(false);
+//  [G3MWidget widget]->getPlanetRenderer()->setEnable(false);
   
   
-  [G3MWidget widget]->setCameraPosition(Geodetic3D::fromDegrees(27.973105, -15.597545, 1000));
-  [G3MWidget widget]->setCameraPitch(Angle::fromDegrees(0));
-  [G3MWidget widget]->setCameraHeading(Angle::fromDegrees(30));
+//  [G3MWidget widget]->setCameraPosition(Geodetic3D::fromDegrees(27.973105, -15.597545, 1000));
+//  [G3MWidget widget]->setCameraPitch(Angle::fromDegrees(0));
+//  [G3MWidget widget]->setCameraHeading(Angle::fromDegrees(30));
   
   
 }
@@ -465,7 +465,7 @@ const Planet* planet;
   return MutableMatrix44D(m.m11, m.m12, m.m13, 0,
                           m.m21, m.m22, m.m23, 0,
                           m.m31, m.m32, m.m33, 0,
-                          0, 0, 0, 1);
+                          0, 0, 0, 1).transposed();
   
 }
 
@@ -582,6 +582,8 @@ std::vector<StarDomeRenderer*> _sdrs;
   
   MutableMatrix44D quaternionRM =  [self matrix:matrixR];//quaternion.getRotationMatrix();
   
+  printf("%s\n", quaternionRM.description().c_str());
+  
   CoordinateSystem global = CoordinateSystem::global();
   CoordinateSystem local = planet->getCoordinateSystemAt(camPosition);
   MutableMatrix44D localRM = local.getRotationMatrix();
@@ -598,12 +600,17 @@ std::vector<StarDomeRenderer*> _sdrs;
   
   UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
   
-  /*
-   Mesh* m = final.createMesh(1000, Color::red(), Color::green(), Color::blue());
+  CoordinateSystem local2 = CoordinateSystem::global().changeOrigin(planet->toCartesian(Geodetic3D::fromDegrees(28, -15, 0)));
+  
+  CoordinateSystem local3 = local2.applyRotation(quaternionRM);
+  
+  Mesh* m = local3.createMesh(1e4, Color::red(), Color::green(), Color::blue());
    mr->clearMeshes();
    mr->addMesh(m);
-   */
   
+  Mesh* m2 = CoordinateSystem::global().createMesh(1e7, Color::red(), Color::green(), Color::blue());
+   mr->addMesh(m2);
+  /*
   switch (orientation) {
     case UIInterfaceOrientationPortrait:
     {
@@ -655,6 +662,7 @@ std::vector<StarDomeRenderer*> _sdrs;
       ILogger::instance()->logInfo("Unexpected Interface Orientation");
       break;
   }
+   */
 }
 
 
