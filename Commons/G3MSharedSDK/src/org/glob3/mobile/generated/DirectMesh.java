@@ -25,7 +25,7 @@ public class DirectMesh extends AbstractMesh
   {
     GL gl = rc.getGL();
   
-    gl.drawArrays(_primitive, 0, _renderVerticesCount, _glState, rc.getGPUProgramManager(), renderType);
+    gl.drawArrays(_primitive, 0, _renderVerticesCount, glState, rc.getGPUProgramManager(), renderType);
   }
 
 //  Mesh* createNormalsMesh() const;
