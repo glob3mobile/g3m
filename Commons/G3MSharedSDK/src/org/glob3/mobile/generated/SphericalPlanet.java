@@ -152,6 +152,7 @@ public class SphericalPlanet extends Planet
      _sphere = sphere;
      _radii = new Vector3D(new Vector3D(sphere._radius, sphere._radius, sphere._radius));
      _lastCorrectingRollAngle = 0;
+     _prevFactor = 0;
   }
 
   public void dispose()
@@ -860,7 +861,12 @@ public class SphericalPlanet extends Planet
         Angle a1 = Angle.fromRadians(angs.get(1));
         Angle last = Angle.fromRadians(_lastCorrectingRollAngle);
   
-        angleInRadians = a0.distanceTo(last)._radians < a1.distanceTo(last)._radians != 0? a0._radians : a1._radians;
+        //angleInRadians = a0.distanceTo(last)._radians < a1.distanceTo(last)._radians? a0._radians : a1._radians;
+  
+        if (ao.distanceTo(last)._radians < a1.distanceTo(last)._radians)
+          angleInRadians = a0._radians;
+        else
+          angleInRadians = a1._radians;
   
         angleInRadians *= -1; //Inverting for camera
   
