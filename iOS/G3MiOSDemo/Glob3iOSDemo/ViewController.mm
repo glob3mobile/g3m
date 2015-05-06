@@ -404,7 +404,7 @@ Mesh* createSectorMesh(const Planet* planet,
 //  [G3MWidget widget]->getPlanetRenderer()->setEnable(false);
   
   
-//  [G3MWidget widget]->setCameraPosition(Geodetic3D::fromDegrees(27.973105, -15.597545, 1000));
+  [G3MWidget widget]->setCameraPosition(Geodetic3D::fromDegrees(27.973105, -15.597545, 100000));
 //  [G3MWidget widget]->setCameraPitch(Angle::fromDegrees(0));
 //  [G3MWidget widget]->setCameraHeading(Angle::fromDegrees(30));
   
@@ -465,7 +465,7 @@ const Planet* planet;
   return MutableMatrix44D(m.m11, m.m12, m.m13, 0,
                           m.m21, m.m22, m.m23, 0,
                           m.m31, m.m32, m.m33, 0,
-                          0, 0, 0, 1).transposed();
+                          0, 0, 0, 1);
   
 }
 
@@ -573,96 +573,84 @@ std::vector<StarDomeRenderer*> _sdrs;
   
 }
 
--(void) changeCameraTick{
-  
-  Camera* camera = [G3MWidget widget]->getNextCamera();
-  Geodetic3D camPosition = camera->getGeodeticPosition();
-  
+-(MutableMatrix44D) getAttitudeMatrixOnGlobal{
   CMRotationMatrix matrixR = [_dO getRotationMatrix];
   
   MutableMatrix44D quaternionRM =  [self matrix:matrixR];//quaternion.getRotationMatrix();
+  return quaternionRM;
+}
+
+-(MutableMatrix44D) getAttitudeMatrixOnLocalForPosition: (Geodetic3D*) g{
+  MutableMatrix44D amg = [self getAttitudeMatrixOnGlobal];
   
-  printf("%s\n", quaternionRM.description().c_str());
-  
-  CoordinateSystem global = CoordinateSystem::global();
-  CoordinateSystem local = planet->getCoordinateSystemAt(camPosition);
+  CoordinateSystem local = planet->getCoordinateSystemAt(*g);
   MutableMatrix44D localRM = local.getRotationMatrix();
   
-  CoordinateSystem unorientedFinal = global.applyRotation(localRM.multiply(quaternionRM) ).changeOrigin(local._origin);
+  MutableMatrix44D reorientation = MutableMatrix44D::createGeneralRotationMatrix(Angle::fromDegrees(90), local._z, local._origin);
   
-  Vector3D planetNormal = planet->geodeticSurfaceNormal(unorientedFinal._origin);
+  return reorientation.multiply(localRM).multiply(amg);
+}
+
+-(MutableMatrix44D) getAttitudeMatrixOnLocalForPosition: (Geodetic3D*) g withViewportOrientation:(UIInterfaceOrientation) orientation{
+  MutableMatrix44D m = [self getAttitudeMatrixOnLocalForPosition:g];
   
-  CoordinateSystem final = unorientedFinal.applyRotation(MutableMatrix44D::createRotationMatrix(Angle::fromDegrees(90), planetNormal));
+  Vector3D viewDirection = Vector3D::upZ().transformedBy(m, 0.0);
   
-  if (!final.isConsistent()){
-    ILogger::instance()->logError("Invalid device attitude, skipping.");
-  }
-  
-  UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
-  
-  CoordinateSystem local2 = CoordinateSystem::global().changeOrigin(planet->toCartesian(Geodetic3D::fromDegrees(28, -15, 0)));
-  
-  CoordinateSystem local3 = local2.applyRotation(quaternionRM);
-  
-  Mesh* m = local3.createMesh(1e4, Color::red(), Color::green(), Color::blue());
-   mr->clearMeshes();
-   mr->addMesh(m);
-  
-  Mesh* m2 = CoordinateSystem::global().createMesh(1e7, Color::red(), Color::green(), Color::blue());
-   mr->addMesh(m2);
-  /*
   switch (orientation) {
     case UIInterfaceOrientationPortrait:
     {
-      
-      CoordinateSystem camCS(final._z.times(-1), //ViewDirection
-                             final._y,            //Up
-                             final._origin);       //Origin
-      
-      [G3MWidget widget]->getNextCamera()->setCameraCoordinateSystem(camCS);
-      
-      break;
+      MutableMatrix44D r = MutableMatrix44D::createRotationMatrix(Angle::fromDegrees(90), viewDirection);
+      return r.multiply(m);
     }
       
     case UIInterfaceOrientationPortraitUpsideDown:
     {
-      
-      CoordinateSystem camCS(final._z.times(-1), //ViewDirection
-                             final._y.times(-1),            //Up
-                             final._origin);       //Origin
-      
-      [G3MWidget widget]->getNextCamera()->setCameraCoordinateSystem(camCS);
-      
-      break;
+      MutableMatrix44D r = MutableMatrix44D::createRotationMatrix(Angle::fromDegrees(-90), viewDirection);
+      return r.multiply(m);
     }
       
     case UIInterfaceOrientationLandscapeLeft:
     {
       
-      CoordinateSystem camCS(final._z.times(-1), //ViewDirection
-                             final._x.times(-1),            //Up
-                             final._origin);       //Origin
-      
-      [G3MWidget widget]->getNextCamera()->setCameraCoordinateSystem(camCS);
-      break;
+      MutableMatrix44D r = MutableMatrix44D::createRotationMatrix(Angle::fromDegrees(180), viewDirection);
+      return r.multiply(m);
     }
       
     case UIInterfaceOrientationLandscapeRight:
     {
-      
-      CoordinateSystem camCS(final._z.times(-1), //ViewDirection
-                             final._x,            //Up
-                             final._origin);       //Origin
-      
-      [G3MWidget widget]->getNextCamera()->setCameraCoordinateSystem(camCS);
-      break;
+      return m; //Landscape right is the position by default
     }
       
     default:
-      ILogger::instance()->logInfo("Unexpected Interface Orientation");
-      break;
+      return m;
   }
-   */
+}
+
+-(void) changeCameraTick{
+  
+  Camera* camera = [G3MWidget widget]->getNextCamera();
+  Geodetic3D camPosition = camera->getGeodeticPosition();
+  
+  CoordinateSystem global2(Vector3D(0,1,0), //X
+                           Vector3D(0,0,-1), //Y -> View Direction
+                           Vector3D(1,0,0), //Z -> Up
+                           planet->toCartesian(Geodetic3D::fromDegrees(28, -15, 0)));
+  
+//  CoordinateSystem local2 = CoordinateSystem::global().changeOrigin(planet->toCartesian(Geodetic3D::fromDegrees(28, -15, 0)));
+  
+  
+  UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
+  
+  CoordinateSystem local3 = global2.
+                            applyRotation([self getAttitudeMatrixOnLocalForPosition:&camPosition withViewportOrientation:orientation]).
+                            changeOrigin(planet->toCartesian(Geodetic3D::fromDegrees(28, -15, 0)));
+  
+//  Mesh* m = local3.createMesh(1e4, Color::red(), Color::green(), Color::blue());
+//   mr->clearMeshes();
+//   mr->addMesh(m);
+  
+  [G3MWidget widget]->getNextCamera()->setCameraCoordinateSystem(local3);
+
 }
 
 
