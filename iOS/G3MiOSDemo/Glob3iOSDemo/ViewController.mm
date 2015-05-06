@@ -635,10 +635,7 @@ std::vector<StarDomeRenderer*> _sdrs;
                            Vector3D(0,0,-1), //Y -> View Direction
                            Vector3D(1,0,0), //Z -> Up
                            planet->toCartesian(Geodetic3D::fromDegrees(28, -15, 0)));
-  
-//  CoordinateSystem local2 = CoordinateSystem::global().changeOrigin(planet->toCartesian(Geodetic3D::fromDegrees(28, -15, 0)));
-  
-  
+
   UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
   
   CoordinateSystem local3 = global2.
