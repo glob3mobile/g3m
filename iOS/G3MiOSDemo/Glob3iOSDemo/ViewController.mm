@@ -574,10 +574,10 @@ std::vector<StarDomeRenderer*> _sdrs;
 }
 
 -(MutableMatrix44D) getAttitudeMatrixOnGlobal{
-  CMRotationMatrix matrixR = [_dO getRotationMatrix];
+  CMRotationMatrix m = [_dO getRotationMatrix];
   
-  MutableMatrix44D quaternionRM =  [self matrix:matrixR];//quaternion.getRotationMatrix();
-  return quaternionRM;
+  MutableMatrix44D attitudeMatrix =  [self matrix:m];
+  return attitudeMatrix;
 }
 
 -(MutableMatrix44D) getAttitudeMatrixOnLocalForPosition: (Geodetic3D*) g{
