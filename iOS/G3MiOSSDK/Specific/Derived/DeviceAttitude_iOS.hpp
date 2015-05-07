@@ -36,6 +36,6 @@ public:
   
   InterfaceOrientation getCurrentInterfaceOrientation() const;
   
-  CoordinateSystem getCameraCoordinateSystemForInterfaceOrientation() const;
+  CoordinateSystem getCameraCoordinateSystemForInterfaceOrientation(InterfaceOrientation orientation) const;
   
 };

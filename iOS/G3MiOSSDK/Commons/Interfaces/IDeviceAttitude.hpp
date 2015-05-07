@@ -18,7 +18,7 @@
 
 enum InterfaceOrientation{
   PORTRAIT,
-  UPSIDEDOWN_PORTRAIT,
+  PORTRAIT_UPSIDEDOWN,
   LANDSCAPE_RIGHT,
   LANDSCAPE_LEFT
 };
@@ -53,7 +53,7 @@ public:
   
   virtual InterfaceOrientation getCurrentInterfaceOrientation() const;
   
-  virtual CoordinateSystem getCameraCoordinateSystemForInterfaceOrientation() const;
+  virtual CoordinateSystem getCameraCoordinateSystemForInterfaceOrientation(InterfaceOrientation orientation) const;
   
 };
 

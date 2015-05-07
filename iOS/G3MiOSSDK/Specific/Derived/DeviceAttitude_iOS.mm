@@ -7,6 +7,7 @@
 //
 
 #import "DeviceAttitude_iOS.hpp"
+#import <UIKit/UIKit.h>
 
 
 DeviceAttitude_iOS::DeviceAttitude_iOS(){
@@ -43,9 +44,78 @@ void DeviceAttitude_iOS::copyValueOfRotationMatrix(MutableMatrix44D& rotationMat
 
 InterfaceOrientation DeviceAttitude_iOS::getCurrentInterfaceOrientation() const{
   
+  
+  UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
+  
+  switch (orientation) {
+    case UIInterfaceOrientationPortrait:
+    {
+      return PORTRAIT;
+    }
+    case UIInterfaceOrientationPortraitUpsideDown:
+    {
+      return PORTRAIT_UPSIDEDOWN;
+    }
+      
+    case UIInterfaceOrientationLandscapeLeft:
+    {
+      return LANDSCAPE_LEFT;
+    }
+      
+    case UIInterfaceOrientationLandscapeRight:
+    {
+      return LANDSCAPE_RIGHT;
+    }
+    default:{
+      return PORTRAIT;
+    }
+  }
+  
 }
 
-CoordinateSystem DeviceAttitude_iOS::getCameraCoordinateSystemForInterfaceOrientation() const{
+CoordinateSystem camCSPortrait(Vector3D(1,0,0), //X
+                               Vector3D(0,0,-1), //Y -> View Direction
+                               Vector3D(0,1,0), //Z -> Up
+                               Vector3D::zero);
+
+CoordinateSystem camCSPortraitUD(Vector3D(1,0,0), //X
+                 Vector3D(0,0,-1), //Y -> View Direction
+                 Vector3D(0,-1,0), //Z -> Up
+                 Vector3D::zero);
+
+CoordinateSystem camCSLL(Vector3D(0,1,0), //X
+                 Vector3D(0,0,-1), //Y -> View Direction
+                 Vector3D(-1,0,0), //Z -> Up
+                 Vector3D::zero);
+
+CoordinateSystem camCSLR(Vector3D(0,1,0), //X
+                 Vector3D(0,0,-1), //Y -> View Direction
+                 Vector3D(1,0,0), //Z -> Up
+                 Vector3D::zero);
+
+CoordinateSystem DeviceAttitude_iOS::getCameraCoordinateSystemForInterfaceOrientation(InterfaceOrientation orientation) const{
   
+  switch (orientation) {
+    case PORTRAIT:{
+      return camCSPortrait;
+    }
+
+    case PORTRAIT_UPSIDEDOWN:{
+      return camCSPortraitUD;
+    }
+
+    case LANDSCAPE_LEFT:{
+      return camCSLL;
+    }
+      
+    case LANDSCAPE_RIGHT:{
+      return camCSLR;
+    }
+      
+    default:{
+      //Landscape right
+      return camCSLR;
+    }
+  }
 }
 
