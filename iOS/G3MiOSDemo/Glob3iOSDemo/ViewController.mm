@@ -383,8 +383,6 @@ Mesh* createSectorMesh(const Planet* planet,
     
   };
   
-  IDeviceAttitude::setInstance(new DeviceAttitude_iOS()); //!!!!
-  
   
   G3MBuilder_iOS builder([self G3MWidget]);
   
@@ -405,6 +403,9 @@ Mesh* createSectorMesh(const Planet* planet,
   builder.setPlanet(planet);
   builder.initializeWidget();
   [[self G3MWidget] startAnimation];
+  
+  IDeviceAttitude::setInstance(new DeviceAttitude_iOS()); //!!!!
+  
   
   //  [G3MWidget widget]->getPlanetRenderer()->setEnable(false);
   
@@ -631,8 +632,11 @@ std::vector<StarDomeRenderer*> _sdrs;
   }
 }
 */
--(CoordinateSystem) cameraCoordinateSystemForOrientation:(UIInterfaceOrientation) orientation{
+-(CoordinateSystem) cameraCoordinateSystemForOrientation:(InterfaceOrientation) orientation{
   
+  return IDeviceAttitude::instance()->getCameraCoordinateSystemForInterfaceOrientation(orientation);
+  
+/*
   switch (orientation) {
     case UIInterfaceOrientationPortrait:
     {
@@ -673,7 +677,7 @@ std::vector<StarDomeRenderer*> _sdrs;
                               Vector3D(1,0,0), //Z -> Up
                               Vector3D::zero);
   }
-  
+ */
 }
 
 -(void) changeCameraTick{
@@ -704,8 +708,8 @@ std::vector<StarDomeRenderer*> _sdrs;
   Geodetic3D camPosition = camera->getGeodeticPosition();
   
   
-  UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
-  CoordinateSystem camCS = [self cameraCoordinateSystemForOrientation:orientation];
+//  UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
+  CoordinateSystem camCS = [self cameraCoordinateSystemForOrientation:IDeviceAttitude::instance()->getCurrentInterfaceOrientation()];
   
   CoordinateSystem local3 = camCS.applyRotation([self getAttitudeMatrixOnLocalForPosition:&camPosition]);
   
