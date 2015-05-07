@@ -37,9 +37,11 @@ public class Angle
      _radians = radians;
   }
 
-
   public final double _degrees;
   public final double _radians;
+
+
+  public static Angle halfPi = Angle.fromRadians(DefineConstants.PI/2);
 
 
   public Angle(Angle angle)
@@ -66,6 +68,15 @@ public class Angle
 
   public static Angle fromDegreesMinutesSeconds(double degrees, double minutes, double seconds)
   {
+    final IMathUtils mu = IMathUtils.instance();
+    final double sign = (degrees * minutes * seconds) < 0 ? -1.0 : 1.0;
+    final double d = sign * (mu.abs(degrees) + (mu.abs(minutes) / 60.0) + (mu.abs(seconds) / 3600.0));
+    return new Angle(d, ((d) / 180.0 * 3.14159265358979323846264338327950288));
+  }
+
+  public static Angle fromHoursMinutesSeconds(double hours, double minutes, double seconds)
+  {
+    final double degrees = hours * 15; // 1 hour = 15 degrees
     final IMathUtils mu = IMathUtils.instance();
     final double sign = (degrees * minutes * seconds) < 0 ? -1.0 : 1.0;
     final double d = sign * (mu.abs(degrees) + (mu.abs(minutes) / 60.0) + (mu.abs(seconds) / 3600.0));
@@ -224,6 +235,20 @@ public class Angle
     return Angle.fromDegrees(dif);
   }
 
+  public static Angle fromClockHoursMinutesSeconds(double hours, double minutes, double seconds)
+  {
+    final double clockMinToDeg = 15.0 / 60.0;
+    final double clockSecToDeg = clockMinToDeg / 60.0;
+
+    double hd = hours * 15.0;
+    double md = minutes * clockMinToDeg;
+    double sd = seconds * clockSecToDeg;
+
+    //printf("%f + %f + %f\n", hd, md, sd);
+
+    return Angle.fromDegrees(hd+md+sd);
+  }
+
   public final Angle normalized()
   {
     double degrees = _degrees;
@@ -236,6 +261,20 @@ public class Angle
       degrees -= 360;
     }
     return new Angle(degrees, ((degrees) / 180.0 * 3.14159265358979323846264338327950288));
+  }
+
+  public final double getNormalizedDegrees()
+  {
+    double degrees = _degrees;
+    while (degrees < 0)
+    {
+      degrees += 360;
+    }
+    while (degrees >= 360)
+    {
+      degrees -= 360;
+    }
+    return degrees;
   }
 
   public final boolean isZero()

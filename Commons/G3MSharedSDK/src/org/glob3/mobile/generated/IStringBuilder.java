@@ -60,4 +60,6 @@ public abstract class IStringBuilder
 
   public abstract boolean contentEqualsTo(String that);
 
+  public abstract void setPrecision(int i);
+
 }

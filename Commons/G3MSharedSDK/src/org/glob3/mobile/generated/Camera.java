@@ -549,6 +549,15 @@ public class Camera
   {
     return new CoordinateSystem(getViewDirection(), getUp(), getCartesianPosition());
   }
+
+  public final void setCameraCoordinateSystem(Vector3D viewDirection, Vector3D up)
+  {
+  
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning TODO_JM
+  }
+
+
   public final TaitBryanAngles getHeadingPitchRoll()
   {
     final CoordinateSystem localRS = getLocalCoordinateSystem();
@@ -574,6 +583,17 @@ public class Camera
     final FrustumData frustumData = getFrustumData();
     final double distanceInMeters = frustumData._znear * IMathUtils.instance().tan(angleInRadians/2);
     return distanceInMeters * _viewPortHeight / frustumData._top;
+  }
+
+
+  public final void setCameraCoordinateSystem(CoordinateSystem rs)
+  {
+  //  _center = _position.add(rs._y.asMutableVector3D());
+    _center.copyFrom(_position);
+    _center.addInPlace(rs._y);
+  //  _up = rs._z.asMutableVector3D();
+    _up.copyFrom(rs._z);
+    _dirtyFlags.setAllDirty(); //Recalculate Everything
   }
 
 
@@ -787,16 +807,6 @@ public class Camera
       _modelViewMatrix.copyValueOfMultiplication(getProjectionMatrix(), getModelMatrix());
     }
     return _modelViewMatrix;
-  }
-
-  private void setCameraCoordinateSystem(CoordinateSystem rs)
-  {
-  //  _center = _position.add(rs._y.asMutableVector3D());
-    _center.copyFrom(_position);
-    _center.addInPlace(rs._y);
-  //  _up = rs._z.asMutableVector3D();
-    _up.copyFrom(rs._z);
-    _dirtyFlags.setAllDirty(); //Recalculate Everything
   }
 
 }
