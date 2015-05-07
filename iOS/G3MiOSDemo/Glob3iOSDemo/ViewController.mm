@@ -157,6 +157,7 @@
 
 //#include <G3MiOSSDK/IDeviceAttitude.hpp>
 #include <G3MiOSSDK/DeviceAttitude_iOS.hpp>
+#include <G3MiOSSDK/DeviceAttitudeCameraConstrainer.hpp>
 
 
 
@@ -358,20 +359,6 @@ Mesh* createSectorMesh(const Planet* planet,
     }
   };
   
-  class DeviceOrientationCameraConstrainer: public ICameraConstrainer{
-    ViewController* _vc;
-  public:
-    
-    DeviceOrientationCameraConstrainer(ViewController* vc):_vc(vc){};
-    
-    bool onCameraChange(const Planet* planet,
-                        const Camera* previousCamera,
-                        Camera* nextCamera) const{
-      [_vc changeCameraTick];
-      return true;
-    }
-  };
-  
   class RotateStarsTask: public GTask{
     ViewController* _vc;
   public:
@@ -385,10 +372,8 @@ Mesh* createSectorMesh(const Planet* planet,
   
   
   G3MBuilder_iOS builder([self G3MWidget]);
-  
-  //builder.addPeriodicalTask(new PeriodicalTask(TimeInterval::fromSeconds(0.1), new RotateStarsTask(self)));
-  
-  builder.addCameraConstraint(new DeviceOrientationCameraConstrainer(self));
+
+  builder.addCameraConstraint(new DeviceAttitudeCameraConstrainer());
   
   
   planet = Planet::createEarth();
@@ -481,33 +466,6 @@ const Planet* planet;
   string = [string stringByReplacingOccurrencesOfString:@"," withString:@"."];
   return [string doubleValue];
 }
-/*
- -(double) toDegressHours:(double) h minutes:(double) m seconds:(double) s{
- 
- return h * 15.0 + m * (15.0/60.0) + s * (15.0/3600.0);
- 
- }
- 
- -(double) getClockTimeInDegrees{
- 
- NSDate *today = [NSDate date];
- NSCalendar *gregorian = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
- NSDateComponents *weekdayComponents =
- [gregorian components:(NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit | NSDayCalendarUnit) fromDate:today];
- 
- NSInteger h = [weekdayComponents hour];
- NSInteger m = [weekdayComponents minute];
- NSInteger s = [weekdayComponents second];
- 
- NSUInteger dayOfYear = [gregorian ordinalityOfUnit:NSDayCalendarUnit
- inUnit:NSYearCalendarUnit forDate:[NSDate date]];
- 
- printf("%d, %d, %d\n", h,m,s);
- 
- return Angle::fromHoursMinutesSeconds(h, m, s)._degrees;
- }
- */
-
 
 std::vector<StarDomeRenderer*> _sdrs;
 
@@ -579,157 +537,6 @@ std::vector<StarDomeRenderer*> _sdrs;
   }
   
 }
-
--(MutableMatrix44D) getAttitudeMatrixOnGlobal{
-  CMRotationMatrix m = [_dO getRotationMatrix];
-  
-  MutableMatrix44D attitudeMatrix =  [self matrix:m];
-  return attitudeMatrix;
-}
-
--(MutableMatrix44D) getAttitudeMatrixOnLocalForPosition: (Geodetic3D*) g{
-//  MutableMatrix44D amg = [self getAttitudeMatrixOnGlobal];
-  
-  MutableMatrix44D attitudeMatrix;
-  IDeviceAttitude::instance()->copyValueOfRotationMatrix(attitudeMatrix);
-  
-  CoordinateSystem local = planet->getCoordinateSystemAt(*g);
-  MutableMatrix44D localRM = local.getRotationMatrix();
-  
-  MutableMatrix44D reorientation = MutableMatrix44D::createGeneralRotationMatrix(Angle::fromDegrees(90), local._z, local._origin);
-  
-  return reorientation.multiply(localRM).multiply(attitudeMatrix);
-}
-/*
--(MutableMatrix44D) getAttitudeMatrixOnLocalForPosition: (Geodetic3D*) g withViewportOrientation:(UIInterfaceOrientation) orientation{
-  MutableMatrix44D m = [self getAttitudeMatrixOnLocalForPosition:g];
-  
-  Vector3D viewDirection = Vector3D::upZ().transformedBy(m, 0.0);
-  
-  switch (orientation) {
-    case UIInterfaceOrientationPortrait:
-    {
-      MutableMatrix44D r = MutableMatrix44D::createRotationMatrix(Angle::fromDegrees(90), viewDirection);
-      return r.multiply(m);
-    }
-      
-    case UIInterfaceOrientationPortraitUpsideDown:
-    {
-      MutableMatrix44D r = MutableMatrix44D::createRotationMatrix(Angle::fromDegrees(-90), viewDirection);
-      return r.multiply(m);
-    }
-      
-    case UIInterfaceOrientationLandscapeLeft:
-    {
-      
-      MutableMatrix44D r = MutableMatrix44D::createRotationMatrix(Angle::fromDegrees(180), viewDirection);
-      return r.multiply(m);
-    }
-      
-    case UIInterfaceOrientationLandscapeRight:
-    {
-      return m; //Landscape right is the position by default
-    }
-      
-    default:
-      return m;
-  }
-}
-*/
--(CoordinateSystem) cameraCoordinateSystemForOrientation:(InterfaceOrientation) orientation{
-  
-  return IDeviceAttitude::instance()->getCameraCoordinateSystemForInterfaceOrientation(orientation);
-  
-/*
-  switch (orientation) {
-    case UIInterfaceOrientationPortrait:
-    {
-      return CoordinateSystem(Vector3D(1,0,0), //X
-                              Vector3D(0,0,-1), //Y -> View Direction
-                              Vector3D(0,1,0), //Z -> Up
-                              Vector3D::zero);
-    }
-      
-    case UIInterfaceOrientationPortraitUpsideDown:
-    {
-      return CoordinateSystem(Vector3D(1,0,0), //X
-                              Vector3D(0,0,-1), //Y -> View Direction
-                              Vector3D(0,-1,0), //Z -> Up
-                              Vector3D::zero);
-    }
-      
-    case UIInterfaceOrientationLandscapeLeft:
-    {
-      return CoordinateSystem(Vector3D(0,1,0), //X
-                              Vector3D(0,0,-1), //Y -> View Direction
-                              Vector3D(-1,0,0), //Z -> Up
-                              Vector3D::zero);
-    }
-      
-    case UIInterfaceOrientationLandscapeRight:
-    {
-      return CoordinateSystem(Vector3D(0,1,0), //X
-                              Vector3D(0,0,-1), //Y -> View Direction
-                              Vector3D(1,0,0), //Z -> Up
-                              Vector3D::zero);
-    }
-      
-    default:
-      //Landscape right
-      return CoordinateSystem(Vector3D(0,1,0), //X
-                              Vector3D(0,0,-1), //Y -> View Direction
-                              Vector3D(1,0,0), //Z -> Up
-                              Vector3D::zero);
-  }
- */
-}
-
--(void) changeCameraTick{
- /*
-  Camera* camera = [G3MWidget widget]->getNextCamera();
-  Geodetic3D camPosition = camera->getGeodeticPosition();
-  
-  CoordinateSystem global2(Vector3D(0,1,0), //X
-                           Vector3D(0,0,-1), //Y -> View Direction
-                           Vector3D(1,0,0), //Z -> Up
-                           planet->toCartesian(Geodetic3D::fromDegrees(28, -15, 0)));
-  
-  UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
-  
-  CoordinateSystem local3 = global2.
-  applyRotation([self getAttitudeMatrixOnLocalForPosition:&camPosition withViewportOrientation:orientation]).
-  changeOrigin(planet->toCartesian(Geodetic3D::fromDegrees(28, -15, 0)));
-  
-  //  Mesh* m = local3.createMesh(1e4, Color::red(), Color::green(), Color::blue());
-  //   mr->clearMeshes();
-  //   mr->addMesh(m);
-  
-  [G3MWidget widget]->getNextCamera()->setCameraCoordinateSystem(local3);
-  */
-  
-  
-  Camera* camera = [G3MWidget widget]->getNextCamera();
-  Geodetic3D camPosition = camera->getGeodeticPosition();
-  
-  
-//  UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
-  CoordinateSystem camCS = IDeviceAttitude::instance()->getCameraCoordinateSystemForInterfaceOrientation(IDeviceAttitude::instance()->getCurrentInterfaceOrientation());
-  
-  MutableMatrix44D matrix;
-  IDeviceAttitude::instance()->copyValueOfRotationMatrix(matrix);
-  camCS.applyRotation(matrix);
-  
-  CoordinateSystem local3 = camCS.applyRotation([self getAttitudeMatrixOnLocalForPosition:&camPosition]);
-  
-  //  Mesh* m = local3.createMesh(1e4, Color::red(), Color::green(), Color::blue());
-  //   mr->clearMeshes();
-  //   mr->addMesh(m);
-  
-  [G3MWidget widget]->getNextCamera()->setCameraCoordinateSystem(local3);
-  
-  
-}
-
 
 -(NSUInteger)supportedInterfaceOrientations {
   return UIInterfaceOrientationMaskAll;

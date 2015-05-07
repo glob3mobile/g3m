@@ -1,13 +1,13 @@
 //
-//  DeviceOrientationCameraConstrainer.hpp
+//  DeviceAttitudeCameraConstrainer.hpp
 //  G3MiOSSDK
 //
 //  Created by Jose Miguel SN on 7/5/15.
 //
 //
 
-#ifndef __G3MiOSSDK__DeviceOrientationCameraConstrainer__
-#define __G3MiOSSDK__DeviceOrientationCameraConstrainer__
+#ifndef __G3MiOSSDK__DeviceAttitudeCameraConstrainer__
+#define __G3MiOSSDK__DeviceAttitudeCameraConstrainer__
 
 #include "ICameraConstrainer.hpp"
 
@@ -19,10 +19,10 @@
  
  **/
 
-class DeviceOrientationCameraConstrainer: public ICameraConstrainer{
+class DeviceAttitudeCameraConstrainer: public ICameraConstrainer{
 public:
   
-  DeviceOrientationCameraConstrainer(){
+  DeviceAttitudeCameraConstrainer(){
   };
   
   bool onCameraChange(const Planet* planet,
@@ -30,4 +30,4 @@ public:
                       Camera* nextCamera) const;
 };
 
-#endif /* defined(__G3MiOSSDK__DeviceOrientationCameraConstrainer__) */
+#endif /* defined(__G3MiOSSDK__DeviceAttitudeCameraConstrainer__) */

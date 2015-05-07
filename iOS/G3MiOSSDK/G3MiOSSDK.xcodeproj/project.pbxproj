@@ -462,11 +462,12 @@
 		D84D5A31157E0EAA000C5E35 /* MutableVector3D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D84D5A2F157E0EAA000C5E35 /* MutableVector3D.cpp */; };
 		D84E2BAC1AAEF782007433ED /* Quaternion.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D84E2BAA1AAEF782007433ED /* Quaternion.cpp */; };
 		D84E2BAD1AAEF957007433ED /* Quaternion.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D84E2BAB1AAEF782007433ED /* Quaternion.hpp */; };
-		D85558391AFB58DA00957341 /* DeviceOrientationCameraConstrainer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D85558371AFB58DA00957341 /* DeviceOrientationCameraConstrainer.cpp */; };
+		D85558391AFB58DA00957341 /* DeviceAttitudeCameraConstrainer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D85558371AFB58DA00957341 /* DeviceAttitudeCameraConstrainer.cpp */; };
 		D855583D1AFB5A7C00957341 /* IDeviceAttitude.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D855583C1AFB5A7C00957341 /* IDeviceAttitude.cpp */; };
 		D85558411AFB5DE700957341 /* DeviceAttitude_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = D85558401AFB5DE700957341 /* DeviceAttitude_iOS.mm */; };
 		D85558421AFB7C0200957341 /* IDeviceAttitude.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D855583B1AFB5A7C00957341 /* IDeviceAttitude.hpp */; };
 		D85558431AFB7C0200957341 /* DeviceAttitude_iOS.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D855583F1AFB5DB900957341 /* DeviceAttitude_iOS.hpp */; };
+		D85558441AFB9A0F00957341 /* DeviceAttitudeCameraConstrainer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D85558381AFB58DA00957341 /* DeviceAttitudeCameraConstrainer.hpp */; };
 		D856FBFD189BB5610053F514 /* CoordinateSystem.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8F2EBAC18994A7B001B6103 /* CoordinateSystem.hpp */; };
 		D8715C1E17032AC700CF7BE2 /* GPUProgram.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8715C1C17032AC700CF7BE2 /* GPUProgram.cpp */; };
 		D874D08E18900B1600610F85 /* SingleBilElevationDataProvider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D874D08D18900B1600610F85 /* SingleBilElevationDataProvider.cpp */; };
@@ -737,6 +738,7 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				D85558441AFB9A0F00957341 /* DeviceAttitudeCameraConstrainer.hpp in CopyFiles */,
 				D85558421AFB7C0200957341 /* IDeviceAttitude.hpp in CopyFiles */,
 				D85558431AFB7C0200957341 /* DeviceAttitude_iOS.hpp in CopyFiles */,
 				D84E2BAD1AAEF957007433ED /* Quaternion.hpp in CopyFiles */,
@@ -1738,8 +1740,8 @@
 		D84D5A30157E0EAA000C5E35 /* MutableVector3D.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = MutableVector3D.hpp; path = Commons/Geometry/MutableVector3D.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		D84E2BAA1AAEF782007433ED /* Quaternion.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Quaternion.cpp; path = Commons/Geometry/Quaternion.cpp; sourceTree = "<group>"; };
 		D84E2BAB1AAEF782007433ED /* Quaternion.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Quaternion.hpp; path = Commons/Geometry/Quaternion.hpp; sourceTree = "<group>"; };
-		D85558371AFB58DA00957341 /* DeviceOrientationCameraConstrainer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = DeviceOrientationCameraConstrainer.cpp; path = Commons/Cameras/DeviceOrientationCameraConstrainer.cpp; sourceTree = "<group>"; };
-		D85558381AFB58DA00957341 /* DeviceOrientationCameraConstrainer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = DeviceOrientationCameraConstrainer.hpp; path = Commons/Cameras/DeviceOrientationCameraConstrainer.hpp; sourceTree = "<group>"; };
+		D85558371AFB58DA00957341 /* DeviceAttitudeCameraConstrainer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = DeviceAttitudeCameraConstrainer.cpp; path = Commons/Cameras/DeviceAttitudeCameraConstrainer.cpp; sourceTree = "<group>"; };
+		D85558381AFB58DA00957341 /* DeviceAttitudeCameraConstrainer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = DeviceAttitudeCameraConstrainer.hpp; path = Commons/Cameras/DeviceAttitudeCameraConstrainer.hpp; sourceTree = "<group>"; };
 		D855583B1AFB5A7C00957341 /* IDeviceAttitude.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = IDeviceAttitude.hpp; path = Commons/Interfaces/IDeviceAttitude.hpp; sourceTree = "<group>"; };
 		D855583C1AFB5A7C00957341 /* IDeviceAttitude.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IDeviceAttitude.cpp; path = Commons/Interfaces/IDeviceAttitude.cpp; sourceTree = "<group>"; };
 		D855583F1AFB5DB900957341 /* DeviceAttitude_iOS.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = DeviceAttitude_iOS.hpp; path = Specific/Derived/DeviceAttitude_iOS.hpp; sourceTree = "<group>"; };
@@ -2411,8 +2413,8 @@
 				FBC2309817972F4F009343FC /* CameraEffects.hpp */,
 				D8C486CE17E205E7000EAFC9 /* InitialCameraPositionProvider.cpp */,
 				D8C486CF17E205E7000EAFC9 /* InitialCameraPositionProvider.hpp */,
-				D85558371AFB58DA00957341 /* DeviceOrientationCameraConstrainer.cpp */,
-				D85558381AFB58DA00957341 /* DeviceOrientationCameraConstrainer.hpp */,
+				D85558371AFB58DA00957341 /* DeviceAttitudeCameraConstrainer.cpp */,
+				D85558381AFB58DA00957341 /* DeviceAttitudeCameraConstrainer.hpp */,
 			);
 			name = Cameras;
 			sourceTree = "<group>";
@@ -3005,7 +3007,7 @@
 				CF8B21C015DD345D0068601A /* SQDatabase.m in Sources */,
 				CF290D50187F1543000BE644 /* TransformableTextureMapping.cpp in Sources */,
 				CFCBA3C2190706C900FD2A2F /* RasterLayerTileImageProvider.cpp in Sources */,
-				D85558391AFB58DA00957341 /* DeviceOrientationCameraConstrainer.cpp in Sources */,
+				D85558391AFB58DA00957341 /* DeviceAttitudeCameraConstrainer.cpp in Sources */,
 				CFF8C4BD15DEB6A70034A576 /* RCObject.cpp in Sources */,
 				CF73BFDB15E114E3001CE412 /* FrameTasksExecutor.cpp in Sources */,
 				D8A723AE15E4D47E00ABDF07 /* StringBuilder_iOS.cpp in Sources */,
