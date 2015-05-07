@@ -49,7 +49,6 @@ void DeviceAttitude_iOS::copyValueOfRotationMatrix(MutableMatrix44D& rotationMat
 
 InterfaceOrientation DeviceAttitude_iOS::getCurrentInterfaceOrientation() const{
   
-  
   UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
   
   switch (orientation) {

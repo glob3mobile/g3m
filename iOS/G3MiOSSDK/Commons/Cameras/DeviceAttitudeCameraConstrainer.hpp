@@ -20,10 +20,17 @@
  **/
 
 class DeviceAttitudeCameraConstrainer: public ICameraConstrainer{
+  
+private:
+  mutable MutableMatrix44D _localRM;
+  mutable MutableMatrix44D _attitudeMatrix;
+  
 public:
   
   DeviceAttitudeCameraConstrainer(){
   };
+  
+  ~DeviceAttitudeCameraConstrainer();
   
   bool onCameraChange(const Planet* planet,
                       const Camera* previousCamera,

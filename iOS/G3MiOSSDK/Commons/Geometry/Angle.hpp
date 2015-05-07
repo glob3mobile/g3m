@@ -33,10 +33,12 @@ private:
   {
   }
 
-
 public:
   const double _degrees;
   const double _radians;
+  
+  
+  static Angle halfPi;
 
 
   Angle(const Angle& angle):

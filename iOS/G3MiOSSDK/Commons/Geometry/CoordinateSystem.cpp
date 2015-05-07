@@ -228,6 +228,14 @@ MutableMatrix44D CoordinateSystem::getRotationMatrix() const{
   
 }
 
+
+void CoordinateSystem::copyValueOfRotationMatrix(MutableMatrix44D& m) const{
+  m.setValue(_x._x, _x._y, _x._z, 0,
+             _y._x, _y._y, _y._z, 0,
+             _z._x, _z._y, _z._z, 0,
+             0,0,0,1);
+}
+
 bool CoordinateSystem::isConsistent() const{
   return checkConsistency(_x, _y, _z);
 }

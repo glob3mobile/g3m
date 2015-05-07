@@ -39,7 +39,4 @@ public:
   void copyValueOfRotationMatrix(MutableMatrix44D& rotationMatrix) const;
   
   InterfaceOrientation getCurrentInterfaceOrientation() const;
-  
-  CoordinateSystem getCameraCoordinateSystemForInterfaceOrientation(InterfaceOrientation orientation) const;
-  
 };

@@ -10,6 +10,8 @@
 
 #include "IStringBuilder.hpp"
 
+Angle Angle::halfPi = Angle::fromRadians(PI/2);
+
 Angle Angle::clampedTo(const Angle& min,
                        const Angle& max) const {
   if (_radians < min._radians) {

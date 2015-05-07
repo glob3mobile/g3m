@@ -53,6 +53,8 @@ public:
   
   MutableMatrix44D getRotationMatrix() const;
   
+  void copyValueOfRotationMatrix(MutableMatrix44D& m) const;
+  
   bool isConsistent() const;
 
 };
