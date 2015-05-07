@@ -155,6 +155,9 @@
 
 #include <typeinfo>
 
+//#include <G3MiOSSDK/IDeviceAttitude.hpp>
+#include <G3MiOSSDK/DeviceAttitude_iOS.hpp>
+
 
 
 
@@ -379,6 +382,8 @@ Mesh* createSectorMesh(const Planet* planet,
     }
     
   };
+  
+  IDeviceAttitude::setInstance(new DeviceAttitude_iOS()); //!!!!
   
   
   G3MBuilder_iOS builder([self G3MWidget]);

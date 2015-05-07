@@ -28,6 +28,8 @@ private:
   static IDeviceAttitude* _instance;
 public:
   
+  IDeviceAttitude();
+  
   static void setInstance(IDeviceAttitude* deviceAttitude);
   
   //Singleton
@@ -47,13 +49,13 @@ public:
   
   virtual void stopTrackingDeviceOrientation() const = 0;
   
-  virtual bool isTracking() const;
+  virtual bool isTracking() const = 0;
 
   virtual void copyValueOfRotationMatrix(MutableMatrix44D& rotationMatrix) const = 0;
   
-  virtual InterfaceOrientation getCurrentInterfaceOrientation() const;
+  virtual InterfaceOrientation getCurrentInterfaceOrientation() const = 0;
   
-  virtual CoordinateSystem getCameraCoordinateSystemForInterfaceOrientation(InterfaceOrientation orientation) const;
+  virtual CoordinateSystem getCameraCoordinateSystemForInterfaceOrientation(InterfaceOrientation orientation) const = 0;
   
 };
 

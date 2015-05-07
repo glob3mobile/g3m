@@ -8,6 +8,13 @@
 
 #include "IDeviceAttitude.hpp"
 
+IDeviceAttitude* IDeviceAttitude::_instance;
+
+
+IDeviceAttitude::IDeviceAttitude(){
+  
+}
+
 void IDeviceAttitude::setInstance(IDeviceAttitude* deviceAttitude) {
   if (_instance != NULL) {
     ILogger::instance()->logWarning("ILooger instance already set!");
@@ -18,9 +25,4 @@ void IDeviceAttitude::setInstance(IDeviceAttitude* deviceAttitude) {
 
 IDeviceAttitude* IDeviceAttitude::instance(){
   return _instance;
-}
-
-
-bool IDeviceAttitude::isTracking() const{
-  return _isTracking;
 }

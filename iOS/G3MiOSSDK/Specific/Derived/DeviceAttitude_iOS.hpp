@@ -18,21 +18,23 @@ public:
   
   DeviceAttitude_iOS();
   
+  ~DeviceAttitude_iOS(){}
+  
   /**
    Must be called before any other operation
    **/
   
-  void startTrackingDeviceOrientation() const = 0;
+  void startTrackingDeviceOrientation() const;
   
   /**
    Must be called to stop operations
    **/
   
-  void stopTrackingDeviceOrientation() const = 0;
+  void stopTrackingDeviceOrientation() const;
   
-  bool isTracking() const = 0;
+  bool isTracking() const;
   
-  void copyValueOfRotationMatrix(MutableMatrix44D& rotationMatrix) const = 0;
+  void copyValueOfRotationMatrix(MutableMatrix44D& rotationMatrix) const;
   
   InterfaceOrientation getCurrentInterfaceOrientation() const;
   

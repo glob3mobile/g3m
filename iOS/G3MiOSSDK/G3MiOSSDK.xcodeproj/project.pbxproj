@@ -465,6 +465,8 @@
 		D85558391AFB58DA00957341 /* DeviceOrientationCameraConstrainer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D85558371AFB58DA00957341 /* DeviceOrientationCameraConstrainer.cpp */; };
 		D855583D1AFB5A7C00957341 /* IDeviceAttitude.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D855583C1AFB5A7C00957341 /* IDeviceAttitude.cpp */; };
 		D85558411AFB5DE700957341 /* DeviceAttitude_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = D85558401AFB5DE700957341 /* DeviceAttitude_iOS.mm */; };
+		D85558421AFB7C0200957341 /* IDeviceAttitude.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D855583B1AFB5A7C00957341 /* IDeviceAttitude.hpp */; };
+		D85558431AFB7C0200957341 /* DeviceAttitude_iOS.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D855583F1AFB5DB900957341 /* DeviceAttitude_iOS.hpp */; };
 		D856FBFD189BB5610053F514 /* CoordinateSystem.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8F2EBAC18994A7B001B6103 /* CoordinateSystem.hpp */; };
 		D8715C1E17032AC700CF7BE2 /* GPUProgram.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8715C1C17032AC700CF7BE2 /* GPUProgram.cpp */; };
 		D874D08E18900B1600610F85 /* SingleBilElevationDataProvider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D874D08D18900B1600610F85 /* SingleBilElevationDataProvider.cpp */; };
@@ -735,6 +737,8 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				D85558421AFB7C0200957341 /* IDeviceAttitude.hpp in CopyFiles */,
+				D85558431AFB7C0200957341 /* DeviceAttitude_iOS.hpp in CopyFiles */,
 				D84E2BAD1AAEF957007433ED /* Quaternion.hpp in CopyFiles */,
 				CF701B471A9F93B9007C6B3F /* MutableVector2F.hpp in CopyFiles */,
 				CF55133D1A8E6AC200097906 /* StaticImageBuilder.hpp in CopyFiles */,
