@@ -336,7 +336,7 @@ Mesh* createSectorMesh(const Planet* planet,
   //                                  repeats:YES];
   
   
-  _dO = [[DeviceOrientation alloc] init];
+ // _dO = [[DeviceOrientation alloc] init];
   
   
   class MyMarkWidgetTouchListener: public NonOverlappingMarkTouchListener{
@@ -405,6 +405,7 @@ Mesh* createSectorMesh(const Planet* planet,
   [[self G3MWidget] startAnimation];
   
   IDeviceAttitude::setInstance(new DeviceAttitude_iOS()); //!!!!
+  IDeviceAttitude::instance()->startTrackingDeviceOrientation();
   
   
   //  [G3MWidget widget]->getPlanetRenderer()->setEnable(false);
@@ -587,14 +588,17 @@ std::vector<StarDomeRenderer*> _sdrs;
 }
 
 -(MutableMatrix44D) getAttitudeMatrixOnLocalForPosition: (Geodetic3D*) g{
-  MutableMatrix44D amg = [self getAttitudeMatrixOnGlobal];
+//  MutableMatrix44D amg = [self getAttitudeMatrixOnGlobal];
+  
+  MutableMatrix44D attitudeMatrix;
+  IDeviceAttitude::instance()->copyValueOfRotationMatrix(attitudeMatrix);
   
   CoordinateSystem local = planet->getCoordinateSystemAt(*g);
   MutableMatrix44D localRM = local.getRotationMatrix();
   
   MutableMatrix44D reorientation = MutableMatrix44D::createGeneralRotationMatrix(Angle::fromDegrees(90), local._z, local._origin);
   
-  return reorientation.multiply(localRM).multiply(amg);
+  return reorientation.multiply(localRM).multiply(attitudeMatrix);
 }
 /*
 -(MutableMatrix44D) getAttitudeMatrixOnLocalForPosition: (Geodetic3D*) g withViewportOrientation:(UIInterfaceOrientation) orientation{
@@ -709,7 +713,11 @@ std::vector<StarDomeRenderer*> _sdrs;
   
   
 //  UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
-  CoordinateSystem camCS = [self cameraCoordinateSystemForOrientation:IDeviceAttitude::instance()->getCurrentInterfaceOrientation()];
+  CoordinateSystem camCS = IDeviceAttitude::instance()->getCameraCoordinateSystemForInterfaceOrientation(IDeviceAttitude::instance()->getCurrentInterfaceOrientation());
+  
+  MutableMatrix44D matrix;
+  IDeviceAttitude::instance()->copyValueOfRotationMatrix(matrix);
+  camCS.applyRotation(matrix);
   
   CoordinateSystem local3 = camCS.applyRotation([self getAttitudeMatrixOnLocalForPosition:&camPosition]);
   

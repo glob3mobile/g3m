@@ -12,24 +12,24 @@
 
 DeviceAttitude_iOS::DeviceAttitude_iOS():
 _camCSPortrait(Vector3D(1,0,0), //X
-                                Vector3D(0,0,-1), //Y -> View Direction
-                                Vector3D(0,1,0), //Z -> Up
-                                Vector3D::zero),
+               Vector3D(0,0,-1), //Y -> View Direction
+               Vector3D(0,1,0), //Z -> Up
+               Vector3D::zero),
 
 _camCSPortraitUD(Vector3D(1,0,0), //X
-                                  Vector3D(0,0,-1), //Y -> View Direction
-                                  Vector3D(0,-1,0), //Z -> Up
-                                  Vector3D::zero),
+                 Vector3D(0,0,-1), //Y -> View Direction
+                 Vector3D(0,-1,0), //Z -> Up
+                 Vector3D::zero),
 
 _camCSLL(Vector3D(0,1,0), //X
-                          Vector3D(0,0,-1), //Y -> View Direction
-                          Vector3D(-1,0,0), //Z -> Up
-                          Vector3D::zero),
+         Vector3D(0,0,-1), //Y -> View Direction
+         Vector3D(-1,0,0), //Z -> Up
+         Vector3D::zero),
 
 _camCSLR(Vector3D(0,1,0), //X
-                          Vector3D(0,0,-1), //Y -> View Direction
-                          Vector3D(1,0,0), //Z -> Up
-                          Vector3D::zero)
+         Vector3D(0,0,-1), //Y -> View Direction
+         Vector3D(1,0,0), //Z -> Up
+         Vector3D::zero)
 {
   _mm = [[CMMotionManager alloc] init];
 }
@@ -54,12 +54,16 @@ bool DeviceAttitude_iOS::isTracking() const{
 }
 
 void DeviceAttitude_iOS::copyValueOfRotationMatrix(MutableMatrix44D& rotationMatrix) const{
-  CMRotationMatrix m = _mm.deviceMotion.attitude.rotationMatrix;
   
-  rotationMatrix.setValue(m.m11, m.m12, m.m13, 0,
-                          m.m21, m.m22, m.m23, 0,
-                          m.m31, m.m32, m.m33, 0,
-                          0, 0, 0, 1);
+  if (isTracking()){
+    
+    CMRotationMatrix m = _mm.deviceMotion.attitude.rotationMatrix;
+    
+    rotationMatrix.setValue(m.m11, m.m12, m.m13, 0,
+                            m.m21, m.m22, m.m23, 0,
+                            m.m31, m.m32, m.m33, 0,
+                            0, 0, 0, 1);
+  }
 }
 
 InterfaceOrientation DeviceAttitude_iOS::getCurrentInterfaceOrientation() const{
@@ -99,11 +103,11 @@ CoordinateSystem DeviceAttitude_iOS::getCameraCoordinateSystemForInterfaceOrient
     case PORTRAIT:{
       return _camCSPortrait;
     }
-
+      
     case PORTRAIT_UPSIDEDOWN:{
       return _camCSPortraitUD;
     }
-
+      
     case LANDSCAPE_LEFT:{
       return _camCSLL;
     }
