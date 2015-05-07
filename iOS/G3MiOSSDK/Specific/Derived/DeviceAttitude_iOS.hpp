@@ -14,14 +14,7 @@
 class DeviceAttitude_iOS: public IDeviceAttitude{
 private:
   CMMotionManager* _mm;
-  
-  CoordinateSystem _camCSPortrait;
-  
-  CoordinateSystem _camCSPortraitUD;
-  
-  CoordinateSystem _camCSLL;
-  
-  CoordinateSystem _camCSLR;
+
   
 public:
   

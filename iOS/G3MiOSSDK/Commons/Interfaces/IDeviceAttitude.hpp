@@ -26,6 +26,15 @@ enum InterfaceOrientation{
 class IDeviceAttitude{
 private:
   static IDeviceAttitude* _instance;
+protected:
+  
+  CoordinateSystem _camCSPortrait;
+  
+  CoordinateSystem _camCSPortraitUD;
+  
+  CoordinateSystem _camCSLL;
+  
+  CoordinateSystem _camCSLR;
 public:
   
   IDeviceAttitude();
@@ -55,7 +64,7 @@ public:
   
   virtual InterfaceOrientation getCurrentInterfaceOrientation() const = 0;
   
-  virtual CoordinateSystem getCameraCoordinateSystemForInterfaceOrientation(InterfaceOrientation orientation) const = 0;
+  CoordinateSystem getCameraCoordinateSystemForInterfaceOrientation(InterfaceOrientation orientation) const;
   
 };
 
