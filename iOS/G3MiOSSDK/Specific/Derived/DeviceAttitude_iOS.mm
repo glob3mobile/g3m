@@ -1,0 +1,51 @@
+//
+//  DeviceAttitude_iOS.m
+//  G3MiOSSDK
+//
+//  Created by Jose Miguel SN on 7/5/15.
+//
+//
+
+#import "DeviceAttitude_iOS.hpp"
+
+
+DeviceAttitude_iOS::DeviceAttitude_iOS(){
+  _mm = [[CMMotionManager alloc] init];
+}
+
+void DeviceAttitude_iOS::startTrackingDeviceOrientation() const{
+  // Tell CoreMotion to show the compass calibration HUD when required
+  // to provide true north-referenced attitude
+  _mm.showsDeviceMovementDisplay = YES;
+  _mm.deviceMotionUpdateInterval = 1.0 / 60.0;
+  
+  // Attitude that is referenced to true north
+  [_mm startDeviceMotionUpdatesUsingReferenceFrame:CMAttitudeReferenceFrameXTrueNorthZVertical];
+}
+
+void DeviceAttitude_iOS::stopTrackingDeviceOrientation() const{
+  [_mm stopDeviceMotionUpdates];
+}
+
+
+bool DeviceAttitude_iOS::isTracking() const{
+  return _mm.deviceMotionActive;
+}
+
+void DeviceAttitude_iOS::copyValueOfRotationMatrix(MutableMatrix44D& rotationMatrix) const{
+  CMRotationMatrix m = _mm.deviceMotion.attitude.rotationMatrix;
+  
+  rotationMatrix.setValue(m.m11, m.m12, m.m13, 0,
+                          m.m21, m.m22, m.m23, 0,
+                          m.m31, m.m32, m.m33, 0,
+                          0, 0, 0, 1);
+}
+
+InterfaceOrientation DeviceAttitude_iOS::getCurrentInterfaceOrientation() const{
+  
+}
+
+CoordinateSystem DeviceAttitude_iOS::getCameraCoordinateSystemForInterfaceOrientation() const{
+  
+}
+
