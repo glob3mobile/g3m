@@ -389,10 +389,6 @@ Mesh* createSectorMesh(const Planet* planet,
   builder.initializeWidget();
   [[self G3MWidget] startAnimation];
   
-  IDeviceAttitude::setInstance(new DeviceAttitude_iOS()); //!!!!
-  IDeviceAttitude::instance()->startTrackingDeviceOrientation();
-  
-  
   //  [G3MWidget widget]->getPlanetRenderer()->setEnable(false);
   
   

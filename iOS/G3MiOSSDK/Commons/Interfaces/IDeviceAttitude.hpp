@@ -28,13 +28,13 @@ private:
   static IDeviceAttitude* _instance;
 protected:
   
-  CoordinateSystem _camCSPortrait;
+  mutable CoordinateSystem* _camCSPortrait;
   
-  CoordinateSystem _camCSPortraitUD;
+  mutable CoordinateSystem* _camCSPortraitUD;
   
-  CoordinateSystem _camCSLL;
+  mutable CoordinateSystem* _camCSLL;
   
-  CoordinateSystem _camCSLR;
+  mutable CoordinateSystem* _camCSLR;
 public:
   
   IDeviceAttitude();
@@ -44,7 +44,7 @@ public:
   //Singleton
   static IDeviceAttitude* instance();
   
-  virtual ~IDeviceAttitude(){}
+  virtual ~IDeviceAttitude();
   
   /**
    Must be called before any other operation

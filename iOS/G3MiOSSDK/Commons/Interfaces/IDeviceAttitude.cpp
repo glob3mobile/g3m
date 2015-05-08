@@ -12,25 +12,10 @@ IDeviceAttitude* IDeviceAttitude::_instance;
 
 
 IDeviceAttitude::IDeviceAttitude():
-_camCSPortrait(Vector3D(1,0,0), //X
-               Vector3D(0,0,-1), //Y -> View Direction
-               Vector3D(0,1,0), //Z -> Up
-               Vector3D::zero),
-
-_camCSPortraitUD(Vector3D(1,0,0), //X
-                 Vector3D(0,0,-1), //Y -> View Direction
-                 Vector3D(0,-1,0), //Z -> Up
-                 Vector3D::zero),
-
-_camCSLL(Vector3D(0,1,0), //X
-         Vector3D(0,0,-1), //Y -> View Direction
-         Vector3D(-1,0,0), //Z -> Up
-         Vector3D::zero),
-
-_camCSLR(Vector3D(0,1,0), //X
-         Vector3D(0,0,-1), //Y -> View Direction
-         Vector3D(1,0,0), //Z -> Up
-         Vector3D::zero){
+_camCSPortrait(NULL),
+_camCSPortraitUD(NULL),
+_camCSLL(NULL),
+_camCSLR(NULL){
   
 }
 
@@ -46,29 +31,58 @@ IDeviceAttitude* IDeviceAttitude::instance(){
   return _instance;
 }
 
+IDeviceAttitude::~IDeviceAttitude(){
+  delete _camCSLL;
+  delete _camCSLR;
+  delete _camCSPortrait;
+  delete _camCSPortraitUD;
+}
+
 
 CoordinateSystem IDeviceAttitude::getCameraCoordinateSystemForInterfaceOrientation(InterfaceOrientation orientation) const{
   
+  if (_camCSLL == NULL){
+    _camCSPortrait = new CoordinateSystem(Vector3D(1,0,0), //X
+                                          Vector3D(0,0,-1), //Y -> View Direction
+                                          Vector3D(0,1,0), //Z -> Up
+                                          Vector3D::zero);
+    
+    _camCSPortraitUD = new CoordinateSystem(Vector3D(1,0,0), //X
+                                            Vector3D(0,0,-1), //Y -> View Direction
+                                            Vector3D(0,-1,0), //Z -> Up
+                                            Vector3D::zero);
+    
+    _camCSLL = new CoordinateSystem(Vector3D(0,1,0), //X
+                                    Vector3D(0,0,-1), //Y -> View Direction
+                                    Vector3D(-1,0,0), //Z -> Up
+                                    Vector3D::zero);
+    
+    _camCSLR = new CoordinateSystem(Vector3D(0,1,0), //X
+                                    Vector3D(0,0,-1), //Y -> View Direction
+                                    Vector3D(1,0,0), //Z -> Up
+                                    Vector3D::zero);
+  }
+  
   switch (orientation) {
     case PORTRAIT:{
-      return _camCSPortrait;
+      return *_camCSPortrait;
     }
       
     case PORTRAIT_UPSIDEDOWN:{
-      return _camCSPortraitUD;
+      return *_camCSPortraitUD;
     }
       
     case LANDSCAPE_LEFT:{
-      return _camCSLL;
+      return *_camCSLL;
     }
       
     case LANDSCAPE_RIGHT:{
-      return _camCSLR;
+      return *_camCSLR;
     }
       
     default:{
       //Landscape right
-      return _camCSLR;
+      return *_camCSLR;
     }
   }
 }
