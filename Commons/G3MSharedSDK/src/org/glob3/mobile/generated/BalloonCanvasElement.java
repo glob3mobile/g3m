@@ -72,7 +72,7 @@ public class BalloonCanvasElement extends CanvasElement
     final Vector2F childExtent = _child.getExtent(canvas);
   
     final float twoMargin = _margin * 2;
-    return new Vector2F(childExtent._x + twoMargin, (childExtent._y + _arrowLenght + twoMargin) * 2);
+    return new Vector2F(childExtent._x + twoMargin, (childExtent._y + _arrowLength + twoMargin) * 2);
   }
 
   public final void drawAt(float left, float top, ICanvas canvas)
