@@ -364,7 +364,7 @@ void Mark::initialize(const G3MContext* context,
                                                  true);
       }
       else {
-        ILogger::instance()->logWarning("Marker created without label nor icon");
+        ILogger::instance()->logWarning("Mark created without label nor icon");
       }
     }
   }

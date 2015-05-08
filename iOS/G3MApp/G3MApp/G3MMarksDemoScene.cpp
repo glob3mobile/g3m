@@ -1,12 +1,12 @@
 //
-//  G3MMarkersDemoScene.cpp
+//  G3MMarksDemoScene.cpp
 //  G3MApp
 //
 //  Created by Diego Gomez Deck on 11/18/13.
 //  Copyright (c) 2013 Igo Software SL. All rights reserved.
 //
 
-#include "G3MMarkersDemoScene.hpp"
+#include "G3MMarksDemoScene.hpp"
 
 #include <G3MiOSSDK/G3MWidget.hpp>
 #include <G3MiOSSDK/LayerSet.hpp>
@@ -26,11 +26,11 @@
 #include "G3MDemoModel.hpp"
 
 
-class G3MMarkersDemoScene_BufferDownloadListener : public IBufferDownloadListener {
+class G3MMarksDemoScene_BufferDownloadListener : public IBufferDownloadListener {
 private:
-  G3MMarkersDemoScene* _scene;
+  G3MMarksDemoScene* _scene;
 public:
-  G3MMarkersDemoScene_BufferDownloadListener(G3MMarkersDemoScene* scene) :
+  G3MMarksDemoScene_BufferDownloadListener(G3MMarksDemoScene* scene) :
   _scene(scene)
   {
   }
@@ -108,11 +108,11 @@ public:
 
 };
 
-void G3MMarkersDemoScene::addMark(Mark* mark) {
+void G3MMarksDemoScene::addMark(Mark* mark) {
   getModel()->getMarksRenderer()->addMark(mark);
 }
 
-void G3MMarkersDemoScene::rawActivate(const G3MContext* context) {
+void G3MMarksDemoScene::rawActivate(const G3MContext* context) {
   G3MDemoModel* model     = getModel();
   G3MWidget*    g3mWidget = model->getG3MWidget();
 
@@ -129,7 +129,7 @@ void G3MMarkersDemoScene::rawActivate(const G3MContext* context) {
                                          DownloadPriority::HIGHEST,
                                          TimeInterval::fromHours(1),
                                          true,
-                                         new G3MMarkersDemoScene_BufferDownloadListener(this),
+                                         new G3MMarksDemoScene_BufferDownloadListener(this),
                                          true);
 
   g3mWidget->setAnimatedCameraPosition(Geodetic3D::fromDegrees(23.2, 5.5, 3643920),
@@ -139,13 +139,13 @@ void G3MMarkersDemoScene::rawActivate(const G3MContext* context) {
                                        );
 }
 
-void G3MMarkersDemoScene::deactivate(const G3MContext* context) {
+void G3MMarksDemoScene::deactivate(const G3MContext* context) {
   context->getDownloader()->cancelRequest(_requestId);
 
   G3MDemoScene::deactivate(context);
 }
 
-void G3MMarkersDemoScene::rawSelectOption(const std::string& option,
+void G3MMarksDemoScene::rawSelectOption(const std::string& option,
                                           int optionIndex) {
   
 }

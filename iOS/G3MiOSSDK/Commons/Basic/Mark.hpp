@@ -162,7 +162,7 @@ private:
 
 public:
   /**
-   * Creates a marker with icon and label
+   * Creates a mark with icon and label
    */
   Mark(const std::string& label,
        const URL&         iconURL,
@@ -180,7 +180,7 @@ public:
        bool               autoDeleteListener=false);
 
   /**
-   * Creates a marker just with label, without icon
+   * Creates a mark just with label, without icon
    */
   Mark(const std::string& label,
        const Geodetic3D&  position,
@@ -195,7 +195,7 @@ public:
        bool               autoDeleteListener=false);
 
   /**
-   * Creates a marker just with icon, without label
+   * Creates a mark just with icon, without label
    */
   Mark(const URL&         iconURL,
        const Geodetic3D&  position,
@@ -207,7 +207,7 @@ public:
        bool               autoDeleteListener=false);
 
   /**
-   * Creates a marker whith a given pre-renderer IImage
+   * Creates a mark whith a given pre-renderer IImage
    */
   Mark(const IImage*      image,
        const std::string& imageID,
