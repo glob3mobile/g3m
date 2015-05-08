@@ -618,7 +618,7 @@ public class SphericalPlanet extends Planet
         minFactor = factor;
     }
   
-    //printf("Converge doble drag %d iteraciones con factor=%.3f\n", iter, factor);
+    System.out.printf("Converge doble drag %d iteraciones con factor=%.3f\n", iter, factor);
   
     _prevFactor = factor;
     return matrix;
@@ -863,7 +863,7 @@ public class SphericalPlanet extends Planet
   
         //angleInRadians = a0.distanceTo(last)._radians < a1.distanceTo(last)._radians? a0._radians : a1._radians;
   
-        if (ao.distanceTo(last)._radians < a1.distanceTo(last)._radians)
+        if (a0.distanceTo(last)._radians < a1.distanceTo(last)._radians)
           angleInRadians = a0._radians;
         else
           angleInRadians = a1._radians;
