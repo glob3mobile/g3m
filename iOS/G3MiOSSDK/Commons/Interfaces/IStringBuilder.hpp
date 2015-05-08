@@ -43,9 +43,6 @@ public:
   }
 
   virtual bool contentEqualsTo(const std::string& that) const = 0;
-  
-  virtual void setPrecision(int i) = 0;
-  
 };
 
 #endif
