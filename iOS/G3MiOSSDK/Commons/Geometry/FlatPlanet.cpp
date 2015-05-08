@@ -144,8 +144,7 @@ void FlatPlanet::beginDoubleDrag(const Vector3D& origin,
 }
 
 MutableMatrix44D FlatPlanet::doubleDrag(const Vector3D& finalRay0,
-                                        const Vector3D& finalRay1,
-                                        bool allowRotation) const
+                                        const Vector3D& finalRay1) const
 {
   // test if initialPoints are valid
   if (_initialPoint0.isNan() || _initialPoint1.isNan())

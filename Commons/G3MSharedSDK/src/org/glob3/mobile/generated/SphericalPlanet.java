@@ -558,7 +558,7 @@ public class SphericalPlanet extends Planet
   
     // search min & max factor for translation
     int iter = 0;
-    double factor;
+    double factor=0;
     double minFactor;
     double maxFactor;
     double deltaFactor = 0.04;

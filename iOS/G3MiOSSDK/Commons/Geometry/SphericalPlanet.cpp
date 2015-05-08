@@ -446,8 +446,7 @@ double SphericalPlanet::testDoubleDragIteration(double factor,
 
 
 MutableMatrix44D SphericalPlanet::doubleDrag(const Vector3D& finalRay0,
-                                             const Vector3D& finalRay1,
-                                             bool allowRotation) const
+                                             const Vector3D& finalRay1) const
 {
   // test if initialPoints are valid
   if (_initialPoint0.isNan() || _initialPoint1.isNan())
@@ -459,7 +458,7 @@ MutableMatrix44D SphericalPlanet::doubleDrag(const Vector3D& finalRay0,
   
   // search min & max factor for translation
   int iter = 0;
-  double factor, minFactor, maxFactor;
+  double factor=0, minFactor, maxFactor;
   double deltaFactor = 0.04;
   double difAngle = testDoubleDragIteration(_prevFactor, finalRay0, finalRay1, matrix);
   iter++;

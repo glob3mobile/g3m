@@ -408,10 +408,9 @@ void EllipsoidalPlanet::beginDoubleDrag(const Vector3D& origin,
 
 
 MutableMatrix44D EllipsoidalPlanet::doubleDrag(const Vector3D& finalRay0,
-                                               const Vector3D& finalRay1,
-                                               bool allowRotation) const
+                                               const Vector3D& finalRay1) const
 {
-  return _sphericalPlanetDoubleDragDelegate->doubleDrag(finalRay0, finalRay1, allowRotation);
+  return _sphericalPlanetDoubleDragDelegate->doubleDrag(finalRay0, finalRay1);
 }
 
 

@@ -18,17 +18,23 @@ class CameraDoubleDragHandler: public CameraEventHandler {
   
 private:
   MeshRenderer* _meshRenderer;
-  bool _allowRotation;
-  bool _fixRollTo0;
+  //bool _allowRotation;
+  //bool _fixRollTo0;
   
 public:
-  CameraDoubleDragHandler(bool allowRotation, bool fixRollTo0):
+/*  CameraDoubleDragHandler(bool allowRotation, bool fixRollTo0):
   _camera0(Camera()),
   _meshRenderer(NULL),
   _allowRotation(allowRotation),
   _fixRollTo0(fixRollTo0)
   {
-  }
+  }*/
+  
+  CameraDoubleDragHandler():
+  _camera0(Camera()),
+  _meshRenderer(NULL)
+  {}
+  
   
   ~CameraDoubleDragHandler() {
 #ifdef JAVA_CODE
