@@ -89,9 +89,9 @@ public class MainActivity
 
 	   final G3MBuilder_Android builder = new G3MBuilder_Android(this);
 
-	   //const Planet* planet = Planet::createEarth();
+	   final Planet planet = Planet.createEarth();
 	   //const Planet* planet = Planet::createSphericalEarth();
-	   final Planet planet = Planet.createFlatEarth();
+	   //final Planet planet = Planet.createFlatEarth();
 	   builder.setPlanet(planet);
 
 	   // set camera handlers
