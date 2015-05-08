@@ -382,6 +382,27 @@ MutableMatrix44D MutableMatrix44D::createTranslationMatrix(double x,
                           x, y, z, 1);
 }
 
+void MutableMatrix44D::setTranslationMatrix(double x, double y, double z) {
+  _m00  = 1;
+  _m01  = 0;
+  _m02  = 0;
+  _m03  = x;
+  
+  _m10  = 0;
+  _m11  = 1;
+  _m12  = 0;
+  _m13  = y;
+  
+  _m20  = 0;
+  _m21  = 0;
+  _m22  = 1;
+  _m23  = z;
+  
+  _m30  = 0;
+  _m31  = 0;
+  _m32  = 0;
+  _m33  = 1;
+}
 
 MutableMatrix44D MutableMatrix44D::createRotationMatrix(const Angle& angle,
                                                         const Vector3D& axis) {
@@ -394,6 +415,38 @@ MutableMatrix44D MutableMatrix44D::createRotationMatrix(const Angle& angle,
                           a._y * a._x * (1 - c) - a._z * s, a._y * a._y * (1 - c) + c, a._y * a._z * (1 - c) + a._x * s, 0,
                           a._x * a._z * (1 - c) + a._y * s, a._y * a._z * (1 - c) - a._x * s, a._z * a._z * (1 - c) + c, 0,
                           0, 0, 0, 1);
+}
+
+void MutableMatrix44D::createRotationMatrix(double radians,
+                                            const MutableVector3D& axis) {
+  //const Vector3D a = axis.normalized();
+  double length = axis.length();
+  double a_x = axis.x() / length;
+  double a_y = axis.y() / length;
+  double a_z = axis.z() / length;
+  
+  const double c = COS(radians);
+  const double s = SIN(radians);
+  
+  _m00 = a_x * a_x * (1 - c) + c;
+  _m01 = a_y * a_x * (1 - c) - a_z * s;
+  _m02 = a_x * a_z * (1 - c) + a_y * s;
+  _m03 = 0;
+  
+  _m10 = a_x * a_y * (1 - c) + a_z * s;
+  _m11 = a_y * a_y * (1 - c) + c;
+  _m12 = a_y * a_z * (1 - c) - a_x * s;
+  _m13 = 0;
+  
+  _m20 = a_x * a_z * (1 - c) - a_y * s;
+  _m21 = a_y * a_z * (1 - c) + a_x * s;
+  _m22 = a_z * a_z * (1 - c) + c;
+  _m23 = 0;
+  
+  _m30 = 0;
+  _m31 = 0;
+  _m32 = 0;
+  _m33 = 1;
 }
 
 MutableMatrix44D MutableMatrix44D::createGeneralRotationMatrix(const Angle& angle,

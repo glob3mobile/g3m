@@ -204,18 +204,22 @@ Sphere* Sphere::createSphere() const {
 }
 
 
-std::vector<double> Sphere::intersectionCenteredSphereWithRay(const Vector3D& origin,
-                                                              const Vector3D& direction,
+std::vector<double> Sphere::intersectionCenteredSphereWithRay(double origin_x,
+                                                              double origin_y,
+                                                              double origin_z,
+                                                              double direction_x,
+                                                              double direction_y,
+                                                              double direction_z,
                                                               double radius)
 {
   std::vector<double> intersections;
   
   // By laborious algebraic manipulation....
-  const double a = direction._x * direction._x  + direction._y * direction._y + direction._z * direction._z;
+  const double a = direction_x * direction_x  + direction_y * direction_y + direction_z * direction_z;
   
-  const double b = 2.0 * (origin._x * direction._x + origin._y * direction._y + origin._z * direction._z);
+  const double b = 2.0 * (origin_x * direction_x + origin_y * direction_y + origin_z * direction_z);
   
-  const double c = origin._x * origin._x + origin._y * origin._y + origin._z * origin._z - radius * radius;
+  const double c = origin_x * origin_x + origin_y * origin_y + origin_z * origin_z - radius * radius;
   
   // Solve the quadratic equation: ax^2 + bx + c = 0.
   // Algorithm is from Wikipedia's "Quadratic equation" topic, and Wikipedia credits
@@ -261,4 +265,29 @@ Vector3D Sphere::closestIntersectionCenteredSphereWithRay(const Vector3D& origin
   }
   return origin.add(direction.times(distances[0]));
 }
+
+void Sphere::setClosestIntersectionCenteredSphereWithRay(double origin_x,
+                                                         double origin_y,
+                                                         double origin_z,
+                                                         double direction_x,
+                                                         double direction_y,
+                                                         double direction_z,
+                                                         double radius,
+                                                         MutableVector3D& result)
+{
+  std::vector<double> distances = Sphere::intersectionCenteredSphereWithRay(origin_x,
+                                                                            origin_y,
+                                                                            origin_z,
+                                                                            direction_x,
+                                                                            direction_y,
+                                                                            direction_z,
+                                                                            radius);
+  if (distances.empty())
+    result = MutableVector3D::nan();
+  else
+    result = MutableVector3D(origin_x + direction_x * distances[0],
+                             origin_y + direction_y * distances[0],
+                             origin_z + direction_z * distances[0]);
+}
+
 

@@ -56,6 +56,10 @@ private:
   MutableMatrix44D createDragMatrix(const Vector3D initialPoint,
                                     const Vector3D finalPoint) const;
   
+  static void multByDragMatrix(const MutableVector3D& initialPoint,
+                               const MutableVector3D& finalPoint,
+                               MutableMatrix44D& matrix);
+  
   double testDoubleDragIteration(double factor,
                                  const Vector3D& finalRay0,
                                  const Vector3D& finalRay1,

@@ -213,6 +213,14 @@ public:
 
   MutableVector3D rotateAroundAxis(const MutableVector3D& axis,
                                    const Angle& theta) const;
+  
+  inline static double distanceBetween(const MutableVector3D& a,
+                                       const MutableVector3D& b) {
+    double squaredDistance = (a._x - b._x) * (a._x - b._x) +
+    (a._y - b._y) * (a._y - b._y) +
+    (a._z - b._z) * (a._z - b._z);
+    return IMathUtils::instance()->sqrt(squaredDistance);
+  }
 
 };
 

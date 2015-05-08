@@ -217,6 +217,11 @@ public:
   static MutableMatrix44D invalid() {
     return MutableMatrix44D(false);
   }
+  
+  inline void setInvalid() {
+    _isValid = false;
+    _matrix44D = NULL;
+  }
 
   bool isValid() const {
     return _isValid;
@@ -338,9 +343,15 @@ public:
   static MutableMatrix44D createTranslationMatrix(double x,
                                                   double y,
                                                   double z);
+  
+  void setTranslationMatrix(double x, double y, double z);
 
   static MutableMatrix44D createRotationMatrix(const Angle& angle,
                                                const Vector3D& axis);
+  
+  void createRotationMatrix(double radians,
+                            const MutableVector3D& axis);
+
 
   static MutableMatrix44D createGeneralRotationMatrix(const Angle& angle,
                                                       const Vector3D& axis,

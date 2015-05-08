@@ -315,6 +315,24 @@ MutableMatrix44D SphericalPlanet::createDragMatrix(const Vector3D initialPoint,
   return MutableMatrix44D::createRotationMatrix(rotationDelta, rotationAxis);
 }
 
+void SphericalPlanet::multByDragMatrix(const MutableVector3D& initialPoint,
+                                       const MutableVector3D& finalPoint,
+                                       MutableMatrix44D& matrix) {
+  // compute the rotation axis
+  const MutableVector3D rotationAxis = initialPoint.cross(finalPoint);
+  
+  // compute the angle
+  double sinus = rotationAxis.length()/initialPoint.length()/finalPoint.length();
+  double rotationDeltaInRadians = -IMathUtils::instance()->asin(sinus);
+  if (rotationDeltaInRadians != rotationDeltaInRadians) {
+    matrix.setInvalid();
+    return;
+  }
+  
+  // return rotation matrix
+  matrix.createRotationMatrix(rotationDeltaInRadians, rotationAxis);
+}
+
 
 MutableMatrix44D SphericalPlanet::singleDrag(const Vector3D& finalRay) const
 {
@@ -368,14 +386,14 @@ void SphericalPlanet::beginDoubleDrag(const Vector3D& origin,
   _prevFactor = 0;
 }
 
-
+/*
 double SphericalPlanet::testDoubleDragIteration(double factor,
                                                 const Vector3D& finalRay0,
                                                 const Vector3D& finalRay1,
                                                 MutableMatrix44D& matrix) const
 {
   MutableVector3D positionCamera = _origin;
-
+  
   // move forward
   double distance = _centerPoint.sub(_origin).length();
   Vector3D traslation = _centerRay.asVector3D().times(distance*factor);
@@ -392,6 +410,97 @@ double SphericalPlanet::testDoubleDragIteration(double factor,
   
   // drag initial point 0 to final point 0
   MutableMatrix44D dragMatrix = createDragMatrix(_initialPoint0.asVector3D(), finalPoint0);
+  matrix.copyValueOfMultiplication(dragMatrix, matrix);
+  
+  // transform points to set axis origin in initialPoint0
+  {
+    Vector3D draggedCameraPos = positionCamera.transformedBy(matrix, 1.0).asVector3D();
+    Vector3D finalPoint1 = Sphere::closestIntersectionCenteredSphereWithRay(draggedCameraPos,
+                                                                            finalRay1.transformedBy(matrix, 0), _dragRadius1); // B1
+    
+    //Taking whole system to origin
+    MutableMatrix44D M = createGeodeticTransformMatrix(toGeodetic3D(_initialPoint0.asVector3D()));
+    MutableMatrix44D transform = M.inversed();
+    
+    Vector3D transformedInitialPoint1 = _initialPoint1.transformedBy(transform, 1.0).asVector3D();
+    Vector3D transformedFinalPoint1 = finalPoint1.transformedBy(transform, 1.0);
+    Vector3D transformedCameraPos = draggedCameraPos.transformedBy(transform, 1.0);
+    Vector3D v0 = transformedFinalPoint1.sub(transformedCameraPos);
+    
+    //Angles to rotate transformedInitialPoint1 to adjust the plane that contains origin, TFP1 and TCP
+    Vector3D planeNormal = transformedCameraPos.cross(v0).normalized();
+    Plane plane(planeNormal, v0);
+    Vector2D angles = plane.rotationAngleAroundZAxisToFixPointInRadians(transformedInitialPoint1);
+    
+    //Selecting best angle to rotate (smallest)
+    double angulo1 = angles._x;
+    double angulo2 = angles._y;
+    double dif1 = Angle::distanceBetweenAnglesInRadians(angulo1, _lastDoubleDragAngle);
+    double dif2 = Angle::distanceBetweenAnglesInRadians(angulo2, _lastDoubleDragAngle);
+    double finalAngle = (dif1 < dif2)? angulo1 : angulo2;
+    if (finalAngle != finalAngle) {
+      matrix.copyValue(MutableMatrix44D::invalid());
+      return 0;
+    }
+    
+    //Creating rotation matrix
+    _lastDoubleDragAngle = finalAngle;
+    Vector3D normal0 = geodeticSurfaceNormal(_initialPoint0);
+    MutableMatrix44D rotation = MutableMatrix44D::createGeneralRotationMatrix(Angle::fromRadians(-_lastDoubleDragAngle),normal0, _initialPoint0.asVector3D());
+    matrix.copyValueOfMultiplication(rotation, matrix);// = rotation.multiply(matrix);
+  }
+  
+  {
+    Vector3D P0   = positionCamera.transformedBy(matrix, 1.0).asVector3D();
+    Vector3D B    = _initialPoint1.asVector3D();
+    Vector3D B0   = B.sub(P0);
+    Vector3D Ra   = finalRay0.transformedBy(matrix, 0.0).normalized();
+    Vector3D Rb   = finalRay1.transformedBy(matrix, 0.0).normalized();
+    return Ra.angleBetween(B0)._degrees - Ra.angleBetween(Rb)._degrees;
+  }
+}
+*/
+
+
+double SphericalPlanet::testDoubleDragIteration(double factor,
+                                                const Vector3D& finalRay0,
+                                                const Vector3D& finalRay1,
+                                                MutableMatrix44D& matrix) const
+{
+  MutableVector3D positionCamera = _origin;
+
+  // move forward
+  factor *= MutableVector3D::distanceBetween(_centerPoint, _origin);
+  double traslationX = _centerRay.x() * factor;
+  double traslationY = _centerRay.y() * factor;
+  double traslationZ = _centerRay.z() * factor;
+  matrix.setTranslationMatrix(traslationX, traslationY, traslationZ);
+  
+  // compute new final points after moving forward
+  MutableVector3D finalPoint0; //A1
+  Sphere::setClosestIntersectionCenteredSphereWithRay(_origin.x() + traslationX,
+                                                      _origin.y() + traslationY,
+                                                      _origin.z() + traslationZ,
+                                                      finalRay0._x,
+                                                      finalRay0._y,
+                                                      finalRay0._z,
+                                                      _dragRadius0,
+                                                      finalPoint0);
+  if (finalPoint0.isNan()) {
+    matrix.setInvalid();
+    return 0;
+  }
+  
+  
+  
+  // AGUSTIN AT WORK REMOVING GARBAGE..............
+  
+  
+  
+  // drag initial point 0 to final point 0
+  //MutableMatrix44D dragMatrix = createDragMatrix(_initialPoint0.asVector3D(), finalPoint0.asVector3D());
+  MutableMatrix44D dragMatrix;
+  multByDragMatrix(_initialPoint0, finalPoint0, dragMatrix);
   matrix.copyValueOfMultiplication(dragMatrix, matrix);
   
   // transform points to set axis origin in initialPoint0
@@ -423,7 +532,7 @@ double SphericalPlanet::testDoubleDragIteration(double factor,
     double dif2 = Angle::distanceBetweenAnglesInRadians(angulo2, _lastDoubleDragAngle);
     double finalAngle = (dif1 < dif2)? angulo1 : angulo2;
     if (finalAngle != finalAngle) {
-        matrix.copyValue(MutableMatrix44D::invalid());
+        matrix.setInvalid();
         return 0;
     }
     
@@ -460,36 +569,36 @@ MutableMatrix44D SphericalPlanet::doubleDrag(const Vector3D& finalRay0,
   int iter = 0;
   double factor=0, minFactor, maxFactor;
   double deltaFactor = 0.04;
-  double difAngle = testDoubleDragIteration(_prevFactor, finalRay0, finalRay1, matrix);
+  double difAngleInDegrees = testDoubleDragIteration(_prevFactor, finalRay0, finalRay1, matrix);
   iter++;
-  if (difAngle != difAngle)
+  if (difAngleInDegrees != difAngleInDegrees)
     return MutableMatrix44D::invalid();
-  if (difAngle < 0) {
+  if (difAngleInDegrees < 0) {
     minFactor = _prevFactor;
     maxFactor = _prevFactor + deltaFactor;
-    difAngle = testDoubleDragIteration(maxFactor, finalRay0, finalRay1, matrix);
+    difAngleInDegrees = testDoubleDragIteration(maxFactor, finalRay0, finalRay1, matrix);
     iter++;
-    if (difAngle != difAngle)
+    if (difAngleInDegrees != difAngleInDegrees)
       return MutableMatrix44D::invalid();
-    while (difAngle < 0) {
+    while (difAngleInDegrees < 0) {
       maxFactor += deltaFactor;
-      difAngle = testDoubleDragIteration(maxFactor, finalRay0, finalRay1, matrix);
+      difAngleInDegrees = testDoubleDragIteration(maxFactor, finalRay0, finalRay1, matrix);
       iter++;
-      if (difAngle != difAngle)
+      if (difAngleInDegrees != difAngleInDegrees)
         return MutableMatrix44D::invalid();
     }
   } else {
     minFactor = _prevFactor - deltaFactor;
     maxFactor = _prevFactor;
-    difAngle = testDoubleDragIteration(minFactor, finalRay0, finalRay1, matrix);
+    difAngleInDegrees = testDoubleDragIteration(minFactor, finalRay0, finalRay1, matrix);
     iter++;
-    if (difAngle != difAngle)
+    if (difAngleInDegrees != difAngleInDegrees)
       return MutableMatrix44D::invalid();
-    while (difAngle > 0) {
+    while (difAngleInDegrees > 0) {
       minFactor -= deltaFactor;
-      difAngle = testDoubleDragIteration(minFactor, finalRay0, finalRay1, matrix);
+      difAngleInDegrees = testDoubleDragIteration(minFactor, finalRay0, finalRay1, matrix);
       iter++;
-      if (difAngle != difAngle)
+      if (difAngleInDegrees != difAngleInDegrees)
         return MutableMatrix44D::invalid();
     }
   }
@@ -497,13 +606,13 @@ MutableMatrix44D SphericalPlanet::doubleDrag(const Vector3D& finalRay0,
   // iterations until find right translation distance
   while (maxFactor-minFactor > 1e-3) {
     factor = (minFactor + maxFactor) / 2;
-    difAngle = testDoubleDragIteration(factor, finalRay0, finalRay1, matrix);
+    difAngleInDegrees = testDoubleDragIteration(factor, finalRay0, finalRay1, matrix);
     iter++;
-    if (difAngle != difAngle) {
+    if (difAngleInDegrees != difAngleInDegrees) {
       return MutableMatrix44D::invalid();
     }
-    //printf("difAngle=%.4f.  Min=%.4f  Factor=%.4f  Max=%.4f)\n", difAngle, minFactor, factor, maxFactor);
-    if (difAngle>0)
+    //printf("difAngleInDegrees=%.4f.  Min=%.4f  Factor=%.4f  Max=%.4f)\n", difAngleInDegrees, minFactor, factor, maxFactor);
+    if (difAngleInDegrees>0)
       maxFactor = factor;
     else
       minFactor = factor;
