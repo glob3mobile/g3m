@@ -23,7 +23,7 @@ package org.glob3.mobile.generated;
 public class CoordinateSystem
 {
 
-  private boolean checkConsistency(Vector3D x, Vector3D y, Vector3D z)
+  private static boolean checkConsistency(Vector3D x, Vector3D y, Vector3D z)
   {
     if (x.isNan() || y.isNan() || z.isNan())
     {
@@ -32,7 +32,7 @@ public class CoordinateSystem
     return areOrtogonal(x, y, z);
   }
 
-  private boolean areOrtogonal(Vector3D x, Vector3D y, Vector3D z)
+  private static boolean areOrtogonal(Vector3D x, Vector3D y, Vector3D z)
   {
     return x.isPerpendicularTo(y) && x.isPerpendicularTo(z) && y.isPerpendicularTo(z);
   }
@@ -59,7 +59,9 @@ public class CoordinateSystem
     if (!checkConsistency(x, y, z))
     {
       ILogger.instance().logError("Inconsistent CoordinateSystem created.");
-      throw new RuntimeException("Inconsistent CoordinateSystem created.");
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning DO NOT STOP EXECUTION, I WILL CHECK CONSISTENCY LATER ON
+      //THROW_EXCEPTION("Inconsistent CoordinateSystem created.");
     }
   }
 
@@ -219,6 +221,29 @@ public class CoordinateSystem
   public final boolean isEqualsTo(CoordinateSystem that)
   {
     return _x.isEquals(that._x) && _y.isEquals(that._y) && _z.isEquals(that._z);
+  }
+
+  public final CoordinateSystem applyRotation(MutableMatrix44D m)
+  {
+  
+    return new CoordinateSystem(_x.transformedBy(m, 1.0), _y.transformedBy(m, 1.0), _z.transformedBy(m, 1.0), _origin); //.transformedBy(m, 1.0));
+  }
+
+  public final MutableMatrix44D getRotationMatrix()
+  {
+  
+    return new MutableMatrix44D(_x._x, _x._y, _x._z, 0, _y._x, _y._y, _y._z, 0, _z._x, _z._y, _z._z, 0, 0,0,0,1);
+  
+  }
+
+  public final void copyValueOfRotationMatrix(MutableMatrix44D m)
+  {
+    m.setValue(_x._x, _x._y, _x._z, 0, _y._x, _y._y, _y._z, 0, _z._x, _z._y, _z._z, 0, 0, 0, 0, 1);
+  }
+
+  public final boolean isConsistent()
+  {
+    return checkConsistency(_x, _y, _z);
   }
 
 }
