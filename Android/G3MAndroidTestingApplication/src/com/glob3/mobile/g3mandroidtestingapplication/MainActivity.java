@@ -5,6 +5,7 @@ package com.glob3.mobile.g3mandroidtestingapplication;
 import org.glob3.mobile.generated.AltitudeMode;
 import org.glob3.mobile.generated.Color;
 import org.glob3.mobile.generated.ColumnLayoutImageBuilder;
+import org.glob3.mobile.generated.DeviceAttitudeCameraConstrainer;
 import org.glob3.mobile.generated.DownloaderImageBuilder;
 import org.glob3.mobile.generated.G3MContext;
 import org.glob3.mobile.generated.GFont;
@@ -51,7 +52,7 @@ public class MainActivity
 
       setContentView(R.layout.activity_main);
 
-      _g3mWidget = createWidget();
+      _g3mWidget = createWidgetVR();
 
       final RelativeLayout placeHolder = (RelativeLayout) findViewById(R.id.g3mWidgetHolder);
 
@@ -90,6 +91,18 @@ public class MainActivity
                new DownloaderImageBuilder(anchorBitmapURL), //
                position);
    }
+   
+   private G3MWidget_Android createWidgetVR() {
+	      final G3MBuilder_Android builder = new G3MBuilder_Android(this);
+
+	      final LayerSet layerSet = new LayerSet();
+	      layerSet.addLayer(new OSMLayer(TimeInterval.fromDays(30)));
+	      builder.getPlanetRendererBuilder().setLayerSet(layerSet);
+	      
+	      builder.addCameraConstraint(new DeviceAttitudeCameraConstrainer());
+
+	      return builder.createWidget();
+	   }
 
 
    private G3MWidget_Android createWidget() {
