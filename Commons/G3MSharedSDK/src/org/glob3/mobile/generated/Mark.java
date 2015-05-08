@@ -121,7 +121,7 @@ public class Mark implements SurfaceElevationListener
   //                                         GLBlendFactor::srcAlpha(),
   //                                         GLBlendFactor::oneMinusSrcAlpha());
   
-        _textureGLF = new TextureGLFeature(_textureId.getID(), billboardTexCoords, 2, 0, false, 0, true, GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha(), 0.0, 0.0, 1.0, 1.0, 0.0f, 0.0f, 0.0f);
+        _textureGLF = new TextureGLFeature(_textureId.getID(), billboardTexCoords, 2, 0, false, 0, true, GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha(), 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 0.0f);
       }
   
       _glState.addGLFeature(_textureGLF, false);

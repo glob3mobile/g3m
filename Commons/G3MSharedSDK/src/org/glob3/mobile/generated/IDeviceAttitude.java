@@ -3,20 +3,20 @@ public abstract class IDeviceAttitude
 {
   private static IDeviceAttitude _instance;
 
-  protected CoordinateSystem _camCSPortrait = new CoordinateSystem();
+  protected CoordinateSystem _camCSPortrait;
 
-  protected CoordinateSystem _camCSPortraitUD = new CoordinateSystem();
+  protected CoordinateSystem _camCSPortraitUD;
 
-  protected CoordinateSystem _camCSLL = new CoordinateSystem();
+  protected CoordinateSystem _camCSLL;
 
-  protected CoordinateSystem _camCSLR = new CoordinateSystem();
+  protected CoordinateSystem _camCSLR;
 
   public IDeviceAttitude()
   {
-     _camCSPortrait = new CoordinateSystem(new Vector3D(1,0,0), new Vector3D(0,0,-1), new Vector3D(0,1,0), Vector3D.zero);
-     _camCSPortraitUD = new CoordinateSystem(new Vector3D(1,0,0), new Vector3D(0,0,-1), new Vector3D(0,-1,0), Vector3D.zero);
-     _camCSLL = new CoordinateSystem(new Vector3D(0,1,0), new Vector3D(0,0,-1), new Vector3D(-1,0,0), Vector3D.zero);
-     _camCSLR = new CoordinateSystem(new Vector3D(0,1,0), new Vector3D(0,0,-1), new Vector3D(1,0,0), Vector3D.zero);
+     _camCSPortrait = null;
+     _camCSPortraitUD = null;
+     _camCSLL = null;
+     _camCSLR = null;
   
   }
 
@@ -39,6 +39,14 @@ public abstract class IDeviceAttitude
 
   public void dispose()
   {
+    if (_camCSLL != null)
+       _camCSLL.dispose();
+    if (_camCSLR != null)
+       _camCSLR.dispose();
+    if (_camCSPortrait != null)
+       _camCSPortrait.dispose();
+    if (_camCSPortraitUD != null)
+       _camCSPortraitUD.dispose();
   }
 
   /**
@@ -61,6 +69,17 @@ public abstract class IDeviceAttitude
 
   public final CoordinateSystem getCameraCoordinateSystemForInterfaceOrientation(InterfaceOrientation orientation)
   {
+  
+    if (_camCSLL == null)
+    {
+      _camCSPortrait = new CoordinateSystem(new Vector3D(1,0,0), new Vector3D(0,0,-1), new Vector3D(0,1,0), Vector3D.zero); //Z -> Up - Y -> View Direction - X
+  
+      _camCSPortraitUD = new CoordinateSystem(new Vector3D(1,0,0), new Vector3D(0,0,-1), new Vector3D(0,-1,0), Vector3D.zero); //Z -> Up - Y -> View Direction - X
+  
+      _camCSLL = new CoordinateSystem(new Vector3D(0,1,0), new Vector3D(0,0,-1), new Vector3D(-1,0,0), Vector3D.zero); //Z -> Up - Y -> View Direction - X
+  
+      _camCSLR = new CoordinateSystem(new Vector3D(0,1,0), new Vector3D(0,0,-1), new Vector3D(1,0,0), Vector3D.zero); //Z -> Up - Y -> View Direction - X
+    }
   
     switch (orientation)
     {
