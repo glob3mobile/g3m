@@ -73,7 +73,16 @@ public class DeviceAttitude_Android extends IDeviceAttitude implements SensorEve
 
 	@Override
 	public void onSensorChanged(SensorEvent event) {
-		// TODO Auto-generated method stub
+    	switch (event.sensor.getType()) {
+    	case Sensor.TYPE_ACCELEROMETER:
+    		System.arraycopy(event.values, 0, _lastAccels, 0, 3);
+    		break;
+    	case Sensor.TYPE_MAGNETIC_FIELD:
+    		System.arraycopy(event.values, 0, _lastMagFields, 0, 3);
+    		break;
+    	default:
+    		return;
+    	}
 		
 	}
 
