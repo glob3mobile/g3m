@@ -331,7 +331,6 @@ public class MutableMatrix44D
   public final String description()
   {
     IStringBuilder isb = IStringBuilder.newStringBuilder();
-    isb.setPrecision(2);
     isb.addString("MUTABLE MATRIX 44D: \n");
     float[] f = asMatrix44D().getColumnMajorFloatArray();
     for (int i = 0; i < 16; i++)
