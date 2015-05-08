@@ -276,8 +276,6 @@ OnGestureListener {
 
    private GPUProgramManager createGPUProgramManager() {
       final GPUProgramFactory factory = new BasicShadersGL2();
-<<<<<<< HEAD
-=======
 
       /*
       factory.add(new GPUProgramSources("Billboard", GL2Shaders._billboardVertexShader, GL2Shaders._billboardFragmentShader));
@@ -303,7 +301,6 @@ OnGestureListener {
                GL2Shaders._FlatColorMesh_DirectionLightFragmentShader));
        */
 
->>>>>>> purgatory
       return new GPUProgramManager(factory);
    }
 

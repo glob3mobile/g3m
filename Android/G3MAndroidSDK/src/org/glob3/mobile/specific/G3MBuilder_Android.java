@@ -76,8 +76,8 @@ protected CameraRenderer createDefaultCameraRenderer() {
 	  CameraRenderer cameraRenderer = new CameraRenderer();
 	  final boolean useInertia = true;
 	  cameraRenderer.addHandler(new CameraSingleDragHandler(useInertia));
-	  final boolean allowRotationInDoubleDrag = true;
-	  cameraRenderer.addHandler(new CameraDoubleDragHandler(allowRotationInDoubleDrag));
+	  /*final boolean allowRotationInDoubleDrag = true;
+	  cameraRenderer.addHandler(new CameraDoubleDragHandler(allowRotationInDoubleDrag));*/
 	  cameraRenderer.addHandler(new CameraRotationHandler());
 	  cameraRenderer.addHandler(new CameraDoubleTapHandler());
 	  
