@@ -32,10 +32,12 @@ IDeviceAttitude* IDeviceAttitude::instance(){
 }
 
 IDeviceAttitude::~IDeviceAttitude(){
+#ifdef C_CODE
   delete _camCSLL;
   delete _camCSLR;
   delete _camCSPortrait;
   delete _camCSPortraitUD;
+#endif
 }
 
 

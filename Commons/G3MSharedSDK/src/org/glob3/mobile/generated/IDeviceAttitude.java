@@ -39,14 +39,6 @@ public abstract class IDeviceAttitude
 
   public void dispose()
   {
-    if (_camCSLL != null)
-       _camCSLL.dispose();
-    if (_camCSLR != null)
-       _camCSLR.dispose();
-    if (_camCSPortrait != null)
-       _camCSPortrait.dispose();
-    if (_camCSPortraitUD != null)
-       _camCSPortraitUD.dispose();
   }
 
   /**
