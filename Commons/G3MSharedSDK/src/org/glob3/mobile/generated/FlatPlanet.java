@@ -269,7 +269,7 @@ public class FlatPlanet extends Planet
     _lastDoubleDragAngle = 0;
   }
 
-  public final MutableMatrix44D doubleDrag(Vector3D finalRay0, Vector3D finalRay1, boolean allowRotation)
+  public final MutableMatrix44D doubleDrag(Vector3D finalRay0, Vector3D finalRay1)
   {
     // test if initialPoints are valid
     if (_initialPoint0.isNan() || _initialPoint1.isNan())

@@ -23,16 +23,23 @@ public class CameraDoubleDragHandler extends CameraEventHandler
 {
 
   private MeshRenderer _meshRenderer;
-  private boolean _allowRotation;
-  private boolean _fixRollTo0;
+  //bool _allowRotation;
+  //bool _fixRollTo0;
 
-  public CameraDoubleDragHandler(boolean allowRotation, boolean fixRollTo0)
+/*  CameraDoubleDragHandler(bool allowRotation, bool fixRollTo0):
+  _camera0(Camera()),
+  _meshRenderer(NULL),
+  _allowRotation(allowRotation),
+  _fixRollTo0(fixRollTo0)
+  {
+  }*/
+
+  public CameraDoubleDragHandler()
   {
      _camera0 = new Camera(new Camera());
      _meshRenderer = null;
-     _allowRotation = allowRotation;
-     _fixRollTo0 = fixRollTo0;
   }
+
 
   public void dispose()
   {
@@ -158,7 +165,7 @@ public class CameraDoubleDragHandler extends CameraEventHandler
     final Planet planet = eventContext.getPlanet();
     final Vector2F pixel0 = touchEvent.getTouch(0).getPos();
     final Vector2F pixel1 = touchEvent.getTouch(1).getPos();
-    MutableMatrix44D matrix = planet.doubleDrag(_camera0.pixel2Ray(pixel0), _camera0.pixel2Ray(pixel1), _allowRotation);
+    MutableMatrix44D matrix = planet.doubleDrag(_camera0.pixel2Ray(pixel0), _camera0.pixel2Ray(pixel1));
   
     if (!matrix.isValid())
        return;
@@ -168,10 +175,9 @@ public class CameraDoubleDragHandler extends CameraEventHandler
     camera.copyFrom(_camera0);
     camera.applyTransform(matrix);
   
-    if (_fixRollTo0)
-    {
-      //eventContext->getPlanet()->correctPitchAfterDoubleDrag(camera, pixel0, pixel1);
-    }
+    /*if (_fixRollTo0){
+      eventContext->getPlanet()->correctPitchAfterDoubleDrag(camera, pixel0, pixel1);
+    }*/
   }
   public final void onUp(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
   {

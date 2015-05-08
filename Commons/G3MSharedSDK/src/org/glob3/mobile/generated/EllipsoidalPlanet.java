@@ -491,9 +491,9 @@ public class EllipsoidalPlanet extends Planet
   }
 
 
-  public final MutableMatrix44D doubleDrag(Vector3D finalRay0, Vector3D finalRay1, boolean allowRotation)
+  public final MutableMatrix44D doubleDrag(Vector3D finalRay0, Vector3D finalRay1)
   {
-    return _sphericalPlanetDoubleDragDelegate.doubleDrag(finalRay0, finalRay1, allowRotation);
+    return _sphericalPlanetDoubleDragDelegate.doubleDrag(finalRay0, finalRay1);
   }
 
   public final Effect createDoubleTapEffect(Vector3D origin, Vector3D centerRay, Vector3D touchedPosition)

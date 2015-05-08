@@ -546,7 +546,7 @@ public class SphericalPlanet extends Planet
     _prevFactor = 0;
   }
 
-  public final MutableMatrix44D doubleDrag(Vector3D finalRay0, Vector3D finalRay1, boolean allowRotation)
+  public final MutableMatrix44D doubleDrag(Vector3D finalRay0, Vector3D finalRay1)
   {
     // test if initialPoints are valid
     if (_initialPoint0.isNan() || _initialPoint1.isNan())
@@ -558,7 +558,7 @@ public class SphericalPlanet extends Planet
   
     // search min & max factor for translation
     int iter = 0;
-    double factor=0;
+    double factor = 0;
     double minFactor;
     double maxFactor;
     double deltaFactor = 0.04;

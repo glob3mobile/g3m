@@ -99,9 +99,10 @@ public abstract class MapBooBuilder
     CameraRenderer cameraRenderer = new CameraRenderer();
     final boolean useInertia = true;
     cameraRenderer.addHandler(new CameraSingleDragHandler(useInertia));
-    final boolean allowRotationInDoubleDrag = true;
-    final boolean fixRollTo0 = true;
-    cameraRenderer.addHandler(new CameraDoubleDragHandler(allowRotationInDoubleDrag, fixRollTo0));
+    /*const bool allowRotationInDoubleDrag = true;
+    const bool fixRollTo0 = true;
+    cameraRenderer->addHandler(new CameraDoubleDragHandler(allowRotationInDoubleDrag, fixRollTo0));*/
+    cameraRenderer.addHandler(new CameraDoubleDragHandler());
     cameraRenderer.addHandler(new CameraRotationHandler());
     //cameraRenderer->addHandler(new CameraDoubleTapHandler());
   
