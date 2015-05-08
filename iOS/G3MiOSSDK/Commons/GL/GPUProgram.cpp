@@ -35,7 +35,7 @@ GPUProgram* GPUProgram::createProgram(GL* gl,
     return NULL;
   }
 
-//  ILogger::instance()->logInfo("VERTEX SOURCE: \n %s", vertexSource.c_str());
+  //  ILogger::instance()->logInfo("VERTEX SOURCE: \n %s", vertexSource.c_str());
 
   // compile fragment shader
   int fragmentShader = gl->createShader(FRAGMENT_SHADER);
@@ -48,7 +48,7 @@ GPUProgram* GPUProgram::createProgram(GL* gl,
     return NULL;
   }
 
-//  ILogger::instance()->logInfo("FRAGMENT SOURCE: \n %s", fragmentSource.c_str());
+  //  ILogger::instance()->logInfo("FRAGMENT SOURCE: \n %s", fragmentSource.c_str());
 
   //gl->bindAttribLocation(p, 0, POSITION);
 
@@ -80,9 +80,9 @@ GPUProgram::~GPUProgram() {
 
   //ILogger::instance()->logInfo("Deleting program %s", _name.c_str());
 
-//  if (_manager != NULL) {
-//    _manager->compiledProgramDeleted(this->_name);
-//  }
+  //  if (_manager != NULL) {
+  //    _manager->compiledProgramDeleted(this->_name);
+  //  }
 
   for (int i = 0; i < _nUniforms; i++) {
     delete _createdUniforms[i];
@@ -388,9 +388,7 @@ void GPUProgram::setGPUUniformValue(int key, GPUUniformValue* v) {
     ILogger::instance()->logError("Uniform [key=%d] not found in program %s", key, _name.c_str());
     return;
   }
-  else {
-    u->set(v);
-  }
+  u->set(v);
 }
 
 void GPUProgram::setGPUAttributeValue(int key, GPUAttributeValue* v) {
@@ -399,7 +397,5 @@ void GPUProgram::setGPUAttributeValue(int key, GPUAttributeValue* v) {
     ILogger::instance()->logError("Attribute [key=%d] not found in program %s", key, _name.c_str());
     return;
   }
-  else {
-    a->set(v);
-  }
+  a->set(v);
 }
