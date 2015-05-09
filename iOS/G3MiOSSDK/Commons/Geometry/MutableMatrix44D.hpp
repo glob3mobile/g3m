@@ -362,6 +362,11 @@ public:
   static MutableMatrix44D createGeneralRotationMatrix(const Angle& angle,
                                                       const Vector3D& axis,
                                                       const Vector3D& point);
+  
+  void setGeneralRotationMatrix(double angleInRadians,
+                                const MutableVector3D& axis,
+                                const MutableVector3D& point);
+
 
   static MutableMatrix44D createModelMatrix(const MutableVector3D& pos,
                                             const MutableVector3D& center,

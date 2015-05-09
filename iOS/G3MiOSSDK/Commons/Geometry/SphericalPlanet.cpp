@@ -425,6 +425,7 @@ void SphericalPlanet::beginDoubleDrag(const Vector3D& origin,
 }
 
 /*
+// BEFORE REMOVING GARBAGE!
 double SphericalPlanet::testDoubleDragIteration(double factor,
                                                 const Vector3D& finalRay0,
                                                 const Vector3D& finalRay1,
@@ -533,59 +534,67 @@ double SphericalPlanet::testDoubleDragIteration(double factor,
   _doubleDragMatrix.copyValueOfMultiplication(_dragMatrix, _doubleDragMatrix);
   
   // transform points to set axis origin in initialPoint0
-  {
-    _draggedCameraPos.transformPointByMatrix(_origin, _doubleDragMatrix, 1.0);
-    _transformedFinalRay1.transformPointByMatrix(finalRay1, _doubleDragMatrix, 0);
-    Sphere::setClosestIntersectionCenteredSphereWithRay(_draggedCameraPos.x(),
-                                                        _draggedCameraPos.y(),
-                                                        _draggedCameraPos.z(),
-                                                        _transformedFinalRay1.x(),
-                                                        _transformedFinalRay1.y(),
-                                                        _transformedFinalRay1.z(),
-                                                        _dragRadius1,
-                                                        _finalPoint1 /*B1*/);
-    
-    //Taking whole system to origin
-    createInversedGeodeticTransformMatrix(_initialPoint0, _geodeticTransformMatrix);
-    _transformedInitialPoint1.transformPointByMatrix(_initialPoint1, _geodeticTransformMatrix, 1.0);
-    _transformedFinalPoint1.transformPointByMatrix(_finalPoint1, _geodeticTransformMatrix, 1.0);
-    _transformedCameraPos.transformPointByMatrix(_draggedCameraPos, _geodeticTransformMatrix, 1.0);
-
-    //Angles to rotate transformedInitialPoint1 to adjust the plane that contains origin, TFP1 and TCP
-    _rayToFinalPoint1.set(_transformedFinalPoint1.x()-_transformedCameraPos.x(),
-                          _transformedFinalPoint1.y()-_transformedCameraPos.y(),
-                          _transformedFinalPoint1.z()-_transformedCameraPos.z());    
-    _planeNormal.copyValueOfCross(_transformedCameraPos, _rayToFinalPoint1);
-    _planeNormal.normalize();
-    double angle1, angle2;
-    Plane::rotationAngleAroundZAxisToFixPointInRadians(_planeNormal,
-                                                       _transformedInitialPoint1,
-                                                       angle1, angle2);
-    
-    //Selecting best angle to rotate (smallest)
-    double dif1 = Angle::distanceBetweenAnglesInRadians(angle1, _lastDoubleDragAngle);
-    double dif2 = Angle::distanceBetweenAnglesInRadians(angle2, _lastDoubleDragAngle);
-    double finalAngle = (dif1 < dif2)? angle1 : angle2;
-    if (finalAngle != finalAngle) {
-        _doubleDragMatrix.setInvalid();
-        return 0;
-    }
-    
-    //Creating rotation matrix
-    _lastDoubleDragAngle = finalAngle;
-    Vector3D normal0 = geodeticSurfaceNormal(_initialPoint0);
-    MutableMatrix44D rotation = MutableMatrix44D::createGeneralRotationMatrix(Angle::fromRadians(-_lastDoubleDragAngle),normal0, _initialPoint0.asVector3D());
-    _doubleDragMatrix.copyValueOfMultiplication(rotation, _doubleDragMatrix);// = rotation.multiply(matrix);
+  _draggedCameraPos.transformPointByMatrix(_origin, _doubleDragMatrix, 1.0);
+  _transformedFinalRay1.transformPointByMatrix(finalRay1, _doubleDragMatrix, 0);
+  Sphere::setClosestIntersectionCenteredSphereWithRay(_draggedCameraPos.x(),
+                                                      _draggedCameraPos.y(),
+                                                      _draggedCameraPos.z(),
+                                                      _transformedFinalRay1.x(),
+                                                      _transformedFinalRay1.y(),
+                                                      _transformedFinalRay1.z(),
+                                                      _dragRadius1,
+                                                      _finalPoint1 /*B1*/);
+  
+  // Taking whole system to origin
+  createInversedGeodeticTransformMatrix(_initialPoint0, _geodeticTransformMatrix);
+  _transformedInitialPoint1.transformPointByMatrix(_initialPoint1, _geodeticTransformMatrix, 1.0);
+  _transformedFinalPoint1.transformPointByMatrix(_finalPoint1, _geodeticTransformMatrix, 1.0);
+  _transformedCameraPos.transformPointByMatrix(_draggedCameraPos, _geodeticTransformMatrix, 1.0);
+  
+  // Angles to rotate transformedInitialPoint1 to adjust the plane that contains origin, TFP1 and TCP
+  _rayToFinalPoint1.set(_transformedFinalPoint1.x()-_transformedCameraPos.x(),
+                        _transformedFinalPoint1.y()-_transformedCameraPos.y(),
+                        _transformedFinalPoint1.z()-_transformedCameraPos.z());
+  _planeNormal.copyValueOfCross(_transformedCameraPos, _rayToFinalPoint1);
+  _planeNormal.normalize();
+  double angle1InRadians, angle2InRadians;
+  Plane::rotationAngleAroundZAxisToFixPointInRadians(_planeNormal,
+                                                     _transformedInitialPoint1,
+                                                     angle1InRadians, angle2InRadians);
+  
+  // Selecting best angle to rotate (smallest)
+  double dif1 = Angle::distanceBetweenAnglesInRadians(angle1InRadians, _lastDoubleDragAngle);
+  double dif2 = Angle::distanceBetweenAnglesInRadians(angle2InRadians, _lastDoubleDragAngle);
+  double finalAngle = (dif1 < dif2)? angle1InRadians : angle2InRadians;
+  if (finalAngle != finalAngle) {
+    _doubleDragMatrix.setInvalid();
+    return 0;
   }
   
-  {
-    Vector3D P0   = _origin.transformedBy(_doubleDragMatrix, 1.0).asVector3D();
-    Vector3D B    = _initialPoint1.asVector3D();
-    Vector3D B0   = B.sub(P0);
-    Vector3D Ra   = finalRay0.transformedBy(_doubleDragMatrix, 0.0).normalized();
-    Vector3D Rb   = finalRay1.transformedBy(_doubleDragMatrix, 0.0).normalized();
-    return Ra.angleBetween(B0)._degrees - Ra.angleBetween(Rb)._degrees;
-  }
+  //Creating general rotation matrix
+  _lastDoubleDragAngle = finalAngle;
+  _initialNormal0.set(_initialPoint0.x(), _initialPoint0.y(), _initialPoint0.z());
+  _initialNormal0.normalize();
+  _translationMatrix.setValid();
+  _translationMatrix.setTranslationMatrix(_initialPoint0.x(), _initialPoint0.y(), _initialPoint0.z());
+  _rotationMatrix.setValid();
+  _rotationMatrix.setRotationMatrix(-_lastDoubleDragAngle, _initialNormal0);
+  _generalRotationMatrix.setValid();
+  _generalRotationMatrix.copyValueOfMultiplication(_translationMatrix, _rotationMatrix);
+  _translationMatrix.setValid();
+  _translationMatrix.setTranslationMatrix(-_initialPoint0.x(), -_initialPoint0.y(), -_initialPoint0.z());
+  _generalRotationMatrix.copyValueOfMultiplication(_generalRotationMatrix, _translationMatrix);
+  _doubleDragMatrix.copyValueOfMultiplication(_generalRotationMatrix, _doubleDragMatrix);
+  
+  // compute angle diference
+  _P0.transformPointByMatrix(_origin, _doubleDragMatrix, 1.0);
+  _B.set(_initialPoint1.x(), _initialPoint1.y(), _initialPoint1.z());
+  _B0.set(_B.x()-_P0.x(), _B.y()-_P0.y(), _B.z()-_P0.z());
+  _Ra.transformPointByMatrix(finalRay0, _doubleDragMatrix, 0.0);
+  _Rb.transformPointByMatrix(finalRay1, _doubleDragMatrix, 0.0);
+  double difAngleInRadians = MutableVector3D::angleInRadiansBetween(_Ra, _B0) -
+  MutableVector3D::angleInRadiansBetween(_Ra, _Rb);
+  return difAngleInRadians / 3.141592653589 * 180.0;
 }
 
 

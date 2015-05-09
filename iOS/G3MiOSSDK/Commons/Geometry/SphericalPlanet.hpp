@@ -54,12 +54,20 @@ private:
   mutable MutableVector3D  _draggedCameraPos;
   mutable MutableVector3D  _transformedFinalRay1;
   mutable MutableMatrix44D _geodeticTransformMatrix;
+  mutable MutableMatrix44D _translationMatrix;
   mutable MutableMatrix44D _rotationMatrix;
+  mutable MutableMatrix44D _generalRotationMatrix;
   mutable MutableVector3D  _transformedInitialPoint1;
   mutable MutableVector3D  _transformedFinalPoint1;
   mutable MutableVector3D  _transformedCameraPos;
   mutable MutableVector3D  _planeNormal;
   mutable MutableVector3D  _rayToFinalPoint1;
+  mutable MutableVector3D  _initialNormal0;
+  mutable MutableVector3D  _P0;
+  mutable MutableVector3D  _B;
+  mutable MutableVector3D  _B0;
+  mutable MutableVector3D  _Ra;
+  mutable MutableVector3D  _Rb;
   mutable int              _iter;
   
   

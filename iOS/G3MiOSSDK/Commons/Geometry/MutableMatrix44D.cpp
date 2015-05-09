@@ -502,6 +502,16 @@ MutableMatrix44D MutableMatrix44D::createGeneralRotationMatrix(const Angle& angl
   return T2.multiply(R).multiply(T1);
 }
 
+void MutableMatrix44D::setGeneralRotationMatrix(double angleInRadians,
+                                                const MutableVector3D& axis,
+                                                const MutableVector3D& point) {
+  const MutableMatrix44D T1 = MutableMatrix44D::createTranslationMatrix(point.asVector3D().times(-1.0));
+  const MutableMatrix44D R  = MutableMatrix44D::createRotationMatrix(Angle::fromRadians(angleInRadians), axis.asVector3D());
+  const MutableMatrix44D T2 = MutableMatrix44D::createTranslationMatrix(point.asVector3D());
+  copyValueOfMultiplication(T2, R);
+  copyValueOfMultiplication(*this, T1);
+}
+
 MutableMatrix44D MutableMatrix44D::createModelMatrix(const MutableVector3D& pos,
                                                      const MutableVector3D& center,
                                                      const MutableVector3D& up) {
