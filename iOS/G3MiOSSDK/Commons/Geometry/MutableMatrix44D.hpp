@@ -254,6 +254,8 @@ public:
   MutableMatrix44D multiply(const MutableMatrix44D& that) const;
 
   MutableMatrix44D inversed() const;
+  
+  void setInverse();
 
   MutableMatrix44D transposed() const;
 
@@ -349,8 +351,8 @@ public:
   static MutableMatrix44D createRotationMatrix(const Angle& angle,
                                                const Vector3D& axis);
   
-  void createRotationMatrix(double radians,
-                            const MutableVector3D& axis);
+  void setRotationMatrix(double radians,
+                         const MutableVector3D& axis);
 
 
   static MutableMatrix44D createGeneralRotationMatrix(const Angle& angle,
@@ -399,6 +401,14 @@ public:
 
   static MutableMatrix44D createGeodeticRotationMatrix(const Angle& latitude,
                                                        const Angle& longitude);
+  
+  void setGeodeticRotationMatrix(double latitudeInRadians,
+                                 double longitudInRadians);
+  
+  void copyValues(double m00, double m10, double m20, double m30,
+                  double m01, double m11, double m21, double m31,
+                  double m02, double m12, double m22, double m32,
+                  double m03, double m13, double m23, double m33);
   
 };
 

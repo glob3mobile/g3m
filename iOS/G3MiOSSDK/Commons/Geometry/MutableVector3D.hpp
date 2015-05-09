@@ -193,6 +193,22 @@ public:
                            _x * m.get1() + _y * m.get5() + _z * m.get9() + homogeneus * m.get13(),
                            _x * m.get2() + _y * m.get6() + _z * m.get10() + homogeneus * m.get14());
   }
+  
+  void transformPointByMatrix(const MutableVector3D& p,
+                              const MutableMatrix44D& m,
+                              const double homogeneus) {
+    _x = p._x * m.get0() + p._y * m.get4() + p._z * m.get8() + homogeneus * m.get12();
+    _y = p._x * m.get1() + p._y * m.get5() + p._z * m.get9() + homogeneus * m.get13();
+    _z = p._x * m.get2() + p._y * m.get6() + p._z * m.get10() + homogeneus * m.get14();
+  }
+  
+  void transformPointByMatrix(const Vector3D& p,
+                              const MutableMatrix44D& m,
+                              const double homogeneus) {
+    _x = p._x * m.get0() + p._y * m.get4() + p._z * m.get8() + homogeneus * m.get12();
+    _y = p._x * m.get1() + p._y * m.get5() + p._z * m.get9() + homogeneus * m.get13();
+    _z = p._x * m.get2() + p._y * m.get6() + p._z * m.get10() + homogeneus * m.get14();
+  }
 
   Vector3D asVector3D() const {
     return Vector3D(_x, _y, _z);

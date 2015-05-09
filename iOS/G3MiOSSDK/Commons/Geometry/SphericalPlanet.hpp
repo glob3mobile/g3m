@@ -46,9 +46,17 @@ private:
   mutable double          _dragRadius1;
   mutable double          _lastDoubleDragAngle;
   
+  mutable MutableMatrix44D _dragMatrix;
+  mutable MutableMatrix44D _doubleDragMatrix;
+  mutable MutableVector3D  _finalPoint0;
+  mutable MutableVector3D  _finalPoint1;
+  mutable MutableVector3D  _draggedCameraPos;
+  mutable MutableVector3D  _transformedFinalRay1;
+  mutable MutableMatrix44D _geodeticTransformMatrix;
+  mutable MutableMatrix44D _rotationMatrix;
+  mutable int              _iter;
   
-  //  mutable MutableVector3D _finalPoint0;
-  //  mutable MutableVector3D _finalPoint1;
+  
   mutable double _lastCorrectingRollAngle;
   mutable MutableVector3D _lastCorrectingRollRotationAxis;
   
@@ -56,14 +64,16 @@ private:
   MutableMatrix44D createDragMatrix(const Vector3D initialPoint,
                                     const Vector3D finalPoint) const;
   
-  static void multByDragMatrix(const MutableVector3D& initialPoint,
-                               const MutableVector3D& finalPoint,
-                               MutableMatrix44D& matrix);
+  void createDragMatrix(const MutableVector3D& initialPoint,
+                        const MutableVector3D& finalPoint,
+                        MutableMatrix44D& matrix) const;
   
   double testDoubleDragIteration(double factor,
                                  const Vector3D& finalRay0,
-                                 const Vector3D& finalRay1,
-                                 MutableMatrix44D& matrix) const;
+                                 const Vector3D& finalRay1) const;
+  
+  void createInversedGeodeticTransformMatrix(const MutableVector3D& position,
+                                             MutableMatrix44D& result) const;
   
 
 public:
@@ -169,9 +179,18 @@ public:
   }
 
   Geodetic2D toGeodetic2D(const Vector3D& position) const;
+  
+  void toGeodetic2D(double x, double y, double z,
+                    double& latitudeInRadians,
+                    double& longitudeInRadians) const;
 
   Geodetic3D toGeodetic3D(const Vector3D& position) const;
-
+  
+  void toGeodetic3D(const MutableVector3D& position,
+                    double& latitudeInRadians,
+                    double& longitudeInRadians,
+                    double& height) const;
+  
   Vector3D scaleToGeodeticSurface(const Vector3D& position) const;
 
   Vector3D scaleToGeocentricSurface(const Vector3D& position) const;
