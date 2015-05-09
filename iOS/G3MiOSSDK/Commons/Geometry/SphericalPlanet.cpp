@@ -117,14 +117,10 @@ Geodetic2D SphericalPlanet::toGeodetic2D(const Vector3D& position) const {
 void SphericalPlanet::toGeodetic2D(double x, double y, double z,
                                    double& latitudeInRadians,
                                    double& longitudeInRadians) const {
-  const Vector3D n = geodeticSurfaceNormal(Vector3D(x,y,z));
   const IMathUtils* mu = IMathUtils::instance();
-  /*return Geodetic2D(Angle::fromRadians(mu->asin(n._z)),
-                    Angle::fromRadians(mu->atan2(n._y, n._x)));*/
-  Geodetic2D geoPos(Angle::fromRadians(mu->asin(n._z)),
-                      Angle::fromRadians(mu->atan2(n._y, n._x)));
-  latitudeInRadians = geoPos._latitude._radians;
-  longitudeInRadians = geoPos._longitude._radians;
+  double mod = x*x + y*y + z*z;
+  latitudeInRadians = mu->asin(z/mod);
+  longitudeInRadians = mu->atan2(y/mod, x/mod);
 }
 
 
