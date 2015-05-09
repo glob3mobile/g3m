@@ -222,6 +222,10 @@ public:
     _isValid = false;
     _matrix44D = NULL;
   }
+  
+  inline void setValid() {
+    _isValid = true;
+  }
 
   bool isValid() const {
     return _isValid;

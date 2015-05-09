@@ -24,3 +24,23 @@ Vector2D IMathUtils::solveSecondDegreeEquation(double A, double B, double C) con
   return Vector2D((-B + squareRoot) / A2,
                   (-B - squareRoot) / A2);
 }
+
+void IMathUtils::solveSecondDegreeEquation(double A, double B, double C,
+                                           double& result_x, double& result_y) const {
+  
+  double x = B*B - 4*A*C;
+  if (x < 0){
+    result_x = NAND;
+    result_y = NAND;
+    return;
+  }
+  
+  double squareRoot = this->sqrt(x);
+  double A2 = 2*A;
+  result_x = (-B + squareRoot) / A2;
+  result_y = (-B - squareRoot) / A2;
+  
+  /*return Vector2D((-B + squareRoot) / A2,
+                  (-B - squareRoot) / A2);*/
+}
+

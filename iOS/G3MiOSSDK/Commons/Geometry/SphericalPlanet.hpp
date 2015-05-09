@@ -54,6 +54,9 @@ private:
   mutable MutableVector3D  _transformedFinalRay1;
   mutable MutableMatrix44D _geodeticTransformMatrix;
   mutable MutableMatrix44D _rotationMatrix;
+  mutable MutableVector3D  _transformedInitialPoint1;
+  mutable MutableVector3D  _transformedFinalPoint1;
+  mutable MutableVector3D  _transformedCameraPos;
   mutable int              _iter;
   
   

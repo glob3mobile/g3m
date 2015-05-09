@@ -309,9 +309,11 @@ MutableMatrix44D SphericalPlanet::createGeodeticTransformMatrix(const Geodetic3D
 
 void SphericalPlanet::createInversedGeodeticTransformMatrix(const MutableVector3D& position,
                                                             MutableMatrix44D& result) const {
+  result.setValid();
   result.setTranslationMatrix(position.x(), position.y(), position.z());
   double latitudeInRadians, longitudeInRadians, height;
   toGeodetic3D(position, latitudeInRadians, longitudeInRadians, height);
+  _rotationMatrix.setValid();
   _rotationMatrix.setGeodeticRotationMatrix(latitudeInRadians, longitudeInRadians);
   result.copyValueOfMultiplication(result, _rotationMatrix);
   result.setInverse();
@@ -365,6 +367,7 @@ void SphericalPlanet::createDragMatrix(const MutableVector3D& initialPoint,
   }
   
   // return rotation matrix
+  matrix.setValid();
   matrix.setRotationMatrix(rotationDeltaInRadians, rotationAxis);
 }
 
@@ -508,6 +511,7 @@ double SphericalPlanet::testDoubleDragIteration(double factor,
   double traslationX = _centerRay.x() * factor;
   double traslationY = _centerRay.y() * factor;
   double traslationZ = _centerRay.z() * factor;
+  _doubleDragMatrix.setValid();
   _doubleDragMatrix.setTranslationMatrix(traslationX, traslationY, traslationZ);
   
   // compute new final points after moving forward
@@ -543,18 +547,17 @@ double SphericalPlanet::testDoubleDragIteration(double factor,
     
     //Taking whole system to origin
     createInversedGeodeticTransformMatrix(_initialPoint0, _geodeticTransformMatrix);
+    _transformedInitialPoint1.transformPointByMatrix(_initialPoint1, _geodeticTransformMatrix, 1.0);
+    _transformedFinalPoint1.transformPointByMatrix(_finalPoint1, _geodeticTransformMatrix, 1.0);
+    _transformedCameraPos.transformPointByMatrix(_draggedCameraPos, _geodeticTransformMatrix, 1.0);
     
     
-    
-    Vector3D transformedInitialPoint1 = _initialPoint1.transformedBy(_geodeticTransformMatrix, 1.0).asVector3D();
-    Vector3D transformedFinalPoint1 = _finalPoint1.asVector3D().transformedBy(_geodeticTransformMatrix, 1.0);
-    Vector3D transformedCameraPos = _draggedCameraPos.asVector3D().transformedBy(_geodeticTransformMatrix, 1.0);
-    Vector3D v0 = transformedFinalPoint1.sub(transformedCameraPos);
+    Vector3D v0 = _transformedFinalPoint1.sub(_transformedCameraPos.asVector3D());
     
     //Angles to rotate transformedInitialPoint1 to adjust the plane that contains origin, TFP1 and TCP
-    Vector3D planeNormal = transformedCameraPos.cross(v0).normalized();
+    Vector3D planeNormal = _transformedCameraPos.asVector3D().cross(v0).normalized();
     Plane plane(planeNormal, v0);
-    Vector2D angles = plane.rotationAngleAroundZAxisToFixPointInRadians(transformedInitialPoint1);
+    Vector2D angles = plane.rotationAngleAroundZAxisToFixPointInRadians(_transformedInitialPoint1.asVector3D());
     
     //Selecting best angle to rotate (smallest)
     double angulo1 = angles._x;

@@ -11,6 +11,7 @@
 
 #include "Vector3D.hpp"
 #include "Vector3F.hpp"
+#include "MutableVector2D.hpp"
 
 class Plane {
 private:
@@ -101,6 +102,10 @@ public:
   }
   
   Vector2D rotationAngleAroundZAxisToFixPointInRadians(const Vector3D& point) const;
+
+  void rotationAngleAroundZAxisToFixPointInRadians(const Vector3D& point,
+                                                   double& result_x,
+                                                   double& result_y) const;
 
   
 };
