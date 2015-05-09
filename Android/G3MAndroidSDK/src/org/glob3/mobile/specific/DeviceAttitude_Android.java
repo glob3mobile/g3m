@@ -96,6 +96,8 @@ public class DeviceAttitude_Android extends IDeviceAttitude implements
 					_rotationMatrix[14], _rotationMatrix[3],
 					_rotationMatrix[7], _rotationMatrix[11],
 					_rotationMatrix[15]);
+		} else{
+			rotationMatrix.setValid(false);
 		}
 
 	}
@@ -108,11 +110,11 @@ public class DeviceAttitude_Android extends IDeviceAttitude implements
 		case Surface.ROTATION_0:
 			return InterfaceOrientation.PORTRAIT;
 		case Surface.ROTATION_90:
-			return InterfaceOrientation.LANDSCAPE_LEFT;
+			return InterfaceOrientation.LANDSCAPE_RIGHT;
 		case Surface.ROTATION_180:
 			return InterfaceOrientation.PORTRAIT_UPSIDEDOWN;
 		case Surface.ROTATION_270:
-			return InterfaceOrientation.LANDSCAPE_RIGHT;
+			return InterfaceOrientation.LANDSCAPE_LEFT;
 		default:
 			return null;
 		}
