@@ -57,6 +57,13 @@ public class DeviceAttitudeCameraConstrainer implements ICameraConstrainer
       devAtt.startTrackingDeviceOrientation();
     }
   
+    //Getting Global Rotation
+    IDeviceAttitude.instance().copyValueOfRotationMatrix(_attitudeMatrix);
+    if (!_attitudeMatrix.isValid())
+    {
+      return false;
+    }
+  
     Geodetic3D camPosition = nextCamera.getGeodeticPosition();
   
     //Getting interface orientation
@@ -64,10 +71,6 @@ public class DeviceAttitudeCameraConstrainer implements ICameraConstrainer
   
     //Getting Attitude Matrix
     CoordinateSystem camCS = IDeviceAttitude.instance().getCameraCoordinateSystemForInterfaceOrientation(ori);
-  
-    //Getting Global Rotation
-    IDeviceAttitude.instance().copyValueOfRotationMatrix(_attitudeMatrix);
-    ILogger.instance().logError(_attitudeMatrix.description());
   
     //Transforming global rotation to local rotation
     CoordinateSystem local = planet.getCoordinateSystemAt(camPosition);

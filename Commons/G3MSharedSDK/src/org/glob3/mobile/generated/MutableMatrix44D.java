@@ -328,6 +328,11 @@ public class MutableMatrix44D
     return _isValid;
   }
 
+  public final void setValid(boolean valid)
+  {
+    _isValid = valid;
+  }
+
   public final String description()
   {
     IStringBuilder isb = IStringBuilder.newStringBuilder();
