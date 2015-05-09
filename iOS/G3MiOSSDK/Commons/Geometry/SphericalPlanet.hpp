@@ -48,6 +48,7 @@ private:
   
   mutable MutableMatrix44D _dragMatrix;
   mutable MutableMatrix44D _doubleDragMatrix;
+  mutable MutableVector3D  _translation;
   mutable MutableVector3D  _finalPoint0;
   mutable MutableVector3D  _finalPoint1;
   mutable MutableVector3D  _draggedCameraPos;
@@ -57,6 +58,8 @@ private:
   mutable MutableVector3D  _transformedInitialPoint1;
   mutable MutableVector3D  _transformedFinalPoint1;
   mutable MutableVector3D  _transformedCameraPos;
+  mutable MutableVector3D  _planeNormal;
+  mutable MutableVector3D  _rayToFinalPoint1;
   mutable int              _iter;
   
   

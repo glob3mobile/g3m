@@ -103,11 +103,10 @@ public:
   
   Vector2D rotationAngleAroundZAxisToFixPointInRadians(const Vector3D& point) const;
 
-  void rotationAngleAroundZAxisToFixPointInRadians(const Vector3D& point,
-                                                   double& result_x,
-                                                   double& result_y) const;
-
-  
+  static void rotationAngleAroundZAxisToFixPointInRadians(const MutableVector3D& normal,
+                                                          const MutableVector3D& point,
+                                                          double& result_x,
+                                                          double& result_y);
 };
 
 

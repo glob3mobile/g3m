@@ -9,6 +9,7 @@
 #include "Plane.hpp"
 
 #include "Vector2D.hpp"
+#include "MutableVector3D.hpp"
 
 Plane Plane::transformedByTranspose(const MutableMatrix44D& M) const {
   //int TODO_Multiplication_with_Matrix;
@@ -218,27 +219,29 @@ Vector2D Plane::rotationAngleAroundZAxisToFixPointInRadians(const Vector3D& poin
   return Vector2D(angle1, angle2);
 }
 
-void Plane::rotationAngleAroundZAxisToFixPointInRadians(const Vector3D& point,
+void Plane::rotationAngleAroundZAxisToFixPointInRadians(const MutableVector3D& normal,
+                                                        const MutableVector3D& point,
                                                         double& result_x,
-                                                        double& result_y) const{
+                                                        double& result_y) {
   const IMathUtils* mu = IMathUtils::instance();
-  double a = _normal._x;
-  double b = _normal._y;
-  double c = _normal._z;
-  double xb = point._x;
-  double yb = point._y;
-  double zb = point._z;
+  double a = normal.x();
+  double b = normal.y();
+  double c = normal.z();
+  double xb = point.x();
+  double yb = point.y();
+  double zb = point.z();
   double A = a*xb + b*yb;
   double B = b*xb - a*yb;
   double C = c*zb;
-  Vector2D sol = mu->solveSecondDegreeEquation(A*A + B*B, 2*B*C, C*C - A*A); //A, B, C
-  if (sol.isNan()){
+  double sol_x, sol_y;
+  mu->solveSecondDegreeEquation(A*A + B*B, 2*B*C, C*C - A*A, sol_x, sol_y);
+  if (sol_x!=sol_x || sol_y!=sol_y) {
     result_x = NAND;
     result_y = NAND;
     return;
   }
-  double sinTita1 = sol._x;
-  double sinTita2 = sol._y;
+  double sinTita1 = sol_x;
+  double sinTita2 = sol_y;
   double cosTita1 = - (C + B*sinTita1) / A;
   double cosTita2 = - (C + B*sinTita2) / A;
   double angle1 = mu->atan2(sinTita1, cosTita1);// / 3.14159 * 180;
