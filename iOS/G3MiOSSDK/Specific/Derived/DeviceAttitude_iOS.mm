@@ -44,6 +44,8 @@ void DeviceAttitude_iOS::copyValueOfRotationMatrix(MutableMatrix44D& rotationMat
                             m.m21, m.m22, m.m23, 0,
                             m.m31, m.m32, m.m33, 0,
                             0, 0, 0, 1);
+  } else{
+    rotationMatrix.setValid(false);
   }
 }
 

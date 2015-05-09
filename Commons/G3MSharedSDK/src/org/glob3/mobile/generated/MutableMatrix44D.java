@@ -337,7 +337,7 @@ public class MutableMatrix44D
     {
       isb.addDouble(f[i]);
       if (i < 15)
-         isb.addString("\t\t\t");
+         isb.addString(" \t\t\t");
       if ((i+1) % 4 == 0)
          isb.addString("\n");
     }

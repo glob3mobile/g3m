@@ -253,6 +253,10 @@ public:
   bool isValid() const {
     return _isValid;
   }
+  
+  void setValid(bool valid){
+    _isValid = valid;
+  }
 
   std::string description() const {
     IStringBuilder* isb = IStringBuilder::newStringBuilder();
@@ -260,7 +264,7 @@ public:
     float* f = asMatrix44D()->getColumnMajorFloatArray();
     for (int i = 0; i < 16; i++) {
       isb->addDouble(f[i]);
-      if (i < 15) isb->addString("\t\t\t");
+      if (i < 15) isb->addString(" \t\t\t");
       if ((i+1) % 4 == 0) isb->addString("\n");
     }
     const std::string s = isb->getString();

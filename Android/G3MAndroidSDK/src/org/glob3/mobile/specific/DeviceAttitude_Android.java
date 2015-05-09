@@ -1,6 +1,8 @@
 package org.glob3.mobile.specific;
 
+import org.glob3.mobile.generated.CoordinateSystem;
 import org.glob3.mobile.generated.IDeviceAttitude;
+import org.glob3.mobile.generated.ILogger;
 import org.glob3.mobile.generated.InterfaceOrientation;
 import org.glob3.mobile.generated.MutableMatrix44D;
 
@@ -9,36 +11,61 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.view.Display;
+import android.view.Surface;
+import android.view.WindowManager;
 
 public class DeviceAttitude_Android extends IDeviceAttitude implements
 		SensorEventListener {
 	private SensorManager _sensorManager = null;
+
+	private Display _display = null;
 
 	float[] _lastMagFields = new float[3];
 	float[] _lastAccels = new float[3];
 	private float[] _rotationMatrix = new float[16];
 	private float[] _inclinationMatrix = new float[16];
 
-	int SENSOR_DELAY = 15;
-	
+	final int SENSOR_DELAY = 15;
+
+	private boolean _tracking = false;
+
 	public DeviceAttitude_Android(Context context) {
 		_sensorManager = (SensorManager) context
 				.getSystemService(Context.SENSOR_SERVICE);
+
+		_display = ((WindowManager) context
+				.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
 	}
 
 	@Override
 	public void startTrackingDeviceOrientation() {
-		_sensorManager.registerListener(this,
+
+		_tracking = true;
+
+		if (!_sensorManager.registerListener(this,
 				_sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD),
-				SENSOR_DELAY);
-		
-		_sensorManager.registerListener(this,
+				SENSOR_DELAY)) {
+			ILogger.instance().logError(
+					"TYPE_MAGNETIC_FIELD sensor not supported.");
+			_tracking = false;
+		}
+
+		if (!_sensorManager.registerListener(this,
 				_sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
-				SENSOR_DELAY);
-		
-		_sensorManager.registerListener(this,
+				SENSOR_DELAY)) {
+			ILogger.instance().logError(
+					"TYPE_ACCELEROMETER sensor not supported.");
+			_tracking = false;
+		}
+
+		if (_sensorManager.registerListener(this,
 				_sensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR),
-				SENSOR_DELAY);
+				SENSOR_DELAY)) {
+			ILogger.instance().logError(
+					"TYPE_ROTATION_VECTOR sensor not supported.");
+			_tracking = false;
+		}
 	}
 
 	@Override
@@ -46,12 +73,13 @@ public class DeviceAttitude_Android extends IDeviceAttitude implements
 		// TODO Auto-generated method stub
 
 		_sensorManager.unregisterListener(this);
+		_tracking = false;
 	}
 
 	@Override
 	public boolean isTracking() {
 		// TODO Auto-generated method stub
-		return false;
+		return _tracking;
 	}
 
 	@Override
@@ -60,27 +88,41 @@ public class DeviceAttitude_Android extends IDeviceAttitude implements
 
 		if (SensorManager.getRotationMatrix(_rotationMatrix,
 				_inclinationMatrix, _lastAccels, _lastMagFields)) {
-			rotationMatrix.setValue(_rotationMatrix[0], _rotationMatrix[1],
-					_rotationMatrix[2], _rotationMatrix[3], _rotationMatrix[4],
-					_rotationMatrix[5], _rotationMatrix[6], _rotationMatrix[7],
-					_rotationMatrix[8], _rotationMatrix[9],
-					_rotationMatrix[10], _rotationMatrix[11],
-					_rotationMatrix[12], _rotationMatrix[13],
-					_rotationMatrix[14], _rotationMatrix[15]);
+			rotationMatrix.setValue(_rotationMatrix[0], _rotationMatrix[4],
+					_rotationMatrix[8], _rotationMatrix[12],
+					_rotationMatrix[1], _rotationMatrix[5], _rotationMatrix[9],
+					_rotationMatrix[13], _rotationMatrix[2],
+					_rotationMatrix[6], _rotationMatrix[10],
+					_rotationMatrix[14], _rotationMatrix[3],
+					_rotationMatrix[7], _rotationMatrix[11],
+					_rotationMatrix[15]);
 		}
 
 	}
 
 	@Override
 	public InterfaceOrientation getCurrentInterfaceOrientation() {
-		// TODO Auto-generated method stub
-		return null;
+		int rotation = _display.getRotation();
+
+		switch (rotation) {
+		case Surface.ROTATION_0:
+			return InterfaceOrientation.PORTRAIT;
+		case Surface.ROTATION_90:
+			return InterfaceOrientation.LANDSCAPE_LEFT;
+		case Surface.ROTATION_180:
+			return InterfaceOrientation.PORTRAIT_UPSIDEDOWN;
+		case Surface.ROTATION_270:
+			return InterfaceOrientation.LANDSCAPE_RIGHT;
+		default:
+			return null;
+		}
 	}
 
 	@Override
 	public void onAccuracyChanged(Sensor sensor, int accuracy) {
-		// TODO Auto-generated method stub
-
+		ILogger.instance().logInfo(
+				"Sensor " + sensor.getName() + " changed accuracy to "
+						+ accuracy);
 	}
 
 	@Override

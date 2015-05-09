@@ -29,6 +29,12 @@ bool DeviceAttitudeCameraConstrainer::onCameraChange(const Planet* planet,
   if (!devAtt->isTracking()){
     devAtt->startTrackingDeviceOrientation();
   }
+  
+  //Getting Global Rotation
+  IDeviceAttitude::instance()->copyValueOfRotationMatrix(_attitudeMatrix);
+  if (!_attitudeMatrix.isValid()){
+    return false;
+  }
 
   Geodetic3D camPosition = nextCamera->getGeodeticPosition();
   
@@ -37,9 +43,6 @@ bool DeviceAttitudeCameraConstrainer::onCameraChange(const Planet* planet,
   
   //Getting Attitude Matrix
   CoordinateSystem camCS = IDeviceAttitude::instance()->getCameraCoordinateSystemForInterfaceOrientation(ori);
-  
-  //Getting Global Rotation
-  IDeviceAttitude::instance()->copyValueOfRotationMatrix(_attitudeMatrix);
   
   //Transforming global rotation to local rotation
   CoordinateSystem local = planet->getCoordinateSystemAt(camPosition);

@@ -67,6 +67,7 @@ public class DeviceAttitudeCameraConstrainer implements ICameraConstrainer
   
     //Getting Global Rotation
     IDeviceAttitude.instance().copyValueOfRotationMatrix(_attitudeMatrix);
+    ILogger.instance().logError(_attitudeMatrix.description());
   
     //Transforming global rotation to local rotation
     CoordinateSystem local = planet.getCoordinateSystemAt(camPosition);
