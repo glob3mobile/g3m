@@ -374,9 +374,10 @@ public class Sphere extends BoundingVolume
   {
     java.util.ArrayList<Double> distances = Sphere.intersectionCenteredSphereWithRay(origin_x, origin_y, origin_z, direction_x, direction_y, direction_z, radius);
     if (distances.isEmpty())
-      result = MutableVector3D.nan();
+      //result = MutableVector3D::nan();
+      result.set(java.lang.Double.NaN, java.lang.Double.NaN, java.lang.Double.NaN);
     else
-      result = new MutableVector3D(origin_x + direction_x * distances.get(0), origin_y + direction_y * distances.get(0), origin_z + direction_z * distances.get(0));
+      result.set(origin_x + direction_x * distances.get(0), origin_y + direction_y * distances.get(0), origin_z + direction_z * distances.get(0));
   }
 
 
