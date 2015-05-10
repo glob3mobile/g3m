@@ -109,7 +109,7 @@ public class MainActivity
 			   AltitudeMode.ABSOLUTE,
 			   new Vector3D(3000, 3000, 20000),
 			   2,
-			   Color.fromRGBA(1.0f, 1.0f, 0.0f, 0.5f),
+			   Color.fromRGBA(1.0f, 0.2f, 0.0f, 0.5f),
 			   Color.newFromRGBA(0.0f, 0.75f, 0.0f, 0.75f));
 	   shapesRenderer.addShape(box);
 	   builder.addRenderer(shapesRenderer);

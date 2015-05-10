@@ -283,11 +283,12 @@ void Sphere::setClosestIntersectionCenteredSphereWithRay(double origin_x,
                                                                             direction_z,
                                                                             radius);
   if (distances.empty())
-    result = MutableVector3D::nan();
+    //result = MutableVector3D::nan();
+    result.set(NAND, NAND, NAND);
   else
-    result = MutableVector3D(origin_x + direction_x * distances[0],
-                             origin_y + direction_y * distances[0],
-                             origin_z + direction_z * distances[0]);
+    result.set(origin_x + direction_x * distances[0],
+               origin_y + direction_y * distances[0],
+               origin_z + direction_z * distances[0]);
 }
 
 
