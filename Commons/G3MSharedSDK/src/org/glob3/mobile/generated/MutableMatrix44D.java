@@ -293,6 +293,17 @@ public class MutableMatrix44D
     return new MutableMatrix44D(false);
   }
 
+  public final void setInvalid()
+  {
+    _isValid = false;
+    _matrix44D = null;
+  }
+
+  public final void setValid()
+  {
+    _isValid = true;
+  }
+
   public final boolean isValid()
   {
     return _isValid;
@@ -492,6 +503,65 @@ public class MutableMatrix44D
     final double m33 = (((+_m20 * a3) - (_m21 * a1)) + (_m22 * a0)) / determinant;
   
     return new MutableMatrix44D(m00, m10, m20, m30, m01, m11, m21, m31, m02, m12, m22, m32, m03, m13, m23, m33);
+  }
+
+  public final void setInverse()
+  {
+    final double a0 = (_m00 * _m11) - (_m01 * _m10);
+    final double a1 = (_m00 * _m12) - (_m02 * _m10);
+    final double a2 = (_m00 * _m13) - (_m03 * _m10);
+    final double a3 = (_m01 * _m12) - (_m02 * _m11);
+    final double a4 = (_m01 * _m13) - (_m03 * _m11);
+    final double a5 = (_m02 * _m13) - (_m03 * _m12);
+  
+    final double b0 = (_m20 * _m31) - (_m21 * _m30);
+    final double b1 = (_m20 * _m32) - (_m22 * _m30);
+    final double b2 = (_m20 * _m33) - (_m23 * _m30);
+    final double b3 = (_m21 * _m32) - (_m22 * _m31);
+    final double b4 = (_m21 * _m33) - (_m23 * _m31);
+    final double b5 = (_m22 * _m33) - (_m23 * _m32);
+  
+    final double determinant = ((((a0 * b5) - (a1 * b4)) + (a2 * b3) + (a3 * b2)) - (a4 * b1)) + (a5 * b0);
+  
+    if (determinant == 0.0)
+    {
+      //return MutableMatrix44D::invalid();
+      setInvalid();
+    }
+  
+    final double m00 = (((+_m11 * b5) - (_m12 * b4)) + (_m13 * b3)) / determinant;
+    final double m10 = (((-_m10 * b5) + (_m12 * b2)) - (_m13 * b1)) / determinant;
+    final double m20 = (((+_m10 * b4) - (_m11 * b2)) + (_m13 * b0)) / determinant;
+    final double m30 = (((-_m10 * b3) + (_m11 * b1)) - (_m12 * b0)) / determinant;
+    final double m01 = (((-_m01 * b5) + (_m02 * b4)) - (_m03 * b3)) / determinant;
+    final double m11 = (((+_m00 * b5) - (_m02 * b2)) + (_m03 * b1)) / determinant;
+    final double m21 = (((-_m00 * b4) + (_m01 * b2)) - (_m03 * b0)) / determinant;
+    final double m31 = (((+_m00 * b3) - (_m01 * b1)) + (_m02 * b0)) / determinant;
+    final double m02 = (((+_m31 * a5) - (_m32 * a4)) + (_m33 * a3)) / determinant;
+    final double m12 = (((-_m30 * a5) + (_m32 * a2)) - (_m33 * a1)) / determinant;
+    final double m22 = (((+_m30 * a4) - (_m31 * a2)) + (_m33 * a0)) / determinant;
+    final double m32 = (((-_m30 * a3) + (_m31 * a1)) - (_m32 * a0)) / determinant;
+    final double m03 = (((-_m21 * a5) + (_m22 * a4)) - (_m23 * a3)) / determinant;
+    final double m13 = (((+_m20 * a5) - (_m22 * a2)) + (_m23 * a1)) / determinant;
+    final double m23 = (((-_m20 * a4) + (_m21 * a2)) - (_m23 * a0)) / determinant;
+    final double m33 = (((+_m20 * a3) - (_m21 * a1)) + (_m22 * a0)) / determinant;
+  
+    _m00 = m00;
+    _m01 = m01;
+    _m02 = m02;
+    _m03 = m03;
+    _m10 = m10;
+    _m11 = m11;
+    _m12 = m12;
+    _m13 = m13;
+    _m20 = m20;
+    _m21 = m21;
+    _m22 = m22;
+    _m23 = m23;
+    _m30 = m30;
+    _m31 = m31;
+    _m32 = m32;
+    _m33 = m33;
   }
 
   public final MutableMatrix44D transposed()
@@ -725,6 +795,29 @@ public class MutableMatrix44D
     return new MutableMatrix44D(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, x, y, z, 1);
   }
 
+  public final void setTranslationMatrix(double x, double y, double z)
+  {
+    _m00 = 1;
+    _m01 = 0;
+    _m02 = 0;
+    _m03 = x;
+  
+    _m10 = 0;
+    _m11 = 1;
+    _m12 = 0;
+    _m13 = y;
+  
+    _m20 = 0;
+    _m21 = 0;
+    _m22 = 1;
+    _m23 = z;
+  
+    _m30 = 0;
+    _m31 = 0;
+    _m32 = 0;
+    _m33 = 1;
+  }
+
   public static MutableMatrix44D createRotationMatrix(Angle angle, Vector3D axis)
   {
     final Vector3D a = axis.normalized();
@@ -735,6 +828,39 @@ public class MutableMatrix44D
     return new MutableMatrix44D(a._x * a._x * (1 - c) + c, a._x * a._y * (1 - c) + a._z * s, a._x * a._z * (1 - c) - a._y * s, 0, a._y * a._x * (1 - c) - a._z * s, a._y * a._y * (1 - c) + c, a._y * a._z * (1 - c) + a._x * s, 0, a._x * a._z * (1 - c) + a._y * s, a._y * a._z * (1 - c) - a._x * s, a._z * a._z * (1 - c) + c, 0, 0, 0, 0, 1);
   }
 
+  public final void setRotationMatrix(double radians, MutableVector3D axis)
+  {
+    //const Vector3D a = axis.normalized();
+    double length = axis.length();
+    double a_x = axis.x() / length;
+    double a_y = axis.y() / length;
+    double a_z = axis.z() / length;
+  
+    final double c = java.lang.Math.cos(radians);
+    final double s = java.lang.Math.sin(radians);
+  
+    _m00 = a_x * a_x * (1 - c) + c;
+    _m01 = a_y * a_x * (1 - c) - a_z * s;
+    _m02 = a_x * a_z * (1 - c) + a_y * s;
+    _m03 = 0;
+  
+    _m10 = a_x * a_y * (1 - c) + a_z * s;
+    _m11 = a_y * a_y * (1 - c) + c;
+    _m12 = a_y * a_z * (1 - c) - a_x * s;
+    _m13 = 0;
+  
+    _m20 = a_x * a_z * (1 - c) - a_y * s;
+    _m21 = a_y * a_z * (1 - c) + a_x * s;
+    _m22 = a_z * a_z * (1 - c) + c;
+    _m23 = 0;
+  
+    _m30 = 0;
+    _m31 = 0;
+    _m32 = 0;
+    _m33 = 1;
+  }
+
+
   public static MutableMatrix44D createGeneralRotationMatrix(Angle angle, Vector3D axis, Vector3D point)
   {
     final MutableMatrix44D T1 = MutableMatrix44D.createTranslationMatrix(point.times(-1.0));
@@ -742,6 +868,16 @@ public class MutableMatrix44D
     final MutableMatrix44D T2 = MutableMatrix44D.createTranslationMatrix(point);
     return T2.multiply(R).multiply(T1);
   }
+
+  public final void setGeneralRotationMatrix(double angleInRadians, MutableVector3D axis, MutableVector3D point)
+  {
+    final MutableMatrix44D T1 = MutableMatrix44D.createTranslationMatrix(point.asVector3D().times(-1.0));
+    final MutableMatrix44D R = MutableMatrix44D.createRotationMatrix(Angle.fromRadians(angleInRadians), axis.asVector3D());
+    final MutableMatrix44D T2 = MutableMatrix44D.createTranslationMatrix(point.asVector3D());
+    copyValueOfMultiplication(T2, R);
+    copyValueOfMultiplication(this, T1);
+  }
+
 
   public static MutableMatrix44D createModelMatrix(MutableVector3D pos, MutableVector3D center, MutableVector3D up)
   {
@@ -821,6 +957,44 @@ public class MutableMatrix44D
     final MutableMatrix44D latitudeRotation = MutableMatrix44D.createRotationMatrix(latitude, Vector3D.downX());
   
     return changeReferenceCoordinatesSystem.multiply(longitudeRotation).multiply(latitudeRotation);
+  }
+
+  public final void setGeodeticRotationMatrix(double latitudeInRadians, double longitudInRadians)
+  {
+    // change the reference coordinates system from x-front/y-left/z-up to x-right/y-up/z-back
+    copyValues(0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 1);
+  
+    // orbit reference system to geodetic position
+    //const MutableMatrix44D longitudeRotation = MutableMatrix44D::createRotationMatrix(position._longitude, Vector3D::upY());
+    MutableMatrix44D longitudeRotation = new MutableMatrix44D();
+    longitudeRotation.setRotationMatrix(longitudInRadians, Vector3D.upY().asMutableVector3D());
+    //const MutableMatrix44D latitudeRotation  = MutableMatrix44D::createRotationMatrix(position._latitude,  Vector3D::downX());
+    MutableMatrix44D latitudeRotation = new MutableMatrix44D();
+    latitudeRotation.setRotationMatrix(latitudeInRadians, Vector3D.downX().asMutableVector3D());
+  
+    //return changeReferenceCoordinatesSystem.multiply(longitudeRotation).multiply(latitudeRotation);
+    copyValueOfMultiplication(this, longitudeRotation);
+    copyValueOfMultiplication(this, latitudeRotation);
+  }
+
+  public final void copyValues(double m00, double m10, double m20, double m30, double m01, double m11, double m21, double m31, double m02, double m12, double m22, double m32, double m03, double m13, double m23, double m33)
+  {
+    _m00 = m00;
+    _m01 = m01;
+    _m02 = m02;
+    _m03 = m03;
+    _m10 = m10;
+    _m11 = m11;
+    _m12 = m12;
+    _m13 = m13;
+    _m20 = m20;
+    _m21 = m21;
+    _m22 = m22;
+    _m23 = m23;
+    _m30 = m30;
+    _m31 = m31;
+    _m32 = m32;
+    _m33 = m33;
   }
 
 }

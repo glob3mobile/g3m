@@ -309,16 +309,16 @@ public class Sphere extends BoundingVolume
     return new Sphere(this);
   }
 
-  public static java.util.ArrayList<Double> intersectionCenteredSphereWithRay(Vector3D origin, Vector3D direction, double radius)
+  public static java.util.ArrayList<Double> intersectionCenteredSphereWithRay(double origin_x, double origin_y, double origin_z, double direction_x, double direction_y, double direction_z, double radius)
   {
     java.util.ArrayList<Double> intersections = new java.util.ArrayList<Double>();
   
     // By laborious algebraic manipulation....
-    final double a = direction._x * direction._x + direction._y * direction._y + direction._z * direction._z;
+    final double a = direction_x * direction_x + direction_y * direction_y + direction_z * direction_z;
   
-    final double b = 2.0 * (origin._x * direction._x + origin._y * direction._y + origin._z * direction._z);
+    final double b = 2.0 * (origin_x * direction_x + origin_y * direction_y + origin_z * direction_z);
   
-    final double c = origin._x * origin._x + origin._y * origin._y + origin._z * origin._z - radius * radius;
+    final double c = origin_x * origin_x + origin_y * origin_y + origin_z * origin_z - radius * radius;
   
     // Solve the quadratic equation: ax^2 + bx + c = 0.
     // Algorithm is from Wikipedia's "Quadratic equation" topic, and Wikipedia credits
@@ -355,6 +355,11 @@ public class Sphere extends BoundingVolume
     return intersections;
   }
 
+  public static java.util.ArrayList<Double> intersectionCenteredSphereWithRay(Vector3D origin, Vector3D direction, double radius)
+  {
+    return intersectionCenteredSphereWithRay(origin._x, origin._y, origin._z, direction._x, direction._y, direction._z, radius);
+  }
+
   public static Vector3D closestIntersectionCenteredSphereWithRay(Vector3D origin, Vector3D direction, double radius)
   {
     java.util.ArrayList<Double> distances = Sphere.intersectionCenteredSphereWithRay(origin, direction, radius);
@@ -364,5 +369,15 @@ public class Sphere extends BoundingVolume
     }
     return origin.add(direction.times(distances.get(0)));
   }
+
+  public static void setClosestIntersectionCenteredSphereWithRay(double origin_x, double origin_y, double origin_z, double direction_x, double direction_y, double direction_z, double radius, MutableVector3D result)
+  {
+    java.util.ArrayList<Double> distances = Sphere.intersectionCenteredSphereWithRay(origin_x, origin_y, origin_z, direction_x, direction_y, direction_z, radius);
+    if (distances.isEmpty())
+      result = MutableVector3D.nan();
+    else
+      result = new MutableVector3D(origin_x + direction_x * distances.get(0), origin_y + direction_y * distances.get(0), origin_z + direction_z * distances.get(0));
+  }
+
 
 }
