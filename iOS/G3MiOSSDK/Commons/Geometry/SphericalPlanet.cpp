@@ -311,7 +311,7 @@ void SphericalPlanet::createInversedGeodeticTransformMatrix(const MutableVector3
                                                             MutableMatrix44D& result) const {
   result.setValid();
   result.setTranslationMatrix(position.x(), position.y(), position.z());
-  double latitudeInRadians, longitudeInRadians, height;
+  double latitudeInRadians=0, longitudeInRadians=0, height=0;
   toGeodetic3D(position, latitudeInRadians, longitudeInRadians, height);
   _rotationMatrix.setValid();
   _rotationMatrix.setGeodeticRotationMatrix(latitudeInRadians, longitudeInRadians);
@@ -557,7 +557,7 @@ double SphericalPlanet::testDoubleDragIteration(double factor,
                         _transformedFinalPoint1.z()-_transformedCameraPos.z());
   _planeNormal.copyValueOfCross(_transformedCameraPos, _rayToFinalPoint1);
   _planeNormal.normalize();
-  double angle1InRadians, angle2InRadians;
+  double angle1InRadians=0, angle2InRadians=0;
   Plane::rotationAngleAroundZAxisToFixPointInRadians(_planeNormal,
                                                      _transformedInitialPoint1,
                                                      angle1InRadians, angle2InRadians);

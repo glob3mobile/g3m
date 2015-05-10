@@ -229,8 +229,8 @@ public class SphericalPlanet extends Planet
     _rayToFinalPoint1.set(_transformedFinalPoint1.x()-_transformedCameraPos.x(), _transformedFinalPoint1.y()-_transformedCameraPos.y(), _transformedFinalPoint1.z()-_transformedCameraPos.z());
     _planeNormal.copyValueOfCross(_transformedCameraPos, _rayToFinalPoint1);
     _planeNormal.normalize();
-    double angle1InRadians;
-    double angle2InRadians;
+    double angle1InRadians=0;
+    double angle2InRadians=0;
     Plane.rotationAngleAroundZAxisToFixPointInRadians(_planeNormal, _transformedInitialPoint1, angle1InRadians, angle2InRadians);
   
     // Selecting best angle to rotate (smallest)
@@ -272,9 +272,9 @@ public class SphericalPlanet extends Planet
   {
     result.setValid();
     result.setTranslationMatrix(position.x(), position.y(), position.z());
-    double latitudeInRadians;
-    double longitudeInRadians;
-    double height;
+    double latitudeInRadians=0;
+    double longitudeInRadians=0;
+    double height=0;
     toGeodetic3D(position, latitudeInRadians, longitudeInRadians, height);
     _rotationMatrix.setValid();
     _rotationMatrix.setGeodeticRotationMatrix(latitudeInRadians, longitudeInRadians);

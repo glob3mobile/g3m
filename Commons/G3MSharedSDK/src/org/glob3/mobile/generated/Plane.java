@@ -320,8 +320,8 @@ public class Plane
     double A = a *xb + b *yb;
     double B = b *xb - a *yb;
     double C = c *zb;
-    double sol_x;
-    double sol_y;
+    double sol_x=0;
+    double sol_y=0;
     mu.solveSecondDegreeEquation(A *A + B *B, 2 *B *C, C *C - A *A, sol_x, sol_y);
     if (sol_x!=sol_x || sol_y!=sol_y)
     {
