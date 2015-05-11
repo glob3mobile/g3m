@@ -14,6 +14,8 @@
 class DeviceAttitude_iOS: public IDeviceAttitude{
 private:
   CMMotionManager* _mm;
+  
+  mutable MutableMatrix44D _reorientationMatrix;
 
   
 public:

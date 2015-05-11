@@ -23,6 +23,8 @@ void DeviceAttitude_iOS::startTrackingDeviceOrientation() const{
   
   // Attitude that is referenced to true north
   [_mm startDeviceMotionUpdatesUsingReferenceFrame:CMAttitudeReferenceFrameXTrueNorthZVertical];
+  
+  _reorientationMatrix.copyValue(MutableMatrix44D::createGeneralRotationMatrix(Angle::halfPi, Vector3D::upZ(), Vector3D::zero));
 }
 
 void DeviceAttitude_iOS::stopTrackingDeviceOrientation() const{
@@ -40,16 +42,18 @@ void DeviceAttitude_iOS::copyValueOfRotationMatrix(MutableMatrix44D& rotationMat
     
     CMRotationMatrix m = _mm.deviceMotion.attitude.rotationMatrix;
     
-    MutableMatrix44D rm = MutableMatrix44D::createGeneralRotationMatrix(Angle::halfPi, Vector3D::upZ(), Vector3D::zero);
+    //MutableMatrix44D rm = MutableMatrix44D::createGeneralRotationMatrix(Angle::halfPi, Vector3D::upZ(), Vector3D::zero);
     
     rotationMatrix.setValue(m.m11, m.m12, m.m13, 0,
                             m.m21, m.m22, m.m23, 0,
                             m.m31, m.m32, m.m33, 0,
                             0, 0, 0, 1);
     
-    MutableMatrix44D rm2 = rm.multiply(rotationMatrix);
+    rotationMatrix.copyValueOfMultiplication(_reorientationMatrix, rotationMatrix);
     
-    rotationMatrix.copyValue(rm2);
+//    MutableMatrix44D rm2 = _reorientationMatrix.multiply(rotationMatrix);
+    
+//    rotationMatrix.copyValue(rm2);
   } else{
     rotationMatrix.setValid(false);
   }
