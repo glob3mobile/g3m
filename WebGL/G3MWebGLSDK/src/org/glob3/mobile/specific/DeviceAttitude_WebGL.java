@@ -12,8 +12,7 @@ public class DeviceAttitude_WebGL extends IDeviceAttitude {
 
 	JavaScriptObject _deviceOrientationData = null;
 
-	// JS Matrix
-	private double _m[] = new double[9];
+	private double _m[] = new double[9]; // JS Base Rotation Matrix
 
 	boolean _isTracking;
 
