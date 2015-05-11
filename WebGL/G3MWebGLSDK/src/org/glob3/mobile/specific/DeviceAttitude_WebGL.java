@@ -23,16 +23,18 @@ public class DeviceAttitude_WebGL extends IDeviceAttitude {
 	private static native void trackGyroscope() /*-{
 
 		try {
-			$wnd
-					.addEventListener(
+			$wnd.addEventListener(
 							'deviceorientation',
 							function(event) {
 								this.@org.glob3.mobile.specific.DeviceAttitude_WebGL::_deviceOrientationData = event;
 								// Chrome - Safari points alpha to the first position instead
 								// of true north.
-								//if ((navigator.userAgent.indexOf("Chrome") != -1 ) || (navigator.userAgent.indexOf("Safari") != -1 )){
-								//$wnd.G3M.deviceOrientationData.alpha = event.webkitCompassHeading;
-								//}
+								try{
+									if ((navigator.userAgent.indexOf("Chrome") != -1 ) || (navigator.userAgent.indexOf("Safari") != -1 )){
+										this.@org.glob3.mobile.specific.DeviceAttitude_WebGL::_deviceOrientationData.alpha = event.webkitCompassHeading;
+									}
+								} catch(err){
+								}
 
 							}, false);
 		} catch (err) {
@@ -68,22 +70,22 @@ public class DeviceAttitude_WebGL extends IDeviceAttitude {
 	};
 
 	private native void trackInterfaceOrientation() /*-{
-
+		
 		try {
-			$wnd.screen.orientation.onchange = function() {
-				if ($wnd.screen.orientation != undefined) {
+			if ($wnd.screen.orientation !== undefined){ //CHROME, SAFARI
+				$wnd.screen.orientation.onchange = function() {
 					this.@org.glob3.mobile.specific.DeviceAttitude_WebGL::storeInterfaceOrientation(Ljava/lang/String;)($wnd.screen.orientation.type);
+				};
+			} else{
+				if ($wnd.screen.mozOrientation !== undefined){ //MOZILLA
+					$wnd.screen.onmozorientationchange = function(event) {
+						event.preventDefault();
+						this.@org.glob3.mobile.specific.DeviceAttitude_WebGL::storeInterfaceOrientation(Ljava/lang/String;)($wnd.screen.orientation.type);
+					}
 				}
-			};
-		} catch (err) {
-		}
-
-		try {
-			$wnd.screen.onmozorientationchange = function(event) {
-				event.preventDefault();
-				this.@org.glob3.mobile.specific.DeviceAttitude_WebGL::storeInterfaceOrientation(Ljava/lang/String;)($wnd.screen.orientation.type);
 			}
 		} catch (err) {
+			console.error("Unable to track Interface Orientation. " + err);
 		}
 
 	}-*/;
