@@ -24,6 +24,7 @@ class DeviceAttitudeCameraConstrainer: public ICameraConstrainer{
 private:
   mutable MutableMatrix44D _localRM;
   mutable MutableMatrix44D _attitudeMatrix;
+  mutable MutableMatrix44D _camRM;
   
 public:
   

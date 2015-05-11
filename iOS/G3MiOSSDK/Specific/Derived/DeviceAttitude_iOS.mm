@@ -42,18 +42,13 @@ void DeviceAttitude_iOS::copyValueOfRotationMatrix(MutableMatrix44D& rotationMat
     
     CMRotationMatrix m = _mm.deviceMotion.attitude.rotationMatrix;
     
-    //MutableMatrix44D rm = MutableMatrix44D::createGeneralRotationMatrix(Angle::halfPi, Vector3D::upZ(), Vector3D::zero);
-    
     rotationMatrix.setValue(m.m11, m.m12, m.m13, 0,
                             m.m21, m.m22, m.m23, 0,
                             m.m31, m.m32, m.m33, 0,
                             0, 0, 0, 1);
     
+    //Reorienting as Heading = 0 is East on iOS
     rotationMatrix.copyValueOfMultiplication(_reorientationMatrix, rotationMatrix);
-    
-//    MutableMatrix44D rm2 = _reorientationMatrix.multiply(rotationMatrix);
-    
-//    rotationMatrix.copyValue(rm2);
   } else{
     rotationMatrix.setValid(false);
   }
