@@ -30,6 +30,7 @@ public class DeviceAttitudeCameraConstrainer implements ICameraConstrainer
 
   private MutableMatrix44D _localRM = new MutableMatrix44D();
   private MutableMatrix44D _attitudeMatrix = new MutableMatrix44D();
+  private MutableMatrix44D _camRM = new MutableMatrix44D();
 
 
   public DeviceAttitudeCameraConstrainer()
@@ -75,14 +76,10 @@ public class DeviceAttitudeCameraConstrainer implements ICameraConstrainer
     //Transforming global rotation to local rotation
     CoordinateSystem local = planet.getCoordinateSystemAt(camPosition);
     local.copyValueOfRotationMatrix(_localRM);
-  
-    MutableMatrix44D reorientation = MutableMatrix44D.identity();// MutableMatrix44D.createGeneralRotationMatrix(Angle.halfPi, local._z, local._origin);
-  
-    reorientation.copyValueOfMultiplication(reorientation, _localRM);
-    reorientation.copyValueOfMultiplication(reorientation, _attitudeMatrix);
+    _camRM.copyValueOfMultiplication(_localRM, _attitudeMatrix);
   
     //Applying to Camera CS
-    CoordinateSystem finalCS = camCS.applyRotation(reorientation);
+    CoordinateSystem finalCS = camCS.applyRotation(_camRM);
     nextCamera.setCameraCoordinateSystem(finalCS);
   
     return true;
