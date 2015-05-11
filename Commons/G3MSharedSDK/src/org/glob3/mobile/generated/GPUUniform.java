@@ -80,7 +80,7 @@ public class GPUUniform extends GPUVariable
     }
   }
 
-  public final void applyChanges(GL gl)
+  public final boolean applyChanges(GL gl)
   {
     if (_dirty)
     {
@@ -92,8 +92,11 @@ public class GPUUniform extends GPUVariable
       if (_value == null)
       {
         ILogger.instance().logError("Uniform " + _name + " was not set.");
+        return false;
       }
     }
+  
+    return true;
   }
 
 }

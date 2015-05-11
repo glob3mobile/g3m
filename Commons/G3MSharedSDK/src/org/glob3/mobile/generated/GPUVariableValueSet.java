@@ -219,4 +219,33 @@ public class GPUVariableValueSet
     return _attributeCode;
   }
 
+  public final String description()
+  {
+    IStringBuilder isb = IStringBuilder.newStringBuilder();
+    isb.addString("GPUVariableValueSet containing Uniforms: ");
+    for (int i = 0; i <= _highestUniformKey; i++)
+    {
+      GPUUniformValue u = _uniformValues[i];
+      if (u != null)
+      {
+        isb.addInt(i);
+        isb.addString(" ");
+      }
+    }
+    isb.addString("and Attributes: ");
+    for (int i = 0; i <= _highestAttributeKey; i++)
+    {
+      GPUAttributeValue a = _attributeValues[i];
+      if (a != null)
+      {
+        isb.addInt(i);
+        isb.addString(" ");
+      }
+    }
+    String s = isb.getString();
+    if (isb != null)
+       isb.dispose();
+    return s;
+  }
+
 }

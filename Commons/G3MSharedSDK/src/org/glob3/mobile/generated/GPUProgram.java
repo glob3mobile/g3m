@@ -396,15 +396,20 @@ public class GPUProgram
   /**
    Must be called before drawing to apply Uniforms and Attributes new values
    */
-  public final void applyChanges(GL gl)
+  public final boolean applyChanges(GL gl)
   {
+  
+    boolean success = true;
   
     for (int i = 0; i < _nUniforms; i++)
     {
       GPUUniform uniform = _createdUniforms[i];
       if (uniform != null) //Texture Samplers return null
       {
-        uniform.applyChanges(gl);
+        if (!uniform.applyChanges(gl))
+        {
+          success = false;
+        }
       }
     }
   
@@ -413,9 +418,13 @@ public class GPUProgram
       GPUAttribute attribute = _createdAttributes[i];
       if (attribute != null)
       {
-        attribute.applyChanges(gl);
+        if (!attribute.applyChanges(gl))
+        {
+          success = false;
+        }
       }
     }
+    return success;
   }
 
   public final GPUUniform getUniformOfType(String name, int type)

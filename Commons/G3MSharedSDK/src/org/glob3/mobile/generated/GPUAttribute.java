@@ -94,13 +94,14 @@ public class GPUAttribute extends GPUVariable
   }
 
 
-  public void applyChanges(GL gl)
+  public boolean applyChanges(GL gl)
   {
     if (_value == null)
     {
       if (_enabled)
       {
         ILogger.instance().logError("Attribute " + _name + " was not set but it is enabled.");
+        return false;
       }
     }
     else
@@ -128,5 +129,6 @@ public class GPUAttribute extends GPUVariable
         _dirty = false;
       }
     }
+    return true;
   }
 }

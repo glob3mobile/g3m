@@ -99,14 +99,12 @@ public class TextureGLFeature extends GLColorGroupFeature
     }
     else
     {
-      if (u == 0.0 && v == 0.0)
-      {
-        _values.removeUniformValue(GPUUniformKey.TRANSLATION_TEXTURE_COORDS);
-      }
-      else
-      {
+  //    if (u == 0.0 && v == 0.0) {
+  //      _values->removeUniformValue(TRANSLATION_TEXTURE_COORDS);
+  //    }
+  //    else {
         _translation.changeValue(u, v);
-      }
+  //    }
     }
   }
   public final void setScale(float u, float v)
