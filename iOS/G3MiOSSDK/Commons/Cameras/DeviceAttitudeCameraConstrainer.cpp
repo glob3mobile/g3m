@@ -48,7 +48,7 @@ bool DeviceAttitudeCameraConstrainer::onCameraChange(const Planet* planet,
   CoordinateSystem local = planet->getCoordinateSystemAt(camPosition);
   local.copyValueOfRotationMatrix(_localRM);
   
-  MutableMatrix44D reorientation = MutableMatrix44D::createGeneralRotationMatrix(Angle::halfPi, local._z, local._origin);
+  MutableMatrix44D reorientation = MutableMatrix44D::identity();//MutableMatrix44D::createGeneralRotationMatrix(Angle::halfPi, local._z, local._origin);
   
   reorientation.copyValueOfMultiplication(reorientation, _localRM);
   reorientation.copyValueOfMultiplication(reorientation, _attitudeMatrix);

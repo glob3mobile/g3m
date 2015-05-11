@@ -26,7 +26,7 @@ public class DeviceAttitude_Android extends IDeviceAttitude implements
 	private float[] _rotationMatrix = new float[16];
 	private float[] _inclinationMatrix = new float[16];
 
-	final int SENSOR_DELAY = 15;
+	final int SENSOR_DELAY = 2000;
 
 	private boolean _tracking = false;
 
@@ -59,13 +59,13 @@ public class DeviceAttitude_Android extends IDeviceAttitude implements
 			_tracking = false;
 		}
 
-		if (_sensorManager.registerListener(this,
-				_sensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR),
-				SENSOR_DELAY)) {
-			ILogger.instance().logError(
-					"TYPE_ROTATION_VECTOR sensor not supported.");
-			_tracking = false;
-		}
+//		if (_sensorManager.registerListener(this,
+//				_sensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR),
+//				SENSOR_DELAY)) {
+//			ILogger.instance().logError(
+//					"TYPE_ROTATION_VECTOR sensor not supported.");
+//			_tracking = false;
+//		}
 	}
 
 	@Override
