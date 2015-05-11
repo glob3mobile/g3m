@@ -269,12 +269,12 @@ void TextureGLFeature::setTranslation(float u, float v) {
                              false);
   }
   else {
-    if (u == 0.0 && v == 0.0) {
-      _values->removeUniformValue(TRANSLATION_TEXTURE_COORDS);
-    }
-    else {
+//    if (u == 0.0 && v == 0.0) {
+//      _values->removeUniformValue(TRANSLATION_TEXTURE_COORDS);
+//    }
+//    else {
       _translation->changeValue(u, v);
-    }
+//    }
   }
 }
 

@@ -133,6 +133,8 @@ public:
 
   int getAttributesCode() const;
   
+  std::string description() const;
+  
 };
 
 #endif

@@ -128,7 +128,10 @@ void GLState::applyOnGPU(GL* gl, GPUProgramManager& progManager) const {
     _valuesSet->applyValuesToProgram(_linkedProgram);
     _globalState->applyChanges(gl, *gl->getCurrentGLGlobalState());
 
-    _linkedProgram->applyChanges(gl);
+    if (!_linkedProgram->applyChanges(gl)){
+      ILogger::instance()->logError("Problem applying GLState values to GPUProgram " + _linkedProgram->getName());
+      ILogger::instance()->logError(this->description());
+    }
 
     //prog->onUnused(); //Uncomment to check that all GPUProgramStates are complete
   }
@@ -174,4 +177,17 @@ GLFeatureSet* GLState::getGLFeatures(GLFeatureID id) const {
     }
   }
   return features;
+}
+
+
+std::string GLState::description() const{
+  IStringBuilder* isb = IStringBuilder::newStringBuilder();
+  isb->addString("GLState\n");
+  if (_valuesSet != NULL){
+    isb->addString("With GPU Values:\n");
+    isb->addString(_valuesSet->description());
+  }
+  isb->addString("\n");
+  std::string s = isb->getString();
+  return s;
 }

@@ -126,7 +126,7 @@ public:
     }
   }
 
-  void applyChanges(GL* gl);
+  bool applyChanges(GL* gl);
 
 };
 

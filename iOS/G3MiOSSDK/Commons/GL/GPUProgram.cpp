@@ -325,21 +325,28 @@ void GPUProgram::onUnused(GL* gl) {
 /**
  Must be called before drawing to apply Uniforms and Attributes new values
  */
-void GPUProgram::applyChanges(GL* gl) {
+bool GPUProgram::applyChanges(GL* gl) {
+  
+  bool success = true;
 
   for (int i = 0; i < _nUniforms; i++) {
     GPUUniform* uniform = _createdUniforms[i];
     if (uniform != NULL) { //Texture Samplers return null
-      uniform->applyChanges(gl);
+      if (!uniform->applyChanges(gl)){
+        success = false;
+      }
     }
   }
 
   for (int i = 0; i < _nAttributes; i++) {
     GPUAttribute* attribute = _createdAttributes[i];
     if (attribute != NULL) {
-      attribute->applyChanges(gl);
+      if (!attribute->applyChanges(gl)){
+        success = false;
+      }
     }
   }
+  return success;
 }
 
 GPUUniform* GPUProgram::getUniformOfType(const std::string& name, int type) const {

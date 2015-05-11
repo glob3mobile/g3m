@@ -170,10 +170,11 @@ public:
   }
 
 
-  virtual void applyChanges(GL* gl) {
+  virtual bool applyChanges(GL* gl) {
     if (_value == NULL) {
       if (_enabled) {
         ILogger::instance()->logError("Attribute " + _name + " was not set but it is enabled.");
+        return false;
       }
     }
     else {
@@ -195,6 +196,7 @@ public:
         _dirty = false;
       }
     }
+    return true;
   }
 };
 

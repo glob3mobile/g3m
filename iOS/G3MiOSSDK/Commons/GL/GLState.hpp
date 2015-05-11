@@ -83,6 +83,8 @@ public:
   GLFeature* getGLFeature(GLFeatureID id) const;
 
   GLFeatureSet* getGLFeatures(GLFeatureID id) const;
+  
+  std::string description() const;
 };
 
 #endif

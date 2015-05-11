@@ -7,6 +7,7 @@
 //
 
 #include "GPUVariableValueSet.hpp"
+#include "IStringBuilder.hpp"
 
 void GPUVariableValueSet::combineWith(const GPUVariableValueSet* vs) {
   for (int i = 0; i <= vs->_highestUniformKey; i++) {
@@ -83,3 +84,28 @@ int GPUVariableValueSet::getAttributesCode() const {
   }
   return _attributeCode;
 }
+
+
+std::string GPUVariableValueSet::description() const{
+  IStringBuilder* isb = IStringBuilder::newStringBuilder();
+  isb->addString("GPUVariableValueSet containing Uniforms: ");
+  for (int i = 0; i <= _highestUniformKey; i++) {
+    GPUUniformValue* u = _uniformValues[i];
+    if (u != NULL) {
+      isb->addInt(i);
+      isb->addString(" ");
+    }
+  }
+  isb->addString("and Attributes: ");
+  for (int i = 0; i <= _highestAttributeKey; i++) {
+    GPUAttributeValue* a = _attributeValues[i];
+    if (a != NULL) {
+      isb->addInt(i);
+      isb->addString(" ");
+    }
+  }
+  std::string s = isb->getString();
+  delete isb;
+  return s;
+}
+

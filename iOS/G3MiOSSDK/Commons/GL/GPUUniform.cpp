@@ -16,7 +16,7 @@ void GPUUniform::unset() {
   _dirty = false;
 }
 
-void GPUUniform::applyChanges(GL* gl) {
+bool GPUUniform::applyChanges(GL* gl) {
   if (_dirty) {
     _value->setUniform(gl, _id);
     _dirty = false;
@@ -24,6 +24,10 @@ void GPUUniform::applyChanges(GL* gl) {
   else {
     if (_value == NULL) {
       ILogger::instance()->logError("Uniform " + _name + " was not set.");
+      return false;
     }
   }
+  
+  return true;
 }
+

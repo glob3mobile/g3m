@@ -141,6 +141,8 @@ void G3MAnimatedMarksDemoScene::rawActivate(const G3MContext* context) {
   g3mWidget->setCameraPosition(Geodetic3D::fromDegrees(27.978501160595179442,
                                                        -15.537316508402767568,
                                                        1634789.5083396979608));
+  g3mWidget->setCameraHeading(Angle::zero());
+  g3mWidget->setCameraPitch(Angle::fromDegrees(-90));
 }
 
 void G3MAnimatedMarksDemoScene::deactivate(const G3MContext* context) {

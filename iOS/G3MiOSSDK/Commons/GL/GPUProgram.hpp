@@ -111,7 +111,7 @@ public:
   
   void onUsed();
   void onUnused(GL* gl);
-  void applyChanges(GL* gl);
+  bool applyChanges(GL* gl);
   
   GPUUniform* getUniformOfType(const std::string& name, int type) const;
   
