@@ -37,7 +37,7 @@ bool DeviceAttitudeCameraConstrainer::onCameraChange(const Planet* planet,
   }
 
   Geodetic3D camPosition = nextCamera->getGeodeticPosition();
-  
+   
   //Getting interface orientation
   InterfaceOrientation ori = IDeviceAttitude::instance()->getCurrentInterfaceOrientation();
   

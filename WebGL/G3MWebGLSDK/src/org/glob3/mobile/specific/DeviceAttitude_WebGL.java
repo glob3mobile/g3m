@@ -1,40 +1,58 @@
 package org.glob3.mobile.specific;
 
+import org.glob3.mobile.generated.Angle;
+import org.glob3.mobile.generated.CoordinateSystem;
 import org.glob3.mobile.generated.IDeviceAttitude;
+import org.glob3.mobile.generated.ILogger;
 import org.glob3.mobile.generated.InterfaceOrientation;
 import org.glob3.mobile.generated.MutableMatrix44D;
-
-import com.google.gwt.core.client.JavaScriptObject;
+import org.glob3.mobile.generated.Vector3D;
 
 public class DeviceAttitude_WebGL extends IDeviceAttitude {
 
-	InterfaceOrientation _currentIO = InterfaceOrientation.PORTRAIT;
+	InterfaceOrientation _currentIO = null;
+	InterfaceOrientation _firstIO = null;
 
-	JavaScriptObject _deviceOrientationData = null;
+	// JavaScriptObject _deviceOrientationData = null;
+	double _beta = Double.NaN;
+	double _gamma = Double.NaN;
+	double _alpha = Double.NaN;
 
-	private double _m[] = new double[9]; // JS Base Rotation Matrix
+//	private double _m[] = new double[9]; // JS Base Rotation Matrix
 
 	boolean _isTracking;
 
 	public DeviceAttitude_WebGL() {
-		trackInterfaceOrientation();
+		trackInterfaceOrientation(this);
+		initInterfaceOrientation(this);
 	}
 
-	private static native void trackGyroscope() /*-{
-
+	private static native void trackGyroscope(DeviceAttitude_WebGL devAtt) /*-{
 		try {
-			$wnd.addEventListener(
+			$wnd
+					.addEventListener(
 							'deviceorientation',
 							function(event) {
-								this.@org.glob3.mobile.specific.DeviceAttitude_WebGL::_deviceOrientationData = event;
+								devAtt.@org.glob3.mobile.specific.DeviceAttitude_WebGL::_beta = event.beta;
+								devAtt.@org.glob3.mobile.specific.DeviceAttitude_WebGL::_gamma = event.gamma;
+								devAtt.@org.glob3.mobile.specific.DeviceAttitude_WebGL::_alpha = event.alpha;
+
+								console
+										.log("TG EVENT B:"
+												+ devAtt.@org.glob3.mobile.specific.DeviceAttitude_WebGL::_beta
+												+ " G:"
+												+ devAtt.@org.glob3.mobile.specific.DeviceAttitude_WebGL::_gamma
+												+ " A:"
+												+ devAtt.@org.glob3.mobile.specific.DeviceAttitude_WebGL::_alpha);
+
 								// Chrome - Safari points alpha to the first position instead
 								// of true north.
-								try{
-									if ((navigator.userAgent.indexOf("Chrome") != -1 ) || (navigator.userAgent.indexOf("Safari") != -1 )){
-										this.@org.glob3.mobile.specific.DeviceAttitude_WebGL::_deviceOrientationData.alpha = event.webkitCompassHeading;
-									}
-								} catch(err){
-								}
+								//								try{
+								//									if ((navigator.userAgent.indexOf("Chrome") != -1 ) || (navigator.userAgent.indexOf("Safari") != -1 )){
+								//										devAtt.@org.glob3.mobile.specific.DeviceAttitude_WebGL::_alpha = event.webkitCompassHeading;
+								//									}
+								//								} catch(err){
+								//								}
 
 							}, false);
 		} catch (err) {
@@ -49,38 +67,64 @@ public class DeviceAttitude_WebGL extends IDeviceAttitude {
 		}
 	}-*/;
 
-	private void storeInterfaceOrientation(String orientation){
-		
-		if (orientation.equalsIgnoreCase("portrait-primary")){
-			this._currentIO = InterfaceOrientation.PORTRAIT;
-		} else{
-			if (orientation.equalsIgnoreCase("portrait-secondary")){
-				this._currentIO = InterfaceOrientation.PORTRAIT_UPSIDEDOWN;
-			} else{
-				if (orientation.equalsIgnoreCase("landscape-primary")){
-					this._currentIO = InterfaceOrientation.LANDSCAPE_RIGHT;
+	private void storeInterfaceOrientation(String orientation) {
+		if (orientation.equalsIgnoreCase("portrait-primary")) {
+			_currentIO = InterfaceOrientation.PORTRAIT;
+		} else {
+			if (orientation.equalsIgnoreCase("portrait-secondary")) {
+				_currentIO = InterfaceOrientation.PORTRAIT_UPSIDEDOWN;
+			} else {
+				if (orientation.equalsIgnoreCase("landscape-primary")) {
+					_currentIO = InterfaceOrientation.LANDSCAPE_RIGHT;
 				} else {
-					if (orientation.equalsIgnoreCase("landscape-secondary")){
-						this._currentIO = InterfaceOrientation.LANDSCAPE_LEFT;
+					if (orientation.equalsIgnoreCase("landscape-secondary")) {
+						_currentIO = InterfaceOrientation.LANDSCAPE_LEFT;
 					}
 				}
 			}
 		}
-		
-	};
 
-	private native void trackInterfaceOrientation() /*-{
-		
+		if (_firstIO == null) {
+			_firstIO = _currentIO;
+		}
+
+		ILogger.instance().logError(
+				"SIO " + orientation + " -> " + _currentIO.toString());
+
+	};
+	
+	private native void initInterfaceOrientation(DeviceAttitude_WebGL devAtt) /*-{
+
 		try {
-			if ($wnd.screen.orientation !== undefined){ //CHROME, SAFARI
+			if ($wnd.screen.orientation !== undefined) { //CHROME, SAFARI
+				console.log("IO CHROME");
+				devAtt.@org.glob3.mobile.specific.DeviceAttitude_WebGL::storeInterfaceOrientation(Ljava/lang/String;)($wnd.screen.orientation.type);
+			} else {
+				if ($wnd.screen.mozOrientation !== undefined) { //MOZILLA
+					console.log("IO MOZ");
+					devAtt.@org.glob3.mobile.specific.DeviceAttitude_WebGL::storeInterfaceOrientation(Ljava/lang/String;)($wnd.screen.mozOrientation);
+				}
+			}
+		} catch (err) {
+			console.error("Unable to track Interface Orientation. " + err);
+		}
+
+	}-*/;
+
+	private native void trackInterfaceOrientation(DeviceAttitude_WebGL devAtt) /*-{
+
+		try {
+			if ($wnd.screen.orientation !== undefined) { //CHROME, SAFARI
+				console.log("IO CHROME");
 				$wnd.screen.orientation.onchange = function() {
-					this.@org.glob3.mobile.specific.DeviceAttitude_WebGL::storeInterfaceOrientation(Ljava/lang/String;)($wnd.screen.orientation.type);
+					devAtt.@org.glob3.mobile.specific.DeviceAttitude_WebGL::storeInterfaceOrientation(Ljava/lang/String;)($wnd.screen.orientation.type);
 				};
-			} else{
-				if ($wnd.screen.mozOrientation !== undefined){ //MOZILLA
+			} else {
+				if ($wnd.screen.mozOrientation !== undefined) { //MOZILLA
+					console.log("IO MOZ");
 					$wnd.screen.onmozorientationchange = function(event) {
 						event.preventDefault();
-						this.@org.glob3.mobile.specific.DeviceAttitude_WebGL::storeInterfaceOrientation(Ljava/lang/String;)($wnd.screen.orientation.type);
+						devAtt.@org.glob3.mobile.specific.DeviceAttitude_WebGL::storeInterfaceOrientation(Ljava/lang/String;)($wnd.screen.orientation.type);
 					}
 				}
 			}
@@ -92,14 +136,15 @@ public class DeviceAttitude_WebGL extends IDeviceAttitude {
 
 	@Override
 	public void startTrackingDeviceOrientation() {
-		trackGyroscope();
+		trackGyroscope(this);
 		_isTracking = true;
 	}
 
 	@Override
 	public void stopTrackingDeviceOrientation() {
-		stopTrackingDeviceOrientation();
-		_deviceOrientationData = null;
+		stopTrackingGyroscope();
+		_beta = _gamma = _alpha = Double.NaN;
+
 		_isTracking = false;
 	}
 
@@ -108,22 +153,73 @@ public class DeviceAttitude_WebGL extends IDeviceAttitude {
 		return _isTracking;
 	}
 
+	private Angle getHeading() {
+		switch (_firstIO) {
+		case LANDSCAPE_RIGHT:
+			return Angle.fromDegrees(_alpha);
+		case LANDSCAPE_LEFT:
+			return Angle.fromDegrees(_alpha);
+		case PORTRAIT:
+			return Angle.fromDegrees(_alpha);
+		case PORTRAIT_UPSIDEDOWN:
+			return Angle.fromDegrees(_alpha);
+		default:
+			return Angle.fromDegrees(_alpha);	
+		} 
+	}
+	
+	private Angle getPitch() {
+		switch (_firstIO) {
+		case LANDSCAPE_RIGHT:
+			return Angle.fromDegrees(_gamma);
+		case LANDSCAPE_LEFT:
+			return Angle.fromDegrees(_gamma);
+		case PORTRAIT:
+			return Angle.fromDegrees(_gamma);
+		case PORTRAIT_UPSIDEDOWN:
+			return Angle.fromDegrees(_gamma);
+		default:
+			return Angle.fromDegrees(_gamma);	
+		} 
+	}
+	
+	private Angle getRoll() {
+		switch (_firstIO) {
+		case LANDSCAPE_RIGHT:
+			return Angle.fromDegrees(-_beta);
+		case LANDSCAPE_LEFT:
+			return Angle.fromDegrees(-_beta);
+		case PORTRAIT:
+			return Angle.fromDegrees(-_beta);
+		case PORTRAIT_UPSIDEDOWN:
+			return Angle.fromDegrees(-_beta);
+		default:
+			return Angle.fromDegrees(-_beta);	
+		} 
+	}
+
 	@Override
 	public void copyValueOfRotationMatrix(MutableMatrix44D rotationMatrix) {
-		if (_deviceOrientationData == null) {
+		if (Double.isNaN(_beta) || Double.isNaN(_gamma) || Double.isNaN(_alpha)
+				|| _firstIO == null) {
 			rotationMatrix.setValid(false);
+			ILogger.instance().logError("Browser attitude data is undefined.");
 		} else {
-			getBaseRotationMatrix();
+			/*
+			 * getBaseRotationMatrix(this);
+			 * 
+			 * for (int i = 0; i < 9; i++) { if (_m[i] <= -99998d) {
+			 * rotationMatrix.setValid(false); return; } }
+			 * 
+			 * 
+			 * rotationMatrix.setValue(_m[0], _m[1], _m[2], 0.0, _m[3], _m[4],
+			 * _m[5], 0.0, _m[6], _m[7], _m[8], 0.0, 0.0, 0.0, 0.0, 1.0);
+			 */
+			
 
-			for (int i = 0; i < 9; i++) {
-				if (_m[i] <= -99998d) {
-					rotationMatrix.setValid(false);
-					return;
-				}
-			}
-
-			rotationMatrix.setValue(_m[0], _m[1], _m[2], 0.0, _m[3], _m[4],
-					_m[5], 0.0, _m[6], _m[7], _m[8], 0.0, 0.0, 0.0, 0.0, 1.0);
+			CoordinateSystem cs = CoordinateSystem.global()
+					.applyTaitBryanAngles(getHeading(), getPitch(), getRoll());
+			rotationMatrix.copyValue(cs.getRotationMatrix());
 		}
 
 	}
@@ -132,45 +228,5 @@ public class DeviceAttitude_WebGL extends IDeviceAttitude {
 	public InterfaceOrientation getCurrentInterfaceOrientation() {
 		return _currentIO;
 	}
-
-	private static native void getBaseRotationMatrix() /*-{
-		var data = this.@org.glob3.mobile.specific.DeviceAttitude_WebGL::_deviceOrientationData;
-
-		var _beta = data.beta;
-		var _gamma = data.gamma;
-		var _alpha = data.alpha;
-		var degtorad = Math.PI / 180;
-
-		var _y = _beta ? _beta * degtorad : 0; // beta value
-		var _z = _gamma ? _gamma * degtorad : 0; // gamma value _gamma ? _gamma * degtorad : 0;
-		var _x = _alpha ? _alpha * degtorad : 0; // alpha value
-
-		var cX = Math.cos(_x);
-		var cY = Math.cos(_y);
-		var cZ = Math.cos(_z);
-		var sX = Math.sin(_x);
-		var sY = Math.sin(_y);
-		var sZ = Math.sin(_z);
-
-		//
-		// ZXY-ordered rotation matrix construction.
-		//
-
-		this.@org.glob3.mobile.specific.DeviceAttitude_WebGL::_m[0] = cZ * cY
-				- sZ * sX * sY;
-		this.@org.glob3.mobile.specific.DeviceAttitude_WebGL::_m[1] = -cX * sZ;
-		this.@org.glob3.mobile.specific.DeviceAttitude_WebGL::_m[2] = cY * sZ
-				* sX + cZ * sY;
-
-		this.@org.glob3.mobile.specific.DeviceAttitude_WebGL::_m[3] = cY * sZ
-				+ cZ * sX * sY;
-		this.@org.glob3.mobile.specific.DeviceAttitude_WebGL::_m[4] = cZ * cX;
-		this.@org.glob3.mobile.specific.DeviceAttitude_WebGL::_m[5] = sZ * sY
-				- cZ * cY * sX;
-
-		this.@org.glob3.mobile.specific.DeviceAttitude_WebGL::_m[6] = -cX * sY;
-		this.@org.glob3.mobile.specific.DeviceAttitude_WebGL::_m[7] = sX;
-		this.@org.glob3.mobile.specific.DeviceAttitude_WebGL::_m[8] = cX * cY;
-	}-*/;
 
 }
