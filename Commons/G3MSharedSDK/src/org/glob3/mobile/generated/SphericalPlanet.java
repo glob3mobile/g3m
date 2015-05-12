@@ -60,6 +60,7 @@ public class SphericalPlanet extends Planet
   private MutableVector3D _planeNormal = new MutableVector3D();
   private MutableVector3D _rayToFinalPoint1 = new MutableVector3D();
   private MutableVector3D _initialNormal0 = new MutableVector3D();
+  private MutableVector2D _rotationAngles = new MutableVector2D();
   private MutableVector3D _P0 = new MutableVector3D();
   private MutableVector3D _B = new MutableVector3D();
   private MutableVector3D _B0 = new MutableVector3D();
@@ -229,9 +230,9 @@ public class SphericalPlanet extends Planet
     _rayToFinalPoint1.set(_transformedFinalPoint1.x()-_transformedCameraPos.x(), _transformedFinalPoint1.y()-_transformedCameraPos.y(), _transformedFinalPoint1.z()-_transformedCameraPos.z());
     _planeNormal.copyValueOfCross(_transformedCameraPos, _rayToFinalPoint1);
     _planeNormal.normalize();
-    double angle1InRadians = 0;
-    double angle2InRadians = 0;
-    Plane.rotationAngleAroundZAxisToFixPointInRadians(_planeNormal, _transformedInitialPoint1, angle1InRadians, angle2InRadians);
+    Plane.rotationAngleAroundZAxisToFixPointInRadians(_planeNormal, _transformedInitialPoint1, _rotationAngles);
+    double angle1InRadians = _rotationAngles.x();
+    double angle2InRadians = _rotationAngles.y();
   
     // Selecting best angle to rotate (smallest)
     double dif1 = Angle.distanceBetweenAnglesInRadians(angle1InRadians, _lastDoubleDragAngle);
@@ -272,10 +273,10 @@ public class SphericalPlanet extends Planet
   {
     result.setValid();
     result.setTranslationMatrix(position.x(), position.y(), position.z());
-    double latitudeInRadians = 0;
-    double longitudeInRadians = 0;
-    double height = 0;
-    toGeodetic3D(position, latitudeInRadians, longitudeInRadians, height);
+    double mod = position.length();
+    final IMathUtils mu = IMathUtils.instance();
+    double latitudeInRadians = mu.asin(position.z()/mod);
+    double longitudeInRadians = mu.atan2(position.y()/mod, position.x()/mod);
     _rotationMatrix.setValid();
     _rotationMatrix.setGeodeticRotationMatrix(latitudeInRadians, longitudeInRadians);
     result.copyValueOfMultiplication(result, _rotationMatrix);
@@ -442,12 +443,14 @@ public class SphericalPlanet extends Planet
     return new Geodetic2D(Angle.fromRadians(mu.asin(n._z)), Angle.fromRadians(mu.atan2(n._y, n._x)));
   }
 
-  public final void toGeodetic2D(double x, double y, double z, double latitudeInRadians, double longitudeInRadians)
+  public final void toGeodetic2D(MutableVector3D position, MutableVector2D result)
   {
+    double mod = position.length();
+    double x = position.x() / mod;
+    double y = position.y() / mod;
+    double z = position.z() / mod;
     final IMathUtils mu = IMathUtils.instance();
-    double mod = x *x + y *y + z *z;
-    latitudeInRadians = mu.asin(z/mod);
-    longitudeInRadians = mu.atan2(y/mod, x/mod);
+    result.setValues(mu.asin(z), mu.atan2(y, x));
   }
 
   public final Geodetic3D toGeodetic3D(Vector3D position)
@@ -460,7 +463,7 @@ public class SphericalPlanet extends Planet
     return new Geodetic3D(toGeodetic2D(p), height);
   }
 
-  public final void toGeodetic3D(MutableVector3D position, double latitudeInRadians, double longitudeInRadians, double height)
+  public final void toGeodetic3D(MutableVector3D position, MutableVector3D result)
   {
     double px = position.x() * _sphere._radius;
     double py = position.y() * _sphere._radius;
@@ -474,8 +477,12 @@ public class SphericalPlanet extends Planet
     double hz = position.z() - pz;
     double hmod = IMathUtils.instance().sqrt(hx *hx + hy *hy + hz *hz);
     double dot = hx *position.x() + hy *position.y() + hz *position.z();
-    height = (dot < 0) ? -1 * hmod : hmod;
-    toGeodetic2D(px, py, pz, latitudeInRadians, longitudeInRadians);
+    double height = (dot < 0) ? -1 * hmod : hmod;
+    final IMathUtils mu = IMathUtils.instance();
+    double mod = px *px + py *py + pz *pz;
+    double latitudeInRadians = mu.asin(pz/mod);
+    double longitudeInRadians = mu.atan2(py/mod, px/mod);
+    result.set(latitudeInRadians, longitudeInRadians, height);
   }
 
   public final Vector3D scaleToGeodeticSurface(Vector3D position)

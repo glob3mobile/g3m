@@ -17,6 +17,7 @@ package org.glob3.mobile.generated;
 
 
 //class Vector2D;
+//class MutableVector2D;
 
 
 //#define SIN(x) java.lang.Math.sin(x)
@@ -263,24 +264,19 @@ public abstract class IMathUtils
     return new Vector2D((-B + squareRoot) / A2, (-B - squareRoot) / A2);
   }
 
-  public final void solveSecondDegreeEquation(double A, double B, double C, double result_x, double result_y)
+  public final void solveSecondDegreeEquation(double A, double B, double C, MutableVector2D result)
   {
   
     double x = B *B - 4 *A *C;
     if (x < 0)
     {
-      result_x = java.lang.Double.NaN;
-      result_y = java.lang.Double.NaN;
+      result.setNan();
       return;
     }
   
     double squareRoot = this.sqrt(x);
     double A2 = 2 *A;
-    result_x = (-B + squareRoot) / A2;
-    result_y = (-B - squareRoot) / A2;
-  
-    /*return Vector2D((-B + squareRoot) / A2,
-                    (-B - squareRoot) / A2);*/
+    result.setValues((-B + squareRoot) / A2, (-B - squareRoot) / A2);
   }
 
 

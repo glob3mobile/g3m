@@ -308,7 +308,7 @@ public class Plane
     return new Vector2D(angle1, angle2);
   }
 
-  public static void rotationAngleAroundZAxisToFixPointInRadians(MutableVector3D normal, MutableVector3D point, double result_x, double result_y)
+  public static void rotationAngleAroundZAxisToFixPointInRadians(MutableVector3D normal, MutableVector3D point, MutableVector2D result)
   {
     final IMathUtils mu = IMathUtils.instance();
     double a = normal.x();
@@ -320,22 +320,15 @@ public class Plane
     double A = a *xb + b *yb;
     double B = b *xb - a *yb;
     double C = c *zb;
-    double sol_x = 0;
-    double sol_y = 0;
-    mu.solveSecondDegreeEquation(A *A + B *B, 2 *B *C, C *C - A *A, sol_x, sol_y);
-    if (sol_x!=sol_x || sol_y!=sol_y)
-    {
-      result_x = java.lang.Double.NaN;
-      result_y = java.lang.Double.NaN;
+    mu.solveSecondDegreeEquation(A *A + B *B, 2 *B *C, C *C - A *A, result);
+    if (result.isNan())
       return;
-    }
-    double sinTita1 = sol_x;
-    double sinTita2 = sol_y;
+    double sinTita1 = result.x();
+    double sinTita2 = result.y();
     double cosTita1 = - (C + B *sinTita1) / A;
     double cosTita2 = - (C + B *sinTita2) / A;
     double angle1 = mu.atan2(sinTita1, cosTita1); // / 3.14159 * 180;
     double angle2 = mu.atan2(sinTita2, cosTita2); // / 3.14159 * 180;
-    result_x = angle1;
-    result_y = angle2;
+    result.setValues(angle1, angle2);
   }
 }
