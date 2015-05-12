@@ -657,7 +657,7 @@ MutableMatrix44D SphericalPlanet::doubleDrag(const Vector3D& finalRay0,
       minFactor = factor;
   }
   
-  printf("Converge doble drag %d iteraciones con factor=%.3f\n", _iter, factor);
+  //printf("Converge doble drag %d iteraciones con factor=%.3f\n", _iter, factor);
   
   _prevFactor = factor;
   return _doubleDragMatrix;

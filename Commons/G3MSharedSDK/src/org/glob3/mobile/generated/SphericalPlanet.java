@@ -778,7 +778,7 @@ public class SphericalPlanet extends Planet
         minFactor = factor;
     }
   
-    System.out.printf("Converge doble drag %d iteraciones con factor=%.3f\n", _iter, factor);
+    //System.out.printf("Converge doble drag %d iteraciones con factor=%.3f\n", _iter, factor);
   
     _prevFactor = factor;
     return _doubleDragMatrix;
