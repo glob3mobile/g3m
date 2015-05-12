@@ -6,19 +6,14 @@ import org.glob3.mobile.generated.IDeviceAttitude;
 import org.glob3.mobile.generated.ILogger;
 import org.glob3.mobile.generated.InterfaceOrientation;
 import org.glob3.mobile.generated.MutableMatrix44D;
-import org.glob3.mobile.generated.Vector3D;
 
 public class DeviceAttitude_WebGL extends IDeviceAttitude {
 
 	InterfaceOrientation _currentIO = null;
-	InterfaceOrientation _firstIO = null;
 
-	// JavaScriptObject _deviceOrientationData = null;
 	double _beta = Double.NaN;
 	double _gamma = Double.NaN;
 	double _alpha = Double.NaN;
-
-//	private double _m[] = new double[9]; // JS Base Rotation Matrix
 
 	boolean _isTracking;
 
@@ -84,11 +79,7 @@ public class DeviceAttitude_WebGL extends IDeviceAttitude {
 			}
 		}
 
-		if (_firstIO == null) {
-			_firstIO = _currentIO;
-		}
-
-		ILogger.instance().logError(
+		ILogger.instance().logInfo(
 				"SIO " + orientation + " -> " + _currentIO.toString());
 
 	};
@@ -154,69 +145,23 @@ public class DeviceAttitude_WebGL extends IDeviceAttitude {
 	}
 
 	private Angle getHeading() {
-		switch (_firstIO) {
-		case LANDSCAPE_RIGHT:
-			return Angle.fromDegrees(_alpha);
-		case LANDSCAPE_LEFT:
-			return Angle.fromDegrees(_alpha);
-		case PORTRAIT:
-			return Angle.fromDegrees(_alpha);
-		case PORTRAIT_UPSIDEDOWN:
-			return Angle.fromDegrees(_alpha);
-		default:
 			return Angle.fromDegrees(_alpha);	
-		} 
 	}
 	
 	private Angle getPitch() {
-		switch (_firstIO) {
-		case LANDSCAPE_RIGHT:
-			return Angle.fromDegrees(_gamma);
-		case LANDSCAPE_LEFT:
-			return Angle.fromDegrees(_gamma);
-		case PORTRAIT:
-			return Angle.fromDegrees(_gamma);
-		case PORTRAIT_UPSIDEDOWN:
-			return Angle.fromDegrees(_gamma);
-		default:
 			return Angle.fromDegrees(_gamma);	
-		} 
 	}
 	
 	private Angle getRoll() {
-		switch (_firstIO) {
-		case LANDSCAPE_RIGHT:
 			return Angle.fromDegrees(-_beta);
-		case LANDSCAPE_LEFT:
-			return Angle.fromDegrees(-_beta);
-		case PORTRAIT:
-			return Angle.fromDegrees(-_beta);
-		case PORTRAIT_UPSIDEDOWN:
-			return Angle.fromDegrees(-_beta);
-		default:
-			return Angle.fromDegrees(-_beta);	
-		} 
 	}
 
 	@Override
 	public void copyValueOfRotationMatrix(MutableMatrix44D rotationMatrix) {
-		if (Double.isNaN(_beta) || Double.isNaN(_gamma) || Double.isNaN(_alpha)
-				|| _firstIO == null) {
+		if (Double.isNaN(_beta) || Double.isNaN(_gamma) || Double.isNaN(_alpha)) {
 			rotationMatrix.setValid(false);
 			ILogger.instance().logError("Browser attitude data is undefined.");
 		} else {
-			/*
-			 * getBaseRotationMatrix(this);
-			 * 
-			 * for (int i = 0; i < 9; i++) { if (_m[i] <= -99998d) {
-			 * rotationMatrix.setValid(false); return; } }
-			 * 
-			 * 
-			 * rotationMatrix.setValue(_m[0], _m[1], _m[2], 0.0, _m[3], _m[4],
-			 * _m[5], 0.0, _m[6], _m[7], _m[8], 0.0, 0.0, 0.0, 0.0, 1.0);
-			 */
-			
-
 			CoordinateSystem cs = CoordinateSystem.global()
 					.applyTaitBryanAngles(getHeading(), getPitch(), getRoll());
 			rotationMatrix.copyValue(cs.getRotationMatrix());
