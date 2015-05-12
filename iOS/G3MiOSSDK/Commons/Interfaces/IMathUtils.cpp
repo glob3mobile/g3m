@@ -8,6 +8,7 @@
 
 #include "IMathUtils.hpp"
 #include "Vector2D.hpp"
+#include "MutableVector2D.hpp"
 
 IMathUtils* IMathUtils::_instance = NULL;
 
@@ -26,21 +27,16 @@ Vector2D IMathUtils::solveSecondDegreeEquation(double A, double B, double C) con
 }
 
 void IMathUtils::solveSecondDegreeEquation(double A, double B, double C,
-                                           double& result_x, double& result_y) const {
+                                           MutableVector2D& result) const {
   
   double x = B*B - 4*A*C;
   if (x < 0){
-    result_x = NAND;
-    result_y = NAND;
+    result.setNan();
     return;
   }
   
   double squareRoot = this->sqrt(x);
   double A2 = 2*A;
-  result_x = (-B + squareRoot) / A2;
-  result_y = (-B - squareRoot) / A2;
-  
-  /*return Vector2D((-B + squareRoot) / A2,
-                  (-B - squareRoot) / A2);*/
+  result.setValues((-B + squareRoot) / A2, (-B - squareRoot) / A2);
 }
 

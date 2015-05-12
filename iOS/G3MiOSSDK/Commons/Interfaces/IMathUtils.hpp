@@ -13,6 +13,7 @@
 #include <cstdio>
 #include "ILogger.hpp"
 class Vector2D;
+class MutableVector2D;
 
 #ifdef C_CODE
 
@@ -250,7 +251,7 @@ public:
   Vector2D solveSecondDegreeEquation(double A, double B, double C) const;
   
   void solveSecondDegreeEquation(double A, double B, double C,
-                                 double& result_x, double& result_y) const;
+                                 MutableVector2D& result) const;
 
 
   /** answer a double value in the range 0.0 (inclusive) and 1.0 (exclusive) */

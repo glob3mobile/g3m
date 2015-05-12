@@ -114,15 +114,15 @@ Geodetic2D SphericalPlanet::toGeodetic2D(const Vector3D& position) const {
                     Angle::fromRadians(mu->atan2(n._y, n._x)));
 }
 
-void SphericalPlanet::toGeodetic2D(double x, double y, double z,
-                                   double& latitudeInRadians,
-                                   double& longitudeInRadians) const {
+void SphericalPlanet::toGeodetic2D(const MutableVector3D& position,
+                                   MutableVector2D& result) {
+  double mod = position.length();
+  double x = position.x() / mod;
+  double y = position.y() / mod;
+  double z = position.z() / mod;
   const IMathUtils* mu = IMathUtils::instance();
-  double mod = x*x + y*y + z*z;
-  latitudeInRadians = mu->asin(z/mod);
-  longitudeInRadians = mu->atan2(y/mod, x/mod);
+  result.setValues(mu->asin(z), mu->atan2(y, x));
 }
-
 
 Geodetic3D SphericalPlanet::toGeodetic3D(const Vector3D& position) const {
   const Vector3D p = scaleToGeodeticSurface(position);
@@ -134,9 +134,7 @@ Geodetic3D SphericalPlanet::toGeodetic3D(const Vector3D& position) const {
 }
 
 void SphericalPlanet::toGeodetic3D(const MutableVector3D& position,
-                                   double& latitudeInRadians,
-                                   double& longitudeInRadians,
-                                   double& height) const {
+                                   MutableVector3D& result) const {
   double px = position.x() * _sphere._radius;
   double py = position.y() * _sphere._radius;
   double pz = position.z() * _sphere._radius;
@@ -147,8 +145,12 @@ void SphericalPlanet::toGeodetic3D(const MutableVector3D& position,
   double hz = position.z() - pz;
   double hmod = IMathUtils::instance()->sqrt(hx*hx + hy*hy + hz*hz);
   double dot = hx*position.x() + hy*position.y() + hz*position.z();
-  height = (dot < 0) ? -1 * hmod : hmod;
-  toGeodetic2D(px, py, pz, latitudeInRadians, longitudeInRadians);
+  double height = (dot < 0) ? -1 * hmod : hmod;
+  const IMathUtils* mu = IMathUtils::instance();
+  double mod = px*px + py*py + pz*pz;
+  double latitudeInRadians = mu->asin(pz/mod);
+  double longitudeInRadians = mu->atan2(py/mod, px/mod);
+  result.set(latitudeInRadians, longitudeInRadians, height);
 }
 
 Vector3D SphericalPlanet::scaleToGeodeticSurface(const Vector3D& position) const {
@@ -311,8 +313,10 @@ void SphericalPlanet::createInversedGeodeticTransformMatrix(const MutableVector3
                                                             MutableMatrix44D& result) const {
   result.setValid();
   result.setTranslationMatrix(position.x(), position.y(), position.z());
-  double latitudeInRadians=0, longitudeInRadians=0, height=0;
-  toGeodetic3D(position, latitudeInRadians, longitudeInRadians, height);
+  double mod = position.length();
+  const IMathUtils* mu = IMathUtils::instance();
+  double latitudeInRadians = mu->asin(position.z()/mod);
+  double longitudeInRadians = mu->atan2(position.y()/mod, position.x()/mod);
   _rotationMatrix.setValid();
   _rotationMatrix.setGeodeticRotationMatrix(latitudeInRadians, longitudeInRadians);
   result.copyValueOfMultiplication(result, _rotationMatrix);
@@ -557,10 +561,11 @@ double SphericalPlanet::testDoubleDragIteration(double factor,
                         _transformedFinalPoint1.z()-_transformedCameraPos.z());
   _planeNormal.copyValueOfCross(_transformedCameraPos, _rayToFinalPoint1);
   _planeNormal.normalize();
-  double angle1InRadians=0, angle2InRadians=0;
   Plane::rotationAngleAroundZAxisToFixPointInRadians(_planeNormal,
                                                      _transformedInitialPoint1,
-                                                     angle1InRadians, angle2InRadians);
+                                                     _rotationAngles);
+  double angle1InRadians = _rotationAngles.x();
+  double angle2InRadians = _rotationAngles.y();
   
   // Selecting best angle to rotate (smallest)
   double dif1 = Angle::distanceBetweenAnglesInRadians(angle1InRadians, _lastDoubleDragAngle);

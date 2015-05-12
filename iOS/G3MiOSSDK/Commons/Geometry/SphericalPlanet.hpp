@@ -63,6 +63,7 @@ private:
   mutable MutableVector3D  _planeNormal;
   mutable MutableVector3D  _rayToFinalPoint1;
   mutable MutableVector3D  _initialNormal0;
+  mutable MutableVector2D  _rotationAngles;
   mutable MutableVector3D  _P0;
   mutable MutableVector3D  _B;
   mutable MutableVector3D  _B0;
@@ -194,16 +195,13 @@ public:
 
   Geodetic2D toGeodetic2D(const Vector3D& position) const;
   
-  void toGeodetic2D(double x, double y, double z,
-                    double& latitudeInRadians,
-                    double& longitudeInRadians) const;
-
+  void toGeodetic2D(const MutableVector3D& position,
+                    MutableVector2D& result);
+  
   Geodetic3D toGeodetic3D(const Vector3D& position) const;
   
   void toGeodetic3D(const MutableVector3D& position,
-                    double& latitudeInRadians,
-                    double& longitudeInRadians,
-                    double& height) const;
+                    MutableVector3D& result) const;
   
   Vector3D scaleToGeodeticSurface(const Vector3D& position) const;
 
