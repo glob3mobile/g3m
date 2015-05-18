@@ -531,6 +531,11 @@ std::vector<StarDomeRenderer*> _sdrs;
   NSUInteger dayOfYear = [gregorian ordinalityOfUnit:NSDayCalendarUnit
                                               inUnit:NSYearCalendarUnit forDate:[NSDate date]];
   
+  double hoursOffset = [[NSTimeZone localTimeZone] daylightSavingTimeOffset] / 36000;
+  
+  h--; //For canary timeZone
+  h -= hoursOffset;
+  
   double clockTimeInDegrees =  Angle::fromClockHoursMinutesSeconds(h, m, s)._degrees;
   
   //////
