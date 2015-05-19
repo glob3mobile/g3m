@@ -293,7 +293,7 @@ public:
     this->add(sourcesMultiTexturedMesh);
 
     GPUProgramSources sourcesNoColorMesh("NoColorMesh",
- emptyString +
+ emptyString +  
 "attribute vec4 aPosition;\n" +
 "uniform mat4 uModelview;\n" +
 "uniform float uPointSize;\n" +
@@ -303,7 +303,7 @@ public:
 "}\n",
  emptyString +  
 "void main() {\n" +
-"gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0); //RED\n" +
+"gl_FragColor = vec4(0.5, 0.5, 0.5, 1.0); //GRAY\n" +
 "}\n");
     this->add(sourcesNoColorMesh);
 
@@ -492,7 +492,7 @@ public:
     this->add(sourcesTransformedTexCoorMultiTexturedMesh);
 
     GPUProgramSources sourcesTransformedTexCoorTexturedMesh("TransformedTexCoorTexturedMesh",
- emptyString +
+ emptyString +  
 "attribute vec4 aPosition;\n" +
 "attribute vec2 aTextureCoord;\n" +
 "uniform mediump vec2 uTranslationTexCoord;\n" +
@@ -558,38 +558,39 @@ public:
     this->add(sourcesTransformedTexCoorTexturedMesh_DirectionLight);
 
     GPUProgramSources sourcesZRender("ZRender",
- emptyString
- + "attribute vec4 aPosition; \n "
- + "uniform mat4 uModelview; \n "
- + "uniform float uPointSize; \n "
- + "uniform float uDepthFar; \n "
- + "uniform float uDepthNear; \n "
- + "varying highp float R; \n "
- + "varying highp float G; \n "
- + "varying highp float B; \n "
- + "void main() { \n "
- + "gl_Position = uModelview * aPosition; \n "
- + "gl_PointSize = uPointSize; \n "
- + "highp float NDCz = (gl_Position.z / gl_Position.w); //GL_POSITION IS CLIP COORDINATES (AFTER PROJECTION) \n "
- + "highp float winZ = ((uDepthFar-uDepthNear)/2.0) * NDCz + (uDepthFar+uDepthNear)/2.0; // = gl_FragCoord.z \n "
- + "highp float zFar = 16777215.0; // 2^24-1 \n "
- + "highp float z = winZ * zFar; \n "
- + "highp float Z = floor(z+0.5); \n "
- + "R = floor(Z/65536.0); \n "
- + "Z -= R * 65536.0; \n "
- + "G = floor(Z/256.0); \n "
- + "B = Z - G * 256.0; \n "
- + "R /= 255.0; \n "
- + "G /= 255.0; \n "
- + "B /= 255.0; \n "
- + "} \n ",
- emptyString
- + "varying highp float R; \n "
- + "varying highp float G; \n "
- + "varying highp float B; \n "
- + "void main() { \n "
- + "gl_FragColor = vec4(R, G, B, 0.0); \n "
- + "} \n ");
+ emptyString +  
+"attribute vec4 aPosition;\n" +
+"uniform mat4 uModelview;\n" +
+"uniform float uPointSize;\n" +
+"uniform float uDepthFar;\n" +
+"uniform float uDepthNear;\n" +
+"varying highp float R;\n" +
+"varying highp float G;\n" +
+"varying highp float B;\n" +
+"void main() {\n" +
+"gl_Position = uModelview * aPosition;\n" +
+"gl_PointSize = uPointSize;\n" +
+"highp float NDCz = (gl_Position.z / gl_Position.w); //GL_POSITION IS CLIP COORDINATES (AFTER PROJECTION)\n" +
+"highp float winZ = ((uDepthFar-uDepthNear)/2.0) * NDCz + (uDepthFar+uDepthNear)/2.0; // = gl_FragCoord.z\n" +
+"highp float zFar = 16777215.0; // 2^24-1\n" +
+"highp float z = winZ * zFar;\n" +
+"highp float Z = floor(z+0.5);\n" +
+"R = floor(Z/65536.0);\n" +
+"Z -= R * 65536.0;\n" +
+"G = floor(Z/256.0);\n" +
+"B = Z - G * 256.0;\n" +
+"R /= 255.0;\n" +
+"G /= 255.0;\n" +
+"B /= 255.0;\n" +
+"}\n" +
+,
+ emptyString +  
+"varying highp float R;\n" +
+"varying highp float G;\n" +
+"varying highp float B;\n" +
+"void main() {\n" +
+"gl_FragColor = vec4(R, G, B, 0.0);\n" +
+"}\n");
     this->add(sourcesZRender);
 
   }
