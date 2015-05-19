@@ -4,7 +4,7 @@
 //  Created by José Miguel Santana Núñez
 //
 
-attribute vec4 aPosition;
+attribute vec4 aPosition; 
 
 uniform mat4 uModelview;
 uniform float uPointSize;

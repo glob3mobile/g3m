@@ -63,11 +63,11 @@ public class Main {
 		final String[] lines = source.split(System
 				.getProperty("line.separator"));
 
-		String result = "emptyString +  \n";
+		String result = "emptyString\n";
 
 		for (int i = 0; i < lines.length; i++) {
 			String line = lines[i];
-
+			
 			line = line.trim();
 			line = line.replaceAll("(\\r|\\n)", "");
 			if (line.length() < 1) {
@@ -77,14 +77,13 @@ public class Main {
 			if (line.startsWith("/")) {
 				continue;
 			}
+			
+			if (i < (lines.length - 1)) {
+				result += " + ";
+			}
 
 			// final boolean firstLine = (result == "");
 			result += "\"" + StringEscapeUtils.escapeJava(line) + "\\n\"";
-
-			if (i < (lines.length - 1)) {
-				result += " +\n";
-			}
-
 		}
 
 		return result;
