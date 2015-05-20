@@ -43,7 +43,8 @@ double Star::getTrueNorthAzimuthInDegrees(double siderealTime, const Geodetic2D 
 //  List(Pi + ArcTan(Cos(Degree*delta)*Cos(Degree*(90 - phi))*Cos(Degree*(-alpha + tetha)) -
 //                   Sin(Degree*delta)*Sin(Degree*(90 - phi)),Cos(Degree*delta)*Sin(Degree*(-alpha + tetha))))
   
-  double azimuth = PI + mu->atan2(mu->cos(delta)*mu->cos((phi))*mu->cos((-alpha + tetha)) - mu->sin(delta)*mu->sin(phi),mu->cos(delta)*mu->sin((-alpha + tetha)));
+  double azimuth = PI + mu->atan2(mu->cos(delta)*mu->sin((-alpha + tetha)),
+                                  mu->cos(delta)*mu->cos((phi))*mu->cos((-alpha + tetha)) - mu->sin(delta)*mu->sin(phi));
   
   
   return TO_DEGREES(azimuth);
@@ -65,7 +66,7 @@ double Star::getAltitude(double siderealTime, const Geodetic2D viewerPosition) c
 //  ArcSin(Cos(Degree*(90 - phi))*Sin(Degree*delta) +
 //         Cos(Degree*delta)*Cos(Degree*(-alpha + tetha))*Sin(Degree*(90 - phi)))
   
-  double ascencion = mu->asin(mu->cos(phi)*mu->sin(delta) + mu->cos(delta)*mu->cos((-alpha + tetha))*mu->sin((90 - phi)));
+  double ascencion = mu->asin(mu->cos(phi)*mu->sin(delta) + mu->cos(delta)*mu->cos((-alpha + tetha))*mu->sin(phi));
   
   return TO_DEGREES(ascencion);
 }
