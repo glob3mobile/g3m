@@ -143,9 +143,9 @@ public:
 
     GPUProgramSources sourcesZRender("ZRender",
  emptyString
- + "attribute vec4 aPosition;\n" + "uniform mat4 uModelview;\n" + "uniform float uPointSize;\n" + "varying highp float R;\n" + "varying highp float G;\n" + "varying highp float B;\n" + "void main() {\n" + "gl_Position = uModelview * aPosition;\n" + "gl_PointSize = uPointSize;\n" + "highp float NDCz = (gl_Position.z / gl_Position.w); //GL_POSITION IS CLIP COORDINATES (AFTER PROJECTION) [-1, 1]\n" + "highp float winZ = 0.5 + (NDCz/2.0); //[0, 1]\n" + "highp float zFar = 16777215.0; // 2^24-1\n" + "highp float z = winZ * zFar;\n" + "highp float Z = floor(z+0.5);\n" + "R = floor(Z/65536.0);\n" + "Z -= R * 65536.0;\n" + "G = floor(Z/256.0);\n" + "B = Z - G * 256.0;\n" + "R /= 255.0;\n" + "G /= 255.0;\n" + "B /= 255.0;\n" + "}\n",
+ + "attribute vec4 aPosition;\n" + "uniform mat4 uModelview;\n" + "uniform float uPointSize;\n" + "void main() {\n" + "gl_Position = uModelview * aPosition;\n" + "gl_PointSize = uPointSize;\n" + "}\n",
  emptyString
- + "varying highp float R;\n" + "varying highp float G;\n" + "varying highp float B;\n" + "void main() {\n" + "gl_FragColor = vec4(R, G, B, 0.0);\n""}\n");
+ + "void main() {\n" + "highp float winZ =  gl_FragCoord.z; //FragCoord are defined in Window Space\n" + "highp float zFar = 16777215.0; // 2^24-1\n" + "highp float z = winZ * zFar;\n" + "highp float Z = floor(z+0.5);\n" + "highp float R = floor(Z/65536.0);\n" + "Z -= R * 65536.0;\n" + "highp float G = floor(Z/256.0);\n" + "highp float B = Z - G * 256.0;\n" + "R /= 255.0;\n" + "G /= 255.0;\n" + "B /= 255.0;\n" + "gl_FragColor = vec4(R, G, B, 0.0);\n""}\n");
     this->add(sourcesZRender);
 
   }

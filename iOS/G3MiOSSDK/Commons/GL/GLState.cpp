@@ -111,13 +111,6 @@ void GLState::applyOnGPU(GL* gl, GPUProgramManager& progManager, RenderType rend
 
     GLFeatureGroup::applyToAllGroups(*accumulatedFeatures, *_valuesSet, *_globalState);
 
-//    //Adding depth range info for Z Rendering
-//    if (renderType == Z_BUFFER_RENDER){
-//      Vector2F depthRange = gl->getDepthRange();
-//      _valuesSet->addUniformValue(DEPTH_NEAR, new GPUUniformValueFloat(depthRange._x), false);
-//      _valuesSet->addUniformValue(DEPTH_FAR, new GPUUniformValueFloat(depthRange._y), false);
-//    }
-
     const int uniformsCode   = _valuesSet->getUniformsCode();
     const int attributesCode = _valuesSet->getAttributesCode();
 
