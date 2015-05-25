@@ -34,6 +34,7 @@ double Star::getTrueNorthAzimuthInDegrees(double siderealTime, const Geodetic2D 
   double tetha = TO_RADIANS(siderealTime);
   
   double phi = (PI / 2) - viewerPosition._latitude._radians; // 90 - phi
+//  printf("PHI: %f\n", viewerPosition._latitude._degrees );
   
   //ArcTan(-(Cos(Degree*delta)*Cos(Degree*(90 - phi))*Cos(Degree*(-alpha + tetha))) + Sin(Degree*delta)*Sin(Degree*(90 - phi)),-(Cos(Degree*delta)*Sin(Degree*(-alpha + tetha))))
   
@@ -42,6 +43,18 @@ double Star::getTrueNorthAzimuthInDegrees(double siderealTime, const Geodetic2D 
   
 //  List(Pi + ArcTan(Cos(Degree*delta)*Cos(Degree*(90 - phi))*Cos(Degree*(-alpha + tetha)) -
 //                   Sin(Degree*delta)*Sin(Degree*(90 - phi)),Cos(Degree*delta)*Sin(Degree*(-alpha + tetha))))
+  
+//  double vIn[] = {
+//    mu->cos(tetha - alpha) * mu->cos(delta),
+//    
+//    mu->sin(tetha - alpha)* mu->cos(delta),
+//    
+//    mu->sin(delta)
+//    
+//  };
+//  
+//  double vOut1 = mu->cos(delta)*mu->cos((phi))*mu->cos((-alpha + tetha)) - mu->sin(delta)*mu->sin(phi);
+//  double vOut2 = mu->cos(delta)*mu->sin((-alpha + tetha));
   
   double azimuth = PI + mu->atan2(mu->cos(delta)*mu->sin((-alpha + tetha)),
                                   mu->cos(delta)*mu->cos((phi))*mu->cos((-alpha + tetha)) - mu->sin(delta)*mu->sin(phi));
@@ -78,6 +91,10 @@ Vector3D Star::getStarDisplacementInDome(double domeHeight, double siderealTime,
   Vector3D origin = Vector3D::zero;
   
   Vector3D startingStarPos = origin.add(north.normalized().times(domeHeight));
+  
+  if (_name.find("Leo") != std::string::npos){
+    printf("ok");
+  }
   
   //Defining stars by true-north azimuth (heading) and altitude http://en.wikipedia.org/wiki/Azimuth
   Angle azimuth = Angle::fromDegrees(getTrueNorthAzimuthInDegrees(siderealTime, domePos));
@@ -118,6 +135,11 @@ void StarDomeRenderer::initialize(const G3MContext* context) {
   const double domeHeight = 1e5;
   
   double siderealTime = getSiderealTime(_position->_longitude._degrees, _clockTimeInDegrees, _dayOfTheYear);
+
+#warning CAMBIAR PUESTO EN GRADOS
+  siderealTime = 12.898573004736164 * 15;
+  
+  
   int size = _stars.size();
   for(int i = 0; i < size; i++){
     Vector3D starPos = _stars[i].getStarDisplacementInDome(domeHeight, siderealTime, _position->asGeodetic2D());
