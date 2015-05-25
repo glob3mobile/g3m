@@ -79,13 +79,11 @@ Vector3D Star::getStarDisplacementInDome(double domeHeight, double siderealTime,
   
   Vector3D startingStarPos = origin.add(north.normalized().times(domeHeight));
   
-//  if (_name.find("Leo") !=std::string::npos){
-//    printf("A LEO");
-//  }
-  
   //Defining stars by true-north azimuth (heading) and altitude http://en.wikipedia.org/wiki/Azimuth
   Angle azimuth = Angle::fromDegrees(getTrueNorthAzimuthInDegrees(siderealTime, domePos));
   Angle altitude = Angle::fromDegrees(getAltitude(siderealTime, domePos));
+  
+  printf("STAR: %s - AZ: %f, AL: %f\n", _name.c_str(), azimuth._degrees, altitude._degrees);
   
   MutableMatrix44D mAltitude = MutableMatrix44D::createGeneralRotationMatrix(altitude, altitudeRotationAxis, origin);
   MutableMatrix44D mAzimuth = MutableMatrix44D::createGeneralRotationMatrix(azimuth, azimuthRotationAxis, origin);

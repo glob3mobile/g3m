@@ -193,7 +193,7 @@ public:
   
   static double getSiderealTime(double placeLongitudeInDegrees, double clockTimeInDegrees, int dayOfTheYear){
     
-    double thetaZero = theta0[dayOfTheYear];
+    double thetaZero = theta0[dayOfTheYear - 1];
     
     double I = 366.2422 / 365.2422;
     double TU = clockTimeInDegrees - IMathUtils::instance()->round(placeLongitudeInDegrees);
