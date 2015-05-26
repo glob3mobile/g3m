@@ -531,11 +531,13 @@ std::vector<StarDomeRenderer*> _sdrs;
   NSUInteger dayOfYear = [gregorian ordinalityOfUnit:NSDayCalendarUnit
                                               inUnit:NSYearCalendarUnit forDate:[NSDate date]];
   
-  
+  /*
+   //FOR TESTING
   h = 23;
   m = 21;
   s = 15;
   dayOfYear = 141;
+   */
   
 #warning VALID ONLY FOR CANARIAN TIMEZONE
   double hoursOffset = [[NSTimeZone localTimeZone] daylightSavingTimeOffset] / 36000;

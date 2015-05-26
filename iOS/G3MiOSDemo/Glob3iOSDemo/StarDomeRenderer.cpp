@@ -134,10 +134,10 @@ void StarDomeRenderer::initialize(const G3MContext* context) {
   
   const double domeHeight = 1e5;
   
-  double siderealTime = getSiderealTime(_position->_longitude._degrees, _clockTimeInDegrees, _dayOfTheYear);
+  double siderealTime = getSiderealTimeInDegrees(_position->_longitude._degrees, _clockTimeInDegrees, _dayOfTheYear);
 
-#warning CAMBIAR PUESTO EN GRADOS
-  siderealTime = 12.898573004736164 * 15;
+//#warning CAMBIAR PUESTO EN GRADOS
+//  siderealTime = 12.898573004736164 * 15;
   
   
   int size = _stars.size();
@@ -217,7 +217,7 @@ void StarDomeRenderer::initialize(const G3MContext* context) {
     mark->setMarkAnchor(0.5, -0.5);
     
     _mr->addMark(mark);
-    
+/*
     for(int i = 0; i < _stars.size(); i++){
       Vector3D firstStarPos = _stars[i].getStarDisplacementInDome(domeHeight, siderealTime, _position->asGeodetic2D());
       
@@ -238,7 +238,7 @@ void StarDomeRenderer::initialize(const G3MContext* context) {
       
       _mr->addMark(mark);
     }
-    
+    */
     delete m;
   }
 }
@@ -299,7 +299,7 @@ bool StarDomeRenderer::onTouchEvent(const G3MEventContext* ec, const TouchEvent*
 void StarDomeRenderer::selectStar(const Angle& trueNorthAzimuthInDegrees, const Angle& altitudeInDegrees){
   
 #warning TODO
-  double siderealTime = getSiderealTime(_position->_longitude._degrees, 0, 0);
+  double siderealTime = getSiderealTimeInDegrees(_position->_longitude._degrees, 0, 0);
   
   double minDist = 4; //No star will be selected above this threshold
   int index = -1;
