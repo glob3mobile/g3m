@@ -44,7 +44,9 @@ void TileElevationDataRequest::onCancel(const Sector& sector,
 void TileElevationDataRequest::cancelRequest() {
   if (_listener != NULL) {
     _listener->_request = NULL;
-    _provider->cancelRequest(_requestID);
+    
+    // THIS CHANGE PROPOSED BY CHANO TO WORK IN SENDEROS IOS 26/05/15
+    //_provider->cancelRequest(_requestID);
   }
 }
 

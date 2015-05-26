@@ -407,7 +407,10 @@ autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
 - (void) dealloc {
   delete _lastTouchEvent;
   [self setRenderer: nil];
-  delete (G3MWidget*) _widgetVP;
+  
+  // THIS CHANGE PROPOSED BY CHANO TO WORK IN SENDEROS IOS 26/05/15
+  //delete (G3MWidget*) _widgetVP;
+  if (_widgetVP != NULL) { delete (G3MWidget*) _widgetVP; _widgetVP = NULL; }
 }
 
 - (G3MWidget*) widget {
