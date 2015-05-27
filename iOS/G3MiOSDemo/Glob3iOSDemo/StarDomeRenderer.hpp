@@ -193,12 +193,13 @@ public:
   
   static double getSiderealTimeInDegrees(double placeLongitudeInDegrees, double clockTimeInDegrees, int dayOfTheYear){
     
-    double thetaZero = theta0[dayOfTheYear - 1];
+    double thetaZero = theta0[dayOfTheYear - 1] * 15;
     
     double I = 366.2422 / 365.2422;
     double TU = clockTimeInDegrees - IMathUtils::instance()->round(placeLongitudeInDegrees);
 #warning CHECK WITH PILAR - 12 hours
-    return (thetaZero + TU * I + placeLongitudeInDegrees) - (180.0);
+    Angle a = Angle::fromDegrees(thetaZero + TU * I + placeLongitudeInDegrees);
+    return a.normalized()._degrees;
   }
   
   void initialize(const G3MContext* context);

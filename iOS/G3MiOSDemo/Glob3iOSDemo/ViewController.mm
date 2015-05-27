@@ -531,17 +531,18 @@ std::vector<StarDomeRenderer*> _sdrs;
   NSUInteger dayOfYear = [gregorian ordinalityOfUnit:NSDayCalendarUnit
                                               inUnit:NSYearCalendarUnit forDate:[NSDate date]];
   
-  /*
+  
    //FOR TESTING
   h = 23;
   m = 21;
   s = 15;
   dayOfYear = 141;
-   */
+  
   
 #warning VALID ONLY FOR CANARIAN TIMEZONE
   double hoursOffset = [[NSTimeZone localTimeZone] daylightSavingTimeOffset] / 36000;
   h -= hoursOffset;
+  h--; //Por estar en canarias
   
   double clockTimeInDegrees =  Angle::fromClockHoursMinutesSeconds(h, m, s)._degrees;
   
@@ -552,7 +553,7 @@ std::vector<StarDomeRenderer*> _sdrs;
   
   NSString *csvLinksPath = [[NSBundle mainBundle] pathForResource: @"stars_links" ofType: @"csv"];
   
-  Geodetic3D gcPosition = Geodetic3D::fromDegrees(27.973105, -15.597545, 500);
+  Geodetic3D gcPosition = Geodetic3D::fromDegrees(28.1, -15.43, 500);
   
 //  double clockTimeInDegrees = [self getClockTimeInDegrees];
   

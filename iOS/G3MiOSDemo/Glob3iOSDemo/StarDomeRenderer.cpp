@@ -217,7 +217,7 @@ void StarDomeRenderer::initialize(const G3MContext* context) {
     mark->setMarkAnchor(0.5, -0.5);
     
     _mr->addMark(mark);
-/*
+
     for(int i = 0; i < _stars.size(); i++){
       Vector3D firstStarPos = _stars[i].getStarDisplacementInDome(domeHeight, siderealTime, _position->asGeodetic2D());
       
@@ -238,7 +238,7 @@ void StarDomeRenderer::initialize(const G3MContext* context) {
       
       _mr->addMark(mark);
     }
-    */
+ 
     delete m;
   }
 }
