@@ -283,6 +283,11 @@ Mesh* createSectorMesh(const Planet* planet,
 //  }
 //};
 
+Geodetic3D* cameraPositionForStars = NULL;
+
+MeshRenderer* mr;
+const Planet* planet;
+
 
 - (void)viewDidLoad
 {
@@ -334,6 +339,9 @@ Mesh* createSectorMesh(const Planet* planet,
   
   
   _dO = [[DeviceOrientation alloc] init];
+  
+  
+  cameraPositionForStars = new Geodetic3D(Geodetic3D::fromDegrees(27.973105, -15.597545, 1000));
   
   
   class MyMarkWidgetTouchListener: public NonOverlappingMarkTouchListener{
@@ -404,13 +412,14 @@ Mesh* createSectorMesh(const Planet* planet,
   [G3MWidget widget]->getPlanetRenderer()->setEnable(false);
   
   
-  [G3MWidget widget]->setCameraPosition(Geodetic3D::fromDegrees(27.973105, -15.597545, 1000));
+  
+  [G3MWidget widget]->setCameraPosition(*cameraPositionForStars);
   [G3MWidget widget]->setCameraPitch(Angle::fromDegrees(0));
   [G3MWidget widget]->setCameraHeading(Angle::fromDegrees(30));
   
   
 }
-
+/*
 -(Mesh*) createStarDome{
   
   FloatBufferBuilderFromCartesian3D* fbb = FloatBufferBuilderFromCartesian3D::builderWithFirstVertexAsCenter();
@@ -457,9 +466,7 @@ Mesh* createSectorMesh(const Planet* planet,
   
 }
 
-MeshRenderer* mr;
-const Planet* planet;
-
+*/
 -(MutableMatrix44D) matrix:(CMRotationMatrix) m{
   
   return MutableMatrix44D(m.m11, m.m12, m.m13, 0,
@@ -468,12 +475,13 @@ const Planet* planet;
                           0, 0, 0, 1);
   
 }
-
+/*
 -(double) getNumFromArray:(NSArray*) array index:(int) i{
   NSString* string = [array objectAtIndex:i];
   string = [string stringByReplacingOccurrencesOfString:@"," withString:@"."];
   return [string doubleValue];
 }
+ */
 /*
 -(double) toDegressHours:(double) h minutes:(double) m seconds:(double) s{
   
@@ -507,7 +515,6 @@ std::vector<StarDomeRenderer*> _sdrs;
 - (void) rotateStars{
   
   for (int i = 0; i < _sdrs.size(); i++){
-    
     _sdrs[i]->setClockTimeInDegrees(_sdrs[i]->getCurrentClockTimeInDegrees() + 0.6);
     _sdrs[i]->clear();
     
@@ -553,7 +560,7 @@ std::vector<StarDomeRenderer*> _sdrs;
   
   NSString *csvLinksPath = [[NSBundle mainBundle] pathForResource: @"stars_links" ofType: @"csv"];
   
-  Geodetic3D gcPosition = Geodetic3D::fromDegrees(28.1, -15.43, 500);
+  //Geodetic3D gcPosition = Geodetic3D::fromDegrees(28.1, -15.43, 500);
   
 //  double clockTimeInDegrees = [self getClockTimeInDegrees];
   
@@ -576,7 +583,7 @@ std::vector<StarDomeRenderer*> _sdrs;
       MarksRenderer* mr = new MarksRenderer(true);
       builder->addRenderer(mr);
       
-      StarDomeRenderer* sdr = new StarDomeRenderer(c._name, c._stars, c._lines, gcPosition, clockTimeInDegrees, dayOfYear, *c._color, mr);
+      StarDomeRenderer* sdr = new StarDomeRenderer(c._name, c._stars, c._lines, *cameraPositionForStars, clockTimeInDegrees, dayOfYear, *c._color, mr);
       builder->addRenderer(sdr);
       
       _sdrs.push_back(sdr);
