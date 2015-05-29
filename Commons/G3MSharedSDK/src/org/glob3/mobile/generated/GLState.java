@@ -171,14 +171,6 @@ public class GLState extends RCObject
   
       GLFeatureGroup.applyToAllGroups(accumulatedFeatures, _valuesSet, _globalState);
   
-      //Adding depth range info for Z Rendering
-      if (renderType == RenderType.Z_BUFFER_RENDER)
-      {
-        Vector2F depthRange = gl.getDepthRange();
-        _valuesSet.addUniformValue(GPUUniformKey.DEPTH_NEAR, new GPUUniformValueFloat(depthRange._x), false);
-        _valuesSet.addUniformValue(GPUUniformKey.DEPTH_FAR, new GPUUniformValueFloat(depthRange._y), false);
-      }
-  
       final int uniformsCode = _valuesSet.getUniformsCode();
       final int attributesCode = _valuesSet.getAttributesCode();
   

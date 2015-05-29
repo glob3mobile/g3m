@@ -105,7 +105,11 @@ public class GPUVariable
       return GPUUniformKey.TRANSLATION_2D;
     }
   
-<<<<<<< HEAD
+    if (name.compareTo("uBillboardAnchor") == 0)
+    {
+      return GPUUniformKey.BILLBOARD_ANCHOR;
+    }
+  
     if (name.compareTo("uDepthFar") == 0)
     {
       return GPUUniformKey.DEPTH_FAR;
@@ -118,13 +122,6 @@ public class GPUVariable
   
     ILogger.instance().logError("UNRECOGNIZED UNIFORM - ", name);
   
-=======
-    if (name.compareTo("uBillboardAnchor") == 0)
-    {
-      return GPUUniformKey.BILLBOARD_ANCHOR;
-    }
-  
->>>>>>> purgatory
     return GPUUniformKey.UNRECOGNIZED_UNIFORM;
   }
   public static GPUAttributeKey getAttributeKey(String name)
