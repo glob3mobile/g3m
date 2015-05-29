@@ -13,6 +13,7 @@ import org.glob3.mobile.generated.Touch;
 import org.glob3.mobile.generated.TouchEvent;
 import org.glob3.mobile.generated.TouchEventType;
 import org.glob3.mobile.generated.Vector2F;
+import org.glob3.mobile.generated.Vector2I;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.JsArray;
@@ -22,7 +23,6 @@ import com.google.gwt.dom.client.NativeEvent;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.Window;
 
 
 public final class MotionEventProcessor {
@@ -285,13 +285,10 @@ public final class MotionEventProcessor {
                                   final int y) {
 	   double dd = (double) delta;
 	   final ArrayList<Touch> touches = new ArrayList<Touch>(2);
-	   touches.add(new Touch(new Vector2I(x,y), new Vector2I(x,y)));
+	   touches.add(new Touch(new Vector2F(x,y), new Vector2F(x,y)));
 	   TouchEvent te = TouchEvent.create(TouchEventType.MouseWheelChanged, touches, false, false, dd);
 	   dispatchEvents( te );
 
-<<<<<<< HEAD
-     _previousMousePosition = new Vector2I(x, y);
-=======
       final Vector2F beginFirstPosition = new Vector2F(x - 10, y - 10);
       final Vector2F beginSecondPosition = new Vector2F(x + 10, y + 10);
 
@@ -314,7 +311,6 @@ public final class MotionEventProcessor {
                );
 
       _previousMousePosition = new Vector2F(x, y);
->>>>>>> purgatory
    }
 
 

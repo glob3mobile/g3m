@@ -85,8 +85,8 @@ public class G3MBuilder_WebGL
      CameraRenderer cameraRenderer = new CameraRenderer();
      final boolean useInertia = true;
      cameraRenderer.addHandler(new CameraSingleDragHandler(useInertia));
-     final boolean allowRotation = true;
-     cameraRenderer.addHandler(new CameraDoubleDragHandler(allowRotation));
+     //final boolean allowRotation = true;
+     cameraRenderer.addHandler(new CameraDoubleDragHandler());
      cameraRenderer.addHandler(new CameraRotationHandler());
      cameraRenderer.addHandler(new CameraDoubleTapHandler());
      cameraRenderer.addHandler(new CameraMouseWheelHandler());
