@@ -24,8 +24,8 @@ import com.sleepycat.je.Transaction;
 
 
 public class BerkeleyDBOctreeNode
-         implements
-            PersistentOctree.Node {
+   implements
+      PersistentOctree.Node {
 
 
    private static double _upperLimitInDegrees = 85.0511287798;
@@ -505,6 +505,7 @@ public class BerkeleyDBOctreeNode
 
    private void remove(final Transaction txn) {
       final DatabaseEntry key = new DatabaseEntry(_id);
+      @SuppressWarnings("unused")
       OperationStatus status = _octree.getNodeDB().delete(txn, key);
       //      if (status != OperationStatus.SUCCESS) {
       //         throw new RuntimeException("Unsupported status=" + status);

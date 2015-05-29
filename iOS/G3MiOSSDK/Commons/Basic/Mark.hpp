@@ -20,6 +20,8 @@
 #include "GLState.hpp"
 #include "SurfaceElevationProvider.hpp"
 #include "MutableVector3D.hpp"
+#include "GTask.hpp"
+#include "PeriodicalTask.hpp"
 
 class IImage;
 class IFloatBuffer;
@@ -123,9 +125,17 @@ private:
 #ifdef JAVA_CODE
   private IImage _textureImage;
 #endif
-  int               _textureWidth;
-  int               _textureHeight;
+  float               _textureWidth;
+  float               _textureHeight;
+  float               _textureWidthProportion;
+  float               _textureHeightProportion;
+  bool              _textureSizeSetExternally;
+  bool              _textureProportionSetExternally;
   const std::string _imageID;
+  
+  bool _hasTCTransformations;
+  float _translationTCX, _translationTCY;
+  float _scalingTCX, _scalingTCY;
 
   bool    _renderedMark;
 
@@ -139,8 +149,16 @@ private:
   AltitudeMode _altitudeMode;
 
   Vector3D* _normalAtMarkPosition;
+  
+  TextureGLFeature* _textureGLF;
+  
+  void clearGLState();
 
   MutableVector3D _markCameraVector;
+  
+  float _anchorU;
+  float _anchorV;
+  BillboardGLFeature* _billboardGLF;
 
 public:
   /**
@@ -227,16 +245,16 @@ public:
 
   void onTextureDownload(const IImage* image);
 
-  int getTextureWidth() const {
+  float getTextureWidth() const {
     return _textureWidth;
   }
 
-  int getTextureHeight() const {
+  float getTextureHeight() const {
     return _textureHeight;
   }
 
-  Vector2I getTextureExtent() const {
-    return Vector2I(_textureWidth, _textureHeight);
+  Vector2F getTextureExtent() const {
+    return Vector2F(_textureWidth, _textureHeight);
   }
 
   const MarkUserData* getUserData() const {
@@ -274,7 +292,66 @@ public:
                         double verticalExaggeration) {}
 
   void setPosition(const Geodetic3D& position);
+  
+  void setOnScreenSizeOnPixels(int width, int height);
+  void setOnScreenSizeOnProportionToImage(float width, float height);
+  
+  void setTextureCoordinatesTransformation(const Vector2F& translation,
+                                           const Vector2F& scaling);
+  
+  void setMarkAnchor(float anchorU, float anchorV);
 
 };
+
+class TextureAtlasMarkAnimationTask: public PeriodicalTask{
+  
+  class TextureAtlasMarkAnimationGTask: public GTask{
+    Mark* _mark;
+    int _cols;
+    int _rows;
+    int _nFrames;
+    
+    int _currentFrame;
+    
+    float _scaleX;
+    float _scaleY;
+  public:
+    
+    ~TextureAtlasMarkAnimationGTask(){}
+    
+    TextureAtlasMarkAnimationGTask(Mark* mark, int nColumn, int nRows, int nFrames):
+    _mark(mark), _currentFrame(0), _cols(nColumn), _rows(nRows), _nFrames(nFrames)
+    {
+      //    _mark->setOnScreenSize(Vector2F(100,100));
+      
+      _scaleX = 1.0f / _cols;
+      _scaleY = 1.0f / _rows;
+    }
+    
+    
+    virtual void run(const G3MContext* context){
+      int row = _currentFrame / _cols;
+      int col = _currentFrame % _cols;
+      
+      float transX = col * (1.0f / _cols);
+      float transY = row * (1.0f / _rows);
+      //        printf("FRAME:%d, R:%d, C:%d -> %f %f\n", _currentFrame, row, col, transX, transY);
+      
+      _mark->setTextureCoordinatesTransformation(Vector2F(transX,transY), Vector2F(_scaleX, _scaleY));
+      _currentFrame = (_currentFrame+1) % _nFrames;
+    }
+    
+  };
+  
+  
+public:
+  TextureAtlasMarkAnimationTask(Mark* mark, int nColumn, int nRows, int nFrames, const TimeInterval& frameTime):
+  PeriodicalTask(frameTime, new TextureAtlasMarkAnimationGTask(mark, nColumn, nRows, nFrames))
+  {
+  }
+};
+
+
+
 
 #endif

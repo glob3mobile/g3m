@@ -26,16 +26,16 @@ public abstract class AbstractMesh extends Mesh
 {
   protected final int _primitive;
   protected final boolean _owner;
-  protected Vector3D _center ;
+  protected final Vector3D _center ;
   protected final MutableMatrix44D _translationMatrix;
-  protected IFloatBuffer _vertices;
+  protected final IFloatBuffer _vertices;
   protected final Color _flatColor;
-  protected IFloatBuffer _colors;
+  protected final IFloatBuffer _colors;
   protected final float _colorsIntensity;
   protected final float _lineWidth;
   protected final float _pointSize;
   protected final boolean _depthTest;
-  protected IFloatBuffer _normals;
+  protected final IFloatBuffer _normals;
 
   protected BoundingVolume _boundingVolume;
   protected final BoundingVolume computeBoundingVolume()

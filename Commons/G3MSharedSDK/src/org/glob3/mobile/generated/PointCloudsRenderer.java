@@ -283,9 +283,9 @@ public class PointCloudsRenderer extends DefaultRenderer
 
     public final void addLeafNode(PointCloudLeafNode leafNode)
     {
-      final int idLenght = _id.length();
-      final int childIndex = leafNode._id.charAt(idLenght) - '0';
-      if ((idLenght + 1) == leafNode._id.length())
+      final int idLength = _id.length();
+      final int childIndex = leafNode._id.charAt(idLength) - '0';
+      if ((idLength + 1) == leafNode._id.length())
       {
         if (_children[childIndex] != null)
         {

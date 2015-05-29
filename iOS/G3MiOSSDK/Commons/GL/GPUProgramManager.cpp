@@ -67,6 +67,8 @@ GPUProgram* GPUProgramManager::getNewProgram(GL* gl, int uniformsCode, int attri
 //  const bool hasTexture3 = GPUVariable::hasUniform(uniformsCode, SAMPLER3);
   
   const bool is2D = GPUVariable::hasAttribute(attributesCode, POSITION_2D);
+  
+//  const bool bbAnchor = GPUVariable::hasUniform(uniformsCode,    BILLBOARD_ANCHOR);
 
   
   if (is2D){
@@ -77,6 +79,10 @@ GPUProgram* GPUProgramManager::getNewProgram(GL* gl, int uniformsCode, int attri
   }
   
   if (billboard) {
+    if (transformTC){
+      return compileProgramWithName(gl, "Billboard_TransformedTexCoor");
+    }
+    
     return compileProgramWithName(gl, "Billboard");
   }
 

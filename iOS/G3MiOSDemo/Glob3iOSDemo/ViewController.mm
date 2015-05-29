@@ -359,12 +359,12 @@ Mesh* createSectorMesh(const Planet* planet,
   };
   
   Geodetic3D canarias[] = { Geodetic3D::fromDegrees(28.131817, -15.440219, 0),
-    Geodetic3D::fromDegrees(28.947345, -13.523105, 0),
-    Geodetic3D::fromDegrees(28.473802, -13.859360, 0),
-    Geodetic3D::fromDegrees(28.467706, -16.251426, 0),
-    Geodetic3D::fromDegrees(28.701819, -17.762003, 0),
-    Geodetic3D::fromDegrees(28.086595, -17.105796, 0),
-    Geodetic3D::fromDegrees(27.810709, -17.917639, 0)
+  Geodetic3D::fromDegrees(28.947345, -13.523105, 0),
+  Geodetic3D::fromDegrees(28.473802, -13.859360, 0),
+  Geodetic3D::fromDegrees(28.467706, -16.251426, 0),
+  Geodetic3D::fromDegrees(28.701819, -17.762003, 0),
+  Geodetic3D::fromDegrees(28.086595, -17.105796, 0),
+  Geodetic3D::fromDegrees(27.810709, -17.917639, 0)
   };
   
   NonOverlappingMark* mark = new NonOverlappingMark(new DownloaderImageBuilder(URL("file:///g3m-marker.png")),
@@ -1182,13 +1182,13 @@ public:
   if (showingPNOA){
     Sector sector = Sector::fromDegrees(21, -18, 45, 6);
     std::vector<Geodetic2D*>* coordinates = new std::vector<Geodetic2D*>();
-    
+
     coordinates->push_back( new Geodetic2D( sector.getSW() ) );
     coordinates->push_back( new Geodetic2D( sector.getNW() ) );
     coordinates->push_back( new Geodetic2D( sector.getNE() ) );
     coordinates->push_back( new Geodetic2D( sector.getSE() ) );
     coordinates->push_back( new Geodetic2D( sector.getSW() ) );
-    
+
     //    printf("RESTERIZING: %s\n", _sector->description().c_str());
     
     float dashLengths[] = {};
@@ -1328,14 +1328,14 @@ public:
   if (testingAnimatedMarks){
     
     Mark* animMark = new Mark(URL(URL::FILE_PROTOCOL + "radar-sprite.png"),
-                              Geodetic3D::fromDegrees( 28.099999998178312, -15.41699999885168, 0),
-                              ABSOLUTE,
-                              4.5e+06,
-                              NULL,
-                              true,
-                              NULL,
-                              false);
-    
+                                Geodetic3D::fromDegrees( 28.099999998178312, -15.41699999885168, 0),
+                                ABSOLUTE,
+                                4.5e+06,
+                                NULL,
+                                true,
+                                NULL,
+                                false);
+
     animMark->setOnScreenSizeOnProportionToImage(0.05, 0.1);
     builder.addPeriodicalTask(new TextureAtlasMarkAnimationTask(animMark, 4, 2, 7, TimeInterval::fromMilliseconds(100)));
     
@@ -1355,12 +1355,11 @@ public:
     marksRenderer->addMark(animMark2);
     builder.addPeriodicalTask(new TextureAtlasMarkAnimationTask(animMark2, 4, 2, 7, TimeInterval::fromMilliseconds(100)));
     
-    
     marksRenderer->addMark(animMark);
     
     Mark* regMark = new Mark("HELLO ANIMATED MARKS!",
-                             Geodetic3D::fromDegrees( 27.599999998178312, -15.41699999885168, 0),
-                             ABSOLUTE);
+                               Geodetic3D::fromDegrees( 27.599999998178312, -15.41699999885168, 0),
+                               ABSOLUTE);
     marksRenderer->addMark(regMark);
     
   }
