@@ -361,9 +361,6 @@ public class MainActivity
 
       setContentView(R.layout.activity_main);
 
-<<<<<<< HEAD
-      // builder.getPlanetRendererBuilder().setRenderDebug(true);
-=======
       _g3mWidget = createWidget();
 
       final RelativeLayout placeHolder = (RelativeLayout) findViewById(R.id.g3mWidgetHolder);
@@ -403,7 +400,6 @@ public class MainActivity
                new DownloaderImageBuilder(anchorBitmapURL), //
                position);
    }
->>>>>>> purgatory
 
 
    private G3MWidget_Android createWidget() {
@@ -414,7 +410,6 @@ public class MainActivity
       builder.getPlanetRendererBuilder().setLayerSet(layerSet);
 
 
-<<<<<<< HEAD
       //      _g3mWidget = builder.createWidget();
       //      _placeHolder = (RelativeLayout) findViewById(R.id.g3mWidgetHolder);
       //      _placeHolder.addView(_g3mWidget);
@@ -548,7 +543,6 @@ public class MainActivity
       _placeHolder = (RelativeLayout) findViewById(R.id.g3mWidgetHolder);
       _placeHolder.addView(_g3mWidget);
    }
-=======
       final NonOverlappingMarksRenderer renderer = new NonOverlappingMarksRenderer(30);
       builder.addRenderer(renderer);
 
@@ -568,7 +562,6 @@ public class MainActivity
       renderer.addMark(createMark(Geodetic3D.fromDegrees(28.701819, -17.762003, 0)));
       renderer.addMark(createMark(Geodetic3D.fromDegrees(28.086595, -17.105796, 0)));
       renderer.addMark(createMark(Geodetic3D.fromDegrees(27.810709, -17.917639, 0)));
->>>>>>> purgatory
 
 
       final boolean testCanvas = false;
@@ -608,17 +601,14 @@ public class MainActivity
                      final float leftStep = (float) width / steps;
                      final float topStep = (float) height / steps;
 
-<<<<<<< HEAD
 
-      final HUDQuadWidget altRuler = new HUDQuadWidget(imageBuilder, x, y, width, height);
-=======
+                     final HUDQuadWidget altRuler = new HUDQuadWidget(imageBuilder, x, y, width, height);
                      canvas.setLineWidth(1);
                      canvas.setFillColor(Color.fromRGBA(0f, 0f, 0f, 0.75f));
                      for (int i = 1; i < steps; i++) {
                         canvas.fillRectangle(0, topStep * i, width, 1);
                         canvas.fillRectangle(leftStep * i, 0, 1, height);
                      }
->>>>>>> purgatory
 
                      canvas.setFont(GFont.monospaced());
                      canvas.setFillColor(Color.black());

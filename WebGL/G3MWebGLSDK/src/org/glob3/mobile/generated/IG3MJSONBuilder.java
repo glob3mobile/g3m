@@ -1,4 +1,7 @@
-package org.glob3.mobile.generated; 
+
+
+package org.glob3.mobile.generated;
+
 //
 //  IG3MJSONBuilder.hpp
 //  G3MiOSSDK
@@ -8,22 +11,27 @@ package org.glob3.mobile.generated;
 //
 
 
+public abstract class IG3MJSONBuilder {
+
+   protected String _jsonSource;
 
 
-public abstract class IG3MJSONBuilder
-{
+   public IG3MJSONBuilder(final String jsonSource) {
+      _jsonSource = jsonSource;
+   }
 
-	protected String _jsonSource;
+
+   public abstract void initWidgetWithCameraConstraints(java.util.ArrayList<ICameraConstrainer> cameraConstraints,
+                                                        LayerSet layerSet,
+                                                        boolean incrementalTileQuality,
+                                                        java.util.ArrayList<Renderer> renderers,
+                                                        WidgetUserData userData,
+                                                        GTask initializationTask,
+                                                        java.util.ArrayList<PeriodicalTask> periodicalTasks,
+                                                        MarkTouchListener markTouchListener);
 
 
-	public IG3MJSONBuilder(String jsonSource)
-	{
-		_jsonSource = jsonSource;
-	}
-
-	public abstract void initWidgetWithCameraConstraints (java.util.ArrayList<ICameraConstrainer> cameraConstraints, LayerSet layerSet, boolean incrementalTileQuality, java.util.ArrayList<Renderer> renderers, UserData userData, GTask initializationTask, java.util.ArrayList<PeriodicalTask> periodicalTasks, MarkTouchListener markTouchListener);
-	public void dispose()
-	{
-	}
+   public void dispose() {
+   }
 
 }
