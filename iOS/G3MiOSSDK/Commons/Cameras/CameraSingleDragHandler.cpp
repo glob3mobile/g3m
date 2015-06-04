@@ -72,8 +72,13 @@ void CameraSingleDragHandler::onMove(const G3MEventContext *eventContext,
   
   // apply transformation
   Camera *camera = cameraContext->getNextCamera();
-  camera->copyFrom(_camera0);
-  camera->applyTransform(matrix);
+  //camera->copyFrom(_camera0);
+  //camera->applyTransform(matrix);
+  
+  MutableVector3D position = _camera0.getCartesianPosition().transformedBy(matrix, 1.0).asMutableVector3D();
+  MutableVector3D center = _camera0.getCenter().transformedBy(matrix, 1.0).asMutableVector3D();
+  MutableVector3D up = _camera0.getUp().transformedBy(matrix, 0.0).asMutableVector3D();
+  camera->setLookAtParams(position, center, up);
 }
 
 

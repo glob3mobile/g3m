@@ -13,6 +13,14 @@
 bool SimpleCameraConstrainer::onCameraChange(const Planet *planet,
                                              const Camera* previousCamera,
                                              Camera* nextCamera) const {
+  
+  long long previousCameraTimeStamp = previousCamera->getTimeStamp();
+  long long nextCameraTimeStamp = nextCamera->getTimeStamp();
+  if (previousCameraTimeStamp != _previousCameraTimeStamp || nextCameraTimeStamp != _nextCameraTimeStamp) {
+    _previousCameraTimeStamp = previousCameraTimeStamp;
+    _nextCameraTimeStamp = nextCameraTimeStamp;
+    printf("Cameras TimeStamp = %lld %lld\n", _previousCameraTimeStamp, _nextCameraTimeStamp);
+  }
 
   const double radii = planet->getRadii().maxAxis();
   const double maxHeight = radii*9;

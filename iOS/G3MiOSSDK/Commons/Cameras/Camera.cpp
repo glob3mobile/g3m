@@ -15,6 +15,7 @@
 #include "Sector.hpp"
 
 void Camera::initialize(const G3MContext* context) {
+  _timeStamp++;
   _planet = context->getPlanet();
   if (_planet->isFlat()) {
     setCartesianPosition( MutableVector3D(0, 0, _planet->getRadii()._y * 5) );
@@ -29,6 +30,18 @@ void Camera::initialize(const G3MContext* context) {
 
 
 void Camera::copyFrom(const Camera &that) {
+  
+  if (_timeStamp == that._timeStamp)
+    return;
+  
+  printf("copy from %lld to %lld\n", _timeStamp, that._timeStamp);
+  
+  if (_timeStamp > that._timeStamp){
+    printf("como??\n");
+  }
+  
+  _timeStamp = that._timeStamp;
+  
   _viewPortWidth  = that._viewPortWidth;
   _viewPortHeight = that._viewPortHeight;
 
@@ -111,13 +124,15 @@ _angle2Horizon(-99),
 _normalizedPosition(0, 0, 0),
 _tanHalfVerticalFieldOfView(NAND),
 _tanHalfHorizontalFieldOfView(NAND),
-_rollInRadians(0)
+_rollInRadians(0),
+_timeStamp(0)
 {
   resizeViewport(0, 0);
   _dirtyFlags.setAllDirty();
 }
 
 void Camera::resizeViewport(int width, int height) {
+  _timeStamp++;
   _viewPortWidth  = width;
   _viewPortHeight = height;
 
@@ -392,6 +407,7 @@ void Camera::setFOV(const Angle& vertical,
   const double newV = halfVFOV.tangent();
   if ((newH != _tanHalfHorizontalFieldOfView) ||
       (newV != _tanHalfVerticalFieldOfView)) {
+    _timeStamp++;
     _tanHalfHorizontalFieldOfView = newH;
     _tanHalfVerticalFieldOfView   = newV;
 
@@ -425,6 +441,7 @@ CoordinateSystem Camera::getCameraCoordinateSystem() const {
 }
 
 void Camera::setCameraCoordinateSystem(const CoordinateSystem& rs) {
+  _timeStamp++;
 //  _center = _position.add(rs._y.asMutableVector3D());
   _center.copyFrom(_position);
   _center.addInPlace(rs._y);
