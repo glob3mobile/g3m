@@ -15,7 +15,6 @@
 #include "Sector.hpp"
 
 void Camera::initialize(const G3MContext* context) {
-  _timeStamp++;
   _planet = context->getPlanet();
   if (_planet->isFlat()) {
     setCartesianPosition( MutableVector3D(0, 0, _planet->getRadii()._y * 5) );

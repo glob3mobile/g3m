@@ -215,7 +215,6 @@ public:
 
   const Frustum* const getFrustumInModelCoordinates() const {
     if (_dirtyFlags._frustumMCDirty) {
-      _timeStamp++;
       _dirtyFlags._frustumMCDirty = false;
       delete _frustumInModelCoordinates;
       _frustumInModelCoordinates = getFrustum()->transformedBy_P(getModelMatrix());
@@ -258,7 +257,6 @@ public:
 
   const Geodetic3D getGeodeticPosition() const {
     if (_geodeticPosition == NULL) {
-      _timeStamp++;
       _geodeticPosition = new Geodetic3D( _planet->toGeodetic3D(getCartesianPosition()) );
     }
     return *_geodeticPosition;
@@ -427,7 +425,6 @@ private:
   // data to compute frustum
   FrustumData getFrustumData() const {
     if (_dirtyFlags._frustumDataDirty) {
-      _timeStamp++;
       _dirtyFlags._frustumDataDirty = false;
       _frustumData = calculateFrustumData();
     }
@@ -437,7 +434,6 @@ private:
   // intersection of view direction with globe in(x,y,z)
   MutableVector3D   _getCartesianCenterOfView() const {
     if (_dirtyFlags._cartesianCenterOfViewDirty) {
-      _timeStamp++;
       _dirtyFlags._cartesianCenterOfViewDirty = false;
       //      _cartesianCenterOfView = centerOfViewOnPlanet().asMutableVector3D();
       _cartesianCenterOfView.copyFrom(centerOfViewOnPlanet());
@@ -448,7 +444,6 @@ private:
   // intersection of view direction with globe in geodetic
   Geodetic3D*     _getGeodeticCenterOfView() const {
     if (_dirtyFlags._geodeticCenterOfViewDirty) {
-      _timeStamp++;
       _dirtyFlags._geodeticCenterOfViewDirty = false;
       delete _geodeticCenterOfView;
       _geodeticCenterOfView = new Geodetic3D(_planet->toGeodetic3D(getXYZCenterOfView()));
@@ -459,7 +454,6 @@ private:
   // camera frustum
   Frustum*  getFrustum() const {
     if (_dirtyFlags._frustumDirty) {
-      _timeStamp++;
       _dirtyFlags._frustumDirty = false;
       delete _frustum;
       _frustum = new Frustum(getFrustumData());
@@ -472,7 +466,6 @@ private:
   // opengl projection matrix
   const MutableMatrix44D& getProjectionMatrix() const {
     if (_dirtyFlags._projectionMatrixDirty) {
-      _timeStamp++;
       _dirtyFlags._projectionMatrixDirty = false;
       _projectionMatrix.copyValue(MutableMatrix44D::createProjectionMatrix(getFrustumData()));
     }
@@ -482,7 +475,6 @@ private:
   // Model matrix, computed in CPU in double precision
   const MutableMatrix44D& getModelMatrix() const {
     if (_dirtyFlags._modelMatrixDirty) {
-      _timeStamp++;
       _dirtyFlags._modelMatrixDirty = false;
       _modelMatrix.copyValue(MutableMatrix44D::createModelMatrix(_position, _center, _up));
     }
@@ -492,7 +484,6 @@ private:
   // multiplication of model * projection
   const MutableMatrix44D& getModelViewMatrix() const {
     if (_dirtyFlags._modelViewMatrixDirty) {
-      _timeStamp++;
       _dirtyFlags._modelViewMatrixDirty = false;
       //_modelViewMatrix.copyValue(getProjectionMatrix().multiply(getModelMatrix()));
       _modelViewMatrix.copyValueOfMultiplication(getProjectionMatrix(), getModelMatrix());
