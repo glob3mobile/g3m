@@ -44,6 +44,7 @@ void CameraSingleDragHandler::onDown(const G3MEventContext *eventContext,
                                      const TouchEvent& touchEvent, 
                                      CameraContext *cameraContext) {
   Camera *camera = cameraContext->getNextCamera();
+  camera->getLookAtParamsInto(_cameraPosition, _cameraCenter, _cameraUp);
   _camera0.copyFrom(*camera);
   // dragging
   const Vector2F pixel = touchEvent.getTouch(0)->getPos();
@@ -71,14 +72,9 @@ void CameraSingleDragHandler::onMove(const G3MEventContext *eventContext,
   if (!matrix.isValid()) return;
   
   // apply transformation
-  Camera *camera = cameraContext->getNextCamera();
-  //camera->copyFrom(_camera0);
-  //camera->applyTransform(matrix);
-  
-  MutableVector3D position = _camera0.getCartesianPosition().transformedBy(matrix, 1.0).asMutableVector3D();
-  MutableVector3D center = _camera0.getCenter().transformedBy(matrix, 1.0).asMutableVector3D();
-  MutableVector3D up = _camera0.getUp().transformedBy(matrix, 0.0).asMutableVector3D();
-  camera->setLookAtParams(position, center, up);
+  cameraContext->getNextCamera()->setLookAtParams(_cameraPosition.transformedBy(matrix, 1.0),
+                                                  _cameraCenter.transformedBy(matrix, 1.0),
+                                                  _cameraUp.transformedBy(matrix, 0.0));
 }
 
 

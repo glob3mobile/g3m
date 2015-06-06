@@ -350,6 +350,14 @@ public:
     setUp(up);
   }
   
+  void getLookAtParamsInto(MutableVector3D& position,
+                           MutableVector3D& center,
+                           MutableVector3D& up) {
+    position.copyFrom(_position);
+    center.copyFrom(_center);
+    up.copyFrom(_up);
+  }
+  
 private:
 
   
