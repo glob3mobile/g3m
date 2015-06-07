@@ -40,8 +40,8 @@ void CameraDoubleDragHandler::onDown(const G3MEventContext *eventContext,
                                      const TouchEvent& touchEvent, 
                                      CameraContext *cameraContext) 
 {
-  
   Camera *camera = cameraContext->getNextCamera();
+  camera->getLookAtParamsInto(_cameraPosition, _cameraCenter, _cameraUp);
   _camera0.copyFrom(*camera);
   // double dragging
   const Vector2F pixel0 = touchEvent.getTouch(0)->getPos();
@@ -63,7 +63,6 @@ void CameraDoubleDragHandler::onDown(const G3MEventContext *eventContext,
 void CameraDoubleDragHandler::onMove(const G3MEventContext *eventContext,
                                      const TouchEvent& touchEvent, 
                                      CameraContext *cameraContext) {
-  
   if (cameraContext->getCurrentGesture() != DoubleDrag) return;
 
   // compute transformation matrix
@@ -80,9 +79,9 @@ void CameraDoubleDragHandler::onMove(const G3MEventContext *eventContext,
   if (!matrix.isValid()) return;
 
   // apply transformation
-  Camera *camera = cameraContext->getNextCamera();
-  camera->copyFrom(_camera0);
-  camera->applyTransform(matrix);
+  cameraContext->getNextCamera()->setLookAtParams(_cameraPosition.transformedBy(matrix, 1.0),
+                                                  _cameraCenter.transformedBy(matrix, 1.0),
+                                                  _cameraUp.transformedBy(matrix, 0.0));
 }
 
 
