@@ -28,10 +28,7 @@ private:
   
   
 public:
-  CameraZoomAndRotateHandler():
-  _camera0(Camera())
-  //_initialPoint(0,0,0),
-  //_initialPixel(0,0,0)
+  CameraZoomAndRotateHandler()
   {}
   
   ~CameraZoomAndRotateHandler() {
@@ -65,8 +62,11 @@ public:
   double _initialFingerSeparation;
   double _initialFingerInclination;
   
-  Camera _camera0;         //Initial Camera saved on Down event
-  
+  //Camera _camera0;         //Initial Camera saved on Down event
+  MutableVector3D _cameraPosition;
+  MutableVector3D _cameraCenter;
+  MutableVector3D _cameraUp;
+
 };
 
 

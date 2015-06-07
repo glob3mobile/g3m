@@ -44,7 +44,7 @@ void CameraZoomAndRotateHandler::onDown(const G3MEventContext *eventContext,
                                      CameraContext *cameraContext)
 {
   Camera *camera = cameraContext->getNextCamera();
-  _camera0.copyFrom(*camera);
+  camera->getLookAtParamsInto(_cameraPosition, _cameraCenter, _cameraUp);
   cameraContext->setCurrentGesture(DoubleDrag);
   
   // double dragging
@@ -77,7 +77,8 @@ void CameraZoomAndRotateHandler::onMove(const G3MEventContext *eventContext,
             (difPixel0._x<-1 && difPixel1._x>1) || (difPixel0._x>1 && difPixel1._x<-1)) {
       
       // compute intersection of view direction with the globe
-      Vector3D intersection = planet->closestIntersection(_camera0.getCartesianPosition(), _camera0.getViewDirection());
+      Vector3D intersection = planet->closestIntersection(_cameraPosition.asVector3D(),
+                                                          _cameraCenter.sub(_cameraPosition).asVector3D());
       if (!intersection.isNan()) {
 //        _centralGlobePoint = intersection.asMutableVector3D();
         _centralGlobePoint.copyFrom(intersection);
@@ -186,7 +187,7 @@ void CameraZoomAndRotateHandler::zoom(Camera* camera, const Vector2F& difCurrent
   double fingerSep = sqrt((difCurrentPixels._x*difCurrentPixels._x+difCurrentPixels._y*difCurrentPixels._y));
   double factor = _fingerSep0 / fingerSep;
   double desp = 1-factor;
-  Vector3D w = _centralGlobePoint.asVector3D().sub(_camera0.getCartesianPosition());
+  Vector3D w = _centralGlobePoint.asVector3D().sub(_cameraPosition);
   double dist = w.length();
     
 	// don't allow much closer
@@ -199,7 +200,8 @@ void CameraZoomAndRotateHandler::zoom(Camera* camera, const Vector2F& difCurrent
     return;
 	
 	// make zoom and rotation
-  camera->copyFrom(_camera0);
+  //camera->copyFrom(_camera0);
+  camera->setLookAtParams(_cameraPosition, _cameraCenter, _cameraUp);
   
   // make rotation
   camera->rotateWithAxisAndPoint(_centralGlobeNormal.asVector3D(),

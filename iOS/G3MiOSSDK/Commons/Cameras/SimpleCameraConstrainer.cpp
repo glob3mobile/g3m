@@ -19,7 +19,7 @@ bool SimpleCameraConstrainer::onCameraChange(const Planet *planet,
   if (previousCameraTimeStamp != _previousCameraTimeStamp || nextCameraTimeStamp != _nextCameraTimeStamp) {
     _previousCameraTimeStamp = previousCameraTimeStamp;
     _nextCameraTimeStamp = nextCameraTimeStamp;
-    printf("Cameras TimeStamp = %lld %lld\n", _previousCameraTimeStamp, _nextCameraTimeStamp);
+    printf("Cameras TimeStamp: PreviousCam=%lld; NextCam=%lld\n", _previousCameraTimeStamp, _nextCameraTimeStamp);
   }
 
   const double radii = planet->getRadii().maxAxis();
