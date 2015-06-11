@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		4415B4AB19CC26B800E73D38 /* countries.geojson in Resources */ = {isa = PBXBuildFile; fileRef = 4415B4AA19CC26B800E73D38 /* countries.geojson */; };
 		443BBC8315A5C22000EAE280 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 443BBC8215A5C21F00EAE280 /* CoreData.framework */; };
+		44D9312F1B21AE7400EB890B /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 44D9312E1B21AE7400EB890B /* CoreLocation.framework */; };
 		44EEB5E0159B2B8B0086F243 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 44EEB5DF159B2B8B0086F243 /* libsqlite3.dylib */; };
 		A717C99615EBA71D00EEC830 /* mercator.jpg in Resources */ = {isa = PBXBuildFile; fileRef = A717C99515EBA71D00EEC830 /* mercator.jpg */; };
 		CCD7885415D9A3FA0065A7E1 /* ProgressWheel.png in Resources */ = {isa = PBXBuildFile; fileRef = CCD7885315D9A3FA0065A7E1 /* ProgressWheel.png */; };
@@ -64,6 +65,7 @@
 		CFF95F7D158A748F00B56E11 /* plane.png in Resources */ = {isa = PBXBuildFile; fileRef = CFF95F7C158A748F00B56E11 /* plane.png */; };
 		D80C8B491A77B44000E67587 /* anchorWidget.png in Resources */ = {isa = PBXBuildFile; fileRef = D80C8B481A77B44000E67587 /* anchorWidget.png */; };
 		D8317203186C5BAD00522E1B /* simpleStencil.png in Resources */ = {isa = PBXBuildFile; fileRef = D8317202186C5BAD00522E1B /* simpleStencil.png */; };
+		D84D3C98194753A900D16D69 /* radar-sprite.png in Resources */ = {isa = PBXBuildFile; fileRef = D84D3C97194753A900D16D69 /* radar-sprite.png */; };
 		D882B1CD171D77C000C2AD9C /* full-earth-256x256.bil in Resources */ = {isa = PBXBuildFile; fileRef = D882B1CC171D76AD00C2AD9C /* full-earth-256x256.bil */; };
 		D8E93BE01588A171009D497C /* world.jpg in Resources */ = {isa = PBXBuildFile; fileRef = D8E93BDF1588A171009D497C /* world.jpg */; };
 		D8EEF38B1577920B003FEB5E /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8EEF38A1577920B003FEB5E /* UIKit.framework */; };
@@ -114,6 +116,7 @@
 /* Begin PBXFileReference section */
 		4415B4AA19CC26B800E73D38 /* countries.geojson */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = countries.geojson; sourceTree = "<group>"; };
 		443BBC8215A5C21F00EAE280 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		44D9312E1B21AE7400EB890B /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		44EEB5DF159B2B8B0086F243 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
 		A717C99515EBA71D00EEC830 /* mercator.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = mercator.jpg; sourceTree = "<group>"; };
 		CCD7885315D9A3FA0065A7E1 /* ProgressWheel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ProgressWheel.png; sourceTree = "<group>"; };
@@ -170,6 +173,7 @@
 		CFF95F7C158A748F00B56E11 /* plane.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = plane.png; sourceTree = "<group>"; };
 		D80C8B481A77B44000E67587 /* anchorWidget.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = anchorWidget.png; sourceTree = "<group>"; };
 		D8317202186C5BAD00522E1B /* simpleStencil.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = simpleStencil.png; sourceTree = "<group>"; };
+		D84D3C97194753A900D16D69 /* radar-sprite.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "radar-sprite.png"; sourceTree = "<group>"; };
 		D882B1CC171D76AD00C2AD9C /* full-earth-256x256.bil */ = {isa = PBXFileReference; lastKnownFileType = file; path = "full-earth-256x256.bil"; sourceTree = "<group>"; };
 		D8E93BDF1588A171009D497C /* world.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = world.jpg; sourceTree = "<group>"; };
 		D8EEF3861577920B003FEB5E /* G3MiOSDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = G3MiOSDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -210,6 +214,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				44D9312F1B21AE7400EB890B /* CoreLocation.framework in Frameworks */,
 				D8EEF38D1577920B003FEB5E /* Foundation.framework in Frameworks */,
 				CF4027EB1770E90000D5A80C /* Security.framework in Frameworks */,
 				CF4027E91770E8F900D5A80C /* CFNetwork.framework in Frameworks */,
@@ -248,6 +253,7 @@
 		D8EEF3891577920B003FEB5E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				44D9312E1B21AE7400EB890B /* CoreLocation.framework */,
 				CF4027E61770E8F100D5A80C /* libicucore.dylib */,
 				44EEB5DF159B2B8B0086F243 /* libsqlite3.dylib */,
 				CF4027E81770E8F900D5A80C /* CFNetwork.framework */,
@@ -300,6 +306,7 @@
 		D8EEF4271577B0D6003FEB5E /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				D84D3C97194753A900D16D69 /* radar-sprite.png */,
 				D80C8B481A77B44000E67587 /* anchorWidget.png */,
 				4415B4AA19CC26B800E73D38 /* countries.geojson */,
 				CFE26D6718A154D700253709 /* 3d_2-0.json */,
@@ -403,7 +410,7 @@
 				LastUpgradeCheck = 0500;
 				TargetAttributes = {
 					D8EEF3851577920A003FEB5E = {
-						DevelopmentTeam = N847RXR927;
+						DevelopmentTeam = CTLLY45L74;
 					};
 				};
 			};
@@ -501,6 +508,7 @@
 				E7A1A99416F202B700D138D8 /* sand-clock.png in Resources */,
 				CFB57DA11860DF4700D5B094 /* Compass_rose_browns_00_transparent.png in Resources */,
 				E736067D16F8D7BE000E32AD /* horizontal-gears.png in Resources */,
+				D84D3C98194753A900D16D69 /* radar-sprite.png in Resources */,
 				CF13F2CC16F3AC4B005704D6 /* caceres-2008x2032.bil in Resources */,
 				CF15759318649D410059312A /* altimeter-ruler-1536x113.png in Resources */,
 				CF61A647186388B200DDC0DC /* debug-compass.png in Resources */,
@@ -566,6 +574,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = YES;
+				ARCHS = (
+					"$(ARCHS_STANDARD)",
+					i386,
+				);
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
@@ -594,7 +606,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = "$(BUILT_PRODUCTS_DIR)/**";
-				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "-ObjC";
 				PROVISIONING_PROFILE = "";
@@ -602,6 +614,7 @@
 				RUN_CLANG_STATIC_ANALYZER = NO;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				VALID_ARCHS = "arm64 armv7 armv7s i386";
 			};
 			name = Debug;
 		};
@@ -630,7 +643,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = "$(BUILT_PRODUCTS_DIR)/**";
-				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				OTHER_LDFLAGS = "-ObjC";
 				PROVISIONING_PROFILE = "";
@@ -659,7 +672,7 @@
 				GCC_WARN_UNUSED_FUNCTION = NO;
 				HEADER_SEARCH_PATHS = "$(BUILT_PRODUCTS_DIR)/**";
 				INFOPLIST_FILE = "Glob3iOSDemo/G3MiOSDemo-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				PRODUCT_NAME = G3MiOSDemo;
 				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
@@ -683,7 +696,7 @@
 				GCC_WARN_UNUSED_FUNCTION = NO;
 				HEADER_SEARCH_PATHS = "$(BUILT_PRODUCTS_DIR)/**";
 				INFOPLIST_FILE = "Glob3iOSDemo/G3MiOSDemo-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				PRODUCT_NAME = G3MiOSDemo;
 				PROVISIONING_PROFILE = "";
 				RUN_CLANG_STATIC_ANALYZER = YES;

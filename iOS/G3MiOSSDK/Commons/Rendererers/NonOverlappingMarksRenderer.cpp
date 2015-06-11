@@ -148,12 +148,17 @@ void MarkWidget::setAndClampScreenPos(float x,
   const IMathUtils* mu = IMathUtils::instance();
   const float xx = mu->clamp(x, _halfWidth  + margin, viewportWidth  - _halfWidth  - margin);
   const float yy = mu->clamp(y, _halfHeight + margin, viewportHeight - _halfHeight - margin);
-
-  if (_geo2Dfeature != NULL) {
-    _geo2Dfeature->setTranslation(xx, yy);
+//  if (_geo2Dfeature != NULL) {
+//    _geo2Dfeature->setTranslation(xx, yy);
+//  }
+//  _x = xx;
+//  _y = yy;
+  if (x != xx || y != yy) {
+    bool clampped = true;
+  } else {
+    bool clampped = false;
   }
-  _x = xx;
-  _y = yy;
+  setScreenPos(xx, yy);
 }
 
 void MarkWidget::setScreenPos(float x, float y) {
@@ -202,6 +207,8 @@ _cartesianPos(NULL),
 //_anchorScreenPosition(MutableVector2F::nan()),
 _speed(MutableVector2F::zero()),
 _force(MutableVector2F::zero()),
+_lastForce(MutableVector2F::zero()),
+_clampped(false),
 _geoPosition(position),
 _springLengthInPixels(springLengthInPixels),
 _springK(springK),
@@ -259,6 +266,32 @@ void NonOverlappingMark::computeAnchorScreenPos(const Camera* camera,
                           sp._y + deltaY);
   }
 }
+
+void NonOverlappingMark::applyLateralForces() {
+  
+  const Vector2F d = getScreenPos().sub(Vector2F(0,getScreenPos()._y));
+  const double distance = d.length() + 0.001;
+  Vector2F direction = d.div((float)distance);
+
+  float strength = (float)(this->_electricCharge * 6000 / (distance * distance));
+
+  const Vector2F force = direction.times(strength);
+
+  this->applyForce( force._x,  force._y);
+  
+  
+  
+  const Vector2F da = getScreenPos().sub(Vector2F(getScreenPos()._x, 0));
+  const double distancea = da.length() + 0.001;
+  Vector2F directiona = da.div((float)distancea);
+  
+  float strengtha = (float)(this->_electricCharge * 6000 / (distancea * distancea));
+  
+  const Vector2F forcea = directiona.times(strengtha);
+  
+  this->applyForce( forcea._x,  forcea._y);
+}
+
 
 void NonOverlappingMark::applyCoulombsLaw(NonOverlappingMark* that) {
   const Vector2F d = getScreenPos().sub(that->getScreenPos());
@@ -388,6 +421,53 @@ void NonOverlappingMark::updatePositionWithCurrentForce(float timeInSeconds,
                                                         int viewportWidth,
                                                         int viewportHeight,
                                                         float viewportMargin) {
+#warning WORKING HERE
+  float minModForce = 10;
+  
+//  ILogger::instance()->logInfo("Force: %f %f", _force._x, _force._y);
+//  ILogger::instance()->logInfo("LastForce: %f %f", _lastForce._x, _lastForce._y);
+
+  
+  
+  
+  
+  
+  double forceMod = _force.asVector2F().length();
+  
+  
+  double lastForceMod = _lastForce.asVector2F().length();
+//  ILogger::instance()->logInfo("Mod. Forces: %f %f", forceMod, lastForceMod);
+
+  /*
+  if (((int)forceMod == (int)lastForceMod)) {
+    ILogger::instance()->logInfo("Equals forces Force: %f %f", _force._x, _force._y);
+    _force.set(0, 0);
+    return;
+  } else if (forceMod >= lastForceMod*0.90 && forceMod <= lastForceMod*1.10) {
+    ILogger::instance()->logInfo("Aprox forces Force: %f %f", _force._x, _force._y);
+    _lastForce.set(_force._x, _force._y);
+    _force.set(0, 0);
+    return;
+  } else {
+    ILogger::instance()->logInfo("No Aprox forces Force: %f %f", _force._x, _force._y);
+  }
+  */
+  _lastForce.set(_force._x, _force._y);
+
+  /*
+  if ( (_force._x < minForce && _force._x > -minForce) && (_force._y < minForce && _force._y > -minForce)) {
+    ILogger::instance()->logInfo("Low Force: %f %f", _force._x, _force._y);
+    _lastForce.set(_force._x, _force._y);
+    _force.set(0, 0);
+    return;
+  } else {
+    ILogger::instance()->logInfo("Others Forces: %f %f", _force._x, _force._y);
+    ILogger::instance()->logInfo("Others LastForce: %f %f", _lastForce._x, _lastForce._y);
+    _lastForce.set(_force._x, _force._y);
+  }
+   */
+  
+  
   _speed.add(_force._x * timeInSeconds,
              _force._y * timeInSeconds);
   _speed.times(_resistanceFactor);
@@ -437,7 +517,8 @@ _lastPositionsUpdatedTime(0),
 //_connectorsGLState(NULL),
 _visibleMarksIDsBuilder( IStringBuilder::newStringBuilder() ),
 _visibleMarksIDs(""),
-_touchListener(NULL)
+_touchListener(NULL),
+_animating(true)
 {
 
 }
@@ -523,7 +604,8 @@ void NonOverlappingMarksRenderer::computeForces(const Camera* camera, const Plan
   for (size_t i = 0; i < visibleMarksSize; i++) {
     NonOverlappingMark* mark = _visibleMarks[i];
     mark->applyHookesLaw();
-
+    mark->applyLateralForces();
+    
     for (size_t j = i+1; j < visibleMarksSize; j++) {
       mark->applyCoulombsLaw(_visibleMarks[j]);
     }
@@ -585,11 +667,40 @@ void NonOverlappingMarksRenderer::render(const G3MRenderContext* rc, GLState* gl
   const Camera* camera = rc->getCurrentCamera();
   const Planet* planet = rc->getPlanet();
 
-  computeMarksToBeRendered(camera, planet);
-  computeForces(camera, planet);
-  applyForces(rc->getFrameStartTimer()->nowInMilliseconds(), camera);
+  if (!_animating) {
+    _animating = true;
+  }
+  
+  if (_animating) {
+    computeMarksToBeRendered(camera, planet);
+    computeForces(camera, planet);
+    
+    
+    double systemForceMod = 0;
+    
+    const size_t visibleMarksSize = _visibleMarks.size();
+    bool continueAntimation = false;
+    for (size_t i = 0; i < visibleMarksSize; i++) {
+      double auxMod = _visibleMarks.at(i)->_force.asVector2F().length();
+      ILogger::instance()->logWarning("System Force Mod %i: %f", i,  auxMod);
 
+      systemForceMod = systemForceMod + auxMod;
+      if (auxMod > 100) {
+        continueAntimation = true;
+      }
+    }
+    
+    if (systemForceMod < 100 * visibleMarksSize || !continueAntimation) {
+      _animating = false;
+    }
+    
+    _animating = continueAntimation;
+    ILogger::instance()->logWarning("System Force Mod: %f", systemForceMod);
+    
+    applyForces(rc->getFrameStartTimer()->nowInMilliseconds(), camera);
+  }
   renderMarks(rc, glState);
+
 }
 
 void NonOverlappingMarksRenderer::onResizeViewportEvent(const G3MEventContext* ec,

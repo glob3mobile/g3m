@@ -61,8 +61,8 @@ public abstract class IStringUtils
 
   public abstract int indexOfFirstNonBlank(String String, int fromIndex);
 
-  //  virtual size_t indexOfFirstBlank(const std::string& string,
-  //                                size_t fromIndex) const = 0;
+  //  virtual int indexOfFirstBlank(const std::string& string,
+  //                                int fromIndex) const = 0;
 
   public abstract int indexOfFirstNonChar(String String, String chars, int fromIndex);
 

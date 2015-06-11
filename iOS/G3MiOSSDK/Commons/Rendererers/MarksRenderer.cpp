@@ -44,8 +44,8 @@ _billboardTexCoords(NULL)
 
 
 MarksRenderer::~MarksRenderer() {
-  int marksSize = _marks.size();
-  for (int i = 0; i < marksSize; i++) {
+  const size_t marksSize = _marks.size();
+  for (size_t i = 0; i < marksSize; i++) {
     delete _marks[i];
   }
 
@@ -66,8 +66,8 @@ MarksRenderer::~MarksRenderer() {
 
 
 void MarksRenderer::onChangedContext() {
-  int marksSize = _marks.size();
-  for (int i = 0; i < marksSize; i++) {
+  const size_t marksSize = _marks.size();
+  for (size_t i = 0; i < marksSize; i++) {
     Mark* mark = _marks[i];
     mark->initialize(_context, _downloadPriority);
   }
@@ -100,8 +100,8 @@ void MarksRenderer::removeMark(Mark* mark) {
 }
 
 void MarksRenderer::removeAllMarks() {
-  const int marksSize = _marks.size();
-  for (int i = 0; i < marksSize; i++) {
+  const size_t marksSize = _marks.size();
+  for (size_t i = 0; i < marksSize; i++) {
     delete _marks[i];
   }
   _marks.clear();
@@ -120,8 +120,8 @@ bool MarksRenderer::onTouchEvent(const G3MEventContext* ec,
       double minSqDistance = IMathUtils::instance()->maxDouble();
       Mark* nearestMark = NULL;
 
-      const int marksSize = _marks.size();
-      for (int i = 0; i < marksSize; i++) {
+      const size_t marksSize = _marks.size();
+      for (size_t i = 0; i < marksSize; i++) {
         Mark* mark = _marks[i];
 
         if (!mark->isReady()) {
@@ -131,12 +131,12 @@ bool MarksRenderer::onTouchEvent(const G3MEventContext* ec,
           continue;
         }
 
-        const int markWidth = mark->getTextureWidth();
+        const int markWidth = (int)mark->getTextureWidth();
         if (markWidth <= 0) {
           continue;
         }
 
-        const int markHeight = mark->getTextureHeight();
+        const int markHeight = (int)mark->getTextureHeight();
         if (markHeight <= 0) {
           continue;
         }
@@ -174,8 +174,8 @@ bool MarksRenderer::onTouchEvent(const G3MEventContext* ec,
 
 RenderState MarksRenderer::getRenderState(const G3MRenderContext* rc) {
   if (_readyWhenMarksReady) {
-    int marksSize = _marks.size();
-    for (int i = 0; i < marksSize; i++) {
+    const size_t marksSize = _marks.size();
+    for (size_t i = 0; i < marksSize; i++) {
       if (!_marks[i]->isReady()) {
         return RenderState::busy();
       }
@@ -198,7 +198,7 @@ IFloatBuffer* MarksRenderer::getBillboardTexCoords() {
 }
 
 void MarksRenderer::render(const G3MRenderContext* rc, GLState* glState) {
-  const int marksSize = _marks.size();
+  const size_t marksSize = _marks.size();
   if (marksSize > 0) {
     const Camera* camera = rc->getCurrentCamera();
 
@@ -215,7 +215,7 @@ void MarksRenderer::render(const G3MRenderContext* rc, GLState* glState) {
 
     IFloatBuffer* billboardTexCoord = getBillboardTexCoords();
 
-    for (int i = 0; i < marksSize; i++) {
+    for (size_t i = 0; i < marksSize; i++) {
       Mark* mark = _marks[i];
       if (mark->isReady()) {
         mark->render(rc,

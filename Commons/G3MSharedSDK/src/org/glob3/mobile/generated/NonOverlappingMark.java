@@ -288,8 +288,6 @@ public class NonOverlappingMark
     _speed.times(_resistanceFactor);
   
     //Force has been applied and must be reset
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning It's needed?
     _force.set(0, 0);
   
     //Update position

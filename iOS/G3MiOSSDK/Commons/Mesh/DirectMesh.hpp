@@ -26,14 +26,14 @@ public:
   DirectMesh(const int primitive,
              bool owner,
              const Vector3D& center,
-             IFloatBuffer* vertices,
+             const IFloatBuffer* vertices,
              float lineWidth,
              float pointSize,
              const Color* flatColor = NULL,
-             IFloatBuffer* colors = NULL,
+             const IFloatBuffer* colors = NULL,
              const float colorsIntensity = 0.0f,
              bool depthTest = true,
-             IFloatBuffer* normals = NULL);
+             const IFloatBuffer* normals = NULL);
 
   ~DirectMesh() {
 #ifdef JAVA_CODE

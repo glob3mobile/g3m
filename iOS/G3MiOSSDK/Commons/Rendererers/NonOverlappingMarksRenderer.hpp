@@ -139,7 +139,7 @@ private:
   Geodetic3D _geoPosition;
 
   MutableVector2F _speed;
-  MutableVector2F _force;
+  MutableVector2F _lastForce;
 
   MarkWidget* _widget;
   MarkWidget* _anchorWidget;
@@ -162,6 +162,9 @@ private:
 //  float _enclosingRadius;
 
 public:
+
+  MutableVector2F _force;
+  bool _clampped;
 
   NonOverlappingMark(IImageBuilder* imageBuilderWidget,
                      IImageBuilder* imageBuilderAnchor,
@@ -206,6 +209,8 @@ public:
   void applyCoulombsLawFromAnchor(NonOverlappingMark* that);
 
   void applyHookesLaw();   //Spring
+  void applyLateralForces();
+
 
   void applyForce(float x, float y) {
     _force.add(x, y);
@@ -246,6 +251,7 @@ class NonOverlappingMarksRenderer: public DefaultRenderer {
 private:
   const size_t _maxVisibleMarks;
   const float  _viewportMargin;
+  bool _animating;
 
   std::vector<NonOverlappingMark*> _marks;
 

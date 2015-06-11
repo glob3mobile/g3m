@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 46;
+	objectVersion = 47;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -20,7 +20,6 @@
 		CF483EC91A2E62A100B70D7E /* CompassHeadings.png in Resources */ = {isa = PBXBuildFile; fileRef = CF483EC81A2E62A100B70D7E /* CompassHeadings.png */; };
 		CF483ECB1A2E62B600B70D7E /* altimeter-ruler-1536x113.png in Resources */ = {isa = PBXBuildFile; fileRef = CF483ECA1A2E62B600B70D7E /* altimeter-ruler-1536x113.png */; };
 		CF483ECD1A2E62C400B70D7E /* widget-background.png in Resources */ = {isa = PBXBuildFile; fileRef = CF483ECC1A2E62C400B70D7E /* widget-background.png */; };
-		CF4E4C3D1AB62AAC00351300 /* BuenosAires-Wikipedia.json in Resources */ = {isa = PBXBuildFile; fileRef = CF4E4C3C1AB62AAC00351300 /* BuenosAires-Wikipedia.json */; };
 		CF6920B11837EA35007409D8 /* G3MDemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF6920AF1837EA35007409D8 /* G3MDemoScene.cpp */; };
 		CF6920B41837F1CA007409D8 /* G3MRasterLayersDemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF6920B21837F1CA007409D8 /* G3MRasterLayersDemoScene.cpp */; };
 		CF6920B71837F26B007409D8 /* G3MVectorialDemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF6920B51837F26B007409D8 /* G3MVectorialDemoScene.cpp */; };
@@ -43,7 +42,7 @@
 		CFC192DB1A8D3A7C00FA89B3 /* colorgrid.jpg in Resources */ = {isa = PBXBuildFile; fileRef = CFC192DA1A8D3A7C00FA89B3 /* colorgrid.jpg */; };
 		CFC59BAC176F68DB002806D6 /* full-earth-2048x1024.bil in Resources */ = {isa = PBXBuildFile; fileRef = CFC59BAB176F68DB002806D6 /* full-earth-2048x1024.bil */; };
 		CFD3BE3D19D3324F00FE2D5A /* G3MStreamingPointCloud2DemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFD3BE3B19D3324F00FE2D5A /* G3MStreamingPointCloud2DemoScene.cpp */; };
-		CFE3B3C7183A99070078C796 /* G3MMarkersDemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFE3B3C5183A99070078C796 /* G3MMarkersDemoScene.cpp */; };
+		CFE3B3C7183A99070078C796 /* G3MMarksDemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFE3B3C5183A99070078C796 /* G3MMarksDemoScene.cpp */; };
 		CFE3B3CB183ABAC70078C796 /* G3M3DSymbologyDemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFE3B3C9183ABAC70078C796 /* G3M3DSymbologyDemoScene.cpp */; };
 		CFE3B3CD183ABD8B0078C796 /* uscitieslite.geojson in Resources */ = {isa = PBXBuildFile; fileRef = CFE3B3CC183ABD8B0078C796 /* uscitieslite.geojson */; };
 		CFE3B3D0183AC7D20078C796 /* G3MPointCloudDemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFE3B3CE183AC7D20078C796 /* G3MPointCloudDemoScene.cpp */; };
@@ -68,7 +67,11 @@
 		CFF64D4918329FE6006ABFF6 /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = CFF64D4818329FE6006ABFF6 /* libicucore.dylib */; };
 		CFF9D2061A7C4903005429A6 /* G3MNonOverlappingMarksDemoScene.mm in Sources */ = {isa = PBXBuildFile; fileRef = CFF9D2041A7C4903005429A6 /* G3MNonOverlappingMarksDemoScene.mm */; };
 		CFF9D20A1A7C5014005429A6 /* anchorWidget.png in Resources */ = {isa = PBXBuildFile; fileRef = CFF9D2091A7C5014005429A6 /* anchorWidget.png */; };
-		CFF9D20C1A7C5048005429A6 /* g3m-marker.png in Resources */ = {isa = PBXBuildFile; fileRef = CFF9D20B1A7C5048005429A6 /* g3m-marker.png */; };
+		CFF9D20C1A7C5048005429A6 /* g3m-mark.png in Resources */ = {isa = PBXBuildFile; fileRef = CFF9D20B1A7C5048005429A6 /* g3m-mark.png */; };
+		CFFCD2C91AD2C748004C7112 /* BuenosAires-Wikipedia.json in Resources */ = {isa = PBXBuildFile; fileRef = CFFCD2C81AD2C748004C7112 /* BuenosAires-Wikipedia.json */; };
+		D871790B1AE4FCCA00A9A14F /* G3MAnimatedMarksDemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D87179091AE4FCCA00A9A14F /* G3MAnimatedMarksDemoScene.cpp */; };
+		D871790E1AE500B500A9A14F /* radar-sprite.png in Resources */ = {isa = PBXBuildFile; fileRef = D871790D1AE500B500A9A14F /* radar-sprite.png */; };
+		D87179101AE501B100A9A14F /* pin.png in Resources */ = {isa = PBXBuildFile; fileRef = D871790F1AE501B100A9A14F /* pin.png */; };
 		E75321CB16D3DF6200CB3F8D /* libG3MiOSSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E7D1B64F16D24DE800AF47C1 /* libG3MiOSSDK.a */; };
 		E780A3CD16D29EA5000F0395 /* map-on-96x48.png in Resources */ = {isa = PBXBuildFile; fileRef = E780A3C716D29EA5000F0395 /* map-on-96x48.png */; };
 		E780A3CE16D29EA5000F0395 /* marker-wikipedia-48x48.png in Resources */ = {isa = PBXBuildFile; fileRef = E780A3C816D29EA5000F0395 /* marker-wikipedia-48x48.png */; };
@@ -150,7 +153,6 @@
 		CF483EC81A2E62A100B70D7E /* CompassHeadings.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = CompassHeadings.png; sourceTree = "<group>"; };
 		CF483ECA1A2E62B600B70D7E /* altimeter-ruler-1536x113.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "altimeter-ruler-1536x113.png"; sourceTree = "<group>"; };
 		CF483ECC1A2E62C400B70D7E /* widget-background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "widget-background.png"; sourceTree = "<group>"; };
-		CF4E4C3C1AB62AAC00351300 /* BuenosAires-Wikipedia.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = "BuenosAires-Wikipedia.json"; path = "../../../../../../../../Desktop/WP Buenos Aires/BuenosAires-Wikipedia.json"; sourceTree = "<group>"; };
 		CF6920AF1837EA35007409D8 /* G3MDemoScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = G3MDemoScene.cpp; sourceTree = "<group>"; };
 		CF6920B01837EA35007409D8 /* G3MDemoScene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = G3MDemoScene.hpp; sourceTree = "<group>"; };
 		CF6920B21837F1CA007409D8 /* G3MRasterLayersDemoScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = G3MRasterLayersDemoScene.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
@@ -185,8 +187,8 @@
 		CFC59BAB176F68DB002806D6 /* full-earth-2048x1024.bil */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "full-earth-2048x1024.bil"; sourceTree = "<group>"; };
 		CFD3BE3B19D3324F00FE2D5A /* G3MStreamingPointCloud2DemoScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = G3MStreamingPointCloud2DemoScene.cpp; sourceTree = "<group>"; };
 		CFD3BE3C19D3324F00FE2D5A /* G3MStreamingPointCloud2DemoScene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = G3MStreamingPointCloud2DemoScene.hpp; sourceTree = "<group>"; };
-		CFE3B3C5183A99070078C796 /* G3MMarkersDemoScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = G3MMarkersDemoScene.cpp; sourceTree = "<group>"; };
-		CFE3B3C6183A99070078C796 /* G3MMarkersDemoScene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = G3MMarkersDemoScene.hpp; sourceTree = "<group>"; };
+		CFE3B3C5183A99070078C796 /* G3MMarksDemoScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = G3MMarksDemoScene.cpp; sourceTree = "<group>"; };
+		CFE3B3C6183A99070078C796 /* G3MMarksDemoScene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = G3MMarksDemoScene.hpp; sourceTree = "<group>"; };
 		CFE3B3C9183ABAC70078C796 /* G3M3DSymbologyDemoScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = G3M3DSymbologyDemoScene.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CFE3B3CA183ABAC70078C796 /* G3M3DSymbologyDemoScene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = G3M3DSymbologyDemoScene.hpp; sourceTree = "<group>"; };
 		CFE3B3CC183ABD8B0078C796 /* uscitieslite.geojson */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = uscitieslite.geojson; sourceTree = "<group>"; };
@@ -218,7 +220,12 @@
 		CFF9D2041A7C4903005429A6 /* G3MNonOverlappingMarksDemoScene.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = G3MNonOverlappingMarksDemoScene.mm; sourceTree = "<group>"; };
 		CFF9D2051A7C4903005429A6 /* G3MNonOverlappingMarksDemoScene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = G3MNonOverlappingMarksDemoScene.hpp; sourceTree = "<group>"; };
 		CFF9D2091A7C5014005429A6 /* anchorWidget.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = anchorWidget.png; sourceTree = "<group>"; };
-		CFF9D20B1A7C5048005429A6 /* g3m-marker.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "g3m-marker.png"; sourceTree = "<group>"; };
+		CFF9D20B1A7C5048005429A6 /* g3m-mark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "g3m-mark.png"; sourceTree = "<group>"; };
+		CFFCD2C81AD2C748004C7112 /* BuenosAires-Wikipedia.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "BuenosAires-Wikipedia.json"; sourceTree = "<group>"; };
+		D87179091AE4FCCA00A9A14F /* G3MAnimatedMarksDemoScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = G3MAnimatedMarksDemoScene.cpp; sourceTree = "<group>"; };
+		D871790A1AE4FCCA00A9A14F /* G3MAnimatedMarksDemoScene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = G3MAnimatedMarksDemoScene.hpp; sourceTree = "<group>"; };
+		D871790D1AE500B500A9A14F /* radar-sprite.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "radar-sprite.png"; sourceTree = "<group>"; };
+		D871790F1AE501B100A9A14F /* pin.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pin.png; sourceTree = "<group>"; };
 		E780A3C716D29EA5000F0395 /* map-on-96x48.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "map-on-96x48.png"; sourceTree = "<group>"; };
 		E780A3C816D29EA5000F0395 /* marker-wikipedia-48x48.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "marker-wikipedia-48x48.png"; sourceTree = "<group>"; };
 		E780A3C916D29EA5000F0395 /* marker-wikipedia-72x72.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "marker-wikipedia-72x72.png"; sourceTree = "<group>"; };
@@ -336,8 +343,8 @@
 				CF6920B01837EA35007409D8 /* G3MDemoScene.hpp */,
 				CFE3B3ED183C05F70078C796 /* G3MIsosurfaceDemoScene.cpp */,
 				CFE3B3EE183C05F70078C796 /* G3MIsosurfaceDemoScene.hpp */,
-				CFE3B3C5183A99070078C796 /* G3MMarkersDemoScene.cpp */,
-				CFE3B3C6183A99070078C796 /* G3MMarkersDemoScene.hpp */,
+				CFE3B3C5183A99070078C796 /* G3MMarksDemoScene.cpp */,
+				CFE3B3C6183A99070078C796 /* G3MMarksDemoScene.hpp */,
 				CFE3B3CE183AC7D20078C796 /* G3MPointCloudDemoScene.cpp */,
 				CFE3B3CF183AC7D20078C796 /* G3MPointCloudDemoScene.hpp */,
 				CF6920B21837F1CA007409D8 /* G3MRasterLayersDemoScene.cpp */,
@@ -360,6 +367,8 @@
 				CFC192D71A8D2E5F00FA89B3 /* G3MCanvas2DDemoScene.hpp */,
 				CFB136C91AA74FA00013EDE1 /* G3MAugmentedRealityDemoScene.mm */,
 				CFB136CA1AA74FA00013EDE1 /* G3MAugmentedRealityDemoScene.hpp */,
+				D87179091AE4FCCA00A9A14F /* G3MAnimatedMarksDemoScene.cpp */,
+				D871790A1AE4FCCA00A9A14F /* G3MAnimatedMarksDemoScene.hpp */,
 			);
 			name = DemoBuilder;
 			sourceTree = "<group>";
@@ -483,9 +492,11 @@
 		E7D1B7F116D2750400AF47C1 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				CF4E4C3C1AB62AAC00351300 /* BuenosAires-Wikipedia.json */,
+				CFFCD2C81AD2C748004C7112 /* BuenosAires-Wikipedia.json */,
+				D871790F1AE501B100A9A14F /* pin.png */,
+				D871790D1AE500B500A9A14F /* radar-sprite.png */,
 				CFC192DA1A8D3A7C00FA89B3 /* colorgrid.jpg */,
-				CFF9D20B1A7C5048005429A6 /* g3m-marker.png */,
+				CFF9D20B1A7C5048005429A6 /* g3m-mark.png */,
 				CFF9D2091A7C5014005429A6 /* anchorWidget.png */,
 				CF483ECC1A2E62C400B70D7E /* widget-background.png */,
 				CF483ECA1A2E62B600B70D7E /* altimeter-ruler-1536x113.png */,
@@ -568,7 +579,7 @@
 				};
 			};
 			buildConfigurationList = E7D1B60016D2436700AF47C1 /* Build configuration list for PBXProject "G3MApp" */;
-			compatibilityVersion = "Xcode 3.2";
+			compatibilityVersion = "Xcode 6.3";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -616,6 +627,7 @@
 				CF37F5F5183D355E0050CAEF /* MainStoryboard-iPhone.storyboard in Resources */,
 				E7D1B63C16D2462B00AF47C1 /* Default-Landscape.png in Resources */,
 				CFE3B3D7183AD2CB0078C796 /* A320.bson in Resources */,
+				D87179101AE501B100A9A14F /* pin.png in Resources */,
 				CF483EC91A2E62A100B70D7E /* CompassHeadings.png in Resources */,
 				E7D1B63D16D2462B00AF47C1 /* Default-Landscape@2x.png in Resources */,
 				E7D1B63E16D2462B00AF47C1 /* Default-Portrait.png in Resources */,
@@ -634,6 +646,7 @@
 				CF6920C418394DB6007409D8 /* restaurants_monaco.geojson in Resources */,
 				E7D1B64316D2462B00AF47C1 /* Icon-Small-50@2x.png in Resources */,
 				E7D1B64416D2462B00AF47C1 /* Icon-Small.png in Resources */,
+				D871790E1AE500B500A9A14F /* radar-sprite.png in Resources */,
 				CFC192DB1A8D3A7C00FA89B3 /* colorgrid.jpg in Resources */,
 				E7D1B64516D2462B00AF47C1 /* Icon-Small@2x.png in Resources */,
 				E7D1B64616D2462B00AF47C1 /* Icon.png in Resources */,
@@ -655,7 +668,7 @@
 				E780A3D216D29EA5000F0395 /* stop.png in Resources */,
 				CF6920C718394E44007409D8 /* restaurant-96x96.png in Resources */,
 				CFE3B3CD183ABD8B0078C796 /* uscitieslite.geojson in Resources */,
-				CF4E4C3D1AB62AAC00351300 /* BuenosAires-Wikipedia.json in Resources */,
+				CFFCD2C91AD2C748004C7112 /* BuenosAires-Wikipedia.json in Resources */,
 				E780A3DB16D29FAA000F0395 /* A320.json in Resources */,
 				E780A3DC16D29FAA000F0395 /* A320-NWA.png in Resources */,
 				CF6920C318394DB6007409D8 /* buildings_monaco.geojson in Resources */,
@@ -664,7 +677,7 @@
 				CF3F8FE7183576AF00589B4C /* MainStoryboard-iPad.storyboard in Resources */,
 				E780A3DE16D29FAA000F0395 /* NWA.png in Resources */,
 				CFC59BAC176F68DB002806D6 /* full-earth-2048x1024.bil in Resources */,
-				CFF9D20C1A7C5048005429A6 /* g3m-marker.png in Resources */,
+				CFF9D20C1A7C5048005429A6 /* g3m-mark.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -676,7 +689,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E7D1B61516D2436700AF47C1 /* main.m in Sources */,
-				CFE3B3C7183A99070078C796 /* G3MMarkersDemoScene.cpp in Sources */,
+				CFE3B3C7183A99070078C796 /* G3MMarksDemoScene.cpp in Sources */,
 				CFE3B3D5183AD04A0078C796 /* G3M3DModelDemoScene.cpp in Sources */,
 				CFE3B3D0183AC7D20078C796 /* G3MPointCloudDemoScene.cpp in Sources */,
 				E7D1B61916D2436700AF47C1 /* G3MAppDelegate.m in Sources */,
@@ -700,6 +713,7 @@
 				CF8B1A541837DBFA004D3902 /* G3MDemoModel.mm in Sources */,
 				CFBD815219A3D9F600F1A8C4 /* G3MStreamingPointCloud1DemoScene.cpp in Sources */,
 				CF6920BA18392D51007409D8 /* G3MDemoContext.cpp in Sources */,
+				D871790B1AE4FCCA00A9A14F /* G3MAnimatedMarksDemoScene.cpp in Sources */,
 				CF8B1A581837DC69004D3902 /* G3MDemoListener.cpp in Sources */,
 				CFB136CB1AA74FA00013EDE1 /* G3MAugmentedRealityDemoScene.mm in Sources */,
 			);

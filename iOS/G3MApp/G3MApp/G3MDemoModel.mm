@@ -26,7 +26,7 @@
 #include "G3MDemoListener.hpp"
 #include "G3MRasterLayersDemoScene.hpp"
 #include "G3MVectorialDemoScene.hpp"
-#include "G3MMarkersDemoScene.hpp"
+#include "G3MMarksDemoScene.hpp"
 #include "G3M3DSymbologyDemoScene.hpp"
 #include "G3MPointCloudDemoScene.hpp"
 #include "G3M3DModelDemoScene.hpp"
@@ -40,6 +40,7 @@
 #include "G3MNonOverlappingMarksDemoScene.hpp"
 #include "G3MCanvas2DDemoScene.hpp"
 #include "G3MAugmentedRealityDemoScene.hpp"
+#include "G3MAnimatedMarksDemoScene.hpp"
 
 G3MDemoModel::G3MDemoModel(G3MDemoListener*             listener,
                            LayerSet*                    layerSet,
@@ -66,7 +67,7 @@ _context(NULL)
   _scenes.push_back( new G3MRasterLayersDemoScene(this) );
   _scenes.push_back( new G3MScenarioDEMDemoScene(this) );
   _scenes.push_back( new G3MVectorialDemoScene(this) );
-  _scenes.push_back( new G3MMarkersDemoScene(this) );
+  _scenes.push_back( new G3MMarksDemoScene(this) );
   _scenes.push_back( new G3M3DSymbologyDemoScene(this) );
   _scenes.push_back( new G3MPointCloudDemoScene(this) );
   _scenes.push_back( new G3M3DModelDemoScene(this) );
@@ -78,7 +79,9 @@ _context(NULL)
   _scenes.push_back( new G3MHUDDemoScene(this) );
   _scenes.push_back( new G3MNonOverlappingMarksDemoScene(this) );
   _scenes.push_back( new G3MAugmentedRealityDemoScene(this) );
-  _scenes.push_back( new G3MCanvas2DDemoScene(this) );
+  //_scenes.push_back( new G3MCanvas2DDemoScene(this) );
+  _scenes.push_back( new G3MAnimatedMarksDemoScene(this) );
+  // _scenes.push_back( new G3MCanvas2DDemoScene(this) );
 }
 
 void G3MDemoModel::initializeG3MContext(const G3MContext* context) {

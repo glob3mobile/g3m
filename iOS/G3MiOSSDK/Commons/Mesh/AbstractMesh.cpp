@@ -45,14 +45,14 @@ AbstractMesh::~AbstractMesh() {
 AbstractMesh::AbstractMesh(const int primitive,
                            bool owner,
                            const Vector3D& center,
-                           IFloatBuffer* vertices,
+                           const IFloatBuffer* vertices,
                            float lineWidth,
                            float pointSize,
                            const Color* flatColor,
-                           IFloatBuffer* colors,
+                           const IFloatBuffer* colors,
                            const float colorsIntensity,
                            bool depthTest,
-                           IFloatBuffer* normals) :
+                           const IFloatBuffer* normals) :
 _primitive(primitive),
 _owner(owner),
 _vertices(vertices),

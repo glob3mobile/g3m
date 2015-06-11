@@ -138,9 +138,9 @@ public class GPUProgram
   
     //ILogger::instance()->logInfo("Deleting program %s", _name.c_str());
   
-  //  if (_manager != NULL) {
-  //    _manager->compiledProgramDeleted(this->_name);
-  //  }
+    //  if (_manager != NULL) {
+    //    _manager->compiledProgramDeleted(this->_name);
+    //  }
   
     for (int i = 0; i < _nUniforms; i++)
     {
@@ -184,7 +184,7 @@ public class GPUProgram
       return null;
     }
   
-  //  ILogger::instance()->logInfo("VERTEX SOURCE: \n %s", vertexSource.c_str());
+    //  ILogger::instance()->logInfo("VERTEX SOURCE: \n %s", vertexSource.c_str());
   
     // compile fragment shader
     int fragmentShader = gl.createShader(ShaderType.FRAGMENT_SHADER);
@@ -198,7 +198,7 @@ public class GPUProgram
       return null;
     }
   
-  //  ILogger::instance()->logInfo("FRAGMENT SOURCE: \n %s", fragmentSource.c_str());
+    //  ILogger::instance()->logInfo("FRAGMENT SOURCE: \n %s", fragmentSource.c_str());
   
     //gl->bindAttribLocation(p, 0, POSITION);
   
@@ -481,24 +481,20 @@ public class GPUProgram
     GPUUniform u = _uniforms[key];
     if (u == null)
     {
-      ILogger.instance().logError("Uniform [key=%d] not found", key);
+      ILogger.instance().logError("Uniform [key=%d] not found in program %s", key, _name);
+      return;
     }
-    else
-    {
-      u.set(v);
-    }
+    u.set(v);
   }
   public final void setGPUAttributeValue(int key, GPUAttributeValue v)
   {
     GPUAttribute a = _attributes[key];
     if (a == null)
     {
-      ILogger.instance().logError("Attribute [key=%d] not found", key);
+      ILogger.instance().logError("Attribute [key=%d] not found in program %s", key, _name);
+      return;
     }
-    else
-    {
-      a.set(v);
-    }
+    a.set(v);
   }
 
   public final void addReference()

@@ -12,6 +12,7 @@
 #include "GPUVariableValueSet.hpp"
 #include "GLFeatureGroup.hpp"
 #include "GPUAttribute.hpp"
+#include "Vector2F.hpp"
 
 #include "RCObject.hpp"
 
@@ -74,13 +75,26 @@ private:
     super.dispose();
 #endif
   }
-
+  
+  GPUUniformValueVec2FloatMutable* _size;
+  GPUUniformValueVec2FloatMutable* _anchor;
+  
 public:
   BillboardGLFeature(const Vector3D& position,
-                     int textureWidth,
-                     int textureHeight);
-
+                     float billboardWidth,
+                     float billboardHeight,
+                     float anchorU, float anchorV);
+  
   void applyOnGlobalGLState(GLGlobalState* state) const;
+  
+  void changeSize(int textureWidth,
+                  int textureHeight){
+    _size->changeValue(textureWidth, textureHeight);
+  }
+  
+  void changeAnchor(float anchorU, float anchorV){
+    _anchor->changeValue(anchorU, anchorV);
+  }
 };
 
 class ViewportExtentGLFeature: public GLFeature {
@@ -125,7 +139,7 @@ private:
 
 public:
 
-  GeometryGLFeature(IFloatBuffer* buffer,
+  GeometryGLFeature(const IFloatBuffer* buffer,
                     int arrayElementSize,
                     int index,
                     bool normalized,
@@ -406,6 +420,8 @@ public:
                    int sFactor,
                    int dFactor,
                    int target = 0);
+  
+  bool hasTranslateAndScale() const { return _translation != NULL && _scale != NULL;}
 
   void setTranslation(float u, float v);
   void setScale(float u, float v);
@@ -438,7 +454,7 @@ private:
   }
 
 public:
-  ColorGLFeature(IFloatBuffer* colors,
+  ColorGLFeature(const IFloatBuffer* colors,
                  int arrayElementSize,
                  int index,
                  bool normalized,
@@ -553,7 +569,7 @@ private:
   }
 
 public:
-  VertexNormalGLFeature(IFloatBuffer* buffer,
+  VertexNormalGLFeature(const IFloatBuffer* buffer,
                         int arrayElementSize,
                         int index,
                         bool normalized,
