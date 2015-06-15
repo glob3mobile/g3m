@@ -124,8 +124,8 @@ public class CameraDoubleDragHandler extends CameraEventHandler
   
     // compute transformation matrix
     final Planet planet = eventContext.getPlanet();
-    final Vector2F pixel0 = touchEvent.getTouch(0).getPos();
-    final Vector2F pixel1 = touchEvent.getTouch(1).getPos();
+    final MutableVector2F pixel0 = touchEvent.getTouch(0).getPos();
+    final MutableVector2F pixel1 = touchEvent.getTouch(1).getPos();
     final Vector3D initialRay0 = Camera.pixel2Ray(_cameraPosition, pixel0, _cameraViewPort, _cameraModelViewMatrix);
     final Vector3D initialRay1 = Camera.pixel2Ray(_cameraPosition, pixel1, _cameraViewPort, _cameraModelViewMatrix);
   
