@@ -42,21 +42,23 @@ void CameraDoubleDragHandler::onDown(const G3MEventContext *eventContext,
 {
   Camera *camera = cameraContext->getNextCamera();
   camera->getLookAtParamsInto(_cameraPosition, _cameraCenter, _cameraUp);
-  _camera0.copyFrom(*camera);
+  camera->getModelViewMatrixInto(_cameraModelViewMatrix);
+  camera->getViewPortInto(_cameraViewPort);
+
   // double dragging
   const Vector2F pixel0 = touchEvent.getTouch(0)->getPos();
   const Vector2F pixel1 = touchEvent.getTouch(1)->getPos();
   
-  const Vector3D& initialRay0 = _camera0.pixel2Ray(pixel0);
-  const Vector3D& initialRay1 = _camera0.pixel2Ray(pixel1);
+  const Vector3D& initialRay0 = camera->pixel2Ray(pixel0);
+  const Vector3D& initialRay1 = camera->pixel2Ray(pixel1);
   
   if ( initialRay0.isNan() || initialRay1.isNan() ) return;
   
   cameraContext->setCurrentGesture(DoubleDrag);
-  eventContext->getPlanet()->beginDoubleDrag(_camera0.getCartesianPosition(),
-                                             _camera0.getViewDirection(),
-                                             _camera0.pixel2Ray(pixel0),
-                                             _camera0.pixel2Ray(pixel1));
+  eventContext->getPlanet()->beginDoubleDrag(camera->getCartesianPosition(),
+                                             camera->getViewDirection(),
+                                             camera->pixel2Ray(pixel0),
+                                             camera->pixel2Ray(pixel1));
 }
 
 
@@ -69,10 +71,12 @@ void CameraDoubleDragHandler::onMove(const G3MEventContext *eventContext,
   const Planet* planet = eventContext->getPlanet();
   const Vector2F pixel0 = touchEvent.getTouch(0)->getPos();
   const Vector2F pixel1 = touchEvent.getTouch(1)->getPos();
-  const Vector3D& initialRay0 = _camera0.pixel2Ray(pixel0);
-  const Vector3D& initialRay1 = _camera0.pixel2Ray(pixel1);
+  const Vector3D& initialRay0 = Camera::pixel2Ray(_cameraPosition, pixel0,
+                                                  _cameraViewPort, _cameraModelViewMatrix);
+  const Vector3D& initialRay1 = Camera::pixel2Ray(_cameraPosition, pixel1,
+                                                  _cameraViewPort, _cameraModelViewMatrix);
   
-   if ( initialRay0.isNan() || initialRay1.isNan() ) return;
+   if (initialRay0.isNan() || initialRay1.isNan() ) return;
   
   MutableMatrix44D matrix = planet->doubleDrag(initialRay0,
                                                initialRay1);

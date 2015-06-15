@@ -213,6 +213,25 @@ void Camera::pixel2RayInto(const MutableVector3D& position,
 }
 
 
+const Vector3D Camera::pixel2Ray(const MutableVector3D& position,
+                                 const MutableVector2F& pixel,
+                                 const MutableVector2I& viewport,
+                                 const MutableMatrix44D& modelViewMatrix)
+{
+  const float px = pixel._x;
+  const float py = viewport.y() - pixel._y;
+  const Vector3D pixel3D(px, py, 0);
+  const Vector3D obj = modelViewMatrix.unproject(pixel3D, 0, 0,
+                                                 viewport.x(),
+                                                 viewport.y());
+  if (obj.isNan()) {
+    return obj;
+  } else {
+    return obj.sub(position.asVector3D());
+  }
+}
+
+
 const Vector3D Camera::pixel2Ray(const Vector2F& pixel) const {
   const float px = pixel._x;
   const float py = _viewPortHeight - pixel._y;

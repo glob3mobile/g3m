@@ -373,6 +373,11 @@ public:
                             const MutableMatrix44D& modelViewMatrix,
                             MutableVector3D& ray);
   
+  static const Vector3D pixel2Ray(const MutableVector3D& position,
+                                  const MutableVector2F& pixel,
+                                  const MutableVector2I& viewport,
+                                  const MutableMatrix44D& modelViewMatrix);
+  
   
 private:
 

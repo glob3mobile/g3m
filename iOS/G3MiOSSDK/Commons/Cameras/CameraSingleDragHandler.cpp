@@ -47,7 +47,7 @@ void CameraSingleDragHandler::onDown(const G3MEventContext *eventContext,
   camera->getLookAtParamsInto(_cameraPosition, _cameraCenter, _cameraUp);
   camera->getModelViewMatrixInto(_cameraModelViewMatrix);
   camera->getViewPortInto(_cameraViewPort);
-  //_camera0.copyFrom(*camera);
+
   // dragging
   const Vector2F pixel = touchEvent.getTouch(0)->getPos();
   const Vector3D& initialRay = camera->pixel2Ray(pixel);
@@ -65,23 +65,9 @@ void CameraSingleDragHandler::onMove(const G3MEventContext *eventContext,
   if (cameraContext->getCurrentGesture()!=Drag) return;
   
   //check finalRay
-  //const Vector3D& finalRay = _camera0.pixel2Ray(touchEvent.getTouch(0)->getPos());
-  
-  
-  /*const Vector2F pixel = touchEvent.getTouch(0)->getPos();
-  const float px = pixel._x;
-  const float py = _cameraViewPort.y() - pixel._y;
-  const Vector3D pixel3D(px, py, 0);
-  const Vector3D obj = _cameraModelViewMatrix.unproject(pixel3D,
-                                                      0, 0, _cameraViewPort.x(), _cameraViewPort.y());
-  if (obj.isNan()) return;
-  const Vector3D& finalRay = obj.sub(_cameraPosition.asVector3D());*/
-  
-  
   Camera::pixel2RayInto(_cameraPosition, touchEvent.getTouch(0)->getPos(),
                         _cameraViewPort, _cameraModelViewMatrix, _finalRay);
   if (_finalRay.isNan()) return;
-
   
   // compute transformation matrix
   const Planet* planet = eventContext->getPlanet();
