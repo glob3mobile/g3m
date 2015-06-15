@@ -616,7 +616,7 @@ public class Camera
     viewport.set(_viewPortWidth, _viewPortHeight);
   }
 
-  public static void pixel2RayInto(MutableVector3D position, MutableVector2F pixel, MutableVector2I viewport, MutableMatrix44D modelViewMatrix, MutableVector3D ray)
+  public static void pixel2RayInto(MutableVector3D position, Vector2F pixel, MutableVector2I viewport, MutableMatrix44D modelViewMatrix, MutableVector3D ray)
   {
     final float px = pixel._x;
     final float py = viewport.y() - pixel._y;
@@ -632,7 +632,7 @@ public class Camera
     }
   }
 
-  public static Vector3D pixel2Ray(MutableVector3D position, MutableVector2F pixel, MutableVector2I viewport, MutableMatrix44D modelViewMatrix)
+  public static Vector3D pixel2Ray(MutableVector3D position, Vector2F pixel, MutableVector2I viewport, MutableMatrix44D modelViewMatrix)
   {
     final float px = pixel._x;
     final float py = viewport.y() - pixel._y;

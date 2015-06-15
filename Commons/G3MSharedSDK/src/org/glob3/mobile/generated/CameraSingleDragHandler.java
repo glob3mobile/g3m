@@ -111,7 +111,7 @@ public class CameraSingleDragHandler extends CameraEventHandler
        return;
   
     //check finalRay
-    final MutableVector2F pixel = touchEvent.getTouch(0).getPos();
+    final Vector2F pixel = touchEvent.getTouch(0).getPos();
     Camera.pixel2RayInto(_cameraPosition, pixel, _cameraViewPort, _cameraModelViewMatrix, _finalRay);
     if (_finalRay.isNan())
        return;
