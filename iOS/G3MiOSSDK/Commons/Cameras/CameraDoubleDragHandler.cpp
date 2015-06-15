@@ -69,8 +69,8 @@ void CameraDoubleDragHandler::onMove(const G3MEventContext *eventContext,
 
   // compute transformation matrix
   const Planet* planet = eventContext->getPlanet();
-  const Vector2F pixel0 = touchEvent.getTouch(0)->getPos();
-  const Vector2F pixel1 = touchEvent.getTouch(1)->getPos();
+  const MutableVector2F pixel0 = touchEvent.getTouch(0)->getPos();
+  const MutableVector2F pixel1 = touchEvent.getTouch(1)->getPos();
   const Vector3D& initialRay0 = Camera::pixel2Ray(_cameraPosition, pixel0,
                                                   _cameraViewPort, _cameraModelViewMatrix);
   const Vector3D& initialRay1 = Camera::pixel2Ray(_cameraPosition, pixel1,
