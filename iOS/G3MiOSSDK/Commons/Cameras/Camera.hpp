@@ -358,6 +358,14 @@ public:
     up.copyFrom(_up);
   }
   
+  void getModelViewMatrixInto(MutableMatrix44D& matrix) {
+    matrix.copyValue(getModelViewMatrix());
+  }
+  
+  void getViewPortInto(MutableVector2I& viewport) {
+    viewport.set(_viewPortWidth, _viewPortHeight);
+  }
+  
 private:
 
   

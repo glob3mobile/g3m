@@ -58,6 +58,8 @@ private:
   MutableVector3D _cameraPosition;
   MutableVector3D _cameraCenter;
   MutableVector3D _cameraUp;
+  MutableVector2I _cameraViewPort;
+  MutableMatrix44D _cameraModelViewMatrix;
 
 };
 
