@@ -25,6 +25,7 @@ public class Camera
      _tanHalfVerticalFieldOfView = java.lang.Double.NaN;
      _tanHalfHorizontalFieldOfView = java.lang.Double.NaN;
      _rollInRadians = that._rollInRadians;
+     _timeStamp = 0;
   }
 
   public Camera()
@@ -49,6 +50,7 @@ public class Camera
      _tanHalfVerticalFieldOfView = java.lang.Double.NaN;
      _tanHalfHorizontalFieldOfView = java.lang.Double.NaN;
      _rollInRadians = 0;
+     _timeStamp = 0;
     resizeViewport(0, 0);
     _dirtyFlags.setAllDirty();
   }
@@ -69,6 +71,12 @@ public class Camera
 
   public final void copyFrom(Camera that)
   {
+  
+    if (_timeStamp == that._timeStamp)
+      return;
+  
+    _timeStamp = that._timeStamp;
+  
     _viewPortWidth = that._viewPortWidth;
     _viewPortHeight = that._viewPortHeight;
   
@@ -110,6 +118,7 @@ public class Camera
 
   public final void resizeViewport(int width, int height)
   {
+    _timeStamp++;
     _viewPortWidth = width;
     _viewPortHeight = height;
   
@@ -339,6 +348,7 @@ public class Camera
     if (!v.equalTo(_position))
     {
       //      _position = MutableVector3D(v);
+      _timeStamp++;
       _position.copyFrom(v);
       if (_geodeticPosition != null)
          _geodeticPosition.dispose();
@@ -516,6 +526,7 @@ public class Camera
     final double newV = halfVFOV.tangent();
     if ((newH != _tanHalfHorizontalFieldOfView) || (newV != _tanHalfVerticalFieldOfView))
     {
+      _timeStamp++;
       _tanHalfHorizontalFieldOfView = newH;
       _tanHalfVerticalFieldOfView = newV;
   
@@ -576,6 +587,71 @@ public class Camera
     return distanceInMeters * _viewPortHeight / frustumData._top;
   }
 
+  public final long getTimeStamp()
+  {
+    return _timeStamp;
+  }
+
+  public final void setLookAtParams(MutableVector3D position, MutableVector3D center, MutableVector3D up)
+  {
+    setCartesianPosition(position);
+    setCenter(center);
+    setUp(up);
+  }
+
+  public final void getLookAtParamsInto(MutableVector3D position, MutableVector3D center, MutableVector3D up)
+  {
+    position.copyFrom(_position);
+    center.copyFrom(_center);
+    up.copyFrom(_up);
+  }
+
+  public final void getModelViewMatrixInto(MutableMatrix44D matrix)
+  {
+    matrix.copyValue(getModelViewMatrix());
+  }
+
+  public final void getViewPortInto(MutableVector2I viewport)
+  {
+    viewport.set(_viewPortWidth, _viewPortHeight);
+  }
+
+  public static void pixel2RayInto(MutableVector3D position, MutableVector2F pixel, MutableVector2I viewport, MutableMatrix44D modelViewMatrix, MutableVector3D ray)
+  {
+    final float px = pixel._x;
+    final float py = viewport.y() - pixel._y;
+    final Vector3D pixel3D = new Vector3D(px, py, 0);
+    final Vector3D obj = modelViewMatrix.unproject(pixel3D, 0, 0, viewport.x(), viewport.y());
+    if (obj.isNan())
+    {
+      ray.copyFrom(obj);
+    }
+    else
+    {
+      ray.set(obj._x-position.x(), obj._y-position.y(), obj._z-position.z());
+    }
+  }
+
+  public static Vector3D pixel2Ray(MutableVector3D position, MutableVector2F pixel, MutableVector2I viewport, MutableMatrix44D modelViewMatrix)
+  {
+    final float px = pixel._x;
+    final float py = viewport.y() - pixel._y;
+    final Vector3D pixel3D = new Vector3D(px, py, 0);
+    final Vector3D obj = modelViewMatrix.unproject(pixel3D, 0, 0, viewport.x(), viewport.y());
+    if (obj.isNan())
+    {
+      return obj;
+    }
+    else
+    {
+      return obj.sub(position.asVector3D());
+    }
+  }
+
+
+
+
+  private long _timeStamp;
 
   private MutableVector3D _ray0 = new MutableVector3D();
   private MutableVector3D _ray1 = new MutableVector3D();
@@ -630,6 +706,7 @@ public class Camera
   {
     if (!v.equalTo(_center))
     {
+      _timeStamp++;
       //      _center = MutableVector3D(v);
       _center.copyFrom(v);
       _dirtyFlags.setAllDirty();
@@ -640,6 +717,7 @@ public class Camera
   {
     if (!v.equalTo(_up))
     {
+      _timeStamp++;
       //      _up = MutableVector3D(v);
       _up.copyFrom(v);
       _dirtyFlags.setAllDirty();
@@ -791,6 +869,7 @@ public class Camera
 
   private void setCameraCoordinateSystem(CoordinateSystem rs)
   {
+    _timeStamp++;
   //  _center = _position.add(rs._y.asMutableVector3D());
     _center.copyFrom(_position);
     _center.addInPlace(rs._y);
