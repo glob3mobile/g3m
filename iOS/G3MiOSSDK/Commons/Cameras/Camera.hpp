@@ -15,6 +15,7 @@
 
 #include "Planet.hpp"
 #include "MutableVector3D.hpp"
+#include "MutableVector2F.hpp"
 #include "Context.hpp"
 #include "Geodetic3D.hpp"
 #include "Vector2I.hpp"
@@ -365,6 +366,13 @@ public:
   void getViewPortInto(MutableVector2I& viewport) {
     viewport.set(_viewPortWidth, _viewPortHeight);
   }
+  
+  static void pixel2RayInto(const MutableVector3D& position,
+                            const MutableVector2F& pixel,
+                            const MutableVector2I& viewport,
+                            const MutableMatrix44D& modelViewMatrix,
+                            MutableVector3D& ray);
+  
   
 private:
 

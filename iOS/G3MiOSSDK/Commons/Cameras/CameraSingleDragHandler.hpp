@@ -60,7 +60,7 @@ private:
   MutableVector3D _cameraUp;
   MutableVector2I _cameraViewPort;
   MutableMatrix44D _cameraModelViewMatrix;
-
+  MutableVector3D _finalRay;
 };
 
 
