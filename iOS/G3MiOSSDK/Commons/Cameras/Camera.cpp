@@ -194,7 +194,7 @@ const Vector3D Camera::pixel2Ray(const Vector2I& pixel) const {
 }
 
 void Camera::pixel2RayInto(const MutableVector3D& position,
-                           const MutableVector2F& pixel,
+                           const Vector2F& pixel,
                            const MutableVector2I& viewport,
                            const MutableMatrix44D& modelViewMatrix,
                            MutableVector3D& ray)
@@ -214,7 +214,7 @@ void Camera::pixel2RayInto(const MutableVector3D& position,
 
 
 const Vector3D Camera::pixel2Ray(const MutableVector3D& position,
-                                 const MutableVector2F& pixel,
+                                 const Vector2F& pixel,
                                  const MutableVector2I& viewport,
                                  const MutableMatrix44D& modelViewMatrix)
 {

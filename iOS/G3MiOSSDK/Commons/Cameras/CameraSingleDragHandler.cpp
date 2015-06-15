@@ -65,7 +65,7 @@ void CameraSingleDragHandler::onMove(const G3MEventContext *eventContext,
   if (cameraContext->getCurrentGesture()!=Drag) return;
   
   //check finalRay
-  const MutableVector2F pixel = touchEvent.getTouch(0)->getPos();
+  const Vector2F pixel = touchEvent.getTouch(0)->getPos();
   Camera::pixel2RayInto(_cameraPosition, pixel,
                         _cameraViewPort, _cameraModelViewMatrix, _finalRay);
   if (_finalRay.isNan()) return;
