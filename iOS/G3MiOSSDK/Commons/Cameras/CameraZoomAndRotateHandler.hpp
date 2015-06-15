@@ -62,7 +62,6 @@ public:
   double _initialFingerSeparation;
   double _initialFingerInclination;
   
-  //Camera _camera0;         //Initial Camera saved on Down event
   MutableVector3D _cameraPosition;
   MutableVector3D _cameraCenter;
   MutableVector3D _cameraUp;

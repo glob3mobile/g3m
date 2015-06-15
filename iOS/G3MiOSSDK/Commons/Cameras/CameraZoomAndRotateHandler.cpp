@@ -200,7 +200,6 @@ void CameraZoomAndRotateHandler::zoom(Camera* camera, const Vector2F& difCurrent
     return;
 	
 	// make zoom and rotation
-  //camera->copyFrom(_camera0);
   camera->setLookAtParams(_cameraPosition, _cameraCenter, _cameraUp);
   
   // make rotation
@@ -211,11 +210,6 @@ void CameraZoomAndRotateHandler::zoom(Camera* camera, const Vector2F& difCurrent
   
   // make zoom
   camera->moveForward(desp*dist);
-  
-  /*printf("dist=%.2f.  desp=%f.   factor=%f   new dist=%.2f\n", dist, desp, factor, dist-desp*dist);
-  printf ("camera en (%.2f, %.2f, %.2f)     centralpoint en (%.2f, %.2f, %.2f). \n",
-          _camera0.getCartesianPosition().x(),  _camera0.getCartesianPosition().y(),  _camera0.getCartesianPosition().z(),
-          _centralGlobePoint.x(), _centralGlobePoint.y(), _centralGlobePoint.z());*/
 }
 
 void CameraZoomAndRotateHandler::rotate()
