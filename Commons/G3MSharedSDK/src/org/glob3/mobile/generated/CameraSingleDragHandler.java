@@ -137,6 +137,8 @@ public class CameraSingleDragHandler extends CameraEventHandler
       final Vector2F prevPixel = touch.getPrevPos();
       final double desp = currPixel.sub(prevPixel).length();
   
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning method getPixelsInMM is ! working fine in iOS devices
       final float delta = IFactory.instance().getDeviceInfo().getPixelsInMM(0.2f);
   
       if ((cameraContext.getCurrentGesture() == Gesture.Drag) && (desp > delta))
