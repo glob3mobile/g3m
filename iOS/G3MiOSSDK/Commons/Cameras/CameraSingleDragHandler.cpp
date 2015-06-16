@@ -94,6 +94,7 @@ void CameraSingleDragHandler::onUp(const G3MEventContext *eventContext,
     const Vector2F prevPixel = touch->getPrevPos();
     const double desp        = currPixel.sub(prevPixel).length();
 
+#warning method getPixelsInMM is not working fine in iOS devices
     const float delta = IFactory::instance()->getDeviceInfo()->getPixelsInMM(0.2f);
 
     if ((cameraContext->getCurrentGesture() == Drag) &&
