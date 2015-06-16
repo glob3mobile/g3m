@@ -22,6 +22,8 @@ public abstract class EffectWithForce extends Effect
 
   public boolean isDone(G3MRenderContext rc, TimeInterval when)
   {
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning TODO: adjust this threshold to work properly in singledrag from any cameraheight.
     return (IMathUtils.instance().abs(_force) < 1e-6);
   }
 

@@ -42,7 +42,7 @@ public class SimpleCameraConstrainer implements ICameraConstrainer
     {
       _previousCameraTimeStamp = previousCameraTimeStamp;
       _nextCameraTimeStamp = nextCameraTimeStamp;
-      //System.out.printf("Cameras TimeStamp: PreviousCam=%lld; NextCam=%lld\n", _previousCameraTimeStamp, _nextCameraTimeStamp);
+      ILogger.instance().logInfo("Cameras TimeStamp: PreviousCam=%lld; NextCam=%lld\n", _previousCameraTimeStamp, _nextCameraTimeStamp);
     }
   
     final double radii = planet.getRadii().maxAxis();

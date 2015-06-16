@@ -181,7 +181,7 @@ public class G3MWidget implements ChangedRendererInfoListener
     }
     _planet.applyCameraConstrainers(_currentCamera, _nextCamera);
   
-    _currentCamera.copyFromForcingMatrixCreation(_nextCamera);
+    _currentCamera.copyFrom(_nextCamera);
   
     _rendererState = calculateRendererState();
     final RenderState_Type renderStateType = _rendererState._type;
@@ -790,8 +790,8 @@ public class G3MWidget implements ChangedRendererInfoListener
      _hudRenderer = hudRenderer;
      _width = 1;
      _height = 1;
-     _currentCamera = new Camera();
-     _nextCamera = new Camera();
+     _currentCamera = new Camera(1);
+     _nextCamera = new Camera(2);
      _backgroundColor = new Color(backgroundColor);
      _timer = IFactory.instance().createTimer();
      _renderCounter = 0;

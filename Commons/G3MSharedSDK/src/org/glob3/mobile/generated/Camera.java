@@ -1,34 +1,8 @@
 package org.glob3.mobile.generated; 
 public class Camera
 {
-  public Camera(Camera that)
-  {
-     _viewPortWidth = that._viewPortWidth;
-     _viewPortHeight = that._viewPortHeight;
-     _planet = that._planet;
-     _position = new MutableVector3D(that._position);
-     _center = new MutableVector3D(that._center);
-     _up = new MutableVector3D(that._up);
-     _dirtyFlags = new CameraDirtyFlags(that._dirtyFlags);
-     _frustumData = new FrustumData(that._frustumData);
-     _projectionMatrix = new MutableMatrix44D(that._projectionMatrix);
-     _modelMatrix = new MutableMatrix44D(that._modelMatrix);
-     _modelViewMatrix = new MutableMatrix44D(that._modelViewMatrix);
-     _cartesianCenterOfView = new MutableVector3D(that._cartesianCenterOfView);
-     _geodeticCenterOfView = (that._geodeticCenterOfView == null) ? null : new Geodetic3D(that._geodeticCenterOfView);
-     _frustum = (that._frustum == null) ? null : new Frustum(that._frustum);
-     _frustumInModelCoordinates = (that._frustumInModelCoordinates == null) ? null : new Frustum(that._frustumInModelCoordinates);
-     _camEffectTarget = new CameraEffectTarget();
-     _geodeticPosition = (that._geodeticPosition == null) ? null: new Geodetic3D(that._geodeticPosition);
-     _angle2Horizon = that._angle2Horizon;
-     _normalizedPosition = new MutableVector3D(that._normalizedPosition);
-     _tanHalfVerticalFieldOfView = java.lang.Double.NaN;
-     _tanHalfHorizontalFieldOfView = java.lang.Double.NaN;
-     _rollInRadians = that._rollInRadians;
-     _timeStamp = 0;
-  }
 
-  public Camera()
+  public Camera(long timeStamp)
   {
      _planet = null;
      _position = new MutableVector3D(0, 0, 0);
@@ -50,7 +24,7 @@ public class Camera
      _tanHalfVerticalFieldOfView = java.lang.Double.NaN;
      _tanHalfHorizontalFieldOfView = java.lang.Double.NaN;
      _rollInRadians = 0;
-     _timeStamp = 0;
+     _timeStamp = timeStamp;
     resizeViewport(0, 0);
     _dirtyFlags.setAllDirty();
   }
@@ -74,6 +48,8 @@ public class Camera
   
     if (_timeStamp == that._timeStamp)
       return;
+  
+    that.forceMatrixCreation();
   
     _timeStamp = that._timeStamp;
   
@@ -108,12 +84,6 @@ public class Camera
   
     _tanHalfVerticalFieldOfView = that._tanHalfVerticalFieldOfView;
     _tanHalfHorizontalFieldOfView = that._tanHalfHorizontalFieldOfView;
-  }
-
-  public final void copyFromForcingMatrixCreation(Camera c)
-  {
-    c.forceMatrixCreation();
-    copyFrom(c);
   }
 
   public final void resizeViewport(int width, int height)
@@ -650,6 +620,32 @@ public class Camera
 
 
 
+  private Camera(Camera that)
+  {
+     _viewPortWidth = that._viewPortWidth;
+     _viewPortHeight = that._viewPortHeight;
+     _planet = that._planet;
+     _position = new MutableVector3D(that._position);
+     _center = new MutableVector3D(that._center);
+     _up = new MutableVector3D(that._up);
+     _dirtyFlags = new CameraDirtyFlags(that._dirtyFlags);
+     _frustumData = new FrustumData(that._frustumData);
+     _projectionMatrix = new MutableMatrix44D(that._projectionMatrix);
+     _modelMatrix = new MutableMatrix44D(that._modelMatrix);
+     _modelViewMatrix = new MutableMatrix44D(that._modelViewMatrix);
+     _cartesianCenterOfView = new MutableVector3D(that._cartesianCenterOfView);
+     _geodeticCenterOfView = (that._geodeticCenterOfView == null) ? null : new Geodetic3D(that._geodeticCenterOfView);
+     _frustum = (that._frustum == null) ? null : new Frustum(that._frustum);
+     _frustumInModelCoordinates = (that._frustumInModelCoordinates == null) ? null : new Frustum(that._frustumInModelCoordinates);
+     _camEffectTarget = new CameraEffectTarget();
+     _geodeticPosition = (that._geodeticPosition == null) ? null: new Geodetic3D(that._geodeticPosition);
+     _angle2Horizon = that._angle2Horizon;
+     _normalizedPosition = new MutableVector3D(that._normalizedPosition);
+     _tanHalfVerticalFieldOfView = java.lang.Double.NaN;
+     _tanHalfHorizontalFieldOfView = java.lang.Double.NaN;
+     _rollInRadians = that._rollInRadians;
+     _timeStamp = that._timeStamp;
+  }
 
   private long _timeStamp;
 
