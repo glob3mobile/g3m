@@ -14,8 +14,9 @@
 #warning rotateWithAxixEffect must imitate behavior of SingleTranslationEffec (force=1 and rotate initialDegrees*force)
 
 RotateWithAxisEffect::RotateWithAxisEffect(const Vector3D& axis, const Angle& angle):
-EffectWithForce(angle._degrees, 0.975),
-_axis(axis)
+EffectWithForce(1, 0.975),
+_axis(axis),
+_degrees(angle._degrees)
 {
 }
 
@@ -23,13 +24,13 @@ _axis(axis)
 void RotateWithAxisEffect::doStep(const G3MRenderContext* rc,
                                   const TimeInterval& when) {
   EffectWithForce::doStep(rc, when);
-  rc->getNextCamera()->rotateWithAxis(_axis, Angle::fromDegrees(getForce()));
+  rc->getNextCamera()->rotateWithAxis(_axis, Angle::fromDegrees(_degrees*getForce()));
 }
 
 
 void RotateWithAxisEffect::stop(const G3MRenderContext* rc,
                                 const TimeInterval& when) {
-  rc->getNextCamera()->rotateWithAxis(_axis, Angle::fromDegrees(getForce()));
+  rc->getNextCamera()->rotateWithAxis(_axis, Angle::fromDegrees(_degrees*getForce()));
 }
 
 

@@ -20,6 +20,7 @@ class Angle;
 class RotateWithAxisEffect : public EffectWithForce {
 private:
   const Vector3D _axis;
+  double _degrees;
 
 public:
   RotateWithAxisEffect(const Vector3D& axis,
