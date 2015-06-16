@@ -97,7 +97,8 @@ void Camera::copyFrom(const Camera &that) {
   _tanHalfHorizontalFieldOfView = that._tanHalfHorizontalFieldOfView;
 }
 
-Camera::Camera() :
+
+Camera::Camera(long long timeStamp) :
 _planet(NULL),
 _position(0, 0, 0),
 _center(0, 0, 0),
@@ -118,7 +119,7 @@ _normalizedPosition(0, 0, 0),
 _tanHalfVerticalFieldOfView(NAND),
 _tanHalfHorizontalFieldOfView(NAND),
 _rollInRadians(0),
-_timeStamp(0)
+_timeStamp(timeStamp)
 {
   resizeViewport(0, 0);
   _dirtyFlags.setAllDirty();
