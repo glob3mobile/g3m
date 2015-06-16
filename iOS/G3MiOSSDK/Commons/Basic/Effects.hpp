@@ -157,33 +157,49 @@ class EffectWithForce : public Effect {
 private:
   double       _force;
   const double _friction;
-
+  
 protected:
   EffectWithForce(double force,
                   double friction):
   _force(force),
   _friction(friction)
   {}
-
+  
   double getForce() const {
     return _force;
   }
-
+  
 public:
   virtual void doStep(const G3MRenderContext* rc,
                       const TimeInterval& when) {
     _force *= _friction;
   };
-
+  
   virtual bool isDone(const G3MRenderContext* rc,
                       const TimeInterval& when) {
-#warning TODO: adjust this threshold to work properly in singledrag from any cameraheight.
     return (IMathUtils::instance()->abs(_force) < 0.05);
   }
-
+  
 };
 
 
+class EffectNeverEnding : public Effect {
+private:
+  
+protected:
+  EffectNeverEnding() {}
+  
+public:
+  virtual void doStep(const G3MRenderContext* rc,
+                      const TimeInterval& when) {
+  };
+  
+  virtual bool isDone(const G3MRenderContext* rc,
+                      const TimeInterval& when) {
+    return false;
+  }
+  
+};
 
 
 class EffectsScheduler {
