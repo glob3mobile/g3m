@@ -110,6 +110,8 @@ public:
 
 //***************************************************************
 
+#warning busy effect must be of class EffectNeverEnding instead of EffectWithForce
+
 class BusyEffect : public EffectWithForce {
 private:
   BusyQuadRenderer* _renderer;

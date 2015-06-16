@@ -11,6 +11,7 @@
 #include "Camera.hpp"
 
 
+#warning rotateWithAxixEffect must imitate behavior of SingleTranslationEffec (force=1 and rotate initialDegrees*force)
 
 RotateWithAxisEffect::RotateWithAxisEffect(const Vector3D& axis, const Angle& angle):
 EffectWithForce(angle._degrees, 0.975),
