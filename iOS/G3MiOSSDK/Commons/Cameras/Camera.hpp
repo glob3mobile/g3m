@@ -127,7 +127,7 @@ public:
   _tanHalfVerticalFieldOfView(NAND),
   _tanHalfHorizontalFieldOfView(NAND),
   _rollInRadians(that._rollInRadians),
-  _timeStamp(0)
+  _timeStamp(that._timeStamp)
   {
   }
 
@@ -140,8 +140,6 @@ public:
     delete _geodeticCenterOfView;
     delete _geodeticPosition;
   }
-
-  void copyFrom(const Camera &c);
 
   void copyFromForcingMatrixCreation(const Camera &c) {
     c.forceMatrixCreation();
@@ -380,6 +378,9 @@ public:
   
   
 private:
+
+  
+  void copyFrom(const Camera &c);
 
   
   mutable long long _timeStamp;

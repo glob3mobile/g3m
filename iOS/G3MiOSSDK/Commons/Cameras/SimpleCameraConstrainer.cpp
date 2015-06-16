@@ -30,13 +30,13 @@ bool SimpleCameraConstrainer::onCameraChange(const Planet *planet,
   const double cameraHeight = cameraPosition._height;
 
   if (cameraHeight > maxHeight) {
-    nextCamera->copyFrom(*previousCamera);
+    nextCamera->copyFromForcingMatrixCreation(*previousCamera);
     /*nextCamera->setGeodeticPosition(cameraPosition._latitude,
                                     cameraPosition._longitude,
                                     maxHeight);*/
   }
   else if (cameraHeight < minHeight) {
-    nextCamera->copyFrom(*previousCamera);
+    nextCamera->copyFromForcingMatrixCreation(*previousCamera);
     /*nextCamera->setGeodeticPosition(cameraPosition._latitude,
                                     cameraPosition._longitude,
                                     minHeight);*/
