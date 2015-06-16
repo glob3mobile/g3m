@@ -33,6 +33,8 @@ void Camera::copyFrom(const Camera &that) {
   if (_timeStamp == that._timeStamp)
     return;
   
+  that.forceMatrixCreation();
+  
   _timeStamp = that._timeStamp;
   
   _viewPortWidth  = that._viewPortWidth;

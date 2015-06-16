@@ -524,7 +524,7 @@ void G3MWidget::render(int width, int height) {
   }
   _planet->applyCameraConstrainers(_currentCamera, _nextCamera);
 
-  _currentCamera->copyFromForcingMatrixCreation(*_nextCamera);
+  _currentCamera->copyFrom(*_nextCamera);
 
 #ifdef C_CODE
   delete _rendererState;

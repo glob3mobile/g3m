@@ -24,7 +24,7 @@ bool SectorAndHeightCameraConstrainer::onCameraChange(const Planet* planet,
   const bool invalidPosition = !_sector.contains(center._latitude, center._longitude);
 
   if (invalidHeight || invalidPosition) {
-    nextCamera->copyFromForcingMatrixCreation(*previousCamera);
+    nextCamera->copyFrom(*previousCamera);
   }
 
   return true;
@@ -57,7 +57,7 @@ bool RenderedSectorCameraConstrainer::onCameraChange(const Planet* planet,
         }
       }
       else {
-        nextCamera->copyFromForcingMatrixCreation(*previousCamera);
+        nextCamera->copyFrom(*previousCamera);
       }
     }
   }

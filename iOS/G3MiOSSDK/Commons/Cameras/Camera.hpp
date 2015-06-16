@@ -114,11 +114,8 @@ public:
     delete _geodeticCenterOfView;
     delete _geodeticPosition;
   }
-
-  void copyFromForcingMatrixCreation(const Camera &c) {
-    c.forceMatrixCreation();
-    copyFrom(c);
-  }
+  
+  void copyFrom(const Camera &c);
 
   void resizeViewport(int width, int height);
 
@@ -379,8 +376,6 @@ private:
   _timeStamp(that._timeStamp)
   {
   }
-  
-  void copyFrom(const Camera &c);
   
   mutable long long _timeStamp;
 
