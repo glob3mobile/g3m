@@ -177,7 +177,7 @@ public:
   
   virtual bool isDone(const G3MRenderContext* rc,
                       const TimeInterval& when) {
-    return (IMathUtils::instance()->abs(_force) < 0.05);
+    return (IMathUtils::instance()->abs(_force) < 0.005);
   }
   
 };

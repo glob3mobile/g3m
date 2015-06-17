@@ -36,7 +36,7 @@ private:
   static GLuint     _boundVertexBuffer;
   mutable bool      _vertexBufferCreated;
   mutable GLuint    _vertexBuffer; //VBO
-  mutable int       _vertexBufferTimeStamp;
+  mutable int       _vertexBufferTimestamp;
 
 public:
   FloatBuffer_iOS(int size) :
@@ -44,7 +44,7 @@ public:
   _timestamp(0),
   _values(new float[size]),
   _vertexBuffer(-1),
-  _vertexBufferTimeStamp(-1),
+  _vertexBufferTimestamp(-1),
   _vertexBufferCreated(false),
   _id(_nextID++)
   {
@@ -79,7 +79,7 @@ public:
   _size(16),
   _timestamp(0),
   _vertexBuffer(-1),
-  _vertexBufferTimeStamp(-1),
+  _vertexBufferTimestamp(-1),
   _vertexBufferCreated(false),
   _id(_nextID)
   {

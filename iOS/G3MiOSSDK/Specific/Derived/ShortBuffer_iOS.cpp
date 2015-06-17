@@ -74,8 +74,8 @@ void ShortBuffer_iOS::bindAsIBOToGPU() {
   //  printf("REUSING");
   //}
 
-  if (_indexBufferTimeStamp != _timestamp) {
-    _indexBufferTimeStamp = _timestamp;
+  if (_indexBufferTimestamp != _timestamp) {
+    _indexBufferTimestamp = _timestamp;
     short* index = getPointer();
     int iboSize = sizeof(short) * size();
 

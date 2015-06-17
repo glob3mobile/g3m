@@ -16,8 +16,8 @@ class SimpleCameraConstrainer : public ICameraConstrainer {
 public:
 
   SimpleCameraConstrainer():
-  _previousCameraTimeStamp(0),
-  _nextCameraTimeStamp(0)
+  _previousCameraTimestamp(0),
+  _nextCameraTimestamp(0)
   {
     
   }
@@ -31,8 +31,8 @@ public:
                               Camera* nextCamera) const;
 
 private:
-  mutable long long _previousCameraTimeStamp;
-  mutable long long _nextCameraTimeStamp;
+  mutable long long _previousCameraTimestamp;
+  mutable long long _nextCameraTimestamp;
 };
 
 #endif

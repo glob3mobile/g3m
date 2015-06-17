@@ -14,13 +14,13 @@ bool SimpleCameraConstrainer::onCameraChange(const Planet *planet,
                                              const Camera* previousCamera,
                                              Camera* nextCamera) const {
   
-  long long previousCameraTimeStamp = previousCamera->getTimeStamp();
-  long long nextCameraTimeStamp = nextCamera->getTimeStamp();
-  if (previousCameraTimeStamp != _previousCameraTimeStamp || nextCameraTimeStamp != _nextCameraTimeStamp) {
-    _previousCameraTimeStamp = previousCameraTimeStamp;
-    _nextCameraTimeStamp = nextCameraTimeStamp;
-    ILogger::instance()->logInfo("Cameras TimeStamp: PreviousCam=%lld; NextCam=%lld\n",
-                                 _previousCameraTimeStamp, _nextCameraTimeStamp);
+  long long previousCameraTimestamp = previousCamera->getTimestamp();
+  long long nextCameraTimestamp = nextCamera->getTimestamp();
+  if (previousCameraTimestamp != _previousCameraTimestamp || nextCameraTimestamp != _nextCameraTimestamp) {
+    _previousCameraTimestamp = previousCameraTimestamp;
+    _nextCameraTimestamp = nextCameraTimestamp;
+    ILogger::instance()->logInfo("Cameras Timestamp: Previous=%lld; Next=%lld\n",
+                                 _previousCameraTimestamp, _nextCameraTimestamp);
   }
 
   const double radii = planet->getRadii().maxAxis();
