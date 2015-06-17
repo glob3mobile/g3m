@@ -46,7 +46,3 @@ public class DoubleTapTranslationEffect extends EffectWithDuration
   }
 
 }
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning rotateWithAxixEffect must imitate behavior of SingleTranslationEffec (force=1 && rotate initialDegrees *force)
-
-

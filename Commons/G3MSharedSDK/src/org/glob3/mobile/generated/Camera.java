@@ -23,7 +23,6 @@ public class Camera
      _normalizedPosition = new MutableVector3D(0, 0, 0);
      _tanHalfVerticalFieldOfView = java.lang.Double.NaN;
      _tanHalfHorizontalFieldOfView = java.lang.Double.NaN;
-     _rollInRadians = 0;
      _timestamp = timestamp;
     resizeViewport(0, 0);
     _dirtyFlags.setAllDirty();
@@ -637,7 +636,6 @@ public class Camera
   //  _normalizedPosition(that._normalizedPosition),
   //  _tanHalfVerticalFieldOfView(NAND),
   //  _tanHalfHorizontalFieldOfView(NAND),
-  //  _rollInRadians(that._rollInRadians),
   //  _timestamp(that._timestamp)
   //  {
   //  }
@@ -676,7 +674,6 @@ public class Camera
   private Frustum _frustumInModelCoordinates;
   private double _tanHalfVerticalFieldOfView;
   private double _tanHalfHorizontalFieldOfView;
-  private double _rollInRadians;
 
   //The Camera Effect Target
   private static class CameraEffectTarget implements EffectTarget

@@ -22,9 +22,9 @@ public class SimpleCameraConstrainer implements ICameraConstrainer
 {
 
   public SimpleCameraConstrainer()
+  //  _previousCameraTimestamp(0),
+  //  _nextCameraTimestamp(0)
   {
-     _previousCameraTimestamp = 0;
-     _nextCameraTimestamp = 0;
 
   }
 
@@ -36,40 +36,30 @@ public class SimpleCameraConstrainer implements ICameraConstrainer
   public boolean onCameraChange(Planet planet, Camera previousCamera, Camera nextCamera)
   {
   
-    long previousCameraTimestamp = previousCamera.getTimestamp();
-    long nextCameraTimestamp = nextCamera.getTimestamp();
-    if (previousCameraTimestamp != _previousCameraTimestamp || nextCameraTimestamp != _nextCameraTimestamp)
-    {
-      _previousCameraTimestamp = previousCameraTimestamp;
-      _nextCameraTimestamp = nextCameraTimestamp;
-      ILogger.instance().logInfo("Cameras Timestamp: Previous=%lld; Next=%lld\n", _previousCameraTimestamp, _nextCameraTimestamp);
-    }
+    //  long long previousCameraTimestamp = previousCamera->getTimestamp();
+    //  long long nextCameraTimestamp = nextCamera->getTimestamp();
+    //  if (previousCameraTimestamp != _previousCameraTimestamp || nextCameraTimestamp != _nextCameraTimestamp) {
+    //    _previousCameraTimestamp = previousCameraTimestamp;
+    //    _nextCameraTimestamp = nextCameraTimestamp;
+    //    ILogger::instance()->logInfo("Cameras Timestamp: Previous=%lld; Next=%lld\n",
+    //                                 _previousCameraTimestamp, _nextCameraTimestamp);
+    //  }
   
     final double radii = planet.getRadii().maxAxis();
     final double maxHeight = radii *9;
     final double minHeight = 10;
   
-    final Geodetic3D cameraPosition = nextCamera.getGeodeticPosition();
-    final double cameraHeight = cameraPosition._height;
+    final double height = nextCamera.getGeodeticPosition()._height;
   
-    if (cameraHeight > maxHeight)
+    if ((height < minHeight) || (height > maxHeight))
     {
       nextCamera.copyFrom(previousCamera);
-      /*nextCamera->setGeodeticPosition(cameraPosition._latitude,
-                                      cameraPosition._longitude,
-                                      maxHeight);*/
-    }
-    else if (cameraHeight < minHeight)
-    {
-      nextCamera.copyFrom(previousCamera);
-      /*nextCamera->setGeodeticPosition(cameraPosition._latitude,
-                                      cameraPosition._longitude,
-                                      minHeight);*/
     }
   
     return true;
   }
 
-  private long _previousCameraTimestamp;
-  private long _nextCameraTimestamp;
+  //private:
+  //  mutable long long _previousCameraTimestamp;
+  //  mutable long long _nextCameraTimestamp;
 }
