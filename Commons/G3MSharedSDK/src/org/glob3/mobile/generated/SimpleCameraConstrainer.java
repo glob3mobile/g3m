@@ -23,8 +23,8 @@ public class SimpleCameraConstrainer implements ICameraConstrainer
 
   public SimpleCameraConstrainer()
   {
-     _previousCameraTimeStamp = 0;
-     _nextCameraTimeStamp = 0;
+     _previousCameraTimestamp = 0;
+     _nextCameraTimestamp = 0;
 
   }
 
@@ -36,13 +36,13 @@ public class SimpleCameraConstrainer implements ICameraConstrainer
   public boolean onCameraChange(Planet planet, Camera previousCamera, Camera nextCamera)
   {
   
-    long previousCameraTimeStamp = previousCamera.getTimeStamp();
-    long nextCameraTimeStamp = nextCamera.getTimeStamp();
-    if (previousCameraTimeStamp != _previousCameraTimeStamp || nextCameraTimeStamp != _nextCameraTimeStamp)
+    long previousCameraTimestamp = previousCamera.getTimestamp();
+    long nextCameraTimestamp = nextCamera.getTimestamp();
+    if (previousCameraTimestamp != _previousCameraTimestamp || nextCameraTimestamp != _nextCameraTimestamp)
     {
-      _previousCameraTimeStamp = previousCameraTimeStamp;
-      _nextCameraTimeStamp = nextCameraTimeStamp;
-      ILogger.instance().logInfo("Cameras TimeStamp: PreviousCam=%lld; NextCam=%lld\n", _previousCameraTimeStamp, _nextCameraTimeStamp);
+      _previousCameraTimestamp = previousCameraTimestamp;
+      _nextCameraTimestamp = nextCameraTimestamp;
+      ILogger.instance().logInfo("Cameras Timestamp: Previous=%lld; Next=%lld\n", _previousCameraTimestamp, _nextCameraTimestamp);
     }
   
     final double radii = planet.getRadii().maxAxis();
@@ -70,6 +70,6 @@ public class SimpleCameraConstrainer implements ICameraConstrainer
     return true;
   }
 
-  private long _previousCameraTimeStamp;
-  private long _nextCameraTimeStamp;
+  private long _previousCameraTimestamp;
+  private long _nextCameraTimestamp;
 }
