@@ -372,7 +372,6 @@ private:
   //  _normalizedPosition(that._normalizedPosition),
   //  _tanHalfVerticalFieldOfView(NAND),
   //  _tanHalfHorizontalFieldOfView(NAND),
-  //  _rollInRadians(that._rollInRadians),
   //  _timestamp(that._timestamp)
   //  {
   //  }
@@ -415,7 +414,6 @@ private:
   mutable Frustum*         _frustumInModelCoordinates;
   double                   _tanHalfVerticalFieldOfView;
   double                   _tanHalfHorizontalFieldOfView;
-  double                   _rollInRadians;
 
   //The Camera Effect Target
   class CameraEffectTarget: public EffectTarget {

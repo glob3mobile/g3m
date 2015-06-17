@@ -122,7 +122,6 @@ _angle2Horizon(-99),
 _normalizedPosition(0, 0, 0),
 _tanHalfVerticalFieldOfView(NAND),
 _tanHalfHorizontalFieldOfView(NAND),
-_rollInRadians(0),
 _timestamp(timestamp)
 {
   resizeViewport(0, 0);
