@@ -25,10 +25,7 @@ public class CameraSingleDragHandler extends CameraEventHandler
 {
 
   public CameraSingleDragHandler(boolean useInertia)
-//  _initialPoint(0,0,0),
-//  _initialPixel(0,0),
   {
-     _camera0 = new Camera(new Camera());
      _useInertia = useInertia;
   }
 
@@ -98,6 +95,7 @@ public class CameraSingleDragHandler extends CameraEventHandler
   public final void onDown(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
   {
     Camera camera = cameraContext.getNextCamera();
+<<<<<<< HEAD
     _camera0.copyFrom(camera);
     cameraContext.setCurrentGesture(Gesture.Drag);
   
@@ -105,6 +103,20 @@ public class CameraSingleDragHandler extends CameraEventHandler
     final Vector2F pixel = touchEvent.getTouch(0).getPos();
     Vector3D touchedPosition = eventContext.getWidget().getScenePositionForPixel((int)pixel._x, (int)pixel._y);
       eventContext.getPlanet().beginSingleDrag(_camera0.getCartesianPosition(), touchedPosition);
+=======
+    camera.getLookAtParamsInto(_cameraPosition, _cameraCenter, _cameraUp);
+    camera.getModelViewMatrixInto(_cameraModelViewMatrix);
+    camera.getViewPortInto(_cameraViewPort);
+  
+    // dragging
+    final Vector2F pixel = touchEvent.getTouch(0).getPos();
+    final Vector3D initialRay = camera.pixel2Ray(pixel);
+    if (!initialRay.isNan())
+    {
+      cameraContext.setCurrentGesture(Gesture.Drag);
+      eventContext.getPlanet().beginSingleDrag(camera.getCartesianPosition(), initialRay);
+    }
+>>>>>>> origin/purgatory
   }
   public final void onMove(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
   {
@@ -113,22 +125,26 @@ public class CameraSingleDragHandler extends CameraEventHandler
        return;
   
     //check finalRay
+<<<<<<< HEAD
   
     Vector2F tp = touchEvent.getTouch(0).getPos();
     final Vector3D finalRay = _camera0.pixel2Ray(new Vector2F(tp._x, tp._y));
     if (finalRay.isNan())
+=======
+    final Vector2F pixel = touchEvent.getTouch(0).getPos();
+    Camera.pixel2RayInto(_cameraPosition, pixel, _cameraViewPort, _cameraModelViewMatrix, _finalRay);
+    if (_finalRay.isNan())
+>>>>>>> origin/purgatory
        return;
   
     // compute transformation matrix
     final Planet planet = eventContext.getPlanet();
-    MutableMatrix44D matrix = planet.singleDrag(finalRay);
+    MutableMatrix44D matrix = planet.singleDrag(_finalRay.asVector3D());
     if (!matrix.isValid())
        return;
   
     // apply transformation
-    Camera camera = cameraContext.getNextCamera();
-    camera.copyFrom(_camera0);
-    camera.applyTransform(matrix);
+    cameraContext.getNextCamera().setLookAtParams(_cameraPosition.transformedBy(matrix, 1.0), _cameraCenter.transformedBy(matrix, 1.0), _cameraUp.transformedBy(matrix, 0.0));
   }
   public final void onUp(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
   {
@@ -142,6 +158,8 @@ public class CameraSingleDragHandler extends CameraEventHandler
       final Vector2F prevPixel = touch.getPrevPos();
       final double desp = currPixel.sub(prevPixel).length();
   
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning method getPixelsInMM is ! working fine in iOS devices
       final float delta = IFactory.instance().getDeviceInfo().getPixelsInMM(0.2f);
   
       if ((cameraContext.getCurrentGesture() == Gesture.Drag) && (desp > delta))
@@ -159,5 +177,10 @@ public class CameraSingleDragHandler extends CameraEventHandler
     cameraContext.setCurrentGesture(Gesture.None);
   }
 
-  private Camera _camera0 = new Camera(); //Initial Camera saved on Down event
+  private MutableVector3D _cameraPosition = new MutableVector3D();
+  private MutableVector3D _cameraCenter = new MutableVector3D();
+  private MutableVector3D _cameraUp = new MutableVector3D();
+  private MutableVector2I _cameraViewPort = new MutableVector2I();
+  private MutableMatrix44D _cameraModelViewMatrix = new MutableMatrix44D();
+  private MutableVector3D _finalRay = new MutableVector3D();
 }

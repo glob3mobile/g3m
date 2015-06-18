@@ -157,32 +157,49 @@ class EffectWithForce : public Effect {
 private:
   double       _force;
   const double _friction;
-
+  
 protected:
   EffectWithForce(double force,
                   double friction):
   _force(force),
   _friction(friction)
   {}
-
+  
   double getForce() const {
     return _force;
   }
-
+  
 public:
   virtual void doStep(const G3MRenderContext* rc,
                       const TimeInterval& when) {
     _force *= _friction;
   };
-
+  
   virtual bool isDone(const G3MRenderContext* rc,
                       const TimeInterval& when) {
-    return (IMathUtils::instance()->abs(_force) < 1e-6);
+    return (IMathUtils::instance()->abs(_force) < 0.005);
   }
-
+  
 };
 
 
+class EffectNeverEnding : public Effect {
+private:
+  
+protected:
+  EffectNeverEnding() {}
+  
+public:
+  virtual void doStep(const G3MRenderContext* rc,
+                      const TimeInterval& when) {
+  };
+  
+  virtual bool isDone(const G3MRenderContext* rc,
+                      const TimeInterval& when) {
+    return false;
+  }
+  
+};
 
 
 class EffectsScheduler {

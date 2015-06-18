@@ -300,7 +300,22 @@ public abstract class IG3MBuilder
   
     return cameraConstraints;
   }
+<<<<<<< HEAD
 
+=======
+  private CameraRenderer createDefaultCameraRenderer()
+  {
+    CameraRenderer cameraRenderer = new CameraRenderer();
+    final boolean useInertia = true;
+    cameraRenderer.addHandler(new CameraSingleDragHandler(useInertia));
+    cameraRenderer.addHandler(new CameraDoubleDragHandler());
+    //cameraRenderer->addHandler(new CameraZoomAndRotateHandler());
+    cameraRenderer.addHandler(new CameraRotationHandler());
+    cameraRenderer.addHandler(new CameraDoubleTapHandler());
+  
+    return cameraRenderer;
+  }
+>>>>>>> origin/purgatory
   private java.util.ArrayList<Renderer> createDefaultRenderers()
   {
     java.util.ArrayList<Renderer> renderers = new java.util.ArrayList<Renderer>();

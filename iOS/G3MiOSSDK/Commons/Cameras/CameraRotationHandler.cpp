@@ -55,7 +55,7 @@ void CameraRotationHandler::onDown(const G3MEventContext *eventContext,
                                    CameraContext *cameraContext) 
 {  
   Camera *camera = cameraContext->getNextCamera();
-  _camera0.copyFrom(*camera);
+  camera->getLookAtParamsInto(_cameraPosition, _cameraCenter, _cameraUp);
   cameraContext->setCurrentGesture(Rotate);
   
   // middle pixel in 2D 
@@ -109,7 +109,7 @@ void CameraRotationHandler::onMove(const G3MEventContext *eventContext,
   
   // vertical rotation around normal vector to globe
   Camera *camera = cameraContext->getNextCamera();
-  camera->copyFrom(_camera0);
+  camera->setLookAtParams(_cameraPosition, _cameraCenter, _cameraUp);
   Angle angle_v             = Angle::fromDegrees((_pivotPixel._x-cm._x)*0.25);
   camera->rotateWithAxisAndPoint(normal, _pivotPoint.asVector3D(), angle_v);
   
@@ -123,21 +123,19 @@ void CameraRotationHandler::onMove(const G3MEventContext *eventContext,
   double finalAngle = initialAngle + delta;
   if (finalAngle > 85)  delta = 85 - initialAngle;
   if (finalAngle < 0)   delta = -initialAngle;
-
+  
   // create temporal camera to test if next rotation is valid
-  Camera tempCamera(*camera);
+  camera->getLookAtParamsInto(_tempCameraPosition, _tempCameraCenter, _tempCameraUp);
   
   // horizontal rotation over the original camera horizontal axix
   Vector3D u = camera->getHorizontalVector();
-  tempCamera.rotateWithAxisAndPoint(u, _pivotPoint.asVector3D(), Angle::fromDegrees(delta));
+  camera->rotateWithAxisAndPoint(u, _pivotPoint.asVector3D(), Angle::fromDegrees(delta));
   
-  /*
-   // update camera only if new view intersects globe
-  if (!tempCamera.getXYZCenterOfView().isNan()) {
-    camera->copyFrom(tempCamera);
-  } 
-   */
-  camera->copyFrom(tempCamera);
+  // update camera only if new view intersects globe
+  if (camera->getXYZCenterOfView().isNan()) {
+    camera->setLookAtParams(_tempCameraPosition, _tempCameraCenter, _tempCameraUp);
+  }
+  
 }
 
 

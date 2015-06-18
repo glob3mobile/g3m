@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated; 
 //***************************************************************
 
-public class BusyMeshEffect extends EffectWithForce
+public class BusyMeshEffect extends EffectNeverEnding
 {
   private BusyMeshRenderer _renderer;
   private long _lastMS;
@@ -9,7 +9,7 @@ public class BusyMeshEffect extends EffectWithForce
 
   public BusyMeshEffect(BusyMeshRenderer renderer)
   {
-     super(1, 1);
+     super();
      _renderer = renderer;
   }
 

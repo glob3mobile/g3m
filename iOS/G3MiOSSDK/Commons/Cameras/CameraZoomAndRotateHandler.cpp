@@ -46,7 +46,7 @@ void CameraZoomAndRotateHandler::onDown(const G3MEventContext *eventContext,
                                      CameraContext *cameraContext)
 {
   Camera *camera = cameraContext->getNextCamera();
-  _camera0.copyFrom(*camera);
+  camera->getLookAtParamsInto(_cameraPosition, _cameraCenter, _cameraUp);
   cameraContext->setCurrentGesture(DoubleDrag);
   
   // double dragging
@@ -189,7 +189,7 @@ void CameraZoomAndRotateHandler::zoom(Camera* camera, const Vector2F& difCurrent
   double fingerSep = sqrt((difCurrentPixels._x*difCurrentPixels._x+difCurrentPixels._y*difCurrentPixels._y));
   double factor = _fingerSep0 / fingerSep;
   double desp = 1-factor;
-  Vector3D w = _centralGlobePoint.asVector3D().sub(_camera0.getCartesianPosition());
+  Vector3D w = _centralGlobePoint.asVector3D().sub(_cameraPosition);
   double dist = w.length();
     
 	// don't allow much closer
@@ -202,7 +202,7 @@ void CameraZoomAndRotateHandler::zoom(Camera* camera, const Vector2F& difCurrent
     return;
 	
 	// make zoom and rotation
-  camera->copyFrom(_camera0);
+  camera->setLookAtParams(_cameraPosition, _cameraCenter, _cameraUp);
   
   // make rotation
   camera->rotateWithAxisAndPoint(_centralGlobeNormal.asVector3D(),
@@ -212,11 +212,6 @@ void CameraZoomAndRotateHandler::zoom(Camera* camera, const Vector2F& difCurrent
   
   // make zoom
   camera->moveForward(desp*dist);
-  
-  /*printf("dist=%.2f.  desp=%f.   factor=%f   new dist=%.2f\n", dist, desp, factor, dist-desp*dist);
-  printf ("camera en (%.2f, %.2f, %.2f)     centralpoint en (%.2f, %.2f, %.2f). \n",
-          _camera0.getCartesianPosition().x(),  _camera0.getCartesianPosition().y(),  _camera0.getCartesianPosition().z(),
-          _centralGlobePoint.x(), _centralGlobePoint.y(), _centralGlobePoint.z());*/
 }
 
 void CameraZoomAndRotateHandler::rotate()

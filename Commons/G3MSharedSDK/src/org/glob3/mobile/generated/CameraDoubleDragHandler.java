@@ -36,8 +36,11 @@ public class CameraDoubleDragHandler extends CameraEventHandler
 
   public CameraDoubleDragHandler()
   {
+<<<<<<< HEAD
      _camera0 = new Camera(new Camera());
      _meshRenderer = null;
+=======
+>>>>>>> origin/purgatory
   }
 
 
@@ -127,9 +130,11 @@ public class CameraDoubleDragHandler extends CameraEventHandler
 
   public final void onDown(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
   {
-  
     Camera camera = cameraContext.getNextCamera();
-    _camera0.copyFrom(camera);
+    camera.getLookAtParamsInto(_cameraPosition, _cameraCenter, _cameraUp);
+    camera.getModelViewMatrixInto(_cameraModelViewMatrix);
+    camera.getViewPortInto(_cameraViewPort);
+  
     // double dragging
     G3MWidget widget = eventContext.getWidget();
     final Vector2F pixel0 = touchEvent.getTouch(0).getPos();
@@ -137,9 +142,15 @@ public class CameraDoubleDragHandler extends CameraEventHandler
     final Vector2F pixel1 = touchEvent.getTouch(1).getPos();
     Vector3D touchedPosition1 = widget.getScenePositionForPixel((int)pixel1._x, (int)pixel1._y);
   
+<<<<<<< HEAD
+=======
+    final Vector3D initialRay0 = camera.pixel2Ray(pixel0);
+    final Vector3D initialRay1 = camera.pixel2Ray(pixel1);
+>>>>>>> origin/purgatory
   
   
     cameraContext.setCurrentGesture(Gesture.DoubleDrag);
+<<<<<<< HEAD
     eventContext.getPlanet().beginDoubleDrag(_camera0.getCartesianPosition(), _camera0.getViewDirection(), widget.getScenePositionForCentralPixel(), touchedPosition0, touchedPosition1);
   
     // draw scene points int render debug mode
@@ -154,10 +165,12 @@ public class CameraDoubleDragHandler extends CameraEventHandler
       _meshRenderer.addMesh(mesh0);
       _meshRenderer.addMesh(mesh1);
     }
+=======
+    eventContext.getPlanet().beginDoubleDrag(camera.getCartesianPosition(), camera.getViewDirection(), camera.pixel2Ray(pixel0), camera.pixel2Ray(pixel1));
+>>>>>>> origin/purgatory
   }
   public final void onMove(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
   {
-  
     if (cameraContext.getCurrentGesture() != Gesture.DoubleDrag)
        return;
   
@@ -165,12 +178,18 @@ public class CameraDoubleDragHandler extends CameraEventHandler
     final Planet planet = eventContext.getPlanet();
     final Vector2F pixel0 = touchEvent.getTouch(0).getPos();
     final Vector2F pixel1 = touchEvent.getTouch(1).getPos();
+<<<<<<< HEAD
     MutableMatrix44D matrix = planet.doubleDrag(_camera0.pixel2Ray(pixel0), _camera0.pixel2Ray(pixel1));
+=======
+    final Vector3D initialRay0 = Camera.pixel2Ray(_cameraPosition, pixel0, _cameraViewPort, _cameraModelViewMatrix);
+    final Vector3D initialRay1 = Camera.pixel2Ray(_cameraPosition, pixel1, _cameraViewPort, _cameraModelViewMatrix);
+>>>>>>> origin/purgatory
   
     if (!matrix.isValid())
        return;
   
     // apply transformation
+<<<<<<< HEAD
     Camera camera = cameraContext.getNextCamera();
     camera.copyFrom(_camera0);
     camera.applyTransform(matrix);
@@ -178,6 +197,9 @@ public class CameraDoubleDragHandler extends CameraEventHandler
     /*if (_fixRollTo0){
       eventContext->getPlanet()->correctPitchAfterDoubleDrag(camera, pixel0, pixel1);
     }*/
+=======
+    cameraContext.getNextCamera().setLookAtParams(_cameraPosition.transformedBy(matrix, 1.0), _cameraCenter.transformedBy(matrix, 1.0), _cameraUp.transformedBy(matrix, 0.0));
+>>>>>>> origin/purgatory
   }
   public final void onUp(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
   {
@@ -191,7 +213,11 @@ public class CameraDoubleDragHandler extends CameraEventHandler
   
   }
 
-  public Camera _camera0 = new Camera(); //Initial Camera saved on Down event
+  public MutableVector3D _cameraPosition = new MutableVector3D();
+  public MutableVector3D _cameraCenter = new MutableVector3D();
+  public MutableVector3D _cameraUp = new MutableVector3D();
+  public MutableVector2I _cameraViewPort = new MutableVector2I();
+  public MutableMatrix44D _cameraModelViewMatrix = new MutableMatrix44D();
 
   public final void setDebugMeshRenderer(MeshRenderer meshRenderer)
   {

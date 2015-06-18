@@ -22,16 +22,8 @@ private:
   //bool _fixRollTo0;
   
 public:
-/*  CameraDoubleDragHandler(bool allowRotation, bool fixRollTo0):
-  _camera0(Camera()),
-  _meshRenderer(NULL),
-  _allowRotation(allowRotation),
-  _fixRollTo0(fixRollTo0)
-  {
-  }*/
   
   CameraDoubleDragHandler():
-  _camera0(Camera()),
   _meshRenderer(NULL)
   {}
   
@@ -61,7 +53,11 @@ public:
             const TouchEvent& touchEvent,
             CameraContext *cameraContext);
   
-  Camera _camera0;         //Initial Camera saved on Down event
+  MutableVector3D _cameraPosition;
+  MutableVector3D _cameraCenter;
+  MutableVector3D _cameraUp;
+  MutableVector2I _cameraViewPort;
+  MutableMatrix44D _cameraModelViewMatrix;
   
   void setDebugMeshRenderer(MeshRenderer* meshRenderer) {
     _meshRenderer = meshRenderer;
