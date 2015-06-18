@@ -343,7 +343,7 @@ public:
     viewport.set(_viewPortWidth, _viewPortHeight);
   }
 
-  static void pixel2RayInto(const MutableVector3D& position,
+  static const void pixel2RayInto(const MutableVector3D& position,
                             const Vector2F& pixel,
                             const MutableVector2I& viewport,
                             const MutableMatrix44D& modelViewMatrix,

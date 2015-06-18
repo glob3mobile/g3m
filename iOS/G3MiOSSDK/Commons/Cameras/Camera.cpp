@@ -199,7 +199,7 @@ const Vector3D Camera::pixel2Ray(const Vector3D& pixel3D) const {
   if (dragMatrix.isValid()) applyTransform(dragMatrix);
 }*/
 
-void Camera::pixel2RayInto(const MutableVector3D& position,
+const void Camera::pixel2RayInto(const MutableVector3D& position,
                            const Vector2F& pixel,
                            const MutableVector2I& viewport,
                            const MutableMatrix44D& modelViewMatrix,
