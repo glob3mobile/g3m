@@ -88,17 +88,16 @@ void CameraDoubleDragHandler::onDown(const G3MEventContext *eventContext,
     _meshRenderer->addMesh(mesh1);
   }*/
 
-  const Vector3D& initialRay0 = camera->pixel2Ray(pixel0);
-  const Vector3D& initialRay1 = camera->pixel2Ray(pixel1);
-  
-  if ( initialRay0.isNan() || initialRay1.isNan() ) return;
+  //const Vector3D& initialRay0 = camera->pixel2Ray(pixel0);
+  //const Vector3D& initialRay1 = camera->pixel2Ray(pixel1);
+  //if ( initialRay0.isNan() || initialRay1.isNan() ) return;
   
   cameraContext->setCurrentGesture(DoubleDrag);
   eventContext->getPlanet()->beginDoubleDrag(camera->getCartesianPosition(),
                                              camera->getViewDirection(),
                                              widget->getScenePositionForCentralPixel(),
-                                             camera->pixel2Ray(pixel0),
-                                             camera->pixel2Ray(pixel1));
+                                             touchedPosition0,
+                                             touchedPosition1);
 }
 
 

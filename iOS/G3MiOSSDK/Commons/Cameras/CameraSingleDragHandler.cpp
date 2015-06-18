@@ -52,14 +52,21 @@ void CameraSingleDragHandler::onDown(const G3MEventContext *eventContext,
   camera->getLookAtParamsInto(_cameraPosition, _cameraCenter, _cameraUp);
   camera->getModelViewMatrixInto(_cameraModelViewMatrix);
   camera->getViewPortInto(_cameraViewPort);
+  cameraContext->setCurrentGesture(Drag);
 
   // dragging
   const Vector2F pixel = touchEvent.getTouch(0)->getPos();
+  Vector3D touchedPosition = eventContext->getWidget()->getScenePositionForPixel((int)pixel._x, (int)pixel._y);
+  eventContext->getPlanet()->beginSingleDrag(camera->getCartesianPosition(), touchedPosition);
+  
+  
+  /*
   const Vector3D& initialRay = camera->pixel2Ray(pixel);
   if (!initialRay.isNan()) {
     cameraContext->setCurrentGesture(Drag);
     eventContext->getPlanet()->beginSingleDrag(camera->getCartesianPosition(),initialRay);
   }
+   */
 }
 
 
