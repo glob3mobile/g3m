@@ -26,21 +26,10 @@ public class CameraDoubleDragHandler extends CameraEventHandler
   //bool _allowRotation;
   //bool _fixRollTo0;
 
-/*  CameraDoubleDragHandler(bool allowRotation, bool fixRollTo0):
-  _camera0(Camera()),
-  _meshRenderer(NULL),
-  _allowRotation(allowRotation),
-  _fixRollTo0(fixRollTo0)
-  {
-  }*/
 
   public CameraDoubleDragHandler()
   {
-<<<<<<< HEAD
-     _camera0 = new Camera(new Camera());
      _meshRenderer = null;
-=======
->>>>>>> origin/purgatory
   }
 
 
@@ -61,14 +50,6 @@ public class CameraDoubleDragHandler extends CameraEventHandler
   
     final Vector2F pixel0 = touchEvent.getTouch(0).getPos();
     final Vector2F pixel1 = touchEvent.getTouch(1).getPos();
-  
-    if (type == TouchEventType.Move && (_camera0.pixel2PlanetPoint(pixel0).isNan() || _camera0.pixel2PlanetPoint(pixel1).isNan()))
-    {
-          //printf("FINGERS OUT OF INITIAL PLANET\n");
-          //FIXING THIS CASE
-          onUp(eventContext, touchEvent, cameraContext);
-          type = TouchEventType.Down;
-    }
   
     switch (type)
     {
@@ -142,32 +123,36 @@ public class CameraDoubleDragHandler extends CameraEventHandler
     final Vector2F pixel1 = touchEvent.getTouch(1).getPos();
     Vector3D touchedPosition1 = widget.getScenePositionForPixel((int)pixel1._x, (int)pixel1._y);
   
-<<<<<<< HEAD
-=======
-    final Vector3D initialRay0 = camera.pixel2Ray(pixel0);
-    final Vector3D initialRay1 = camera.pixel2Ray(pixel1);
->>>>>>> origin/purgatory
+  /*
+    // draw scene points int render debug mode
+    if (_meshRenderer != NULL) {
+      FloatBufferBuilderFromCartesian3D* vertices = FloatBufferBuilderFromCartesian3D::builderWithoutCenter();
+      vertices->add(0.0f, 0.0f, 0.0f);
+      Mesh* mesh0 = new DirectMesh(GLPrimitive::points(),
+                                  true,
+                                  touchedPosition0,
+                                  vertices->create(),
+                                  1,
+                                  80,
+                                  Color::newFromRGBA(1, 0, 0, 1));
+      Mesh* mesh1 = new DirectMesh(GLPrimitive::points(),
+                                  true,
+                                  touchedPosition1,
+                                  vertices->create(),
+                                  1,
+                                  80,
+                                  Color::newFromRGBA(1, 0, 0, 1));
+      delete vertices;
+      _meshRenderer->addMesh(mesh0);
+      _meshRenderer->addMesh(mesh1);
+    }*/
   
+    //const Vector3D& initialRay0 = camera->pixel2Ray(pixel0);
+    //const Vector3D& initialRay1 = camera->pixel2Ray(pixel1);
+    //if ( initialRay0.isNan() || initialRay1.isNan() ) return;
   
     cameraContext.setCurrentGesture(Gesture.DoubleDrag);
-<<<<<<< HEAD
-    eventContext.getPlanet().beginDoubleDrag(_camera0.getCartesianPosition(), _camera0.getViewDirection(), widget.getScenePositionForCentralPixel(), touchedPosition0, touchedPosition1);
-  
-    // draw scene points int render debug mode
-    if (_meshRenderer != null)
-    {
-      FloatBufferBuilderFromCartesian3D vertices = FloatBufferBuilderFromCartesian3D.builderWithoutCenter();
-      vertices.add(0.0f, 0.0f, 0.0f);
-      Mesh mesh0 = new DirectMesh(GLPrimitive.points(), true, touchedPosition0, vertices.create(), 1, 80, Color.newFromRGBA(1, 0, 0, 1));
-      Mesh mesh1 = new DirectMesh(GLPrimitive.points(), true, touchedPosition1, vertices.create(), 1, 80, Color.newFromRGBA(1, 0, 0, 1));
-      if (vertices != null)
-         vertices.dispose();
-      _meshRenderer.addMesh(mesh0);
-      _meshRenderer.addMesh(mesh1);
-    }
-=======
-    eventContext.getPlanet().beginDoubleDrag(camera.getCartesianPosition(), camera.getViewDirection(), camera.pixel2Ray(pixel0), camera.pixel2Ray(pixel1));
->>>>>>> origin/purgatory
+    eventContext.getPlanet().beginDoubleDrag(camera.getCartesianPosition(), camera.getViewDirection(), widget.getScenePositionForCentralPixel(), touchedPosition0, touchedPosition1);
   }
   public final void onMove(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
   {
@@ -178,28 +163,28 @@ public class CameraDoubleDragHandler extends CameraEventHandler
     final Planet planet = eventContext.getPlanet();
     final Vector2F pixel0 = touchEvent.getTouch(0).getPos();
     final Vector2F pixel1 = touchEvent.getTouch(1).getPos();
-<<<<<<< HEAD
-    MutableMatrix44D matrix = planet.doubleDrag(_camera0.pixel2Ray(pixel0), _camera0.pixel2Ray(pixel1));
-=======
+  
+    /*
+    if (type == Move &&
+        (_camera0.pixel2PlanetPoint(pixel0).isNan() ||
+         _camera0.pixel2PlanetPoint(pixel1).isNan())){
+          //printf("FINGERS OUT OF INITIAL PLANET\n");
+          //FIXING THIS CASE
+          onUp(eventContext, *touchEvent, cameraContext);
+          type = Down;
+        }*/
+  
+  
     final Vector3D initialRay0 = Camera.pixel2Ray(_cameraPosition, pixel0, _cameraViewPort, _cameraModelViewMatrix);
     final Vector3D initialRay1 = Camera.pixel2Ray(_cameraPosition, pixel1, _cameraViewPort, _cameraModelViewMatrix);
->>>>>>> origin/purgatory
-  
+    if (initialRay0.isNan() || initialRay1.isNan())
+       return;
+    MutableMatrix44D matrix = planet.doubleDrag(initialRay0, initialRay1);
     if (!matrix.isValid())
        return;
   
     // apply transformation
-<<<<<<< HEAD
-    Camera camera = cameraContext.getNextCamera();
-    camera.copyFrom(_camera0);
-    camera.applyTransform(matrix);
-  
-    /*if (_fixRollTo0){
-      eventContext->getPlanet()->correctPitchAfterDoubleDrag(camera, pixel0, pixel1);
-    }*/
-=======
     cameraContext.getNextCamera().setLookAtParams(_cameraPosition.transformedBy(matrix, 1.0), _cameraCenter.transformedBy(matrix, 1.0), _cameraUp.transformedBy(matrix, 0.0));
->>>>>>> origin/purgatory
   }
   public final void onUp(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
   {

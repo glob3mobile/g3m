@@ -95,28 +95,24 @@ public class CameraSingleDragHandler extends CameraEventHandler
   public final void onDown(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
   {
     Camera camera = cameraContext.getNextCamera();
-<<<<<<< HEAD
-    _camera0.copyFrom(camera);
+    camera.getLookAtParamsInto(_cameraPosition, _cameraCenter, _cameraUp);
+    camera.getModelViewMatrixInto(_cameraModelViewMatrix);
+    camera.getViewPortInto(_cameraViewPort);
     cameraContext.setCurrentGesture(Gesture.Drag);
   
     // dragging
     final Vector2F pixel = touchEvent.getTouch(0).getPos();
     Vector3D touchedPosition = eventContext.getWidget().getScenePositionForPixel((int)pixel._x, (int)pixel._y);
-      eventContext.getPlanet().beginSingleDrag(_camera0.getCartesianPosition(), touchedPosition);
-=======
-    camera.getLookAtParamsInto(_cameraPosition, _cameraCenter, _cameraUp);
-    camera.getModelViewMatrixInto(_cameraModelViewMatrix);
-    camera.getViewPortInto(_cameraViewPort);
+    eventContext.getPlanet().beginSingleDrag(camera.getCartesianPosition(), touchedPosition);
   
-    // dragging
-    final Vector2F pixel = touchEvent.getTouch(0).getPos();
-    final Vector3D initialRay = camera.pixel2Ray(pixel);
-    if (!initialRay.isNan())
-    {
-      cameraContext.setCurrentGesture(Gesture.Drag);
-      eventContext.getPlanet().beginSingleDrag(camera.getCartesianPosition(), initialRay);
+  
+    /*
+    const Vector3D& initialRay = camera->pixel2Ray(pixel);
+    if (!initialRay.isNan()) {
+      cameraContext->setCurrentGesture(Drag);
+      eventContext->getPlanet()->beginSingleDrag(camera->getCartesianPosition(),initialRay);
     }
->>>>>>> origin/purgatory
+     */
   }
   public final void onMove(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
   {
@@ -125,16 +121,9 @@ public class CameraSingleDragHandler extends CameraEventHandler
        return;
   
     //check finalRay
-<<<<<<< HEAD
-  
-    Vector2F tp = touchEvent.getTouch(0).getPos();
-    final Vector3D finalRay = _camera0.pixel2Ray(new Vector2F(tp._x, tp._y));
-    if (finalRay.isNan())
-=======
     final Vector2F pixel = touchEvent.getTouch(0).getPos();
     Camera.pixel2RayInto(_cameraPosition, pixel, _cameraViewPort, _cameraModelViewMatrix, _finalRay);
     if (_finalRay.isNan())
->>>>>>> origin/purgatory
        return;
   
     // compute transformation matrix

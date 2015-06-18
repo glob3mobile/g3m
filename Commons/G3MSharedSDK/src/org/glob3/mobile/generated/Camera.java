@@ -1,35 +1,6 @@
 package org.glob3.mobile.generated; 
 public class Camera
 {
-<<<<<<< HEAD
-  public Camera(Camera that)
-  {
-     _viewPortWidth = that._viewPortWidth;
-     _viewPortHeight = that._viewPortHeight;
-     _planet = that._planet;
-     _position = new MutableVector3D(that._position);
-     _groundHeight = that._groundHeight;
-     _center = new MutableVector3D(that._center);
-     _up = new MutableVector3D(that._up);
-     _dirtyFlags = new CameraDirtyFlags(that._dirtyFlags);
-     _frustumData = new FrustumData(that._frustumData);
-     _projectionMatrix = new MutableMatrix44D(that._projectionMatrix);
-     _modelMatrix = new MutableMatrix44D(that._modelMatrix);
-     _modelViewMatrix = new MutableMatrix44D(that._modelViewMatrix);
-     _cartesianCenterOfView = new MutableVector3D(that._cartesianCenterOfView);
-     _geodeticCenterOfView = (that._geodeticCenterOfView == null) ? null : new Geodetic3D(that._geodeticCenterOfView);
-     _frustum = (that._frustum == null) ? null : new Frustum(that._frustum);
-     _frustumInModelCoordinates = (that._frustumInModelCoordinates == null) ? null : new Frustum(that._frustumInModelCoordinates);
-     _camEffectTarget = new CameraEffectTarget();
-     _geodeticPosition = (that._geodeticPosition == null) ? null: new Geodetic3D(that._geodeticPosition);
-     _angle2Horizon = that._angle2Horizon;
-     _normalizedPosition = new MutableVector3D(that._normalizedPosition);
-     _tanHalfVerticalFieldOfView = java.lang.Double.NaN;
-     _tanHalfHorizontalFieldOfView = java.lang.Double.NaN;
-     _rollInRadians = that._rollInRadians;
-  }
-=======
->>>>>>> origin/purgatory
 
   public Camera(long timestamp)
   {
@@ -430,11 +401,25 @@ public class Camera
     setPitch(pitch);
   }
 
-  public final void setGeodeticPositionStablePitch(Geodetic3D g3d)
+  /*void setGeodeticPositionStablePitch(const Geodetic3D& g3d) {
+    MutableMatrix44D dragMatrix = _planet->drag(getGeodeticPosition(), g3d);
+    if (dragMatrix.isValid()) applyTransform(dragMatrix);
+  }*/
+  
+  public final void Camera.pixel2RayInto(MutableVector3D position, Vector2F pixel, MutableVector2I viewport, MutableMatrix44D modelViewMatrix, MutableVector3D ray)
   {
-    MutableMatrix44D dragMatrix = _planet.drag(getGeodeticPosition(), g3d);
-    if (dragMatrix.isValid())
-       applyTransform(dragMatrix);
+    final float px = pixel._x;
+    final float py = viewport.y() - pixel._y;
+    final Vector3D pixel3D = new Vector3D(px, py, 0);
+    final Vector3D obj = modelViewMatrix.unproject(pixel3D, 0, 0, viewport.x(), viewport.y());
+    if (obj.isNan())
+    {
+      ray.copyFrom(obj);
+    }
+    else
+    {
+      ray.set(obj._x-position.x(), obj._y-position.y(), obj._z-position.z());
+    }
   }
 
   public final void setGeodeticPosition(Angle latitude, Angle longitude, double height)
@@ -637,21 +622,8 @@ public class Camera
     viewport.set(_viewPortWidth, _viewPortHeight);
   }
 
-  public static void pixel2RayInto(MutableVector3D position, Vector2F pixel, MutableVector2I viewport, MutableMatrix44D modelViewMatrix, MutableVector3D ray)
-  {
-    final float px = pixel._x;
-    final float py = viewport.y() - pixel._y;
-    final Vector3D pixel3D = new Vector3D(px, py, 0);
-    final Vector3D obj = modelViewMatrix.unproject(pixel3D, 0, 0, viewport.x(), viewport.y());
-    if (obj.isNan())
-    {
-      ray.copyFrom(obj);
-    }
-    else
-    {
-      ray.set(obj._x-position.x(), obj._y-position.y(), obj._z-position.z());
-    }
-  }
+//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
+//  static void pixel2RayInto(MutableVector3D position, Vector2F pixel, MutableVector2I viewport, MutableMatrix44D modelViewMatrix, MutableVector3D ray);
 
   public static Vector3D pixel2Ray(MutableVector3D position, Vector2F pixel, MutableVector2I viewport, MutableMatrix44D modelViewMatrix)
   {

@@ -184,22 +184,12 @@ public class CameraRotationHandler extends CameraEventHandler
     Vector3D u = camera.getHorizontalVector();
     camera.rotateWithAxisAndPoint(u, _pivotPoint.asVector3D(), Angle.fromDegrees(delta));
   
-<<<<<<< HEAD
-    /*
-     // update camera only if new view intersects globe
-    if (!tempCamera.getXYZCenterOfView().isNan()) {
-      camera->copyFrom(tempCamera);
-    }
-     */
-    camera.copyFrom(tempCamera);
-=======
     // update camera only if new view intersects globe
     if (camera.getXYZCenterOfView().isNan())
     {
       camera.setLookAtParams(_tempCameraPosition, _tempCameraCenter, _tempCameraUp);
     }
   
->>>>>>> origin/purgatory
   }
 
   public final void onUp(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
