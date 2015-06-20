@@ -97,6 +97,12 @@ public class Camera
     _dirtyFlags.setAllDirty();
   }
 
+
+  /*void Camera::setGeodeticPositionStablePitch(const Geodetic3D& g3d) {
+    MutableMatrix44D dragMatrix = _planet->drag(getGeodeticPosition(), g3d);
+    if (dragMatrix.isValid()) applyTransform(dragMatrix);
+  }*/
+  
   public final Vector3D pixel2Ray(Vector2F pixel)
   {
     final float px = pixel._x;
@@ -401,26 +407,8 @@ public class Camera
     setPitch(pitch);
   }
 
-  /*void setGeodeticPositionStablePitch(const Geodetic3D& g3d) {
-    MutableMatrix44D dragMatrix = _planet->drag(getGeodeticPosition(), g3d);
-    if (dragMatrix.isValid()) applyTransform(dragMatrix);
-  }*/
-  
-  
-  
-  
-  public final Vector3D Camera.pixel2Ray(MutableVector3D position, Vector2F pixel, MutableVector2I viewport, MutableMatrix44D modelViewMatrix)
-  {
-    final float px = pixel._x;
-    final float py = viewport.y() - pixel._y;
-    final Vector3D pixel3D = new Vector3D(px, py, 0);
-    final Vector3D obj = modelViewMatrix.unproject(pixel3D, 0, 0, viewport.x(), viewport.y());
-    if (obj.isNan())
-    {
-      return obj;
-    }
-    return obj.sub(position.asVector3D());
-  }
+//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
+//  void setGeodeticPositionStablePitch(Geodetic3D g3d);
 
   public final void setGeodeticPosition(Angle latitude, Angle longitude, double height)
   {
@@ -638,8 +626,18 @@ public class Camera
     }
   }
 
-//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
-//  static Vector3D pixel2Ray(MutableVector3D position, Vector2F pixel, MutableVector2I viewport, MutableMatrix44D modelViewMatrix);
+  public static Vector3D pixel2Ray(MutableVector3D position, Vector2F pixel, MutableVector2I viewport, MutableMatrix44D modelViewMatrix)
+  {
+    final float px = pixel._x;
+    final float py = viewport.y() - pixel._y;
+    final Vector3D pixel3D = new Vector3D(px, py, 0);
+    final Vector3D obj = modelViewMatrix.unproject(pixel3D, 0, 0, viewport.x(), viewport.y());
+    if (obj.isNan())
+    {
+      return obj;
+    }
+    return obj.sub(position.asVector3D());
+  }
 
 
 
