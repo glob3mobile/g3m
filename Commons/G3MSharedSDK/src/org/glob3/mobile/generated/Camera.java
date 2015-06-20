@@ -406,7 +406,10 @@ public class Camera
     if (dragMatrix.isValid()) applyTransform(dragMatrix);
   }*/
   
-  public final void Camera.pixel2RayInto(MutableVector3D position, Vector2F pixel, MutableVector2I viewport, MutableMatrix44D modelViewMatrix, MutableVector3D ray)
+  
+  
+  
+  public final Vector3D Camera.pixel2Ray(MutableVector3D position, Vector2F pixel, MutableVector2I viewport, MutableMatrix44D modelViewMatrix)
   {
     final float px = pixel._x;
     final float py = viewport.y() - pixel._y;
@@ -414,12 +417,9 @@ public class Camera
     final Vector3D obj = modelViewMatrix.unproject(pixel3D, 0, 0, viewport.x(), viewport.y());
     if (obj.isNan())
     {
-      ray.copyFrom(obj);
+      return obj;
     }
-    else
-    {
-      ray.set(obj._x-position.x(), obj._y-position.y(), obj._z-position.z());
-    }
+    return obj.sub(position.asVector3D());
   }
 
   public final void setGeodeticPosition(Angle latitude, Angle longitude, double height)
@@ -622,10 +622,7 @@ public class Camera
     viewport.set(_viewPortWidth, _viewPortHeight);
   }
 
-//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
-//  static void pixel2RayInto(MutableVector3D position, Vector2F pixel, MutableVector2I viewport, MutableMatrix44D modelViewMatrix, MutableVector3D ray);
-
-  public static Vector3D pixel2Ray(MutableVector3D position, Vector2F pixel, MutableVector2I viewport, MutableMatrix44D modelViewMatrix)
+  public static void pixel2RayInto(MutableVector3D position, Vector2F pixel, MutableVector2I viewport, MutableMatrix44D modelViewMatrix, MutableVector3D ray)
   {
     final float px = pixel._x;
     final float py = viewport.y() - pixel._y;
@@ -633,10 +630,16 @@ public class Camera
     final Vector3D obj = modelViewMatrix.unproject(pixel3D, 0, 0, viewport.x(), viewport.y());
     if (obj.isNan())
     {
-      return obj;
+      ray.copyFrom(obj);
     }
-    return obj.sub(position.asVector3D());
+    else
+    {
+      ray.set(obj._x-position.x(), obj._y-position.y(), obj._z-position.z());
+    }
   }
+
+//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
+//  static Vector3D pixel2Ray(MutableVector3D position, Vector2F pixel, MutableVector2I viewport, MutableMatrix44D modelViewMatrix);
 
 
 
