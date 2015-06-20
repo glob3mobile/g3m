@@ -17,6 +17,8 @@
 
 #include "G3MWidget.hpp"
 
+#include "Camera.hpp"
+
 bool CameraSingleDragHandler::onTouchEvent(const G3MEventContext *eventContext,
                                            const TouchEvent* touchEvent, 
                                            CameraContext *cameraContext) 
