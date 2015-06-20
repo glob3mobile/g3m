@@ -9,7 +9,7 @@ varying mediump vec2 TextureCoordOut;
 //uniform mediump vec2 TranslationTexCoord;
 //uniform mediump vec2 ScaleTexCoord;
 
-varying mediump vec4 VertexColor;
+varying mediump vec4 VertexColor; 
 
 uniform sampler2D Sampler;
 uniform bool EnableTexture;

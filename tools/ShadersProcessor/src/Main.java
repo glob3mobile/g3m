@@ -70,20 +70,14 @@ public class Main {
 			
 			line = line.trim();
 			line = line.replaceAll("(\\r|\\n)", "");
-			if (line.length() < 1) {
-				continue;
-			}
-
-			if (line.startsWith("/")) {
-				continue;
-			}
 			
-			if (i < (lines.length - 1)) {
-				result += " + ";
+			if (line.length() < 1 ||
+				line.startsWith("/")) {
+				continue;
 			}
 
 			// final boolean firstLine = (result == "");
-			result += "\"" + StringEscapeUtils.escapeJava(line) + "\\n\"";
+			result += " + \n" + "\"" + StringEscapeUtils.escapeJava(line) + "\\n\"";
 		}
 
 		return result;
