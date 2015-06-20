@@ -199,24 +199,7 @@ const Vector3D Camera::pixel2Ray(const Vector3D& pixel3D) const {
   if (dragMatrix.isValid()) applyTransform(dragMatrix);
 }*/
 
-void Camera::pixel2RayInto(const MutableVector3D& position,
-                           const Vector2F& pixel,
-                           const MutableVector2I& viewport,
-                           const MutableMatrix44D& modelViewMatrix,
-                           MutableVector3D& ray)
-{
-  const float px = pixel._x;
-  const float py = viewport.y() - pixel._y;
-  const Vector3D pixel3D(px, py, 0);
-  const Vector3D obj = modelViewMatrix.unproject(pixel3D, 0, 0,
-                                                 viewport.x(),
-                                                 viewport.y());
-  if (obj.isNan()) {
-    ray.copyFrom(obj);
-  } else {
-    ray.set(obj._x-position.x(), obj._y-position.y(), obj._z-position.z());
-  }
-}
+
 
 
 const Vector3D Camera::pixel2Ray(const MutableVector3D& position,
