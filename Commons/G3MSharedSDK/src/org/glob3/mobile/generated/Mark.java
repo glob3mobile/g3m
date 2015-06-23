@@ -111,6 +111,7 @@ public class Mark implements SurfaceElevationListener
       }
       else
       {
+<<<<<<< HEAD
   //      _textureGLF = new TextureGLFeature(_textureId->getID(),
   //                                         billboardTexCoords,
   //                                         2,
@@ -120,6 +121,8 @@ public class Mark implements SurfaceElevationListener
   //                                         true,
   //                                         GLBlendFactor::srcAlpha(),
   //                                         GLBlendFactor::oneMinusSrcAlpha());
+=======
+>>>>>>> purgatory
   
         _textureGLF = new TextureGLFeature(_textureId.getID(), billboardTexCoords, 2, 0, false, 0, true, GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha(), 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 0.0f);
       }
@@ -763,7 +766,7 @@ public class Mark implements SurfaceElevationListener
       BillboardGLFeature b = (BillboardGLFeature) _glState.getGLFeature(GLFeatureID.GLF_BILLBOARD);
       if (b != null)
       {
-        b.changeSize((int)_textureWidth *10, (int)_textureHeight *10);
+        b.changeSize((int)_textureWidth, (int)_textureHeight);
       }
     }
   }

@@ -81,8 +81,8 @@ private:
   
 public:
   BillboardGLFeature(const Vector3D& position,
-                     int textureWidth,
-                     int textureHeight,
+                     float billboardWidth,
+                     float billboardHeight,
                      float anchorU, float anchorV);
   
   void applyOnGlobalGLState(GLGlobalState* state) const;
@@ -139,7 +139,7 @@ private:
 
 public:
 
-  GeometryGLFeature(IFloatBuffer* buffer,
+  GeometryGLFeature(const IFloatBuffer* buffer,
                     int arrayElementSize,
                     int index,
                     bool normalized,
@@ -454,7 +454,7 @@ private:
   }
 
 public:
-  ColorGLFeature(IFloatBuffer* colors,
+  ColorGLFeature(const IFloatBuffer* colors,
                  int arrayElementSize,
                  int index,
                  bool normalized,
@@ -569,7 +569,7 @@ private:
   }
 
 public:
-  VertexNormalGLFeature(IFloatBuffer* buffer,
+  VertexNormalGLFeature(const IFloatBuffer* buffer,
                         int arrayElementSize,
                         int index,
                         bool normalized,

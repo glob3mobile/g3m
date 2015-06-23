@@ -20,6 +20,7 @@
 #import <CoreLocation/CoreLocation.h>
 #import <CoreMotion/CoreMotion.h>
 
+#include <G3MiOSSDK/DeviceAttitudeCameraConstrainer.hpp>
 
 void G3MAugmentedRealityDemoScene::deactivate(const G3MContext* context) {
   [_locationManager stopUpdatingLocation];
@@ -104,6 +105,8 @@ public:
 void G3MAugmentedRealityDemoScene::rawActivate(const G3MContext* context) {
   G3MDemoModel* model     = getModel();
   G3MWidget*    g3mWidget = model->getG3MWidget();
+  
+  new DeviceAttitudeCameraConstrainer();
 
 
   BingMapsLayer* layer = new BingMapsLayer(BingMapType::AerialWithLabels(),

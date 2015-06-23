@@ -198,6 +198,7 @@
 		CF5C119A178C7F34000ED715 /* GEOGeometry2D.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF5C1198178C7E33000ED715 /* GEOGeometry2D.hpp */; };
 		CF5C119D178CA747000ED715 /* GEORasterSymbol.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF5C119B178CA746000ED715 /* GEORasterSymbol.cpp */; };
 		CF5C119E178CA794000ED715 /* GEORasterSymbol.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF5C119C178CA746000ED715 /* GEORasterSymbol.hpp */; };
+		CF5DB0671AFD52B6001FFE58 /* BalloonCanvasElement.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF5DB0661AFD52B6001FFE58 /* BalloonCanvasElement.cpp */; };
 		CF5EA5D4163DDC7900D8F797 /* Shape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF5EA5D2163DDC7900D8F797 /* Shape.cpp */; };
 		CF5EA5D8163DDCB900D8F797 /* QuadShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF5EA5D6163DDCB900D8F797 /* QuadShape.cpp */; };
 		CF60500317724C5C00EB48A6 /* JSONNull.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF60500117724C5C00EB48A6 /* JSONNull.cpp */; };
@@ -1392,6 +1393,7 @@
 		CF5C1198178C7E33000ED715 /* GEOGeometry2D.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = GEOGeometry2D.hpp; path = Commons/GEO/GEOGeometry2D.hpp; sourceTree = "<group>"; };
 		CF5C119B178CA746000ED715 /* GEORasterSymbol.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GEORasterSymbol.cpp; path = Commons/GEO/GEORasterSymbol.cpp; sourceTree = "<group>"; };
 		CF5C119C178CA746000ED715 /* GEORasterSymbol.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = GEORasterSymbol.hpp; path = Commons/GEO/GEORasterSymbol.hpp; sourceTree = "<group>"; };
+		CF5DB0661AFD52B6001FFE58 /* BalloonCanvasElement.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = BalloonCanvasElement.cpp; path = Commons/Basic/BalloonCanvasElement.cpp; sourceTree = "<group>"; };
 		CF5EA5D2163DDC7900D8F797 /* Shape.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Shape.cpp; path = Commons/Rendererers/Shape.cpp; sourceTree = "<group>"; };
 		CF5EA5D3163DDC7900D8F797 /* Shape.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Shape.hpp; path = Commons/Rendererers/Shape.hpp; sourceTree = "<group>"; };
 		CF5EA5D6163DDCB900D8F797 /* QuadShape.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = QuadShape.cpp; path = Commons/Rendererers/QuadShape.cpp; sourceTree = "<group>"; };
@@ -2027,6 +2029,7 @@
 				D895CA1C1861C32300AE8291 /* IImageUtils.hpp */,
 				D87D3A2B183B96930014C96D /* BasicShadersGL2.hpp */,
 				CF6D7243171859C40043C74B /* BalloonCanvasElement.hpp */,
+				CF5DB0661AFD52B6001FFE58 /* BalloonCanvasElement.cpp */,
 				CF4FAAC11695C66F009734CA /* ByteBufferBuilder.cpp */,
 				CF4FAAC21695C66F009734CA /* ByteBufferBuilder.hpp */,
 				CF7EDA0316948302002C760A /* ByteBufferIterator.cpp */,
@@ -3163,6 +3166,7 @@
 				CF8AE00B1702049F00FE9F56 /* GEOSymbolizer.cpp in Sources */,
 				D8715C1E17032AC700CF7BE2 /* GPUProgram.cpp in Sources */,
 				D80E59B2170B12CD00E7C799 /* GPUProgramFactory.cpp in Sources */,
+				CF5DB0671AFD52B6001FFE58 /* BalloonCanvasElement.cpp in Sources */,
 				CF9EDC641978357D00F7351E /* GEOVectorTileImageProvider.cpp in Sources */,
 				D80E59B5170B155C00E7C799 /* GPUProgramManager.cpp in Sources */,
 				CFCE391219129D0D00E3EBE1 /* GEORasterSymbolizer.cpp in Sources */,
@@ -3275,7 +3279,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = armv7;
+				ARCHS = "$(ARCHS_STANDARD)";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
@@ -3320,7 +3324,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = armv7;
+				ARCHS = "$(ARCHS_STANDARD)";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
@@ -3359,7 +3363,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = armv7;
+				ARCHS = "$(ARCHS_STANDARD)";
 				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = YES;
 				CLANG_WARN__EXIT_TIME_DESTRUCTORS = NO;
 				DSTROOT = /tmp/Glob3iOSSDK.dst;
@@ -3390,7 +3394,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = armv7;
+				ARCHS = "$(ARCHS_STANDARD)";
 				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = YES;
 				CLANG_WARN__EXIT_TIME_DESTRUCTORS = NO;
 				DSTROOT = /tmp/Glob3iOSSDK.dst;

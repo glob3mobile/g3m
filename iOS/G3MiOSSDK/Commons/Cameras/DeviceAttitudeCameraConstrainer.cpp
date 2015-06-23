@@ -10,6 +10,9 @@
 
 #include "IDeviceAttitude.hpp"
 
+DeviceAttitudeCameraConstrainer::DeviceAttitudeCameraConstrainer(){
+  
+}
 
 DeviceAttitudeCameraConstrainer::~DeviceAttitudeCameraConstrainer(){
   IDeviceAttitude::instance()->stopTrackingDeviceOrientation();

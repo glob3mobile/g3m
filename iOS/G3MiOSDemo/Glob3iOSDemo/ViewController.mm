@@ -358,11 +358,118 @@ Mesh* createSectorMesh(const Planet* planet,
       return true;
     }
   };
+
+  Geodetic3D canarias[] = { Geodetic3D::fromDegrees(28.131817, -15.440219, 0),
+  Geodetic3D::fromDegrees(28.947345, -13.523105, 0),
+  Geodetic3D::fromDegrees(28.473802, -13.859360, 0),
+  Geodetic3D::fromDegrees(28.467706, -16.251426, 0),
+  Geodetic3D::fromDegrees(28.701819, -17.762003, 0),
+  Geodetic3D::fromDegrees(28.086595, -17.105796, 0),
+  Geodetic3D::fromDegrees(27.810709, -17.917639, 0)
+  };
   
-  class RotateStarsTask: public GTask{
-    ViewController* _vc;
-  public:
-    RotateStarsTask(ViewController* vc):_vc(vc){}
+  NonOverlappingMark* mark = new NonOverlappingMark(new DownloaderImageBuilder(URL("file:///g3m-marker.png")),
+                                                    new DownloaderImageBuilder(URL("file:///anchorWidget.png")),
+                                                    Geodetic3D::fromDegrees(28.131817, -15.440219, 0),
+                                                    new MyMarkWidgetTouchListener(),
+                                                    10.0);
+  nomr->addMark(mark);
+  
+  NonOverlappingMark* mark2 = new NonOverlappingMark(new DownloaderImageBuilder(URL("file:///g3m-marker.png")),
+                                                     new DownloaderImageBuilder(URL("file:///anchorWidget.png")),
+                                                     Geodetic3D::fromDegrees(28.947345, -13.523105, 0),
+                                                     new MyMarkWidgetTouchListener(),
+                                                     10.0);
+  nomr->addMark(mark2);
+  
+  NonOverlappingMark* mark3 = new NonOverlappingMark(new DownloaderImageBuilder(URL("file:///g3m-marker.png")),
+                                                     new DownloaderImageBuilder(URL("file:///anchorWidget.png")),
+                                                     Geodetic3D::fromDegrees(28.473802, -13.859360, 0),
+                                                     new MyMarkWidgetTouchListener(),
+                                                     10.0);
+  nomr->addMark(mark3);
+  
+  NonOverlappingMark* mark4 = new NonOverlappingMark(new DownloaderImageBuilder(URL("file:///g3m-marker.png")),
+                                                     new DownloaderImageBuilder(URL("file:///anchorWidget.png")),
+                                                     Geodetic3D::fromDegrees(28.467706, -16.251426, 0),
+                                                     new MyMarkWidgetTouchListener(),
+                                                     10.0);
+  nomr->addMark(mark4);
+  
+  NonOverlappingMark* mark5 = new NonOverlappingMark(new DownloaderImageBuilder(URL("file:///g3m-marker.png")),
+                                                     new DownloaderImageBuilder(URL("file:///anchorWidget.png")),
+                                                     Geodetic3D::fromDegrees(28.701819, -17.762003, 0),
+                                                     new MyMarkWidgetTouchListener(),
+                                                     10.0);
+  nomr->addMark(mark5);
+  
+  NonOverlappingMark* mark6 = new NonOverlappingMark(new DownloaderImageBuilder(URL("file:///g3m-marker.png")),
+                                                     new DownloaderImageBuilder(URL("file:///anchorWidget.png")),
+                                                     Geodetic3D::fromDegrees(28.086595, -17.105796, 0),
+                                                     new MyMarkWidgetTouchListener(),
+                                                     10.0);
+  nomr->addMark(mark6);
+  
+  NonOverlappingMark* mark7 = new NonOverlappingMark(new DownloaderImageBuilder(URL("file:///g3m-marker.png")),
+                                                     new DownloaderImageBuilder(URL("file:///anchorWidget.png")),
+                                                     Geodetic3D::fromDegrees(27.810709, -17.917639, 0),
+                                                     new MyMarkWidgetTouchListener(),
+                                                     100.0);
+  nomr->addMark(mark7);
+  
+  for(int i = 0; i < 50; i++){
+    
+    double lat = ((rand() % 18000) - 9000) / 100.0;
+    double lon = ((rand() % 36000) - 18000) / 100.0;
+    
+    NonOverlappingMark* mark = new NonOverlappingMark(new DownloaderImageBuilder(URL("file:///g3m-marker.png")),
+                                                      new DownloaderImageBuilder(URL("file:///anchorWidget.png")),
+                                                      Geodetic3D::fromDegrees(lat, lon, 0),
+                                                      NULL,
+                                                      100.0);
+    nomr->addMark(mark);
+  }
+  
+  //nomr->setEnable(false);
+  
+  builder.initializeWidget();
+}
+
+
+class MoveCameraInitializationTask : public GInitializationTask {
+private:
+  G3MWidget_iOS* _iosWidget;
+  const Sector   _sector;
+  
+public:
+  
+  MoveCameraInitializationTask(G3MWidget_iOS* iosWidget,
+                               const Sector   sector) :
+  _iosWidget(iosWidget),
+  _sector(sector)
+  {
+  }
+  
+  void run(const G3MContext* context) {
+    //    const std::string cartoCSS = "/* coment */ // comment\n @water: #C0E0F8; [zoom > 1] { line-color:@waterline; line-width:1.6; ::newSymbolizer { line-width:2; } } #world .class [level == 5] { background-color: black; } ";
+    
+    //    const std::string cartoCSS = "@water: #ddeeff;\n#lakes[ScaleRank<3][zoom=3],\n#lakes[ScaleRank<4][zoom=4],\n#lakes[ScaleRank<5][zoom=5],\n#lakes[ScaleRank<6][zoom>=6] {\n    polygon-fill:@water;\n    line-color:darken(@water, 20%);\n    line-width:0.3;\n  }\n";
+    
+    //    const std::string cartoCSS = "/* coment */ // comment\n @water: #C0E0F8; [zoom > 1] { line-color:@waterline; line-width:1.6; ::newSymbolizer { line-width:2; } } #world .class [level == 5] { background-color: black; } \n@water: #ddeeff;\n#lakes[ScaleRank<3][zoom=3],\n#lakes[ScaleRank<4][zoom=4],\n#lakes[ScaleRank<5][zoom=5],\n#lakes[ScaleRank<6][zoom>=6] {\n    polygon-fill:@water;\n    line-color:darken(@water, 20%);\n    line-width:0.3;\n  }\n.class1.class2{} ::anotherSymbolizer {background-color: black;} * {line-color:white;} ";
+    const std::string cartoCSS = "@water: #C0E0F8; #id { a:1; b:2; .class {a:2;} [level > 2] {b:3; [COUNTRY=US][COUNTRY=AR] { d:33;} } }";
+    
+    CartoCSSResult* result = CartoCSSParser::parse(cartoCSS);
+    
+    if (result->hasError()) {
+      std::vector<CartoCSSError> errors = result->getErrors();
+      const int errorsSize = errors.size();
+      for (int i = 0; i < errorsSize; i++) {
+        const CartoCSSError error = errors[i];
+        ILogger::instance()->logError("\"%s\" at %d",
+                                      error.getDescription().c_str(),
+                                      error.getPosition());
+      }
+    }
     
     void run(const G3MContext* context){
       [_vc rotateStars];

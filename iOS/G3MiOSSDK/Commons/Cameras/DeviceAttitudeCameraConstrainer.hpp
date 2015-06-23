@@ -28,8 +28,7 @@ private:
   
 public:
   
-  DeviceAttitudeCameraConstrainer(){
-  };
+  DeviceAttitudeCameraConstrainer();
   
   ~DeviceAttitudeCameraConstrainer();
   

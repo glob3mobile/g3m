@@ -39,8 +39,8 @@ void ViewportExtentGLFeature::changeExtent(int viewportWidth,
 }
 
 BillboardGLFeature::BillboardGLFeature(const Vector3D& position,
-                                       int textureWidth,
-                                       int textureHeight,
+                                       float billboardWidth,
+                                       float billboardHeight,
                                        float anchorU, float anchorV) :
 GLFeature(NO_GROUP, GLF_BILLBOARD)
 {
@@ -51,7 +51,7 @@ GLFeature(NO_GROUP, GLF_BILLBOARD)
                            false);
   
   
-  _size = new GPUUniformValueVec2FloatMutable(textureWidth, textureHeight);
+  _size = new GPUUniformValueVec2FloatMutable(billboardWidth, billboardHeight);
   _values->addUniformValue(TEXTURE_EXTENT,
                            _size,
                            false);
@@ -70,7 +70,7 @@ void BillboardGLFeature::applyOnGlobalGLState(GLGlobalState* state)  const {
   state->disablePolygonOffsetFill();
 }
 
-GeometryGLFeature::GeometryGLFeature(IFloatBuffer* buffer,
+GeometryGLFeature::GeometryGLFeature(const IFloatBuffer* buffer,
                                      int arrayElementSize,
                                      int index,
                                      bool normalized,
@@ -328,7 +328,7 @@ void TextureGLFeature::applyOnGlobalGLState(GLGlobalState* state) const {
   state->bindTexture(_target, _texID);
 }
 
-ColorGLFeature::ColorGLFeature(IFloatBuffer* colors, int arrayElementSize, int index, bool normalized, int stride,
+ColorGLFeature::ColorGLFeature(const IFloatBuffer* colors, int arrayElementSize, int index, bool normalized, int stride,
                                bool blend, int sFactor, int dFactor) :
 GLColorGroupFeature(GLF_COLOR, 3, blend, sFactor, dFactor)
 {
@@ -449,7 +449,11 @@ void DirectionLightGLFeature::setLightDirection(const Vector3D& lightDir) {
                                            (float)dirN._z);
 }
 
-VertexNormalGLFeature::VertexNormalGLFeature(IFloatBuffer* buffer, int arrayElementSize, int index, bool normalized, int stride) :
+VertexNormalGLFeature::VertexNormalGLFeature(const IFloatBuffer* buffer,
+                                             int arrayElementSize,
+                                             int index,
+                                             bool normalized,
+                                             int stride) :
 GLFeature(LIGHTING_GROUP, GLF_VERTEX_NORMAL)
 {
   _values->addAttributeValue(NORMAL,

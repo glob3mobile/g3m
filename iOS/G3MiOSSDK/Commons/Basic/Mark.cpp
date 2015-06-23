@@ -499,15 +499,6 @@ void Mark::createGLState(const Planet* planet,
                      0.0f,
                      0.0f);
     } else{
-//      _textureGLF = new TextureGLFeature(_textureId->getID(),
-//                                         billboardTexCoords,
-//                                         2,
-//                                         0,
-//                                         false,
-//                                         0,
-//                                         true,
-//                                         GLBlendFactor::srcAlpha(),
-//                                         GLBlendFactor::oneMinusSrcAlpha());
       
       _textureGLF = new TextureGLFeature(_textureId->getID(),
                                          billboardTexCoords,
@@ -667,7 +658,7 @@ void Mark::setOnScreenSizeOnPixels(int width, int height){
   if (_glState != NULL){
     BillboardGLFeature* b = (BillboardGLFeature*) _glState->getGLFeature(GLF_BILLBOARD);
     if (b != NULL){
-      b->changeSize((int)_textureWidth*10, (int)_textureHeight*10);
+      b->changeSize((int)_textureWidth, (int)_textureHeight);
     }
   }
 }

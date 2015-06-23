@@ -329,9 +329,9 @@ PointCloudsRenderer::PointCloudInnerNode::~PointCloudInnerNode() {
 }
 
 void PointCloudsRenderer::PointCloudInnerNode::addLeafNode(PointCloudLeafNode* leafNode) {
-  const int idLenght = _id.length();
-  const int childIndex = leafNode->_id[idLenght] - '0';
-  if ((idLenght + 1) == leafNode->_id.length()) {
+  const int idLength = _id.length();
+  const int childIndex = leafNode->_id[idLength] - '0';
+  if ((idLength + 1) == leafNode->_id.length()) {
     if (_children[childIndex] != NULL) {
       THROW_EXCEPTION("Logic error!");
     }

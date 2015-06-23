@@ -254,7 +254,7 @@ protected:
   }
 
 public:
-  GPUAttributeValueVecFloat(IFloatBuffer* buffer, int attributeSize, int arrayElementSize, int index, int stride, bool normalized):
+  GPUAttributeValueVecFloat(const IFloatBuffer* buffer, int attributeSize, int arrayElementSize, int index, int stride, bool normalized):
   GPUAttributeValue(GLType::glFloat(), attributeSize, arrayElementSize, index, stride, normalized),
   _buffer(buffer),
   _timeStamp(buffer->timestamp()),
@@ -368,7 +368,7 @@ private:
   }
 
 public:
-  GPUAttributeValueVec3Float(IFloatBuffer* buffer, int arrayElementSize, int index, int stride, bool normalized):
+  GPUAttributeValueVec3Float(const IFloatBuffer* buffer, int arrayElementSize, int index, int stride, bool normalized):
   GPUAttributeValueVecFloat(buffer, 3, arrayElementSize, index, stride, normalized) {}
 };
 
@@ -395,7 +395,7 @@ private:
   }
 
 public:
-  GPUAttributeValueVec4Float(IFloatBuffer* buffer, int arrayElementSize, int index, int stride, bool normalized):
+  GPUAttributeValueVec4Float(const IFloatBuffer* buffer, int arrayElementSize, int index, int stride, bool normalized):
   GPUAttributeValueVecFloat(buffer, 4, arrayElementSize, index, stride, normalized) {}
 };
 

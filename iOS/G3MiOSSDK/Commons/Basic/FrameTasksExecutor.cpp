@@ -83,7 +83,7 @@ void FrameTasksExecutor::doPreRenderCycle(const G3MRenderContext* rc) {
 
   if (_debug) {
     if (canceledCounter > 0) {
-      rc->getLogger()->logInfo("FTE: Removed %d tasks, actived %d tasks.",
+      rc->getLogger()->logInfo("FTE: Removed %d tasks, active %d tasks.",
                                canceledCounter,
                                _tasks.size());
     }
