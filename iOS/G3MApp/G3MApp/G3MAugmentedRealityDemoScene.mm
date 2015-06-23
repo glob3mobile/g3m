@@ -23,16 +23,16 @@
 #include <G3MiOSSDK/DeviceAttitudeCameraConstrainer.hpp>
 
 void G3MAugmentedRealityDemoScene::deactivate(const G3MContext* context) {
-  [_locationManager stopUpdatingLocation];
+/*  [_locationManager stopUpdatingLocation];
   [_locationManager stopUpdatingHeading];
   _locationManager = nil;
 
   [_motionManager stopDeviceMotionUpdates];
   _motionManager = nil;
-
+*/
   G3MDemoScene::deactivate(context);
 }
-
+/*
 
 class UpdateCameraTask : public GTask {
 private:
@@ -100,13 +100,14 @@ public:
                                                          altitude + 500) );
   }
 };
-
+*/
 
 void G3MAugmentedRealityDemoScene::rawActivate(const G3MContext* context) {
   G3MDemoModel* model     = getModel();
   G3MWidget*    g3mWidget = model->getG3MWidget();
   
-  new DeviceAttitudeCameraConstrainer();
+  DeviceAttitudeCameraConstrainer* dac = new DeviceAttitudeCameraConstrainer();
+  g3mWidget->addCameraConstrainer(dac);
 
 
   BingMapsLayer* layer = new BingMapsLayer(BingMapType::AerialWithLabels(),
@@ -114,8 +115,11 @@ void G3MAugmentedRealityDemoScene::rawActivate(const G3MContext* context) {
                                            TimeInterval::fromDays(30));
 //  MapQuestLayer* layer = MapQuestLayer::newOpenAerial(TimeInterval::fromDays(30));
   model->getLayerSet()->addLayer(layer);
+  
+  Camera* camera = g3mWidget->getNextCamera();
+  camera->setGeodeticPosition( Geodetic3D::fromDegrees(28.1001809,-15.4147574, 500) );
 
-
+/*
   _locationManager = [[CLLocationManager alloc] init];
   _locationManager.desiredAccuracy = kCLLocationAccuracyBestForNavigation;
   _locationManager.distanceFilter = kCLDistanceFilterNone;
@@ -136,5 +140,5 @@ void G3MAugmentedRealityDemoScene::rawActivate(const G3MContext* context) {
                                                   new UpdateCameraTask(g3mWidget,
                                                                        _locationManager,
                                                                        _motionManager)));
-  
+  */
 }

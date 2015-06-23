@@ -249,6 +249,10 @@ public:
                            const std::vector<const Info*>& info);
 
   void removeAllPeriodicalTasks();
+  
+  void addCameraConstrainer(ICameraConstrainer* cc);
+  void removeCameraConstrainer(ICameraConstrainer* cc);
+
 
 
 private:

@@ -868,3 +868,19 @@ void G3MWidget::changedRendererInfo(const int rendererIdentifier,
 }
 
 
+void G3MWidget::addCameraConstrainer(ICameraConstrainer* cc){
+  _cameraConstrainers.push_back(cc);
+}
+
+void G3MWidget::removeCameraConstrainer(ICameraConstrainer* cc){
+  size_t size = _cameraConstrainers.size();
+  for (size_t i = 0; i < size; i++) {
+    if (_cameraConstrainers[i] == cc){
+      _cameraConstrainers.erase(_cameraConstrainers.begin() + i);
+      return;
+    }
+  }
+  ILogger::instance()->logError("Could not remove camera constrainer.");
+}
+
+
