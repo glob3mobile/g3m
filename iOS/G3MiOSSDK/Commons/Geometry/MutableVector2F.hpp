@@ -34,7 +34,7 @@ public:
   {
   }
 
-  MutableVector2F(const Vector2F& that);
+  explicit MutableVector2F(const Vector2F& that);
 
   void set(float x, float y) {
     _x = x;

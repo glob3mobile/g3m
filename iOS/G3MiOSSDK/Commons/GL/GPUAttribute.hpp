@@ -243,7 +243,7 @@ public:
 class GPUAttributeValueVecFloat : public GPUAttributeValue {
 private:
   const IFloatBuffer* _buffer;
-  const int _timeStamp;
+  const int _timestamp;
   const long long _id;
 
 protected:
@@ -257,7 +257,7 @@ public:
   GPUAttributeValueVecFloat(const IFloatBuffer* buffer, int attributeSize, int arrayElementSize, int index, int stride, bool normalized):
   GPUAttributeValue(GLType::glFloat(), attributeSize, arrayElementSize, index, stride, normalized),
   _buffer(buffer),
-  _timeStamp(buffer->timestamp()),
+  _timestamp(buffer->timestamp()),
   _id(buffer->getID()) {}
 
   void setAttribute(GL* gl, const int id) const {
@@ -275,12 +275,12 @@ public:
       return false;          //Is a disabled value
     }
     GPUAttributeValueVecFloat* vecV = (GPUAttributeValueVecFloat*)v;
-    bool equal = ((_id      == vecV->_buffer->getID())     &&
-                  (_timeStamp     == vecV->_timeStamp)  &&
-                  (_type          == v->_type)          &&
-                  (_attributeSize == v->_attributeSize) &&
-                  (_stride        == v->_stride)        &&
-                  (_normalized    == v->_normalized) );
+    bool equal = ( (_id            == vecV->_buffer->getID()) &&
+                   (_timestamp     == vecV->_timestamp      ) &&
+                   (_type          == v->_type              ) &&
+                   (_attributeSize == v->_attributeSize     ) &&
+                   (_stride        == v->_stride            ) &&
+                   (_normalized    == v->_normalized        ) );
 
     return equal;
   }

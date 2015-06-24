@@ -1,14 +1,14 @@
 package org.glob3.mobile.generated; 
 //***************************************************************
 
-public class BusyEffect extends EffectWithForce
+public class BusyEffect extends EffectNeverEnding
 {
   private BusyQuadRenderer _renderer;
 
 
   public BusyEffect(BusyQuadRenderer renderer)
   {
-     super(1, 1);
+     super();
      _renderer = renderer;
   }
 

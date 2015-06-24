@@ -1,33 +1,8 @@
 package org.glob3.mobile.generated; 
 public class Camera
 {
-  public Camera(Camera that)
-  {
-     _viewPortWidth = that._viewPortWidth;
-     _viewPortHeight = that._viewPortHeight;
-     _planet = that._planet;
-     _position = new MutableVector3D(that._position);
-     _center = new MutableVector3D(that._center);
-     _up = new MutableVector3D(that._up);
-     _dirtyFlags = new CameraDirtyFlags(that._dirtyFlags);
-     _frustumData = new FrustumData(that._frustumData);
-     _projectionMatrix = new MutableMatrix44D(that._projectionMatrix);
-     _modelMatrix = new MutableMatrix44D(that._modelMatrix);
-     _modelViewMatrix = new MutableMatrix44D(that._modelViewMatrix);
-     _cartesianCenterOfView = new MutableVector3D(that._cartesianCenterOfView);
-     _geodeticCenterOfView = (that._geodeticCenterOfView == null) ? null : new Geodetic3D(that._geodeticCenterOfView);
-     _frustum = (that._frustum == null) ? null : new Frustum(that._frustum);
-     _frustumInModelCoordinates = (that._frustumInModelCoordinates == null) ? null : new Frustum(that._frustumInModelCoordinates);
-     _camEffectTarget = new CameraEffectTarget();
-     _geodeticPosition = (that._geodeticPosition == null) ? null: new Geodetic3D(that._geodeticPosition);
-     _angle2Horizon = that._angle2Horizon;
-     _normalizedPosition = new MutableVector3D(that._normalizedPosition);
-     _tanHalfVerticalFieldOfView = java.lang.Double.NaN;
-     _tanHalfHorizontalFieldOfView = java.lang.Double.NaN;
-     _rollInRadians = that._rollInRadians;
-  }
 
-  public Camera()
+  public Camera(long timestamp)
   {
      _planet = null;
      _position = new MutableVector3D(0, 0, 0);
@@ -48,7 +23,7 @@ public class Camera
      _normalizedPosition = new MutableVector3D(0, 0, 0);
      _tanHalfVerticalFieldOfView = java.lang.Double.NaN;
      _tanHalfHorizontalFieldOfView = java.lang.Double.NaN;
-     _rollInRadians = 0;
+     _timestamp = timestamp;
     resizeViewport(0, 0);
     _dirtyFlags.setAllDirty();
   }
@@ -69,6 +44,16 @@ public class Camera
 
   public final void copyFrom(Camera that)
   {
+  
+    if (_timestamp == that._timestamp)
+    {
+      return;
+    }
+  
+    that.forceMatrixCreation();
+  
+    _timestamp = that._timestamp;
+  
     _viewPortWidth = that._viewPortWidth;
     _viewPortHeight = that._viewPortHeight;
   
@@ -102,14 +87,9 @@ public class Camera
     _tanHalfHorizontalFieldOfView = that._tanHalfHorizontalFieldOfView;
   }
 
-  public final void copyFromForcingMatrixCreation(Camera c)
-  {
-    c.forceMatrixCreation();
-    copyFrom(c);
-  }
-
   public final void resizeViewport(int width, int height)
   {
+    _timestamp++;
     _viewPortWidth = width;
     _viewPortHeight = height;
   
@@ -321,6 +301,8 @@ public class Camera
   public final void initialize(G3MContext context)
   {
     _planet = context.getPlanet();
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning move this to Planet, && remove isFlat() method (DGD)
     if (_planet.isFlat())
     {
       setCartesianPosition(new MutableVector3D(0, 0, _planet.getRadii()._y * 5));
@@ -338,7 +320,7 @@ public class Camera
   {
     if (!v.equalTo(_position))
     {
-      //      _position = MutableVector3D(v);
+      _timestamp++;
       _position.copyFrom(v);
       if (_geodeticPosition != null)
          _geodeticPosition.dispose();
@@ -347,7 +329,6 @@ public class Camera
       final double distanceToPlanetCenter = _position.length();
       final double planetRadius = distanceToPlanetCenter - getGeodeticPosition()._height;
       _angle2Horizon = Math.acos(planetRadius/distanceToPlanetCenter);
-      //      _normalizedPosition = _position.normalized();
       _normalizedPosition.copyFrom(_position);
       _normalizedPosition.normalize();
     }
@@ -364,7 +345,6 @@ public class Camera
   }
   public final void setHeading(Angle angle)
   {
-    //ILogger::instance()->logInfo("SET CAMERA HEADING: %f", angle._degrees);
     final TaitBryanAngles angles = getHeadingPitchRoll();
     final CoordinateSystem localRS = getLocalCoordinateSystem();
     final CoordinateSystem cameraRS = localRS.applyTaitBryanAngles(angle, angles._pitch, angles._roll);
@@ -376,7 +356,6 @@ public class Camera
   }
   public final void setPitch(Angle angle)
   {
-    //ILogger::instance()->logInfo("SET CAMERA PITCH: %f", angle._degrees);
     final TaitBryanAngles angles = getHeadingPitchRoll();
     final CoordinateSystem localRS = getLocalCoordinateSystem();
     final CoordinateSystem cameraRS = localRS.applyTaitBryanAngles(angles._heading, angle, angles._roll);
@@ -516,6 +495,7 @@ public class Camera
     final double newV = halfVFOV.tangent();
     if ((newH != _tanHalfHorizontalFieldOfView) || (newV != _tanHalfVerticalFieldOfView))
     {
+      _timestamp++;
       _tanHalfHorizontalFieldOfView = newH;
       _tanHalfVerticalFieldOfView = newV;
   
@@ -533,7 +513,6 @@ public class Camera
   }
   public final void setRoll(Angle angle)
   {
-    //ILogger::instance()->logInfo("SET CAMERA ROLL: %f", angle._degrees);
     final TaitBryanAngles angles = getHeadingPitchRoll();
   
     final CoordinateSystem localRS = getLocalCoordinateSystem();
@@ -564,10 +543,6 @@ public class Camera
 
   public final double getEstimatedPixelDistance(Vector3D point0, Vector3D point1)
   {
-  //  const Vector3D ray0 = _position.sub(point0);
-  //  const Vector3D ray1 = _position.sub(point1);
-  //  const double angleInRadians = ray1.angleInRadiansBetween(ray0);
-  
     _ray0.putSub(_position, point0);
     _ray1.putSub(_position, point1);
     final double angleInRadians = MutableVector3D.angleInRadiansBetween(_ray1, _ray0);
@@ -576,6 +551,96 @@ public class Camera
     return distanceInMeters * _viewPortHeight / frustumData._top;
   }
 
+  public final long getTimestamp()
+  {
+    return _timestamp;
+  }
+
+  public final void setLookAtParams(MutableVector3D position, MutableVector3D center, MutableVector3D up)
+  {
+    setCartesianPosition(position);
+    setCenter(center);
+    setUp(up);
+  }
+
+  public final void getLookAtParamsInto(MutableVector3D position, MutableVector3D center, MutableVector3D up)
+  {
+    position.copyFrom(_position);
+    center.copyFrom(_center);
+    up.copyFrom(_up);
+  }
+
+  public final void getModelViewMatrixInto(MutableMatrix44D matrix)
+  {
+    matrix.copyValue(getModelViewMatrix());
+  }
+
+  public final void getViewPortInto(MutableVector2I viewport)
+  {
+    viewport.set(_viewPortWidth, _viewPortHeight);
+  }
+
+  public static void pixel2RayInto(MutableVector3D position, Vector2F pixel, MutableVector2I viewport, MutableMatrix44D modelViewMatrix, MutableVector3D ray)
+  {
+    final float px = pixel._x;
+    final float py = viewport.y() - pixel._y;
+    final Vector3D pixel3D = new Vector3D(px, py, 0);
+    final Vector3D obj = modelViewMatrix.unproject(pixel3D, 0, 0, viewport.x(), viewport.y());
+    if (obj.isNan())
+    {
+      ray.copyFrom(obj);
+    }
+    else
+    {
+      ray.set(obj._x-position.x(), obj._y-position.y(), obj._z-position.z());
+    }
+  }
+
+  public static Vector3D pixel2Ray(MutableVector3D position, Vector2F pixel, MutableVector2I viewport, MutableMatrix44D modelViewMatrix)
+  {
+    final float px = pixel._x;
+    final float py = viewport.y() - pixel._y;
+    final Vector3D pixel3D = new Vector3D(px, py, 0);
+    final Vector3D obj = modelViewMatrix.unproject(pixel3D, 0, 0, viewport.x(), viewport.y());
+    if (obj.isNan())
+    {
+      return obj;
+    }
+    return obj.sub(position.asVector3D());
+  }
+
+
+
+//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
+//  Camera(Camera that);
+
+  //  Camera(const Camera &that):
+  //  _viewPortWidth(that._viewPortWidth),
+  //  _viewPortHeight(that._viewPortHeight),
+  //  _planet(that._planet),
+  //  _position(that._position),
+  //  _center(that._center),
+  //  _up(that._up),
+  //  _dirtyFlags(that._dirtyFlags),
+  //  _frustumData(that._frustumData),
+  //  _projectionMatrix(that._projectionMatrix),
+  //  _modelMatrix(that._modelMatrix),
+  //  _modelViewMatrix(that._modelViewMatrix),
+  //  _cartesianCenterOfView(that._cartesianCenterOfView),
+  //  _geodeticCenterOfView((that._geodeticCenterOfView == NULL) ? NULL : new Geodetic3D(*that._geodeticCenterOfView)),
+  //  _frustum((that._frustum == NULL) ? NULL : new Frustum(*that._frustum)),
+  //  _frustumInModelCoordinates((that._frustumInModelCoordinates == NULL) ? NULL : new Frustum(*that._frustumInModelCoordinates)),
+  //  _camEffectTarget(new CameraEffectTarget()),
+  //  _geodeticPosition((that._geodeticPosition == NULL) ? NULL: new Geodetic3D(*that._geodeticPosition)),
+  //  _angle2Horizon(that._angle2Horizon),
+  //  _normalizedPosition(that._normalizedPosition),
+  //  _tanHalfVerticalFieldOfView(NAND),
+  //  _tanHalfHorizontalFieldOfView(NAND),
+  //  _timestamp(that._timestamp)
+  //  {
+  //  }
+
+  private long _timestamp;
 
   private MutableVector3D _ray0 = new MutableVector3D();
   private MutableVector3D _ray1 = new MutableVector3D();
@@ -609,7 +674,6 @@ public class Camera
   private Frustum _frustumInModelCoordinates;
   private double _tanHalfVerticalFieldOfView;
   private double _tanHalfHorizontalFieldOfView;
-  private double _rollInRadians;
 
   //The Camera Effect Target
   private static class CameraEffectTarget implements EffectTarget
@@ -630,7 +694,7 @@ public class Camera
   {
     if (!v.equalTo(_center))
     {
-      //      _center = MutableVector3D(v);
+      _timestamp++;
       _center.copyFrom(v);
       _dirtyFlags.setAllDirty();
     }
@@ -640,7 +704,7 @@ public class Camera
   {
     if (!v.equalTo(_up))
     {
-      //      _up = MutableVector3D(v);
+      _timestamp++;
       _up.copyFrom(v);
       _dirtyFlags.setAllDirty();
     }
@@ -708,13 +772,6 @@ public class Camera
     {
       zNear = zFar / goalRatio;
     }
-  
-    //  int __TODO_remove_debug_code;
-    //  printf(">>> height=%f zNear=%f zFar=%f ratio=%f\n",
-    //         height,
-    //         zNear,
-    //         zFar,
-    //         ratio);
   
     // compute rest of frustum numbers
   
@@ -791,12 +848,11 @@ public class Camera
 
   private void setCameraCoordinateSystem(CoordinateSystem rs)
   {
-  //  _center = _position.add(rs._y.asMutableVector3D());
+    _timestamp++;
     _center.copyFrom(_position);
     _center.addInPlace(rs._y);
-  //  _up = rs._z.asMutableVector3D();
     _up.copyFrom(rs._z);
-    _dirtyFlags.setAllDirty(); //Recalculate Everything
+    _dirtyFlags.setAllDirty();
   }
 
 }

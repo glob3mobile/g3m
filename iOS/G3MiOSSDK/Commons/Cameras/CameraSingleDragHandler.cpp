@@ -44,13 +44,16 @@ void CameraSingleDragHandler::onDown(const G3MEventContext *eventContext,
                                      const TouchEvent& touchEvent, 
                                      CameraContext *cameraContext) {
   Camera *camera = cameraContext->getNextCamera();
-  _camera0.copyFrom(*camera);
+  camera->getLookAtParamsInto(_cameraPosition, _cameraCenter, _cameraUp);
+  camera->getModelViewMatrixInto(_cameraModelViewMatrix);
+  camera->getViewPortInto(_cameraViewPort);
+
   // dragging
   const Vector2F pixel = touchEvent.getTouch(0)->getPos();
-  const Vector3D& initialRay = _camera0.pixel2Ray(pixel);
+  const Vector3D& initialRay = camera->pixel2Ray(pixel);
   if (!initialRay.isNan()) {
     cameraContext->setCurrentGesture(Drag);
-    eventContext->getPlanet()->beginSingleDrag(_camera0.getCartesianPosition(),initialRay);
+    eventContext->getPlanet()->beginSingleDrag(camera->getCartesianPosition(),initialRay);
   }
 }
 
@@ -62,18 +65,20 @@ void CameraSingleDragHandler::onMove(const G3MEventContext *eventContext,
   if (cameraContext->getCurrentGesture()!=Drag) return;
   
   //check finalRay
-  const Vector3D& finalRay = _camera0.pixel2Ray(touchEvent.getTouch(0)->getPos());
-  if (finalRay.isNan()) return;
+  const Vector2F pixel = touchEvent.getTouch(0)->getPos();
+  Camera::pixel2RayInto(_cameraPosition, pixel,
+                        _cameraViewPort, _cameraModelViewMatrix, _finalRay);
+  if (_finalRay.isNan()) return;
   
   // compute transformation matrix
   const Planet* planet = eventContext->getPlanet();
-  MutableMatrix44D matrix = planet->singleDrag(finalRay);
+  MutableMatrix44D matrix = planet->singleDrag(_finalRay.asVector3D());
   if (!matrix.isValid()) return;
   
   // apply transformation
-  Camera *camera = cameraContext->getNextCamera();
-  camera->copyFrom(_camera0);
-  camera->applyTransform(matrix);
+  cameraContext->getNextCamera()->setLookAtParams(_cameraPosition.transformedBy(matrix, 1.0),
+                                                  _cameraCenter.transformedBy(matrix, 1.0),
+                                                  _cameraUp.transformedBy(matrix, 0.0));
 }
 
 
@@ -89,6 +94,7 @@ void CameraSingleDragHandler::onUp(const G3MEventContext *eventContext,
     const Vector2F prevPixel = touch->getPrevPos();
     const double desp        = currPixel.sub(prevPixel).length();
 
+#warning method getPixelsInMM is not working fine in iOS devices
     const float delta = IFactory::instance()->getDeviceInfo()->getPixelsInMM(0.2f);
 
     if ((cameraContext->getCurrentGesture() == Drag) &&

@@ -64,8 +64,8 @@ void FloatBuffer_iOS::bindAsVBOToGPU() const {
     _boundVertexBuffer = _vertexBuffer;
   }
 
-  if (_vertexBufferTimeStamp != _timestamp) {
-    _vertexBufferTimeStamp = _timestamp;
+  if (_vertexBufferTimestamp != _timestamp) {
+    _vertexBufferTimestamp = _timestamp;
 
     float* vertices = getPointer();
     int vboSize = sizeof(float) * size();
