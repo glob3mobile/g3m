@@ -48,6 +48,7 @@ class PlanetRenderer;
 class ErrorRenderer;
 class G3MRenderContext;
 //class InfoDisplay;
+class IDeviceLocation;
 
 #include <vector>
 #include <string>
@@ -99,7 +100,8 @@ public:
                              IStringBuilder*     stringBuilder,
                              IMathUtils*         mathUtils,
                              IJSONParser*        jsonParser,
-                             ITextUtils*         textUtils);
+                             ITextUtils*         textUtils,
+                             IDeviceLocation*    devLocation);
 
   static G3MWidget* create(GL*                                  gl,
                            IStorage*                            storage,
