@@ -513,6 +513,8 @@
 		D8B8CE91178D6DCF00EE1B97 /* GPUVariableValueSet.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8B8CE8D178D645F00EE1B97 /* GPUVariableValueSet.hpp */; };
 		D8C486D017E205E7000EAFC9 /* InitialCameraPositionProvider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8C486CE17E205E7000EAFC9 /* InitialCameraPositionProvider.cpp */; };
 		D8C486D117E20A2E000EAFC9 /* InitialCameraPositionProvider.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8C486CF17E205E7000EAFC9 /* InitialCameraPositionProvider.hpp */; };
+		D8D3212F1B3C3257008C130A /* IDeviceLocation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8D3212D1B3C3257008C130A /* IDeviceLocation.cpp */; };
+		D8D321331B3C34FF008C130A /* DeviceLocation_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = D8D321311B3C34FF008C130A /* DeviceLocation_iOS.mm */; };
 		D8D347BA15E5133B00EDB394 /* IStringBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8D347B915E5133B00EDB394 /* IStringBuilder.cpp */; };
 		D8D894ED17731870007E41A5 /* GPUVariable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8D894EB17731870007E41A5 /* GPUVariable.cpp */; };
 		D8D894EE17731B6A007E41A5 /* GPUVariable.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8D894EC17731870007E41A5 /* GPUVariable.hpp */; };
@@ -1820,6 +1822,10 @@
 		D8CE5D37173BB68200C7AAE6 /* Billboard.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = Billboard.vsh; sourceTree = "<group>"; };
 		D8D0CDB51771C91300D25CB6 /* FlatColorMesh.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = FlatColorMesh.fsh; sourceTree = "<group>"; };
 		D8D0CDB61771C91300D25CB6 /* FlatColorMesh.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = FlatColorMesh.vsh; sourceTree = "<group>"; };
+		D8D3212C1B3C3192008C130A /* IDeviceLocation.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = IDeviceLocation.hpp; path = Commons/Interfaces/IDeviceLocation.hpp; sourceTree = "<group>"; };
+		D8D3212D1B3C3257008C130A /* IDeviceLocation.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IDeviceLocation.cpp; path = Commons/Interfaces/IDeviceLocation.cpp; sourceTree = "<group>"; };
+		D8D321311B3C34FF008C130A /* DeviceLocation_iOS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = DeviceLocation_iOS.mm; path = Specific/Derived/DeviceLocation_iOS.mm; sourceTree = "<group>"; };
+		D8D321321B3C34FF008C130A /* DeviceLocation_iOS.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = DeviceLocation_iOS.hpp; path = Specific/Derived/DeviceLocation_iOS.hpp; sourceTree = "<group>"; };
 		D8D347B915E5133B00EDB394 /* IStringBuilder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IStringBuilder.cpp; path = Commons/Interfaces/IStringBuilder.cpp; sourceTree = "<group>"; };
 		D8D894EB17731870007E41A5 /* GPUVariable.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GPUVariable.cpp; sourceTree = "<group>"; };
 		D8D894EC17731870007E41A5 /* GPUVariable.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GPUVariable.hpp; sourceTree = "<group>"; };
@@ -1962,6 +1968,8 @@
 				CF4027D11770DD5C00D5A80C /* WebSocket_iOS.hpp */,
 				CF4F78481804ADFC00550409 /* DeviceInfo_iOS.mm */,
 				CF4F78491804ADFC00550409 /* DeviceInfo_iOS.hpp */,
+				D8D321311B3C34FF008C130A /* DeviceLocation_iOS.mm */,
+				D8D321321B3C34FF008C130A /* DeviceLocation_iOS.hpp */,
 			);
 			name = Derived;
 			sourceTree = "<group>";
@@ -2308,6 +2316,8 @@
 				CF4F78461804AD4B00550409 /* IDeviceInfo.hpp */,
 				E71AA047191AACE400834D69 /* ICanvasUtils.cpp */,
 				E71AA048191AACE400834D69 /* ICanvasUtils.hpp */,
+				D8D3212C1B3C3192008C130A /* IDeviceLocation.hpp */,
+				D8D3212D1B3C3257008C130A /* IDeviceLocation.cpp */,
 			);
 			name = Interfaces;
 			sourceTree = "<group>";
@@ -2951,6 +2961,7 @@
 				CF423A2D17F8874E00F50525 /* RenderState.cpp in Sources */,
 				CFFEC12315C2EA5F003FA986 /* Downloader_iOS.mm in Sources */,
 				CFFEC12615C2EBA6003FA986 /* URL.cpp in Sources */,
+				D8D321331B3C34FF008C130A /* DeviceLocation_iOS.mm in Sources */,
 				CC596F2215C46D4F008FC230 /* Camera.cpp in Sources */,
 				4435E3D019056ED70064A7D7 /* ChangedRendererInfoListener.cpp in Sources */,
 				CC596F2415C46D4F008FC230 /* CameraDoubleDragHandler.cpp in Sources */,
@@ -2973,6 +2984,7 @@
 				CC55C47F15D11D8500923D7B /* CameraDoubleTapHandler.cpp in Sources */,
 				CF4F78471804AD4B00550409 /* IDeviceInfo.cpp in Sources */,
 				CF8FF98B15D5539F000F79D1 /* LeveledTexturedMesh.cpp in Sources */,
+				D8D3212F1B3C3257008C130A /* IDeviceLocation.cpp in Sources */,
 				CC041F5315D98FF000D6AC5D /* BusyQuadRenderer.cpp in Sources */,
 				CF9CD89A15DBE2C800C6FD7E /* CachedDownloader.cpp in Sources */,
 				CF8B21B215DD32820068601A /* SQLiteStorage_iOS.mm in Sources */,
