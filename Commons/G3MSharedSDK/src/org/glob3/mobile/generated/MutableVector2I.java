@@ -71,4 +71,11 @@ public class MutableVector2I
   {
     return new Vector2I(_x, _y);
   }
+
+  public final void set(int x, int y)
+  {
+    _x = x;
+    _y = y;
+  }
+
 }

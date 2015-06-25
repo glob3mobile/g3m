@@ -101,8 +101,8 @@ _errorRenderer(errorRenderer),
 _hudRenderer(hudRenderer),
 _width(1),
 _height(1),
-_currentCamera(new Camera()),
-_nextCamera(new Camera()),
+_currentCamera(new Camera(1)),
+_nextCamera(new Camera(2)),
 _backgroundColor( new Color(backgroundColor) ),
 _timer(IFactory::instance()->createTimer()),
 _renderCounter(0),
@@ -527,7 +527,7 @@ void G3MWidget::render(int width, int height) {
   }
   _planet->applyCameraConstrainers(_currentCamera, _nextCamera);
 
-  _currentCamera->copyFromForcingMatrixCreation(*_nextCamera);
+  _currentCamera->copyFrom(*_nextCamera);
 
 #ifdef C_CODE
   delete _rendererState;

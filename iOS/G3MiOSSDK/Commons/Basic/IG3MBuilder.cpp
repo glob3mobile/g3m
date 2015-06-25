@@ -18,6 +18,7 @@
 #include "CameraSingleDragHandler.hpp"
 #include "CameraDoubleDragHandler.hpp"
 #include "CameraRotationHandler.hpp"
+#include "CameraZoomAndRotateHandler.hpp"
 #include "CameraDoubleTapHandler.hpp"
 #include "PlanetRendererBuilder.hpp"
 #include "BusyMeshRenderer.hpp"
@@ -777,6 +778,7 @@ CameraRenderer* IG3MBuilder::createDefaultCameraRenderer() {
   const bool useInertia = true;
   cameraRenderer->addHandler(new CameraSingleDragHandler(useInertia));
   cameraRenderer->addHandler(new CameraDoubleDragHandler());
+  //cameraRenderer->addHandler(new CameraZoomAndRotateHandler());
   cameraRenderer->addHandler(new CameraRotationHandler());
   cameraRenderer->addHandler(new CameraDoubleTapHandler());
 

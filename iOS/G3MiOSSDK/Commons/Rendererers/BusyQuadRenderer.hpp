@@ -110,14 +110,14 @@ public:
 
 //***************************************************************
 
-class BusyEffect : public EffectWithForce {
+class BusyEffect : public EffectNeverEnding {
 private:
   BusyQuadRenderer* _renderer;
 
 public:
 
   BusyEffect(BusyQuadRenderer *renderer):
-  EffectWithForce(1, 1),
+  EffectNeverEnding(),
   _renderer(renderer)
   { }
 
@@ -126,7 +126,7 @@ public:
 
   void doStep(const G3MRenderContext* rc,
               const TimeInterval& when) {
-    EffectWithForce::doStep(rc, when);
+    EffectNeverEnding::doStep(rc, when);
     _renderer->incDegrees(3);
   }
 

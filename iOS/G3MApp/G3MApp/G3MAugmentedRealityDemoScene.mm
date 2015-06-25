@@ -23,91 +23,24 @@
 #include <G3MiOSSDK/DeviceAttitudeCameraConstrainer.hpp>
 
 void G3MAugmentedRealityDemoScene::deactivate(const G3MContext* context) {
-/*  [_locationManager stopUpdatingLocation];
-  [_locationManager stopUpdatingHeading];
-  _locationManager = nil;
-
-  [_motionManager stopDeviceMotionUpdates];
-  _motionManager = nil;
-*/
+  if (_dac != NULL){
+    getModel()->getG3MWidget()->removeCameraConstrainer(_dac);
+    delete _dac;
+    _dac = NULL;
+  }
+  
+  Camera* camera = getModel()->getG3MWidget()->getNextCamera();
+  camera->setHeadingPitchRoll(Angle::zero(), Angle::fromDegrees(-90), Angle::zero());
+  
   G3MDemoScene::deactivate(context);
 }
-/*
-
-class UpdateCameraTask : public GTask {
-private:
-  G3MWidget*         _g3mWidget;
-  CLLocationManager* _locationManager;
-  CMMotionManager*   _motionManager;
-
-public:
-  UpdateCameraTask(G3MWidget*         g3mWidget,
-                   CLLocationManager* locationManager,
-                   CMMotionManager*   motionManager) :
-  _g3mWidget(g3mWidget),
-  _locationManager(locationManager),
-  _motionManager(motionManager)
-  {
-  }
-
-  void run(const G3MContext* context) {
-    CLHeading*      heading  = [_locationManager heading];
-    CLLocation*     location = [_locationManager location];
-    CMDeviceMotion* motion   = [_motionManager deviceMotion];
-
-    CLLocationDirection trueHeading = [heading trueHeading];
-
-    CMAttitude* attitude = [motion attitude];
-    double roll  = [attitude roll];
-    double pitch = [attitude pitch];
-//    double yaw   = [attitude yaw];
-
-
-    UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
-    double headingInDegrees;
-    double pitchRadians;
-    if (orientation == UIInterfaceOrientationLandscapeLeft) {
-      headingInDegrees = -trueHeading + 90;
-      pitchRadians = (2*PI - roll) - PI/2;
-    }
-    else if (orientation == UIInterfaceOrientationLandscapeRight) {
-      headingInDegrees = -trueHeading - 90;
-      pitchRadians = roll - PI/2;
-    }
-    else if (orientation == UIInterfaceOrientationPortraitUpsideDown) {
-      headingInDegrees = -trueHeading - 180;
-      pitchRadians = (2*PI -pitch) - PI/2;
-    }
-    else {
-      headingInDegrees = -trueHeading;
-      pitchRadians = pitch - PI/2;
-    }
-
-    CLLocationCoordinate2D coordinate = [location coordinate];
-    CLLocationDistance altitude = [location altitude];
-
-
-    Camera* camera = _g3mWidget->getNextCamera();
-
-//    //    camera->setRoll( Angle::fromRadians(rollRadians) );
-
-    camera->setHeading( Angle::fromDegrees( headingInDegrees ) );
-
-    camera->setPitch( Angle::fromRadians( pitchRadians ) );
-
-    camera->setGeodeticPosition( Geodetic3D::fromDegrees(coordinate.latitude,
-                                                         coordinate.longitude,
-                                                         altitude + 500) );
-  }
-};
-*/
 
 void G3MAugmentedRealityDemoScene::rawActivate(const G3MContext* context) {
   G3MDemoModel* model     = getModel();
   G3MWidget*    g3mWidget = model->getG3MWidget();
   
-  DeviceAttitudeCameraConstrainer* dac = new DeviceAttitudeCameraConstrainer();
-  g3mWidget->addCameraConstrainer(dac);
+  _dac = new DeviceAttitudeCameraConstrainer();
+  g3mWidget->addCameraConstrainer(_dac);
 
 
   BingMapsLayer* layer = new BingMapsLayer(BingMapType::AerialWithLabels(),
@@ -118,27 +51,4 @@ void G3MAugmentedRealityDemoScene::rawActivate(const G3MContext* context) {
   
   Camera* camera = g3mWidget->getNextCamera();
   camera->setGeodeticPosition( Geodetic3D::fromDegrees(28.1001809,-15.4147574, 500) );
-
-/*
-  _locationManager = [[CLLocationManager alloc] init];
-  _locationManager.desiredAccuracy = kCLLocationAccuracyBestForNavigation;
-  _locationManager.distanceFilter = kCLDistanceFilterNone;
-  _locationManager.headingFilter = 0.001;
-  [_locationManager requestAlwaysAuthorization];
-
-  [_locationManager startUpdatingHeading];
-  [_locationManager startUpdatingLocation];
-
-
-  _motionManager = [[CMMotionManager alloc] init];
-  _motionManager.showsDeviceMovementDisplay = YES;
-  _motionManager.deviceMotionUpdateInterval = 10.0 / 1000.0; // 10ms
-  [_motionManager startDeviceMotionUpdatesUsingReferenceFrame:CMAttitudeReferenceFrameXTrueNorthZVertical];
-
-
-  g3mWidget->addPeriodicalTask(new PeriodicalTask(TimeInterval::fromMilliseconds(10),
-                                                  new UpdateCameraTask(g3mWidget,
-                                                                       _locationManager,
-                                                                       _motionManager)));
-  */
 }
