@@ -700,6 +700,26 @@ public class G3MWidget implements ChangedRendererInfoListener
     _periodicalTasks.clear();
   }
 
+  public final void addCameraConstrainer(ICameraConstrainer cc)
+  {
+    _cameraConstrainers.add(cc);
+  }
+  public final void removeCameraConstrainer(ICameraConstrainer cc)
+  {
+    int size = _cameraConstrainers.size();
+    for (int i = 0; i < size; i++)
+    {
+      if (_cameraConstrainers.get(i) == cc)
+      {
+//C++ TO JAVA CONVERTER TODO TASK: There is no direct equivalent to the STL vector 'erase' method in Java:
+        _cameraConstrainers.erase(_cameraConstrainers.iterator() + i);
+        return;
+      }
+    }
+    ILogger.instance().logError("Could not remove camera constrainer.");
+  }
+
+
 
   private IStorage _storage;
   private IDownloader _downloader;

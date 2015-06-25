@@ -35,6 +35,7 @@ public class DeviceAttitudeCameraConstrainer implements ICameraConstrainer
 
   public DeviceAttitudeCameraConstrainer()
   {
+  
   }
 
   public void dispose()

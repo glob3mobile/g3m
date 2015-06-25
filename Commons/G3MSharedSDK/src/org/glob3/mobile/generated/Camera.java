@@ -560,6 +560,16 @@ public class Camera
     return distanceInMeters * _viewPortHeight / frustumData._top;
   }
 
+
+  public final void setCameraCoordinateSystem(CoordinateSystem rs)
+  {
+    _timestamp++;
+    _center.copyFrom(_position);
+    _center.addInPlace(rs._y);
+    _up.copyFrom(rs._z);
+    _dirtyFlags.setAllDirty();
+  }
+
   public final long getTimestamp()
   {
     return _timestamp;
@@ -650,17 +660,6 @@ public class Camera
   //  }
 
   private long _timestamp;
-
-  public final void setCameraCoordinateSystem(CoordinateSystem rs)
-  {
-  //  _center = _position.add(rs._y.asMutableVector3D());
-    _center.copyFrom(_position);
-    _center.addInPlace(rs._y);
-  //  _up = rs._z.asMutableVector3D();
-    _up.copyFrom(rs._z);
-    _dirtyFlags.setAllDirty(); //Recalculate Everything
-  }
-
 
   private MutableVector3D _ray0 = new MutableVector3D();
   private MutableVector3D _ray1 = new MutableVector3D();
@@ -866,16 +865,4 @@ public class Camera
     return _modelViewMatrix;
   }
 
-<<<<<<< HEAD
-=======
-  private void setCameraCoordinateSystem(CoordinateSystem rs)
-  {
-    _timestamp++;
-    _center.copyFrom(_position);
-    _center.addInPlace(rs._y);
-    _up.copyFrom(rs._z);
-    _dirtyFlags.setAllDirty();
-  }
-
->>>>>>> purgatory
 }
