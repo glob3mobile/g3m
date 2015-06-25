@@ -711,8 +711,7 @@ public class G3MWidget implements ChangedRendererInfoListener
     {
       if (_cameraConstrainers.get(i) == cc)
       {
-//C++ TO JAVA CONVERTER TODO TASK: There is no direct equivalent to the STL vector 'erase' method in Java:
-        _cameraConstrainers.erase(_cameraConstrainers.iterator() + i);
+        _cameraConstrainers.remove(i);
         return;
       }
     }

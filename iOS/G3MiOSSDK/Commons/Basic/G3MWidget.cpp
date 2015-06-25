@@ -876,7 +876,12 @@ void G3MWidget::removeCameraConstrainer(ICameraConstrainer* cc){
   size_t size = _cameraConstrainers.size();
   for (size_t i = 0; i < size; i++) {
     if (_cameraConstrainers[i] == cc){
+#ifdef C_CODE
       _cameraConstrainers.erase(_cameraConstrainers.begin() + i);
+#endif
+#ifdef JAVA_CODE
+      _cameraConstrainers.remove(i);
+#endif
       return;
     }
   }
