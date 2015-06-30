@@ -321,7 +321,7 @@ bool Tile::meetsRenderCriteria(const G3MRenderContext* rc,
   }
 
   _lastMeetsRenderCriteriaTimeInMS = nowInMS; //Storing time of result
-
+#warning store camera-timestamp to avoid recalculation when the camera isn't moving
 
   if ((_northArcSegmentRatioSquared == 0) ||
       (_southArcSegmentRatioSquared == 0) ||

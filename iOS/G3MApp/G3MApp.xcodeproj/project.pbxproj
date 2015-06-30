@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 47;
+	objectVersion = 46;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -570,7 +570,7 @@
 			isa = PBXProject;
 			attributes = {
 				CLASSPREFIX = G3M;
-				LastUpgradeCheck = 0460;
+				LastUpgradeCheck = 0640;
 				ORGANIZATIONNAME = "Igo Software SL";
 				TargetAttributes = {
 					E7D1B60416D2436700AF47C1 = {
@@ -579,7 +579,7 @@
 				};
 			};
 			buildConfigurationList = E7D1B60016D2436700AF47C1 /* Build configuration list for PBXProject "G3MApp" */;
-			compatibilityVersion = "Xcode 6.3";
+			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
