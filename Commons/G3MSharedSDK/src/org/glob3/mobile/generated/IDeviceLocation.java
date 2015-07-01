@@ -23,7 +23,7 @@ public abstract class IDeviceLocation
   private static IDeviceLocation _instance = null;
 
 
-  public final IDeviceLocation instance()
+  public static IDeviceLocation instance()
   {
     return _instance;
   }
