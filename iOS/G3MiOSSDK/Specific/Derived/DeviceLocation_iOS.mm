@@ -37,7 +37,6 @@
       status == kCLAuthorizationStatusAuthorizedAlways ||
       status == kCLAuthorizationStatusAuthorizedWhenInUse){
     
-    
     [_locationManager startUpdatingLocation];
     return true;
   }
