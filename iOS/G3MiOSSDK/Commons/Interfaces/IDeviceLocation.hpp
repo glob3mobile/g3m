@@ -17,7 +17,7 @@ class IDeviceLocation{
   
 public:
   
-  IDeviceLocation* instance(){
+  static IDeviceLocation* instance(){
     return _instance;
   }
   

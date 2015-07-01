@@ -12,12 +12,37 @@
 
 #pragma mark Location Delegate
 
--(void) startTrackingLocation{
+-(BOOL) startTrackingLocation{
+
+  CLAuthorizationStatus status = [CLLocationManager authorizationStatus];
+  if (status == kCLAuthorizationStatusRestricted ||
+      status == kCLAuthorizationStatusDenied ||
+      ![CLLocationManager locationServicesEnabled]){
+    return false;
+  }
+  
+  
   _locationManager = [[CLLocationManager alloc] init];
   _locationManager.delegate = self;
   _locationManager.desiredAccuracy = kCLLocationAccuracyBest;
   _locationManager.distanceFilter = kCLDistanceFilterNone;
-  [_locationManager startUpdatingLocation];
+  
+  if ([_locationManager respondsToSelector:@selector(requestWhenInUseAuthorization)]) {
+    //Make sure to have the key NSLocationWhenInUseUsageDescription defined before calling this method
+    [_locationManager requestWhenInUseAuthorization];
+  }
+  
+  status = [CLLocationManager authorizationStatus];
+  if (status == kCLAuthorizationStatusAuthorized ||
+      status == kCLAuthorizationStatusAuthorizedAlways ||
+      status == kCLAuthorizationStatusAuthorizedWhenInUse){
+    
+    
+    [_locationManager startUpdatingLocation];
+    return true;
+  }
+  
+  return false;
 }
 
 -(void) stopTrackingLocation{
