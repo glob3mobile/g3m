@@ -165,7 +165,7 @@ OnGestureListener {
       final IMathUtils mathUtils = new MathUtils_Android();
       final IJSONParser jsonParser = new JSONParser_Android();
       final ITextUtils textUtils = new TextUtils_Android();
-      final IDeviceLocation devLoc = new DeviceLocation_Android(getContext(), (long) 10.0, 1.0f);
+      final IDeviceLocation devLoc = new DeviceLocation_Android(getContext(), (long) 10000.0, 1.0f);
 
       G3MWidget.initSingletons(logger, factory, stringUtils, stringBuilder, mathUtils, jsonParser, textUtils, devLoc);
    }

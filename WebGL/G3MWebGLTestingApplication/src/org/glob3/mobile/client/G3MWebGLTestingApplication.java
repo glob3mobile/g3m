@@ -9,16 +9,22 @@ import org.glob3.mobile.generated.DownloaderImageBuilder;
 import org.glob3.mobile.generated.G3MContext;
 import org.glob3.mobile.generated.GFont;
 import org.glob3.mobile.generated.GInitializationTask;
+import org.glob3.mobile.generated.GTask;
 import org.glob3.mobile.generated.Geodetic3D;
 import org.glob3.mobile.generated.ICanvas;
+import org.glob3.mobile.generated.IDeviceLocation;
 import org.glob3.mobile.generated.IImage;
 import org.glob3.mobile.generated.IImageDownloadListener;
 import org.glob3.mobile.generated.IImageListener;
+import org.glob3.mobile.generated.ILogger;
 import org.glob3.mobile.generated.LabelImageBuilder;
 import org.glob3.mobile.generated.LayerSet;
 import org.glob3.mobile.generated.MapQuestLayer;
+import org.glob3.mobile.generated.Mark;
+import org.glob3.mobile.generated.MarksRenderer;
 import org.glob3.mobile.generated.NonOverlappingMark;
 import org.glob3.mobile.generated.NonOverlappingMarksRenderer;
+import org.glob3.mobile.generated.PeriodicalTask;
 import org.glob3.mobile.generated.QuadShape;
 import org.glob3.mobile.generated.ShapesRenderer;
 import org.glob3.mobile.generated.TimeInterval;
@@ -49,7 +55,7 @@ EntryPoint {
    public void onModuleLoad() {
       final Panel g3mWidgetHolder = RootPanel.get(_g3mWidgetHolderId);
 
-      _g3mWidget = createWidget();
+      _g3mWidget = createWidgetWithYouAreHere();
       g3mWidgetHolder.add(_g3mWidget);
 
 
@@ -70,6 +76,50 @@ EntryPoint {
                new DownloaderImageBuilder(anchorBitmapURL), //
                position);
    }
+   
+	private G3MWidget_WebGL createWidgetWithYouAreHere() {
+		final G3MBuilder_WebGL builder = new G3MBuilder_WebGL();
+
+//		final LayerSet layerSet = new LayerSet();
+//		layerSet.addLayer(new OSMLayer(TimeInterval.fromDays(30)));
+//		builder.getPlanetRendererBuilder().setLayerSet(layerSet);
+
+		final MarksRenderer marksRenderer = new MarksRenderer(true);
+		builder.addRenderer(marksRenderer);
+
+		class YouAreHereTask extends GTask {
+			private Mark _mark = null;
+
+			public YouAreHereTask() {
+			}
+
+			@Override
+			public void run(G3MContext context) {
+				IDeviceLocation loc = IDeviceLocation.instance();
+
+				if (_mark == null) {
+					loc.startTrackingLocation();
+
+					_mark = new Mark(new URL("/g3m-marker.png"), Geodetic3D.fromDegrees(
+							28.099999998178312, -15.41699999885168, 0),
+							AltitudeMode.ABSOLUTE, 4.5e+06, null, true, null,
+							false);
+
+					marksRenderer.addMark(_mark);
+				} else {
+					ILogger.instance().logInfo("User Position:%s",
+							loc.getLocation().description());
+					_mark.setPosition(loc.getLocation());
+				}
+			}
+
+		}
+
+		builder.addPeriodicalTask(new PeriodicalTask(TimeInterval
+				.fromMilliseconds(1000), new YouAreHereTask()));
+
+		return builder.createWidget();
+	}
 
 
    private static NonOverlappingMark createMark(final String label,

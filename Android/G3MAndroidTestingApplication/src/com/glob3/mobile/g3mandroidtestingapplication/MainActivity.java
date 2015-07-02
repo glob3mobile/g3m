@@ -52,7 +52,7 @@ public class MainActivity extends Activity {
 
 		setContentView(R.layout.activity_main);
 
-		_g3mWidget = createWidget();
+		_g3mWidget = createWidgetWithYouAreHere();
 
 		final RelativeLayout placeHolder = (RelativeLayout) findViewById(R.id.g3mWidgetHolder);
 
