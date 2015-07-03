@@ -9,6 +9,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Looper;
 
 public class DeviceLocation_Android extends IDeviceLocation{
 	
@@ -23,11 +24,12 @@ public class DeviceLocation_Android extends IDeviceLocation{
 		@Override
 		public void onProviderDisabled(String provider) {
 			_lastLocation = null;
+			ILogger.instance().logInfo("Location Provider " + provider + " has been disabled.");
 		}
 
 		@Override
 		public void onProviderEnabled(String provider) {
-			
+			ILogger.instance().logInfo("Location Provider " + provider + " has been enabled.");
 		}
 
 		@Override
@@ -56,20 +58,19 @@ public class DeviceLocation_Android extends IDeviceLocation{
 
 	@Override
 	public boolean startTrackingLocation() {
+		
 		_locationManager = (LocationManager) _ctx.getSystemService(Context.LOCATION_SERVICE);
 		
 		boolean gpsActive = _locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
 		boolean netActive = _locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
 		
 		if (gpsActive) {
-			_locationManager.requestSingleUpdate(LocationManager.GPS_PROVIDER, _gpsListener, null);
-			_locationManager.requestLocationUpdates( LocationManager.GPS_PROVIDER, 0, 0, _gpsListener);
+			_locationManager.requestLocationUpdates( LocationManager.GPS_PROVIDER, _minTime, 0, _gpsListener, Looper.getMainLooper());
 			_isTracking = true;
 		}
 		
 		if (netActive){
-			_locationManager.requestSingleUpdate(LocationManager.NETWORK_PROVIDER, _netListener, null);
-			_locationManager.requestLocationUpdates( LocationManager.NETWORK_PROVIDER, 0, 0, _netListener);
+			_locationManager.requestLocationUpdates( LocationManager.NETWORK_PROVIDER, _minTime, 0, _netListener, Looper.getMainLooper());
 			_isTracking = true;	
 		}
 		
