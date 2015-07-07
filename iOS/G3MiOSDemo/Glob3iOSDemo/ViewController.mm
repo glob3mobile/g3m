@@ -284,7 +284,8 @@ Mesh* createSectorMesh(const Planet* planet,
   //[[self G3MWidget] initSingletons];
   // [self initWithoutBuilder];
   
-  [self initCustomizedWithBuilder];
+//  [self initCustomizedWithBuilder];
+  [self initWithStreamingElevations];
   
   //[self initTestingTileImageProvider];
   
@@ -317,13 +318,34 @@ Mesh* createSectorMesh(const Planet* planet,
   //                                                                                 1000076.892613024946));
   //
   [[self G3MWidget] startAnimation];
-  
+
   /*
    [[self G3MWidget] widget]->addPeriodicalTask(TimeInterval::fromMilliseconds(100),
    new CameraRollChangerTask([[self G3MWidget] widget]));
    */
   
 }
+
+- (void) initWithStreamingElevations
+{
+  G3MBuilder_iOS builder([self G3MWidget]);
+  
+  LayerSet* layerSet = new LayerSet();
+  layerSet->addLayer(MapQuestLayer::newOSM(TimeInterval::fromDays(30)));
+  builder.getPlanetRendererBuilder()->setLayerSet(layerSet);
+  
+  WMSBilElevationDataProvider* edp = new WMSBilElevationDataProvider(URL("http://data.worldwind.arc.nasa.gov/elev"),
+                                                                     "srtm30",
+                                                                     Sector::FULL_SPHERE,
+                                                                     0);
+
+  builder.getPlanetRendererBuilder()->setElevationDataProvider(edp);
+  builder.initializeWidget();
+  
+  
+  //[[self G3MWidget] widget]->getNextCamera()->setGeodeticPosition(Geodetic3D::fromDegrees(28.271842, -16.642497, 4000));
+}
+
 
 - (void) initWithNonOverlappingMarks
 {

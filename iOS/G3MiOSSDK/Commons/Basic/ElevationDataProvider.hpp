@@ -72,6 +72,8 @@ public:
   virtual void cancelRequest(const long long requestId) = 0;
 
   virtual std::vector<const Sector*> getSectors() const = 0;
+  
+  bool containsSector(const Sector& sector) const;
 
   virtual const Vector2I getMinResolution() const = 0;
 

@@ -518,7 +518,8 @@ RenderState PlanetRenderer::getRenderState(const G3MRenderContext* rc) {
     const int firstLevelTilesCount = _firstLevelTiles.size();
     for (int i = 0; i < firstLevelTilesCount; i++) {
       Tile* tile = _firstLevelTiles[i];
-      if (!tile->isTextureSolved()) {
+      if (!tile->isTextureSolved() ||
+          !tile->isElevationDataSolved()) {
         return RenderState::busy();
       }
     }

@@ -149,7 +149,7 @@ private:
 
   int                    _elevationDataLevel;
   ElevationData*         _elevationData;
-  bool                   _mustActualizeMeshDueToNewElevationData;
+  bool                   _mustUpdateMeshDueToNewED;
   ElevationDataProvider* _lastElevationDataProvider;
   int _lastTileMeshResolutionX;
   int _lastTileMeshResolutionY;
