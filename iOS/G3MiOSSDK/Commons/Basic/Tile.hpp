@@ -149,7 +149,10 @@ private:
 
   int                    _elevationDataLevel;
   ElevationData*         _elevationData;
-  bool                   _mustUpdateMeshDueToNewED;
+//  bool                   _mustUpdateMeshDueToNewED;
+  
+  int                    _elevationDataLevelOfTessellatorMesh;
+  
   ElevationDataProvider* _lastElevationDataProvider;
   int _lastTileMeshResolutionX;
   int _lastTileMeshResolutionY;
@@ -310,6 +313,8 @@ public:
 
   Vector2I getNormalizedPixelsFromPosition(const Geodetic2D& position2D,
                                            const Vector2I& size) const;
+  
+  bool canUseElevationDataProvider(const ElevationDataProvider* edp) const;
   
 };
 

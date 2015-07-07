@@ -147,6 +147,7 @@
 #import <G3MiOSSDK/Info.hpp>
 
 #import <G3MiOSSDK/NonOverlappingMarksRenderer.hpp>
+#import <G3MiOSSDK/NASAElevationDataProvider.hpp>
 
 #include <typeinfo>
 
@@ -330,6 +331,7 @@ Mesh* createSectorMesh(const Planet* planet,
 {
   G3MBuilder_iOS builder([self G3MWidget]);
   
+  
   LayerSet* layerSet = new LayerSet();
   layerSet->addLayer(MapQuestLayer::newOSM(TimeInterval::fromDays(30)));
   builder.getPlanetRendererBuilder()->setLayerSet(layerSet);
@@ -338,8 +340,33 @@ Mesh* createSectorMesh(const Planet* planet,
                                                                      "srtm30",
                                                                      Sector::FULL_SPHERE,
                                                                      0);
+  
+ // NASAElevationDataProvider* edp = new NASAElevationDataProvider();
+  
+  
+  class InitTask: public GInitializationTask{
+    G3MWidget_iOS* _w;
+  public:
+    InitTask(G3MWidget_iOS* w):_w(w){
+      
+    }
+    
+    void run(const G3MContext* context){
+      [_w widget]->getNextCamera()->setGeodeticPosition(Geodetic3D::fromDegrees(28.271842, -16.642497, 4000));
+      [_w widget]->getNextCamera()->setPitch(Angle::fromDegrees(-15));
+    }
+    
+    virtual bool isDone(const G3MContext* context){
+      return true;
+    }
+  };
+  
+  
+  builder.setInitializationTask(new InitTask([self G3MWidget]), true);
 
   builder.getPlanetRendererBuilder()->setElevationDataProvider(edp);
+  builder.getPlanetRendererBuilder()->setVerticalExaggeration(3.0);
+  builder.getPlanetRendererBuilder()->setRenderDebug(true);
   builder.initializeWidget();
   
   

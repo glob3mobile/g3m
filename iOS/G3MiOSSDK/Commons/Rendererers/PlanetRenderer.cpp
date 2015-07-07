@@ -483,8 +483,9 @@ RenderState PlanetRenderer::getRenderState(const G3MRenderContext* rc) {
   if (texturizerRenderState._type != RENDER_READY) {
     return texturizerRenderState;
   }
-
-  if (_firstLevelTilesJustCreated) {
+  
+#warning CALLING THIS UNTIL TEXTURE AND ELEV. ARE SOLVED AS TEXTURE IS ASKED AFTER ED IS RESOLVED
+  if (!_allFirstLevelTilesAreTextureSolved) {
     _firstLevelTilesJustCreated = false;
 
     const int firstLevelTilesCount = _firstLevelTiles.size();

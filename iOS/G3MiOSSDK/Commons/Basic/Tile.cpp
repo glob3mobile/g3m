@@ -70,7 +70,7 @@ _elevationData(NULL),
 _elevationDataLevel(-1),
 _elevationDataRequest(NULL),
 _verticalExaggeration(0),
-_mustUpdateMeshDueToNewED(false),
+_elevationDataLevelOfTessellatorMesh(-1),
 _lastTileMeshResolutionX(-1),
 _lastTileMeshResolutionY(-1),
 _boundingVolume(NULL),
@@ -178,25 +178,34 @@ Mesh* Tile::getTessellatorMesh(const G3MRenderContext* rc,
                                const TilesRenderParameters* tilesRenderParameters) {
 
 
-  if ( (_elevationData == NULL) && (elevationDataProvider != NULL) && (elevationDataProvider->isEnabled()) ) {
+  if ( (_elevationData == NULL) &&
+      canUseElevationDataProvider(elevationDataProvider) ) {
     initializeElevationData(elevationDataProvider,
                             tessellator,
                             layerTilesRenderParameters->_tileMeshResolution,
                             rc->getPlanet(),
                             tilesRenderParameters->_renderDebug);
-  }
-
-  if ( (_tessellatorMesh == NULL) || _mustUpdateMeshDueToNewED ) {
     
-    if (_mustUpdateMeshDueToNewED){
+    if (_elevationData == NULL){
+      ILogger::instance()->logInfo("Tile not ready for rendering as no ElevationData can be found. Returning NULL Mesh.");
+      return NULL;
+    }
+  }
+  
+  if (_elevationDataLevel < 0 && canUseElevationDataProvider(elevationDataProvider)){
+    ILogger::instance()->logError("Creating Mesh without ED.");
+  }
+  
+  const bool mustUpdate = (_elevationDataLevelOfTessellatorMesh < _elevationDataLevel);
+
+  if ( (_tessellatorMesh == NULL) || mustUpdate ) {
+    
+    if (mustUpdate){
       ILogger::instance()->logInfo("Updating mesh due to _mustUpdateMeshDueToNewED");
       
       //Tessellator mesh is going to change, thus reference to _boundingVolume is sent to oblivion
       _boundingVolume = NULL;
     }
-    
-    
-    _mustUpdateMeshDueToNewED = false;
 
     if (elevationDataProvider == NULL) {
       // no elevation data provider, just create a simple mesh without elevation
@@ -230,6 +239,8 @@ Mesh* Tile::getTessellatorMesh(const G3MRenderContext* rc,
 
       computeTileCorners(rc->getPlanet());
     }
+    
+    _elevationDataLevelOfTessellatorMesh = _elevationDataLevel;
 
     //Notifying when the tile is first created and every time the elevation data changes
     _planetRenderer->sectorElevationChanged(_elevationData);
@@ -403,15 +414,6 @@ void Tile::prepareForFullRendering(const G3MRenderContext* rc,
                                               _texturizedMesh,
                                               logTilesPetitions);
     }
-  }
-  
-  //Getting Elevation Data
-  if (elevationDataProvider != NULL){
-    initializeElevationData(elevationDataProvider,
-                            tessellator,
-                            layerTilesRenderParameters->_tileMeshResolution,
-                            rc->getPlanet(),
-                            tilesRenderParameters->_renderDebug);
   }
 }
 
@@ -845,7 +847,6 @@ void Tile::setElevationData(ElevationData* ed, int level) {
 
     _elevationData = ed;
     _elevationDataLevel = level;
-    _mustUpdateMeshDueToNewED = true;
 
     //If the elevation belongs to tile's level, we notify the sub-tree
     if (isElevationDataSolved()) {
@@ -1021,4 +1022,9 @@ Vector2I Tile::getNormalizedPixelsFromPosition(const Geodetic2D& position2D,
   const IMathUtils* math = IMathUtils::instance();
   const Vector2D uv = _sector.getUVCoordinates(position2D);
   return Vector2I(math->toInt(tileDimension._x * uv._x), math->toInt(tileDimension._y * uv._y));
+}
+
+
+bool Tile::canUseElevationDataProvider(const ElevationDataProvider* edp) const{
+  return (edp != NULL && edp->isEnabled() && edp->containsSector(_sector));
 }

@@ -457,6 +457,7 @@
 		D8173ECB18A3A3AB001E7B57 /* TaitBryanAngles.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8173EC918A3A2D6001E7B57 /* TaitBryanAngles.hpp */; };
 		D81BA17115CBF19F004EF0B0 /* GL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D81BA16F15CBF19E004EF0B0 /* GL.cpp */; };
 		D81D2072160748EA009A8BA6 /* GLConstants.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D81D2071160748EA009A8BA6 /* GLConstants.cpp */; };
+		D81FC5441B4BED5400260B85 /* NASAElevationDataProvider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D81FC5421B4BED5400260B85 /* NASAElevationDataProvider.cpp */; };
 		D8228EBF157F7F7900BBAF60 /* MutableMatrix44D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8228EBE157F7F7900BBAF60 /* MutableMatrix44D.cpp */; };
 		D842D9AF1A727FAF008D55E4 /* NonOverlappingMarksRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D842D9AD1A727FAF008D55E4 /* NonOverlappingMarksRenderer.cpp */; };
 		D842D9B01A72906A008D55E4 /* NonOverlappingMarksRenderer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D842D9AE1A727FAF008D55E4 /* NonOverlappingMarksRenderer.hpp */; };
@@ -513,6 +514,7 @@
 		D8B8CE91178D6DCF00EE1B97 /* GPUVariableValueSet.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8B8CE8D178D645F00EE1B97 /* GPUVariableValueSet.hpp */; };
 		D8C486D017E205E7000EAFC9 /* InitialCameraPositionProvider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8C486CE17E205E7000EAFC9 /* InitialCameraPositionProvider.cpp */; };
 		D8C486D117E20A2E000EAFC9 /* InitialCameraPositionProvider.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8C486CF17E205E7000EAFC9 /* InitialCameraPositionProvider.hpp */; };
+		D8CC36541B4BF72B00FAC679 /* NASAElevationDataProvider.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D81FC5431B4BED5400260B85 /* NASAElevationDataProvider.hpp */; };
 		D8D347BA15E5133B00EDB394 /* IStringBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8D347B915E5133B00EDB394 /* IStringBuilder.cpp */; };
 		D8D894ED17731870007E41A5 /* GPUVariable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8D894EB17731870007E41A5 /* GPUVariable.cpp */; };
 		D8D894EE17731B6A007E41A5 /* GPUVariable.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8D894EC17731870007E41A5 /* GPUVariable.hpp */; };
@@ -731,6 +733,7 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				D8CC36541B4BF72B00FAC679 /* NASAElevationDataProvider.hpp in CopyFiles */,
 				CF701B471A9F93B9007C6B3F /* MutableVector2F.hpp in CopyFiles */,
 				CF55133D1A8E6AC200097906 /* StaticImageBuilder.hpp in CopyFiles */,
 				CFAB53F61A8BCE5800DD0099 /* LayoutImageBuilder.hpp in CopyFiles */,
@@ -1716,6 +1719,8 @@
 		D81BA16F15CBF19E004EF0B0 /* GL.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = GL.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		D81D2071160748EA009A8BA6 /* GLConstants.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLConstants.cpp; sourceTree = "<group>"; };
 		D81FB47C1636A5AE00CC2CA7 /* PeriodicalTask.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = PeriodicalTask.hpp; path = Commons/Basic/PeriodicalTask.hpp; sourceTree = "<group>"; };
+		D81FC5421B4BED5400260B85 /* NASAElevationDataProvider.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = NASAElevationDataProvider.cpp; path = Commons/Basic/NASAElevationDataProvider.cpp; sourceTree = "<group>"; };
+		D81FC5431B4BED5400260B85 /* NASAElevationDataProvider.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = NASAElevationDataProvider.hpp; path = Commons/Basic/NASAElevationDataProvider.hpp; sourceTree = "<group>"; };
 		D8228EBC157F7F6100BBAF60 /* MutableMatrix44D.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = MutableMatrix44D.hpp; path = Commons/Geometry/MutableMatrix44D.hpp; sourceTree = "<group>"; };
 		D8228EBE157F7F7900BBAF60 /* MutableMatrix44D.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = MutableMatrix44D.cpp; path = Commons/Geometry/MutableMatrix44D.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		D83171F3186C52CD00522E1B /* TransformedTexCoorMultiTexturedMesh.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = TransformedTexCoorMultiTexturedMesh.vsh; sourceTree = "<group>"; };
@@ -2194,6 +2199,8 @@
 				CFAB53F11A8BCD9B00DD0099 /* LayoutImageBuilder.hpp */,
 				CFAB53F31A8BCDFF00DD0099 /* ColumnLayoutImageBuilder.cpp */,
 				CFAB53F41A8BCDFF00DD0099 /* ColumnLayoutImageBuilder.hpp */,
+				D81FC5421B4BED5400260B85 /* NASAElevationDataProvider.cpp */,
+				D81FC5431B4BED5400260B85 /* NASAElevationDataProvider.hpp */,
 			);
 			name = Basic;
 			sourceTree = "<group>";
@@ -3188,6 +3195,7 @@
 				CF4027DE1770E7B900D5A80C /* NSData+SRB64Additions.m in Sources */,
 				CF4027DF1770E7B900D5A80C /* SRWebSocket.m in Sources */,
 				CF60500317724C5C00EB48A6 /* JSONNull.cpp in Sources */,
+				D81FC5441B4BED5400260B85 /* NASAElevationDataProvider.cpp in Sources */,
 				CFF96441190885210044F06D /* CompositeTileImageProvider.cpp in Sources */,
 				D8A6C0D41781D807007BC175 /* Matrix44D.cpp in Sources */,
 				D8B8CE88178D636000EE1B97 /* GLFeature.cpp in Sources */,
