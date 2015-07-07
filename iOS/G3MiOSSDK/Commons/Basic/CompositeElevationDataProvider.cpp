@@ -294,6 +294,8 @@ void CompositeElevationDataProvider::CompositeElevationDataProvider_Request::res
   }
   else {
     _listener->onData(_sector, _resolution, _compData);
+#warning CHANGING
+    _compData->_release();
     if (_autodelete) {
       delete _listener;
     }

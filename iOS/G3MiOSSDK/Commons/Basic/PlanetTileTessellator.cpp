@@ -358,7 +358,7 @@ double PlanetTileTessellator::createSurface(const Sector& tileSector,
       }
 
       vertices->add( position, elevation );
-
+      
       //TEXT COORDS
       if (mercator) {
         //U

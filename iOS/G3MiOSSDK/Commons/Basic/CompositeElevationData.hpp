@@ -40,7 +40,10 @@ public:
   virtual ~CompositeElevationData() {
     int s = _data.size();
     for (int i = 0; i < s; i++) {
-      delete _data[i];
+#warning CHANGING
+      if (_data[i] != NULL){
+        _data[i]->_release();
+      }
     }
     delete _interpolator;
     

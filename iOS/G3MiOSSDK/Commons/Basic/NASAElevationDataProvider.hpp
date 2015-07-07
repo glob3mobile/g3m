@@ -11,6 +11,32 @@
 
 #include "WMSBilElevationDataProvider.hpp"
 
+class NASAElevationDataProviderListener: public IElevationDataListener{
+  IElevationDataListener* _listener;
+  Sector  _requestedSector;
+  Vector2I _requestedExtent;
+  bool _autoDelete;
+public:
+  
+  NASAElevationDataProviderListener(IElevationDataListener* listener,
+                                    bool autodelete,
+                                    const Sector& requestedSector,
+                                    const Vector2I& requestedExtent):
+  _listener(listener), _autoDelete(autodelete), _requestedSector(requestedSector), _requestedExtent(requestedExtent){
+    
+  }
+  
+  virtual void onData(const Sector& sector,
+                      const Vector2I& extent,
+                      ElevationData* elevationData);
+  
+  virtual void onError(const Sector& sector,
+                       const Vector2I& extent);
+  
+  virtual void onCancel(const Sector& sector,
+                        const Vector2I& extent);
+};
+
 class NASAElevationDataProvider: public ElevationDataProvider{
   
 private:

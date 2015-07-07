@@ -100,7 +100,10 @@ public:
 
 
 SingleBilElevationDataProvider::~SingleBilElevationDataProvider() {
-  delete _elevationData;
+#warning CHANGING
+  if (_elevationData != NULL){
+    _elevationData->_release();
+  }
 
   if (_downloader != NULL && _requestToDownloaderID > -1) {
     _downloader->cancelRequest(_requestToDownloaderID);
@@ -166,6 +169,9 @@ const long long SingleBilElevationDataProvider::requestElevationData(const Secto
     listener->onData(sector,
                      extent,
                      elevationData);
+    
+#warning CHANGING
+    elevationData->_release();
   }
 
   if (autodeleteListener) {

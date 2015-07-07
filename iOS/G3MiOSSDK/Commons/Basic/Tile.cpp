@@ -108,8 +108,11 @@ Tile::~Tile() {
   delete _texturizedMesh;
   _texturizedMesh = NULL;
 
-  delete _elevationData;
-  _elevationData = NULL;
+#warning CHANGING
+  if (_elevationData != NULL){
+    _elevationData->_release();
+    _elevationData = NULL;
+  }
 
   if (_elevationDataRequest != NULL) {
     _elevationDataRequest->cancelRequest(); //The listener will auto delete
@@ -201,7 +204,7 @@ Mesh* Tile::getTessellatorMesh(const G3MRenderContext* rc,
   if ( (_tessellatorMesh == NULL) || mustUpdate ) {
     
     if (mustUpdate){
-      ILogger::instance()->logInfo("Updating mesh due to _mustUpdateMeshDueToNewED");
+      ILogger::instance()->logInfo("Updating mesh due to new Elevation Data");
       
       //Tessellator mesh is going to change, thus reference to _boundingVolume is sent to oblivion
       _boundingVolume = NULL;
@@ -396,7 +399,7 @@ void Tile::prepareForFullRendering(const G3MRenderContext* rc,
                                              layerTilesRenderParameters,
                                              tilesRenderParameters);
   if (tessellatorMesh == NULL) {
-    return;
+    return; //Normally due to ElevationData not resolved
   }
 
   if (texturizer != NULL) {
@@ -842,10 +845,14 @@ void Tile::setElevationData(ElevationData* ed, int level) {
   if (_elevationDataLevel < level) {
 
     if (_elevationData != NULL) {
-      delete _elevationData;
+#warning CHANGING THIS
+      _elevationData->_release();
+      _elevationData = NULL;
     }
 
     _elevationData = ed;
+    _elevationData->_retain();
+    
     _elevationDataLevel = level;
 
     //If the elevation belongs to tile's level, we notify the sub-tree
@@ -947,9 +954,12 @@ ElevationData* Tile::createElevationDataSubviewFromAncestor(Tile* ancestor) cons
   if ((_lastElevationDataProvider != NULL) &&
       (_lastTileMeshResolutionX > 0) &&
       (_lastTileMeshResolutionY > 0)) {
-    return new DecimatedSubviewElevationData(ed,
-                                             _sector,
-                                             Vector2I(_lastTileMeshResolutionX, _lastTileMeshResolutionY));
+    
+#warning CHANGING THIS
+    return ed;
+//    return new DecimatedSubviewElevationData(ed,
+//                                             _sector,
+//                                             Vector2I(_lastTileMeshResolutionX, _lastTileMeshResolutionY));
   }
 
   ILogger::instance()->logError("Can't create subview of elevation data from ancestor");
