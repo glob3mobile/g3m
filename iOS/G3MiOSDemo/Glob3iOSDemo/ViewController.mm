@@ -1997,8 +1997,8 @@ public:
   CameraRenderer* cameraRenderer = new CameraRenderer();
   const bool useInertia = true;
   
-  //cameraRenderer->addHandler(new CameraSingleDragHandler(useInertia));
-  cameraRenderer->addHandler(new CameraMouseWheelHandler);
+  cameraRenderer->addHandler(new CameraSingleDragHandler(useInertia));
+  //cameraRenderer->addHandler(new CameraMouseWheelHandler);
   
   cameraRenderer->addHandler(new CameraDoubleDragHandler());
   //cameraRenderer->addHandler(new CameraZoomAndRotateHandler());

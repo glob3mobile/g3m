@@ -15,22 +15,20 @@ bool CameraMouseWheelHandler::onTouchEvent(const G3MEventContext *eventContext,
                   const TouchEvent* touchEvent,
                   CameraContext *cameraContext){
   
- /***** ORIGINAL CODE
   if (touchEvent->getType() == MouseWheelChanged){
     onMouseWheel(eventContext, *touchEvent, cameraContext);
     return true;
   }
   return false;
-  */
   
-  //**** codigo del single drag
+/*
+  //**** THIS CODE IS TO TEST MOUSEWHEELHANDLER
   // only one finger needed
   if (touchEvent->getTouchCount()!=1) return false;
   if (touchEvent->getTapCount()>1) return false;
   if (touchEvent->getType() == MouseWheelChanged){
     return false;
   }
-  
   switch (touchEvent->getType()) {
     case Down:
       onMouseWheel(eventContext, *touchEvent, cameraContext);
@@ -38,10 +36,8 @@ bool CameraMouseWheelHandler::onTouchEvent(const G3MEventContext *eventContext,
     default:
       break;
   }
-  
   return true;
-
-
+*/
 
 }
 
@@ -61,8 +57,7 @@ void CameraMouseWheelHandler::onMouseWheel(const G3MEventContext *eventContext,
   camera->getModelViewMatrixInto(cameraModelViewMatrix);
   camera->getViewPortInto(cameraViewPort);
   
-  //const double delta = touchEvent.getMouseWheelDelta();
-  double delta = 1;
+  const double delta = touchEvent.getMouseWheelDelta();
   double factor = 0.1;
   if (delta < 0){
     factor *= -1;
