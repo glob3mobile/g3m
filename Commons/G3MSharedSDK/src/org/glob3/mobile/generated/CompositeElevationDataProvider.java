@@ -258,6 +258,7 @@ public class CompositeElevationDataProvider extends ElevationDataProvider
       else
       {
         _listener.onData(_sector, _resolution, _compData);
+        _compData._release();
         if (_autodelete)
         {
           if (_listener != null)

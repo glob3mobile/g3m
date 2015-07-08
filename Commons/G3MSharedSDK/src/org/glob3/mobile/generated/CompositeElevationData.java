@@ -55,6 +55,8 @@ public class CompositeElevationData extends ElevationData
   
     _data.add(data);
   
+    data._retain();
+  
     //Checking NoData
     for (int i = 0; i < _width; i++)
     {
@@ -76,7 +78,9 @@ public class CompositeElevationData extends ElevationData
     for (int i = 0; i < s; i++)
     {
       if (_data.get(i) != null)
-         _data.get(i).dispose();
+      {
+        _data.get(i)._release();
+      }
     }
     if (_interpolator != null)
        _interpolator.dispose();

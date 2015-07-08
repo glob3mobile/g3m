@@ -252,4 +252,14 @@ public abstract class AbstractGeometryMesh extends Mesh
     _showNormals = v;
   }
 
+  public final IFloatBuffer getVerticesFloatBuffer()
+  {
+    return (IFloatBuffer)_vertices; //Droping const so tiles can change their DEM
+  }
+
+  public final Vector3D getVerticesOffset()
+  {
+    return _center;
+  }
+
 }

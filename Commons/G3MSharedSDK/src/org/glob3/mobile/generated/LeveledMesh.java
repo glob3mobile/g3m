@@ -84,4 +84,14 @@ public class LeveledMesh extends Mesh
     _mesh.showNormals(v);
   }
 
+  public final IFloatBuffer getVerticesFloatBuffer()
+  {
+    return _mesh.getVerticesFloatBuffer();
+  }
+
+  public final Vector3D getVerticesOffset()
+  {
+    return _mesh.getVerticesOffset();
+  }
+
 }
