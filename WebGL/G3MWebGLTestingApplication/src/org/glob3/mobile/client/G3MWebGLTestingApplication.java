@@ -2,7 +2,6 @@
 
 package org.glob3.mobile.client;
 
-<<<<<<< HEAD
 import java.util.ArrayList;
 
 import org.glob3.mobile.generated.AltitudeMode;
@@ -37,7 +36,7 @@ import org.glob3.mobile.generated.GEOMultiLineRasterSymbol;
 import org.glob3.mobile.generated.GEORenderer;
 import org.glob3.mobile.generated.GEOSymbol;
 import org.glob3.mobile.generated.GEOSymbolizer;
-import org.glob3.mobile.generated.GEOTileRasterizer;
+//import org.glob3.mobile.generated.GEOTileRasterizer;
 import org.glob3.mobile.generated.GInitializationTask;
 import org.glob3.mobile.generated.GLPrimitive;
 import org.glob3.mobile.generated.Geodetic2D;
@@ -80,7 +79,6 @@ import org.glob3.mobile.generated.TimeInterval;
 import org.glob3.mobile.generated.URL;
 import org.glob3.mobile.generated.Vector2I;
 import org.glob3.mobile.generated.Vector3D;
-=======
 import org.glob3.mobile.generated.AltitudeMode;
 import org.glob3.mobile.generated.Color;
 import org.glob3.mobile.generated.ColumnLayoutImageBuilder;
@@ -102,7 +100,6 @@ import org.glob3.mobile.generated.QuadShape;
 import org.glob3.mobile.generated.ShapesRenderer;
 import org.glob3.mobile.generated.TimeInterval;
 import org.glob3.mobile.generated.URL;
->>>>>>> purgatory
 import org.glob3.mobile.specific.Downloader_WebGL;
 import org.glob3.mobile.specific.G3MBuilder_WebGL;
 import org.glob3.mobile.specific.G3MWidget_WebGL;
@@ -117,7 +114,7 @@ implements
 EntryPoint {
 
    private static final String _g3mWidgetHolderId = "g3mWidgetHolder";
-   private G3MWidget_WebGL     _g3mWidget         = null;
+   private G3MWidget_WebGL     _widget         = null;
 
 
    private native void runUserPlugin() /*-{
@@ -127,7 +124,6 @@ EntryPoint {
 
    @Override
    public void onModuleLoad() {
-<<<<<<< HEAD
 	   /*
       Scheduler.get().scheduleDeferred(new ScheduledCommand() {
 
@@ -156,15 +152,14 @@ EntryPoint {
          g3mWidgetHolder.add(_widget);
       }
    }
-
-=======
->>>>>>> purgatory
+/*
       final Panel g3mWidgetHolder = RootPanel.get(_g3mWidgetHolderId);
 
       _g3mWidget = createWidget();
       g3mWidgetHolder.add(_g3mWidget);
+*/
+   
 
-<<<<<<< HEAD
       //      final LayerSet layerSet = new LayerSet();
       //      layerSet.addLayer(MapQuestLayer.newOpenAerial(TimeInterval.fromDays(30)));
       //      builder.getPlanetRendererBuilder().setLayerSet(layerSet);
@@ -1320,7 +1315,7 @@ EntryPoint {
 	  final boolean useInertia = true;
 	  cameraRenderer.addHandler(new CameraSingleDragHandler(useInertia));
 	  final boolean allowRotationInDoubleDrag = false;
-	  cameraRenderer.addHandler(new CameraDoubleDragHandler(allowRotationInDoubleDrag));
+	  cameraRenderer.addHandler(new CameraDoubleDragHandler());
 	  //cameraRenderer.addHandler(new CameraZoomAndRotateHandler());
 
 	  cameraRenderer.addHandler(new CameraRotationHandler());
