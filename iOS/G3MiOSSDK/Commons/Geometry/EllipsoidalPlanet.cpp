@@ -487,6 +487,9 @@ MutableMatrix44D EllipsoidalPlanet::zoomUsingMouseWheel(double factor,
                                                         const Vector3D& centerPosition,
                                                         const Vector3D& touchedPosition,
                                                         const Vector3D& finalRay) const {
+  if (_sphericalPlanetDoubleDragDelegate == NULL){
+    _sphericalPlanetDoubleDragDelegate = new SphericalPlanet(Sphere(Vector3D::zero, _ellipsoid._radii.maxAxis()));
+  }
   return _sphericalPlanetDoubleDragDelegate->zoomUsingMouseWheel(factor,
                                                                  origin,
                                                                  centerRay,
