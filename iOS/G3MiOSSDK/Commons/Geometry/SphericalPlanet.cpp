@@ -935,6 +935,10 @@ MutableMatrix44D SphericalPlanet::zoomUsingMouseWheel(double factor,
                                                       const Vector3D& centerPosition,
                                                       const Vector3D& touchedPosition,
                                                       const Vector3D& finalRay) const {
+  double dist = touchedPosition.distanceTo(origin);
+  Vector3D translation = finalRay.normalized().times(dist * factor);
+  MutableMatrix44D matrix = MutableMatrix44D::createTranslationMatrix(translation);
+  return matrix;
 }
 
 

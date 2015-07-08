@@ -62,7 +62,7 @@ void CameraMouseWheelHandler::onMouseWheel(const G3MEventContext *eventContext,
   camera->getViewPortInto(cameraViewPort);
   
   //const double delta = touchEvent.getMouseWheelDelta();
-  double delta = 1;
+  double delta = -1;
   double factor = 0.1;
   if (delta < 0){
     factor *= -1;
