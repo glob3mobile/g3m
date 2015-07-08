@@ -207,14 +207,18 @@ Mesh* Tile::getTessellatorMesh(const G3MRenderContext* rc,
       
       //Tessellator mesh is going to change, thus reference to _boundingVolume is sent to oblivion
       
+      const Planet* planet = rc->getPlanet();
       
       ((PlanetTileTessellator*)tessellator)->updateSurface(_tessellatorMesh,
                                                            this,
                                                            layerTilesRenderParameters->_tileMeshResolution,
-                                                           rc->getPlanet(),
+                                                           planet,
                                                            _elevationData,
                                                            _verticalExaggeration,
                                                            _tileTessellatorMeshData);
+      
+      computeTileCorners(planet);
+      prepareTestLODData(planet);
       
       _boundingVolume = NULL;
     } else{
