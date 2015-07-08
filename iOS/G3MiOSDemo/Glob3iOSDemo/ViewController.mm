@@ -20,6 +20,7 @@
 #import <G3MiOSSDK/DirectMesh.hpp>
 #import <G3MiOSSDK/WMSLayer.hpp>
 #import <G3MiOSSDK/CameraSingleDragHandler.hpp>
+#import <G3MiOSSDK/CameraMouseWheelHandler.hpp>
 #import <G3MiOSSDK/CameraDoubleDragHandler.hpp>
 #import <G3MiOSSDK/CameraZoomAndRotateHandler.hpp>
 #import <G3MiOSSDK/CameraRotationHandler.hpp>
@@ -1995,7 +1996,10 @@ public:
 {
   CameraRenderer* cameraRenderer = new CameraRenderer();
   const bool useInertia = true;
-  cameraRenderer->addHandler(new CameraSingleDragHandler(useInertia));
+  
+  //cameraRenderer->addHandler(new CameraSingleDragHandler(useInertia));
+  cameraRenderer->addHandler(new CameraMouseWheelHandler);
+  
   cameraRenderer->addHandler(new CameraDoubleDragHandler());
   //cameraRenderer->addHandler(new CameraZoomAndRotateHandler());
   
@@ -4366,9 +4370,12 @@ public:
   G3MBuilder_iOS builder([self G3MWidget]);
   
   //const Planet* planet = Planet::createEarth();
-  const Planet* planet = Planet::createSphericalEarth();
-  //final Planet planet = Planet.createFlatEarth();
+  //const Planet* planet = Planet::createSphericalEarth();
+  const Planet* planet = Planet::createFlatEarth();
   builder.setPlanet(planet);
+  
+  // create camerarenderers
+  builder.setCameraRenderer([self createCameraRenderer]);
   
   // create shape
   ShapesRenderer* shapesRenderer = new ShapesRenderer();

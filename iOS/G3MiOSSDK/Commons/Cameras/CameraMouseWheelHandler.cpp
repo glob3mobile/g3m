@@ -15,11 +15,33 @@ bool CameraMouseWheelHandler::onTouchEvent(const G3MEventContext *eventContext,
                   const TouchEvent* touchEvent,
                   CameraContext *cameraContext){
   
+ /***** ORIGINAL CODE
   if (touchEvent->getType() == MouseWheelChanged){
     onMouseWheel(eventContext, *touchEvent, cameraContext);
     return true;
   }
   return false;
+  */
+  
+  //**** codigo del single drag
+  // only one finger needed
+  if (touchEvent->getTouchCount()!=1) return false;
+  if (touchEvent->getTapCount()>1) return false;
+  if (touchEvent->getType() == MouseWheelChanged){
+    return false;
+  }
+  
+  switch (touchEvent->getType()) {
+    case Down:
+      onMouseWheel(eventContext, *touchEvent, cameraContext);
+      break;
+    default:
+      break;
+  }
+  
+  return true;
+
+
 
 }
 
@@ -27,50 +49,46 @@ bool CameraMouseWheelHandler::onTouchEvent(const G3MEventContext *eventContext,
 void CameraMouseWheelHandler::onMouseWheel(const G3MEventContext *eventContext,
                                            const TouchEvent& touchEvent,
                                            CameraContext *cameraContext){
-  Camera* cam = cameraContext->getNextCamera();
+  MutableVector3D cameraPosition;
+  MutableVector3D cameraCenter;
+  MutableVector3D cameraUp;
+  MutableVector2I cameraViewPort;
+  MutableMatrix44D cameraModelViewMatrix;
   
-  Vector2F pixel = touchEvent.getTouch(0)->getPos();
-  Vector3D touchedPosition = eventContext->getWidget()->getScenePositionForPixel((int)pixel._x, (int)pixel._y);
+  // save params
+  Camera *camera = cameraContext->getNextCamera();
+  camera->getLookAtParamsInto(cameraPosition, cameraCenter, cameraUp);
+  camera->getModelViewMatrixInto(cameraModelViewMatrix);
+  camera->getViewPortInto(cameraViewPort);
   
-  if (!touchedPosition.isNan()){
-    
-    const Vector3D dir = cam->pixel2Ray(pixel).normalized();
-    
-    double dist = touchedPosition.distanceTo(cam->getCartesianPosition());
-    
-    const double delta = touchEvent.getMouseWheelDelta();
-    double factor = 0.1;
-    if (delta < 0){
-      factor *= -1;
-    }
-    
-    Vector3D translation = dir.normalized().times(dist * factor);
-    
-    cam->translateCamera(translation);
-    
+  //const double delta = touchEvent.getMouseWheelDelta();
+  double delta = 1;
+  double factor = 0.1;
+  if (delta < 0){
+    factor *= -1;
   }
   
-  //NO ZRENDER
+  G3MWidget* widget = eventContext->getWidget();
+  const Vector2F pixel = touchEvent.getTouch(0)->getPos();
+  Vector3D touchedPosition = widget->getScenePositionForPixel((int)pixel._x, (int)pixel._y);
+  if (touchedPosition.isNan()) return;
   
-//  const Planet* planet = eventContext->getPlanet();
-//  const Vector3D dir = cam->pixel2Ray(touchEvent.getTouch(0)->getPos()).normalized();
-//  
-//#warning USE ZRENDER IN THE FUTURE
-//  std::vector<double> dists = planet->intersectionsDistances(cam->getCartesianPosition(), dir);
-//  
-//  if (dists.size() > 0){     //Research other behaviours as Google Earth
-//
-//    const double delta = touchEvent.getMouseWheelDelta();
-//    double factor = 0.1;
-//    if (delta < 0){
-//      factor *= -1;
-//    }
-//    
-//    double dist = dists.at(0);
-//    Vector3D translation = dir.normalized().times(dist * factor);
-//    
-//    cam->translateCamera(translation);
-//  }
+  const Vector3D& initialRay = Camera::pixel2Ray(cameraPosition, pixel,
+                                                 cameraViewPort, cameraModelViewMatrix);
+  if (initialRay.isNan()) return;
   
+  const Planet* planet = eventContext->getPlanet();
+  MutableMatrix44D matrix = planet->zoomUsingMouseWheel(factor,
+                                                        camera->getCartesianPosition(),
+                                                        camera->getViewDirection(),
+                                                        widget->getScenePositionForCentralPixel(),
+                                                        touchedPosition,
+                                                        initialRay);
+  if (!matrix.isValid()) return;
   
+  // apply transformation
+  cameraContext->getNextCamera()->setLookAtParams(cameraPosition.transformedBy(matrix, 1.0),
+                                                  cameraCenter.transformedBy(matrix, 1.0),
+                                                  cameraUp.transformedBy(matrix, 0.0));
 }
+

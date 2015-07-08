@@ -273,3 +273,18 @@ void FlatPlanet::applyCameraConstrainers(const Camera* previousCamera,
 //    nextCamera->copyFrom(*previousCamera);
 //  }
 }
+
+MutableMatrix44D FlatPlanet::zoomUsingMouseWheel(double factor,
+                                                 const Vector3D& origin,
+                                                 const Vector3D& centerRay,
+                                                 const Vector3D& centerPosition,
+                                                 const Vector3D& touchedPosition,
+                                                 const Vector3D& finalRay) const {
+  double dist = touchedPosition.distanceTo(origin);
+  Vector3D translation = finalRay.normalized().times(dist * factor);
+  MutableMatrix44D matrix = MutableMatrix44D::createTranslationMatrix(translation);
+  return matrix;
+}
+
+
+
