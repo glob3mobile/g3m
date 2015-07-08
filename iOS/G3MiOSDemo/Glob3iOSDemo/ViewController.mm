@@ -284,7 +284,9 @@ Mesh* createSectorMesh(const Planet* planet,
   //[[self G3MWidget] initSingletons];
   // [self initWithoutBuilder];
   
-  [self initCustomizedWithBuilder];
+  //[self initCustomizedWithBuilder];
+  
+  [self testBranch_zrender_touchhandlers];
   
   //[self initTestingTileImageProvider];
   
@@ -4357,6 +4359,47 @@ public:
   } else {
     return YES;
   }
+}
+
+- (void) testBranch_zrender_touchhandlers
+{
+  G3MBuilder_iOS builder([self G3MWidget]);
+  
+  //const Planet* planet = Planet::createEarth();
+  const Planet* planet = Planet::createSphericalEarth();
+  //final Planet planet = Planet.createFlatEarth();
+  builder.setPlanet(planet);
+  
+  // create shape
+  ShapesRenderer* shapesRenderer = new ShapesRenderer();
+  Shape* box = new BoxShape(new Geodetic3D(Angle::fromDegrees(28.4),
+                                           Angle::fromDegrees(-16.4),
+                                          0),
+                           ABSOLUTE,
+                           Vector3D(3000, 3000, 20000),
+                           2,
+                            Color::fromRGBA(1.0f, 1.0f, 0.0f, 0.5f),
+                            Color::newFromRGBA(0.0f, 0.75f, 0.0f, 0.75f));
+  shapesRenderer->addShape(box);
+  builder.addRenderer(shapesRenderer);
+  
+  // create elevations for Tenerife from bil file
+  Sector sector = Sector::fromDegrees (27.967811065876,                  // min latitude
+                                      -17.0232177085356,                // min longitude
+                                      28.6103464294992,                 // max latitude
+                                      -16.0019401695656);               // max longitude
+  Vector2I extent = Vector2I(256, 256);                             // image resolution
+  URL url = URL("http://serdis.dis.ulpgc.es/~atrujill/glob3m/IGO/Tenerife-256x256.bil", false);
+  ElevationDataProvider* elevationDataProvider = new SingleBilElevationDataProvider(url, sector, extent);
+  builder.getPlanetRendererBuilder()->setElevationDataProvider(elevationDataProvider);
+  builder.getPlanetRendererBuilder()->setVerticalExaggeration(4.0f);
+  
+  builder.initializeWidget();
+  
+  // set camera looking at Tenerife
+  Geodetic3D position = Geodetic3D(Angle::fromDegrees(27.60), Angle::fromDegrees(-16.54), 55000.0);
+  [[self G3MWidget] widget]->setCameraPosition(position);
+  [[self G3MWidget] widget]->setCameraPitch(Angle::fromDegrees(-50.0));
 }
 
 @end
