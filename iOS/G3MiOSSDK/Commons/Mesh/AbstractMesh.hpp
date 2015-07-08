@@ -77,6 +77,14 @@ public:
     _showNormals = v;
   }
   
+  IFloatBuffer* getVerticesFloatBuffer() const{
+    return (IFloatBuffer*)_vertices; //Droping const so tiles can change their DEM
+  }
+  
+  Vector3D getVerticesOffset() const{
+    return _center;
+  }
+  
 };
 
 #endif

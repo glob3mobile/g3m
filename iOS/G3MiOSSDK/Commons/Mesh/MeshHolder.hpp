@@ -64,6 +64,13 @@ public:
     _mesh->showNormals(v);
   }
 
+  IFloatBuffer* getVerticesFloatBuffer() const{
+    return _mesh->getVerticesFloatBuffer();
+  }
+  
+  Vector3D getVerticesOffset() const{
+    return _mesh->getVerticesOffset();
+  }
 };
 
 #endif

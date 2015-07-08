@@ -367,8 +367,8 @@ Mesh* createSectorMesh(const Planet* planet,
   builder.setInitializationTask(new InitTask([self G3MWidget]), true);
 
   builder.getPlanetRendererBuilder()->setElevationDataProvider(edp);
-  builder.getPlanetRendererBuilder()->setVerticalExaggeration(5.0);
-  builder.getPlanetRendererBuilder()->setRenderDebug(true);
+  builder.getPlanetRendererBuilder()->setVerticalExaggeration(2.5);
+//  builder.getPlanetRendererBuilder()->setRenderDebug(true);
   builder.initializeWidget();
   
   

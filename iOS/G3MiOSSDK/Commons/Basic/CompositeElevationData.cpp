@@ -40,8 +40,7 @@ void CompositeElevationData::addElevationData(ElevationData* data) {
   }
 
   _data.push_back(data);
-  
-#warning CHANGING
+
   data->_retain();
   
   //Checking NoData

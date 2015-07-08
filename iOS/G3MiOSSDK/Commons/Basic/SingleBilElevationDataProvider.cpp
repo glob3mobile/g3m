@@ -100,7 +100,6 @@ public:
 
 
 SingleBilElevationDataProvider::~SingleBilElevationDataProvider() {
-#warning CHANGING
   if (_elevationData != NULL){
     _elevationData->_release();
   }
@@ -169,8 +168,6 @@ const long long SingleBilElevationDataProvider::requestElevationData(const Secto
     listener->onData(sector,
                      extent,
                      elevationData);
-    
-#warning CHANGING
     elevationData->_release();
   }
 

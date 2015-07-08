@@ -47,13 +47,15 @@ public:
     
   }
   
-  static std::vector<std::string> _urls;
+//  static std::vector<std::string> _urls;
   
   void onDownload(const URL& url,
                   IByteBuffer* buffer,
                   bool expired) {
     const Vector2I resolution(_width, _height);
     
+    /*
+     //DEBUGGING CODE
 #warning at work
     if (_sector.contains(Geodetic2D::fromDegrees(28.271842, -16.642497))){
       _urls.push_back(url._path);
@@ -63,6 +65,7 @@ public:
         printf("%s\n", _urls[i].c_str());
       }
     }
+     */
     
     ShortBufferElevationData* elevationData = BilParser::parseBil16(_sector,
                                                                     resolution,
@@ -75,8 +78,6 @@ public:
     }
     else {
       _listener->onData(_sector, resolution, elevationData);
-      
-#warning CHANGING THIS
       elevationData->_release();
     }
     
@@ -121,7 +122,7 @@ public:
 };
 
 
-std::vector<std::string> WMSBilElevationDataProvider_BufferDownloadListener::_urls;
+//std::vector<std::string> WMSBilElevationDataProvider_BufferDownloadListener::_urls;
 
 
 void WMSBilElevationDataProvider::initialize(const G3MContext* context) {
