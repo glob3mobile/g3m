@@ -63,7 +63,7 @@ const long long NASAElevationDataProvider::requestElevationData(const Sector& se
                                                                                   sector,
                                                                                   extent);
   
-  int factor = 3.0;
+  int factor = 4.0;
   
   Sector sector2 = sector.shrinkedByPercent(-factor);
   Vector2I extent2(extent._x * factor, extent._y * factor);

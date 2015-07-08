@@ -190,7 +190,7 @@ Mesh* Tile::getTessellatorMesh(const G3MRenderContext* rc,
                             tilesRenderParameters->_renderDebug);
     
     if (_elevationData == NULL){
-      ILogger::instance()->logInfo("Tile not ready for rendering as no ElevationData can be found. Returning NULL Mesh.");
+//      ILogger::instance()->logInfo("Tile not ready for rendering as no ElevationData can be found. Returning NULL Mesh.");
       return NULL;
     }
   }
@@ -204,7 +204,7 @@ Mesh* Tile::getTessellatorMesh(const G3MRenderContext* rc,
   if ( (_tessellatorMesh == NULL) || mustUpdate ) {
     
     if (mustUpdate){
-      ILogger::instance()->logInfo("Updating mesh due to new Elevation Data");
+      //ILogger::instance()->logInfo("Updating mesh due to new Elevation Data");
       
       //Tessellator mesh is going to change, thus reference to _boundingVolume is sent to oblivion
       _boundingVolume = NULL;
@@ -881,7 +881,9 @@ void Tile::getElevationDataFromAncestor(const Vector2I& extent) {
       ElevationData* subView = createElevationDataSubviewFromAncestor(ancestor);
       setElevationData(subView, ancestor->_level);
     } else{
-      ILogger::instance()->logInfo("No ancestor has elevation data.");
+      if (getParent() != NULL){
+        ILogger::instance()->logInfo("No ancestor has elevation data.");
+      }
     }
   }
 }
