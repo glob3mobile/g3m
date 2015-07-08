@@ -574,4 +574,14 @@ public class EllipsoidalPlanet extends Planet
     return "Ellipsoidal";
   }
 
+  public final MutableMatrix44D zoomUsingMouseWheel(double factor, Vector3D origin, Vector3D centerRay, Vector3D centerPosition, Vector3D touchedPosition, Vector3D finalRay)
+  {
+    if (_sphericalPlanetDoubleDragDelegate == null)
+    {
+      _sphericalPlanetDoubleDragDelegate = new SphericalPlanet(new Sphere(Vector3D.zero, _ellipsoid._radii.maxAxis()));
+    }
+    return _sphericalPlanetDoubleDragDelegate.zoomUsingMouseWheel(factor, origin, centerRay, centerPosition, touchedPosition, finalRay);
+  }
+
+
 }

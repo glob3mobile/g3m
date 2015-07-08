@@ -159,4 +159,6 @@ public abstract class Planet
   {
   }
 
+  public abstract MutableMatrix44D zoomUsingMouseWheel(double factor, Vector3D origin, Vector3D centerRay, Vector3D centerPosition, Vector3D touchedPosition, Vector3D finalRay);
+
 }

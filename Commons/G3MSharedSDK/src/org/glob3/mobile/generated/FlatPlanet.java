@@ -420,4 +420,12 @@ public class FlatPlanet extends Planet
     return "Flat";
   }
 
+  public final MutableMatrix44D zoomUsingMouseWheel(double factor, Vector3D origin, Vector3D centerRay, Vector3D centerPosition, Vector3D touchedPosition, Vector3D finalRay)
+  {
+    double dist = touchedPosition.distanceTo(origin);
+    Vector3D translation = finalRay.normalized().times(dist * factor);
+    MutableMatrix44D matrix = MutableMatrix44D.createTranslationMatrix(translation);
+    return matrix;
+  }
+
 }
