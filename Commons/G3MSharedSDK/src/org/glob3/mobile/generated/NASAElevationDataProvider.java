@@ -24,7 +24,7 @@ public class NASAElevationDataProvider extends ElevationDataProvider
   
     NASAElevationDataProviderListener list = new NASAElevationDataProviderListener(listener, autodeleteListener, sector, extent);
   
-    int factor = 4.0;
+    int factor = 4;
   
     Sector sector2 = sector.shrinkedByPercent(-factor);
     Vector2I extent2 = new Vector2I(extent._x * factor, extent._y * factor);

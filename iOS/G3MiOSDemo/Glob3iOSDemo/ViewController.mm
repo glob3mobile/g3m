@@ -343,7 +343,11 @@ Mesh* createSectorMesh(const Planet* planet,
 //                                                                     0);
   
 
-  NASAElevationDataProvider* edp = new NASAElevationDataProvider();
+  //NASAElevationDataProvider* edp = new NASAElevationDataProvider();
+  
+  ElevationDataProvider* edp = new SingleBilElevationDataProvider(URL("file:///full-earth-2048x1024.bil", false),
+                                                                                    Sector::fullSphere(),
+                                                                                    Vector2I(2048, 1024));
   
   
   class InitTask: public GInitializationTask{

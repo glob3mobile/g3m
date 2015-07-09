@@ -13,16 +13,19 @@
 
 class NASAElevationDataProviderListener: public IElevationDataListener{
   IElevationDataListener* _listener;
-  Sector  _requestedSector;
-  Vector2I _requestedExtent;
-  bool _autoDelete;
+  const Sector  _requestedSector;
+  const Vector2I _requestedExtent;
+  const bool _autoDelete;
 public:
   
   NASAElevationDataProviderListener(IElevationDataListener* listener,
                                     bool autodelete,
                                     const Sector& requestedSector,
                                     const Vector2I& requestedExtent):
-  _listener(listener), _autoDelete(autodelete), _requestedSector(requestedSector), _requestedExtent(requestedExtent){
+  _listener(listener),
+  _autoDelete(autodelete),
+  _requestedSector(requestedSector),
+  _requestedExtent(requestedExtent){
     
   }
   

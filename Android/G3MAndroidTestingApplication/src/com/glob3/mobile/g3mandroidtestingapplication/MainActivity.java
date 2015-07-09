@@ -16,6 +16,7 @@ import org.glob3.mobile.generated.IImageDownloadListener;
 import org.glob3.mobile.generated.IImageListener;
 import org.glob3.mobile.generated.LabelImageBuilder;
 import org.glob3.mobile.generated.LayerSet;
+import org.glob3.mobile.generated.NASAElevationDataProvider;
 import org.glob3.mobile.generated.NonOverlappingMark;
 import org.glob3.mobile.generated.NonOverlappingMarkTouchListener;
 import org.glob3.mobile.generated.NonOverlappingMarksRenderer;
@@ -91,6 +92,20 @@ public class MainActivity
                position);
    }
 
+
+   private G3MWidget_Android createWidgetStreamingElevations() {
+      final G3MBuilder_Android builder = new G3MBuilder_Android(this);
+
+      final LayerSet layerSet = new LayerSet();
+      layerSet.addLayer(new OSMLayer(TimeInterval.fromDays(30)));
+      builder.getPlanetRendererBuilder().setLayerSet(layerSet);
+      
+      NASAElevationDataProvider edp = new NASAElevationDataProvider();
+      
+      builder.getPlanetRendererBuilder().setElevationDataProvider(edp);
+      
+      return builder.createWidget();
+   }
 
    private G3MWidget_Android createWidget() {
       final G3MBuilder_Android builder = new G3MBuilder_Android(this);

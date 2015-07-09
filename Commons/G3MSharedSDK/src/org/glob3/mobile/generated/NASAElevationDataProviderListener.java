@@ -21,7 +21,7 @@ public class NASAElevationDataProviderListener implements IElevationDataListener
 {
   private IElevationDataListener _listener;
   private Sector _requestedSector ;
-  private Vector2I _requestedExtent = new Vector2I();
+  private Vector2I _requestedExtent = null;
   private boolean _autoDelete;
 
   public NASAElevationDataProviderListener(IElevationDataListener listener, boolean autodelete, Sector requestedSector, Vector2I requestedExtent)
