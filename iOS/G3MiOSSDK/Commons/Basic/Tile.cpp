@@ -209,13 +209,13 @@ Mesh* Tile::getTessellatorMesh(const G3MRenderContext* rc,
       
       const Planet* planet = rc->getPlanet();
       
-      ((PlanetTileTessellator*)tessellator)->updateSurface(_tessellatorMesh,
-                                                           this,
-                                                           layerTilesRenderParameters->_tileMeshResolution,
-                                                           planet,
-                                                           _elevationData,
-                                                           _verticalExaggeration,
-                                                           _tileTessellatorMeshData);
+      tessellator->updateSurface(_tessellatorMesh,
+                                 this,
+                                 layerTilesRenderParameters->_tileMeshResolution,
+                                 planet,
+                                 _elevationData,
+                                 _verticalExaggeration,
+                                 _tileTessellatorMeshData);
       
       computeTileCorners(planet);
       prepareTestLODData(planet);

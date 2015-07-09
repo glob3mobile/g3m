@@ -9,6 +9,13 @@
 #include "NASAElevationDataProvider.hpp"
 #include "InterpolatedSubviewElevationData.hpp"
 
+NASAElevationDataProviderListener::~NASAElevationDataProviderListener(){
+  if (_autoDelete){
+    delete _listener;
+    _listener = NULL;
+  }
+}
+
 
 void NASAElevationDataProviderListener::onData(const Sector& sector,
                     const Vector2I& extent,
@@ -23,6 +30,7 @@ void NASAElevationDataProviderListener::onData(const Sector& sector,
   
   if (_autoDelete){
     delete _listener;
+    _listener = NULL;
   }
 }
 
@@ -32,6 +40,7 @@ void NASAElevationDataProviderListener::onError(const Sector& sector,
   _listener->onError(sector, _requestedExtent);
   if (_autoDelete){
     delete _listener;
+    _listener = NULL;
   }
 }
 
@@ -41,6 +50,7 @@ void NASAElevationDataProviderListener::onCancel(const Sector& sector,
   _listener->onCancel(sector, _requestedExtent);
   if (_autoDelete){
     delete _listener;
+    _listener = NULL;
   }
   
 }

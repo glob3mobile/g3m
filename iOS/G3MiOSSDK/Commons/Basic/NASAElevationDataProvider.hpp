@@ -26,6 +26,8 @@ public:
     
   }
   
+  ~NASAElevationDataProviderListener();
+  
   virtual void onData(const Sector& sector,
                       const Vector2I& extent,
                       ElevationData* elevationData);
