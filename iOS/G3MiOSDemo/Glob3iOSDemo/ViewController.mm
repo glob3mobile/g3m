@@ -333,21 +333,27 @@ Mesh* createSectorMesh(const Planet* planet,
   
   
   LayerSet* layerSet = new LayerSet();
-  layerSet->addLayer(MapQuestLayer::newOSM(TimeInterval::fromDays(30)));
-  builder.getPlanetRendererBuilder()->setLayerSet(layerSet);
+//  layerSet->addLayer(MapQuestLayer::newOSM(TimeInterval::fromDays(30)));
+
+  
+  
+    builder.getPlanetRendererBuilder()->setLayerSet(layerSet);
  
   
-//  WMSBilElevationDataProvider* edp = new WMSBilElevationDataProvider(URL("http://data.worldwind.arc.nasa.gov/elev"),
-//                                                                     "srtm30",
-//                                                                     Sector::FULL_SPHERE,
-//                                                                     0);
+  WMSBilElevationDataProvider* edp = new WMSBilElevationDataProvider(URL("http://data.worldwind.arc.nasa.gov/elev"),
+                                                                     "srtm30",
+                                                                     Sector::FULL_SPHERE,
+                                                                     0);
   
 
-  //NASAElevationDataProvider* edp = new NASAElevationDataProvider();
-  
-  ElevationDataProvider* edp = new SingleBilElevationDataProvider(URL("file:///full-earth-2048x1024.bil", false),
-                                                                                    Sector::fullSphere(),
-                                                                                    Vector2I(2048, 1024));
+  layerSet->addLayer(new BingMapsLayer(BingMapType::AerialWithLabels(),
+                                       "AnU5uta7s5ql_HTrRZcPLI4_zotvNefEeSxIClF1Jf7eS-mLig1jluUdCoecV7jc",
+                                       TimeInterval::fromDays(30)
+                                       //                                         true,
+                                       //                                         2,
+                                       //                                         17
+                                       )
+                     );
   
   
   class InitTask: public GInitializationTask{
@@ -1115,7 +1121,8 @@ public:
   
   LayerSet* layerSet = new LayerSet();
   //  layerSet->addLayer(MapQuestLayer::newOSM(TimeInterval::fromDays(30), true, 10));
-  layerSet->addLayer(MapQuestLayer::newOSM(TimeInterval::fromDays(30)));
+  
+//  layerSet->addLayer(MapQuestLayer::newOSM(TimeInterval::fromDays(30)));
   builder.getPlanetRendererBuilder()->setLayerSet(layerSet);
   
   const Sector sector = Sector::fromDegrees(40.1540143280790858, -5.8664874640814313,

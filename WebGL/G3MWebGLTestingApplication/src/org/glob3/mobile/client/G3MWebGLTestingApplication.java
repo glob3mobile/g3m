@@ -18,15 +18,12 @@ import org.glob3.mobile.generated.MapQuestLayer;
 import org.glob3.mobile.generated.NASAElevationDataProvider;
 import org.glob3.mobile.generated.NonOverlappingMark;
 import org.glob3.mobile.generated.NonOverlappingMarksRenderer;
-import org.glob3.mobile.generated.OSMLayer;
 import org.glob3.mobile.generated.QuadShape;
 import org.glob3.mobile.generated.ShapesRenderer;
 import org.glob3.mobile.generated.TimeInterval;
 import org.glob3.mobile.generated.URL;
 import org.glob3.mobile.specific.Downloader_WebGL;
-import org.glob3.mobile.specific.G3MBuilder_Android;
 import org.glob3.mobile.specific.G3MBuilder_WebGL;
-import org.glob3.mobile.specific.G3MWidget_Android;
 import org.glob3.mobile.specific.G3MWidget_WebGL;
 
 import com.google.gwt.core.client.EntryPoint;
@@ -62,8 +59,15 @@ public class G3MWebGLTestingApplication implements EntryPoint {
 		final G3MBuilder_WebGL builder = new G3MBuilder_WebGL();
 
 		final LayerSet layerSet = new LayerSet();
-		layerSet.addLayer(new OSMLayer(TimeInterval.fromDays(30)));
+		layerSet.addLayer(MapQuestLayer.newOSM(TimeInterval.fromDays(30)));
 		builder.getPlanetRendererBuilder().setLayerSet(layerSet);
+		
+		final String proxy = "/proxy.php?url=";
+		builder.setDownloader(new Downloader_WebGL( //
+		8, // maxConcurrentOperationCount
+		10, // delayMillis
+		proxy));
+
 
 		NASAElevationDataProvider edp = new NASAElevationDataProvider();
 

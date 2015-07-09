@@ -14,7 +14,13 @@
 class NASAElevationDataProviderListener: public IElevationDataListener{
   IElevationDataListener* _listener;
   const Sector  _requestedSector;
+  
+#ifdef C_CODE
   const Vector2I _requestedExtent;
+#endif
+#ifdef JAVA_CODE
+  private Vector2I _requestedExtent;
+#endif
   const bool _autoDelete;
 public:
   
