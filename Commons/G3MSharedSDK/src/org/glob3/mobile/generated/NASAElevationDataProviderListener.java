@@ -33,6 +33,16 @@ public class NASAElevationDataProviderListener implements IElevationDataListener
 
   }
 
+  public void dispose()
+  {
+    if (_autoDelete)
+    {
+      if (_listener != null)
+         _listener.dispose();
+      _listener = null;
+    }
+  }
+
   public void onData(Sector sector, Vector2I extent, ElevationData elevationData)
   {
   
@@ -45,6 +55,7 @@ public class NASAElevationDataProviderListener implements IElevationDataListener
     {
       if (_listener != null)
          _listener.dispose();
+      _listener = null;
     }
   }
 
@@ -56,6 +67,7 @@ public class NASAElevationDataProviderListener implements IElevationDataListener
     {
       if (_listener != null)
          _listener.dispose();
+      _listener = null;
     }
   }
 
@@ -67,6 +79,7 @@ public class NASAElevationDataProviderListener implements IElevationDataListener
     {
       if (_listener != null)
          _listener.dispose();
+      _listener = null;
     }
   
   }

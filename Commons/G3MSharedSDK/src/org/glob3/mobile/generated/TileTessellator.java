@@ -22,4 +22,6 @@ public abstract class TileTessellator
 
   public abstract void setRenderedSector(Sector sector);
 
+  public abstract void updateSurface(Mesh mesh, Tile tile, Vector2I rawResolution, Planet planet, ElevationData elevationData, float verticalExaggeration, TileTessellatorMeshData data);
+
 }
