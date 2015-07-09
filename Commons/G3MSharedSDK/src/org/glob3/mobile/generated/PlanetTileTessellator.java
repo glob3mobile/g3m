@@ -419,8 +419,8 @@ public class PlanetTileTessellator extends TileTessellator
     IFloatBuffer verticesB = vertices.create();
     IShortBuffer indicesB = indices.create();
     IFloatBuffer normals = null;
-  ///#warning Testing_Terrain_Normals;
-  //  IFloatBuffer* normals = NormalsUtils::createTriangleStripSmoothNormals(verticesB, indicesB);
+    ///#warning Testing_Terrain_Normals;
+    //  IFloatBuffer* normals = NormalsUtils::createTriangleStripSmoothNormals(verticesB, indicesB);
   
     Mesh result = new IndexedGeometryMesh(GLPrimitive.triangleStrip(), vertices.getCenter(), verticesB, true, normals, true, indicesB, true);
   
@@ -532,5 +532,82 @@ public class PlanetTileTessellator extends TileTessellator
       }
     }
   }
+
+  public final void updateSurface(Mesh mesh, Tile tile, Vector2I rawResolution, Planet planet, ElevationData elevationData, float verticalExaggeration, TileTessellatorMeshData data)
+  {
+  
+    final Sector tileSector = tile._sector;
+    final Sector meshSector = getRenderedSectorForTile(tile); // tile->getSector();
+    final Vector2I meshResolution = calculateResolution(rawResolution, tile, meshSector);
+  
+    IFloatBuffer vertices = mesh.getVerticesFloatBuffer();
+    Vector3D offset = mesh.getVerticesOffset();
+  
+    final int rx = meshResolution._x;
+    final int ry = meshResolution._y;
+  
+    //VERTICES///////////////////////////////////////////////////////////////
+    final IMathUtils mu = IMathUtils.instance();
+    double minElevation = mu.maxDouble();
+    double maxElevation = mu.minDouble();
+    double averageElevation = 0;
+  
+    int pos = 0; //Pos counter updating
+  
+    for (int j = 0; j < ry; j++)
+    {
+      final double v = (double) j / (ry - 1);
+  
+      for (int i = 0; i < rx; i++)
+      {
+        final double u = (double) i / (rx - 1);
+        final Geodetic2D position = meshSector.getInnerPoint(u, v);
+        double elevation = 0;
+  
+        if (elevationData != null)
+        {
+          final double rawElevation = elevationData.getElevationAt(position);
+  
+          elevation = (rawElevation != rawElevation)? 0 : rawElevation * verticalExaggeration;
+  
+          //MIN
+          if (elevation < minElevation)
+          {
+            minElevation = elevation;
+          }
+  
+          //MAX
+          if (elevation > maxElevation)
+          {
+            maxElevation = elevation;
+          }
+  
+          //AVERAGE
+          averageElevation += elevation;
+        }
+  
+        final Vector3D pos3D = planet.toCartesian(position._latitude, position._longitude, elevation).sub(offset);
+  
+        //vertices->add( position, elevation );
+        vertices.put(pos++, (float)pos3D._x);
+        vertices.put(pos++, (float)pos3D._y);
+        vertices.put(pos++, (float)pos3D._z);
+      }
+    }
+  
+    if (minElevation == mu.maxDouble())
+    {
+      minElevation = 0;
+    }
+    if (maxElevation == mu.minDouble())
+    {
+      maxElevation = 0;
+    }
+  
+    data._minHeight = minElevation;
+    data._maxHeight = maxElevation;
+    data._averageHeight = averageElevation / (rx * ry);
+  }
+
 
 }

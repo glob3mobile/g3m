@@ -134,39 +134,73 @@ public class Tile
   {
   
   
-    if ((_elevationData == null) && (elevationDataProvider != null) && (elevationDataProvider.isEnabled()))
+    if ((_elevationData == null) && canUseElevationDataProvider(elevationDataProvider))
     {
       initializeElevationData(elevationDataProvider, tessellator, layerTilesRenderParameters._tileMeshResolution, rc.getPlanet(), tilesRenderParameters._renderDebug);
+  
+      if (_elevationData == null)
+      {
+        //      ILogger::instance()->logInfo("Tile not ready for rendering as no ElevationData can be found. Returning NULL Mesh.");
+        return null;
+      }
     }
   
-    if ((_tessellatorMesh == null) || _mustActualizeMeshDueToNewElevationData)
+    if (_elevationDataLevel < 0 && canUseElevationDataProvider(elevationDataProvider))
     {
-      _mustActualizeMeshDueToNewElevationData = false;
+      ILogger.instance().logError("Creating Mesh without ED.");
+    }
   
-      if (elevationDataProvider == null)
+    final boolean mustUpdate = (_elevationDataLevelOfTessellatorMesh < _elevationDataLevel);
+  
+    if ((_tessellatorMesh == null) || mustUpdate)
+    {
+  
+      if (mustUpdate && _tessellatorMesh != null)
       {
-        // no elevation data provider, just create a simple mesh without elevation
-        _tessellatorMesh = tessellator.createTileMesh(rc.getPlanet(), layerTilesRenderParameters._tileMeshResolution, this, null, _verticalExaggeration, tilesRenderParameters._renderDebug, _tileTessellatorMeshData);
+        //ILogger::instance()->logInfo("Updating mesh due to new Elevation Data");
   
-        computeTileCorners(rc.getPlanet());
+        //Tessellator mesh is going to change, thus reference to _boundingVolume is sent to oblivion
+  
+        final Planet planet = rc.getPlanet();
+  
+        ((PlanetTileTessellator)tessellator).updateSurface(_tessellatorMesh, this, layerTilesRenderParameters._tileMeshResolution, planet, _elevationData, _verticalExaggeration, _tileTessellatorMeshData);
+  
+        computeTileCorners(planet);
+        prepareTestLODData(planet);
+  
+        _boundingVolume = null;
       }
       else
       {
-        Mesh tessellatorMesh = tessellator.createTileMesh(rc.getPlanet(), layerTilesRenderParameters._tileMeshResolution, this, _elevationData, _verticalExaggeration, tilesRenderParameters._renderDebug, _tileTessellatorMeshData);
   
-        MeshHolder meshHolder = (MeshHolder) _tessellatorMesh;
-        if (meshHolder == null)
+        if (elevationDataProvider == null)
         {
-          meshHolder = new MeshHolder(tessellatorMesh);
-          _tessellatorMesh = meshHolder;
+          // no elevation data provider, just create a simple mesh without elevation
+          _tessellatorMesh = tessellator.createTileMesh(rc.getPlanet(), layerTilesRenderParameters._tileMeshResolution, this, null, _verticalExaggeration, tilesRenderParameters._renderDebug, _tileTessellatorMeshData);
+  
+          computeTileCorners(rc.getPlanet());
         }
         else
         {
-          meshHolder.setMesh(tessellatorMesh);
+          Mesh tessellatorMesh = tessellator.createTileMesh(rc.getPlanet(), layerTilesRenderParameters._tileMeshResolution, this, _elevationData, _verticalExaggeration, tilesRenderParameters._renderDebug, _tileTessellatorMeshData);
+  
+          MeshHolder meshHolder = (MeshHolder) _tessellatorMesh;
+          if (meshHolder == null)
+          {
+            meshHolder = new MeshHolder(tessellatorMesh);
+            _tessellatorMesh = meshHolder;
+          }
+          else
+          {
+            meshHolder.setMesh(tessellatorMesh);
+          }
+  
+          computeTileCorners(rc.getPlanet());
         }
   
-        computeTileCorners(rc.getPlanet());
       }
+  
+      _elevationDataLevelOfTessellatorMesh = _elevationDataLevel;
   
       //Notifying when the tile is first created and every time the elevation data changes
       _planetRenderer.sectorElevationChanged(_elevationData);
@@ -240,7 +274,8 @@ public class Tile
     }
   
     _lastMeetsRenderCriteriaTimeInMS = nowInMS; //Storing time of result
-  
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning store camera-timestamp to avoid recalculation when the camera isn't moving
   
     if ((_northArcSegmentRatioSquared == 0) || (_southArcSegmentRatioSquared == 0) || (_eastArcSegmentRatioSquared == 0) || (_westArcSegmentRatioSquared == 0))
     {
@@ -398,7 +433,10 @@ public class Tile
 
   private int _elevationDataLevel;
   private ElevationData _elevationData;
-  private boolean _mustActualizeMeshDueToNewElevationData;
+//  bool                   _mustUpdateMeshDueToNewED;
+
+  private int _elevationDataLevelOfTessellatorMesh;
+
   private ElevationDataProvider _lastElevationDataProvider;
   private int _lastTileMeshResolutionX;
   private int _lastTileMeshResolutionY;
@@ -407,6 +445,7 @@ public class Tile
 
   private BoundingVolume getBoundingVolume(G3MRenderContext rc, ElevationDataProvider elevationDataProvider, TileTessellator tessellator, LayerTilesRenderParameters layerTilesRenderParameters, TilesRenderParameters tilesRenderParameters)
   {
+  
     if (_boundingVolume == null)
     {
       Mesh mesh = getTessellatorMesh(rc, elevationDataProvider, tessellator, layerTilesRenderParameters, tilesRenderParameters);
@@ -455,7 +494,7 @@ public class Tile
      _elevationDataLevel = -1;
      _elevationDataRequest = null;
      _verticalExaggeration = 0F;
-     _mustActualizeMeshDueToNewElevationData = false;
+     _elevationDataLevelOfTessellatorMesh = -1;
      _lastTileMeshResolutionX = -1;
      _lastTileMeshResolutionY = -1;
      _boundingVolume = null;
@@ -476,7 +515,7 @@ public class Tile
 
   public void dispose()
   {
-  //  prune(NULL, NULL);
+    //  prune(NULL, NULL);
   
     if (_debugMesh != null)
        _debugMesh.dispose();
@@ -499,8 +538,10 @@ public class Tile
     _texturizedMesh = null;
   
     if (_elevationData != null)
-       _elevationData.dispose();
-    _elevationData = null;
+    {
+      _elevationData._release();
+      _elevationData = null;
+    }
   
     if (_elevationDataRequest != null)
     {
@@ -569,7 +610,7 @@ public class Tile
     Mesh tessellatorMesh = getTessellatorMesh(rc, elevationDataProvider, tessellator, layerTilesRenderParameters, tilesRenderParameters);
     if (tessellatorMesh == null)
     {
-      return;
+      return; //Normally due to ElevationData not resolved
     }
   
     if (texturizer != null)
@@ -790,11 +831,11 @@ public class Tile
           texturizer.tileToBeDeleted(subtile, subtile._texturizedMesh);
         }
   
-  //      if (_rendered) {
-  //        if (tilesStoppedRendering != NULL) {
-  //          tilesStoppedRendering->push_back(subtile);
-  //        }
-  //      }
+        //      if (_rendered) {
+        //        if (tilesStoppedRendering != NULL) {
+        //          tilesStoppedRendering->push_back(subtile);
+        //        }
+        //      }
         if (subtile != null)
            subtile.dispose();
       }
@@ -913,13 +954,14 @@ public class Tile
   
       if (_elevationData != null)
       {
-        if (_elevationData != null)
-           _elevationData.dispose();
+        _elevationData._release();
+        _elevationData = null;
       }
   
       _elevationData = ed;
+      _elevationData._retain();
+  
       _elevationDataLevel = level;
-      _mustActualizeMeshDueToNewElevationData = true;
   
       //If the elevation belongs to tile's level, we notify the sub-tree
       if (isElevationDataSolved())
@@ -953,11 +995,26 @@ public class Tile
         ElevationData subView = createElevationDataSubviewFromAncestor(ancestor);
         setElevationData(subView, ancestor._level);
       }
+      else
+      {
+        if (getParent() != null)
+        {
+          ILogger.instance().logInfo("No ancestor has elevation data.");
+        }
+      }
     }
   }
 
   public final void initializeElevationData(ElevationDataProvider elevationDataProvider, TileTessellator tessellator, Vector2I tileMeshResolution, Planet planet, boolean renderDebug)
   {
+  
+    if (elevationDataProvider == null || !elevationDataProvider.containsSector(_sector))
+    {
+      //Marking data elevation as solved
+      _elevationDataLevel = _level;
+      return;
+    }
+  
     //Storing for subviewing
     _lastElevationDataProvider = elevationDataProvider;
     _lastTileMeshResolutionX = tileMeshResolution._x;
@@ -1019,7 +1076,10 @@ public class Tile
   
     if ((_lastElevationDataProvider != null) && (_lastTileMeshResolutionX > 0) && (_lastTileMeshResolutionY > 0))
     {
-      return new DecimatedSubviewElevationData(ed, _sector, new Vector2I(_lastTileMeshResolutionX, _lastTileMeshResolutionY));
+      return ed;
+      //    return new DecimatedSubviewElevationData(ed,
+      //                                             _sector,
+      //                                             Vector2I(_lastTileMeshResolutionX, _lastTileMeshResolutionY));
     }
   
     ILogger.instance().logError("Can't create subview of elevation data from ancestor");
@@ -1032,6 +1092,11 @@ public class Tile
     final IMathUtils math = IMathUtils.instance();
     final Vector2D uv = _sector.getUVCoordinates(position2D);
     return new Vector2I(math.toInt(tileDimension._x * uv._x), math.toInt(tileDimension._y * uv._y));
+  }
+
+  public final boolean canUseElevationDataProvider(ElevationDataProvider edp)
+  {
+    return (edp != null && edp.isEnabled() && edp.containsSector(_sector));
   }
 
 }

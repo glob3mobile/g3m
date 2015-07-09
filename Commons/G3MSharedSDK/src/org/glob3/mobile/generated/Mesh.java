@@ -63,4 +63,8 @@ public abstract class Mesh
 
   public abstract void showNormals(boolean v);
 
+  public abstract IFloatBuffer getVerticesFloatBuffer();
+
+  public abstract Vector3D getVerticesOffset();
+
 }

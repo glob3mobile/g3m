@@ -21,6 +21,7 @@ package org.glob3.mobile.generated;
 //class Sector;
 //class FloatBufferBuilderFromGeodetic;
 //class ShortBufferBuilder;
+//class IndexedMesh;
 
 
 public class PlanetTileTessellatorData

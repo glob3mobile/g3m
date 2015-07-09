@@ -683,7 +683,9 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
       return texturizerRenderState;
     }
   
-    if (_firstLevelTilesJustCreated)
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning CALLING THIS UNTIL TEXTURE AND ELEV.ARE SOLVED AS TEXTURE IS ASKED AFTER ED IS RESOLVED
+    if (!_allFirstLevelTilesAreTextureSolved)
     {
       _firstLevelTilesJustCreated = false;
   
@@ -713,7 +715,7 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
       for (int i = 0; i < firstLevelTilesCount; i++)
       {
         Tile tile = _firstLevelTiles.get(i);
-        if (!tile.isTextureSolved())
+        if (!tile.isTextureSolved() || !tile.isElevationDataSolved())
         {
           return RenderState.busy();
         }

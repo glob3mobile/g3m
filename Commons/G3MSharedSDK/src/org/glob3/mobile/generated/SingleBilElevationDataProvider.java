@@ -73,7 +73,9 @@ public class SingleBilElevationDataProvider extends ElevationDataProvider
   public void dispose()
   {
     if (_elevationData != null)
-       _elevationData.dispose();
+    {
+      _elevationData._release();
+    }
   
     if (_downloader != null && _requestToDownloaderID > -1)
     {
@@ -120,6 +122,7 @@ public class SingleBilElevationDataProvider extends ElevationDataProvider
       //int _DGD_working_on_terrain;
       ElevationData elevationData = new InterpolatedSubviewElevationData(_elevationData, sector, extent);
       listener.onData(sector, extent, elevationData);
+      elevationData._release();
     }
   
     if (autodeleteListener)

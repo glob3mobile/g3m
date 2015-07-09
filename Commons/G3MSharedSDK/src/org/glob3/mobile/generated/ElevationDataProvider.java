@@ -28,6 +28,21 @@ public abstract class ElevationDataProvider
 
   public abstract java.util.ArrayList<Sector> getSectors();
 
+  public final boolean containsSector(Sector sector)
+  {
+  
+    final java.util.ArrayList<Sector> ss = getSectors();
+    for (int i = 0; i < ss.size(); i++)
+    {
+      if (ss.get(i).touchesWith(sector))
+      {
+        return true;
+      }
+    }
+    return false;
+  
+  }
+
   public abstract Vector2I getMinResolution();
 
   public final void setChangedListener(ChangedListener changedListener)
