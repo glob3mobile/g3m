@@ -20,7 +20,6 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
   private Camera     _lastCamera;
 
   private java.util.ArrayList<Tile> _firstLevelTiles = new java.util.ArrayList<Tile>();
-  private boolean _firstLevelTilesJustCreated;
   private boolean _allFirstLevelTilesAreTextureSolved;
 
   private ITimer _lastSplitTimer; // timer to start every time a tile get splitted into subtiles
@@ -119,8 +118,6 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
     {
       context.getLogger().logWarning("%d tiles are many for the first level. We recommend a number of those less than 64. You can review some parameters (Render Sector and/or First Level) to reduce the number of tiles.", _firstLevelTiles.size());
     }
-  
-    _firstLevelTilesJustCreated = true;
   }
   private void createFirstLevelTiles(java.util.ArrayList<Tile> firstLevelTiles, Tile tile, int firstLevel)
   {
@@ -398,7 +395,6 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
      _layerSet = layerSet;
      _tilesRenderParameters = tilesRenderParameters;
      _showStatistics = showStatistics;
-     _firstLevelTilesJustCreated = false;
      _lastSplitTimer = null;
      _lastCamera = null;
      _firstRender = false;
@@ -674,11 +670,9 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
       return texturizerRenderState;
     }
   
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning CALLING THIS UNTIL TEXTURE AND ELEV.ARE SOLVED AS TEXTURE IS ASKED AFTER ED IS RESOLVED
+    //CALLING THIS UNTIL TEXTURE AND ELEV. ARE SOLVED AS TEXTURE IS REQUESTED AFTER ED IS RESOLVED
     if (!_allFirstLevelTilesAreTextureSolved)
     {
-      _firstLevelTilesJustCreated = false;
   
       final int firstLevelTilesCount = _firstLevelTiles.size();
   
