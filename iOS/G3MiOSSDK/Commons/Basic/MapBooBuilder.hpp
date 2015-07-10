@@ -517,6 +517,10 @@ public:
   void onPause(const G3MContext* context);
   
   void onDestroy(const G3MContext* context);
+  
+  void zRender(const G3MRenderContext* rc,
+               GLState* glState){}
+
 };
 
 
@@ -569,6 +573,9 @@ public:
               GLState* glState) {}
   void onResizeViewportEvent(const G3MEventContext* ec,
                              int width, int height) {}
+  void zRender(const G3MRenderContext* rc,
+               GLState* glState){}
+
 };
 
 class MapBooBuilder {

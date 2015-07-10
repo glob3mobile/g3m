@@ -9,6 +9,13 @@
 #include "CameraDoubleDragHandler.hpp"
 #include "GL.hpp"
 #include "TouchEvent.hpp"
+#include "G3MWidget.hpp"
+
+#include "FloatBufferBuilderFromCartesian3D.hpp"
+#include "MeshRenderer.hpp"
+#include "DirectMesh.hpp"
+
+#include "Vector2F.hpp"
 
 
 
@@ -19,7 +26,12 @@ bool CameraDoubleDragHandler::onTouchEvent(const G3MEventContext *eventContext,
   // only one finger needed
   if (touchEvent->getTouchCount()!=2) return false;
   
-  switch (touchEvent->getType()) {
+  TouchEventType type = touchEvent->getType();
+  
+  const Vector2F pixel0 = touchEvent->getTouch(0)->getPos();
+  const Vector2F pixel1 = touchEvent->getTouch(1)->getPos();
+
+  switch (type) {
     case Down:
       onDown(eventContext, *touchEvent, cameraContext);
       break;
@@ -46,19 +58,46 @@ void CameraDoubleDragHandler::onDown(const G3MEventContext *eventContext,
   camera->getViewPortInto(_cameraViewPort);
 
   // double dragging
+  G3MWidget* widget = eventContext->getWidget();
   const Vector2F pixel0 = touchEvent.getTouch(0)->getPos();
+  Vector3D touchedPosition0 = widget->getScenePositionForPixel((int)pixel0._x, (int)pixel0._y);
   const Vector2F pixel1 = touchEvent.getTouch(1)->getPos();
+  Vector3D touchedPosition1 = widget->getScenePositionForPixel((int)pixel1._x, (int)pixel1._y);
   
-  const Vector3D& initialRay0 = camera->pixel2Ray(pixel0);
-  const Vector3D& initialRay1 = camera->pixel2Ray(pixel1);
-  
-  if ( initialRay0.isNan() || initialRay1.isNan() ) return;
+/*
+  // draw scene points int render debug mode
+  if (_meshRenderer != NULL) {
+    FloatBufferBuilderFromCartesian3D* vertices = FloatBufferBuilderFromCartesian3D::builderWithoutCenter();
+    vertices->add(0.0f, 0.0f, 0.0f);
+    Mesh* mesh0 = new DirectMesh(GLPrimitive::points(),
+                                true,
+                                touchedPosition0,
+                                vertices->create(),
+                                1,
+                                80,
+                                Color::newFromRGBA(1, 0, 0, 1));
+    Mesh* mesh1 = new DirectMesh(GLPrimitive::points(),
+                                true,
+                                touchedPosition1,
+                                vertices->create(),
+                                1,
+                                80,
+                                Color::newFromRGBA(1, 0, 0, 1));
+    delete vertices;
+    _meshRenderer->addMesh(mesh0);
+    _meshRenderer->addMesh(mesh1);
+  }*/
+
+  //const Vector3D& initialRay0 = camera->pixel2Ray(pixel0);
+  //const Vector3D& initialRay1 = camera->pixel2Ray(pixel1);
+  //if ( initialRay0.isNan() || initialRay1.isNan() ) return;
   
   cameraContext->setCurrentGesture(DoubleDrag);
   eventContext->getPlanet()->beginDoubleDrag(camera->getCartesianPosition(),
                                              camera->getViewDirection(),
-                                             camera->pixel2Ray(pixel0),
-                                             camera->pixel2Ray(pixel1));
+                                             widget->getScenePositionForCentralPixel(),
+                                             touchedPosition0,
+                                             touchedPosition1);
 }
 
 
@@ -71,15 +110,24 @@ void CameraDoubleDragHandler::onMove(const G3MEventContext *eventContext,
   const Planet* planet = eventContext->getPlanet();
   const Vector2F pixel0 = touchEvent.getTouch(0)->getPos();
   const Vector2F pixel1 = touchEvent.getTouch(1)->getPos();
+  
+  /*
+  if (type == Move &&
+      (_camera0.pixel2PlanetPoint(pixel0).isNan() ||
+       _camera0.pixel2PlanetPoint(pixel1).isNan())){
+        //printf("FINGERS OUT OF INITIAL PLANET\n");
+        //FIXING THIS CASE
+        onUp(eventContext, *touchEvent, cameraContext);
+        type = Down;
+      }*/
+  
+
   const Vector3D& initialRay0 = Camera::pixel2Ray(_cameraPosition, pixel0,
                                                   _cameraViewPort, _cameraModelViewMatrix);
   const Vector3D& initialRay1 = Camera::pixel2Ray(_cameraPosition, pixel1,
                                                   _cameraViewPort, _cameraModelViewMatrix);
-  
-   if (initialRay0.isNan() || initialRay1.isNan() ) return;
-  
-  MutableMatrix44D matrix = planet->doubleDrag(initialRay0,
-                                               initialRay1);
+  if (initialRay0.isNan() || initialRay1.isNan() ) return;
+  MutableMatrix44D matrix = planet->doubleDrag(initialRay0, initialRay1);
   if (!matrix.isValid()) return;
 
   // apply transformation
@@ -94,6 +142,12 @@ void CameraDoubleDragHandler::onUp(const G3MEventContext *eventContext,
                                    CameraContext *cameraContext) 
 {
   cameraContext->setCurrentGesture(None);
+  
+  // remove scene points int render debug mode
+  if (_meshRenderer != NULL) {
+    _meshRenderer->clearMeshes();
+  }
+
 }
 
 

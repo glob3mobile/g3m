@@ -55,6 +55,12 @@ public class MutableVector2D
     return new MutableVector2D(java.lang.Double.NaN, java.lang.Double.NaN);
   }
 
+  public final void setNan()
+  {
+    _x = java.lang.Double.NaN;
+    _y = java.lang.Double.NaN;
+  }
+
   public final boolean isEquals(double x, double y)
   {
     return _x == x && _y == y;
@@ -142,4 +148,10 @@ public class MutableVector2D
     return description();
   }
 
+
+  public final void setValues (double x, double y)
+  {
+    _x = x;
+    _y = y;
+  }
 }

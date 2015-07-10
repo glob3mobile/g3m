@@ -25,7 +25,6 @@ package org.glob3.mobile.generated;
 //class ILogger;
 //class GL;
 //class EffectsScheduler;
-//class ITimer;
 //class IStringUtils;
 //class IThreadUtils;
 //class IMathUtils;
@@ -34,6 +33,7 @@ package org.glob3.mobile.generated;
 //class OrderedRenderable;
 //class GPUProgramManager;
 //class SurfaceElevationProvider;
+//class G3MWidget;
 
 
 public class G3MContext
@@ -49,9 +49,11 @@ public class G3MContext
   protected EffectsScheduler _effectsScheduler;
   protected IStorage _storage;
 
+  protected G3MWidget _widget;
+
   protected SurfaceElevationProvider _surfaceElevationProvider;
 
-  public G3MContext(IFactory factory, IStringUtils stringUtils, IThreadUtils threadUtils, ILogger logger, IMathUtils mathUtils, IJSONParser jsonParser, Planet planet, IDownloader downloader, EffectsScheduler effectsScheduler, IStorage storage, SurfaceElevationProvider surfaceElevationProvider)
+  public G3MContext(G3MWidget widget, IFactory factory, IStringUtils stringUtils, IThreadUtils threadUtils, ILogger logger, IMathUtils mathUtils, IJSONParser jsonParser, Planet planet, IDownloader downloader, EffectsScheduler effectsScheduler, IStorage storage, SurfaceElevationProvider surfaceElevationProvider)
   {
      _factory = factory;
      _stringUtils = stringUtils;
@@ -64,11 +66,17 @@ public class G3MContext
      _effectsScheduler = effectsScheduler;
      _storage = storage;
      _surfaceElevationProvider = surfaceElevationProvider;
+     _widget = widget;
   }
 
   public void dispose()
   {
 
+  }
+
+  public final G3MWidget getWidget()
+  {
+    return _widget;
   }
 
   public final IFactory getFactory()

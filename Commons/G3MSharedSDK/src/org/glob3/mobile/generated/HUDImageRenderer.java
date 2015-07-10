@@ -248,4 +248,8 @@ public class HUDImageRenderer extends DefaultRenderer
     return _imageFactory;
   }
 
+  public final void zRender(G3MRenderContext rc, GLState glState)
+  {
+  }
+
 }

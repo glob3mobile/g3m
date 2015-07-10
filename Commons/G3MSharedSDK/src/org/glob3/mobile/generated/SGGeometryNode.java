@@ -90,7 +90,7 @@ public class SGGeometryNode extends SGNode
   public final void rawRender(G3MRenderContext rc, GLState glState)
   {
     GL gl = rc.getGL();
-    gl.drawElements(_primitive, _indices, glState, rc.getGPUProgramManager());
+    gl.drawElements(_primitive, _indices, glState, rc.getGPUProgramManager(), RenderType.REGULAR_RENDER);
   }
 
   public final GLState createState(G3MRenderContext rc, GLState parentState)
@@ -102,6 +102,33 @@ public class SGGeometryNode extends SGNode
   public final String description()
   {
     return "SGGeometryNode";
+  }
+
+  public void zRawRender(G3MRenderContext rc, GLState parentState)
+  {
+    GL gl = rc.getGL();
+    gl.drawElements(_primitive, _indices, parentState, rc.getGPUProgramManager(), RenderType.Z_BUFFER_RENDER);
+  }
+
+  public GLState createZRenderState(G3MRenderContext rc, GLState parentState)
+  {
+    GLState state = new GLState();
+    state.setParent(parentState);
+  
+    state.addGLFeature(new GeometryGLFeature(_vertices, 3, 0, false, 0, true, false, 0, false, (float)0.0, (float)0.0, (float)1.0, true, (float)1.0), false); //Depth test - Stride 0 - Not normalized - Index 0 - Our buffer contains elements of 3 - The attribute is a float vector of 4 elements
+  
+    //TODO: TEXTURES
+  //  if (_uv != NULL) {
+  //    _glState->addGLFeature(new TextureCoordsGLFeature(_uv,
+  //                                                      2,
+  //                                                      0,
+  //                                                      false,
+  //                                                      0,
+  //                                                      false, Vector2D::zero(), Vector2D::zero()) ,
+  //                           false);
+  //  }
+  
+    return state;
   }
 
 }

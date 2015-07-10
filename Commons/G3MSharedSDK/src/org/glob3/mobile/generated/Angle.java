@@ -224,6 +224,14 @@ public class Angle
     return Angle.fromDegrees(dif);
   }
 
+  public static double distanceBetweenAnglesInRadians(double r1, double r2)
+  {
+    double dif1 = IMathUtils.instance().abs(r1-r2);
+    if (dif1 > DefineConstants.PI)
+       dif1 = 2 *DefineConstants.PI - dif1;
+    return dif1;
+  }
+
   public final Angle normalized()
   {
     double degrees = _degrees;

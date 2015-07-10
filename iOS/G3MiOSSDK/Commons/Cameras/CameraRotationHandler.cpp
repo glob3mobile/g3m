@@ -10,6 +10,8 @@
 #include "CameraRotationHandler.hpp"
 #include "GL.hpp"
 #include "TouchEvent.hpp"
+#include "G3MWidget.hpp"
+
 
 
 
@@ -61,12 +63,24 @@ void CameraRotationHandler::onDown(const G3MEventContext *eventContext,
   Vector2F pixel1 = touchEvent.getTouch(1)->getPos();
   Vector2F pixel2 = touchEvent.getTouch(2)->getPos();
   Vector2F averagePixel = pixel0.add(pixel1).add(pixel2).div(3);
+
   _pivotPixel = MutableVector2F(averagePixel._x, averagePixel._y);
   //_lastYValid = _initialPixel.y();
   
   // compute center of view
+  //_pivotPoint = camera->getXYZCenterOfView().asMutableVector3D();
+  _pivotPoint = eventContext->getWidget()->getFirstValidScenePositionForCentralColumn().asMutableVector3D();
+
+  //const int centralPixelColumn = camera->getWidth() / 2;
+  //_pivotPoint = eventContext->getWidget()->getFirstValidScenePositionForFrameBufferColumn(centralPixelColumn).asMutableVector3D();
+
+/*
+ =======
 //  _pivotPoint = camera->getXYZCenterOfView().asMutableVector3D();
   _pivotPoint.copyFrom(camera->getXYZCenterOfView());
+>>>>>>> origin/purgatory
+ */
+  
   if (_pivotPoint.isNan()) {
     ILogger::instance()->logError("CAMERA ERROR: center point does not intersect globe!!\n");
     cameraContext->setCurrentGesture(None);

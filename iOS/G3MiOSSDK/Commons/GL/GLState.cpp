@@ -9,6 +9,7 @@
 #include "GLState.hpp"
 #include "GLFeature.hpp"
 
+#include "G3MWidget.hpp"
 #include <vector>
 
 GLState::~GLState() {
@@ -99,8 +100,7 @@ void GLState::setParent(const GLState* parent) const {
   }
 }
 
-void GLState::applyOnGPU(GL* gl, GPUProgramManager& progManager) const {
-
+void GLState::applyOnGPU(GL* gl, GPUProgramManager& progManager, RenderType renderType) const{
 
   if (_valuesSet == NULL && _globalState == NULL) {
 
@@ -114,8 +114,11 @@ void GLState::applyOnGPU(GL* gl, GPUProgramManager& progManager) const {
     const int uniformsCode   = _valuesSet->getUniformsCode();
     const int attributesCode = _valuesSet->getAttributesCode();
 
-    _linkedProgram = progManager.getProgram(gl, uniformsCode, attributesCode); //GET RETAINED REFERENCE
+    _linkedProgram = progManager.getProgram(gl, uniformsCode, attributesCode, renderType);
+
   }
+
+
 
   if (_valuesSet == NULL || _globalState == NULL) {
     ILogger::instance()->logError("GLState logic error.");

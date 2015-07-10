@@ -175,6 +175,8 @@ public:
   Angle nearestAngleInInterval(const Angle& min, const Angle& max) const;
 
   Angle distanceTo(const Angle& other) const;
+  
+  static double distanceBetweenAnglesInRadians(double r1, double r2);
 
   Angle normalized() const {
     double degrees = _degrees;

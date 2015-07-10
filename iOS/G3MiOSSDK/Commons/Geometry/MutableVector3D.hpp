@@ -169,6 +169,14 @@ public:
                            _z * other._x - _x * other._z,
                            _x * other._y - _y * other._x);
   }
+  
+  void copyValueOfCross(const MutableVector3D& u,
+                        const MutableVector3D& v) {
+    double result_x = u._y * v._z - u._z * v._y;
+    double result_y = u._z * v._x - u._x * v._z;
+    double result_z = u._x * v._y - u._y * v._x;
+    _x=result_x; _y=result_y; _z=result_z;
+  }
 
   Angle angleBetween(const MutableVector3D& other) const;
 
@@ -193,6 +201,22 @@ public:
                            _x * m.get1() + _y * m.get5() + _z * m.get9() + homogeneus * m.get13(),
                            _x * m.get2() + _y * m.get6() + _z * m.get10() + homogeneus * m.get14());
   }
+  
+  void transformPointByMatrix(const MutableVector3D& p,
+                              const MutableMatrix44D& m,
+                              const double homogeneus) {
+    _x = p._x * m.get0() + p._y * m.get4() + p._z * m.get8() + homogeneus * m.get12();
+    _y = p._x * m.get1() + p._y * m.get5() + p._z * m.get9() + homogeneus * m.get13();
+    _z = p._x * m.get2() + p._y * m.get6() + p._z * m.get10() + homogeneus * m.get14();
+  }
+  
+  void transformPointByMatrix(const Vector3D& p,
+                              const MutableMatrix44D& m,
+                              const double homogeneus) {
+    _x = p._x * m.get0() + p._y * m.get4() + p._z * m.get8() + homogeneus * m.get12();
+    _y = p._x * m.get1() + p._y * m.get5() + p._z * m.get9() + homogeneus * m.get13();
+    _z = p._x * m.get2() + p._y * m.get6() + p._z * m.get10() + homogeneus * m.get14();
+  }
 
   Vector3D asVector3D() const {
     return Vector3D(_x, _y, _z);
@@ -213,6 +237,14 @@ public:
 
   MutableVector3D rotateAroundAxis(const MutableVector3D& axis,
                                    const Angle& theta) const;
+  
+  inline static double distanceBetween(const MutableVector3D& a,
+                                       const MutableVector3D& b) {
+    double squaredDistance = (a._x - b._x) * (a._x - b._x) +
+    (a._y - b._y) * (a._y - b._y) +
+    (a._z - b._z) * (a._z - b._z);
+    return IMathUtils::instance()->sqrt(squaredDistance);
+  }
 
 };
 

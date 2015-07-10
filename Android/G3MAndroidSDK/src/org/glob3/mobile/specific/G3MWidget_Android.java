@@ -60,6 +60,7 @@ OnGestureListener {
    private final MotionEventProcessor _motionEventProcessor = new MotionEventProcessor();
    private final OnDoubleTapListener  _doubleTapListener;
    private final GestureDetector      _gestureDetector;
+   private boolean _processingDoubleTap = false;
    private Thread                     _openGLThread         = null;
 
 
@@ -136,6 +137,8 @@ OnGestureListener {
             public boolean onDoubleTap(final MotionEvent event) {
 
                final TouchEvent te = _motionEventProcessor.processDoubleTapEvent(event);
+               
+               _processingDoubleTap = true;
 
                queueEvent(new Runnable() {
                   @Override
@@ -193,7 +196,12 @@ OnGestureListener {
       if (te == null) {
          return false;
       }
-
+      
+      if (_processingDoubleTap){
+    	  _processingDoubleTap = false; //Dismissing next event after double tap
+    	  return false;
+      }
+      
       queueEvent(new Runnable() {
          @Override
          public void run() {

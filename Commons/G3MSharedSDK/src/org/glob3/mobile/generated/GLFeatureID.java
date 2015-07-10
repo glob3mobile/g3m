@@ -36,7 +36,8 @@ public enum GLFeatureID
   GLF_DIRECTION_LIGTH,
   GLF_VERTEX_NORMAL,
   GLF_MODEL_VIEW,
-  GLF_BLENDING_MODE;
+  GLF_BLENDING_MODE,
+  GLF_DEPTH_RANGE;
 
    public int getValue()
    {

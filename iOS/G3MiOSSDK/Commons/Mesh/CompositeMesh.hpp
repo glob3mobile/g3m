@@ -37,6 +37,8 @@ public:
   void rawRender(const G3MRenderContext* rc,
                  const GLState* parentGLState) const;
 
+  void zRawRender(const G3MRenderContext* rc, const GLState* parentGLState) const;
+
   void showNormals(bool v) const;
   
   IFloatBuffer* getVerticesFloatBuffer() const{

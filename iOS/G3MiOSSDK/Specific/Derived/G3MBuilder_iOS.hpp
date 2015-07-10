@@ -21,6 +21,7 @@ protected:
   IThreadUtils* createDefaultThreadUtils();
   IStorage*     createDefaultStorage();
   IDownloader*  createDefaultDownloader();
+  CameraRenderer* createDefaultCameraRenderer();
 
   GPUProgramSources loadGPUProgramSources(const std::string& name);
 

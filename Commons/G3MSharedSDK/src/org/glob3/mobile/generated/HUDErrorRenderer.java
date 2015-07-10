@@ -71,4 +71,8 @@ public class HUDErrorRenderer implements ErrorRenderer
     _hudImageRenderer.onDestroy(context);
   }
 
+  public final void zRender(G3MRenderContext rc, GLState glState)
+  {
+  }
+
 }

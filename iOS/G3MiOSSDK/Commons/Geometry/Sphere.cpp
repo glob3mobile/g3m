@@ -202,3 +202,93 @@ bool Sphere::fullContainedInSphere(const Sphere* that) const {
 Sphere* Sphere::createSphere() const {
   return new Sphere(*this);
 }
+
+
+std::vector<double> Sphere::intersectionCenteredSphereWithRay(double origin_x,
+                                                              double origin_y,
+                                                              double origin_z,
+                                                              double direction_x,
+                                                              double direction_y,
+                                                              double direction_z,
+                                                              double radius)
+{
+  std::vector<double> intersections;
+  
+  // By laborious algebraic manipulation....
+  const double a = direction_x * direction_x  + direction_y * direction_y + direction_z * direction_z;
+  
+  const double b = 2.0 * (origin_x * direction_x + origin_y * direction_y + origin_z * direction_z);
+  
+  const double c = origin_x * origin_x + origin_y * origin_y + origin_z * origin_z - radius * radius;
+  
+  // Solve the quadratic equation: ax^2 + bx + c = 0.
+  // Algorithm is from Wikipedia's "Quadratic equation" topic, and Wikipedia credits
+  // Numerical Recipes in C, section 5.6: "Quadratic and Cubic Equations"
+  const double discriminant = b * b - 4 * a * c;
+  if (discriminant < 0.0) {
+    // no intersections
+    return intersections;
+  }
+  else if (discriminant == 0.0) {
+    // one intersection at a tangent point
+    //return new double[1] { -0.5 * b / a };
+    intersections.push_back(-0.5 * b / a);
+    return intersections;
+  }
+  
+  const double rootDiscriminant = IMathUtils::instance()->sqrt(discriminant);
+  const double root1 = (-b + rootDiscriminant) / (2*a);
+  const double root2 = (-b - rootDiscriminant) / (2*a);
+  
+  // Two intersections - return the smallest first.
+  if (root1 < root2) {
+    intersections.push_back(root1);
+    intersections.push_back(root2);
+  }
+  else {
+    intersections.push_back(root2);
+    intersections.push_back(root1);
+  }
+  return intersections;
+}
+
+
+Vector3D Sphere::closestIntersectionCenteredSphereWithRay(const Vector3D& origin,
+                                                          const Vector3D& direction,
+                                                          double radius)
+{
+  std::vector<double> distances = Sphere::intersectionCenteredSphereWithRay(origin,
+                                                                            direction,
+                                                                            radius);
+  if (distances.empty()) {
+    return Vector3D::nan();
+  }
+  return origin.add(direction.times(distances[0]));
+}
+
+void Sphere::setClosestIntersectionCenteredSphereWithRay(double origin_x,
+                                                         double origin_y,
+                                                         double origin_z,
+                                                         double direction_x,
+                                                         double direction_y,
+                                                         double direction_z,
+                                                         double radius,
+                                                         MutableVector3D& result)
+{
+  std::vector<double> distances = Sphere::intersectionCenteredSphereWithRay(origin_x,
+                                                                            origin_y,
+                                                                            origin_z,
+                                                                            direction_x,
+                                                                            direction_y,
+                                                                            direction_z,
+                                                                            radius);
+  if (distances.empty())
+    //result = MutableVector3D::nan();
+    result.set(NAND, NAND, NAND);
+  else
+    result.set(origin_x + direction_x * distances[0],
+               origin_y + direction_y * distances[0],
+               origin_z + direction_z * distances[0]);
+}
+
+

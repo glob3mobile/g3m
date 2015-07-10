@@ -217,6 +217,15 @@ public:
   static MutableMatrix44D invalid() {
     return MutableMatrix44D(false);
   }
+  
+  inline void setInvalid() {
+    _isValid = false;
+    _matrix44D = NULL;
+  }
+  
+  inline void setValid() {
+    _isValid = true;
+  }
 
   bool isValid() const {
     return _isValid;
@@ -249,6 +258,8 @@ public:
   MutableMatrix44D multiply(const MutableMatrix44D& that) const;
 
   MutableMatrix44D inversed() const;
+  
+  void setInverse();
 
   MutableMatrix44D transposed() const;
 
@@ -338,17 +349,34 @@ public:
   static MutableMatrix44D createTranslationMatrix(double x,
                                                   double y,
                                                   double z);
+  
+  void setTranslationMatrix(double x, double y, double z);
 
   static MutableMatrix44D createRotationMatrix(const Angle& angle,
                                                const Vector3D& axis);
+  
+  void setRotationMatrix(double radians,
+                         const MutableVector3D& axis);
+
 
   static MutableMatrix44D createGeneralRotationMatrix(const Angle& angle,
                                                       const Vector3D& axis,
                                                       const Vector3D& point);
+  
+  void setGeneralRotationMatrix(double angleInRadians,
+                                const MutableVector3D& axis,
+                                const MutableVector3D& point);
+
 
   static MutableMatrix44D createModelMatrix(const MutableVector3D& pos,
                                             const MutableVector3D& center,
                                             const MutableVector3D& up);
+  
+  static MutableMatrix44D createModelMatrix(const MutableVector3D& u,
+                                            const MutableVector3D& v,
+                                            const MutableVector3D& w,
+                                            const MutableVector3D& pos);
+
 
   static MutableMatrix44D createProjectionMatrix(double left, double right,
                                                  double bottom, double top,
@@ -382,6 +410,14 @@ public:
 
   static MutableMatrix44D createGeodeticRotationMatrix(const Angle& latitude,
                                                        const Angle& longitude);
+  
+  void setGeodeticRotationMatrix(double latitudeInRadians,
+                                 double longitudInRadians);
+  
+  void copyValues(double m00, double m10, double m20, double m30,
+                  double m01, double m11, double m21, double m31,
+                  double m02, double m12, double m22, double m32,
+                  double m03, double m13, double m23, double m33);
   
 };
 

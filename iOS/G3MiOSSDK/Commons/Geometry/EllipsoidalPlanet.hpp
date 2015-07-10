@@ -20,6 +20,8 @@
 #include "Ellipsoid.hpp"
 #include "Sector.hpp"
 
+#include "SphericalPlanet.hpp"
+
 class EllipsoidalPlanet: public Planet {
 private:
 
@@ -32,6 +34,7 @@ private:
 
   mutable MutableVector3D _origin;
   mutable MutableVector3D _initialPoint;
+  mutable MutableVector3D _oneOverDragRadiiSquared;
   mutable MutableVector3D _centerPoint;
   mutable MutableVector3D _centerRay;
   mutable MutableVector3D _initialPoint0;
@@ -42,7 +45,8 @@ private:
   mutable double          _angleBetweenInitialRays;
   mutable double          _angleBetweenInitialPoints;
   mutable bool            _validSingleDrag;
-
+  
+  mutable SphericalPlanet* _sphericalPlanetDoubleDragDelegate; //Same math applied for Double Drag
 
 public:
 
@@ -52,6 +56,7 @@ public:
 #ifdef JAVA_CODE
     super.dispose();
 #endif
+    delete _sphericalPlanetDoubleDragDelegate;
   }
 
   Vector3D getRadii() const {
@@ -174,11 +179,17 @@ public:
 
   Vector3D closestPointToSphere(const Vector3D& pos, const Vector3D& ray) const;
 
+  Vector3D closestIntersection(const Vector3D& pos, const Vector3D& ray) const {
+    return Ellipsoid::closestIntersectionCenteredEllipsoidWithRay(pos,
+                                                                  ray,
+                                                                  _ellipsoid.getOneOverRadiiSquared());
+  }
+  
   MutableMatrix44D createGeodeticTransformMatrix(const Geodetic3D& position) const;
 
   bool isFlat() const { return false; }
 
-  void beginSingleDrag(const Vector3D& origin, const Vector3D& initialRay) const;
+  void beginSingleDrag(const Vector3D& origin, const Vector3D& touchedPosition) const;
 
   MutableMatrix44D singleDrag(const Vector3D& finalRay) const;
 
@@ -186,15 +197,17 @@ public:
 
   void beginDoubleDrag(const Vector3D& origin,
                        const Vector3D& centerRay,
-                       const Vector3D& initialRay0,
-                       const Vector3D& initialRay1) const;
+                       const Vector3D& centerPosition,
+                       const Vector3D& touchedPosition0,
+                       const Vector3D& touchedPosition1) const;
 
+  
   MutableMatrix44D doubleDrag(const Vector3D& finalRay0,
                               const Vector3D& finalRay1) const;
-
+  
   Effect* createDoubleTapEffect(const Vector3D& origin,
-                                const Vector3D& centerRay,
-                                const Vector3D& tapRay) const;
+                                        const Vector3D& centerRay,
+                                        const Vector3D& touchedPosition) const;
 
   double distanceToHorizon(const Vector3D& position) const;
 
@@ -215,6 +228,9 @@ public:
     return Geodetic3D(rendereSector._center,
                       height);
   }
+  
+  
+  void correctPitchAfterDoubleDrag(Camera* camera, const Vector2F& finalPixel0, const Vector2F& finalPixel1) const;
 
   const std::string getType() const {
     return "Ellipsoidal";

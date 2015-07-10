@@ -35,6 +35,13 @@ Angle Angle::distanceTo(const Angle& other) const {
   return Angle::fromDegrees(dif);
 }
 
+double Angle::distanceBetweenAnglesInRadians(double r1, double r2){
+  double dif1 = IMathUtils::instance()->abs(r1-r2);
+  if (dif1 > PI) dif1 = 2*PI - dif1;
+  return dif1;
+}
+
+
 
 Angle Angle::nearestAngleInInterval(const Angle& min,
                                     const Angle& max) const {

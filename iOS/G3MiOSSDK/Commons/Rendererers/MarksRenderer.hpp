@@ -93,6 +93,8 @@ public:
     return true;
   }
 
+  void zRender(const G3MRenderContext* rc, GLState* glState){}
+
   void modifiyGLState(GLState* state) {
     
   }

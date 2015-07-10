@@ -183,10 +183,12 @@ public class G3MWidget implements ChangedRendererInfoListener
   
     _currentCamera.copyFrom(_nextCamera);
   
+  
+  
     _rendererState = calculateRendererState();
     final RenderState_Type renderStateType = _rendererState._type;
   
-    _renderContext.clear();
+    _renderContext.clearForNewFrame();
   
     _effectsScheduler.doOneCyle(_renderContext);
   
@@ -257,10 +259,16 @@ public class G3MWidget implements ChangedRendererInfoListener
       _gpuProgramManager.removeUnused();
     }
   
+    _zRenderCounter = -1; //Frame buffer does not contain Z anymore
+  
     final long elapsedTimeMS = _timer.elapsedTimeInMilliseconds();
     //  if (elapsedTimeMS > 100) {
     //    ILogger::instance()->logWarning("Frame took too much time: %dms", elapsedTimeMS);
     //  }
+  ///#warning REMOVE
+  //  if (RENDER_READY == renderStateType){
+  //    zRender();
+  //  }
   
     if (_logFPS)
     {
@@ -303,10 +311,33 @@ public class G3MWidget implements ChangedRendererInfoListener
     }
   }
 
+  public final void zRender()
+  {
+  
+    if (_zRenderCounter == -1 || _zRenderCounter != _renderCounter)
+    {
+      _zRenderCounter = _renderCounter;
+    }
+    else
+    {
+      //ILogger::instance()->logInfo("Recycling Z Render");
+      return; //NO NEED OF RENDERING AGAIN
+    }
+  
+    if (_mainRenderer.isEnable())
+    {
+      GLState zRenderGLState = new GLState();
+      _gl.clearScreen(Color.black());
+      _mainRenderer.zRender(_renderContext, zRenderGLState);
+      zRenderGLState._release();
+    }
+  
+  }
+
   public final void onTouchEvent(TouchEvent touchEvent)
   {
   
-    G3MEventContext ec = new G3MEventContext(IFactory.instance(), IStringUtils.instance(), _threadUtils, ILogger.instance(), IMathUtils.instance(), IJSONParser.instance(), _planet, _downloader, _effectsScheduler, _storage, _surfaceElevationProvider);
+    G3MEventContext ec = new G3MEventContext(this, IFactory.instance(), IStringUtils.instance(), _threadUtils, ILogger.instance(), IMathUtils.instance(), IJSONParser.instance(), _planet, _downloader, _effectsScheduler, _storage, _surfaceElevationProvider);
   
       // notify the original event
       notifyTouchEvent(ec, touchEvent);
@@ -347,7 +378,7 @@ public class G3MWidget implements ChangedRendererInfoListener
 
   public final void onResizeViewportEvent(int width, int height)
   {
-    G3MEventContext ec = new G3MEventContext(IFactory.instance(), IStringUtils.instance(), _threadUtils, ILogger.instance(), IMathUtils.instance(), IJSONParser.instance(), _planet, _downloader, _effectsScheduler, _storage, _surfaceElevationProvider);
+    G3MEventContext ec = new G3MEventContext(this, IFactory.instance(), IStringUtils.instance(), _threadUtils, ILogger.instance(), IMathUtils.instance(), IJSONParser.instance(), _planet, _downloader, _effectsScheduler, _storage, _surfaceElevationProvider);
   
     _nextCamera.resizeViewport(width, height);
     _currentCamera.resizeViewport(width, height);
@@ -645,6 +676,76 @@ public class G3MWidget implements ChangedRendererInfoListener
     _forceBusyRenderer = forceBusyRenderer;
   }
 
+  public final Vector3D getScenePositionForPixel(int x, int y)
+  {
+    zRender();
+  
+    final double z = _gl.readPixelAsDouble(x, y, _width, _height);
+  
+    if (!(z != z))
+    {
+      Vector3D pixel3D = new Vector3D(x,_height - y,z);
+      MutableMatrix44D mmv = new MutableMatrix44D(_currentCamera.getModelViewMatrix44D());
+      Vector3D pos = mmv.unproject(pixel3D, 0, 0, _width, _height);
+      //ILogger::instance()->logInfo("PIXEL 3D: %s -> %s\n", pixel3D.description().c_str(), pos.description().c_str() );
+      //ILogger::instance()->logInfo("Z = %f - DIST CAM: %f\n", z, _currentCamera->getCartesianPosition().sub(pos).length());
+      //ILogger::instance()->logInfo("GEO: %s\n", _planet->toGeodetic2D(pos).description().c_str());
+  
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning ASK AGUSTIN
+      // update ground height in camera class
+  //    _nextCamera->setGroundHeightFromCartesianPoint(pos);
+  //    _currentCamera->setGroundHeightFromCartesianPoint(pos);
+      return pos;
+    }
+    else
+    {
+      //ILogger::instance()->logInfo("NO Z");
+      return Vector3D.nan();
+    }
+  }
+
+  public final Vector3D getScenePositionForCentralPixel()
+  {
+    return getScenePositionForPixel(_width/2, _height/2);
+  }
+
+  public final Vector3D getFirstValidScenePositionForCentralColumn()
+  {
+    int row = _height / 2;
+    MutableVector3D position = MutableVector3D.nan();
+    while (position.isNan() && row<_height-1)
+    {
+      row++;
+      position = getScenePositionForPixel(_width/2, row).asMutableVector3D();
+    }
+    return position.asVector3D();
+  }
+
+  public final Vector3D getFirstValidScenePositionForFrameBufferColumn(int column)
+  {
+    zRender();
+  
+    int row = _height / 2;
+    while (row<_height-1)
+    {
+  
+      final double z = _gl.readPixelAsDouble(column, row, _width, _height);
+  
+      if (!(z != z))
+      {
+        Vector3D pixel3D = new Vector3D(column, _height - row,z);
+        MutableMatrix44D mmv = new MutableMatrix44D(_currentCamera.getModelViewMatrix44D());
+        Vector3D pos = mmv.unproject(pixel3D, 0, 0, _width, _height);
+        _nextCamera.setGroundHeightFromCartesianPoint(pos);
+        return pos;
+      }
+      row++;
+    }
+    return Vector3D.nan();
+  }
+
+
   //void notifyChangedInfo() const;
 
   public final void setInfoDisplay(InfoDisplay infoDisplay)
@@ -771,6 +872,8 @@ public class G3MWidget implements ChangedRendererInfoListener
 
   private InfoDisplay _infoDisplay;
 
+  private int _zRenderCounter; //-1 means Frame Buffer does not contain Z; Z of referenced frame otherwise
+
   private G3MWidget(GL gl, IStorage storage, IDownloader downloader, IThreadUtils threadUtils, ICameraActivityListener cameraActivityListener, Planet planet, java.util.ArrayList<ICameraConstrainer> cameraConstrainers, CameraRenderer cameraRenderer, Renderer mainRenderer, ProtoRenderer busyRenderer, ErrorRenderer errorRenderer, Renderer hudRenderer, Color backgroundColor, boolean logFPS, boolean logDownloaderStatistics, GInitializationTask initializationTask, boolean autoDeleteInitializationTask, java.util.ArrayList<PeriodicalTask> periodicalTasks, GPUProgramManager gpuProgramManager, SceneLighting sceneLighting, InitialCameraPositionProvider initialCameraPositionProvider, InfoDisplay infoDisplay)
   {
      _frameTasksExecutor = new FrameTasksExecutor();
@@ -805,7 +908,7 @@ public class G3MWidget implements ChangedRendererInfoListener
      _initializationTask = initializationTask;
      _autoDeleteInitializationTask = autoDeleteInitializationTask;
      _surfaceElevationProvider = mainRenderer.getSurfaceElevationProvider();
-     _context = new G3MContext(IFactory.instance(), IStringUtils.instance(), threadUtils, ILogger.instance(), IMathUtils.instance(), IJSONParser.instance(), _planet, downloader, _effectsScheduler, storage, mainRenderer.getSurfaceElevationProvider());
+     _context = new G3MContext(this, IFactory.instance(), IStringUtils.instance(), threadUtils, ILogger.instance(), IMathUtils.instance(), IJSONParser.instance(), _planet, downloader, _effectsScheduler, storage, mainRenderer.getSurfaceElevationProvider());
      _paused = false;
      _initializationTaskWasRun = false;
      _initializationTaskReady = true;
@@ -817,6 +920,7 @@ public class G3MWidget implements ChangedRendererInfoListener
      _initialCameraPositionHasBeenSet = false;
      _forceBusyRenderer = false;
      _nFramesBeetweenProgramsCleanUp = 500;
+     _zRenderCounter = -1;
      _infoDisplay = infoDisplay;
     _effectsScheduler.initialize(_context);
     _cameraRenderer.initialize(_context);
@@ -853,7 +957,7 @@ public class G3MWidget implements ChangedRendererInfoListener
     _mainRenderer.setChangedRendererInfoListener((ChangedRendererInfoListener)this, -1);
   
   
-    _renderContext = new G3MRenderContext(_frameTasksExecutor, IFactory.instance(), IStringUtils.instance(), _threadUtils, ILogger.instance(), IMathUtils.instance(), IJSONParser.instance(), _planet, _gl, _currentCamera, _nextCamera, _texturesHandler, _downloader, _effectsScheduler, IFactory.instance().createTimer(), _storage, _gpuProgramManager, _surfaceElevationProvider);
+    _renderContext = new G3MRenderContext(this, _frameTasksExecutor, IFactory.instance(), IStringUtils.instance(), _threadUtils, ILogger.instance(), IMathUtils.instance(), IJSONParser.instance(), _planet, _gl, _currentCamera, _nextCamera, _texturesHandler, _downloader, _effectsScheduler, IFactory.instance().createTimer(), _storage, _gpuProgramManager, _surfaceElevationProvider);
   
   
   ///#ifdef C_CODE

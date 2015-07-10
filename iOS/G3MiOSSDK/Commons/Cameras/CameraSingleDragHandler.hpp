@@ -11,9 +11,9 @@
 
 
 #include "CameraEventHandler.hpp"
-#include "Camera.hpp"
 #include "Effects.hpp"
 #include "MutableVector2I.hpp"
+#include "MutableVector3D.hpp"
 
 
 

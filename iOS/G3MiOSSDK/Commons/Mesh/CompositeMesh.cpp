@@ -101,7 +101,15 @@ void CompositeMesh::rawRender(const G3MRenderContext* rc,
   }
 }
 
-void CompositeMesh::showNormals(bool v) const {
+void CompositeMesh::zRawRender(const G3MRenderContext* rc, const GLState* parentGLState) const{
+  const int childrenCount = _children.size();
+  for (int i = 0; i < childrenCount; i++) {
+    Mesh* child = _children[i];
+    child->zRender(rc, parentGLState);
+  }
+}
+
+void CompositeMesh::showNormals(bool v) const{
   const int childrenCount = _children.size();
   for (int i = 0; i < childrenCount; i++) {
     Mesh* child = _children[i];

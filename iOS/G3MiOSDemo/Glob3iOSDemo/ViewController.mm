@@ -340,10 +340,12 @@ Mesh* createSectorMesh(const Planet* planet,
     builder.getPlanetRendererBuilder()->setLayerSet(layerSet);
  
   
-  WMSBilElevationDataProvider* edp = new WMSBilElevationDataProvider(URL("http://data.worldwind.arc.nasa.gov/elev"),
-                                                                     "srtm30",
-                                                                     Sector::FULL_SPHERE,
-                                                                     0);
+//  WMSBilElevationDataProvider* edp = new WMSBilElevationDataProvider(URL("http://data.worldwind.arc.nasa.gov/elev"),
+//                                                                     "srtm30",
+//                                                                     Sector::FULL_SPHERE,
+//                                                                     0);
+  
+  NASAElevationDataProvider* edp = new NASAElevationDataProvider();
   
 
   layerSet->addLayer(new BingMapsLayer(BingMapType::AerialWithLabels(),
@@ -1416,7 +1418,6 @@ public:
     animMark2->setMarkAnchor(0.5, 1.0);
     marksRenderer->addMark(animMark2);
     builder.addPeriodicalTask(new TextureAtlasMarkAnimationTask(animMark2, 4, 2, 7, TimeInterval::fromMilliseconds(100)));
-
     
     marksRenderer->addMark(animMark);
     
@@ -1426,7 +1427,7 @@ public:
     marksRenderer->addMark(regMark);
     
   }
-
+  
   GEORenderer* geoRenderer = [self createGEORendererMeshRenderer: meshRenderer
                                                   shapesRenderer: shapesRenderer
                                                    marksRenderer: marksRenderer

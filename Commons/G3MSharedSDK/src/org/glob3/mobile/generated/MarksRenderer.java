@@ -326,6 +326,10 @@ public class MarksRenderer extends DefaultRenderer
     return true;
   }
 
+  public final void zRender(G3MRenderContext rc, GLState glState)
+  {
+  }
+
   public final void modifiyGLState(GLState state)
   {
 

@@ -72,10 +72,16 @@ public class MeshHolder extends Mesh
     _mesh.render(rc, parentGLState);
   }
 
+  public final void zRawRender(G3MRenderContext rc, GLState parentGLState)
+  {
+    _mesh.zRender(rc, parentGLState);
+  }
+
   public final void showNormals(boolean v)
   {
     _mesh.showNormals(v);
   }
+<<<<<<< HEAD
 
   public final IFloatBuffer getVerticesFloatBuffer()
   {
@@ -86,4 +92,6 @@ public class MeshHolder extends Mesh
   {
     return _mesh.getVerticesOffset();
   }
+=======
+>>>>>>> zrender-touchhandlers
 }

@@ -19,8 +19,10 @@
 
 #include "Effects.hpp"
 
+
 class RenderState;
 class CameraEventHandler;
+class MeshRenderer;
 
 
 class ILogger;
@@ -64,11 +66,14 @@ private:
   bool _processTouchEvents;
   std::vector<CameraEventHandler*> _handlers;
   CameraContext *_cameraContext;
+  MeshRenderer* _meshRenderer;
+
 
 public:
   CameraRenderer() :
   _cameraContext(NULL),
-  _processTouchEvents(true)
+  _processTouchEvents(true),
+  _meshRenderer(NULL)
   {
   }
 
@@ -119,6 +124,10 @@ public:
   void onDestroy(const G3MContext* context) {
     
   }
+
+  void zRender(const G3MRenderContext* rc, GLState* glState){}
+  
+  void setDebugMeshRenderer(MeshRenderer* meshRenderer);
 };
 
 

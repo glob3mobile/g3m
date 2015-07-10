@@ -28,6 +28,7 @@ private:
 
   mutable MutableVector3D _origin;
   mutable MutableVector3D _initialPoint;
+  mutable double          _dragRadius;
   mutable MutableVector3D _centerPoint;
   mutable MutableVector3D _centerRay;
   mutable MutableVector3D _initialPoint0;
@@ -38,6 +39,56 @@ private:
   mutable double          _angleBetweenInitialRays;
   mutable double          _angleBetweenInitialPoints;
   mutable bool            _validSingleDrag;
+  
+  mutable double          _prevFactor;
+  
+  mutable double          _dragRadius0;
+  mutable double          _dragRadius1;
+  mutable double          _lastDoubleDragAngle;
+  
+  mutable MutableMatrix44D _dragMatrix;
+  mutable MutableMatrix44D _doubleDragMatrix;
+  mutable MutableVector3D  _translation;
+  mutable MutableVector3D  _finalPoint0;
+  mutable MutableVector3D  _finalPoint1;
+  mutable MutableVector3D  _draggedCameraPos;
+  mutable MutableVector3D  _transformedFinalRay1;
+  mutable MutableMatrix44D _geodeticTransformMatrix;
+  mutable MutableMatrix44D _translationMatrix;
+  mutable MutableMatrix44D _rotationMatrix;
+  mutable MutableMatrix44D _generalRotationMatrix;
+  mutable MutableVector3D  _transformedInitialPoint1;
+  mutable MutableVector3D  _transformedFinalPoint1;
+  mutable MutableVector3D  _transformedCameraPos;
+  mutable MutableVector3D  _planeNormal;
+  mutable MutableVector3D  _rayToFinalPoint1;
+  mutable MutableVector3D  _initialNormal0;
+  mutable MutableVector2D  _rotationAngles;
+  mutable MutableVector3D  _P0;
+  mutable MutableVector3D  _B;
+  mutable MutableVector3D  _B0;
+  mutable MutableVector3D  _Ra;
+  mutable MutableVector3D  _Rb;
+  mutable int              _iter;
+  
+  
+  mutable double _lastCorrectingRollAngle;
+  mutable MutableVector3D _lastCorrectingRollRotationAxis;
+  
+  
+  MutableMatrix44D createDragMatrix(const Vector3D initialPoint,
+                                    const Vector3D finalPoint) const;
+  
+  void createDragMatrix(const MutableVector3D& initialPoint,
+                        const MutableVector3D& finalPoint,
+                        MutableMatrix44D& matrix) const;
+  
+  double testDoubleDragIteration(double factor,
+                                 const Vector3D& finalRay0,
+                                 const Vector3D& finalRay1) const;
+  
+  void createInversedGeodeticTransformMatrix(const MutableVector3D& position,
+                                             MutableMatrix44D& result) const;
   
 
 public:
@@ -78,7 +129,7 @@ public:
   Vector3D geodeticSurfaceNormal(const Geodetic2D& geodetic) const {
     return geodeticSurfaceNormal(geodetic._latitude, geodetic._longitude);
   }
-
+  
   void geodeticSurfaceNormal(const Angle& latitude,
                              const Angle& longitude,
                              MutableVector3D& result) const;
@@ -143,9 +194,15 @@ public:
   }
 
   Geodetic2D toGeodetic2D(const Vector3D& position) const;
-
+  
+  void toGeodetic2D(const MutableVector3D& position,
+                    MutableVector2D& result);
+  
   Geodetic3D toGeodetic3D(const Vector3D& position) const;
-
+  
+  void toGeodetic3D(const MutableVector3D& position,
+                    MutableVector3D& result) const;
+  
   Vector3D scaleToGeodeticSurface(const Vector3D& position) const;
 
   Vector3D scaleToGeocentricSurface(const Vector3D& position) const;
@@ -165,11 +222,18 @@ public:
 
   Vector3D closestPointToSphere(const Vector3D& pos, const Vector3D& ray) const;
 
+  Vector3D closestIntersection(const Vector3D& pos, const Vector3D& ray) const {
+    return Sphere::closestIntersectionCenteredSphereWithRay(pos,
+                                                            ray,
+                                                            _sphere._radius);
+  }
+
+
   MutableMatrix44D createGeodeticTransformMatrix(const Geodetic3D& position) const;
   
   bool isFlat() const { return false; }
 
-  void beginSingleDrag(const Vector3D& origin, const Vector3D& initialRay) const;
+  void beginSingleDrag(const Vector3D& origin, const Vector3D& touchedPosition) const;
   
   MutableMatrix44D singleDrag(const Vector3D& finalRay) const;
   
@@ -177,15 +241,16 @@ public:
   
   void beginDoubleDrag(const Vector3D& origin,
                        const Vector3D& centerRay,
-                               const Vector3D& initialRay0,
-                               const Vector3D& initialRay1) const;
+                       const Vector3D& centerPosition,
+                       const Vector3D& touchedPosition0,
+                       const Vector3D& touchedPosition1) const;
   
   MutableMatrix44D doubleDrag(const Vector3D& finalRay0,
                               const Vector3D& finalRay1) const;
-
+  
   Effect* createDoubleTapEffect(const Vector3D& origin,
                                 const Vector3D& centerRay,
-                                const Vector3D& tapRay) const;
+                                const Vector3D& touchedPosition) const;
 
   double distanceToHorizon(const Vector3D& position) const;
   
@@ -206,11 +271,12 @@ public:
     return Geodetic3D(rendereSector._center,
                       height);
   }
+  
+  void correctPitchAfterDoubleDrag(Camera* camera, const Vector2F& finalPixel0, const Vector2F& finalPixel1) const;
 
   const std::string getType() const {
     return "Spherical";
   }
-
 };
 
 #endif

@@ -115,6 +115,8 @@ public:
     return _imageFactory;
   }
 
+  void zRender(const G3MRenderContext* rc, GLState* glState){}
+
 };
 
 #endif

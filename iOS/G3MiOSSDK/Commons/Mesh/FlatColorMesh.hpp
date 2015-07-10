@@ -76,6 +76,11 @@ public:
   bool isTransparent(const G3MRenderContext* rc) const {
     return _flatColor->_alpha != 1.0;
   }
+
+  void zRawRender(const G3MRenderContext* rc, const GLState* parentState) const{
+    _mesh->zRender(rc, parentState);
+  }
+
   
   void rawRender(const G3MRenderContext* rc,
                  const GLState* parentState) const;

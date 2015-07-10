@@ -6,6 +6,7 @@ public class Camera
   {
      _planet = null;
      _position = new MutableVector3D(0, 0, 0);
+     _groundHeight = 0;
      _center = new MutableVector3D(0, 0, 0);
      _up = new MutableVector3D(0, 0, 1);
      _dirtyFlags = new CameraDirtyFlags();
@@ -96,21 +97,12 @@ public class Camera
     _dirtyFlags.setAllDirty();
   }
 
-  public final Vector3D pixel2Ray(Vector2I pixel)
-  {
-    final int px = pixel._x;
-    final int py = _viewPortHeight - pixel._y;
-    final Vector3D pixel3D = new Vector3D(px, py, 0);
+
+  /*void Camera::setGeodeticPositionStablePitch(const Geodetic3D& g3d) {
+    MutableMatrix44D dragMatrix = _planet->drag(getGeodeticPosition(), g3d);
+    if (dragMatrix.isValid()) applyTransform(dragMatrix);
+  }*/
   
-    final Vector3D obj = getModelViewMatrix().unproject(pixel3D, 0, 0, _viewPortWidth, _viewPortHeight);
-    if (obj.isNan())
-    {
-      ILogger.instance().logWarning("Pixel to Ray return NaN");
-      return obj;
-    }
-  
-    return obj.sub(_position.asVector3D());
-  }
   public final Vector3D pixel2Ray(Vector2F pixel)
   {
     final float px = pixel._x;
@@ -127,7 +119,25 @@ public class Camera
     return obj.sub(_position.asVector3D());
   }
 
-  public final Vector3D pixel2PlanetPoint(Vector2I pixel)
+
+  //void Camera::render(const G3MRenderContext* rc,
+  //                    const GLGlobalState& parentState) const {
+  //  //TODO: NO LONGER NEEDED!!!
+  //}
+  
+  public final Vector3D pixel2Ray(Vector3D pixel3D)
+  {
+  
+    final Vector3D obj = getModelViewMatrix().unproject(pixel3D, 0, 0, _viewPortWidth, _viewPortHeight);
+    if (obj.isNan())
+    {
+      return obj;
+    }
+  
+    return obj.sub(_position.asVector3D());
+  }
+
+  public final Vector3D pixel2PlanetPoint(Vector2F pixel)
   {
     return _planet.closestIntersection(_position.asVector3D(), pixel2Ray(pixel));
   }
@@ -136,11 +146,25 @@ public class Camera
   {
     final Vector2D p = getModelViewMatrix().project(point, 0, 0, _viewPortWidth, _viewPortHeight);
   
+    Vector3D direction = point.sub(getCartesianPosition());
+    double angle = direction.angleBetween(getViewDirection())._degrees;
+    if (angle > 90) //Projecting point behind the camera
+    {
+      return new Vector2F((float)-p._x, (float)-(_viewPortHeight - p._y));
+    }
+  
     return new Vector2F((float) p._x, (float)(_viewPortHeight - p._y));
   }
   public final Vector2F point2Pixel(Vector3F point)
   {
     final Vector2F p = getModelViewMatrix().project(point, 0, 0, _viewPortWidth, _viewPortHeight);
+  
+    Vector3D direction = point.asVector3D().sub(getCartesianPosition());
+    double angle = direction.angleBetween(getViewDirection())._degrees;
+    if (angle > 90) //Projecting point behind the camera
+    {
+      return new Vector2F((float)-p._x, (float)-(_viewPortHeight - p._y));
+    }
   
     return new Vector2F(p._x, (_viewPortHeight - p._y));
   }
@@ -281,7 +305,7 @@ public class Camera
     return new Vector3D(M.get0(), M.get4(), M.get8());
   }
 
-  public final Angle compute3DAngularDistance(Vector2I pixel0, Vector2I pixel1)
+  public final Angle compute3DAngularDistance(Vector2F pixel0, Vector2F pixel1)
   {
     final Vector3D point0 = pixel2PlanetPoint(pixel0);
     if (point0.isNan())
@@ -383,12 +407,8 @@ public class Camera
     setPitch(pitch);
   }
 
-  public final void setGeodeticPositionStablePitch(Geodetic3D g3d)
-  {
-    MutableMatrix44D dragMatrix = _planet.drag(getGeodeticPosition(), g3d);
-    if (dragMatrix.isValid())
-       applyTransform(dragMatrix);
-  }
+//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
+//  void setGeodeticPositionStablePitch(Geodetic3D g3d);
 
   public final void setGeodeticPosition(Angle latitude, Angle longitude, double height)
   {
@@ -484,6 +504,16 @@ public class Camera
   {
     final Geodetic3D position = getGeodeticCenterOfView();
     return sector.contains(position._latitude, position._longitude) && height >= position._height;
+  }
+
+  public final void setGroundHeightFromCartesianPoint(Vector3D point)
+  {
+    _groundHeight = _planet.toGeodetic3D(point)._height;
+  }
+
+  public final double getHeightFromGround()
+  {
+    return getGeodeticPosition()._height - _groundHeight;
   }
 
   //In case any of the angles is NAN it would be inferred considering the vieport ratio
@@ -657,6 +687,8 @@ public class Camera
 
   private Geodetic3D _geodeticPosition; //Must be updated when changing position
 
+  private double _groundHeight;
+
   // this value is only used in the method Sector::isBackOriented
   // it's stored in double instead of Angle class to optimize performance in android
   // Must be updated when changing position
@@ -761,8 +793,16 @@ public class Camera
 
   private FrustumData calculateFrustumData()
   {
+  //  const double heightFromGround = getHeightFromGround();
+  //
+  //  double zNear = heightFromGround * 0.1;
+  
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning ASK AGUSTIN
     final double height = getGeodeticPosition()._height;
     double zNear = height * 0.1;
+  
+    //printf ("computing new znear=%.3f.  Height from ground =%.2f\n", zNear, heightFromGround);
   
     double zFar = _planet.distanceToHorizon(_position.asVector3D());
   

@@ -303,4 +303,8 @@ public class GEORenderer extends DefaultRenderer
     }
   }
 
+  public final void zRender(G3MRenderContext rc, GLState glState)
+  {
+  }
+
 }

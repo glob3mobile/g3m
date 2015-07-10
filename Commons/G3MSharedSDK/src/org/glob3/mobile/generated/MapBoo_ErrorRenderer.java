@@ -26,4 +26,8 @@ public class MapBoo_ErrorRenderer extends DefaultRenderer
   public final void onResizeViewportEvent(G3MEventContext ec, int width, int height)
   {
   }
+  public final void zRender(G3MRenderContext rc, GLState glState)
+  {
+  }
+
 }

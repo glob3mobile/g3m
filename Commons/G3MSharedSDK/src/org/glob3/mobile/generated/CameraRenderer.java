@@ -4,11 +4,14 @@ public class CameraRenderer implements ProtoRenderer
   private boolean _processTouchEvents;
   private java.util.ArrayList<CameraEventHandler> _handlers = new java.util.ArrayList<CameraEventHandler>();
   private CameraContext _cameraContext;
+  private MeshRenderer _meshRenderer;
+
 
   public CameraRenderer()
   {
      _cameraContext = null;
      _processTouchEvents = true;
+     _meshRenderer = null;
   }
 
   public void dispose()
@@ -117,5 +120,16 @@ public class CameraRenderer implements ProtoRenderer
   public final void onDestroy(G3MContext context)
   {
 
+  }
+
+  public final void zRender(G3MRenderContext rc, GLState glState)
+  {
+  }
+
+  public final void setDebugMeshRenderer(MeshRenderer meshRenderer)
+  {
+    _meshRenderer = meshRenderer;
+    for (int n = 0; n<_handlers.size(); n++)
+      _handlers.get(n).setDebugMeshRenderer(meshRenderer);
   }
 }

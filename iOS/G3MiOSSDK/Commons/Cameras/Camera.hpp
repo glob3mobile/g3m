@@ -119,10 +119,11 @@ public:
 
   void resizeViewport(int width, int height);
 
-  const Vector3D pixel2Ray(const Vector2I& pixel) const;
   const Vector3D pixel2Ray(const Vector2F& pixel) const;
 
-  const Vector3D pixel2PlanetPoint(const Vector2I& pixel) const;
+  const Vector3D pixel2Ray(const Vector3D& pixel3D) const;
+
+  const Vector3D pixel2PlanetPoint(const Vector2F& pixel) const;
 
   const Vector2F point2Pixel(const Vector3D& point) const;
   const Vector2F point2Pixel(const Vector3F& point) const;
@@ -194,8 +195,8 @@ public:
 
   Vector3D getHorizontalVector();
 
-  Angle compute3DAngularDistance(const Vector2I& pixel0,
-                                 const Vector2I& pixel1);
+  Angle compute3DAngularDistance(const Vector2F& pixel0,
+                                 const Vector2F& pixel1);
 
   void initialize(const G3MContext* context);
 
@@ -288,6 +289,14 @@ public:
 
   bool isPositionWithin(const Sector& sector, double height) const;
   bool isCenterOfViewWithin(const Sector& sector, double height) const;
+  
+  void setGroundHeightFromCartesianPoint(const Vector3D& point) {
+    _groundHeight = _planet->toGeodetic3D(point)._height;
+  }
+  
+  double getHeightFromGround() const {
+    return getGeodeticPosition()._height - _groundHeight;
+  }
 
   //In case any of the angles is NAN it would be inferred considering the vieport ratio
   void setFOV(const Angle& vertical,
@@ -335,15 +344,39 @@ public:
   }
 
   static void pixel2RayInto(const MutableVector3D& position,
-                            const Vector2F& pixel,
-                            const MutableVector2I& viewport,
-                            const MutableMatrix44D& modelViewMatrix,
-                            MutableVector3D& ray);
+                                    const Vector2F& pixel,
+                                    const MutableVector2I& viewport,
+                                    const MutableMatrix44D& modelViewMatrix,
+                                    MutableVector3D& ray)
+  {
+    const float px = pixel._x;
+    const float py = viewport.y() - pixel._y;
+    const Vector3D pixel3D(px, py, 0);
+    const Vector3D obj = modelViewMatrix.unproject(pixel3D, 0, 0,
+                                                   viewport.x(),
+                                                   viewport.y());
+    if (obj.isNan()) {
+      ray.copyFrom(obj);
+    } else {
+      ray.set(obj._x-position.x(), obj._y-position.y(), obj._z-position.z());
+    }
+  }
 
   static const Vector3D pixel2Ray(const MutableVector3D& position,
                                   const Vector2F& pixel,
                                   const MutableVector2I& viewport,
-                                  const MutableMatrix44D& modelViewMatrix);
+                                  const MutableMatrix44D& modelViewMatrix){
+    const float px = pixel._x;
+    const float py = viewport.y() - pixel._y;
+    const Vector3D pixel3D(px, py, 0);
+    const Vector3D obj = modelViewMatrix.unproject(pixel3D, 0, 0,
+                                                   viewport.x(),
+                                                   viewport.y());
+    if (obj.isNan()) {
+      return obj;
+    }
+    return obj.sub(position.asVector3D());
+  }
 
 
 private:
@@ -396,6 +429,8 @@ private:
   MutableVector3D _up;                  // vertical vector
 
   mutable Geodetic3D*     _geodeticPosition;    //Must be updated when changing position
+  
+  double _groundHeight;
 
   // this value is only used in the method Sector::isBackOriented
   // it's stored in double instead of Angle class to optimize performance in android

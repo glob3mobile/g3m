@@ -43,6 +43,10 @@ public class CameraSingleDragHandler extends CameraEventHandler
        return false;
     if (touchEvent.getTapCount()>1)
        return false;
+    if (touchEvent.getType() == TouchEventType.MouseWheelChanged)
+    {
+      return false;
+    }
   
     switch (touchEvent.getType())
     {
@@ -94,15 +98,21 @@ public class CameraSingleDragHandler extends CameraEventHandler
     camera.getLookAtParamsInto(_cameraPosition, _cameraCenter, _cameraUp);
     camera.getModelViewMatrixInto(_cameraModelViewMatrix);
     camera.getViewPortInto(_cameraViewPort);
+    cameraContext.setCurrentGesture(Gesture.Drag);
   
     // dragging
     final Vector2F pixel = touchEvent.getTouch(0).getPos();
-    final Vector3D initialRay = camera.pixel2Ray(pixel);
-    if (!initialRay.isNan())
-    {
-      cameraContext.setCurrentGesture(Gesture.Drag);
-      eventContext.getPlanet().beginSingleDrag(camera.getCartesianPosition(), initialRay);
+    Vector3D touchedPosition = eventContext.getWidget().getScenePositionForPixel((int)pixel._x, (int)pixel._y);
+    eventContext.getPlanet().beginSingleDrag(camera.getCartesianPosition(), touchedPosition);
+  
+  
+    /*
+    const Vector3D& initialRay = camera->pixel2Ray(pixel);
+    if (!initialRay.isNan()) {
+      cameraContext->setCurrentGesture(Drag);
+      eventContext->getPlanet()->beginSingleDrag(camera->getCartesianPosition(),initialRay);
     }
+     */
   }
   public final void onMove(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
   {

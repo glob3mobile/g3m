@@ -26,7 +26,7 @@
 
 
 void MeshRenderer::clearMeshes() {
-  const int meshesCount = _meshes.size();
+  const size_t meshesCount = _meshes.size();
   for (int i = 0; i < meshesCount; i++) {
     Mesh* mesh = _meshes[i];
     delete mesh;
@@ -35,7 +35,7 @@ void MeshRenderer::clearMeshes() {
 }
 
 MeshRenderer::~MeshRenderer() {
-  const int meshesCount = _meshes.size();
+  const size_t meshesCount = _meshes.size();
   for (int i = 0; i < meshesCount; i++) {
     Mesh* mesh = _meshes[i];
     delete mesh;
@@ -66,7 +66,7 @@ void MeshRenderer::render(const G3MRenderContext* rc, GLState* glState) {
 
   _glState->setParent(glState);
 
-  const int meshesCount = _meshes.size();
+  const size_t meshesCount = _meshes.size();
   for (int i = 0; i < meshesCount; i++) {
     Mesh* mesh = _meshes[i];
     const BoundingVolume* boundingVolume = mesh->getBoundingVolume();
@@ -89,7 +89,7 @@ void MeshRenderer::onLostContext() {
 }
 
 void MeshRenderer::drainLoadQueue() {
-  const int loadQueueSize = _loadQueue.size();
+  const size_t loadQueueSize = _loadQueue.size();
   for (int i = 0; i < loadQueueSize; i++) {
     LoadQueueItem* item = _loadQueue[i];
     requestMeshBuffer(item->_url,
@@ -111,7 +111,7 @@ void MeshRenderer::drainLoadQueue() {
 }
 
 void MeshRenderer::cleanLoadQueue() {
-  const int loadQueueSize = _loadQueue.size();
+  const size_t loadQueueSize = _loadQueue.size();
   for (int i = 0; i < loadQueueSize; i++) {
     LoadQueueItem* item = _loadQueue[i];
     delete item;
@@ -706,7 +706,7 @@ void MeshRenderer::requestMeshBuffer(const URL&          url,
 }
 
 void MeshRenderer::enableAll() {
-  const int meshesCount = _meshes.size();
+  const size_t meshesCount = _meshes.size();
   for (int i = 0; i < meshesCount; i++) {
     Mesh* mesh = _meshes[i];
     mesh->setEnable(true);
@@ -714,16 +714,30 @@ void MeshRenderer::enableAll() {
 }
 
 void MeshRenderer::disableAll() {
-  const int meshesCount = _meshes.size();
+  const size_t meshesCount = _meshes.size();
   for (int i = 0; i < meshesCount; i++) {
     Mesh* mesh = _meshes[i];
     mesh->setEnable(false);
   }
 }
 
-void MeshRenderer::showNormals(bool v) const {
+void MeshRenderer::zRender(const G3MRenderContext* rc, GLState* glState){
+
+  const Frustum* frustum = rc->getCurrentCamera()->getFrustumInModelCoordinates();
+
+  const size_t meshesCount = _meshes.size();
+  for (int i = 0; i < meshesCount; i++) {
+    Mesh* mesh = _meshes[i];
+    const BoundingVolume* boundingVolume = mesh->getBoundingVolume();
+    if ( boundingVolume->touchesFrustum(frustum) ) {
+      mesh->zRender(rc, _glState);
+    }
+  }
+}
+
+void MeshRenderer::showNormals(bool v) const{
   _showNormals = v;
-  const int meshesCount = _meshes.size();
+  const size_t meshesCount = _meshes.size();
   for (int i = 0; i < meshesCount; i++) {
     Mesh* mesh = _meshes[i];
     mesh->showNormals(v);

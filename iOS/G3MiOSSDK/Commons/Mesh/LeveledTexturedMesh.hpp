@@ -165,7 +165,9 @@ public:
   void rawRender(const G3MRenderContext* rc,
                  const GLState* parentGLState) const;
 
-  void showNormals(bool v) const {
+  void zRawRender(const G3MRenderContext* rc, const GLState* parentGLState) const;
+
+  void showNormals(bool v) const{
     _mesh->showNormals(v);
   }
   

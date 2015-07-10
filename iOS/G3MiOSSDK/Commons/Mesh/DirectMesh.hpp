@@ -17,7 +17,7 @@ private:
   int _renderVerticesCount;
 
 protected:
-  void rawRender(const G3MRenderContext* rc) const;
+  void rawRender(const G3MRenderContext* rc, GLState* glState, RenderType renderType) const;
 
 //  Mesh* createNormalsMesh() const;
 

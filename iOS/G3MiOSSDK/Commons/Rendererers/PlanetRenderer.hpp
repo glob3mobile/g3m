@@ -232,7 +232,6 @@ private:
 #endif
 
   std::vector<Tile*> _firstLevelTiles;
-  bool               _firstLevelTilesJustCreated;
   bool               _allFirstLevelTilesAreTextureSolved;
 
   ITimer* _lastSplitTimer; // timer to start every time a tile get splitted into subtiles
@@ -287,9 +286,13 @@ private:
 #endif
   std::vector<std::string> _errors;
 
-  const LayerTilesRenderParameters* getLayerTilesRenderParameters();
-
   std::vector<TerrainTouchListener*> _terrainTouchListeners;
+
+//  std::list<Tile*> _tilesRenderedInLastFrame;
+
+  long long _renderedTilesListFrame;
+  std::list<Tile*> _renderedTiles;
+  std::list<Tile*>* getRenderedTilesList(const G3MRenderContext* rc);
   
   TouchEventType _touchEventTypeOfTerrainTouchListener;
 
@@ -443,6 +446,8 @@ public:
 
   void addTerrainTouchListener(TerrainTouchListener* listener);
 
+  void zRender(const G3MRenderContext* rc, GLState* glState);
+
   void setElevationDataProvider(ElevationDataProvider* elevationDataProvider,
                                 bool owned);
   void setVerticalExaggeration(float verticalExaggeration);
@@ -470,6 +475,8 @@ public:
   }
   
   void setChangedRendererInfoListener(ChangedRendererInfoListener* changedInfoListener, const int rendererIdentifier);
+  
+  const LayerTilesRenderParameters* getLayerTilesRenderParameters();
   
 };
 
