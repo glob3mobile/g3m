@@ -87,7 +87,7 @@ public class MainActivity
 	   getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
 	   setContentView(R.layout.activity_main);
-
+/*
 	   final G3MBuilder_Android builder = new G3MBuilder_Android(this);
 
 	   final Planet planet = Planet.createEarth();
@@ -127,7 +127,9 @@ public class MainActivity
 	   builder.getPlanetRendererBuilder().setVerticalExaggeration(4.0f);
 
 	   _g3mWidget = builder.createWidget();  
-
+*/
+	   _g3mWidget = createWidgetStreamingElevations();
+	   
 	   // set camera looking at Tenerife
 	   Geodetic3D position = new Geodetic3D(Angle.fromDegrees(27.60), Angle.fromDegrees(-16.54), 55000.0);
 	   _g3mWidget.setCameraPosition(position);
