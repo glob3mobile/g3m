@@ -152,7 +152,9 @@ IStringUtils {
 
    @Override
    public String toString(final double value) {
-      return Double.toString(value);
+       Locale.setDefault(new Locale("en", "US"));
+       java.text.DecimalFormat df = new java.text.DecimalFormat("#.################"); 
+       return df.format(value);
    }
 
 

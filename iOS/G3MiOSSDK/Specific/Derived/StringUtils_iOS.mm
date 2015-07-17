@@ -175,7 +175,11 @@ std::string StringUtils_iOS::toString(long long value) const {
 
 std::string StringUtils_iOS::toString(double value) const {
   std::stringstream ss;
-  ss << value;
+  
+  ss.precision(16);
+  
+  ss<<std::fixed<<value;
+  
   return ss.str();
 }
 
