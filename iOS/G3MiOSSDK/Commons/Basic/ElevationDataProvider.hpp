@@ -66,6 +66,7 @@ public:
 
   virtual const long long requestElevationData(const Sector& sector,
                                                const Vector2I& extent,
+                                               long long requestPriority,
                                                IElevationDataListener* listener,
                                                bool autodeleteListener) = 0;
 

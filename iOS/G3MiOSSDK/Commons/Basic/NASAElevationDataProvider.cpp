@@ -18,12 +18,12 @@ NASAElevationDataProviderListener::~NASAElevationDataProviderListener(){
 
 
 void NASAElevationDataProviderListener::onData(const Sector& sector,
-                    const Vector2I& extent,
-                    ElevationData* elevationData){
+                                               const Vector2I& extent,
+                                               ElevationData* elevationData){
   
   ElevationData* sub = new InterpolatedSubviewElevationData(elevationData,
-                                                _requestedSector,
-                                                _requestedExtent);
+                                                            _requestedSector,
+                                                            _requestedExtent);
   
   _listener->onData(sector, _requestedExtent, sub);
   sub->_release();
@@ -35,7 +35,7 @@ void NASAElevationDataProviderListener::onData(const Sector& sector,
 }
 
 void NASAElevationDataProviderListener::onError(const Sector& sector,
-                     const Vector2I& extent){
+                                                const Vector2I& extent){
   
   _listener->onError(sector, _requestedExtent);
   if (_autoDelete){
@@ -45,7 +45,7 @@ void NASAElevationDataProviderListener::onError(const Sector& sector,
 }
 
 void NASAElevationDataProviderListener::onCancel(const Sector& sector,
-                      const Vector2I& extent){
+                                                 const Vector2I& extent){
   
   _listener->onCancel(sector, _requestedExtent);
   if (_autoDelete){
@@ -64,9 +64,10 @@ NASAElevationDataProvider::NASAElevationDataProvider(){
 
 
 const long long NASAElevationDataProvider::requestElevationData(const Sector& sector,
-                                             const Vector2I& extent,
-                                             IElevationDataListener* listener,
-                                                                        bool autodeleteListener){
+                                                                const Vector2I& extent,
+                                                                long long requestPriority,
+                                                                IElevationDataListener* listener,
+                                                                bool autodeleteListener){
   
   NASAElevationDataProviderListener* list = new NASAElevationDataProviderListener(listener,
                                                                                   autodeleteListener,
@@ -78,7 +79,7 @@ const long long NASAElevationDataProvider::requestElevationData(const Sector& se
   Sector sector2 = sector.shrinkedByPercent(-factor);
   Vector2I extent2(extent._x * factor, extent._y * factor);
   
-  return _provider->requestElevationData(sector2, extent2, list, true);
+  return _provider->requestElevationData(sector2, extent2, requestPriority, list, true);
   
   //return _provider->requestElevationData(sector, extent, listener, autodeleteListener);
   

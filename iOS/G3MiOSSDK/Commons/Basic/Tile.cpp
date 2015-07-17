@@ -176,7 +176,8 @@ Mesh* Tile::getTessellatorMesh(const G3MRenderContext* rc,
                                ElevationDataProvider* elevationDataProvider,
                                const TileTessellator* tessellator,
                                const LayerTilesRenderParameters* layerTilesRenderParameters,
-                               const TilesRenderParameters* tilesRenderParameters) {
+                               const TilesRenderParameters* tilesRenderParameters,
+                               long long elevationDataRequestPriority) {
   
   if ( (_elevationData == NULL) &&
       canUseElevationDataProvider(elevationDataProvider) ) {
@@ -185,7 +186,8 @@ Mesh* Tile::getTessellatorMesh(const G3MRenderContext* rc,
                             tessellator,
                             layerTilesRenderParameters->_tileMeshResolution,
                             rc->getPlanet(),
-                            tilesRenderParameters->_renderDebug);
+                            tilesRenderParameters->_renderDebug,
+                            elevationDataRequestPriority);
     
     if (_elevationData == NULL){
       //      ILogger::instance()->logInfo("Tile not ready for rendering as no ElevationData can be found. Returning NULL Mesh.");
@@ -282,14 +284,16 @@ const BoundingVolume* Tile::getBoundingVolume(const G3MRenderContext* rc,
                                               ElevationDataProvider* elevationDataProvider,
                                               const TileTessellator* tessellator,
                                               const LayerTilesRenderParameters* layerTilesRenderParameters,
-                                              const TilesRenderParameters* tilesRenderParameters) {
+                                              const TilesRenderParameters* tilesRenderParameters,
+                                              long long elevationDataRequestPriority) {
   
   if (_boundingVolume == NULL) {
     Mesh* mesh = getTessellatorMesh(rc,
                                     elevationDataProvider,
                                     tessellator,
                                     layerTilesRenderParameters,
-                                    tilesRenderParameters);
+                                    tilesRenderParameters,
+                                    elevationDataRequestPriority);
     if (mesh != NULL) {
       _boundingVolume = mesh->getBoundingVolume();
     }
@@ -303,7 +307,8 @@ bool Tile::isVisible(const G3MRenderContext* rc,
                      const Sector* renderedSector,
                      const TileTessellator* tessellator,
                      const LayerTilesRenderParameters* layerTilesRenderParameters,
-                     const TilesRenderParameters* tilesRenderParameters) {
+                     const TilesRenderParameters* tilesRenderParameters,
+                     long long elevationDataRequestPriority) {
   if ((renderedSector != NULL) &&
       !renderedSector->touchesWith(_sector)) { //Incomplete world
     return false;
@@ -313,7 +318,8 @@ bool Tile::isVisible(const G3MRenderContext* rc,
                                                            elevationDataProvider,
                                                            tessellator,
                                                            layerTilesRenderParameters,
-                                                           tilesRenderParameters);
+                                                           tilesRenderParameters,
+                                                           elevationDataRequestPriority);
   
   return ((boundingVolume != NULL)  &&
           boundingVolume->touchesFrustum(cameraFrustumInModelCoordinates));
@@ -412,7 +418,8 @@ void Tile::prepareForFullRendering(const G3MRenderContext* rc,
                                              elevationDataProvider,
                                              tessellator,
                                              layerTilesRenderParameters,
-                                             tilesRenderParameters);
+                                             tilesRenderParameters,
+                                             tileDownloadPriority);
   if (tessellatorMesh == NULL) {
     return; //Normally due to ElevationData not resolved
   }
@@ -451,7 +458,8 @@ void Tile::rawRender(const G3MRenderContext* rc,
                                              elevationDataProvider,
                                              tessellator,
                                              layerTilesRenderParameters,
-                                             tilesRenderParameters);
+                                             tilesRenderParameters,
+                                             tileDownloadPriority);
   if (tessellatorMesh == NULL) {
     return;
   }
@@ -779,7 +787,8 @@ void Tile::initializeElevationData(ElevationDataProvider* elevationDataProvider,
                                    const TileTessellator* tessellator,
                                    const Vector2I& tileMeshResolution,
                                    const Planet* planet,
-                                   bool renderDebug) {
+                                   bool renderDebug,
+                                   long long requestPriority) {
   
   if (elevationDataProvider == NULL ||
       !elevationDataProvider->containsSector(_sector)){
@@ -798,7 +807,7 @@ void Tile::initializeElevationData(ElevationDataProvider* elevationDataProvider,
                                                             tileMeshResolution,
                                                             this,
                                                             renderDebug);
-    _elevationDataRequest = new TileElevationDataRequest(this, res, elevationDataProvider);
+    _elevationDataRequest = new TileElevationDataRequest(this, res, requestPriority,  elevationDataProvider);
     _elevationDataRequest->sendRequest();
   }
   
@@ -915,6 +924,7 @@ void Tile::updateQuadTree(const G3MRenderContext* rc,
                           double texWidthSquared,
                           double texHeightSquared,
                           double nowInMS,
+                          long long tileDownloadPriority,
                           std::vector<const Tile*>* tilesStartedRendering,
                           std::vector<std::string>* tilesStoppedRendering) {
   
@@ -934,7 +944,8 @@ void Tile::updateQuadTree(const G3MRenderContext* rc,
                 renderedSector,
                 tessellator,
                 layerTilesRenderParameters,
-                tilesRenderParameters)) {
+                tilesRenderParameters,
+                tileDownloadPriority)) {
     setIsVisible(true, texturizer);
     
     tilesStatistics->computeVisibleTile(this);
@@ -1008,6 +1019,7 @@ void Tile::updateQuadTree(const G3MRenderContext* rc,
                                    texWidthSquared,
                                    texHeightSquared,
                                    nowInMS,
+                                   tileDownloadPriority,
                                    tilesStartedRendering,
                                    tilesStoppedRendering);
       }

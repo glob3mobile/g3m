@@ -147,12 +147,14 @@ void SingleBilElevationDataProvider::initialize(const G3MContext* context) {
 }
 
 const long long SingleBilElevationDataProvider::requestElevationData(const Sector& sector,
-                                                                      const Vector2I& extent,
-                                                                      IElevationDataListener* listener,
-                                                                      bool autodeleteListener) {
+                                                                     const Vector2I& extent,
+                                                                     long long requestPriority,
+                                                                     IElevationDataListener* listener,
+                                                                     bool autodeleteListener) {
   if (!_elevationDataResolved) {
     return queueRequest(sector,
                         extent,
+                        requestPriority,
                         listener,
                         autodeleteListener);
   }
@@ -194,14 +196,14 @@ void SingleBilElevationDataProvider::drainQueue() {
   std::map<long long, SingleBilElevationDataProvider_Request*>::iterator it = _requestsQueue.begin();
   for (; it != _requestsQueue.end(); it++) {
     SingleBilElevationDataProvider_Request* r = it->second;
-    requestElevationData(r->_sector, r->_extent, r->_listener, r->_autodeleteListener);
+    requestElevationData(r->_sector, r->_extent, r->_requestPriority, r->_listener, r->_autodeleteListener);
     delete r;
   }
 #endif
 #ifdef JAVA_CODE
   for (final Long key : _requestsQueue.keySet()) {
     final SingleBilElevationDataProvider_Request r = _requestsQueue.get(key);
-    requestElevationData(r._sector, r._extent, r._listener, r._autodeleteListener);
+    requestElevationData(r._sector, r._extent, r.requestPriority, r._listener, r._autodeleteListener);
     if (r != null) {
       r.dispose();
     }
@@ -212,10 +214,11 @@ void SingleBilElevationDataProvider::drainQueue() {
 
 const long long SingleBilElevationDataProvider::queueRequest(const Sector& sector,
                                                               const Vector2I& extent,
+                                                             long long requestPriority,
                                                               IElevationDataListener* listener,
                                                               bool autodeleteListener) {
   _currentRequestID++;
-  _requestsQueue[_currentRequestID] = new SingleBilElevationDataProvider_Request(sector, extent, listener, autodeleteListener);
+  _requestsQueue[_currentRequestID] = new SingleBilElevationDataProvider_Request(sector, extent, requestPriority, listener, autodeleteListener);
   return _currentRequestID;
 }
 

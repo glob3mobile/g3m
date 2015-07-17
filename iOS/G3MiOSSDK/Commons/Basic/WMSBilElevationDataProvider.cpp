@@ -131,6 +131,7 @@ void WMSBilElevationDataProvider::initialize(const G3MContext* context) {
 
 const long long WMSBilElevationDataProvider::requestElevationData(const Sector& sector,
                                                                   const Vector2I& extent,
+                                                                  long long requestPriority,
                                                                   IElevationDataListener* listener,
                                                                   bool autodeleteListener) {
   if (_downloader == NULL) {
@@ -214,7 +215,7 @@ const long long WMSBilElevationDataProvider::requestElevationData(const Sector& 
   
   
   return _downloader->requestBuffer(URL(path, false),
-                                    2000000000,
+                                    requestPriority,
                                     TimeInterval::fromDays(30),
                                     true,
                                     new WMSBilElevationDataProvider_BufferDownloadListener(sector,

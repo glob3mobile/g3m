@@ -99,7 +99,7 @@ double PlanetTileTessellator::skirtDepthForSector(const Planet* planet, const Se
   const double diagonalLength = nw.sub(se).length();
   const double sideLength = diagonalLength * 0.70710678118;
   //0.707 = 1 / SQRT(2) -> diagonalLength => estimated side length
-  return sideLength / 20.0;
+  return sideLength / 5.0;
 }
 
 Mesh* PlanetTileTessellator::createTileMesh(const Planet* planet,

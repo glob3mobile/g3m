@@ -31,13 +31,17 @@ struct SingleBilElevationDataProvider_Request {
 #endif
   IElevationDataListener* const _listener;
   const bool _autodeleteListener;
+  
+  const long long _requestPriority;
 
   SingleBilElevationDataProvider_Request(const Sector& sector,
                                           const Vector2I& extent,
+                                         long long requestPriority,
                                           IElevationDataListener* listener,
                                           bool autodeleteListener):
   _sector(sector),
   _extent(extent),
+  _requestPriority(requestPriority),
   _listener(listener),
   _autodeleteListener(autodeleteListener)
   {
@@ -74,6 +78,7 @@ private:
 
   const long long queueRequest(const Sector& sector,
                                const Vector2I& extent,
+                               long long requestPriority,
                                IElevationDataListener* listener,
                                bool autodeleteListener);
 
@@ -99,6 +104,7 @@ public:
 
   const long long requestElevationData(const Sector& sector,
                                        const Vector2I& extent,
+                                       long long requestPriority,
                                        IElevationDataListener* listener,
                                        bool autodeleteListener);
 
