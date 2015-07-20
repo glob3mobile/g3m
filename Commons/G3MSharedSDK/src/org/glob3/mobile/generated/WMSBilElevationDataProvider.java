@@ -52,7 +52,7 @@ public class WMSBilElevationDataProvider extends ElevationDataProvider
     _downloader = context.getDownloader();
   }
 
-  public final long requestElevationData(Sector sector, Vector2I extent, IElevationDataListener listener, boolean autodeleteListener)
+  public final long requestElevationData(Sector sector, Vector2I extent, long requestPriority, IElevationDataListener listener, boolean autodeleteListener)
   {
     if (_downloader == null)
     {
@@ -138,7 +138,7 @@ public class WMSBilElevationDataProvider extends ElevationDataProvider
        isb.dispose();
   
   
-    return _downloader.requestBuffer(new URL(path, false), 2000000000, TimeInterval.fromDays(30), true, new WMSBilElevationDataProvider_BufferDownloadListener(sector, extent, listener, autodeleteListener, _deltaHeight), true);
+    return _downloader.requestBuffer(new URL(path, false), requestPriority, TimeInterval.fromDays(30), true, new WMSBilElevationDataProvider_BufferDownloadListener(sector, extent, listener, autodeleteListener, _deltaHeight), true);
   }
 
   public final void cancelRequest(long requestId)

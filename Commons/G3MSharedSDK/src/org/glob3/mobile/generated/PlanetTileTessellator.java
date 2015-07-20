@@ -357,7 +357,7 @@ public class PlanetTileTessellator extends TileTessellator
     final double diagonalLength = nw.sub(se).length();
     final double sideLength = diagonalLength * 0.70710678118;
     //0.707 = 1 / SQRT(2) -> diagonalLength => estimated side length
-    return sideLength / 20.0;
+    return sideLength / 5.0;
   }
 
 

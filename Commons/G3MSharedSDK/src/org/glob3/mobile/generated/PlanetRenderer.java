@@ -368,7 +368,7 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
   
       for (int i = 0; i < firstLevelTilesCount; i++)
       {
-        _firstLevelTiles.get(i).updateQuadTree(rc, _renderedTiles, planet, cameraNormalizedPosition, cameraAngle2HorizonInRadians, cameraFrustumInModelCoordinates, _statistics, _verticalExaggeration, layerTilesRenderParameters, _texturizer, _tilesRenderParameters, _lastSplitTimer, _elevationDataProvider, _tessellator, _layerSet, _renderedSector, _firstRender, _tileDownloadPriority, texWidthSquared, texHeightSquared, nowInMS, _tilesStartedRendering, _tilesStoppedRendering); // if first render, force full render
+        _firstLevelTiles.get(i).updateQuadTree(rc, _renderedTiles, planet, cameraNormalizedPosition, cameraAngle2HorizonInRadians, cameraFrustumInModelCoordinates, _statistics, _verticalExaggeration, layerTilesRenderParameters, _texturizer, _tilesRenderParameters, _lastSplitTimer, _elevationDataProvider, _tessellator, _layerSet, _renderedSector, _firstRender, _tileDownloadPriority, texWidthSquared, texHeightSquared, nowInMS, _tileDownloadPriority, _tilesStartedRendering, _tilesStoppedRendering); // if first render, force full render
       }
     }
     else
@@ -542,17 +542,17 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
     {
       _statistics.log(rc.getLogger());
     }
-      _lastVisibleSector = _statistics.updateVisibleSector(_lastVisibleSector);
-      // ILogger::instance()->logInfo("=> visibleSector: %s", _lastVisibleSector->description().c_str());
-      if (_lastVisibleSector != null)
+    _lastVisibleSector = _statistics.updateVisibleSector(_lastVisibleSector);
+    // ILogger::instance()->logInfo("=> visibleSector: %s", _lastVisibleSector->description().c_str());
+    if (_lastVisibleSector != null)
+    {
+      final int visibleSectorListenersCount = _visibleSectorListeners.size();
+      for (int i = 0; i < visibleSectorListenersCount; i++)
       {
-        final int visibleSectorListenersCount = _visibleSectorListeners.size();
-        for (int i = 0; i < visibleSectorListenersCount; i++)
-        {
-          VisibleSectorListenerEntry entry = _visibleSectorListeners.get(i);
-          entry.tryToNotifyListener(_lastVisibleSector, rc);
-        }
+        VisibleSectorListenerEntry entry = _visibleSectorListeners.get(i);
+        entry.tryToNotifyListener(_lastVisibleSector, rc);
       }
+    }
   
   }
 
@@ -1023,6 +1023,74 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
       _layerTilesRenderParametersDirty = false;
     }
     return _layerTilesRenderParameters;
+  }
+
+
+  //std::vector<std::string> PlanetRenderer::getInfo() {
+  //  _info.clear();
+  //  std::vector<std::string> info = _layerSet->getInfo();
+  //
+  ///#ifdef C_CODE
+  //      _info.insert(_info.end(),info.begin(), info.end());
+  ///#endif
+  ///#ifdef JAVA_CODE
+  //      _infos.add(info);
+  ///#endif
+  //
+  //  return _info;
+  //}
+  
+  public final Tile getTileFromTouchEvent(G3MEventContext ec, TouchEvent touchEvent)
+  {
+  
+    final Vector2F pixel = touchEvent.getTouch(0).getPos();
+  
+    final Vector3D ray = _lastCamera.pixel2Ray(pixel);
+  
+    final Vector3D origin = _lastCamera.getCartesianPosition();
+  
+  
+  
+    final Planet planet = ec.getPlanet();
+  
+  
+  
+    final Vector3D positionCartesian = planet.closestIntersection(origin, ray);
+  
+    if (positionCartesian.isNan())
+    {
+  
+      ILogger.instance().logWarning("PlanetRenderer::onTouchEvent: positionCartesian ( - planet->closestIntersection(origin, ray) - ) is NaN");
+  
+      return null;
+  
+    }
+  
+  
+  
+    final Geodetic3D position = planet.toGeodetic3D(positionCartesian);
+  
+  
+  
+    final int firstLevelTilesCount = _firstLevelTiles.size();
+  
+    for (int i = 0; i < firstLevelTilesCount; i++)
+    {
+  
+      final Tile tile = _firstLevelTiles.get(i).getDeepestTileContaining(position);
+  
+      if (tile != null)
+      {
+  
+        return tile;
+  
+      }
+  
+    }
+  
+    return null;
+  
+  
   }
 
 }
