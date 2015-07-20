@@ -478,6 +478,8 @@ public:
   
   const LayerTilesRenderParameters* getLayerTilesRenderParameters();
   
+  const Tile* getTileFromTouchEvent(const G3MEventContext* ec, const TouchEvent& touchEvent) const;
+  
 };
 
 

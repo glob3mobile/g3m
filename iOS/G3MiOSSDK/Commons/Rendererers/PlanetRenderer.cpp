@@ -979,3 +979,52 @@ void PlanetRenderer::setChangedRendererInfoListener(ChangedRendererInfoListener*
 //  return _info;
 //}
 
+const Tile* PlanetRenderer::getTileFromTouchEvent(const G3MEventContext* ec, const TouchEvent& touchEvent) const {
+  
+  const Vector2F pixel = touchEvent.getTouch(0)->getPos();
+  
+  const Vector3D ray = _lastCamera->pixel2Ray(pixel);
+  
+  const Vector3D origin = _lastCamera->getCartesianPosition();
+  
+  
+  
+  const Planet* planet = ec->getPlanet();
+  
+  
+  
+  const Vector3D positionCartesian = planet->closestIntersection(origin, ray);
+  
+  if (positionCartesian.isNan()) {
+    
+    ILogger::instance()->logWarning("PlanetRenderer::onTouchEvent: positionCartesian ( - planet->closestIntersection(origin, ray) - ) is NaN");
+    
+    return NULL;
+    
+  }
+  
+  
+  
+  const Geodetic3D position = planet->toGeodetic3D(positionCartesian);
+  
+  
+  
+  const int firstLevelTilesCount = _firstLevelTiles.size();
+  
+  for (int i = 0; i < firstLevelTilesCount; i++) {
+    
+    const Tile* tile = _firstLevelTiles[i]->getDeepestTileContaining(position);
+    
+    if (tile != NULL) {
+      
+      return tile;
+      
+    }
+    
+  }
+  
+  return NULL;
+  
+  
+}
+
