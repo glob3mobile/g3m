@@ -786,7 +786,7 @@ void Tile::initializeElevationData(ElevationDataProvider* elevationDataProvider,
                                    const Planet* planet,
                                    bool renderDebug) {
   
-  if (canUseElevationDataProvider(elevationDataProvider)){
+  if (!canUseElevationDataProvider(elevationDataProvider)){
     //Marking data elevation as solved
     _elevationDataLevel = _level;
     return;
