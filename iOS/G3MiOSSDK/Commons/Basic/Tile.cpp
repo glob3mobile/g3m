@@ -189,9 +189,18 @@ Mesh* Tile::getTessellatorMesh(const G3MRenderContext* rc,
                             tilesRenderParameters->_renderDebug,
                             elevationDataRequestPriority);
     
-    if (_elevationData == NULL){
-      //      ILogger::instance()->logInfo("Tile not ready for rendering as no ElevationData can be found. Returning NULL Mesh.");
-      return NULL;
+    if (_elevationData == NULL) {
+      
+      initializeElevationData(elevationDataProvider,
+                              tessellator,
+                              layerTilesRenderParameters->_tileMeshResolution,
+                              rc->getPlanet(),
+                              tilesRenderParameters->_renderDebug);
+      
+      if (_elevationData == NULL){
+        //      ILogger::instance()->logInfo("Tile not ready for rendering as no ElevationData can be found. Returning NULL Mesh.");
+        return NULL;
+      }
     }
   }
   
@@ -790,8 +799,7 @@ void Tile::initializeElevationData(ElevationDataProvider* elevationDataProvider,
                                    bool renderDebug,
                                    long long requestPriority) {
   
-  if (elevationDataProvider == NULL ||
-      !elevationDataProvider->containsSector(_sector)){
+  if (canUseElevationDataProvider(elevationDataProvider)){
     //Marking data elevation as solved
     _elevationDataLevel = _level;
     return;
