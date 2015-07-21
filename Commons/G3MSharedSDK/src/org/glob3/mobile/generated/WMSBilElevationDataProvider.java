@@ -60,6 +60,13 @@ public class WMSBilElevationDataProvider extends ElevationDataProvider
       return -1;
     }
   
+    String path = requestStringPath(sector, extent);
+  
+    return _downloader.requestBuffer(new URL(path, false), requestPriority, TimeInterval.fromDays(30), true, new WMSBilElevationDataProvider_BufferDownloadListener(sector, extent, listener, autodeleteListener, _deltaHeight), true);
+  }
+
+  public final String requestStringPath(Sector sector, Vector2I extent)
+  {
     IStringBuilder isb = IStringBuilder.newStringBuilder();
   
     /*
@@ -84,7 +91,7 @@ public class WMSBilElevationDataProvider extends ElevationDataProvider
     /**
      There is some inconsistency between the WMS 1.3.0 standard and the NASA implementation regarding the CRS with EPSG 4326
     
-      http: //portal.opengeospatial.org/files/?artifact_id=14416
+     http: //portal.opengeospatial.org/files/?artifact_id=14416
      EXAMPLE 1 A <BoundingBox> metadata element for a Layer representing the entire Earth in the CRS:84 Layer CRS
      would be written as
      <BoundingBox CRS="CRS:84" minx="-180" miny="-90" maxx="180" maxy="90">.
@@ -136,9 +143,7 @@ public class WMSBilElevationDataProvider extends ElevationDataProvider
     final String path = isb.getString();
     if (isb != null)
        isb.dispose();
-  
-  
-    return _downloader.requestBuffer(new URL(path, false), requestPriority, TimeInterval.fromDays(30), true, new WMSBilElevationDataProvider_BufferDownloadListener(sector, extent, listener, autodeleteListener, _deltaHeight), true);
+    return path;
   }
 
   public final void cancelRequest(long requestId)
