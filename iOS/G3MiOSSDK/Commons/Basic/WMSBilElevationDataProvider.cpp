@@ -129,16 +129,8 @@ void WMSBilElevationDataProvider::initialize(const G3MContext* context) {
   _downloader = context->getDownloader();
 }
 
-const long long WMSBilElevationDataProvider::requestElevationData(const Sector& sector,
-                                                                  const Vector2I& extent,
-                                                                  long long requestPriority,
-                                                                  IElevationDataListener* listener,
-                                                                  bool autodeleteListener) {
-  if (_downloader == NULL) {
-    ILogger::instance()->logError("WMSBilElevationDataProvider was not initialized.");
-    return -1;
-  }
-  
+std::string WMSBilElevationDataProvider::requestStringPath(const Sector& sector,
+                                                                  const Vector2I& extent) {
   IStringBuilder* isb = IStringBuilder::newStringBuilder();
   
   /*
@@ -162,7 +154,7 @@ const long long WMSBilElevationDataProvider::requestElevationData(const Sector& 
   /**
    There is some inconsistency between the WMS 1.3.0 standard and the NASA implementation regarding the CRS with EPSG 4326
    
-    http://portal.opengeospatial.org/files/?artifact_id=14416
+   http://portal.opengeospatial.org/files/?artifact_id=14416
    EXAMPLE 1 A <BoundingBox> metadata element for a Layer representing the entire Earth in the CRS:84 Layer CRS
    would be written as
    <BoundingBox CRS="CRS:84" minx="-180" miny="-90" maxx="180" maxy="90">.
@@ -212,7 +204,20 @@ const long long WMSBilElevationDataProvider::requestElevationData(const Sector& 
   
   const std::string path = isb->getString();
   delete isb;
+  return path;
+}
+
+const long long WMSBilElevationDataProvider::requestElevationData(const Sector& sector,
+                                                                  const Vector2I& extent,
+                                                                  long long requestPriority,
+                                                                  IElevationDataListener* listener,
+                                                                  bool autodeleteListener) {
+  if (_downloader == NULL) {
+    ILogger::instance()->logError("WMSBilElevationDataProvider was not initialized.");
+    return -1;
+  }
   
+  std::string path = requestStringPath(sector, extent);
   
   return _downloader->requestBuffer(URL(path, false),
                                     requestPriority,
