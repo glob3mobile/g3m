@@ -134,15 +134,24 @@ public class Tile
   private Mesh getTessellatorMesh(G3MRenderContext rc, ElevationDataProvider elevationDataProvider, TileTessellator tessellator, LayerTilesRenderParameters layerTilesRenderParameters, TilesRenderParameters tilesRenderParameters)
   {
   
-    if ((_elevationData == null) && canUseElevationDataProvider(elevationDataProvider))
+    if (!canUseElevationDataProvider(elevationDataProvider))
     {
-  
-      initializeElevationData(elevationDataProvider, tessellator, layerTilesRenderParameters._tileMeshResolution, rc.getPlanet(), tilesRenderParameters._renderDebug);
+      //Marking as ED resolved
+      _elevationDataLevel = _level;
+    }
+    else
+    {
   
       if (_elevationData == null)
       {
-        //      ILogger::instance()->logInfo("Tile not ready for rendering as no ElevationData can be found. Returning NULL Mesh.");
-        return null;
+  
+        initializeElevationData(elevationDataProvider, tessellator, layerTilesRenderParameters._tileMeshResolution, rc.getPlanet(), tilesRenderParameters._renderDebug);
+  
+        if (_elevationData == null)
+        {
+          //      ILogger::instance()->logInfo("Tile not ready for rendering as no ElevationData can be found. Returning NULL Mesh.");
+          return null;
+        }
       }
     }
   
@@ -1069,7 +1078,7 @@ public class Tile
   public final void initializeElevationData(ElevationDataProvider elevationDataProvider, TileTessellator tessellator, Vector2I tileMeshResolution, Planet planet, boolean renderDebug)
   {
   
-    if (elevationDataProvider == null || !elevationDataProvider.containsSector(_sector))
+    if (canUseElevationDataProvider(elevationDataProvider))
     {
       //Marking data elevation as solved
       _elevationDataLevel = _level;
