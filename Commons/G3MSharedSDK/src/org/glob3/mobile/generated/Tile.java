@@ -1078,7 +1078,7 @@ public class Tile
   public final void initializeElevationData(ElevationDataProvider elevationDataProvider, TileTessellator tessellator, Vector2I tileMeshResolution, Planet planet, boolean renderDebug)
   {
   
-    if (canUseElevationDataProvider(elevationDataProvider))
+    if (!canUseElevationDataProvider(elevationDataProvider))
     {
       //Marking data elevation as solved
       _elevationDataLevel = _level;
