@@ -41,6 +41,12 @@ public class TileTessellatorMeshData
 
   public Vector3D _meshCenter;
 
+  public TileTessellatorMeshData()
+  {
+     _meshCenter = null;
+
+  }
+
   public void dispose()
   {
     if (_meshCenter != null)

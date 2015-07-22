@@ -551,7 +551,6 @@ public class Camera
     return distanceInMeters * _viewPortHeight / frustumData._top;
   }
 
-<<<<<<< HEAD
   public final double getPixelsForObjectSize(double distance, double objectSize)
   {
   
@@ -567,7 +566,6 @@ public class Camera
   
   }
 
-=======
   public final long getTimestamp()
   {
     return _timestamp;
@@ -662,7 +660,6 @@ public class Camera
   private MutableVector3D _ray0 = new MutableVector3D();
   private MutableVector3D _ray1 = new MutableVector3D();
 
->>>>>>> purgatory
   //  const Angle getHeading(const Vector3D& normal) const;
 
   //IF A NEW ATTRIBUTE IS ADDED CHECK CONSTRUCTORS AND RESET() !!!!

@@ -221,7 +221,7 @@ public abstract class ElevationData
     final double dY = (1.0 - v) * (_height - 1);
   
   
-    IMathUtils mu = IMathUtils.instance();
+    final IMathUtils mu = IMathUtils.instance();
     final int rX = (int) mu.round(dX);
     final int rY = (int) mu.round(dY);
     if (mu.abs(rX - dX) < 0.1 && mu.abs(rY - dY) < 0.1)
