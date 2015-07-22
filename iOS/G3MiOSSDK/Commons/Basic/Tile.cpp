@@ -307,8 +307,7 @@ const BoundingVolume* Tile::getBoundingVolume(const G3MRenderContext* rc,
       _boundingVolume = mesh->getBoundingVolume();
     }
   }
-  //  }
-  return NULL;
+  return _boundingVolume;
 }
 
 bool Tile::isVisible(const G3MRenderContext* rc,

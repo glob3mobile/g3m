@@ -344,7 +344,8 @@ double PlanetTileTessellator::createSurface(const Sector& tileSector,
   bool elevationDataMatchVertices = (elevationData != NULL &&
                                      meshSector.isEquals(tileSector) &&
                                      rx2 == elevationData->getExtent()._x &&
-                                     ry2 == elevationData->getExtent()._y);
+                                     ry2 == elevationData->getExtent()._y,
+                                     elevationData->getSector().isEquals(meshSector));
   
   double latGap = meshSector._deltaLatitude._degrees / (ry2 - 1);
   double lonGap = meshSector._deltaLongitude._degrees / (rx2 -1);

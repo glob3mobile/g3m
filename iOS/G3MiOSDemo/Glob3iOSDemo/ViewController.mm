@@ -333,12 +333,9 @@ Mesh* createSectorMesh(const Planet* planet,
   
   
   LayerSet* layerSet = new LayerSet();
-//  layerSet->addLayer(MapQuestLayer::newOSM(TimeInterval::fromDays(30)));
+  layerSet->addLayer(MapQuestLayer::newOSM(TimeInterval::fromDays(30)));
+  builder.getPlanetRendererBuilder()->setLayerSet(layerSet);
 
-  
-  
-    builder.getPlanetRendererBuilder()->setLayerSet(layerSet);
- 
   
 //  WMSBilElevationDataProvider* edp = new WMSBilElevationDataProvider(URL("http://data.worldwind.arc.nasa.gov/elev"),
 //                                                                     "srtm30",
@@ -376,11 +373,12 @@ Mesh* createSectorMesh(const Planet* planet,
   };
   
   
-  builder.setInitializationTask(new InitTask([self G3MWidget]), true);
+//  builder.setInitializationTask(new InitTask([self G3MWidget]), true);
 
   builder.getPlanetRendererBuilder()->setElevationDataProvider(edp);
   builder.getPlanetRendererBuilder()->setVerticalExaggeration(2.5);
 //  builder.getPlanetRendererBuilder()->setRenderDebug(true);
+  
   builder.initializeWidget();
   
   
