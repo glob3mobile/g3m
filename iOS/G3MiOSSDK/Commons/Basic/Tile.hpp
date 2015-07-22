@@ -175,6 +175,8 @@ private:
   
   double getMinimumTexelSideSize(const Planet* planet,
                                  const LayerTilesRenderParameters* layerTilesRenderParameters) const;
+  
+  long long _cameraTimeStampDuringLastLodTest;
 
 public:
   const Sector      _sector;

@@ -25,8 +25,7 @@ _deltaLatitude(upper._latitude.sub(lower._latitude)),
 _deltaLongitude(upper._longitude.sub(lower._longitude)),
 _center(Angle::midAngle(lower._latitude, upper._latitude),
         Angle::midAngle(lower._longitude, upper._longitude)),
-_deltaRadiusInRadians(-1.0),
-_normalizedCartesianCenter(NULL)
+_deltaRadiusInRadians(-1.0)
 {
 //    if (_deltaLatitude._degrees == 0){
 //        printf("NO AREA");
@@ -41,17 +40,6 @@ _deltaLongitude(sector._deltaLongitude),
 _center(sector._center),
 _deltaRadiusInRadians(sector._deltaRadiusInRadians)
 {
-    if (sector._normalizedCartesianCenter == NULL) {
-        _normalizedCartesianCenter = NULL;
-    }
-    else {
-        const Vector3D* normalizedCartesianCenter = sector._normalizedCartesianCenter;
-        _normalizedCartesianCenter = new Vector3D(*normalizedCartesianCenter);
-    }
-    
-//    if (_deltaLatitude._degrees == 0){
-//        printf("NO AREA");
-//    }
 }
 
 Sector Sector::fullSphere() {
@@ -112,7 +100,6 @@ const Angle Sector::getInnerPointLatitude(double v) const {
 }
 
 Sector::~Sector() {
-  delete _normalizedCartesianCenter;
 }
 
 
@@ -288,13 +275,6 @@ void Sector::rasterize(ICanvas*                   canvas,
   const float height = u._y - top;
 
   canvas->strokeRectangle(left, top, width, height);
-}
-
-const Vector3D Sector::getNormalizedCartesianCenter(const Planet* planet) const {
-  if (_normalizedCartesianCenter == NULL) {
-    _normalizedCartesianCenter = new Vector3D(planet->toCartesian(_center).normalized());
-  }
-  return *_normalizedCartesianCenter;
 }
 
 const GEORasterSymbol* Sector::createGEOSymbol(const Color& c) const {

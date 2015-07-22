@@ -31,8 +31,6 @@ private:
     // this value is only used in the method Sector::isBackOriented
     mutable double _deltaRadiusInRadians;
     
-    mutable Vector3D* _normalizedCartesianCenter;
-    
 public:
     
     //Special instances

@@ -184,7 +184,6 @@ public:
                      float verticalExaggeration,
                      TileTessellatorMeshData& data) const;
   
-  
 };
 
 #endif
