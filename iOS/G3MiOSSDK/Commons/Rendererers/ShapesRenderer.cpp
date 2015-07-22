@@ -46,8 +46,8 @@ public:
 
 RenderState ShapesRenderer::getRenderState(const G3MRenderContext* rc) {
   if (!_renderNotReadyShapes) {
-    const int shapesCount = _shapes.size();
-    for (int i = 0; i < shapesCount; i++) {
+    const size_t shapesCount = _shapes.size();
+    for (size_t i = 0; i < shapesCount; i++) {
       Shape* shape = _shapes[i];
       const bool shapeReady = shape->isReadyToRender(rc);
       if (!shapeReady) {
@@ -60,37 +60,21 @@ RenderState ShapesRenderer::getRenderState(const G3MRenderContext* rc) {
 
 void ShapesRenderer::updateGLState(const G3MRenderContext* rc) {
 
-  const Camera* cam = rc->getCurrentCamera();
-  /*
-
-   if (_projection == NULL) {
-   _projection = new ProjectionGLFeature(cam->getProjectionMatrix44D());
-   _glState->addGLFeature(_projection, true);
-   _glStateTransparent->addGLFeature(_projection, true);
-   } else{
-   _projection->setMatrix(cam->getProjectionMatrix44D());
-   }
-
-   if (_model == NULL) {
-   _model = new ModelGLFeature(cam->getModelMatrix44D());
-   _glState->addGLFeature(_model, true);
-   _glStateTransparent->addGLFeature(_model, true);
-   } else{
-   _model->setMatrix(cam->getModelMatrix44D());
-   }
-   */
+  const Camera* camera = rc->getCurrentCamera();
   ModelViewGLFeature* f = (ModelViewGLFeature*) _glState->getGLFeature(GLF_MODEL_VIEW);
   if (f == NULL) {
-    _glState->addGLFeature(new ModelViewGLFeature(cam), true);
-  } else{
-    f->setMatrix(cam->getModelViewMatrix44D());
+    _glState->addGLFeature(new ModelViewGLFeature(camera), true);
+  }
+  else {
+    f->setMatrix(camera->getModelViewMatrix44D());
   }
 
   f = (ModelViewGLFeature*) _glStateTransparent->getGLFeature(GLF_MODEL_VIEW);
   if (f == NULL) {
-    _glStateTransparent->addGLFeature(new ModelViewGLFeature(cam), true);
-  } else{
-    f->setMatrix(cam->getModelViewMatrix44D());
+    _glStateTransparent->addGLFeature(new ModelViewGLFeature(camera), true);
+  }
+  else {
+    f->setMatrix(camera->getModelViewMatrix44D());
   }
 
 }
@@ -99,7 +83,8 @@ void ShapesRenderer::render(const G3MRenderContext* rc, GLState* glState) {
   // Saving camera for use in onTouchEvent
   _lastCamera = rc->getCurrentCamera();
 
-  const Vector3D cameraPosition = rc->getCurrentCamera()->getCartesianPosition();
+  MutableVector3D cameraPosition;
+  rc->getCurrentCamera()->getCartesianPositionMutable(cameraPosition);
 
   //Setting camera matrixes
   updateGLState(rc);
@@ -108,8 +93,8 @@ void ShapesRenderer::render(const G3MRenderContext* rc, GLState* glState) {
   _glStateTransparent->setParent(glState);
 
 
-  const int shapesCount = _shapes.size();
-  for (int i = 0; i < shapesCount; i++) {
+  const size_t shapesCount = _shapes.size();
+  for (size_t i = 0; i < shapesCount; i++) {
     Shape* shape = _shapes[i];
     if (shape->isEnable()) {
       if (shape->isTransparent(rc)) {
@@ -150,8 +135,8 @@ void ShapesRenderer::removeShape(Shape* shape) {
 
 void ShapesRenderer::removeAllShapes(bool deleteShapes) {
   if (deleteShapes) {
-    const int shapesCount = _shapes.size();
-    for (int i = 0; i < shapesCount; i++) {
+    const size_t shapesCount = _shapes.size();
+    for (size_t i = 0; i < shapesCount; i++) {
       Shape* shape = _shapes[i];
       delete shape;
     }
@@ -172,13 +157,14 @@ public:
 
 
 
-std::vector<ShapeDistance> ShapesRenderer::intersectionsDistances(const Vector3D& origin,
+std::vector<ShapeDistance> ShapesRenderer::intersectionsDistances(const Planet* planet,
+                                                                  const Vector3D& origin,
                                                                   const Vector3D& direction) const
 {
   std::vector<ShapeDistance> shapeDistances;
   for (int n=0; n<_shapes.size(); n++) {
     Shape* shape = _shapes[n];
-    std::vector<double> distances = shape->intersectionsDistances(origin, direction);
+    std::vector<double> distances = shape->intersectionsDistances(planet, origin, direction);
     for (int i=0; i<distances.size(); i++) {
       shapeDistances.push_back(ShapeDistance(distances[i], shape));
     }
@@ -213,20 +199,26 @@ bool ShapesRenderer::onTouchEvent(const G3MEventContext* ec,
         touchEvent->getTapCount()==1 &&
         touchEvent->getType()==Down) {
       const Vector3D origin = _lastCamera->getCartesianPosition();
-      const Vector2I pixel = touchEvent->getTouch(0)->getPos();
+      const Vector2F pixel = touchEvent->getTouch(0)->getPos();
       const Vector3D direction = _lastCamera->pixel2Ray(pixel);
-      std::vector<ShapeDistance> shapeDistances = intersectionsDistances(origin, direction);
+      const Planet* planet = ec->getPlanet();
+      if (!direction.isNan()) {
+        std::vector<ShapeDistance> shapeDistances = intersectionsDistances(planet, origin, direction);
 
-      if (!shapeDistances.empty()) {
-        //        printf ("Found %d intersections with shapes:\n",
-        //                (int)shapeDistances.size());
-        for (int i=0; i<shapeDistances.size(); i++) {
-          //          printf ("   %d: shape %x to distance %f\n",
-          //                  i+1,
-          //                  (unsigned int)shapeDistances[i]._shape,
-          //                  shapeDistances[i]._distance);
+        if (!shapeDistances.empty()) {
+          //        printf ("Found %d intersections with shapes:\n",
+          //                (int)shapeDistances.size());
+          for (int i=0; i<shapeDistances.size(); i++) {
+//            printf ("   %d: shape %x to distance %f\n",
+//                    i+1,
+//                    (unsigned int)shapeDistances[i]._shape,
+//                    shapeDistances[i]._distance);
+          }
         }
+      } else {
+        ILogger::instance()->logWarning("ShapesRenderer::onTouchEvent: direction ( - _lastCamera->pixel2Ray(pixel) - ) is NaN");
       }
+      
     }
   }
   return false;
@@ -234,8 +226,8 @@ bool ShapesRenderer::onTouchEvent(const G3MEventContext* ec,
 
 void ShapesRenderer::drainLoadQueue() {
 
-  const int loadQueueSize = _loadQueue.size();
-  for (int i = 0; i < loadQueueSize; i++) {
+  const size_t loadQueueSize = _loadQueue.size();
+  for (size_t i = 0; i < loadQueueSize; i++) {
     LoadQueueItem* item = _loadQueue[i];
     requestBuffer(item->_url,
                   item->_priority,
@@ -256,8 +248,8 @@ void ShapesRenderer::drainLoadQueue() {
 }
 
 void ShapesRenderer::cleanLoadQueue() {
-  const int loadQueueSize = _loadQueue.size();
-  for (int i = 0; i < loadQueueSize; i++) {
+  const size_t loadQueueSize = _loadQueue.size();
+  for (size_t i = 0; i < loadQueueSize; i++) {
     LoadQueueItem* item = _loadQueue[i];
     delete item;
   }
@@ -266,8 +258,8 @@ void ShapesRenderer::cleanLoadQueue() {
 
 void ShapesRenderer::onChangedContext() {
   if (_context != NULL) {
-    const int shapesCount = _shapes.size();
-    for (int i = 0; i < shapesCount; i++) {
+    const size_t shapesCount = _shapes.size();
+    for (size_t i = 0; i < shapesCount; i++) {
       Shape* shape = _shapes[i];
       shape->initialize(_context);
     }
@@ -574,16 +566,16 @@ void ShapesRenderer::requestBuffer(const URL&          url,
 }
 
 void ShapesRenderer::enableAll() {
-  const int shapesCount = _shapes.size();
-  for (int i = 0; i < shapesCount; i++) {
+  const size_t shapesCount = _shapes.size();
+  for (size_t i = 0; i < shapesCount; i++) {
     Shape* shape = _shapes[i];
     shape->setEnable(true);
   }
 }
 
 void ShapesRenderer::disableAll() {
-  const int shapesCount = _shapes.size();
-  for (int i = 0; i < shapesCount; i++) {
+  const size_t shapesCount = _shapes.size();
+  for (size_t i = 0; i < shapesCount; i++) {
     Shape* shape = _shapes[i];
     shape->setEnable(false);
   }

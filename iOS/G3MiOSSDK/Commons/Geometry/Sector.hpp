@@ -56,11 +56,11 @@ public:
     
     Sector(const Sector& sector);
     
-    bool isNan() const{
+    bool isNan() const {
         return ISNAN(_lower._latitude._degrees);
     }
     
-    bool hasNoArea() const{
+    bool hasNoArea() const {
         return _deltaLatitude._radians == 0 || _deltaLongitude._radians == 0;
     }
     
@@ -160,7 +160,8 @@ public:
     
     const Angle clampLatitude(const Angle& latitude) const;
     const Angle clampLongitude(const Angle& longitude) const;
-    
+  
+    const std::string id() const;
     const std::string description() const;
 #ifdef JAVA_CODE
     @Override
@@ -201,19 +202,19 @@ public:
         return (_lower._latitude._degrees <= -89.9);
     }
     
-    Angle getNorth() const{
+    Angle getNorth() const {
         return _upper._latitude;
     }
     
-    Angle getSouth() const{
+    Angle getSouth() const {
         return _lower._latitude;
     }
     
-    Angle getEast() const{
+    Angle getEast() const {
         return _upper._longitude;
     }
     
-    Angle getWest() const{
+    Angle getWest() const {
         return _lower._longitude;
     }
     
@@ -235,7 +236,7 @@ public:
     
     const Vector3D getNormalizedCartesianCenter(const Planet* planet) const;
     
-    const double getAngularAreaInSquaredDegrees() const{
+    const double getAngularAreaInSquaredDegrees() const {
         return _deltaLatitude._degrees * _deltaLongitude._degrees;
     }
     

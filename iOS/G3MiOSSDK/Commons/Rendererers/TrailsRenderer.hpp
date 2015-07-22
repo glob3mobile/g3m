@@ -120,7 +120,7 @@ private:
 
 
 public:
-  Trail(Color color,
+  Trail(const Color& color,
         float ribbonWidth,
         float heightDelta):
   _visible(true),
@@ -177,6 +177,9 @@ public:
   }
 
   void addTrail(Trail* trail);
+
+  void removeTrail(Trail* trail,
+                   bool deleteTrail = true);
 
   virtual ~TrailsRenderer();
 

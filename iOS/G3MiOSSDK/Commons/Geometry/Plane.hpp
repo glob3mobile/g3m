@@ -95,7 +95,7 @@ public:
 
   Angle vectorRotationForAxis(const Vector3D& vector, const Vector3D& axis) const;
 
-  Vector3D getNormal() const{
+  Vector3D getNormal() const {
     return _normal;
   }
 

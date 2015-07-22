@@ -23,9 +23,9 @@ private:
   
   bool _enable;
   
-  std::vector<std::string> _info;
+  std::vector<const Info*> _info;
   
-  void notifyChangedInfo(const std::vector<std::string>& info);
+  void notifyChangedInfo(const std::vector<const Info*>& info);
   
 protected:
   
@@ -55,7 +55,11 @@ protected:
     _context = NULL;
     _changedInfoListener = NULL;
   }
-  
+
+  virtual void onChangedContext() { }
+
+  virtual void onLostContext() { }
+
 public:
   
   bool isEnable() const {
@@ -83,10 +87,6 @@ public:
     _context = NULL;
     onLostContext();
   }
-
-  virtual void onChangedContext() { }
-  
-  virtual void onLostContext() { }
 
 
   virtual RenderState getRenderState(const G3MRenderContext* rc) {
@@ -124,16 +124,16 @@ public:
     return false;
   }
   
-  void setInfo(const std::vector<std::string>& info);
+  void setInfo(const std::vector<const Info*>& info);
   
-  void addInfo(const std::vector<std::string>& info);
+  void addInfo(const std::vector<const Info*>& info);
   
-  void addInfo(const std::string info);
+  void addInfo(const Info* info);
 
   
   
   
-  void setChangedRendererInfoListener(ChangedRendererInfoListener* changedInfoListener, const int rendererIdentifier);
+  virtual void setChangedRendererInfoListener(ChangedRendererInfoListener* changedInfoListener, const int rendererIdentifier);
 };
 
 #endif

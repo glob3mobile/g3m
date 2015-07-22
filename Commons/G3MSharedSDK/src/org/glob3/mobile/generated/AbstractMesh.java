@@ -26,16 +26,16 @@ public abstract class AbstractMesh extends Mesh
 {
   protected final int _primitive;
   protected final boolean _owner;
-  protected Vector3D _center ;
+  protected final Vector3D _center ;
   protected final MutableMatrix44D _translationMatrix;
-  protected IFloatBuffer _vertices;
+  protected final IFloatBuffer _vertices;
   protected final Color _flatColor;
-  protected IFloatBuffer _colors;
+  protected final IFloatBuffer _colors;
   protected final float _colorsIntensity;
   protected final float _lineWidth;
   protected final float _pointSize;
   protected final boolean _depthTest;
-  protected IFloatBuffer _normals;
+  protected final IFloatBuffer _normals;
 
   protected BoundingVolume _boundingVolume;
   protected final BoundingVolume computeBoundingVolume()
@@ -111,7 +111,7 @@ public abstract class AbstractMesh extends Mesh
   protected final void createGLState()
   {
   
-    _glState.addGLFeature(new GeometryGLFeature(_vertices, 3, 0, false, 0, _depthTest, false, 0, false, 0.0f, 0.0f, _lineWidth, true, _pointSize), false); //POINT SIZE -  Depth test -  Stride 0 -  Not normalized -  Index 0 -  Our buffer contains elements of 3 -  The attribute is a float vector of 4 elements
+    _glState.addGLFeature(new GeometryGLFeature(_vertices, 3, 0, false, 0, _depthTest, false, 0, false, 0.0f, 0.0f, _lineWidth, true, _pointSize), false); // Depth test -  Stride 0 -  Not normalized -  Index 0 -  Our buffer contains elements of 3 -  The attribute is a float vector of 4 elements
   
     if (_normals != null)
     {
@@ -136,7 +136,7 @@ public abstract class AbstractMesh extends Mesh
   
     if (_colors != null)
     {
-      _glState.addGLFeature(new ColorGLFeature(_colors, 4, 0, false, 0, true, GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha()), false); //Stride 0 - Not normalized - Index 0 - Our buffer contains elements of 4 - The attribute is a float vector of 4 elements RGBA
+      _glState.addGLFeature(new ColorGLFeature(_colors, 4, 0, false, 0, true, GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha()), false); // Stride 0 -  Not normalized -  Index 0 -  Our buffer contains elements of 4 -  The attribute is a float vector of 4 elements RGBA
   
     }
   
@@ -160,11 +160,10 @@ public abstract class AbstractMesh extends Mesh
     final int size = _vertices.size();
     for (int i = 0; i < size; i+=3)
     {
+      final Vector3D v = new Vector3D(_vertices.get(i), _vertices.get(i+1), _vertices.get(i+2));
+      final Vector3D n = new Vector3D(_normals.get(i), _normals.get(i+1), _normals.get(i+2));
   
-      Vector3D v = new Vector3D(_vertices.get(i), _vertices.get(i+1), _vertices.get(i+2));
-      Vector3D n = new Vector3D(_normals.get(i), _normals.get(i+1), _normals.get(i+2));
-  
-      Vector3D v_n = v.add(n.normalized().times(normalsSize));
+      final Vector3D v_n = v.add(n.normalized().times(normalsSize));
   
       fbb.add(v);
       fbb.add(v_n);
@@ -208,7 +207,6 @@ public abstract class AbstractMesh extends Mesh
        _normalsMesh.dispose();
   
     super.dispose();
-  
   }
 
   public final BoundingVolume getBoundingVolume()

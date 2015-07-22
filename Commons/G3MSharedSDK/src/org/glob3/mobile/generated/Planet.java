@@ -45,23 +45,40 @@ public abstract class Planet
   }
 
   public abstract Vector3D getRadii();
+
   public abstract Vector3D centricSurfaceNormal(Vector3D positionOnEllipsoid);
+
   public abstract Vector3D geodeticSurfaceNormal(Vector3D positionOnEllipsoid);
-
   public abstract Vector3D geodeticSurfaceNormal(MutableVector3D positionOnEllipsoid);
-
-
   public abstract Vector3D geodeticSurfaceNormal(Angle latitude, Angle longitude);
-
   public abstract Vector3D geodeticSurfaceNormal(Geodetic3D geodetic);
   public abstract Vector3D geodeticSurfaceNormal(Geodetic2D geodetic);
-  public abstract java.util.ArrayList<Double> intersectionsDistances(Vector3D origin, Vector3D direction);
+
+  public abstract void geodeticSurfaceNormal(Angle latitude, Angle longitude, MutableVector3D result);
+
+  public final java.util.ArrayList<Double> intersectionsDistances(Vector3D origin, Vector3D direction)
+  {
+    return intersectionsDistances(origin._x, origin._y, origin._z, direction._x, direction._y, direction._z);
+  }
+
+  public final java.util.ArrayList<Double> intersectionsDistances(Vector3D origin, MutableVector3D direction)
+  {
+    return intersectionsDistances(origin._x, origin._y, origin._z, direction.x(), direction.y(), direction.z());
+  }
+
+  public abstract java.util.ArrayList<Double> intersectionsDistances(double originX, double originY, double originZ, double directionX, double directionY, double directionZ);
 
   public abstract Vector3D toCartesian(Angle latitude, Angle longitude, double height);
-
   public abstract Vector3D toCartesian(Geodetic3D geodetic);
   public abstract Vector3D toCartesian(Geodetic2D geodetic);
   public abstract Vector3D toCartesian(Geodetic2D geodetic, double height);
+
+  public abstract void toCartesian(Angle latitude, Angle longitude, double height, MutableVector3D result);
+  public abstract void toCartesian(Geodetic3D geodetic, MutableVector3D result);
+  public abstract void toCartesian(Geodetic2D geodetic, MutableVector3D result);
+  public abstract void toCartesian(Geodetic2D geodetic, double height, MutableVector3D result);
+
+
   public abstract Geodetic2D toGeodetic2D(Vector3D positionOnEllipsoid);
 
   public abstract Geodetic3D toGeodetic3D(Vector3D position);
@@ -83,7 +100,19 @@ public abstract class Planet
 
   //virtual Vector3D closestPointToSphere(const Vector3D& pos, const Vector3D& ray) const = 0;
 
-  public abstract Vector3D closestIntersection(Vector3D pos, Vector3D ray);
+  public final Vector3D closestIntersection(Vector3D pos, Vector3D ray)
+  {
+    if (pos.isNan() || ray.isNan())
+    {
+      return Vector3D.nan();
+    }
+    java.util.ArrayList<Double> distances = intersectionsDistances(pos._x, pos._y, pos._z, ray._x, ray._y, ray._z);
+    if (distances.isEmpty())
+    {
+      return Vector3D.nan();
+    }
+    return pos.add(ray.times(distances.get(0)));
+  }
 
 
   public abstract MutableMatrix44D createGeodeticTransformMatrix(Geodetic3D position);
@@ -122,4 +151,7 @@ public abstract class Planet
   
     return new CoordinateSystem(x,y,z, origin);
   }
+
+  public abstract String getType();
+
 }

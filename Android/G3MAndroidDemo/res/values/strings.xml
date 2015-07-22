@@ -29,6 +29,8 @@
     <string name="arctriomphe">Arc de Triomphe</string>
     <string name="title_activity_simplest_raster">SimplestRasterActivity</string>
      <string name="threedsymbology">3D Symbology</string>
+    <string name="changeSymbology">Change Symbology</string>
+     <string name="vector_tiles">Vector tiles</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_scenario_terrain">ScenarioTerrain</string>
     <string name="title_activity_plane_flying">PlaneFlyingActivity</string>

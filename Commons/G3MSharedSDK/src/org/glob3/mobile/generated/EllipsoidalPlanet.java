@@ -44,18 +44,16 @@ public class EllipsoidalPlanet extends Planet
   public EllipsoidalPlanet(Ellipsoid ellipsoid)
   {
      _ellipsoid = ellipsoid;
-  
   }
 
   public void dispose()
   {
-  super.dispose();
-
+    super.dispose();
   }
 
   public final Vector3D getRadii()
   {
-    return _ellipsoid.getRadii();
+    return _ellipsoid._radii;
   }
 
   public final Vector3D centricSurfaceNormal(Vector3D positionOnEllipsoidalPlanet)
@@ -65,22 +63,16 @@ public class EllipsoidalPlanet extends Planet
 
   public final Vector3D geodeticSurfaceNormal(Vector3D positionOnEllipsoidalPlanet)
   {
-    return positionOnEllipsoidalPlanet.times(_ellipsoid.getOneOverRadiiSquared()).normalized();
+    return positionOnEllipsoidalPlanet.times(_ellipsoid._oneOverRadiiSquared).normalized();
   }
 
   public final Vector3D geodeticSurfaceNormal(MutableVector3D positionOnEllipsoidalPlanet)
   {
-    return positionOnEllipsoidalPlanet.times(_ellipsoid.getOneOverRadiiSquared()).normalized().asVector3D();
+    return positionOnEllipsoidalPlanet.times(_ellipsoid._oneOverRadiiSquared).normalized().asVector3D();
   }
-
 
   public final Vector3D geodeticSurfaceNormal(Angle latitude, Angle longitude)
   {
-  //  const double cosLatitude = latitude.cosinus();
-  //
-  //  return Vector3D(cosLatitude * longitude.cosinus(),
-  //                  cosLatitude * longitude.sinus(),
-  //                  latitude.sinus());
     final double cosLatitude = java.lang.Math.cos(latitude._radians);
   
     return new Vector3D(cosLatitude * java.lang.Math.cos(longitude._radians), cosLatitude * java.lang.Math.sin(longitude._radians), java.lang.Math.sin(latitude._radians));
@@ -96,16 +88,23 @@ public class EllipsoidalPlanet extends Planet
     return geodeticSurfaceNormal(geodetic._latitude, geodetic._longitude);
   }
 
-  public final java.util.ArrayList<Double> intersectionsDistances(Vector3D origin, Vector3D direction)
+  public final void geodeticSurfaceNormal(Angle latitude, Angle longitude, MutableVector3D result)
   {
-    return _ellipsoid.intersectionsDistances(origin, direction);
+    final double cosLatitude = java.lang.Math.cos(latitude._radians);
+  
+    result.set(cosLatitude * java.lang.Math.cos(longitude._radians), cosLatitude * java.lang.Math.sin(longitude._radians), java.lang.Math.sin(latitude._radians));
+  }
+
+  public final java.util.ArrayList<Double> intersectionsDistances(double originX, double originY, double originZ, double directionX, double directionY, double directionZ)
+  {
+    return _ellipsoid.intersectionsDistances(originX, originY, originZ, directionX, directionY, directionZ);
   }
 
   public final Vector3D toCartesian(Angle latitude, Angle longitude, double height)
   {
     final Vector3D n = geodeticSurfaceNormal(latitude, longitude);
   
-    final Vector3D k = _ellipsoid.getRadiiSquared().times(n);
+    final Vector3D k = _ellipsoid._radiiSquared.times(n);
     final double gamma = IMathUtils.instance().sqrt((k._x * n._x) + (k._y * n._y) + (k._z * n._z));
   
     final Vector3D rSurface = k.div(gamma);
@@ -125,6 +124,40 @@ public class EllipsoidalPlanet extends Planet
   public final Vector3D toCartesian(Geodetic2D geodetic, double height)
   {
     return toCartesian(geodetic._latitude, geodetic._longitude, height);
+  }
+
+  public final void toCartesian(Angle latitude, Angle longitude, double height, MutableVector3D result)
+  {
+    geodeticSurfaceNormal(latitude, longitude, result);
+    final double nX = result.x();
+    final double nY = result.y();
+    final double nZ = result.z();
+  
+    final double kX = nX * _ellipsoid._radiiSquared._x;
+    final double kY = nY * _ellipsoid._radiiSquared._y;
+    final double kZ = nZ * _ellipsoid._radiiSquared._z;
+  
+    final double gamma = IMathUtils.instance().sqrt((kX * nX) + (kY * nY) + (kZ * nZ));
+  
+    final double rSurfaceX = kX / gamma;
+    final double rSurfaceY = kY / gamma;
+    final double rSurfaceZ = kZ / gamma;
+  
+    result.set(rSurfaceX + (nX * height), rSurfaceY + (nY * height), rSurfaceZ + (nZ * height));
+  }
+
+  public final void toCartesian(Geodetic3D geodetic, MutableVector3D result)
+  {
+    toCartesian(geodetic._latitude, geodetic._longitude, geodetic._height, result);
+  }
+
+  public final void toCartesian(Geodetic2D geodetic, MutableVector3D result)
+  {
+    toCartesian(geodetic._latitude, geodetic._longitude, 0, result);
+  }
+  public final void toCartesian(Geodetic2D geodetic, double height, MutableVector3D result)
+  {
+    toCartesian(geodetic._latitude, geodetic._longitude, height, result);
   }
 
   public final Geodetic2D toGeodetic2D(Vector3D positionOnEllipsoidalPlanet)
@@ -149,9 +182,9 @@ public class EllipsoidalPlanet extends Planet
   {
     final IMathUtils mu = IMathUtils.instance();
   
-    final Vector3D oneOverRadiiSquared = _ellipsoid.getOneOverRadiiSquared();
-    final Vector3D radiiSquared = _ellipsoid.getRadiiSquared();
-    final Vector3D radiiToTheFourth = _ellipsoid.getRadiiToTheFourth();
+    final Vector3D oneOverRadiiSquared = _ellipsoid._oneOverRadiiSquared;
+    final Vector3D radiiSquared = _ellipsoid._radiiSquared;
+    final Vector3D radiiToTheFourth = _ellipsoid._radiiToTheFourth;
   
     final double beta = 1.0 / mu.sqrt((position._x * position._x) * oneOverRadiiSquared._x + (position._y * position._y) * oneOverRadiiSquared._y + (position._z * position._z) * oneOverRadiiSquared._z);
   
@@ -197,7 +230,7 @@ public class EllipsoidalPlanet extends Planet
 
   public final Vector3D scaleToGeocentricSurface(Vector3D position)
   {
-    Vector3D oneOverRadiiSquared = _ellipsoid.getOneOverRadiiSquared();
+    Vector3D oneOverRadiiSquared = _ellipsoid._oneOverRadiiSquared;
   
     final double beta = 1.0 / IMathUtils.instance().sqrt((position._x * position._x) * oneOverRadiiSquared._x + (position._y * position._y) * oneOverRadiiSquared._y + (position._z * position._z) * oneOverRadiiSquared._z);
   
@@ -213,7 +246,7 @@ public class EllipsoidalPlanet extends Planet
     }
   
     final Vector3D normal = start.cross(stop).normalized();
-    final double theta = start.angleBetween(stop)._radians;
+    final double theta = start.angleInRadiansBetween(stop);
   
     //int n = max((int)(theta / granularity) - 1, 0);
     int n = ((int)(theta / granularity) - 1) > 0 ? (int)(theta / granularity) - 1 : 0;
@@ -251,7 +284,7 @@ public class EllipsoidalPlanet extends Planet
   {
     final IMathUtils mu = IMathUtils.instance();
   
-    final Vector3D radius = _ellipsoid.getRadii();
+    final Vector3D radius = _ellipsoid._radii;
     final double R = (radius._x + radius._y + radius._z) / 3;
   
     // spheric distance from P to Q
@@ -279,7 +312,7 @@ public class EllipsoidalPlanet extends Planet
   {
     final IMathUtils mu = IMathUtils.instance();
   
-    final Vector3D radius = _ellipsoid.getRadii();
+    final Vector3D radius = _ellipsoid._radii;
     final double R = (radius._x + radius._y + radius._z) / 3;
   
     final double medLat = g1._latitude._degrees;
@@ -350,17 +383,6 @@ public class EllipsoidalPlanet extends Planet
     return result;
   }
 
-  public final Vector3D closestIntersection(Vector3D pos, Vector3D ray)
-  {
-    java.util.ArrayList<Double> distances = intersectionsDistances(pos, ray);
-    if (distances.isEmpty())
-    {
-      return Vector3D.nan();
-    }
-    return pos.add(ray.times(distances.get(0)));
-  }
-
-
   public final MutableMatrix44D createGeodeticTransformMatrix(Geodetic3D position)
   {
     final MutableMatrix44D translation = MutableMatrix44D.createTranslationMatrix(toCartesian(position));
@@ -376,8 +398,10 @@ public class EllipsoidalPlanet extends Planet
 
   public final void beginSingleDrag(Vector3D origin, Vector3D initialRay)
   {
-    _origin = origin.asMutableVector3D();
-    _initialPoint = closestIntersection(origin, initialRay).asMutableVector3D();
+  //  _origin = origin.asMutableVector3D();
+    _origin.copyFrom(origin);
+  //  _initialPoint = closestIntersection(origin, initialRay).asMutableVector3D();
+    _initialPoint.copyFrom(closestIntersection(origin, initialRay));
     _validSingleDrag = false;
   }
 
@@ -393,7 +417,13 @@ public class EllipsoidalPlanet extends Planet
     if (finalPoint.isNan())
     {
       //printf ("--invalid final point in drag!!\n");
-      finalPoint = closestPointToSphere(origin, finalRay).asMutableVector3D();
+  //    finalPoint = closestPointToSphere(origin, finalRay).asMutableVector3D();
+      finalPoint.copyFrom(closestPointToSphere(origin, finalRay));
+      if (finalPoint.isNan())
+      {
+        ILogger.instance().logWarning("EllipsoidalPlanet::singleDrag-> finalPoint is NaN");
+        return MutableMatrix44D.invalid();
+      }
     }
   
     // compute the rotation axis
@@ -406,7 +436,8 @@ public class EllipsoidalPlanet extends Planet
        return MutableMatrix44D.invalid();
   
     // save params for possible inertial animations
-    _lastDragAxis = rotationAxis.asMutableVector3D();
+  //  _lastDragAxis = rotationAxis.asMutableVector3D();
+    _lastDragAxis.copyFrom(rotationAxis);
     double radians = rotationDelta._radians;
     _lastDragRadiansStep = radians - _lastDragRadians;
     _lastDragRadians = radians;
@@ -473,7 +504,7 @@ public class EllipsoidalPlanet extends Planet
     d = mu.abs((distance-d)*0.3);
     if (angle0 < _angleBetweenInitialPoints)
        d*=-1;
-    translation = MutableMatrix44D.createTranslationMatrix(_centerRay.asVector3D().normalized().times(d));
+    translation.copyValue(MutableMatrix44D.createTranslationMatrix(_centerRay.asVector3D().normalized().times(d)));
     positionCamera = positionCamera.transformedBy(translation, 1.0);
     dAccum += d;
     {
@@ -494,7 +525,7 @@ public class EllipsoidalPlanet extends Planet
   
       if ((angle_n1-angle_n)/(angle_n-_angleBetweenInitialPoints) < 0)
          d*=-0.5;
-      translation = MutableMatrix44D.createTranslationMatrix(_centerRay.asVector3D().normalized().times(d));
+      translation.copyValue(MutableMatrix44D.createTranslationMatrix(_centerRay.asVector3D().normalized().times(d)));
       positionCamera = positionCamera.transformedBy(translation, 1.0);
       dAccum += d;
       angle_n1 = angle_n;
@@ -530,14 +561,16 @@ public class EllipsoidalPlanet extends Planet
       viewDirection = viewDirection.transformedBy(rotation, 0.0);
       ray0 = ray0.transformedBy(rotation, 0.0);
       ray1 = ray1.transformedBy(rotation, 0.0);
-      matrix = rotation.multiply(matrix);
+      //matrix.copyValue(rotation.multiply(matrix));
+      matrix.copyValueOfMultiplication(rotation, matrix);
     }
   
     // move the camera forward
     {
       MutableMatrix44D translation2 = MutableMatrix44D.createTranslationMatrix(viewDirection.asVector3D().normalized().times(dAccum));
       positionCamera = positionCamera.transformedBy(translation2, 1.0);
-      matrix = translation2.multiply(matrix);
+  //    matrix.copyValue(translation2.multiply(matrix));
+      matrix.copyValueOfMultiplication(translation2, matrix);
     }
   
     // compute 3D point of view center
@@ -560,7 +593,8 @@ public class EllipsoidalPlanet extends Planet
       viewDirection = viewDirection.transformedBy(rotation, 0.0);
       ray0 = ray0.transformedBy(rotation, 0.0);
       ray1 = ray1.transformedBy(rotation, 0.0);
-      matrix = rotation.multiply(matrix);
+  //    matrix.copyValue(rotation.multiply(matrix));
+      matrix.copyValueOfMultiplication(rotation, matrix);
     }
   
     // camera rotation
@@ -574,7 +608,8 @@ public class EllipsoidalPlanet extends Planet
       if (sign<0)
          angle = -angle;
       MutableMatrix44D rotation = MutableMatrix44D.createGeneralRotationMatrix(Angle.fromDegrees(angle), normal, centerPoint2);
-      matrix = rotation.multiply(matrix);
+  //    matrix.copyValue(rotation.multiply(matrix));
+      matrix.copyValueOfMultiplication(rotation, matrix);
     }
   
     return matrix;
@@ -643,5 +678,9 @@ public class EllipsoidalPlanet extends Planet
     return new Geodetic3D(rendereSector._center, height);
   }
 
+  public final String getType()
+  {
+    return "Ellipsoidal";
+  }
 
 }

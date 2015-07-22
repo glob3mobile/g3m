@@ -20,6 +20,8 @@
 #include "MeshRenderer.hpp"
 #include "ShapesRenderer.hpp"
 #include "MarksRenderer.hpp"
+#include "GEOVectorLayer.hpp"
+
 
 class GEORenderer_ObjectSymbolizerPair {
 public:
@@ -80,7 +82,7 @@ void GEORenderer::render(const G3MRenderContext* rc, GLState* glState) {
                                     _meshRenderer,
                                     _shapesRenderer,
                                     _marksRenderer,
-                                    _geoTileRasterizer);
+                                    _geoVectorLayer);
       }
 
       delete pair;
@@ -323,7 +325,17 @@ void GEORenderer::setEnable(bool enable) {
   if (_marksRenderer) {
     _marksRenderer->setEnable(enable);
   }
-  if (_geoTileRasterizer) {
-    _geoTileRasterizer->setEnable(enable);
+  if (_geoVectorLayer) {
+    _geoVectorLayer->setEnable(enable);
+  }
+}
+
+void GEORenderer::setGEOVectorLayer(GEOVectorLayer* geoVectorLayer,
+                                    bool deletePrevious) {
+  if (geoVectorLayer != _geoVectorLayer) {
+    if (deletePrevious) {
+      delete _geoVectorLayer;
+    }
+    _geoVectorLayer = geoVectorLayer;
   }
 }

@@ -14,7 +14,7 @@
 class ChildRenderer {
 private:
   Renderer* _renderer;
-  std::vector<std::string> _info;
+  std::vector<const Info*> _info;
   
 public:
   
@@ -24,11 +24,11 @@ public:
     
   }
   
-  ChildRenderer(Renderer* renderer, const std::vector<std::string>& info):
-  _renderer(renderer),
-  _info(info)
+  ChildRenderer(Renderer* renderer,
+                const std::vector<const Info*>& info):
+  _renderer(renderer)
   {
-    
+    setInfo(info);
   }
   
   ~ChildRenderer() {
@@ -36,15 +36,15 @@ public:
     _info.clear();
   }
   
-  void addInfo(std::string& inf);
+  void addInfo(const Info* inf);
   
-  void setInfo(const std::vector<std::string>& info);
+  void setInfo(const std::vector<const Info*>& info);
 
   Renderer* getRenderer() const {
     return _renderer;
   }
   
-  const std::vector<std::string> getInfo() const {
+  const std::vector<const Info*> getInfo() const {
     return _info;
   }
 

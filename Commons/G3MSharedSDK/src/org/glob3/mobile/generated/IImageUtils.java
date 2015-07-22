@@ -76,7 +76,7 @@ public class IImageUtils
     {
       ICanvas canvas = IFactory.instance().createCanvas();
   
-      IMathUtils mu = IMathUtils.instance();
+      final IMathUtils mu = IMathUtils.instance();
       canvas.initialize(mu.round(rect._width), mu.round(rect._height));
   
       canvas.drawImage(image, rect._x, rect._y, rect._width, rect._height, 0, 0, rect._width, rect._height);

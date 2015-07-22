@@ -49,43 +49,25 @@ public class ShapesRenderer extends DefaultRenderer
   private void updateGLState(G3MRenderContext rc)
   {
   
-    final Camera cam = rc.getCurrentCamera();
-    /*
-  
-     if (_projection == NULL) {
-     _projection = new ProjectionGLFeature(cam->getProjectionMatrix44D());
-     _glState->addGLFeature(_projection, true);
-     _glStateTransparent->addGLFeature(_projection, true);
-     } else{
-     _projection->setMatrix(cam->getProjectionMatrix44D());
-     }
-  
-     if (_model == NULL) {
-     _model = new ModelGLFeature(cam->getModelMatrix44D());
-     _glState->addGLFeature(_model, true);
-     _glStateTransparent->addGLFeature(_model, true);
-     } else{
-     _model->setMatrix(cam->getModelMatrix44D());
-     }
-     */
+    final Camera camera = rc.getCurrentCamera();
     ModelViewGLFeature f = (ModelViewGLFeature) _glState.getGLFeature(GLFeatureID.GLF_MODEL_VIEW);
     if (f == null)
     {
-      _glState.addGLFeature(new ModelViewGLFeature(cam), true);
+      _glState.addGLFeature(new ModelViewGLFeature(camera), true);
     }
     else
     {
-      f.setMatrix(cam.getModelViewMatrix44D());
+      f.setMatrix(camera.getModelViewMatrix44D());
     }
   
     f = (ModelViewGLFeature) _glStateTransparent.getGLFeature(GLFeatureID.GLF_MODEL_VIEW);
     if (f == null)
     {
-      _glStateTransparent.addGLFeature(new ModelViewGLFeature(cam), true);
+      _glStateTransparent.addGLFeature(new ModelViewGLFeature(camera), true);
     }
     else
     {
-      f.setMatrix(cam.getModelViewMatrix44D());
+      f.setMatrix(camera.getModelViewMatrix44D());
     }
   
   }
@@ -281,22 +263,31 @@ public class ShapesRenderer extends DefaultRenderer
       if (touchEvent.getTouchCount() == 1 && touchEvent.getTapCount() == 1 && touchEvent.getType() == TouchEventType.Down)
       {
         final Vector3D origin = _lastCamera.getCartesianPosition();
-        final Vector2I pixel = touchEvent.getTouch(0).getPos();
+        final Vector2F pixel = touchEvent.getTouch(0).getPos();
         final Vector3D direction = _lastCamera.pixel2Ray(pixel);
-        java.util.ArrayList<ShapeDistance> shapeDistances = intersectionsDistances(origin, direction);
-  
-        if (!shapeDistances.isEmpty())
+        final Planet planet = ec.getPlanet();
+        if (!direction.isNan())
         {
-          //        printf ("Found %d intersections with shapes:\n",
-          //                (int)shapeDistances.size());
-          for (int i = 0; i<shapeDistances.size(); i++)
+          java.util.ArrayList<ShapeDistance> shapeDistances = intersectionsDistances(planet, origin, direction);
+  
+          if (!shapeDistances.isEmpty())
           {
-            //          printf ("   %d: shape %x to distance %f\n",
-            //                  i+1,
-            //                  (unsigned int)shapeDistances[i]._shape,
-            //                  shapeDistances[i]._distance);
+            //        printf ("Found %d intersections with shapes:\n",
+            //                (int)shapeDistances.size());
+            for (int i = 0; i<shapeDistances.size(); i++)
+            {
+  //            printf ("   %d: shape %x to distance %f\n",
+  //                    i+1,
+  //                    (unsigned int)shapeDistances[i]._shape,
+  //                    shapeDistances[i]._distance);
+            }
           }
         }
+        else
+        {
+          ILogger.instance().logWarning("ShapesRenderer::onTouchEvent: direction ( - _lastCamera->pixel2Ray(pixel) - ) is NaN");
+        }
+  
       }
     }
     return false;
@@ -311,7 +302,8 @@ public class ShapesRenderer extends DefaultRenderer
     // Saving camera for use in onTouchEvent
     _lastCamera = rc.getCurrentCamera();
   
-    final Vector3D cameraPosition = rc.getCurrentCamera().getCartesianPosition();
+    MutableVector3D cameraPosition = new MutableVector3D();
+    rc.getCurrentCamera().getCartesianPositionMutable(cameraPosition);
   
     //Setting camera matrixes
     updateGLState(rc);
@@ -342,13 +334,13 @@ public class ShapesRenderer extends DefaultRenderer
     }
   }
 
-  public final java.util.ArrayList<ShapeDistance> intersectionsDistances(Vector3D origin, Vector3D direction)
+  public final java.util.ArrayList<ShapeDistance> intersectionsDistances(Planet planet, Vector3D origin, Vector3D direction)
   {
     java.util.ArrayList<ShapeDistance> shapeDistances = new java.util.ArrayList<ShapeDistance>();
     for (int n = 0; n<_shapes.size(); n++)
     {
       Shape shape = _shapes.get(n);
-      java.util.ArrayList<Double> distances = shape.intersectionsDistances(origin, direction);
+      java.util.ArrayList<Double> distances = shape.intersectionsDistances(planet, origin, direction);
       for (int i = 0; i<distances.size(); i++)
       {
         shapeDistances.add(new ShapeDistance(distances.get(i), shape));

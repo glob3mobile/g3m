@@ -16,8 +16,11 @@ package org.glob3.mobile.generated;
 //
 
 
+
 //class LeveledTexturedMesh;
 //class TextureIDReference;
+//class IImageBuilder;
+//class IImage;
 
 
 public class DefaultTileTexturizer extends TileTexturizer
@@ -28,6 +31,24 @@ public class DefaultTileTexturizer extends TileTexturizer
     return (tileBuilderHolder == null) ? null : tileBuilderHolder.get().getTexturedMesh();
   }
 
+
+  private IImageBuilder _defaultBackGroundImageBuilder;
+  private boolean _defaultBackGroundImageLoaded;
+  private IImage _defaultBackGroundImage;
+  private String _defaultBackGroundImageName;
+
+
+  public java.util.ArrayList<String> _errors = new java.util.ArrayList<String>();
+
+
+  public DefaultTileTexturizer(IImageBuilder defaultBackGroundImageBuilder)
+  {
+     _defaultBackGroundImageBuilder = defaultBackGroundImageBuilder;
+     _defaultBackGroundImageLoaded = false;
+    ILogger.instance().logInfo("Create texturizer...");
+  
+  }
+
   public void dispose()
   {
     super.dispose();
@@ -35,6 +56,15 @@ public class DefaultTileTexturizer extends TileTexturizer
 
   public final RenderState getRenderState(LayerSet layerSet)
   {
+    //ILogger::instance()->logInfo("Check render state texturizer...");
+    if (_errors.size() > 0)
+    {
+      return RenderState.error(_errors);
+    }
+    if (!_defaultBackGroundImageLoaded)
+    {
+      return RenderState.busy();
+    }
     if (layerSet != null)
     {
       return layerSet.getRenderState();
@@ -44,24 +74,21 @@ public class DefaultTileTexturizer extends TileTexturizer
 
   public final void initialize(G3MContext context, TilesRenderParameters parameters)
   {
+    ILogger.instance().logInfo("Initializing texturizer...");
+  
+    _defaultBackGroundImageBuilder.build(context, new DTT_IImageBuilderListener(this), true);
+  
     // do nothing
   }
 
-  public final Mesh texturize(G3MRenderContext rc, TileTessellator tessellator, TileRasterizer tileRasterizer, LayerTilesRenderParameters layerTilesRenderParameters, LayerSet layerSet, boolean forceFullRender, long tileDownloadPriority, Tile tile, Mesh tessellatorMesh, Mesh previousMesh, boolean logTilesPetitions)
+  public final Mesh texturize(G3MRenderContext rc, TileTessellator tessellator, LayerTilesRenderParameters layerTilesRenderParameters, LayerSet layerSet, boolean forceFullRender, long tileDownloadPriority, Tile tile, Mesh tessellatorMesh, Mesh previousMesh, boolean logTilesPetitions)
   {
     DTT_TileTextureBuilderHolder builderHolder = (DTT_TileTextureBuilderHolder) tile.getTexturizerData();
   
-    //  TileImageProvider* tileImageProvider = new DebugTileImageProvider();
-    //  TileImageProvider* tileImageProvider = new ChessboardTileImageProvider();
-  
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning TODO: creates the TileImageProvider from the LayerSet (&& Rasterizer?)
     TileImageProvider tileImageProvider = layerSet.getTileImageProvider(rc, layerTilesRenderParameters);
   
     if (tileImageProvider == null)
     {
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning TODO: error callback
       tile.setTextureSolved(true);
       tile.setTexturizerDirty(false);
       return null;
@@ -70,7 +97,7 @@ public class DefaultTileTexturizer extends TileTexturizer
     DTT_TileTextureBuilder builder;
     if (builderHolder == null)
     {
-      builder = new DTT_TileTextureBuilder(rc, layerTilesRenderParameters, tileImageProvider, tile, tessellatorMesh, tessellator, tileDownloadPriority, logTilesPetitions, rc.getFrameTasksExecutor());
+      builder = new DTT_TileTextureBuilder(rc, layerTilesRenderParameters, tileImageProvider, tile, tessellatorMesh, tessellator, tileDownloadPriority, logTilesPetitions, rc.getFrameTasksExecutor(), _defaultBackGroundImage, _defaultBackGroundImageName);
       builderHolder = new DTT_TileTextureBuilderHolder(builder);
       tile.setTexturizerData(builderHolder);
     }
@@ -170,6 +197,36 @@ public class DefaultTileTexturizer extends TileTexturizer
   public final boolean onTerrainTouchEvent(G3MEventContext ec, Geodetic3D position, Tile tile, LayerSet layerSet)
   {
     return (layerSet == null) ? false : layerSet.onTerrainTouchEvent(ec, position, tile);
+  }
+
+  public final IImageBuilder getDefaultBackGroundImageBuilder()
+  {
+    return _defaultBackGroundImageBuilder;
+  }
+
+  public final IImage getDefaultBackGroundImage()
+  {
+    return _defaultBackGroundImage;
+  }
+
+  public final void setDefaultBackGroundImage(IImage defaultBackGroundImage)
+  {
+    _defaultBackGroundImage = defaultBackGroundImage;
+  }
+
+  public final String getDefaultBackGroundImageName()
+  {
+    return _defaultBackGroundImageName;
+  }
+
+  public final void setDefaultBackGroundImageName(String defaultBackGroundImageName)
+  {
+    _defaultBackGroundImageName = defaultBackGroundImageName;
+  }
+
+  public final void setDefaultBackGroundImageLoaded(boolean defaultBackGroundImageLoaded)
+  {
+    _defaultBackGroundImageLoaded = defaultBackGroundImageLoaded;
   }
 
 }

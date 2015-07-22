@@ -16,14 +16,19 @@ class Mesh;
 class Color;
 
 class CoordinateSystem {
+private:
+  
+  bool checkConsistency(const Vector3D& x, const Vector3D& y, const Vector3D& z);
+  
+  bool areOrtogonal(const Vector3D& x, const Vector3D& y, const Vector3D& z);
+
 public:
 
   const Vector3D _x;
   const Vector3D _y;
   const Vector3D _z;
   const Vector3D _origin;
-
-  static bool areOrtogonal(const Vector3D& x, const Vector3D& y, const Vector3D& z);
+  
 
   static CoordinateSystem global();
 

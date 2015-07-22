@@ -14,6 +14,7 @@ class G3MRenderContext;
 class Vector3D;
 class MeshRenderer;
 #include "Color.hpp"
+#include "MutableVector3D.hpp"
 
 class SceneLighting{
 public:
@@ -38,6 +39,9 @@ class CameraFocusSceneLighting: public SceneLighting {
 
   double _cameraDirX, _cameraDirY, _cameraDirZ;
   double _upX, _upY, _upZ;
+
+  MutableVector3D _camDir;
+  MutableVector3D _up;
 
 public:
 

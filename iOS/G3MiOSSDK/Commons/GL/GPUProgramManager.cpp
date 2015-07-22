@@ -54,8 +54,24 @@ GPUProgram* GPUProgramManager::getNewProgram(GL* gl, int uniformsCode, int attri
 
   const bool hasTexture2 = GPUVariable::hasUniform(uniformsCode, SAMPLER2);
 //  const bool hasTexture3 = GPUVariable::hasUniform(uniformsCode, SAMPLER3);
+  
+  const bool is2D = GPUVariable::hasAttribute(attributesCode, POSITION_2D);
+  
+//  const bool bbAnchor = GPUVariable::hasUniform(uniformsCode,    BILLBOARD_ANCHOR);
 
+  
+  if (is2D){
+    if (flatColor){
+      return compileProgramWithName(gl, "FlatColor2DMesh");
+    }
+    return compileProgramWithName(gl, "Textured2DMesh");
+  }
+  
   if (billboard) {
+    if (transformTC){
+      return compileProgramWithName(gl, "Billboard_TransformedTexCoor");
+    }
+    
     return compileProgramWithName(gl, "Billboard");
   }
 
@@ -152,7 +168,8 @@ GPUProgram* GPUProgramManager::compileProgramWithName(GL* gl,
       }
 
       _programs[name] = prog;
-    } else{
+    }
+    else {
       ILogger::instance()->logError("No shader sources for program named %s.", name.c_str());
     }
 
@@ -165,7 +182,8 @@ GPUProgram* GPUProgramManager::getCompiledProgram(const std::string& name) {
   std::map<std::string, GPUProgram*>::iterator it = _programs.find(name);
   if (it != _programs.end()) {
     return it->second;
-  } else{
+  }
+  else {
     return NULL;
   }
 #endif
@@ -182,19 +200,20 @@ void GPUProgramManager::removeUnused() {
       ILogger::instance()->logInfo("Deleting program %s", it->second->getName().c_str() );
       delete it->second;
       _programs.erase(it++);
-    } else{
+    }
+    else {
       ++it;
     }
   }
 #endif
 #ifdef JAVA_CODE
-  java.util.Iterator it = _programs.entrySet().iterator();
-  while (it.hasNext()) {
-    java.util.Map.Entry pairs = (java.util.Map.Entry)it.next();
-    GPUProgram program = (GPUProgram) pairs.getValue();
+  final java.util.Iterator<java.util.Map.Entry<String, GPUProgram>> iterator = _programs.entrySet().iterator();
+  while (iterator.hasNext()) {
+    final java.util.Map.Entry<String, GPUProgram> entry = iterator.next();
+    final GPUProgram program = entry.getValue();
     if (program.getNReferences() == 0) {
-      ILogger.instance().logInfo("Deleting program %s", program.getName() );
-      it.remove();
+      ILogger.instance().logInfo("Deleting program %s", program.getName());
+      iterator.remove();
     }
   }
 #endif

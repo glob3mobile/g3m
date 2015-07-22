@@ -92,7 +92,7 @@ public:
     }
   }
 
-  bool isEnabled() const{
+  bool isEnabled() const {
     return _enabled;
   }
   

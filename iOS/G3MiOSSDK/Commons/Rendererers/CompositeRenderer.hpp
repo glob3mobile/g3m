@@ -17,7 +17,7 @@
 class CompositeRenderer: public Renderer, ChangedRendererInfoListener
 {
 private:
-  std::vector<std::string> _info;
+  std::vector<const Info*> _info;
   std::vector<ChildRenderer*> _renderers;
   int                    _renderersSize;
 
@@ -33,7 +33,8 @@ private:
 
   ChangedRendererInfoListener* _changedInfoListener;
 
-  std::vector<std::string> getInfo();
+  const std::vector<const Info*> getInfo();
+  
 public:
   CompositeRenderer():
   _context(NULL),
@@ -66,7 +67,8 @@ public:
 
   void addRenderer(Renderer* renderer);
 
-  void addRenderer(Renderer* renderer, const std::vector<std::string>& info);
+  void addRenderer(Renderer* renderer,
+                   const std::vector<const Info*>& info);
   
   void addChildRenderer(ChildRenderer* renderer);
 
@@ -90,7 +92,8 @@ public:
   
   void setChangedRendererInfoListener(ChangedRendererInfoListener* changedInfoListener, const int rendererIdentifier);
   
-  void changedRendererInfo(const int rendererIdentifier, const std::vector<std::string>& info);
+  void changedRendererInfo(const int rendererIdentifier,
+                           const std::vector<const Info*>& info);
   
 };
 

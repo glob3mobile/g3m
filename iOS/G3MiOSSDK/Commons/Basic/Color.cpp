@@ -12,6 +12,24 @@
 #include "IMathUtils.hpp"
 #include "IStringBuilder.hpp"
 
+
+Color Color::interpolateColor(const Color& from,
+                              const Color& middle,
+                              const Color& to,
+                              float d) {
+  if (d <= 0) {
+    return from;
+  }
+  if (d >= 1) {
+    return to;
+  }
+  if (d <= 0.5) {
+    return from.mixedWith(middle, d * 2);
+  }
+  return middle.mixedWith(to, (d - 0.5f) * 2);
+}
+
+
 Color* Color::parse(const std::string& str) {
   const IStringUtils* su = IStringUtils::instance();
 

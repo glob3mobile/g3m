@@ -33,7 +33,10 @@ public class CompositeMesh extends Mesh
     for (int i = 1; i < childrenCount; i++)
     {
       Mesh child = _children.get(i);
-      result = result.mergedWith(child.getBoundingVolume());
+      BoundingVolume newResult = result.mergedWith(child.getBoundingVolume());
+      if (result != null)
+         result.dispose();
+      result = newResult;
     }
   
     return result;

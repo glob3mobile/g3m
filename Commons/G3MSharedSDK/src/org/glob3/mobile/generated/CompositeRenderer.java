@@ -19,7 +19,7 @@ package org.glob3.mobile.generated;
 
 public class CompositeRenderer implements Renderer, ChangedRendererInfoListener
 {
-  private java.util.ArrayList<String> _info = new java.util.ArrayList<String>();
+  private final java.util.ArrayList<Info> _info = new java.util.ArrayList<Info>();
   private java.util.ArrayList<ChildRenderer> _renderers = new java.util.ArrayList<ChildRenderer>();
   private int _renderersSize;
 
@@ -31,20 +31,21 @@ public class CompositeRenderer implements Renderer, ChangedRendererInfoListener
 
   private ChangedRendererInfoListener _changedInfoListener;
 
-  private java.util.ArrayList<String> getInfo()
+  private java.util.ArrayList<Info> getInfo()
   {
     _info.clear();
   
     for (int i = 0; i < _renderersSize; i++)
     {
       ChildRenderer child = _renderers.get(i);
-      final java.util.ArrayList<String> childInfo = child.getInfo();
+      final java.util.ArrayList<Info> childInfo = child.getInfo();
       _info.addAll(childInfo);
   
     }
   
     return _info;
   }
+
   public CompositeRenderer()
   {
      _context = null;
@@ -179,7 +180,7 @@ public class CompositeRenderer implements Renderer, ChangedRendererInfoListener
     addChildRenderer(new ChildRenderer(renderer));
   }
 
-  public final void addRenderer(Renderer renderer, java.util.ArrayList<String> info)
+  public final void addRenderer(Renderer renderer, java.util.ArrayList<Info> info)
   {
     addChildRenderer(new ChildRenderer(renderer, info));
   }
@@ -302,11 +303,9 @@ public class CompositeRenderer implements Renderer, ChangedRendererInfoListener
     {
       _changedInfoListener.changedRendererInfo(-1, getInfo());
     }
-  
-    ILogger.instance().logInfo("Changed Renderer Info Listener of CompositeRenderer set ok");
   }
 
-  public final void changedRendererInfo(int rendererIdentifier, java.util.ArrayList<String> info)
+  public final void changedRendererInfo(int rendererIdentifier, java.util.ArrayList<Info> info)
   {
     if(rendererIdentifier >= 0 && rendererIdentifier < _renderersSize)
     {
@@ -316,7 +315,6 @@ public class CompositeRenderer implements Renderer, ChangedRendererInfoListener
     {
       ILogger.instance().logWarning("Child Render not found: %d", rendererIdentifier);
     }
-  
   
     if (_changedInfoListener != null)
     {

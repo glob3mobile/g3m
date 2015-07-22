@@ -25,7 +25,6 @@ class Tile;
 class G3MEventContext;
 class Geodetic3D;
 class RenderState;
-class Petition;
 
 
 class LayerSet : public ChangedInfoListener {
@@ -38,7 +37,8 @@ private:
 
   //  mutable LayerTilesRenderParameters* _layerTilesRenderParameters;
   std::vector<std::string> _errors;
-  std::vector<std::string> _infos;
+
+  std::vector<const Info*> _infos;
 
   void layersChanged() const;
 
@@ -53,6 +53,16 @@ private:
 
   TileImageProvider* createTileImageProvider(const G3MRenderContext* rc,
                                              const LayerTilesRenderParameters* layerTilesRenderParameters) const;
+
+  bool checkLayersDataSector(const bool forceFirstLevelTilesRenderOnStart,
+                             std::vector<std::string>& errors) const;
+
+  bool checkLayersRenderState(std::vector<std::string>& errors,
+                              std::vector<Layer*>& enableLayers) const;
+
+  LayerTilesRenderParameters* checkAndComposeLayerTilesRenderParameters (const bool forceFirstLevelTilesRenderOnStart,
+                                                                        const std::vector<Layer*>& enableLayers,
+                                                                        std::vector<std::string>& errors) const;
 
 public:
   LayerSet() :
@@ -76,21 +86,25 @@ public:
 
   RenderState getRenderState();
 
-  void initialize(const G3MContext* context)const;
+  void initialize(const G3MContext* context) const;
 
-  int size() const {
+  size_t size() const {
     return _layers.size();
   }
 
   void layerChanged(const Layer* layer) const;
 
   void setChangeListener(ChangedListener* listener);
+  
+  void setTileImageProvider(TileImageProvider* tileImageProvider);
 
-  Layer* getLayer(int index) const;
+
+  Layer* getLayer(size_t index) const;
 
   Layer* getLayerByTitle(const std::string& title) const;
 
-  LayerTilesRenderParameters* createLayerTilesRenderParameters(const bool forceFirstLevelTilesRenderOnStart, std::vector<std::string>& errors) const;
+  LayerTilesRenderParameters* createLayerTilesRenderParameters(const bool forceFirstLevelTilesRenderOnStart,
+                                                               std::vector<std::string>& errors) const;
 
   bool isEquals(const LayerSet* that) const;
 
@@ -98,19 +112,15 @@ public:
 
   void disableAllLayers();
 
-  std::vector<Petition*> createTileMapPetitions(const G3MRenderContext* rc,
-                                                const LayerTilesRenderParameters* layerTilesRenderParameters,
-                                                const Tile* tile) const;
-
   TileImageProvider* getTileImageProvider(const G3MRenderContext* rc,
                                           const LayerTilesRenderParameters* layerTilesRenderParameters) const;
 
 
   void setChangedInfoListener(ChangedInfoListener* changedInfoListener);
 
-  std::vector<std::string> getInfo();
+  const std::vector<const Info*> getInfo();
 
-  void changedInfo(const std::vector<std::string>& info);
+  void changedInfo(const std::vector<const Info*>& info);
   
 };
 

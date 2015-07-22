@@ -25,11 +25,14 @@ class Geodetic2D;
 class G3MContext;
 class Sector;
 class LayerTouchEvent;
-class Petition;
 class TileImageProvider;
 
+#include "Info.hpp"
 
 class Layer {
+private:
+  bool isEqualsParameters(const Layer* that) const;
+
 protected:
   std::vector<LayerTouchEventListener*> _listeners;
   std::vector<std::string>              _errors;
@@ -38,39 +41,33 @@ protected:
 
   bool _enable;
 
-  std::string _disclaimerInfo;
+  std::vector<const Info*>* _layerInfo;
 
-  std::vector<std::string> _info;
-
-#ifdef C_CODE
-  const LayerTilesRenderParameters* _parameters;
-#endif
-#ifdef JAVA_CODE
-  protected LayerTilesRenderParameters _parameters;
-#endif
-
-  const float           _transparency;
+  float                 _transparency;
   const LayerCondition* _condition;
 
   void notifyChanges() const;
 
   std::string _title;
 
-  Layer(const LayerTilesRenderParameters* parameters,
-        const float                       transparency,
-        const LayerCondition*             condition,
-        const std::string&                disclaimerInfo);
-
-  void setParameters(const LayerTilesRenderParameters* parameters);
+  Layer(float           transparency,
+        const LayerCondition* condition,
+        std::vector<const Info*>* layerInfo);
 
   virtual std::string getLayerType() const = 0;
 
   virtual bool rawIsEquals(const Layer* that) const = 0;
-    
-  const Tile* getParentTileOfSuitableLevel(const Tile* tile) const;
+
+  const std::vector<const LayerTilesRenderParameters*> createParametersVectorCopy() const;
 
 public:
 
+  const float getTransparency() const {
+    return _transparency;
+  }
+  
+  void setTransparency(float transparency);
+  
   virtual void setEnable(bool enable) {
     if (enable != _enable) {
       _enable = enable;
@@ -105,9 +102,9 @@ public:
 
   void removeLayerSet(LayerSet* layerSet);
 
-  const LayerTilesRenderParameters* getLayerTilesRenderParameters() const {
-    return _parameters;
-  }
+  virtual const std::vector<const LayerTilesRenderParameters*> getLayerTilesRenderParametersVector() const = 0;
+
+  virtual void selectLayerTilesRenderParameters(int index) = 0;
 
   virtual const std::string description() const = 0;
 #ifdef JAVA_CODE
@@ -126,22 +123,20 @@ public:
   const std::string getTitle() const;
 
   void setTitle(const std::string& title);
-
-  virtual std::vector<Petition*> createTileMapPetitions(const G3MRenderContext* rc,
-                                                        const LayerTilesRenderParameters* layerTilesRenderParameters,
-                                                        const Tile* tile) const = 0;
-
+  
   virtual TileImageProvider* createTileImageProvider(const G3MRenderContext* rc,
                                                      const LayerTilesRenderParameters* layerTilesRenderParameters) const = 0;
 
-  const std::string getInfo() const {
-    return _disclaimerInfo;
-  }
+  void setInfo(const std::vector<const Info*>& info) const;
+  
+  const std::vector<const Info*>& getInfo() const;
+  
+  void addInfo(const std::vector<const Info*>& info);
+  
+  void addInfo(const Info* info);
 
-  void setInfo(const std::string& disclaimerInfo);
-  
-  std::vector<std::string> getInfos();
-  
+  virtual const std::vector<URL*> getDownloadURLs(const Tile* tile) const = 0;
+
 };
 
 #endif

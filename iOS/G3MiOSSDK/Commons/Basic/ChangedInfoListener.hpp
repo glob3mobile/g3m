@@ -10,6 +10,7 @@
 #define __G3MiOSSDK__ChangedInfoListener__
 
 #include <vector>
+class Info;
 
 class ChangedInfoListener {
  
@@ -21,7 +22,7 @@ public:
   void dispose();
 #endif
   
-  virtual void changedInfo(const std::vector<std::string>& info) = 0;
+  virtual void changedInfo(const std::vector<const Info*>& info) = 0;
 };
 
 

@@ -32,28 +32,54 @@ public:
   }
   
   virtual Vector3D getRadii() const = 0;
+
   virtual Vector3D centricSurfaceNormal(const Vector3D& positionOnEllipsoid) const = 0;
+
   virtual Vector3D geodeticSurfaceNormal(const Vector3D& positionOnEllipsoid) const = 0;
-  
   virtual Vector3D geodeticSurfaceNormal(const MutableVector3D& positionOnEllipsoid) const = 0;
-  
-  
   virtual Vector3D geodeticSurfaceNormal(const Angle& latitude,
                                          const Angle& longitude) const = 0;
-  
   virtual Vector3D geodeticSurfaceNormal(const Geodetic3D& geodetic) const = 0;
   virtual Vector3D geodeticSurfaceNormal(const Geodetic2D& geodetic) const = 0;
-  virtual std::vector<double> intersectionsDistances(const Vector3D& origin,
-                                                     const Vector3D& direction) const = 0;
-  
+
+  virtual void geodeticSurfaceNormal(const Angle& latitude,
+                                     const Angle& longitude,
+                                     MutableVector3D& result) const = 0;
+
+  std::vector<double> intersectionsDistances(const Vector3D& origin,
+                                             const Vector3D& direction) const;
+
+  std::vector<double> intersectionsDistances(const Vector3D& origin,
+                                             const MutableVector3D& direction) const;
+
+  virtual std::vector<double> intersectionsDistances(double originX,
+                                                     double originY,
+                                                     double originZ,
+                                                     double directionX,
+                                                     double directionY,
+                                                     double directionZ) const = 0;
+
   virtual Vector3D toCartesian(const Angle& latitude,
                                const Angle& longitude,
                                const double height) const = 0;
-  
   virtual Vector3D toCartesian(const Geodetic3D& geodetic) const = 0;
   virtual Vector3D toCartesian(const Geodetic2D& geodetic) const = 0;
   virtual Vector3D toCartesian(const Geodetic2D& geodetic,
                                const double height) const = 0;
+
+  virtual void toCartesian(const Angle& latitude,
+                           const Angle& longitude,
+                           const double height,
+                           MutableVector3D& result) const = 0;
+  virtual void toCartesian(const Geodetic3D& geodetic,
+                           MutableVector3D& result) const = 0;
+  virtual void toCartesian(const Geodetic2D& geodetic,
+                           MutableVector3D& result) const = 0;
+  virtual void toCartesian(const Geodetic2D& geodetic,
+                           const double height,
+                           MutableVector3D& result) const = 0;
+
+
   virtual Geodetic2D toGeodetic2D(const Vector3D& positionOnEllipsoid) const = 0;
   
   virtual Geodetic3D toGeodetic3D(const Vector3D& position) const = 0;
@@ -76,8 +102,8 @@ public:
                                            const Geodetic2D& g2) const = 0;
   
   //virtual Vector3D closestPointToSphere(const Vector3D& pos, const Vector3D& ray) const = 0;
-  
-  virtual Vector3D closestIntersection(const Vector3D& pos, const Vector3D& ray) const = 0;
+
+  Vector3D closestIntersection(const Vector3D& pos, const Vector3D& ray) const;
   
   
   virtual MutableMatrix44D createGeodeticTransformMatrix(const Geodetic3D& position) const = 0;
@@ -114,6 +140,9 @@ public:
   virtual Geodetic3D getDefaultCameraPosition(const Sector& rendereSector) const = 0;
 
   CoordinateSystem getCoordinateSystemAt(const Geodetic3D& geo) const;
+
+  virtual const std::string getType() const = 0;
+
 };
 
 #endif

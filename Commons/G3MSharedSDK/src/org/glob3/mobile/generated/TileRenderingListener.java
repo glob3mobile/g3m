@@ -16,14 +16,6 @@ public abstract class TileRenderingListener
   {
   }
 
-  /**
-   The given Tile started to be rendered
-   */
-  public abstract void startRendering(Tile tile);
-
-  /**
-   The given Tile stoped to be rendered
-   */
-  public abstract void stopRendering(Tile tile);
+  public abstract void changedTilesRendering(java.util.ArrayList<Tile> tilesStartedRendering, java.util.ArrayList<String> tilesStoppedRendering);
 
 }

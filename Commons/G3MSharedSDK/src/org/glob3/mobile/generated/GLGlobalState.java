@@ -194,7 +194,7 @@ public class GLGlobalState
     _polygonOffsetFactor = factor;
     _polygonOffsetUnits = units;
   }
-  public final void disPolygonOffsetFill()
+  public final void disablePolygonOffsetFill()
   {
     _polygonOffsetFill = false;
   }
@@ -332,7 +332,6 @@ public class GLGlobalState
           currentState._polygonOffsetUnits = _polygonOffsetUnits;
           currentState._polygonOffsetFactor = _polygonOffsetFactor;
         }
-  
       }
       else
       {

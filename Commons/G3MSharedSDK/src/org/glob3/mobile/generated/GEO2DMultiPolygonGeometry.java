@@ -34,6 +34,27 @@ public class GEO2DMultiPolygonGeometry extends GEOGeometry2D
     return symbolizer.createSymbols(this);
   }
 
+  protected static java.util.ArrayList<GEO2DPolygonData> copy(java.util.ArrayList<GEO2DPolygonData> polygonsData)
+  {
+    if (polygonsData == null)
+    {
+      return null;
+    }
+    java.util.ArrayList<GEO2DPolygonData> result = new java.util.ArrayList<GEO2DPolygonData>();
+    final int size = polygonsData.size();
+    for (int i = 0; i < size; i++)
+    {
+      GEO2DPolygonData each = polygonsData.get(i);
+      if (each != null)
+      {
+        each._retain();
+      }
+      result.add(each);
+    }
+    return result;
+  }
+
+
 
   public GEO2DMultiPolygonGeometry(java.util.ArrayList<GEO2DPolygonData> polygonsData)
   {
@@ -66,7 +87,30 @@ public class GEO2DMultiPolygonGeometry extends GEOGeometry2D
 
   public final long getCoordinatesCount()
   {
-    return _polygonsData.size();
+    return (_polygonsData == null) ? 0 : _polygonsData.size();
   }
 
+  public final GEO2DMultiPolygonGeometry deepCopy()
+  {
+    return new GEO2DMultiPolygonGeometry(copy(_polygonsData));
+  }
+
+  public final boolean contain(Geodetic2D point)
+  {
+    if (_polygonsData == null)
+    {
+      return false;
+    }
+    final int polygonsDataSize = _polygonsData.size();
+    for (int i = 0; i < polygonsDataSize; i++)
+    {
+      GEO2DPolygonData polygonData = _polygonsData.get(i);
+      if (polygonData.contains(point))
+      {
+        return true;
+      }
+    }
+  
+    return false;
+  }
 }

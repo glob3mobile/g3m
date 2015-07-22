@@ -19,7 +19,7 @@ class Downloader_iOS : public IDownloader {
 private:
   NSMutableArray*      _workers;
 
-  NSLock*              _lock;                // synchronization helper
+  NSRecursiveLock*     _lock;                // synchronization helper
   NSMutableDictionary* _downloadingHandlers; // downloads current in progress
   NSMutableDictionary* _queuedHandlers;      // queued downloads
 

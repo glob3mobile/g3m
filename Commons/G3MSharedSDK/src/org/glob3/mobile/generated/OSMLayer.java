@@ -42,27 +42,27 @@ public class OSMLayer extends MercatorTiledLayer
 
   public OSMLayer(TimeInterval timeToCache, boolean readExpired, int initialLevel, float transparency, LayerCondition condition)
   {
-     this(timeToCache, readExpired, initialLevel, transparency, condition, "");
+     this(timeToCache, readExpired, initialLevel, transparency, condition, new java.util.ArrayList<Info>());
   }
   public OSMLayer(TimeInterval timeToCache, boolean readExpired, int initialLevel, float transparency)
   {
-     this(timeToCache, readExpired, initialLevel, transparency, null, "");
+     this(timeToCache, readExpired, initialLevel, transparency, null, new java.util.ArrayList<Info>());
   }
   public OSMLayer(TimeInterval timeToCache, boolean readExpired, int initialLevel)
   {
-     this(timeToCache, readExpired, initialLevel, 1, null, "");
+     this(timeToCache, readExpired, initialLevel, 1, null, new java.util.ArrayList<Info>());
   }
   public OSMLayer(TimeInterval timeToCache, boolean readExpired)
   {
-     this(timeToCache, readExpired, 2, 1, null, "");
+     this(timeToCache, readExpired, 2, 1, null, new java.util.ArrayList<Info>());
   }
   public OSMLayer(TimeInterval timeToCache)
   {
-     this(timeToCache, true, 2, 1, null, "");
+     this(timeToCache, true, 2, 1, null, new java.util.ArrayList<Info>());
   }
-  public OSMLayer(TimeInterval timeToCache, boolean readExpired, int initialLevel, float transparency, LayerCondition condition, String disclaimerInfo) // isTransparent
+  public OSMLayer(TimeInterval timeToCache, boolean readExpired, int initialLevel, float transparency, LayerCondition condition, java.util.ArrayList<Info> layerInfo) // isTransparent
   {
-     super("http://", "tile.openstreetmap.org", getSubdomains(), "png", timeToCache, readExpired, Sector.fullSphere(), initialLevel, 18, false, transparency, condition, disclaimerInfo);
+     super("http://", "tile.openstreetmap.org", getSubdomains(), "png", timeToCache, readExpired, initialLevel, 18, false, transparency, condition, layerInfo);
   }
 
   public final String description()
@@ -72,7 +72,7 @@ public class OSMLayer extends MercatorTiledLayer
 
   public final OSMLayer copy()
   {
-    return new OSMLayer(_timeToCache, _readExpired, _initialLevel, _transparency, (_condition == null) ? null : _condition.copy(), _disclaimerInfo);
+    return new OSMLayer(_timeToCache, _readExpired, _initialLevel, _transparency, (_condition == null) ? null : _condition.copy(), _layerInfo);
   }
 
   public final RenderState getRenderState()

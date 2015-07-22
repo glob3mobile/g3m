@@ -20,6 +20,7 @@ class Frustum;
 class Box;
 class Sphere;
 class GLState;
+class Color;
 
 class BoundingVolume {
 public:
@@ -34,7 +35,8 @@ public:
   //                                     const Vector3D& direction) const = 0;
 
   virtual void render(const G3MRenderContext* rc,
-                      const GLState& parentState) const = 0;
+                      const GLState* parentState,
+                      const Color& color) const = 0;
 
   virtual bool touches(const BoundingVolume* that) const = 0;
   virtual bool touchesBox(const Box* that) const = 0;

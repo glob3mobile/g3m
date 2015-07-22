@@ -59,10 +59,10 @@ public:
                              int width, int height) {
     const int halfWidth = width / 2;
     const int halfHeight = height / 2;
-    _projectionMatrix = MutableMatrix44D::createOrthographicProjectionMatrix(-halfWidth,   halfWidth,
-                                                                              -halfHeight, halfHeight,
-                                                                              -halfWidth,  halfWidth);
-
+    _projectionMatrix.copyValue(MutableMatrix44D::createOrthographicProjectionMatrix(-halfWidth,  halfWidth,
+                                                                                     -halfHeight, halfHeight,
+                                                                                     -halfWidth,  halfWidth));
+    
     delete _mesh;
     _mesh = NULL;
   }
@@ -79,7 +79,8 @@ public:
     if (_degrees>360) {
       _degrees -= 360;
     }
-    _modelviewMatrix = MutableMatrix44D::createRotationMatrix(Angle::fromDegrees(_degrees), Vector3D(0, 0, -1));
+    _modelviewMatrix.copyValue(MutableMatrix44D::createRotationMatrix(Angle::fromDegrees(_degrees),
+                                                                     Vector3D(0, 0, -1)));
   }
 
   void start(const G3MRenderContext* rc);
@@ -101,24 +102,34 @@ public:
 
 //***************************************************************
 
-class BusyMeshEffect : public EffectWithForce {
+class BusyMeshEffect : public EffectNeverEnding {
 private:
   BusyMeshRenderer* _renderer;
+  long long _lastMS;
 
 public:
 
   BusyMeshEffect(BusyMeshRenderer *renderer):
-  EffectWithForce(1, 1),
+  EffectNeverEnding(),
   _renderer(renderer)
   { }
 
   void start(const G3MRenderContext* rc,
-             const TimeInterval& when) {}
+             const TimeInterval& when) {
+    _lastMS = when.milliseconds();
+  }
 
   void doStep(const G3MRenderContext* rc,
               const TimeInterval& when) {
-    EffectWithForce::doStep(rc, when);
-    _renderer->incDegrees(5);
+    EffectNeverEnding::doStep(rc, when);
+
+    const long long now = when.milliseconds();
+    const long long ellapsed = now - _lastMS;
+    _lastMS = now;
+
+    const double deltaDegrees = (360.0 / 1200.0) * ellapsed;
+
+    _renderer->incDegrees(deltaDegrees);
   }
 
   void stop(const G3MRenderContext* rc,

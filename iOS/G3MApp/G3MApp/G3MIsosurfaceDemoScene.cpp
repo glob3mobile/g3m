@@ -23,6 +23,9 @@ public:
   _g3mWidget(g3mWidget)
   {
   }
+  
+  void onError(const URL& url) {
+  }
 
   void onBeforeAddMesh(Mesh* mesh) {
   }

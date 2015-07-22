@@ -15,21 +15,21 @@
 
 class AbstractImageBuilder : public IImageBuilder {
 private:
-  ChangedListener* _listener;
+  ChangedListener* _changeListener;
 
 protected:
   void changed();
 
 public:
   AbstractImageBuilder() :
-  _listener(NULL)
+  _changeListener(NULL)
   {
   }
 
   virtual ~AbstractImageBuilder() {
   }
   
-  void setChangeListener(ChangedListener* listener);
+  void setChangeListener(ChangedListener* changeListener);
 
 };
 

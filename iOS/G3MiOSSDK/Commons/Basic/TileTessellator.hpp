@@ -37,6 +37,10 @@ public:
   
   Vector3D* _meshCenter;
   
+  TileTessellatorMeshData():_meshCenter(NULL){
+    
+  }
+  
   ~TileTessellatorMeshData(){
     delete _meshCenter;
   }
@@ -47,8 +51,6 @@ class TileTessellator {
 public:
   virtual ~TileTessellator() {
   }
-
-  virtual bool isReady(const G3MRenderContext* rc) const = 0;
 
   virtual Mesh* createTileMesh(const Planet* planet,
                                const Vector2I& resolution,

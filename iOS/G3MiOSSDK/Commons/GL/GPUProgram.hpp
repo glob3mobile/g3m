@@ -89,25 +89,25 @@ public:
 
   std::string getName() const { return _name;}
   
-  int getProgramID() const{ return _programID;}
+  int getProgramID() const { return _programID;}
   
   int getGPUAttributesNumber() const { return _nAttributes;}
   int getGPUUniformsNumber() const { return _nUniforms;}
   
-  GPUUniform* getGPUUniform(const std::string name) const;
-  GPUAttribute* getGPUAttribute(const std::string name) const;
+  GPUUniform* getGPUUniform(const std::string& name) const;
+  GPUAttribute* getGPUAttribute(const std::string& name) const;
   
-  GPUUniformBool* getGPUUniformBool(const std::string name) const;
-  GPUUniformVec2Float* getGPUUniformVec2Float(const std::string name) const;
-  GPUUniformVec4Float* getGPUUniformVec4Float(const std::string name) const;
-  GPUUniformFloat* getGPUUniformFloat(const std::string name) const;
-  GPUUniformMatrix4Float* getGPUUniformMatrix4Float(const std::string name) const;
+  GPUUniformBool* getGPUUniformBool(const std::string& name) const;
+  GPUUniformVec2Float* getGPUUniformVec2Float(const std::string& name) const;
+  GPUUniformVec4Float* getGPUUniformVec4Float(const std::string& name) const;
+  GPUUniformFloat* getGPUUniformFloat(const std::string& name) const;
+  GPUUniformMatrix4Float* getGPUUniformMatrix4Float(const std::string& name) const;
   
-  GPUAttribute* getGPUAttributeVecXFloat(const std::string name, int x) const;
-  GPUAttributeVec1Float* getGPUAttributeVec1Float(const std::string name) const;
-  GPUAttributeVec2Float* getGPUAttributeVec2Float(const std::string name) const;
-  GPUAttributeVec3Float* getGPUAttributeVec3Float(const std::string name) const;
-  GPUAttributeVec4Float* getGPUAttributeVec4Float(const std::string name) const;
+  GPUAttribute* getGPUAttributeVecXFloat(const std::string& name, int x) const;
+  GPUAttributeVec1Float* getGPUAttributeVec1Float(const std::string& name) const;
+  GPUAttributeVec2Float* getGPUAttributeVec2Float(const std::string& name) const;
+  GPUAttributeVec3Float* getGPUAttributeVec3Float(const std::string& name) const;
+  GPUAttributeVec4Float* getGPUAttributeVec4Float(const std::string& name) const;
   
   void onUsed();
   void onUnused(GL* gl);
@@ -119,8 +119,8 @@ public:
   GPUAttribute* getGPUAttribute(int key) const;
   GPUAttribute* getGPUAttributeVecXFloat(int key, int x) const;
 
-  int getAttributesCode() const{ return _attributesCode;}
-  int getUniformsCode() const{ return _uniformsCode;}
+  int getAttributesCode() const { return _attributesCode;}
+  int getUniformsCode() const { return _uniformsCode;}
 
   void setGPUUniformValue(int key, GPUUniformValue* v);
   void setGPUAttributeValue(int key, GPUAttributeValue* v);

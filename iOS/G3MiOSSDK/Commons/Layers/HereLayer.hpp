@@ -21,7 +21,7 @@ private:
   const int         _initialLevel;
 
 protected:
-  std::string getLayerType() const{
+  std::string getLayerType() const {
     return "Here";
   }
 
@@ -41,11 +41,7 @@ public:
             const int             initialLevel   = 2,
             const float           transparency   = 1,
             const LayerCondition* condition      = NULL,
-            const std::string&    disclaimerInfo = "");
-
-  std::vector<Petition*> createTileMapPetitions(const G3MRenderContext* rc,
-                                                const LayerTilesRenderParameters* layerTilesRenderParameters,
-                                                const Tile* tile) const;
+            std::vector<const Info*>*  layerInfo = new std::vector<const Info*>());
 
   URL getFeatureInfoURL(const Geodetic2D& position,
                         const Sector& sector) const;

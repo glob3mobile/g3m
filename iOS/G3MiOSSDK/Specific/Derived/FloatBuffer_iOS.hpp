@@ -10,7 +10,8 @@
 #define __G3MiOSSDK__FloatBuffer_iOS__
 
 #include "IFloatBuffer.hpp"
-#include "ILogger.hpp"
+//#include "ILogger.hpp"
+#include "ErrorHandling.hpp"
 #include <OpenGLES/ES2/gl.h>
 
 class FloatBuffer_iOS : public IFloatBuffer {
@@ -35,7 +36,7 @@ private:
   static GLuint     _boundVertexBuffer;
   mutable bool      _vertexBufferCreated;
   mutable GLuint    _vertexBuffer; //VBO
-  mutable int       _vertexBufferTimeStamp;
+  mutable int       _vertexBufferTimestamp;
 
 public:
   FloatBuffer_iOS(int size) :
@@ -43,24 +44,19 @@ public:
   _timestamp(0),
   _values(new float[size]),
   _vertexBuffer(-1),
-  _vertexBufferTimeStamp(-1),
+  _vertexBufferTimestamp(-1),
   _vertexBufferCreated(false),
   _id(_nextID++)
   {
     if (_values == NULL) {
-      ILogger::instance()->logError("Allocating error.");
+      THROW_EXCEPTION("Allocating error.");
     }
 
     _newCounter++;
     showStatistics();
-
-//    if (size == 48 || size == 36) {
-//#warning DGD_At_Work;
-//      printf("break point on me\n");
-//    }
   }
 
-  long long getID() const{
+  long long getID() const {
     return _id;
   }
 
@@ -83,7 +79,7 @@ public:
   _size(16),
   _timestamp(0),
   _vertexBuffer(-1),
-  _vertexBufferTimeStamp(-1),
+  _vertexBufferTimestamp(-1),
   _vertexBufferCreated(false),
   _id(_nextID)
   {
@@ -121,7 +117,7 @@ public:
 
   float get(int i) const {
     if (i < 0 || i > _size) {
-      ILogger::instance()->logError("Buffer Get error.");
+      THROW_EXCEPTION("Buffer Get error.");
     }
 
     return _values[i];
@@ -130,7 +126,7 @@ public:
   void put(int i,
            float value) {
     if (i < 0 || i > _size) {
-      ILogger::instance()->logError("Buffer Put error.");
+      THROW_EXCEPTION("Buffer Put error.");
     }
 
     if (_values[i] != value) {
@@ -142,7 +138,7 @@ public:
   void rawPut(int i,
               float value) {
     if (i < 0 || i > _size) {
-      ILogger::instance()->logError("Buffer Put error.");
+      THROW_EXCEPTION("Buffer Put error.");
     }
 
     _values[i] = value;
@@ -150,7 +146,7 @@ public:
 
   void rawAdd(int i, float value) {
     if (i < 0 || i > _size) {
-      ILogger::instance()->logError("Buffer Put error.");
+      THROW_EXCEPTION("Buffer Put error.");
     }
 
     _values[i] = _values[i] + value;
@@ -164,7 +160,12 @@ public:
   const std::string description() const;
   
   void bindAsVBOToGPU() const;
-  
+
+  void rawPut(int i,
+              const IFloatBuffer* srcBuffer,
+              int srcFromIndex,
+              int srcToIndex);
+
 };
 
 #endif

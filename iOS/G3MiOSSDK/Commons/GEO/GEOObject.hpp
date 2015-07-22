@@ -9,16 +9,15 @@
 #ifndef __G3MiOSSDK__GEOObject__
 #define __G3MiOSSDK__GEOObject__
 
+class GEORasterSymbolizer;
+class ICanvas;
+class GEORasterProjection;
 class G3MRenderContext;
 class GEOSymbolizer;
 class MeshRenderer;
 class ShapesRenderer;
 class MarksRenderer;
-class GEOTileRasterizer;
-class GEORasterSymbolizer;
-class ICanvas;
-class GEORasterProjection;
-
+class GEOVectorLayer;
 
 class GEOObject {
 public:
@@ -35,9 +34,12 @@ public:
                          MeshRenderer*           meshRenderer,
                          ShapesRenderer*         shapesRenderer,
                          MarksRenderer*          marksRenderer,
-                         GEOTileRasterizer*      geoTileRasterizer) const = 0 ;
+                         GEOVectorLayer*         geoVectorLayer
+                         ) const = 0 ;
 
   virtual long long getCoordinatesCount() const = 0;
+
+  virtual GEOObject* deepCopy() const = 0;
 
 };
 

@@ -17,6 +17,7 @@ package org.glob3.mobile.generated;
 
 
 //class Renderer;
+//class Info;
 
 
 public interface ChangedRendererInfoListener
@@ -24,6 +25,6 @@ public interface ChangedRendererInfoListener
 
   void dispose();
 
-  void changedRendererInfo(int rendererIdentifier, java.util.ArrayList<String> info);
+  void changedRendererInfo(int rendererIdentifier, java.util.ArrayList<Info> info);
 
  }

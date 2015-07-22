@@ -10,15 +10,35 @@
 #define __G3MiOSSDK__DefaultTileTexturizer__
 
 #include "TileTexturizer.hpp"
+
 class LeveledTexturedMesh;
 class TextureIDReference;
+class IImageBuilder;
+class IImage;
 
 
 class DefaultTileTexturizer : public TileTexturizer {
 private:
   inline LeveledTexturedMesh* getMesh(Tile* tile) const;
-
+  
+  
+  IImageBuilder* _defaultBackGroundImageBuilder;
+  bool _defaultBackGroundImageLoaded;
+#ifdef C_CODE
+  const IImage* _defaultBackGroundImage;
+#endif
+#ifdef JAVA_CODE
+  private IImage _defaultBackGroundImage;
+#endif
+  std::string _defaultBackGroundImageName;
+  
 public:
+  
+  std::vector<std::string> _errors;
+
+  
+  DefaultTileTexturizer(IImageBuilder* defaultBackGroundImageBuilder);
+
   virtual ~DefaultTileTexturizer() {
 #ifdef JAVA_CODE
     super.dispose();
@@ -32,7 +52,6 @@ public:
 
   Mesh* texturize(const G3MRenderContext* rc,
                   const TileTessellator* tessellator,
-                  TileRasterizer* tileRasterizer,
                   const LayerTilesRenderParameters* layerTilesRenderParameters,
                   const LayerSet* layerSet,
                   bool forceFullRender,
@@ -63,6 +82,24 @@ public:
                            const Tile* tile,
                            LayerSet* layerSet);
   
+  const IImageBuilder* getDefaultBackGroundImageBuilder() const {
+    return _defaultBackGroundImageBuilder;
+  }
+  
+  const IImage* getDefaultBackGroundImage() const {
+    return _defaultBackGroundImage;
+  }
+  
+  void setDefaultBackGroundImage(const IImage* defaultBackGroundImage);
+  
+  const std::string getDefaultBackGroundImageName() const {
+    return _defaultBackGroundImageName;
+  }
+  
+  void setDefaultBackGroundImageName(const std::string& defaultBackGroundImageName);
+  
+  void setDefaultBackGroundImageLoaded(const bool defaultBackGroundImageLoaded);
+
 };
 
 #endif

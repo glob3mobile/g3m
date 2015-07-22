@@ -69,9 +69,9 @@ public:
                              int width, int height) {
     const int halfWidth = width / 2;
     const int halfHeight = height / 2;
-    _projectionMatrix = MutableMatrix44D::createOrthographicProjectionMatrix(-halfWidth, halfWidth,
-                                                                             -halfHeight, halfHeight,
-                                                                             -halfWidth, halfWidth);
+    _projectionMatrix.copyValue(MutableMatrix44D::createOrthographicProjectionMatrix(-halfWidth, halfWidth,
+                                                                                    -halfHeight, halfHeight,
+                                                                                    -halfWidth, halfWidth));
   }
 
   virtual ~BusyQuadRenderer() {
@@ -87,7 +87,7 @@ public:
   void incDegrees(double value) {
     _degrees += value;
     if (_degrees>360) _degrees -= 360;
-    _modelviewMatrix = MutableMatrix44D::createRotationMatrix(Angle::fromDegrees(_degrees), Vector3D(0, 0, 1));
+    _modelviewMatrix.copyValue(MutableMatrix44D::createRotationMatrix(Angle::fromDegrees(_degrees), Vector3D(0, 0, 1)));
   }
   
   void start(const G3MRenderContext* rc);
@@ -110,14 +110,14 @@ public:
 
 //***************************************************************
 
-class BusyEffect : public EffectWithForce {
+class BusyEffect : public EffectNeverEnding {
 private:
   BusyQuadRenderer* _renderer;
 
 public:
 
   BusyEffect(BusyQuadRenderer *renderer):
-  EffectWithForce(1, 1),
+  EffectNeverEnding(),
   _renderer(renderer)
   { }
 
@@ -126,7 +126,7 @@ public:
 
   void doStep(const G3MRenderContext* rc,
               const TimeInterval& when) {
-    EffectWithForce::doStep(rc, when);
+    EffectNeverEnding::doStep(rc, when);
     _renderer->incDegrees(3);
   }
 

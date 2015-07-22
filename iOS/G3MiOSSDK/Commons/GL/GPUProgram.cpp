@@ -35,7 +35,7 @@ GPUProgram* GPUProgram::createProgram(GL* gl,
     return NULL;
   }
 
-//  ILogger::instance()->logInfo("VERTEX SOURCE: \n %s", vertexSource.c_str());
+  //  ILogger::instance()->logInfo("VERTEX SOURCE: \n %s", vertexSource.c_str());
 
   // compile fragment shader
   int fragmentShader = gl->createShader(FRAGMENT_SHADER);
@@ -48,7 +48,7 @@ GPUProgram* GPUProgram::createProgram(GL* gl,
     return NULL;
   }
 
-//  ILogger::instance()->logInfo("FRAGMENT SOURCE: \n %s", fragmentSource.c_str());
+  //  ILogger::instance()->logInfo("FRAGMENT SOURCE: \n %s", fragmentSource.c_str());
 
   //gl->bindAttribLocation(p, 0, POSITION);
 
@@ -80,9 +80,9 @@ GPUProgram::~GPUProgram() {
 
   //ILogger::instance()->logInfo("Deleting program %s", _name.c_str());
 
-//  if (_manager != NULL) {
-//    _manager->compiledProgramDeleted(this->_name);
-//  }
+  //  if (_manager != NULL) {
+  //    _manager->compiledProgramDeleted(this->_name);
+  //  }
 
   for (int i = 0; i < _nUniforms; i++) {
     delete _createdUniforms[i];
@@ -108,7 +108,7 @@ bool GPUProgram::linkProgram(GL* gl) const {
   return result;
 }
 
-bool GPUProgram::compileShader(GL* gl, int shader, const std::string& source) const{
+bool GPUProgram::compileShader(GL* gl, int shader, const std::string& source) const {
   bool result = gl->compileShader(shader, source);
 
   //#if defined(DEBUG)
@@ -117,14 +117,15 @@ bool GPUProgram::compileShader(GL* gl, int shader, const std::string& source) co
 
   if (result) {
     gl->attachShader(_programID, shader);
-  } else{
+  }
+  else {
     ILogger::instance()->logError("GPUProgram: Problem encountered while compiling shader.");
   }
 
   return result;
 }
 
-void GPUProgram::deleteShader(GL* gl, int shader) const{
+void GPUProgram::deleteShader(GL* gl, int shader) const {
   if (!gl->deleteShader(shader)) {
     ILogger::instance()->logError("GPUProgram: Problem encountered while deleting shader.");
   }
@@ -184,7 +185,7 @@ void GPUProgram::getVariables(GL* gl) {
   //ILogger::instance()->logInfo("Program with Uniforms Bitcode: %d and Attributes Bitcode: %d", _uniformsCode, _attributesCode);
 }
 
-GPUUniform* GPUProgram::getGPUUniform(const std::string name) const{
+GPUUniform* GPUProgram::getGPUUniform(const std::string& name) const {
 #ifdef C_CODE
   const int key = GPUVariable::getUniformKey(name);
 #endif
@@ -194,7 +195,7 @@ GPUUniform* GPUProgram::getGPUUniform(const std::string name) const{
   return _uniforms[key];
 }
 
-GPUUniformBool* GPUProgram::getGPUUniformBool(const std::string name) const {
+GPUUniformBool* GPUProgram::getGPUUniformBool(const std::string& name) const {
   GPUUniform* u = getGPUUniform(name);
   if (u!= NULL && u->_type == GLType::glBool()) {
     return (GPUUniformBool*)u;
@@ -202,7 +203,7 @@ GPUUniformBool* GPUProgram::getGPUUniformBool(const std::string name) const {
   return NULL;
 }
 
-GPUUniformVec2Float* GPUProgram::getGPUUniformVec2Float(const std::string name) const {
+GPUUniformVec2Float* GPUProgram::getGPUUniformVec2Float(const std::string& name) const {
   GPUUniform* u = getGPUUniform(name);
   if (u!= NULL && u->_type == GLType::glVec2Float()) {
     return (GPUUniformVec2Float*)u;
@@ -210,7 +211,7 @@ GPUUniformVec2Float* GPUProgram::getGPUUniformVec2Float(const std::string name) 
   return NULL;
 }
 
-GPUUniformVec4Float* GPUProgram::getGPUUniformVec4Float(const std::string name) const{
+GPUUniformVec4Float* GPUProgram::getGPUUniformVec4Float(const std::string& name) const {
   GPUUniform* u = getGPUUniform(name);
   if (u!= NULL && u->_type == GLType::glVec4Float()) {
     return (GPUUniformVec4Float*)u;
@@ -218,7 +219,7 @@ GPUUniformVec4Float* GPUProgram::getGPUUniformVec4Float(const std::string name) 
   return NULL;
 }
 
-GPUUniformFloat* GPUProgram::getGPUUniformFloat(const std::string name) const{
+GPUUniformFloat* GPUProgram::getGPUUniformFloat(const std::string& name) const {
   GPUUniform* u = getGPUUniform(name);
   if (u!= NULL && u->_type == GLType::glFloat()) {
     return (GPUUniformFloat*)u;
@@ -226,7 +227,7 @@ GPUUniformFloat* GPUProgram::getGPUUniformFloat(const std::string name) const{
   return NULL;
 }
 
-GPUUniformMatrix4Float* GPUProgram::getGPUUniformMatrix4Float(const std::string name) const{
+GPUUniformMatrix4Float* GPUProgram::getGPUUniformMatrix4Float(const std::string& name) const {
   GPUUniform* u = getGPUUniform(name);
   if (u!= NULL && u->_type == GLType::glMatrix4Float()) {
     return (GPUUniformMatrix4Float*)u;
@@ -235,7 +236,7 @@ GPUUniformMatrix4Float* GPUProgram::getGPUUniformMatrix4Float(const std::string 
 
 }
 
-GPUAttribute* GPUProgram::getGPUAttribute(const std::string name) const{
+GPUAttribute* GPUProgram::getGPUAttribute(const std::string& name) const {
 #ifdef C_CODE
   const int key = GPUVariable::getAttributeKey(name);
 #endif
@@ -245,7 +246,7 @@ GPUAttribute* GPUProgram::getGPUAttribute(const std::string name) const{
   return _attributes[key];
 }
 
-GPUAttribute* GPUProgram::getGPUAttributeVecXFloat(const std::string name, int x) const{
+GPUAttribute* GPUProgram::getGPUAttributeVecXFloat(const std::string& name, int x) const {
   switch (x) {
     case 1:
       return getGPUAttributeVec1Float(name);
@@ -260,7 +261,7 @@ GPUAttribute* GPUProgram::getGPUAttributeVecXFloat(const std::string name, int x
   }
 }
 
-GPUAttributeVec1Float* GPUProgram::getGPUAttributeVec1Float(const std::string name) const{
+GPUAttributeVec1Float* GPUProgram::getGPUAttributeVec1Float(const std::string& name) const {
   GPUAttributeVec1Float* a = (GPUAttributeVec1Float*)getGPUAttribute(name);
   if (a!= NULL && a->_size == 1 && a->_type == GLType::glFloat()) {
     return (GPUAttributeVec1Float*)a;
@@ -269,7 +270,7 @@ GPUAttributeVec1Float* GPUProgram::getGPUAttributeVec1Float(const std::string na
 
 }
 
-GPUAttributeVec2Float* GPUProgram::getGPUAttributeVec2Float(const std::string name) const{
+GPUAttributeVec2Float* GPUProgram::getGPUAttributeVec2Float(const std::string& name) const {
   GPUAttributeVec2Float* a = (GPUAttributeVec2Float*)getGPUAttribute(name);
   if (a!= NULL && a->_size == 2 && a->_type == GLType::glFloat()) {
     return (GPUAttributeVec2Float*)a;
@@ -278,7 +279,7 @@ GPUAttributeVec2Float* GPUProgram::getGPUAttributeVec2Float(const std::string na
 
 }
 
-GPUAttributeVec3Float* GPUProgram::getGPUAttributeVec3Float(const std::string name) const{
+GPUAttributeVec3Float* GPUProgram::getGPUAttributeVec3Float(const std::string& name) const {
   GPUAttributeVec3Float* a = (GPUAttributeVec3Float*)getGPUAttribute(name);
   if (a!= NULL && a->_size == 3 && a->_type == GLType::glFloat()) {
     return (GPUAttributeVec3Float*)a;
@@ -287,7 +288,7 @@ GPUAttributeVec3Float* GPUProgram::getGPUAttributeVec3Float(const std::string na
 
 }
 
-GPUAttributeVec4Float* GPUProgram::getGPUAttributeVec4Float(const std::string name) const{
+GPUAttributeVec4Float* GPUProgram::getGPUAttributeVec4Float(const std::string& name) const {
   GPUAttributeVec4Float* a = (GPUAttributeVec4Float*)getGPUAttribute(name);
   if (a!= NULL && a->_size == 4 && a->_type == GLType::glFloat()) {
     return (GPUAttributeVec4Float*)a;
@@ -341,38 +342,39 @@ void GPUProgram::applyChanges(GL* gl) {
   }
 }
 
-GPUUniform* GPUProgram::getUniformOfType(const std::string& name, int type) const{
+GPUUniform* GPUProgram::getUniformOfType(const std::string& name, int type) const {
   GPUUniform* u = NULL;
   if (type == GLType::glBool()) {
     u = getGPUUniformBool(name);
-  } else {
-    if (type == GLType::glVec2Float()) {
-      u = getGPUUniformVec2Float(name);
-    } else{
-      if (type == GLType::glVec4Float()) {
-        u = getGPUUniformVec4Float(name);
-      } else{
-        if (type == GLType::glFloat()) {
-          u = getGPUUniformFloat(name);
-        } else
-          if (type == GLType::glMatrix4Float()) {
-            u = getGPUUniformMatrix4Float(name);
-          }
-      }
-    }
   }
+  else if (type == GLType::glVec2Float()) {
+    u = getGPUUniformVec2Float(name);
+  }
+  else if (type == GLType::glVec4Float()) {
+    u = getGPUUniformVec4Float(name);
+  }
+  else if (type == GLType::glFloat()) {
+    u = getGPUUniformFloat(name);
+  }
+  else if (type == GLType::glMatrix4Float()) {
+    u = getGPUUniformMatrix4Float(name);
+  }
+  else {
+    ILogger::instance()->logError("Invalid uniform type");
+  }
+
   return u;
 }
 
-GPUUniform* GPUProgram::getGPUUniform(int key) const{
+GPUUniform* GPUProgram::getGPUUniform(int key) const {
   return _uniforms[key];
 }
 
-GPUAttribute* GPUProgram::getGPUAttribute(int key) const{
+GPUAttribute* GPUProgram::getGPUAttribute(int key) const {
   return _attributes[key];
 }
 
-GPUAttribute* GPUProgram::getGPUAttributeVecXFloat(int key, int x) const{
+GPUAttribute* GPUProgram::getGPUAttributeVecXFloat(int key, int x) const {
   GPUAttribute* a = getGPUAttribute(key);
   if (a->_type == GLType::glFloat() && a->_size == x) {
     return a;
@@ -383,7 +385,7 @@ GPUAttribute* GPUProgram::getGPUAttributeVecXFloat(int key, int x) const{
 void GPUProgram::setGPUUniformValue(int key, GPUUniformValue* v) {
   GPUUniform* u = _uniforms[key];
   if (u == NULL) {
-    ILogger::instance()->logError("Uniform [key=%d] not found", key);
+    ILogger::instance()->logError("Uniform [key=%d] not found in program %s", key, _name.c_str());
     return;
   }
   u->set(v);
@@ -392,7 +394,7 @@ void GPUProgram::setGPUUniformValue(int key, GPUUniformValue* v) {
 void GPUProgram::setGPUAttributeValue(int key, GPUAttributeValue* v) {
   GPUAttribute* a = _attributes[key];
   if (a == NULL) {
-    ILogger::instance()->logError("Attribute [key=%d] not found", key);
+    ILogger::instance()->logError("Attribute [key=%d] not found in program %s", key, _name.c_str());
     return;
   }
   a->set(v);

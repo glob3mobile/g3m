@@ -67,6 +67,15 @@ public class ByteBufferBuilder
     _values.add(b4);
   }
 
+  public final void addInt16(short value)
+  {
+    final byte b1 = (byte)((value) & 0xFF);
+    final byte b2 = (byte)((value >> 8) & 0xFF);
+
+    _values.add(b1);
+    _values.add(b2);
+  }
+
   public final void setInt32(int i, int value)
   {
     final int b1 = ((value) & 0xFF);

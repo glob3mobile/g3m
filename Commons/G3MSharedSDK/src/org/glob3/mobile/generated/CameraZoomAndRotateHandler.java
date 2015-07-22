@@ -19,7 +19,6 @@ package org.glob3.mobile.generated;
 
 
 
-
 public class CameraZoomAndRotateHandler extends CameraEventHandler
 {
   private double _fingerSep0;
@@ -29,7 +28,7 @@ public class CameraZoomAndRotateHandler extends CameraEventHandler
   private MutableVector3D _centralGlobePoint = new MutableVector3D();
   private MutableVector3D _centralGlobeNormal = new MutableVector3D();
 
-  private void zoom(Camera camera, Vector2I difCurrentPixels)
+  private void zoom(Camera camera, Vector2F difCurrentPixels)
   {
     final double MIN_CAMERA_HEIGHT = 30;
   
@@ -49,7 +48,7 @@ public class CameraZoomAndRotateHandler extends CameraEventHandler
     double fingerSep = Math.sqrt((difCurrentPixels._x *difCurrentPixels._x+difCurrentPixels._y *difCurrentPixels._y));
     double factor = _fingerSep0 / fingerSep;
     double desp = 1-factor;
-    Vector3D w = _centralGlobePoint.asVector3D().sub(_camera0.getCartesianPosition());
+    Vector3D w = _centralGlobePoint.asVector3D().sub(_cameraPosition);
     double dist = w.length();
   
      // don't allow much closer
@@ -62,7 +61,7 @@ public class CameraZoomAndRotateHandler extends CameraEventHandler
       return;
   
      // make zoom and rotation
-    camera.copyFrom(_camera0);
+    camera.setLookAtParams(_cameraPosition, _cameraCenter, _cameraUp);
   
     // make rotation
     camera.rotateWithAxisAndPoint(_centralGlobeNormal.asVector3D(), _centralGlobePoint.asVector3D(), Angle.fromRadians(angle));
@@ -70,11 +69,6 @@ public class CameraZoomAndRotateHandler extends CameraEventHandler
   
     // make zoom
     camera.moveForward(desp *dist);
-  
-    /*printf("dist=%.2f.  desp=%f.   factor=%f   new dist=%.2f\n", dist, desp, factor, dist-desp*dist);
-    printf ("camera en (%.2f, %.2f, %.2f)     centralpoint en (%.2f, %.2f, %.2f). \n",
-            _camera0.getCartesianPosition().x(),  _camera0.getCartesianPosition().y(),  _camera0.getCartesianPosition().z(),
-            _centralGlobePoint.x(), _centralGlobePoint.y(), _centralGlobePoint.z());*/
   }
   private void rotate()
   {
@@ -83,10 +77,7 @@ public class CameraZoomAndRotateHandler extends CameraEventHandler
 
 
   public CameraZoomAndRotateHandler()
-  //_initialPoint(0,0,0),
-  //_initialPixel(0,0,0)
   {
-     _camera0 = new Camera(new Camera());
   }
 
   public void dispose()
@@ -163,26 +154,26 @@ public class CameraZoomAndRotateHandler extends CameraEventHandler
   public final void onDown(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
   {
     Camera camera = cameraContext.getNextCamera();
-    _camera0.copyFrom(camera);
+    camera.getLookAtParamsInto(_cameraPosition, _cameraCenter, _cameraUp);
     cameraContext.setCurrentGesture(Gesture.DoubleDrag);
   
     // double dragging
-    _initialPixel0 = touchEvent.getTouch(0).getPos().asMutableVector2I();
-    _initialPixel1 = touchEvent.getTouch(1).getPos().asMutableVector2I();
+    _initialPixel0 = new MutableVector2F(touchEvent.getTouch(0).getPos());
+    _initialPixel1 = new MutableVector2F(touchEvent.getTouch(1).getPos());
     }
   public final void onMove(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
   {
   
-    Vector2I pixel0 = touchEvent.getTouch(0).getPos();
-    Vector2I pixel1 = touchEvent.getTouch(1).getPos();
-    Vector2I difCurrentPixels = pixel1.sub(pixel0);
+    Vector2F pixel0 = touchEvent.getTouch(0).getPos();
+    Vector2F pixel1 = touchEvent.getTouch(1).getPos();
+    Vector2F difCurrentPixels = pixel1.sub(pixel0);
     final Planet planet = eventContext.getPlanet();
   
     // if it is the first move, let's decide if make zoom or rotate
     if (cameraContext.getCurrentGesture() == Gesture.DoubleDrag)
     {
-      Vector2I difPixel0 = pixel0.sub(_initialPixel0.asVector2I());
-      Vector2I difPixel1 = pixel1.sub(_initialPixel1.asVector2I());
+      Vector2F difPixel0 = pixel0.sub(_initialPixel0.asVector2F());
+      Vector2F difPixel1 = pixel1.sub(_initialPixel1.asVector2F());
       if ((difPixel0._y<-1 && difPixel1._y>1) || (difPixel0._y>1 && difPixel1._y<-1) || (difPixel0._x<-1 && difPixel1._x>1) || (difPixel0._x>1 && difPixel1._x<-1))
       {
         //printf ("zoom..\n");
@@ -194,11 +185,13 @@ public class CameraZoomAndRotateHandler extends CameraEventHandler
       {
   
         // compute intersection of view direction with the globe
-        Vector3D intersection = planet.closestIntersection(_camera0.getCartesianPosition(), _camera0.getViewDirection());
+        Vector3D intersection = planet.closestIntersection(_cameraPosition.asVector3D(), _cameraCenter.sub(_cameraPosition).asVector3D());
         if (!intersection.isNan())
         {
-          _centralGlobePoint = intersection.asMutableVector3D();
-          _centralGlobeNormal = planet.geodeticSurfaceNormal(_centralGlobePoint).asMutableVector3D();
+  //        _centralGlobePoint = intersection.asMutableVector3D();
+          _centralGlobePoint.copyFrom(intersection);
+  //        _centralGlobeNormal = planet->geodeticSurfaceNormal(_centralGlobePoint).asMutableVector3D();
+          _centralGlobeNormal.copyFrom(planet.geodeticSurfaceNormal(_centralGlobePoint));
           _fingerSep0 = Math.sqrt((difCurrentPixels._x *difCurrentPixels._x+difCurrentPixels._y *difCurrentPixels._y));
           _lastAngle = _angle0 = Math.atan2(difCurrentPixels._y, difCurrentPixels._x);
           cameraContext.setCurrentGesture(Gesture.Zoom);
@@ -239,12 +232,14 @@ public class CameraZoomAndRotateHandler extends CameraEventHandler
   }
 
   //MutableVector3D _initialPoint;  //Initial point at dragging
-  public MutableVector2I _initialPixel0 = new MutableVector2I(); //Initial pixels at start of gesture
-  public MutableVector2I _initialPixel1 = new MutableVector2I();
+  public MutableVector2F _initialPixel0 = new MutableVector2F(); //Initial pixels at start of gesture
+  public MutableVector2F _initialPixel1 = new MutableVector2F();
   //MutableVector3D _initialPoint0, _initialPoint1;
   public double _initialFingerSeparation;
   public double _initialFingerInclination;
 
-  public Camera _camera0 = new Camera(); //Initial Camera saved on Down event
+  public MutableVector3D _cameraPosition = new MutableVector3D();
+  public MutableVector3D _cameraCenter = new MutableVector3D();
+  public MutableVector3D _cameraUp = new MutableVector3D();
 
 }

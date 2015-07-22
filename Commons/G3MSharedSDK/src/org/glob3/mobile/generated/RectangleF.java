@@ -10,6 +10,7 @@ package org.glob3.mobile.generated;
 
 
 
+
 public class RectangleF
 {
 
@@ -123,6 +124,59 @@ public class RectangleF
        isb.dispose();
     return s;
   }
+
+  public final String id()
+  {
+    IStringBuilder isb = IStringBuilder.newStringBuilder();
+    isb.addString("RectangleF|");
+    isb.addDouble(_x);
+    isb.addString("|");
+    isb.addDouble(_y);
+    isb.addString("|");
+    isb.addDouble(_width);
+    isb.addString("|");
+    isb.addDouble(_height);
+    final String s = isb.getString();
+    if (isb != null)
+       isb.dispose();
+    return s;
+  }
+
+  public static RectangleF calculateInnerRectangleFromSector(int wholeSectorWidth, int wholeSectorHeight, Sector wholeSector, Sector innerSector)
+  {
+    if (wholeSector.isNan() || innerSector.isNan())
+    {
+      //I think that this case doesn't exist
+      ILogger.instance().logError("Testing this case: view code");
+      return new RectangleF(0, 0, wholeSectorWidth, wholeSectorHeight);
+    }
+
+    if (wholeSector.isEquals(innerSector))
+    {
+      return new RectangleF(0, 0, wholeSectorWidth, wholeSectorHeight);
+    }
+
+    final double widthFactor2 = innerSector._deltaLongitude.div(wholeSector._deltaLongitude);
+    final double heightFactor2 = innerSector._deltaLatitude.div(wholeSector._deltaLatitude);
+
+    final Vector2D lowerUV = wholeSector.getUVCoordinates(innerSector.getNW());
+    final Vector2D upperUV = wholeSector.getUVCoordinates(innerSector.getSE());
+
+    final double widthFactor = (upperUV._x - lowerUV._x);
+    final double heightFactor = (upperUV._y - lowerUV._y);
+
+    //Test factors:
+    final double deltaWidthFactor = (widthFactor - widthFactor2);
+    final double deltaHeightFactor = (heightFactor - heightFactor2);
+
+    if (deltaWidthFactor < -0.00001 || deltaWidthFactor > 0.00001 || deltaHeightFactor < -0.00001 || deltaHeightFactor > 0.00001)
+    {
+      ILogger.instance().logWarning("Testing this case (view code): factors are diferents: %f and %f", widthFactor - widthFactor2, heightFactor - heightFactor2);
+    }
+
+    return new RectangleF((float)(lowerUV._x * wholeSectorWidth), (float)(lowerUV._y * wholeSectorHeight), (float)(widthFactor * wholeSectorWidth), (float)(heightFactor * wholeSectorHeight));
+  }
+
 
 
 }

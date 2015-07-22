@@ -22,11 +22,11 @@ class AbstractGeometryMesh : public Mesh {
   
 protected:
   const int               _primitive;
-  Vector3D                _center;
+  const Vector3D          _center;
   const MutableMatrix44D* _translationMatrix;
-  IFloatBuffer*           _vertices;
+  const IFloatBuffer*           _vertices;
   const bool              _ownsVertices;
-  IFloatBuffer*           _normals;
+  const IFloatBuffer*           _normals;
   const bool              _ownsNormals;
   const float             _lineWidth;
   const float             _pointSize;
@@ -64,14 +64,14 @@ public:
   
   const Vector3D getVertex(int i) const;
   
-  bool isTransparent(const G3MRenderContext* rc) const{
+  bool isTransparent(const G3MRenderContext* rc) const {
     return false; //TODO: CHECK
   }
   
   void rawRender(const G3MRenderContext* rc,
                  const GLState* parentGLState) const;
 
-  void showNormals(bool v) const{
+  void showNormals(bool v) const {
     _showNormals = v;
   }
   

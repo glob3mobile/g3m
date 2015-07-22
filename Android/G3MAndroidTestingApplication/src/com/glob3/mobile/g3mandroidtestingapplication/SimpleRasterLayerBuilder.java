@@ -91,8 +91,7 @@ public class SimpleRasterLayerBuilder
       subdomains.add("3.");
 
       final MercatorTiledLayer meteoritesLayer = new MercatorTiledLayer("http://",
-               "tiles.cartocdn.com/osm2/tiles/meteoritessize", subdomains, "png", TimeInterval.fromDays(90), false,
-               Sector.fullSphere(), 2, 17, true);
+               "tiles.cartocdn.com/osm2/tiles/meteoritessize", subdomains, "png", TimeInterval.fromDays(90), false, 2, 17, true);
       meteoritesLayer.setTitle("CartoDB Meteorites");
       meteoritesLayer.setEnable(false);
       layerSet.addLayer(meteoritesLayer);

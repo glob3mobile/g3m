@@ -14,7 +14,7 @@
 #include "RasterLayer.hpp"
 #include "Tile.hpp"
 #include "IDownloader.hpp"
-
+#include "ErrorHandling.hpp"
 
 class RLTIP_ImageDownloadListener : public IImageDownloadListener {
 private:
@@ -103,7 +103,7 @@ RasterLayerTileImageProvider::~RasterLayerTileImageProvider() {
 }
 
 const TileImageContribution* RasterLayerTileImageProvider::contribution(const Tile* tile) {
-  return _layer->contribution(tile);
+  return (_layer == NULL) ? NULL : _layer->contribution(tile);
 }
 
 void RasterLayerTileImageProvider::create(const Tile* tile,
@@ -152,4 +152,11 @@ void RasterLayerTileImageProvider::cancel(const std::string& tileId) {
 
 void RasterLayerTileImageProvider::requestFinish(const std::string& tileId) {
   _requestsIdsPerTile.erase(tileId);
+}
+
+void RasterLayerTileImageProvider::layerDeleted(const RasterLayer* layer) {
+  if (layer != _layer) {
+    THROW_EXCEPTION("Logic error");
+  }
+  _layer = NULL;
 }

@@ -12,12 +12,23 @@
 #include "Layer.hpp"
 
 #include "TileImageContribution.hpp"
+#include "TimeInterval.hpp"
 class IDownloader;
 class IImageDownloadListener;
-#include "TimeInterval.hpp"
+class RasterLayerTileImageProvider;
 
 class RasterLayer : public Layer {
+private:
+  mutable RasterLayerTileImageProvider* _tileImageProvider;
+
 protected:
+#ifdef C_CODE
+  const LayerTilesRenderParameters* _parameters;
+#endif
+#ifdef JAVA_CODE
+  protected LayerTilesRenderParameters _parameters;
+#endif
+
 #ifdef C_CODE
   const TimeInterval _timeToCache;
 #endif
@@ -31,7 +42,7 @@ protected:
               const LayerTilesRenderParameters* parameters,
               const float                       transparency,
               const LayerCondition*             condition,
-              const std::string&                disclaimerInfo);
+              std::vector<const Info*>*         layerInfo);
 
   const TimeInterval getTimeToCache() const {
     return _timeToCache;
@@ -45,7 +56,17 @@ protected:
 
   virtual const URL createURL(const Tile* tile) const = 0;
 
+  void setParameters(const LayerTilesRenderParameters* parameters);
+
+  ~RasterLayer();
+
+  const Tile* getParentTileOfSuitableLevel(const Tile* tile) const;
+
 public:
+  const std::vector<const LayerTilesRenderParameters*> getLayerTilesRenderParametersVector() const;
+
+  void selectLayerTilesRenderParameters(int index);
+
   bool isEquals(const Layer* that) const;
 
   TileImageProvider* createTileImageProvider(const G3MRenderContext* rc,
@@ -59,6 +80,8 @@ public:
                          bool logDownloadActivity,
                          IImageDownloadListener* listener,
                          bool deleteListener) const;
+
+  const std::vector<URL*> getDownloadURLs(const Tile* tile) const;
 
 };
 

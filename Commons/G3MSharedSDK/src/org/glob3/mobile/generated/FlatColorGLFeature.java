@@ -6,6 +6,18 @@ public class FlatColorGLFeature extends GLColorGroupFeature
     super.dispose();
   }
 
+  public FlatColorGLFeature(Color color, boolean blend, int sFactor)
+  {
+     this(color, blend, sFactor, GLBlendFactor.oneMinusSrcAlpha());
+  }
+  public FlatColorGLFeature(Color color, boolean blend)
+  {
+     this(color, blend, GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha());
+  }
+  public FlatColorGLFeature(Color color)
+  {
+     this(color, false, GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha());
+  }
   public FlatColorGLFeature(Color color, boolean blend, int sFactor, int dFactor)
   {
      super(GLFeatureID.GLF_FLATCOLOR, 2, blend, sFactor, dFactor);

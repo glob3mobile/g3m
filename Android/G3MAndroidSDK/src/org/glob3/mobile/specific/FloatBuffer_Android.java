@@ -12,8 +12,8 @@ import android.opengl.GLES20;
 
 
 public final class FloatBuffer_Android
-         extends
-            IFloatBuffer {
+extends
+IFloatBuffer {
 
    private final FloatBuffer _buffer;
    private int               _timestamp;
@@ -35,21 +35,21 @@ public final class FloatBuffer_Android
 
 
    FloatBuffer_Android(final float f0,
-                       final float f1,
-                       final float f2,
-                       final float f3,
-                       final float f4,
-                       final float f5,
-                       final float f6,
-                       final float f7,
-                       final float f8,
-                       final float f9,
-                       final float f10,
-                       final float f11,
-                       final float f12,
-                       final float f13,
-                       final float f14,
-                       final float f15) {
+            final float f1,
+            final float f2,
+            final float f3,
+            final float f4,
+            final float f5,
+            final float f6,
+            final float f7,
+            final float f8,
+            final float f9,
+            final float f10,
+            final float f11,
+            final float f12,
+            final float f13,
+            final float f14,
+            final float f15) {
       _buffer = ByteBuffer.allocateDirect(16 * 4).order(ByteOrder.nativeOrder()).asFloatBuffer();
       _buffer.put(0, f0);
       _buffer.put(1, f1);
@@ -71,14 +71,14 @@ public final class FloatBuffer_Android
 
 
    //     FloatBuffer_Android(final float[] array) {
-   //      _buffer = ByteBuffer.allocateDirect(array.length * 4).order(ByteOrder.nativeOrder()).asFloatBuffer();
+      //      _buffer = ByteBuffer.allocateDirect(array.length * 4).order(ByteOrder.nativeOrder()).asFloatBuffer();
    //      _buffer.put(array);
    //      _buffer.rewind();
    //   }
 
 
    FloatBuffer_Android(final float[] array,
-                       final int length) {
+            final int length) {
       _buffer = ByteBuffer.allocateDirect(length * 4).order(ByteOrder.nativeOrder()).asFloatBuffer();
       _buffer.put(array, 0, length);
       _buffer.rewind();
@@ -188,6 +188,22 @@ public final class FloatBuffer_Android
    @Override
    public long getID() {
       return _id;
+   }
+
+
+   @Override
+   public void rawPut(final int i,
+                      final IFloatBuffer srcBuffer,
+                      final int srcFromIndex,
+                      final int count) {
+      if ((i < 0) || ((i + count) > size())) {
+         throw new RuntimeException("buffer put error");
+      }
+
+      final FloatBuffer_Android androidSrcBuffer = (FloatBuffer_Android) srcBuffer;
+      for (int j = 0; j < count; j++) {
+         _buffer.put(i + j, androidSrcBuffer._buffer.get(srcFromIndex + j));
+      }
    }
 
 

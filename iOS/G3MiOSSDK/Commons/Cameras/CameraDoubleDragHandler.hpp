@@ -17,8 +17,7 @@
 class CameraDoubleDragHandler: public CameraEventHandler {
     
 public:
-  CameraDoubleDragHandler():
-  _camera0(Camera())
+  CameraDoubleDragHandler()
   {
   }
   
@@ -47,7 +46,11 @@ public:
             const TouchEvent& touchEvent,
             CameraContext *cameraContext);
   
-  Camera _camera0;         //Initial Camera saved on Down event
+  MutableVector3D _cameraPosition;
+  MutableVector3D _cameraCenter;
+  MutableVector3D _cameraUp;
+  MutableVector2I _cameraViewPort;
+  MutableMatrix44D _cameraModelViewMatrix;
   
 };
 

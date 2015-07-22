@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 
 
@@ -19,12 +19,12 @@ import android.widget.TextView;
 
 /**
  * @author mdelacalle
- * 
+ *
  */
 
 public class DataSourceAdapter
          extends
-            ArrayAdapter {
+            ArrayAdapter<String> {
 
    private final Activity     _context;
    private final List<String> _itemList;

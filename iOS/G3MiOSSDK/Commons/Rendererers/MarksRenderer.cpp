@@ -44,8 +44,8 @@ _billboardTexCoords(NULL)
 
 
 MarksRenderer::~MarksRenderer() {
-  int marksSize = _marks.size();
-  for (int i = 0; i < marksSize; i++) {
+  const size_t marksSize = _marks.size();
+  for (size_t i = 0; i < marksSize; i++) {
     delete _marks[i];
   }
 
@@ -66,8 +66,8 @@ MarksRenderer::~MarksRenderer() {
 
 
 void MarksRenderer::onChangedContext() {
-  int marksSize = _marks.size();
-  for (int i = 0; i < marksSize; i++) {
+  const size_t marksSize = _marks.size();
+  for (size_t i = 0; i < marksSize; i++) {
     Mark* mark = _marks[i];
     mark->initialize(_context, _downloadPriority);
   }
@@ -100,8 +100,8 @@ void MarksRenderer::removeMark(Mark* mark) {
 }
 
 void MarksRenderer::removeAllMarks() {
-  const int marksSize = _marks.size();
-  for (int i = 0; i < marksSize; i++) {
+  const size_t marksSize = _marks.size();
+  for (size_t i = 0; i < marksSize; i++) {
     delete _marks[i];
   }
   _marks.clear();
@@ -114,14 +114,14 @@ bool MarksRenderer::onTouchEvent(const G3MEventContext* ec,
   if ( touchEvent->getType() == DownUp ) {
 
     if (_lastCamera != NULL) {
-      const Vector2I touchedPixel = touchEvent->getTouch(0)->getPos();
+      const Vector2F touchedPixel = touchEvent->getTouch(0)->getPos();
       const Planet* planet = ec->getPlanet();
 
       double minSqDistance = IMathUtils::instance()->maxDouble();
       Mark* nearestMark = NULL;
 
-      const int marksSize = _marks.size();
-      for (int i = 0; i < marksSize; i++) {
+      const size_t marksSize = _marks.size();
+      for (size_t i = 0; i < marksSize; i++) {
         Mark* mark = _marks[i];
 
         if (!mark->isReady()) {
@@ -131,23 +131,23 @@ bool MarksRenderer::onTouchEvent(const G3MEventContext* ec,
           continue;
         }
 
-        const int textureWidth = mark->getTextureWidth();
-        if (textureWidth <= 0) {
+        const int markWidth = (int)mark->getTextureWidth();
+        if (markWidth <= 0) {
           continue;
         }
 
-        const int textureHeight = mark->getTextureHeight();
-        if (textureHeight <= 0) {
+        const int markHeight = (int)mark->getTextureHeight();
+        if (markHeight <= 0) {
           continue;
         }
 
         const Vector3D* cartesianMarkPosition = mark->getCartesianPosition(planet);
         const Vector2F markPixel = _lastCamera->point2Pixel(*cartesianMarkPosition);
 
-        const RectangleF markPixelBounds(markPixel._x - (textureWidth / 2),
-                                         markPixel._y - (textureHeight / 2),
-                                         textureWidth,
-                                         textureHeight);
+        const RectangleF markPixelBounds(markPixel._x - ((float) markWidth / 2),
+                                         markPixel._y - ((float) markHeight / 2),
+                                         markWidth,
+                                         markHeight);
 
         if (markPixelBounds.contains(touchedPixel._x, touchedPixel._y)) {
           const double sqDistance = markPixel.squaredDistanceTo(touchedPixel);
@@ -174,8 +174,8 @@ bool MarksRenderer::onTouchEvent(const G3MEventContext* ec,
 
 RenderState MarksRenderer::getRenderState(const G3MRenderContext* rc) {
   if (_readyWhenMarksReady) {
-    int marksSize = _marks.size();
-    for (int i = 0; i < marksSize; i++) {
+    const size_t marksSize = _marks.size();
+    for (size_t i = 0; i < marksSize; i++) {
       if (!_marks[i]->isReady()) {
         return RenderState::busy();
       }
@@ -198,13 +198,14 @@ IFloatBuffer* MarksRenderer::getBillboardTexCoords() {
 }
 
 void MarksRenderer::render(const G3MRenderContext* rc, GLState* glState) {
-  const int marksSize = _marks.size();
+  const size_t marksSize = _marks.size();
   if (marksSize > 0) {
     const Camera* camera = rc->getCurrentCamera();
 
     _lastCamera = camera; // Saving camera for use in onTouchEvent
 
-    const Vector3D cameraPosition = camera->getCartesianPosition();
+    MutableVector3D cameraPosition;
+    camera->getCartesianPositionMutable(cameraPosition);
     const double cameraHeight = camera->getGeodeticPosition()._height;
 
     updateGLState(rc);
@@ -214,7 +215,7 @@ void MarksRenderer::render(const G3MRenderContext* rc, GLState* glState) {
 
     IFloatBuffer* billboardTexCoord = getBillboardTexCoords();
 
-    for (int i = 0; i < marksSize; i++) {
+    for (size_t i = 0; i < marksSize; i++) {
       Mark* mark = _marks[i];
       if (mark->isReady()) {
         mark->render(rc,
@@ -230,19 +231,20 @@ void MarksRenderer::render(const G3MRenderContext* rc, GLState* glState) {
 }
 
 void MarksRenderer::updateGLState(const G3MRenderContext* rc) {
-  const Camera* cam = rc->getCurrentCamera();
+  const Camera* camera = rc->getCurrentCamera();
 
   ModelViewGLFeature* f = (ModelViewGLFeature*) _glState->getGLFeature(GLF_MODEL_VIEW);
   if (f == NULL) {
-    _glState->addGLFeature(new ModelViewGLFeature(cam), true);
+    _glState->addGLFeature(new ModelViewGLFeature(camera), true);
   }
   else {
-    f->setMatrix(cam->getModelViewMatrix44D());
+    f->setMatrix(camera->getModelViewMatrix44D());
   }
 
   if (_glState->getGLFeature(GLF_VIEWPORT_EXTENT) == NULL) {
     _glState->clearGLFeatureGroup(NO_GROUP);
-    _glState->addGLFeature(new ViewportExtentGLFeature(cam->getViewPortWidth(), cam->getViewPortHeight()), false);
+    _glState->addGLFeature(new ViewportExtentGLFeature(camera),
+                           false);
   }
 }
 

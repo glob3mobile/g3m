@@ -98,8 +98,8 @@ _errorRenderer(errorRenderer),
 _hudRenderer(hudRenderer),
 _width(1),
 _height(1),
-_currentCamera(new Camera()),
-_nextCamera(new Camera()),
+_currentCamera(new Camera(1)),
+_nextCamera(new Camera(2)),
 _backgroundColor( new Color(backgroundColor) ),
 _timer(IFactory::instance()->createTimer()),
 _renderCounter(0),
@@ -187,6 +187,14 @@ _infoDisplay(infoDisplay)
                                         _gpuProgramManager,
                                         _surfaceElevationProvider);
 
+
+//#ifdef C_CODE
+//  delete _rendererState;
+//  _rendererState = new RenderState( calculateRendererState() );
+//#endif
+//#ifdef JAVA_CODE
+//  _rendererState = calculateRendererState();
+//#endif
 }
 
 
@@ -287,6 +295,14 @@ G3MWidget::~G3MWidget() {
   }
 }
 
+void G3MWidget::removeAllPeriodicalTasks() {
+  for (int i = 0; i < _periodicalTasks.size(); i++) {
+    PeriodicalTask* periodicalTask =  _periodicalTasks[i];
+    delete periodicalTask;
+  }
+  _periodicalTasks.clear();
+}
+
 void G3MWidget::notifyTouchEvent(const G3MEventContext &ec,
                                  const TouchEvent* touchEvent) const {
   const RenderState_Type renderStateType = _rendererState->_type;
@@ -324,7 +340,7 @@ void G3MWidget::notifyTouchEvent(const G3MEventContext &ec,
 }
 
 void G3MWidget::onTouchEvent(const TouchEvent* touchEvent) {
-
+  
   G3MEventContext ec(IFactory::instance(),
                      IStringUtils::instance(),
                      _threadUtils,
@@ -336,39 +352,38 @@ void G3MWidget::onTouchEvent(const TouchEvent* touchEvent) {
                      _effectsScheduler,
                      _storage,
                      _surfaceElevationProvider);
-
-
-  // notify the original event
-  notifyTouchEvent(ec, touchEvent);
-
-
-  // creates DownUp event when a Down is immediately followed by an Up
-  if (touchEvent->getTouchCount() == 1) {
-    const TouchEventType eventType = touchEvent->getType();
-    if (eventType == Down) {
-      _clickOnProcess = true;
+  
+    // notify the original event
+    notifyTouchEvent(ec, touchEvent);
+    
+    // creates DownUp event when a Down is immediately followed by an Up
+    //ILogger::instance()->logInfo("Touch Event: %i. Taps: %i. Touchs: %i",touchEvent->getType(), touchEvent->getTapCount(), touchEvent->getTouchCount());
+    if (touchEvent->getTouchCount() == 1) {
+      const TouchEventType eventType = touchEvent->getType();
+      if (eventType == Down) {
+        _clickOnProcess = true;
+      }
+      else {
+        if (eventType == Up) {
+          if (_clickOnProcess) {
+            
+            const Touch* touch = touchEvent->getTouch(0);
+            const TouchEvent* downUpEvent = TouchEvent::create(DownUp,
+                                                               new Touch(*touch));
+            
+            notifyTouchEvent(ec, downUpEvent);
+            
+            delete downUpEvent;
+          }
+        }
+        _clickOnProcess = false;
+      }
     }
     else {
-      if (eventType == Up) {
-        if (_clickOnProcess) {
-
-          const Touch* touch = touchEvent->getTouch(0);
-          const TouchEvent* downUpEvent = TouchEvent::create(DownUp,
-                                                             new Touch(*touch));
-
-          notifyTouchEvent(ec, downUpEvent);
-
-          delete downUpEvent;
-        }
-      }
       _clickOnProcess = false;
     }
   }
-  else {
-    _clickOnProcess = false;
-  }
 
-}
 
 void G3MWidget::onResizeViewportEvent(int width, int height) {
   G3MEventContext ec(IFactory::instance(),
@@ -396,8 +411,8 @@ void G3MWidget::onResizeViewportEvent(int width, int height) {
 
 
 void G3MWidget::resetPeriodicalTasksTimeouts() {
-  const int periodicalTasksCount = _periodicalTasks.size();
-  for (int i = 0; i < periodicalTasksCount; i++) {
+  const size_t periodicalTasksCount = _periodicalTasks.size();
+  for (size_t i = 0; i < periodicalTasksCount; i++) {
     PeriodicalTask* pt = _periodicalTasks[i];
     pt->resetTimeout();
   }
@@ -493,15 +508,15 @@ void G3MWidget::render(int width, int height) {
   }
 
   // Start periodical tasks
-  const int periodicalTasksCount = _periodicalTasks.size();
-  for (int i = 0; i < periodicalTasksCount; i++) {
+  const size_t periodicalTasksCount = _periodicalTasks.size();
+  for (size_t i = 0; i < periodicalTasksCount; i++) {
     PeriodicalTask* pt = _periodicalTasks[i];
     pt->executeIfNecessary(_context);
   }
 
   // give to the CameraContrainers the opportunity to change the nextCamera
-  const int cameraConstrainersCount = _cameraConstrainers.size();
-  for (int i = 0; i< cameraConstrainersCount; i++) {
+  const size_t cameraConstrainersCount = _cameraConstrainers.size();
+  for (size_t i = 0; i< cameraConstrainersCount; i++) {
     ICameraConstrainer* constrainer = _cameraConstrainers[i];
     constrainer->onCameraChange(_planet,
                                 _currentCamera,
@@ -509,7 +524,7 @@ void G3MWidget::render(int width, int height) {
   }
   _planet->applyCameraConstrainers(_currentCamera, _nextCamera);
 
-  _currentCamera->copyFromForcingMatrixCreation(*_nextCamera);
+  _currentCamera->copyFrom(*_nextCamera);
 
 #ifdef C_CODE
   delete _rendererState;
@@ -560,8 +575,8 @@ void G3MWidget::render(int width, int height) {
 
   std::vector<OrderedRenderable*>* orderedRenderables = _renderContext->getSortedOrderedRenderables();
   if (orderedRenderables != NULL) {
-    const int orderedRenderablesCount = orderedRenderables->size();
-    for (int i = 0; i < orderedRenderablesCount; i++) {
+    const size_t orderedRenderablesCount = orderedRenderables->size();
+    for (size_t i = 0; i < orderedRenderablesCount; i++) {
       OrderedRenderable* orderedRenderable = orderedRenderables->at(i);
       orderedRenderable->render(_renderContext);
       delete orderedRenderable;
@@ -839,12 +854,14 @@ bool G3MWidget::setRenderedSector(const Sector& sector) {
 //  }
 //}
 
-void G3MWidget::changedRendererInfo(const int rendererIdentifier, const std::vector<std::string>& info) {
+void G3MWidget::changedRendererInfo(const int rendererIdentifier,
+                                    const std::vector<const Info*>& info) {
   if(_infoDisplay != NULL){
     _infoDisplay->changedInfo(info);
-  } else {
-    ILogger::instance()->logWarning("Render Infos are changing and InfoDisplay is NULL");
   }
+//  else {
+//    ILogger::instance()->logWarning("Render Infos are changing and InfoDisplay is NULL");
+//  }
 }
 
 

@@ -11,10 +11,13 @@
 
 #include "TileImageProvider.hpp"
 
+#include "Color.hpp"
 class IImage;
 
 class ChessboardTileImageProvider : public TileImageProvider {
 private:
+  const Color _backgroundColor;
+  const Color _boxColor;
   const int _splits;
 
   IImage* _image;
@@ -23,7 +26,11 @@ protected:
   ~ChessboardTileImageProvider();
 
 public:
-  ChessboardTileImageProvider(int splits = 8) :
+  ChessboardTileImageProvider(const Color& backgroundColor,
+                              const Color& boxColor,
+                              int splits) :
+  _backgroundColor(backgroundColor),
+  _boxColor(boxColor),
   _splits(splits),
   _image(NULL)
   {

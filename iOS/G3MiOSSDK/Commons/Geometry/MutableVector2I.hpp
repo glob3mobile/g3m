@@ -58,6 +58,13 @@ public:
   }
   
   Vector2I asVector2I() const;
+  
+  void set(const int x,
+           const int y) {
+    _x = x;
+    _y = y;
+  }
+
 };
 
 #endif

@@ -26,8 +26,8 @@ private:
   GLFeatureSet* _features;
   mutable GLFeatureSet* _accumulatedFeatures;
 
-  mutable int _timeStamp;
-  mutable int _parentsTimeStamp;
+  mutable int _timestamp;
+  mutable int _parentsTimestamp;
 
   mutable GPUVariableValueSet* _valuesSet;
   mutable GLGlobalState*   _globalState;
@@ -52,8 +52,8 @@ public:
   GLState():
   _parentGLState(NULL),
   _linkedProgram(NULL),
-  _parentsTimeStamp(-1),
-  _timeStamp(0),
+  _parentsTimestamp(-1),
+  _timestamp(0),
   _valuesSet(NULL),
   _globalState(NULL),
   _accumulatedFeatures(NULL)
@@ -61,7 +61,7 @@ public:
     _features = new GLFeatureSet();
   }
 
-  int getTimeStamp() const { return _timeStamp;}
+  int getTimestamp() const { return _timestamp; }
 
   GLFeatureSet* getAccumulatedFeatures() const;
 //  GLFeatureSet* createAccumulatedFeatures() const;

@@ -36,7 +36,7 @@ public class WebSocket_Android
 
 
       try {
-         final URI uri = new URI(url.getPath());
+         final URI uri = new URI(url._path);
          _webSocketClient = new WebSocketClient(uri) {
             @Override
             public void onOpen(final ServerHandshake handshakedata) {

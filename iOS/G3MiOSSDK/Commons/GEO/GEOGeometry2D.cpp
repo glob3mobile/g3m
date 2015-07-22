@@ -29,3 +29,9 @@ void GEOGeometry2D::rasterize(const GEORasterSymbolizer* symbolizer,
     delete symbols;
   }
 }
+
+
+bool GEOGeometry2D::contain(const Geodetic2D& point) const {
+  return false;
+}
+

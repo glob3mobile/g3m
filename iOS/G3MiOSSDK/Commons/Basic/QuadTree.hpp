@@ -139,6 +139,10 @@ public:
 
   bool isEmpty() const;
 
+  const Sector getSector() const {
+    return _root->_sector;
+  }
+
 };
 
 #endif

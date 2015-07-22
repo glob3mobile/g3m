@@ -22,14 +22,14 @@ public class BalloonCanvasElement extends CanvasElement
   private CanvasElement _child;
 
   private final Color _color ;
-  private final float _arrowLenght;
+  private final float _arrowLength;
   private final float _margin;
   private final float _radius;
   private final float _arrowPointSize;
 
-  public BalloonCanvasElement(CanvasElement child, Color color, float margin, float radius, float arrowLenght)
+  public BalloonCanvasElement(CanvasElement child, Color color, float margin, float radius, float arrowLength)
   {
-     this(child, color, margin, radius, arrowLenght, 12);
+     this(child, color, margin, radius, arrowLength, 12);
   }
   public BalloonCanvasElement(CanvasElement child, Color color, float margin, float radius)
   {
@@ -47,13 +47,13 @@ public class BalloonCanvasElement extends CanvasElement
   {
      this(child, Color.white(), 5, 10, 5, 12);
   }
-  public BalloonCanvasElement(CanvasElement child, Color color, float margin, float radius, float arrowLenght, float arrowPointSize)
+  public BalloonCanvasElement(CanvasElement child, Color color, float margin, float radius, float arrowLength, float arrowPointSize)
   {
      _child = child;
      _color = new Color(color);
      _margin = margin;
      _radius = radius;
-     _arrowLenght = arrowLenght;
+     _arrowLength = arrowLength;
      _arrowPointSize = arrowPointSize;
 
   }
@@ -72,7 +72,7 @@ public class BalloonCanvasElement extends CanvasElement
     final Vector2F childExtent = _child.getExtent(canvas);
   
     final float twoMargin = _margin * 2;
-    return new Vector2F(childExtent._x + twoMargin, (childExtent._y + _arrowLenght + twoMargin) * 2);
+    return new Vector2F(childExtent._x + twoMargin, (childExtent._y + _arrowLength + twoMargin) * 2);
   }
 
   public final void drawAt(float left, float top, ICanvas canvas)

@@ -27,6 +27,7 @@ public:
   static RenderState ready();
   static RenderState busy();
   static RenderState error(const std::vector<std::string>& errors);
+  static RenderState error(const std::string& error);
 
   const RenderState_Type _type;
 

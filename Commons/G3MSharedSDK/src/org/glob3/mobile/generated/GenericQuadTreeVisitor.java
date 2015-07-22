@@ -14,11 +14,12 @@ public abstract class GenericQuadTreeVisitor
 
   public final void addComparisonsDoneWhileVisiting(int n)
   {
-     _comparisonsDone += n;
+    _comparisonsDone += n;
   }
+
   public final int getNComparisonsDone()
   {
-     return _comparisonsDone;
+    return _comparisonsDone;
   }
 
   public abstract boolean visitElement(Sector sector, Object element);

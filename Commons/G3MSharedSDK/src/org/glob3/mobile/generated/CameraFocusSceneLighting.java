@@ -14,6 +14,9 @@ public class CameraFocusSceneLighting extends SceneLighting
   private double _upY;
   private double _upZ;
 
+  private MutableVector3D _camDir = new MutableVector3D();
+  private MutableVector3D _up = new MutableVector3D();
+
 
   public CameraFocusSceneLighting(Color ambient, Color diffuse)
   {
@@ -32,30 +35,31 @@ public class CameraFocusSceneLighting extends SceneLighting
 
   public final void modifyGLState(GLState glState, G3MRenderContext rc)
   {
+    final Camera camera = rc.getCurrentCamera();
   
-    final Camera cam = rc.getCurrentCamera();
-    final Vector3D camDir = cam.getViewDirection();
-    final Vector3D up = cam.getUp();
-    if (_cameraDirX == camDir._x && _cameraDirY == camDir._y && _cameraDirZ == camDir._z && _upX == up._x && _upY == up._y && _upZ == up._z)
+    camera.getViewDirectionInto(_camDir);
+    camera.getUpMutable(_up);
+  
+    if ((_cameraDirX == _camDir.x()) && (_cameraDirY == _camDir.y()) && (_cameraDirZ == _camDir.z()) && (_upX == _up.x()) && (_upY == _up.y()) && (_upZ == _up.z()))
     {
       return;
     }
   
-    final Vector3D cameraVector = camDir.times(-1);
+    final MutableVector3D cameraVector = _camDir.times(-1);
   
     //Light slightly different of camera position
-    final Vector3D rotationLightDirAxis = up.cross(cameraVector);
-    final Vector3D lightDir = cameraVector.rotateAroundAxis(rotationLightDirAxis, Angle.fromDegrees(45.0));
+    final MutableVector3D rotationLightDirAxis = _up.cross(cameraVector);
+    final MutableVector3D lightDir = cameraVector.rotateAroundAxis(rotationLightDirAxis, Angle.fromDegrees(45.0));
   
     DirectionLightGLFeature f = (DirectionLightGLFeature) glState.getGLFeature(GLFeatureID.GLF_DIRECTION_LIGTH);
     if (f == null)
     {
       glState.clearGLFeatureGroup(GLFeatureGroupName.LIGHTING_GROUP);
-      glState.addGLFeature(new DirectionLightGLFeature(lightDir, _diffuseColor, _ambientColor), false);
+      glState.addGLFeature(new DirectionLightGLFeature(lightDir.asVector3D(), _diffuseColor, _ambientColor), false);
     }
     else
     {
-      f.setLightDirection(lightDir);
+      f.setLightDirection(lightDir.asVector3D());
     }
   
     //ADD MESH
@@ -63,12 +67,12 @@ public class CameraFocusSceneLighting extends SceneLighting
     {
       Vector3D lastCamDir = new Vector3D(_cameraDirX, _cameraDirY, _cameraDirZ);
   
-      if (lastCamDir.angleBetween(lightDir)._degrees > 10)
+      if (lastCamDir.angleBetween(lightDir.asVector3D())._degrees > 10)
       {
   
         FloatBufferBuilderFromCartesian3D vertices = FloatBufferBuilderFromCartesian3D.builderWithFirstVertexAsCenter();
-        vertices.add(cam.getCartesianPosition());
-        vertices.add(cam.getCartesianPosition().add(lightDir.times(1000)));
+        vertices.add(camera.getCartesianPosition());
+        vertices.add(camera.getCartesianPosition().add(lightDir.times(1000).asVector3D()));
   
         DirectMesh mesh = new DirectMesh(GLPrimitive.lines(), true, vertices.getCenter(), vertices.create(), (float)3.0, (float)1.0, new Color(Color.red()));
         _meshRenderer.addMesh(mesh);
@@ -76,14 +80,13 @@ public class CameraFocusSceneLighting extends SceneLighting
     }
   
     //SAVING STATE
-    _cameraDirX = camDir._x;
-    _cameraDirY = camDir._y;
-    _cameraDirZ = camDir._z;
+    _cameraDirX = _camDir.x();
+    _cameraDirY = _camDir.y();
+    _cameraDirZ = _camDir.z();
   
-    _upX = up._x;
-    _upY = up._y;
-    _upZ = up._z;
-  
+    _upX = _up.x();
+    _upY = _up.y();
+    _upZ = _up.z();
   }
 
   public final void setLightDirectionsMeshRenderer(MeshRenderer meshRenderer)

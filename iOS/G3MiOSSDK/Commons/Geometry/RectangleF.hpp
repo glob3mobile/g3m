@@ -11,6 +11,8 @@
 
 #include "IMathUtils.hpp"
 #include "IStringBuilder.hpp"
+#include "Sector.hpp"
+
 
 
 class RectangleF {
@@ -114,6 +116,60 @@ public:
     delete isb;
     return s;
   }
+  
+  const std::string id() const {
+    IStringBuilder* isb = IStringBuilder::newStringBuilder();
+    isb->addString("RectangleF|");
+    isb->addDouble(_x);
+    isb->addString("|");
+    isb->addDouble(_y);
+    isb->addString("|");
+    isb->addDouble(_width);
+    isb->addString("|");
+    isb->addDouble(_height);
+    const std::string s = isb->getString();
+    delete isb;
+    return s;
+  }
+  
+  static RectangleF* calculateInnerRectangleFromSector(int wholeSectorWidth,
+                                             int wholeSectorHeight,
+                                             const Sector& wholeSector,
+                                             const Sector& innerSector)  {
+    if (wholeSector.isNan() || innerSector.isNan())
+    {
+      //I think that this case doesn't exist
+      ILogger::instance()->logError("Testing this case: view code");
+      return new RectangleF(0, 0, wholeSectorWidth, wholeSectorHeight);
+    }
+    
+    if (wholeSector.isEquals(innerSector)){
+      return new RectangleF(0, 0, wholeSectorWidth, wholeSectorHeight);
+    }
+    
+    const double widthFactor2  = innerSector._deltaLongitude.div(wholeSector._deltaLongitude);
+    const double heightFactor2 = innerSector._deltaLatitude.div(wholeSector._deltaLatitude);
+    
+    const Vector2D lowerUV = wholeSector.getUVCoordinates(innerSector.getNW());
+    const Vector2D upperUV = wholeSector.getUVCoordinates(innerSector.getSE());
+    
+    const double widthFactor  = (upperUV._x - lowerUV._x);
+    const double heightFactor = (upperUV._y - lowerUV._y);
+    
+    //Test factors:
+    const double deltaWidthFactor = (widthFactor - widthFactor2);
+    const double deltaHeightFactor = (heightFactor - heightFactor2);
+
+    if ( deltaWidthFactor < -0.00001 || deltaWidthFactor > 0.00001 || deltaHeightFactor < -0.00001 || deltaHeightFactor  > 0.00001) {
+      ILogger::instance()->logWarning("Testing this case (view code): factors are diferents: %f and %f", widthFactor - widthFactor2, heightFactor - heightFactor2);
+    }
+    
+    return new RectangleF((float) (lowerUV._x   * wholeSectorWidth),
+                          (float) (lowerUV._y   * wholeSectorHeight),
+                          (float) (widthFactor  * wholeSectorWidth),
+                          (float) (heightFactor * wholeSectorHeight));
+  }
+
 
 
 };

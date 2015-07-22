@@ -14,7 +14,7 @@ public class FixedFocusSceneLighting extends SceneLighting
       glState.addGLFeature(new DirectionLightGLFeature(lightDir, Color.yellow(), Color.white()), false);
     }
     /* //Add this to obtain a rotating "sun"
-     else{
+     else {
   
      ITimer *timer = IFactory::instance()->createTimer();
      double sec = timer->now().milliseconds();

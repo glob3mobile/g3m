@@ -53,4 +53,9 @@ public class QuadTree
     return _root.isEmpty();
   }
 
+  public final Sector getSector()
+  {
+    return _root._sector;
+  }
+
 }

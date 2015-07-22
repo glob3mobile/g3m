@@ -1,4 +1,7 @@
 package org.glob3.mobile.generated; 
+/////////////////////////////////////////////////////////
+
+
 public class GeometryGLFeature extends GLFeature
 {
   //Position + cull + depth + polygonoffset + linewidth
@@ -15,7 +18,6 @@ public class GeometryGLFeature extends GLFeature
   public void dispose()
   {
     //  _position->_release();
-  
     super.dispose();
   }
 
@@ -30,7 +32,6 @@ public class GeometryGLFeature extends GLFeature
      _polygonOffsetFactor = polygonOffsetFactor;
      _polygonOffsetUnits = polygonOffsetUnits;
      _lineWidth = lineWidth;
-  
     _position = new GPUAttributeValueVec4Float(buffer, arrayElementSize, index, stride, normalized);
     _values.addAttributeValue(GPUAttributeKey.POSITION, _position, false);
   
@@ -67,7 +68,7 @@ public class GeometryGLFeature extends GLFeature
     }
     else
     {
-      state.disPolygonOffsetFill();
+      state.disablePolygonOffsetFill();
     }
   
     state.setLineWidth(_lineWidth);

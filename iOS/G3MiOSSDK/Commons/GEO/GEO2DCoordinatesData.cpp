@@ -13,8 +13,8 @@
 
 GEO2DCoordinatesData::~GEO2DCoordinatesData() {
 #ifdef C_CODE
-  const int coordinatesCount = _coordinates->size();
-  for (int i = 0; i < coordinatesCount; i++) {
+  const size_t coordinatesCount = _coordinates->size();
+  for (size_t i = 0; i < coordinatesCount; i++) {
     Geodetic2D* coordinate = _coordinates->at(i);
     delete coordinate;
   }
@@ -27,7 +27,7 @@ GEO2DCoordinatesData::~GEO2DCoordinatesData() {
 }
 
 Sector* GEO2DCoordinatesData::calculateSector() const {
-  const int size = _coordinates->size();
+  const size_t size = _coordinates->size();
   if (size == 0) {
     return NULL;
   }
@@ -40,7 +40,7 @@ Sector* GEO2DCoordinatesData::calculateSector() const {
   double minLonInRadians = coordinate0->_longitude._radians;
   double maxLonInRadians = minLonInRadians;
 
-  for (int i = 1; i < size; i++) {
+  for (size_t i = 1; i < size; i++) {
     const Geodetic2D* coordinate = _coordinates->at(i);
 
     const double latInRadians = coordinate->_latitude._radians;
@@ -84,3 +84,4 @@ const Sector* GEO2DCoordinatesData::getSector() const {
 long long GEO2DCoordinatesData::getCoordinatesCount() const {
   return (_coordinates == NULL) ? 0 : _coordinates->size();
 }
+

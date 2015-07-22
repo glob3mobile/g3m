@@ -11,18 +11,18 @@
 
 #include <vector>
 
-#include "Vector2I.hpp"
+#include "Vector2F.hpp"
 
 
 class Touch {
 private:
 #ifdef C_CODE
-  const Vector2I _pos;
-  const Vector2I _prevPos;
+  const Vector2F _pos;
+  const Vector2F _prevPos;
 #endif
 #ifdef JAVA_CODE
-  private final Vector2I _pos;
-  private final Vector2I _prevPos;
+  private final Vector2F _pos;
+  private final Vector2F _prevPos;
 #endif
   const unsigned char _tapCount;
 
@@ -33,16 +33,16 @@ public:
   _tapCount(other._tapCount)
   {}
 
-  Touch(const Vector2I& pos,
-        const Vector2I& prev,
+  Touch(const Vector2F& pos,
+        const Vector2F& prev,
         const unsigned char tapCount=(unsigned char)0):
   _pos(pos),
   _prevPos(prev),
   _tapCount(tapCount)
   { }
 
-  const Vector2I getPos() const { return _pos; }
-  const Vector2I getPrevPos() const { return _prevPos; }
+  const Vector2F getPos() const { return _pos; }
+  const Vector2F getPrevPos() const { return _prevPos; }
   const unsigned char getTapCount() const { return _tapCount; }
 
   ~Touch() {
@@ -128,7 +128,7 @@ public:
     return _touchs[i];
   }
 
-  int getTouchCount() const {
+  size_t getTouchCount() const {
     return _touchs.size();
   }
 

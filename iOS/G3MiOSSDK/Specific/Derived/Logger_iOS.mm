@@ -18,7 +18,7 @@ void Logger_iOS::logInfo(const std::string x, ...) const {
 //    va_end(args);
 //    printf("\n");
 
-    NSString* nsX = [ @"Info: " stringByAppendingString: [NSString stringWithUTF8String: x.c_str()] ];
+    NSString* nsX = [ @"" stringByAppendingString: [NSString stringWithUTF8String: x.c_str()] ];
     va_list args;
     va_start(args, x);
     NSLogv(nsX, args);

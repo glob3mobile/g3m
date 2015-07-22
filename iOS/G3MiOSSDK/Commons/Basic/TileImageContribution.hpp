@@ -52,7 +52,18 @@ protected:
     _alpha(alpha)
     {
     }
-    
+  
+//  TileImageContribution(const Sector& sector,
+//                        bool isFullCoverage,
+//                        bool isTransparent,
+//                        float alpha) :
+//  _isFullCoverage(isFullCoverage),
+//  _sector(sector),
+//  _isTransparent(isTransparent),
+//  _alpha(alpha)
+//  {
+//  }
+  
     virtual ~TileImageContribution() {
 #ifdef JAVA_CODE
         super.dispose();
@@ -85,7 +96,7 @@ public:
     static void releaseContribution(const TileImageContribution* contribution);
     
     bool isFullCoverageAndOpaque() const {
-        return _isFullCoverage && !_isTransparent && (_alpha >= 0.99);
+        return _isFullCoverage && !_isTransparent && isOpaque();
     }
     
     bool isFullCoverage() const {
@@ -100,10 +111,10 @@ public:
         return (_alpha >= 0.99);
     }
     
-    //  bool isTransparent() const {
-    //    return _isTransparent;
-    //  }
-    
+    bool isTransparent() const {
+        return _isTransparent;
+    }
+  
 };
 
 #endif

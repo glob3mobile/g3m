@@ -16,6 +16,9 @@ package org.glob3.mobile.generated;
 //
 
 
+//class Geodetic2D;
+
+
 //class GEORasterSymbol;
 
 public abstract class GEOGeometry2D extends GEOGeometry
@@ -49,5 +52,13 @@ public abstract class GEOGeometry2D extends GEOGeometry
       symbols = null;
     }
   }
+
+  public abstract GEOGeometry2D deepCopy();
+
+  public boolean contain(Geodetic2D point)
+  {
+    return false;
+  }
+
 
 }

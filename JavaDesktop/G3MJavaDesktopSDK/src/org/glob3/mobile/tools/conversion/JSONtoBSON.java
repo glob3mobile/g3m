@@ -38,8 +38,8 @@ public class JSONtoBSON {
       //final String pathFileBson = "/Users/mdelacalle/Documents/java_src/IGO-GIT-Repository/galileo/Android/Galileo/assets/2479-3029-13-.bson";
 
       //Path Terra-Vision
-      final String pathFileBson = "/Users/mdelacalle/Documents/java_src/terra-vision/webgl/terra-vision-demo/war/assets/2476-1280-12-.bson";
-      final String pathFileJson = "/Users/mdelacalle/Documents/java_src/workspaces10122013/OSM2World-h/2476-1280-12-.json";
+      final String pathFileBson = "/Users/mdelacalle/Documents/java_src/IGO-GIT-Repository/galileo/Android/Galileo/assets/8586-5560-14-.bson";
+      final String pathFileJson = "/Users/mdelacalle/Documents/java_src/workspaces10122013/OSM2World-h/8586-5550-14-.json";
       //    final String pathFileBson = "/Users/mdelacalle/Documents/java_src/IGO-GIT-Repository/wb/sldemo/Android/SLDemo/assets/boston.bson";
       //http://b.tile.openstreetmap.org/13/2478/3028.png
       //13/2479/3029.png
@@ -71,6 +71,8 @@ public class JSONtoBSON {
 
             final JSONParser_JavaDesktop jp = new JSONParser_JavaDesktop();
             jbase = jp.parse(new ByteBuffer_JavaDesktop(fileContent));
+
+            System.out.println("finished");
 
          }
          catch (final FileNotFoundException e) {

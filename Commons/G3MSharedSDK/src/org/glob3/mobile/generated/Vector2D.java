@@ -49,9 +49,6 @@ public class Vector2D
 
   }
 
-//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
-//  Vector2D normalized();
-
   public final double length()
   {
     return IMathUtils.instance().sqrt(squaredLength());
@@ -154,6 +151,25 @@ public class Vector2D
   @Override
   public String toString() {
     return description();
+  }
+
+  public static Vector2D intersectionOfTwoLines(Vector2D p1, Vector2D r1, Vector2D p2, Vector2D r2)
+  {
+  
+    //u = (p2 − p1) × r1 / (r1 × r2)
+    //out = p2 + u x r2
+  
+    double u = ((p2.sub(p1)).dot(r1)) / r1.dot(r2);
+    Vector2D out = p2.add(r2.times(u));
+  
+    return out;
+  
+  
+  }
+
+  public final double dot(Vector2D v)
+  {
+    return _x * v._x + _y * v._y;
   }
 
 }

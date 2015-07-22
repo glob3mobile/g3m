@@ -64,10 +64,10 @@ protected:
 public:
   MultiTexturedHUDQuadWidget(const URL& imageURL1,
                              const URL& imageURL2,
-                HUDPosition* x,
-                HUDPosition* y,
-                float width,
-                float height) :
+                             HUDPosition* x,
+                             HUDPosition* y,
+                             float width,
+                             float height) :
   _imageURL1(imageURL1),
   _imageURL2(imageURL2),
   _x(x),

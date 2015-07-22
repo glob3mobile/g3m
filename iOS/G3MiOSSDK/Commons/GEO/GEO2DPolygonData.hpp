@@ -17,7 +17,9 @@
 class GEO2DPolygonData : public GEO2DCoordinatesData {
 private:
   const std::vector<std::vector<Geodetic2D*>*>* _holesCoordinatesArray;
-
+  
+  bool contains(const std::vector<Geodetic2D*>* coordinates, const Geodetic2D& point) const;
+  
 protected:
   ~GEO2DPolygonData();
 
@@ -34,6 +36,8 @@ public:
   }
 
   long long getCoordinatesCount() const;
+
+  bool contains(const Geodetic2D& point) const;
 
 };
 

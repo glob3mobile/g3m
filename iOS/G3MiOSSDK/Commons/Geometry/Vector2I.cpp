@@ -10,7 +10,7 @@
 #include "IMathUtils.hpp"
 
 Vector2I Vector2I::div(double v) const {
-  IMathUtils* mu = IMathUtils::instance();
+  const IMathUtils* mu = IMathUtils::instance();
   return Vector2I(mu->toInt(_x / v),
                   mu->toInt(_y / v) );
 }

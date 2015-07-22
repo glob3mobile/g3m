@@ -15,4 +15,6 @@ public interface SurfaceElevationProvider
 
   boolean removeListener(SurfaceElevationListener listener);
 
+  float getVerticalExaggeration();
+
 }

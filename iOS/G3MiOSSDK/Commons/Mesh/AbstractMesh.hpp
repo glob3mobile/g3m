@@ -22,16 +22,16 @@ class AbstractMesh : public Mesh {
 protected:
   const int               _primitive;
   const bool              _owner;
-  Vector3D                _center;
+  const Vector3D                _center;
   const MutableMatrix44D* _translationMatrix;
-  IFloatBuffer*           _vertices;
+  const IFloatBuffer*           _vertices;
   const Color*            _flatColor;
-  IFloatBuffer*           _colors;
+  const IFloatBuffer*           _colors;
   const float             _colorsIntensity;
   const float             _lineWidth;
   const float             _pointSize;
   const bool              _depthTest;
-  IFloatBuffer*           _normals;
+  const IFloatBuffer*           _normals;
 
   mutable BoundingVolume* _boundingVolume;
   BoundingVolume* computeBoundingVolume() const;
@@ -39,14 +39,14 @@ protected:
   AbstractMesh(const int primitive,
                bool owner,
                const Vector3D& center,
-               IFloatBuffer* vertices,
+               const IFloatBuffer* vertices,
                float lineWidth,
                float pointSize,
                const Color* flatColor,
-               IFloatBuffer* colors,
+               const IFloatBuffer* colors,
                const float colorsIntensity,
                bool depthTest,
-               IFloatBuffer* normals);
+               const IFloatBuffer* normals);
 
   virtual void rawRender(const G3MRenderContext* rc) const = 0;
 //  virtual void rawRender(const G3MRenderContext* rc, const GLState* parentGLState) const = 0;
@@ -73,7 +73,7 @@ public:
   void rawRender(const G3MRenderContext* rc,
                  const GLState* parentGLState) const;
 
-  void showNormals(bool v) const{
+  void showNormals(bool v) const {
     _showNormals = v;
   }
   

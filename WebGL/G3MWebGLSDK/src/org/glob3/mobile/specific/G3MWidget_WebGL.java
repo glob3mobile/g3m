@@ -49,8 +49,8 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 
 public class G3MWidget_WebGL
-         extends
-            Composite {
+   extends
+      Composite {
 
    private Canvas               _canvas;
    private JavaScriptObject     _webGLContext;
@@ -426,6 +426,7 @@ public class G3MWidget_WebGL
                           final SceneLighting sceneLighting,
                           final InitialCameraPositionProvider initialCameraPositionProvider,
                           final InfoDisplay infoDisplay) {
+
 
       _g3mWidget = G3MWidget.create(//
                _gl, //

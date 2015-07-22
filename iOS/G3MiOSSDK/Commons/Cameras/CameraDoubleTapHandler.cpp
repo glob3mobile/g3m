@@ -48,7 +48,7 @@ void CameraDoubleTapHandler::onDown(const G3MEventContext *eventContext,
   Effect* effect = new DoubleTapEffect(TimeInterval::fromSeconds(0.75), axis, angle, distance);
   */
   
-  const Vector2I pixel = touchEvent.getTouch(0)->getPos();
+  const Vector2F pixel = touchEvent.getTouch(0)->getPos();
   const Planet* planet = eventContext->getPlanet();
   Camera* camera = cameraContext->getNextCamera();
   Effect* effect = planet->createDoubleTapEffect(camera->getCartesianPosition(),

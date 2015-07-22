@@ -15,22 +15,14 @@
 
 class GAsyncTask {
 public:
-//#ifdef C_CODE
   virtual ~GAsyncTask() {
   }
-//#endif
-//#ifdef JAVA_CODE
-//  void dispose();
-//#endif
 
   virtual void runInBackground(const G3MContext* context) = 0;
 
   virtual void onPostExecute(const G3MContext* context) = 0;
-
 };
 
-
-class G3MContext;
 
 class IThreadUtils {
 protected:
@@ -42,7 +34,6 @@ protected:
 #endif
 
 public:
-
   IThreadUtils() :
   _context(NULL)
   {
@@ -53,15 +44,15 @@ public:
   virtual void onPause(const G3MContext* context) = 0;
 
   virtual void onDestroy(const G3MContext* context) = 0;
-  
+
   virtual void initialize(const G3MContext* context);
 
   virtual ~IThreadUtils() {
   }
-  
+
   virtual void invokeInRendererThread(GTask* task,
                                       bool autoDelete) const = 0;
-  
+
   virtual void invokeInBackground(GTask* task,
                                   bool autoDelete) const = 0;
 

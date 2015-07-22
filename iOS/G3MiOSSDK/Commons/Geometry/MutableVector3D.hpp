@@ -23,27 +23,62 @@ private:
   double _y;
   double _z;
 
+//  MutableVector3D& operator=(const MutableVector3D& that);
+
+
 public:
 
-  MutableVector3D(): _x(0), _y(0), _z(0) {}
+  MutableVector3D() :
+  _x(0),
+  _y(0),
+  _z(0)
+  {
+  }
 
   MutableVector3D(const double x,
                   const double y,
-                  const double z): _x(x), _y(y), _z(z) {
-
+                  const double z) :
+  _x(x),
+  _y(y),
+  _z(z)
+  {
   }
 
-  MutableVector3D(const MutableVector3D &v): _x(v._x), _y(v._y), _z(v._z) {
+  MutableVector3D(const MutableVector3D &v) :
+  _x(v._x),
+  _y(v._y),
+  _z(v._z)
+  {
+  }
 
+  void set(const double x,
+           const double y,
+           const double z) {
+    _x = x;
+    _y = y;
+    _z = z;
+  }
+
+  void copyFrom(const MutableVector3D& that) {
+    _x = that._x;
+    _y = that._y;
+    _z = that._z;
+  }
+
+  void copyFrom(const Vector3D& that) {
+    _x = that._x;
+    _y = that._y;
+    _z = that._z;
   }
 
   MutableVector3D normalized() const;
+  void normalize();
 
   static MutableVector3D nan() {
     return MutableVector3D(NAND, NAND, NAND);
   }
 
-  bool equalTo(const MutableVector3D& v) const{
+  bool equalTo(const MutableVector3D& v) const {
     return (v._x == _x && v._y == _y && v._z == _z);
   }
 
@@ -73,6 +108,18 @@ public:
     return MutableVector3D(_x + v._x,
                            _y + v._y,
                            _z + v._z);
+  }
+
+  void addInPlace(const MutableVector3D& that) {
+    _x += that._x;
+    _y += that._y;
+    _z += that._z;
+  }
+
+  void addInPlace(const Vector3D& that) {
+    _x += that._x;
+    _y += that._y;
+    _z += that._z;
   }
 
   MutableVector3D sub(const MutableVector3D& v) const {
@@ -150,6 +197,22 @@ public:
   Vector3D asVector3D() const {
     return Vector3D(_x, _y, _z);
   }
+
+  void putSub(const MutableVector3D& a,
+              const Vector3D& b) {
+    _x = a._x - b._x;
+    _y = a._y - b._y;
+    _z = a._z - b._z;
+  }
+
+  static double normalizedDot(const MutableVector3D& a,
+                              const MutableVector3D& b);
+
+  static double angleInRadiansBetween(const MutableVector3D& a,
+                                      const MutableVector3D& b);
+
+  MutableVector3D rotateAroundAxis(const MutableVector3D& axis,
+                                   const Angle& theta) const;
 
 };
 

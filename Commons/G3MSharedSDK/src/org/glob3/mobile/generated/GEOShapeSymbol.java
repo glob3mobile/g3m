@@ -37,13 +37,13 @@ public class GEOShapeSymbol extends GEOSymbol
   
   }
 
-  public final boolean symbolize(G3MRenderContext rc, GEOSymbolizer symbolizer, MeshRenderer meshRenderer, ShapesRenderer shapesRenderer, MarksRenderer marksRenderer, GEOTileRasterizer geoTileRasterizer)
+  public final boolean symbolize(G3MRenderContext rc, GEOSymbolizer symbolizer, MeshRenderer meshRenderer, ShapesRenderer shapesRenderer, MarksRenderer marksRenderer, GEOVectorLayer geoVectorLayer)
   {
     if (_shape != null)
     {
       if (shapesRenderer == null)
       {
-        ILogger.instance().logError("Can't simbolize with Shape, ShapesRenderer was not set");
+        ILogger.instance().logError("Can't symbolize with Shape, ShapesRenderer was not set");
         if (_shape != null)
            _shape.dispose();
       }

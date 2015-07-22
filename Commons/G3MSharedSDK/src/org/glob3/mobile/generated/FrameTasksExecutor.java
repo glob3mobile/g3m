@@ -141,6 +141,10 @@ public class FrameTasksExecutor
 
   public final void doPreRenderCycle(G3MRenderContext rc)
   {
+    if (_tasks.isEmpty())
+    {
+      return;
+    }
   
     // remove canceled tasks
     int canceledCounter = 0;
@@ -166,7 +170,7 @@ public class FrameTasksExecutor
     {
       if (canceledCounter > 0)
       {
-        rc.getLogger().logInfo("FTE: Removed %d tasks, actived %d tasks.", canceledCounter, _tasks.size());
+        rc.getLogger().logInfo("FTE: Removed %d tasks, active %d tasks.", canceledCounter, _tasks.size());
       }
     }
   

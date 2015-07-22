@@ -92,7 +92,7 @@ public final class ListenerEntry {
          final Image_WebGL image = new Image_WebGL(data);
 
          if (image.getImage() == null) {
-            log(LogLevel.ErrorLevel, ": Can't create image from data (URL=" + url.getPath() + ")");
+            log(LogLevel.ErrorLevel, ": Can't create image from data (URL=" + url._path + ")");
             _imageListener.onError(url);
          }
          else {
@@ -114,7 +114,7 @@ public final class ListenerEntry {
          final Image_WebGL image = new Image_WebGL(data);
 
          if (image.getImage() == null) {
-            log(LogLevel.ErrorLevel, ": Can't create image from data (URL=" + url.getPath() + ")");
+            log(LogLevel.ErrorLevel, ": Can't create image from data (URL=" + url._path + ")");
          }
          else {
             _imageListener.onCanceledDownload(url, image, false);

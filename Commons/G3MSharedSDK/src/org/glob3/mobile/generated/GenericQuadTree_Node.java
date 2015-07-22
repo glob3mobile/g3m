@@ -7,45 +7,17 @@ public class GenericQuadTree_Node
   private final int _depth;
   private Sector _sector;
 
-  //  Sector* _elementsSector;
-
   private java.util.ArrayList<GenericQuadTree_Element> _elements = new java.util.ArrayList<GenericQuadTree_Element>();
 
   private GenericQuadTree_Node[] _children;
 
-  private GenericQuadTree_Node(Sector sector, GenericQuadTree_Node parent) //,
-  //  _elementsSector(new Sector(sector))
+  private GenericQuadTree_Node(Sector sector, GenericQuadTree_Node parent)
   {
      _sector = new Sector(sector);
      _depth = parent._depth + 1;
      _children = null;
   }
 
-
-  //void GenericQuadTree_Node::computeElementsSector() {
-  //
-  //  delete _elementsSector;
-  //  _elementsSector = new Sector(_sector);
-  //  if (_children == NULL) {
-  //    const int size = _elements.size();
-  //    for (int i = 0; i < size; i++) {
-  //      Sector newElementSector = _elementsSector->mergedWith(_elements[i]->getSector());
-  //      delete _elementsSector;
-  //      _elementsSector = new Sector(newElementSector);
-  //    }
-  //
-  //  } else{
-  //
-  //    for (int i = 0; i < 4; i++) {
-  //      Sector newElementSector =_elementsSector->mergedWith(_children[i]->getElementsSector());
-  //      delete _elementsSector;
-  //      _elementsSector = new Sector(newElementSector);
-  //    }
-  //
-  //  }
-  //
-  //}
-  
   private void splitNode(int maxElementsPerNode, int maxDepth, double childAreaProportion)
   {
     _children = new GenericQuadTree_Node[4];
@@ -71,30 +43,13 @@ public class GenericQuadTree_Node
   
     //Split elements by sector
     java.util.ArrayList<GenericQuadTree_Element> elementsToBeInserted = _elements;
-    _elements.clear();
     final int size = elementsToBeInserted.size();
     for (int i = 0; i < size; i++)
     {
       this.add(elementsToBeInserted.get(i), maxElementsPerNode, maxDepth, childAreaProportion);
     }
-  
-  
-    //  const int size = _elements.size();
-    //  for (int i = 0; i < size; i++) {
-    //    GenericQuadTree_Element* e = _elements[i];
-    //
-    //    for (int j = 0; j < 4; j++) {
-    //      GenericQuadTree_Node* child = _children[j];
-    //      if (child->add(e, maxElementsPerNode, maxDepth)) {
-    //        break;
-    //      }
-    //    }
-    //  }
-    //
-    //  _elements.clear();
+    _elements.clear();
   }
-
-  //  void computeElementsSector();
 
   private GenericQuadTree_Node getBestNodeForInsertion(GenericQuadTree_Element element, double childAreaProportion)
   {
@@ -122,7 +77,6 @@ public class GenericQuadTree_Node
       }
       else
       {
-  
         if (cost == minChildInsertionCost)
         {
           //        printf("BOTH CHILDREN WITH SAME COST");
@@ -162,8 +116,7 @@ public class GenericQuadTree_Node
     _sector = new Sector(s.mergedWith(element.getSector()));
   }
 
-  public GenericQuadTree_Node(Sector sector) //,
-  //  _elementsSector(new Sector(sector))
+  public GenericQuadTree_Node(Sector sector)
   {
      _sector = new Sector(sector);
      _depth = 1;
@@ -196,9 +149,8 @@ public class GenericQuadTree_Node
 
   public final Sector getSector()
   {
-     return _sector;
+    return _sector;
   }
-  //  Sector getElementsSector() const { return *_elementsSector;}
 
   public final boolean add(GenericQuadTree_Element element, int maxElementsPerNode, int maxDepth, double childAreaProportion)
   {
@@ -265,8 +217,8 @@ public class GenericQuadTree_Node
             return true;
           }
         }
-      } //Element is associated to geodetic
-      else
+      }
+      else //Element is associated to geodetic
       {
         GenericQuadTree_Geodetic2DElement e = (GenericQuadTree_Geodetic2DElement) element;
         if (sector.contains(e._geodetic))
@@ -326,8 +278,8 @@ public class GenericQuadTree_Node
             return true;
           }
         }
-      } //Element is associated to geodetic
-      else
+      }
+      else //Element is associated to geodetic
       {
         GenericQuadTree_Geodetic2DElement e = (GenericQuadTree_Geodetic2DElement) element;
         if (geo.isEquals(e._geodetic))
@@ -395,15 +347,17 @@ public class GenericQuadTree_Node
 
   public final int getDepth()
   {
-     return _depth;
+    return _depth;
   }
+
   public final int getNElements()
   {
-     return _elements.size();
+    return _elements.size();
   }
+
   public final boolean isLeaf()
   {
-     return _children == null;
+    return _children == null;
   }
 
   public final int getSubtreeNElements()
@@ -419,7 +373,7 @@ public class GenericQuadTree_Node
     return n;
   }
 
-  public final void symbolize(GEOTileRasterizer geoTileRasterizer)
+  public final void symbolize(GEOVectorLayer geoVectorLayer)
   {
   
     if (_elements.size() > 0)
@@ -446,14 +400,14 @@ public class GenericQuadTree_Node
       GEOLineRasterSymbol symbol = new GEOLineRasterSymbol(coordinatesData, ls);
       coordinatesData._release();
   
-      geoTileRasterizer.addSymbol(symbol);
+      geoVectorLayer.addSymbol(symbol);
     }
   
     if (_children != null)
     {
       for (int i = 0; i < 4; i++)
       {
-        _children[i].symbolize(geoTileRasterizer);
+        _children[i].symbolize(geoVectorLayer);
       }
     }
   

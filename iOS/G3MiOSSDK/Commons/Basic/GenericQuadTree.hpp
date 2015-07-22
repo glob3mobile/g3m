@@ -11,7 +11,7 @@
 
 #include "Sector.hpp"
 #include "Geodetic2D.hpp"
-#include "GEOTileRasterizer.hpp"
+#include "GEOVectorTileImageProvider.hpp"
 
 class GenericQuadTree_Node;
 
@@ -26,15 +26,20 @@ public:
 
 class GenericQuadTreeVisitor {
 
-  mutable int _comparisonsDone;
+  mutable size_t _comparisonsDone;
 
 public:
   GenericQuadTreeVisitor(): _comparisonsDone(0) {}
   virtual ~GenericQuadTreeVisitor() {
   }
 
-  void addComparisonsDoneWhileVisiting(int n) const { _comparisonsDone += n;}
-  int getNComparisonsDone() const { return _comparisonsDone;}
+  void addComparisonsDoneWhileVisiting(size_t n) const {
+    _comparisonsDone += n;
+  }
+
+  size_t getNComparisonsDone() const {
+    return _comparisonsDone;
+  }
 
   virtual bool visitElement(const Sector& sector,
                             const void*   element) const = 0;
@@ -50,7 +55,7 @@ class GenericQuadTree_Element {
 public:
   const void*  _element;
 
-  GenericQuadTree_Element(const void*   element) :
+  GenericQuadTree_Element(const void* element) :
   _element(element)
   {
   }
@@ -70,16 +75,26 @@ public:
   GenericQuadTree_SectorElement(const Sector& sector,
                                 const void*   element) :
   GenericQuadTree_Element(element),
-  _sector(sector) { }
-  bool isSectorElement() const { return true;}
-  Geodetic2D getCenter() const { return _sector.getCenter();}
-  Sector getSector() const { return _sector;}
+  _sector(sector)
+  {
+  }
+
+  bool isSectorElement() const {
+    return true;
+  }
+
+  Geodetic2D getCenter() const {
+    return _sector.getCenter();
+  }
+
+  Sector getSector() const {
+    return _sector;
+  }
 
   ~GenericQuadTree_SectorElement() {
 #ifdef JAVA_CODE
   super.dispose();
 #endif
-
   }
 };
 
@@ -90,16 +105,25 @@ public:
   GenericQuadTree_Geodetic2DElement(const Geodetic2D& geodetic,
                                     const void*   element) :
   GenericQuadTree_Element(element),
-  _geodetic(geodetic) {}
-  bool isSectorElement() const { return false;}
-  Geodetic2D getCenter() const { return _geodetic;}
-  Sector getSector() const { return Sector(_geodetic, _geodetic);}
+  _geodetic(geodetic) {
+  }
+
+  bool isSectorElement() const {
+    return false;
+  }
+
+  Geodetic2D getCenter() const {
+    return _geodetic;
+  }
+
+  Sector getSector() const {
+    return Sector(_geodetic, _geodetic);
+  }
 
   ~GenericQuadTree_Geodetic2DElement() {
 #ifdef JAVA_CODE
   super.dispose();
 #endif
-
   }
 };
 ///////////////////////////////////////////////////////////////////////////////////////
@@ -107,10 +131,8 @@ public:
 
 class GenericQuadTree_Node {
 private:
-  const int     _depth;
-  Sector*  _sector;
-
-  //  Sector* _elementsSector;
+  const int _depth;
+  Sector*   _sector;
 
   std::vector<GenericQuadTree_Element*> _elements;
 
@@ -120,16 +142,13 @@ private:
                        GenericQuadTree_Node* parent) :
   _sector(new Sector(sector)),
   _depth( parent->_depth + 1 ),
-  _children(NULL)//,
-  //  _elementsSector(new Sector(sector))
+  _children(NULL)
   {
   }
 
   void splitNode(int maxElementsPerNode,
                  int maxDepth,
                  double childAreaProportion);
-
-  //  void computeElementsSector();
 
   GenericQuadTree_Node* getBestNodeForInsertion(GenericQuadTree_Element* element,
                                                 double childAreaProportion);
@@ -140,15 +159,15 @@ public:
   GenericQuadTree_Node(const Sector& sector) :
   _sector(new Sector(sector)),
   _depth(1),
-  _children(NULL)//,
-  //  _elementsSector(new Sector(sector))
+  _children(NULL)
   {
   }
 
   ~GenericQuadTree_Node();
 
-  Sector getSector() const{ return *_sector;}
-  //  Sector getElementsSector() const { return *_elementsSector;}
+  Sector getSector() const {
+    return *_sector;
+  }
 
   bool add(GenericQuadTree_Element* element,
            int maxElementsPerNode,
@@ -166,12 +185,20 @@ public:
   double getInsertionCostInSquaredDegrees(const Sector& sector) const;
   double getAreaInSquaredDegreesAfterInsertion(const Sector& sector) const;
 
-  int getDepth() const { return _depth;}
-  int getNElements() const { return _elements.size();}
-  bool isLeaf() const { return _children == NULL;}
+  int getDepth() const {
+    return _depth;
+  }
 
-  int getSubtreeNElements() const{
-    int n = _elements.size();
+  size_t getNElements() const {
+    return _elements.size();
+  }
+
+  bool isLeaf() const {
+    return _children == NULL;
+  }
+
+  size_t getSubtreeNElements() const {
+    size_t n = _elements.size();
     if (_children != NULL) {
       for (int i = 0; i<4;i++) {
         n += _children[i]->getSubtreeNElements();
@@ -180,7 +207,7 @@ public:
     return n;
   }
 
-  void symbolize(GEOTileRasterizer* geoTileRasterizer) const;
+  void symbolize(GEOVectorLayer* geoVectorLayer) const;
 
   void getGeodetics(std::vector<Geodetic2D*>& geo) const;
   void getSectors(std::vector<Sector*>& sectors) const;
@@ -231,14 +258,14 @@ public:
 
   bool acceptNodeVisitor(GenericQuadTreeNodeVisitor& visitor) const;
 
-  void symbolize(GEOTileRasterizer* geoTileRasterizer) const;
+  void symbolize(GEOVectorLayer* geoVectorLayer) const;
 
-  std::vector<Geodetic2D*> getGeodetics() const{
+  std::vector<Geodetic2D*> getGeodetics() const {
     std::vector<Geodetic2D*> geo;
     _root->getGeodetics(geo);
     return geo;
   }
-  std::vector<Sector*> getSectors() const{
+  std::vector<Sector*> getSectors() const {
     std::vector<Sector*> sectors;
     _root->getSectors(sectors);
     return sectors;
@@ -258,7 +285,7 @@ class GenericQuadTree_TESTER {
     GenericQuadTreeVisitorSector_TESTER(const Sector& s):_sec(s) {}
 
     bool visitElement(const Sector& sector,
-                      const void*   element) const{
+                      const void*   element) const {
 
       if (_sec.isEquals(sector)) {
         //        std::string* s = (std::string*)element;
@@ -269,14 +296,15 @@ class GenericQuadTree_TESTER {
     }
 
     bool visitElement(const Geodetic2D& geodetic,
-                      const void*   element) const{
+                      const void*   element) const {
       return false;
     }
 
-    void endVisit(bool aborted) const{
+    void endVisit(bool aborted) const {
       if (!aborted) {
         ILogger::instance()->logInfo("COULDN'T FIND ELEMENT\n");
-      } else{
+      }
+      else {
         //        printf("ELEMENT FOUND WITH %d COMPARISONS\n", getNComparisonsDone() );
         GenericQuadTree_TESTER::_nComparisons += getNComparisonsDone();
         GenericQuadTree_TESTER::_nElements += 1;
@@ -293,10 +321,12 @@ class GenericQuadTree_TESTER {
     GenericQuadTreeVisitorGeodetic_TESTER(const Geodetic2D g):_geo(g) {}
 
     bool visitElement(const Sector& sector,
-                      const void*   element) const{return false;}
+                      const void*   element) const {
+      return false;
+    }
 
     bool visitElement(const Geodetic2D& geodetic,
-                      const void*   element) const{
+                      const void*   element) const {
 
       if (geodetic.isEquals(_geo)) {
         //        std::string* s = (std::string*)element;
@@ -306,10 +336,11 @@ class GenericQuadTree_TESTER {
       return false;
     }
 
-    void endVisit(bool aborted) const{
+    void endVisit(bool aborted) const {
       if (!aborted) {
         ILogger::instance()->logInfo("COULDN'T FIND ELEMENT\n");
-      } else{
+      }
+      else {
         //        printf("ELEMENT FOUND WITH %d COMPARISONS\n", getNComparisonsDone() );
         GenericQuadTree_TESTER::_nComparisons += getNComparisonsDone();
         GenericQuadTree_TESTER::_nElements += 1;
@@ -324,7 +355,7 @@ class GenericQuadTree_TESTER {
     int _maxDepth;
     int _meanDepth;
 
-    int _maxNEle;
+    size_t _maxNEle;
     int _meanElemDepth;
     int _nNodes;
     int _nElem;
@@ -370,7 +401,7 @@ class GenericQuadTree_TESTER {
 
       return false;
     }
-    void endVisit(bool aborted) const{
+    void endVisit(bool aborted) const {
       ILogger::instance()->logInfo("============== \nTREE WITH %d ELEM. \nMAXDEPTH: %d, MEAN NODE DEPTH: %f, MAX NELEM: %d, MEAN ELEM DEPTH: %f\nLEAF NODES %d -> MIN DEPTH: %d, MEAN DEPTH: %f\n============== \n",
                                    _nElem,
                                    _maxDepth,
@@ -401,9 +432,9 @@ public:
     return i % max;
   }
   
-  static void run(int nElements, GEOTileRasterizer* rasterizer);
+  static void run(int nElements, GEOVectorLayer* geoVectorLayer);
   
-  static void run(GenericQuadTree& tree, GEOTileRasterizer* rasterizer);
+  static void run(GenericQuadTree& tree, GEOVectorLayer* geoVectorLayer);
   
 };
 

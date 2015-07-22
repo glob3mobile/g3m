@@ -1,10 +1,7 @@
 package org.glob3.mobile.generated; 
-//class G3MContext;
-
 public abstract class IThreadUtils
 {
   protected G3MContext _context;
-
 
   public IThreadUtils()
   {

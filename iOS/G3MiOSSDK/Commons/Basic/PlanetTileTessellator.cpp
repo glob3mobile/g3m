@@ -295,7 +295,7 @@ Mesh* PlanetTileTessellator::createTileDebugMesh(const Planet* planet,
   return result;
 }
 
-Sector PlanetTileTessellator::getRenderedSectorForTile(const Tile* tile) const{
+Sector PlanetTileTessellator::getRenderedSectorForTile(const Tile* tile) const {
   if (_renderedSector == NULL) {
     return tile->_sector;
   }
@@ -317,8 +317,7 @@ double PlanetTileTessellator::createSurface(const Sector& tileSector,
                                             FloatBufferBuilderFromGeodetic* vertices,
                                             ShortBufferBuilder& indices,
                                             FloatBufferBuilderFromCartesian2D& textCoords,
-                                            TileTessellatorMeshData& data) const{
-  
+                                            TileTessellatorMeshData& data) const {
   const int rx = meshResolution._x;
   const int ry = meshResolution._y;
   
@@ -327,7 +326,7 @@ double PlanetTileTessellator::createSurface(const Sector& tileSector,
   const double mercatorDeltaGlobalV = mercatorLowerGlobalV - mercatorUpperGlobalV;
   
   //VERTICES///////////////////////////////////////////////////////////////
-  IMathUtils* mu = IMathUtils::instance();
+  const IMathUtils* mu = IMathUtils::instance();
   double minElevation = mu->maxDouble();
   double maxElevation = mu->minDouble();
   double averageElevation = 0;
@@ -601,8 +600,8 @@ void PlanetTileTessellator::createNorthSkirt(const Planet* planet,
                                              double skirtHeight,
                                              FloatBufferBuilderFromGeodetic* vertices,
                                              ShortBufferBuilder& indices,
-                                             FloatBufferBuilderFromCartesian2D& textCoords) const{
-  
+                                             FloatBufferBuilderFromCartesian2D& textCoords) const {
+
   //VERTICES///////////////////////////////////////////////////////////////
   const short firstSkirtVertex = (short) (vertices->size() / 3);
   
@@ -645,8 +644,8 @@ void PlanetTileTessellator::createWestSkirt(const Planet* planet,
                                             double skirtHeight,
                                             FloatBufferBuilderFromGeodetic* vertices,
                                             ShortBufferBuilder& indices,
-                                            FloatBufferBuilderFromCartesian2D& textCoords) const{
-  
+                                            FloatBufferBuilderFromCartesian2D& textCoords) const {
+
   //VERTICES///////////////////////////////////////////////////////////////
   const short firstSkirtVertex = (short) (vertices->size() / 3);
   
@@ -689,8 +688,8 @@ void PlanetTileTessellator::createSouthSkirt(const Planet* planet,
                                              double skirtHeight,
                                              FloatBufferBuilderFromGeodetic* vertices,
                                              ShortBufferBuilder& indices,
-                                             FloatBufferBuilderFromCartesian2D& textCoords) const{
-  
+                                             FloatBufferBuilderFromCartesian2D& textCoords) const {
+
   //VERTICES///////////////////////////////////////////////////////////////
   const short firstSkirtVertex = (short) (vertices->size() / 3);
   

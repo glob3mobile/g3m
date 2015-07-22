@@ -2,6 +2,7 @@ package org.glob3.mobile.generated;
 public class MultiTexturedHUDQuadWidget_ImageDownloadListener extends IImageDownloadListener
 {
   private MultiTexturedHUDQuadWidget _quadWidget;
+
   public MultiTexturedHUDQuadWidget_ImageDownloadListener(MultiTexturedHUDQuadWidget quadWidget)
   {
      _quadWidget = quadWidget;
@@ -26,5 +27,4 @@ public class MultiTexturedHUDQuadWidget_ImageDownloadListener extends IImageDown
   {
     // do nothing
   }
-
 }

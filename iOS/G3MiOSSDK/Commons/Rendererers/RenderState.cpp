@@ -22,3 +22,9 @@ RenderState RenderState::busy() {
 RenderState RenderState::error(const std::vector<std::string>& errors) {
   return RenderState(errors);
 }
+
+RenderState RenderState::error(const std::string& error) {
+  std::vector<std::string> errors;
+  errors.push_back(error);
+  return RenderState(errors);
+}

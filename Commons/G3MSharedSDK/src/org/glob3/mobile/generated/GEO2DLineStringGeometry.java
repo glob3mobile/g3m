@@ -22,6 +22,15 @@ public class GEO2DLineStringGeometry extends GEOGeometry2D
 {
   private final GEO2DCoordinatesData _coordinatesData;
 
+  private GEO2DLineStringGeometry(GEO2DCoordinatesData coordinatesData)
+  {
+     _coordinatesData = coordinatesData;
+    if (_coordinatesData != null)
+    {
+      _coordinatesData._retain();
+    }
+  }
+
   protected final java.util.ArrayList<GEOSymbol> createSymbols(GEOSymbolizer symbolizer)
   {
     return symbolizer.createSymbols(this);
@@ -58,5 +67,9 @@ public class GEO2DLineStringGeometry extends GEOGeometry2D
     return _coordinatesData.size();
   }
 
+  public final GEO2DLineStringGeometry deepCopy()
+  {
+    return new GEO2DLineStringGeometry(_coordinatesData);
+  }
 
 }

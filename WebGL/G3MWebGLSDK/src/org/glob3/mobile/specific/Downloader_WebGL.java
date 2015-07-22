@@ -182,7 +182,7 @@ public final class Downloader_WebGL
          return url;
       }
 
-      final String urlPath = url.getPath();
+      final String urlPath = url._path;
       if (!urlPath.startsWith("http://") && !urlPath.startsWith("https://")) {
          // assumes the URL is a relative URL to the server, no need to use proxy
          return url;

@@ -17,6 +17,8 @@ class GEO2DMultiLineStringGeometry : public GEOGeometry2D {
 private:
   const GEO2DCoordinatesArrayData* _coordinatesArrayData;
 
+  GEO2DMultiLineStringGeometry(const GEO2DCoordinatesArrayData* coordinatesArrayData);
+
 protected:
   std::vector<GEOSymbol*>* createSymbols(const GEOSymbolizer* symbolizer) const;
 
@@ -33,6 +35,8 @@ public:
   }
 
   long long getCoordinatesCount() const;
+
+  GEO2DMultiLineStringGeometry* deepCopy() const;
 
 };
 

@@ -36,7 +36,8 @@ public:
         }
       }
 
-    } else{
+    }
+    else {
 
       for (int x = 0; x < _width; x++) {
         const double u = (double) x / (_width - 1);

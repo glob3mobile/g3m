@@ -141,8 +141,8 @@ public:
   }
 
   ~ShapesRenderer() {
-    const int shapesCount = _shapes.size();
-    for (int i = 0; i < shapesCount; i++) {
+    const size_t shapesCount = _shapes.size();
+    for (size_t i = 0; i < shapesCount; i++) {
       Shape* shape = _shapes[i];
       delete shape;
     }
@@ -191,7 +191,8 @@ public:
 
   void render(const G3MRenderContext* rc, GLState* glState);
 
-  std::vector<ShapeDistance> intersectionsDistances(const Vector3D& origin,
+  std::vector<ShapeDistance> intersectionsDistances(const Planet* planet,
+                                                    const Vector3D& origin,
                                                     const Vector3D& direction) const;
 
   void loadJSONSceneJS(const URL&          url,

@@ -50,7 +50,8 @@ _started(false)
   _downloadingHandlers = [NSMutableDictionary dictionary];
   _queuedHandlers      = [NSMutableDictionary dictionary];
 
-  _lock = [[NSLock alloc] init];
+  _lock = [[NSRecursiveLock alloc] init];
+  [_lock setName:@"Downloader_iOS_lock"];
 
   _workers = [NSMutableArray arrayWithCapacity:maxConcurrentOperationCount];
   for (int i = 0; i < maxConcurrentOperationCount; i++) {
@@ -255,9 +256,9 @@ long long Downloader_iOS::request(const URL &url,
 const std::string Downloader_iOS::statistics() {
   IStringBuilder* isb = IStringBuilder::newStringBuilder();
   isb->addString("Downloader_iOS(downloading=");
-  isb->addInt([_downloadingHandlers count]);
+  isb->addLong([_downloadingHandlers count]);
   isb->addString(", queued=");
-  isb->addInt([_queuedHandlers count]);
+  isb->addLong([_queuedHandlers count]);
   isb->addString(", totalRequests=");
   isb->addLong(_requestsCounter);
   isb->addString(", totalCancels=");

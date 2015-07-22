@@ -30,7 +30,7 @@ MapQuestLayer* MapQuestLayer::copy() const {
                            _readExpired,
                            _transparency,
                            (_condition == NULL) ? NULL : _condition->copy(),
-                           _disclaimerInfo);
+                           _layerInfo);
 }
 
 RenderState MapQuestLayer::getRenderState() {

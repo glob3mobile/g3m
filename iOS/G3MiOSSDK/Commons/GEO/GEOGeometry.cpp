@@ -9,13 +9,14 @@
 #include "GEOGeometry.hpp"
 #include "GEOSymbol.hpp"
 #include "GEOFeature.hpp"
+#include "ErrorHandling.hpp"
 
 
-void GEOGeometry::setFeature(GEOFeature* feature) {
-  if (_feature != feature) {
-    delete _feature;
-    _feature = feature;
+void GEOGeometry::setFeature(GEOFeature* feature) const {
+  if (_feature != NULL) {
+    THROW_EXCEPTION("Logic error");
   }
+  _feature = feature;
 }
 
 void GEOGeometry::symbolize(const G3MRenderContext* rc,
@@ -23,7 +24,7 @@ void GEOGeometry::symbolize(const G3MRenderContext* rc,
                             MeshRenderer*           meshRenderer,
                             ShapesRenderer*         shapesRenderer,
                             MarksRenderer*          marksRenderer,
-                            GEOTileRasterizer*      geoTileRasterizer) const {
+                            GEOVectorLayer*         geoVectorLayer) const {
   std::vector<GEOSymbol*>* symbols = createSymbols(symbolizer);
   if (symbols != NULL) {
 
@@ -36,7 +37,7 @@ void GEOGeometry::symbolize(const G3MRenderContext* rc,
                                                     meshRenderer,
                                                     shapesRenderer,
                                                     marksRenderer,
-                                                    geoTileRasterizer);
+                                                    geoVectorLayer);
         if (deleteSymbol) {
           delete symbol;
         }

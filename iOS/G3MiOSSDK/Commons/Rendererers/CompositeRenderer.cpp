@@ -21,7 +21,8 @@ void CompositeRenderer::addRenderer(Renderer *renderer) {
   addChildRenderer(new ChildRenderer(renderer));
 }
 
-void CompositeRenderer::addRenderer(Renderer *renderer, const std::vector<std::string>& info) {
+void CompositeRenderer::addRenderer(Renderer *renderer,
+                                    const std::vector<const Info*>& info) {
   addChildRenderer(new ChildRenderer(renderer, info));
 }
 
@@ -197,12 +198,12 @@ PlanetRenderer* CompositeRenderer::getPlanetRenderer() {
   return result;
 }
 
-std::vector<std::string> CompositeRenderer::getInfo() {
+const std::vector<const Info*> CompositeRenderer::getInfo() {
   _info.clear();
   
   for (int i = 0; i < _renderersSize; i++) {
     ChildRenderer* child = _renderers[i];
-    const std::vector<std::string> childInfo = child->getInfo();
+    const std::vector<const Info*> childInfo = child->getInfo();
 #ifdef C_CODE
     _info.insert(_info.end(),
                  childInfo.begin(),
@@ -226,17 +227,16 @@ void CompositeRenderer::setChangedRendererInfoListener(ChangedRendererInfoListen
   if(_changedInfoListener != NULL){
     _changedInfoListener->changedRendererInfo(-1, getInfo());
   }
-  
-  ILogger::instance()->logInfo("Changed Renderer Info Listener of CompositeRenderer set ok");
 }
 
-void CompositeRenderer::changedRendererInfo(const int rendererIdentifier, const std::vector<std::string>& info) {
+void CompositeRenderer::changedRendererInfo(const int rendererIdentifier,
+                                            const std::vector<const Info*>& info) {
   if(rendererIdentifier >= 0 && rendererIdentifier < _renderersSize) {
     _renderers[rendererIdentifier]->setInfo(info);
-  }else {
+  }
+  else {
     ILogger::instance()->logWarning("Child Render not found: %d", rendererIdentifier);
   }
-  
   
   if (_changedInfoListener != NULL) {
     _changedInfoListener->changedRendererInfo(-1, getInfo());

@@ -29,7 +29,7 @@ public class CachedDownloader extends IDownloader
 
   private final boolean _saveInBackground;
 
-  private IImageResult getCachedImageResult(URL url, boolean readExpired)
+  private IImageResult getCachedImageResult(URL url, TimeInterval timeToCache, boolean readExpired)
   {
     if ((_lastImageResult != null) && (_lastImageURL != null))
     {
@@ -40,7 +40,7 @@ public class CachedDownloader extends IDownloader
       }
     }
   
-    if (!_storage.isAvailable() || url.isFileProtocol())
+    if (!_storage.isAvailable() || url.isFileProtocol() || timeToCache.isZero())
     {
       return new IImageResult(null, false);
     }
@@ -103,9 +103,8 @@ public class CachedDownloader extends IDownloader
   
     _requestsCounter++;
   
-    IByteBufferResult cached = _storage.isAvailable() && !url.isFileProtocol() ? _storage.readBuffer(url, readExpired) : new IByteBufferResult(null, false);
-    /*                                         */
-    /*                                         */
+    final boolean useCache = _storage.isAvailable() && !url.isFileProtocol() && !timeToCache.isZero();
+    IByteBufferResult cached = useCache ? _storage.readBuffer(url, readExpired) : new IByteBufferResult(null, false);
   
     IByteBuffer cachedBuffer = cached.getBuffer();
   
@@ -126,14 +125,19 @@ public class CachedDownloader extends IDownloader
     }
   
     // cache miss
-    return _downloader.requestBuffer(url, priority, TimeInterval.zero(), false, new BufferSaverDownloadListener(this, cachedBuffer, listener, deleteListener, _storage, timeToCache), true);
+    if (useCache)
+    {
+      return _downloader.requestBuffer(url, priority, TimeInterval.zero(), false, new BufferSaverDownloadListener(this, cachedBuffer, listener, deleteListener, _storage, timeToCache), true);
+    }
+  
+    return _downloader.requestBuffer(url, priority, TimeInterval.zero(), false, listener, deleteListener);
   }
 
   public final long requestImage(URL url, long priority, TimeInterval timeToCache, boolean readExpired, IImageDownloadListener listener, boolean deleteListener)
   {
     _requestsCounter++;
   
-    IImageResult cached = getCachedImageResult(url, readExpired);
+    IImageResult cached = getCachedImageResult(url, timeToCache, readExpired);
     IImage cachedImage = cached._image;
   
     if (cachedImage != null && !cached._expired)
@@ -153,8 +157,12 @@ public class CachedDownloader extends IDownloader
     }
   
     // cache miss
-    return _downloader.requestImage(url, priority, TimeInterval.zero(), false, new ImageSaverDownloadListener(this, cachedImage, listener, deleteListener, _storage, timeToCache), true);
-  
+    final boolean useCache = _storage.isAvailable() && !url.isFileProtocol() && !timeToCache.isZero();
+    if (useCache)
+    {
+      return _downloader.requestImage(url, priority, TimeInterval.zero(), false, new ImageSaverDownloadListener(this, cachedImage, listener, deleteListener, _storage, timeToCache), true);
+    }
+    return _downloader.requestImage(url, priority, TimeInterval.zero(), false, listener, deleteListener);
   }
 
   public final void cancelRequest(long requestId)

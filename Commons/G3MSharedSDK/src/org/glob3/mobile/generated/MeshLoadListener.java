@@ -24,6 +24,7 @@ public interface MeshLoadListener
 {
   void dispose();
 
+  void onError(URL url);
   void onBeforeAddMesh(Mesh mesh);
   void onAfterAddMesh(Mesh mesh);
 }

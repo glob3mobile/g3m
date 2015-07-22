@@ -100,9 +100,9 @@ bool GEOMeshSymbol::symbolize(const G3MRenderContext* rc,
                               MeshRenderer*           meshRenderer,
                               ShapesRenderer*         shapesRenderer,
                               MarksRenderer*          marksRenderer,
-                              GEOTileRasterizer*      geoTileRasterizer) const {
+                              GEOVectorLayer*         geoVectorLayer) const {
   if (meshRenderer == NULL) {
-    ILogger::instance()->logError("Can't simbolize with Mesh, MeshRenderer was not set");
+    ILogger::instance()->logError("Can't symbolize with Mesh, MeshRenderer was not set");
   }
   else {
     Mesh* mesh = createMesh(rc);

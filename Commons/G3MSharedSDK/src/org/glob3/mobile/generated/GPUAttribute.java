@@ -35,10 +35,10 @@ public class GPUAttribute extends GPUVariable
      _key = getAttributeKey(name);
   }
 
-  //  const std::string getName() const{ return _name;}
-  //  const int getID() const{ return _id;}
-  //  int getType() const{ return _type;}
-  //  int getSize() const{ return _size;}
+  //  const std::string getName() const { return _name;}
+  //  const int getID() const { return _id;}
+  //  int getType() const { return _type;}
+  //  int getSize() const { return _size;}
   public final boolean wasSet()
   {
      return _value != null;

@@ -41,37 +41,51 @@ void CameraDoubleDragHandler::onDown(const G3MEventContext *eventContext,
                                      CameraContext *cameraContext) 
 {
   Camera *camera = cameraContext->getNextCamera();
-  _camera0.copyFrom(*camera);
-  cameraContext->setCurrentGesture(DoubleDrag);  
+  camera->getLookAtParamsInto(_cameraPosition, _cameraCenter, _cameraUp);
+  camera->getModelViewMatrixInto(_cameraModelViewMatrix);
+  camera->getViewPortInto(_cameraViewPort);
 
   // double dragging
-  const Vector2I pixel0 = touchEvent.getTouch(0)->getPos();
-  const Vector2I pixel1 = touchEvent.getTouch(1)->getPos();
-  eventContext->getPlanet()->beginDoubleDrag(_camera0.getCartesianPosition(),
-                                             _camera0.getViewDirection(),
-                                             _camera0.pixel2Ray(pixel0),
-                                             _camera0.pixel2Ray(pixel1));
+  const Vector2F pixel0 = touchEvent.getTouch(0)->getPos();
+  const Vector2F pixel1 = touchEvent.getTouch(1)->getPos();
+  
+  const Vector3D& initialRay0 = camera->pixel2Ray(pixel0);
+  const Vector3D& initialRay1 = camera->pixel2Ray(pixel1);
+  
+  if ( initialRay0.isNan() || initialRay1.isNan() ) return;
+  
+  cameraContext->setCurrentGesture(DoubleDrag);
+  eventContext->getPlanet()->beginDoubleDrag(camera->getCartesianPosition(),
+                                             camera->getViewDirection(),
+                                             camera->pixel2Ray(pixel0),
+                                             camera->pixel2Ray(pixel1));
 }
 
 
 void CameraDoubleDragHandler::onMove(const G3MEventContext *eventContext,
                                      const TouchEvent& touchEvent, 
                                      CameraContext *cameraContext) {
-  
   if (cameraContext->getCurrentGesture() != DoubleDrag) return;
 
   // compute transformation matrix
   const Planet* planet = eventContext->getPlanet();
-  const Vector2I pixel0 = touchEvent.getTouch(0)->getPos();
-  const Vector2I pixel1 = touchEvent.getTouch(1)->getPos();
-  MutableMatrix44D matrix = planet->doubleDrag(_camera0.pixel2Ray(pixel0),
-                                               _camera0.pixel2Ray(pixel1));
+  const Vector2F pixel0 = touchEvent.getTouch(0)->getPos();
+  const Vector2F pixel1 = touchEvent.getTouch(1)->getPos();
+  const Vector3D& initialRay0 = Camera::pixel2Ray(_cameraPosition, pixel0,
+                                                  _cameraViewPort, _cameraModelViewMatrix);
+  const Vector3D& initialRay1 = Camera::pixel2Ray(_cameraPosition, pixel1,
+                                                  _cameraViewPort, _cameraModelViewMatrix);
+  
+   if (initialRay0.isNan() || initialRay1.isNan() ) return;
+  
+  MutableMatrix44D matrix = planet->doubleDrag(initialRay0,
+                                               initialRay1);
   if (!matrix.isValid()) return;
 
   // apply transformation
-  Camera *camera = cameraContext->getNextCamera();
-  camera->copyFrom(_camera0);
-  camera->applyTransform(matrix);
+  cameraContext->getNextCamera()->setLookAtParams(_cameraPosition.transformedBy(matrix, 1.0),
+                                                  _cameraCenter.transformedBy(matrix, 1.0),
+                                                  _cameraUp.transformedBy(matrix, 0.0));
 }
 
 

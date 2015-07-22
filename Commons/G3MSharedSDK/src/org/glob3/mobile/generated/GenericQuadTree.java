@@ -94,11 +94,11 @@ public class GenericQuadTree
     return false;
   }
 
-  public final void symbolize(GEOTileRasterizer geoTileRasterizer)
+  public final void symbolize(GEOVectorLayer geoVectorLayer)
   {
     if (_root != null)
     {
-      _root.symbolize(geoTileRasterizer);
+      _root.symbolize(geoVectorLayer);
     }
   }
 

@@ -80,7 +80,7 @@ public:
   void rawRender(const G3MRenderContext* rc,
                  const GLState* parentState) const;
 
-  void showNormals(bool v) const{
+  void showNormals(bool v) const {
     _mesh->showNormals(v);
   }
 };

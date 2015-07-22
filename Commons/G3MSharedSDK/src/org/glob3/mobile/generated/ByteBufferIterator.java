@@ -41,8 +41,8 @@ public class ByteBufferIterator
   {
     if (_bufferTimestamp != _buffer.timestamp())
     {
-      ILogger.instance().logError("The buffer was changed after the iteration started");
-      _bufferSize = _buffer.size();
+      throw new RuntimeException("The buffer was changed after the iteration started");
+      // _bufferSize = _buffer->size();
     }
   
     return (_cursor < _bufferSize);
@@ -52,14 +52,14 @@ public class ByteBufferIterator
   {
     if (_bufferTimestamp != _buffer.timestamp())
     {
-      ILogger.instance().logError("The buffer was changed after the iteration started");
-      _bufferSize = _buffer.size();
+      throw new RuntimeException("The buffer was changed after the iteration started");
+      //_bufferSize = _buffer->size();
     }
   
     if (_cursor >= _bufferSize)
     {
-      ILogger.instance().logError("Iteration overflow");
-      return 0;
+      throw new RuntimeException("Iteration overflow");
+      // return 0;
     }
   
     return _buffer.get(_cursor++);
@@ -71,8 +71,6 @@ public class ByteBufferIterator
     final short b2 = (short) (nextUInt8() & 0xFF);
   
     final int iResult = (((int) b1) | ((int)(b2 << 8)));
-    //  const short result = (short) iResult;
-    //  return result;
     return (short) iResult;
   }
   public final int nextInt32()
@@ -127,6 +125,33 @@ public class ByteBufferIterator
   {
     final long l = nextInt64();
     return IMathUtils.instance().rawLongBitsToDouble(l);
+  }
+  public final float nextFloat()
+  {
+    final int i = nextInt32();
+    return IMathUtils.instance().rawIntBitsToFloat(i);
+  }
+
+  public final void nextUInt8(int count, byte[] dst)
+  {
+    for (int i = 0; i < count; i++)
+    {
+      dst[i] = nextUInt8();
+    }
+  }
+  public final void nextInt16(int count, short[] dst)
+  {
+    for (int i = 0; i < count; i++)
+    {
+      dst[i] = nextInt16();
+    }
+  }
+  public final void nextInt32(int count, int[] dst)
+  {
+    for (int i = 0; i < count; i++)
+    {
+      dst[i] = nextInt32();
+    }
   }
 
 }

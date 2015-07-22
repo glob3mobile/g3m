@@ -102,8 +102,8 @@ Vector2F Box::projectedExtent(const G3MRenderContext* rc) const {
   float lowerY = pixel0._y;
   float upperY = pixel0._y;
 
-  const int cornersSize = corners.size();
-  for (int i = 1; i < cornersSize; i++) {
+  const size_t cornersSize = corners.size();
+  for (size_t i = 1; i < cornersSize; i++) {
     const Vector2F pixel = currentCamera->point2Pixel(corners[i]);
 
     const float x = pixel._x;
@@ -137,8 +137,8 @@ double Box::projectedArea(const G3MRenderContext* rc) const {
   float lowerY = pixel0._y;
   float upperY = pixel0._y;
 
-  const int cornersSize = corners.size();
-  for (int i = 1; i < cornersSize; i++) {
+  const size_t cornersSize = corners.size();
+  for (size_t i = 1; i < cornersSize; i++) {
     const Vector2F pixel = currentCamera->point2Pixel(corners[i]);
 
     const float x = pixel._x;
@@ -219,19 +219,18 @@ Vector3D Box::intersectionWithRay(const Vector3D& origin,
 }
 
 
-void Box::createMesh(Color* color) const {
-  
-  float v[] = {
-    (float) _lower._x, (float) _lower._y, (float) _lower._z,
-    (float) _lower._x, (float) _upper._y, (float) _lower._z,
-    (float) _lower._x, (float) _upper._y, (float) _upper._z,
-    (float) _lower._x, (float) _lower._y, (float) _upper._z,
-    (float) _upper._x, (float) _lower._y, (float) _lower._z,
-    (float) _upper._x, (float) _upper._y, (float) _lower._z,
-    (float) _upper._x, (float) _upper._y, (float) _upper._z,
-    (float) _upper._x, (float) _lower._y, (float) _upper._z
+Mesh* Box::createMesh(const Color& color) const {
+  double v[] = {
+    _lower._x, _lower._y, _lower._z,
+    _lower._x, _upper._y, _lower._z,
+    _lower._x, _upper._y, _upper._z,
+    _lower._x, _lower._y, _upper._z,
+    _upper._x, _lower._y, _lower._z,
+    _upper._x, _upper._y, _lower._z,
+    _upper._x, _upper._y, _upper._z,
+    _upper._x, _lower._y, _upper._z
   };
-  
+
   short i[] = {
     0, 1, 1, 2, 2, 3, 3, 0,
     1, 5, 5, 6, 6, 2, 2, 1,
@@ -240,37 +239,40 @@ void Box::createMesh(Color* color) const {
     3, 2, 2, 6, 6, 7, 7, 3,
     0, 1, 1, 5, 5, 4, 4, 0
   };
-  
+
   FloatBufferBuilderFromCartesian3D* vertices = FloatBufferBuilderFromCartesian3D::builderWithFirstVertexAsCenter();
-  ShortBufferBuilder indices;
-  
-  const unsigned int numVertices = 8;
-  for (unsigned int n=0; n<numVertices; n++) {
+  const int numVertices = 8;
+  for (int n = 0; n < numVertices; n++) {
     vertices->add(v[n*3], v[n*3+1], v[n*3+2]);
   }
-  
+
+  ShortBufferBuilder indices;
   const int numIndices = 48;
-  for (unsigned int n=0; n<numIndices; n++) {
+  for (int n = 0; n < numIndices; n++) {
     indices.add(i[n]);
   }
-  
-  _mesh = new IndexedMesh(GLPrimitive::lines(),
-                          true,
-                          vertices->getCenter(),
-                          vertices->create(),
-                          indices.create(),
-                          1,
-                          1,
-                          color);
 
+  Mesh* mesh = new IndexedMesh(GLPrimitive::lines(),
+                               true,
+                               vertices->getCenter(),
+                               vertices->create(),
+                               indices.create(),
+                               2,
+                               1,
+                               new Color(color));
+  
   delete vertices;
+  
+  return mesh;
 }
 
-void Box::render(const G3MRenderContext* rc, const GLState& parentState) const{
+void Box::render(const G3MRenderContext* rc,
+                 const GLState* parentState,
+                 const Color& color) const {
   if (_mesh == NULL) {
-    createMesh(Color::newFromRGBA(1.0f, 0.0f, 1.0f, 1.0f));
+    _mesh = createMesh(color);
   }
-  _mesh->render(rc, &parentState);
+  _mesh->render(rc, parentState);
 }
 
 bool Box::touchesBox(const Box* that) const {
@@ -288,7 +290,7 @@ bool Box::touchesSphere(const Sphere* that) const {
 }
 
 
-BoundingVolume* Box::mergedWithBox(const Box* that) const {
+Box* Box::mergedWithBox(const Box* that) const {
   const IMathUtils* mu = IMathUtils::instance();
 
   const double lowerX = mu->min(_lower._x, that->_lower._x);
@@ -323,4 +325,17 @@ Sphere* Box::createSphere() const {
   const Vector3D center = _lower.add(_upper).div(2);
   const double radius = center.distanceTo(_upper);
   return new Sphere(center, radius);
+}
+
+
+const std::string Box::description() const {
+  IStringBuilder* isb = IStringBuilder::newStringBuilder();
+  isb->addString("[Box ");
+  isb->addString(_lower.description());
+  isb->addString(" / ");
+  isb->addString(_upper.description());
+  isb->addString("]");
+  const std::string s = isb->getString();
+  delete isb;
+  return s;
 }

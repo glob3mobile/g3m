@@ -17,7 +17,7 @@ private:
   CanvasElement* _child;
 
   const Color _color;
-  const float _arrowLenght;
+  const float _arrowLength;
   const float _margin;
   const float _radius;
   const float _arrowPointSize;
@@ -27,13 +27,13 @@ public:
                        const Color& color = Color::white(),
                        float margin = 5,
                        float radius = 10,
-                       float arrowLenght = 5,
+                       float arrowLength = 5,
                        float arrowPointSize = 12) :
   _child(child),
   _color(color),
   _margin(margin),
   _radius(radius),
-  _arrowLenght(arrowLenght),
+  _arrowLength(arrowLength),
   _arrowPointSize(arrowPointSize)
   {
 

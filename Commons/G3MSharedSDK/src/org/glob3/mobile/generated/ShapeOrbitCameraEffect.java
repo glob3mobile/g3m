@@ -54,7 +54,7 @@ public class ShapeOrbitCameraEffect extends EffectWithDuration
   {
     final double alpha = getAlpha(when);
   
-    IMathUtils mu = IMathUtils.instance();
+    final IMathUtils mu = IMathUtils.instance();
     final double distance = mu.linearInterpolation(_fromDistance, _toDistance, alpha);
     final double azimuthInRadians = mu.linearInterpolation(_fromAzimuthInRadians, _toAzimuthInRadians, alpha);
     final double altitudeInRadians = mu.linearInterpolation(_fromAltitudeInRadians, _toAltitudeInRadians, alpha);

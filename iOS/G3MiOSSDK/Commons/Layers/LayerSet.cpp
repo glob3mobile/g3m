@@ -16,12 +16,17 @@
 #include "Context.hpp"
 #include "TileImageProvider.hpp"
 #include "CompositeTileImageProvider.hpp"
+#include "Color.hpp"
+#include "Info.hpp"
 
 LayerSet::~LayerSet() {
   for (unsigned int i = 0; i < _layers.size(); i++) {
     delete _layers[i];
   }
-  _tileImageProvider->_release();
+  
+  if (_tileImageProvider != NULL) {
+    _tileImageProvider->_release();
+  }
 }
 
 bool LayerSet::onTerrainTouchEvent(const G3MEventContext* ec,
@@ -45,8 +50,8 @@ bool LayerSet::onTerrainTouchEvent(const G3MEventContext* ec,
 void LayerSet::initialize(const G3MContext* context) const {
   _context = context;
 
-  const int layersCount = _layers.size();
-  for (int i = 0; i < layersCount; i++) {
+  const size_t layersCount = _layers.size();
+  for (size_t i = 0; i < layersCount; i++) {
     _layers[i]->initialize(context);
   }
 }
@@ -58,12 +63,19 @@ void LayerSet::setChangeListener(ChangedListener* listener) {
   _listener = listener;
 }
 
+void LayerSet::setTileImageProvider(TileImageProvider* tileImageProvider) {
+  if (_tileImageProvider != NULL) {
+    ILogger::instance()->logError("TileImageProvider already set");
+  }
+  _tileImageProvider = tileImageProvider;
+}
+
 
 RenderState LayerSet::getRenderState() {
   _errors.clear();
   bool busyFlag  = false;
   bool errorFlag = false;
-  const int layersCount = _layers.size();
+  const size_t layersCount = _layers.size();
   
   for (int i = 0; i < layersCount; i++) {
     Layer* child = _layers[i];
@@ -100,7 +112,7 @@ RenderState LayerSet::getRenderState() {
   return RenderState::ready();
 }
 
-Layer* LayerSet::getLayer(int index) const {
+Layer* LayerSet::getLayer(size_t index) const {
   if (index < _layers.size()) {
     return _layers[index];
   }
@@ -109,15 +121,15 @@ Layer* LayerSet::getLayer(int index) const {
 }
 
 void LayerSet::disableAllLayers() {
-  const int layersCount = _layers.size();
-  for (int i = 0; i < layersCount; i++) {
+  const size_t layersCount = _layers.size();
+  for (size_t i = 0; i < layersCount; i++) {
     _layers[i]->setEnable(false);
   }
 }
 
 Layer* LayerSet::getLayerByTitle(const std::string& title) const {
-  const int layersCount = _layers.size();
-  for (int i = 0; i < layersCount; i++) {
+  const size_t layersCount = _layers.size();
+  for (size_t i = 0; i < layersCount; i++) {
     if (_layers[i]->getTitle() == title) {
       return _layers[i];
     }
@@ -134,13 +146,13 @@ void LayerSet::addLayer(Layer* layer) {
   }
 
   layersChanged();
-  changedInfo(layer->getInfos());
+  changedInfo(layer->getInfo());
 }
 
 void LayerSet::removeAllLayers(const bool deleteLayers) {
-  const int layersSize = _layers.size();
+  const size_t layersSize = _layers.size();
   if (layersSize > 0) {
-    for (int i = 0; i < layersSize; i++) {
+    for (size_t i = 0; i < layersSize; i++) {
       Layer* layer = _layers[i];
       layer->removeLayerSet(this);
       if (deleteLayers) {
@@ -173,14 +185,14 @@ bool LayerSet::isEquals(const LayerSet* that) const {
     return false;
   }
 
-  const int thisSize = size();
-  const int thatSize = that->size();
+  const size_t thisSize = size();
+  const size_t thatSize = that->size();
 
   if (thisSize != thatSize) {
     return false;
   }
 
-  for (int i = 0; i < thisSize; i++) {
+  for (size_t i = 0; i < thisSize; i++) {
     Layer* thisLayer = getLayer(i);
     Layer* thatLayer = that->getLayer(i);
 
@@ -192,26 +204,15 @@ bool LayerSet::isEquals(const LayerSet* that) const {
   return true;
 }
 
-LayerTilesRenderParameters* LayerSet::createLayerTilesRenderParameters(const bool forceFirstLevelTilesRenderOnStart, std::vector<std::string>& errors) const {
-  Sector* topSector                  = NULL;
-  int     topSectorSplitsByLatitude  = 0;
-  int     topSectorSplitsByLongitude = 0;
-  int     firstLevel                 = 0;
-  int     maxLevel                   = 0;
-  int     tileTextureWidth           = 0;
-  int     tileTextureHeight          = 0;
-  int     tileMeshWidth              = 0;
-  int     tileMeshHeight             = 0;
-  bool    mercator                   = false;
-  Sector* biggestDataSector          = NULL;
+bool LayerSet::checkLayersDataSector(const bool forceFirstLevelTilesRenderOnStart,
+                                     std::vector<std::string>& errors) const {
 
-  bool layerSetNotReadyFlag = false;
-  bool first = true;
-  const int layersCount = _layers.size();
-  
-  if (forceFirstLevelTilesRenderOnStart && layersCount > 0) {
+  if (forceFirstLevelTilesRenderOnStart) {
+    Sector* biggestDataSector = NULL;
+
+    const size_t layersCount = _layers.size();
     double biggestArea = 0;
-    for (int i = 0; i < layersCount; i++) {
+    for (size_t i = 0; i < layersCount; i++) {
       Layer* layer = _layers[i];
       if (layer->isEnable()) {
         const double layerArea = layer->getDataSector().getAngularAreaInSquaredDegrees();
@@ -222,9 +223,10 @@ LayerTilesRenderParameters* LayerSet::createLayerTilesRenderParameters(const boo
         }
       }
     }
+
     if (biggestDataSector != NULL) {
       bool dataSectorsInconsistency = false;
-      for (int i = 0; i < layersCount; i++) {
+      for (size_t i = 0; i < layersCount; i++) {
         Layer* layer = _layers[i];
         if (layer->isEnable()) {
           if (!biggestDataSector->fullContains(layer->getDataSector())) {
@@ -233,27 +235,35 @@ LayerTilesRenderParameters* LayerSet::createLayerTilesRenderParameters(const boo
           }
         }
       }
+
+      delete biggestDataSector;
+
       if (dataSectorsInconsistency) {
         errors.push_back("Inconsistency in layers data sectors");
-        return NULL;
+        return false;
       }
     }
-    delete biggestDataSector;
   }
 
-  for (int i = 0; i < layersCount; i++) {
+  return true;
+}
+
+bool LayerSet::checkLayersRenderState(std::vector<std::string>& errors,
+                                      std::vector<Layer*>& enableLayers) const {
+  bool layerSetNotReadyFlag = false;
+  for (size_t i = 0; i < _layers.size(); i++) {
     Layer* layer = _layers[i];
 
     if (layer->isEnable()) {
+      enableLayers.push_back(layer);
+
       const RenderState layerRenderState = layer->getRenderState();
       const RenderState_Type layerRenderStateType = layerRenderState._type;
       if (layerRenderStateType != RENDER_READY) {
         if (layerRenderStateType == RENDER_ERROR) {
           const std::vector<std::string> layerErrors = layerRenderState.getErrors();
 #ifdef C_CODE
-          errors.insert(errors.end(),
-                      layerErrors.begin(),
-                      layerErrors.end());
+          errors.insert(errors.end(), layerErrors.begin(), layerErrors.end());
 #endif
 #ifdef JAVA_CODE
           errors.addAll(layerErrors);
@@ -261,105 +271,206 @@ LayerTilesRenderParameters* LayerSet::createLayerTilesRenderParameters(const boo
         }
         layerSetNotReadyFlag = true;
       }
-      else {
-        const LayerTilesRenderParameters* layerParam = layer->getLayerTilesRenderParameters();
-
-        if (layerParam == NULL) {
-          continue;
-        }
-
-        if (first) {
-          first = false;
-
-          topSector                  = new Sector( layerParam->_topSector );
-          topSectorSplitsByLatitude  = layerParam->_topSectorSplitsByLatitude;
-          topSectorSplitsByLongitude = layerParam->_topSectorSplitsByLongitude;
-          firstLevel                 = layerParam->_firstLevel;
-          maxLevel                   = layerParam->_maxLevel;
-          tileTextureWidth           = layerParam->_tileTextureResolution._x;
-          tileTextureHeight          = layerParam->_tileTextureResolution._y;
-          tileMeshWidth              = layerParam->_tileMeshResolution._x;
-          tileMeshHeight             = layerParam->_tileMeshResolution._y;
-          mercator                   = layerParam->_mercator;
-        }
-        else {
-          if ( mercator != layerParam->_mercator ) {
-            errors.push_back("Inconsistency in Layer's Parameters: mercator");
-            delete topSector;
-            return NULL;
-          }
-
-          if (!topSector->isEquals(layerParam->_topSector) ) {
-            errors.push_back("Inconsistency in Layer's Parameters: topSector");
-            delete topSector;
-            return NULL;
-          }
-
-          if ( topSectorSplitsByLatitude != layerParam->_topSectorSplitsByLatitude ) {
-            errors.push_back("Inconsistency in Layer's Parameters: topSectorSplitsByLatitude");
-            delete topSector;
-            return NULL;
-          }
-
-          if ( topSectorSplitsByLongitude != layerParam->_topSectorSplitsByLongitude ) {
-            errors.push_back("Inconsistency in Layer's Parameters: topSectorSplitsByLongitude");
-            delete topSector;
-            return NULL;
-          }
-
-          if (( tileTextureWidth  != layerParam->_tileTextureResolution._x ) ||
-              ( tileTextureHeight != layerParam->_tileTextureResolution._y ) ) {
-            errors.push_back("Inconsistency in Layer's Parameters: tileTextureResolution");
-            delete topSector;
-            return NULL;
-          }
-
-          if (( tileMeshWidth  != layerParam->_tileMeshResolution._x ) ||
-              ( tileMeshHeight != layerParam->_tileMeshResolution._y ) ) {
-            errors.push_back("Inconsistency in Layer's Parameters: tileMeshResolution");
-            delete topSector;
-            return NULL;
-          }
-
-          if ( maxLevel < layerParam->_maxLevel ) {
-            ILogger::instance()->logWarning("Inconsistency in Layer's Parameters: maxLevel (upgrading from %d to %d)",
-                                            maxLevel,
-                                            layerParam->_maxLevel);
-            maxLevel = layerParam->_maxLevel;
-          }
-
-          if ( firstLevel < layerParam->_firstLevel ) {
-            ILogger::instance()->logWarning("Inconsistency in Layer's Parameters: firstLevel (upgrading from %d to %d)",
-                                            firstLevel,
-                                            layerParam->_firstLevel);
-            firstLevel = layerParam->_firstLevel;
-          }
-
-        }
-      }
     }
   }
 
-  if (layerSetNotReadyFlag) {
+  return !layerSetNotReadyFlag;
+}
+
+
+class MutableLayerTilesRenderParameters {
+private:
+  Sector* _topSector;
+  int     _topSectorSplitsByLatitude;
+  int     _topSectorSplitsByLongitude;
+  int     _firstLevel;
+  int     _maxLevel;
+  int     _tileTextureWidth;
+  int     _tileTextureHeight;
+  int     _tileMeshWidth;
+  int     _tileMeshHeight;
+  bool    _mercator;
+
+public:
+  MutableLayerTilesRenderParameters() :
+  _topSector(NULL),
+  _topSectorSplitsByLatitude(0),
+  _topSectorSplitsByLongitude(0),
+  _firstLevel(0),
+  _maxLevel(0),
+  _tileTextureWidth(0),
+  _tileTextureHeight(0),
+  _tileMeshWidth(0),
+  _tileMeshHeight(0),
+  _mercator(false)
+  {
+  }
+
+  ~MutableLayerTilesRenderParameters() {
+    delete _topSector;
+  }
+
+  bool update(const LayerTilesRenderParameters* parameters,
+              std::vector<std::string>& errors) {
+    if (_topSector == NULL) {
+      _topSector                  = new Sector( parameters->_topSector );
+      _topSectorSplitsByLatitude  = parameters->_topSectorSplitsByLatitude;
+      _topSectorSplitsByLongitude = parameters->_topSectorSplitsByLongitude;
+      _firstLevel                 = parameters->_firstLevel;
+      _maxLevel                   = parameters->_maxLevel;
+      _tileTextureWidth           = parameters->_tileTextureResolution._x;
+      _tileTextureHeight          = parameters->_tileTextureResolution._y;
+      _tileMeshWidth              = parameters->_tileMeshResolution._x;
+      _tileMeshHeight             = parameters->_tileMeshResolution._y;
+      _mercator                   = parameters->_mercator;
+      return true;
+    }
+
+    if ( _mercator != parameters->_mercator ) {
+      errors.push_back("Inconsistency in Layer's Parameters: mercator");
+      return false;
+    }
+
+    if ( !_topSector->isEquals(parameters->_topSector) ) {
+      errors.push_back("Inconsistency in Layer's Parameters: topSector");
+      return false;
+    }
+
+    if ( _topSectorSplitsByLatitude != parameters->_topSectorSplitsByLatitude ) {
+      errors.push_back("Inconsistency in Layer's Parameters: topSectorSplitsByLatitude");
+      return false;
+    }
+
+    if ( _topSectorSplitsByLongitude != parameters->_topSectorSplitsByLongitude ) {
+      errors.push_back("Inconsistency in Layer's Parameters: topSectorSplitsByLongitude");
+      return false;
+    }
+
+    if (( _tileTextureWidth  != parameters->_tileTextureResolution._x ) ||
+        ( _tileTextureHeight != parameters->_tileTextureResolution._y ) ) {
+      errors.push_back("Inconsistency in Layer's Parameters: tileTextureResolution");
+      return false;
+    }
+
+    if (( _tileMeshWidth  != parameters->_tileMeshResolution._x ) ||
+        ( _tileMeshHeight != parameters->_tileMeshResolution._y ) ) {
+      errors.push_back("Inconsistency in Layer's Parameters: tileMeshResolution");
+      return false;
+    }
+
+    if ( _maxLevel < parameters->_maxLevel ) {
+      ILogger::instance()->logWarning("Inconsistency in Layer's Parameters: maxLevel (upgrading from %d to %d)",
+                                      _maxLevel,
+                                      parameters->_maxLevel);
+      _maxLevel = parameters->_maxLevel;
+    }
+
+    if ( _firstLevel < parameters->_firstLevel ) {
+      ILogger::instance()->logWarning("Inconsistency in Layer's Parameters: firstLevel (upgrading from %d to %d)",
+                                      _firstLevel,
+                                      parameters->_firstLevel);
+      _firstLevel = parameters->_firstLevel;
+    }
+
+    return true;
+  }
+
+  bool update(Layer* layer,
+              std::vector<std::string>& errors) {
+    const std::vector<const LayerTilesRenderParameters*> layerParametersVector = layer->getLayerTilesRenderParametersVector();
+
+    if (_topSector == NULL) {
+      return update(layerParametersVector[0], errors);
+    }
+
+    int foundI = -1;
+    for (int i = 0; i < layerParametersVector.size(); i++) {
+      const LayerTilesRenderParameters* parameters = layerParametersVector[i];
+      if (parameters->_mercator == _mercator) {
+        foundI = i;
+        break;
+      }
+    }
+
+    if (foundI < 0) {
+      errors.push_back("Can't find a compatible LayerTilesRenderParameters in layer " + layer->description());
+      return false;
+    }
+
+    layer->selectLayerTilesRenderParameters(foundI);
+
+    return update(layerParametersVector[foundI], errors);
+  }
+
+  LayerTilesRenderParameters* create(std::vector<std::string>& errors) {
+    if (_topSector == NULL) {
+      errors.push_back("Can't find any enabled Layer");
+      return NULL;
+    }
+
+    return new LayerTilesRenderParameters(*_topSector,
+                                          _topSectorSplitsByLatitude,
+                                          _topSectorSplitsByLongitude,
+                                          _firstLevel,
+                                          _maxLevel,
+                                          Vector2I(_tileTextureWidth, _tileTextureHeight),
+                                          Vector2I(_tileMeshWidth,    _tileMeshHeight),
+                                          _mercator);
+  }
+};
+
+
+LayerTilesRenderParameters* LayerSet::checkAndComposeLayerTilesRenderParameters(const bool forceFirstLevelTilesRenderOnStart,
+                                                                                const std::vector<Layer*>& enableLayers,
+                                                                                std::vector<std::string>& errors) const {
+
+  MutableLayerTilesRenderParameters mutableLayerTilesRenderParameters;
+
+  std::vector<Layer*> multiProjectionLayers;
+
+  for (size_t i = 0; i < enableLayers.size(); i++) {
+    Layer* layer = enableLayers[i];
+
+    const std::vector<const LayerTilesRenderParameters*> layerParametersVector = layer->getLayerTilesRenderParametersVector();
+
+    const size_t layerParametersVectorSize = layerParametersVector.size();
+    if (layerParametersVectorSize == 0) {
+      continue;
+    }
+    else if (layerParametersVectorSize == 1) {
+      if (!mutableLayerTilesRenderParameters.update(layerParametersVector[0], errors)) {
+        return NULL;
+      }
+    }
+    else {
+      multiProjectionLayers.push_back(layer);
+    }
+  }
+
+  for (size_t i = 0; i < multiProjectionLayers.size(); i++) {
+    Layer* layer = multiProjectionLayers[i];
+    if (!mutableLayerTilesRenderParameters.update(layer, errors)) {
+      return NULL;
+    }
+  }
+  
+  return mutableLayerTilesRenderParameters.create(errors);
+}
+
+
+LayerTilesRenderParameters* LayerSet::createLayerTilesRenderParameters(const bool forceFirstLevelTilesRenderOnStart,
+                                                                       std::vector<std::string>& errors) const {
+
+  if (!checkLayersDataSector(forceFirstLevelTilesRenderOnStart, errors)) {
     return NULL;
   }
-  if (first) {
-    errors.push_back("Can't find any enabled Layer");
+
+  std::vector<Layer*> enableLayers;
+  if (!checkLayersRenderState(errors, enableLayers)) {
     return NULL;
   }
 
-  LayerTilesRenderParameters* parameters = new LayerTilesRenderParameters(*topSector,
-                                                                          topSectorSplitsByLatitude,
-                                                                          topSectorSplitsByLongitude,
-                                                                          firstLevel,
-                                                                          maxLevel,
-                                                                          Vector2I(tileTextureWidth, tileTextureHeight),
-                                                                          Vector2I(tileMeshWidth,    tileMeshHeight),
-                                                                          mercator);
-
-  delete topSector;
-
-  return parameters;
+  return checkAndComposeLayerTilesRenderParameters(forceFirstLevelTilesRenderOnStart, enableLayers, errors);
 }
 
 void LayerSet::takeLayersFrom(LayerSet* that) {
@@ -378,48 +489,6 @@ void LayerSet::takeLayersFrom(LayerSet* that) {
   for (int i = 0; i < thatSize; i++) {
     addLayer( thatLayers[i] );
   }
-}
-
-std::vector<Petition*> LayerSet::createTileMapPetitions(const G3MRenderContext* rc,
-                                                        const LayerTilesRenderParameters* layerTilesRenderParameters,
-                                                        const Tile* tile) const {
-  std::vector<Petition*> petitions;
-
-  const int layersSize = _layers.size();
-  for (int i = 0; i < layersSize; i++) {
-    Layer* layer = _layers[i];
-    if (layer->isAvailable(tile)) {
-#ifdef C_CODE
-      const Tile* petitionTile = tile;
-#else
-      Tile* petitionTile = tile;
-#endif
-      const int maxLevel = layer->getLayerTilesRenderParameters()->_maxLevel;
-      while ((petitionTile->_level > maxLevel) && (petitionTile != NULL)) {
-        petitionTile = petitionTile->getParent();
-      }
-
-      if (petitionTile == NULL) {
-        ILogger::instance()->logError("Can't find a valid tile for petitions");
-      }
-
-      std::vector<Petition*> tilePetitions = layer->createTileMapPetitions(rc,
-                                                                           layerTilesRenderParameters,
-                                                                           petitionTile);
-
-      const int tilePetitionsSize = tilePetitions.size();
-      for (int j = 0; j < tilePetitionsSize; j++) {
-        petitions.push_back( tilePetitions[j] );
-      }
-    }
-  }
-
-  if (petitions.empty()) {
-    rc->getLogger()->logWarning("Can't create map petitions for tile %s",
-                                tile->_id.c_str());
-  }
-  
-  return petitions;
 }
 
 TileImageProvider* LayerSet::createTileImageProvider(const G3MRenderContext* rc,
@@ -447,7 +516,7 @@ TileImageProvider* LayerSet::createTileImageProvider(const G3MRenderContext* rc,
       }
     }
   }
-
+  
   return (compositeTileImageProvider == NULL) ? singleTileImageProvider : compositeTileImageProvider;
 }
 
@@ -459,20 +528,23 @@ TileImageProvider* LayerSet::getTileImageProvider(const G3MRenderContext* rc,
   return _tileImageProvider;
 }
 
-std::vector<std::string> LayerSet::getInfo() {
+const std::vector<const Info*> LayerSet::getInfo() {
   _infos.clear();
   const int layersCount = _layers.size();
   for (int i = 0; i < layersCount; i++) {
     Layer* layer = _layers[i];
     if (layer->isEnable()) {
-      const std::string layerInfo = layer->getInfo();
-      _infos.push_back(layerInfo);
+      const std::vector<const Info*> layerInfo = layer->getInfo();
+      const int infoSize = layerInfo.size();
+      for (int j = 0; j < infoSize; j++) {
+        _infos.push_back(layerInfo[j]);
+      }
     }
   }
   return _infos;
 }
 
-void LayerSet::changedInfo(const std::vector<std::string>& info) {
+void LayerSet::changedInfo(const std::vector<const Info*>& info) {
   if (_changedInfoListener != NULL) {
     _changedInfoListener->changedInfo(getInfo());
   }
@@ -483,7 +555,8 @@ void LayerSet::setChangedInfoListener(ChangedInfoListener* changedInfoListener) 
     ILogger::instance()->logError("Changed Info Listener of LayerSet already set");
     return;
   }
-  ILogger::instance()->logError("Changed Info Listener of LayerSet set ok");
   _changedInfoListener = changedInfoListener;
-  changedInfo(getInfo());
+  if (_changedInfoListener != NULL) {
+    _changedInfoListener->changedInfo(getInfo());
+  }
 }

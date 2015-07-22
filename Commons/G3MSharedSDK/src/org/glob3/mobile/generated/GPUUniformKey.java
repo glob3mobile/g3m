@@ -22,7 +22,9 @@ public enum GPUUniformKey
   ROTATION_ANGLE_TEXTURE_COORDS(17),
   SAMPLER(18),
   SAMPLER2(19),
-  SAMPLER3(20);
+  SAMPLER3(20),
+  TRANSLATION_2D(21),
+  BILLBOARD_ANCHOR(22);
 
    private int intValue;
    private static java.util.HashMap<Integer, GPUUniformKey> mappings;

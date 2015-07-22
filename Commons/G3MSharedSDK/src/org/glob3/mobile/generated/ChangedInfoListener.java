@@ -16,11 +16,12 @@ package org.glob3.mobile.generated;
 //
 
 
+//class Info;
 
 public interface ChangedInfoListener
 {
 
   void dispose();
 
-  void changedInfo(java.util.ArrayList<String> info);
+  void changedInfo(java.util.ArrayList<Info> info);
 }

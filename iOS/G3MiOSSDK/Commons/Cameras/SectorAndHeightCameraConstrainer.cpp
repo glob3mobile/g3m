@@ -13,7 +13,7 @@
 
 bool SectorAndHeightCameraConstrainer::onCameraChange(const Planet* planet,
                                                       const Camera* previousCamera,
-                                                      Camera* nextCamera) const{
+                                                      Camera* nextCamera) const {
 
   const Geodetic3D position = nextCamera->getGeodeticPosition();
   const double height = position._height;
@@ -32,7 +32,7 @@ bool SectorAndHeightCameraConstrainer::onCameraChange(const Planet* planet,
 
 bool RenderedSectorCameraConstrainer::onCameraChange(const Planet* planet,
                                                      const Camera* previousCamera,
-                                                     Camera* nextCamera) const{
+                                                     Camera* nextCamera) const {
   if (_planetRenderer != NULL) {
     const Sector* sector = _planetRenderer->getRenderedSector();
     const Geodetic3D position = nextCamera->getGeodeticPosition();

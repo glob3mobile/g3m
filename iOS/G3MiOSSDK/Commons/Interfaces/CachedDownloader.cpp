@@ -297,6 +297,7 @@ void CachedDownloader::initialize(const G3MContext* context,
 }
 
 IImageResult CachedDownloader::getCachedImageResult(const URL& url,
+                                                    const TimeInterval& timeToCache,
                                                     bool readExpired) {
   if ( (_lastImageResult != NULL) && (_lastImageURL != NULL) ) {
     if (_lastImageURL->isEquals(url)) {
@@ -306,7 +307,7 @@ IImageResult CachedDownloader::getCachedImageResult(const URL& url,
     }
   }
 
-  if (!_storage->isAvailable() || url.isFileProtocol()) {
+  if (!_storage->isAvailable() || url.isFileProtocol() || timeToCache.isZero()) {
     return IImageResult(NULL, false);
   }
 
@@ -337,7 +338,7 @@ long long CachedDownloader::requestImage(const URL& url,
                                          bool deleteListener) {
   _requestsCounter++;
 
-  IImageResult cached = getCachedImageResult(url, readExpired);
+  IImageResult cached = getCachedImageResult(url, timeToCache, readExpired);
   IImage* cachedImage = cached._image;
 
   if (cachedImage != NULL && !cached._expired) {
@@ -354,18 +355,26 @@ long long CachedDownloader::requestImage(const URL& url,
   }
 
   // cache miss
+  const bool useCache = _storage->isAvailable() && !url.isFileProtocol() && !timeToCache.isZero();
+  if (useCache) {
+    return _downloader->requestImage(url,
+                                     priority,
+                                     TimeInterval::zero(),
+                                     false,
+                                     new ImageSaverDownloadListener(this,
+                                                                    cachedImage,
+                                                                    listener,
+                                                                    deleteListener,
+                                                                    _storage,
+                                                                    timeToCache),
+                                     true);
+  }
   return _downloader->requestImage(url,
                                    priority,
                                    TimeInterval::zero(),
                                    false,
-                                   new ImageSaverDownloadListener(this,
-                                                                  cachedImage,
-                                                                  listener,
-                                                                  deleteListener,
-                                                                  _storage,
-                                                                  timeToCache),
-                                   true);
-
+                                   listener,
+                                   deleteListener);
 }
 
 long long CachedDownloader::requestBuffer(const URL& url,
@@ -377,9 +386,8 @@ long long CachedDownloader::requestBuffer(const URL& url,
 
   _requestsCounter++;
 
-  IByteBufferResult cached = _storage->isAvailable() && !url.isFileProtocol()
-  /*                                         */ ? _storage->readBuffer(url, readExpired)
-  /*                                         */ : IByteBufferResult(NULL, false);
+  const bool useCache = _storage->isAvailable() && !url.isFileProtocol() && !timeToCache.isZero();
+  IByteBufferResult cached = useCache ? _storage->readBuffer(url, readExpired) : IByteBufferResult(NULL, false);
 
   IByteBuffer* cachedBuffer = cached.getBuffer();
 
@@ -397,15 +405,24 @@ long long CachedDownloader::requestBuffer(const URL& url,
   }
 
   // cache miss
+  if (useCache) {
+    return _downloader->requestBuffer(url,
+                                      priority,
+                                      TimeInterval::zero(),
+                                      false,
+                                      new BufferSaverDownloadListener(this,
+                                                                      cachedBuffer,
+                                                                      listener,
+                                                                      deleteListener,
+                                                                      _storage,
+                                                                      timeToCache),
+                                      true);
+  }
+
   return _downloader->requestBuffer(url,
                                     priority,
                                     TimeInterval::zero(),
                                     false,
-                                    new BufferSaverDownloadListener(this,
-                                                                    cachedBuffer,
-                                                                    listener,
-                                                                    deleteListener,
-                                                                    _storage,
-                                                                    timeToCache),
-                                    true);
+                                    listener,
+                                    deleteListener);
 }

@@ -34,7 +34,7 @@ private:
   //IBO
   mutable bool   _indexBufferCreated;
   mutable GLuint _indexBuffer; //IBO
-  mutable int    _indexBufferTimeStamp;
+  mutable int    _indexBufferTimestamp;
   static GLuint  _boundIBO;
 
 public:
@@ -42,7 +42,7 @@ public:
   _size(size),
   _timestamp(0),
   _indexBuffer(-1),
-  _indexBufferTimeStamp(-1),
+  _indexBufferTimestamp(-1),
   _indexBufferCreated(false),
   _id(_nextID++)
   {
@@ -55,7 +55,7 @@ public:
 //    showStatistics();
   }
 
-  long long getID() const{
+  long long getID() const {
     return _id;
   }
 

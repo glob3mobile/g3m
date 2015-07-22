@@ -15,6 +15,7 @@
 
 #include "Planet.hpp"
 #include "MutableVector3D.hpp"
+#include "MutableVector2F.hpp"
 #include "Context.hpp"
 #include "Geodetic3D.hpp"
 #include "Vector2I.hpp"
@@ -42,7 +43,7 @@ public:
   bool _frustumMCDirty;
 
   CameraDirtyFlags() {
-    setAll(true);
+    setAllDirty();
   }
 
   void copyFrom(const CameraDirtyFlags& other) {
@@ -87,48 +88,24 @@ public:
   }
 #endif
 
-  void setAll(bool value) {
-    _frustumDataDirty           = value;
-    _projectionMatrixDirty      = value;
-    _modelMatrixDirty           = value;
-    _modelViewMatrixDirty       = value;
-    _cartesianCenterOfViewDirty = value;
-    _geodeticCenterOfViewDirty  = value;
-    _frustumDirty               = value;
-    _frustumMCDirty             = value;
+  void setAllDirty() {
+    _frustumDataDirty           = true;
+    _projectionMatrixDirty      = true;
+    _modelMatrixDirty           = true;
+    _modelViewMatrixDirty       = true;
+    _cartesianCenterOfViewDirty = true;
+    _geodeticCenterOfViewDirty  = true;
+    _frustumDirty               = true;
+    _frustumMCDirty             = true;
   }
+
 };
 
 
 class Camera {
 public:
-  Camera(const Camera &that):
-  _viewPortWidth(that._viewPortWidth),
-  _viewPortHeight(that._viewPortHeight),
-  _planet(that._planet),
-  _position(that._position),
-  _center(that._center),
-  _up(that._up),
-  _dirtyFlags(that._dirtyFlags),
-  _frustumData(that._frustumData),
-  _projectionMatrix(that._projectionMatrix),
-  _modelMatrix(that._modelMatrix),
-  _modelViewMatrix(that._modelViewMatrix),
-  _cartesianCenterOfView(that._cartesianCenterOfView),
-  _geodeticCenterOfView((that._geodeticCenterOfView == NULL) ? NULL : new Geodetic3D(*that._geodeticCenterOfView)),
-  _frustum((that._frustum == NULL) ? NULL : new Frustum(*that._frustum)),
-  _frustumInModelCoordinates((that._frustumInModelCoordinates == NULL) ? NULL : new Frustum(*that._frustumInModelCoordinates)),
-  _camEffectTarget(new CameraEffectTarget()),
-  _geodeticPosition((that._geodeticPosition == NULL) ? NULL: new Geodetic3D(*that._geodeticPosition)),
-  _angle2Horizon(that._angle2Horizon),
-  _normalizedPosition(that._normalizedPosition),
-  _tanHalfVerticalFieldOfView(NAND),
-  _tanHalfHorizontalFieldOfView(NAND),
-  _rollInRadians(that._rollInRadians)
-  {
-  }
 
-  explicit Camera();
+  explicit Camera(long long timestamp);
 
   ~Camera() {
     delete _camEffectTarget;
@@ -140,14 +117,10 @@ public:
 
   void copyFrom(const Camera &c);
 
-  void copyFromForcingMatrixCreation(const Camera &c) {
-    c.forceMatrixCreation();
-    copyFrom(c);
-  }
-
   void resizeViewport(int width, int height);
 
   const Vector3D pixel2Ray(const Vector2I& pixel) const;
+  const Vector3D pixel2Ray(const Vector2F& pixel) const;
 
   const Vector3D pixel2PlanetPoint(const Vector2I& pixel) const;
 
@@ -166,12 +139,34 @@ public:
   }
 
   const Vector3D getCartesianPosition() const { return _position.asVector3D(); }
+  void getCartesianPositionMutable(MutableVector3D& result) const {
+    result.copyFrom(_position);
+  }
+
   const Vector3D getNormalizedPosition() const { return _normalizedPosition.asVector3D(); }
   const Vector3D getCenter() const { return _center.asVector3D(); }
   const Vector3D getUp() const { return _up.asVector3D(); }
+  void getUpMutable(MutableVector3D& result) const {
+    result.copyFrom(_up);
+  }
+
   const Geodetic3D getGeodeticCenterOfView() const { return *_getGeodeticCenterOfView(); }
   const Vector3D getXYZCenterOfView() const { return _getCartesianCenterOfView().asVector3D(); }
-  const Vector3D getViewDirection() const { return _center.sub(_position).asVector3D(); }
+  const Vector3D getViewDirection() const {
+    // return _center.sub(_position).asVector3D();
+
+    // perform the substraction inlinde to avoid a temporary MutableVector3D instance
+    return Vector3D(_center.x() - _position.x(),
+                    _center.y() - _position.y(),
+                    _center.z() - _position.z());
+  }
+
+  const void getViewDirectionInto(MutableVector3D& result) const {
+    result.set(_center.x() - _position.x(),
+               _center.y() - _position.y(),
+               _center.z() - _position.z());
+  }
+
 
   void dragCamera(const Vector3D& p0,
                   const Vector3D& p1);
@@ -206,14 +201,16 @@ public:
 
   void setCartesianPosition(const MutableVector3D& v) {
     if (!v.equalTo(_position)) {
-      _position = MutableVector3D(v);
+      _timestamp++;
+      _position.copyFrom(v);
       delete _geodeticPosition;
       _geodeticPosition = NULL;
-      _dirtyFlags.setAll(true);
+      _dirtyFlags.setAllDirty();
       const double distanceToPlanetCenter = _position.length();
       const double planetRadius = distanceToPlanetCenter - getGeodeticPosition()._height;
       _angle2Horizon = acos(planetRadius/distanceToPlanetCenter);
-      _normalizedPosition = _position.normalized();
+      _normalizedPosition.copyFrom(_position);
+      _normalizedPosition.normalize();
     }
   }
 
@@ -247,7 +244,7 @@ public:
                            const double height) {
     setGeodeticPosition(Geodetic3D(g2d, height));
   }
-  
+
   /**
    This method put the camera pointing to given center, at the given distance, using the given angles.
 
@@ -261,23 +258,25 @@ public:
                       const Angle& azimuth,
                       const Angle& altitude);
 
-  void forceMatrixCreation() const{
-    //MutableMatrix44D projectionMatrix = MutableMatrix44D::createProjectionMatrix(_frustumData);
-    //getFrustumData();
+  void forceMatrixCreation() const {
+    getGeodeticCenterOfView();
+    //getXYZCenterOfView();
+    _getCartesianCenterOfView();
+    getFrustumInModelCoordinates();
     getProjectionMatrix44D();
     getModelMatrix44D();
     getModelViewMatrix().asMatrix44D();
   }
 
-  Matrix44D* getModelMatrix44D() const{
+  Matrix44D* getModelMatrix44D() const {
     return getModelMatrix().asMatrix44D();
   }
 
-  Matrix44D* getProjectionMatrix44D() const{
+  Matrix44D* getProjectionMatrix44D() const {
     return getProjectionMatrix().asMatrix44D();
   }
 
-  Matrix44D* getModelViewMatrix44D() const{
+  Matrix44D* getModelViewMatrix44D() const {
     return getModelViewMatrix().asMatrix44D();
   }
 
@@ -309,7 +308,81 @@ public:
   
   double getPixelsForObjectSize(double distance, double length) const;
 
+  inline long long getTimestamp() const {
+    return _timestamp;
+  }
+
+  void setLookAtParams(MutableVector3D position,
+                       MutableVector3D center,
+                       MutableVector3D up) {
+    setCartesianPosition(position);
+    setCenter(center);
+    setUp(up);
+  }
+
+  void getLookAtParamsInto(MutableVector3D& position,
+                           MutableVector3D& center,
+                           MutableVector3D& up) {
+    position.copyFrom(_position);
+    center.copyFrom(_center);
+    up.copyFrom(_up);
+  }
+
+  void getModelViewMatrixInto(MutableMatrix44D& matrix) {
+    matrix.copyValue(getModelViewMatrix());
+  }
+
+  void getViewPortInto(MutableVector2I& viewport) {
+    viewport.set(_viewPortWidth, _viewPortHeight);
+  }
+
+  static void pixel2RayInto(const MutableVector3D& position,
+                            const Vector2F& pixel,
+                            const MutableVector2I& viewport,
+                            const MutableMatrix44D& modelViewMatrix,
+                            MutableVector3D& ray);
+
+  static const Vector3D pixel2Ray(const MutableVector3D& position,
+                                  const Vector2F& pixel,
+                                  const MutableVector2I& viewport,
+                                  const MutableMatrix44D& modelViewMatrix);
+
+
 private:
+
+  Camera(const Camera &that);
+
+  //  Camera(const Camera &that):
+  //  _viewPortWidth(that._viewPortWidth),
+  //  _viewPortHeight(that._viewPortHeight),
+  //  _planet(that._planet),
+  //  _position(that._position),
+  //  _center(that._center),
+  //  _up(that._up),
+  //  _dirtyFlags(that._dirtyFlags),
+  //  _frustumData(that._frustumData),
+  //  _projectionMatrix(that._projectionMatrix),
+  //  _modelMatrix(that._modelMatrix),
+  //  _modelViewMatrix(that._modelViewMatrix),
+  //  _cartesianCenterOfView(that._cartesianCenterOfView),
+  //  _geodeticCenterOfView((that._geodeticCenterOfView == NULL) ? NULL : new Geodetic3D(*that._geodeticCenterOfView)),
+  //  _frustum((that._frustum == NULL) ? NULL : new Frustum(*that._frustum)),
+  //  _frustumInModelCoordinates((that._frustumInModelCoordinates == NULL) ? NULL : new Frustum(*that._frustumInModelCoordinates)),
+  //  _camEffectTarget(new CameraEffectTarget()),
+  //  _geodeticPosition((that._geodeticPosition == NULL) ? NULL: new Geodetic3D(*that._geodeticPosition)),
+  //  _angle2Horizon(that._angle2Horizon),
+  //  _normalizedPosition(that._normalizedPosition),
+  //  _tanHalfVerticalFieldOfView(NAND),
+  //  _tanHalfHorizontalFieldOfView(NAND),
+  //  _timestamp(that._timestamp)
+  //  {
+  //  }
+
+  mutable long long _timestamp;
+
+  mutable MutableVector3D _ray0;
+  mutable MutableVector3D _ray1;
+
   //  const Angle getHeading(const Vector3D& normal) const;
 
   //IF A NEW ATTRIBUTE IS ADDED CHECK CONSTRUCTORS AND RESET() !!!!
@@ -343,7 +416,6 @@ private:
   mutable Frustum*         _frustumInModelCoordinates;
   double                   _tanHalfVerticalFieldOfView;
   double                   _tanHalfHorizontalFieldOfView;
-  double                   _rollInRadians;
 
   //The Camera Effect Target
   class CameraEffectTarget: public EffectTarget {
@@ -358,15 +430,17 @@ private:
 
   void setCenter(const MutableVector3D& v) {
     if (!v.equalTo(_center)) {
-      _center = MutableVector3D(v);
-      _dirtyFlags.setAll(true);
+      _timestamp++;
+      _center.copyFrom(v);
+      _dirtyFlags.setAllDirty();
     }
   }
 
   void setUp(const MutableVector3D& v) {
     if (!v.equalTo(_up)) {
-      _up = MutableVector3D(v);
-      _dirtyFlags.setAll(true);
+      _timestamp++;
+      _up.copyFrom(v);
+      _dirtyFlags.setAllDirty();
     }
   }
 
@@ -383,7 +457,8 @@ private:
   MutableVector3D   _getCartesianCenterOfView() const {
     if (_dirtyFlags._cartesianCenterOfViewDirty) {
       _dirtyFlags._cartesianCenterOfViewDirty = false;
-      _cartesianCenterOfView = centerOfViewOnPlanet().asMutableVector3D();
+      //      _cartesianCenterOfView = centerOfViewOnPlanet().asMutableVector3D();
+      _cartesianCenterOfView.copyFrom(centerOfViewOnPlanet());
     }
     return _cartesianCenterOfView;
   }
@@ -411,10 +486,10 @@ private:
   FrustumData calculateFrustumData() const;
 
   // opengl projection matrix
-  const MutableMatrix44D& getProjectionMatrix() const{
+  const MutableMatrix44D& getProjectionMatrix() const {
     if (_dirtyFlags._projectionMatrixDirty) {
       _dirtyFlags._projectionMatrixDirty = false;
-      _projectionMatrix = MutableMatrix44D::createProjectionMatrix(getFrustumData());
+      _projectionMatrix.copyValue(MutableMatrix44D::createProjectionMatrix(getFrustumData()));
     }
     return _projectionMatrix;
   }
@@ -423,7 +498,7 @@ private:
   const MutableMatrix44D& getModelMatrix() const {
     if (_dirtyFlags._modelMatrixDirty) {
       _dirtyFlags._modelMatrixDirty = false;
-      _modelMatrix = MutableMatrix44D::createModelMatrix(_position, _center, _up);
+      _modelMatrix.copyValue(MutableMatrix44D::createModelMatrix(_position, _center, _up));
     }
     return _modelMatrix;
   }
@@ -432,17 +507,14 @@ private:
   const MutableMatrix44D& getModelViewMatrix() const {
     if (_dirtyFlags._modelViewMatrixDirty) {
       _dirtyFlags._modelViewMatrixDirty = false;
-      _modelViewMatrix = getProjectionMatrix().multiply(getModelMatrix());
+      //_modelViewMatrix.copyValue(getProjectionMatrix().multiply(getModelMatrix()));
+      _modelViewMatrix.copyValueOfMultiplication(getProjectionMatrix(), getModelMatrix());
     }
     return _modelViewMatrix;
   }
   
-  
-  
   void setCameraCoordinateSystem(const CoordinateSystem& rs);
   
 };
-
-
 
 #endif

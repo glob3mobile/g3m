@@ -28,7 +28,7 @@ package org.glob3.mobile.generated;
 public class GEOFeature extends GEOObject
 {
   private final JSONBaseObject _id;
-  private GEOGeometry _geometry;
+  private final GEOGeometry _geometry;
   private final JSONObject _properties;
 
 
@@ -51,7 +51,6 @@ public class GEOFeature extends GEOObject
        _geometry.dispose();
     if (_properties != null)
        _properties.dispose();
-  
     super.dispose();
   }
 
@@ -65,11 +64,11 @@ public class GEOFeature extends GEOObject
     return _geometry;
   }
 
-  public final void symbolize(G3MRenderContext rc, GEOSymbolizer symbolizer, MeshRenderer meshRenderer, ShapesRenderer shapesRenderer, MarksRenderer marksRenderer, GEOTileRasterizer geoTileRasterizer)
+  public final void symbolize(G3MRenderContext rc, GEOSymbolizer symbolizer, MeshRenderer meshRenderer, ShapesRenderer shapesRenderer, MarksRenderer marksRenderer, GEOVectorLayer geoVectorLayer)
   {
     if (_geometry != null)
     {
-      _geometry.symbolize(rc, symbolizer, meshRenderer, shapesRenderer, marksRenderer, geoTileRasterizer);
+      _geometry.symbolize(rc, symbolizer, meshRenderer, shapesRenderer, marksRenderer, geoVectorLayer);
     }
   }
 
@@ -83,7 +82,12 @@ public class GEOFeature extends GEOObject
 
   public final long getCoordinatesCount()
   {
-    return _geometry.getCoordinatesCount();
+    return (_geometry == null) ? 0 : _geometry.getCoordinatesCount();
+  }
+
+  public final GEOFeature deepCopy()
+  {
+    return new GEOFeature((_id == null) ? null : _id.deepCopy(), (_geometry == null) ? null : _geometry.deepCopy(), (_properties == null) ? null : _properties.deepCopy());
   }
 
 }

@@ -40,20 +40,19 @@ AbstractMesh::~AbstractMesh() {
 #ifdef JAVA_CODE
   super.dispose();
 #endif
-
 }
 
 AbstractMesh::AbstractMesh(const int primitive,
                            bool owner,
                            const Vector3D& center,
-                           IFloatBuffer* vertices,
+                           const IFloatBuffer* vertices,
                            float lineWidth,
                            float pointSize,
                            const Color* flatColor,
-                           IFloatBuffer* colors,
+                           const IFloatBuffer* colors,
                            const float colorsIntensity,
                            bool depthTest,
-                           IFloatBuffer* normals) :
+                           const IFloatBuffer* normals) :
 _primitive(primitive),
 _owner(owner),
 _vertices(vertices),
@@ -139,7 +138,7 @@ bool AbstractMesh::isTransparent(const G3MRenderContext* rc) const {
 
 void AbstractMesh::createGLState() {
 
-  _glState->addGLFeature(new GeometryGLFeature(_vertices,   // The attribute is a float vector of 4 elements
+  _glState->addGLFeature(new GeometryGLFeature(_vertices,    // The attribute is a float vector of 4 elements
                                                3,            // Our buffer contains elements of 3
                                                0,            // Index 0
                                                false,        // Not normalized
@@ -150,7 +149,7 @@ void AbstractMesh::createGLState() {
                                                _lineWidth,
                                                true,
                                                _pointSize),
-                         false);   //POINT SIZE
+                         false);
 
   if (_normals != NULL) {
     _glState->addGLFeature(new VertexNormalGLFeature(_normals, 3, 0, false, 0),
@@ -175,19 +174,20 @@ void AbstractMesh::createGLState() {
   }
 
   if (_colors != NULL) {
-    _glState->addGLFeature(new ColorGLFeature(_colors,   //The attribute is a float vector of 4 elements RGBA
-                                              4,            //Our buffer contains elements of 4
-                                              0,            //Index 0
-                                              false,        //Not normalized
-                                              0,            //Stride 0
-                                              true, GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha()), false);
+    _glState->addGLFeature(new ColorGLFeature(_colors,      // The attribute is a float vector of 4 elements RGBA
+                                              4,            // Our buffer contains elements of 4
+                                              0,            // Index 0
+                                              false,        // Not normalized
+                                              0,            // Stride 0
+                                              true, GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha()),
+                           false);
 
   }
 
 }
 
 void AbstractMesh::rawRender(const G3MRenderContext* rc,
-                             const GLState* parentGLState) const{
+                             const GLState* parentGLState) const {
   _glState->setParent(parentGLState);
   rawRender(rc);
 
@@ -200,7 +200,8 @@ void AbstractMesh::rawRender(const G3MRenderContext* rc,
       if (_normalsMesh != NULL) {
         //_normalsMesh->render(rc, parentGLState);
       }
-    } else{
+    }
+    else {
       if (_normalsMesh != NULL) {
         delete _normalsMesh;
         _normalsMesh = NULL;
@@ -210,7 +211,7 @@ void AbstractMesh::rawRender(const G3MRenderContext* rc,
 }
 
 
-Mesh* AbstractMesh::createNormalsMesh() const{
+Mesh* AbstractMesh::createNormalsMesh() const {
 
   DirectMesh* verticesMesh = new DirectMesh(GLPrimitive::points(),
                                             false,
@@ -233,11 +234,10 @@ Mesh* AbstractMesh::createNormalsMesh() const{
 
   const int size = _vertices->size();
   for (int i = 0; i < size; i+=3) {
+    const Vector3D v(_vertices->get(i), _vertices->get(i+1), _vertices->get(i+2));
+    const Vector3D n(_normals->get(i),  _normals->get(i+1),  _normals->get(i+2));
 
-    Vector3D v(_vertices->get(i), _vertices->get(i+1), _vertices->get(i+2));
-    Vector3D n(_normals->get(i), _normals->get(i+1), _normals->get(i+2));
-
-    Vector3D v_n = v.add(n.normalized().times(normalsSize));
+    const Vector3D v_n = v.add(n.normalized().times(normalsSize));
 
     fbb->add(v);
     fbb->add(v_n);
