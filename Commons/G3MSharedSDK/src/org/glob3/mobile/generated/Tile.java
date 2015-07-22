@@ -237,8 +237,8 @@ public class Tile
   
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#warning store camera-timestamp to avoid recalculation when the camera isn't moving
-  
     final Camera camera = rc.getCurrentCamera();
+  
   
     //LOD Test without mesh
     if (_tessellatorMesh == null)
@@ -262,13 +262,6 @@ public class Tile
       }
     }
   
-    //  if ((_northArcSegmentRatioSquared == 0) ||
-    //      (_southArcSegmentRatioSquared == 0) ||
-    //      (_eastArcSegmentRatioSquared  == 0) ||
-    //      (_westArcSegmentRatioSquared  == 0)) {
-    //    prepareTestLODData( rc->getPlanet() );
-    //  }
-    //
     //Computing distance to tile
     double tileRadius = _tileTessellatorMeshData._radius; // _northEastPoint->sub(*_southWestPoint).length() / 2.0;
     //
@@ -319,25 +312,8 @@ public class Tile
   
     }
   
-    //int texHeight = (int) mu->sqrt(texHeightSquared);
-  
-    //  bool lastLMRCR = _lastMeetsRenderCriteriaResult;
-  
     //CRITERIA
     _lastMeetsRenderCriteriaResult = deviationCriteria && texelCriteria;
-  
-  //  if (_lastMeetsRenderCriteriaResult){
-  //    printf("TILE LOD %d RENDERED\n", _level);
-  //  }
-  
-    //  if (_lastMeetsRenderCriteriaResult && !lastLMRCR){
-    //    printf("Deviation: %f, Distance: %f, Visible deviation: %f pixels.\nMaxTexelWidth: %f, %f pixels per texel\n",
-    //           _tileTessellatorMeshData._deviation,
-    //           distanceToTile,
-    //           visibleDeviation,
-    //           maxTexelWidth,
-    //           maxPixelsPerTexel);
-    //  }
   
     return _lastMeetsRenderCriteriaResult;
   }
@@ -392,139 +368,6 @@ public class Tile
     }
   }
 
-
-  //void Tile::render(const G3MRenderContext* rc,
-  //                  const GLState& parentState,
-  //                  std::vector<Tile*>* toVisitInNextIteration,
-  //                  const Frustum* cameraFrustumInModelCoordinates,
-  //                  TilesStatistics* tilesStatistics,
-  //                  const float verticalExaggeration,
-  //                  const LayerTilesRenderParameters* layerTilesRenderParameters,
-  //                  TileTexturizer* texturizer,
-  //                  const TilesRenderParameters* tilesRenderParameters,
-  //                  ITimer* lastSplitTimer,
-  //                  ElevationDataProvider* elevationDataProvider,
-  //                  const TileTessellator* tessellator,
-  //                  const LayerSet* layerSet,
-  //                  const Sector* renderedSector,
-  //                  bool forceFullRender,
-  //                  long long tileDownloadPriority,
-  //                  double texWidthSquared,
-  //                  double texHeightSquared,
-  //                  double nowInMS,
-  //                  const bool renderTileMeshes,
-  //                  bool logTilesPetitions,
-  //                  std::vector<const Tile*>* tilesStartedRendering,
-  //                  std::vector<std::string>* tilesStoppedRendering){
-  //  
-  //  tilesStatistics->computeTileProcessed(this);
-  //  
-  //  if (verticalExaggeration != _verticalExaggeration) {
-  //    // TODO: verticalExaggeration changed, invalidate tileExtent, Mesh, etc.
-  //    _verticalExaggeration = verticalExaggeration;
-  //  }
-  //  
-  //  const bool tileVisible = isVisible(rc,
-  //                                     cameraFrustumInModelCoordinates,
-  //                                     elevationDataProvider,
-  //                                     renderedSector,
-  //                                     tessellator,
-  //                                     layerTilesRenderParameters,
-  //                                     tilesRenderParameters);
-  //  
-  //  const bool tileMeetsRenderCriteria = meetsRenderCriteria(rc,
-  //                                                           layerTilesRenderParameters,
-  //                                                           texturizer,
-  //                                                           tilesRenderParameters,
-  //                                                           tilesStatistics,
-  //                                                           lastSplitTimer,
-  //                                                           texWidthSquared,
-  //                                                           texHeightSquared,
-  //                                                           nowInMS);
-  //  
-  //  bool rendered = false;
-  //  
-  //  if (tileVisible) {
-  //    setIsVisible(true, texturizer);
-  //    
-  //    tilesStatistics->computeVisibleTile(this);
-  //    
-  //    const bool isRawRender = (
-  //                              (toVisitInNextIteration == NULL) ||
-  //                              tileMeetsRenderCriteria ||
-  //                              (tilesRenderParameters->_incrementalTileQuality && !_textureSolved)
-  //                              );
-  //    
-  //    if (isRawRender) {
-  //      
-  //      const long long tileTexturePriority = (tilesRenderParameters->_incrementalTileQuality
-  //                                             ? tileDownloadPriority + layerTilesRenderParameters->_maxLevel - _level
-  //                                             : tileDownloadPriority + _level);
-  //      
-  //      rendered = true;
-  //      if (renderTileMeshes) {
-  //        
-  //        
-  //        //printf("RENDERING TILE LOD %d\n", _level);
-  //        rawRender(rc,
-  //                  &parentState,
-  //                  texturizer,
-  //                  elevationDataProvider,
-  //                  tessellator,
-  //                  layerTilesRenderParameters,
-  //                  layerSet,
-  //                  tilesRenderParameters,
-  //                  forceFullRender,
-  //                  tileTexturePriority,
-  //                  logTilesPetitions);
-  //      }
-  //      if (tilesRenderParameters->_renderDebug) {
-  //        debugRender(rc, &parentState, tessellator, layerTilesRenderParameters);
-  //      }
-  //      
-  //      tilesStatistics->computeTileRenderered(this);
-  //      
-  //      prune(texturizer, elevationDataProvider, tilesStoppedRendering);
-  //      //TODO: AVISAR CAMBIO DE TERRENO
-  //    }
-  //    else {
-  //      std::vector<Tile*>* subTiles = getSubTiles();
-  //      if (_justCreatedSubtiles) {
-  //        lastSplitTimer->start();
-  //        _justCreatedSubtiles = false;
-  //      }
-  //      
-  //      const size_t subTilesSize = subTiles->size();
-  //      for (size_t i = 0; i < subTilesSize; i++) {
-  //        Tile* subTile = subTiles->at(i);
-  //        toVisitInNextIteration->push_back(subTile);
-  //      }
-  //    }
-  //  }
-  //  else {
-  //    setIsVisible(false, texturizer);
-  //    
-  //    prune(texturizer, elevationDataProvider, tilesStoppedRendering);
-  //    //TODO: AVISAR CAMBIO DE TERRENO
-  //  }
-  //  
-  //  if (_rendered != rendered) {
-  //    _rendered = rendered;
-  //    
-  //    if (_rendered) {
-  //      if (tilesStartedRendering != NULL) {
-  //        tilesStartedRendering->push_back(this);
-  //      }
-  //    }
-  //    else {
-  //      if (tilesStoppedRendering != NULL) {
-  //        tilesStoppedRendering->push_back(_id);
-  //      }
-  //    }
-  //  }
-  //  
-  //}
-  
   private Tile createSubTile(Angle lowerLat, Angle lowerLon, Angle upperLat, Angle upperLon, int level, int row, int column, boolean setParent)
   {
     Tile parent = setParent ? this : null;
@@ -667,6 +510,8 @@ public class Tile
     }
   }
 
+  private long _cameraTimeStampDuringLastLodTest;
+
   public final Sector _sector ;
   public final boolean _mercator;
   public final int _level;
@@ -675,14 +520,6 @@ public class Tile
   public final String _id;
 
   public Tile(TileTexturizer texturizer, Tile parent, Sector sector, boolean mercator, int level, int row, int column, PlanetRenderer planetRenderer)
-  //_northWestPoint(NULL),
-  //_northEastPoint(NULL),
-  //_southWestPoint(NULL),
-  //_southEastPoint(NULL),
-  //_northArcSegmentRatioSquared(0),
-  //_southArcSegmentRatioSquared(0),
-  //_eastArcSegmentRatioSquared(0),
-  //_westArcSegmentRatioSquared(0),
   {
      _texturizer = texturizer;
      _parent = parent;

@@ -34,8 +34,6 @@ public class Sector
     // this value is only used in the method Sector::isBackOriented
     private double _deltaRadiusInRadians;
 
-    private Vector3D _normalizedCartesianCenter;
-
 
     //Special instances
     public static final Sector FULL_SPHERE = Sector.fromDegrees(-90, -180, 90, 180);
@@ -53,8 +51,6 @@ public class Sector
 
     public void dispose()
     {
-      if (_normalizedCartesianCenter != null)
-         _normalizedCartesianCenter.dispose();
     }
 
     public Sector(Geodetic2D lower, Geodetic2D upper)
@@ -65,7 +61,6 @@ public class Sector
        _deltaLongitude = new Angle(upper._longitude.sub(lower._longitude));
        _center = new Geodetic2D(Angle.midAngle(lower._latitude, upper._latitude), Angle.midAngle(lower._longitude, upper._longitude));
        _deltaRadiusInRadians = -1.0;
-       _normalizedCartesianCenter = null;
     //    if (_deltaLatitude._degrees == 0){
     //        printf("NO AREA");
     //    }
@@ -79,19 +74,6 @@ public class Sector
        _deltaLongitude = new Angle(sector._deltaLongitude);
        _center = new Geodetic2D(sector._center);
        _deltaRadiusInRadians = sector._deltaRadiusInRadians;
-        if (sector._normalizedCartesianCenter == null)
-        {
-            _normalizedCartesianCenter = null;
-        }
-        else
-        {
-            final Vector3D normalizedCartesianCenter = sector._normalizedCartesianCenter;
-            _normalizedCartesianCenter = new Vector3D(normalizedCartesianCenter);
-        }
-    
-    //    if (_deltaLatitude._degrees == 0){
-    //        printf("NO AREA");
-    //    }
     }
 
     public final boolean isNan()
@@ -490,14 +472,8 @@ public class Sector
         return _deltaRadiusInRadians;
     }
 
-    public final Vector3D getNormalizedCartesianCenter(Planet planet)
-    {
-      if (_normalizedCartesianCenter == null)
-      {
-        _normalizedCartesianCenter = new Vector3D(planet.toCartesian(_center).normalized());
-      }
-      return _normalizedCartesianCenter;
-    }
+//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
+//    Vector3D getNormalizedCartesianCenter(Planet planet);
 
     public final double getAngularAreaInSquaredDegrees()
     {
