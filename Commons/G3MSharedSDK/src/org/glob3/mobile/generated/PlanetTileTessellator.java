@@ -204,7 +204,7 @@ public class PlanetTileTessellator extends TileTessellator
     Vector3D firstVertex = grid[0][0];
     Vector3D lastVertex = grid[(rx-1) *2][(ry-1) *2];
   
-    double meshDiagonalLength = firstVertex.sublastVertex .length();
+    double meshDiagonalLength = firstVertex.sub(lastVertex).length();
     double maxValidDEMGap = meshDiagonalLength * 0.01;
   
     double deviation = 0;
@@ -249,7 +249,7 @@ public class PlanetTileTessellator extends TileTessellator
           }
   
           //Computing maxVerticesDistance
-          double dist = vertex.subprevLonV .squaredLength();
+          double dist = vertex.sub(prevLonV).squaredLength();
           if (maxVerticesDistanceInLongitudeSquared < dist)
           {
             maxVerticesDistanceInLongitudeSquared = dist;
@@ -287,7 +287,7 @@ public class PlanetTileTessellator extends TileTessellator
   
   
           //Computing maxVerticesDistance
-          double dist = vertex.subprevLatV .squaredLength();
+          double dist = vertex.sub(prevLatV).squaredLength();
           if (maxVerticesDistanceInLatitudeSquared < dist)
           {
             maxVerticesDistanceInLatitudeSquared = dist;
