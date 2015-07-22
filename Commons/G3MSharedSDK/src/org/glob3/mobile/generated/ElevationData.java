@@ -221,8 +221,18 @@ public abstract class ElevationData extends RCObject
     final double dX = u * (_width - 1);
     final double dY = (1.0 - v) * (_height - 1);
   
+  
+    final IMathUtils mu = IMathUtils.instance();
+    final int rX = (int) mu.round(dX);
+    final int rY = (int) mu.round(dY);
+    if (mu.abs(rX - dX) < 0.1 && mu.abs(rY - dY) < 0.1)
+    {
+      return getElevationAt(rX, rY);
+    }
+  
     final int x = (int) dX;
     final int y = (int) dY;
+  
     final int nextX = x + 1;
     final int nextY = y + 1;
     final double alphaY = dY - y;

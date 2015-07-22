@@ -146,6 +146,8 @@ _renderedTilesListFrame(-1),
 _renderTileMeshes(renderTileMeshes),
 _logTilesPetitions(logTilesPetitions),
 _tileRenderingListener(tileRenderingListener),
+_maxDEMDevianceInPixels(3.0),
+_maxTexelSizeInPixels(3.0),
 _touchEventTypeOfTerrainTouchListener(touchEventTypeOfTerrainTouchListener)
 {
   _context = NULL;

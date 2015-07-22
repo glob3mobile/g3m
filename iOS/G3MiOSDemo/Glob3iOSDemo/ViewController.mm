@@ -422,12 +422,12 @@ Mesh* createSectorMesh(const Planet* planet,
   };
   
   Geodetic3D canarias[] = { Geodetic3D::fromDegrees(28.131817, -15.440219, 0),
-  Geodetic3D::fromDegrees(28.947345, -13.523105, 0),
-  Geodetic3D::fromDegrees(28.473802, -13.859360, 0),
-  Geodetic3D::fromDegrees(28.467706, -16.251426, 0),
-  Geodetic3D::fromDegrees(28.701819, -17.762003, 0),
-  Geodetic3D::fromDegrees(28.086595, -17.105796, 0),
-  Geodetic3D::fromDegrees(27.810709, -17.917639, 0)
+    Geodetic3D::fromDegrees(28.947345, -13.523105, 0),
+    Geodetic3D::fromDegrees(28.473802, -13.859360, 0),
+    Geodetic3D::fromDegrees(28.467706, -16.251426, 0),
+    Geodetic3D::fromDegrees(28.701819, -17.762003, 0),
+    Geodetic3D::fromDegrees(28.086595, -17.105796, 0),
+    Geodetic3D::fromDegrees(27.810709, -17.917639, 0)
   };
   
   NonOverlappingMark* mark = new NonOverlappingMark(new DownloaderImageBuilder(URL("file:///g3m-marker.png")),
@@ -1127,6 +1127,11 @@ public:
 //  layerSet->addLayer(MapQuestLayer::newOSM(TimeInterval::fromDays(30)));
   builder.getPlanetRendererBuilder()->setLayerSet(layerSet);
   
+  // builder.getPlanetRendererBuilder()->addTileRasterizer(new DebugTileRasterizer(GFont::monospaced(),
+  //                                                                               Color::red(),
+  //                                                                               false,
+  //                                                                               true));
+  
   const Sector sector = Sector::fromDegrees(40.1540143280790858, -5.8664874640814313,
                                             40.3423148480663158, -5.5116079822178570);
   
@@ -1145,12 +1150,20 @@ public:
 
 - (void) initializeElevationDataProvider: (G3MBuilder_iOS&) builder
 {
-  float verticalExaggeration = 1.0f;
+  float verticalExaggeration = 2.0f;
   builder.getPlanetRendererBuilder()->setVerticalExaggeration(verticalExaggeration);
   
-  ElevationDataProvider* elevationDataProvider = new SingleBilElevationDataProvider(URL("file:///full-earth-2048x1024.bil", false),
-                                                                                    Sector::fullSphere(),
-                                                                                    Vector2I(2048, 1024));
+  //  ElevationDataProvider* elevationDataProvider = new SingleBilElevationDataProvider(URL("file:///full-earth-2048x1024.bil", false),
+  //                                                                                    Sector::fullSphere(),
+  //                                                                                    Vector2I(2048, 1024));
+  
+  ElevationDataProvider* elevationDataProvider = new SingleBilElevationDataProvider(URL("http://data.worldwind.arc.nasa.gov/elev?REQUEST=GetMap&SERVICE=WMS&VERSION=1.3.0&LAYERS=srtm30&STYLES=&FORMAT=image/bil&CRS=EPSG:4326&BBOX=-16.991663136868738,27.9514429482668,-16.079797902493738,28.64790963679534&WIDTH=1000&HEIGHT=1000", false),
+                                                                                    Sector::fromDegrees(27.9514429482668, -16.991663136868738,
+                                                                                                        28.64790963679534, -16.079797902493738 ),
+                                                                                    Vector2I(1000, 1000));
+  
+  
+  
   
   //  ElevationDataProvider* elevationDataProvider = new SingleBilElevationDataProvider(URL("file:///caceres-2008x2032.bil", false),
   //                                                                                    Sector::fromDegrees(                                                                                 39.4642996294239623,                                                                                -6.3829977122432933,                                                                                  39.4829891936013553,-6.3645288909498845),                                                              Vector2I(2008, 2032),0);
@@ -1232,6 +1245,23 @@ public:
 //};
 
 
+- (void) initWithElevations
+{
+  G3MBuilder_iOS builder([self G3MWidget]);
+  
+  ElevationDataProvider* elevationDataProvider = new SingleBilElevationDataProvider(URL("http://data.worldwind.arc.nasa.gov/elev?REQUEST=GetMap&SERVICE=WMS&VERSION=1.3.0&LAYERS=srtm30&STYLES=&FORMAT=image/bil&CRS=EPSG:4326&BBOX=-16.991663136868738,27.9514429482668,-16.079797902493738,28.64790963679534&WIDTH=1000&HEIGHT=1000", false),
+                                                                                    Sector::fromDegrees(27.9514429482668, -16.991663136868738,
+                                                                                                        28.64790963679534, -16.079797902493738 ),
+                                                                                    Vector2I(1000, 1000));
+  
+  builder.getPlanetRendererBuilder()->setVerticalExaggeration(3.0);
+  builder.getPlanetRendererBuilder()->setElevationDataProvider(elevationDataProvider);
+  
+  // initialization
+  builder.initializeWidget();
+}
+
+
 - (void) initCustomizedWithBuilder
 {
   G3MBuilder_iOS builder([self G3MWidget]);
@@ -1241,18 +1271,20 @@ public:
   
   GEOVectorLayer* geoVectorLayer = new GEOVectorLayer();
   
+  //builder.getPlanetRendererBuilder()->addTileRasterizer(new DebugTileRasterizer());
+  //  builder.getPlanetRendererBuilder()->addTileRasterizer(geoTileRasterizer);
   
   bool showingPNOA = true;
   if (showingPNOA){
     Sector sector = Sector::fromDegrees(21, -18, 45, 6);
     std::vector<Geodetic2D*>* coordinates = new std::vector<Geodetic2D*>();
-
+    
     coordinates->push_back( new Geodetic2D( sector.getSW() ) );
     coordinates->push_back( new Geodetic2D( sector.getNW() ) );
     coordinates->push_back( new Geodetic2D( sector.getNE() ) );
     coordinates->push_back( new Geodetic2D( sector.getSE() ) );
     coordinates->push_back( new Geodetic2D( sector.getSW() ) );
-
+    
     //    printf("RESTERIZING: %s\n", _sector->description().c_str());
     
     float dashLengths[] = {};
@@ -1271,7 +1303,41 @@ public:
     
     
     const GEO2DCoordinatesData* coordinatesData = new GEO2DCoordinatesData(coordinates);
+    GEOLineRasterSymbol * symbol = new GEOLineRasterSymbol(coordinatesData, ls);
+    coordinatesData->_release();
     
+    //    geoTileRasterizer->addSymbol(symbol);
+  }
+  
+  if (bool showingTF = true){
+    Sector sector = Sector::fromDegrees(27.9514429482668, -16.991663136868738,
+                                        28.64790963679534, -16.079797902493738 );
+    std::vector<Geodetic2D*>* coordinates = new std::vector<Geodetic2D*>();
+    
+    coordinates->push_back( new Geodetic2D( sector.getSW() ) );
+    coordinates->push_back( new Geodetic2D( sector.getNW() ) );
+    coordinates->push_back( new Geodetic2D( sector.getNE() ) );
+    coordinates->push_back( new Geodetic2D( sector.getSE() ) );
+    coordinates->push_back( new Geodetic2D( sector.getSW() ) );
+    
+    //    printf("RESTERIZING: %s\n", _sector->description().c_str());
+    
+    float dashLengths[] = {};
+    int dashCount = 0;
+    
+    Color c = Color::green();
+    
+    GEO2DLineRasterStyle ls(c, //const Color&     color,
+                            (float)1.0, //const float      width,
+                            CAP_ROUND, // const StrokeCap  cap,
+                            JOIN_ROUND, //const StrokeJoin join,
+                            1,//const float      miterLimit,
+                            dashLengths,//float            dashLengths[],
+                            dashCount,//const int        dashCount,
+                            0);//const int        dashPhase) :
+    
+    
+    const GEO2DCoordinatesData* coordinatesData = new GEO2DCoordinatesData(coordinates);
     GEOLineRasterSymbol * symbol = new GEOLineRasterSymbol(coordinatesData, ls);
     coordinatesData->_release();
     geoVectorLayer->addSymbol(symbol);
@@ -1318,13 +1384,19 @@ public:
   //  builder.getPlanetRendererBuilder()->addVisibleSectorListener(new TestVisibleSectorListener(),
   //                                                               TimeInterval::fromSeconds(3));
   
+  //  builder.getPlanetRendererBuilder()->addTileRasterizer(new DebugTileRasterizer(GFont::monospaced(15),
+  //                                                                                Color::yellow(),
+  //                                                                                true,  // showIDLabel
+  //                                                                                false, // showSectorLabels,
+  //                                                                                true   // showTileBounds
+  //                                                                                ));
   //  builder.getPlanetRendererBuilder()->setIncrementalTileQuality(true);
   
   ProtoRenderer* busyRenderer = new BusyMeshRenderer(Color::newFromRGBA((float)0, (float)0.1, (float)0.2, (float)1));
   builder.setBusyRenderer(busyRenderer);
   
-  ShapesRenderer* shapesRenderer = [self createShapesRenderer: builder.getPlanet()];
-  builder.addRenderer(shapesRenderer);
+  //  ShapesRenderer* shapesRenderer = [self createShapesRenderer: builder.getPlanet()];
+  //  builder.addRenderer(shapesRenderer);
   
   MeshRenderer* meshRenderer = new MeshRenderer();
   builder.addRenderer( meshRenderer );
@@ -1392,14 +1464,14 @@ public:
   if (testingAnimatedMarks){
     
     Mark* animMark = new Mark(URL(URL::FILE_PROTOCOL + "radar-sprite.png"),
-                                Geodetic3D::fromDegrees( 28.099999998178312, -15.41699999885168, 0),
-                                ABSOLUTE,
-                                4.5e+06,
-                                NULL,
-                                true,
-                                NULL,
-                                false);
-
+                              Geodetic3D::fromDegrees( 28.099999998178312, -15.41699999885168, 0),
+                              ABSOLUTE,
+                              4.5e+06,
+                              NULL,
+                              true,
+                              NULL,
+                              false);
+    
     animMark->setOnScreenSizeOnProportionToImage(0.05, 0.1);
     builder.addPeriodicalTask(new TextureAtlasMarkAnimationTask(animMark, 4, 2, 7, TimeInterval::fromMilliseconds(100)));
     
@@ -1422,8 +1494,8 @@ public:
     marksRenderer->addMark(animMark);
     
     Mark* regMark = new Mark("HELLO ANIMATED MARKS!",
-                               Geodetic3D::fromDegrees( 27.599999998178312, -15.41699999885168, 0),
-                               ABSOLUTE);
+                             Geodetic3D::fromDegrees( 27.599999998178312, -15.41699999885168, 0),
+                             ABSOLUTE);
     marksRenderer->addMark(regMark);
     
   }
@@ -1776,12 +1848,12 @@ public:
     
   }
   
-  GInitializationTask* initializationTask = [self createSampleInitializationTask: shapesRenderer
-                                                                     geoRenderer: geoRenderer
-                                                                    meshRenderer: meshRenderer
-                                                                   marksRenderer: marksRenderer
-                                                                          planet: planet];
-  builder.setInitializationTask(initializationTask, true);
+  //  GInitializationTask* initializationTask = [self createSampleInitializationTask: shapesRenderer
+  //                                                                     geoRenderer: geoRenderer
+  //                                                                    meshRenderer: meshRenderer
+  //                                                                   marksRenderer: marksRenderer
+  //                                                                          planet: planet];
+  //  builder.setInitializationTask(initializationTask, true);
   
   //  PeriodicalTask* periodicalTask = [self createSamplePeriodicalTask: &builder];
   //  builder.addPeriodicalTask(periodicalTask);
@@ -1800,6 +1872,10 @@ public:
   // initialization
   builder.initializeWidget();
   //  [self testGenericQuadTree:geoVectorLayer];
+  
+  //TO TENERIFE
+  //  [G3MWidget widget]->setCameraPosition(Geodetic3D::fromDegrees(27.952817142980624, -16.66305498161819, 10000));
+  //  [G3MWidget widget]->setCameraPitch(Angle::fromDegrees(-30));
   
 }
 
@@ -2086,7 +2162,8 @@ private:
     //
     //    const Color color = Color::fromRGBA(0.7, 0, 0, 0.5).wheelStep(7, colorIndex).muchLighter().muchLighter();
     
-    const Color color = Color::fromRGBA(0.85, 0.5, 0.5, 0.75).muchDarker();
+    //    const Color color = Color::fromRGBA(0.7, 0, 0, 0.5).wheelStep(7, colorIndex).muchLighter().muchLighter();
+    const Color color = Color::fromRGBA(0.7, 0, 0, 0.5);
     
     float dashLengths[] = {};
     int dashCount = 0;
@@ -2939,7 +3016,7 @@ public:
 
 - (TilesRenderParameters*) createPlanetRendererParameters
 {
-  const bool renderDebug = false;
+  const bool renderDebug = true;
   const bool useTilesSplitBudget = true;
   const bool forceFirstLevelTilesRenderOnStart = true;
   const bool incrementalTileQuality = false;
@@ -3047,254 +3124,6 @@ public:
   return marksRenderer;
   
 }
-
-- (ShapesRenderer*) createShapesRenderer: (const Planet*) planet
-{
-  ShapesRenderer* shapesRenderer = new ShapesRenderer();
-  Shape* quad1 = new QuadShape(new Geodetic3D(Angle::fromDegrees(37.78333333),
-                                              Angle::fromDegrees(-122 - 2),
-                                              824000 / 2),
-                               RELATIVE_TO_GROUND,
-                               URL("file:///hud.png", false),
-                               //50000, 50000,
-                               663000, 824000,
-                               false);
-  //  Shape* quad1 = new QuadShape(new Geodetic3D(Angle::fromDegrees(37.78333333),
-  //                                              Angle::fromDegrees(-122 - 2),
-  //                                              50000 / 2),
-  //                               RELATIVE_TO_GROUND,
-  //                               URL("file:///hud2.png", false),
-  //                               //50000, 50000,
-  //                               50000, 50000,
-  //                               false);
-  quad1->setPitch(Angle::fromDegrees(90));
-  shapesRenderer->addShape(quad1);
-  
-  Shape* quad2 = new QuadShape(new Geodetic3D(Angle::fromDegrees(37.78333333),
-                                              Angle::fromDegrees(-123),
-                                              8000),
-                               RELATIVE_TO_GROUND,
-                               35000, 75000,
-                               Color::newFromRGBA(1, 0, 1, 0.5),
-                               true);
-  shapesRenderer->addShape(quad2);
-  
-  Shape* circle = new CircleShape(new Geodetic3D(Angle::fromDegrees(38.78333333),
-                                                 Angle::fromDegrees(-123),
-                                                 8000),
-                                  ABSOLUTE,
-                                  50000,
-                                  Color::fromRGBA(1, 1, 0, 0.5));
-  shapesRenderer->addShape(circle);
-  
-  Shape* sphere = new EllipsoidShape(new Geodetic3D(Angle::fromDegrees(40),
-                                                    Angle::fromDegrees(-123.5),
-                                                    8000),
-                                     ABSOLUTE,
-                                     Vector3D(50000, 50000, 50000),
-                                     16,
-                                     0,
-                                     false,
-                                     false,
-                                     Color::fromRGBA(0, 1, 1, 1));
-  shapesRenderer->addShape(sphere);
-  
-  
-  Shape* box = new BoxShape(new Geodetic3D(Angle::fromDegrees(39.78333333),
-                                           Angle::fromDegrees(-122),
-                                           45000),
-                            ABSOLUTE,
-                            Vector3D(20000, 30000, 50000),
-                            2,
-                            Color::fromRGBA(0,    1, 0, 0.5),
-                            Color::newFromRGBA(0, 0.75, 0, 0.75));
-  box->setAnimatedScale(1, 1, 20);
-  shapesRenderer->addShape(box);
-  
-  //    const URL textureURL("file:///world.jpg", false);
-  //
-  //  const double factor = 2e5;
-  //  const Vector3D radius1(factor, factor, factor);
-  //  const Vector3D radius2(factor*1.5, factor*1.5, factor*1.5);
-  //  const Vector3D radiusBox(factor, factor*1.5, factor*2);
-  
-  
-  //  Shape* box1 = new BoxShape(new Geodetic3D(Angle::fromDegrees(0),
-  //                                           Angle::fromDegrees(10),
-  //                                           radiusBox.z()/2),
-  //                            ABSOLUTE,
-  //                            radiusBox,
-  //                            2,
-  //                            Color::fromRGBA(0,    1, 0, 1),
-  //                            Color::newFromRGBA(0, 0.75, 0, 1));
-  //  //box->setAnimatedScale(1, 1, 20);
-  //  shapesRenderer->addShape(box1);
-  //
-  //
-  //    Shape* ellipsoid1 = new EllipsoidShape(new Geodetic3D(Angle::fromDegrees(0),
-  //                                                          Angle::fromDegrees(0),
-  //                                                          radius1._x),
-  //                                           ABSOLUTE,
-  //                                           planet,
-  //                                           URL("file:///world.jpg", false),
-  //                                           radius1,
-  //                                           32,
-  //                                           0,
-  //                                           false,
-  //                                           false
-  //                                           //Color::newFromRGBA(0,    0.5, 0.8, 0.5),
-  //                                           //Color::newFromRGBA(0, 0.75, 0, 0.75)
-  //                                           );
-  //  //ellipsoid1->setScale(2);
-  //    shapesRenderer->addShape(ellipsoid1);
-  //
-  //  Shape* mercator1 = new EllipsoidShape(new Geodetic3D(Angle::fromDegrees(0),
-  //                                                       Angle::fromDegrees(5),
-  //                                                       radius2._x),
-  //                                          ABSOLUTE,
-  //                                          planet,
-  //                                          URL("file:///mercator_debug.png", false),
-  //                                          radius2,
-  //                                          32,
-  //                                          0,
-  //                                          false,
-  //                                          true
-  //                                          //Color::newFromRGBA(0.5,    0.0, 0.8, 0.5),
-  //                                          //Color::newFromRGBA(0, 0.75, 0, 0.75)
-  //                                          );
-  //    shapesRenderer->addShape(mercator1);
-  
-  //  Shape* mercator2 = new EllipsoidShape(new Geodetic3D(Angle::fromDegrees(41),
-  //                                                       Angle::fromDegrees(-117),
-  //                                                       radius._x * 1.1),
-  //                                        URL("file:///mercator.jpg", false),
-  //                                        radius,
-  //                                        32,
-  //                                        0,
-  //                                        true,
-  //                                        true
-  //                                        //Color::newFromRGBA(0.5,    0.0, 0.8, 0.5),
-  //                                        //Color::newFromRGBA(0, 0.75, 0, 0.75)
-  //                                        );
-  //  shapesRenderer->addShape(mercator2);
-  
-  //  Shape* colored = new EllipsoidShape(new Geodetic3D(Angle::fromDegrees(41),
-  //                                                     Angle::fromDegrees(-115),
-  //                                                     radius._x * 1.1),
-  //                                      radius,
-  //                                      16,
-  //                                      1,
-  //                                      true,
-  //                                      Color::newFromRGBA(1, 1, 0, 0.75),
-  //                                      Color::newFromRGBA(0, 0, 0, 1)
-  //                                      );
-  //  shapesRenderer->addShape(colored);
-  
-  //  // to test layout::splitOverCircle
-  //  Geodetic3D* center = new Geodetic3D(Angle::fromDegrees(40.429701),
-  //                                      Angle::fromDegrees(-3.703766),
-  //                                      0);
-  //  double radius = 5e4;
-  //  Vector3D radiusVector(radius, radius, radius);
-  //  Shape* centralSphere = new EllipsoidShape(center,
-  //                                      radiusVector,
-  //                                      8,
-  //                                      1,
-  //                                      false,
-  //                                      false,
-  //                                      Color::newFromRGBA(0.8, 0, 0, 0.5),
-  //                                      Color::newFromRGBA(0, 0, 0, 0.5)
-  //                                      );
-  //  shapesRenderer->addShape(centralSphere);
-  //  int splits = 5;
-  //  std::vector<Geodetic3D*> spheres3D = LayoutUtils::splitOverCircle(planet, *center, 1e6, splits);
-  //  for (int i=0; i<splits; i++) {
-  //    Shape* sphere = new EllipsoidShape(spheres3D[i],
-  //                                       radiusVector,
-  //                                       8,
-  //                                       1,
-  //                                       false,
-  //                                       false,
-  //                                       Color::newFromRGBA(0.0, 0.8, 0, 0.5),
-  //                                       Color::newFromRGBA(0, 0, 0, 0.5)
-  //                                       );
-  //    shapesRenderer->addShape(sphere);
-  //  }
-  //  std::vector<Geodetic2D*> spheres2D = LayoutUtils::splitOverCircle(planet, center->asGeodetic2D(), 1e6, splits, Angle::fromDegrees(36));
-  //  for (int i=0; i<splits; i++) {
-  //    Geodetic3D* centerSplit = new Geodetic3D(*spheres2D[i], 0);
-  //    delete spheres2D[i];
-  //    Shape* sphere = new EllipsoidShape(centerSplit,
-  //                                       radiusVector,
-  //                                       8,
-  //                                       1,
-  //                                       false,
-  //                                       false,
-  //                                       Color::newFromRGBA(0.8, 0.8, 0, 0.5),
-  //                                       Color::newFromRGBA(0, 0, 0, 0.5)
-  //                                       );
-  //    shapesRenderer->addShape(sphere);
-  //  }
-  
-  Image_iOS *image1 = new Image_iOS([[UIImage alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"Icon-72" ofType:@"png"]], NULL);
-  
-  Image_iOS *image2 = new Image_iOS([[UIImage alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"Default-Landscape" ofType:@"png"]], NULL);
-  
-  std::vector<const IImage*> images;
-  images.push_back(image2);
-  images.push_back(image1);
-  
-  std::vector<RectangleF *> srcRs;
-  srcRs.push_back(new RectangleF(0,0,1024,748));
-  srcRs.push_back(new RectangleF(0, 0, 72, 72));
-  
-  std::vector<RectangleF *> destRs;
-  destRs.push_back(new RectangleF(0,0,256,256));
-  destRs.push_back(new RectangleF(0, 128, 64, 64));
-  
-  std::vector<float> transparencies;
-  transparencies.push_back(1.0);
-  transparencies.push_back(0.5);
-  
-  class QuadListener: public IImageListener {
-    ShapesRenderer* _sr;
-  public:
-#warning TODO vtp: probar con canvas los 4 casos de drawImage:
-    QuadListener(ShapesRenderer* sr):_sr(sr) {
-      
-    }
-    
-    void imageCreated(const IImage* image) {
-      
-      Shape* quadImages = new QuadShape(new Geodetic3D(Angle::fromDegrees(28.410728),
-                                                       Angle::fromDegrees(-16.339417),
-                                                       8000),
-                                        RELATIVE_TO_GROUND,
-                                        image,
-                                        49000, 38000,
-                                        false);
-      
-      _sr->addShape(quadImages);
-    }
-  };
-  
-  
-  IImageUtils::combine(Vector2I(256,256),
-                       images,
-                       srcRs,
-                       destRs,
-                       transparencies,
-                       new QuadListener(shapesRenderer), true);
-  
-  for (int i = 0; i < 2; i++) {
-    delete images[i];
-    delete srcRs[i];
-    delete destRs[i];
-  }
-  
-  return shapesRenderer;
-}
-
 
 class SampleSymbolizer : public GEOSymbolizer {
 private:
@@ -3596,6 +3425,7 @@ public:
                                         planet: (const Planet*) planet
 {
   GEOSymbolizer* symbolizer = new SampleSymbolizer(planet);
+  
   
   GEORenderer* geoRenderer = new GEORenderer(symbolizer,
                                              meshRenderer,

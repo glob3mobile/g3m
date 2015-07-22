@@ -314,6 +314,8 @@ public:
 
   double getEstimatedPixelDistance(const Vector3D& point0,
                                    const Vector3D& point1) const;
+  
+  double getPixelsForObjectSize(double distance, double length) const;
 
   inline long long getTimestamp() const {
     return _timestamp;

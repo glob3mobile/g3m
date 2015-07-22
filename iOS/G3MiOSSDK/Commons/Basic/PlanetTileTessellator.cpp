@@ -306,6 +306,7 @@ Sector PlanetTileTessellator::getRenderedSectorForTile(const Tile* tile) const {
 #endif
 }
 
+
 double PlanetTileTessellator::createSurface(const Sector& tileSector,
                                             const Sector& meshSector,
                                             const Vector2I& meshResolution,
@@ -369,11 +370,33 @@ double PlanetTileTessellator::createSurface(const Sector& tileSector,
         
         textCoords.add((float)m_u, (float)m_v);
       }
-      else {
-        Vector2D uv = tileSector.getUVCoordinates(position);
-        textCoords.add(uv);
+      
+      Vector3D newVertex = planet->toCartesian(position, elevation);
+      
+      grid[i][j] = new Vector3D(newVertex);
+      
+      if (i % 2 == 0 && j % 2 == 0){
+        vertices->add(newVertex);
+        
+        //TEXT COORDS
+        if (mercator) {
+          //U
+          const double m_u = tileSector.getUCoordinate(position._longitude);
+          
+          //V
+          const double mercatorGlobalV = MercatorUtils::getMercatorV(position._latitude);
+          const double m_v = (mercatorGlobalV - mercatorUpperGlobalV) / mercatorDeltaGlobalV;
+          
+          textCoords.add((float)m_u, (float)m_v);
+        }
+        else {
+          Vector2D uv = tileSector.getUVCoordinates(position);
+          textCoords.add(uv);
+        }
       }
     }
+    
+    
   }
   
   if (minElevation == mu->maxDouble()) {

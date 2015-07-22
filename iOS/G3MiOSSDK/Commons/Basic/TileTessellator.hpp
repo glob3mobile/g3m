@@ -21,12 +21,29 @@ class Sector;
 
 #include "Vector2I.hpp"
 #include "Vector2F.hpp"
+#include "Vector3D.hpp"
 
 class TileTessellatorMeshData{
 public:
   double _minHeight;
   double _maxHeight;
   double _averageHeight;
+  double _deviation;
+  double _maxVerticesDistanceInLongitude;
+  double _maxVerticesDistanceInLatitude;
+  int _surfaceResolutionX;
+  int _surfaceResolutionY;
+  double _radius;
+  
+  Vector3D* _meshCenter;
+  
+  TileTessellatorMeshData():_meshCenter(NULL){
+    
+  }
+  
+  ~TileTessellatorMeshData(){
+    delete _meshCenter;
+  }
 };
 
 

@@ -294,12 +294,14 @@ private:
   std::list<Tile*> _renderedTiles;
   std::list<Tile*>* getRenderedTilesList(const G3MRenderContext* rc);
   
+  double _maxTexelSizeInPixels;
+  double _maxDEMDevianceInPixels;
+  
   TouchEventType _touchEventTypeOfTerrainTouchListener;
 
 
   std::vector<Tile*> _toVisit;
   std::vector<Tile*> _toVisitInNextIteration;
-
 public:
   PlanetRenderer(TileTessellator*             tessellator,
                  ElevationDataProvider*       elevationDataProvider,

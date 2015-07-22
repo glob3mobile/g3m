@@ -384,7 +384,6 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
 
   private java.util.ArrayList<Tile> _toVisit = new java.util.ArrayList<Tile>();
   private java.util.ArrayList<Tile> _toVisitInNextIteration = new java.util.ArrayList<Tile>();
-
   public PlanetRenderer(TileTessellator tessellator, ElevationDataProvider elevationDataProvider, boolean ownsElevationDataProvider, float verticalExaggeration, TileTexturizer texturizer, LayerSet layerSet, TilesRenderParameters tilesRenderParameters, boolean showStatistics, long tileDownloadPriority, Sector renderedSector, boolean renderTileMeshes, boolean logTilesPetitions, TileRenderingListener tileRenderingListener, ChangedRendererInfoListener changedInfoListener, TouchEventType touchEventTypeOfTerrainTouchListener)
   {
      _tessellator = tessellator;
@@ -410,6 +409,8 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
      _renderTileMeshes = renderTileMeshes;
      _logTilesPetitions = logTilesPetitions;
      _tileRenderingListener = tileRenderingListener;
+     _maxDEMDevianceInPixels = 3.0;
+     _maxTexelSizeInPixels = 3.0;
      _touchEventTypeOfTerrainTouchListener = touchEventTypeOfTerrainTouchListener;
     _context = null;
     _changedInfoListener = changedInfoListener;

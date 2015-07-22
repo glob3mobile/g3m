@@ -32,4 +32,24 @@ public class TileTessellatorMeshData
   public double _minHeight;
   public double _maxHeight;
   public double _averageHeight;
+  public double _deviation;
+  public double _maxVerticesDistanceInLongitude;
+  public double _maxVerticesDistanceInLatitude;
+  public int _surfaceResolutionX;
+  public int _surfaceResolutionY;
+  public double _radius;
+
+  public Vector3D _meshCenter;
+
+  public TileTessellatorMeshData()
+  {
+     _meshCenter = null;
+
+  }
+
+  public void dispose()
+  {
+    if (_meshCenter != null)
+       _meshCenter.dispose();
+  }
 }

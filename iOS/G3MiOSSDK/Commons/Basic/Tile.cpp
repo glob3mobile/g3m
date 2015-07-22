@@ -74,18 +74,18 @@ _verticalExaggeration(0),
 _elevationDataLevelOfTessellatorMesh(-1),
 _lastTileMeshResolutionX(-1),
 _lastTileMeshResolutionY(-1),
-_boundingVolume(NULL),
+//_boundingVolume(NULL),
 _lastMeetsRenderCriteriaTimeInMS(0),
 _planetRenderer(planetRenderer),
 _tessellatorData(NULL),
-_northWestPoint(NULL),
-_northEastPoint(NULL),
-_southWestPoint(NULL),
-_southEastPoint(NULL),
-_northArcSegmentRatioSquared(0),
-_southArcSegmentRatioSquared(0),
-_eastArcSegmentRatioSquared(0),
-_westArcSegmentRatioSquared(0),
+//_northWestPoint(NULL),
+//_northEastPoint(NULL),
+//_southWestPoint(NULL),
+//_southEastPoint(NULL),
+//_northArcSegmentRatioSquared(0),
+//_southArcSegmentRatioSquared(0),
+//_eastArcSegmentRatioSquared(0),
+//_westArcSegmentRatioSquared(0),
 _rendered(false),
 _id( createTileId(level, row, column) )
 {
@@ -303,7 +303,8 @@ const BoundingVolume* Tile::getBoundingVolume(const G3MRenderContext* rc,
       _boundingVolume = mesh->getBoundingVolume();
     }
   }
-  return _boundingVolume;
+  //  }
+  return NULL;
 }
 
 bool Tile::isVisible(const G3MRenderContext* rc,
@@ -1117,7 +1118,7 @@ void Tile::computeTileCorners(const Planet* planet) {
   _southWestPoint = new Vector3D( planet->toCartesian( _sector.getSW(), mediumHeight ) );
   _southEastPoint = new Vector3D( planet->toCartesian( _sector.getSE(), mediumHeight ) );
 }
-
+*/
 Vector2I Tile::getNormalizedPixelsFromPosition(const Geodetic2D& position2D,
                                                const Vector2I& tileDimension) const {
   const IMathUtils* math = IMathUtils::instance();

@@ -581,6 +581,21 @@ public class Camera
     return distanceInMeters * _viewPortHeight / frustumData._top;
   }
 
+  public final double getPixelsForObjectSize(double distance, double objectSize)
+  {
+  
+    FrustumData fd = getFrustumData();
+  
+    final double objSizeAtZNear = (objectSize * fd._znear) / distance; // Meters
+  
+    final double pixelSizeW = (fd._right - fd._left) / _viewPortWidth;
+    final double pixelSizeH = (fd._top - fd._bottom) / _viewPortHeight;
+    final double pixelSize = (pixelSizeW > pixelSizeH)? pixelSizeW : pixelSizeH; //Meters per pixel
+  
+    return objSizeAtZNear / pixelSize; //Pixels
+  
+  }
+
   public final long getTimestamp()
   {
     return _timestamp;
