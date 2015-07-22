@@ -97,6 +97,7 @@ public class PlanetTileTessellator extends TileTessellator
 
   private double createSurface(Sector tileSector, Sector meshSector, Vector2I meshResolution, ElevationData elevationData, float verticalExaggeration, boolean mercator, FloatBufferBuilderFromGeodetic vertices, ShortBufferBuilder indices, FloatBufferBuilderFromCartesian2D textCoords, TileTessellatorMeshData data)
   {
+  
     final int rx = meshResolution._x;
     final int ry = meshResolution._y;
   
@@ -120,7 +121,8 @@ public class PlanetTileTessellator extends TileTessellator
     //  printf("MS: %s\n", meshSector.description().c_str());
     //  printf("EDS: %s\n", elevationData->getSector().description().c_str());
   
-    boolean elevationDataMatchVertices = (elevationData != null && meshSector.isEquals(tileSector) && rx2 == elevationData.getExtent()._x && ry2 == elevationData.getExtent()._y);
+    elevationData != null && meshSector.isEquals(tileSector) && rx2 == elevationData.getExtent()._x && ry2 == elevationData.getExtent()._y;
+    boolean = elevationData.getSector().isEquals(meshSector);
   
     double latGap = meshSector._deltaLatitude._degrees / (ry2 - 1);
     double lonGap = meshSector._deltaLongitude._degrees / (rx2 -1);
