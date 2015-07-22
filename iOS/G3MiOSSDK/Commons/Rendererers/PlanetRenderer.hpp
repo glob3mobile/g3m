@@ -478,11 +478,30 @@ public:
   
   void setChangedRendererInfoListener(ChangedRendererInfoListener* changedInfoListener, const int rendererIdentifier);
   
+  void setLODParameters(double maxTexelSizeInPixels,
+                        double maxDEMDevianceInPixels){
+    
+    if (maxTexelSizeInPixels < 1.0 || maxDEMDevianceInPixels < 1.0){
+      ILogger::instance()->logError("Invalid LOD Parameters");
+      return;
+    }
+    
+    _maxTexelSizeInPixels = maxTexelSizeInPixels;
+    _maxDEMDevianceInPixels = maxDEMDevianceInPixels;
+  }
   const LayerTilesRenderParameters* getLayerTilesRenderParameters();
   
   const Tile* getTileFromTouchEvent(const G3MEventContext* ec, const TouchEvent& touchEvent) const;
   
+  double getMaxDEMDevianceInPixels() const{
+    return _maxDEMDevianceInPixels;
+  }
+  
+  double getMaxTexelSizeInPixels() const{
+    return _maxTexelSizeInPixels;
+  }
 };
 
 
 #endif
+

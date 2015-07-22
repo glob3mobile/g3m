@@ -379,6 +379,11 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
     return _renderedTiles;
   }
 
+  private java.util.ArrayList<TerrainTouchListener> _terrainTouchListeners = new java.util.ArrayList<TerrainTouchListener>();
+
+  private double _maxTexelSizeInPixels;
+  private double _maxDEMDevianceInPixels;
+
   private TouchEventType _touchEventTypeOfTerrainTouchListener;
 
 
@@ -1013,6 +1018,8 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
   public final LayerTilesRenderParameters getLayerTilesRenderParameters()
   {
     if (_layerTilesRenderParametersDirty)
+
+    if (maxTexelSizeInPixels < 1.0 || maxDEMDevianceInPixels < 1.0)
     {
       _errors.clear();
       _layerTilesRenderParameters = null;
@@ -1024,6 +1031,9 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
       _layerTilesRenderParametersDirty = false;
     }
     return _layerTilesRenderParameters;
+
+    _maxTexelSizeInPixels = maxTexelSizeInPixels;
+    _maxDEMDevianceInPixels = maxDEMDevianceInPixels;
   }
 
 
@@ -1042,6 +1052,7 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
   //}
   
   public final Tile getTileFromTouchEvent(G3MEventContext ec, TouchEvent touchEvent)
+  public final double getMaxDEMDevianceInPixels()
   {
   
     final Vector2F pixel = touchEvent.getTouch(0).getPos();

@@ -330,18 +330,45 @@ double PlanetTileTessellator::createSurface(const Sector& tileSector,
   double minElevation = mu->maxDouble();
   double maxElevation = mu->minDouble();
   double averageElevation = 0;
-  for (int j = 0; j < ry; j++) {
-    const double v = (double) j / (ry - 1);
+  
+  int rx2 = rx*2-1;
+  int ry2 = ry*2-1;
+  Vector3D* grid[rx2][ry2];
+  double gridElevation[rx2][ry2];
+  
+  const Planet* planet = vertices->getPlanet();
+  
+  //  printf("MS: %s\n", meshSector.description().c_str());
+  //  printf("EDS: %s\n", elevationData->getSector().description().c_str());
+  
+  bool elevationDataMatchVertices = (elevationData != NULL &&
+                                     meshSector.isEquals(tileSector) &&
+                                     rx2 == elevationData->getExtent()._x &&
+                                     ry2 == elevationData->getExtent()._y);
+  
+  double latGap = meshSector._deltaLatitude._degrees / (ry2 - 1);
+  double lonGap = meshSector._deltaLongitude._degrees / (rx2 -1);
+  double minLat = meshSector._lower._latitude._degrees;
+  double minLon = meshSector._lower._longitude._degrees;
+  
+  for (int j = 0; j < ry2; j++) {     //V = Latitude
     
-    for (int i = 0; i < rx; i++) {
-      const double u = (double) i / (rx - 1);
-      const Geodetic2D position = meshSector.getInnerPoint(u, v);
+    for (int i = 0; i < rx2; i++) {       //U = Longitude
+      
+      const Geodetic2D position = Geodetic2D::fromDegrees(minLat + (latGap * (ry2 - j - 1)), minLon + (lonGap * i));
       double elevation = 0;
       
       if (elevationData != NULL) {
-        const double rawElevation = elevationData->getElevationAt(position);
+        const double rawElevation = elevationDataMatchVertices? elevationData->getElevationAt(i, ry2- j - 1) :
+        elevationData->getElevationAt(position);
         
-        elevation = ISNAN(rawElevation)? 0 : rawElevation * verticalExaggeration;
+        bool nanElev = ISNAN(rawElevation);
+        
+        double meshElevation = rawElevation * verticalExaggeration;
+        
+        elevation = nanElev? 0 : meshElevation;
+        
+        gridElevation[i][j] = meshElevation;
         
         //MIN
         if (elevation < minElevation) {
@@ -356,19 +383,8 @@ double PlanetTileTessellator::createSurface(const Sector& tileSector,
         //AVERAGE
         averageElevation += elevation;
       }
-      
-      vertices->add( position, elevation );
-      
-      //TEXT COORDS
-      if (mercator) {
-        //U
-        const double m_u = tileSector.getUCoordinate(position._longitude);
-        
-        //V
-        const double mercatorGlobalV = MercatorUtils::getMercatorV(position._latitude);
-        const double m_v = (mercatorGlobalV - mercatorUpperGlobalV) / mercatorDeltaGlobalV;
-        
-        textCoords.add((float)m_u, (float)m_v);
+      else{
+        gridElevation[i][j] = 0.0;
       }
       
       Vector3D newVertex = planet->toCartesian(position, elevation);
@@ -399,6 +415,86 @@ double PlanetTileTessellator::createSurface(const Sector& tileSector,
     
   }
   
+  //Analyzing grid //////////////////////////////////////////////////////////////////
+  
+  Vector3D* firstVertex = grid[0][0];
+  Vector3D* lastVertex = grid[(rx-1) *2][(ry-1) *2];
+  
+  double meshDiagonalLength = firstVertex->distanceTo( *lastVertex );
+  double maxValidDEMGap = meshDiagonalLength * 0.01;
+  
+  double deviation = 0;
+  double maxVerticesDistanceInLongitudeSquared = 0;
+  double maxVerticesDistanceInLatitudeSquared = 0;
+  
+  for (int j = 0; j < ry; j++) {
+    for (int i = 0; i < rx; i++) {
+      int lonIndex = i*2;
+      int latIndex = j*2;
+      Vector3D* vertex = grid[lonIndex][latIndex];
+      
+      double currentElevation = gridElevation[lonIndex][latIndex];
+      
+      if (lonIndex > 1){
+        
+        double prevLonElevation = gridElevation[lonIndex - 2][latIndex];
+        bool checkDeviationLon =  !ISNAN(currentElevation) && !ISNAN(prevLonElevation) && (mu->abs(currentElevation - prevLonElevation) < maxValidDEMGap);
+        
+        
+        Vector3D* prevLonV = grid[lonIndex - 2][latIndex];
+        
+        if (checkDeviationLon){
+          
+          double meshInterpolatedLonElevation = (prevLonElevation + currentElevation) / 2.0;
+          double realInterpolatedLonElevation = gridElevation[lonIndex-1][latIndex];
+          double eastDeviation = (meshInterpolatedLonElevation - realInterpolatedLonElevation);
+          
+          if (eastDeviation > deviation){
+            deviation = eastDeviation;
+          }
+          
+        }
+        
+        //Computing maxVerticesDistance
+        double dist = vertex->squaredDistanceTo( *prevLonV );
+        if (maxVerticesDistanceInLongitudeSquared < dist){
+          maxVerticesDistanceInLongitudeSquared = dist;
+        }
+        
+      }
+      
+      if (latIndex > 1){
+        
+        double prevLatElevation = gridElevation[lonIndex][latIndex - 2] ;
+        bool checkDeviationLat = !ISNAN(currentElevation) && !ISNAN(prevLatElevation) && (mu->abs(currentElevation - prevLatElevation) < maxValidDEMGap);
+        
+        Vector3D* prevLatV = grid[lonIndex][latIndex - 2];
+        
+        if (checkDeviationLat){
+          
+          double meshInterpolatedLatElevation = (prevLatElevation + currentElevation) / 2.0;
+          double realInterpolatedLatElevation = gridElevation[lonIndex][latIndex-1];
+          double southDeviation = (meshInterpolatedLatElevation - realInterpolatedLatElevation);
+          
+          if (southDeviation > deviation){
+            deviation = southDeviation;
+          }
+          
+        }
+        
+        
+        //Computing maxVerticesDistance
+        double dist = vertex->squaredDistanceTo( *prevLatV );
+        if (maxVerticesDistanceInLatitudeSquared < dist){
+          maxVerticesDistanceInLatitudeSquared = dist;
+        }
+        
+      }
+      
+    }
+    
+  }
+  
   if (minElevation == mu->maxDouble()) {
     minElevation = 0;
   }
@@ -409,6 +505,21 @@ double PlanetTileTessellator::createSurface(const Sector& tileSector,
   data._minHeight = minElevation;
   data._maxHeight = maxElevation;
   data._averageHeight = averageElevation / (rx * ry);
+  data._deviation = deviation;
+  data._maxVerticesDistanceInLongitude = mu->sqrt(maxVerticesDistanceInLongitudeSquared);
+  data._maxVerticesDistanceInLatitude = mu->sqrt(maxVerticesDistanceInLatitudeSquared);
+  data._surfaceResolutionX = meshResolution._x;
+  data._surfaceResolutionY = meshResolution._y;
+  data._radius = planet->toCartesian(tileSector.getNE()).sub(planet->toCartesian(tileSector.getSW())).length() / 2.0;
+  data._meshCenter = new Vector3D(planet->toCartesian(meshSector._center));
+  
+#ifdef C_CODE
+  for (int j = 0; j < ry2; j++) {
+    for (int i = 0; i < rx2; i++) {
+      delete grid[i][j];
+    }
+  }
+#endif
   
   //INDEX///////////////////////////////////////////////////////////////
   for (short j = 0; j < (ry-1); j++) {
@@ -422,6 +533,9 @@ double PlanetTileTessellator::createSurface(const Sector& tileSector,
     }
     indices.add((short) (jTimesResolution + 2*rx - 1));
   }
+  
+  
+  //printf("DEVIATION: %f\n", deviation);
   
   return minElevation;
 }
@@ -509,7 +623,7 @@ void PlanetTileTessellator::createEastSkirt(const Planet* planet,
                                             double skirtHeight,
                                             FloatBufferBuilderFromGeodetic* vertices,
                                             ShortBufferBuilder& indices,
-                                            FloatBufferBuilderFromCartesian2D& textCoords) const {
+                                            FloatBufferBuilderFromCartesian2D& textCoords) const{
   
   //VERTICES///////////////////////////////////////////////////////////////
   const short firstSkirtVertex = (short) (vertices->size() / 3);

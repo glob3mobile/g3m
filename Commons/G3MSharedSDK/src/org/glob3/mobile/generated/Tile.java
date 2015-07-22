@@ -284,111 +284,29 @@ public class Tile
     }
   
     _lastMeetsRenderCriteriaTimeInMS = nowInMS; //Storing time of result
+  
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#warning store camera-timestamp to avoid recalculation when the camera isn't moving
+    final Camera camera = rc.getCurrentCamera();
+  
+    if ((_northArcSegmentRatioSquared == 0) || (_southArcSegmentRatioSquared == 0) || (_eastArcSegmentRatioSquared == 0) || (_westArcSegmentRatioSquared == 0))
+    {
+      prepareTestLODData(rc.getPlanet());
+    }
   
     final Camera camera = rc.getCurrentCamera();
   
-    //LOD Test without mesh
-    if (_tessellatorMesh == null)
-    {
+    final double distanceInPixelsNorth = camera.getEstimatedPixelDistance(_northWestPoint, _northEastPoint);
+    final double distanceInPixelsSouth = camera.getEstimatedPixelDistance(_southWestPoint, _southEastPoint);
+    final double distanceInPixelsWest = camera.getEstimatedPixelDistance(_northWestPoint, _southWestPoint);
+    final double distanceInPixelsEast = camera.getEstimatedPixelDistance(_northEastPoint, _southEastPoint);
   
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning store camera-timestamp to avoid recalculation when the camera isn't moving
+    final double distanceInPixelsSquaredArcNorth = (distanceInPixelsNorth * distanceInPixelsNorth) * _northArcSegmentRatioSquared;
+    final double distanceInPixelsSquaredArcSouth = (distanceInPixelsSouth * distanceInPixelsSouth) * _southArcSegmentRatioSquared;
+    final double distanceInPixelsSquaredArcWest = (distanceInPixelsWest * distanceInPixelsWest) * _westArcSegmentRatioSquared;
+    final double distanceInPixelsSquaredArcEast = (distanceInPixelsEast * distanceInPixelsEast) * _eastArcSegmentRatioSquared;
   
-      Vector3D ne = rc.getPlanet().toCartesian(_sector.getNE());
-      Vector3D sw = rc.getPlanet().toCartesian(_sector.getSW());
-      double tileRadius = ne.sub(sw).length() / 2.0;
-  
-      Vector3D center = rc.getPlanet().toCartesian(_sector.getCenter());
-      double distanceToTile = camera.getCartesianPosition().sub(center).length();
-      distanceToTile -= tileRadius;
-  
-      double minTexelSize = getMinimumTexelSideSize(rc.getPlanet(), layerTilesRenderParameters);
-      double minTexelSizeInPixels = camera.getPixelsForObjectSize(distanceToTile, minTexelSize);
-      if (minTexelSizeInPixels > _planetRenderer.getMaxTexelSizeInPixels())
-      {
-        System.out.printf("TILE LOD %d DISMISSED\n", _level);
-        return false;
-      }
-    }
-  
-    //  if ((_northArcSegmentRatioSquared == 0) ||
-    //      (_southArcSegmentRatioSquared == 0) ||
-    //      (_eastArcSegmentRatioSquared  == 0) ||
-    //      (_westArcSegmentRatioSquared  == 0)) {
-    //    prepareTestLODData( rc->getPlanet() );
-    //  }
-    //
-    //Computing distance to tile
-    double tileRadius = _tileTessellatorMeshData._radius; // _northEastPoint->sub(*_southWestPoint).length() / 2.0;
-    //
-    //  printf("%f, %f\n", tileRadius, _tileTessellatorMeshData._radius);
-    //
-    Vector3D center = _tileTessellatorMeshData._meshCenter; //rc->getPlanet()->toCartesian(_sector._center);
-    double distanceToTile = camera.getCartesianPosition().distanceTo(center);
-    distanceToTile -= tileRadius;
-  
-    if (distanceToTile < 0) //If we are inside the bounding volume we should split the tile
-    {
-      return false;
-    }
-  
-    final IMathUtils mu = IMathUtils.instance();
-  
-    //Deviation
-    double visibleDeviation = mu.maxDouble();
-    if (distanceToTile > 0.0)
-    {
-      visibleDeviation = camera.getPixelsForObjectSize(distanceToTile, _tileTessellatorMeshData._deviation);
-    }
-  
-    boolean deviationCriteria = visibleDeviation < _planetRenderer.getMaxDEMDevianceInPixels();
-    boolean texelCriteria = false;
-  
-    if (deviationCriteria)
-    {
-  
-      //Pixel size in meters
-      final int texWidth = layerTilesRenderParameters._tileTextureResolution._x; // (int) mu->sqrt(texWidthSquared);
-      final int texelsBetweenVerticesLongitude = texWidth / _tileTessellatorMeshData._surfaceResolutionX;
-      final double maxTexelWidth = _tileTessellatorMeshData._maxVerticesDistanceInLongitude / texelsBetweenVerticesLongitude;
-  
-      final int texHeight = layerTilesRenderParameters._tileTextureResolution._y; // (int) mu->sqrt(texHeightSquared);
-      final int texelsBetweenVerticesLatitude = texHeight / _tileTessellatorMeshData._surfaceResolutionY;
-      final double maxTexelHeight = _tileTessellatorMeshData._maxVerticesDistanceInLatitude / texelsBetweenVerticesLatitude;
-  
-      final double maxTexelSize = (maxTexelHeight > maxTexelWidth) ? maxTexelHeight : maxTexelWidth;
-  
-      double maxPixelsPerTexel = mu.maxDouble();
-      if (maxPixelsPerTexel > 0.0)
-      {
-        maxPixelsPerTexel = camera.getPixelsForObjectSize(distanceToTile, maxTexelSize);
-      }
-  
-      texelCriteria = maxPixelsPerTexel < _planetRenderer.getMaxTexelSizeInPixels();
-  
-    }
-  
-    //int texHeight = (int) mu->sqrt(texHeightSquared);
-  
-    //  bool lastLMRCR = _lastMeetsRenderCriteriaResult;
-  
-    //CRITERIA
-    _lastMeetsRenderCriteriaResult = deviationCriteria && texelCriteria;
-  
-  //  if (_lastMeetsRenderCriteriaResult){
-  //    printf("TILE LOD %d RENDERED\n", _level);
-  //  }
-  
-    //  if (_lastMeetsRenderCriteriaResult && !lastLMRCR){
-    //    printf("Deviation: %f, Distance: %f, Visible deviation: %f pixels.\nMaxTexelWidth: %f, %f pixels per texel\n",
-    //           _tileTessellatorMeshData._deviation,
-    //           distanceToTile,
-    //           visibleDeviation,
-    //           maxTexelWidth,
-    //           maxPixelsPerTexel);
-    //  }
+    _lastMeetsRenderCriteriaResult = ((distanceInPixelsSquaredArcNorth <= texHeightSquared) && (distanceInPixelsSquaredArcSouth <= texHeightSquared) && (distanceInPixelsSquaredArcWest <= texWidthSquared) && (distanceInPixelsSquaredArcEast <= texWidthSquared));
   
     return _lastMeetsRenderCriteriaResult;
   }
@@ -542,6 +460,9 @@ public class Tile
   {
   
     if (_boundingVolume == null)
+    //  if (_boundingVolume == NULL) {
+    Mesh mesh = getTessellatorMesh(rc, elevationDataProvider, tessellator, layerTilesRenderParameters, tilesRenderParameters);
+    if (mesh != null)
     {
       Mesh mesh = getTessellatorMesh(rc, elevationDataProvider, tessellator, layerTilesRenderParameters, tilesRenderParameters, elevationDataRequestPriority);
       if (mesh != null)
@@ -549,8 +470,7 @@ public class Tile
         _boundingVolume = mesh.getBoundingVolume();
       }
     }
-    //  }
-    return null;
+    return _boundingVolume;
   }
 
   private boolean _rendered;
@@ -558,32 +478,6 @@ public class Tile
   private static String createTileId(int level, int row, int column)
   {
     return level + "/" + row + "/" + column;
-  }
-
-
-  private double getMinimumTexelSideSize(Planet planet, LayerTilesRenderParameters layerTilesRenderParameters)
-  {
-  
-    Vector3D ne = planet.toCartesian(_sector.getNE());
-    Vector3D nw = planet.toCartesian(_sector.getNW());
-    Vector3D se = planet.toCartesian(_sector.getSE());
-    //Vector3D sw = planet->toCartesian(_sector.getSW());
-  
-  
-    double lon = ne.sub(nw).length();
-    double lat = se.sub(ne).length();
-  
-    double texelLon = lon / layerTilesRenderParameters.defaultTileTextureResolution()._x;
-    double texelLat = lat / layerTilesRenderParameters.defaultTileTextureResolution()._y;
-  
-    if (texelLat > texelLon)
-    {
-      return texelLat;
-    }
-    else
-    {
-      return texelLon;
-    }
   }
 
   public final Sector _sector ;
@@ -594,15 +488,6 @@ public class Tile
   public final String _id;
 
   public Tile(TileTexturizer texturizer, Tile parent, Sector sector, boolean mercator, int level, int row, int column, PlanetRenderer planetRenderer)
-  //_boundingVolume(NULL),
-  //_northWestPoint(NULL),
-  //_northEastPoint(NULL),
-  //_southWestPoint(NULL),
-  //_southEastPoint(NULL),
-  //_northArcSegmentRatioSquared(0),
-  //_southArcSegmentRatioSquared(0),
-  //_eastArcSegmentRatioSquared(0),
-  //_westArcSegmentRatioSquared(0),
   {
      _texturizer = texturizer;
      _parent = parent;
@@ -628,15 +513,26 @@ public class Tile
      _elevationDataLevelOfTessellatorMesh = -1;
      _lastTileMeshResolutionX = -1;
      _lastTileMeshResolutionY = -1;
+     _boundingVolume = null;
      _lastMeetsRenderCriteriaTimeInMS = 0;
      _planetRenderer = planetRenderer;
      _tessellatorData = null;
+     _northWestPoint = null;
+     _northEastPoint = null;
+     _southWestPoint = null;
+     _southEastPoint = null;
+     _northArcSegmentRatioSquared = 0;
+     _southArcSegmentRatioSquared = 0;
+     _eastArcSegmentRatioSquared = 0;
+     _westArcSegmentRatioSquared = 0;
      _rendered = false;
      _id = createTileId(level, row, column);
   }
 
   public void dispose()
   {
+    //  prune(NULL, NULL);
+  
     if (_debugMesh != null)
        _debugMesh.dispose();
     _debugMesh = null;
@@ -673,11 +569,15 @@ public class Tile
   
     if (_tessellatorData != null)
        _tessellatorData.dispose();
-    //
-    //  delete _northWestPoint;
-    //  delete _northEastPoint;
-    //  delete _southWestPoint;
-    //  delete _southEastPoint;
+  
+    if (_northWestPoint != null)
+       _northWestPoint.dispose();
+    if (_northEastPoint != null)
+       _northEastPoint.dispose();
+    if (_southWestPoint != null)
+       _southWestPoint.dispose();
+    if (_southEastPoint != null)
+       _southEastPoint.dispose();
   }
 
   //Change to public for TileCache
@@ -751,10 +651,6 @@ public class Tile
       _verticalExaggeration = verticalExaggeration;
     }
   
-    final boolean tileVisible = isVisible(rc, cameraFrustumInModelCoordinates, elevationDataProvider, renderedSector, tessellator, layerTilesRenderParameters, tilesRenderParameters);
-  
-    final boolean tileMeetsRenderCriteria = meetsRenderCriteria(rc, layerTilesRenderParameters, texturizer, tilesRenderParameters, tilesStatistics, lastSplitTimer, texWidthSquared, texHeightSquared, nowInMS);
-  
     boolean rendered = false;
   
   
@@ -772,6 +668,18 @@ public class Tile
         _rendered = true;
   
         renderedTiles.addLast(this);
+        rendered = true;
+        if (renderTileMeshes)
+        {
+  
+  
+          //printf("RENDERING TILE LOD %d\n", _level);
+          rawRender(rc, parentState, texturizer, elevationDataProvider, tessellator, layerTilesRenderParameters, layerSet, tilesRenderParameters, forceFullRender, tileTexturePriority, logTilesPetitions);
+        }
+        if (tilesRenderParameters._renderDebug)
+        {
+          debugRender(rc, parentState, tessellator, layerTilesRenderParameters);
+        }
   
         prune(texturizer, elevationDataProvider, tilesStoppedRendering);
         //TODO: AVISAR CAMBIO DE TERRENO
@@ -1016,6 +924,7 @@ public class Tile
         {
           texturizer.tileToBeDeleted(subtile, subtile._texturizedMesh);
         }
+  
         if (subtile != null)
            subtile.dispose();
       }
