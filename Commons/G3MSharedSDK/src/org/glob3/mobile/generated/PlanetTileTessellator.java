@@ -204,7 +204,7 @@ public class PlanetTileTessellator extends TileTessellator
     Vector3D firstVertex = grid[0][0];
     Vector3D lastVertex = grid[(rx-1) *2][(ry-1) *2];
   
-    double meshDiagonalLength = firstVertex.sub(lastVertex).length();
+    double meshDiagonalLength = firstVertex.distanceTo(lastVertex);
     double maxValidDEMGap = meshDiagonalLength * 0.01;
   
     double deviation = 0;
@@ -232,15 +232,11 @@ public class PlanetTileTessellator extends TileTessellator
   
           if (checkDeviationLon)
           {
-            //            Vector3D* realLonV = grid[lonIndex - 1][latIndex];
-  
-            //            Vector3D interpolatedLonV = prevLonV->add( *vertex ).div(2.0);
   
             double meshInterpolatedLonElevation = (prevLonElevation + currentElevation) / 2.0;
             double realInterpolatedLonElevation = gridElevation[lonIndex-1][latIndex];
             double eastDeviation = (meshInterpolatedLonElevation - realInterpolatedLonElevation);
   
-            //            double eastDeviation = realLonV->sub(interpolatedLonV).squaredLength();
             if (eastDeviation > deviation)
             {
               deviation = eastDeviation;
@@ -249,7 +245,7 @@ public class PlanetTileTessellator extends TileTessellator
           }
   
           //Computing maxVerticesDistance
-          double dist = vertex.sub(prevLonV).squaredLength();
+          double dist = vertex.squaredDistanceTo(prevLonV);
           if (maxVerticesDistanceInLongitudeSquared < dist)
           {
             maxVerticesDistanceInLongitudeSquared = dist;
@@ -267,17 +263,11 @@ public class PlanetTileTessellator extends TileTessellator
   
           if (checkDeviationLat)
           {
-            //            Vector3D* realLatV = grid[lonIndex][latIndex - 1];
-  
-            //            Vector3D interpolatedLonV = prevLatV->add( *vertex ).div(2.0);
   
             double meshInterpolatedLatElevation = (prevLatElevation + currentElevation) / 2.0;
             double realInterpolatedLatElevation = gridElevation[lonIndex][latIndex-1];
             double southDeviation = (meshInterpolatedLatElevation - realInterpolatedLatElevation);
   
-  
-  
-            //double southDeviation = realLatV->sub(interpolatedLonV).squaredLength();
             if (southDeviation > deviation)
             {
               deviation = southDeviation;
@@ -287,7 +277,7 @@ public class PlanetTileTessellator extends TileTessellator
   
   
           //Computing maxVerticesDistance
-          double dist = vertex.sub(prevLatV).squaredLength();
+          double dist = vertex.squaredDistanceTo(prevLatV);
           if (maxVerticesDistanceInLatitudeSquared < dist)
           {
             maxVerticesDistanceInLatitudeSquared = dist;

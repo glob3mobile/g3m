@@ -229,7 +229,7 @@ public class Tile
     //  printf("%f, %f\n", tileRadius, _tileTessellatorMeshData._radius);
     //
     Vector3D center = _tileTessellatorMeshData._meshCenter; //rc->getPlanet()->toCartesian(_sector._center);
-    double distanceToTile = camera.getCartesianPosition().subcenter.length();
+    double distanceToTile = camera.getCartesianPosition().distanceTo(center);
     distanceToTile -= tileRadius;
   
     if (distanceToTile < 0) //If we are inside the bounding volume we should split the tile
@@ -473,7 +473,14 @@ public class Tile
     double texelLon = lon / layerTilesRenderParameters.defaultTileTextureResolution()._x;
     double texelLat = lat / layerTilesRenderParameters.defaultTileTextureResolution()._y;
   
-    return texelLat > texelLon != 0? texelLat : texelLon;
+    if (texelLat > texelLon)
+    {
+      return texelLat;
+    }
+    else
+    {
+      return texelLon;
+    }
   }
 
   public final Sector _sector ;
