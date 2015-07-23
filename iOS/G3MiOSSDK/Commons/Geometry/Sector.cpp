@@ -277,6 +277,10 @@ void Sector::rasterize(ICanvas*                   canvas,
   canvas->strokeRectangle(left, top, width, height);
 }
 
+const Vector3D Sector::getNormalizedCartesianCenter(const Planet* planet) const {
+  return Vector3D(planet->toCartesian(_center).normalized());
+}
+
 const GEORasterSymbol* Sector::createGEOSymbol(const Color& c) const {
 
   std::vector<Geodetic2D*>* coordinates = new std::vector<Geodetic2D*>();
