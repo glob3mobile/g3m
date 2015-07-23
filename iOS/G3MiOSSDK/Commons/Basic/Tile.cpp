@@ -202,66 +202,40 @@ Mesh* Tile::getTessellatorMesh(const G3MRenderContext* rc,
   
   if ( (_tessellatorMesh == NULL) || mustUpdate ) {
     
-    if (mustUpdate && _tessellatorMesh != NULL){
-      //ILogger::instance()->logInfo("Updating mesh due to new Elevation Data");
+    if (elevationDataProvider == NULL) {
+      // no elevation data provider, just create a simple mesh without elevation
+      _tessellatorMesh = tessellator->createTileMesh(rc->getPlanet(),
+                                                     layerTilesRenderParameters->_tileMeshResolution,
+                                                     this,
+                                                     NULL,
+                                                     _verticalExaggeration,
+                                                     tilesRenderParameters->_renderDebug,
+                                                     _tileTessellatorMeshData);
+    }
+    else {
+      Mesh* tessellatorMesh = tessellator->createTileMesh(rc->getPlanet(),
+                                                          layerTilesRenderParameters->_tileMeshResolution,
+                                                          this,
+                                                          _elevationData,
+                                                          _verticalExaggeration,
+                                                          tilesRenderParameters->_renderDebug,
+                                                          _tileTessellatorMeshData);
       
-      //Tessellator mesh is going to change, thus reference to _boundingVolume is sent to oblivion
-      
-      const Planet* planet = rc->getPlanet();
-      
-      tessellator->updateSurface(_tessellatorMesh,
-                                 this,
-                                 layerTilesRenderParameters->_tileMeshResolution,
-                                 planet,
-                                 _elevationData,
-                                 _verticalExaggeration,
-                                 _tileTessellatorMeshData);
-      
-//      computeTileCorners(planet);
-//      prepareTestLODData(planet);
-      
-      _boundingVolume = NULL;
-    } else{
-      
-      if (elevationDataProvider == NULL) {
-        // no elevation data provider, just create a simple mesh without elevation
-        _tessellatorMesh = tessellator->createTileMesh(rc->getPlanet(),
-                                                       layerTilesRenderParameters->_tileMeshResolution,
-                                                       this,
-                                                       NULL,
-                                                       _verticalExaggeration,
-                                                       tilesRenderParameters->_renderDebug,
-                                                       _tileTessellatorMeshData);
-        
-//        computeTileCorners(rc->getPlanet());
-
+      MeshHolder* meshHolder = (MeshHolder*) _tessellatorMesh;
+      if (meshHolder == NULL) {
+        meshHolder = new MeshHolder(tessellatorMesh);
+        _tessellatorMesh = meshHolder;
       }
       else {
-        Mesh* tessellatorMesh = tessellator->createTileMesh(rc->getPlanet(),
-                                                            layerTilesRenderParameters->_tileMeshResolution,
-                                                            this,
-                                                            _elevationData,
-                                                            _verticalExaggeration,
-                                                            tilesRenderParameters->_renderDebug,
-                                                            _tileTessellatorMeshData);
-        
-        MeshHolder* meshHolder = (MeshHolder*) _tessellatorMesh;
-        if (meshHolder == NULL) {
-          meshHolder = new MeshHolder(tessellatorMesh);
-          _tessellatorMesh = meshHolder;
-        }
-        else {
-          meshHolder->setMesh(tessellatorMesh);
-        }
-        
-//        computeTileCorners(rc->getPlanet());
+        meshHolder->setMesh(tessellatorMesh);
       }
       
-      //      computeTileCorners(rc->getPlanet());
+      //Removing weak reference to Bounding Volume
+      _boundingVolume = NULL;
     }
     
     _elevationDataLevelOfTessellatorMesh = _elevationDataLevel;
-
+    
     //Notifying when the tile is first created and every time the elevation data changes
     _planetRenderer->sectorElevationChanged(_elevationData);
   }
@@ -366,14 +340,13 @@ bool Tile::meetsRenderCriteria(const G3MRenderContext* rc,
   }
   
   _lastMeetsRenderCriteriaTimeInMS = nowInMS; //Storing time of result
-
+  
 #warning store camera-timestamp to avoid recalculation when the camera isn't moving
   const Camera* camera = rc->getCurrentCamera();
-
+  
   
   //LOD Test without mesh
   if (_tessellatorMesh == NULL){
-    
     
     Vector3D ne = rc->getPlanet()->toCartesian(_sector.getNE());
     Vector3D sw = rc->getPlanet()->toCartesian(_sector.getSW());
@@ -400,19 +373,28 @@ bool Tile::meetsRenderCriteria(const G3MRenderContext* rc,
   double distanceToTile = camera->getCartesianPosition().distanceTo( *center );
   distanceToTile -= tileRadius;
   
-  if (distanceToTile < 0){ //If we are inside the bounding volume we should split the tile
-    return false;
-  }
+  bool insideBoundingSphere = distanceToTile < 0;
+  
+  //  if (insideBoundingSphere){ //If we are inside the bounding volume we should split the tile
+  //    return false;
+  //  }
   
   const IMathUtils* mu = IMathUtils::instance();
   
-  //Deviation
-  double visibleDeviation = mu->maxDouble();
-  if (distanceToTile > 0.0){
-    visibleDeviation = camera->getPixelsForObjectSize(distanceToTile, _tileTessellatorMeshData._deviation);
+  bool deviationCriteria = true;
+  
+  if (insideBoundingSphere){
+    
+    //Deviation
+    double visibleDeviation = mu->maxDouble();
+    if (distanceToTile > 0.0){
+      visibleDeviation = camera->getPixelsForObjectSize(distanceToTile, _tileTessellatorMeshData._deviation);
+    }
+    
+    deviationCriteria = visibleDeviation < _planetRenderer->getMaxDEMDevianceInPixels();
+    
   }
   
-  bool deviationCriteria = visibleDeviation < _planetRenderer->getMaxDEMDevianceInPixels();
   bool texelCriteria = false;
   
   if (deviationCriteria){
@@ -436,7 +418,11 @@ bool Tile::meetsRenderCriteria(const G3MRenderContext* rc,
     texelCriteria = maxPixelsPerTexel < _planetRenderer->getMaxTexelSizeInPixels();
     
   }
-
+  
+  if (_lastMeetsRenderCriteriaResult != deviationCriteria  && texelCriteria){
+    printf("Tile %d, %d, %d changed LoD\n", _level, _row, _column);
+  }
+  
   //CRITERIA
   _lastMeetsRenderCriteriaResult = deviationCriteria  && texelCriteria;
   
@@ -656,7 +642,7 @@ void Tile::deleteTexturizedMesh(TileTexturizer* texturizer) {
   // in this case, the mesh is always loaded (as well as its texture) to be the last option
   // falback texture for any tile
   if ((_parent != NULL) && (_texturizedMesh != NULL)) {
-
+    
     if (texturizer != NULL) {
       texturizer->tileMeshToBeDeleted(this, _texturizedMesh);
     }
@@ -1001,8 +987,7 @@ void Tile::updateQuadTree(const G3MRenderContext* rc,
     
     tilesStatistics->computeVisibleTile(this);
     
-    const bool isRawRender = (
-                              meetsRenderCriteria(rc,
+    const bool isRawRender = (meetsRenderCriteria(rc,
                                                   layerTilesRenderParameters,
                                                   texturizer,
                                                   tilesRenderParameters,
@@ -1011,8 +996,7 @@ void Tile::updateQuadTree(const G3MRenderContext* rc,
                                                   texWidthSquared,
                                                   texHeightSquared,
                                                   nowInMS) ||
-                              (tilesRenderParameters->_incrementalTileQuality && !_textureSolved)
-                              );
+                              (tilesRenderParameters->_incrementalTileQuality && !_textureSolved));
     
     if (isRawRender) {
       
@@ -1050,29 +1034,29 @@ void Tile::updateQuadTree(const G3MRenderContext* rc,
         Tile* subTile = subTiles->at(i);
         
         subTile->updateQuadTree(rc,
-                                   /* parentState,*/ renderedTiles,
-                                   planet,
-                                   cameraNormalizedPosition,
-                                   cameraAngle2HorizonInRadians,
-                                   cameraFrustumInModelCoordinates,
-                                   tilesStatistics,
-                                   verticalExaggeration,
-                                   layerTilesRenderParameters,
-                                   texturizer,
-                                   tilesRenderParameters,
-                                   lastSplitTimer,
-                                   elevationDataProvider,
-                                   tessellator,
-                                   layerSet,
-                                   renderedSector,
-                                   isForcedFullRender,
-                                   texturePriority,
-                                   texWidthSquared,
-                                   texHeightSquared,
-                                   nowInMS,
-                                   tileDownloadPriority,
-                                   tilesStartedRendering,
-                                   tilesStoppedRendering);
+                                /* parentState,*/ renderedTiles,
+                                planet,
+                                cameraNormalizedPosition,
+                                cameraAngle2HorizonInRadians,
+                                cameraFrustumInModelCoordinates,
+                                tilesStatistics,
+                                verticalExaggeration,
+                                layerTilesRenderParameters,
+                                texturizer,
+                                tilesRenderParameters,
+                                lastSplitTimer,
+                                elevationDataProvider,
+                                tessellator,
+                                layerSet,
+                                renderedSector,
+                                isForcedFullRender,
+                                texturePriority,
+                                texWidthSquared,
+                                texHeightSquared,
+                                nowInMS,
+                                tileDownloadPriority,
+                                tilesStartedRendering,
+                                tilesStoppedRendering);
       }
     }
   }
@@ -1085,16 +1069,16 @@ void Tile::updateQuadTree(const G3MRenderContext* rc,
   
   if (_rendered != rendered) {
     _rendered = rendered;
-      if (_rendered) {
-        if (tilesStartedRendering != NULL){
-          tilesStartedRendering->push_back(this);
-        }
+    if (_rendered) {
+      if (tilesStartedRendering != NULL){
+        tilesStartedRendering->push_back(this);
       }
-      else {
-        if (tilesStoppedRendering != NULL){
-          tilesStoppedRendering->push_back(_id);
-        }
+    }
+    else {
+      if (tilesStoppedRendering != NULL){
+        tilesStoppedRendering->push_back(_id);
       }
+    }
   }
   
 }

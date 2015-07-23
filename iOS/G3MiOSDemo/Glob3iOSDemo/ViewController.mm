@@ -335,6 +335,7 @@ Mesh* createSectorMesh(const Planet* planet,
   LayerSet* layerSet = new LayerSet();
   layerSet->addLayer(MapQuestLayer::newOSM(TimeInterval::fromDays(30)));
   builder.getPlanetRendererBuilder()->setLayerSet(layerSet);
+  builder.getPlanetRendererBuilder()->setRenderDebug(true);
 
   
 //  WMSBilElevationDataProvider* edp = new WMSBilElevationDataProvider(URL("http://data.worldwind.arc.nasa.gov/elev"),

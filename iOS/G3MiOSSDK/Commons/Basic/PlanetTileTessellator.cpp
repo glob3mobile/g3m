@@ -512,6 +512,10 @@ double PlanetTileTessellator::createSurface(const Sector& tileSector,
   data._surfaceResolutionX = meshResolution._x;
   data._surfaceResolutionY = meshResolution._y;
   data._radius = planet->toCartesian(tileSector.getNE()).sub(planet->toCartesian(tileSector.getSW())).length() / 2.0;
+  
+  if (data._meshCenter != NULL){
+    delete data._meshCenter;
+  }
   data._meshCenter = new Vector3D(planet->toCartesian(meshSector._center));
   
 #ifdef C_CODE
@@ -554,6 +558,9 @@ void PlanetTileTessellator::updateSurface(Mesh* mesh,
   const Sector meshSector = getRenderedSectorForTile(tile); // tile->getSector();
   const Vector2I meshResolution = calculateResolution(rawResolution, tile, meshSector);
   
+  
+  IFloatBuffer* vertices = mesh->getVerticesFloatBuffer();
+  
   const int rx = meshResolution._x;
   const int ry = meshResolution._y;
   
@@ -581,6 +588,8 @@ void PlanetTileTessellator::updateSurface(Mesh* mesh,
   double lonGap = meshSector._deltaLongitude._degrees / (rx2 -1);
   double minLat = meshSector._lower._latitude._degrees;
   double minLon = meshSector._lower._longitude._degrees;
+  
+  int count = 0;
   
   for (int j = 0; j < ry2; j++) {     //V = Latitude
     
@@ -621,6 +630,14 @@ void PlanetTileTessellator::updateSurface(Mesh* mesh,
       Vector3D newVertex = planet->toCartesian(position, elevation);
       
       grid[i][j] = new Vector3D(newVertex);
+      
+      if (i % 2 == 0 && j % 2 == 0){
+        vertices->put(count++, (float)newVertex._x);
+        vertices->put(count++, (float)newVertex._y);
+        vertices->put(count++, (float)newVertex._z);
+        
+//        vertices->add(newVertex);
+      }
     }
     
     
