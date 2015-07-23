@@ -416,11 +416,6 @@ bool Tile::meetsRenderCriteria(const G3MRenderContext* rc,
     }
     
     texelCriteria = maxPixelsPerTexel < _planetRenderer->getMaxTexelSizeInPixels();
-    
-  }
-  
-  if (_lastMeetsRenderCriteriaResult != deviationCriteria  && texelCriteria){
-    printf("Tile %d, %d, %d changed LoD\n", _level, _row, _column);
   }
   
   //CRITERIA
