@@ -308,6 +308,12 @@ public class PlanetTileTessellator extends TileTessellator
     data._surfaceResolutionX = meshResolution._x;
     data._surfaceResolutionY = meshResolution._y;
     data._radius = planet.toCartesian(tileSector.getNE()).sub(planet.toCartesian(tileSector.getSW())).length() / 2.0;
+  
+    if (data._meshCenter != null)
+    {
+      if (data._meshCenter != null)
+         data._meshCenter.dispose();
+    }
     data._meshCenter = new Vector3D(planet.toCartesian(meshSector._center));
   
   
@@ -756,6 +762,9 @@ public class PlanetTileTessellator extends TileTessellator
     final Sector meshSector = getRenderedSectorForTile(tile); // tile->getSector();
     final Vector2I meshResolution = calculateResolution(rawResolution, tile, meshSector);
   
+  
+    IFloatBuffer vertices = mesh.getVerticesFloatBuffer();
+  
     final int rx = meshResolution._x;
     final int ry = meshResolution._y;
   
@@ -783,6 +792,8 @@ public class PlanetTileTessellator extends TileTessellator
     double lonGap = meshSector._deltaLongitude._degrees / (rx2 -1);
     double minLat = meshSector._lower._latitude._degrees;
     double minLon = meshSector._lower._longitude._degrees;
+  
+    int count = 0;
   
     for (int j = 0; j < ry2; j++) //V = Latitude
     {
@@ -828,6 +839,15 @@ public class PlanetTileTessellator extends TileTessellator
         Vector3D newVertex = planet.toCartesian(position, elevation);
   
         grid[i][j] = new Vector3D(newVertex);
+  
+        if (i % 2 == 0 && j % 2 == 0)
+        {
+          vertices.put(count++, (float)newVertex._x);
+          vertices.put(count++, (float)newVertex._y);
+          vertices.put(count++, (float)newVertex._z);
+  
+  //        vertices->add(newVertex);
+        }
       }
   
   

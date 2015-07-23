@@ -113,51 +113,28 @@ public class Tile
     if ((_tessellatorMesh == null) || mustUpdate)
     {
   
-      if (mustUpdate && _tessellatorMesh != null)
+      if (elevationDataProvider == null)
       {
-        //ILogger::instance()->logInfo("Updating mesh due to new Elevation Data");
-  
-        //Tessellator mesh is going to change, thus reference to _boundingVolume is sent to oblivion
-  
-        final Planet planet = rc.getPlanet();
-  
-        tessellator.updateSurface(_tessellatorMesh, this, layerTilesRenderParameters._tileMeshResolution, planet, _elevationData, _verticalExaggeration, _tileTessellatorMeshData);
-  
-  //      computeTileCorners(planet);
-  //      prepareTestLODData(planet);
-  
-        _boundingVolume = null;
+        // no elevation data provider, just create a simple mesh without elevation
+        _tessellatorMesh = tessellator.createTileMesh(rc.getPlanet(), layerTilesRenderParameters._tileMeshResolution, this, null, _verticalExaggeration, tilesRenderParameters._renderDebug, _tileTessellatorMeshData);
       }
       else
       {
+        Mesh tessellatorMesh = tessellator.createTileMesh(rc.getPlanet(), layerTilesRenderParameters._tileMeshResolution, this, _elevationData, _verticalExaggeration, tilesRenderParameters._renderDebug, _tileTessellatorMeshData);
   
-        if (elevationDataProvider == null)
+        MeshHolder meshHolder = (MeshHolder) _tessellatorMesh;
+        if (meshHolder == null)
         {
-          // no elevation data provider, just create a simple mesh without elevation
-          _tessellatorMesh = tessellator.createTileMesh(rc.getPlanet(), layerTilesRenderParameters._tileMeshResolution, this, null, _verticalExaggeration, tilesRenderParameters._renderDebug, _tileTessellatorMeshData);
-  
-  //        computeTileCorners(rc->getPlanet());
-  
+          meshHolder = new MeshHolder(tessellatorMesh);
+          _tessellatorMesh = meshHolder;
         }
         else
         {
-          Mesh tessellatorMesh = tessellator.createTileMesh(rc.getPlanet(), layerTilesRenderParameters._tileMeshResolution, this, _elevationData, _verticalExaggeration, tilesRenderParameters._renderDebug, _tileTessellatorMeshData);
-  
-          MeshHolder meshHolder = (MeshHolder) _tessellatorMesh;
-          if (meshHolder == null)
-          {
-            meshHolder = new MeshHolder(tessellatorMesh);
-            _tessellatorMesh = meshHolder;
-          }
-          else
-          {
-            meshHolder.setMesh(tessellatorMesh);
-          }
-  
-  //        computeTileCorners(rc->getPlanet());
+          meshHolder.setMesh(tessellatorMesh);
         }
   
-        //      computeTileCorners(rc->getPlanet());
+        //Removing weak reference to Bounding Volume
+        _boundingVolume = null;
       }
   
       _elevationDataLevelOfTessellatorMesh = _elevationDataLevel;
@@ -244,7 +221,6 @@ public class Tile
     if (_tessellatorMesh == null)
     {
   
-  
       Vector3D ne = rc.getPlanet().toCartesian(_sector.getNE());
       Vector3D sw = rc.getPlanet().toCartesian(_sector.getSW());
       double tileRadius = ne.sub(sw).length() / 2.0;
@@ -271,21 +247,30 @@ public class Tile
     double distanceToTile = camera.getCartesianPosition().distanceTo(center);
     distanceToTile -= tileRadius;
   
-    if (distanceToTile < 0) //If we are inside the bounding volume we should split the tile
-    {
-      return false;
-    }
+    boolean insideBoundingSphere = distanceToTile < 0;
+  
+    //  if (insideBoundingSphere){ //If we are inside the bounding volume we should split the tile
+    //    return false;
+    //  }
   
     final IMathUtils mu = IMathUtils.instance();
   
-    //Deviation
-    double visibleDeviation = mu.maxDouble();
-    if (distanceToTile > 0.0)
+    boolean deviationCriteria = true;
+  
+    if (insideBoundingSphere)
     {
-      visibleDeviation = camera.getPixelsForObjectSize(distanceToTile, _tileTessellatorMeshData._deviation);
+  
+      //Deviation
+      double visibleDeviation = mu.maxDouble();
+      if (distanceToTile > 0.0)
+      {
+        visibleDeviation = camera.getPixelsForObjectSize(distanceToTile, _tileTessellatorMeshData._deviation);
+      }
+  
+      deviationCriteria = visibleDeviation < _planetRenderer.getMaxDEMDevianceInPixels();
+  
     }
   
-    boolean deviationCriteria = visibleDeviation < _planetRenderer.getMaxDEMDevianceInPixels();
     boolean texelCriteria = false;
   
     if (deviationCriteria)
@@ -309,7 +294,6 @@ public class Tile
       }
   
       texelCriteria = maxPixelsPerTexel < _planetRenderer.getMaxTexelSizeInPixels();
-  
     }
   
     //CRITERIA
@@ -719,7 +703,7 @@ public class Tile
           Tile subTile = subTiles.get(i);
   
           subTile.updateQuadTree(rc, renderedTiles, planet, cameraNormalizedPosition, cameraAngle2HorizonInRadians, cameraFrustumInModelCoordinates, tilesStatistics, verticalExaggeration, layerTilesRenderParameters, texturizer, tilesRenderParameters, lastSplitTimer, elevationDataProvider, tessellator, layerSet, renderedSector, isForcedFullRender, texturePriority, texWidthSquared, texHeightSquared, nowInMS, tileDownloadPriority, tilesStartedRendering, tilesStoppedRendering);
-                                     /* parentState,*/
+                                  /* parentState,*/
         }
       }
     }
@@ -734,20 +718,20 @@ public class Tile
     if (_rendered != rendered)
     {
       _rendered = rendered;
-        if (_rendered)
+      if (_rendered)
+      {
+        if (tilesStartedRendering != null)
         {
-          if (tilesStartedRendering != null)
-          {
-            tilesStartedRendering.add(this);
-          }
+          tilesStartedRendering.add(this);
         }
-        else
+      }
+      else
+      {
+        if (tilesStoppedRendering != null)
         {
-          if (tilesStoppedRendering != null)
-          {
-            tilesStoppedRendering.add(_id);
-          }
+          tilesStoppedRendering.add(_id);
         }
+      }
     }
   
   }
