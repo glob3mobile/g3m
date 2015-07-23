@@ -472,8 +472,10 @@ public class Sector
         return _deltaRadiusInRadians;
     }
 
-//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
-//    Vector3D getNormalizedCartesianCenter(Planet planet);
+    public final Vector3D getNormalizedCartesianCenter(Planet planet)
+    {
+      return new Vector3D(planet.toCartesian(_center).normalized());
+    }
 
     public final double getAngularAreaInSquaredDegrees()
     {
