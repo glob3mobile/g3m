@@ -233,7 +233,7 @@ public class Tile
       double minTexelSizeInPixels = camera.getPixelsForObjectSize(distanceToTile, minTexelSize);
       if (minTexelSizeInPixels > _planetRenderer.getMaxTexelSizeInPixels())
       {
-        System.out.printf("TILE LOD %d DISMISSED\n", _level);
+        //System.out.printf("TILE LOD %d DISMISSED\n", _level);
         return false;
       }
     }
