@@ -49,6 +49,8 @@ class ErrorRenderer;
 class G3MRenderContext;
 class Vector3D;
 class IDeviceAttitude;
+//class InfoDisplay;
+class IDeviceLocation;
 
 #include <vector>
 #include <string>
@@ -101,7 +103,8 @@ public:
                              IMathUtils*         mathUtils,
                              IJSONParser*        jsonParser,
                              ITextUtils*         textUtils,
-                             IDeviceAttitude*    devAttitude);
+                             IDeviceAttitude*    devAttitude,
+                             IDeviceLocation*    devLocation);
 
   static G3MWidget* create(GL*                                  gl,
                            IStorage*                            storage,

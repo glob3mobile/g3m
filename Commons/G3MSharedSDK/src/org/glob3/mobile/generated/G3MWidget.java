@@ -3,6 +3,7 @@ public class G3MWidget implements ChangedRendererInfoListener
 {
 
   public static void initSingletons(ILogger logger, IFactory factory, IStringUtils stringUtils, IStringBuilder stringBuilder, IMathUtils mathUtils, IJSONParser jsonParser, ITextUtils textUtils, IDeviceAttitude devAttitude)
+  public static void initSingletons(ILogger logger, IFactory factory, IStringUtils stringUtils, IStringBuilder stringBuilder, IMathUtils mathUtils, IJSONParser jsonParser, ITextUtils textUtils, IDeviceLocation devLocation)
   {
     if (ILogger.instance() == null)
     {
@@ -14,6 +15,7 @@ public class G3MWidget implements ChangedRendererInfoListener
       IJSONParser.setInstance(jsonParser);
       ITextUtils.setInstance(textUtils);
       IDeviceAttitude.setInstance(devAttitude);
+      IDeviceLocation.setInstance(devLocation);
     }
     else
     {

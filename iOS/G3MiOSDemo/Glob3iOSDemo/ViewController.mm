@@ -147,6 +147,7 @@
 #import <G3MiOSSDK/Info.hpp>
 
 #import <G3MiOSSDK/NonOverlappingMarksRenderer.hpp>
+#import <G3MiOSSDK/IDeviceLocation.hpp>
 #import <G3MiOSSDK/NASAElevationDataProvider.hpp>
 #import "StarDomeRenderer.hpp"
 #import "StarsParser.hpp"
@@ -787,13 +788,13 @@ std::vector<StarDomeRenderer*> _sdrs;
   if (showingPNOA){
     Sector sector = Sector::fromDegrees(21, -18, 45, 6);
     std::vector<Geodetic2D*>* coordinates = new std::vector<Geodetic2D*>();
-
+    
     coordinates->push_back( new Geodetic2D( sector.getSW() ) );
     coordinates->push_back( new Geodetic2D( sector.getNW() ) );
     coordinates->push_back( new Geodetic2D( sector.getNE() ) );
     coordinates->push_back( new Geodetic2D( sector.getSE() ) );
     coordinates->push_back( new Geodetic2D( sector.getSW() ) );
-
+    
     //    printf("RESTERIZING: %s\n", _sector->description().c_str());
     
     float dashLengths[] = {};
@@ -1002,6 +1003,7 @@ std::vector<StarDomeRenderer*> _sdrs;
     animMark2->setMarkAnchor(0.5, 1.0);
     marksRenderer->addMark(animMark2);
     builder.addPeriodicalTask(new TextureAtlasMarkAnimationTask(animMark2, 4, 2, 7, TimeInterval::fromMilliseconds(100)));
+    
     
     marksRenderer->addMark(animMark);
     

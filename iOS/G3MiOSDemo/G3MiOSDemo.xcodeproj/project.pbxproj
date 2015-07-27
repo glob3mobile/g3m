@@ -64,6 +64,7 @@
 		CFEA76681666DCB000E89BC7 /* images in Resources */ = {isa = PBXBuildFile; fileRef = CFEA76671666DCB000E89BC7 /* images */; };
 		CFF95F7D158A748F00B56E11 /* plane.png in Resources */ = {isa = PBXBuildFile; fileRef = CFF95F7C158A748F00B56E11 /* plane.png */; };
 		D80C8B491A77B44000E67587 /* anchorWidget.png in Resources */ = {isa = PBXBuildFile; fileRef = D80C8B481A77B44000E67587 /* anchorWidget.png */; };
+		D82DFD981B44009200BF45F8 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D82DFD971B44009200BF45F8 /* CoreLocation.framework */; };
 		D80DF37C1AC5642900A7D92A /* stars_old.csv in Resources */ = {isa = PBXBuildFile; fileRef = D80DF37B1AC5642900A7D92A /* stars_old.csv */; };
 		D83165EE1ABAD435002A8451 /* StarDomeRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D83165EC1ABAD435002A8451 /* StarDomeRenderer.cpp */; };
 		D8317203186C5BAD00522E1B /* simpleStencil.png in Resources */ = {isa = PBXBuildFile; fileRef = D8317202186C5BAD00522E1B /* simpleStencil.png */; };
@@ -183,6 +184,7 @@
 		CFEA76671666DCB000E89BC7 /* images */ = {isa = PBXFileReference; lastKnownFileType = folder; path = images; sourceTree = "<group>"; };
 		CFF95F7C158A748F00B56E11 /* plane.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = plane.png; sourceTree = "<group>"; };
 		D80C8B481A77B44000E67587 /* anchorWidget.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = anchorWidget.png; sourceTree = "<group>"; };
+		D82DFD971B44009200BF45F8 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		D80DF37B1AC5642900A7D92A /* stars_old.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = stars_old.csv; sourceTree = "<group>"; };
 		D83165EC1ABAD435002A8451 /* StarDomeRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = StarDomeRenderer.cpp; sourceTree = "<group>"; };
 		D83165ED1ABAD435002A8451 /* StarDomeRenderer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = StarDomeRenderer.hpp; sourceTree = "<group>"; };
@@ -239,6 +241,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D82DFD981B44009200BF45F8 /* CoreLocation.framework in Frameworks */,
 				D83D604A1AA89BC0002EA2B8 /* CoreMotion.framework in Frameworks */,
 				D8EEF38D1577920B003FEB5E /* Foundation.framework in Frameworks */,
 				CF4027EB1770E90000D5A80C /* Security.framework in Frameworks */,
@@ -278,6 +281,7 @@
 		D8EEF3891577920B003FEB5E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				D82DFD971B44009200BF45F8 /* CoreLocation.framework */,
 				D83D60491AA89BC0002EA2B8 /* CoreMotion.framework */,
 				CF4027E61770E8F100D5A80C /* libicucore.dylib */,
 				44EEB5DF159B2B8B0086F243 /* libsqlite3.dylib */,

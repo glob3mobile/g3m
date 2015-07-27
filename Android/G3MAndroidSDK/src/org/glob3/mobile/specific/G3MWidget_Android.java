@@ -18,6 +18,7 @@ import org.glob3.mobile.generated.Geodetic3D;
 import org.glob3.mobile.generated.ICameraActivityListener;
 import org.glob3.mobile.generated.ICameraConstrainer;
 import org.glob3.mobile.generated.IDeviceAttitude;
+import org.glob3.mobile.generated.IDeviceLocation;
 import org.glob3.mobile.generated.IDownloader;
 import org.glob3.mobile.generated.IFactory;
 import org.glob3.mobile.generated.IJSONParser;
@@ -169,10 +170,10 @@ OnGestureListener {
       final IJSONParser jsonParser = new JSONParser_Android();
       final ITextUtils textUtils = new TextUtils_Android();
       final IDeviceAttitude devAttitude = new DeviceAttitude_Android(getContext());
+      final IDeviceAttitude devAttitude = new DeviceAttitude_Android(getContext());
+      final IDeviceLocation devLoc = new DeviceLocation_Android(getContext(), (long) 10000.0, 1.0f);
 
-      G3MWidget.initSingletons(logger, factory, stringUtils, stringBuilder, mathUtils, jsonParser, textUtils, devAttitude);
-   }
-
+      G3MWidget.initSingletons(logger, factory, stringUtils, stringBuilder, mathUtils, jsonParser, textUtils, devAttitude, devLoc);
 
    @Override
    protected void onSizeChanged(final int w,
