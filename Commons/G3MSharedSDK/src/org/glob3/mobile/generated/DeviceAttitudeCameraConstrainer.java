@@ -17,6 +17,8 @@ package org.glob3.mobile.generated;
 
 
 
+//class ITimer;
+
 
 /**
  Class that applies the Rotation obtained with IDeviceAttitude and IInterfaceOrientation to the camera.
@@ -32,19 +34,37 @@ public class DeviceAttitudeCameraConstrainer implements ICameraConstrainer
   private MutableMatrix44D _attitudeMatrix = new MutableMatrix44D();
   private MutableMatrix44D _camRM = new MutableMatrix44D();
 
+  private boolean _updateLocation;
+  private double _heightOffset;
+  private long _lastLocationUpdateTimeInMS;
+  private ITimer _timer;
 
-  public DeviceAttitudeCameraConstrainer()
+
+  public DeviceAttitudeCameraConstrainer(boolean updateLocation)
   {
+     this(updateLocation, 1000);
+  }
+  public DeviceAttitudeCameraConstrainer(boolean updateLocation, double heightOffset)
+  {
+     _updateLocation = updateLocation;
+     _heightOffset = heightOffset;
+     _lastLocationUpdateTimeInMS = 0;
+     _timer = null;
   
   }
 
   public void dispose()
   {
     IDeviceAttitude.instance().stopTrackingDeviceOrientation();
+    IDeviceLocation.instance().stopTrackingLocation();
+  
+    if (_timer != null)
+       _timer.dispose();
   }
 
   public final boolean onCameraChange(Planet planet, Camera previousCamera, Camera nextCamera)
   {
+  
   
     IDeviceAttitude devAtt = IDeviceAttitude.instance();
   
@@ -82,6 +102,37 @@ public class DeviceAttitudeCameraConstrainer implements ICameraConstrainer
     //Applying to Camera CS
     CoordinateSystem finalCS = camCS.applyRotation(_camRM);
     nextCamera.setCameraCoordinateSystem(finalCS);
+  
+    if (_updateLocation)
+    {
+  
+      if (_timer == null)
+      {
+        _timer = IFactory.instance().createTimer();
+      }
+  
+      long t = IFactory.instance().createTimer().nowInMilliseconds();
+  
+      if ((t - _lastLocationUpdateTimeInMS > 5000) || (_lastLocationUpdateTimeInMS == 0))
+      {
+  
+  
+        IDeviceLocation loc = IDeviceLocation.instance();
+        if (!loc.isTrackingLocation())
+        {
+          loc.startTrackingLocation();
+        }
+  
+        Geodetic3D g = loc.getLocation();
+        if (!g.isNan())
+        {
+          _lastLocationUpdateTimeInMS = t;
+  
+          nextCamera.setGeodeticPosition(Geodetic3D.fromDegrees(g._latitude._degrees, g._longitude._degrees, g._height + _heightOffset));
+        }
+      }
+  
+    }
   
     return true;
   }
