@@ -39,7 +39,7 @@ void G3MAugmentedRealityDemoScene::rawActivate(const G3MContext* context) {
   G3MDemoModel* model     = getModel();
   G3MWidget*    g3mWidget = model->getG3MWidget();
   
-  _dac = new DeviceAttitudeCameraConstrainer();
+  _dac = new DeviceAttitudeCameraConstrainer(true);
   g3mWidget->addCameraConstrainer(_dac);
 
 
