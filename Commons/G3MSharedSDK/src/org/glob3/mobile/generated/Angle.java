@@ -235,14 +235,14 @@ public class Angle
     return Angle.fromDegrees(dif);
   }
 
-<<<<<<< HEAD
   public static double distanceBetweenAnglesInRadians(double r1, double r2)
   {
     double dif1 = IMathUtils.instance().abs(r1-r2);
     if (dif1 > DefineConstants.PI)
        dif1 = 2 *DefineConstants.PI - dif1;
     return dif1;
-=======
+  }
+
   public static Angle fromClockHoursMinutesSeconds(double hours, double minutes, double seconds)
   {
     final double clockMinToDeg = 15.0 / 60.0;
@@ -255,7 +255,6 @@ public class Angle
     //printf("%f + %f + %f\n", hd, md, sd);
 
     return Angle.fromDegrees(hd+md+sd);
->>>>>>> devAttitude
   }
 
   public final Angle normalized()
