@@ -33,10 +33,12 @@ private:
   {
   }
 
-
 public:
   const double _degrees;
   const double _radians;
+  
+  
+  static Angle halfPi;
 
 
   Angle(const Angle& angle):
@@ -64,6 +66,16 @@ public:
   static Angle fromDegreesMinutesSeconds(double degrees,
                                          double minutes,
                                          double seconds) {
+    const IMathUtils* mu = IMathUtils::instance();
+    const double sign = (degrees * minutes * seconds) < 0 ? -1.0 : 1.0;
+    const double d = sign * ( mu->abs(degrees) + ( mu->abs(minutes) / 60.0) + ( mu->abs(seconds) / 3600.0 ) );
+    return Angle( d, TO_RADIANS(d) );
+  }
+  
+  static Angle fromHoursMinutesSeconds(double hours,
+                                         double minutes,
+                                         double seconds) {
+    const double degrees = hours * 15; // 1 hour = 15 degrees
     const IMathUtils* mu = IMathUtils::instance();
     const double sign = (degrees * minutes * seconds) < 0 ? -1.0 : 1.0;
     const double d = sign * ( mu->abs(degrees) + ( mu->abs(minutes) / 60.0) + ( mu->abs(seconds) / 3600.0 ) );
@@ -178,6 +190,21 @@ public:
   
   static double distanceBetweenAnglesInRadians(double r1, double r2);
 
+  static Angle fromClockHoursMinutesSeconds(double hours,
+                                            double minutes,
+                                            double seconds) {
+    const double clockMinToDeg = 15.0 / 60.0;
+    const double clockSecToDeg = clockMinToDeg / 60.0;
+    
+    double hd = hours * 15.0;
+    double md = minutes * clockMinToDeg;
+    double sd = seconds * clockSecToDeg;
+    
+    //printf("%f + %f + %f\n", hd, md, sd);
+    
+    return Angle::fromDegrees(hd+md+sd);
+  }
+
   Angle normalized() const {
     double degrees = _degrees;
     while (degrees < 0) {
@@ -187,6 +214,17 @@ public:
       degrees -= 360;
     }
     return Angle(degrees, TO_RADIANS(degrees));
+  }
+  
+  double getNormalizedDegrees() const {
+    double degrees = _degrees;
+    while (degrees < 0) {
+      degrees += 360;
+    }
+    while (degrees >= 360) {
+      degrees -= 360;
+    }
+    return degrees;
   }
 
   bool isZero() const {

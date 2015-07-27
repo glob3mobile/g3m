@@ -26,7 +26,8 @@ _x(x.normalized()),_y(y.normalized()),_z(z.normalized()), _origin(origin)
   //TODO CHECK CONSISTENCY
   if (!checkConsistency(x, y, z)) {
     ILogger::instance()->logError("Inconsistent CoordinateSystem created.");
-    THROW_EXCEPTION("Inconsistent CoordinateSystem created.");
+#warning DO NOT STOP EXECUTION, I WILL CHECK CONSISTENCY LATER ON
+    //THROW_EXCEPTION("Inconsistent CoordinateSystem created.");
   }
 }
 
@@ -43,7 +44,7 @@ CoordinateSystem::CoordinateSystem(const Vector3D& viewDirection, const Vector3D
   }
 }
 
-bool CoordinateSystem::checkConsistency(const Vector3D& x, const Vector3D& y, const Vector3D& z) {
+bool CoordinateSystem::checkConsistency(const Vector3D& x, const Vector3D& y, const Vector3D& z){
   if (x.isNan() || y.isNan() || z.isNan()) {
     return false;
   }
@@ -208,3 +209,33 @@ bool CoordinateSystem::isEqualsTo(const CoordinateSystem& that) const {
   return _x.isEquals(that._x) && _y.isEquals(that._y) && _z.isEquals(that._z);
 }
 
+
+CoordinateSystem CoordinateSystem::applyRotation(const MutableMatrix44D& m) const{
+  
+  return CoordinateSystem(_x.transformedBy(m, 1.0),
+                          _y.transformedBy(m, 1.0),
+                          _z.transformedBy(m, 1.0),
+                          _origin);//.transformedBy(m, 1.0));
+}
+
+
+MutableMatrix44D CoordinateSystem::getRotationMatrix() const{
+  
+  return MutableMatrix44D(_x._x, _x._y, _x._z, 0,
+                          _y._x, _y._y, _y._z, 0,
+                          _z._x, _z._y, _z._z, 0,
+                          0,0,0,1);
+  
+}
+
+
+void CoordinateSystem::copyValueOfRotationMatrix(MutableMatrix44D& m) const{
+  m.setValue(_x._x, _x._y, _x._z, 0,
+             _y._x, _y._y, _y._z, 0,
+             _z._x, _z._y, _z._z, 0,
+             0,0,0,1);
+}
+
+bool CoordinateSystem::isConsistent() const{
+  return checkConsistency(_x, _y, _z);
+}

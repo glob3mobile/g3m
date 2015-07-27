@@ -6,7 +6,11 @@
 
     <uses-sdk
         android:minSdkVersion="15"
+<<<<<<< HEAD
         android:targetSdkVersion="20" />
+=======
+        android:targetSdkVersion="21" />
+>>>>>>> devAttitude
 
     <uses-feature android:glEsVersion="0x00020000" />
 

@@ -26,7 +26,7 @@ protected:
 public:
 
   StringBuilder_iOS() {
-    _oss.precision(20);
+    _oss.precision(30);
   }
 
   IStringBuilder* addBool(bool b) {

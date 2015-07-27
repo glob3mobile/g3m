@@ -9,6 +9,8 @@
 #import <UIKit/UIKit.h>
 
 #import <G3MiOSSDK/G3MWidget_iOS.h>
+
+#import "DeviceOrientation.h"
 class MapBooBuilder_iOS;
 
 class Sector;
@@ -24,8 +26,12 @@ Mesh* createSectorMesh(const Planet* planet,
   IBOutlet G3MWidget_iOS* G3MWidget;
 
   MapBooBuilder_iOS* _g3mcBuilder;
+  
+  DeviceOrientation* _dO;
 }
 
 @property (retain, nonatomic) G3MWidget_iOS* G3MWidget;
+
+-(void) tick;
 
 @end

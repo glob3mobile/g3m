@@ -59,5 +59,4 @@ public abstract class IStringBuilder
   }
 
   public abstract boolean contentEqualsTo(String that);
-
 }

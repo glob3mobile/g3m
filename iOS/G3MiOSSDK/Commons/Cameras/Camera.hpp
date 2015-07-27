@@ -307,6 +307,11 @@ public:
 
   CoordinateSystem getLocalCoordinateSystem() const;
   CoordinateSystem getCameraCoordinateSystem() const;
+  
+  void setCameraCoordinateSystem(const Vector3D& viewDirection,
+                                 const Vector3D& up);
+
+  
   TaitBryanAngles getHeadingPitchRoll() const;
   void setHeadingPitchRoll(const Angle& heading,
                            const Angle& pitch,
@@ -314,6 +319,9 @@ public:
 
   double getEstimatedPixelDistance(const Vector3D& point0,
                                    const Vector3D& point1) const;
+  
+  
+  void setCameraCoordinateSystem(const CoordinateSystem& rs);
 
   inline long long getTimestamp() const {
     return _timestamp;
@@ -545,8 +553,6 @@ private:
     }
     return _modelViewMatrix;
   }
-  
-  void setCameraCoordinateSystem(const CoordinateSystem& rs);
   
 };
 

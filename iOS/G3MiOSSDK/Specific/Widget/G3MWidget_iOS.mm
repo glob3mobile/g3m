@@ -24,6 +24,7 @@
 #include "Sector.hpp"
 #include "InitialCameraPositionProvider.hpp"
 #include "InfoDisplay.hpp"
+#include "DeviceAttitude_iOS.hpp"
 
 
 @interface G3MWidget_iOS ()
@@ -422,6 +423,8 @@ autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
   IMathUtils*         mathUtils       = new MathUtils_iOS();
   IJSONParser*        jsonParser      = new JSONParser_iOS();
   ITextUtils*         textUtils       = new TextUtils_iOS();
+  IDeviceAttitude*    devAttitude     = new DeviceAttitude_iOS();
+  
 
   G3MWidget::initSingletons(logger,
                             factory,
@@ -429,7 +432,8 @@ autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
                             stringBuilder,
                             mathUtils,
                             jsonParser,
-                            textUtils);
+                            textUtils,
+                            devAttitude);
 }
 
 - (CameraRenderer*)getCameraRenderer {

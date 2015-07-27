@@ -48,7 +48,7 @@ class PlanetRenderer;
 class ErrorRenderer;
 class G3MRenderContext;
 class Vector3D;
-//class InfoDisplay;
+class IDeviceAttitude;
 
 #include <vector>
 #include <string>
@@ -100,7 +100,8 @@ public:
                              IStringBuilder*     stringBuilder,
                              IMathUtils*         mathUtils,
                              IJSONParser*        jsonParser,
-                             ITextUtils*         textUtils);
+                             ITextUtils*         textUtils,
+                             IDeviceAttitude*    devAttitude);
 
   static G3MWidget* create(GL*                                  gl,
                            IStorage*                            storage,
@@ -259,6 +260,10 @@ public:
                            const std::vector<const Info*>& info);
 
   void removeAllPeriodicalTasks();
+  
+  void addCameraConstrainer(ICameraConstrainer* cc);
+  void removeCameraConstrainer(ICameraConstrainer* cc);
+
 
 
 private:

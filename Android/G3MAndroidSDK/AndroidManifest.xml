@@ -6,6 +6,8 @@
 
     <uses-sdk android:minSdkVersion="11" />
     <uses-feature android:glEsVersion="0x00020000"/>
+    
+    <uses-feature android:name="android.hardware.gyroscope"/>
 
     <application
         android:label="G3MAndroidSDK" >

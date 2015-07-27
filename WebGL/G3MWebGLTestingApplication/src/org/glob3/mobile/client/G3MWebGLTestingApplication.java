@@ -10,6 +10,7 @@ import org.glob3.mobile.generated.CameraRotationHandler;
 import org.glob3.mobile.generated.CameraSingleDragHandler;
 import org.glob3.mobile.generated.Color;
 import org.glob3.mobile.generated.ColumnLayoutImageBuilder;
+import org.glob3.mobile.generated.DeviceAttitudeCameraConstrainer;
 import org.glob3.mobile.generated.DownloaderImageBuilder;
 import org.glob3.mobile.generated.G3MContext;
 import org.glob3.mobile.generated.GFont;
@@ -25,6 +26,7 @@ import org.glob3.mobile.generated.MapQuestLayer;
 import org.glob3.mobile.generated.NASAElevationDataProvider;
 import org.glob3.mobile.generated.NonOverlappingMark;
 import org.glob3.mobile.generated.NonOverlappingMarksRenderer;
+import org.glob3.mobile.generated.OSMLayer;
 import org.glob3.mobile.generated.QuadShape;
 import org.glob3.mobile.generated.ShapesRenderer;
 import org.glob3.mobile.generated.TimeInterval;
@@ -52,7 +54,11 @@ public class G3MWebGLTestingApplication implements EntryPoint {
 	public void onModuleLoad() {
 		final Panel g3mWidgetHolder = RootPanel.get(_g3mWidgetHolderId);
 
+<<<<<<< HEAD
 		_g3mWidget = createWidgetStreamingElevations();
+=======
+		_g3mWidget = createWidgetVR();
+>>>>>>> devAttitude
 		g3mWidgetHolder.add(_g3mWidget);
 
 		// // Buenos Aires, there we go!
@@ -64,6 +70,7 @@ public class G3MWebGLTestingApplication implements EntryPoint {
 				28.034468668529083146, -15.904092315837871752, 1634079));
 	}
 
+<<<<<<< HEAD
 	private G3MWidget_WebGL createWidgetStreamingElevations() {
 		final G3MBuilder_WebGL builder = new G3MBuilder_WebGL();
 
@@ -88,6 +95,19 @@ public class G3MWebGLTestingApplication implements EntryPoint {
 		builder.getPlanetRendererBuilder().setElevationDataProvider(edp);
 
 		builder.getPlanetRendererBuilder().setVerticalExaggeration(2.5f);
+=======
+	private G3MWidget_WebGL createWidgetVR() {
+		final G3MBuilder_WebGL builder = new G3MBuilder_WebGL();
+
+		final LayerSet layerSet = new LayerSet();
+		layerSet.addLayer(new OSMLayer(TimeInterval.fromDays(30)));
+		builder.getPlanetRendererBuilder().setLayerSet(layerSet);
+
+		builder.addCameraConstraint(new DeviceAttitudeCameraConstrainer());
+
+		final String proxy = "proxy.php?url=";
+		builder.setDownloader(new Downloader_WebGL(8, 10, proxy));
+>>>>>>> devAttitude
 
 		return builder.createWidget();
 	}
@@ -283,6 +303,7 @@ public class G3MWebGLTestingApplication implements EntryPoint {
 
 		return builder.createWidget();
 	}
+<<<<<<< HEAD
 
 	public CameraRenderer createCameraRenderer() {
 		CameraRenderer cameraRenderer = new CameraRenderer();
@@ -341,5 +362,7 @@ public class G3MWebGLTestingApplication implements EntryPoint {
 	// _widget.setCameraPosition(position);
 	// _widget.setCameraPitch(Angle.fromDegrees(-50.0));
 	// }
+=======
+>>>>>>> devAttitude
 
 }

@@ -2,7 +2,7 @@ package org.glob3.mobile.generated;
 public class G3MWidget implements ChangedRendererInfoListener
 {
 
-  public static void initSingletons(ILogger logger, IFactory factory, IStringUtils stringUtils, IStringBuilder stringBuilder, IMathUtils mathUtils, IJSONParser jsonParser, ITextUtils textUtils)
+  public static void initSingletons(ILogger logger, IFactory factory, IStringUtils stringUtils, IStringBuilder stringBuilder, IMathUtils mathUtils, IJSONParser jsonParser, ITextUtils textUtils, IDeviceAttitude devAttitude)
   {
     if (ILogger.instance() == null)
     {
@@ -13,6 +13,7 @@ public class G3MWidget implements ChangedRendererInfoListener
       IMathUtils.setInstance(mathUtils);
       IJSONParser.setInstance(jsonParser);
       ITextUtils.setInstance(textUtils);
+      IDeviceAttitude.setInstance(devAttitude);
     }
     else
     {
@@ -799,6 +800,25 @@ public class G3MWidget implements ChangedRendererInfoListener
     }
     _periodicalTasks.clear();
   }
+
+  public final void addCameraConstrainer(ICameraConstrainer cc)
+  {
+    _cameraConstrainers.add(cc);
+  }
+  public final void removeCameraConstrainer(ICameraConstrainer cc)
+  {
+    int size = _cameraConstrainers.size();
+    for (int i = 0; i < size; i++)
+    {
+      if (_cameraConstrainers.get(i) == cc)
+      {
+        _cameraConstrainers.remove(i);
+        return;
+      }
+    }
+    ILogger.instance().logError("Could not remove camera constrainer.");
+  }
+
 
 
   private IStorage _storage;

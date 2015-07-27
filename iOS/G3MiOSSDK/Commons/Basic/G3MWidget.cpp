@@ -37,6 +37,7 @@
 #include "SceneLighting.hpp"
 #include "PlanetRenderer.hpp"
 #include "ErrorRenderer.hpp"
+#include "IDeviceAttitude.hpp"
 
 void G3MWidget::initSingletons(ILogger*            logger,
                                IFactory*           factory,
@@ -44,7 +45,8 @@ void G3MWidget::initSingletons(ILogger*            logger,
                                IStringBuilder*     stringBuilder,
                                IMathUtils*         mathUtils,
                                IJSONParser*        jsonParser,
-                               ITextUtils*         textUtils) {
+                               ITextUtils*         textUtils,
+                               IDeviceAttitude*    devAttitude) {
   if (ILogger::instance() == NULL) {
     ILogger::setInstance(logger);
     IFactory::setInstance(factory);
@@ -53,6 +55,7 @@ void G3MWidget::initSingletons(ILogger*            logger,
     IMathUtils::setInstance(mathUtils);
     IJSONParser::setInstance(jsonParser);
     ITextUtils::setInstance(textUtils);
+    IDeviceAttitude::setInstance(devAttitude);
   }
   else {
     ILogger::instance()->logWarning("Singletons already set");
@@ -957,6 +960,27 @@ void G3MWidget::changedRendererInfo(const int rendererIdentifier,
 //  else {
 //    ILogger::instance()->logWarning("Render Infos are changing and InfoDisplay is NULL");
 //  }
+}
+
+
+void G3MWidget::addCameraConstrainer(ICameraConstrainer* cc){
+  _cameraConstrainers.push_back(cc);
+}
+
+void G3MWidget::removeCameraConstrainer(ICameraConstrainer* cc){
+  size_t size = _cameraConstrainers.size();
+  for (size_t i = 0; i < size; i++) {
+    if (_cameraConstrainers[i] == cc){
+#ifdef C_CODE
+      _cameraConstrainers.erase(_cameraConstrainers.begin() + i);
+#endif
+#ifdef JAVA_CODE
+      _cameraConstrainers.remove(i);
+#endif
+      return;
+    }
+  }
+  ILogger::instance()->logError("Could not remove camera constrainer.");
 }
 
 

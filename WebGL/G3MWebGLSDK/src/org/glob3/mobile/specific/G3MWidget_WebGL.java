@@ -17,6 +17,7 @@ import org.glob3.mobile.generated.GPUProgramManager;
 import org.glob3.mobile.generated.Geodetic3D;
 import org.glob3.mobile.generated.ICameraActivityListener;
 import org.glob3.mobile.generated.ICameraConstrainer;
+import org.glob3.mobile.generated.IDeviceAttitude;
 import org.glob3.mobile.generated.IDownloader;
 import org.glob3.mobile.generated.IFactory;
 import org.glob3.mobile.generated.IJSONParser;
@@ -214,8 +215,9 @@ public class G3MWidget_WebGL
       final IMathUtils mathUtils = new MathUtils_WebGL();
       final IJSONParser jsonParser = new JSONParser_WebGL();
       final ITextUtils textUtils = new TextUtils_WebGL();
+      final IDeviceAttitude devAtt = new DeviceAttitude_WebGL();
 
-      G3MWidget.initSingletons(logger, factory, stringUtils, stringBuilder, mathUtils, jsonParser, textUtils);
+      G3MWidget.initSingletons(logger, factory, stringUtils, stringBuilder, mathUtils, jsonParser, textUtils, devAtt);
    }
 
 
