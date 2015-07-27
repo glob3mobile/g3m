@@ -964,7 +964,8 @@ void Tile::updateQuadTree(const G3MRenderContext* rc,
                                                   texWidthSquared,
                                                   texHeightSquared,
                                                   nowInMS) ||
-                              (tilesRenderParameters->_incrementalTileQuality && !_textureSolved)
+                              (tilesRenderParameters->_incrementalTileQuality &&
+                               (!_textureSolved || !isElevationDataSolved()))
                               );
     
     if (isRawRender) {
