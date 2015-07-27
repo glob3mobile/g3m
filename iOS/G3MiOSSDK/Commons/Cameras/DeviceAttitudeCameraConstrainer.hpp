@@ -11,6 +11,8 @@
 
 #include "ICameraConstrainer.hpp"
 
+class ITimer;
+
 
 /**
  Class that applies the Rotation obtained with IDeviceAttitude and IInterfaceOrientation to the camera.
@@ -26,9 +28,15 @@ private:
   mutable MutableMatrix44D _attitudeMatrix;
   mutable MutableMatrix44D _camRM;
   
+  bool _updateLocation;
+  double _heightOffset;
+  mutable long long _lastLocationUpdateTimeInMS;
+  mutable ITimer* _timer;
+  
 public:
   
-  DeviceAttitudeCameraConstrainer();
+  DeviceAttitudeCameraConstrainer(bool updateLocation,
+                                  double heightOffset = 1000);
   
   ~DeviceAttitudeCameraConstrainer();
   

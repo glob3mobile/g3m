@@ -388,8 +388,7 @@ Mesh* createSectorMesh(const Planet* planet,
   
   builder.setInitializationTask(new InitTask([self G3MWidget]), true);
   
-  
-  builder.addCameraConstraint(new DeviceAttitudeCameraConstrainer());
+  builder.addCameraConstraint(new DeviceAttitudeCameraConstrainer(true));
 
   builder.getPlanetRendererBuilder()->setElevationDataProvider(edp);
   builder.getPlanetRendererBuilder()->setVerticalExaggeration(2.5);
