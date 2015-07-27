@@ -1,5 +1,3 @@
-
-
 package com.glob3.mobile.g3mandroidtestingapplication;
 
 import org.glob3.mobile.generated.AltitudeMode;
@@ -37,11 +35,14 @@ import org.glob3.mobile.generated.DownloaderImageBuilder;
 import org.glob3.mobile.generated.G3MContext;
 import org.glob3.mobile.generated.GFont;
 import org.glob3.mobile.generated.GInitializationTask;
+import org.glob3.mobile.generated.GTask;
 import org.glob3.mobile.generated.Geodetic3D;
 import org.glob3.mobile.generated.ICanvas;
+import org.glob3.mobile.generated.IDeviceLocation;
 import org.glob3.mobile.generated.IImage;
 import org.glob3.mobile.generated.IImageDownloadListener;
 import org.glob3.mobile.generated.IImageListener;
+import org.glob3.mobile.generated.ILogger;
 import org.glob3.mobile.generated.LabelImageBuilder;
 import org.glob3.mobile.generated.LayerSet;
 import org.glob3.mobile.generated.NASAElevationDataProvider;
@@ -52,6 +53,7 @@ import org.glob3.mobile.generated.URL;
 import org.glob3.mobile.generated.Vector2I;
 import org.glob3.mobile.generated.Vector3D;
 import org.glob3.mobile.generated.OSMLayer;
+import org.glob3.mobile.generated.PeriodicalTask;
 import org.glob3.mobile.generated.QuadShape;
 import org.glob3.mobile.generated.ShapesRenderer;
 import org.glob3.mobile.generated.TimeInterval;
@@ -62,12 +64,17 @@ import org.glob3.mobile.specific.G3MWidget_Android;
 import org.glob3.mobile.generated.PointCloudsRenderer;
 
 import android.app.Activity;
+import android.content.Context;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.RelativeLayout;
 
+public class MainActivity extends Activity {
 
 public class MainActivity
          extends
@@ -383,58 +390,25 @@ public class MainActivity
                         canvas.fillText("Hellow World", leftStep * i, topStep * i);
                      }
 
-                     //                  canvas.drawImage(image, width / 4, height / 4); // ok
+		requestWindowFeature(Window.FEATURE_NO_TITLE);
+		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+				WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-                     canvas.drawImage(image, width / 8, height / 8); // ok
-                     canvas.drawImage(image, (width / 8) * 3, height / 8, 0.5f); // ok
+		setContentView(R.layout.activity_main);
 
-                     canvas.drawImage(image, width / 8, (height / 8) * 3, image.getWidth() * 2, image.getHeight() * 2); // ok
-                     canvas.drawImage(image, (width / 8) * 3, (height / 8) * 3, image.getWidth() * 2, image.getHeight() * 2, 0.5f); //ok
+		_g3mWidget = createWidgetWithYouAreHere();
 
-                     // ok
-                     canvas.drawImage(image, //
-                              0, 0, image.getWidth(), image.getHeight(), //
-                              (width / 8) * 5, (height / 8) * 5, image.getWidth() * 2, image.getHeight() * 2);
-                     // ok
-                     canvas.drawImage(image, //
-                              0, 0, image.getWidth(), image.getHeight(), //
-                              (width / 8) * 7, (height / 8) * 7, image.getWidth() * 2, image.getHeight() * 2, //
-                              0.5f);
+		final RelativeLayout placeHolder = (RelativeLayout) findViewById(R.id.g3mWidgetHolder);
 
+		placeHolder.addView(_g3mWidget);
 
-                     canvas.createImage(new IImageListener() {
-                        @Override
-                        public void imageCreated(final IImage canvasImage) {
-                           final QuadShape quad = new QuadShape( //
-                                    Geodetic3D.fromDegrees(-34.615047738942699596, -58.4447233540403559, 1000), //
-                                    AltitudeMode.ABSOLUTE, //
-                                    canvasImage, //
-                                    canvasImage.getWidth() * 15.0f, //
-                                    canvasImage.getHeight() * 15.0f, //
-                                    true);
+		_g3mWidget.setAnimatedCameraPosition(Geodetic3D.fromDegrees(
+				28.034468668529083146, -15.904092315837871752, 1634079));
 
-                           shapesRenderer.addShape(quad);
-                        }
-                     }, true);
-
-                     canvas.dispose();
-
-                     image.dispose();
-                  }
-
-
-                  @Override
-                  public void onCanceledDownload(final URL url,
-                                                 final IImage image,
-                                                 final boolean expired) {
-                  }
-
-
-                  @Override
-                  public void onCancel(final URL url) {
-                  }
-               };
-
+		// // Buenos Aires, there we go!
+		// _g3mWidget.setAnimatedCameraPosition(Geodetic3D.fromDegrees(-34.615047738942699596,
+		// -58.4447233540403559, 35000));
+	}
 
                context.getDownloader().requestImage( //
                         new URL("file:///g3m-marker.png"), //

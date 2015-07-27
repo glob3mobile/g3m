@@ -60,6 +60,7 @@ package org.glob3.mobile.generated;
 //class IDeviceAttitude;
 >>>>>>> devAttitude
 //class InfoDisplay;
+//class IDeviceLocation;
 
 
 
