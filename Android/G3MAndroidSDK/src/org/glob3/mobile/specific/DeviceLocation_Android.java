@@ -66,11 +66,13 @@ public class DeviceLocation_Android extends IDeviceLocation{
 		
 		if (gpsActive) {
 			_locationManager.requestLocationUpdates( LocationManager.GPS_PROVIDER, _minTime, 0, _gpsListener, Looper.getMainLooper());
+			_locationManager.requestSingleUpdate(LocationManager.GPS_PROVIDER, _gpsListener, Looper.getMainLooper());
 			_isTracking = true;
 		}
 		
 		if (netActive){
 			_locationManager.requestLocationUpdates( LocationManager.NETWORK_PROVIDER, _minTime, 0, _netListener, Looper.getMainLooper());
+			_locationManager.requestSingleUpdate(LocationManager.NETWORK_PROVIDER, _netListener, Looper.getMainLooper());
 			_isTracking = true;	
 		}
 		
@@ -91,7 +93,7 @@ public class DeviceLocation_Android extends IDeviceLocation{
 
 	@Override
 	public boolean isTrackingLocation() {
-		return _isTracking && (_gpsListener._lastLocation != null || _netListener._lastLocation != null);
+		return _isTracking;// && (_gpsListener._lastLocation != null || _netListener._lastLocation != null);
 	}
 
 	@Override
