@@ -111,7 +111,7 @@ public class DeviceAttitudeCameraConstrainer implements ICameraConstrainer
         _timer = IFactory.instance().createTimer();
       }
   
-      long t = IFactory.instance().createTimer().nowInMilliseconds();
+      long t = _timer.nowInMilliseconds();
   
       if ((t - _lastLocationUpdateTimeInMS > 5000) || (_lastLocationUpdateTimeInMS == 0))
       {
