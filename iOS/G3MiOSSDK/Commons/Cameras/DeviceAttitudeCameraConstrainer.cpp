@@ -73,7 +73,7 @@ bool DeviceAttitudeCameraConstrainer::onCameraChange(const Planet* planet,
       _timer = IFactory::instance()->createTimer();
     }
     
-    long long t = IFactory::instance()->createTimer()->nowInMilliseconds();
+    long long t = _timer->nowInMilliseconds();
     
     if ((t - _lastLocationUpdateTimeInMS > 5000) || (_lastLocationUpdateTimeInMS == 0)){
       
