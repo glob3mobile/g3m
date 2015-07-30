@@ -901,7 +901,7 @@ public final class NativeGL2_Android
 
 		double r = byte2double(pixels.get(0));
 		double g = byte2double(pixels.get(1));
-		double b = byte2double(pixels.get(2));
+//		double b = byte2double(pixels.get(2));
 		double a = byte2double(pixels.get(3));
 
 		if (a != 0) { // ZRENDER Shader sets all pixels with 0 alpha

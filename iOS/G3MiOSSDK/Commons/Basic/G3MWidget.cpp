@@ -390,7 +390,7 @@ Vector3D G3MWidget::getFirstValidScenePositionForFrameBufferColumn(int column){
       Vector3D pixel3D(column, _height - row,z);
       MutableMatrix44D mmv(*_currentCamera->getModelViewMatrix44D());
       Vector3D pos = mmv.unproject(pixel3D, 0, 0, _width, _height);
-      _nextCamera->setGroundHeightFromCartesianPoint(pos);
+//      _nextCamera->setGroundHeightFromCartesianPoint(pos);
       return pos;
     }
     row++;
