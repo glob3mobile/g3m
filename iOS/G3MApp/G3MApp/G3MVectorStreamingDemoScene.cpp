@@ -29,7 +29,7 @@ void G3MVectorStreamingDemoScene::rawActivate(const G3MContext* context) {
 
 
   VectorStreamingRenderer* renderer = model->getVectorStreamingRenderer();
-  renderer->addVectorSet(URL("http://localhost:8080/server-mapboo/public/VectorialStreaming/"),
+  renderer->addVectorSet(URL("http://192.168.1.12:8080/server-mapboo/public/VectorialStreaming/"),
                          "GEONames-PopulatedPlaces_LOD",
                          DownloadPriority::LOWER,
                          TimeInterval::zero(),
