@@ -41,6 +41,7 @@
 #include "G3MCanvas2DDemoScene.hpp"
 #include "G3MAugmentedRealityDemoScene.hpp"
 #include "G3MAnimatedMarksDemoScene.hpp"
+#include "G3MVectorStreamingDemoScene.hpp"
 
 G3MDemoModel::G3MDemoModel(G3MDemoListener*             listener,
                            LayerSet*                    layerSet,
@@ -50,7 +51,8 @@ G3MDemoModel::G3MDemoModel(G3MDemoListener*             listener,
                            GEORenderer*                 geoRenderer,
                            PointCloudsRenderer*         pointCloudsRenderer,
                            HUDRenderer*                 hudRenderer,
-                           NonOverlappingMarksRenderer* nonOverlappingMarksRenderer) :
+                           NonOverlappingMarksRenderer* nonOverlappingMarksRenderer,
+                           VectorStreamingRenderer*     vectorStreamingRenderer) :
 _listener(listener),
 _g3mWidget(NULL),
 _layerSet(layerSet),
@@ -61,6 +63,7 @@ _geoRenderer(geoRenderer),
 _pointCloudsRenderer(pointCloudsRenderer),
 _hudRenderer(hudRenderer),
 _nonOverlappingMarksRenderer(nonOverlappingMarksRenderer),
+_vectorStreamingRenderer(vectorStreamingRenderer),
 _selectedScene(NULL),
 _context(NULL)
 {
@@ -81,6 +84,7 @@ _context(NULL)
   _scenes.push_back( new G3MAugmentedRealityDemoScene(this) );
   _scenes.push_back( new G3MAnimatedMarksDemoScene(this) );
   // _scenes.push_back( new G3MCanvas2DDemoScene(this) );
+  _scenes.push_back( new G3MVectorStreamingDemoScene(this) );
 }
 
 void G3MDemoModel::initializeG3MContext(const G3MContext* context) {
