@@ -26,6 +26,9 @@ class Sector;
 class Geodetic2D;
 class JSONArray;
 class JSONObject;
+class MarksRenderer;
+class Mark;
+class GEO2DPointGeometry;
 
 
 class VectorStreamingRenderer : public DefaultRenderer {
@@ -156,6 +159,16 @@ public:
   };
 
 
+  class VectorSetSymbolizer {
+  public:
+    virtual ~VectorSetSymbolizer() {
+    }
+
+    virtual Mark* createMark(const GEO2DPointGeometry* geometry) const = 0;
+
+  };
+
+
   class VectorSet {
   private:
 #ifdef C_CODE
@@ -165,6 +178,8 @@ public:
     private final URL _serverURL;
 #endif
     const std::string  _name;
+    const VectorSetSymbolizer* _symbolizer;
+    const bool                 _deleteSymbolizer;
     const long long    _downloadPriority;
 #ifdef C_CODE
     const TimeInterval _timeToCache;
@@ -192,14 +207,18 @@ public:
 
   public:
 
-    VectorSet(const URL& serverURL,
-              const std::string& name,
-              long long downloadPriority,
-              const TimeInterval& timeToCache,
-              bool readExpired,
-              bool verbose) :
+    VectorSet(const URL&                 serverURL,
+              const std::string&         name,
+              const VectorSetSymbolizer* symbolizer,
+              const bool                 deleteSymbolizer,
+              long long                  downloadPriority,
+              const TimeInterval&        timeToCache,
+              bool                       readExpired,
+              bool                       verbose) :
     _serverURL(serverURL),
     _name(name),
+    _symbolizer(symbolizer),
+    _deleteSymbolizer(deleteSymbolizer),
     _downloadPriority(downloadPriority),
     _timeToCache(timeToCache),
     _readExpired(readExpired),
@@ -244,6 +263,8 @@ public:
 
 
 private:
+  MarksRenderer* _markRenderer;
+
   size_t                  _vectorSetsSize;
   std::vector<VectorSet*> _vectorSets;
 
@@ -251,7 +272,8 @@ private:
 
 public:
 
-  VectorStreamingRenderer() :
+  VectorStreamingRenderer(MarksRenderer* markRenderer) :
+  _markRenderer(markRenderer),
   _vectorSetsSize(0)
   {
   }
@@ -268,12 +290,14 @@ public:
 
   void onChangedContext();
 
-  void addVectorSet(const URL& serverURL,
-                    const std::string& cloudName,
-                    long long downloadPriority,
-                    const TimeInterval& timeToCache,
-                    bool readExpired,
-                    bool verbose);
+  void addVectorSet(const URL&                 serverURL,
+                    const std::string&         name,
+                    const VectorSetSymbolizer* symbolizer,
+                    const bool                 deleteSymbolizer,
+                    long long                  downloadPriority,
+                    const TimeInterval&        timeToCache,
+                    bool                       readExpired,
+                    bool                       verbose);
 
   void removeAllVectorSets();
 

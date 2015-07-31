@@ -94,7 +94,7 @@ void G3MDemoBuilder::build() {
   NonOverlappingMarksRenderer* nonOverlappingMarksRenderer = new NonOverlappingMarksRenderer(10);
   builder->addRenderer(nonOverlappingMarksRenderer);
 
-  VectorStreamingRenderer* vectorStreamingRenderer = new VectorStreamingRenderer();
+  VectorStreamingRenderer* vectorStreamingRenderer = new VectorStreamingRenderer(marksRenderer);
   builder->addRenderer(vectorStreamingRenderer);
 
   _initialized = true;

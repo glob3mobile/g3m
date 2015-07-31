@@ -28,6 +28,8 @@
 
 
 VectorStreamingRenderer::Node::~Node() {
+// cancel pending requests
+
   delete _sector;
   delete _averagePosition;
 
@@ -50,6 +52,8 @@ long long VectorStreamingRenderer::Node::render(const G3MRenderContext* rc,
 //      loadFeatures();
 //    }
 //  }
+
+// don't load children until my features are loaded
 
 #warning Diego at work!
   return 0;
@@ -221,6 +225,10 @@ void VectorStreamingRenderer::VectorSet::errorParsingMetadata() {
 }
 
 VectorStreamingRenderer::VectorSet::~VectorSet() {
+  if (_deleteSymbolizer) {
+    delete _symbolizer;
+  }
+
   delete _sector;
   delete _averagePosition;
   if (_rootNodes != NULL) {
@@ -400,14 +408,18 @@ RenderState VectorStreamingRenderer::getRenderState(const G3MRenderContext* rc) 
 }
 
 
-void VectorStreamingRenderer::addVectorSet(const URL& serverURL,
-                                           const std::string& name,
-                                           long long downloadPriority,
-                                           const TimeInterval& timeToCache,
-                                           bool readExpired,
-                                           bool verbose) {
+void VectorStreamingRenderer::addVectorSet(const URL&                 serverURL,
+                                           const std::string&         name,
+                                           const VectorSetSymbolizer* symbolizer,
+                                           const bool                 deleteSymbolizer,
+                                           long long                  downloadPriority,
+                                           const TimeInterval&        timeToCache,
+                                           bool                       readExpired,
+                                           bool                       verbose) {
   VectorSet* vectorSet = new VectorSet(serverURL,
                                        name,
+                                       symbolizer,
+                                       deleteSymbolizer,
                                        downloadPriority,
                                        timeToCache,
                                        readExpired,

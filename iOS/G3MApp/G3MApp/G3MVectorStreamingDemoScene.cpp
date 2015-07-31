@@ -13,8 +13,48 @@
 #include <G3MiOSSDK/LayerSet.hpp>
 #include <G3MiOSSDK/VectorStreamingRenderer.hpp>
 #include <G3MiOSSDK/DownloadPriority.hpp>
+#include <G3MiOSSDK/GEO2DPointGeometry.hpp>
+#include <G3MiOSSDK/GEOFeature.hpp>
+#include <G3MiOSSDK/Mark.hpp>
+#include <G3MiOSSDK/JSONObject.hpp>
+#include <G3MiOSSDK/JSONString.hpp>
 
 #include "G3MDemoModel.hpp"
+
+
+class G3MVectorStreamingDemoScene_Symbolizer : public VectorStreamingRenderer::VectorSetSymbolizer {
+public:
+  Mark* createMark(const GEO2DPointGeometry* geometry) const {
+    const GEOFeature* feature = geometry->getFeature();
+
+    const JSONObject* properties = feature->getProperties();
+
+//    /**
+//     * Creates a mark just with label, without icon
+//     */
+//    Mark(const std::string& label,
+//         const Geodetic3D&  position,
+//         AltitudeMode       altitudeMode,
+//         double             minDistanceToCamera=4.5e+06,
+//         const float        labelFontSize=20,
+//         const Color*       labelFontColor=Color::newFromRGBA(1, 1, 1, 1),
+//         const Color*       labelShadowColor=Color::newFromRGBA(0, 0, 0, 1),
+//         MarkUserData*      userData=NULL,
+//         bool               autoDeleteUserData=true,
+//         MarkTouchListener* listener=NULL,
+//         bool               autoDeleteListener=false);
+
+    const std::string label = properties->getAsString("name")->value();
+    const Geodetic3D  position( geometry->getPosition(), 0);
+
+    return new Mark(label,
+                    position,
+                    ABSOLUTE,
+                    0 // minDistanceToCamera
+                    );
+  }
+
+};
 
 
 void G3MVectorStreamingDemoScene::rawActivate(const G3MContext* context) {
@@ -27,10 +67,11 @@ void G3MVectorStreamingDemoScene::rawActivate(const G3MContext* context) {
                                            TimeInterval::fromDays(30));
   model->getLayerSet()->addLayer(layer);
 
-
   VectorStreamingRenderer* renderer = model->getVectorStreamingRenderer();
   renderer->addVectorSet(URL("http://192.168.1.12:8080/server-mapboo/public/VectorialStreaming/"),
                          "GEONames-PopulatedPlaces_LOD",
+                         new G3MVectorStreamingDemoScene_Symbolizer(),
+                         true, // deleteSymbolizer
                          DownloadPriority::LOWER,
                          TimeInterval::zero(),
                          true, // readExpired
