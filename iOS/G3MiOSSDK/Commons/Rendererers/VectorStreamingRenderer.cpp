@@ -225,10 +225,6 @@ void VectorStreamingRenderer::VectorSet::parsedMetadata(Sector* sector,
                                                         std::vector<Node*>* rootNodes) {
   _downloadingMetadata = false;
 
-  if (_verbose) {
-    ILogger::instance()->logInfo("Parsed metadata for \"%s\"", _name.c_str());
-  }
-
   _sector          = sector;
   _featuresCount   = featuresCount;
   _averagePosition = averagePosition;
@@ -237,6 +233,22 @@ void VectorStreamingRenderer::VectorSet::parsedMetadata(Sector* sector,
   _maxNodeDepth    = maxNodeDepth;
   _rootNodes       = rootNodes;
   _rootNodesSize   = _rootNodes->size();
+
+  if (_verbose) {
+    ILogger::instance()->logInfo("Metadata for \"%s\"",         _name.c_str());
+    ILogger::instance()->logInfo("   Sector           : %s",    _sector->description().c_str());
+#ifdef C_CODE
+    ILogger::instance()->logInfo("   Features Count   : %ld",   _featuresCount);
+#endif
+#ifdef JAVA_CODE
+    ILogger.instance().logInfo("   Features Count   : %d",   _featuresCount);
+#endif
+    ILogger::instance()->logInfo("   Average Position : %s",    _averagePosition->description().c_str());
+    ILogger::instance()->logInfo("   Nodes Count      : %d",    _nodesCount);
+    ILogger::instance()->logInfo("   Depth            : %d/%d", _minNodeDepth, _maxNodeDepth);
+    ILogger::instance()->logInfo("   Root Nodes       : %d",    _rootNodesSize);
+  }
+
 }
 
 void VectorStreamingRenderer::VectorSet::initialize(const G3MContext* context) {
