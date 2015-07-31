@@ -52,7 +52,12 @@ public:
     const Sector*                  _sector;
     const int                      _featuresCount;
     const Geodetic2D*              _averagePosition;
+#ifdef C_CODE
     const std::vector<std::string> _children;
+#endif
+#ifdef JAVA_CODE
+    private final java.util.ArrayList<String> _children;
+#endif
 
   public:
     Node(const std::string&              id,
@@ -157,7 +162,12 @@ public:
     const URL          _serverURL;
     const std::string  _name;
     const long long    _downloadPriority;
+#ifdef C_CODE
     const TimeInterval _timeToCache;
+#endif
+#ifdef JAVA_CODE
+    private final TimeInterval _timeToCache;
+#endif
     const bool         _readExpired;
     const bool         _verbose;
 
