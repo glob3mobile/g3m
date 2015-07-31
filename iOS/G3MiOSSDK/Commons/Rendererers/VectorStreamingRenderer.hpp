@@ -57,11 +57,38 @@ public:
     const int                      _featuresCount;
     const Geodetic2D*              _averagePosition;
 #ifdef C_CODE
-    const std::vector<std::string> _children;
+    const std::vector<std::string> _childrenIDs;
 #endif
 #ifdef JAVA_CODE
     private final java.util.ArrayList<String> _children;
 #endif
+
+    std::vector<Node*>* _children;
+    size_t _childrenSize;
+    bool _loadingChildren;
+
+    bool _wasVisible;
+    bool isVisible();
+
+    bool _loadedFeatures;
+    bool _loadingFeatures;
+
+#warning IMPLEMENTS THOSE METHODS
+    bool _wasBigEnough;
+    bool isBigEnough();
+    long long renderFeatures();
+
+    void loadFeatures();
+    void unloadFeatures();
+    void cancelLoadFeatures();
+
+    void loadChildren();
+    void unloadChildren();
+    void cancelLoadChildren();
+
+    void unload();
+#warning IMPLEMENTS THOSE METHODS
+
 
   protected:
     ~Node();
@@ -71,12 +98,19 @@ public:
          const Sector*                   sector,
          const int                       featuresCount,
          const Geodetic2D*               averagePosition,
-         const std::vector<std::string>& children) :
+         const std::vector<std::string>& childrenIDs) :
     _id(id),
     _sector(sector),
     _featuresCount(featuresCount),
     _averagePosition(averagePosition),
-    _children(children)
+    _childrenIDs(childrenIDs),
+    _wasVisible(false),
+    _loadedFeatures(false),
+    _loadingFeatures(false),
+    _children(NULL),
+    _childrenSize(0),
+    _loadingChildren(false),
+    _wasBigEnough(false)
     {
 
     }
@@ -298,9 +332,9 @@ public:
                     const TimeInterval&        timeToCache,
                     bool                       readExpired,
                     bool                       verbose);
-
+  
   void removeAllVectorSets();
-
+  
   RenderState getRenderState(const G3MRenderContext* rc);
   
 };

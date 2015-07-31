@@ -28,7 +28,11 @@
 
 
 VectorStreamingRenderer::Node::~Node() {
-// cancel pending requests
+  cancelLoadFeatures();
+  cancelLoadChildren();
+
+  unloadFeatures();
+  unloadChildren();
 
   delete _sector;
   delete _averagePosition;
@@ -38,25 +42,99 @@ VectorStreamingRenderer::Node::~Node() {
 #endif
 }
 
+void VectorStreamingRenderer::Node::unloadChildren() {
+  if (_children != NULL) {
+    for (size_t i = 0; i < _childrenSize; i++) {
+      Node* child = _children->at(i);
+      child->_release();
+    }
+    delete _children;
+    _children = NULL;
+    _childrenSize = 0;
+  }
+}
+
+bool VectorStreamingRenderer::Node::isVisible() {
+  if ((_sector->_deltaLatitude._degrees  > 80) ||
+      (_sector->_deltaLongitude._degrees > 80)) {
+    return true;
+  }
+
+#warning TODO
+  return false;
+}
+
+void VectorStreamingRenderer::Node::unload() {
+  removeMarks();
+
+  if (_loadedFeatures) {
+    unloadFeatures();
+    _loadedFeatures = false;
+  }
+
+  if (_loadingFeatures) {
+    cancelLoadFeatures();
+    _loadingFeatures = false;
+  }
+
+  if (_loadingChildren) {
+    _loadingChildren = true;
+    cancelLoadChildren();
+  }
+
+  if (_children != NULL) {
+    unloadChildren();
+  }
+}
+
 long long VectorStreamingRenderer::Node::render(const G3MRenderContext* rc,
                                                 const long long cameraTS,
                                                 GLState* glState) {
 
-//  checkVisibility();
-//
-//  if (loadedFeatures) {
-//    renderFeatures();
-//  }
-//  else {
-//    if (!loadingFeatures) {
-//      loadFeatures();
-//    }
-//  }
+  long long renderedCount = 0;
 
-// don't load children until my features are loaded
+  if (isBigEnough()) {
+    const bool visible = isVisible();
+    if (visible) {
+      if (_loadedFeatures) {
+        renderedCount += renderFeatures();
 
-#warning Diego at work!
-  return 0;
+        if (_children == NULL) {
+          // don't load children until my features are loaded
+          if (!_loadingChildren) {
+            _loadingChildren = true;
+            loadChildren();
+          }
+        }
+        if (_children != NULL) {
+          for (size_t i = 0; i < _childrenSize; i++) {
+            Node* child = _children->at(i);
+            renderedCount += child->render(rc, cameraTS, glState);
+          }
+        }
+      }
+      else {
+        if (!_loadingFeatures) {
+          _loadingFeatures = true;
+          loadFeatures();
+        }
+      }
+    }
+    else {
+      if (_wasVisible) {
+        unload();
+      }
+    }
+    _wasVisible = visible;
+  }
+  else {
+    if (_wasBigEnough) {
+      _wasBigEnough = false;
+      unload();
+    }
+  }
+  
+  return renderedCount;
 }
 
 Sector* VectorStreamingRenderer::GEOJSONUtils::parseSector(const JSONArray* json) {
@@ -437,7 +515,7 @@ void VectorStreamingRenderer::render(const G3MRenderContext* rc,
   for (int i = 0; i < _vectorSetsSize; i++) {
     const Camera* camera = rc->getCurrentCamera();
     const long long cameraTS = camera->getTimestamp();
-
+    
     VectorSet* vectorSector = _vectorSets[i];
     vectorSector->render(rc, cameraTS, glState);
   }
