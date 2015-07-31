@@ -21,6 +21,7 @@
 #include <G3MiOSSDK/PointCloudsRenderer.hpp>
 #include <G3MiOSSDK/HUDRenderer.hpp>
 #include <G3MiOSSDK/NonOverlappingMarksRenderer.hpp>
+#include <G3MiOSSDK/VectorStreamingRenderer.hpp>
 
 #include "G3MDemoScene.hpp"
 #include "G3MDemoListener.hpp"
@@ -126,6 +127,8 @@ void G3MDemoModel::reset() {
 
   getNonOverlappingMarksRenderer()->removeAllMarks();
   getNonOverlappingMarksRenderer()->removeAllListeners();
+
+  getVectorStreamingRenderer()->removeAllVectorSets();
 
   _layerSet->removeAllLayers(true);
 }

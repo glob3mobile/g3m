@@ -270,7 +270,9 @@ public:
                     const TimeInterval& timeToCache,
                     bool readExpired,
                     bool verbose);
-  
+
+  void removeAllVectorSets();
+
   RenderState getRenderState(const G3MRenderContext* rc);
   
 };

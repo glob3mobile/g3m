@@ -103,18 +103,41 @@ void VectorStreamingRenderer::MetadataParserAsyncTask::runInBackground(const G3M
     _parsingError = true;
   }
   else {
-    _sector          = GEOJSONUtils::parseSector( jsonObject->getAsArray("sector") );
-    _featuresCount   = (long long) jsonObject->getAsNumber("featuresCount")->value();
-    _averagePosition = GEOJSONUtils::parseGeodetic2D( jsonObject->getAsArray("averagePosition") );
-    _nodesCount      = (int) jsonObject->getAsNumber("featuresCount")->value();
-    _minNodeDepth    = (int) jsonObject->getAsNumber("minNodeDepth")->value();
-    _maxNodeDepth    = (int) jsonObject->getAsNumber("maxNodeDepth")->value();
+    // check for errors
+    const JSONString* errorCodeJSON = jsonObject->getAsString("errorCode");
+    if (errorCodeJSON != NULL) {
+      _parsingError = true;
 
-    const JSONArray* rootNodesJSON = jsonObject->getAsArray("rootNodes");
-    _rootNodes = new std::vector<Node*>();
-    for (int i = 0; i < rootNodesJSON->size(); i++) {
-      Node* node = GEOJSONUtils::parseNode( rootNodesJSON->getAsObject(i) );
-      _rootNodes->push_back(node);
+      const std::string errorCode = errorCodeJSON->value();
+
+      const JSONString* errorDescriptionJSON = jsonObject->getAsString("errorDescription");
+      if (errorDescriptionJSON == NULL) {
+        ILogger::instance()->logError("\"%s\": %s",
+                                      _vectorSet->getName().c_str(),
+                                      errorCode.c_str());
+      }
+      else {
+        const std::string errorDescription = errorDescriptionJSON->value();
+        ILogger::instance()->logError("\"%s\": %s (%s)",
+                                      _vectorSet->getName().c_str(),
+                                      errorCode.c_str(),
+                                      errorDescription.c_str());
+      }
+    }
+    else {
+      _sector          = GEOJSONUtils::parseSector( jsonObject->getAsArray("sector") );
+      _featuresCount   = (long long) jsonObject->getAsNumber("featuresCount")->value();
+      _averagePosition = GEOJSONUtils::parseGeodetic2D( jsonObject->getAsArray("averagePosition") );
+      _nodesCount      = (int) jsonObject->getAsNumber("featuresCount")->value();
+      _minNodeDepth    = (int) jsonObject->getAsNumber("minNodeDepth")->value();
+      _maxNodeDepth    = (int) jsonObject->getAsNumber("maxNodeDepth")->value();
+
+      const JSONArray* rootNodesJSON = jsonObject->getAsArray("rootNodes");
+      _rootNodes = new std::vector<Node*>();
+      for (int i = 0; i < rootNodesJSON->size(); i++) {
+        Node* node = GEOJSONUtils::parseNode( rootNodesJSON->getAsObject(i) );
+        _rootNodes->push_back(node);
+      }
     }
   }
 
@@ -133,9 +156,9 @@ void VectorStreamingRenderer::MetadataParserAsyncTask::onPostExecute(const G3MCo
                                _minNodeDepth,
                                _maxNodeDepth,
                                _rootNodes);
-    _sector          = NULL; // moved ownership to pointCloud
-    _averagePosition = NULL; // moved ownership to pointCloud
-    _rootNodes       = NULL; // moved ownership to pointCloud
+    _sector          = NULL; // moved ownership to _vectorSet
+    _averagePosition = NULL; // moved ownership to _vectorSet
+    _rootNodes       = NULL; // moved ownership to _vectorSet
   }
 }
 
@@ -290,6 +313,15 @@ VectorStreamingRenderer::~VectorStreamingRenderer() {
 #ifdef JAVA_CODE
   super.dispose();
 #endif
+}
+
+void VectorStreamingRenderer::removeAllVectorSets() {
+  for (size_t i = 0; i < _vectorSetsSize; i++) {
+    VectorSet* vectorSet = _vectorSets[i];
+    delete vectorSet;
+  }
+  _vectorSets.clear();
+  _vectorSetsSize = 0;
 }
 
 void VectorStreamingRenderer::onChangedContext() {
