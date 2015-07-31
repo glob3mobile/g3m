@@ -30,11 +30,27 @@
 VectorStreamingRenderer::Node::~Node() {
   delete _sector;
   delete _averagePosition;
+
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
 }
 
 long long VectorStreamingRenderer::Node::render(const G3MRenderContext* rc,
                                                 const long long cameraTS,
                                                 GLState* glState) {
+
+//  checkVisibility();
+//
+//  if (loadedFeatures) {
+//    renderFeatures();
+//  }
+//  else {
+//    if (!loadingFeatures) {
+//      loadFeatures();
+//    }
+//  }
+
 #warning Diego at work!
   return 0;
 }
@@ -80,7 +96,7 @@ VectorStreamingRenderer::MetadataParserAsyncTask::~MetadataParserAsyncTask() {
   if (_rootNodes != NULL) {
     for (size_t i = 0; i < _rootNodes->size(); i++) {
       Node* node = _rootNodes->at(i);
-      delete node;
+      node->_release();
     }
     delete _rootNodes;
   }
@@ -210,7 +226,7 @@ VectorStreamingRenderer::VectorSet::~VectorSet() {
   if (_rootNodes != NULL) {
     for (size_t i = 0; i < _rootNodes->size(); i++) {
       Node* node = _rootNodes->at(i);
-      delete node;
+      node->_release();
     }
     delete _rootNodes;
   }

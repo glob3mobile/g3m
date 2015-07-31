@@ -15,6 +15,7 @@
 #include "TimeInterval.hpp"
 #include "IBufferDownloadListener.hpp"
 #include "IThreadUtils.hpp"
+#include "RCObject.hpp"
 
 #include <vector>
 #include <string>
@@ -46,7 +47,7 @@ public:
   };
 
 
-  class Node {
+  class Node : public RCObject {
   private:
     const std::string              _id;
     const Sector*                  _sector;
@@ -58,6 +59,9 @@ public:
 #ifdef JAVA_CODE
     private final java.util.ArrayList<String> _children;
 #endif
+
+  protected:
+    ~Node();
 
   public:
     Node(const std::string&              id,
@@ -73,8 +77,6 @@ public:
     {
 
     }
-
-    ~Node();
 
     long long render(const G3MRenderContext* rc,
                      const long long cameraTS,
