@@ -414,11 +414,6 @@ public class VectorStreamingRenderer extends DefaultRenderer
     {
       _downloadingMetadata = false;
     
-      if (_verbose)
-      {
-        ILogger.instance().logInfo("Parsed metadata for \"%s\"", _name);
-      }
-    
       _sector = sector;
       _featuresCount = featuresCount;
       _averagePosition = averagePosition;
@@ -427,6 +422,18 @@ public class VectorStreamingRenderer extends DefaultRenderer
       _maxNodeDepth = maxNodeDepth;
       _rootNodes = rootNodes;
       _rootNodesSize = _rootNodes.size();
+    
+      if (_verbose)
+      {
+        ILogger.instance().logInfo("Metadata for \"%s\"", _name);
+        ILogger.instance().logInfo("   Sector           : %s", _sector.description());
+        ILogger.instance().logInfo("   Features Count   : %d",   _featuresCount);
+        ILogger.instance().logInfo("   Average Position : %s", _averagePosition.description());
+        ILogger.instance().logInfo("   Nodes Count      : %d", _nodesCount);
+        ILogger.instance().logInfo("   Depth            : %d/%d", _minNodeDepth, _maxNodeDepth);
+        ILogger.instance().logInfo("   Root Nodes       : %d", _rootNodesSize);
+      }
+    
     }
 
     public final void render(G3MRenderContext rc, long cameraTS, GLState glState)
