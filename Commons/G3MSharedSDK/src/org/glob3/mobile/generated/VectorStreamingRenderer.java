@@ -127,7 +127,6 @@ public class VectorStreamingRenderer extends DefaultRenderer
   {
     private VectorSet _vectorSet;
     private IByteBuffer _buffer;
-    private final boolean _verbose;
 
     private boolean _parsingError;
 
@@ -139,11 +138,10 @@ public class VectorStreamingRenderer extends DefaultRenderer
     private int _maxNodeDepth;
     private java.util.ArrayList<Node> _rootNodes;
 
-    public MetadataParserAsyncTask(VectorSet vectorSet, IByteBuffer buffer, boolean verbose)
+    public MetadataParserAsyncTask(VectorSet vectorSet, IByteBuffer buffer)
     {
        _vectorSet = vectorSet;
        _buffer = buffer;
-       _verbose = verbose;
        _parsingError = false;
        _sector = null;
        _featuresCount = -1;
@@ -198,19 +196,41 @@ public class VectorStreamingRenderer extends DefaultRenderer
       }
       else
       {
-        _sector = GEOJSONUtils.parseSector(jsonObject.getAsArray("sector"));
-        _featuresCount = (long) jsonObject.getAsNumber("featuresCount").value();
-        _averagePosition = GEOJSONUtils.parseGeodetic2D(jsonObject.getAsArray("averagePosition"));
-        _nodesCount = (int) jsonObject.getAsNumber("featuresCount").value();
-        _minNodeDepth = (int) jsonObject.getAsNumber("minNodeDepth").value();
-        _maxNodeDepth = (int) jsonObject.getAsNumber("maxNodeDepth").value();
-    
-        final JSONArray rootNodesJSON = jsonObject.getAsArray("rootNodes");
-        _rootNodes = new java.util.ArrayList<Node>();
-        for (int i = 0; i < rootNodesJSON.size(); i++)
+        // check for errors
+        final JSONString errorCodeJSON = jsonObject.getAsString("errorCode");
+        if (errorCodeJSON != null)
         {
-          Node node = GEOJSONUtils.parseNode(rootNodesJSON.getAsObject(i));
-          _rootNodes.add(node);
+          _parsingError = true;
+    
+          final String errorCode = errorCodeJSON.value();
+    
+          final JSONString errorDescriptionJSON = jsonObject.getAsString("errorDescription");
+          if (errorDescriptionJSON == null)
+          {
+            ILogger.instance().logError("\"%s\": %s", _vectorSet.getName(), errorCode);
+          }
+          else
+          {
+            final String errorDescription = errorDescriptionJSON.value();
+            ILogger.instance().logError("\"%s\": %s (%s)", _vectorSet.getName(), errorCode, errorDescription);
+          }
+        }
+        else
+        {
+          _sector = GEOJSONUtils.parseSector(jsonObject.getAsArray("sector"));
+          _featuresCount = (long) jsonObject.getAsNumber("featuresCount").value();
+          _averagePosition = GEOJSONUtils.parseGeodetic2D(jsonObject.getAsArray("averagePosition"));
+          _nodesCount = (int) jsonObject.getAsNumber("featuresCount").value();
+          _minNodeDepth = (int) jsonObject.getAsNumber("minNodeDepth").value();
+          _maxNodeDepth = (int) jsonObject.getAsNumber("maxNodeDepth").value();
+    
+          final JSONArray rootNodesJSON = jsonObject.getAsArray("rootNodes");
+          _rootNodes = new java.util.ArrayList<Node>();
+          for (int i = 0; i < rootNodesJSON.size(); i++)
+          {
+            Node node = GEOJSONUtils.parseNode(rootNodesJSON.getAsObject(i));
+            _rootNodes.add(node);
+          }
         }
       }
     
@@ -227,9 +247,9 @@ public class VectorStreamingRenderer extends DefaultRenderer
       else
       {
         _vectorSet.parsedMetadata(_sector, _featuresCount, _averagePosition, _nodesCount, _minNodeDepth, _maxNodeDepth, _rootNodes);
-        _sector = null; // moved ownership to pointCloud
-        _averagePosition = null; // moved ownership to pointCloud
-        _rootNodes = null; // moved ownership to pointCloud
+        _sector = null; // moved ownership to _vectorSet
+        _averagePosition = null; // moved ownership to _vectorSet
+        _rootNodes = null; // moved ownership to _vectorSet
       }
     }
 
@@ -256,7 +276,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
         ILogger.instance().logInfo("Downloaded metadata for \"%s\" (bytes=%d)", _vectorSet.getName(), buffer.size());
       }
     
-      _threadUtils.invokeAsyncTask(new MetadataParserAsyncTask(_vectorSet, buffer, _verbose), true);
+      _threadUtils.invokeAsyncTask(new MetadataParserAsyncTask(_vectorSet, buffer), true);
     }
 
     public final void onError(URL url)
@@ -279,7 +299,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
 
   public static class VectorSet
   {
-    private final URL _serverURL = new URL();
+    private final URL _serverURL;
     private final String _name;
     private final long _downloadPriority;
     private final TimeInterval _timeToCache;
@@ -304,7 +324,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
 
     public VectorSet(URL serverURL, String name, long downloadPriority, TimeInterval timeToCache, boolean readExpired, boolean verbose)
     {
-       _serverURL = new URL(serverURL);
+       _serverURL = serverURL;
        _name = name;
        _downloadPriority = downloadPriority;
        _timeToCache = timeToCache;
@@ -496,6 +516,18 @@ public class VectorStreamingRenderer extends DefaultRenderer
     }
     _vectorSets.add(vectorSet);
     _vectorSetsSize = _vectorSets.size();
+  }
+
+  public final void removeAllVectorSets()
+  {
+    for (int i = 0; i < _vectorSetsSize; i++)
+    {
+      VectorSet vectorSet = _vectorSets.get(i);
+      if (vectorSet != null)
+         vectorSet.dispose();
+    }
+    _vectorSets.clear();
+    _vectorSetsSize = 0;
   }
 
   public final RenderState getRenderState(G3MRenderContext rc)
