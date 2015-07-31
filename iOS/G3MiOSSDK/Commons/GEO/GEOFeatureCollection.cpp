@@ -82,3 +82,15 @@ const std::vector<GEOFeature*> GEOFeatureCollection::copy(const std::vector<GEOF
 GEOFeatureCollection* GEOFeatureCollection::deepCopy() const {
   return new GEOFeatureCollection( copy(_features) );
 }
+
+void GEOFeatureCollection::createMarks(const VectorStreamingRenderer::VectorSet* vectorSet,
+                                       const VectorStreamingRenderer::Node*      node) const {
+  const int featuresCount = _features.size();
+  for (int i = 0; i < featuresCount; i++) {
+    GEOFeature* feature = _features[i];
+    if (feature != NULL) {
+      feature->createMarks(vectorSet, node);
+    }
+  }
+  
+}

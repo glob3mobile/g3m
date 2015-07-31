@@ -58,6 +58,9 @@ public:
 
   GEOFeature* deepCopy() const;
 
+  void createMarks(const VectorStreamingRenderer::VectorSet* vectorSet,
+                   const VectorStreamingRenderer::Node*      node) const;
+
 };
 
 #endif

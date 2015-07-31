@@ -56,8 +56,9 @@ public:
   }
   
   URL(const URL& parent,
-      const std::string& path) :
-  _path( concatenatePath(parent, path) )
+      const std::string& path,
+      const bool escapePath=false) :
+  _path( concatenatePath(parent, escapePath ? escape(path) : path) )
   {
   }
 

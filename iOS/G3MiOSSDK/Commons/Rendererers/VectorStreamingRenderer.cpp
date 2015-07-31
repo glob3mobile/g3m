@@ -17,14 +17,64 @@
 #include "JSONString.hpp"
 #include "Camera.hpp"
 #include "Sphere.hpp"
+#include "GEOJSONParser.hpp"
+#include "GEOObject.hpp"
+#include "MarksRenderer.hpp"
 
-/*
 
- http://localhost:8080/server-mapboo/public/VectorialStreaming/GEONames-PopulatedPlaces_LOD/features?node=&properties=name|population|featureClass|featureCode
+VectorStreamingRenderer::FeaturesParserAsyncTask::~FeaturesParserAsyncTask() {
+  _node->_release();
+  delete _buffer;
+  delete _features;
+}
 
- http://localhost:8080/server-mapboo/public/VectorialStreaming/GEONames-PopulatedPlaces_LOD
+void VectorStreamingRenderer::FeaturesParserAsyncTask::runInBackground(const G3MContext* context) {
+  _features = GEOJSONParser::parseJSON(_buffer, _verbose);
 
- */
+  delete _buffer;
+  _buffer = NULL;
+}
+
+void VectorStreamingRenderer::FeaturesParserAsyncTask::onPostExecute(const G3MContext* context) {
+  _node->parsedFeatures(_features, _threadUtils);
+  _features = NULL; // moved ownership to _node
+}
+
+
+void VectorStreamingRenderer::NodeFeaturesDownloadListener::onDownload(const URL& url,
+                                                                       IByteBuffer* buffer,
+                                                                       bool expired) {
+  if (_verbose) {
+#ifdef C_CODE
+    ILogger::instance()->logInfo("Downloaded features for \"%s\" (bytes=%ld)",
+                                 _node->getFullName().c_str(),
+                                 buffer->size());
+#endif
+#ifdef JAVA_CODE
+    ILogger.instance().logInfo("Downloaded features for \"%s\" (bytes=%d)",
+                               _node->getFullName(),
+                               buffer.size());
+#endif
+  }
+
+  _threadUtils->invokeAsyncTask(new FeaturesParserAsyncTask(_node, _verbose, buffer, _threadUtils),
+                                true);
+
+}
+
+void VectorStreamingRenderer::NodeFeaturesDownloadListener::onError(const URL& url) {
+  _node->errorDownloadingFeatures();
+}
+
+void VectorStreamingRenderer::NodeFeaturesDownloadListener::onCancel(const URL& url) {
+  // do nothing
+}
+
+void VectorStreamingRenderer::NodeFeaturesDownloadListener::onCanceledDownload(const URL& url,
+                                                                               IByteBuffer* buffer,
+                                                                               bool expired) {
+  // do nothing
+}
 
 
 VectorStreamingRenderer::Node::~Node() {
@@ -38,6 +88,27 @@ VectorStreamingRenderer::Node::~Node() {
   super.dispose();
 #endif
 }
+
+void VectorStreamingRenderer::Node::parsedFeatures(GEOObject* features,
+                                                   const IThreadUtils* threadUtils) {
+  _loadedFeatures = true;
+  _loadingFeatures = false;
+  if (features == NULL) {
+    // do nothing by now
+  }
+  else {
+    _features = features;
+
+    _features->createMarks(_vectorSet, this);
+
+#warning TODO create marks on background
+//    threadUtils->invokeAsyncTask(new MarksCreatorAsyncTask(this, _features, _markRenderer),
+//                                 true);
+
+#warning TODO create marks
+  }
+}
+
 
 BoundingVolume* VectorStreamingRenderer::Node::getBoundingVolume(const G3MRenderContext *rc) {
   if (_boundingVolume == NULL) {
@@ -86,19 +157,57 @@ long long VectorStreamingRenderer::Node::renderFeatures(const G3MRenderContext *
   return 0;
 }
 
-void VectorStreamingRenderer::Node::loadFeatures() {
-#warning TODO
+void VectorStreamingRenderer::Node::loadFeatures(const G3MRenderContext* rc) {
+  /*
+   http://localhost:8080/server-mapboo/public/VectorialStreaming/GEONames-PopulatedPlaces_LOD/features?node=&properties=name|population|featureClass|featureCode
+
+   http://localhost:8080/server-mapboo/public/VectorialStreaming/
+   GEONames-PopulatedPlaces_LOD
+   /features
+   ?node=
+   &properties=name|population|featureClass|featureCode
+
+   */
+
+  const URL metadataURL(_vectorSet->getServerURL(),
+                        _vectorSet->getName() + "/features" +
+                        "?node=" + _id +
+                        "&properties=" + _vectorSet->getProperties(),
+                        true);
+
+  if (_verbose) {
+    ILogger::instance()->logInfo("\"%s\": Downloading features for node \'%s\'",
+                                 _vectorSet->getName().c_str(),
+                                 _id.c_str());
+  }
+
+  _downloader = rc->getDownloader();
+  _featuresRequestID = _downloader->requestBuffer(metadataURL,
+                                                  _vectorSet->getDownloadPriority(),
+                                                  _vectorSet->getTimeToCache(),
+                                                  _vectorSet->getReadExpired(),
+                                                  new VectorStreamingRenderer::NodeFeaturesDownloadListener(this,
+                                                                                                            rc->getThreadUtils(),
+                                                                                                            _verbose),
+                                                  true);
 }
 
 void VectorStreamingRenderer::Node::unloadFeatures() {
-#warning TODO
+  _loadedFeatures = false;
+  _loadingFeatures = false;
+
+  delete _features;
+  _features = NULL;
 }
 
 void VectorStreamingRenderer::Node::cancelLoadFeatures() {
-#warning TODO
+  if (_featuresRequestID != -1) {
+    _downloader->cancelRequest(_featuresRequestID);
+    _featuresRequestID = -1;
+  }
 }
 
-void VectorStreamingRenderer::Node::loadChildren() {
+void VectorStreamingRenderer::Node::loadChildren(const G3MRenderContext* rc) {
 #warning TODO
 }
 
@@ -176,7 +285,7 @@ long long VectorStreamingRenderer::Node::render(const G3MRenderContext* rc,
           // don't load children until my features are loaded
           if (!_loadingChildren) {
             _loadingChildren = true;
-            loadChildren();
+            loadChildren(rc);
           }
         }
         if (_children != NULL) {
@@ -192,7 +301,7 @@ long long VectorStreamingRenderer::Node::render(const G3MRenderContext* rc,
       else {
         if (!_loadingFeatures) {
           _loadingFeatures = true;
-          loadFeatures();
+          loadFeatures(rc);
         }
       }
     }
@@ -230,7 +339,9 @@ Geodetic2D* VectorStreamingRenderer::GEOJSONUtils::parseGeodetic2D(const JSONArr
   return new Geodetic2D(Angle::fromDegrees(lat), Angle::fromDegrees(lon));
 }
 
-VectorStreamingRenderer::Node* VectorStreamingRenderer::GEOJSONUtils::parseNode(const JSONObject* json) {
+VectorStreamingRenderer::Node* VectorStreamingRenderer::GEOJSONUtils::parseNode(const JSONObject* json,
+                                                                                const VectorSet*  vectorSet,
+                                                                                const bool        verbose) {
   const std::string id              = json->getAsString("id")->value();
   Sector*           sector          = GEOJSONUtils::parseSector( json->getAsArray("sector") );
   int               featuresCount   = (int) json->getAsNumber("featuresCount")->value();
@@ -242,7 +353,7 @@ VectorStreamingRenderer::Node* VectorStreamingRenderer::GEOJSONUtils::parseNode(
     children.push_back( childrenJSON->getAsString(i)->value() );
   }
 
-  return new Node(id, sector, featuresCount, averagePosition, children);
+  return new Node(vectorSet, id, sector, featuresCount, averagePosition, children, verbose);
 }
 
 VectorStreamingRenderer::MetadataParserAsyncTask::~MetadataParserAsyncTask() {
@@ -309,7 +420,9 @@ void VectorStreamingRenderer::MetadataParserAsyncTask::runInBackground(const G3M
       const JSONArray* rootNodesJSON = jsonObject->getAsArray("rootNodes");
       _rootNodes = new std::vector<Node*>();
       for (int i = 0; i < rootNodesJSON->size(); i++) {
-        Node* node = GEOJSONUtils::parseNode( rootNodesJSON->getAsObject(i) );
+        Node* node = GEOJSONUtils::parseNode(rootNodesJSON->getAsObject(i),
+                                             _vectorSet,
+                                             _verbose);
         _rootNodes->push_back(node);
       }
     }
@@ -350,7 +463,7 @@ void VectorStreamingRenderer::MetadataDownloadListener::onDownload(const URL& ur
 #endif
   }
 
-  _threadUtils->invokeAsyncTask(new MetadataParserAsyncTask(_vectorSet, buffer),
+  _threadUtils->invokeAsyncTask(new MetadataParserAsyncTask(_vectorSet, _verbose, buffer),
                                 true);
 }
 
@@ -495,6 +608,17 @@ void VectorStreamingRenderer::VectorSet::render(const G3MRenderContext* rc,
   }
 }
 
+void VectorStreamingRenderer::VectorSet::createMark(const Node* node,
+                                                    const GEO2DPointGeometry* geometry) const {
+
+  Mark* mark = _symbolizer->createMark(geometry);
+  if (mark != NULL) {
+#warning    mark->setUserdata();
+    _renderer->getMarkRenderer()->addMark( mark );
+  }
+
+}
+
 VectorStreamingRenderer::VectorStreamingRenderer(MarksRenderer* markRenderer) :
 _markRenderer(markRenderer),
 _vectorSetsSize(0),
@@ -580,9 +704,11 @@ void VectorStreamingRenderer::addVectorSet(const URL&                 serverURL,
                                            const TimeInterval&        timeToCache,
                                            bool                       readExpired,
                                            bool                       verbose) {
-  VectorSet* vectorSet = new VectorSet(serverURL,
+  VectorSet* vectorSet = new VectorSet(this,
+                                       serverURL,
                                        name,
                                        symbolizer,
+                                       "name|population|featureClass|featureCode",
                                        deleteSymbolizer,
                                        downloadPriority,
                                        timeToCache,

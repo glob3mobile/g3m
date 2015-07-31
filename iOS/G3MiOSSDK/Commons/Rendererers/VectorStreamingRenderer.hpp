@@ -32,7 +32,8 @@ class GEO2DPointGeometry;
 class BoundingVolume;
 class Camera;
 class Frustum;
-
+class IDownloader;
+class GEOObject;
 
 class VectorStreamingRenderer : public DefaultRenderer {
 public:
@@ -48,13 +49,84 @@ public:
   public:
     static Sector*     parseSector(const JSONArray* json);
     static Geodetic2D* parseGeodetic2D(const JSONArray* json);
-    static Node*       parseNode(const JSONObject* json);
+    static Node*       parseNode(const JSONObject* json,
+                                 const VectorSet*  vectorSet,
+                                 const bool        verbose);
+
+  };
+
+
+  class FeaturesParserAsyncTask : public GAsyncTask {
+  private:
+    Node*        _node;
+    bool         _verbose;
+    IByteBuffer* _buffer;
+    const IThreadUtils* _threadUtils;
+
+    GEOObject* _features;
+
+  public:
+    FeaturesParserAsyncTask(Node*               node,
+                            bool                verbose,
+                            IByteBuffer*        buffer,
+                            const IThreadUtils* threadUtils) :
+    _node(node),
+    _verbose(verbose),
+    _buffer(buffer),
+    _threadUtils(threadUtils),
+    _features(NULL)
+    {
+      _node->_retain();
+    }
+
+    ~FeaturesParserAsyncTask();
+
+    void runInBackground(const G3MContext* context);
+
+    void onPostExecute(const G3MContext* context);
+
+  };
+
+
+  class NodeFeaturesDownloadListener : public IBufferDownloadListener {
+  private:
+    Node*               _node;
+    const IThreadUtils* _threadUtils;
+    const bool          _verbose;
+
+  public:
+    NodeFeaturesDownloadListener(Node* node,
+                                 const IThreadUtils* threadUtils,
+                                 bool verbose) :
+    _node(node),
+    _threadUtils(threadUtils),
+    _verbose(verbose)
+    {
+      _node->_retain();
+    }
+
+    ~NodeFeaturesDownloadListener() {
+      _node->_release();
+    }
+
+    void onDownload(const URL& url,
+                    IByteBuffer* buffer,
+                    bool expired);
+
+    void onError(const URL& url);
+
+    void onCancel(const URL& url);
+
+    void onCanceledDownload(const URL& url,
+                            IByteBuffer* buffer,
+                            bool expired);
 
   };
 
 
   class Node : public RCObject {
   private:
+    const VectorSet*               _vectorSet;
     const std::string              _id;
     const Sector*                  _sector;
     const int                      _featuresCount;
@@ -69,10 +141,14 @@ public:
     std::vector<Node*>* _children;
     size_t _childrenSize;
 
+    const bool _verbose;
+
+    GEOObject* _features;
 
     BoundingVolume* _boundingVolume;
     BoundingVolume* getBoundingVolume(const G3MRenderContext *rc);
 
+    IDownloader* _downloader;
     bool _loadingChildren;
 
     bool _wasVisible;
@@ -87,11 +163,12 @@ public:
     long long renderFeatures(const G3MRenderContext *rc,
                              const GLState *glState);
 
-    void loadFeatures();
+    long long _featuresRequestID;
+    void loadFeatures(const G3MRenderContext* rc);
     void unloadFeatures();
     void cancelLoadFeatures();
 
-    void loadChildren();
+    void loadChildren(const G3MRenderContext* rc);
     void unloadChildren();
     void cancelLoadChildren();
 
@@ -103,16 +180,20 @@ public:
     ~Node();
 
   public:
-    Node(const std::string&              id,
+    Node(const VectorSet*                vectorSet,
+         const std::string&              id,
          const Sector*                   sector,
          const int                       featuresCount,
          const Geodetic2D*               averagePosition,
-         const std::vector<std::string>& childrenIDs) :
+         const std::vector<std::string>& childrenIDs,
+         const bool                      verbose) :
+    _vectorSet(vectorSet),
     _id(id),
     _sector(sector),
     _featuresCount(featuresCount),
     _averagePosition(averagePosition),
     _childrenIDs(childrenIDs),
+    _verbose(verbose),
     _wasVisible(false),
     _loadedFeatures(false),
     _loadingFeatures(false),
@@ -120,9 +201,16 @@ public:
     _childrenSize(0),
     _loadingChildren(false),
     _wasBigEnough(false),
-    _boundingVolume(NULL)
+    _boundingVolume(NULL),
+    _featuresRequestID(-1),
+    _downloader(NULL),
+    _features(NULL)
     {
 
+    }
+
+    const std::string getFullName() const {
+      return _vectorSet->getName() + "/" + _id;
     }
 
     long long render(const G3MRenderContext* rc,
@@ -130,12 +218,20 @@ public:
                      const long long cameraTS,
                      GLState* glState);
 
+    void errorDownloadingFeatures() {
+      // do nothing by now
+    }
+
+    void parsedFeatures(GEOObject* features,
+                        const IThreadUtils* threadUtils);
+
   };
 
 
   class MetadataParserAsyncTask : public GAsyncTask {
   private:
     VectorSet*   _vectorSet;
+    const bool   _verbose;
     IByteBuffer* _buffer;
 
     bool         _parsingError;
@@ -150,8 +246,10 @@ public:
 
   public:
     MetadataParserAsyncTask(VectorSet* vectorSet,
+                            bool verbose,
                             IByteBuffer* buffer) :
     _vectorSet(vectorSet),
+    _verbose(verbose),
     _buffer(buffer),
     _parsingError(false),
     _sector(NULL),
@@ -216,6 +314,7 @@ public:
 
   class VectorSet {
   private:
+    VectorStreamingRenderer* _renderer;
 #ifdef C_CODE
     const URL _serverURL;
 #endif
@@ -235,6 +334,8 @@ public:
     const bool         _readExpired;
     const bool         _verbose;
 
+    const std::string _properties;
+    
     bool _downloadingMetadata;
     bool _errorDownloadingMetadata;
     bool _errorParsingMetadata;
@@ -252,17 +353,21 @@ public:
 
   public:
 
-    VectorSet(const URL&                 serverURL,
+    VectorSet(VectorStreamingRenderer*   renderer,
+              const URL&                 serverURL,
               const std::string&         name,
               const VectorSetSymbolizer* symbolizer,
+              const std::string&         properties,
               const bool                 deleteSymbolizer,
               long long                  downloadPriority,
               const TimeInterval&        timeToCache,
               bool                       readExpired,
               bool                       verbose) :
+    _renderer(renderer),
     _serverURL(serverURL),
     _name(name),
     _symbolizer(symbolizer),
+    _properties(properties),
     _deleteSymbolizer(deleteSymbolizer),
     _downloadPriority(downloadPriority),
     _timeToCache(timeToCache),
@@ -282,8 +387,28 @@ public:
 
     ~VectorSet();
 
+    const URL getServerURL() const {
+      return _serverURL;
+    }
+
     const std::string getName() const {
       return _name;
+    }
+
+    long long getDownloadPriority() const {
+      return _downloadPriority;
+    }
+
+    TimeInterval getTimeToCache() const  {
+      return _timeToCache;
+    }
+
+    bool getReadExpired() const {
+      return _readExpired;
+    }
+
+    const std::string getProperties() const {
+      return _properties;
     }
 
     void initialize(const G3MContext* context);
@@ -305,6 +430,9 @@ public:
                 const long long cameraTS,
                 GLState* glState);
 
+    void createMark(const Node* node,
+                    const GEO2DPointGeometry* geometry) const;
+
   };
 
 
@@ -324,6 +452,10 @@ public:
   VectorStreamingRenderer(MarksRenderer* markRenderer);
 
   ~VectorStreamingRenderer();
+
+  MarksRenderer* getMarkRenderer() const {
+    return _markRenderer;
+  }
 
   void render(const G3MRenderContext* rc,
               GLState* glState);

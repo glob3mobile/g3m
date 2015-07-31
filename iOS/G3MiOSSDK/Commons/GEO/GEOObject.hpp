@@ -19,6 +19,9 @@ class ShapesRenderer;
 class MarksRenderer;
 class GEOVectorLayer;
 
+#include "VectorStreamingRenderer.hpp"
+
+
 class GEOObject {
 public:
   virtual ~GEOObject() {
@@ -40,6 +43,9 @@ public:
   virtual long long getCoordinatesCount() const = 0;
 
   virtual GEOObject* deepCopy() const = 0;
+
+  virtual void createMarks(const VectorStreamingRenderer::VectorSet* vectorSet,
+                           const VectorStreamingRenderer::Node*      node) const = 0;
 
 };
 
