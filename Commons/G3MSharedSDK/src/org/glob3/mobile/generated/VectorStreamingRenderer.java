@@ -25,6 +25,9 @@ package org.glob3.mobile.generated;
 //class Geodetic2D;
 //class JSONArray;
 //class JSONObject;
+//class MarksRenderer;
+//class Mark;
+//class GEO2DPointGeometry;
 
 
 public class VectorStreamingRenderer extends DefaultRenderer
@@ -97,6 +100,8 @@ public class VectorStreamingRenderer extends DefaultRenderer
     
     public void dispose()
     {
+    // cancel pending requests
+    
       if (_sector != null)
          _sector.dispose();
       if (_averagePosition != null)
@@ -128,6 +133,8 @@ public class VectorStreamingRenderer extends DefaultRenderer
     //      loadFeatures();
     //    }
     //  }
+    
+    // don't load children until my features are loaded
     
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#warning Diego at work!
@@ -310,10 +317,23 @@ public class VectorStreamingRenderer extends DefaultRenderer
   }
 
 
+  public abstract static class VectorSetSymbolizer
+  {
+    public void dispose()
+    {
+    }
+
+    public abstract Mark createMark(GEO2DPointGeometry geometry);
+
+  }
+
+
   public static class VectorSet
   {
     private final URL _serverURL;
     private final String _name;
+    private final VectorSetSymbolizer _symbolizer;
+    private final boolean _deleteSymbolizer;
     private final long _downloadPriority;
     private final TimeInterval _timeToCache;
     private final boolean _readExpired;
@@ -335,10 +355,12 @@ public class VectorStreamingRenderer extends DefaultRenderer
     private long _lastRenderedCount;
 
 
-    public VectorSet(URL serverURL, String name, long downloadPriority, TimeInterval timeToCache, boolean readExpired, boolean verbose)
+    public VectorSet(URL serverURL, String name, VectorSetSymbolizer symbolizer, boolean deleteSymbolizer, long downloadPriority, TimeInterval timeToCache, boolean readExpired, boolean verbose)
     {
        _serverURL = serverURL;
        _name = name;
+       _symbolizer = symbolizer;
+       _deleteSymbolizer = deleteSymbolizer;
        _downloadPriority = downloadPriority;
        _timeToCache = timeToCache;
        _readExpired = readExpired;
@@ -356,6 +378,12 @@ public class VectorStreamingRenderer extends DefaultRenderer
 
     public void dispose()
     {
+      if (_deleteSymbolizer)
+      {
+        if (_symbolizer != null)
+           _symbolizer.dispose();
+      }
+    
       if (_sector != null)
          _sector.dispose();
       if (_averagePosition != null)
@@ -474,14 +502,17 @@ public class VectorStreamingRenderer extends DefaultRenderer
   }
 
 
+  private MarksRenderer _markRenderer;
+
   private int _vectorSetsSize;
   private java.util.ArrayList<VectorSet> _vectorSets = new java.util.ArrayList<VectorSet>();
 
   private java.util.ArrayList<String> _errors = new java.util.ArrayList<String>();
 
 
-  public VectorStreamingRenderer()
+  public VectorStreamingRenderer(MarksRenderer markRenderer)
   {
+     _markRenderer = markRenderer;
      _vectorSetsSize = 0;
   }
 
@@ -526,9 +557,9 @@ public class VectorStreamingRenderer extends DefaultRenderer
     }
   }
 
-  public final void addVectorSet(URL serverURL, String name, long downloadPriority, TimeInterval timeToCache, boolean readExpired, boolean verbose)
+  public final void addVectorSet(URL serverURL, String name, VectorSetSymbolizer symbolizer, boolean deleteSymbolizer, long downloadPriority, TimeInterval timeToCache, boolean readExpired, boolean verbose)
   {
-    VectorSet vectorSet = new VectorSet(serverURL, name, downloadPriority, timeToCache, readExpired, verbose);
+    VectorSet vectorSet = new VectorSet(serverURL, name, symbolizer, deleteSymbolizer, downloadPriority, timeToCache, readExpired, verbose);
     if (_context != null)
     {
       vectorSet.initialize(_context);
