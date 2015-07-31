@@ -83,7 +83,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
     private final Sector _sector;
     private final int _featuresCount;
     private final Geodetic2D _averagePosition;
-    private final java.util.ArrayList<String> _children = new java.util.ArrayList<String>();
+    private final java.util.ArrayList<String> _children;
 
     public Node(String id, Sector sector, int featuresCount, Geodetic2D averagePosition, java.util.ArrayList<String> children)
     {
@@ -282,7 +282,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
     private final URL _serverURL = new URL();
     private final String _name;
     private final long _downloadPriority;
-    private final TimeInterval _timeToCache = new TimeInterval();
+    private final TimeInterval _timeToCache;
     private final boolean _readExpired;
     private final boolean _verbose;
 
@@ -307,7 +307,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
        _serverURL = new URL(serverURL);
        _name = name;
        _downloadPriority = downloadPriority;
-       _timeToCache = new TimeInterval(timeToCache);
+       _timeToCache = timeToCache;
        _readExpired = readExpired;
        _verbose = verbose;
        _downloadingMetadata = false;
