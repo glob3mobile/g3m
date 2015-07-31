@@ -28,11 +28,7 @@
 
 
 VectorStreamingRenderer::Node::~Node() {
-  cancelLoadFeatures();
-  cancelLoadChildren();
-
-  unloadFeatures();
-  unloadChildren();
+  unload();
 
   delete _sector;
   delete _averagePosition;
@@ -40,6 +36,32 @@ VectorStreamingRenderer::Node::~Node() {
 #ifdef JAVA_CODE
   super.dispose();
 #endif
+}
+
+bool VectorStreamingRenderer::Node::isBigEnough() {
+#warning TODO
+  return true;
+}
+
+long long VectorStreamingRenderer::Node::renderFeatures() {
+#warning TODO
+  return 0;
+}
+
+void VectorStreamingRenderer::Node::loadFeatures() {
+#warning TODO
+}
+
+void VectorStreamingRenderer::Node::unloadFeatures() {
+#warning TODO
+}
+
+void VectorStreamingRenderer::Node::cancelLoadFeatures() {
+#warning TODO
+}
+
+void VectorStreamingRenderer::Node::loadChildren() {
+#warning TODO
 }
 
 void VectorStreamingRenderer::Node::unloadChildren() {
@@ -52,6 +74,14 @@ void VectorStreamingRenderer::Node::unloadChildren() {
     _children = NULL;
     _childrenSize = 0;
   }
+}
+
+void VectorStreamingRenderer::Node::cancelLoadChildren() {
+#warning TODO
+}
+
+void VectorStreamingRenderer::Node::removeMarks() {
+#warning TODO
 }
 
 bool VectorStreamingRenderer::Node::isVisible() {
@@ -67,11 +97,6 @@ bool VectorStreamingRenderer::Node::isVisible() {
 void VectorStreamingRenderer::Node::unload() {
   removeMarks();
 
-  if (_loadedFeatures) {
-    unloadFeatures();
-    _loadedFeatures = false;
-  }
-
   if (_loadingFeatures) {
     cancelLoadFeatures();
     _loadingFeatures = false;
@@ -80,6 +105,11 @@ void VectorStreamingRenderer::Node::unload() {
   if (_loadingChildren) {
     _loadingChildren = true;
     cancelLoadChildren();
+  }
+
+  if (_loadedFeatures) {
+    unloadFeatures();
+    _loadedFeatures = false;
   }
 
   if (_children != NULL) {

@@ -73,7 +73,6 @@ public:
     bool _loadedFeatures;
     bool _loadingFeatures;
 
-#warning IMPLEMENTS THOSE METHODS
     bool _wasBigEnough;
     bool isBigEnough();
     long long renderFeatures();
@@ -87,8 +86,8 @@ public:
     void cancelLoadChildren();
 
     void unload();
-#warning IMPLEMENTS THOSE METHODS
 
+    void removeMarks();
 
   protected:
     ~Node();
