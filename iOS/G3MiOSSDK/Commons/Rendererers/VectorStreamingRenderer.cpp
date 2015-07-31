@@ -15,6 +15,7 @@
 #include "JSONArray.hpp"
 #include "JSONNumber.hpp"
 #include "JSONString.hpp"
+#include "Camera.hpp"
 
 
 /*
@@ -25,9 +26,17 @@
 
  */
 
+
 VectorStreamingRenderer::Node::~Node() {
   delete _sector;
   delete _averagePosition;
+}
+
+long long VectorStreamingRenderer::Node::render(const G3MRenderContext* rc,
+                                                const long long cameraTS,
+                                                GLState* glState) {
+#warning Diego at work!
+  return 0;
 }
 
 Sector* VectorStreamingRenderer::GEOJSONUtils::parseSector(const JSONArray* json) {
@@ -68,9 +77,12 @@ VectorStreamingRenderer::MetadataParserAsyncTask::~MetadataParserAsyncTask() {
   delete _sector;
   delete _averagePosition;
 
-  for (size_t i = 0; i < _rootNodes.size(); i++) {
-    Node* node = _rootNodes[i];
-    delete node;
+  if (_rootNodes != NULL) {
+    for (size_t i = 0; i < _rootNodes->size(); i++) {
+      Node* node = _rootNodes->at(i);
+      delete node;
+    }
+    delete _rootNodes;
   }
 }
 
@@ -99,9 +111,10 @@ void VectorStreamingRenderer::MetadataParserAsyncTask::runInBackground(const G3M
     _maxNodeDepth    = (int) jsonObject->getAsNumber("maxNodeDepth")->value();
 
     const JSONArray* rootNodesJSON = jsonObject->getAsArray("rootNodes");
+    _rootNodes = new std::vector<Node*>();
     for (int i = 0; i < rootNodesJSON->size(); i++) {
       Node* node = GEOJSONUtils::parseNode( rootNodesJSON->getAsObject(i) );
-      _rootNodes.push_back(node);
+      _rootNodes->push_back(node);
     }
   }
 
@@ -122,11 +135,9 @@ void VectorStreamingRenderer::MetadataParserAsyncTask::onPostExecute(const G3MCo
                                _rootNodes);
     _sector          = NULL; // moved ownership to pointCloud
     _averagePosition = NULL; // moved ownership to pointCloud
-    _rootNodes.clear();      // moved ownership to pointCloud
+    _rootNodes       = NULL; // moved ownership to pointCloud
   }
 }
-
-
 
 void VectorStreamingRenderer::MetadataDownloadListener::onDownload(const URL& url,
                                                                    IByteBuffer* buffer,
@@ -170,20 +181,39 @@ void VectorStreamingRenderer::VectorSet::errorParsingMetadata() {
   _errorParsingMetadata = true;
 }
 
+VectorStreamingRenderer::VectorSet::~VectorSet() {
+  delete _sector;
+  delete _averagePosition;
+  if (_rootNodes != NULL) {
+    for (size_t i = 0; i < _rootNodes->size(); i++) {
+      Node* node = _rootNodes->at(i);
+      delete node;
+    }
+    delete _rootNodes;
+  }
+}
+
 void VectorStreamingRenderer::VectorSet::parsedMetadata(Sector* sector,
                                                         long long featuresCount,
                                                         Geodetic2D* averagePosition,
                                                         int nodesCount,
                                                         int minNodeDepth,
                                                         int maxNodeDepth,
-                                                        const std::vector<Node*>& rootNodes) {
+                                                        std::vector<Node*>* rootNodes) {
   _downloadingMetadata = false;
 
   if (_verbose) {
     ILogger::instance()->logInfo("Parsed metadata for \"%s\"", _name.c_str());
   }
 
-#warning Diego at work!
+  _sector          = sector;
+  _featuresCount   = featuresCount;
+  _averagePosition = averagePosition;
+  _nodesCount      = nodesCount;
+  _minNodeDepth    = minNodeDepth;
+  _maxNodeDepth    = maxNodeDepth;
+  _rootNodes       = rootNodes;
+  _rootNodesSize   = _rootNodes->size();
 }
 
 void VectorStreamingRenderer::VectorSet::initialize(const G3MContext* context) {
@@ -223,6 +253,30 @@ RenderState VectorStreamingRenderer::VectorSet::getRenderState(const G3MRenderCo
   return RenderState::ready();
 }
 
+void VectorStreamingRenderer::VectorSet::render(const G3MRenderContext* rc,
+                                                const long long cameraTS,
+                                                GLState* glState) {
+  if (_rootNodesSize > 0) {
+    long long renderedCount = 0;
+    for (size_t i = 0; i < _rootNodesSize; i++) {
+      Node* rootNode = _rootNodes->at(i);
+      renderedCount += rootNode->render(rc, cameraTS, glState);
+    }
+
+    if (_lastRenderedCount != renderedCount) {
+      if (_verbose) {
+#ifdef C_CODE
+        ILogger::instance()->logInfo("\"%s\": Rendered %ld features", _name.c_str(), renderedCount);
+#endif
+#ifdef JAVA_CODE
+        ILogger.instance().logInfo("\"%s\": Rendered %d features", _name, renderedCount);
+#endif
+      }
+      _lastRenderedCount = renderedCount;
+    }
+
+  }
+}
 
 VectorStreamingRenderer::~VectorStreamingRenderer() {
   for (size_t i = 0; i < _vectorSetsSize; i++) {
@@ -308,5 +362,11 @@ void VectorStreamingRenderer::addVectorSet(const URL& serverURL,
 
 void VectorStreamingRenderer::render(const G3MRenderContext* rc,
                                      GLState* glState) {
-#warning Diego at work!
+  for (int i = 0; i < _vectorSetsSize; i++) {
+    const Camera* camera = rc->getCurrentCamera();
+    const long long cameraTS = camera->getTimestamp();
+
+    VectorSet* vectorSector = _vectorSets[i];
+    vectorSector->render(rc, cameraTS, glState);
+  }
 }

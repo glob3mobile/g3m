@@ -70,6 +70,11 @@ public:
     }
 
     ~Node();
+
+    long long render(const G3MRenderContext* rc,
+                     const long long cameraTS,
+                     GLState* glState);
+
   };
 
 
@@ -81,13 +86,13 @@ public:
 
     bool         _parsingError;
 
-    Sector*            _sector;
-    long long          _featuresCount;
-    Geodetic2D*        _averagePosition;
-    int                _nodesCount;
-    int                _minNodeDepth;
-    int                _maxNodeDepth;
-    std::vector<Node*> _rootNodes;
+    Sector*             _sector;
+    long long           _featuresCount;
+    Geodetic2D*         _averagePosition;
+    int                 _nodesCount;
+    int                 _minNodeDepth;
+    int                 _maxNodeDepth;
+    std::vector<Node*>* _rootNodes;
 
   public:
     MetadataParserAsyncTask(VectorSet* vectorSet,
@@ -102,7 +107,8 @@ public:
     _averagePosition(NULL),
     _nodesCount(-1),
     _minNodeDepth(-1),
-    _maxNodeDepth(-1)
+    _maxNodeDepth(-1),
+    _rootNodes(NULL)
     {
     }
 
@@ -159,6 +165,17 @@ public:
     bool _errorDownloadingMetadata;
     bool _errorParsingMetadata;
 
+    Sector*             _sector;
+    long long           _featuresCount;
+    Geodetic2D*         _averagePosition;
+    int                 _nodesCount;
+    int                 _minNodeDepth;
+    int                 _maxNodeDepth;
+    std::vector<Node*>* _rootNodes;
+    size_t              _rootNodesSize;
+
+    long long _lastRenderedCount;
+
   public:
 
     VectorSet(const URL& serverURL,
@@ -175,10 +192,17 @@ public:
     _verbose(verbose),
     _downloadingMetadata(false),
     _errorDownloadingMetadata(false),
-    _errorParsingMetadata(false)
+    _errorParsingMetadata(false),
+    _sector(NULL),
+    _averagePosition(NULL),
+    _rootNodes(NULL),
+    _rootNodesSize(0),
+    _lastRenderedCount(0)
     {
 
     }
+
+    ~VectorSet();
 
     const std::string getName() const {
       return _name;
@@ -196,7 +220,11 @@ public:
                         int nodesCount,
                         int minNodeDepth,
                         int maxNodeDepth,
-                        const std::vector<Node*>& rootNodes);
+                        std::vector<Node*>* rootNodes);
+
+    void render(const G3MRenderContext* rc,
+                const long long cameraTS,
+                GLState* glState);
 
   };
 
