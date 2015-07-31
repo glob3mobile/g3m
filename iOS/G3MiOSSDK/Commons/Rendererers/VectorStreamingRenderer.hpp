@@ -87,7 +87,6 @@ public:
   private:
     VectorSet*   _vectorSet;
     IByteBuffer* _buffer;
-    const bool   _verbose;
 
     bool         _parsingError;
 
@@ -101,11 +100,9 @@ public:
 
   public:
     MetadataParserAsyncTask(VectorSet* vectorSet,
-                            IByteBuffer* buffer,
-                            bool verbose) :
+                            IByteBuffer* buffer) :
     _vectorSet(vectorSet),
     _buffer(buffer),
-    _verbose(verbose),
     _parsingError(false),
     _sector(NULL),
     _featuresCount(-1),
@@ -159,7 +156,12 @@ public:
 
   class VectorSet {
   private:
-    const URL          _serverURL;
+#ifdef C_CODE
+    const URL _serverURL;
+#endif
+#ifdef JAVA_CODE
+    private final URL _serverURL;
+#endif
     const std::string  _name;
     const long long    _downloadPriority;
 #ifdef C_CODE

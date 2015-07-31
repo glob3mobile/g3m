@@ -176,7 +176,7 @@ void VectorStreamingRenderer::MetadataDownloadListener::onDownload(const URL& ur
 #endif
   }
 
-  _threadUtils->invokeAsyncTask(new MetadataParserAsyncTask(_vectorSet, buffer, _verbose),
+  _threadUtils->invokeAsyncTask(new MetadataParserAsyncTask(_vectorSet, buffer),
                                 true);
 }
 
