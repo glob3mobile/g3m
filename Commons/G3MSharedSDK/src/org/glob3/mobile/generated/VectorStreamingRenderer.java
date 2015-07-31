@@ -77,23 +77,13 @@ public class VectorStreamingRenderer extends DefaultRenderer
   }
 
 
-  public static class Node
+  public static class Node extends RCObject
   {
     private final String _id;
     private final Sector _sector;
     private final int _featuresCount;
     private final Geodetic2D _averagePosition;
     private final java.util.ArrayList<String> _children;
-
-    public Node(String id, Sector sector, int featuresCount, Geodetic2D averagePosition, java.util.ArrayList<String> children)
-    {
-       _id = id;
-       _sector = sector;
-       _featuresCount = featuresCount;
-       _averagePosition = averagePosition;
-       _children = children;
-
-    }
 
 
     /*
@@ -111,10 +101,34 @@ public class VectorStreamingRenderer extends DefaultRenderer
          _sector.dispose();
       if (_averagePosition != null)
          _averagePosition.dispose();
+    
+      super.dispose();
+    }
+
+    public Node(String id, Sector sector, int featuresCount, Geodetic2D averagePosition, java.util.ArrayList<String> children)
+    {
+       _id = id;
+       _sector = sector;
+       _featuresCount = featuresCount;
+       _averagePosition = averagePosition;
+       _children = children;
+
     }
 
     public final long render(G3MRenderContext rc, long cameraTS, GLState glState)
     {
+    
+    //  checkVisibility();
+    //
+    //  if (loadedFeatures) {
+    //    renderFeatures();
+    //  }
+    //  else {
+    //    if (!loadingFeatures) {
+    //      loadFeatures();
+    //    }
+    //  }
+    
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#warning Diego at work!
       return 0;
@@ -167,8 +181,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
         for (int i = 0; i < _rootNodes.size(); i++)
         {
           Node node = _rootNodes.get(i);
-          if (node != null)
-             node.dispose();
+          node._release();
         }
         _rootNodes = null;
       }
@@ -352,8 +365,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
         for (int i = 0; i < _rootNodes.size(); i++)
         {
           Node node = _rootNodes.get(i);
-          if (node != null)
-             node.dispose();
+          node._release();
         }
         _rootNodes = null;
       }
