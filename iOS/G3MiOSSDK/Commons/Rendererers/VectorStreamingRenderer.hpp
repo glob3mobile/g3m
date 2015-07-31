@@ -77,7 +77,7 @@ public:
 
     bool _wasVisible;
     bool isVisible(const G3MRenderContext* rc,
-                   const Frustum* cameraFrustumInModelCoordinates);
+                   const Frustum* frustumInModelCoordinates);
 
     bool _loadedFeatures;
     bool _loadingFeatures;
@@ -126,7 +126,7 @@ public:
     }
 
     long long render(const G3MRenderContext* rc,
-                     const Frustum* cameraFrustumInModelCoordinates,
+                     const Frustum* frustumInModelCoordinates,
                      const long long cameraTS,
                      GLState* glState);
 
@@ -301,7 +301,7 @@ public:
                         std::vector<Node*>* rootNodes);
 
     void render(const G3MRenderContext* rc,
-                const Frustum* cameraFrustumInModelCoordinates,
+                const Frustum* frustumInModelCoordinates,
                 const long long cameraTS,
                 GLState* glState);
 

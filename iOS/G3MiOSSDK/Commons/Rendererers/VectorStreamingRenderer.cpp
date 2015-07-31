@@ -45,10 +45,10 @@ BoundingVolume* VectorStreamingRenderer::Node::getBoundingVolume(const G3MRender
 
 #ifdef C_CODE
     const Vector3D c[5] = {
-      planet->toCartesian( _sector->getNE() ),
-      planet->toCartesian( _sector->getNW() ),
-      planet->toCartesian( _sector->getSE() ),
-      planet->toCartesian( _sector->getSW() ),
+      planet->toCartesian( _sector->getNE()     ),
+      planet->toCartesian( _sector->getNW()     ),
+      planet->toCartesian( _sector->getSE()     ),
+      planet->toCartesian( _sector->getSW()     ),
       planet->toCartesian( _sector->getCenter() )
     };
 
@@ -56,10 +56,10 @@ BoundingVolume* VectorStreamingRenderer::Node::getBoundingVolume(const G3MRender
 #endif
 #ifdef JAVA_CODE
     java.util.ArrayList<Vector3D>points = new java.util.ArrayList<Vector3D>(5);
-    _cornersD.add( planet.toCartesian( _sector.getNE() ) );
-    _cornersD.add( planet.toCartesian( _sector.getNW() ) );
-    _cornersD.add( planet.toCartesian( _sector.getSE() ) );
-    _cornersD.add( planet.toCartesian( _sector.getSW() ) );
+    _cornersD.add( planet.toCartesian( _sector.getNE()     ) );
+    _cornersD.add( planet.toCartesian( _sector.getNW()     ) );
+    _cornersD.add( planet.toCartesian( _sector.getSE()     ) );
+    _cornersD.add( planet.toCartesian( _sector.getSW()     ) );
     _cornersD.add( planet.toCartesian( _sector.getCenter() ) );
 #endif
 
@@ -70,13 +70,12 @@ BoundingVolume* VectorStreamingRenderer::Node::getBoundingVolume(const G3MRender
 }
 
 bool VectorStreamingRenderer::Node::isBigEnough(const G3MRenderContext *rc) {
-//  if ((_sector->_deltaLatitude._degrees  > 80) ||
-//      (_sector->_deltaLongitude._degrees > 80)) {
-//    return true;
-//  }
+  //  if ((_sector->_deltaLatitude._degrees  > 80) ||
+  //      (_sector->_deltaLongitude._degrees > 80)) {
+  //    return true;
+  //  }
 
-  BoundingVolume* boundingVolume = getBoundingVolume(rc);
-  const double projectedArea = boundingVolume->projectedArea(rc);
+  const double projectedArea = getBoundingVolume(rc)->projectedArea(rc);
   return (projectedArea > 100000);
 }
 
@@ -124,14 +123,13 @@ void VectorStreamingRenderer::Node::removeMarks() {
 }
 
 bool VectorStreamingRenderer::Node::isVisible(const G3MRenderContext* rc,
-                                              const Frustum* cameraFrustumInModelCoordinates) {
-//  if ((_sector->_deltaLatitude._degrees  > 80) ||
-//      (_sector->_deltaLongitude._degrees > 80)) {
-//    return true;
-//  }
+                                              const Frustum* frustumInModelCoordinates) {
+  //  if ((_sector->_deltaLatitude._degrees  > 80) ||
+  //      (_sector->_deltaLongitude._degrees > 80)) {
+  //    return true;
+  //  }
 
-  BoundingVolume* boundingVolume = getBoundingVolume(rc);
-  return boundingVolume->touchesFrustum(cameraFrustumInModelCoordinates);
+  return getBoundingVolume(rc)->touchesFrustum(frustumInModelCoordinates);
 }
 
 void VectorStreamingRenderer::Node::unload() {
@@ -158,18 +156,18 @@ void VectorStreamingRenderer::Node::unload() {
 }
 
 long long VectorStreamingRenderer::Node::render(const G3MRenderContext* rc,
-                                                const Frustum* cameraFrustumInModelCoordinates,
+                                                const Frustum* frustumInModelCoordinates,
                                                 const long long cameraTS,
                                                 GLState* glState) {
 
   long long renderedCount = 0;
 
-  getBoundingVolume(rc)->render(rc,
-                                glState,
-                                Color::red());
+#warning Show Bounding Volume
+  getBoundingVolume(rc)->render(rc, glState, Color::red());
 
-  if (isBigEnough(rc)) {
-    const bool visible = isVisible(rc, cameraFrustumInModelCoordinates);
+  const bool bigEnough = isBigEnough(rc);
+  if (bigEnough) {
+    const bool visible = isVisible(rc, frustumInModelCoordinates);
     if (visible) {
       if (_loadedFeatures) {
         renderedCount += renderFeatures(rc, glState);
@@ -185,7 +183,7 @@ long long VectorStreamingRenderer::Node::render(const G3MRenderContext* rc,
           for (size_t i = 0; i < _childrenSize; i++) {
             Node* child = _children->at(i);
             renderedCount += child->render(rc,
-                                           cameraFrustumInModelCoordinates,
+                                           frustumInModelCoordinates,
                                            cameraTS,
                                            glState);
           }
@@ -207,11 +205,11 @@ long long VectorStreamingRenderer::Node::render(const G3MRenderContext* rc,
   }
   else {
     if (_wasBigEnough) {
-      _wasBigEnough = false;
       unload();
     }
   }
-  
+  _wasBigEnough = bigEnough;
+
   return renderedCount;
 }
 
@@ -469,7 +467,7 @@ RenderState VectorStreamingRenderer::VectorSet::getRenderState(const G3MRenderCo
 }
 
 void VectorStreamingRenderer::VectorSet::render(const G3MRenderContext* rc,
-                                                const Frustum* cameraFrustumInModelCoordinates,
+                                                const Frustum* frustumInModelCoordinates,
                                                 const long long cameraTS,
                                                 GLState* glState) {
   if (_rootNodesSize > 0) {
@@ -477,7 +475,7 @@ void VectorStreamingRenderer::VectorSet::render(const G3MRenderContext* rc,
     for (size_t i = 0; i < _rootNodesSize; i++) {
       Node* rootNode = _rootNodes->at(i);
       renderedCount += rootNode->render(rc,
-                                        cameraFrustumInModelCoordinates,
+                                        frustumInModelCoordinates,
                                         cameraTS,
                                         glState);
     }
@@ -612,7 +610,7 @@ void VectorStreamingRenderer::render(const G3MRenderContext* rc,
                                      GLState* glState) {
   for (int i = 0; i < _vectorSetsSize; i++) {
     const Camera* camera = rc->getCurrentCamera();
-    const Frustum* cameraFrustumInModelCoordinates = camera->getFrustumInModelCoordinates();
+    const Frustum* frustumInModelCoordinates = camera->getFrustumInModelCoordinates();
 
     const long long cameraTS = camera->getTimestamp();
 
@@ -621,7 +619,7 @@ void VectorStreamingRenderer::render(const G3MRenderContext* rc,
 
     VectorSet* vectorSector = _vectorSets[i];
     vectorSector->render(rc,
-                         cameraFrustumInModelCoordinates,
+                         frustumInModelCoordinates,
                          cameraTS,
                          _glState);
   }
