@@ -29,6 +29,9 @@ class JSONObject;
 class MarksRenderer;
 class Mark;
 class GEO2DPointGeometry;
+class BoundingVolume;
+class Camera;
+class Frustum;
 
 
 class VectorStreamingRenderer : public DefaultRenderer {
@@ -65,17 +68,24 @@ public:
 
     std::vector<Node*>* _children;
     size_t _childrenSize;
+
+
+    BoundingVolume* _boundingVolume;
+    BoundingVolume* getBoundingVolume(const G3MRenderContext *rc);
+
     bool _loadingChildren;
 
     bool _wasVisible;
-    bool isVisible();
+    bool isVisible(const G3MRenderContext* rc,
+                   const Frustum* cameraFrustumInModelCoordinates);
 
     bool _loadedFeatures;
     bool _loadingFeatures;
 
     bool _wasBigEnough;
-    bool isBigEnough();
-    long long renderFeatures();
+    bool isBigEnough(const G3MRenderContext *rc);
+    long long renderFeatures(const G3MRenderContext *rc,
+                             const GLState *glState);
 
     void loadFeatures();
     void unloadFeatures();
@@ -109,12 +119,14 @@ public:
     _children(NULL),
     _childrenSize(0),
     _loadingChildren(false),
-    _wasBigEnough(false)
+    _wasBigEnough(false),
+    _boundingVolume(NULL)
     {
 
     }
 
     long long render(const G3MRenderContext* rc,
+                     const Frustum* cameraFrustumInModelCoordinates,
                      const long long cameraTS,
                      GLState* glState);
 
@@ -289,6 +301,7 @@ public:
                         std::vector<Node*>* rootNodes);
 
     void render(const G3MRenderContext* rc,
+                const Frustum* cameraFrustumInModelCoordinates,
                 const long long cameraTS,
                 GLState* glState);
 
@@ -303,13 +316,12 @@ private:
 
   std::vector<std::string> _errors;
 
+  GLState* _glState;
+  void updateGLState(const Camera* camera);
+
 public:
 
-  VectorStreamingRenderer(MarksRenderer* markRenderer) :
-  _markRenderer(markRenderer),
-  _vectorSetsSize(0)
-  {
-  }
+  VectorStreamingRenderer(MarksRenderer* markRenderer);
 
   ~VectorStreamingRenderer();
 

@@ -16,7 +16,7 @@
 #include "JSONNumber.hpp"
 #include "JSONString.hpp"
 #include "Camera.hpp"
-
+#include "Sphere.hpp"
 
 /*
 
@@ -32,19 +32,58 @@ VectorStreamingRenderer::Node::~Node() {
 
   delete _sector;
   delete _averagePosition;
+  delete _boundingVolume;
 
 #ifdef JAVA_CODE
   super.dispose();
 #endif
 }
 
-bool VectorStreamingRenderer::Node::isBigEnough() {
-#warning TODO
-  return true;
+BoundingVolume* VectorStreamingRenderer::Node::getBoundingVolume(const G3MRenderContext *rc) {
+  if (_boundingVolume == NULL) {
+    const Planet* planet = rc->getPlanet();
+
+#ifdef C_CODE
+    const Vector3D c[5] = {
+      planet->toCartesian( _sector->getNE() ),
+      planet->toCartesian( _sector->getNW() ),
+      planet->toCartesian( _sector->getSE() ),
+      planet->toCartesian( _sector->getSW() ),
+      planet->toCartesian( _sector->getCenter() )
+    };
+
+    std::vector<Vector3D> points(c, c+5);
+#endif
+#ifdef JAVA_CODE
+    java.util.ArrayList<Vector3D>points = new java.util.ArrayList<Vector3D>(5);
+    _cornersD.add( planet.toCartesian( _sector.getNE() ) );
+    _cornersD.add( planet.toCartesian( _sector.getNW() ) );
+    _cornersD.add( planet.toCartesian( _sector.getSE() ) );
+    _cornersD.add( planet.toCartesian( _sector.getSW() ) );
+    _cornersD.add( planet.toCartesian( _sector.getCenter() ) );
+#endif
+
+    _boundingVolume = Sphere::enclosingSphere(points);
+  }
+
+  return _boundingVolume;
 }
 
-long long VectorStreamingRenderer::Node::renderFeatures() {
+bool VectorStreamingRenderer::Node::isBigEnough(const G3MRenderContext *rc) {
+//  if ((_sector->_deltaLatitude._degrees  > 80) ||
+//      (_sector->_deltaLongitude._degrees > 80)) {
+//    return true;
+//  }
+
+  BoundingVolume* boundingVolume = getBoundingVolume(rc);
+  const double projectedArea = boundingVolume->projectedArea(rc);
+  return (projectedArea > 100000);
+}
+
+long long VectorStreamingRenderer::Node::renderFeatures(const G3MRenderContext *rc,
+                                                        const GLState *glState) {
 #warning TODO
+
   return 0;
 }
 
@@ -84,14 +123,15 @@ void VectorStreamingRenderer::Node::removeMarks() {
 #warning TODO
 }
 
-bool VectorStreamingRenderer::Node::isVisible() {
-  if ((_sector->_deltaLatitude._degrees  > 80) ||
-      (_sector->_deltaLongitude._degrees > 80)) {
-    return true;
-  }
+bool VectorStreamingRenderer::Node::isVisible(const G3MRenderContext* rc,
+                                              const Frustum* cameraFrustumInModelCoordinates) {
+//  if ((_sector->_deltaLatitude._degrees  > 80) ||
+//      (_sector->_deltaLongitude._degrees > 80)) {
+//    return true;
+//  }
 
-#warning TODO
-  return false;
+  BoundingVolume* boundingVolume = getBoundingVolume(rc);
+  return boundingVolume->touchesFrustum(cameraFrustumInModelCoordinates);
 }
 
 void VectorStreamingRenderer::Node::unload() {
@@ -118,16 +158,21 @@ void VectorStreamingRenderer::Node::unload() {
 }
 
 long long VectorStreamingRenderer::Node::render(const G3MRenderContext* rc,
+                                                const Frustum* cameraFrustumInModelCoordinates,
                                                 const long long cameraTS,
                                                 GLState* glState) {
 
   long long renderedCount = 0;
 
-  if (isBigEnough()) {
-    const bool visible = isVisible();
+  getBoundingVolume(rc)->render(rc,
+                                glState,
+                                Color::red());
+
+  if (isBigEnough(rc)) {
+    const bool visible = isVisible(rc, cameraFrustumInModelCoordinates);
     if (visible) {
       if (_loadedFeatures) {
-        renderedCount += renderFeatures();
+        renderedCount += renderFeatures(rc, glState);
 
         if (_children == NULL) {
           // don't load children until my features are loaded
@@ -139,7 +184,10 @@ long long VectorStreamingRenderer::Node::render(const G3MRenderContext* rc,
         if (_children != NULL) {
           for (size_t i = 0; i < _childrenSize; i++) {
             Node* child = _children->at(i);
-            renderedCount += child->render(rc, cameraTS, glState);
+            renderedCount += child->render(rc,
+                                           cameraFrustumInModelCoordinates,
+                                           cameraTS,
+                                           glState);
           }
         }
       }
@@ -421,13 +469,17 @@ RenderState VectorStreamingRenderer::VectorSet::getRenderState(const G3MRenderCo
 }
 
 void VectorStreamingRenderer::VectorSet::render(const G3MRenderContext* rc,
+                                                const Frustum* cameraFrustumInModelCoordinates,
                                                 const long long cameraTS,
                                                 GLState* glState) {
   if (_rootNodesSize > 0) {
     long long renderedCount = 0;
     for (size_t i = 0; i < _rootNodesSize; i++) {
       Node* rootNode = _rootNodes->at(i);
-      renderedCount += rootNode->render(rc, cameraTS, glState);
+      renderedCount += rootNode->render(rc,
+                                        cameraFrustumInModelCoordinates,
+                                        cameraTS,
+                                        glState);
     }
 
     if (_lastRenderedCount != renderedCount) {
@@ -445,13 +497,20 @@ void VectorStreamingRenderer::VectorSet::render(const G3MRenderContext* rc,
   }
 }
 
+VectorStreamingRenderer::VectorStreamingRenderer(MarksRenderer* markRenderer) :
+_markRenderer(markRenderer),
+_vectorSetsSize(0),
+_glState(new GLState())
+{
+}
+
 VectorStreamingRenderer::~VectorStreamingRenderer() {
   for (size_t i = 0; i < _vectorSetsSize; i++) {
     VectorSet* vectorSet = _vectorSets[i];
     delete vectorSet;
   }
 
-  //  _glState->_release();
+  _glState->_release();
   //  delete _timer;
 
 #ifdef JAVA_CODE
@@ -515,7 +574,6 @@ RenderState VectorStreamingRenderer::getRenderState(const G3MRenderContext* rc) 
   }
 }
 
-
 void VectorStreamingRenderer::addVectorSet(const URL&                 serverURL,
                                            const std::string&         name,
                                            const VectorSetSymbolizer* symbolizer,
@@ -539,14 +597,32 @@ void VectorStreamingRenderer::addVectorSet(const URL&                 serverURL,
   _vectorSetsSize = _vectorSets.size();
 }
 
+void VectorStreamingRenderer::updateGLState(const Camera* camera) {
+  ModelViewGLFeature* f = (ModelViewGLFeature*) _glState->getGLFeature(GLF_MODEL_VIEW);
+  if (f == NULL) {
+    _glState->addGLFeature(new ModelViewGLFeature(camera), true);
+  }
+  else {
+    f->setMatrix(camera->getModelViewMatrix44D());
+  }
+}
+
 
 void VectorStreamingRenderer::render(const G3MRenderContext* rc,
                                      GLState* glState) {
   for (int i = 0; i < _vectorSetsSize; i++) {
     const Camera* camera = rc->getCurrentCamera();
+    const Frustum* cameraFrustumInModelCoordinates = camera->getFrustumInModelCoordinates();
+
     const long long cameraTS = camera->getTimestamp();
-    
+
+    updateGLState(camera);
+    _glState->setParent(glState);
+
     VectorSet* vectorSector = _vectorSets[i];
-    vectorSector->render(rc, cameraTS, glState);
+    vectorSector->render(rc,
+                         cameraFrustumInModelCoordinates,
+                         cameraTS,
+                         _glState);
   }
 }
