@@ -739,7 +739,7 @@ public class G3MWidget implements ChangedRendererInfoListener
         Vector3D pixel3D = new Vector3D(column, _height - row,z);
         MutableMatrix44D mmv = new MutableMatrix44D(_currentCamera.getModelViewMatrix44D());
         Vector3D pos = mmv.unproject(pixel3D, 0, 0, _width, _height);
-        _nextCamera.setGroundHeightFromCartesianPoint(pos);
+  //      _nextCamera->setGroundHeightFromCartesianPoint(pos);
         return pos;
       }
       row++;

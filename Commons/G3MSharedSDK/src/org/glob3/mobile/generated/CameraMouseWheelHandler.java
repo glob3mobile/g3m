@@ -114,6 +114,7 @@ public class CameraMouseWheelHandler extends CameraEventHandler
   
     // apply transformation
     cameraContext.getNextCamera().setLookAtParams(cameraPosition.transformedBy(matrix, 1.0), cameraCenter.transformedBy(matrix, 1.0), cameraUp.transformedBy(matrix, 0.0));
+  
   }
 
 }
