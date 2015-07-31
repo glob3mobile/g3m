@@ -57,6 +57,7 @@
 		CC0DFA6E178B4B4E001F6355 /* Frustum.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CC0DFA6D178B49E6001F6355 /* Frustum.hpp */; };
 		CC41E3A015B1FD5B00B5581C /* Plane.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CC41E39F15B1FD5B00B5581C /* Plane.cpp */; };
 		CC41E3B615B32DFB00B5581C /* Frustum.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CC41E3B515B32DFB00B5581C /* Frustum.cpp */; };
+		CC54A2131B4D4F0A00B649CC /* CameraMouseWheelHandler.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8F6165F19E7DE8500825A2D /* CameraMouseWheelHandler.hpp */; };
 		CC55C47F15D11D8500923D7B /* CameraDoubleTapHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CC55C47E15D11D8500923D7B /* CameraDoubleTapHandler.cpp */; };
 		CC596F2215C46D4F008FC230 /* Camera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CC596F1C15C46D4F008FC230 /* Camera.cpp */; };
 		CC596F2415C46D4F008FC230 /* CameraDoubleDragHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CC596F1E15C46D4F008FC230 /* CameraDoubleDragHandler.cpp */; };
@@ -747,6 +748,7 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				CC54A2131B4D4F0A00B649CC /* CameraMouseWheelHandler.hpp in CopyFiles */,
 				D8EBB5E61B66394E000C696D /* DeviceLocation_iOS.hpp in CopyFiles */,
 				D8EBB5E21B662FA9000C696D /* CameraMouseWheelHandler.hpp in CopyFiles */,
 				D8CC36541B4BF72B00FAC679 /* NASAElevationDataProvider.hpp in CopyFiles */,

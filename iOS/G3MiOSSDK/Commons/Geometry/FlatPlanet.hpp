@@ -212,6 +212,13 @@ public:
     return "Flat";
   }
   
+  MutableMatrix44D zoomUsingMouseWheel(double factor,
+                                       const Vector3D& origin,
+                                       const Vector3D& centerRay,
+                                       const Vector3D& centerPosition,
+                                       const Vector3D& touchedPosition,
+                                       const Vector3D& finalRay) const;
+  
 };
 
 

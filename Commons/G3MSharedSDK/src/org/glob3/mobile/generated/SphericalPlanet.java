@@ -1080,4 +1080,29 @@ public class SphericalPlanet extends Planet
   {
     return "Spherical";
   }
+
+  public final MutableMatrix44D zoomUsingMouseWheel(double factor, Vector3D origin, Vector3D centerRay, Vector3D centerPosition, Vector3D touchedPosition, Vector3D finalRay)
+  {
+    // move forward
+    double distance = origin.distanceTo(centerPosition);
+    final Vector3D translation = centerRay.normalized().times(factor *distance);
+    MutableMatrix44D matrix = MutableMatrix44D.createTranslationMatrix(translation);
+  
+    // compute new final point after moving forward
+    double dragRadius = _sphere._radius + toGeodetic3D(touchedPosition)._height;
+    final Vector3D finalPoint = Sphere.closestIntersectionCenteredSphereWithRay(origin.add(translation), finalRay, dragRadius);
+    if (_finalPoint0.isNan())
+    {
+      matrix.setInvalid();
+      return matrix;
+    }
+  
+    // drag initial point to final point
+    MutableMatrix44D dragMatrix = createDragMatrix(touchedPosition, finalPoint);
+    matrix.copyValueOfMultiplication(dragMatrix, matrix);
+  
+    return matrix;
+  }
+
+
 }

@@ -929,3 +929,33 @@ void SphericalPlanet::correctPitchAfterDoubleDrag(Camera* camera, const Vector2F
 }
 
 
+MutableMatrix44D SphericalPlanet::zoomUsingMouseWheel(double factor,
+                                                      const Vector3D& origin,
+                                                      const Vector3D& centerRay,
+                                                      const Vector3D& centerPosition,
+                                                      const Vector3D& touchedPosition,
+                                                      const Vector3D& finalRay) const {
+  // move forward
+  double distance = origin.distanceTo(centerPosition);
+  const Vector3D translation = centerRay.normalized().times(factor*distance);
+  MutableMatrix44D matrix = MutableMatrix44D::createTranslationMatrix(translation);
+  
+  // compute new final point after moving forward
+  double dragRadius = _sphere._radius + toGeodetic3D(touchedPosition)._height;
+  const Vector3D finalPoint = Sphere::closestIntersectionCenteredSphereWithRay(origin.add(translation),
+                                                                               finalRay,
+                                                                               dragRadius);
+  if (_finalPoint0.isNan()) {
+    matrix.setInvalid();
+    return matrix;
+  }
+  
+  // drag initial point to final point
+  MutableMatrix44D dragMatrix = createDragMatrix(touchedPosition, finalPoint);
+  matrix.copyValueOfMultiplication(dragMatrix, matrix);
+  
+  return matrix;
+}
+
+
+

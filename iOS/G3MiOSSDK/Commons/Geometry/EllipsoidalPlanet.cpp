@@ -479,3 +479,23 @@ void EllipsoidalPlanet::applyCameraConstrainers(const Camera* previousCamera,
 void EllipsoidalPlanet::correctPitchAfterDoubleDrag(Camera* camera, const Vector2F& finalPixel0, const Vector2F& finalPixel1) const{
   _sphericalPlanetDoubleDragDelegate->correctPitchAfterDoubleDrag(camera, finalPixel0, finalPixel1);
 }
+
+
+MutableMatrix44D EllipsoidalPlanet::zoomUsingMouseWheel(double factor,
+                                                        const Vector3D& origin,
+                                                        const Vector3D& centerRay,
+                                                        const Vector3D& centerPosition,
+                                                        const Vector3D& touchedPosition,
+                                                        const Vector3D& finalRay) const {
+  if (_sphericalPlanetDoubleDragDelegate == NULL){
+    _sphericalPlanetDoubleDragDelegate = new SphericalPlanet(Sphere(Vector3D::zero, _ellipsoid._radii.maxAxis()));
+  }
+  return _sphericalPlanetDoubleDragDelegate->zoomUsingMouseWheel(factor,
+                                                                 origin,
+                                                                 centerRay,
+                                                                 centerPosition,
+                                                                 touchedPosition,
+                                                                 finalRay);
+}
+
+
