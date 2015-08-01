@@ -383,7 +383,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
       //  }
     
       final double projectedArea = getBoundingVolume(rc).projectedArea(rc);
-      return (projectedArea > 150000);
+      return (projectedArea > 200000);
     }
 
     private long _featuresRequestID;
@@ -574,18 +574,19 @@ public class VectorStreamingRenderer extends DefaultRenderer
     public final long render(G3MRenderContext rc, Frustum frustumInModelCoordinates, long cameraTS, GLState glState)
     {
     
-      long renderedCount = _marksCount;
+      long renderedCount = 0;
     
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#warning Show Bounding Volume
       getBoundingVolume(rc).render(rc, glState, Color.red());
     
-      final boolean bigEnough = isBigEnough(rc);
-      if (bigEnough)
+      final boolean visible = isVisible(rc, frustumInModelCoordinates);
+      if (visible)
       {
-        final boolean visible = isVisible(rc, frustumInModelCoordinates);
-        if (visible)
+        final boolean bigEnough = isBigEnough(rc);
+        if (bigEnough)
         {
+          renderedCount += _marksCount;
           if (_loadedFeatures)
           {
             // don't load children until my features are loaded
@@ -614,24 +615,25 @@ public class VectorStreamingRenderer extends DefaultRenderer
               loadFeatures(rc);
             }
           }
+    
         }
         else
         {
-          if (_wasVisible)
+          if (_wasBigEnough)
           {
             unload();
           }
         }
-        _wasVisible = visible;
+        _wasBigEnough = bigEnough;
       }
       else
       {
-        if (_wasBigEnough)
+        if (_wasVisible)
         {
           unload();
         }
       }
-      _wasBigEnough = bigEnough;
+      _wasVisible = visible;
     
       return renderedCount;
     }
@@ -656,7 +658,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
     
         _marksCount = _features.createMarks(_vectorSet, this);
     
-    //  Delete _features???
+        //  Delete _features???
         if (_features != null)
            _features.dispose();
         _features = null;
