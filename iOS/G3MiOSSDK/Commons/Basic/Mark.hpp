@@ -109,6 +109,8 @@ private:
    */
   const bool        _autoDeleteListener;
 
+  std::string _token = "";
+
 #ifdef C_CODE
   const TextureIDReference* _textureId;
 #endif
@@ -125,10 +127,10 @@ private:
 #ifdef JAVA_CODE
   private IImage _textureImage;
 #endif
-  float               _textureWidth;
-  float               _textureHeight;
-  float               _textureWidthProportion;
-  float               _textureHeightProportion;
+  float             _textureWidth;
+  float             _textureHeight;
+  float             _textureWidthProportion;
+  float             _textureHeightProportion;
   bool              _textureSizeSetExternally;
   bool              _textureProportionSetExternally;
   const std::string _imageID;
@@ -300,6 +302,14 @@ public:
                                            const Vector2F& scaling);
   
   void setMarkAnchor(float anchorU, float anchorV);
+
+  void setToken(const std::string& token) {
+    _token = token;
+  }
+
+  const std::string getToken() const {
+    return _token;
+  }
 
 };
 

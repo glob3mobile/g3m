@@ -253,3 +253,24 @@ void MarksRenderer::onResizeViewportEvent(const G3MEventContext* ec,
   _glState->clearGLFeatureGroup(NO_GROUP);
   _glState->addGLFeature(new ViewportExtentGLFeature(width, height), false);
 }
+
+size_t MarksRenderer::removeAllMarks(const MarksFilter& filter) {
+  size_t removed = 0;
+  std::vector<Mark*> newMarks;
+
+  const size_t marksSize = _marks.size();
+  for (size_t i = 0; i < marksSize; i++) {
+    Mark* mark = _marks[i];
+    if ( !filter.test(mark) ) {
+      removed++;
+      newMarks.push_back(mark);
+    }
+  }
+
+  if (removed > 0) {
+    _marks = newMarks;
+  }
+
+  return removed;
+}
+

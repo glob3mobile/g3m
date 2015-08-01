@@ -21,6 +21,18 @@ class Camera;
 class MarkTouchListener;
 class IFloatBuffer;
 
+
+class MarksFilter {
+public:
+  virtual ~MarksFilter() {
+  }
+
+  virtual bool test(const Mark* mark) const = 0;
+
+};
+
+
+
 class MarksRenderer : public DefaultRenderer {
 private:
   const bool         _readyWhenMarksReady;
@@ -96,7 +108,9 @@ public:
   void modifiyGLState(GLState* state) {
     
   }
-  
+
+  size_t removeAllMarks(const MarksFilter& filter);
+
 };
 
 #endif

@@ -19,7 +19,7 @@
 #include "Sphere.hpp"
 #include "GEOJSONParser.hpp"
 #include "GEOObject.hpp"
-#include "MarksRenderer.hpp"
+#include "Mark.hpp"
 
 
 VectorStreamingRenderer::FeaturesParserAsyncTask::~FeaturesParserAsyncTask() {
@@ -100,12 +100,6 @@ void VectorStreamingRenderer::Node::parsedFeatures(GEOObject* features,
     _features = features;
 
     _features->createMarks(_vectorSet, this);
-
-#warning TODO create marks on background
-//    threadUtils->invokeAsyncTask(new MarksCreatorAsyncTask(this, _features, _markRenderer),
-//                                 true);
-
-#warning TODO create marks
   }
 }
 
@@ -227,8 +221,30 @@ void VectorStreamingRenderer::Node::cancelLoadChildren() {
 #warning TODO
 }
 
+VectorStreamingRenderer::NodeMarksFilter::NodeMarksFilter(const Node* node) {
+  _nodeToken = node->getMarkToken();
+}
+
+bool VectorStreamingRenderer::NodeMarksFilter::test(const Mark* mark) const {
+  return (mark->getToken() == _nodeToken);
+}
+
+
 void VectorStreamingRenderer::Node::removeMarks() {
-#warning TODO
+  size_t removed = _vectorSet->getMarksRenderer()->removeAllMarks( NodeMarksFilter(this) );
+
+  if (_verbose) {
+#ifdef C_CODE
+    ILogger::instance()->logInfo("Removed %ld marks for node \"%s\" (bytes=)",
+                                 removed,
+                                 getFullName().c_str());
+#endif
+#ifdef JAVA_CODE
+    ILogger.instance().logInfo("Removed %d marks for node \"%s\" (bytes=)",
+                               removed,
+                               getFullName());
+#endif
+  }
 }
 
 bool VectorStreamingRenderer::Node::isVisible(const G3MRenderContext* rc,
@@ -613,7 +629,7 @@ void VectorStreamingRenderer::VectorSet::createMark(const Node* node,
 
   Mark* mark = _symbolizer->createMark(geometry);
   if (mark != NULL) {
-#warning    mark->setUserdata();
+    mark->setToken(node->getMarkToken());
     _renderer->getMarkRenderer()->addMark( mark );
   }
 

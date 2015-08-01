@@ -26,7 +26,6 @@ class Sector;
 class Geodetic2D;
 class JSONArray;
 class JSONObject;
-class MarksRenderer;
 class Mark;
 class GEO2DPointGeometry;
 class BoundingVolume;
@@ -34,6 +33,8 @@ class Camera;
 class Frustum;
 class IDownloader;
 class GEOObject;
+
+#include "MarksRenderer.hpp"
 
 class VectorStreamingRenderer : public DefaultRenderer {
 public:
@@ -120,6 +121,18 @@ public:
     void onCanceledDownload(const URL& url,
                             IByteBuffer* buffer,
                             bool expired);
+
+  };
+
+
+  class NodeMarksFilter : public MarksFilter {
+  private:
+    std::string _nodeToken;
+
+  public:
+    NodeMarksFilter(const Node* node);
+
+    bool test(const Mark* mark) const;
 
   };
 
@@ -211,6 +224,10 @@ public:
 
     const std::string getFullName() const {
       return _vectorSet->getName() + "/" + _id;
+    }
+
+    const std::string getMarkToken() const {
+      return getFullName();
     }
 
     long long render(const G3MRenderContext* rc,
@@ -433,6 +450,10 @@ public:
     void createMark(const Node* node,
                     const GEO2DPointGeometry* geometry) const;
 
+    MarksRenderer* getMarksRenderer() const {
+      return _renderer->getMarkRenderer();
+    }
+
   };
 
 
@@ -479,7 +500,11 @@ public:
   void removeAllVectorSets();
   
   RenderState getRenderState(const G3MRenderContext* rc);
-  
+
+  MarksRenderer* getMarksRenderer() const {
+    return _markRenderer;
+  }
+
 };
 
 #endif
