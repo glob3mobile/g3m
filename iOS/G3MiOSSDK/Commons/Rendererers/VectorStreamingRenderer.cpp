@@ -228,16 +228,6 @@ BoundingVolume* VectorStreamingRenderer::Node::getBoundingVolume(const G3MRender
   return _boundingVolume;
 }
 
-bool VectorStreamingRenderer::Node::isBigEnough(const G3MRenderContext *rc) {
-  //  if ((_sector->_deltaLatitude._degrees  >= 80) ||
-  //      (_sector->_deltaLongitude._degrees >= 80)) {
-  //    return true;
-  //  }
-
-  const double projectedArea = getBoundingVolume(rc)->projectedArea(rc);
-  return (projectedArea > 200000);
-}
-
 void VectorStreamingRenderer::Node::loadFeatures(const G3MRenderContext* rc) {
   const URL metadataURL(_vectorSet->getServerURL(),
                         _vectorSet->getName() + "/features" +
@@ -379,6 +369,16 @@ bool VectorStreamingRenderer::Node::isVisible(const G3MRenderContext* rc,
   return getBoundingVolume(rc)->touchesFrustum(frustumInModelCoordinates);
 }
 
+bool VectorStreamingRenderer::Node::isBigEnough(const G3MRenderContext *rc) {
+  if ((_sector->_deltaLatitude._degrees  >= 80) ||
+      (_sector->_deltaLongitude._degrees >= 80)) {
+    return true;
+  }
+
+  const double projectedArea = getBoundingVolume(rc)->projectedArea(rc);
+  return (projectedArea > 350000);
+}
+
 void VectorStreamingRenderer::Node::unload() {
   removeMarks();
 
@@ -410,7 +410,7 @@ long long VectorStreamingRenderer::Node::render(const G3MRenderContext* rc,
   long long renderedCount = 0;
 
 #warning Show Bounding Volume
-  //getBoundingVolume(rc)->render(rc, glState, Color::red());
+  // getBoundingVolume(rc)->render(rc, glState, Color::red());
 
   const bool visible = isVisible(rc, frustumInModelCoordinates);
   if (visible) {
