@@ -148,7 +148,7 @@ public:
     const std::vector<std::string> _childrenIDs;
 #endif
 #ifdef JAVA_CODE
-    private final java.util.ArrayList<String> _children;
+    private final java.util.ArrayList<String> _childrenIDs;
 #endif
 
     std::vector<Node*>* _children;

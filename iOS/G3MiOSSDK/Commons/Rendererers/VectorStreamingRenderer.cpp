@@ -52,7 +52,7 @@ void VectorStreamingRenderer::NodeFeaturesDownloadListener::onDownload(const URL
 #endif
 #ifdef JAVA_CODE
     ILogger.instance().logInfo("Downloaded features for \"%s\" (bytes=%d)",
-                               _node->getFullName(),
+                               _node.getFullName(),
                                buffer.size());
 #endif
   }
@@ -122,12 +122,12 @@ BoundingVolume* VectorStreamingRenderer::Node::getBoundingVolume(const G3MRender
     std::vector<Vector3D> points(c, c+5);
 #endif
 #ifdef JAVA_CODE
-    java.util.ArrayList<Vector3D>points = new java.util.ArrayList<Vector3D>(5);
-    _cornersD.add( planet.toCartesian( _sector.getNE()     ) );
-    _cornersD.add( planet.toCartesian( _sector.getNW()     ) );
-    _cornersD.add( planet.toCartesian( _sector.getSE()     ) );
-    _cornersD.add( planet.toCartesian( _sector.getSW()     ) );
-    _cornersD.add( planet.toCartesian( _sector.getCenter() ) );
+    java.util.ArrayList<Vector3D> points = new java.util.ArrayList<Vector3D>(5);
+    points.add( planet.toCartesian( _sector.getNE()     ) );
+    points.add( planet.toCartesian( _sector.getNW()     ) );
+    points.add( planet.toCartesian( _sector.getSE()     ) );
+    points.add( planet.toCartesian( _sector.getSW()     ) );
+    points.add( planet.toCartesian( _sector.getCenter() ) );
 #endif
 
     _boundingVolume = Sphere::enclosingSphere(points);
@@ -477,7 +477,9 @@ void VectorStreamingRenderer::MetadataDownloadListener::onDownload(const URL& ur
                                  buffer->size());
 #endif
 #ifdef JAVA_CODE
-    ILogger.instance().logInfo("Downloaded metadata for \"%s\" (bytes=%d)", _vectorSet.getName(), buffer.size());
+    ILogger.instance().logInfo("Downloaded metadata for \"%s\" (bytes=%d)",
+                               _vectorSet.getName(),
+                               buffer.size());
 #endif
   }
 
