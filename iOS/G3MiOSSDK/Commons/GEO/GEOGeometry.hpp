@@ -50,8 +50,8 @@ public:
 
   virtual GEOGeometry* deepCopy() const = 0;
 
-  virtual size_t createMarks(const VectorStreamingRenderer::VectorSet* vectorSet,
-                             const VectorStreamingRenderer::Node*      node) const {
+  virtual long long createMarks(const VectorStreamingRenderer::VectorSet* vectorSet,
+                                const VectorStreamingRenderer::Node*      node) const {
     return 0;
   }
 

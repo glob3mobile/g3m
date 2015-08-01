@@ -173,8 +173,6 @@ public:
 
     bool _wasBigEnough;
     bool isBigEnough(const G3MRenderContext *rc);
-    long long renderFeatures(const G3MRenderContext *rc,
-                             const GLState *glState);
 
     long long _featuresRequestID;
     void loadFeatures(const G3MRenderContext* rc);
@@ -189,7 +187,7 @@ public:
 
     void removeMarks();
 
-    size_t _marksCount;
+    long long _marksCount;
 
   protected:
     ~Node();
@@ -450,8 +448,8 @@ public:
                 const long long cameraTS,
                 GLState* glState);
 
-    size_t createMark(const Node* node,
-                      const GEO2DPointGeometry* geometry) const;
+    long long createMark(const Node* node,
+                         const GEO2DPointGeometry* geometry) const;
 
     MarksRenderer* getMarksRenderer() const {
       return _renderer->getMarkRenderer();

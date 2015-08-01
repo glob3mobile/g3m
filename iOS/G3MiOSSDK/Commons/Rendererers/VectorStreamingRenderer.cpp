@@ -146,13 +146,6 @@ bool VectorStreamingRenderer::Node::isBigEnough(const G3MRenderContext *rc) {
   return (projectedArea > 100000);
 }
 
-long long VectorStreamingRenderer::Node::renderFeatures(const G3MRenderContext *rc,
-                                                        const GLState *glState) {
-#warning TODO
-
-  return _marksCount;
-}
-
 void VectorStreamingRenderer::Node::loadFeatures(const G3MRenderContext* rc) {
   /*
    http://localhost:8080/server-mapboo/public/VectorialStreaming/GEONames-PopulatedPlaces_LOD/features?node=&properties=name|population|featureClass|featureCode
@@ -287,7 +280,7 @@ long long VectorStreamingRenderer::Node::render(const G3MRenderContext* rc,
                                                 const long long cameraTS,
                                                 GLState* glState) {
 
-  long long renderedCount = 0;
+  long long renderedCount = _marksCount;
 
 #warning Show Bounding Volume
   getBoundingVolume(rc)->render(rc, glState, Color::red());
@@ -297,10 +290,8 @@ long long VectorStreamingRenderer::Node::render(const G3MRenderContext* rc,
     const bool visible = isVisible(rc, frustumInModelCoordinates);
     if (visible) {
       if (_loadedFeatures) {
-        renderedCount += renderFeatures(rc, glState);
-
+        // don't load children until my features are loaded
         if (_children == NULL) {
-          // don't load children until my features are loaded
           if (!_loadingChildren) {
             _loadingChildren = true;
             loadChildren(rc);
@@ -628,8 +619,8 @@ void VectorStreamingRenderer::VectorSet::render(const G3MRenderContext* rc,
   }
 }
 
-size_t VectorStreamingRenderer::VectorSet::createMark(const Node* node,
-                                                    const GEO2DPointGeometry* geometry) const {
+long long VectorStreamingRenderer::VectorSet::createMark(const Node* node,
+                                                         const GEO2DPointGeometry* geometry) const {
   Mark* mark = _symbolizer->createMark(geometry);
   if (mark == NULL) {
     return 0;
