@@ -45,8 +45,9 @@ public class VectorStreamingRenderer extends DefaultRenderer
 
   public static class GEOJSONUtils
   {
-//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
-//    GEOJSONUtils();
+    private GEOJSONUtils()
+    {
+    }
 
     public static Sector parseSector(JSONArray json)
     {
@@ -83,7 +84,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
 
   }
 
-//  ;
+
 
   public static class ChildrenParserAsyncTask extends GAsyncTask
   {
@@ -376,10 +377,10 @@ public class VectorStreamingRenderer extends DefaultRenderer
     private boolean _wasBigEnough;
     private boolean isBigEnough(G3MRenderContext rc)
     {
-    //  if ((_sector->_deltaLatitude._degrees  >= 80) ||
-    //      (_sector->_deltaLongitude._degrees >= 80)) {
-    //    return true;
-    //  }
+      //  if ((_sector->_deltaLatitude._degrees  >= 80) ||
+      //      (_sector->_deltaLongitude._degrees >= 80)) {
+      //    return true;
+      //  }
     
       final double projectedArea = getBoundingVolume(rc).projectedArea(rc);
       return (projectedArea > 150000);
@@ -420,7 +421,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
     private void loadChildren(G3MRenderContext rc)
     {
     
-     // http://192.168.1.12:8080/server-mapboo/public/VectorialStreaming/GEONames-PopulatedPlaces_LOD/?nodes=0|1|
+      // http://192.168.1.12:8080/server-mapboo/public/VectorialStreaming/GEONames-PopulatedPlaces_LOD/?nodes=0|1|
     
       final int childrenIDsSize = _childrenIDs.size();
       if (childrenIDsSize == 0)
@@ -448,9 +449,6 @@ public class VectorStreamingRenderer extends DefaultRenderer
       }
     
       _downloader = rc.getDownloader();
-    
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning TODO
     
       _childrenRequestID = _downloader.requestBuffer(childrenURL, _vectorSet.getDownloadPriority(), _vectorSet.getTimeToCache(), _vectorSet.getReadExpired(), new VectorStreamingRenderer.NodeChildrenDownloadListener(this, rc.getThreadUtils(), _verbose), true);
     }
@@ -509,9 +507,9 @@ public class VectorStreamingRenderer extends DefaultRenderer
     {
       int removed = _vectorSet.getMarksRenderer().removeAllMarks(new NodeMarksFilter(this));
     
-      if (_verbose)
+      if (_verbose && removed != 0)
       {
-        ILogger.instance().logInfo("Removed %d marks for node \"%s\" (bytes=)",
+        ILogger.instance().logInfo("Removed %d marks for node \"%s\"",
                                    removed,
                                    getFullName());
       }
@@ -658,8 +656,10 @@ public class VectorStreamingRenderer extends DefaultRenderer
     
         _marksCount = _features.createMarks(_vectorSet, this);
     
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning Delete _features???
+    //  Delete _features???
+        if (_features != null)
+           _features.dispose();
+        _features = null;
       }
     }
 
