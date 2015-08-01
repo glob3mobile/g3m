@@ -45,7 +45,7 @@ public:
 
   class GEOJSONUtils {
   private:
-    GEOJSONUtils();
+    GEOJSONUtils() {}
 
   public:
     static Sector*     parseSector(const JSONArray* json);
@@ -56,7 +56,7 @@ public:
 
   };
 
-  ;
+
 
   class ChildrenParserAsyncTask : public GAsyncTask {
   private:
@@ -86,7 +86,7 @@ public:
     void runInBackground(const G3MContext* context);
 
     void onPostExecute(const G3MContext* context);
-    
+
   };
 
 
@@ -123,7 +123,7 @@ public:
     void onCanceledDownload(const URL& url,
                             IByteBuffer* buffer,
                             bool expired);
-    
+
   };
 
 
@@ -437,7 +437,7 @@ public:
     const bool         _verbose;
 
     const std::string _properties;
-    
+
     bool _downloadingMetadata;
     bool _errorDownloadingMetadata;
     bool _errorParsingMetadata;
@@ -585,11 +585,11 @@ public:
   void removeAllVectorSets();
   
   RenderState getRenderState(const G3MRenderContext* rc);
-
+  
   MarksRenderer* getMarksRenderer() const {
     return _markRenderer;
   }
-
+  
 };
 
 #endif

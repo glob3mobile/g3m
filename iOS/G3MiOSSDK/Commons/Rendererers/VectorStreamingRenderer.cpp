@@ -191,7 +191,9 @@ void VectorStreamingRenderer::Node::parsedFeatures(GEOObject* features,
 
     _marksCount = _features->createMarks(_vectorSet, this);
 
-#warning Delete _features???
+//  Delete _features???
+    delete _features;
+    _features = NULL;
   }
 }
 
@@ -227,10 +229,10 @@ BoundingVolume* VectorStreamingRenderer::Node::getBoundingVolume(const G3MRender
 }
 
 bool VectorStreamingRenderer::Node::isBigEnough(const G3MRenderContext *rc) {
-//  if ((_sector->_deltaLatitude._degrees  >= 80) ||
-//      (_sector->_deltaLongitude._degrees >= 80)) {
-//    return true;
-//  }
+  //  if ((_sector->_deltaLatitude._degrees  >= 80) ||
+  //      (_sector->_deltaLongitude._degrees >= 80)) {
+  //    return true;
+  //  }
 
   const double projectedArea = getBoundingVolume(rc)->projectedArea(rc);
   return (projectedArea > 150000);
@@ -277,7 +279,7 @@ void VectorStreamingRenderer::Node::cancelLoadFeatures() {
 
 void VectorStreamingRenderer::Node::loadChildren(const G3MRenderContext* rc) {
 
- // http://192.168.1.12:8080/server-mapboo/public/VectorialStreaming/GEONames-PopulatedPlaces_LOD/?nodes=0|1|
+  // http://192.168.1.12:8080/server-mapboo/public/VectorialStreaming/GEONames-PopulatedPlaces_LOD/?nodes=0|1|
 
   const size_t childrenIDsSize = _childrenIDs.size();
   if (childrenIDsSize == 0) {
