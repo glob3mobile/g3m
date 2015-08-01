@@ -99,7 +99,9 @@ void VectorStreamingRenderer::Node::parsedFeatures(GEOObject* features,
   else {
     _features = features;
 
-    _features->createMarks(_vectorSet, this);
+    _marksCount = _features->createMarks(_vectorSet, this);
+
+#warning Delete _features???
   }
 }
 
@@ -148,7 +150,7 @@ long long VectorStreamingRenderer::Node::renderFeatures(const G3MRenderContext *
                                                         const GLState *glState) {
 #warning TODO
 
-  return 0;
+  return _marksCount;
 }
 
 void VectorStreamingRenderer::Node::loadFeatures(const G3MRenderContext* rc) {
@@ -624,15 +626,16 @@ void VectorStreamingRenderer::VectorSet::render(const G3MRenderContext* rc,
   }
 }
 
-void VectorStreamingRenderer::VectorSet::createMark(const Node* node,
+size_t VectorStreamingRenderer::VectorSet::createMark(const Node* node,
                                                     const GEO2DPointGeometry* geometry) const {
-
   Mark* mark = _symbolizer->createMark(geometry);
-  if (mark != NULL) {
-    mark->setToken(node->getMarkToken());
-    _renderer->getMarkRenderer()->addMark( mark );
+  if (mark == NULL) {
+    return 0;
   }
 
+  mark->setToken( node->getMarkToken() );
+  _renderer->getMarkRenderer()->addMark( mark );
+  return 1;
 }
 
 VectorStreamingRenderer::VectorStreamingRenderer(MarksRenderer* markRenderer) :

@@ -39,8 +39,8 @@ public:
 
   GEO2DPointGeometry* deepCopy() const;
 
-  void createMarks(const VectorStreamingRenderer::VectorSet* vectorSet,
-                   const VectorStreamingRenderer::Node*      node) const;
+  size_t createMarks(const VectorStreamingRenderer::VectorSet* vectorSet,
+                     const VectorStreamingRenderer::Node*      node) const;
 
 };
 

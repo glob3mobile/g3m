@@ -189,6 +189,8 @@ public:
 
     void removeMarks();
 
+    size_t _marksCount;
+
   protected:
     ~Node();
 
@@ -217,7 +219,8 @@ public:
     _boundingVolume(NULL),
     _featuresRequestID(-1),
     _downloader(NULL),
-    _features(NULL)
+    _features(NULL),
+    _marksCount(0)
     {
 
     }
@@ -447,8 +450,8 @@ public:
                 const long long cameraTS,
                 GLState* glState);
 
-    void createMark(const Node* node,
-                    const GEO2DPointGeometry* geometry) const;
+    size_t createMark(const Node* node,
+                      const GEO2DPointGeometry* geometry) const;
 
     MarksRenderer* getMarksRenderer() const {
       return _renderer->getMarkRenderer();
