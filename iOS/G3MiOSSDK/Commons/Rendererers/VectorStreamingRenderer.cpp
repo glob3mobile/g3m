@@ -191,7 +191,7 @@ void VectorStreamingRenderer::Node::parsedFeatures(GEOObject* features,
 
     _marksCount = _features->createMarks(_vectorSet, this);
 
-//  Delete _features???
+    //  Delete _features???
     delete _features;
     _features = NULL;
   }
@@ -407,15 +407,16 @@ long long VectorStreamingRenderer::Node::render(const G3MRenderContext* rc,
                                                 const long long cameraTS,
                                                 GLState* glState) {
 
-  long long renderedCount = _marksCount;
+  long long renderedCount = 0;
 
 #warning Show Bounding Volume
   getBoundingVolume(rc)->render(rc, glState, Color::red());
 
-  const bool bigEnough = isBigEnough(rc);
-  if (bigEnough) {
-    const bool visible = isVisible(rc, frustumInModelCoordinates);
-    if (visible) {
+  const bool visible = isVisible(rc, frustumInModelCoordinates);
+  if (visible) {
+    const bool bigEnough = isBigEnough(rc);
+    if (bigEnough) {
+      renderedCount += _marksCount;
       if (_loadedFeatures) {
         // don't load children until my features are loaded
         if (_children == NULL) {
@@ -440,20 +441,21 @@ long long VectorStreamingRenderer::Node::render(const G3MRenderContext* rc,
           loadFeatures(rc);
         }
       }
+
     }
     else {
-      if (_wasVisible) {
+      if (_wasBigEnough) {
         unload();
       }
     }
-    _wasVisible = visible;
+    _wasBigEnough = bigEnough;
   }
   else {
-    if (_wasBigEnough) {
+    if (_wasVisible) {
       unload();
     }
   }
-  _wasBigEnough = bigEnough;
+  _wasVisible = visible;
 
   return renderedCount;
 }
