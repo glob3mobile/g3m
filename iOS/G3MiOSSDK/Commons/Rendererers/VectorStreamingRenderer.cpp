@@ -227,13 +227,13 @@ BoundingVolume* VectorStreamingRenderer::Node::getBoundingVolume(const G3MRender
 }
 
 bool VectorStreamingRenderer::Node::isBigEnough(const G3MRenderContext *rc) {
-  //  if ((_sector->_deltaLatitude._degrees  > 80) ||
-  //      (_sector->_deltaLongitude._degrees > 80)) {
-  //    return true;
-  //  }
+//  if ((_sector->_deltaLatitude._degrees  >= 80) ||
+//      (_sector->_deltaLongitude._degrees >= 80)) {
+//    return true;
+//  }
 
   const double projectedArea = getBoundingVolume(rc)->projectedArea(rc);
-  return (projectedArea > 100000);
+  return (projectedArea > 150000);
 }
 
 void VectorStreamingRenderer::Node::loadFeatures(const G3MRenderContext* rc) {
