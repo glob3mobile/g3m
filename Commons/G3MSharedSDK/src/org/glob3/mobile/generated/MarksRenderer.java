@@ -1,30 +1,4 @@
 package org.glob3.mobile.generated; 
-//
-//  MarksRenderer.cpp
-//  G3MiOSSDK
-//
-//  Created by Diego Gomez Deck on 05/06/12.
-//  Copyright (c) 2012 IGO Software SL. All rights reserved.
-//
-
-//
-//  MarksRenderer.hpp
-//  G3MiOSSDK
-//
-//  Created by Diego Gomez Deck on 05/06/12.
-//  Copyright (c) 2012 IGO Software SL. All rights reserved.
-//
-
-
-
-///#include "GPUProgramState.hpp"
-
-
-//class Mark;
-//class Camera;
-//class MarkTouchListener;
-//class IFloatBuffer;
-
 public class MarksRenderer extends DefaultRenderer
 {
   private final boolean _readyWhenMarksReady;
@@ -329,6 +303,30 @@ public class MarksRenderer extends DefaultRenderer
   public final void modifiyGLState(GLState state)
   {
 
+  }
+
+  public final int removeAllMarks(MarksFilter filter)
+  {
+    int removed = 0;
+    java.util.ArrayList<Mark> newMarks = new java.util.ArrayList<Mark>();
+  
+    final int marksSize = _marks.size();
+    for (int i = 0; i < marksSize; i++)
+    {
+      Mark mark = _marks.get(i);
+      if (!filter.test(mark))
+      {
+        removed++;
+        newMarks.add(mark);
+      }
+    }
+  
+    if (removed > 0)
+    {
+      _marks = newMarks;
+    }
+  
+    return removed;
   }
 
 }

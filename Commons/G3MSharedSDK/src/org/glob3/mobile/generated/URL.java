@@ -63,7 +63,11 @@ public class URL
 
   public URL(URL parent, String path)
   {
-     _path = concatenatePath(parent, path);
+     this(parent, path, false);
+  }
+  public URL(URL parent, String path, boolean escapePath)
+  {
+     _path = concatenatePath(parent, escapePath ? escape(path) : path);
   }
 
   public void dispose()

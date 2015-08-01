@@ -78,4 +78,9 @@ public abstract class GEOGeometry extends GEOObject
 
   public abstract GEOGeometry deepCopy();
 
+  public final void createMarks(VectorStreamingRenderer.VectorSet vectorSet, VectorStreamingRenderer.Node node)
+  {
+
+  }
+
 }

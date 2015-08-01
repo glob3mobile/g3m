@@ -70,6 +70,8 @@ public class Mark implements SurfaceElevationListener
    */
   private final boolean _autoDeleteListener;
 
+  private String _token = "";
+
   private TextureIDReference _textureId;
 
   private Vector3D _cartesianPosition;
@@ -814,6 +816,16 @@ public class Mark implements SurfaceElevationListener
     }
     _anchorU = anchorU;
     _anchorV = anchorV;
+  }
+
+  public final void setToken(String token)
+  {
+    _token = token;
+  }
+
+  public final String getToken()
+  {
+    return _token;
   }
 
 }
