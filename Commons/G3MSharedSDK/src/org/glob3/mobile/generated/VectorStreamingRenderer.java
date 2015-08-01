@@ -376,13 +376,13 @@ public class VectorStreamingRenderer extends DefaultRenderer
     private boolean _wasBigEnough;
     private boolean isBigEnough(G3MRenderContext rc)
     {
-      //  if ((_sector->_deltaLatitude._degrees  > 80) ||
-      //      (_sector->_deltaLongitude._degrees > 80)) {
-      //    return true;
-      //  }
+    //  if ((_sector->_deltaLatitude._degrees  >= 80) ||
+    //      (_sector->_deltaLongitude._degrees >= 80)) {
+    //    return true;
+    //  }
     
       final double projectedArea = getBoundingVolume(rc).projectedArea(rc);
-      return (projectedArea > 100000);
+      return (projectedArea > 150000);
     }
 
     private long _featuresRequestID;
@@ -437,7 +437,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
         {
           nodes += "|";
         }
-        nodes += _childrenIDs[i];
+        nodes += _childrenIDs.get(i);
       }
     
       final URL childrenURL = new URL(_vectorSet.getServerURL(), _vectorSet.getName() + "?nodes=" + nodes, true);
