@@ -179,6 +179,7 @@ public:
     void unloadFeatures();
     void cancelLoadFeatures();
 
+    long long _childrenRequestID;
     void loadChildren(const G3MRenderContext* rc);
     void unloadChildren();
     void cancelLoadChildren();
@@ -216,6 +217,7 @@ public:
     _wasBigEnough(false),
     _boundingVolume(NULL),
     _featuresRequestID(-1),
+    _childrenRequestID(-1),
     _downloader(NULL),
     _features(NULL),
     _marksCount(0)

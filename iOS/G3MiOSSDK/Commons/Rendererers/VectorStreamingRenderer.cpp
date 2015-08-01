@@ -93,6 +93,7 @@ void VectorStreamingRenderer::Node::parsedFeatures(GEOObject* features,
                                                    const IThreadUtils* threadUtils) {
   _loadedFeatures = true;
   _loadingFeatures = false;
+  _featuresRequestID = -1;
   if (features == NULL) {
     // do nothing by now
   }
@@ -198,6 +199,9 @@ void VectorStreamingRenderer::Node::cancelLoadFeatures() {
 
 void VectorStreamingRenderer::Node::loadChildren(const G3MRenderContext* rc) {
 #warning TODO
+
+
+//  _childrenRequestID = 
 }
 
 void VectorStreamingRenderer::Node::unloadChildren() {
@@ -213,7 +217,10 @@ void VectorStreamingRenderer::Node::unloadChildren() {
 }
 
 void VectorStreamingRenderer::Node::cancelLoadChildren() {
-#warning TODO
+  if (_childrenRequestID != -1) {
+    _downloader->cancelRequest(_childrenRequestID);
+    _childrenRequestID = -1;
+  }
 }
 
 VectorStreamingRenderer::NodeMarksFilter::NodeMarksFilter(const Node* node) {
