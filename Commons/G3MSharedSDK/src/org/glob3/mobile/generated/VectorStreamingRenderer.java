@@ -154,7 +154,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
       if (_verbose)
       {
         ILogger.instance().logInfo("Downloaded features for \"%s\" (bytes=%d)",
-                                   _node->getFullName(),
+                                   _node.getFullName(),
                                    buffer.size());
       }
     
@@ -204,7 +204,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
     private final Sector _sector;
     private final int _featuresCount;
     private final Geodetic2D _averagePosition;
-    private final java.util.ArrayList<String> _children;
+    private final java.util.ArrayList<String> _childrenIDs;
 
     private java.util.ArrayList<Node> _children;
     private int _childrenSize;
@@ -220,12 +220,12 @@ public class VectorStreamingRenderer extends DefaultRenderer
       {
         final Planet planet = rc.getPlanet();
     
-        java.util.ArrayList<Vector3D>points = new java.util.ArrayList<Vector3D>(5);
-        _cornersD.add( planet.toCartesian( _sector.getNE()     ) );
-        _cornersD.add( planet.toCartesian( _sector.getNW()     ) );
-        _cornersD.add( planet.toCartesian( _sector.getSE()     ) );
-        _cornersD.add( planet.toCartesian( _sector.getSW()     ) );
-        _cornersD.add( planet.toCartesian( _sector.getCenter() ) );
+        java.util.ArrayList<Vector3D> points = new java.util.ArrayList<Vector3D>(5);
+        points.add( planet.toCartesian( _sector.getNE()     ) );
+        points.add( planet.toCartesian( _sector.getNW()     ) );
+        points.add( planet.toCartesian( _sector.getSE()     ) );
+        points.add( planet.toCartesian( _sector.getSW()     ) );
+        points.add( planet.toCartesian( _sector.getCenter() ) );
     
         _boundingVolume = Sphere.enclosingSphere(points);
       }
@@ -266,7 +266,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#warning TODO
     
-      return 0;
+      return _marksCount;
     }
 
     private long _featuresRequestID;
@@ -376,6 +376,8 @@ public class VectorStreamingRenderer extends DefaultRenderer
       }
     }
 
+    private int _marksCount;
+
     public void dispose()
     {
       unload();
@@ -410,6 +412,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
        _featuresRequestID = -1;
        _downloader = null;
        _features = null;
+       _marksCount = 0;
 
     }
 
@@ -507,7 +510,10 @@ public class VectorStreamingRenderer extends DefaultRenderer
       {
         _features = features;
     
-        _features.createMarks(_vectorSet, this);
+        _marksCount = _features.createMarks(_vectorSet, this);
+    
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning Delete _features???
       }
     }
 
@@ -665,7 +671,9 @@ public class VectorStreamingRenderer extends DefaultRenderer
     {
       if (_verbose)
       {
-        ILogger.instance().logInfo("Downloaded metadata for \"%s\" (bytes=%d)", _vectorSet.getName(), buffer.size());
+        ILogger.instance().logInfo("Downloaded metadata for \"%s\" (bytes=%d)",
+                                   _vectorSet.getName(),
+                                   buffer.size());
       }
     
       _threadUtils.invokeAsyncTask(new MetadataParserAsyncTask(_vectorSet, _verbose, buffer), true);
@@ -901,16 +909,17 @@ public class VectorStreamingRenderer extends DefaultRenderer
       }
     }
 
-    public final void createMark(Node node, GEO2DPointGeometry geometry)
+    public final int createMark(Node node, GEO2DPointGeometry geometry)
     {
-    
       Mark mark = _symbolizer.createMark(geometry);
-      if (mark != null)
+      if (mark == null)
       {
-        mark.setToken(node.getMarkToken());
-        _renderer.getMarkRenderer().addMark(mark);
+        return 0;
       }
     
+      mark.setToken(node.getMarkToken());
+      _renderer.getMarkRenderer().addMark(mark);
+      return 1;
     }
 
     public final MarksRenderer getMarksRenderer()

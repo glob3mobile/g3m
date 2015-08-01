@@ -90,12 +90,13 @@ public class GEOFeature extends GEOObject
     return new GEOFeature((_id == null) ? null : _id.deepCopy(), (_geometry == null) ? null : _geometry.deepCopy(), (_properties == null) ? null : _properties.deepCopy());
   }
 
-  public final void createMarks(VectorStreamingRenderer.VectorSet vectorSet, VectorStreamingRenderer.Node node)
+  public final int createMarks(VectorStreamingRenderer.VectorSet vectorSet, VectorStreamingRenderer.Node node)
   {
     if (_geometry != null)
     {
-      _geometry.createMarks(vectorSet, node);
+      return _geometry.createMarks(vectorSet, node);
     }
+    return 0;
   }
 
 }

@@ -109,18 +109,19 @@ public class GEOFeatureCollection extends GEOObject
     return new GEOFeatureCollection(copy(_features));
   }
 
-  public final void createMarks(VectorStreamingRenderer.VectorSet vectorSet, VectorStreamingRenderer.Node node)
+  public final int createMarks(VectorStreamingRenderer.VectorSet vectorSet, VectorStreamingRenderer.Node node)
   {
+    int result = 0;
     final int featuresCount = _features.size();
     for (int i = 0; i < featuresCount; i++)
     {
       GEOFeature feature = _features.get(i);
       if (feature != null)
       {
-        feature.createMarks(vectorSet, node);
+        result += feature.createMarks(vectorSet, node);
       }
     }
-  
+    return result;
   }
 
 }
