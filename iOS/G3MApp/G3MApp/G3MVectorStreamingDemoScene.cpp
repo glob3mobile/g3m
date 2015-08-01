@@ -18,6 +18,7 @@
 #include <G3MiOSSDK/Mark.hpp>
 #include <G3MiOSSDK/JSONObject.hpp>
 #include <G3MiOSSDK/JSONString.hpp>
+#include <G3MiOSSDK/JSONNumber.hpp>
 
 #include "G3MDemoModel.hpp"
 
@@ -44,13 +45,19 @@ public:
 //         MarkTouchListener* listener=NULL,
 //         bool               autoDeleteListener=false);
 
+
     const std::string label = properties->getAsString("name")->value();
     const Geodetic3D  position( geometry->getPosition(), 0);
+
+    double maxPopulation = 22315474;
+    double population = properties->getAsNumber("population")->value();
+    float labelFontSize = (float) (10.0 * (population / maxPopulation) + 14.0) ;
 
     return new Mark(label,
                     position,
                     ABSOLUTE,
-                    0 // minDistanceToCamera
+                    0, // minDistanceToCamera
+                    labelFontSize
                     );
   }
 

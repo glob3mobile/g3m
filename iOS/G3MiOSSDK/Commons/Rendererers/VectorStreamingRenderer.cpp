@@ -410,7 +410,7 @@ long long VectorStreamingRenderer::Node::render(const G3MRenderContext* rc,
   long long renderedCount = 0;
 
 #warning Show Bounding Volume
-  getBoundingVolume(rc)->render(rc, glState, Color::red());
+  //getBoundingVolume(rc)->render(rc, glState, Color::red());
 
   const bool visible = isVisible(rc, frustumInModelCoordinates);
   if (visible) {
