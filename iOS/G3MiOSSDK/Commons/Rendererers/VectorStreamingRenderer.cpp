@@ -312,8 +312,6 @@ void VectorStreamingRenderer::Node::loadChildren(const G3MRenderContext* rc) {
 
   _downloader = rc->getDownloader();
 
-#warning TODO
-
   _childrenRequestID = _downloader->requestBuffer(childrenURL,
                                                   _vectorSet->getDownloadPriority(),
                                                   _vectorSet->getTimeToCache(),
@@ -355,14 +353,14 @@ bool VectorStreamingRenderer::NodeMarksFilter::test(const Mark* mark) const {
 void VectorStreamingRenderer::Node::removeMarks() {
   size_t removed = _vectorSet->getMarksRenderer()->removeAllMarks( NodeMarksFilter(this) );
 
-  if (_verbose) {
+  if (_verbose && removed) {
 #ifdef C_CODE
-    ILogger::instance()->logInfo("Removed %ld marks for node \"%s\" (bytes=)",
+    ILogger::instance()->logInfo("Removed %ld marks for node \"%s\"",
                                  removed,
                                  getFullName().c_str());
 #endif
 #ifdef JAVA_CODE
-    ILogger.instance().logInfo("Removed %d marks for node \"%s\" (bytes=)",
+    ILogger.instance().logInfo("Removed %d marks for node \"%s\"",
                                removed,
                                getFullName());
 #endif
