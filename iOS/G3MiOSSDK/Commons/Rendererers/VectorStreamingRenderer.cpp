@@ -291,7 +291,12 @@ void VectorStreamingRenderer::Node::loadChildren(const G3MRenderContext* rc) {
     if (i > 0) {
       nodes += "|";
     }
+#ifdef C_CODE
     nodes += _childrenIDs[i];
+#endif
+#ifdef JAVA_CODE
+    nodes += _childrenIDs.get(i);
+#endif
   }
 
   const URL childrenURL(_vectorSet->getServerURL(),
