@@ -83,6 +83,129 @@ public class VectorStreamingRenderer extends DefaultRenderer
 
   }
 
+//  ;
+
+  public static class ChildrenParserAsyncTask extends GAsyncTask
+  {
+    private Node _node;
+    private boolean _verbose;
+    private IByteBuffer _buffer;
+    private final IThreadUtils _threadUtils;
+
+    private java.util.ArrayList<Node> _children;
+
+    public ChildrenParserAsyncTask(Node node, boolean verbose, IByteBuffer buffer, IThreadUtils threadUtils)
+    {
+       _node = node;
+       _verbose = verbose;
+       _buffer = buffer;
+       _threadUtils = threadUtils;
+       _children = null;
+      _node._retain();
+    }
+
+    public void dispose()
+    {
+      _node._release();
+      if (_buffer != null)
+         _buffer.dispose();
+    
+      if (_children != null)
+      {
+        for (int i = 0; i > _children.size(); i++)
+        {
+          Node child = _children.get(i);
+          child._release();
+        }
+        _children = null;
+      }
+    }
+
+    public final void runInBackground(G3MContext context)
+    {
+      final JSONBaseObject jsonBaseObject = IJSONParser.instance().parse(_buffer);
+      if (jsonBaseObject != null)
+      {
+        final JSONArray nodesJSON = jsonBaseObject.asArray();
+        if (nodesJSON != null)
+        {
+          _children = new java.util.ArrayList<Node>();
+          for (int i = 0; i < nodesJSON.size(); i++)
+          {
+            final JSONObject nodeJSON = nodesJSON.getAsObject(i);
+            _children.add(GEOJSONUtils.parseNode(nodeJSON, _node.getVectorSet(), _verbose));
+          }
+        }
+    
+        if (jsonBaseObject != null)
+           jsonBaseObject.dispose();
+      }
+    
+      if (_buffer != null)
+         _buffer.dispose();
+      _buffer = null;
+    }
+
+    public final void onPostExecute(G3MContext context)
+    {
+      _node.parsedChildren(_children, _threadUtils);
+      _children = null; // moved ownership to _node
+    }
+
+  }
+
+
+
+  public static class NodeChildrenDownloadListener extends IBufferDownloadListener
+  {
+    private Node _node;
+    private final IThreadUtils _threadUtils;
+    private final boolean _verbose;
+
+    public NodeChildrenDownloadListener(Node node, IThreadUtils threadUtils, boolean verbose)
+    {
+       _node = node;
+       _threadUtils = threadUtils;
+       _verbose = verbose;
+      _node._retain();
+    }
+
+    public void dispose()
+    {
+      _node._release();
+    }
+
+    public final void onDownload(URL url, IByteBuffer buffer, boolean expired)
+    {
+      if (_verbose)
+      {
+        ILogger.instance().logInfo("Downloaded children for \"%s\" (bytes=%d)",
+                                   _node.getFullName(),
+                                   buffer.size());
+      }
+    
+      _threadUtils.invokeAsyncTask(new ChildrenParserAsyncTask(_node, _verbose, buffer, _threadUtils), true);
+    
+    }
+
+    public final void onError(URL url)
+    {
+      _node.errorDownloadingChildren();
+    }
+
+    public final void onCancel(URL url)
+    {
+      // do nothing
+    }
+
+    public final void onCanceledDownload(URL url, IByteBuffer buffer, boolean expired)
+    {
+      // do nothing
+    }
+
+  }
+
+
 
   public static class FeaturesParserAsyncTask extends GAsyncTask
   {
@@ -265,17 +388,6 @@ public class VectorStreamingRenderer extends DefaultRenderer
     private long _featuresRequestID;
     private void loadFeatures(G3MRenderContext rc)
     {
-      /*
-       http: //localhost:8080/server-mapboo/public/VectorialStreaming/GEONames-PopulatedPlaces_LOD/features?node=&properties=name|population|featureClass|featureCode
-    
-       http: //localhost:8080/server-mapboo/public/VectorialStreaming/
-       GEONames-PopulatedPlaces_LOD
-       /features
-       ?node=
-       &properties=name|population|featureClass|featureCode
-    
-       */
-    
       final URL metadataURL = new URL(_vectorSet.getServerURL(), _vectorSet.getName() + "/features" + "?node=" + _id + "&properties=" + _vectorSet.getProperties(), true);
     
       if (_verbose)
@@ -304,10 +416,43 @@ public class VectorStreamingRenderer extends DefaultRenderer
       }
     }
 
+    private long _childrenRequestID;
     private void loadChildren(G3MRenderContext rc)
     {
+    
+     // http://192.168.1.12:8080/server-mapboo/public/VectorialStreaming/GEONames-PopulatedPlaces_LOD/?nodes=0|1|
+    
+      final int childrenIDsSize = _childrenIDs.size();
+      if (childrenIDsSize == 0)
+      {
+        java.util.ArrayList<Node> children = new java.util.ArrayList<Node>();
+        parsedChildren(children, rc.getThreadUtils());
+        return;
+      }
+    
+      String nodes = "";
+      for (int i = 0; i < childrenIDsSize; i++)
+      {
+        if (i > 0)
+        {
+          nodes += "|";
+        }
+        nodes += _childrenIDs[i];
+      }
+    
+      final URL childrenURL = new URL(_vectorSet.getServerURL(), _vectorSet.getName() + "?nodes=" + nodes, true);
+    
+      if (_verbose)
+      {
+        ILogger.instance().logInfo("\"%s\": Downloading children for node \'%s\'", _vectorSet.getName(), _id);
+      }
+    
+      _downloader = rc.getDownloader();
+    
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#warning TODO
+    
+      _childrenRequestID = _downloader.requestBuffer(childrenURL, _vectorSet.getDownloadPriority(), _vectorSet.getTimeToCache(), _vectorSet.getReadExpired(), new VectorStreamingRenderer.NodeChildrenDownloadListener(this, rc.getThreadUtils(), _verbose), true);
     }
     private void unloadChildren()
     {
@@ -325,8 +470,11 @@ public class VectorStreamingRenderer extends DefaultRenderer
     }
     private void cancelLoadChildren()
     {
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning TODO
+      if (_childrenRequestID != -1)
+      {
+        _downloader.cancelRequest(_childrenRequestID);
+        _childrenRequestID = -1;
+      }
     }
 
     private void unload()
@@ -403,10 +551,16 @@ public class VectorStreamingRenderer extends DefaultRenderer
        _wasBigEnough = false;
        _boundingVolume = null;
        _featuresRequestID = -1;
+       _childrenRequestID = -1;
        _downloader = null;
        _features = null;
        _marksCount = 0;
 
+    }
+
+    public final VectorSet getVectorSet()
+    {
+      return _vectorSet;
     }
 
     public final String getFullName()
@@ -493,6 +647,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
     {
       _loadedFeatures = true;
       _loadingFeatures = false;
+      _featuresRequestID = -1;
       if (features == null)
       {
         // do nothing by now
@@ -505,6 +660,25 @@ public class VectorStreamingRenderer extends DefaultRenderer
     
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#warning Delete _features???
+      }
+    }
+
+    public final void errorDownloadingChildren()
+    {
+      // do nothing by now
+    }
+
+    public final void parsedChildren(java.util.ArrayList<Node> children, IThreadUtils threadUtils)
+    {
+      if (children == null)
+      {
+        // do nothing by now
+      }
+      else
+      {
+        _children = children;
+        _loadingChildren = false;
+        _childrenSize = _children.size();
       }
     }
 
