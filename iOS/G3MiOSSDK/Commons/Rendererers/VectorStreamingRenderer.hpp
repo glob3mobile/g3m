@@ -56,6 +56,77 @@ public:
 
   };
 
+  ;
+
+  class ChildrenParserAsyncTask : public GAsyncTask {
+  private:
+    Node*        _node;
+    bool         _verbose;
+    IByteBuffer* _buffer;
+    const IThreadUtils* _threadUtils;
+
+    std::vector<Node*>* _children;
+
+  public:
+    ChildrenParserAsyncTask(Node*               node,
+                            bool                verbose,
+                            IByteBuffer*        buffer,
+                            const IThreadUtils* threadUtils) :
+    _node(node),
+    _verbose(verbose),
+    _buffer(buffer),
+    _threadUtils(threadUtils),
+    _children(NULL)
+    {
+      _node->_retain();
+    }
+
+    ~ChildrenParserAsyncTask();
+
+    void runInBackground(const G3MContext* context);
+
+    void onPostExecute(const G3MContext* context);
+    
+  };
+
+
+
+  class NodeChildrenDownloadListener : public IBufferDownloadListener {
+  private:
+    Node*               _node;
+    const IThreadUtils* _threadUtils;
+    const bool          _verbose;
+
+  public:
+    NodeChildrenDownloadListener(Node* node,
+                                 const IThreadUtils* threadUtils,
+                                 bool verbose) :
+    _node(node),
+    _threadUtils(threadUtils),
+    _verbose(verbose)
+    {
+      _node->_retain();
+    }
+
+    ~NodeChildrenDownloadListener() {
+      _node->_release();
+    }
+
+    void onDownload(const URL& url,
+                    IByteBuffer* buffer,
+                    bool expired);
+
+    void onError(const URL& url);
+
+    void onCancel(const URL& url);
+
+    void onCanceledDownload(const URL& url,
+                            IByteBuffer* buffer,
+                            bool expired);
+    
+  };
+
+
 
   class FeaturesParserAsyncTask : public GAsyncTask {
   private:
@@ -225,6 +296,10 @@ public:
 
     }
 
+    const VectorSet* getVectorSet() const {
+      return _vectorSet;
+    }
+
     const std::string getFullName() const {
       return _vectorSet->getName() + "/" + _id;
     }
@@ -243,6 +318,13 @@ public:
     }
 
     void parsedFeatures(GEOObject* features,
+                        const IThreadUtils* threadUtils);
+
+    void errorDownloadingChildren() {
+      // do nothing by now
+    }
+
+    void parsedChildren(std::vector<Node*>* children,
                         const IThreadUtils* threadUtils);
 
   };

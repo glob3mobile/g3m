@@ -300,7 +300,7 @@ public:
 const std::string MapBooBuilder::escapeString(const std::string& str) const {
   const IStringUtils* su = IStringUtils::instance();
 
-  return su->replaceSubstring(str, "\"", "\\\"");
+  return su->replaceAll(str, "\"", "\\\"");
 }
 
 const std::string MapBooBuilder::toCameraPositionJSON(const MapBoo_CameraPosition* cameraPosition) const {

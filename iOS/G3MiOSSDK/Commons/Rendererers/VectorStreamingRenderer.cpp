@@ -21,6 +21,82 @@
 #include "GEOObject.hpp"
 #include "Mark.hpp"
 
+VectorStreamingRenderer::ChildrenParserAsyncTask::~ChildrenParserAsyncTask() {
+  _node->_release();
+  delete _buffer;
+
+  if (_children != NULL) {
+    for (size_t i = 0; i > _children->size(); i++) {
+      Node* child = _children->at(i);
+      child->_release();
+    }
+    _children = NULL;
+  }
+}
+
+void VectorStreamingRenderer::ChildrenParserAsyncTask::runInBackground(const G3MContext* context) {
+  const JSONBaseObject* jsonBaseObject = IJSONParser::instance()->parse(_buffer);
+  if (jsonBaseObject != NULL) {
+    const JSONArray* nodesJSON = jsonBaseObject->asArray();
+    if (nodesJSON != NULL) {
+      _children = new std::vector<Node*>();
+      for (int i = 0; i < nodesJSON->size(); i++) {
+        const JSONObject* nodeJSON = nodesJSON->getAsObject(i);
+        _children->push_back( GEOJSONUtils::parseNode(nodeJSON,
+                                                      _node->getVectorSet(),
+                                                      _verbose) );
+      }
+    }
+
+    delete jsonBaseObject;
+  }
+
+  delete _buffer;
+  _buffer = NULL;
+}
+
+void VectorStreamingRenderer::ChildrenParserAsyncTask::onPostExecute(const G3MContext* context) {
+  _node->parsedChildren(_children, _threadUtils);
+  _children = NULL; // moved ownership to _node
+}
+
+
+
+void VectorStreamingRenderer::NodeChildrenDownloadListener::onDownload(const URL& url,
+                                                                       IByteBuffer* buffer,
+                                                                       bool expired) {
+  if (_verbose) {
+#ifdef C_CODE
+    ILogger::instance()->logInfo("Downloaded children for \"%s\" (bytes=%ld)",
+                                 _node->getFullName().c_str(),
+                                 buffer->size());
+#endif
+#ifdef JAVA_CODE
+    ILogger.instance().logInfo("Downloaded children for \"%s\" (bytes=%d)",
+                               _node.getFullName(),
+                               buffer.size());
+#endif
+  }
+
+  _threadUtils->invokeAsyncTask(new ChildrenParserAsyncTask(_node, _verbose, buffer, _threadUtils),
+                                true);
+
+}
+
+void VectorStreamingRenderer::NodeChildrenDownloadListener::onError(const URL& url) {
+  _node->errorDownloadingChildren();
+}
+
+void VectorStreamingRenderer::NodeChildrenDownloadListener::onCancel(const URL& url) {
+  // do nothing
+}
+
+void VectorStreamingRenderer::NodeChildrenDownloadListener::onCanceledDownload(const URL& url,
+                                                                               IByteBuffer* buffer,
+                                                                               bool expired) {
+  // do nothing
+}
+
 
 VectorStreamingRenderer::FeaturesParserAsyncTask::~FeaturesParserAsyncTask() {
   _node->_release();
@@ -89,6 +165,19 @@ VectorStreamingRenderer::Node::~Node() {
 #endif
 }
 
+void VectorStreamingRenderer::Node::parsedChildren(std::vector<Node*>* children,
+                                                   const IThreadUtils* threadUtils) {
+  if (children == NULL) {
+    // do nothing by now
+  }
+  else {
+    _children = children;
+    _loadingChildren = false;
+    _childrenSize = _children->size();
+  }
+}
+
+
 void VectorStreamingRenderer::Node::parsedFeatures(GEOObject* features,
                                                    const IThreadUtils* threadUtils) {
   _loadedFeatures = true;
@@ -148,17 +237,6 @@ bool VectorStreamingRenderer::Node::isBigEnough(const G3MRenderContext *rc) {
 }
 
 void VectorStreamingRenderer::Node::loadFeatures(const G3MRenderContext* rc) {
-  /*
-   http://localhost:8080/server-mapboo/public/VectorialStreaming/GEONames-PopulatedPlaces_LOD/features?node=&properties=name|population|featureClass|featureCode
-
-   http://localhost:8080/server-mapboo/public/VectorialStreaming/
-   GEONames-PopulatedPlaces_LOD
-   /features
-   ?node=
-   &properties=name|population|featureClass|featureCode
-
-   */
-
   const URL metadataURL(_vectorSet->getServerURL(),
                         _vectorSet->getName() + "/features" +
                         "?node=" + _id +
@@ -198,10 +276,47 @@ void VectorStreamingRenderer::Node::cancelLoadFeatures() {
 }
 
 void VectorStreamingRenderer::Node::loadChildren(const G3MRenderContext* rc) {
+
+ // http://192.168.1.12:8080/server-mapboo/public/VectorialStreaming/GEONames-PopulatedPlaces_LOD/?nodes=0|1|
+
+  const size_t childrenIDsSize = _childrenIDs.size();
+  if (childrenIDsSize == 0) {
+    std::vector<Node*>* children = new std::vector<Node*>();
+    parsedChildren(children, rc->getThreadUtils());
+    return;
+  }
+
+  std::string nodes = "";
+  for (size_t i = 0; i < childrenIDsSize; i++) {
+    if (i > 0) {
+      nodes += "|";
+    }
+    nodes += _childrenIDs[i];
+  }
+
+  const URL childrenURL(_vectorSet->getServerURL(),
+                        _vectorSet->getName() +
+                        "?nodes=" + nodes,
+                        true);
+
+  if (_verbose) {
+    ILogger::instance()->logInfo("\"%s\": Downloading children for node \'%s\'",
+                                 _vectorSet->getName().c_str(),
+                                 _id.c_str());
+  }
+
+  _downloader = rc->getDownloader();
+
 #warning TODO
 
-
-//  _childrenRequestID = 
+  _childrenRequestID = _downloader->requestBuffer(childrenURL,
+                                                  _vectorSet->getDownloadPriority(),
+                                                  _vectorSet->getTimeToCache(),
+                                                  _vectorSet->getReadExpired(),
+                                                  new VectorStreamingRenderer::NodeChildrenDownloadListener(this,
+                                                                                                            rc->getThreadUtils(),
+                                                                                                            _verbose),
+                                                  true);
 }
 
 void VectorStreamingRenderer::Node::unloadChildren() {

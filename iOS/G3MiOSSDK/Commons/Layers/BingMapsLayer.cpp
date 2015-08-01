@@ -316,9 +316,9 @@ const URL BingMapsLayer::createURL(const Tile* tile) const {
   const std::string quadkey = getQuadKey(level, column, row);
   
   std::string path = _imageUrl;
-  path = su->replaceSubstring(path, "{subdomain}", subdomain);
-  path = su->replaceSubstring(path, "{quadkey}",   quadkey);
-  path = su->replaceSubstring(path, "{culture}",   _culture);
+  path = su->replaceAll(path, "{subdomain}", subdomain);
+  path = su->replaceAll(path, "{quadkey}",   quadkey);
+  path = su->replaceAll(path, "{culture}",   _culture);
   
   return URL(path, false);
 }

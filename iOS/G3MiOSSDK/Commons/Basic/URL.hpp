@@ -20,7 +20,7 @@ private:
                                            const std::string& path) {
     const IStringUtils* iu = IStringUtils::instance();
 
-    std::string result = iu->replaceSubstring(parent._path + "/" + path, "//", "/");
+    std::string result = iu->replaceAll(parent._path + "/" + path, "//", "/");
     if (iu->beginsWith(result, "http:/")) {
 #ifdef C_CODE
       result = "http://" + iu->substring(result, 6);
