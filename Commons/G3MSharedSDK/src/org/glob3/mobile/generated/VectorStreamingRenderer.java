@@ -261,13 +261,6 @@ public class VectorStreamingRenderer extends DefaultRenderer
       final double projectedArea = getBoundingVolume(rc).projectedArea(rc);
       return (projectedArea > 100000);
     }
-    private long renderFeatures(G3MRenderContext rc, GLState glState)
-    {
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning TODO
-    
-      return _marksCount;
-    }
 
     private long _featuresRequestID;
     private void loadFeatures(G3MRenderContext rc)
@@ -376,7 +369,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
       }
     }
 
-    private int _marksCount;
+    private long _marksCount;
 
     public void dispose()
     {
@@ -429,7 +422,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
     public final long render(G3MRenderContext rc, Frustum frustumInModelCoordinates, long cameraTS, GLState glState)
     {
     
-      long renderedCount = 0;
+      long renderedCount = _marksCount;
     
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#warning Show Bounding Volume
@@ -443,11 +436,9 @@ public class VectorStreamingRenderer extends DefaultRenderer
         {
           if (_loadedFeatures)
           {
-            renderedCount += renderFeatures(rc, glState);
-    
+            // don't load children until my features are loaded
             if (_children == null)
             {
-              // don't load children until my features are loaded
               if (!_loadingChildren)
               {
                 _loadingChildren = true;
@@ -909,7 +900,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
       }
     }
 
-    public final int createMark(Node node, GEO2DPointGeometry geometry)
+    public final long createMark(Node node, GEO2DPointGeometry geometry)
     {
       Mark mark = _symbolizer.createMark(geometry);
       if (mark == null)

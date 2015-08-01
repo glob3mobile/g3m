@@ -109,9 +109,9 @@ public class GEOFeatureCollection extends GEOObject
     return new GEOFeatureCollection(copy(_features));
   }
 
-  public final int createMarks(VectorStreamingRenderer.VectorSet vectorSet, VectorStreamingRenderer.Node node)
+  public final long createMarks(VectorStreamingRenderer.VectorSet vectorSet, VectorStreamingRenderer.Node node)
   {
-    int result = 0;
+    long result = 0;
     final int featuresCount = _features.size();
     for (int i = 0; i < featuresCount; i++)
     {
