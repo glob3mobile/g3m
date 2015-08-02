@@ -244,7 +244,7 @@ void MarksRenderer::render(const G3MRenderContext* rc, GLState* glState) {
         }
       }
     }
-    
+
     for (size_t i = 0; i < marksSize; i++) {
       const size_t ii = _renderInReverse ? (marksSize-1-i) : i;
       Mark* mark = _marks[ii];
@@ -299,11 +299,11 @@ size_t MarksRenderer::removeAllMarks(const MarksFilter& filter) {
       newMarks.push_back(mark);
     }
   }
-
+  
   if (removed > 0) {
     _marks = newMarks;
   }
-
+  
   return removed;
 }
 

@@ -102,7 +102,7 @@ public:
   void onResume(const G3MContext* context) {
     _context = context;
   }
-  
+
   /**
    Change the download-priority used by Marks (for downloading textures).
 
@@ -121,11 +121,11 @@ public:
   }
 
   void modifiyGLState(GLState* state) {
-    
+
   }
 
   size_t removeAllMarks(const MarksFilter& filter);
-
+  
 };
 
 #endif
