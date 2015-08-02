@@ -24,6 +24,7 @@ package org.glob3.mobile.generated;
 //class Camera;
 //class MarkTouchListener;
 //class IFloatBuffer;
+//class ITimer;
 
 
 public abstract class MarksFilter

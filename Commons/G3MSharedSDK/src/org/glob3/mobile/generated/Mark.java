@@ -144,6 +144,8 @@ public class Mark implements SurfaceElevationListener
   private float _anchorV;
   private BillboardGLFeature _billboardGLF;
 
+  private boolean _initialized;
+
   /**
    * Creates a mark with icon and label
    */
@@ -224,6 +226,7 @@ public class Mark implements SurfaceElevationListener
      _textureHeightProportion = 1.0F;
      _textureWidthProportion = 1.0F;
      _textureProportionSetExternally = false;
+     _initialized = false;
   
   }
 
@@ -299,6 +302,7 @@ public class Mark implements SurfaceElevationListener
      _textureHeightProportion = 1.0F;
      _textureWidthProportion = 1.0F;
      _textureProportionSetExternally = false;
+     _initialized = false;
   
   }
 
@@ -362,6 +366,7 @@ public class Mark implements SurfaceElevationListener
      _textureHeightProportion = 1.0F;
      _textureWidthProportion = 1.0F;
      _textureProportionSetExternally = false;
+     _initialized = false;
   
   }
 
@@ -423,6 +428,7 @@ public class Mark implements SurfaceElevationListener
      _billboardGLF = null;
      _textureHeightProportion = 1.0F;
      _textureWidthProportion = 1.0F;
+     _initialized = false;
   
   }
 
@@ -470,6 +476,11 @@ public class Mark implements SurfaceElevationListener
     }
   }
 
+  public final boolean isInitialized()
+  {
+    return _initialized;
+  }
+
   public final String getLabel()
   {
     return _label;
@@ -482,6 +493,7 @@ public class Mark implements SurfaceElevationListener
 
   public final void initialize(G3MContext context, long downloadPriority)
   {
+    _initialized = true;
     if (_altitudeMode == AltitudeMode.RELATIVE_TO_GROUND)
     {
       _surfaceElevationProvider = context.getSurfaceElevationProvider();

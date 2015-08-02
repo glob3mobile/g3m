@@ -49,22 +49,30 @@ public class MarksRenderer extends DefaultRenderer
   }
 
   private boolean _renderInReverse;
+  private boolean _progressiveInitialization;
+  private ITimer _initializationTimer;
 
 
+  public MarksRenderer(boolean readyWhenMarksReady, boolean renderInReverse)
+  {
+     this(readyWhenMarksReady, renderInReverse, true);
+  }
   public MarksRenderer(boolean readyWhenMarksReady)
   {
-     this(readyWhenMarksReady, false);
+     this(readyWhenMarksReady, false, true);
   }
-  public MarksRenderer(boolean readyWhenMarksReady, boolean renderInReverse)
+  public MarksRenderer(boolean readyWhenMarksReady, boolean renderInReverse, boolean progressiveInitialization)
   {
      _readyWhenMarksReady = readyWhenMarksReady;
      _renderInReverse = renderInReverse;
+     _progressiveInitialization = progressiveInitialization;
      _lastCamera = null;
      _markTouchListener = null;
      _autoDeleteMarkTouchListener = false;
      _downloadPriority = DownloadPriority.MEDIUM;
      _glState = new GLState();
      _billboardTexCoords = null;
+     _initializationTimer = null;
     _context = null;
   }
 
@@ -92,6 +100,9 @@ public class MarksRenderer extends DefaultRenderer
 
   public void dispose()
   {
+    if (_initializationTimer != null)
+       _initializationTimer.dispose();
+  
     final int marksSize = _marks.size();
     for (int i = 0; i < marksSize; i++)
     {
@@ -128,6 +139,7 @@ public class MarksRenderer extends DefaultRenderer
   public void render(G3MRenderContext rc, GLState glState)
   {
     final int marksSize = _marks.size();
+  
     if (marksSize > 0)
     {
       final Camera camera = rc.getCurrentCamera();
@@ -145,26 +157,41 @@ public class MarksRenderer extends DefaultRenderer
   
       IFloatBuffer billboardTexCoord = getBillboardTexCoords();
   
-      if (_renderInReverse)
+  
+      if (_progressiveInitialization)
       {
-        for (int i = marksSize; i > 0; i--)
+        if (_initializationTimer == null)
         {
-          Mark mark = _marks.get(i - 1);
-          if (mark.isReady())
+          _initializationTimer = rc.getFactory().createTimer();
+        }
+        else
+        {
+          _initializationTimer.start();
+        }
+  
+        for (int i = 0; i < marksSize; i++)
+        {
+          if (_initializationTimer.elapsedTimeInMilliseconds() > 5)
           {
-            mark.render(rc, cameraPosition, cameraHeight, _glState, planet, gl, billboardTexCoord);
+            break;
+          }
+  
+          final int ii = _renderInReverse ? i : (marksSize-1-i);
+          Mark mark = _marks.get(ii);
+          if (!mark.isInitialized())
+          {
+            mark.initialize(_context, _downloadPriority);
           }
         }
       }
-      else
+  
+      for (int i = 0; i < marksSize; i++)
       {
-        for (int i = 0; i < marksSize; i++)
+        final int ii = _renderInReverse ? (marksSize-1-i) : i;
+        Mark mark = _marks.get(ii);
+        if (mark.isReady())
         {
-          Mark mark = _marks.get(i);
-          if (mark.isReady())
-          {
-            mark.render(rc, cameraPosition, cameraHeight, _glState, planet, gl, billboardTexCoord);
-          }
+          mark.render(rc, cameraPosition, cameraHeight, _glState, planet, gl, billboardTexCoord);
         }
       }
     }
@@ -173,7 +200,7 @@ public class MarksRenderer extends DefaultRenderer
   public final void addMark(Mark mark)
   {
     _marks.add(mark);
-    if (_context != null)
+    if ((_context != null) && !_progressiveInitialization)
     {
       mark.initialize(_context, _downloadPriority);
     }
