@@ -180,7 +180,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
     {
       if (_verbose)
       {
-        ILogger.instance().logInfo("Downloaded children for \"%s\" (bytes=%d)",
+        ILogger.instance().logInfo("\"%s\": Downloaded children (bytes=%d)",
                                    _node.getFullName(),
                                    buffer.size());
       }
@@ -238,7 +238,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
 
     public final void runInBackground(G3MContext context)
     {
-      _features = GEOJSONParser.parseJSON(_buffer, _verbose);
+      _features = GEOJSONParser.parseJSON(_buffer, false); // _verbose
     
       if (_buffer != null)
          _buffer.dispose();
@@ -277,7 +277,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
     {
       if (_verbose)
       {
-        ILogger.instance().logInfo("Downloaded features for \"%s\" (bytes=%d)",
+        ILogger.instance().logInfo("\"%s\": Downloaded features (bytes=%d)",
                                    _node.getFullName(),
                                    buffer.size());
       }
@@ -377,13 +377,13 @@ public class VectorStreamingRenderer extends DefaultRenderer
     private boolean _wasBigEnough;
     private boolean isBigEnough(G3MRenderContext rc)
     {
-      //  if ((_sector->_deltaLatitude._degrees  >= 80) ||
-      //      (_sector->_deltaLongitude._degrees >= 80)) {
-      //    return true;
-      //  }
+      if ((_sector._deltaLatitude._degrees >= 80) || (_sector._deltaLongitude._degrees >= 80))
+      {
+        return true;
+      }
     
       final double projectedArea = getBoundingVolume(rc).projectedArea(rc);
-      return (projectedArea > 200000);
+      return (projectedArea > 350000);
     }
 
     private long _featuresRequestID;
@@ -391,10 +391,11 @@ public class VectorStreamingRenderer extends DefaultRenderer
     {
       final URL metadataURL = new URL(_vectorSet.getServerURL(), _vectorSet.getName() + "/features" + "?node=" + _id + "&properties=" + _vectorSet.getProperties(), true);
     
-      if (_verbose)
-      {
-        ILogger.instance().logInfo("\"%s\": Downloading features for node \'%s\'", _vectorSet.getName(), _id);
-      }
+    //  if (_verbose) {
+    //    ILogger::instance()->logInfo("\"%s\": Downloading features for node \'%s\'",
+    //                                 _vectorSet->getName().c_str(),
+    //                                 _id.c_str());
+    //  }
     
       _downloader = rc.getDownloader();
       _featuresRequestID = _downloader.requestBuffer(metadataURL, _vectorSet.getDownloadPriority(), _vectorSet.getTimeToCache(), _vectorSet.getReadExpired(), new VectorStreamingRenderer.NodeFeaturesDownloadListener(this, rc.getThreadUtils(), _verbose), true);
@@ -443,10 +444,11 @@ public class VectorStreamingRenderer extends DefaultRenderer
     
       final URL childrenURL = new URL(_vectorSet.getServerURL(), _vectorSet.getName() + "?nodes=" + nodes, true);
     
-      if (_verbose)
-      {
-        ILogger.instance().logInfo("\"%s\": Downloading children for node \'%s\'", _vectorSet.getName(), _id);
-      }
+    //  if (_verbose) {
+    //    ILogger::instance()->logInfo("\"%s\": Downloading children for node \'%s\'",
+    //                                 _vectorSet->getName().c_str(),
+    //                                 _id.c_str());
+    //  }
     
       _downloader = rc.getDownloader();
     
@@ -507,11 +509,16 @@ public class VectorStreamingRenderer extends DefaultRenderer
     {
       int removed = _vectorSet.getMarksRenderer().removeAllMarks(new NodeMarksFilter(this));
     
+      if (removed > 64)
+      {
+        ILogger.instance().logError("OOPS!!");
+      }
+    
       if (_verbose && removed != 0)
       {
-        ILogger.instance().logInfo("Removed %d marks for node \"%s\"",
-                                   removed,
-                                   getFullName());
+        ILogger.instance().logInfo("\"%s\": Removed %d marks",
+                                   getFullName(),
+                                   removed);
       }
     }
 
@@ -568,7 +575,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
 
     public final String getMarkToken()
     {
-      return getFullName();
+      return _id + _vectorSet.getName();
     }
 
     public final long render(G3MRenderContext rc, Frustum frustumInModelCoordinates, long cameraTS, GLState glState)
@@ -578,7 +585,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
     
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#warning Show Bounding Volume
-      getBoundingVolume(rc).render(rc, glState, Color.red());
+      // getBoundingVolume(rc)->render(rc, glState, Color::red());
     
       final boolean visible = isVisible(rc, frustumInModelCoordinates);
       if (visible)
@@ -589,7 +596,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
           renderedCount += _marksCount;
           if (_loadedFeatures)
           {
-            // don't load children until my features are loaded
+            // don't load nor render children until the features are loaded
             if (_children == null)
             {
               if (!_loadingChildren)
@@ -657,6 +664,16 @@ public class VectorStreamingRenderer extends DefaultRenderer
         _features = features;
     
         _marksCount = _features.createMarks(_vectorSet, this);
+        if (_marksCount > 64)
+        {
+          ILogger.instance().logError("OOPS!!");
+        }
+        if (_verbose)
+        {
+          ILogger.instance().logInfo("\"%s\": Created %d marks",
+                                     getFullName(),
+                                     _marksCount);
+        }
     
         //  Delete _features???
         if (_features != null)
@@ -838,7 +855,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
     {
       if (_verbose)
       {
-        ILogger.instance().logInfo("Downloaded metadata for \"%s\" (bytes=%d)",
+        ILogger.instance().logInfo("\"%s\": Downloaded metadata (bytes=%d)",
                                    _vectorSet.getName(),
                                    buffer.size());
       }
@@ -991,7 +1008,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
     
       if (_verbose)
       {
-        ILogger.instance().logInfo("Downloading metadata for \"%s\"", _name);
+        ILogger.instance().logInfo("\"%s\": Downloading metadata", _name);
       }
     
       context.getDownloader().requestBuffer(metadataURL, _downloadPriority, _timeToCache, _readExpired, new VectorStreamingRenderer.MetadataDownloadListener(this, context.getThreadUtils(), _verbose), true);
@@ -1042,7 +1059,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
     
       if (_verbose)
       {
-        ILogger.instance().logInfo("Metadata for \"%s\"", _name);
+        ILogger.instance().logInfo("\"%s\": Metadata", _name);
         ILogger.instance().logInfo("   Sector           : %s", _sector.description());
         ILogger.instance().logInfo("   Features Count   : %d",   _featuresCount);
         ILogger.instance().logInfo("   Average Position : %s", _averagePosition.description());

@@ -48,10 +48,17 @@ public class MarksRenderer extends DefaultRenderer
     return _billboardTexCoords;
   }
 
+  private boolean _renderInReverse;
+
 
   public MarksRenderer(boolean readyWhenMarksReady)
   {
+     this(readyWhenMarksReady, false);
+  }
+  public MarksRenderer(boolean readyWhenMarksReady, boolean renderInReverse)
+  {
      _readyWhenMarksReady = readyWhenMarksReady;
+     _renderInReverse = renderInReverse;
      _lastCamera = null;
      _markTouchListener = null;
      _autoDeleteMarkTouchListener = false;
@@ -59,6 +66,16 @@ public class MarksRenderer extends DefaultRenderer
      _glState = new GLState();
      _billboardTexCoords = null;
     _context = null;
+  }
+
+  public final void setRenderInReverse(boolean renderInReverse)
+  {
+    _renderInReverse = renderInReverse;
+  }
+
+  public final boolean getRenderInReverse()
+  {
+    return _renderInReverse;
   }
 
   public final void setMarkTouchListener(MarkTouchListener markTouchListener, boolean autoDelete)
@@ -128,12 +145,26 @@ public class MarksRenderer extends DefaultRenderer
   
       IFloatBuffer billboardTexCoord = getBillboardTexCoords();
   
-      for (int i = 0; i < marksSize; i++)
+      if (_renderInReverse)
       {
-        Mark mark = _marks.get(i);
-        if (mark.isReady())
+        for (int i = marksSize; i > 0; i--)
         {
-          mark.render(rc, cameraPosition, cameraHeight, _glState, planet, gl, billboardTexCoord);
+          Mark mark = _marks.get(i - 1);
+          if (mark.isReady())
+          {
+            mark.render(rc, cameraPosition, cameraHeight, _glState, planet, gl, billboardTexCoord);
+          }
+        }
+      }
+      else
+      {
+        for (int i = 0; i < marksSize; i++)
+        {
+          Mark mark = _marks.get(i);
+          if (mark.isReady())
+          {
+            mark.render(rc, cameraPosition, cameraHeight, _glState, planet, gl, billboardTexCoord);
+          }
         }
       }
     }
@@ -314,9 +345,12 @@ public class MarksRenderer extends DefaultRenderer
     for (int i = 0; i < marksSize; i++)
     {
       Mark mark = _marks.get(i);
-      if (!filter.test(mark))
+      if (filter.test(mark))
       {
         removed++;
+      }
+      else
+      {
         newMarks.add(mark);
       }
     }
