@@ -31,21 +31,26 @@ void MarksRenderer::setMarkTouchListener(MarkTouchListener* markTouchListener,
 }
 
 MarksRenderer::MarksRenderer(bool readyWhenMarksReady,
-                             bool renderInReverse) :
+                             bool renderInReverse,
+                             bool progressiveInitialization) :
 _readyWhenMarksReady(readyWhenMarksReady),
 _renderInReverse(renderInReverse),
+_progressiveInitialization(progressiveInitialization),
 _lastCamera(NULL),
 _markTouchListener(NULL),
 _autoDeleteMarkTouchListener(false),
 _downloadPriority(DownloadPriority::MEDIUM),
 _glState(new GLState()),
-_billboardTexCoords(NULL)
+_billboardTexCoords(NULL),
+_initializationTimer(NULL)
 {
   _context = NULL;
 }
 
 
 MarksRenderer::~MarksRenderer() {
+  delete _initializationTimer;
+
   const size_t marksSize = _marks.size();
   for (size_t i = 0; i < marksSize; i++) {
     delete _marks[i];
@@ -77,7 +82,7 @@ void MarksRenderer::onChangedContext() {
 
 void MarksRenderer::addMark(Mark* mark) {
   _marks.push_back(mark);
-  if (_context != NULL) {
+  if ((_context != NULL) && !_progressiveInitialization) {
     mark->initialize(_context, _downloadPriority);
   }
 }
@@ -201,6 +206,7 @@ IFloatBuffer* MarksRenderer::getBillboardTexCoords() {
 
 void MarksRenderer::render(const G3MRenderContext* rc, GLState* glState) {
   const size_t marksSize = _marks.size();
+
   if (marksSize > 0) {
     const Camera* camera = rc->getCurrentCamera();
 
@@ -217,32 +223,39 @@ void MarksRenderer::render(const G3MRenderContext* rc, GLState* glState) {
 
     IFloatBuffer* billboardTexCoord = getBillboardTexCoords();
 
-    if (_renderInReverse) {
-      for (size_t i = marksSize; i > 0; i--) {
-        Mark* mark = _marks[i - 1];
-        if (mark->isReady()) {
-          mark->render(rc,
-                       cameraPosition,
-                       cameraHeight,
-                       _glState,
-                       planet,
-                       gl,
-                       billboardTexCoord);
+
+    if (_progressiveInitialization) {
+      if (_initializationTimer == NULL) {
+        _initializationTimer = rc->getFactory()->createTimer();
+      }
+      else {
+        _initializationTimer->start();
+      }
+
+      for (size_t i = 0; i < marksSize; i++) {
+        if (_initializationTimer->elapsedTimeInMilliseconds() > 8) {
+          break;
+        }
+
+        const size_t ii = _renderInReverse ? i : (marksSize-1-i);
+        Mark* mark = _marks[ii];
+        if (!mark->isInitialized()) {
+          mark->initialize(_context, _downloadPriority);
         }
       }
     }
-    else {
-      for (size_t i = 0; i < marksSize; i++) {
-        Mark* mark = _marks[i];
-        if (mark->isReady()) {
-          mark->render(rc,
-                       cameraPosition,
-                       cameraHeight,
-                       _glState,
-                       planet,
-                       gl,
-                       billboardTexCoord);
-        }
+    
+    for (size_t i = 0; i < marksSize; i++) {
+      const size_t ii = _renderInReverse ? (marksSize-1-i) : i;
+      Mark* mark = _marks[ii];
+      if (mark->isReady()) {
+        mark->render(rc,
+                     cameraPosition,
+                     cameraHeight,
+                     _glState,
+                     planet,
+                     gl,
+                     billboardTexCoord);
       }
     }
   }

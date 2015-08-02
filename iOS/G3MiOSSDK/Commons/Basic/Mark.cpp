@@ -176,7 +176,8 @@ _anchorV(0.5),
 _billboardGLF(NULL),
 _textureHeightProportion(1.0),
 _textureWidthProportion(1.0),
-_textureProportionSetExternally(false)
+_textureProportionSetExternally(false),
+_initialized(false)
 {
   
 }
@@ -226,7 +227,8 @@ _anchorV(0.5),
 _billboardGLF(NULL),
 _textureHeightProportion(1.0),
 _textureWidthProportion(1.0),
-_textureProportionSetExternally(false)
+_textureProportionSetExternally(false),
+_initialized(false)
 {
   
 }
@@ -273,7 +275,8 @@ _anchorV(0.5),
 _billboardGLF(NULL),
 _textureHeightProportion(1.0),
 _textureWidthProportion(1.0),
-_textureProportionSetExternally(false)
+_textureProportionSetExternally(false),
+_initialized(false)
 {
   
 }
@@ -319,13 +322,15 @@ _anchorU(0.5),
 _anchorV(0.5),
 _billboardGLF(NULL),
 _textureHeightProportion(1.0),
-_textureWidthProportion(1.0)
+_textureWidthProportion(1.0),
+_initialized(false)
 {
   
 }
 
 void Mark::initialize(const G3MContext* context,
                       long long downloadPriority) {
+  _initialized = true;
   if (_altitudeMode == RELATIVE_TO_GROUND) {
     _surfaceElevationProvider = context->getSurfaceElevationProvider();
     if (_surfaceElevationProvider != NULL) {

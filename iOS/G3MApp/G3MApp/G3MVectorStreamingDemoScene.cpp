@@ -51,7 +51,7 @@ public:
 
     double maxPopulation = 22315474;
     double population = properties->getAsNumber("population")->value();
-    float labelFontSize = (float) (12.0 * (population / maxPopulation) + 14.0) ;
+    float labelFontSize = (float) (12.0 * (population / maxPopulation) + 16.0) ;
 
     return new Mark(label,
                     position,

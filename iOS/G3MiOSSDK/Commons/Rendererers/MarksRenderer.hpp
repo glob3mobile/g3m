@@ -20,6 +20,7 @@ class Mark;
 class Camera;
 class MarkTouchListener;
 class IFloatBuffer;
+class ITimer;
 
 
 class MarksFilter {
@@ -57,11 +58,14 @@ private:
   IFloatBuffer* getBillboardTexCoords();
 
   bool _renderInReverse;
+  bool _progressiveInitialization;
+  ITimer* _initializationTimer;
 
 public:
 
   MarksRenderer(bool readyWhenMarksReady,
-                bool renderInReverse = false);
+                bool renderInReverse = false,
+                bool progressiveInitialization = true);
 
   void setRenderInReverse(bool renderInReverse) {
     _renderInReverse = renderInReverse;

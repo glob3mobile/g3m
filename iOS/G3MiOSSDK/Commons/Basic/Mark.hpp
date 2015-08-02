@@ -162,6 +162,8 @@ private:
   float _anchorV;
   BillboardGLFeature* _billboardGLF;
 
+  bool _initialized;
+
 public:
   /**
    * Creates a mark with icon and label
@@ -222,6 +224,10 @@ public:
        bool               autoDeleteListener=false);
 
   ~Mark();
+
+  bool isInitialized() const {
+    return _initialized;
+  }
 
   const std::string getLabel() const {
     return _label;
