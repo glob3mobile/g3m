@@ -233,7 +233,7 @@ void MarksRenderer::render(const G3MRenderContext* rc, GLState* glState) {
       }
 
       for (size_t i = 0; i < marksSize; i++) {
-        if (_initializationTimer->elapsedTimeInMilliseconds() > 8) {
+        if (_initializationTimer->elapsedTimeInMilliseconds() > 5) {
           break;
         }
 
