@@ -30,22 +30,6 @@ public:
 
     const JSONObject* properties = feature->getProperties();
 
-//    /**
-//     * Creates a mark just with label, without icon
-//     */
-//    Mark(const std::string& label,
-//         const Geodetic3D&  position,
-//         AltitudeMode       altitudeMode,
-//         double             minDistanceToCamera=4.5e+06,
-//         const float        labelFontSize=20,
-//         const Color*       labelFontColor=Color::newFromRGBA(1, 1, 1, 1),
-//         const Color*       labelShadowColor=Color::newFromRGBA(0, 0, 0, 1),
-//         MarkUserData*      userData=NULL,
-//         bool               autoDeleteUserData=true,
-//         MarkTouchListener* listener=NULL,
-//         bool               autoDeleteListener=false);
-
-
     const std::string label = properties->getAsString("name")->value();
     const Geodetic3D  position( geometry->getPosition(), 0);
 
