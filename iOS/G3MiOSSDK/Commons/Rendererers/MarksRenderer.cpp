@@ -30,8 +30,10 @@ void MarksRenderer::setMarkTouchListener(MarkTouchListener* markTouchListener,
   _autoDeleteMarkTouchListener = autoDelete;
 }
 
-MarksRenderer::MarksRenderer(bool readyWhenMarksReady) :
+MarksRenderer::MarksRenderer(bool readyWhenMarksReady,
+                             bool renderInReverse) :
 _readyWhenMarksReady(readyWhenMarksReady),
+_renderInReverse(renderInReverse),
 _lastCamera(NULL),
 _markTouchListener(NULL),
 _autoDeleteMarkTouchListener(false),
@@ -215,16 +217,32 @@ void MarksRenderer::render(const G3MRenderContext* rc, GLState* glState) {
 
     IFloatBuffer* billboardTexCoord = getBillboardTexCoords();
 
-    for (size_t i = 0; i < marksSize; i++) {
-      Mark* mark = _marks[i];
-      if (mark->isReady()) {
-        mark->render(rc,
-                     cameraPosition,
-                     cameraHeight,
-                     _glState,
-                     planet,
-                     gl,
-                     billboardTexCoord);
+    if (_renderInReverse) {
+      for (size_t i = marksSize; i > 0; i--) {
+        Mark* mark = _marks[i - 1];
+        if (mark->isReady()) {
+          mark->render(rc,
+                       cameraPosition,
+                       cameraHeight,
+                       _glState,
+                       planet,
+                       gl,
+                       billboardTexCoord);
+        }
+      }
+    }
+    else {
+      for (size_t i = 0; i < marksSize; i++) {
+        Mark* mark = _marks[i];
+        if (mark->isReady()) {
+          mark->render(rc,
+                       cameraPosition,
+                       cameraHeight,
+                       _glState,
+                       planet,
+                       gl,
+                       billboardTexCoord);
+        }
       }
     }
   }
@@ -261,8 +279,10 @@ size_t MarksRenderer::removeAllMarks(const MarksFilter& filter) {
   const size_t marksSize = _marks.size();
   for (size_t i = 0; i < marksSize; i++) {
     Mark* mark = _marks[i];
-    if ( !filter.test(mark) ) {
+    if (filter.test(mark)) {
       removed++;
+    }
+    else {
       newMarks.push_back(mark);
     }
   }

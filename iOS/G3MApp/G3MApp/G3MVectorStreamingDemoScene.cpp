@@ -74,6 +74,8 @@ void G3MVectorStreamingDemoScene::rawActivate(const G3MContext* context) {
                                            TimeInterval::fromDays(30));
   model->getLayerSet()->addLayer(layer);
 
+  model->getMarksRenderer()->setRenderInReverse(true);
+
   VectorStreamingRenderer* renderer = model->getVectorStreamingRenderer();
   renderer->addVectorSet(URL("http://192.168.1.12:8080/server-mapboo/public/VectorialStreaming/"),
                          "GEONames-PopulatedPlaces_LOD",

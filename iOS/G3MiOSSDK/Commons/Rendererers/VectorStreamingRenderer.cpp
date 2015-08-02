@@ -67,12 +67,12 @@ void VectorStreamingRenderer::NodeChildrenDownloadListener::onDownload(const URL
                                                                        bool expired) {
   if (_verbose) {
 #ifdef C_CODE
-    ILogger::instance()->logInfo("Downloaded children for \"%s\" (bytes=%ld)",
+    ILogger::instance()->logInfo("\"%s\": Downloaded children (bytes=%ld)",
                                  _node->getFullName().c_str(),
                                  buffer->size());
 #endif
 #ifdef JAVA_CODE
-    ILogger.instance().logInfo("Downloaded children for \"%s\" (bytes=%d)",
+    ILogger.instance().logInfo("\"%s\": Downloaded children (bytes=%d)",
                                _node.getFullName(),
                                buffer.size());
 #endif
@@ -105,7 +105,7 @@ VectorStreamingRenderer::FeaturesParserAsyncTask::~FeaturesParserAsyncTask() {
 }
 
 void VectorStreamingRenderer::FeaturesParserAsyncTask::runInBackground(const G3MContext* context) {
-  _features = GEOJSONParser::parseJSON(_buffer, _verbose);
+  _features = GEOJSONParser::parseJSON(_buffer, false /* _verbose */);
 
   delete _buffer;
   _buffer = NULL;
@@ -122,12 +122,12 @@ void VectorStreamingRenderer::NodeFeaturesDownloadListener::onDownload(const URL
                                                                        bool expired) {
   if (_verbose) {
 #ifdef C_CODE
-    ILogger::instance()->logInfo("Downloaded features for \"%s\" (bytes=%ld)",
+    ILogger::instance()->logInfo("\"%s\": Downloaded features (bytes=%ld)",
                                  _node->getFullName().c_str(),
                                  buffer->size());
 #endif
 #ifdef JAVA_CODE
-    ILogger.instance().logInfo("Downloaded features for \"%s\" (bytes=%d)",
+    ILogger.instance().logInfo("\"%s\": Downloaded features (bytes=%d)",
                                _node.getFullName(),
                                buffer.size());
 #endif
@@ -190,6 +190,21 @@ void VectorStreamingRenderer::Node::parsedFeatures(GEOObject* features,
     _features = features;
 
     _marksCount = _features->createMarks(_vectorSet, this);
+    if (_marksCount > 64) {
+      ILogger::instance()->logError("OOPS!!");
+    }
+    if (_verbose) {
+#ifdef C_CODE
+      ILogger::instance()->logInfo("\"%s\": Created %ld marks",
+                                   getFullName().c_str(),
+                                   _marksCount);
+#endif
+#ifdef JAVA_CODE
+      ILogger.instance().logInfo("\"%s\": Created %d marks",
+                                 getFullName(),
+                                 _marksCount);
+#endif
+    }
 
     //  Delete _features???
     delete _features;
@@ -235,11 +250,11 @@ void VectorStreamingRenderer::Node::loadFeatures(const G3MRenderContext* rc) {
                         "&properties=" + _vectorSet->getProperties(),
                         true);
 
-  if (_verbose) {
-    ILogger::instance()->logInfo("\"%s\": Downloading features for node \'%s\'",
-                                 _vectorSet->getName().c_str(),
-                                 _id.c_str());
-  }
+//  if (_verbose) {
+//    ILogger::instance()->logInfo("\"%s\": Downloading features for node \'%s\'",
+//                                 _vectorSet->getName().c_str(),
+//                                 _id.c_str());
+//  }
 
   _downloader = rc->getDownloader();
   _featuresRequestID = _downloader->requestBuffer(metadataURL,
@@ -296,11 +311,11 @@ void VectorStreamingRenderer::Node::loadChildren(const G3MRenderContext* rc) {
                         "?nodes=" + nodes,
                         true);
 
-  if (_verbose) {
-    ILogger::instance()->logInfo("\"%s\": Downloading children for node \'%s\'",
-                                 _vectorSet->getName().c_str(),
-                                 _id.c_str());
-  }
+//  if (_verbose) {
+//    ILogger::instance()->logInfo("\"%s\": Downloading children for node \'%s\'",
+//                                 _vectorSet->getName().c_str(),
+//                                 _id.c_str());
+//  }
 
   _downloader = rc->getDownloader();
 
@@ -345,16 +360,20 @@ bool VectorStreamingRenderer::NodeMarksFilter::test(const Mark* mark) const {
 void VectorStreamingRenderer::Node::removeMarks() {
   size_t removed = _vectorSet->getMarksRenderer()->removeAllMarks( NodeMarksFilter(this) );
 
+  if (removed > 64) {
+    ILogger::instance()->logError("OOPS!!");
+  }
+
   if (_verbose && removed) {
 #ifdef C_CODE
-    ILogger::instance()->logInfo("Removed %ld marks for node \"%s\"",
-                                 removed,
-                                 getFullName().c_str());
+    ILogger::instance()->logInfo("\"%s\": Removed %ld marks",
+                                 getFullName().c_str(),
+                                 removed);
 #endif
 #ifdef JAVA_CODE
-    ILogger.instance().logInfo("Removed %d marks for node \"%s\"",
-                               removed,
-                               getFullName());
+    ILogger.instance().logInfo("\"%s\": Removed %d marks",
+                               getFullName(),
+                               removed);
 #endif
   }
 }
@@ -418,7 +437,7 @@ long long VectorStreamingRenderer::Node::render(const G3MRenderContext* rc,
     if (bigEnough) {
       renderedCount += _marksCount;
       if (_loadedFeatures) {
-        // don't load children until my features are loaded
+        // don't load nor render children until the features are loaded
         if (_children == NULL) {
           if (!_loadingChildren) {
             _loadingChildren = true;
@@ -592,12 +611,12 @@ void VectorStreamingRenderer::MetadataDownloadListener::onDownload(const URL& ur
                                                                    bool expired) {
   if (_verbose) {
 #ifdef C_CODE
-    ILogger::instance()->logInfo("Downloaded metadata for \"%s\" (bytes=%ld)",
+    ILogger::instance()->logInfo("\"%s\": Downloaded metadata (bytes=%ld)",
                                  _vectorSet->getName().c_str(),
                                  buffer->size());
 #endif
 #ifdef JAVA_CODE
-    ILogger.instance().logInfo("Downloaded metadata for \"%s\" (bytes=%d)",
+    ILogger.instance().logInfo("\"%s\": Downloaded metadata (bytes=%d)",
                                _vectorSet.getName(),
                                buffer.size());
 #endif
@@ -666,7 +685,7 @@ void VectorStreamingRenderer::VectorSet::parsedMetadata(Sector* sector,
   _rootNodesSize   = _rootNodes->size();
 
   if (_verbose) {
-    ILogger::instance()->logInfo("Metadata for \"%s\"",         _name.c_str());
+    ILogger::instance()->logInfo("\"%s\": Metadata",         _name.c_str());
     ILogger::instance()->logInfo("   Sector           : %s",    _sector->description().c_str());
 #ifdef C_CODE
     ILogger::instance()->logInfo("   Features Count   : %ld",   _featuresCount);
@@ -690,7 +709,7 @@ void VectorStreamingRenderer::VectorSet::initialize(const G3MContext* context) {
   const URL metadataURL(_serverURL, _name);
 
   if (_verbose) {
-    ILogger::instance()->logInfo("Downloading metadata for \"%s\"", _name.c_str());
+    ILogger::instance()->logInfo("\"%s\": Downloading metadata", _name.c_str());
   }
 
   context->getDownloader()->requestBuffer(metadataURL,

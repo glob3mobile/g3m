@@ -56,9 +56,20 @@ private:
   IFloatBuffer* _billboardTexCoords;
   IFloatBuffer* getBillboardTexCoords();
 
+  bool _renderInReverse;
+
 public:
 
-  MarksRenderer(bool readyWhenMarksReady);
+  MarksRenderer(bool readyWhenMarksReady,
+                bool renderInReverse = false);
+
+  void setRenderInReverse(bool renderInReverse) {
+    _renderInReverse = renderInReverse;
+  }
+
+  bool getRenderInReverse() const {
+    return _renderInReverse;
+  }
 
   void setMarkTouchListener(MarkTouchListener* markTouchListener,
                             bool autoDelete);

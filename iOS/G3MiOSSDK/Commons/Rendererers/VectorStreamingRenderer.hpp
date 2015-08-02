@@ -305,7 +305,7 @@ public:
     }
 
     const std::string getMarkToken() const {
-      return getFullName();
+      return _id + _vectorSet->getName() ;
     }
 
     long long render(const G3MRenderContext* rc,

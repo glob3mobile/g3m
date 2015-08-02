@@ -120,6 +120,8 @@ void G3MDemoModel::reset() {
   getG3MWidget()->removeAllPeriodicalTasks();
 
   getMarksRenderer()->removeAllMarks();
+  getMarksRenderer()->setRenderInReverse(false);
+
   getMeshRenderer()->clearMeshes();
   getShapesRenderer()->removeAllShapes(true);
   getPointCloudsRenderer()->removeAllPointClouds();
