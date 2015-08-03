@@ -37,13 +37,15 @@ public:
     double population = properties->getAsNumber("population")->value();
     float labelFontSize = (float) (14.0 * (population / maxPopulation) + 16.0) ;
 
-    return new Mark(label,
-                    position,
-                    ABSOLUTE,
-                    0, // minDistanceToCamera
-                    labelFontSize
-                    // Color::newFromRGBA(1, 1, 0, 1)
-                    );
+    Mark* mark = new Mark(label,
+                          position,
+                          ABSOLUTE,
+                          0, // minDistanceToCamera
+                          labelFontSize
+                          // Color::newFromRGBA(1, 1, 0, 1)
+                          );
+    mark->setZoomInAppears(true);
+    return mark;
   }
   
 };

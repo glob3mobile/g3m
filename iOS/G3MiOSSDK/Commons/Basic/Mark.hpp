@@ -30,6 +30,7 @@ class MarkTouchListener;
 class GLGlobalState;
 class GPUProgramState;
 class TextureIDReference;
+class EffectTarget;
 
 class MarkUserData {
 public:
@@ -163,6 +164,14 @@ private:
   BillboardGLFeature* _billboardGLF;
 
   bool _initialized;
+
+  bool _zoomInAppears;
+  EffectsScheduler* _effectsScheduler;
+  bool _firstRender;
+
+
+  EffectTarget* _effectTarget;
+  EffectTarget* getEffectTarget();
 
 public:
   /**
@@ -315,6 +324,14 @@ public:
 
   const std::string getToken() const {
     return _token;
+  }
+
+  void setZoomInAppears(bool zoomInAppears) {
+    _zoomInAppears = zoomInAppears;
+  }
+
+  bool getZoomInAppears() const {
+    return _zoomInAppears;
   }
 
 };

@@ -23,6 +23,47 @@
 #include "Geodetic3D.hpp"
 #include "TextureIDReference.hpp"
 #include "ErrorHandling.hpp"
+#include "Effects.hpp"
+
+
+class MarkEffectTarget : public EffectTarget {
+
+};
+
+
+class MarkZoomInEffect : public EffectWithDuration {
+private:
+  Mark* _mark;
+  const float _initialSize;
+
+public:
+  MarkZoomInEffect(Mark* mark,
+                   const TimeInterval& timeInterval = TimeInterval::fromMilliseconds(400)) :
+  EffectWithDuration(timeInterval, false),
+  _mark(mark),
+  _initialSize(0.01f)
+  {
+    _mark->setOnScreenSizeOnProportionToImage(_initialSize,_initialSize);
+  }
+
+  void doStep(const G3MRenderContext* rc,
+              const TimeInterval& when) {
+    const double alpha = getAlpha(when);
+    float s = (float) (alpha * (1.0 - _initialSize) + _initialSize);
+    _mark->setOnScreenSizeOnProportionToImage(s, s);
+  }
+
+  void stop(const G3MRenderContext* rc,
+            const TimeInterval& when) {
+    _mark->setOnScreenSizeOnProportionToImage(1, 1);
+  }
+
+  void cancel(const TimeInterval& when) {
+    _mark->setOnScreenSizeOnProportionToImage(1, 1);
+  }
+
+};
+
 
 class MarkLabelImageListener : public IImageListener {
 private:
@@ -127,6 +168,13 @@ public:
   }
 };
 
+EffectTarget* Mark::getEffectTarget() {
+  if (_effectTarget == NULL) {
+    _effectTarget = new MarkEffectTarget();
+  }
+  return _effectTarget;
+}
+
 
 Mark::Mark(const std::string& label,
            const URL&         iconURL,
@@ -177,7 +225,11 @@ _billboardGLF(NULL),
 _textureHeightProportion(1.0),
 _textureWidthProportion(1.0),
 _textureProportionSetExternally(false),
-_initialized(false)
+_initialized(false),
+_zoomInAppears(true),
+_effectsScheduler(NULL),
+_firstRender(true),
+_effectTarget(NULL)
 {
 
 }
@@ -228,7 +280,11 @@ _billboardGLF(NULL),
 _textureHeightProportion(1.0),
 _textureWidthProportion(1.0),
 _textureProportionSetExternally(false),
-_initialized(false)
+_initialized(false),
+_zoomInAppears(true),
+_effectsScheduler(NULL),
+_firstRender(true),
+_effectTarget(NULL)
 {
 
 }
@@ -276,7 +332,11 @@ _billboardGLF(NULL),
 _textureHeightProportion(1.0),
 _textureWidthProportion(1.0),
 _textureProportionSetExternally(false),
-_initialized(false)
+_initialized(false),
+_zoomInAppears(true),
+_effectsScheduler(NULL),
+_firstRender(true),
+_effectTarget(NULL)
 {
 
 }
@@ -323,7 +383,11 @@ _anchorV(0.5),
 _billboardGLF(NULL),
 _textureHeightProportion(1.0),
 _textureWidthProportion(1.0),
-_initialized(false)
+_initialized(false),
+_zoomInAppears(true),
+_effectsScheduler(NULL),
+_firstRender(true),
+_effectTarget(NULL)
 {
 
 }
@@ -411,6 +475,9 @@ bool Mark::isReady() const {
 }
 
 Mark::~Mark() {
+  if (_effectsScheduler != NULL) {
+    _effectsScheduler->cancelAllEffectsFor(getEffectTarget());
+  }
 
   delete _position;
 
@@ -478,7 +545,8 @@ void Mark::createGLState(const Planet* planet,
   _glState = new GLState();
 
   _billboardGLF = new BillboardGLFeature(*getCartesianPosition(planet),
-                                         (int)_textureWidth, (int)_textureHeight,
+                                         IMathUtils::instance()->round(_textureWidth),
+                                         IMathUtils::instance()->round(_textureHeight),
                                          _anchorU, _anchorV);
 
   _glState->addGLFeature(_billboardGLF,
@@ -598,6 +666,15 @@ void Mark::render(const G3MRenderContext* rc,
         }
         _glState->setParent(parentGLState);
 
+        if (_firstRender) {
+          _firstRender = false;
+          if (_zoomInAppears) {
+            _effectsScheduler = rc->getEffectsScheduler();
+            _effectsScheduler->startEffect(new MarkZoomInEffect(this),
+                                           getEffectTarget());
+          }
+        }
+
         rc->getGL()->drawArrays(GLPrimitive::triangleStrip(),
                                 0,
                                 4,
@@ -663,7 +740,8 @@ void Mark::setOnScreenSizeOnPixels(int width, int height){
   if (_glState != NULL){
     BillboardGLFeature* b = (BillboardGLFeature*) _glState->getGLFeature(GLF_BILLBOARD);
     if (b != NULL){
-      b->changeSize((int)_textureWidth, (int)_textureHeight);
+      b->changeSize(IMathUtils::instance()->round(_textureWidth),
+                    IMathUtils::instance()->round(_textureHeight));
     }
   }
 }
@@ -676,7 +754,8 @@ void Mark::setOnScreenSizeOnProportionToImage(float width, float height){
   if (_glState != NULL){
     BillboardGLFeature* b = (BillboardGLFeature*) _glState->getGLFeature(GLF_BILLBOARD);
     if (b != NULL){
-      b->changeSize((int)(_textureWidth*_textureWidthProportion), (int)(_textureHeight*_textureHeightProportion));
+      b->changeSize(IMathUtils::instance()->round(_textureWidth  * _textureWidthProportion),
+                    IMathUtils::instance()->round(_textureHeight * _textureHeightProportion));
     }
   }
 }
