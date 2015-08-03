@@ -42,9 +42,10 @@ public:
                     ABSOLUTE,
                     0, // minDistanceToCamera
                     labelFontSize
+                    // Color::newFromRGBA(1, 1, 0, 1)
                     );
   }
-
+  
 };
 
 
