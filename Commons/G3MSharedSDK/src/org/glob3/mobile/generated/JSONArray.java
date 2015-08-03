@@ -127,17 +127,13 @@ public class JSONArray extends JSONBaseObject
   {
     IStringBuilder isb = IStringBuilder.newStringBuilder();
   
-    int size = this.size();
+    final int size = this.size();
   
     isb.addString("[");
-    //  isb->addString("[size=");
-    //  isb->addInt(size);
   
     if (size > 0)
     {
-      //isb->addString(" ");
-  
-        isb.addString((this.get(0) == null) ? "null" : this.get(0).description());
+      isb.addString((this.get(0) == null) ? "null" : this.get(0).description());
   
       if (size <= 10)
       {
@@ -156,7 +152,7 @@ public class JSONArray extends JSONBaseObject
         }
         isb.addString(", ...");
         isb.addString(" size=");
-        isb.addInt(size);
+        isb.addLong(size);
   
       }
     }

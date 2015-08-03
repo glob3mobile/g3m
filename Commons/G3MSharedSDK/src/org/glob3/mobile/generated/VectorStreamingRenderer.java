@@ -238,7 +238,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
 
     public final void runInBackground(G3MContext context)
     {
-      _features = GEOJSONParser.parseJSON(_buffer, false); // _verbose
+      _features = GEOJSONParser.parseJSON(_buffer, _verbose);
     
       if (_buffer != null)
          _buffer.dispose();
