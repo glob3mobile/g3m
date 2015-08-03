@@ -55,7 +55,7 @@ public:
   void doStep(const G3MRenderContext* rc,
               const TimeInterval& when) {
     const double alpha = getAlpha(when);
-    float s = (float) (alpha * (1.0 - _initialSize) + _initialSize);
+    float s = (float) (((1.0 - _initialSize) * alpha) + _initialSize);
     _mark->setOnScreenSizeOnProportionToImage(s, s);
   }
 
