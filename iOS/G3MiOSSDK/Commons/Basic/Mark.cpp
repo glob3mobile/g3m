@@ -44,12 +44,13 @@ private:
 
 public:
   MarkZoomInEffect(Mark* mark,
-                   const TimeInterval& timeInterval = TimeInterval::fromMilliseconds(400)) :
+                   const TimeInterval& timeInterval = TimeInterval::fromMilliseconds(400),
+                   const float initialSize = 0.01f) :
   EffectWithDuration(timeInterval, false),
   _mark(mark),
-  _initialSize(0.01f)
+  _initialSize(initialSize)
   {
-    _mark->setOnScreenSizeOnProportionToImage(_initialSize,_initialSize);
+    _mark->setOnScreenSizeOnProportionToImage(_initialSize, _initialSize);
   }
 
   void doStep(const G3MRenderContext* rc,
@@ -788,9 +789,9 @@ void Mark::setTextureCoordinatesTransformation(const Vector2F& translation,
     _textureGLF->setTranslation(_translationTCX, _translationTCY);
     _textureGLF->setScale(_scalingTCX, _scalingTCY);
   } else{
-
+    
   }
-
+  
 }
 
 void Mark::setMarkAnchor(float anchorU, float anchorV){
