@@ -31,6 +31,9 @@ public:
   ~MarkEffectTarget() {
   }
 
+#ifndef C_CODE
+  void unusedMethod() { }
+#endif
 };
 
 
