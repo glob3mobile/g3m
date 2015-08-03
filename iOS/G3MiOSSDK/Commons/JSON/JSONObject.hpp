@@ -68,7 +68,7 @@ public:
   void put(const std::string& key,
            bool value);
 
-  int size() const;
+  size_t size() const;
 
   std::vector<std::string> keys() const;
 

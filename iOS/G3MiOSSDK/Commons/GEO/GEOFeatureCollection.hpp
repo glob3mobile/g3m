@@ -43,8 +43,8 @@ public:
   GEOFeature* get(int i) const {
     return _features[i];
   }
-  
-  int size() const {
+
+  size_t size() const {
     return _features.size();
   }
 

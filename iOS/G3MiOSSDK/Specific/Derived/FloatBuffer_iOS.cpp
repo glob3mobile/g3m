@@ -68,7 +68,7 @@ void FloatBuffer_iOS::bindAsVBOToGPU() const {
     _vertexBufferTimestamp = _timestamp;
 
     float* vertices = getPointer();
-    int vboSize = sizeof(float) * size();
+    int vboSize = (int) ( sizeof(float) * size() );
 
     glBufferData(GL_ARRAY_BUFFER, vboSize, vertices, GL_STATIC_DRAW);
   }
@@ -96,18 +96,16 @@ FloatBuffer_iOS::~FloatBuffer_iOS() {
 }
 
 
-void FloatBuffer_iOS::rawPut(int i,
+void FloatBuffer_iOS::rawPut(size_t i,
                              const IFloatBuffer* srcBuffer,
-                             int srcFromIndex,
-                             int count) {
-  if (i < 0 || (i + count) > _size) {
+                             size_t srcFromIndex,
+                             size_t count) {
+  if ((i + count) > _size) {
     THROW_EXCEPTION("buffer put error");
   }
 
   FloatBuffer_iOS* iosSrcBuffer = (FloatBuffer_iOS*) srcBuffer;
   for (int j = 0; j < count; j++) {
-//#warning remove debug code
     _values[i + j] = iosSrcBuffer->_values[srcFromIndex + j];
-    //rawPut(i + j, srcBuffer->get(srcFromIndex + j));
   }
 }
