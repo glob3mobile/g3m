@@ -85,6 +85,80 @@ public class Sphere extends BoundingVolume
   }
 
 
+
+  public static Sphere enclosingSphere(java.util.ArrayList<Vector3D> points)
+  {
+    if (points.size() < 2)
+    {
+      return null;
+    }
+  
+    final Vector3D first = points.get(0);
+  
+    MutableVector3D xmin = new MutableVector3D(first);
+    MutableVector3D xmax = new MutableVector3D(first);
+    MutableVector3D ymin = new MutableVector3D(first);
+    MutableVector3D ymax = new MutableVector3D(first);
+    MutableVector3D zmin = new MutableVector3D(first);
+    MutableVector3D zmax = new MutableVector3D(first);
+  
+    for (int i = 1; i < points.size(); i++)
+    {
+      final Vector3D p = points.get(i);
+      if (p._x < xmin.x())
+         xmin.copyFrom(p);
+      if (p._x > xmax.x())
+         xmax.copyFrom(p);
+      if (p._y < ymin.y())
+         ymin.copyFrom(p);
+      if (p._y > ymax.y())
+         ymax.copyFrom(p);
+      if (p._z < zmin.z())
+         zmin.copyFrom(p);
+      if (p._z > zmax.z())
+         zmax.copyFrom(p);
+    }
+  
+    double xSpan = xmax.squaredDistanceTo(xmin);
+    double ySpan = ymax.squaredDistanceTo(ymin);
+    double zSpan = zmax.squaredDistanceTo(zmin);
+    MutableVector3D dia1 = new MutableVector3D(xmin);
+    MutableVector3D dia2 = new MutableVector3D(xmax);
+    double maxSpan = xSpan;
+    if (ySpan > maxSpan)
+    {
+      maxSpan = ySpan;
+      dia1.copyFrom(ymin);
+      dia2.copyFrom(ymax);
+    }
+    if (zSpan > maxSpan)
+    {
+      dia1.copyFrom(zmin);
+      dia2.copyFrom(zmax);
+    }
+  
+    MutableVector3D center = new MutableVector3D((dia1.x() + dia2.x()) / 2, (dia1.y() + dia2.y()) / 2, (dia1.z() + dia2.z()) / 2);
+  
+    double sqRad = dia2.squaredDistanceTo(center);
+    double radius = IMathUtils.instance().sqrt(sqRad);
+    for (int i = 0; i < points.size(); i++)
+    {
+      final Vector3D p = points.get(i);
+      double d = center.squaredDistanceTo(p);
+      if (d > sqRad)
+      {
+        double r = IMathUtils.instance().sqrt(d);
+        radius = (radius + r) * 0.5f;
+        sqRad = radius * radius;
+        double offset = r - radius;
+        //center = (radius * center + offset * p) / r;
+        center.set((radius * center.x() + offset * p._x) / r, (radius * center.y() + offset * p._y) / r, (radius * center.z() + offset * p._z) / r);
+      }
+    }
+  
+    return new Sphere(center.asVector3D(), radius);
+  }
+
   public final Vector3D _center ;
   public final double _radius;
   public final double _radiusSquared;

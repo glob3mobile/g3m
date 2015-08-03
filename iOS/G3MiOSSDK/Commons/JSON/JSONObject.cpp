@@ -83,7 +83,7 @@ void JSONObject::put(const std::string& key,
   _entries[key] = new JSONBoolean(value);
 }
 
-int JSONObject::size() const {
+size_t JSONObject::size() const {
   return _entries.size();
 }
 
@@ -181,10 +181,10 @@ const std::string JSONObject::description() const {
 
   std::vector<std::string> keys = this->keys();
 
-  int keysCount = keys.size();
+  size_t keysCount = keys.size();
   if (keysCount > 0) {
     putKeyAndValueDescription(keys[0], isb);
-    for (int i = 1; i < keysCount; i++) {
+    for (size_t i = 1; i < keysCount; i++) {
       isb->addString(", ");
       putKeyAndValueDescription(keys[i], isb);
     }
@@ -202,8 +202,8 @@ JSONObject* JSONObject::deepCopy() const {
 
   std::vector<std::string> keys = this->keys();
 
-  int keysCount = keys.size();
-  for (int i = 0; i < keysCount; i++) {
+  size_t keysCount = keys.size();
+  for (size_t i = 0; i < keysCount; i++) {
     std::string key = keys[i];
     result->put(key, JSONBaseObject::deepCopy( get(key) ) );
   }
@@ -216,8 +216,8 @@ void JSONObject::acceptVisitor(JSONVisitor* visitor) const {
 
   std::vector<std::string> keys = this->keys();
 
-  int keysCount = keys.size();
-  for (int i = 0; i < keysCount; i++) {
+  size_t keysCount = keys.size();
+  for (size_t i = 0; i < keysCount; i++) {
     if (i != 0) {
       visitor->visitObjectInBetweenChildren(this);
     }

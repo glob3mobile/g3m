@@ -697,7 +697,7 @@ public abstract class MapBooBuilder
   {
     final IStringUtils su = IStringUtils.instance();
   
-    return su.replaceSubstring(str, "\"", "\\\"");
+    return su.replaceAll(str, "\"", "\\\"");
   }
 
   private String toCameraPositionJSON(Camera camera)

@@ -43,8 +43,8 @@ void GEOMultiLineRasterSymbol::rawRasterize(ICanvas*                   canvas,
                                             const GEORasterProjection* projection) const {
   if (_coordinatesArrayData != NULL) {
     if (_style.apply(canvas)) {
-      const int coordinatesArrayCount = _coordinatesArrayData->size();
-      for (int i = 0; i < coordinatesArrayCount; i++) {
+      const size_t coordinatesArrayCount = _coordinatesArrayData->size();
+      for (size_t i = 0; i < coordinatesArrayCount; i++) {
         const GEO2DCoordinatesData* coordinates = _coordinatesArrayData->get(i);
         if (coordinates != NULL) {
           rasterLine(coordinates,

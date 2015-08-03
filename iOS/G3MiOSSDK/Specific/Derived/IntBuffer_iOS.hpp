@@ -11,10 +11,11 @@
 
 #include "IIntBuffer.hpp"
 #include "ILogger.hpp"
+#include "ErrorHandling.hpp"
 
 class IntBuffer_iOS : public IIntBuffer {
 private:
-  const int _size;
+  const size_t _size;
   int*      _values;
   int       _timestamp;
 
@@ -23,7 +24,7 @@ private:
   static long long _nextID;
 
 public:
-  IntBuffer_iOS(int size) :
+  IntBuffer_iOS(size_t size) :
   _size(size),
   _timestamp(0),
   _id(_nextID++)
@@ -43,7 +44,7 @@ public:
     delete [] _values;
   }
   
-  int size() const {
+  size_t size() const {
     return _size;
   }
   
@@ -51,17 +52,17 @@ public:
     return _timestamp;
   }
   
-  int get(int i) const {
-    if (i < 0 || i > _size) {
-      ILogger::instance()->logError("Buffer Get error.");
+  int get(size_t i) const {
+    if (i >= _size) {
+      THROW_EXCEPTION("Buffer Overflow");
     }
     
     return _values[i];
   }
   
-  void put(int i, int value) {
-    if (i < 0 || i > _size) {
-      ILogger::instance()->logError("Buffer Put error.");
+  void put(size_t i, int value) {
+    if (i >= _size) {
+      THROW_EXCEPTION("Buffer Overflow");
     }
     
     if (_values[i] != value) {
@@ -70,9 +71,9 @@ public:
     }
   }
   
-  void rawPut(int i, int value) {
-    if (i < 0 || i > _size) {
-      ILogger::instance()->logError("Buffer Put error.");
+  void rawPut(size_t i, int value) {
+    if (i >= _size) {
+      THROW_EXCEPTION("Buffer Overflow");
     }
     
     _values[i] = value;

@@ -39,7 +39,7 @@ public:
   void visitArrayBeforeChildren(const JSONArray* value);
   void visitArrayInBetweenChildren(const JSONArray* value);
   void visitArrayBeforeChild(const JSONArray* value,
-                             int i);
+                             size_t i);
   void visitArrayAfterChildren(const JSONArray* value);
 
   void visitObjectBeforeChildren(const JSONObject* value);

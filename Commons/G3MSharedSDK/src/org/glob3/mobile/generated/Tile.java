@@ -240,7 +240,8 @@ public class Tile
     }
   
     _lastMeetsRenderCriteriaTimeInMS = nowInMS; //Storing time of result
-  
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning store camera-timestamp to avoid recalculation when the camera isn't moving
   
     if ((_northArcSegmentRatioSquared == 0) || (_southArcSegmentRatioSquared == 0) || (_eastArcSegmentRatioSquared == 0) || (_westArcSegmentRatioSquared == 0))
     {

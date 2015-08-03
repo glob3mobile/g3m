@@ -139,7 +139,7 @@ void BSONGenerator::visitArrayInBetweenChildren(const JSONArray* value) {
 }
 
 void BSONGenerator::visitArrayBeforeChild(const JSONArray* value,
-                                          int i) {
+                                          size_t i) {
 //  IStringBuilder* isb = IStringBuilder::newStringBuilder();
 //  isb->addInt(i);
 //  _currentKey = isb->getString();
