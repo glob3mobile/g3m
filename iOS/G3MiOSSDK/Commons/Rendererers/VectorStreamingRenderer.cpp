@@ -105,7 +105,7 @@ VectorStreamingRenderer::FeaturesParserAsyncTask::~FeaturesParserAsyncTask() {
 }
 
 void VectorStreamingRenderer::FeaturesParserAsyncTask::runInBackground(const G3MContext* context) {
-  _features = GEOJSONParser::parseJSON(_buffer, false /* _verbose */);
+  _features = GEOJSONParser::parseJSON(_buffer, _verbose);
 
   delete _buffer;
   _buffer = NULL;

@@ -117,9 +117,9 @@ public:
     const GEO2DSurfaceRasterStyle surfaceStyle = createPolygonSurfaceRasterStyle(geometry, baseColor);
 
     const std::vector<GEO2DPolygonData*>* polygonsData = geometry->getPolygonsData();
-    const int polygonsDataSize = polygonsData->size();
+    const size_t polygonsDataSize = polygonsData->size();
 
-    for (int i = 0; i < polygonsDataSize; i++) {
+    for (size_t i = 0; i < polygonsDataSize; i++) {
       GEO2DPolygonData* polygonData = polygonsData->at(i);
       symbols->push_back( new GEOPolygonRasterSymbol(polygonData,
                                                      lineStyle,

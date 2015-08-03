@@ -84,9 +84,7 @@ public:
                                 int endIndex) const = 0;
 
   virtual std::string substring(const std::string& string,
-                                int beginIndex) const {
-    return substring(string, beginIndex, string.size());
-  }
+                                int beginIndex) const;
 
   virtual std::string replaceAll(const std::string& originalString,
                                  const std::string& searchString,

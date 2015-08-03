@@ -88,22 +88,36 @@ void MarksRenderer::addMark(Mark* mark) {
 }
 
 void MarksRenderer::removeMark(Mark* mark) {
-  int pos = -1;
-  const int marksSize = _marks.size();
-  for (int i = 0; i < marksSize; i++) {
+//  int pos = -1;
+//  const int marksSize = _marks.size();
+//  for (int i = 0; i < marksSize; i++) {
+//    if (_marks[i] == mark) {
+//      pos = i;
+//      break;
+//    }
+//  }
+//  if (pos != -1) {
+//#ifdef C_CODE
+//    _marks.erase(_marks.begin() + pos);
+//#endif
+//#ifdef JAVA_CODE
+//    _marks.remove(pos);
+//#endif
+//  }
+
+  const size_t marksSize = _marks.size();
+  for (size_t i = 0; i < marksSize; i++) {
     if (_marks[i] == mark) {
-      pos = i;
+#ifdef C_CODE
+      _marks.erase(_marks.begin() + i);
+#endif
+#ifdef JAVA_CODE
+      _marks.remove(i);
+#endif
       break;
     }
   }
-  if (pos != -1) {
-#ifdef C_CODE
-    _marks.erase(_marks.begin() + pos);
-#endif
-#ifdef JAVA_CODE
-    _marks.remove(pos);
-#endif
-  }
+
 }
 
 void MarksRenderer::removeAllMarks() {

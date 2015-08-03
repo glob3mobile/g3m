@@ -43,17 +43,63 @@ GEOObject* GEOJSONParser::parseBSON(const IByteBuffer* bson,
 }
 
 void GEOJSONParser::showStatisticsToLogger() const {
-  ILogger::instance()->logInfo("GEOJSONParser Statistics: Coordinates2D=%d, Points2D=%d, LineStrings2D=%d, MultiLineStrings2D=%d (LineStrings2D=%d), Polygons2D=%d (Holes=%d), MultiPolygons=%d, features=%d, featuresCollection=%d",
-                               _coordinates2DCount,
-                               _points2DCount,
-                               _lineStrings2DCount,
-                               _multiLineStrings2DCount,
-                               _lineStringsInMultiLineString2DCount,
-                               _polygon2DCount,
-                               _holesLineStringsInPolygon2DCount,
-                               _multiPolygon2DCount,
-                               _featuresCount,
-                               _featuresCollectionCount);
+  IStringBuilder* sb = IStringBuilder::newStringBuilder();
+
+  sb->addString("GEOJSONParser Statistics:");
+
+  if (_featuresCollectionCount > 0) {
+    sb->addString(" FeaturesCollection=");
+    sb->addLong(_featuresCollectionCount);
+  }
+
+  if (_featuresCount > 0) {
+    sb->addString(" Features=");
+    sb->addLong(_featuresCount);
+  }
+
+  if (_coordinates2DCount > 0) {
+    sb->addString(" Coordinates=");
+    sb->addLong(_coordinates2DCount);
+  }
+
+  if (_points2DCount > 0) {
+    sb->addString(" Points=");
+    sb->addLong(_points2DCount);
+  }
+
+  if (_lineStrings2DCount > 0) {
+    sb->addString(" LineStrings=");
+    sb->addLong(_lineStrings2DCount);
+  }
+
+  if (_multiLineStrings2DCount > 0) {
+    sb->addString(" MultiLineStrings=");
+    sb->addLong(_multiLineStrings2DCount);
+    if (_lineStringsInMultiLineString2DCount > 0) {
+      sb->addString(" (LineStrings=");
+      sb->addLong(_lineStringsInMultiLineString2DCount);
+      sb->addString(")");
+    }
+  }
+
+  if (_polygon2DCount > 0) {
+    sb->addString(" Polygons=");
+    sb->addLong(_polygon2DCount);
+    if (_lineStringsInMultiLineString2DCount > 0) {
+      sb->addString(" (Holes=");
+      sb->addLong(_holesLineStringsInPolygon2DCount);
+      sb->addString(")");
+    }
+  }
+
+  if (_multiPolygon2DCount > 0) {
+    sb->addString(" MultiPolygons=");
+    sb->addLong(_multiPolygon2DCount);
+  }
+
+  ILogger::instance()->logInfo( sb->getString() );
+
+  delete sb;
 }
 
 GEOObject* GEOJSONParser::pvtParse(bool showStatistics) const {
@@ -76,7 +122,7 @@ GEOObject* GEOJSONParser::pvtParse(bool showStatistics) const {
       showStatisticsToLogger();
     }
   }
-  
+
   return result;
 }
 
@@ -116,7 +162,7 @@ GEOGeometry* GEOJSONParser::createPointGeometry(const JSONObject* jsonObject) co
   }
 
   GEOGeometry* geo = NULL;
-  
+
   const int dimensions = jsCoordinates->size();
   if (dimensions == 2) {
     const double latitudeDegrees  = jsCoordinates->getAsNumber(1, 0.0);
@@ -126,11 +172,11 @@ GEOGeometry* GEOJSONParser::createPointGeometry(const JSONObject* jsonObject) co
 
     geo = new GEO2DPointGeometry( Geodetic2D::fromDegrees(latitudeDegrees, longitudeDegrees) );
   }
-//  else if (dimensions == 3) {
-//    const double latitudeDegrees  = jsCoordinates->getAsNumber(1, 0.0);
-//    const double longitudeDegrees = jsCoordinates->getAsNumber(0, 0.0);
-//    const double height           = jsCoordinates->getAsNumber(2, 0.0);
-//  }
+  //  else if (dimensions == 3) {
+  //    const double latitudeDegrees  = jsCoordinates->getAsNumber(1, 0.0);
+  //    const double longitudeDegrees = jsCoordinates->getAsNumber(0, 0.0);
+  //    const double height           = jsCoordinates->getAsNumber(2, 0.0);
+  //  }
   else {
     ILogger::instance()->logError("Mandatory \"coordinates\" dimensions not supported %d", dimensions);
   }

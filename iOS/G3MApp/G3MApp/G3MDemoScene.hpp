@@ -67,7 +67,7 @@ public:
     return _options.size();
   }
 
-  const std::string getOption(int index) const {
+  const std::string getOption(size_t index) const {
     return _options[index];
   }
 

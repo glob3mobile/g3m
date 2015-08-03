@@ -140,8 +140,8 @@ PlanetRenderer* G3MDemoModel::getPlanetRenderer() const {
 }
 
 G3MDemoScene* G3MDemoModel::getSceneByName(const std::string& sceneName) const {
-  const int scenesSize = _scenes.size();
-  for (int i = 0; i < scenesSize; i++) {
+  const size_t scenesSize = _scenes.size();
+  for (size_t i = 0; i < scenesSize; i++) {
     G3MDemoScene* scene = _scenes[i];
     if (scene->getName() == sceneName) {
       return scene;
