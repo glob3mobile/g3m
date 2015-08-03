@@ -100,7 +100,7 @@ public class Mark implements SurfaceElevationListener
   {
     _glState = new GLState();
   
-    _billboardGLF = new BillboardGLFeature(getCartesianPosition(planet), (int)_textureWidth, (int)_textureHeight, _anchorU, _anchorV);
+    _billboardGLF = new BillboardGLFeature(getCartesianPosition(planet), IMathUtils.instance().round(_textureWidth), IMathUtils.instance().round(_textureHeight), _anchorU, _anchorV);
   
     _glState.addGLFeature(_billboardGLF, false);
   
@@ -109,11 +109,10 @@ public class Mark implements SurfaceElevationListener
   
       if (_hasTCTransformations)
       {
-      _textureGLF = new TextureGLFeature(_textureId.getID(), billboardTexCoords, 2, 0, false, 0, true, GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha(), _translationTCX, _translationTCY, _scalingTCX, _scalingTCY, 0.0f, 0.0f, 0.0f);
+        _textureGLF = new TextureGLFeature(_textureId.getID(), billboardTexCoords, 2, 0, false, 0, true, GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha(), _translationTCX, _translationTCY, _scalingTCX, _scalingTCY, 0.0f, 0.0f, 0.0f);
       }
       else
       {
-  
         _textureGLF = new TextureGLFeature(_textureId.getID(), billboardTexCoords, 2, 0, false, 0, true, GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha(), 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 0.0f);
       }
   
@@ -145,6 +144,21 @@ public class Mark implements SurfaceElevationListener
   private BillboardGLFeature _billboardGLF;
 
   private boolean _initialized;
+
+  private boolean _zoomInAppears;
+  private EffectsScheduler _effectsScheduler;
+  private boolean _firstRender;
+
+
+  private EffectTarget _effectTarget;
+  private EffectTarget getEffectTarget()
+  {
+    if (_effectTarget == null)
+    {
+      _effectTarget = new MarkEffectTarget();
+    }
+    return _effectTarget;
+  }
 
   /**
    * Creates a mark with icon and label
@@ -227,6 +241,10 @@ public class Mark implements SurfaceElevationListener
      _textureWidthProportion = 1.0F;
      _textureProportionSetExternally = false;
      _initialized = false;
+     _zoomInAppears = true;
+     _effectsScheduler = null;
+     _firstRender = true;
+     _effectTarget = null;
   
   }
 
@@ -303,6 +321,10 @@ public class Mark implements SurfaceElevationListener
      _textureWidthProportion = 1.0F;
      _textureProportionSetExternally = false;
      _initialized = false;
+     _zoomInAppears = true;
+     _effectsScheduler = null;
+     _firstRender = true;
+     _effectTarget = null;
   
   }
 
@@ -367,6 +389,10 @@ public class Mark implements SurfaceElevationListener
      _textureWidthProportion = 1.0F;
      _textureProportionSetExternally = false;
      _initialized = false;
+     _zoomInAppears = true;
+     _effectsScheduler = null;
+     _firstRender = true;
+     _effectTarget = null;
   
   }
 
@@ -429,11 +455,19 @@ public class Mark implements SurfaceElevationListener
      _textureHeightProportion = 1.0F;
      _textureWidthProportion = 1.0F;
      _initialized = false;
+     _zoomInAppears = true;
+     _effectsScheduler = null;
+     _firstRender = true;
+     _effectTarget = null;
   
   }
 
   public void dispose()
   {
+    if (_effectsScheduler != null)
+    {
+      _effectsScheduler.cancelAllEffectsFor(getEffectTarget());
+    }
   
     if (_position != null)
        _position.dispose();
@@ -684,7 +718,7 @@ public class Mark implements SurfaceElevationListener
         {
           _normalAtMarkPosition = new Vector3D(planet.geodeticSurfaceNormal(markPosition));
         }
-  //      occludedByHorizon = (_normalAtMarkPosition->angleInRadiansBetween(markCameraVector) <= HALF_PI);
+        //      occludedByHorizon = (_normalAtMarkPosition->angleInRadiansBetween(markCameraVector) <= HALF_PI);
         occludedByHorizon = (Vector3D.angleInRadiansBetween(_normalAtMarkPosition, _markCameraVector) <= DefineConstants.HALF_PI);
       }
   
@@ -705,6 +739,16 @@ public class Mark implements SurfaceElevationListener
             createGLState(planet, billboardTexCoords); // If GLState was disposed due to elevation change
           }
           _glState.setParent(parentGLState);
+  
+          if (_firstRender)
+          {
+            _firstRender = false;
+            if (_zoomInAppears)
+            {
+              _effectsScheduler = rc.getEffectsScheduler();
+              _effectsScheduler.startEffect(new MarkZoomInEffect(this), getEffectTarget());
+            }
+          }
   
           rc.getGL().drawArrays(GLPrimitive.triangleStrip(), 0, 4, _glState, rc.getGPUProgramManager());
   
@@ -768,7 +812,7 @@ public class Mark implements SurfaceElevationListener
       BillboardGLFeature b = (BillboardGLFeature) _glState.getGLFeature(GLFeatureID.GLF_BILLBOARD);
       if (b != null)
       {
-        b.changeSize((int)_textureWidth, (int)_textureHeight);
+        b.changeSize(IMathUtils.instance().round(_textureWidth), IMathUtils.instance().round(_textureHeight));
       }
     }
   }
@@ -783,7 +827,7 @@ public class Mark implements SurfaceElevationListener
       BillboardGLFeature b = (BillboardGLFeature) _glState.getGLFeature(GLFeatureID.GLF_BILLBOARD);
       if (b != null)
       {
-        b.changeSize((int)(_textureWidth *_textureWidthProportion), (int)(_textureHeight *_textureHeightProportion));
+        b.changeSize(IMathUtils.instance().round(_textureWidth * _textureWidthProportion), IMathUtils.instance().round(_textureHeight * _textureHeightProportion));
       }
     }
   }
@@ -838,6 +882,16 @@ public class Mark implements SurfaceElevationListener
   public final String getToken()
   {
     return _token;
+  }
+
+  public final void setZoomInAppears(boolean zoomInAppears)
+  {
+    _zoomInAppears = zoomInAppears;
+  }
+
+  public final boolean getZoomInAppears()
+  {
+    return _zoomInAppears;
   }
 
 }
