@@ -30,6 +30,7 @@ class MarkEffectTarget : public EffectTarget {
 public:
   ~MarkEffectTarget() {
   }
+
 };
 
 
