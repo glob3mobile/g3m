@@ -68,7 +68,8 @@ void G3MVectorStreamingDemoScene::rawActivate(const G3MContext* context) {
                          "GEONames-PopulatedPlaces_LOD",
                          new G3MVectorStreamingDemoScene_Symbolizer(),
                          true, // deleteSymbolizer
-                         DownloadPriority::LOWER,
+                         //DownloadPriority::LOWER,
+                         DownloadPriority::HIGHER,
                          TimeInterval::zero(),
                          true, // readExpired
                          true // verbose

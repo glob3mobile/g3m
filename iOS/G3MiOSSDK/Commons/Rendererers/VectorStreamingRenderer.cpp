@@ -255,7 +255,7 @@ void VectorStreamingRenderer::Node::loadFeatures(const G3MRenderContext* rc) {
 
   _downloader = rc->getDownloader();
   _featuresRequestID = _downloader->requestBuffer(metadataURL,
-                                                  _vectorSet->getDownloadPriority(),
+                                                  _vectorSet->getDownloadPriority() + _featuresCount,
                                                   _vectorSet->getTimeToCache(),
                                                   _vectorSet->getReadExpired(),
                                                   new VectorStreamingRenderer::NodeFeaturesDownloadListener(this,
