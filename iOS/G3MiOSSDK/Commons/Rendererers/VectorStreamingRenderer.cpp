@@ -259,9 +259,9 @@ void VectorStreamingRenderer::Node::loadFeatures(const G3MRenderContext* rc) {
                                                   _vectorSet->getDownloadPriority() + _featuresCount,
                                                   _vectorSet->getTimeToCache(),
                                                   _vectorSet->getReadExpired(),
-                                                  new VectorStreamingRenderer::NodeFeaturesDownloadListener(this,
-                                                                                                            rc->getThreadUtils(),
-                                                                                                            _verbose),
+                                                  new NodeFeaturesDownloadListener(this,
+                                                                                   rc->getThreadUtils(),
+                                                                                   _verbose),
                                                   true);
 }
 
@@ -321,9 +321,9 @@ void VectorStreamingRenderer::Node::loadChildren(const G3MRenderContext* rc) {
                                                   _vectorSet->getDownloadPriority(),
                                                   _vectorSet->getTimeToCache(),
                                                   _vectorSet->getReadExpired(),
-                                                  new VectorStreamingRenderer::NodeChildrenDownloadListener(this,
-                                                                                                            rc->getThreadUtils(),
-                                                                                                            _verbose),
+                                                  new NodeChildrenDownloadListener(this,
+                                                                                   rc->getThreadUtils(),
+                                                                                   _verbose),
                                                   true);
 }
 
@@ -718,9 +718,9 @@ void VectorStreamingRenderer::VectorSet::initialize(const G3MContext* context) {
                                           _downloadPriority,
                                           _timeToCache,
                                           _readExpired,
-                                          new VectorStreamingRenderer::MetadataDownloadListener(this,
-                                                                                                context->getThreadUtils(),
-                                                                                                _verbose),
+                                          new MetadataDownloadListener(this,
+                                                                       context->getThreadUtils(),
+                                                                       _verbose),
                                           true);
 }
 
