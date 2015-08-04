@@ -299,7 +299,8 @@ void MarksRenderer::onResizeViewportEvent(const G3MEventContext* ec,
   _glState->addGLFeature(new ViewportExtentGLFeature(width, height), false);
 }
 
-size_t MarksRenderer::removeAllMarks(const MarksFilter& filter) {
+size_t MarksRenderer::removeAllMarks(const MarksFilter& filter,
+                                     bool deleteMarks) {
   size_t removed = 0;
   std::vector<Mark*> newMarks;
 
@@ -307,6 +308,9 @@ size_t MarksRenderer::removeAllMarks(const MarksFilter& filter) {
   for (size_t i = 0; i < marksSize; i++) {
     Mark* mark = _marks[i];
     if (filter.test(mark)) {
+      if (deleteMarks) {
+        delete mark;
+      }
       removed++;
     }
     else {

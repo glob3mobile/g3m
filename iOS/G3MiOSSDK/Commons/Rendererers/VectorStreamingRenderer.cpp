@@ -190,9 +190,6 @@ void VectorStreamingRenderer::Node::parsedFeatures(GEOObject* features,
     _features = features;
 
     _marksCount = _features->createMarks(_vectorSet, this);
-    if (_marksCount > 64) {
-      ILogger::instance()->logError("OOPS!!");
-    }
     if (_verbose) {
 #ifdef C_CODE
       ILogger::instance()->logInfo("\"%s\": Created %ld marks",
@@ -358,11 +355,7 @@ bool VectorStreamingRenderer::NodeMarksFilter::test(const Mark* mark) const {
 
 
 void VectorStreamingRenderer::Node::removeMarks() {
-  size_t removed = _vectorSet->getMarksRenderer()->removeAllMarks( NodeMarksFilter(this) );
-
-  if (removed > 64) {
-    ILogger::instance()->logError("OOPS!!");
-  }
+  size_t removed = _vectorSet->getMarksRenderer()->removeAllMarks( NodeMarksFilter(this), true );
 
   if (_verbose && removed) {
 #ifdef C_CODE

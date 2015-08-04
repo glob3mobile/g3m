@@ -124,7 +124,8 @@ public:
 
   }
 
-  size_t removeAllMarks(const MarksFilter& filter);
+  size_t removeAllMarks(const MarksFilter& filter,
+                        bool deleteMarks);
   
 };
 
