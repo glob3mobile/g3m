@@ -190,9 +190,6 @@ void VectorStreamingRenderer::Node::parsedFeatures(GEOObject* features,
     _features = features;
 
     _marksCount = _features->createMarks(_vectorSet, this);
-    if (_marksCount > 64) {
-      ILogger::instance()->logError("OOPS!!");
-    }
     if (_verbose) {
 #ifdef C_CODE
       ILogger::instance()->logInfo("\"%s\": Created %ld marks",
@@ -258,7 +255,7 @@ void VectorStreamingRenderer::Node::loadFeatures(const G3MRenderContext* rc) {
 
   _downloader = rc->getDownloader();
   _featuresRequestID = _downloader->requestBuffer(metadataURL,
-                                                  _vectorSet->getDownloadPriority(),
+                                                  _vectorSet->getDownloadPriority() + _featuresCount,
                                                   _vectorSet->getTimeToCache(),
                                                   _vectorSet->getReadExpired(),
                                                   new VectorStreamingRenderer::NodeFeaturesDownloadListener(this,
@@ -358,11 +355,7 @@ bool VectorStreamingRenderer::NodeMarksFilter::test(const Mark* mark) const {
 
 
 void VectorStreamingRenderer::Node::removeMarks() {
-  size_t removed = _vectorSet->getMarksRenderer()->removeAllMarks( NodeMarksFilter(this) );
-
-  if (removed > 64) {
-    ILogger::instance()->logError("OOPS!!");
-  }
+  size_t removed = _vectorSet->getMarksRenderer()->removeAllMarks( NodeMarksFilter(this), true );
 
   if (_verbose && removed) {
 #ifdef C_CODE
@@ -428,7 +421,7 @@ long long VectorStreamingRenderer::Node::render(const G3MRenderContext* rc,
 
   long long renderedCount = 0;
 
-#warning Show Bounding Volume
+  // #warning Show Bounding Volume
   // getBoundingVolume(rc)->render(rc, glState, Color::red());
 
   const bool visible = isVisible(rc, frustumInModelCoordinates);

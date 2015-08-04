@@ -58,18 +58,32 @@ private:
    * Default value: 20
    */
   const float       _labelFontSize;
+
+
   /**
    * The color of the text.
    * Useless if the mark does not have label.
    * Default value: white
    */
+#ifdef C_CODE
   const Color*      _labelFontColor;
+#endif
+#ifdef JAVA_CODE
+  private Color     _labelFontColor;
+#endif
+
   /**
    * The color of the text shadow.
    * Useless if the mark does not have label.
    * Default value: black
    */
+#ifdef C_CODE
   const Color*      _labelShadowColor;
+#endif
+#ifdef JAVA_CODE
+  private Color     _labelShadowColor;
+#endif
+
   /**
    * The number of pixels between the icon and the text.
    * Useless if the mark does not have label or icon.

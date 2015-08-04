@@ -376,7 +376,7 @@ public class MarksRenderer extends DefaultRenderer
 
   }
 
-  public final int removeAllMarks(MarksFilter filter)
+  public final int removeAllMarks(MarksFilter filter, boolean deleteMarks)
   {
     int removed = 0;
     java.util.ArrayList<Mark> newMarks = new java.util.ArrayList<Mark>();
@@ -387,6 +387,11 @@ public class MarksRenderer extends DefaultRenderer
       Mark mark = _marks.get(i);
       if (filter.test(mark))
       {
+        if (deleteMarks)
+        {
+          if (mark != null)
+             mark.dispose();
+        }
         removed++;
       }
       else

@@ -450,7 +450,9 @@ void Mark::onTextureDownloadError() {
   _textureSolved = true;
 
   delete _labelFontColor;
+  _labelFontColor = NULL;
   delete _labelShadowColor;
+  _labelShadowColor = NULL;
 
   ILogger::instance()->logError("Can't create texture for Mark (iconURL=\"%s\", label=\"%s\")",
                                 _iconURL._path.c_str(),
@@ -461,7 +463,9 @@ void Mark::onTextureDownload(const IImage* image) {
   _textureSolved = true;
 
   delete _labelFontColor;
+  _labelFontColor = NULL;
   delete _labelShadowColor;
+  _labelShadowColor = NULL;
 
   _textureImage = image;
 
@@ -485,6 +489,10 @@ Mark::~Mark() {
   if (_effectsScheduler != NULL) {
     _effectsScheduler->cancelAllEffectsFor(getEffectTarget());
   }
+  delete _effectTarget;
+
+  delete _labelFontColor;
+  delete _labelShadowColor;
 
   delete _position;
 

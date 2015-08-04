@@ -18,18 +18,22 @@ public class Mark implements SurfaceElevationListener
    * Default value: 20
    */
   private final float _labelFontSize;
+
+
   /**
    * The color of the text.
    * Useless if the mark does not have label.
    * Default value: white
    */
-  private final Color _labelFontColor;
+  private Color     _labelFontColor;
+
   /**
    * The color of the text shadow.
    * Useless if the mark does not have label.
    * Default value: black
    */
-  private final Color _labelShadowColor;
+  private Color     _labelShadowColor;
+
   /**
    * The number of pixels between the icon and the text.
    * Useless if the mark does not have label or icon.
@@ -468,6 +472,11 @@ public class Mark implements SurfaceElevationListener
     {
       _effectsScheduler.cancelAllEffectsFor(getEffectTarget());
     }
+    if (_effectTarget != null)
+       _effectTarget.dispose();
+  
+    _labelFontColor = null;
+    _labelShadowColor = null;
   
     if (_position != null)
        _position.dispose();
@@ -578,10 +587,10 @@ public class Mark implements SurfaceElevationListener
   {
     _textureSolved = true;
   
-    if (_labelFontColor != null)
-       _labelFontColor.dispose();
-    if (_labelShadowColor != null)
-       _labelShadowColor.dispose();
+    _labelFontColor = null;
+    _labelFontColor = null;
+    _labelShadowColor = null;
+    _labelShadowColor = null;
   
     ILogger.instance().logError("Can't create texture for Mark (iconURL=\"%s\", label=\"%s\")", _iconURL._path, _label);
   }
@@ -590,10 +599,10 @@ public class Mark implements SurfaceElevationListener
   {
     _textureSolved = true;
   
-    if (_labelFontColor != null)
-       _labelFontColor.dispose();
-    if (_labelShadowColor != null)
-       _labelShadowColor.dispose();
+    _labelFontColor = null;
+    _labelFontColor = null;
+    _labelShadowColor = null;
+    _labelShadowColor = null;
   
     _textureImage = image;
   
