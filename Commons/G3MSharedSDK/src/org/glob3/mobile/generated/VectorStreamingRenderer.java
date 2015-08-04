@@ -68,7 +68,8 @@ public class VectorStreamingRenderer extends DefaultRenderer
     public static VectorStreamingRenderer.Node parseNode(JSONObject json, VectorSet vectorSet, boolean verbose)
     {
       final String id = json.getAsString("id").value();
-      Sector sector = GEOJSONUtils.parseSector(json.getAsArray("sector"));
+      Sector nodeSector = GEOJSONUtils.parseSector(json.getAsArray("nodeSector"));
+      Sector minimumSector = GEOJSONUtils.parseSector(json.getAsArray("minimumSector"));
       int featuresCount = (int) json.getAsNumber("featuresCount").value();
       Geodetic2D averagePosition = GEOJSONUtils.parseGeodetic2D(json.getAsArray("averagePosition"));
     
@@ -79,7 +80,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
         children.add(childrenJSON.getAsString(i).value());
       }
     
-      return new Node(vectorSet, id, sector, featuresCount, averagePosition, children, verbose);
+      return new Node(vectorSet, id, nodeSector, minimumSector, featuresCount, averagePosition, children, verbose);
     }
 
   }
@@ -325,7 +326,8 @@ public class VectorStreamingRenderer extends DefaultRenderer
   {
     private final VectorSet _vectorSet;
     private final String _id;
-    private final Sector _sector;
+    private final Sector _nodeSector;
+    private final Sector _minimumSector;
     private final int _featuresCount;
     private final Geodetic2D _averagePosition;
     private final java.util.ArrayList<String> _childrenIDs;
@@ -345,11 +347,11 @@ public class VectorStreamingRenderer extends DefaultRenderer
         final Planet planet = rc.getPlanet();
     
         java.util.ArrayList<Vector3D> points = new java.util.ArrayList<Vector3D>(5);
-        points.add( planet.toCartesian( _sector.getNE()     ) );
-        points.add( planet.toCartesian( _sector.getNW()     ) );
-        points.add( planet.toCartesian( _sector.getSE()     ) );
-        points.add( planet.toCartesian( _sector.getSW()     ) );
-        points.add( planet.toCartesian( _sector.getCenter() ) );
+        points.add( planet.toCartesian( _minimumSector.getNE()     ) );
+        points.add( planet.toCartesian( _minimumSector.getNW()     ) );
+        points.add( planet.toCartesian( _minimumSector.getSE()     ) );
+        points.add( planet.toCartesian( _minimumSector.getSW()     ) );
+        points.add( planet.toCartesian( _minimumSector.getCenter() ) );
     
         _boundingVolume = Sphere.enclosingSphere(points);
       }
@@ -377,7 +379,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
     private boolean _wasBigEnough;
     private boolean isBigEnough(G3MRenderContext rc)
     {
-      if ((_sector._deltaLatitude._degrees >= 80) || (_sector._deltaLongitude._degrees >= 80))
+      if ((_nodeSector._deltaLatitude._degrees >= 80) || (_nodeSector._deltaLongitude._degrees >= 80))
       {
         return true;
       }
@@ -523,8 +525,10 @@ public class VectorStreamingRenderer extends DefaultRenderer
     {
       unload();
     
-      if (_sector != null)
-         _sector.dispose();
+      if (_nodeSector != null)
+         _nodeSector.dispose();
+      if (_minimumSector != null)
+         _minimumSector.dispose();
       if (_averagePosition != null)
          _averagePosition.dispose();
       if (_boundingVolume != null)
@@ -533,11 +537,12 @@ public class VectorStreamingRenderer extends DefaultRenderer
       super.dispose();
     }
 
-    public Node(VectorSet vectorSet, String id, Sector sector, int featuresCount, Geodetic2D averagePosition, java.util.ArrayList<String> childrenIDs, boolean verbose)
+    public Node(VectorSet vectorSet, String id, Sector nodeSector, Sector minimumSector, int featuresCount, Geodetic2D averagePosition, java.util.ArrayList<String> childrenIDs, boolean verbose)
     {
        _vectorSet = vectorSet;
        _id = id;
-       _sector = sector;
+       _nodeSector = nodeSector;
+       _minimumSector = minimumSector;
        _featuresCount = featuresCount;
        _averagePosition = averagePosition;
        _childrenIDs = childrenIDs;
