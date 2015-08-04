@@ -507,12 +507,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
 
     private void removeMarks()
     {
-      int removed = _vectorSet.getMarksRenderer().removeAllMarks(new NodeMarksFilter(this));
-    
-      if (removed > 64)
-      {
-        ILogger.instance().logError("OOPS!!");
-      }
+      int removed = _vectorSet.getMarksRenderer().removeAllMarks(new NodeMarksFilter(this), true);
     
       if (_verbose && removed != 0)
       {
@@ -583,8 +578,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
     
       long renderedCount = 0;
     
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning Show Bounding Volume
+      // #warning Show Bounding Volume
       // getBoundingVolume(rc)->render(rc, glState, Color::red());
     
       final boolean visible = isVisible(rc, frustumInModelCoordinates);
@@ -664,10 +658,6 @@ public class VectorStreamingRenderer extends DefaultRenderer
         _features = features;
     
         _marksCount = _features.createMarks(_vectorSet, this);
-        if (_marksCount > 64)
-        {
-          ILogger.instance().logError("OOPS!!");
-        }
         if (_verbose)
         {
           ILogger.instance().logInfo("\"%s\": Created %d marks",

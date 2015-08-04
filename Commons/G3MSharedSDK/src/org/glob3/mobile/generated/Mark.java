@@ -468,6 +468,13 @@ public class Mark implements SurfaceElevationListener
     {
       _effectsScheduler.cancelAllEffectsFor(getEffectTarget());
     }
+    if (_effectTarget != null)
+       _effectTarget.dispose();
+  
+    if (_labelFontColor != null)
+       _labelFontColor.dispose();
+    if (_labelShadowColor != null)
+       _labelShadowColor.dispose();
   
     if (_position != null)
        _position.dispose();
@@ -580,8 +587,10 @@ public class Mark implements SurfaceElevationListener
   
     if (_labelFontColor != null)
        _labelFontColor.dispose();
+    _labelFontColor = null;
     if (_labelShadowColor != null)
        _labelShadowColor.dispose();
+    _labelShadowColor = null;
   
     ILogger.instance().logError("Can't create texture for Mark (iconURL=\"%s\", label=\"%s\")", _iconURL._path, _label);
   }
@@ -592,8 +601,10 @@ public class Mark implements SurfaceElevationListener
   
     if (_labelFontColor != null)
        _labelFontColor.dispose();
+    _labelFontColor = null;
     if (_labelShadowColor != null)
        _labelShadowColor.dispose();
+    _labelShadowColor = null;
   
     _textureImage = image;
   
