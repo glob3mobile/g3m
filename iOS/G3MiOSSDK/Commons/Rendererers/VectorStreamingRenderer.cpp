@@ -156,7 +156,8 @@ void VectorStreamingRenderer::NodeFeaturesDownloadListener::onCanceledDownload(c
 VectorStreamingRenderer::Node::~Node() {
   unload();
 
-  delete _sector;
+  delete _nodeSector;
+  delete _minimumSector;
   delete _averagePosition;
   delete _boundingVolume;
 
@@ -216,22 +217,22 @@ BoundingVolume* VectorStreamingRenderer::Node::getBoundingVolume(const G3MRender
 
 #ifdef C_CODE
     const Vector3D c[5] = {
-      planet->toCartesian( _sector->getNE()     ),
-      planet->toCartesian( _sector->getNW()     ),
-      planet->toCartesian( _sector->getSE()     ),
-      planet->toCartesian( _sector->getSW()     ),
-      planet->toCartesian( _sector->getCenter() )
+      planet->toCartesian( _nodeSector->getNE()     ),
+      planet->toCartesian( _nodeSector->getNW()     ),
+      planet->toCartesian( _nodeSector->getSE()     ),
+      planet->toCartesian( _nodeSector->getSW()     ),
+      planet->toCartesian( _nodeSector->getCenter() )
     };
 
     std::vector<Vector3D> points(c, c+5);
 #endif
 #ifdef JAVA_CODE
     java.util.ArrayList<Vector3D> points = new java.util.ArrayList<Vector3D>(5);
-    points.add( planet.toCartesian( _sector.getNE()     ) );
-    points.add( planet.toCartesian( _sector.getNW()     ) );
-    points.add( planet.toCartesian( _sector.getSE()     ) );
-    points.add( planet.toCartesian( _sector.getSW()     ) );
-    points.add( planet.toCartesian( _sector.getCenter() ) );
+    points.add( planet.toCartesian( _nodeSector.getNE()     ) );
+    points.add( planet.toCartesian( _nodeSector.getNW()     ) );
+    points.add( planet.toCartesian( _nodeSector.getSE()     ) );
+    points.add( planet.toCartesian( _nodeSector.getSW()     ) );
+    points.add( planet.toCartesian( _nodeSector.getCenter() ) );
 #endif
 
     _boundingVolume = Sphere::enclosingSphere(points);
@@ -382,8 +383,8 @@ bool VectorStreamingRenderer::Node::isVisible(const G3MRenderContext* rc,
 }
 
 bool VectorStreamingRenderer::Node::isBigEnough(const G3MRenderContext *rc) {
-  if ((_sector->_deltaLatitude._degrees  >= 80) ||
-      (_sector->_deltaLongitude._degrees >= 80)) {
+  if ((_nodeSector->_deltaLatitude._degrees  >= 80) ||
+      (_nodeSector->_deltaLongitude._degrees >= 80)) {
     return true;
   }
 
@@ -493,7 +494,8 @@ VectorStreamingRenderer::Node* VectorStreamingRenderer::GEOJSONUtils::parseNode(
                                                                                 const VectorSet*  vectorSet,
                                                                                 const bool        verbose) {
   const std::string id              = json->getAsString("id")->value();
-  Sector*           sector          = GEOJSONUtils::parseSector( json->getAsArray("sector") );
+  Sector*           nodeSector      = GEOJSONUtils::parseSector( json->getAsArray("nodeSector") );
+  Sector*           minimumSector   = GEOJSONUtils::parseSector( json->getAsArray("minimumSector") );
   int               featuresCount   = (int) json->getAsNumber("featuresCount")->value();
   Geodetic2D*       averagePosition = GEOJSONUtils::parseGeodetic2D( json->getAsArray("averagePosition") );
 
@@ -503,7 +505,14 @@ VectorStreamingRenderer::Node* VectorStreamingRenderer::GEOJSONUtils::parseNode(
     children.push_back( childrenJSON->getAsString(i)->value() );
   }
 
-  return new Node(vectorSet, id, sector, featuresCount, averagePosition, children, verbose);
+  return new Node(vectorSet,
+                  id,
+                  nodeSector,
+                  minimumSector,
+                  featuresCount,
+                  averagePosition,
+                  children,
+                  verbose);
 }
 
 VectorStreamingRenderer::MetadataParserAsyncTask::~MetadataParserAsyncTask() {

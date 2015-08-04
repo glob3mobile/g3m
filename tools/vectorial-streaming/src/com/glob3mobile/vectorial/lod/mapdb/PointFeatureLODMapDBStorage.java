@@ -771,10 +771,11 @@ public class PointFeatureLODMapDBStorage
 
       private final PointFeatureLODMapDBStorage _storage;
       private final byte[]                      _id;
-      private final Sector                      _sector;
+      private final Sector                      _nodeSector;
       private final Geodetic2D                  _averagePosition;
       private final int                         _featuresCount;
-      private List<PointFeature>                _features = null;
+      private List<PointFeature>                _features      = null;
+      private Sector                            _minimumSector = null;
 
 
       private PvtNode(final PointFeatureLODMapDBStorage storage,
@@ -782,7 +783,7 @@ public class PointFeatureLODMapDBStorage
                       final NodeHeader header) {
          _storage = storage;
          _id = id;
-         _sector = header._sector;
+         _nodeSector = header._sector;
          _averagePosition = header._averagePosition;
          _featuresCount = header._featuresCount;
       }
@@ -795,8 +796,8 @@ public class PointFeatureLODMapDBStorage
 
 
       @Override
-      public Sector getSector() {
-         return _sector;
+      public Sector getNodeSector() {
+         return _nodeSector;
       }
 
 
@@ -830,6 +831,60 @@ public class PointFeatureLODMapDBStorage
       @Override
       public List<String> getChildrenIDs() {
          return _storage.getChildrenIDs(_id);
+      }
+
+
+      @Override
+      public Sector getMinimumSector() {
+         if (_minimumSector == null) {
+            _minimumSector = calculateMinimumSector();
+            if (!_nodeSector.fullContains(_minimumSector)) {
+               throw new RuntimeException("LOGIC ERROR!");
+            }
+         }
+         return _minimumSector;
+      }
+
+
+      private Sector calculateMinimumSector() {
+         final List<PointFeature> features = getFeatures();
+
+         final int featuresSize = features.size();
+
+         if (featuresSize == 0) {
+            return null;
+         }
+
+         final Geodetic2D firstPosition = features.get(0)._position;
+         double minLatRad = firstPosition._latitude._radians;
+         double minLonRad = firstPosition._longitude._radians;
+
+         double maxLatRad = firstPosition._latitude._radians;
+         double maxLonRad = firstPosition._longitude._radians;
+
+         for (int i = 1; i < featuresSize; i++) {
+            final Geodetic2D position = features.get(i)._position;
+            final double latRad = position._latitude._radians;
+            final double lonRad = position._longitude._radians;
+
+            if (latRad < minLatRad) {
+               minLatRad = latRad;
+            }
+            if (latRad > maxLatRad) {
+               maxLatRad = latRad;
+            }
+
+            if (lonRad < minLonRad) {
+               minLonRad = lonRad;
+            }
+            if (lonRad > maxLonRad) {
+               maxLonRad = lonRad;
+            }
+         }
+
+         return Sector.fromRadians( //
+                  minLatRad, minLonRad, //
+                  maxLatRad, maxLonRad);
       }
 
    }

@@ -81,7 +81,10 @@ public interface PointFeatureLODStorage
       String getID();
 
 
-      Sector getSector();
+      Sector getNodeSector();
+
+
+      Sector getMinimumSector();
 
 
       int getDepth();

@@ -55,7 +55,11 @@ public class LODPointFeaturesStatistics {
             // final int pointSize = (maxLevel - level);
             final int pointSize = 2;
 
-            _bitmap.drawSector(node.getSector(), new Color(1, 1, 1, 0.05f), new Color(1, 1, 1, 0.2f));
+            final Sector nodeSector = node.getNodeSector();
+            _bitmap.drawSector(nodeSector, new Color(1, 1, 1, 0.05f), new Color(1, 1, 1, 0.2f));
+
+            final Sector minimumSector = node.getMinimumSector();
+            _bitmap.drawSector(minimumSector, new Color(0, 1, 1, 0.05f), new Color(0, 1, 1, 0.2f));
 
             for (final PointFeature feature : node.getFeatures()) {
                _bitmap.drawPoint(feature._position, pointSize, pointSize, featureColor);
@@ -125,41 +129,41 @@ public class LODPointFeaturesStatistics {
          final PointFeatureLODStorage.Statistics statistics = lodStorage.getStatistics(true);
          statistics.show();
 
-         // final int nodesCount = statistics.getNodesCount();
+         final int nodesCount = statistics.getNodesCount();
 
 
-         // final String id = "102311321213";
-         //final String id = "100221122202";
-
-         //         drawLODForNode(lodStorage, "100221122200");
-         //         drawLODForNode(lodStorage, "100221122201");
-         //         drawLODForNode(lodStorage, "100221122202");
-         //         drawLODForNode(lodStorage, "100221122203");
-
-         //         drawLODForNode(lodStorage, "100221033310");
-         //         drawLODForNode(lodStorage, "100221033311");
-         //         drawLODForNode(lodStorage, "100221033312");
-         //         drawLODForNode(lodStorage, "100221033313");
-
-         //         drawLODForSector(lodStorage, "Spain", Sector.fromDegrees(-8, 37, 1, 42));
-
-         //  drawLODForNode(lodStorage, "03311101");
-
-         //         final Sector baSector = Sector.fromDegrees( //
-         //                  -34.703643764020576157, -58.579915412480858095, //
-         //                  -34.519657217233664426, -58.307698526247456527);
+         //         // final String id = "102311321213";
+         //         //final String id = "100221122202";
          //
-         //         drawLODForSector(lodStorage, "Buenos Aires", baSector);
+         //         //         drawLODForNode(lodStorage, "100221122200");
+         //         //         drawLODForNode(lodStorage, "100221122201");
+         //         //         drawLODForNode(lodStorage, "100221122202");
+         //         //         drawLODForNode(lodStorage, "100221122203");
+         //
+         //         //         drawLODForNode(lodStorage, "100221033310");
+         //         //         drawLODForNode(lodStorage, "100221033311");
+         //         //         drawLODForNode(lodStorage, "100221033312");
+         //         //         drawLODForNode(lodStorage, "100221033313");
+         //
+         //         //         drawLODForSector(lodStorage, "Spain", Sector.fromDegrees(-8, 37, 1, 42));
+         //
+         //         //  drawLODForNode(lodStorage, "03311101");
+         //
+         //         //         final Sector baSector = Sector.fromDegrees( //
+         //         //                  -34.703643764020576157, -58.579915412480858095, //
+         //         //                  -34.519657217233664426, -58.307698526247456527);
+         //         //
+         //         //         drawLODForSector(lodStorage, "Buenos Aires", baSector);
+         //
+         //         // drawLODForPosition(lodStorage, "Buenos Aires", Geodetic2D.fromDegrees(-34.610202831685171532, -58.385756267343843717));
+         //         // drawLODForPosition(lodStorage, "Madrid", Geodetic2D.fromDegrees(40.414924394015059761, -3.6980228798493248732));
+         //         // drawLODForPosition(lodStorage, "Caceres", Geodetic2D.fromDegrees(39.483333, -6.366667));
+         //
+         //         // drawLODForPosition(lodStorage, "DC", Geodetic2D.fromDegrees(38.904722, -77.016389));
+         //         // drawLODForPosition(lodStorage, "New York City", Geodetic2D.fromDegrees(40.7127, -74.0059));
+         //         drawLODForPosition(lodStorage, "San Francisco", Geodetic2D.fromDegrees(37.783333, -122.416667));
 
-         // drawLODForPosition(lodStorage, "Buenos Aires", Geodetic2D.fromDegrees(-34.610202831685171532, -58.385756267343843717));
-         // drawLODForPosition(lodStorage, "Madrid", Geodetic2D.fromDegrees(40.414924394015059761, -3.6980228798493248732));
-         // drawLODForPosition(lodStorage, "Caceres", Geodetic2D.fromDegrees(39.483333, -6.366667));
-
-         // drawLODForPosition(lodStorage, "DC", Geodetic2D.fromDegrees(38.904722, -77.016389));
-         // drawLODForPosition(lodStorage, "New York City", Geodetic2D.fromDegrees(40.7127, -74.0059));
-         drawLODForPosition(lodStorage, "San Francisco", Geodetic2D.fromDegrees(37.783333, -122.416667));
-
-         // lodStorage.acceptDepthFirstVisitor(new LODDrawer(lodStorage, nodesCount));
+         lodStorage.acceptDepthFirstVisitor(new LODDrawer(lodStorage, nodesCount));
       }
 
 
@@ -189,7 +193,7 @@ public class LODPointFeaturesStatistics {
                                          final String name,
                                          final Geodetic2D position) throws IOException {
       final List<PointFeatureLODStorage.Node> nodes = lodStorage.getNodesFor(position);
-      final Sector sector = nodes.get(nodes.size() - 1).getSector();
+      final Sector sector = nodes.get(nodes.size() - 1).getNodeSector();
       drawNodes(name, sector, nodes);
    }
 

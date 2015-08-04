@@ -29,30 +29,30 @@ public class PointFeaturesImporter {
       System.out.println("---------------------------\n");
 
 
-      //      final GEOParser parser = GEOJSONParser.INSTANCE;
-      //      final String featuresFileName = "test-files/ne_10m_populated_places.geojson";
-      //      final String storageName = "PopulatedPlaces";
+      // final GEOParser parser = GEOJSONParser.INSTANCE;
+      // final String featuresFileName = "test-files/ne_10m_populated_places.geojson";
+      // final String storageName = "PopulatedPlaces";
 
       final GEOParser parser = GEONamesParser.INSTANCE;
       // final String featuresFileName = "test-files/geonames/US.txt";
-      //      final String featuresFileName = "test-files/geonames/MX.txt";
-      //      final String storageName = "MX";
+      // final String featuresFileName = "test-files/geonames/MX.txt";
+      // final String storageName = "MX";
 
-      //      final String featuresFileName = "test-files/geonames/NO.txt";
-      //      final String storageName = "NO";
+      // final String featuresFileName = "test-files/geonames/NO.txt";
+      // final String storageName = "NO";
 
-      //      final String featuresFileName = "test-files/geonames/ES.txt";
-      //      final String storageName = "ES";
+      // final String featuresFileName = "test-files/geonames/ES.txt";
+      // final String storageName = "ES";
 
-      //      final String featuresFileName = "test-files/geonames/AR.txt";
-      //      final String storageName = "AR";
+      // final String featuresFileName = "test-files/geonames/AR.txt";
+      // final String storageName = "AR";
 
       // final String featuresFileName = "test-files/geonames/allCountries.txt";
-      //      final String featuresFileName = "test-files/geonames/NO.txt";
-      //      final String storageName = "NO";
+      // final String featuresFileName = "test-files/geonames/NO.txt";
+      // final String storageName = "NO";
 
-      //      final String featuresFileName = "test-files/geonames/cities1000.txt";
-      //      final String storageName = "Cities1000";
+      // final String featuresFileName = "test-files/geonames/cities1000.txt";
+      // final String storageName = "Cities1000";
 
       final String featuresFileName = "test-files/GEONames-PopulatedPlaces.txt";
       final String storageName = "GEONames-PopulatedPlaces";
@@ -62,10 +62,9 @@ public class PointFeaturesImporter {
       final File storageDir = new File("PointFeaturesStorage");
 
 
-      final int maxBufferSize = 512;
-      final int maxFeaturesPerNode = 512;
+      final int maxBufferSize = 2048;
+      final int maxFeaturesPerNode = 2048;
 
-      //      PointFeatureMapDBStorage.delete(storageDir, storageName);
 
       final GEOStatisticsGatherer.Statistics statistics = GEOStatisticsGatherer.getStatistics(parser, featuresFile);
       final long featuresCount = statistics._featuresCount;

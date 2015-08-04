@@ -15,8 +15,12 @@ public class PointFeaturesSet {
 
    public static PointFeaturesSet extractFeatures(final Sector sector,
                                                   final List<PointFeature> features) {
-      double sumLatitudeInRadians = 0;
-      double sumLongitudeInRadians = 0;
+      double sumLatRad = 0;
+      double sumLonRad = 0;
+      double minLatRad = Double.POSITIVE_INFINITY;
+      double minLonRad = Double.POSITIVE_INFINITY;
+      double maxLatRad = Double.NEGATIVE_INFINITY;
+      double maxLonRad = Double.NEGATIVE_INFINITY;
 
       final List<PointFeature> extracted = new ArrayList<PointFeature>();
 
@@ -27,8 +31,25 @@ public class PointFeaturesSet {
          if (sector.contains(point)) {
             extracted.add(feature);
 
-            sumLatitudeInRadians += point._latitude._radians;
-            sumLongitudeInRadians += point._longitude._radians;
+            final double latRad = point._latitude._radians;
+            final double lonRad = point._longitude._radians;
+
+            sumLatRad += latRad;
+            sumLonRad += lonRad;
+
+            if (latRad < minLatRad) {
+               minLatRad = latRad;
+            }
+            if (latRad > maxLatRad) {
+               maxLatRad = latRad;
+            }
+
+            if (lonRad < minLonRad) {
+               minLonRad = lonRad;
+            }
+            if (lonRad > maxLonRad) {
+               maxLonRad = lonRad;
+            }
 
             iterator.remove();
          }
@@ -39,23 +60,27 @@ public class PointFeaturesSet {
          return null;
       }
 
-      final double averageLatitudeInRadians = sumLatitudeInRadians / extractedSize;
-      final double averageLongitudeInRadians = sumLongitudeInRadians / extractedSize;
+      final double averageLatRad = sumLatRad / extractedSize;
+      final double averageLonRad = sumLonRad / extractedSize;
 
-      final Geodetic2D averagePosition = Geodetic2D.fromRadians(averageLatitudeInRadians, averageLongitudeInRadians);
-
-      return new PointFeaturesSet(extracted, averagePosition);
+      return new PointFeaturesSet( //
+               extracted, //
+               Geodetic2D.fromRadians(averageLatRad, averageLonRad), //
+               Sector.fromRadians(minLatRad, minLonRad, maxLatRad, maxLonRad));
    }
 
 
    public final List<PointFeature> _features;
    public final Geodetic2D         _averagePosition;
+   public final Sector             _minimumSector;
 
 
    public PointFeaturesSet(final List<PointFeature> features,
-                           final Geodetic2D averagePosition) {
+                           final Geodetic2D averagePosition,
+                           final Sector minimumSector) {
       _features = features;
       _averagePosition = averagePosition;
+      _minimumSector = minimumSector;
    }
 
 
