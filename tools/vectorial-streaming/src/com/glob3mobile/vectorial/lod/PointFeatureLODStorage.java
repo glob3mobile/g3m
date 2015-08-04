@@ -24,7 +24,8 @@ public interface PointFeatureLODStorage
 
 
    void addLeafNode(String id,
-                    Sector sector,
+                    Sector nodeSector,
+                    Sector minimumSector,
                     Geodetic2D averagePosition,
                     List<PointFeature> features);
 

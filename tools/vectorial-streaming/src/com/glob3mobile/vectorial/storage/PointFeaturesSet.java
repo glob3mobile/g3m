@@ -70,6 +70,52 @@ public class PointFeaturesSet {
    }
 
 
+   public static PointFeaturesSet create(final List<PointFeature> features) {
+      if ((features == null) || features.isEmpty()) {
+         throw new RuntimeException("Empty features");
+      }
+
+      double sumLatRad = 0;
+      double sumLonRad = 0;
+      double minLatRad = Double.POSITIVE_INFINITY;
+      double minLonRad = Double.POSITIVE_INFINITY;
+      double maxLatRad = Double.NEGATIVE_INFINITY;
+      double maxLonRad = Double.NEGATIVE_INFINITY;
+
+      for (final PointFeature feature : features) {
+         final Geodetic2D point = feature._position;
+
+         final double latRad = point._latitude._radians;
+         final double lonRad = point._longitude._radians;
+
+         sumLatRad += latRad;
+         sumLonRad += lonRad;
+
+         if (latRad < minLatRad) {
+            minLatRad = latRad;
+         }
+         if (latRad > maxLatRad) {
+            maxLatRad = latRad;
+         }
+
+         if (lonRad < minLonRad) {
+            minLonRad = lonRad;
+         }
+         if (lonRad > maxLonRad) {
+            maxLonRad = lonRad;
+         }
+      }
+
+      final double averageLatRad = sumLatRad / features.size();
+      final double averageLonRad = sumLonRad / features.size();
+
+      return new PointFeaturesSet( //
+               features, //
+               Geodetic2D.fromRadians(averageLatRad, averageLonRad), //
+               Sector.fromRadians(minLatRad, minLonRad, maxLatRad, maxLonRad));
+   }
+
+
    public final List<PointFeature> _features;
    public final Geodetic2D         _averagePosition;
    public final Sector             _minimumSector;

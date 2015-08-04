@@ -50,8 +50,15 @@ class SerializerUtils {
 
    static void serialize(final DataOutput out,
                          final Sector sector) throws IOException {
-      serialize(out, sector._lower);
-      serialize(out, sector._upper);
+      if (sector == null) {
+         final Geodetic2D position = null;
+         serialize(out, position);
+         serialize(out, position);
+      }
+      else {
+         serialize(out, sector._lower);
+         serialize(out, sector._upper);
+      }
    }
 
 
@@ -63,6 +70,9 @@ class SerializerUtils {
    static Sector deserializeSector(final DataInput in) throws IOException {
       final Geodetic2D lower = deserializeGeodetic2D(in);
       final Geodetic2D upper = deserializeGeodetic2D(in);
+      if ((lower == null) || (upper == null)) {
+         return null;
+      }
       return new Sector(lower, upper);
    }
 
