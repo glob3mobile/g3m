@@ -89,7 +89,7 @@ public class LODPointFeaturesStatistics {
 
 
          final int width = 2048;
-         // final Sector sector = lodStorage.getSector();
+         // final Sector sector = _lodStorage.getSector();
          final Sector sector = Sector.FULL_SPHERE;
          final double sectorFactor = sector._deltaLatitude._radians / sector._deltaLongitude._radians;
          final int height = Math.round((float) sectorFactor * width);
