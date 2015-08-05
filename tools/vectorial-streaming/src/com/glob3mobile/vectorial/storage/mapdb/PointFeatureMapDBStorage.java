@@ -87,12 +87,12 @@ public class PointFeatureMapDBStorage
    private final DB                                   _db;
 
 
-   private double                                     _minLatitudeInRadians;
-   private double                                     _minLongitudeInRadians;
-   private double                                     _maxLatitudeInRadians;
-   private double                                     _maxLongitudeInRadians;
-   private double                                     _sumLatitudeInRadians;
-   private double                                     _sumLongitudeInRadians;
+   private double                                     _minLatRad;
+   private double                                     _minLonRad;
+   private double                                     _maxLatRad;
+   private double                                     _maxLonRad;
+   private double                                     _sumLatRad;
+   private double                                     _sumLonRad;
 
    private final int                                  _maxBufferSize;
    private final List<PointFeature>                   _buffer;
@@ -326,53 +326,53 @@ public class PointFeatureMapDBStorage
 
 
    private void resetBufferBounds() {
-      _minLatitudeInRadians = Double.POSITIVE_INFINITY;
-      _minLongitudeInRadians = Double.POSITIVE_INFINITY;
+      _minLatRad = Double.POSITIVE_INFINITY;
+      _minLonRad = Double.POSITIVE_INFINITY;
 
-      _maxLatitudeInRadians = Double.NEGATIVE_INFINITY;
-      _maxLongitudeInRadians = Double.NEGATIVE_INFINITY;
+      _maxLatRad = Double.NEGATIVE_INFINITY;
+      _maxLonRad = Double.NEGATIVE_INFINITY;
 
-      _sumLatitudeInRadians = 0.0;
-      _sumLongitudeInRadians = 0.0;
+      _sumLatRad = 0.0;
+      _sumLonRad = 0.0;
    }
 
 
-   private static Sector getBounds(final List<PointFeature> features) {
-      if ((features == null) || features.isEmpty()) {
-         return null;
-      }
-
-      final Geodetic2D firstPoint = features.get(0)._position;
-      double minLatitudeInRadians = firstPoint._latitude._radians;
-      double minLongitudeInRadians = firstPoint._longitude._radians;
-
-      double maxLatitudeInRadians = firstPoint._latitude._radians;
-      double maxLongitudeInRadians = firstPoint._longitude._radians;
-
-      for (int i = 1; i < features.size(); i++) {
-         final Geodetic2D point = features.get(i)._position;
-         final double latitudeInRadians = point._latitude._radians;
-         final double longitudeInRadians = point._longitude._radians;
-
-         if (latitudeInRadians < minLatitudeInRadians) {
-            minLatitudeInRadians = latitudeInRadians;
-         }
-         if (latitudeInRadians > maxLatitudeInRadians) {
-            maxLatitudeInRadians = latitudeInRadians;
-         }
-
-         if (longitudeInRadians < minLongitudeInRadians) {
-            minLongitudeInRadians = longitudeInRadians;
-         }
-         if (longitudeInRadians > maxLongitudeInRadians) {
-            maxLongitudeInRadians = longitudeInRadians;
-         }
-      }
-
-      return Sector.fromRadians( //
-               minLatitudeInRadians, minLongitudeInRadians, //
-               maxLatitudeInRadians, maxLongitudeInRadians);
-   }
+   //   private static Sector getBounds(final List<PointFeature> features) {
+   //      if ((features == null) || features.isEmpty()) {
+   //         return null;
+   //      }
+   //
+   //      final Geodetic2D firstPoint = features.get(0)._position;
+   //      double minLatRad = firstPoint._latitude._radians;
+   //      double minLonRad = firstPoint._longitude._radians;
+   //
+   //      double maxLatRad = firstPoint._latitude._radians;
+   //      double maxLonRad = firstPoint._longitude._radians;
+   //
+   //      for (int i = 1; i < features.size(); i++) {
+   //         final Geodetic2D point = features.get(i)._position;
+   //         final double latRad = point._latitude._radians;
+   //         final double lonRad = point._longitude._radians;
+   //
+   //         if (latRad < minLatRad) {
+   //            minLatRad = latRad;
+   //         }
+   //         if (latRad > maxLatRad) {
+   //            maxLatRad = latRad;
+   //         }
+   //
+   //         if (lonRad < minLonRad) {
+   //            minLonRad = lonRad;
+   //         }
+   //         if (lonRad > maxLonRad) {
+   //            maxLonRad = lonRad;
+   //         }
+   //      }
+   //
+   //      return Sector.fromRadians( //
+   //               minLatRad, minLonRad, //
+   //               maxLatRad, maxLonRad);
+   //   }
 
 
    @Override
@@ -381,23 +381,23 @@ public class PointFeatureMapDBStorage
       if (bufferSize > 0) {
          //deleteCachedStatistics();
          try {
-            final Sector targetSector = Sector.fromRadians( //
-                     _minLatitudeInRadians, _minLongitudeInRadians, //
-                     _maxLatitudeInRadians, _maxLongitudeInRadians);
+            final Sector minimumSector = Sector.fromRadians( //
+                     _minLatRad, _minLonRad, //
+                     _maxLatRad, _maxLonRad);
 
-            final Sector boundsSector = getBounds(_buffer);
-            if (!targetSector.equals(boundsSector)) {
-               throw new RuntimeException("LOGIC ERROR");
-            }
+            //            final Sector boundsSector = getBounds(_buffer);
+            //            if (!minimumSector.equals(boundsSector)) {
+            //               throw new RuntimeException("LOGIC ERROR");
+            //            }
 
-            final QuadKey quadKey = QuadKey.deepestEnclosingNodeKey(_rootKey, targetSector);
+            final QuadKey quadKey = QuadKey.deepestEnclosingNodeKey(_rootKey, minimumSector);
 
-            final double averageLatitudeInRadians = _sumLatitudeInRadians / bufferSize;
-            final double averageLongitudeInRadians = _sumLongitudeInRadians / bufferSize;
+            final double averageLatRad = _sumLatRad / bufferSize;
+            final double averageLonRad = _sumLonRad / bufferSize;
 
-            final Geodetic2D averagePoint = Geodetic2D.fromRadians(averageLatitudeInRadians, averageLongitudeInRadians);
+            final Geodetic2D averagePoint = Geodetic2D.fromRadians(averageLatRad, averageLonRad);
 
-            final PointFeaturesSet featuresSet = new PointFeaturesSet(new ArrayList<>(_buffer), averagePoint);
+            final PointFeaturesSet featuresSet = new PointFeaturesSet(new ArrayList<>(_buffer), averagePoint, minimumSector);
             PointFeatureMapDBNode.insertFeatures(this, quadKey, featuresSet);
 
             _db.commit();
@@ -454,25 +454,25 @@ public class PointFeatureMapDBStorage
 
       final Geodetic2D position = feature._position;
 
-      final double latitudeInRadians = position._latitude._radians;
-      final double longitudeInRadians = position._longitude._radians;
+      final double latRad = position._latitude._radians;
+      final double lonRad = position._longitude._radians;
 
-      _sumLatitudeInRadians += latitudeInRadians;
-      _sumLongitudeInRadians += longitudeInRadians;
+      _sumLatRad += latRad;
+      _sumLonRad += lonRad;
 
 
-      if (latitudeInRadians < _minLatitudeInRadians) {
-         _minLatitudeInRadians = latitudeInRadians;
+      if (latRad < _minLatRad) {
+         _minLatRad = latRad;
       }
-      if (latitudeInRadians > _maxLatitudeInRadians) {
-         _maxLatitudeInRadians = latitudeInRadians;
+      if (latRad > _maxLatRad) {
+         _maxLatRad = latRad;
       }
 
-      if (longitudeInRadians < _minLongitudeInRadians) {
-         _minLongitudeInRadians = longitudeInRadians;
+      if (lonRad < _minLonRad) {
+         _minLonRad = lonRad;
       }
-      if (longitudeInRadians > _maxLongitudeInRadians) {
-         _maxLongitudeInRadians = longitudeInRadians;
+      if (lonRad > _maxLonRad) {
+         _maxLonRad = lonRad;
       }
 
 

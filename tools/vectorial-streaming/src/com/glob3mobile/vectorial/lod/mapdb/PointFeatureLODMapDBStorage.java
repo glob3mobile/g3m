@@ -240,43 +240,50 @@ public class PointFeatureLODMapDBStorage
 
    @Override
    synchronized public void addLeafNode(final String id,
-                                        final Sector sector,
+                                        final Sector nodeSector,
+                                        final Sector minimumSector,
                                         final Geodetic2D averagePosition,
                                         final List<PointFeature> features) {
       if (_readOnly) {
          throw new RuntimeException("Read Only");
       }
 
-      addLeafNode(QuadKeyUtils.toBinaryID(id), sector, averagePosition, features);
+      addLeafNode(QuadKeyUtils.toBinaryID(id), nodeSector, minimumSector, averagePosition, features);
       _db.commit();
    }
 
 
    private void addLeafNode(final byte[] id,
-                            final Sector sector,
+                            final Sector nodeSector,
+                            final Sector minimumSector,
                             final Geodetic2D averagePosition,
                             final List<PointFeature> features) {
       if (features.size() > _maxFeaturesPerNode) {
-         split(id, sector, features);
+         split(id, nodeSector, features);
       }
       else {
-         saveLeafNode(id, sector, averagePosition, features);
+         saveLeafNode(id, nodeSector, minimumSector, averagePosition, features);
       }
    }
 
 
    private void split(final byte[] id,
-                      final Sector sector,
-                      final List<PointFeature> features22) {
-      final QuadKey key = new QuadKey(id, sector);
+                      final Sector nodeSector,
+                      final List<PointFeature> sourceFeatures) {
+      final QuadKey key = new QuadKey(id, nodeSector);
       final QuadKey[] childrenKeys = key.createChildren();
 
-      final List<PointFeature> features = new ArrayList<>(features22);
+      final List<PointFeature> features = new ArrayList<>(sourceFeatures);
 
       for (final QuadKey childKey : childrenKeys) {
          final PointFeaturesSet childPointFeaturesSet = PointFeaturesSet.extractFeatures(childKey._sector, features);
          if (childPointFeaturesSet != null) {
-            addLeafNode(childKey._id, childKey._sector, childPointFeaturesSet._averagePosition, childPointFeaturesSet._features);
+            addLeafNode( //
+                     childKey._id, //
+                     childKey._sector, //
+                     childPointFeaturesSet._minimumSector, //
+                     childPointFeaturesSet._averagePosition, //
+                     childPointFeaturesSet._features);
          }
       }
 
@@ -287,30 +294,56 @@ public class PointFeatureLODMapDBStorage
 
 
    private void saveLeafNode(final byte[] id,
-                             final Sector sector,
+                             final Sector nodeSector,
+                             final Sector minimumSector,
                              final Geodetic2D averagePosition,
                              final List<PointFeature> features) {
 
-      saveNode(id, sector, averagePosition, features);
+      saveNode(id, nodeSector, minimumSector, averagePosition, features);
 
       for (final byte[] ancestorID : QuadKeyUtils.ancestors(id)) {
          if (!_pendingNodes.contains(ancestorID)) {
             _pendingNodes.add(ancestorID);
-            final Sector ancestorSector = QuadKey.sectorFor(_rootKey, ancestorID);
+            final Sector ancestorNodeSector = QuadKey.sectorFor(_rootKey, ancestorID);
+            final Sector ancestorMinimumSector = null;
             final Geodetic2D ancestorAveragePosition = null;
             final List<PointFeature> ancestorFeatures = Collections.emptyList();
-            saveNode(ancestorID, ancestorSector, ancestorAveragePosition, ancestorFeatures);
+            saveNode(ancestorID, ancestorNodeSector, ancestorMinimumSector, ancestorAveragePosition, ancestorFeatures);
          }
       }
    }
 
 
    private void saveNode(final byte[] id,
-                         final Sector sector,
+                         final Sector nodeSector,
+                         final Sector minimumSector,
                          final Geodetic2D averagePosition,
                          final List<PointFeature> features) {
-      assertIsNull(_nodesHeaders.put(id, new NodeHeader(sector, averagePosition, features.size())));
+      validateFeatures(nodeSector, minimumSector, features);
+      assertIsNull(_nodesHeaders.put(id, new NodeHeader(nodeSector, minimumSector, averagePosition, features.size())));
       assertIsNull(_nodesFeatures.put(id, features));
+   }
+
+
+   private static void validateFeatures(final Sector nodeSector,
+                                        final Sector minimumSector,
+                                        final List<PointFeature> features) {
+      if (minimumSector != null) {
+         if (!nodeSector.fullContains(minimumSector)) {
+            throw new RuntimeException("LOGIC ERROR");
+         }
+      }
+      for (final PointFeature feature : features) {
+         final Geodetic2D position = feature._position;
+         if (!nodeSector.contains(position)) {
+            throw new RuntimeException("LOGIC ERROR");
+         }
+         if (minimumSector != null) {
+            if (!minimumSector.contains(position)) {
+               throw new RuntimeException("LOGIC ERROR");
+            }
+         }
+      }
    }
 
 
@@ -360,7 +393,7 @@ public class PointFeatureLODMapDBStorage
          while (it.hasNext()) {
             final byte[] key = it.next();
             if (key.length == currentLevel) {
-               process(key, featuresComparator);
+               processPendingNode(key, featuresComparator);
                it.remove();
                _db.commit();
 
@@ -429,47 +462,48 @@ public class PointFeatureLODMapDBStorage
 
    private List<Child> getChildren(final byte[] key) {
       final List<Child> result = new ArrayList<>(4);
-
       addChild(key, (byte) 0, result);
       addChild(key, (byte) 1, result);
       addChild(key, (byte) 2, result);
       addChild(key, (byte) 3, result);
-
       return result;
    }
 
 
-   private void process(final byte[] key,
-                        final Comparator<PointFeature> featuresComparator) {
-      //      System.out.println("    Processing \"" + QuadKeyUtils.toIDString(key) + "\" ");
+   private void processPendingNode(final byte[] key,
+                                   final Comparator<PointFeature> featuresComparator) {
 
-      final List<PointFeature> allFeatures = new ArrayList<>();
 
       final List<Child> children = getChildren(key);
       if (children.isEmpty()) {
          throw new RuntimeException("LOGIC ERROR");
       }
 
+      Sector topMinimumSector = null;
+      final List<PointFeature> allFeatures = new ArrayList<>();
       for (final Child child : children) {
-         final byte[] childID = child._id;
-         //         final NodeHeader childHeader = child._header;
-         //         System.out.println("       Child \"" + QuadKeyUtils.toIDString(childID) + "\" " + childHeader._averagePosition);
-
-         final List<PointFeature> childFeatures = _nodesFeatures.get(childID);
+         if (topMinimumSector == null) {
+            topMinimumSector = child._header._minimumSector;
+         }
+         else {
+            topMinimumSector = topMinimumSector.mergedWith(child._header._minimumSector);
+         }
+         final List<PointFeature> childFeatures = _nodesFeatures.get(child._id);
          if ((childFeatures == null) || childFeatures.isEmpty()) {
-            throw new RuntimeException("Logic error");
+            throw new RuntimeException("LOGIC ERROR");
          }
          allFeatures.addAll(childFeatures);
       }
 
       Collections.sort(allFeatures, featuresComparator);
 
+
       final float topFeaturesPercent = (float) 1 / Math.max(children.size(), 2);
       // final float topFeaturesPercent = (float) 1 / 4;
       final int topFeaturesCount = Math.round(allFeatures.size() * topFeaturesPercent);
 
       final List<PointFeature> topFeatures = allFeatures.subList(0, topFeaturesCount);
-      saveNode(key, topFeatures);
+      saveNode(key, topFeatures, topMinimumSector);
 
       final List<PointFeature> restFeatures = new ArrayList<>(allFeatures.subList(topFeaturesCount, allFeatures.size()));
       for (final Child child : children) {
@@ -483,7 +517,8 @@ public class PointFeatureLODMapDBStorage
 
    private void extractAndSaveChildFeatures(final Child child,
                                             final List<PointFeature> restFeatures) {
-      final Sector childSector = child._header._sector;
+      final byte[] childID = child._id;
+      final Sector childSector = child._header._nodeSector;
 
       final List<PointFeature> childFeatures = new ArrayList<>();
       final Iterator<PointFeature> it = restFeatures.iterator();
@@ -496,10 +531,10 @@ public class PointFeatureLODMapDBStorage
       }
 
       if (childFeatures.isEmpty()) {
-         removeNode(child._id);
+         removeNode(childID);
       }
       else {
-         saveNode(child._id, childFeatures);
+         saveNode(childID, childFeatures, child._header._minimumSector);
       }
    }
 
@@ -511,10 +546,16 @@ public class PointFeatureLODMapDBStorage
 
 
    private void saveNode(final byte[] id,
-                         final List<PointFeature> features) {
-      final Sector sector = QuadKey.sectorFor(_rootKey, id);
+                         final List<PointFeature> features,
+                         final Sector minimumSector) {
+      final Sector nodeSector = QuadKey.sectorFor(_rootKey, id);
+
+      validateFeatures(nodeSector, minimumSector, features);
+
+      //      final PointFeaturesSet featuresSet = PointFeaturesSet.create(features);
       final Geodetic2D averagePosition = averagePosition(features);
-      _nodesHeaders.put(id, new NodeHeader(sector, averagePosition, features.size()));
+
+      _nodesHeaders.put(id, new NodeHeader(nodeSector, minimumSector, averagePosition, features.size()));
       _nodesFeatures.put(id, features);
    }
 
@@ -771,7 +812,8 @@ public class PointFeatureLODMapDBStorage
 
       private final PointFeatureLODMapDBStorage _storage;
       private final byte[]                      _id;
-      private final Sector                      _sector;
+      private final Sector                      _nodeSector;
+      private final Sector                      _minimumSector;
       private final Geodetic2D                  _averagePosition;
       private final int                         _featuresCount;
       private List<PointFeature>                _features = null;
@@ -782,7 +824,8 @@ public class PointFeatureLODMapDBStorage
                       final NodeHeader header) {
          _storage = storage;
          _id = id;
-         _sector = header._sector;
+         _nodeSector = header._nodeSector;
+         _minimumSector = header._minimumSector;
          _averagePosition = header._averagePosition;
          _featuresCount = header._featuresCount;
       }
@@ -795,8 +838,14 @@ public class PointFeatureLODMapDBStorage
 
 
       @Override
-      public Sector getSector() {
-         return _sector;
+      public Sector getNodeSector() {
+         return _nodeSector;
+      }
+
+
+      @Override
+      public Sector getMinimumSector() {
+         return _minimumSector;
       }
 
 
@@ -831,6 +880,49 @@ public class PointFeatureLODMapDBStorage
       public List<String> getChildrenIDs() {
          return _storage.getChildrenIDs(_id);
       }
+
+
+      //      private Sector calculateMinimumSector() {
+      //         final List<PointFeature> features = getFeatures();
+      //
+      //         final int featuresSize = features.size();
+      //
+      //         if (featuresSize == 0) {
+      //            return null;
+      //         }
+      //
+      //         final Geodetic2D firstPosition = features.get(0)._position;
+      //         double minLatRad = firstPosition._latitude._radians;
+      //         double minLonRad = firstPosition._longitude._radians;
+      //
+      //         double maxLatRad = firstPosition._latitude._radians;
+      //         double maxLonRad = firstPosition._longitude._radians;
+      //
+      //         for (int i = 1; i < featuresSize; i++) {
+      //            final Geodetic2D position = features.get(i)._position;
+      //            final double latRad = position._latitude._radians;
+      //            final double lonRad = position._longitude._radians;
+      //
+      //            if (latRad < minLatRad) {
+      //               minLatRad = latRad;
+      //            }
+      //            if (latRad > maxLatRad) {
+      //               maxLatRad = latRad;
+      //            }
+      //
+      //            if (lonRad < minLonRad) {
+      //               minLonRad = lonRad;
+      //            }
+      //            if (lonRad > maxLonRad) {
+      //               maxLonRad = lonRad;
+      //            }
+      //         }
+      //
+      //         return Sector.fromRadians( //
+      //                  minLatRad, minLonRad, //
+      //                  maxLatRad, maxLonRad);
+      //      }
+
 
    }
 

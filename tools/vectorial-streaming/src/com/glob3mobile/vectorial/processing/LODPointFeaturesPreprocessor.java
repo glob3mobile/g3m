@@ -58,7 +58,12 @@ public class LODPointFeaturesPreprocessor {
 
       @Override
       public boolean visit(final PointFeatureStorage.Node node) {
-         _lodStorage.addLeafNode(node.getID(), node.getSector(), node.getAveragePosition(), node.getFeatures());
+         _lodStorage.addLeafNode( //
+                  node.getID(), //
+                  node.getNodeSector(), //
+                  node.getMinimumSector(), //
+                  node.getAveragePosition(), //
+                  node.getFeatures());
 
          _progress.stepDone();
          return true;

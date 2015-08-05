@@ -256,7 +256,8 @@ public class VectorialStreamingRESTProcessor
    private static Map<String, Object> toJSON(final PointFeatureLODStorage.Node node) {
       final Map<String, Object> result = new LinkedHashMap<>();
       result.put("id", node.getID());
-      result.put("sector", GEOJSONUtils.toJSON(node.getSector()));
+      result.put("nodeSector", GEOJSONUtils.toJSON(node.getNodeSector()));
+      result.put("minimumSector", GEOJSONUtils.toJSON(node.getMinimumSector()));
       result.put("featuresCount", node.getFeaturesCount());
       result.put("averagePosition", GEOJSONUtils.toJSON(node.getAveragePosition()));
       result.put("children", node.getChildrenIDs());

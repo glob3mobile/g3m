@@ -212,7 +212,8 @@ public:
   private:
     const VectorSet*               _vectorSet;
     const std::string              _id;
-    const Sector*                  _sector;
+    const Sector*                  _nodeSector;
+    const Sector*                  _minimumSector;
     const int                      _featuresCount;
     const Geodetic2D*              _averagePosition;
 #ifdef C_CODE
@@ -267,14 +268,16 @@ public:
   public:
     Node(const VectorSet*                vectorSet,
          const std::string&              id,
-         const Sector*                   sector,
+         const Sector*                   nodeSector,
+         const Sector*                   minimumSector,
          const int                       featuresCount,
          const Geodetic2D*               averagePosition,
          const std::vector<std::string>& childrenIDs,
          const bool                      verbose) :
     _vectorSet(vectorSet),
     _id(id),
-    _sector(sector),
+    _nodeSector(nodeSector),
+    _minimumSector(minimumSector),
     _featuresCount(featuresCount),
     _averagePosition(averagePosition),
     _childrenIDs(childrenIDs),

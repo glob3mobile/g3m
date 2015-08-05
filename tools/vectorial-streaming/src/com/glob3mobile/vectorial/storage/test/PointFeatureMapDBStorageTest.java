@@ -229,7 +229,8 @@ public class PointFeatureMapDBStorageTest {
             public boolean visit(final Node node) {
                System.out.println("  visiting node #" + node.getID() + ", features: " + node.getFeaturesCount());
 
-               _geoBitmap.drawSector(node.getSector(), new Color(1, 1, 1, 0.1f), new Color(1, 1, 1, 0.4f));
+               _geoBitmap.drawSector(node.getNodeSector(), new Color(1, 1, 1, 0.1f), new Color(1, 1, 1, 0.4f));
+               _geoBitmap.drawSector(node.getMinimumSector(), new Color(0, 1, 1, 0.1f), new Color(0, 1, 1, 0.4f));
 
                final List<PointFeature> nodeFeatures = node.getFeatures();
                for (final PointFeature feature : nodeFeatures) {

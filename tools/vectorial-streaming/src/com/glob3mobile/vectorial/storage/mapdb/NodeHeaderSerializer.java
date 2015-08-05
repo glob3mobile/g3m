@@ -25,11 +25,13 @@ public class NodeHeaderSerializer
    @Override
    public void serialize(final DataOutput out,
                          final NodeHeader value) throws IOException {
-      final Sector sector = value._sector;
+      final Sector nodeSector = value._nodeSector;
+      final Sector minimumSector = value._minimumSector;
       final Geodetic2D averagePosition = value._averagePosition;
       final int featuresCount = value._featuresCount;
 
-      SerializerUtils.serialize(out, sector);
+      SerializerUtils.serialize(out, nodeSector);
+      SerializerUtils.serialize(out, minimumSector);
       SerializerUtils.serialize(out, averagePosition);
       out.writeInt(featuresCount);
    }
@@ -38,16 +40,18 @@ public class NodeHeaderSerializer
    @Override
    public NodeHeader deserialize(final DataInput in,
                                  final int available) throws IOException {
-      final Sector sector = SerializerUtils.deserializeSector(in);
+      final Sector nodeSector = SerializerUtils.deserializeSector(in);
+      final Sector minimumSector = SerializerUtils.deserializeSector(in);
       final Geodetic2D averagePosition = SerializerUtils.deserializeGeodetic2D(in);
       final int featuresCount = in.readInt();
-      return new NodeHeader(sector, averagePosition, featuresCount);
+      return new NodeHeader(nodeSector, minimumSector, averagePosition, featuresCount);
    }
 
 
    @Override
    public int fixedSize() {
       return SerializerUtils.sectorSerializationSize() + //
+             SerializerUtils.sectorSerializationSize() + //
              SerializerUtils.geodetic2DSerializationSize() + //
              4 /* featuresCount:int */;
    }

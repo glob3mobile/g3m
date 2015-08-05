@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Map;
 
+import com.glob3mobile.geo.Geodetic2D;
 import com.glob3mobile.geo.Sector;
 import com.glob3mobile.utils.Progress;
 import com.glob3mobile.vectorial.storage.PointFeature;
@@ -60,13 +61,23 @@ public class PointFeatureStorageStatistics {
             public boolean visit(final PointFeatureStorage.Node node) {
                // System.out.println(node.getID() + ", features: " + node.getFeaturesCount());
 
+               final Sector nodeSector = node.getNodeSector();
+               final Sector minimumSector = node.getMinimumSector();
 
-               _geoBitmap.drawSector(node.getSector(), new Color(1, 1, 0, 0.2f), new Color(1, 1, 0, 0.5f));
+               _geoBitmap.drawSector(nodeSector, new Color(1, 1, 0, 0.2f), new Color(1, 1, 0, 0.5f));
+               _geoBitmap.drawSector(minimumSector, new Color(0, 1, 1, 0.2f), new Color(0, 1, 1, 0.5f));
 
                final int pointSize = 1;
 
                for (final PointFeature feature : node.getFeatures()) {
-                  _geoBitmap.drawPoint(feature._position, pointSize, pointSize, new Color(1, 1, 1, 0.5f));
+                  final Geodetic2D position = feature._position;
+                  if (!nodeSector.contains(position)) {
+                     throw new RuntimeException("LOGIC ERROR 1");
+                  }
+                  if (!minimumSector.contains(position)) {
+                     throw new RuntimeException("LOGIC ERROR 2");
+                  }
+                  _geoBitmap.drawPoint(position, pointSize, pointSize, new Color(1, 1, 1, 0.5f));
 
                   final Map<String, Object> properties = feature._properties;
 
