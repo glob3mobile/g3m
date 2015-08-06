@@ -6,7 +6,7 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -124,7 +124,7 @@ class SerializerUtils {
 
    private static <K, V> Map<K, V> deserializeMap(final DataInput in) throws IOException {
       final int size = in.readInt();
-      final Map<K, V> map = new HashMap<K, V>(size);
+      final Map<K, V> map = new LinkedHashMap<>(size);
       for (int i = 0; i < size; i++) {
          final K key = deserialize(in);
          final V value = deserialize(in);

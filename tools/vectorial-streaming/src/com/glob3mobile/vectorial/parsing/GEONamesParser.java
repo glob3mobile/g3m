@@ -6,7 +6,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import com.glob3mobile.geo.Geodetic2D;
@@ -79,7 +79,7 @@ public class GEONamesParser
       }
       else {
          _currentLine = line;
-         final Map<String, Object> properties = new HashMap<>();
+         final Map<String, Object> properties = new LinkedHashMap<>();
          properties.put("geonameid", Long.parseLong(tokens[0]));
          properties.put("name", tokens[1]);
          properties.put("asciiname", tokens[2]);

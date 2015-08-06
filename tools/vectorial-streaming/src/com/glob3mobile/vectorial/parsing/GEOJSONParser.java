@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -240,7 +240,7 @@ public class GEOJSONParser
 
 
    private static Map<String, Object> parseObject(final JsonReader reader) throws IOException, GEOParseException {
-      final Map<String, Object> result = new HashMap<>();
+      final Map<String, Object> result = new LinkedHashMap<>();
       reader.beginObject();
       while (reader.peek() != JsonToken.END_OBJECT) {
          final String name = reader.nextName();

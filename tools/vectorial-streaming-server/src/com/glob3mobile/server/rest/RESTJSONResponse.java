@@ -5,6 +5,7 @@ package com.glob3mobile.server.rest;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -42,7 +43,7 @@ public class RESTJSONResponse
                            final String key,
                            final Object value) {
       _responseStatus = responseStatus;
-      final HashMap<String, Object> map = new HashMap<String, Object>(1);
+      final HashMap<String, Object> map = new LinkedHashMap<>(1);
       map.put(key, value);
       _result = map;
    }
