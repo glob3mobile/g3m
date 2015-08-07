@@ -400,7 +400,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
     //  }
     
       _downloader = rc.getDownloader();
-      _featuresRequestID = _downloader.requestBuffer(metadataURL, _vectorSet.getDownloadPriority() + _featuresCount, _vectorSet.getTimeToCache(), _vectorSet.getReadExpired(), new VectorStreamingRenderer.NodeFeaturesDownloadListener(this, rc.getThreadUtils(), _verbose), true);
+      _featuresRequestID = _downloader.requestBuffer(metadataURL, _vectorSet.getDownloadPriority() + _featuresCount, _vectorSet.getTimeToCache(), _vectorSet.getReadExpired(), new NodeFeaturesDownloadListener(this, rc.getThreadUtils(), _verbose), true);
     }
     private void unloadFeatures()
     {
@@ -454,7 +454,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
     
       _downloader = rc.getDownloader();
     
-      _childrenRequestID = _downloader.requestBuffer(childrenURL, _vectorSet.getDownloadPriority(), _vectorSet.getTimeToCache(), _vectorSet.getReadExpired(), new VectorStreamingRenderer.NodeChildrenDownloadListener(this, rc.getThreadUtils(), _verbose), true);
+      _childrenRequestID = _downloader.requestBuffer(childrenURL, _vectorSet.getDownloadPriority(), _vectorSet.getTimeToCache(), _vectorSet.getReadExpired(), new NodeChildrenDownloadListener(this, rc.getThreadUtils(), _verbose), true);
     }
     private void unloadChildren()
     {
@@ -1006,7 +1006,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
         ILogger.instance().logInfo("\"%s\": Downloading metadata", _name);
       }
     
-      context.getDownloader().requestBuffer(metadataURL, _downloadPriority, _timeToCache, _readExpired, new VectorStreamingRenderer.MetadataDownloadListener(this, context.getThreadUtils(), _verbose), true);
+      context.getDownloader().requestBuffer(metadataURL, _downloadPriority, _timeToCache, _readExpired, new MetadataDownloadListener(this, context.getThreadUtils(), _verbose), true);
     }
 
     public final RenderState getRenderState(G3MRenderContext rc)
