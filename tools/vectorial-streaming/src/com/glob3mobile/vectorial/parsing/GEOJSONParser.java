@@ -5,7 +5,9 @@ package com.glob3mobile.vectorial.parsing;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.Reader;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -25,7 +27,7 @@ public class GEOJSONParser
       GEOParser {
 
 
-   public final static GEOParser INSTANCE = new GEOJSONParser();
+   public final static GEOJSONParser INSTANCE = new GEOJSONParser();
 
 
    private GEOJSONParser() {
@@ -69,8 +71,20 @@ public class GEOJSONParser
    @Override
    public void parse(final File file,
                      final GEOFeatureHandler handler) throws IOException, GEOParseException {
+      parse(new FileInputStream(file), handler);
+   }
+
+
+   public void parse(final InputStream is,
+                     final GEOFeatureHandler handler) throws IOException, GEOParseException {
+      parse(new InputStreamReader(is, UTF8), handler);
+   }
+
+
+   public void parse(final Reader in,
+                     final GEOFeatureHandler handler) throws IOException, GEOParseException {
       handler.onStart();
-      try (final JsonReader reader = new JsonReader(new InputStreamReader(new FileInputStream(file), UTF8))) {
+      try (final JsonReader reader = new JsonReader(in)) {
          reader.setLenient(true);
 
          parseRoot(handler, reader);
