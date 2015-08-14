@@ -22,7 +22,7 @@ public class GEOBitmapTest {
 
    private static class DrawPointsHandler
       implements
-         GEOFeatureHandler {
+         GEOFeatureHandler<RuntimeException> {
 
       private long                  _counter;
       private long                  _errors;
@@ -89,6 +89,11 @@ public class GEOBitmapTest {
          System.out.println("Elapsed time: " + elapsed + "ms");
 
          System.out.println();
+      }
+
+
+      @Override
+      public void onFinishWithException() {
       }
 
    }

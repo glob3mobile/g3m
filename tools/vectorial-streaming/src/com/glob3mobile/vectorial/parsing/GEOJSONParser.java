@@ -69,20 +69,21 @@ public class GEOJSONParser
 
 
    @Override
-   public void parse(final File file,
-                     final GEOFeatureHandler handler) throws IOException, GEOParseException {
+   public <E extends Exception> void parse(final File file,
+                                           final GEOFeatureHandler<E> handler) throws IOException, GEOParseException, E {
       parse(new FileInputStream(file), handler);
    }
 
 
-   public void parse(final InputStream is,
-                     final GEOFeatureHandler handler) throws IOException, GEOParseException {
+   public <E extends Exception> void parse(final InputStream is,
+                                           final GEOFeatureHandler<E> handler) throws IOException, GEOParseException, E {
       parse(new InputStreamReader(is, UTF8), handler);
    }
 
 
-   public void parse(final Reader in,
-                     final GEOFeatureHandler handler) throws IOException, GEOParseException {
+   public <E extends Exception> void parse(final Reader in,
+                                           final GEOFeatureHandler<E> handler) throws IOException, GEOParseException, E {
+      boolean finishedOK = false;
       handler.onStart();
       try (final JsonReader reader = new JsonReader(in)) {
          reader.setLenient(true);
@@ -97,6 +98,10 @@ public class GEOJSONParser
          throw new GEOParseException(e);
       }
       handler.onFinish();
+      finishedOK = true;
+      if (!finishedOK) {
+         handler.onFinishWithException();
+      }
    }
 
 
@@ -136,8 +141,8 @@ public class GEOJSONParser
    }
 
 
-   private void parseRoot(final GEOFeatureHandler handler,
-                          final JsonReader reader) throws IOException, GEOParseException {
+   private <E extends Exception> void parseRoot(final GEOFeatureHandler<E> handler,
+                                                final JsonReader reader) throws IOException, GEOParseException, E {
       reader.beginObject();
       while (reader.peek() != JsonToken.END_OBJECT) {
          final String name = reader.nextName();
@@ -175,8 +180,8 @@ public class GEOJSONParser
    }
 
 
-   private void parseFeatures(final GEOFeatureHandler handler,
-                              final JsonReader reader) throws IOException, GEOParseException {
+   private <E extends Exception> void parseFeatures(final GEOFeatureHandler<E> handler,
+                                                    final JsonReader reader) throws IOException, GEOParseException, E {
       reader.beginArray();
       while (reader.peek() == JsonToken.BEGIN_OBJECT) {
          parseFeature(handler, reader);
@@ -185,8 +190,8 @@ public class GEOJSONParser
    }
 
 
-   private void parseFeature(final GEOFeatureHandler handler,
-                             final JsonReader reader) throws IOException, GEOParseException {
+   private <E extends Exception> void parseFeature(final GEOFeatureHandler<E> handler,
+                                                   final JsonReader reader) throws IOException, GEOParseException, E {
 
       Map<String, Object> properties = null;
       GEOGeometry geometry = null;

@@ -29,8 +29,8 @@ public interface GEOParser {
                       boolean showProgress) throws IOException, GEOParseException;
 
 
-   void parse(File file,
-              GEOFeatureHandler handler) throws IOException, GEOParseException;
+   <E extends Exception> void parse(File file,
+                                    GEOFeatureHandler<E> handler) throws IOException, GEOParseException, E;
 
 
 }

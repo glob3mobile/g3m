@@ -57,8 +57,9 @@ public class GEONamesParser
 
 
    @Override
-   public void parse(final File file,
-                     final GEOFeatureHandler handler) throws IOException {
+   public <E extends Exception> void parse(final File file,
+                                           final GEOFeatureHandler<E> handler) throws IOException, E {
+      boolean finishedOK = false;
       handler.onStart();
       try (BufferedReader br = new BufferedReader(new FileReader(file))) {
          String line;
@@ -67,11 +68,15 @@ public class GEONamesParser
          }
       }
       handler.onFinish();
+      finishedOK = true;
+      if (!finishedOK) {
+         handler.onFinishWithException();
+      }
    }
 
 
-   private void parseLine(final GEOFeatureHandler handler,
-                          final String line) {
+   private <E extends Exception> void parseLine(final GEOFeatureHandler<E> handler,
+                                                final String line) throws E {
       final String[] tokens = line.split("\\t");
 
       if (tokens.length != 19) {

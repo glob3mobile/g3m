@@ -64,7 +64,7 @@ public class GEONamesFilter {
 
       try (final OutputStreamWriter os = new OutputStreamWriter(new FileOutputStream(targetFile), "UTF-8")) {
 
-         parser.parse(sourceFile, new GEOFeatureHandler() {
+         parser.parse(sourceFile, new GEOFeatureHandler<RuntimeException>() {
             private Progress _progress = null;
             private Counter  _featureClassCounter;
             private Counter  _featureCodeCounter;
@@ -102,6 +102,11 @@ public class GEONamesFilter {
                _featureCodeCounter.show();
 
                System.out.println("\nAccepted: " + _accepted);
+            }
+
+
+            @Override
+            public void onFinishWithException() {
             }
 
 

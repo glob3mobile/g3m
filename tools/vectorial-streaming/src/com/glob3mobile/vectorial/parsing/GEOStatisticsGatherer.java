@@ -15,7 +15,7 @@ import com.glob3mobile.vectorial.GEOPoint;
 
 public class GEOStatisticsGatherer
    implements
-      GEOFeatureHandler {
+      GEOFeatureHandler<RuntimeException> {
 
 
    public static class Statistics {
@@ -94,6 +94,13 @@ public class GEOStatisticsGatherer
 
    @Override
    public void onFinish() {
+      _progress.finish();
+      _progress = null;
+   }
+
+
+   @Override
+   public void onFinishWithException() {
       _progress.finish();
       _progress = null;
    }

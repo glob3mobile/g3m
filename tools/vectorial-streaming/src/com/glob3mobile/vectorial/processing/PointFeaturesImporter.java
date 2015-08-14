@@ -70,7 +70,7 @@ public class PointFeaturesImporter {
       final long featuresCount = statistics._featuresCount;
       final Sector sector = statistics._boundingSector;
 
-      parser.parse(featuresFile, new GEOFeatureHandler() {
+      parser.parse(featuresFile, new GEOFeatureHandler<RuntimeException>() {
          private PointFeatureStorage _storage;
          private Progress            _progress = null;
 
@@ -109,6 +109,12 @@ public class PointFeaturesImporter {
 
             _progress.finish();
             _progress = null;
+         }
+
+
+         @Override
+         public void onFinishWithException() {
+            onFinish();
          }
 
 
