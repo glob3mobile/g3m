@@ -33,7 +33,8 @@ public interface PointFeatureLODStorage
    void optimize() throws IOException;
 
 
-   void processPendingNodes(Comparator<PointFeature> featuresComparator);
+   void processPendingNodes(Comparator<PointFeature> featuresComparator,
+                            boolean verbose);
 
 
    public static interface Statistics {

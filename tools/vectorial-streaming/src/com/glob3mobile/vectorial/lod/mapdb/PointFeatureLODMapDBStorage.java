@@ -370,12 +370,13 @@ public class PointFeatureLODMapDBStorage
 
 
    @Override
-   public void processPendingNodes(final Comparator<PointFeature> featuresComparator) {
+   public void processPendingNodes(final Comparator<PointFeature> featuresComparator,
+                                   final boolean verbose) {
       if (_readOnly) {
          throw new RuntimeException("Read Only");
       }
 
-      int currentLevel = getMaxLevel();
+      int currentLevel = getMaxLevel(verbose);
 
       final Progress progress = new Progress(_pendingNodes.size()) {
          @Override
@@ -383,8 +384,10 @@ public class PointFeatureLODMapDBStorage
                                     final double percent,
                                     final long elapsed,
                                     final long estimatedMsToFinish) {
-            System.out.println(getName() + " - 3/4 Processing Pending Nodes: "
-                               + progressString(stepsDone, percent, elapsed, estimatedMsToFinish));
+            if (verbose) {
+               System.out.println(getName() + " - 3/4 Processing Pending Nodes: "
+                                  + progressString(stepsDone, percent, elapsed, estimatedMsToFinish));
+            }
          }
       };
 
@@ -411,15 +414,17 @@ public class PointFeatureLODMapDBStorage
    }
 
 
-   private int getMaxLevel() {
+   private int getMaxLevel(final boolean verbose) {
       final Progress progress = new Progress(_pendingNodes.size()) {
          @Override
          public void informProgress(final long stepsDone,
                                     final double percent,
                                     final long elapsed,
                                     final long estimatedMsToFinish) {
-            System.out.println(getName() + " - 2/4 Processing Pending Nodes: "
-                               + progressString(stepsDone, percent, elapsed, estimatedMsToFinish));
+            if (verbose) {
+               System.out.println(getName() + " - 2/4 Processing Pending Nodes: "
+                                  + progressString(stepsDone, percent, elapsed, estimatedMsToFinish));
+            }
          }
       };
 

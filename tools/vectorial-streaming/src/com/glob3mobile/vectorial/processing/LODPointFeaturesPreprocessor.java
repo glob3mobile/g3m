@@ -4,7 +4,10 @@ package com.glob3mobile.vectorial.processing;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 
 import com.glob3mobile.utils.Progress;
 import com.glob3mobile.vectorial.lod.PointFeatureLODStorage;
@@ -21,16 +24,22 @@ public class LODPointFeaturesPreprocessor {
       implements
          PointFeatureStorage.NodeVisitor {
 
-      private final long                   _nodesCount;
-      private final PointFeatureLODStorage _lodStorage;
+      private final long                     _nodesCount;
+      private final PointFeatureLODStorage   _lodStorage;
+      private final Comparator<PointFeature> _featuresComparator;
+      private final boolean                  _verbose;
 
-      private Progress                     _progress;
+      private Progress                       _progress;
 
 
       private LeafNodesImporter(final long nodesCount,
-                                final PointFeatureLODStorage lodStorage) {
+                                final PointFeatureLODStorage lodStorage,
+                                final Comparator<PointFeature> featuresComparator,
+                                final boolean verbose) {
          _nodesCount = nodesCount;
          _lodStorage = lodStorage;
+         _featuresComparator = featuresComparator;
+         _verbose = verbose;
       }
 
 
@@ -42,8 +51,10 @@ public class LODPointFeaturesPreprocessor {
                                        final double percent,
                                        final long elapsed,
                                        final long estimatedMsToFinish) {
-               System.out.println(_lodStorage.getName() + " - 1/4 Importing leaf nodes: "
-                                  + progressString(stepsDone, percent, elapsed, estimatedMsToFinish));
+               if (_verbose) {
+                  System.out.println(_lodStorage.getName() + " - 1/4 Importing leaf nodes: "
+                                     + progressString(stepsDone, percent, elapsed, estimatedMsToFinish));
+               }
             }
          };
       }
@@ -58,12 +69,16 @@ public class LODPointFeaturesPreprocessor {
 
       @Override
       public boolean visit(final PointFeatureStorage.Node node) {
+         final List<PointFeature> sortedFeatures = new ArrayList<>(node.getFeatures());
+         Collections.sort(sortedFeatures, _featuresComparator);
+
          _lodStorage.addLeafNode( //
                   node.getID(), //
                   node.getNodeSector(), //
                   node.getMinimumSector(), //
                   node.getAveragePosition(), //
-                  node.getFeatures());
+                  sortedFeatures //
+         );
 
          _progress.stepDone();
          return true;
@@ -75,31 +90,38 @@ public class LODPointFeaturesPreprocessor {
    public static void process(final File storageDir,
                               final String storageName,
                               final File lodDir,
-                              final Comparator<PointFeature> featuresComparator) throws IOException {
+                              final String lodName,
+                              final Comparator<PointFeature> featuresComparator,
+                              final int maxFeaturesPerNode,
+                              final boolean verbose) throws IOException {
 
       try (final PointFeatureStorage storage = PointFeatureMapDBStorage.openReadOnly(storageDir, storageName)) {
-         final String lodName = storage.getName() + "_LOD";
 
-         final int maxFeaturesPerNode = 64;
 
          try (final PointFeatureLODStorage lodStorage = PointFeatureLODMapDBStorage.createEmpty(storage.getSector(), lodDir,
                   lodName, maxFeaturesPerNode)) {
-            final PointFeatureStorage.Statistics statistics = storage.getStatistics(true);
-            statistics.show();
-            System.out.println();
+            final PointFeatureStorage.Statistics statistics = storage.getStatistics(verbose);
+            if (verbose) {
+               statistics.show();
+               System.out.println();
+            }
 
             final int nodesCount = statistics.getNodesCount();
 
-            storage.acceptDepthFirstVisitor(new LeafNodesImporter(nodesCount, lodStorage));
+            storage.acceptDepthFirstVisitor(new LeafNodesImporter(nodesCount, lodStorage, featuresComparator, verbose));
 
-            lodStorage.processPendingNodes(featuresComparator);
+            lodStorage.processPendingNodes(featuresComparator, verbose);
 
-            System.out.println(lodStorage.getName() + " - 3/4 Optimizing storage...");
+            if (verbose) {
+               System.out.println(lodStorage.getName() + " - 3/4 Optimizing storage...");
+            }
             lodStorage.optimize();
 
-            System.out.println();
-            final PointFeatureLODStorage.Statistics lodStatistics = lodStorage.getStatistics(true);
-            lodStatistics.show();
+            if (verbose) {
+               System.out.println();
+               final PointFeatureLODStorage.Statistics lodStatistics = lodStorage.getStatistics(verbose);
+               lodStatistics.show();
+            }
          }
       }
    }
@@ -127,11 +149,18 @@ public class LODPointFeaturesPreprocessor {
       final Comparator<PointFeature> featuresComparator = new GEONamesComparator();
 
       final File lodDir = new File("PointFeaturesLOD");
+      final String lodName = storageName + "_LOD";
+
+      final int maxFeaturesPerNode = 64;
+
+      final boolean verbose = true;
 
       LODPointFeaturesPreprocessor.process( //
                storageDir, storageName, //
-               lodDir, //
-               featuresComparator);
+               lodDir, lodName, //
+               featuresComparator, //
+               maxFeaturesPerNode, //
+               verbose);
 
       System.out.println("\n- done!");
    }
