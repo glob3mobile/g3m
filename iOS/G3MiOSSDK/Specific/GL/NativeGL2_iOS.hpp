@@ -117,14 +117,17 @@ public:
   void drawElements(int mode,
                     int count,
                     IShortBuffer* buffer) const {
-
-//    printf("-----DRAW\n");
-//    ShortBuffer_iOS* bufferIOS = (ShortBuffer_iOS*) buffer; //UNCOMMENT FOR IBO USING
-//    bufferIOS->bindAsIBOToGPU();
-//    glDrawElements(mode, count, GL_UNSIGNED_SHORT, 0);
-
-    const short* pointer = ((ShortBuffer_iOS*) buffer)->getPointer();
-    glDrawElements(mode, count, GL_UNSIGNED_SHORT, pointer);
+    
+    //    printf("-----DRAW\n");
+    //    ShortBuffer_iOS* bufferIOS = (ShortBuffer_iOS*) buffer; //UNCOMMENT FOR IBO USING
+    //    bufferIOS->bindAsIBOToGPU();
+    //    glDrawElements(mode, count, GL_UNSIGNED_SHORT, 0);
+    
+    try {
+      const short* pointer = ((ShortBuffer_iOS*) buffer)->getPointer();
+      glDrawElements(mode, count, GL_UNSIGNED_SHORT, pointer);
+    }
+    catch (...) {}
   }
 
   void lineWidth(float width) const {
