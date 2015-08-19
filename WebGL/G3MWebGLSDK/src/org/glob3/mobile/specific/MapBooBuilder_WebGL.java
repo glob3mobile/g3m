@@ -15,8 +15,8 @@ import org.glob3.mobile.generated.URL;
 
 
 public class MapBooBuilder_WebGL
-         extends
-            MapBooBuilder {
+   extends
+      MapBooBuilder {
 
 
    private final G3MWidget_WebGL _nativeWidget;
@@ -35,7 +35,7 @@ public class MapBooBuilder_WebGL
 
 
    public G3MWidget_WebGL createWidget() {
-      if (_nativeWidget.isSupported()) {
+      if (_nativeWidget.isWebGLSupported()) {
 
          setGL(_nativeWidget.getGL());
 
