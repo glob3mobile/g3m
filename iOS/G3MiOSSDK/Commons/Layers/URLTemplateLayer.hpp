@@ -37,10 +37,6 @@ protected:
     return "URLTemplate";
   }
 
-  virtual const std::string getPath(const LayerTilesRenderParameters* layerTilesRenderParameters,
-                                    const Tile* tile,
-                                    const Sector& sector) const;
-
   bool rawIsEquals(const Layer* that) const;
 
   const TileImageContribution* rawContribution(const Tile* tile) const;
