@@ -13,8 +13,10 @@
 #include "ChessboardLayer.hpp"
 
 
-MapBoo::MapBoo(IG3MBuilder* builder) :
+MapBoo::MapBoo(IG3MBuilder* builder,
+               const URL& serverURL) :
 _builder(builder),
+_serverURL(serverURL),
 _layerSet(NULL)
 {
   _layerSet = new LayerSet();
