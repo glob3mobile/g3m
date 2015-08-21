@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated; 
-public class MapBooBuilder_DummyListener extends IBufferDownloadListener
+public class MapBooOLDBuilder_DummyListener extends IBufferDownloadListener
 {
-  public MapBooBuilder_DummyListener()
+  public MapBooOLDBuilder_DummyListener()
   {
   }
 

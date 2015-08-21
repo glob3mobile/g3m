@@ -1,10 +1,10 @@
 package org.glob3.mobile.generated; 
-public class MapBooBuilder_TubeWatchdogPeriodicalTask extends GTask
+public class MapBooOLDBuilder_TubeWatchdogPeriodicalTask extends GTask
 {
-  private MapBooBuilder _builder;
+  private MapBooOLDBuilder _builder;
   private boolean _firstRun;
 
-  public MapBooBuilder_TubeWatchdogPeriodicalTask(MapBooBuilder builder)
+  public MapBooOLDBuilder_TubeWatchdogPeriodicalTask(MapBooOLDBuilder builder)
   {
      _builder = builder;
      _firstRun = true;

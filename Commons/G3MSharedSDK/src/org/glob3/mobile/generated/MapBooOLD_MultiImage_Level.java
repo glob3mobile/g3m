@@ -1,11 +1,11 @@
 package org.glob3.mobile.generated; 
-public class MapBoo_MultiImage_Level
+public class MapBooOLD_MultiImage_Level
 {
   private final URL _url;
   private final int _width;
   private final int _height;
 
-  public MapBoo_MultiImage_Level(URL url, int width, int height)
+  public MapBooOLD_MultiImage_Level(URL url, int width, int height)
   {
      _url = url;
      _width = width;

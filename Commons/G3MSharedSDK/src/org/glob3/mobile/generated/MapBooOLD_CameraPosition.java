@@ -1,12 +1,12 @@
 package org.glob3.mobile.generated; 
-public class MapBoo_CameraPosition
+public class MapBooOLD_CameraPosition
 {
   private final Geodetic3D _position ;
   private final Angle _heading ;
   private final Angle _pitch ;
   private final boolean _animated;
 
-  public MapBoo_CameraPosition(Geodetic3D position, Angle heading, Angle pitch, boolean animated)
+  public MapBooOLD_CameraPosition(Geodetic3D position, Angle heading, Angle pitch, boolean animated)
   {
      _position = new Geodetic3D(position);
      _heading = new Angle(heading);

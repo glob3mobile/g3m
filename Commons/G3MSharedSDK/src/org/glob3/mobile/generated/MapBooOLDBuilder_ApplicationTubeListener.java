@@ -1,9 +1,9 @@
 package org.glob3.mobile.generated; 
-public class MapBooBuilder_ApplicationTubeListener implements IWebSocketListener
+public class MapBooOLDBuilder_ApplicationTubeListener implements IWebSocketListener
 {
-  private MapBooBuilder _builder;
+  private MapBooOLDBuilder _builder;
 
-  public MapBooBuilder_ApplicationTubeListener(MapBooBuilder builder)
+  public MapBooOLDBuilder_ApplicationTubeListener(MapBooOLDBuilder builder)
   {
      _builder = builder;
   }

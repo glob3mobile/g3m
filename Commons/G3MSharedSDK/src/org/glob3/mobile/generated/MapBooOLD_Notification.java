@@ -1,13 +1,13 @@
 package org.glob3.mobile.generated; 
-public class MapBoo_Notification
+public class MapBooOLD_Notification
 {
   private final Geodetic2D _position ;
-  private final MapBoo_CameraPosition _cameraPosition;
+  private final MapBooOLD_CameraPosition _cameraPosition;
   private final String _message;
   private final URL _iconURL;
 
 
-  public MapBoo_Notification(Geodetic2D position, MapBoo_CameraPosition cameraPosition, String message, URL iconURL)
+  public MapBooOLD_Notification(Geodetic2D position, MapBooOLD_CameraPosition cameraPosition, String message, URL iconURL)
   {
      _position = new Geodetic2D(position);
      _cameraPosition = cameraPosition;
@@ -28,7 +28,7 @@ public class MapBoo_Notification
     return _position;
   }
 
-  public final MapBoo_CameraPosition getCameraPosition()
+  public final MapBooOLD_CameraPosition getCameraPosition()
   {
     return _cameraPosition;
   }

@@ -1,6 +1,6 @@
 package org.glob3.mobile.generated; 
 //
-//  MapBooBuilder.cpp
+//  MapBooOLDBuilder.cpp
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 5/25/13.
@@ -8,7 +8,7 @@ package org.glob3.mobile.generated;
 //
 
 //
-//  MapBooBuilder.hpp
+//  MapBooOLDBuilder.hpp
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 5/25/13.
@@ -45,14 +45,14 @@ package org.glob3.mobile.generated;
 //class WMSLayer;
 //class G3MContext;
 //class IWebSocket;
-//class MapBoo_Scene;
+//class MapBooOLD_Scene;
 //class ErrorRenderer;
 //class SceneLighting;
 //class G3MEventContext;
 //class Camera;
 //class Tile;
 //class MarksRenderer;
-//class MapBooBuilder;
+//class MapBooOLDBuilder;
 //class Vector2I;
 //class URLTemplateLayer;
 //class Sector;
@@ -62,7 +62,7 @@ package org.glob3.mobile.generated;
 
 
 
-public abstract class MapBooApplicationChangeListener
+public abstract class MapBooOLDApplicationChangeListener
 {
   public void dispose()
   {
@@ -78,17 +78,17 @@ public abstract class MapBooApplicationChangeListener
 
   public abstract void onIconChanged(G3MContext context, String icon);
 
-  public abstract void onSceneChanged(G3MContext context, MapBoo_Scene scene);
+  public abstract void onSceneChanged(G3MContext context, MapBooOLD_Scene scene);
 
-  public abstract void onScenesChanged(G3MContext context, java.util.ArrayList<MapBoo_Scene> scenes);
+  public abstract void onScenesChanged(G3MContext context, java.util.ArrayList<MapBooOLD_Scene> scenes);
 
-  public abstract void onCurrentSceneChanged(G3MContext context, String sceneId, MapBoo_Scene scene);
+  public abstract void onCurrentSceneChanged(G3MContext context, String sceneId, MapBooOLD_Scene scene);
 
   public abstract void onWebSocketOpen(G3MContext context);
 
   public abstract void onWebSocketClose(G3MContext context);
 
-  public abstract void onTerrainTouch(MapBooBuilder builder, G3MEventContext ec, Vector2F pixel, Camera camera, Geodetic3D position, Tile tile);
+  public abstract void onTerrainTouch(MapBooOLDBuilder builder, G3MEventContext ec, Vector2F pixel, Camera camera, Geodetic3D position, Tile tile);
 
   public abstract void onFeatureInfoReceived(IByteBuffer buffer);
 

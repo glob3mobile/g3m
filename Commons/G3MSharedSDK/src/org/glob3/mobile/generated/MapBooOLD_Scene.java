@@ -1,19 +1,19 @@
 package org.glob3.mobile.generated; 
-public class MapBoo_Scene
+public class MapBooOLD_Scene
 {
   private final String _id;
   private final String _name;
   private final String _description;
-  private final MapBoo_MultiImage _screenshot;
+  private final MapBooOLD_MultiImage _screenshot;
   private final Color _backgroundColor ;
-  private final MapBoo_CameraPosition _cameraPosition;
+  private final MapBooOLD_CameraPosition _cameraPosition;
   private final Sector _sector;
   private Layer _baseLayer;
   private Layer _overlayLayer;
   private final boolean _queryable;
   private final boolean _hasWarnings;
 
-  public MapBoo_Scene(String id, String name, String description, MapBoo_MultiImage screenshot, Color backgroundColor, MapBoo_CameraPosition cameraPosition, Sector sector, Layer baseLayer, Layer overlayLayer, boolean queryable, boolean hasWarnings)
+  public MapBooOLD_Scene(String id, String name, String description, MapBooOLD_MultiImage screenshot, Color backgroundColor, MapBooOLD_CameraPosition cameraPosition, Sector sector, Layer baseLayer, Layer overlayLayer, boolean queryable, boolean hasWarnings)
   {
      _id = id;
      _name = name;
@@ -43,7 +43,7 @@ public class MapBoo_Scene
     return _description;
   }
 
-  public final MapBoo_MultiImage getScreenshot()
+  public final MapBooOLD_MultiImage getScreenshot()
   {
     return _screenshot;
   }
@@ -53,7 +53,7 @@ public class MapBoo_Scene
     return _backgroundColor;
   }
 
-  public final MapBoo_CameraPosition getCameraPosition()
+  public final MapBooOLD_CameraPosition getCameraPosition()
   {
     return _cameraPosition;
   }

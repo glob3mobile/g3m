@@ -1,9 +1,9 @@
 package org.glob3.mobile.generated; 
-public class MapBoo_HUDRendererInfoDisplay implements InfoDisplay
+public class MapBooOLD_HUDRendererInfoDisplay implements InfoDisplay
 {
-  private MapBoo_HUDRenderer _mapBooHUDRenderer;
+  private MapBooOLD_HUDRenderer _mapBooHUDRenderer;
 
-  public MapBoo_HUDRendererInfoDisplay(MapBoo_HUDRenderer mapBooHUDRenderer)
+  public MapBooOLD_HUDRendererInfoDisplay(MapBooOLD_HUDRenderer mapBooHUDRenderer)
   {
      _mapBooHUDRenderer = mapBooHUDRenderer;
 

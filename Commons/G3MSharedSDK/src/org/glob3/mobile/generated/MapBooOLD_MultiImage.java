@@ -1,10 +1,10 @@
 package org.glob3.mobile.generated; 
-public class MapBoo_MultiImage
+public class MapBooOLD_MultiImage
 {
   private final Color _averageColor ;
-  private java.util.ArrayList<MapBoo_MultiImage_Level> _levels = new java.util.ArrayList<MapBoo_MultiImage_Level>();
+  private java.util.ArrayList<MapBooOLD_MultiImage_Level> _levels = new java.util.ArrayList<MapBooOLD_MultiImage_Level>();
 
-  public MapBoo_MultiImage(Color averageColor, java.util.ArrayList<MapBoo_MultiImage_Level> levels)
+  public MapBooOLD_MultiImage(Color averageColor, java.util.ArrayList<MapBooOLD_MultiImage_Level> levels)
   {
      _averageColor = new Color(averageColor);
      _levels = levels;
@@ -15,7 +15,7 @@ public class MapBoo_MultiImage
     final int levelsSize = _levels.size();
     for (int i = 0; i < levelsSize; i++)
     {
-      MapBoo_MultiImage_Level level = _levels.get(i);
+      MapBooOLD_MultiImage_Level level = _levels.get(i);
       if (level != null)
          level.dispose();
     }
@@ -26,12 +26,12 @@ public class MapBoo_MultiImage
     return _averageColor;
   }
 
-  public final java.util.ArrayList<MapBoo_MultiImage_Level> getLevels()
+  public final java.util.ArrayList<MapBooOLD_MultiImage_Level> getLevels()
   {
     return _levels;
   }
 
-  public final MapBoo_MultiImage_Level getBestLevel(int width)
+  public final MapBooOLD_MultiImage_Level getBestLevel(int width)
   {
     final int levelsSize = _levels.size();
     if (levelsSize == 0)
@@ -41,7 +41,7 @@ public class MapBoo_MultiImage
   
     for (int i = 0; i < levelsSize; i++)
     {
-      MapBoo_MultiImage_Level level = _levels.get(i);
+      MapBooOLD_MultiImage_Level level = _levels.get(i);
       final int levelWidth = level.getWidth();
       if (levelWidth <= width)
       {
@@ -83,17 +83,17 @@ public class MapBoo_MultiImage
     return description();
   }
 
-  public final MapBoo_MultiImage deepCopy()
+  public final MapBooOLD_MultiImage deepCopy()
   {
     final Color averageColor = Color.fromRGBA(_averageColor._red, _averageColor._green, _averageColor._blue, _averageColor._alpha);
-    java.util.ArrayList<MapBoo_MultiImage_Level> levels = new java.util.ArrayList<MapBoo_MultiImage_Level>();
+    java.util.ArrayList<MapBooOLD_MultiImage_Level> levels = new java.util.ArrayList<MapBooOLD_MultiImage_Level>();
     final int levelsSize = _levels.size();
     for (int i = 0; i < levelsSize; i++)
     {
-      final MapBoo_MultiImage_Level level = _levels.get(i);
-      levels.add(new MapBoo_MultiImage_Level(level.getUrl(), level.getWidth(), level.getHeight()));
+      final MapBooOLD_MultiImage_Level level = _levels.get(i);
+      levels.add(new MapBooOLD_MultiImage_Level(level.getUrl(), level.getWidth(), level.getHeight()));
     }
 
-    return new MapBoo_MultiImage(averageColor, levels);
+    return new MapBooOLD_MultiImage(averageColor, levels);
   }
 }
