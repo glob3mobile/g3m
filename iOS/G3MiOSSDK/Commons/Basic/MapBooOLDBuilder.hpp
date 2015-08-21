@@ -1,13 +1,13 @@
 //
-//  MapBooBuilder.hpp
+//  MapBooOLDBuilder.hpp
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 5/25/13.
 //
 //
 
-#ifndef __G3MiOSSDK__MapBooBuilder__
-#define __G3MiOSSDK__MapBooBuilder__
+#ifndef __G3MiOSSDK__MapBooOLDBuilder__
+#define __G3MiOSSDK__MapBooOLDBuilder__
 
 #include <stddef.h>
 
@@ -39,14 +39,14 @@ class MapBoxLayer;
 class WMSLayer;
 class G3MContext;
 class IWebSocket;
-class MapBoo_Scene;
+class MapBooOLD_Scene;
 class ErrorRenderer;
 class SceneLighting;
 class G3MEventContext;
 class Camera;
 class Tile;
 class MarksRenderer;
-class MapBooBuilder;
+class MapBooOLDBuilder;
 class Vector2I;
 class URLTemplateLayer;
 class Sector;
@@ -66,9 +66,9 @@ class IBufferDownloadListener;
 
 
 
-class MapBooApplicationChangeListener {
+class MapBooOLDApplicationChangeListener {
 public:
-  virtual ~MapBooApplicationChangeListener() {
+  virtual ~MapBooOLDApplicationChangeListener() {
   }
 
   virtual void onNameChanged(const G3MContext* context,
@@ -87,20 +87,20 @@ public:
                              const std::string& icon) = 0;
   
   virtual void onSceneChanged(const G3MContext* context,
-                              MapBoo_Scene* scene) = 0;
+                              MapBooOLD_Scene* scene) = 0;
   
   virtual void onScenesChanged(const G3MContext* context,
-                               const std::vector<MapBoo_Scene*>& scenes) = 0;
+                               const std::vector<MapBooOLD_Scene*>& scenes) = 0;
 
   virtual void onCurrentSceneChanged(const G3MContext* context,
                               const std::string& sceneId,
-                              const MapBoo_Scene* scene) = 0;
+                              const MapBooOLD_Scene* scene) = 0;
 
   virtual void onWebSocketOpen(const G3MContext* context) = 0;
 
   virtual void onWebSocketClose(const G3MContext* context) = 0;
 
-  virtual void onTerrainTouch(MapBooBuilder*         builder,
+  virtual void onTerrainTouch(MapBooOLDBuilder*         builder,
                               const G3MEventContext* ec,
                               const Vector2F&        pixel,
                               const Camera*          camera,
@@ -113,7 +113,7 @@ public:
 
 class FeatureInfoDownloadListener : public IBufferDownloadListener {
 private:
-  MapBooApplicationChangeListener* _applicationListener;
+  MapBooOLDApplicationChangeListener* _applicationListener;
 public:
   
   /**
@@ -152,7 +152,7 @@ public:
     
   }
   
-  FeatureInfoDownloadListener(MapBooApplicationChangeListener* applicationListener) : _applicationListener(applicationListener)
+  FeatureInfoDownloadListener(MapBooOLDApplicationChangeListener* applicationListener) : _applicationListener(applicationListener)
   {
     
   }
@@ -168,14 +168,14 @@ public:
 };
 
 
-enum MapBoo_ViewType {
+enum MapBooOLD_ViewType {
   VIEW_RUNTIME,
   VIEW_EDITION_PREVIEW,
   VIEW_PRESENTATION
 };
 
 
-class MapBoo_MultiImage_Level {
+class MapBooOLD_MultiImage_Level {
 private:
 #ifdef C_CODE
   const URL _url;
@@ -187,7 +187,7 @@ private:
   const int _height;
 
 public:
-  MapBoo_MultiImage_Level(const URL& url,
+  MapBooOLD_MultiImage_Level(const URL& url,
                           int width,
                           int height) :
   _url(url),
@@ -216,30 +216,30 @@ public:
   }
 #endif
 
-  ~MapBoo_MultiImage_Level() {
+  ~MapBooOLD_MultiImage_Level() {
 
   }
 
 };
 
 
-class MapBoo_MultiImage {
+class MapBooOLD_MultiImage {
 private:
   const Color                           _averageColor;
-  std::vector<MapBoo_MultiImage_Level*> _levels;
+  std::vector<MapBooOLD_MultiImage_Level*> _levels;
 
 public:
-  MapBoo_MultiImage(const Color&                          averageColor,
-                    std::vector<MapBoo_MultiImage_Level*> levels) :
+  MapBooOLD_MultiImage(const Color&                          averageColor,
+                    std::vector<MapBooOLD_MultiImage_Level*> levels) :
   _averageColor(averageColor),
   _levels(levels)
   {
   }
 
-  ~MapBoo_MultiImage() {
+  ~MapBooOLD_MultiImage() {
     const int levelsSize = _levels.size();
     for (int i = 0; i < levelsSize; i++) {
-      MapBoo_MultiImage_Level* level = _levels[i];
+      MapBooOLD_MultiImage_Level* level = _levels[i];
       delete level;
     }
   }
@@ -248,11 +248,11 @@ public:
     return _averageColor;
   }
 
-  std::vector<MapBoo_MultiImage_Level*> getLevels() const {
+  std::vector<MapBooOLD_MultiImage_Level*> getLevels() const {
     return _levels;
   }
 
-  MapBoo_MultiImage_Level* getBestLevel(int width) const;
+  MapBooOLD_MultiImage_Level* getBestLevel(int width) const;
 
   const std::string description() const;
 #ifdef JAVA_CODE
@@ -262,21 +262,21 @@ public:
   }
 #endif
 
-  MapBoo_MultiImage* deepCopy() const {
+  MapBooOLD_MultiImage* deepCopy() const {
     const Color averageColor = Color::fromRGBA(_averageColor._red, _averageColor._green, _averageColor._blue, _averageColor._alpha);
-    std::vector<MapBoo_MultiImage_Level*> levels;
+    std::vector<MapBooOLD_MultiImage_Level*> levels;
     const int levelsSize = _levels.size();
     for (int i = 0; i < levelsSize; i++) {
-      const MapBoo_MultiImage_Level* level = _levels.at(i);
-      levels.push_back(new MapBoo_MultiImage_Level(level->getUrl(), level->getWidth(), level->getHeight()));
+      const MapBooOLD_MultiImage_Level* level = _levels.at(i);
+      levels.push_back(new MapBooOLD_MultiImage_Level(level->getUrl(), level->getWidth(), level->getHeight()));
     }
     
-    return new MapBoo_MultiImage(averageColor, levels);
+    return new MapBooOLD_MultiImage(averageColor, levels);
   }
 };
 
 
-class MapBoo_CameraPosition {
+class MapBooOLD_CameraPosition {
 private:
   const Geodetic3D _position;
   const Angle      _heading;
@@ -284,7 +284,7 @@ private:
   const bool       _animated;
 
 public:
-  MapBoo_CameraPosition(const Geodetic3D& position,
+  MapBooOLD_CameraPosition(const Geodetic3D& position,
                         const Angle&      heading,
                         const Angle&      pitch,
                         const bool        animated) :
@@ -295,7 +295,7 @@ public:
   {
   }
 
-  ~MapBoo_CameraPosition() {
+  ~MapBooOLD_CameraPosition() {
 
   }
 
@@ -326,14 +326,14 @@ public:
 };
 
 
-class MapBoo_Scene {
+class MapBooOLD_Scene {
 private:
   const std::string            _id;
   const std::string            _name;
   const std::string            _description;
-  const MapBoo_MultiImage*     _screenshot;
+  const MapBooOLD_MultiImage*     _screenshot;
   const Color                  _backgroundColor;
-  const MapBoo_CameraPosition* _cameraPosition;
+  const MapBooOLD_CameraPosition* _cameraPosition;
   const Sector*                _sector;
   Layer*                       _baseLayer;
   Layer*                       _overlayLayer;
@@ -341,12 +341,12 @@ private:
   const bool                   _hasWarnings;
 
 public:
-  MapBoo_Scene(const std::string&           id,
+  MapBooOLD_Scene(const std::string&           id,
                const std::string&           name,
                const std::string&           description,
-               const MapBoo_MultiImage*     screenshot,
+               const MapBooOLD_MultiImage*     screenshot,
                const Color&                 backgroundColor,
-               const MapBoo_CameraPosition* cameraPosition,
+               const MapBooOLD_CameraPosition* cameraPosition,
                const Sector*                sector,
                Layer*                       baseLayer,
                Layer*                       overlayLayer,
@@ -378,7 +378,7 @@ public:
     return _description;
   }
 
-  const MapBoo_MultiImage* getScreenshot() const {
+  const MapBooOLD_MultiImage* getScreenshot() const {
     return _screenshot;
   }
 
@@ -386,7 +386,7 @@ public:
     return _backgroundColor;
   }
 
-  const MapBoo_CameraPosition* getCameraPosition() const {
+  const MapBooOLD_CameraPosition* getCameraPosition() const {
     return _cameraPosition;
   }
 
@@ -413,7 +413,7 @@ public:
 
   LayerSet* createLayerSet() const;
 
-  ~MapBoo_Scene();
+  ~MapBooOLD_Scene();
 
   const std::string description() const;
 #ifdef JAVA_CODE
@@ -425,17 +425,17 @@ public:
 
 };
 
-class MapBoo_Notification {
+class MapBooOLD_Notification {
 private:
   const Geodetic2D             _position;
-  const MapBoo_CameraPosition* _cameraPosition;
+  const MapBooOLD_CameraPosition* _cameraPosition;
   const std::string            _message;
   const URL*                   _iconURL;
 
 public:
 
-  MapBoo_Notification(const Geodetic2D&            position,
-                      const MapBoo_CameraPosition* cameraPosition,
+  MapBooOLD_Notification(const Geodetic2D&            position,
+                      const MapBooOLD_CameraPosition* cameraPosition,
                       const std::string&           message,
                       const URL*                   iconURL) :
   _position(position),
@@ -445,7 +445,7 @@ public:
   {
   }
 
-  ~MapBoo_Notification() {
+  ~MapBooOLD_Notification() {
     delete _iconURL;
     delete _cameraPosition;
   }
@@ -454,7 +454,7 @@ public:
     return _position;
   }
 
-  const MapBoo_CameraPosition* getCameraPosition() const {
+  const MapBooOLD_CameraPosition* getCameraPosition() const {
     return _cameraPosition;
   }
 
@@ -489,13 +489,13 @@ public:
   bool setInfo(const std::vector<const Info*>& info);
 };
 
-class MapBoo_HUDRenderer : public DefaultRenderer {
+class MapBooOLD_HUDRenderer : public DefaultRenderer {
 private:
   HUDImageRenderer* _hudImageRenderer;
 public:
-  MapBoo_HUDRenderer();
+  MapBooOLD_HUDRenderer();
   
-  ~MapBoo_HUDRenderer();
+  ~MapBooOLD_HUDRenderer();
   
   void updateInfo(const std::vector<const Info*>& info);
   
@@ -520,12 +520,12 @@ public:
 };
 
 
-class MapBoo_HUDRendererInfoDisplay : public InfoDisplay {
+class MapBooOLD_HUDRendererInfoDisplay : public InfoDisplay {
 private:
-  MapBoo_HUDRenderer* _mapBooHUDRenderer;
+  MapBooOLD_HUDRenderer* _mapBooHUDRenderer;
 public:
   
-  MapBoo_HUDRendererInfoDisplay(MapBoo_HUDRenderer* mapBooHUDRenderer):
+  MapBooOLD_HUDRendererInfoDisplay(MapBooOLD_HUDRenderer* mapBooHUDRenderer):
   _mapBooHUDRenderer(mapBooHUDRenderer)
   {
     
@@ -549,7 +549,7 @@ public:
   }
   
 #ifdef C_CODE
-  virtual ~MapBoo_HUDRendererInfoDisplay() { }
+  virtual ~MapBooOLD_HUDRendererInfoDisplay() { }
 #endif
 #ifdef JAVA_CODE
   public void dispose() { }
@@ -557,12 +557,12 @@ public:
 
 };
 
-class MapBoo_ErrorRenderer : public DefaultRenderer {
+class MapBooOLD_ErrorRenderer : public DefaultRenderer {
 private:
   std::vector<std::string> _errors;
 public:
-  MapBoo_ErrorRenderer() {}
-  ~MapBoo_ErrorRenderer() {};
+  MapBooOLD_ErrorRenderer() {}
+  ~MapBooOLD_ErrorRenderer() {};
   void setErrors(const std::vector<std::string>& errors);
   RenderState getRenderState(const G3MRenderContext* rc);
   void render(const G3MRenderContext* rc,
@@ -571,7 +571,7 @@ public:
                              int width, int height) {}
 };
 
-class MapBooBuilder {
+class MapBooOLDBuilder {
 private:
 
 #ifdef C_CODE
@@ -583,9 +583,9 @@ private:
   private final URL _tubesURL;
 #endif
 
-  MapBoo_ViewType _viewType;
+  MapBooOLD_ViewType _viewType;
 
-  MapBooApplicationChangeListener* _applicationListener;
+  MapBooOLDApplicationChangeListener* _applicationListener;
   
   FeatureInfoDownloadListener* _featureInfoDownloadListener;
 
@@ -597,7 +597,7 @@ private:
   std::string                _applicationEMail;
   std::string                _applicationAbout;
   int                        _applicationTimestamp;
-  std::vector<MapBoo_Scene*> _applicationScenes;
+  std::vector<MapBooOLD_Scene*> _applicationScenes;
   std::string                _applicationCurrentSceneId;
   std::string                _lastApplicationCurrentSceneId;
   
@@ -619,7 +619,7 @@ private:
 
   bool        _isApplicationTubeOpen;
     
-  MapBoo_ErrorRenderer* _mbErrorRenderer;
+  MapBooOLD_ErrorRenderer* _mbErrorRenderer;
 
   LayerSet* _layerSet;
   PlanetRenderer* createPlanetRenderer();
@@ -670,19 +670,19 @@ private:
                                           const bool transparent) const;
 
   const std::string getApplicationCurrentSceneId();
-  const MapBoo_Scene* getApplicationCurrentScene();
+  const MapBooOLD_Scene* getApplicationCurrentScene();
 
   Color getCurrentBackgroundColor();
 
 //  const std::string parseSceneId(const JSONObject* jsonObject) const;
-  MapBoo_Scene* parseScene(const JSONObject* json) const;
+  MapBooOLD_Scene* parseScene(const JSONObject* json) const;
   
   Color         parseColor(const JSONString* jsonColor) const;
   Sector*       parseSector(const JSONBaseObject* jsonBaseObjectLayer) const;
 
-  MapBoo_MultiImage*       parseMultiImage(const JSONObject* jsonObject) const;
-  MapBoo_MultiImage_Level* parseMultiImageLevel(const JSONObject* jsonObject) const;
-  const MapBoo_CameraPosition* parseCameraPosition(const JSONObject* jsonObject) const;
+  MapBooOLD_MultiImage*       parseMultiImage(const JSONObject* jsonObject) const;
+  MapBooOLD_MultiImage_Level* parseMultiImageLevel(const JSONObject* jsonObject) const;
+  const MapBooOLD_CameraPosition* parseCameraPosition(const JSONObject* jsonObject) const;
 
   void changedCurrentScene();
   
@@ -696,20 +696,20 @@ private:
                                                const URL*         iconURL) const;
 
   const std::string getSendNotificationCommand(const Geodetic2D&            position,
-                                               const MapBoo_CameraPosition* cameraPosition,
+                                               const MapBooOLD_CameraPosition* cameraPosition,
                                                const std::string&           message,
                                                const URL*                   iconURL) const;
 
   const std::string escapeString(const std::string& str) const;
 
   const std::string toCameraPositionJSON(const Camera* camera) const;
-  const std::string toCameraPositionJSON(const MapBoo_CameraPosition* cameraPosition) const;
+  const std::string toCameraPositionJSON(const MapBooOLD_CameraPosition* cameraPosition) const;
 
-  MapBoo_Notification* parseNotification(const JSONObject* jsonNotification) const;
-  std::vector<MapBoo_Notification*>* parseNotifications(const JSONArray* jsonArray) const;
+  MapBooOLD_Notification* parseNotification(const JSONObject* jsonNotification) const;
+  std::vector<MapBooOLD_Notification*>* parseNotifications(const JSONArray* jsonArray) const;
 
-  void addApplicationNotification(MapBoo_Notification* notification);
-  void addApplicationNotifications(const std::vector<MapBoo_Notification*>* notifications);
+  void addApplicationNotification(MapBooOLD_Notification* notification);
+  void addApplicationNotifications(const std::vector<MapBooOLD_Notification*>* notifications);
 
   const URL* parseURL(const JSONString* jsonString) const;
 
@@ -722,8 +722,8 @@ private:
   
   void fireOnScenesChanged();
   
-  void setCameraPosition(const MapBoo_CameraPosition* cameraPosition, const bool animated);
-  void setCameraPosition(const MapBoo_CameraPosition* cameraPosition);
+  void setCameraPosition(const MapBooOLD_CameraPosition* cameraPosition, const bool animated);
+  void setCameraPosition(const MapBooOLD_CameraPosition* cameraPosition);
   
   const std::string getViewAsString() const;
   
@@ -734,15 +734,15 @@ private:
                                         const Vector2I& pixel,
                                         const Geodetic3D& position);
 protected:
-  MapBooBuilder(const URL& serverURL,
+  MapBooOLDBuilder(const URL& serverURL,
                 const URL& tubesURL,
                 const std::string& applicationId,
-                MapBoo_ViewType viewType,
-                MapBooApplicationChangeListener* applicationListener,
+                MapBooOLD_ViewType viewType,
+                MapBooOLDApplicationChangeListener* applicationListener,
                 bool enableNotifications,
                 const std::string& token);
 
-  virtual ~MapBooBuilder();
+  virtual ~MapBooOLDBuilder();
 
   void setGL(GL *gl);
 
@@ -794,13 +794,13 @@ public:
   void setApplicationAbout(const std::string& about);
   
   /** Private to MapbooBuilder, don't call it */
-  void addApplicationScene(MapBoo_Scene* scene, const int position);
+  void addApplicationScene(MapBooOLD_Scene* scene, const int position);
 
   /** Private to MapbooBuilder, don't call it */
   void deleteApplicationScene(const std::string& sceneId);
   
   /** Private to MapbooBuilder, don't call it */
-  void setApplicationScenes(const std::vector<MapBoo_Scene*>& applicationScenes);
+  void setApplicationScenes(const std::vector<MapBooOLD_Scene*>& applicationScenes);
 
   /** Private to MapbooBuilder, don't call it */
   void saveApplicationData() const;
@@ -857,7 +857,7 @@ public:
   bool hasParsedApplication() const;
 
 
-  const MapBoo_Notification* createNotification(const Geodetic2D&  position,
+  const MapBooOLD_Notification* createNotification(const Geodetic2D&  position,
                                                 const Camera*      camera,
                                                 const std::string& message,
                                                 const URL*         iconURL) const;
@@ -868,13 +868,13 @@ public:
                         const URL*         iconURL) const;
 
   void sendNotification(const Geodetic2D&            position,
-                        const MapBoo_CameraPosition* cameraPosition,
+                        const MapBooOLD_CameraPosition* cameraPosition,
                         const std::string&           message,
                         const URL*                   iconURL) const;
 
   void changeScene(const std::string& sceneId);
   
-  void changeScene(const MapBoo_Scene* scene);
+  void changeScene(const MapBooOLD_Scene* scene);
   
   
   const bool isQueryableCurrentScene() {

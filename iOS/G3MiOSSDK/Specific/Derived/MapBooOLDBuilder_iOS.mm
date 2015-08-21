@@ -1,12 +1,12 @@
 //
-//  MapBooBuilder_iOS.mm
+//  MapBooOLDBuilder_iOS.mm
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 5/25/13.
 //
 //
 
-#include "MapBooBuilder_iOS.hpp"
+#include "MapBooOLDBuilder_iOS.hpp"
 #include "CachedDownloader.hpp"
 #include "Downloader_iOS.hpp"
 #include "ThreadUtils_iOS.hpp"
@@ -15,15 +15,15 @@
 #include "BasicShadersGL2.hpp"
 #include "Info.hpp"
 
-MapBooBuilder_iOS::MapBooBuilder_iOS(G3MWidget_iOS* nativeWidget,
+MapBooOLDBuilder_iOS::MapBooOLDBuilder_iOS(G3MWidget_iOS* nativeWidget,
                                      const URL& serverURL,
                                      const URL& tubesURL,
                                      const std::string& applicationId,
-                                     MapBoo_ViewType viewType,
-                                     MapBooApplicationChangeListener* applicationListener,
+                                     MapBooOLD_ViewType viewType,
+                                     MapBooOLDApplicationChangeListener* applicationListener,
                                      bool enableNotifications,
                                      const std::string& token) :
-MapBooBuilder(serverURL,
+MapBooOLDBuilder(serverURL,
               tubesURL,
               applicationId,
               viewType,
@@ -35,28 +35,28 @@ _nativeWidget(nativeWidget)
   [_nativeWidget initSingletons];
 }
 
-void MapBooBuilder_iOS::initializeWidget() {
+void MapBooOLDBuilder_iOS::initializeWidget() {
   setGL([_nativeWidget getGL]);
 
   [_nativeWidget setWidget: create()];
 }
 
-IStorage* MapBooBuilder_iOS::createStorage() {
+IStorage* MapBooOLDBuilder_iOS::createStorage() {
   return new SQLiteStorage_iOS("g3m.cache");
 }
 
-IDownloader* MapBooBuilder_iOS::createDownloader() {
+IDownloader* MapBooOLDBuilder_iOS::createDownloader() {
   const bool saveInBackground = true;
   return new CachedDownloader(new Downloader_iOS(8),
                                                  getStorage(),
                                                  saveInBackground);
 }
 
-IThreadUtils* MapBooBuilder_iOS::createThreadUtils() {
+IThreadUtils* MapBooOLDBuilder_iOS::createThreadUtils() {
   return new ThreadUtils_iOS();
 }
 
-GPUProgramSources MapBooBuilder_iOS::loadDefaultGPUProgramSources(const std::string& name) {
+GPUProgramSources MapBooOLDBuilder_iOS::loadDefaultGPUProgramSources(const std::string& name) {
   
   NSString* nsName = [[NSString alloc] initWithUTF8String:name.c_str()];
   
@@ -83,7 +83,7 @@ GPUProgramSources MapBooBuilder_iOS::loadDefaultGPUProgramSources(const std::str
   return GPUProgramSources(name, vertexSource, fragmentSource);
 }
 
-GPUProgramManager* MapBooBuilder_iOS::createGPUProgramManager() {
+GPUProgramManager* MapBooOLDBuilder_iOS::createGPUProgramManager() {
   GPUProgramFactory * gpuProgramFactory = new BasicShadersGL2();
   return new GPUProgramManager(gpuProgramFactory);
 }

@@ -1,20 +1,20 @@
 //
-//  MapBooBuilder_iOS.hpp
+//  MapBooOLDBuilder_iOS.hpp
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 5/25/13.
 //
 //
 
-#ifndef __G3MiOSSDK__MapBooBuilder_iOS__
-#define __G3MiOSSDK__MapBooBuilder_iOS__
+#ifndef __G3MiOSSDK__MapBooOLDBuilder_iOS__
+#define __G3MiOSSDK__MapBooOLDBuilder_iOS__
 
-#include "MapBooBuilder.hpp"
+#include "MapBooOLDBuilder.hpp"
 #include "G3MWidget_iOS.h"
 
 class GPUProgramSources;
 
-class MapBooBuilder_iOS : public MapBooBuilder {
+class MapBooOLDBuilder_iOS : public MapBooOLDBuilder {
 private:
   G3MWidget_iOS* _nativeWidget;
 
@@ -31,12 +31,12 @@ protected:
   GPUProgramManager* createGPUProgramManager();
 
 public:
-  MapBooBuilder_iOS(G3MWidget_iOS* nativeWidget,
+  MapBooOLDBuilder_iOS(G3MWidget_iOS* nativeWidget,
                     const URL& serverURL,
                     const URL& tubesURL,
                     const std::string& applicationId,
-                    MapBoo_ViewType viewType,
-                    MapBooApplicationChangeListener* applicationListener,
+                    MapBooOLD_ViewType viewType,
+                    MapBooOLDApplicationChangeListener* applicationListener,
                     bool enableNotifications,
                     const std::string& token);
 
