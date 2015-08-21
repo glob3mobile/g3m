@@ -16,20 +16,22 @@ package org.glob3.mobile.generated;
 //
 
 
+
 //class IG3MBuilder;
 //class LayerSet;
-
 
 public class MapBoo
 {
   private IG3MBuilder _builder;
+  private final URL _serverURL = new URL();
 
   private LayerSet _layerSet;
 
 
-  public MapBoo(IG3MBuilder builder)
+  public MapBoo(IG3MBuilder builder, URL serverURL)
   {
      _builder = builder;
+     _serverURL = new URL(serverURL);
      _layerSet = null;
     _layerSet = new LayerSet();
     _layerSet.addLayer(new ChessboardLayer());
