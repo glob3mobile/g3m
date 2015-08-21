@@ -230,6 +230,8 @@
 		CF701B471A9F93B9007C6B3F /* MutableVector2F.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF1918A91A9E5B2C00BF433C /* MutableVector2F.hpp */; };
 		CF708F301836A43500AAB0B1 /* NormalsUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF708F2E1836A43500AAB0B1 /* NormalsUtils.cpp */; };
 		CF73BFDB15E114E3001CE412 /* FrameTasksExecutor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF73BFD915E114E3001CE412 /* FrameTasksExecutor.cpp */; };
+		CF75A9FC1B87E2750033DA25 /* MapBoo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF75A9FA1B87E2750033DA25 /* MapBoo.cpp */; };
+		CF75A9FD1B87E2B10033DA25 /* MapBoo.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF75A9FB1B87E2750033DA25 /* MapBoo.hpp */; };
 		CF75C39516E92CDF00F7EE9F /* HereLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF75C39316E92CDF00F7EE9F /* HereLayer.cpp */; };
 		CF75C39616E92D1300F7EE9F /* HereLayer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF75C39416E92CDF00F7EE9F /* HereLayer.hpp */; };
 		CF75C39916EA3B4500F7EE9F /* MercatorTiledLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF75C39716EA3B4500F7EE9F /* MercatorTiledLayer.cpp */; };
@@ -733,6 +735,7 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				CF75A9FD1B87E2B10033DA25 /* MapBoo.hpp in CopyFiles */,
 				CFECA77C1B6ABA0100A0A44E /* VectorStreamingRenderer.hpp in CopyFiles */,
 				CF701B471A9F93B9007C6B3F /* MutableVector2F.hpp in CopyFiles */,
 				CF55133D1A8E6AC200097906 /* StaticImageBuilder.hpp in CopyFiles */,
@@ -1426,6 +1429,8 @@
 		CF708F2F1836A43500AAB0B1 /* NormalsUtils.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = NormalsUtils.hpp; path = Commons/Geometry/NormalsUtils.hpp; sourceTree = "<group>"; };
 		CF73BFD915E114E3001CE412 /* FrameTasksExecutor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = FrameTasksExecutor.cpp; path = Commons/Basic/FrameTasksExecutor.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CF73BFDA15E114E3001CE412 /* FrameTasksExecutor.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = FrameTasksExecutor.hpp; path = Commons/Basic/FrameTasksExecutor.hpp; sourceTree = "<group>"; };
+		CF75A9FA1B87E2750033DA25 /* MapBoo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MapBoo.cpp; path = Commons/Basic/MapBoo.cpp; sourceTree = "<group>"; };
+		CF75A9FB1B87E2750033DA25 /* MapBoo.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = MapBoo.hpp; path = Commons/Basic/MapBoo.hpp; sourceTree = "<group>"; };
 		CF75C39316E92CDF00F7EE9F /* HereLayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HereLayer.cpp; sourceTree = "<group>"; };
 		CF75C39416E92CDF00F7EE9F /* HereLayer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = HereLayer.hpp; sourceTree = "<group>"; };
 		CF75C39716EA3B4500F7EE9F /* MercatorTiledLayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MercatorTiledLayer.cpp; sourceTree = "<group>"; };
@@ -2199,6 +2204,8 @@
 				CFAB53F11A8BCD9B00DD0099 /* LayoutImageBuilder.hpp */,
 				CFAB53F31A8BCDFF00DD0099 /* ColumnLayoutImageBuilder.cpp */,
 				CFAB53F41A8BCDFF00DD0099 /* ColumnLayoutImageBuilder.hpp */,
+				CF75A9FA1B87E2750033DA25 /* MapBoo.cpp */,
+				CF75A9FB1B87E2750033DA25 /* MapBoo.hpp */,
 			);
 			name = Basic;
 			sourceTree = "<group>";
@@ -3141,6 +3148,7 @@
 				CF8AE00A1702049F00FE9F56 /* GEOSymbol.cpp in Sources */,
 				CF8AE00B1702049F00FE9F56 /* GEOSymbolizer.cpp in Sources */,
 				D8715C1E17032AC700CF7BE2 /* GPUProgram.cpp in Sources */,
+				CF75A9FC1B87E2750033DA25 /* MapBoo.cpp in Sources */,
 				D80E59B2170B12CD00E7C799 /* GPUProgramFactory.cpp in Sources */,
 				CF5DB0671AFD52B6001FFE58 /* BalloonCanvasElement.cpp in Sources */,
 				CF9EDC641978357D00F7351E /* GEOVectorTileImageProvider.cpp in Sources */,
