@@ -9,18 +9,18 @@ import org.glob3.mobile.generated.GPUProgramManager;
 import org.glob3.mobile.generated.IDownloader;
 import org.glob3.mobile.generated.IStorage;
 import org.glob3.mobile.generated.IThreadUtils;
-import org.glob3.mobile.generated.MapBooApplicationChangeListener;
-import org.glob3.mobile.generated.MapBooBuilder;
-import org.glob3.mobile.generated.MapBoo_ViewType;
+import org.glob3.mobile.generated.MapBooOLDApplicationChangeListener;
+import org.glob3.mobile.generated.MapBooOLDBuilder;
+import org.glob3.mobile.generated.MapBooOLD_ViewType;
 import org.glob3.mobile.generated.TimeInterval;
 import org.glob3.mobile.generated.URL;
 
 import android.content.Context;
 
 
-public class MapBooBuilder_Android
-         extends
-            MapBooBuilder {
+public class MapBooOLDBuilder_Android
+   extends
+      MapBooOLDBuilder {
 
    private final G3MWidget_Android _nativeWidget;
 
@@ -43,14 +43,14 @@ public class MapBooBuilder_Android
    }
 
 
-   public MapBooBuilder_Android(final Context context,
-                                final URL serverURL,
-                                final URL tubesURL,
-                                final String sceneId,
-                                final MapBoo_ViewType viewType,
-                                final MapBooApplicationChangeListener applicationListener,
-                                final boolean enableNotifications,
-                                final String token) {
+   public MapBooOLDBuilder_Android(final Context context,
+                                   final URL serverURL,
+                                   final URL tubesURL,
+                                   final String sceneId,
+                                   final MapBooOLD_ViewType viewType,
+                                   final MapBooOLDApplicationChangeListener applicationListener,
+                                   final boolean enableNotifications,
+                                   final String token) {
       super(serverURL, tubesURL, sceneId, viewType, applicationListener, enableNotifications, token);
 
       _nativeWidget = new G3MWidget_Android(context);

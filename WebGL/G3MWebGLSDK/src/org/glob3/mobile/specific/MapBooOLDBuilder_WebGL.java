@@ -8,25 +8,25 @@ import org.glob3.mobile.generated.GPUProgramManager;
 import org.glob3.mobile.generated.IDownloader;
 import org.glob3.mobile.generated.IStorage;
 import org.glob3.mobile.generated.IThreadUtils;
-import org.glob3.mobile.generated.MapBooApplicationChangeListener;
-import org.glob3.mobile.generated.MapBooBuilder;
-import org.glob3.mobile.generated.MapBoo_ViewType;
+import org.glob3.mobile.generated.MapBooOLDApplicationChangeListener;
+import org.glob3.mobile.generated.MapBooOLDBuilder;
+import org.glob3.mobile.generated.MapBooOLD_ViewType;
 import org.glob3.mobile.generated.URL;
 
 
-public class MapBooBuilder_WebGL
+public class MapBooOLDBuilder_WebGL
    extends
-      MapBooBuilder {
+      MapBooOLDBuilder {
 
 
    private final G3MWidget_WebGL _nativeWidget;
 
 
-   public MapBooBuilder_WebGL(final URL serverURL,
+   public MapBooOLDBuilder_WebGL(final URL serverURL,
                               final URL tubesURL,
                               final String sceneId,
-                              final MapBoo_ViewType viewType,
-                              final MapBooApplicationChangeListener applicationListener,
+                              final MapBooOLD_ViewType viewType,
+                              final MapBooOLDApplicationChangeListener applicationListener,
                               final boolean enableNotifications,
                               final String token) {
       super(serverURL, tubesURL, sceneId, viewType, applicationListener, enableNotifications, token);
