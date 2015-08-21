@@ -169,6 +169,7 @@ const URL URLTemplateLayer::createURL(const Tile* tile) const {
   path = _su->replaceAll(path, "{y2}",             _su->toString( tile->_row                        ) );
   path = _su->replaceAll(path, "{row}",            _su->toString( tile->_row                        ) );
   path = _su->replaceAll(path, "{level}",          _su->toString( level                             ) );
+  path = _su->replaceAll(path, "{z}",              _su->toString( level                             ) );
   path = _su->replaceAll(path, "{level-1}",        _su->toString( level - 1                         ) );
   path = _su->replaceAll(path, "{lowerLatitude}",  _su->toString( sector._lower._latitude._degrees  ) );
   path = _su->replaceAll(path, "{lowerLongitude}", _su->toString( sector._lower._longitude._degrees ) );
