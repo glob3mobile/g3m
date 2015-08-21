@@ -10,6 +10,13 @@
 #include "LevelTileCondition.hpp"
 #include "LayerSet.hpp"
 #include "TimeInterval.hpp"
+#include "MapQuestLayer.hpp"
+
+LayerSet* LayerBuilder::createDefault() {
+  LayerSet* layerSet = new LayerSet();
+  layerSet->addLayer( MapQuestLayer::newOSM(TimeInterval::fromDays(30)) );
+  return layerSet;
+}
 
 LayerSet* LayerBuilder::createDefaultSatelliteImagery() {
   LayerSet* layerSet = new LayerSet();
