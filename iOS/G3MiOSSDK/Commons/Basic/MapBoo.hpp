@@ -36,8 +36,13 @@ public:
     {
     }
 
+
   public:
     static const MapBoo::Layer* fromJSON(const JSONBaseObject* jsonBaseObject);
+
+    virtual ~Layer() {
+
+    }
 
   };
 
