@@ -30,7 +30,7 @@ public:
     const std::string _url;
 
     LayerInfo(const std::string& type,
-          const std::string& url) :
+              const std::string& url) :
     _type(type),
     _url(url)
     {
