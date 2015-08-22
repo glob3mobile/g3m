@@ -61,7 +61,12 @@ public class MapBoo
 
     public void dispose()
     {
+    }
 
+    public final void createG3MLayer()
+    {
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning Diego at work!
     }
 
   }
@@ -71,7 +76,7 @@ public class MapBoo
   {
     private final String _id;
     private final String _name;
-    private final java.util.ArrayList<MapBoo.Layer> _layers = new java.util.ArrayList<MapBoo.Layer>();
+    private final java.util.ArrayList<MapBoo.Layer> _layers;
     private java.util.ArrayList<String> _datasetsIDs = new java.util.ArrayList<String>();
     private final int _timestamp;
 
@@ -133,7 +138,7 @@ public class MapBoo
     {
       for (int i = 0; i < _layers.size(); i++)
       {
-        final Layer layer = _layers.get(i);
+        final Layer layer = _layers[i];
         if (layer != null)
            layer.dispose();
       }
