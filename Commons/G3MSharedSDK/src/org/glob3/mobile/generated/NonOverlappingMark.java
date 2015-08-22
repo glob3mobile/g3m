@@ -122,8 +122,7 @@ public class NonOverlappingMark
 
   public final Vector3D getCartesianPosition(Planet planet)
   {
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning toCartesian without garbage
+  // #warning toCartesian without garbage
     if (_cartesianPos == null)
     {
       _cartesianPos = new Vector3D(planet.toCartesian(_geoPosition));

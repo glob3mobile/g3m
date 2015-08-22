@@ -138,9 +138,9 @@ public class MapBoo
     {
       for (int i = 0; i < _layers.size(); i++)
       {
-        final Layer layer = _layers[i];
+        final Layer layer = _layers.get(i);
         if (layer != null)
-           layer.dispose();
+          layer.dispose();
       }
     }
   }

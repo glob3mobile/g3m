@@ -36,8 +36,7 @@ public class NonOverlappingMarksRenderer extends DefaultRenderer
       else
       {
         // Resetting marks location of invisible anchors
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning Do we really need this?
+  // #warning Do we really need this?
         m.resetWidgetPositionVelocityAndForce();
       }
     }

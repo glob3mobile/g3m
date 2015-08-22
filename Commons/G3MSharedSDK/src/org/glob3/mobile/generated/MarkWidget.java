@@ -61,8 +61,7 @@ public class MarkWidget
     pos2D.add(-_halfWidth, _halfHeight); // vertex 2
     pos2D.add(_halfWidth, -_halfHeight); // vertex 3
     pos2D.add(_halfWidth, _halfHeight); // vertex 4
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning TODO: share vertices for marks of the same size?
+  // #warning TODO: share vertices for marks of the same size?
   
     _vertices = pos2D.create();
   
@@ -78,8 +77,7 @@ public class MarkWidget
   
     final TextureIDReference textureID = _texHandler.getTextureIDReference(_image, GLFormat.rgba(), _imageName, false);
   
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning TODO: share unit texCoords
+  // #warning TODO: share unit texCoords
     if (_textureMapping != null)
     {
       if (_textureMapping != null)
