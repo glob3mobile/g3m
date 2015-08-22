@@ -49,11 +49,11 @@ public:
 
   class Map {
   private:
-    const std::string                       _id;
-    const std::string                       _name;
-    const std::vector<const MapBoo::Layer*> _layers;
-    std::vector<std::string>                _datasetsIDs;
-    const int                               _timestamp;
+    const std::string                 _id;
+    const std::string                 _name;
+    std::vector<const MapBoo::Layer*> _layers;
+    std::vector<std::string>          _datasetsIDs;
+    const int                         _timestamp;
 
     Map(const std::string&                 id,
         const std::string&                 name,
