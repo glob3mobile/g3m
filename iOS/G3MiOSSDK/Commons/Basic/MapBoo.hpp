@@ -17,7 +17,12 @@ class LayerSet;
 class MapBoo {
 private:
   IG3MBuilder* _builder;
-  const URL    _serverURL;
+#ifdef C_CODE
+  const URL         _serverURL;
+#endif
+#ifdef JAVA_CODE
+  private final URL _serverURL;
+#endif
 
   LayerSet* _layerSet;
 
