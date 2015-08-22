@@ -40,8 +40,11 @@ public:
   public:
     static const MapBoo::Layer* fromJSON(const JSONBaseObject* jsonBaseObject);
 
-    virtual ~Layer() {
+    ~Layer() {
+    }
 
+    void createG3MLayer() {
+#warning Diego at work!
     }
 
   };
@@ -51,7 +54,12 @@ public:
   private:
     const std::string                 _id;
     const std::string                 _name;
+#ifdef C_CODE
     std::vector<const MapBoo::Layer*> _layers;
+#endif
+#ifdef JAVA_CODE
+    private final java.util.ArrayList<MapBoo.Layer> _layers;
+#endif
     std::vector<std::string>          _datasetsIDs;
     const int                         _timestamp;
 
