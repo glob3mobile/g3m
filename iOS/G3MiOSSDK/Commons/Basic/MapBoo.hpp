@@ -24,12 +24,12 @@ class MapBoo {
 public:
 
 
-  class Layer {
+  class LayerInfo {
   private:
     const std::string _type;
     const std::string _url;
 
-    Layer(const std::string& type,
+    LayerInfo(const std::string& type,
           const std::string& url) :
     _type(type),
     _url(url)
@@ -38,9 +38,9 @@ public:
 
 
   public:
-    static const MapBoo::Layer* fromJSON(const JSONBaseObject* jsonBaseObject);
+    static const MapBoo::LayerInfo* fromJSON(const JSONBaseObject* jsonBaseObject);
 
-    ~Layer();
+    ~LayerInfo();
 
     void createG3MLayer();
 
@@ -52,19 +52,19 @@ public:
     const std::string                 _id;
     const std::string                 _name;
 #ifdef C_CODE
-    std::vector<const MapBoo::Layer*> _layers;
+    std::vector<const MapBoo::LayerInfo*> _layers;
 #endif
 #ifdef JAVA_CODE
-    private final java.util.ArrayList<MapBoo.Layer> _layers;
+    private final java.util.ArrayList<MapBoo.LayerInfo> _layers;
 #endif
     std::vector<std::string>          _datasetsIDs;
     const int                         _timestamp;
 
-    Map(const std::string&                 id,
-        const std::string&                 name,
-        std::vector<const MapBoo::Layer*>& layers,
-        std::vector<std::string>&          datasetsIDs,
-        int                                timestamp) :
+    Map(const std::string&                     id,
+        const std::string&                     name,
+        std::vector<const MapBoo::LayerInfo*>& layers,
+        std::vector<std::string>&              datasetsIDs,
+        int                                    timestamp) :
     _id(id),
     _name(name),
     _layers(layers),
@@ -73,8 +73,8 @@ public:
     {
     }
 
-    static std::vector<const MapBoo::Layer*> parseLayers(const JSONArray* jsonArray);
-    static std::vector<std::string>          parseDatasetsIDs(const JSONArray* jsonArray);
+    static std::vector<const MapBoo::LayerInfo*> parseLayers(const JSONArray* jsonArray);
+    static std::vector<std::string>              parseDatasetsIDs(const JSONArray* jsonArray);
 
   public:
     static const MapBoo::Map* fromJSON(const JSONBaseObject* jsonBaseObject);
