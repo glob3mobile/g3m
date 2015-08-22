@@ -103,9 +103,7 @@ void MapBoo::MapsParserAsyncTask::runInBackground(const G3MContext* context) {
           _parseError = true;
           break;
         }
-        else {
-          _maps.push_back( map );
-        }
+        _maps.push_back( map );
       }
     }
 
