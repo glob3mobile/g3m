@@ -155,8 +155,15 @@ std::vector<const MapBoo::Layer*> MapBoo::Map::parseLayers(const JSONArray* json
 
 MapBoo::Map::~Map() {
   for (int i = 0; i < _layers.size(); i++) {
+#ifdef C_CODE
     const Layer* layer = _layers[i];
     delete layer;
+#endif
+#ifdef JAVA_CODE
+    final Layer layer = _layers.get(i);
+    if (layer != null)
+      layer.dispose();
+#endif
   }
 }
 
@@ -182,4 +189,12 @@ const MapBoo::Layer* MapBoo::Layer::fromJSON(const JSONBaseObject* jsonBaseObjec
   const std::string url  = jsonObject->getAsString("url", "");
 
   return new MapBoo::Layer(type, url);
+}
+
+MapBoo::Layer::~Layer() {
+}
+
+
+void MapBoo::Layer::createG3MLayer() {
+#warning Diego at work!
 }

@@ -40,12 +40,9 @@ public:
   public:
     static const MapBoo::Layer* fromJSON(const JSONBaseObject* jsonBaseObject);
 
-    ~Layer() {
-    }
+    ~Layer();
 
-    void createG3MLayer() {
-#warning Diego at work!
-    }
+    void createG3MLayer();
 
   };
 
