@@ -24,13 +24,13 @@ class MapBoo {
 public:
 
 
-  class LayerInfo {
+  class MBLayer {
   private:
     const std::string _type;
     const std::string _url;
 
-    LayerInfo(const std::string& type,
-              const std::string& url) :
+    MBLayer(const std::string& type,
+            const std::string& url) :
     _type(type),
     _url(url)
     {
@@ -38,33 +38,33 @@ public:
 
 
   public:
-    static const MapBoo::LayerInfo* fromJSON(const JSONBaseObject* jsonBaseObject);
+    static const MapBoo::MBLayer* fromJSON(const JSONBaseObject* jsonBaseObject);
 
-    ~LayerInfo();
+    ~MBLayer();
 
     void createG3MLayer();
 
   };
 
 
-  class Map {
+  class MBMap {
   private:
     const std::string                 _id;
     const std::string                 _name;
 #ifdef C_CODE
-    std::vector<const MapBoo::LayerInfo*> _layers;
+    std::vector<const MapBoo::MBLayer*> _layers;
 #endif
 #ifdef JAVA_CODE
-    private final java.util.ArrayList<MapBoo.LayerInfo> _layers;
+    private final java.util.ArrayList<MapBoo.MBLayer> _layers;
 #endif
     std::vector<std::string>          _datasetsIDs;
     const int                         _timestamp;
 
-    Map(const std::string&                     id,
-        const std::string&                     name,
-        std::vector<const MapBoo::LayerInfo*>& layers,
-        std::vector<std::string>&              datasetsIDs,
-        int                                    timestamp) :
+    MBMap(const std::string&                   id,
+        const std::string&                   name,
+        std::vector<const MapBoo::MBLayer*>& layers,
+        std::vector<std::string>&            datasetsIDs,
+        int                                  timestamp) :
     _id(id),
     _name(name),
     _layers(layers),
@@ -73,13 +73,13 @@ public:
     {
     }
 
-    static std::vector<const MapBoo::LayerInfo*> parseLayers(const JSONArray* jsonArray);
+    static std::vector<const MapBoo::MBLayer*> parseLayers(const JSONArray* jsonArray);
     static std::vector<std::string>              parseDatasetsIDs(const JSONArray* jsonArray);
 
   public:
-    static const MapBoo::Map* fromJSON(const JSONBaseObject* jsonBaseObject);
+    static const MapBoo::MBMap* fromJSON(const JSONBaseObject* jsonBaseObject);
 
-    ~Map();
+    ~MBMap();
   };
 
 
@@ -92,7 +92,7 @@ public:
     void dispose();
 #endif
 
-    virtual void onMaps(const std::vector<const MapBoo::Map*> maps) = 0;
+    virtual void onMaps(const std::vector<const MapBoo::MBMap*> maps) = 0;
 
     virtual void onDownloadError() = 0;
     virtual void onParseError() = 0;
@@ -105,7 +105,7 @@ public:
     bool         _deleteHandler;
     IByteBuffer* _buffer;
     bool _parseError;
-    std::vector<const Map*> _maps;
+    std::vector<const MBMap*> _maps;
 
   public:
 

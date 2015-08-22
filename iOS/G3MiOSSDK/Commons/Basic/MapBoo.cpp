@@ -78,7 +78,7 @@ MapBoo::MapsParserAsyncTask::~MapsParserAsyncTask() {
   delete _buffer;
 
   for (int i = 0; i < _maps.size(); i++) {
-    const Map* map = _maps[i];
+    const MBMap* map = _maps[i];
     delete map;
   }
 
@@ -98,7 +98,7 @@ void MapBoo::MapsParserAsyncTask::runInBackground(const G3MContext* context) {
       _parseError = false;
 
       for (int i = 0; i < jsonArray->size(); i++) {
-        const Map* map = Map::fromJSON( jsonArray->get(i) );
+        const MBMap* map = MBMap::fromJSON( jsonArray->get(i) );
         if (map == NULL) {
           _parseError = true;
           break;
@@ -121,7 +121,7 @@ void MapBoo::MapsParserAsyncTask::onPostExecute(const G3MContext* context) {
   }
 }
 
-const MapBoo::Map* MapBoo::Map::fromJSON(const JSONBaseObject* jsonBaseObject) {
+const MapBoo::MBMap* MapBoo::MBMap::fromJSON(const JSONBaseObject* jsonBaseObject) {
   if (jsonBaseObject == NULL) {
     return NULL;
   }
@@ -131,19 +131,19 @@ const MapBoo::Map* MapBoo::Map::fromJSON(const JSONBaseObject* jsonBaseObject) {
     return NULL;
   }
 
-  const std::string                 id          = jsonObject->get("id")->asString()->value();
-  const std::string                 name        = jsonObject->get("name")->asString()->value();
-  std::vector<const MapBoo::LayerInfo*> layers      = parseLayers( jsonObject->get("layerSet")->asArray() );
-  std::vector<std::string>          datasetsIDs = parseDatasetsIDs( jsonObject->get("datasets")->asArray() );
-  const int                         timestamp   = (int) jsonObject->get("timestamp")->asNumber()->value();
+  const std::string                   id          = jsonObject->get("id")->asString()->value();
+  const std::string                   name        = jsonObject->get("name")->asString()->value();
+  std::vector<const MapBoo::MBLayer*> layers      = parseLayers( jsonObject->get("layerSet")->asArray() );
+  std::vector<std::string>            datasetsIDs = parseDatasetsIDs( jsonObject->get("datasets")->asArray() );
+  const int                           timestamp   = (int) jsonObject->get("timestamp")->asNumber()->value();
 
-  return new Map(id, name, layers, datasetsIDs, timestamp);
+  return new MBMap(id, name, layers, datasetsIDs, timestamp);
 }
 
-std::vector<const MapBoo::LayerInfo*> MapBoo::Map::parseLayers(const JSONArray* jsonArray) {
-  std::vector<const MapBoo::LayerInfo*> result;
+std::vector<const MapBoo::MBLayer*> MapBoo::MBMap::parseLayers(const JSONArray* jsonArray) {
+  std::vector<const MapBoo::MBLayer*> result;
   for (int i = 0; i < jsonArray->size(); i++) {
-    const LayerInfo* layer = LayerInfo::fromJSON( jsonArray->get(i) );
+    const MBLayer* layer = MBLayer::fromJSON( jsonArray->get(i) );
     if (layer != NULL) {
       result.push_back( layer );
     }
@@ -151,21 +151,21 @@ std::vector<const MapBoo::LayerInfo*> MapBoo::Map::parseLayers(const JSONArray* 
   return result;
 }
 
-MapBoo::Map::~Map() {
+MapBoo::MBMap::~MBMap() {
   for (int i = 0; i < _layers.size(); i++) {
 #ifdef C_CODE
-    const LayerInfo* layer = _layers[i];
+    const MBLayer* layer = _layers[i];
     delete layer;
 #endif
 #ifdef JAVA_CODE
-    final LayerInfo layer = _layers.get(i);
+    final MBLayer layer = _layers.get(i);
     if (layer != null)
       layer.dispose();
 #endif
   }
 }
 
-std::vector<std::string> MapBoo::Map::parseDatasetsIDs(const JSONArray* jsonArray) {
+std::vector<std::string> MapBoo::MBMap::parseDatasetsIDs(const JSONArray* jsonArray) {
   std::vector<std::string> result;
   for (int i = 0; i < jsonArray->size(); i++) {
     result.push_back( jsonArray->get(i)->asString()->value() );
@@ -173,7 +173,7 @@ std::vector<std::string> MapBoo::Map::parseDatasetsIDs(const JSONArray* jsonArra
   return result;
 }
 
-const MapBoo::LayerInfo* MapBoo::LayerInfo::fromJSON(const JSONBaseObject* jsonBaseObject) {
+const MapBoo::MBLayer* MapBoo::MBLayer::fromJSON(const JSONBaseObject* jsonBaseObject) {
   if (jsonBaseObject == NULL) {
     return NULL;
   }
@@ -186,13 +186,13 @@ const MapBoo::LayerInfo* MapBoo::LayerInfo::fromJSON(const JSONBaseObject* jsonB
   const std::string type = jsonObject->get("type")->asString()->value();
   const std::string url  = jsonObject->getAsString("url", "");
 
-  return new MapBoo::LayerInfo(type, url);
+  return new MapBoo::MBLayer(type, url);
 }
 
-MapBoo::LayerInfo::~LayerInfo() {
+MapBoo::MBLayer::~MBLayer() {
 }
 
 
-void MapBoo::LayerInfo::createG3MLayer() {
+void MapBoo::MBLayer::createG3MLayer() {
 #warning Diego at work!
 }
