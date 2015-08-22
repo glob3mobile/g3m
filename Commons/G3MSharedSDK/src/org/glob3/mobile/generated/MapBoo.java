@@ -28,19 +28,19 @@ public class MapBoo
 
 
 
-  public abstract static class Layer
+  public static class LayerInfo
   {
     private final String _type;
     private final String _url;
 
-    private Layer(String type, String url)
+    private LayerInfo(String type, String url)
     {
        _type = type;
        _url = url;
     }
 
 
-    public static MapBoo.Layer fromJSON(JSONBaseObject jsonBaseObject)
+    public static MapBoo.LayerInfo fromJSON(JSONBaseObject jsonBaseObject)
     {
       if (jsonBaseObject == null)
       {
@@ -56,7 +56,7 @@ public class MapBoo
       final String type = jsonObject.get("type").asString().value();
       final String url = jsonObject.getAsString("url", "");
     
-      return new MapBoo.Layer(type, url);
+      return new MapBoo.LayerInfo(type, url);
     }
 
     public void dispose()
@@ -76,11 +76,11 @@ public class MapBoo
   {
     private final String _id;
     private final String _name;
-    private final java.util.ArrayList<MapBoo.Layer> _layers;
+    private final java.util.ArrayList<MapBoo.LayerInfo> _layers;
     private java.util.ArrayList<String> _datasetsIDs = new java.util.ArrayList<String>();
     private final int _timestamp;
 
-    private Map(String id, String name, java.util.ArrayList<MapBoo.Layer> layers, java.util.ArrayList<String> datasetsIDs, int timestamp)
+    private Map(String id, String name, java.util.ArrayList<MapBoo.LayerInfo> layers, java.util.ArrayList<String> datasetsIDs, int timestamp)
     {
        _id = id;
        _name = name;
@@ -89,12 +89,12 @@ public class MapBoo
        _timestamp = timestamp;
     }
 
-    private static java.util.ArrayList<MapBoo.Layer> parseLayers(JSONArray jsonArray)
+    private static java.util.ArrayList<MapBoo.LayerInfo> parseLayers(JSONArray jsonArray)
     {
-      final java.util.ArrayList<MapBoo.Layer> result = new java.util.ArrayList<MapBoo.Layer>();
+      final java.util.ArrayList<MapBoo.LayerInfo> result = new java.util.ArrayList<MapBoo.LayerInfo>();
       for (int i = 0; i < jsonArray.size(); i++)
       {
-        final Layer layer = Layer.fromJSON(jsonArray.get(i));
+        final LayerInfo layer = LayerInfo.fromJSON(jsonArray.get(i));
         if (layer != null)
         {
           result.add(layer);
@@ -127,7 +127,7 @@ public class MapBoo
     
       final String id = jsonObject.get("id").asString().value();
       final String name = jsonObject.get("name").asString().value();
-      final java.util.ArrayList<MapBoo.Layer> layers = parseLayers(jsonObject.get("layerSet").asArray());
+      final java.util.ArrayList<MapBoo.LayerInfo> layers = parseLayers(jsonObject.get("layerSet").asArray());
       java.util.ArrayList<String> datasetsIDs = parseDatasetsIDs(jsonObject.get("datasets").asArray());
       final int timestamp = (int) jsonObject.get("timestamp").asNumber().value();
     
@@ -138,7 +138,7 @@ public class MapBoo
     {
       for (int i = 0; i < _layers.size(); i++)
       {
-        final Layer layer = _layers.get(i);
+        final LayerInfo layer = _layers.get(i);
         if (layer != null)
           layer.dispose();
       }
@@ -216,10 +216,7 @@ public class MapBoo
               _parseError = true;
               break;
             }
-            else
-            {
-              _maps.add(map);
-            }
+            _maps.add(map);
           }
         }
     
