@@ -28,19 +28,19 @@ public class MapBoo
 
 
 
-  public static class LayerInfo
+  public static class MBLayer
   {
     private final String _type;
     private final String _url;
 
-    private LayerInfo(String type, String url)
+    private MBLayer(String type, String url)
     {
        _type = type;
        _url = url;
     }
 
 
-    public static MapBoo.LayerInfo fromJSON(JSONBaseObject jsonBaseObject)
+    public static MapBoo.MBLayer fromJSON(JSONBaseObject jsonBaseObject)
     {
       if (jsonBaseObject == null)
       {
@@ -56,7 +56,7 @@ public class MapBoo
       final String type = jsonObject.get("type").asString().value();
       final String url = jsonObject.getAsString("url", "");
     
-      return new MapBoo.LayerInfo(type, url);
+      return new MapBoo.MBLayer(type, url);
     }
 
     public void dispose()
@@ -72,15 +72,15 @@ public class MapBoo
   }
 
 
-  public static class Map
+  public static class MBMap
   {
     private final String _id;
     private final String _name;
-    private final java.util.ArrayList<MapBoo.LayerInfo> _layers;
+    private final java.util.ArrayList<MapBoo.MBLayer> _layers;
     private java.util.ArrayList<String> _datasetsIDs = new java.util.ArrayList<String>();
     private final int _timestamp;
 
-    private Map(String id, String name, java.util.ArrayList<MapBoo.LayerInfo> layers, java.util.ArrayList<String> datasetsIDs, int timestamp)
+    private MBMap(String id, String name, java.util.ArrayList<MapBoo.MBLayer> layers, java.util.ArrayList<String> datasetsIDs, int timestamp)
     {
        _id = id;
        _name = name;
@@ -89,12 +89,12 @@ public class MapBoo
        _timestamp = timestamp;
     }
 
-    private static java.util.ArrayList<MapBoo.LayerInfo> parseLayers(JSONArray jsonArray)
+    private static java.util.ArrayList<MapBoo.MBLayer> parseLayers(JSONArray jsonArray)
     {
-      final java.util.ArrayList<MapBoo.LayerInfo> result = new java.util.ArrayList<MapBoo.LayerInfo>();
+      final java.util.ArrayList<MapBoo.MBLayer> result = new java.util.ArrayList<MapBoo.MBLayer>();
       for (int i = 0; i < jsonArray.size(); i++)
       {
-        final LayerInfo layer = LayerInfo.fromJSON(jsonArray.get(i));
+        final MBLayer layer = MBLayer.fromJSON(jsonArray.get(i));
         if (layer != null)
         {
           result.add(layer);
@@ -112,7 +112,7 @@ public class MapBoo
       return result;
     }
 
-    public static MapBoo.Map fromJSON(JSONBaseObject jsonBaseObject)
+    public static MapBoo.MBMap fromJSON(JSONBaseObject jsonBaseObject)
     {
       if (jsonBaseObject == null)
       {
@@ -127,18 +127,18 @@ public class MapBoo
     
       final String id = jsonObject.get("id").asString().value();
       final String name = jsonObject.get("name").asString().value();
-      final java.util.ArrayList<MapBoo.LayerInfo> layers = parseLayers(jsonObject.get("layerSet").asArray());
+      final java.util.ArrayList<MapBoo.MBLayer> layers = parseLayers(jsonObject.get("layerSet").asArray());
       java.util.ArrayList<String> datasetsIDs = parseDatasetsIDs(jsonObject.get("datasets").asArray());
       final int timestamp = (int) jsonObject.get("timestamp").asNumber().value();
     
-      return new Map(id, name, layers, datasetsIDs, timestamp);
+      return new MBMap(id, name, layers, datasetsIDs, timestamp);
     }
 
     public void dispose()
     {
       for (int i = 0; i < _layers.size(); i++)
       {
-        final LayerInfo layer = _layers.get(i);
+        final MBLayer layer = _layers.get(i);
         if (layer != null)
           layer.dispose();
       }
@@ -150,7 +150,7 @@ public class MapBoo
   {
     void dispose();
 
-    void onMaps(java.util.ArrayList<MapBoo.Map> maps);
+    void onMaps(java.util.ArrayList<MapBoo.MBMap> maps);
 
     void onDownloadError();
     void onParseError();
@@ -163,7 +163,7 @@ public class MapBoo
     private boolean _deleteHandler;
     private IByteBuffer _buffer;
     private boolean _parseError;
-    private final java.util.ArrayList<Map> _maps = new java.util.ArrayList<Map>();
+    private final java.util.ArrayList<MBMap> _maps = new java.util.ArrayList<MBMap>();
 
 
     public MapsParserAsyncTask(MapsHandler handler, boolean deleteHandler, IByteBuffer buffer)
@@ -181,7 +181,7 @@ public class MapBoo
     
       for (int i = 0; i < _maps.size(); i++)
       {
-        final Map map = _maps.get(i);
+        final MBMap map = _maps.get(i);
         if (map != null)
            map.dispose();
       }
@@ -210,7 +210,7 @@ public class MapBoo
     
           for (int i = 0; i < jsonArray.size(); i++)
           {
-            final Map map = Map.fromJSON(jsonArray.get(i));
+            final MBMap map = MBMap.fromJSON(jsonArray.get(i));
             if (map == null)
             {
               _parseError = true;
