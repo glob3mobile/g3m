@@ -39,6 +39,7 @@ public class MapBoo
        _url = url;
     }
 
+
     public static MapBoo.Layer fromJSON(JSONBaseObject jsonBaseObject)
     {
       if (jsonBaseObject == null)
@@ -56,6 +57,11 @@ public class MapBoo
       final String url = jsonObject.getAsString("url", "");
     
       return new MapBoo.Layer(type, url);
+    }
+
+    public void dispose()
+    {
+
     }
 
   }
