@@ -20,7 +20,11 @@ private:
                                            const std::string& path) {
     const IStringUtils* iu = IStringUtils::instance();
 
-    std::string result = iu->replaceAll(parent._path + "/" + path, "//", "/");
+    std::string result = parent._path + "/" + path;
+    while (iu->indexOf(result, "//") >= 0) {
+      result = iu->replaceAll(result, "//", "/");
+    }
+
     if (iu->beginsWith(result, "http:/")) {
 #ifdef C_CODE
       result = "http://" + iu->substring(result, 6);
