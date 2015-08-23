@@ -12,13 +12,13 @@
 #include "URL.hpp"
 #include "IBufferDownloadListener.hpp"
 #include "IThreadUtils.hpp"
+#include "VectorStreamingRenderer.hpp"
 
 class IG3MBuilder;
 class LayerSet;
 class IDownloader;
 class JSONBaseObject;
 class JSONArray;
-class VectorStreamingRenderer;
 class MarksRenderer;
 
 
@@ -75,6 +75,10 @@ public:
     {
     }
 
+    const std::string  createMarkLabel(const JSONObject* properties) const;
+    MarkTouchListener* createMarkTouchListener(const JSONObject* properties) const;
+
+
   public:
     static MapBoo::MBDataset* fromJSON(const JSONBaseObject* jsonBaseObject);
 
@@ -83,8 +87,25 @@ public:
     void apply(const URL&               serverURL,
                VectorStreamingRenderer* vectorStreamingRenderer) const;
 
+    Mark* createMark(const GEO2DPointGeometry* geometry) const;
+
   };
 
+
+  class MBDatasetVectorSetSymbolizer : public VectorStreamingRenderer::VectorSetSymbolizer {
+  private:
+    const MBDataset* _dataset;
+
+  public:
+    MBDatasetVectorSetSymbolizer(const MBDataset* dataset) :
+    _dataset(dataset)
+    {
+    }
+
+    Mark* createMark(const GEO2DPointGeometry* geometry) const {
+      return _dataset->createMark( geometry );
+    }
+  };
 
 
   class MBMap {

@@ -181,3 +181,37 @@ std::vector<std::string> JSONArray::asStringVector() const {
   }
   return result;
 }
+
+const std::string JSONArray::toString() const {
+  IStringBuilder* isb = IStringBuilder::newStringBuilder();
+
+  const size_t size = this->size();
+
+  isb->addString("[");
+
+  if (size > 0) {
+    isb->addString((this->get(0) == NULL) ? "null" : this->get(0)->toString());
+
+    if (size <= 10) {
+      for (size_t i = 1; i < size; i++) {
+        isb->addString(", ");
+        isb->addString((this->get(i) == NULL) ? "null" : this->get(i)->toString());
+      }
+    }
+    else {
+      for (size_t i = 1; i < 10; i++) {
+        isb->addString(", ");
+        isb->addString((this->get(i) == NULL) ? "null" : this->get(i)->toString());
+      }
+      isb->addString(", ...");
+      isb->addString(" size=");
+      isb->addLong(size);
+    }
+  }
+
+  isb->addString("]");
+
+  const std::string s = isb->getString();
+  delete isb;
+  return s;
+}

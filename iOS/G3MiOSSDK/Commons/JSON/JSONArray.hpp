@@ -54,6 +54,7 @@ public:
   void add(bool value);
 
   const std::string description() const;
+  const std::string toString() const;
 
   JSONArray* deepCopy() const;
 

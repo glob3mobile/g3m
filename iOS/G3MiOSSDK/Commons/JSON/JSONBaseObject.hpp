@@ -52,6 +52,8 @@ public:
 
   virtual void acceptVisitor(JSONVisitor* visitor) const = 0;
 
+  virtual const std::string toString() const = 0;
+
 };
 
 #endif

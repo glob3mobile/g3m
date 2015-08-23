@@ -18,12 +18,11 @@
 #include "JSONString.hpp"
 #include "JSONNumber.hpp"
 #include "URLTemplateLayer.hpp"
-#include "VectorStreamingRenderer.hpp"
 #include "MarksRenderer.hpp"
 #include "GEOFeature.hpp"
 #include "GEO2DPointGeometry.hpp"
 #include "Mark.hpp"
-
+#include "IStringBuilder.hpp"
 
 MapBoo::MapBoo(IG3MBuilder* builder,
                const URL&   serverURL,
@@ -367,33 +366,33 @@ MapBoo::MBDataset::~MBDataset() {
 }
 
 
-class XXXVectorSetSymbolizer : public VectorStreamingRenderer::VectorSetSymbolizer {
-public:
-  Mark* createMark(const GEO2DPointGeometry* geometry) const {
-    const GEOFeature* feature = geometry->getFeature();
-
-    const JSONObject* properties = feature->getProperties();
-
-    const std::string label = properties->getAsString("name")->value();
-    const Geodetic3D  position( geometry->getPosition(), 0);
-
-    //    double maxPopulation = 22315474;
-    //    double population = properties->getAsNumber("population")->value();
-    //    float labelFontSize = (float) (14.0 * (population / maxPopulation) + 16.0) ;
-
-    float labelFontSize = 18;
-
-    Mark* mark = new Mark(label,
-                          position,
-                          ABSOLUTE,
-                          0, // minDistanceToCamera
-                          labelFontSize
-                          // Color::newFromRGBA(1, 1, 0, 1)
-                          );
-    mark->setZoomInAppears(true);
-    return mark;
-  }
-};
+//class XXXVectorSetSymbolizer : public VectorStreamingRenderer::VectorSetSymbolizer {
+//public:
+//  Mark* createMark(const GEO2DPointGeometry* geometry) const {
+//    const GEOFeature* feature = geometry->getFeature();
+//
+//    const JSONObject* properties = feature->getProperties();
+//
+//    const std::string label = properties->getAsString("name")->value();
+//    const Geodetic3D  position( geometry->getPosition(), 0);
+//
+//    //    double maxPopulation = 22315474;
+//    //    double population = properties->getAsNumber("population")->value();
+//    //    float labelFontSize = (float) (14.0 * (population / maxPopulation) + 16.0) ;
+//
+//    float labelFontSize = 18;
+//
+//    Mark* mark = new Mark(label,
+//                          position,
+//                          ABSOLUTE,
+//                          0, // minDistanceToCamera
+//                          labelFontSize
+//                          // Color::newFromRGBA(1, 1, 0, 1)
+//                          );
+//    mark->setZoomInAppears(true);
+//    return mark;
+//  }
+//};
 
 
 void MapBoo::MBDataset::apply(const URL&               serverURL,
@@ -409,7 +408,7 @@ void MapBoo::MBDataset::apply(const URL&               serverURL,
   vectorStreamingRenderer->addVectorSet(URL(serverURL, "/public/VectorialStreaming/"),
                                         _id,
                                         properties,
-                                        new XXXVectorSetSymbolizer(),
+                                        new MBDatasetVectorSetSymbolizer(this),
                                         true,  // deleteSymbolizer
                                         DownloadPriority::HIGHER,
                                         TimeInterval::zero(),
@@ -417,4 +416,58 @@ void MapBoo::MBDataset::apply(const URL&               serverURL,
                                         true,  // verbose
                                         false  // haltOnError
                                         );
+}
+
+
+const std::string MapBoo::MBDataset::createMarkLabel(const JSONObject* properties) const {
+  const size_t size = _labelingCriteria.size();
+  if (size == 0) {
+    return "<label>";
+  }
+  else if (size == 1) {
+    return properties->get( _labelingCriteria[0] )->toString();
+  }
+  else {
+    IStringBuilder* labelBuilder = IStringBuilder::newStringBuilder();
+    for (int i = 0; i < _labelingCriteria.size(); i++) {
+      if (i > 0) {
+        labelBuilder->addString(" ");
+      }
+      const std::string value = properties->get( _labelingCriteria[i] )->toString();
+      labelBuilder->addString( value );
+    }
+
+    const std::string label = labelBuilder->getString();
+    delete labelBuilder;
+    labelBuilder = NULL;
+    return label;
+  }
+}
+
+MarkTouchListener* MapBoo::MBDataset::createMarkTouchListener(const JSONObject* properties) const {
+  const size_t size = _infoCriteria.size();
+  if (size == 0) {
+    return NULL;
+  }
+#warning Diego at work!
+  return NULL;
+}
+
+Mark* MapBoo::MBDataset::createMark(const GEO2DPointGeometry* geometry) const {
+  const GEOFeature* feature = geometry->getFeature();
+  const JSONObject* properties = feature->getProperties();
+  const Geodetic3D  position( geometry->getPosition(), 0);
+
+  return new Mark(createMarkLabel(properties),
+                  position,
+                  ABSOLUTE,
+                  0,                                    // minDistanceToCamera
+                  18,                                   // labelFontSize
+                  Color::newFromRGBA(1, 1, 1, 1),       // labelFontColor
+                  Color::newFromRGBA(0, 0, 0, 1),       // labelShadowColor
+                  NULL,                                 // userData
+                  true,                                 // autoDeleteUserData
+                  createMarkTouchListener(properties),  // MarkTouchListener*
+                  true                                  // autoDeleteListener
+                  );
 }
