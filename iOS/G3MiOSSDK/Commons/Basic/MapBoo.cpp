@@ -254,6 +254,7 @@ void MapBoo::setMap(MapBoo::MBMap* map) {
 
 void MapBoo::applyMap(MapBoo::MBMap* map) {
   // clean current map
+//  _markRenderer->removeAllMarks();
   _vectorStreamingRenderer->removeAllVectorSets();
   _layerSet->removeAllLayers(true);
 
