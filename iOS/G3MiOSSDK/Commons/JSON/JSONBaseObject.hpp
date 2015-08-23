@@ -28,6 +28,10 @@ public:
     return (object == NULL) ? NULL : object->deepCopy();
   }
 
+  static const std::string toString(const JSONBaseObject* object) {
+    return (object == NULL) ? "null" : object->toString();
+  }
+
   virtual ~JSONBaseObject() {
   }
 

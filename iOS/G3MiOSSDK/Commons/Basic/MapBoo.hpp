@@ -27,7 +27,7 @@ class MapBoo {
 public:
 
 
-  class MBLayer {
+  class MBLayer : public RCObject {
   private:
     const std::string _type;
     const std::string _url;
@@ -52,7 +52,7 @@ public:
 
 
 
-  class MBDataset {
+  class MBDataset : public RCObject {
   private:
     const std::string        _id;
     const std::string        _name;
@@ -78,11 +78,12 @@ public:
     const std::string  createMarkLabel(const JSONObject* properties) const;
     MarkTouchListener* createMarkTouchListener(const JSONObject* properties) const;
 
+  protected:
+    ~MBDataset();
 
   public:
     static MapBoo::MBDataset* fromJSON(const JSONBaseObject* jsonBaseObject);
 
-    ~MBDataset();
 
     void apply(const URL&               serverURL,
                VectorStreamingRenderer* vectorStreamingRenderer) const;
@@ -100,6 +101,11 @@ public:
     MBDatasetVectorSetSymbolizer(const MBDataset* dataset) :
     _dataset(dataset)
     {
+      _dataset->_retain();
+    }
+
+    ~MBDatasetVectorSetSymbolizer() {
+      _dataset->_release();
     }
 
     Mark* createMark(const GEO2DPointGeometry* geometry) const {
@@ -133,6 +139,7 @@ public:
 
     static std::vector<MapBoo::MBLayer*>   parseLayers(const JSONArray* jsonArray);
     static std::vector<MapBoo::MBDataset*> parseDatasets(const JSONArray* jsonArray);
+
 
   public:
     static MapBoo::MBMap* fromJSON(const JSONBaseObject* jsonBaseObject);

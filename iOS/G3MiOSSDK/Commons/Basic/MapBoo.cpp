@@ -170,7 +170,7 @@ std::vector<MapBoo::MBLayer*> MapBoo::MBMap::parseLayers(const JSONArray* jsonAr
 MapBoo::MBMap::~MBMap() {
   for (int i = 0; i < _datasets.size(); i++) {
     MBDataset* dataset = _datasets[i];
-    delete dataset;
+    dataset->_release();
   }
 
   for (int i = 0; i < _layers.size(); i++) {
@@ -362,38 +362,10 @@ MapBoo::MBDataset* MapBoo::MBDataset::fromJSON(const JSONBaseObject* jsonBaseObj
 }
 
 MapBoo::MBDataset::~MBDataset() {
-
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
 }
-
-
-//class XXXVectorSetSymbolizer : public VectorStreamingRenderer::VectorSetSymbolizer {
-//public:
-//  Mark* createMark(const GEO2DPointGeometry* geometry) const {
-//    const GEOFeature* feature = geometry->getFeature();
-//
-//    const JSONObject* properties = feature->getProperties();
-//
-//    const std::string label = properties->getAsString("name")->value();
-//    const Geodetic3D  position( geometry->getPosition(), 0);
-//
-//    //    double maxPopulation = 22315474;
-//    //    double population = properties->getAsNumber("population")->value();
-//    //    float labelFontSize = (float) (14.0 * (population / maxPopulation) + 16.0) ;
-//
-//    float labelFontSize = 18;
-//
-//    Mark* mark = new Mark(label,
-//                          position,
-//                          ABSOLUTE,
-//                          0, // minDistanceToCamera
-//                          labelFontSize
-//                          // Color::newFromRGBA(1, 1, 0, 1)
-//                          );
-//    mark->setZoomInAppears(true);
-//    return mark;
-//  }
-//};
-
 
 void MapBoo::MBDataset::apply(const URL&               serverURL,
                               VectorStreamingRenderer* vectorStreamingRenderer) const {
@@ -421,11 +393,12 @@ void MapBoo::MBDataset::apply(const URL&               serverURL,
 
 const std::string MapBoo::MBDataset::createMarkLabel(const JSONObject* properties) const {
   const size_t size = _labelingCriteria.size();
+  std::string label;
   if (size == 0) {
-    return "<label>";
+    label = "<label>";
   }
   else if (size == 1) {
-    return properties->get( _labelingCriteria[0] )->toString();
+    label = JSONBaseObject::toString( properties->get(_labelingCriteria[0]) );
   }
   else {
     IStringBuilder* labelBuilder = IStringBuilder::newStringBuilder();
@@ -433,24 +406,27 @@ const std::string MapBoo::MBDataset::createMarkLabel(const JSONObject* propertie
       if (i > 0) {
         labelBuilder->addString(" ");
       }
-      const std::string value = properties->get( _labelingCriteria[i] )->toString();
+      const std::string value = JSONBaseObject::toString( properties->get(_labelingCriteria[i]) );
       labelBuilder->addString( value );
     }
 
-    const std::string label = labelBuilder->getString();
+    label = labelBuilder->getString();
     delete labelBuilder;
     labelBuilder = NULL;
-    return label;
   }
+//  delete properties;
+  return label;
 }
 
 MarkTouchListener* MapBoo::MBDataset::createMarkTouchListener(const JSONObject* properties) const {
+  MarkTouchListener* result = NULL;
   const size_t size = _infoCriteria.size();
-  if (size == 0) {
-    return NULL;
-  }
+  if (size > 0) {
 #warning Diego at work!
-  return NULL;
+  }
+
+//  delete properties;
+  return result;
 }
 
 Mark* MapBoo::MBDataset::createMark(const GEO2DPointGeometry* geometry) const {

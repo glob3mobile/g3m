@@ -8,6 +8,7 @@ import static com.glob3mobile.server.rest.ErrorCodes.NOT_FOUND;
 import static javax.servlet.http.HttpServletResponse.SC_OK;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -54,10 +55,10 @@ public abstract class AbstractVectorialStreamingRESTProcessor
    }
 
 
-   protected abstract File getDirectoryFor(String lodName);
+   protected abstract File getDirectoryFor(String lodName) throws FileNotFoundException;
 
 
-   private File directoryFor(final String lodName) throws ServletException {
+   private File directoryFor(final String lodName) throws ServletException, FileNotFoundException {
       final File dir = getDirectoryFor(lodName);
       validateDirectory(dir);
       return dir;
