@@ -20,6 +20,10 @@
 #include "URLTemplateLayer.hpp"
 #include "VectorStreamingRenderer.hpp"
 #include "MarksRenderer.hpp"
+#include "GEOFeature.hpp"
+#include "GEO2DPointGeometry.hpp"
+#include "Mark.hpp"
+
 
 MapBoo::MapBoo(IG3MBuilder* builder,
                const URL&   serverURL,
@@ -144,13 +148,13 @@ MapBoo::MBMap* MapBoo::MBMap::fromJSON(const JSONBaseObject* jsonBaseObject) {
     return NULL;
   }
 
-  const std::string             id          = jsonObject->get("id")->asString()->value();
-  const std::string             name        = jsonObject->get("name")->asString()->value();
-  std::vector<MapBoo::MBLayer*> layers      = parseLayers( jsonObject->get("layerSet")->asArray() );
-  std::vector<std::string>      datasetsIDs = parseDatasetsIDs( jsonObject->get("datasets")->asArray() );
-  const int                     timestamp   = (int) jsonObject->get("timestamp")->asNumber()->value();
+  const std::string               id        = jsonObject->get("id")->asString()->value();
+  const std::string               name      = jsonObject->get("name")->asString()->value();
+  std::vector<MapBoo::MBLayer*>   layers    = parseLayers( jsonObject->get("layerSet")->asArray() );
+  std::vector<MapBoo::MBDataset*> datasets  = parseDatasets( jsonObject->get("datasets")->asArray() );
+  const int                       timestamp = (int) jsonObject->get("timestamp")->asNumber()->value();
 
-  return new MBMap(id, name, layers, datasetsIDs, timestamp);
+  return new MBMap(id, name, layers, datasets, timestamp);
 }
 
 std::vector<MapBoo::MBLayer*> MapBoo::MBMap::parseLayers(const JSONArray* jsonArray) {
@@ -165,23 +169,24 @@ std::vector<MapBoo::MBLayer*> MapBoo::MBMap::parseLayers(const JSONArray* jsonAr
 }
 
 MapBoo::MBMap::~MBMap() {
+  for (int i = 0; i < _datasets.size(); i++) {
+    MBDataset* dataset = _datasets[i];
+    delete dataset;
+  }
+
   for (int i = 0; i < _layers.size(); i++) {
-#ifdef C_CODE
     MBLayer* layer = _layers[i];
     delete layer;
-#endif
-#ifdef JAVA_CODE
-    final MBLayer layer = _layers.get(i);
-    if (layer != null)
-      layer.dispose();
-#endif
   }
 }
 
-std::vector<std::string> MapBoo::MBMap::parseDatasetsIDs(const JSONArray* jsonArray) {
-  std::vector<std::string> result;
+std::vector<MapBoo::MBDataset*> MapBoo::MBMap::parseDatasets(const JSONArray* jsonArray) {
+  std::vector<MapBoo::MBDataset*> result;
   for (int i = 0; i < jsonArray->size(); i++) {
-    result.push_back( jsonArray->get(i)->asString()->value() );
+    MBDataset* dataset = MBDataset::fromJSON( jsonArray->get(i) );
+    if (dataset != NULL) {
+      result.push_back( dataset );
+    }
   }
   return result;
 }
@@ -206,7 +211,7 @@ MapBoo::MBLayer::~MBLayer() {
 }
 
 
-void MapBoo::MBLayer::apply(LayerSet* layerSet) {
+void MapBoo::MBLayer::apply(LayerSet* layerSet) const {
   if (_type == "URLTemplate") {
     URLTemplateLayer* layer = URLTemplateLayer::newMercator(_url,
                                                             Sector::fullSphere(),
@@ -249,22 +254,11 @@ void MapBoo::setMap(MapBoo::MBMap* map) {
 }
 
 void MapBoo::applyMap(MapBoo::MBMap* map) {
-  //  renderer->addVectorSet(URL("http://192.168.1.12:8080/server-mapboo/public/VectorialStreaming/"),
-  //                         "GEONames-PopulatedPlaces_LOD",
-  //                         new G3MVectorStreamingDemoScene_Symbolizer(),
-  //                         true, // deleteSymbolizer
-  //                         //DownloadPriority::LOWER,
-  //                         DownloadPriority::HIGHER,
-  //                         TimeInterval::zero(),
-  //                         true, // readExpired
-  //                         true // verbose
-  //                         );
-
   // clean current map
   _vectorStreamingRenderer->removeAllVectorSets();
   _layerSet->removeAllLayers(true);
 
-  map->apply(_layerSet, _vectorStreamingRenderer);
+  map->apply(_serverURL, _layerSet, _vectorStreamingRenderer);
 
   // just in case nobody put a layer
   if (_layerSet->size() == 0) {
@@ -278,20 +272,18 @@ void MapBoo::applyMap(MapBoo::MBMap* map) {
   delete map;
 }
 
-void MapBoo::MBMap::apply(LayerSet*                layerSet,
+
+void MapBoo::MBMap::apply(const URL&               serverURL,
+                          LayerSet*                layerSet,
                           VectorStreamingRenderer* vectorStreamingRenderer) {
   for (int i = 0; i < _layers.size(); i++) {
-#ifdef C_CODE
     MBLayer* layer = _layers[i];
-#endif
-#ifdef JAVA_CODE
-    final MBLayer layer = _layers.get(i);
-#endif
     layer->apply(layerSet);
   }
 
-  for (int i = 0; i < _datasetsIDs.size(); i++) {
-    const std::string datasetID = _datasetsIDs[i];
+  for (int i = 0; i < _datasets.size(); i++) {
+    MBDataset* dataset = _datasets[i];
+    dataset->apply(serverURL, vectorStreamingRenderer);
   }
 }
 
@@ -345,4 +337,84 @@ void MapBoo::onMapParseError() {
 
 void MapBoo::onMap(MapBoo::MBMap* map) {
   applyMap(map);
+}
+
+MapBoo::MBDataset* MapBoo::MBDataset::fromJSON(const JSONBaseObject* jsonBaseObject) {
+  if (jsonBaseObject == NULL) {
+    return NULL;
+  }
+
+  const JSONObject* jsonObject = jsonBaseObject->asObject();
+  if (jsonObject == NULL) {
+    return NULL;
+  }
+
+  const std::string        id               = jsonObject->get("id")->asString()->value();
+  const std::string        name             = jsonObject->get("name")->asString()->value();
+  std::vector<std::string> labelingCriteria = jsonObject->getAsArray("labelingCriteria")->asStringVector();
+  std::vector<std::string> infoCriteria     = jsonObject->getAsArray("infoCriteria")->asStringVector();
+  const int                timestamp        = (int) jsonObject->get("timestamp")->asNumber()->value();
+
+  return new MBDataset(id,
+                       name,
+                       labelingCriteria,
+                       infoCriteria,
+                       timestamp);
+}
+
+MapBoo::MBDataset::~MBDataset() {
+
+}
+
+
+class XXXVectorSetSymbolizer : public VectorStreamingRenderer::VectorSetSymbolizer {
+public:
+  Mark* createMark(const GEO2DPointGeometry* geometry) const {
+    const GEOFeature* feature = geometry->getFeature();
+
+    const JSONObject* properties = feature->getProperties();
+
+    const std::string label = properties->getAsString("name")->value();
+    const Geodetic3D  position( geometry->getPosition(), 0);
+
+    //    double maxPopulation = 22315474;
+    //    double population = properties->getAsNumber("population")->value();
+    //    float labelFontSize = (float) (14.0 * (population / maxPopulation) + 16.0) ;
+
+    float labelFontSize = 18;
+
+    Mark* mark = new Mark(label,
+                          position,
+                          ABSOLUTE,
+                          0, // minDistanceToCamera
+                          labelFontSize
+                          // Color::newFromRGBA(1, 1, 0, 1)
+                          );
+    mark->setZoomInAppears(true);
+    return mark;
+  }
+};
+
+
+void MapBoo::MBDataset::apply(const URL&               serverURL,
+                              VectorStreamingRenderer* vectorStreamingRenderer) const {
+  std::string properties = "";
+  for (int i = 0; i < _labelingCriteria.size(); i++) {
+    properties += _labelingCriteria[i] + "|";
+  }
+  for (int i = 0; i < _infoCriteria.size(); i++) {
+    properties += _infoCriteria[i] + "|";
+  }
+
+  vectorStreamingRenderer->addVectorSet(URL(serverURL, "/public/VectorialStreaming/"),
+                                        _id,
+                                        properties,
+                                        new XXXVectorSetSymbolizer(),
+                                        true,  // deleteSymbolizer
+                                        DownloadPriority::HIGHER,
+                                        TimeInterval::zero(),
+                                        true,  // readExpired
+                                        true,  // verbose
+                                        false  // haltOnError
+                                        );
 }

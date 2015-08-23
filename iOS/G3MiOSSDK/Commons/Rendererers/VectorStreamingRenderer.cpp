@@ -725,16 +725,18 @@ void VectorStreamingRenderer::VectorSet::initialize(const G3MContext* context) {
 }
 
 RenderState VectorStreamingRenderer::VectorSet::getRenderState(const G3MRenderContext* rc) {
-  if (_downloadingMetadata) {
-    return RenderState::busy();
-  }
+  if (_haltOnError) {
+    if (_downloadingMetadata) {
+      return RenderState::busy();
+    }
 
-  if (_errorDownloadingMetadata) {
-    return RenderState::error("Error downloading metadata of \"" + _name + "\" from \"" + _serverURL.getPath() + "\"");
-  }
+    if (_errorDownloadingMetadata) {
+      return RenderState::error("Error downloading metadata of \"" + _name + "\" from \"" + _serverURL.getPath() + "\"");
+    }
 
-  if (_errorParsingMetadata) {
-    return RenderState::error("Error parsing metadata of \"" + _name + "\" from \"" + _serverURL.getPath() + "\"");
+    if (_errorParsingMetadata) {
+      return RenderState::error("Error parsing metadata of \"" + _name + "\" from \"" + _serverURL.getPath() + "\"");
+    }
   }
 
   return RenderState::ready();
@@ -860,22 +862,25 @@ RenderState VectorStreamingRenderer::getRenderState(const G3MRenderContext* rc) 
 
 void VectorStreamingRenderer::addVectorSet(const URL&                 serverURL,
                                            const std::string&         name,
+                                           const std::string&         properties,
                                            const VectorSetSymbolizer* symbolizer,
                                            const bool                 deleteSymbolizer,
                                            long long                  downloadPriority,
                                            const TimeInterval&        timeToCache,
                                            bool                       readExpired,
-                                           bool                       verbose) {
+                                           bool                       verbose,
+                                           bool                       haltOnError) {
   VectorSet* vectorSet = new VectorSet(this,
                                        serverURL,
                                        name,
+                                       properties,
                                        symbolizer,
-                                       "name|population|featureClass|featureCode",
                                        deleteSymbolizer,
                                        downloadPriority,
                                        timeToCache,
                                        readExpired,
-                                       verbose);
+                                       verbose,
+                                       haltOnError);
   if (_context != NULL) {
     vectorSet->initialize(_context);
   }

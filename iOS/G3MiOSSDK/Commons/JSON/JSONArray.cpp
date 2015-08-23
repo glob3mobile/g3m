@@ -171,3 +171,13 @@ void JSONArray::acceptVisitor(JSONVisitor* visitor) const {
 
   visitor->visitArrayAfterChildren(this);
 }
+
+
+std::vector<std::string> JSONArray::asStringVector() const {
+  std::vector<std::string> result;
+  const size_t size = this->size();
+  for (size_t i = 0; i < size; i++) {
+    result.push_back( getAsString(i)->value() );
+  }
+  return result;
+}

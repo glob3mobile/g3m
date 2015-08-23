@@ -39,45 +39,79 @@ public:
     {
     }
 
+    MBLayer(const MBLayer& that);
 
   public:
     static MapBoo::MBLayer* fromJSON(const JSONBaseObject* jsonBaseObject);
 
     ~MBLayer();
 
-    void apply(LayerSet* layerSet);
+    void apply(LayerSet* layerSet) const;
 
   };
 
 
-  class MBMap {
-  private:
-    const std::string                 _id;
-    const std::string                 _name;
-#ifdef C_CODE
-    std::vector<MapBoo::MBLayer*> _layers;
-#endif
-#ifdef JAVA_CODE
-    private final java.util.ArrayList<MapBoo.MBLayer> _layers;
-#endif
-    std::vector<std::string>          _datasetsIDs;
-    const int                         _timestamp;
 
-    MBMap(const std::string&             id,
-          const std::string&             name,
-          std::vector<MapBoo::MBLayer*>& layers,
-          std::vector<std::string>&      datasetsIDs,
-          int                            timestamp) :
+  class MBDataset {
+  private:
+    const std::string        _id;
+    const std::string        _name;
+    std::vector<std::string> _labelingCriteria;
+    std::vector<std::string> _infoCriteria;
+    const int                _timestamp;
+
+    MBDataset(const MBDataset& that);
+
+    MBDataset(const std::string&        id,
+              const std::string&        name,
+              std::vector<std::string>& labelingCriteria,
+              std::vector<std::string>& infoCriteria,
+              const int                 timestamp) :
     _id(id),
     _name(name),
-    _layers(layers),
-    _datasetsIDs(datasetsIDs),
+    _labelingCriteria(labelingCriteria),
+    _infoCriteria(infoCriteria),
     _timestamp(timestamp)
     {
     }
 
-    static std::vector<MapBoo::MBLayer*> parseLayers(const JSONArray* jsonArray);
-    static std::vector<std::string>      parseDatasetsIDs(const JSONArray* jsonArray);
+  public:
+    static MapBoo::MBDataset* fromJSON(const JSONBaseObject* jsonBaseObject);
+
+    ~MBDataset();
+
+    void apply(const URL&               serverURL,
+               VectorStreamingRenderer* vectorStreamingRenderer) const;
+
+  };
+
+
+
+  class MBMap {
+  private:
+    const std::string               _id;
+    const std::string               _name;
+    std::vector<MapBoo::MBLayer*>   _layers;
+    std::vector<MapBoo::MBDataset*> _datasets;
+    const int                       _timestamp;
+
+    MBMap(const MBMap& that);
+
+    MBMap(const std::string&               id,
+          const std::string&               name,
+          std::vector<MapBoo::MBLayer*>&   layers,
+          std::vector<MapBoo::MBDataset*>& datasets,
+          int                              timestamp) :
+    _id(id),
+    _name(name),
+    _layers(layers),
+    _datasets(datasets),
+    _timestamp(timestamp)
+    {
+    }
+
+    static std::vector<MapBoo::MBLayer*>   parseLayers(const JSONArray* jsonArray);
+    static std::vector<MapBoo::MBDataset*> parseDatasets(const JSONArray* jsonArray);
 
   public:
     static MapBoo::MBMap* fromJSON(const JSONBaseObject* jsonBaseObject);
@@ -92,7 +126,8 @@ public:
       return _id;
     }
 
-    void apply(LayerSet*                layerSet,
+    void apply(const URL&               serverURL,
+               LayerSet*                layerSet,
                VectorStreamingRenderer* vectorStreamingRenderer);
   };
 
@@ -273,6 +308,8 @@ private:
   void requestMap();
   void applyMap(MapBoo::MBMap* map);
 
+
+  MapBoo(const MapBoo& that);
 
 public:
   MapBoo(IG3MBuilder* builder,

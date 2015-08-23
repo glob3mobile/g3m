@@ -409,8 +409,12 @@ public:
 
   class VectorSetSymbolizer {
   public:
-    virtual ~VectorSetSymbolizer() {
-    }
+#ifdef C_CODE
+    virtual ~VectorSetSymbolizer() { }
+#endif
+#ifdef JAVA_CODE
+    void dispose();
+#endif
 
     virtual Mark* createMark(const GEO2DPointGeometry* geometry) const = 0;
 
@@ -438,6 +442,7 @@ public:
 #endif
     const bool         _readExpired;
     const bool         _verbose;
+    const bool         _haltOnError;
 
     const std::string _properties;
 
@@ -461,23 +466,25 @@ public:
     VectorSet(VectorStreamingRenderer*   renderer,
               const URL&                 serverURL,
               const std::string&         name,
-              const VectorSetSymbolizer* symbolizer,
               const std::string&         properties,
+              const VectorSetSymbolizer* symbolizer,
               const bool                 deleteSymbolizer,
               long long                  downloadPriority,
               const TimeInterval&        timeToCache,
               bool                       readExpired,
-              bool                       verbose) :
+              bool                       verbose,
+              bool                       haltOnError) :
     _renderer(renderer),
     _serverURL(serverURL),
     _name(name),
-    _symbolizer(symbolizer),
     _properties(properties),
+    _symbolizer(symbolizer),
     _deleteSymbolizer(deleteSymbolizer),
     _downloadPriority(downloadPriority),
     _timeToCache(timeToCache),
     _readExpired(readExpired),
     _verbose(verbose),
+    _haltOnError(haltOnError),
     _downloadingMetadata(false),
     _errorDownloadingMetadata(false),
     _errorParsingMetadata(false),
@@ -578,12 +585,14 @@ public:
 
   void addVectorSet(const URL&                 serverURL,
                     const std::string&         name,
+                    const std::string&         properties,
                     const VectorSetSymbolizer* symbolizer,
                     const bool                 deleteSymbolizer,
                     long long                  downloadPriority,
                     const TimeInterval&        timeToCache,
                     bool                       readExpired,
-                    bool                       verbose);
+                    bool                       verbose,
+                    bool                       haltOnError);
   
   void removeAllVectorSets();
   
