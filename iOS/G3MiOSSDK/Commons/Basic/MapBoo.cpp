@@ -21,9 +21,11 @@
 
 
 MapBoo::MapBoo(IG3MBuilder* builder,
-               const URL& serverURL) :
+               const URL&   serverURL,
+               MBHandler*   handler) :
 _builder(builder),
 _serverURL(serverURL),
+_handler(handler),
 _layerSet(NULL)
 {
   _layerSet = new LayerSet();
@@ -37,11 +39,11 @@ _layerSet(NULL)
 
 MapBoo::~MapBoo() {
   delete _builder;
+  delete _handler;
 }
 
-void MapBoo::requestMaps(MapsHandler* handler,
+void MapBoo::requestMaps(MBMapsHandler* handler,
                          bool deleteHandler) {
-
   _downloader->requestBuffer(URL(_serverURL, "/public/map/"),
                              DownloadPriority::HIGHEST,
                              TimeInterval::zero(),
@@ -211,12 +213,20 @@ void MapBoo::MBLayer::apply(LayerSet* layerSet) {
 }
 
 
+void MapBoo::requestMap() {
+  _downloader->requestBuffer(URL(_serverURL, "/public/map/" + _mapID),
+                             DownloadPriority::HIGHEST,
+                             TimeInterval::zero(),
+                             false, // readExpired
+                             new MapBufferDownloadListener(this, _threadUtils),
+                             true);
+}
 
 void MapBoo::setMapID(const std::string& mapID) {
   if (_mapID != mapID) {
     _mapID = mapID;
+    requestMap();
   }
-#warning TODO: request map's data
 }
 
 void MapBoo::setMap(MapBoo::MBMap* map) {
@@ -224,11 +234,16 @@ void MapBoo::setMap(MapBoo::MBMap* map) {
   if (_mapID != mapID) {
     _mapID = mapID;
 
-    _layerSet->removeAllLayers(true);
-    map->apply(_layerSet);
-    if (_layerSet->size() == 0) {
-      _layerSet->addLayer( new ChessboardLayer() );
-    }
+    applyMap(map);
+    delete map;
+  }
+}
+
+void MapBoo::applyMap(MapBoo::MBMap* map) {
+  _layerSet->removeAllLayers(true);
+  map->apply(_layerSet);
+  if (_layerSet->size() == 0) {
+    _layerSet->addLayer( new ChessboardLayer() );
   }
 }
 
@@ -241,5 +256,61 @@ void MapBoo::MBMap::apply(LayerSet* layerSet) {
     final MBLayer layer = _layers.get(i);
 #endif
     layer->apply(layerSet);
+  }
+}
+
+void MapBoo::MapBufferDownloadListener::onDownload(const URL& url,
+                                                   IByteBuffer* buffer,
+                                                   bool expired) {
+  _threadUtils->invokeAsyncTask(new MapParserAsyncTask(_mapboo, buffer),
+                                true);
+}
+
+void MapBoo::MapBufferDownloadListener::onError(const URL& url) {
+  _mapboo->onMapDownloadError();
+}
+
+MapBoo::MapParserAsyncTask::~MapParserAsyncTask() {
+  delete _buffer;
+  delete _map;
+}
+
+void MapBoo::MapParserAsyncTask::runInBackground(const G3MContext* context) {
+  const JSONBaseObject* jsonBaseObject = IJSONParser::instance()->parse(_buffer);
+
+  delete _buffer; _buffer = NULL; // release some memory
+
+  _map = MBMap::fromJSON( jsonBaseObject );
+
+  delete jsonBaseObject;
+}
+
+void MapBoo::MapParserAsyncTask::onPostExecute(const G3MContext* context) {
+  if (_map == NULL) {
+    _mapboo->onMapParseError();
+  }
+  else {
+    _mapboo->onMap(_map);
+    _map = NULL; // moved ownership to _mapboo
+  }
+}
+
+void MapBoo::onMapDownloadError() {
+  if (_handler != NULL) {
+    _handler->onMapDownloadError();
+  }
+}
+
+void MapBoo::onMapParseError() {
+  if (_handler != NULL) {
+    _handler->onMapParseError();
+  }
+}
+
+void MapBoo::onMap(MapBoo::MBMap* map) {
+  if (_handler != NULL) {
+    applyMap(map);
+    _handler->onSelectedMap(map);
+    delete map;
   }
 }
