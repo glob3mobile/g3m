@@ -26,11 +26,12 @@
 
 MapBoo::MapBoo(IG3MBuilder* builder,
                const URL&   serverURL,
-               MBHandler*   handler) :
+               MBHandler*   handler,
+               bool         verbose) :
 _builder(builder),
 _serverURL(serverURL),
 _handler(handler),
-_layerSet(NULL)
+_verbose(verbose)
 {
   _layerSet = new LayerSet();
   _layerSet->addLayer( new ChessboardLayer() );
@@ -38,8 +39,8 @@ _layerSet(NULL)
   _builder->getPlanetRendererBuilder()->setLayerSet( _layerSet );
 
   _markRenderer = new MarksRenderer(false, // readyWhenMarksReady
-                                    true, // renderInReverse
-                                    true // progressiveInitialization
+                                    true,  // renderInReverse
+                                    true   // progressiveInitialization
                                     );
   _builder->addRenderer(_markRenderer);
 
@@ -57,25 +58,35 @@ MapBoo::~MapBoo() {
 
 void MapBoo::requestMaps(MBMapsHandler* handler,
                          bool deleteHandler) {
+  if (_verbose) {
+    ILogger::instance()->logInfo("MapBoo: loading maps");
+  }
   _downloader->requestBuffer(URL(_serverURL, "/public/v1/map/"),
                              DownloadPriority::HIGHEST,
                              TimeInterval::zero(),
                              false, // readExpired
-                             new MapsBufferDownloadListener(handler, deleteHandler, _threadUtils),
+                             new MapsBufferDownloadListener(handler, deleteHandler, _threadUtils, _verbose),
                              true);
 }
 
 void MapBoo::MapsBufferDownloadListener::onDownload(const URL& url,
                                                     IByteBuffer* buffer,
                                                     bool expired) {
+  if (_verbose) {
+    ILogger::instance()->logInfo("MapBoo: downloaded maps");
+  }
   _threadUtils->invokeAsyncTask(new MapsParserAsyncTask(_handler,
                                                         _deleteHandler,
-                                                        buffer),
+                                                        buffer,
+                                                        _verbose),
                                 true);
   _handler = NULL; // moves ownership to MapsParserAsyncTask
 }
 
 void MapBoo::MapsBufferDownloadListener::onError(const URL& url) {
+  if (_verbose) {
+    ILogger::instance()->logInfo("MapBoo: error downloading maps");
+  }
   _handler->onDownloadError();
 
   if (_deleteHandler) {
@@ -104,6 +115,10 @@ MapBoo::MapsParserAsyncTask::~MapsParserAsyncTask() {
 }
 
 void MapBoo::MapsParserAsyncTask::runInBackground(const G3MContext* context) {
+  if (_verbose) {
+    ILogger::instance()->logInfo("MapBoo: parsing maps");
+  }
+
   const JSONBaseObject* jsonBaseObject = IJSONParser::instance()->parse(_buffer);
 
   delete _buffer; _buffer = NULL; // release some memory
@@ -114,7 +129,7 @@ void MapBoo::MapsParserAsyncTask::runInBackground(const G3MContext* context) {
       _parseError = false;
 
       for (int i = 0; i < jsonArray->size(); i++) {
-        MBMap* map = MBMap::fromJSON( jsonArray->get(i) );
+        MBMap* map = MBMap::fromJSON( jsonArray->get(i), _verbose );
         if (map == NULL) {
           _parseError = true;
           break;
@@ -129,15 +144,24 @@ void MapBoo::MapsParserAsyncTask::runInBackground(const G3MContext* context) {
 
 void MapBoo::MapsParserAsyncTask::onPostExecute(const G3MContext* context) {
   if (_parseError) {
+    if (_verbose) {
+      ILogger::instance()->logInfo("MapBoo: error parsing maps");
+    }
+
     _handler->onParseError();
   }
   else {
+    if (_verbose) {
+      ILogger::instance()->logInfo("MapBoo: parsed maps");
+    }
+
     _handler->onMaps(_maps);
     _maps.clear(); // moved maps ownership to _handler
   }
 }
 
-MapBoo::MBMap* MapBoo::MBMap::fromJSON(const JSONBaseObject* jsonBaseObject) {
+MapBoo::MBMap* MapBoo::MBMap::fromJSON(const JSONBaseObject* jsonBaseObject,
+                                       bool verbose) {
   if (jsonBaseObject == NULL) {
     return NULL;
   }
@@ -149,17 +173,18 @@ MapBoo::MBMap* MapBoo::MBMap::fromJSON(const JSONBaseObject* jsonBaseObject) {
 
   const std::string               id        = jsonObject->get("id")->asString()->value();
   const std::string               name      = jsonObject->get("name")->asString()->value();
-  std::vector<MapBoo::MBLayer*>   layers    = parseLayers( jsonObject->get("layerSet")->asArray() );
-  std::vector<MapBoo::MBDataset*> datasets  = parseDatasets( jsonObject->get("datasets")->asArray() );
+  std::vector<MapBoo::MBLayer*>   layers    = parseLayers( jsonObject->get("layerSet")->asArray(), verbose );
+  std::vector<MapBoo::MBDataset*> datasets  = parseDatasets( jsonObject->get("datasets")->asArray(), verbose );
   const int                       timestamp = (int) jsonObject->get("timestamp")->asNumber()->value();
 
-  return new MBMap(id, name, layers, datasets, timestamp);
+  return new MBMap(id, name, layers, datasets, timestamp, verbose);
 }
 
-std::vector<MapBoo::MBLayer*> MapBoo::MBMap::parseLayers(const JSONArray* jsonArray) {
+std::vector<MapBoo::MBLayer*> MapBoo::MBMap::parseLayers(const JSONArray* jsonArray,
+                                                         bool verbose) {
   std::vector<MapBoo::MBLayer*> result;
   for (int i = 0; i < jsonArray->size(); i++) {
-    MBLayer* layer = MBLayer::fromJSON( jsonArray->get(i) );
+    MBLayer* layer = MBLayer::fromJSON( jsonArray->get(i), verbose );
     if (layer != NULL) {
       result.push_back( layer );
     }
@@ -168,6 +193,10 @@ std::vector<MapBoo::MBLayer*> MapBoo::MBMap::parseLayers(const JSONArray* jsonAr
 }
 
 MapBoo::MBMap::~MBMap() {
+  if (_verbose) {
+    ILogger::instance()->logInfo("MapBoo: deleting map");
+  }
+
   for (int i = 0; i < _datasets.size(); i++) {
     MBDataset* dataset = _datasets[i];
     dataset->_release();
@@ -179,10 +208,11 @@ MapBoo::MBMap::~MBMap() {
   }
 }
 
-std::vector<MapBoo::MBDataset*> MapBoo::MBMap::parseDatasets(const JSONArray* jsonArray) {
+std::vector<MapBoo::MBDataset*> MapBoo::MBMap::parseDatasets(const JSONArray* jsonArray,
+                                                             bool verbose) {
   std::vector<MapBoo::MBDataset*> result;
   for (int i = 0; i < jsonArray->size(); i++) {
-    MBDataset* dataset = MBDataset::fromJSON( jsonArray->get(i) );
+    MBDataset* dataset = MBDataset::fromJSON( jsonArray->get(i), verbose );
     if (dataset != NULL) {
       result.push_back( dataset );
     }
@@ -190,7 +220,8 @@ std::vector<MapBoo::MBDataset*> MapBoo::MBMap::parseDatasets(const JSONArray* js
   return result;
 }
 
-MapBoo::MBLayer* MapBoo::MBLayer::fromJSON(const JSONBaseObject* jsonBaseObject) {
+MapBoo::MBLayer* MapBoo::MBLayer::fromJSON(const JSONBaseObject* jsonBaseObject,
+                                           bool verbose) {
   if (jsonBaseObject == NULL) {
     return NULL;
   }
@@ -203,10 +234,13 @@ MapBoo::MBLayer* MapBoo::MBLayer::fromJSON(const JSONBaseObject* jsonBaseObject)
   const std::string type = jsonObject->get("type")->asString()->value();
   const std::string url  = jsonObject->getAsString("url", "");
 
-  return new MapBoo::MBLayer(type, url);
+  return new MapBoo::MBLayer(type, url, verbose);
 }
 
 MapBoo::MBLayer::~MBLayer() {
+  if (_verbose) {
+    ILogger::instance()->logInfo("MapBoo: deleting layer");
+  }
 }
 
 
@@ -228,11 +262,15 @@ void MapBoo::MBLayer::apply(LayerSet* layerSet) const {
 
 
 void MapBoo::requestMap() {
+  if (_verbose) {
+    ILogger::instance()->logInfo("MapBoo: requesting map \"%s\"", _mapID.c_str());
+  }
+
   _downloader->requestBuffer(URL(_serverURL, "/public/v1/map/" + _mapID),
                              DownloadPriority::HIGHEST,
                              TimeInterval::zero(),
                              false, // readExpired
-                             new MapBufferDownloadListener(this, _threadUtils),
+                             new MapBufferDownloadListener(this, _threadUtils, _verbose),
                              true);
 }
 
@@ -253,8 +291,11 @@ void MapBoo::setMap(MapBoo::MBMap* map) {
 }
 
 void MapBoo::applyMap(MapBoo::MBMap* map) {
+  if (_verbose) {
+    ILogger::instance()->logInfo("MapBoo: applying map \"%s\"", map->getID().c_str());
+  }
+
   // clean current map
-//  _markRenderer->removeAllMarks();
   _vectorStreamingRenderer->removeAllVectorSets();
   _layerSet->removeAllLayers(true);
 
@@ -290,11 +331,19 @@ void MapBoo::MBMap::apply(const URL&               serverURL,
 void MapBoo::MapBufferDownloadListener::onDownload(const URL& url,
                                                    IByteBuffer* buffer,
                                                    bool expired) {
-  _threadUtils->invokeAsyncTask(new MapParserAsyncTask(_mapboo, buffer),
+  if (_verbose) {
+    ILogger::instance()->logInfo("MapBoo: downloaded map");
+  }
+
+  _threadUtils->invokeAsyncTask(new MapParserAsyncTask(_mapboo, buffer, _verbose),
                                 true);
 }
 
 void MapBoo::MapBufferDownloadListener::onError(const URL& url) {
+  if (_verbose) {
+    ILogger::instance()->logInfo("MapBoo: error downloading map");
+  }
+
   _mapboo->onMapDownloadError();
 }
 
@@ -304,20 +353,32 @@ MapBoo::MapParserAsyncTask::~MapParserAsyncTask() {
 }
 
 void MapBoo::MapParserAsyncTask::runInBackground(const G3MContext* context) {
+  if (_verbose) {
+    ILogger::instance()->logInfo("MapBoo: parsing map");
+  }
+
   const JSONBaseObject* jsonBaseObject = IJSONParser::instance()->parse(_buffer);
 
   delete _buffer; _buffer = NULL; // release some memory
 
-  _map = MBMap::fromJSON( jsonBaseObject );
+  _map = MBMap::fromJSON( jsonBaseObject, _verbose );
 
   delete jsonBaseObject;
 }
 
 void MapBoo::MapParserAsyncTask::onPostExecute(const G3MContext* context) {
   if (_map == NULL) {
+    if (_verbose) {
+      ILogger::instance()->logInfo("MapBoo: error parsing map");
+    }
+
     _mapboo->onMapParseError();
   }
   else {
+    if (_verbose) {
+      ILogger::instance()->logInfo("MapBoo: parsed map");
+    }
+
     _mapboo->onMap(_map);
     _map = NULL; // moved ownership to _mapboo
   }
@@ -339,7 +400,8 @@ void MapBoo::onMap(MapBoo::MBMap* map) {
   applyMap(map);
 }
 
-MapBoo::MBDataset* MapBoo::MBDataset::fromJSON(const JSONBaseObject* jsonBaseObject) {
+MapBoo::MBDataset* MapBoo::MBDataset::fromJSON(const JSONBaseObject* jsonBaseObject,
+                                               bool verbose) {
   if (jsonBaseObject == NULL) {
     return NULL;
   }

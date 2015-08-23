@@ -353,9 +353,14 @@ bool VectorStreamingRenderer::NodeMarksFilter::test(const Mark* mark) const {
 
 
 void VectorStreamingRenderer::Node::removeMarks() {
+  if (_verbose) {
+    ILogger::instance()->logInfo("\"%s\": Removing marks",
+                                 getFullName().c_str());
+  }
+
   size_t removed = _vectorSet->getMarksRenderer()->removeAllMarks( NodeMarksFilter(this), true );
 
-  if (_verbose && removed) {
+  if (_verbose && removed > 0) {
 #ifdef C_CODE
     ILogger::instance()->logInfo("\"%s\": Removed %ld marks",
                                  getFullName().c_str(),
