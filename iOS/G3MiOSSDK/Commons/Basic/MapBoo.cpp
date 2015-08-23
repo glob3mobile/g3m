@@ -18,7 +18,8 @@
 #include "JSONString.hpp"
 #include "JSONNumber.hpp"
 #include "URLTemplateLayer.hpp"
-
+#include "VectorStreamingRenderer.hpp"
+#include "MarksRenderer.hpp"
 
 MapBoo::MapBoo(IG3MBuilder* builder,
                const URL&   serverURL,
@@ -32,6 +33,15 @@ _layerSet(NULL)
   _layerSet->addLayer( new ChessboardLayer() );
 
   _builder->getPlanetRendererBuilder()->setLayerSet( _layerSet );
+
+  _markRenderer = new MarksRenderer(false, // readyWhenMarksReady
+                                    true, // renderInReverse
+                                    true // progressiveInitialization
+                                    );
+  _builder->addRenderer(_markRenderer);
+
+  _vectorStreamingRenderer = new VectorStreamingRenderer(_markRenderer);
+  _builder->addRenderer(_vectorStreamingRenderer);
 
   _downloader  = _builder->getDownloader();
   _threadUtils = _builder->getThreadUtils();
@@ -235,22 +245,41 @@ void MapBoo::setMap(MapBoo::MBMap* map) {
     _mapID = mapID;
 
     applyMap(map);
-    if (_handler != NULL) {
-      _handler->onSelectedMap(map);
-    }
-    delete map;
   }
 }
 
 void MapBoo::applyMap(MapBoo::MBMap* map) {
+  //  renderer->addVectorSet(URL("http://192.168.1.12:8080/server-mapboo/public/VectorialStreaming/"),
+  //                         "GEONames-PopulatedPlaces_LOD",
+  //                         new G3MVectorStreamingDemoScene_Symbolizer(),
+  //                         true, // deleteSymbolizer
+  //                         //DownloadPriority::LOWER,
+  //                         DownloadPriority::HIGHER,
+  //                         TimeInterval::zero(),
+  //                         true, // readExpired
+  //                         true // verbose
+  //                         );
+
+  // clean current map
+  _vectorStreamingRenderer->removeAllVectorSets();
   _layerSet->removeAllLayers(true);
-  map->apply(_layerSet);
+
+  map->apply(_layerSet, _vectorStreamingRenderer);
+
+  // just in case nobody put a layer
   if (_layerSet->size() == 0) {
     _layerSet->addLayer( new ChessboardLayer() );
   }
+
+  if (_handler != NULL) {
+    _handler->onSelectedMap(map);
+  }
+
+  delete map;
 }
 
-void MapBoo::MBMap::apply(LayerSet* layerSet) {
+void MapBoo::MBMap::apply(LayerSet*                layerSet,
+                          VectorStreamingRenderer* vectorStreamingRenderer) {
   for (int i = 0; i < _layers.size(); i++) {
 #ifdef C_CODE
     MBLayer* layer = _layers[i];
@@ -259,6 +288,10 @@ void MapBoo::MBMap::apply(LayerSet* layerSet) {
     final MBLayer layer = _layers.get(i);
 #endif
     layer->apply(layerSet);
+  }
+
+  for (int i = 0; i < _datasetsIDs.size(); i++) {
+    const std::string datasetID = _datasetsIDs[i];
   }
 }
 
@@ -312,8 +345,4 @@ void MapBoo::onMapParseError() {
 
 void MapBoo::onMap(MapBoo::MBMap* map) {
   applyMap(map);
-  if (_handler != NULL) {
-    _handler->onSelectedMap(map);
-  }
-  delete map;
 }

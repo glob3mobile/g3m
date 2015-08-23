@@ -18,6 +18,9 @@ class LayerSet;
 class IDownloader;
 class JSONBaseObject;
 class JSONArray;
+class VectorStreamingRenderer;
+class MarksRenderer;
+
 
 class MapBoo {
 
@@ -89,7 +92,8 @@ public:
       return _id;
     }
 
-    void apply(LayerSet* layerSet);
+    void apply(LayerSet*                layerSet,
+               VectorStreamingRenderer* vectorStreamingRenderer);
   };
 
   class MBHandler {
@@ -260,9 +264,11 @@ private:
 
   std::string _mapID;
 
-  LayerSet*           _layerSet;
-  IDownloader*        _downloader;
-  const IThreadUtils* _threadUtils;
+  LayerSet*                _layerSet;
+  VectorStreamingRenderer* _vectorStreamingRenderer;
+  MarksRenderer*           _markRenderer;
+  IDownloader*             _downloader;
+  const IThreadUtils*      _threadUtils;
 
   void requestMap();
   void applyMap(MapBoo::MBMap* map);
