@@ -423,9 +423,6 @@ public class VectorStreamingRenderer extends DefaultRenderer
     private long _childrenRequestID;
     private void loadChildren(G3MRenderContext rc)
     {
-    
-      // http://192.168.1.12:8080/server-mapboo/public/VectorialStreaming/GEONames-PopulatedPlaces_LOD/?nodes=0|1|
-    
       final int childrenIDsSize = _childrenIDs.size();
       if (childrenIDsSize == 0)
       {

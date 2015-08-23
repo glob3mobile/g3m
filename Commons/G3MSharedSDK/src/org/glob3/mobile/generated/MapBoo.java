@@ -30,7 +30,7 @@ public class MapBoo
 
 
 
-  public static class MBLayer
+  public static class MBLayer extends RCObject
   {
     private final String _type;
     private final String _url;
@@ -85,7 +85,7 @@ public class MapBoo
 
 
 
-  public static class MBDataset
+  public static class MBDataset extends RCObject
   {
     private final String _id;
     private final String _name;
@@ -108,13 +108,14 @@ public class MapBoo
     private String createMarkLabel(JSONObject properties)
     {
       final int size = _labelingCriteria.size();
+      String label;
       if (size == 0)
       {
-        return "<label>";
+        label = "<label>";
       }
       else if (size == 1)
       {
-        return properties.get(_labelingCriteria.get(0)).toString();
+        label = JSONBaseObject.toString(properties.get(_labelingCriteria.get(0)));
       }
       else
       {
@@ -125,29 +126,36 @@ public class MapBoo
           {
             labelBuilder.addString(" ");
           }
-          final String value = properties.get(_labelingCriteria.get(i)).toString();
+          final String value = JSONBaseObject.toString(properties.get(_labelingCriteria.get(i)));
           labelBuilder.addString(value);
         }
     
-        final String label = labelBuilder.getString();
+        label = labelBuilder.getString();
         if (labelBuilder != null)
            labelBuilder.dispose();
         labelBuilder = null;
-        return label;
       }
+    //  delete properties;
+      return label;
     }
     private MarkTouchListener createMarkTouchListener(JSONObject properties)
     {
+      MarkTouchListener result = null;
       final int size = _infoCriteria.size();
-      if (size == 0)
+      if (size > 0)
       {
-        return null;
-      }
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#warning Diego at work!
-      return null;
+      }
+    
+    //  delete properties;
+      return result;
     }
 
+    public void dispose()
+    {
+      super.dispose();
+    }
 
     public static MapBoo.MBDataset fromJSON(JSONBaseObject jsonBaseObject)
     {
@@ -171,41 +179,7 @@ public class MapBoo
       return new MBDataset(id, name, labelingCriteria, infoCriteria, timestamp);
     }
 
-    public void dispose()
-    {
-    
-    }
 
-
-    //class XXXVectorSetSymbolizer : public VectorStreamingRenderer::VectorSetSymbolizer {
-    //public:
-    //  Mark* createMark(const GEO2DPointGeometry* geometry) const {
-    //    const GEOFeature* feature = geometry->getFeature();
-    //
-    //    const JSONObject* properties = feature->getProperties();
-    //
-    //    const std::string label = properties->getAsString("name")->value();
-    //    const Geodetic3D  position( geometry->getPosition(), 0);
-    //
-    //    //    double maxPopulation = 22315474;
-    //    //    double population = properties->getAsNumber("population")->value();
-    //    //    float labelFontSize = (float) (14.0 * (population / maxPopulation) + 16.0) ;
-    //
-    //    float labelFontSize = 18;
-    //
-    //    Mark* mark = new Mark(label,
-    //                          position,
-    //                          ABSOLUTE,
-    //                          0, // minDistanceToCamera
-    //                          labelFontSize
-    //                          // Color::newFromRGBA(1, 1, 0, 1)
-    //                          );
-    //    mark->setZoomInAppears(true);
-    //    return mark;
-    //  }
-    //};
-    
-    
     public final void apply(URL serverURL, VectorStreamingRenderer vectorStreamingRenderer)
     {
       String properties = "";
@@ -218,7 +192,7 @@ public class MapBoo
         properties += _infoCriteria.get(i) + "|";
       }
     
-      vectorStreamingRenderer.addVectorSet(new URL(serverURL, "/public/VectorialStreaming/"), _id, properties, new MBDatasetVectorSetSymbolizer(this), true, DownloadPriority.HIGHER, TimeInterval.zero(), true, true, false); // haltOnError -  verbose -  readExpired -  deleteSymbolizer
+      vectorStreamingRenderer.addVectorSet(new URL(serverURL, "/public/v1/VectorialStreaming/"), _id, properties, new MBDatasetVectorSetSymbolizer(this), true, DownloadPriority.HIGHER, TimeInterval.zero(), true, true, false); // haltOnError -  verbose -  readExpired -  deleteSymbolizer
     }
 
     public final Mark createMark(GEO2DPointGeometry geometry)
@@ -240,6 +214,12 @@ public class MapBoo
     public MBDatasetVectorSetSymbolizer(MBDataset dataset)
     {
        _dataset = dataset;
+      _dataset._retain();
+    }
+
+    public void dispose()
+    {
+      _dataset._release();
     }
 
     public final Mark createMark(GEO2DPointGeometry geometry)
@@ -296,6 +276,7 @@ public class MapBoo
       return result;
     }
 
+
     public static MapBoo.MBMap fromJSON(JSONBaseObject jsonBaseObject)
     {
       if (jsonBaseObject == null)
@@ -323,8 +304,7 @@ public class MapBoo
       for (int i = 0; i < _datasets.size(); i++)
       {
         MBDataset dataset = _datasets.get(i);
-        if (dataset != null)
-           dataset.dispose();
+        dataset._release();
       }
     
       for (int i = 0; i < _layers.size(); i++)
@@ -621,7 +601,7 @@ public class MapBoo
 
   private void requestMap()
   {
-    _downloader.requestBuffer(new URL(_serverURL, "/public/map/" + _mapID), DownloadPriority.HIGHEST, TimeInterval.zero(), false, new MapBufferDownloadListener(this, _threadUtils), true); // readExpired
+    _downloader.requestBuffer(new URL(_serverURL, "/public/v1/map/" + _mapID), DownloadPriority.HIGHEST, TimeInterval.zero(), false, new MapBufferDownloadListener(this, _threadUtils), true); // readExpired
   }
   private void applyMap(MapBoo.MBMap map)
   {
@@ -685,7 +665,7 @@ public class MapBoo
   }
   public final void requestMaps(MBMapsHandler handler, boolean deleteHandler)
   {
-    _downloader.requestBuffer(new URL(_serverURL, "/public/map/"), DownloadPriority.HIGHEST, TimeInterval.zero(), false, new MapsBufferDownloadListener(handler, deleteHandler, _threadUtils), true); // readExpired
+    _downloader.requestBuffer(new URL(_serverURL, "/public/v1/map/"), DownloadPriority.HIGHEST, TimeInterval.zero(), false, new MapsBufferDownloadListener(handler, deleteHandler, _threadUtils), true); // readExpired
   }
 
   public final void setMapID(String mapID)

@@ -36,6 +36,11 @@ public abstract class JSONBaseObject
     return (object == null) ? null : object.deepCopy();
   }
 
+  public static String toString(JSONBaseObject object)
+  {
+    return (object == null) ? "null" : object.toString();
+  }
+
   public void dispose()
   {
   }
