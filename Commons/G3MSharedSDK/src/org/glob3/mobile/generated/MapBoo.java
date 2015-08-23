@@ -22,6 +22,9 @@ package org.glob3.mobile.generated;
 //class IDownloader;
 //class JSONBaseObject;
 //class JSONArray;
+//class VectorStreamingRenderer;
+//class MarksRenderer;
+
 
 public class MapBoo
 {
@@ -162,12 +165,17 @@ public class MapBoo
       return _id;
     }
 
-    public final void apply(LayerSet layerSet)
+    public final void apply(LayerSet layerSet, VectorStreamingRenderer vectorStreamingRenderer)
     {
       for (int i = 0; i < _layers.size(); i++)
       {
         final MBLayer layer = _layers.get(i);
         layer.apply(layerSet);
+      }
+    
+      for (int i = 0; i < _datasetsIDs.size(); i++)
+      {
+        final String datasetID = _datasetsIDs.get(i);
       }
     }
   }
@@ -425,6 +433,8 @@ public class MapBoo
   private String _mapID;
 
   private LayerSet _layerSet;
+  private VectorStreamingRenderer _vectorStreamingRenderer;
+  private MarksRenderer _markRenderer;
   private IDownloader _downloader;
   private final IThreadUtils _threadUtils;
 
@@ -434,12 +444,36 @@ public class MapBoo
   }
   private void applyMap(MapBoo.MBMap map)
   {
+    //  renderer->addVectorSet(URL("http://192.168.1.12:8080/server-mapboo/public/VectorialStreaming/"),
+    //                         "GEONames-PopulatedPlaces_LOD",
+    //                         new G3MVectorStreamingDemoScene_Symbolizer(),
+    //                         true, // deleteSymbolizer
+    //                         //DownloadPriority::LOWER,
+    //                         DownloadPriority::HIGHER,
+    //                         TimeInterval::zero(),
+    //                         true, // readExpired
+    //                         true // verbose
+    //                         );
+  
+    // clean current map
+    _vectorStreamingRenderer.removeAllVectorSets();
     _layerSet.removeAllLayers(true);
-    map.apply(_layerSet);
+  
+    map.apply(_layerSet, _vectorStreamingRenderer);
+  
+    // just in case nobody put a layer
     if (_layerSet.size() == 0)
     {
       _layerSet.addLayer(new ChessboardLayer());
     }
+  
+    if (_handler != null)
+    {
+      _handler.onSelectedMap(map);
+    }
+  
+    if (map != null)
+       map.dispose();
   }
 
 
@@ -453,6 +487,12 @@ public class MapBoo
     _layerSet.addLayer(new ChessboardLayer());
   
     _builder.getPlanetRendererBuilder().setLayerSet(_layerSet);
+  
+    _markRenderer = new MarksRenderer(false, true, true); // progressiveInitialization -  renderInReverse -  readyWhenMarksReady
+    _builder.addRenderer(_markRenderer);
+  
+    _vectorStreamingRenderer = new VectorStreamingRenderer(_markRenderer);
+    _builder.addRenderer(_vectorStreamingRenderer);
   
     _downloader = _builder.getDownloader();
     _threadUtils = _builder.getThreadUtils();
@@ -491,12 +531,6 @@ public class MapBoo
       _mapID = mapID;
   
       applyMap(map);
-      if (_handler != null)
-      {
-        _handler.onSelectedMap(map);
-      }
-      if (map != null)
-         map.dispose();
     }
   }
 
@@ -517,12 +551,6 @@ public class MapBoo
   public final void onMap(MapBoo.MBMap map)
   {
     applyMap(map);
-    if (_handler != null)
-    {
-      _handler.onSelectedMap(map);
-    }
-    if (map != null)
-       map.dispose();
   }
 
   public final void reloadMap()
