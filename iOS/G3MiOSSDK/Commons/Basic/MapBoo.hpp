@@ -84,6 +84,11 @@ public:
     const std::string getName() const {
       return _name;
     }
+
+    const std::string getID() const {
+      return _id;
+    }
+
   };
 
 
@@ -179,6 +184,8 @@ private:
   private final URL _serverURL;
 #endif
 
+  std::string _mapID;
+
   LayerSet*           _layerSet;
   IDownloader*        _downloader;
   const IThreadUtils* _threadUtils;
@@ -191,6 +198,8 @@ public:
   
   void requestMaps(MapsHandler* handler,
                    bool deleteHandler = true);
+
+  void setMapID(const std::string& mapID);
   
 };
 

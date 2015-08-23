@@ -196,3 +196,9 @@ MapBoo::MBLayer::~MBLayer() {
 void MapBoo::MBLayer::createG3MLayer() {
 #warning Diego at work!
 }
+
+
+
+void MapBoo::setMapID(const std::string& mapID) {
+  _mapID = mapID;
+}
