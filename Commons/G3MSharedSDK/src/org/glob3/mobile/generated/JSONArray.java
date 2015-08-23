@@ -71,6 +71,17 @@ public class JSONArray extends JSONBaseObject
     return (object == null) ? null : object.asString();
   }
 
+  public final java.util.ArrayList<String> asStringVector()
+  {
+    java.util.ArrayList<String> result = new java.util.ArrayList<String>();
+    final int size = this.size();
+    for (int i = 0; i < size; i++)
+    {
+      result.add(getAsString(i).value());
+    }
+    return result;
+  }
+
   public final boolean getAsBoolean(int index, boolean defaultValue)
   {
     final JSONBoolean jsBool = getAsBoolean(index);

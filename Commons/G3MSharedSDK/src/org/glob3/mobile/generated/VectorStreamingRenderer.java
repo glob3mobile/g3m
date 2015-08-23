@@ -876,13 +876,11 @@ public class VectorStreamingRenderer extends DefaultRenderer
   }
 
 
-  public abstract static class VectorSetSymbolizer
+  public interface VectorSetSymbolizer
   {
-    public void dispose()
-    {
-    }
+    void dispose();
 
-    public abstract Mark createMark(GEO2DPointGeometry geometry);
+    Mark createMark(GEO2DPointGeometry geometry);
 
   }
 
@@ -898,6 +896,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
     private final TimeInterval _timeToCache;
     private final boolean _readExpired;
     private final boolean _verbose;
+    private final boolean _haltOnError;
 
     private final String _properties;
 
@@ -917,18 +916,19 @@ public class VectorStreamingRenderer extends DefaultRenderer
     private long _lastRenderedCount;
 
 
-    public VectorSet(VectorStreamingRenderer renderer, URL serverURL, String name, VectorSetSymbolizer symbolizer, String properties, boolean deleteSymbolizer, long downloadPriority, TimeInterval timeToCache, boolean readExpired, boolean verbose)
+    public VectorSet(VectorStreamingRenderer renderer, URL serverURL, String name, String properties, VectorSetSymbolizer symbolizer, boolean deleteSymbolizer, long downloadPriority, TimeInterval timeToCache, boolean readExpired, boolean verbose, boolean haltOnError)
     {
        _renderer = renderer;
        _serverURL = serverURL;
        _name = name;
-       _symbolizer = symbolizer;
        _properties = properties;
+       _symbolizer = symbolizer;
        _deleteSymbolizer = deleteSymbolizer;
        _downloadPriority = downloadPriority;
        _timeToCache = timeToCache;
        _readExpired = readExpired;
        _verbose = verbose;
+       _haltOnError = haltOnError;
        _downloadingMetadata = false;
        _errorDownloadingMetadata = false;
        _errorParsingMetadata = false;
@@ -1011,19 +1011,22 @@ public class VectorStreamingRenderer extends DefaultRenderer
 
     public final RenderState getRenderState(G3MRenderContext rc)
     {
-      if (_downloadingMetadata)
+      if (_haltOnError)
       {
-        return RenderState.busy();
-      }
+        if (_downloadingMetadata)
+        {
+          return RenderState.busy();
+        }
     
-      if (_errorDownloadingMetadata)
-      {
-        return RenderState.error("Error downloading metadata of \"" + _name + "\" from \"" + _serverURL.getPath() + "\"");
-      }
+        if (_errorDownloadingMetadata)
+        {
+          return RenderState.error("Error downloading metadata of \"" + _name + "\" from \"" + _serverURL.getPath() + "\"");
+        }
     
-      if (_errorParsingMetadata)
-      {
-        return RenderState.error("Error parsing metadata of \"" + _name + "\" from \"" + _serverURL.getPath() + "\"");
+        if (_errorParsingMetadata)
+        {
+          return RenderState.error("Error parsing metadata of \"" + _name + "\" from \"" + _serverURL.getPath() + "\"");
+        }
       }
     
       return RenderState.ready();
@@ -1189,9 +1192,9 @@ public class VectorStreamingRenderer extends DefaultRenderer
     }
   }
 
-  public final void addVectorSet(URL serverURL, String name, VectorSetSymbolizer symbolizer, boolean deleteSymbolizer, long downloadPriority, TimeInterval timeToCache, boolean readExpired, boolean verbose)
+  public final void addVectorSet(URL serverURL, String name, String properties, VectorSetSymbolizer symbolizer, boolean deleteSymbolizer, long downloadPriority, TimeInterval timeToCache, boolean readExpired, boolean verbose, boolean haltOnError)
   {
-    VectorSet vectorSet = new VectorSet(this, serverURL, name, symbolizer, "name|population|featureClass|featureCode", deleteSymbolizer, downloadPriority, timeToCache, readExpired, verbose);
+    VectorSet vectorSet = new VectorSet(this, serverURL, name, properties, symbolizer, deleteSymbolizer, downloadPriority, timeToCache, readExpired, verbose, haltOnError);
     if (_context != null)
     {
       vectorSet.initialize(_context);

@@ -42,6 +42,8 @@ public class MapBoo
        _url = url;
     }
 
+//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
+//    MBLayer(MBLayer that);
 
     public static MapBoo.MBLayer fromJSON(JSONBaseObject jsonBaseObject)
     {
@@ -83,20 +85,90 @@ public class MapBoo
   }
 
 
+
+  public static class MBDataset
+  {
+    private final String _id;
+    private final String _name;
+    private java.util.ArrayList<String> _labelingCriteria = new java.util.ArrayList<String>();
+    private java.util.ArrayList<String> _infoCriteria = new java.util.ArrayList<String>();
+    private final int _timestamp;
+
+//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
+//    MBDataset(MBDataset that);
+
+    private MBDataset(String id, String name, java.util.ArrayList<String> labelingCriteria, java.util.ArrayList<String> infoCriteria, int timestamp)
+    {
+       _id = id;
+       _name = name;
+       _labelingCriteria = labelingCriteria;
+       _infoCriteria = infoCriteria;
+       _timestamp = timestamp;
+    }
+
+    public static MapBoo.MBDataset fromJSON(JSONBaseObject jsonBaseObject)
+    {
+      if (jsonBaseObject == null)
+      {
+        return null;
+      }
+    
+      final JSONObject jsonObject = jsonBaseObject.asObject();
+      if (jsonObject == null)
+      {
+        return null;
+      }
+    
+      final String id = jsonObject.get("id").asString().value();
+      final String name = jsonObject.get("name").asString().value();
+      java.util.ArrayList<String> labelingCriteria = jsonObject.getAsArray("labelingCriteria").asStringVector();
+      java.util.ArrayList<String> infoCriteria = jsonObject.getAsArray("infoCriteria").asStringVector();
+      final int timestamp = (int) jsonObject.get("timestamp").asNumber().value();
+    
+      return new MBDataset(id, name, labelingCriteria, infoCriteria, timestamp);
+    }
+
+    public void dispose()
+    {
+    
+    }
+
+    public final void apply(URL serverURL, VectorStreamingRenderer vectorStreamingRenderer)
+    {
+      String properties = "";
+      for (int i = 0; i < _labelingCriteria.size(); i++)
+      {
+        properties += _labelingCriteria.get(i) + "|";
+      }
+      for (int i = 0; i < _infoCriteria.size(); i++)
+      {
+        properties += _infoCriteria.get(i) + "|";
+      }
+    
+      vectorStreamingRenderer.addVectorSet(new URL(serverURL, "/public/VectorialStreaming/"), _id, properties, new XXXVectorSetSymbolizer(), true, DownloadPriority.HIGHER, TimeInterval.zero(), true, true, false); // haltOnError -  verbose -  readExpired -  deleteSymbolizer
+    }
+
+  }
+
+
+
   public static class MBMap
   {
     private final String _id;
     private final String _name;
-    private final java.util.ArrayList<MapBoo.MBLayer> _layers;
-    private java.util.ArrayList<String> _datasetsIDs = new java.util.ArrayList<String>();
+    private java.util.ArrayList<MapBoo.MBLayer> _layers = new java.util.ArrayList<MapBoo.MBLayer>();
+    private java.util.ArrayList<MapBoo.MBDataset> _datasets = new java.util.ArrayList<MapBoo.MBDataset>();
     private final int _timestamp;
 
-    private MBMap(String id, String name, java.util.ArrayList<MapBoo.MBLayer> layers, java.util.ArrayList<String> datasetsIDs, int timestamp)
+//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
+//    MBMap(MBMap that);
+
+    private MBMap(String id, String name, java.util.ArrayList<MapBoo.MBLayer> layers, java.util.ArrayList<MapBoo.MBDataset> datasets, int timestamp)
     {
        _id = id;
        _name = name;
        _layers = layers;
-       _datasetsIDs = datasetsIDs;
+       _datasets = datasets;
        _timestamp = timestamp;
     }
 
@@ -113,12 +185,16 @@ public class MapBoo
       }
       return result;
     }
-    private static java.util.ArrayList<String> parseDatasetsIDs(JSONArray jsonArray)
+    private static java.util.ArrayList<MapBoo.MBDataset> parseDatasets(JSONArray jsonArray)
     {
-      java.util.ArrayList<String> result = new java.util.ArrayList<String>();
+      java.util.ArrayList<MapBoo.MBDataset> result = new java.util.ArrayList<MapBoo.MBDataset>();
       for (int i = 0; i < jsonArray.size(); i++)
       {
-        result.add(jsonArray.get(i).asString().value());
+        MBDataset dataset = MBDataset.fromJSON(jsonArray.get(i));
+        if (dataset != null)
+        {
+          result.add(dataset);
+        }
       }
       return result;
     }
@@ -139,19 +215,26 @@ public class MapBoo
       final String id = jsonObject.get("id").asString().value();
       final String name = jsonObject.get("name").asString().value();
       java.util.ArrayList<MapBoo.MBLayer> layers = parseLayers(jsonObject.get("layerSet").asArray());
-      java.util.ArrayList<String> datasetsIDs = parseDatasetsIDs(jsonObject.get("datasets").asArray());
+      java.util.ArrayList<MapBoo.MBDataset> datasets = parseDatasets(jsonObject.get("datasets").asArray());
       final int timestamp = (int) jsonObject.get("timestamp").asNumber().value();
     
-      return new MBMap(id, name, layers, datasetsIDs, timestamp);
+      return new MBMap(id, name, layers, datasets, timestamp);
     }
 
     public void dispose()
     {
+      for (int i = 0; i < _datasets.size(); i++)
+      {
+        MBDataset dataset = _datasets.get(i);
+        if (dataset != null)
+           dataset.dispose();
+      }
+    
       for (int i = 0; i < _layers.size(); i++)
       {
-        final MBLayer layer = _layers.get(i);
+        MBLayer layer = _layers.get(i);
         if (layer != null)
-          layer.dispose();
+           layer.dispose();
       }
     }
 
@@ -165,17 +248,18 @@ public class MapBoo
       return _id;
     }
 
-    public final void apply(LayerSet layerSet, VectorStreamingRenderer vectorStreamingRenderer)
+    public final void apply(URL serverURL, LayerSet layerSet, VectorStreamingRenderer vectorStreamingRenderer)
     {
       for (int i = 0; i < _layers.size(); i++)
       {
-        final MBLayer layer = _layers.get(i);
+        MBLayer layer = _layers.get(i);
         layer.apply(layerSet);
       }
     
-      for (int i = 0; i < _datasetsIDs.size(); i++)
+      for (int i = 0; i < _datasets.size(); i++)
       {
-        final String datasetID = _datasetsIDs.get(i);
+        MBDataset dataset = _datasets.get(i);
+        dataset.apply(serverURL, vectorStreamingRenderer);
       }
     }
   }
@@ -444,22 +528,11 @@ public class MapBoo
   }
   private void applyMap(MapBoo.MBMap map)
   {
-    //  renderer->addVectorSet(URL("http://192.168.1.12:8080/server-mapboo/public/VectorialStreaming/"),
-    //                         "GEONames-PopulatedPlaces_LOD",
-    //                         new G3MVectorStreamingDemoScene_Symbolizer(),
-    //                         true, // deleteSymbolizer
-    //                         //DownloadPriority::LOWER,
-    //                         DownloadPriority::HIGHER,
-    //                         TimeInterval::zero(),
-    //                         true, // readExpired
-    //                         true // verbose
-    //                         );
-  
     // clean current map
     _vectorStreamingRenderer.removeAllVectorSets();
     _layerSet.removeAllLayers(true);
   
-    map.apply(_layerSet, _vectorStreamingRenderer);
+    map.apply(_serverURL, _layerSet, _vectorStreamingRenderer);
   
     // just in case nobody put a layer
     if (_layerSet.size() == 0)
@@ -476,6 +549,9 @@ public class MapBoo
        map.dispose();
   }
 
+
+//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
+//  MapBoo(MapBoo that);
 
   public MapBoo(IG3MBuilder builder, URL serverURL, MBHandler handler)
   {
