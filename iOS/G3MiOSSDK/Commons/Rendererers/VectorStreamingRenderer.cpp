@@ -281,9 +281,6 @@ void VectorStreamingRenderer::Node::cancelLoadFeatures() {
 }
 
 void VectorStreamingRenderer::Node::loadChildren(const G3MRenderContext* rc) {
-
-  // http://192.168.1.12:8080/server-mapboo/public/VectorialStreaming/GEONames-PopulatedPlaces_LOD/?nodes=0|1|
-
   const size_t childrenIDsSize = _childrenIDs.size();
   if (childrenIDsSize == 0) {
     std::vector<Node*>* children = new std::vector<Node*>();

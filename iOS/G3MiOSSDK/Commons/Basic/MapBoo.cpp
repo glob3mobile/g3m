@@ -57,7 +57,7 @@ MapBoo::~MapBoo() {
 
 void MapBoo::requestMaps(MBMapsHandler* handler,
                          bool deleteHandler) {
-  _downloader->requestBuffer(URL(_serverURL, "/public/map/"),
+  _downloader->requestBuffer(URL(_serverURL, "/public/v1/map/"),
                              DownloadPriority::HIGHEST,
                              TimeInterval::zero(),
                              false, // readExpired
@@ -228,7 +228,7 @@ void MapBoo::MBLayer::apply(LayerSet* layerSet) const {
 
 
 void MapBoo::requestMap() {
-  _downloader->requestBuffer(URL(_serverURL, "/public/map/" + _mapID),
+  _downloader->requestBuffer(URL(_serverURL, "/public/v1/map/" + _mapID),
                              DownloadPriority::HIGHEST,
                              TimeInterval::zero(),
                              false, // readExpired
@@ -405,7 +405,7 @@ void MapBoo::MBDataset::apply(const URL&               serverURL,
     properties += _infoCriteria[i] + "|";
   }
 
-  vectorStreamingRenderer->addVectorSet(URL(serverURL, "/public/VectorialStreaming/"),
+  vectorStreamingRenderer->addVectorSet(URL(serverURL, "/public/v1/VectorialStreaming/"),
                                         _id,
                                         properties,
                                         new MBDatasetVectorSetSymbolizer(this),
