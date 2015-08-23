@@ -34,17 +34,19 @@ public class MapBoo
   {
     private final String _type;
     private final String _url;
+    private final boolean _verbose;
 
-    private MBLayer(String type, String url)
+    private MBLayer(String type, String url, boolean verbose)
     {
        _type = type;
        _url = url;
+       _verbose = verbose;
     }
 
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
 //    MBLayer(MBLayer that);
 
-    public static MapBoo.MBLayer fromJSON(JSONBaseObject jsonBaseObject)
+    public static MapBoo.MBLayer fromJSON(JSONBaseObject jsonBaseObject, boolean verbose)
     {
       if (jsonBaseObject == null)
       {
@@ -60,11 +62,15 @@ public class MapBoo
       final String type = jsonObject.get("type").asString().value();
       final String url = jsonObject.getAsString("url", "");
     
-      return new MapBoo.MBLayer(type, url);
+      return new MapBoo.MBLayer(type, url, verbose);
     }
 
     public void dispose()
     {
+      if (_verbose)
+      {
+        ILogger.instance().logInfo("MapBoo: deleting layer");
+      }
     }
 
     public final void apply(LayerSet layerSet)
@@ -157,7 +163,7 @@ public class MapBoo
       super.dispose();
     }
 
-    public static MapBoo.MBDataset fromJSON(JSONBaseObject jsonBaseObject)
+    public static MapBoo.MBDataset fromJSON(JSONBaseObject jsonBaseObject, boolean verbose)
     {
       if (jsonBaseObject == null)
       {
@@ -192,7 +198,7 @@ public class MapBoo
         properties += _infoCriteria.get(i) + "|";
       }
     
-      vectorStreamingRenderer.addVectorSet(new URL(serverURL, "/public/v1/VectorialStreaming/"), _id, properties, new MBDatasetVectorSetSymbolizer(this), true, DownloadPriority.HIGHER, TimeInterval.zero(), true, true, false); // haltOnError -  verbose -  readExpired -  deleteSymbolizer
+      vectorStreamingRenderer.addVectorSet(new URL(serverURL, "/public/v1/VectorialStreaming/"), _id, properties, new MBDatasetVectorSetSymbolizer(this), true, DownloadPriority.MEDIUM, TimeInterval.zero(), true, true, false); // haltOnError -  verbose -  readExpired -  deleteSymbolizer
     }
 
     public final Mark createMark(GEO2DPointGeometry geometry)
@@ -236,25 +242,27 @@ public class MapBoo
     private java.util.ArrayList<MapBoo.MBLayer> _layers = new java.util.ArrayList<MapBoo.MBLayer>();
     private java.util.ArrayList<MapBoo.MBDataset> _datasets = new java.util.ArrayList<MapBoo.MBDataset>();
     private final int _timestamp;
+    private final boolean _verbose;
 
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
 //    MBMap(MBMap that);
 
-    private MBMap(String id, String name, java.util.ArrayList<MapBoo.MBLayer> layers, java.util.ArrayList<MapBoo.MBDataset> datasets, int timestamp)
+    private MBMap(String id, String name, java.util.ArrayList<MapBoo.MBLayer> layers, java.util.ArrayList<MapBoo.MBDataset> datasets, int timestamp, boolean verbose)
     {
        _id = id;
        _name = name;
        _layers = layers;
        _datasets = datasets;
        _timestamp = timestamp;
+       _verbose = verbose;
     }
 
-    private static java.util.ArrayList<MapBoo.MBLayer> parseLayers(JSONArray jsonArray)
+    private static java.util.ArrayList<MapBoo.MBLayer> parseLayers(JSONArray jsonArray, boolean verbose)
     {
       java.util.ArrayList<MapBoo.MBLayer> result = new java.util.ArrayList<MapBoo.MBLayer>();
       for (int i = 0; i < jsonArray.size(); i++)
       {
-        MBLayer layer = MBLayer.fromJSON(jsonArray.get(i));
+        MBLayer layer = MBLayer.fromJSON(jsonArray.get(i), verbose);
         if (layer != null)
         {
           result.add(layer);
@@ -262,12 +270,12 @@ public class MapBoo
       }
       return result;
     }
-    private static java.util.ArrayList<MapBoo.MBDataset> parseDatasets(JSONArray jsonArray)
+    private static java.util.ArrayList<MapBoo.MBDataset> parseDatasets(JSONArray jsonArray, boolean verbose)
     {
       java.util.ArrayList<MapBoo.MBDataset> result = new java.util.ArrayList<MapBoo.MBDataset>();
       for (int i = 0; i < jsonArray.size(); i++)
       {
-        MBDataset dataset = MBDataset.fromJSON(jsonArray.get(i));
+        MBDataset dataset = MBDataset.fromJSON(jsonArray.get(i), verbose);
         if (dataset != null)
         {
           result.add(dataset);
@@ -277,7 +285,7 @@ public class MapBoo
     }
 
 
-    public static MapBoo.MBMap fromJSON(JSONBaseObject jsonBaseObject)
+    public static MapBoo.MBMap fromJSON(JSONBaseObject jsonBaseObject, boolean verbose)
     {
       if (jsonBaseObject == null)
       {
@@ -292,15 +300,20 @@ public class MapBoo
     
       final String id = jsonObject.get("id").asString().value();
       final String name = jsonObject.get("name").asString().value();
-      java.util.ArrayList<MapBoo.MBLayer> layers = parseLayers(jsonObject.get("layerSet").asArray());
-      java.util.ArrayList<MapBoo.MBDataset> datasets = parseDatasets(jsonObject.get("datasets").asArray());
+      java.util.ArrayList<MapBoo.MBLayer> layers = parseLayers(jsonObject.get("layerSet").asArray(), verbose);
+      java.util.ArrayList<MapBoo.MBDataset> datasets = parseDatasets(jsonObject.get("datasets").asArray(), verbose);
       final int timestamp = (int) jsonObject.get("timestamp").asNumber().value();
     
-      return new MBMap(id, name, layers, datasets, timestamp);
+      return new MBMap(id, name, layers, datasets, timestamp, verbose);
     }
 
     public void dispose()
     {
+      if (_verbose)
+      {
+        ILogger.instance().logInfo("MapBoo: deleting map");
+      }
+    
       for (int i = 0; i < _datasets.size(); i++)
       {
         MBDataset dataset = _datasets.get(i);
@@ -368,11 +381,13 @@ public class MapBoo
     private MapBoo _mapboo;
     private IByteBuffer _buffer;
     private MBMap _map;
+    private final boolean _verbose;
 
-    public MapParserAsyncTask(MapBoo mapboo, IByteBuffer buffer)
+    public MapParserAsyncTask(MapBoo mapboo, IByteBuffer buffer, boolean verbose)
     {
        _mapboo = mapboo;
        _buffer = buffer;
+       _verbose = verbose;
        _map = null;
     }
 
@@ -386,13 +401,18 @@ public class MapBoo
 
     public final void runInBackground(G3MContext context)
     {
+      if (_verbose)
+      {
+        ILogger.instance().logInfo("MapBoo: parsing map");
+      }
+    
       final JSONBaseObject jsonBaseObject = IJSONParser.instance().parse(_buffer);
     
       if (_buffer != null)
          _buffer.dispose(); // release some memory
       _buffer = null;
     
-      _map = MBMap.fromJSON(jsonBaseObject);
+      _map = MBMap.fromJSON(jsonBaseObject, _verbose);
     
       if (jsonBaseObject != null)
          jsonBaseObject.dispose();
@@ -402,10 +422,20 @@ public class MapBoo
     {
       if (_map == null)
       {
+        if (_verbose)
+        {
+          ILogger.instance().logInfo("MapBoo: error parsing map");
+        }
+    
         _mapboo.onMapParseError();
       }
       else
       {
+        if (_verbose)
+        {
+          ILogger.instance().logInfo("MapBoo: parsed map");
+        }
+    
         _mapboo.onMap(_map);
         _map = null; // moved ownership to _mapboo
       }
@@ -419,16 +449,18 @@ public class MapBoo
     private MBMapsHandler _handler;
     private boolean _deleteHandler;
     private IByteBuffer _buffer;
+    private final boolean _verbose;
 
     private boolean _parseError;
     private java.util.ArrayList<MBMap> _maps = new java.util.ArrayList<MBMap>();
 
 
-    public MapsParserAsyncTask(MBMapsHandler handler, boolean deleteHandler, IByteBuffer buffer)
+    public MapsParserAsyncTask(MBMapsHandler handler, boolean deleteHandler, IByteBuffer buffer, boolean verbose)
     {
        _handler = handler;
        _deleteHandler = deleteHandler;
        _buffer = buffer;
+       _verbose = verbose;
        _parseError = true;
     }
 
@@ -453,6 +485,11 @@ public class MapBoo
 
     public final void runInBackground(G3MContext context)
     {
+      if (_verbose)
+      {
+        ILogger.instance().logInfo("MapBoo: parsing maps");
+      }
+    
       final JSONBaseObject jsonBaseObject = IJSONParser.instance().parse(_buffer);
     
       if (_buffer != null)
@@ -468,7 +505,7 @@ public class MapBoo
     
           for (int i = 0; i < jsonArray.size(); i++)
           {
-            MBMap map = MBMap.fromJSON(jsonArray.get(i));
+            MBMap map = MBMap.fromJSON(jsonArray.get(i), _verbose);
             if (map == null)
             {
               _parseError = true;
@@ -487,10 +524,20 @@ public class MapBoo
     {
       if (_parseError)
       {
+        if (_verbose)
+        {
+          ILogger.instance().logInfo("MapBoo: error parsing maps");
+        }
+    
         _handler.onParseError();
       }
       else
       {
+        if (_verbose)
+        {
+          ILogger.instance().logInfo("MapBoo: parsed maps");
+        }
+    
         _handler.onMaps(_maps);
         _maps.clear(); // moved maps ownership to _handler
       }
@@ -503,20 +550,31 @@ public class MapBoo
   {
     private MapBoo _mapboo;
     private final IThreadUtils _threadUtils;
-
-    public MapBufferDownloadListener(MapBoo mapboo, IThreadUtils threadUtils)
+    private final boolean _verbose;
+    public MapBufferDownloadListener(MapBoo mapboo, IThreadUtils threadUtils, boolean verbose)
     {
        _mapboo = mapboo;
        _threadUtils = threadUtils;
+       _verbose = verbose;
     }
 
     public final void onDownload(URL url, IByteBuffer buffer, boolean expired)
     {
-      _threadUtils.invokeAsyncTask(new MapParserAsyncTask(_mapboo, buffer), true);
+      if (_verbose)
+      {
+        ILogger.instance().logInfo("MapBoo: downloaded map");
+      }
+    
+      _threadUtils.invokeAsyncTask(new MapParserAsyncTask(_mapboo, buffer, _verbose), true);
     }
 
     public final void onError(URL url)
     {
+      if (_verbose)
+      {
+        ILogger.instance().logInfo("MapBoo: error downloading map");
+      }
+    
       _mapboo.onMapDownloadError();
     }
 
@@ -538,13 +596,15 @@ public class MapBoo
     private MBMapsHandler _handler;
     private boolean _deleteHandler;
     private final IThreadUtils _threadUtils;
+    private final boolean _verbose;
 
 
-    public MapsBufferDownloadListener(MBMapsHandler handler, boolean deleteHandler, IThreadUtils threadUtils)
+    public MapsBufferDownloadListener(MBMapsHandler handler, boolean deleteHandler, IThreadUtils threadUtils, boolean verbose)
     {
        _handler = handler;
        _deleteHandler = deleteHandler;
        _threadUtils = threadUtils;
+       _verbose = verbose;
     }
 
     public void dispose()
@@ -558,12 +618,20 @@ public class MapBoo
 
     public final void onDownload(URL url, IByteBuffer buffer, boolean expired)
     {
-      _threadUtils.invokeAsyncTask(new MapsParserAsyncTask(_handler, _deleteHandler, buffer), true);
+      if (_verbose)
+      {
+        ILogger.instance().logInfo("MapBoo: downloaded maps");
+      }
+      _threadUtils.invokeAsyncTask(new MapsParserAsyncTask(_handler, _deleteHandler, buffer, _verbose), true);
       _handler = null; // moves ownership to MapsParserAsyncTask
     }
 
     public final void onError(URL url)
     {
+      if (_verbose)
+      {
+        ILogger.instance().logInfo("MapBoo: error downloading maps");
+      }
       _handler.onDownloadError();
     
       if (_deleteHandler)
@@ -590,6 +658,7 @@ public class MapBoo
   private IG3MBuilder _builder;
   private final URL _serverURL;
   private MBHandler _handler;
+  private final boolean _verbose;
 
   private String _mapID;
 
@@ -601,12 +670,21 @@ public class MapBoo
 
   private void requestMap()
   {
-    _downloader.requestBuffer(new URL(_serverURL, "/public/v1/map/" + _mapID), DownloadPriority.HIGHEST, TimeInterval.zero(), false, new MapBufferDownloadListener(this, _threadUtils), true); // readExpired
+    if (_verbose)
+    {
+      ILogger.instance().logInfo("MapBoo: requesting map \"%s\"", _mapID);
+    }
+  
+    _downloader.requestBuffer(new URL(_serverURL, "/public/v1/map/" + _mapID), DownloadPriority.HIGHEST, TimeInterval.zero(), false, new MapBufferDownloadListener(this, _threadUtils, _verbose), true); // readExpired
   }
   private void applyMap(MapBoo.MBMap map)
   {
+    if (_verbose)
+    {
+      ILogger.instance().logInfo("MapBoo: applying map \"%s\"", map.getID());
+    }
+  
     // clean current map
-  //  _markRenderer->removeAllMarks();
     _vectorStreamingRenderer.removeAllVectorSets();
     _layerSet.removeAllLayers(true);
   
@@ -631,12 +709,12 @@ public class MapBoo
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
 //  MapBoo(MapBoo that);
 
-  public MapBoo(IG3MBuilder builder, URL serverURL, MBHandler handler)
+  public MapBoo(IG3MBuilder builder, URL serverURL, MBHandler handler, boolean verbose)
   {
      _builder = builder;
      _serverURL = serverURL;
      _handler = handler;
-     _layerSet = null;
+     _verbose = verbose;
     _layerSet = new LayerSet();
     _layerSet.addLayer(new ChessboardLayer());
   
@@ -666,7 +744,11 @@ public class MapBoo
   }
   public final void requestMaps(MBMapsHandler handler, boolean deleteHandler)
   {
-    _downloader.requestBuffer(new URL(_serverURL, "/public/v1/map/"), DownloadPriority.HIGHEST, TimeInterval.zero(), false, new MapsBufferDownloadListener(handler, deleteHandler, _threadUtils), true); // readExpired
+    if (_verbose)
+    {
+      ILogger.instance().logInfo("MapBoo: loading maps");
+    }
+    _downloader.requestBuffer(new URL(_serverURL, "/public/v1/map/"), DownloadPriority.HIGHEST, TimeInterval.zero(), false, new MapsBufferDownloadListener(handler, deleteHandler, _threadUtils, _verbose), true); // readExpired
   }
 
   public final void setMapID(String mapID)
