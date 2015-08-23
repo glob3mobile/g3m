@@ -491,6 +491,10 @@ public class MapBoo
       _mapID = mapID;
   
       applyMap(map);
+      if (_handler != null)
+      {
+        _handler.onSelectedMap(map);
+      }
       if (map != null)
          map.dispose();
     }
@@ -512,12 +516,18 @@ public class MapBoo
   }
   public final void onMap(MapBoo.MBMap map)
   {
+    applyMap(map);
     if (_handler != null)
     {
-      applyMap(map);
       _handler.onSelectedMap(map);
-      if (map != null)
-         map.dispose();
     }
+    if (map != null)
+       map.dispose();
   }
+
+  public final void reloadMap()
+  {
+    requestMap();
+  }
+
 }
