@@ -172,8 +172,17 @@ public class MapBoo
     }
   }
 
+  public interface MBHandler
+  {
+    void dispose();
 
-  public interface MapsHandler
+    void onMapDownloadError();
+    void onMapParseError();
+    void onSelectedMap(MapBoo.MBMap map);
+  }
+
+
+  public interface MBMapsHandler
   {
     void dispose();
 
@@ -184,16 +193,69 @@ public class MapBoo
 
   }
 
+
+  public static class MapParserAsyncTask extends GAsyncTask
+  {
+    private MapBoo _mapboo;
+    private IByteBuffer _buffer;
+    private MBMap _map;
+
+    public MapParserAsyncTask(MapBoo mapboo, IByteBuffer buffer)
+    {
+       _mapboo = mapboo;
+       _buffer = buffer;
+       _map = null;
+    }
+
+    public void dispose()
+    {
+      if (_buffer != null)
+         _buffer.dispose();
+      if (_map != null)
+         _map.dispose();
+    }
+
+    public final void runInBackground(G3MContext context)
+    {
+      final JSONBaseObject jsonBaseObject = IJSONParser.instance().parse(_buffer);
+    
+      if (_buffer != null)
+         _buffer.dispose(); // release some memory
+      _buffer = null;
+    
+      _map = MBMap.fromJSON(jsonBaseObject);
+    
+      if (jsonBaseObject != null)
+         jsonBaseObject.dispose();
+    }
+
+    public final void onPostExecute(G3MContext context)
+    {
+      if (_map == null)
+      {
+        _mapboo.onMapParseError();
+      }
+      else
+      {
+        _mapboo.onMap(_map);
+        _map = null; // moved ownership to _mapboo
+      }
+    }
+
+  }
+
+
   public static class MapsParserAsyncTask extends GAsyncTask
   {
-    private MapsHandler _handler;
+    private MBMapsHandler _handler;
     private boolean _deleteHandler;
     private IByteBuffer _buffer;
+
     private boolean _parseError;
     private java.util.ArrayList<MBMap> _maps = new java.util.ArrayList<MBMap>();
 
 
-    public MapsParserAsyncTask(MapsHandler handler, boolean deleteHandler, IByteBuffer buffer)
+    public MapsParserAsyncTask(MBMapsHandler handler, boolean deleteHandler, IByteBuffer buffer)
     {
        _handler = handler;
        _deleteHandler = deleteHandler;
@@ -268,14 +330,48 @@ public class MapBoo
   }
 
 
+  public static class MapBufferDownloadListener extends IBufferDownloadListener
+  {
+    private MapBoo _mapboo;
+    private final IThreadUtils _threadUtils;
+
+    public MapBufferDownloadListener(MapBoo mapboo, IThreadUtils threadUtils)
+    {
+       _mapboo = mapboo;
+       _threadUtils = threadUtils;
+    }
+
+    public final void onDownload(URL url, IByteBuffer buffer, boolean expired)
+    {
+      _threadUtils.invokeAsyncTask(new MapParserAsyncTask(_mapboo, buffer), true);
+    }
+
+    public final void onError(URL url)
+    {
+      _mapboo.onMapDownloadError();
+    }
+
+    public final void onCancel(URL url)
+    {
+      // do nothing
+    }
+
+    public final void onCanceledDownload(URL url, IByteBuffer buffer, boolean expired)
+    {
+      // do nothing
+    }
+
+  }
+
+
   public static class MapsBufferDownloadListener extends IBufferDownloadListener
   {
-    private MapsHandler _handler;
+    private MBMapsHandler _handler;
     private boolean _deleteHandler;
     private final IThreadUtils _threadUtils;
 
 
-    public MapsBufferDownloadListener(MapsHandler handler, boolean deleteHandler, IThreadUtils threadUtils)
+    public MapsBufferDownloadListener(MBMapsHandler handler, boolean deleteHandler, IThreadUtils threadUtils)
     {
        _handler = handler;
        _deleteHandler = deleteHandler;
@@ -324,6 +420,7 @@ public class MapBoo
 
   private IG3MBuilder _builder;
   private final URL _serverURL;
+  private MBHandler _handler;
 
   private String _mapID;
 
@@ -331,10 +428,26 @@ public class MapBoo
   private IDownloader _downloader;
   private final IThreadUtils _threadUtils;
 
-  public MapBoo(IG3MBuilder builder, URL serverURL)
+  private void requestMap()
+  {
+    _downloader.requestBuffer(new URL(_serverURL, "/public/map/" + _mapID), DownloadPriority.HIGHEST, TimeInterval.zero(), false, new MapBufferDownloadListener(this, _threadUtils), true); // readExpired
+  }
+  private void applyMap(MapBoo.MBMap map)
+  {
+    _layerSet.removeAllLayers(true);
+    map.apply(_layerSet);
+    if (_layerSet.size() == 0)
+    {
+      _layerSet.addLayer(new ChessboardLayer());
+    }
+  }
+
+
+  public MapBoo(IG3MBuilder builder, URL serverURL, MBHandler handler)
   {
      _builder = builder;
      _serverURL = serverURL;
+     _handler = handler;
      _layerSet = null;
     _layerSet = new LayerSet();
     _layerSet.addLayer(new ChessboardLayer());
@@ -349,15 +462,16 @@ public class MapBoo
   {
     if (_builder != null)
        _builder.dispose();
+    if (_handler != null)
+       _handler.dispose();
   }
 
-  public final void requestMaps(MapsHandler handler)
+  public final void requestMaps(MBMapsHandler handler)
   {
      requestMaps(handler, true);
   }
-  public final void requestMaps(MapsHandler handler, boolean deleteHandler)
+  public final void requestMaps(MBMapsHandler handler, boolean deleteHandler)
   {
-  
     _downloader.requestBuffer(new URL(_serverURL, "/public/map/"), DownloadPriority.HIGHEST, TimeInterval.zero(), false, new MapsBufferDownloadListener(handler, deleteHandler, _threadUtils), true); // readExpired
   }
 
@@ -366,9 +480,8 @@ public class MapBoo
     if (!_mapID.equals(mapID))
     {
       _mapID = mapID;
+      requestMap();
     }
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning TODO: request map's data
   }
   public final void setMap(MapBoo.MBMap map)
   {
@@ -377,13 +490,34 @@ public class MapBoo
     {
       _mapID = mapID;
   
-      _layerSet.removeAllLayers(true);
-      map.apply(_layerSet);
-      if (_layerSet.size() == 0)
-      {
-        _layerSet.addLayer(new ChessboardLayer());
-      }
+      applyMap(map);
+      if (map != null)
+         map.dispose();
     }
   }
 
+  public final void onMapDownloadError()
+  {
+    if (_handler != null)
+    {
+      _handler.onMapDownloadError();
+    }
+  }
+  public final void onMapParseError()
+  {
+    if (_handler != null)
+    {
+      _handler.onMapParseError();
+    }
+  }
+  public final void onMap(MapBoo.MBMap map)
+  {
+    if (_handler != null)
+    {
+      applyMap(map);
+      _handler.onSelectedMap(map);
+      if (map != null)
+         map.dispose();
+    }
+  }
 }
