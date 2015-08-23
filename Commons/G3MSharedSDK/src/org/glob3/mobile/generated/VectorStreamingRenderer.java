@@ -876,11 +876,13 @@ public class VectorStreamingRenderer extends DefaultRenderer
   }
 
 
-  public interface VectorSetSymbolizer
+  public abstract static class VectorSetSymbolizer
   {
-    void dispose();
+    public void dispose()
+    {
+    }
 
-    Mark createMark(GEO2DPointGeometry geometry);
+    public abstract Mark createMark(GEO2DPointGeometry geometry);
 
   }
 

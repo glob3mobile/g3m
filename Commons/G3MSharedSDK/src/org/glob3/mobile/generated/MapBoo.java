@@ -22,7 +22,6 @@ package org.glob3.mobile.generated;
 //class IDownloader;
 //class JSONBaseObject;
 //class JSONArray;
-//class VectorStreamingRenderer;
 //class MarksRenderer;
 
 
@@ -106,6 +105,50 @@ public class MapBoo
        _timestamp = timestamp;
     }
 
+    private String createMarkLabel(JSONObject properties)
+    {
+      final int size = _labelingCriteria.size();
+      if (size == 0)
+      {
+        return "<label>";
+      }
+      else if (size == 1)
+      {
+        return properties.get(_labelingCriteria.get(0)).toString();
+      }
+      else
+      {
+        IStringBuilder labelBuilder = IStringBuilder.newStringBuilder();
+        for (int i = 0; i < _labelingCriteria.size(); i++)
+        {
+          if (i > 0)
+          {
+            labelBuilder.addString(" ");
+          }
+          final String value = properties.get(_labelingCriteria.get(i)).toString();
+          labelBuilder.addString(value);
+        }
+    
+        final String label = labelBuilder.getString();
+        if (labelBuilder != null)
+           labelBuilder.dispose();
+        labelBuilder = null;
+        return label;
+      }
+    }
+    private MarkTouchListener createMarkTouchListener(JSONObject properties)
+    {
+      final int size = _infoCriteria.size();
+      if (size == 0)
+      {
+        return null;
+      }
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning Diego at work!
+      return null;
+    }
+
+
     public static MapBoo.MBDataset fromJSON(JSONBaseObject jsonBaseObject)
     {
       if (jsonBaseObject == null)
@@ -133,6 +176,36 @@ public class MapBoo
     
     }
 
+
+    //class XXXVectorSetSymbolizer : public VectorStreamingRenderer::VectorSetSymbolizer {
+    //public:
+    //  Mark* createMark(const GEO2DPointGeometry* geometry) const {
+    //    const GEOFeature* feature = geometry->getFeature();
+    //
+    //    const JSONObject* properties = feature->getProperties();
+    //
+    //    const std::string label = properties->getAsString("name")->value();
+    //    const Geodetic3D  position( geometry->getPosition(), 0);
+    //
+    //    //    double maxPopulation = 22315474;
+    //    //    double population = properties->getAsNumber("population")->value();
+    //    //    float labelFontSize = (float) (14.0 * (population / maxPopulation) + 16.0) ;
+    //
+    //    float labelFontSize = 18;
+    //
+    //    Mark* mark = new Mark(label,
+    //                          position,
+    //                          ABSOLUTE,
+    //                          0, // minDistanceToCamera
+    //                          labelFontSize
+    //                          // Color::newFromRGBA(1, 1, 0, 1)
+    //                          );
+    //    mark->setZoomInAppears(true);
+    //    return mark;
+    //  }
+    //};
+    
+    
     public final void apply(URL serverURL, VectorStreamingRenderer vectorStreamingRenderer)
     {
       String properties = "";
@@ -145,11 +218,35 @@ public class MapBoo
         properties += _infoCriteria.get(i) + "|";
       }
     
-      vectorStreamingRenderer.addVectorSet(new URL(serverURL, "/public/VectorialStreaming/"), _id, properties, new XXXVectorSetSymbolizer(), true, DownloadPriority.HIGHER, TimeInterval.zero(), true, true, false); // haltOnError -  verbose -  readExpired -  deleteSymbolizer
+      vectorStreamingRenderer.addVectorSet(new URL(serverURL, "/public/VectorialStreaming/"), _id, properties, new MBDatasetVectorSetSymbolizer(this), true, DownloadPriority.HIGHER, TimeInterval.zero(), true, true, false); // haltOnError -  verbose -  readExpired -  deleteSymbolizer
+    }
+
+    public final Mark createMark(GEO2DPointGeometry geometry)
+    {
+      final GEOFeature feature = geometry.getFeature();
+      final JSONObject properties = feature.getProperties();
+      final Geodetic3D position = new Geodetic3D(geometry.getPosition(), 0);
+    
+      return new Mark(createMarkLabel(properties), position, AltitudeMode.ABSOLUTE, 0, 18, Color.newFromRGBA(1, 1, 1, 1), Color.newFromRGBA(0, 0, 0, 1), null, true, createMarkTouchListener(properties), true); // autoDeleteListener -  MarkTouchListener* -  autoDeleteUserData -  userData -  labelShadowColor -  labelFontColor -  labelFontSize -  minDistanceToCamera
     }
 
   }
 
+
+  public static class MBDatasetVectorSetSymbolizer extends VectorStreamingRenderer.VectorSetSymbolizer
+  {
+    private final MBDataset _dataset;
+
+    public MBDatasetVectorSetSymbolizer(MBDataset dataset)
+    {
+       _dataset = dataset;
+    }
+
+    public final Mark createMark(GEO2DPointGeometry geometry)
+    {
+      return _dataset.createMark(geometry);
+    }
+  }
 
 
   public static class MBMap

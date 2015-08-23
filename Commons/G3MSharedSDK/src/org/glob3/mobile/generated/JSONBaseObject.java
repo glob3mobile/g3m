@@ -83,4 +83,6 @@ public abstract class JSONBaseObject
 
   public abstract void acceptVisitor(JSONVisitor visitor);
 
+  public abstract String toString();
+
 }

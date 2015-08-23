@@ -175,6 +175,46 @@ public class JSONArray extends JSONBaseObject
        isb.dispose();
     return s;
   }
+  public final String toString()
+  {
+    IStringBuilder isb = IStringBuilder.newStringBuilder();
+  
+    final int size = this.size();
+  
+    isb.addString("[");
+  
+    if (size > 0)
+    {
+      isb.addString((this.get(0) == null) ? "null" : this.get(0).toString());
+  
+      if (size <= 10)
+      {
+        for (int i = 1; i < size; i++)
+        {
+          isb.addString(", ");
+          isb.addString((this.get(i) == null) ? "null" : this.get(i).toString());
+        }
+      }
+      else
+      {
+        for (int i = 1; i < 10; i++)
+        {
+          isb.addString(", ");
+          isb.addString((this.get(i) == null) ? "null" : this.get(i).toString());
+        }
+        isb.addString(", ...");
+        isb.addString(" size=");
+        isb.addLong(size);
+      }
+    }
+  
+    isb.addString("]");
+  
+    final String s = isb.getString();
+    if (isb != null)
+       isb.dispose();
+    return s;
+  }
 
   public final JSONArray deepCopy()
   {
