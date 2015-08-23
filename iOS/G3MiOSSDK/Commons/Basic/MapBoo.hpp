@@ -284,6 +284,11 @@ public:
   void onMapDownloadError();
   void onMapParseError();
   void onMap(MapBoo::MBMap* map);
+
+  void reloadMap() {
+    requestMap();
+  }
+
 };
 
 #endif

@@ -235,6 +235,9 @@ void MapBoo::setMap(MapBoo::MBMap* map) {
     _mapID = mapID;
 
     applyMap(map);
+    if (_handler != NULL) {
+      _handler->onSelectedMap(map);
+    }
     delete map;
   }
 }
@@ -308,9 +311,9 @@ void MapBoo::onMapParseError() {
 }
 
 void MapBoo::onMap(MapBoo::MBMap* map) {
+  applyMap(map);
   if (_handler != NULL) {
-    applyMap(map);
     _handler->onSelectedMap(map);
-    delete map;
   }
+  delete map;
 }
