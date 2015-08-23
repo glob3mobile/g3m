@@ -606,6 +606,7 @@ public class MapBoo
   private void applyMap(MapBoo.MBMap map)
   {
     // clean current map
+  //  _markRenderer->removeAllMarks();
     _vectorStreamingRenderer.removeAllVectorSets();
     _layerSet.removeAllLayers(true);
   
