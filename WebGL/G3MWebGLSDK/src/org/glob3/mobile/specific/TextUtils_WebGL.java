@@ -11,8 +11,8 @@ import org.glob3.mobile.generated.LabelPosition;
 
 
 public class TextUtils_WebGL
-         extends
-            ITextUtils {
+   extends
+      ITextUtils {
 
    //   public static native String toJSColor(final Color color) /*-{
    //		if (color) {
@@ -163,8 +163,7 @@ public class TextUtils_WebGL
 		if (labelBottom) {
 			resultWidth = Math.max(textWidth, imageWidth);
 			resultHeight = textHeight + separation + imageHeight;
-		}
-		else {
+		} else {
 			resultWidth = textWidth + separation + imageWidth;
 			resultHeight = Math.max(textHeight, imageHeight);
 		}
@@ -180,8 +179,7 @@ public class TextUtils_WebGL
 
 		if (labelBottom) {
 			context.drawImage(htmlImage, (resultWidth - imageWidth) / 2, 0);
-		}
-		else {
+		} else {
 			context.drawImage(htmlImage, 0, (resultHeight - imageHeight) / 2);
 		}
 
@@ -199,10 +197,11 @@ public class TextUtils_WebGL
 		//context.fillText(label, 0, 0);
 
 		if (labelBottom) {
-			context.fillText(label, (resultWidth - textWidth) / 2, imageHeight + separation);
-		}
-		else {
-			context.fillText(label, imageWidth + separation, (resultHeight - textHeight) / 2);
+			context.fillText(label, (resultWidth - textWidth) / 2, imageHeight
+					+ separation);
+		} else {
+			context.fillText(label, imageWidth + separation,
+					(resultHeight - textHeight) / 2);
 		}
 
 		var jsResult = new Image();

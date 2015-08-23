@@ -383,7 +383,7 @@ void MapBoo::MBDataset::apply(const URL&               serverURL,
                                         properties,
                                         new MBDatasetVectorSetSymbolizer(this),
                                         true,  // deleteSymbolizer
-                                        DownloadPriority::HIGHER,
+                                        DownloadPriority::MEDIUM,
                                         TimeInterval::zero(),
                                         true,  // readExpired
                                         true,  // verbose
