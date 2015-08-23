@@ -63,10 +63,18 @@ public class MapBoo
     {
     }
 
-    public final void createG3MLayer()
+    public final void apply(LayerSet layerSet)
     {
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning Diego at work!
+      if (_type.equals("URLTemplate"))
+      {
+        URLTemplateLayer layer = URLTemplateLayer.newMercator(_url, Sector.fullSphere(), false, 1, 18, TimeInterval.fromDays(30)); // maxLevel -  firstLevel -  isTransparent
+    
+        layerSet.addLayer(layer);
+      }
+      else
+      {
+        ILogger.instance().logError("MapBoo::MBLayer: unknown type \"%s\"", _type);
+      }
     }
 
   }
@@ -91,10 +99,10 @@ public class MapBoo
 
     private static java.util.ArrayList<MapBoo.MBLayer> parseLayers(JSONArray jsonArray)
     {
-      final java.util.ArrayList<MapBoo.MBLayer> result = new java.util.ArrayList<MapBoo.MBLayer>();
+      java.util.ArrayList<MapBoo.MBLayer> result = new java.util.ArrayList<MapBoo.MBLayer>();
       for (int i = 0; i < jsonArray.size(); i++)
       {
-        final MBLayer layer = MBLayer.fromJSON(jsonArray.get(i));
+        MBLayer layer = MBLayer.fromJSON(jsonArray.get(i));
         if (layer != null)
         {
           result.add(layer);
@@ -127,7 +135,7 @@ public class MapBoo
     
       final String id = jsonObject.get("id").asString().value();
       final String name = jsonObject.get("name").asString().value();
-      final java.util.ArrayList<MapBoo.MBLayer> layers = parseLayers(jsonObject.get("layerSet").asArray());
+      java.util.ArrayList<MapBoo.MBLayer> layers = parseLayers(jsonObject.get("layerSet").asArray());
       java.util.ArrayList<String> datasetsIDs = parseDatasetsIDs(jsonObject.get("datasets").asArray());
       final int timestamp = (int) jsonObject.get("timestamp").asNumber().value();
     
@@ -141,6 +149,25 @@ public class MapBoo
         final MBLayer layer = _layers.get(i);
         if (layer != null)
           layer.dispose();
+      }
+    }
+
+    public final String getName()
+    {
+      return _name;
+    }
+
+    public final String getID()
+    {
+      return _id;
+    }
+
+    public final void apply(LayerSet layerSet)
+    {
+      for (int i = 0; i < _layers.size(); i++)
+      {
+        final MBLayer layer = _layers.get(i);
+        layer.apply(layerSet);
       }
     }
   }
@@ -163,7 +190,7 @@ public class MapBoo
     private boolean _deleteHandler;
     private IByteBuffer _buffer;
     private boolean _parseError;
-    private final java.util.ArrayList<MBMap> _maps = new java.util.ArrayList<MBMap>();
+    private java.util.ArrayList<MBMap> _maps = new java.util.ArrayList<MBMap>();
 
 
     public MapsParserAsyncTask(MapsHandler handler, boolean deleteHandler, IByteBuffer buffer)
@@ -181,7 +208,7 @@ public class MapBoo
     
       for (int i = 0; i < _maps.size(); i++)
       {
-        final MBMap map = _maps.get(i);
+        MBMap map = _maps.get(i);
         if (map != null)
            map.dispose();
       }
@@ -210,7 +237,7 @@ public class MapBoo
     
           for (int i = 0; i < jsonArray.size(); i++)
           {
-            final MBMap map = MBMap.fromJSON(jsonArray.get(i));
+            MBMap map = MBMap.fromJSON(jsonArray.get(i));
             if (map == null)
             {
               _parseError = true;
@@ -298,6 +325,8 @@ public class MapBoo
   private IG3MBuilder _builder;
   private final URL _serverURL;
 
+  private String _mapID;
+
   private LayerSet _layerSet;
   private IDownloader _downloader;
   private final IThreadUtils _threadUtils;
@@ -330,6 +359,31 @@ public class MapBoo
   {
   
     _downloader.requestBuffer(new URL(_serverURL, "/public/map/"), DownloadPriority.HIGHEST, TimeInterval.zero(), false, new MapsBufferDownloadListener(handler, deleteHandler, _threadUtils), true); // readExpired
+  }
+
+  public final void setMapID(String mapID)
+  {
+    if (!_mapID.equals(mapID))
+    {
+      _mapID = mapID;
+    }
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning TODO: request map's data
+  }
+  public final void setMap(MapBoo.MBMap map)
+  {
+    final String mapID = map.getID();
+    if (!_mapID.equals(mapID))
+    {
+      _mapID = mapID;
+  
+      _layerSet.removeAllLayers(true);
+      map.apply(_layerSet);
+      if (_layerSet.size() == 0)
+      {
+        _layerSet.addLayer(new ChessboardLayer());
+      }
+    }
   }
 
 }
