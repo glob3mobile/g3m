@@ -61,10 +61,10 @@ public:
     const int                         _timestamp;
 
     MBMap(const std::string&                   id,
-        const std::string&                   name,
-        std::vector<const MapBoo::MBLayer*>& layers,
-        std::vector<std::string>&            datasetsIDs,
-        int                                  timestamp) :
+          const std::string&                   name,
+          std::vector<const MapBoo::MBLayer*>& layers,
+          std::vector<std::string>&            datasetsIDs,
+          int                                  timestamp) :
     _id(id),
     _name(name),
     _layers(layers),
@@ -80,6 +80,10 @@ public:
     static const MapBoo::MBMap* fromJSON(const JSONBaseObject* jsonBaseObject);
 
     ~MBMap();
+
+    const std::string getName() const {
+      return _name;
+    }
   };
 
 
