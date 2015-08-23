@@ -44,27 +44,27 @@ protected:
   const URL createURL(const Tile* tile) const;
 
 public:
-  static URLTemplateLayer* newMercator(const std::string&               urlTemplate,
-                                       const Sector&                    dataSector,
-                                       const bool                       isTransparent,
-                                       const int                        firstLevel,
-                                       const int                        maxLevel,
-                                       const TimeInterval&              timeToCache,
-                                       const bool                       readExpired     = true,
-                                       const float                      transparency    = 1,
-                                       const LayerCondition*            condition       = NULL,
-                                       std::vector<const Info*>*  layerInfo       = new std::vector<const Info*>());
+  static URLTemplateLayer* newMercator(const std::string&         urlTemplate,
+                                       const Sector&              dataSector,
+                                       const bool                 isTransparent,
+                                       const int                  firstLevel,
+                                       const int                  maxLevel,
+                                       const TimeInterval&        timeToCache,
+                                       const bool                 readExpired  = true,
+                                       const float                transparency = 1,
+                                       const LayerCondition*      condition    = NULL,
+                                       std::vector<const Info*>*  layerInfo    = new std::vector<const Info*>());
 
-  static URLTemplateLayer* newWGS84(const std::string&    urlTemplate,
-                                    const Sector&         dataSector,
-                                    const bool            isTransparent,
-                                    const int             firstLevel,
-                                    const int             maxLevel,
-                                    const TimeInterval&   timeToCache,
-                                    const bool            readExpired    = true,
-                                    const LayerCondition* condition      = NULL,
-                                    const float           transparency   = 1,
-                                    std::vector<const Info*>*  layerInfo       = new std::vector<const Info*>());
+  static URLTemplateLayer* newWGS84(const std::string&        urlTemplate,
+                                    const Sector&             dataSector,
+                                    const bool                isTransparent,
+                                    const int                 firstLevel,
+                                    const int                 maxLevel,
+                                    const TimeInterval&       timeToCache,
+                                    const bool                readExpired  = true,
+                                    const LayerCondition*     condition    = NULL,
+                                    const float               transparency = 1,
+                                    std::vector<const Info*>* layerInfo    = new std::vector<const Info*>());
 
   URLTemplateLayer(const std::string&                urlTemplate,
                    const Sector&                     dataSector,
@@ -73,8 +73,8 @@ public:
                    const bool                        readExpired,
                    const LayerCondition*             condition,
                    const LayerTilesRenderParameters* parameters,
-                   float                             transparency   = 1,
-                   std::vector<const Info*>*   layerInfo       = new std::vector<const Info*>());
+                   float                             transparency = 1,
+                   std::vector<const Info*>*         layerInfo    = new std::vector<const Info*>());
 
   const std::string description() const;
 

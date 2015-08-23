@@ -38,11 +38,11 @@ public:
 
 
   public:
-    static const MapBoo::MBLayer* fromJSON(const JSONBaseObject* jsonBaseObject);
+    static MapBoo::MBLayer* fromJSON(const JSONBaseObject* jsonBaseObject);
 
     ~MBLayer();
 
-    void createG3MLayer();
+    void apply(LayerSet* layerSet);
 
   };
 
@@ -52,7 +52,7 @@ public:
     const std::string                 _id;
     const std::string                 _name;
 #ifdef C_CODE
-    std::vector<const MapBoo::MBLayer*> _layers;
+    std::vector<MapBoo::MBLayer*> _layers;
 #endif
 #ifdef JAVA_CODE
     private final java.util.ArrayList<MapBoo.MBLayer> _layers;
@@ -60,11 +60,11 @@ public:
     std::vector<std::string>          _datasetsIDs;
     const int                         _timestamp;
 
-    MBMap(const std::string&                   id,
-          const std::string&                   name,
-          std::vector<const MapBoo::MBLayer*>& layers,
-          std::vector<std::string>&            datasetsIDs,
-          int                                  timestamp) :
+    MBMap(const std::string&             id,
+          const std::string&             name,
+          std::vector<MapBoo::MBLayer*>& layers,
+          std::vector<std::string>&      datasetsIDs,
+          int                            timestamp) :
     _id(id),
     _name(name),
     _layers(layers),
@@ -73,11 +73,11 @@ public:
     {
     }
 
-    static std::vector<const MapBoo::MBLayer*> parseLayers(const JSONArray* jsonArray);
-    static std::vector<std::string>              parseDatasetsIDs(const JSONArray* jsonArray);
+    static std::vector<MapBoo::MBLayer*> parseLayers(const JSONArray* jsonArray);
+    static std::vector<std::string>      parseDatasetsIDs(const JSONArray* jsonArray);
 
   public:
-    static const MapBoo::MBMap* fromJSON(const JSONBaseObject* jsonBaseObject);
+    static MapBoo::MBMap* fromJSON(const JSONBaseObject* jsonBaseObject);
 
     ~MBMap();
 
@@ -89,6 +89,7 @@ public:
       return _id;
     }
 
+    void apply(LayerSet* layerSet);
   };
 
 
@@ -101,7 +102,7 @@ public:
     void dispose();
 #endif
 
-    virtual void onMaps(const std::vector<const MapBoo::MBMap*> maps) = 0;
+    virtual void onMaps(std::vector<MapBoo::MBMap*> maps) = 0;
 
     virtual void onDownloadError() = 0;
     virtual void onParseError() = 0;
@@ -114,7 +115,7 @@ public:
     bool         _deleteHandler;
     IByteBuffer* _buffer;
     bool _parseError;
-    std::vector<const MBMap*> _maps;
+    std::vector<MBMap*> _maps;
 
   public:
 
@@ -200,7 +201,8 @@ public:
                    bool deleteHandler = true);
 
   void setMapID(const std::string& mapID);
-  
+  void setMap(MapBoo::MBMap* map);
+
 };
 
 #endif

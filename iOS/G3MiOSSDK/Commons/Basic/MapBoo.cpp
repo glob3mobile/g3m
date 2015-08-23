@@ -17,6 +17,7 @@
 #include "JSONObject.hpp"
 #include "JSONString.hpp"
 #include "JSONNumber.hpp"
+#include "URLTemplateLayer.hpp"
 
 
 MapBoo::MapBoo(IG3MBuilder* builder,
@@ -78,7 +79,7 @@ MapBoo::MapsParserAsyncTask::~MapsParserAsyncTask() {
   delete _buffer;
 
   for (int i = 0; i < _maps.size(); i++) {
-    const MBMap* map = _maps[i];
+    MBMap* map = _maps[i];
     delete map;
   }
 
@@ -98,7 +99,7 @@ void MapBoo::MapsParserAsyncTask::runInBackground(const G3MContext* context) {
       _parseError = false;
 
       for (int i = 0; i < jsonArray->size(); i++) {
-        const MBMap* map = MBMap::fromJSON( jsonArray->get(i) );
+        MBMap* map = MBMap::fromJSON( jsonArray->get(i) );
         if (map == NULL) {
           _parseError = true;
           break;
@@ -121,7 +122,7 @@ void MapBoo::MapsParserAsyncTask::onPostExecute(const G3MContext* context) {
   }
 }
 
-const MapBoo::MBMap* MapBoo::MBMap::fromJSON(const JSONBaseObject* jsonBaseObject) {
+MapBoo::MBMap* MapBoo::MBMap::fromJSON(const JSONBaseObject* jsonBaseObject) {
   if (jsonBaseObject == NULL) {
     return NULL;
   }
@@ -131,19 +132,19 @@ const MapBoo::MBMap* MapBoo::MBMap::fromJSON(const JSONBaseObject* jsonBaseObjec
     return NULL;
   }
 
-  const std::string                   id          = jsonObject->get("id")->asString()->value();
-  const std::string                   name        = jsonObject->get("name")->asString()->value();
-  std::vector<const MapBoo::MBLayer*> layers      = parseLayers( jsonObject->get("layerSet")->asArray() );
-  std::vector<std::string>            datasetsIDs = parseDatasetsIDs( jsonObject->get("datasets")->asArray() );
-  const int                           timestamp   = (int) jsonObject->get("timestamp")->asNumber()->value();
+  const std::string             id          = jsonObject->get("id")->asString()->value();
+  const std::string             name        = jsonObject->get("name")->asString()->value();
+  std::vector<MapBoo::MBLayer*> layers      = parseLayers( jsonObject->get("layerSet")->asArray() );
+  std::vector<std::string>      datasetsIDs = parseDatasetsIDs( jsonObject->get("datasets")->asArray() );
+  const int                     timestamp   = (int) jsonObject->get("timestamp")->asNumber()->value();
 
   return new MBMap(id, name, layers, datasetsIDs, timestamp);
 }
 
-std::vector<const MapBoo::MBLayer*> MapBoo::MBMap::parseLayers(const JSONArray* jsonArray) {
-  std::vector<const MapBoo::MBLayer*> result;
+std::vector<MapBoo::MBLayer*> MapBoo::MBMap::parseLayers(const JSONArray* jsonArray) {
+  std::vector<MapBoo::MBLayer*> result;
   for (int i = 0; i < jsonArray->size(); i++) {
-    const MBLayer* layer = MBLayer::fromJSON( jsonArray->get(i) );
+    MBLayer* layer = MBLayer::fromJSON( jsonArray->get(i) );
     if (layer != NULL) {
       result.push_back( layer );
     }
@@ -154,7 +155,7 @@ std::vector<const MapBoo::MBLayer*> MapBoo::MBMap::parseLayers(const JSONArray* 
 MapBoo::MBMap::~MBMap() {
   for (int i = 0; i < _layers.size(); i++) {
 #ifdef C_CODE
-    const MBLayer* layer = _layers[i];
+    MBLayer* layer = _layers[i];
     delete layer;
 #endif
 #ifdef JAVA_CODE
@@ -173,7 +174,7 @@ std::vector<std::string> MapBoo::MBMap::parseDatasetsIDs(const JSONArray* jsonAr
   return result;
 }
 
-const MapBoo::MBLayer* MapBoo::MBLayer::fromJSON(const JSONBaseObject* jsonBaseObject) {
+MapBoo::MBLayer* MapBoo::MBLayer::fromJSON(const JSONBaseObject* jsonBaseObject) {
   if (jsonBaseObject == NULL) {
     return NULL;
   }
@@ -193,12 +194,52 @@ MapBoo::MBLayer::~MBLayer() {
 }
 
 
-void MapBoo::MBLayer::createG3MLayer() {
-#warning Diego at work!
+void MapBoo::MBLayer::apply(LayerSet* layerSet) {
+  if (_type == "URLTemplate") {
+    URLTemplateLayer* layer = URLTemplateLayer::newMercator(_url,
+                                                            Sector::fullSphere(),
+                                                            false,                // isTransparent
+                                                            1,                    // firstLevel
+                                                            18,                   // maxLevel
+                                                            TimeInterval::fromDays(30));
+
+    layerSet->addLayer(layer);
+  }
+  else {
+    ILogger::instance()->logError("MapBoo::MBLayer: unknown type \"%s\"", _type.c_str());
+  }
 }
 
 
 
 void MapBoo::setMapID(const std::string& mapID) {
-  _mapID = mapID;
+  if (_mapID != mapID) {
+    _mapID = mapID;
+  }
+#warning TODO: request map's data
+}
+
+void MapBoo::setMap(MapBoo::MBMap* map) {
+  const std::string mapID = map->getID();
+  if (_mapID != mapID) {
+    _mapID = mapID;
+
+    _layerSet->removeAllLayers(true);
+    map->apply(_layerSet);
+    if (_layerSet->size() == 0) {
+      _layerSet->addLayer( new ChessboardLayer() );
+    }
+  }
+}
+
+void MapBoo::MBMap::apply(LayerSet* layerSet) {
+  for (int i = 0; i < _layers.size(); i++) {
+#ifdef C_CODE
+    MBLayer* layer = _layers[i];
+#endif
+#ifdef JAVA_CODE
+    final MBLayer layer = _layers.get(i);
+#endif
+    layer->apply(layerSet);
+  }
 }
