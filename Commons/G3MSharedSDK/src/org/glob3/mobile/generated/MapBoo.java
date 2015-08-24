@@ -397,6 +397,7 @@ public class MapBoo
     public final boolean touchedMark(Mark mark)
     {
       _handler.onFeatureTouched(_properties);
+      return true;
     }
 
   }
