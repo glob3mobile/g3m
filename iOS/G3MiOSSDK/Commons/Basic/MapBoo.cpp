@@ -498,6 +498,7 @@ const std::string MapBoo::MBDataset::createMarkLabel(const JSONObject* propertie
 
 bool MapBoo::MBFeatureMarkTouchListener::touchedMark(Mark* mark) {
   _handler->onFeatureTouched(_properties);
+  return true;
 }
 
 
