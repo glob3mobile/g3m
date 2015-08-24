@@ -9,7 +9,6 @@
 #ifndef __G3MiOSSDK__RCObject__
 #define __G3MiOSSDK__RCObject__
 
-#include "ILogger.hpp"
 
 class RCObject {
 private:

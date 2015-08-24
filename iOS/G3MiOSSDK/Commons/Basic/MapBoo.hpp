@@ -27,7 +27,7 @@ class MapBoo {
 
 public:
 
-  class MBLayer : public RCObject {
+  class MBLayer {
   private:
     const std::string _type;
     const std::string _url;
@@ -43,6 +43,7 @@ public:
     }
 
     MBLayer(const MBLayer& that);
+
 
   public:
     static MapBoo::MBLayer* fromJSON(const JSONBaseObject* jsonBaseObject,
