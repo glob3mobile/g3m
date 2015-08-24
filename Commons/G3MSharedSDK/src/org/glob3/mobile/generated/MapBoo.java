@@ -29,7 +29,7 @@ public class MapBoo
 {
 
 
-  public static class MBLayer extends RCObject
+  public static class MBLayer
   {
     private final String _type;
     private final String _url;
@@ -44,6 +44,7 @@ public class MapBoo
 
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
 //    MBLayer(MBLayer that);
+
 
     public static MapBoo.MBLayer fromJSON(JSONBaseObject jsonBaseObject, boolean verbose)
     {
