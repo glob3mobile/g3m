@@ -13,6 +13,7 @@
 #include "IBufferDownloadListener.hpp"
 #include "IThreadUtils.hpp"
 #include "VectorStreamingRenderer.hpp"
+#include "MarkTouchListener.hpp"
 
 class IG3MBuilder;
 class LayerSet;
@@ -25,7 +26,6 @@ class MarksRenderer;
 class MapBoo {
 
 public:
-
 
   class MBLayer : public RCObject {
   private:
@@ -54,10 +54,12 @@ public:
 
   };
 
+  class MBHandler;
 
 
   class MBDataset : public RCObject {
   private:
+    MBHandler*               _handler;
     const std::string        _id;
     const std::string        _name;
     std::vector<std::string> _labelingCriteria;
@@ -66,11 +68,13 @@ public:
 
     MBDataset(const MBDataset& that);
 
-    MBDataset(const std::string&        id,
+    MBDataset(MBHandler*                handler,
+              const std::string&        id,
               const std::string&        name,
               std::vector<std::string>& labelingCriteria,
               std::vector<std::string>& infoCriteria,
               const int                 timestamp) :
+    _handler(handler),
     _id(id),
     _name(name),
     _labelingCriteria(labelingCriteria),
@@ -86,7 +90,8 @@ public:
     ~MBDataset();
 
   public:
-    static MapBoo::MBDataset* fromJSON(const JSONBaseObject* jsonBaseObject,
+    static MapBoo::MBDataset* fromJSON(MBHandler*            handler,
+                                       const JSONBaseObject* jsonBaseObject,
                                        bool verbose);
 
 
@@ -124,6 +129,7 @@ public:
 
   class MBMap {
   private:
+    MBHandler*                      _handler;
     const std::string               _id;
     const std::string               _name;
     std::vector<MapBoo::MBLayer*>   _layers;
@@ -133,12 +139,14 @@ public:
 
     MBMap(const MBMap& that);
 
-    MBMap(const std::string&               id,
+    MBMap(MBHandler*                       handler,
+          const std::string&               id,
           const std::string&               name,
           std::vector<MapBoo::MBLayer*>&   layers,
           std::vector<MapBoo::MBDataset*>& datasets,
           int                              timestamp,
           bool                             verbose) :
+    _handler(handler),
     _id(id),
     _name(name),
     _layers(layers),
@@ -150,12 +158,14 @@ public:
 
     static std::vector<MapBoo::MBLayer*>   parseLayers(const JSONArray* jsonArray,
                                                        bool verbose);
-    static std::vector<MapBoo::MBDataset*> parseDatasets(const JSONArray* jsonArray,
+    static std::vector<MapBoo::MBDataset*> parseDatasets(MBHandler*       handler,
+                                                         const JSONArray* jsonArray,
                                                          bool verbose);
 
 
   public:
-    static MapBoo::MBMap* fromJSON(const JSONBaseObject* jsonBaseObject,
+    static MapBoo::MBMap* fromJSON(MBHandler*            handler,
+                                   const JSONBaseObject* jsonBaseObject,
                                    bool verbose);
 
     ~MBMap();
@@ -173,6 +183,7 @@ public:
                VectorStreamingRenderer* vectorStreamingRenderer);
   };
 
+
   class MBHandler {
   public:
 #ifdef C_CODE
@@ -185,6 +196,26 @@ public:
     virtual void onMapDownloadError() = 0;
     virtual void onMapParseError() = 0;
     virtual void onSelectedMap(MapBoo::MBMap* map) = 0;
+
+    virtual void onFeatureTouched(const JSONObject* properties) = 0;
+  };
+
+
+  class MBFeatureMarkTouchListener : public MarkTouchListener {
+  private:
+    MBHandler*        _handler;
+    const JSONObject* _properties;
+
+  public:
+    MBFeatureMarkTouchListener(MBHandler*        handler,
+                               const JSONObject* properties) :
+    _handler(handler),
+    _properties(properties)
+    {
+    }
+
+    bool touchedMark(Mark* mark);
+
   };
 
 
@@ -201,22 +232,24 @@ public:
 
     virtual void onDownloadError() = 0;
     virtual void onParseError() = 0;
-
   };
 
 
   class MapParserAsyncTask : public GAsyncTask {
   private:
     MapBoo*      _mapboo;
+    MBHandler*   _handler;
     IByteBuffer* _buffer;
     MBMap*       _map;
     const bool   _verbose;
 
   public:
     MapParserAsyncTask(MapBoo*      mapboo,
+                       MBHandler*   handler,
                        IByteBuffer* buffer,
                        const bool   verbose) :
     _mapboo(mapboo),
+    _handler(handler),
     _buffer(buffer),
     _verbose(verbose),
     _map(NULL)
@@ -234,7 +267,8 @@ public:
 
   class MapsParserAsyncTask : public GAsyncTask {
   private:
-    MBMapsHandler* _handler;
+    MBHandler*     _handler;
+    MBMapsHandler* _mapsHandler;
     bool           _deleteHandler;
     IByteBuffer*   _buffer;
     const bool     _verbose;
@@ -244,11 +278,13 @@ public:
 
   public:
 
-    MapsParserAsyncTask(MBMapsHandler* handler,
+    MapsParserAsyncTask(MBHandler*     handler,
+                        MBMapsHandler* mapsHandler,
                         bool           deleteHandler,
                         IByteBuffer*   buffer,
                         bool           verbose) :
     _handler(handler),
+    _mapsHandler(mapsHandler),
     _deleteHandler(deleteHandler),
     _buffer(buffer),
     _verbose(verbose),
@@ -268,13 +304,16 @@ public:
   class MapBufferDownloadListener : public IBufferDownloadListener {
   private:
     MapBoo*             _mapboo;
+    MBHandler*          _handler;
     const IThreadUtils* _threadUtils;
     const bool          _verbose;
   public:
     MapBufferDownloadListener(MapBoo*             mapboo,
+                              MBHandler*          handler,
                               const IThreadUtils* threadUtils,
                               const bool          verbose) :
     _mapboo(mapboo),
+    _handler(handler),
     _threadUtils(threadUtils),
     _verbose(verbose)
     {
@@ -301,18 +340,21 @@ public:
 
   class MapsBufferDownloadListener : public IBufferDownloadListener {
   private:
-    MBMapsHandler*      _handler;
+    MBHandler*          _handler;
+    MBMapsHandler*      _mapsHandler;
     bool                _deleteHandler;
     const IThreadUtils* _threadUtils;
     const bool          _verbose;
 
   public:
 
-    MapsBufferDownloadListener(MBMapsHandler*      handler,
+    MapsBufferDownloadListener(MBHandler*          handler,
+                               MBMapsHandler*      mapsHandler,
                                bool                deleteHandler,
                                const IThreadUtils* threadUtils,
                                bool                verbose) :
     _handler(handler),
+    _mapsHandler(mapsHandler),
     _deleteHandler(deleteHandler),
     _threadUtils(threadUtils),
     _verbose(verbose)
@@ -373,7 +415,7 @@ public:
 
   ~MapBoo();
 
-  void requestMaps(MBMapsHandler* handler,
+  void requestMaps(MBMapsHandler* mapsHandler,
                    bool deleteHandler = true);
   
   void setMapID(const std::string& mapID);
