@@ -111,6 +111,9 @@ public:
 
     ~MBDatasetVectorSetSymbolizer() {
       _dataset->_release();
+#ifdef JAVA_CODE
+      super.dispose();
+#endif
     }
 
     Mark* createMark(const GEO2DPointGeometry* geometry) const {
@@ -379,11 +382,11 @@ public:
   void onMapDownloadError();
   void onMapParseError();
   void onMap(MapBoo::MBMap* map);
-
+  
   void reloadMap() {
     requestMap();
   }
-
+  
 };
 
 #endif

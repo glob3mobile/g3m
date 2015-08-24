@@ -32,6 +32,10 @@ VectorStreamingRenderer::ChildrenParserAsyncTask::~ChildrenParserAsyncTask() {
     }
     _children = NULL;
   }
+
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
 }
 
 void VectorStreamingRenderer::ChildrenParserAsyncTask::runInBackground(const G3MContext* context) {
@@ -60,8 +64,6 @@ void VectorStreamingRenderer::ChildrenParserAsyncTask::onPostExecute(const G3MCo
   _children = NULL; // moved ownership to _node
 }
 
-
-
 void VectorStreamingRenderer::NodeChildrenDownloadListener::onDownload(const URL& url,
                                                                        IByteBuffer* buffer,
                                                                        bool expired) {
@@ -80,7 +82,6 @@ void VectorStreamingRenderer::NodeChildrenDownloadListener::onDownload(const URL
 
   _threadUtils->invokeAsyncTask(new ChildrenParserAsyncTask(_node, _verbose, buffer, _threadUtils),
                                 true);
-
 }
 
 void VectorStreamingRenderer::NodeChildrenDownloadListener::onError(const URL& url) {
@@ -97,11 +98,14 @@ void VectorStreamingRenderer::NodeChildrenDownloadListener::onCanceledDownload(c
   // do nothing
 }
 
-
 VectorStreamingRenderer::FeaturesParserAsyncTask::~FeaturesParserAsyncTask() {
   _node->_release();
   delete _buffer;
   delete _features;
+
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
 }
 
 void VectorStreamingRenderer::FeaturesParserAsyncTask::runInBackground(const G3MContext* context) {
@@ -115,7 +119,6 @@ void VectorStreamingRenderer::FeaturesParserAsyncTask::onPostExecute(const G3MCo
   _node->parsedFeatures(_features, _threadUtils);
   _features = NULL; // moved ownership to _node
 }
-
 
 void VectorStreamingRenderer::NodeFeaturesDownloadListener::onDownload(const URL& url,
                                                                        IByteBuffer* buffer,
@@ -135,7 +138,6 @@ void VectorStreamingRenderer::NodeFeaturesDownloadListener::onDownload(const URL
 
   _threadUtils->invokeAsyncTask(new FeaturesParserAsyncTask(_node, _verbose, buffer, _threadUtils),
                                 true);
-
 }
 
 void VectorStreamingRenderer::NodeFeaturesDownloadListener::onError(const URL& url) {
@@ -151,7 +153,6 @@ void VectorStreamingRenderer::NodeFeaturesDownloadListener::onCanceledDownload(c
                                                                                bool expired) {
   // do nothing
 }
-
 
 VectorStreamingRenderer::Node::~Node() {
   unload();
@@ -177,7 +178,6 @@ void VectorStreamingRenderer::Node::parsedChildren(std::vector<Node*>* children,
     _childrenSize = _children->size();
   }
 }
-
 
 void VectorStreamingRenderer::Node::parsedFeatures(GEOObject* features,
                                                    const IThreadUtils* threadUtils) {
@@ -248,11 +248,11 @@ void VectorStreamingRenderer::Node::loadFeatures(const G3MRenderContext* rc) {
                         "&properties=" + _vectorSet->getProperties(),
                         true);
 
-//  if (_verbose) {
-//    ILogger::instance()->logInfo("\"%s\": Downloading features for node \'%s\'",
-//                                 _vectorSet->getName().c_str(),
-//                                 _id.c_str());
-//  }
+  //  if (_verbose) {
+  //    ILogger::instance()->logInfo("\"%s\": Downloading features for node \'%s\'",
+  //                                 _vectorSet->getName().c_str(),
+  //                                 _id.c_str());
+  //  }
 
   _downloader = rc->getDownloader();
   _featuresRequestID = _downloader->requestBuffer(metadataURL,
@@ -306,11 +306,11 @@ void VectorStreamingRenderer::Node::loadChildren(const G3MRenderContext* rc) {
                         "?nodes=" + nodes,
                         true);
 
-//  if (_verbose) {
-//    ILogger::instance()->logInfo("\"%s\": Downloading children for node \'%s\'",
-//                                 _vectorSet->getName().c_str(),
-//                                 _id.c_str());
-//  }
+  //  if (_verbose) {
+  //    ILogger::instance()->logInfo("\"%s\": Downloading children for node \'%s\'",
+  //                                 _vectorSet->getName().c_str(),
+  //                                 _id.c_str());
+  //  }
 
   _downloader = rc->getDownloader();
 
@@ -353,10 +353,10 @@ bool VectorStreamingRenderer::NodeMarksFilter::test(const Mark* mark) const {
 
 
 void VectorStreamingRenderer::Node::removeMarks() {
-//  if (_verbose) {
-//    ILogger::instance()->logInfo("\"%s\": Removing marks",
-//                                 getFullName().c_str());
-//  }
+  //  if (_verbose) {
+  //    ILogger::instance()->logInfo("\"%s\": Removing marks",
+  //                                 getFullName().c_str());
+  //  }
 
   size_t removed = _vectorSet->getMarksRenderer()->removeAllMarks( NodeMarksFilter(this), true );
 
@@ -530,6 +530,10 @@ VectorStreamingRenderer::MetadataParserAsyncTask::~MetadataParserAsyncTask() {
     }
     delete _rootNodes;
   }
+
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
 }
 
 void VectorStreamingRenderer::MetadataParserAsyncTask::runInBackground(const G3MContext* context) {
@@ -668,6 +672,10 @@ VectorStreamingRenderer::VectorSet::~VectorSet() {
     }
     delete _rootNodes;
   }
+
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
 }
 
 void VectorStreamingRenderer::VectorSet::parsedMetadata(Sector* sector,
@@ -911,7 +919,7 @@ void VectorStreamingRenderer::render(const G3MRenderContext* rc,
 
     updateGLState(camera);
     _glState->setParent(glState);
-
+    
     VectorSet* vectorSector = _vectorSets[i];
     vectorSector->render(rc,
                          frustumInModelCoordinates,

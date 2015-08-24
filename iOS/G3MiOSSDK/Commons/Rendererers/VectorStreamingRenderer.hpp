@@ -110,6 +110,9 @@ public:
 
     ~NodeChildrenDownloadListener() {
       _node->_release();
+#ifdef JAVA_CODE
+      super.dispose();
+#endif
     }
 
     void onDownload(const URL& url,
@@ -179,6 +182,9 @@ public:
 
     ~NodeFeaturesDownloadListener() {
       _node->_release();
+#ifdef JAVA_CODE
+      super.dispose();
+#endif
     }
 
     void onDownload(const URL& url,
@@ -412,7 +418,7 @@ public:
     virtual ~VectorSetSymbolizer() { }
 
     virtual Mark* createMark(const GEO2DPointGeometry* geometry) const = 0;
-    
+
   };
 
 

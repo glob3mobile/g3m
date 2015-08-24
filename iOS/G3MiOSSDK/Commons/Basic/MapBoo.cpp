@@ -99,6 +99,9 @@ MapBoo::MapsBufferDownloadListener::~MapsBufferDownloadListener() {
   if (_deleteHandler && (_handler != NULL)) {
     delete _handler;
   }
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
 }
 
 MapBoo::MapsParserAsyncTask::~MapsParserAsyncTask() {
@@ -112,6 +115,9 @@ MapBoo::MapsParserAsyncTask::~MapsParserAsyncTask() {
   if (_deleteHandler && (_handler != NULL)) {
     delete _handler;
   }
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
 }
 
 void MapBoo::MapsParserAsyncTask::runInBackground(const G3MContext* context) {
@@ -350,6 +356,9 @@ void MapBoo::MapBufferDownloadListener::onError(const URL& url) {
 MapBoo::MapParserAsyncTask::~MapParserAsyncTask() {
   delete _buffer;
   delete _map;
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
 }
 
 void MapBoo::MapParserAsyncTask::runInBackground(const G3MContext* context) {
@@ -453,15 +462,13 @@ void MapBoo::MBDataset::apply(const URL&               serverURL,
                                         );
 }
 
-
 const std::string MapBoo::MBDataset::createMarkLabel(const JSONObject* properties) const {
   const size_t size = _labelingCriteria.size();
-  std::string label;
   if (size == 0) {
-    label = "<label>";
+    return "<label>";
   }
   else if (size == 1) {
-    label = JSONBaseObject::toString( properties->get(_labelingCriteria[0]) );
+    return JSONBaseObject::toString( properties->get(_labelingCriteria[0]) );
   }
   else {
     IStringBuilder* labelBuilder = IStringBuilder::newStringBuilder();
@@ -473,12 +480,10 @@ const std::string MapBoo::MBDataset::createMarkLabel(const JSONObject* propertie
       labelBuilder->addString( value );
     }
 
-    label = labelBuilder->getString();
+    const std::string label = labelBuilder->getString();
     delete labelBuilder;
-    labelBuilder = NULL;
+    return label;
   }
-//  delete properties;
-  return label;
 }
 
 MarkTouchListener* MapBoo::MBDataset::createMarkTouchListener(const JSONObject* properties) const {
@@ -488,7 +493,6 @@ MarkTouchListener* MapBoo::MBDataset::createMarkTouchListener(const JSONObject* 
 #warning Diego at work!
   }
 
-//  delete properties;
   return result;
 }
 
@@ -506,7 +510,7 @@ Mark* MapBoo::MBDataset::createMark(const GEO2DPointGeometry* geometry) const {
                   Color::newFromRGBA(0, 0, 0, 1),       // labelShadowColor
                   NULL,                                 // userData
                   true,                                 // autoDeleteUserData
-                  createMarkTouchListener(properties),  // MarkTouchListener*
+                  createMarkTouchListener(properties),
                   true                                  // autoDeleteListener
                   );
 }
