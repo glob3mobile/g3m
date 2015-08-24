@@ -169,7 +169,7 @@ public class MapBoo
         }
       }
     
-      return new MBFeatureMarkTouchListener(_handler, infoProperties);
+      return new MBFeatureMarkTouchListener(_handler, _infoCriteria, infoProperties);
     }
 
     public void dispose()
@@ -252,7 +252,6 @@ public class MapBoo
 
   public static class MBMap
   {
-    private MBHandler _handler;
     private final String _id;
     private final String _name;
     private java.util.ArrayList<MapBoo.MBLayer> _layers = new java.util.ArrayList<MapBoo.MBLayer>();
@@ -263,9 +262,8 @@ public class MapBoo
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
 //    MBMap(MBMap that);
 
-    private MBMap(MBHandler handler, String id, String name, java.util.ArrayList<MapBoo.MBLayer> layers, java.util.ArrayList<MapBoo.MBDataset> datasets, int timestamp, boolean verbose)
+    private MBMap(String id, String name, java.util.ArrayList<MapBoo.MBLayer> layers, java.util.ArrayList<MapBoo.MBDataset> datasets, int timestamp, boolean verbose)
     {
-       _handler = handler;
        _id = id;
        _name = name;
        _layers = layers;
@@ -321,7 +319,7 @@ public class MapBoo
       java.util.ArrayList<MapBoo.MBDataset> datasets = parseDatasets(handler, jsonObject.get("datasets").asArray(), verbose);
       final int timestamp = (int) jsonObject.get("timestamp").asNumber().value();
     
-      return new MBMap(handler, id, name, layers, datasets, timestamp, verbose);
+      return new MBMap(id, name, layers, datasets, timestamp, verbose);
     }
 
     public void dispose()
@@ -380,24 +378,26 @@ public class MapBoo
     void onMapParseError();
     void onSelectedMap(MapBoo.MBMap map);
 
-    void onFeatureTouched(JSONObject properties);
+    void onFeatureTouched(java.util.ArrayList<String> infoCriteria, JSONObject properties);
   }
 
 
   public static class MBFeatureMarkTouchListener extends MarkTouchListener
   {
     private MBHandler _handler;
+    private java.util.ArrayList<String> _infoCriteria = new java.util.ArrayList<String>();
     private final JSONObject _properties;
 
-    public MBFeatureMarkTouchListener(MBHandler handler, JSONObject properties)
+    public MBFeatureMarkTouchListener(MBHandler handler, java.util.ArrayList<String> infoCriteria, JSONObject properties)
     {
        _handler = handler;
+       _infoCriteria = infoCriteria;
        _properties = properties;
     }
 
     public final boolean touchedMark(Mark mark)
     {
-      _handler.onFeatureTouched(_properties);
+      _handler.onFeatureTouched(_infoCriteria, _properties);
       return true;
     }
 
