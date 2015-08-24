@@ -463,16 +463,16 @@ void MapBoo::MBDataset::apply(const URL&               serverURL,
 }
 
 const std::string MapBoo::MBDataset::createMarkLabel(const JSONObject* properties) const {
-  const size_t size = _labelingCriteria.size();
-  if (size == 0) {
+  const size_t criteriaSize = _labelingCriteria.size();
+  if ((criteriaSize == 0) || (properties->size() == 0)) {
     return "<label>";
   }
-  else if (size == 1) {
+  else if (criteriaSize == 1) {
     return JSONBaseObject::toString( properties->get(_labelingCriteria[0]) );
   }
   else {
     IStringBuilder* labelBuilder = IStringBuilder::newStringBuilder();
-    for (int i = 0; i < _labelingCriteria.size(); i++) {
+    for (int i = 0; i < criteriaSize; i++) {
       if (i > 0) {
         labelBuilder->addString(" ");
       }
