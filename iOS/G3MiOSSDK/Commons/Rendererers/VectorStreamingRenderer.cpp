@@ -672,10 +672,6 @@ VectorStreamingRenderer::VectorSet::~VectorSet() {
     }
     delete _rootNodes;
   }
-
-#ifdef JAVA_CODE
-  super.dispose();
-#endif
 }
 
 void VectorStreamingRenderer::VectorSet::parsedMetadata(Sector* sector,
