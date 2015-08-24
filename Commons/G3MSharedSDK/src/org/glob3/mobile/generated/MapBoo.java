@@ -169,7 +169,7 @@ public class MapBoo
         }
       }
     
-      return new MBFeatureMarkTouchListener(_handler, _infoCriteria, infoProperties);
+      return new MBFeatureMarkTouchListener(_name, _handler, _infoCriteria, infoProperties);
     }
 
     public void dispose()
@@ -378,18 +378,20 @@ public class MapBoo
     void onMapParseError();
     void onSelectedMap(MapBoo.MBMap map);
 
-    void onFeatureTouched(java.util.ArrayList<String> infoCriteria, JSONObject properties);
+    void onFeatureTouched(String datasetName, java.util.ArrayList<String> infoCriteria, JSONObject properties);
   }
 
 
   public static class MBFeatureMarkTouchListener extends MarkTouchListener
   {
+    private final String _datasetName;
     private MBHandler _handler;
     private java.util.ArrayList<String> _infoCriteria = new java.util.ArrayList<String>();
     private final JSONObject _properties;
 
-    public MBFeatureMarkTouchListener(MBHandler handler, java.util.ArrayList<String> infoCriteria, JSONObject properties)
+    public MBFeatureMarkTouchListener(String datasetName, MBHandler handler, java.util.ArrayList<String> infoCriteria, JSONObject properties)
     {
+       _datasetName = datasetName;
        _handler = handler;
        _infoCriteria = infoCriteria;
        _properties = properties;
@@ -397,7 +399,7 @@ public class MapBoo
 
     public final boolean touchedMark(Mark mark)
     {
-      _handler.onFeatureTouched(_infoCriteria, _properties);
+      _handler.onFeatureTouched(_datasetName, _infoCriteria, _properties);
       return true;
     }
 
