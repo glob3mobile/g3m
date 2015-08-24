@@ -19,8 +19,8 @@ import com.google.gwt.user.client.Timer;
 
 
 public final class Downloader_WebGL
-         extends
-            IDownloader {
+   extends
+      IDownloader {
 
    final private int                                _maxConcurrentOperationCount;
    private final Map<URL, Downloader_WebGL_Handler> _downloadingHandlers;
@@ -156,19 +156,19 @@ public final class Downloader_WebGL
 
       if ((handler != null) && !handler.isRequestingImage()) {
          // the URL is being downloaded, just add the new listener
-         handler.addListener(listener, priority, requestId);
+         handler.addListener(listener, deleteListener, priority, requestId);
       }
       else {
          handler = _queuedHandlers.get(proxyUrl);
          if ((handler != null) && !handler.isRequestingImage()) {
             // the URL is queued for future download, just add the new listener
-            handler.addListener(listener, priority, requestId);
+            handler.addListener(listener, deleteListener, priority, requestId);
          }
          else {
             // new handler, queue it
             //            handler = new Downloader_WebGL_HandlerImpl(proxyUrl, listener, priority, requestId);
             handler = GWT.create(Downloader_WebGL_Handler.class);
-            handler.init(proxyUrl, listener, priority, requestId);
+            handler.init(proxyUrl, listener, deleteListener, priority, requestId);
             _queuedHandlers.put(proxyUrl, handler);
          }
       }
@@ -210,19 +210,19 @@ public final class Downloader_WebGL
 
       if ((handler != null) && handler.isRequestingImage()) {
          // the URL is being downloaded, just add the new listener
-         handler.addListener(listener, priority, requestId);
+         handler.addListener(listener, deleteListener, priority, requestId);
       }
       else {
          handler = _queuedHandlers.get(proxyUrl);
          if ((handler != null) && handler.isRequestingImage()) {
             // the URL is queued for future download, just add the new listener
-            handler.addListener(listener, priority, requestId);
+            handler.addListener(listener, deleteListener, priority, requestId);
          }
          else {
             // new handler, queue it
             //            handler = new Downloader_WebGL_HandlerImpl(proxyUrl, listener, priority, requestId);
             handler = GWT.create(Downloader_WebGL_Handler.class);
-            handler.init(proxyUrl, listener, priority, requestId);
+            handler.init(proxyUrl, listener, deleteListener, priority, requestId);
             _queuedHandlers.put(proxyUrl, handler);
          }
       }

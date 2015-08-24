@@ -17,17 +17,20 @@ public final class Downloader_Android_ListenerEntry {
    private final static String           TAG = "Downloader_Android_ListenerEntry";
 
 
-   final long                            _requestId;
    private final IBufferDownloadListener _bufferListener;
    private final IImageDownloadListener  _imageListener;
+   private final boolean                 _deleteListener;
+   final long                            _requestId;
    private boolean                       _canceled;
 
 
    Downloader_Android_ListenerEntry(final IBufferDownloadListener bufferListener,
                                     final IImageDownloadListener imageListener,
+                                    final boolean deleteListener,
                                     final long requestId) {
       _bufferListener = bufferListener;
       _imageListener = imageListener;
+      _deleteListener = deleteListener;
       _requestId = requestId;
       _canceled = false;
    }
@@ -54,10 +57,16 @@ public final class Downloader_Android_ListenerEntry {
    void onCancel(final URL url) {
       if (_bufferListener != null) {
          _bufferListener.onCancel(url);
+         if (_deleteListener) {
+            _bufferListener.dispose();
+         }
       }
 
       if (_imageListener != null) {
          _imageListener.onCancel(url);
+         if (_deleteListener) {
+            _imageListener.dispose();
+         }
       }
    }
 
@@ -65,10 +74,16 @@ public final class Downloader_Android_ListenerEntry {
    void onError(final URL url) {
       if (_bufferListener != null) {
          _bufferListener.onError(url);
+         if (_deleteListener) {
+            _bufferListener.dispose();
+         }
       }
 
       if (_imageListener != null) {
          _imageListener.onError(url);
+         if (_deleteListener) {
+            _imageListener.dispose();
+         }
       }
    }
 
@@ -79,6 +94,9 @@ public final class Downloader_Android_ListenerEntry {
       if (_bufferListener != null) {
          final IByteBuffer buffer = new ByteBuffer_Android(data);
          _bufferListener.onDownload(url, buffer, false);
+         if (_deleteListener) {
+            _bufferListener.dispose();
+         }
       }
 
       if (_imageListener != null) {
@@ -88,6 +106,9 @@ public final class Downloader_Android_ListenerEntry {
          }
          else {
             _imageListener.onDownload(url, image, false);
+         }
+         if (_deleteListener) {
+            _imageListener.dispose();
          }
       }
    }
