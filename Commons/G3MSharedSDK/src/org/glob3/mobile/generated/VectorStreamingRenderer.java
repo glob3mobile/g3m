@@ -971,8 +971,6 @@ public class VectorStreamingRenderer extends DefaultRenderer
         }
         _rootNodes = null;
       }
-    
-      super.dispose();
     }
 
     public final URL getServerURL()
