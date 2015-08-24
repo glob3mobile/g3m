@@ -189,7 +189,7 @@ MapBoo::MBMap* MapBoo::MBMap::fromJSON(MBHandler*            handler,
   std::vector<MapBoo::MBDataset*> datasets  = parseDatasets(handler, jsonObject->get("datasets")->asArray(), verbose );
   const int                       timestamp = (int) jsonObject->get("timestamp")->asNumber()->value();
 
-  return new MBMap(handler, id, name, layers, datasets, timestamp, verbose);
+  return new MBMap(id, name, layers, datasets, timestamp, verbose);
 }
 
 std::vector<MapBoo::MBLayer*> MapBoo::MBMap::parseLayers(const JSONArray* jsonArray,
@@ -497,7 +497,7 @@ const std::string MapBoo::MBDataset::createMarkLabel(const JSONObject* propertie
 
 
 bool MapBoo::MBFeatureMarkTouchListener::touchedMark(Mark* mark) {
-  _handler->onFeatureTouched(_properties);
+  _handler->onFeatureTouched(_infoCriteria, _properties);
   return true;
 }
 
@@ -521,7 +521,7 @@ MarkTouchListener* MapBoo::MBDataset::createMarkTouchListener(const JSONObject* 
     }
   }
 
-  return new MBFeatureMarkTouchListener(_handler, infoProperties);
+  return new MBFeatureMarkTouchListener(_handler, _infoCriteria, infoProperties);
 }
 
 Mark* MapBoo::MBDataset::createMark(const GEO2DPointGeometry* geometry) const {

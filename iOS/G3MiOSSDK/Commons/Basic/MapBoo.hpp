@@ -130,7 +130,6 @@ public:
 
   class MBMap {
   private:
-    MBHandler*                      _handler;
     const std::string               _id;
     const std::string               _name;
     std::vector<MapBoo::MBLayer*>   _layers;
@@ -140,14 +139,12 @@ public:
 
     MBMap(const MBMap& that);
 
-    MBMap(MBHandler*                       handler,
-          const std::string&               id,
+    MBMap(const std::string&               id,
           const std::string&               name,
           std::vector<MapBoo::MBLayer*>&   layers,
           std::vector<MapBoo::MBDataset*>& datasets,
           int                              timestamp,
           bool                             verbose) :
-    _handler(handler),
     _id(id),
     _name(name),
     _layers(layers),
@@ -198,19 +195,23 @@ public:
     virtual void onMapParseError() = 0;
     virtual void onSelectedMap(MapBoo::MBMap* map) = 0;
 
-    virtual void onFeatureTouched(const JSONObject* properties) = 0;
+    virtual void onFeatureTouched(const std::vector<std::string>& infoCriteria,
+                                  const JSONObject* properties) = 0;
   };
 
 
   class MBFeatureMarkTouchListener : public MarkTouchListener {
   private:
-    MBHandler*        _handler;
-    const JSONObject* _properties;
+    MBHandler*               _handler;
+    std::vector<std::string> _infoCriteria;
+    const JSONObject*        _properties;
 
   public:
-    MBFeatureMarkTouchListener(MBHandler*        handler,
-                               const JSONObject* properties) :
+    MBFeatureMarkTouchListener(MBHandler*                      handler,
+                               const std::vector<std::string>& infoCriteria,
+                               const JSONObject*               properties) :
     _handler(handler),
+    _infoCriteria(infoCriteria),
     _properties(properties)
     {
     }
