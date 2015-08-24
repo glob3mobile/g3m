@@ -121,6 +121,8 @@ public class VectorStreamingRenderer extends DefaultRenderer
         }
         _children = null;
       }
+    
+      super.dispose();
     }
 
     public final void runInBackground(G3MContext context)
@@ -175,6 +177,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
     public void dispose()
     {
       _node._release();
+      super.dispose();
     }
 
     public final void onDownload(URL url, IByteBuffer buffer, boolean expired)
@@ -187,7 +190,6 @@ public class VectorStreamingRenderer extends DefaultRenderer
       }
     
       _threadUtils.invokeAsyncTask(new ChildrenParserAsyncTask(_node, _verbose, buffer, _threadUtils), true);
-    
     }
 
     public final void onError(URL url)
@@ -235,6 +237,8 @@ public class VectorStreamingRenderer extends DefaultRenderer
          _buffer.dispose();
       if (_features != null)
          _features.dispose();
+    
+      super.dispose();
     }
 
     public final void runInBackground(G3MContext context)
@@ -272,6 +276,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
     public void dispose()
     {
       _node._release();
+      super.dispose();
     }
 
     public final void onDownload(URL url, IByteBuffer buffer, boolean expired)
@@ -284,7 +289,6 @@ public class VectorStreamingRenderer extends DefaultRenderer
       }
     
       _threadUtils.invokeAsyncTask(new FeaturesParserAsyncTask(_node, _verbose, buffer, _threadUtils), true);
-    
     }
 
     public final void onError(URL url)
@@ -393,11 +397,11 @@ public class VectorStreamingRenderer extends DefaultRenderer
     {
       final URL metadataURL = new URL(_vectorSet.getServerURL(), _vectorSet.getName() + "/features" + "?node=" + _id + "&properties=" + _vectorSet.getProperties(), true);
     
-    //  if (_verbose) {
-    //    ILogger::instance()->logInfo("\"%s\": Downloading features for node \'%s\'",
-    //                                 _vectorSet->getName().c_str(),
-    //                                 _id.c_str());
-    //  }
+      //  if (_verbose) {
+      //    ILogger::instance()->logInfo("\"%s\": Downloading features for node \'%s\'",
+      //                                 _vectorSet->getName().c_str(),
+      //                                 _id.c_str());
+      //  }
     
       _downloader = rc.getDownloader();
       _featuresRequestID = _downloader.requestBuffer(metadataURL, _vectorSet.getDownloadPriority() + _featuresCount, _vectorSet.getTimeToCache(), _vectorSet.getReadExpired(), new NodeFeaturesDownloadListener(this, rc.getThreadUtils(), _verbose), true);
@@ -443,11 +447,11 @@ public class VectorStreamingRenderer extends DefaultRenderer
     
       final URL childrenURL = new URL(_vectorSet.getServerURL(), _vectorSet.getName() + "?nodes=" + nodes, true);
     
-    //  if (_verbose) {
-    //    ILogger::instance()->logInfo("\"%s\": Downloading children for node \'%s\'",
-    //                                 _vectorSet->getName().c_str(),
-    //                                 _id.c_str());
-    //  }
+      //  if (_verbose) {
+      //    ILogger::instance()->logInfo("\"%s\": Downloading children for node \'%s\'",
+      //                                 _vectorSet->getName().c_str(),
+      //                                 _id.c_str());
+      //  }
     
       _downloader = rc.getDownloader();
     
@@ -506,10 +510,10 @@ public class VectorStreamingRenderer extends DefaultRenderer
 
     private void removeMarks()
     {
-    //  if (_verbose) {
-    //    ILogger::instance()->logInfo("\"%s\": Removing marks",
-    //                                 getFullName().c_str());
-    //  }
+      //  if (_verbose) {
+      //    ILogger::instance()->logInfo("\"%s\": Removing marks",
+      //                                 getFullName().c_str());
+      //  }
     
       int removed = _vectorSet.getMarksRenderer().removeAllMarks(new NodeMarksFilter(this), true);
     
@@ -751,6 +755,8 @@ public class VectorStreamingRenderer extends DefaultRenderer
         }
         _rootNodes = null;
       }
+    
+      super.dispose();
     }
 
     public final void runInBackground(G3MContext context)
@@ -965,6 +971,8 @@ public class VectorStreamingRenderer extends DefaultRenderer
         }
         _rootNodes = null;
       }
+    
+      super.dispose();
     }
 
     public final URL getServerURL()

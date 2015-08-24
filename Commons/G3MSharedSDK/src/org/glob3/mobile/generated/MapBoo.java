@@ -114,14 +114,13 @@ public class MapBoo
     private String createMarkLabel(JSONObject properties)
     {
       final int size = _labelingCriteria.size();
-      String label;
       if (size == 0)
       {
-        label = "<label>";
+        return "<label>";
       }
       else if (size == 1)
       {
-        label = JSONBaseObject.toString(properties.get(_labelingCriteria.get(0)));
+        return JSONBaseObject.toString(properties.get(_labelingCriteria.get(0)));
       }
       else
       {
@@ -136,13 +135,11 @@ public class MapBoo
           labelBuilder.addString(value);
         }
     
-        label = labelBuilder.getString();
+        final String label = labelBuilder.getString();
         if (labelBuilder != null)
            labelBuilder.dispose();
-        labelBuilder = null;
+        return label;
       }
-    //  delete properties;
-      return label;
     }
     private MarkTouchListener createMarkTouchListener(JSONObject properties)
     {
@@ -154,7 +151,6 @@ public class MapBoo
 //#warning Diego at work!
       }
     
-    //  delete properties;
       return result;
     }
 
@@ -207,7 +203,7 @@ public class MapBoo
       final JSONObject properties = feature.getProperties();
       final Geodetic3D position = new Geodetic3D(geometry.getPosition(), 0);
     
-      return new Mark(createMarkLabel(properties), position, AltitudeMode.ABSOLUTE, 0, 18, Color.newFromRGBA(1, 1, 1, 1), Color.newFromRGBA(0, 0, 0, 1), null, true, createMarkTouchListener(properties), true); // autoDeleteListener -  MarkTouchListener* -  autoDeleteUserData -  userData -  labelShadowColor -  labelFontColor -  labelFontSize -  minDistanceToCamera
+      return new Mark(createMarkLabel(properties), position, AltitudeMode.ABSOLUTE, 0, 18, Color.newFromRGBA(1, 1, 1, 1), Color.newFromRGBA(0, 0, 0, 1), null, true, createMarkTouchListener(properties), true); // autoDeleteListener -  autoDeleteUserData -  userData -  labelShadowColor -  labelFontColor -  labelFontSize -  minDistanceToCamera
     }
 
   }
@@ -226,6 +222,7 @@ public class MapBoo
     public void dispose()
     {
       _dataset._release();
+      super.dispose();
     }
 
     public final Mark createMark(GEO2DPointGeometry geometry)
@@ -397,6 +394,7 @@ public class MapBoo
          _buffer.dispose();
       if (_map != null)
          _map.dispose();
+      super.dispose();
     }
 
     public final void runInBackground(G3MContext context)
@@ -481,6 +479,7 @@ public class MapBoo
         if (_handler != null)
            _handler.dispose();
       }
+      super.dispose();
     }
 
     public final void runInBackground(G3MContext context)
@@ -614,6 +613,7 @@ public class MapBoo
         if (_handler != null)
            _handler.dispose();
       }
+      super.dispose();
     }
 
     public final void onDownload(URL url, IByteBuffer buffer, boolean expired)
