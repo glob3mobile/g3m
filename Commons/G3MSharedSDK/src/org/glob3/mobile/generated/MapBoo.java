@@ -29,7 +29,6 @@ public class MapBoo
 {
 
 
-
   public static class MBLayer extends RCObject
   {
     private final String _type;
@@ -89,10 +88,13 @@ public class MapBoo
 
   }
 
+//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following type could not be found.
+//  class MBHandler;
 
 
   public static class MBDataset extends RCObject
   {
+    private MBHandler _handler;
     private final String _id;
     private final String _name;
     private java.util.ArrayList<String> _labelingCriteria = new java.util.ArrayList<String>();
@@ -102,8 +104,9 @@ public class MapBoo
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
 //    MBDataset(MBDataset that);
 
-    private MBDataset(String id, String name, java.util.ArrayList<String> labelingCriteria, java.util.ArrayList<String> infoCriteria, int timestamp)
+    private MBDataset(MBHandler handler, String id, String name, java.util.ArrayList<String> labelingCriteria, java.util.ArrayList<String> infoCriteria, int timestamp)
     {
+       _handler = handler;
        _id = id;
        _name = name;
        _labelingCriteria = labelingCriteria;
@@ -113,19 +116,19 @@ public class MapBoo
 
     private String createMarkLabel(JSONObject properties)
     {
-      final int size = _labelingCriteria.size();
-      if (size == 0)
+      final int criteriaSize = _labelingCriteria.size();
+      if ((criteriaSize == 0) || (properties.size() == 0))
       {
         return "<label>";
       }
-      else if (size == 1)
+      else if (criteriaSize == 1)
       {
         return JSONBaseObject.toString(properties.get(_labelingCriteria.get(0)));
       }
       else
       {
         IStringBuilder labelBuilder = IStringBuilder.newStringBuilder();
-        for (int i = 0; i < _labelingCriteria.size(); i++)
+        for (int i = 0; i < criteriaSize; i++)
         {
           if (i > 0)
           {
@@ -143,15 +146,29 @@ public class MapBoo
     }
     private MarkTouchListener createMarkTouchListener(JSONObject properties)
     {
-      MarkTouchListener result = null;
-      final int size = _infoCriteria.size();
-      if (size > 0)
+      if (_handler == null)
       {
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning Diego at work!
+        return null;
       }
     
-      return result;
+      final int criteriaSize = _infoCriteria.size();
+      if (criteriaSize == 0)
+      {
+        return null;
+      }
+    
+      JSONObject infoProperties = new JSONObject();
+      for (int i = 0; i < criteriaSize; i++)
+      {
+        final String criteria = _infoCriteria.get(i);
+        final JSONBaseObject value = properties.get(criteria);
+        if (value != null)
+        {
+          infoProperties.put(criteria, value.deepCopy());
+        }
+      }
+    
+      return new MBFeatureMarkTouchListener(_handler, infoProperties);
     }
 
     public void dispose()
@@ -159,7 +176,7 @@ public class MapBoo
       super.dispose();
     }
 
-    public static MapBoo.MBDataset fromJSON(JSONBaseObject jsonBaseObject, boolean verbose)
+    public static MapBoo.MBDataset fromJSON(MBHandler handler, JSONBaseObject jsonBaseObject, boolean verbose)
     {
       if (jsonBaseObject == null)
       {
@@ -178,7 +195,7 @@ public class MapBoo
       java.util.ArrayList<String> infoCriteria = jsonObject.getAsArray("infoCriteria").asStringVector();
       final int timestamp = (int) jsonObject.get("timestamp").asNumber().value();
     
-      return new MBDataset(id, name, labelingCriteria, infoCriteria, timestamp);
+      return new MBDataset(handler, id, name, labelingCriteria, infoCriteria, timestamp);
     }
 
 
@@ -201,9 +218,9 @@ public class MapBoo
     {
       final GEOFeature feature = geometry.getFeature();
       final JSONObject properties = feature.getProperties();
-      final Geodetic3D position = new Geodetic3D(geometry.getPosition(), 0);
+      final Geodetic2D position = geometry.getPosition();
     
-      return new Mark(createMarkLabel(properties), position, AltitudeMode.ABSOLUTE, 0, 18, Color.newFromRGBA(1, 1, 1, 1), Color.newFromRGBA(0, 0, 0, 1), null, true, createMarkTouchListener(properties), true); // autoDeleteListener -  autoDeleteUserData -  userData -  labelShadowColor -  labelFontColor -  labelFontSize -  minDistanceToCamera
+      return new Mark(createMarkLabel(properties), new Geodetic3D(position, 0), AltitudeMode.ABSOLUTE, 0, 18, Color.newFromRGBA(1, 1, 1, 1), Color.newFromRGBA(0, 0, 0, 1), null, true, createMarkTouchListener(properties), true); // autoDeleteListener -  autoDeleteUserData -  userData -  labelShadowColor -  labelFontColor -  labelFontSize -  minDistanceToCamera
     }
 
   }
@@ -234,6 +251,7 @@ public class MapBoo
 
   public static class MBMap
   {
+    private MBHandler _handler;
     private final String _id;
     private final String _name;
     private java.util.ArrayList<MapBoo.MBLayer> _layers = new java.util.ArrayList<MapBoo.MBLayer>();
@@ -244,8 +262,9 @@ public class MapBoo
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
 //    MBMap(MBMap that);
 
-    private MBMap(String id, String name, java.util.ArrayList<MapBoo.MBLayer> layers, java.util.ArrayList<MapBoo.MBDataset> datasets, int timestamp, boolean verbose)
+    private MBMap(MBHandler handler, String id, String name, java.util.ArrayList<MapBoo.MBLayer> layers, java.util.ArrayList<MapBoo.MBDataset> datasets, int timestamp, boolean verbose)
     {
+       _handler = handler;
        _id = id;
        _name = name;
        _layers = layers;
@@ -267,12 +286,12 @@ public class MapBoo
       }
       return result;
     }
-    private static java.util.ArrayList<MapBoo.MBDataset> parseDatasets(JSONArray jsonArray, boolean verbose)
+    private static java.util.ArrayList<MapBoo.MBDataset> parseDatasets(MBHandler handler, JSONArray jsonArray, boolean verbose)
     {
       java.util.ArrayList<MapBoo.MBDataset> result = new java.util.ArrayList<MapBoo.MBDataset>();
       for (int i = 0; i < jsonArray.size(); i++)
       {
-        MBDataset dataset = MBDataset.fromJSON(jsonArray.get(i), verbose);
+        MBDataset dataset = MBDataset.fromJSON(handler, jsonArray.get(i), verbose);
         if (dataset != null)
         {
           result.add(dataset);
@@ -282,7 +301,7 @@ public class MapBoo
     }
 
 
-    public static MapBoo.MBMap fromJSON(JSONBaseObject jsonBaseObject, boolean verbose)
+    public static MapBoo.MBMap fromJSON(MBHandler handler, JSONBaseObject jsonBaseObject, boolean verbose)
     {
       if (jsonBaseObject == null)
       {
@@ -298,10 +317,10 @@ public class MapBoo
       final String id = jsonObject.get("id").asString().value();
       final String name = jsonObject.get("name").asString().value();
       java.util.ArrayList<MapBoo.MBLayer> layers = parseLayers(jsonObject.get("layerSet").asArray(), verbose);
-      java.util.ArrayList<MapBoo.MBDataset> datasets = parseDatasets(jsonObject.get("datasets").asArray(), verbose);
+      java.util.ArrayList<MapBoo.MBDataset> datasets = parseDatasets(handler, jsonObject.get("datasets").asArray(), verbose);
       final int timestamp = (int) jsonObject.get("timestamp").asNumber().value();
     
-      return new MBMap(id, name, layers, datasets, timestamp, verbose);
+      return new MBMap(handler, id, name, layers, datasets, timestamp, verbose);
     }
 
     public void dispose()
@@ -351,6 +370,7 @@ public class MapBoo
     }
   }
 
+
   public interface MBHandler
   {
     void dispose();
@@ -358,6 +378,27 @@ public class MapBoo
     void onMapDownloadError();
     void onMapParseError();
     void onSelectedMap(MapBoo.MBMap map);
+
+    void onFeatureTouched(JSONObject properties);
+  }
+
+
+  public static class MBFeatureMarkTouchListener extends MarkTouchListener
+  {
+    private MBHandler _handler;
+    private final JSONObject _properties;
+
+    public MBFeatureMarkTouchListener(MBHandler handler, JSONObject properties)
+    {
+       _handler = handler;
+       _properties = properties;
+    }
+
+    public final boolean touchedMark(Mark mark)
+    {
+      _handler.onFeatureTouched(_properties);
+    }
+
   }
 
 
@@ -369,20 +410,21 @@ public class MapBoo
 
     void onDownloadError();
     void onParseError();
-
   }
 
 
   public static class MapParserAsyncTask extends GAsyncTask
   {
     private MapBoo _mapboo;
+    private MBHandler _handler;
     private IByteBuffer _buffer;
     private MBMap _map;
     private final boolean _verbose;
 
-    public MapParserAsyncTask(MapBoo mapboo, IByteBuffer buffer, boolean verbose)
+    public MapParserAsyncTask(MapBoo mapboo, MBHandler handler, IByteBuffer buffer, boolean verbose)
     {
        _mapboo = mapboo;
+       _handler = handler;
        _buffer = buffer;
        _verbose = verbose;
        _map = null;
@@ -410,7 +452,7 @@ public class MapBoo
          _buffer.dispose(); // release some memory
       _buffer = null;
     
-      _map = MBMap.fromJSON(jsonBaseObject, _verbose);
+      _map = MBMap.fromJSON(_handler, jsonBaseObject, _verbose);
     
       if (jsonBaseObject != null)
          jsonBaseObject.dispose();
@@ -444,7 +486,8 @@ public class MapBoo
 
   public static class MapsParserAsyncTask extends GAsyncTask
   {
-    private MBMapsHandler _handler;
+    private MBHandler _handler;
+    private MBMapsHandler _mapsHandler;
     private boolean _deleteHandler;
     private IByteBuffer _buffer;
     private final boolean _verbose;
@@ -453,9 +496,10 @@ public class MapBoo
     private java.util.ArrayList<MBMap> _maps = new java.util.ArrayList<MBMap>();
 
 
-    public MapsParserAsyncTask(MBMapsHandler handler, boolean deleteHandler, IByteBuffer buffer, boolean verbose)
+    public MapsParserAsyncTask(MBHandler handler, MBMapsHandler mapsHandler, boolean deleteHandler, IByteBuffer buffer, boolean verbose)
     {
        _handler = handler;
+       _mapsHandler = mapsHandler;
        _deleteHandler = deleteHandler;
        _buffer = buffer;
        _verbose = verbose;
@@ -474,10 +518,10 @@ public class MapBoo
            map.dispose();
       }
     
-      if (_deleteHandler && (_handler != null))
+      if (_deleteHandler && (_mapsHandler != null))
       {
-        if (_handler != null)
-           _handler.dispose();
+        if (_mapsHandler != null)
+           _mapsHandler.dispose();
       }
       super.dispose();
     }
@@ -504,7 +548,7 @@ public class MapBoo
     
           for (int i = 0; i < jsonArray.size(); i++)
           {
-            MBMap map = MBMap.fromJSON(jsonArray.get(i), _verbose);
+            MBMap map = MBMap.fromJSON(_handler, jsonArray.get(i), _verbose);
             if (map == null)
             {
               _parseError = true;
@@ -528,7 +572,7 @@ public class MapBoo
           ILogger.instance().logInfo("MapBoo: error parsing maps");
         }
     
-        _handler.onParseError();
+        _mapsHandler.onParseError();
       }
       else
       {
@@ -537,7 +581,7 @@ public class MapBoo
           ILogger.instance().logInfo("MapBoo: parsed maps");
         }
     
-        _handler.onMaps(_maps);
+        _mapsHandler.onMaps(_maps);
         _maps.clear(); // moved maps ownership to _handler
       }
     }
@@ -548,11 +592,13 @@ public class MapBoo
   public static class MapBufferDownloadListener extends IBufferDownloadListener
   {
     private MapBoo _mapboo;
+    private MBHandler _handler;
     private final IThreadUtils _threadUtils;
     private final boolean _verbose;
-    public MapBufferDownloadListener(MapBoo mapboo, IThreadUtils threadUtils, boolean verbose)
+    public MapBufferDownloadListener(MapBoo mapboo, MBHandler handler, IThreadUtils threadUtils, boolean verbose)
     {
        _mapboo = mapboo;
+       _handler = handler;
        _threadUtils = threadUtils;
        _verbose = verbose;
     }
@@ -564,7 +610,7 @@ public class MapBoo
         ILogger.instance().logInfo("MapBoo: downloaded map");
       }
     
-      _threadUtils.invokeAsyncTask(new MapParserAsyncTask(_mapboo, buffer, _verbose), true);
+      _threadUtils.invokeAsyncTask(new MapParserAsyncTask(_mapboo, _handler, buffer, _verbose), true);
     }
 
     public final void onError(URL url)
@@ -592,15 +638,17 @@ public class MapBoo
 
   public static class MapsBufferDownloadListener extends IBufferDownloadListener
   {
-    private MBMapsHandler _handler;
+    private MBHandler _handler;
+    private MBMapsHandler _mapsHandler;
     private boolean _deleteHandler;
     private final IThreadUtils _threadUtils;
     private final boolean _verbose;
 
 
-    public MapsBufferDownloadListener(MBMapsHandler handler, boolean deleteHandler, IThreadUtils threadUtils, boolean verbose)
+    public MapsBufferDownloadListener(MBHandler handler, MBMapsHandler mapsHandler, boolean deleteHandler, IThreadUtils threadUtils, boolean verbose)
     {
        _handler = handler;
+       _mapsHandler = mapsHandler;
        _deleteHandler = deleteHandler;
        _threadUtils = threadUtils;
        _verbose = verbose;
@@ -608,10 +656,10 @@ public class MapBoo
 
     public void dispose()
     {
-      if (_deleteHandler && (_handler != null))
+      if (_deleteHandler && (_mapsHandler != null))
       {
-        if (_handler != null)
-           _handler.dispose();
+        if (_mapsHandler != null)
+           _mapsHandler.dispose();
       }
       super.dispose();
     }
@@ -622,8 +670,8 @@ public class MapBoo
       {
         ILogger.instance().logInfo("MapBoo: downloaded maps");
       }
-      _threadUtils.invokeAsyncTask(new MapsParserAsyncTask(_handler, _deleteHandler, buffer, _verbose), true);
-      _handler = null; // moves ownership to MapsParserAsyncTask
+      _threadUtils.invokeAsyncTask(new MapsParserAsyncTask(_handler, _mapsHandler, _deleteHandler, buffer, _verbose), true);
+      _mapsHandler = null; // moves ownership to MapsParserAsyncTask
     }
 
     public final void onError(URL url)
@@ -632,13 +680,13 @@ public class MapBoo
       {
         ILogger.instance().logInfo("MapBoo: error downloading maps");
       }
-      _handler.onDownloadError();
+      _mapsHandler.onDownloadError();
     
       if (_deleteHandler)
       {
-        if (_handler != null)
-           _handler.dispose();
-        _handler = null;
+        if (_mapsHandler != null)
+           _mapsHandler.dispose();
+        _mapsHandler = null;
       }
     }
 
@@ -675,7 +723,7 @@ public class MapBoo
       ILogger.instance().logInfo("MapBoo: requesting map \"%s\"", _mapID);
     }
   
-    _downloader.requestBuffer(new URL(_serverURL, "/public/v1/map/" + _mapID), DownloadPriority.HIGHEST, TimeInterval.zero(), false, new MapBufferDownloadListener(this, _threadUtils, _verbose), true); // readExpired
+    _downloader.requestBuffer(new URL(_serverURL, "/public/v1/map/" + _mapID), DownloadPriority.HIGHEST, TimeInterval.zero(), false, new MapBufferDownloadListener(this, _handler, _threadUtils, _verbose), true); // readExpired
   }
   private void applyMap(MapBoo.MBMap map)
   {
@@ -738,17 +786,17 @@ public class MapBoo
        _handler.dispose();
   }
 
-  public final void requestMaps(MBMapsHandler handler)
+  public final void requestMaps(MBMapsHandler mapsHandler)
   {
-     requestMaps(handler, true);
+     requestMaps(mapsHandler, true);
   }
-  public final void requestMaps(MBMapsHandler handler, boolean deleteHandler)
+  public final void requestMaps(MBMapsHandler mapsHandler, boolean deleteHandler)
   {
     if (_verbose)
     {
       ILogger.instance().logInfo("MapBoo: loading maps");
     }
-    _downloader.requestBuffer(new URL(_serverURL, "/public/v1/map/"), DownloadPriority.HIGHEST, TimeInterval.zero(), false, new MapsBufferDownloadListener(handler, deleteHandler, _threadUtils, _verbose), true); // readExpired
+    _downloader.requestBuffer(new URL(_serverURL, "/public/v1/map/"), DownloadPriority.HIGHEST, TimeInterval.zero(), false, new MapsBufferDownloadListener(_handler, mapsHandler, deleteHandler, _threadUtils, _verbose), true); // readExpired
   }
 
   public final void setMapID(String mapID)
