@@ -195,21 +195,25 @@ public:
     virtual void onMapParseError() = 0;
     virtual void onSelectedMap(MapBoo::MBMap* map) = 0;
 
-    virtual void onFeatureTouched(const std::vector<std::string>& infoCriteria,
+    virtual void onFeatureTouched(const std::string& datasetName,
+                                  const std::vector<std::string>& infoCriteria,
                                   const JSONObject* properties) = 0;
   };
 
 
   class MBFeatureMarkTouchListener : public MarkTouchListener {
   private:
+    const std::string        _datasetName;
     MBHandler*               _handler;
     std::vector<std::string> _infoCriteria;
     const JSONObject*        _properties;
 
   public:
-    MBFeatureMarkTouchListener(MBHandler*                      handler,
+    MBFeatureMarkTouchListener(const std::string&              datasetName,
+                               MBHandler*                      handler,
                                const std::vector<std::string>& infoCriteria,
                                const JSONObject*               properties) :
+    _datasetName(datasetName),
     _handler(handler),
     _infoCriteria(infoCriteria),
     _properties(properties)

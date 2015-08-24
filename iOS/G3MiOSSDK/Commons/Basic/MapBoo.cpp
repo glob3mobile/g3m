@@ -497,7 +497,7 @@ const std::string MapBoo::MBDataset::createMarkLabel(const JSONObject* propertie
 
 
 bool MapBoo::MBFeatureMarkTouchListener::touchedMark(Mark* mark) {
-  _handler->onFeatureTouched(_infoCriteria, _properties);
+  _handler->onFeatureTouched(_datasetName, _infoCriteria, _properties);
   return true;
 }
 
@@ -521,7 +521,7 @@ MarkTouchListener* MapBoo::MBDataset::createMarkTouchListener(const JSONObject* 
     }
   }
 
-  return new MBFeatureMarkTouchListener(_handler, _infoCriteria, infoProperties);
+  return new MBFeatureMarkTouchListener(_name, _handler, _infoCriteria, infoProperties);
 }
 
 Mark* MapBoo::MBDataset::createMark(const GEO2DPointGeometry* geometry) const {
