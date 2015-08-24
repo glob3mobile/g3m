@@ -506,10 +506,10 @@ public class VectorStreamingRenderer extends DefaultRenderer
 
     private void removeMarks()
     {
-      if (_verbose)
-      {
-        ILogger.instance().logInfo("\"%s\": Removing marks", getFullName());
-      }
+    //  if (_verbose) {
+    //    ILogger::instance()->logInfo("\"%s\": Removing marks",
+    //                                 getFullName().c_str());
+    //  }
     
       int removed = _vectorSet.getMarksRenderer().removeAllMarks(new NodeMarksFilter(this), true);
     
