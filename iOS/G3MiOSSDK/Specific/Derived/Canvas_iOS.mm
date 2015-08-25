@@ -161,9 +161,6 @@ void Canvas_iOS::_removeShadow() {
 
 void Canvas_iOS::_clearRect(float left, float top,
                             float width, float height) {
-
-
-
   CGContextClearRect(_context, CGRectMake(left, _canvasHeight - top,
                                           width, -height));
 }
