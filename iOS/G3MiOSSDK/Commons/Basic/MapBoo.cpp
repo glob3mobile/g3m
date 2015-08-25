@@ -541,4 +541,14 @@ Mark* MapBoo::MBDataset::createMark(const GEO2DPointGeometry* geometry) const {
                   createMarkTouchListener(properties),
                   true                                  // autoDeleteListener
                   );
+
+  //  return new Mark(URL("file:///icon.png"),
+  //                  Geodetic3D(position, 0),
+  //                  ABSOLUTE,
+  //                  0,
+  //                  NULL,
+  //                  true,
+  //                  createMarkTouchListener(properties),
+  //                  true);
+  
 }
