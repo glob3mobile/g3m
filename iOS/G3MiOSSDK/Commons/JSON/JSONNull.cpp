@@ -14,6 +14,10 @@ const std::string JSONNull::description() const {
   return "null";
 }
 
+const std::string JSONNull::toString() const {
+  return "null";
+}
+
 void JSONNull::acceptVisitor(JSONVisitor* visitor) const {
   visitor->visitNull();
 }

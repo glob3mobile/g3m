@@ -25,3 +25,13 @@ const std::string JSONInteger::description() const {
   delete isb;
   return s;
 }
+
+const std::string JSONInteger::toString() const {
+  IStringBuilder* isb = IStringBuilder::newStringBuilder();
+
+  isb->addInt(_value);
+
+  const std::string s = isb->getString();
+  delete isb;
+  return s;
+}

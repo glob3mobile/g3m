@@ -1,13 +1,13 @@
 package org.glob3.mobile.generated; 
-public abstract class MapBooBuilder
+public abstract class MapBooOLDBuilder
 {
 
   private final URL _serverURL;
   private final URL _tubesURL;
 
-  private MapBoo_ViewType _viewType;
+  private MapBooOLD_ViewType _viewType;
 
-  private MapBooApplicationChangeListener _applicationListener;
+  private MapBooOLDApplicationChangeListener _applicationListener;
 
   private FeatureInfoDownloadListener _featureInfoDownloadListener;
 
@@ -19,7 +19,7 @@ public abstract class MapBooBuilder
   private String _applicationEMail;
   private String _applicationAbout;
   private int _applicationTimestamp;
-  private java.util.ArrayList<MapBoo_Scene> _applicationScenes = new java.util.ArrayList<MapBoo_Scene>();
+  private java.util.ArrayList<MapBooOLD_Scene> _applicationScenes = new java.util.ArrayList<MapBooOLD_Scene>();
   private String _applicationCurrentSceneId;
   private String _lastApplicationCurrentSceneId;
 
@@ -36,7 +36,7 @@ public abstract class MapBooBuilder
 
   private boolean _isApplicationTubeOpen;
 
-  private MapBoo_ErrorRenderer _mbErrorRenderer;
+  private MapBooOLD_ErrorRenderer _mbErrorRenderer;
 
   private LayerSet _layerSet;
   private PlanetRenderer createPlanetRenderer()
@@ -76,7 +76,7 @@ public abstract class MapBooBuilder
   
     if (_enableNotifications)
     {
-      result.addTerrainTouchListener(new MapBooBuilder_TerrainTouchListener(this));
+      result.addTerrainTouchListener(new MapBooOLDBuilder_TerrainTouchListener(this));
     }
   
     return result;
@@ -120,14 +120,14 @@ public abstract class MapBooBuilder
   {
     java.util.ArrayList<PeriodicalTask> periodicalTasks = new java.util.ArrayList<PeriodicalTask>();
   
-    periodicalTasks.add(new PeriodicalTask(TimeInterval.fromSeconds(5), new MapBooBuilder_TubeWatchdogPeriodicalTask(this)));
+    periodicalTasks.add(new PeriodicalTask(TimeInterval.fromSeconds(5), new MapBooOLDBuilder_TubeWatchdogPeriodicalTask(this)));
   
     return periodicalTasks;
   }
 
   private void recreateLayerSet()
   {
-    final MapBoo_Scene scene = getApplicationCurrentScene();
+    final MapBooOLD_Scene scene = getApplicationCurrentScene();
   
     if (scene == null)
     {
@@ -351,7 +351,7 @@ public abstract class MapBooBuilder
   {
     return _applicationCurrentSceneId;
   }
-  private MapBoo_Scene getApplicationCurrentScene()
+  private MapBooOLD_Scene getApplicationCurrentScene()
   {
     final String currentSceneId = getApplicationCurrentSceneId();
   
@@ -369,12 +369,12 @@ public abstract class MapBooBuilder
 
   private Color getCurrentBackgroundColor()
   {
-    final MapBoo_Scene scene = getApplicationCurrentScene();
+    final MapBooOLD_Scene scene = getApplicationCurrentScene();
     return (scene == null) ? Color.black() : scene.getBackgroundColor();
   }
 
 //  const std::string parseSceneId(const JSONObject* jsonObject) const;
-  private MapBoo_Scene parseScene(JSONObject jsonObject)
+  private MapBooOLD_Scene parseScene(JSONObject jsonObject)
   {
     if (jsonObject == null)
     {
@@ -390,7 +390,7 @@ public abstract class MapBooBuilder
     //    return NULL;
     //  }
   
-    return new MapBoo_Scene(jsonObject.getAsString("id", ""), jsonObject.getAsString("name", ""), jsonObject.getAsString("description", ""), parseMultiImage(jsonObject.getAsObject("screenshot")), parseColor(jsonObject.getAsString("backgroundColor")), parseCameraPosition(jsonObject.getAsObject("cameraPosition")), parseSector(jsonObject.get("sector")), parseLayer(jsonObject.get("baseLayer")), parseLayer(jsonObject.get("overlayLayer")), queryable, hasWarnings);
+    return new MapBooOLD_Scene(jsonObject.getAsString("id", ""), jsonObject.getAsString("name", ""), jsonObject.getAsString("description", ""), parseMultiImage(jsonObject.getAsObject("screenshot")), parseColor(jsonObject.getAsString("backgroundColor")), parseCameraPosition(jsonObject.getAsObject("cameraPosition")), parseSector(jsonObject.get("sector")), parseLayer(jsonObject.get("baseLayer")), parseLayer(jsonObject.get("overlayLayer")), queryable, hasWarnings);
   }
 
   private Color parseColor(JSONString jsonColor)
@@ -413,7 +413,7 @@ public abstract class MapBooBuilder
     return result;
   }
 
-  //const std::string MapBooBuilder::parseSceneId(const JSONObject* jsonObject) const {
+  //const std::string MapBooOLDBuilder::parseSceneId(const JSONObject* jsonObject) const {
   //  if (jsonObject == NULL) {
   //    ILogger::instance()->logError("Missing Scene ID");
   //    return "";
@@ -448,7 +448,7 @@ public abstract class MapBooBuilder
     return new Sector(Geodetic2D.fromDegrees(lowerLat, lowerLon), Geodetic2D.fromDegrees(upperLat, upperLon));
   }
 
-  private MapBoo_MultiImage parseMultiImage(JSONObject jsonObject)
+  private MapBooOLD_MultiImage parseMultiImage(JSONObject jsonObject)
   {
     if (jsonObject == null)
     {
@@ -457,7 +457,7 @@ public abstract class MapBooBuilder
   
     Color averageColor = parseColor(jsonObject.getAsString("averageColor"));
   
-    java.util.ArrayList<MapBoo_MultiImage_Level> levels = new java.util.ArrayList<MapBoo_MultiImage_Level>();
+    java.util.ArrayList<MapBooOLD_MultiImage_Level> levels = new java.util.ArrayList<MapBooOLD_MultiImage_Level>();
   
     final JSONArray jsLevels = jsonObject.getAsArray("levels");
     if (jsLevels != null)
@@ -465,7 +465,7 @@ public abstract class MapBooBuilder
       final int levelsCount = jsLevels.size();
       for (int i = 0; i < levelsCount; i++)
       {
-        MapBoo_MultiImage_Level level = parseMultiImageLevel(jsLevels.getAsObject(i));
+        MapBooOLD_MultiImage_Level level = parseMultiImageLevel(jsLevels.getAsObject(i));
         if (level != null)
         {
           levels.add(level);
@@ -473,9 +473,9 @@ public abstract class MapBooBuilder
       }
     }
   
-    return new MapBoo_MultiImage(averageColor, levels);
+    return new MapBooOLD_MultiImage(averageColor, levels);
   }
-  private MapBoo_MultiImage_Level parseMultiImageLevel(JSONObject jsonObject)
+  private MapBooOLD_MultiImage_Level parseMultiImageLevel(JSONObject jsonObject)
   {
     final JSONString jsURL = jsonObject.getAsString("url");
     if (jsURL == null)
@@ -495,9 +495,9 @@ public abstract class MapBooBuilder
       return null;
     }
   
-    return new MapBoo_MultiImage_Level(new URL(_serverURL, "/images/" + jsURL.value()), (int) jsWidth.value(), (int) jsHeight.value());
+    return new MapBooOLD_MultiImage_Level(new URL(_serverURL, "/images/" + jsURL.value()), (int) jsWidth.value(), (int) jsHeight.value());
   }
-  private MapBoo_CameraPosition parseCameraPosition(JSONObject jsonObject)
+  private MapBooOLD_CameraPosition parseCameraPosition(JSONObject jsonObject)
   {
     if (jsonObject == null)
     {
@@ -513,14 +513,14 @@ public abstract class MapBooBuilder
   
     final boolean animated = jsonObject.getAsBoolean("animated", true);
   
-    return new MapBoo_CameraPosition(Geodetic3D.fromDegrees(latitudeInDegress, longitudeInDegress, height), Angle.fromDegrees(headingInDegrees), Angle.fromDegrees(pitchInDegrees), animated);
+    return new MapBooOLD_CameraPosition(Geodetic3D.fromDegrees(latitudeInDegress, longitudeInDegress, height), Angle.fromDegrees(headingInDegrees), Angle.fromDegrees(pitchInDegrees), animated);
   }
 
   private void changedCurrentScene()
   {
     recreateLayerSet();
   
-    final MapBoo_Scene currentScene = getApplicationCurrentScene();
+    final MapBooOLD_Scene currentScene = getApplicationCurrentScene();
   
     if (_g3mWidget != null)
     {
@@ -550,7 +550,7 @@ public abstract class MapBooBuilder
       _applicationListener.onCurrentSceneChanged(_context, getApplicationCurrentSceneId(), currentScene);
     }
   
-    if (_viewType == MapBoo_ViewType.VIEW_EDITION_PREVIEW)
+    if (_viewType == MapBooOLD_ViewType.VIEW_EDITION_PREVIEW)
     {
       if (_applicationCurrentSceneId.compareTo(_lastApplicationCurrentSceneId) != 0)
       {
@@ -562,7 +562,7 @@ public abstract class MapBooBuilder
           }
           else if (_token.length() > 0)
           {
-              _g3mWidget.getG3MContext().getDownloader().requestBuffer(createApplicationCurrentSceneURL(), DownloadPriority.HIGHEST, TimeInterval.zero(), false, new MapBooBuilder_DummyListener(), false); // readExpired
+              _g3mWidget.getG3MContext().getDownloader().requestBuffer(createApplicationCurrentSceneURL(), DownloadPriority.HIGHEST, TimeInterval.zero(), false, new MapBooOLDBuilder_DummyListener(), false); // readExpired
           }
           else
           {
@@ -577,7 +577,7 @@ public abstract class MapBooBuilder
   private void updateVisibleScene(boolean cameraPositionChanged)
   {
     recreateLayerSet();
-    final MapBoo_Scene currentScene = getApplicationCurrentScene();
+    final MapBooOLD_Scene currentScene = getApplicationCurrentScene();
   
     if (_g3mWidget != null)
     {
@@ -617,7 +617,7 @@ public abstract class MapBooBuilder
     return s;
   }
 
-  private String getSendNotificationCommand(Geodetic2D position, MapBoo_CameraPosition cameraPosition, String message, URL iconURL)
+  private String getSendNotificationCommand(Geodetic2D position, MapBooOLD_CameraPosition cameraPosition, String message, URL iconURL)
   {
     IStringBuilder isb = IStringBuilder.newStringBuilder();
   
@@ -733,7 +733,7 @@ public abstract class MapBooBuilder
        isb.dispose();
     return s;
   }
-  private String toCameraPositionJSON(MapBoo_CameraPosition cameraPosition)
+  private String toCameraPositionJSON(MapBooOLD_CameraPosition cameraPosition)
   {
     IStringBuilder isb = IStringBuilder.newStringBuilder();
   
@@ -767,25 +767,25 @@ public abstract class MapBooBuilder
     return s;
   }
 
-  private MapBoo_Notification parseNotification(JSONObject jsonObject)
+  private MapBooOLD_Notification parseNotification(JSONObject jsonObject)
   {
     if (jsonObject == null)
     {
       return null;
     }
   
-    return new MapBoo_Notification(Geodetic2D.fromDegrees(jsonObject.getAsNumber("latitude", 0), jsonObject.getAsNumber("longitude", 0)), parseCameraPosition(jsonObject.getAsObject("cameraPosition")), jsonObject.getAsString("message", ""), parseURL(jsonObject.getAsString("iconURL")));
+    return new MapBooOLD_Notification(Geodetic2D.fromDegrees(jsonObject.getAsNumber("latitude", 0), jsonObject.getAsNumber("longitude", 0)), parseCameraPosition(jsonObject.getAsObject("cameraPosition")), jsonObject.getAsString("message", ""), parseURL(jsonObject.getAsString("iconURL")));
   }
-  private java.util.ArrayList<MapBoo_Notification> parseNotifications(JSONArray jsonArray)
+  private java.util.ArrayList<MapBooOLD_Notification> parseNotifications(JSONArray jsonArray)
   {
-    java.util.ArrayList<MapBoo_Notification> result = new java.util.ArrayList<MapBoo_Notification>();
+    java.util.ArrayList<MapBooOLD_Notification> result = new java.util.ArrayList<MapBooOLD_Notification>();
   
     if (jsonArray != null)
     {
       final int size = jsonArray.size();
       for (int i = 0; i < size; i++)
       {
-        MapBoo_Notification notification = parseNotification(jsonArray.getAsObject(i));
+        MapBooOLD_Notification notification = parseNotification(jsonArray.getAsObject(i));
         if (notification != null)
         {
           result.add(notification);
@@ -796,7 +796,7 @@ public abstract class MapBooBuilder
     return result;
   }
 
-  private void addApplicationNotification(MapBoo_Notification notification)
+  private void addApplicationNotification(MapBooOLD_Notification notification)
   {
     if (_marksRenderer != null)
     {
@@ -832,7 +832,7 @@ public abstract class MapBooBuilder
   
       if (newMark)
       {
-        final MapBoo_CameraPosition cameraPosition = notification.getCameraPosition();
+        final MapBooOLD_CameraPosition cameraPosition = notification.getCameraPosition();
         if (cameraPosition != null)
         {
           setCameraPosition(cameraPosition, true);
@@ -843,7 +843,7 @@ public abstract class MapBooBuilder
     if (notification != null)
        notification.dispose();
   }
-  private void addApplicationNotifications(java.util.ArrayList<MapBoo_Notification> notifications)
+  private void addApplicationNotifications(java.util.ArrayList<MapBooOLD_Notification> notifications)
   {
     if (notifications == null)
     {
@@ -853,7 +853,7 @@ public abstract class MapBooBuilder
     final int size = notifications.size();
     for (int i = 0; i < size; i++)
     {
-      MapBoo_Notification notification = notifications.get(i);
+      MapBooOLD_Notification notification = notifications.get(i);
       if (notification != null)
       {
         addApplicationNotification(notification);
@@ -891,11 +891,11 @@ public abstract class MapBooBuilder
     if (_applicationListener != null)
     {
       _applicationListener.onScenesChanged(_context,
-                                           new java.util.ArrayList<MapBoo_Scene>(_applicationScenes));
+                                           new java.util.ArrayList<MapBooOLD_Scene>(_applicationScenes));
     }
   }
 
-  private void setCameraPosition(MapBoo_CameraPosition cameraPosition, boolean animated)
+  private void setCameraPosition(MapBooOLD_CameraPosition cameraPosition, boolean animated)
   {
     if (cameraPosition != null)
     {
@@ -911,7 +911,7 @@ public abstract class MapBooBuilder
       }
     }
   }
-  private void setCameraPosition(MapBoo_CameraPosition cameraPosition)
+  private void setCameraPosition(MapBooOLD_CameraPosition cameraPosition)
   {
     if (cameraPosition != null)
     {
@@ -961,7 +961,7 @@ public abstract class MapBooBuilder
     isb.addString(_applicationId);
     isb.addString("/scenes/");
   
-    final MapBoo_Scene scene = getApplicationCurrentScene();
+    final MapBooOLD_Scene scene = getApplicationCurrentScene();
     isb.addString(scene.getId());
   
     isb.addString("/getinfo?");
@@ -1015,7 +1015,7 @@ public abstract class MapBooBuilder
     return new URL(path, false);
   
   }
-  protected MapBooBuilder(URL serverURL, URL tubesURL, String applicationId, MapBoo_ViewType viewType, MapBooApplicationChangeListener applicationListener, boolean enableNotifications, String token)
+  protected MapBooOLDBuilder(URL serverURL, URL tubesURL, String applicationId, MapBooOLD_ViewType viewType, MapBooOLDApplicationChangeListener applicationListener, boolean enableNotifications, String token)
   {
      _serverURL = serverURL;
      _tubesURL = tubesURL;
@@ -1090,7 +1090,7 @@ public abstract class MapBooBuilder
   
     CompositeRenderer mainRenderer = new CompositeRenderer();
   
-    _mbErrorRenderer = new MapBoo_ErrorRenderer();
+    _mbErrorRenderer = new MapBooOLD_ErrorRenderer();
     mainRenderer.addRenderer(_mbErrorRenderer);
   
     final Planet planet = createPlanet();
@@ -1102,7 +1102,7 @@ public abstract class MapBooBuilder
   
     java.util.ArrayList<ICameraConstrainer> cameraConstraints = createCameraConstraints(planet, planetRenderer);
   
-    GInitializationTask initializationTask = new MapBooBuilder_ApplicationTubeConnector(this);
+    GInitializationTask initializationTask = new MapBooOLDBuilder_ApplicationTubeConnector(this);
   
     java.util.ArrayList<PeriodicalTask> periodicalTasks = createPeriodicalTasks();
   
@@ -1111,8 +1111,8 @@ public abstract class MapBooBuilder
   
     InitialCameraPositionProvider icpp = new SimpleInitialCameraPositionProvider();
   
-    MapBoo_HUDRenderer hudRenderer = new MapBoo_HUDRenderer();
-    InfoDisplay infoDisplay = new MapBoo_HUDRendererInfoDisplay(hudRenderer);
+    MapBooOLD_HUDRenderer hudRenderer = new MapBooOLD_HUDRenderer();
+    InfoDisplay infoDisplay = new MapBooOLD_HUDRendererInfoDisplay(hudRenderer);
     infoDisplay.showDisplay();
   
     _g3mWidget = G3MWidget.create(getGL(), getStorage(), getDownloader(), getThreadUtils(), cameraActivityListener, planet, cameraConstraints, createCameraRenderer(), mainRenderer, createBusyRenderer(), createErrorRenderer(), hudRenderer, Color.black(), false, false, initializationTask, true, periodicalTasks, getGPUProgramManager(), createSceneLighting(), icpp, infoDisplay); // autoDeleteInitializationTask -  logDownloaderStatistics -  logFPS
@@ -1271,7 +1271,7 @@ public abstract class MapBooBuilder
   }
 
   /** Private to MapbooBuilder, don't call it */
-  public final void addApplicationScene(MapBoo_Scene scene, int position)
+  public final void addApplicationScene(MapBooOLD_Scene scene, int position)
   {
     _applicationScenes.add(position, scene);
   
@@ -1294,12 +1294,12 @@ public abstract class MapBooBuilder
     }
     if (sceneIndex != -1)
     {
-      MapBoo_Scene scene = _applicationScenes.get(sceneIndex);
+      MapBooOLD_Scene scene = _applicationScenes.get(sceneIndex);
       _applicationScenes.remove(sceneIndex);
       if (scene != null)
          scene.dispose();
   
-      if (_viewType == MapBoo_ViewType.VIEW_RUNTIME)
+      if (_viewType == MapBooOLD_ViewType.VIEW_RUNTIME)
       {
         if (_applicationCurrentSceneId.compareTo(sceneId) == 0)
         {
@@ -1312,19 +1312,19 @@ public abstract class MapBooBuilder
   }
 
   /** Private to MapbooBuilder, don't call it */
-  public final void setApplicationScenes(java.util.ArrayList<MapBoo_Scene> applicationScenes)
+  public final void setApplicationScenes(java.util.ArrayList<MapBooOLD_Scene> applicationScenes)
   {
     final int currentScenesCount = _applicationScenes.size();
     for (int i = 0; i < currentScenesCount; i++)
     {
-      MapBoo_Scene scene = _applicationScenes.get(i);
+      MapBooOLD_Scene scene = _applicationScenes.get(i);
       if (scene != null)
          scene.dispose();
     }
   
     _applicationScenes.clear();
   
-    _applicationScenes = new java.util.ArrayList<MapBoo_Scene>(applicationScenes);
+    _applicationScenes = new java.util.ArrayList<MapBooOLD_Scene>(applicationScenes);
   
     fireOnScenesChanged();
   }
@@ -1338,7 +1338,7 @@ public abstract class MapBooBuilder
     //  std::string                _applicationEMail;
     //  std::string                _applicationAbout;
     //  int                        _applicationTimestamp;
-    //  std::vector<MapBoo_Scene*> _applicationScenes;
+    //  std::vector<MapBooOLD_Scene*> _applicationScenes;
     //  int                        _applicationCurrentSceneIndex;
     //  int                        _lastApplicationCurrentSceneIndex;
   ///#warning Diego at work!
@@ -1435,12 +1435,12 @@ public abstract class MapBooBuilder
           final JSONArray jsonAllScenes = jsonObject.getAsArray("scenes");
           if (jsonAllScenes != null)
           {
-            java.util.ArrayList<MapBoo_Scene> scenes = new java.util.ArrayList<MapBoo_Scene>();
+            java.util.ArrayList<MapBooOLD_Scene> scenes = new java.util.ArrayList<MapBooOLD_Scene>();
   
             final int scenesCount = jsonAllScenes.size();
             for (int i = 0; i < scenesCount; i++)
             {
-              MapBoo_Scene scene = parseScene(jsonAllScenes.getAsObject(i));
+              MapBooOLD_Scene scene = parseScene(jsonAllScenes.getAsObject(i));
               if (scene != null)
               {
                 scenes.add(scene);
@@ -1461,7 +1461,7 @@ public abstract class MapBooBuilder
               final JSONObject jsonNewScene = jsonPutScene.getAsObject("scene");
               if (jsonNewScene != null)
               {
-                MapBoo_Scene scene = parseScene(jsonNewScene);
+                MapBooOLD_Scene scene = parseScene(jsonNewScene);
                 if (scene != null)
                 {
                   addApplicationScene(scene, position);
@@ -1584,33 +1584,33 @@ public abstract class MapBooBuilder
       final String sceneID = _applicationScenes.get(i).getId();
       if (sceneID.compareTo(sceneToBeUpdatedID) == 0)
       {
-        MapBoo_Scene oldScene = _applicationScenes.get(i);
+        MapBooOLD_Scene oldScene = _applicationScenes.get(i);
   
         final String name = jsonObject.getAsString("name", oldScene.getName());
         final String description = jsonObject.getAsString("description", oldScene.getDescription());
         final JSONBaseObject jboScreenshot = jsonObject.get("screenshot");
-        final MapBoo_MultiImage screenshot;
+        final MapBooOLD_MultiImage screenshot;
         if (jboScreenshot != null)
         {
           screenshot = parseMultiImage(jboScreenshot.asObject());
         }
         else
         {
-          final MapBoo_MultiImage oldScreenshot = oldScene.getScreenshot();
+          final MapBooOLD_MultiImage oldScreenshot = oldScene.getScreenshot();
           screenshot = (oldScreenshot != null) ? oldScreenshot.deepCopy() : null;
         }
         final JSONBaseObject jboBackgroundColor = jsonObject.get("backgroundColor");
         final Color backgroundColor = (jboBackgroundColor != null) ? parseColor(jboBackgroundColor.asString()) : oldScene.getBackgroundColor();
         final JSONBaseObject jboCameraPosition = jsonObject.get("cameraPosition");
-        final MapBoo_CameraPosition cameraPosition;
+        final MapBooOLD_CameraPosition cameraPosition;
         if (jboCameraPosition != null)
         {
           cameraPosition = parseCameraPosition(jboCameraPosition.asObject());
         }
         else
         {
-          final MapBoo_CameraPosition oldCameraPosition = oldScene.getCameraPosition();
-          cameraPosition = (oldCameraPosition != null) ? new MapBoo_CameraPosition(oldCameraPosition.getPosition(), oldCameraPosition.getHeading(), oldCameraPosition.getPitch(), oldCameraPosition.isAnimated()) : null;
+          final MapBooOLD_CameraPosition oldCameraPosition = oldScene.getCameraPosition();
+          cameraPosition = (oldCameraPosition != null) ? new MapBooOLD_CameraPosition(oldCameraPosition.getPosition(), oldCameraPosition.getHeading(), oldCameraPosition.getPitch(), oldCameraPosition.isAnimated()) : null;
         }
         final JSONBaseObject jboSector = jsonObject.get("sector");
         final Sector sector;
@@ -1633,7 +1633,7 @@ public abstract class MapBooBuilder
         final boolean queryable = jsonObject.getAsBoolean("queryable", oldScene.isQueryable());
         final boolean cameraPositionChaged = (jboCameraPosition != null);
   
-        MapBoo_Scene newScene = new MapBoo_Scene(sceneToBeUpdatedID, name, description, screenshot, backgroundColor, cameraPosition, sector, baseLayer, overlayLayer, queryable, hasWarnings);
+        MapBooOLD_Scene newScene = new MapBooOLD_Scene(sceneToBeUpdatedID, name, description, screenshot, backgroundColor, cameraPosition, sector, baseLayer, overlayLayer, queryable, hasWarnings);
   
         _applicationScenes.set(i, newScene);
   
@@ -1665,11 +1665,11 @@ public abstract class MapBooBuilder
   //                            DownloadPriority::HIGHEST,
   //                            TimeInterval::zero(),
   //                            false, // readExpired
-  //                            new MapBooBuilder_RestJSON(this),
+  //                            new MapBooOLDBuilder_RestJSON(this),
   //                            true);
   
     final IFactory factory = context.getFactory();
-    _webSocket = factory.createWebSocket(createApplicationTubeURL(), new MapBooBuilder_ApplicationTubeListener(this), true, true); // autodeleteWebSocket -  autodeleteListener
+    _webSocket = factory.createWebSocket(createApplicationTubeURL(), new MapBooOLDBuilder_ApplicationTubeListener(this), true, true); // autodeleteWebSocket -  autodeleteListener
   }
 
   /** Private to MapbooBuilder, don't call it */
@@ -1764,13 +1764,13 @@ public abstract class MapBooBuilder
   }
 
 
-  public final MapBoo_Notification createNotification(Geodetic2D position, Camera camera, String message, URL iconURL)
+  public final MapBooOLD_Notification createNotification(Geodetic2D position, Camera camera, String message, URL iconURL)
   {
-    MapBoo_CameraPosition cameraPosition = new MapBoo_CameraPosition(camera.getGeodeticPosition(), camera.getHeading(), camera.getPitch(), true); // animated
-    return new MapBoo_Notification(position, cameraPosition, message, iconURL);
+    MapBooOLD_CameraPosition cameraPosition = new MapBooOLD_CameraPosition(camera.getGeodeticPosition(), camera.getHeading(), camera.getPitch(), true); // animated
+    return new MapBooOLD_Notification(position, cameraPosition, message, iconURL);
   }
 
-  public final void sendNotification(Geodetic2D position, MapBoo_CameraPosition cameraPosition, String message, URL iconURL)
+  public final void sendNotification(Geodetic2D position, MapBooOLD_CameraPosition cameraPosition, String message, URL iconURL)
   {
     if ((_webSocket != null) && _isApplicationTubeOpen)
     {
@@ -1805,14 +1805,14 @@ public abstract class MapBooBuilder
         final String iSceneId = _applicationScenes.get(i).getId();
         if (sceneId.compareTo(iSceneId) == 0)
         {
-          getThreadUtils().invokeInRendererThread(new MapBooBuilder_ChangeSceneTask(this, sceneId), true);
+          getThreadUtils().invokeInRendererThread(new MapBooOLDBuilder_ChangeSceneTask(this, sceneId), true);
           break;
         }
       }
     }
   }
 
-  public final void changeScene(MapBoo_Scene scene)
+  public final void changeScene(MapBooOLD_Scene scene)
   {
     final int size = _applicationScenes.size();
     for (int i = 0; i < size; i++)
@@ -1845,7 +1845,7 @@ public abstract class MapBooBuilder
   public final void pollApplicationDataFromServer(G3MContext context)
   {
     IDownloader downloader = context.getDownloader();
-    downloader.requestBuffer(createApplicationPollURL(), DownloadPriority.HIGHEST, TimeInterval.zero(), false, new MapBooBuilder_RestJSON(this), true); // readExpired
+    downloader.requestBuffer(createApplicationPollURL(), DownloadPriority.HIGHEST, TimeInterval.zero(), false, new MapBooOLDBuilder_RestJSON(this), true); // readExpired
   }
 
   public final String getApplicationId()

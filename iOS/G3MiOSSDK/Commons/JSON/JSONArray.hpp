@@ -32,6 +32,8 @@ public:
   const JSONNumber*  getAsNumber (const size_t index) const;
   const JSONString*  getAsString (const size_t index) const;
 
+  std::vector<std::string> asStringVector() const;
+
   bool getAsBoolean(const size_t index,
                     bool defaultValue) const;
 
@@ -52,6 +54,7 @@ public:
   void add(bool value);
 
   const std::string description() const;
+  const std::string toString() const;
 
   JSONArray* deepCopy() const;
 

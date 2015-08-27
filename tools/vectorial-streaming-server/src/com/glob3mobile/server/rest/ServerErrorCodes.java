@@ -3,7 +3,7 @@
 package com.glob3mobile.server.rest;
 
 
-public class ErrorCodes {
+public class ServerErrorCodes {
 
    // no need to translate, there are development-only messages
    public static final String GET_NOT_SUPPORTED       = "GET_NOT_SUPPORTED";
@@ -32,7 +32,7 @@ public class ErrorCodes {
    public static final String NOT_FOUND               = "NOT_FOUND";
 
 
-   private ErrorCodes() {
+   private ServerErrorCodes() {
    }
 
 

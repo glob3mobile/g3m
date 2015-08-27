@@ -32,6 +32,10 @@ VectorStreamingRenderer::ChildrenParserAsyncTask::~ChildrenParserAsyncTask() {
     }
     _children = NULL;
   }
+
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
 }
 
 void VectorStreamingRenderer::ChildrenParserAsyncTask::runInBackground(const G3MContext* context) {
@@ -60,8 +64,6 @@ void VectorStreamingRenderer::ChildrenParserAsyncTask::onPostExecute(const G3MCo
   _children = NULL; // moved ownership to _node
 }
 
-
-
 void VectorStreamingRenderer::NodeChildrenDownloadListener::onDownload(const URL& url,
                                                                        IByteBuffer* buffer,
                                                                        bool expired) {
@@ -80,7 +82,6 @@ void VectorStreamingRenderer::NodeChildrenDownloadListener::onDownload(const URL
 
   _threadUtils->invokeAsyncTask(new ChildrenParserAsyncTask(_node, _verbose, buffer, _threadUtils),
                                 true);
-
 }
 
 void VectorStreamingRenderer::NodeChildrenDownloadListener::onError(const URL& url) {
@@ -97,11 +98,14 @@ void VectorStreamingRenderer::NodeChildrenDownloadListener::onCanceledDownload(c
   // do nothing
 }
 
-
 VectorStreamingRenderer::FeaturesParserAsyncTask::~FeaturesParserAsyncTask() {
   _node->_release();
   delete _buffer;
   delete _features;
+
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
 }
 
 void VectorStreamingRenderer::FeaturesParserAsyncTask::runInBackground(const G3MContext* context) {
@@ -115,7 +119,6 @@ void VectorStreamingRenderer::FeaturesParserAsyncTask::onPostExecute(const G3MCo
   _node->parsedFeatures(_features, _threadUtils);
   _features = NULL; // moved ownership to _node
 }
-
 
 void VectorStreamingRenderer::NodeFeaturesDownloadListener::onDownload(const URL& url,
                                                                        IByteBuffer* buffer,
@@ -135,7 +138,6 @@ void VectorStreamingRenderer::NodeFeaturesDownloadListener::onDownload(const URL
 
   _threadUtils->invokeAsyncTask(new FeaturesParserAsyncTask(_node, _verbose, buffer, _threadUtils),
                                 true);
-
 }
 
 void VectorStreamingRenderer::NodeFeaturesDownloadListener::onError(const URL& url) {
@@ -151,7 +153,6 @@ void VectorStreamingRenderer::NodeFeaturesDownloadListener::onCanceledDownload(c
                                                                                bool expired) {
   // do nothing
 }
-
 
 VectorStreamingRenderer::Node::~Node() {
   unload();
@@ -177,7 +178,6 @@ void VectorStreamingRenderer::Node::parsedChildren(std::vector<Node*>* children,
     _childrenSize = _children->size();
   }
 }
-
 
 void VectorStreamingRenderer::Node::parsedFeatures(GEOObject* features,
                                                    const IThreadUtils* threadUtils) {
@@ -248,11 +248,11 @@ void VectorStreamingRenderer::Node::loadFeatures(const G3MRenderContext* rc) {
                         "&properties=" + _vectorSet->getProperties(),
                         true);
 
-//  if (_verbose) {
-//    ILogger::instance()->logInfo("\"%s\": Downloading features for node \'%s\'",
-//                                 _vectorSet->getName().c_str(),
-//                                 _id.c_str());
-//  }
+  //  if (_verbose) {
+  //    ILogger::instance()->logInfo("\"%s\": Downloading features for node \'%s\'",
+  //                                 _vectorSet->getName().c_str(),
+  //                                 _id.c_str());
+  //  }
 
   _downloader = rc->getDownloader();
   _featuresRequestID = _downloader->requestBuffer(metadataURL,
@@ -281,9 +281,6 @@ void VectorStreamingRenderer::Node::cancelLoadFeatures() {
 }
 
 void VectorStreamingRenderer::Node::loadChildren(const G3MRenderContext* rc) {
-
-  // http://192.168.1.12:8080/server-mapboo/public/VectorialStreaming/GEONames-PopulatedPlaces_LOD/?nodes=0|1|
-
   const size_t childrenIDsSize = _childrenIDs.size();
   if (childrenIDsSize == 0) {
     std::vector<Node*>* children = new std::vector<Node*>();
@@ -309,11 +306,11 @@ void VectorStreamingRenderer::Node::loadChildren(const G3MRenderContext* rc) {
                         "?nodes=" + nodes,
                         true);
 
-//  if (_verbose) {
-//    ILogger::instance()->logInfo("\"%s\": Downloading children for node \'%s\'",
-//                                 _vectorSet->getName().c_str(),
-//                                 _id.c_str());
-//  }
+  //  if (_verbose) {
+  //    ILogger::instance()->logInfo("\"%s\": Downloading children for node \'%s\'",
+  //                                 _vectorSet->getName().c_str(),
+  //                                 _id.c_str());
+  //  }
 
   _downloader = rc->getDownloader();
 
@@ -356,9 +353,14 @@ bool VectorStreamingRenderer::NodeMarksFilter::test(const Mark* mark) const {
 
 
 void VectorStreamingRenderer::Node::removeMarks() {
+  //  if (_verbose) {
+  //    ILogger::instance()->logInfo("\"%s\": Removing marks",
+  //                                 getFullName().c_str());
+  //  }
+
   size_t removed = _vectorSet->getMarksRenderer()->removeAllMarks( NodeMarksFilter(this), true );
 
-  if (_verbose && removed) {
+  if (_verbose && removed > 0) {
 #ifdef C_CODE
     ILogger::instance()->logInfo("\"%s\": Removed %ld marks",
                                  getFullName().c_str(),
@@ -528,6 +530,10 @@ VectorStreamingRenderer::MetadataParserAsyncTask::~MetadataParserAsyncTask() {
     }
     delete _rootNodes;
   }
+
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
 }
 
 void VectorStreamingRenderer::MetadataParserAsyncTask::runInBackground(const G3MContext* context) {
@@ -725,16 +731,18 @@ void VectorStreamingRenderer::VectorSet::initialize(const G3MContext* context) {
 }
 
 RenderState VectorStreamingRenderer::VectorSet::getRenderState(const G3MRenderContext* rc) {
-  if (_downloadingMetadata) {
-    return RenderState::busy();
-  }
+  if (_haltOnError) {
+    if (_downloadingMetadata) {
+      return RenderState::busy();
+    }
 
-  if (_errorDownloadingMetadata) {
-    return RenderState::error("Error downloading metadata of \"" + _name + "\" from \"" + _serverURL.getPath() + "\"");
-  }
+    if (_errorDownloadingMetadata) {
+      return RenderState::error("Error downloading metadata of \"" + _name + "\" from \"" + _serverURL.getPath() + "\"");
+    }
 
-  if (_errorParsingMetadata) {
-    return RenderState::error("Error parsing metadata of \"" + _name + "\" from \"" + _serverURL.getPath() + "\"");
+    if (_errorParsingMetadata) {
+      return RenderState::error("Error parsing metadata of \"" + _name + "\" from \"" + _serverURL.getPath() + "\"");
+    }
   }
 
   return RenderState::ready();
@@ -860,22 +868,25 @@ RenderState VectorStreamingRenderer::getRenderState(const G3MRenderContext* rc) 
 
 void VectorStreamingRenderer::addVectorSet(const URL&                 serverURL,
                                            const std::string&         name,
+                                           const std::string&         properties,
                                            const VectorSetSymbolizer* symbolizer,
                                            const bool                 deleteSymbolizer,
                                            long long                  downloadPriority,
                                            const TimeInterval&        timeToCache,
                                            bool                       readExpired,
-                                           bool                       verbose) {
+                                           bool                       verbose,
+                                           bool                       haltOnError) {
   VectorSet* vectorSet = new VectorSet(this,
                                        serverURL,
                                        name,
+                                       properties,
                                        symbolizer,
-                                       "name|population|featureClass|featureCode",
                                        deleteSymbolizer,
                                        downloadPriority,
                                        timeToCache,
                                        readExpired,
-                                       verbose);
+                                       verbose,
+                                       haltOnError);
   if (_context != NULL) {
     vectorSet->initialize(_context);
   }
@@ -904,7 +915,7 @@ void VectorStreamingRenderer::render(const G3MRenderContext* rc,
 
     updateGLState(camera);
     _glState->setParent(glState);
-
+    
     VectorSet* vectorSector = _vectorSets[i];
     vectorSector->render(rc,
                          frustumInModelCoordinates,

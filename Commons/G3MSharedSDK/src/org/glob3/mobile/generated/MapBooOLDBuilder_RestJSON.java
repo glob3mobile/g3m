@@ -1,9 +1,9 @@
 package org.glob3.mobile.generated; 
-public class MapBooBuilder_RestJSON extends IBufferDownloadListener
+public class MapBooOLDBuilder_RestJSON extends IBufferDownloadListener
 {
-  private MapBooBuilder _builder;
+  private MapBooOLDBuilder _builder;
 
-  public MapBooBuilder_RestJSON(MapBooBuilder builder)
+  public MapBooOLDBuilder_RestJSON(MapBooOLDBuilder builder)
   {
      _builder = builder;
   }

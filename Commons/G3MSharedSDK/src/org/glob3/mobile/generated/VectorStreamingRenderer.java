@@ -121,6 +121,8 @@ public class VectorStreamingRenderer extends DefaultRenderer
         }
         _children = null;
       }
+    
+      super.dispose();
     }
 
     public final void runInBackground(G3MContext context)
@@ -175,6 +177,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
     public void dispose()
     {
       _node._release();
+      super.dispose();
     }
 
     public final void onDownload(URL url, IByteBuffer buffer, boolean expired)
@@ -187,7 +190,6 @@ public class VectorStreamingRenderer extends DefaultRenderer
       }
     
       _threadUtils.invokeAsyncTask(new ChildrenParserAsyncTask(_node, _verbose, buffer, _threadUtils), true);
-    
     }
 
     public final void onError(URL url)
@@ -235,6 +237,8 @@ public class VectorStreamingRenderer extends DefaultRenderer
          _buffer.dispose();
       if (_features != null)
          _features.dispose();
+    
+      super.dispose();
     }
 
     public final void runInBackground(G3MContext context)
@@ -272,6 +276,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
     public void dispose()
     {
       _node._release();
+      super.dispose();
     }
 
     public final void onDownload(URL url, IByteBuffer buffer, boolean expired)
@@ -284,7 +289,6 @@ public class VectorStreamingRenderer extends DefaultRenderer
       }
     
       _threadUtils.invokeAsyncTask(new FeaturesParserAsyncTask(_node, _verbose, buffer, _threadUtils), true);
-    
     }
 
     public final void onError(URL url)
@@ -393,11 +397,11 @@ public class VectorStreamingRenderer extends DefaultRenderer
     {
       final URL metadataURL = new URL(_vectorSet.getServerURL(), _vectorSet.getName() + "/features" + "?node=" + _id + "&properties=" + _vectorSet.getProperties(), true);
     
-    //  if (_verbose) {
-    //    ILogger::instance()->logInfo("\"%s\": Downloading features for node \'%s\'",
-    //                                 _vectorSet->getName().c_str(),
-    //                                 _id.c_str());
-    //  }
+      //  if (_verbose) {
+      //    ILogger::instance()->logInfo("\"%s\": Downloading features for node \'%s\'",
+      //                                 _vectorSet->getName().c_str(),
+      //                                 _id.c_str());
+      //  }
     
       _downloader = rc.getDownloader();
       _featuresRequestID = _downloader.requestBuffer(metadataURL, _vectorSet.getDownloadPriority() + _featuresCount, _vectorSet.getTimeToCache(), _vectorSet.getReadExpired(), new NodeFeaturesDownloadListener(this, rc.getThreadUtils(), _verbose), true);
@@ -423,9 +427,6 @@ public class VectorStreamingRenderer extends DefaultRenderer
     private long _childrenRequestID;
     private void loadChildren(G3MRenderContext rc)
     {
-    
-      // http://192.168.1.12:8080/server-mapboo/public/VectorialStreaming/GEONames-PopulatedPlaces_LOD/?nodes=0|1|
-    
       final int childrenIDsSize = _childrenIDs.size();
       if (childrenIDsSize == 0)
       {
@@ -446,11 +447,11 @@ public class VectorStreamingRenderer extends DefaultRenderer
     
       final URL childrenURL = new URL(_vectorSet.getServerURL(), _vectorSet.getName() + "?nodes=" + nodes, true);
     
-    //  if (_verbose) {
-    //    ILogger::instance()->logInfo("\"%s\": Downloading children for node \'%s\'",
-    //                                 _vectorSet->getName().c_str(),
-    //                                 _id.c_str());
-    //  }
+      //  if (_verbose) {
+      //    ILogger::instance()->logInfo("\"%s\": Downloading children for node \'%s\'",
+      //                                 _vectorSet->getName().c_str(),
+      //                                 _id.c_str());
+      //  }
     
       _downloader = rc.getDownloader();
     
@@ -509,9 +510,14 @@ public class VectorStreamingRenderer extends DefaultRenderer
 
     private void removeMarks()
     {
+      //  if (_verbose) {
+      //    ILogger::instance()->logInfo("\"%s\": Removing marks",
+      //                                 getFullName().c_str());
+      //  }
+    
       int removed = _vectorSet.getMarksRenderer().removeAllMarks(new NodeMarksFilter(this), true);
     
-      if (_verbose && removed != 0)
+      if (_verbose && removed > 0)
       {
         ILogger.instance().logInfo("\"%s\": Removed %d marks",
                                    getFullName(),
@@ -749,6 +755,8 @@ public class VectorStreamingRenderer extends DefaultRenderer
         }
         _rootNodes = null;
       }
+    
+      super.dispose();
     }
 
     public final void runInBackground(G3MContext context)
@@ -898,6 +906,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
     private final TimeInterval _timeToCache;
     private final boolean _readExpired;
     private final boolean _verbose;
+    private final boolean _haltOnError;
 
     private final String _properties;
 
@@ -917,18 +926,19 @@ public class VectorStreamingRenderer extends DefaultRenderer
     private long _lastRenderedCount;
 
 
-    public VectorSet(VectorStreamingRenderer renderer, URL serverURL, String name, VectorSetSymbolizer symbolizer, String properties, boolean deleteSymbolizer, long downloadPriority, TimeInterval timeToCache, boolean readExpired, boolean verbose)
+    public VectorSet(VectorStreamingRenderer renderer, URL serverURL, String name, String properties, VectorSetSymbolizer symbolizer, boolean deleteSymbolizer, long downloadPriority, TimeInterval timeToCache, boolean readExpired, boolean verbose, boolean haltOnError)
     {
        _renderer = renderer;
        _serverURL = serverURL;
        _name = name;
-       _symbolizer = symbolizer;
        _properties = properties;
+       _symbolizer = symbolizer;
        _deleteSymbolizer = deleteSymbolizer;
        _downloadPriority = downloadPriority;
        _timeToCache = timeToCache;
        _readExpired = readExpired;
        _verbose = verbose;
+       _haltOnError = haltOnError;
        _downloadingMetadata = false;
        _errorDownloadingMetadata = false;
        _errorParsingMetadata = false;
@@ -1011,19 +1021,22 @@ public class VectorStreamingRenderer extends DefaultRenderer
 
     public final RenderState getRenderState(G3MRenderContext rc)
     {
-      if (_downloadingMetadata)
+      if (_haltOnError)
       {
-        return RenderState.busy();
-      }
+        if (_downloadingMetadata)
+        {
+          return RenderState.busy();
+        }
     
-      if (_errorDownloadingMetadata)
-      {
-        return RenderState.error("Error downloading metadata of \"" + _name + "\" from \"" + _serverURL.getPath() + "\"");
-      }
+        if (_errorDownloadingMetadata)
+        {
+          return RenderState.error("Error downloading metadata of \"" + _name + "\" from \"" + _serverURL.getPath() + "\"");
+        }
     
-      if (_errorParsingMetadata)
-      {
-        return RenderState.error("Error parsing metadata of \"" + _name + "\" from \"" + _serverURL.getPath() + "\"");
+        if (_errorParsingMetadata)
+        {
+          return RenderState.error("Error parsing metadata of \"" + _name + "\" from \"" + _serverURL.getPath() + "\"");
+        }
       }
     
       return RenderState.ready();
@@ -1189,9 +1202,9 @@ public class VectorStreamingRenderer extends DefaultRenderer
     }
   }
 
-  public final void addVectorSet(URL serverURL, String name, VectorSetSymbolizer symbolizer, boolean deleteSymbolizer, long downloadPriority, TimeInterval timeToCache, boolean readExpired, boolean verbose)
+  public final void addVectorSet(URL serverURL, String name, String properties, VectorSetSymbolizer symbolizer, boolean deleteSymbolizer, long downloadPriority, TimeInterval timeToCache, boolean readExpired, boolean verbose, boolean haltOnError)
   {
-    VectorSet vectorSet = new VectorSet(this, serverURL, name, symbolizer, "name|population|featureClass|featureCode", deleteSymbolizer, downloadPriority, timeToCache, readExpired, verbose);
+    VectorSet vectorSet = new VectorSet(this, serverURL, name, properties, symbolizer, deleteSymbolizer, downloadPriority, timeToCache, readExpired, verbose, haltOnError);
     if (_context != null)
     {
       vectorSet.initialize(_context);

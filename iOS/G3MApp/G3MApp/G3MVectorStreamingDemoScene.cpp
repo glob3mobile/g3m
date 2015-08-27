@@ -66,13 +66,15 @@ void G3MVectorStreamingDemoScene::rawActivate(const G3MContext* context) {
   VectorStreamingRenderer* renderer = model->getVectorStreamingRenderer();
   renderer->addVectorSet(URL("http://192.168.1.12:8080/server-mapboo/public/VectorialStreaming/"),
                          "GEONames-PopulatedPlaces_LOD",
+                         "name|population|featureClass|featureCode",
                          new G3MVectorStreamingDemoScene_Symbolizer(),
                          true, // deleteSymbolizer
                          //DownloadPriority::LOWER,
                          DownloadPriority::HIGHER,
                          TimeInterval::zero(),
                          true, // readExpired
-                         true // verbose
+                         true, // verbose
+                         true // haltOnError
                          );
 
 

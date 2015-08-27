@@ -1,5 +1,5 @@
 package org.glob3.mobile.generated; 
-public enum MapBoo_ViewType
+public enum MapBooOLD_ViewType
 {
   VIEW_RUNTIME,
   VIEW_EDITION_PREVIEW,
@@ -10,7 +10,7 @@ public enum MapBoo_ViewType
       return this.ordinal();
    }
 
-   public static MapBoo_ViewType forValue(int value)
+   public static MapBooOLD_ViewType forValue(int value)
    {
       return values()[value];
    }
