@@ -2,6 +2,12 @@
 
 package com.glob3mobile.server.rest;
 
+import static com.glob3mobile.server.rest.ServerErrorCodes.DELETE_NOT_SUPPORTED;
+import static com.glob3mobile.server.rest.ServerErrorCodes.GET_NOT_SUPPORTED;
+import static com.glob3mobile.server.rest.ServerErrorCodes.PARAMETER_INVALID_RANGE;
+import static com.glob3mobile.server.rest.ServerErrorCodes.POST_NOT_SUPPORTED;
+import static com.glob3mobile.server.rest.ServerErrorCodes.PUT_NOT_SUPPORTED;
+
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -36,28 +42,29 @@ public abstract class DefaultRESTProcessor
    @Override
    public RESTResponse doGet(final RESTPath path,
                              final HttpServletRequest request) throws RESTException {
-      throw new RESTJSONErrorException(_notSupportedResponseStatus, ErrorCodes.GET_NOT_SUPPORTED);
+
+      throw new RESTJSONErrorException(_notSupportedResponseStatus, GET_NOT_SUPPORTED);
    }
 
 
    @Override
    public RESTResponse doPost(final RESTPath path,
                               final HttpServletRequest request) throws RESTException {
-      throw new RESTJSONErrorException(_notSupportedResponseStatus, ErrorCodes.POST_NOT_SUPPORTED);
+      throw new RESTJSONErrorException(_notSupportedResponseStatus, POST_NOT_SUPPORTED);
    }
 
 
    @Override
    public RESTResponse doPut(final RESTPath path,
                              final HttpServletRequest request) throws RESTException {
-      throw new RESTJSONErrorException(_notSupportedResponseStatus, ErrorCodes.PUT_NOT_SUPPORTED);
+      throw new RESTJSONErrorException(_notSupportedResponseStatus, PUT_NOT_SUPPORTED);
    }
 
 
    @Override
    public RESTResponse doDelete(final RESTPath path,
                                 final HttpServletRequest request) throws RESTException {
-      throw new RESTJSONErrorException(_notSupportedResponseStatus, ErrorCodes.DELETE_NOT_SUPPORTED);
+      throw new RESTJSONErrorException(_notSupportedResponseStatus, DELETE_NOT_SUPPORTED);
    }
 
 
@@ -76,7 +83,7 @@ public abstract class DefaultRESTProcessor
       if ((size < Integer.MIN_VALUE) || (size > Integer.MAX_VALUE)) {
          throw new RESTJSONErrorException( //
                   HttpServletResponse.SC_OK, //
-                  ErrorCodes.PARAMETER_INVALID_RANGE, //
+                  PARAMETER_INVALID_RANGE, //
                   "size is out of Integer range");
       }
       return (int) size;

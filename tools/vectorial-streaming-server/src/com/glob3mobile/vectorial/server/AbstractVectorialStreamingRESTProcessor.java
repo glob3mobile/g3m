@@ -3,8 +3,8 @@
 package com.glob3mobile.vectorial.server;
 
 
-import static com.glob3mobile.server.rest.ErrorCodes.INVALID_OPERATION;
-import static com.glob3mobile.server.rest.ErrorCodes.NOT_FOUND;
+import static com.glob3mobile.server.rest.ServerErrorCodes.INVALID_OPERATION;
+import static com.glob3mobile.server.rest.ServerErrorCodes.NOT_FOUND;
 import static javax.servlet.http.HttpServletResponse.SC_OK;
 
 import java.io.File;
