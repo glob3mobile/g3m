@@ -165,6 +165,10 @@ public class MapBoo
       return null;
     }
 
+    public void dispose()
+    {
+
+    }
   }
 
 
@@ -193,6 +197,10 @@ public class MapBoo
       return new MBCircleShape(Color.fromRGBA(red, green, blue, alpha), radius);
     }
 
+    public void dispose()
+    {
+      super.dispose();
+    }
   }
 
 
