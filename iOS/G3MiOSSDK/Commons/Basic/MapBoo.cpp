@@ -183,13 +183,16 @@ MapBoo::MBMap* MapBoo::MBMap::fromJSON(MBHandler*            handler,
     return NULL;
   }
 
-  const std::string                         id                 = jsonObject->get("id")->asString()->value();
-  const std::string                         name               = jsonObject->get("name")->asString()->value();
-  std::vector<MapBoo::MBLayer*>             layers             = parseLayers( jsonObject->get("layerSet")->asArray(), verbose );
-  std::vector<MapBoo::MBSymbolizedDataset*> symbolizedDatasets = parseSymbolizedDatasets(handler, jsonObject->get("symbolizedDatasets")->asArray(), verbose );
-  const int                                 timestamp          = (int) jsonObject->get("timestamp")->asNumber()->value();
+  const std::string                         id          = jsonObject->get("id")->asString()->value();
+  const std::string                         name        = jsonObject->get("name")->asString()->value();
+  std::vector<MapBoo::MBLayer*>             layers      = parseLayers(jsonObject->get("layerSet")->asArray(),
+                                                                      verbose);
+  std::vector<MapBoo::MBSymbolizedDataset*> symDatasets = parseSymbolizedDatasets(handler,
+                                                                                  jsonObject->get("symbolizedDatasets")->asArray(),
+                                                                                  verbose );
+  const int                                 timestamp   = (int) jsonObject->get("timestamp")->asNumber()->value();
 
-  return new MBMap(id, name, layers, symbolizedDatasets, timestamp, verbose);
+  return new MBMap(id, name, layers, symDatasets, timestamp, verbose);
 }
 
 std::vector<MapBoo::MBLayer*> MapBoo::MBMap::parseLayers(const JSONArray* jsonArray,
@@ -258,10 +261,11 @@ MapBoo::MBLayer* MapBoo::MBLayer::fromJSON(const JSONBaseObject* jsonBaseObject,
     return NULL;
   }
 
-  const std::string type = jsonObject->get("type")->asString()->value();
-  const std::string url  = jsonObject->getAsString("url", "");
+  const std::string type         = jsonObject->get("type")->asString()->value();
+  const std::string url          = jsonObject->getAsString("url", "");
+  const std::string attribution  = jsonObject->getAsString("attribution", "");
 
-  return new MapBoo::MBLayer(type, url, verbose);
+  return new MapBoo::MBLayer(type, url, attribution, verbose);
 }
 
 MapBoo::MBLayer::~MBLayer() {
@@ -468,15 +472,19 @@ MapBoo::MBSymbolizedDataset* MapBoo::MBSymbolizedDataset::fromJSON(MBHandler*   
     return NULL;
   }
 
-  const std::string        datasetID   = jsonObject->get("datasetID")->asString()->value();
-  const std::string        datasetName = jsonObject->get("datasetName")->asString()->value();
-  std::vector<std::string> labeling    = jsonObject->getAsArray("labeling")->asStringVector();
-  const MBShape*           shape       = MBShape::fromJSON( jsonObject->get("shape") );
-  std::vector<std::string> info        = jsonObject->getAsArray("info")->asStringVector();
+  const std::string        datasetID          = jsonObject->get("datasetID")->asString()->value();
+  const std::string        datasetName        = jsonObject->getAsString("datasetName", "");
+  const std::string        datasetAttribution = jsonObject->getAsString("datasetAttribution", "");
+  std::vector<std::string> labeling           = jsonObject->getAsArray("labeling")->asStringVector();
+  const MBShape*           shape              = MBShape::fromJSON( jsonObject->get("shape") );
+  std::vector<std::string> info               = jsonObject->getAsArray("info")->asStringVector();
+
+
 
   return new MBSymbolizedDataset(handler,
                                  datasetID,
                                  datasetName,
+                                 datasetAttribution,
                                  labeling,
                                  shape,
                                  info);
@@ -515,11 +523,11 @@ const MapBoo::MBCircleShape* MapBoo::MBCircleShape::fromJSON(const JSONObject* j
                            radius);
 }
 
-MapBoo::MBDataset::~MBDataset() {
-#ifdef JAVA_CODE
-  super.dispose();
-#endif
-}
+//MapBoo::MBDataset::~MBDataset() {
+//#ifdef JAVA_CODE
+//  super.dispose();
+//#endif
+//}
 
 //void MapBoo::MBDataset::apply(const URL&               serverURL,
 //                              VectorStreamingRenderer* vectorStreamingRenderer) const {

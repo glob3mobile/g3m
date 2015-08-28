@@ -31,13 +31,16 @@ public:
   private:
     const std::string _type;
     const std::string _url;
+    const std::string _attribution;
     const bool        _verbose;
 
     MBLayer(const std::string& type,
             const std::string& url,
+            const std::string& attribution,
             const bool         verbose) :
     _type(type),
     _url(url),
+    _attribution(attribution),
     _verbose(verbose)
     {
     }
@@ -58,54 +61,62 @@ public:
   class MBHandler;
 
 
-  class MBDataset : public RCObject {
-  private:
-    MBHandler*               _handler;
-    const std::string        _id;
-    const std::string        _name;
-    //    std::vector<std::string> _labelingCriteria;
-    //    std::vector<std::string> _infoCriteria;
-    const int                _timestamp;
-
-    MBDataset(const MBDataset& that);
-
-    MBDataset(MBHandler*                handler,
-              const std::string&        id,
-              const std::string&        name,
-              //              std::vector<std::string>& labelingCriteria,
-              //              std::vector<std::string>& infoCriteria,
-              const int                 timestamp) :
-    _handler(handler),
-    _id(id),
-    _name(name),
-    //    _labelingCriteria(labelingCriteria),
-    //    _infoCriteria(infoCriteria),
-    _timestamp(timestamp)
-    {
-    }
-
-    //    const std::string  createMarkLabel(const JSONObject* properties) const;
-    //    MarkTouchListener* createMarkTouchListener(const JSONObject* properties) const;
-
-  protected:
-    ~MBDataset();
-
-  public:
-    //    static MapBoo::MBDataset* fromJSON(MBHandler*            handler,
-    //                                       const JSONBaseObject* jsonBaseObject,
-    //                                       bool verbose);
-
-
-    //    void apply(const URL&               serverURL,
-    //               VectorStreamingRenderer* vectorStreamingRenderer) const;
-
-    //    Mark* createMark(const GEO2DPointGeometry* geometry) const;
-
-  };
+//  class MBDataset : public RCObject {
+//  private:
+//    MBHandler*               _handler;
+//    const std::string        _id;
+//    const std::string        _name;
+//    //    std::vector<std::string> _labelingCriteria;
+//    //    std::vector<std::string> _infoCriteria;
+//    const int                _timestamp;
+//
+//    MBDataset(const MBDataset& that);
+//
+//    MBDataset(MBHandler*                handler,
+//              const std::string&        id,
+//              const std::string&        name,
+//              //              std::vector<std::string>& labelingCriteria,
+//              //              std::vector<std::string>& infoCriteria,
+//              const int                 timestamp) :
+//    _handler(handler),
+//    _id(id),
+//    _name(name),
+//    //    _labelingCriteria(labelingCriteria),
+//    //    _infoCriteria(infoCriteria),
+//    _timestamp(timestamp)
+//    {
+//    }
+//
+//    //    const std::string  createMarkLabel(const JSONObject* properties) const;
+//    //    MarkTouchListener* createMarkTouchListener(const JSONObject* properties) const;
+//
+//  protected:
+//    ~MBDataset();
+//
+//  public:
+//    //    static MapBoo::MBDataset* fromJSON(MBHandler*            handler,
+//    //                                       const JSONBaseObject* jsonBaseObject,
+//    //                                       bool verbose);
+//
+//
+//    //    void apply(const URL&               serverURL,
+//    //               VectorStreamingRenderer* vectorStreamingRenderer) const;
+//
+//    //    Mark* createMark(const GEO2DPointGeometry* geometry) const;
+//
+//  };
 
 
 
   class MBShape {
+  private:
+    MBShape(const MBShape& that);
+
+  protected:
+    MBShape() {
+
+    }
+
   public:
     static const MapBoo::MBShape* fromJSON(const JSONBaseObject* jsonBaseObject);
 
@@ -144,6 +155,7 @@ public:
     MBHandler*               _handler;
     const std::string        _datasetID;
     const std::string        _datasetName;
+    const std::string        _datasetAttribution;
     std::vector<std::string> _labeling;
     const MBShape*           _shape;
     std::vector<std::string> _info;
@@ -151,12 +163,14 @@ public:
     MBSymbolizedDataset(MBHandler*                handler,
                         const std::string&        datasetID,
                         const std::string&        datasetName,
+                        const std::string&        datasetAttribution,
                         std::vector<std::string>& labeling,
                         const MBShape*            shape,
                         std::vector<std::string>& info) :
     _handler(handler),
     _datasetID(datasetID),
     _datasetName(datasetName),
+    _datasetAttribution(datasetAttribution),
     _labeling(labeling),
     _shape(shape),
     _info(info)
