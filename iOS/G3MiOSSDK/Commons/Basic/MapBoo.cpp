@@ -183,13 +183,13 @@ MapBoo::MBMap* MapBoo::MBMap::fromJSON(MBHandler*            handler,
     return NULL;
   }
 
-  const std::string               id        = jsonObject->get("id")->asString()->value();
-  const std::string               name      = jsonObject->get("name")->asString()->value();
-  std::vector<MapBoo::MBLayer*>   layers    = parseLayers( jsonObject->get("layerSet")->asArray(), verbose );
-  std::vector<MapBoo::MBDataset*> datasets  = parseDatasets(handler, jsonObject->get("datasets")->asArray(), verbose );
-  const int                       timestamp = (int) jsonObject->get("timestamp")->asNumber()->value();
+  const std::string                         id                 = jsonObject->get("id")->asString()->value();
+  const std::string                         name               = jsonObject->get("name")->asString()->value();
+  std::vector<MapBoo::MBLayer*>             layers             = parseLayers( jsonObject->get("layerSet")->asArray(), verbose );
+  std::vector<MapBoo::MBSymbolizedDataset*> symbolizedDatasets = parseSymbolizedDatasets(handler, jsonObject->get("symbolizedDatasets")->asArray(), verbose );
+  const int                                 timestamp          = (int) jsonObject->get("timestamp")->asNumber()->value();
 
-  return new MBMap(id, name, layers, datasets, timestamp, verbose);
+  return new MBMap(id, name, layers, symbolizedDatasets, timestamp, verbose);
 }
 
 std::vector<MapBoo::MBLayer*> MapBoo::MBMap::parseLayers(const JSONArray* jsonArray,
@@ -209,9 +209,9 @@ MapBoo::MBMap::~MBMap() {
     ILogger::instance()->logInfo("MapBoo: deleting map");
   }
 
-  for (int i = 0; i < _datasets.size(); i++) {
-    MBDataset* dataset = _datasets[i];
-    dataset->_release();
+  for (int i = 0; i < _symbolizedDatasets.size(); i++) {
+    MBSymbolizedDataset* symbolizedDataset = _symbolizedDatasets[i];
+    symbolizedDataset->_release();
   }
 
   for (int i = 0; i < _layers.size(); i++) {
@@ -220,18 +220,32 @@ MapBoo::MBMap::~MBMap() {
   }
 }
 
-std::vector<MapBoo::MBDataset*> MapBoo::MBMap::parseDatasets(MBHandler*       handler,
-                                                             const JSONArray* jsonArray,
-                                                             bool verbose) {
-  std::vector<MapBoo::MBDataset*> result;
+//std::vector<MapBoo::MBDataset*> MapBoo::MBMap::parseDatasets(MBHandler*       handler,
+//                                                             const JSONArray* jsonArray,
+//                                                             bool verbose) {
+//  std::vector<MapBoo::MBDataset*> result;
+//  for (int i = 0; i < jsonArray->size(); i++) {
+//    MBDataset* dataset = MBDataset::fromJSON(handler, jsonArray->get(i), verbose );
+//    if (dataset != NULL) {
+//      result.push_back( dataset );
+//    }
+//  }
+//  return result;
+//}
+
+std::vector<MapBoo::MBSymbolizedDataset*> MapBoo::MBMap::parseSymbolizedDatasets(MBHandler*       handler,
+                                                                                 const JSONArray* jsonArray,
+                                                                                 bool verbose) {
+  std::vector<MapBoo::MBSymbolizedDataset*> result;
   for (int i = 0; i < jsonArray->size(); i++) {
-    MBDataset* dataset = MBDataset::fromJSON(handler, jsonArray->get(i), verbose );
-    if (dataset != NULL) {
-      result.push_back( dataset );
+    MBSymbolizedDataset* symbolizedDataset = MBSymbolizedDataset::fromJSON(handler, jsonArray->get(i), verbose );
+    if (symbolizedDataset != NULL) {
+      result.push_back( symbolizedDataset );
     }
   }
   return result;
 }
+
 
 MapBoo::MBLayer* MapBoo::MBLayer::fromJSON(const JSONBaseObject* jsonBaseObject,
                                            bool verbose) {
@@ -335,9 +349,9 @@ void MapBoo::MBMap::apply(const URL&               serverURL,
     layer->apply(layerSet);
   }
 
-  for (int i = 0; i < _datasets.size(); i++) {
-    MBDataset* dataset = _datasets[i];
-    dataset->apply(serverURL, vectorStreamingRenderer);
+  for (int i = 0; i < _symbolizedDatasets.size(); i++) {
+    MBSymbolizedDataset* symbolizedDataset = _symbolizedDatasets[i];
+    symbolizedDataset->apply(serverURL, vectorStreamingRenderer);
   }
 }
 
@@ -416,9 +430,35 @@ void MapBoo::onMap(MapBoo::MBMap* map) {
   applyMap(map);
 }
 
-MapBoo::MBDataset* MapBoo::MBDataset::fromJSON(MBHandler*            handler,
-                                               const JSONBaseObject* jsonBaseObject,
-                                               bool verbose) {
+//MapBoo::MBDataset* MapBoo::MBDataset::fromJSON(MBHandler*            handler,
+//                                               const JSONBaseObject* jsonBaseObject,
+//                                               bool verbose) {
+//  if (jsonBaseObject == NULL) {
+//    return NULL;
+//  }
+//
+//  const JSONObject* jsonObject = jsonBaseObject->asObject();
+//  if (jsonObject == NULL) {
+//    return NULL;
+//  }
+//
+//  const std::string        id               = jsonObject->get("id")->asString()->value();
+//  const std::string        name             = jsonObject->get("name")->asString()->value();
+//  std::vector<std::string> labelingCriteria = jsonObject->getAsArray("labelingCriteria")->asStringVector();
+//  std::vector<std::string> infoCriteria     = jsonObject->getAsArray("infoCriteria")->asStringVector();
+//  const int                timestamp        = (int) jsonObject->get("timestamp")->asNumber()->value();
+//
+//  return new MBDataset(handler,
+//                       id,
+//                       name,
+//                       labelingCriteria,
+//                       infoCriteria,
+//                       timestamp);
+//}
+
+MapBoo::MBSymbolizedDataset* MapBoo::MBSymbolizedDataset::fromJSON(MBHandler*            handler,
+                                                                   const JSONBaseObject* jsonBaseObject,
+                                                                   bool verbose) {
   if (jsonBaseObject == NULL) {
     return NULL;
   }
@@ -428,18 +468,51 @@ MapBoo::MBDataset* MapBoo::MBDataset::fromJSON(MBHandler*            handler,
     return NULL;
   }
 
-  const std::string        id               = jsonObject->get("id")->asString()->value();
-  const std::string        name             = jsonObject->get("name")->asString()->value();
-  std::vector<std::string> labelingCriteria = jsonObject->getAsArray("labelingCriteria")->asStringVector();
-  std::vector<std::string> infoCriteria     = jsonObject->getAsArray("infoCriteria")->asStringVector();
-  const int                timestamp        = (int) jsonObject->get("timestamp")->asNumber()->value();
+  const std::string        datasetID   = jsonObject->get("datasetID")->asString()->value();
+  const std::string        datasetName = jsonObject->get("datasetName")->asString()->value();
+  std::vector<std::string> labeling    = jsonObject->getAsArray("labeling")->asStringVector();
+  const MBShape*           shape       = MBShape::fromJSON( jsonObject->get("shape") );
+  std::vector<std::string> info        = jsonObject->getAsArray("info")->asStringVector();
 
-  return new MBDataset(handler,
-                       id,
-                       name,
-                       labelingCriteria,
-                       infoCriteria,
-                       timestamp);
+  return new MBSymbolizedDataset(handler,
+                                 datasetID,
+                                 datasetName,
+                                 labeling,
+                                 shape,
+                                 info);
+}
+
+const MapBoo::MBShape* MapBoo::MBShape::fromJSON(const JSONBaseObject* jsonBaseObject) {
+  if (jsonBaseObject == NULL) {
+    return NULL;
+  }
+
+  const JSONObject* jsonObject = jsonBaseObject->asObject();
+  if (jsonObject == NULL) {
+    return NULL;
+  }
+
+  const std::string type = jsonObject->getAsString("type")->value();
+  if (type == "Circle") {
+    return MBCircleShape::fromJSON(jsonObject);
+  }
+
+  ILogger::instance()->logError("Shape type \"%s\" not supported", type.c_str());
+
+  return NULL;
+}
+
+const MapBoo::MBCircleShape* MapBoo::MBCircleShape::fromJSON(const JSONObject* jsonObject) {
+  const JSONArray* colorArray = jsonObject->getAsArray("color");
+  const float red   = (float) colorArray->getAsNumber(0)->value();
+  const float green = (float) colorArray->getAsNumber(1)->value();
+  const float blue  = (float) colorArray->getAsNumber(2)->value();
+  const float alpha = (float) colorArray->getAsNumber(3)->value();
+
+  const int radius = (int) jsonObject->getAsNumber("radius")->value();
+
+  return new MBCircleShape(Color::fromRGBA(red, green, blue, alpha),
+                           radius);
 }
 
 MapBoo::MBDataset::~MBDataset() {
@@ -448,18 +521,41 @@ MapBoo::MBDataset::~MBDataset() {
 #endif
 }
 
-void MapBoo::MBDataset::apply(const URL&               serverURL,
-                              VectorStreamingRenderer* vectorStreamingRenderer) const {
+//void MapBoo::MBDataset::apply(const URL&               serverURL,
+//                              VectorStreamingRenderer* vectorStreamingRenderer) const {
+//  std::string properties = "";
+//  for (int i = 0; i < _labelingCriteria.size(); i++) {
+//    properties += _labelingCriteria[i] + "|";
+//  }
+//  for (int i = 0; i < _infoCriteria.size(); i++) {
+//    properties += _infoCriteria[i] + "|";
+//  }
+//
+//  vectorStreamingRenderer->addVectorSet(URL(serverURL, "/public/v1/VectorialStreaming/"),
+//                                        _id,
+//                                        properties,
+//                                        new MBDatasetVectorSetSymbolizer(this),
+//                                        true,  // deleteSymbolizer
+//                                        DownloadPriority::MEDIUM,
+//                                        TimeInterval::zero(),
+//                                        true,  // readExpired
+//                                        true,  // verbose
+//                                        false  // haltOnError
+//                                        );
+//}
+
+void MapBoo::MBSymbolizedDataset::apply(const URL&               serverURL,
+                                        VectorStreamingRenderer* vectorStreamingRenderer) const {
   std::string properties = "";
-  for (int i = 0; i < _labelingCriteria.size(); i++) {
-    properties += _labelingCriteria[i] + "|";
+  for (int i = 0; i < _labeling.size(); i++) {
+    properties += _labeling[i] + "|";
   }
-  for (int i = 0; i < _infoCriteria.size(); i++) {
-    properties += _infoCriteria[i] + "|";
+  for (int i = 0; i < _info.size(); i++) {
+    properties += _info[i] + "|";
   }
 
   vectorStreamingRenderer->addVectorSet(URL(serverURL, "/public/v1/VectorialStreaming/"),
-                                        _id,
+                                        _datasetID,
                                         properties,
                                         new MBDatasetVectorSetSymbolizer(this),
                                         true,  // deleteSymbolizer
@@ -471,21 +567,128 @@ void MapBoo::MBDataset::apply(const URL&               serverURL,
                                         );
 }
 
-const std::string MapBoo::MBDataset::createMarkLabel(const JSONObject* properties) const {
-  const size_t criteriaSize = _labelingCriteria.size();
-  if ((criteriaSize == 0) || (properties->size() == 0)) {
+//const std::string MapBoo::MBDataset::createMarkLabel(const JSONObject* properties) const {
+//  const size_t criteriaSize = _labelingCriteria.size();
+//  if ((criteriaSize == 0) || (properties->size() == 0)) {
+//    return "<label>";
+//  }
+//  else if (criteriaSize == 1) {
+//    return JSONBaseObject::toString( properties->get(_labelingCriteria[0]) );
+//  }
+//  else {
+//    IStringBuilder* labelBuilder = IStringBuilder::newStringBuilder();
+//    for (int i = 0; i < criteriaSize; i++) {
+//      if (i > 0) {
+//        labelBuilder->addString(" ");
+//      }
+//      const std::string value = JSONBaseObject::toString( properties->get(_labelingCriteria[i]) );
+//      labelBuilder->addString( value );
+//    }
+//
+//    const std::string label = labelBuilder->getString();
+//    delete labelBuilder;
+//    return label;
+//  }
+//}
+//
+
+//const std::string MapBoo::MBDataset::createMarkLabel(const JSONObject* properties) const {
+//  const size_t criteriaSize = _labelingCriteria.size();
+//  if ((criteriaSize == 0) || (properties->size() == 0)) {
+//    return "<label>";
+//  }
+//  else if (criteriaSize == 1) {
+//    return JSONBaseObject::toString( properties->get(_labelingCriteria[0]) );
+//  }
+//  else {
+//    IStringBuilder* labelBuilder = IStringBuilder::newStringBuilder();
+//    for (int i = 0; i < criteriaSize; i++) {
+//      if (i > 0) {
+//        labelBuilder->addString(" ");
+//      }
+//      const std::string value = JSONBaseObject::toString( properties->get(_labelingCriteria[i]) );
+//      labelBuilder->addString( value );
+//    }
+//
+//    const std::string label = labelBuilder->getString();
+//    delete labelBuilder;
+//    return label;
+//  }
+//}
+//
+//
+//bool MapBoo::MBFeatureMarkTouchListener::touchedMark(Mark* mark) {
+//  _handler->onFeatureTouched(_datasetName, _infoCriteria, _properties);
+//  return true;
+//}
+//
+//
+//MarkTouchListener* MapBoo::MBDataset::createMarkTouchListener(const JSONObject* properties) const {
+//  if (_handler == NULL) {
+//    return NULL;
+//  }
+//
+//  const size_t criteriaSize = _infoCriteria.size();
+//  if (criteriaSize == 0) {
+//    return NULL;
+//  }
+//
+//  JSONObject* infoProperties = new JSONObject();
+//  for (int i = 0; i < criteriaSize; i++) {
+//    const std::string criteria = _infoCriteria[i];
+//    const JSONBaseObject* value = properties->get(criteria);
+//    if (value != NULL) {
+//      infoProperties->put(criteria, value->deepCopy());
+//    }
+//  }
+//
+//  return new MBFeatureMarkTouchListener(_name, _handler, _infoCriteria, infoProperties);
+//}
+
+//Mark* MapBoo::MBDataset::createMark(const GEO2DPointGeometry* geometry) const {
+//  const GEOFeature* feature = geometry->getFeature();
+//  const JSONObject* properties = feature->getProperties();
+//  const Geodetic2D position = geometry->getPosition();
+//
+//  return new Mark(createMarkLabel(properties),
+//                  Geodetic3D(position, 0),
+//                  ABSOLUTE,
+//                  0,                                    // minDistanceToCamera
+//                  18,                                   // labelFontSize
+//                  Color::newFromRGBA(1, 1, 1, 1),       // labelFontColor
+//                  Color::newFromRGBA(0, 0, 0, 1),       // labelShadowColor
+//                  NULL,                                 // userData
+//                  true,                                 // autoDeleteUserData
+//                  createMarkTouchListener(properties),
+//                  true                                  // autoDeleteListener
+//                  );
+//
+//  //  return new Mark(URL("file:///icon.png"),
+//  //                  Geodetic3D(position, 0),
+//  //                  ABSOLUTE,
+//  //                  0,
+//  //                  NULL,
+//  //                  true,
+//  //                  createMarkTouchListener(properties),
+//  //                  true);
+//  
+//}
+
+const std::string MapBoo::MBSymbolizedDataset::createMarkLabel(const JSONObject* properties) const {
+  const size_t labelingSize = _labeling.size();
+  if ((labelingSize == 0) || (properties->size() == 0)) {
     return "<label>";
   }
-  else if (criteriaSize == 1) {
-    return JSONBaseObject::toString( properties->get(_labelingCriteria[0]) );
+  else if (labelingSize == 1) {
+    return JSONBaseObject::toString( properties->get(_labeling[0]) );
   }
   else {
     IStringBuilder* labelBuilder = IStringBuilder::newStringBuilder();
-    for (int i = 0; i < criteriaSize; i++) {
+    for (int i = 0; i < labelingSize; i++) {
       if (i > 0) {
         labelBuilder->addString(" ");
       }
-      const std::string value = JSONBaseObject::toString( properties->get(_labelingCriteria[i]) );
+      const std::string value = JSONBaseObject::toString( properties->get(_labeling[i]) );
       labelBuilder->addString( value );
     }
 
@@ -497,37 +700,38 @@ const std::string MapBoo::MBDataset::createMarkLabel(const JSONObject* propertie
 
 
 bool MapBoo::MBFeatureMarkTouchListener::touchedMark(Mark* mark) {
-  _handler->onFeatureTouched(_datasetName, _infoCriteria, _properties);
+  _handler->onFeatureTouched(_datasetName, _info, _properties);
   return true;
 }
 
 
-MarkTouchListener* MapBoo::MBDataset::createMarkTouchListener(const JSONObject* properties) const {
+MarkTouchListener* MapBoo::MBSymbolizedDataset::createMarkTouchListener(const JSONObject* properties) const {
   if (_handler == NULL) {
     return NULL;
   }
 
-  const size_t criteriaSize = _infoCriteria.size();
-  if (criteriaSize == 0) {
+  const size_t infoSize = _info.size();
+  if (infoSize == 0) {
     return NULL;
   }
 
   JSONObject* infoProperties = new JSONObject();
-  for (int i = 0; i < criteriaSize; i++) {
-    const std::string criteria = _infoCriteria[i];
-    const JSONBaseObject* value = properties->get(criteria);
+  for (int i = 0; i < infoSize; i++) {
+    const std::string info = _info[i];
+    const JSONBaseObject* value = properties->get(info);
     if (value != NULL) {
-      infoProperties->put(criteria, value->deepCopy());
+      infoProperties->put(info, value->deepCopy());
     }
   }
 
-  return new MBFeatureMarkTouchListener(_name, _handler, _infoCriteria, infoProperties);
+  return new MBFeatureMarkTouchListener(_datasetName, _handler, _info, infoProperties);
 }
 
-Mark* MapBoo::MBDataset::createMark(const GEO2DPointGeometry* geometry) const {
-  const GEOFeature* feature = geometry->getFeature();
+
+Mark* MapBoo::MBSymbolizedDataset::createMark(const GEO2DPointGeometry* geometry) const {
+  const GEOFeature* feature    = geometry->getFeature();
   const JSONObject* properties = feature->getProperties();
-  const Geodetic2D position = geometry->getPosition();
+  const Geodetic2D  position   = geometry->getPosition();
 
   return new Mark(createMarkLabel(properties),
                   Geodetic3D(position, 0),
@@ -550,5 +754,5 @@ Mark* MapBoo::MBDataset::createMark(const GEO2DPointGeometry* geometry) const {
   //                  true,
   //                  createMarkTouchListener(properties),
   //                  true);
-  
+
 }
