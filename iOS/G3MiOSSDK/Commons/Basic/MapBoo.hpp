@@ -109,6 +109,9 @@ public:
   public:
     static const MapBoo::MBShape* fromJSON(const JSONBaseObject* jsonBaseObject);
 
+    virtual ~MBShape() {
+
+    }
   };
 
 
@@ -128,6 +131,11 @@ public:
   public:
     static const MapBoo::MBCircleShape* fromJSON(const JSONObject* jsonObject);
 
+    ~MBCircleShape() {
+#ifdef JAVA_CODE
+      super.dispose();
+#endif
+    }
   };
 
 
