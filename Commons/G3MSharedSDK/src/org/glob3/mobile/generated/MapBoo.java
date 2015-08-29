@@ -33,12 +33,14 @@ public class MapBoo
   {
     private final String _type;
     private final String _url;
+    private final String _attribution;
     private final boolean _verbose;
 
-    private MBLayer(String type, String url, boolean verbose)
+    private MBLayer(String type, String url, String attribution, boolean verbose)
     {
        _type = type;
        _url = url;
+       _attribution = attribution;
        _verbose = verbose;
     }
 
@@ -61,8 +63,9 @@ public class MapBoo
     
       final String type = jsonObject.get("type").asString().value();
       final String url = jsonObject.getAsString("url", "");
+      final String attribution = jsonObject.getAsString("attribution", "");
     
-      return new MapBoo.MBLayer(type, url, verbose);
+      return new MapBoo.MBLayer(type, url, attribution, verbose);
     }
 
     public void dispose()
@@ -93,54 +96,106 @@ public class MapBoo
 //  class MBHandler;
 
 
-  public static class MBDataset extends RCObject
+  //  class MBDataset : public RCObject {
+  //  private:
+  //    MBHandler*               _handler;
+  //    const std::string        _id;
+  //    const std::string        _name;
+  //    //    std::vector<std::string> _labelingCriteria;
+  //    //    std::vector<std::string> _infoCriteria;
+  //    const int                _timestamp;
+  //
+  //    MBDataset(const MBDataset& that);
+  //
+  //    MBDataset(MBHandler*                handler,
+  //              const std::string&        id,
+  //              const std::string&        name,
+  //              //              std::vector<std::string>& labelingCriteria,
+  //              //              std::vector<std::string>& infoCriteria,
+  //              const int                 timestamp) :
+  //    _handler(handler),
+  //    _id(id),
+  //    _name(name),
+  //    //    _labelingCriteria(labelingCriteria),
+  //    //    _infoCriteria(infoCriteria),
+  //    _timestamp(timestamp)
+  //    {
+  //    }
+  //
+  //    //    const std::string  createMarkLabel(const JSONObject* properties) const;
+  //    //    MarkTouchListener* createMarkTouchListener(const JSONObject* properties) const;
+  //
+  //  protected:
+  //    ~MBDataset();
+  //
+  //  public:
+  //    //    static MapBoo::MBDataset* fromJSON(MBHandler*            handler,
+  //    //                                       const JSONBaseObject* jsonBaseObject,
+  //    //                                       bool verbose);
+  //
+  //
+  //    //    void apply(const URL&               serverURL,
+  //    //               VectorStreamingRenderer* vectorStreamingRenderer) const;
+  //
+  //    //    Mark* createMark(const GEO2DPointGeometry* geometry) const;
+  //
+  //  };
+
+
+
+  public abstract static class MBSymbology extends RCObject
   {
-    private MBHandler _handler;
-    private final String _id;
-    private final String _name;
-    //    std::vector<std::string> _labelingCriteria;
-    //    std::vector<std::string> _infoCriteria;
-    private final int _timestamp;
+    protected MBHandler _handler;
+    protected final String _datasetID;
+    protected final String _datasetName;
 
-//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
-//    MBDataset(MBDataset that);
-
-    private MBDataset(MBHandler handler, String id, String name, int timestamp)
-              //              std::vector<std::string>& labelingCriteria,
-              //              std::vector<std::string>& infoCriteria,
-    //    _labelingCriteria(labelingCriteria),
-    //    _infoCriteria(infoCriteria),
+    protected MBSymbology(MBHandler handler, String datasetID, String datasetName)
     {
        _handler = handler;
-       _id = id;
-       _name = name;
-       _timestamp = timestamp;
-    }
+       _datasetID = datasetID;
+       _datasetName = datasetName;
 
-    //    const std::string  createMarkLabel(const JSONObject* properties) const;
-    //    MarkTouchListener* createMarkTouchListener(const JSONObject* properties) const;
+    }
 
     public void dispose()
     {
       super.dispose();
     }
 
-    //    static MapBoo::MBDataset* fromJSON(MBHandler*            handler,
-    //                                       const JSONBaseObject* jsonBaseObject,
-    //                                       bool verbose);
+    public static MapBoo.MBSymbology fromJSON(MBHandler handler, String datasetID, String datasetName, JSONBaseObject jsonBaseObject)
+    {
+      if (jsonBaseObject == null)
+      {
+        return null;
+      }
+    
+      final JSONObject jsonObject = jsonBaseObject.asObject();
+    
+      final String type = jsonObject.get("type").asString().value();
+      if (type.equals("Vector"))
+      {
+        return MBVectorSymbology.fromJSON(handler, datasetID, datasetName, jsonObject);
+      }
+    
+      ILogger.instance().logError("Symbology type=\"%s\" not supported", type);
+      return null;
+    }
 
-
-    //    void apply(const URL&               serverURL,
-    //               VectorStreamingRenderer* vectorStreamingRenderer) const;
-
-    //    Mark* createMark(const GEO2DPointGeometry* geometry) const;
+    public abstract void apply(URL serverURL, VectorStreamingRenderer vectorStreamingRenderer);
 
   }
 
 
-
   public static class MBShape
   {
+//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
+//    MBShape(MBShape that);
+
+    protected MBShape()
+    {
+
+    }
+
     public static MapBoo.MBShape fromJSON(JSONBaseObject jsonBaseObject)
     {
       if (jsonBaseObject == null)
@@ -169,6 +224,7 @@ public class MapBoo
     {
 
     }
+
   }
 
 
@@ -204,25 +260,11 @@ public class MapBoo
   }
 
 
-  public static class MBSymbolizedDataset extends RCObject
+  public static class MBVectorSymbology extends MBSymbology
   {
-    private MBHandler _handler;
-    private final String _datasetID;
-    private final String _datasetName;
     private java.util.ArrayList<String> _labeling = new java.util.ArrayList<String>();
     private final MBShape _shape;
     private java.util.ArrayList<String> _info = new java.util.ArrayList<String>();
-
-    private MBSymbolizedDataset(MBHandler handler, String datasetID, String datasetName, java.util.ArrayList<String> labeling, MBShape shape, java.util.ArrayList<String> info)
-    {
-       _handler = handler;
-       _datasetID = datasetID;
-       _datasetName = datasetName;
-       _labeling = labeling;
-       _shape = shape;
-       _info = info;
-
-    }
 
 
     //const std::string MapBoo::MBDataset::createMarkLabel(const JSONObject* properties) const {
@@ -393,7 +435,120 @@ public class MapBoo
     {
       if (_shape != null)
          _shape.dispose();
+
       super.dispose();
+    }
+
+    public static MapBoo.MBVectorSymbology fromJSON(MBHandler handler, String datasetID, String datasetName, JSONObject jsonObject)
+    {
+      java.util.ArrayList<String> labeling = jsonObject.getAsArray("labeling").asStringVector();
+      final MBShape shape = MBShape.fromJSON(jsonObject.get("shape"));
+      java.util.ArrayList<String> info = jsonObject.getAsArray("info").asStringVector();
+    
+      return new MBVectorSymbology(handler, datasetID, datasetName, labeling, shape, info);
+    }
+
+    public MBVectorSymbology(MBHandler handler, String datasetID, String datasetName, java.util.ArrayList<String> labeling, MBShape shape, java.util.ArrayList<String> info)
+    {
+       super(handler, datasetID, datasetName);
+       _labeling = labeling;
+       _shape = shape;
+       _info = info;
+    }
+
+
+    //MapBoo::MBDataset::~MBDataset() {
+    ///#ifdef JAVA_CODE
+    //  super.dispose();
+    ///#endif
+    //}
+    
+    //void MapBoo::MBDataset::apply(const URL&               serverURL,
+    //                              VectorStreamingRenderer* vectorStreamingRenderer) const {
+    //  std::string properties = "";
+    //  for (int i = 0; i < _labelingCriteria.size(); i++) {
+    //    properties += _labelingCriteria[i] + "|";
+    //  }
+    //  for (int i = 0; i < _infoCriteria.size(); i++) {
+    //    properties += _infoCriteria[i] + "|";
+    //  }
+    //
+    //  vectorStreamingRenderer->addVectorSet(URL(serverURL, "/public/v1/VectorialStreaming/"),
+    //                                        _id,
+    //                                        properties,
+    //                                        new MBDatasetVectorSetSymbolizer(this),
+    //                                        true,  // deleteSymbolizer
+    //                                        DownloadPriority::MEDIUM,
+    //                                        TimeInterval::zero(),
+    //                                        true,  // readExpired
+    //                                        true,  // verbose
+    //                                        false  // haltOnError
+    //                                        );
+    //}
+    
+    
+    public final void apply(URL serverURL, VectorStreamingRenderer vectorStreamingRenderer)
+    {
+      String properties = "";
+      for (int i = 0; i < _labeling.size(); i++)
+      {
+        properties += _labeling.get(i) + "|";
+      }
+      for (int i = 0; i < _info.size(); i++)
+      {
+        properties += _info.get(i) + "|";
+      }
+    
+      vectorStreamingRenderer.addVectorSet(new URL(serverURL, "/public/v1/VectorialStreaming/"), _datasetID, properties, new MBDatasetVectorSetSymbolizer(this), true, DownloadPriority.MEDIUM, TimeInterval.zero(), true, true, false); // haltOnError -  verbose -  readExpired -  deleteSymbolizer
+    }
+
+    public final Mark createMark(GEO2DPointGeometry geometry)
+    {
+      final GEOFeature feature = geometry.getFeature();
+      final JSONObject properties = feature.getProperties();
+      final Geodetic2D position = geometry.getPosition();
+    
+      return new Mark(createMarkLabel(properties), new Geodetic3D(position, 0), AltitudeMode.ABSOLUTE, 0, 18, Color.newFromRGBA(1, 1, 1, 1), Color.newFromRGBA(0, 0, 0, 1), null, true, createMarkTouchListener(properties), true); // autoDeleteListener -  autoDeleteUserData -  userData -  labelShadowColor -  labelFontColor -  labelFontSize -  minDistanceToCamera
+    
+      //  return new Mark(URL("file:///icon.png"),
+      //                  Geodetic3D(position, 0),
+      //                  ABSOLUTE,
+      //                  0,
+      //                  NULL,
+      //                  true,
+      //                  createMarkTouchListener(properties),
+      //                  true);
+    
+    }
+
+  }
+
+
+  public static class MBSymbolizedDataset
+  {
+    private MBHandler _handler;
+    private final String _datasetID;
+    private final String _datasetName;
+    private final String _datasetAttribution;
+    private final MBSymbology _symbology;
+
+    private MBSymbolizedDataset(MBHandler handler, String datasetID, String datasetName, String datasetAttribution, MBSymbology symbology)
+    {
+       _handler = handler;
+       _datasetID = datasetID;
+       _datasetName = datasetName;
+       _datasetAttribution = datasetAttribution;
+       _symbology = symbology;
+
+    }
+
+
+    public void dispose()
+    {
+      if (_symbology != null)
+      {
+        _symbology._release();
+      }
     }
 
 
@@ -437,70 +592,16 @@ public class MapBoo
       }
     
       final String datasetID = jsonObject.get("datasetID").asString().value();
-      final String datasetName = jsonObject.get("datasetName").asString().value();
-      java.util.ArrayList<String> labeling = jsonObject.getAsArray("labeling").asStringVector();
-      final MBShape shape = MBShape.fromJSON(jsonObject.get("shape"));
-      java.util.ArrayList<String> info = jsonObject.getAsArray("info").asStringVector();
+      final String datasetName = jsonObject.getAsString("datasetName", "");
+      final String datasetAttribution = jsonObject.getAsString("datasetAttribution", "");
+      final MBSymbology symbology = MBSymbology.fromJSON(handler, datasetID, datasetName, jsonObject.get("symbology"));
     
-      return new MBSymbolizedDataset(handler, datasetID, datasetName, labeling, shape, info);
+      return new MBSymbolizedDataset(handler, datasetID, datasetName, datasetAttribution, symbology);
     }
 
-
-    //void MapBoo::MBDataset::apply(const URL&               serverURL,
-    //                              VectorStreamingRenderer* vectorStreamingRenderer) const {
-    //  std::string properties = "";
-    //  for (int i = 0; i < _labelingCriteria.size(); i++) {
-    //    properties += _labelingCriteria[i] + "|";
-    //  }
-    //  for (int i = 0; i < _infoCriteria.size(); i++) {
-    //    properties += _infoCriteria[i] + "|";
-    //  }
-    //
-    //  vectorStreamingRenderer->addVectorSet(URL(serverURL, "/public/v1/VectorialStreaming/"),
-    //                                        _id,
-    //                                        properties,
-    //                                        new MBDatasetVectorSetSymbolizer(this),
-    //                                        true,  // deleteSymbolizer
-    //                                        DownloadPriority::MEDIUM,
-    //                                        TimeInterval::zero(),
-    //                                        true,  // readExpired
-    //                                        true,  // verbose
-    //                                        false  // haltOnError
-    //                                        );
-    //}
-    
     public final void apply(URL serverURL, VectorStreamingRenderer vectorStreamingRenderer)
     {
-      String properties = "";
-      for (int i = 0; i < _labeling.size(); i++)
-      {
-        properties += _labeling.get(i) + "|";
-      }
-      for (int i = 0; i < _info.size(); i++)
-      {
-        properties += _info.get(i) + "|";
-      }
-    
-      vectorStreamingRenderer.addVectorSet(new URL(serverURL, "/public/v1/VectorialStreaming/"), _datasetID, properties, new MBDatasetVectorSetSymbolizer(this), true, DownloadPriority.MEDIUM, TimeInterval.zero(), true, true, false); // haltOnError -  verbose -  readExpired -  deleteSymbolizer
-    }
-
-    public final Mark createMark(GEO2DPointGeometry geometry)
-    {
-      final GEOFeature feature = geometry.getFeature();
-      final JSONObject properties = feature.getProperties();
-      final Geodetic2D position = geometry.getPosition();
-    
-      return new Mark(createMarkLabel(properties), new Geodetic3D(position, 0), AltitudeMode.ABSOLUTE, 0, 18, Color.newFromRGBA(1, 1, 1, 1), Color.newFromRGBA(0, 0, 0, 1), null, true, createMarkTouchListener(properties), true); // autoDeleteListener -  autoDeleteUserData -  userData -  labelShadowColor -  labelFontColor -  labelFontSize -  minDistanceToCamera
-    
-      //  return new Mark(URL("file:///icon.png"),
-      //                  Geodetic3D(position, 0),
-      //                  ABSOLUTE,
-      //                  0,
-      //                  NULL,
-      //                  true,
-      //                  createMarkTouchListener(properties),
-      //                  true);
-    
+      _symbology.apply(serverURL, vectorStreamingRenderer);
     }
 
   }
@@ -508,23 +609,23 @@ public class MapBoo
 
   public static class MBDatasetVectorSetSymbolizer extends VectorStreamingRenderer.VectorSetSymbolizer
   {
-    private final MBSymbolizedDataset _symbolizedDataset;
+    private final MBVectorSymbology _symbology;
 
-    public MBDatasetVectorSetSymbolizer(MBSymbolizedDataset symbolizedDataset)
+    public MBDatasetVectorSetSymbolizer(MBVectorSymbology symbology)
     {
-       _symbolizedDataset = symbolizedDataset;
-      _symbolizedDataset._retain();
+       _symbology = symbology;
+      _symbology._retain();
     }
 
     public void dispose()
     {
-      _symbolizedDataset._release();
+      _symbology._release();
       super.dispose();
     }
 
     public final Mark createMark(GEO2DPointGeometry geometry)
     {
-      return _symbolizedDataset.createMark(geometry);
+      return _symbology.createMark(geometry);
     }
   }
 
@@ -613,10 +714,10 @@ public class MapBoo
       final String id = jsonObject.get("id").asString().value();
       final String name = jsonObject.get("name").asString().value();
       java.util.ArrayList<MapBoo.MBLayer> layers = parseLayers(jsonObject.get("layerSet").asArray(), verbose);
-      java.util.ArrayList<MapBoo.MBSymbolizedDataset> symbolizedDatasets = parseSymbolizedDatasets(handler, jsonObject.get("symbolizedDatasets").asArray(), verbose);
+      java.util.ArrayList<MapBoo.MBSymbolizedDataset> symDatasets = parseSymbolizedDatasets(handler, jsonObject.get("symbolizedDatasets").asArray(), verbose);
       final int timestamp = (int) jsonObject.get("timestamp").asNumber().value();
     
-      return new MBMap(id, name, layers, symbolizedDatasets, timestamp, verbose);
+      return new MBMap(id, name, layers, symDatasets, timestamp, verbose);
     }
 
     public void dispose()
@@ -629,7 +730,8 @@ public class MapBoo
       for (int i = 0; i < _symbolizedDatasets.size(); i++)
       {
         MBSymbolizedDataset symbolizedDataset = _symbolizedDatasets.get(i);
-        symbolizedDataset._release();
+        if (symbolizedDataset != null)
+           symbolizedDataset.dispose();
       }
     
       for (int i = 0; i < _layers.size(); i++)
