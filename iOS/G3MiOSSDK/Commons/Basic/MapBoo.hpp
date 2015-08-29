@@ -61,51 +61,85 @@ public:
   class MBHandler;
 
 
-//  class MBDataset : public RCObject {
-//  private:
-//    MBHandler*               _handler;
-//    const std::string        _id;
-//    const std::string        _name;
-//    //    std::vector<std::string> _labelingCriteria;
-//    //    std::vector<std::string> _infoCriteria;
-//    const int                _timestamp;
-//
-//    MBDataset(const MBDataset& that);
-//
-//    MBDataset(MBHandler*                handler,
-//              const std::string&        id,
-//              const std::string&        name,
-//              //              std::vector<std::string>& labelingCriteria,
-//              //              std::vector<std::string>& infoCriteria,
-//              const int                 timestamp) :
-//    _handler(handler),
-//    _id(id),
-//    _name(name),
-//    //    _labelingCriteria(labelingCriteria),
-//    //    _infoCriteria(infoCriteria),
-//    _timestamp(timestamp)
-//    {
-//    }
-//
-//    //    const std::string  createMarkLabel(const JSONObject* properties) const;
-//    //    MarkTouchListener* createMarkTouchListener(const JSONObject* properties) const;
-//
-//  protected:
-//    ~MBDataset();
-//
-//  public:
-//    //    static MapBoo::MBDataset* fromJSON(MBHandler*            handler,
-//    //                                       const JSONBaseObject* jsonBaseObject,
-//    //                                       bool verbose);
-//
-//
-//    //    void apply(const URL&               serverURL,
-//    //               VectorStreamingRenderer* vectorStreamingRenderer) const;
-//
-//    //    Mark* createMark(const GEO2DPointGeometry* geometry) const;
-//
-//  };
+  //  class MBDataset : public RCObject {
+  //  private:
+  //    MBHandler*               _handler;
+  //    const std::string        _id;
+  //    const std::string        _name;
+  //    //    std::vector<std::string> _labelingCriteria;
+  //    //    std::vector<std::string> _infoCriteria;
+  //    const int                _timestamp;
+  //
+  //    MBDataset(const MBDataset& that);
+  //
+  //    MBDataset(MBHandler*                handler,
+  //              const std::string&        id,
+  //              const std::string&        name,
+  //              //              std::vector<std::string>& labelingCriteria,
+  //              //              std::vector<std::string>& infoCriteria,
+  //              const int                 timestamp) :
+  //    _handler(handler),
+  //    _id(id),
+  //    _name(name),
+  //    //    _labelingCriteria(labelingCriteria),
+  //    //    _infoCriteria(infoCriteria),
+  //    _timestamp(timestamp)
+  //    {
+  //    }
+  //
+  //    //    const std::string  createMarkLabel(const JSONObject* properties) const;
+  //    //    MarkTouchListener* createMarkTouchListener(const JSONObject* properties) const;
+  //
+  //  protected:
+  //    ~MBDataset();
+  //
+  //  public:
+  //    //    static MapBoo::MBDataset* fromJSON(MBHandler*            handler,
+  //    //                                       const JSONBaseObject* jsonBaseObject,
+  //    //                                       bool verbose);
+  //
+  //
+  //    //    void apply(const URL&               serverURL,
+  //    //               VectorStreamingRenderer* vectorStreamingRenderer) const;
+  //
+  //    //    Mark* createMark(const GEO2DPointGeometry* geometry) const;
+  //
+  //  };
 
+
+
+  class MBSymbology : public RCObject {
+  protected:
+    MBHandler*         _handler;
+    const std::string  _datasetID;
+    const std::string  _datasetName;
+
+    MBSymbology(MBHandler*         handler,
+                const std::string& datasetID,
+                const std::string& datasetName) :
+    _handler(handler),
+    _datasetID(datasetID),
+    _datasetName(datasetName)
+    {
+
+    }
+
+    virtual ~MBSymbology() {
+#ifdef JAVA_CODE
+      super.dispose();
+#endif
+    }
+
+  public:
+    static const MBSymbology* fromJSON(MBHandler*            handler,
+                                       const std::string&    datasetID,
+                                       const std::string&    datasetName,
+                                       const JSONBaseObject* jsonBaseObject);
+
+    virtual void apply(const URL&               serverURL,
+                       VectorStreamingRenderer* vectorStreamingRenderer) const = 0;
+    
+  };
 
 
   class MBShape {
@@ -123,6 +157,7 @@ public:
     virtual ~MBShape() {
 
     }
+    
   };
 
 
@@ -150,49 +185,42 @@ public:
   };
 
 
-  class MBSymbolizedDataset : public RCObject {
+  class MBVectorSymbology : public MBSymbology {
   private:
-    MBHandler*               _handler;
-    const std::string        _datasetID;
-    const std::string        _datasetName;
-    const std::string        _datasetAttribution;
     std::vector<std::string> _labeling;
     const MBShape*           _shape;
     std::vector<std::string> _info;
-
-    MBSymbolizedDataset(MBHandler*                handler,
-                        const std::string&        datasetID,
-                        const std::string&        datasetName,
-                        const std::string&        datasetAttribution,
-                        std::vector<std::string>& labeling,
-                        const MBShape*            shape,
-                        std::vector<std::string>& info) :
-    _handler(handler),
-    _datasetID(datasetID),
-    _datasetName(datasetName),
-    _datasetAttribution(datasetAttribution),
-    _labeling(labeling),
-    _shape(shape),
-    _info(info)
-    {
-
-    }
 
     const std::string  createMarkLabel(const JSONObject* properties) const;
     MarkTouchListener* createMarkTouchListener(const JSONObject* properties) const;
 
   protected:
-    ~MBSymbolizedDataset() {
+    virtual ~MBVectorSymbology() {
       delete _shape;
+
 #ifdef JAVA_CODE
       super.dispose();
 #endif
     }
 
   public:
-    static MapBoo::MBSymbolizedDataset* fromJSON(MBHandler*            handler,
-                                                 const JSONBaseObject* jsonBaseObject,
-                                                 bool verbose);
+    static const MBVectorSymbology* fromJSON(MBHandler*         handler,
+                                             const std::string& datasetID,
+                                             const std::string& datasetName,
+                                             const JSONObject*  jsonObject);
+
+    MBVectorSymbology(MBHandler*                handler,
+                      const std::string&        datasetID,
+                      const std::string&        datasetName,
+                      std::vector<std::string>& labeling,
+                      const MBShape*            shape,
+                      std::vector<std::string>& info) :
+    MBSymbology(handler, datasetID, datasetName),
+    _labeling(labeling),
+    _shape(shape),
+    _info(info)
+    {
+    }
 
     void apply(const URL&               serverURL,
                VectorStreamingRenderer* vectorStreamingRenderer) const;
@@ -202,26 +230,66 @@ public:
   };
 
 
-  class MBDatasetVectorSetSymbolizer : public VectorStreamingRenderer::VectorSetSymbolizer {
+  class MBSymbolizedDataset {
   private:
-    const MBSymbolizedDataset* _symbolizedDataset;
+    MBHandler*         _handler;
+    const std::string  _datasetID;
+    const std::string  _datasetName;
+    const std::string  _datasetAttribution;
+    const MBSymbology* _symbology;
+
+    MBSymbolizedDataset(MBHandler*         handler,
+                        const std::string& datasetID,
+                        const std::string& datasetName,
+                        const std::string& datasetAttribution,
+                        const MBSymbology* symbology) :
+    _handler(handler),
+    _datasetID(datasetID),
+    _datasetName(datasetName),
+    _datasetAttribution(datasetAttribution),
+    _symbology(symbology)
+    {
+
+    }
+
 
   public:
-    MBDatasetVectorSetSymbolizer(const MBSymbolizedDataset* symbolizedDataset) :
-    _symbolizedDataset(symbolizedDataset)
+    ~MBSymbolizedDataset() {
+      if (_symbology != NULL) {
+        _symbology->_release();
+      }
+    }
+
+    static MapBoo::MBSymbolizedDataset* fromJSON(MBHandler*            handler,
+                                                 const JSONBaseObject* jsonBaseObject,
+                                                 bool verbose);
+
+    void apply(const URL&               serverURL,
+               VectorStreamingRenderer* vectorStreamingRenderer) const;
+
+  };
+
+
+  class MBDatasetVectorSetSymbolizer : public VectorStreamingRenderer::VectorSetSymbolizer {
+  private:
+    const MBVectorSymbology* _symbology;
+
+  public:
+    MBDatasetVectorSetSymbolizer(const MBVectorSymbology* symbology) :
+    _symbology(symbology)
     {
-      _symbolizedDataset->_retain();
+      _symbology->_retain();
     }
 
     ~MBDatasetVectorSetSymbolizer() {
-      _symbolizedDataset->_release();
+      _symbology->_release();
 #ifdef JAVA_CODE
       super.dispose();
 #endif
     }
 
     Mark* createMark(const GEO2DPointGeometry* geometry) const {
-      return _symbolizedDataset->createMark( geometry );
+      return _symbology->createMark( geometry );
     }
   };
 

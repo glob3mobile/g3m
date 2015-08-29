@@ -214,7 +214,7 @@ MapBoo::MBMap::~MBMap() {
 
   for (int i = 0; i < _symbolizedDatasets.size(); i++) {
     MBSymbolizedDataset* symbolizedDataset = _symbolizedDatasets[i];
-    symbolizedDataset->_release();
+    delete symbolizedDataset;
   }
 
   for (int i = 0; i < _layers.size(); i++) {
@@ -472,23 +472,58 @@ MapBoo::MBSymbolizedDataset* MapBoo::MBSymbolizedDataset::fromJSON(MBHandler*   
     return NULL;
   }
 
-  const std::string        datasetID          = jsonObject->get("datasetID")->asString()->value();
-  const std::string        datasetName        = jsonObject->getAsString("datasetName", "");
-  const std::string        datasetAttribution = jsonObject->getAsString("datasetAttribution", "");
-  std::vector<std::string> labeling           = jsonObject->getAsArray("labeling")->asStringVector();
-  const MBShape*           shape              = MBShape::fromJSON( jsonObject->get("shape") );
-  std::vector<std::string> info               = jsonObject->getAsArray("info")->asStringVector();
-
-
+  const std::string  datasetID          = jsonObject->get("datasetID")->asString()->value();
+  const std::string  datasetName        = jsonObject->getAsString("datasetName", "");
+  const std::string  datasetAttribution = jsonObject->getAsString("datasetAttribution", "");
+  const MBSymbology* symbology          = MBSymbology::fromJSON(handler,
+                                                                datasetID,
+                                                                datasetName,
+                                                                jsonObject->get("symbology"));
 
   return new MBSymbolizedDataset(handler,
                                  datasetID,
                                  datasetName,
                                  datasetAttribution,
-                                 labeling,
-                                 shape,
-                                 info);
+                                 symbology);
 }
+
+
+const MapBoo::MBSymbology* MapBoo::MBSymbology::fromJSON(MBHandler*            handler,
+                                                         const std::string&    datasetID,
+                                                         const std::string&    datasetName,
+                                                         const JSONBaseObject* jsonBaseObject) {
+  if (jsonBaseObject == NULL) {
+    return NULL;
+  }
+
+  const JSONObject* jsonObject = jsonBaseObject->asObject();
+
+  const std::string type = jsonObject->get("type")->asString()->value();
+  if (type == "Vector") {
+    return MBVectorSymbology::fromJSON(handler, datasetID, datasetName, jsonObject);
+  }
+
+  ILogger::instance()->logError("Symbology type=\"%s\" not supported", type.c_str());
+  return NULL;
+}
+
+
+const MapBoo::MBVectorSymbology* MapBoo::MBVectorSymbology::fromJSON(MBHandler*         handler,
+                                                                     const std::string& datasetID,
+                                                                     const std::string& datasetName,
+                                                                     const JSONObject*  jsonObject) {
+  std::vector<std::string> labeling           = jsonObject->getAsArray("labeling")->asStringVector();
+  const MBShape*           shape              = MBShape::fromJSON( jsonObject->get("shape") );
+  std::vector<std::string> info               = jsonObject->getAsArray("info")->asStringVector();
+
+  return new MBVectorSymbology(handler,
+                               datasetID,
+                               datasetName,
+                               labeling,
+                               shape,
+                               info);
+}
+
 
 const MapBoo::MBShape* MapBoo::MBShape::fromJSON(const JSONBaseObject* jsonBaseObject) {
   if (jsonBaseObject == NULL) {
@@ -552,8 +587,9 @@ const MapBoo::MBCircleShape* MapBoo::MBCircleShape::fromJSON(const JSONObject* j
 //                                        );
 //}
 
-void MapBoo::MBSymbolizedDataset::apply(const URL&               serverURL,
-                                        VectorStreamingRenderer* vectorStreamingRenderer) const {
+
+void MapBoo::MBVectorSymbology::apply(const URL&               serverURL,
+                                      VectorStreamingRenderer* vectorStreamingRenderer) const {
   std::string properties = "";
   for (int i = 0; i < _labeling.size(); i++) {
     properties += _labeling[i] + "|";
@@ -573,6 +609,11 @@ void MapBoo::MBSymbolizedDataset::apply(const URL&               serverURL,
                                         true,  // verbose
                                         false  // haltOnError
                                         );
+}
+
+void MapBoo::MBSymbolizedDataset::apply(const URL&               serverURL,
+                                        VectorStreamingRenderer* vectorStreamingRenderer) const {
+  _symbology->apply(serverURL, vectorStreamingRenderer);
 }
 
 //const std::string MapBoo::MBDataset::createMarkLabel(const JSONObject* properties) const {
@@ -682,7 +723,7 @@ void MapBoo::MBSymbolizedDataset::apply(const URL&               serverURL,
 //  
 //}
 
-const std::string MapBoo::MBSymbolizedDataset::createMarkLabel(const JSONObject* properties) const {
+const std::string MapBoo::MBVectorSymbology::createMarkLabel(const JSONObject* properties) const {
   const size_t labelingSize = _labeling.size();
   if ((labelingSize == 0) || (properties->size() == 0)) {
     return "<label>";
@@ -712,8 +753,7 @@ bool MapBoo::MBFeatureMarkTouchListener::touchedMark(Mark* mark) {
   return true;
 }
 
-
-MarkTouchListener* MapBoo::MBSymbolizedDataset::createMarkTouchListener(const JSONObject* properties) const {
+MarkTouchListener* MapBoo::MBVectorSymbology::createMarkTouchListener(const JSONObject* properties) const {
   if (_handler == NULL) {
     return NULL;
   }
@@ -735,8 +775,7 @@ MarkTouchListener* MapBoo::MBSymbolizedDataset::createMarkTouchListener(const JS
   return new MBFeatureMarkTouchListener(_datasetName, _handler, _info, infoProperties);
 }
 
-
-Mark* MapBoo::MBSymbolizedDataset::createMark(const GEO2DPointGeometry* geometry) const {
+Mark* MapBoo::MBVectorSymbology::createMark(const GEO2DPointGeometry* geometry) const {
   const GEOFeature* feature    = geometry->getFeature();
   const JSONObject* properties = feature->getProperties();
   const Geodetic2D  position   = geometry->getPosition();
