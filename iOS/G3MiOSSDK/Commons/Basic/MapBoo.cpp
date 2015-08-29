@@ -223,19 +223,6 @@ MapBoo::MBMap::~MBMap() {
   }
 }
 
-//std::vector<MapBoo::MBDataset*> MapBoo::MBMap::parseDatasets(MBHandler*       handler,
-//                                                             const JSONArray* jsonArray,
-//                                                             bool verbose) {
-//  std::vector<MapBoo::MBDataset*> result;
-//  for (int i = 0; i < jsonArray->size(); i++) {
-//    MBDataset* dataset = MBDataset::fromJSON(handler, jsonArray->get(i), verbose );
-//    if (dataset != NULL) {
-//      result.push_back( dataset );
-//    }
-//  }
-//  return result;
-//}
-
 std::vector<MapBoo::MBSymbolizedDataset*> MapBoo::MBMap::parseSymbolizedDatasets(MBHandler*       handler,
                                                                                  const JSONArray* jsonArray,
                                                                                  bool verbose) {
@@ -248,7 +235,6 @@ std::vector<MapBoo::MBSymbolizedDataset*> MapBoo::MBMap::parseSymbolizedDatasets
   }
   return result;
 }
-
 
 MapBoo::MBLayer* MapBoo::MBLayer::fromJSON(const JSONBaseObject* jsonBaseObject,
                                            bool verbose) {
@@ -434,32 +420,6 @@ void MapBoo::onMap(MapBoo::MBMap* map) {
   applyMap(map);
 }
 
-//MapBoo::MBDataset* MapBoo::MBDataset::fromJSON(MBHandler*            handler,
-//                                               const JSONBaseObject* jsonBaseObject,
-//                                               bool verbose) {
-//  if (jsonBaseObject == NULL) {
-//    return NULL;
-//  }
-//
-//  const JSONObject* jsonObject = jsonBaseObject->asObject();
-//  if (jsonObject == NULL) {
-//    return NULL;
-//  }
-//
-//  const std::string        id               = jsonObject->get("id")->asString()->value();
-//  const std::string        name             = jsonObject->get("name")->asString()->value();
-//  std::vector<std::string> labelingCriteria = jsonObject->getAsArray("labelingCriteria")->asStringVector();
-//  std::vector<std::string> infoCriteria     = jsonObject->getAsArray("infoCriteria")->asStringVector();
-//  const int                timestamp        = (int) jsonObject->get("timestamp")->asNumber()->value();
-//
-//  return new MBDataset(handler,
-//                       id,
-//                       name,
-//                       labelingCriteria,
-//                       infoCriteria,
-//                       timestamp);
-//}
-
 MapBoo::MBSymbolizedDataset* MapBoo::MBSymbolizedDataset::fromJSON(MBHandler*            handler,
                                                                    const JSONBaseObject* jsonBaseObject,
                                                                    bool verbose) {
@@ -487,7 +447,6 @@ MapBoo::MBSymbolizedDataset* MapBoo::MBSymbolizedDataset::fromJSON(MBHandler*   
                                  symbology);
 }
 
-
 const MapBoo::MBSymbology* MapBoo::MBSymbology::fromJSON(MBHandler*            handler,
                                                          const std::string&    datasetID,
                                                          const std::string&    datasetName,
@@ -506,7 +465,6 @@ const MapBoo::MBSymbology* MapBoo::MBSymbology::fromJSON(MBHandler*            h
   ILogger::instance()->logError("Symbology type=\"%s\" not supported", type.c_str());
   return NULL;
 }
-
 
 const MapBoo::MBVectorSymbology* MapBoo::MBVectorSymbology::fromJSON(MBHandler*         handler,
                                                                      const std::string& datasetID,
@@ -558,36 +516,6 @@ const MapBoo::MBCircleShape* MapBoo::MBCircleShape::fromJSON(const JSONObject* j
                            radius);
 }
 
-//MapBoo::MBDataset::~MBDataset() {
-//#ifdef JAVA_CODE
-//  super.dispose();
-//#endif
-//}
-
-//void MapBoo::MBDataset::apply(const URL&               serverURL,
-//                              VectorStreamingRenderer* vectorStreamingRenderer) const {
-//  std::string properties = "";
-//  for (int i = 0; i < _labelingCriteria.size(); i++) {
-//    properties += _labelingCriteria[i] + "|";
-//  }
-//  for (int i = 0; i < _infoCriteria.size(); i++) {
-//    properties += _infoCriteria[i] + "|";
-//  }
-//
-//  vectorStreamingRenderer->addVectorSet(URL(serverURL, "/public/v1/VectorialStreaming/"),
-//                                        _id,
-//                                        properties,
-//                                        new MBDatasetVectorSetSymbolizer(this),
-//                                        true,  // deleteSymbolizer
-//                                        DownloadPriority::MEDIUM,
-//                                        TimeInterval::zero(),
-//                                        true,  // readExpired
-//                                        true,  // verbose
-//                                        false  // haltOnError
-//                                        );
-//}
-
-
 void MapBoo::MBVectorSymbology::apply(const URL&               serverURL,
                                       VectorStreamingRenderer* vectorStreamingRenderer) const {
   std::string properties = "";
@@ -616,113 +544,6 @@ void MapBoo::MBSymbolizedDataset::apply(const URL&               serverURL,
   _symbology->apply(serverURL, vectorStreamingRenderer);
 }
 
-//const std::string MapBoo::MBDataset::createMarkLabel(const JSONObject* properties) const {
-//  const size_t criteriaSize = _labelingCriteria.size();
-//  if ((criteriaSize == 0) || (properties->size() == 0)) {
-//    return "<label>";
-//  }
-//  else if (criteriaSize == 1) {
-//    return JSONBaseObject::toString( properties->get(_labelingCriteria[0]) );
-//  }
-//  else {
-//    IStringBuilder* labelBuilder = IStringBuilder::newStringBuilder();
-//    for (int i = 0; i < criteriaSize; i++) {
-//      if (i > 0) {
-//        labelBuilder->addString(" ");
-//      }
-//      const std::string value = JSONBaseObject::toString( properties->get(_labelingCriteria[i]) );
-//      labelBuilder->addString( value );
-//    }
-//
-//    const std::string label = labelBuilder->getString();
-//    delete labelBuilder;
-//    return label;
-//  }
-//}
-//
-
-//const std::string MapBoo::MBDataset::createMarkLabel(const JSONObject* properties) const {
-//  const size_t criteriaSize = _labelingCriteria.size();
-//  if ((criteriaSize == 0) || (properties->size() == 0)) {
-//    return "<label>";
-//  }
-//  else if (criteriaSize == 1) {
-//    return JSONBaseObject::toString( properties->get(_labelingCriteria[0]) );
-//  }
-//  else {
-//    IStringBuilder* labelBuilder = IStringBuilder::newStringBuilder();
-//    for (int i = 0; i < criteriaSize; i++) {
-//      if (i > 0) {
-//        labelBuilder->addString(" ");
-//      }
-//      const std::string value = JSONBaseObject::toString( properties->get(_labelingCriteria[i]) );
-//      labelBuilder->addString( value );
-//    }
-//
-//    const std::string label = labelBuilder->getString();
-//    delete labelBuilder;
-//    return label;
-//  }
-//}
-//
-//
-//bool MapBoo::MBFeatureMarkTouchListener::touchedMark(Mark* mark) {
-//  _handler->onFeatureTouched(_datasetName, _infoCriteria, _properties);
-//  return true;
-//}
-//
-//
-//MarkTouchListener* MapBoo::MBDataset::createMarkTouchListener(const JSONObject* properties) const {
-//  if (_handler == NULL) {
-//    return NULL;
-//  }
-//
-//  const size_t criteriaSize = _infoCriteria.size();
-//  if (criteriaSize == 0) {
-//    return NULL;
-//  }
-//
-//  JSONObject* infoProperties = new JSONObject();
-//  for (int i = 0; i < criteriaSize; i++) {
-//    const std::string criteria = _infoCriteria[i];
-//    const JSONBaseObject* value = properties->get(criteria);
-//    if (value != NULL) {
-//      infoProperties->put(criteria, value->deepCopy());
-//    }
-//  }
-//
-//  return new MBFeatureMarkTouchListener(_name, _handler, _infoCriteria, infoProperties);
-//}
-
-//Mark* MapBoo::MBDataset::createMark(const GEO2DPointGeometry* geometry) const {
-//  const GEOFeature* feature = geometry->getFeature();
-//  const JSONObject* properties = feature->getProperties();
-//  const Geodetic2D position = geometry->getPosition();
-//
-//  return new Mark(createMarkLabel(properties),
-//                  Geodetic3D(position, 0),
-//                  ABSOLUTE,
-//                  0,                                    // minDistanceToCamera
-//                  18,                                   // labelFontSize
-//                  Color::newFromRGBA(1, 1, 1, 1),       // labelFontColor
-//                  Color::newFromRGBA(0, 0, 0, 1),       // labelShadowColor
-//                  NULL,                                 // userData
-//                  true,                                 // autoDeleteUserData
-//                  createMarkTouchListener(properties),
-//                  true                                  // autoDeleteListener
-//                  );
-//
-//  //  return new Mark(URL("file:///icon.png"),
-//  //                  Geodetic3D(position, 0),
-//  //                  ABSOLUTE,
-//  //                  0,
-//  //                  NULL,
-//  //                  true,
-//  //                  createMarkTouchListener(properties),
-//  //                  true);
-//  
-//}
-
 const std::string MapBoo::MBVectorSymbology::createMarkLabel(const JSONObject* properties) const {
   const size_t labelingSize = _labeling.size();
   if ((labelingSize == 0) || (properties->size() == 0)) {
@@ -746,7 +567,6 @@ const std::string MapBoo::MBVectorSymbology::createMarkLabel(const JSONObject* p
     return label;
   }
 }
-
 
 bool MapBoo::MBFeatureMarkTouchListener::touchedMark(Mark* mark) {
   _handler->onFeatureTouched(_datasetName, _info, _properties);
@@ -776,6 +596,8 @@ MarkTouchListener* MapBoo::MBVectorSymbology::createMarkTouchListener(const JSON
 }
 
 Mark* MapBoo::MBVectorSymbology::createMark(const GEO2DPointGeometry* geometry) const {
+#warning TODO: Shape, Shape+label
+
   const GEOFeature* feature    = geometry->getFeature();
   const JSONObject* properties = feature->getProperties();
   const Geodetic2D  position   = geometry->getPosition();
@@ -801,5 +623,5 @@ Mark* MapBoo::MBVectorSymbology::createMark(const GEO2DPointGeometry* geometry) 
   //                  true,
   //                  createMarkTouchListener(properties),
   //                  true);
-
+  
 }

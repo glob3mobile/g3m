@@ -60,54 +60,6 @@ public:
 
   class MBHandler;
 
-
-  //  class MBDataset : public RCObject {
-  //  private:
-  //    MBHandler*               _handler;
-  //    const std::string        _id;
-  //    const std::string        _name;
-  //    //    std::vector<std::string> _labelingCriteria;
-  //    //    std::vector<std::string> _infoCriteria;
-  //    const int                _timestamp;
-  //
-  //    MBDataset(const MBDataset& that);
-  //
-  //    MBDataset(MBHandler*                handler,
-  //              const std::string&        id,
-  //              const std::string&        name,
-  //              //              std::vector<std::string>& labelingCriteria,
-  //              //              std::vector<std::string>& infoCriteria,
-  //              const int                 timestamp) :
-  //    _handler(handler),
-  //    _id(id),
-  //    _name(name),
-  //    //    _labelingCriteria(labelingCriteria),
-  //    //    _infoCriteria(infoCriteria),
-  //    _timestamp(timestamp)
-  //    {
-  //    }
-  //
-  //    //    const std::string  createMarkLabel(const JSONObject* properties) const;
-  //    //    MarkTouchListener* createMarkTouchListener(const JSONObject* properties) const;
-  //
-  //  protected:
-  //    ~MBDataset();
-  //
-  //  public:
-  //    //    static MapBoo::MBDataset* fromJSON(MBHandler*            handler,
-  //    //                                       const JSONBaseObject* jsonBaseObject,
-  //    //                                       bool verbose);
-  //
-  //
-  //    //    void apply(const URL&               serverURL,
-  //    //               VectorStreamingRenderer* vectorStreamingRenderer) const;
-  //
-  //    //    Mark* createMark(const GEO2DPointGeometry* geometry) const;
-  //
-  //  };
-
-
-
   class MBSymbology : public RCObject {
   protected:
     MBHandler*         _handler;
@@ -138,7 +90,7 @@ public:
 
     virtual void apply(const URL&               serverURL,
                        VectorStreamingRenderer* vectorStreamingRenderer) const = 0;
-    
+
   };
 
 
@@ -157,7 +109,7 @@ public:
     virtual ~MBShape() {
 
     }
-    
+
   };
 
 
@@ -320,12 +272,8 @@ public:
     {
     }
 
-    static std::vector<MapBoo::MBLayer*>   parseLayers(const JSONArray* jsonArray,
-                                                       bool verbose);
-    //    static std::vector<MapBoo::MBDataset*> parseDatasets(MBHandler*       handler,
-    //                                                         const JSONArray* jsonArray,
-    //                                                         bool verbose);
-
+    static std::vector<MapBoo::MBLayer*> parseLayers(const JSONArray* jsonArray,
+                                                     bool verbose);
     static std::vector<MapBoo::MBSymbolizedDataset*> parseSymbolizedDatasets(MBHandler*       handler,
                                                                              const JSONArray* jsonArray,
                                                                              bool verbose);
