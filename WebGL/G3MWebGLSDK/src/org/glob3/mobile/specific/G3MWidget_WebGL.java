@@ -324,7 +324,8 @@ public class G3MWidget_WebGL
 			for ( var cn in contextNames) {
 				try {
 					context = jsCanvas.getContext(contextNames[cn], {
-						preserveDrawingBuffer : true
+						preserveDrawingBuffer : true,
+						alpha : false
 					});
 					//STORING SIZE FOR GLVIEWPORT
 					context.viewportWidth = jsCanvas.width;
