@@ -222,6 +222,16 @@ public class MapBoo
       final Geodetic2D position = geometry.getPosition();
     
       return new Mark(createMarkLabel(properties), new Geodetic3D(position, 0), AltitudeMode.ABSOLUTE, 0, 18, Color.newFromRGBA(1, 1, 1, 1), Color.newFromRGBA(0, 0, 0, 1), null, true, createMarkTouchListener(properties), true); // autoDeleteListener -  autoDeleteUserData -  userData -  labelShadowColor -  labelFontColor -  labelFontSize -  minDistanceToCamera
+    
+      //  return new Mark(URL("file:///icon.png"),
+      //                  Geodetic3D(position, 0),
+      //                  ABSOLUTE,
+      //                  0,
+      //                  NULL,
+      //                  true,
+      //                  createMarkTouchListener(properties),
+      //                  true);
+    
     }
 
   }
