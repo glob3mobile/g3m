@@ -749,7 +749,18 @@ public class Mark implements SurfaceElevationListener
           }
           _glState.setParent(parentGLState);
   
-          rc.getGL().drawArrays(GLPrimitive.triangleStrip(), 0, 4, _glState, rc.getGPUProgramManager(), RenderType.REGULAR_RENDER);
+          if (_firstRender)
+          {
+            _firstRender = false;
+            if (_zoomInAppears)
+            {
+              _effectsScheduler = rc.getEffectsScheduler();
+              _effectsScheduler.startEffect(new MarkZoomInEffect(this), getEffectTarget());
+            }
+          }
+  
+          rc.getGL().drawArrays(GLPrimitive.triangleStrip(), 0, 4, _glState, rc.getGPUProgramManager());
+  
           _renderedMark = true;
         }
       }

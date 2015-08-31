@@ -317,10 +317,20 @@ public class MutableVector3D
     return new MutableVector3D(((u * (u * _x + v * _y + w * _z)) + (((_x * (v * v + w * w)) - (u * (v * _y + w * _z))) * cosTheta) + (m * ((-w * _y) + (v * _z)) * sinTheta)) / ms, ((v * (u * _x + v * _y + w * _z)) + (((_y * (u * u + w * w)) - (v * (u * _x + w * _z))) * cosTheta) + (m * ((w * _x) - (u * _z)) * sinTheta)) / ms, ((w * (u * _x + v * _y + w * _z)) + (((_z * (u * u + v * v)) - (w * (u * _x + v * _y))) * cosTheta) + (m * (-(v * _x) + (u * _y)) * sinTheta)) / ms);
   }
 
-  public static double distanceBetween(MutableVector3D a, MutableVector3D b)
+  public final double squaredDistanceTo(Vector3D that)
   {
-    double squaredDistance = (a._x - b._x) * (a._x - b._x) + (a._y - b._y) * (a._y - b._y) + (a._z - b._z) * (a._z - b._z);
-    return IMathUtils.instance().sqrt(squaredDistance);
+    final double dx = _x - that._x;
+    final double dy = _y - that._y;
+    final double dz = _z - that._z;
+    return (dx * dx) + (dy * dy) + (dz * dz);
+  }
+
+  public final double squaredDistanceTo(MutableVector3D that)
+  {
+    final double dx = _x - that._x;
+    final double dy = _y - that._y;
+    final double dz = _z - that._z;
+    return (dx * dx) + (dy * dy) + (dz * dz);
   }
 
 }
