@@ -235,7 +235,7 @@ NonOverlappingMark::~NonOverlappingMark() {
 }
 
 Vector3D NonOverlappingMark::getCartesianPosition(const Planet* planet) const {
-#warning toCartesian without garbage
+// #warning toCartesian without garbage
   if (_cartesianPos == NULL) {
     _cartesianPos = new Vector3D(planet->toCartesian(_geoPosition));
   }
@@ -497,7 +497,7 @@ void NonOverlappingMarksRenderer::computeMarksToBeRendered(const Camera* camera,
     }
     else {
       // Resetting marks location of invisible anchors
-#warning Do we really need this?
+// #warning Do we really need this?
       m->resetWidgetPositionVelocityAndForce();
     }
   }

@@ -210,7 +210,7 @@ public class PlanetRendererBuilder
 
   private LayerSet createLayerSet()
   {
-    return LayerBuilder.createDefaultSatelliteImagery();
+    return LayerBuilder.createDefault();
   }
   private TilesRenderParameters createPlanetRendererParameters()
   {

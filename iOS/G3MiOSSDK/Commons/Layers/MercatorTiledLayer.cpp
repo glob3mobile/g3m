@@ -74,10 +74,10 @@ const URL MercatorTiledLayer::createURL(const Tile* tile) const {
 
   isb->addString(_protocol);
 
-  const int subdomainsSize = _subdomains.size();
+  const size_t subdomainsSize = _subdomains.size();
   if (subdomainsSize > 0) {
     // select subdomain based on fixed data (instead of round-robin) to be cache friendly
-    const int subdomainsIndex =  mu->abs(level + column + row) % subdomainsSize;
+    const size_t subdomainsIndex =  mu->abs(level + column + row) % subdomainsSize;
 #ifdef C_CODE
     isb->addString(_subdomains[subdomainsIndex]);
 #endif
@@ -148,8 +148,8 @@ bool MercatorTiledLayer::rawIsEquals(const Layer* that) const {
     return false;
   }
 
-  const int thisSubdomainsSize = _subdomains.size();
-  const int thatSubdomainsSize = t->_subdomains.size();
+  const size_t thisSubdomainsSize = _subdomains.size();
+  const size_t thatSubdomainsSize = t->_subdomains.size();
 
   if (thisSubdomainsSize != thatSubdomainsSize) {
     return false;

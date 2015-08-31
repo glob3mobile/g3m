@@ -193,7 +193,7 @@ public class G3MWidget_WebGL
    }-*/;
 
 
-   private VerticalPanel createUnsupportedMessage(final String message) {
+   private static VerticalPanel createUnsupportedMessage(final String message) {
       final VerticalPanel panel = new VerticalPanel();
 
       panel.add(new Label(message));
@@ -203,7 +203,7 @@ public class G3MWidget_WebGL
    }
 
 
-   public boolean isSupported() {
+   boolean isWebGLSupported() {
       return ((_canvas != null) && (_webGLContext != null));
    }
 

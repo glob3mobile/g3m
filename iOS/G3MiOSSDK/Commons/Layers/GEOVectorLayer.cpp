@@ -15,10 +15,11 @@
 #include "Tile.hpp"
 #include "TileImageContribution.hpp"
 
+
 GEOVectorLayer::GEOVectorLayer(const std::vector<const LayerTilesRenderParameters*>& parametersVector,
                                const float                                           transparency,
                                const LayerCondition*                                 condition,
-                               std::vector<const Info*>*                       layerInfo) :
+                               std::vector<const Info*>*                             layerInfo) :
 VectorLayer(parametersVector,
             transparency,
             condition,
@@ -29,13 +30,13 @@ _tileImageProvider(NULL)
 }
 
 
-GEOVectorLayer::GEOVectorLayer(const int                        mercatorFirstLevel,
-                               const int                        mercatorMaxLevel,
-                               const int                        wgs84firstLevel,
-                               const int                        wgs84maxLevel,
-                               const float                      transparency,
-                               const LayerCondition*            condition,
-                               std::vector<const Info*>*  layerInfo) :
+GEOVectorLayer::GEOVectorLayer(const int                 mercatorFirstLevel,
+                               const int                 mercatorMaxLevel,
+                               const int                 wgs84firstLevel,
+                               const int                 wgs84maxLevel,
+                               const float               transparency,
+                               const LayerCondition*     condition,
+                               std::vector<const Info*>* layerInfo) :
 VectorLayer(LayerTilesRenderParameters::createDefaultMultiProjection(mercatorFirstLevel,
                                                                      mercatorMaxLevel,
                                                                      wgs84firstLevel,

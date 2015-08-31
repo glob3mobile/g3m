@@ -30,6 +30,7 @@ class MarkTouchListener;
 class GLGlobalState;
 class GPUProgramState;
 class TextureIDReference;
+class EffectTarget;
 
 class MarkUserData {
 public:
@@ -57,18 +58,32 @@ private:
    * Default value: 20
    */
   const float       _labelFontSize;
+
+
   /**
    * The color of the text.
    * Useless if the mark does not have label.
    * Default value: white
    */
+#ifdef C_CODE
   const Color*      _labelFontColor;
+#endif
+#ifdef JAVA_CODE
+  private Color     _labelFontColor;
+#endif
+
   /**
    * The color of the text shadow.
    * Useless if the mark does not have label.
    * Default value: black
    */
+#ifdef C_CODE
   const Color*      _labelShadowColor;
+#endif
+#ifdef JAVA_CODE
+  private Color     _labelShadowColor;
+#endif
+
   /**
    * The number of pixels between the icon and the text.
    * Useless if the mark does not have label or icon.
@@ -109,6 +124,8 @@ private:
    */
   const bool        _autoDeleteListener;
 
+  std::string _token = "";
+
 #ifdef C_CODE
   const TextureIDReference* _textureId;
 #endif
@@ -125,10 +142,10 @@ private:
 #ifdef JAVA_CODE
   private IImage _textureImage;
 #endif
-  float               _textureWidth;
-  float               _textureHeight;
-  float               _textureWidthProportion;
-  float               _textureHeightProportion;
+  float             _textureWidth;
+  float             _textureHeight;
+  float             _textureWidthProportion;
+  float             _textureHeightProportion;
   bool              _textureSizeSetExternally;
   bool              _textureProportionSetExternally;
   const std::string _imageID;
@@ -159,6 +176,16 @@ private:
   float _anchorU;
   float _anchorV;
   BillboardGLFeature* _billboardGLF;
+
+  bool _initialized;
+
+  bool _zoomInAppears;
+  EffectsScheduler* _effectsScheduler;
+  bool _firstRender;
+
+
+  EffectTarget* _effectTarget;
+  EffectTarget* getEffectTarget();
 
 public:
   /**
@@ -220,6 +247,10 @@ public:
        bool               autoDeleteListener=false);
 
   ~Mark();
+
+  bool isInitialized() const {
+    return _initialized;
+  }
 
   const std::string getLabel() const {
     return _label;
@@ -300,6 +331,22 @@ public:
                                            const Vector2F& scaling);
   
   void setMarkAnchor(float anchorU, float anchorV);
+
+  void setToken(const std::string& token) {
+    _token = token;
+  }
+
+  const std::string getToken() const {
+    return _token;
+  }
+
+  void setZoomInAppears(bool zoomInAppears) {
+    _zoomInAppears = zoomInAppears;
+  }
+
+  bool getZoomInAppears() const {
+    return _zoomInAppears;
+  }
 
 };
 

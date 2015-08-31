@@ -51,6 +51,13 @@ public:
   {
   }
 
+  explicit MutableVector3D(const Vector3D &v) :
+  _x(v._x),
+  _y(v._y),
+  _z(v._z)
+  {
+  }
+
   void set(const double x,
            const double y,
            const double z) {
@@ -244,6 +251,20 @@ public:
     (a._y - b._y) * (a._y - b._y) +
     (a._z - b._z) * (a._z - b._z);
     return IMathUtils::instance()->sqrt(squaredDistance);
+  }
+
+  const double squaredDistanceTo(const Vector3D& that) const {
+    const double dx = _x - that._x;
+    const double dy = _y - that._y;
+    const double dz = _z - that._z;
+    return (dx * dx) + (dy * dy) + (dz * dz);
+  }
+
+  const double squaredDistanceTo(const MutableVector3D& that) const {
+    const double dx = _x - that._x;
+    const double dy = _y - that._y;
+    const double dz = _z - that._z;
+    return (dx * dx) + (dy * dy) + (dz * dz);
   }
 
 };

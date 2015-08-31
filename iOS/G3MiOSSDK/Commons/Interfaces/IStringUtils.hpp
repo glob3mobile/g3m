@@ -84,46 +84,11 @@ public:
                                 int endIndex) const = 0;
 
   virtual std::string substring(const std::string& string,
-                                int beginIndex) const {
-    //    return substring(string, beginIndex, string.size() + 1);
-    return substring(string, beginIndex, string.size());
-  }
+                                int beginIndex) const;
 
-  virtual std::string replaceSubstring(const std::string& originalString,
-                                       const std::string& searchString,
-                                       const std::string& replaceString,
-                                       int beginIndex,
-                                       int endIndex2) const {
-    int startIndex = indexOf(originalString, searchString, beginIndex, endIndex2);
-    //The part to replace was not found. Return original String
-    if (startIndex == -1) {
-      return originalString;
-    }
-    const int endReplacedIndex = startIndex + searchString.size();
-    const std::string left = substring(originalString, 0, startIndex);
-    const std::string right = substring(originalString, endReplacedIndex);
-    const std::string result = left + replaceString + right;
-    startIndex = indexOf(result, searchString, endReplacedIndex+1, endIndex2);
-    if (startIndex != -1) {
-      //recursive call to replace other ocurrences
-      return replaceSubstring(result,
-                              searchString,
-                              replaceString,
-                              endReplacedIndex+1,
-                              endIndex2);
-    }
-    return result;
-  }
-
-  virtual std::string replaceSubstring(const std::string& originalString,
-                                       const std::string& searchString,
-                                       const std::string& replaceString) const {
-    return replaceSubstring(originalString,
-                            searchString,
-                            replaceString,
-                            0,
-                            originalString.size());
-  }
+  virtual std::string replaceAll(const std::string& originalString,
+                                 const std::string& searchString,
+                                 const std::string& replaceString) const = 0;
 
   virtual std::string left(const std::string& string,
                            int endIndex) const {

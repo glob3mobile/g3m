@@ -405,7 +405,7 @@ void PointCloudsRenderer::PointCloud::render(const G3MRenderContext* rc,
                                              const Frustum* frustum,
                                              long long nowInMS) {
   if (_rootNode != NULL) {
-#warning TODO: make plugable the colorization of the cloud
+// #warning TODO: make plugable the colorization of the cloud
 #ifdef C_CODE
     const double maxHeight = (_colorPolicy == MIN_MAX_HEIGHT) ? _maxHeight : _averageHeight * 3;
 #endif
@@ -453,7 +453,7 @@ long long PointCloudsRenderer::PointCloudNode::render(const PointCloud* pointClo
         }
       }
 
-#warning TODO: quality factor 1
+// #warning TODO: quality factor 1
       const double minProjectedArea = 250;
       if (_projectedArea >= minProjectedArea) {
         const long long renderedCount = rawRender(pointCloud,
@@ -844,7 +844,7 @@ long long PointCloudsRenderer::PointCloudLeafNode::rawRender(const PointCloud* p
                                                              bool justRecalculatedProjectedArea) {
 
   if (justRecalculatedProjectedArea) {
-#warning TODO: quality factor 2
+// #warning TODO: quality factor 2
     const int intendedPointsCount = IMathUtils::instance()->round((float) projectedArea * 0.09f);
     // const int intendedPointsCount = IMathUtils::instance()->round((float) projectedArea * 0.25f);
     int accummulated = 0;

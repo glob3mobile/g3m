@@ -364,7 +364,7 @@ public:
   }
   
   void imageCreationError(const std::string& error) {
-#warning propagate the error to the texturizer and change the render state if is necessary
+// TODO: #warning propagate the error to the texturizer and change the render state if is necessary
     ILogger::instance()->logError("%s", error.c_str());
   }
   

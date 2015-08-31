@@ -22,3 +22,7 @@ const std::string JSONBoolean::description() const {
 void JSONBoolean::acceptVisitor(JSONVisitor* visitor) const {
   visitor->visitBoolean(this);
 }
+
+const std::string JSONBoolean::toString() const {
+  return _value ? "true" : "false";
+}

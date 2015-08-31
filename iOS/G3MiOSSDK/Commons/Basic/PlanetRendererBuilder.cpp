@@ -441,7 +441,7 @@ TileTessellator* PlanetRendererBuilder::createTileTessellator() {
 }
 
 LayerSet* PlanetRendererBuilder::createLayerSet() {
-  return LayerBuilder::createDefaultSatelliteImagery();
+  return LayerBuilder::createDefault();
 }
 
 void PlanetRendererBuilder::setRenderedSector(const Sector& sector) {

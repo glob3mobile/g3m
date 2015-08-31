@@ -41,7 +41,7 @@ public:
   virtual void visitArrayBeforeChildren(const JSONArray* value) = 0;
   virtual void visitArrayInBetweenChildren(const JSONArray* value) = 0;
   virtual void visitArrayBeforeChild(const JSONArray* value,
-                                     int i) = 0;
+                                     size_t i) = 0;
   virtual void visitArrayAfterChildren(const JSONArray* value) = 0;
 
   virtual void visitObjectBeforeChildren(const JSONObject* value) = 0;

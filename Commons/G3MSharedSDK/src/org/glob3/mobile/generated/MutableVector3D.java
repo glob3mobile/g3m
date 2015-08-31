@@ -51,6 +51,13 @@ public class MutableVector3D
      _z = v._z;
   }
 
+  public MutableVector3D(Vector3D v)
+  {
+     _x = v._x;
+     _y = v._y;
+     _z = v._z;
+  }
+
   public final void set(double x, double y, double z)
   {
     _x = x;

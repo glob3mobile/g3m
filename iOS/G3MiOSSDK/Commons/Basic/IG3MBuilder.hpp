@@ -70,8 +70,6 @@ private:
   InfoDisplay*                      _infoDisplay;
 
   GL*                               getGL();
-  IDownloader*                      getDownloader();
-  IThreadUtils*                     getThreadUtils();
   ICameraActivityListener*          getCameraActivityListener();
   std::vector<ICameraConstrainer*>* getCameraConstraints();
   CameraRenderer*                   getCameraRenderer();
@@ -117,6 +115,9 @@ public:
   IG3MBuilder();
 
   virtual ~IG3MBuilder();
+
+  IDownloader*                      getDownloader();
+  IThreadUtils*                     getThreadUtils();
 
   void setGL(GL* gl);
 

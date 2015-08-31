@@ -325,8 +325,7 @@ public class Camera
   public final void initialize(G3MContext context)
   {
     _planet = context.getPlanet();
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning move this to Planet, && remove isFlat() method (DGD)
+  // #warning move this to Planet, and remove isFlat() method (DGD)
     if (_planet.isFlat())
     {
       setCartesianPosition(new MutableVector3D(0, 0, _planet.getRadii()._y * 5));

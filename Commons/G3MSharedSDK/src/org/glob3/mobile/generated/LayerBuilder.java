@@ -19,6 +19,12 @@ package org.glob3.mobile.generated;
 
 public class LayerBuilder
 {
+  public static LayerSet createDefault()
+  {
+    LayerSet layerSet = new LayerSet();
+    layerSet.addLayer(MapQuestLayer.newOSM(TimeInterval.fromDays(30)));
+    return layerSet;
+  }
   public static LayerSet createDefaultSatelliteImagery()
   {
     LayerSet layerSet = new LayerSet();

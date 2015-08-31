@@ -26,3 +26,7 @@ const std::string JSONString::description() const {
 void JSONString::acceptVisitor(JSONVisitor* visitor) const {
   visitor->visitString(this);
 }
+
+const std::string JSONString::toString() const {
+  return _value;
+}

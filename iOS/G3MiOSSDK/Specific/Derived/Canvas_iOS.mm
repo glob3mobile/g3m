@@ -169,9 +169,6 @@ void Canvas_iOS::_removeShadow() {
 
 void Canvas_iOS::_clearRect(float left, float top,
                             float width, float height) {
-
-
-
   CGContextClearRect(_context, CGRectMake(left, _canvasHeight - top,
                                           width, -height));
 }
@@ -339,7 +336,8 @@ const Vector2F Canvas_iOS::_textExtent(const std::string& text) {
 
   CGSize cgSize = [nsString sizeWithFont: _currentUIFont];
 
-  return Vector2F(cgSize.width, cgSize.height);
+  return Vector2F((float) cgSize.width,
+                  (float) cgSize.height);
 }
 
 void Canvas_iOS::_fillText(const std::string& text,

@@ -15,6 +15,7 @@ class Vector2I;
 class TileImageListener;
 
 #include "RCObject.hpp"
+#include <string>
 
 class FrameTasksExecutor;
 

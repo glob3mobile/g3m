@@ -23,8 +23,8 @@ import android.graphics.Typeface;
 
 
 public final class Canvas_Android
-         extends
-            ICanvas {
+   extends
+      ICanvas {
 
    private Bitmap      _bitmap          = null;
    private Canvas      _canvas          = null;

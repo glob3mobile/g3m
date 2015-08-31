@@ -70,3 +70,11 @@ GEOFeature* GEOFeature::deepCopy() const {
                         (_geometry   == NULL) ? NULL : _geometry->deepCopy(),
                         (_properties == NULL) ? NULL : _properties->deepCopy());
 }
+
+long long GEOFeature::createMarks(const VectorStreamingRenderer::VectorSet* vectorSet,
+                                  const VectorStreamingRenderer::Node*      node) const {
+  if (_geometry != NULL) {
+    return _geometry->createMarks(vectorSet, node);
+  }
+  return 0;
+}

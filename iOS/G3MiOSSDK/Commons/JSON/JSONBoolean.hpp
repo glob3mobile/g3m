@@ -31,6 +31,8 @@ public:
 
   const std::string description() const;
 
+  const std::string toString() const;
+
   JSONBoolean* deepCopy() const {
     return new JSONBoolean(_value);
   }

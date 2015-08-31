@@ -19,20 +19,20 @@ public:
   virtual ~IFloatBuffer() {
   }
   
-  virtual float get(int i) const = 0;
+  virtual float get(size_t i) const = 0;
   
-  virtual void put(int i, float value) = 0;
+  virtual void put(size_t i, float value) = 0;
 
-  virtual void rawPut(int i, float value) = 0;
+  virtual void rawPut(size_t i, float value) = 0;
 
-  virtual void rawAdd(int i, float value) = 0;
+  virtual void rawAdd(size_t i, float value) = 0;
 
-  virtual void rawPut(int i,
+  virtual void rawPut(size_t i,
                       const IFloatBuffer* srcBuffer,
-                      int srcFromIndex,
-                      int count) = 0;
+                      size_t srcFromIndex,
+                      size_t count) = 0;
 
-  void rawPut(int i,
+  void rawPut(size_t i,
               const IFloatBuffer* srcBuffer) {
     rawPut(i, srcBuffer, 0, srcBuffer->size());
   }

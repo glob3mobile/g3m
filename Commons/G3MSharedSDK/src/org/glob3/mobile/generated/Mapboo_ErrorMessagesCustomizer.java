@@ -1,9 +1,9 @@
 package org.glob3.mobile.generated; 
 public class Mapboo_ErrorMessagesCustomizer implements ErrorMessagesCustomizer
 {
-  private MapBooBuilder _mbBuilder;
+  private MapBooOLDBuilder _mbBuilder;
 
-  public Mapboo_ErrorMessagesCustomizer(MapBooBuilder mbBuilder)
+  public Mapboo_ErrorMessagesCustomizer(MapBooOLDBuilder mbBuilder)
   {
     _mbBuilder = mbBuilder;
   }
