@@ -216,7 +216,7 @@ public:
     return Angle(degrees, TO_RADIANS(degrees));
   }
   
-  double getNormalizedDegrees() const {
+  double getNormalizedDegrees360() const {
     double degrees = _degrees;
     while (degrees < 0) {
       degrees += 360;

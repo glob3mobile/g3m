@@ -1393,9 +1393,9 @@ std::vector<StarDomeRenderer*> _sdrs;
 //-(void) tick2{
 //  CMAttitude* attitude = [_dO getAttitude];
 //
-//  double pitch = Angle::fromRadians(attitude.pitch).getNormalizedDegrees();
-//  double roll = Angle::fromRadians(attitude.roll).getNormalizedDegrees();
-//  double yaw = Angle::fromRadians(attitude.yaw).getNormalizedDegrees();
+//  double pitch = Angle::fromRadians(attitude.pitch).getNormalizedDegrees360();
+//  double roll = Angle::fromRadians(attitude.roll).getNormalizedDegrees360();
+//  double yaw = Angle::fromRadians(attitude.yaw).getNormalizedDegrees360();
 //}
 //
 //
