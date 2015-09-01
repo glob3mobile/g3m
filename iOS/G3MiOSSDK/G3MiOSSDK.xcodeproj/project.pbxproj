@@ -451,6 +451,8 @@
 		D80A286B1746474E0058CEC3 /* Planet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D80A28691746474E0058CEC3 /* Planet.cpp */; };
 		D80A286C1746474E0058CEC3 /* EllipsoidalPlanet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D80A286A1746474E0058CEC3 /* EllipsoidalPlanet.cpp */; };
 		D80A28711746572E0058CEC3 /* GLState.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D80A286F1746572E0058CEC3 /* GLState.cpp */; };
+		D80AA0771B95BB39001E3CD3 /* DeviceAttitudeCameraHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D80AA0751B95BB39001E3CD3 /* DeviceAttitudeCameraHandler.cpp */; };
+		D80AA0781B95C0CB001E3CD3 /* DeviceAttitudeCameraHandler.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D80AA0761B95BB39001E3CD3 /* DeviceAttitudeCameraHandler.hpp */; };
 		D80D521215EE2B0100ACEA16 /* IMathUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D80D521115EE2B0100ACEA16 /* IMathUtils.cpp */; };
 		D80D525915EE698E00ACEA16 /* TileTessellator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D80D525815EE698E00ACEA16 /* TileTessellator.cpp */; };
 		D80E59B2170B12CD00E7C799 /* GPUProgramFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D80E59B0170B12CD00E7C799 /* GPUProgramFactory.cpp */; };
@@ -752,6 +754,7 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				D80AA0781B95C0CB001E3CD3 /* DeviceAttitudeCameraHandler.hpp in CopyFiles */,
 				CF75A9FD1B87E2B10033DA25 /* MapBoo.hpp in CopyFiles */,
 				CFECA77C1B6ABA0100A0A44E /* VectorStreamingRenderer.hpp in CopyFiles */,
 				CC54A2131B4D4F0A00B649CC /* CameraMouseWheelHandler.hpp in CopyFiles */,
@@ -1728,6 +1731,8 @@
 		D80A286A1746474E0058CEC3 /* EllipsoidalPlanet.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = EllipsoidalPlanet.cpp; path = Commons/Geometry/EllipsoidalPlanet.cpp; sourceTree = "<group>"; };
 		D80A286F1746572E0058CEC3 /* GLState.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = GLState.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		D80A28701746572E0058CEC3 /* GLState.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GLState.hpp; sourceTree = "<group>"; };
+		D80AA0751B95BB39001E3CD3 /* DeviceAttitudeCameraHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = DeviceAttitudeCameraHandler.cpp; path = Commons/Cameras/DeviceAttitudeCameraHandler.cpp; sourceTree = "<group>"; };
+		D80AA0761B95BB39001E3CD3 /* DeviceAttitudeCameraHandler.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = DeviceAttitudeCameraHandler.hpp; path = Commons/Cameras/DeviceAttitudeCameraHandler.hpp; sourceTree = "<group>"; };
 		D80C8B4A1A77B94E00E67587 /* FlatColor2DMesh.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = FlatColor2DMesh.fsh; sourceTree = "<group>"; };
 		D80C8B4B1A77B94E00E67587 /* FlatColor2DMesh.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = FlatColor2DMesh.vsh; sourceTree = "<group>"; };
 		D80D3A5D160A0A47004831C5 /* IGLUniformID.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = IGLUniformID.hpp; path = Commons/Interfaces/IGLUniformID.hpp; sourceTree = "<group>"; };
@@ -2462,6 +2467,8 @@
 				D8F6165F19E7DE8500825A2D /* CameraMouseWheelHandler.hpp */,
 				D85558371AFB58DA00957341 /* DeviceAttitudeCameraConstrainer.cpp */,
 				D85558381AFB58DA00957341 /* DeviceAttitudeCameraConstrainer.hpp */,
+				D80AA0751B95BB39001E3CD3 /* DeviceAttitudeCameraHandler.cpp */,
+				D80AA0761B95BB39001E3CD3 /* DeviceAttitudeCameraHandler.hpp */,
 			);
 			name = Cameras;
 			sourceTree = "<group>";
@@ -3015,6 +3022,7 @@
 				D8A5602115AEF64E00035086 /* Mesh.cpp in Sources */,
 				CC41E3A015B1FD5B00B5581C /* Plane.cpp in Sources */,
 				CC41E3B615B32DFB00B5581C /* Frustum.cpp in Sources */,
+				D80AA0771B95BB39001E3CD3 /* DeviceAttitudeCameraHandler.cpp in Sources */,
 				CCB2565015B5A33A00079B96 /* TexturedMesh.cpp in Sources */,
 				CF6CCE3919254B7500AA3ED7 /* ProceduralLayer.cpp in Sources */,
 				CCB2566415B5F58500079B96 /* Box.cpp in Sources */,

@@ -132,8 +132,6 @@ public:
   ~G3MWidget();
 
   void render(int width, int height);
-
-  void zRender();
   
   void onTouchEvent(const TouchEvent* myEvent);
 
@@ -372,6 +370,12 @@ private:
   RenderState calculateRendererState();
   
   void setSelectedRenderer(ProtoRenderer* selectedRenderer);
+  
+  /**
+   Generates a image on the FrameBuffer of the depth of each pixel
+   so the method getScenePositionForPixel can obtain it.
+  */
+  void zRender();
   
 };
 

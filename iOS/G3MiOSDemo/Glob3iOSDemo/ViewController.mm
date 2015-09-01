@@ -156,7 +156,7 @@
 
 #include <typeinfo>
 
-#include <G3MiOSSDK/DeviceAttitudeCameraConstrainer.hpp>
+#include <G3MiOSSDK/DeviceAttitudeCameraHandler.hpp>
 
 
 
@@ -390,7 +390,7 @@ Mesh* createSectorMesh(const Planet* planet,
   
   builder.setInitializationTask(new InitTask([self G3MWidget]), true);
   
-  builder.addCameraConstraint(new DeviceAttitudeCameraConstrainer(true));
+//  builder.addCameraConstraint(new DeviceAttitudeCameraConstrainer(true));
 
   builder.getPlanetRendererBuilder()->setElevationDataProvider(edp);
   builder.getPlanetRendererBuilder()->setVerticalExaggeration(2.5);
@@ -3061,6 +3061,8 @@ std::vector<StarDomeRenderer*> _sdrs;
 
   cameraRenderer->addHandler(new CameraRotationHandler());
   cameraRenderer->addHandler(new CameraDoubleTapHandler());
+  
+  cameraRenderer->addHandler(new DeviceAttitudeCameraHandler(true));
 
   return cameraRenderer;
 }
@@ -6060,6 +6062,8 @@ public:
 - (void) testBranch_zrender_touchhandlers
 {
   G3MBuilder_iOS builder([self G3MWidget]);
+  
+
   
   const Planet* planet = Planet::createEarth();
   //const Planet* planet = Planet::createSphericalEarth();
