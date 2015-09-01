@@ -349,14 +349,7 @@ void G3MWidget::notifyTouchEvent(const G3MEventContext &ec,
 }
 
 Vector3D G3MWidget::getScenePositionForPixel(float x, float y){
-  zRender();
-  
-  const IMathUtils* mu = IMathUtils::instance();
-  
-  const int ix = mu->round(x);
-  const int iy = mu->round(y);
-
-  const double z = _gl->readPixelAsDouble(ix, iy, _width, _height);
+  const double z = getDepthForPixel(x, y);
 
   if (!ISNAN(z)){
     Vector3D pixel3D(x,_height - y,z);
@@ -371,6 +364,19 @@ Vector3D G3MWidget::getScenePositionForPixel(float x, float y){
     //ILogger::instance()->logInfo("NO Z");
     return Vector3D::nan();
   }
+}
+
+double G3MWidget::getDepthForPixel(float x, float y){
+  zRender();
+  
+  const IMathUtils* mu = IMathUtils::instance();
+  
+  const int ix = mu->round(x);
+  const int iy = mu->round(y);
+  
+  const double z = _gl->readPixelAsDouble(ix, iy, _width, _height);
+  
+  return z;
 }
 
 

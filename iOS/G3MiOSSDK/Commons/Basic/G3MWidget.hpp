@@ -61,6 +61,7 @@ class IDeviceLocation;
 #include "RenderState.hpp"
 #include "InfoDisplay.hpp"
 #include "ChangedRendererInfoListener.hpp"
+#include "FrameDepthProvider.hpp"
 
 class G3MContext;
 class GLGlobalState;
@@ -99,7 +100,7 @@ enum FrameBufferContent{
 };
 
 
-class G3MWidget : public ChangedRendererInfoListener {
+class G3MWidget : public ChangedRendererInfoListener, FrameDepthProvider {
 public:
 
   static void initSingletons(ILogger*            logger,
@@ -245,6 +246,8 @@ public:
   }
 
   Vector3D getScenePositionForPixel(float x, float y);
+  
+  double getDepthForPixel(float x, float y);
 
   Vector3D getScenePositionForCentralPixel();
   
