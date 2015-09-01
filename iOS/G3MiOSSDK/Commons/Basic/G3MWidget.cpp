@@ -360,11 +360,7 @@ Vector3D G3MWidget::getScenePositionForPixel(int x, int y){
     //ILogger::instance()->logInfo("PIXEL 3D: %s -> %s\n", pixel3D.description().c_str(), pos.description().c_str() );
     //ILogger::instance()->logInfo("Z = %f - DIST CAM: %f\n", z, _currentCamera->getCartesianPosition().sub(pos).length());
     //ILogger::instance()->logInfo("GEO: %s\n", _planet->toGeodetic2D(pos).description().c_str());
-    
-#warning ASK AGUSTIN
-    // update ground height in camera class
-//    _nextCamera->setGroundHeightFromCartesianPoint(pos);
-//    _currentCamera->setGroundHeightFromCartesianPoint(pos);
+
     return pos;
   } else{
     //ILogger::instance()->logInfo("NO Z");
@@ -390,7 +386,6 @@ Vector3D G3MWidget::getFirstValidScenePositionForFrameBufferColumn(int column){
       Vector3D pixel3D(column, _height - row,z);
       MutableMatrix44D mmv(*_currentCamera->getModelViewMatrix44D());
       Vector3D pos = mmv.unproject(pixel3D, 0, 0, _width, _height);
-//      _nextCamera->setGroundHeightFromCartesianPoint(pos);
       return pos;
     }
     row++;

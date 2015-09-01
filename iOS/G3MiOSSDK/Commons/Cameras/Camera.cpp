@@ -105,7 +105,6 @@ void Camera::copyFrom(const Camera &that) {
 Camera::Camera(long long timestamp) :
 _planet(NULL),
 _position(0, 0, 0),
-_groundHeight(0),
 _center(0, 0, 0),
 _up(0, 0, 1),
 _dirtyFlags(),
