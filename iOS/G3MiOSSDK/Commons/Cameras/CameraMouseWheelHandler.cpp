@@ -62,7 +62,7 @@ void CameraMouseWheelHandler::onMouseWheel(const G3MEventContext *eventContext,
   double factor = delta< 0? - _factor : _factor;
   
   const Vector2F pixel = touchEvent.getTouch(0)->getPos();
-  Vector3D touchedPosition = camera->getScenePositionForPixel((int)pixel._x, (int)pixel._y);
+  Vector3D touchedPosition = camera->getScenePositionForPixel(pixel._x, pixel._y);
   if (touchedPosition.isNan()) return;
   
   const Vector3D& initialRay = Camera::pixel2Ray(cameraPosition, pixel,
