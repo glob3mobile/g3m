@@ -470,9 +470,17 @@ void G3MWidget::zRender(){
     _gl->clearScreen(Color::black());
     _mainRenderer->zRender(_renderContext, zRenderGLState);
     zRenderGLState->_release();
+    
+    std::vector<OrderedRenderable*>* orderedRenderables = _renderContext->getSortedOrderedRenderables();
+    if (orderedRenderables != NULL) {
+      if (orderedRenderables->size() > 0){
+        ILogger::instance()->logError("Some component is altering the OrderedRenderables list during Depth Rendering.");
+      }
+    }
+    
+    _frameBufferContent = DEPTH_IMAGE;
   }
 
-  _frameBufferContent = DEPTH_IMAGE;
 }
 
 void G3MWidget::onResizeViewportEvent(int width, int height) {
