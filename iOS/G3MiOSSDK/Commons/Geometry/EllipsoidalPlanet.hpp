@@ -101,7 +101,10 @@ public:
                                              originZ,
                                              directionX,
                                              directionY,
-                                             directionZ);
+                                             directionZ,
+                                             _oneOverDragRadiiSquared.x(),
+                                             _oneOverDragRadiiSquared.y(),
+                                             _oneOverDragRadiiSquared.z());
   }
 
   Vector3D toCartesian(const Angle& latitude,
