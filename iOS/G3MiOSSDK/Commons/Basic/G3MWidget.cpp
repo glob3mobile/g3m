@@ -143,7 +143,7 @@ _initialCameraPositionProvider(initialCameraPositionProvider),
 _initialCameraPositionHasBeenSet(false),
 _forceBusyRenderer(false),
 _nFramesBeetweenProgramsCleanUp(500),
-_zRenderCounter(-1),
+_frameBufferContent(EMPTY_FRAMEBUFFER),
 _infoDisplay(infoDisplay)
 {
   _effectsScheduler->initialize(_context);
@@ -460,12 +460,9 @@ void G3MWidget::onTouchEvent(const TouchEvent* touchEvent) {
 
 
 void G3MWidget::zRender(){
-
-  if (_zRenderCounter == -1 || _zRenderCounter != _renderCounter){
-    _zRenderCounter = _renderCounter;
-  } else{
-    //ILogger::instance()->logInfo("Recycling Z Render");
-    return; //NO NEED OF RENDERING AGAIN
+  
+  if (_frameBufferContent == DEPTH_IMAGE){
+    return; //It means no regular frame has been generated since last ZRender
   }
 
   if (_mainRenderer->isEnable()){
@@ -475,6 +472,7 @@ void G3MWidget::zRender(){
     zRenderGLState->_release();
   }
 
+  _frameBufferContent = DEPTH_IMAGE;
 }
 
 void G3MWidget::onResizeViewportEvent(int width, int height) {
@@ -690,8 +688,8 @@ void G3MWidget::render(int width, int height) {
   if (_renderCounter % _nFramesBeetweenProgramsCleanUp == 0) {
     _gpuProgramManager->removeUnused();
   }
-
-  _zRenderCounter = -1; //Frame buffer does not contain Z anymore
+  
+  _frameBufferContent = REGULAR_FRAME; //FrameBuffer has been filled with a regular frame
 
   const long long elapsedTimeMS = _timer->elapsedTimeInMilliseconds();
   //  if (elapsedTimeMS > 100) {

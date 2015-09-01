@@ -92,6 +92,12 @@ public:
   }
 };
 
+enum FrameBufferContent{
+  EMPTY_FRAMEBUFFER,
+  REGULAR_FRAME,
+  DEPTH_IMAGE
+};
+
 
 class G3MWidget : public ChangedRendererInfoListener {
 public:
@@ -339,7 +345,7 @@ private:
   
   InfoDisplay* _infoDisplay;
 
-  long _zRenderCounter; //-1 means Frame Buffer does not contain Z; Z of referenced frame otherwise
+  FrameBufferContent _frameBufferContent;
 
   G3MWidget(GL*                              gl,
             IStorage*                        storage,

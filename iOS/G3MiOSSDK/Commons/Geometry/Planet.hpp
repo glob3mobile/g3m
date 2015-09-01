@@ -147,8 +147,6 @@ public:
 
   virtual const std::string getType() const = 0;
   
-  virtual void correctPitchAfterDoubleDrag(Camera* camera, const Vector2F& finalPixel0, const Vector2F& finalPixel1) const{}
-  
   virtual MutableMatrix44D zoomUsingMouseWheel(double factor,
                                                const Vector3D& origin,
                                                const Vector3D& centerRay,

@@ -482,12 +482,6 @@ void EllipsoidalPlanet::applyCameraConstrainers(const Camera* previousCamera,
 
 }
 
-
-void EllipsoidalPlanet::correctPitchAfterDoubleDrag(Camera* camera, const Vector2F& finalPixel0, const Vector2F& finalPixel1) const{
-  _sphericalPlanetDoubleDragDelegate->correctPitchAfterDoubleDrag(camera, finalPixel0, finalPixel1);
-}
-
-
 MutableMatrix44D EllipsoidalPlanet::zoomUsingMouseWheel(double factor,
                                                         const Vector3D& origin,
                                                         const Vector3D& centerRay,
