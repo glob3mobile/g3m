@@ -12,11 +12,11 @@
 
 #include "G3MDemoScene.hpp"
 
-class DeviceAttitudeCameraConstrainer;
+class DeviceAttitudeCameraHandler;
 
 class G3MAugmentedRealityDemoScene : public G3MDemoScene {
 private:
-  DeviceAttitudeCameraConstrainer* _dac;
+  DeviceAttitudeCameraHandler* _dac;
 
 protected:
   void rawActivate(const G3MContext* context);

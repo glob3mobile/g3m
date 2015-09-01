@@ -20,11 +20,12 @@
 #import <CoreLocation/CoreLocation.h>
 #import <CoreMotion/CoreMotion.h>
 
-#include <G3MiOSSDK/DeviceAttitudeCameraConstrainer.hpp>
+#include <G3MiOSSDK/CameraRenderer.hpp>
+#include <G3MiOSSDK/DeviceAttitudeCameraHandler.hpp>
 
 void G3MAugmentedRealityDemoScene::deactivate(const G3MContext* context) {
   if (_dac != NULL){
-    getModel()->getG3MWidget()->removeCameraConstrainer(_dac);
+    getModel()->getG3MWidget()->getCameraRenderer()->removeHandler(_dac);
     delete _dac;
     _dac = NULL;
   }
@@ -39,8 +40,8 @@ void G3MAugmentedRealityDemoScene::rawActivate(const G3MContext* context) {
   G3MDemoModel* model     = getModel();
   G3MWidget*    g3mWidget = model->getG3MWidget();
   
-  _dac = new DeviceAttitudeCameraConstrainer(true);
-  g3mWidget->addCameraConstrainer(_dac);
+  _dac = new DeviceAttitudeCameraHandler(true);
+  g3mWidget->getCameraRenderer()->addHandler(_dac);
 
 
   BingMapsLayer* layer = new BingMapsLayer(BingMapType::AerialWithLabels(),

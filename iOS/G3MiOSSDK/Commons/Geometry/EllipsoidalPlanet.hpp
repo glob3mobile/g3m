@@ -162,7 +162,9 @@ public:
   Geodetic2D toGeodetic2D(const Vector3D& positionOnEllipsoidalPlanet) const;
 
   Geodetic3D toGeodetic3D(const Vector3D& position) const;
-
+  
+  double getGeodetic3DHeight(const Vector3D& position) const;
+  
   Vector3D scaleToGeodeticSurface(const Vector3D& position) const;
 
   Vector3D scaleToGeocentricSurface(const Vector3D& position) const;

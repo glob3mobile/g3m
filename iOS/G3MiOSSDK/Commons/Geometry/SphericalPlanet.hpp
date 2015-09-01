@@ -200,6 +200,8 @@ public:
   
   Geodetic3D toGeodetic3D(const Vector3D& position) const;
   
+  double getGeodetic3DHeight(const Vector3D& position) const;
+  
   void toGeodetic3D(const MutableVector3D& position,
                     MutableVector3D& result) const;
   

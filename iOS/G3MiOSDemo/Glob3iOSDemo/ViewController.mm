@@ -3062,7 +3062,7 @@ std::vector<StarDomeRenderer*> _sdrs;
   cameraRenderer->addHandler(new CameraRotationHandler());
   cameraRenderer->addHandler(new CameraDoubleTapHandler());
   
-  cameraRenderer->addHandler(new DeviceAttitudeCameraHandler(true));
+ // cameraRenderer->addHandler(new DeviceAttitudeCameraHandler(true));
 
   return cameraRenderer;
 }

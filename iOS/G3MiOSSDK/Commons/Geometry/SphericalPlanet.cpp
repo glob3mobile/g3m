@@ -133,6 +133,13 @@ Geodetic3D SphericalPlanet::toGeodetic3D(const Vector3D& position) const {
   return Geodetic3D(toGeodetic2D(p), height);
 }
 
+double SphericalPlanet::getGeodetic3DHeight(const Vector3D& position) const{
+  const Vector3D p = scaleToGeodeticSurface(position);
+  const Vector3D h = position.sub(p);
+  
+  return (h.dot(position) < 0) ? -1 * h.length() : h.length();
+}
+
 void SphericalPlanet::toGeodetic3D(const MutableVector3D& position,
                                    MutableVector3D& result) const {
   double px = position.x() * _sphere._radius;
@@ -328,7 +335,7 @@ void SphericalPlanet::beginSingleDrag(const Vector3D& origin, const Vector3D& to
   _origin = origin.asMutableVector3D();
   //_initialPoint = closestIntersection(origin, initialRay).asMutableVector3D();
   _initialPoint = touchedPosition.asMutableVector3D();
-  _dragRadius = _sphere._radius + toGeodetic3D(touchedPosition)._height;
+  _dragRadius = _sphere._radius + getGeodetic3DHeight(touchedPosition);
   
   _validSingleDrag = false;
 }
@@ -417,9 +424,9 @@ void SphericalPlanet::beginDoubleDrag(const Vector3D& origin,
   _centerRay = centerRay.normalized().asMutableVector3D();
   _initialPoint0 = touchedPosition0.asMutableVector3D();
   
-  _dragRadius0 = _sphere._radius + toGeodetic3D(touchedPosition0)._height;
+  _dragRadius0 = _sphere._radius + getGeodetic3DHeight(touchedPosition0);
   _initialPoint1 = touchedPosition1.asMutableVector3D();
-  _dragRadius1 = _sphere._radius + toGeodetic3D(touchedPosition1)._height;
+  _dragRadius1 = _sphere._radius + getGeodetic3DHeight(touchedPosition1);
   _centerPoint = centerPosition.asMutableVector3D();
   _lastDoubleDragAngle = 0;
   _lastCorrectingRollAngle = NAND;
@@ -784,7 +791,7 @@ Effect* SphericalPlanet::createDoubleTapEffect(const Vector3D& origin,
   
   // compute central point of view
   //const Vector3D centerPoint = closestIntersection(origin, centerRay);
-  double touchedHeight = toGeodetic3D(touchedPosition)._height;
+  double touchedHeight = getGeodetic3DHeight(touchedPosition);
   double dragRadius = _sphere._radius + touchedHeight;
   const Vector3D centerPoint = Sphere::closestIntersectionCenteredSphereWithRay(origin,
                                                                                 centerRay,
@@ -796,7 +803,7 @@ Effect* SphericalPlanet::createDoubleTapEffect(const Vector3D& origin,
   const Angle angle   = Angle::fromRadians(- mu->asin(axis.length()/touchedPosition.length()/centerPoint.length()));
   
   // compute zoom factor
-  const double distanceToGround = toGeodetic3D(origin)._height - touchedHeight;
+  const double distanceToGround = getGeodetic3DHeight(origin) - touchedHeight;
   const double distance = distanceToGround * 0.6;
   
   // create effect
@@ -941,7 +948,7 @@ MutableMatrix44D SphericalPlanet::zoomUsingMouseWheel(double factor,
   MutableMatrix44D matrix = MutableMatrix44D::createTranslationMatrix(translation);
   
   // compute new final point after moving forward
-  double dragRadius = _sphere._radius + toGeodetic3D(touchedPosition)._height;
+  double dragRadius = _sphere._radius + getGeodetic3DHeight(touchedPosition);
   const Vector3D finalPoint = Sphere::closestIntersectionCenteredSphereWithRay(origin.add(translation),
                                                                                finalRay,
                                                                                dragRadius);
