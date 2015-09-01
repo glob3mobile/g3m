@@ -17,14 +17,14 @@
 class CameraDoubleDragHandler: public CameraEventHandler {
   
 private:
-  MeshRenderer* _meshRenderer;
+  MeshRenderer* _debugMR;
   //bool _allowRotation;
   //bool _fixRollTo0;
   
 public:
   
   CameraDoubleDragHandler():
-  _meshRenderer(NULL)
+  _debugMR(NULL)
   {}
   
   
@@ -60,7 +60,7 @@ public:
   MutableMatrix44D _cameraModelViewMatrix;
   
   void setDebugMeshRenderer(MeshRenderer* meshRenderer) {
-    _meshRenderer = meshRenderer;
+    _debugMR = meshRenderer;
   }
   
 };

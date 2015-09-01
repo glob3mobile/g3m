@@ -105,8 +105,8 @@ void CameraDoubleDragHandler::onUp(const G3MEventContext *eventContext,
   cameraContext->setCurrentGesture(None);
   
   // remove scene points int render debug mode
-  if (_meshRenderer != NULL) {
-    _meshRenderer->clearMeshes();
+  if (_debugMR != NULL) {
+    _debugMR->clearMeshes();
   }
 
 }
