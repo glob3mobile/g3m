@@ -24,6 +24,7 @@
 #include "Vector3F.hpp"
 #include "Effects.hpp"
 #include "GLState.hpp"
+#include "FrameDepthProvider.hpp"
 
 class ILogger;
 class GPUProgramState;
@@ -105,7 +106,7 @@ public:
 class Camera {
 public:
 
-  explicit Camera(long long timestamp);
+  explicit Camera(long long timestamp, FrameDepthProvider* frameDepthProvider);
 
   ~Camera() {
     delete _camEffectTarget;
@@ -302,11 +303,7 @@ public:
 
   CoordinateSystem getLocalCoordinateSystem() const;
   CoordinateSystem getCameraCoordinateSystem() const;
-  
-  void setCameraCoordinateSystem(const Vector3D& viewDirection,
-                                 const Vector3D& up);
 
-  
   TaitBryanAngles getHeadingPitchRoll() const;
   void setHeadingPitchRoll(const Angle& heading,
                            const Angle& pitch,
@@ -315,6 +312,11 @@ public:
   double getEstimatedPixelDistance(const Vector3D& point0,
                                    const Vector3D& point1) const;
   
+  Vector3D getScenePositionForPixel(float x, float y);
+  
+  Vector3D getScenePositionForCentralPixel();
+  
+  Vector3D getFirstValidScenePositionForCentralColumn() const;
   
   void setCameraCoordinateSystem(const CoordinateSystem& rs);
 
@@ -387,6 +389,8 @@ private:
   Camera(const Camera &that);
 
   mutable long long _timestamp;
+  
+  FrameDepthProvider* _frameDepthProvider;
 
   mutable MutableVector3D _ray0;
   mutable MutableVector3D _ray1;

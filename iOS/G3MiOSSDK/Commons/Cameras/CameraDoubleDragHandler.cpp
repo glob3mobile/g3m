@@ -58,16 +58,15 @@ void CameraDoubleDragHandler::onDown(const G3MEventContext *eventContext,
   camera->getViewPortInto(_cameraViewPort);
 
   // double dragging
-  G3MWidget* widget = eventContext->getWidget();
   const Vector2F pixel0 = touchEvent.getTouch(0)->getPos();
-  Vector3D touchedPosition0 = widget->getScenePositionForPixel((int)pixel0._x, (int)pixel0._y);
+  Vector3D touchedPosition0 = camera->getScenePositionForPixel((int)pixel0._x, (int)pixel0._y);
   const Vector2F pixel1 = touchEvent.getTouch(1)->getPos();
-  Vector3D touchedPosition1 = widget->getScenePositionForPixel((int)pixel1._x, (int)pixel1._y);
+  Vector3D touchedPosition1 = camera->getScenePositionForPixel((int)pixel1._x, (int)pixel1._y);
   
   cameraContext->setCurrentGesture(DoubleDrag);
   eventContext->getPlanet()->beginDoubleDrag(camera->getCartesianPosition(),
                                              camera->getViewDirection(),
-                                             widget->getScenePositionForCentralPixel(),
+                                             camera->getScenePositionForCentralPixel(),
                                              touchedPosition0,
                                              touchedPosition1);
 }

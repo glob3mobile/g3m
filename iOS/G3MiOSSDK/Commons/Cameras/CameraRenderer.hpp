@@ -128,6 +128,8 @@ public:
   void zRender(const G3MRenderContext* rc, GLState* glState){}
   
   void setDebugMeshRenderer(MeshRenderer* meshRenderer);
+  
+  void removeHandler(CameraEventHandler* handler);
 };
 
 

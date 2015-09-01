@@ -104,8 +104,8 @@ _errorRenderer(errorRenderer),
 _hudRenderer(hudRenderer),
 _width(1),
 _height(1),
-_currentCamera(new Camera(1)),
-_nextCamera(new Camera(2)),
+_currentCamera(new Camera(1, this)),
+_nextCamera(new Camera(2, this)),
 _backgroundColor( new Color(backgroundColor) ),
 _timer(IFactory::instance()->createTimer()),
 _renderCounter(0),
@@ -119,8 +119,7 @@ _userData(NULL),
 _initializationTask(initializationTask),
 _autoDeleteInitializationTask(autoDeleteInitializationTask),
 _surfaceElevationProvider( mainRenderer->getSurfaceElevationProvider() ),
-_context(new G3MContext(this,
-                        IFactory::instance(),
+_context(new G3MContext(IFactory::instance(),
                         IStringUtils::instance(),
                         threadUtils,
                         ILogger::instance(),
@@ -176,8 +175,7 @@ _infoDisplay(infoDisplay)
   _mainRenderer->setChangedRendererInfoListener((ChangedRendererInfoListener*)this, -1);
 
 
-  _renderContext = new G3MRenderContext(this,
-                                        _frameTasksExecutor,
+  _renderContext = new G3MRenderContext(_frameTasksExecutor,
                                         IFactory::instance(),
                                         IStringUtils::instance(),
                                         _threadUtils,
@@ -348,24 +346,6 @@ void G3MWidget::notifyTouchEvent(const G3MEventContext &ec,
   }
 }
 
-Vector3D G3MWidget::getScenePositionForPixel(float x, float y){
-  const double z = getDepthForPixel(x, y);
-
-  if (!ISNAN(z)){
-    Vector3D pixel3D(x,_height - y,z);
-    MutableMatrix44D mmv(*_currentCamera->getModelViewMatrix44D());
-    Vector3D pos = mmv.unproject(pixel3D, 0, 0, _width, _height);
-    //ILogger::instance()->logInfo("PIXEL 3D: %s -> %s\n", pixel3D.description().c_str(), pos.description().c_str() );
-    //ILogger::instance()->logInfo("Z = %f - DIST CAM: %f\n", z, _currentCamera->getCartesianPosition().sub(pos).length());
-    //ILogger::instance()->logInfo("GEO: %s\n", _planet->toGeodetic2D(pos).description().c_str());
-
-    return pos;
-  } else{
-    //ILogger::instance()->logInfo("NO Z");
-    return Vector3D::nan();
-  }
-}
-
 double G3MWidget::getDepthForPixel(float x, float y){
   zRender();
   
@@ -379,47 +359,9 @@ double G3MWidget::getDepthForPixel(float x, float y){
   return z;
 }
 
-
-Vector3D G3MWidget::getScenePositionForCentralPixel() {
-  return getScenePositionForPixel(_width/2, _height/2);
-}
-
-
-Vector3D G3MWidget::getFirstValidScenePositionForFrameBufferColumn(int column){
-  zRender();
-
-  int row = _height / 2;
-  while (row<_height-1){
-
-    const double z = _gl->readPixelAsDouble(column, row, _width, _height);
-
-    if (!ISNAN(z)){
-      Vector3D pixel3D(column, _height - row,z);
-      MutableMatrix44D mmv(*_currentCamera->getModelViewMatrix44D());
-      Vector3D pos = mmv.unproject(pixel3D, 0, 0, _width, _height);
-      return pos;
-    }
-    row++;
-  }
-  return Vector3D::nan();
-}
-
-
-Vector3D G3MWidget::getFirstValidScenePositionForCentralColumn() {
-  int row = _height / 2;
-  MutableVector3D position = MutableVector3D::nan();
-  while (position.isNan() && row<_height-1) {
-    row++;
-    position = getScenePositionForPixel(_width/2, row).asMutableVector3D();
-  }
-  return position.asVector3D();
-}
-
-
 void G3MWidget::onTouchEvent(const TouchEvent* touchEvent) {
   
-  G3MEventContext ec(this,
-                     IFactory::instance(),
+  G3MEventContext ec(IFactory::instance(),
                      IStringUtils::instance(),
                      _threadUtils,
                      ILogger::instance(),
@@ -490,8 +432,7 @@ void G3MWidget::zRender(){
 }
 
 void G3MWidget::onResizeViewportEvent(int width, int height) {
-  G3MEventContext ec(this,
-                     IFactory::instance(),
+  G3MEventContext ec(IFactory::instance(),
                      IStringUtils::instance(),
                      _threadUtils,
                      ILogger::instance(),

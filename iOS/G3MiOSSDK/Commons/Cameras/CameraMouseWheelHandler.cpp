@@ -22,7 +22,7 @@ bool CameraMouseWheelHandler::onTouchEvent(const G3MEventContext *eventContext,
   return false;
   
 /*
-  //**** THIS CODE IS TO TEST MOUSEWHEELHANDLER
+  /**** THIS CODE IS TO TEST MOUSEWHEELHANDLER
   // only one finger needed
   if (touchEvent->getTouchCount()!=1) return false;
   if (touchEvent->getTapCount()>1) return false;
@@ -58,14 +58,11 @@ void CameraMouseWheelHandler::onMouseWheel(const G3MEventContext *eventContext,
   camera->getViewPortInto(cameraViewPort);
   
   const double delta = touchEvent.getMouseWheelDelta();
-  double factor = 0.1;
-  if (delta < 0){
-    factor *= -1;
-  }
   
-  G3MWidget* widget = eventContext->getWidget();
+  double factor = delta< 0? - _factor : _factor;
+  
   const Vector2F pixel = touchEvent.getTouch(0)->getPos();
-  Vector3D touchedPosition = widget->getScenePositionForPixel((int)pixel._x, (int)pixel._y);
+  Vector3D touchedPosition = camera->getScenePositionForPixel((int)pixel._x, (int)pixel._y);
   if (touchedPosition.isNan()) return;
   
   const Vector3D& initialRay = Camera::pixel2Ray(cameraPosition, pixel,
@@ -76,7 +73,7 @@ void CameraMouseWheelHandler::onMouseWheel(const G3MEventContext *eventContext,
   MutableMatrix44D matrix = planet->zoomUsingMouseWheel(factor,
                                                         camera->getCartesianPosition(),
                                                         camera->getViewDirection(),
-                                                        widget->getScenePositionForCentralPixel(),
+                                                        camera->getScenePositionForCentralPixel(),
                                                         touchedPosition,
                                                         initialRay);
   if (!matrix.isValid()) return;

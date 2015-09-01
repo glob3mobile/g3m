@@ -13,9 +13,9 @@
 #include "Camera.hpp"
 
 class CameraMouseWheelHandler : public CameraEventHandler {
-  
+  const double _factor;
 public:
-  CameraMouseWheelHandler()
+  CameraMouseWheelHandler(double factor = 0.1): _factor(factor)
   {}
   
   ~CameraMouseWheelHandler() {

@@ -245,18 +245,7 @@ public:
     _forceBusyRenderer = forceBusyRenderer;
   }
 
-  Vector3D getScenePositionForPixel(float x, float y);
-  
   double getDepthForPixel(float x, float y);
-
-  Vector3D getScenePositionForCentralPixel();
-  
-  Vector3D getFirstValidScenePositionForCentralColumn();
-
-  Vector3D getFirstValidScenePositionForFrameBufferColumn(int column);
-  
-  
-  //void notifyChangedInfo() const;
   
   void setInfoDisplay(InfoDisplay* infoDisplay) {
     _infoDisplay = infoDisplay;

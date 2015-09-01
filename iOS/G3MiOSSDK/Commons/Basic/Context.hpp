@@ -26,7 +26,6 @@ class IStorage;
 class OrderedRenderable;
 class GPUProgramManager;
 class SurfaceElevationProvider;
-class G3MWidget;
 
 #include "ITimer.hpp"
 #include <vector>
@@ -44,13 +43,10 @@ protected:
   EffectsScheduler*   _effectsScheduler;
   IStorage*           _storage;
 
-  G3MWidget*          _widget;
-
   SurfaceElevationProvider* _surfaceElevationProvider;
 
 public:
-  G3MContext(G3MWidget*                widget,
-             const IFactory*           factory,
+  G3MContext(const IFactory*           factory,
              const IStringUtils*       stringUtils,
              const IThreadUtils*       threadUtils,
              const ILogger*            logger,
@@ -71,17 +67,12 @@ public:
   _downloader(downloader),
   _effectsScheduler(effectsScheduler),
   _storage(storage),
-  _surfaceElevationProvider(surfaceElevationProvider),
-  _widget(widget)
+  _surfaceElevationProvider(surfaceElevationProvider)
   {
   }
 
   virtual ~G3MContext() {
 
-  }
-
-  G3MWidget* getWidget() const{
-    return _widget;
   }
 
   const IFactory* getFactory() const {
@@ -136,8 +127,7 @@ public:
 
 class G3MEventContext: public G3MContext {
 public:
-  G3MEventContext(G3MWidget*                widget,
-                  const IFactory*           factory,
+  G3MEventContext(const IFactory*           factory,
                   const IStringUtils*       stringUtils,
                   const IThreadUtils*       threadUtils,
                   const ILogger*            logger,
@@ -148,8 +138,7 @@ public:
                   EffectsScheduler*         scheduler,
                   IStorage*                 storage,
                   SurfaceElevationProvider* surfaceElevationProvider) :
-  G3MContext(widget,
-             factory,
+  G3MContext(factory,
              stringUtils,
              threadUtils,
              logger,
@@ -188,8 +177,7 @@ private:
   long long _frameCounter;
 
 public:
-  G3MRenderContext(G3MWidget*                widget,
-                   FrameTasksExecutor*       frameTasksExecutor,
+  G3MRenderContext(FrameTasksExecutor*       frameTasksExecutor,
                    const IFactory*           factory,
                    const IStringUtils*       stringUtils,
                    const IThreadUtils*       threadUtils,
@@ -207,8 +195,7 @@ public:
                    IStorage*                 storage,
                    GPUProgramManager*        gpuProgramManager,
                    SurfaceElevationProvider* surfaceElevationProvider) :
-  G3MContext(widget,
-             factory,
+  G3MContext(factory,
              stringUtils,
              threadUtils,
              logger,
