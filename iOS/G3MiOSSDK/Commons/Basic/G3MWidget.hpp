@@ -240,7 +240,7 @@ public:
     _forceBusyRenderer = forceBusyRenderer;
   }
 
-  Vector3D getScenePositionForPixel(int x, int y);
+  Vector3D getScenePositionForPixel(float x, float y);
 
   Vector3D getScenePositionForCentralPixel();
   
