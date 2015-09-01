@@ -1,33 +1,23 @@
 package org.glob3.mobile.generated; 
 //
-//  DeviceAttitudeCameraConstrainer.cpp
+//  DeviceAttitudeCameraHandler.cpp
 //  G3MiOSSDK
 //
-//  Created by Jose Miguel SN on 7/5/15.
+//  Created by Jose Miguel SN on 1/9/15.
 //
 //
 
 //
-//  DeviceAttitudeCameraConstrainer.hpp
+//  DeviceAttitudeCameraHandler.h
 //  G3MiOSSDK
 //
-//  Created by Jose Miguel SN on 7/5/15.
+//  Created by Jose Miguel SN on 1/9/15.
 //
 //
 
 
 
-//class ITimer;
-
-
-/**
- Class that applies the Rotation obtained with IDeviceAttitude and IInterfaceOrientation to the camera.
- 
- It translate to the Global Coordinate System to the Local CS on the camera geodetic location.
- 
- **/
-
-public class DeviceAttitudeCameraConstrainer implements ICameraConstrainer
+public class DeviceAttitudeCameraHandler extends CameraEventHandler
 {
 
   private MutableMatrix44D _localRM = new MutableMatrix44D();
@@ -40,11 +30,11 @@ public class DeviceAttitudeCameraConstrainer implements ICameraConstrainer
   private ITimer _timer;
 
 
-  public DeviceAttitudeCameraConstrainer(boolean updateLocation)
+  public DeviceAttitudeCameraHandler(boolean updateLocation)
   {
      this(updateLocation, 1000);
   }
-  public DeviceAttitudeCameraConstrainer(boolean updateLocation, double heightOffset)
+  public DeviceAttitudeCameraHandler(boolean updateLocation, double heightOffset)
   {
      _updateLocation = updateLocation;
      _heightOffset = heightOffset;
@@ -62,16 +52,19 @@ public class DeviceAttitudeCameraConstrainer implements ICameraConstrainer
        _timer.dispose();
   }
 
-  public final boolean onCameraChange(Planet planet, Camera previousCamera, Camera nextCamera)
+  public final void render(G3MRenderContext rc, CameraContext cameraContext)
   {
+  
   
   
     IDeviceAttitude devAtt = IDeviceAttitude.instance();
   
+    Camera nextCamera = rc.getNextCamera();
+  
     if (devAtt == null)
     {
       ILogger.instance().logError("IDeviceAttitude not initilized");
-      return false;
+      return;
     }
   
     if (!devAtt.isTracking())
@@ -83,7 +76,7 @@ public class DeviceAttitudeCameraConstrainer implements ICameraConstrainer
     IDeviceAttitude.instance().copyValueOfRotationMatrix(_attitudeMatrix);
     if (!_attitudeMatrix.isValid())
     {
-      return false;
+      return;
     }
   
     Geodetic3D camPosition = nextCamera.getGeodeticPosition();
@@ -95,7 +88,7 @@ public class DeviceAttitudeCameraConstrainer implements ICameraConstrainer
     CoordinateSystem camCS = IDeviceAttitude.instance().getCameraCoordinateSystemForInterfaceOrientation(ori);
   
     //Transforming global rotation to local rotation
-    CoordinateSystem local = planet.getCoordinateSystemAt(camPosition);
+    CoordinateSystem local = rc.getPlanet().getCoordinateSystemAt(camPosition);
     local.copyValueOfRotationMatrix(_localRM);
     _camRM.copyValueOfMultiplication(_localRM, _attitudeMatrix);
   
@@ -116,7 +109,6 @@ public class DeviceAttitudeCameraConstrainer implements ICameraConstrainer
       if ((t - _lastLocationUpdateTimeInMS > 5000) || (_lastLocationUpdateTimeInMS == 0))
       {
   
-  
         IDeviceLocation loc = IDeviceLocation.instance();
         if (!loc.isTrackingLocation())
         {
@@ -128,12 +120,44 @@ public class DeviceAttitudeCameraConstrainer implements ICameraConstrainer
         {
           _lastLocationUpdateTimeInMS = t;
   
-          nextCamera.setGeodeticPosition(Geodetic3D.fromDegrees(g._latitude._degrees, g._longitude._degrees, g._height + _heightOffset));
+          if (nextCamera.hasValidViewDirection())
+          {
+            nextCamera.setGeodeticPosition(Geodetic3D.fromDegrees(g._latitude._degrees, g._longitude._degrees, g._height + _heightOffset));
+          }
+          else
+          {
+            ILogger.instance().logWarning("Trying to set position of unvalid camera. ViewDirection: %s", nextCamera.getViewDirection().description());
+          }
         }
       }
   
     }
-  
-    return true;
   }
+
+  public boolean onTouchEvent(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
+  {
+     return false;
+  }
+
+
+  public void onDown(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
+  {
+  }
+
+  public void onMove(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
+  {
+  }
+
+  public void onUp(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
+  {
+  }
+
+  public final void setDebugMeshRenderer(MeshRenderer meshRenderer)
+  {
+  }
+
+  public final void onMouseWheel(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
+  {
+  }
+
 }

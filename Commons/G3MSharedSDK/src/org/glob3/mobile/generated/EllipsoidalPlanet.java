@@ -103,7 +103,7 @@ public class EllipsoidalPlanet extends Planet
 
   public final java.util.ArrayList<Double> intersectionsDistances(double originX, double originY, double originZ, double directionX, double directionY, double directionZ)
   {
-    return _ellipsoid.intersectionsDistances(originX, originY, originZ, directionX, directionY, directionZ);
+    return _ellipsoid.intersectionsDistances(originX, originY, originZ, directionX, directionY, directionZ, _oneOverDragRadiiSquared.x(), _oneOverDragRadiiSquared.y(), _oneOverDragRadiiSquared.z());
   }
 
   public final Vector3D toCartesian(Angle latitude, Angle longitude, double height)
@@ -182,6 +182,14 @@ public class EllipsoidalPlanet extends Planet
     final double height = (h.dot(position) < 0) ? -1 * h.length() : h.length();
   
     return new Geodetic3D(toGeodetic2D(p), height);
+  }
+
+  public final double getGeodetic3DHeight(Vector3D position)
+  {
+    final Vector3D p = scaleToGeodeticSurface(position);
+    final Vector3D h = position.sub(p);
+  
+    return (h.dot(position) < 0) ? -1 * h.length() : h.length();
   }
 
   public final Vector3D scaleToGeodeticSurface(Vector3D position)
@@ -515,7 +523,7 @@ public class EllipsoidalPlanet extends Planet
     final Angle angle = Angle.fromRadians(- mu.asin(axis.length()/touchedPosition.length()/centerPoint.length()));
   
     // compute zoom factor
-    final double distanceToGround = toGeodetic3D(origin)._height - toGeodetic3D(touchedPosition)._height;
+    final double distanceToGround = getGeodetic3DHeight(origin) - getGeodetic3DHeight(touchedPosition);
     final double distance = distanceToGround * 0.6;
   
     // create effect
@@ -561,12 +569,6 @@ public class EllipsoidalPlanet extends Planet
     final double height = asw.sub(ane).length() * 1.9;
 
     return new Geodetic3D(rendereSector._center, height);
-  }
-
-
-  public final void correctPitchAfterDoubleDrag(Camera camera, Vector2F finalPixel0, Vector2F finalPixel1)
-  {
-    _sphericalPlanetDoubleDragDelegate.correctPitchAfterDoubleDrag(camera, finalPixel0, finalPixel1);
   }
 
   public final String getType()

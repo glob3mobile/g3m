@@ -271,7 +271,7 @@ public class Angle
     return new Angle(degrees, ((degrees) / 180.0 * 3.14159265358979323846264338327950288));
   }
 
-  public final double getNormalizedDegrees()
+  public final double getNormalizedDegrees360()
   {
     double degrees = _degrees;
     while (degrees < 0)

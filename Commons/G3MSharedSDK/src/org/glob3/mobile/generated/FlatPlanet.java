@@ -176,6 +176,11 @@ public class FlatPlanet extends Planet
     return new Geodetic3D(toGeodetic2D(position), position._z);
   }
 
+  public final double getGeodetic3DHeight(Vector3D position)
+  {
+    return position._z;
+  }
+
   public final Vector3D scaleToGeodeticSurface(Vector3D position)
   {
     return new Vector3D(position._x, position._y, 0);
@@ -221,7 +226,7 @@ public class FlatPlanet extends Planet
     _origin = origin.asMutableVector3D();
     //_initialPoint = Plane::intersectionXYPlaneWithRay(origin, initialRay).asMutableVector3D();
     _initialPoint = touchedPosition.asMutableVector3D();
-    _dragHeight = toGeodetic3D(touchedPosition)._height;
+    _dragHeight = getGeodetic3DHeight(touchedPosition);
   
     //printf("INiTIAL POINT EN %f, %f, %f\n ", _initialPoint.x(), _initialPoint.y(), _initialPoint.z());
   
@@ -262,9 +267,9 @@ public class FlatPlanet extends Planet
     _origin = origin.asMutableVector3D();
     _centerRay = centerRay.asMutableVector3D();
     _initialPoint0 = touchedPosition0.asMutableVector3D();
-    _dragHeight0 = toGeodetic3D(touchedPosition0)._height;
+    _dragHeight0 = getGeodetic3DHeight(touchedPosition0);
     _initialPoint1 = touchedPosition1.asMutableVector3D();
-    _dragHeight1 = toGeodetic3D(touchedPosition1)._height;
+    _dragHeight1 = getGeodetic3DHeight(touchedPosition1);
     _centerPoint = centerPosition.asMutableVector3D();
     _lastDoubleDragAngle = 0;
   }
@@ -359,11 +364,11 @@ public class FlatPlanet extends Planet
     if (touchedPosition.isNan())
        return null;
     //const Vector3D centerPoint = Plane::intersectionXYPlaneWithRay(origin, centerRay);
-    double dragHeight = toGeodetic3D(touchedPosition)._height;
+    double dragHeight = getGeodetic3DHeight(touchedPosition);
     final Vector3D centerPoint = Plane.intersectionXYPlaneWithRay(origin, centerRay, dragHeight);
   
     // create effect
-    double distanceToGround = toGeodetic3D(origin)._height - dragHeight;
+    double distanceToGround = getGeodetic3DHeight(origin) - dragHeight;
   
     //printf("\n-- double tap to height %.2f, desde mi altura=%.2f\n", dragHeight, toGeodetic3D(origin)._height);
   

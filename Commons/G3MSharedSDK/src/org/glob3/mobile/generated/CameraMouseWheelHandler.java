@@ -19,9 +19,14 @@ package org.glob3.mobile.generated;
 
 public class CameraMouseWheelHandler extends CameraEventHandler
 {
-
+  private final double _factor;
   public CameraMouseWheelHandler()
   {
+     this(0.1);
+  }
+  public CameraMouseWheelHandler(double factor)
+  {
+     _factor = factor;
   }
 
   public void dispose()
@@ -41,7 +46,7 @@ public class CameraMouseWheelHandler extends CameraEventHandler
     return false;
   
   /*
-    //**** THIS CODE IS TO TEST MOUSEWHEELHANDLER
+    /**** THIS CODE IS TO TEST MOUSEWHEELHANDLER
     // only one finger needed
     if (touchEvent->getTouchCount()!=1) return false;
     if (touchEvent->getTapCount()>1) return false;
@@ -91,15 +96,11 @@ public class CameraMouseWheelHandler extends CameraEventHandler
     camera.getViewPortInto(cameraViewPort);
   
     final double delta = touchEvent.getMouseWheelDelta();
-    double factor = 0.1;
-    if (delta < 0)
-    {
-      factor *= -1;
-    }
   
-    G3MWidget widget = eventContext.getWidget();
+    double factor = delta< 0? - _factor : _factor;
+  
     final Vector2F pixel = touchEvent.getTouch(0).getPos();
-    Vector3D touchedPosition = widget.getScenePositionForPixel((int)pixel._x, (int)pixel._y);
+    Vector3D touchedPosition = camera.getScenePositionForPixel(pixel._x, pixel._y);
     if (touchedPosition.isNan())
        return;
   
@@ -108,7 +109,7 @@ public class CameraMouseWheelHandler extends CameraEventHandler
        return;
   
     final Planet planet = eventContext.getPlanet();
-    MutableMatrix44D matrix = planet.zoomUsingMouseWheel(factor, camera.getCartesianPosition(), camera.getViewDirection(), widget.getScenePositionForCentralPixel(), touchedPosition, initialRay);
+    MutableMatrix44D matrix = planet.zoomUsingMouseWheel(factor, camera.getCartesianPosition(), camera.getViewDirection(), camera.getScenePositionForCentralPixel(), touchedPosition, initialRay);
     if (!matrix.isValid())
        return;
   

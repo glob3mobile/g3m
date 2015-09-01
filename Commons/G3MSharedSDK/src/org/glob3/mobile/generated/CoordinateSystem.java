@@ -59,8 +59,8 @@ public class CoordinateSystem
     if (!checkConsistency(x, y, z))
     {
       ILogger.instance().logError("Inconsistent CoordinateSystem created.");
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning DO NOT STOP EXECUTION, I WILL CHECK CONSISTENCY LATER ON
+  
+      //DO NOT STOP EXECUTION, I WILL CHECK CONSISTENCY LATER ON
       //THROW_EXCEPTION("Inconsistent CoordinateSystem created.");
     }
   }

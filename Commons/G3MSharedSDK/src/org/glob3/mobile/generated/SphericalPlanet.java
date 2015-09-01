@@ -463,6 +463,14 @@ public class SphericalPlanet extends Planet
     return new Geodetic3D(toGeodetic2D(p), height);
   }
 
+  public final double getGeodetic3DHeight(Vector3D position)
+  {
+    final Vector3D p = scaleToGeodeticSurface(position);
+    final Vector3D h = position.sub(p);
+  
+    return (h.dot(position) < 0) ? -1 * h.length() : h.length();
+  }
+
   public final void toGeodetic3D(MutableVector3D position, MutableVector3D result)
   {
     double px = position.x() * _sphere._radius;
@@ -663,7 +671,7 @@ public class SphericalPlanet extends Planet
     _origin = origin.asMutableVector3D();
     //_initialPoint = closestIntersection(origin, initialRay).asMutableVector3D();
     _initialPoint = touchedPosition.asMutableVector3D();
-    _dragRadius = _sphere._radius + toGeodetic3D(touchedPosition)._height;
+    _dragRadius = _sphere._radius + getGeodetic3DHeight(touchedPosition);
   
     _validSingleDrag = false;
   }
@@ -705,9 +713,9 @@ public class SphericalPlanet extends Planet
     _centerRay = centerRay.normalized().asMutableVector3D();
     _initialPoint0 = touchedPosition0.asMutableVector3D();
   
-    _dragRadius0 = _sphere._radius + toGeodetic3D(touchedPosition0)._height;
+    _dragRadius0 = _sphere._radius + getGeodetic3DHeight(touchedPosition0);
     _initialPoint1 = touchedPosition1.asMutableVector3D();
-    _dragRadius1 = _sphere._radius + toGeodetic3D(touchedPosition1)._height;
+    _dragRadius1 = _sphere._radius + getGeodetic3DHeight(touchedPosition1);
     _centerPoint = centerPosition.asMutableVector3D();
     _lastDoubleDragAngle = 0;
     _lastCorrectingRollAngle = java.lang.Double.NaN;
@@ -904,7 +912,7 @@ public class SphericalPlanet extends Planet
   
     // compute central point of view
     //const Vector3D centerPoint = closestIntersection(origin, centerRay);
-    double touchedHeight = toGeodetic3D(touchedPosition)._height;
+    double touchedHeight = getGeodetic3DHeight(touchedPosition);
     double dragRadius = _sphere._radius + touchedHeight;
     final Vector3D centerPoint = Sphere.closestIntersectionCenteredSphereWithRay(origin, centerRay, dragRadius);
   
@@ -914,7 +922,7 @@ public class SphericalPlanet extends Planet
     final Angle angle = Angle.fromRadians(- mu.asin(axis.length()/touchedPosition.length()/centerPoint.length()));
   
     // compute zoom factor
-    final double distanceToGround = toGeodetic3D(origin)._height - touchedHeight;
+    final double distanceToGround = getGeodetic3DHeight(origin) - touchedHeight;
     final double distance = distanceToGround * 0.6;
   
     // create effect
@@ -972,110 +980,6 @@ public class SphericalPlanet extends Planet
     return new Geodetic3D(rendereSector._center, height);
   }
 
-  public final void correctPitchAfterDoubleDrag(Camera camera, Vector2F finalPixel0, Vector2F finalPixel1)
-  {
-  
-    Vector3D finalPoint0 = camera.pixel2PlanetPoint(finalPixel0);
-    Vector3D finalPoint1 = camera.pixel2PlanetPoint(finalPixel1);
-    if (finalPoint0.isNan() || finalPoint1.isNan())
-    {
-      return;
-    }
-  
-    //  printf("dist = %f\n", finalPoint0.distanceTo(finalPoint1));
-  
-    Vector3D axis = finalPoint0.sub(finalPoint1);
-  
-  
-    //Avoiding big jumps
-    boolean axisCorrect = true;
-    boolean angleCorrect = true;
-    if (_lastCorrectingRollRotationAxis.isNan())
-    {
-      _lastCorrectingRollRotationAxis.copyFrom(axis);
-    }
-    else
-    {
-      double axisDirectionJump = axis.angleBetween(_lastCorrectingRollRotationAxis.asVector3D())._degrees;
-      axisCorrect = (axisDirectionJump < 5.0);
-    }
-  
-    if (axisCorrect)
-    {
-  
-      //Taking axis to camera coordinate system
-      MutableMatrix44D csm = new MutableMatrix44D(camera.getModelMatrix44D());
-      Vector3D axisCS = axis.transformedBy(csm, 0.0).normalized(); //ROTATION AXIS
-      Vector3D rotationPointCS = finalPoint0.transformedBy(csm, 1.0); //ROTATION POINT
-      Vector3D planetCenterCS = Vector3D.zero.transformedBy(csm, 1.0); //Point to be dragged
-  
-      //The angle should take the planet center to the center of the view (Plane ZY) -> X = 0
-  
-      double angleInRadians = _lastCorrectingRollAngle;
-  
-      java.util.ArrayList<Double> angs = planetCenterCS.rotationAngleInRadiansToYZPlane(axisCS, rotationPointCS);
-      if (angs.size() > 0)
-      {
-  
-        Angle a0 = Angle.fromRadians(angs.get(0));
-        Angle a1 = Angle.fromRadians(angs.get(1));
-        Angle last = Angle.fromRadians(_lastCorrectingRollAngle);
-  
-        //angleInRadians = a0.distanceTo(last)._radians < a1.distanceTo(last)._radians? a0._radians : a1._radians;
-  
-        if (a0.distanceTo(last)._radians < a1.distanceTo(last)._radians)
-          angleInRadians = a0._radians;
-        else
-          angleInRadians = a1._radians;
-  
-        angleInRadians *= -1; //Inverting for camera
-  
-        if ((_lastCorrectingRollAngle != _lastCorrectingRollAngle))
-        {
-          _lastCorrectingRollAngle = angleInRadians;
-        }
-        else
-        {
-          double jump = Angle.fromRadians(angleInRadians).distanceTo(Angle.fromRadians(_lastCorrectingRollAngle))._degrees;
-          angleCorrect = (jump < 20);
-          //      if (jump > 20){
-          //        printf("CORRECTED ROLL JUMPED %f DEGREES\n", jump);
-          //        angleInRadians = _lastCorrectingRollAngle;
-          //      }
-        }
-  
-  
-  
-      }
-      else
-      {
-        System.out.print("NONE CORRECT ROLL ANGLE FOR THIS FRAME\n");
-      }
-  
-      if (angleCorrect) //In angle and axis haven't change much
-      {
-        Angle angle = Angle.fromRadians(angleInRadians);
-  
-        //printf("CORRECTING ROLL %f GRAD\n", angle->_degrees);
-        MutableMatrix44D m = MutableMatrix44D.createGeneralRotationMatrix(angle, axis, finalPoint0);
-        camera.applyTransform(m);
-  
-        //Storing for next frame
-        _lastCorrectingRollAngle = angle._radians;
-        _lastCorrectingRollRotationAxis.copyFrom(axis);
-      }
-      else
-      {
-        System.out.print("ROLL ANGLE JUMPED\n");
-      }
-  
-    }
-    else
-    {
-      System.out.print("ROLL AXIS JUMPED\n");
-    }
-  }
-
   public final String getType()
   {
     return "Spherical";
@@ -1089,7 +993,7 @@ public class SphericalPlanet extends Planet
     MutableMatrix44D matrix = MutableMatrix44D.createTranslationMatrix(translation);
   
     // compute new final point after moving forward
-    double dragRadius = _sphere._radius + toGeodetic3D(touchedPosition)._height;
+    double dragRadius = _sphere._radius + getGeodetic3DHeight(touchedPosition);
     final Vector3D finalPoint = Sphere.closestIntersectionCenteredSphereWithRay(origin.add(translation), finalRay, dragRadius);
     if (_finalPoint0.isNan())
     {
