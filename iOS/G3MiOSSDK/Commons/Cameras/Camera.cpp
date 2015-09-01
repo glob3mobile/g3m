@@ -193,11 +193,6 @@ const Vector3D Camera::pixel2Ray(const Vector3D& pixel3D) const {
   return obj.sub(_position.asVector3D());
 }
 
-/*void Camera::setGeodeticPositionStablePitch(const Geodetic3D& g3d) {
-  MutableMatrix44D dragMatrix = _planet->drag(getGeodeticPosition(), g3d);
-  if (dragMatrix.isValid()) applyTransform(dragMatrix);
-}*/
-
 const Vector3D Camera::pixel2Ray(const Vector2F& pixel) const {
   const float px = pixel._x;
   const float py = _viewPortHeight - pixel._y;

@@ -64,34 +64,6 @@ void CameraDoubleDragHandler::onDown(const G3MEventContext *eventContext,
   const Vector2F pixel1 = touchEvent.getTouch(1)->getPos();
   Vector3D touchedPosition1 = widget->getScenePositionForPixel((int)pixel1._x, (int)pixel1._y);
   
-/*
-  // draw scene points int render debug mode
-  if (_meshRenderer != NULL) {
-    FloatBufferBuilderFromCartesian3D* vertices = FloatBufferBuilderFromCartesian3D::builderWithoutCenter();
-    vertices->add(0.0f, 0.0f, 0.0f);
-    Mesh* mesh0 = new DirectMesh(GLPrimitive::points(),
-                                true,
-                                touchedPosition0,
-                                vertices->create(),
-                                1,
-                                80,
-                                Color::newFromRGBA(1, 0, 0, 1));
-    Mesh* mesh1 = new DirectMesh(GLPrimitive::points(),
-                                true,
-                                touchedPosition1,
-                                vertices->create(),
-                                1,
-                                80,
-                                Color::newFromRGBA(1, 0, 0, 1));
-    delete vertices;
-    _meshRenderer->addMesh(mesh0);
-    _meshRenderer->addMesh(mesh1);
-  }*/
-
-  //const Vector3D& initialRay0 = camera->pixel2Ray(pixel0);
-  //const Vector3D& initialRay1 = camera->pixel2Ray(pixel1);
-  //if ( initialRay0.isNan() || initialRay1.isNan() ) return;
-  
   cameraContext->setCurrentGesture(DoubleDrag);
   eventContext->getPlanet()->beginDoubleDrag(camera->getCartesianPosition(),
                                              camera->getViewDirection(),
@@ -110,17 +82,6 @@ void CameraDoubleDragHandler::onMove(const G3MEventContext *eventContext,
   const Planet* planet = eventContext->getPlanet();
   const Vector2F pixel0 = touchEvent.getTouch(0)->getPos();
   const Vector2F pixel1 = touchEvent.getTouch(1)->getPos();
-  
-  /*
-  if (type == Move &&
-      (_camera0.pixel2PlanetPoint(pixel0).isNan() ||
-       _camera0.pixel2PlanetPoint(pixel1).isNan())){
-        //printf("FINGERS OUT OF INITIAL PLANET\n");
-        //FIXING THIS CASE
-        onUp(eventContext, *touchEvent, cameraContext);
-        type = Down;
-      }*/
-  
 
   const Vector3D& initialRay0 = Camera::pixel2Ray(_cameraPosition, pixel0,
                                                   _cameraViewPort, _cameraModelViewMatrix);
