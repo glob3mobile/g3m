@@ -618,12 +618,12 @@ IImageBuilder* MapBoo::MBCircleShape::createImageBuilder() const {
 LabelImageBuilder* MapBoo::MBVectorSymbology::createLabelImageBuilder(const std::string& label) const {
   return new LabelImageBuilder(label,
                                GFont::sansSerif(18, true),
-                               2,               // margin
+                               2.0f,            // margin
                                Color::white(),  // color
                                Color::black(),  // shadowColor
-                               2.5,             // shadowBlur
-                               0,               // shadowOffsetX
-                               0                // shadowOffsetY
+                               2.0f,            // shadowBlur
+                               0.0f,            // shadowOffsetX
+                               0.0f             // shadowOffsetY
                                );
 }
 
