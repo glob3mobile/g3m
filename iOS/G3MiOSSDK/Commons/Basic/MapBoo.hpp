@@ -21,7 +21,7 @@ class IDownloader;
 class JSONBaseObject;
 class JSONArray;
 class MarksRenderer;
-
+class IImageBuilder;
 
 class MapBoo {
 
@@ -110,6 +110,8 @@ public:
 
     }
 
+    virtual IImageBuilder* createImageBuilder() const = 0;
+
   };
 
 
@@ -134,6 +136,9 @@ public:
       super.dispose();
 #endif
     }
+
+    IImageBuilder* createImageBuilder() const;
+
   };
 
 
@@ -145,6 +150,8 @@ public:
 
     const std::string  createMarkLabel(const JSONObject* properties) const;
     MarkTouchListener* createMarkTouchListener(const JSONObject* properties) const;
+
+    IImageBuilder* createImageBuilder(const JSONObject* properties) const;
 
   protected:
     virtual ~MBVectorSymbology() {

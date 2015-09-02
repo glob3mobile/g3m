@@ -23,6 +23,10 @@
 #include "GEO2DPointGeometry.hpp"
 #include "Mark.hpp"
 #include "IStringBuilder.hpp"
+#include "LabelImageBuilder.hpp"
+#include "ColumnLayoutImageBuilder.hpp"
+#include "CircleImageBuilder.hpp"
+
 
 MapBoo::MapBoo(IG3MBuilder* builder,
                const URL&   serverURL,
@@ -555,30 +559,6 @@ void MapBoo::MBSymbolizedDataset::apply(const URL&               serverURL,
   _symbology->apply(serverURL, vectorStreamingRenderer);
 }
 
-const std::string MapBoo::MBVectorSymbology::createMarkLabel(const JSONObject* properties) const {
-  const size_t labelingSize = _labeling.size();
-  if ((labelingSize == 0) || (properties->size() == 0)) {
-    return "<label>";
-  }
-  else if (labelingSize == 1) {
-    return JSONBaseObject::toString( properties->get(_labeling[0]) );
-  }
-  else {
-    IStringBuilder* labelBuilder = IStringBuilder::newStringBuilder();
-    for (int i = 0; i < labelingSize; i++) {
-      if (i > 0) {
-        labelBuilder->addString(" ");
-      }
-      const std::string value = JSONBaseObject::toString( properties->get(_labeling[i]) );
-      labelBuilder->addString( value );
-    }
-
-    const std::string label = labelBuilder->getString();
-    delete labelBuilder;
-    return label;
-  }
-}
-
 bool MapBoo::MBFeatureMarkTouchListener::touchedMark(Mark* mark) {
   _handler->onFeatureTouched(_datasetName, _info, _properties);
   return true;
@@ -606,33 +586,95 @@ MarkTouchListener* MapBoo::MBVectorSymbology::createMarkTouchListener(const JSON
   return new MBFeatureMarkTouchListener(_datasetName, _handler, _info, infoProperties);
 }
 
-Mark* MapBoo::MBVectorSymbology::createMark(const GEO2DPointGeometry* geometry) const {
-#warning TODO: Shape, Shape+label
+const std::string MapBoo::MBVectorSymbology::createMarkLabel(const JSONObject* properties) const {
+  const size_t labelingSize = _labeling.size();
+  if ((labelingSize == 0) || (properties->size() == 0)) {
+    return "<label>";
+  }
+  else if (labelingSize == 1) {
+    return JSONBaseObject::toString( properties->get(_labeling[0]) );
+  }
+  else {
+    IStringBuilder* labelBuilder = IStringBuilder::newStringBuilder();
+    for (int i = 0; i < labelingSize; i++) {
+      if (i > 0) {
+        labelBuilder->addString(" ");
+      }
+      const std::string value = JSONBaseObject::toString( properties->get(_labeling[i]) );
+      labelBuilder->addString( value );
+    }
 
+    const std::string label = labelBuilder->getString();
+    delete labelBuilder;
+    return label;
+  }
+}
+
+
+IImageBuilder* MapBoo::MBCircleShape::createImageBuilder() const {
+  return new CircleImageBuilder(_color, _radius);
+}
+
+IImageBuilder* MapBoo::MBVectorSymbology::createImageBuilder(const JSONObject* properties) const {
+  const bool hasLabeling = (_labeling.size() != 0) && (properties->size() != 0);
+  const bool hasShape    = (_shape != NULL);
+
+  if (hasLabeling) {
+    if (hasShape) {
+      return new ColumnLayoutImageBuilder(new LabelImageBuilder(createMarkLabel(properties)),
+                                          _shape->createImageBuilder());
+    }
+
+    return new LabelImageBuilder(createMarkLabel(properties));
+  }
+
+  if (hasShape) {
+    return _shape->createImageBuilder();
+  }
+
+  return new LabelImageBuilder("[X]");
+}
+
+
+Mark* MapBoo::MBVectorSymbology::createMark(const GEO2DPointGeometry* geometry) const {
   const GEOFeature* feature    = geometry->getFeature();
   const JSONObject* properties = feature->getProperties();
   const Geodetic2D  position   = geometry->getPosition();
 
-  return new Mark(createMarkLabel(properties),
+
+//  /**
+//   * Creates a mark whith a IImageBuilder, in future versions it'll be the only constructor
+//   */
+//  Mark(IImageBuilder*     imageBuilder,
+//       const Geodetic3D&  position,
+//       AltitudeMode       altitudeMode,
+//       double             minDistanceToCamera=4.5e+06,
+//       MarkUserData*      userData=NULL,
+//       bool               autoDeleteUserData=true,
+//       MarkTouchListener* listener=NULL,
+//       bool               autoDeleteListener=false);
+//
+
+  return new Mark(createImageBuilder(properties),
                   Geodetic3D(position, 0),
                   ABSOLUTE,
                   0,                                    // minDistanceToCamera
-                  18,                                   // labelFontSize
-                  Color::newFromRGBA(1, 1, 1, 1),       // labelFontColor
-                  Color::newFromRGBA(0, 0, 0, 1),       // labelShadowColor
                   NULL,                                 // userData
                   true,                                 // autoDeleteUserData
                   createMarkTouchListener(properties),
                   true                                  // autoDeleteListener
                   );
 
-  //  return new Mark(URL("file:///icon.png"),
-  //                  Geodetic3D(position, 0),
-  //                  ABSOLUTE,
-  //                  0,
-  //                  NULL,
-  //                  true,
-  //                  createMarkTouchListener(properties),
-  //                  true);
-  
+//  return new Mark(createMarkLabel(properties),
+//                  Geodetic3D(position, 0),
+//                  ABSOLUTE,
+//                  0,                                    // minDistanceToCamera
+//                  18,                                   // labelFontSize
+//                  Color::newFromRGBA(1, 1, 1, 1),       // labelFontColor
+//                  Color::newFromRGBA(0, 0, 0, 1),       // labelShadowColor
+//                  NULL,                                 // userData
+//                  true,                                 // autoDeleteUserData
+//                  createMarkTouchListener(properties),
+//                  true                                  // autoDeleteListener
+//                  );
 }

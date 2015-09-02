@@ -24,6 +24,7 @@
 #include "TextureIDReference.hpp"
 #include "ErrorHandling.hpp"
 #include "Effects.hpp"
+#include "IImageBuilder.hpp"
 
 
 class MarkEffectTarget : public EffectTarget {
@@ -197,6 +198,7 @@ Mark::Mark(const std::string& label,
            bool               autoDeleteUserData,
            MarkTouchListener* listener,
            bool               autoDeleteListener) :
+_imageBuilder(NULL),
 _label(label),
 _iconURL(iconURL),
 _position(new Geodetic3D(position)),
@@ -252,6 +254,7 @@ Mark::Mark(const std::string& label,
            bool               autoDeleteUserData,
            MarkTouchListener* listener,
            bool               autoDeleteListener) :
+_imageBuilder(NULL),
 _label(label),
 _labelBottom(true),
 _iconURL("", false),
@@ -304,6 +307,7 @@ Mark::Mark(const URL&         iconURL,
            bool               autoDeleteUserData,
            MarkTouchListener* listener,
            bool               autoDeleteListener) :
+_imageBuilder(NULL),
 _label(""),
 _labelBottom(true),
 _iconURL(iconURL),
@@ -357,6 +361,7 @@ Mark::Mark(const IImage*      image,
            bool               autoDeleteUserData,
            MarkTouchListener* listener,
            bool               autoDeleteListener) :
+_imageBuilder(NULL),
 _label(""),
 _labelBottom(true),
 _iconURL(URL("", false)),
@@ -399,6 +404,60 @@ _effectTarget(NULL)
 
 }
 
+Mark::Mark(IImageBuilder*     imageBuilder,
+           const Geodetic3D&  position,
+           AltitudeMode       altitudeMode,
+           double             minDistanceToCamera,
+           MarkUserData*      userData,
+           bool               autoDeleteUserData,
+           MarkTouchListener* listener,
+           bool               autoDeleteListener) :
+_imageBuilder(imageBuilder),
+_label(""),
+_labelBottom(true),
+_iconURL(URL("", false)),
+_position(new Geodetic3D(position)),
+_altitudeMode(altitudeMode),
+_labelFontSize(20),
+_labelFontColor(NULL),
+_labelShadowColor(NULL),
+_labelGapSize(2),
+_textureId(NULL),
+_cartesianPosition(NULL),
+_textureSolved(false),
+_textureImage(NULL),
+_renderedMark(false),
+_textureWidth(0),
+_textureHeight(0),
+_userData(userData),
+_autoDeleteUserData(autoDeleteUserData),
+_minDistanceToCamera(minDistanceToCamera),
+_listener(listener),
+_autoDeleteListener(autoDeleteListener),
+_imageID( "" ),
+_surfaceElevationProvider(NULL),
+_currentSurfaceElevation(0.0),
+_glState(NULL),
+_normalAtMarkPosition(NULL),
+_textureSizeSetExternally(false),
+_hasTCTransformations(false),
+_anchorU(0.5),
+_anchorV(0.5),
+_billboardGLF(NULL),
+_textureHeightProportion(1.0),
+_textureWidthProportion(1.0),
+_initialized(false),
+_zoomInAppears(true),
+_effectsScheduler(NULL),
+_firstRender(true),
+_effectTarget(NULL)
+{
+  if (_imageBuilder->isMutable()) {
+    ILogger::instance()->logError("Marks doesn't support mutable image builders");
+  }
+}
+
+
 void Mark::initialize(const G3MContext* context,
                       long long downloadPriority) {
   _initialized = true;
@@ -412,35 +471,42 @@ void Mark::initialize(const G3MContext* context,
   }
 
   if (!_textureSolved) {
-    const bool hasIconURL = ( _iconURL._path.length() != 0 );
-    if (hasIconURL) {
-      IDownloader* downloader = context->getDownloader();
-
-      downloader->requestImage(_iconURL,
-                               downloadPriority,
-                               TimeInterval::fromDays(30),
-                               true,
-                               new IconDownloadListener(this,
-                                                        _label,
-                                                        _labelBottom,
-                                                        _labelFontSize,
-                                                        _labelFontColor,
-                                                        _labelShadowColor,
-                                                        _labelGapSize),
-                               true);
+    if (_imageBuilder != NULL) {
+      _imageBuilder->build(context,
+                           new ImageBuilderListener(this),
+                           true);
     }
     else {
-      const bool hasLabel = ( _label.length() != 0 );
-      if (hasLabel) {
-        ITextUtils::instance()->createLabelImage(_label,
-                                                 _labelFontSize,
-                                                 _labelFontColor,
-                                                 _labelShadowColor,
-                                                 new MarkLabelImageListener(NULL, this),
-                                                 true);
+      const bool hasIconURL = ( _iconURL._path.length() != 0 );
+      if (hasIconURL) {
+        IDownloader* downloader = context->getDownloader();
+
+        downloader->requestImage(_iconURL,
+                                 downloadPriority,
+                                 TimeInterval::fromDays(30),
+                                 true,
+                                 new IconDownloadListener(this,
+                                                          _label,
+                                                          _labelBottom,
+                                                          _labelFontSize,
+                                                          _labelFontColor,
+                                                          _labelShadowColor,
+                                                          _labelGapSize),
+                                 true);
       }
       else {
-        ILogger::instance()->logWarning("Mark created without label nor icon");
+        const bool hasLabel = ( _label.length() != 0 );
+        if (hasLabel) {
+          ITextUtils::instance()->createLabelImage(_label,
+                                                   _labelFontSize,
+                                                   _labelFontColor,
+                                                   _labelShadowColor,
+                                                   new MarkLabelImageListener(NULL, this),
+                                                   true);
+        }
+        else {
+          ILogger::instance()->logWarning("Mark created without label nor icon");
+        }
       }
     }
   }
@@ -513,6 +579,8 @@ Mark::~Mark() {
   }
 
   delete _textureImage;
+
+  delete _imageBuilder;
 
   if (_glState != NULL) {
     _glState->_release();
@@ -797,9 +865,9 @@ void Mark::setTextureCoordinatesTransformation(const Vector2F& translation,
     _textureGLF->setTranslation(_translationTCX, _translationTCY);
     _textureGLF->setScale(_scalingTCX, _scalingTCY);
   } else{
-    
+
   }
-  
+
 }
 
 void Mark::setMarkAnchor(float anchorU, float anchorV){
@@ -808,4 +876,53 @@ void Mark::setMarkAnchor(float anchorU, float anchorV){
   }
   _anchorU = anchorU;
   _anchorV = anchorV;
+}
+
+void Mark::onImageCreationError(const std::string& error) {
+  _textureSolved = true;
+
+//  delete _labelFontColor;
+//  _labelFontColor = NULL;
+//  delete _labelShadowColor;
+//  _labelShadowColor = NULL;
+  delete _imageBuilder;
+  _imageBuilder = NULL;
+
+  ILogger::instance()->logError("Can't create image for Mark: \"%s\"",
+                                error.c_str());
+}
+
+void Mark::onImageCreated(const IImage* image,
+                          const std::string& imageName) {
+  _textureSolved = true;
+  _imageID = imageName;
+
+//  delete _labelFontColor;
+//  _labelFontColor = NULL;
+//  delete _labelShadowColor;
+//  _labelShadowColor = NULL;
+  delete _imageBuilder;
+  _imageBuilder = NULL;
+
+  _textureImage = image;
+
+  if (!_textureSizeSetExternally){
+    _textureWidth  = _textureImage->getWidth();
+    _textureHeight = _textureImage->getHeight();
+
+    if (_textureProportionSetExternally){
+      _textureWidth  *= _textureWidthProportion;
+      _textureHeight *= _textureHeightProportion;
+    }
+  }
+}
+
+
+void Mark::ImageBuilderListener::imageCreated(const IImage*      image,
+                                              const std::string& imageName) {
+  _mark->onImageCreated(image, imageName);
+}
+
+void Mark::ImageBuilderListener::onError(const std::string& error) {
+  _mark->onImageCreationError(error);
 }
