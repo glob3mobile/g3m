@@ -19,8 +19,6 @@ _radius(radius)
 
 }
 
-
-
 void CircleImageBuilder::buildOnCanvas(const G3MContext* context,
                                        ICanvas* canvas) {
   const float width  = canvas->getWidth();
