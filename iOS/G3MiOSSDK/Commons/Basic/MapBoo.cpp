@@ -183,6 +183,17 @@ MapBoo::MBMap* MapBoo::MBMap::fromJSON(MBHandler*            handler,
     return NULL;
   }
 
+  const JSONBaseObject* jsonErrorCode = jsonObject->get("errorCode");
+  if (jsonErrorCode != NULL) {
+    const JSONString* jsonStringErrorCode = jsonErrorCode->asString();
+    if (jsonStringErrorCode != NULL) {
+      const std::string errorCode        = jsonStringErrorCode->value();
+      const std::string errorDescription = jsonObject->getAsString("errorDescription", "");
+      ILogger::instance()->logError("Error: \%s %s", errorCode.c_str(), errorDescription.c_str());
+    }
+    return NULL;
+  }
+
   const std::string                         id          = jsonObject->get("id")->asString()->value();
   const std::string                         name        = jsonObject->get("name")->asString()->value();
   std::vector<MapBoo::MBLayer*>             layers      = parseLayers(jsonObject->get("layerSet")->asArray(),
