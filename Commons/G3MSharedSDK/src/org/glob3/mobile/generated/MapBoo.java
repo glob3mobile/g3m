@@ -292,10 +292,10 @@ public class MapBoo
       {
         if (hasShape)
         {
-          return new ColumnLayoutImageBuilder(new LabelImageBuilder(createMarkLabel(properties)), _shape.createImageBuilder());
+          return new ColumnLayoutImageBuilder(new LabelImageBuilder(createMarkLabel(properties), GFont.sansSerif(18, true), 2, Color.white(), Color.black(), 2.5, 0, 0), _shape.createImageBuilder()); // shadowOffsetY -  shadowOffsetX -  shadowBlur -  shadowColor -  color -  margin
         }
     
-        return new LabelImageBuilder(createMarkLabel(properties));
+        return new LabelImageBuilder(createMarkLabel(properties), GFont.sansSerif(18, true), 2, Color.white(), Color.black(), 2.5, 0, 0); // shadowOffsetY -  shadowOffsetX -  shadowBlur -  shadowColor -  color -  margin
       }
     
       if (hasShape)
@@ -303,7 +303,7 @@ public class MapBoo
         return _shape.createImageBuilder();
       }
     
-      return new LabelImageBuilder("[X]");
+      return new LabelImageBuilder("[X]", GFont.sansSerif(18, true), 2, Color.white(), Color.black(), 2.5, 0, 0); // shadowOffsetY -  shadowOffsetX -  shadowBlur -  shadowColor -  color -  margin
     }
 
     public void dispose()
@@ -351,20 +351,6 @@ public class MapBoo
       final GEOFeature feature = geometry.getFeature();
       final JSONObject properties = feature.getProperties();
       final Geodetic2D position = geometry.getPosition();
-    
-    
-    //  /**
-    //   * Creates a mark whith a IImageBuilder, in future versions it'll be the only constructor
-    //   */
-    //  Mark(IImageBuilder*     imageBuilder,
-    //       const Geodetic3D&  position,
-    //       AltitudeMode       altitudeMode,
-    //       double             minDistanceToCamera=4.5e+06,
-    //       MarkUserData*      userData=NULL,
-    //       bool               autoDeleteUserData=true,
-    //       MarkTouchListener* listener=NULL,
-    //       bool               autoDeleteListener=false);
-    //
     
       return new Mark(createImageBuilder(properties), new Geodetic3D(position, 0), AltitudeMode.ABSOLUTE, 0, null, true, createMarkTouchListener(properties), true); // autoDeleteListener -  autoDeleteUserData -  userData -  minDistanceToCamera
     
