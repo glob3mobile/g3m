@@ -535,7 +535,7 @@ public class MapBoo
         {
           final String errorCode = jsonStringErrorCode.value();
           final String errorDescription = jsonObject.getAsString("errorDescription", "");
-          ILogger.instance().logError("Error: \%s %s", errorCode, errorDescription);
+          ILogger.instance().logError("Error: %s %s", errorCode, errorDescription);
         }
         return null;
       }
