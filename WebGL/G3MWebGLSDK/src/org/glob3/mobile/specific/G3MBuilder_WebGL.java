@@ -71,15 +71,6 @@ public class G3MBuilder_WebGL
       // TODO To be implemented when Storage_WebGL is implemented.
       return null;
    }
-
-
-   @Override
-   protected IDownloader createDefaultDownloader() {
-      final int delayMillis = 10;
-      final IDownloader downloader = new Downloader_WebGL(8, delayMillis, "");
-
-      return downloader;
-   }
    
    @Override
    protected CameraRenderer createDefaultCameraRenderer()

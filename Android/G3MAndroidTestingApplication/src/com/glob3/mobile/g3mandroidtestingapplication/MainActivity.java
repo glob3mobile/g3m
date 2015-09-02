@@ -5,8 +5,9 @@ package com.glob3.mobile.g3mandroidtestingapplication;
 import org.glob3.mobile.generated.Angle;
 import org.glob3.mobile.generated.BingMapType;
 import org.glob3.mobile.generated.BingMapsLayer;
+import org.glob3.mobile.generated.CameraRenderer;
 import org.glob3.mobile.generated.ColumnLayoutImageBuilder;
-import org.glob3.mobile.generated.DeviceAttitudeCameraConstrainer;
+import org.glob3.mobile.generated.DeviceAttitudeCameraHandler;
 import org.glob3.mobile.generated.DownloadPriority;
 import org.glob3.mobile.generated.DownloaderImageBuilder;
 import org.glob3.mobile.generated.GFont;
@@ -162,7 +163,9 @@ public class MainActivity
 	      layerSet.addLayer(new OSMLayer(TimeInterval.fromDays(30)));
 	      builder.getPlanetRendererBuilder().setLayerSet(layerSet);
 	      
-	      builder.addCameraConstraint(new DeviceAttitudeCameraConstrainer(true));
+	      CameraRenderer cr = new CameraRenderer();
+	      cr.addHandler(new DeviceAttitudeCameraHandler(true));
+	      builder.setCameraRenderer(cr);
 
 	      return builder.createWidget();
 	   }
