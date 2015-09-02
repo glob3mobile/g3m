@@ -796,7 +796,6 @@ public final class NativeGL2_Android
 
       }
       catch (final UnsupportedEncodingException e) {
-         // TODO Auto-generated catch block
          e.printStackTrace();
          return null;
       }
@@ -892,8 +891,6 @@ public final class NativeGL2_Android
 
 	@Override
 	public double read1PixelAsDouble(int x, int y) {
-		
-		Color c = read1PixelAsRGBAColor(x, y);
 
 		ByteBuffer pixels = ByteBuffer.allocate(4);
 		pixels.order(ByteOrder.nativeOrder());
