@@ -23,7 +23,7 @@ package org.glob3.mobile.generated;
 //class JSONBaseObject;
 //class JSONArray;
 //class MarksRenderer;
-
+//class IImageBuilder;
 
 public class MapBoo
 {
@@ -95,54 +95,6 @@ public class MapBoo
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following type could not be found.
 //  class MBHandler;
 
-
-  //  class MBDataset : public RCObject {
-  //  private:
-  //    MBHandler*               _handler;
-  //    const std::string        _id;
-  //    const std::string        _name;
-  //    //    std::vector<std::string> _labelingCriteria;
-  //    //    std::vector<std::string> _infoCriteria;
-  //    const int                _timestamp;
-  //
-  //    MBDataset(const MBDataset& that);
-  //
-  //    MBDataset(MBHandler*                handler,
-  //              const std::string&        id,
-  //              const std::string&        name,
-  //              //              std::vector<std::string>& labelingCriteria,
-  //              //              std::vector<std::string>& infoCriteria,
-  //              const int                 timestamp) :
-  //    _handler(handler),
-  //    _id(id),
-  //    _name(name),
-  //    //    _labelingCriteria(labelingCriteria),
-  //    //    _infoCriteria(infoCriteria),
-  //    _timestamp(timestamp)
-  //    {
-  //    }
-  //
-  //    //    const std::string  createMarkLabel(const JSONObject* properties) const;
-  //    //    MarkTouchListener* createMarkTouchListener(const JSONObject* properties) const;
-  //
-  //  protected:
-  //    ~MBDataset();
-  //
-  //  public:
-  //    //    static MapBoo::MBDataset* fromJSON(MBHandler*            handler,
-  //    //                                       const JSONBaseObject* jsonBaseObject,
-  //    //                                       bool verbose);
-  //
-  //
-  //    //    void apply(const URL&               serverURL,
-  //    //               VectorStreamingRenderer* vectorStreamingRenderer) const;
-  //
-  //    //    Mark* createMark(const GEO2DPointGeometry* geometry) const;
-  //
-  //  };
-
-
-
   public abstract static class MBSymbology extends RCObject
   {
     protected MBHandler _handler;
@@ -186,7 +138,7 @@ public class MapBoo
   }
 
 
-  public static class MBShape
+  public abstract static class MBShape
   {
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
 //    MBShape(MBShape that);
@@ -225,6 +177,8 @@ public class MapBoo
 
     }
 
+    public abstract IImageBuilder createImageBuilder();
+
   }
 
 
@@ -257,6 +211,12 @@ public class MapBoo
     {
       super.dispose();
     }
+
+    public final IImageBuilder createImageBuilder()
+    {
+      return new CircleImageBuilder(_color, _radius);
+    }
+
   }
 
 
@@ -266,114 +226,6 @@ public class MapBoo
     private final MBShape _shape;
     private java.util.ArrayList<String> _info = new java.util.ArrayList<String>();
 
-
-    //const std::string MapBoo::MBDataset::createMarkLabel(const JSONObject* properties) const {
-    //  const size_t criteriaSize = _labelingCriteria.size();
-    //  if ((criteriaSize == 0) || (properties->size() == 0)) {
-    //    return "<label>";
-    //  }
-    //  else if (criteriaSize == 1) {
-    //    return JSONBaseObject::toString( properties->get(_labelingCriteria[0]) );
-    //  }
-    //  else {
-    //    IStringBuilder* labelBuilder = IStringBuilder::newStringBuilder();
-    //    for (int i = 0; i < criteriaSize; i++) {
-    //      if (i > 0) {
-    //        labelBuilder->addString(" ");
-    //      }
-    //      const std::string value = JSONBaseObject::toString( properties->get(_labelingCriteria[i]) );
-    //      labelBuilder->addString( value );
-    //    }
-    //
-    //    const std::string label = labelBuilder->getString();
-    //    delete labelBuilder;
-    //    return label;
-    //  }
-    //}
-    //
-    
-    //const std::string MapBoo::MBDataset::createMarkLabel(const JSONObject* properties) const {
-    //  const size_t criteriaSize = _labelingCriteria.size();
-    //  if ((criteriaSize == 0) || (properties->size() == 0)) {
-    //    return "<label>";
-    //  }
-    //  else if (criteriaSize == 1) {
-    //    return JSONBaseObject::toString( properties->get(_labelingCriteria[0]) );
-    //  }
-    //  else {
-    //    IStringBuilder* labelBuilder = IStringBuilder::newStringBuilder();
-    //    for (int i = 0; i < criteriaSize; i++) {
-    //      if (i > 0) {
-    //        labelBuilder->addString(" ");
-    //      }
-    //      const std::string value = JSONBaseObject::toString( properties->get(_labelingCriteria[i]) );
-    //      labelBuilder->addString( value );
-    //    }
-    //
-    //    const std::string label = labelBuilder->getString();
-    //    delete labelBuilder;
-    //    return label;
-    //  }
-    //}
-    //
-    //
-    //bool MapBoo::MBFeatureMarkTouchListener::touchedMark(Mark* mark) {
-    //  _handler->onFeatureTouched(_datasetName, _infoCriteria, _properties);
-    //  return true;
-    //}
-    //
-    //
-    //MarkTouchListener* MapBoo::MBDataset::createMarkTouchListener(const JSONObject* properties) const {
-    //  if (_handler == NULL) {
-    //    return NULL;
-    //  }
-    //
-    //  const size_t criteriaSize = _infoCriteria.size();
-    //  if (criteriaSize == 0) {
-    //    return NULL;
-    //  }
-    //
-    //  JSONObject* infoProperties = new JSONObject();
-    //  for (int i = 0; i < criteriaSize; i++) {
-    //    const std::string criteria = _infoCriteria[i];
-    //    const JSONBaseObject* value = properties->get(criteria);
-    //    if (value != NULL) {
-    //      infoProperties->put(criteria, value->deepCopy());
-    //    }
-    //  }
-    //
-    //  return new MBFeatureMarkTouchListener(_name, _handler, _infoCriteria, infoProperties);
-    //}
-    
-    //Mark* MapBoo::MBDataset::createMark(const GEO2DPointGeometry* geometry) const {
-    //  const GEOFeature* feature = geometry->getFeature();
-    //  const JSONObject* properties = feature->getProperties();
-    //  const Geodetic2D position = geometry->getPosition();
-    //
-    //  return new Mark(createMarkLabel(properties),
-    //                  Geodetic3D(position, 0),
-    //                  ABSOLUTE,
-    //                  0,                                    // minDistanceToCamera
-    //                  18,                                   // labelFontSize
-    //                  Color::newFromRGBA(1, 1, 1, 1),       // labelFontColor
-    //                  Color::newFromRGBA(0, 0, 0, 1),       // labelShadowColor
-    //                  NULL,                                 // userData
-    //                  true,                                 // autoDeleteUserData
-    //                  createMarkTouchListener(properties),
-    //                  true                                  // autoDeleteListener
-    //                  );
-    //
-    //  //  return new Mark(URL("file:///icon.png"),
-    //  //                  Geodetic3D(position, 0),
-    //  //                  ABSOLUTE,
-    //  //                  0,
-    //  //                  NULL,
-    //  //                  true,
-    //  //                  createMarkTouchListener(properties),
-    //  //                  true);
-    //  
-    //}
-    
     private String createMarkLabel(JSONObject properties)
     {
       final int labelingSize = _labeling.size();
@@ -431,6 +283,29 @@ public class MapBoo
       return new MBFeatureMarkTouchListener(_datasetName, _handler, _info, infoProperties);
     }
 
+    private IImageBuilder createImageBuilder(JSONObject properties)
+    {
+      final boolean hasLabeling = (_labeling.size() != 0) && (properties.size() != 0);
+      final boolean hasShape = (_shape != null);
+    
+      if (hasLabeling)
+      {
+        if (hasShape)
+        {
+          return new ColumnLayoutImageBuilder(new LabelImageBuilder(createMarkLabel(properties)), _shape.createImageBuilder());
+        }
+    
+        return new LabelImageBuilder(createMarkLabel(properties));
+      }
+    
+      if (hasShape)
+      {
+        return _shape.createImageBuilder();
+      }
+    
+      return new LabelImageBuilder("[X]");
+    }
+
     public void dispose()
     {
       if (_shape != null)
@@ -456,37 +331,6 @@ public class MapBoo
        _info = info;
     }
 
-
-    //MapBoo::MBDataset::~MBDataset() {
-    ///#ifdef JAVA_CODE
-    //  super.dispose();
-    ///#endif
-    //}
-    
-    //void MapBoo::MBDataset::apply(const URL&               serverURL,
-    //                              VectorStreamingRenderer* vectorStreamingRenderer) const {
-    //  std::string properties = "";
-    //  for (int i = 0; i < _labelingCriteria.size(); i++) {
-    //    properties += _labelingCriteria[i] + "|";
-    //  }
-    //  for (int i = 0; i < _infoCriteria.size(); i++) {
-    //    properties += _infoCriteria[i] + "|";
-    //  }
-    //
-    //  vectorStreamingRenderer->addVectorSet(URL(serverURL, "/public/v1/VectorialStreaming/"),
-    //                                        _id,
-    //                                        properties,
-    //                                        new MBDatasetVectorSetSymbolizer(this),
-    //                                        true,  // deleteSymbolizer
-    //                                        DownloadPriority::MEDIUM,
-    //                                        TimeInterval::zero(),
-    //                                        true,  // readExpired
-    //                                        true,  // verbose
-    //                                        false  // haltOnError
-    //                                        );
-    //}
-    
-    
     public final void apply(URL serverURL, VectorStreamingRenderer vectorStreamingRenderer)
     {
       String properties = "";
@@ -508,17 +352,34 @@ public class MapBoo
       final JSONObject properties = feature.getProperties();
       final Geodetic2D position = geometry.getPosition();
     
-      return new Mark(createMarkLabel(properties), new Geodetic3D(position, 0), AltitudeMode.ABSOLUTE, 0, 18, Color.newFromRGBA(1, 1, 1, 1), Color.newFromRGBA(0, 0, 0, 1), null, true, createMarkTouchListener(properties), true); // autoDeleteListener -  autoDeleteUserData -  userData -  labelShadowColor -  labelFontColor -  labelFontSize -  minDistanceToCamera
     
-      //  return new Mark(URL("file:///icon.png"),
-      //                  Geodetic3D(position, 0),
-      //                  ABSOLUTE,
-      //                  0,
-      //                  NULL,
-      //                  true,
-      //                  createMarkTouchListener(properties),
-      //                  true);
+    //  /**
+    //   * Creates a mark whith a IImageBuilder, in future versions it'll be the only constructor
+    //   */
+    //  Mark(IImageBuilder*     imageBuilder,
+    //       const Geodetic3D&  position,
+    //       AltitudeMode       altitudeMode,
+    //       double             minDistanceToCamera=4.5e+06,
+    //       MarkUserData*      userData=NULL,
+    //       bool               autoDeleteUserData=true,
+    //       MarkTouchListener* listener=NULL,
+    //       bool               autoDeleteListener=false);
+    //
     
+      return new Mark(createImageBuilder(properties), new Geodetic3D(position, 0), AltitudeMode.ABSOLUTE, 0, null, true, createMarkTouchListener(properties), true); // autoDeleteListener -  autoDeleteUserData -  userData -  minDistanceToCamera
+    
+    //  return new Mark(createMarkLabel(properties),
+    //                  Geodetic3D(position, 0),
+    //                  ABSOLUTE,
+    //                  0,                                    // minDistanceToCamera
+    //                  18,                                   // labelFontSize
+    //                  Color::newFromRGBA(1, 1, 1, 1),       // labelFontColor
+    //                  Color::newFromRGBA(0, 0, 0, 1),       // labelShadowColor
+    //                  NULL,                                 // userData
+    //                  true,                                 // autoDeleteUserData
+    //                  createMarkTouchListener(properties),
+    //                  true                                  // autoDeleteListener
+    //                  );
     }
 
   }
@@ -551,33 +412,6 @@ public class MapBoo
       }
     }
 
-
-    //MapBoo::MBDataset* MapBoo::MBDataset::fromJSON(MBHandler*            handler,
-    //                                               const JSONBaseObject* jsonBaseObject,
-    //                                               bool verbose) {
-    //  if (jsonBaseObject == NULL) {
-    //    return NULL;
-    //  }
-    //
-    //  const JSONObject* jsonObject = jsonBaseObject->asObject();
-    //  if (jsonObject == NULL) {
-    //    return NULL;
-    //  }
-    //
-    //  const std::string        id               = jsonObject->get("id")->asString()->value();
-    //  const std::string        name             = jsonObject->get("name")->asString()->value();
-    //  std::vector<std::string> labelingCriteria = jsonObject->getAsArray("labelingCriteria")->asStringVector();
-    //  std::vector<std::string> infoCriteria     = jsonObject->getAsArray("infoCriteria")->asStringVector();
-    //  const int                timestamp        = (int) jsonObject->get("timestamp")->asNumber()->value();
-    //
-    //  return new MBDataset(handler,
-    //                       id,
-    //                       name,
-    //                       labelingCriteria,
-    //                       infoCriteria,
-    //                       timestamp);
-    //}
-    
     public static MapBoo.MBSymbolizedDataset fromJSON(MBHandler handler, JSONBaseObject jsonBaseObject, boolean verbose)
     {
       if (jsonBaseObject == null)
@@ -665,24 +499,6 @@ public class MapBoo
       }
       return result;
     }
-    //    static std::vector<MapBoo::MBDataset*> parseDatasets(MBHandler*       handler,
-    //                                                         const JSONArray* jsonArray,
-    //                                                         bool verbose);
-
-
-    //std::vector<MapBoo::MBDataset*> MapBoo::MBMap::parseDatasets(MBHandler*       handler,
-    //                                                             const JSONArray* jsonArray,
-    //                                                             bool verbose) {
-    //  std::vector<MapBoo::MBDataset*> result;
-    //  for (int i = 0; i < jsonArray->size(); i++) {
-    //    MBDataset* dataset = MBDataset::fromJSON(handler, jsonArray->get(i), verbose );
-    //    if (dataset != NULL) {
-    //      result.push_back( dataset );
-    //    }
-    //  }
-    //  return result;
-    //}
-    
     private static java.util.ArrayList<MapBoo.MBSymbolizedDataset> parseSymbolizedDatasets(MBHandler handler, JSONArray jsonArray, boolean verbose)
     {
       java.util.ArrayList<MapBoo.MBSymbolizedDataset> result = new java.util.ArrayList<MapBoo.MBSymbolizedDataset>();
@@ -708,6 +524,19 @@ public class MapBoo
       final JSONObject jsonObject = jsonBaseObject.asObject();
       if (jsonObject == null)
       {
+        return null;
+      }
+    
+      final JSONBaseObject jsonErrorCode = jsonObject.get("errorCode");
+      if (jsonErrorCode != null)
+      {
+        final JSONString jsonStringErrorCode = jsonErrorCode.asString();
+        if (jsonStringErrorCode != null)
+        {
+          final String errorCode = jsonStringErrorCode.value();
+          final String errorDescription = jsonObject.getAsString("errorDescription", "");
+          ILogger.instance().logError("Error: \%s %s", errorCode, errorDescription);
+        }
         return null;
       }
     
