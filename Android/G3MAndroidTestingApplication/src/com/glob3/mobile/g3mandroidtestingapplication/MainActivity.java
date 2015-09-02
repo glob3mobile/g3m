@@ -95,8 +95,9 @@ public class MainActivity
 
 	   _g3mWidget = builder.createWidget();  
 */
-//	   _g3mWidget = createWidgetStreamingElevations();
-	   _g3mWidget = createWidgetVR();
+	   _g3mWidget = createWidget();  
+	   //_g3mWidget = createWidgetStreamingElevations();
+	   //_g3mWidget = createWidgetVR();
 	   
 	   // set camera looking at Tenerife
 	   Geodetic3D position = new Geodetic3D(Angle.fromDegrees(27.60), Angle.fromDegrees(-16.54), 55000.0);
