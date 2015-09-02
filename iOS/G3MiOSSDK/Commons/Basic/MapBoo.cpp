@@ -615,40 +615,8 @@ IImageBuilder* MapBoo::MBCircleShape::createImageBuilder() const {
   return new CircleImageBuilder(_color, _radius);
 }
 
-IImageBuilder* MapBoo::MBVectorSymbology::createImageBuilder(const JSONObject* properties) const {
-  const bool hasLabeling = (_labeling.size() != 0) && (properties->size() != 0);
-  const bool hasShape    = (_shape != NULL);
-
-  if (hasLabeling) {
-    if (hasShape) {
-      return new ColumnLayoutImageBuilder(new LabelImageBuilder(createMarkLabel(properties),
-                                                                GFont::sansSerif(18, true),
-                                                                2,               // margin
-                                                                Color::white(),  // color
-                                                                Color::black(),  // shadowColor
-                                                                2.5,             // shadowBlur
-                                                                0,               // shadowOffsetX
-                                                                0                // shadowOffsetY
-                                                                ),
-                                          _shape->createImageBuilder());
-    }
-
-    return new LabelImageBuilder(createMarkLabel(properties),
-                                 GFont::sansSerif(18, true),
-                                 2,               // margin
-                                 Color::white(),  // color
-                                 Color::black(),  // shadowColor
-                                 2.5,             // shadowBlur
-                                 0,               // shadowOffsetX
-                                 0                // shadowOffsetY
-                                 );
-  }
-
-  if (hasShape) {
-    return _shape->createImageBuilder();
-  }
-
-  return new LabelImageBuilder("[X]",
+LabelImageBuilder* MapBoo::MBVectorSymbology::createLabelImageBuilder(const std::string& label) const {
+  return new LabelImageBuilder(label,
                                GFont::sansSerif(18, true),
                                2,               // margin
                                Color::white(),  // color
@@ -657,6 +625,26 @@ IImageBuilder* MapBoo::MBVectorSymbology::createImageBuilder(const JSONObject* p
                                0,               // shadowOffsetX
                                0                // shadowOffsetY
                                );
+}
+
+IImageBuilder* MapBoo::MBVectorSymbology::createImageBuilder(const JSONObject* properties) const {
+  const bool hasLabeling = (_labeling.size() != 0) && (properties->size() != 0);
+  const bool hasShape    = (_shape != NULL);
+
+  if (hasLabeling) {
+    if (hasShape) {
+      return new ColumnLayoutImageBuilder(createLabelImageBuilder(createMarkLabel(properties)),
+                                          _shape->createImageBuilder());
+    }
+
+    return createLabelImageBuilder(createMarkLabel(properties));
+  }
+
+  if (hasShape) {
+    return _shape->createImageBuilder();
+  }
+
+  return createLabelImageBuilder("[X]");
 }
 
 
