@@ -621,18 +621,42 @@ IImageBuilder* MapBoo::MBVectorSymbology::createImageBuilder(const JSONObject* p
 
   if (hasLabeling) {
     if (hasShape) {
-      return new ColumnLayoutImageBuilder(new LabelImageBuilder(createMarkLabel(properties)),
+      return new ColumnLayoutImageBuilder(new LabelImageBuilder(createMarkLabel(properties),
+                                                                GFont::sansSerif(18, true),
+                                                                2,               // margin
+                                                                Color::white(),  // color
+                                                                Color::black(),  // shadowColor
+                                                                2.5,             // shadowBlur
+                                                                0,               // shadowOffsetX
+                                                                0                // shadowOffsetY
+                                                                ),
                                           _shape->createImageBuilder());
     }
 
-    return new LabelImageBuilder(createMarkLabel(properties));
+    return new LabelImageBuilder(createMarkLabel(properties),
+                                 GFont::sansSerif(18, true),
+                                 2,               // margin
+                                 Color::white(),  // color
+                                 Color::black(),  // shadowColor
+                                 2.5,             // shadowBlur
+                                 0,               // shadowOffsetX
+                                 0                // shadowOffsetY
+                                 );
   }
 
   if (hasShape) {
     return _shape->createImageBuilder();
   }
 
-  return new LabelImageBuilder("[X]");
+  return new LabelImageBuilder("[X]",
+                               GFont::sansSerif(18, true),
+                               2,               // margin
+                               Color::white(),  // color
+                               Color::black(),  // shadowColor
+                               2.5,             // shadowBlur
+                               0,               // shadowOffsetX
+                               0                // shadowOffsetY
+                               );
 }
 
 
@@ -640,20 +664,6 @@ Mark* MapBoo::MBVectorSymbology::createMark(const GEO2DPointGeometry* geometry) 
   const GEOFeature* feature    = geometry->getFeature();
   const JSONObject* properties = feature->getProperties();
   const Geodetic2D  position   = geometry->getPosition();
-
-
-//  /**
-//   * Creates a mark whith a IImageBuilder, in future versions it'll be the only constructor
-//   */
-//  Mark(IImageBuilder*     imageBuilder,
-//       const Geodetic3D&  position,
-//       AltitudeMode       altitudeMode,
-//       double             minDistanceToCamera=4.5e+06,
-//       MarkUserData*      userData=NULL,
-//       bool               autoDeleteUserData=true,
-//       MarkTouchListener* listener=NULL,
-//       bool               autoDeleteListener=false);
-//
 
   return new Mark(createImageBuilder(properties),
                   Geodetic3D(position, 0),

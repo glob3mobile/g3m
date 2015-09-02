@@ -56,7 +56,7 @@ public class TextUtils_WebGL
 		var canvas = $doc.createElement("canvas");
 		var context = canvas.getContext("2d");
 
-		var font = "" + (fontSize * 0.67) + "pt sans-serif";
+		var font = "" + (fontSize * 0.6) + "pt sans-serif";
 		context.font = font;
 
 		var width = context.measureText(label).width;
@@ -144,7 +144,7 @@ public class TextUtils_WebGL
 		var canvas = $doc.createElement("canvas");
 		var context = canvas.getContext("2d");
 
-		var font = "" + (fontSize * 0.67) + "pt sans-serif";
+		var font = "" + (fontSize * 0.6) + "pt sans-serif";
 		context.font = font;
 
 		var textWidth = context.measureText(label).width;
