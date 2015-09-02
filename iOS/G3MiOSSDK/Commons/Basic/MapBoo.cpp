@@ -193,7 +193,7 @@ MapBoo::MBMap* MapBoo::MBMap::fromJSON(MBHandler*            handler,
     if (jsonStringErrorCode != NULL) {
       const std::string errorCode        = jsonStringErrorCode->value();
       const std::string errorDescription = jsonObject->getAsString("errorDescription", "");
-      ILogger::instance()->logError("Error: \%s %s", errorCode.c_str(), errorDescription.c_str());
+      ILogger::instance()->logError("Error: %s %s", errorCode.c_str(), errorDescription.c_str());
     }
     return NULL;
   }
