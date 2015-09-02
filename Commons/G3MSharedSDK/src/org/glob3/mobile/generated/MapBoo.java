@@ -24,6 +24,8 @@ package org.glob3.mobile.generated;
 //class JSONArray;
 //class MarksRenderer;
 //class IImageBuilder;
+//class LabelImageBuilder;
+
 
 public class MapBoo
 {
@@ -292,10 +294,10 @@ public class MapBoo
       {
         if (hasShape)
         {
-          return new ColumnLayoutImageBuilder(new LabelImageBuilder(createMarkLabel(properties), GFont.sansSerif(18, true), 2, Color.white(), Color.black(), 2.5, 0, 0), _shape.createImageBuilder()); // shadowOffsetY -  shadowOffsetX -  shadowBlur -  shadowColor -  color -  margin
+          return new ColumnLayoutImageBuilder(createLabelImageBuilder(createMarkLabel(properties)), _shape.createImageBuilder());
         }
     
-        return new LabelImageBuilder(createMarkLabel(properties), GFont.sansSerif(18, true), 2, Color.white(), Color.black(), 2.5, 0, 0); // shadowOffsetY -  shadowOffsetX -  shadowBlur -  shadowColor -  color -  margin
+        return createLabelImageBuilder(createMarkLabel(properties));
       }
     
       if (hasShape)
@@ -303,7 +305,11 @@ public class MapBoo
         return _shape.createImageBuilder();
       }
     
-      return new LabelImageBuilder("[X]", GFont.sansSerif(18, true), 2, Color.white(), Color.black(), 2.5, 0, 0); // shadowOffsetY -  shadowOffsetX -  shadowBlur -  shadowColor -  color -  margin
+      return createLabelImageBuilder("[X]");
+    }
+    private LabelImageBuilder createLabelImageBuilder(String label)
+    {
+      return new LabelImageBuilder(label, GFont.sansSerif(18, true), 2.0f, Color.white(), Color.black(), 2.0f, 0.0f, 0.0f); // shadowOffsetY -  shadowOffsetX -  shadowBlur -  shadowColor -  color -  margin
     }
 
     public void dispose()
