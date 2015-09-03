@@ -455,8 +455,7 @@ MapBoo::MBSymbolizedDataset* MapBoo::MBSymbolizedDataset::fromJSON(MBHandler*   
                                                                 datasetName,
                                                                 jsonObject->get("symbology"));
 
-  return new MBSymbolizedDataset(handler,
-                                 datasetID,
+  return new MBSymbolizedDataset(datasetID,
                                  datasetName,
                                  datasetAttribution,
                                  symbology);

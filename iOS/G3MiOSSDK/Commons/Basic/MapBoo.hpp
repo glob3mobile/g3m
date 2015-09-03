@@ -194,18 +194,15 @@ public:
 
   class MBSymbolizedDataset {
   private:
-    MBHandler*         _handler;
     const std::string  _datasetID;
     const std::string  _datasetName;
     const std::string  _datasetAttribution;
     const MBSymbology* _symbology;
 
-    MBSymbolizedDataset(MBHandler*         handler,
-                        const std::string& datasetID,
+    MBSymbolizedDataset(const std::string& datasetID,
                         const std::string& datasetName,
                         const std::string& datasetAttribution,
                         const MBSymbology* symbology) :
-    _handler(handler),
     _datasetID(datasetID),
     _datasetName(datasetName),
     _datasetAttribution(datasetAttribution),
