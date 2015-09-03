@@ -9,8 +9,8 @@ import com.google.gwt.core.client.JavaScriptObject;
 
 
 public final class Image_WebGL
-         extends
-            IImage {
+   extends
+      IImage {
 
    private JavaScriptObject _imgObject; //IMAGE JS
 
@@ -57,6 +57,12 @@ public final class Image_WebGL
    @Override
    public IImage shallowCopy() {
       return new Image_WebGL(_imgObject);
+   }
+
+
+   @Override
+   public boolean isPremultiplied() {
+      return false;
    }
 
 
