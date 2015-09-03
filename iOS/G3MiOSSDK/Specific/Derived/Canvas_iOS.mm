@@ -53,6 +53,13 @@ void Canvas_iOS::_initialize(int width, int height) {
                                    colorSpace,
                                    kCGImageAlphaPremultipliedLast);
 
+  CGContextSetShouldAntialias(_context, YES);
+  CGContextSetAllowsFontSmoothing(_context, YES);
+  CGContextSetShouldSmoothFonts(_context, YES);
+  CGContextSetShouldSubpixelPositionFonts(_context, NO);
+  CGContextSetShouldSubpixelQuantizeFonts(_context, NO);
+  CGContextSetInterpolationQuality(_context, kCGInterpolationHigh);
+
   CGColorSpaceRelease( colorSpace );
 
   if (_context == NULL) {
@@ -542,4 +549,25 @@ void Canvas_iOS::_moveTo(float x, float y) {
 
 void Canvas_iOS::_lineTo(float x, float y) {
   CGPathAddLineToPoint(_path, &_transform, x, y);
+}
+
+
+void Canvas_iOS::_fillEllipse(float left, float top,
+                              float width, float height) {
+  CGContextFillEllipseInRect(_context,
+                             CGRectMake(left, _canvasHeight - top,
+                                        width, -height));
+}
+
+void Canvas_iOS::_strokeEllipse(float left, float top,
+                                float width, float height) {
+  CGContextStrokeEllipseInRect(_context,
+                               CGRectMake(left, _canvasHeight - top,
+                                          width, -height));
+}
+
+void Canvas_iOS::_fillAndStrokeEllipse(float left, float top,
+                                       float width, float height) {
+  _fillEllipse(left, top, width, height);
+  _strokeEllipse(left, top, width, height);
 }

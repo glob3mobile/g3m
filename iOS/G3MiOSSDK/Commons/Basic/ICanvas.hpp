@@ -139,6 +139,15 @@ protected:
 
   virtual void _lineTo(float x, float y) = 0;
 
+  virtual void _fillEllipse(float left, float top,
+                            float width, float height) = 0;
+
+  virtual void _strokeEllipse(float left, float top,
+                              float width, float height) = 0;
+
+  virtual void _fillAndStrokeEllipse(float left, float top,
+                                     float width, float height) = 0;
+
 
 public:
   ICanvas() :
@@ -225,6 +234,16 @@ public:
                                      float width, float height,
                                      float radius);
 
+  void fillEllipse(float left, float top,
+                   float width, float height);
+
+  void strokeEllipse(float left, float top,
+                     float width, float height);
+
+  void fillAndStrokeEllipse(float left, float top,
+                            float width, float height);
+
+
   void createImage(IImageListener* listener,
                    bool autodelete);
 
@@ -277,7 +296,7 @@ public:
   void moveTo(const Vector2F& position) {
     moveTo(position._x, position._y);
   }
-
+  
   void lineTo(float x, float y);
   
   void lineTo(const Vector2F& position) {

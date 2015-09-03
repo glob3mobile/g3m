@@ -93,7 +93,8 @@ void MultiTextureMapping::modifyGLState(GLState& state) const {
                                             false,
                                             0,
                                             _transparent,
-                                            GLBlendFactor::srcAlpha(),
+                                            // GLBlendFactor::srcAlpha(),
+                                            GLBlendFactor::one(),
                                             GLBlendFactor::oneMinusSrcAlpha(),
                                             _translationU,
                                             _translationV,
@@ -118,7 +119,8 @@ void MultiTextureMapping::modifyGLState(GLState& state) const {
                                             false,
                                             0,
                                             _transparent2,
-                                            GLBlendFactor::srcAlpha(),
+                                            // GLBlendFactor::srcAlpha(),
+                                            GLBlendFactor::one(),
                                             GLBlendFactor::oneMinusSrcAlpha(),
                                             1), //TARGET
                        false);

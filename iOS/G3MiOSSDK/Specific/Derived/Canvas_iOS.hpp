@@ -135,6 +135,15 @@ protected:
 
   void _lineTo(float x, float y);
 
+  void _fillEllipse(float left, float top,
+                    float width, float height);
+
+  void _strokeEllipse(float left, float top,
+                      float width, float height);
+
+  void _fillAndStrokeEllipse(float left, float top,
+                             float width, float height);
+
 
 public:
   Canvas_iOS() :
