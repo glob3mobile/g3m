@@ -379,15 +379,13 @@ public class MapBoo
 
   public static class MBSymbolizedDataset
   {
-    private MBHandler _handler;
     private final String _datasetID;
     private final String _datasetName;
     private final String _datasetAttribution;
     private final MBSymbology _symbology;
 
-    private MBSymbolizedDataset(MBHandler handler, String datasetID, String datasetName, String datasetAttribution, MBSymbology symbology)
+    private MBSymbolizedDataset(String datasetID, String datasetName, String datasetAttribution, MBSymbology symbology)
     {
-       _handler = handler;
        _datasetID = datasetID;
        _datasetName = datasetName;
        _datasetAttribution = datasetAttribution;
@@ -422,7 +420,7 @@ public class MapBoo
       final String datasetAttribution = jsonObject.getAsString("datasetAttribution", "");
       final MBSymbology symbology = MBSymbology.fromJSON(handler, datasetID, datasetName, jsonObject.get("symbology"));
     
-      return new MBSymbolizedDataset(handler, datasetID, datasetName, datasetAttribution, symbology);
+      return new MBSymbolizedDataset(datasetID, datasetName, datasetAttribution, symbology);
     }
 
     public final void apply(URL serverURL, VectorStreamingRenderer vectorStreamingRenderer)
