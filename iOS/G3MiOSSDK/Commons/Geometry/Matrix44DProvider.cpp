@@ -7,6 +7,7 @@
 //
 
 #include "Matrix44DProvider.hpp"
+#include "ILogger.hpp"
 
 void Matrix44DMultiplicationHolder::pullMatrixes() const {
   for (int j = 0; j < _matricesSize; j++) {

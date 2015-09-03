@@ -17,6 +17,8 @@ import org.glob3.mobile.generated.GPUProgramManager;
 import org.glob3.mobile.generated.Geodetic3D;
 import org.glob3.mobile.generated.ICameraActivityListener;
 import org.glob3.mobile.generated.ICameraConstrainer;
+import org.glob3.mobile.generated.IDeviceAttitude;
+import org.glob3.mobile.generated.IDeviceLocation;
 import org.glob3.mobile.generated.IDownloader;
 import org.glob3.mobile.generated.IFactory;
 import org.glob3.mobile.generated.IJSONParser;
@@ -191,7 +193,7 @@ public class G3MWidget_WebGL
    }-*/;
 
 
-   private VerticalPanel createUnsupportedMessage(final String message) {
+   private static VerticalPanel createUnsupportedMessage(final String message) {
       final VerticalPanel panel = new VerticalPanel();
 
       panel.add(new Label(message));
@@ -201,7 +203,7 @@ public class G3MWidget_WebGL
    }
 
 
-   public boolean isSupported() {
+   boolean isWebGLSupported() {
       return ((_canvas != null) && (_webGLContext != null));
    }
 
@@ -214,8 +216,10 @@ public class G3MWidget_WebGL
       final IMathUtils mathUtils = new MathUtils_WebGL();
       final IJSONParser jsonParser = new JSONParser_WebGL();
       final ITextUtils textUtils = new TextUtils_WebGL();
+      final IDeviceAttitude devAtt = new DeviceAttitude_WebGL();
+      final IDeviceLocation devLoc = new DeviceLocation_WebGL();
 
-      G3MWidget.initSingletons(logger, factory, stringUtils, stringBuilder, mathUtils, jsonParser, textUtils);
+      G3MWidget.initSingletons(logger, factory, stringUtils, stringBuilder, mathUtils, jsonParser, textUtils, devAtt, devLoc);
    }
 
 

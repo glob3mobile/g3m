@@ -16,7 +16,7 @@
 
 void Camera::initialize(const G3MContext* context) {
   _planet = context->getPlanet();
-#warning move this to Planet, and remove isFlat() method (DGD)
+// #warning move this to Planet, and remove isFlat() method (DGD)
   if (_planet->isFlat()) {
     setCartesianPosition( MutableVector3D(0, 0, _planet->getRadii()._y * 5) );
     setUp(MutableVector3D(0, 1, 0));
@@ -99,13 +99,14 @@ void Camera::copyFrom(const Camera &that) {
 
   _tanHalfVerticalFieldOfView   = that._tanHalfVerticalFieldOfView;
   _tanHalfHorizontalFieldOfView = that._tanHalfHorizontalFieldOfView;
+  
+  _frameDepthProvider = that._frameDepthProvider;
 }
 
 
-Camera::Camera(long long timestamp) :
+Camera::Camera(long long timestamp, FrameDepthProvider* frameDepthProvider) :
 _planet(NULL),
 _position(0, 0, 0),
-_groundHeight(0),
 _center(0, 0, 0),
 _up(0, 0, 1),
 _dirtyFlags(),
@@ -123,7 +124,8 @@ _angle2Horizon(-99),
 _normalizedPosition(0, 0, 0),
 _tanHalfVerticalFieldOfView(NAND),
 _tanHalfHorizontalFieldOfView(NAND),
-_timestamp(timestamp)
+_timestamp(timestamp),
+_frameDepthProvider(frameDepthProvider)
 {
   resizeViewport(0, 0);
   _dirtyFlags.setAllDirty();
@@ -193,11 +195,6 @@ const Vector3D Camera::pixel2Ray(const Vector3D& pixel3D) const {
 
   return obj.sub(_position.asVector3D());
 }
-
-/*void Camera::setGeodeticPositionStablePitch(const Geodetic3D& g3d) {
-  MutableMatrix44D dragMatrix = _planet->drag(getGeodeticPosition(), g3d);
-  if (dragMatrix.isValid()) applyTransform(dragMatrix);
-}*/
 
 const Vector3D Camera::pixel2Ray(const Vector2F& pixel) const {
   const float px = pixel._x;
@@ -341,11 +338,7 @@ void Camera::setPointOfView(const Geodetic3D& center,
 }
 
 FrustumData Camera::calculateFrustumData() const {
-//  const double heightFromGround = getHeightFromGround();
-//  
-//  double zNear = heightFromGround * 0.1;
-  
-#warning ASK AGUSTIN
+
   const double height = getGeodeticPosition()._height;
   double zNear = height * 0.1;
 
@@ -482,4 +475,43 @@ double Camera::getEstimatedPixelDistance(const Vector3D& point0,
   const FrustumData frustumData = getFrustumData();
   const double distanceInMeters = frustumData._znear * IMathUtils::instance()->tan(angleInRadians/2);
   return distanceInMeters * _viewPortHeight / frustumData._top;
+}
+
+Vector3D Camera::getScenePositionForPixel(float x, float y){
+  const double z = _frameDepthProvider->getDepthForPixel(x, y);
+  
+  if (!ISNAN(z)){
+    Vector3D pixel3D(x, _viewPortHeight - y,z);
+    Vector3D pos = getModelViewMatrix().unproject(pixel3D, 0, 0, _viewPortWidth, _viewPortHeight);
+    //ILogger::instance()->logInfo("PIXEL 3D: %s -> %s\n", pixel3D.description().c_str(), pos.description().c_str() );
+    //ILogger::instance()->logInfo("Z = %f - DIST CAM: %f\n", z, _currentCamera->getCartesianPosition().sub(pos).length());
+    //ILogger::instance()->logInfo("GEO: %s\n", _planet->toGeodetic2D(pos).description().c_str());
+    
+    return pos;
+  } else{
+    //ILogger::instance()->logInfo("NO Z");
+    return Vector3D::nan();
+  }
+}
+
+Vector3D Camera::getScenePositionForCentralPixel(){
+  return getScenePositionForPixel(_viewPortWidth / 2, _viewPortHeight / 2);
+}
+
+Vector3D Camera::getFirstValidScenePositionForCentralColumn() const {
+  
+  const int halfWidth = _viewPortWidth/2;
+  
+  for (int row = _viewPortHeight / 2; row < _viewPortHeight-1; row++) {
+    const double z = _frameDepthProvider->getDepthForPixel(halfWidth, row);
+    
+    if (!ISNAN(z)){
+      Vector3D pixel3D(halfWidth, _viewPortHeight - row,z);
+      Vector3D pos = getModelViewMatrix().unproject(pixel3D, 0, 0, _viewPortWidth, _viewPortHeight);
+      return pos;
+    }
+  }
+  
+  return Vector3D::nan();
+
 }

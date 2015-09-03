@@ -10,8 +10,8 @@ import org.glob3.mobile.generated.IStringUtils;
 
 
 public final class StringUtils_Android
-extends
-IStringUtils {
+   extends
+      IStringUtils {
 
    @Override
    public String createString(final byte[] data,
@@ -152,9 +152,7 @@ IStringUtils {
 
    @Override
    public String toString(final double value) {
-       Locale.setDefault(new Locale("en", "US"));
-       java.text.DecimalFormat df = new java.text.DecimalFormat("#.################"); 
-       return df.format(value);
+	   return String.format("%.16f", value);
    }
 
 
@@ -173,6 +171,14 @@ IStringUtils {
    @Override
    public String toString(final float value) {
       return Float.toString(value);
+   }
+
+
+   @Override
+   public String replaceAll(final String originalString,
+                            final String searchString,
+                            final String replaceString) {
+      return originalString.replace(searchString, replaceString);
    }
 
 }

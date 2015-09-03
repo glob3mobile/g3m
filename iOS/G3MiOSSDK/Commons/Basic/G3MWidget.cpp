@@ -37,6 +37,8 @@
 #include "SceneLighting.hpp"
 #include "PlanetRenderer.hpp"
 #include "ErrorRenderer.hpp"
+#include "IDeviceAttitude.hpp"
+#include "IDeviceLocation.hpp"
 
 void G3MWidget::initSingletons(ILogger*            logger,
                                IFactory*           factory,
@@ -44,7 +46,9 @@ void G3MWidget::initSingletons(ILogger*            logger,
                                IStringBuilder*     stringBuilder,
                                IMathUtils*         mathUtils,
                                IJSONParser*        jsonParser,
-                               ITextUtils*         textUtils) {
+                               ITextUtils*         textUtils,
+                               IDeviceAttitude*    devAttitude,
+                               IDeviceLocation*    devLocation) {
   if (ILogger::instance() == NULL) {
     ILogger::setInstance(logger);
     IFactory::setInstance(factory);
@@ -53,6 +57,8 @@ void G3MWidget::initSingletons(ILogger*            logger,
     IMathUtils::setInstance(mathUtils);
     IJSONParser::setInstance(jsonParser);
     ITextUtils::setInstance(textUtils);
+    IDeviceAttitude::setInstance(devAttitude);
+    IDeviceLocation::setInstance(devLocation);
   }
   else {
     ILogger::instance()->logWarning("Singletons already set");
@@ -98,8 +104,8 @@ _errorRenderer(errorRenderer),
 _hudRenderer(hudRenderer),
 _width(1),
 _height(1),
-_currentCamera(new Camera(1)),
-_nextCamera(new Camera(2)),
+_currentCamera(new Camera(1, this)),
+_nextCamera(new Camera(2, this)),
 _backgroundColor( new Color(backgroundColor) ),
 _timer(IFactory::instance()->createTimer()),
 _renderCounter(0),
@@ -113,8 +119,7 @@ _userData(NULL),
 _initializationTask(initializationTask),
 _autoDeleteInitializationTask(autoDeleteInitializationTask),
 _surfaceElevationProvider( mainRenderer->getSurfaceElevationProvider() ),
-_context(new G3MContext(this,
-                        IFactory::instance(),
+_context(new G3MContext(IFactory::instance(),
                         IStringUtils::instance(),
                         threadUtils,
                         ILogger::instance(),
@@ -137,7 +142,7 @@ _initialCameraPositionProvider(initialCameraPositionProvider),
 _initialCameraPositionHasBeenSet(false),
 _forceBusyRenderer(false),
 _nFramesBeetweenProgramsCleanUp(500),
-_zRenderCounter(-1),
+_frameBufferContent(EMPTY_FRAMEBUFFER),
 _infoDisplay(infoDisplay)
 {
   _effectsScheduler->initialize(_context);
@@ -170,8 +175,7 @@ _infoDisplay(infoDisplay)
   _mainRenderer->setChangedRendererInfoListener((ChangedRendererInfoListener*)this, -1);
 
 
-  _renderContext = new G3MRenderContext(this,
-                                        _frameTasksExecutor,
+  _renderContext = new G3MRenderContext(_frameTasksExecutor,
                                         IFactory::instance(),
                                         IStringUtils::instance(),
                                         _threadUtils,
@@ -342,72 +346,22 @@ void G3MWidget::notifyTouchEvent(const G3MEventContext &ec,
   }
 }
 
-Vector3D G3MWidget::getScenePositionForPixel(int x, int y){
+double G3MWidget::getDepthForPixel(float x, float y){
   zRender();
-
-  const double z = _gl->readPixelAsDouble(x,y, _width, _height);
-
-  if (!ISNAN(z)){
-    Vector3D pixel3D(x,_height - y,z);
-    MutableMatrix44D mmv(*_currentCamera->getModelViewMatrix44D());
-    Vector3D pos = mmv.unproject(pixel3D, 0, 0, _width, _height);
-    //ILogger::instance()->logInfo("PIXEL 3D: %s -> %s\n", pixel3D.description().c_str(), pos.description().c_str() );
-    //ILogger::instance()->logInfo("Z = %f - DIST CAM: %f\n", z, _currentCamera->getCartesianPosition().sub(pos).length());
-    //ILogger::instance()->logInfo("GEO: %s\n", _planet->toGeodetic2D(pos).description().c_str());
-    
-#warning ASK AGUSTIN
-    // update ground height in camera class
-//    _nextCamera->setGroundHeightFromCartesianPoint(pos);
-//    _currentCamera->setGroundHeightFromCartesianPoint(pos);
-    return pos;
-  } else{
-    //ILogger::instance()->logInfo("NO Z");
-    return Vector3D::nan();
-  }
+  
+  const IMathUtils* mu = IMathUtils::instance();
+  
+  const int ix = mu->round(x);
+  const int iy = mu->round(y);
+  
+  const double z = _gl->readPixelAsDouble(ix, iy, _width, _height);
+  
+  return z;
 }
-
-
-Vector3D G3MWidget::getScenePositionForCentralPixel() {
-  return getScenePositionForPixel(_width/2, _height/2);
-}
-
-
-Vector3D G3MWidget::getFirstValidScenePositionForFrameBufferColumn(int column){
-  zRender();
-
-  int row = _height / 2;
-  while (row<_height-1){
-
-    const double z = _gl->readPixelAsDouble(column, row, _width, _height);
-
-    if (!ISNAN(z)){
-      Vector3D pixel3D(column, _height - row,z);
-      MutableMatrix44D mmv(*_currentCamera->getModelViewMatrix44D());
-      Vector3D pos = mmv.unproject(pixel3D, 0, 0, _width, _height);
-      _nextCamera->setGroundHeightFromCartesianPoint(pos);
-      return pos;
-    }
-    row++;
-  }
-  return Vector3D::nan();
-}
-
-
-Vector3D G3MWidget::getFirstValidScenePositionForCentralColumn() {
-  int row = _height / 2;
-  MutableVector3D position = MutableVector3D::nan();
-  while (position.isNan() && row<_height-1) {
-    row++;
-    position = getScenePositionForPixel(_width/2, row).asMutableVector3D();
-  }
-  return position.asVector3D();
-}
-
 
 void G3MWidget::onTouchEvent(const TouchEvent* touchEvent) {
   
-  G3MEventContext ec(this,
-                     IFactory::instance(),
+  G3MEventContext ec(IFactory::instance(),
                      IStringUtils::instance(),
                      _threadUtils,
                      ILogger::instance(),
@@ -454,12 +408,9 @@ void G3MWidget::onTouchEvent(const TouchEvent* touchEvent) {
 
 
 void G3MWidget::zRender(){
-
-  if (_zRenderCounter == -1 || _zRenderCounter != _renderCounter){
-    _zRenderCounter = _renderCounter;
-  } else{
-    //ILogger::instance()->logInfo("Recycling Z Render");
-    return; //NO NEED OF RENDERING AGAIN
+  
+  if (_frameBufferContent == DEPTH_IMAGE){
+    return; //It means no regular frame has been generated since last ZRender
   }
 
   if (_mainRenderer->isEnable()){
@@ -467,13 +418,21 @@ void G3MWidget::zRender(){
     _gl->clearScreen(Color::black());
     _mainRenderer->zRender(_renderContext, zRenderGLState);
     zRenderGLState->_release();
+    
+    std::vector<OrderedRenderable*>* orderedRenderables = _renderContext->getSortedOrderedRenderables();
+    if (orderedRenderables != NULL) {
+      if (orderedRenderables->size() > 0){
+        ILogger::instance()->logError("Some component is altering the OrderedRenderables list during Depth Rendering.");
+      }
+    }
+    
+    _frameBufferContent = DEPTH_IMAGE;
   }
 
 }
 
 void G3MWidget::onResizeViewportEvent(int width, int height) {
-  G3MEventContext ec(this,
-                     IFactory::instance(),
+  G3MEventContext ec(IFactory::instance(),
                      IStringUtils::instance(),
                      _threadUtils,
                      ILogger::instance(),
@@ -684,8 +643,8 @@ void G3MWidget::render(int width, int height) {
   if (_renderCounter % _nFramesBeetweenProgramsCleanUp == 0) {
     _gpuProgramManager->removeUnused();
   }
-
-  _zRenderCounter = -1; //Frame buffer does not contain Z anymore
+  
+  _frameBufferContent = REGULAR_FRAME; //FrameBuffer has been filled with a regular frame
 
   const long long elapsedTimeMS = _timer->elapsedTimeInMilliseconds();
   //  if (elapsedTimeMS > 100) {
@@ -957,6 +916,27 @@ void G3MWidget::changedRendererInfo(const int rendererIdentifier,
 //  else {
 //    ILogger::instance()->logWarning("Render Infos are changing and InfoDisplay is NULL");
 //  }
+}
+
+
+void G3MWidget::addCameraConstrainer(ICameraConstrainer* cc){
+  _cameraConstrainers.push_back(cc);
+}
+
+void G3MWidget::removeCameraConstrainer(ICameraConstrainer* cc){
+  size_t size = _cameraConstrainers.size();
+  for (size_t i = 0; i < size; i++) {
+    if (_cameraConstrainers[i] == cc){
+#ifdef C_CODE
+      _cameraConstrainers.erase(_cameraConstrainers.begin() + i);
+#endif
+#ifdef JAVA_CODE
+      _cameraConstrainers.remove(i);
+#endif
+      return;
+    }
+  }
+  ILogger::instance()->logError("Could not remove camera constrainer.");
 }
 
 

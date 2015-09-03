@@ -189,8 +189,7 @@ public abstract class LayoutImageBuilder extends AbstractImageBuilder
 
   public final boolean isMutable()
   {
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning TODO: make mutable if any children is
+  //TODO: #warning TODO: make mutable if any children is
     return false;
   }
 

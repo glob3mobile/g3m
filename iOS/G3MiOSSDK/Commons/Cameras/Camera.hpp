@@ -24,6 +24,7 @@
 #include "Vector3F.hpp"
 #include "Effects.hpp"
 #include "GLState.hpp"
+#include "FrameDepthProvider.hpp"
 
 class ILogger;
 class GPUProgramState;
@@ -105,7 +106,7 @@ public:
 class Camera {
 public:
 
-  explicit Camera(long long timestamp);
+  explicit Camera(long long timestamp, FrameDepthProvider* frameDepthProvider);
 
   ~Camera() {
     delete _camEffectTarget;
@@ -160,6 +161,11 @@ public:
     return Vector3D(_center.x() - _position.x(),
                     _center.y() - _position.y(),
                     _center.z() - _position.z());
+  }
+  
+  bool hasValidViewDirection() const{
+    double d = _center.squaredDistanceTo(_position);
+    return (d > 0) && !ISNAN(d);
   }
 
   const void getViewDirectionInto(MutableVector3D& result) const {
@@ -233,8 +239,6 @@ public:
 
   void setGeodeticPosition(const Geodetic3D& g3d);
 
-  void setGeodeticPositionStablePitch(const Geodetic3D& g3d);
-
   void setGeodeticPosition(const Angle &latitude,
                            const Angle &longitude,
                            const double height) {
@@ -289,14 +293,6 @@ public:
 
   bool isPositionWithin(const Sector& sector, double height) const;
   bool isCenterOfViewWithin(const Sector& sector, double height) const;
-  
-  void setGroundHeightFromCartesianPoint(const Vector3D& point) {
-    _groundHeight = _planet->toGeodetic3D(point)._height;
-  }
-  
-  double getHeightFromGround() const {
-    return getGeodeticPosition()._height - _groundHeight;
-  }
 
   //In case any of the angles is NAN it would be inferred considering the vieport ratio
   void setFOV(const Angle& vertical,
@@ -307,6 +303,7 @@ public:
 
   CoordinateSystem getLocalCoordinateSystem() const;
   CoordinateSystem getCameraCoordinateSystem() const;
+
   TaitBryanAngles getHeadingPitchRoll() const;
   void setHeadingPitchRoll(const Angle& heading,
                            const Angle& pitch,
@@ -314,6 +311,14 @@ public:
 
   double getEstimatedPixelDistance(const Vector3D& point0,
                                    const Vector3D& point1) const;
+  
+  Vector3D getScenePositionForPixel(float x, float y);
+  
+  Vector3D getScenePositionForCentralPixel();
+  
+  Vector3D getFirstValidScenePositionForCentralColumn() const;
+  
+  void setCameraCoordinateSystem(const CoordinateSystem& rs);
 
   inline long long getTimestamp() const {
     return _timestamp;
@@ -383,33 +388,9 @@ private:
 
   Camera(const Camera &that);
 
-  //  Camera(const Camera &that):
-  //  _viewPortWidth(that._viewPortWidth),
-  //  _viewPortHeight(that._viewPortHeight),
-  //  _planet(that._planet),
-  //  _position(that._position),
-  //  _center(that._center),
-  //  _up(that._up),
-  //  _dirtyFlags(that._dirtyFlags),
-  //  _frustumData(that._frustumData),
-  //  _projectionMatrix(that._projectionMatrix),
-  //  _modelMatrix(that._modelMatrix),
-  //  _modelViewMatrix(that._modelViewMatrix),
-  //  _cartesianCenterOfView(that._cartesianCenterOfView),
-  //  _geodeticCenterOfView((that._geodeticCenterOfView == NULL) ? NULL : new Geodetic3D(*that._geodeticCenterOfView)),
-  //  _frustum((that._frustum == NULL) ? NULL : new Frustum(*that._frustum)),
-  //  _frustumInModelCoordinates((that._frustumInModelCoordinates == NULL) ? NULL : new Frustum(*that._frustumInModelCoordinates)),
-  //  _camEffectTarget(new CameraEffectTarget()),
-  //  _geodeticPosition((that._geodeticPosition == NULL) ? NULL: new Geodetic3D(*that._geodeticPosition)),
-  //  _angle2Horizon(that._angle2Horizon),
-  //  _normalizedPosition(that._normalizedPosition),
-  //  _tanHalfVerticalFieldOfView(NAND),
-  //  _tanHalfHorizontalFieldOfView(NAND),
-  //  _timestamp(that._timestamp)
-  //  {
-  //  }
-
   mutable long long _timestamp;
+  
+  FrameDepthProvider* _frameDepthProvider;
 
   mutable MutableVector3D _ray0;
   mutable MutableVector3D _ray1;
@@ -429,8 +410,6 @@ private:
   MutableVector3D _up;                  // vertical vector
 
   mutable Geodetic3D*     _geodeticPosition;    //Must be updated when changing position
-  
-  double _groundHeight;
 
   // this value is only used in the method Sector::isBackOriented
   // it's stored in double instead of Angle class to optimize performance in android
@@ -490,7 +469,6 @@ private:
   MutableVector3D   _getCartesianCenterOfView() const {
     if (_dirtyFlags._cartesianCenterOfViewDirty) {
       _dirtyFlags._cartesianCenterOfViewDirty = false;
-      //      _cartesianCenterOfView = centerOfViewOnPlanet().asMutableVector3D();
       _cartesianCenterOfView.copyFrom(centerOfViewOnPlanet());
     }
     return _cartesianCenterOfView;
@@ -540,13 +518,10 @@ private:
   const MutableMatrix44D& getModelViewMatrix() const {
     if (_dirtyFlags._modelViewMatrixDirty) {
       _dirtyFlags._modelViewMatrixDirty = false;
-      //_modelViewMatrix.copyValue(getProjectionMatrix().multiply(getModelMatrix()));
       _modelViewMatrix.copyValueOfMultiplication(getProjectionMatrix(), getModelMatrix());
     }
     return _modelViewMatrix;
   }
-  
-  void setCameraCoordinateSystem(const CoordinateSystem& rs);
   
 };
 

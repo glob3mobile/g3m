@@ -46,12 +46,12 @@ protected:
                      const GEORasterProjection* projection) const;
 
   void rasterRectangle(const GEO2DPolygonData*  rectangleData,
-                         const Vector2F            rectangleSize,
-                         bool                       rasterSurface,
-                         bool                       rasterBoundary,
-                         ICanvas*                   canvas,
-                         const GEORasterProjection* projection) const;
-    
+                       const Vector2F            rectangleSize,
+                       bool                       rasterSurface,
+                       bool                       rasterBoundary,
+                       ICanvas*                   canvas,
+                       const GEORasterProjection* projection) const;
+
   virtual void rawRasterize(ICanvas*                   canvas,
                             const GEORasterProjection* projection) const = 0;
 
@@ -71,7 +71,7 @@ public:
   void rasterize(ICanvas*                   canvas,
                  const GEORasterProjection* projection,
                  int tileLevel) const;
-  
+
 };
 
 #endif

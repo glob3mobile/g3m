@@ -14,8 +14,8 @@
 
 CameraRenderer::~CameraRenderer() {
   delete _cameraContext;
-  const int handlersSize = _handlers.size();
-  for (int i = 0; i < handlersSize; i++) {
+  const size_t handlersSize = _handlers.size();
+  for (size_t i = 0; i < handlersSize; i++) {
     CameraEventHandler* handler = _handlers[i];
     delete handler;
   }
@@ -31,8 +31,8 @@ void CameraRenderer::render(const G3MRenderContext* rc, GLState* glState) {
   // render camera object
 //  rc->getCurrentCamera()->render(rc, parentState);
 
-  const int handlersSize = _handlers.size();
-  for (unsigned int i = 0; i < handlersSize; i++) {
+  const size_t handlersSize = _handlers.size();
+  for (size_t i = 0; i < handlersSize; i++) {
     _handlers[i]->render(rc, _cameraContext);
   }
 }
@@ -47,8 +47,8 @@ bool CameraRenderer::onTouchEvent(const G3MEventContext* ec,
     }
 
     // pass the event to all the handlers
-    const int handlersSize = _handlers.size();
-    for (unsigned int i = 0; i < handlersSize; i++) {
+    const size_t handlersSize = _handlers.size();
+    for (size_t i = 0; i < handlersSize; i++) {
       if (_handlers[i]->onTouchEvent(ec, touchEvent, _cameraContext)) {
         return true;
       }
@@ -61,8 +61,24 @@ bool CameraRenderer::onTouchEvent(const G3MEventContext* ec,
 
 
 void CameraRenderer::setDebugMeshRenderer(MeshRenderer* meshRenderer) {
-  _meshRenderer = meshRenderer;
+  _debugMR = meshRenderer;
   for (int n=0; n<_handlers.size(); n++)
     _handlers[n]->setDebugMeshRenderer(meshRenderer);
+}
+
+void CameraRenderer::removeHandler(CameraEventHandler* handler){
+  size_t size = _handlers.size();
+  for (size_t i = 0; i < size; i++) {
+    if (_handlers[i] == handler){
+#ifdef C_CODE
+      _handlers.erase(_handlers.begin() + i);
+#endif
+#ifdef JAVA_CODE
+      _handlers.remove(i);
+#endif
+      return;
+    }
+  }
+  ILogger::instance()->logError("Could not remove camera handler.");
 }
 

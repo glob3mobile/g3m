@@ -1,0 +1,10 @@
+/bin/
+/PointFeatureStorageTest/
+*-quadtree.png
+LOD_*.png
+LOD-Levels*.png
+test.png
+/PointFeaturesStorage/
+/PointFeaturesLOD/
+/test-files/
+/testing-bitmaps/

@@ -98,6 +98,13 @@ Geodetic3D EllipsoidalPlanet::toGeodetic3D(const Vector3D& position) const {
   return Geodetic3D(toGeodetic2D(p), height);
 }
 
+double EllipsoidalPlanet::getGeodetic3DHeight(const Vector3D& position) const{
+  const Vector3D p = scaleToGeodeticSurface(position);
+  const Vector3D h = position.sub(p);
+  
+  return (h.dot(position) < 0) ? -1 * h.length() : h.length();
+}
+
 
 Vector3D EllipsoidalPlanet::scaleToGeodeticSurface(const Vector3D& position) const {
   const IMathUtils* mu = IMathUtils::instance();
@@ -440,7 +447,7 @@ Effect* EllipsoidalPlanet::createDoubleTapEffect(const Vector3D& origin,
   const Angle angle   = Angle::fromRadians(- mu->asin(axis.length()/touchedPosition.length()/centerPoint.length()));
 
   // compute zoom factor
-  const double distanceToGround   = toGeodetic3D(origin)._height - toGeodetic3D(touchedPosition)._height;
+  const double distanceToGround = getGeodetic3DHeight(origin) - getGeodetic3DHeight(touchedPosition);
   const double distance = distanceToGround * 0.6;
 
   // create effect
@@ -475,7 +482,21 @@ void EllipsoidalPlanet::applyCameraConstrainers(const Camera* previousCamera,
 
 }
 
-
-void EllipsoidalPlanet::correctPitchAfterDoubleDrag(Camera* camera, const Vector2F& finalPixel0, const Vector2F& finalPixel1) const{
-  _sphericalPlanetDoubleDragDelegate->correctPitchAfterDoubleDrag(camera, finalPixel0, finalPixel1);
+MutableMatrix44D EllipsoidalPlanet::zoomUsingMouseWheel(double factor,
+                                                        const Vector3D& origin,
+                                                        const Vector3D& centerRay,
+                                                        const Vector3D& centerPosition,
+                                                        const Vector3D& touchedPosition,
+                                                        const Vector3D& finalRay) const {
+  if (_sphericalPlanetDoubleDragDelegate == NULL){
+    _sphericalPlanetDoubleDragDelegate = new SphericalPlanet(Sphere(Vector3D::zero, _ellipsoid._radii.maxAxis()));
+  }
+  return _sphericalPlanetDoubleDragDelegate->zoomUsingMouseWheel(factor,
+                                                                 origin,
+                                                                 centerRay,
+                                                                 centerPosition,
+                                                                 touchedPosition,
+                                                                 finalRay);
 }
+
+

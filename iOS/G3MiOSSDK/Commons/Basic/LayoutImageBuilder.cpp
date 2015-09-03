@@ -19,7 +19,7 @@ LayoutImageBuilder::~LayoutImageBuilder() {
 }
 
 bool LayoutImageBuilder::isMutable() const {
-#warning TODO: make mutable if any children is
+//TODO: #warning TODO: make mutable if any children is
   return false;
 }
 

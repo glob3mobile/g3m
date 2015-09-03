@@ -796,7 +796,6 @@ public final class NativeGL2_Android
 
       }
       catch (final UnsupportedEncodingException e) {
-         // TODO Auto-generated catch block
          e.printStackTrace();
          return null;
       }
@@ -874,12 +873,12 @@ public final class NativeGL2_Android
 		GLES20.glReadPixels(x, y, 1, 1, GLES20.GL_RGBA,
 				GLES20.GL_UNSIGNED_BYTE, pixels);
 
-		byte r = pixels.get(0);
-		byte g = pixels.get(1);
-		byte b = pixels.get(2);
-		byte a = pixels.get(3);
+		double r = byte2double(pixels.get(0)) / 255.0;
+		double g = byte2double(pixels.get(1)) / 255.0;
+		double b = byte2double(pixels.get(2)) / 255.0;
+		double a = byte2double(pixels.get(3)) / 255.0;
 
-		Color c = Color.fromRGBA(r, g, b, a);
+		Color c = Color.fromRGBA((float)r, (float)g, (float)b, (float)a);
 		return c;
 	}
 
@@ -901,7 +900,7 @@ public final class NativeGL2_Android
 
 		double r = byte2double(pixels.get(0));
 		double g = byte2double(pixels.get(1));
-		double b = byte2double(pixels.get(2));
+//		double b = byte2double(pixels.get(2));
 		double a = byte2double(pixels.get(3));
 
 		if (a != 0) { // ZRENDER Shader sets all pixels with 0 alpha

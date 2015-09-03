@@ -51,6 +51,13 @@ public class MutableVector3D
      _z = v._z;
   }
 
+  public MutableVector3D(Vector3D v)
+  {
+     _x = v._x;
+     _y = v._y;
+     _z = v._z;
+  }
+
   public final void set(double x, double y, double z)
   {
     _x = x;
@@ -314,6 +321,22 @@ public class MutableVector3D
   {
     double squaredDistance = (a._x - b._x) * (a._x - b._x) + (a._y - b._y) * (a._y - b._y) + (a._z - b._z) * (a._z - b._z);
     return IMathUtils.instance().sqrt(squaredDistance);
+  }
+
+  public final double squaredDistanceTo(Vector3D that)
+  {
+    final double dx = _x - that._x;
+    final double dy = _y - that._y;
+    final double dz = _z - that._z;
+    return (dx * dx) + (dy * dy) + (dz * dz);
+  }
+
+  public final double squaredDistanceTo(MutableVector3D that)
+  {
+    final double dx = _x - that._x;
+    final double dy = _y - that._y;
+    final double dz = _z - that._z;
+    return (dx * dx) + (dy * dy) + (dz * dz);
   }
 
 }

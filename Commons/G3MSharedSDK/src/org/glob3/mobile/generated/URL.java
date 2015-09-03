@@ -26,7 +26,12 @@ public class URL
   {
     final IStringUtils iu = IStringUtils.instance();
 
-    String result = iu.replaceSubstring(parent._path + "/" + path, "//", "/");
+    String result = parent._path + "/" + path;
+    while (iu.indexOf(result, "//") >= 0)
+    {
+      result = iu.replaceAll(result, "//", "/");
+    }
+
     if (iu.beginsWith(result, "http:/"))
     {
       result = "http://" + iu.substring(result, 6);
@@ -63,7 +68,11 @@ public class URL
 
   public URL(URL parent, String path)
   {
-     _path = concatenatePath(parent, path);
+     this(parent, path, false);
+  }
+  public URL(URL parent, String path, boolean escapePath)
+  {
+     _path = concatenatePath(parent, escapePath ? escape(path) : path);
   }
 
   public void dispose()
@@ -116,21 +125,21 @@ public class URL
   public static String escape(String path)
   {
     final IStringUtils su = IStringUtils.instance();
-    String result = su.replaceSubstring(path, "\n", "%0A");
-    result = su.replaceSubstring(result, " ", "%20");
-    result = su.replaceSubstring(result, "\"", "%22");
-    result = su.replaceSubstring(result, "-", "%2D");
-    result = su.replaceSubstring(result, ".", "%2E");
-    result = su.replaceSubstring(result, "<", "%3C");
-    result = su.replaceSubstring(result, ">", "%3E");
-    result = su.replaceSubstring(result, "\\", "%5C");
-    result = su.replaceSubstring(result, "^", "%5E");
-    result = su.replaceSubstring(result, "_", "%5F");
-    result = su.replaceSubstring(result, "`", "%60");
-    result = su.replaceSubstring(result, "{", "%7B");
-    result = su.replaceSubstring(result, "|", "%7C");
-    result = su.replaceSubstring(result, "}", "%7D");
-    result = su.replaceSubstring(result, "~", "%7E");
+    String result = su.replaceAll(path, "\n", "%0A");
+    result = su.replaceAll(result, " ", "%20");
+    result = su.replaceAll(result, "\"", "%22");
+    result = su.replaceAll(result, "-", "%2D");
+    result = su.replaceAll(result, ".", "%2E");
+    result = su.replaceAll(result, "<", "%3C");
+    result = su.replaceAll(result, ">", "%3E");
+    result = su.replaceAll(result, "\\", "%5C");
+    result = su.replaceAll(result, "^", "%5E");
+    result = su.replaceAll(result, "_", "%5F");
+    result = su.replaceAll(result, "`", "%60");
+    result = su.replaceAll(result, "{", "%7B");
+    result = su.replaceAll(result, "|", "%7C");
+    result = su.replaceAll(result, "}", "%7D");
+    result = su.replaceAll(result, "~", "%7E");
     return result;
   }
 

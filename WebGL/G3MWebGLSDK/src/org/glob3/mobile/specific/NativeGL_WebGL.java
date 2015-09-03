@@ -223,51 +223,51 @@ public final class NativeGL_WebGL extends INativeGL {
 		return Number(e);
 	}-*/;
 
-   @Override
-   public native void blendFunc(final int sfactor,
-                                final int dfactor) /*-{
-		this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.blendFunc(sfactor, dfactor);
-   }-*/;
+	@Override
+	public native void blendFunc(final int sfactor, final int dfactor) /*-{
+		this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.blendFunc(sfactor,
+				dfactor);
+	}-*/;
 
 	@Override
 	public native void bindTexture(final int target, final IGLTextureId texture) /*-{
 		var id = texture.@org.glob3.mobile.specific.GLTextureId_WebGL::getWebGLTexture()();
-		this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.bindTexture(target, id);
-   }-*/;
-
+		this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.bindTexture(target,
+				id);
+	}-*/;
 
 	@Override
 	public native boolean deleteTexture(final IGLTextureId texture) /*-{
 		var textureID = texture.@org.glob3.mobile.specific.GLTextureId_WebGL::getWebGLTexture()();
-		this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.deleteTexture(textureID);
+		this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl
+				.deleteTexture(textureID);
 		return false;
 	}-*/;
 
+	@Override
+	public native void enableVertexAttribArray(final int location) /*-{
+		this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl
+				.enableVertexAttribArray(location);
+	}-*/;
 
-   @Override
-   public native void enableVertexAttribArray(final int location) /*-{
-		this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.enableVertexAttribArray(location);
-   }-*/;
+	@Override
+	public native void disableVertexAttribArray(final int location) /*-{
+		this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl
+				.disableVertexAttribArray(location);
+	}-*/;
 
-
-   @Override
-   public native void disableVertexAttribArray(final int location) /*-{
-		this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.disableVertexAttribArray(location);
-   }-*/;
-
-
-   @Override
-   public native void pixelStorei(final int pname,
-                                  final int param) /*-{
-		this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.pixelStorei(pname, param);
-   }-*/;
-
+	@Override
+	public native void pixelStorei(final int pname, final int param) /*-{
+		this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.pixelStorei(pname,
+				param);
+	}-*/;
 
 	@Override
 	public native ArrayList<IGLTextureId> genTextures(final int n) /*-{
 		var array = @java.util.ArrayList::new()();
 		for (i = 0; i < n; i++) {
-			var texture = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.createTexture();
+			var texture = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl
+					.createTexture();
 
 			var textureID = @org.glob3.mobile.specific.GLTextureId_WebGL::new(Lcom/google/gwt/core/client/JavaScriptObject;)(texture);
 			array.@java.util.ArrayList::add(Ljava/lang/Object;)(textureID);
@@ -276,14 +276,12 @@ public final class NativeGL_WebGL extends INativeGL {
 		return array;
 	}-*/;
 
-
-   @Override
-   public native void texParameteri(final int target,
-                                    final int par,
-                                    final int v) /*-{
-		this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.texParameteri(target, par, v);
-   }-*/;
-
+	@Override
+	public native void texParameteri(final int target, final int par,
+			final int v) /*-{
+		this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.texParameteri(
+				target, par, v);
+	}-*/;
 
 	@Override
 	public native void texImage2D(final IImage image, final int format) /*-{
@@ -295,19 +293,18 @@ public final class NativeGL_WebGL extends INativeGL {
 		gl.texImage2D(TEXTURE_2D, 0, format, format, UNSIGNED_BYTE, img);
 	}-*/;
 
+	@Override
+	public native void generateMipmap(final int target) /*-{
+		this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl
+				.generateMipmap(target);
+	}-*/;
 
-   @Override
-   public native void generateMipmap(final int target) /*-{
-		this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.generateMipmap(target);
-   }-*/;
-
-
-   @Override
-   public native void drawArrays(final int mode,
-                                 final int first,
-                                 final int count) /*-{
-		this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.drawArrays(mode, first, count);
-   }-*/;
+	@Override
+	public native void drawArrays(final int mode, final int first,
+			final int count) /*-{
+		this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.drawArrays(mode,
+				first, count);
+	}-*/;
 
 	@Override
 	public native void cullFace(final int c) /*-{
@@ -317,7 +314,8 @@ public final class NativeGL_WebGL extends INativeGL {
 	@Override
 	public native void getIntegerv(final int v, final int[] i) /*-{
 		// TODO Warning: getIntegerv is not implemented in WebGL.
-		var result = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.getParameter(v);
+		var result = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl
+				.getParameter(v);
 
 		this.@org.glob3.mobile.specific.NativeGL_WebGL::convertJsArrayIngeterToJavaArrayInt(Lcom/google/gwt/core/client/JsArrayInteger;[I)(result, i);
 	}-*/;
@@ -464,11 +462,10 @@ public final class NativeGL_WebGL extends INativeGL {
 		return this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.TEXTURE_WRAP_T;
 	}-*/;
 
-//	@Override
-//	public native int TextureParameterValue_Linear() /*-{
-//		return this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.LINEAR;
-//	}-*/;
-
+	// @Override
+	// public native int TextureParameterValue_Linear() /*-{
+	// return this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.LINEAR;
+	// }-*/;
 
 	@Override
 	public native int TextureParameterValue_ClampToEdge() /*-{
@@ -503,7 +500,8 @@ public final class NativeGL_WebGL extends INativeGL {
 	@Override
 	public native int createProgram() /*-{
 		var shaderList = this.@org.glob3.mobile.specific.NativeGL_WebGL::_shaderList;
-		var jsoProgram = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.createProgram();
+		var jsoProgram = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl
+				.createProgram();
 		shaderList.@java.util.ArrayList::add(Ljava/lang/Object;)(jsoProgram);
 		var id = shaderList.@java.util.ArrayList::size()() - 1;
 
@@ -515,8 +513,9 @@ public final class NativeGL_WebGL extends INativeGL {
 		var shaderList = this.@org.glob3.mobile.specific.NativeGL_WebGL::_shaderList;
 		var jsoProgram = shaderList.@java.util.ArrayList::get(I)(program);
 
-		this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.deleteProgram(jsoProgram);
-   }-*/;
+		this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl
+				.deleteProgram(jsoProgram);
+	}-*/;
 
 	@Override
 	public native void attachShader(final int program, final int shader) /*-{
@@ -524,9 +523,9 @@ public final class NativeGL_WebGL extends INativeGL {
 		var jsoProgram = shaderList.@java.util.ArrayList::get(I)(program);
 		var jsoShader = shaderList.@java.util.ArrayList::get(I)(shader);
 
-		this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.attachShader(jsoProgram, jsoShader);
-   }-*/;
-
+		this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.attachShader(
+				jsoProgram, jsoShader);
+	}-*/;
 
 	@Override
 	public native int createShader(final ShaderType type) /*-{
@@ -582,7 +581,8 @@ public final class NativeGL_WebGL extends INativeGL {
 		var jsoShader = shaderList.@java.util.ArrayList::get(I)(shader);
 
 		if (!gl.getShaderParameter(jsoShader, gl.COMPILE_STATUS)) {
-			$wnd.alert("Error compiling shaders: " + gl.getShaderInfoLog(jsoShader));
+			$wnd.alert("Error compiling shaders: "
+					+ gl.getShaderInfoLog(jsoShader));
 		}
 	}-*/;
 
@@ -604,7 +604,8 @@ public final class NativeGL_WebGL extends INativeGL {
 		var jsoProgram = shaderList.@java.util.ArrayList::get(I)(program);
 
 		if (!gl.getProgramParameter(jsoProgram, gl.LINK_STATUS)) {
-			$wnd.alert("Error linking program: " + gl.getProgramInfoLog(jsoProgram));
+			$wnd.alert("Error linking program: "
+					+ gl.getProgramInfoLog(jsoProgram));
 		}
 	}-*/;
 
@@ -623,8 +624,9 @@ public final class NativeGL_WebGL extends INativeGL {
 		var progInt = program.@org.glob3.mobile.generated.GPUProgram::getProgramID()();
 		var shaderList = this.@org.glob3.mobile.specific.NativeGL_WebGL::_shaderList;
 		var jsoProgram = shaderList.@java.util.ArrayList::get(I)(progInt);
-		this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.useProgram(jsoProgram);
-   }-*/;
+		this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl
+				.useProgram(jsoProgram);
+	}-*/;
 
 	@Override
 	public native int Type_Vec2Float() /*-{
@@ -762,7 +764,7 @@ public final class NativeGL_WebGL extends INativeGL {
 		var b = pixels[2];
 		var a = pixels[3];
 
-		return @org.glob3.mobile.generated.Color::fromRGBA(FFFF)(r,g,b,a);
+		return @org.glob3.mobile.generated.Color::fromRGBA255(IIII)(r,g,b,a);
 	}-*/;
 
 	@Override
@@ -813,47 +815,40 @@ public final class NativeGL_WebGL extends INativeGL {
 				y, z);
 	}-*/;
 
-
-   @Override
-   public native int TextureParameterValue_Linear() /*-{
+	@Override
+	public native int TextureParameterValue_Linear() /*-{
 		return this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.LINEAR;
-   }-*/;
+	}-*/;
 
-
-   @Override
-   public native int TextureParameterValue_Nearest() /*-{
+	@Override
+	public native int TextureParameterValue_Nearest() /*-{
 		return this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.NEAREST;
-   }-*/;
+	}-*/;
 
-
-   @Override
-   public native int TextureParameterValue_NearestMipmapNearest() /*-{
+	@Override
+	public native int TextureParameterValue_NearestMipmapNearest() /*-{
 		return this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.NEAREST_MIPMAP_NEAREST;
-   }-*/;
+	}-*/;
 
-
-   @Override
-   public native int TextureParameterValue_NearestMipmapLinear() /*-{
+	@Override
+	public native int TextureParameterValue_NearestMipmapLinear() /*-{
 		return this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.NEAREST_MIPMAP_LINEAR;
-   }-*/;
+	}-*/;
 
-
-   @Override
-   public native int TextureParameterValue_LinearMipmapNearest() /*-{
+	@Override
+	public native int TextureParameterValue_LinearMipmapNearest() /*-{
 		return this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.LINEAR_MIPMAP_NEAREST;
-   }-*/;
+	}-*/;
 
-
-   @Override
-   public native int TextureParameterValue_LinearMipmapLinear() /*-{
+	@Override
+	public native int TextureParameterValue_LinearMipmapLinear() /*-{
 		return this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.LINEAR_MIPMAP_LINEAR;
-   }-*/;
+	}-*/;
 
-
-   @Override
-   public native void setActiveTexture(final int i) /*-{
+	@Override
+	public native void setActiveTexture(final int i) /*-{
 		var gl = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl;
 		gl.activeTexture(gl.TEXTURE0 + i);
-   }-*/;
+	}-*/;
 
 }

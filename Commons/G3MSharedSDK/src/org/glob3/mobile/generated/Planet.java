@@ -83,6 +83,8 @@ public abstract class Planet
 
   public abstract Geodetic3D toGeodetic3D(Vector3D position);
 
+  public abstract double getGeodetic3DHeight(Vector3D position);
+
   public abstract Vector3D scaleToGeodeticSurface(Vector3D position);
 
   public abstract Vector3D scaleToGeocentricSurface(Vector3D position);
@@ -155,8 +157,6 @@ public abstract class Planet
 
   public abstract String getType();
 
-  public void correctPitchAfterDoubleDrag(Camera camera, Vector2F finalPixel0, Vector2F finalPixel1)
-  {
-  }
+  public abstract MutableMatrix44D zoomUsingMouseWheel(double factor, Vector3D origin, Vector3D centerRay, Vector3D centerPosition, Vector3D touchedPosition, Vector3D finalRay);
 
 }

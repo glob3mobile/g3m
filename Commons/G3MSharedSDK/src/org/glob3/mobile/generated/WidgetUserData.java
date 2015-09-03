@@ -55,7 +55,9 @@ package org.glob3.mobile.generated;
 //class ErrorRenderer;
 //class G3MRenderContext;
 //class Vector3D;
+//class IDeviceAttitude;
 //class InfoDisplay;
+//class IDeviceLocation;
 
 
 

@@ -2,11 +2,10 @@ package org.glob3.mobile.generated;
 public class Camera
 {
 
-  public Camera(long timestamp)
+  public Camera(long timestamp, FrameDepthProvider frameDepthProvider)
   {
      _planet = null;
      _position = new MutableVector3D(0, 0, 0);
-     _groundHeight = 0;
      _center = new MutableVector3D(0, 0, 0);
      _up = new MutableVector3D(0, 0, 1);
      _dirtyFlags = new CameraDirtyFlags();
@@ -25,6 +24,7 @@ public class Camera
      _tanHalfVerticalFieldOfView = java.lang.Double.NaN;
      _tanHalfHorizontalFieldOfView = java.lang.Double.NaN;
      _timestamp = timestamp;
+     _frameDepthProvider = frameDepthProvider;
     resizeViewport(0, 0);
     _dirtyFlags.setAllDirty();
   }
@@ -86,6 +86,8 @@ public class Camera
   
     _tanHalfVerticalFieldOfView = that._tanHalfVerticalFieldOfView;
     _tanHalfHorizontalFieldOfView = that._tanHalfHorizontalFieldOfView;
+  
+    _frameDepthProvider = that._frameDepthProvider;
   }
 
   public final void resizeViewport(int width, int height)
@@ -97,12 +99,6 @@ public class Camera
     _dirtyFlags.setAllDirty();
   }
 
-
-  /*void Camera::setGeodeticPositionStablePitch(const Geodetic3D& g3d) {
-    MutableMatrix44D dragMatrix = _planet->drag(getGeodeticPosition(), g3d);
-    if (dragMatrix.isValid()) applyTransform(dragMatrix);
-  }*/
-  
   public final Vector3D pixel2Ray(Vector2F pixel)
   {
     final float px = pixel._x;
@@ -230,6 +226,12 @@ public class Camera
     return new Vector3D(_center.x() - _position.x(), _center.y() - _position.y(), _center.z() - _position.z());
   }
 
+  public final boolean hasValidViewDirection()
+  {
+    double d = _center.squaredDistanceTo(_position);
+    return (d > 0) && !(d != d);
+  }
+
   public final void getViewDirectionInto(MutableVector3D result)
   {
     result.set(_center.x() - _position.x(), _center.y() - _position.y(), _center.z() - _position.z());
@@ -325,8 +327,7 @@ public class Camera
   public final void initialize(G3MContext context)
   {
     _planet = context.getPlanet();
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning move this to Planet, && remove isFlat() method (DGD)
+  // #warning move this to Planet, and remove isFlat() method (DGD)
     if (_planet.isFlat())
     {
       setCartesianPosition(new MutableVector3D(0, 0, _planet.getRadii()._y * 5));
@@ -406,9 +407,6 @@ public class Camera
     setHeading(heading);
     setPitch(pitch);
   }
-
-//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
-//  void setGeodeticPositionStablePitch(Geodetic3D g3d);
 
   public final void setGeodeticPosition(Angle latitude, Angle longitude, double height)
   {
@@ -506,16 +504,6 @@ public class Camera
     return sector.contains(position._latitude, position._longitude) && height >= position._height;
   }
 
-  public final void setGroundHeightFromCartesianPoint(Vector3D point)
-  {
-    _groundHeight = _planet.toGeodetic3D(point)._height;
-  }
-
-  public final double getHeightFromGround()
-  {
-    return getGeodeticPosition()._height - _groundHeight;
-  }
-
   //In case any of the angles is NAN it would be inferred considering the vieport ratio
   public final void setFOV(Angle vertical, Angle horizontal)
   {
@@ -558,6 +546,7 @@ public class Camera
   {
     return new CoordinateSystem(getViewDirection(), getUp(), getCartesianPosition());
   }
+
   public final TaitBryanAngles getHeadingPitchRoll()
   {
     final CoordinateSystem localRS = getLocalCoordinateSystem();
@@ -579,6 +568,62 @@ public class Camera
     final FrustumData frustumData = getFrustumData();
     final double distanceInMeters = frustumData._znear * IMathUtils.instance().tan(angleInRadians/2);
     return distanceInMeters * _viewPortHeight / frustumData._top;
+  }
+
+  public final Vector3D getScenePositionForPixel(float x, float y)
+  {
+    final double z = _frameDepthProvider.getDepthForPixel(x, y);
+  
+    if (!(z != z))
+    {
+      Vector3D pixel3D = new Vector3D(x, _viewPortHeight - y,z);
+      Vector3D pos = getModelViewMatrix().unproject(pixel3D, 0, 0, _viewPortWidth, _viewPortHeight);
+      //ILogger::instance()->logInfo("PIXEL 3D: %s -> %s\n", pixel3D.description().c_str(), pos.description().c_str() );
+      //ILogger::instance()->logInfo("Z = %f - DIST CAM: %f\n", z, _currentCamera->getCartesianPosition().sub(pos).length());
+      //ILogger::instance()->logInfo("GEO: %s\n", _planet->toGeodetic2D(pos).description().c_str());
+  
+      return pos;
+    }
+    else
+    {
+      //ILogger::instance()->logInfo("NO Z");
+      return Vector3D.nan();
+    }
+  }
+
+  public final Vector3D getScenePositionForCentralPixel()
+  {
+    return getScenePositionForPixel(_viewPortWidth / 2, _viewPortHeight / 2);
+  }
+
+  public final Vector3D getFirstValidScenePositionForCentralColumn()
+  {
+  
+    final int halfWidth = _viewPortWidth/2;
+  
+    for (int row = _viewPortHeight / 2; row < _viewPortHeight-1; row++)
+    {
+      final double z = _frameDepthProvider.getDepthForPixel(halfWidth, row);
+  
+      if (!(z != z))
+      {
+        Vector3D pixel3D = new Vector3D(halfWidth, _viewPortHeight - row,z);
+        Vector3D pos = getModelViewMatrix().unproject(pixel3D, 0, 0, _viewPortWidth, _viewPortHeight);
+        return pos;
+      }
+    }
+  
+    return Vector3D.nan();
+  
+  }
+
+  public final void setCameraCoordinateSystem(CoordinateSystem rs)
+  {
+    _timestamp++;
+    _center.copyFrom(_position);
+    _center.addInPlace(rs._y);
+    _up.copyFrom(rs._z);
+    _dirtyFlags.setAllDirty();
   }
 
   public final long getTimestamp()
@@ -644,33 +689,9 @@ public class Camera
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
 //  Camera(Camera that);
 
-  //  Camera(const Camera &that):
-  //  _viewPortWidth(that._viewPortWidth),
-  //  _viewPortHeight(that._viewPortHeight),
-  //  _planet(that._planet),
-  //  _position(that._position),
-  //  _center(that._center),
-  //  _up(that._up),
-  //  _dirtyFlags(that._dirtyFlags),
-  //  _frustumData(that._frustumData),
-  //  _projectionMatrix(that._projectionMatrix),
-  //  _modelMatrix(that._modelMatrix),
-  //  _modelViewMatrix(that._modelViewMatrix),
-  //  _cartesianCenterOfView(that._cartesianCenterOfView),
-  //  _geodeticCenterOfView((that._geodeticCenterOfView == NULL) ? NULL : new Geodetic3D(*that._geodeticCenterOfView)),
-  //  _frustum((that._frustum == NULL) ? NULL : new Frustum(*that._frustum)),
-  //  _frustumInModelCoordinates((that._frustumInModelCoordinates == NULL) ? NULL : new Frustum(*that._frustumInModelCoordinates)),
-  //  _camEffectTarget(new CameraEffectTarget()),
-  //  _geodeticPosition((that._geodeticPosition == NULL) ? NULL: new Geodetic3D(*that._geodeticPosition)),
-  //  _angle2Horizon(that._angle2Horizon),
-  //  _normalizedPosition(that._normalizedPosition),
-  //  _tanHalfVerticalFieldOfView(NAND),
-  //  _tanHalfHorizontalFieldOfView(NAND),
-  //  _timestamp(that._timestamp)
-  //  {
-  //  }
-
   private long _timestamp;
+
+  private FrameDepthProvider _frameDepthProvider;
 
   private MutableVector3D _ray0 = new MutableVector3D();
   private MutableVector3D _ray1 = new MutableVector3D();
@@ -686,8 +707,6 @@ public class Camera
   private MutableVector3D _up = new MutableVector3D(); // vertical vector
 
   private Geodetic3D _geodeticPosition; //Must be updated when changing position
-
-  private double _groundHeight;
 
   // this value is only used in the method Sector::isBackOriented
   // it's stored in double instead of Angle class to optimize performance in android
@@ -759,7 +778,6 @@ public class Camera
     if (_dirtyFlags._cartesianCenterOfViewDirty)
     {
       _dirtyFlags._cartesianCenterOfViewDirty = false;
-      //      _cartesianCenterOfView = centerOfViewOnPlanet().asMutableVector3D();
       _cartesianCenterOfView.copyFrom(centerOfViewOnPlanet());
     }
     return _cartesianCenterOfView;
@@ -793,12 +811,7 @@ public class Camera
 
   private FrustumData calculateFrustumData()
   {
-  //  const double heightFromGround = getHeightFromGround();
-  //
-  //  double zNear = heightFromGround * 0.1;
   
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning ASK AGUSTIN
     final double height = getGeodeticPosition()._height;
     double zNear = height * 0.1;
   
@@ -880,19 +893,9 @@ public class Camera
     if (_dirtyFlags._modelViewMatrixDirty)
     {
       _dirtyFlags._modelViewMatrixDirty = false;
-      //_modelViewMatrix.copyValue(getProjectionMatrix().multiply(getModelMatrix()));
       _modelViewMatrix.copyValueOfMultiplication(getProjectionMatrix(), getModelMatrix());
     }
     return _modelViewMatrix;
-  }
-
-  private void setCameraCoordinateSystem(CoordinateSystem rs)
-  {
-    _timestamp++;
-    _center.copyFrom(_position);
-    _center.addInPlace(rs._y);
-    _up.copyFrom(rs._z);
-    _dirtyFlags.setAllDirty();
   }
 
 }

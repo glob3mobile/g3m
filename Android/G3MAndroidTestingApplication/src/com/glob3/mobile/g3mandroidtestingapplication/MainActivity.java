@@ -2,67 +2,34 @@
 
 package com.glob3.mobile.g3mandroidtestingapplication;
 
-import org.glob3.mobile.generated.AltitudeMode;
 import org.glob3.mobile.generated.Angle;
 import org.glob3.mobile.generated.BingMapType;
 import org.glob3.mobile.generated.BingMapsLayer;
-import org.glob3.mobile.generated.BoxShape;
-import org.glob3.mobile.generated.CameraDoubleDragHandler;
-import org.glob3.mobile.generated.CameraDoubleTapHandler;
 import org.glob3.mobile.generated.CameraRenderer;
-import org.glob3.mobile.generated.CameraRotationHandler;
-import org.glob3.mobile.generated.CameraSingleDragHandler;
-import org.glob3.mobile.generated.Color;
+import org.glob3.mobile.generated.ColumnLayoutImageBuilder;
+import org.glob3.mobile.generated.DeviceAttitudeCameraHandler;
 import org.glob3.mobile.generated.DownloadPriority;
-import org.glob3.mobile.generated.ElevationDataProvider;
+import org.glob3.mobile.generated.DownloaderImageBuilder;
+import org.glob3.mobile.generated.GFont;
 import org.glob3.mobile.generated.Geodetic2D;
 import org.glob3.mobile.generated.Geodetic3D;
+import org.glob3.mobile.generated.LabelImageBuilder;
 import org.glob3.mobile.generated.LayerSet;
 import org.glob3.mobile.generated.MarksRenderer;
-import org.glob3.mobile.generated.MeshRenderer;
-import org.glob3.mobile.generated.Planet;
+import org.glob3.mobile.generated.NASAElevationDataProvider;
+import org.glob3.mobile.generated.NonOverlappingMark;
+import org.glob3.mobile.generated.OSMLayer;
 import org.glob3.mobile.generated.PointCloudsRenderer;
 import org.glob3.mobile.generated.PointCloudsRenderer.ColorPolicy;
 import org.glob3.mobile.generated.PointCloudsRenderer.PointCloudMetadataListener;
 import org.glob3.mobile.generated.Sector;
-import org.glob3.mobile.generated.Shape;
-import org.glob3.mobile.generated.ShapesRenderer;
-import org.glob3.mobile.generated.SingleBilElevationDataProvider;
-import org.glob3.mobile.generated.TimeInterval;
-import org.glob3.mobile.generated.AltitudeMode;
-import org.glob3.mobile.generated.Color;
-import org.glob3.mobile.generated.ColumnLayoutImageBuilder;
-import org.glob3.mobile.generated.DownloaderImageBuilder;
-import org.glob3.mobile.generated.G3MContext;
-import org.glob3.mobile.generated.GFont;
-import org.glob3.mobile.generated.GInitializationTask;
-import org.glob3.mobile.generated.Geodetic3D;
-import org.glob3.mobile.generated.ICanvas;
-import org.glob3.mobile.generated.IImage;
-import org.glob3.mobile.generated.IImageDownloadListener;
-import org.glob3.mobile.generated.IImageListener;
-import org.glob3.mobile.generated.LabelImageBuilder;
-import org.glob3.mobile.generated.LayerSet;
-import org.glob3.mobile.generated.NASAElevationDataProvider;
-import org.glob3.mobile.generated.NonOverlappingMark;
-import org.glob3.mobile.generated.NonOverlappingMarkTouchListener;
-import org.glob3.mobile.generated.NonOverlappingMarksRenderer;
-import org.glob3.mobile.generated.URL;
-import org.glob3.mobile.generated.Vector2I;
-import org.glob3.mobile.generated.Vector3D;
-import org.glob3.mobile.generated.OSMLayer;
-import org.glob3.mobile.generated.QuadShape;
-import org.glob3.mobile.generated.ShapesRenderer;
 import org.glob3.mobile.generated.TimeInterval;
 import org.glob3.mobile.generated.URL;
-import org.glob3.mobile.generated.Vector2F;
 import org.glob3.mobile.specific.G3MBuilder_Android;
 import org.glob3.mobile.specific.G3MWidget_Android;
-import org.glob3.mobile.generated.PointCloudsRenderer;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.view.Menu;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.RelativeLayout;
@@ -128,7 +95,9 @@ public class MainActivity
 
 	   _g3mWidget = builder.createWidget();  
 */
-	   _g3mWidget = createWidgetStreamingElevations();
+	   _g3mWidget = createWidget();  
+	   //_g3mWidget = createWidgetStreamingElevations();
+	   //_g3mWidget = createWidgetVR();
 	   
 	   // set camera looking at Tenerife
 	   Geodetic3D position = new Geodetic3D(Angle.fromDegrees(27.60), Angle.fromDegrees(-16.54), 55000.0);
@@ -147,7 +116,7 @@ public class MainActivity
 
       setContentView(R.layout.activity_main);
 
-      _g3mWidget = createWidget();
+      _g3mWidget = createWidgetVR();
 
       final RelativeLayout placeHolder = (RelativeLayout) findViewById(R.id.g3mWidgetHolder);
 
@@ -187,6 +156,20 @@ public class MainActivity
                new DownloaderImageBuilder(anchorBitmapURL), //
                position);
    }
+   
+   private G3MWidget_Android createWidgetVR() {
+	      final G3MBuilder_Android builder = new G3MBuilder_Android(this);
+
+	      final LayerSet layerSet = new LayerSet();
+	      layerSet.addLayer(new OSMLayer(TimeInterval.fromDays(30)));
+	      builder.getPlanetRendererBuilder().setLayerSet(layerSet);
+	      
+	      CameraRenderer cr = new CameraRenderer();
+	      cr.addHandler(new DeviceAttitudeCameraHandler(true));
+	      builder.setCameraRenderer(cr);
+
+	      return builder.createWidget();
+	   }
 
 
    private G3MWidget_Android createWidgetStreamingElevations() {

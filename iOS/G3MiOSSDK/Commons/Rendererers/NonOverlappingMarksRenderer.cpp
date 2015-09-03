@@ -90,8 +90,8 @@ void MarkWidget::prepareWidget(const IImage* image,
   pos2D.add( -_halfWidth,  _halfHeight );   // vertex 2
   pos2D.add(  _halfWidth, -_halfHeight );   // vertex 3
   pos2D.add(  _halfWidth,  _halfHeight );   // vertex 4
-#warning TODO: share vertices for marks of the same size?
-  
+// #warning TODO: share vertices for marks of the same size?
+
   _vertices = pos2D.create();
 
   _geo2Dfeature = new Geometry2DGLFeature(_vertices,       // buffer
@@ -117,8 +117,8 @@ void MarkWidget::prepareWidget(const IImage* image,
                                                                            GLFormat::rgba(),
                                                                            _imageName,
                                                                            false);
-  
-#warning TODO: share unit texCoords
+
+// #warning TODO: share unit texCoords
   if (_textureMapping != NULL) {
     delete _textureMapping;
   }
@@ -235,7 +235,7 @@ NonOverlappingMark::~NonOverlappingMark() {
 }
 
 Vector3D NonOverlappingMark::getCartesianPosition(const Planet* planet) const {
-#warning toCartesian without garbage
+// #warning toCartesian without garbage
   if (_cartesianPos == NULL) {
     _cartesianPos = new Vector3D(planet->toCartesian(_geoPosition));
   }
@@ -497,7 +497,7 @@ void NonOverlappingMarksRenderer::computeMarksToBeRendered(const Camera* camera,
     }
     else {
       // Resetting marks location of invisible anchors
-#warning Do we really need this?
+// #warning Do we really need this?
       m->resetWidgetPositionVelocityAndForce();
     }
   }

@@ -152,6 +152,8 @@ public:
   
   Geodetic3D toGeodetic3D(const Vector3D& position) const;
   
+  double getGeodetic3DHeight(const Vector3D& position) const;
+  
   Vector3D scaleToGeodeticSurface(const Vector3D& position) const;
   
   Vector3D scaleToGeocentricSurface(const Vector3D& position) const;
@@ -211,6 +213,13 @@ public:
   const std::string getType() const {
     return "Flat";
   }
+  
+  MutableMatrix44D zoomUsingMouseWheel(double factor,
+                                       const Vector3D& origin,
+                                       const Vector3D& centerRay,
+                                       const Vector3D& centerPosition,
+                                       const Vector3D& touchedPosition,
+                                       const Vector3D& finalRay) const;
   
 };
 

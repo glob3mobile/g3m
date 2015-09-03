@@ -77,15 +77,21 @@ public:
                                   origin._z,
                                   direction._x,
                                   direction._y,
-                                  direction._z);
+                                  direction._z,
+                                  _oneOverRadiiSquared._x,
+                                  _oneOverRadiiSquared._y,
+                                  _oneOverRadiiSquared._z);
   }
 
-  std::vector<double> intersectionsDistances(double originX,
+  static std::vector<double> intersectionsDistances(double originX,
                                              double originY,
                                              double originZ,
                                              double directionX,
                                              double directionY,
-                                             double directionZ) const;
+                                             double directionZ,
+                                             double oneOverRadiiSquaredX,
+                                             double oneOverRadiiSquaredY,
+                                             double oneOverRadiiSquaredZ);
 };
 
 #endif

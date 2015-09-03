@@ -38,6 +38,8 @@ public:
 
   const std::string description() const;
 
+  const std::string toString() const;
+
   JSONString* deepCopy() const {
     return new JSONString(_value);
   }

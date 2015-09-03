@@ -10,11 +10,12 @@
 #define __G3MiOSSDK__CameraMouseWheelHandler__
 
 #include "CameraEventHandler.hpp"
+#include "Camera.hpp"
 
 class CameraMouseWheelHandler : public CameraEventHandler {
-  
+  const double _factor;
 public:
-  CameraMouseWheelHandler()
+  CameraMouseWheelHandler(double factor = 0.1): _factor(factor)
   {}
   
   ~CameraMouseWheelHandler() {
@@ -46,8 +47,6 @@ public:
   void onMouseWheel(const G3MEventContext *eventContext,
                     const TouchEvent& touchEvent,
                     CameraContext *cameraContext);
-  
-  
   
 };
 

@@ -64,9 +64,17 @@
 		CFEA76681666DCB000E89BC7 /* images in Resources */ = {isa = PBXBuildFile; fileRef = CFEA76671666DCB000E89BC7 /* images */; };
 		CFF95F7D158A748F00B56E11 /* plane.png in Resources */ = {isa = PBXBuildFile; fileRef = CFF95F7C158A748F00B56E11 /* plane.png */; };
 		D80C8B491A77B44000E67587 /* anchorWidget.png in Resources */ = {isa = PBXBuildFile; fileRef = D80C8B481A77B44000E67587 /* anchorWidget.png */; };
+		D82DFD981B44009200BF45F8 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D82DFD971B44009200BF45F8 /* CoreLocation.framework */; };
+		D80DF37C1AC5642900A7D92A /* stars_old.csv in Resources */ = {isa = PBXBuildFile; fileRef = D80DF37B1AC5642900A7D92A /* stars_old.csv */; };
+		D83165EE1ABAD435002A8451 /* StarDomeRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D83165EC1ABAD435002A8451 /* StarDomeRenderer.cpp */; };
 		D8317203186C5BAD00522E1B /* simpleStencil.png in Resources */ = {isa = PBXBuildFile; fileRef = D8317202186C5BAD00522E1B /* simpleStencil.png */; };
+		D83D604A1AA89BC0002EA2B8 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D83D60491AA89BC0002EA2B8 /* CoreMotion.framework */; };
+		D83D604D1AA89D75002EA2B8 /* DeviceOrientation.mm in Sources */ = {isa = PBXBuildFile; fileRef = D83D604C1AA89D75002EA2B8 /* DeviceOrientation.mm */; };
 		D84D3C98194753A900D16D69 /* radar-sprite.png in Resources */ = {isa = PBXBuildFile; fileRef = D84D3C97194753A900D16D69 /* radar-sprite.png */; };
+		D876E6DA1AE6554700F616DE /* StarsParser.mm in Sources */ = {isa = PBXBuildFile; fileRef = D876E6D91AE6554700F616DE /* StarsParser.mm */; };
+		D876E6DC1AE65A4400F616DE /* stars.csv in Resources */ = {isa = PBXBuildFile; fileRef = D876E6DB1AE65A4400F616DE /* stars.csv */; };
 		D882B1CD171D77C000C2AD9C /* full-earth-256x256.bil in Resources */ = {isa = PBXBuildFile; fileRef = D882B1CC171D76AD00C2AD9C /* full-earth-256x256.bil */; };
+		D8C4723D1AE8F637005254B3 /* stars_links.csv in Resources */ = {isa = PBXBuildFile; fileRef = D8C4723C1AE8F636005254B3 /* stars_links.csv */; };
 		D8D3A26318363C58007A784A /* FlatColorMesh_DirectionLight.fsh in Sources */ = {isa = PBXBuildFile; fileRef = D8D3A25F18363C58007A784A /* FlatColorMesh_DirectionLight.fsh */; };
 		D8D3A26418363C58007A784A /* FlatColorMesh_DirectionLight.vsh in Sources */ = {isa = PBXBuildFile; fileRef = D8D3A26018363C58007A784A /* FlatColorMesh_DirectionLight.vsh */; };
 		D8D3A26518363C58007A784A /* TexturedMesh_DirectionLight.fsh in Sources */ = {isa = PBXBuildFile; fileRef = D8D3A26118363C58007A784A /* TexturedMesh_DirectionLight.fsh */; };
@@ -176,9 +184,20 @@
 		CFEA76671666DCB000E89BC7 /* images */ = {isa = PBXFileReference; lastKnownFileType = folder; path = images; sourceTree = "<group>"; };
 		CFF95F7C158A748F00B56E11 /* plane.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = plane.png; sourceTree = "<group>"; };
 		D80C8B481A77B44000E67587 /* anchorWidget.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = anchorWidget.png; sourceTree = "<group>"; };
+		D82DFD971B44009200BF45F8 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		D80DF37B1AC5642900A7D92A /* stars_old.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = stars_old.csv; sourceTree = "<group>"; };
+		D83165EC1ABAD435002A8451 /* StarDomeRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = StarDomeRenderer.cpp; sourceTree = "<group>"; };
+		D83165ED1ABAD435002A8451 /* StarDomeRenderer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = StarDomeRenderer.hpp; sourceTree = "<group>"; };
 		D8317202186C5BAD00522E1B /* simpleStencil.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = simpleStencil.png; sourceTree = "<group>"; };
+		D83D60491AA89BC0002EA2B8 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
+		D83D604B1AA89D75002EA2B8 /* DeviceOrientation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DeviceOrientation.h; sourceTree = "<group>"; };
+		D83D604C1AA89D75002EA2B8 /* DeviceOrientation.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = DeviceOrientation.mm; sourceTree = "<group>"; };
 		D84D3C97194753A900D16D69 /* radar-sprite.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "radar-sprite.png"; sourceTree = "<group>"; };
+		D876E6D81AE6554700F616DE /* StarsParser.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = StarsParser.hpp; sourceTree = "<group>"; };
+		D876E6D91AE6554700F616DE /* StarsParser.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = StarsParser.mm; sourceTree = "<group>"; };
+		D876E6DB1AE65A4400F616DE /* stars.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = stars.csv; sourceTree = "<group>"; };
 		D882B1CC171D76AD00C2AD9C /* full-earth-256x256.bil */ = {isa = PBXFileReference; lastKnownFileType = file; path = "full-earth-256x256.bil"; sourceTree = "<group>"; };
+		D8C4723C1AE8F636005254B3 /* stars_links.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = stars_links.csv; sourceTree = "<group>"; };
 		D8D3A25F18363C58007A784A /* FlatColorMesh_DirectionLight.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = FlatColorMesh_DirectionLight.fsh; sourceTree = "<group>"; };
 		D8D3A26018363C58007A784A /* FlatColorMesh_DirectionLight.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = FlatColorMesh_DirectionLight.vsh; sourceTree = "<group>"; };
 		D8D3A26118363C58007A784A /* TexturedMesh_DirectionLight.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = TexturedMesh_DirectionLight.fsh; sourceTree = "<group>"; };
@@ -222,6 +241,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D82DFD981B44009200BF45F8 /* CoreLocation.framework in Frameworks */,
+				D83D604A1AA89BC0002EA2B8 /* CoreMotion.framework in Frameworks */,
 				D8EEF38D1577920B003FEB5E /* Foundation.framework in Frameworks */,
 				CF4027EB1770E90000D5A80C /* Security.framework in Frameworks */,
 				CF4027E91770E8F900D5A80C /* CFNetwork.framework in Frameworks */,
@@ -260,6 +281,8 @@
 		D8EEF3891577920B003FEB5E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				D82DFD971B44009200BF45F8 /* CoreLocation.framework */,
+				D83D60491AA89BC0002EA2B8 /* CoreMotion.framework */,
 				CF4027E61770E8F100D5A80C /* libicucore.dylib */,
 				44EEB5DF159B2B8B0086F243 /* libsqlite3.dylib */,
 				CF4027E81770E8F900D5A80C /* CFNetwork.framework */,
@@ -284,7 +307,13 @@
 				D8EEF39C1577920B003FEB5E /* MainStoryboard_iPhone.storyboard */,
 				D8EEF3A21577920B003FEB5E /* ViewController.h */,
 				D8EEF3A31577920B003FEB5E /* ViewController.mm */,
+				D83165EC1ABAD435002A8451 /* StarDomeRenderer.cpp */,
+				D876E6D81AE6554700F616DE /* StarsParser.hpp */,
+				D876E6D91AE6554700F616DE /* StarsParser.mm */,
+				D83165ED1ABAD435002A8451 /* StarDomeRenderer.hpp */,
 				D8EEF3911577920B003FEB5E /* Supporting Files */,
+				D83D604B1AA89D75002EA2B8 /* DeviceOrientation.h */,
+				D83D604C1AA89D75002EA2B8 /* DeviceOrientation.mm */,
 			);
 			name = G3MiOSDemo;
 			path = Glob3iOSDemo;
@@ -312,7 +341,10 @@
 		D8EEF4271577B0D6003FEB5E /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				D8C4723C1AE8F636005254B3 /* stars_links.csv */,
 				D84D3C97194753A900D16D69 /* radar-sprite.png */,
+				D80DF37B1AC5642900A7D92A /* stars_old.csv */,
+				D876E6DB1AE65A4400F616DE /* stars.csv */,
 				D80C8B481A77B44000E67587 /* anchorWidget.png */,
 				4415B4AA19CC26B800E73D38 /* countries.geojson */,
 				CFE26D6718A154D700253709 /* 3d_2-0.json */,
@@ -468,6 +500,7 @@
 				CF883B841591053100AEE39C /* mark.png in Resources */,
 				CF8E9887180D98DC00A08208 /* pointcloud in Resources */,
 				CFB57D9F1860DAD900D5B094 /* Compass_rose_browns_00.png in Resources */,
+				D8C4723D1AE8F637005254B3 /* stars_links.csv in Resources */,
 				CCD7885415D9A3FA0065A7E1 /* ProgressWheel.png in Resources */,
 				CF0FC6F21899B86B005988D7 /* 3d_.json in Resources */,
 				A717C99615EBA71D00EEC830 /* mercator.jpg in Resources */,
@@ -475,6 +508,7 @@
 				CFE26D6018A153DB00253709 /* 3d_1.json in Resources */,
 				D80C8B491A77B44000E67587 /* anchorWidget.png in Resources */,
 				E71B15371626D27F003D1013 /* Default-Landscape.png in Resources */,
+				D876E6DC1AE65A4400F616DE /* stars.csv in Resources */,
 				E71B15381626D27F003D1013 /* Default-Landscape@2x.png in Resources */,
 				E71B15391626D27F003D1013 /* Default-Portrait.png in Resources */,
 				CF935B4C18006CCB0032A9C8 /* washington-memorial-normals.json in Resources */,
@@ -525,6 +559,7 @@
 				4415B4AB19CC26B800E73D38 /* countries.geojson in Resources */,
 				CF8C0EBB16FC99C400DBEDE4 /* cc3d4326.json in Resources */,
 				CFE26D6418A1547B00253709 /* 3d_1-1.json in Resources */,
+				D80DF37C1AC5642900A7D92A /* stars_old.csv in Resources */,
 				CFC04FC4185FA00400E7494A /* hud2.png in Resources */,
 				CF0FC6EE1899A443005988D7 /* g3mesh.json in Resources */,
 				E70B224D1700DBA300172DF3 /* A320.bson in Resources */,
@@ -547,7 +582,10 @@
 				D8D3A26518363C58007A784A /* TexturedMesh_DirectionLight.fsh in Sources */,
 				D8EEF3971577920B003FEB5E /* main.m in Sources */,
 				D8D3A26618363C58007A784A /* TexturedMesh_DirectionLight.vsh in Sources */,
+				D83165EE1ABAD435002A8451 /* StarDomeRenderer.cpp in Sources */,
 				D8EEF39B1577920B003FEB5E /* AppDelegate.m in Sources */,
+				D83D604D1AA89D75002EA2B8 /* DeviceOrientation.mm in Sources */,
+				D876E6DA1AE6554700F616DE /* StarsParser.mm in Sources */,
 				D8EEF3A41577920B003FEB5E /* ViewController.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -666,6 +704,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD)";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -679,7 +718,7 @@
 				GCC_WARN_UNUSED_FUNCTION = NO;
 				HEADER_SEARCH_PATHS = "$(BUILT_PRODUCTS_DIR)/**";
 				INFOPLIST_FILE = "Glob3iOSDemo/G3MiOSDemo-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1.1;
 				PRODUCT_NAME = G3MiOSDemo;
 				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
@@ -694,6 +733,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD)";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -703,7 +743,7 @@
 				GCC_WARN_UNUSED_FUNCTION = NO;
 				HEADER_SEARCH_PATHS = "$(BUILT_PRODUCTS_DIR)/**";
 				INFOPLIST_FILE = "Glob3iOSDemo/G3MiOSDemo-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1.1;
 				PRODUCT_NAME = G3MiOSDemo;
 				PROVISIONING_PROFILE = "";
 				RUN_CLANG_STATIC_ANALYZER = YES;

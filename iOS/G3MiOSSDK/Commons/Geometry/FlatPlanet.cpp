@@ -61,6 +61,10 @@ Geodetic3D FlatPlanet::toGeodetic3D(const Vector3D& position) const {
   return Geodetic3D(toGeodetic2D(position), position._z);
 }
 
+double FlatPlanet::getGeodetic3DHeight(const Vector3D& position) const{
+  return position._z;
+}
+
 Vector3D FlatPlanet::scaleToGeodeticSurface(const Vector3D& position) const {
   return Vector3D(position._x, position._y, 0);
 }
@@ -96,8 +100,8 @@ void FlatPlanet::beginSingleDrag(const Vector3D& origin, const Vector3D& touched
   _origin = origin.asMutableVector3D();
   //_initialPoint = Plane::intersectionXYPlaneWithRay(origin, initialRay).asMutableVector3D();
   _initialPoint = touchedPosition.asMutableVector3D();
-  _dragHeight = toGeodetic3D(touchedPosition)._height;
-
+  _dragHeight = getGeodetic3DHeight(touchedPosition);
+  
   //printf("INiTIAL POINT EN %f, %f, %f\n ", _initialPoint.x(), _initialPoint.y(), _initialPoint.z());
 
   _lastFinalPoint = _initialPoint;
@@ -136,9 +140,9 @@ void FlatPlanet::beginDoubleDrag(const Vector3D& origin,
   _origin = origin.asMutableVector3D();
   _centerRay = centerRay.asMutableVector3D();
   _initialPoint0 = touchedPosition0.asMutableVector3D();
-  _dragHeight0 = toGeodetic3D(touchedPosition0)._height;
+  _dragHeight0 = getGeodetic3DHeight(touchedPosition0);
   _initialPoint1 = touchedPosition1.asMutableVector3D();
-  _dragHeight1 = toGeodetic3D(touchedPosition1)._height;
+  _dragHeight1 = getGeodetic3DHeight(touchedPosition1);
   _centerPoint = centerPosition.asMutableVector3D();
   _lastDoubleDragAngle = 0;
 }
@@ -234,11 +238,11 @@ Effect* FlatPlanet::createDoubleTapEffect(const Vector3D& origin,
   //const Vector3D initialPoint = Plane::intersectionXYPlaneWithRay(origin, tapRay);
   if (touchedPosition.isNan()) return NULL;
   //const Vector3D centerPoint = Plane::intersectionXYPlaneWithRay(origin, centerRay);
-  double dragHeight = toGeodetic3D(touchedPosition)._height;
+  double dragHeight = getGeodetic3DHeight(touchedPosition);
   const Vector3D centerPoint = Plane::intersectionXYPlaneWithRay(origin, centerRay, dragHeight);
 
   // create effect
-  double distanceToGround = toGeodetic3D(origin)._height - dragHeight;
+  double distanceToGround = getGeodetic3DHeight(origin) - dragHeight;
   
   //printf("\n-- double tap to height %.2f, desde mi altura=%.2f\n", dragHeight, toGeodetic3D(origin)._height);
   
@@ -273,3 +277,18 @@ void FlatPlanet::applyCameraConstrainers(const Camera* previousCamera,
 //    nextCamera->copyFrom(*previousCamera);
 //  }
 }
+
+MutableMatrix44D FlatPlanet::zoomUsingMouseWheel(double factor,
+                                                 const Vector3D& origin,
+                                                 const Vector3D& centerRay,
+                                                 const Vector3D& centerPosition,
+                                                 const Vector3D& touchedPosition,
+                                                 const Vector3D& finalRay) const {
+  double dist = touchedPosition.distanceTo(origin);
+  Vector3D translation = finalRay.normalized().times(dist * factor);
+  MutableMatrix44D matrix = MutableMatrix44D::createTranslationMatrix(translation);
+  return matrix;
+}
+
+
+

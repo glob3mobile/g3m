@@ -200,6 +200,8 @@ public:
   
   Geodetic3D toGeodetic3D(const Vector3D& position) const;
   
+  double getGeodetic3DHeight(const Vector3D& position) const;
+  
   void toGeodetic3D(const MutableVector3D& position,
                     MutableVector3D& result) const;
   
@@ -271,12 +273,19 @@ public:
     return Geodetic3D(rendereSector._center,
                       height);
   }
-  
-  void correctPitchAfterDoubleDrag(Camera* camera, const Vector2F& finalPixel0, const Vector2F& finalPixel1) const;
 
   const std::string getType() const {
     return "Spherical";
   }
+  
+  MutableMatrix44D zoomUsingMouseWheel(double factor,
+                                       const Vector3D& origin,
+                                       const Vector3D& centerRay,
+                                       const Vector3D& centerPosition,
+                                       const Vector3D& touchedPosition,
+                                       const Vector3D& finalRay) const;
+  
+
 };
 
 #endif

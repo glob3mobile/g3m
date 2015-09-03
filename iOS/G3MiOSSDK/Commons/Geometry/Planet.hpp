@@ -84,6 +84,8 @@ public:
   
   virtual Geodetic3D toGeodetic3D(const Vector3D& position) const = 0;
   
+  virtual double getGeodetic3DHeight(const Vector3D& position) const = 0;
+  
   virtual Vector3D scaleToGeodeticSurface(const Vector3D& position) const = 0;
   
   virtual Vector3D scaleToGeocentricSurface(const Vector3D& position) const = 0;
@@ -145,7 +147,12 @@ public:
 
   virtual const std::string getType() const = 0;
   
-  virtual void correctPitchAfterDoubleDrag(Camera* camera, const Vector2F& finalPixel0, const Vector2F& finalPixel1) const{}
+  virtual MutableMatrix44D zoomUsingMouseWheel(double factor,
+                                               const Vector3D& origin,
+                                               const Vector3D& centerRay,
+                                               const Vector3D& centerPosition,
+                                               const Vector3D& touchedPosition,
+                                               const Vector3D& finalRay) const = 0;
 
 };
 
