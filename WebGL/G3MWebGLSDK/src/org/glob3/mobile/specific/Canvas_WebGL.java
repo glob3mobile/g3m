@@ -213,6 +213,64 @@ public final class Canvas_WebGL
 
 
    @Override
+   protected void _fillEllipse(final float left,
+                               final float top,
+                               final float width,
+                               final float height) {
+      drawEllipse(left, top, width, height, true, false);
+   }
+
+
+   @Override
+   protected void _strokeEllipse(final float left,
+                                 final float top,
+                                 final float width,
+                                 final float height) {
+      drawEllipse(left, top, width, height, false, true);
+   }
+
+
+   @Override
+   protected void _fillAndStrokeEllipse(final float left,
+                                        final float top,
+                                        final float width,
+                                        final float height) {
+      drawEllipse(left, top, width, height, true, true);
+   }
+
+
+   private native void drawEllipse(final float x,
+                                   final float y,
+                                   final float w,
+                                   final float h,
+                                   final boolean fill,
+                                   final boolean stroke) /*-{
+		var context = this.@org.glob3.mobile.specific.Canvas_WebGL::_domCanvasContext;
+
+		var kappa = .5522848;
+		var ox = (w / 2) * kappa; // control point offset horizontal
+		var oy = (h / 2) * kappa; // control point offset vertical
+		var xe = x + w; // x-end
+		var ye = y + h; // y-end
+		var xm = x + w / 2; // x-middle
+		var ym = y + h / 2; // y-middle
+
+		context.beginPath();
+		context.moveTo(x, ym);
+		context.bezierCurveTo(x, ym - oy, xm - ox, y, xm, y);
+		context.bezierCurveTo(xm + ox, y, xe, ym - oy, xe, ym);
+		context.bezierCurveTo(xe, ym + oy, xm + ox, ye, xm, ye);
+		context.bezierCurveTo(xm - ox, ye, x, ym + oy, x, ym);
+		if (fill) {
+			context.fill();
+		}
+		if (stroke) {
+			context.stroke();
+		}
+   }-*/;
+
+
+   @Override
    protected native void _fillText(final String text,
                                    final float left,
                                    final float top) /*-{
@@ -512,5 +570,6 @@ public final class Canvas_WebGL
 		context.fill();
 		context.stroke();
    }-*/;
+
 
 }

@@ -220,6 +220,36 @@ public final class Canvas_Android
 
 
    @Override
+   protected void _fillEllipse(final float left,
+                               final float top,
+                               final float width,
+                               final float height) {
+      _rectF.set(left, top, left + width, top + height);
+      _canvas.drawOval(_rectF, _fillPaint);
+   }
+
+
+   @Override
+   protected void _strokeEllipse(final float left,
+                                 final float top,
+                                 final float width,
+                                 final float height) {
+      _rectF.set(left, top, left + width, top + height);
+      _canvas.drawOval(_rectF, _strokePaint);
+   }
+
+
+   @Override
+   protected void _fillAndStrokeEllipse(final float left,
+                                        final float top,
+                                        final float width,
+                                        final float height) {
+      _fillEllipse(left, top, width, height);
+      _strokeEllipse(left, top, width, height);
+   }
+
+
+   @Override
    protected void _fillRoundedRectangle(final float left,
                                         final float top,
                                         final float width,
