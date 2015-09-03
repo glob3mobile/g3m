@@ -34,11 +34,11 @@ public class CircleImageBuilder extends CanvasImageBuilder
     final float height = canvas.getHeight();
   
     canvas.setFillColor(_color);
-    canvas.fillRoundedRectangle(0, 0, width, height, _radius);
+    canvas.fillEllipse(1, 1, width-2, height-2);
   }
   public CircleImageBuilder(Color color, int radius)
   {
-     super(radius *2, radius *2);
+     super(radius *2 + 2, radius *2 + 2);
      _color = new Color(color);
      _radius = radius;
   
