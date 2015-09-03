@@ -65,7 +65,7 @@ void TextUtils_iOS::createLabelImage(const std::string& label,
   UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
   UIGraphicsEndImageContext();
 
-  IImage* result = new Image_iOS(image, NULL);
+  IImage* result = new Image_iOS(image, NULL, NULL);
   listener->imageCreated(result);
   if (autodelete) {
     delete listener;
@@ -154,7 +154,7 @@ void TextUtils_iOS::labelImage(const IImage* image,
     UIImage* resultImage = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
 
-    IImage* result = new Image_iOS(resultImage, NULL);
+    IImage* result = new Image_iOS(resultImage, NULL, NULL);
     listener->imageCreated(result);
     if (autodelete) {
       delete listener;

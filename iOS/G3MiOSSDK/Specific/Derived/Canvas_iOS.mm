@@ -30,6 +30,8 @@ Canvas_iOS::~Canvas_iOS() {
     CGContextRelease( _context );
     _context = NULL;
   }
+
+  delete [] _dataRGBA8888;
 }
 
 void Canvas_iOS::tryToSetCurrentFontToContext() {
@@ -45,13 +47,25 @@ void Canvas_iOS::tryToSetCurrentFontToContext() {
 void Canvas_iOS::_initialize(int width, int height) {
   CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
 
-  _context = CGBitmapContextCreate(NULL,       // memory created by Quartz
+  _dataRGBA8888 = new unsigned char[4 * width * height];
+  _context = CGBitmapContextCreate(_dataRGBA8888,
                                    width,
                                    height,
                                    8,          // bits per component
-                                   width * 4,  // bitmap bytes per row: 4 bytes per pixel
+                                   4 * width,  // bytes per row
                                    colorSpace,
-                                   kCGImageAlphaPremultipliedLast);
+                                   kCGImageAlphaPremultipliedLast | kCGBitmapByteOrder32Big
+                                   );
+  CGContextClearRect( _context, CGRectMake( 0, 0, width, height ) );
+
+//  _context = CGBitmapContextCreate(NULL,       // memory created by Quartz
+//                                   width,
+//                                   height,
+//                                   8,          // bits per component
+//                                   0,          // bytes per row
+//                                   colorSpace,
+//                                   kCGImageAlphaPremultipliedLast | kCGBitmapByteOrder32Big
+//                                   );
 
   CGContextSetShouldAntialias(_context, YES);
   CGContextSetAllowsFontSmoothing(_context, YES);
@@ -178,7 +192,8 @@ void Canvas_iOS::_createImage(IImageListener* listener,
   UIImage* image = [UIImage imageWithCGImage: cgImage];
   CFRelease(cgImage);
 
-  IImage* result = new Image_iOS(image, NULL);
+  IImage* result = new Image_iOS(image, NULL, _dataRGBA8888);
+  _dataRGBA8888 = NULL; // moved ownership to image
   listener->imageCreated(result);
   if (autodelete) {
     delete listener;
