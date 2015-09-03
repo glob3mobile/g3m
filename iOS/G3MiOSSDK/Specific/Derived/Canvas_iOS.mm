@@ -47,25 +47,37 @@ void Canvas_iOS::tryToSetCurrentFontToContext() {
 void Canvas_iOS::_initialize(int width, int height) {
   CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
 
-  _dataRGBA8888 = new unsigned char[4 * width * height];
-  _context = CGBitmapContextCreate(_dataRGBA8888,
-                                   width,
-                                   height,
-                                   8,          // bits per component
-                                   4 * width,  // bytes per row
-                                   colorSpace,
-                                   kCGImageAlphaPremultipliedLast | kCGBitmapByteOrder32Big
-                                   );
-  CGContextClearRect( _context, CGRectMake( 0, 0, width, height ) );
-
-//  _context = CGBitmapContextCreate(NULL,       // memory created by Quartz
+//  _dataRGBA8888 = new unsigned char[4 * width * height];
+//  _context = CGBitmapContextCreate(_dataRGBA8888,
 //                                   width,
 //                                   height,
 //                                   8,          // bits per component
-//                                   0,          // bytes per row
+//                                   4 * width,  // bytes per row
 //                                   colorSpace,
-//                                   kCGImageAlphaPremultipliedLast | kCGBitmapByteOrder32Big
-//                                   );
+//                                   kCGImageAlphaPremultipliedLast | kCGBitmapByteOrder32Big);
+//  if (_context == NULL) {
+//    delete _dataRGBA8888;
+//    _dataRGBA8888 = NULL;
+//    ILogger::instance()->logError("Can't create CGContext");
+//    return;
+//  }
+//
+//  CGContextClearRect( _context, CGRectMake( 0, 0, width, height ) );
+
+  _context = CGBitmapContextCreate(NULL,       // memory created by Quartz
+                                   width,
+                                   height,
+                                   8,          // bits per component
+                                   0,          // bytes per row
+                                   colorSpace,
+                                   kCGImageAlphaPremultipliedLast | kCGBitmapByteOrder32Big);
+
+  CGColorSpaceRelease( colorSpace );
+
+  if (_context == NULL) {
+    ILogger::instance()->logError("Can't create CGContext");
+    return;
+  }
 
   CGContextSetShouldAntialias(_context, YES);
   CGContextSetAllowsFontSmoothing(_context, YES);
@@ -74,12 +86,6 @@ void Canvas_iOS::_initialize(int width, int height) {
   CGContextSetShouldSubpixelQuantizeFonts(_context, NO);
   CGContextSetInterpolationQuality(_context, kCGInterpolationHigh);
 
-  CGColorSpaceRelease( colorSpace );
-
-  if (_context == NULL) {
-    ILogger::instance()->logError("Can't create CGContext");
-    return;
-  }
 
   tryToSetCurrentFontToContext();
 }
