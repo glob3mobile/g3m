@@ -484,9 +484,9 @@ const MapBoo::MBVectorSymbology* MapBoo::MBVectorSymbology::fromJSON(MBHandler* 
                                                                      const std::string& datasetID,
                                                                      const std::string& datasetName,
                                                                      const JSONObject*  jsonObject) {
-  std::vector<std::string> labeling           = jsonObject->getAsArray("labeling")->asStringVector();
-  const MBShape*           shape              = MBShape::fromJSON( jsonObject->get("shape") );
-  std::vector<std::string> info               = jsonObject->getAsArray("info")->asStringVector();
+  std::vector<std::string> labeling = jsonObject->getAsArray("labeling")->asStringVector();
+  const MBShape*           shape    = MBShape::fromJSON( jsonObject->get("shape") );
+  std::vector<std::string> info     = jsonObject->getAsArray("info")->asStringVector();
 
   return new MBVectorSymbology(handler,
                                datasetID,
