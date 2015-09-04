@@ -21,9 +21,6 @@ _radius(radius)
 
 void CircleImageBuilder::buildOnCanvas(const G3MContext* context,
                                        ICanvas* canvas) {
-  const float width  = canvas->getWidth();
-  const float height = canvas->getHeight();
-
   canvas->setFillColor(_color);
-  canvas->fillEllipse(1, 1, width-2, height-2);
+  canvas->fillEllipse(1, 1, _radius*2, _radius*2);
 }
