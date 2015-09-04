@@ -152,13 +152,12 @@ public final class StringUtils_Android
 
    @Override
    public String toString(final double value) {
-	   
+	   Locale localeDefault = Locale.getDefault();
        Locale.setDefault(new Locale("en", "US"));
        java.text.DecimalFormat df = new java.text.DecimalFormat("#.################"); 
-       return df.format(value);
-	   
-	   
-	   //return String.format("%.16f", value);
+       String s = df.format(value);
+       Locale.setDefault(localeDefault); //Resetting old Locale
+       return s;
    }
 
 
