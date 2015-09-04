@@ -30,11 +30,8 @@ public class CircleImageBuilder extends CanvasImageBuilder
 
   protected final void buildOnCanvas(G3MContext context, ICanvas canvas)
   {
-    final float width = canvas.getWidth();
-    final float height = canvas.getHeight();
-  
     canvas.setFillColor(_color);
-    canvas.fillEllipse(1, 1, width-2, height-2);
+    canvas.fillEllipse(1, 1, _radius *2, _radius *2);
   }
   public CircleImageBuilder(Color color, int radius)
   {
