@@ -391,7 +391,6 @@ void G3MWidget::onTouchEvent(const TouchEvent* touchEvent) {
           _clickOnProcess = false;
         }
       }
-      //_clickOnProcess = false;
     }
   }
   else {
