@@ -320,7 +320,12 @@ private:
   bool _forceBusyRenderer;
   
   InfoDisplay* _infoDisplay;
-  
+
+
+  float _touchDownPositionX;
+  float _touchDownPositionY;
+
+
   G3MWidget(GL*                              gl,
             IStorage*                        storage,
             IDownloader*                     downloader,

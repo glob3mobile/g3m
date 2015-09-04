@@ -49,7 +49,10 @@ public:
   const double squaredDistanceTo(const Vector2I& that) const;
 
   const double squaredDistanceTo(const Vector2F& that) const;
-  
+
+  const double squaredDistanceTo(float x, float y) const;
+
+
   Vector2F add(const Vector2F& v) const {
     return Vector2F(_x + v._x,
                     _y + v._y);
