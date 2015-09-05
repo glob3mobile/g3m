@@ -29,7 +29,10 @@ public class PointFeaturesImporter {
       System.out.println("---------------------------\n");
 
 
-      // final GEOParser parser = GEOJSONParser.INSTANCE;
+      //      final GEOParser parser = GEOJSONParser.INSTANCE;
+      //      final String featuresFileName = "/Users/dgd/Downloads/sfcrimes.geojson";
+      //      final String storageName = "SFCrimes";
+
       // final String featuresFileName = "test-files/ne_10m_populated_places.geojson";
       // final String storageName = "PopulatedPlaces";
 
@@ -62,13 +65,17 @@ public class PointFeaturesImporter {
       final File storageDir = new File("PointFeaturesStorage");
 
 
-      final int maxBufferSize = 2048;
-      final int maxFeaturesPerNode = 2048;
+      //      final int maxBufferSize = 4096;
+      //      final int maxFeaturesPerNode = 4096;
+      final int maxFeaturesPerNode = 32 * 1024;
+      final int maxBufferSize = maxFeaturesPerNode;
 
 
       final GEOStatisticsGatherer.Statistics statistics = GEOStatisticsGatherer.getStatistics(parser, featuresFile);
       final long featuresCount = statistics._featuresCount;
       final Sector sector = statistics._boundingSector;
+
+      System.out.println("- Features: " + featuresCount + ", sector: " + sector);
 
       parser.parse(featuresFile, new GEOFeatureHandler<RuntimeException>() {
          private PointFeatureStorage _storage;

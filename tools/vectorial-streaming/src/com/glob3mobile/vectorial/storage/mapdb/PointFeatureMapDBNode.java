@@ -23,28 +23,40 @@ class PointFeatureMapDBNode
       PointFeatureStorage.Node {
 
 
+   private static final int MAX_SPLITS = 32;
+
+
    public static void insertFeatures(final PointFeatureMapDBStorage storage,
                                      final QuadKey quadKey,
                                      final PointFeaturesSet featuresSet) {
+      final int splitCount = 0;
+      insertFeatures(storage, quadKey, featuresSet, splitCount);
+   }
+
+
+   private static void insertFeatures(final PointFeatureMapDBStorage storage,
+                                      final QuadKey quadKey,
+                                      final PointFeaturesSet featuresSet,
+                                      final int splitCount) {
       final byte[] id = quadKey._id;
 
       final PointFeatureMapDBNode ancestor = getAncestorOrSameLevel(storage, id);
       if (ancestor != null) {
          // System.out.println("==> found ancestor (" + ancestor.getID() + ") for tile " + toString(id));
 
-         ancestor.mergeFeatures(featuresSet);
+         ancestor.mergeFeatures(featuresSet, splitCount);
          return;
       }
 
       final List<PointFeatureMapDBNode> descendants = getDescendants(storage, id);
       if ((descendants != null) && !descendants.isEmpty()) {
-         splitFeaturesIntoDescendants(storage, quadKey, featuresSet, descendants);
+         splitFeaturesIntoDescendants(storage, quadKey, featuresSet, descendants, splitCount);
          return;
       }
 
       final Sector nodeSector = quadKey._sector;
       final PointFeatureMapDBNode tile = new PointFeatureMapDBNode(storage, id, nodeSector, featuresSet);
-      tile.rawSave();
+      tile.rawSave(splitCount);
    }
 
 
@@ -127,7 +139,7 @@ class PointFeatureMapDBNode
    }
 
 
-   private void rawSave() {
+   private void rawSave(final int splitCount) {
       for (final PointFeature feature : _features) {
          if (!_nodeSector.contains(feature._position)) {
             throw new RuntimeException("LOGIC ERROR!!");
@@ -137,8 +149,11 @@ class PointFeatureMapDBNode
          }
       }
 
-      if (getFeatures().size() > _storage.getMaxFeaturesPerNode()) {
-         split();
+      if (splitCount > MAX_SPLITS) {
+         System.out.println("Too many split, forcing saved");
+      }
+      else if (getFeatures().size() > _storage.getMaxFeaturesPerNode()) {
+         split(splitCount + 1);
          return;
       }
 
@@ -152,7 +167,7 @@ class PointFeatureMapDBNode
    }
 
 
-   private void split() {
+   private void split(final int splitCount) {
       final List<PointFeature> features = new ArrayList<>(getFeatures()); // ask for features before removing
 
       remove();
@@ -163,7 +178,7 @@ class PointFeatureMapDBNode
          final PointFeaturesSet childPointFeaturesSet = PointFeaturesSet.extractFeatures(childKey._sector, features);
          if (childPointFeaturesSet != null) {
             // System.out.println(">>> tile " + getID() + " split " + childPointFeaturesSet.size() + " points into " + toString(child._id));
-            insertFeatures(_storage, childKey, childPointFeaturesSet);
+            insertFeatures(_storage, childKey, childPointFeaturesSet, splitCount + 1);
          }
       }
 
@@ -236,18 +251,25 @@ class PointFeatureMapDBNode
    }
 
 
-   private void mergeFeatures(final PointFeaturesSet newPointFeaturesSet) {
+   private void mergeFeatures(final PointFeaturesSet newPointFeaturesSet,
+                              final int splitCount) {
       final int mergedLength = getFeaturesCount() + newPointFeaturesSet.size();
-      if (mergedLength > _storage.getMaxFeaturesPerNode()) {
-         split(newPointFeaturesSet);
+
+      if (splitCount > MAX_SPLITS) {
+         System.out.println("Too many split, forcing saved");
+      }
+
+      if ((splitCount <= MAX_SPLITS) && (mergedLength > _storage.getMaxFeaturesPerNode())) {
+         split(newPointFeaturesSet, splitCount + 1);
       }
       else {
-         updateFromFeatures(newPointFeaturesSet);
+         updateFromFeatures(newPointFeaturesSet, splitCount);
       }
    }
 
 
-   private void split(final PointFeaturesSet newPointFeaturesSet) {
+   private void split(final PointFeaturesSet newPointFeaturesSet,
+                      final int splitCount) {
       final List<PointFeature> features = getFeatures(); // ask for features before removing
 
       remove();
@@ -267,7 +289,7 @@ class PointFeatureMapDBNode
          final PointFeaturesSet childPointFeaturesSet = PointFeaturesSet.extractFeatures(child._sector, mergedFeatures);
          if (childPointFeaturesSet != null) {
             // System.out.println(">>> tile " + getID() + " split " + childPointFeaturesSet.size() + " points into " + toString(child._id));
-            insertFeatures(_storage, child, childPointFeaturesSet);
+            insertFeatures(_storage, child, childPointFeaturesSet, splitCount + 1);
          }
       }
 
@@ -277,7 +299,8 @@ class PointFeatureMapDBNode
    }
 
 
-   private void updateFromFeatures(final PointFeaturesSet newPointFeaturesSet) {
+   private void updateFromFeatures(final PointFeaturesSet newPointFeaturesSet,
+                                   final int splitCount) {
       final int oldFeaturesCount = getFeaturesCount();
       final int newFeaturesSize = newPointFeaturesSet.size();
       final int mergedFeaturesSize = oldFeaturesCount + newFeaturesSize;
@@ -297,7 +320,7 @@ class PointFeatureMapDBNode
       _averagePosition = mergedAveragePosition;
       _minimumSector = _minimumSector.mergedWith(newPointFeaturesSet._minimumSector);
 
-      rawSave();
+      rawSave(splitCount);
    }
 
 
@@ -360,7 +383,8 @@ class PointFeatureMapDBNode
    private static void splitFeaturesIntoDescendants(final PointFeatureMapDBStorage storage,
                                                     final QuadKey quadKey,
                                                     final PointFeaturesSet featuresSet,
-                                                    final List<PointFeatureMapDBNode> descendants) {
+                                                    final List<PointFeatureMapDBNode> descendants,
+                                                    final int splitCount) {
       final List<PointFeature> features = new ArrayList<>(featuresSet._features);
       for (final PointFeatureMapDBNode descendant : descendants) {
          final PointFeaturesSet descendantPointFeaturesSet = PointFeaturesSet.extractFeatures(descendant._nodeSector, features);
@@ -370,7 +394,7 @@ class PointFeatureMapDBNode
             // + " points not yet distributed)");
 
             descendant.getFeatures(); // force features load
-            descendant.mergeFeatures(descendantPointFeaturesSet);
+            descendant.mergeFeatures(descendantPointFeaturesSet, splitCount + 1);
             descendant._features = null; // release features' memory
          }
       }
@@ -385,7 +409,7 @@ class PointFeatureMapDBNode
                // + " points into descendant " + toString(descendantQuadKey._id) + " (" + points.size()
                // + " points not yet distributed)");
 
-               insertFeatures(storage, descendantQuadKey, descendantPointFeaturesSet);
+               insertFeatures(storage, descendantQuadKey, descendantPointFeaturesSet, splitCount);
             }
          }
 
