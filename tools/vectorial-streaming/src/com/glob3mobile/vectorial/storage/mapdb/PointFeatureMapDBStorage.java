@@ -106,80 +106,6 @@ public class PointFeatureMapDBStorage
    private final BTreeMap<String, Object>             _metadata;
 
 
-   //   private PointFeatureMapDBStorage(final Sector sector,
-   //                                    final File directory,
-   //                                    final String name,
-   //                                    final boolean createIfNotExists,
-   //                                    final boolean readOnly,
-   //                                    final int maxBufferSize,
-   //                                    final int maxFeaturesPerNode) throws IOException {
-   //
-   //      _sector = sector;
-   //      _maxBufferSize = maxBufferSize;
-   //      _buffer = new ArrayList<>(_maxBufferSize);
-   //      resetBufferBounds();
-   //      _maxFeaturesPerNode = maxFeaturesPerNode;
-   //
-   //      _directory = directory;
-   //      _name = name;
-   //      _readOnly = readOnly;
-   //      _rootKey = new QuadKey(new byte[] {}, _sector);
-   //
-   //      if (createIfNotExists) {
-   //         if (!_directory.exists()) {
-   //            if (!_directory.mkdirs()) {
-   //               throw new IOException("Can't create directory: " + _directory);
-   //            }
-   //         }
-   //      }
-   //
-   //      if (!_directory.isDirectory()) {
-   //         throw new IOException(_directory + " is not a directory");
-   //      }
-   //
-   //      final File file = new File(_directory, _name);
-   //      final DBMaker maker = DBMaker.newFileDB(file);
-   //      // maker.cacheLRUEnable();
-   //      maker.compressionEnable();
-   //      if (_readOnly) {
-   //         maker.strictDBGet();
-   //         maker.readOnly();
-   //      }
-   //      else {
-   //         if (!createIfNotExists) {
-   //            maker.strictDBGet();
-   //         }
-   //      }
-   //
-   //      try {
-   //         _db = maker.make();
-   //      }
-   //      catch (final IOError | UnsupportedOperationException e) {
-   //         throw new IOException(e.getMessage());
-   //      }
-   //
-   //
-   //      final QuadKeyComparator comparator = new QuadKeyComparator();
-   //
-   //      final BTreeMapMaker nodesHeadersMaker = _db //
-   //      .createTreeMap("NodesHeaders") //
-   //      .counterEnable() //
-   //      .comparator(comparator) //
-   //      .valueSerializer(new NodeHeaderSerializer());
-   //
-   //      _nodesHeaders = nodesHeadersMaker.makeOrGet();
-   //
-   //
-   //      final BTreeMapMaker nodesFeaturesMaker = _db //
-   //      .createTreeMap("NodesFeatures") //
-   //      .counterEnable() //
-   //      .comparator(comparator) //
-   //      .valueSerializer(new PointFeaturesSerializer());
-   //
-   //      _nodesFeatures = nodesFeaturesMaker.makeOrGet();
-   //   }
-
-
    private PointFeatureMapDBStorage(final Sector sector,
                                     final File directory,
                                     final String name,
@@ -335,44 +261,6 @@ public class PointFeatureMapDBStorage
       _sumLatRad = 0.0;
       _sumLonRad = 0.0;
    }
-
-
-   //   private static Sector getBounds(final List<PointFeature> features) {
-   //      if ((features == null) || features.isEmpty()) {
-   //         return null;
-   //      }
-   //
-   //      final Geodetic2D firstPoint = features.get(0)._position;
-   //      double minLatRad = firstPoint._latitude._radians;
-   //      double minLonRad = firstPoint._longitude._radians;
-   //
-   //      double maxLatRad = firstPoint._latitude._radians;
-   //      double maxLonRad = firstPoint._longitude._radians;
-   //
-   //      for (int i = 1; i < features.size(); i++) {
-   //         final Geodetic2D point = features.get(i)._position;
-   //         final double latRad = point._latitude._radians;
-   //         final double lonRad = point._longitude._radians;
-   //
-   //         if (latRad < minLatRad) {
-   //            minLatRad = latRad;
-   //         }
-   //         if (latRad > maxLatRad) {
-   //            maxLatRad = latRad;
-   //         }
-   //
-   //         if (lonRad < minLonRad) {
-   //            minLonRad = lonRad;
-   //         }
-   //         if (lonRad > maxLonRad) {
-   //            maxLonRad = lonRad;
-   //         }
-   //      }
-   //
-   //      return Sector.fromRadians( //
-   //               minLatRad, minLonRad, //
-   //               maxLatRad, maxLonRad);
-   //   }
 
 
    @Override
@@ -691,11 +579,6 @@ public class PointFeatureMapDBStorage
 
          _sumLatRadians += (nodeAveragePosition._latitude._radians * nodeFeaturesCount);
          _sumLonRadians += (nodeAveragePosition._longitude._radians * nodeFeaturesCount);
-
-         //         for (final PointFeature feature : node.getFeatures()) {
-         //            final double lat = feature._position._latitude._radians;
-         //            final double lon = feature._position._longitude._radians;
-         //         }
 
          if (_progress != null) {
             _progress.stepDone();
