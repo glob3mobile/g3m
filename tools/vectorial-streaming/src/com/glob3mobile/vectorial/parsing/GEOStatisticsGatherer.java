@@ -5,6 +5,7 @@ package com.glob3mobile.vectorial.parsing;
 import java.io.File;
 import java.io.IOException;
 import java.util.Map;
+import java.util.function.BiPredicate;
 
 import com.glob3mobile.geo.Geodetic2D;
 import com.glob3mobile.geo.Sector;
@@ -35,32 +36,39 @@ public class GEOStatisticsGatherer
 
 
    public static GEOStatisticsGatherer.Statistics getStatistics(final GEOParser parser,
-                                                                final File file) throws IOException, GEOParseException {
+                                                                final File file,
+                                                                final BiPredicate<Map<String, Object>, Geodetic2D> filter)
+                                                                                                                          throws IOException,
+                                                                                                                          GEOParseException {
 
       final long featuresCount = parser.countFeatures(file, true);
       System.out.println();
-      final GEOStatisticsGatherer gatherer = new GEOStatisticsGatherer(file.getName(), featuresCount);
+      final GEOStatisticsGatherer gatherer = new GEOStatisticsGatherer(file.getName(), featuresCount, filter);
       parser.parse(file, gatherer);
       return gatherer.getStatistics();
    }
 
 
-   private final String _name;
-   private final long   _featuresCount;
-   private Progress     _progress;
+   private final String                                       _name;
+   private final long                                         _featuresCount;
+   private final BiPredicate<Map<String, Object>, Geodetic2D> _filter;
 
-   private double       _sumLatRadians;
-   private double       _sumLonRadians;
-   private double       _minLatRadians;
-   private double       _maxLatRadians;
-   private double       _minLonRadians;
-   private double       _maxLonRadians;
+   private Progress                                           _progress;
+
+   private double                                             _sumLatRadians;
+   private double                                             _sumLonRadians;
+   private double                                             _minLatRadians;
+   private double                                             _maxLatRadians;
+   private double                                             _minLonRadians;
+   private double                                             _maxLonRadians;
 
 
    private GEOStatisticsGatherer(final String name,
-                                 final long featuresCount) {
+                                 final long featuresCount,
+                                 final BiPredicate<Map<String, Object>, Geodetic2D> filter) {
       _name = name;
       _featuresCount = featuresCount;
+      _filter = filter;
    }
 
 
@@ -79,7 +87,8 @@ public class GEOStatisticsGatherer
                                     final double percent,
                                     final long elapsed,
                                     final long estimatedMsToFinish) {
-            System.out.println(_name + " - Progress: " + progressString(stepsDone, percent, elapsed, estimatedMsToFinish));
+            System.out.println(_name + ": Gathering Statistics: "
+                               + progressString(stepsDone, percent, elapsed, estimatedMsToFinish));
          }
       };
 
@@ -117,16 +126,19 @@ public class GEOStatisticsGatherer
                          final GEOGeometry geometry) {
 
       final Geodetic2D position = ((GEOPoint) geometry)._position;
-      final double lat = position._latitude._radians;
-      final double lon = position._longitude._radians;
 
-      _sumLatRadians += lat;
-      _sumLonRadians += lon;
+      if ((_filter == null) || _filter.test(properties, position)) {
+         final double lat = position._latitude._radians;
+         final double lon = position._longitude._radians;
 
-      _minLatRadians = Math.min(_minLatRadians, lat);
-      _maxLatRadians = Math.max(_maxLatRadians, lat);
-      _minLonRadians = Math.min(_minLonRadians, lon);
-      _maxLonRadians = Math.max(_maxLonRadians, lon);
+         _sumLatRadians += lat;
+         _sumLonRadians += lon;
+
+         _minLatRadians = Math.min(_minLatRadians, lat);
+         _maxLatRadians = Math.max(_maxLatRadians, lat);
+         _minLonRadians = Math.min(_minLonRadians, lon);
+         _maxLonRadians = Math.max(_maxLonRadians, lon);
+      }
 
       _progress.stepDone();
    }
@@ -147,7 +159,7 @@ public class GEOStatisticsGatherer
 
       final File file = new File(featuresFileName);
 
-      final GEOStatisticsGatherer.Statistics statistics = GEOStatisticsGatherer.getStatistics(parser, file);
+      final GEOStatisticsGatherer.Statistics statistics = GEOStatisticsGatherer.getStatistics(parser, file, null);
 
       System.out.println("   Features Count: " + statistics._featuresCount);
       System.out.println(" Average Position: " + statistics._averagePosition);

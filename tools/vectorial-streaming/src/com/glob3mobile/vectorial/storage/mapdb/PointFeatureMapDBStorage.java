@@ -2,10 +2,13 @@
 
 package com.glob3mobile.vectorial.storage.mapdb;
 
+import java.io.DataInput;
+import java.io.DataOutput;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOError;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -14,6 +17,7 @@ import org.mapdb.BTreeMap;
 import org.mapdb.DB;
 import org.mapdb.DB.BTreeMapMaker;
 import org.mapdb.DBMaker;
+import org.mapdb.Serializer;
 
 import com.glob3mobile.geo.Geodetic2D;
 import com.glob3mobile.geo.Sector;
@@ -102,8 +106,84 @@ public class PointFeatureMapDBStorage
    private final QuadKey                              _rootKey;
 
    private final BTreeMap<byte[], NodeHeader>         _nodesHeaders;
-   private final BTreeMap<byte[], List<PointFeature>> _nodesFeatures;
+
+   //   private final BTreeMap<byte[], List<PointFeature>> _nodesFeatures;
+   private final BTreeMap<byte[], List<MapDBFeature>> _nodesFeatures;
+   private final BTreeMap<Long, Map<String, Object>>  _properties;
+
    private final BTreeMap<String, Object>             _metadata;
+
+
+   private static class MapDBFeaturesSerializer
+      implements
+         Serializer<List<MapDBFeature>>,
+         Serializable {
+
+      private static final long serialVersionUID = 1L;
+
+
+      @Override
+      public void serialize(final DataOutput out,
+                            final List<MapDBFeature> features) throws IOException {
+         out.writeInt(features.size());
+         for (final MapDBFeature feature : features) {
+            SerializerUtils.serialize(out, feature._position);
+            out.writeLong(feature._propertiesID);
+         }
+      }
+
+
+      @Override
+      public List<MapDBFeature> deserialize(final DataInput in,
+                                            final int available) throws IOException {
+         final int size = in.readInt();
+         final List<MapDBFeature> features = new ArrayList<>(size);
+         for (int i = 0; i < size; i++) {
+            final Geodetic2D position = SerializerUtils.deserializeGeodetic2D(in);
+            final long propertiesID = in.readLong();
+            final MapDBFeature feature = new MapDBFeature(position, propertiesID);
+            features.add(feature);
+         }
+         return features;
+      }
+
+
+      @Override
+      public int fixedSize() {
+         return -1;
+      }
+   }
+
+
+   private static class PropertiesSerializer
+      implements
+         Serializer<Map<String, Object>>,
+         Serializable {
+
+
+      private static final long serialVersionUID = 1L;
+
+
+      @Override
+      public void serialize(final DataOutput out,
+                            final Map<String, Object> value) throws IOException {
+         SerializerUtils.serialize(out, value);
+      }
+
+
+      @Override
+      public Map<String, Object> deserialize(final DataInput in,
+                                             final int available) throws IOException {
+         return SerializerUtils.deserialize(in);
+      }
+
+
+      @Override
+      public int fixedSize() {
+         return -1;
+      }
+
+   }
 
 
    private PointFeatureMapDBStorage(final Sector sector,
@@ -160,8 +240,16 @@ public class PointFeatureMapDBStorage
       .createTreeMap("NodesFeatures") //
       .counterEnable() //
       .comparator(comparator) //
-      .valueSerializer(new PointFeaturesSerializer());
+      .valueSerializer(new MapDBFeaturesSerializer());
       _nodesFeatures = nodesFeaturesMaker.makeOrGet();
+
+      // private final BTreeMap<Long, Map<String, Object>>           _properties;
+
+      final BTreeMapMaker propertiesMaker = _db //
+      .createTreeMap("Properties") //
+      .counterEnable() //
+      .valueSerializer(new PropertiesSerializer());
+      _properties = propertiesMaker.makeLongMap();
 
       _metadata = _db.createTreeMap("Metadata").counterEnable().makeOrGet();
 
@@ -227,7 +315,7 @@ public class PointFeatureMapDBStorage
       .createTreeMap("NodesFeatures") //
       .counterEnable() //
       .comparator(comparator) //
-      .valueSerializer(new PointFeaturesSerializer());
+      .valueSerializer(new MapDBFeaturesSerializer());
 
       _nodesFeatures = nodesFeaturesMaker.makeOrGet();
 
@@ -241,6 +329,12 @@ public class PointFeatureMapDBStorage
       resetBufferBounds();
       _maxFeaturesPerNode = MapDBUtils.readInt(_metadata, "maxFeaturesPerNode");
 
+
+      final BTreeMapMaker propertiesMaker = _db //
+      .createTreeMap("Properties") //
+      .counterEnable() //
+      .valueSerializer(new PropertiesSerializer());
+      _properties = propertiesMaker.makeOrGet();
    }
 
 
@@ -318,13 +412,23 @@ public class PointFeatureMapDBStorage
    }
 
 
-   BTreeMap<byte[], NodeHeader> getNodesHeaders() {
+   BTreeMap<byte[], NodeHeader> getNodesHeadersMap() {
       return _nodesHeaders;
    }
 
 
-   BTreeMap<byte[], List<PointFeature>> getNodesFeatures() {
+   //   BTreeMap<byte[], List<PointFeature>> getNodesFeatures() {
+   //      return _nodesFeatures;
+   //   }
+
+
+   BTreeMap<byte[], List<MapDBFeature>> getNodesFeaturesMap() {
       return _nodesFeatures;
+   }
+
+
+   BTreeMap<Long, Map<String, Object>> getPropertiesMap() {
+      return _properties;
    }
 
 
@@ -374,9 +478,9 @@ public class PointFeatureMapDBStorage
    public void acceptDepthFirstVisitor(final PointFeatureStorage.NodeVisitor visitor) {
       visitor.start();
 
-      final List<PointFeature> features = null;
+      final List<MapDBFeature> features = null;
 
-      final BTreeMap<byte[], NodeHeader> nodesHeaders = getNodesHeaders();
+      final BTreeMap<byte[], NodeHeader> nodesHeaders = getNodesHeadersMap();
       for (final Map.Entry<byte[], NodeHeader> entry : nodesHeaders.entrySet()) {
          final byte[] id = entry.getKey();
          final NodeHeader header = entry.getValue();

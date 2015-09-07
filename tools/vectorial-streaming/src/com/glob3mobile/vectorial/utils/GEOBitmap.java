@@ -49,7 +49,7 @@ public class GEOBitmap {
       final int y = Math.round((float) (_sector.getVCoordinate(position._latitude) * _height));
 
       _g.setColor(color);
-      _g.fillOval(x, y, width, height);
+      _g.fillOval(x - (width / 2), y - (height / 2), width, height);
    }
 
 

@@ -5,7 +5,6 @@ package com.glob3mobile.vectorial.processing;
 import java.awt.Color;
 import java.io.File;
 import java.io.IOException;
-import java.util.Map;
 
 import com.glob3mobile.geo.Geodetic2D;
 import com.glob3mobile.geo.Sector;
@@ -34,7 +33,9 @@ public class PointFeatureStorageStatistics {
       // final String storageName = "ES";
       // final String storageName = "MX";
       // final String storageName = "NO";
-      final String storageName = "GEONames-PopulatedPlaces";
+      //      final String storageName = "GEONames-PopulatedPlaces";
+
+      final String storageName = "SFCrimes";
 
       try (final PointFeatureStorage storage = PointFeatureMapDBStorage.openReadOnly(storageDir, storageName)) {
 
@@ -67,23 +68,23 @@ public class PointFeatureStorageStatistics {
                _geoBitmap.drawSector(nodeSector, new Color(1, 1, 0, 0.2f), new Color(1, 1, 0, 0.5f));
                _geoBitmap.drawSector(minimumSector, new Color(0, 1, 1, 0.2f), new Color(0, 1, 1, 0.5f));
 
-               final int pointSize = 1;
+               final int pointSize = 5;
 
                for (final PointFeature feature : node.getFeatures()) {
                   final Geodetic2D position = feature._position;
-                  if (!nodeSector.contains(position)) {
-                     throw new RuntimeException("LOGIC ERROR 1");
-                  }
-                  if (!minimumSector.contains(position)) {
-                     throw new RuntimeException("LOGIC ERROR 2");
-                  }
-                  _geoBitmap.drawPoint(position, pointSize, pointSize, new Color(1, 1, 1, 0.5f));
+                  //                  if (!nodeSector.contains(position)) {
+                  //                     throw new RuntimeException("LOGIC ERROR 1");
+                  //                  }
+                  //                  if (!minimumSector.contains(position)) {
+                  //                     throw new RuntimeException("LOGIC ERROR 2");
+                  //                  }
+                  _geoBitmap.drawPoint(position, pointSize, pointSize, new Color(1, 1, 0, 0.05f));
 
-                  final Map<String, Object> properties = feature._properties;
-
-                  final long population = (Long) properties.get("population");
-
-                  _maxPopulation = Math.max(_maxPopulation, population);
+                  //                  final Map<String, Object> properties = feature._properties;
+                  //
+                  //                  final long population = (Long) properties.get("population");
+                  //
+                  //                  _maxPopulation = Math.max(_maxPopulation, population);
 
                   //                  final String featureClass = (String) properties.get("featureClass");
                   //                  final String featureCode = (String) properties.get("featureCode");

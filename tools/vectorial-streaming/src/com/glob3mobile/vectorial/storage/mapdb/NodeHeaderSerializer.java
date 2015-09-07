@@ -19,6 +19,11 @@ public class NodeHeaderSerializer
       Serializable {
 
 
+   private static final int  FIXED_SIZE       = SerializerUtils.sectorSerializationSize() + //
+                                                SerializerUtils.sectorSerializationSize() + //
+                                                SerializerUtils.geodetic2DSerializationSize() + //
+                                                4 /* featuresCount:int */;
+
    private static final long serialVersionUID = 1L;
 
 
@@ -50,10 +55,7 @@ public class NodeHeaderSerializer
 
    @Override
    public int fixedSize() {
-      return SerializerUtils.sectorSerializationSize() + //
-             SerializerUtils.sectorSerializationSize() + //
-             SerializerUtils.geodetic2DSerializationSize() + //
-             4 /* featuresCount:int */;
+      return FIXED_SIZE;
    }
 
 
