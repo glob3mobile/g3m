@@ -6,5 +6,6 @@ LOD-Levels*.png
 test.png
 /PointFeaturesStorage/
 /PointFeaturesLOD/
+/PointFeaturesCluster/
 /test-files/
 /testing-bitmaps/

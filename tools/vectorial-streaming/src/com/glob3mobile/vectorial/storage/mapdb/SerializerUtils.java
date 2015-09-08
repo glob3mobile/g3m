@@ -14,14 +14,14 @@ import com.glob3mobile.geo.Geodetic2D;
 import com.glob3mobile.geo.Sector;
 
 
-class SerializerUtils {
+public class SerializerUtils {
 
    private SerializerUtils() {
    }
 
 
-   static void serialize(final DataOutput out,
-                         final Geodetic2D position) throws IOException {
+   public static void serialize(final DataOutput out,
+                                final Geodetic2D position) throws IOException {
       if (position == null) {
          out.writeDouble(Double.NaN);
          out.writeDouble(Double.NaN);
@@ -33,7 +33,7 @@ class SerializerUtils {
    }
 
 
-   static Geodetic2D deserializeGeodetic2D(final DataInput in) throws IOException {
+   public static Geodetic2D deserializeGeodetic2D(final DataInput in) throws IOException {
       final double latitude = in.readDouble();
       final double longitude = in.readDouble();
       if (Double.isNaN(latitude) || Double.isNaN(longitude)) {
@@ -48,8 +48,8 @@ class SerializerUtils {
    }
 
 
-   static void serialize(final DataOutput out,
-                         final Sector sector) throws IOException {
+   public static void serialize(final DataOutput out,
+                                final Sector sector) throws IOException {
       if (sector == null) {
          final Geodetic2D position = null;
          serialize(out, position);
@@ -67,7 +67,7 @@ class SerializerUtils {
    }
 
 
-   static Sector deserializeSector(final DataInput in) throws IOException {
+   public static Sector deserializeSector(final DataInput in) throws IOException {
       final Geodetic2D lower = deserializeGeodetic2D(in);
       final Geodetic2D upper = deserializeGeodetic2D(in);
       if ((lower == null) || (upper == null)) {
@@ -110,8 +110,8 @@ class SerializerUtils {
    }
 
 
-   static <K, V> void serialize(final DataOutput out,
-                                final Map<K, V> map) throws IOException {
+   public static <K, V> void serialize(final DataOutput out,
+                                       final Map<K, V> map) throws IOException {
       out.writeByte(Type.MAP._token);
       final int size = map.size();
       out.writeInt(size);
