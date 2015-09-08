@@ -259,37 +259,113 @@ public class PointFeatureLODMapDBStorage
                             final Geodetic2D averagePosition,
                             final List<PointFeature> features) {
       if (features.size() > _maxFeaturesPerNode) {
-         split(id, nodeSector, features);
-      }
-      else {
-         saveLeafNode(id, nodeSector, minimumSector, averagePosition, features);
-      }
-   }
-
-
-   private void split(final byte[] id,
-                      final Sector nodeSector,
-                      final List<PointFeature> sourceFeatures) {
-      final QuadKey key = new QuadKey(id, nodeSector);
-      final QuadKey[] childrenKeys = key.createChildren();
-
-      final List<PointFeature> features = new ArrayList<>(sourceFeatures);
-
-      for (final QuadKey childKey : childrenKeys) {
-         final PointFeaturesSet childPointFeaturesSet = PointFeaturesSet.extractFeatures(childKey._sector, features);
-         if (childPointFeaturesSet != null) {
-            addLeafNode( //
-                     childKey._id, //
-                     childKey._sector, //
-                     childPointFeaturesSet._minimumSector, //
-                     childPointFeaturesSet._averagePosition, //
-                     childPointFeaturesSet._features);
+         if (split(id, nodeSector, features)) {
+            return;
          }
       }
 
+      saveLeafNode(id, nodeSector, minimumSector, averagePosition, features);
+   }
+
+
+   private static class ChildSplitResult {
+      private final QuadKey          _key;
+      private final PointFeaturesSet _featuresSet;
+
+
+      private ChildSplitResult(final QuadKey key,
+                               final PointFeaturesSet featuresSet) {
+         super();
+         _key = key;
+         _featuresSet = featuresSet;
+      }
+
+   }
+
+   private static final int MAX_SPLIT_DEPTH = 8;
+
+
+   private static List<ChildSplitResult> splitIntoChildren(final byte[] id,
+                                                           final Sector nodeSector,
+                                                           final List<PointFeature> features) {
+      final QuadKey key = new QuadKey(id, nodeSector);
+      return splitIntoChildren(key, features, 0);
+   }
+
+
+   private static List<ChildSplitResult> splitIntoChildren(final QuadKey key,
+                                                           final List<PointFeature> features,
+                                                           final int splitDepth) {
+      final int featuresSize = features.size(); // save the size here, to be compare after the features get cleared in PointFeaturesSet.extractFeatures()
+
+      final QuadKey[] childrenKeys = key.createChildren();
+      final List<ChildSplitResult> result = new ArrayList<>(childrenKeys.length);
+      for (final QuadKey childKey : childrenKeys) {
+         final PointFeaturesSet childPointFeaturesSet = PointFeaturesSet.extractFeatures(childKey._sector, features);
+         if (childPointFeaturesSet != null) {
+            final List<PointFeature> childFeatures = childPointFeaturesSet._features;
+            if ((childFeatures.size() == featuresSize) && (splitDepth < MAX_SPLIT_DEPTH)) {
+               return splitIntoChildren(childKey, childFeatures, splitDepth + 1);
+            }
+            result.add(new ChildSplitResult(childKey, childPointFeaturesSet));
+         }
+      }
       if (!features.isEmpty()) {
          throw new RuntimeException("Logic error!");
       }
+      if (result.size() == 0) {
+         throw new RuntimeException("Logic error!");
+      }
+      return result;
+   }
+
+
+   private boolean split(final byte[] id,
+                         final Sector nodeSector,
+                         final List<PointFeature> sourceFeatures) {
+      final List<PointFeature> features = new ArrayList<>(sourceFeatures);
+
+      final List<ChildSplitResult> splits = splitIntoChildren(id, nodeSector, features);
+      if (splits.size() == 1) {
+         System.out.println("- can't split \"" + QuadKeyUtils.toIDString(id) + "\"");
+         return false;
+      }
+
+
+      for (final ChildSplitResult split : splits) {
+         final QuadKey childKey = split._key;
+         final PointFeaturesSet childFeaturesSet = split._featuresSet;
+         addLeafNode( //
+                  childKey._id, //
+                  childKey._sector, //
+                  childFeaturesSet._minimumSector, //
+                  childFeaturesSet._averagePosition, //
+                  childFeaturesSet._features);
+      }
+
+      return true;
+
+
+      //      final QuadKey key = new QuadKey(id, nodeSector);
+      //      final QuadKey[] childrenKeys = key.createChildren();
+      //
+      //      final List<PointFeature> features = new ArrayList<>(sourceFeatures);
+      //
+      //      for (final QuadKey childKey : childrenKeys) {
+      //         final PointFeaturesSet childPointFeaturesSet = PointFeaturesSet.extractFeatures(childKey._sector, features);
+      //         if (childPointFeaturesSet != null) {
+      //            addLeafNode( //
+      //                     childKey._id, //
+      //                     childKey._sector, //
+      //                     childPointFeaturesSet._minimumSector, //
+      //                     childPointFeaturesSet._averagePosition, //
+      //                     childPointFeaturesSet._features);
+      //         }
+      //      }
+      //
+      //      if (!features.isEmpty()) {
+      //         throw new RuntimeException("Logic error!");
+      //      }
    }
 
 
@@ -503,8 +579,8 @@ public class PointFeatureLODMapDBStorage
       Collections.sort(allFeatures, featuresComparator);
 
 
-      final float topFeaturesPercent = (float) 1 / Math.max(children.size(), 2);
-      // final float topFeaturesPercent = (float) 1 / 4;
+      //final float topFeaturesPercent = (float) 1 / Math.max(children.size(), 2);
+      final float topFeaturesPercent = 0.25f;
       final int topFeaturesCount = Math.round(allFeatures.size() * topFeaturesPercent);
 
       final List<PointFeature> topFeatures = allFeatures.subList(0, topFeaturesCount);

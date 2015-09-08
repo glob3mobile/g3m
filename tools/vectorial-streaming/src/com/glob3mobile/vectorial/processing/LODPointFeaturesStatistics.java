@@ -48,7 +48,7 @@ public class LODPointFeaturesStatistics {
 
          final int level = node.getDepth();
 
-         final int maxLevel = 13;
+         final int maxLevel = 15;
          if (level < maxLevel) {
             // final Font font = new Font(Font.SERIF, Font.BOLD, 12 + ((maxLevel - level) * 3));
             // final Font font = new Font(Font.SERIF, Font.BOLD, 14);

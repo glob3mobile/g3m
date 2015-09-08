@@ -33,9 +33,9 @@ public class PointFeatureStorageStatistics {
       // final String storageName = "ES";
       // final String storageName = "MX";
       // final String storageName = "NO";
-      //      final String storageName = "GEONames-PopulatedPlaces";
 
-      final String storageName = "SFCrimes";
+      final String storageName = "GEONames-PopulatedPlaces";
+      //      final String storageName = "SFCrimes";
 
       try (final PointFeatureStorage storage = PointFeatureMapDBStorage.openReadOnly(storageDir, storageName)) {
 
@@ -62,13 +62,16 @@ public class PointFeatureStorageStatistics {
             public boolean visit(final PointFeatureStorage.Node node) {
                // System.out.println(node.getID() + ", features: " + node.getFeaturesCount());
 
+               //               final String id = node.getID();
+               //               if (node.getFeaturesCount() > 4096) {
+               //                  System.out.println(id + " " + node.getFeaturesCount());
                final Sector nodeSector = node.getNodeSector();
                final Sector minimumSector = node.getMinimumSector();
 
                _geoBitmap.drawSector(nodeSector, new Color(1, 1, 0, 0.2f), new Color(1, 1, 0, 0.5f));
                _geoBitmap.drawSector(minimumSector, new Color(0, 1, 1, 0.2f), new Color(0, 1, 1, 0.5f));
 
-               final int pointSize = 5;
+               final int pointSize = 8;
 
                for (final PointFeature feature : node.getFeatures()) {
                   final Geodetic2D position = feature._position;
@@ -100,6 +103,7 @@ public class PointFeatureStorageStatistics {
                   //                                        ", featureCode=" + featureCode);
                   //                  }
                }
+               //               }
 
                _progress.stepDone();
 
@@ -119,7 +123,7 @@ public class PointFeatureStorageStatistics {
                   }
                };
 
-               final int width = 2048;
+               final int width = 2048 + 1024;
                final Sector sector = storage.getSector();
                // final Sector sector = Sector.FULL_SPHERE;
                final double sectorFactor = sector._deltaLatitude._radians / sector._deltaLongitude._radians;

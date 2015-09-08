@@ -350,14 +350,28 @@ class PointFeatureMapDBNode
 
    }
 
+   private static final int MAX_SPLIT_DEPTH = 8;
+
 
    private List<ChildSplitResult> splitIntoChildren(final List<MapDBFeature> features) {
-      final QuadKey key = new QuadKey(_id, _nodeSector);
+      return splitIntoChildren(new QuadKey(_id, _nodeSector), features, 0);
+   }
+
+
+   private static List<ChildSplitResult> splitIntoChildren(final QuadKey key,
+                                                           final List<MapDBFeature> features,
+                                                           final int splitDepth) {
+      final int featuresSize = features.size(); // save the size here, to be compare after the features get cleared in MapDBFeaturesSet.extractFeatures()
+
       final QuadKey[] childrenKeys = key.createChildren();
       final List<ChildSplitResult> result = new ArrayList<>(childrenKeys.length);
       for (final QuadKey childKey : childrenKeys) {
          final MapDBFeaturesSet childPointFeaturesSet = MapDBFeaturesSet.extractFeatures(childKey._sector, features);
          if (childPointFeaturesSet != null) {
+            final List<MapDBFeature> childFeatures = childPointFeaturesSet._features;
+            if ((childFeatures.size() == featuresSize) && (splitDepth < MAX_SPLIT_DEPTH)) {
+               return splitIntoChildren(childKey, childFeatures, splitDepth + 1);
+            }
             result.add(new ChildSplitResult(childKey, childPointFeaturesSet));
          }
       }
@@ -376,7 +390,7 @@ class PointFeatureMapDBNode
 
       final List<ChildSplitResult> splits = splitIntoChildren(features);
       if (splits.size() == 1) {
-         System.out.println("- can't split " + getID() + " (2)");
+         System.out.println("- can't split \"" + getID() + "\" (2)");
          return false;
       }
 
@@ -404,7 +418,7 @@ class PointFeatureMapDBNode
 
       final List<ChildSplitResult> splits = splitIntoChildren(mergedFeatures);
       if (splits.size() == 1) {
-         System.out.println("- can't split " + getID() + " (1)");
+         System.out.println("- can't split \"" + getID() + "\" (1)");
          return false;
       }
 

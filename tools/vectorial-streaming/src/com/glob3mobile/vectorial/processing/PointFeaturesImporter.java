@@ -80,7 +80,7 @@ public class PointFeaturesImporter {
          if (_sector.contains(position)) {
             final int r = (int) (_sector.getUCoordinate(position._longitude) * (_maxRow - 0.01));
             final int c = (int) (_sector.getVCoordinate(position._latitude) * (_maxCol - 0.01));
-            //                              System.out.println(row + "x" + col);
+            //                         System.out.println(row + "x" + col);
             if ((r == _row) && (c == _col)) {
                final PointFeature feature = new PointFeature(properties, position);
                try {
@@ -112,58 +112,32 @@ public class PointFeaturesImporter {
       final String featuresFileName = "/Users/dgd/Downloads/sfcrimes.geojson";
       final String storageName = "SFCrimes";
 
-      //      final String featuresFileName = "test-files/ne_10m_populated_places.geojson";
-      //      final String storageName = "PopulatedPlaces";
+      // final String featuresFileName = "test-files/ne_10m_populated_places.geojson";
+      // final String storageName = "PopulatedPlaces";
 
-      //      final GEOParser parser = GEONamesParser.INSTANCE;
-      // final String featuresFileName = "test-files/geonames/US.txt";
-      // final String featuresFileName = "test-files/geonames/MX.txt";
-      // final String storageName = "MX";
-
-      // final String featuresFileName = "test-files/geonames/NO.txt";
-      // final String storageName = "NO";
-
-      // final String featuresFileName = "test-files/geonames/ES.txt";
-      // final String storageName = "ES";
-
-      // final String featuresFileName = "test-files/geonames/AR.txt";
-      // final String storageName = "AR";
-
-      // final String featuresFileName = "test-files/geonames/allCountries.txt";
-      // final String featuresFileName = "test-files/geonames/NO.txt";
-      // final String storageName = "NO";
-
-      // final String featuresFileName = "test-files/geonames/cities1000.txt";
-      // final String storageName = "Cities1000";
-
-      //      final String featuresFileName = "test-files/GEONames-PopulatedPlaces.txt";
-      //      final String storageName = "GEONames-PopulatedPlaces";
+      // final GEOParser parser = GEONamesParser.INSTANCE;
+      // final String featuresFileName = "test-files/GEONames-PopulatedPlaces.txt";
+      // final String storageName = "GEONames-PopulatedPlaces";
 
 
       final File featuresFile = new File(featuresFileName);
       final File storageDir = new File("PointFeaturesStorage");
 
 
-      //      final int maxBufferSize = 4096;
-      //      final int maxFeaturesPerNode = 4096;
-      //      final int maxFeaturesPerNode = 32 * 1024;
-      //      final int maxFeaturesPerNode = 64 * 1024;
+      // final int maxFeaturesPerNode = 4096;
+      // final int maxFeaturesPerNode = 32 * 1024;
+      // final int maxFeaturesPerNode = 64 * 1024;
       final int maxFeaturesPerNode = 16 * 1024;
+      // final int maxFeaturesPerNode = 8 * 1024;
       final int maxBufferSize = maxFeaturesPerNode;
 
 
       final BiPredicate<Map<String, Object>, Geodetic2D> filter = (properties,
                                                                    position) -> {
-         //         final boolean accepted = (position._latitude._degrees < 80) && (position._longitude._degrees < 80);
-         //         if (!accepted) {
-         //            System.out.println("- Filtered out " + position + " " + properties);
-         //         }
-         //         return accepted;
-
          return (position._latitude._degrees < 80) && (position._longitude._degrees < 80);
       };
 
-      //      final BiPredicate<Map<String, Object>, Geodetic2D> filter = null;
+      // final BiPredicate<Map<String, Object>, Geodetic2D> filter = null;
 
       final GEOStatisticsGatherer.Statistics statistics = GEOStatisticsGatherer.getStatistics(parser, featuresFile, filter);
       final long featuresCount = statistics._featuresCount;
@@ -190,8 +164,8 @@ public class PointFeaturesImporter {
             }
          };
 
-         final int maxRow = 6;
-         final int maxCol = 6;
+         final int maxRow = 5;
+         final int maxCol = 5;
          for (int row = 0; row < maxRow; row++) {
             rowContainer.set(row);
             for (int col = 0; col < maxCol; col++) {
