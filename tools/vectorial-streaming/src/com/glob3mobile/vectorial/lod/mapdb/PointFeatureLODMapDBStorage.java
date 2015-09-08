@@ -427,7 +427,7 @@ public class PointFeatureLODMapDBStorage
          throw new RuntimeException("Read Only");
       }
 
-      int currentLevel = getMaxLevel(verbose);
+      int currentLevel = getPendingNodesMaxLevel(verbose);
 
       final Progress progress = new Progress(_pendingNodes.size()) {
          @Override
@@ -465,7 +465,7 @@ public class PointFeatureLODMapDBStorage
    }
 
 
-   private int getMaxLevel(final boolean verbose) {
+   private int getPendingNodesMaxLevel(final boolean verbose) {
       final Progress progress = new Progress(_pendingNodes.size()) {
          @Override
          public void informProgress(final long stepsDone,

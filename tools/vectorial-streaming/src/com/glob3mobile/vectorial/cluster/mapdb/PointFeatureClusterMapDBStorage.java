@@ -8,6 +8,7 @@ import java.io.IOError;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.NavigableSet;
@@ -19,6 +20,7 @@ import org.mapdb.DBMaker;
 
 import com.glob3mobile.geo.Geodetic2D;
 import com.glob3mobile.geo.Sector;
+import com.glob3mobile.utils.Progress;
 import com.glob3mobile.utils.UndeterminateProgress;
 import com.glob3mobile.vectorial.cluster.PointFeatureClusterStorage;
 import com.glob3mobile.vectorial.cluster.nodes.CInnerNodeData;
@@ -381,20 +383,20 @@ public class PointFeatureClusterMapDBStorage
             final Sector ancestorMinimumSector = null;
             final Geodetic2D ancestorAveragePosition = null;
             final List<PointFeatureCluster> ancestorClusters = Collections.emptyList();
-            saveNodeAsInner(ancestorID, ancestorNodeSector, ancestorMinimumSector, ancestorAveragePosition, ancestorClusters);
+            saveInnerNode(ancestorID, ancestorNodeSector, ancestorMinimumSector, ancestorAveragePosition, ancestorClusters);
          }
       }
    }
 
 
-   private void saveNodeAsInner(final byte[] id,
-                                final Sector nodeSector,
-                                final Sector minimumSector,
-                                final Geodetic2D averagePosition,
-                                final List<PointFeatureCluster> clusters) {
+   private void saveInnerNode(final byte[] id,
+                              final Sector nodeSector,
+                              final Sector minimumSector,
+                              final Geodetic2D averagePosition,
+                              final List<PointFeatureCluster> clusters) {
       validateClusters(nodeSector, minimumSector, clusters);
-      assertIsNull(_nodesHeaders.put(id, new CInnerNodeHeader(nodeSector, minimumSector, averagePosition, clusters.size())));
-      assertIsNull(_nodesFeatures.put(id, new CInnerNodeData(clusters)));
+      _nodesHeaders.put(id, new CInnerNodeHeader(nodeSector, minimumSector, averagePosition, clusters.size()));
+      _nodesFeatures.put(id, new CInnerNodeData(clusters));
    }
 
 
@@ -994,6 +996,155 @@ public class PointFeatureClusterMapDBStorage
       else {
          throw new RuntimeException("Unsupported header: " + entry);
       }
+   }
+
+
+   @Override
+   public void processPendingNodes(final boolean verbose) {
+      if (_readOnly) {
+         throw new RuntimeException("Read Only");
+      }
+
+      int currentLevel = getPendingNodesMaxLevel(verbose);
+
+      final Progress progress = new Progress(_pendingNodes.size()) {
+         @Override
+         public void informProgress(final long stepsDone,
+                                    final double percent,
+                                    final long elapsed,
+                                    final long estimatedMsToFinish) {
+            if (verbose) {
+               System.out.println(getName() + ": 3/4 Processing Pending Nodes: "
+                                  + progressString(stepsDone, percent, elapsed, estimatedMsToFinish));
+            }
+         }
+      };
+
+      while (currentLevel >= 0) {
+         final Iterator<byte[]> it = _pendingNodes.iterator();
+         while (it.hasNext()) {
+            final byte[] key = it.next();
+            if (key.length == currentLevel) {
+               processPendingNode(key);
+               it.remove();
+               _db.commit();
+
+               progress.stepDone();
+            }
+         }
+         currentLevel--;
+      }
+
+      if (!_pendingNodes.isEmpty()) {
+         throw new RuntimeException("Logic Error: PendingNodes=" + _pendingNodes.size());
+      }
+
+      progress.finish();
+   }
+
+
+   private int getPendingNodesMaxLevel(final boolean verbose) {
+      final Progress progress = new Progress(_pendingNodes.size()) {
+         @Override
+         public void informProgress(final long stepsDone,
+                                    final double percent,
+                                    final long elapsed,
+                                    final long estimatedMsToFinish) {
+            if (verbose) {
+               System.out.println(getName() + ": 2/4 Processing Pending Nodes: "
+                                  + progressString(stepsDone, percent, elapsed, estimatedMsToFinish));
+            }
+         }
+      };
+
+      int maxLevel = Integer.MIN_VALUE;
+      for (final byte[] key : _pendingNodes) {
+         maxLevel = Math.max(maxLevel, key.length);
+         progress.stepDone();
+      }
+
+      progress.finish();
+
+      return maxLevel;
+   }
+
+
+   private static class Child {
+      private final byte[]      _id;
+      private final CNodeHeader _header;
+
+
+      private Child(final byte[] id,
+                    final CNodeHeader header) {
+         _id = id;
+         _header = header;
+      }
+
+   }
+
+
+   private void addChild(final byte[] key,
+                         final byte childIndex,
+                         final List<Child> children) {
+      final byte[] childID = QuadKeyUtils.append(key, childIndex);
+      final CNodeHeader childHeader = _nodesHeaders.get(childID);
+      if (childHeader != null) {
+         children.add(new Child(childID, childHeader));
+      }
+   }
+
+
+   private List<Child> getChildren(final byte[] key) {
+      final List<Child> result = new ArrayList<>(4);
+      addChild(key, (byte) 0, result);
+      addChild(key, (byte) 1, result);
+      addChild(key, (byte) 2, result);
+      addChild(key, (byte) 3, result);
+      return result;
+   }
+
+
+   private void processPendingNode(final byte[] key) {
+      final List<Child> children = getChildren(key);
+      if (children.isEmpty()) {
+         throw new RuntimeException("LOGIC ERROR");
+      }
+
+      Sector topMinimumSector = null;
+      final List<PointFeatureCluster> clusters = new ArrayList<>(children.size());
+      for (final Child child : children) {
+         topMinimumSector = child._header.getMinimumSector().mergedWith(topMinimumSector);
+         final CNodeData childNodeData = _nodesFeatures.get(child._id);
+         if (childNodeData == null) {
+            throw new RuntimeException("LOGIC ERROR");
+         }
+         clusters.add(childNodeData.createCluster());
+      }
+
+      if (clusters.isEmpty()) {
+         throw new RuntimeException("LOGIC ERROR");
+      }
+
+      final Sector nodeSector = QuadKey.sectorFor(_rootKey, key);
+
+      final Geodetic2D averagePosition = averagePosition(clusters);
+      saveInnerNode(key, nodeSector, topMinimumSector, averagePosition, clusters);
+   }
+
+
+   private static Geodetic2D averagePosition(final List<PointFeatureCluster> clusters) {
+      double sumLat = 0;
+      double sumLon = 0;
+      long sumSize = 0;
+      for (final PointFeatureCluster cluster : clusters) {
+         final Geodetic2D position = cluster._position;
+         final long clusterSize = cluster._size;
+         sumLat += position._latitude._radians * clusterSize;
+         sumLon += position._longitude._radians * clusterSize;
+         sumSize += clusterSize;
+      }
+
+      return Geodetic2D.fromRadians(sumLat / sumSize, sumLon / sumSize);
    }
 
 

@@ -170,6 +170,9 @@ public interface PointFeatureClusterStorage
    Sector getSector();
 
 
+   void processPendingNodes(boolean verbose);
+
+
    //   List<PointFeatureClusterStorage.Node> getNodesFor(Sector searchSector);
    //
    //

@@ -103,9 +103,7 @@ public class ClusterPointFeaturesPreprocessor {
 
             storage.acceptDepthFirstVisitor(new LeafNodesImporter(nodesCount, clusterStorage, verbose));
 
-            if (false) {
-               // clusterStorage.processPendingNodes(featuresComparator, verbose);
-            }
+            clusterStorage.processPendingNodes(verbose);
 
             if (verbose) {
                System.out.println(clusterStorage.getName() + ": 3/4 Optimizing storage...");
