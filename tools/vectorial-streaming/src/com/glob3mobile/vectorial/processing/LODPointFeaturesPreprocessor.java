@@ -52,7 +52,7 @@ public class LODPointFeaturesPreprocessor {
                                        final long elapsed,
                                        final long estimatedMsToFinish) {
                if (_verbose) {
-                  System.out.println(_lodStorage.getName() + " - 1/4 Importing leaf nodes: "
+                  System.out.println(_lodStorage.getName() + ": 1/4 Importing leaf nodes: "
                                      + progressString(stepsDone, percent, elapsed, estimatedMsToFinish));
                }
             }
@@ -113,7 +113,7 @@ public class LODPointFeaturesPreprocessor {
             lodStorage.processPendingNodes(featuresComparator, verbose);
 
             if (verbose) {
-               System.out.println(lodStorage.getName() + " - 3/4 Optimizing storage...");
+               System.out.println(lodStorage.getName() + ": 3/4 Optimizing storage...");
             }
             lodStorage.optimize();
 

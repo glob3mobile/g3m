@@ -14,7 +14,7 @@ import com.glob3mobile.utils.Progress;
 import com.glob3mobile.vectorial.GEOGeometry;
 import com.glob3mobile.vectorial.GEOPoint;
 import com.glob3mobile.vectorial.parsing.GEOFeatureHandler;
-import com.glob3mobile.vectorial.parsing.GEOJSONParser;
+import com.glob3mobile.vectorial.parsing.GEONamesParser;
 import com.glob3mobile.vectorial.parsing.GEOParseException;
 import com.glob3mobile.vectorial.parsing.GEOParser;
 import com.glob3mobile.vectorial.parsing.GEOStatisticsGatherer;
@@ -108,16 +108,16 @@ public class PointFeaturesImporter {
       System.out.println("---------------------------\n");
 
 
-      final GEOParser parser = GEOJSONParser.INSTANCE;
-      final String featuresFileName = "/Users/dgd/Downloads/sfcrimes.geojson";
-      final String storageName = "SFCrimes";
+      //      final GEOParser parser = GEOJSONParser.INSTANCE;
+      //      final String featuresFileName = "/Users/dgd/Downloads/sfcrimes.geojson";
+      //      final String storageName = "SFCrimes";
 
       // final String featuresFileName = "test-files/ne_10m_populated_places.geojson";
       // final String storageName = "PopulatedPlaces";
 
-      // final GEOParser parser = GEONamesParser.INSTANCE;
-      // final String featuresFileName = "test-files/GEONames-PopulatedPlaces.txt";
-      // final String storageName = "GEONames-PopulatedPlaces";
+      final GEOParser parser = GEONamesParser.INSTANCE;
+      final String featuresFileName = "test-files/GEONames-PopulatedPlaces.txt";
+      final String storageName = "GEONames-PopulatedPlaces";
 
 
       final File featuresFile = new File(featuresFileName);
@@ -132,12 +132,12 @@ public class PointFeaturesImporter {
       final int maxBufferSize = maxFeaturesPerNode;
 
 
-      final BiPredicate<Map<String, Object>, Geodetic2D> filter = (properties,
-                                                                   position) -> {
-         return (position._latitude._degrees < 80) && (position._longitude._degrees < 80);
-      };
+      //      final BiPredicate<Map<String, Object>, Geodetic2D> filter = (properties,
+      //                                                                   position) -> {
+      //         return (position._latitude._degrees < 80) && (position._longitude._degrees < 80);
+      //      };
 
-      // final BiPredicate<Map<String, Object>, Geodetic2D> filter = null;
+      final BiPredicate<Map<String, Object>, Geodetic2D> filter = null;
 
       final GEOStatisticsGatherer.Statistics statistics = GEOStatisticsGatherer.getStatistics(parser, featuresFile, filter);
       final long featuresCount = statistics._featuresCount;

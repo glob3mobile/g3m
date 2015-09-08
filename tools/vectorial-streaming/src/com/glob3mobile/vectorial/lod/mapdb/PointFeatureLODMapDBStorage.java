@@ -206,7 +206,6 @@ public class PointFeatureLODMapDBStorage
 
       final File file = new File(directory, lodName);
       final DBMaker maker = DBMaker.newFileDB(file);
-      // maker.cacheLRUEnable();
       maker.compressionEnable();
 
       if (readOnly) {
@@ -227,7 +226,6 @@ public class PointFeatureLODMapDBStorage
 
    @Override
    synchronized public void close() {
-      //flush();
       _db.close();
    }
 
@@ -331,7 +329,6 @@ public class PointFeatureLODMapDBStorage
          return false;
       }
 
-
       for (final ChildSplitResult split : splits) {
          final QuadKey childKey = split._key;
          final PointFeaturesSet childFeaturesSet = split._featuresSet;
@@ -344,28 +341,6 @@ public class PointFeatureLODMapDBStorage
       }
 
       return true;
-
-
-      //      final QuadKey key = new QuadKey(id, nodeSector);
-      //      final QuadKey[] childrenKeys = key.createChildren();
-      //
-      //      final List<PointFeature> features = new ArrayList<>(sourceFeatures);
-      //
-      //      for (final QuadKey childKey : childrenKeys) {
-      //         final PointFeaturesSet childPointFeaturesSet = PointFeaturesSet.extractFeatures(childKey._sector, features);
-      //         if (childPointFeaturesSet != null) {
-      //            addLeafNode( //
-      //                     childKey._id, //
-      //                     childKey._sector, //
-      //                     childPointFeaturesSet._minimumSector, //
-      //                     childPointFeaturesSet._averagePosition, //
-      //                     childPointFeaturesSet._features);
-      //         }
-      //      }
-      //
-      //      if (!features.isEmpty()) {
-      //         throw new RuntimeException("Logic error!");
-      //      }
    }
 
 
@@ -461,7 +436,7 @@ public class PointFeatureLODMapDBStorage
                                     final long elapsed,
                                     final long estimatedMsToFinish) {
             if (verbose) {
-               System.out.println(getName() + " - 3/4 Processing Pending Nodes: "
+               System.out.println(getName() + ": 3/4 Processing Pending Nodes: "
                                   + progressString(stepsDone, percent, elapsed, estimatedMsToFinish));
             }
          }
@@ -498,7 +473,7 @@ public class PointFeatureLODMapDBStorage
                                     final long elapsed,
                                     final long estimatedMsToFinish) {
             if (verbose) {
-               System.out.println(getName() + " - 2/4 Processing Pending Nodes: "
+               System.out.println(getName() + ": 2/4 Processing Pending Nodes: "
                                   + progressString(stepsDone, percent, elapsed, estimatedMsToFinish));
             }
          }
@@ -563,12 +538,7 @@ public class PointFeatureLODMapDBStorage
       Sector topMinimumSector = null;
       final List<PointFeature> allFeatures = new ArrayList<>();
       for (final Child child : children) {
-         if (topMinimumSector == null) {
-            topMinimumSector = child._header._minimumSector;
-         }
-         else {
-            topMinimumSector = topMinimumSector.mergedWith(child._header._minimumSector);
-         }
+         topMinimumSector = child._header._minimumSector.mergedWith(topMinimumSector);
          final List<PointFeature> childFeatures = _nodesFeatures.get(child._id);
          if ((childFeatures == null) || childFeatures.isEmpty()) {
             throw new RuntimeException("LOGIC ERROR");
@@ -633,7 +603,6 @@ public class PointFeatureLODMapDBStorage
 
       validateFeatures(nodeSector, minimumSector, features);
 
-      //      final PointFeaturesSet featuresSet = PointFeaturesSet.create(features);
       final Geodetic2D averagePosition = averagePosition(features);
 
       _nodesHeaders.put(id, new NodeHeader(nodeSector, minimumSector, averagePosition, features.size()));
@@ -845,11 +814,6 @@ public class PointFeatureLODMapDBStorage
          _sumLatRadians += (nodeAveragePosition._latitude._radians * nodeFeaturesCount);
          _sumLonRadians += (nodeAveragePosition._longitude._radians * nodeFeaturesCount);
 
-         //         for (final PointFeature feature : node.getFeatures()) {
-         //            final double lat = feature._position._latitude._radians;
-         //            final double lon = feature._position._longitude._radians;
-         //         }
-
          if (_progress != null) {
             _progress.stepDone();
          }
@@ -961,48 +925,6 @@ public class PointFeatureLODMapDBStorage
       public List<String> getChildrenIDs() {
          return _storage.getChildrenIDs(_id);
       }
-
-
-      //      private Sector calculateMinimumSector() {
-      //         final List<PointFeature> features = getFeatures();
-      //
-      //         final int featuresSize = features.size();
-      //
-      //         if (featuresSize == 0) {
-      //            return null;
-      //         }
-      //
-      //         final Geodetic2D firstPosition = features.get(0)._position;
-      //         double minLatRad = firstPosition._latitude._radians;
-      //         double minLonRad = firstPosition._longitude._radians;
-      //
-      //         double maxLatRad = firstPosition._latitude._radians;
-      //         double maxLonRad = firstPosition._longitude._radians;
-      //
-      //         for (int i = 1; i < featuresSize; i++) {
-      //            final Geodetic2D position = features.get(i)._position;
-      //            final double latRad = position._latitude._radians;
-      //            final double lonRad = position._longitude._radians;
-      //
-      //            if (latRad < minLatRad) {
-      //               minLatRad = latRad;
-      //            }
-      //            if (latRad > maxLatRad) {
-      //               maxLatRad = latRad;
-      //            }
-      //
-      //            if (lonRad < minLonRad) {
-      //               minLonRad = lonRad;
-      //            }
-      //            if (lonRad > maxLonRad) {
-      //               maxLonRad = lonRad;
-      //            }
-      //         }
-      //
-      //         return Sector.fromRadians( //
-      //                  minLatRad, minLonRad, //
-      //                  maxLatRad, maxLonRad);
-      //      }
 
 
    }
