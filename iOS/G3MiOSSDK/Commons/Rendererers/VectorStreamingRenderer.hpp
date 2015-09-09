@@ -60,9 +60,9 @@ public:
 
   class ChildrenParserAsyncTask : public GAsyncTask {
   private:
-    Node*        _node;
-    bool         _verbose;
-    IByteBuffer* _buffer;
+    Node*               _node;
+    bool                _verbose;
+    IByteBuffer*        _buffer;
     const IThreadUtils* _threadUtils;
 
     std::vector<Node*>* _children;
@@ -133,9 +133,9 @@ public:
 
   class FeaturesParserAsyncTask : public GAsyncTask {
   private:
-    Node*        _node;
-    bool         _verbose;
-    IByteBuffer* _buffer;
+    Node*               _node;
+    bool                _verbose;
+    IByteBuffer*        _buffer;
     const IThreadUtils* _threadUtils;
 
     GEOObject* _features;
@@ -431,19 +431,19 @@ public:
 #ifdef JAVA_CODE
     private final URL _serverURL;
 #endif
-    const std::string  _name;
+    const std::string          _name;
     const VectorSetSymbolizer* _symbolizer;
     const bool                 _deleteSymbolizer;
-    const long long    _downloadPriority;
+    const long long            _downloadPriority;
 #ifdef C_CODE
-    const TimeInterval _timeToCache;
+    const TimeInterval         _timeToCache;
 #endif
 #ifdef JAVA_CODE
     private final TimeInterval _timeToCache;
 #endif
-    const bool         _readExpired;
-    const bool         _verbose;
-    const bool         _haltOnError;
+    const bool                 _readExpired;
+    const bool                 _verbose;
+    const bool                 _haltOnError;
 
     const std::string _properties;
 
