@@ -53,16 +53,15 @@ public class ClusterPointFeaturesStatistics {
                                        final double percent,
                                        final long elapsed,
                                        final long estimatedMsToFinish) {
-               System.out.println(_clusterStorage.getName() + " - Processing: "
+               System.out.println(_clusterStorage.getName() + " [" + _minDepth + "-" + _maxDepth + "] - Processing: "
                                   + progressString(stepsDone, percent, elapsed, estimatedMsToFinish));
-
             }
          };
 
 
          final int width = 2048;
-         // final Sector sector = _clusterStorage.getSector();
-         final Sector sector = Sector.FULL_SPHERE;
+         final Sector sector = _clusterStorage.getSector();
+         // final Sector sector = Sector.FULL_SPHERE;
          final double sectorFactor = sector._deltaLatitude._radians / sector._deltaLongitude._radians;
          final int height = Math.round((float) sectorFactor * width);
          _bitmap = new GEOBitmap(sector, width, height, Color.BLACK);
@@ -169,17 +168,17 @@ public class ClusterPointFeaturesStatistics {
       final String name = "GEONames-PopulatedPlaces_Cluster";
 
 
-      //      final int depth = 7;
-      for (int depth = 0; depth <= 14; depth++) {
-         final int minDepth = depth;
-         final int maxDepth = depth;
+      try (final PointFeatureClusterStorage clusterStorage = PointFeatureClusterMapDBStorage.openReadOnly(directory, name)) {
+         final PointFeatureClusterStorage.Statistics statistics = clusterStorage.getStatistics(true);
+         statistics.show();
 
-         try (final PointFeatureClusterStorage clusterStorage = PointFeatureClusterMapDBStorage.openReadOnly(directory, name)) {
-            final PointFeatureClusterStorage.Statistics statistics = clusterStorage.getStatistics(true);
-            statistics.show();
+         final int nodesCount = statistics.getNodesCount();
+         final long featuresCount = statistics.getFeaturesCount();
+         final int maxNodeDepth = statistics.getMaxNodeDepth();
 
-            final int nodesCount = statistics.getNodesCount();
-            final long featuresCount = statistics.getFeaturesCount();
+         for (int depth = 0; depth <= maxNodeDepth; depth++) {
+            final int minDepth = depth;
+            final int maxDepth = depth;
 
             clusterStorage.acceptDepthFirstVisitor(new ClusterDrawer(clusterStorage, nodesCount, minDepth, maxDepth,
                      featuresCount));
