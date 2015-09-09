@@ -127,7 +127,7 @@ public class PointFeatureMapDBStorage
                             final List<MapDBFeature> features) throws IOException {
          out.writeInt(features.size());
          for (final MapDBFeature feature : features) {
-            SerializerUtils.serialize(out, feature._position);
+            SerializerUtils.serializeGeodetic2D(out, feature._position);
             out.writeLong(feature._propertiesID);
          }
       }
@@ -167,14 +167,14 @@ public class PointFeatureMapDBStorage
       @Override
       public void serialize(final DataOutput out,
                             final Map<String, Object> value) throws IOException {
-         SerializerUtils.serialize(out, value);
+         SerializerUtils.serializeMap(out, value);
       }
 
 
       @Override
       public Map<String, Object> deserialize(final DataInput in,
                                              final int available) throws IOException {
-         return SerializerUtils.deserialize(in);
+         return SerializerUtils.deserializeMap(in);
       }
 
 

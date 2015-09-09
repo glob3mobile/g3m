@@ -58,13 +58,15 @@ public class GEOBitmap {
                          final int width,
                          final int height,
                          final Color color,
-                         final Font font) {
+                         final Font font,
+                         final Color fontColor) {
       final int x = Math.round((float) (_sector.getUCoordinate(position._longitude) * _width));
       final int y = Math.round((float) (_sector.getVCoordinate(position._latitude) * _height));
 
       _g.setColor(color);
       _g.fillOval(x - (width / 2), y - (height / 2), width, height);
 
+      _g.setColor(fontColor);
       _g.setFont(font);
       final double w = _g.getFontMetrics().getStringBounds(name, _g).getWidth();
       _g.drawString(name, Math.round((float) (x - (w / 2))), y);

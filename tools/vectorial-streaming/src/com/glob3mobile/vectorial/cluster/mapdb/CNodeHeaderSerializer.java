@@ -30,11 +30,11 @@ public class CNodeHeaderSerializer
    public void serialize(final DataOutput out,
                          final CNodeHeader node) throws IOException {
       if (node instanceof CLeafNodeHeader) {
-         out.writeBoolean(true);
+         out.writeBoolean(true); // isLeaf
          serialize(out, (CLeafNodeHeader) node);
       }
       else if (node instanceof CInnerNodeHeader) {
-         out.writeBoolean(true);
+         out.writeBoolean(false); // isLeaf
          serialize(out, (CInnerNodeHeader) node);
       }
       else {
@@ -45,9 +45,9 @@ public class CNodeHeaderSerializer
 
    private void serialize(final DataOutput out,
                           final CLeafNodeHeader node) throws IOException {
-      SerializerUtils.serialize(out, node.getNodeSector());
-      SerializerUtils.serialize(out, node.getMinimumSector());
-      SerializerUtils.serialize(out, node.getAveragePosition());
+      SerializerUtils.serializeSector(out, node.getNodeSector());
+      SerializerUtils.serializeSector(out, node.getMinimumSector());
+      SerializerUtils.serializeGeodetic2D(out, node.getAveragePosition());
       out.writeInt(node.getFeaturesCount());
    }
 
@@ -71,9 +71,9 @@ public class CNodeHeaderSerializer
 
    private void serialize(final DataOutput out,
                           final CInnerNodeHeader node) throws IOException {
-      SerializerUtils.serialize(out, node.getNodeSector());
-      SerializerUtils.serialize(out, node.getMinimumSector());
-      SerializerUtils.serialize(out, node.getAveragePosition());
+      SerializerUtils.serializeSector(out, node.getNodeSector());
+      SerializerUtils.serializeSector(out, node.getMinimumSector());
+      SerializerUtils.serializeGeodetic2D(out, node.getAveragePosition());
       out.writeInt(node.getClustersCount());
    }
 

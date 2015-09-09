@@ -34,12 +34,12 @@ public class CNodeDataSerializer
    public void serialize(final DataOutput out,
                          final CNodeData node) throws IOException {
       if (node instanceof CLeafNodeData) {
-         out.writeBoolean(true);
-         serialize(out, (CLeafNodeData) node);
+         out.writeBoolean(true); // isLeaf
+         serializeLeaf(out, (CLeafNodeData) node);
       }
       else if (node instanceof CInnerNodeData) {
-         out.writeBoolean(true);
-         serialize(out, (CInnerNodeData) node);
+         out.writeBoolean(false); // isLeaf
+         serializeInner(out, (CInnerNodeData) node);
       }
       else {
          throw new RuntimeException("Unknown node type: " + node.getClass());
@@ -47,13 +47,13 @@ public class CNodeDataSerializer
    }
 
 
-   private void serialize(final DataOutput out,
-                          final CLeafNodeData node) throws IOException {
+   private void serializeLeaf(final DataOutput out,
+                              final CLeafNodeData node) throws IOException {
       final List<PointFeature> features = node.getFeatures();
       out.writeInt(features.size());
       for (final PointFeature feature : features) {
-         SerializerUtils.serialize(out, feature._position);
-         SerializerUtils.serialize(out, feature._properties);
+         SerializerUtils.serializeGeodetic2D(out, feature._position);
+         SerializerUtils.serializeMap(out, feature._properties);
       }
    }
 
@@ -71,7 +71,7 @@ public class CNodeDataSerializer
       final List<PointFeature> features = new ArrayList<>(size);
       for (int i = 0; i < size; i++) {
          final Geodetic2D position = SerializerUtils.deserializeGeodetic2D(in);
-         final Map<String, Object> properties = SerializerUtils.deserialize(in);
+         final Map<String, Object> properties = SerializerUtils.deserializeMap(in);
          final PointFeature feature = new PointFeature(properties, position);
          features.add(feature);
       }
@@ -79,12 +79,12 @@ public class CNodeDataSerializer
    }
 
 
-   private void serialize(final DataOutput out,
-                          final CInnerNodeData node) throws IOException {
+   private void serializeInner(final DataOutput out,
+                               final CInnerNodeData node) throws IOException {
       final List<PointFeatureCluster> clusters = node.getClusters();
       out.writeInt(clusters.size());
       for (final PointFeatureCluster cluster : clusters) {
-         SerializerUtils.serialize(out, cluster._position);
+         SerializerUtils.serializeGeodetic2D(out, cluster._position);
          out.writeLong(cluster._size);
       }
    }

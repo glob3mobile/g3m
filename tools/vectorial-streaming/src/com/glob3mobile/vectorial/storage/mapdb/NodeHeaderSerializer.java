@@ -35,9 +35,9 @@ public class NodeHeaderSerializer
       final Geodetic2D averagePosition = value._averagePosition;
       final int featuresCount = value._featuresCount;
 
-      SerializerUtils.serialize(out, nodeSector);
-      SerializerUtils.serialize(out, minimumSector);
-      SerializerUtils.serialize(out, averagePosition);
+      SerializerUtils.serializeSector(out, nodeSector);
+      SerializerUtils.serializeSector(out, minimumSector);
+      SerializerUtils.serializeGeodetic2D(out, averagePosition);
       out.writeInt(featuresCount);
    }
 

@@ -1110,10 +1110,10 @@ public class PointFeatureClusterMapDBStorage
          throw new RuntimeException("LOGIC ERROR");
       }
 
-      Sector topMinimumSector = null;
+      Sector minimumSector = null;
       final List<PointFeatureCluster> clusters = new ArrayList<>(children.size());
       for (final Child child : children) {
-         topMinimumSector = child._header.getMinimumSector().mergedWith(topMinimumSector);
+         minimumSector = child._header.getMinimumSector().mergedWith(minimumSector);
          final CNodeData childNodeData = _nodesFeatures.get(child._id);
          if (childNodeData == null) {
             throw new RuntimeException("LOGIC ERROR");
@@ -1126,9 +1126,8 @@ public class PointFeatureClusterMapDBStorage
       }
 
       final Sector nodeSector = QuadKey.sectorFor(_rootKey, key);
-
       final Geodetic2D averagePosition = averagePosition(clusters);
-      saveInnerNode(key, nodeSector, topMinimumSector, averagePosition, clusters);
+      saveInnerNode(key, nodeSector, minimumSector, averagePosition, clusters);
    }
 
 

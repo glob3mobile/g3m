@@ -213,7 +213,8 @@ public class LODPointFeaturesStatistics {
 
             for (final PointFeature features : node.getFeatures()) {
                final String featuresName = (String) features._properties.get("name");
-               bitmap.drawPoint(featuresName + " LOD:" + i, features._position, pointSize, pointSize, featureColor, featureFont);
+               bitmap.drawPoint(featuresName + " LOD:" + i, features._position, pointSize, pointSize, featureColor, featureFont,
+                        featureColor);
             }
          }
       }
