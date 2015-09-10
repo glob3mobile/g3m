@@ -206,7 +206,6 @@ public class PointFeatureLODMapDBStorage
 
       final File file = new File(directory, lodName);
       final DBMaker maker = DBMaker.newFileDB(file);
-      // maker.cacheLRUEnable();
       maker.compressionEnable();
 
       if (readOnly) {
@@ -227,7 +226,6 @@ public class PointFeatureLODMapDBStorage
 
    @Override
    synchronized public void close() {
-      //flush();
       _db.close();
    }
 
@@ -259,37 +257,90 @@ public class PointFeatureLODMapDBStorage
                             final Geodetic2D averagePosition,
                             final List<PointFeature> features) {
       if (features.size() > _maxFeaturesPerNode) {
-         split(id, nodeSector, features);
-      }
-      else {
-         saveLeafNode(id, nodeSector, minimumSector, averagePosition, features);
-      }
-   }
-
-
-   private void split(final byte[] id,
-                      final Sector nodeSector,
-                      final List<PointFeature> sourceFeatures) {
-      final QuadKey key = new QuadKey(id, nodeSector);
-      final QuadKey[] childrenKeys = key.createChildren();
-
-      final List<PointFeature> features = new ArrayList<>(sourceFeatures);
-
-      for (final QuadKey childKey : childrenKeys) {
-         final PointFeaturesSet childPointFeaturesSet = PointFeaturesSet.extractFeatures(childKey._sector, features);
-         if (childPointFeaturesSet != null) {
-            addLeafNode( //
-                     childKey._id, //
-                     childKey._sector, //
-                     childPointFeaturesSet._minimumSector, //
-                     childPointFeaturesSet._averagePosition, //
-                     childPointFeaturesSet._features);
+         if (split(id, nodeSector, features)) {
+            return;
          }
       }
 
+      saveLeafNode(id, nodeSector, minimumSector, averagePosition, features);
+   }
+
+
+   private static class ChildSplitResult {
+      private final QuadKey          _key;
+      private final PointFeaturesSet _featuresSet;
+
+
+      private ChildSplitResult(final QuadKey key,
+                               final PointFeaturesSet featuresSet) {
+         super();
+         _key = key;
+         _featuresSet = featuresSet;
+      }
+
+   }
+
+   private static final int MAX_SPLIT_DEPTH = 8;
+
+
+   private static List<ChildSplitResult> splitIntoChildren(final byte[] id,
+                                                           final Sector nodeSector,
+                                                           final List<PointFeature> features) {
+      final QuadKey key = new QuadKey(id, nodeSector);
+      return splitIntoChildren(key, features, 0);
+   }
+
+
+   private static List<ChildSplitResult> splitIntoChildren(final QuadKey key,
+                                                           final List<PointFeature> features,
+                                                           final int splitDepth) {
+      final int featuresSize = features.size(); // save the size here, to be compare after the features get cleared in PointFeaturesSet.extractFeatures()
+
+      final QuadKey[] childrenKeys = key.createChildren();
+      final List<ChildSplitResult> result = new ArrayList<>(childrenKeys.length);
+      for (final QuadKey childKey : childrenKeys) {
+         final PointFeaturesSet childPointFeaturesSet = PointFeaturesSet.extractFeatures(childKey._sector, features);
+         if (childPointFeaturesSet != null) {
+            final List<PointFeature> childFeatures = childPointFeaturesSet._features;
+            if ((childFeatures.size() == featuresSize) && (splitDepth < MAX_SPLIT_DEPTH)) {
+               return splitIntoChildren(childKey, childFeatures, splitDepth + 1);
+            }
+            result.add(new ChildSplitResult(childKey, childPointFeaturesSet));
+         }
+      }
       if (!features.isEmpty()) {
          throw new RuntimeException("Logic error!");
       }
+      if (result.size() == 0) {
+         throw new RuntimeException("Logic error!");
+      }
+      return result;
+   }
+
+
+   private boolean split(final byte[] id,
+                         final Sector nodeSector,
+                         final List<PointFeature> sourceFeatures) {
+      final List<PointFeature> features = new ArrayList<>(sourceFeatures);
+
+      final List<ChildSplitResult> splits = splitIntoChildren(id, nodeSector, features);
+      if (splits.size() == 1) {
+         System.out.println("- can't split \"" + QuadKeyUtils.toIDString(id) + "\"");
+         return false;
+      }
+
+      for (final ChildSplitResult split : splits) {
+         final QuadKey childKey = split._key;
+         final PointFeaturesSet childFeaturesSet = split._featuresSet;
+         addLeafNode( //
+                  childKey._id, //
+                  childKey._sector, //
+                  childFeaturesSet._minimumSector, //
+                  childFeaturesSet._averagePosition, //
+                  childFeaturesSet._features);
+      }
+
+      return true;
    }
 
 
@@ -376,7 +427,7 @@ public class PointFeatureLODMapDBStorage
          throw new RuntimeException("Read Only");
       }
 
-      int currentLevel = getMaxLevel(verbose);
+      int currentLevel = getPendingNodesMaxLevel(verbose);
 
       final Progress progress = new Progress(_pendingNodes.size()) {
          @Override
@@ -385,7 +436,7 @@ public class PointFeatureLODMapDBStorage
                                     final long elapsed,
                                     final long estimatedMsToFinish) {
             if (verbose) {
-               System.out.println(getName() + " - 3/4 Processing Pending Nodes: "
+               System.out.println(getName() + ": 3/4 Processing Pending Nodes: "
                                   + progressString(stepsDone, percent, elapsed, estimatedMsToFinish));
             }
          }
@@ -414,7 +465,7 @@ public class PointFeatureLODMapDBStorage
    }
 
 
-   private int getMaxLevel(final boolean verbose) {
+   private int getPendingNodesMaxLevel(final boolean verbose) {
       final Progress progress = new Progress(_pendingNodes.size()) {
          @Override
          public void informProgress(final long stepsDone,
@@ -422,7 +473,7 @@ public class PointFeatureLODMapDBStorage
                                     final long elapsed,
                                     final long estimatedMsToFinish) {
             if (verbose) {
-               System.out.println(getName() + " - 2/4 Processing Pending Nodes: "
+               System.out.println(getName() + ": 2/4 Processing Pending Nodes: "
                                   + progressString(stepsDone, percent, elapsed, estimatedMsToFinish));
             }
          }
@@ -487,12 +538,7 @@ public class PointFeatureLODMapDBStorage
       Sector topMinimumSector = null;
       final List<PointFeature> allFeatures = new ArrayList<>();
       for (final Child child : children) {
-         if (topMinimumSector == null) {
-            topMinimumSector = child._header._minimumSector;
-         }
-         else {
-            topMinimumSector = topMinimumSector.mergedWith(child._header._minimumSector);
-         }
+         topMinimumSector = child._header._minimumSector.mergedWith(topMinimumSector);
          final List<PointFeature> childFeatures = _nodesFeatures.get(child._id);
          if ((childFeatures == null) || childFeatures.isEmpty()) {
             throw new RuntimeException("LOGIC ERROR");
@@ -503,8 +549,8 @@ public class PointFeatureLODMapDBStorage
       Collections.sort(allFeatures, featuresComparator);
 
 
-      final float topFeaturesPercent = (float) 1 / Math.max(children.size(), 2);
-      // final float topFeaturesPercent = (float) 1 / 4;
+      //final float topFeaturesPercent = (float) 1 / Math.max(children.size(), 2);
+      final float topFeaturesPercent = 0.25f;
       final int topFeaturesCount = Math.round(allFeatures.size() * topFeaturesPercent);
 
       final List<PointFeature> topFeatures = allFeatures.subList(0, topFeaturesCount);
@@ -539,6 +585,10 @@ public class PointFeatureLODMapDBStorage
          removeNode(childID);
       }
       else {
+         if (childFeatures.size() == 1) {
+            // consider moving this single feature up to my parent
+         }
+         final int TODO_calculate_new__minimumSector;
          saveNode(childID, childFeatures, child._header._minimumSector);
       }
    }
@@ -557,7 +607,6 @@ public class PointFeatureLODMapDBStorage
 
       validateFeatures(nodeSector, minimumSector, features);
 
-      //      final PointFeaturesSet featuresSet = PointFeaturesSet.create(features);
       final Geodetic2D averagePosition = averagePosition(features);
 
       _nodesHeaders.put(id, new NodeHeader(nodeSector, minimumSector, averagePosition, features.size()));
@@ -769,11 +818,6 @@ public class PointFeatureLODMapDBStorage
          _sumLatRadians += (nodeAveragePosition._latitude._radians * nodeFeaturesCount);
          _sumLonRadians += (nodeAveragePosition._longitude._radians * nodeFeaturesCount);
 
-         //         for (final PointFeature feature : node.getFeatures()) {
-         //            final double lat = feature._position._latitude._radians;
-         //            final double lon = feature._position._longitude._radians;
-         //         }
-
          if (_progress != null) {
             _progress.stepDone();
          }
@@ -885,48 +929,6 @@ public class PointFeatureLODMapDBStorage
       public List<String> getChildrenIDs() {
          return _storage.getChildrenIDs(_id);
       }
-
-
-      //      private Sector calculateMinimumSector() {
-      //         final List<PointFeature> features = getFeatures();
-      //
-      //         final int featuresSize = features.size();
-      //
-      //         if (featuresSize == 0) {
-      //            return null;
-      //         }
-      //
-      //         final Geodetic2D firstPosition = features.get(0)._position;
-      //         double minLatRad = firstPosition._latitude._radians;
-      //         double minLonRad = firstPosition._longitude._radians;
-      //
-      //         double maxLatRad = firstPosition._latitude._radians;
-      //         double maxLonRad = firstPosition._longitude._radians;
-      //
-      //         for (int i = 1; i < featuresSize; i++) {
-      //            final Geodetic2D position = features.get(i)._position;
-      //            final double latRad = position._latitude._radians;
-      //            final double lonRad = position._longitude._radians;
-      //
-      //            if (latRad < minLatRad) {
-      //               minLatRad = latRad;
-      //            }
-      //            if (latRad > maxLatRad) {
-      //               maxLatRad = latRad;
-      //            }
-      //
-      //            if (lonRad < minLonRad) {
-      //               minLonRad = lonRad;
-      //            }
-      //            if (lonRad > maxLonRad) {
-      //               maxLonRad = lonRad;
-      //            }
-      //         }
-      //
-      //         return Sector.fromRadians( //
-      //                  minLatRad, minLonRad, //
-      //                  maxLatRad, maxLonRad);
-      //      }
 
 
    }

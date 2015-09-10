@@ -48,7 +48,7 @@ public class LODPointFeaturesStatistics {
 
          final int level = node.getDepth();
 
-         final int maxLevel = 13;
+         final int maxLevel = 15;
          if (level < maxLevel) {
             // final Font font = new Font(Font.SERIF, Font.BOLD, 12 + ((maxLevel - level) * 3));
             // final Font font = new Font(Font.SERIF, Font.BOLD, 14);
@@ -213,7 +213,8 @@ public class LODPointFeaturesStatistics {
 
             for (final PointFeature features : node.getFeatures()) {
                final String featuresName = (String) features._properties.get("name");
-               bitmap.drawPoint(featuresName + " LOD:" + i, features._position, pointSize, pointSize, featureColor, featureFont);
+               bitmap.drawPoint(featuresName + " LOD:" + i, features._position, pointSize, pointSize, featureColor, featureFont,
+                        featureColor);
             }
          }
       }

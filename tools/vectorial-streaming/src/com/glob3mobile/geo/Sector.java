@@ -175,6 +175,10 @@ public class Sector
 
 
    public final Sector mergedWith(final Sector that) {
+      if (that == null) {
+         return this;
+      }
+
       final Angle lowLat = Angle.min(_lower._latitude, that._lower._latitude);
       final Angle lowLon = Angle.min(_lower._longitude, that._lower._longitude);
       final Geodetic2D low = new Geodetic2D(lowLat, lowLon);

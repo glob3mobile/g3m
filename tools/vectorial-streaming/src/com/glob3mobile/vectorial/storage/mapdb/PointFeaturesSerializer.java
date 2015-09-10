@@ -32,8 +32,8 @@ public class PointFeaturesSerializer
       out.writeInt(size);
 
       for (final PointFeature feature : features) {
-         SerializerUtils.serialize(out, feature._position);
-         SerializerUtils.serialize(out, feature._properties);
+         SerializerUtils.serializeGeodetic2D(out, feature._position);
+         SerializerUtils.serializeMap(out, feature._properties);
       }
    }
 
@@ -46,7 +46,7 @@ public class PointFeaturesSerializer
       final List<PointFeature> features = new ArrayList<>(size);
       for (int i = 0; i < size; i++) {
          final Geodetic2D position = SerializerUtils.deserializeGeodetic2D(in);
-         final Map<String, Object> properties = SerializerUtils.deserialize(in);
+         final Map<String, Object> properties = SerializerUtils.deserializeMap(in);
          final PointFeature feature = new PointFeature(properties, position);
          features.add(feature);
       }
