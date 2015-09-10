@@ -585,6 +585,10 @@ public class PointFeatureLODMapDBStorage
          removeNode(childID);
       }
       else {
+         if (childFeatures.size() == 1) {
+            // consider moving this single feature up to my parent
+         }
+         final int TODO_calculate_new__minimumSector;
          saveNode(childID, childFeatures, child._header._minimumSector);
       }
    }
