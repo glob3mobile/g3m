@@ -352,7 +352,6 @@ public class G3MWidget implements ChangedRendererInfoListener
             _clickOnProcess = false;
           }
         }
-        //_clickOnProcess = false;
       }
     }
     else

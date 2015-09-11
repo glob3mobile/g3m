@@ -588,9 +588,41 @@ public class PointFeatureLODMapDBStorage
          if (childFeatures.size() == 1) {
             // consider moving this single feature up to my parent
          }
-         final int TODO_calculate_new__minimumSector;
-         saveNode(childID, childFeatures, child._header._minimumSector);
+         // final  Sector minimumSector = child._header._minimumSector;
+         final Sector minimumSector = getMinimumSector(childFeatures);
+         saveNode(childID, childFeatures, minimumSector);
       }
+   }
+
+
+   private static Sector getMinimumSector(final List<PointFeature> features) {
+      double minLatRad = Double.POSITIVE_INFINITY;
+      double minLonRad = Double.POSITIVE_INFINITY;
+      double maxLatRad = Double.NEGATIVE_INFINITY;
+      double maxLonRad = Double.NEGATIVE_INFINITY;
+
+      for (final PointFeature feature : features) {
+         final Geodetic2D point = feature._position;
+
+         final double latRad = point._latitude._radians;
+         final double lonRad = point._longitude._radians;
+
+         if (latRad < minLatRad) {
+            minLatRad = latRad;
+         }
+         if (latRad > maxLatRad) {
+            maxLatRad = latRad;
+         }
+
+         if (lonRad < minLonRad) {
+            minLonRad = lonRad;
+         }
+         if (lonRad > maxLonRad) {
+            maxLonRad = lonRad;
+         }
+      }
+
+      return Sector.fromRadians(minLatRad, minLonRad, maxLatRad, maxLonRad);
    }
 
 

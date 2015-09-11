@@ -985,6 +985,7 @@ public class MapBoo
      _serverURL = serverURL;
      _handler = handler;
      _verbose = verbose;
+     _mapID = "";
     _layerSet = new LayerSet();
     _layerSet.addLayer(new ChessboardLayer());
   
