@@ -35,7 +35,8 @@ MapBoo::MapBoo(IG3MBuilder* builder,
 _builder(builder),
 _serverURL(serverURL),
 _handler(handler),
-_verbose(verbose)
+_verbose(verbose),
+_mapID("")
 {
   _layerSet = new LayerSet();
   _layerSet->addLayer( new ChessboardLayer() );
