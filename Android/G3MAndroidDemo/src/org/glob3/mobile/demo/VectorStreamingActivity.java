@@ -110,7 +110,7 @@ public class VectorStreamingActivity
 
 
       //   _g3mWidget.setAnimatedCameraPosition(Geodetic3D.fromDegrees(47.39987642274313d, 8.544022519285223d, 1300),
-      _g3mWidget.setAnimatedCameraPosition(Geodetic3D.fromDegrees(40d, -3.1889d, 300000), TimeInterval.fromSeconds(5));
+      _g3mWidget.setAnimatedCameraPosition(Geodetic3D.fromDegrees(40d, -3.1889d, 1000000), TimeInterval.fromSeconds(5));
       final RelativeLayout placeHolder = (RelativeLayout) findViewById(R.id.g3mWidgetHolder);
       placeHolder.addView(_g3mWidget);
 
