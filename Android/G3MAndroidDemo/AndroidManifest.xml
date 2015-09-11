@@ -146,6 +146,8 @@
             android:hardwareAccelerated="true"
              >
         </activity>
+            <activity android:name="VectorStreamingActivity" android:process=":AB"></activity>
+            <activity android:name="PointCloudStreamimgActivity" android:process=":AC"></activity>
     </application>
 
 </manifest>
