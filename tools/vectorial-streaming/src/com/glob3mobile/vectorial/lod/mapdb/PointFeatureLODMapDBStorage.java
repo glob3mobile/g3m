@@ -355,11 +355,7 @@ public class PointFeatureLODMapDBStorage
       for (final byte[] ancestorID : QuadKeyUtils.ancestors(id)) {
          if (!_pendingNodes.contains(ancestorID)) {
             _pendingNodes.add(ancestorID);
-            final Sector ancestorNodeSector = QuadKey.sectorFor(_rootKey, ancestorID);
-            final Sector ancestorMinimumSector = null;
-            final Geodetic2D ancestorAveragePosition = null;
-            final List<PointFeature> ancestorFeatures = Collections.emptyList();
-            saveNode(ancestorID, ancestorNodeSector, ancestorMinimumSector, ancestorAveragePosition, ancestorFeatures);
+            saveEmptyAncestorNode(ancestorID);
          }
       }
    }
@@ -373,6 +369,13 @@ public class PointFeatureLODMapDBStorage
       validateFeatures(nodeSector, minimumSector, features);
       assertIsNull(_nodesHeaders.put(id, new NodeHeader(nodeSector, minimumSector, averagePosition, features.size())));
       assertIsNull(_nodesFeatures.put(id, features));
+   }
+
+
+   private void saveEmptyAncestorNode(final byte[] id) {
+      final Sector nodeSector = QuadKey.sectorFor(_rootKey, id);
+      assertIsNull(_nodesHeaders.put(id, new NodeHeader(nodeSector, null, null, 0)));
+      assertIsNull(_nodesFeatures.put(id, Collections.emptyList()));
    }
 
 
@@ -551,7 +554,7 @@ public class PointFeatureLODMapDBStorage
 
       //final float topFeaturesPercent = (float) 1 / Math.max(children.size(), 2);
       final float topFeaturesPercent = 0.25f;
-      final int topFeaturesCount = Math.round(allFeatures.size() * topFeaturesPercent);
+      final int topFeaturesCount = Math.max(1, Math.round(allFeatures.size() * topFeaturesPercent));
 
       final List<PointFeature> topFeatures = allFeatures.subList(0, topFeaturesCount);
       saveNode(key, topFeatures, topMinimumSector);
