@@ -1,6 +1,6 @@
 
 
-package com.glob3mobile.vectorial.cluster.mapdb;
+package com.glob3mobile.vectorial.lod.clustering.mapdb;
 
 import java.io.DataInput;
 import java.io.DataOutput;

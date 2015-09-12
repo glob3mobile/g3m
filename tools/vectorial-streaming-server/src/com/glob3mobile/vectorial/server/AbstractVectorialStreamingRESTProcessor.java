@@ -26,8 +26,8 @@ import com.glob3mobile.server.rest.RESTJSONErrorException;
 import com.glob3mobile.server.rest.RESTJSONResponse;
 import com.glob3mobile.server.rest.RESTPath;
 import com.glob3mobile.server.rest.RESTResponse;
-import com.glob3mobile.vectorial.lod.PointFeatureLODStorage;
-import com.glob3mobile.vectorial.lod.mapdb.PointFeatureLODMapDBStorage;
+import com.glob3mobile.vectorial.lod.sorting.PointFeatureSortingLODStorage;
+import com.glob3mobile.vectorial.lod.sorting.mapdb.PointFeatureSortingLODMapDBStorage;
 import com.glob3mobile.vectorial.server.utils.GEOJSONUtils;
 import com.glob3mobile.vectorial.storage.PointFeature;
 
@@ -93,7 +93,8 @@ public abstract class AbstractVectorialStreamingRESTProcessor
       final String nodeID = request.getParameter("node");
       final String nodesIDs = request.getParameter("nodes");
 
-      try (final PointFeatureLODStorage lodStorage = PointFeatureLODMapDBStorage.openReadOnly(directoryFor(lodName), lodName)) {
+      try (final PointFeatureSortingLODStorage lodStorage = PointFeatureSortingLODMapDBStorage.openReadOnly(
+               directoryFor(lodName), lodName)) {
          if ((nodeID == null) && (nodesIDs == null)) {
             return sendLODMetadata(lodStorage);
          }
@@ -114,8 +115,9 @@ public abstract class AbstractVectorialStreamingRESTProcessor
       final String nodeID = getMandatoryParameter(request, "node");
       final String[] properties = getMandatoryParameter(request, "properties").split("\\|");
 
-      try (final PointFeatureLODStorage lodStorage = PointFeatureLODMapDBStorage.openReadOnly(directoryFor(lodName), lodName)) {
-         final PointFeatureLODStorage.Node node = lodStorage.getNode(nodeID);
+      try (final PointFeatureSortingLODStorage lodStorage = PointFeatureSortingLODMapDBStorage.openReadOnly(
+               directoryFor(lodName), lodName)) {
+         final PointFeatureSortingLODStorage.Node node = lodStorage.getNode(nodeID);
          if (node == null) {
             throw new RESTJSONErrorException(SC_OK, NOT_FOUND, "node: \'" + nodeID + "\'");
          }
@@ -127,8 +129,8 @@ public abstract class AbstractVectorialStreamingRESTProcessor
    }
 
 
-   private static RESTResponse sendLODMetadata(final PointFeatureLODStorage lodStorage) {
-      final PointFeatureLODStorage.Statistics statistics = lodStorage.getStatistics(false);
+   private static RESTResponse sendLODMetadata(final PointFeatureSortingLODStorage lodStorage) {
+      final PointFeatureSortingLODStorage.Statistics statistics = lodStorage.getStatistics(false);
       final Map<String, Object> result = new LinkedHashMap<>();
       result.put("name", lodStorage.getName());
       result.put("sector", GEOJSONUtils.toJSON(lodStorage.getSector()));
@@ -143,9 +145,9 @@ public abstract class AbstractVectorialStreamingRESTProcessor
    }
 
 
-   private static RESTResponse sendNodeMetadata(final PointFeatureLODStorage lodStorage,
+   private static RESTResponse sendNodeMetadata(final PointFeatureSortingLODStorage lodStorage,
                                                 final String nodeID) throws RESTException {
-      final PointFeatureLODStorage.Node node = lodStorage.getNode(nodeID);
+      final PointFeatureSortingLODStorage.Node node = lodStorage.getNode(nodeID);
       if (node == null) {
          throw new RESTJSONErrorException(SC_OK, NOT_FOUND, "node: \'" + nodeID + "\'");
       }
@@ -153,14 +155,14 @@ public abstract class AbstractVectorialStreamingRESTProcessor
    }
 
 
-   private static RESTResponse sendNodesMetadata(final PointFeatureLODStorage lodStorage,
+   private static RESTResponse sendNodesMetadata(final PointFeatureSortingLODStorage lodStorage,
                                                  final String nodesIDs) throws RESTException {
 
       final String[] ids = nodesIDs.split("\\|");
 
       final List<Map<String, Object>> nodes = new ArrayList<>(ids.length);
       for (final String nodeID : ids) {
-         final PointFeatureLODStorage.Node node = lodStorage.getNode(nodeID);
+         final PointFeatureSortingLODStorage.Node node = lodStorage.getNode(nodeID);
          if (node == null) {
             throw new RESTJSONErrorException(SC_OK, NOT_FOUND, "node: \'" + nodeID + "\'");
          }
@@ -181,7 +183,7 @@ public abstract class AbstractVectorialStreamingRESTProcessor
    }
 
 
-   private static Map<String, Object> toGEOJSON(final PointFeatureLODStorage.Node node,
+   private static Map<String, Object> toGEOJSON(final PointFeatureSortingLODStorage.Node node,
                                                 final String[] properties) {
       final Map<String, Object> result = new LinkedHashMap<>();
       result.put("type", "FeatureCollection");
@@ -190,16 +192,16 @@ public abstract class AbstractVectorialStreamingRESTProcessor
    }
 
 
-   private static List<Map<String, Object>> toNodesJSON(final List<PointFeatureLODStorage.Node> nodes) {
+   private static List<Map<String, Object>> toNodesJSON(final List<PointFeatureSortingLODStorage.Node> nodes) {
       final List<Map<String, Object>> result = new ArrayList<>(nodes.size());
-      for (final PointFeatureLODStorage.Node node : nodes) {
+      for (final PointFeatureSortingLODStorage.Node node : nodes) {
          result.add(toJSON(node));
       }
       return result;
    }
 
 
-   private static Map<String, Object> toJSON(final PointFeatureLODStorage.Node node) {
+   private static Map<String, Object> toJSON(final PointFeatureSortingLODStorage.Node node) {
       final Map<String, Object> result = new LinkedHashMap<>();
       result.put("id", node.getID());
       result.put("nodeSector", GEOJSONUtils.toJSON(node.getNodeSector()));

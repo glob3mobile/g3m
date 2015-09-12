@@ -1,6 +1,6 @@
 
 
-package com.glob3mobile.vectorial.lod.mapdb;
+package com.glob3mobile.vectorial.lod.sorting.mapdb;
 
 import java.io.File;
 import java.io.FilenameFilter;
@@ -24,7 +24,7 @@ import com.glob3mobile.geo.Geodetic2D;
 import com.glob3mobile.geo.Sector;
 import com.glob3mobile.utils.Progress;
 import com.glob3mobile.utils.UndeterminateProgress;
-import com.glob3mobile.vectorial.lod.PointFeatureLODStorage;
+import com.glob3mobile.vectorial.lod.sorting.PointFeatureSortingLODStorage;
 import com.glob3mobile.vectorial.storage.PointFeature;
 import com.glob3mobile.vectorial.storage.PointFeaturesSet;
 import com.glob3mobile.vectorial.storage.QuadKey;
@@ -37,10 +37,11 @@ import com.glob3mobile.vectorial.utils.CollectionUtils;
 import com.glob3mobile.vectorial.utils.MapDBUtils;
 
 
-public class PointFeatureLODMapDBStorage
+public class PointFeatureSortingLODMapDBStorage
    implements
-      PointFeatureLODStorage {
+      PointFeatureSortingLODStorage {
 
+   
 
    public static void delete(final File directory,
                              final String name) throws IOException {
@@ -66,19 +67,19 @@ public class PointFeatureLODMapDBStorage
    }
 
 
-   public static PointFeatureLODStorage createEmpty(final Sector sector,
-                                                    final File directory,
-                                                    final String name,
-                                                    final int maxFeaturesPerNode) throws IOException {
-      PointFeatureLODMapDBStorage.delete(directory, name);
+   public static PointFeatureSortingLODStorage createEmpty(final Sector sector,
+                                                           final File directory,
+                                                           final String name,
+                                                           final int maxFeaturesPerNode) throws IOException {
+      PointFeatureSortingLODMapDBStorage.delete(directory, name);
 
-      return new PointFeatureLODMapDBStorage(sector, directory, name, maxFeaturesPerNode);
+      return new PointFeatureSortingLODMapDBStorage(sector, directory, name, maxFeaturesPerNode);
    }
 
 
-   public static PointFeatureLODStorage openReadOnly(final File directory,
-                                                     final String name) throws IOException {
-      return new PointFeatureLODMapDBStorage(directory, name);
+   public static PointFeatureSortingLODStorage openReadOnly(final File directory,
+                                                            final String name) throws IOException {
+      return new PointFeatureSortingLODMapDBStorage(directory, name);
    }
 
 
@@ -95,7 +96,7 @@ public class PointFeatureLODMapDBStorage
    private final BTreeMap<String, Object>             _metadata;
 
 
-   private PointFeatureLODMapDBStorage(final Sector sector,
+   private PointFeatureSortingLODMapDBStorage(final Sector sector,
                                        final File directory,
                                        final String name,
                                        final int maxFeaturesPerNode) throws IOException {
@@ -146,7 +147,7 @@ public class PointFeatureLODMapDBStorage
    }
 
 
-   private PointFeatureLODMapDBStorage(final File directory,
+   private PointFeatureSortingLODMapDBStorage(final File directory,
                                        final String name) throws IOException {
       // Constructor for a alread existing LOD-Storage, read only
 
@@ -666,7 +667,7 @@ public class PointFeatureLODMapDBStorage
 
    private static class PvtStatistics
       implements
-         PointFeatureLODStorage.Statistics {
+         PointFeatureSortingLODStorage.Statistics {
 
       private final String     _storageName;
 
@@ -781,7 +782,7 @@ public class PointFeatureLODMapDBStorage
 
    private static class StatisticsGatherer
       implements
-         PointFeatureLODStorage.NodeVisitor {
+         PointFeatureSortingLODStorage.NodeVisitor {
 
       private final String          _name;
       private final boolean         _showProgress;
@@ -834,7 +835,7 @@ public class PointFeatureLODMapDBStorage
 
 
       @Override
-      public boolean visit(final PointFeatureLODStorage.Node node) {
+      public boolean visit(final PointFeatureSortingLODStorage.Node node) {
          _nodesCount++;
 
          final int nodeFeaturesCount = node.getFeaturesCount();
@@ -884,7 +885,7 @@ public class PointFeatureLODMapDBStorage
 
 
    @Override
-   synchronized public PointFeatureLODStorage.Statistics getStatistics(final boolean showProgress) {
+   synchronized public PointFeatureSortingLODStorage.Statistics getStatistics(final boolean showProgress) {
       final StatisticsGatherer gatherer = new StatisticsGatherer(_name, showProgress);
       acceptDepthFirstVisitor(gatherer);
       return gatherer._statistics;
@@ -892,9 +893,9 @@ public class PointFeatureLODMapDBStorage
 
    private static class PvtNode
       implements
-         PointFeatureLODStorage.Node {
+         PointFeatureSortingLODStorage.Node {
 
-      private final PointFeatureLODMapDBStorage _storage;
+      private final PointFeatureSortingLODMapDBStorage _storage;
       private final byte[]                      _id;
       private final Sector                      _nodeSector;
       private final Sector                      _minimumSector;
@@ -903,7 +904,7 @@ public class PointFeatureLODMapDBStorage
       private List<PointFeature>                _features = null;
 
 
-      private PvtNode(final PointFeatureLODMapDBStorage storage,
+      private PvtNode(final PointFeatureSortingLODMapDBStorage storage,
                       final byte[] id,
                       final NodeHeader header) {
          _storage = storage;
@@ -970,7 +971,7 @@ public class PointFeatureLODMapDBStorage
 
 
    @Override
-   synchronized public void acceptDepthFirstVisitor(final PointFeatureLODStorage.NodeVisitor visitor) {
+   synchronized public void acceptDepthFirstVisitor(final PointFeatureSortingLODStorage.NodeVisitor visitor) {
       visitor.start();
 
       for (final Map.Entry<byte[], NodeHeader> nodeHeader : _nodesHeaders.entrySet()) {
@@ -991,25 +992,25 @@ public class PointFeatureLODMapDBStorage
 
 
    @Override
-   public List<PointFeatureLODStorage.Node> getNodesFor(final Sector searchSector) {
+   public List<PointFeatureSortingLODStorage.Node> getNodesFor(final Sector searchSector) {
       final QuadKey candidate = QuadKey.deepestEnclosingNodeKey(_rootKey, searchSector);
       return getNodesUpTo(candidate);
    }
 
 
    @Override
-   public List<PointFeatureLODStorage.Node> getNodesFor(final Geodetic2D position) {
+   public List<PointFeatureSortingLODStorage.Node> getNodesFor(final Geodetic2D position) {
       final int maxLevel = getStatistics(false).getMaxNodeDepth();
       final QuadKey candidate = QuadKey.deepestEnclosingNodeKey(_rootKey, position, maxLevel);
       return getNodesUpTo(candidate);
    }
 
 
-   private List<PointFeatureLODStorage.Node> getNodesUpTo(final QuadKey candidate) {
+   private List<PointFeatureSortingLODStorage.Node> getNodesUpTo(final QuadKey candidate) {
       final byte[] key = candidate._id;
 
       final int keyLength = key.length;
-      final List<PointFeatureLODStorage.Node> result = new ArrayList<>(keyLength);
+      final List<PointFeatureSortingLODStorage.Node> result = new ArrayList<>(keyLength);
       for (int i = 0; i < (keyLength + 1); i++) {
          final byte[] k = Arrays.copyOf(key, i);
          result.add(getNode(k));
@@ -1018,14 +1019,14 @@ public class PointFeatureLODMapDBStorage
    }
 
 
-   private PointFeatureLODStorage.Node getNode(final byte[] id) {
+   private PointFeatureSortingLODStorage.Node getNode(final byte[] id) {
       final NodeHeader header = _nodesHeaders.get(id);
       return (header == null) ? null : new PvtNode(this, id, header);
    }
 
 
    @Override
-   public List<PointFeatureLODStorage.Node> getAllNodesOfDepth(final int depth) {
+   public List<PointFeatureSortingLODStorage.Node> getAllNodesOfDepth(final int depth) {
       final List<Node> result = new ArrayList<>();
       for (final byte[] key : _nodesHeaders.keySet()) {
          if (key.length == depth) {

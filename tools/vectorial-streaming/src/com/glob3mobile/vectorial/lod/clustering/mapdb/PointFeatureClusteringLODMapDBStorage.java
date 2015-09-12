@@ -1,6 +1,6 @@
 
 
-package com.glob3mobile.vectorial.cluster.mapdb;
+package com.glob3mobile.vectorial.lod.clustering.mapdb;
 
 import java.io.File;
 import java.io.FilenameFilter;
@@ -22,13 +22,13 @@ import com.glob3mobile.geo.Geodetic2D;
 import com.glob3mobile.geo.Sector;
 import com.glob3mobile.utils.Progress;
 import com.glob3mobile.utils.UndeterminateProgress;
-import com.glob3mobile.vectorial.cluster.PointFeatureClusterStorage;
 import com.glob3mobile.vectorial.cluster.nodes.CInnerNodeData;
 import com.glob3mobile.vectorial.cluster.nodes.CInnerNodeHeader;
 import com.glob3mobile.vectorial.cluster.nodes.CLeafNodeData;
 import com.glob3mobile.vectorial.cluster.nodes.CLeafNodeHeader;
 import com.glob3mobile.vectorial.cluster.nodes.CNodeData;
 import com.glob3mobile.vectorial.cluster.nodes.CNodeHeader;
+import com.glob3mobile.vectorial.lod.clustering.PointFeatureClusteringLODStorage;
 import com.glob3mobile.vectorial.storage.PointFeature;
 import com.glob3mobile.vectorial.storage.PointFeatureCluster;
 import com.glob3mobile.vectorial.storage.PointFeaturesSet;
@@ -38,9 +38,9 @@ import com.glob3mobile.vectorial.storage.QuadKeyUtils;
 import com.glob3mobile.vectorial.utils.MapDBUtils;
 
 
-public class PointFeatureClusterMapDBStorage
+public class PointFeatureClusteringLODMapDBStorage
    implements
-      PointFeatureClusterStorage {
+      PointFeatureClusteringLODStorage {
 
 
    public static void delete(final File directory,
@@ -67,19 +67,19 @@ public class PointFeatureClusterMapDBStorage
    }
 
 
-   public static PointFeatureClusterStorage createEmpty(final Sector sector,
-                                                        final File directory,
-                                                        final String name,
-                                                        final int maxFeaturesPerNode) throws IOException {
-      PointFeatureClusterMapDBStorage.delete(directory, name);
+   public static PointFeatureClusteringLODStorage createEmpty(final Sector sector,
+                                                              final File directory,
+                                                              final String name,
+                                                              final int maxFeaturesPerNode) throws IOException {
+      PointFeatureClusteringLODMapDBStorage.delete(directory, name);
 
-      return new PointFeatureClusterMapDBStorage(sector, directory, name, maxFeaturesPerNode);
+      return new PointFeatureClusteringLODMapDBStorage(sector, directory, name, maxFeaturesPerNode);
    }
 
 
-   public static PointFeatureClusterStorage openReadOnly(final File directory,
-                                                         final String name) throws IOException {
-      return new PointFeatureClusterMapDBStorage(directory, name);
+   public static PointFeatureClusteringLODStorage openReadOnly(final File directory,
+                                                               final String name) throws IOException {
+      return new PointFeatureClusteringLODMapDBStorage(directory, name);
    }
 
 
@@ -96,10 +96,10 @@ public class PointFeatureClusterMapDBStorage
    private final BTreeMap<String, Object>      _metadata;
 
 
-   private PointFeatureClusterMapDBStorage(final Sector sector,
-                                           final File directory,
-                                           final String name,
-                                           final int maxFeaturesPerNode) throws IOException {
+   private PointFeatureClusteringLODMapDBStorage(final Sector sector,
+                                                 final File directory,
+                                                 final String name,
+                                                 final int maxFeaturesPerNode) throws IOException {
       // Constructor for new Cluster-Storage
       _sector = sector;
       _rootKey = new QuadKey(new byte[] {}, _sector);
@@ -148,8 +148,8 @@ public class PointFeatureClusterMapDBStorage
    }
 
 
-   private PointFeatureClusterMapDBStorage(final File directory,
-                                           final String name) throws IOException {
+   private PointFeatureClusteringLODMapDBStorage(final File directory,
+                                                 final String name) throws IOException {
       // Constructor for a alread existing Cluster-Storage, read only
 
       _name = name;
@@ -464,7 +464,7 @@ public class PointFeatureClusterMapDBStorage
 
    private static class PvtStatistics
       implements
-         PointFeatureClusterStorage.Statistics {
+         PointFeatureClusteringLODStorage.Statistics {
 
       private final String     _storageName;
       private final long       _clustersCount;
@@ -636,7 +636,7 @@ public class PointFeatureClusterMapDBStorage
 
    private static class StatisticsGatherer
       implements
-         PointFeatureClusterStorage.NodeVisitor {
+         PointFeatureClusteringLODStorage.NodeVisitor {
 
       private final String          _name;
       private final boolean         _showProgress;
@@ -700,7 +700,7 @@ public class PointFeatureClusterMapDBStorage
 
 
       @Override
-      public boolean visit(final PointFeatureClusterStorage.InnerNode node) {
+      public boolean visit(final PointFeatureClusteringLODStorage.InnerNode node) {
          _innerNodesCount++;
 
          final int clustersCount = node.getClustersCount();
@@ -728,7 +728,7 @@ public class PointFeatureClusterMapDBStorage
 
 
       @Override
-      public boolean visit(final PointFeatureClusterStorage.LeafNode node) {
+      public boolean visit(final PointFeatureClusteringLODStorage.LeafNode node) {
          _leafNodesCount++;
 
          final int nodeFeaturesCount = node.getFeaturesCount();
@@ -796,7 +796,7 @@ public class PointFeatureClusterMapDBStorage
 
 
    @Override
-   synchronized public PointFeatureClusterStorage.Statistics getStatistics(final boolean showProgress) {
+   synchronized public PointFeatureClusteringLODStorage.Statistics getStatistics(final boolean showProgress) {
       final StatisticsGatherer gatherer = new StatisticsGatherer(_name, showProgress);
       acceptDepthFirstVisitor(gatherer);
       return gatherer._statistics;
@@ -805,15 +805,15 @@ public class PointFeatureClusterMapDBStorage
 
    private static abstract class PvtNode
       implements
-         PointFeatureClusterStorage.Node {
-      protected final PointFeatureClusterMapDBStorage _storage;
-      protected final byte[]                          _id;
-      private final Sector                            _nodeSector;
-      private final Sector                            _minimumSector;
-      private final Geodetic2D                        _averagePosition;
+         PointFeatureClusteringLODStorage.Node {
+      protected final PointFeatureClusteringLODMapDBStorage _storage;
+      protected final byte[]                                _id;
+      private final Sector                                  _nodeSector;
+      private final Sector                                  _minimumSector;
+      private final Geodetic2D                              _averagePosition;
 
 
-      protected PvtNode(final PointFeatureClusterMapDBStorage storage,
+      protected PvtNode(final PointFeatureClusteringLODMapDBStorage storage,
                         final byte[] id,
                         final CNodeHeader header) {
          _storage = storage;
@@ -854,7 +854,7 @@ public class PointFeatureClusterMapDBStorage
       }
 
 
-      protected abstract boolean acceptVisitor(PointFeatureClusterStorage.NodeVisitor visitor);
+      protected abstract boolean acceptVisitor(PointFeatureClusteringLODStorage.NodeVisitor visitor);
 
    }
 
@@ -862,13 +862,13 @@ public class PointFeatureClusterMapDBStorage
       extends
          PvtNode
       implements
-         PointFeatureClusterStorage.InnerNode {
+         PointFeatureClusteringLODStorage.InnerNode {
 
       private final int                 _clustersCount;
       private List<PointFeatureCluster> _clusters;
 
 
-      private PvtInnerNode(final PointFeatureClusterMapDBStorage storage,
+      private PvtInnerNode(final PointFeatureClusteringLODMapDBStorage storage,
                            final byte[] id,
                            final CInnerNodeHeader header) {
          super(storage, id, header);
@@ -899,7 +899,7 @@ public class PointFeatureClusterMapDBStorage
 
 
       @Override
-      protected boolean acceptVisitor(final PointFeatureClusterStorage.NodeVisitor visitor) {
+      protected boolean acceptVisitor(final PointFeatureClusteringLODStorage.NodeVisitor visitor) {
          return visitor.visit(this);
       }
    }
@@ -909,14 +909,14 @@ public class PointFeatureClusterMapDBStorage
       extends
          PvtNode
       implements
-         PointFeatureClusterStorage.LeafNode {
+         PointFeatureClusteringLODStorage.LeafNode {
 
 
       private final int          _featuresCount;
       private List<PointFeature> _features = null;
 
 
-      private PvtLeafNode(final PointFeatureClusterMapDBStorage storage,
+      private PvtLeafNode(final PointFeatureClusteringLODMapDBStorage storage,
                           final byte[] id,
                           final CLeafNodeHeader header) {
          super(storage, id, header);
@@ -941,7 +941,7 @@ public class PointFeatureClusterMapDBStorage
 
 
       @Override
-      protected boolean acceptVisitor(final PointFeatureClusterStorage.NodeVisitor visitor) {
+      protected boolean acceptVisitor(final PointFeatureClusteringLODStorage.NodeVisitor visitor) {
          return visitor.visit(this);
       }
    }
@@ -970,7 +970,7 @@ public class PointFeatureClusterMapDBStorage
 
 
    @Override
-   synchronized public void acceptDepthFirstVisitor(final PointFeatureClusterStorage.NodeVisitor visitor) {
+   synchronized public void acceptDepthFirstVisitor(final PointFeatureClusteringLODStorage.NodeVisitor visitor) {
       visitor.start();
 
       for (final Map.Entry<byte[], CNodeHeader> entry : _nodesHeaders.entrySet()) {

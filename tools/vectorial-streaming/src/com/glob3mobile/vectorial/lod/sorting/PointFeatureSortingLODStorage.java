@@ -1,6 +1,6 @@
 
 
-package com.glob3mobile.vectorial.lod;
+package com.glob3mobile.vectorial.lod.sorting;
 
 import java.io.IOException;
 import java.util.Comparator;
@@ -11,7 +11,7 @@ import com.glob3mobile.geo.Sector;
 import com.glob3mobile.vectorial.storage.PointFeature;
 
 
-public interface PointFeatureLODStorage
+public interface PointFeatureSortingLODStorage
    extends
       AutoCloseable {
 
@@ -112,7 +112,7 @@ public interface PointFeatureLODStorage
       void start();
 
 
-      boolean visit(PointFeatureLODStorage.Node node);
+      boolean visit(PointFeatureSortingLODStorage.Node node);
 
 
       void stop();
@@ -120,7 +120,7 @@ public interface PointFeatureLODStorage
    }
 
 
-   void acceptDepthFirstVisitor(final PointFeatureLODStorage.NodeVisitor visitor);
+   void acceptDepthFirstVisitor(final PointFeatureSortingLODStorage.NodeVisitor visitor);
 
 
    Statistics getStatistics(boolean showProgress);
@@ -129,16 +129,16 @@ public interface PointFeatureLODStorage
    Sector getSector();
 
 
-   List<PointFeatureLODStorage.Node> getNodesFor(Sector searchSector);
+   List<PointFeatureSortingLODStorage.Node> getNodesFor(Sector searchSector);
 
 
-   List<PointFeatureLODStorage.Node> getNodesFor(Geodetic2D position);
+   List<PointFeatureSortingLODStorage.Node> getNodesFor(Geodetic2D position);
 
 
-   List<PointFeatureLODStorage.Node> getAllNodesOfDepth(int depth);
+   List<PointFeatureSortingLODStorage.Node> getAllNodesOfDepth(int depth);
 
 
-   PointFeatureLODStorage.Node getNode(String id);
+   PointFeatureSortingLODStorage.Node getNode(String id);
 
 
 }

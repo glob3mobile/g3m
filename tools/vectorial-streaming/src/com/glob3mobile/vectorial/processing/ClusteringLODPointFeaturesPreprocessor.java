@@ -8,29 +8,29 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.glob3mobile.utils.Progress;
-import com.glob3mobile.vectorial.cluster.PointFeatureClusterStorage;
-import com.glob3mobile.vectorial.cluster.mapdb.PointFeatureClusterMapDBStorage;
+import com.glob3mobile.vectorial.lod.clustering.PointFeatureClusteringLODStorage;
+import com.glob3mobile.vectorial.lod.clustering.mapdb.PointFeatureClusteringLODMapDBStorage;
 import com.glob3mobile.vectorial.storage.PointFeature;
 import com.glob3mobile.vectorial.storage.PointFeatureStorage;
 import com.glob3mobile.vectorial.storage.mapdb.PointFeatureMapDBStorage;
 
 
-public class ClusterPointFeaturesPreprocessor {
+public class ClusteringLODPointFeaturesPreprocessor {
 
 
    private static class LeafNodesImporter
       implements
          PointFeatureStorage.NodeVisitor {
 
-      private final long                       _nodesCount;
-      private final PointFeatureClusterStorage _clusterStorage;
-      private final boolean                    _verbose;
+      private final long                             _nodesCount;
+      private final PointFeatureClusteringLODStorage _clusterStorage;
+      private final boolean                          _verbose;
 
-      private Progress                         _progress;
+      private Progress                               _progress;
 
 
       private LeafNodesImporter(final long nodesCount,
-                                final PointFeatureClusterStorage clusterStorage,
+                                final PointFeatureClusteringLODStorage clusterStorage,
                                 final boolean verbose) {
          _nodesCount = nodesCount;
          _clusterStorage = clusterStorage;
@@ -91,8 +91,8 @@ public class ClusterPointFeaturesPreprocessor {
       try (final PointFeatureStorage storage = PointFeatureMapDBStorage.openReadOnly(storageDir, storageName)) {
 
 
-         try (final PointFeatureClusterStorage clusterStorage = PointFeatureClusterMapDBStorage.createEmpty(storage.getSector(),
-                  clusterDir, clusterName, maxFeaturesPerNode)) {
+         try (final PointFeatureClusteringLODStorage clusterStorage = PointFeatureClusteringLODMapDBStorage.createEmpty(
+                  storage.getSector(), clusterDir, clusterName, maxFeaturesPerNode)) {
             final PointFeatureStorage.Statistics statistics = storage.getStatistics(verbose);
             if (verbose) {
                statistics.show();
@@ -112,7 +112,7 @@ public class ClusterPointFeaturesPreprocessor {
 
             if (verbose) {
                System.out.println();
-               final PointFeatureClusterStorage.Statistics clusterStatistics = clusterStorage.getStatistics(verbose);
+               final PointFeatureClusteringLODStorage.Statistics clusterStatistics = clusterStorage.getStatistics(verbose);
                clusterStatistics.show();
             }
          }
@@ -120,13 +120,13 @@ public class ClusterPointFeaturesPreprocessor {
    }
 
 
-   private ClusterPointFeaturesPreprocessor() {
+   private ClusteringLODPointFeaturesPreprocessor() {
    }
 
 
    public static void main(final String[] args) throws IOException {
-      System.out.println("ClusterPointFeaturesPreprocessor 0.1");
-      System.out.println("--------------------------------\n");
+      System.out.println("ClusteringLODPointFeaturesPreprocessor 0.1");
+      System.out.println("------------------------------------------\n");
 
 
       final File storageDir = new File("PointFeaturesStorage");
@@ -145,7 +145,7 @@ public class ClusterPointFeaturesPreprocessor {
 
       final boolean verbose = true;
 
-      ClusterPointFeaturesPreprocessor.process( //
+      ClusteringLODPointFeaturesPreprocessor.process( //
                storageDir, storageName, //
                clusterDir, clusterName, //
                maxFeaturesPerNode, //

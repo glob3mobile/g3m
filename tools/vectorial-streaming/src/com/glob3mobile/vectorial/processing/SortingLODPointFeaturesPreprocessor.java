@@ -10,30 +10,30 @@ import java.util.Comparator;
 import java.util.List;
 
 import com.glob3mobile.utils.Progress;
-import com.glob3mobile.vectorial.lod.PointFeatureLODStorage;
-import com.glob3mobile.vectorial.lod.mapdb.PointFeatureLODMapDBStorage;
+import com.glob3mobile.vectorial.lod.sorting.PointFeatureSortingLODStorage;
+import com.glob3mobile.vectorial.lod.sorting.mapdb.PointFeatureSortingLODMapDBStorage;
 import com.glob3mobile.vectorial.storage.PointFeature;
 import com.glob3mobile.vectorial.storage.PointFeatureStorage;
 import com.glob3mobile.vectorial.storage.mapdb.PointFeatureMapDBStorage;
 
 
-public class LODPointFeaturesPreprocessor {
+public class SortingLODPointFeaturesPreprocessor {
 
 
    private static class LeafNodesImporter
       implements
          PointFeatureStorage.NodeVisitor {
 
-      private final long                     _nodesCount;
-      private final PointFeatureLODStorage   _lodStorage;
-      private final Comparator<PointFeature> _featuresComparator;
-      private final boolean                  _verbose;
+      private final long                          _nodesCount;
+      private final PointFeatureSortingLODStorage _lodStorage;
+      private final Comparator<PointFeature>      _featuresComparator;
+      private final boolean                       _verbose;
 
-      private Progress                       _progress;
+      private Progress                            _progress;
 
 
       private LeafNodesImporter(final long nodesCount,
-                                final PointFeatureLODStorage lodStorage,
+                                final PointFeatureSortingLODStorage lodStorage,
                                 final Comparator<PointFeature> featuresComparator,
                                 final boolean verbose) {
          _nodesCount = nodesCount;
@@ -97,8 +97,8 @@ public class LODPointFeaturesPreprocessor {
 
       try (final PointFeatureStorage storage = PointFeatureMapDBStorage.openReadOnly(storageDir, storageName)) {
 
-         try (final PointFeatureLODStorage lodStorage = PointFeatureLODMapDBStorage.createEmpty(storage.getSector(), lodDir,
-                  lodName, maxFeaturesPerNode)) {
+         try (final PointFeatureSortingLODStorage lodStorage = PointFeatureSortingLODMapDBStorage.createEmpty(
+                  storage.getSector(), lodDir, lodName, maxFeaturesPerNode)) {
             final PointFeatureStorage.Statistics statistics = storage.getStatistics(verbose);
             if (verbose) {
                statistics.show();
@@ -118,7 +118,7 @@ public class LODPointFeaturesPreprocessor {
 
             if (verbose) {
                System.out.println();
-               final PointFeatureLODStorage.Statistics lodStatistics = lodStorage.getStatistics(verbose);
+               final PointFeatureSortingLODStorage.Statistics lodStatistics = lodStorage.getStatistics(verbose);
                lodStatistics.show();
             }
          }
@@ -126,13 +126,13 @@ public class LODPointFeaturesPreprocessor {
    }
 
 
-   private LODPointFeaturesPreprocessor() {
+   private SortingLODPointFeaturesPreprocessor() {
    }
 
 
    public static void main(final String[] args) throws IOException {
-      System.out.println("LODPointFeaturesPreprocessor 0.1");
-      System.out.println("--------------------------------\n");
+      System.out.println("SortingLODPointFeaturesPreprocessor 0.1");
+      System.out.println("---------------------------------------\n");
 
 
       final File storageDir = new File("PointFeaturesStorage");
@@ -154,7 +154,7 @@ public class LODPointFeaturesPreprocessor {
 
       final boolean verbose = true;
 
-      LODPointFeaturesPreprocessor.process( //
+      SortingLODPointFeaturesPreprocessor.process( //
                storageDir, storageName, //
                lodDir, lodName, //
                featuresComparator, //

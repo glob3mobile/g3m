@@ -11,29 +11,29 @@ import java.util.List;
 import com.glob3mobile.geo.Geodetic2D;
 import com.glob3mobile.geo.Sector;
 import com.glob3mobile.utils.Progress;
-import com.glob3mobile.vectorial.lod.PointFeatureLODStorage;
-import com.glob3mobile.vectorial.lod.mapdb.PointFeatureLODMapDBStorage;
+import com.glob3mobile.vectorial.lod.sorting.PointFeatureSortingLODStorage;
+import com.glob3mobile.vectorial.lod.sorting.mapdb.PointFeatureSortingLODMapDBStorage;
 import com.glob3mobile.vectorial.storage.PointFeature;
 import com.glob3mobile.vectorial.storage.QuadKey;
 import com.glob3mobile.vectorial.storage.QuadKeyUtils;
 import com.glob3mobile.vectorial.utils.GEOBitmap;
 
 
-public class LODPointFeaturesStatistics {
+public class SortingLODPointFeaturesStatistics {
 
 
    public static final class LODDrawer
       implements
-         PointFeatureLODStorage.NodeVisitor {
+         PointFeatureSortingLODStorage.NodeVisitor {
 
-      private final PointFeatureLODStorage _lodStorage;
-      private final int                    _nodesCount;
+      private final PointFeatureSortingLODStorage _lodStorage;
+      private final int                           _nodesCount;
 
-      private Progress                     _progress;
-      private GEOBitmap                    _bitmap;
+      private Progress                            _progress;
+      private GEOBitmap                           _bitmap;
 
 
-      private LODDrawer(final PointFeatureLODStorage lodStorage,
+      private LODDrawer(final PointFeatureSortingLODStorage lodStorage,
                         final int nodesCount) {
          _lodStorage = lodStorage;
          _nodesCount = nodesCount;
@@ -41,7 +41,7 @@ public class LODPointFeaturesStatistics {
 
 
       @Override
-      public boolean visit(final PointFeatureLODStorage.Node node) {
+      public boolean visit(final PointFeatureSortingLODStorage.Node node) {
          // System.out.println(node.getID() + ", features=" + node.getFeaturesCount());
 
          final Color featureColor = new Color(1, 1, 0, 0.25f);
@@ -114,8 +114,8 @@ public class LODPointFeaturesStatistics {
 
 
    public static void main(final String[] args) throws IOException {
-      System.out.println("LODPointFeaturesStatistics 0.1");
-      System.out.println("------------------------------\n");
+      System.out.println("SortingLODPointFeaturesStatistics 0.1");
+      System.out.println("-------------------------------------\n");
 
 
       final File directory = new File("PointFeaturesLOD");
@@ -125,8 +125,8 @@ public class LODPointFeaturesStatistics {
       final String name = "GEONames-PopulatedPlaces_LOD";
 
 
-      try (final PointFeatureLODStorage lodStorage = PointFeatureLODMapDBStorage.openReadOnly(directory, name)) {
-         final PointFeatureLODStorage.Statistics statistics = lodStorage.getStatistics(true);
+      try (final PointFeatureSortingLODStorage lodStorage = PointFeatureSortingLODMapDBStorage.openReadOnly(directory, name)) {
+         final PointFeatureSortingLODStorage.Statistics statistics = lodStorage.getStatistics(true);
          statistics.show();
 
          final int nodesCount = statistics.getNodesCount();
@@ -171,7 +171,7 @@ public class LODPointFeaturesStatistics {
    }
 
 
-   public static void drawLODForNode(final PointFeatureLODStorage lodStorage,
+   public static void drawLODForNode(final PointFeatureSortingLODStorage lodStorage,
                                      final String nodeID) throws IOException {
       final QuadKey root = new QuadKey(new byte[] {}, lodStorage.getSector());
       final Sector searchSector = QuadKey.sectorFor(root, QuadKeyUtils.toBinaryID(nodeID));
@@ -180,19 +180,19 @@ public class LODPointFeaturesStatistics {
    }
 
 
-   public static void drawLODForSector(final PointFeatureLODStorage lodStorage,
+   public static void drawLODForSector(final PointFeatureSortingLODStorage lodStorage,
                                        final String name,
                                        final Sector searchSector) throws IOException {
-      final List<PointFeatureLODStorage.Node> nodes = lodStorage.getNodesFor(searchSector);
+      final List<PointFeatureSortingLODStorage.Node> nodes = lodStorage.getNodesFor(searchSector);
 
       drawNodes(name, searchSector, nodes);
    }
 
 
-   public static void drawLODForPosition(final PointFeatureLODStorage lodStorage,
+   public static void drawLODForPosition(final PointFeatureSortingLODStorage lodStorage,
                                          final String name,
                                          final Geodetic2D position) throws IOException {
-      final List<PointFeatureLODStorage.Node> nodes = lodStorage.getNodesFor(position);
+      final List<PointFeatureSortingLODStorage.Node> nodes = lodStorage.getNodesFor(position);
       final Sector sector = nodes.get(nodes.size() - 1).getNodeSector();
       drawNodes(name, sector, nodes);
    }
@@ -200,10 +200,10 @@ public class LODPointFeaturesStatistics {
 
    public static void drawNodes(final String name,
                                 final Sector sector,
-                                final List<PointFeatureLODStorage.Node> nodes) throws IOException {
+                                final List<PointFeatureSortingLODStorage.Node> nodes) throws IOException {
       final GEOBitmap bitmap = new GEOBitmap(sector, 2048, 2048, Color.BLACK);
       for (int i = 0; i < nodes.size(); i++) {
-         final PointFeatureLODStorage.Node node = nodes.get(i);
+         final PointFeatureSortingLODStorage.Node node = nodes.get(i);
          if (node != null) {
             System.out.println("Node #\"" + node.getID() + "\", features=" + node.getFeaturesCount());
 
