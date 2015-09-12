@@ -1,6 +1,6 @@
 
 
-package com.glob3mobile.vectorial.lod.clustering;
+package com.glob3mobile.vectorial.lod;
 
 import java.io.IOException;
 import java.util.List;
@@ -10,7 +10,7 @@ import com.glob3mobile.vectorial.storage.PointFeature;
 import com.glob3mobile.vectorial.storage.PointFeatureCluster;
 
 
-public interface PointFeatureClusteringLODStorage
+public interface PointFeatureLODStorage
    extends
       AutoCloseable {
 
@@ -25,6 +25,7 @@ public interface PointFeatureClusteringLODStorage
    void addLeafNode(String id,
                     Sector nodeSector,
                     Sector minimumSector,
+                    final List<PointFeatureCluster> clusters,
                     List<PointFeature> features);
 
 
@@ -43,28 +44,22 @@ public interface PointFeatureClusteringLODStorage
       int getNodesCount();
 
 
-      int getLeafNodesCount();
+      int getMinFeaturesPerNode();
 
 
-      int getInnerNodesCount();
+      int getMaxFeaturesPerNode();
 
 
-      int getMinFeaturesPerLeafNode();
+      double getAverageFeaturesPerNode();
 
 
-      int getMaxFeaturesPerLeafNode();
+      int getMinClustersPerNode();
 
 
-      double getAverageFeaturesPerLeafNode();
+      int getMaxClustersPerNode();
 
 
-      int getMinClustersPerInnerNode();
-
-
-      int getMaxClustersPerInnerNode();
-
-
-      double getAverageClustersPerInnerNode();
+      double getAverageClustersPerNode();
 
 
       int getMaxNodeDepth();
@@ -101,14 +96,6 @@ public interface PointFeatureClusteringLODStorage
       int getDepth();
 
 
-   }
-
-
-   public static interface InnerNode
-      extends
-         Node {
-
-
       int getClustersCount();
 
 
@@ -117,19 +104,11 @@ public interface PointFeatureClusteringLODStorage
 
       List<String> getChildrenIDs();
 
-   }
-
-
-   public static interface LeafNode
-      extends
-         Node {
-
 
       int getFeaturesCount();
 
 
       List<PointFeature> getFeatures();
-
 
    }
 
@@ -139,10 +118,7 @@ public interface PointFeatureClusteringLODStorage
       void start();
 
 
-      boolean visit(PointFeatureClusteringLODStorage.InnerNode node);
-
-
-      boolean visit(PointFeatureClusteringLODStorage.LeafNode node);
+      boolean visit(PointFeatureLODStorage.Node node);
 
 
       void stop();
@@ -150,7 +126,7 @@ public interface PointFeatureClusteringLODStorage
    }
 
 
-   void acceptDepthFirstVisitor(final PointFeatureClusteringLODStorage.NodeVisitor visitor);
+   void acceptDepthFirstVisitor(final PointFeatureLODStorage.NodeVisitor visitor);
 
 
    Statistics getStatistics(boolean showProgress);
@@ -159,10 +135,7 @@ public interface PointFeatureClusteringLODStorage
    Sector getSector();
 
 
-   void processPendingNodes(boolean verbose);
-
-   //   void processPendingNodes(Comparator<PointFeature> featuresComparator,
-   //                            boolean verbose);
+   void createLOD(boolean verbose);
 
 
    //   List<PointFeatureClusterLODStorage.Node> getNodesFor(Sector searchSector);

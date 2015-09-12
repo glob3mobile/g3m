@@ -76,7 +76,6 @@ public class SortingLODPointFeaturesPreprocessor {
                   node.getID(), //
                   node.getNodeSector(), //
                   node.getMinimumSector(), //
-                  node.getAveragePosition(), //
                   sortedFeatures //
          );
 

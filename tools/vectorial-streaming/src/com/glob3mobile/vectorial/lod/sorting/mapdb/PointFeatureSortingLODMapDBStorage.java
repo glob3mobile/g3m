@@ -41,7 +41,6 @@ public class PointFeatureSortingLODMapDBStorage
    implements
       PointFeatureSortingLODStorage {
 
-   
 
    public static void delete(final File directory,
                              final String name) throws IOException {
@@ -97,9 +96,9 @@ public class PointFeatureSortingLODMapDBStorage
 
 
    private PointFeatureSortingLODMapDBStorage(final Sector sector,
-                                       final File directory,
-                                       final String name,
-                                       final int maxFeaturesPerNode) throws IOException {
+                                              final File directory,
+                                              final String name,
+                                              final int maxFeaturesPerNode) throws IOException {
       // Constructor for new LOD-Storage
       _sector = sector;
       _rootKey = new QuadKey(new byte[] {}, _sector);
@@ -148,7 +147,7 @@ public class PointFeatureSortingLODMapDBStorage
 
 
    private PointFeatureSortingLODMapDBStorage(final File directory,
-                                       final String name) throws IOException {
+                                              final String name) throws IOException {
       // Constructor for a alread existing LOD-Storage, read only
 
       _name = name;
@@ -241,13 +240,12 @@ public class PointFeatureSortingLODMapDBStorage
    synchronized public void addLeafNode(final String id,
                                         final Sector nodeSector,
                                         final Sector minimumSector,
-                                        final Geodetic2D averagePosition,
                                         final List<PointFeature> features) {
       if (_readOnly) {
          throw new RuntimeException("Read Only");
       }
 
-      addLeafNode(QuadKeyUtils.toBinaryID(id), nodeSector, minimumSector, averagePosition, features);
+      addLeafNode(QuadKeyUtils.toBinaryID(id), nodeSector, minimumSector, features);
       _db.commit();
    }
 
@@ -255,7 +253,6 @@ public class PointFeatureSortingLODMapDBStorage
    private void addLeafNode(final byte[] id,
                             final Sector nodeSector,
                             final Sector minimumSector,
-                            final Geodetic2D averagePosition,
                             final List<PointFeature> features) {
       if (features.size() > _maxFeaturesPerNode) {
          if (split(id, nodeSector, features)) {
@@ -263,7 +260,7 @@ public class PointFeatureSortingLODMapDBStorage
          }
       }
 
-      saveLeafNode(id, nodeSector, minimumSector, averagePosition, features);
+      saveLeafNode(id, nodeSector, minimumSector, features);
    }
 
 
@@ -300,7 +297,8 @@ public class PointFeatureSortingLODMapDBStorage
       final QuadKey[] childrenKeys = key.createChildren();
       final List<ChildSplitResult> result = new ArrayList<>(childrenKeys.length);
       for (final QuadKey childKey : childrenKeys) {
-         final PointFeaturesSet childPointFeaturesSet = PointFeaturesSet.extractFeatures(childKey._sector, features);
+         final PointFeaturesSet childPointFeaturesSet = PointFeaturesSet.extractFeatures(childKey._sector,
+                  Collections.emptyList(), features);
          if (childPointFeaturesSet != null) {
             final List<PointFeature> childFeatures = childPointFeaturesSet._features;
             if ((childFeatures.size() == featuresSize) && (splitDepth < MAX_SPLIT_DEPTH)) {
@@ -337,7 +335,6 @@ public class PointFeatureSortingLODMapDBStorage
                   childKey._id, //
                   childKey._sector, //
                   childFeaturesSet._minimumSector, //
-                  childFeaturesSet._averagePosition, //
                   childFeaturesSet._features);
       }
 
@@ -348,10 +345,9 @@ public class PointFeatureSortingLODMapDBStorage
    private void saveLeafNode(final byte[] id,
                              final Sector nodeSector,
                              final Sector minimumSector,
-                             final Geodetic2D averagePosition,
                              final List<PointFeature> features) {
 
-      saveNode(id, nodeSector, minimumSector, averagePosition, features);
+      saveNode(id, nodeSector, minimumSector, features);
 
       for (final byte[] ancestorID : QuadKeyUtils.ancestors(id)) {
          if (!_pendingNodes.contains(ancestorID)) {
@@ -365,17 +361,16 @@ public class PointFeatureSortingLODMapDBStorage
    private void saveNode(final byte[] id,
                          final Sector nodeSector,
                          final Sector minimumSector,
-                         final Geodetic2D averagePosition,
                          final List<PointFeature> features) {
       validateFeatures(nodeSector, minimumSector, features);
-      assertIsNull(_nodesHeaders.put(id, new NodeHeader(nodeSector, minimumSector, averagePosition, features.size())));
+      assertIsNull(_nodesHeaders.put(id, new NodeHeader(nodeSector, minimumSector, features.size())));
       assertIsNull(_nodesFeatures.put(id, features));
    }
 
 
    private void saveEmptyAncestorNode(final byte[] id) {
       final Sector nodeSector = QuadKey.sectorFor(_rootKey, id);
-      assertIsNull(_nodesHeaders.put(id, new NodeHeader(nodeSector, null, null, 0)));
+      assertIsNull(_nodesHeaders.put(id, new NodeHeader(nodeSector, null, 0)));
       assertIsNull(_nodesFeatures.put(id, Collections.emptyList()));
    }
 
@@ -643,25 +638,9 @@ public class PointFeatureSortingLODMapDBStorage
 
       validateFeatures(nodeSector, minimumSector, features);
 
-      final Geodetic2D averagePosition = averagePosition(features);
 
-      _nodesHeaders.put(id, new NodeHeader(nodeSector, minimumSector, averagePosition, features.size()));
+      _nodesHeaders.put(id, new NodeHeader(nodeSector, minimumSector, features.size()));
       _nodesFeatures.put(id, features);
-   }
-
-
-   private static Geodetic2D averagePosition(final List<PointFeature> features) {
-      final int featuresCount = features.size();
-
-      double sumLat = 0;
-      double sumLon = 0;
-      for (final PointFeature feature : features) {
-         final Geodetic2D position = feature._position;
-         sumLat += position._latitude._radians;
-         sumLon += position._longitude._radians;
-      }
-
-      return Geodetic2D.fromRadians(sumLat / featuresCount, sumLon / featuresCount);
    }
 
 
@@ -669,22 +648,20 @@ public class PointFeatureSortingLODMapDBStorage
       implements
          PointFeatureSortingLODStorage.Statistics {
 
-      private final String     _storageName;
+      private final String _storageName;
 
-      private final long       _featuresCount;
-      private final Geodetic2D _averagePosition;
-      private final int        _nodesCount;
-      private final int        _minFeaturesPerNode;
-      private final int        _maxFeaturesPerNode;
-      private final double     _averageFeaturesPerNode;
-      private final int        _minNodeDepth;
-      private final int        _maxNodeDepth;
-      private final double     _averageNodeDepth;
+      private final long   _featuresCount;
+      private final int    _nodesCount;
+      private final int    _minFeaturesPerNode;
+      private final int    _maxFeaturesPerNode;
+      private final double _averageFeaturesPerNode;
+      private final int    _minNodeDepth;
+      private final int    _maxNodeDepth;
+      private final double _averageNodeDepth;
 
 
       private PvtStatistics(final String storageName,
                             final long featuresCount,
-                            final Geodetic2D averagePosition,
                             final int nodesCount,
                             final int minFeaturesPerNode,
                             final int maxFeaturesPerNode,
@@ -694,7 +671,6 @@ public class PointFeatureSortingLODMapDBStorage
                             final double averageNodeDepth) {
          _storageName = storageName;
          _featuresCount = featuresCount;
-         _averagePosition = averagePosition;
          _nodesCount = nodesCount;
          _minFeaturesPerNode = minFeaturesPerNode;
          _maxFeaturesPerNode = maxFeaturesPerNode;
@@ -708,12 +684,6 @@ public class PointFeatureSortingLODMapDBStorage
       @Override
       public long getFeaturesCount() {
          return _featuresCount;
-      }
-
-
-      @Override
-      public Geodetic2D getAveragePosition() {
-         return _averagePosition;
       }
 
 
@@ -746,7 +716,6 @@ public class PointFeatureSortingLODMapDBStorage
          System.out.println("--------------------------------------------------------------");
          System.out.println(" Storage: " + _storageName);
          System.out.println("  Features: " + _featuresCount);
-         System.out.println("  Average Position: " + _averagePosition);
          System.out.println("  Nodes Count: " + _nodesCount);
          System.out.println("  Features/Node: " + //
                             "min=" + _minFeaturesPerNode + //
@@ -793,8 +762,6 @@ public class PointFeatureSortingLODMapDBStorage
 
       private long                  _featuresCount;
       private int                   _nodesCount;
-      private double                _sumLatRadians;
-      private double                _sumLonRadians;
       private int                   _minFeaturesPerNode;
       private int                   _maxFeaturesPerNode;
       private int                   _minNodeDepth;
@@ -813,8 +780,6 @@ public class PointFeatureSortingLODMapDBStorage
       public void start() {
          _featuresCount = 0;
          _nodesCount = 0;
-         _sumLatRadians = 0;
-         _sumLonRadians = 0;
 
          _minFeaturesPerNode = Integer.MAX_VALUE;
          _maxFeaturesPerNode = Integer.MIN_VALUE;
@@ -849,10 +814,6 @@ public class PointFeatureSortingLODMapDBStorage
          _minNodeDepth = Math.min(_minNodeDepth, nodeDepth);
          _maxNodeDepth = Math.max(_maxNodeDepth, nodeDepth);
 
-         final Geodetic2D nodeAveragePosition = node.getAveragePosition();
-
-         _sumLatRadians += (nodeAveragePosition._latitude._radians * nodeFeaturesCount);
-         _sumLonRadians += (nodeAveragePosition._longitude._radians * nodeFeaturesCount);
 
          if (_progress != null) {
             _progress.stepDone();
@@ -867,7 +828,6 @@ public class PointFeatureSortingLODMapDBStorage
          _statistics = new PvtStatistics( //
                   _name, //
                   _featuresCount, //
-                  Geodetic2D.fromRadians(_sumLatRadians / _featuresCount, _sumLonRadians / _featuresCount), //
                   _nodesCount, //
                   _minFeaturesPerNode, //
                   _maxFeaturesPerNode, //
@@ -896,12 +856,11 @@ public class PointFeatureSortingLODMapDBStorage
          PointFeatureSortingLODStorage.Node {
 
       private final PointFeatureSortingLODMapDBStorage _storage;
-      private final byte[]                      _id;
-      private final Sector                      _nodeSector;
-      private final Sector                      _minimumSector;
-      private final Geodetic2D                  _averagePosition;
-      private final int                         _featuresCount;
-      private List<PointFeature>                _features = null;
+      private final byte[]                             _id;
+      private final Sector                             _nodeSector;
+      private final Sector                             _minimumSector;
+      private final int                                _featuresCount;
+      private List<PointFeature>                       _features = null;
 
 
       private PvtNode(final PointFeatureSortingLODMapDBStorage storage,
@@ -911,7 +870,6 @@ public class PointFeatureSortingLODMapDBStorage
          _id = id;
          _nodeSector = header._nodeSector;
          _minimumSector = header._minimumSector;
-         _averagePosition = header._averagePosition;
          _featuresCount = header._featuresCount;
       }
 
@@ -931,12 +889,6 @@ public class PointFeatureSortingLODMapDBStorage
       @Override
       public Sector getMinimumSector() {
          return _minimumSector;
-      }
-
-
-      @Override
-      public Geodetic2D getAveragePosition() {
-         return _averagePosition;
       }
 
 

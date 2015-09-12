@@ -2,23 +2,19 @@
 
 package com.glob3mobile.vectorial.lod.clustering.nodes;
 
-import com.glob3mobile.geo.Geodetic2D;
 import com.glob3mobile.geo.Sector;
 
 
 public abstract class CNodeHeader {
 
-   private final Sector     _nodeSector;
-   private final Sector     _minimumSector;
-   private final Geodetic2D _averagePosition;
+   private final Sector _nodeSector;
+   private final Sector _minimumSector;
 
 
    protected CNodeHeader(final Sector nodeSector,
-                         final Sector minimumSector,
-                         final Geodetic2D averagePosition) {
+                         final Sector minimumSector) {
       _nodeSector = nodeSector;
       _minimumSector = minimumSector;
-      _averagePosition = averagePosition;
    }
 
 
@@ -29,11 +25,6 @@ public abstract class CNodeHeader {
 
    public Sector getMinimumSector() {
       return _minimumSector;
-   }
-
-
-   public Geodetic2D getAveragePosition() {
-      return _averagePosition;
    }
 
 

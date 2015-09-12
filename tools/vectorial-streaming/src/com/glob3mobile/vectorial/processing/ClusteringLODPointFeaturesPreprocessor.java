@@ -70,7 +70,6 @@ public class ClusteringLODPointFeaturesPreprocessor {
                   node.getID(), //
                   node.getNodeSector(), //
                   node.getMinimumSector(), //
-                  node.getAveragePosition(), //
                   features //
          );
 

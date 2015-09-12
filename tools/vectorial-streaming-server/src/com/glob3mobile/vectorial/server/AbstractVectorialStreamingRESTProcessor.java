@@ -135,7 +135,6 @@ public abstract class AbstractVectorialStreamingRESTProcessor
       result.put("name", lodStorage.getName());
       result.put("sector", GEOJSONUtils.toJSON(lodStorage.getSector()));
       result.put("featuresCount", statistics.getFeaturesCount());
-      result.put("averagePosition", GEOJSONUtils.toJSON(statistics.getAveragePosition()));
       result.put("nodesCount", statistics.getNodesCount());
       final int minNodeDepth = statistics.getMinNodeDepth();
       result.put("minNodeDepth", minNodeDepth);
@@ -207,7 +206,6 @@ public abstract class AbstractVectorialStreamingRESTProcessor
       result.put("nodeSector", GEOJSONUtils.toJSON(node.getNodeSector()));
       result.put("minimumSector", GEOJSONUtils.toJSON(node.getMinimumSector()));
       result.put("featuresCount", node.getFeaturesCount());
-      result.put("averagePosition", GEOJSONUtils.toJSON(node.getAveragePosition()));
       result.put("children", node.getChildrenIDs());
       return result;
    }

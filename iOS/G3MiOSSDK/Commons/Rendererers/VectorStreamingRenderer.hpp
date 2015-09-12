@@ -221,7 +221,6 @@ public:
     const Sector*                  _nodeSector;
     const Sector*                  _minimumSector;
     const int                      _featuresCount;
-    const Geodetic2D*              _averagePosition;
 #ifdef C_CODE
     const std::vector<std::string> _childrenIDs;
 #endif
@@ -277,7 +276,6 @@ public:
          const Sector*                   nodeSector,
          const Sector*                   minimumSector,
          const int                       featuresCount,
-         const Geodetic2D*               averagePosition,
          const std::vector<std::string>& childrenIDs,
          const bool                      verbose) :
     _vectorSet(vectorSet),
@@ -285,7 +283,6 @@ public:
     _nodeSector(nodeSector),
     _minimumSector(minimumSector),
     _featuresCount(featuresCount),
-    _averagePosition(averagePosition),
     _childrenIDs(childrenIDs),
     _verbose(verbose),
     _wasVisible(false),
@@ -349,7 +346,6 @@ public:
 
     Sector*             _sector;
     long long           _featuresCount;
-    Geodetic2D*         _averagePosition;
     int                 _nodesCount;
     int                 _minNodeDepth;
     int                 _maxNodeDepth;
@@ -365,7 +361,6 @@ public:
     _parsingError(false),
     _sector(NULL),
     _featuresCount(-1),
-    _averagePosition(NULL),
     _nodesCount(-1),
     _minNodeDepth(-1),
     _maxNodeDepth(-1),
@@ -453,7 +448,6 @@ public:
 
     Sector*             _sector;
     long long           _featuresCount;
-    Geodetic2D*         _averagePosition;
     int                 _nodesCount;
     int                 _minNodeDepth;
     int                 _maxNodeDepth;
@@ -490,7 +484,6 @@ public:
     _errorDownloadingMetadata(false),
     _errorParsingMetadata(false),
     _sector(NULL),
-    _averagePosition(NULL),
     _rootNodes(NULL),
     _rootNodesSize(0),
     _lastRenderedCount(0)
@@ -532,7 +525,6 @@ public:
     void errorParsingMetadata();
     void parsedMetadata(Sector* sector,
                         long long featuresCount,
-                        Geodetic2D* averagePosition,
                         int nodesCount,
                         int minNodeDepth,
                         int maxNodeDepth,

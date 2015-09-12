@@ -14,28 +14,24 @@ public class PointFeaturesSet {
 
 
    public static PointFeaturesSet extractFeatures(final Sector sector,
+                                                  final List<PointFeatureCluster> clusters,
                                                   final List<PointFeature> features) {
-      double sumLatRad = 0;
-      double sumLonRad = 0;
       double minLatRad = Double.POSITIVE_INFINITY;
       double minLonRad = Double.POSITIVE_INFINITY;
       double maxLatRad = Double.NEGATIVE_INFINITY;
       double maxLonRad = Double.NEGATIVE_INFINITY;
 
-      final List<PointFeature> extracted = new ArrayList<PointFeature>();
+      final List<PointFeature> extractedFeatures = new ArrayList<>();
 
-      final Iterator<PointFeature> iterator = features.iterator();
-      while (iterator.hasNext()) {
-         final PointFeature feature = iterator.next();
+      final Iterator<PointFeature> featuresIterator = features.iterator();
+      while (featuresIterator.hasNext()) {
+         final PointFeature feature = featuresIterator.next();
          final Geodetic2D point = feature._position;
          if (sector.contains(point)) {
-            extracted.add(feature);
+            extractedFeatures.add(feature);
 
             final double latRad = point._latitude._radians;
             final double lonRad = point._longitude._radians;
-
-            sumLatRad += latRad;
-            sumLonRad += lonRad;
 
             if (latRad < minLatRad) {
                minLatRad = latRad;
@@ -51,32 +47,57 @@ public class PointFeaturesSet {
                maxLonRad = lonRad;
             }
 
-            iterator.remove();
+            featuresIterator.remove();
          }
       }
 
-      final int extractedSize = extracted.size();
-      if (extractedSize == 0) {
+      final List<PointFeatureCluster> extractedClusters = new ArrayList<>();
+      final Iterator<PointFeatureCluster> clustersIterator = clusters.iterator();
+      while (clustersIterator.hasNext()) {
+         final PointFeatureCluster cluster = clustersIterator.next();
+         final Geodetic2D point = cluster._position;
+         if (sector.contains(point)) {
+            extractedClusters.add(cluster);
+
+            final double latRad = point._latitude._radians;
+            final double lonRad = point._longitude._radians;
+
+            if (latRad < minLatRad) {
+               minLatRad = latRad;
+            }
+            if (latRad > maxLatRad) {
+               maxLatRad = latRad;
+            }
+
+            if (lonRad < minLonRad) {
+               minLonRad = lonRad;
+            }
+            if (lonRad > maxLonRad) {
+               maxLonRad = lonRad;
+            }
+
+            clustersIterator.remove();
+         }
+      }
+
+      if (extractedFeatures.isEmpty() && extractedClusters.isEmpty()) {
          return null;
       }
 
-      final double averageLatRad = sumLatRad / extractedSize;
-      final double averageLonRad = sumLonRad / extractedSize;
 
       return new PointFeaturesSet( //
-               extracted, //
-               Geodetic2D.fromRadians(averageLatRad, averageLonRad), //
-               Sector.fromRadians(minLatRad, minLonRad, maxLatRad, maxLonRad));
+               Sector.fromRadians(minLatRad, minLonRad, maxLatRad, maxLonRad), //
+               extractedClusters, //
+               extractedFeatures);
    }
 
 
-   public static PointFeaturesSet create(final List<PointFeature> features) {
-      if ((features == null) || features.isEmpty()) {
-         throw new RuntimeException("Empty features");
-      }
+   public static PointFeaturesSet create(final List<PointFeatureCluster> clusters,
+                                         final List<PointFeature> features) {
+      //      if ((features == null) || features.isEmpty()) {
+      //         throw new RuntimeException("Empty features");
+      //      }
 
-      double sumLatRad = 0;
-      double sumLonRad = 0;
       double minLatRad = Double.POSITIVE_INFINITY;
       double minLonRad = Double.POSITIVE_INFINITY;
       double maxLatRad = Double.NEGATIVE_INFINITY;
@@ -87,9 +108,6 @@ public class PointFeaturesSet {
 
          final double latRad = point._latitude._radians;
          final double lonRad = point._longitude._radians;
-
-         sumLatRad += latRad;
-         sumLonRad += lonRad;
 
          if (latRad < minLatRad) {
             minLatRad = latRad;
@@ -106,31 +124,54 @@ public class PointFeaturesSet {
          }
       }
 
-      final double averageLatRad = sumLatRad / features.size();
-      final double averageLonRad = sumLonRad / features.size();
+      for (final PointFeatureCluster cluster : clusters) {
+         final Geodetic2D point = cluster._position;
+
+         final double latRad = point._latitude._radians;
+         final double lonRad = point._longitude._radians;
+
+         if (latRad < minLatRad) {
+            minLatRad = latRad;
+         }
+         if (latRad > maxLatRad) {
+            maxLatRad = latRad;
+         }
+
+         if (lonRad < minLonRad) {
+            minLonRad = lonRad;
+         }
+         if (lonRad > maxLonRad) {
+            maxLonRad = lonRad;
+         }
+      }
 
       return new PointFeaturesSet( //
-               features, //
-               Geodetic2D.fromRadians(averageLatRad, averageLonRad), //
-               Sector.fromRadians(minLatRad, minLonRad, maxLatRad, maxLonRad));
+               Sector.fromRadians(minLatRad, minLonRad, maxLatRad, maxLonRad), //
+               clusters, //
+               features);
    }
 
 
-   public final List<PointFeature> _features;
-   public final Geodetic2D         _averagePosition;
-   public final Sector             _minimumSector;
+   public final Sector                    _minimumSector;
+   public final List<PointFeatureCluster> _clusters;
+   public final List<PointFeature>        _features;
 
 
-   public PointFeaturesSet(final List<PointFeature> features,
-                           final Geodetic2D averagePosition,
-                           final Sector minimumSector) {
-      _features = features;
-      _averagePosition = averagePosition;
+   public PointFeaturesSet(final Sector minimumSector,
+                           final List<PointFeatureCluster> clusters,
+                           final List<PointFeature> features) {
       _minimumSector = minimumSector;
+      _clusters = clusters;
+      _features = features;
    }
 
 
-   public int size() {
+   public int getFClustersCount() {
+      return _clusters.size();
+   }
+
+
+   public int getFeaturesCount() {
       return _features.size();
    }
 

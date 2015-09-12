@@ -159,7 +159,6 @@ VectorStreamingRenderer::Node::~Node() {
 
   delete _nodeSector;
   delete _minimumSector;
-  delete _averagePosition;
   delete _boundingVolume;
 
 #ifdef JAVA_CODE
@@ -499,7 +498,6 @@ VectorStreamingRenderer::Node* VectorStreamingRenderer::GEOJSONUtils::parseNode(
   Sector*           nodeSector      = GEOJSONUtils::parseSector( json->getAsArray("nodeSector") );
   Sector*           minimumSector   = GEOJSONUtils::parseSector( json->getAsArray("minimumSector") );
   int               featuresCount   = (int) json->getAsNumber("featuresCount")->value();
-  Geodetic2D*       averagePosition = GEOJSONUtils::parseGeodetic2D( json->getAsArray("averagePosition") );
 
   std::vector<std::string> children;
   const JSONArray* childrenJSON = json->getAsArray("children");
@@ -512,7 +510,6 @@ VectorStreamingRenderer::Node* VectorStreamingRenderer::GEOJSONUtils::parseNode(
                   nodeSector,
                   minimumSector,
                   featuresCount,
-                  averagePosition,
                   children,
                   verbose);
 }
@@ -521,7 +518,6 @@ VectorStreamingRenderer::MetadataParserAsyncTask::~MetadataParserAsyncTask() {
   delete _buffer;
 
   delete _sector;
-  delete _averagePosition;
 
   if (_rootNodes != NULL) {
     for (size_t i = 0; i < _rootNodes->size(); i++) {
@@ -577,7 +573,6 @@ void VectorStreamingRenderer::MetadataParserAsyncTask::runInBackground(const G3M
     else {
       _sector          = GEOJSONUtils::parseSector( jsonObject->getAsArray("sector") );
       _featuresCount   = (long long) jsonObject->getAsNumber("featuresCount")->value();
-      _averagePosition = GEOJSONUtils::parseGeodetic2D( jsonObject->getAsArray("averagePosition") );
       _nodesCount      = (int) jsonObject->getAsNumber("featuresCount")->value();
       _minNodeDepth    = (int) jsonObject->getAsNumber("minNodeDepth")->value();
       _maxNodeDepth    = (int) jsonObject->getAsNumber("maxNodeDepth")->value();
@@ -603,13 +598,11 @@ void VectorStreamingRenderer::MetadataParserAsyncTask::onPostExecute(const G3MCo
   else {
     _vectorSet->parsedMetadata(_sector,
                                _featuresCount,
-                               _averagePosition,
                                _nodesCount,
                                _minNodeDepth,
                                _maxNodeDepth,
                                _rootNodes);
     _sector          = NULL; // moved ownership to _vectorSet
-    _averagePosition = NULL; // moved ownership to _vectorSet
     _rootNodes       = NULL; // moved ownership to _vectorSet
   }
 }
@@ -664,7 +657,6 @@ VectorStreamingRenderer::VectorSet::~VectorSet() {
   }
 
   delete _sector;
-  delete _averagePosition;
   if (_rootNodes != NULL) {
     for (size_t i = 0; i < _rootNodes->size(); i++) {
       Node* node = _rootNodes->at(i);
@@ -676,7 +668,6 @@ VectorStreamingRenderer::VectorSet::~VectorSet() {
 
 void VectorStreamingRenderer::VectorSet::parsedMetadata(Sector* sector,
                                                         long long featuresCount,
-                                                        Geodetic2D* averagePosition,
                                                         int nodesCount,
                                                         int minNodeDepth,
                                                         int maxNodeDepth,
@@ -685,7 +676,6 @@ void VectorStreamingRenderer::VectorSet::parsedMetadata(Sector* sector,
 
   _sector          = sector;
   _featuresCount   = featuresCount;
-  _averagePosition = averagePosition;
   _nodesCount      = nodesCount;
   _minNodeDepth    = minNodeDepth;
   _maxNodeDepth    = maxNodeDepth;
@@ -694,17 +684,16 @@ void VectorStreamingRenderer::VectorSet::parsedMetadata(Sector* sector,
 
   if (_verbose) {
     ILogger::instance()->logInfo("\"%s\": Metadata",         _name.c_str());
-    ILogger::instance()->logInfo("   Sector           : %s",    _sector->description().c_str());
+    ILogger::instance()->logInfo("   Sector        : %s",    _sector->description().c_str());
 #ifdef C_CODE
-    ILogger::instance()->logInfo("   Features Count   : %ld",   _featuresCount);
+    ILogger::instance()->logInfo("   Features Count: %ld",   _featuresCount);
 #endif
 #ifdef JAVA_CODE
-    ILogger.instance().logInfo("   Features Count   : %d",   _featuresCount);
+    ILogger.instance().logInfo("   Features Count: %d",   _featuresCount);
 #endif
-    ILogger::instance()->logInfo("   Average Position : %s",    _averagePosition->description().c_str());
-    ILogger::instance()->logInfo("   Nodes Count      : %d",    _nodesCount);
-    ILogger::instance()->logInfo("   Depth            : %d/%d", _minNodeDepth, _maxNodeDepth);
-    ILogger::instance()->logInfo("   Root Nodes       : %d",    _rootNodesSize);
+    ILogger::instance()->logInfo("   Nodes Count   : %d",    _nodesCount);
+    ILogger::instance()->logInfo("   Depth         : %d/%d", _minNodeDepth, _maxNodeDepth);
+    ILogger::instance()->logInfo("   Root Nodes    : %d",    _rootNodesSize);
   }
 
 }

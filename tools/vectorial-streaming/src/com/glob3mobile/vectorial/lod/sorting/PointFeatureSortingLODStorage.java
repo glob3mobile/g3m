@@ -26,7 +26,6 @@ public interface PointFeatureSortingLODStorage
    void addLeafNode(String id,
                     Sector nodeSector,
                     Sector minimumSector,
-                    Geodetic2D averagePosition,
                     List<PointFeature> features);
 
 
@@ -41,9 +40,6 @@ public interface PointFeatureSortingLODStorage
 
 
       long getFeaturesCount();
-
-
-      Geodetic2D getAveragePosition();
 
 
       int getNodesCount();
@@ -96,9 +92,6 @@ public interface PointFeatureSortingLODStorage
 
 
       List<PointFeature> getFeatures();
-
-
-      Geodetic2D getAveragePosition();
 
 
       List<String> getChildrenIDs();
