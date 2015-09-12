@@ -11,9 +11,9 @@ import org.mapdb.Serializer;
 
 import com.glob3mobile.geo.Geodetic2D;
 import com.glob3mobile.geo.Sector;
-import com.glob3mobile.vectorial.cluster.nodes.CInnerNodeHeader;
-import com.glob3mobile.vectorial.cluster.nodes.CLeafNodeHeader;
-import com.glob3mobile.vectorial.cluster.nodes.CNodeHeader;
+import com.glob3mobile.vectorial.lod.clustering.nodes.CInnerNodeHeader;
+import com.glob3mobile.vectorial.lod.clustering.nodes.CLeafNodeHeader;
+import com.glob3mobile.vectorial.lod.clustering.nodes.CNodeHeader;
 import com.glob3mobile.vectorial.storage.mapdb.SerializerUtils;
 
 
