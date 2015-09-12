@@ -71,7 +71,6 @@ public class VectorStreamingRenderer extends DefaultRenderer
       Sector nodeSector = GEOJSONUtils.parseSector(json.getAsArray("nodeSector"));
       Sector minimumSector = GEOJSONUtils.parseSector(json.getAsArray("minimumSector"));
       int featuresCount = (int) json.getAsNumber("featuresCount").value();
-      Geodetic2D averagePosition = GEOJSONUtils.parseGeodetic2D(json.getAsArray("averagePosition"));
     
       java.util.ArrayList<String> children = new java.util.ArrayList<String>();
       final JSONArray childrenJSON = json.getAsArray("children");
@@ -80,7 +79,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
         children.add(childrenJSON.getAsString(i).value());
       }
     
-      return new Node(vectorSet, id, nodeSector, minimumSector, featuresCount, averagePosition, children, verbose);
+      return new Node(vectorSet, id, nodeSector, minimumSector, featuresCount, children, verbose);
     }
 
   }
@@ -333,7 +332,6 @@ public class VectorStreamingRenderer extends DefaultRenderer
     private final Sector _nodeSector;
     private final Sector _minimumSector;
     private final int _featuresCount;
-    private final Geodetic2D _averagePosition;
     private final java.util.ArrayList<String> _childrenIDs;
 
     private java.util.ArrayList<Node> _children;
@@ -535,22 +533,19 @@ public class VectorStreamingRenderer extends DefaultRenderer
          _nodeSector.dispose();
       if (_minimumSector != null)
          _minimumSector.dispose();
-      if (_averagePosition != null)
-         _averagePosition.dispose();
       if (_boundingVolume != null)
          _boundingVolume.dispose();
     
       super.dispose();
     }
 
-    public Node(VectorSet vectorSet, String id, Sector nodeSector, Sector minimumSector, int featuresCount, Geodetic2D averagePosition, java.util.ArrayList<String> childrenIDs, boolean verbose)
+    public Node(VectorSet vectorSet, String id, Sector nodeSector, Sector minimumSector, int featuresCount, java.util.ArrayList<String> childrenIDs, boolean verbose)
     {
        _vectorSet = vectorSet;
        _id = id;
        _nodeSector = nodeSector;
        _minimumSector = minimumSector;
        _featuresCount = featuresCount;
-       _averagePosition = averagePosition;
        _childrenIDs = childrenIDs;
        _verbose = verbose;
        _wasVisible = false;
@@ -715,7 +710,6 @@ public class VectorStreamingRenderer extends DefaultRenderer
 
     private Sector _sector;
     private long _featuresCount;
-    private Geodetic2D _averagePosition;
     private int _nodesCount;
     private int _minNodeDepth;
     private int _maxNodeDepth;
@@ -729,7 +723,6 @@ public class VectorStreamingRenderer extends DefaultRenderer
        _parsingError = false;
        _sector = null;
        _featuresCount = -1;
-       _averagePosition = null;
        _nodesCount = -1;
        _minNodeDepth = -1;
        _maxNodeDepth = -1;
@@ -743,8 +736,6 @@ public class VectorStreamingRenderer extends DefaultRenderer
     
       if (_sector != null)
          _sector.dispose();
-      if (_averagePosition != null)
-         _averagePosition.dispose();
     
       if (_rootNodes != null)
       {
@@ -804,7 +795,6 @@ public class VectorStreamingRenderer extends DefaultRenderer
         {
           _sector = GEOJSONUtils.parseSector(jsonObject.getAsArray("sector"));
           _featuresCount = (long) jsonObject.getAsNumber("featuresCount").value();
-          _averagePosition = GEOJSONUtils.parseGeodetic2D(jsonObject.getAsArray("averagePosition"));
           _nodesCount = (int) jsonObject.getAsNumber("featuresCount").value();
           _minNodeDepth = (int) jsonObject.getAsNumber("minNodeDepth").value();
           _maxNodeDepth = (int) jsonObject.getAsNumber("maxNodeDepth").value();
@@ -831,9 +821,8 @@ public class VectorStreamingRenderer extends DefaultRenderer
       }
       else
       {
-        _vectorSet.parsedMetadata(_sector, _featuresCount, _averagePosition, _nodesCount, _minNodeDepth, _maxNodeDepth, _rootNodes);
+        _vectorSet.parsedMetadata(_sector, _featuresCount, _nodesCount, _minNodeDepth, _maxNodeDepth, _rootNodes);
         _sector = null; // moved ownership to _vectorSet
-        _averagePosition = null; // moved ownership to _vectorSet
         _rootNodes = null; // moved ownership to _vectorSet
       }
     }
@@ -916,7 +905,6 @@ public class VectorStreamingRenderer extends DefaultRenderer
 
     private Sector _sector;
     private long _featuresCount;
-    private Geodetic2D _averagePosition;
     private int _nodesCount;
     private int _minNodeDepth;
     private int _maxNodeDepth;
@@ -943,7 +931,6 @@ public class VectorStreamingRenderer extends DefaultRenderer
        _errorDownloadingMetadata = false;
        _errorParsingMetadata = false;
        _sector = null;
-       _averagePosition = null;
        _rootNodes = null;
        _rootNodesSize = 0;
        _lastRenderedCount = 0;
@@ -960,8 +947,6 @@ public class VectorStreamingRenderer extends DefaultRenderer
     
       if (_sector != null)
          _sector.dispose();
-      if (_averagePosition != null)
-         _averagePosition.dispose();
       if (_rootNodes != null)
       {
         for (int i = 0; i < _rootNodes.size(); i++)
@@ -1052,13 +1037,12 @@ public class VectorStreamingRenderer extends DefaultRenderer
       _downloadingMetadata = false;
       _errorParsingMetadata = true;
     }
-    public final void parsedMetadata(Sector sector, long featuresCount, Geodetic2D averagePosition, int nodesCount, int minNodeDepth, int maxNodeDepth, java.util.ArrayList<Node> rootNodes)
+    public final void parsedMetadata(Sector sector, long featuresCount, int nodesCount, int minNodeDepth, int maxNodeDepth, java.util.ArrayList<Node> rootNodes)
     {
       _downloadingMetadata = false;
     
       _sector = sector;
       _featuresCount = featuresCount;
-      _averagePosition = averagePosition;
       _nodesCount = nodesCount;
       _minNodeDepth = minNodeDepth;
       _maxNodeDepth = maxNodeDepth;
@@ -1068,12 +1052,11 @@ public class VectorStreamingRenderer extends DefaultRenderer
       if (_verbose)
       {
         ILogger.instance().logInfo("\"%s\": Metadata", _name);
-        ILogger.instance().logInfo("   Sector           : %s", _sector.description());
-        ILogger.instance().logInfo("   Features Count   : %d",   _featuresCount);
-        ILogger.instance().logInfo("   Average Position : %s", _averagePosition.description());
-        ILogger.instance().logInfo("   Nodes Count      : %d", _nodesCount);
-        ILogger.instance().logInfo("   Depth            : %d/%d", _minNodeDepth, _maxNodeDepth);
-        ILogger.instance().logInfo("   Root Nodes       : %d", _rootNodesSize);
+        ILogger.instance().logInfo("   Sector        : %s", _sector.description());
+        ILogger.instance().logInfo("   Features Count: %d",   _featuresCount);
+        ILogger.instance().logInfo("   Nodes Count   : %d", _nodesCount);
+        ILogger.instance().logInfo("   Depth         : %d/%d", _minNodeDepth, _maxNodeDepth);
+        ILogger.instance().logInfo("   Root Nodes    : %d", _rootNodesSize);
       }
     
     }
