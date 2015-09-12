@@ -76,7 +76,7 @@ public abstract class UndeterminateProgress {
       final String thrMsg = getThroughputMessage(stepsDone, elapsed);
 
       if (_finished) {
-         return " [ done ] " + _done + " steps" + " [Finished in " + StringUtils.getTimeMessage(elapsed) + "]" + thrMsg;
+         return " [ done ] " + _done + " steps" + " [Finished in " + StrUtils.getTimeMessage(elapsed) + "]" + thrMsg;
       }
 
       final String stepChar = STEPS_MESSAGES[_informedStep++ % STEPS_MESSAGES.length];
@@ -86,7 +86,7 @@ public abstract class UndeterminateProgress {
       if (_done == 0) {
          return bar + "[Started]";
       }
-      return bar + _done + " steps" + " [Elapsed: " + StringUtils.getTimeMessage(elapsed) + "]" + thrMsg;
+      return bar + _done + " steps" + " [Elapsed: " + StrUtils.getTimeMessage(elapsed) + "]" + thrMsg;
    }
 
 
@@ -102,8 +102,8 @@ public abstract class UndeterminateProgress {
       _lastStepsDone = stepsDone;
       _lastElapsed = elapsed;
 
-      final String inst = StringUtils.getSpaceMessage(((double) deltaSteps / deltaElapsed) * 1000) + "/sec";
-      final String avr = StringUtils.getSpaceMessage(((double) stepsDone / elapsed) * 1000) + "/sec";
+      final String inst = StrUtils.getSpaceMessage(((double) deltaSteps / deltaElapsed) * 1000) + "/sec";
+      final String avr = StrUtils.getSpaceMessage(((double) stepsDone / elapsed) * 1000) + "/sec";
 
       return " " + inst + " (avr=" + avr + ")";
    }
