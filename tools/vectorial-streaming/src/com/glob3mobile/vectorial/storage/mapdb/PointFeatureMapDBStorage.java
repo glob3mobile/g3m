@@ -10,7 +10,6 @@ import java.io.IOError;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -371,8 +370,7 @@ public class PointFeatureMapDBStorage
             final QuadKey quadKey = QuadKey.deepestEnclosingNodeKey(_rootKey, minimumSector);
 
 
-            final PointFeaturesSet featuresSet = new PointFeaturesSet(minimumSector, Collections.emptyList(), new ArrayList<>(
-                     _buffer));
+            final PointFeaturesSet featuresSet = new PointFeaturesSet(minimumSector, new ArrayList<>(_buffer));
             PointFeatureMapDBNode.insertFeatures(this, quadKey, featuresSet);
 
             _db.commit();

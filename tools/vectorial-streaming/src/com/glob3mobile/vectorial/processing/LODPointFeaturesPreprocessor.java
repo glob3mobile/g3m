@@ -5,7 +5,6 @@ package com.glob3mobile.vectorial.processing;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
@@ -72,7 +71,6 @@ public class LODPointFeaturesPreprocessor {
                   node.getID(), //
                   node.getNodeSector(), //
                   node.getMinimumSector(), //
-                  Collections.emptyList(), //
                   features //
          );
 
@@ -144,8 +142,12 @@ public class LODPointFeaturesPreprocessor {
       final String clusterName = sourceName + "_LOD";
 
       final int maxFeaturesPerNode = 64;
-      final Comparator<PointFeature> featuresComparator = null;
+
+      //      final boolean createClusters = true;
+      //      final Comparator<PointFeature> featuresComparator = createClusters ? null : new GEONamesComparator();
+
       final boolean createClusters = true;
+      final Comparator<PointFeature> featuresComparator = new GEONamesComparator();
 
       final boolean verbose = true;
 

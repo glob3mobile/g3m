@@ -25,7 +25,6 @@ public interface PointFeatureLODStorage
    void addLeafNode(String id,
                     Sector nodeSector,
                     Sector minimumSector,
-                    final List<PointFeatureCluster> clusters,
                     List<PointFeature> features);
 
 

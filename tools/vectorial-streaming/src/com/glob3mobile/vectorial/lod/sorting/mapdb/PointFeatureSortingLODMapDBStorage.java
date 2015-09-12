@@ -297,8 +297,7 @@ public class PointFeatureSortingLODMapDBStorage
       final QuadKey[] childrenKeys = key.createChildren();
       final List<ChildSplitResult> result = new ArrayList<>(childrenKeys.length);
       for (final QuadKey childKey : childrenKeys) {
-         final PointFeaturesSet childPointFeaturesSet = PointFeaturesSet.extractFeatures(childKey._sector,
-                  Collections.emptyList(), features);
+         final PointFeaturesSet childPointFeaturesSet = PointFeaturesSet.extractFeatures(childKey._sector, features);
          if (childPointFeaturesSet != null) {
             final List<PointFeature> childFeatures = childPointFeaturesSet._features;
             if ((childFeatures.size() == featuresSize) && (splitDepth < MAX_SPLIT_DEPTH)) {
