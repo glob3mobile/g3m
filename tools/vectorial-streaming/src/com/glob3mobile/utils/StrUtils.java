@@ -7,10 +7,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-public class StringUtils {
+public class StrUtils {
 
 
-   private StringUtils() {
+   private StrUtils() {
    }
 
 
@@ -95,8 +95,8 @@ public class StringUtils {
    private static final Map<String, String> _largeStrings = new HashMap<String, String>();
 
 
-   static String getSubstringOfStringRepeating(final String repeated,
-                                               final int count) {
+   public static String getSubstringOfStringRepeating(final String repeated,
+                                                      final int count) {
       synchronized (_largeStrings) {
          String large = _largeStrings.get(repeated);
          if (large == null) {

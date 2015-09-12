@@ -97,7 +97,6 @@ public class LODPointFeaturesPreprocessor {
 
       try (final PointFeatureStorage storage = PointFeatureMapDBStorage.openReadOnly(storageDir, storageName)) {
 
-
          try (final PointFeatureLODStorage lodStorage = PointFeatureLODMapDBStorage.createEmpty(storage.getSector(), lodDir,
                   lodName, maxFeaturesPerNode)) {
             final PointFeatureStorage.Statistics statistics = storage.getStatistics(verbose);

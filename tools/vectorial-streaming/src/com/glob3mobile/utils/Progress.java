@@ -85,7 +85,7 @@ public abstract class Progress {
       final String thrMsg = getThroughputMessage(stepsDone, elapsed);
 
       if (percent == 1) {
-         return "[" + doneBar(1) + "] " + percentString(1) + " [Finished in " + StringUtils.getTimeMessage(elapsed) + "] | "
+         return "[" + doneBar(1) + "] " + percentString(1) + " [Finished in " + StrUtils.getTimeMessage(elapsed) + "] | "
                 + thrMsg;
       }
 
@@ -97,7 +97,7 @@ public abstract class Progress {
 
       return bar + //
              percentString(percent) + //
-             " | " + StringUtils.getTimeMessage(elapsed) + " - ETF:" + StringUtils.getTimeMessage(estimatedMsToFinish) + //
+             " | " + StrUtils.getTimeMessage(elapsed) + " - ETF:" + StrUtils.getTimeMessage(estimatedMsToFinish) + //
              " | " + //
              thrMsg;
    }
@@ -112,14 +112,14 @@ public abstract class Progress {
 
    private String doneBar(final double percent) {
       final int doneBarsSteps = Math.max(Math.round((float) percent * FULL_BAR_STEPS), 0);
-      // return StringUtils.sharps(doneBarsSteps);
-      return StringUtils.getSubstringOfStringRepeating("#", doneBarsSteps);
+      // return StrUtils.sharps(doneBarsSteps);
+      return StrUtils.getSubstringOfStringRepeating("#", doneBarsSteps);
    }
 
 
    private String pendingBar(final int count) {
-      // return StringUtils.dashes(count);
-      return StringUtils.getSubstringOfStringRepeating("-", count);
+      // return StrUtils.dashes(count);
+      return StrUtils.getSubstringOfStringRepeating("-", count);
    }
 
 
@@ -150,7 +150,7 @@ public abstract class Progress {
       _lastStepsDone = stepsDone;
       _lastElapsed = elapsed;
 
-      final String instant = StringUtils.getSpaceMessage(((double) deltaSteps / deltaElapsed) * 1000) + "/s";
+      final String instant = StrUtils.getSpaceMessage(((double) deltaSteps / deltaElapsed) * 1000) + "/s";
 
 
       final Delta delta = new Delta(deltaSteps, deltaElapsed);
@@ -166,9 +166,9 @@ public abstract class Progress {
          acumElapsed += d._elapsed;
       }
       final String deltasAverage = " l" + _deltas.size() + "="
-                                   + StringUtils.getSpaceMessage(((double) acumSteps / acumElapsed) * 1000) + "/s";
+                                   + StrUtils.getSpaceMessage(((double) acumSteps / acumElapsed) * 1000) + "/s";
 
-      final String average = " avr=" + StringUtils.getSpaceMessage(((double) stepsDone / elapsed) * 1000) + "/s";
+      final String average = " avr=" + StrUtils.getSpaceMessage(((double) stepsDone / elapsed) * 1000) + "/s";
 
       return instant + deltasAverage + average + " | ";
    }
