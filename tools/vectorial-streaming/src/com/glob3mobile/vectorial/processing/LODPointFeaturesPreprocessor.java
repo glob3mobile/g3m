@@ -143,11 +143,9 @@ public class LODPointFeaturesPreprocessor {
 
       final int maxFeaturesPerNode = 64;
 
-      //      final boolean createClusters = true;
-      //      final Comparator<PointFeature> featuresComparator = createClusters ? null : new GEONamesComparator();
-
       final boolean createClusters = true;
-      final Comparator<PointFeature> featuresComparator = new GEONamesComparator();
+      final Comparator<PointFeature> featuresComparator = createClusters ? null : new GEONamesComparator();
+
 
       final boolean verbose = true;
 
