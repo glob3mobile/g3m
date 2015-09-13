@@ -16,6 +16,7 @@
 #include "IBufferDownloadListener.hpp"
 #include "IThreadUtils.hpp"
 #include "RCObject.hpp"
+#include "MarksRenderer.hpp"
 
 #include <vector>
 #include <string>
@@ -34,7 +35,6 @@ class Frustum;
 class IDownloader;
 class GEOObject;
 
-#include "MarksRenderer.hpp"
 
 class VectorStreamingRenderer : public DefaultRenderer {
 public:
@@ -56,6 +56,25 @@ public:
 
   };
 
+
+  class Cluster {
+  private:
+    const Geodetic2D* _position;
+    const long long   _size;
+  public:
+    Cluster(const Geodetic2D* position,
+            const long long   size) :
+    _position(position),
+    _size(size)
+    {
+
+    }
+
+    ~Cluster() {
+      delete _position;
+    }
+
+  };
 
 
   class ChildrenParserAsyncTask : public GAsyncTask {
@@ -138,7 +157,11 @@ public:
     IByteBuffer*        _buffer;
     const IThreadUtils* _threadUtils;
 
-    GEOObject* _features;
+    std::vector<Cluster*>* _clusters;
+    GEOObject*             _features;
+
+  private:
+    std::vector<Cluster*>* parseClusters(const JSONArray* clustersJson);
 
   public:
     FeaturesParserAsyncTask(Node*               node,
@@ -149,6 +172,7 @@ public:
     _verbose(verbose),
     _buffer(buffer),
     _threadUtils(threadUtils),
+    _clusters(NULL),
     _features(NULL)
     {
       _node->_retain();
@@ -234,7 +258,8 @@ public:
 
     const bool _verbose;
 
-    GEOObject* _features;
+    std::vector<Cluster*>* _clusters;
+    GEOObject*             _features;
 
     BoundingVolume* _boundingVolume;
     BoundingVolume* getBoundingVolume(const G3MRenderContext *rc);
@@ -266,7 +291,8 @@ public:
 
     void removeMarks();
 
-    long long _marksCount;
+    long long _clusterMarksCount;
+    long long _featureMarksCount;
 
   protected:
     ~Node();
@@ -299,8 +325,10 @@ public:
     _featuresRequestID(-1),
     _childrenRequestID(-1),
     _downloader(NULL),
+    _clusters(NULL),
     _features(NULL),
-    _marksCount(0)
+    _clusterMarksCount(0),
+    _featureMarksCount(0)
     {
 
     }
@@ -326,8 +354,9 @@ public:
       // do nothing by now
     }
 
-    void parsedFeatures(GEOObject* features,
-                        const IThreadUtils* threadUtils);
+    void parsedFeatures(std::vector<Cluster*>* clusters,
+                        GEOObject*             features,
+                        const IThreadUtils*    threadUtils);
 
     void errorDownloadingChildren() {
       // do nothing by now
@@ -417,7 +446,9 @@ public:
   public:
     virtual ~VectorSetSymbolizer() { }
 
-    virtual Mark* createMark(const GEO2DPointGeometry* geometry) const = 0;
+    virtual Mark* createFeatureMark(const GEO2DPointGeometry* geometry) const = 0;
+
+    // virtual Mark* createClusterMark(const Cluster* cluster) const = 0;
 
   };
 
@@ -542,8 +573,8 @@ public:
                 const long long cameraTS,
                 GLState* glState);
 
-    long long createMark(const Node* node,
-                         const GEO2DPointGeometry* geometry) const;
+    long long createFeatureMark(const Node* node,
+                                const GEO2DPointGeometry* geometry) const;
 
     MarksRenderer* getMarksRenderer() const {
       return _renderer->getMarkRenderer();

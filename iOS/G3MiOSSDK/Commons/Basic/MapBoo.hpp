@@ -187,7 +187,7 @@ public:
     void apply(const URL&               serverURL,
                VectorStreamingRenderer* vectorStreamingRenderer) const;
 
-    Mark* createMark(const GEO2DPointGeometry* geometry) const;
+    Mark* createFeatureMark(const GEO2DPointGeometry* geometry) const;
 
   };
 
@@ -247,8 +247,8 @@ public:
 #endif
     }
 
-    Mark* createMark(const GEO2DPointGeometry* geometry) const {
-      return _symbology->createMark( geometry );
+    Mark* createFeatureMark(const GEO2DPointGeometry* geometry) const {
+      return _symbology->createFeatureMark( geometry );
     }
   };
 

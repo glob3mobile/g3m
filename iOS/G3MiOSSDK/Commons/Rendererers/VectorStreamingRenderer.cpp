@@ -100,7 +100,16 @@ void VectorStreamingRenderer::NodeChildrenDownloadListener::onCanceledDownload(c
 
 VectorStreamingRenderer::FeaturesParserAsyncTask::~FeaturesParserAsyncTask() {
   _node->_release();
+
   delete _buffer;
+  if (_clusters != NULL) {
+    for (int i = 0; i < _clusters->size(); i++) {
+      Cluster* cluster = _clusters->at(i);
+      delete cluster;
+    }
+    delete _clusters;
+  }
+
   delete _features;
 
 #ifdef JAVA_CODE
@@ -108,16 +117,47 @@ VectorStreamingRenderer::FeaturesParserAsyncTask::~FeaturesParserAsyncTask() {
 #endif
 }
 
-void VectorStreamingRenderer::FeaturesParserAsyncTask::runInBackground(const G3MContext* context) {
-#error split features / clusters
-  _features = GEOJSONParser::parseJSON(_buffer, _verbose);
+std::vector<VectorStreamingRenderer::Cluster*>* VectorStreamingRenderer::FeaturesParserAsyncTask::parseClusters(const JSONArray* clustersJson) {
+  if (clustersJson == NULL) {
+    return NULL;
+  }
 
+  std::vector<VectorStreamingRenderer::Cluster*>* clusters = new std::vector<VectorStreamingRenderer::Cluster*>();
+  const size_t clustersCount = clustersJson->size();
+  for (int i = 0; i < clustersCount; i++) {
+    const Geodetic2D* position = GEOJSONUtils::parseGeodetic2D( clustersJson->getAsArray(i) );
+    const long long  size      = (long long) clustersJson->getAsNumber(i)->value();
+
+    clusters->push_back( new Cluster(position, size) );
+  }
+  return clusters;
+}
+
+
+void VectorStreamingRenderer::FeaturesParserAsyncTask::runInBackground(const G3MContext* context) {
+
+  const JSONBaseObject* jsonBaseObject = IJSONParser::instance()->parse(_buffer);
   delete _buffer;
   _buffer = NULL;
+
+  if (jsonBaseObject != NULL) {
+    const JSONObject* jsonObject = jsonBaseObject->asObject();
+
+    const JSONArray* clustersJson = jsonObject->get("clusters")->asArray();
+    _clusters = parseClusters( clustersJson );
+
+    const JSONObject* featuresJson = jsonObject->get("features")->asObject();
+    _features = GEOJSONParser::parse(featuresJson, _verbose);
+
+    delete jsonBaseObject;
+  }
+
+  //  _features = GEOJSONParser::parseJSON(_buffer, _verbose);
 }
 
 void VectorStreamingRenderer::FeaturesParserAsyncTask::onPostExecute(const G3MContext* context) {
-  _node->parsedFeatures(_features, _threadUtils);
+  _node->parsedFeatures(_clusters, _features, _threadUtils);
+  _clusters = NULL; // moved ownership to _node
   _features = NULL; // moved ownership to _node
 }
 
@@ -158,6 +198,14 @@ void VectorStreamingRenderer::NodeFeaturesDownloadListener::onCanceledDownload(c
 VectorStreamingRenderer::Node::~Node() {
   unload();
 
+  if (_clusters != NULL) {
+    for (int i = 0; i < _clusters->size(); i++) {
+      Cluster* cluster = _clusters->at(i);
+      delete cluster;
+    }
+    delete _clusters;
+  }
+
   delete _nodeSector;
   delete _minimumSector;
   delete _boundingVolume;
@@ -179,28 +227,27 @@ void VectorStreamingRenderer::Node::parsedChildren(std::vector<Node*>* children,
   }
 }
 
-void VectorStreamingRenderer::Node::parsedFeatures(GEOObject* features,
-                                                   const IThreadUtils* threadUtils) {
+void VectorStreamingRenderer::Node::parsedFeatures(std::vector<Cluster*>* clusters,
+                                                   GEOObject*             features,
+                                                   const IThreadUtils*    threadUtils) {
   _loadedFeatures = true;
   _loadingFeatures = false;
   _featuresRequestID = -1;
-  if (features == NULL) {
-    // do nothing by now
-  }
-  else {
+
+  if (features != NULL) {
     _features = features;
 
-    _marksCount = _features->createMarks(_vectorSet, this);
-    if (_verbose) {
+    _featureMarksCount = _features->createFeatureMarks(_vectorSet, this);
+    if (_verbose && (_featureMarksCount > 0)) {
 #ifdef C_CODE
-      ILogger::instance()->logInfo("\"%s\": Created %ld marks",
+      ILogger::instance()->logInfo("\"%s\": Created %ld feature-marks",
                                    getFullName().c_str(),
-                                   _marksCount);
+                                   _featureMarksCount);
 #endif
 #ifdef JAVA_CODE
-      ILogger.instance().logInfo("\"%s\": Created %d marks",
+      ILogger.instance().logInfo("\"%s\": Created %d feature-marks",
                                  getFullName(),
-                                 _marksCount);
+                                 _featureMarksCount);
 #endif
     }
 
@@ -208,6 +255,25 @@ void VectorStreamingRenderer::Node::parsedFeatures(GEOObject* features,
     delete _features;
     _features = NULL;
   }
+
+  if (clusters != NULL) {
+    _clusters = clusters;
+    //_clusterMarksCount = createClusterMarks();
+
+    if (_verbose && (_clusterMarksCount > 0)) {
+#ifdef C_CODE
+      ILogger::instance()->logInfo("\"%s\": Created %ld cluster-marks",
+                                   getFullName().c_str(),
+                                   _clusterMarksCount);
+#endif
+#ifdef JAVA_CODE
+      ILogger.instance().logInfo("\"%s\": Created %d cluster-marks",
+                                 getFullName(),
+                                 _clusterMarksCount);
+#endif
+    }
+  }
+
 }
 
 
@@ -266,7 +332,7 @@ void VectorStreamingRenderer::Node::loadFeatures(const G3MRenderContext* rc) {
 }
 
 void VectorStreamingRenderer::Node::unloadFeatures() {
-  _loadedFeatures = false;
+  _loadedFeatures  = false;
   _loadingFeatures = false;
 
   delete _features;
@@ -431,7 +497,7 @@ long long VectorStreamingRenderer::Node::render(const G3MRenderContext* rc,
   if (visible) {
     const bool bigEnough = isBigEnough(rc);
     if (bigEnough) {
-      renderedCount += _marksCount;
+      renderedCount += _featureMarksCount;
       if (_loadedFeatures) {
         // don't load nor render children until the features are loaded
         if (_children == NULL) {
@@ -775,9 +841,9 @@ void VectorStreamingRenderer::VectorSet::render(const G3MRenderContext* rc,
   }
 }
 
-long long VectorStreamingRenderer::VectorSet::createMark(const Node* node,
-                                                         const GEO2DPointGeometry* geometry) const {
-  Mark* mark = _symbolizer->createMark(geometry);
+long long VectorStreamingRenderer::VectorSet::createFeatureMark(const Node* node,
+                                                                const GEO2DPointGeometry* geometry) const {
+  Mark* mark = _symbolizer->createFeatureMark(geometry);
   if (mark == NULL) {
     return 0;
   }

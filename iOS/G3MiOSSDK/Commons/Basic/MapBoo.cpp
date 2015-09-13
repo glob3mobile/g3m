@@ -648,7 +648,7 @@ IImageBuilder* MapBoo::MBVectorSymbology::createImageBuilder(const JSONObject* p
 }
 
 
-Mark* MapBoo::MBVectorSymbology::createMark(const GEO2DPointGeometry* geometry) const {
+Mark* MapBoo::MBVectorSymbology::createFeatureMark(const GEO2DPointGeometry* geometry) const {
   const GEOFeature* feature    = geometry->getFeature();
   const JSONObject* properties = feature->getProperties();
   const Geodetic2D  position   = geometry->getPosition();
