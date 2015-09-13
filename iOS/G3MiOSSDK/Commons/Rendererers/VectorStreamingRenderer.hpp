@@ -70,6 +70,14 @@ public:
 
     }
 
+    const Geodetic2D* getPosition() const {
+      return _position;
+    }
+
+    const long long getSize() const {
+      return _size;
+    }
+
     ~Cluster() {
       delete _position;
     }
@@ -448,7 +456,8 @@ public:
 
     virtual Mark* createFeatureMark(const GEO2DPointGeometry* geometry) const = 0;
 
-    // virtual Mark* createClusterMark(const Cluster* cluster) const = 0;
+    virtual Mark* createClusterMark(const Cluster* cluster,
+                                    long long featuresCount) const = 0;
 
   };
 
@@ -575,6 +584,9 @@ public:
 
     long long createFeatureMark(const Node* node,
                                 const GEO2DPointGeometry* geometry) const;
+
+    long long createClusterMarks(const Node* node,
+                                 const std::vector<Cluster*>* clusters) const;
 
     MarksRenderer* getMarksRenderer() const {
       return _renderer->getMarkRenderer();

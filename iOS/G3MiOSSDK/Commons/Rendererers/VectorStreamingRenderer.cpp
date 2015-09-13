@@ -102,6 +102,7 @@ VectorStreamingRenderer::FeaturesParserAsyncTask::~FeaturesParserAsyncTask() {
   _node->_release();
 
   delete _buffer;
+
   if (_clusters != NULL) {
     for (int i = 0; i < _clusters->size(); i++) {
       Cluster* cluster = _clusters->at(i);
@@ -125,11 +126,13 @@ std::vector<VectorStreamingRenderer::Cluster*>* VectorStreamingRenderer::Feature
   std::vector<VectorStreamingRenderer::Cluster*>* clusters = new std::vector<VectorStreamingRenderer::Cluster*>();
   const size_t clustersCount = clustersJson->size();
   for (int i = 0; i < clustersCount; i++) {
-    const Geodetic2D* position = GEOJSONUtils::parseGeodetic2D( clustersJson->getAsArray(i) );
-    const long long  size      = (long long) clustersJson->getAsNumber(i)->value();
+    const JSONObject* clusterJson = clustersJson->getAsObject(i);
+    const Geodetic2D* position = GEOJSONUtils::parseGeodetic2D( clusterJson->getAsArray("position") );
+    const long long   size     = (long long) clusterJson->getAsNumber("size")->value();
 
     clusters->push_back( new Cluster(position, size) );
   }
+
   return clusters;
 }
 
@@ -143,11 +146,8 @@ void VectorStreamingRenderer::FeaturesParserAsyncTask::runInBackground(const G3M
   if (jsonBaseObject != NULL) {
     const JSONObject* jsonObject = jsonBaseObject->asObject();
 
-    const JSONArray* clustersJson = jsonObject->get("clusters")->asArray();
-    _clusters = parseClusters( clustersJson );
-
-    const JSONObject* featuresJson = jsonObject->get("features")->asObject();
-    _features = GEOJSONParser::parse(featuresJson, _verbose);
+    _clusters = parseClusters( jsonObject->get("clusters")->asArray() );
+    _features = GEOJSONParser::parse( jsonObject->get("features")->asObject() , _verbose);
 
     delete jsonBaseObject;
   }
@@ -198,6 +198,8 @@ void VectorStreamingRenderer::NodeFeaturesDownloadListener::onCanceledDownload(c
 VectorStreamingRenderer::Node::~Node() {
   unload();
 
+  delete _features;
+
   if (_clusters != NULL) {
     for (int i = 0; i < _clusters->size(); i++) {
       Cluster* cluster = _clusters->at(i);
@@ -217,10 +219,7 @@ VectorStreamingRenderer::Node::~Node() {
 
 void VectorStreamingRenderer::Node::parsedChildren(std::vector<Node*>* children,
                                                    const IThreadUtils* threadUtils) {
-  if (children == NULL) {
-    // do nothing by now
-  }
-  else {
+  if (children != NULL) {
     _children = children;
     _loadingChildren = false;
     _childrenSize = _children->size();
@@ -258,7 +257,7 @@ void VectorStreamingRenderer::Node::parsedFeatures(std::vector<Cluster*>* cluste
 
   if (clusters != NULL) {
     _clusters = clusters;
-    //_clusterMarksCount = createClusterMarks();
+    _clusterMarksCount = _vectorSet->createClusterMarks(this, _clusters);
 
     if (_verbose && (_clusterMarksCount > 0)) {
 #ifdef C_CODE
@@ -552,8 +551,8 @@ Sector* VectorStreamingRenderer::GEOJSONUtils::parseSector(const JSONArray* json
 }
 
 Geodetic2D* VectorStreamingRenderer::GEOJSONUtils::parseGeodetic2D(const JSONArray* json) {
-  const double lat = json->getAsNumber(0)->value();
-  const double lon = json->getAsNumber(1)->value();
+  const double lon = json->getAsNumber(0)->value();
+  const double lat = json->getAsNumber(1)->value();
 
   return new Geodetic2D(Angle::fromDegrees(lat), Angle::fromDegrees(lon));
 }
@@ -840,6 +839,28 @@ void VectorStreamingRenderer::VectorSet::render(const G3MRenderContext* rc,
 
   }
 }
+
+long long VectorStreamingRenderer::VectorSet::createClusterMarks(const Node* node,
+                                                                 const std::vector<Cluster*>* clusters) const {
+  long long counter = 0;
+  if (clusters != NULL) {
+    const size_t clustersCount = clusters->size();
+    for (size_t i = 0; i < clustersCount; i++) {
+      const Cluster* cluster = clusters->at(i);
+      if (cluster != NULL) {
+        Mark* mark = _symbolizer->createClusterMark(cluster, _featuresCount);
+        if (mark != NULL) {
+          mark->setToken( node->getMarkToken() );
+          _renderer->getMarkRenderer()->addMark( mark );
+          counter++;
+        }
+      }
+    }
+  }
+
+  return counter;
+}
+
 
 long long VectorStreamingRenderer::VectorSet::createFeatureMark(const Node* node,
                                                                 const GEO2DPointGeometry* geometry) const {

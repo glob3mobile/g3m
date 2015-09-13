@@ -21,11 +21,12 @@
 #include <G3MiOSSDK/JSONNumber.hpp>
 
 #include "G3MDemoModel.hpp"
+#include <sstream>
 
 
 class G3MVectorStreamingDemoScene_Symbolizer : public VectorStreamingRenderer::VectorSetSymbolizer {
 public:
-  Mark* createMark(const GEO2DPointGeometry* geometry) const {
+  Mark* createFeatureMark(const GEO2DPointGeometry* geometry) const {
     const GEOFeature* feature = geometry->getFeature();
 
     const JSONObject* properties = feature->getProperties();
@@ -47,7 +48,34 @@ public:
     mark->setZoomInAppears(true);
     return mark;
   }
-  
+
+  Mark* createClusterMark(const VectorStreamingRenderer::Cluster* cluster,
+                          long long featuresCount) const {
+    const Geodetic3D  position(cluster->getPosition()->_latitude,
+                               cluster->getPosition()->_longitude,
+                               0);
+
+    std::stringstream labelStream;
+    labelStream << "(";
+    labelStream << cluster->getSize();
+    labelStream << ")";
+
+    std::string label;
+    labelStream >> label;
+
+    float labelFontSize = (float) (14.0 * ((float) cluster->getSize() / featuresCount) + 16.0) ;
+
+    Mark* mark = new Mark(label,
+                          position,
+                          ABSOLUTE,
+                          0, // minDistanceToCamera
+                          labelFontSize,
+                          Color::newFromRGBA(1, 1, 0, 1)
+                          );
+    mark->setZoomInAppears(true);
+    return mark;
+  }
+
 };
 
 

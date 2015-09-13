@@ -250,6 +250,13 @@ public:
     Mark* createFeatureMark(const GEO2DPointGeometry* geometry) const {
       return _symbology->createFeatureMark( geometry );
     }
+
+    Mark* createClusterMark(const VectorStreamingRenderer::Cluster* cluster,
+                            long long featuresCount) const {
+#warning TODO MapBoo-createClusterMark()
+      return NULL;
+    }
+
   };
 
 
