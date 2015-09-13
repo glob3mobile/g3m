@@ -253,7 +253,6 @@ public:
 
     Mark* createClusterMark(const VectorStreamingRenderer::Cluster* cluster,
                             long long featuresCount) const {
-#warning TODO MapBoo-createClusterMark()
       return NULL;
     }
 
