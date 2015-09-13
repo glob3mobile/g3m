@@ -454,8 +454,6 @@ public class MapBoo
 
     public final Mark createClusterMark(VectorStreamingRenderer.Cluster cluster, long featuresCount)
     {
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning TODO MapBoo-createClusterMark()
       return null;
     }
 
