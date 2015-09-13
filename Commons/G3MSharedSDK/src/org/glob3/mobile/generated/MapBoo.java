@@ -431,7 +431,7 @@ public class MapBoo
   }
 
 
-  public static class MBDatasetVectorSetSymbolizer extends VectorStreamingRenderer.VectorSetSymbolizer
+  public abstract static class MBDatasetVectorSetSymbolizer extends VectorStreamingRenderer.VectorSetSymbolizer
   {
     private final MBVectorSymbology _symbology;
 
@@ -451,6 +451,14 @@ public class MapBoo
     {
       return _symbology.createFeatureMark(geometry);
     }
+
+    public final Mark createClusterMark(VectorStreamingRenderer.Cluster cluster, long featuresCount)
+    {
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning TODO MapBoo-createClusterMark()
+      return null;
+    }
+
   }
 
 
