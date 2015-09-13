@@ -220,6 +220,7 @@ public:
     const std::string              _id;
     const Sector*                  _nodeSector;
     const Sector*                  _minimumSector;
+    const int                      _clustersCount;
     const int                      _featuresCount;
 #ifdef C_CODE
     const std::vector<std::string> _childrenIDs;
@@ -275,6 +276,7 @@ public:
          const std::string&              id,
          const Sector*                   nodeSector,
          const Sector*                   minimumSector,
+         const int                       clustersCount,
          const int                       featuresCount,
          const std::vector<std::string>& childrenIDs,
          const bool                      verbose) :
@@ -282,6 +284,7 @@ public:
     _id(id),
     _nodeSector(nodeSector),
     _minimumSector(minimumSector),
+    _clustersCount(clustersCount),
     _featuresCount(featuresCount),
     _childrenIDs(childrenIDs),
     _verbose(verbose),
@@ -345,6 +348,7 @@ public:
     bool         _parsingError;
 
     Sector*             _sector;
+    long long           _clustersCount;
     long long           _featuresCount;
     int                 _nodesCount;
     int                 _minNodeDepth;
@@ -360,6 +364,7 @@ public:
     _buffer(buffer),
     _parsingError(false),
     _sector(NULL),
+    _clustersCount(-1),
     _featuresCount(-1),
     _nodesCount(-1),
     _minNodeDepth(-1),
@@ -447,6 +452,7 @@ public:
     bool _errorParsingMetadata;
 
     Sector*             _sector;
+    long long           _clustersCount;
     long long           _featuresCount;
     int                 _nodesCount;
     int                 _minNodeDepth;
@@ -524,6 +530,7 @@ public:
     void errorDownloadingMetadata();
     void errorParsingMetadata();
     void parsedMetadata(Sector* sector,
+                        long long clustersCount,
                         long long featuresCount,
                         int nodesCount,
                         int minNodeDepth,

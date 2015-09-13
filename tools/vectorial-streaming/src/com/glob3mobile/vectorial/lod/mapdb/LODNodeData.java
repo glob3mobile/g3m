@@ -11,14 +11,14 @@ import com.glob3mobile.vectorial.storage.PointFeature;
 import com.glob3mobile.vectorial.storage.PointFeatureCluster;
 
 
-public class NodeData {
+public class LODNodeData {
 
 
    private final List<PointFeatureCluster> _clusters;
    private final List<PointFeature>        _features;
 
 
-   public NodeData(final List<PointFeatureCluster> clusters,
+   public LODNodeData(final List<PointFeatureCluster> clusters,
                    final List<PointFeature> features) {
       _clusters = Collections.unmodifiableList(new ArrayList<>(clusters));
       _features = Collections.unmodifiableList(new ArrayList<>(features));

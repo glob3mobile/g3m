@@ -5,7 +5,7 @@ package com.glob3mobile.vectorial.lod.mapdb;
 import com.glob3mobile.geo.Sector;
 
 
-public class NodeHeader {
+public class LODNodeHeader {
 
    private final Sector _nodeSector;
    private final Sector _minimumSector;
@@ -13,7 +13,7 @@ public class NodeHeader {
    private final int    _featuresCount;
 
 
-   NodeHeader(final Sector nodeSector,
+   LODNodeHeader(final Sector nodeSector,
               final Sector minimumSector,
               final int clustersCount,
               final int featuresCount) {

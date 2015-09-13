@@ -109,6 +109,7 @@ VectorStreamingRenderer::FeaturesParserAsyncTask::~FeaturesParserAsyncTask() {
 }
 
 void VectorStreamingRenderer::FeaturesParserAsyncTask::runInBackground(const G3MContext* context) {
+#error split features / clusters
   _features = GEOJSONParser::parseJSON(_buffer, _verbose);
 
   delete _buffer;
@@ -255,7 +256,7 @@ void VectorStreamingRenderer::Node::loadFeatures(const G3MRenderContext* rc) {
 
   _downloader = rc->getDownloader();
   _featuresRequestID = _downloader->requestBuffer(metadataURL,
-                                                  _vectorSet->getDownloadPriority() + _featuresCount,
+                                                  _vectorSet->getDownloadPriority() + _featuresCount + _clustersCount,
                                                   _vectorSet->getTimeToCache(),
                                                   _vectorSet->getReadExpired(),
                                                   new NodeFeaturesDownloadListener(this,
@@ -494,10 +495,11 @@ Geodetic2D* VectorStreamingRenderer::GEOJSONUtils::parseGeodetic2D(const JSONArr
 VectorStreamingRenderer::Node* VectorStreamingRenderer::GEOJSONUtils::parseNode(const JSONObject* json,
                                                                                 const VectorSet*  vectorSet,
                                                                                 const bool        verbose) {
-  const std::string id              = json->getAsString("id")->value();
-  Sector*           nodeSector      = GEOJSONUtils::parseSector( json->getAsArray("nodeSector") );
-  Sector*           minimumSector   = GEOJSONUtils::parseSector( json->getAsArray("minimumSector") );
-  int               featuresCount   = (int) json->getAsNumber("featuresCount")->value();
+  const std::string id            = json->getAsString("id")->value();
+  Sector*           nodeSector    = GEOJSONUtils::parseSector( json->getAsArray("nodeSector") );
+  Sector*           minimumSector = GEOJSONUtils::parseSector( json->getAsArray("minimumSector") );
+  int               clustersCount = (int) json->getAsNumber("clustersCount")->value();
+  int               featuresCount = (int) json->getAsNumber("featuresCount")->value();
 
   std::vector<std::string> children;
   const JSONArray* childrenJSON = json->getAsArray("children");
@@ -509,6 +511,7 @@ VectorStreamingRenderer::Node* VectorStreamingRenderer::GEOJSONUtils::parseNode(
                   id,
                   nodeSector,
                   minimumSector,
+                  clustersCount,
                   featuresCount,
                   children,
                   verbose);
@@ -571,11 +574,12 @@ void VectorStreamingRenderer::MetadataParserAsyncTask::runInBackground(const G3M
       }
     }
     else {
-      _sector          = GEOJSONUtils::parseSector( jsonObject->getAsArray("sector") );
-      _featuresCount   = (long long) jsonObject->getAsNumber("featuresCount")->value();
-      _nodesCount      = (int) jsonObject->getAsNumber("featuresCount")->value();
-      _minNodeDepth    = (int) jsonObject->getAsNumber("minNodeDepth")->value();
-      _maxNodeDepth    = (int) jsonObject->getAsNumber("maxNodeDepth")->value();
+      _sector        = GEOJSONUtils::parseSector( jsonObject->getAsArray("sector") );
+      _clustersCount = (long long) jsonObject->getAsNumber("clustersCount")->value();
+      _featuresCount = (long long) jsonObject->getAsNumber("featuresCount")->value();
+      _nodesCount    = (int) jsonObject->getAsNumber("nodesCount")->value();
+      _minNodeDepth  = (int) jsonObject->getAsNumber("minNodeDepth")->value();
+      _maxNodeDepth  = (int) jsonObject->getAsNumber("maxNodeDepth")->value();
 
       const JSONArray* rootNodesJSON = jsonObject->getAsArray("rootNodes");
       _rootNodes = new std::vector<Node*>();
@@ -597,6 +601,7 @@ void VectorStreamingRenderer::MetadataParserAsyncTask::onPostExecute(const G3MCo
   }
   else {
     _vectorSet->parsedMetadata(_sector,
+                               _clustersCount,
                                _featuresCount,
                                _nodesCount,
                                _minNodeDepth,
@@ -667,6 +672,7 @@ VectorStreamingRenderer::VectorSet::~VectorSet() {
 }
 
 void VectorStreamingRenderer::VectorSet::parsedMetadata(Sector* sector,
+                                                        long long clustersCount,
                                                         long long featuresCount,
                                                         int nodesCount,
                                                         int minNodeDepth,
@@ -675,6 +681,7 @@ void VectorStreamingRenderer::VectorSet::parsedMetadata(Sector* sector,
   _downloadingMetadata = false;
 
   _sector          = sector;
+  _clustersCount   = clustersCount;
   _featuresCount   = featuresCount;
   _nodesCount      = nodesCount;
   _minNodeDepth    = minNodeDepth;
@@ -686,9 +693,11 @@ void VectorStreamingRenderer::VectorSet::parsedMetadata(Sector* sector,
     ILogger::instance()->logInfo("\"%s\": Metadata",         _name.c_str());
     ILogger::instance()->logInfo("   Sector        : %s",    _sector->description().c_str());
 #ifdef C_CODE
+    ILogger::instance()->logInfo("   Clusters Count: %ld",   _clustersCount);
     ILogger::instance()->logInfo("   Features Count: %ld",   _featuresCount);
 #endif
 #ifdef JAVA_CODE
+    ILogger.instance().logInfo("   Clusters Count: %d",   _clustersCount);
     ILogger.instance().logInfo("   Features Count: %d",   _featuresCount);
 #endif
     ILogger::instance()->logInfo("   Nodes Count   : %d",    _nodesCount);

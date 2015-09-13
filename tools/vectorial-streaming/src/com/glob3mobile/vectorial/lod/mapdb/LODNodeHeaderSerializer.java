@@ -13,9 +13,9 @@ import com.glob3mobile.geo.Sector;
 import com.glob3mobile.vectorial.storage.mapdb.SerializerUtils;
 
 
-public class NodeHeaderSerializer
+public class LODNodeHeaderSerializer
    implements
-      Serializer<NodeHeader>,
+      Serializer<LODNodeHeader>,
       Serializable {
 
 
@@ -31,7 +31,7 @@ public class NodeHeaderSerializer
 
    @Override
    public void serialize(final DataOutput out,
-                         final NodeHeader node) throws IOException {
+                         final LODNodeHeader node) throws IOException {
       SerializerUtils.serializeSector(out, node.getNodeSector());
       SerializerUtils.serializeSector(out, node.getMinimumSector());
       out.writeInt(node.getClustersCount());
@@ -40,13 +40,13 @@ public class NodeHeaderSerializer
 
 
    @Override
-   public NodeHeader deserialize(final DataInput in,
+   public LODNodeHeader deserialize(final DataInput in,
                                  final int available) throws IOException {
       final Sector nodeSector = SerializerUtils.deserializeSector(in);
       final Sector minimumSector = SerializerUtils.deserializeSector(in);
       final int clustersCount = in.readInt();
       final int featuresCount = in.readInt();
-      return new NodeHeader(nodeSector, minimumSector, clustersCount, featuresCount);
+      return new LODNodeHeader(nodeSector, minimumSector, clustersCount, featuresCount);
    }
 
 

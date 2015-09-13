@@ -137,16 +137,19 @@ public interface PointFeatureLODStorage
    void createLOD(boolean verbose);
 
 
-   //   List<PointFeatureClusterLODStorage.Node> getNodesFor(Sector searchSector);
+   List<PointFeatureLODStorage.Node> getAllNodesOfDepth(int depth);
+
+
+   //   List<PointFeatureLODStorage.Node> getNodesFor(Sector searchSector);
    //
    //
-   //   List<PointFeatureClusterLODStorage.Node> getNodesFor(Geodetic2D position);
+   //   List<PointFeatureLODStorage.Node> getNodesFor(Geodetic2D position);
    //
    //
-   //   List<PointFeatureClusterLODStorage.Node> getAllNodesOfDepth(int depth);
+   //   List<PointFeatureLODStorage.Node> getAllNodesOfDepth(int depth);
    //
-   //
-   //   PointFeatureClusterLODStorage.Node getNode(String id);
+
+   PointFeatureLODStorage.Node getNode(String id);
 
 
 }

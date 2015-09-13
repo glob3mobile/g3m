@@ -80,19 +80,19 @@ public class PointFeatureLODMapDBStorage
    }
 
 
-   private final Sector                       _sector;
-   private final QuadKey                      _rootKey;
-   private final String                       _name;
-   private final boolean                      _readOnly;
-   private final int                          _maxFeaturesPerNode;
-   private final Comparator<PointFeature>     _featuresComparator;
-   private final boolean                      _createClusters;
+   private final Sector                          _sector;
+   private final QuadKey                         _rootKey;
+   private final String                          _name;
+   private final boolean                         _readOnly;
+   private final int                             _maxFeaturesPerNode;
+   private final Comparator<PointFeature>        _featuresComparator;
+   private final boolean                         _createClusters;
 
-   private final DB                           _db;
-   private final BTreeMap<byte[], NodeHeader> _nodesHeaders;
-   private final BTreeMap<byte[], NodeData>   _nodesFeatures;
-   private final NavigableSet<byte[]>         _pendingNodes;
-   private final BTreeMap<String, Object>     _metadata;
+   private final DB                              _db;
+   private final BTreeMap<byte[], LODNodeHeader> _nodesHeaders;
+   private final BTreeMap<byte[], LODNodeData>   _nodesFeatures;
+   private final NavigableSet<byte[]>            _pendingNodes;
+   private final BTreeMap<String, Object>        _metadata;
 
 
    private PointFeatureLODMapDBStorage(final Sector sector,
@@ -117,7 +117,7 @@ public class PointFeatureLODMapDBStorage
       .createTreeMap("NodesHeaders") //
       .counterEnable() //
       .comparator(quadKeyComparator) //
-      .valueSerializer(new NodeHeaderSerializer());
+      .valueSerializer(new LODNodeHeaderSerializer());
 
       _nodesHeaders = nodesHeadersMaker.makeOrGet();
 
@@ -126,7 +126,7 @@ public class PointFeatureLODMapDBStorage
       .createTreeMap("NodesFeatures") //
       .counterEnable() //
       .comparator(quadKeyComparator) //
-      .valueSerializer(new NodeDataSerializer());
+      .valueSerializer(new LODNodeDataSerializer());
 
       _nodesFeatures = nodesFeaturesMaker.makeOrGet();
 
@@ -168,7 +168,7 @@ public class PointFeatureLODMapDBStorage
       .createTreeMap("NodesHeaders") //
       .counterEnable() //
       .comparator(quadKeyComparator) //
-      .valueSerializer(new NodeHeaderSerializer());
+      .valueSerializer(new LODNodeHeaderSerializer());
 
       _nodesHeaders = nodesHeadersMaker.makeOrGet();
 
@@ -177,7 +177,7 @@ public class PointFeatureLODMapDBStorage
       .createTreeMap("NodesFeatures") //
       .counterEnable() //
       .comparator(quadKeyComparator) //
-      .valueSerializer(new NodeDataSerializer());
+      .valueSerializer(new LODNodeDataSerializer());
 
       _nodesFeatures = nodesFeaturesMaker.makeOrGet();
 
@@ -403,14 +403,14 @@ public class PointFeatureLODMapDBStorage
                                final Sector minimumSector,
                                final List<PointFeature> features) {
       validateFeatures(nodeSector, minimumSector, features);
-      assertIsNull(_nodesHeaders.put(id, new NodeHeader(nodeSector, minimumSector, 0, features.size())));
-      assertIsNull(_nodesFeatures.put(id, new NodeData(Collections.emptyList(), features)));
+      assertIsNull(_nodesHeaders.put(id, new LODNodeHeader(nodeSector, minimumSector, 0, features.size())));
+      assertIsNull(_nodesFeatures.put(id, new LODNodeData(Collections.emptyList(), features)));
    }
 
 
    private void createEmptyInnerNode(final byte[] id) {
-      assertIsNull(_nodesHeaders.put(id, new NodeHeader(QuadKey.sectorFor(_rootKey, id), null, 0, 0)));
-      assertIsNull(_nodesFeatures.put(id, new NodeData(Collections.emptyList(), Collections.emptyList())));
+      assertIsNull(_nodesHeaders.put(id, new LODNodeHeader(QuadKey.sectorFor(_rootKey, id), null, 0, 0)));
+      assertIsNull(_nodesFeatures.put(id, new LODNodeData(Collections.emptyList(), Collections.emptyList())));
    }
 
 
@@ -421,8 +421,8 @@ public class PointFeatureLODMapDBStorage
                               final List<PointFeature> features) {
       validateClusters(nodeSector, minimumSector, clusters);
       validateFeatures(nodeSector, minimumSector, features);
-      _nodesHeaders.put(id, new NodeHeader(nodeSector, minimumSector, clusters.size(), features.size()));
-      _nodesFeatures.put(id, new NodeData(clusters, features));
+      _nodesHeaders.put(id, new LODNodeHeader(nodeSector, minimumSector, clusters.size(), features.size()));
+      _nodesFeatures.put(id, new LODNodeData(clusters, features));
    }
 
 
@@ -759,7 +759,7 @@ public class PointFeatureLODMapDBStorage
 
       protected PvtNode(final PointFeatureLODMapDBStorage storage,
                         final byte[] id,
-                        final NodeHeader header) {
+                        final LODNodeHeader header) {
          _storage = storage;
          _id = id;
          _nodeSector = header.getNodeSector();
@@ -802,7 +802,7 @@ public class PointFeatureLODMapDBStorage
       @Override
       public List<PointFeatureCluster> getClusters() {
          if (_clusters == null) {
-            final NodeData nodeData = _storage._nodesFeatures.get(_id);
+            final LODNodeData nodeData = _storage._nodesFeatures.get(_id);
             _clusters = Collections.unmodifiableList(nodeData.getClusters());
          }
          return _clusters;
@@ -824,7 +824,7 @@ public class PointFeatureLODMapDBStorage
       @Override
       public List<PointFeature> getFeatures() {
          if (_features == null) {
-            final NodeData nodeData = _storage._nodesFeatures.get(_id);
+            final LODNodeData nodeData = _storage._nodesFeatures.get(_id);
             _features = Collections.unmodifiableList(nodeData.getFeatures());
          }
          return _features;
@@ -859,8 +859,8 @@ public class PointFeatureLODMapDBStorage
    synchronized public void acceptDepthFirstVisitor(final PointFeatureLODStorage.NodeVisitor visitor) {
       visitor.start();
 
-      for (final Map.Entry<byte[], NodeHeader> entry : _nodesHeaders.entrySet()) {
-         final NodeHeader header = entry.getValue();
+      for (final Map.Entry<byte[], LODNodeHeader> entry : _nodesHeaders.entrySet()) {
+         final LODNodeHeader header = entry.getValue();
          final PvtNode node = new PvtNode(this, entry.getKey(), header);
          final boolean keepGoing = visitor.visit(node);
          if (!keepGoing) {
@@ -943,14 +943,14 @@ public class PointFeatureLODMapDBStorage
 
 
    private static class Child {
-      private final byte[]     _id;
-      private final NodeHeader _header;
-      private final NodeData   _data;
+      private final byte[]        _id;
+      private final LODNodeHeader _header;
+      private final LODNodeData   _data;
 
 
       private Child(final byte[] id,
-                    final NodeHeader header,
-                    final NodeData data) {
+                    final LODNodeHeader header,
+                    final LODNodeData data) {
          _id = id;
          _header = header;
          _data = data;
@@ -963,9 +963,9 @@ public class PointFeatureLODMapDBStorage
                          final byte childIndex,
                          final List<Child> children) {
       final byte[] childID = QuadKeyUtils.append(key, childIndex);
-      final NodeHeader childHeader = _nodesHeaders.get(childID);
+      final LODNodeHeader childHeader = _nodesHeaders.get(childID);
       if (childHeader != null) {
-         final NodeData childData = _nodesFeatures.get(childID);
+         final LODNodeData childData = _nodesFeatures.get(childID);
          children.add(new Child(childID, childHeader, childData));
       }
    }
@@ -1016,8 +1016,8 @@ public class PointFeatureLODMapDBStorage
                          final List<PointFeature> features) {
       validateClusters(nodeSector, minimumSector, clusters);
       validateFeatures(nodeSector, minimumSector, features);
-      _nodesHeaders.put(id, new NodeHeader(nodeSector, minimumSector, clusters.size(), features.size()));
-      _nodesFeatures.put(id, new NodeData(clusters, features));
+      _nodesHeaders.put(id, new LODNodeHeader(nodeSector, minimumSector, clusters.size(), features.size()));
+      _nodesFeatures.put(id, new LODNodeData(clusters, features));
    }
 
 
@@ -1065,7 +1065,7 @@ public class PointFeatureLODMapDBStorage
          clusters = new ArrayList<>(children.size());
          for (final Child child : children) {
             minimumSector = child._header.getMinimumSector().mergedWith(minimumSector);
-            final NodeData childNodeData = _nodesFeatures.get(child._id);
+            final LODNodeData childNodeData = _nodesFeatures.get(child._id);
             if (childNodeData == null) {
                throw new RuntimeException("LOGIC ERROR");
             }
@@ -1124,7 +1124,7 @@ public class PointFeatureLODMapDBStorage
    private List<PointFeature> borrowFeaturesFromChildren(final List<Child> children) {
       final List<PointFeature> allFeatures = new ArrayList<>();
       for (final Child child : children) {
-         final NodeData childNodeData = _nodesFeatures.get(child._id);
+         final LODNodeData childNodeData = _nodesFeatures.get(child._id);
          allFeatures.addAll(childNodeData.getFeatures());
       }
 
@@ -1145,6 +1145,30 @@ public class PointFeatureLODMapDBStorage
       }
 
       return topFeatures;
+   }
+
+
+   @Override
+   public List<PointFeatureLODStorage.Node> getAllNodesOfDepth(final int depth) {
+      final List<Node> result = new ArrayList<>();
+      for (final byte[] key : _nodesHeaders.keySet()) {
+         if (key.length == depth) {
+            result.add(getNode(key));
+         }
+      }
+      return Collections.unmodifiableList(result);
+   }
+
+
+   @Override
+   public PointFeatureLODStorage.Node getNode(final String id) {
+      return getNode(QuadKeyUtils.toBinaryID(id));
+   }
+
+
+   private PointFeatureLODStorage.Node getNode(final byte[] id) {
+      final LODNodeHeader header = _nodesHeaders.get(id);
+      return (header == null) ? null : new PvtNode(this, id, header);
    }
 
 

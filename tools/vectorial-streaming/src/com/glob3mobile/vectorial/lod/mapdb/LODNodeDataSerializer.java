@@ -18,9 +18,9 @@ import com.glob3mobile.vectorial.storage.PointFeatureCluster;
 import com.glob3mobile.vectorial.storage.mapdb.SerializerUtils;
 
 
-public class NodeDataSerializer
+public class LODNodeDataSerializer
    implements
-      Serializer<NodeData>,
+      Serializer<LODNodeData>,
       Serializable {
 
 
@@ -29,7 +29,7 @@ public class NodeDataSerializer
 
    @Override
    public void serialize(final DataOutput out,
-                         final NodeData node) throws IOException {
+                         final LODNodeData node) throws IOException {
       final List<PointFeatureCluster> clusters = node.getClusters();
       out.writeInt(clusters.size());
       for (final PointFeatureCluster cluster : clusters) {
@@ -48,7 +48,7 @@ public class NodeDataSerializer
 
 
    @Override
-   public NodeData deserialize(final DataInput in,
+   public LODNodeData deserialize(final DataInput in,
                                final int available) throws IOException {
       final int clustersCount = in.readInt();
       final List<PointFeatureCluster> clusters = new ArrayList<>(clustersCount);
@@ -68,7 +68,7 @@ public class NodeDataSerializer
          features.add(feature);
       }
 
-      return new NodeData(clusters, features);
+      return new LODNodeData(clusters, features);
    }
 
 
