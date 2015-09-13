@@ -50,7 +50,8 @@ public:
   public:
     static Sector*     parseSector(const JSONArray* json);
     static Geodetic2D* parseGeodetic2D(const JSONArray* json);
-    static Node*       parseNode(const JSONObject* json,
+    static Node*       parseNode(Node*             parent,
+                                 const JSONObject* json,
                                  const VectorSet*  vectorSet,
                                  const bool        verbose);
 
@@ -234,21 +235,35 @@ public:
   };
 
 
-  class NodeMarksFilter : public MarksFilter {
+  class NodeAllMarksFilter : public MarksFilter {
   private:
-    std::string _nodeToken;
+    std::string _nodeClusterToken;
+    std::string _nodeFeatureToken;
 
   public:
-    NodeMarksFilter(const Node* node);
+    NodeAllMarksFilter(const Node* node);
 
     bool test(const Mark* mark) const;
 
   };
 
+  class NodeClusterMarksFilter : public MarksFilter {
+  private:
+    std::string _nodeClusterToken;
+
+  public:
+    NodeClusterMarksFilter(const Node* node);
+
+    bool test(const Mark* mark) const;
+
+  };
+  
+
 
   class Node : public RCObject {
   private:
     const VectorSet*               _vectorSet;
+    Node*                          _parent;
     const std::string              _id;
     const Sector*                  _nodeSector;
     const Sector*                  _minimumSector;
@@ -302,11 +317,17 @@ public:
     long long _clusterMarksCount;
     long long _featureMarksCount;
 
+    void childRendered();
+    void childStopRendered();
+
+    void createClusterMarks();
+
   protected:
     ~Node();
 
   public:
     Node(const VectorSet*                vectorSet,
+         Node*                           parent,
          const std::string&              id,
          const Sector*                   nodeSector,
          const Sector*                   minimumSector,
@@ -315,6 +336,7 @@ public:
          const std::vector<std::string>& childrenIDs,
          const bool                      verbose) :
     _vectorSet(vectorSet),
+    _parent(parent),
     _id(id),
     _nodeSector(nodeSector),
     _minimumSector(minimumSector),
@@ -338,7 +360,9 @@ public:
     _clusterMarksCount(0),
     _featureMarksCount(0)
     {
-
+      if (_parent != NULL) {
+        _parent->_retain();
+      }
     }
 
     const VectorSet* getVectorSet() const {
@@ -349,8 +373,12 @@ public:
       return _vectorSet->getName() + "/" + _id;
     }
 
-    const std::string getMarkToken() const {
-      return _id + _vectorSet->getName() ;
+    const std::string getFeatureMarkToken() const {
+      return _id + "_F_" + _vectorSet->getName() ;
+    }
+
+    const std::string getClusterMarkToken() const {
+      return _id + "_C_" + _vectorSet->getName() ;
     }
 
     long long render(const G3MRenderContext* rc,
