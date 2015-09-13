@@ -19,6 +19,9 @@
 #include <G3MiOSSDK/JSONObject.hpp>
 #include <G3MiOSSDK/JSONString.hpp>
 #include <G3MiOSSDK/JSONNumber.hpp>
+#include <G3MiOSSDK/StackLayoutImageBuilder.hpp>
+#include <G3MiOSSDK/CircleImageBuilder.hpp>
+#include <G3MiOSSDK/LabelImageBuilder.hpp>
 
 #include "G3MDemoModel.hpp"
 #include <sstream>
@@ -56,23 +59,42 @@ public:
                                0);
 
     std::stringstream labelStream;
-    labelStream << "(";
+//    labelStream << "(";
     labelStream << cluster->getSize();
-    labelStream << ")";
+//    labelStream << ")";
 
     std::string label;
     labelStream >> label;
 
-    float labelFontSize = (float) (14.0 * ((float) cluster->getSize() / featuresCount) + 16.0) ;
+    // float labelFontSize = (float) (14.0 * ((float) cluster->getSize() / featuresCount) + 16.0) ;
+    float labelFontSize = 18.0f;
 
-    Mark* mark = new Mark(label,
+    Mark* mark = new Mark(new StackLayoutImageBuilder(new CircleImageBuilder(Color::white(), 32),
+                                                      new LabelImageBuilder(label,
+                                                                            GFont::sansSerif(labelFontSize, true),
+                                                                            2.0f,                 // margin
+                                                                            Color::black(),       // color
+                                                                            Color::transparent(), // shadowColor
+                                                                            5.0f,                 // shadowBlur
+                                                                            0.0f,                 // shadowOffsetX
+                                                                            0.0f,                 // shadowOffsetY
+                                                                            Color::white(),       // backgroundColor
+                                                                            4.0f                  // cornerRadius
+                                                                            )
+                                                      ),
                           position,
                           ABSOLUTE,
-                          0, // minDistanceToCamera
-                          labelFontSize,
-                          Color::newFromRGBA(1, 1, 0, 1)
+                          0 // minDistanceToCamera
                           );
-    mark->setZoomInAppears(true);
+
+//    Mark* mark = new Mark(label,
+//                          position,
+//                          ABSOLUTE,
+//                          0, // minDistanceToCamera
+//                          labelFontSize,
+//                          Color::newFromRGBA(1, 1, 0, 1)
+//                          );
+
     return mark;
   }
 
