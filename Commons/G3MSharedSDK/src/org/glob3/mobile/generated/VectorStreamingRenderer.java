@@ -70,6 +70,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
       final String id = json.getAsString("id").value();
       Sector nodeSector = GEOJSONUtils.parseSector(json.getAsArray("nodeSector"));
       Sector minimumSector = GEOJSONUtils.parseSector(json.getAsArray("minimumSector"));
+      int clustersCount = (int) json.getAsNumber("clustersCount").value();
       int featuresCount = (int) json.getAsNumber("featuresCount").value();
     
       java.util.ArrayList<String> children = new java.util.ArrayList<String>();
@@ -79,11 +80,30 @@ public class VectorStreamingRenderer extends DefaultRenderer
         children.add(childrenJSON.getAsString(i).value());
       }
     
-      return new Node(vectorSet, id, nodeSector, minimumSector, featuresCount, children, verbose);
+      return new Node(vectorSet, id, nodeSector, minimumSector, clustersCount, featuresCount, children, verbose);
     }
 
   }
 
+
+  public static class Cluster
+  {
+    private final Geodetic2D _position;
+    private final long _size;
+    public Cluster(Geodetic2D position, long size)
+    {
+       _position = position;
+       _size = size;
+
+    }
+
+    public void dispose()
+    {
+      if (_position != null)
+         _position.dispose();
+    }
+
+  }
 
 
   public static class ChildrenParserAsyncTask extends GAsyncTask
@@ -217,7 +237,27 @@ public class VectorStreamingRenderer extends DefaultRenderer
     private IByteBuffer _buffer;
     private final IThreadUtils _threadUtils;
 
+    private java.util.ArrayList<Cluster> _clusters;
     private GEOObject _features;
+
+    private java.util.ArrayList<VectorStreamingRenderer.Cluster> parseClusters(JSONArray clustersJson)
+    {
+      if (clustersJson == null)
+      {
+        return null;
+      }
+    
+      java.util.ArrayList<VectorStreamingRenderer.Cluster> clusters = new java.util.ArrayList<VectorStreamingRenderer.Cluster>();
+      final int clustersCount = clustersJson.size();
+      for (int i = 0; i < clustersCount; i++)
+      {
+        final Geodetic2D position = GEOJSONUtils.parseGeodetic2D(clustersJson.getAsArray(i));
+        final long size = (long) clustersJson.getAsNumber(i).value();
+    
+        clusters.add(new Cluster(position, size));
+      }
+      return clusters;
+    }
 
     public FeaturesParserAsyncTask(Node node, boolean verbose, IByteBuffer buffer, IThreadUtils threadUtils)
     {
@@ -225,6 +265,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
        _verbose = verbose;
        _buffer = buffer;
        _threadUtils = threadUtils;
+       _clusters = null;
        _features = null;
       _node._retain();
     }
@@ -232,8 +273,20 @@ public class VectorStreamingRenderer extends DefaultRenderer
     public void dispose()
     {
       _node._release();
+    
       if (_buffer != null)
          _buffer.dispose();
+      if (_clusters != null)
+      {
+        for (int i = 0; i < _clusters.size(); i++)
+        {
+          Cluster cluster = _clusters.get(i);
+          if (cluster != null)
+             cluster.dispose();
+        }
+        _clusters = null;
+      }
+    
       if (_features != null)
          _features.dispose();
     
@@ -242,16 +295,33 @@ public class VectorStreamingRenderer extends DefaultRenderer
 
     public final void runInBackground(G3MContext context)
     {
-      _features = GEOJSONParser.parseJSON(_buffer, _verbose);
     
+      final JSONBaseObject jsonBaseObject = IJSONParser.instance().parse(_buffer);
       if (_buffer != null)
          _buffer.dispose();
       _buffer = null;
+    
+      if (jsonBaseObject != null)
+      {
+        final JSONObject jsonObject = jsonBaseObject.asObject();
+    
+        final JSONArray clustersJson = jsonObject.get("clusters").asArray();
+        _clusters = parseClusters(clustersJson);
+    
+        final JSONObject featuresJson = jsonObject.get("features").asObject();
+        _features = GEOJSONParser.parse(featuresJson, _verbose);
+    
+        if (jsonBaseObject != null)
+           jsonBaseObject.dispose();
+      }
+    
+      //  _features = GEOJSONParser::parseJSON(_buffer, _verbose);
     }
 
     public final void onPostExecute(G3MContext context)
     {
-      _node.parsedFeatures(_features, _threadUtils);
+      _node.parsedFeatures(_clusters, _features, _threadUtils);
+      _clusters = null; // moved ownership to _node
       _features = null; // moved ownership to _node
     }
 
@@ -331,6 +401,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
     private final String _id;
     private final Sector _nodeSector;
     private final Sector _minimumSector;
+    private final int _clustersCount;
     private final int _featuresCount;
     private final java.util.ArrayList<String> _childrenIDs;
 
@@ -339,6 +410,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
 
     private final boolean _verbose;
 
+    private java.util.ArrayList<Cluster> _clusters;
     private GEOObject _features;
 
     private BoundingVolume _boundingVolume;
@@ -402,7 +474,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
       //  }
     
       _downloader = rc.getDownloader();
-      _featuresRequestID = _downloader.requestBuffer(metadataURL, _vectorSet.getDownloadPriority() + _featuresCount, _vectorSet.getTimeToCache(), _vectorSet.getReadExpired(), new NodeFeaturesDownloadListener(this, rc.getThreadUtils(), _verbose), true);
+      _featuresRequestID = _downloader.requestBuffer(metadataURL, _vectorSet.getDownloadPriority() + _featuresCount + _clustersCount, _vectorSet.getTimeToCache(), _vectorSet.getReadExpired(), new NodeFeaturesDownloadListener(this, rc.getThreadUtils(), _verbose), true);
     }
     private void unloadFeatures()
     {
@@ -523,11 +595,23 @@ public class VectorStreamingRenderer extends DefaultRenderer
       }
     }
 
-    private long _marksCount;
+    private long _clusterMarksCount;
+    private long _featureMarksCount;
 
     public void dispose()
     {
       unload();
+    
+      if (_clusters != null)
+      {
+        for (int i = 0; i < _clusters.size(); i++)
+        {
+          Cluster cluster = _clusters.get(i);
+          if (cluster != null)
+             cluster.dispose();
+        }
+        _clusters = null;
+      }
     
       if (_nodeSector != null)
          _nodeSector.dispose();
@@ -539,12 +623,13 @@ public class VectorStreamingRenderer extends DefaultRenderer
       super.dispose();
     }
 
-    public Node(VectorSet vectorSet, String id, Sector nodeSector, Sector minimumSector, int featuresCount, java.util.ArrayList<String> childrenIDs, boolean verbose)
+    public Node(VectorSet vectorSet, String id, Sector nodeSector, Sector minimumSector, int clustersCount, int featuresCount, java.util.ArrayList<String> childrenIDs, boolean verbose)
     {
        _vectorSet = vectorSet;
        _id = id;
        _nodeSector = nodeSector;
        _minimumSector = minimumSector;
+       _clustersCount = clustersCount;
        _featuresCount = featuresCount;
        _childrenIDs = childrenIDs;
        _verbose = verbose;
@@ -559,8 +644,10 @@ public class VectorStreamingRenderer extends DefaultRenderer
        _featuresRequestID = -1;
        _childrenRequestID = -1;
        _downloader = null;
+       _clusters = null;
        _features = null;
-       _marksCount = 0;
+       _clusterMarksCount = 0;
+       _featureMarksCount = 0;
 
     }
 
@@ -593,7 +680,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
         final boolean bigEnough = isBigEnough(rc);
         if (bigEnough)
         {
-          renderedCount += _marksCount;
+          renderedCount += _featureMarksCount;
           if (_loadedFeatures)
           {
             // don't load nor render children until the features are loaded
@@ -650,25 +737,22 @@ public class VectorStreamingRenderer extends DefaultRenderer
       // do nothing by now
     }
 
-    public final void parsedFeatures(GEOObject features, IThreadUtils threadUtils)
+    public final void parsedFeatures(java.util.ArrayList<Cluster> clusters, GEOObject features, IThreadUtils threadUtils)
     {
       _loadedFeatures = true;
       _loadingFeatures = false;
       _featuresRequestID = -1;
-      if (features == null)
-      {
-        // do nothing by now
-      }
-      else
+    
+      if (features != null)
       {
         _features = features;
     
-        _marksCount = _features.createMarks(_vectorSet, this);
-        if (_verbose)
+        _featureMarksCount = _features.createFeatureMarks(_vectorSet, this);
+        if (_verbose && (_featureMarksCount > 0))
         {
-          ILogger.instance().logInfo("\"%s\": Created %d marks",
+          ILogger.instance().logInfo("\"%s\": Created %d feature-marks",
                                      getFullName(),
-                                     _marksCount);
+                                     _featureMarksCount);
         }
     
         //  Delete _features???
@@ -676,6 +760,20 @@ public class VectorStreamingRenderer extends DefaultRenderer
            _features.dispose();
         _features = null;
       }
+    
+      if (clusters != null)
+      {
+        _clusters = clusters;
+        //_clusterMarksCount = createClusterMarks();
+    
+        if (_verbose && (_clusterMarksCount > 0))
+        {
+          ILogger.instance().logInfo("\"%s\": Created %d cluster-marks",
+                                     getFullName(),
+                                     _clusterMarksCount);
+        }
+      }
+    
     }
 
     public final void errorDownloadingChildren()
@@ -709,6 +807,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
     private boolean _parsingError;
 
     private Sector _sector;
+    private long _clustersCount;
     private long _featuresCount;
     private int _nodesCount;
     private int _minNodeDepth;
@@ -722,6 +821,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
        _buffer = buffer;
        _parsingError = false;
        _sector = null;
+       _clustersCount = -1;
        _featuresCount = -1;
        _nodesCount = -1;
        _minNodeDepth = -1;
@@ -794,8 +894,9 @@ public class VectorStreamingRenderer extends DefaultRenderer
         else
         {
           _sector = GEOJSONUtils.parseSector(jsonObject.getAsArray("sector"));
+          _clustersCount = (long) jsonObject.getAsNumber("clustersCount").value();
           _featuresCount = (long) jsonObject.getAsNumber("featuresCount").value();
-          _nodesCount = (int) jsonObject.getAsNumber("featuresCount").value();
+          _nodesCount = (int) jsonObject.getAsNumber("nodesCount").value();
           _minNodeDepth = (int) jsonObject.getAsNumber("minNodeDepth").value();
           _maxNodeDepth = (int) jsonObject.getAsNumber("maxNodeDepth").value();
     
@@ -821,7 +922,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
       }
       else
       {
-        _vectorSet.parsedMetadata(_sector, _featuresCount, _nodesCount, _minNodeDepth, _maxNodeDepth, _rootNodes);
+        _vectorSet.parsedMetadata(_sector, _clustersCount, _featuresCount, _nodesCount, _minNodeDepth, _maxNodeDepth, _rootNodes);
         _sector = null; // moved ownership to _vectorSet
         _rootNodes = null; // moved ownership to _vectorSet
       }
@@ -879,7 +980,9 @@ public class VectorStreamingRenderer extends DefaultRenderer
     {
     }
 
-    public abstract Mark createMark(GEO2DPointGeometry geometry);
+    public abstract Mark createFeatureMark(GEO2DPointGeometry geometry);
+
+    // virtual Mark* createClusterMark(const Cluster* cluster) const = 0;
 
   }
 
@@ -904,6 +1007,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
     private boolean _errorParsingMetadata;
 
     private Sector _sector;
+    private long _clustersCount;
     private long _featuresCount;
     private int _nodesCount;
     private int _minNodeDepth;
@@ -1037,11 +1141,12 @@ public class VectorStreamingRenderer extends DefaultRenderer
       _downloadingMetadata = false;
       _errorParsingMetadata = true;
     }
-    public final void parsedMetadata(Sector sector, long featuresCount, int nodesCount, int minNodeDepth, int maxNodeDepth, java.util.ArrayList<Node> rootNodes)
+    public final void parsedMetadata(Sector sector, long clustersCount, long featuresCount, int nodesCount, int minNodeDepth, int maxNodeDepth, java.util.ArrayList<Node> rootNodes)
     {
       _downloadingMetadata = false;
     
       _sector = sector;
+      _clustersCount = clustersCount;
       _featuresCount = featuresCount;
       _nodesCount = nodesCount;
       _minNodeDepth = minNodeDepth;
@@ -1053,6 +1158,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
       {
         ILogger.instance().logInfo("\"%s\": Metadata", _name);
         ILogger.instance().logInfo("   Sector        : %s", _sector.description());
+        ILogger.instance().logInfo("   Clusters Count: %d",   _clustersCount);
         ILogger.instance().logInfo("   Features Count: %d",   _featuresCount);
         ILogger.instance().logInfo("   Nodes Count   : %d", _nodesCount);
         ILogger.instance().logInfo("   Depth         : %d/%d", _minNodeDepth, _maxNodeDepth);
@@ -1084,9 +1190,9 @@ public class VectorStreamingRenderer extends DefaultRenderer
       }
     }
 
-    public final long createMark(Node node, GEO2DPointGeometry geometry)
+    public final long createFeatureMark(Node node, GEO2DPointGeometry geometry)
     {
-      Mark mark = _symbolizer.createMark(geometry);
+      Mark mark = _symbolizer.createFeatureMark(geometry);
       if (mark == null)
       {
         return 0;

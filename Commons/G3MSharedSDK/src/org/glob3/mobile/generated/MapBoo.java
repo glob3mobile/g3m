@@ -352,7 +352,7 @@ public class MapBoo
       vectorStreamingRenderer.addVectorSet(new URL(serverURL, "/public/v1/VectorialStreaming/"), _datasetID, properties, new MBDatasetVectorSetSymbolizer(this), true, DownloadPriority.MEDIUM, TimeInterval.zero(), true, true, false); // haltOnError -  verbose -  readExpired -  deleteSymbolizer
     }
 
-    public final Mark createMark(GEO2DPointGeometry geometry)
+    public final Mark createFeatureMark(GEO2DPointGeometry geometry)
     {
       final GEOFeature feature = geometry.getFeature();
       final JSONObject properties = feature.getProperties();
@@ -447,9 +447,9 @@ public class MapBoo
       super.dispose();
     }
 
-    public final Mark createMark(GEO2DPointGeometry geometry)
+    public final Mark createFeatureMark(GEO2DPointGeometry geometry)
     {
-      return _symbology.createMark(geometry);
+      return _symbology.createFeatureMark(geometry);
     }
   }
 

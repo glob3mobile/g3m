@@ -109,7 +109,7 @@ public class GEOFeatureCollection extends GEOObject
     return new GEOFeatureCollection(copy(_features));
   }
 
-  public final long createMarks(VectorStreamingRenderer.VectorSet vectorSet, VectorStreamingRenderer.Node node)
+  public final long createFeatureMarks(VectorStreamingRenderer.VectorSet vectorSet, VectorStreamingRenderer.Node node)
   {
     long result = 0;
     final int featuresCount = _features.size();
@@ -118,7 +118,7 @@ public class GEOFeatureCollection extends GEOObject
       GEOFeature feature = _features.get(i);
       if (feature != null)
       {
-        result += feature.createMarks(vectorSet, node);
+        result += feature.createFeatureMarks(vectorSet, node);
       }
     }
     return result;

@@ -34,6 +34,6 @@ public abstract class GEOObject
 
   public abstract GEOObject deepCopy();
 
-  public abstract long createMarks(VectorStreamingRenderer.VectorSet vectorSet, VectorStreamingRenderer.Node node);
+  public abstract long createFeatureMarks(VectorStreamingRenderer.VectorSet vectorSet, VectorStreamingRenderer.Node node);
 
 }
