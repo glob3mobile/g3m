@@ -87,7 +87,7 @@ void ColumnLayoutImageBuilder::doLayout(const G3MContext* context,
 {
   bool anyError = false;
   std::string error = "";
-  std::string imageName = "";
+  std::string imageName = "Col";
 
   int maxWidth = 0;
   int accumulatedHeight = 0;
