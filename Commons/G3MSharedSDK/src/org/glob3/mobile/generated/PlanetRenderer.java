@@ -921,7 +921,7 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
   
     if (renderedTiles.size() < 2)
     {
-      Tile tile = (*renderedTiles.iterator());
+      Tile tile = renderedTiles.getFirst();
       if (!tile.isElevationDataSolved() || !tile.isTextureSolved())
       {
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
