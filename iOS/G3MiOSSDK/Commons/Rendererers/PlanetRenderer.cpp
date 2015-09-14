@@ -838,6 +838,15 @@ void PlanetRenderer::zRender(const G3MRenderContext* rc, GLState* glState){
   
   std::list<Tile*> *renderedTiles = getRenderedTilesList(rc);
   
+  if (renderedTiles->size() < 2){
+    Tile* tile = (*renderedTiles->begin());
+    if (!tile->isElevationDataSolved() || !tile->isTextureSolved()){
+#warning AVOIDING EXC_BAD_ACCESS on DrawElements
+      ILogger::instance()->logWarning("AVOIDING EXC_BAD_ACCESS on DrawElements");
+      return;
+    }
+  }
+  
   for (std::list<Tile*>::iterator iter = renderedTiles->begin();
        iter != renderedTiles->end();
        iter++) {
