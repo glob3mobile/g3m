@@ -24,17 +24,17 @@ public class LODPointFeaturesPreprocessor {
          PointFeatureStorage.NodeVisitor {
 
       private final long                   _nodesCount;
-      private final PointFeatureLODStorage _clusterStorage;
+      private final PointFeatureLODStorage _lodStorage;
       private final boolean                _verbose;
 
       private Progress                     _progress;
 
 
       private LeafNodesImporter(final long nodesCount,
-                                final PointFeatureLODStorage clusterStorage,
+                                final PointFeatureLODStorage lodStorage,
                                 final boolean verbose) {
          _nodesCount = nodesCount;
-         _clusterStorage = clusterStorage;
+         _lodStorage = lodStorage;
          _verbose = verbose;
       }
 
@@ -48,7 +48,7 @@ public class LODPointFeaturesPreprocessor {
                                        final long elapsed,
                                        final long estimatedMsToFinish) {
                if (_verbose) {
-                  System.out.println(_clusterStorage.getName() + ": 1/4 Importing leaf nodes: "
+                  System.out.println(_lodStorage.getName() + ": 1/4 Importing leaf nodes: "
                                      + progressString(stepsDone, percent, elapsed, estimatedMsToFinish));
                }
             }
@@ -67,7 +67,7 @@ public class LODPointFeaturesPreprocessor {
       public boolean visit(final PointFeatureStorage.Node node) {
          final List<PointFeature> features = new ArrayList<>(node.getFeatures());
 
-         _clusterStorage.addLeafNode( //
+         _lodStorage.addLeafNode( //
                   node.getID(), //
                   node.getNodeSector(), //
                   node.getMinimumSector(), //
@@ -83,8 +83,8 @@ public class LODPointFeaturesPreprocessor {
 
    public static void process(final File storageDir,
                               final String storageName,
-                              final File clusterDir,
-                              final String clusterName,
+                              final File lodDir,
+                              final String lodName,
                               final int maxFeaturesPerNode,
                               final Comparator<PointFeature> featuresComparator,
                               final boolean createClusters,
@@ -93,8 +93,8 @@ public class LODPointFeaturesPreprocessor {
       try (final PointFeatureStorage storage = PointFeatureMapDBStorage.openReadOnly(storageDir, storageName)) {
 
 
-         try (final PointFeatureLODStorage clusterStorage = PointFeatureLODMapDBStorage.createEmpty(storage.getSector(),
-                  clusterDir, clusterName, maxFeaturesPerNode, featuresComparator, createClusters)) {
+         try (final PointFeatureLODStorage lodStorage = PointFeatureLODMapDBStorage.createEmpty(storage.getSector(), lodDir,
+                  lodName, maxFeaturesPerNode, featuresComparator, createClusters)) {
             final PointFeatureStorage.Statistics statistics = storage.getStatistics(verbose);
             if (verbose) {
                statistics.show();
@@ -103,19 +103,19 @@ public class LODPointFeaturesPreprocessor {
 
             final int nodesCount = statistics.getNodesCount();
 
-            storage.acceptDepthFirstVisitor(new LeafNodesImporter(nodesCount, clusterStorage, verbose));
+            storage.acceptDepthFirstVisitor(new LeafNodesImporter(nodesCount, lodStorage, verbose));
 
-            clusterStorage.createLOD(verbose);
+            lodStorage.createLOD(verbose);
 
             if (verbose) {
-               System.out.println(clusterStorage.getName() + ": 4/4 Optimizing storage...");
+               System.out.println(lodStorage.getName() + ": 4/4 Optimizing storage...");
             }
-            clusterStorage.optimize();
+            lodStorage.optimize();
 
             if (verbose) {
                System.out.println();
-               final PointFeatureLODStorage.Statistics clusterStatistics = clusterStorage.getStatistics(verbose);
-               clusterStatistics.show();
+               final PointFeatureLODStorage.Statistics lodStatistics = lodStorage.getStatistics(verbose);
+               lodStatistics.show();
             }
          }
       }
@@ -138,8 +138,8 @@ public class LODPointFeaturesPreprocessor {
       final String sourceName = "GEONames-PopulatedPlaces";
 
 
-      final File clusterDir = new File("PointFeaturesLOD");
-      final String clusterName = sourceName + "_LOD";
+      final File lodDir = new File("PointFeaturesLOD");
+      final String lodName = sourceName + "_LOD";
 
       final int maxFeaturesPerNode = 64;
 
@@ -151,7 +151,7 @@ public class LODPointFeaturesPreprocessor {
 
       LODPointFeaturesPreprocessor.process( //
                sourceDir, sourceName, //
-               clusterDir, clusterName, //
+               lodDir, lodName, //
                maxFeaturesPerNode, //
                featuresComparator, //
                createClusters, //
