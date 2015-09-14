@@ -13,8 +13,8 @@
 
 CameraRenderer::~CameraRenderer() {
   delete _cameraContext;
-  const int handlersSize = _handlers.size();
-  for (int i = 0; i < handlersSize; i++) {
+  const size_t handlersSize = _handlers.size();
+  for (size_t i = 0; i < handlersSize; i++) {
     CameraEventHandler* handler = _handlers[i];
     delete handler;
   }
@@ -30,8 +30,8 @@ void CameraRenderer::render(const G3MRenderContext* rc, GLState* glState) {
   // render camera object
 //  rc->getCurrentCamera()->render(rc, parentState);
 
-  const int handlersSize = _handlers.size();
-  for (unsigned int i = 0; i < handlersSize; i++) {
+  const size_t handlersSize = _handlers.size();
+  for (size_t i = 0; i < handlersSize; i++) {
     _handlers[i]->render(rc, _cameraContext);
   }
 }
@@ -46,8 +46,8 @@ bool CameraRenderer::onTouchEvent(const G3MEventContext* ec,
     }
 
     // pass the event to all the handlers
-    const int handlersSize = _handlers.size();
-    for (unsigned int i = 0; i < handlersSize; i++) {
+    const size_t handlersSize = _handlers.size();
+    for (size_t i = 0; i < handlersSize; i++) {
       if (_handlers[i]->onTouchEvent(ec, touchEvent, _cameraContext)) {
         return true;
       }

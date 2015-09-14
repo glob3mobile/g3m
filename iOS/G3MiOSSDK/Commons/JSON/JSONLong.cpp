@@ -25,3 +25,13 @@ const std::string JSONLong::description() const {
   delete isb;
   return s;
 }
+
+const std::string JSONLong::toString() const {
+  IStringBuilder* isb = IStringBuilder::newStringBuilder();
+
+  isb->addLong(_value);
+
+  const std::string s = isb->getString();
+  delete isb;
+  return s;
+}

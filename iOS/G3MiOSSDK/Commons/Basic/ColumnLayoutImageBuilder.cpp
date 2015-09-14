@@ -14,13 +14,13 @@
 #include "IImageListener.hpp"
 
 ColumnLayoutImageBuilder::ColumnLayoutImageBuilder(const std::vector<IImageBuilder*>& children,
-                                                   int            margin,
-                                                   float          borderWidth,
-                                                   const Color&   borderColor,
-                                                   int            padding,
-                                                   const Color&   backgroundColor,
-                                                   float          cornerRadius,
-                                                   int            childrenSeparation) :
+                                                   int                                margin,
+                                                   float                              borderWidth,
+                                                   const Color&                       borderColor,
+                                                   int                                padding,
+                                                   const Color&                       backgroundColor,
+                                                   float                              cornerRadius,
+                                                   int                                childrenSeparation) :
 LayoutImageBuilder(children,
 margin,
                    borderWidth,
@@ -43,7 +43,7 @@ ColumnLayoutImageBuilder::ColumnLayoutImageBuilder(IImageBuilder* child0,
                                                    float          cornerRadius,
                                                    int            childrenSeparation) :
 LayoutImageBuilder(child0,
-child1,
+                   child1,
                    margin,
                    borderWidth,
                    borderColor,
@@ -129,9 +129,9 @@ void ColumnLayoutImageBuilder::doLayout(const G3MContext* context,
     ICanvas* canvas = context->getFactory()->createCanvas();
     canvas->initialize(canvasWidth, canvasHeight);
 
-//#warning remove debug code
-//    canvas->setFillColor(Color::red());
-//    canvas->fillRectangle(0, 0, width, height);
+    //#warning remove debug code
+    //    canvas->setFillColor(Color::red());
+    //    canvas->fillRectangle(0, 0, width, height);
 
     if (!_backgroundColor.isFullTransparent()) {
       canvas->setFillColor(_backgroundColor);

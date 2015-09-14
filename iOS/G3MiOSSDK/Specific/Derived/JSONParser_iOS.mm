@@ -71,8 +71,8 @@ JSONBaseObject* JSONParser_iOS::convert(NSObject* object,
     NSDictionary *jsonDict = (NSDictionary *) object;
     JSONObject* dictionary = new JSONObject();
     NSArray *keys = [jsonDict allKeys];
-    const int count = [keys count];
-    for (int i = 0; i<count; i++) {
+    const size_t count = [keys count];
+    for (size_t i = 0; i<count; i++) {
       NSUInteger objI = i;
       const std::string key = std::string( [[keys objectAtIndex:objI] UTF8String] );
       dictionary->put(key,

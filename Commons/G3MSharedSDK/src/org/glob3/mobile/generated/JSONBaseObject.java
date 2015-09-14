@@ -36,6 +36,11 @@ public abstract class JSONBaseObject
     return (object == null) ? null : object.deepCopy();
   }
 
+  public static String toString(JSONBaseObject object)
+  {
+    return (object == null) ? "null" : object.toString();
+  }
+
   public void dispose()
   {
   }
@@ -76,11 +81,15 @@ public abstract class JSONBaseObject
   public abstract JSONBaseObject deepCopy();
 
   public abstract String description();
-  @Override
-  public String toString() {
-    return description();
-  }
+///#ifdef JAVA_CODE
+//  @Override
+//  public String toString() {
+//    return description();
+//  }
+///#endif
 
   public abstract void acceptVisitor(JSONVisitor visitor);
+
+  public abstract String toString();
 
 }

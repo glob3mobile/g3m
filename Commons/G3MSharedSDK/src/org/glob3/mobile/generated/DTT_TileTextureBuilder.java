@@ -181,8 +181,7 @@ public class DTT_TileTextureBuilder extends RCObject
 
   public final void imageCreationError(String error)
   {
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning propagate the error to the texturizer && change the render state if is necessary
+// TODO: #warning propagate the error to the texturizer and change the render state if is necessary
     ILogger.instance().logError("%s", error);
   }
 

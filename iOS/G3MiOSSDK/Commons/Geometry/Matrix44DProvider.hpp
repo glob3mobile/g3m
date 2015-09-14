@@ -11,9 +11,10 @@
 
 #include "RCObject.hpp"
 #include "Matrix44D.hpp"
+//#include "ILogger.hpp"
+#include "ErrorHandling.hpp"
 
 #include <vector>
-
 
 class Matrix44DProvider: public RCObject {
 protected:
@@ -48,14 +49,14 @@ private:
 public:
   Matrix44DHolder(const Matrix44D* matrix):_matrix(matrix) {
     if (matrix == NULL) {
-      ILogger::instance()->logError("Setting NULL in Matrix44D Holder");
+      THROW_EXCEPTION("Setting NULL in Matrix44D Holder");
     }
     _matrix->_retain();
   }
 
   void setMatrix(const Matrix44D* matrix) {
     if (matrix == NULL) {
-      ILogger::instance()->logError("Setting NULL in Matrix44D Holder");
+      THROW_EXCEPTION("Setting NULL in Matrix44D Holder");
     }
 
     if (matrix != _matrix) {

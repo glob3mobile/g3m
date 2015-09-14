@@ -59,4 +59,16 @@ public class JSONFloat extends JSONNumber
     return s;
   }
 
+  public final String toString()
+  {
+    IStringBuilder isb = IStringBuilder.newStringBuilder();
+  
+    isb.addFloat(_value);
+  
+    final String s = isb.getString();
+    if (isb != null)
+       isb.dispose();
+    return s;
+  }
+
 }

@@ -13,26 +13,37 @@
 #include "RectangleI.hpp"
 
 unsigned char* Image_iOS::createByteArrayRGBA8888() const {
+
+  if (_dataRGBA8888 != NULL) {
+    unsigned char* result = _dataRGBA8888;
+    _dataRGBA8888 = NULL; // moves ownership to the method caller
+    return result;
+  }
+
+
   const int width  = getWidth();
   const int height = getHeight();
-  
+
   unsigned char* result = new unsigned char[4 * width * height];
-  
+
   CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
   CGContextRef context = CGBitmapContextCreate(result,
-                                               width, height,
-                                               8, 4 * width,
+                                               width,
+                                               height,
+                                               8,         // bits per component
+                                               4 * width, // bytes per row
                                                colorSpace,
                                                kCGImageAlphaPremultipliedLast | kCGBitmapByteOrder32Big );
-  
+
   CGColorSpaceRelease( colorSpace );
+
   CGRect bounds = CGRectMake( 0, 0, width, height );
   CGContextClearRect( context, bounds );
-  
+
   CGContextDrawImage( context, bounds, _image.CGImage );
-  
+
   CGContextRelease(context);
-  
+
   return result;
 }
 
@@ -51,5 +62,5 @@ const std::string Image_iOS::description() const {
 }
 
 IImage* Image_iOS::shallowCopy() const {
-  return new Image_iOS(_image, _sourceBuffer);
+  return new Image_iOS(_image, _sourceBuffer, NULL);
 }

@@ -15,8 +15,9 @@
 
 class Canvas_iOS : public ICanvas {
 private:
-  CGContextRef _context;
-  UIFont*      _currentUIFont;
+  CGContextRef   _context;
+  UIFont*        _currentUIFont;
+  unsigned char* _dataRGBA8888;
 
   CGMutablePathRef _path;
   CGAffineTransform _transform;
@@ -58,7 +59,7 @@ protected:
                   float offsetY);
 
   void _removeShadow();
-  
+
   void _clearRect(float left, float top,
                   float width, float height);
 
@@ -95,18 +96,18 @@ protected:
 
   void _fillText(const std::string& text,
                  float left, float top);
-  
+
   void _drawImage(const IImage* image,
                   float destLeft, float destTop);
-  
+
   void _drawImage(const IImage* image,
                   float destLeft, float destTop,
                   float transparency);
-  
+
   void _drawImage(const IImage* image,
                   float destLeft, float destTop, float destWidth, float destHeight);
-  
-  
+
+
   void _drawImage(const IImage* image,
                   float destLeft, float destTop, float destWidth, float destHeight,
                   float transparency);
@@ -135,16 +136,26 @@ protected:
 
   void _lineTo(float x, float y);
 
+  void _fillEllipse(float left, float top,
+                    float width, float height);
+
+  void _strokeEllipse(float left, float top,
+                      float width, float height);
+
+  void _fillAndStrokeEllipse(float left, float top,
+                             float width, float height);
+
 
 public:
   Canvas_iOS() :
   _context(NULL),
   _currentUIFont(nil),
   _path(NULL),
-  _transform()
+  _transform(),
+  _dataRGBA8888(NULL)
   {
   }
-
+  
   virtual ~Canvas_iOS();
   
 };

@@ -24,24 +24,26 @@ public:
 
   ~JSONArray();
 
-  const JSONBaseObject* get(const int index) const;
+  const JSONBaseObject* get(const size_t index) const;
 
-  const JSONObject*  getAsObject (const int index) const;
-  const JSONArray*   getAsArray  (const int index) const;
-  const JSONBoolean* getAsBoolean(const int index) const;
-  const JSONNumber*  getAsNumber (const int index) const;
-  const JSONString*  getAsString (const int index) const;
+  const JSONObject*  getAsObject (const size_t index) const;
+  const JSONArray*   getAsArray  (const size_t index) const;
+  const JSONBoolean* getAsBoolean(const size_t index) const;
+  const JSONNumber*  getAsNumber (const size_t index) const;
+  const JSONString*  getAsString (const size_t index) const;
 
-  bool getAsBoolean(const int index,
+  std::vector<std::string> asStringVector() const;
+
+  bool getAsBoolean(const size_t index,
                     bool defaultValue) const;
 
-  double getAsNumber(const int index,
+  double getAsNumber(const size_t index,
                      double defaultValue) const;
 
-  const std::string getAsString(const int index,
+  const std::string getAsString(const size_t index,
                                 const std::string& defaultValue) const;
 
-  int size() const;
+  size_t size() const;
 
   void add(JSONBaseObject* object);
   void add(const std::string& value);
@@ -52,6 +54,7 @@ public:
   void add(bool value);
 
   const std::string description() const;
+  const std::string toString() const;
 
   JSONArray* deepCopy() const;
 

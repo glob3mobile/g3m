@@ -187,7 +187,7 @@ void ICanvas::drawImage(const IImage* image,
                         float transparency) {
   checkInitialized();
   _drawImage(image, destLeft, destTop,
-            transparency);
+             transparency);
 }
 
 void ICanvas::drawImage(const IImage* image,
@@ -232,7 +232,7 @@ void ICanvas::drawImage(const IImage* image,
     if (transparency <= 0.0) {
       return;
     }
-    
+
     if (transparency >= 1.0) {
       _drawImage(image,
                  srcLeft, srcTop, srcWidth, srcHeight,
@@ -247,7 +247,7 @@ void ICanvas::drawImage(const IImage* image,
 
   }
 
-  
+
 }
 
 void ICanvas::beginPath() {
@@ -283,4 +283,26 @@ void ICanvas::moveTo(float x, float y) {
 void ICanvas::lineTo(float x, float y) {
   checkInitialized();
   _lineTo(x, y);
+}
+
+
+void ICanvas::fillEllipse(float left, float top,
+                          float width, float height) {
+  checkInitialized();
+  _fillEllipse(left, top,
+               width, height);
+}
+
+void ICanvas::strokeEllipse(float left, float top,
+                            float width, float height) {
+  checkInitialized();
+  _strokeEllipse(left, top,
+                 width, height);
+}
+
+void ICanvas::fillAndStrokeEllipse(float left, float top,
+                                   float width, float height) {
+  checkInitialized();
+  _fillAndStrokeEllipse(left, top,
+                        width, height);
 }

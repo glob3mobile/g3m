@@ -16,7 +16,7 @@
 
 void Camera::initialize(const G3MContext* context) {
   _planet = context->getPlanet();
-#warning move this to Planet, and remove isFlat() method (DGD)
+// #warning move this to Planet, and remove isFlat() method (DGD)
   if (_planet->isFlat()) {
     setCartesianPosition( MutableVector3D(0, 0, _planet->getRadii()._y * 5) );
     setUp(MutableVector3D(0, 1, 0));

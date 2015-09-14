@@ -29,20 +29,20 @@ bool URL::isFileProtocol() const {
 
 const std::string URL::escape(const std::string& path) {
   const IStringUtils* su = IStringUtils::instance();
-  std::string result = su->replaceSubstring(path, "\n", "%0A");
-  result = su->replaceSubstring(result, " ", "%20");
-  result = su->replaceSubstring(result, "\"", "%22");
-  result = su->replaceSubstring(result, "-", "%2D");
-  result = su->replaceSubstring(result, ".", "%2E");
-  result = su->replaceSubstring(result, "<", "%3C");
-  result = su->replaceSubstring(result, ">", "%3E");
-  result = su->replaceSubstring(result, "\\", "%5C");
-  result = su->replaceSubstring(result, "^", "%5E");
-  result = su->replaceSubstring(result, "_", "%5F");
-  result = su->replaceSubstring(result, "`", "%60");
-  result = su->replaceSubstring(result, "{", "%7B");
-  result = su->replaceSubstring(result, "|", "%7C");
-  result = su->replaceSubstring(result, "}", "%7D");
-  result = su->replaceSubstring(result, "~", "%7E");
+  std::string result = su->replaceAll(path, "\n", "%0A");
+  result = su->replaceAll(result, " ", "%20");
+  result = su->replaceAll(result, "\"", "%22");
+  result = su->replaceAll(result, "-", "%2D");
+  result = su->replaceAll(result, ".", "%2E");
+  result = su->replaceAll(result, "<", "%3C");
+  result = su->replaceAll(result, ">", "%3E");
+  result = su->replaceAll(result, "\\", "%5C");
+  result = su->replaceAll(result, "^", "%5E");
+  result = su->replaceAll(result, "_", "%5F");
+  result = su->replaceAll(result, "`", "%60");
+  result = su->replaceAll(result, "{", "%7B");
+  result = su->replaceAll(result, "|", "%7C");
+  result = su->replaceAll(result, "}", "%7D");
+  result = su->replaceAll(result, "~", "%7E");
   return result;
 }

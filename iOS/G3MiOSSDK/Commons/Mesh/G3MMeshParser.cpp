@@ -223,7 +223,7 @@ Mesh* G3MMeshParser::parseMesh(std::map<std::string, G3MMeshMaterial*>& material
 
   IFloatBuffer* normals   = parseFloatBuffer( jsonMesh->getAsArray("normals")  );
   IFloatBuffer* colors    = parseFloatBuffer( jsonMesh->getAsArray("colors")   );
-#warning TODO texCoords
+// #warning TODO texCoords
   //IFloatBuffer* texCoords = parseFloatBuffer( jsonMesh->getAsArray("texCoords") );
 
   IShortBuffer* indices   = parseShortBuffer( jsonMesh->getAsArray("indices") );
