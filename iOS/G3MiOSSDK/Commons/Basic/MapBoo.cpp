@@ -26,6 +26,7 @@
 #include "LabelImageBuilder.hpp"
 #include "ColumnLayoutImageBuilder.hpp"
 #include "CircleImageBuilder.hpp"
+#include "StackLayoutImageBuilder.hpp"
 
 
 MapBoo::MapBoo(IG3MBuilder* builder,
@@ -647,7 +648,6 @@ IImageBuilder* MapBoo::MBVectorSymbology::createImageBuilder(const JSONObject* p
   return createLabelImageBuilder("[X]");
 }
 
-
 Mark* MapBoo::MBVectorSymbology::createFeatureMark(const GEO2DPointGeometry* geometry) const {
   const GEOFeature* feature    = geometry->getFeature();
   const JSONObject* properties = feature->getProperties();
@@ -662,22 +662,39 @@ Mark* MapBoo::MBVectorSymbology::createFeatureMark(const GEO2DPointGeometry* geo
                   createMarkTouchListener(properties),
                   true                                  // autoDeleteListener
                   );
-
-//  return new Mark(createMarkLabel(properties),
-//                  Geodetic3D(position, 0),
-//                  ABSOLUTE,
-//                  0,                                    // minDistanceToCamera
-//                  18,                                   // labelFontSize
-//                  Color::newFromRGBA(1, 1, 1, 1),       // labelFontColor
-//                  Color::newFromRGBA(0, 0, 0, 1),       // labelShadowColor
-//                  NULL,                                 // userData
-//                  true,                                 // autoDeleteUserData
-//                  createMarkTouchListener(properties),
-//                  true                                  // autoDeleteListener
-//                  );
 }
 
+Mark* MapBoo::MBVectorSymbology::createClusterMark(const VectorStreamingRenderer::Cluster* cluster,
+                                                   long long featuresCount) const {
+  const Geodetic3D  position(cluster->getPosition()->_latitude,
+                             cluster->getPosition()->_longitude,
+                             0);
 
+  const std::string label = IStringUtils::instance()->toString( cluster->getSize() );
+
+  // float labelFontSize = (float) (14.0 * ((float) cluster->getSize() / featuresCount) + 16.0) ;
+  float labelFontSize = 18.0f;
+
+  Mark* mark = new Mark(new StackLayoutImageBuilder(new CircleImageBuilder(Color::white(), 32),
+                                                    new LabelImageBuilder(label,
+                                                                          GFont::sansSerif(labelFontSize, true),
+                                                                          2.0f,                 // margin
+                                                                          Color::black(),       // color
+                                                                          Color::transparent(), // shadowColor
+                                                                          5.0f,                 // shadowBlur
+                                                                          0.0f,                 // shadowOffsetX
+                                                                          0.0f,                 // shadowOffsetY
+                                                                          Color::white(),       // backgroundColor
+                                                                          4.0f                  // cornerRadius
+                                                                          )
+                                                    ),
+                        position,
+                        ABSOLUTE,
+                        0 // minDistanceToCamera
+                        );
+
+  return mark;
+}
 
 MapBoo::MBDatasetVectorSetSymbolizer::MBDatasetVectorSetSymbolizer(const MBVectorSymbology* symbology) :
 _symbology(symbology)
@@ -697,6 +714,6 @@ Mark* MapBoo::MBDatasetVectorSetSymbolizer::createFeatureMark(const GEO2DPointGe
 }
 
 Mark* MapBoo::MBDatasetVectorSetSymbolizer::createClusterMark(const VectorStreamingRenderer::Cluster* cluster,
-                        long long featuresCount) const {
-  return NULL;
+                                                              long long featuresCount) const {
+  return _symbology->createClusterMark( cluster, featuresCount );
 }

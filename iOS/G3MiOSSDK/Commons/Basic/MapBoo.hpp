@@ -189,6 +189,9 @@ public:
 
     Mark* createFeatureMark(const GEO2DPointGeometry* geometry) const;
 
+    Mark* createClusterMark(const VectorStreamingRenderer::Cluster* cluster,
+                            long long featuresCount) const;
+
   };
 
 
