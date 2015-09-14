@@ -135,7 +135,7 @@ public class MapBoo
       return null;
     }
 
-    public abstract void apply(URL serverURL, VectorStreamingRenderer vectorStreamingRenderer);
+    public abstract void apply(URL serverURL, VectorStreamingRenderer vectorStreamingRenderer, VectorStreamingRenderer.VectorSetSymbolizer symbolizer, boolean deleteSymbolizer);
 
   }
 
@@ -337,7 +337,7 @@ public class MapBoo
        _info = info;
     }
 
-    public final void apply(URL serverURL, VectorStreamingRenderer vectorStreamingRenderer)
+    public final void apply(URL serverURL, VectorStreamingRenderer vectorStreamingRenderer, VectorStreamingRenderer.VectorSetSymbolizer symbolizer, boolean deleteSymbolizer)
     {
       String properties = "";
       for (int i = 0; i < _labeling.size(); i++)
@@ -349,7 +349,20 @@ public class MapBoo
         properties += _info.get(i) + "|";
       }
     
-      vectorStreamingRenderer.addVectorSet(new URL(serverURL, "/public/v1/VectorialStreaming/"), _datasetID, properties, new MBDatasetVectorSetSymbolizer(this), true, DownloadPriority.MEDIUM, TimeInterval.zero(), true, true, false); // haltOnError -  verbose -  readExpired -  deleteSymbolizer
+      final VectorStreamingRenderer.VectorSetSymbolizer sym;
+      boolean deleteSym;
+      if (symbolizer == null)
+      {
+        sym = new MBDatasetVectorSetSymbolizer(this);
+        deleteSym = true;
+      }
+      else
+      {
+        sym = symbolizer;
+        deleteSym = deleteSymbolizer;
+      }
+    
+      vectorStreamingRenderer.addVectorSet(new URL(serverURL, "/public/v1/VectorialStreaming/"), _datasetID, properties, sym, deleteSym, DownloadPriority.MEDIUM, TimeInterval.zero(), true, true, false); // haltOnError -  verbose -  readExpired
     }
 
     public final Mark createFeatureMark(GEO2DPointGeometry geometry)
@@ -424,9 +437,9 @@ public class MapBoo
       return new MBSymbolizedDataset(datasetID, datasetName, datasetAttribution, symbology);
     }
 
-    public final void apply(URL serverURL, VectorStreamingRenderer vectorStreamingRenderer)
+    public final void apply(URL serverURL, VectorStreamingRenderer vectorStreamingRenderer, VectorStreamingRenderer.VectorSetSymbolizer symbolizer, boolean deleteSymbolizer)
     {
-      _symbology.apply(serverURL, vectorStreamingRenderer);
+      _symbology.apply(serverURL, vectorStreamingRenderer, symbolizer, deleteSymbolizer);
     }
 
   }
@@ -578,7 +591,7 @@ public class MapBoo
       return _id;
     }
 
-    public final void apply(URL serverURL, LayerSet layerSet, VectorStreamingRenderer vectorStreamingRenderer)
+    public final void apply(URL serverURL, LayerSet layerSet, VectorStreamingRenderer vectorStreamingRenderer, VectorStreamingRenderer.VectorSetSymbolizer symbolizer, boolean deleteSymbolizer)
     {
       for (int i = 0; i < _layers.size(); i++)
       {
@@ -589,7 +602,7 @@ public class MapBoo
       for (int i = 0; i < _symbolizedDatasets.size(); i++)
       {
         MBSymbolizedDataset symbolizedDataset = _symbolizedDatasets.get(i);
-        symbolizedDataset.apply(serverURL, vectorStreamingRenderer);
+        symbolizedDataset.apply(serverURL, vectorStreamingRenderer, symbolizer, deleteSymbolizer);
       }
     }
   }
@@ -649,13 +662,17 @@ public class MapBoo
     private IByteBuffer _buffer;
     private MBMap _map;
     private final boolean _verbose;
+    private final VectorStreamingRenderer.VectorSetSymbolizer _symbolizer;
+    private final boolean _deleteSymbolizer;
 
-    public MapParserAsyncTask(MapBoo mapboo, MBHandler handler, IByteBuffer buffer, boolean verbose)
+    public MapParserAsyncTask(MapBoo mapboo, MBHandler handler, IByteBuffer buffer, boolean verbose, VectorStreamingRenderer.VectorSetSymbolizer symbolizer, boolean deleteSymbolizer)
     {
        _mapboo = mapboo;
        _handler = handler;
        _buffer = buffer;
        _verbose = verbose;
+       _symbolizer = symbolizer;
+       _deleteSymbolizer = deleteSymbolizer;
        _map = null;
     }
 
@@ -705,7 +722,7 @@ public class MapBoo
           ILogger.instance().logInfo("MapBoo: parsed map");
         }
     
-        _mapboo.onMap(_map);
+        _mapboo.onMap(_map, _symbolizer, _deleteSymbolizer);
         _map = null; // moved ownership to _mapboo
       }
     }
@@ -824,12 +841,17 @@ public class MapBoo
     private MBHandler _handler;
     private final IThreadUtils _threadUtils;
     private final boolean _verbose;
-    public MapBufferDownloadListener(MapBoo mapboo, MBHandler handler, IThreadUtils threadUtils, boolean verbose)
+    private final VectorStreamingRenderer.VectorSetSymbolizer _symbolizer;
+    private final boolean _deleteSymbolizer;
+
+    public MapBufferDownloadListener(MapBoo mapboo, MBHandler handler, IThreadUtils threadUtils, boolean verbose, VectorStreamingRenderer.VectorSetSymbolizer symbolizer, boolean deleteSymbolizer)
     {
        _mapboo = mapboo;
        _handler = handler;
        _threadUtils = threadUtils;
        _verbose = verbose;
+       _symbolizer = symbolizer;
+       _deleteSymbolizer = deleteSymbolizer;
     }
 
     public final void onDownload(URL url, IByteBuffer buffer, boolean expired)
@@ -839,7 +861,7 @@ public class MapBoo
         ILogger.instance().logInfo("MapBoo: downloaded map");
       }
     
-      _threadUtils.invokeAsyncTask(new MapParserAsyncTask(_mapboo, _handler, buffer, _verbose), true);
+      _threadUtils.invokeAsyncTask(new MapParserAsyncTask(_mapboo, _handler, buffer, _verbose, _symbolizer, _deleteSymbolizer), true);
     }
 
     public final void onError(URL url)
@@ -945,16 +967,16 @@ public class MapBoo
   private IDownloader _downloader;
   private final IThreadUtils _threadUtils;
 
-  private void requestMap()
+  private void requestMap(VectorStreamingRenderer.VectorSetSymbolizer symbolizer, boolean deleteSymbolizer)
   {
     if (_verbose)
     {
       ILogger.instance().logInfo("MapBoo: requesting map \"%s\"", _mapID);
     }
   
-    _downloader.requestBuffer(new URL(_serverURL, "/public/v1/map/" + _mapID), DownloadPriority.HIGHEST, TimeInterval.zero(), false, new MapBufferDownloadListener(this, _handler, _threadUtils, _verbose), true); // readExpired
+    _downloader.requestBuffer(new URL(_serverURL, "/public/v1/map/" + _mapID), DownloadPriority.HIGHEST, TimeInterval.zero(), false, new MapBufferDownloadListener(this, _handler, _threadUtils, _verbose, symbolizer, deleteSymbolizer), true); // readExpired
   }
-  private void applyMap(MapBoo.MBMap map)
+  private void applyMap(MapBoo.MBMap map, VectorStreamingRenderer.VectorSetSymbolizer symbolizer, boolean deleteSymbolizer)
   {
     if (_verbose)
     {
@@ -965,7 +987,7 @@ public class MapBoo
     _vectorStreamingRenderer.removeAllVectorSets();
     _layerSet.removeAllLayers(true);
   
-    map.apply(_serverURL, _layerSet, _vectorStreamingRenderer);
+    map.apply(_serverURL, _layerSet, _vectorStreamingRenderer, symbolizer, deleteSymbolizer);
   
     // just in case nobody put a layer
     if (_layerSet.size() == 0)
@@ -1029,14 +1051,20 @@ public class MapBoo
     _downloader.requestBuffer(new URL(_serverURL, "/public/v1/map/"), DownloadPriority.HIGHEST, TimeInterval.zero(), false, new MapsBufferDownloadListener(_handler, mapsHandler, deleteHandler, _threadUtils, _verbose), true); // readExpired
   }
 
-  public final void setMapID(String mapID)
+  public final void setMapID(String mapID, VectorStreamingRenderer.VectorSetSymbolizer symbolizer, boolean deleteSymbolizer)
   {
     if (!_mapID.equals(mapID))
     {
       _mapID = mapID;
-      requestMap();
+      requestMap(symbolizer, deleteSymbolizer);
     }
   }
+
+  public final void setMapID(String mapID)
+  {
+    setMapID(mapID, null, true);
+  }
+
   public final void setMap(MapBoo.MBMap map)
   {
     final String mapID = map.getID();
@@ -1044,7 +1072,7 @@ public class MapBoo
     {
       _mapID = mapID;
   
-      applyMap(map);
+      applyMap(map, null, true);
     }
   }
 
@@ -1062,14 +1090,14 @@ public class MapBoo
       _handler.onMapParseError();
     }
   }
-  public final void onMap(MapBoo.MBMap map)
+  public final void onMap(MapBoo.MBMap map, VectorStreamingRenderer.VectorSetSymbolizer symbolizer, boolean deleteSymbolizer)
   {
-    applyMap(map);
+    applyMap(map, symbolizer, deleteSymbolizer);
   }
 
   public final void reloadMap()
   {
-    requestMap();
+    requestMap(null, true);
   }
 
 }
