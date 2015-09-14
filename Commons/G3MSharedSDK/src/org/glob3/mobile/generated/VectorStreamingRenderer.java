@@ -1079,7 +1079,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
 
     public abstract Mark createFeatureMark(GEO2DPointGeometry geometry);
 
-    public abstract Mark createClusterMark(Cluster cluster, long featuresCount);
+    public abstract Mark createClusterMark(VectorStreamingRenderer.Cluster cluster, long featuresCount);
 
   }
 

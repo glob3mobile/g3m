@@ -431,7 +431,7 @@ public class MapBoo
   }
 
 
-  public abstract static class MBDatasetVectorSetSymbolizer extends VectorStreamingRenderer.VectorSetSymbolizer
+  public static class MBDatasetVectorSetSymbolizer extends VectorStreamingRenderer.VectorSetSymbolizer
   {
     private final MBVectorSymbology _symbology;
 
