@@ -484,7 +484,7 @@ public:
 
     virtual Mark* createFeatureMark(const GEO2DPointGeometry* geometry) const = 0;
 
-    virtual Mark* createClusterMark(const Cluster* cluster,
+    virtual Mark* createClusterMark(const VectorStreamingRenderer::Cluster* cluster,
                                     long long featuresCount) const = 0;
 
   };
