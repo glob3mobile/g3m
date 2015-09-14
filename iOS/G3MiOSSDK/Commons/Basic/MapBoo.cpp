@@ -676,3 +676,27 @@ Mark* MapBoo::MBVectorSymbology::createFeatureMark(const GEO2DPointGeometry* geo
 //                  true                                  // autoDeleteListener
 //                  );
 }
+
+
+
+MapBoo::MBDatasetVectorSetSymbolizer::MBDatasetVectorSetSymbolizer(const MBVectorSymbology* symbology) :
+_symbology(symbology)
+{
+  _symbology->_retain();
+}
+
+MapBoo::MBDatasetVectorSetSymbolizer::~MBDatasetVectorSetSymbolizer() {
+  _symbology->_release();
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+}
+
+Mark* MapBoo::MBDatasetVectorSetSymbolizer::createFeatureMark(const GEO2DPointGeometry* geometry) const {
+  return _symbology->createFeatureMark( geometry );
+}
+
+Mark* MapBoo::MBDatasetVectorSetSymbolizer::createClusterMark(const VectorStreamingRenderer::Cluster* cluster,
+                        long long featuresCount) const {
+  return NULL;
+}

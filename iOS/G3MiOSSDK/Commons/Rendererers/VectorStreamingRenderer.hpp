@@ -480,12 +480,7 @@ public:
 
   class VectorSetSymbolizer {
   public:
-#ifdef C_CODE
     virtual ~VectorSetSymbolizer() { }
-#endif
-#ifdef JAVA_CODE
-    void dispose();
-#endif
 
     virtual Mark* createFeatureMark(const GEO2DPointGeometry* geometry) const = 0;
 

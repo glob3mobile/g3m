@@ -234,27 +234,14 @@ public:
     const MBVectorSymbology* _symbology;
 
   public:
-    MBDatasetVectorSetSymbolizer(const MBVectorSymbology* symbology) :
-    _symbology(symbology)
-    {
-      _symbology->_retain();
-    }
+    MBDatasetVectorSetSymbolizer(const MBVectorSymbology* symbology);
 
-    ~MBDatasetVectorSetSymbolizer() {
-      _symbology->_release();
-#ifdef JAVA_CODE
-      super.dispose();
-#endif
-    }
+    ~MBDatasetVectorSetSymbolizer();
 
-    Mark* createFeatureMark(const GEO2DPointGeometry* geometry) const {
-      return _symbology->createFeatureMark( geometry );
-    }
+    Mark* createFeatureMark(const GEO2DPointGeometry* geometry) const;
 
     Mark* createClusterMark(const VectorStreamingRenderer::Cluster* cluster,
-                            long long featuresCount) const {
-      return NULL;
-    }
+                            long long featuresCount) const;
 
   };
 
