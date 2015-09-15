@@ -115,8 +115,11 @@ public class PointFeaturesImporter {
       // final String featuresFileName = "test-files/ne_10m_populated_places.geojson";
       // final String storageName = "PopulatedPlaces";
 
-      final String featuresFileName = "test-files/spanish-bars.geojson";
-      final String storageName = "SpanishBars";
+      //      final String featuresFileName = "test-files/spanish-bars.geojson";
+      //      final String storageName = "SpanishBars";
+
+      final String featuresFileName = "/Users/dgd/Downloads/tornados.geojson";
+      final String storageName = "Tornados";
 
       //      final GEOParser parser = GEONamesParser.INSTANCE;
       //      final String featuresFileName = "test-files/GEONames-PopulatedPlaces.txt";

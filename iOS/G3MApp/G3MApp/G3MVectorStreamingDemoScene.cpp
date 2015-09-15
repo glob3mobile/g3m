@@ -34,7 +34,7 @@ public:
 
     const JSONObject* properties = feature->getProperties();
 
-    const std::string label = properties->getAsString("name", "<bar>");
+//    const std::string label = properties->getAsString("name", "<bar>");
     const Geodetic3D  position( geometry->getPosition(), 0);
 
 //    double maxPopulation = 22315474;
@@ -43,13 +43,23 @@ public:
 
     float labelFontSize = 18.0f;
 
-    Mark* mark = new Mark(label,
+//    Mark* mark = new Mark(label,
+//                          position,
+//                          ABSOLUTE,
+//                          0, // minDistanceToCamera
+//                          labelFontSize
+//                          // Color::newFromRGBA(1, 1, 0, 1)
+//                          );
+
+    int pointSize = 12;
+
+    Mark* mark = new Mark(new CircleImageBuilder(Color::white(),
+                                                 pointSize),
                           position,
                           ABSOLUTE,
-                          0, // minDistanceToCamera
-                          labelFontSize
-                          // Color::newFromRGBA(1, 1, 0, 1)
+                          0 // minDistanceToCamera
                           );
+
     mark->setZoomInAppears(true);
     return mark;
   }
@@ -98,14 +108,6 @@ public:
                           0 // minDistanceToCamera
                           );
 
-//    Mark* mark = new Mark(label,
-//                          position,
-//                          ABSOLUTE,
-//                          0, // minDistanceToCamera
-//                          labelFontSize,
-//                          Color::newFromRGBA(1, 1, 0, 1)
-//                          );
-
     return mark;
   }
 
@@ -128,8 +130,10 @@ void G3MVectorStreamingDemoScene::rawActivate(const G3MContext* context) {
   renderer->addVectorSet(URL("http://192.168.1.12:8080/server-mapboo/public/VectorialStreaming/"),
                          //"GEONames-PopulatedPlaces_LOD",
                          //"name|population|featureClass|featureCode",
-                         "SpanishBars_LOD",
-                         "name",
+                         //"SpanishBars_LOD",
+                         //"name",
+                         "Tornados_LOD",
+                         "mag",
                          new G3MVectorStreamingDemoScene_Symbolizer(),
                          true, // deleteSymbolizer
                          //DownloadPriority::LOWER,
