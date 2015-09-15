@@ -43,7 +43,7 @@ public class SerializerUtils {
    }
 
 
-   static int geodetic2DSerializationSize() {
+   public static int geodetic2DSerializationSize() {
       return 8 * 2;
    }
 
@@ -62,7 +62,7 @@ public class SerializerUtils {
    }
 
 
-   static int sectorSerializationSize() {
+   public static int sectorSerializationSize() {
       return geodetic2DSerializationSize() * 2;
    }
 

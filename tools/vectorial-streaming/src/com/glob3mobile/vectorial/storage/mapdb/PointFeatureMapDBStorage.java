@@ -95,8 +95,6 @@ public class PointFeatureMapDBStorage
    private double                                     _minLonRad;
    private double                                     _maxLatRad;
    private double                                     _maxLonRad;
-   private double                                     _sumLatRad;
-   private double                                     _sumLonRad;
 
    private final int                                  _maxBufferSize;
    private final List<PointFeature>                   _buffer;
@@ -351,9 +349,6 @@ public class PointFeatureMapDBStorage
 
       _maxLatRad = Double.NEGATIVE_INFINITY;
       _maxLonRad = Double.NEGATIVE_INFINITY;
-
-      _sumLatRad = 0.0;
-      _sumLonRad = 0.0;
    }
 
 
@@ -374,12 +369,8 @@ public class PointFeatureMapDBStorage
 
             final QuadKey quadKey = QuadKey.deepestEnclosingNodeKey(_rootKey, minimumSector);
 
-            final double averageLatRad = _sumLatRad / bufferSize;
-            final double averageLonRad = _sumLonRad / bufferSize;
 
-            final Geodetic2D averagePoint = Geodetic2D.fromRadians(averageLatRad, averageLonRad);
-
-            final PointFeaturesSet featuresSet = new PointFeaturesSet(new ArrayList<>(_buffer), averagePoint, minimumSector);
+            final PointFeaturesSet featuresSet = new PointFeaturesSet(minimumSector, new ArrayList<>(_buffer));
             PointFeatureMapDBNode.insertFeatures(this, quadKey, featuresSet);
 
             _db.commit();
@@ -449,10 +440,6 @@ public class PointFeatureMapDBStorage
       final double latRad = position._latitude._radians;
       final double lonRad = position._longitude._radians;
 
-      _sumLatRad += latRad;
-      _sumLonRad += lonRad;
-
-
       if (latRad < _minLatRad) {
          _minLatRad = latRad;
       }
@@ -499,22 +486,20 @@ public class PointFeatureMapDBStorage
       implements
          PointFeatureStorage.Statistics {
 
-      private final String     _storageName;
+      private final String _storageName;
 
-      private final long       _featuresCount;
-      private final Geodetic2D _averagePosition;
-      private final int        _nodesCount;
-      private final int        _minFeaturesPerNode;
-      private final int        _maxFeaturesPerNode;
-      private final double     _averageFeaturesPerNode;
-      private final int        _minNodeDepth;
-      private final int        _maxNodeDepth;
-      private final double     _averageNodeDepth;
+      private final long   _featuresCount;
+      private final int    _nodesCount;
+      private final int    _minFeaturesPerNode;
+      private final int    _maxFeaturesPerNode;
+      private final double _averageFeaturesPerNode;
+      private final int    _minNodeDepth;
+      private final int    _maxNodeDepth;
+      private final double _averageNodeDepth;
 
 
       private PvtStatistics(final String storageName,
                             final long featuresCount,
-                            final Geodetic2D averagePosition,
                             final int nodesCount,
                             final int minFeaturesPerNode,
                             final int maxFeaturesPerNode,
@@ -524,7 +509,6 @@ public class PointFeatureMapDBStorage
                             final double averageNodeDepth) {
          _storageName = storageName;
          _featuresCount = featuresCount;
-         _averagePosition = averagePosition;
          _nodesCount = nodesCount;
          _minFeaturesPerNode = minFeaturesPerNode;
          _maxFeaturesPerNode = maxFeaturesPerNode;
@@ -538,12 +522,6 @@ public class PointFeatureMapDBStorage
       @Override
       public long getFeaturesCount() {
          return _featuresCount;
-      }
-
-
-      @Override
-      public Geodetic2D getAveragePosition() {
-         return _averagePosition;
       }
 
 
@@ -576,7 +554,6 @@ public class PointFeatureMapDBStorage
          System.out.println("--------------------------------------------------------------");
          System.out.println(" Storage: " + _storageName);
          System.out.println("  Features: " + _featuresCount);
-         System.out.println("  Average Position: " + _averagePosition);
          System.out.println("  Nodes Count: " + _nodesCount);
          System.out.println("  Features/Node: " + //
                             "min=" + _minFeaturesPerNode + //
@@ -623,8 +600,6 @@ public class PointFeatureMapDBStorage
 
       private long                  _featuresCount;
       private int                   _nodesCount;
-      private double                _sumLatRadians;
-      private double                _sumLonRadians;
       private int                   _minFeaturesPerNode;
       private int                   _maxFeaturesPerNode;
       private int                   _minNodeDepth;
@@ -643,8 +618,6 @@ public class PointFeatureMapDBStorage
       public void start() {
          _featuresCount = 0;
          _nodesCount = 0;
-         _sumLatRadians = 0;
-         _sumLonRadians = 0;
 
          _minFeaturesPerNode = Integer.MAX_VALUE;
          _maxFeaturesPerNode = Integer.MIN_VALUE;
@@ -679,10 +652,6 @@ public class PointFeatureMapDBStorage
          _minNodeDepth = Math.min(_minNodeDepth, nodeDepth);
          _maxNodeDepth = Math.max(_maxNodeDepth, nodeDepth);
 
-         final Geodetic2D nodeAveragePosition = node.getAveragePosition();
-
-         _sumLatRadians += (nodeAveragePosition._latitude._radians * nodeFeaturesCount);
-         _sumLonRadians += (nodeAveragePosition._longitude._radians * nodeFeaturesCount);
 
          if (_progress != null) {
             _progress.stepDone();
@@ -697,7 +666,6 @@ public class PointFeatureMapDBStorage
          _statistics = new PvtStatistics( //
                   _name, //
                   _featuresCount, //
-                  Geodetic2D.fromRadians(_sumLatRadians / _featuresCount, _sumLonRadians / _featuresCount), //
                   _nodesCount, //
                   _minFeaturesPerNode, //
                   _maxFeaturesPerNode, //

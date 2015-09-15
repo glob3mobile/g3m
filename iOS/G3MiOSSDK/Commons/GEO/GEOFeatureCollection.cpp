@@ -83,14 +83,14 @@ GEOFeatureCollection* GEOFeatureCollection::deepCopy() const {
   return new GEOFeatureCollection( copy(_features) );
 }
 
-long long GEOFeatureCollection::createMarks(const VectorStreamingRenderer::VectorSet* vectorSet,
-                                            const VectorStreamingRenderer::Node*      node) const {
+long long GEOFeatureCollection::createFeatureMarks(const VectorStreamingRenderer::VectorSet* vectorSet,
+                                                   const VectorStreamingRenderer::Node*      node) const {
   long long result = 0;
   const size_t featuresCount = _features.size();
   for (size_t i = 0; i < featuresCount; i++) {
     GEOFeature* feature = _features[i];
     if (feature != NULL) {
-      result += feature->createMarks(vectorSet, node);
+      result += feature->createFeatureMarks(vectorSet, node);
     }
   }
   return result;

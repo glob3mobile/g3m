@@ -1,8 +1,7 @@
 
 
-package com.glob3mobile.vectorial.cluster.nodes;
+package com.glob3mobile.vectorial.lod.clustering.nodes;
 
-import com.glob3mobile.geo.Geodetic2D;
 import com.glob3mobile.geo.Sector;
 
 
@@ -16,9 +15,8 @@ public class CLeafNodeHeader
 
    public CLeafNodeHeader(final Sector nodeSector,
                           final Sector minimumSector,
-                          final Geodetic2D averagePosition,
                           final int featuresCount) {
-      super(nodeSector, minimumSector, averagePosition);
+      super(nodeSector, minimumSector);
       _featuresCount = featuresCount;
    }
 

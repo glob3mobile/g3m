@@ -1,6 +1,6 @@
 
 
-package com.glob3mobile.vectorial.cluster.mapdb;
+package com.glob3mobile.vectorial.lod.clustering.mapdb;
 
 import java.io.DataInput;
 import java.io.DataOutput;
@@ -9,11 +9,10 @@ import java.io.Serializable;
 
 import org.mapdb.Serializer;
 
-import com.glob3mobile.geo.Geodetic2D;
 import com.glob3mobile.geo.Sector;
-import com.glob3mobile.vectorial.cluster.nodes.CInnerNodeHeader;
-import com.glob3mobile.vectorial.cluster.nodes.CLeafNodeHeader;
-import com.glob3mobile.vectorial.cluster.nodes.CNodeHeader;
+import com.glob3mobile.vectorial.lod.clustering.nodes.CInnerNodeHeader;
+import com.glob3mobile.vectorial.lod.clustering.nodes.CLeafNodeHeader;
+import com.glob3mobile.vectorial.lod.clustering.nodes.CNodeHeader;
 import com.glob3mobile.vectorial.storage.mapdb.SerializerUtils;
 
 
@@ -47,7 +46,6 @@ public class CNodeHeaderSerializer
                           final CLeafNodeHeader node) throws IOException {
       SerializerUtils.serializeSector(out, node.getNodeSector());
       SerializerUtils.serializeSector(out, node.getMinimumSector());
-      SerializerUtils.serializeGeodetic2D(out, node.getAveragePosition());
       out.writeInt(node.getFeaturesCount());
    }
 
@@ -63,9 +61,8 @@ public class CNodeHeaderSerializer
    private CLeafNodeHeader deserializeLeaf(final DataInput in) throws IOException {
       final Sector nodeSector = SerializerUtils.deserializeSector(in);
       final Sector minimumSector = SerializerUtils.deserializeSector(in);
-      final Geodetic2D averagePosition = SerializerUtils.deserializeGeodetic2D(in);
       final int featuresCount = in.readInt();
-      return new CLeafNodeHeader(nodeSector, minimumSector, averagePosition, featuresCount);
+      return new CLeafNodeHeader(nodeSector, minimumSector, featuresCount);
    }
 
 
@@ -73,7 +70,6 @@ public class CNodeHeaderSerializer
                           final CInnerNodeHeader node) throws IOException {
       SerializerUtils.serializeSector(out, node.getNodeSector());
       SerializerUtils.serializeSector(out, node.getMinimumSector());
-      SerializerUtils.serializeGeodetic2D(out, node.getAveragePosition());
       out.writeInt(node.getClustersCount());
    }
 
@@ -81,9 +77,8 @@ public class CNodeHeaderSerializer
    private CInnerNodeHeader deserializeInner(final DataInput in) throws IOException {
       final Sector nodeSector = SerializerUtils.deserializeSector(in);
       final Sector minimumSector = SerializerUtils.deserializeSector(in);
-      final Geodetic2D averagePosition = SerializerUtils.deserializeGeodetic2D(in);
       final int clustersCount = in.readInt();
-      return new CInnerNodeHeader(nodeSector, minimumSector, averagePosition, clustersCount);
+      return new CInnerNodeHeader(nodeSector, minimumSector, clustersCount);
    }
 
 
