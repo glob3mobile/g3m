@@ -13,6 +13,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.NavigableSet;
+import java.util.concurrent.ConcurrentNavigableMap;
 
 import org.mapdb.BTreeMap;
 import org.mapdb.DB;
@@ -1022,6 +1023,7 @@ public class PointFeatureLODMapDBStorage
 
 
    private void extractAndSaveChildFeatures(final Child child,
+                                            final List<PointFeature> topFeatures,
                                             final List<PointFeature> restFeatures) {
       final byte[] childID = child._id;
       final Sector childSector = child._header.getNodeSector();
@@ -1036,9 +1038,14 @@ public class PointFeatureLODMapDBStorage
          }
       }
 
+      if (childFeatures.size() == 1) {
+         topFeatures.addAll(childFeatures);
+         childFeatures.clear();
+      }
+
       final List<PointFeatureCluster> childClusters = child._data.getClusters();
 
-      if (childFeatures.isEmpty() && childClusters.isEmpty()) {
+      if (childFeatures.isEmpty() && childClusters.isEmpty() && isLeaf(childID)) {
          removeNode(childID);
       }
       else {
@@ -1047,42 +1054,40 @@ public class PointFeatureLODMapDBStorage
    }
 
 
-   private void processPendingNode(final byte[] key) {
-      List<Child> children = getChildren(key);
-      if (children.isEmpty()) {
-         throw new RuntimeException("LOGIC ERROR");
-      }
+   private boolean isLeaf(final byte[] id) {
+      final byte[] toKey = QuadKeyUtils.append(id, (byte) 9);
+      final ConcurrentNavigableMap<byte[], LODNodeHeader> headers = _nodesHeaders.subMap(id, false, toKey, false);
 
+      final boolean result = headers.isEmpty();
+      return result;
+   }
+
+
+   private void processPendingNode(final byte[] key) {
       final List<PointFeature> features = (_featuresComparator == null) //
                                                                        ? Collections.emptyList() //
-                                                                       : borrowFeaturesFromChildren(children);
-      Sector minimumSector = calculateMinimumSector(features);
+                                                                       : borrowFeaturesFromChildren(key);
 
-      children = getChildren(key); // ask again for the children, they can be removed in borrowFeaturesFromChildren();
+      final List<Child> children = getChildren(key); // ask here for the children, some could be removed in borrowFeaturesFromChildren()
 
-      final List<PointFeatureCluster> clusters;
-      if (_createClusters) {
-         clusters = new ArrayList<>(children.size());
-         for (final Child child : children) {
-            minimumSector = child._header.getMinimumSector().mergedWith(minimumSector);
-            final LODNodeData childNodeData = _nodesFeatures.get(child._id);
-            if (childNodeData == null) {
-               throw new RuntimeException("LOGIC ERROR");
-            }
-            clusters.add(childNodeData.createCluster());
-         }
+      final Sector minimumSector = calculateMinimumSector(children, features);
 
-         if (clusters.isEmpty()) {
-            throw new RuntimeException("LOGIC ERROR");
-         }
-      }
-      else {
-         clusters = Collections.emptyList();
-      }
-
+      final List<PointFeatureCluster> clusters = _createClusters //
+                                                                ? createClusters(children) //
+                                                                : Collections.emptyList();
 
       final Sector nodeSector = QuadKey.sectorFor(_rootKey, key);
       saveInnerNode(key, nodeSector, minimumSector, clusters, features);
+   }
+
+
+   private static Sector calculateMinimumSector(final List<Child> children,
+                                                final List<PointFeature> features) {
+      Sector result = calculateMinimumSector(features);
+      for (final Child child : children) {
+         result = child._header.getMinimumSector().mergedWith(result);
+      }
+      return result;
    }
 
 
@@ -1121,7 +1126,30 @@ public class PointFeatureLODMapDBStorage
    }
 
 
-   private List<PointFeature> borrowFeaturesFromChildren(final List<Child> children) {
+   private List<PointFeatureCluster> createClusters(final List<Child> children) {
+      final List<PointFeatureCluster> clusters = new ArrayList<>();
+      for (final Child child : children) {
+         final LODNodeData childNodeData = _nodesFeatures.get(child._id);
+         if (childNodeData == null) {
+            throw new RuntimeException("LOGIC ERROR");
+         }
+         clusters.addAll(childNodeData.createClusters());
+      }
+
+      if (clusters.isEmpty()) {
+         throw new RuntimeException("LOGIC ERROR");
+      }
+
+      return clusters;
+   }
+
+
+   private List<PointFeature> borrowFeaturesFromChildren(final byte[] key) {
+      final List<Child> children = getChildren(key);
+      if (children.isEmpty()) {
+         throw new RuntimeException("LOGIC ERROR");
+      }
+
       final List<PointFeature> allFeatures = new ArrayList<>();
       for (final Child child : children) {
          final LODNodeData childNodeData = _nodesFeatures.get(child._id);
@@ -1130,15 +1158,15 @@ public class PointFeatureLODMapDBStorage
 
       Collections.sort(allFeatures, _featuresComparator);
 
-      //final float topFeaturesPercent = (float) 1 / Math.max(children.size(), 2);
-      final float topFeaturesPercent = 0.25f;
+      final float topFeaturesPercent = (float) 1 / Math.max(children.size(), 2);
+      // final float topFeaturesPercent = 0.25f;
       final int topFeaturesCount = Math.max(1, Math.round(allFeatures.size() * topFeaturesPercent));
 
-      final List<PointFeature> topFeatures = allFeatures.subList(0, topFeaturesCount);
+      final List<PointFeature> topFeatures = new ArrayList<>(allFeatures.subList(0, topFeaturesCount));
 
       final List<PointFeature> restFeatures = new ArrayList<>(allFeatures.subList(topFeaturesCount, allFeatures.size()));
       for (final Child child : children) {
-         extractAndSaveChildFeatures(child, restFeatures);
+         extractAndSaveChildFeatures(child, topFeatures, restFeatures);
       }
       if (!restFeatures.isEmpty()) {
          throw new RuntimeException("LOGIC ERROR");

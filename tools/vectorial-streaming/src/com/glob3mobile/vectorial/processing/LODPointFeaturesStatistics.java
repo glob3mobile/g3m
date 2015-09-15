@@ -114,7 +114,6 @@ public class LODPointFeaturesStatistics {
          if (depth <= _maxDepth) {
             if (depth >= _minDepth) {
                final Color clusterColor = new Color(1, 1, 0, 0.9f);
-               //            final Font font = new Font(Font.SERIF, Font.BOLD, 14);
                //            final Color fontColor = new Color(1, 1, 0, 1f);
 
                for (final PointFeatureCluster cluster : node.getClusters()) {
@@ -129,11 +128,15 @@ public class LODPointFeaturesStatistics {
                }
             }
 
+
             final int pointSize = 2;
-            final Color clusterColor = new Color(1, 0, 1, 0.9f);
+            final Color featureColor = new Color(1, 0, 1, 0.9f);
+            // final Font font = new Font(Font.SERIF, Font.BOLD, 14);
 
             for (final PointFeature feature : node.getFeatures()) {
-               _bitmap.drawPoint(feature._position, pointSize, pointSize, clusterColor);
+               _bitmap.drawPoint(feature._position, pointSize, pointSize, featureColor);
+               // final String featureName = (String) feature._properties.get("name");
+               // _bitmap.drawPoint(featureName, feature._position, pointSize, pointSize, featureColor, font, featureColor);
             }
          }
 
@@ -172,7 +175,9 @@ public class LODPointFeaturesStatistics {
       // final String name = "Cities1000_LOD";
       // final String name = "AR_LOD";
       // final String name = "ES_LOD";
-      final String name = "GEONames-PopulatedPlaces_LOD";
+      //      final String name = "GEONames-PopulatedPlaces_LOD";
+      //      final String name = "SpanishBars_LOD";
+      final String name = "Tornados_LOD";
 
 
       try (final PointFeatureLODStorage clusterStorage = PointFeatureLODMapDBStorage.openReadOnly(directory, name)) {

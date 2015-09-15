@@ -451,11 +451,16 @@ public class VectorStreamingRenderer extends DefaultRenderer
         final Planet planet = rc.getPlanet();
     
         java.util.ArrayList<Vector3D> points = new java.util.ArrayList<Vector3D>(5);
-        points.add( planet.toCartesian( _minimumSector.getNE()     ) );
-        points.add( planet.toCartesian( _minimumSector.getNW()     ) );
-        points.add( planet.toCartesian( _minimumSector.getSE()     ) );
-        points.add( planet.toCartesian( _minimumSector.getSW()     ) );
-        points.add( planet.toCartesian( _minimumSector.getCenter() ) );
+    //    points.add( planet.toCartesian( _minimumSector.getNE()     ) );
+    //    points.add( planet.toCartesian( _minimumSector.getNW()     ) );
+    //    points.add( planet.toCartesian( _minimumSector.getSE()     ) );
+    //    points.add( planet.toCartesian( _minimumSector.getSW()     ) );
+    //    points.add( planet.toCartesian( _minimumSector.getCenter() ) );
+        points.add( planet.toCartesian( _nodeSector.getNE()     ) );
+        points.add( planet.toCartesian( _nodeSector.getNW()     ) );
+        points.add( planet.toCartesian( _nodeSector.getSE()     ) );
+        points.add( planet.toCartesian( _nodeSector.getSW()     ) );
+        points.add( planet.toCartesian( _nodeSector.getCenter() ) );
     
         _boundingVolume = Sphere.enclosingSphere(points);
       }

@@ -135,13 +135,15 @@ public class LODPointFeaturesPreprocessor {
       // final String sourceName = "Cities1000";
       // final String sourceName = "AR";
       // final String sourceName = "ES";
-      final String sourceName = "GEONames-PopulatedPlaces";
-
+      //  final String sourceName = "GEONames-PopulatedPlaces";
+      //      final String sourceName = "SpanishBars";
+      final String sourceName = "Tornados";
 
       final File lodDir = new File("PointFeaturesLOD");
       final String lodName = sourceName + "_LOD";
 
       final int maxFeaturesPerNode = 64;
+      // final int maxFeaturesPerNode = 96;
 
       final boolean createClusters = true;
       final Comparator<PointFeature> featuresComparator = createClusters ? null : new GEONamesComparator();
