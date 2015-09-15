@@ -3,6 +3,7 @@
 package com.glob3mobile.vectorial.lod.mapdb;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -19,7 +20,7 @@ public class LODNodeData {
 
 
    public LODNodeData(final List<PointFeatureCluster> clusters,
-                   final List<PointFeature> features) {
+                      final List<PointFeature> features) {
       _clusters = Collections.unmodifiableList(new ArrayList<>(clusters));
       _features = Collections.unmodifiableList(new ArrayList<>(features));
    }
@@ -35,7 +36,7 @@ public class LODNodeData {
    }
 
 
-   public PointFeatureCluster createCluster() {
+   public List<PointFeatureCluster> createClusters() {
       double sumLatRad = 0;
       double sumLonRad = 0;
       long sumSize = 0;
@@ -48,15 +49,16 @@ public class LODNodeData {
          sumSize += clusterSize;
       }
 
-      sumSize += _features.size();
       for (final PointFeature feature : _features) {
          final Geodetic2D position = feature._position;
          sumLatRad += position._latitude._radians;
          sumLonRad += position._longitude._radians;
       }
+      sumSize += _features.size();
 
       final Geodetic2D averagePosition = Geodetic2D.fromRadians(sumLatRad / sumSize, sumLonRad / sumSize);
-      return new PointFeatureCluster(averagePosition, sumSize);
+      final int Diego_at_work;
+      return Arrays.asList(new PointFeatureCluster(averagePosition, sumSize));
    }
 
 
