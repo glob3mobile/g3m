@@ -14,7 +14,7 @@ import com.glob3mobile.utils.Progress;
 import com.glob3mobile.vectorial.GEOGeometry;
 import com.glob3mobile.vectorial.GEOPoint;
 import com.glob3mobile.vectorial.parsing.GEOFeatureHandler;
-import com.glob3mobile.vectorial.parsing.GEONamesParser;
+import com.glob3mobile.vectorial.parsing.GEOJSONParser;
 import com.glob3mobile.vectorial.parsing.GEOParseException;
 import com.glob3mobile.vectorial.parsing.GEOParser;
 import com.glob3mobile.vectorial.parsing.GEOStatisticsGatherer;
@@ -108,16 +108,19 @@ public class PointFeaturesImporter {
       System.out.println("---------------------------\n");
 
 
-      //      final GEOParser parser = GEOJSONParser.INSTANCE;
+      final GEOParser parser = GEOJSONParser.INSTANCE;
       //      final String featuresFileName = "/Users/dgd/Downloads/sfcrimes.geojson";
       //      final String storageName = "SFCrimes";
 
       // final String featuresFileName = "test-files/ne_10m_populated_places.geojson";
       // final String storageName = "PopulatedPlaces";
 
-      final GEOParser parser = GEONamesParser.INSTANCE;
-      final String featuresFileName = "test-files/GEONames-PopulatedPlaces.txt";
-      final String storageName = "GEONames-PopulatedPlaces";
+      final String featuresFileName = "test-files/spanish-bars.geojson";
+      final String storageName = "SpanishBars";
+
+      //      final GEOParser parser = GEONamesParser.INSTANCE;
+      //      final String featuresFileName = "test-files/GEONames-PopulatedPlaces.txt";
+      //      final String storageName = "GEONames-PopulatedPlaces";
 
 
       final File featuresFile = new File(featuresFileName);

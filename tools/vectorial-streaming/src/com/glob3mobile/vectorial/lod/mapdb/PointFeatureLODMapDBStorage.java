@@ -1023,6 +1023,7 @@ public class PointFeatureLODMapDBStorage
 
 
    private void extractAndSaveChildFeatures(final Child child,
+                                            final List<PointFeature> topFeatures,
                                             final List<PointFeature> restFeatures) {
       final byte[] childID = child._id;
       final Sector childSector = child._header.getNodeSector();
@@ -1035,6 +1036,11 @@ public class PointFeatureLODMapDBStorage
             childFeatures.add(feature);
             it.remove();
          }
+      }
+
+      if (childFeatures.size() == 1) {
+         topFeatures.addAll(childFeatures);
+         childFeatures.clear();
       }
 
       final List<PointFeatureCluster> childClusters = child._data.getClusters();
@@ -1156,11 +1162,11 @@ public class PointFeatureLODMapDBStorage
       // final float topFeaturesPercent = 0.25f;
       final int topFeaturesCount = Math.max(1, Math.round(allFeatures.size() * topFeaturesPercent));
 
-      final List<PointFeature> topFeatures = allFeatures.subList(0, topFeaturesCount);
+      final List<PointFeature> topFeatures = new ArrayList<>(allFeatures.subList(0, topFeaturesCount));
 
       final List<PointFeature> restFeatures = new ArrayList<>(allFeatures.subList(topFeaturesCount, allFeatures.size()));
       for (final Child child : children) {
-         extractAndSaveChildFeatures(child, restFeatures);
+         extractAndSaveChildFeatures(child, topFeatures, restFeatures);
       }
       if (!restFeatures.isEmpty()) {
          throw new RuntimeException("LOGIC ERROR");

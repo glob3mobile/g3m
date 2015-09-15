@@ -175,7 +175,8 @@ public class LODPointFeaturesStatistics {
       // final String name = "Cities1000_LOD";
       // final String name = "AR_LOD";
       // final String name = "ES_LOD";
-      final String name = "GEONames-PopulatedPlaces_LOD";
+      //      final String name = "GEONames-PopulatedPlaces_LOD";
+      final String name = "SpanishBars_LOD";
 
 
       try (final PointFeatureLODStorage clusterStorage = PointFeatureLODMapDBStorage.openReadOnly(directory, name)) {

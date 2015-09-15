@@ -34,12 +34,14 @@ public:
 
     const JSONObject* properties = feature->getProperties();
 
-    const std::string label = properties->getAsString("name")->value();
+    const std::string label = properties->getAsString("name", "<bar>");
     const Geodetic3D  position( geometry->getPosition(), 0);
 
-    double maxPopulation = 22315474;
-    double population = properties->getAsNumber("population")->value();
-    float labelFontSize = (float) (14.0 * (population / maxPopulation) + 16.0) ;
+//    double maxPopulation = 22315474;
+//    double population = properties->getAsNumber("population")->value();
+//    float labelFontSize = (float) (14.0 * (population / maxPopulation) + 16.0) ;
+
+    float labelFontSize = 18.0f;
 
     Mark* mark = new Mark(label,
                           position,
@@ -66,10 +68,19 @@ public:
     std::string label;
     labelStream >> label;
 
-    // float labelFontSize = (float) (14.0 * ((float) cluster->getSize() / featuresCount) + 16.0) ;
-    float labelFontSize = 18.0f;
+    const double clusterPercent = (double) cluster->getSize() / featuresCount;
 
-    Mark* mark = new Mark(new StackLayoutImageBuilder(new CircleImageBuilder(Color::white(), 32),
+    const IMathUtils* mu = IMathUtils::instance();
+
+     float labelFontSize = (float) ((14.0 * clusterPercent) + 16.0) ;
+//    float labelFontSize = 18.0f;
+
+    double area = (15000.0 * clusterPercent);
+//    int pointSize = mu->max(12, mu->round((float) mu->sqrt(area)));
+    int pointSize = 12 + mu->round((float) mu->sqrt(area));
+
+    Mark* mark = new Mark(new StackLayoutImageBuilder(new CircleImageBuilder(Color::white(),
+                                                                             pointSize),
                                                       new LabelImageBuilder(label,
                                                                             GFont::sansSerif(labelFontSize, true),
                                                                             2.0f,                 // margin
@@ -115,8 +126,10 @@ void G3MVectorStreamingDemoScene::rawActivate(const G3MContext* context) {
 
   VectorStreamingRenderer* renderer = model->getVectorStreamingRenderer();
   renderer->addVectorSet(URL("http://192.168.1.12:8080/server-mapboo/public/VectorialStreaming/"),
-                         "GEONames-PopulatedPlaces_LOD",
-                         "name|population|featureClass|featureCode",
+                         //"GEONames-PopulatedPlaces_LOD",
+                         //"name|population|featureClass|featureCode",
+                         "SpanishBars_LOD",
+                         "name",
                          new G3MVectorStreamingDemoScene_Symbolizer(),
                          true, // deleteSymbolizer
                          //DownloadPriority::LOWER,
@@ -124,7 +137,7 @@ void G3MVectorStreamingDemoScene::rawActivate(const G3MContext* context) {
                          TimeInterval::zero(),
                          true, // readExpired
                          true, // verbose
-                         true // haltOnError
+                         true  // haltOnError
                          );
 
 

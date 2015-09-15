@@ -288,22 +288,32 @@ BoundingVolume* VectorStreamingRenderer::Node::getBoundingVolume(const G3MRender
 
 #ifdef C_CODE
     const Vector3D c[5] = {
-      planet->toCartesian( _minimumSector->getNE()     ),
-      planet->toCartesian( _minimumSector->getNW()     ),
-      planet->toCartesian( _minimumSector->getSE()     ),
-      planet->toCartesian( _minimumSector->getSW()     ),
-      planet->toCartesian( _minimumSector->getCenter() )
+//      planet->toCartesian( _minimumSector->getNE()     ),
+//      planet->toCartesian( _minimumSector->getNW()     ),
+//      planet->toCartesian( _minimumSector->getSE()     ),
+//      planet->toCartesian( _minimumSector->getSW()     ),
+//      planet->toCartesian( _minimumSector->getCenter() )
+      planet->toCartesian( _nodeSector->getNE()     ),
+      planet->toCartesian( _nodeSector->getNW()     ),
+      planet->toCartesian( _nodeSector->getSE()     ),
+      planet->toCartesian( _nodeSector->getSW()     ),
+      planet->toCartesian( _nodeSector->getCenter() )
     };
 
     std::vector<Vector3D> points(c, c+5);
 #endif
 #ifdef JAVA_CODE
     java.util.ArrayList<Vector3D> points = new java.util.ArrayList<Vector3D>(5);
-    points.add( planet.toCartesian( _minimumSector.getNE()     ) );
-    points.add( planet.toCartesian( _minimumSector.getNW()     ) );
-    points.add( planet.toCartesian( _minimumSector.getSE()     ) );
-    points.add( planet.toCartesian( _minimumSector.getSW()     ) );
-    points.add( planet.toCartesian( _minimumSector.getCenter() ) );
+//    points.add( planet.toCartesian( _minimumSector.getNE()     ) );
+//    points.add( planet.toCartesian( _minimumSector.getNW()     ) );
+//    points.add( planet.toCartesian( _minimumSector.getSE()     ) );
+//    points.add( planet.toCartesian( _minimumSector.getSW()     ) );
+//    points.add( planet.toCartesian( _minimumSector.getCenter() ) );
+    points.add( planet.toCartesian( _nodeSector.getNE()     ) );
+    points.add( planet.toCartesian( _nodeSector.getNW()     ) );
+    points.add( planet.toCartesian( _nodeSector.getSE()     ) );
+    points.add( planet.toCartesian( _nodeSector.getSW()     ) );
+    points.add( planet.toCartesian( _nodeSector.getCenter() ) );
 #endif
 
     _boundingVolume = Sphere::enclosingSphere(points);

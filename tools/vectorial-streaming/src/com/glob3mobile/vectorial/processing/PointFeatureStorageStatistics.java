@@ -34,8 +34,11 @@ public class PointFeatureStorageStatistics {
       // final String storageName = "MX";
       // final String storageName = "NO";
 
-      final String storageName = "GEONames-PopulatedPlaces";
+      //      final String storageName = "GEONames-PopulatedPlaces";
       //      final String storageName = "SFCrimes";
+
+      final String storageName = "SpanishBars";
+
 
       try (final PointFeatureStorage storage = PointFeatureMapDBStorage.openReadOnly(storageDir, storageName)) {
 
