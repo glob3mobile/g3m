@@ -338,6 +338,9 @@ private:
   InfoDisplay* _infoDisplay;
 
   FrameBufferContent _frameBufferContent;
+  
+  float _touchDownPositionX;
+  float _touchDownPositionY;
 
   G3MWidget(GL*                              gl,
             IStorage*                        storage,

@@ -39,6 +39,8 @@
 #include "ErrorRenderer.hpp"
 #include "IDeviceAttitude.hpp"
 #include "IDeviceLocation.hpp"
+#include "IDeviceInfo.hpp"
+
 
 void G3MWidget::initSingletons(ILogger*            logger,
                                IFactory*           factory,
@@ -142,6 +144,8 @@ _initialCameraPositionProvider(initialCameraPositionProvider),
 _initialCameraPositionHasBeenSet(false),
 _forceBusyRenderer(false),
 _nFramesBeetweenProgramsCleanUp(500),
+_touchDownPositionX(0),
+_touchDownPositionY(0),
 _frameBufferContent(EMPTY_FRAMEBUFFER),
 _infoDisplay(infoDisplay)
 {
@@ -414,7 +418,6 @@ void G3MWidget::onTouchEvent(const TouchEvent* touchEvent) {
   }
 
 }
-
 
 
 

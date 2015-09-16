@@ -756,6 +756,7 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				CF3623411B97AFD900824932 /* CircleImageBuilder.hpp in CopyFiles */,
 				D8D10E7C1B95E41A005C63CB /* FrameDepthProvider.hpp in CopyFiles */,
 				D80AA0781B95C0CB001E3CD3 /* DeviceAttitudeCameraHandler.hpp in CopyFiles */,
 				CF75A9FD1B87E2B10033DA25 /* MapBoo.hpp in CopyFiles */,
@@ -2263,6 +2264,8 @@
 				CFAB53F41A8BCDFF00DD0099 /* ColumnLayoutImageBuilder.hpp */,
 				CF75A9FA1B87E2750033DA25 /* MapBoo.cpp */,
 				CF75A9FB1B87E2750033DA25 /* MapBoo.hpp */,
+				CF36233E1B97AFA400824932 /* CircleImageBuilder.cpp */,
+				CF36233F1B97AFA400824932 /* CircleImageBuilder.hpp */,
 				D81FC5421B4BED5400260B85 /* NASAElevationDataProvider.cpp */,
 				D81FC5431B4BED5400260B85 /* NASAElevationDataProvider.hpp */,
 				D8D10E791B95E171005C63CB /* FrameDepthProvider.cpp */,

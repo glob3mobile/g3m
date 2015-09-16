@@ -358,17 +358,74 @@ public class MapBoo
       final JSONObject properties = feature.getProperties();
       final Geodetic2D position = geometry.getPosition();
     
-      return new Mark(createMarkLabel(properties), new Geodetic3D(position, 0), AltitudeMode.ABSOLUTE, 0, 18, Color.newFromRGBA(1, 1, 1, 1), Color.newFromRGBA(0, 0, 0, 1), null, true, createMarkTouchListener(properties), true); // autoDeleteListener -  autoDeleteUserData -  userData -  labelShadowColor -  labelFontColor -  labelFontSize -  minDistanceToCamera
+      return new Mark(createImageBuilder(properties), new Geodetic3D(position, 0), AltitudeMode.ABSOLUTE, 0, null, true, createMarkTouchListener(properties), true); // autoDeleteListener -  autoDeleteUserData -  userData -  minDistanceToCamera
     
-      //  return new Mark(URL("file:///icon.png"),
-      //                  Geodetic3D(position, 0),
-      //                  ABSOLUTE,
-      //                  0,
-      //                  NULL,
-      //                  true,
-      //                  createMarkTouchListener(properties),
-      //                  true);
+    //  return new Mark(createMarkLabel(properties),
+    //                  Geodetic3D(position, 0),
+    //                  ABSOLUTE,
+    //                  0,                                    // minDistanceToCamera
+    //                  18,                                   // labelFontSize
+    //                  Color::newFromRGBA(1, 1, 1, 1),       // labelFontColor
+    //                  Color::newFromRGBA(0, 0, 0, 1),       // labelShadowColor
+    //                  NULL,                                 // userData
+    //                  true,                                 // autoDeleteUserData
+    //                  createMarkTouchListener(properties),
+    //                  true                                  // autoDeleteListener
+    //                  );
+    }
+
+  }
+
+
+  public static class MBSymbolizedDataset
+  {
+    private final String _datasetID;
+    private final String _datasetName;
+    private final String _datasetAttribution;
+    private final MBSymbology _symbology;
+
+    private MBSymbolizedDataset(String datasetID, String datasetName, String datasetAttribution, MBSymbology symbology)
+    {
+       _datasetID = datasetID;
+       _datasetName = datasetName;
+       _datasetAttribution = datasetAttribution;
+       _symbology = symbology;
+
+    }
+
+
+    public void dispose()
+    {
+      if (_symbology != null)
+      {
+        _symbology._release();
+      }
+    }
+
+    public static MapBoo.MBSymbolizedDataset fromJSON(MBHandler handler, JSONBaseObject jsonBaseObject, boolean verbose)
+    {
+      if (jsonBaseObject == null)
+      {
+        return null;
+      }
     
+      final JSONObject jsonObject = jsonBaseObject.asObject();
+      if (jsonObject == null)
+      {
+        return null;
+      }
+    
+      final String datasetID = jsonObject.get("datasetID").asString().value();
+      final String datasetName = jsonObject.getAsString("datasetName", "");
+      final String datasetAttribution = jsonObject.getAsString("datasetAttribution", "");
+      final MBSymbology symbology = MBSymbology.fromJSON(handler, datasetID, datasetName, jsonObject.get("symbology"));
+    
+      return new MBSymbolizedDataset(datasetID, datasetName, datasetAttribution, symbology);
+    }
+
+    public final void apply(URL serverURL, VectorStreamingRenderer vectorStreamingRenderer)
+    {
+      _symbology.apply(serverURL, vectorStreamingRenderer);
     }
 
   }
