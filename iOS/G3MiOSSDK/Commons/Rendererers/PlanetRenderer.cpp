@@ -846,8 +846,6 @@ void PlanetRenderer::zRender(const G3MRenderContext* rc, GLState* glState){
     Tile tile = renderedTiles.getFirst();
 #endif
     if (!tile->isElevationDataSolved() || !tile->isTextureSolved()){
-#warning AVOIDING EXC_BAD_ACCESS on DrawElements
-      ILogger::instance()->logWarning("AVOIDING EXC_BAD_ACCESS on DrawElements");
       return;
     }
   }
