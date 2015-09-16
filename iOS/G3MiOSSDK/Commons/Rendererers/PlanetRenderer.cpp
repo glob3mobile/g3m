@@ -838,6 +838,18 @@ void PlanetRenderer::zRender(const G3MRenderContext* rc, GLState* glState){
   
   std::list<Tile*> *renderedTiles = getRenderedTilesList(rc);
   
+  if (renderedTiles->size() < 2){
+#ifdef C_CODE
+    Tile* tile = (*renderedTiles->begin());
+#endif
+#ifdef JAVA_CODE
+    Tile tile = renderedTiles.getFirst();
+#endif
+    if (!tile->isElevationDataSolved() || !tile->isTextureSolved()){
+      return;
+    }
+  }
+  
   for (std::list<Tile*>::iterator iter = renderedTiles->begin();
        iter != renderedTiles->end();
        iter++) {
