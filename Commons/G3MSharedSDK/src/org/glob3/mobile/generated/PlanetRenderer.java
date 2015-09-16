@@ -924,9 +924,6 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
       Tile tile = renderedTiles.getFirst();
       if (!tile.isElevationDataSolved() || !tile.isTextureSolved())
       {
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning AVOIDING EXC_BAD_ACCESS on DrawElements
-        ILogger.instance().logWarning("AVOIDING EXC_BAD_ACCESS on DrawElements");
         return;
       }
     }
