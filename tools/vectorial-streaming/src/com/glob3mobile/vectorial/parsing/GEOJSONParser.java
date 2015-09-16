@@ -228,6 +228,11 @@ public class GEOJSONParser
       String type = null;
       List<Object> coordinates = null;
 
+      if (reader.peek() == JsonToken.NULL) {
+         reader.nextNull();
+         return null;
+      }
+
       reader.beginObject();
       while (reader.peek() != JsonToken.END_OBJECT) {
          final String name = reader.nextName();

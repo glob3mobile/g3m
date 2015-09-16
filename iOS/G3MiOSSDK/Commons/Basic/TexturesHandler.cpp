@@ -128,7 +128,9 @@ const TextureIDReference* TexturesHandler::getTextureIDReference(const IImage* i
 
   const IGLTextureId* previousId = getGLTextureIdIfAvailable(textureSpec);
   if (previousId != NULL) {
-    return new TextureIDReference(previousId, this);
+    return new TextureIDReference(previousId,
+                                  image->isPremultiplied(),
+                                  this);
   }
 
   TextureHolder* holder = new TextureHolder(textureSpec);
@@ -145,7 +147,9 @@ const TextureIDReference* TexturesHandler::getTextureIDReference(const IImage* i
 
   //showHolders("getGLTextureId(): created holder " + holder->description());
 
-  return new TextureIDReference(holder->_glTextureId, this);
+  return new TextureIDReference(holder->_glTextureId,
+                                image->isPremultiplied(),
+                                this);
 }
 
 void TexturesHandler::retainGLTextureId(const IGLTextureId* glTextureId) {

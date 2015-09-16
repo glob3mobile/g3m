@@ -25,5 +25,7 @@ public abstract class IImage
     return description();
   }
 
+  public abstract boolean isPremultiplied();
+
   public abstract IImage shallowCopy();
 }

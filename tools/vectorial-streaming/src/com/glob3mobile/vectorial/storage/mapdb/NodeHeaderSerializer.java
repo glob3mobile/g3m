@@ -19,6 +19,11 @@ public class NodeHeaderSerializer
       Serializable {
 
 
+   private static final int  FIXED_SIZE       = SerializerUtils.sectorSerializationSize() + //
+                                                SerializerUtils.sectorSerializationSize() + //
+                                                SerializerUtils.geodetic2DSerializationSize() + //
+                                                4 /* featuresCount:int */;
+
    private static final long serialVersionUID = 1L;
 
 
@@ -30,9 +35,9 @@ public class NodeHeaderSerializer
       final Geodetic2D averagePosition = value._averagePosition;
       final int featuresCount = value._featuresCount;
 
-      SerializerUtils.serialize(out, nodeSector);
-      SerializerUtils.serialize(out, minimumSector);
-      SerializerUtils.serialize(out, averagePosition);
+      SerializerUtils.serializeSector(out, nodeSector);
+      SerializerUtils.serializeSector(out, minimumSector);
+      SerializerUtils.serializeGeodetic2D(out, averagePosition);
       out.writeInt(featuresCount);
    }
 
@@ -50,10 +55,7 @@ public class NodeHeaderSerializer
 
    @Override
    public int fixedSize() {
-      return SerializerUtils.sectorSerializationSize() + //
-             SerializerUtils.sectorSerializationSize() + //
-             SerializerUtils.geodetic2DSerializationSize() + //
-             4 /* featuresCount:int */;
+      return FIXED_SIZE;
    }
 
 

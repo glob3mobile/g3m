@@ -17,8 +17,10 @@ package org.glob3.mobile.generated;
 
 
 
+
 public abstract class LayoutImageBuilder extends AbstractImageBuilder
 {
+
 
   protected static class ChildResult
   {
@@ -47,7 +49,8 @@ public abstract class LayoutImageBuilder extends AbstractImageBuilder
     }
   }
 
-  protected static class ChildrenResult
+
+  protected static class ChildrenResult extends RCObject
   {
     private LayoutImageBuilder _layoutImageBuilder;
     private final G3MContext _context;
@@ -55,6 +58,11 @@ public abstract class LayoutImageBuilder extends AbstractImageBuilder
     private boolean _deleteListener;
 
     private int _childrenResultPendingCounter;
+
+    public void dispose()
+    {
+      super.dispose();
+    }
 
     public java.util.ArrayList<ChildResult> _childrenResult = new java.util.ArrayList<ChildResult>();
 
@@ -100,6 +108,7 @@ public abstract class LayoutImageBuilder extends AbstractImageBuilder
     }
   }
 
+
   protected static class LayoutImageBuilderChildListener implements IImageBuilderListener
   {
     private ChildrenResult _childrenResult;
@@ -109,11 +118,12 @@ public abstract class LayoutImageBuilder extends AbstractImageBuilder
     {
        _childrenResult = childrenResult;
        _childIndex = childIndex;
+      _childrenResult._retain();
     }
 
     public void dispose()
     {
-
+      _childrenResult._release();
     }
 
     public final void imageCreated(IImage image, String imageName)
@@ -189,7 +199,7 @@ public abstract class LayoutImageBuilder extends AbstractImageBuilder
 
   public final boolean isMutable()
   {
-  //TODO: #warning TODO: make mutable if any children is
+    //TODO: #warning TODO: make mutable if any children is
     return false;
   }
 
@@ -203,6 +213,8 @@ public abstract class LayoutImageBuilder extends AbstractImageBuilder
   
       child.build(context, new LayoutImageBuilderChildListener(childrenResult, i), true);
     }
+  
+    childrenResult._release();
   }
 
 }

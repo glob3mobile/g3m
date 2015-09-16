@@ -144,6 +144,8 @@
 		CF35A20716D3D44E00D795D8 /* BilParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF35A20516D3D44E00D795D8 /* BilParser.cpp */; };
 		CF35DD4C16C6995D002EFC96 /* Vector3F.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF35DD4A16C6995C002EFC96 /* Vector3F.cpp */; };
 		CF35DD5016C69B08002EFC96 /* Vector2F.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF35DD4E16C69B08002EFC96 /* Vector2F.cpp */; };
+		CF3623401B97AFA400824932 /* CircleImageBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF36233E1B97AFA400824932 /* CircleImageBuilder.cpp */; };
+		CF3623411B97AFD900824932 /* CircleImageBuilder.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF36233F1B97AFA400824932 /* CircleImageBuilder.hpp */; };
 		CF3C7E55190C138B00ED051F /* CompositeTileImageContribution.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF3C7E53190C138B00ED051F /* CompositeTileImageContribution.cpp */; };
 		CF3C7E56190C13FE00ED051F /* CompositeTileImageContribution.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF3C7E54190C138B00ED051F /* CompositeTileImageContribution.hpp */; };
 		CF3C992D17C2713300937BD3 /* NSString_CppAdditions.mm in Sources */ = {isa = PBXBuildFile; fileRef = CF3C992C17C2713300937BD3 /* NSString_CppAdditions.mm */; };
@@ -1346,6 +1348,8 @@
 		CF35DD4B16C6995C002EFC96 /* Vector3F.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Vector3F.hpp; path = Commons/Geometry/Vector3F.hpp; sourceTree = "<group>"; };
 		CF35DD4E16C69B08002EFC96 /* Vector2F.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Vector2F.cpp; path = Commons/Geometry/Vector2F.cpp; sourceTree = "<group>"; };
 		CF35DD4F16C69B08002EFC96 /* Vector2F.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Vector2F.hpp; path = Commons/Geometry/Vector2F.hpp; sourceTree = "<group>"; };
+		CF36233E1B97AFA400824932 /* CircleImageBuilder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CircleImageBuilder.cpp; path = Commons/Basic/CircleImageBuilder.cpp; sourceTree = "<group>"; };
+		CF36233F1B97AFA400824932 /* CircleImageBuilder.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = CircleImageBuilder.hpp; path = Commons/Basic/CircleImageBuilder.hpp; sourceTree = "<group>"; };
 		CF3C7E53190C138B00ED051F /* CompositeTileImageContribution.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = CompositeTileImageContribution.cpp; path = Commons/Basic/CompositeTileImageContribution.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CF3C7E54190C138B00ED051F /* CompositeTileImageContribution.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = CompositeTileImageContribution.hpp; path = Commons/Basic/CompositeTileImageContribution.hpp; sourceTree = "<group>"; };
 		CF3C992B17C270D800937BD3 /* NSString_CppAdditions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = NSString_CppAdditions.h; path = Specific/NSString_CppAdditions.h; sourceTree = "<group>"; };
@@ -3266,6 +3270,7 @@
 				CFE6046B1904442700E6C78B /* TerrainTouchListener.cpp in Sources */,
 				CF07DD0D175D32CC00839F5D /* Color.cpp in Sources */,
 				D8D894ED17731870007E41A5 /* GPUVariable.cpp in Sources */,
+				CF3623401B97AFA400824932 /* CircleImageBuilder.cpp in Sources */,
 				D8765D041779C3AE004B62F4 /* AbstractGeometryMesh.cpp in Sources */,
 				D8765D051779C3AE004B62F4 /* IndexedGeometryMesh.cpp in Sources */,
 				CFAC9E9F18CE277D00EE57EF /* GEOLabelRasterSymbol.cpp in Sources */,

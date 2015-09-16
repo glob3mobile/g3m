@@ -22,6 +22,7 @@
 #include "MutableVector3D.hpp"
 #include "GTask.hpp"
 #include "PeriodicalTask.hpp"
+#include "IImageBuilderListener.hpp"
 
 class IImage;
 class IFloatBuffer;
@@ -31,6 +32,7 @@ class GLGlobalState;
 class GPUProgramState;
 class TextureIDReference;
 class EffectTarget;
+class IImageBuilder;
 
 class MarkUserData {
 public:
@@ -41,6 +43,9 @@ public:
 
 class Mark : public SurfaceElevationListener {
 private:
+
+  IImageBuilder* _imageBuilder;
+
   /**
    * The text the mark displays.
    * Useless if the mark does not have label.
@@ -135,22 +140,22 @@ private:
 
   Vector3D* _cartesianPosition;
 
-  bool              _textureSolved;
+  bool           _textureSolved;
 #ifdef C_CODE
-  const IImage*     _textureImage;
+  const IImage*  _textureImage;
 #endif
 #ifdef JAVA_CODE
   private IImage _textureImage;
 #endif
-  float             _textureWidth;
-  float             _textureHeight;
-  float             _textureWidthProportion;
-  float             _textureHeightProportion;
-  bool              _textureSizeSetExternally;
-  bool              _textureProportionSetExternally;
-  const std::string _imageID;
+  float          _textureWidth;
+  float          _textureHeight;
+  float          _textureWidthProportion;
+  float          _textureHeightProportion;
+  bool           _textureSizeSetExternally;
+  bool           _textureProportionSetExternally;
+  std::string    _imageID;
   
-  bool _hasTCTransformations;
+  bool  _hasTCTransformations;
   float _translationTCX, _translationTCY;
   float _scalingTCX, _scalingTCY;
 
@@ -188,6 +193,31 @@ private:
   EffectTarget* getEffectTarget();
 
 public:
+
+
+  class ImageBuilderListener : public IImageBuilderListener {
+  private:
+    Mark* _mark;
+
+  public:
+    ImageBuilderListener(Mark* mark) :
+    _mark(mark)
+    {
+
+    }
+
+    ~ImageBuilderListener() {
+
+    }
+
+    void imageCreated(const IImage*      image,
+                      const std::string& imageName);
+
+    void onError(const std::string& error);
+    
+  };
+  
+  
   /**
    * Creates a mark with icon and label
    */
@@ -246,6 +276,18 @@ public:
        MarkTouchListener* listener=NULL,
        bool               autoDeleteListener=false);
 
+  /**
+   * Creates a mark whith a IImageBuilder, in future versions it'll be the only constructor
+   */
+  Mark(IImageBuilder*     imageBuilder,
+       const Geodetic3D&  position,
+       AltitudeMode       altitudeMode,
+       double             minDistanceToCamera=4.5e+06,
+       MarkUserData*      userData=NULL,
+       bool               autoDeleteUserData=true,
+       MarkTouchListener* listener=NULL,
+       bool               autoDeleteListener=false);
+
   ~Mark();
 
   bool isInitialized() const {
@@ -275,6 +317,11 @@ public:
   void onTextureDownloadError();
 
   void onTextureDownload(const IImage* image);
+
+  void onImageCreated(const IImage* image,
+                      const std::string& imageName);
+
+  void onImageCreationError(const std::string& error);
 
   float getTextureWidth() const {
     return _textureWidth;

@@ -43,7 +43,6 @@ import org.glob3.mobile.generated.WidgetUserData;
 
 import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.core.client.JavaScriptObject;
-import com.google.gwt.event.dom.client.TouchEvent;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Label;
@@ -89,14 +88,14 @@ public class G3MWidget_WebGL
 
       jsDefineG3MBrowserObjects();
 
-      // Events
 
-      if (TouchEvent.isSupported()) {
-         sinkEvents(Event.TOUCHEVENTS);
-      }
-      else {
-         sinkEvents(Event.MOUSEEVENTS | Event.ONCONTEXTMENU | Event.ONDBLCLICK | Event.ONMOUSEWHEEL);
-      }
+      // if (TouchEvent.isSupported()) {
+      //    sinkEvents(Event.TOUCHEVENTS);
+      // }
+      // else {
+      //    sinkEvents(Event.MOUSEEVENTS | Event.ONCONTEXTMENU | Event.ONDBLCLICK | Event.ONMOUSEWHEEL);
+      // }
+      sinkEvents(Event.TOUCHEVENTS | Event.MOUSEEVENTS | Event.ONCONTEXTMENU | Event.ONDBLCLICK | Event.ONMOUSEWHEEL);
 
       exportJSFunctions();
    }
@@ -125,13 +124,10 @@ public class G3MWidget_WebGL
 		$wnd.G3M.getCameraData = $entry(function() {
 			return that.@org.glob3.mobile.specific.G3MWidget_WebGL::getCameraData()();
 		});
-		// temp Java function with parameters and return value to test JS function calls
 		$wnd.G3M.newGeodetic3D = $entry(function(latitude, longitude, height) {
 			return that.@org.glob3.mobile.specific.G3MWidget_WebGL::newGeodetic3D(DDD)(latitude, longitude, height);
 		});
 		$wnd.G3M.moveCameraTo = $entry(function(position) {
-			//return that.@org.glob3.mobile.specific.G3MWidget_WebGL::moveToSpain()();
-			//return that.@org.glob3.mobile.specific.G3MWidget_WebGL::moveToSpain(D)(height);
 			//return that.@org.glob3.mobile.specific.G3MWidget_WebGL::moveCameraTo(DDD)(latitude, longitude, height);
 			that.@org.glob3.mobile.specific.G3MWidget_WebGL::moveCameraTo(Lorg/glob3/mobile/generated/Geodetic3D;)(position);
 		});
@@ -235,7 +231,6 @@ public class G3MWidget_WebGL
 
 
    private native void jsAddResizeHandler(JavaScriptObject jsCanvas) /*-{
-		//		debugger;
 		var that = this;
 		$wnd.g3mWidgetResize = function() {
 			if ((jsCanvas.clientWidth != jsCanvas.parentNode.clientWidth)
@@ -328,7 +323,8 @@ public class G3MWidget_WebGL
 			for ( var cn in contextNames) {
 				try {
 					context = jsCanvas.getContext(contextNames[cn], {
-						preserveDrawingBuffer : true
+						preserveDrawingBuffer : true,
+						alpha : false
 					});
 					//STORING SIZE FOR GLVIEWPORT
 					context.viewportWidth = jsCanvas.width;
@@ -361,27 +357,6 @@ public class G3MWidget_WebGL
    }
 
 
-   //   public void initWidget(final IStorage storage,
-   //                          final IDownloader downloader,
-   //                          final IThreadUtils threadUtils,
-   //                          final ICameraActivityListener cameraActivityListener,
-   //                          final Planet planet,
-   //                          final ArrayList<ICameraConstrainer> cameraConstraints,
-   //                          final CameraRenderer cameraRenderer,
-   //                          final Renderer mainRenderer,
-   //                          final ProtoRenderer busyRenderer,
-   //                          final ErrorRenderer errorRenderer,
-   //                          final Renderer hudRenderer,
-   //                          final Color backgroundColor,
-   //                          final boolean logFPS,
-   //                          final boolean logDownloaderStatistics,
-   //                          final GInitializationTask initializationTask,
-   //                          final boolean autoDeleteInitializationTask,
-   //                          final ArrayList<PeriodicalTask> periodicalTasks,
-   //                          final WidgetUserData userData,
-   //                          final SceneLighting sceneLighting,
-   //                          final InitialCameraPositionProvider initialCameraPositionProvider) {
-
    public void initWidget(final IStorage storage,
                           final IDownloader downloader,
                           final IThreadUtils threadUtils,
@@ -403,7 +378,6 @@ public class G3MWidget_WebGL
                           final SceneLighting sceneLighting,
                           final InitialCameraPositionProvider initialCameraPositionProvider,
                           final InfoDisplay infoDisplay) {
-
 
       _g3mWidget = G3MWidget.create(//
                _gl, //
@@ -437,20 +411,8 @@ public class G3MWidget_WebGL
 
    public void startWidget() {
       if (_g3mWidget != null) {
-         //         _shaderProgram = new ShaderProgram(_g3mWidget.getGL());
-         //         if (_shaderProgram.loadShaders(_vertexShader, _fragmentShader) == false) {
-         //            ILogger.instance().logInfo("Failed to load shaders");
-         //         }
-
          _motionEventProcessor = new MotionEventProcessor(_g3mWidget, _canvas.getCanvasElement());
          jsAddResizeHandler(_canvas.getCanvasElement());
-
-         /*      if (_program != null) {
-                  _widget.getGL().useProgram(_program);
-               }
-               else {
-                  throw new RuntimeException("PROGRAM INVALID");
-               }*/
 
          jsStartRenderLoop();
       }
@@ -458,23 +420,12 @@ public class G3MWidget_WebGL
 
 
    private native void jsStartRenderLoop() /*-{
-		//		debugger;
-
 		$wnd.g3mTick();
    }-*/;
 
 
    private void renderG3MWidget() {
-      //USING PROGRAM
-      //      if (_program != null) {
-      //jsGLInit();
-      //      _g3mWidget.getGL().useProgram(_shaderProgram);
       _g3mWidget.render(_width, _height);
-
-      //      }
-      //      else {
-      //         throw new RuntimeException("PROGRAM INVALID");
-      //      }
    }
 
 

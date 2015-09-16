@@ -23,6 +23,8 @@ package org.glob3.mobile.generated;
 //class JSONBaseObject;
 //class JSONArray;
 //class MarksRenderer;
+//class IImageBuilder;
+//class LabelImageBuilder;
 
 
 public class MapBoo
@@ -33,12 +35,14 @@ public class MapBoo
   {
     private final String _type;
     private final String _url;
+    private final String _attribution;
     private final boolean _verbose;
 
-    private MBLayer(String type, String url, boolean verbose)
+    private MBLayer(String type, String url, String attribution, boolean verbose)
     {
        _type = type;
        _url = url;
+       _attribution = attribution;
        _verbose = verbose;
     }
 
@@ -61,8 +65,9 @@ public class MapBoo
     
       final String type = jsonObject.get("type").asString().value();
       final String url = jsonObject.getAsString("url", "");
+      final String attribution = jsonObject.getAsString("attribution", "");
     
-      return new MapBoo.MBLayer(type, url, verbose);
+      return new MapBoo.MBLayer(type, url, attribution, verbose);
     }
 
     public void dispose()
@@ -92,50 +97,158 @@ public class MapBoo
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following type could not be found.
 //  class MBHandler;
 
-
-  public static class MBDataset extends RCObject
+  public abstract static class MBSymbology extends RCObject
   {
-    private MBHandler _handler;
-    private final String _id;
-    private final String _name;
-    private java.util.ArrayList<String> _labelingCriteria = new java.util.ArrayList<String>();
-    private java.util.ArrayList<String> _infoCriteria = new java.util.ArrayList<String>();
-    private final int _timestamp;
+    protected MBHandler _handler;
+    protected final String _datasetID;
+    protected final String _datasetName;
 
-//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
-//    MBDataset(MBDataset that);
-
-    private MBDataset(MBHandler handler, String id, String name, java.util.ArrayList<String> labelingCriteria, java.util.ArrayList<String> infoCriteria, int timestamp)
+    protected MBSymbology(MBHandler handler, String datasetID, String datasetName)
     {
        _handler = handler;
-       _id = id;
-       _name = name;
-       _labelingCriteria = labelingCriteria;
-       _infoCriteria = infoCriteria;
-       _timestamp = timestamp;
+       _datasetID = datasetID;
+       _datasetName = datasetName;
+
     }
+
+    public void dispose()
+    {
+      super.dispose();
+    }
+
+    public static MapBoo.MBSymbology fromJSON(MBHandler handler, String datasetID, String datasetName, JSONBaseObject jsonBaseObject)
+    {
+      if (jsonBaseObject == null)
+      {
+        return null;
+      }
+    
+      final JSONObject jsonObject = jsonBaseObject.asObject();
+    
+      final String type = jsonObject.get("type").asString().value();
+      if (type.equals("Vector"))
+      {
+        return MBVectorSymbology.fromJSON(handler, datasetID, datasetName, jsonObject);
+      }
+    
+      ILogger.instance().logError("Symbology type=\"%s\" not supported", type);
+      return null;
+    }
+
+    public abstract void apply(URL serverURL, VectorStreamingRenderer vectorStreamingRenderer);
+
+  }
+
+
+  public abstract static class MBShape
+  {
+//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
+//    MBShape(MBShape that);
+
+    protected MBShape()
+    {
+
+    }
+
+    public static MapBoo.MBShape fromJSON(JSONBaseObject jsonBaseObject)
+    {
+      if (jsonBaseObject == null)
+      {
+        return null;
+      }
+    
+      final JSONObject jsonObject = jsonBaseObject.asObject();
+      if (jsonObject == null)
+      {
+        return null;
+      }
+    
+      final String type = jsonObject.getAsString("type").value();
+      if (type.equals("Circle"))
+      {
+        return MBCircleShape.fromJSON(jsonObject);
+      }
+    
+      ILogger.instance().logError("Shape type \"%s\" not supported", type);
+    
+      return null;
+    }
+
+    public void dispose()
+    {
+
+    }
+
+    public abstract IImageBuilder createImageBuilder();
+
+  }
+
+
+  public static class MBCircleShape extends MBShape
+  {
+    private final Color _color ;
+    private final int _radius;
+
+    private MBCircleShape(Color color, int radius)
+    {
+       _color = new Color(color);
+       _radius = radius;
+
+    }
+
+    public static MapBoo.MBCircleShape fromJSON(JSONObject jsonObject)
+    {
+      final JSONArray colorArray = jsonObject.getAsArray("color");
+      final float red = (float) colorArray.getAsNumber(0).value();
+      final float green = (float) colorArray.getAsNumber(1).value();
+      final float blue = (float) colorArray.getAsNumber(2).value();
+      final float alpha = (float) colorArray.getAsNumber(3).value();
+    
+      final int radius = (int) jsonObject.getAsNumber("radius").value();
+    
+      return new MBCircleShape(Color.fromRGBA(red, green, blue, alpha), radius);
+    }
+
+    public void dispose()
+    {
+      super.dispose();
+    }
+
+    public final IImageBuilder createImageBuilder()
+    {
+      return new CircleImageBuilder(_color, _radius);
+    }
+
+  }
+
+
+  public static class MBVectorSymbology extends MBSymbology
+  {
+    private java.util.ArrayList<String> _labeling = new java.util.ArrayList<String>();
+    private final MBShape _shape;
+    private java.util.ArrayList<String> _info = new java.util.ArrayList<String>();
 
     private String createMarkLabel(JSONObject properties)
     {
-      final int criteriaSize = _labelingCriteria.size();
-      if ((criteriaSize == 0) || (properties.size() == 0))
+      final int labelingSize = _labeling.size();
+      if ((labelingSize == 0) || (properties.size() == 0))
       {
         return "<label>";
       }
-      else if (criteriaSize == 1)
+      else if (labelingSize == 1)
       {
-        return JSONBaseObject.toString(properties.get(_labelingCriteria.get(0)));
+        return JSONBaseObject.toString(properties.get(_labeling.get(0)));
       }
       else
       {
         IStringBuilder labelBuilder = IStringBuilder.newStringBuilder();
-        for (int i = 0; i < criteriaSize; i++)
+        for (int i = 0; i < labelingSize; i++)
         {
           if (i > 0)
           {
             labelBuilder.addString(" ");
           }
-          final String value = JSONBaseObject.toString(properties.get(_labelingCriteria.get(i)));
+          final String value = JSONBaseObject.toString(properties.get(_labeling.get(i)));
           labelBuilder.addString(value);
         }
     
@@ -152,67 +265,91 @@ public class MapBoo
         return null;
       }
     
-      final int criteriaSize = _infoCriteria.size();
-      if (criteriaSize == 0)
+      final int infoSize = _info.size();
+      if (infoSize == 0)
       {
         return null;
       }
     
       JSONObject infoProperties = new JSONObject();
-      for (int i = 0; i < criteriaSize; i++)
+      for (int i = 0; i < infoSize; i++)
       {
-        final String criteria = _infoCriteria.get(i);
-        final JSONBaseObject value = properties.get(criteria);
+        final String info = _info.get(i);
+        final JSONBaseObject value = properties.get(info);
         if (value != null)
         {
-          infoProperties.put(criteria, value.deepCopy());
+          infoProperties.put(info, value.deepCopy());
         }
       }
     
-      return new MBFeatureMarkTouchListener(_name, _handler, _infoCriteria, infoProperties);
+      return new MBFeatureMarkTouchListener(_datasetName, _handler, _info, infoProperties);
+    }
+
+    private IImageBuilder createImageBuilder(JSONObject properties)
+    {
+      final boolean hasLabeling = (_labeling.size() != 0) && (properties.size() != 0);
+      final boolean hasShape = (_shape != null);
+    
+      if (hasLabeling)
+      {
+        if (hasShape)
+        {
+          return new ColumnLayoutImageBuilder(createLabelImageBuilder(createMarkLabel(properties)), _shape.createImageBuilder());
+        }
+    
+        return createLabelImageBuilder(createMarkLabel(properties));
+      }
+    
+      if (hasShape)
+      {
+        return _shape.createImageBuilder();
+      }
+    
+      return createLabelImageBuilder("[X]");
+    }
+    private LabelImageBuilder createLabelImageBuilder(String label)
+    {
+      return new LabelImageBuilder(label, GFont.sansSerif(18, true), 2.0f, Color.white(), Color.black(), 2.0f, 0.0f, 0.0f); // shadowOffsetY -  shadowOffsetX -  shadowBlur -  shadowColor -  color -  margin
     }
 
     public void dispose()
     {
+      if (_shape != null)
+         _shape.dispose();
+
       super.dispose();
     }
 
-    public static MapBoo.MBDataset fromJSON(MBHandler handler, JSONBaseObject jsonBaseObject, boolean verbose)
+    public static MapBoo.MBVectorSymbology fromJSON(MBHandler handler, String datasetID, String datasetName, JSONObject jsonObject)
     {
-      if (jsonBaseObject == null)
-      {
-        return null;
-      }
+      java.util.ArrayList<String> labeling = jsonObject.getAsArray("labeling").asStringVector();
+      final MBShape shape = MBShape.fromJSON(jsonObject.get("shape"));
+      java.util.ArrayList<String> info = jsonObject.getAsArray("info").asStringVector();
     
-      final JSONObject jsonObject = jsonBaseObject.asObject();
-      if (jsonObject == null)
-      {
-        return null;
-      }
-    
-      final String id = jsonObject.get("id").asString().value();
-      final String name = jsonObject.get("name").asString().value();
-      java.util.ArrayList<String> labelingCriteria = jsonObject.getAsArray("labelingCriteria").asStringVector();
-      java.util.ArrayList<String> infoCriteria = jsonObject.getAsArray("infoCriteria").asStringVector();
-      final int timestamp = (int) jsonObject.get("timestamp").asNumber().value();
-    
-      return new MBDataset(handler, id, name, labelingCriteria, infoCriteria, timestamp);
+      return new MBVectorSymbology(handler, datasetID, datasetName, labeling, shape, info);
     }
 
+    public MBVectorSymbology(MBHandler handler, String datasetID, String datasetName, java.util.ArrayList<String> labeling, MBShape shape, java.util.ArrayList<String> info)
+    {
+       super(handler, datasetID, datasetName);
+       _labeling = labeling;
+       _shape = shape;
+       _info = info;
+    }
 
     public final void apply(URL serverURL, VectorStreamingRenderer vectorStreamingRenderer)
     {
       String properties = "";
-      for (int i = 0; i < _labelingCriteria.size(); i++)
+      for (int i = 0; i < _labeling.size(); i++)
       {
-        properties += _labelingCriteria.get(i) + "|";
+        properties += _labeling.get(i) + "|";
       }
-      for (int i = 0; i < _infoCriteria.size(); i++)
+      for (int i = 0; i < _info.size(); i++)
       {
-        properties += _infoCriteria.get(i) + "|";
+        properties += _info.get(i) + "|";
       }
     
-      vectorStreamingRenderer.addVectorSet(new URL(serverURL, "/public/v1/VectorialStreaming/"), _id, properties, new MBDatasetVectorSetSymbolizer(this), true, DownloadPriority.MEDIUM, TimeInterval.zero(), true, true, false); // haltOnError -  verbose -  readExpired -  deleteSymbolizer
+      vectorStreamingRenderer.addVectorSet(new URL(serverURL, "/public/v1/VectorialStreaming/"), _datasetID, properties, new MBDatasetVectorSetSymbolizer(this), true, DownloadPriority.MEDIUM, TimeInterval.zero(), true, true, false); // haltOnError -  verbose -  readExpired -  deleteSymbolizer
     }
 
     public final Mark createMark(GEO2DPointGeometry geometry)
@@ -239,23 +376,23 @@ public class MapBoo
 
   public static class MBDatasetVectorSetSymbolizer extends VectorStreamingRenderer.VectorSetSymbolizer
   {
-    private final MBDataset _dataset;
+    private final MBVectorSymbology _symbology;
 
-    public MBDatasetVectorSetSymbolizer(MBDataset dataset)
+    public MBDatasetVectorSetSymbolizer(MBVectorSymbology symbology)
     {
-       _dataset = dataset;
-      _dataset._retain();
+       _symbology = symbology;
+      _symbology._retain();
     }
 
     public void dispose()
     {
-      _dataset._release();
+      _symbology._release();
       super.dispose();
     }
 
     public final Mark createMark(GEO2DPointGeometry geometry)
     {
-      return _dataset.createMark(geometry);
+      return _symbology.createMark(geometry);
     }
   }
 
@@ -265,19 +402,19 @@ public class MapBoo
     private final String _id;
     private final String _name;
     private java.util.ArrayList<MapBoo.MBLayer> _layers = new java.util.ArrayList<MapBoo.MBLayer>();
-    private java.util.ArrayList<MapBoo.MBDataset> _datasets = new java.util.ArrayList<MapBoo.MBDataset>();
+    private java.util.ArrayList<MapBoo.MBSymbolizedDataset> _symbolizedDatasets = new java.util.ArrayList<MapBoo.MBSymbolizedDataset>();
     private final int _timestamp;
     private final boolean _verbose;
 
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
 //    MBMap(MBMap that);
 
-    private MBMap(String id, String name, java.util.ArrayList<MapBoo.MBLayer> layers, java.util.ArrayList<MapBoo.MBDataset> datasets, int timestamp, boolean verbose)
+    private MBMap(String id, String name, java.util.ArrayList<MapBoo.MBLayer> layers, java.util.ArrayList<MapBoo.MBSymbolizedDataset> symbolizedDatasets, int timestamp, boolean verbose)
     {
        _id = id;
        _name = name;
        _layers = layers;
-       _datasets = datasets;
+       _symbolizedDatasets = symbolizedDatasets;
        _timestamp = timestamp;
        _verbose = verbose;
     }
@@ -295,15 +432,15 @@ public class MapBoo
       }
       return result;
     }
-    private static java.util.ArrayList<MapBoo.MBDataset> parseDatasets(MBHandler handler, JSONArray jsonArray, boolean verbose)
+    private static java.util.ArrayList<MapBoo.MBSymbolizedDataset> parseSymbolizedDatasets(MBHandler handler, JSONArray jsonArray, boolean verbose)
     {
-      java.util.ArrayList<MapBoo.MBDataset> result = new java.util.ArrayList<MapBoo.MBDataset>();
+      java.util.ArrayList<MapBoo.MBSymbolizedDataset> result = new java.util.ArrayList<MapBoo.MBSymbolizedDataset>();
       for (int i = 0; i < jsonArray.size(); i++)
       {
-        MBDataset dataset = MBDataset.fromJSON(handler, jsonArray.get(i), verbose);
-        if (dataset != null)
+        MBSymbolizedDataset symbolizedDataset = MBSymbolizedDataset.fromJSON(handler, jsonArray.get(i), verbose);
+        if (symbolizedDataset != null)
         {
-          result.add(dataset);
+          result.add(symbolizedDataset);
         }
       }
       return result;
@@ -323,13 +460,26 @@ public class MapBoo
         return null;
       }
     
+      final JSONBaseObject jsonErrorCode = jsonObject.get("errorCode");
+      if (jsonErrorCode != null)
+      {
+        final JSONString jsonStringErrorCode = jsonErrorCode.asString();
+        if (jsonStringErrorCode != null)
+        {
+          final String errorCode = jsonStringErrorCode.value();
+          final String errorDescription = jsonObject.getAsString("errorDescription", "");
+          ILogger.instance().logError("Error: %s %s", errorCode, errorDescription);
+        }
+        return null;
+      }
+    
       final String id = jsonObject.get("id").asString().value();
       final String name = jsonObject.get("name").asString().value();
       java.util.ArrayList<MapBoo.MBLayer> layers = parseLayers(jsonObject.get("layerSet").asArray(), verbose);
-      java.util.ArrayList<MapBoo.MBDataset> datasets = parseDatasets(handler, jsonObject.get("datasets").asArray(), verbose);
+      java.util.ArrayList<MapBoo.MBSymbolizedDataset> symDatasets = parseSymbolizedDatasets(handler, jsonObject.get("symbolizedDatasets").asArray(), verbose);
       final int timestamp = (int) jsonObject.get("timestamp").asNumber().value();
     
-      return new MBMap(id, name, layers, datasets, timestamp, verbose);
+      return new MBMap(id, name, layers, symDatasets, timestamp, verbose);
     }
 
     public void dispose()
@@ -339,10 +489,11 @@ public class MapBoo
         ILogger.instance().logInfo("MapBoo: deleting map");
       }
     
-      for (int i = 0; i < _datasets.size(); i++)
+      for (int i = 0; i < _symbolizedDatasets.size(); i++)
       {
-        MBDataset dataset = _datasets.get(i);
-        dataset._release();
+        MBSymbolizedDataset symbolizedDataset = _symbolizedDatasets.get(i);
+        if (symbolizedDataset != null)
+           symbolizedDataset.dispose();
       }
     
       for (int i = 0; i < _layers.size(); i++)
@@ -371,10 +522,10 @@ public class MapBoo
         layer.apply(layerSet);
       }
     
-      for (int i = 0; i < _datasets.size(); i++)
+      for (int i = 0; i < _symbolizedDatasets.size(); i++)
       {
-        MBDataset dataset = _datasets.get(i);
-        dataset.apply(serverURL, vectorStreamingRenderer);
+        MBSymbolizedDataset symbolizedDataset = _symbolizedDatasets.get(i);
+        symbolizedDataset.apply(serverURL, vectorStreamingRenderer);
       }
     }
   }
@@ -388,7 +539,7 @@ public class MapBoo
     void onMapParseError();
     void onSelectedMap(MapBoo.MBMap map);
 
-    void onFeatureTouched(String datasetName, java.util.ArrayList<String> infoCriteria, JSONObject properties);
+    void onFeatureTouched(String datasetName, java.util.ArrayList<String> info, JSONObject properties);
   }
 
 
@@ -396,20 +547,20 @@ public class MapBoo
   {
     private final String _datasetName;
     private MBHandler _handler;
-    private java.util.ArrayList<String> _infoCriteria = new java.util.ArrayList<String>();
+    private java.util.ArrayList<String> _info = new java.util.ArrayList<String>();
     private final JSONObject _properties;
 
-    public MBFeatureMarkTouchListener(String datasetName, MBHandler handler, java.util.ArrayList<String> infoCriteria, JSONObject properties)
+    public MBFeatureMarkTouchListener(String datasetName, MBHandler handler, java.util.ArrayList<String> info, JSONObject properties)
     {
        _datasetName = datasetName;
        _handler = handler;
-       _infoCriteria = infoCriteria;
+       _info = info;
        _properties = properties;
     }
 
     public final boolean touchedMark(Mark mark)
     {
-      _handler.onFeatureTouched(_datasetName, _infoCriteria, _properties);
+      _handler.onFeatureTouched(_datasetName, _info, _properties);
       return true;
     }
 
@@ -777,6 +928,7 @@ public class MapBoo
      _serverURL = serverURL;
      _handler = handler;
      _verbose = verbose;
+     _mapID = "";
     _layerSet = new LayerSet();
     _layerSet.addLayer(new ChessboardLayer());
   

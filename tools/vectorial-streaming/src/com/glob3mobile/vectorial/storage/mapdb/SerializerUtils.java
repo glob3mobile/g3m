@@ -14,14 +14,14 @@ import com.glob3mobile.geo.Geodetic2D;
 import com.glob3mobile.geo.Sector;
 
 
-class SerializerUtils {
+public class SerializerUtils {
 
    private SerializerUtils() {
    }
 
 
-   static void serialize(final DataOutput out,
-                         final Geodetic2D position) throws IOException {
+   public static void serializeGeodetic2D(final DataOutput out,
+                                          final Geodetic2D position) throws IOException {
       if (position == null) {
          out.writeDouble(Double.NaN);
          out.writeDouble(Double.NaN);
@@ -33,7 +33,7 @@ class SerializerUtils {
    }
 
 
-   static Geodetic2D deserializeGeodetic2D(final DataInput in) throws IOException {
+   public static Geodetic2D deserializeGeodetic2D(final DataInput in) throws IOException {
       final double latitude = in.readDouble();
       final double longitude = in.readDouble();
       if (Double.isNaN(latitude) || Double.isNaN(longitude)) {
@@ -48,16 +48,16 @@ class SerializerUtils {
    }
 
 
-   static void serialize(final DataOutput out,
-                         final Sector sector) throws IOException {
+   public static void serializeSector(final DataOutput out,
+                                      final Sector sector) throws IOException {
       if (sector == null) {
          final Geodetic2D position = null;
-         serialize(out, position);
-         serialize(out, position);
+         serializeGeodetic2D(out, position);
+         serializeGeodetic2D(out, position);
       }
       else {
-         serialize(out, sector._lower);
-         serialize(out, sector._upper);
+         serializeGeodetic2D(out, sector._lower);
+         serializeGeodetic2D(out, sector._upper);
       }
    }
 
@@ -67,7 +67,7 @@ class SerializerUtils {
    }
 
 
-   static Sector deserializeSector(final DataInput in) throws IOException {
+   public static Sector deserializeSector(final DataInput in) throws IOException {
       final Geodetic2D lower = deserializeGeodetic2D(in);
       final Geodetic2D upper = deserializeGeodetic2D(in);
       if ((lower == null) || (upper == null)) {
@@ -105,14 +105,20 @@ class SerializerUtils {
                return e;
             }
          }
-         throw null;
+         return null;
       }
    }
 
 
-   static <K, V> void serialize(final DataOutput out,
-                                final Map<K, V> map) throws IOException {
+   private static <K, V> void serialize(final DataOutput out,
+                                        final Map<K, V> map) throws IOException {
       out.writeByte(Type.MAP._token);
+      serializeMap(out, map);
+   }
+
+
+   public static <K, V> void serializeMap(final DataOutput out,
+                                          final Map<K, V> map) throws IOException {
       final int size = map.size();
       out.writeInt(size);
       for (final Map.Entry<K, V> entry : map.entrySet()) {
@@ -122,7 +128,7 @@ class SerializerUtils {
    }
 
 
-   private static <K, V> Map<K, V> deserializeMap(final DataInput in) throws IOException {
+   public static <K, V> Map<K, V> deserializeMap(final DataInput in) throws IOException {
       final int size = in.readInt();
       final Map<K, V> map = new LinkedHashMap<>(size);
       for (int i = 0; i < size; i++) {
@@ -135,7 +141,7 @@ class SerializerUtils {
 
 
    @SuppressWarnings("unchecked")
-   public static <T> T deserialize(final DataInput in) throws IOException {
+   private static <T> T deserialize(final DataInput in) throws IOException {
       final byte token = in.readByte();
       final Type type = Type.fromToken(token);
       if (type == null) {
@@ -173,7 +179,7 @@ class SerializerUtils {
    }
 
 
-   private static <T> List<T> deserializeList(final DataInput in) throws IOException {
+   public static <T> List<T> deserializeList(final DataInput in) throws IOException {
       final int size = in.readInt();
       final List<T> list = new ArrayList<>(size);
       for (int i = 0; i < size; i++) {
@@ -184,9 +190,15 @@ class SerializerUtils {
    }
 
 
-   static <T> void serialize(final DataOutput out,
-                             final List<T> list) throws IOException {
+   private static <T> void serialize(final DataOutput out,
+                                     final List<T> list) throws IOException {
       out.writeByte(Type.LIST._token);
+      serializeList(out, list);
+   }
+
+
+   public static <T> void serializeList(final DataOutput out,
+                                        final List<T> list) throws IOException {
       final int size = list.size();
       out.writeInt(size);
       for (final T value : list) {
@@ -195,6 +207,7 @@ class SerializerUtils {
    }
 
 
+   @SuppressWarnings("unchecked")
    private static <T> void serialize(final DataOutput out,
                                      final T value) throws IOException {
       if (value == null) {
@@ -223,6 +236,12 @@ class SerializerUtils {
       }
       else if (value instanceof Boolean) {
          serialize(out, (Boolean) value);
+      }
+      else if (value instanceof Map) {
+         serialize(out, (Map) value);
+      }
+      else if (value instanceof List) {
+         serialize(out, (List) value);
       }
       else {
          throw new IOException("Class not yet supported: " + value.getClass());

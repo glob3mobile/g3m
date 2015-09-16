@@ -4,9 +4,12 @@ package com.glob3mobile.vectorial.storage.mapdb;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentNavigableMap;
+
+import org.mapdb.BTreeMap;
 
 import com.glob3mobile.geo.Angle;
 import com.glob3mobile.geo.Geodetic2D;
@@ -23,9 +26,119 @@ class PointFeatureMapDBNode
       PointFeatureStorage.Node {
 
 
-   public static void insertFeatures(final PointFeatureMapDBStorage storage,
-                                     final QuadKey quadKey,
-                                     final PointFeaturesSet featuresSet) {
+   private static int PROPERTIES_KEY;
+
+
+   private static class MapDBFeaturesSet {
+
+
+      public final List<MapDBFeature> _features;
+      public final Geodetic2D         _averagePosition;
+      public final Sector             _minimumSector;
+
+
+      private MapDBFeaturesSet(final List<MapDBFeature> features,
+                               final Geodetic2D averagePosition,
+                               final Sector minimumSector) {
+         _features = features;
+         _averagePosition = averagePosition;
+         _minimumSector = minimumSector;
+      }
+
+
+      private int size() {
+         return _features.size();
+      }
+
+
+      private static MapDBFeaturesSet extractFeatures(final Sector sector,
+                                                      final List<MapDBFeature> features) {
+         double sumLatRad = 0;
+         double sumLonRad = 0;
+         double minLatRad = Double.POSITIVE_INFINITY;
+         double minLonRad = Double.POSITIVE_INFINITY;
+         double maxLatRad = Double.NEGATIVE_INFINITY;
+         double maxLonRad = Double.NEGATIVE_INFINITY;
+
+         final List<MapDBFeature> extracted = new ArrayList<>();
+
+         final Iterator<MapDBFeature> iterator = features.iterator();
+         while (iterator.hasNext()) {
+            final MapDBFeature feature = iterator.next();
+            final Geodetic2D point = feature._position;
+            if (sector.contains(point)) {
+               extracted.add(feature);
+
+               final double latRad = point._latitude._radians;
+               final double lonRad = point._longitude._radians;
+
+               sumLatRad += latRad;
+               sumLonRad += lonRad;
+
+               if (latRad < minLatRad) {
+                  minLatRad = latRad;
+               }
+               if (latRad > maxLatRad) {
+                  maxLatRad = latRad;
+               }
+
+               if (lonRad < minLonRad) {
+                  minLonRad = lonRad;
+               }
+               if (lonRad > maxLonRad) {
+                  maxLonRad = lonRad;
+               }
+
+               iterator.remove();
+            }
+         }
+
+         final int extractedSize = extracted.size();
+         if (extractedSize == 0) {
+            return null;
+         }
+
+         final double averageLatRad = sumLatRad / extractedSize;
+         final double averageLonRad = sumLonRad / extractedSize;
+
+         return new MapDBFeaturesSet( //
+                  extracted, //
+                  Geodetic2D.fromRadians(averageLatRad, averageLonRad), //
+                  Sector.fromRadians(minLatRad, minLonRad, maxLatRad, maxLonRad));
+      }
+
+   }
+
+
+   static void insertFeatures(final PointFeatureMapDBStorage storage,
+                              final QuadKey quadKey,
+                              final PointFeaturesSet featuresSet) {
+      final List<MapDBFeature> features = new ArrayList<>(featuresSet._features.size());
+      for (final PointFeature pointFeature : featuresSet._features) {
+         final Geodetic2D position = pointFeature._position;
+         final long propertiesID = saveProperties(storage, pointFeature._properties);
+         features.add(new MapDBFeature(position, propertiesID));
+      }
+
+      final MapDBFeaturesSet mapDBFeaturesSet = new MapDBFeaturesSet(features, featuresSet._averagePosition,
+               featuresSet._minimumSector);
+
+      insertFeatures(storage, quadKey, mapDBFeaturesSet);
+   }
+
+
+   private static long saveProperties(final PointFeatureMapDBStorage storage,
+                                      final Map<String, Object> properties) {
+      final BTreeMap<Long, Map<String, Object>> propertiesMap = storage.getPropertiesMap();
+      final long key = PROPERTIES_KEY++;
+      propertiesMap.put(key, properties);
+      return key;
+   }
+
+
+   private static void insertFeatures(final PointFeatureMapDBStorage storage,
+                                      final QuadKey quadKey,
+                                      final MapDBFeaturesSet featuresSet) {
       final byte[] id = quadKey._id;
 
       final PointFeatureMapDBNode ancestor = getAncestorOrSameLevel(storage, id);
@@ -51,7 +164,7 @@ class PointFeatureMapDBNode
    private static List<PointFeatureMapDBNode> getDescendants(final PointFeatureMapDBStorage storage,
                                                              final byte[] id) {
       final byte[] toKey = QuadKeyUtils.append(id, (byte) 9);
-      final ConcurrentNavigableMap<byte[], NodeHeader> headers = storage.getNodesHeaders().subMap(id, true, toKey, true);
+      final ConcurrentNavigableMap<byte[], NodeHeader> headers = storage.getNodesHeadersMap().subMap(id, true, toKey, true);
 
       final List<PointFeatureMapDBNode> result = new ArrayList<>(headers.size());
       for (final Map.Entry<byte[], NodeHeader> entry : headers.entrySet()) {
@@ -66,7 +179,7 @@ class PointFeatureMapDBNode
    private static PointFeatureMapDBNode getAncestorOrSameLevel(final PointFeatureMapDBStorage storage,
                                                                final byte[] id) {
       // final byte[] ancestorID = storage.getNodesHeaders().ceilingKey(id);
-      final byte[] ancestorID = storage.getNodesHeaders().floorKey(id);
+      final byte[] ancestorID = storage.getNodesHeadersMap().floorKey(id);
       if (ancestorID == null) {
          return null;
       }
@@ -81,7 +194,7 @@ class PointFeatureMapDBNode
          return null;
       }
 
-      final NodeHeader header = storage.getNodesHeaders().get(id);
+      final NodeHeader header = storage.getNodesHeadersMap().get(id);
       if (header == null) {
          return null;
       }
@@ -95,14 +208,14 @@ class PointFeatureMapDBNode
    private Sector                         _minimumSector;
 
    private int                            _featuresCount;
-   private List<PointFeature>             _features;
+   private List<MapDBFeature>             _features;
    private Geodetic2D                     _averagePosition;
 
 
    private PointFeatureMapDBNode(final PointFeatureMapDBStorage storage,
                                  final byte[] id,
                                  final Sector nodeSector,
-                                 final PointFeaturesSet featuresSet) {
+                                 final MapDBFeaturesSet featuresSet) {
       _storage = storage;
       _id = id;
       _nodeSector = nodeSector;
@@ -116,7 +229,7 @@ class PointFeatureMapDBNode
    PointFeatureMapDBNode(final PointFeatureMapDBStorage storage,
                          final byte[] id,
                          final NodeHeader header,
-                         final List<PointFeature> features) {
+                         final List<MapDBFeature> features) {
       _storage = storage;
       _id = id;
       _nodeSector = header._nodeSector;
@@ -128,7 +241,7 @@ class PointFeatureMapDBNode
 
 
    private void rawSave() {
-      for (final PointFeature feature : _features) {
+      for (final MapDBFeature feature : _features) {
          if (!_nodeSector.contains(feature._position)) {
             throw new RuntimeException("LOGIC ERROR!!");
          }
@@ -138,64 +251,40 @@ class PointFeatureMapDBNode
       }
 
       if (getFeatures().size() > _storage.getMaxFeaturesPerNode()) {
-         split();
-         return;
+         if (split()) {
+            return;
+         }
       }
 
       final NodeHeader header = new NodeHeader(getNodeSector(), getMinimumSector(), getAveragePosition(), getFeaturesCount());
-      _storage.getNodesHeaders().put(_id, header);
+      _storage.getNodesHeadersMap().put(_id, header);
 
       if (_features == null) {
          throw new RuntimeException("Logic Error");
       }
-      _storage.getNodesFeatures().put(_id, _features);
-   }
-
-
-   private void split() {
-      final List<PointFeature> features = new ArrayList<>(getFeatures()); // ask for features before removing
-
-      remove();
-
-      final QuadKey key = new QuadKey(_id, _nodeSector);
-      final QuadKey[] childrenKeys = key.createChildren();
-      for (final QuadKey childKey : childrenKeys) {
-         final PointFeaturesSet childPointFeaturesSet = PointFeaturesSet.extractFeatures(childKey._sector, features);
-         if (childPointFeaturesSet != null) {
-            // System.out.println(">>> tile " + getID() + " split " + childPointFeaturesSet.size() + " points into " + toString(child._id));
-            insertFeatures(_storage, childKey, childPointFeaturesSet);
-         }
-      }
-
-      if (!features.isEmpty()) {
-         throw new RuntimeException("Logic error!");
-      }
+      _storage.getNodesFeaturesMap().put(_id, _features);
    }
 
 
    private void remove() {
-      _storage.getNodesHeaders().remove(_id);
-      _storage.getNodesFeatures().remove(_id);
+      _storage.getNodesHeadersMap().remove(_id);
+      _storage.getNodesFeaturesMap().remove(_id);
    }
 
 
-   @Override
-   public List<PointFeature> getFeatures() {
+   private List<MapDBFeature> getMapDBFeatures() {
       if (_features == null) {
          _features = loadFeatures();
       }
-
       return _features;
    }
 
 
-   private List<PointFeature> loadFeatures() {
-      final List<PointFeature> features = _storage.getNodesFeatures().get(_id);
-
+   private List<MapDBFeature> loadFeatures() {
+      final List<MapDBFeature> features = _storage.getNodesFeaturesMap().get(_id);
       if ((features == null) || (_featuresCount != features.size())) {
          throw new RuntimeException("Inconsistency in pointsCount");
       }
-
       return Collections.unmodifiableList(features);
    }
 
@@ -236,61 +325,125 @@ class PointFeatureMapDBNode
    }
 
 
-   private void mergeFeatures(final PointFeaturesSet newPointFeaturesSet) {
+   private void mergeFeatures(final MapDBFeaturesSet newPointFeaturesSet) {
       final int mergedLength = getFeaturesCount() + newPointFeaturesSet.size();
       if (mergedLength > _storage.getMaxFeaturesPerNode()) {
-         split(newPointFeaturesSet);
+         if (split(newPointFeaturesSet)) {
+            return;
+         }
       }
-      else {
-         updateFromFeatures(newPointFeaturesSet);
-      }
+      updateFromFeatures(newPointFeaturesSet);
    }
 
 
-   private void split(final PointFeaturesSet newPointFeaturesSet) {
-      final List<PointFeature> features = getFeatures(); // ask for features before removing
+   private static class ChildSplitResult {
+      private final QuadKey          _key;
+      private final MapDBFeaturesSet _featuresSet;
+
+
+      private ChildSplitResult(final QuadKey key,
+                               final MapDBFeaturesSet featuresSet) {
+         super();
+         _key = key;
+         _featuresSet = featuresSet;
+      }
+
+   }
+
+   private static final int MAX_SPLIT_DEPTH = 8;
+
+
+   private List<ChildSplitResult> splitIntoChildren(final List<MapDBFeature> features) {
+      return splitIntoChildren(new QuadKey(_id, _nodeSector), features, 0);
+   }
+
+
+   private static List<ChildSplitResult> splitIntoChildren(final QuadKey key,
+                                                           final List<MapDBFeature> features,
+                                                           final int splitDepth) {
+      final int featuresSize = features.size(); // save the size here, to be compare after the features get cleared in MapDBFeaturesSet.extractFeatures()
+
+      final QuadKey[] childrenKeys = key.createChildren();
+      final List<ChildSplitResult> result = new ArrayList<>(childrenKeys.length);
+      for (final QuadKey childKey : childrenKeys) {
+         final MapDBFeaturesSet childPointFeaturesSet = MapDBFeaturesSet.extractFeatures(childKey._sector, features);
+         if (childPointFeaturesSet != null) {
+            final List<MapDBFeature> childFeatures = childPointFeaturesSet._features;
+            if ((childFeatures.size() == featuresSize) && (splitDepth < MAX_SPLIT_DEPTH)) {
+               return splitIntoChildren(childKey, childFeatures, splitDepth + 1);
+            }
+            result.add(new ChildSplitResult(childKey, childPointFeaturesSet));
+         }
+      }
+      if (!features.isEmpty()) {
+         throw new RuntimeException("Logic error!");
+      }
+      if (result.size() == 0) {
+         throw new RuntimeException("Logic error!");
+      }
+      return result;
+   }
+
+
+   private boolean split() {
+      final List<MapDBFeature> features = new ArrayList<>(getMapDBFeatures()); // ask for features before removing
+
+      final List<ChildSplitResult> splits = splitIntoChildren(features);
+      if (splits.size() == 1) {
+         System.out.println("- can't split \"" + getID() + "\" (2)");
+         return false;
+      }
+
 
       remove();
+      for (final ChildSplitResult split : splits) {
+         insertFeatures(_storage, split._key, split._featuresSet);
+      }
+
+      return true;
+   }
+
+
+   private boolean split(final MapDBFeaturesSet newPointFeaturesSet) {
+      final List<MapDBFeature> oldFeatures = getMapDBFeatures(); // ask for features before removing
 
       final int oldFeaturesCount = getFeaturesCount();
       final int newFeaturesSize = newPointFeaturesSet.size();
       final int mergedFeaturesSize = oldFeaturesCount + newFeaturesSize;
 
-      final List<PointFeature> mergedFeatures = new ArrayList<>(mergedFeaturesSize);
-      mergedFeatures.addAll(features);
+      final List<MapDBFeature> mergedFeatures = new ArrayList<>(mergedFeaturesSize);
+      mergedFeatures.addAll(oldFeatures);
       mergedFeatures.addAll(newPointFeaturesSet._features);
 
 
-      final QuadKey key = new QuadKey(_id, _nodeSector);
-      final QuadKey[] children = key.createChildren();
-      for (final QuadKey child : children) {
-         final PointFeaturesSet childPointFeaturesSet = PointFeaturesSet.extractFeatures(child._sector, mergedFeatures);
-         if (childPointFeaturesSet != null) {
-            // System.out.println(">>> tile " + getID() + " split " + childPointFeaturesSet.size() + " points into " + toString(child._id));
-            insertFeatures(_storage, child, childPointFeaturesSet);
-         }
+      final List<ChildSplitResult> splits = splitIntoChildren(mergedFeatures);
+      if (splits.size() == 1) {
+         System.out.println("- can't split \"" + getID() + "\" (1)");
+         return false;
       }
 
-      if (!mergedFeatures.isEmpty()) {
-         throw new RuntimeException("Logic error!");
+
+      remove();
+      for (final ChildSplitResult split : splits) {
+         insertFeatures(_storage, split._key, split._featuresSet);
       }
+
+      return true;
    }
 
 
-   private void updateFromFeatures(final PointFeaturesSet newPointFeaturesSet) {
+   private void updateFromFeatures(final MapDBFeaturesSet newPointFeaturesSet) {
       final int oldFeaturesCount = getFeaturesCount();
       final int newFeaturesSize = newPointFeaturesSet.size();
       final int mergedFeaturesSize = oldFeaturesCount + newFeaturesSize;
 
-      final List<PointFeature> mergedFeatures = new ArrayList<PointFeature>(mergedFeaturesSize);
-      mergedFeatures.addAll(getFeatures());
+      final List<MapDBFeature> mergedFeatures = new ArrayList<>(mergedFeaturesSize);
+      mergedFeatures.addAll(getMapDBFeatures());
       mergedFeatures.addAll(newPointFeaturesSet._features);
 
       final Geodetic2D mergedAveragePosition = weightedAverage( //
                _averagePosition, oldFeaturesCount, //
                newPointFeaturesSet._averagePosition, newFeaturesSize);
-
-      //System.out.println(" merged " + mergedFeaturesSize + " points, old=" + oldFeaturesCount + ", new=" + newFeaturesSize);
 
       _featuresCount = mergedFeaturesSize;
       _features = mergedFeatures;
@@ -359,16 +512,12 @@ class PointFeatureMapDBNode
 
    private static void splitFeaturesIntoDescendants(final PointFeatureMapDBStorage storage,
                                                     final QuadKey quadKey,
-                                                    final PointFeaturesSet featuresSet,
+                                                    final MapDBFeaturesSet featuresSet,
                                                     final List<PointFeatureMapDBNode> descendants) {
-      final List<PointFeature> features = new ArrayList<>(featuresSet._features);
+      final List<MapDBFeature> features = new ArrayList<>(featuresSet._features);
       for (final PointFeatureMapDBNode descendant : descendants) {
-         final PointFeaturesSet descendantPointFeaturesSet = PointFeaturesSet.extractFeatures(descendant._nodeSector, features);
+         final MapDBFeaturesSet descendantPointFeaturesSet = MapDBFeaturesSet.extractFeatures(descendant._nodeSector, features);
          if (descendantPointFeaturesSet != null) {
-            // System.out.println(">>> tile " + toString(header._id) + " split " + descendantPointFeaturesSet.size()
-            // + " points into descendant " + toString(descendant._id) + " (" + points.size()
-            // + " points not yet distributed)");
-
             descendant.getFeatures(); // force features load
             descendant.mergeFeatures(descendantPointFeaturesSet);
             descendant._features = null; // release features' memory
@@ -376,16 +525,11 @@ class PointFeatureMapDBNode
       }
 
       if (!features.isEmpty()) {
-         final List<QuadKey> descendantsQuadKeys = descendantsQuadKeysOfLevel(quadKey, quadKey.getLevel() + 1);
-         for (final QuadKey descendantQuadKey : descendantsQuadKeys) {
-            final PointFeaturesSet descendantPointFeaturesSet = PointFeaturesSet.extractFeatures(descendantQuadKey._sector,
-                     features);
+         final List<QuadKey> descendantsQKs = descendantsQuadKeysOfLevel(quadKey, quadKey.getLevel() + 1);
+         for (final QuadKey descendantQK : descendantsQKs) {
+            final MapDBFeaturesSet descendantPointFeaturesSet = MapDBFeaturesSet.extractFeatures(descendantQK._sector, features);
             if (descendantPointFeaturesSet != null) {
-               // System.out.println(">>> 2ND tile " + toString(header._id) + " split " + descendantPointFeaturesSet.size()
-               // + " points into descendant " + toString(descendantQuadKey._id) + " (" + points.size()
-               // + " points not yet distributed)");
-
-               insertFeatures(storage, descendantQuadKey, descendantPointFeaturesSet);
+               insertFeatures(storage, descendantQK, descendantPointFeaturesSet);
             }
          }
 
@@ -393,6 +537,19 @@ class PointFeatureMapDBNode
             throw new RuntimeException("Logic error!");
          }
       }
+   }
+
+
+   @Override
+   public List<PointFeature> getFeatures() {
+      final BTreeMap<Long, Map<String, Object>> propertiesMap = _storage.getPropertiesMap();
+      final List<MapDBFeature> mapDBFeatures = getMapDBFeatures();
+      final List<PointFeature> result = new ArrayList<>(mapDBFeatures.size());
+      for (final MapDBFeature mapDBFeature : mapDBFeatures) {
+         final Map<String, Object> properties = propertiesMap.get(mapDBFeature._propertiesID);
+         result.add(new PointFeature(properties, mapDBFeature._position));
+      }
+      return result;
    }
 
 

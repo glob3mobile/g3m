@@ -173,7 +173,7 @@ public:
   static int oneMinusSrcAlpha() { return _oneMinusSrcAlpha; }
   static int one()              { return _one; }
   static int zero()             { return _zero; }
-  
+
   static void init(const INativeGL* ngl) {
     _srcAlpha         = ngl->BlendFactor_SrcAlpha();
     _oneMinusSrcAlpha = ngl->BlendFactor_OneMinusSrcAlpha();

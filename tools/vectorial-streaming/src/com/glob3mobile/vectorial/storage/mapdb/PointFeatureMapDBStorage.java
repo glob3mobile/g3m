@@ -2,10 +2,13 @@
 
 package com.glob3mobile.vectorial.storage.mapdb;
 
+import java.io.DataInput;
+import java.io.DataOutput;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOError;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -14,6 +17,7 @@ import org.mapdb.BTreeMap;
 import org.mapdb.DB;
 import org.mapdb.DB.BTreeMapMaker;
 import org.mapdb.DBMaker;
+import org.mapdb.Serializer;
 
 import com.glob3mobile.geo.Geodetic2D;
 import com.glob3mobile.geo.Sector;
@@ -102,82 +106,84 @@ public class PointFeatureMapDBStorage
    private final QuadKey                              _rootKey;
 
    private final BTreeMap<byte[], NodeHeader>         _nodesHeaders;
-   private final BTreeMap<byte[], List<PointFeature>> _nodesFeatures;
+
+   //   private final BTreeMap<byte[], List<PointFeature>> _nodesFeatures;
+   private final BTreeMap<byte[], List<MapDBFeature>> _nodesFeatures;
+   private final BTreeMap<Long, Map<String, Object>>  _properties;
+
    private final BTreeMap<String, Object>             _metadata;
 
 
-   //   private PointFeatureMapDBStorage(final Sector sector,
-   //                                    final File directory,
-   //                                    final String name,
-   //                                    final boolean createIfNotExists,
-   //                                    final boolean readOnly,
-   //                                    final int maxBufferSize,
-   //                                    final int maxFeaturesPerNode) throws IOException {
-   //
-   //      _sector = sector;
-   //      _maxBufferSize = maxBufferSize;
-   //      _buffer = new ArrayList<>(_maxBufferSize);
-   //      resetBufferBounds();
-   //      _maxFeaturesPerNode = maxFeaturesPerNode;
-   //
-   //      _directory = directory;
-   //      _name = name;
-   //      _readOnly = readOnly;
-   //      _rootKey = new QuadKey(new byte[] {}, _sector);
-   //
-   //      if (createIfNotExists) {
-   //         if (!_directory.exists()) {
-   //            if (!_directory.mkdirs()) {
-   //               throw new IOException("Can't create directory: " + _directory);
-   //            }
-   //         }
-   //      }
-   //
-   //      if (!_directory.isDirectory()) {
-   //         throw new IOException(_directory + " is not a directory");
-   //      }
-   //
-   //      final File file = new File(_directory, _name);
-   //      final DBMaker maker = DBMaker.newFileDB(file);
-   //      // maker.cacheLRUEnable();
-   //      maker.compressionEnable();
-   //      if (_readOnly) {
-   //         maker.strictDBGet();
-   //         maker.readOnly();
-   //      }
-   //      else {
-   //         if (!createIfNotExists) {
-   //            maker.strictDBGet();
-   //         }
-   //      }
-   //
-   //      try {
-   //         _db = maker.make();
-   //      }
-   //      catch (final IOError | UnsupportedOperationException e) {
-   //         throw new IOException(e.getMessage());
-   //      }
-   //
-   //
-   //      final QuadKeyComparator comparator = new QuadKeyComparator();
-   //
-   //      final BTreeMapMaker nodesHeadersMaker = _db //
-   //      .createTreeMap("NodesHeaders") //
-   //      .counterEnable() //
-   //      .comparator(comparator) //
-   //      .valueSerializer(new NodeHeaderSerializer());
-   //
-   //      _nodesHeaders = nodesHeadersMaker.makeOrGet();
-   //
-   //
-   //      final BTreeMapMaker nodesFeaturesMaker = _db //
-   //      .createTreeMap("NodesFeatures") //
-   //      .counterEnable() //
-   //      .comparator(comparator) //
-   //      .valueSerializer(new PointFeaturesSerializer());
-   //
-   //      _nodesFeatures = nodesFeaturesMaker.makeOrGet();
-   //   }
+   private static class MapDBFeaturesSerializer
+      implements
+         Serializer<List<MapDBFeature>>,
+         Serializable {
+
+      private static final long serialVersionUID = 1L;
+
+
+      @Override
+      public void serialize(final DataOutput out,
+                            final List<MapDBFeature> features) throws IOException {
+         out.writeInt(features.size());
+         for (final MapDBFeature feature : features) {
+            SerializerUtils.serializeGeodetic2D(out, feature._position);
+            out.writeLong(feature._propertiesID);
+         }
+      }
+
+
+      @Override
+      public List<MapDBFeature> deserialize(final DataInput in,
+                                            final int available) throws IOException {
+         final int size = in.readInt();
+         final List<MapDBFeature> features = new ArrayList<>(size);
+         for (int i = 0; i < size; i++) {
+            final Geodetic2D position = SerializerUtils.deserializeGeodetic2D(in);
+            final long propertiesID = in.readLong();
+            final MapDBFeature feature = new MapDBFeature(position, propertiesID);
+            features.add(feature);
+         }
+         return features;
+      }
+
+
+      @Override
+      public int fixedSize() {
+         return -1;
+      }
+   }
+
+
+   private static class PropertiesSerializer
+      implements
+         Serializer<Map<String, Object>>,
+         Serializable {
+
+
+      private static final long serialVersionUID = 1L;
+
+
+      @Override
+      public void serialize(final DataOutput out,
+                            final Map<String, Object> value) throws IOException {
+         SerializerUtils.serializeMap(out, value);
+      }
+
+
+      @Override
+      public Map<String, Object> deserialize(final DataInput in,
+                                             final int available) throws IOException {
+         return SerializerUtils.deserializeMap(in);
+      }
+
+
+      @Override
+      public int fixedSize() {
+         return -1;
+      }
+
+   }
 
 
    private PointFeatureMapDBStorage(final Sector sector,
@@ -234,8 +240,16 @@ public class PointFeatureMapDBStorage
       .createTreeMap("NodesFeatures") //
       .counterEnable() //
       .comparator(comparator) //
-      .valueSerializer(new PointFeaturesSerializer());
+      .valueSerializer(new MapDBFeaturesSerializer());
       _nodesFeatures = nodesFeaturesMaker.makeOrGet();
+
+      // private final BTreeMap<Long, Map<String, Object>>           _properties;
+
+      final BTreeMapMaker propertiesMaker = _db //
+      .createTreeMap("Properties") //
+      .counterEnable() //
+      .valueSerializer(new PropertiesSerializer());
+      _properties = propertiesMaker.makeLongMap();
 
       _metadata = _db.createTreeMap("Metadata").counterEnable().makeOrGet();
 
@@ -301,7 +315,7 @@ public class PointFeatureMapDBStorage
       .createTreeMap("NodesFeatures") //
       .counterEnable() //
       .comparator(comparator) //
-      .valueSerializer(new PointFeaturesSerializer());
+      .valueSerializer(new MapDBFeaturesSerializer());
 
       _nodesFeatures = nodesFeaturesMaker.makeOrGet();
 
@@ -315,6 +329,12 @@ public class PointFeatureMapDBStorage
       resetBufferBounds();
       _maxFeaturesPerNode = MapDBUtils.readInt(_metadata, "maxFeaturesPerNode");
 
+
+      final BTreeMapMaker propertiesMaker = _db //
+      .createTreeMap("Properties") //
+      .counterEnable() //
+      .valueSerializer(new PropertiesSerializer());
+      _properties = propertiesMaker.makeOrGet();
    }
 
 
@@ -335,44 +355,6 @@ public class PointFeatureMapDBStorage
       _sumLatRad = 0.0;
       _sumLonRad = 0.0;
    }
-
-
-   //   private static Sector getBounds(final List<PointFeature> features) {
-   //      if ((features == null) || features.isEmpty()) {
-   //         return null;
-   //      }
-   //
-   //      final Geodetic2D firstPoint = features.get(0)._position;
-   //      double minLatRad = firstPoint._latitude._radians;
-   //      double minLonRad = firstPoint._longitude._radians;
-   //
-   //      double maxLatRad = firstPoint._latitude._radians;
-   //      double maxLonRad = firstPoint._longitude._radians;
-   //
-   //      for (int i = 1; i < features.size(); i++) {
-   //         final Geodetic2D point = features.get(i)._position;
-   //         final double latRad = point._latitude._radians;
-   //         final double lonRad = point._longitude._radians;
-   //
-   //         if (latRad < minLatRad) {
-   //            minLatRad = latRad;
-   //         }
-   //         if (latRad > maxLatRad) {
-   //            maxLatRad = latRad;
-   //         }
-   //
-   //         if (lonRad < minLonRad) {
-   //            minLonRad = lonRad;
-   //         }
-   //         if (lonRad > maxLonRad) {
-   //            maxLonRad = lonRad;
-   //         }
-   //      }
-   //
-   //      return Sector.fromRadians( //
-   //               minLatRad, minLonRad, //
-   //               maxLatRad, maxLonRad);
-   //   }
 
 
    @Override
@@ -430,13 +412,23 @@ public class PointFeatureMapDBStorage
    }
 
 
-   BTreeMap<byte[], NodeHeader> getNodesHeaders() {
+   BTreeMap<byte[], NodeHeader> getNodesHeadersMap() {
       return _nodesHeaders;
    }
 
 
-   BTreeMap<byte[], List<PointFeature>> getNodesFeatures() {
+   //   BTreeMap<byte[], List<PointFeature>> getNodesFeatures() {
+   //      return _nodesFeatures;
+   //   }
+
+
+   BTreeMap<byte[], List<MapDBFeature>> getNodesFeaturesMap() {
       return _nodesFeatures;
+   }
+
+
+   BTreeMap<Long, Map<String, Object>> getPropertiesMap() {
+      return _properties;
    }
 
 
@@ -486,9 +478,9 @@ public class PointFeatureMapDBStorage
    public void acceptDepthFirstVisitor(final PointFeatureStorage.NodeVisitor visitor) {
       visitor.start();
 
-      final List<PointFeature> features = null;
+      final List<MapDBFeature> features = null;
 
-      final BTreeMap<byte[], NodeHeader> nodesHeaders = getNodesHeaders();
+      final BTreeMap<byte[], NodeHeader> nodesHeaders = getNodesHeadersMap();
       for (final Map.Entry<byte[], NodeHeader> entry : nodesHeaders.entrySet()) {
          final byte[] id = entry.getKey();
          final NodeHeader header = entry.getValue();
@@ -691,11 +683,6 @@ public class PointFeatureMapDBStorage
 
          _sumLatRadians += (nodeAveragePosition._latitude._radians * nodeFeaturesCount);
          _sumLonRadians += (nodeAveragePosition._longitude._radians * nodeFeaturesCount);
-
-         //         for (final PointFeature feature : node.getFeatures()) {
-         //            final double lat = feature._position._latitude._radians;
-         //            final double lon = feature._position._longitude._radians;
-         //         }
 
          if (_progress != null) {
             _progress.stepDone();

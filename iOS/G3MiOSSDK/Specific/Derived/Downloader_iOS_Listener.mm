@@ -54,7 +54,7 @@
   if (_cppImageListener) {
     UIImage* uiImage = [UIImage imageWithData:data];
     if (uiImage) {
-      IImage* image = new Image_iOS(uiImage, data);
+      IImage* image = new Image_iOS(uiImage, data, NULL);
       _cppImageListener->onDownload(url, image, false);
     }
     else {
@@ -102,7 +102,7 @@
   if (_cppImageListener) {
     UIImage* uiImage = [UIImage imageWithData:data];
     if (uiImage) {
-      IImage* image = new Image_iOS(uiImage, data);
+      IImage* image = new Image_iOS(uiImage, data, NULL);
       _cppImageListener->onCanceledDownload(url, image, false);
       delete image;
     }
