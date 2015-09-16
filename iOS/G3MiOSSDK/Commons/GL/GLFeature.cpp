@@ -200,6 +200,8 @@ void TextureGLFeature::createBasicValues(IFloatBuffer* texCoords,
       break;
       
     default:
+      value->_release();
+      texUnit->_release();
       ILogger::instance()->logError("Wrong texture target.");
       
       break;
