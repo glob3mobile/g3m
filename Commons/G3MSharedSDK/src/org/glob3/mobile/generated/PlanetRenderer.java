@@ -919,6 +919,15 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
   
     java.util.LinkedList<Tile> renderedTiles = getRenderedTilesList(rc);
   
+    if (renderedTiles.size() < 2)
+    {
+      Tile tile = renderedTiles.getFirst();
+      if (!tile.isElevationDataSolved() || !tile.isTextureSolved())
+      {
+        return;
+      }
+    }
+  
     for (java.util.Iterator<Tile> iter = renderedTiles.iterator(); iter.hasNext();)
     {
       Tile tile = iter.next();

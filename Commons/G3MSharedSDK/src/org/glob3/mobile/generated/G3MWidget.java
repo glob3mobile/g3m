@@ -829,6 +829,9 @@ public class G3MWidget implements ChangedRendererInfoListener, FrameDepthProvide
 
   private FrameBufferContent _frameBufferContent;
 
+  private float _touchDownPositionX;
+  private float _touchDownPositionY;
+
   private G3MWidget(GL gl, IStorage storage, IDownloader downloader, IThreadUtils threadUtils, ICameraActivityListener cameraActivityListener, Planet planet, java.util.ArrayList<ICameraConstrainer> cameraConstrainers, CameraRenderer cameraRenderer, Renderer mainRenderer, ProtoRenderer busyRenderer, ErrorRenderer errorRenderer, Renderer hudRenderer, Color backgroundColor, boolean logFPS, boolean logDownloaderStatistics, GInitializationTask initializationTask, boolean autoDeleteInitializationTask, java.util.ArrayList<PeriodicalTask> periodicalTasks, GPUProgramManager gpuProgramManager, SceneLighting sceneLighting, InitialCameraPositionProvider initialCameraPositionProvider, InfoDisplay infoDisplay)
   {
      _frameTasksExecutor = new FrameTasksExecutor();
@@ -875,10 +878,10 @@ public class G3MWidget implements ChangedRendererInfoListener, FrameDepthProvide
      _initialCameraPositionHasBeenSet = false;
      _forceBusyRenderer = false;
      _nFramesBeetweenProgramsCleanUp = 500;
-     _frameBufferContent = FrameBufferContent.EMPTY_FRAMEBUFFER;
-     _infoDisplay = infoDisplay;
      _touchDownPositionX = 0F;
      _touchDownPositionY = 0F;
+     _frameBufferContent = FrameBufferContent.EMPTY_FRAMEBUFFER;
+     _infoDisplay = infoDisplay;
     _effectsScheduler.initialize(_context);
     _cameraRenderer.initialize(_context);
     _mainRenderer.initialize(_context);
