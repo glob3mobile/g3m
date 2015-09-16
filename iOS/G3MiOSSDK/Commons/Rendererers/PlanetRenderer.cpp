@@ -809,8 +809,8 @@ bool PlanetRenderer::onTouchEvent(const G3MEventContext* ec,
       const Tile* tile = _firstLevelTiles[i]->getDeepestTileContaining(position);
       if (tile != NULL) {
 
-        const Vector2I& tileDimension = Vector2I(256, 256);
-        const Vector2I& normalizedPixel = tile->getNormalizedPixelsFromPosition(position.asGeodetic2D(), tileDimension);
+        const Vector2I tileDimension = Vector2I(256, 256);
+        const Vector2I normalizedPixel = tile->getNormalizedPixelsFromPosition(position.asGeodetic2D(), tileDimension);
         ILogger::instance()->logInfo("Touched on %s", tile->description().c_str());
         ILogger::instance()->logInfo("Touched on position %s", position.description().c_str());
         ILogger::instance()->logInfo("Touched on pixels %s", normalizedPixel.description().c_str());
