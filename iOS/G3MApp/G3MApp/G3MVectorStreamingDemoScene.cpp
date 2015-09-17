@@ -34,33 +34,32 @@ public:
 
     const JSONObject* properties = feature->getProperties();
 
-//    const std::string label = properties->getAsString("name", "<bar>");
+    const std::string label = properties->getAsString("name", "<bar>");
     const Geodetic3D  position( geometry->getPosition(), 0);
 
-//    double maxPopulation = 22315474;
-//    double population = properties->getAsNumber("population")->value();
-//    float labelFontSize = (float) (14.0 * (population / maxPopulation) + 16.0) ;
+    double maxPopulation = 22315474;
+    double population = properties->getAsNumber("population")->value();
+    float labelFontSize = (float) (14.0 * (population / maxPopulation) + 16.0) ;
 
-    float labelFontSize = 18.0f;
+//    float labelFontSize = 18.0f;
 
-//    Mark* mark = new Mark(label,
-//                          position,
-//                          ABSOLUTE,
-//                          0, // minDistanceToCamera
-//                          labelFontSize
-//                          // Color::newFromRGBA(1, 1, 0, 1)
-//                          );
-
-    int pointSize = 12;
-
-    Mark* mark = new Mark(new CircleImageBuilder(Color::white(),
-                                                 pointSize),
+    Mark* mark = new Mark(label,
                           position,
                           ABSOLUTE,
-                          0 // minDistanceToCamera
+                          0, // minDistanceToCamera
+                          labelFontSize
+                          // Color::newFromRGBA(1, 1, 0, 1)
                           );
 
-    mark->setZoomInAppears(true);
+//    int pointSize = 12;
+//
+//    Mark* mark = new Mark(new CircleImageBuilder(Color::white(),
+//                                                 pointSize),
+//                          position,
+//                          ABSOLUTE,
+//                          0 // minDistanceToCamera
+//                          );
+
     return mark;
   }
 
@@ -128,12 +127,12 @@ void G3MVectorStreamingDemoScene::rawActivate(const G3MContext* context) {
 
   VectorStreamingRenderer* renderer = model->getVectorStreamingRenderer();
   renderer->addVectorSet(URL("http://192.168.1.12:8080/server-mapboo/public/VectorialStreaming/"),
-                         //"GEONames-PopulatedPlaces_LOD",
-                         //"name|population|featureClass|featureCode",
+                         "GEONames-PopulatedPlaces_LOD",
+                         "name|population|featureClass|featureCode",
                          //"SpanishBars_LOD",
                          //"name",
-                         "Tornados_LOD",
-                         "mag",
+                         //"Tornados_LOD",
+                         //"mag",
                          new G3MVectorStreamingDemoScene_Symbolizer(),
                          true, // deleteSymbolizer
                          //DownloadPriority::LOWER,
