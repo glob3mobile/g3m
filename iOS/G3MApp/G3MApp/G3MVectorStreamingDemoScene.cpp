@@ -37,11 +37,11 @@ public:
     const std::string label = properties->getAsString("name", "<bar>");
     const Geodetic3D  position( geometry->getPosition(), 0);
 
-    double maxPopulation = 22315474;
-    double population = properties->getAsNumber("population")->value();
-    float labelFontSize = (float) (14.0 * (population / maxPopulation) + 16.0) ;
+//    double maxPopulation = 22315474;
+//    double population = properties->getAsNumber("population")->value();
+//    float labelFontSize = (float) (14.0 * (population / maxPopulation) + 16.0) ;
 
-//    float labelFontSize = 18.0f;
+     float labelFontSize = 18.0f;
 
     Mark* mark = new Mark(label,
                           position,
@@ -127,10 +127,10 @@ void G3MVectorStreamingDemoScene::rawActivate(const G3MContext* context) {
 
   VectorStreamingRenderer* renderer = model->getVectorStreamingRenderer();
   renderer->addVectorSet(URL("http://192.168.1.12:8080/server-mapboo/public/VectorialStreaming/"),
-                         "GEONames-PopulatedPlaces_LOD",
-                         "name|population|featureClass|featureCode",
-                         //"SpanishBars_LOD",
-                         //"name",
+                         // "GEONames-PopulatedPlaces_LOD",
+                         // "name|population|featureClass|featureCode",
+                         "SpanishBars_LOD",
+                         "name",
                          //"Tornados_LOD",
                          //"mag",
                          new G3MVectorStreamingDemoScene_Symbolizer(),

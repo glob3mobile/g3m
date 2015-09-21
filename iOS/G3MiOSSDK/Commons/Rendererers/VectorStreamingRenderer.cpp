@@ -237,6 +237,7 @@ void VectorStreamingRenderer::Node::parsedFeatures(std::vector<Cluster*>* cluste
   _featuresRequestID = -1;
 
   if (features != NULL) {
+    delete _features;
     _features = features;
 
     _featureMarksCount = _features->createFeatureMarks(_vectorSet, this);
@@ -259,6 +260,14 @@ void VectorStreamingRenderer::Node::parsedFeatures(std::vector<Cluster*>* cluste
   }
 
   if (clusters != NULL) {
+    if (_clusters != NULL) {
+      for (int i = 0; i < _clusters->size(); i++) {
+        Cluster* cluster = _clusters->at(i);
+        delete cluster;
+      }
+      delete _clusters;
+    }
+
     _clusters = clusters;
     createClusterMarks();
   }
@@ -352,6 +361,15 @@ void VectorStreamingRenderer::Node::unloadFeatures() {
 
   delete _features;
   _features = NULL;
+
+  if (_clusters != NULL) {
+    for (int i = 0; i < _clusters->size(); i++) {
+      Cluster* cluster = _clusters->at(i);
+      delete cluster;
+    }
+    delete _clusters;
+    _clusters = NULL;
+  }
 }
 
 void VectorStreamingRenderer::Node::cancelLoadFeatures() {

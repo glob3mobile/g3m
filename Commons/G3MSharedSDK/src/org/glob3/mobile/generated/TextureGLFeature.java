@@ -37,6 +37,8 @@ public class TextureGLFeature extends GLColorGroupFeature
         break;
   
       default:
+        value._release();
+        texUnit._release();
         ILogger.instance().logError("Wrong texture target.");
   
         break;
