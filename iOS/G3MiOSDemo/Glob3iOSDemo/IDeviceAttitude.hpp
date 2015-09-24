@@ -11,7 +11,7 @@
 
 #include <stdio.h>
 
-#include "MutableMatrix44D.hpp"
+#include <G3MiOSSDK/MutableMatrix44D.hpp>
 #include "ICameraConstrainer.hpp"
 #include "G3MWidget.hpp"
 
