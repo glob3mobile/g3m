@@ -616,7 +616,7 @@ void G3MWidget::render(int width, int height) {
   
   
   Vector3D camPos = _currentCamera->getCartesianPosition();
-  Vector3D eyesDirection = _currentCamera->getUp().times(_currentCamera->getViewDirection()).normalized();
+  Vector3D eyesDirection = _currentCamera->getUp().cross(_currentCamera->getViewDirection()).normalized();
   const double eyesSeparation = 0.03;
   
 #warning AT WORK JM
@@ -624,12 +624,12 @@ void G3MWidget::render(int width, int height) {
   
   _gl->clearScreen(*_backgroundColor);
   
-  _currentCamera->setCartesianPosition(camPos.add(eyesDirection.times(eyesSeparation)));
+  _currentCamera->setCartesianPosition(camPos.add(eyesDirection.times(-eyesSeparation)));
   rawRender(renderStateType);
   
   glViewport(_width / 2, 0, _width / 2, _height);
   
-  _currentCamera->setCartesianPosition(camPos.add(eyesDirection.times(-eyesSeparation)));
+  _currentCamera->setCartesianPosition(camPos.add(eyesDirection.times(eyesSeparation)));
   rawRender(renderStateType);
   
   _currentCamera->setCartesianPosition(camPos);

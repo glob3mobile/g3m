@@ -1324,7 +1324,7 @@ public:
   MarksRenderer* marksRenderer = [self createMarksRenderer];
   builder.addRenderer(marksRenderer);
   
-  bool testingAnimatedMarks = true;
+  bool testingAnimatedMarks = false;
   if (testingAnimatedMarks){
     
     Mark* animMark = new Mark(URL(URL::FILE_PROTOCOL + "radar-sprite.png"),
@@ -1380,7 +1380,7 @@ public:
     builder.setSceneLighting(light);
   }
   
-  if (true) { //HUD
+  if (false) { //HUD
     HUDRenderer* hudRenderer = new HUDRenderer();
     builder.setHUDRenderer(hudRenderer);
     
