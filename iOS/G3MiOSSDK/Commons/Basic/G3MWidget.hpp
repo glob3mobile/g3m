@@ -356,6 +356,8 @@ private:
   
   void setSelectedRenderer(ProtoRenderer* selectedRenderer);
   
+  void rawRender(const RenderState_Type renderStateType);
+  
 };
 
 #endif

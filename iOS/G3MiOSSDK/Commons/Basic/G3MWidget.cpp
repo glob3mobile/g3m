@@ -39,6 +39,9 @@
 #include "ErrorRenderer.hpp"
 #include "IDeviceInfo.hpp"
 
+#warning TO BE REMOVED
+#include <OpenGLES/ES2/gl.h>
+
 
 void G3MWidget::initSingletons(ILogger*            logger,
                                IFactory*           factory,
@@ -473,6 +476,61 @@ RenderState G3MWidget::calculateRendererState() {
   return busyFlag ? RenderState::busy() : RenderState::ready();
 }
 
+void G3MWidget::rawRender(const RenderState_Type renderStateType) {
+  
+  if (_rootState == NULL) {
+    _rootState = new GLState();
+  }
+  
+  switch (renderStateType) {
+    case RENDER_READY:
+      setSelectedRenderer(_mainRenderer);
+      _cameraRenderer->render(_renderContext, _rootState);
+      
+      _sceneLighting->modifyGLState(_rootState, _renderContext);  //Applying ilumination to rootState
+      
+      if (_mainRenderer->isEnable()) {
+        _mainRenderer->render(_renderContext, _rootState);
+      }
+      
+      break;
+      
+    case RENDER_BUSY:
+      setSelectedRenderer(_busyRenderer);
+      _busyRenderer->render(_renderContext, _rootState);
+      break;
+      
+    default:
+      _errorRenderer->setErrors( _rendererState->getErrors() );
+      setSelectedRenderer(_errorRenderer);
+      _errorRenderer->render(_renderContext, _rootState);
+      break;
+      
+  }
+  
+  std::vector<OrderedRenderable*>* orderedRenderables = _renderContext->getSortedOrderedRenderables();
+  if (orderedRenderables != NULL) {
+    const size_t orderedRenderablesCount = orderedRenderables->size();
+    for (size_t i = 0; i < orderedRenderablesCount; i++) {
+      OrderedRenderable* orderedRenderable = orderedRenderables->at(i);
+      orderedRenderable->render(_renderContext);
+      delete orderedRenderable;
+    }
+    
+    orderedRenderables->clear();
+  }
+  
+  if (_hudRenderer != NULL) {
+    if (renderStateType == RENDER_READY) {
+      if (_hudRenderer->isEnable()) {
+        _hudRenderer->render(_renderContext, _rootState);
+      }
+    }
+  }
+
+
+}
+
 void G3MWidget::render(int width, int height) {
   if (_paused) {
     return;
@@ -555,57 +613,27 @@ void G3MWidget::render(int width, int height) {
   _effectsScheduler->doOneCyle(_renderContext);
 
   _frameTasksExecutor->doPreRenderCycle(_renderContext);
-
+  
+  
+  Vector3D camPos = _currentCamera->getCartesianPosition();
+  Vector3D eyesDirection = _currentCamera->getUp().times(_currentCamera->getViewDirection()).normalized();
+  const double eyesSeparation = 0.03;
+  
+#warning AT WORK JM
+  glViewport(0, 0, _width / 2, _height);
+  
   _gl->clearScreen(*_backgroundColor);
-
-  if (_rootState == NULL) {
-    _rootState = new GLState();
-  }
-
-  switch (renderStateType) {
-    case RENDER_READY:
-      setSelectedRenderer(_mainRenderer);
-      _cameraRenderer->render(_renderContext, _rootState);
-
-      _sceneLighting->modifyGLState(_rootState, _renderContext);  //Applying ilumination to rootState
-
-      if (_mainRenderer->isEnable()) {
-        _mainRenderer->render(_renderContext, _rootState);
-      }
-
-      break;
-
-    case RENDER_BUSY:
-      setSelectedRenderer(_busyRenderer);
-      _busyRenderer->render(_renderContext, _rootState);
-      break;
-
-    default:
-      _errorRenderer->setErrors( _rendererState->getErrors() );
-      setSelectedRenderer(_errorRenderer);
-      _errorRenderer->render(_renderContext, _rootState);
-      break;
-
-  }
-
-  std::vector<OrderedRenderable*>* orderedRenderables = _renderContext->getSortedOrderedRenderables();
-  if (orderedRenderables != NULL) {
-    const size_t orderedRenderablesCount = orderedRenderables->size();
-    for (size_t i = 0; i < orderedRenderablesCount; i++) {
-      OrderedRenderable* orderedRenderable = orderedRenderables->at(i);
-      orderedRenderable->render(_renderContext);
-      delete orderedRenderable;
-    }
-  }
-
-  if (_hudRenderer != NULL) {
-    if (renderStateType == RENDER_READY) {
-      if (_hudRenderer->isEnable()) {
-        _hudRenderer->render(_renderContext, _rootState);
-      }
-    }
-  }
-
+  
+  _currentCamera->setCartesianPosition(camPos.add(eyesDirection.times(eyesSeparation)));
+  rawRender(renderStateType);
+  
+  glViewport(_width / 2, 0, _width / 2, _height);
+  
+  _currentCamera->setCartesianPosition(camPos.add(eyesDirection.times(-eyesSeparation)));
+  rawRender(renderStateType);
+  
+  _currentCamera->setCartesianPosition(camPos);
+  
   //Removing unused programs
   if (_renderCounter % _nFramesBeetweenProgramsCleanUp == 0) {
     _gpuProgramManager->removeUnused();
