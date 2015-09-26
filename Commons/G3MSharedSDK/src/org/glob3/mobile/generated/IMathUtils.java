@@ -129,6 +129,12 @@ public abstract class IMathUtils
     return (i1 < i2) ? i1 : i2;
   }
 
+  public final long min(long i1, long i2)
+  {
+    return (i1 < i2) ? i1 : i2;
+  }
+
+
   public abstract double max(double d1, double d2);
   public abstract float max(float f1, float f2);
 
