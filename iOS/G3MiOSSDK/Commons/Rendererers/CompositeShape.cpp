@@ -10,7 +10,7 @@
 
 CompositeShape::~CompositeShape() {
   size_t childrenCount = _children.size();
-  for (int i = 0; i < childrenCount; i++) {
+  for (size_t i = 0; i < childrenCount; i++) {
     Shape* child = _children[i];
     delete child;
   }
