@@ -44,7 +44,7 @@ Color* Color::parse(const std::string& str) {
 #endif
   }
 
-  const int strSize = colorStr.size();
+  const size_t strSize = colorStr.size();
 
   std::string rs;
   std::string gs;

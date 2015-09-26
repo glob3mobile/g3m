@@ -237,8 +237,8 @@ public:
   }
 
   ~MapBooOLD_MultiImage() {
-    const int levelsSize = _levels.size();
-    for (int i = 0; i < levelsSize; i++) {
+    const size_t levelsSize = _levels.size();
+    for (size_t i = 0; i < levelsSize; i++) {
       MapBooOLD_MultiImage_Level* level = _levels[i];
       delete level;
     }
@@ -265,8 +265,8 @@ public:
   MapBooOLD_MultiImage* deepCopy() const {
     const Color averageColor = Color::fromRGBA(_averageColor._red, _averageColor._green, _averageColor._blue, _averageColor._alpha);
     std::vector<MapBooOLD_MultiImage_Level*> levels;
-    const int levelsSize = _levels.size();
-    for (int i = 0; i < levelsSize; i++) {
+    const size_t levelsSize = _levels.size();
+    for (size_t i = 0; i < levelsSize; i++) {
       const MapBooOLD_MultiImage_Level* level = _levels.at(i);
       levels.push_back(new MapBooOLD_MultiImage_Level(level->getUrl(), level->getWidth(), level->getHeight()));
     }

@@ -50,7 +50,7 @@ public:
 
   ~TrailSegment();
   
-  int getSize() const {
+  size_t getSize() const {
     return _positions.size();
   }
 
