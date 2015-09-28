@@ -519,6 +519,18 @@ public class VectorStreamingRenderer extends DefaultRenderer
       if (_features != null)
          _features.dispose();
       _features = null;
+    
+      if (_clusters != null)
+      {
+        for (int i = 0; i < _clusters.size(); i++)
+        {
+          Cluster cluster = _clusters.get(i);
+          if (cluster != null)
+             cluster.dispose();
+        }
+        _clusters = null;
+        _clusters = null;
+      }
     }
     private void cancelLoadFeatures()
     {
@@ -859,6 +871,8 @@ public class VectorStreamingRenderer extends DefaultRenderer
     
       if (features != null)
       {
+        if (_features != null)
+           _features.dispose();
         _features = features;
     
         _featureMarksCount = _features.createFeatureMarks(_vectorSet, this);
@@ -877,6 +891,17 @@ public class VectorStreamingRenderer extends DefaultRenderer
     
       if (clusters != null)
       {
+        if (_clusters != null)
+        {
+          for (int i = 0; i < _clusters.size(); i++)
+          {
+            Cluster cluster = _clusters.get(i);
+            if (cluster != null)
+               cluster.dispose();
+          }
+          _clusters = null;
+        }
+    
         _clusters = clusters;
         createClusterMarks();
       }
