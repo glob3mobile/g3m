@@ -323,6 +323,17 @@ Mesh* createSectorMesh(const Planet* planet,
   //
   [[self G3MWidget] startAnimation];
   
+  
+//  [G3MWidget widget]->setAnimatedCameraPosition(TimeInterval::fromSeconds(30), Geodetic3D::fromDegrees(28.0465484603694577, -16.679972746659540661, 3523.1227238618689626));
+//  
+//  [G3MWidget widget]->setAnimatedCameraPosition(TimeInterval::fromSeconds(30),
+//                                                [G3MWidget widget]->getCurrentCamera()->getGeodeticPosition(),
+//                                                Geodetic3D::fromDegrees(28.0465484603694577, -16.679972746659540661, 3523.1227238618689626), Angle::zero(), Angle::zero(),
+//                                                Angle::zero(), Angle::fromDegrees(-20));
+  
+  [G3MWidget widget]->setCameraPosition(Geodetic3D::fromDegrees(28.034039522888807738, -15.391984897940172772, 19995.736280033790536));
+  [G3MWidget widget]->setCameraPitch(Angle::fromDegrees(-53.461659));
+  
   /*
    [[self G3MWidget] widget]->addPeriodicalTask(TimeInterval::fromMilliseconds(100),
    new CameraRollChangerTask([[self G3MWidget] widget]));
@@ -1249,7 +1260,7 @@ public:
   //                                  NULL)
   //                     );
   
-  bool useElevations = false;
+  bool useElevations = true;
   if (useElevations) {
     [self initializeElevationDataProvider: builder];
   }
@@ -1680,10 +1691,7 @@ public:
       builder.addCameraConstraint(new AnimatedRollCameraConstrainer());
       
     }
-    
-    
-    
-    
+ 
   }
   
   
