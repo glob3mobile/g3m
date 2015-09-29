@@ -1,4 +1,5 @@
 package org.glob3.mobile.generated; 
+
 //
 //  INativeGL.hpp
 //  G3MiOSSDK
@@ -29,6 +30,8 @@ public abstract class INativeGL
   public void dispose()
   {
   }
+  
+  public abstract void glViewport(int x, int y, int width, int height);
 
   public abstract void useProgram(GPUProgram program);
 

@@ -106,6 +106,68 @@ public class G3MWidget implements ChangedRendererInfoListener
          _infoDisplay.dispose();
     }
   }
+  
+  public final void rawRender(RenderState_Type renderStateType){
+
+	    if (_rootState == null)
+	    {
+	      _rootState = new GLState();
+	    }
+	  
+	    switch (renderStateType)
+	    {
+	      case RENDER_READY:
+	        setSelectedRenderer(_mainRenderer);
+	        _cameraRenderer.render(_renderContext, _rootState);
+	  
+	        _sceneLighting.modifyGLState(_rootState, _renderContext); //Applying ilumination to rootState
+	  
+	        if (_mainRenderer.isEnable())
+	        {
+	          _mainRenderer.render(_renderContext, _rootState);
+	        }
+	  
+	        break;
+	  
+	      case RENDER_BUSY:
+	        setSelectedRenderer(_busyRenderer);
+	        _busyRenderer.render(_renderContext, _rootState);
+	        break;
+	  
+	      default:
+	        _errorRenderer.setErrors(_rendererState.getErrors());
+	        setSelectedRenderer(_errorRenderer);
+	        _errorRenderer.render(_renderContext, _rootState);
+	        break;
+	  
+	    }
+	  
+	    java.util.ArrayList<OrderedRenderable> orderedRenderables = _renderContext.getSortedOrderedRenderables();
+	    if (orderedRenderables != null)
+	    {
+	      final int orderedRenderablesCount = orderedRenderables.size();
+	      for (int i = 0; i < orderedRenderablesCount; i++)
+	      {
+	        OrderedRenderable orderedRenderable = orderedRenderables.get(i);
+	        orderedRenderable.render(_renderContext);
+	        if (orderedRenderable != null)
+	           orderedRenderable.dispose();
+	      }
+	      orderedRenderables.clear();
+	    }
+	    
+	    if (_hudRenderer != null)
+	    {
+	      if (renderStateType == RenderState_Type.RENDER_READY)
+	      {
+	        if (_hudRenderer.isEnable())
+	        {
+	          _hudRenderer.render(_renderContext, _rootState);
+	        }
+	      }
+	    }
+	  
+  }
 
   public final void render(int width, int height)
   {
@@ -191,65 +253,24 @@ public class G3MWidget implements ChangedRendererInfoListener
     _effectsScheduler.doOneCyle(_renderContext);
   
     _frameTasksExecutor.doPreRenderCycle(_renderContext);
+    
+    Vector3D camPos = _currentCamera.getCartesianPosition();
+    Vector3D eyesDirection = _currentCamera.getUp().cross(_currentCamera.getViewDirection()).normalized();
+    double eyesSeparation = 0.03;
   
     _gl.clearScreen(_backgroundColor);
-  
-    if (_rootState == null)
-    {
-      _rootState = new GLState();
-    }
-  
-    switch (renderStateType)
-    {
-      case RENDER_READY:
-        setSelectedRenderer(_mainRenderer);
-        _cameraRenderer.render(_renderContext, _rootState);
-  
-        _sceneLighting.modifyGLState(_rootState, _renderContext); //Applying ilumination to rootState
-  
-        if (_mainRenderer.isEnable())
-        {
-          _mainRenderer.render(_renderContext, _rootState);
-        }
-  
-        break;
-  
-      case RENDER_BUSY:
-        setSelectedRenderer(_busyRenderer);
-        _busyRenderer.render(_renderContext, _rootState);
-        break;
-  
-      default:
-        _errorRenderer.setErrors(_rendererState.getErrors());
-        setSelectedRenderer(_errorRenderer);
-        _errorRenderer.render(_renderContext, _rootState);
-        break;
-  
-    }
-  
-    java.util.ArrayList<OrderedRenderable> orderedRenderables = _renderContext.getSortedOrderedRenderables();
-    if (orderedRenderables != null)
-    {
-      final int orderedRenderablesCount = orderedRenderables.size();
-      for (int i = 0; i < orderedRenderablesCount; i++)
-      {
-        OrderedRenderable orderedRenderable = orderedRenderables.get(i);
-        orderedRenderable.render(_renderContext);
-        if (orderedRenderable != null)
-           orderedRenderable.dispose();
-      }
-    }
-  
-    if (_hudRenderer != null)
-    {
-      if (renderStateType == RenderState_Type.RENDER_READY)
-      {
-        if (_hudRenderer.isEnable())
-        {
-          _hudRenderer.render(_renderContext, _rootState);
-        }
-      }
-    }
+    
+    
+    _gl.getNative().glViewport(0, 0, _width / 2, _height);
+
+    _currentCamera.setCartesianPosition(camPos.add(eyesDirection.times(-eyesSeparation)));
+    rawRender(renderStateType);
+    
+    _gl.getNative().glViewport(_width / 2, 0, _width / 2, _height);
+    
+
+    _currentCamera.setCartesianPosition(camPos.add(eyesDirection.times(eyesSeparation)));
+    rawRender(renderStateType);
   
     //Removing unused programs
     if (_renderCounter % _nFramesBeetweenProgramsCleanUp == 0)

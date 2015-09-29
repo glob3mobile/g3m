@@ -758,6 +758,10 @@ public final class NativeGL2_Android
       }
    }
 
+   
+   public void glViewport(int x, int y, int width, int height){
+	   GLES20.glViewport(x, y, width, height);
+   }
 
    @Override
    public GPUAttribute getActiveAttribute(final GPUProgram program,
