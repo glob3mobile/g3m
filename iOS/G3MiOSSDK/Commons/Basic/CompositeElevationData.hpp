@@ -38,9 +38,11 @@ public:
   void addElevationData(ElevationData* data);
 
   virtual ~CompositeElevationData() {
-    int s = _data.size();
+    size_t s = _data.size();
     for (int i = 0; i < s; i++) {
-      delete _data[i];
+      if (_data[i] != NULL){
+        _data[i]->_release();
+      }
     }
     delete _interpolator;
     

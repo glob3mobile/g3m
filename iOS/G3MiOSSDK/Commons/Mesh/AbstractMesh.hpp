@@ -48,8 +48,9 @@ protected:
                bool depthTest,
                const IFloatBuffer* normals);
 
-  virtual void rawRender(const G3MRenderContext* rc) const = 0;
+//  virtual void rawRender(const G3MRenderContext* rc) const = 0;
 //  virtual void rawRender(const G3MRenderContext* rc, const GLState* parentGLState) const = 0;
+  virtual void rawRender(const G3MRenderContext* rc, GLState* glState, RenderType renderType) const = 0;
   
   GLState* _glState;
   
@@ -69,12 +70,23 @@ public:
   const Vector3D getVertex(int i) const;
 
   bool isTransparent(const G3MRenderContext* rc) const;
-  
+
   void rawRender(const G3MRenderContext* rc,
                  const GLState* parentGLState) const;
 
-  void showNormals(bool v) const {
+  void zRawRender(const G3MRenderContext* rc,
+                 const GLState* parentGLState) const;
+  
+  void showNormals(bool v) const{
     _showNormals = v;
+  }
+  
+  IFloatBuffer* getVerticesFloatBuffer() const{
+    return (IFloatBuffer*)_vertices; //Droping const so tiles can change their DEM
+  }
+  
+  Vector3D getVerticesOffset() const{
+    return _center;
   }
   
 };

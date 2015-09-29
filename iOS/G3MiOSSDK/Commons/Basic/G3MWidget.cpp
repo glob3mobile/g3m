@@ -37,6 +37,8 @@
 #include "SceneLighting.hpp"
 #include "PlanetRenderer.hpp"
 #include "ErrorRenderer.hpp"
+#include "IDeviceAttitude.hpp"
+#include "IDeviceLocation.hpp"
 #include "IDeviceInfo.hpp"
 
 #warning TO BE REMOVED
@@ -49,7 +51,9 @@ void G3MWidget::initSingletons(ILogger*            logger,
                                IStringBuilder*     stringBuilder,
                                IMathUtils*         mathUtils,
                                IJSONParser*        jsonParser,
-                               ITextUtils*         textUtils) {
+                               ITextUtils*         textUtils,
+                               IDeviceAttitude*    devAttitude,
+                               IDeviceLocation*    devLocation) {
   if (ILogger::instance() == NULL) {
     ILogger::setInstance(logger);
     IFactory::setInstance(factory);
@@ -58,6 +62,8 @@ void G3MWidget::initSingletons(ILogger*            logger,
     IMathUtils::setInstance(mathUtils);
     IJSONParser::setInstance(jsonParser);
     ITextUtils::setInstance(textUtils);
+    IDeviceAttitude::setInstance(devAttitude);
+    IDeviceLocation::setInstance(devLocation);
   }
   else {
     ILogger::instance()->logWarning("Singletons already set");
@@ -103,8 +109,8 @@ _errorRenderer(errorRenderer),
 _hudRenderer(hudRenderer),
 _width(1),
 _height(1),
-_currentCamera(new Camera(1)),
-_nextCamera(new Camera(2)),
+_currentCamera(new Camera(1, this)),
+_nextCamera(new Camera(2, this)),
 _backgroundColor( new Color(backgroundColor) ),
 _timer(IFactory::instance()->createTimer()),
 _renderCounter(0),
@@ -141,9 +147,10 @@ _initialCameraPositionProvider(initialCameraPositionProvider),
 _initialCameraPositionHasBeenSet(false),
 _forceBusyRenderer(false),
 _nFramesBeetweenProgramsCleanUp(500),
-_infoDisplay(infoDisplay),
 _touchDownPositionX(0),
-_touchDownPositionY(0)
+_touchDownPositionY(0),
+_frameBufferContent(EMPTY_FRAMEBUFFER),
+_infoDisplay(infoDisplay)
 {
   _effectsScheduler->initialize(_context);
   _cameraRenderer->initialize(_context);
@@ -346,6 +353,19 @@ void G3MWidget::notifyTouchEvent(const G3MEventContext &ec,
   }
 }
 
+double G3MWidget::getDepthForPixel(float x, float y){
+  zRender();
+  
+  const IMathUtils* mu = IMathUtils::instance();
+  
+  const int ix = mu->round(x);
+  const int iy = mu->round(y);
+  
+  const double z = _gl->readPixelAsDouble(ix, iy, _width, _height);
+  
+  return z;
+}
+
 void G3MWidget::onTouchEvent(const TouchEvent* touchEvent) {
 
   G3MEventContext ec(IFactory::instance(),
@@ -402,6 +422,31 @@ void G3MWidget::onTouchEvent(const TouchEvent* touchEvent) {
 
 }
 
+
+
+void G3MWidget::zRender(){
+  
+  if (_frameBufferContent == DEPTH_IMAGE){
+    return; //It means no regular frame has been generated since last ZRender
+  }
+
+  if (_mainRenderer->isEnable()){
+    GLState* zRenderGLState = new GLState();
+    _gl->clearScreen(Color::black());
+    _mainRenderer->zRender(_renderContext, zRenderGLState);
+    zRenderGLState->_release();
+    
+    std::vector<OrderedRenderable*>* orderedRenderables = _renderContext->getSortedOrderedRenderables();
+    if (orderedRenderables != NULL) {
+      if (orderedRenderables->size() > 0){
+        ILogger::instance()->logError("Some component is altering the OrderedRenderables list during Depth Rendering.");
+      }
+    }
+    
+    _frameBufferContent = DEPTH_IMAGE;
+  }
+
+}
 
 void G3MWidget::onResizeViewportEvent(int width, int height) {
   G3MEventContext ec(IFactory::instance(),
@@ -687,6 +732,8 @@ void G3MWidget::render(int width, int height) {
 
   _currentCamera->copyFrom(*_nextCamera);
 
+
+
 #ifdef C_CODE
   delete _rendererState;
   _rendererState = new RenderState( calculateRendererState() );
@@ -696,7 +743,7 @@ void G3MWidget::render(int width, int height) {
 #endif
   const RenderState_Type renderStateType = _rendererState->_type;
 
-  _renderContext->clear();
+  _renderContext->clearForNewFrame();
 
   _effectsScheduler->doOneCyle(_renderContext);
 
@@ -709,12 +756,18 @@ void G3MWidget::render(int width, int height) {
   if (_renderCounter % _nFramesBeetweenProgramsCleanUp == 0) {
     _gpuProgramManager->removeUnused();
   }
+  
+  _frameBufferContent = REGULAR_FRAME; //FrameBuffer has been filled with a regular frame
 
   const long long elapsedTimeMS = _timer->elapsedTimeInMilliseconds();
   //  if (elapsedTimeMS > 100) {
   //    ILogger::instance()->logWarning("Frame took too much time: %dms", elapsedTimeMS);
   //  }
-
+//#warning REMOVE
+//  if (RENDER_READY == renderStateType){
+//    zRender();
+//  }
+  
   if (_logFPS) {
     _totalRenderTime += elapsedTimeMS;
 
@@ -975,6 +1028,27 @@ void G3MWidget::changedRendererInfo(const int rendererIdentifier,
   //  else {
   //    ILogger::instance()->logWarning("Render Infos are changing and InfoDisplay is NULL");
   //  }
+}
+
+
+void G3MWidget::addCameraConstrainer(ICameraConstrainer* cc){
+  _cameraConstrainers.push_back(cc);
+}
+
+void G3MWidget::removeCameraConstrainer(ICameraConstrainer* cc){
+  size_t size = _cameraConstrainers.size();
+  for (size_t i = 0; i < size; i++) {
+    if (_cameraConstrainers[i] == cc){
+#ifdef C_CODE
+      _cameraConstrainers.erase(_cameraConstrainers.begin() + i);
+#endif
+#ifdef JAVA_CODE
+      _cameraConstrainers.remove(i);
+#endif
+      return;
+    }
+  }
+  ILogger::instance()->logError("Could not remove camera constrainer.");
 }
 
 

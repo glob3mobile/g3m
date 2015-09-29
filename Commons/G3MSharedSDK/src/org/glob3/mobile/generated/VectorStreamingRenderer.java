@@ -1429,6 +1429,11 @@ public class VectorStreamingRenderer extends DefaultRenderer
     }
   }
 
+  public final void zRender(G3MRenderContext rc, GLState glState)
+  {
+  
+  }
+
   public final void onResizeViewportEvent(G3MEventContext ec, int width, int height)
   {
 

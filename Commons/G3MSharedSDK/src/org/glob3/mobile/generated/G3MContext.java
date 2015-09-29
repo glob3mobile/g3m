@@ -25,7 +25,6 @@ package org.glob3.mobile.generated;
 //class ILogger;
 //class GL;
 //class EffectsScheduler;
-//class ITimer;
 //class IStringUtils;
 //class IThreadUtils;
 //class IMathUtils;

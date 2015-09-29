@@ -17,6 +17,8 @@ import org.glob3.mobile.generated.GPUProgramManager;
 import org.glob3.mobile.generated.Geodetic3D;
 import org.glob3.mobile.generated.ICameraActivityListener;
 import org.glob3.mobile.generated.ICameraConstrainer;
+import org.glob3.mobile.generated.IDeviceAttitude;
+import org.glob3.mobile.generated.IDeviceLocation;
 import org.glob3.mobile.generated.IDownloader;
 import org.glob3.mobile.generated.IFactory;
 import org.glob3.mobile.generated.IJSONParser;
@@ -60,6 +62,7 @@ OnGestureListener {
    private final MotionEventProcessor _motionEventProcessor = new MotionEventProcessor();
    private final OnDoubleTapListener  _doubleTapListener;
    private final GestureDetector      _gestureDetector;
+   private boolean _processingDoubleTap = false;
    private Thread                     _openGLThread         = null;
 
 
@@ -136,6 +139,8 @@ OnGestureListener {
             public boolean onDoubleTap(final MotionEvent event) {
 
                final TouchEvent te = _motionEventProcessor.processDoubleTapEvent(event);
+               
+               _processingDoubleTap = true;
 
                queueEvent(new Runnable() {
                   @Override
@@ -164,11 +169,13 @@ OnGestureListener {
       final IMathUtils mathUtils = new MathUtils_Android();
       final IJSONParser jsonParser = new JSONParser_Android();
       final ITextUtils textUtils = new TextUtils_Android();
+      final IDeviceAttitude devAttitude = new DeviceAttitude_Android(getContext());
+      final IDeviceLocation devLoc = new DeviceLocation_Android(getContext(), (long) 10000.0, 1.0f);
 
-      G3MWidget.initSingletons(logger, factory, stringUtils, stringBuilder, mathUtils, jsonParser, textUtils);
+      G3MWidget.initSingletons(logger, factory, stringUtils, stringBuilder, mathUtils, jsonParser, textUtils, devAttitude, devLoc);
+
    }
-
-
+   
    @Override
    protected void onSizeChanged(final int w,
                                 final int h,
@@ -193,7 +200,12 @@ OnGestureListener {
       if (te == null) {
          return false;
       }
-
+      
+      if (_processingDoubleTap){
+    	  _processingDoubleTap = false; //Dismissing next event after double tap
+    	  return false;
+      }
+      
       queueEvent(new Runnable() {
          @Override
          public void run() {

@@ -25,18 +25,22 @@ public class FlatPlanet extends Planet
 
   private MutableVector3D _origin = new MutableVector3D();
   private MutableVector3D _initialPoint = new MutableVector3D();
+  private double _dragHeight;
   private MutableVector3D _lastFinalPoint = new MutableVector3D();
   private boolean _validSingleDrag;
   private MutableVector3D _lastDirection = new MutableVector3D();
 
   private MutableVector3D _centerRay = new MutableVector3D();
   private MutableVector3D _initialPoint0 = new MutableVector3D();
+  private double _dragHeight0;
   private MutableVector3D _initialPoint1 = new MutableVector3D();
-  private double _distanceBetweenInitialPoints;
+  private double _dragHeight1;
   private MutableVector3D _centerPoint = new MutableVector3D();
-  //  mutable double          _angleBetweenInitialRays;
 
+  private double _correctionT2;
+  private MutableVector3D _correctedCenterPoint = new MutableVector3D();
 
+  private double _lastDoubleDragAngle;
 
 
   public FlatPlanet(Vector2D size)
@@ -172,6 +176,11 @@ public class FlatPlanet extends Planet
     return new Geodetic3D(toGeodetic2D(position), position._z);
   }
 
+  public final double getGeodetic3DHeight(Vector3D position)
+  {
+    return position._z;
+  }
+
   public final Vector3D scaleToGeodeticSurface(Vector3D position)
   {
     return new Vector3D(position._x, position._y, 0);
@@ -212,10 +221,15 @@ public class FlatPlanet extends Planet
      return true;
   }
 
-  public final void beginSingleDrag(Vector3D origin, Vector3D initialRay)
+  public final void beginSingleDrag(Vector3D origin, Vector3D touchedPosition)
   {
     _origin = origin.asMutableVector3D();
-    _initialPoint = Plane.intersectionXYPlaneWithRay(origin, initialRay).asMutableVector3D();
+    //_initialPoint = Plane::intersectionXYPlaneWithRay(origin, initialRay).asMutableVector3D();
+    _initialPoint = touchedPosition.asMutableVector3D();
+    _dragHeight = getGeodetic3DHeight(touchedPosition);
+  
+    //printf("INiTIAL POINT EN %f, %f, %f\n ", _initialPoint.x(), _initialPoint.y(), _initialPoint.z());
+  
     _lastFinalPoint = _initialPoint;
     _validSingleDrag = false;
   }
@@ -228,7 +242,7 @@ public class FlatPlanet extends Planet
   
     // compute final point
     final Vector3D origin = _origin.asVector3D();
-    MutableVector3D finalPoint = Plane.intersectionXYPlaneWithRay(origin, finalRay).asMutableVector3D();
+    MutableVector3D finalPoint = Plane.intersectionXYPlaneWithRay(origin, finalRay, _dragHeight).asMutableVector3D();
     if (finalPoint.isNan())
        return MutableMatrix44D.invalid();
   
@@ -248,18 +262,16 @@ public class FlatPlanet extends Planet
     return new SingleTranslationEffect(_lastDirection.asVector3D());
   }
 
-  public final void beginDoubleDrag(Vector3D origin, Vector3D centerRay, Vector3D initialRay0, Vector3D initialRay1)
+  public final void beginDoubleDrag(Vector3D origin, Vector3D centerRay, Vector3D centerPosition, Vector3D touchedPosition0, Vector3D touchedPosition1)
   {
     _origin = origin.asMutableVector3D();
     _centerRay = centerRay.asMutableVector3D();
-    _initialPoint0 = Plane.intersectionXYPlaneWithRay(origin, initialRay0).asMutableVector3D();
-    _initialPoint1 = Plane.intersectionXYPlaneWithRay(origin, initialRay1).asMutableVector3D();
-    _distanceBetweenInitialPoints = _initialPoint0.sub(_initialPoint1).length();
-    _centerPoint = Plane.intersectionXYPlaneWithRay(origin, centerRay).asMutableVector3D();
-    //  _angleBetweenInitialRays = initialRay0.angleBetween(initialRay1).degrees();
-  
-    // middle point in 3D
-    _initialPoint = _initialPoint0.add(_initialPoint1).times(0.5);
+    _initialPoint0 = touchedPosition0.asMutableVector3D();
+    _dragHeight0 = getGeodetic3DHeight(touchedPosition0);
+    _initialPoint1 = touchedPosition1.asMutableVector3D();
+    _dragHeight1 = getGeodetic3DHeight(touchedPosition1);
+    _centerPoint = centerPosition.asMutableVector3D();
+    _lastDoubleDragAngle = 0;
   }
 
   public final MutableMatrix44D doubleDrag(Vector3D finalRay0, Vector3D finalRay1)
@@ -270,77 +282,97 @@ public class FlatPlanet extends Planet
   
     // init params
     final IMathUtils mu = IMathUtils.instance();
+    final Vector3D origin = _origin.asVector3D();
     MutableVector3D positionCamera = _origin;
   
-    // compute distance to translate camera
-    double d0 = _distanceBetweenInitialPoints;
-    final Vector3D r1 = finalRay0;
-    final Vector3D r2 = finalRay1;
-    double k = ((r1._x/r1._z - r2._x/r2._z) * (r1._x/r1._z - r2._x/r2._z) + (r1._y/r1._z - r2._y/r2._z) * (r1._y/r1._z - r2._y/r2._z));
-    double zc = _origin.z();
-    double uz = _centerRay.z();
-    double t2 = (d0 / mu.sqrt(k) - zc) / uz;
+    // compute final points
+    Vector3D finalPoint0 = Plane.intersectionXYPlaneWithRay(origin, finalRay0, _dragHeight0); //A1
+    if (finalPoint0.isNan())
+       return MutableMatrix44D.invalid();
   
-    // start to compound matrix
-    MutableMatrix44D matrix = MutableMatrix44D.identity();
-    positionCamera = _origin;
-    MutableVector3D viewDirection = _centerRay;
-    MutableVector3D ray0 = finalRay0.asMutableVector3D();
-    MutableVector3D ray1 = finalRay1.asMutableVector3D();
+    // drag initial point 0 to final point 0
+    MutableMatrix44D matrix = MutableMatrix44D.createTranslationMatrix(_initialPoint0.sub(finalPoint0));
   
-    // drag from initialPoint to centerPoint and move the camera forward
+    // transform points to set axis origin in initialPoint0
+    // (en el mundo plano es solo una traslacion)
+    // (en el esférico será un cambio de sistema de referencia: traslacion + rotacion, usando el sistema local normal en ese punto)
     {
-      MutableVector3D delta = _initialPoint.sub((_centerPoint));
-      delta = delta.add(viewDirection.times(t2));
-      MutableMatrix44D translation = MutableMatrix44D.createTranslationMatrix(delta.asVector3D());
-      positionCamera = positionCamera.transformedBy(translation, 1.0);
-  //    matrix.copyValue(translation.multiply(matrix));
-      matrix.copyValueOfMultiplication(translation, matrix);
+  
+      Vector3D draggedCameraPos = positionCamera.transformedBy(matrix, 1.0).asVector3D();
+      Vector3D finalPoint1 = Plane.intersectionXYPlaneWithRay(draggedCameraPos, finalRay1.transformedBy(matrix, 0), _dragHeight1); //B1
+  
+      //Taking whole system to origin
+      MutableMatrix44D traslation = MutableMatrix44D.createTranslationMatrix(_initialPoint0.times(-1).asVector3D());
+      Vector3D transformedInitialPoint1 = _initialPoint1.transformedBy(traslation, 1.0).asVector3D();
+      Vector3D transformedFinalPoint1 = finalPoint1.transformedBy(traslation, 1.0);
+      Vector3D transformedCameraPos = draggedCameraPos.transformedBy(traslation, 1.0);
+      Vector3D v0 = transformedFinalPoint1.sub(transformedCameraPos);
+  
+      //Angles to rotate transformedInitialPoint1 to adjust the plane that contains origin, TFP1 and TCP
+      Vector3D planeNormal = transformedCameraPos.cross(v0).normalized();
+      Plane plane = new Plane(planeNormal, v0);
+      Vector2D angles = plane.rotationAngleAroundZAxisToFixPointInRadians(transformedInitialPoint1);
+  
+      //Selecting best angle to rotate (smallest)
+      double angulo1 = angles._x;
+      double angulo2 = angles._y;
+      double dif1 = Angle.distanceBetweenAnglesInRadians(angulo1, _lastDoubleDragAngle);
+      double dif2 = Angle.distanceBetweenAnglesInRadians(angulo2, _lastDoubleDragAngle);
+      _lastDoubleDragAngle = (dif1 < dif2)? angulo1 : angulo2;
+  
+      //Creating rotating matrix
+      Vector3D normal0 = geodeticSurfaceNormal(_initialPoint0);
+      MutableMatrix44D rotation = MutableMatrix44D.createGeneralRotationMatrix(Angle.fromRadians(-_lastDoubleDragAngle), normal0, _initialPoint0.asVector3D());
+      matrix.copyValueOfMultiplication(rotation, matrix); // = rotation.multiply(matrix);
+  
     }
   
-    // compute 3D point of view center
-    Vector3D centerPoint2 = Plane.intersectionXYPlaneWithRay(positionCamera.asVector3D(), viewDirection.asVector3D());
-  
-    // compute middle point in 3D
-    Vector3D P0 = Plane.intersectionXYPlaneWithRay(positionCamera.asVector3D(), ray0.asVector3D());
-    Vector3D P1 = Plane.intersectionXYPlaneWithRay(positionCamera.asVector3D(), ray1.asVector3D());
-    Vector3D finalPoint = P0.add(P1).times(0.5);
-  
-    // drag globe from centerPoint to finalPoint
+    // zoom camera (see chuleta en pdf)
+    // ahora mismo lo que se hace es buscar cuánto acercar para que el angulo de las dos parejas de vectores
+    // sea el mismo
     {
-      MutableMatrix44D translation = MutableMatrix44D.createTranslationMatrix(centerPoint2.sub(finalPoint));
-      positionCamera = positionCamera.transformedBy(translation, 1.0);
-  //    matrix.copyValue(translation.multiply(matrix));
-      matrix.copyValueOfMultiplication(translation, matrix);
-    }
+      Vector3D P0 = positionCamera.transformedBy(matrix, 1.0).asVector3D();
+      Vector3D B = _initialPoint1.asVector3D();
+      Vector3D B0 = B.sub(P0);
+      Vector3D Ra = finalRay0.transformedBy(matrix, 0.0).normalized();
+      Vector3D Rb = finalRay1.transformedBy(matrix, 0.0).normalized();
+      double b = -2 * (B0.dot(Ra));
+      double c = B0.squaredLength();
+      double k = Ra.dot(B0);
+      double RaRb2 = Ra.dot(Rb) * Ra.dot(Rb);
+      double at = RaRb2 - 1;
+      double bt = b *RaRb2 + 2 *k;
+      double ct = c *RaRb2 - k *k;
   
-    // camera rotation
-    {
-      Vector3D normal = geodeticSurfaceNormal(centerPoint2);
-      Vector3D v0 = _initialPoint0.asVector3D().sub(centerPoint2).projectionInPlane(normal);
-      Vector3D p0 = Plane.intersectionXYPlaneWithRay(positionCamera.asVector3D(), ray0.asVector3D());
-      Vector3D v1 = p0.sub(centerPoint2).projectionInPlane(normal);
-      double angle = v0.angleBetween(v1)._degrees;
-      double sign = v1.cross(v0).dot(normal);
-      if (sign<0)
-         angle = -angle;
-      MutableMatrix44D rotation = MutableMatrix44D.createGeneralRotationMatrix(Angle.fromDegrees(angle), normal, centerPoint2);
-  //    matrix.copyValue(rotation.multiply(matrix));
-      matrix.copyValueOfMultiplication(rotation, matrix);
+      Vector2D sol = mu.solveSecondDegreeEquation(at, bt, ct);
+      if (sol.isNan())
+      {
+        return MutableMatrix44D.invalid();
+      }
+      double t = sol._x;
+  
+      MutableMatrix44D zoom = MutableMatrix44D.createTranslationMatrix(Ra.times(t));
+      matrix.copyValueOfMultiplication(zoom, matrix); // = zoom.multiply(matrix);
     }
   
     return matrix;
   }
 
-  public final Effect createDoubleTapEffect(Vector3D origin, Vector3D centerRay, Vector3D tapRay)
+  public final Effect createDoubleTapEffect(Vector3D origin, Vector3D centerRay, Vector3D touchedPosition)
   {
-    final Vector3D initialPoint = Plane.intersectionXYPlaneWithRay(origin, tapRay);
-    if (initialPoint.isNan())
+    //const Vector3D initialPoint = Plane::intersectionXYPlaneWithRay(origin, tapRay);
+    if (touchedPosition.isNan())
        return null;
-    final Vector3D centerPoint = Plane.intersectionXYPlaneWithRay(origin, centerRay);
+    //const Vector3D centerPoint = Plane::intersectionXYPlaneWithRay(origin, centerRay);
+    double dragHeight = getGeodetic3DHeight(touchedPosition);
+    final Vector3D centerPoint = Plane.intersectionXYPlaneWithRay(origin, centerRay, dragHeight);
   
     // create effect
-    return new DoubleTapTranslationEffect(TimeInterval.fromSeconds(0.75), initialPoint.sub(centerPoint), toGeodetic3D(origin)._height *0.6);
+    double distanceToGround = getGeodetic3DHeight(origin) - dragHeight;
+  
+    //printf("\n-- double tap to height %.2f, desde mi altura=%.2f\n", dragHeight, toGeodetic3D(origin)._height);
+  
+    return new DoubleTapTranslationEffect(TimeInterval.fromSeconds(0.75), touchedPosition.sub(centerPoint), distanceToGround *0.6);
   }
 
   public final double distanceToHorizon(Vector3D position)
@@ -391,6 +423,14 @@ public class FlatPlanet extends Planet
   public final String getType()
   {
     return "Flat";
+  }
+
+  public final MutableMatrix44D zoomUsingMouseWheel(double factor, Vector3D origin, Vector3D centerRay, Vector3D centerPosition, Vector3D touchedPosition, Vector3D finalRay)
+  {
+    double dist = touchedPosition.distanceTo(origin);
+    Vector3D translation = finalRay.normalized().times(dist * factor);
+    MutableMatrix44D matrix = MutableMatrix44D.createTranslationMatrix(translation);
+    return matrix;
   }
 
 }

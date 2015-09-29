@@ -12,6 +12,8 @@
 #include <string>
 #include <cstdio>
 #include "ILogger.hpp"
+class Vector2D;
+class MutableVector2D;
 
 #ifdef C_CODE
 
@@ -246,9 +248,14 @@ public:
     return fracPart * denominator;
   }
 
+  Vector2D solveSecondDegreeEquation(double A, double B, double C) const;
+  
+  void solveSecondDegreeEquation(double A, double B, double C,
+                                 MutableVector2D& result) const;
+
+
   /** answer a double value in the range 0.0 (inclusive) and 1.0 (exclusive) */
   virtual double nextRandomDouble() const = 0;
-
 };
 
 #endif

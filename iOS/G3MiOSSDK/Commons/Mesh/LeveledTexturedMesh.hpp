@@ -15,6 +15,7 @@
 #include "GLState.hpp"
 #include <vector>
 #include "Vector2F.hpp"
+#include "Vector3D.hpp"
 #include "ErrorHandling.hpp"
 
 class TextureIDReference;
@@ -164,8 +165,18 @@ public:
   void rawRender(const G3MRenderContext* rc,
                  const GLState* parentGLState) const;
 
-  void showNormals(bool v) const {
+  void zRawRender(const G3MRenderContext* rc, const GLState* parentGLState) const;
+
+  void showNormals(bool v) const{
     _mesh->showNormals(v);
+  }
+  
+  IFloatBuffer* getVerticesFloatBuffer() const{
+    return _mesh->getVerticesFloatBuffer();
+  }
+  
+  Vector3D getVerticesOffset() const{
+    return _mesh->getVerticesOffset();
   }
 
 };

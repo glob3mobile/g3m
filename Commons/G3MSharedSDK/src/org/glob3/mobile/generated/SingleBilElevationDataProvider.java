@@ -26,7 +26,7 @@ public class SingleBilElevationDataProvider extends ElevationDataProvider
   
     for (final Long key : _requestsQueue.keySet()) {
       final SingleBilElevationDataProvider_Request r = _requestsQueue.get(key);
-      requestElevationData(r._sector, r._extent, r._listener, r._autodeleteListener);
+      requestElevationData(r._sector, r._extent, r._requestPriority, r._listener, r._autodeleteListener);
       if (r != null) {
         r.dispose();
       }
@@ -34,10 +34,10 @@ public class SingleBilElevationDataProvider extends ElevationDataProvider
     _requestsQueue.clear();
   }
 
-  private long queueRequest(Sector sector, Vector2I extent, IElevationDataListener listener, boolean autodeleteListener)
+  private long queueRequest(Sector sector, Vector2I extent, long requestPriority, IElevationDataListener listener, boolean autodeleteListener)
   {
     _currentRequestID++;
-    _requestsQueue.put(_currentRequestID, new SingleBilElevationDataProvider_Request(sector, extent, listener, autodeleteListener));
+    _requestsQueue.put(_currentRequestID, new SingleBilElevationDataProvider_Request(sector, extent, requestPriority, listener, autodeleteListener));
     return _currentRequestID;
   }
 
@@ -73,7 +73,9 @@ public class SingleBilElevationDataProvider extends ElevationDataProvider
   public void dispose()
   {
     if (_elevationData != null)
-       _elevationData.dispose();
+    {
+      _elevationData._release();
+    }
   
     if (_downloader != null && _requestToDownloaderID > -1)
     {
@@ -104,11 +106,11 @@ public class SingleBilElevationDataProvider extends ElevationDataProvider
     }
   }
 
-  public final long requestElevationData(Sector sector, Vector2I extent, IElevationDataListener listener, boolean autodeleteListener)
+  public final long requestElevationData(Sector sector, Vector2I extent, long requestPriority, IElevationDataListener listener, boolean autodeleteListener)
   {
     if (!_elevationDataResolved)
     {
-      return queueRequest(sector, extent, listener, autodeleteListener);
+      return queueRequest(sector, extent, requestPriority, listener, autodeleteListener);
     }
   
     if (_elevationData == null)
@@ -120,6 +122,7 @@ public class SingleBilElevationDataProvider extends ElevationDataProvider
       //int _DGD_working_on_terrain;
       ElevationData elevationData = new InterpolatedSubviewElevationData(_elevationData, sector, extent);
       listener.onData(sector, extent, elevationData);
+      elevationData._release();
     }
   
     if (autodeleteListener)

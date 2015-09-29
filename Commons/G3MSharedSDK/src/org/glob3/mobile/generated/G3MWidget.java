@@ -1,8 +1,8 @@
 package org.glob3.mobile.generated; 
-public class G3MWidget implements ChangedRendererInfoListener
+public class G3MWidget implements ChangedRendererInfoListener, FrameDepthProvider
 {
 
-  public static void initSingletons(ILogger logger, IFactory factory, IStringUtils stringUtils, IStringBuilder stringBuilder, IMathUtils mathUtils, IJSONParser jsonParser, ITextUtils textUtils)
+  public static void initSingletons(ILogger logger, IFactory factory, IStringUtils stringUtils, IStringBuilder stringBuilder, IMathUtils mathUtils, IJSONParser jsonParser, ITextUtils textUtils, IDeviceAttitude devAttitude, IDeviceLocation devLocation)
   {
     if (ILogger.instance() == null)
     {
@@ -13,6 +13,8 @@ public class G3MWidget implements ChangedRendererInfoListener
       IMathUtils.setInstance(mathUtils);
       IJSONParser.setInstance(jsonParser);
       ITextUtils.setInstance(textUtils);
+      IDeviceAttitude.setInstance(devAttitude);
+      IDeviceLocation.setInstance(devLocation);
     }
     else
     {
@@ -245,10 +247,12 @@ public class G3MWidget implements ChangedRendererInfoListener
   
     _currentCamera.copyFrom(_nextCamera);
   
+  
+  
     _rendererState = calculateRendererState();
     final RenderState_Type renderStateType = _rendererState._type;
   
-    _renderContext.clear();
+    _renderContext.clearForNewFrame();
   
     _effectsScheduler.doOneCyle(_renderContext);
   
@@ -278,10 +282,16 @@ public class G3MWidget implements ChangedRendererInfoListener
       _gpuProgramManager.removeUnused();
     }
   
+    _frameBufferContent = FrameBufferContent.REGULAR_FRAME; //FrameBuffer has been filled with a regular frame
+  
     final long elapsedTimeMS = _timer.elapsedTimeInMilliseconds();
     //  if (elapsedTimeMS > 100) {
     //    ILogger::instance()->logWarning("Frame took too much time: %dms", elapsedTimeMS);
     //  }
+  ///#warning REMOVE
+  //  if (RENDER_READY == renderStateType){
+  //    zRender();
+  //  }
   
     if (_logFPS)
     {
@@ -682,7 +692,19 @@ public class G3MWidget implements ChangedRendererInfoListener
     _forceBusyRenderer = forceBusyRenderer;
   }
 
-  //void notifyChangedInfo() const;
+  public final double getDepthForPixel(float x, float y)
+  {
+    zRender();
+  
+    final IMathUtils mu = IMathUtils.instance();
+  
+    final int ix = mu.round(x);
+    final int iy = mu.round(y);
+  
+    final double z = _gl.readPixelAsDouble(ix, iy, _width, _height);
+  
+    return z;
+  }
 
   public final void setInfoDisplay(InfoDisplay infoDisplay)
   {
@@ -734,6 +756,25 @@ public class G3MWidget implements ChangedRendererInfoListener
     }
     _periodicalTasks.clear();
   }
+
+  public final void addCameraConstrainer(ICameraConstrainer cc)
+  {
+    _cameraConstrainers.add(cc);
+  }
+  public final void removeCameraConstrainer(ICameraConstrainer cc)
+  {
+    int size = _cameraConstrainers.size();
+    for (int i = 0; i < size; i++)
+    {
+      if (_cameraConstrainers.get(i) == cc)
+      {
+        _cameraConstrainers.remove(i);
+        return;
+      }
+    }
+    ILogger.instance().logError("Could not remove camera constrainer.");
+  }
+
 
 
   private IStorage _storage;
@@ -807,10 +848,10 @@ public class G3MWidget implements ChangedRendererInfoListener
 
   private InfoDisplay _infoDisplay;
 
+  private FrameBufferContent _frameBufferContent;
 
   private float _touchDownPositionX;
   private float _touchDownPositionY;
-
 
   private G3MWidget(GL gl, IStorage storage, IDownloader downloader, IThreadUtils threadUtils, ICameraActivityListener cameraActivityListener, Planet planet, java.util.ArrayList<ICameraConstrainer> cameraConstrainers, CameraRenderer cameraRenderer, Renderer mainRenderer, ProtoRenderer busyRenderer, ErrorRenderer errorRenderer, Renderer hudRenderer, Color backgroundColor, boolean logFPS, boolean logDownloaderStatistics, GInitializationTask initializationTask, boolean autoDeleteInitializationTask, java.util.ArrayList<PeriodicalTask> periodicalTasks, GPUProgramManager gpuProgramManager, SceneLighting sceneLighting, InitialCameraPositionProvider initialCameraPositionProvider, InfoDisplay infoDisplay)
   {
@@ -831,8 +872,8 @@ public class G3MWidget implements ChangedRendererInfoListener
      _hudRenderer = hudRenderer;
      _width = 1;
      _height = 1;
-     _currentCamera = new Camera(1);
-     _nextCamera = new Camera(2);
+     _currentCamera = new Camera(1, this);
+     _nextCamera = new Camera(2, this);
      _backgroundColor = new Color(backgroundColor);
      _timer = IFactory.instance().createTimer();
      _renderCounter = 0;
@@ -858,9 +899,10 @@ public class G3MWidget implements ChangedRendererInfoListener
      _initialCameraPositionHasBeenSet = false;
      _forceBusyRenderer = false;
      _nFramesBeetweenProgramsCleanUp = 500;
-     _infoDisplay = infoDisplay;
      _touchDownPositionX = 0F;
      _touchDownPositionY = 0F;
+     _frameBufferContent = FrameBufferContent.EMPTY_FRAMEBUFFER;
+     _infoDisplay = infoDisplay;
     _effectsScheduler.initialize(_context);
     _cameraRenderer.initialize(_context);
     _mainRenderer.initialize(_context);
@@ -1015,6 +1057,39 @@ public class G3MWidget implements ChangedRendererInfoListener
       _selectedRenderer = selectedRenderer;
       _selectedRenderer.start(_renderContext);
     }
+  }
+
+  /**
+   Generates a image on the FrameBuffer of the depth of each pixel
+   so the method getScenePositionForPixel can obtain it.
+  */
+  private void zRender()
+  {
+  
+    if (_frameBufferContent == FrameBufferContent.DEPTH_IMAGE)
+    {
+      return; //It means no regular frame has been generated since last ZRender
+    }
+  
+    if (_mainRenderer.isEnable())
+    {
+      GLState zRenderGLState = new GLState();
+      _gl.clearScreen(Color.black());
+      _mainRenderer.zRender(_renderContext, zRenderGLState);
+      zRenderGLState._release();
+  
+      java.util.ArrayList<OrderedRenderable> orderedRenderables = _renderContext.getSortedOrderedRenderables();
+      if (orderedRenderables != null)
+      {
+        if (orderedRenderables.size() > 0)
+        {
+          ILogger.instance().logError("Some component is altering the OrderedRenderables list during Depth Rendering.");
+        }
+      }
+  
+      _frameBufferContent = FrameBufferContent.DEPTH_IMAGE;
+    }
+  
   }
 
 }

@@ -110,6 +110,10 @@ public class TrailsRenderer extends DefaultRenderer
     }
   }
 
+  public final void zRender(G3MRenderContext rc, GLState glState)
+  {
+  }
+
 }
 //#define MAX_POSITIONS_PER_SEGMENT 128
 

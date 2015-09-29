@@ -8,13 +8,16 @@ public class TileElevationDataRequest
 
   private TileElevationDataRequestListener _listener;
 
-  public TileElevationDataRequest(Tile tile, Vector2I resolution, ElevationDataProvider provider)
+  private final long _requestPriority;
+
+  public TileElevationDataRequest(Tile tile, Vector2I resolution, long requestPriority, ElevationDataProvider provider)
   {
      _tile = tile;
      _resolution = resolution;
      _provider = provider;
      _requestID = -1;
      _listener = null;
+     _requestPriority = requestPriority;
   
   }
 
@@ -45,7 +48,7 @@ public class TileElevationDataRequest
   public final void sendRequest()
   {
     _listener = new TileElevationDataRequestListener(this);
-    _requestID = _provider.requestElevationData(_tile._sector, _resolution, _listener, true);
+    _requestID = _provider.requestElevationData(_tile._sector, _resolution, _requestPriority, _listener, true);
   }
 
   public final void cancelRequest()

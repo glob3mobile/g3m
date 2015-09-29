@@ -254,6 +254,51 @@ MutableMatrix44D MutableMatrix44D::inversed() const {
                           m03, m13, m23, m33);
 }
 
+void MutableMatrix44D::setInverse() {
+  const double a0 = (_m00 * _m11) - (_m01 * _m10);
+  const double a1 = (_m00 * _m12) - (_m02 * _m10);
+  const double a2 = (_m00 * _m13) - (_m03 * _m10);
+  const double a3 = (_m01 * _m12) - (_m02 * _m11);
+  const double a4 = (_m01 * _m13) - (_m03 * _m11);
+  const double a5 = (_m02 * _m13) - (_m03 * _m12);
+  
+  const double b0 = (_m20 * _m31) - (_m21 * _m30);
+  const double b1 = (_m20 * _m32) - (_m22 * _m30);
+  const double b2 = (_m20 * _m33) - (_m23 * _m30);
+  const double b3 = (_m21 * _m32) - (_m22 * _m31);
+  const double b4 = (_m21 * _m33) - (_m23 * _m31);
+  const double b5 = (_m22 * _m33) - (_m23 * _m32);
+  
+  const double determinant = ((((a0 * b5) - (a1 * b4)) + (a2 * b3) + (a3 * b2)) - (a4 * b1)) + (a5 * b0);
+  
+  if (determinant == 0.0) {
+    //return MutableMatrix44D::invalid();
+    setInvalid();
+  }
+  
+  const double m00 = (((+_m11 * b5) - (_m12 * b4)) + (_m13 * b3)) / determinant;
+  const double m10 = (((-_m10 * b5) + (_m12 * b2)) - (_m13 * b1)) / determinant;
+  const double m20 = (((+_m10 * b4) - (_m11 * b2)) + (_m13 * b0)) / determinant;
+  const double m30 = (((-_m10 * b3) + (_m11 * b1)) - (_m12 * b0)) / determinant;
+  const double m01 = (((-_m01 * b5) + (_m02 * b4)) - (_m03 * b3)) / determinant;
+  const double m11 = (((+_m00 * b5) - (_m02 * b2)) + (_m03 * b1)) / determinant;
+  const double m21 = (((-_m00 * b4) + (_m01 * b2)) - (_m03 * b0)) / determinant;
+  const double m31 = (((+_m00 * b3) - (_m01 * b1)) + (_m02 * b0)) / determinant;
+  const double m02 = (((+_m31 * a5) - (_m32 * a4)) + (_m33 * a3)) / determinant;
+  const double m12 = (((-_m30 * a5) + (_m32 * a2)) - (_m33 * a1)) / determinant;
+  const double m22 = (((+_m30 * a4) - (_m31 * a2)) + (_m33 * a0)) / determinant;
+  const double m32 = (((-_m30 * a3) + (_m31 * a1)) - (_m32 * a0)) / determinant;
+  const double m03 = (((-_m21 * a5) + (_m22 * a4)) - (_m23 * a3)) / determinant;
+  const double m13 = (((+_m20 * a5) - (_m22 * a2)) + (_m23 * a1)) / determinant;
+  const double m23 = (((-_m20 * a4) + (_m21 * a2)) - (_m23 * a0)) / determinant;
+  const double m33 = (((+_m20 * a3) - (_m21 * a1)) + (_m22 * a0)) / determinant;
+  
+  _m00=m00; _m01=m01; _m02=m02; _m03=m03;
+  _m10=m10; _m11=m11; _m12=m12; _m13=m13;
+  _m20=m20; _m21=m21; _m22=m22; _m23=m23;
+  _m30=m30; _m31=m31; _m32=m32; _m33=m33;
+}
+
 void MutableMatrix44D::print(const std::string& name, const ILogger* log) const {
   log->logInfo("MutableMatrix44D %s:\n", name.c_str());
   log->logInfo("%.2f  %.2f %.2f %.2f\n", _m00, _m01,_m02, _m03 );
@@ -382,6 +427,27 @@ MutableMatrix44D MutableMatrix44D::createTranslationMatrix(double x,
                           x, y, z, 1);
 }
 
+void MutableMatrix44D::setTranslationMatrix(double x, double y, double z) {
+  _m00  = 1;
+  _m01  = 0;
+  _m02  = 0;
+  _m03  = x;
+  
+  _m10  = 0;
+  _m11  = 1;
+  _m12  = 0;
+  _m13  = y;
+  
+  _m20  = 0;
+  _m21  = 0;
+  _m22  = 1;
+  _m23  = z;
+  
+  _m30  = 0;
+  _m31  = 0;
+  _m32  = 0;
+  _m33  = 1;
+}
 
 MutableMatrix44D MutableMatrix44D::createRotationMatrix(const Angle& angle,
                                                         const Vector3D& axis) {
@@ -396,12 +462,54 @@ MutableMatrix44D MutableMatrix44D::createRotationMatrix(const Angle& angle,
                           0, 0, 0, 1);
 }
 
+void MutableMatrix44D::setRotationMatrix(double radians,
+                                         const MutableVector3D& axis) {
+  //const Vector3D a = axis.normalized();
+  double length = axis.length();
+  double a_x = axis.x() / length;
+  double a_y = axis.y() / length;
+  double a_z = axis.z() / length;
+  
+  const double c = COS(radians);
+  const double s = SIN(radians);
+  
+  _m00 = a_x * a_x * (1 - c) + c;
+  _m01 = a_y * a_x * (1 - c) - a_z * s;
+  _m02 = a_x * a_z * (1 - c) + a_y * s;
+  _m03 = 0;
+  
+  _m10 = a_x * a_y * (1 - c) + a_z * s;
+  _m11 = a_y * a_y * (1 - c) + c;
+  _m12 = a_y * a_z * (1 - c) - a_x * s;
+  _m13 = 0;
+  
+  _m20 = a_x * a_z * (1 - c) - a_y * s;
+  _m21 = a_y * a_z * (1 - c) + a_x * s;
+  _m22 = a_z * a_z * (1 - c) + c;
+  _m23 = 0;
+  
+  _m30 = 0;
+  _m31 = 0;
+  _m32 = 0;
+  _m33 = 1;
+}
+
 MutableMatrix44D MutableMatrix44D::createGeneralRotationMatrix(const Angle& angle,
                                                                const Vector3D& axis, const Vector3D& point) {
   const MutableMatrix44D T1 = MutableMatrix44D::createTranslationMatrix(point.times(-1.0));
   const MutableMatrix44D R  = MutableMatrix44D::createRotationMatrix(angle, axis);
   const MutableMatrix44D T2 = MutableMatrix44D::createTranslationMatrix(point);
   return T2.multiply(R).multiply(T1);
+}
+
+void MutableMatrix44D::setGeneralRotationMatrix(double angleInRadians,
+                                                const MutableVector3D& axis,
+                                                const MutableVector3D& point) {
+  const MutableMatrix44D T1 = MutableMatrix44D::createTranslationMatrix(point.asVector3D().times(-1.0));
+  const MutableMatrix44D R  = MutableMatrix44D::createRotationMatrix(Angle::fromRadians(angleInRadians), axis.asVector3D());
+  const MutableMatrix44D T2 = MutableMatrix44D::createTranslationMatrix(point.asVector3D());
+  copyValueOfMultiplication(T2, R);
+  copyValueOfMultiplication(*this, T1);
 }
 
 MutableMatrix44D MutableMatrix44D::createModelMatrix(const MutableVector3D& pos,
@@ -415,7 +523,21 @@ MutableMatrix44D MutableMatrix44D::createModelMatrix(const MutableVector3D& pos,
                           u.y(), v.y(), -w.y(), 0,
                           u.z(), v.z(), -w.z(), 0,
                           -pos.dot(u), -pos.dot(v), pos.dot(w), 1);
+  
+}
 
+MutableMatrix44D MutableMatrix44D::createModelMatrix(const MutableVector3D& u,
+                                                     const MutableVector3D& v,
+                                                     const MutableVector3D& w,
+                                                     const MutableVector3D& pos) {
+  const MutableVector3D normalizedU = u.normalized();
+  const MutableVector3D normalizedV = v.normalized();
+  const MutableVector3D normalizedW = w.normalized();
+  
+  return MutableMatrix44D(normalizedU.x(),  normalizedV.x(),  normalizedW.x(),  0,
+                          normalizedU.y(),  normalizedV.y(),  normalizedW.y(),  0,
+                          normalizedU.z(),  normalizedV.z(),  normalizedW.z(),  0,
+                          -pos.x(),         -pos.y(),         -pos.z(),         1);
 }
 
 MutableMatrix44D MutableMatrix44D::createOrthographicProjectionMatrix(double left, double right,
@@ -447,12 +569,33 @@ MutableMatrix44D MutableMatrix44D::createGeodeticRotationMatrix(const Angle& lat
                                                           0, 0, 1, 0,
                                                           1, 0, 0, 0,
                                                           0, 0, 0, 1);
-
+  
   // orbit reference system to geodetic position
   const MutableMatrix44D longitudeRotation = MutableMatrix44D::createRotationMatrix(longitude, Vector3D::upY());
   const MutableMatrix44D latitudeRotation  = MutableMatrix44D::createRotationMatrix(latitude,  Vector3D::downX());
-
+  
   return changeReferenceCoordinatesSystem.multiply(longitudeRotation).multiply(latitudeRotation);
+}
+
+void MutableMatrix44D::setGeodeticRotationMatrix(double latitudeInRadians,
+                                                 double longitudInRadians) {
+  // change the reference coordinates system from x-front/y-left/z-up to x-right/y-up/z-back
+  copyValues(0, 1, 0, 0,
+             0, 0, 1, 0,
+             1, 0, 0, 0,
+             0, 0, 0, 1);
+  
+  // orbit reference system to geodetic position
+  //const MutableMatrix44D longitudeRotation = MutableMatrix44D::createRotationMatrix(position._longitude, Vector3D::upY());
+  MutableMatrix44D longitudeRotation;
+  longitudeRotation.setRotationMatrix(longitudInRadians, Vector3D::upY().asMutableVector3D());
+  //const MutableMatrix44D latitudeRotation  = MutableMatrix44D::createRotationMatrix(position._latitude,  Vector3D::downX());
+  MutableMatrix44D latitudeRotation;
+  latitudeRotation.setRotationMatrix(latitudeInRadians, Vector3D::downX().asMutableVector3D());
+  
+  //return changeReferenceCoordinatesSystem.multiply(longitudeRotation).multiply(latitudeRotation);
+  copyValueOfMultiplication(*this, longitudeRotation);
+  copyValueOfMultiplication(*this, latitudeRotation);
 }
 
 
@@ -496,4 +639,14 @@ void MutableMatrix44D::copyValue(const MutableMatrix44D &m) {
   if (_matrix44D != NULL) {
     _matrix44D->_retain();
   }
+}
+
+void MutableMatrix44D::copyValues(double m00, double m10, double m20, double m30,
+                                  double m01, double m11, double m21, double m31,
+                                  double m02, double m12, double m22, double m32,
+                                  double m03, double m13, double m23, double m33) {
+  _m00=m00; _m01=m01; _m02=m02; _m03=m03;
+  _m10=m10; _m11=m11; _m12=m12; _m13=m13;
+  _m20=m20; _m21=m21; _m22=m22; _m23=m23;
+  _m30=m30; _m31=m31; _m32=m32; _m33=m33;
 }

@@ -48,8 +48,11 @@ public:
 
   const long long requestElevationData(const Sector& sector,
                                        const Vector2I& extent,
+                                       long long requestPriority,
                                        IElevationDataListener* listener,
                                        bool autodeleteListener);
+  
+  std::string requestStringPath(const Sector& sector, const Vector2I& extent);
 
   void cancelRequest(const long long requestId);
   

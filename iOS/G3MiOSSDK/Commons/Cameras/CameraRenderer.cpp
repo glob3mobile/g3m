@@ -11,6 +11,7 @@
 #include "CameraEventHandler.hpp"
 #include "TouchEvent.hpp"
 
+
 CameraRenderer::~CameraRenderer() {
   delete _cameraContext;
   const size_t handlersSize = _handlers.size();
@@ -57,3 +58,27 @@ bool CameraRenderer::onTouchEvent(const G3MEventContext* ec,
   // if no handler processed the event, return not-handled
   return false;
 }
+
+
+void CameraRenderer::setDebugMeshRenderer(MeshRenderer* meshRenderer) {
+  _debugMR = meshRenderer;
+  for (int n=0; n<_handlers.size(); n++)
+    _handlers[n]->setDebugMeshRenderer(meshRenderer);
+}
+
+void CameraRenderer::removeHandler(CameraEventHandler* handler){
+  size_t size = _handlers.size();
+  for (size_t i = 0; i < size; i++) {
+    if (_handlers[i] == handler){
+#ifdef C_CODE
+      _handlers.erase(_handlers.begin() + i);
+#endif
+#ifdef JAVA_CODE
+      _handlers.remove(i);
+#endif
+      return;
+    }
+  }
+  ILogger::instance()->logError("Could not remove camera handler.");
+}
+

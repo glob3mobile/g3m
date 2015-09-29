@@ -22,9 +22,16 @@ package org.glob3.mobile.generated;
 public class CameraDoubleDragHandler extends CameraEventHandler
 {
 
+  private MeshRenderer _debugMR;
+  //bool _allowRotation;
+  //bool _fixRollTo0;
+
+
   public CameraDoubleDragHandler()
   {
+     _debugMR = null;
   }
+
 
   public void dispose()
   {
@@ -39,7 +46,12 @@ public class CameraDoubleDragHandler extends CameraEventHandler
     if (touchEvent.getTouchCount()!=2)
        return false;
   
-    switch (touchEvent.getType())
+    TouchEventType type = touchEvent.getType();
+  
+    final Vector2F pixel0 = touchEvent.getTouch(0).getPos();
+    final Vector2F pixel1 = touchEvent.getTouch(1).getPos();
+  
+    switch (type)
     {
       case Down:
         onDown(eventContext, touchEvent, cameraContext);
@@ -106,16 +118,12 @@ public class CameraDoubleDragHandler extends CameraEventHandler
   
     // double dragging
     final Vector2F pixel0 = touchEvent.getTouch(0).getPos();
+    Vector3D touchedPosition0 = camera.getScenePositionForPixel(pixel0._x, pixel0._y);
     final Vector2F pixel1 = touchEvent.getTouch(1).getPos();
-  
-    final Vector3D initialRay0 = camera.pixel2Ray(pixel0);
-    final Vector3D initialRay1 = camera.pixel2Ray(pixel1);
-  
-    if (initialRay0.isNan() || initialRay1.isNan())
-       return;
+    Vector3D touchedPosition1 = camera.getScenePositionForPixel(pixel1._x, pixel1._y);
   
     cameraContext.setCurrentGesture(Gesture.DoubleDrag);
-    eventContext.getPlanet().beginDoubleDrag(camera.getCartesianPosition(), camera.getViewDirection(), camera.pixel2Ray(pixel0), camera.pixel2Ray(pixel1));
+    eventContext.getPlanet().beginDoubleDrag(camera.getCartesianPosition(), camera.getViewDirection(), camera.getScenePositionForCentralPixel(), touchedPosition0, touchedPosition1);
   }
   public final void onMove(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
   {
@@ -126,12 +134,11 @@ public class CameraDoubleDragHandler extends CameraEventHandler
     final Planet planet = eventContext.getPlanet();
     final Vector2F pixel0 = touchEvent.getTouch(0).getPos();
     final Vector2F pixel1 = touchEvent.getTouch(1).getPos();
+  
     final Vector3D initialRay0 = Camera.pixel2Ray(_cameraPosition, pixel0, _cameraViewPort, _cameraModelViewMatrix);
     final Vector3D initialRay1 = Camera.pixel2Ray(_cameraPosition, pixel1, _cameraViewPort, _cameraModelViewMatrix);
-  
-     if (initialRay0.isNan() || initialRay1.isNan())
-        return;
-  
+    if (initialRay0.isNan() || initialRay1.isNan())
+       return;
     MutableMatrix44D matrix = planet.doubleDrag(initialRay0, initialRay1);
     if (!matrix.isValid())
        return;
@@ -142,6 +149,13 @@ public class CameraDoubleDragHandler extends CameraEventHandler
   public final void onUp(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
   {
     cameraContext.setCurrentGesture(Gesture.None);
+  
+    // remove scene points int render debug mode
+    if (_debugMR != null)
+    {
+      _debugMR.clearMeshes();
+    }
+  
   }
 
   public MutableVector3D _cameraPosition = new MutableVector3D();
@@ -149,5 +163,10 @@ public class CameraDoubleDragHandler extends CameraEventHandler
   public MutableVector3D _cameraUp = new MutableVector3D();
   public MutableVector2I _cameraViewPort = new MutableVector2I();
   public MutableMatrix44D _cameraModelViewMatrix = new MutableMatrix44D();
+
+  public final void setDebugMeshRenderer(MeshRenderer meshRenderer)
+  {
+    _debugMR = meshRenderer;
+  }
 
 }

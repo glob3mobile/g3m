@@ -291,6 +291,20 @@ public class CompositeRenderer implements Renderer, ChangedRendererInfoListener
     return false;
   }
 
+  public final void zRender(G3MRenderContext rc, GLState glState)
+  {
+  
+    for (int i = 0; i < _renderersSize; i++)
+    {
+      Renderer renderer = _renderers.get(i).getRenderer();
+      if (renderer.isEnable())
+      {
+        renderer.zRender(rc, glState);
+      }
+    }
+  }
+
+
   public final void setChangedRendererInfoListener(ChangedRendererInfoListener changedInfoListener, int rendererIdentifier)
   {
     if (_changedInfoListener != null)

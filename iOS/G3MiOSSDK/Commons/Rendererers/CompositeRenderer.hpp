@@ -89,6 +89,9 @@ public:
   virtual bool isPlanetRenderer() {
     return false;
   }
+
+  void zRender(const G3MRenderContext* rc, GLState* glState);
+
   
   void setChangedRendererInfoListener(ChangedRendererInfoListener* changedInfoListener, const int rendererIdentifier);
   

@@ -34,6 +34,10 @@ public interface Renderer extends ProtoRenderer
 
   public abstract RenderState getRenderState(G3MRenderContext rc);
 
+  public abstract void render(G3MRenderContext rc, GLState glState);
+
+  public abstract void zRender(G3MRenderContext rc, GLState glState);
+
   /**
    Gives to Renderer the opportunity to process touch events.
    

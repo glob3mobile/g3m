@@ -16,6 +16,8 @@ class IImage;
 class IGLUniformID;
 class IGLTextureId;
 class Matrix44D;
+class Color;
+class Vector2F;
 
 #include <vector>
 #include <string>
@@ -178,6 +180,7 @@ public:
   virtual int Alignment_Unpack() const = 0;
 
   virtual int Format_RGBA() const = 0;
+  virtual int Format_RGB() const = 0;
 
   virtual int Variable_Viewport() const = 0;
   virtual int Variable_ActiveAttributes() const = 0;
@@ -202,7 +205,12 @@ public:
   virtual GPUUniform* getActiveUniform(const GPUProgram* program, int i) const = 0;
   virtual GPUAttribute* getActiveAttribute(const GPUProgram* program, int i) const = 0;
 
+  virtual Color read1PixelAsRGBAColor(int x, int y) const = 0;
+  virtual double read1PixelAsDouble(int x, int y) const = 0;
+
   virtual void depthMask(bool v) const = 0;
+
+  virtual Vector2F getDepthRange() const = 0;
 
   virtual void setActiveTexture(int i) const = 0;
   

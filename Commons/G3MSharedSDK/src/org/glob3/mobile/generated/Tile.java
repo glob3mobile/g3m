@@ -113,6 +113,7 @@ public class Tile
 
   private void prepareTestLODData(Planet planet)
   {
+  
     if ((_northWestPoint == null) || (_northEastPoint == null) || (_southWestPoint == null) || (_southEastPoint == null))
     {
       ILogger.instance().logError("Error in Tile::prepareTestLODData");
@@ -130,43 +131,86 @@ public class Tile
     _westArcSegmentRatioSquared = getSquaredArcSegmentRatio(normalNW, normalSW);
   }
 
-  private Mesh getTessellatorMesh(G3MRenderContext rc, ElevationDataProvider elevationDataProvider, TileTessellator tessellator, LayerTilesRenderParameters layerTilesRenderParameters, TilesRenderParameters tilesRenderParameters)
+  private Mesh getTessellatorMesh(G3MRenderContext rc, ElevationDataProvider elevationDataProvider, TileTessellator tessellator, LayerTilesRenderParameters layerTilesRenderParameters, TilesRenderParameters tilesRenderParameters, long elevationDataRequestPriority)
   {
   
-  
-    if ((_elevationData == null) && (elevationDataProvider != null) && (elevationDataProvider.isEnabled()))
+    if (!canUseElevationDataProvider(elevationDataProvider))
     {
-      initializeElevationData(elevationDataProvider, tessellator, layerTilesRenderParameters._tileMeshResolution, rc.getPlanet(), tilesRenderParameters._renderDebug);
+      //Marking as ED resolved
+      _elevationDataLevel = _level;
+    }
+    else
+    {
+  
+      if (_elevationData == null)
+      {
+  
+        initializeElevationData(elevationDataProvider, tessellator, layerTilesRenderParameters._tileMeshResolution, rc.getPlanet(), tilesRenderParameters._renderDebug, elevationDataRequestPriority);
+  
+        if (_elevationData == null)
+        {
+          //      ILogger::instance()->logInfo("Tile not ready for rendering as no ElevationData can be found. Returning NULL Mesh.");
+          return null;
+        }
+      }
     }
   
-    if ((_tessellatorMesh == null) || _mustActualizeMeshDueToNewElevationData)
+    if (_elevationDataLevel < 0 && canUseElevationDataProvider(elevationDataProvider))
     {
-      _mustActualizeMeshDueToNewElevationData = false;
+      ILogger.instance().logError("Creating Mesh without ED.");
+    }
   
-      if (elevationDataProvider == null)
+    final boolean mustUpdate = (_elevationDataLevelOfTessellatorMesh < _elevationDataLevel);
+  
+    if ((_tessellatorMesh == null) || mustUpdate)
+    {
+  
+      if (mustUpdate && _tessellatorMesh != null)
       {
-        // no elevation data provider, just create a simple mesh without elevation
-        _tessellatorMesh = tessellator.createTileMesh(rc.getPlanet(), layerTilesRenderParameters._tileMeshResolution, this, null, _verticalExaggeration, tilesRenderParameters._renderDebug, _tileTessellatorMeshData);
+        //ILogger::instance()->logInfo("Updating mesh due to new Elevation Data");
   
-        computeTileCorners(rc.getPlanet());
+        //Tessellator mesh is going to change, thus reference to _boundingVolume is sent to oblivion
+  
+        final Planet planet = rc.getPlanet();
+  
+        tessellator.updateSurface(_tessellatorMesh, this, layerTilesRenderParameters._tileMeshResolution, planet, _elevationData, _verticalExaggeration, _tileTessellatorMeshData);
+  
+        computeTileCorners(planet);
+        prepareTestLODData(planet);
+  
+        _boundingVolume = null;
       }
       else
       {
-        Mesh tessellatorMesh = tessellator.createTileMesh(rc.getPlanet(), layerTilesRenderParameters._tileMeshResolution, this, _elevationData, _verticalExaggeration, tilesRenderParameters._renderDebug, _tileTessellatorMeshData);
   
-        MeshHolder meshHolder = (MeshHolder) _tessellatorMesh;
-        if (meshHolder == null)
+        if (elevationDataProvider == null)
         {
-          meshHolder = new MeshHolder(tessellatorMesh);
-          _tessellatorMesh = meshHolder;
+          // no elevation data provider, just create a simple mesh without elevation
+          _tessellatorMesh = tessellator.createTileMesh(rc.getPlanet(), layerTilesRenderParameters._tileMeshResolution, this, null, _verticalExaggeration, tilesRenderParameters._renderDebug, _tileTessellatorMeshData);
+  
+          computeTileCorners(rc.getPlanet());
+  
         }
         else
         {
-          meshHolder.setMesh(tessellatorMesh);
-        }
+          Mesh tessellatorMesh = tessellator.createTileMesh(rc.getPlanet(), layerTilesRenderParameters._tileMeshResolution, this, _elevationData, _verticalExaggeration, tilesRenderParameters._renderDebug, _tileTessellatorMeshData);
   
-        computeTileCorners(rc.getPlanet());
+          MeshHolder meshHolder = (MeshHolder) _tessellatorMesh;
+          if (meshHolder == null)
+          {
+            meshHolder = new MeshHolder(tessellatorMesh);
+            _tessellatorMesh = meshHolder;
+          }
+          else
+          {
+            meshHolder.setMesh(tessellatorMesh);
+          }
+  
+          computeTileCorners(rc.getPlanet());
+        }
       }
+  
+      _elevationDataLevelOfTessellatorMesh = _elevationDataLevel;
   
       //Notifying when the tile is first created and every time the elevation data changes
       _planetRenderer.sectorElevationChanged(_elevationData);
@@ -186,14 +230,14 @@ public class Tile
     return _debugMesh;
   }
 
-  private boolean isVisible(G3MRenderContext rc, Frustum cameraFrustumInModelCoordinates, ElevationDataProvider elevationDataProvider, Sector renderedSector, TileTessellator tessellator, LayerTilesRenderParameters layerTilesRenderParameters, TilesRenderParameters tilesRenderParameters)
+  private boolean isVisible(G3MRenderContext rc, Frustum cameraFrustumInModelCoordinates, ElevationDataProvider elevationDataProvider, Sector renderedSector, TileTessellator tessellator, LayerTilesRenderParameters layerTilesRenderParameters, TilesRenderParameters tilesRenderParameters, long elevationDataRequestPriority)
   {
     if ((renderedSector != null) && !renderedSector.touchesWith(_sector)) //Incomplete world
     {
       return false;
     }
   
-    final BoundingVolume boundingVolume = getBoundingVolume(rc, elevationDataProvider, tessellator, layerTilesRenderParameters, tilesRenderParameters);
+    final BoundingVolume boundingVolume = getBoundingVolume(rc, elevationDataProvider, tessellator, layerTilesRenderParameters, tilesRenderParameters, elevationDataRequestPriority);
   
     return ((boundingVolume != null) && boundingVolume.touchesFrustum(cameraFrustumInModelCoordinates));
   }
@@ -240,6 +284,7 @@ public class Tile
     }
   
     _lastMeetsRenderCriteriaTimeInMS = nowInMS; //Storing time of result
+  
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#warning store camera-timestamp to avoid recalculation when the camera isn't moving
   
@@ -268,7 +313,7 @@ public class Tile
   private void rawRender(G3MRenderContext rc, GLState glState, TileTexturizer texturizer, ElevationDataProvider elevationDataProvider, TileTessellator tessellator, LayerTilesRenderParameters layerTilesRenderParameters, LayerSet layerSet, TilesRenderParameters tilesRenderParameters, boolean forceFullRender, long tileDownloadPriority, boolean logTilesPetitions)
   {
   
-    Mesh tessellatorMesh = getTessellatorMesh(rc, elevationDataProvider, tessellator, layerTilesRenderParameters, tilesRenderParameters);
+    Mesh tessellatorMesh = getTessellatorMesh(rc, elevationDataProvider, tessellator, layerTilesRenderParameters, tilesRenderParameters, tileDownloadPriority);
     if (tessellatorMesh == null)
     {
       return;
@@ -301,6 +346,9 @@ public class Tile
         _flatColorMesh.render(rc, glState);
       }
     }
+  
+    //  const BoundingVolume* boundingVolume = getBoundingVolume(rc, trc);
+    //  boundingVolume->render(rc, parentState);
   }
 
   private void debugRender(G3MRenderContext rc, GLState glState, TileTessellator tessellator, LayerTilesRenderParameters layerTilesRenderParameters)
@@ -376,6 +424,7 @@ public class Tile
     // falback texture for any tile
     if ((_parent != null) && (_texturizedMesh != null))
     {
+  
       if (texturizer != null)
       {
         texturizer.tileMeshToBeDeleted(this, _texturizedMesh);
@@ -399,18 +448,19 @@ public class Tile
 
   private int _elevationDataLevel;
   private ElevationData _elevationData;
-  private boolean _mustActualizeMeshDueToNewElevationData;
+  private int _elevationDataLevelOfTessellatorMesh;
   private ElevationDataProvider _lastElevationDataProvider;
   private int _lastTileMeshResolutionX;
   private int _lastTileMeshResolutionY;
 
   private final PlanetRenderer _planetRenderer;
 
-  private BoundingVolume getBoundingVolume(G3MRenderContext rc, ElevationDataProvider elevationDataProvider, TileTessellator tessellator, LayerTilesRenderParameters layerTilesRenderParameters, TilesRenderParameters tilesRenderParameters)
+  private BoundingVolume getBoundingVolume(G3MRenderContext rc, ElevationDataProvider elevationDataProvider, TileTessellator tessellator, LayerTilesRenderParameters layerTilesRenderParameters, TilesRenderParameters tilesRenderParameters, long elevationDataRequestPriority)
   {
+  
     if (_boundingVolume == null)
     {
-      Mesh mesh = getTessellatorMesh(rc, elevationDataProvider, tessellator, layerTilesRenderParameters, tilesRenderParameters);
+      Mesh mesh = getTessellatorMesh(rc, elevationDataProvider, tessellator, layerTilesRenderParameters, tilesRenderParameters, elevationDataRequestPriority);
       if (mesh != null)
       {
         _boundingVolume = mesh.getBoundingVolume();
@@ -456,7 +506,7 @@ public class Tile
      _elevationDataLevel = -1;
      _elevationDataRequest = null;
      _verticalExaggeration = 0F;
-     _mustActualizeMeshDueToNewElevationData = false;
+     _elevationDataLevelOfTessellatorMesh = -1;
      _lastTileMeshResolutionX = -1;
      _lastTileMeshResolutionY = -1;
      _boundingVolume = null;
@@ -477,8 +527,6 @@ public class Tile
 
   public void dispose()
   {
-  //  prune(NULL, NULL);
-  
     if (_debugMesh != null)
        _debugMesh.dispose();
     _debugMesh = null;
@@ -500,8 +548,10 @@ public class Tile
     _texturizedMesh = null;
   
     if (_elevationData != null)
-       _elevationData.dispose();
-    _elevationData = null;
+    {
+      _elevationData._release();
+      _elevationData = null;
+    }
   
     if (_elevationDataRequest != null)
     {
@@ -567,10 +617,10 @@ public class Tile
     }
   
   
-    Mesh tessellatorMesh = getTessellatorMesh(rc, elevationDataProvider, tessellator, layerTilesRenderParameters, tilesRenderParameters);
+    Mesh tessellatorMesh = getTessellatorMesh(rc, elevationDataProvider, tessellator, layerTilesRenderParameters, tilesRenderParameters, tileDownloadPriority);
     if (tessellatorMesh == null)
     {
-      return;
+      return; //Normally due to ElevationData not resolved
     }
   
     if (texturizer != null)
@@ -584,7 +634,7 @@ public class Tile
     }
   }
 
-  public final void render(G3MRenderContext rc, GLState parentState, java.util.ArrayList<Tile> toVisitInNextIteration, Frustum cameraFrustumInModelCoordinates, TilesStatistics tilesStatistics, float verticalExaggeration, LayerTilesRenderParameters layerTilesRenderParameters, TileTexturizer texturizer, TilesRenderParameters tilesRenderParameters, ITimer lastSplitTimer, ElevationDataProvider elevationDataProvider, TileTessellator tessellator, LayerSet layerSet, Sector renderedSector, boolean forceFullRender, long tileDownloadPriority, double texWidthSquared, double texHeightSquared, double nowInMS, boolean renderTileMeshes, boolean logTilesPetitions, java.util.ArrayList<Tile> tilesStartedRendering, java.util.ArrayList<String> tilesStoppedRendering)
+  public final void updateQuadTree(G3MRenderContext rc, java.util.LinkedList<Tile> renderedTiles, Planet planet, Vector3D cameraNormalizedPosition, double cameraAngle2HorizonInRadians, Frustum cameraFrustumInModelCoordinates, TilesStatistics tilesStatistics, float verticalExaggeration, LayerTilesRenderParameters layerTilesRenderParameters, TileTexturizer texturizer, TilesRenderParameters tilesRenderParameters, ITimer lastSplitTimer, ElevationDataProvider elevationDataProvider, TileTessellator tessellator, LayerSet layerSet, Sector renderedSector, boolean isForcedFullRender, long texturePriority, double texWidthSquared, double texHeightSquared, double nowInMS, long tileDownloadPriority, java.util.ArrayList<Tile> tilesStartedRendering, java.util.ArrayList<String> tilesStoppedRendering)
   {
   
     tilesStatistics.computeTileProcessed(this);
@@ -597,40 +647,43 @@ public class Tile
   
     boolean rendered = false;
   
-    if (isVisible(rc, cameraFrustumInModelCoordinates, elevationDataProvider, renderedSector, tessellator, layerTilesRenderParameters, tilesRenderParameters))
+  
+    if (isVisible(rc, cameraFrustumInModelCoordinates, elevationDataProvider, renderedSector, tessellator, layerTilesRenderParameters, tilesRenderParameters, tileDownloadPriority))
     {
       setIsVisible(true, texturizer);
   
       tilesStatistics.computeVisibleTile(this);
   
-      final boolean isRawRender = ((toVisitInNextIteration == null) || meetsRenderCriteria(rc, layerTilesRenderParameters, texturizer, tilesRenderParameters, tilesStatistics, lastSplitTimer, texWidthSquared, texHeightSquared, nowInMS) || (tilesRenderParameters._incrementalTileQuality && !_textureSolved));
+      final boolean isRawRender = (meetsRenderCriteria(rc, layerTilesRenderParameters, texturizer, tilesRenderParameters, tilesStatistics, lastSplitTimer, texWidthSquared, texHeightSquared, nowInMS) || (tilesRenderParameters._incrementalTileQuality && (!_textureSolved || !isElevationDataSolved())));
   
       if (isRawRender)
       {
   
-        final long tileTexturePriority = (tilesRenderParameters._incrementalTileQuality ? tileDownloadPriority + layerTilesRenderParameters._maxLevel - _level : tileDownloadPriority + _level);
+        _rendered = true;
   
-        rendered = true;
-        if (renderTileMeshes)
-        {
-          rawRender(rc, parentState, texturizer, elevationDataProvider, tessellator, layerTilesRenderParameters, layerSet, tilesRenderParameters, forceFullRender, tileTexturePriority, logTilesPetitions);
-        }
-        if (tilesRenderParameters._renderDebug)
-        {
-          debugRender(rc, parentState, tessellator, layerTilesRenderParameters);
-        }
-  
-        tilesStatistics.computeTileRenderered(this);
+        renderedTiles.addLast(this);
   
         prune(texturizer, elevationDataProvider, tilesStoppedRendering);
         //TODO: AVISAR CAMBIO DE TERRENO
+  
       }
       else
       {
-        java.util.ArrayList<Tile> subTiles = getSubTiles();
+  
+        final Geodetic2D lower = _sector._lower;
+        final Geodetic2D upper = _sector._upper;
+  
+        final Angle splitLongitude = Angle.midAngle(lower._longitude, upper._longitude);
+  
+        final Angle splitLatitude = layerTilesRenderParameters._mercator ? MercatorUtils.calculateSplitLatitude(lower._latitude, upper._latitude) : Angle.midAngle(lower._latitude, upper._latitude);
+        /*                               */
+        /*                               */
+  
+        java.util.ArrayList<Tile> subTiles = getSubTiles(splitLatitude, splitLongitude);
         if (_justCreatedSubtiles)
         {
           lastSplitTimer.start();
+          tilesStatistics.computeBuilderStartInFrame();
           _justCreatedSubtiles = false;
         }
   
@@ -638,7 +691,9 @@ public class Tile
         for (int i = 0; i < subTilesSize; i++)
         {
           Tile subTile = subTiles.get(i);
-          toVisitInNextIteration.add(subTile);
+  
+          subTile.updateQuadTree(rc, renderedTiles, planet, cameraNormalizedPosition, cameraAngle2HorizonInRadians, cameraFrustumInModelCoordinates, tilesStatistics, verticalExaggeration, layerTilesRenderParameters, texturizer, tilesRenderParameters, lastSplitTimer, elevationDataProvider, tessellator, layerSet, renderedSector, isForcedFullRender, texturePriority, texWidthSquared, texHeightSquared, nowInMS, tileDownloadPriority, tilesStartedRendering, tilesStoppedRendering);
+                                     /* parentState,*/
         }
       }
     }
@@ -653,25 +708,86 @@ public class Tile
     if (_rendered != rendered)
     {
       _rendered = rendered;
-  
-      if (_rendered)
-      {
-        if (tilesStartedRendering != null)
+        if (_rendered)
         {
-          tilesStartedRendering.add(this);
+          if (tilesStartedRendering != null)
+          {
+            tilesStartedRendering.add(this);
+          }
         }
-      }
-      else
-      {
-        if (tilesStoppedRendering != null)
+        else
         {
-          tilesStoppedRendering.add(_id);
+          if (tilesStoppedRendering != null)
+          {
+            tilesStoppedRendering.add(_id);
+          }
         }
-      }
     }
   
   }
 
+
+  public final void performRawRender(G3MRenderContext rc, GLState glState, TileTexturizer texturizer, ElevationDataProvider elevationDataProvider, TileTessellator tessellator, LayerTilesRenderParameters layerTilesRenderParameters, LayerSet layerSet, TilesRenderParameters tilesRenderParameters, boolean isForcedFullRender, long texturePriority, TilesStatistics tilesStatistics, boolean logTilesPetitions)
+  {
+  
+    rawRender(rc, glState, texturizer, elevationDataProvider, tessellator, layerTilesRenderParameters, layerSet, tilesRenderParameters, isForcedFullRender, texturePriority, logTilesPetitions);
+    if (tilesRenderParameters._renderDebug) //TO RAW RENDER
+    {
+      debugRender(rc, glState, tessellator, layerTilesRenderParameters);
+    }
+  
+    tilesStatistics.computeTileRenderered(this);
+  
+    //TODO: AVISAR CAMBIO DE TERRENO
+  }
+
+  public final void zRender(G3MRenderContext rc, GLState parentState)
+  {
+  
+    if (_tessellatorMesh == null)
+    {
+      ILogger.instance().logError("Calling ZRender for Tile withouth any valid mesh.");
+      return;
+    }
+    else
+    {
+      _tessellatorMesh.zRender(rc, parentState);
+    }
+  }
+
+  //const TileKey getKey() const;
+
+  //  const TileKey getKey() const;
+  //  const std::string getId() const;
+
+
+//=======
+//
+//  void render(const G3MRenderContext* rc,
+//              const GLState& parentState,
+//              std::vector<Tile*>* toVisitInNextIteration,
+//              const Frustum* cameraFrustumInModelCoordinates,
+//              TilesStatistics* tilesStatistics,
+//              const float verticalExaggeration,
+//              const LayerTilesRenderParameters* layerTilesRenderParameters,
+//              TileTexturizer* texturizer,
+//              const TilesRenderParameters* tilesRenderParameters,
+//              ITimer* lastSplitTimer,
+//              ElevationDataProvider* elevationDataProvider,
+//              const TileTessellator* tessellator,
+//              const LayerSet* layerSet,
+//              const Sector* renderedSector,
+//              bool forceFullRender,
+//              long long tileDownloadPriority,
+//              double texWidth,
+//              double texHeight,
+//              double nowInMS,
+//              const bool renderTileMeshes,
+//              bool logTilesPetitions,
+//              std::vector<const Tile*>* tilesStartedRendering,
+//              std::vector<std::string>* tilesStoppedRendering);
+//
+//>>>>>>> purgatory
   public final void setTextureSolved(boolean textureSolved)
   {
     if (textureSolved != _textureSolved)
@@ -790,12 +906,6 @@ public class Tile
         {
           texturizer.tileToBeDeleted(subtile, subtile._texturizedMesh);
         }
-  
-  //      if (_rendered) {
-  //        if (tilesStoppedRendering != NULL) {
-  //          tilesStoppedRendering->push_back(subtile);
-  //        }
-  //      }
         if (subtile != null)
            subtile.dispose();
       }
@@ -914,13 +1024,14 @@ public class Tile
   
       if (_elevationData != null)
       {
-        if (_elevationData != null)
-           _elevationData.dispose();
+        _elevationData._release();
+        _elevationData = null;
       }
   
       _elevationData = ed;
+      _elevationData._retain();
+  
       _elevationDataLevel = level;
-      _mustActualizeMeshDueToNewElevationData = true;
   
       //If the elevation belongs to tile's level, we notify the sub-tree
       if (isElevationDataSolved())
@@ -954,11 +1065,26 @@ public class Tile
         ElevationData subView = createElevationDataSubviewFromAncestor(ancestor);
         setElevationData(subView, ancestor._level);
       }
+      else
+      {
+        if (getParent() != null)
+        {
+          ILogger.instance().logInfo("No ancestor has elevation data.");
+        }
+      }
     }
   }
 
-  public final void initializeElevationData(ElevationDataProvider elevationDataProvider, TileTessellator tessellator, Vector2I tileMeshResolution, Planet planet, boolean renderDebug)
+  public final void initializeElevationData(ElevationDataProvider elevationDataProvider, TileTessellator tessellator, Vector2I tileMeshResolution, Planet planet, boolean renderDebug, long requestPriority)
   {
+  
+    if (!canUseElevationDataProvider(elevationDataProvider))
+    {
+      //Marking data elevation as solved
+      _elevationDataLevel = _level;
+      return;
+    }
+  
     //Storing for subviewing
     _lastElevationDataProvider = elevationDataProvider;
     _lastTileMeshResolutionX = tileMeshResolution._x;
@@ -967,7 +1093,7 @@ public class Tile
     {
   
       final Vector2I res = tessellator.getTileMeshResolution(planet, tileMeshResolution, this, renderDebug);
-      _elevationDataRequest = new TileElevationDataRequest(this, res, elevationDataProvider);
+      _elevationDataRequest = new TileElevationDataRequest(this, res, requestPriority, elevationDataProvider);
       _elevationDataRequest.sendRequest();
     }
   
@@ -1020,7 +1146,10 @@ public class Tile
   
     if ((_lastElevationDataProvider != null) && (_lastTileMeshResolutionX > 0) && (_lastTileMeshResolutionY > 0))
     {
-      return new DecimatedSubviewElevationData(ed, _sector, new Vector2I(_lastTileMeshResolutionX, _lastTileMeshResolutionY));
+      return ed;
+      //    return new DecimatedSubviewElevationData(ed,
+      //                                             _sector,
+      //                                             Vector2I(_lastTileMeshResolutionX, _lastTileMeshResolutionY));
     }
   
     ILogger.instance().logError("Can't create subview of elevation data from ancestor");
@@ -1033,6 +1162,11 @@ public class Tile
     final IMathUtils math = IMathUtils.instance();
     final Vector2D uv = _sector.getUVCoordinates(position2D);
     return new Vector2I(math.toInt(tileDimension._x * uv._x), math.toInt(tileDimension._y * uv._y));
+  }
+
+  public final boolean canUseElevationDataProvider(ElevationDataProvider edp)
+  {
+    return (edp != null && edp.isEnabled() && edp.containsSector(_sector));
   }
 
 }

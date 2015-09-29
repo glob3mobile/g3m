@@ -23,10 +23,10 @@ public class IndexedGeometryMesh extends AbstractGeometryMesh
 {
   private boolean _ownsIndices;
   private IShortBuffer _indices;
-  protected final void rawRender(G3MRenderContext rc)
+  protected final void rawRender(G3MRenderContext rc, GLState glState, RenderType renderType)
   {
     GL gl = rc.getGL();
-    gl.drawElements(_primitive, _indices, _glState, rc.getGPUProgramManager());
+    gl.drawElements(_primitive, _indices, glState, rc.getGPUProgramManager(), renderType);
   }
 
   public IndexedGeometryMesh(int primitive, Vector3D center, IFloatBuffer vertices, boolean ownsVertices, IShortBuffer indices, boolean ownsIndices, float lineWidth, float pointSize)
@@ -85,6 +85,7 @@ public class IndexedGeometryMesh extends AbstractGeometryMesh
     super.dispose();
   
   }
+
 
 
 }

@@ -180,6 +180,13 @@ public class Sphere extends BoundingVolume
      _mesh = null;
   }
 
+  public void dispose()
+  {
+    if (_mesh != null)
+      if (_mesh != null)
+         _mesh.dispose();
+  }
+
   public final Vector3D getCenter()
   {
     return _center;
@@ -375,5 +382,77 @@ public class Sphere extends BoundingVolume
   {
     return new Sphere(this);
   }
+
+  public static java.util.ArrayList<Double> intersectionCenteredSphereWithRay(double origin_x, double origin_y, double origin_z, double direction_x, double direction_y, double direction_z, double radius)
+  {
+    java.util.ArrayList<Double> intersections = new java.util.ArrayList<Double>();
+  
+    // By laborious algebraic manipulation....
+    final double a = direction_x * direction_x + direction_y * direction_y + direction_z * direction_z;
+  
+    final double b = 2.0 * (origin_x * direction_x + origin_y * direction_y + origin_z * direction_z);
+  
+    final double c = origin_x * origin_x + origin_y * origin_y + origin_z * origin_z - radius * radius;
+  
+    // Solve the quadratic equation: ax^2 + bx + c = 0.
+    // Algorithm is from Wikipedia's "Quadratic equation" topic, and Wikipedia credits
+    // Numerical Recipes in C, section 5.6: "Quadratic and Cubic Equations"
+    final double discriminant = b * b - 4 * a * c;
+    if (discriminant < 0.0)
+    {
+      // no intersections
+      return intersections;
+    }
+    else if (discriminant == 0.0)
+    {
+      // one intersection at a tangent point
+      //return new double[1] { -0.5 * b / a };
+      intersections.add(-0.5 * b / a);
+      return intersections;
+    }
+  
+    final double rootDiscriminant = IMathUtils.instance().sqrt(discriminant);
+    final double root1 = (-b + rootDiscriminant) / (2 *a);
+    final double root2 = (-b - rootDiscriminant) / (2 *a);
+  
+    // Two intersections - return the smallest first.
+    if (root1 < root2)
+    {
+      intersections.add(root1);
+      intersections.add(root2);
+    }
+    else
+    {
+      intersections.add(root2);
+      intersections.add(root1);
+    }
+    return intersections;
+  }
+
+  public static java.util.ArrayList<Double> intersectionCenteredSphereWithRay(Vector3D origin, Vector3D direction, double radius)
+  {
+    return intersectionCenteredSphereWithRay(origin._x, origin._y, origin._z, direction._x, direction._y, direction._z, radius);
+  }
+
+  public static Vector3D closestIntersectionCenteredSphereWithRay(Vector3D origin, Vector3D direction, double radius)
+  {
+    java.util.ArrayList<Double> distances = Sphere.intersectionCenteredSphereWithRay(origin, direction, radius);
+    if (distances.isEmpty())
+    {
+      return Vector3D.nan();
+    }
+    return origin.add(direction.times(distances.get(0)));
+  }
+
+  public static void setClosestIntersectionCenteredSphereWithRay(double origin_x, double origin_y, double origin_z, double direction_x, double direction_y, double direction_z, double radius, MutableVector3D result)
+  {
+    java.util.ArrayList<Double> distances = Sphere.intersectionCenteredSphereWithRay(origin_x, origin_y, origin_z, direction_x, direction_y, direction_z, radius);
+    if (distances.isEmpty())
+      //result = MutableVector3D::nan();
+      result.set(java.lang.Double.NaN, java.lang.Double.NaN, java.lang.Double.NaN);
+    else
+      result.set(origin_x + direction_x * distances.get(0), origin_y + direction_y * distances.get(0), origin_z + direction_z * distances.get(0));
+  }
+
 
 }

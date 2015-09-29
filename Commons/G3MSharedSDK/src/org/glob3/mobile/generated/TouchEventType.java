@@ -5,7 +5,8 @@ public enum TouchEventType
   Up,
   Move,
   LongPress,
-  DownUp;
+  DownUp,
+  MouseWheelChanged;
 
    public int getValue()
    {

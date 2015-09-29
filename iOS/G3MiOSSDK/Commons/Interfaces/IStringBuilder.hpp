@@ -43,7 +43,6 @@ public:
   }
 
   virtual bool contentEqualsTo(const std::string& that) const = 0;
-  
 };
 
 #endif

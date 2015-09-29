@@ -11,6 +11,7 @@
 
 #include "Vector3D.hpp"
 #include "Vector3F.hpp"
+#include "MutableVector2D.hpp"
 
 class Plane {
 private:
@@ -89,7 +90,8 @@ public:
                                const Vector3D& direction) const;
   
   static Vector3D intersectionXYPlaneWithRay(const Vector3D& origin,
-                                             const Vector3D& direction);
+                                             const Vector3D& direction,
+                                             double planeHeight=0);
 
   bool isVectorParallel(const Vector3D& vector) const;
 
@@ -98,8 +100,12 @@ public:
   Vector3D getNormal() const {
     return _normal;
   }
-
   
+  Vector2D rotationAngleAroundZAxisToFixPointInRadians(const Vector3D& point) const;
+
+  static void rotationAngleAroundZAxisToFixPointInRadians(const MutableVector3D& normal,
+                                                          const MutableVector3D& point,
+                                                          MutableVector2D& result);
 };
 
 

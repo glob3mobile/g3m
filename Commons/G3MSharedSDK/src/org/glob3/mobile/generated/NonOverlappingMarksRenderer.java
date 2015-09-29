@@ -151,7 +151,7 @@ public class NonOverlappingMarksRenderer extends DefaultRenderer
 
   public void dispose()
   {
-  //  _connectorsGLState->_release();
+    //  _connectorsGLState->_release();
   
     final int marksSize = _marks.size();
     for (int i = 0; i < marksSize; i++)
@@ -296,6 +296,10 @@ public class NonOverlappingMarksRenderer extends DefaultRenderer
          _touchListener.dispose();
     }
     _touchListener = touchListener;
+  }
+
+  public final void zRender(G3MRenderContext rc, GLState glState)
+  {
   }
 
 }

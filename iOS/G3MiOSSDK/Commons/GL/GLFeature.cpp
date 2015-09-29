@@ -462,3 +462,15 @@ GLFeature(LIGHTING_GROUP, GLF_VERTEX_NORMAL)
                              new GPUAttributeValueVec3Float(buffer, arrayElementSize, index, stride, normalized),
                              false);
 }
+
+DepthRangeGLFeature::DepthRangeGLFeature(float far, float near):
+GLFeature(NO_GROUP, GLF_DEPTH_RANGE)
+{
+  _values->addUniformValue(DEPTH_FAR,
+                            new GPUUniformValueFloat(far),
+                            false);
+
+  _values->addUniformValue(DEPTH_NEAR,
+                            new GPUUniformValueFloat(near),
+                            false);
+}

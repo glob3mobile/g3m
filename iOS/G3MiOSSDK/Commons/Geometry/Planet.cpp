@@ -62,6 +62,8 @@ std::vector<double> Planet::intersectionsDistances(const Vector3D& origin,
                                 direction.z());
 }
 
+
+
 Vector3D Planet::closestIntersection(const Vector3D& pos,
                                               const Vector3D& ray) const {
   if (pos.isNan() || ray.isNan()) {

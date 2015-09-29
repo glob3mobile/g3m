@@ -60,10 +60,21 @@ public:
     _mesh->render(rc, parentGLState);
   }
 
-  void showNormals(bool v) const {
-    _mesh->showNormals(v);
+  void zRawRender(const G3MRenderContext* rc, const GLState* parentGLState) const{
+    _mesh->zRender(rc, parentGLState);
   }
 
+  IFloatBuffer* getVerticesFloatBuffer() const{
+    return _mesh->getVerticesFloatBuffer();
+  }
+  
+  Vector3D getVerticesOffset() const{
+    return _mesh->getVerticesOffset();
+  }
+  
+  void showNormals(bool v) const{
+    _mesh->showNormals(v);
+  }
 };
 
 #endif

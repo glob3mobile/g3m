@@ -62,4 +62,9 @@ public class MapBooOLD_HUDRenderer extends DefaultRenderer
   {
     _hudImageRenderer.onDestroy(context);
   }
+
+  public final void zRender(G3MRenderContext rc, GLState glState)
+  {
+  }
+
 }

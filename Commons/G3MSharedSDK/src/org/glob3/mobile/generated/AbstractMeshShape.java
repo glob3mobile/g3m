@@ -89,4 +89,13 @@ public abstract class AbstractMeshShape extends Shape
     }
     return mesh.isTransparent(rc);
   }
+
+  public final void zRawRender(G3MRenderContext rc, GLState parentGLState)
+  {
+    Mesh mesh = getMesh(rc);
+    if (mesh != null)
+    {
+      mesh.zRender(rc, parentGLState);
+    }
+  }
 }

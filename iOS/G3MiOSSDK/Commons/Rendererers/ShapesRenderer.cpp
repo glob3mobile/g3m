@@ -565,6 +565,15 @@ void ShapesRenderer::requestBuffer(const URL&          url,
   
 }
 
+void ShapesRenderer::zRender(const G3MRenderContext* rc, GLState* glState){
+  
+  const size_t shapesCount = _shapes.size();
+  for (int i = 0; i < shapesCount; i++) {
+    Shape* shape = _shapes[i];
+    shape->zRender(rc, _glState, _renderNotReadyShapes);
+  }
+}
+
 void ShapesRenderer::enableAll() {
   const size_t shapesCount = _shapes.size();
   for (size_t i = 0; i < shapesCount; i++) {

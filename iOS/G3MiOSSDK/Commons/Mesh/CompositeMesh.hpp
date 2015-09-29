@@ -10,6 +10,7 @@
 #define __G3MiOSSDK__CompositeMesh__
 
 #include "Mesh.hpp"
+#include "Vector3D.hpp"
 
 class CompositeMesh : public Mesh {
 private:
@@ -36,7 +37,18 @@ public:
   void rawRender(const G3MRenderContext* rc,
                  const GLState* parentGLState) const;
 
+  void zRawRender(const G3MRenderContext* rc, const GLState* parentGLState) const;
+
   void showNormals(bool v) const;
+  
+  IFloatBuffer* getVerticesFloatBuffer() const{
+    return NULL;
+  }
+  
+  Vector3D getVerticesOffset() const{
+    return Vector3D::nan();
+  }
+  
 
 };
 

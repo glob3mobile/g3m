@@ -158,9 +158,8 @@ public class GLState extends RCObject
     }
   }
 
-  public final void applyOnGPU(GL gl, GPUProgramManager progManager)
+  public final void applyOnGPU(GL gl, GPUProgramManager progManager, RenderType renderType)
   {
-  
   
     if (_valuesSet == null && _globalState == null)
     {
@@ -175,8 +174,11 @@ public class GLState extends RCObject
       final int uniformsCode = _valuesSet.getUniformsCode();
       final int attributesCode = _valuesSet.getAttributesCode();
   
-      _linkedProgram = progManager.getProgram(gl, uniformsCode, attributesCode); //GET RETAINED REFERENCE
+      _linkedProgram = progManager.getProgram(gl, uniformsCode, attributesCode, renderType);
+  
     }
+  
+  
   
     if (_valuesSet == null || _globalState == null)
     {

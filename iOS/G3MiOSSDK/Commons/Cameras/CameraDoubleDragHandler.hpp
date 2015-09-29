@@ -15,11 +15,18 @@
 
 
 class CameraDoubleDragHandler: public CameraEventHandler {
-    
+  
+private:
+  MeshRenderer* _debugMR;
+  //bool _allowRotation;
+  //bool _fixRollTo0;
+  
 public:
-  CameraDoubleDragHandler()
-  {
-  }
+  
+  CameraDoubleDragHandler():
+  _debugMR(NULL)
+  {}
+  
   
   ~CameraDoubleDragHandler() {
 #ifdef JAVA_CODE
@@ -51,6 +58,10 @@ public:
   MutableVector3D _cameraUp;
   MutableVector2I _cameraViewPort;
   MutableMatrix44D _cameraModelViewMatrix;
+  
+  void setDebugMeshRenderer(MeshRenderer* meshRenderer) {
+    _debugMR = meshRenderer;
+  }
   
 };
 

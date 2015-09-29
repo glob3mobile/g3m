@@ -634,6 +634,10 @@ long long VectorStreamingRenderer::Node::render(const G3MRenderContext* rc,
   return renderedCount;
 }
 
+void VectorStreamingRenderer::zRender(const G3MRenderContext* rc, GLState* glState){
+  
+}
+
 Sector* VectorStreamingRenderer::GEOJSONUtils::parseSector(const JSONArray* json) {
   const double lowerLat = json->getAsNumber(0)->value();
   const double lowerLon = json->getAsNumber(1)->value();

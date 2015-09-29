@@ -13,6 +13,7 @@
 #include "Geodetic2D.hpp"
 #include "Geodetic3D.hpp"
 #include "Sector.hpp"
+#include "RCObject.hpp"
 
 class Vector2I;
 class Mesh;
@@ -20,7 +21,7 @@ class Ellipsoid;
 class Vector3D;
 class Interpolator;
 
-class ElevationData {
+class ElevationData: public RCObject {
 private:
   mutable Interpolator* _interpolator;
   Interpolator* getInterpolator() const;
@@ -31,12 +32,13 @@ protected:
   const int _height;
 
   const Geodetic2D _resolution;
+  
+  virtual ~ElevationData();
 
 public:
   ElevationData(const Sector& sector,
                 const Vector2I& extent);
 
-  virtual ~ElevationData();
 
   virtual const Vector2I getExtent() const;
 

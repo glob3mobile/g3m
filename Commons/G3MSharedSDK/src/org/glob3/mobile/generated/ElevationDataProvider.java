@@ -22,11 +22,26 @@ public abstract class ElevationDataProvider
 
   public abstract void initialize(G3MContext context);
 
-  public abstract long requestElevationData(Sector sector, Vector2I extent, IElevationDataListener listener, boolean autodeleteListener);
+  public abstract long requestElevationData(Sector sector, Vector2I extent, long requestPriority, IElevationDataListener listener, boolean autodeleteListener);
 
   public abstract void cancelRequest(long requestId);
 
   public abstract java.util.ArrayList<Sector> getSectors();
+
+  public final boolean containsSector(Sector sector)
+  {
+  
+    final java.util.ArrayList<Sector> ss = getSectors();
+    for (int i = 0; i < ss.size(); i++)
+    {
+      if (ss.get(i).touchesWith(sector))
+      {
+        return true;
+      }
+    }
+    return false;
+  
+  }
 
   public abstract Vector2I getMinResolution();
 

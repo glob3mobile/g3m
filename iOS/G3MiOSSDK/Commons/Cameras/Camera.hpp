@@ -24,6 +24,7 @@
 #include "Vector3F.hpp"
 #include "Effects.hpp"
 #include "GLState.hpp"
+#include "FrameDepthProvider.hpp"
 
 class ILogger;
 class GPUProgramState;
@@ -105,7 +106,7 @@ public:
 class Camera {
 public:
 
-  explicit Camera(long long timestamp);
+  explicit Camera(long long timestamp, FrameDepthProvider* frameDepthProvider);
 
   ~Camera() {
     delete _camEffectTarget;
@@ -119,10 +120,11 @@ public:
 
   void resizeViewport(int width, int height);
 
-  const Vector3D pixel2Ray(const Vector2I& pixel) const;
   const Vector3D pixel2Ray(const Vector2F& pixel) const;
 
-  const Vector3D pixel2PlanetPoint(const Vector2I& pixel) const;
+  const Vector3D pixel2Ray(const Vector3D& pixel3D) const;
+
+  const Vector3D pixel2PlanetPoint(const Vector2F& pixel) const;
 
   const Vector2F point2Pixel(const Vector3D& point) const;
   const Vector2F point2Pixel(const Vector3F& point) const;
@@ -160,6 +162,11 @@ public:
                     _center.y() - _position.y(),
                     _center.z() - _position.z());
   }
+  
+  bool hasValidViewDirection() const{
+    double d = _center.squaredDistanceTo(_position);
+    return (d > 0) && !ISNAN(d);
+  }
 
   const void getViewDirectionInto(MutableVector3D& result) const {
     result.set(_center.x() - _position.x(),
@@ -194,8 +201,8 @@ public:
 
   Vector3D getHorizontalVector();
 
-  Angle compute3DAngularDistance(const Vector2I& pixel0,
-                                 const Vector2I& pixel1);
+  Angle compute3DAngularDistance(const Vector2F& pixel0,
+                                 const Vector2F& pixel1);
 
   void initialize(const G3MContext* context);
 
@@ -231,8 +238,6 @@ public:
   }
 
   void setGeodeticPosition(const Geodetic3D& g3d);
-
-  void setGeodeticPositionStablePitch(const Geodetic3D& g3d);
 
   void setGeodeticPosition(const Angle &latitude,
                            const Angle &longitude,
@@ -298,6 +303,7 @@ public:
 
   CoordinateSystem getLocalCoordinateSystem() const;
   CoordinateSystem getCameraCoordinateSystem() const;
+
   TaitBryanAngles getHeadingPitchRoll() const;
   void setHeadingPitchRoll(const Angle& heading,
                            const Angle& pitch,
@@ -305,6 +311,14 @@ public:
 
   double getEstimatedPixelDistance(const Vector3D& point0,
                                    const Vector3D& point1) const;
+  
+  Vector3D getScenePositionForPixel(float x, float y);
+  
+  Vector3D getScenePositionForCentralPixel();
+  
+  Vector3D getFirstValidScenePositionForCentralColumn() const;
+  
+  void setCameraCoordinateSystem(const CoordinateSystem& rs);
 
   inline long long getTimestamp() const {
     return _timestamp;
@@ -335,10 +349,23 @@ public:
   }
 
   static void pixel2RayInto(const MutableVector3D& position,
-                            const Vector2F& pixel,
-                            const MutableVector2I& viewport,
-                            const MutableMatrix44D& modelViewMatrix,
-                            MutableVector3D& ray);
+                                    const Vector2F& pixel,
+                                    const MutableVector2I& viewport,
+                                    const MutableMatrix44D& modelViewMatrix,
+                                    MutableVector3D& ray)
+  {
+    const float px = pixel._x;
+    const float py = viewport.y() - pixel._y;
+    const Vector3D pixel3D(px, py, 0);
+    const Vector3D obj = modelViewMatrix.unproject(pixel3D, 0, 0,
+                                                   viewport.x(),
+                                                   viewport.y());
+    if (obj.isNan()) {
+      ray.copyFrom(obj);
+    } else {
+      ray.set(obj._x-position.x(), obj._y-position.y(), obj._z-position.z());
+    }
+  }
 
   static const Vector3D pixel2Ray(const MutableVector3D& position,
                                   const Vector2F& pixel,
@@ -354,33 +381,9 @@ private:
 
   Camera(const Camera &that);
 
-  //  Camera(const Camera &that):
-  //  _viewPortWidth(that._viewPortWidth),
-  //  _viewPortHeight(that._viewPortHeight),
-  //  _planet(that._planet),
-  //  _position(that._position),
-  //  _center(that._center),
-  //  _up(that._up),
-  //  _dirtyFlags(that._dirtyFlags),
-  //  _frustumData(that._frustumData),
-  //  _projectionMatrix(that._projectionMatrix),
-  //  _modelMatrix(that._modelMatrix),
-  //  _modelViewMatrix(that._modelViewMatrix),
-  //  _cartesianCenterOfView(that._cartesianCenterOfView),
-  //  _geodeticCenterOfView((that._geodeticCenterOfView == NULL) ? NULL : new Geodetic3D(*that._geodeticCenterOfView)),
-  //  _frustum((that._frustum == NULL) ? NULL : new Frustum(*that._frustum)),
-  //  _frustumInModelCoordinates((that._frustumInModelCoordinates == NULL) ? NULL : new Frustum(*that._frustumInModelCoordinates)),
-  //  _camEffectTarget(new CameraEffectTarget()),
-  //  _geodeticPosition((that._geodeticPosition == NULL) ? NULL: new Geodetic3D(*that._geodeticPosition)),
-  //  _angle2Horizon(that._angle2Horizon),
-  //  _normalizedPosition(that._normalizedPosition),
-  //  _tanHalfVerticalFieldOfView(NAND),
-  //  _tanHalfHorizontalFieldOfView(NAND),
-  //  _timestamp(that._timestamp)
-  //  {
-  //  }
-
   mutable long long _timestamp;
+  
+  FrameDepthProvider* _frameDepthProvider;
 
   mutable MutableVector3D _ray0;
   mutable MutableVector3D _ray1;
@@ -459,7 +462,6 @@ private:
   MutableVector3D   _getCartesianCenterOfView() const {
     if (_dirtyFlags._cartesianCenterOfViewDirty) {
       _dirtyFlags._cartesianCenterOfViewDirty = false;
-      //      _cartesianCenterOfView = centerOfViewOnPlanet().asMutableVector3D();
       _cartesianCenterOfView.copyFrom(centerOfViewOnPlanet());
     }
     return _cartesianCenterOfView;
@@ -509,13 +511,10 @@ private:
   const MutableMatrix44D& getModelViewMatrix() const {
     if (_dirtyFlags._modelViewMatrixDirty) {
       _dirtyFlags._modelViewMatrixDirty = false;
-      //_modelViewMatrix.copyValue(getProjectionMatrix().multiply(getModelMatrix()));
       _modelViewMatrix.copyValueOfMultiplication(getProjectionMatrix(), getModelMatrix());
     }
     return _modelViewMatrix;
   }
-  
-  void setCameraCoordinateSystem(const CoordinateSystem& rs);
   
 };
 

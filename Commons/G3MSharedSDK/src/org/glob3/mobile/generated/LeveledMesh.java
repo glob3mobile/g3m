@@ -17,7 +17,7 @@ package org.glob3.mobile.generated;
 
 
 
-public class LeveledMesh extends Mesh
+public abstract class LeveledMesh extends Mesh
 {
   private Mesh _mesh;
 
@@ -82,6 +82,16 @@ public class LeveledMesh extends Mesh
   public final void showNormals(boolean v)
   {
     _mesh.showNormals(v);
+  }
+
+  public final IFloatBuffer getVerticesFloatBuffer()
+  {
+    return _mesh.getVerticesFloatBuffer();
+  }
+
+  public final Vector3D getVerticesOffset()
+  {
+    return _mesh.getVerticesOffset();
   }
 
 }

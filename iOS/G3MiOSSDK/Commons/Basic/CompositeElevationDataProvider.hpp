@@ -79,6 +79,8 @@ private:
 #endif
     const Sector _sector;
     
+    const long long _requestPriority;
+    
   public:
     
     std::vector<ElevationDataProvider*> _providers;
@@ -89,6 +91,7 @@ private:
     CompositeElevationDataProvider_Request(CompositeElevationDataProvider* provider,
                                            const Sector& sector,
                                            const Vector2I &resolution,
+                                           long long requestPriority,
                                            IElevationDataListener *listener,
                                            bool autodelete);
 
@@ -142,6 +145,7 @@ public:
 
   const long long requestElevationData(const Sector& sector,
                                        const Vector2I& extent,
+                                       long long requestPriority,
                                        IElevationDataListener* listener,
                                        bool autodeleteListener);
 

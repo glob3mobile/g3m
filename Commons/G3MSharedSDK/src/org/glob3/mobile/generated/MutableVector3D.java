@@ -186,6 +186,16 @@ public class MutableVector3D
     return new MutableVector3D(_y * other._z - _z * other._y, _z * other._x - _x * other._z, _x * other._y - _y * other._x);
   }
 
+  public final void copyValueOfCross(MutableVector3D u, MutableVector3D v)
+  {
+    double result_x = u._y * v._z - u._z * v._y;
+    double result_y = u._z * v._x - u._x * v._z;
+    double result_z = u._x * v._y - u._y * v._x;
+    _x = result_x;
+    _y = result_y;
+    _z = result_z;
+  }
+
   public final Angle angleBetween(MutableVector3D other)
   {
     final MutableVector3D v1 = normalized();
@@ -235,6 +245,20 @@ public class MutableVector3D
   public final MutableVector3D transformedBy(MutableMatrix44D m, double homogeneus)
   {
     return new MutableVector3D(_x * m.get0() + _y * m.get4() + _z * m.get8() + homogeneus * m.get12(), _x * m.get1() + _y * m.get5() + _z * m.get9() + homogeneus * m.get13(), _x * m.get2() + _y * m.get6() + _z * m.get10() + homogeneus * m.get14());
+  }
+
+  public final void transformPointByMatrix(MutableVector3D p, MutableMatrix44D m, double homogeneus)
+  {
+    _x = p._x * m.get0() + p._y * m.get4() + p._z * m.get8() + homogeneus * m.get12();
+    _y = p._x * m.get1() + p._y * m.get5() + p._z * m.get9() + homogeneus * m.get13();
+    _z = p._x * m.get2() + p._y * m.get6() + p._z * m.get10() + homogeneus * m.get14();
+  }
+
+  public final void transformPointByMatrix(Vector3D p, MutableMatrix44D m, double homogeneus)
+  {
+    _x = p._x * m.get0() + p._y * m.get4() + p._z * m.get8() + homogeneus * m.get12();
+    _y = p._x * m.get1() + p._y * m.get5() + p._z * m.get9() + homogeneus * m.get13();
+    _z = p._x * m.get2() + p._y * m.get6() + p._z * m.get10() + homogeneus * m.get14();
   }
 
   public final Vector3D asVector3D()
@@ -291,6 +315,12 @@ public class MutableVector3D
     final double m = IMathUtils.instance().sqrt(ms);
   
     return new MutableVector3D(((u * (u * _x + v * _y + w * _z)) + (((_x * (v * v + w * w)) - (u * (v * _y + w * _z))) * cosTheta) + (m * ((-w * _y) + (v * _z)) * sinTheta)) / ms, ((v * (u * _x + v * _y + w * _z)) + (((_y * (u * u + w * w)) - (v * (u * _x + w * _z))) * cosTheta) + (m * ((w * _x) - (u * _z)) * sinTheta)) / ms, ((w * (u * _x + v * _y + w * _z)) + (((_z * (u * u + v * v)) - (w * (u * _x + v * _y))) * cosTheta) + (m * (-(v * _x) + (u * _y)) * sinTheta)) / ms);
+  }
+
+  public static double distanceBetween(MutableVector3D a, MutableVector3D b)
+  {
+    double squaredDistance = (a._x - b._x) * (a._x - b._x) + (a._y - b._y) * (a._y - b._y) + (a._z - b._z) * (a._z - b._z);
+    return IMathUtils.instance().sqrt(squaredDistance);
   }
 
   public final double squaredDistanceTo(Vector3D that)
