@@ -336,18 +336,7 @@ Mesh* createSectorMesh(const Planet* planet,
   //                                                                                 1000076.892613024946));
   //
   [[self G3MWidget] startAnimation];
-  
-  
-//  [G3MWidget widget]->setAnimatedCameraPosition(TimeInterval::fromSeconds(30), Geodetic3D::fromDegrees(28.0465484603694577, -16.679972746659540661, 3523.1227238618689626));
-//  
-//  [G3MWidget widget]->setAnimatedCameraPosition(TimeInterval::fromSeconds(30),
-//                                                [G3MWidget widget]->getCurrentCamera()->getGeodeticPosition(),
-//                                                Geodetic3D::fromDegrees(28.0465484603694577, -16.679972746659540661, 3523.1227238618689626), Angle::zero(), Angle::zero(),
-//                                                Angle::zero(), Angle::fromDegrees(-20));
-  
-  [G3MWidget widget]->setCameraPosition(Geodetic3D::fromDegrees(28.034039522888807738, -15.391984897940172772, 19995.736280033790536));
-  [G3MWidget widget]->setCameraPitch(Angle::fromDegrees(-53.461659));
-  
+
   /*
    [[self G3MWidget] widget]->addPeriodicalTask(TimeInterval::fromMilliseconds(100),
    new CameraRollChangerTask([[self G3MWidget] widget]));
@@ -724,219 +713,6 @@ std::vector<StarDomeRenderer*> _sdrs;
     
   }
   
-}
-
-- (void) initWithBuilderAndSegmentedWorld
-{
-  G3MBuilder_iOS builder([self G3MWidget]);
-  
-  LayerSet* layerSet = new LayerSet();
-  //  layerSet->addLayer(MapQuestLayer::newOSM(TimeInterval::fromDays(30), true, 10));
-  
-//  layerSet->addLayer(MapQuestLayer::newOSM(TimeInterval::fromDays(30)));
-  builder.getPlanetRendererBuilder()->setLayerSet(layerSet);
-  
-  const Sector sector = Sector::fromDegrees(40.1540143280790858, -5.8664874640814313,
-                                            40.3423148480663158, -5.5116079822178570);
-  
-  builder.setShownSector(sector);
-  
-  builder.initializeWidget();
-}
-
--(NSUInteger)supportedInterfaceOrientations {
-  return UIInterfaceOrientationMaskAll;
-}
-
-
--(BOOL)shouldAutorotate {
-  return YES;
-}
-
-
-//
-//-(void) tickQuaternion{
-//
-//  //CMQuaternion q = [_dO getQuaternion];
-//
-//  //Quaternion quaternion(q.x, q.y, q.z, q.w);
-//  //  Angle angle = quaternion.getRotationAngle();
-//  //  Vector3D axis = quaternion.getRotationAxis();
-//
-//  //  Angle angle = Angle::fromRadians(2 * acos(q.w));
-//  //  double x = q.x / sqrt(1-q.w*q.w);
-//  //  double y = q.y / sqrt(1-q.w*q.w);
-//  //  double z = q.z / sqrt(1-q.w*q.w);
-//  //  Vector3D axis(x, y, z);
-//
-//  //  MutableMatrix44D quaternionRM = MutableMatrix44D::createRotationMatrix(angle, axis);
-//
-//
-//  CMRotationMatrix matrixR = [_dO getRotationMatrix];
-//
-//  MutableMatrix44D* quaternionRM =  [self matrix:matrixR];//quaternion.getRotationMatrix();
-//
-//  CoordinateSystem global = CoordinateSystem::global();
-//  CoordinateSystem local = planet->getCoordinateSystemAt(Geodetic3D::fromDegrees(28.133441, -15.423952, 1000));
-//  MutableMatrix44D localRM = local.getRotationMatrix();
-//
-//  CoordinateSystem final = global.applyRotation(localRM.multiply(*quaternionRM) ).changeOrigin(local._origin);
-//  delete quaternionRM;
-//
-//  UIDeviceAttitude orientation = [[UIDevice currentDevice] orientation];// UIDeviceAttitudePortraitUpsideDown; //Changing manually
-//
-//  if (orientation == UIDeviceAttitudeFaceUp || orientation == UIDeviceAttitudeFaceDown){
-//    orientation = _lastDeviceOrientation;
-//  }
-//};
-
-
-- (void) initCustomizedWithBuilder
-{
-  G3MBuilder_iOS builder([self G3MWidget]);
-  
-  
-  //  builder.getPlanetRendererBuilder()->setTileRenderingListener(new SampleTileRenderingListener());
-  
-  GEOVectorLayer* geoVectorLayer = new GEOVectorLayer();
-  
-  
-  bool showingPNOA = true;
-  if (showingPNOA){
-    Sector sector = Sector::fromDegrees(21, -18, 45, 6);
-    std::vector<Geodetic2D*>* coordinates = new std::vector<Geodetic2D*>();
-    
-    coordinates->push_back( new Geodetic2D( sector.getSW() ) );
-    coordinates->push_back( new Geodetic2D( sector.getNW() ) );
-    coordinates->push_back( new Geodetic2D( sector.getNE() ) );
-    coordinates->push_back( new Geodetic2D( sector.getSE() ) );
-    coordinates->push_back( new Geodetic2D( sector.getSW() ) );
-    
-    //    printf("RESTERIZING: %s\n", _sector->description().c_str());
-    
-    float dashLengths[] = {};
-    int dashCount = 0;
-    
-    Color c = Color::red();
-    
-    GEO2DLineRasterStyle ls(c, //const Color&     color,
-                            (float)1.0, //const float      width,
-                            CAP_ROUND, // const StrokeCap  cap,
-                            JOIN_ROUND, //const StrokeJoin join,
-                            1,//const float      miterLimit,
-                            dashLengths,//float            dashLengths[],
-                            dashCount,//const int        dashCount,
-                            0);//const int        dashPhase) :
-    
-    
-    const GEO2DCoordinatesData* coordinatesData = new GEO2DCoordinatesData(coordinates);
-    
-    GEOLineRasterSymbol * symbol = new GEOLineRasterSymbol(coordinatesData, ls);
-    coordinatesData->_release();
-    geoVectorLayer->addSymbol(symbol);
-  }
-  
-  //#warning Diego at work!
-  //  builder.getPlanetRendererBuilder()->setShowStatistics(true);
-  
-  //  SimpleCameraConstrainer* scc = new SimpleCameraConstrainer();
-  //  builder.addCameraConstraint(scc);
-  
-  builder.setCameraRenderer([self createCameraRenderer]);
-  
-  const Planet* planet = Planet::createEarth();
-  //const Planet* planet = Planet::createSphericalEarth();
-  //  const Planet* planet = Planet::createFlatEarth();
-  builder.setPlanet(planet);
-  
-  Color* bgColor = Color::newFromRGBA(0.0f, 0.1f, 0.2f, 1.0f);
-  //  Color* bgColor = Color::newFromRGBA(1, 0, 0, 1);
-  
-  builder.setBackgroundColor(bgColor);
-  
-  GEO2DPolygonData* figure = new GEO2DPolygonData(coordinates, holesCoordinatesArray);
-  
-  if (figure->contains(Geodetic2D(Angle::fromDegrees(34), Angle::fromDegrees(-6))) ) {
-    ILogger::instance()->logInfo("Test 1: OK -> Point is a polygon's vertex PIPV");
-  } else {
-    ILogger::instance()->logInfo("Test 1: KO");
-  }
-  
-  if (figure->contains(Geodetic2D(Angle::fromDegrees(35.5), Angle::fromDegrees(-5.5))) ) {
-    ILogger::instance()->logInfo("Test 2: OK -> Point in polygon PIP");
-  } else {
-    ILogger::instance()->logInfo("Test 2: KO");
-  }
-  
-  if (figure->contains(Geodetic2D(Angle::fromDegrees(35.5), Angle::fromDegrees(-5))) ) {
-    ILogger::instance()->logInfo("Test 3: OK -> Point in polygon's edge PIPE");
-  } else {
-    ILogger::instance()->logInfo("Test 3: KO");
-  }
-  
-  if (!figure->contains(Geodetic2D(Angle::fromDegrees(36), Angle::fromDegrees(-5))) ) {
-    ILogger::instance()->logInfo("Test 4: OK -> Point out polygon POP");
-  } else {
-    ILogger::instance()->logInfo("Test 4: KO");
-  }
-  
-  if (!figure->contains(Geodetic2D(Angle::fromDegrees(35), Angle::fromDegrees(-6))) ) {
-    ILogger::instance()->logInfo("Test 5: OK -> POP: Point is a hole's vertex PIHV");
-  } else {
-    ILogger::instance()->logInfo("Test 5: KO");
-  }
-  
-  if (!figure->contains(Geodetic2D(Angle::fromDegrees(35.5), Angle::fromDegrees(-6))) ) {
-    ILogger::instance()->logInfo("Test 6: OK -> POP: Point in hole PIH");
-  } else {
-    ILogger::instance()->logInfo("Test 6: KO");
-  }
-  
-  if (!figure->contains(Geodetic2D(Angle::fromDegrees(35.5), Angle::fromDegrees(-5.75))) ) {
-    ILogger::instance()->logInfo("Test 7: OK -> POP: Point in hole's edge PIHE");
-  } else {
-    ILogger::instance()->logInfo("Test 7: KO");
-  }
-  
-  
-}
-
-- (ShapesRenderer*) createShapesRendererForTestImageDrawingOfCanvas : (const Planet*) planet
-{
-  ShapesRenderer* shapesRenderer = new ShapesRenderer();
-  Shape* quad1 = new QuadShape(new Geodetic3D(Angle::fromDegrees(37.78333333),
-                                              Angle::fromDegrees(-122 - 2),
-                                              824000 / 2),
-                               RELATIVE_TO_GROUND,
-                               URL("file:///hud.png", false),
-                               //50000, 50000,
-                               663000, 824000,
-                               false);
-  
-  //shapesRenderer->addShape(quad1);
-  
-  class QuadListener: public IImageListener {
-    ShapesRenderer* _sr;
-  public:
-    QuadListener(ShapesRenderer* sr):_sr(sr) {
-      
-    }
-    
-    void imageCreated(const IImage* image) {
-      
-      Shape* quadImages = new QuadShape(new Geodetic3D(Angle::fromDegrees(28.410728),
-                                                       Angle::fromDegrees(-16.339417),
-                                                       8000),
-                                        RELATIVE_TO_GROUND,
-                                        image,
-                                        2560,
-                                        2560,
-                                        false);
-      
-      _sr->addShape(quadImages);
-    }
-  };
-  
   Image_iOS *image = new Image_iOS([[UIImage alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"Icon-72" ofType:@"png"]], NULL, NULL);
   
   
@@ -1033,15 +809,14 @@ std::vector<StarDomeRenderer*> _sdrs;
   delete destRect;
   delete srcRect;
   
-  canvas->createImage(new QuadListener(shapesRenderer), true);
+//  canvas->createImage(new QuadListener(shapesRenderer), true);
   
   delete canvas;
   
   delete image;
   
-  return shapesRenderer;
+//  return shapesRenderer;
 }
-
 
 - (void) initWithBuilderAndSegmentedWorld
 {
@@ -1049,7 +824,8 @@ std::vector<StarDomeRenderer*> _sdrs;
   
   LayerSet* layerSet = new LayerSet();
   //  layerSet->addLayer(MapQuestLayer::newOSM(TimeInterval::fromDays(30), true, 10));
-  layerSet->addLayer(MapQuestLayer::newOSM(TimeInterval::fromDays(30)));
+  
+//  layerSet->addLayer(MapQuestLayer::newOSM(TimeInterval::fromDays(30)));
   builder.getPlanetRendererBuilder()->setLayerSet(layerSet);
   
   const Sector sector = Sector::fromDegrees(40.1540143280790858, -5.8664874640814313,
@@ -1060,99 +836,49 @@ std::vector<StarDomeRenderer*> _sdrs;
   builder.initializeWidget();
 }
 
-
-- (void) initWithDefaultBuilder
-{
-  G3MBuilder_iOS builder([self G3MWidget]);
-  builder.initializeWidget();
+-(NSUInteger)supportedInterfaceOrientations {
+  return UIInterfaceOrientationMaskAll;
 }
 
 
-- (void) initializeElevationDataProvider: (G3MBuilder_iOS&) builder
-{
-  float verticalExaggeration = 1.0f;
-  builder.getPlanetRendererBuilder()->setVerticalExaggeration(verticalExaggeration);
-  
-  ElevationDataProvider* elevationDataProvider = new SingleBilElevationDataProvider(URL("file:///full-earth-2048x1024.bil", false),
-                                                                                    Sector::fullSphere(),
-                                                                                    Vector2I(2048, 1024));
-  
-  //  ElevationDataProvider* elevationDataProvider = new SingleBilElevationDataProvider(URL("file:///caceres-2008x2032.bil", false),
-  //                                                                                    Sector::fromDegrees(                                                                                 39.4642996294239623,                                                                                -6.3829977122432933,                                                                                  39.4829891936013553,-6.3645288909498845),                                                              Vector2I(2008, 2032),0);
-  
-  builder.getPlanetRendererBuilder()->setElevationDataProvider(elevationDataProvider);
+-(BOOL)shouldAutorotate {
+  return YES;
 }
 
-//- (GPUProgramSources) loadDefaultGPUProgramSourcesFromDisk{
-//  //GPU Program Sources
-//  NSString* vertShaderPathname = [[NSBundle mainBundle] pathForResource: @"Shader"
-//                                                                 ofType: @"vsh"];
-//  if (!vertShaderPathname) {
-//    NSLog(@"Can't load Shader.vsh");
-//  }
-//  const std::string vertexSource ([[NSString stringWithContentsOfFile: vertShaderPathname
-//                                                             encoding: NSUTF8StringEncoding
-//                                                                error: nil] UTF8String]);
-//
-//  NSString* fragShaderPathname = [[NSBundle mainBundle] pathForResource: @"Shader"
-//                                                                 ofType: @"fsh"];
-//  if (!fragShaderPathname) {
-//    NSLog(@"Can't load Shader.fsh");
-//  }
-//
-//  const std::string fragmentSource ([[NSString stringWithContentsOfFile: fragShaderPathname
-//                                                               encoding: NSUTF8StringEncoding
-//                                                                  error: nil] UTF8String]);
-//
-//  return GPUProgramSources("DefaultProgram", vertexSource, fragmentSource);
-//}
 
-- (GPUProgramSources) loadDefaultGPUProgramSourcesWithName: (NSString*) name{
-  //GPU Program Sources
-  NSString* vertShaderPathname = [[NSBundle mainBundle] pathForResource: name
-                                                                 ofType: @"vsh"];
-  if (!vertShaderPathname) {
-    NSLog(@"Can't load %@.vsh", name);
-  }
-  const std::string vertexSource ([[NSString stringWithContentsOfFile: vertShaderPathname
-                                                             encoding: NSUTF8StringEncoding
-                                                                error: nil] UTF8String]);
-  
-  NSString* fragShaderPathname = [[NSBundle mainBundle] pathForResource: name
-                                                                 ofType: @"fsh"];
-  if (!fragShaderPathname) {
-    NSLog(@"Can't load %@.fsh", name);
-  }
-  
-  const std::string fragmentSource ([[NSString stringWithContentsOfFile: fragShaderPathname
-                                                               encoding: NSUTF8StringEncoding
-                                                                  error: nil] UTF8String]);
-  
-  return GPUProgramSources([name UTF8String], vertexSource, fragmentSource);
-}
-
-class TestMeshLoadListener : public MeshLoadListener {
-public:
-  void onError(const URL& url) {
-  }
-  
-  void onBeforeAddMesh(Mesh* mesh) {
-  }
-  
-  void onAfterAddMesh(Mesh* mesh) {
-  }
-  
-};
-
-
-//class SampleTileRenderingListener : public TileRenderingListener {
-//public:
-//  void startRendering(const Tile* tile) {
-//    ILogger::instance()->logInfo("** Start rendering tile %d/%d/%d", tile->_level, tile->_column, tile->_row);
-//  }
 //
-//  void stopRendering(const Tile* tile) {
-//    ILogger::instance()->logInfo("** Stop rendering tile %d/%d/%d", tile->_level, tile->_column, tile->_row);
+//-(void) tickQuaternion{
+//
+//  //CMQuaternion q = [_dO getQuaternion];
+//
+//  //Quaternion quaternion(q.x, q.y, q.z, q.w);
+//  //  Angle angle = quaternion.getRotationAngle();
+//  //  Vector3D axis = quaternion.getRotationAxis();
+//
+//  //  Angle angle = Angle::fromRadians(2 * acos(q.w));
+//  //  double x = q.x / sqrt(1-q.w*q.w);
+//  //  double y = q.y / sqrt(1-q.w*q.w);
+//  //  double z = q.z / sqrt(1-q.w*q.w);
+//  //  Vector3D axis(x, y, z);
+//
+//  //  MutableMatrix44D quaternionRM = MutableMatrix44D::createRotationMatrix(angle, axis);
+//
+//
+//  CMRotationMatrix matrixR = [_dO getRotationMatrix];
+//
+//  MutableMatrix44D* quaternionRM =  [self matrix:matrixR];//quaternion.getRotationMatrix();
+//
+//  CoordinateSystem global = CoordinateSystem::global();
+//  CoordinateSystem local = planet->getCoordinateSystemAt(Geodetic3D::fromDegrees(28.133441, -15.423952, 1000));
+//  MutableMatrix44D localRM = local.getRotationMatrix();
+//
+//  CoordinateSystem final = global.applyRotation(localRM.multiply(*quaternionRM) ).changeOrigin(local._origin);
+//  delete quaternionRM;
+//
+//  UIDeviceAttitude orientation = [[UIDevice currentDevice] orientation];// UIDeviceAttitudePortraitUpsideDown; //Changing manually
+//
+//  if (orientation == UIDeviceAttitudeFaceUp || orientation == UIDeviceAttitudeFaceDown){
+//    orientation = _lastDeviceOrientation;
 //  }
 //};
 
@@ -1171,13 +897,13 @@ public:
   if (showingPNOA){
     Sector sector = Sector::fromDegrees(21, -18, 45, 6);
     std::vector<Geodetic2D*>* coordinates = new std::vector<Geodetic2D*>();
-
+    
     coordinates->push_back( new Geodetic2D( sector.getSW() ) );
     coordinates->push_back( new Geodetic2D( sector.getNW() ) );
     coordinates->push_back( new Geodetic2D( sector.getNE() ) );
     coordinates->push_back( new Geodetic2D( sector.getSE() ) );
     coordinates->push_back( new Geodetic2D( sector.getSW() ) );
-
+    
     //    printf("RESTERIZING: %s\n", _sector->description().c_str());
     
     float dashLengths[] = {};
@@ -1314,7 +1040,49 @@ public:
   MarksRenderer* marksRenderer = [self createMarksRenderer];
   builder.addRenderer(marksRenderer);
   
-  bool testingAnimatedMarks = false;
+  if (true) { //Location
+
+    class YouAreHereTask : public GTask {
+    private:
+      Mark* _mark;
+      MarksRenderer* _mr;
+      
+    public:
+      YouAreHereTask(MarksRenderer* mr) :
+      _mark(NULL),
+      _mr(mr)
+      {
+      }
+      
+      void run(const G3MContext* context) {
+        IDeviceLocation* loc = IDeviceLocation::instance();
+        
+        if (_mark == NULL){
+          loc->startTrackingLocation();
+          
+          _mark = new Mark(URL(URL::FILE_PROTOCOL + "g3m-marker.png"),
+                           Geodetic3D::fromDegrees( 28.099999998178312, -15.41699999885168, 0),
+                           ABSOLUTE,
+                           4.5e+06,
+                           NULL,
+                           true,
+                           NULL,
+                           false);
+          
+          _mr->addMark(_mark);
+        } else{
+          ILogger::instance()->logInfo("User Position:%s", loc->getLocation().description().c_str() );
+          _mark->setPosition(loc->getLocation());
+        }
+      }
+    };
+    
+    builder.addPeriodicalTask(new PeriodicalTask(TimeInterval::fromMilliseconds(1000),
+                                                 new YouAreHereTask(marksRenderer)));
+    
+  }
+  
+  bool testingAnimatedMarks = true;
   if (testingAnimatedMarks){
     
     Mark* animMark = new Mark(URL(URL::FILE_PROTOCOL + "radar-sprite.png"),
@@ -6408,7 +6176,7 @@ public:
   builder.setPlanet(planet);
   
   // create camerarenderers
-  builder.setCameraRenderer([self createCameraRenderer]);
+  //builder.setCameraRenderer([self createCameraRenderer]);
   
   // create shape
   ShapesRenderer* shapesRenderer = new ShapesRenderer();
@@ -6434,12 +6202,23 @@ public:
   builder.getPlanetRendererBuilder()->setElevationDataProvider(elevationDataProvider);
   builder.getPlanetRendererBuilder()->setVerticalExaggeration(4.0f);
   
+  CameraRenderer* cameraRenderer = new CameraRenderer();
+  cameraRenderer->addHandler(new DeviceAttitudeCameraHandler(true));
+  
+  builder.setCameraRenderer(cameraRenderer);
+  
+  
   builder.initializeWidget();
   
   // set camera looking at Tenerife
   Geodetic3D position = Geodetic3D(Angle::fromDegrees(27.60), Angle::fromDegrees(-16.54), 55000.0);
   [[self G3MWidget] widget]->setCameraPosition(position);
   [[self G3MWidget] widget]->setCameraPitch(Angle::fromDegrees(-50.0));
+  
+  
+  
+  
+  
 }
 
 @end

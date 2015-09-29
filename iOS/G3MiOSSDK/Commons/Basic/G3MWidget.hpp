@@ -373,6 +373,11 @@ private:
   void setSelectedRenderer(ProtoRenderer* selectedRenderer);
   
   void rawRender(const RenderState_Type renderStateType);
+  /**
+   Generates a image on the FrameBuffer of the depth of each pixel
+   so the method getScenePositionForPixel can obtain it.
+  */
+  void zRender();
   
   
   void rawRenderStereoToedIn(const RenderState_Type renderStateType);
