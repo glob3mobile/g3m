@@ -684,6 +684,16 @@ public class Camera
     return obj.sub(position.asVector3D());
   }
 
+  public final Angle getHorizontalFOV()
+  {
+    return Angle.fromRadians(IMathUtils.instance().atan(_tanHalfHorizontalFieldOfView)).times(2);
+  }
+
+  public final Angle getVerticalFOV()
+  {
+    return Angle.fromRadians(IMathUtils.instance().atan(_tanHalfVerticalFieldOfView)).times(2);
+  }
+
 
 
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
