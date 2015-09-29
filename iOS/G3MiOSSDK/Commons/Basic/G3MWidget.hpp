@@ -358,6 +358,12 @@ private:
   
   void rawRender(const RenderState_Type renderStateType);
   
+  
+  void rawRenderStereoToedIn(const RenderState_Type renderStateType);
+  
+  void rawRenderStereoParallelAxis(const RenderState_Type renderStateType);
+
+  
 };
 
 #endif

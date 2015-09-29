@@ -93,7 +93,7 @@
 #import <G3MiOSSDK/SGShape.hpp>
 #import <G3MiOSSDK/SGNode.hpp>
 #import <G3MiOSSDK/SGMaterialNode.hpp>
-#import <G3MiOSSDK/MapBooBuilder_iOS.hpp>
+#import <G3MiOSSDK/MapBooOLDBuilder_iOS.hpp>
 #import <G3MiOSSDK/IWebSocketListener.hpp>
 #import <G3MiOSSDK/GPUProgramFactory.hpp>
 #import <G3MiOSSDK/FloatBufferBuilderFromCartesian3D.hpp>
@@ -279,6 +279,11 @@ Mesh* createSectorMesh(const Planet* planet,
 - (void)viewDidLoad
 {
   [super viewDidLoad];
+  
+  
+  G3MWidget.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleBottomMargin |
+  UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin |
+  UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
   
   // initialize a customized widget without using a builder
   //[[self G3MWidget] initSingletons];

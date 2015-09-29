@@ -63,6 +63,7 @@
 		CFEA76681666DCB000E89BC7 /* images in Resources */ = {isa = PBXBuildFile; fileRef = CFEA76671666DCB000E89BC7 /* images */; };
 		CFF95F7D158A748F00B56E11 /* plane.png in Resources */ = {isa = PBXBuildFile; fileRef = CFF95F7C158A748F00B56E11 /* plane.png */; };
 		D80C8B491A77B44000E67587 /* anchorWidget.png in Resources */ = {isa = PBXBuildFile; fileRef = D80C8B481A77B44000E67587 /* anchorWidget.png */; };
+		D80D57311BBAA1F400BA4762 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D80D57301BBAA1F400BA4762 /* Images.xcassets */; settings = {ASSET_TAGS = (); }; };
 		D8317203186C5BAD00522E1B /* simpleStencil.png in Resources */ = {isa = PBXBuildFile; fileRef = D8317202186C5BAD00522E1B /* simpleStencil.png */; };
 		D84D3C98194753A900D16D69 /* radar-sprite.png in Resources */ = {isa = PBXBuildFile; fileRef = D84D3C97194753A900D16D69 /* radar-sprite.png */; };
 		D882B1CD171D77C000C2AD9C /* full-earth-256x256.bil in Resources */ = {isa = PBXBuildFile; fileRef = D882B1CC171D76AD00C2AD9C /* full-earth-256x256.bil */; };
@@ -170,6 +171,7 @@
 		CFEA76671666DCB000E89BC7 /* images */ = {isa = PBXFileReference; lastKnownFileType = folder; path = images; sourceTree = "<group>"; };
 		CFF95F7C158A748F00B56E11 /* plane.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = plane.png; sourceTree = "<group>"; };
 		D80C8B481A77B44000E67587 /* anchorWidget.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = anchorWidget.png; sourceTree = "<group>"; };
+		D80D57301BBAA1F400BA4762 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = G3MiOSDemo/Images.xcassets; sourceTree = SOURCE_ROOT; };
 		D8317202186C5BAD00522E1B /* simpleStencil.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = simpleStencil.png; sourceTree = "<group>"; };
 		D84D3C97194753A900D16D69 /* radar-sprite.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "radar-sprite.png"; sourceTree = "<group>"; };
 		D882B1CC171D76AD00C2AD9C /* full-earth-256x256.bil */ = {isa = PBXFileReference; lastKnownFileType = file; path = "full-earth-256x256.bil"; sourceTree = "<group>"; };
@@ -274,6 +276,7 @@
 				D8EEF39C1577920B003FEB5E /* MainStoryboard_iPhone.storyboard */,
 				D8EEF3A21577920B003FEB5E /* ViewController.h */,
 				D8EEF3A31577920B003FEB5E /* ViewController.mm */,
+				D80D57301BBAA1F400BA4762 /* Images.xcassets */,
 				D8EEF3911577920B003FEB5E /* Supporting Files */,
 			);
 			name = G3MiOSDemo;
@@ -449,6 +452,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D882B1CD171D77C000C2AD9C /* full-earth-256x256.bil in Resources */,
+				D80D57311BBAA1F400BA4762 /* Images.xcassets in Resources */,
 				CF09A94E16A0A0F500E72811 /* test.bson in Resources */,
 				D8EEF3951577920B003FEB5E /* InfoPlist.strings in Resources */,
 				D8EEF39E1577920B003FEB5E /* MainStoryboard_iPhone.storyboard in Resources */,
@@ -650,8 +654,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = BrandAsset;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				ENABLE_BITCODE = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Glob3iOSDemo/G3MiOSDemo-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -678,8 +685,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = BrandAsset;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				ENABLE_BITCODE = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Glob3iOSDemo/G3MiOSDemo-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = C_CODE;

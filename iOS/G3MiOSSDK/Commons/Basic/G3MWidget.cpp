@@ -531,6 +531,69 @@ void G3MWidget::rawRender(const RenderState_Type renderStateType) {
 
 }
 
+void G3MWidget::rawRenderStereoToedIn(const RenderState_Type renderStateType){
+  Vector3D camPos = _currentCamera->getCartesianPosition();
+  Vector3D eyesDirection = _currentCamera->getUp().cross(_currentCamera->getViewDirection()).normalized();
+  const double eyesSeparation = 0.03;
+  
+  _gl->clearScreen(*_backgroundColor);
+  
+  
+  Camera centralCamera(1000);
+  centralCamera.copyFrom(*_currentCamera);
+  
+  Vector3D center = centralCamera.pixel2PlanetPoint(Vector2I(_width/2, _height/2));
+  
+  Vector3D up = _currentCamera->getUp();
+  
+  //Left
+  glViewport(0, 0, _width / 2, _height);
+  Vector3D leftEyePosition = camPos.add(eyesDirection.times(-eyesSeparation));
+  Vector3D leftEyeCenter = _currentCamera->getCenter().add(eyesDirection.times(-eyesSeparation));
+  
+  //_currentCamera->setCartesianPosition(camPos.add(eyesDirection.times(-eyesSeparation)));
+  _currentCamera->setLookAtParams(leftEyePosition.asMutableVector3D(), center.asMutableVector3D(), up.asMutableVector3D());
+  
+  rawRender(renderStateType);
+
+  
+  //Right
+  
+  glViewport(_width / 2, 0, _width / 2, _height);
+  Vector3D rightEyePosition = camPos.add(eyesDirection.times(eyesSeparation));
+  Vector3D rightEyeCenter = _currentCamera->getCenter().add(eyesDirection.times(eyesSeparation));
+  
+  //_currentCamera->setCartesianPosition(camPos.add(eyesDirection.times(eyesSeparation)));
+  _currentCamera->setLookAtParams(rightEyePosition.asMutableVector3D(), center.asMutableVector3D(), up.asMutableVector3D());
+  
+  
+  rawRender(renderStateType);
+  
+//  _currentCamera->setCartesianPosition(camPos);
+  
+  _currentCamera->copyFrom(centralCamera);
+}
+
+void G3MWidget::rawRenderStereoParallelAxis(const RenderState_Type renderStateType){
+  Vector3D camPos = _currentCamera->getCartesianPosition();
+  Vector3D eyesDirection = _currentCamera->getUp().cross(_currentCamera->getViewDirection()).normalized();
+  const double eyesSeparation = 0.03;
+  
+  glViewport(0, 0, _width / 2, _height);
+  
+  _gl->clearScreen(*_backgroundColor);
+  
+  _currentCamera->setCartesianPosition(camPos.add(eyesDirection.times(-eyesSeparation)));
+  rawRender(renderStateType);
+  
+  glViewport(_width / 2, 0, _width / 2, _height);
+  
+  _currentCamera->setCartesianPosition(camPos.add(eyesDirection.times(eyesSeparation)));
+  rawRender(renderStateType);
+  
+  _currentCamera->setCartesianPosition(camPos);
+}
+
 void G3MWidget::render(int width, int height) {
   if (_paused) {
     return;
@@ -614,25 +677,8 @@ void G3MWidget::render(int width, int height) {
 
   _frameTasksExecutor->doPreRenderCycle(_renderContext);
   
-  
-  Vector3D camPos = _currentCamera->getCartesianPosition();
-  Vector3D eyesDirection = _currentCamera->getUp().cross(_currentCamera->getViewDirection()).normalized();
-  const double eyesSeparation = 0.03;
-  
 #warning AT WORK JM
-  glViewport(0, 0, _width / 2, _height);
-  
-  _gl->clearScreen(*_backgroundColor);
-  
-  _currentCamera->setCartesianPosition(camPos.add(eyesDirection.times(-eyesSeparation)));
-  rawRender(renderStateType);
-  
-  glViewport(_width / 2, 0, _width / 2, _height);
-  
-  _currentCamera->setCartesianPosition(camPos.add(eyesDirection.times(eyesSeparation)));
-  rawRender(renderStateType);
-  
-  _currentCamera->setCartesianPosition(camPos);
+  rawRenderStereoToedIn(renderStateType);
   
   //Removing unused programs
   if (_renderCounter % _nFramesBeetweenProgramsCleanUp == 0) {
