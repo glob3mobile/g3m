@@ -590,7 +590,7 @@ void G3MWidget::rawRenderStereoToedIn(const RenderState_Type renderStateType){
   centralCamera.copyFrom(*_currentCamera);
   //centralCamera.initialize(_renderContext);
   
-  _currentCamera->setFOV(_currentCamera->getVerticalFOV(), _currentCamera->getHorizontalFOV().times(0.5));
+  _currentCamera->setFOV(Angle::fromDegrees(60), Angle::fromDegrees(60));
   
  // Vector3D center = centralCamera.pixel2PlanetPoint(Vector2F(_width/2, _height/2));
   

@@ -1096,14 +1096,14 @@ public class G3MWidget implements ChangedRendererInfoListener, FrameDepthProvide
     centralCamera.copyFrom(_currentCamera);
     //centralCamera.initialize(_renderContext);
   
-    _currentCamera.setFOV(_currentCamera.getVerticalFOV(), _currentCamera.getHorizontalFOV().times(0.5));
+    _currentCamera.setFOV(Angle.fromDegrees(60), Angle.fromDegrees(60));
   
    // Vector3D center = centralCamera.pixel2PlanetPoint(Vector2F(_width/2, _height/2));
   
     Vector3D up = _currentCamera.getUp();
   
     //Left
-    glViewport(0, 0, _width / 2, _height);
+    _gl.getNative().glViewport(0, 0, _width / 2, _height);
     Vector3D leftEyePosition = camPos.add(eyesDirection.times(-eyesSeparation));
     Vector3D leftEyeCenter = camCenter.add(eyesDirection.times(-eyesSeparation));
   
@@ -1115,7 +1115,7 @@ public class G3MWidget implements ChangedRendererInfoListener, FrameDepthProvide
   
     //Right
   
-    glViewport(_width / 2, 0, _width / 2, _height);
+    _gl.getNative().glViewport(_width / 2, 0, _width / 2, _height);
     Vector3D rightEyePosition = camPos.add(eyesDirection.times(eyesSeparation));
     Vector3D rightEyeCenter = camCenter.add(eyesDirection.times(eyesSeparation));
   
@@ -1135,7 +1135,7 @@ public class G3MWidget implements ChangedRendererInfoListener, FrameDepthProvide
     Vector3D camPos = _currentCamera.getCartesianPosition();
     Vector3D camCenter = _currentCamera.getCenter();
     Vector3D eyesDirection = _currentCamera.getUp().cross(_currentCamera.getViewDirection()).normalized();
-    final double eyesSeparation = 200; // 0.03;
+    final double eyesSeparation = 20; // 0.03;
   
     _gl.clearScreen(_backgroundColor);
   
@@ -1147,7 +1147,7 @@ public class G3MWidget implements ChangedRendererInfoListener, FrameDepthProvide
     Vector3D up = _currentCamera.getUp();
   
     //Left
-    glViewport(0, 0, _width / 2, _height);
+    _gl.getNative().glViewport(0, 0, _width / 2, _height);
     Vector3D leftEyePosition = camPos.add(eyesDirection.times(-eyesSeparation));
     Vector3D leftEyeCenter = camCenter.add(eyesDirection.times(-eyesSeparation));
   
@@ -1159,7 +1159,7 @@ public class G3MWidget implements ChangedRendererInfoListener, FrameDepthProvide
   
     //Right
   
-    glViewport(_width / 2, 0, _width / 2, _height);
+    _gl.getNative().glViewport(_width / 2, 0, _width / 2, _height);
     Vector3D rightEyePosition = camPos.add(eyesDirection.times(eyesSeparation));
     Vector3D rightEyeCenter = camCenter.add(eyesDirection.times(eyesSeparation));
   
