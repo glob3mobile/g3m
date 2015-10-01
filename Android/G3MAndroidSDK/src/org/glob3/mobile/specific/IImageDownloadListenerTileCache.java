@@ -12,11 +12,14 @@ public class IImageDownloadListenerTileCache
          extends
             IImageDownloadListener {
 
-   private final long _requestId;
+   private final long                _requestId;
+   private final TileVisitorListener _listener;
 
 
-   public IImageDownloadListenerTileCache(final long requestId) {
+   public IImageDownloadListenerTileCache(final long requestId,
+                                          final TileVisitorListener listener) {
       _requestId = requestId;
+      _listener = listener;
    }
 
 
@@ -46,7 +49,7 @@ public class IImageDownloadListenerTileCache
    public void onDownload(final URL arg0,
                           final IImage arg1,
                           final boolean arg2) {
-      ILogger.instance().logInfo("Downloaded id: " + _requestId);
+      _listener.onTileDownloaded();
    }
 
 }
