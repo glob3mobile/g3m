@@ -36,27 +36,13 @@ public:
 
     const int mag = properties->getAsNumber("mag")->value();
 
-//    const std::string label = properties->getAsString("name", "<bar>");
     const Geodetic3D  position( geometry->getPosition(), 0);
-
-//    double maxPopulation = 22315474;
-//    double population = properties->getAsNumber("population")->value();
-//    float labelFontSize = (float) (14.0 * (population / maxPopulation) + 16.0) ;
-
-//     float labelFontSize = 18.0f;
-
-//    Mark* mark = new Mark(label,
-//                          position,
-//                          ABSOLUTE,
-//                          0, // minDistanceToCamera
-//                          labelFontSize
-//                          // Color::newFromRGBA(1, 1, 0, 1)
-//                          );
 
     int red   = 255;
     int green = 255;
     int blue  = 255;
-    int alpha = 171;
+    // int alpha = 171;
+    int alpha = 255;
     switch (mag) {
       case 0:
         red   = 0;
@@ -131,7 +117,6 @@ void G3MVectorStreaming1DemoScene::rawActivate(const G3MContext* context) {
                          "om|yr|mo|dy|date|time|tz|st|stf|stn|mag|inj|fat|loss|closs|slat|slon|elat|elon|len|wid|",
                          new G3MVectorStreaming1DemoScene_Symbolizer(),
                          true, // deleteSymbolizer
-                         //DownloadPriority::LOWER,
                          DownloadPriority::HIGHER,
                          TimeInterval::zero(),
                          true, // readExpired

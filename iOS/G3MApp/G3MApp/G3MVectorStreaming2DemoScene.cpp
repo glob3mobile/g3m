@@ -36,27 +36,13 @@ public:
 
     const int mag = properties->getAsNumber("mag")->value();
 
-//    const std::string label = properties->getAsString("name", "<bar>");
     const Geodetic3D  position( geometry->getPosition(), 0);
-
-//    double maxPopulation = 22315474;
-//    double population = properties->getAsNumber("population")->value();
-//    float labelFontSize = (float) (14.0 * (population / maxPopulation) + 16.0) ;
-
-//     float labelFontSize = 18.0f;
-
-//    Mark* mark = new Mark(label,
-//                          position,
-//                          ABSOLUTE,
-//                          0, // minDistanceToCamera
-//                          labelFontSize
-//                          // Color::newFromRGBA(1, 1, 0, 1)
-//                          );
 
     int red   = 255;
     int green = 255;
     int blue  = 255;
-    int alpha = 171;
+    // int alpha = 171;
+    int alpha = 255;
     switch (mag) {
       case 0:
         red   = 0;
@@ -107,9 +93,9 @@ public:
 
   Mark* createClusterMark(const VectorStreamingRenderer::Cluster* cluster,
                           long long featuresCount) const {
-    const Geodetic3D  position(cluster->getPosition()->_latitude,
-                               cluster->getPosition()->_longitude,
-                               0);
+    const Geodetic3D position(cluster->getPosition()->_latitude,
+                              cluster->getPosition()->_longitude,
+                              0);
 
     std::stringstream labelStream;
     labelStream << cluster->getSize();
@@ -121,12 +107,9 @@ public:
 
     const IMathUtils* mu = IMathUtils::instance();
 
-     float labelFontSize = (float) ((14.0 * clusterPercent) + 16.0) ;
-//    float labelFontSize = 18.0f;
+    const float labelFontSize = (float) ((14.0 * clusterPercent) + 16.0) ;
 
     const double area = (15000.0 * clusterPercent);
-//    int pointSize = mu->max(12, mu->round((float) mu->sqrt(area)));
-//    int pointSize = 12 + mu->round((float) mu->sqrt(area));
     const int radius = 12 + mu->round((float) mu->sqrt(area / PI));
 
     Mark* mark = new Mark(new StackLayoutImageBuilder(new CircleImageBuilder(Color::white(),
@@ -158,7 +141,6 @@ void G3MVectorStreaming2DemoScene::rawActivate(const G3MContext* context) {
   G3MDemoModel* model     = getModel();
 //  G3MWidget*    g3mWidget = model->getG3MWidget();
 
-
   BingMapsLayer* layer = new BingMapsLayer(BingMapType::Aerial(),
                                            "AnU5uta7s5ql_HTrRZcPLI4_zotvNefEeSxIClF1Jf7eS-mLig1jluUdCoecV7jc",
                                            TimeInterval::fromDays(30));
@@ -169,24 +151,16 @@ void G3MVectorStreaming2DemoScene::rawActivate(const G3MContext* context) {
   VectorStreamingRenderer* renderer = model->getVectorStreamingRenderer();
   renderer->addVectorSet(//URL("http://192.168.1.12:8080/server-mapboo/public/VectorialStreaming/"),
                          URL("http://mapboo.com/server-mapboo/public/v1/VectorialStreaming/"),
-                         // "GEONames-PopulatedPlaces_LOD",
-                         // "name|population|featureClass|featureCode",
                          "55f922dc0c1bc2b9673c6203", // tornados clustering
-//                         "55f91bab0c1bc2b9673c5f8a", // tornados sorting
-                         //"name",
                          "om|yr|mo|dy|date|time|tz|st|stf|stn|mag|inj|fat|loss|closs|slat|slon|elat|elon|len|wid|",
-                         //"Tornados_LOD",
-                         //"mag",
                          new G3MVectorStreaming2DemoScene_Symbolizer(),
                          true, // deleteSymbolizer
-                         //DownloadPriority::LOWER,
                          DownloadPriority::HIGHER,
                          TimeInterval::zero(),
                          true, // readExpired
                          true, // verbose
                          true  // haltOnError
                          );
-
 
 //  g3mWidget->setAnimatedCameraPosition( Geodetic3D::fromDegrees(46.612016780685230799, 7.8587244849714883443, 5410460) );
 
