@@ -41,8 +41,8 @@ public:
     int red   = 255;
     int green = 255;
     int blue  = 255;
-    // int alpha = 171;
-    int alpha = 255;
+    int alpha = 171;
+    // int alpha = 255;
     switch (mag) {
       case 0:
         red   = 0;
