@@ -37,7 +37,7 @@ private:
   bool _blend;
   bool _cullFace;
   int  _culledFace;
-  
+
 #ifdef C_CODE
   const IGLTextureId* _boundTextureId[MAX_N_TEXTURES];
 #endif
@@ -46,19 +46,19 @@ private:
 #endif
 
   float _lineWidth;
-  
+
   //Polygon Offset
   bool  _polygonOffsetFill;
   float _polygonOffsetFactor;
   float _polygonOffsetUnits;
-  
+
   //Blending Factors
   int _blendSFactor;
   int _blendDFactor;
-  
+
   //Texture Parameters
   int _pixelStoreIAlignmentUnpack;
-  
+
   //Clear color
   float _clearColorR;
   float _clearColorG;
@@ -72,7 +72,7 @@ public:
   static void initializationAvailable() {
     _initializationAvailable = true;
   }
-  
+
   GLGlobalState() :
   _depthTest(false),
   _blend(false),
@@ -104,30 +104,26 @@ public:
   static GLGlobalState* newDefault() {
     return new GLGlobalState();
   }
-  
-  GLGlobalState* createCopy() {
-    return new GLGlobalState(*this);
-  }
 
   ~GLGlobalState() {
   }
-  
+
   void enableDepthTest() {
-      _depthTest = true;
+    _depthTest = true;
   }
   void disableDepthTest() {
-      _depthTest = false;
+    _depthTest = false;
   }
   bool isEnabledDepthTest() const { return _depthTest; }
-  
+
   void enableBlend() {
-      _blend = true;
+    _blend = true;
   }
   void disableBlend() {
-      _blend = false;
+    _blend = false;
   }
   bool isEnabledBlend() const { return _blend; }
-  
+
   void enableCullFace(int face) {
     _cullFace   = true;
     _culledFace = face;
@@ -137,12 +133,12 @@ public:
   }
   bool isEnabledCullFace() const { return _cullFace; }
   int getCulledFace() const { return _culledFace; }
-  
+
   void setLineWidth(float lineWidth) {
     _lineWidth = lineWidth;
   }
   float lineWidth() const { return _lineWidth; }
-  
+
   void enablePolygonOffsetFill(float factor, float units) {
     _polygonOffsetFill = true;
     _polygonOffsetFactor = factor;
@@ -151,11 +147,11 @@ public:
   void disablePolygonOffsetFill() {
     _polygonOffsetFill = false;
   }
-  
+
   bool getPolygonOffsetFill()    const { return _polygonOffsetFill;   }
   float getPolygonOffsetUnits()  const { return _polygonOffsetUnits;  }
   float getPolygonOffsetFactor() const { return _polygonOffsetFactor; }
-  
+
   void setBlendFactors(int sFactor, int dFactor) {
     _blendSFactor = sFactor;
     _blendDFactor = dFactor;
@@ -182,14 +178,14 @@ public:
   void setPixelStoreIAlignmentUnpack(int p) {
     _pixelStoreIAlignmentUnpack = p;
   }
-  
+
   void setClearColor(const Color& color) {
     _clearColorR = color._red;
     _clearColorG = color._green;
     _clearColorB = color._blue;
     _clearColorA = color._alpha;
   }
-  
+
   void applyChanges(GL* gl, GLGlobalState& currentState) const;
 };
 
