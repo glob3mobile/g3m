@@ -8,7 +8,8 @@
 
 #include "CircleImageBuilder.hpp"
 #include "ICanvas.hpp"
-
+#include "Context.hpp"
+#include "IStringUtils.hpp"
 
 CircleImageBuilder::CircleImageBuilder(const Color& color,
                                        int radius) :
@@ -23,4 +24,10 @@ void CircleImageBuilder::buildOnCanvas(const G3MContext* context,
                                        ICanvas* canvas) {
   canvas->setFillColor(_color);
   canvas->fillEllipse(1, 1, _radius*2, _radius*2);
+}
+
+std::string CircleImageBuilder::getImageName(const G3MContext* context) const {
+  const IStringUtils* su = context->getStringUtils();
+
+  return "_CircleImage_" + _color.toID() + "_" + su->toString(_radius);
 }
