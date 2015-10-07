@@ -104,22 +104,17 @@ public class GLGlobalState
     return new GLGlobalState();
   }
 
-  public final GLGlobalState createCopy()
-  {
-    return new GLGlobalState(this);
-  }
-
   public void dispose()
   {
   }
 
   public final void enableDepthTest()
   {
-      _depthTest = true;
+    _depthTest = true;
   }
   public final void disableDepthTest()
   {
-      _depthTest = false;
+    _depthTest = false;
   }
   public final boolean isEnabledDepthTest()
   {
@@ -128,11 +123,11 @@ public class GLGlobalState
 
   public final void enableBlend()
   {
-      _blend = true;
+    _blend = true;
   }
   public final void disableBlend()
   {
-      _blend = false;
+    _blend = false;
   }
   public final boolean isEnabledBlend()
   {
