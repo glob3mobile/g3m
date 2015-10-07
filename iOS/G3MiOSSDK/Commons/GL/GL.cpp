@@ -122,7 +122,7 @@ const IGLTextureId* GL::uploadTexture(const IImage* image,
     GLGlobalState newState;
 
     newState.setPixelStoreIAlignmentUnpack(1);
-    newState.bindTexture(texId);
+    newState.bindTexture(0, texId);
 
     newState.applyChanges(this, *_currentGLGlobalState);
 
@@ -219,28 +219,19 @@ const IGLTextureId* GL::getGLTextureId() {
 }
 
 void GL::deleteTexture(const IGLTextureId* textureId) {
-
   //  if (_verbose) {
   //    ILogger::instance()->logInfo("GL::deleteTexture()");
   //  }
 
   if (textureId != NULL) {
+    _currentGLGlobalState->onTextureDelete(textureId);
+
     if ( _nativeGL->deleteTexture(textureId) ) {
       _texturesIdBag.push_back(textureId);
     }
     else {
       delete textureId;
     }
-
-    if (_currentGLGlobalState->getBoundTexture() == textureId) {
-      _currentGLGlobalState->bindTexture(NULL);
-    }
-
-    //    GLState::textureHasBeenDeleted(textureId);
-
-    //    if (GLState::getCurrentGLGlobalState()->getBoundTexture() == textureId) {
-    //      GLState::getCurrentGLGlobalState()->bindTexture(NULL);
-    //    }
 
     //ILogger::instance()->logInfo("  = delete textureId=%s", texture->description().c_str());
   }

@@ -65,30 +65,8 @@ private:
   float _clearColorB;
   float _clearColorA;
 
-  GLGlobalState(const GLGlobalState& parentState) :
-  _depthTest(parentState._depthTest),
-  _blend(parentState._blend),
-  _cullFace(parentState._cullFace),
-  _culledFace(parentState._culledFace),
-  _lineWidth(parentState._lineWidth),
-  _polygonOffsetFactor(parentState._polygonOffsetFactor),
-  _polygonOffsetUnits(parentState._polygonOffsetUnits),
-  _polygonOffsetFill(parentState._polygonOffsetFill),
-  _blendDFactor(parentState._blendDFactor),
-  _blendSFactor(parentState._blendSFactor),
-  _pixelStoreIAlignmentUnpack(parentState._pixelStoreIAlignmentUnpack),
-  _clearColorR(parentState._clearColorR),
-  _clearColorG(parentState._clearColorG),
-  _clearColorB(parentState._clearColorB),
-  _clearColorA(parentState._clearColorA)
-  {
+  GLGlobalState(const GLGlobalState& parentState);
 
-    for (int i = 0; i < MAX_N_TEXTURES; i++) {
-      _boundTextureId[i] = parentState._boundTextureId[i];
-    }
-
-  }
-  
 public:
 
   static void initializationAvailable() {
@@ -182,18 +160,9 @@ public:
     _blendSFactor = sFactor;
     _blendDFactor = dFactor;
   }
-  
-  void bindTexture(const IGLTextureId* textureId) {
-    _boundTextureId[0] = textureId;
-  }
-  
-  const IGLTextureId* getBoundTexture() const {
-    return _boundTextureId[0];
-  }
 
-  void bindTexture(int target, const IGLTextureId* textureId) {
-
-
+  void bindTexture(const int target,
+                   const IGLTextureId* textureId) {
     if (target > MAX_N_TEXTURES) {
       ILogger::instance()->logError("WRONG TARGET FOR TEXTURE");
       return;
@@ -202,8 +171,12 @@ public:
     _boundTextureId[target] = textureId;
   }
 
-  const IGLTextureId* getBoundTexture(int target) const {
-    return _boundTextureId[0];
+  void onTextureDelete(const IGLTextureId* textureId) {
+    for (int i = 0; i < MAX_N_TEXTURES; i++) {
+      if (_boundTextureId[i] == textureId) {
+        _boundTextureId[i] = NULL;
+      }
+    }
   }
 
   void setPixelStoreIAlignmentUnpack(int p) {
