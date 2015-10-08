@@ -129,22 +129,17 @@ public class GLGlobalState
     return new GLGlobalState();
   }
 
-  public final GLGlobalState createCopy()
-  {
-    return new GLGlobalState(this);
-  }
-
   public void dispose()
   {
   }
 
   public final void enableDepthTest()
   {
-      _depthTest = true;
+    _depthTest = true;
   }
   public final void disableDepthTest()
   {
-      _depthTest = false;
+    _depthTest = false;
   }
   public final void enableDepthMask()
   {
@@ -166,11 +161,11 @@ public class GLGlobalState
 
   public final void enableBlend()
   {
-      _blend = true;
+    _blend = true;
   }
   public final void disableBlend()
   {
-      _blend = false;
+    _blend = false;
   }
   public final boolean isEnabledBlend()
   {
@@ -234,20 +229,8 @@ public class GLGlobalState
     _blendDFactor = dFactor;
   }
 
-  public final void bindTexture(IGLTextureId textureId)
-  {
-    _boundTextureId[0] = textureId;
-  }
-
-  public final IGLTextureId getBoundTexture()
-  {
-    return _boundTextureId[0];
-  }
-
   public final void bindTexture(int target, IGLTextureId textureId)
   {
-
-
     if (target > DefineConstants.MAX_N_TEXTURES)
     {
       ILogger.instance().logError("WRONG TARGET FOR TEXTURE");
@@ -257,9 +240,15 @@ public class GLGlobalState
     _boundTextureId[target] = textureId;
   }
 
-  public final IGLTextureId getBoundTexture(int target)
+  public final void onTextureDelete(IGLTextureId textureId)
   {
-    return _boundTextureId[0];
+    for (int i = 0; i < DefineConstants.MAX_N_TEXTURES; i++)
+    {
+      if (_boundTextureId[i] == textureId)
+      {
+        _boundTextureId[i] = null;
+      }
+    }
   }
 
   public final void setPixelStoreIAlignmentUnpack(int p)

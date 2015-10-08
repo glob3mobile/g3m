@@ -21,7 +21,7 @@ private:
 
   ICanvas* getCanvas(const G3MContext* context);
 
-  static long long _counter;
+//  static long long _counter;
 
 protected:
   const int _width;
@@ -41,7 +41,7 @@ protected:
   virtual void buildOnCanvas(const G3MContext* context,
                              ICanvas* canvas) = 0;
 
-  virtual std::string getImageName(const G3MContext* context) const;
+  virtual std::string getImageName(const G3MContext* context) const = 0;
 
 public:
   void build(const G3MContext* context,

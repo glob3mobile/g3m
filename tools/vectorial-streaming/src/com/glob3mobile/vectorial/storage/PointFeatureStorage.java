@@ -5,7 +5,6 @@ package com.glob3mobile.vectorial.storage;
 import java.io.IOException;
 import java.util.List;
 
-import com.glob3mobile.geo.Geodetic2D;
 import com.glob3mobile.geo.Sector;
 
 
@@ -39,9 +38,6 @@ public interface PointFeatureStorage
       List<PointFeature> getFeatures();
 
 
-      Geodetic2D getAveragePosition();
-
-
    }
 
 
@@ -62,9 +58,6 @@ public interface PointFeatureStorage
 
 
       long getFeaturesCount();
-
-
-      Geodetic2D getAveragePosition();
 
 
       int getNodesCount();

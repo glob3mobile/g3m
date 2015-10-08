@@ -91,6 +91,8 @@
 		CF15759B1864C13B0059312A /* HUDAbsolutePosition.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF1575991864C0E10059312A /* HUDAbsolutePosition.hpp */; };
 		CF15759E1864C1570059312A /* HUDRelativePosition.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF15759C1864C1570059312A /* HUDRelativePosition.cpp */; };
 		CF15759F1864C18A0059312A /* HUDRelativePosition.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF15759D1864C1570059312A /* HUDRelativePosition.hpp */; };
+		CF1751D11BA617BB006286C6 /* StackLayoutImageBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF1751CF1BA617BB006286C6 /* StackLayoutImageBuilder.cpp */; };
+		CF1751D21BA61808006286C6 /* StackLayoutImageBuilder.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF1751D01BA617BB006286C6 /* StackLayoutImageBuilder.hpp */; };
 		CF1871B71703534200092888 /* GEO2DPointGeometry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF1871B51703534200092888 /* GEO2DPointGeometry.cpp */; };
 		CF1871B81703536B00092888 /* GEO2DPointGeometry.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF1871B61703534200092888 /* GEO2DPointGeometry.hpp */; };
 		CF1871BF17036DD800092888 /* GEOMeshSymbol.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF1871BD17036DD700092888 /* GEOMeshSymbol.cpp */; };
@@ -756,6 +758,7 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				CF1751D21BA61808006286C6 /* StackLayoutImageBuilder.hpp in CopyFiles */,
 				CF3623411B97AFD900824932 /* CircleImageBuilder.hpp in CopyFiles */,
 				D8D10E7C1B95E41A005C63CB /* FrameDepthProvider.hpp in CopyFiles */,
 				D80AA0781B95C0CB001E3CD3 /* DeviceAttitudeCameraHandler.hpp in CopyFiles */,
@@ -1288,6 +1291,8 @@
 		CF1575991864C0E10059312A /* HUDAbsolutePosition.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = HUDAbsolutePosition.hpp; path = Commons/Rendererers/HUDAbsolutePosition.hpp; sourceTree = "<group>"; };
 		CF15759C1864C1570059312A /* HUDRelativePosition.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = HUDRelativePosition.cpp; path = Commons/Rendererers/HUDRelativePosition.cpp; sourceTree = "<group>"; };
 		CF15759D1864C1570059312A /* HUDRelativePosition.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = HUDRelativePosition.hpp; path = Commons/Rendererers/HUDRelativePosition.hpp; sourceTree = "<group>"; };
+		CF1751CF1BA617BB006286C6 /* StackLayoutImageBuilder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = StackLayoutImageBuilder.cpp; path = Commons/Basic/StackLayoutImageBuilder.cpp; sourceTree = "<group>"; };
+		CF1751D01BA617BB006286C6 /* StackLayoutImageBuilder.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = StackLayoutImageBuilder.hpp; path = Commons/Basic/StackLayoutImageBuilder.hpp; sourceTree = "<group>"; };
 		CF1871B51703534200092888 /* GEO2DPointGeometry.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GEO2DPointGeometry.cpp; path = Commons/GEO/GEO2DPointGeometry.cpp; sourceTree = "<group>"; };
 		CF1871B61703534200092888 /* GEO2DPointGeometry.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = GEO2DPointGeometry.hpp; path = Commons/GEO/GEO2DPointGeometry.hpp; sourceTree = "<group>"; };
 		CF1871BD17036DD700092888 /* GEOMeshSymbol.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GEOMeshSymbol.cpp; path = Commons/GEO/GEOMeshSymbol.cpp; sourceTree = "<group>"; };
@@ -2262,6 +2267,8 @@
 				CFAB53F11A8BCD9B00DD0099 /* LayoutImageBuilder.hpp */,
 				CFAB53F31A8BCDFF00DD0099 /* ColumnLayoutImageBuilder.cpp */,
 				CFAB53F41A8BCDFF00DD0099 /* ColumnLayoutImageBuilder.hpp */,
+				CF1751CF1BA617BB006286C6 /* StackLayoutImageBuilder.cpp */,
+				CF1751D01BA617BB006286C6 /* StackLayoutImageBuilder.hpp */,
 				CF75A9FA1B87E2750033DA25 /* MapBoo.cpp */,
 				CF75A9FB1B87E2750033DA25 /* MapBoo.hpp */,
 				CF36233E1B97AFA400824932 /* CircleImageBuilder.cpp */,
@@ -3251,6 +3258,7 @@
 				CF6D723B17184D620043C74B /* CanvasElement.cpp in Sources */,
 				CF6D7240171854F50043C74B /* TextCanvasElement.cpp in Sources */,
 				CF6D724717185CF20043C74B /* GroupCanvasElement.cpp in Sources */,
+				CF1751D11BA617BB006286C6 /* StackLayoutImageBuilder.cpp in Sources */,
 				CF6D724C171861770043C74B /* ColumnCanvasElement.cpp in Sources */,
 				D89FBD7D1725444800FFA541 /* MeshShape.cpp in Sources */,
 				D89D9CCC172E95370058CA9D /* TileElevationDataRequest.cpp in Sources */,
@@ -3437,6 +3445,7 @@
 				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = YES;
 				CLANG_WARN__EXIT_TIME_DESTRUCTORS = NO;
 				DSTROOT = /tmp/Glob3iOSSDK.dst;
+				ENABLE_BITCODE = NO;
 				GCC_INCREASE_PRECOMPILED_HEADER_SHARING = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Glob3iOSSDK/G3MiOSSDK-Prefix.pch";
@@ -3468,6 +3477,7 @@
 				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = YES;
 				CLANG_WARN__EXIT_TIME_DESTRUCTORS = NO;
 				DSTROOT = /tmp/Glob3iOSSDK.dst;
+				ENABLE_BITCODE = NO;
 				GCC_INCREASE_PRECOMPILED_HEADER_SHARING = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Glob3iOSSDK/G3MiOSSDK-Prefix.pch";

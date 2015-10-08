@@ -53,9 +53,9 @@ public class GEO2DPointGeometry extends GEOGeometry2D
     return new GEO2DPointGeometry(_position);
   }
 
-  public final long createMarks(VectorStreamingRenderer.VectorSet vectorSet, VectorStreamingRenderer.Node node)
+  public final long createFeatureMarks(VectorStreamingRenderer.VectorSet vectorSet, VectorStreamingRenderer.Node node)
   {
-    return vectorSet.createMark(node, this);
+    return vectorSet.createFeatureMark(node, this);
   }
 
 }

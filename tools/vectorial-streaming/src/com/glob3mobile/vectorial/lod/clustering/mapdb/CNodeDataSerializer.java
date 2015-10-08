@@ -1,6 +1,6 @@
 
 
-package com.glob3mobile.vectorial.cluster.mapdb;
+package com.glob3mobile.vectorial.lod.clustering.mapdb;
 
 import java.io.DataInput;
 import java.io.DataOutput;
@@ -13,9 +13,9 @@ import java.util.Map;
 import org.mapdb.Serializer;
 
 import com.glob3mobile.geo.Geodetic2D;
-import com.glob3mobile.vectorial.cluster.nodes.CInnerNodeData;
-import com.glob3mobile.vectorial.cluster.nodes.CLeafNodeData;
-import com.glob3mobile.vectorial.cluster.nodes.CNodeData;
+import com.glob3mobile.vectorial.lod.clustering.nodes.CInnerNodeData;
+import com.glob3mobile.vectorial.lod.clustering.nodes.CLeafNodeData;
+import com.glob3mobile.vectorial.lod.clustering.nodes.CNodeData;
 import com.glob3mobile.vectorial.storage.PointFeature;
 import com.glob3mobile.vectorial.storage.PointFeatureCluster;
 import com.glob3mobile.vectorial.storage.mapdb.SerializerUtils;

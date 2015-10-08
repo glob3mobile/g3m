@@ -1,6 +1,6 @@
 
 
-package com.glob3mobile.vectorial.cluster.nodes;
+package com.glob3mobile.vectorial.lod.clustering.nodes;
 
 import java.util.ArrayList;
 import java.util.Collections;

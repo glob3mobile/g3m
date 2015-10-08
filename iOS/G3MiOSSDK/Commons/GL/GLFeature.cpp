@@ -200,6 +200,8 @@ void TextureGLFeature::createBasicValues(IFloatBuffer* texCoords,
       break;
       
     default:
+      value->_release();
+      texUnit->_release();
       ILogger::instance()->logError("Wrong texture target.");
       
       break;
@@ -357,7 +359,7 @@ _texID(texID)
 }
 
 void TextureIDGLFeature::applyOnGlobalGLState(GLGlobalState* state) const {
-  state->bindTexture(_texID);
+  state->bindTexture(0, _texID);
 }
 
 BlendingModeGLFeature::BlendingModeGLFeature(bool blend, int sFactor, int dFactor) :

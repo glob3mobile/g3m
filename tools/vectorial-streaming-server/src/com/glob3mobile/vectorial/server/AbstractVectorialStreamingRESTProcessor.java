@@ -30,6 +30,7 @@ import com.glob3mobile.vectorial.lod.PointFeatureLODStorage;
 import com.glob3mobile.vectorial.lod.mapdb.PointFeatureLODMapDBStorage;
 import com.glob3mobile.vectorial.server.utils.GEOJSONUtils;
 import com.glob3mobile.vectorial.storage.PointFeature;
+import com.glob3mobile.vectorial.storage.PointFeatureCluster;
 
 
 public abstract class AbstractVectorialStreamingRESTProcessor
@@ -132,8 +133,8 @@ public abstract class AbstractVectorialStreamingRESTProcessor
       final Map<String, Object> result = new LinkedHashMap<>();
       result.put("name", lodStorage.getName());
       result.put("sector", GEOJSONUtils.toJSON(lodStorage.getSector()));
+      result.put("clustersCount", statistics.getClustersCount());
       result.put("featuresCount", statistics.getFeaturesCount());
-      result.put("averagePosition", GEOJSONUtils.toJSON(statistics.getAveragePosition()));
       result.put("nodesCount", statistics.getNodesCount());
       final int minNodeDepth = statistics.getMinNodeDepth();
       result.put("minNodeDepth", minNodeDepth);
@@ -184,8 +185,31 @@ public abstract class AbstractVectorialStreamingRESTProcessor
    private static Map<String, Object> toGEOJSON(final PointFeatureLODStorage.Node node,
                                                 final String[] properties) {
       final Map<String, Object> result = new LinkedHashMap<>();
-      result.put("type", "FeatureCollection");
-      result.put("features", toGEOJSONFeatures(node.getFeatures(), properties));
+
+      result.put("clusters", toJSONClusters(node.getClusters()));
+
+      final Map<String, Object> features = new LinkedHashMap<>();
+      features.put("type", "FeatureCollection");
+      features.put("features", toGEOJSONFeatures(node.getFeatures(), properties));
+      result.put("features", features);
+
+      return result;
+   }
+
+
+   private static List<Map<String, Object>> toJSONClusters(final List<PointFeatureCluster> clusters) {
+      final List<Map<String, Object>> result = new ArrayList<>(clusters.size());
+      for (final PointFeatureCluster cluster : clusters) {
+         result.add(toJSONCluster(cluster));
+      }
+      return result;
+   }
+
+
+   private static Map<String, Object> toJSONCluster(final PointFeatureCluster cluster) {
+      final Map<String, Object> result = new LinkedHashMap<>();
+      result.put("position", toGEOJSONCoordinates(cluster._position));
+      result.put("size", cluster._size);
       return result;
    }
 
@@ -204,8 +228,8 @@ public abstract class AbstractVectorialStreamingRESTProcessor
       result.put("id", node.getID());
       result.put("nodeSector", GEOJSONUtils.toJSON(node.getNodeSector()));
       result.put("minimumSector", GEOJSONUtils.toJSON(node.getMinimumSector()));
+      result.put("clustersCount", node.getClustersCount());
       result.put("featuresCount", node.getFeaturesCount());
-      result.put("averagePosition", GEOJSONUtils.toJSON(node.getAveragePosition()));
       result.put("children", node.getChildrenIDs());
       return result;
    }

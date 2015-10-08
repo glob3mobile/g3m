@@ -42,6 +42,16 @@ GEOObject* GEOJSONParser::parseBSON(const IByteBuffer* bson,
   return parser.pvtParse(showStatistics);
 }
 
+GEOObject* GEOJSONParser::parse(const JSONObject* jsonObject,
+                                bool showStatistics) {
+  GEOJSONParser parser("", NULL);
+  GEOObject* result = parser.toGEO(jsonObject);
+  if (showStatistics) {
+    parser.showStatisticsToLogger();
+  }
+  return result;
+}
+
 void GEOJSONParser::showStatisticsToLogger() const {
   IStringBuilder* sb = IStringBuilder::newStringBuilder();
 

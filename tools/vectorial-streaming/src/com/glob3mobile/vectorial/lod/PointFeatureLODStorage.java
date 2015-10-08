@@ -3,12 +3,11 @@
 package com.glob3mobile.vectorial.lod;
 
 import java.io.IOException;
-import java.util.Comparator;
 import java.util.List;
 
-import com.glob3mobile.geo.Geodetic2D;
 import com.glob3mobile.geo.Sector;
 import com.glob3mobile.vectorial.storage.PointFeature;
+import com.glob3mobile.vectorial.storage.PointFeatureCluster;
 
 
 public interface PointFeatureLODStorage
@@ -26,15 +25,10 @@ public interface PointFeatureLODStorage
    void addLeafNode(String id,
                     Sector nodeSector,
                     Sector minimumSector,
-                    Geodetic2D averagePosition,
                     List<PointFeature> features);
 
 
    void optimize() throws IOException;
-
-
-   void processPendingNodes(Comparator<PointFeature> featuresComparator,
-                            boolean verbose);
 
 
    public static interface Statistics {
@@ -43,7 +37,7 @@ public interface PointFeatureLODStorage
       long getFeaturesCount();
 
 
-      Geodetic2D getAveragePosition();
+      long getClustersCount();
 
 
       int getNodesCount();
@@ -56,6 +50,15 @@ public interface PointFeatureLODStorage
 
 
       double getAverageFeaturesPerNode();
+
+
+      int getMinClustersPerNode();
+
+
+      int getMaxClustersPerNode();
+
+
+      double getAverageClustersPerNode();
 
 
       int getMaxNodeDepth();
@@ -92,17 +95,19 @@ public interface PointFeatureLODStorage
       int getDepth();
 
 
-      int getFeaturesCount();
+      int getClustersCount();
 
 
-      List<PointFeature> getFeatures();
-
-
-      Geodetic2D getAveragePosition();
+      List<PointFeatureCluster> getClusters();
 
 
       List<String> getChildrenIDs();
 
+
+      int getFeaturesCount();
+
+
+      List<PointFeature> getFeatures();
 
    }
 
@@ -129,14 +134,20 @@ public interface PointFeatureLODStorage
    Sector getSector();
 
 
-   List<PointFeatureLODStorage.Node> getNodesFor(Sector searchSector);
-
-
-   List<PointFeatureLODStorage.Node> getNodesFor(Geodetic2D position);
+   void createLOD(boolean verbose);
 
 
    List<PointFeatureLODStorage.Node> getAllNodesOfDepth(int depth);
 
+
+   //   List<PointFeatureLODStorage.Node> getNodesFor(Sector searchSector);
+   //
+   //
+   //   List<PointFeatureLODStorage.Node> getNodesFor(Geodetic2D position);
+   //
+   //
+   //   List<PointFeatureLODStorage.Node> getAllNodesOfDepth(int depth);
+   //
 
    PointFeatureLODStorage.Node getNode(String id);
 

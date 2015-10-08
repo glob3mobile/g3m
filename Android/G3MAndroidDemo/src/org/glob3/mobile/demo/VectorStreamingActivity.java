@@ -105,7 +105,7 @@ public class VectorStreamingActivity
 
 
       final MapBoo mapboo = new MapBoo(builder, new URL("http://mapboo.com/server-mapboo/"), handler, true);
-      mapboo.setMapID("55f265a10c1bc2760d495894");
+      mapboo.setMapID("55f920310c1bc2b9673c6082");
       _g3mWidget = builder.createWidget();
 
 

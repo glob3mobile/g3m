@@ -8,31 +8,31 @@ import java.io.IOException;
 
 import com.glob3mobile.geo.Sector;
 import com.glob3mobile.utils.Progress;
-import com.glob3mobile.vectorial.cluster.PointFeatureClusterStorage;
-import com.glob3mobile.vectorial.cluster.mapdb.PointFeatureClusterMapDBStorage;
+import com.glob3mobile.vectorial.lod.clustering.PointFeatureClusteringLODStorage;
+import com.glob3mobile.vectorial.lod.clustering.mapdb.PointFeatureClusteringLODMapDBStorage;
 import com.glob3mobile.vectorial.storage.PointFeature;
 import com.glob3mobile.vectorial.storage.PointFeatureCluster;
 import com.glob3mobile.vectorial.utils.GEOBitmap;
 
 
-public class ClusterPointFeaturesStatistics {
+public class ClusteringLODPointFeaturesStatistics {
 
 
    public static final class ClusterDrawer
       implements
-         PointFeatureClusterStorage.NodeVisitor {
+         PointFeatureClusteringLODStorage.NodeVisitor {
 
-      private final PointFeatureClusterStorage _clusterStorage;
-      private final int                        _nodesCount;
-      private final int                        _minDepth;
-      private final int                        _maxDepth;
-      private final long                       _featuresCount;
+      private final PointFeatureClusteringLODStorage _clusterStorage;
+      private final int                              _nodesCount;
+      private final int                              _minDepth;
+      private final int                              _maxDepth;
+      private final long                             _featuresCount;
 
-      private Progress                         _progress;
-      private GEOBitmap                        _bitmap;
+      private Progress                               _progress;
+      private GEOBitmap                              _bitmap;
 
 
-      private ClusterDrawer(final PointFeatureClusterStorage clusterStorage,
+      private ClusterDrawer(final PointFeatureClusteringLODStorage clusterStorage,
                             final int nodesCount,
                             final int minDepth,
                             final int maxDepth,
@@ -109,7 +109,7 @@ public class ClusterPointFeaturesStatistics {
 
 
       @Override
-      public boolean visit(final PointFeatureClusterStorage.InnerNode node) {
+      public boolean visit(final PointFeatureClusteringLODStorage.InnerNode node) {
          final int depth = node.getDepth();
          if ((depth >= _minDepth) && (depth <= _maxDepth)) {
             final Color clusterColor = new Color(1, 1, 0, 0.9f);
@@ -135,7 +135,7 @@ public class ClusterPointFeaturesStatistics {
 
 
       @Override
-      public boolean visit(final PointFeatureClusterStorage.LeafNode node) {
+      public boolean visit(final PointFeatureClusteringLODStorage.LeafNode node) {
          final int depth = node.getDepth();
          //         if ((depth >= _minDepth) && (depth <= _maxDepth)) {
          if (depth <= _maxDepth) {
@@ -157,8 +157,8 @@ public class ClusterPointFeaturesStatistics {
 
 
    public static void main(final String[] args) throws IOException {
-      System.out.println("ClusterPointFeaturesStatistics 0.1");
-      System.out.println("----------------------------------\n");
+      System.out.println("ClusteringLODPointFeaturesStatistics 0.1");
+      System.out.println("----------------------------------------\n");
 
 
       final File directory = new File("PointFeaturesCluster");
@@ -168,8 +168,9 @@ public class ClusterPointFeaturesStatistics {
       final String name = "GEONames-PopulatedPlaces_Cluster";
 
 
-      try (final PointFeatureClusterStorage clusterStorage = PointFeatureClusterMapDBStorage.openReadOnly(directory, name)) {
-         final PointFeatureClusterStorage.Statistics statistics = clusterStorage.getStatistics(true);
+      try (final PointFeatureClusteringLODStorage clusterStorage = PointFeatureClusteringLODMapDBStorage.openReadOnly(directory,
+               name)) {
+         final PointFeatureClusteringLODStorage.Statistics statistics = clusterStorage.getStatistics(true);
          statistics.show();
 
          final int nodesCount = statistics.getNodesCount();
