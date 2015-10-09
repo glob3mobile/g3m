@@ -131,10 +131,6 @@ public class GLGlobalState
   {
      return _depthTest;
   }
-  public final boolean isEnabledDepthMask()
-  {
-     return _depthMask;
-  }
 
   public final void enableBlend()
   {
