@@ -32,6 +32,6 @@ Mesh* createSectorMesh(const Planet* planet,
 
 @property (retain, nonatomic) G3MWidget_iOS* G3MWidget;
 
--(void) tick;
+//-(void) tick;
 
 @end
