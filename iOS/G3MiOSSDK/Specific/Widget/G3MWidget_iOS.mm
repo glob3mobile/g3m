@@ -124,10 +124,11 @@ autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
     eaglLayer.drawableProperties = [NSDictionary dictionaryWithObjectsAndKeys:
                                     [NSNumber numberWithBool:FALSE], kEAGLDrawablePropertyRetainedBacking, kEAGLColorFormatRGBA8, kEAGLDrawablePropertyColorFormat, nil];
 //    // for retina display
-//    eaglLayer.contentsScale = 2;
-//    if ([[UIScreen mainScreen] respondsToSelector:@selector(displayLinkWithTarget:selector:)]) {
-//      eaglLayer.contentsScale = [UIScreen mainScreen].scale;
-//    }
+//    eaglLayer.contentsScale = 1;
+#warning Enable retina resolution. TODO: Add scale to touch events
+    if ([[UIScreen mainScreen] respondsToSelector:@selector(displayLinkWithTarget:selector:)]) {
+      eaglLayer.contentsScale = [UIScreen mainScreen].scale;
+    }
 
     // create GL object
     _renderer = [[ES2Renderer alloc] init];
