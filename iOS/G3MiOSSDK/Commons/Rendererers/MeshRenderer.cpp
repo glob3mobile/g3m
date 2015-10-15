@@ -27,7 +27,7 @@
 
 void MeshRenderer::clearMeshes() {
   const size_t meshesCount = _meshes.size();
-  for (int i = 0; i < meshesCount; i++) {
+  for (size_t i = 0; i < meshesCount; i++) {
     Mesh* mesh = _meshes[i];
     delete mesh;
   }
@@ -36,7 +36,7 @@ void MeshRenderer::clearMeshes() {
 
 MeshRenderer::~MeshRenderer() {
   const size_t meshesCount = _meshes.size();
-  for (int i = 0; i < meshesCount; i++) {
+  for (size_t i = 0; i < meshesCount; i++) {
     Mesh* mesh = _meshes[i];
     delete mesh;
   }
@@ -67,7 +67,7 @@ void MeshRenderer::render(const G3MRenderContext* rc, GLState* glState) {
   _glState->setParent(glState);
 
   const size_t meshesCount = _meshes.size();
-  for (int i = 0; i < meshesCount; i++) {
+  for (size_t i = 0; i < meshesCount; i++) {
     Mesh* mesh = _meshes[i];
     const BoundingVolume* boundingVolume = mesh->getBoundingVolume();
     if ( boundingVolume != NULL && boundingVolume->touchesFrustum(frustum) ) {
@@ -90,7 +90,7 @@ void MeshRenderer::onLostContext() {
 
 void MeshRenderer::drainLoadQueue() {
   const size_t loadQueueSize = _loadQueue.size();
-  for (int i = 0; i < loadQueueSize; i++) {
+  for (size_t i = 0; i < loadQueueSize; i++) {
     LoadQueueItem* item = _loadQueue[i];
     requestMeshBuffer(item->_url,
                       item->_priority,
@@ -112,7 +112,7 @@ void MeshRenderer::drainLoadQueue() {
 
 void MeshRenderer::cleanLoadQueue() {
   const size_t loadQueueSize = _loadQueue.size();
-  for (int i = 0; i < loadQueueSize; i++) {
+  for (size_t i = 0; i < loadQueueSize; i++) {
     LoadQueueItem* item = _loadQueue[i];
     delete item;
   }
@@ -707,7 +707,7 @@ void MeshRenderer::requestMeshBuffer(const URL&          url,
 
 void MeshRenderer::enableAll() {
   const size_t meshesCount = _meshes.size();
-  for (int i = 0; i < meshesCount; i++) {
+  for (size_t i = 0; i < meshesCount; i++) {
     Mesh* mesh = _meshes[i];
     mesh->setEnable(true);
   }
@@ -715,7 +715,7 @@ void MeshRenderer::enableAll() {
 
 void MeshRenderer::disableAll() {
   const size_t meshesCount = _meshes.size();
-  for (int i = 0; i < meshesCount; i++) {
+  for (size_t i = 0; i < meshesCount; i++) {
     Mesh* mesh = _meshes[i];
     mesh->setEnable(false);
   }
@@ -738,7 +738,7 @@ void MeshRenderer::zRender(const G3MRenderContext* rc, GLState* glState){
 void MeshRenderer::showNormals(bool v) const{
   _showNormals = v;
   const size_t meshesCount = _meshes.size();
-  for (int i = 0; i < meshesCount; i++) {
+  for (size_t i = 0; i < meshesCount; i++) {
     Mesh* mesh = _meshes[i];
     mesh->showNormals(v);
   }
