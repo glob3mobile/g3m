@@ -242,7 +242,13 @@ public class G3MWidget implements ChangedRendererInfoListener, FrameDepthProvide
         if (orderedRenderable != null)
            orderedRenderable.dispose();
       }
+  
+  
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning DIEGO TAKE A LOOK
+      orderedRenderables.clear();
     }
+  
   
     if (_hudRenderer != null)
     {
