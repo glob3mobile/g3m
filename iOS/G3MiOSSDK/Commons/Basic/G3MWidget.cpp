@@ -643,7 +643,12 @@ void G3MWidget::render(int width, int height) {
       orderedRenderable->render(_renderContext);
       delete orderedRenderable;
     }
+    
+    
+#warning DIEGO TAKE A LOOK
+    orderedRenderables->clear();
   }
+  
 
   if (_hudRenderer != NULL) {
     if (renderStateType == RENDER_READY) {
