@@ -133,6 +133,11 @@ public:
     return (i1 < i2) ? i1 : i2;
   }
 
+  long long min(long long i1, long long i2) const {
+    return (i1 < i2) ? i1 : i2;
+  }
+
+
   virtual double max(double d1, double d2) const = 0;
   virtual float  max(float f1,  float f2)  const = 0;
 

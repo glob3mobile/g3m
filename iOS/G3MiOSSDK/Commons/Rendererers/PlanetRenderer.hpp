@@ -474,7 +474,8 @@ public:
     return _verticalExaggeration;
   }
   
-  void setChangedRendererInfoListener(ChangedRendererInfoListener* changedInfoListener, const int rendererIdentifier);
+  void setChangedRendererInfoListener(ChangedRendererInfoListener* changedInfoListener,
+                                      const size_t rendererIdentifier);
   
   const LayerTilesRenderParameters* getLayerTilesRenderParameters();
   

@@ -9,8 +9,8 @@
 #include "CompositeShape.hpp"
 
 CompositeShape::~CompositeShape() {
-  int childrenCount = _children.size();
-  for (int i = 0; i < childrenCount; i++) {
+  size_t childrenCount = _children.size();
+  for (size_t i = 0; i < childrenCount; i++) {
     Shape* child = _children[i];
     delete child;
   }
@@ -26,8 +26,8 @@ void CompositeShape::addShape(Shape* shape) {
 }
 
 bool CompositeShape::isReadyToRender(const G3MRenderContext* rc) {
-  int childrenCount = _children.size();
-  for (int i = 0; i < childrenCount; i++) {
+  size_t childrenCount = _children.size();
+  for (size_t i = 0; i < childrenCount; i++) {
     Shape* child = _children[i];
     if (child->isReadyToRender(rc)) {
       return true;
@@ -40,8 +40,8 @@ bool CompositeShape::isReadyToRender(const G3MRenderContext* rc) {
 void CompositeShape::rawRender(const G3MRenderContext* rc,
                               GLState* parentState,
                                bool renderNotReadyShapes) {
-  int childrenCount = _children.size();
-  for (int i = 0; i < childrenCount; i++) {
+  size_t childrenCount = _children.size();
+  for (size_t i = 0; i < childrenCount; i++) {
     Shape* child = _children[i];
     child->render(rc, parentState, renderNotReadyShapes);
   }

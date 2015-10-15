@@ -321,7 +321,7 @@ public class CompositeRenderer implements Renderer, ChangedRendererInfoListener
 
   public final void changedRendererInfo(int rendererIdentifier, java.util.ArrayList<Info> info)
   {
-    if(rendererIdentifier >= 0 && rendererIdentifier < _renderersSize)
+    if (rendererIdentifier < _renderersSize)
     {
       _renderers.get(rendererIdentifier).setInfo(info);
     }

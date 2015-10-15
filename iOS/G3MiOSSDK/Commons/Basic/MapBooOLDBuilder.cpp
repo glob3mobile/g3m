@@ -105,8 +105,8 @@ const std::string MapBooOLD_MultiImage::description() const {
   isb->addString("[MultiImage averageColor=");
   isb->addString(_averageColor.description());
   isb->addString(", _levels=[");
-  const int levelsSize = _levels.size();
-  for (int i = 0; i < levelsSize; i++) {
+  const size_t levelsSize = _levels.size();
+  for (size_t i = 0; i < levelsSize; i++) {
     if (i > 0) {
       isb->addString(", ");
     }
@@ -119,12 +119,12 @@ const std::string MapBooOLD_MultiImage::description() const {
 }
 
 MapBooOLD_MultiImage_Level* MapBooOLD_MultiImage::getBestLevel(int width) const {
-  const int levelsSize = _levels.size();
+  const size_t levelsSize = _levels.size();
   if (levelsSize == 0) {
     return NULL;
   }
 
-  for (int i = 0; i < levelsSize; i++) {
+  for (size_t i = 0; i < levelsSize; i++) {
     MapBooOLD_MultiImage_Level* level = _levels[i];
     const int levelWidth = level->getWidth();
     if (levelWidth <= width) {
@@ -602,11 +602,11 @@ public:
   std::vector<std::string> customize(const std::vector<std::string>& errors) {
     std::vector<std::string> customizedErrorMessages;
     const IStringUtils* stringUtils = IStringUtils::instance();
-    const int errorsSize = errors.size();
+    const size_t errorsSize = errors.size();
 
     const std::string appNotFound = "Invalid request: Application #" + _mbBuilder->getApplicationId() + " not found";
 
-    for (int i = 0; i < errorsSize; i++) {
+    for (size_t i = 0; i < errorsSize; i++) {
       std::string error = errors.at(i);
       if (stringUtils->beginsWith(error, appNotFound)) {
         customizedErrorMessages.push_back("Oops, application not found!");
@@ -875,8 +875,8 @@ MapBooOLD_MultiImage* MapBooOLDBuilder::parseMultiImage(const JSONObject* jsonOb
 
   const JSONArray* jsLevels = jsonObject->getAsArray("levels");
   if (jsLevels != NULL) {
-    const int levelsCount = jsLevels->size();
-    for (int i = 0; i < levelsCount; i++) {
+    const size_t levelsCount = jsLevels->size();
+    for (size_t i = 0; i < levelsCount; i++) {
       MapBooOLD_MultiImage_Level* level = parseMultiImageLevel( jsLevels->getAsObject(i) );
       if (level != NULL) {
         levels.push_back(level);
@@ -1011,8 +1011,8 @@ std::vector<MapBooOLD_Notification*>* MapBooOLDBuilder::parseNotifications(const
   std::vector<MapBooOLD_Notification*>* result = new std::vector<MapBooOLD_Notification*>();
 
   if (jsonArray != NULL) {
-    const int size = jsonArray->size();
-    for (int i = 0; i < size; i++) {
+    const size_t size = jsonArray->size();
+    for (size_t i = 0; i < size; i++) {
       MapBooOLD_Notification* notification = parseNotification( jsonArray->getAsObject(i) );
       if (notification != NULL) {
         result->push_back(notification);
@@ -1033,8 +1033,8 @@ void MapBooOLDBuilder::parseApplicationEventsJSON(const std::string& json,
   else {
     const JSONArray* jsonArray = jsonBaseObject->asArray();
     if (jsonArray != NULL) {
-      const int size = jsonArray->size();
-      for (int i = 0; i < size; i++) {
+      const size_t size = jsonArray->size();
+      for (size_t i = 0; i < size; i++) {
         const JSONObject* jsonObject = jsonArray->getAsObject(i);
         parseApplicationJSON(jsonObject, url);
       }
@@ -1090,8 +1090,8 @@ void MapBooOLDBuilder::parseApplicationJSON(const JSONObject* jsonObject,
         if (jsonAllScenes != NULL) {
           std::vector<MapBooOLD_Scene*> scenes;
           
-          const int scenesCount = jsonAllScenes->size();
-          for (int i = 0; i < scenesCount; i++) {
+          const size_t scenesCount = jsonAllScenes->size();
+          for (size_t i = 0; i < scenesCount; i++) {
             MapBooOLD_Scene* scene = parseScene( jsonAllScenes->getAsObject(i) );
             if (scene != NULL) {
               scenes.push_back(scene);
@@ -1198,8 +1198,8 @@ void MapBooOLDBuilder::parseSceneEventAndUpdateScene(const JSONObject* jsonObjec
     return;
   }
   const std::string sceneToBeUpdatedID = jsonSceneToBeUpdatedID->value();
-  const int scenesCount = _applicationScenes.size();
-  for (int i = 0; i < scenesCount; i++) {
+  const size_t scenesCount = _applicationScenes.size();
+  for (size_t i = 0; i < scenesCount; i++) {
     const std::string sceneID = _applicationScenes[i]->getId();
     if (sceneID.compare(sceneToBeUpdatedID) == 0) {
       MapBooOLD_Scene* oldScene = _applicationScenes[i];
@@ -1283,8 +1283,8 @@ void MapBooOLDBuilder::addApplicationNotifications(const std::vector<MapBooOLD_N
     return;
   }
 
-  const int size = notifications->size();
-  for (int i = 0; i < size; i++) {
+  const size_t size = notifications->size();
+  for (size_t i = 0; i < size; i++) {
     MapBooOLD_Notification* notification = notifications->at(i);
     if (notification != NULL) {
       addApplicationNotification(notification);
@@ -1344,8 +1344,8 @@ void MapBooOLDBuilder::addApplicationNotification(MapBooOLD_Notification* notifi
 
 void MapBooOLDBuilder::setApplicationCurrentSceneId(const std::string& currentSceneId) {
   if (_applicationCurrentSceneId.compare(currentSceneId) != 0) {
-    const int scenesCount = _applicationScenes.size();
-    for (int i = 0; i < scenesCount; i++) {
+    const size_t scenesCount = _applicationScenes.size();
+    for (size_t i = 0; i < scenesCount; i++) {
       const std::string sceneId = _applicationScenes[i]->getId();
       if (sceneId.compare(currentSceneId) == 0) {
         _applicationCurrentSceneId = currentSceneId;
@@ -1586,8 +1586,8 @@ const std::string MapBooOLDBuilder::getApplicationCurrentSceneId() {
 const MapBooOLD_Scene* MapBooOLDBuilder::getApplicationCurrentScene() {
   const std::string currentSceneId = getApplicationCurrentSceneId();
   
-  const int scenesCount = _applicationScenes.size();
-  for (int i = 0; i < scenesCount; i++) {
+  const size_t scenesCount = _applicationScenes.size();
+  for (size_t i = 0; i < scenesCount; i++) {
     const std::string sceneId = _applicationScenes[i]->getId();
     if (sceneId.compare(currentSceneId) == 0) {
       return _applicationScenes[i];
@@ -1780,8 +1780,8 @@ void MapBooOLDBuilder::rawChangeScene(const std::string& sceneId) {
 void MapBooOLDBuilder::changeScene(const std::string& sceneId) {
   const std::string currentSceneId = getApplicationCurrentSceneId();
   if (currentSceneId.compare(sceneId) != 0) {
-    const int scenesCount = _applicationScenes.size();
-    for (int i = 0; i < scenesCount; i++) {
+    const size_t scenesCount = _applicationScenes.size();
+    for (size_t i = 0; i < scenesCount; i++) {
       const std::string iSceneId = _applicationScenes[i]->getId();
       if (sceneId.compare(iSceneId) == 0) {
         getThreadUtils()->invokeInRendererThread(new MapBooOLDBuilder_ChangeSceneTask(this, sceneId),
@@ -1793,8 +1793,8 @@ void MapBooOLDBuilder::changeScene(const std::string& sceneId) {
 }
 
 void MapBooOLDBuilder::changeScene(const MapBooOLD_Scene* scene) {
-  const int size = _applicationScenes.size();
-  for (int i = 0; i < size; i++) {
+  const size_t size = _applicationScenes.size();
+  for (size_t i = 0; i < size; i++) {
     if (_applicationScenes[i] == scene) {
       changeScene(scene->getId());
       break;
@@ -2011,8 +2011,8 @@ void MapBooOLDBuilder::deleteApplicationScene(const std::string &sceneId) {
 }
 
 void MapBooOLDBuilder::setApplicationScenes(const std::vector<MapBooOLD_Scene*>& applicationScenes) {
-  const int currentScenesCount = _applicationScenes.size();
-  for (int i = 0; i < currentScenesCount; i++) {
+  const size_t currentScenesCount = _applicationScenes.size();
+  for (size_t i = 0; i < currentScenesCount; i++) {
     MapBooOLD_Scene* scene = _applicationScenes[i];
     delete scene;
   }
@@ -2167,8 +2167,8 @@ void HUDInfoRenderer_ImageFactory::drawOn(ICanvas* canvas,
   
   std::vector<std::string> strings;
   
-  const int size = _info.size();
-  for (int i = 0; i < size; i++)
+  const size_t size = _info.size();
+  for (size_t i = 0; i < size; i++)
   {
     strings.push_back(_info.at(i)->getText());
   }
@@ -2189,13 +2189,13 @@ void HUDInfoRenderer_ImageFactory::drawOn(ICanvas* canvas,
 
 bool HUDInfoRenderer_ImageFactory::isEquals(const std::vector<const Info*>& v1,
                                             const std::vector<const Info*>& v2) const {
-  const int size1 = v1.size();
-  const int size2 = v2.size();
+  const size_t size1 = v1.size();
+  const size_t size2 = v2.size();
   if (size1 != size2) {
     return false;
   }
   
-  for (int i = 0; i < size1; i++) {
+  for (size_t i = 0; i < size1; i++) {
     const Info* str1 = v1[i];
     const Info* str2 = v2[i];
     if (str1 != str2) {

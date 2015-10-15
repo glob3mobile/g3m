@@ -181,8 +181,8 @@ const IGLTextureId* GL::getGLTextureId() {
     //const int bugdetSize = 10240;
 
     const std::vector<IGLTextureId*> ids = _nativeGL->genTextures(bugdetSize);
-    const int idsCount = ids.size();
-    for (int i = 0; i < idsCount; i++) {
+    const size_t idsCount = ids.size();
+    for (size_t i = 0; i < idsCount; i++) {
       // ILogger::instance()->logInfo("  = Created textureId=%s", ids[i]->description().c_str());
       _texturesIdBag.push_front(ids[i]);
     }

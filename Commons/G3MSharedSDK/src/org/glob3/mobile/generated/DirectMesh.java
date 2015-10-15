@@ -64,7 +64,7 @@ public class DirectMesh extends AbstractMesh
 
   public final void setRenderVerticesCount(int renderVerticesCount)
   {
-    if ((renderVerticesCount < 0) || (renderVerticesCount > getRenderVerticesCount()))
+    if (renderVerticesCount > getRenderVerticesCount())
     {
       throw new RuntimeException("Invalid renderVerticesCount");
     }

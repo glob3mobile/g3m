@@ -24,8 +24,8 @@ void CompositeElevationDataProvider::addElevationDataProvider(ElevationDataProvi
 }
 
 bool CompositeElevationDataProvider::isReadyToRender(const G3MRenderContext* rc) {
-  int size = _providers.size();
-  for (int i = 0; i < size; i++) {
+  size_t size = _providers.size();
+  for (size_t i = 0; i < size; i++) {
     if (!_providers[i]->isReadyToRender(rc)) {
       return false;
     }
@@ -35,23 +35,23 @@ bool CompositeElevationDataProvider::isReadyToRender(const G3MRenderContext* rc)
 
 void CompositeElevationDataProvider::initialize(const G3MContext* context) {
   _context = context;
-  int size = _providers.size();
-  for (int i = 0; i < size; i++) {
+  size_t size = _providers.size();
+  for (size_t i = 0; i < size; i++) {
     _providers[i]->initialize(context);
   }
 }
 
 std::vector<ElevationDataProvider*> CompositeElevationDataProvider::getProviders(const Sector& s) const {
-  int size = _providers.size();
+  size_t size = _providers.size();
   std::vector<ElevationDataProvider*> providers;
 
-  for (int i = 0; i < size; i++) {
+  for (size_t i = 0; i < size; i++) {
 
     ElevationDataProvider* edp = _providers[i];
 
     std::vector<const Sector*> sectorsI = edp->getSectors();
-    int sizeI = sectorsI.size();
-    for (int j = 0; j < sizeI; j++) {
+    size_t sizeI = sectorsI.size();
+    for (size_t j = 0; j < sizeI; j++) {
       if (sectorsI[j]->touchesWith(s)) { //This provider contains the sector
         providers.push_back(edp);
       }
@@ -82,11 +82,11 @@ const long long CompositeElevationDataProvider::requestElevationData(const Secto
 
 std::vector<const Sector*> CompositeElevationDataProvider::getSectors() const {
   std::vector<const Sector*> sectors;
-  int size = _providers.size();
-  for (int i = 0; i < size; i++) {
+  size_t size = _providers.size();
+  for (size_t i = 0; i < size; i++) {
     std::vector<const Sector*> sectorsI = _providers[i]->getSectors();
-    int sizeI = sectorsI.size();
-    for (int j = 0; j < sizeI; j++) {
+    size_t sizeI = sectorsI.size();
+    for (size_t j = 0; j < sizeI; j++) {
       sectors.push_back(sectorsI[j]);
     }
   }
@@ -94,12 +94,12 @@ std::vector<const Sector*> CompositeElevationDataProvider::getSectors() const {
 }
 
 const Vector2I CompositeElevationDataProvider::getMinResolution() const {
-  const int size = _providers.size();
+  const size_t size = _providers.size();
   double minD = IMathUtils::instance()->maxDouble();
   int x = -1;
   int y = -1;
 
-  for (int i = 0; i < size; i++) {
+  for (size_t i = 0; i < size; i++) {
     const Vector2I res = _providers[i]->getMinResolution();
     const double d = res.squaredLength();
 

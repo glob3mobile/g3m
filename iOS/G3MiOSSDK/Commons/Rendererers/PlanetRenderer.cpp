@@ -245,8 +245,8 @@ PlanetRenderer::~PlanetRenderer() {
 }
 
 void PlanetRenderer::clearFirstLevelTiles() {
-  const int firstLevelTilesCount = _firstLevelTiles.size();
-  for (int i = 0; i < firstLevelTilesCount; i++) {
+  const size_t firstLevelTilesCount = _firstLevelTiles.size();
+  for (size_t i = 0; i < firstLevelTilesCount; i++) {
     Tile* tile = _firstLevelTiles[i];
     tile->toBeDeleted(_texturizer, _elevationDataProvider, _tilesStoppedRendering);
     delete tile;
@@ -415,8 +415,8 @@ void PlanetRenderer::createFirstLevelTiles(const G3MContext* context) {
   }
   
   if (parameters->_firstLevel > 0) {
-    const int topLevelTilesSize = topLevelTiles.size();
-    for (int i = 0; i < topLevelTilesSize; i++) {
+    const size_t topLevelTilesSize = topLevelTiles.size();
+    for (size_t i = 0; i < topLevelTilesSize; i++) {
       Tile* tile = topLevelTiles[i];
       createFirstLevelTiles(_firstLevelTiles, tile, parameters->_firstLevel);
     }
@@ -516,8 +516,8 @@ RenderState PlanetRenderer::getRenderState(const G3MRenderContext* rc) {
   }
   
   if (_tilesRenderParameters->_forceFirstLevelTilesRenderOnStart && !_allFirstLevelTilesAreTextureSolved) {
-    const int firstLevelTilesCount = _firstLevelTiles.size();
-    for (int i = 0; i < firstLevelTilesCount; i++) {
+    const size_t firstLevelTilesCount = _firstLevelTiles.size();
+    for (size_t i = 0; i < firstLevelTilesCount; i++) {
       Tile* tile = _firstLevelTiles[i];
       if (!tile->isTextureSolved() ||
           !tile->isElevationDataSolved()) {
@@ -559,8 +559,8 @@ void PlanetRenderer::visitTilesTouchesWith(const Sector& sector,
     }
     
     std::vector<Layer*> layers;
-    const int layersCount = _layerSet->size();
-    for (int i = 0; i < layersCount; i++) {
+    const size_t layersCount = _layerSet->size();
+    for (size_t i = 0; i < layersCount; i++) {
       Layer* layer = _layerSet->getLayer(i);
       if (layer->isEnable() && layer->getRenderState()._type == RENDER_READY) {
         layers.push_back(layer);
@@ -763,8 +763,8 @@ bool PlanetRenderer::onTouchEvent(const G3MEventContext* ec,
 
 
 void PlanetRenderer::pruneFirstLevelTiles() {
-  const int firstLevelTilesCount = _firstLevelTiles.size();
-  for (int i = 0; i < firstLevelTilesCount; i++) {
+  const size_t firstLevelTilesCount = _firstLevelTiles.size();
+  for (size_t i = 0; i < firstLevelTilesCount; i++) {
     Tile* tile = _firstLevelTiles[i];
     tile->prune(_texturizer, _elevationDataProvider, _tilesStoppedRendering);
   }
@@ -964,7 +964,8 @@ void PlanetRenderer::setVerticalExaggeration(float verticalExaggeration) {
   }
 }
 
-void PlanetRenderer::setChangedRendererInfoListener(ChangedRendererInfoListener* changedInfoListener, const int rendererIdentifier) {
+void PlanetRenderer::setChangedRendererInfoListener(ChangedRendererInfoListener* changedInfoListener,
+                                                    const size_t rendererIdentifier) {
   if (_changedInfoListener != NULL) {
     ILogger::instance()->logWarning("Changed Renderer Info Listener of PlanetRenderer already set");
   }

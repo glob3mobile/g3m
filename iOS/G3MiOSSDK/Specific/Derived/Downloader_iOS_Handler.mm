@@ -187,7 +187,9 @@
 
       NSString* fileName = [ NSString stringWithCppString: su->left(fileFullName, dotPos) ];
 
-      NSString* fileExt = [ NSString stringWithCppString: su->substring(fileFullName, dotPos + 1, fileFullName.size()) ];
+      NSString* fileExt = [ NSString stringWithCppString: su->substring(fileFullName,
+                                                                        dotPos + 1,
+                                                                        fileFullName.size()) ];
 
       NSString* filePath = [[NSBundle mainBundle] pathForResource: fileName
                                                            ofType: fileExt];
