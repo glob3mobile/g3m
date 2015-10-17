@@ -8,16 +8,16 @@ package org.glob3.mobile.generated;
 public class DTT_TileImageListener extends TileImageListener
 {
   private DTT_TileTextureBuilder _builder;
-  private final Tile _tile;
+  private final Sector _tileSector ;
   private final IImage _backGroundTileImage;
   private final String _backGroundTileImageName;
 
-  private final Vector2I _tileTextureResolution;
+  private final Vector2I  _tileTextureResolution;
 
   public DTT_TileImageListener(DTT_TileTextureBuilder builder, Tile tile, Vector2I tileTextureResolution, IImage backGroundTileImage, String backGroundTileImageName)
   {
      _builder = builder;
-     _tile = tile;
+     _tileSector = new Sector(tile._sector);
      _tileTextureResolution = tileTextureResolution;
      _backGroundTileImage = backGroundTileImage;
      _backGroundTileImageName = backGroundTileImageName;
@@ -49,8 +49,6 @@ public class DTT_TileImageListener extends TileImageListener
   
       final int _height = _tileTextureResolution._y;
   
-      final Sector tileSector = _tile._sector;
-  
       //ILogger::instance()->logInfo("Tile " + _tile->description());
   
       canvas.initialize(_width, _height);
@@ -77,14 +75,14 @@ public class DTT_TileImageListener extends TileImageListener
       {
         final Sector imageSector = contribution.getSector();
   
-        final Sector visibleContributionSector = imageSector.intersection(tileSector);
+        final Sector visibleContributionSector = imageSector.intersection(_tileSector);
   
         auxImageId.addString(visibleContributionSector.id());
         auxImageId.addString("|");
   
         final RectangleF srcRect = RectangleF.calculateInnerRectangleFromSector(image.getWidth(), image.getHeight(), imageSector, visibleContributionSector);
   
-        final RectangleF destRect = RectangleF.calculateInnerRectangleFromSector(_width, _height, tileSector, visibleContributionSector);
+        final RectangleF destRect = RectangleF.calculateInnerRectangleFromSector(_width, _height, _tileSector, visibleContributionSector);
   
   
         //We add "destRect->id()" to "auxImageId" for to differentiate cases of same "visibleContributionSector" at different levels of tiles
