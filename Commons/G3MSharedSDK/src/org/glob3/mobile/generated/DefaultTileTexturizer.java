@@ -25,17 +25,17 @@ package org.glob3.mobile.generated;
 
 public class DefaultTileTexturizer extends TileTexturizer
 {
-  private LeveledTexturedMesh getMesh(Tile tile)
-  {
-    DTT_TileTextureBuilderHolder tileBuilderHolder = (DTT_TileTextureBuilderHolder) tile.getTexturizerData();
-    return (tileBuilderHolder == null) ? null : tileBuilderHolder.get().getTexturedMesh();
-  }
-
 
   private IImageBuilder _defaultBackGroundImageBuilder;
   private boolean _defaultBackGroundImageLoaded;
   private IImage _defaultBackGroundImage;
   private String _defaultBackGroundImageName;
+
+  private LeveledTexturedMesh getMesh(Tile tile)
+  {
+    DTT_TileTextureBuilderHolder tileBuilderHolder = (DTT_TileTextureBuilderHolder) tile.getTexturizerData();
+    return (tileBuilderHolder == null) ? null : tileBuilderHolder.get().getTexturedMesh();
+  }
 
 
   public java.util.ArrayList<String> _errors = new java.util.ArrayList<String>();
