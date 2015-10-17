@@ -45,19 +45,18 @@ public class DTT_TileImageListener extends TileImageListener
   
       ICanvas canvas = IFactory.instance().createCanvas();
   
-      final int _width = _tileTextureResolution._x;
-  
-      final int _height = _tileTextureResolution._y;
+      final int width = _tileTextureResolution._x;
+      final int height = _tileTextureResolution._y;
   
       //ILogger::instance()->logInfo("Tile " + _tile->description());
   
-      canvas.initialize(_width, _height);
+      canvas.initialize(width, height);
   
       if (_backGroundTileImage != null)
       {
         auxImageId.addString(_backGroundTileImageName);
         auxImageId.addString("|");
-        canvas.drawImage(_backGroundTileImage, 0, 0, _width, _height);
+        canvas.drawImage(_backGroundTileImage, 0, 0, width, height);
       }
   
       auxImageId.addString(imageId);
@@ -69,7 +68,7 @@ public class DTT_TileImageListener extends TileImageListener
       {
         auxImageId.addFloat(alpha);
         auxImageId.addString("|");
-        canvas.drawImage(image, 0, 0, _width, _height, alpha);
+        canvas.drawImage(image, 0, 0, width, height, alpha);
       }
       else
       {
@@ -82,7 +81,7 @@ public class DTT_TileImageListener extends TileImageListener
   
         final RectangleF srcRect = RectangleF.calculateInnerRectangleFromSector(image.getWidth(), image.getHeight(), imageSector, visibleContributionSector);
   
-        final RectangleF destRect = RectangleF.calculateInnerRectangleFromSector(_width, _height, _tileSector, visibleContributionSector);
+        final RectangleF destRect = RectangleF.calculateInnerRectangleFromSector(width, height, _tileSector, visibleContributionSector);
   
   
         //We add "destRect->id()" to "auxImageId" for to differentiate cases of same "visibleContributionSector" at different levels of tiles
@@ -96,9 +95,6 @@ public class DTT_TileImageListener extends TileImageListener
         canvas.drawImage(image, srcRect._x, srcRect._y, srcRect._width, srcRect._height, destRect._x, destRect._y, destRect._width, destRect._height, alpha);
                           //SRC RECT
                           //DEST RECT
-  
-  
-  
   
         if (destRect != null)
            destRect.dispose();
