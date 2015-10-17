@@ -19,8 +19,6 @@ class IImage;
 
 class DefaultTileTexturizer : public TileTexturizer {
 private:
-  inline LeveledTexturedMesh* getMesh(Tile* tile) const;
-
 
   IImageBuilder* _defaultBackGroundImageBuilder;
   bool _defaultBackGroundImageLoaded;
@@ -31,6 +29,8 @@ private:
   private IImage _defaultBackGroundImage;
 #endif
   std::string _defaultBackGroundImageName;
+
+  LeveledTexturedMesh* getMesh(Tile* tile) const;
 
 public:
 
