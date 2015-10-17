@@ -440,18 +440,17 @@ void DTT_TileImageListener::imageCreated(const std::string&           tileId,
 
     ICanvas* canvas = IFactory::instance()->createCanvas();
 
-    const int _width =  _tileTextureResolution._x;
-
-    const int _height =  _tileTextureResolution._y;
+    const int width  =  _tileTextureResolution._x;
+    const int height =  _tileTextureResolution._y;
 
     //ILogger::instance()->logInfo("Tile " + _tile->description());
 
-    canvas->initialize(_width, _height);
+    canvas->initialize(width, height);
 
     if (_backGroundTileImage != NULL) {
       auxImageId->addString(_backGroundTileImageName);
       auxImageId->addString("|");
-      canvas->drawImage(_backGroundTileImage, 0, 0, _width, _height);
+      canvas->drawImage(_backGroundTileImage, 0, 0, width, height);
     }
 
     auxImageId->addString(imageId);
@@ -462,8 +461,9 @@ void DTT_TileImageListener::imageCreated(const std::string&           tileId,
     if (contribution->isFullCoverage()) {
       auxImageId->addFloat(alpha);
       auxImageId->addString("|");
-      canvas->drawImage(image, 0, 0, _width, _height, alpha);
-    } else {
+      canvas->drawImage(image, 0, 0, width, height, alpha);
+    }
+    else {
       const Sector* imageSector = contribution->getSector();
 
       const Sector visibleContributionSector = imageSector->intersection(_tileSector);
@@ -475,7 +475,7 @@ void DTT_TileImageListener::imageCreated(const std::string&           tileId,
                                                                                 *imageSector,
                                                                                 visibleContributionSector);
 
-      const RectangleF* destRect = RectangleF::calculateInnerRectangleFromSector(_width, _height,
+      const RectangleF* destRect = RectangleF::calculateInnerRectangleFromSector(width, height,
                                                                                  _tileSector,
                                                                                  visibleContributionSector);
 
@@ -496,9 +496,6 @@ void DTT_TileImageListener::imageCreated(const std::string&           tileId,
                         destRect->_x, destRect->_y,
                         destRect->_width, destRect->_height,
                         alpha);
-
-
-
 
       delete destRect;
       delete srcRect;
