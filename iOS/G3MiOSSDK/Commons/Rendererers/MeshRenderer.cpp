@@ -27,7 +27,7 @@
 
 void MeshRenderer::clearMeshes() {
   const size_t meshesCount = _meshes.size();
-  for (int i = 0; i < meshesCount; i++) {
+  for (size_t i = 0; i < meshesCount; i++) {
     Mesh* mesh = _meshes[i];
     delete mesh;
   }
@@ -36,7 +36,7 @@ void MeshRenderer::clearMeshes() {
 
 MeshRenderer::~MeshRenderer() {
   const size_t meshesCount = _meshes.size();
-  for (int i = 0; i < meshesCount; i++) {
+  for (size_t i = 0; i < meshesCount; i++) {
     Mesh* mesh = _meshes[i];
     delete mesh;
   }
@@ -67,7 +67,7 @@ void MeshRenderer::render(const G3MRenderContext* rc, GLState* glState) {
   _glState->setParent(glState);
 
   const size_t meshesCount = _meshes.size();
-  for (int i = 0; i < meshesCount; i++) {
+  for (size_t i = 0; i < meshesCount; i++) {
     Mesh* mesh = _meshes[i];
     const BoundingVolume* boundingVolume = mesh->getBoundingVolume();
     if ( boundingVolume != NULL && boundingVolume->touchesFrustum(frustum) ) {
@@ -90,7 +90,7 @@ void MeshRenderer::onLostContext() {
 
 void MeshRenderer::drainLoadQueue() {
   const size_t loadQueueSize = _loadQueue.size();
-  for (int i = 0; i < loadQueueSize; i++) {
+  for (size_t i = 0; i < loadQueueSize; i++) {
     LoadQueueItem* item = _loadQueue[i];
     requestMeshBuffer(item->_url,
                       item->_priority,
@@ -112,7 +112,7 @@ void MeshRenderer::drainLoadQueue() {
 
 void MeshRenderer::cleanLoadQueue() {
   const size_t loadQueueSize = _loadQueue.size();
-  for (int i = 0; i < loadQueueSize; i++) {
+  for (size_t i = 0; i < loadQueueSize; i++) {
     LoadQueueItem* item = _loadQueue[i];
     delete item;
   }
@@ -397,8 +397,8 @@ private:
           else {
             FloatBufferBuilderFromColor colorsBuilder;
 
-            const int colorsSize = jsonColors->size();
-            for (int i = 0; i < colorsSize; i += 3) {
+            const size_t colorsSize = jsonColors->size();
+            for (size_t i = 0; i < colorsSize; i += 3) {
               const int red   = (int) jsonColors->getAsNumber(i    , 0);
               const int green = (int) jsonColors->getAsNumber(i + 1, 0);
               const int blue  = (int) jsonColors->getAsNumber(i + 2, 0);
@@ -442,8 +442,8 @@ private:
       else {
         FloatBufferBuilderFromGeodetic* vertices = FloatBufferBuilderFromGeodetic::builderWithFirstVertexAsCenter(_context->getPlanet());
         
-        const int coordinatesSize = jsonCoordinates->size();
-        for (int i = 0; i < coordinatesSize; i += 3) {
+        const size_t coordinatesSize = jsonCoordinates->size();
+        for (size_t i = 0; i < coordinatesSize; i += 3) {
           const double latInDegrees = jsonCoordinates->getAsNumber(i    , 0);
           const double lonInDegrees = jsonCoordinates->getAsNumber(i + 1, 0);
           const double height       = jsonCoordinates->getAsNumber(i + 2, 0);
@@ -454,16 +454,16 @@ private:
         }
         
         const JSONArray* jsonNormals = jsonObject->getAsArray("normals");
-        const int normalsSize = jsonNormals->size();
+        const size_t normalsSize = jsonNormals->size();
         IFloatBuffer* normals = IFactory::instance()->createFloatBuffer(normalsSize);
-        for (int i = 0; i < normalsSize; i++) {
+        for (size_t i = 0; i < normalsSize; i++) {
           normals->put(i, (float) jsonNormals->getAsNumber(i, 0) );
         }
         
         const JSONArray* jsonIndices = jsonObject->getAsArray("indices");
-        const int indicesSize = jsonIndices->size();
+        const size_t indicesSize = jsonIndices->size();
         IShortBuffer* indices = IFactory::instance()->createShortBuffer(indicesSize);
-        for (int i = 0; i < indicesSize; i++) {
+        for (size_t i = 0; i < indicesSize; i++) {
           indices->put(i, (short) jsonIndices->getAsNumber(i, 0) );
         }
         
@@ -707,7 +707,7 @@ void MeshRenderer::requestMeshBuffer(const URL&          url,
 
 void MeshRenderer::enableAll() {
   const size_t meshesCount = _meshes.size();
-  for (int i = 0; i < meshesCount; i++) {
+  for (size_t i = 0; i < meshesCount; i++) {
     Mesh* mesh = _meshes[i];
     mesh->setEnable(true);
   }
@@ -715,7 +715,7 @@ void MeshRenderer::enableAll() {
 
 void MeshRenderer::disableAll() {
   const size_t meshesCount = _meshes.size();
-  for (int i = 0; i < meshesCount; i++) {
+  for (size_t i = 0; i < meshesCount; i++) {
     Mesh* mesh = _meshes[i];
     mesh->setEnable(false);
   }
@@ -738,7 +738,7 @@ void MeshRenderer::zRender(const G3MRenderContext* rc, GLState* glState){
 void MeshRenderer::showNormals(bool v) const{
   _showNormals = v;
   const size_t meshesCount = _meshes.size();
-  for (int i = 0; i < meshesCount; i++) {
+  for (size_t i = 0; i < meshesCount; i++) {
     Mesh* mesh = _meshes[i];
     mesh->showNormals(v);
   }

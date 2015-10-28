@@ -753,10 +753,10 @@ void G3MWidget::render(int width, int height) {
   _effectsScheduler->doOneCyle(_renderContext);
 
   _frameTasksExecutor->doPreRenderCycle(_renderContext);
-  
+
 #warning AT WORK JM
   rawRenderStereoToedIn(renderStateType);
-  
+
   //Removing unused programs
   if (_renderCounter % _nFramesBeetweenProgramsCleanUp == 0) {
     _gpuProgramManager->removeUnused();
@@ -1025,7 +1025,7 @@ bool G3MWidget::setRenderedSector(const Sector& sector) {
 //  }
 //}
 
-void G3MWidget::changedRendererInfo(const int rendererIdentifier,
+void G3MWidget::changedRendererInfo(const size_t rendererIdentifier,
                                     const std::vector<const Info*>& info) {
   if(_infoDisplay != NULL){
     _infoDisplay->changedInfo(info);

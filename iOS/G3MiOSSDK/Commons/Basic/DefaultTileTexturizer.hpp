@@ -19,9 +19,7 @@ class IImage;
 
 class DefaultTileTexturizer : public TileTexturizer {
 private:
-  inline LeveledTexturedMesh* getMesh(Tile* tile) const;
-  
-  
+
   IImageBuilder* _defaultBackGroundImageBuilder;
   bool _defaultBackGroundImageLoaded;
 #ifdef C_CODE
@@ -31,12 +29,14 @@ private:
   private IImage _defaultBackGroundImage;
 #endif
   std::string _defaultBackGroundImageName;
-  
+
+  LeveledTexturedMesh* getMesh(Tile* tile) const;
+
 public:
-  
+
   std::vector<std::string> _errors;
 
-  
+
   DefaultTileTexturizer(IImageBuilder* defaultBackGroundImageBuilder);
 
   virtual ~DefaultTileTexturizer() {
@@ -81,25 +81,25 @@ public:
                            const Geodetic3D& position,
                            const Tile* tile,
                            LayerSet* layerSet);
-  
+
   const IImageBuilder* getDefaultBackGroundImageBuilder() const {
     return _defaultBackGroundImageBuilder;
   }
-  
+
   const IImage* getDefaultBackGroundImage() const {
     return _defaultBackGroundImage;
   }
-  
+
   void setDefaultBackGroundImage(const IImage* defaultBackGroundImage);
-  
+
   const std::string getDefaultBackGroundImageName() const {
     return _defaultBackGroundImageName;
   }
-  
-  void setDefaultBackGroundImageName(const std::string& defaultBackGroundImageName);
-  
-  void setDefaultBackGroundImageLoaded(const bool defaultBackGroundImageLoaded);
 
+  void setDefaultBackGroundImageName(const std::string& defaultBackGroundImageName);
+
+  void setDefaultBackGroundImageLoaded(const bool defaultBackGroundImageLoaded);
+  
 };
 
 #endif

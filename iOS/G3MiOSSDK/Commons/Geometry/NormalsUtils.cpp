@@ -44,14 +44,14 @@ Vector3F NormalsUtils::calculateNormal(const IFloatBuffer* vertices,
 IFloatBuffer* NormalsUtils::createTriangleSmoothNormals(const IFloatBuffer* vertices,
                                                         const IShortBuffer* indices) {
 
-  const int verticesSize = vertices->size();
+  const size_t verticesSize = vertices->size();
   IFloatBuffer* normals = IFactory::instance()->createFloatBuffer(verticesSize);
-  for (int i = 0; i < verticesSize; i++) {
+  for (size_t i = 0; i < verticesSize; i++) {
     normals->rawPut(i, 0.0f);
   }
 
-  const int indicesSize = indices->size();
-  for (int i = 0; i < indicesSize; i += 3) {
+  const size_t indicesSize = indices->size();
+  for (size_t i = 0; i < indicesSize; i += 3) {
     const short index0 = indices->get(i);
     const short index1 = indices->get(i + 1);
     const short index2 = indices->get(i + 2);
@@ -78,17 +78,17 @@ IFloatBuffer* NormalsUtils::createTriangleSmoothNormals(const IFloatBuffer* vert
 
 IFloatBuffer* NormalsUtils::createTriangleStripSmoothNormals(const IFloatBuffer* vertices,
                                                              const IShortBuffer* indices) {
-  const int verticesSize = vertices->size();
+  const size_t verticesSize = vertices->size();
   IFloatBuffer* normals = IFactory::instance()->createFloatBuffer(verticesSize);
-  for (int i = 0; i < verticesSize; i++) {
+  for (size_t i = 0; i < verticesSize; i++) {
     normals->rawPut(i, 0.0f);
   }
 
   short index0 = indices->get(0);
   short index1 = indices->get(1);
 
-  const int indicesSize = indices->size();
-  for (int i = 2; i < indicesSize; i++) {
+  const size_t indicesSize = indices->size();
+  for (size_t i = 2; i < indicesSize; i++) {
     const short index2 = indices->get(i);
 
     const Vector3F normal = (i % 2 == 0)

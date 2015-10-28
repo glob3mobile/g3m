@@ -11,8 +11,8 @@
 
 
 GroupCanvasElement::~GroupCanvasElement() {
-  const int childrenSize = _children.size();
-  for (int i = 0; i < childrenSize; i++) {
+  const size_t childrenSize = _children.size();
+  for (size_t i = 0; i < childrenSize; i++) {
     CanvasElement* child = _children[i];
     delete child;
   }

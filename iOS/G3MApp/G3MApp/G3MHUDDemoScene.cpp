@@ -74,6 +74,14 @@ protected:
     canvas->strokeRectangle(0, 0, width, height);
   }
 
+
+  std::string getImageName(const G3MContext* context) const {
+    const IStringUtils* su = context->getStringUtils();
+
+    return "_AltimeterCanvasImage_" + su->toString(_width) + "_" + su->toString(_height) + "_" + su->toString(_altitude);
+  }
+
+
 public:
   AltimeterCanvasImageBuilder() :
   CanvasImageBuilder(256, 256*3)
@@ -255,4 +263,3 @@ void G3MHUDDemoScene::rawActivate(const G3MContext *context) {
                                                                             altimeterCanvasImageBuilder)));
   
 }
-

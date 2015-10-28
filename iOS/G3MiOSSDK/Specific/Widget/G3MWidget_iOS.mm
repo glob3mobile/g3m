@@ -28,7 +28,10 @@
 #include "DeviceLocation_iOS.hpp"
 
 
-@interface G3MWidget_iOS ()
+@interface G3MWidget_iOS () {
+  CGFloat _scale;
+}
+
 @property(nonatomic, getter=isAnimating) BOOL animating;
 @end
 
@@ -123,12 +126,12 @@ autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
     eaglLayer.opaque = TRUE;
     eaglLayer.drawableProperties = [NSDictionary dictionaryWithObjectsAndKeys:
                                     [NSNumber numberWithBool:FALSE], kEAGLDrawablePropertyRetainedBacking, kEAGLColorFormatRGBA8, kEAGLDrawablePropertyColorFormat, nil];
+    _scale = 1;
 //    // for retina display
-//    eaglLayer.contentsScale = 1;
-#warning Enable retina resolution. TODO: Add scale to touch events
-    if ([[UIScreen mainScreen] respondsToSelector:@selector(displayLinkWithTarget:selector:)]) {
-      eaglLayer.contentsScale = [UIScreen mainScreen].scale;
-    }
+//    if ([[UIScreen mainScreen] respondsToSelector:@selector(displayLinkWithTarget:selector:)]) {
+//      _scale = [UIScreen mainScreen].scale;
+//    }
+    eaglLayer.contentsScale = _scale;
 
     // create GL object
     _renderer = [[ES2Renderer alloc] init];

@@ -3,6 +3,7 @@
 package org.glob3.mobile.specific;
 
 import java.io.UnsupportedEncodingException;
+import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.Locale;
 
@@ -152,12 +153,10 @@ public final class StringUtils_Android
 
    @Override
    public String toString(final double value) {
-	   
-	   Locale localeDefault = Locale.getDefault();
-       Locale.setDefault(new Locale("en", "US"));
-       java.text.DecimalFormat df = new java.text.DecimalFormat("#.################"); 
+       
+       DecimalFormatSymbols dfs = new DecimalFormatSymbols(new Locale("en", "US"));
+       java.text.DecimalFormat df = new java.text.DecimalFormat("#.################", dfs); 
        String s = df.format(value);
-       Locale.setDefault(localeDefault); //Resetting old Locale
        return s;
        
    }

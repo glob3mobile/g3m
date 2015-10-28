@@ -187,7 +187,7 @@ public class GL
       GLGlobalState newState = new GLGlobalState();
   
       newState.setPixelStoreIAlignmentUnpack(1);
-      newState.bindTexture(texId);
+      newState.bindTexture(0, texId);
   
       newState.applyChanges(this, _currentGLGlobalState);
   
@@ -234,13 +234,14 @@ public class GL
 
   public final void deleteTexture(IGLTextureId textureId)
   {
-  
     //  if (_verbose) {
     //    ILogger::instance()->logInfo("GL::deleteTexture()");
     //  }
   
     if (textureId != null)
     {
+      _currentGLGlobalState.onTextureDelete(textureId);
+  
       if (_nativeGL.deleteTexture(textureId))
       {
         _texturesIdBag.addLast(textureId);
@@ -250,17 +251,6 @@ public class GL
         if (textureId != null)
            textureId.dispose();
       }
-  
-      if (_currentGLGlobalState.getBoundTexture() == textureId)
-      {
-        _currentGLGlobalState.bindTexture(null);
-      }
-  
-      //    GLState::textureHasBeenDeleted(textureId);
-  
-      //    if (GLState::getCurrentGLGlobalState()->getBoundTexture() == textureId) {
-      //      GLState::getCurrentGLGlobalState()->bindTexture(NULL);
-      //    }
   
       //ILogger::instance()->logInfo("  = delete textureId=%s", texture->description().c_str());
     }

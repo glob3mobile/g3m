@@ -13,11 +13,11 @@
 
 IFloatBuffer* FloatBufferBuilder::create() const {
 #ifdef C_CODE
-  const int size = _values.size();
+  const size_t size = _values.size();
 
   IFloatBuffer* result = IFactory::instance()->createFloatBuffer(size);
 
-  for (int i = 0; i < size; i++) {
+  for (size_t i = 0; i < size; i++) {
     result->rawPut(i, _values.at(i));
   }
 

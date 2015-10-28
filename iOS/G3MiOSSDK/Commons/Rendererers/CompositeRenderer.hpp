@@ -17,9 +17,9 @@
 class CompositeRenderer: public Renderer, ChangedRendererInfoListener
 {
 private:
-  std::vector<const Info*> _info;
+  std::vector<const Info*>    _info;
   std::vector<ChildRenderer*> _renderers;
-  int                    _renderersSize;
+  size_t                      _renderersSize;
 
 #ifdef C_CODE
   const G3MContext* _context;
@@ -93,9 +93,10 @@ public:
   void zRender(const G3MRenderContext* rc, GLState* glState);
 
   
-  void setChangedRendererInfoListener(ChangedRendererInfoListener* changedInfoListener, const int rendererIdentifier);
+  void setChangedRendererInfoListener(ChangedRendererInfoListener* changedInfoListener,
+                                      const size_t rendererIdentifier);
   
-  void changedRendererInfo(const int rendererIdentifier,
+  void changedRendererInfo(const size_t rendererIdentifier,
                            const std::vector<const Info*>& info);
   
 };

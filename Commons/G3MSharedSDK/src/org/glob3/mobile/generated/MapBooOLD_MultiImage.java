@@ -61,7 +61,7 @@ public class MapBooOLD_MultiImage
   {
     IStringBuilder isb = IStringBuilder.newStringBuilder();
     isb.addString("[MultiImage averageColor=");
-    isb.addString(_averageColor.description());
+    isb.addString(_averageColor.toID());
     isb.addString(", _levels=[");
     final int levelsSize = _levels.size();
     for (int i = 0; i < levelsSize; i++)

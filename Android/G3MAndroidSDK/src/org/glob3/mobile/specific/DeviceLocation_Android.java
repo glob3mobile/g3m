@@ -45,8 +45,8 @@ public class DeviceLocation_Android extends IDeviceLocation{
 	LocationManager _locationManager = null;
 	Context _ctx = null;
 	
-	long _minTime = (long) 10000.0; //Seconds between updates (ms.)
-	float _minDistance = (float) 1.0; //Min meters between updates
+	long _minTime = (long) 500.0; //Seconds between updates (ms.)
+	float _minDistance = (float) 0.5; //Min meters between updates
 	
 	boolean _isTracking = false;
 	
@@ -66,13 +66,11 @@ public class DeviceLocation_Android extends IDeviceLocation{
 		
 		if (gpsActive) {
 			_locationManager.requestLocationUpdates( LocationManager.GPS_PROVIDER, _minTime, 0, _gpsListener, Looper.getMainLooper());
-			_locationManager.requestSingleUpdate(LocationManager.GPS_PROVIDER, _gpsListener, Looper.getMainLooper());
 			_isTracking = true;
 		}
 		
 		if (netActive){
 			_locationManager.requestLocationUpdates( LocationManager.NETWORK_PROVIDER, _minTime, 0, _netListener, Looper.getMainLooper());
-			_locationManager.requestSingleUpdate(LocationManager.NETWORK_PROVIDER, _netListener, Looper.getMainLooper());
 			_isTracking = true;	
 		}
 		

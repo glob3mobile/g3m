@@ -34,6 +34,7 @@ public class CompositeElevationData extends ElevationData
      _hasNoData = data.hasNoData();
      _interpolator = new BilinearInterpolator();
     _data.add(data);
+    data._retain();
   }
 
   public final void addElevationData(ElevationData data)

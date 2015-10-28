@@ -61,31 +61,8 @@ public class GLGlobalState
   private float _clearColorB;
   private float _clearColorA;
 
-  private GLGlobalState(GLGlobalState parentState)
-  {
-     _depthTest = parentState._depthTest;
-     _depthMask = parentState._depthMask;
-     _blend = parentState._blend;
-     _cullFace = parentState._cullFace;
-     _culledFace = parentState._culledFace;
-     _lineWidth = parentState._lineWidth;
-     _polygonOffsetFactor = parentState._polygonOffsetFactor;
-     _polygonOffsetUnits = parentState._polygonOffsetUnits;
-     _polygonOffsetFill = parentState._polygonOffsetFill;
-     _blendDFactor = parentState._blendDFactor;
-     _blendSFactor = parentState._blendSFactor;
-     _pixelStoreIAlignmentUnpack = parentState._pixelStoreIAlignmentUnpack;
-     _clearColorR = parentState._clearColorR;
-     _clearColorG = parentState._clearColorG;
-     _clearColorB = parentState._clearColorB;
-     _clearColorA = parentState._clearColorA;
-
-    for (int i = 0; i < DefineConstants.MAX_N_TEXTURES; i++)
-    {
-      _boundTextureId[i] = parentState._boundTextureId[i];
-    }
-
-  }
+//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
+//  GLGlobalState(GLGlobalState parentState);
 
 
   public static void initializationAvailable()
@@ -129,22 +106,17 @@ public class GLGlobalState
     return new GLGlobalState();
   }
 
-  public final GLGlobalState createCopy()
-  {
-    return new GLGlobalState(this);
-  }
-
   public void dispose()
   {
   }
 
   public final void enableDepthTest()
   {
-      _depthTest = true;
+    _depthTest = true;
   }
   public final void disableDepthTest()
   {
-      _depthTest = false;
+    _depthTest = false;
   }
   public final void enableDepthMask()
   {
@@ -159,18 +131,14 @@ public class GLGlobalState
   {
      return _depthTest;
   }
-  public final boolean isEnabledDepthMask()
-  {
-     return _depthMask;
-  }
 
   public final void enableBlend()
   {
-      _blend = true;
+    _blend = true;
   }
   public final void disableBlend()
   {
-      _blend = false;
+    _blend = false;
   }
   public final boolean isEnabledBlend()
   {
@@ -234,20 +202,8 @@ public class GLGlobalState
     _blendDFactor = dFactor;
   }
 
-  public final void bindTexture(IGLTextureId textureId)
-  {
-    _boundTextureId[0] = textureId;
-  }
-
-  public final IGLTextureId getBoundTexture()
-  {
-    return _boundTextureId[0];
-  }
-
   public final void bindTexture(int target, IGLTextureId textureId)
   {
-
-
     if (target > DefineConstants.MAX_N_TEXTURES)
     {
       ILogger.instance().logError("WRONG TARGET FOR TEXTURE");
@@ -257,9 +213,15 @@ public class GLGlobalState
     _boundTextureId[target] = textureId;
   }
 
-  public final IGLTextureId getBoundTexture(int target)
+  public final void onTextureDelete(IGLTextureId textureId)
   {
-    return _boundTextureId[0];
+    for (int i = 0; i < DefineConstants.MAX_N_TEXTURES; i++)
+    {
+      if (_boundTextureId[i] == textureId)
+      {
+        _boundTextureId[i] = null;
+      }
+    }
   }
 
   public final void setPixelStoreIAlignmentUnpack(int p)

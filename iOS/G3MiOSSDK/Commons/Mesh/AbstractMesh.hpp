@@ -65,9 +65,9 @@ public:
   
   BoundingVolume* getBoundingVolume() const;
 
-  int getVertexCount() const;
+  size_t getVertexCount() const;
 
-  const Vector3D getVertex(int i) const;
+  const Vector3D getVertex(size_t i) const;
 
   bool isTransparent(const G3MRenderContext* rc) const;
 

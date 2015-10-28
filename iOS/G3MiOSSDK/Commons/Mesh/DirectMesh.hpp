@@ -14,7 +14,7 @@
 
 class DirectMesh : public AbstractMesh {
 private:
-  int _renderVerticesCount;
+  size_t _renderVerticesCount;
 
 protected:
   void rawRender(const G3MRenderContext* rc, GLState* glState, RenderType renderType) const;
@@ -41,15 +41,14 @@ public:
 #endif
   }
 
-  void setRenderVerticesCount(int renderVerticesCount) {
-    if ((renderVerticesCount < 0) ||
-        (renderVerticesCount > getRenderVerticesCount())) {
+  void setRenderVerticesCount(size_t renderVerticesCount) {
+    if (renderVerticesCount > getRenderVerticesCount()) {
       THROW_EXCEPTION("Invalid renderVerticesCount");
     }
     _renderVerticesCount = renderVerticesCount;
   }
 
-  int getRenderVerticesCount() const {
+  size_t getRenderVerticesCount() const {
     return _renderVerticesCount;
   }
 
