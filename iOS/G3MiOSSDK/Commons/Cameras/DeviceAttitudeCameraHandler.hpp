@@ -11,15 +11,9 @@
 
 #include "CameraEventHandler.hpp"
 #include "MutableMatrix44D.hpp"
+#include "ILocationModifier.hpp"
 
-class ILocationModifier{
-public:
-  virtual ~ILocationModifier() {}
-  
-  /** Modifies the sensors position every frame **/
-  virtual Geodetic3D modify(const Geodetic3D& location) = 0;
-  
-};
+
 
 class HeightOffsetLocationModifier: public ILocationModifier{
   double _offsetInMeters;

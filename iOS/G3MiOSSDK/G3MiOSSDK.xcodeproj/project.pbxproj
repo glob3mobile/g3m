@@ -464,6 +464,7 @@
 		D82DFD961B44003200BF45F8 /* IDeviceLocation.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8D3212C1B3C3192008C130A /* IDeviceLocation.hpp */; };
 		D842D9AF1A727FAF008D55E4 /* NonOverlappingMarksRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D842D9AD1A727FAF008D55E4 /* NonOverlappingMarksRenderer.cpp */; };
 		D842D9B01A72906A008D55E4 /* NonOverlappingMarksRenderer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D842D9AE1A727FAF008D55E4 /* NonOverlappingMarksRenderer.hpp */; };
+		D84D515A1BE1189E0070805F /* ILocationModifier.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D84D51591BE117E90070805F /* ILocationModifier.hpp */; };
 		D84D5A31157E0EAA000C5E35 /* MutableVector3D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D84D5A2F157E0EAA000C5E35 /* MutableVector3D.cpp */; };
 		D84E2BAC1AAEF782007433ED /* Quaternion.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D84E2BAA1AAEF782007433ED /* Quaternion.cpp */; };
 		D84E2BAD1AAEF957007433ED /* Quaternion.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D84E2BAB1AAEF782007433ED /* Quaternion.hpp */; };
@@ -750,6 +751,7 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				D84D515A1BE1189E0070805F /* ILocationModifier.hpp in CopyFiles */,
 				CF1751D21BA61808006286C6 /* StackLayoutImageBuilder.hpp in CopyFiles */,
 				CF3623411B97AFD900824932 /* CircleImageBuilder.hpp in CopyFiles */,
 				D8D10E7C1B95E41A005C63CB /* FrameDepthProvider.hpp in CopyFiles */,
@@ -1755,6 +1757,7 @@
 		D84625D61777291F00FC4862 /* TexturedMesh.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = TexturedMesh.vsh; sourceTree = "<group>"; };
 		D84625DD177732A900FC4862 /* ColorMesh.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = ColorMesh.fsh; sourceTree = "<group>"; };
 		D84625DE177732A900FC4862 /* ColorMesh.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = ColorMesh.vsh; sourceTree = "<group>"; };
+		D84D51591BE117E90070805F /* ILocationModifier.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = ILocationModifier.hpp; path = Commons/Interfaces/ILocationModifier.hpp; sourceTree = "<group>"; };
 		D84D5A2F157E0EAA000C5E35 /* MutableVector3D.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MutableVector3D.cpp; path = Commons/Geometry/MutableVector3D.cpp; sourceTree = "<group>"; };
 		D84D5A30157E0EAA000C5E35 /* MutableVector3D.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = MutableVector3D.hpp; path = Commons/Geometry/MutableVector3D.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		D84E2BAA1AAEF782007433ED /* Quaternion.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Quaternion.cpp; path = Commons/Geometry/Quaternion.cpp; sourceTree = "<group>"; };
@@ -2369,6 +2372,7 @@
 				E71AA048191AACE400834D69 /* ICanvasUtils.hpp */,
 				D8D3212C1B3C3192008C130A /* IDeviceLocation.hpp */,
 				D8D3212D1B3C3257008C130A /* IDeviceLocation.cpp */,
+				D84D51591BE117E90070805F /* ILocationModifier.hpp */,
 			);
 			name = Interfaces;
 			sourceTree = "<group>";
@@ -3313,11 +3317,7 @@
 				D80FAADF17CB82EE00ACD249 /* SceneLighting.cpp in Sources */,
 				D8B0125717E09ECA00AD743A /* SectorAndHeightCameraConstrainer.cpp in Sources */,
 				D8C486D017E205E7000EAFC9 /* InitialCameraPositionProvider.cpp in Sources */,
-				CF1E85B817E797BC005BDE80 /* CartoCSSParser.cpp in Sources */,
-				CF1E85BB17E799F8005BDE80 /* CartoCSSSymbolizer.cpp in Sources */,
-				CF22263C17E8F47000280C66 /* CartoCSSTokens.cpp in Sources */,
 				D8F6166019E7DE8500825A2D /* CameraMouseWheelHandler.cpp in Sources */,
-				CFA2EEEE17EA0B1100EB4526 /* CartoCSSLexer.cpp in Sources */,
 				CFE6046D1904448900E6C78B /* TileImageProvider.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
