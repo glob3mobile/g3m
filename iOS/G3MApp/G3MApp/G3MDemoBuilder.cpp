@@ -65,8 +65,17 @@ void G3MDemoBuilder::build() {
 
   //builder->getPlanetRendererBuilder()->setRenderDebug(true);
 
- 
+  LayerSet* layerSet = new LayerSet();
+  builder->getPlanetRendererBuilder()->setLayerSet(layerSet);
   
+  MeshRenderer* meshRenderer = new MeshRenderer();
+  builder->addRenderer(meshRenderer);
+  
+  ShapesRenderer* shapesRenderer = new ShapesRenderer();
+  builder->addRenderer(shapesRenderer);
+  
+  MarksRenderer* marksRenderer = new MarksRenderer(false);
+  builder->addRenderer(marksRenderer);
 
   PointCloudsRenderer* pointCloudsRenderer = new PointCloudsRenderer();
   builder->addRenderer(pointCloudsRenderer);
