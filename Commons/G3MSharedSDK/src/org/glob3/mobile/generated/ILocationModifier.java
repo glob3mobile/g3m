@@ -8,16 +8,16 @@ package org.glob3.mobile.generated;
 //
 
 
+//class Geodetic3D;
+
 /** Class used as modifier of GPS data from DeviceAttitudeCameraHandler**/
 
-
-public abstract class ILocationModifier
+public interface ILocationModifier
 {
-  public void dispose()
-  {
-  }
 
-  /** Modifies the sensors position every frame **/
-  public abstract Geodetic3D modify(Geodetic3D location);
+  /** 
+   Modifies the sensors position every frame 
+   **/
+  Geodetic3D modify(Geodetic3D location);
 
 }
