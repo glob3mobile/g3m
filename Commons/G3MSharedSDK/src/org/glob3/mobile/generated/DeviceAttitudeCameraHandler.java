@@ -1,22 +1,4 @@
 package org.glob3.mobile.generated; 
-//
-//  DeviceAttitudeCameraHandler.cpp
-//  G3MiOSSDK
-//
-//  Created by Jose Miguel SN on 1/9/15.
-//
-//
-
-//
-//  DeviceAttitudeCameraHandler.h
-//  G3MiOSSDK
-//
-//  Created by Jose Miguel SN on 1/9/15.
-//
-//
-
-
-
 public class DeviceAttitudeCameraHandler extends CameraEventHandler
 {
 
@@ -25,19 +7,20 @@ public class DeviceAttitudeCameraHandler extends CameraEventHandler
   private MutableMatrix44D _camRM = new MutableMatrix44D();
 
   private boolean _updateLocation;
-  private double _heightOffset;
   private long _lastLocationUpdateTimeInMS;
   private ITimer _timer;
+
+  private ILocationModifier _locationModifier;
 
 
   public DeviceAttitudeCameraHandler(boolean updateLocation)
   {
-     this(updateLocation, 1000);
+     this(updateLocation, null);
   }
-  public DeviceAttitudeCameraHandler(boolean updateLocation, double heightOffset)
+  public DeviceAttitudeCameraHandler(boolean updateLocation, ILocationModifier locationModifier)
   {
      _updateLocation = updateLocation;
-     _heightOffset = heightOffset;
+     _locationModifier = locationModifier;
      _lastLocationUpdateTimeInMS = 0;
      _timer = null;
   
@@ -50,6 +33,8 @@ public class DeviceAttitudeCameraHandler extends CameraEventHandler
   
     if (_timer != null)
        _timer.dispose();
+    if (_locationModifier != null)
+       _locationModifier.dispose();
   }
 
   public final void render(G3MRenderContext rc, CameraContext cameraContext)
@@ -96,6 +81,8 @@ public class DeviceAttitudeCameraHandler extends CameraEventHandler
     CoordinateSystem finalCS = camCS.applyRotation(_camRM);
     nextCamera.setCameraCoordinateSystem(finalCS);
   
+  
+    //Updating location
     if (_updateLocation)
     {
   
@@ -120,9 +107,24 @@ public class DeviceAttitudeCameraHandler extends CameraEventHandler
         {
           _lastLocationUpdateTimeInMS = t;
   
+  
+          //Changing current location
+          double lat = g._latitude._degrees;
+          double lon = g._longitude._degrees;
+          double height = g._height;
+          if (_locationModifier != null)
+          {
+            Geodetic3D g2 = _locationModifier.modify(g);
+            lat = g2._latitude._degrees;
+            lon = g2._latitude._degrees;
+            height = g2._height;
+          }
+  
+          Geodetic3D modG = Geodetic3D.fromDegrees(lat, lon, height);
+  
           if (nextCamera.hasValidViewDirection())
           {
-            nextCamera.setGeodeticPosition(Geodetic3D.fromDegrees(g._latitude._degrees, g._longitude._degrees, g._height + _heightOffset));
+            nextCamera.setGeodeticPosition(Geodetic3D.fromDegrees(modG._latitude._degrees, modG._longitude._degrees, modG._height));
           }
           else
           {
