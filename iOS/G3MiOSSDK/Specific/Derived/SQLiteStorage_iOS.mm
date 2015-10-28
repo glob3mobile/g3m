@@ -305,3 +305,47 @@ IByteBufferResult SQLiteStorage_iOS::readBuffer(const URL& url,
   return IByteBufferResult(buffer, expired);
   //  }
 }
+
+
+void SQLiteStorage_iOS::merge(const std::string &databasePath) {
+  NSArray*  paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+  NSString* documentsDirectory = [paths objectAtIndex:0];
+  NSString* dbPath = [documentsDirectory stringByAppendingPathComponent: [NSString stringWithCppString: databasePath] ];
+  
+  
+  NSFileManager *fileManager = [NSFileManager defaultManager];
+  if ([fileManager fileExistsAtPath:dbPath]) {
+    SQDatabase* readDB = [SQDatabase databaseWithPath:dbPath];
+    if (!readDB) {
+      printf("Can't open read-database \"%s\"\n", [dbPath toCppString].c_str());
+    }
+    else {
+      [readDB openReadOnly];
+    }
+    
+    
+    SQResultSet* rs = [readDB executeQuery:@"SELECT name, contents, expiration FROM buffer2"];
+    NSLog(@"result %@ ",rs);
+    while ([rs next]) {
+      NSString* name = [rs stringColumnByIndex:0];
+      NSData* nsData = [rs dataColumnByIndex: 1];
+      double expirationIntervalInSeconds = [[rs stringColumnByIndex:2] doubleValue];
+      
+      SQResultSet* sqrs = [_readDB executeQuery:@"SELECT expiration FROM buffer2 WHERE (name = ?)", name];
+      if ([rs next]) {
+        const double actualExpirationIntervalInSeconds = [[rs stringColumnByIndex:0] doubleValue];
+        expirationIntervalInSeconds = MAX(expirationIntervalInSeconds, actualExpirationIntervalInSeconds);
+      }
+      
+      
+      [sqrs close];
+      
+      rawSave(@"buffer2", name, nsData, TimeInterval::fromSeconds((int)expirationIntervalInSeconds));
+    }
+    
+    
+    
+    [readDB close];
+  }
+}
+

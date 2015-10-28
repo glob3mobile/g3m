@@ -16,6 +16,7 @@ class G3MContext;
 class TimeInterval;
 
 #include <stddef.h>
+#include <string>
 
 
 class IImageResult {
@@ -108,6 +109,8 @@ public:
 
 
   virtual bool isAvailable() = 0;
+  
+  virtual void merge(const std::string& databasePath) = 0;
   
 };
 
