@@ -9,15 +9,19 @@
 #ifndef ILocationModifier_h
 #define ILocationModifier_h
 
-/** Class used as modifier of GPS data from DeviceAttitudeCameraHandler**/
+class Geodetic3D;
 
-#include "Geodetic3D.hpp"
+/** Class used as modifier of GPS data from DeviceAttitudeCameraHandler**/
 
 class ILocationModifier{
 public:
+#ifdef C_CODE
   virtual ~ILocationModifier() {}
+#endif
   
-  /** Modifies the sensors position every frame **/
+  /** 
+   Modifies the sensors position every frame 
+   **/
   virtual Geodetic3D modify(const Geodetic3D& location) = 0;
   
 };
