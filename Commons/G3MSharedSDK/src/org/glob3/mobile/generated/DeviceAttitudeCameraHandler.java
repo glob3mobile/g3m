@@ -27,8 +27,7 @@ public class DeviceAttitudeCameraHandler extends CameraEventHandler
     IDeviceAttitude.instance().stopTrackingDeviceOrientation();
     IDeviceLocation.instance().stopTrackingLocation();
   
-    if (_locationModifier != null)
-       _locationModifier.dispose();
+    _locationModifier = null;
   }
 
   public final void render(G3MRenderContext rc, CameraContext cameraContext)
