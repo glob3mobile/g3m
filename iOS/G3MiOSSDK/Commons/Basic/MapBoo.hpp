@@ -90,8 +90,10 @@ public:
                                        const std::string&    datasetName,
                                        const JSONBaseObject* jsonBaseObject);
 
-    virtual void apply(const URL&               serverURL,
-                       VectorStreamingRenderer* vectorStreamingRenderer) const = 0;
+    virtual void apply(const URL&                                          serverURL,
+                       VectorStreamingRenderer*                            vectorStreamingRenderer,
+                       const VectorStreamingRenderer::VectorSetSymbolizer* symbolizer,
+                       const bool                                          deleteSymbolizer) const = 0;
 
   };
 
@@ -184,10 +186,15 @@ public:
     {
     }
 
-    void apply(const URL&               serverURL,
-               VectorStreamingRenderer* vectorStreamingRenderer) const;
+    void apply(const URL&                                          serverURL,
+               VectorStreamingRenderer*                            vectorStreamingRenderer,
+               const VectorStreamingRenderer::VectorSetSymbolizer* symbolizer,
+               const bool                                          deleteSymbolizer) const;
 
-    Mark* createMark(const GEO2DPointGeometry* geometry) const;
+    Mark* createFeatureMark(const GEO2DPointGeometry* geometry) const;
+
+    Mark* createClusterMark(const VectorStreamingRenderer::Cluster* cluster,
+                            long long featuresCount) const;
 
   };
 
@@ -223,8 +230,10 @@ public:
                                                  const JSONBaseObject* jsonBaseObject,
                                                  bool verbose);
 
-    void apply(const URL&               serverURL,
-               VectorStreamingRenderer* vectorStreamingRenderer) const;
+    void apply(const URL&                                          serverURL,
+               VectorStreamingRenderer*                            vectorStreamingRenderer,
+               const VectorStreamingRenderer::VectorSetSymbolizer* symbolizer,
+               const bool                                          deleteSymbolizer) const;
 
   };
 
@@ -234,22 +243,15 @@ public:
     const MBVectorSymbology* _symbology;
 
   public:
-    MBDatasetVectorSetSymbolizer(const MBVectorSymbology* symbology) :
-    _symbology(symbology)
-    {
-      _symbology->_retain();
-    }
+    MBDatasetVectorSetSymbolizer(const MBVectorSymbology* symbology);
 
-    ~MBDatasetVectorSetSymbolizer() {
-      _symbology->_release();
-#ifdef JAVA_CODE
-      super.dispose();
-#endif
-    }
+    ~MBDatasetVectorSetSymbolizer();
 
-    Mark* createMark(const GEO2DPointGeometry* geometry) const {
-      return _symbology->createMark( geometry );
-    }
+    Mark* createFeatureMark(const GEO2DPointGeometry* geometry) const;
+
+    Mark* createClusterMark(const VectorStreamingRenderer::Cluster* cluster,
+                            long long featuresCount) const;
+
   };
 
 
@@ -301,9 +303,11 @@ public:
       return _id;
     }
 
-    void apply(const URL&               serverURL,
-               LayerSet*                layerSet,
-               VectorStreamingRenderer* vectorStreamingRenderer);
+    void apply(const URL&                                          serverURL,
+               LayerSet*                                           layerSet,
+               VectorStreamingRenderer*                            vectorStreamingRenderer,
+               const VectorStreamingRenderer::VectorSetSymbolizer* symbolizer,
+               const bool                                          deleteSymbolizer);
   };
 
 
@@ -368,21 +372,27 @@ public:
 
   class MapParserAsyncTask : public GAsyncTask {
   private:
-    MapBoo*      _mapboo;
-    MBHandler*   _handler;
-    IByteBuffer* _buffer;
-    MBMap*       _map;
-    const bool   _verbose;
+    MapBoo*                                             _mapboo;
+    MBHandler*                                          _handler;
+    IByteBuffer*                                        _buffer;
+    MBMap*                                              _map;
+    const bool                                          _verbose;
+    const VectorStreamingRenderer::VectorSetSymbolizer* _symbolizer;
+    const bool                                          _deleteSymbolizer;
 
   public:
-    MapParserAsyncTask(MapBoo*      mapboo,
-                       MBHandler*   handler,
-                       IByteBuffer* buffer,
-                       const bool   verbose) :
+    MapParserAsyncTask(MapBoo*                                             mapboo,
+                       MBHandler*                                          handler,
+                       IByteBuffer*                                        buffer,
+                       const bool                                          verbose,
+                       const VectorStreamingRenderer::VectorSetSymbolizer* symbolizer,
+                       const bool                                          deleteSymbolizer) :
     _mapboo(mapboo),
     _handler(handler),
     _buffer(buffer),
     _verbose(verbose),
+    _symbolizer(symbolizer),
+    _deleteSymbolizer(deleteSymbolizer),
     _map(NULL)
     {
     }
@@ -434,19 +444,26 @@ public:
 
   class MapBufferDownloadListener : public IBufferDownloadListener {
   private:
-    MapBoo*             _mapboo;
-    MBHandler*          _handler;
-    const IThreadUtils* _threadUtils;
-    const bool          _verbose;
+    MapBoo*                                             _mapboo;
+    MBHandler*                                          _handler;
+    const IThreadUtils*                                 _threadUtils;
+    const bool                                          _verbose;
+    const VectorStreamingRenderer::VectorSetSymbolizer* _symbolizer;
+    const bool                                          _deleteSymbolizer;
+
   public:
-    MapBufferDownloadListener(MapBoo*             mapboo,
-                              MBHandler*          handler,
-                              const IThreadUtils* threadUtils,
-                              const bool          verbose) :
+    MapBufferDownloadListener(MapBoo*                                             mapboo,
+                              MBHandler*                                          handler,
+                              const IThreadUtils*                                 threadUtils,
+                              const bool                                          verbose,
+                              const VectorStreamingRenderer::VectorSetSymbolizer* symbolizer,
+                              const bool                                          deleteSymbolizer) :
     _mapboo(mapboo),
     _handler(handler),
     _threadUtils(threadUtils),
-    _verbose(verbose)
+    _verbose(verbose),
+    _symbolizer(symbolizer),
+    _deleteSymbolizer(deleteSymbolizer)
     {
     }
 
@@ -532,8 +549,11 @@ private:
   IDownloader*             _downloader;
   const IThreadUtils*      _threadUtils;
 
-  void requestMap();
-  void applyMap(MapBoo::MBMap* map);
+  void requestMap(const VectorStreamingRenderer::VectorSetSymbolizer* symbolizer,
+                  const bool                                          deleteSymbolizer);
+  void applyMap(MapBoo::MBMap*                                      map,
+                const VectorStreamingRenderer::VectorSetSymbolizer* symbolizer,
+                const bool                                          deleteSymbolizer);
 
 
   MapBoo(const MapBoo& that);
@@ -543,21 +563,30 @@ public:
          const URL&   serverURL,
          MBHandler*   handler,
          bool         verbose);
-  
+
   ~MapBoo();
-  
+
   void requestMaps(MBMapsHandler* mapsHandler,
                    bool deleteHandler = true);
+
+  void setMapID(const std::string&                                  mapID,
+                const VectorStreamingRenderer::VectorSetSymbolizer* symbolizer,
+                const bool                                          deleteSymbolizer);
+
+  void setMapID(const std::string& mapID) {
+    setMapID(mapID, NULL, true);
+  }
   
-  void setMapID(const std::string& mapID);
   void setMap(MapBoo::MBMap* map);
   
   void onMapDownloadError();
   void onMapParseError();
-  void onMap(MapBoo::MBMap* map);
+  void onMap(MapBoo::MBMap*                                      map,
+             const VectorStreamingRenderer::VectorSetSymbolizer* symbolizer,
+             const bool                                          deleteSymbolizer);
   
   void reloadMap() {
-    requestMap();
+    requestMap(NULL, true);
   }
   
 };

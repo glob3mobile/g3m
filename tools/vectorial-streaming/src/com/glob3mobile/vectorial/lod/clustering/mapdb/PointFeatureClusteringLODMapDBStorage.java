@@ -1,6 +1,6 @@
 
 
-package com.glob3mobile.vectorial.cluster.mapdb;
+package com.glob3mobile.vectorial.lod.clustering.mapdb;
 
 import java.io.File;
 import java.io.FilenameFilter;
@@ -22,13 +22,13 @@ import com.glob3mobile.geo.Geodetic2D;
 import com.glob3mobile.geo.Sector;
 import com.glob3mobile.utils.Progress;
 import com.glob3mobile.utils.UndeterminateProgress;
-import com.glob3mobile.vectorial.cluster.PointFeatureClusterStorage;
-import com.glob3mobile.vectorial.cluster.nodes.CInnerNodeData;
-import com.glob3mobile.vectorial.cluster.nodes.CInnerNodeHeader;
-import com.glob3mobile.vectorial.cluster.nodes.CLeafNodeData;
-import com.glob3mobile.vectorial.cluster.nodes.CLeafNodeHeader;
-import com.glob3mobile.vectorial.cluster.nodes.CNodeData;
-import com.glob3mobile.vectorial.cluster.nodes.CNodeHeader;
+import com.glob3mobile.vectorial.lod.clustering.PointFeatureClusteringLODStorage;
+import com.glob3mobile.vectorial.lod.clustering.nodes.CInnerNodeData;
+import com.glob3mobile.vectorial.lod.clustering.nodes.CInnerNodeHeader;
+import com.glob3mobile.vectorial.lod.clustering.nodes.CLeafNodeData;
+import com.glob3mobile.vectorial.lod.clustering.nodes.CLeafNodeHeader;
+import com.glob3mobile.vectorial.lod.clustering.nodes.CNodeData;
+import com.glob3mobile.vectorial.lod.clustering.nodes.CNodeHeader;
 import com.glob3mobile.vectorial.storage.PointFeature;
 import com.glob3mobile.vectorial.storage.PointFeatureCluster;
 import com.glob3mobile.vectorial.storage.PointFeaturesSet;
@@ -38,9 +38,9 @@ import com.glob3mobile.vectorial.storage.QuadKeyUtils;
 import com.glob3mobile.vectorial.utils.MapDBUtils;
 
 
-public class PointFeatureClusterMapDBStorage
+public class PointFeatureClusteringLODMapDBStorage
    implements
-      PointFeatureClusterStorage {
+      PointFeatureClusteringLODStorage {
 
 
    public static void delete(final File directory,
@@ -67,19 +67,19 @@ public class PointFeatureClusterMapDBStorage
    }
 
 
-   public static PointFeatureClusterStorage createEmpty(final Sector sector,
-                                                        final File directory,
-                                                        final String name,
-                                                        final int maxFeaturesPerNode) throws IOException {
-      PointFeatureClusterMapDBStorage.delete(directory, name);
+   public static PointFeatureClusteringLODStorage createEmpty(final Sector sector,
+                                                              final File directory,
+                                                              final String name,
+                                                              final int maxFeaturesPerNode) throws IOException {
+      PointFeatureClusteringLODMapDBStorage.delete(directory, name);
 
-      return new PointFeatureClusterMapDBStorage(sector, directory, name, maxFeaturesPerNode);
+      return new PointFeatureClusteringLODMapDBStorage(sector, directory, name, maxFeaturesPerNode);
    }
 
 
-   public static PointFeatureClusterStorage openReadOnly(final File directory,
-                                                         final String name) throws IOException {
-      return new PointFeatureClusterMapDBStorage(directory, name);
+   public static PointFeatureClusteringLODStorage openReadOnly(final File directory,
+                                                               final String name) throws IOException {
+      return new PointFeatureClusteringLODMapDBStorage(directory, name);
    }
 
 
@@ -96,10 +96,10 @@ public class PointFeatureClusterMapDBStorage
    private final BTreeMap<String, Object>      _metadata;
 
 
-   private PointFeatureClusterMapDBStorage(final Sector sector,
-                                           final File directory,
-                                           final String name,
-                                           final int maxFeaturesPerNode) throws IOException {
+   private PointFeatureClusteringLODMapDBStorage(final Sector sector,
+                                                 final File directory,
+                                                 final String name,
+                                                 final int maxFeaturesPerNode) throws IOException {
       // Constructor for new Cluster-Storage
       _sector = sector;
       _rootKey = new QuadKey(new byte[] {}, _sector);
@@ -148,8 +148,8 @@ public class PointFeatureClusterMapDBStorage
    }
 
 
-   private PointFeatureClusterMapDBStorage(final File directory,
-                                           final String name) throws IOException {
+   private PointFeatureClusteringLODMapDBStorage(final File directory,
+                                                 final String name) throws IOException {
       // Constructor for a alread existing Cluster-Storage, read only
 
       _name = name;
@@ -264,13 +264,12 @@ public class PointFeatureClusterMapDBStorage
    synchronized public void addLeafNode(final String id,
                                         final Sector nodeSector,
                                         final Sector minimumSector,
-                                        final Geodetic2D averagePosition,
                                         final List<PointFeature> features) {
       if (_readOnly) {
          throw new RuntimeException("Read Only");
       }
 
-      addLeafNode(QuadKeyUtils.toBinaryID(id), nodeSector, minimumSector, averagePosition, features);
+      addLeafNode(QuadKeyUtils.toBinaryID(id), nodeSector, minimumSector, features);
       _db.commit();
    }
 
@@ -278,7 +277,6 @@ public class PointFeatureClusterMapDBStorage
    private void addLeafNode(final byte[] id,
                             final Sector nodeSector,
                             final Sector minimumSector,
-                            final Geodetic2D averagePosition,
                             final List<PointFeature> features) {
       if (features.size() > _maxFeaturesPerNode) {
          if (split(id, nodeSector, features)) {
@@ -286,7 +284,7 @@ public class PointFeatureClusterMapDBStorage
          }
       }
 
-      saveLeafNode(id, nodeSector, minimumSector, averagePosition, features);
+      saveLeafNode(id, nodeSector, minimumSector, features);
    }
 
 
@@ -360,7 +358,6 @@ public class PointFeatureClusterMapDBStorage
                   childKey._id, //
                   childKey._sector, //
                   childFeaturesSet._minimumSector, //
-                  childFeaturesSet._averagePosition, //
                   childFeaturesSet._features);
       }
 
@@ -371,19 +368,17 @@ public class PointFeatureClusterMapDBStorage
    private void saveLeafNode(final byte[] id,
                              final Sector nodeSector,
                              final Sector minimumSector,
-                             final Geodetic2D averagePosition,
                              final List<PointFeature> features) {
 
-      saveNodeAsLeaf(id, nodeSector, minimumSector, averagePosition, features);
+      saveNodeAsLeaf(id, nodeSector, minimumSector, features);
 
       for (final byte[] ancestorID : QuadKeyUtils.ancestors(id)) {
          if (!_pendingNodes.contains(ancestorID)) {
             _pendingNodes.add(ancestorID);
             final Sector ancestorNodeSector = QuadKey.sectorFor(_rootKey, ancestorID);
             final Sector ancestorMinimumSector = null;
-            final Geodetic2D ancestorAveragePosition = null;
             final List<PointFeatureCluster> ancestorClusters = Collections.emptyList();
-            saveInnerNode(ancestorID, ancestorNodeSector, ancestorMinimumSector, ancestorAveragePosition, ancestorClusters);
+            saveInnerNode(ancestorID, ancestorNodeSector, ancestorMinimumSector, ancestorClusters);
          }
       }
    }
@@ -392,10 +387,9 @@ public class PointFeatureClusterMapDBStorage
    private void saveInnerNode(final byte[] id,
                               final Sector nodeSector,
                               final Sector minimumSector,
-                              final Geodetic2D averagePosition,
                               final List<PointFeatureCluster> clusters) {
       validateClusters(nodeSector, minimumSector, clusters);
-      _nodesHeaders.put(id, new CInnerNodeHeader(nodeSector, minimumSector, averagePosition, clusters.size()));
+      _nodesHeaders.put(id, new CInnerNodeHeader(nodeSector, minimumSector, clusters.size()));
       _nodesFeatures.put(id, new CInnerNodeData(clusters));
    }
 
@@ -425,10 +419,9 @@ public class PointFeatureClusterMapDBStorage
    private void saveNodeAsLeaf(final byte[] id,
                                final Sector nodeSector,
                                final Sector minimumSector,
-                               final Geodetic2D averagePosition,
                                final List<PointFeature> features) {
       validateFeatures(nodeSector, minimumSector, features);
-      assertIsNull(_nodesHeaders.put(id, new CLeafNodeHeader(nodeSector, minimumSector, averagePosition, features.size())));
+      assertIsNull(_nodesHeaders.put(id, new CLeafNodeHeader(nodeSector, minimumSector, features.size())));
       assertIsNull(_nodesFeatures.put(id, new CLeafNodeData(features)));
    }
 
@@ -464,29 +457,27 @@ public class PointFeatureClusterMapDBStorage
 
    private static class PvtStatistics
       implements
-         PointFeatureClusterStorage.Statistics {
+         PointFeatureClusteringLODStorage.Statistics {
 
-      private final String     _storageName;
-      private final long       _clustersCount;
-      private final long       _featuresCount;
-      private final Geodetic2D _featuresAveragePosition;
-      private final int        _leafNodesCount;
-      private final int        _innerNodesCount;
-      private final int        _minFeaturesPerLeafNode;
-      private final int        _maxFeaturesPerLeafNode;
-      private final double     _averageFeaturesPerLeafNode;
-      private final int        _minClustersPerInnerNode;
-      private final int        _maxClustersPerInnerNode;
-      private final double     _averageClustersPerInnerNode;
-      private final int        _maxNodeDepth;
-      private final int        _minNodeDepth;
-      private final double     _averageNodeDepth;
+      private final String _storageName;
+      private final long   _clustersCount;
+      private final long   _featuresCount;
+      private final int    _leafNodesCount;
+      private final int    _innerNodesCount;
+      private final int    _minFeaturesPerLeafNode;
+      private final int    _maxFeaturesPerLeafNode;
+      private final double _averageFeaturesPerLeafNode;
+      private final int    _minClustersPerInnerNode;
+      private final int    _maxClustersPerInnerNode;
+      private final double _averageClustersPerInnerNode;
+      private final int    _maxNodeDepth;
+      private final int    _minNodeDepth;
+      private final double _averageNodeDepth;
 
 
       private PvtStatistics(final String storageName,
                             final long clustersCount,
                             final long featuresCount,
-                            final Geodetic2D featuresAveragePosition,
                             final int leafNodesCount,
                             final int innerNodesCount,
                             final int minFeaturesPerLeafNode,
@@ -501,7 +492,6 @@ public class PointFeatureClusterMapDBStorage
          _storageName = storageName;
          _clustersCount = clustersCount;
          _featuresCount = featuresCount;
-         _featuresAveragePosition = featuresAveragePosition;
          _leafNodesCount = leafNodesCount;
          _innerNodesCount = innerNodesCount;
          _minFeaturesPerLeafNode = minFeaturesPerLeafNode;
@@ -525,12 +515,6 @@ public class PointFeatureClusterMapDBStorage
       @Override
       public long getFeaturesCount() {
          return _featuresCount;
-      }
-
-
-      @Override
-      public Geodetic2D getFeaturesAveragePosition() {
-         return _featuresAveragePosition;
       }
 
 
@@ -611,7 +595,6 @@ public class PointFeatureClusterMapDBStorage
          System.out.println("--------------------------------------------------------------");
          System.out.println(" Storage: " + _storageName);
          System.out.println("  Features: " + _featuresCount);
-         System.out.println("  Features Average Position: " + _featuresAveragePosition);
          System.out.println("  Nodes Count: " + (_innerNodesCount + _leafNodesCount));
          System.out.println("    InnerNodes: " + _innerNodesCount);
          System.out.println("    LeafsNodes: " + _leafNodesCount);
@@ -636,7 +619,7 @@ public class PointFeatureClusterMapDBStorage
 
    private static class StatisticsGatherer
       implements
-         PointFeatureClusterStorage.NodeVisitor {
+         PointFeatureClusteringLODStorage.NodeVisitor {
 
       private final String          _name;
       private final boolean         _showProgress;
@@ -649,8 +632,6 @@ public class PointFeatureClusterMapDBStorage
       private long                  _clustersCount;
       private int                   _innerNodesCount;
       private int                   _leafNodesCount;
-      private double                _sumLatRadians;
-      private double                _sumLonRadians;
       private int                   _minFeaturesPerLeafNode;
       private int                   _maxFeaturesPerLeafNode;
       private int                   _minClustersPerInnerNode;
@@ -675,9 +656,6 @@ public class PointFeatureClusterMapDBStorage
          _innerNodesCount = 0;
          _leafNodesCount = 0;
 
-         _sumLatRadians = 0;
-         _sumLonRadians = 0;
-
          _minFeaturesPerLeafNode = Integer.MAX_VALUE;
          _maxFeaturesPerLeafNode = Integer.MIN_VALUE;
 
@@ -700,7 +678,7 @@ public class PointFeatureClusterMapDBStorage
 
 
       @Override
-      public boolean visit(final PointFeatureClusterStorage.InnerNode node) {
+      public boolean visit(final PointFeatureClusteringLODStorage.InnerNode node) {
          _innerNodesCount++;
 
          final int clustersCount = node.getClustersCount();
@@ -728,7 +706,7 @@ public class PointFeatureClusterMapDBStorage
 
 
       @Override
-      public boolean visit(final PointFeatureClusterStorage.LeafNode node) {
+      public boolean visit(final PointFeatureClusteringLODStorage.LeafNode node) {
          _leafNodesCount++;
 
          final int nodeFeaturesCount = node.getFeaturesCount();
@@ -741,11 +719,6 @@ public class PointFeatureClusterMapDBStorage
          _sumDepth += nodeDepth;
          _minNodeDepth = Math.min(_minNodeDepth, nodeDepth);
          _maxNodeDepth = Math.max(_maxNodeDepth, nodeDepth);
-
-         final Geodetic2D nodeAveragePosition = node.getAveragePosition();
-
-         _sumLatRadians += (nodeAveragePosition._latitude._radians * nodeFeaturesCount);
-         _sumLonRadians += (nodeAveragePosition._longitude._radians * nodeFeaturesCount);
 
          if (_progress != null) {
             _progress.stepDone();
@@ -773,7 +746,6 @@ public class PointFeatureClusterMapDBStorage
                   _name, //
                   _clustersCount, //
                   _featuresCount, //
-                  Geodetic2D.fromRadians(_sumLatRadians / _featuresCount, _sumLonRadians / _featuresCount), //
                   _leafNodesCount, //
                   _innerNodesCount, //
                   _minFeaturesPerLeafNode, //
@@ -796,7 +768,7 @@ public class PointFeatureClusterMapDBStorage
 
 
    @Override
-   synchronized public PointFeatureClusterStorage.Statistics getStatistics(final boolean showProgress) {
+   synchronized public PointFeatureClusteringLODStorage.Statistics getStatistics(final boolean showProgress) {
       final StatisticsGatherer gatherer = new StatisticsGatherer(_name, showProgress);
       acceptDepthFirstVisitor(gatherer);
       return gatherer._statistics;
@@ -805,22 +777,20 @@ public class PointFeatureClusterMapDBStorage
 
    private static abstract class PvtNode
       implements
-         PointFeatureClusterStorage.Node {
-      protected final PointFeatureClusterMapDBStorage _storage;
-      protected final byte[]                          _id;
-      private final Sector                            _nodeSector;
-      private final Sector                            _minimumSector;
-      private final Geodetic2D                        _averagePosition;
+         PointFeatureClusteringLODStorage.Node {
+      protected final PointFeatureClusteringLODMapDBStorage _storage;
+      protected final byte[]                                _id;
+      private final Sector                                  _nodeSector;
+      private final Sector                                  _minimumSector;
 
 
-      protected PvtNode(final PointFeatureClusterMapDBStorage storage,
+      protected PvtNode(final PointFeatureClusteringLODMapDBStorage storage,
                         final byte[] id,
                         final CNodeHeader header) {
          _storage = storage;
          _id = id;
          _nodeSector = header.getNodeSector();
          _minimumSector = header.getMinimumSector();
-         _averagePosition = header.getAveragePosition();
       }
 
 
@@ -848,13 +818,7 @@ public class PointFeatureClusterMapDBStorage
       }
 
 
-      @Override
-      public Geodetic2D getAveragePosition() {
-         return _averagePosition;
-      }
-
-
-      protected abstract boolean acceptVisitor(PointFeatureClusterStorage.NodeVisitor visitor);
+      protected abstract boolean acceptVisitor(PointFeatureClusteringLODStorage.NodeVisitor visitor);
 
    }
 
@@ -862,13 +826,13 @@ public class PointFeatureClusterMapDBStorage
       extends
          PvtNode
       implements
-         PointFeatureClusterStorage.InnerNode {
+         PointFeatureClusteringLODStorage.InnerNode {
 
       private final int                 _clustersCount;
       private List<PointFeatureCluster> _clusters;
 
 
-      private PvtInnerNode(final PointFeatureClusterMapDBStorage storage,
+      private PvtInnerNode(final PointFeatureClusteringLODMapDBStorage storage,
                            final byte[] id,
                            final CInnerNodeHeader header) {
          super(storage, id, header);
@@ -899,7 +863,7 @@ public class PointFeatureClusterMapDBStorage
 
 
       @Override
-      protected boolean acceptVisitor(final PointFeatureClusterStorage.NodeVisitor visitor) {
+      protected boolean acceptVisitor(final PointFeatureClusteringLODStorage.NodeVisitor visitor) {
          return visitor.visit(this);
       }
    }
@@ -909,14 +873,14 @@ public class PointFeatureClusterMapDBStorage
       extends
          PvtNode
       implements
-         PointFeatureClusterStorage.LeafNode {
+         PointFeatureClusteringLODStorage.LeafNode {
 
 
       private final int          _featuresCount;
       private List<PointFeature> _features = null;
 
 
-      private PvtLeafNode(final PointFeatureClusterMapDBStorage storage,
+      private PvtLeafNode(final PointFeatureClusteringLODMapDBStorage storage,
                           final byte[] id,
                           final CLeafNodeHeader header) {
          super(storage, id, header);
@@ -941,7 +905,7 @@ public class PointFeatureClusterMapDBStorage
 
 
       @Override
-      protected boolean acceptVisitor(final PointFeatureClusterStorage.NodeVisitor visitor) {
+      protected boolean acceptVisitor(final PointFeatureClusteringLODStorage.NodeVisitor visitor) {
          return visitor.visit(this);
       }
    }
@@ -970,7 +934,7 @@ public class PointFeatureClusterMapDBStorage
 
 
    @Override
-   synchronized public void acceptDepthFirstVisitor(final PointFeatureClusterStorage.NodeVisitor visitor) {
+   synchronized public void acceptDepthFirstVisitor(final PointFeatureClusteringLODStorage.NodeVisitor visitor) {
       visitor.start();
 
       for (final Map.Entry<byte[], CNodeHeader> entry : _nodesHeaders.entrySet()) {
@@ -1126,24 +1090,7 @@ public class PointFeatureClusterMapDBStorage
       }
 
       final Sector nodeSector = QuadKey.sectorFor(_rootKey, key);
-      final Geodetic2D averagePosition = averagePosition(clusters);
-      saveInnerNode(key, nodeSector, minimumSector, averagePosition, clusters);
-   }
-
-
-   private static Geodetic2D averagePosition(final List<PointFeatureCluster> clusters) {
-      double sumLat = 0;
-      double sumLon = 0;
-      long sumSize = 0;
-      for (final PointFeatureCluster cluster : clusters) {
-         final Geodetic2D position = cluster._position;
-         final long clusterSize = cluster._size;
-         sumLat += position._latitude._radians * clusterSize;
-         sumLon += position._longitude._radians * clusterSize;
-         sumSize += clusterSize;
-      }
-
-      return Geodetic2D.fromRadians(sumLat / sumSize, sumLon / sumSize);
+      saveInnerNode(key, nodeSector, minimumSector, clusters);
    }
 
 

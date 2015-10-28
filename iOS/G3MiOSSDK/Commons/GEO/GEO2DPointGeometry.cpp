@@ -23,7 +23,7 @@ GEO2DPointGeometry* GEO2DPointGeometry::deepCopy() const {
   return new GEO2DPointGeometry(_position);
 }
 
-long long GEO2DPointGeometry::createMarks(const VectorStreamingRenderer::VectorSet* vectorSet,
-                                          const VectorStreamingRenderer::Node*      node) const {
-  return vectorSet->createMark(node, this);
+long long GEO2DPointGeometry::createFeatureMarks(const VectorStreamingRenderer::VectorSet* vectorSet,
+                                                 const VectorStreamingRenderer::Node*      node) const {
+  return vectorSet->createFeatureMark(node, this);
 }

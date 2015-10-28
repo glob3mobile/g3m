@@ -128,6 +128,6 @@ void GLGlobalState::applyChanges(GL* gl, GLGlobalState& currentState) const {
     currentState._clearColorB = _clearColorB;
     currentState._clearColorA = _clearColorA;
   }
-
+  
 }
 

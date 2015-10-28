@@ -643,4 +643,19 @@ public class GEOJSONParser
     return parser.pvtParse(showStatistics);
   }
 
+  public static GEOObject parse(JSONObject jsonObject)
+  {
+     return parse(jsonObject, true);
+  }
+  public static GEOObject parse(JSONObject jsonObject, boolean showStatistics)
+  {
+    GEOJSONParser parser = new GEOJSONParser("", null);
+    GEOObject result = parser.toGEO(jsonObject);
+    if (showStatistics)
+    {
+      parser.showStatisticsToLogger();
+    }
+    return result;
+  }
+
 }

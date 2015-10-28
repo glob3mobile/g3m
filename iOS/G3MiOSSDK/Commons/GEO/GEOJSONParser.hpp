@@ -92,6 +92,9 @@ public:
   static GEOObject* parseBSON(const IByteBuffer* bson,
                               bool showStatistics = true);
 
+  static GEOObject* parse(const JSONObject* jsonObject,
+                          bool showStatistics = true);
+
 };
 
 #endif

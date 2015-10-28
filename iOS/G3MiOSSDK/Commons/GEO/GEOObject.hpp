@@ -44,8 +44,8 @@ public:
 
   virtual GEOObject* deepCopy() const = 0;
 
-  virtual long long createMarks(const VectorStreamingRenderer::VectorSet* vectorSet,
-                                const VectorStreamingRenderer::Node*      node) const = 0;
+  virtual long long createFeatureMarks(const VectorStreamingRenderer::VectorSet* vectorSet,
+                                       const VectorStreamingRenderer::Node*      node) const = 0;
 
 };
 

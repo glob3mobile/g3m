@@ -16,6 +16,7 @@
 #include "IBufferDownloadListener.hpp"
 #include "IThreadUtils.hpp"
 #include "RCObject.hpp"
+#include "MarksRenderer.hpp"
 
 #include <vector>
 #include <string>
@@ -34,7 +35,6 @@ class Frustum;
 class IDownloader;
 class GEOObject;
 
-#include "MarksRenderer.hpp"
 
 class VectorStreamingRenderer : public DefaultRenderer {
 public:
@@ -50,12 +50,40 @@ public:
   public:
     static Sector*     parseSector(const JSONArray* json);
     static Geodetic2D* parseGeodetic2D(const JSONArray* json);
-    static Node*       parseNode(const JSONObject* json,
+    static Node*       parseNode(Node*             parent,
+                                 const JSONObject* json,
                                  const VectorSet*  vectorSet,
                                  const bool        verbose);
 
   };
 
+
+  class Cluster {
+  private:
+    const Geodetic2D* _position;
+    const long long   _size;
+  public:
+    Cluster(const Geodetic2D* position,
+            const long long   size) :
+    _position(position),
+    _size(size)
+    {
+
+    }
+
+    const Geodetic2D* getPosition() const {
+      return _position;
+    }
+
+    const long long getSize() const {
+      return _size;
+    }
+
+    ~Cluster() {
+      delete _position;
+    }
+
+  };
 
 
   class ChildrenParserAsyncTask : public GAsyncTask {
@@ -138,7 +166,11 @@ public:
     IByteBuffer*        _buffer;
     const IThreadUtils* _threadUtils;
 
-    GEOObject* _features;
+    std::vector<Cluster*>* _clusters;
+    GEOObject*             _features;
+
+  private:
+    std::vector<Cluster*>* parseClusters(const JSONArray* clustersJson);
 
   public:
     FeaturesParserAsyncTask(Node*               node,
@@ -149,6 +181,7 @@ public:
     _verbose(verbose),
     _buffer(buffer),
     _threadUtils(threadUtils),
+    _clusters(NULL),
     _features(NULL)
     {
       _node->_retain();
@@ -202,26 +235,40 @@ public:
   };
 
 
-  class NodeMarksFilter : public MarksFilter {
+  class NodeAllMarksFilter : public MarksFilter {
   private:
-    std::string _nodeToken;
+    std::string _nodeClusterToken;
+    std::string _nodeFeatureToken;
 
   public:
-    NodeMarksFilter(const Node* node);
+    NodeAllMarksFilter(const Node* node);
 
     bool test(const Mark* mark) const;
 
   };
 
+  class NodeClusterMarksFilter : public MarksFilter {
+  private:
+    std::string _nodeClusterToken;
+
+  public:
+    NodeClusterMarksFilter(const Node* node);
+
+    bool test(const Mark* mark) const;
+
+  };
+  
+
 
   class Node : public RCObject {
   private:
     const VectorSet*               _vectorSet;
+    Node*                          _parent;
     const std::string              _id;
     const Sector*                  _nodeSector;
     const Sector*                  _minimumSector;
+    const int                      _clustersCount;
     const int                      _featuresCount;
-    const Geodetic2D*              _averagePosition;
 #ifdef C_CODE
     const std::vector<std::string> _childrenIDs;
 #endif
@@ -234,7 +281,8 @@ public:
 
     const bool _verbose;
 
-    GEOObject* _features;
+    std::vector<Cluster*>* _clusters;
+    GEOObject*             _features;
 
     BoundingVolume* _boundingVolume;
     BoundingVolume* getBoundingVolume(const G3MRenderContext *rc);
@@ -266,26 +314,34 @@ public:
 
     void removeMarks();
 
-    long long _marksCount;
+    long long _clusterMarksCount;
+    long long _featureMarksCount;
+
+    void childRendered();
+    void childStopRendered();
+
+    void createClusterMarks();
 
   protected:
     ~Node();
 
   public:
     Node(const VectorSet*                vectorSet,
+         Node*                           parent,
          const std::string&              id,
          const Sector*                   nodeSector,
          const Sector*                   minimumSector,
+         const int                       clustersCount,
          const int                       featuresCount,
-         const Geodetic2D*               averagePosition,
          const std::vector<std::string>& childrenIDs,
          const bool                      verbose) :
     _vectorSet(vectorSet),
+    _parent(parent),
     _id(id),
     _nodeSector(nodeSector),
     _minimumSector(minimumSector),
+    _clustersCount(clustersCount),
     _featuresCount(featuresCount),
-    _averagePosition(averagePosition),
     _childrenIDs(childrenIDs),
     _verbose(verbose),
     _wasVisible(false),
@@ -299,10 +355,14 @@ public:
     _featuresRequestID(-1),
     _childrenRequestID(-1),
     _downloader(NULL),
+    _clusters(NULL),
     _features(NULL),
-    _marksCount(0)
+    _clusterMarksCount(0),
+    _featureMarksCount(0)
     {
-
+      if (_parent != NULL) {
+        _parent->_retain();
+      }
     }
 
     const VectorSet* getVectorSet() const {
@@ -313,8 +373,12 @@ public:
       return _vectorSet->getName() + "/" + _id;
     }
 
-    const std::string getMarkToken() const {
-      return _id + _vectorSet->getName() ;
+    const std::string getFeatureMarkToken() const {
+      return _id + "_F_" + _vectorSet->getName() ;
+    }
+
+    const std::string getClusterMarkToken() const {
+      return _id + "_C_" + _vectorSet->getName() ;
     }
 
     long long render(const G3MRenderContext* rc,
@@ -326,8 +390,9 @@ public:
       // do nothing by now
     }
 
-    void parsedFeatures(GEOObject* features,
-                        const IThreadUtils* threadUtils);
+    void parsedFeatures(std::vector<Cluster*>* clusters,
+                        GEOObject*             features,
+                        const IThreadUtils*    threadUtils);
 
     void errorDownloadingChildren() {
       // do nothing by now
@@ -348,8 +413,8 @@ public:
     bool         _parsingError;
 
     Sector*             _sector;
+    long long           _clustersCount;
     long long           _featuresCount;
-    Geodetic2D*         _averagePosition;
     int                 _nodesCount;
     int                 _minNodeDepth;
     int                 _maxNodeDepth;
@@ -364,8 +429,8 @@ public:
     _buffer(buffer),
     _parsingError(false),
     _sector(NULL),
+    _clustersCount(-1),
     _featuresCount(-1),
-    _averagePosition(NULL),
     _nodesCount(-1),
     _minNodeDepth(-1),
     _maxNodeDepth(-1),
@@ -417,7 +482,10 @@ public:
   public:
     virtual ~VectorSetSymbolizer() { }
 
-    virtual Mark* createMark(const GEO2DPointGeometry* geometry) const = 0;
+    virtual Mark* createFeatureMark(const GEO2DPointGeometry* geometry) const = 0;
+
+    virtual Mark* createClusterMark(const VectorStreamingRenderer::Cluster* cluster,
+                                    long long featuresCount) const = 0;
 
   };
 
@@ -452,8 +520,8 @@ public:
     bool _errorParsingMetadata;
 
     Sector*             _sector;
+    long long           _clustersCount;
     long long           _featuresCount;
-    Geodetic2D*         _averagePosition;
     int                 _nodesCount;
     int                 _minNodeDepth;
     int                 _maxNodeDepth;
@@ -490,7 +558,6 @@ public:
     _errorDownloadingMetadata(false),
     _errorParsingMetadata(false),
     _sector(NULL),
-    _averagePosition(NULL),
     _rootNodes(NULL),
     _rootNodesSize(0),
     _lastRenderedCount(0)
@@ -531,8 +598,8 @@ public:
     void errorDownloadingMetadata();
     void errorParsingMetadata();
     void parsedMetadata(Sector* sector,
+                        long long clustersCount,
                         long long featuresCount,
-                        Geodetic2D* averagePosition,
                         int nodesCount,
                         int minNodeDepth,
                         int maxNodeDepth,
@@ -543,8 +610,11 @@ public:
                 const long long cameraTS,
                 GLState* glState);
 
-    long long createMark(const Node* node,
-                         const GEO2DPointGeometry* geometry) const;
+    long long createFeatureMark(const Node* node,
+                                const GEO2DPointGeometry* geometry) const;
+
+    long long createClusterMarks(const Node* node,
+                                 const std::vector<Cluster*>* clusters) const;
 
     MarksRenderer* getMarksRenderer() const {
       return _renderer->getMarkRenderer();

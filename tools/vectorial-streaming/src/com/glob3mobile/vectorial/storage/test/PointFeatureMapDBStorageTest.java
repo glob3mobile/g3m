@@ -171,8 +171,6 @@ public class PointFeatureMapDBStorageTest {
 
             @Override
             public boolean visit(final Node node) {
-               //               System.out.println("  visiting node #" + node.getID() + ", features: " + node.getFeaturesCount()
-               //                                  + ", averagePosition: " + node.getAveragePosition());
                System.out.println("  visiting node #" + node.getID() + ", features: " + node.getFeaturesCount());
 
                final List<PointFeature> nodeFeatures = node.getFeatures();

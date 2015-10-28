@@ -5,35 +5,40 @@ package com.glob3mobile.vectorial.processing;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import com.glob3mobile.utils.Progress;
-import com.glob3mobile.vectorial.cluster.PointFeatureClusterStorage;
-import com.glob3mobile.vectorial.cluster.mapdb.PointFeatureClusterMapDBStorage;
+import com.glob3mobile.vectorial.lod.sorting.PointFeatureSortingLODStorage;
+import com.glob3mobile.vectorial.lod.sorting.mapdb.PointFeatureSortingLODMapDBStorage;
 import com.glob3mobile.vectorial.storage.PointFeature;
 import com.glob3mobile.vectorial.storage.PointFeatureStorage;
 import com.glob3mobile.vectorial.storage.mapdb.PointFeatureMapDBStorage;
 
 
-public class ClusterPointFeaturesPreprocessor {
+public class SortingLODPointFeaturesPreprocessor {
 
 
    private static class LeafNodesImporter
       implements
          PointFeatureStorage.NodeVisitor {
 
-      private final long                       _nodesCount;
-      private final PointFeatureClusterStorage _clusterStorage;
-      private final boolean                    _verbose;
+      private final long                          _nodesCount;
+      private final PointFeatureSortingLODStorage _lodStorage;
+      private final Comparator<PointFeature>      _featuresComparator;
+      private final boolean                       _verbose;
 
-      private Progress                         _progress;
+      private Progress                            _progress;
 
 
       private LeafNodesImporter(final long nodesCount,
-                                final PointFeatureClusterStorage clusterStorage,
+                                final PointFeatureSortingLODStorage lodStorage,
+                                final Comparator<PointFeature> featuresComparator,
                                 final boolean verbose) {
          _nodesCount = nodesCount;
-         _clusterStorage = clusterStorage;
+         _lodStorage = lodStorage;
+         _featuresComparator = featuresComparator;
          _verbose = verbose;
       }
 
@@ -47,7 +52,7 @@ public class ClusterPointFeaturesPreprocessor {
                                        final long elapsed,
                                        final long estimatedMsToFinish) {
                if (_verbose) {
-                  System.out.println(_clusterStorage.getName() + ": 1/4 Importing leaf nodes: "
+                  System.out.println(_lodStorage.getName() + ": 1/4 Importing leaf nodes: "
                                      + progressString(stepsDone, percent, elapsed, estimatedMsToFinish));
                }
             }
@@ -64,14 +69,14 @@ public class ClusterPointFeaturesPreprocessor {
 
       @Override
       public boolean visit(final PointFeatureStorage.Node node) {
-         final List<PointFeature> features = new ArrayList<>(node.getFeatures());
+         final List<PointFeature> sortedFeatures = new ArrayList<>(node.getFeatures());
+         Collections.sort(sortedFeatures, _featuresComparator);
 
-         _clusterStorage.addLeafNode( //
+         _lodStorage.addLeafNode( //
                   node.getID(), //
                   node.getNodeSector(), //
                   node.getMinimumSector(), //
-                  node.getAveragePosition(), //
-                  features //
+                  sortedFeatures //
          );
 
          _progress.stepDone();
@@ -83,16 +88,16 @@ public class ClusterPointFeaturesPreprocessor {
 
    public static void process(final File storageDir,
                               final String storageName,
-                              final File clusterDir,
-                              final String clusterName,
+                              final File lodDir,
+                              final String lodName,
+                              final Comparator<PointFeature> featuresComparator,
                               final int maxFeaturesPerNode,
                               final boolean verbose) throws IOException {
 
       try (final PointFeatureStorage storage = PointFeatureMapDBStorage.openReadOnly(storageDir, storageName)) {
 
-
-         try (final PointFeatureClusterStorage clusterStorage = PointFeatureClusterMapDBStorage.createEmpty(storage.getSector(),
-                  clusterDir, clusterName, maxFeaturesPerNode)) {
+         try (final PointFeatureSortingLODStorage lodStorage = PointFeatureSortingLODMapDBStorage.createEmpty(
+                  storage.getSector(), lodDir, lodName, maxFeaturesPerNode)) {
             final PointFeatureStorage.Statistics statistics = storage.getStatistics(verbose);
             if (verbose) {
                statistics.show();
@@ -101,53 +106,57 @@ public class ClusterPointFeaturesPreprocessor {
 
             final int nodesCount = statistics.getNodesCount();
 
-            storage.acceptDepthFirstVisitor(new LeafNodesImporter(nodesCount, clusterStorage, verbose));
+            storage.acceptDepthFirstVisitor(new LeafNodesImporter(nodesCount, lodStorage, featuresComparator, verbose));
 
-            clusterStorage.processPendingNodes(verbose);
+            lodStorage.processPendingNodes(featuresComparator, verbose);
 
             if (verbose) {
-               System.out.println(clusterStorage.getName() + ": 3/4 Optimizing storage...");
+               System.out.println(lodStorage.getName() + ": 3/4 Optimizing storage...");
             }
-            clusterStorage.optimize();
+            lodStorage.optimize();
 
             if (verbose) {
                System.out.println();
-               final PointFeatureClusterStorage.Statistics clusterStatistics = clusterStorage.getStatistics(verbose);
-               clusterStatistics.show();
+               final PointFeatureSortingLODStorage.Statistics lodStatistics = lodStorage.getStatistics(verbose);
+               lodStatistics.show();
             }
          }
       }
    }
 
 
-   private ClusterPointFeaturesPreprocessor() {
+   private SortingLODPointFeaturesPreprocessor() {
    }
 
 
    public static void main(final String[] args) throws IOException {
-      System.out.println("ClusterPointFeaturesPreprocessor 0.1");
-      System.out.println("--------------------------------\n");
+      System.out.println("SortingLODPointFeaturesPreprocessor 0.1");
+      System.out.println("---------------------------------------\n");
 
 
       final File storageDir = new File("PointFeaturesStorage");
 
+      //      final String storageName = "PopulatedPlaces";
+      //      final Comparator<PointFeature> featuresComparator = new PopulatedPlacesComparator();
 
       // final String storageName = "Cities1000";
       // final String storageName = "AR";
       // final String storageName = "ES";
       final String storageName = "GEONames-PopulatedPlaces";
 
+      final Comparator<PointFeature> featuresComparator = new GEONamesComparator();
 
-      final File clusterDir = new File("PointFeaturesCluster");
-      final String clusterName = storageName + "_Cluster";
+      final File lodDir = new File("PointFeaturesLOD");
+      final String lodName = storageName + "_LOD";
 
       final int maxFeaturesPerNode = 64;
 
       final boolean verbose = true;
 
-      ClusterPointFeaturesPreprocessor.process( //
+      SortingLODPointFeaturesPreprocessor.process( //
                storageDir, storageName, //
-               clusterDir, clusterName, //
+               lodDir, lodName, //
+               featuresComparator, //
                maxFeaturesPerNode, //
                verbose);
 

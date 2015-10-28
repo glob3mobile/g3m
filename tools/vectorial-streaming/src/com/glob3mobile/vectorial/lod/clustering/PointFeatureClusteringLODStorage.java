@@ -1,17 +1,16 @@
 
 
-package com.glob3mobile.vectorial.cluster;
+package com.glob3mobile.vectorial.lod.clustering;
 
 import java.io.IOException;
 import java.util.List;
 
-import com.glob3mobile.geo.Geodetic2D;
 import com.glob3mobile.geo.Sector;
 import com.glob3mobile.vectorial.storage.PointFeature;
 import com.glob3mobile.vectorial.storage.PointFeatureCluster;
 
 
-public interface PointFeatureClusterStorage
+public interface PointFeatureClusteringLODStorage
    extends
       AutoCloseable {
 
@@ -26,15 +25,10 @@ public interface PointFeatureClusterStorage
    void addLeafNode(String id,
                     Sector nodeSector,
                     Sector minimumSector,
-                    Geodetic2D averagePosition,
                     List<PointFeature> features);
 
 
    void optimize() throws IOException;
-
-
-   //   void processPendingNodes(Comparator<PointFeature> featuresComparator,
-   //                            boolean verbose);
 
 
    public static interface Statistics {
@@ -44,9 +38,6 @@ public interface PointFeatureClusterStorage
 
 
       long getClustersCount();
-
-
-      Geodetic2D getFeaturesAveragePosition();
 
 
       int getNodesCount();
@@ -110,8 +101,6 @@ public interface PointFeatureClusterStorage
       int getDepth();
 
 
-      Geodetic2D getAveragePosition();
-
    }
 
 
@@ -150,10 +139,10 @@ public interface PointFeatureClusterStorage
       void start();
 
 
-      boolean visit(PointFeatureClusterStorage.InnerNode node);
+      boolean visit(PointFeatureClusteringLODStorage.InnerNode node);
 
 
-      boolean visit(PointFeatureClusterStorage.LeafNode node);
+      boolean visit(PointFeatureClusteringLODStorage.LeafNode node);
 
 
       void stop();
@@ -161,7 +150,7 @@ public interface PointFeatureClusterStorage
    }
 
 
-   void acceptDepthFirstVisitor(final PointFeatureClusterStorage.NodeVisitor visitor);
+   void acceptDepthFirstVisitor(final PointFeatureClusteringLODStorage.NodeVisitor visitor);
 
 
    Statistics getStatistics(boolean showProgress);
@@ -172,17 +161,20 @@ public interface PointFeatureClusterStorage
 
    void processPendingNodes(boolean verbose);
 
+   //   void processPendingNodes(Comparator<PointFeature> featuresComparator,
+   //                            boolean verbose);
 
-   //   List<PointFeatureClusterStorage.Node> getNodesFor(Sector searchSector);
+
+   //   List<PointFeatureClusterLODStorage.Node> getNodesFor(Sector searchSector);
    //
    //
-   //   List<PointFeatureClusterStorage.Node> getNodesFor(Geodetic2D position);
+   //   List<PointFeatureClusterLODStorage.Node> getNodesFor(Geodetic2D position);
    //
    //
-   //   List<PointFeatureClusterStorage.Node> getAllNodesOfDepth(int depth);
+   //   List<PointFeatureClusterLODStorage.Node> getAllNodesOfDepth(int depth);
    //
    //
-   //   PointFeatureClusterStorage.Node getNode(String id);
+   //   PointFeatureClusterLODStorage.Node getNode(String id);
 
 
 }

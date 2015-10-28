@@ -23,7 +23,7 @@ public class ColumnLayoutImageBuilder extends LayoutImageBuilder
   {
     boolean anyError = false;
     String error = "";
-    String imageName = "";
+    String imageName = "Col";
   
     int maxWidth = 0;
     int accumulatedHeight = 0;

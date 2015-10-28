@@ -26,6 +26,7 @@
 #include "LabelImageBuilder.hpp"
 #include "ColumnLayoutImageBuilder.hpp"
 #include "CircleImageBuilder.hpp"
+#include "StackLayoutImageBuilder.hpp"
 
 
 MapBoo::MapBoo(IG3MBuilder* builder,
@@ -294,7 +295,8 @@ void MapBoo::MBLayer::apply(LayerSet* layerSet) const {
 }
 
 
-void MapBoo::requestMap() {
+void MapBoo::requestMap(const VectorStreamingRenderer::VectorSetSymbolizer* symbolizer,
+                        const bool                                          deleteSymbolizer) {
   if (_verbose) {
     ILogger::instance()->logInfo("MapBoo: requesting map \"%s\"", _mapID.c_str());
   }
@@ -303,14 +305,21 @@ void MapBoo::requestMap() {
                              DownloadPriority::HIGHEST,
                              TimeInterval::zero(),
                              false, // readExpired
-                             new MapBufferDownloadListener(this, _handler, _threadUtils, _verbose),
+                             new MapBufferDownloadListener(this,
+                                                           _handler,
+                                                           _threadUtils,
+                                                           _verbose,
+                                                           symbolizer,
+                                                           deleteSymbolizer),
                              true);
 }
 
-void MapBoo::setMapID(const std::string& mapID) {
+void MapBoo::setMapID(const std::string&                                  mapID,
+                      const VectorStreamingRenderer::VectorSetSymbolizer* symbolizer,
+                      const bool                                          deleteSymbolizer) {
   if (_mapID != mapID) {
     _mapID = mapID;
-    requestMap();
+    requestMap(symbolizer, deleteSymbolizer);
   }
 }
 
@@ -319,11 +328,13 @@ void MapBoo::setMap(MapBoo::MBMap* map) {
   if (_mapID != mapID) {
     _mapID = mapID;
 
-    applyMap(map);
+    applyMap(map, NULL, true);
   }
 }
 
-void MapBoo::applyMap(MapBoo::MBMap* map) {
+void MapBoo::applyMap(MapBoo::MBMap*                                      map,
+                      const VectorStreamingRenderer::VectorSetSymbolizer* symbolizer,
+                      const bool                                          deleteSymbolizer) {
   if (_verbose) {
     ILogger::instance()->logInfo("MapBoo: applying map \"%s\"", map->getID().c_str());
   }
@@ -332,7 +343,7 @@ void MapBoo::applyMap(MapBoo::MBMap* map) {
   _vectorStreamingRenderer->removeAllVectorSets();
   _layerSet->removeAllLayers(true);
 
-  map->apply(_serverURL, _layerSet, _vectorStreamingRenderer);
+  map->apply(_serverURL, _layerSet, _vectorStreamingRenderer, symbolizer, deleteSymbolizer);
 
   // just in case nobody put a layer
   if (_layerSet->size() == 0) {
@@ -346,10 +357,11 @@ void MapBoo::applyMap(MapBoo::MBMap* map) {
   delete map;
 }
 
-
-void MapBoo::MBMap::apply(const URL&               serverURL,
-                          LayerSet*                layerSet,
-                          VectorStreamingRenderer* vectorStreamingRenderer) {
+void MapBoo::MBMap::apply(const URL&                                          serverURL,
+                          LayerSet*                                           layerSet,
+                          VectorStreamingRenderer*                            vectorStreamingRenderer,
+                          const VectorStreamingRenderer::VectorSetSymbolizer* symbolizer,
+                          const bool                                          deleteSymbolizer) {
   for (int i = 0; i < _layers.size(); i++) {
     MBLayer* layer = _layers[i];
     layer->apply(layerSet);
@@ -357,7 +369,7 @@ void MapBoo::MBMap::apply(const URL&               serverURL,
 
   for (int i = 0; i < _symbolizedDatasets.size(); i++) {
     MBSymbolizedDataset* symbolizedDataset = _symbolizedDatasets[i];
-    symbolizedDataset->apply(serverURL, vectorStreamingRenderer);
+    symbolizedDataset->apply(serverURL, vectorStreamingRenderer, symbolizer, deleteSymbolizer);
   }
 }
 
@@ -368,7 +380,12 @@ void MapBoo::MapBufferDownloadListener::onDownload(const URL& url,
     ILogger::instance()->logInfo("MapBoo: downloaded map");
   }
 
-  _threadUtils->invokeAsyncTask(new MapParserAsyncTask(_mapboo, _handler, buffer, _verbose),
+  _threadUtils->invokeAsyncTask(new MapParserAsyncTask(_mapboo,
+                                                       _handler,
+                                                       buffer,
+                                                       _verbose,
+                                                       _symbolizer,
+                                                       _deleteSymbolizer),
                                 true);
 }
 
@@ -415,7 +432,7 @@ void MapBoo::MapParserAsyncTask::onPostExecute(const G3MContext* context) {
       ILogger::instance()->logInfo("MapBoo: parsed map");
     }
 
-    _mapboo->onMap(_map);
+    _mapboo->onMap(_map, _symbolizer, _deleteSymbolizer);
     _map = NULL; // moved ownership to _mapboo
   }
 }
@@ -432,8 +449,10 @@ void MapBoo::onMapParseError() {
   }
 }
 
-void MapBoo::onMap(MapBoo::MBMap* map) {
-  applyMap(map);
+void MapBoo::onMap(MapBoo::MBMap*                                      map,
+                   const VectorStreamingRenderer::VectorSetSymbolizer* symbolizer,
+                   const bool                                          deleteSymbolizer) {
+  applyMap(map, symbolizer, deleteSymbolizer);
 }
 
 MapBoo::MBSymbolizedDataset* MapBoo::MBSymbolizedDataset::fromJSON(MBHandler*            handler,
@@ -531,8 +550,10 @@ const MapBoo::MBCircleShape* MapBoo::MBCircleShape::fromJSON(const JSONObject* j
                            radius);
 }
 
-void MapBoo::MBVectorSymbology::apply(const URL&               serverURL,
-                                      VectorStreamingRenderer* vectorStreamingRenderer) const {
+void MapBoo::MBVectorSymbology::apply(const URL&                                          serverURL,
+                                      VectorStreamingRenderer*                            vectorStreamingRenderer,
+                                      const VectorStreamingRenderer::VectorSetSymbolizer* symbolizer,
+                                      const bool                                          deleteSymbolizer) const {
   std::string properties = "";
   for (int i = 0; i < _labeling.size(); i++) {
     properties += _labeling[i] + "|";
@@ -541,11 +562,22 @@ void MapBoo::MBVectorSymbology::apply(const URL&               serverURL,
     properties += _info[i] + "|";
   }
 
+  const VectorStreamingRenderer::VectorSetSymbolizer* sym;
+  bool deleteSym;
+  if (symbolizer == NULL) {
+    sym       = new MBDatasetVectorSetSymbolizer(this);
+    deleteSym = true;
+  }
+  else {
+    sym       = symbolizer;
+    deleteSym = deleteSymbolizer;
+  }
+
   vectorStreamingRenderer->addVectorSet(URL(serverURL, "/public/v1/VectorialStreaming/"),
                                         _datasetID,
                                         properties,
-                                        new MBDatasetVectorSetSymbolizer(this),
-                                        true,  // deleteSymbolizer
+                                        sym,
+                                        deleteSym,
                                         DownloadPriority::MEDIUM,
                                         TimeInterval::zero(),
                                         true,  // readExpired
@@ -554,9 +586,11 @@ void MapBoo::MBVectorSymbology::apply(const URL&               serverURL,
                                         );
 }
 
-void MapBoo::MBSymbolizedDataset::apply(const URL&               serverURL,
-                                        VectorStreamingRenderer* vectorStreamingRenderer) const {
-  _symbology->apply(serverURL, vectorStreamingRenderer);
+void MapBoo::MBSymbolizedDataset::apply(const URL&                                          serverURL,
+                                        VectorStreamingRenderer*                            vectorStreamingRenderer,
+                                        const VectorStreamingRenderer::VectorSetSymbolizer* symbolizer,
+                                        const bool                                          deleteSymbolizer) const {
+  _symbology->apply(serverURL, vectorStreamingRenderer, symbolizer, deleteSymbolizer);
 }
 
 bool MapBoo::MBFeatureMarkTouchListener::touchedMark(Mark* mark) {
@@ -647,8 +681,7 @@ IImageBuilder* MapBoo::MBVectorSymbology::createImageBuilder(const JSONObject* p
   return createLabelImageBuilder("[X]");
 }
 
-
-Mark* MapBoo::MBVectorSymbology::createMark(const GEO2DPointGeometry* geometry) const {
+Mark* MapBoo::MBVectorSymbology::createFeatureMark(const GEO2DPointGeometry* geometry) const {
   const GEOFeature* feature    = geometry->getFeature();
   const JSONObject* properties = feature->getProperties();
   const Geodetic2D  position   = geometry->getPosition();
@@ -662,17 +695,58 @@ Mark* MapBoo::MBVectorSymbology::createMark(const GEO2DPointGeometry* geometry) 
                   createMarkTouchListener(properties),
                   true                                  // autoDeleteListener
                   );
+}
 
-//  return new Mark(createMarkLabel(properties),
-//                  Geodetic3D(position, 0),
-//                  ABSOLUTE,
-//                  0,                                    // minDistanceToCamera
-//                  18,                                   // labelFontSize
-//                  Color::newFromRGBA(1, 1, 1, 1),       // labelFontColor
-//                  Color::newFromRGBA(0, 0, 0, 1),       // labelShadowColor
-//                  NULL,                                 // userData
-//                  true,                                 // autoDeleteUserData
-//                  createMarkTouchListener(properties),
-//                  true                                  // autoDeleteListener
-//                  );
+Mark* MapBoo::MBVectorSymbology::createClusterMark(const VectorStreamingRenderer::Cluster* cluster,
+                                                   long long featuresCount) const {
+  const Geodetic3D  position(cluster->getPosition()->_latitude,
+                             cluster->getPosition()->_longitude,
+                             0);
+
+  const std::string label = IStringUtils::instance()->toString( cluster->getSize() );
+
+  // float labelFontSize = (float) (14.0 * ((float) cluster->getSize() / featuresCount) + 16.0) ;
+  float labelFontSize = 18.0f;
+
+  Mark* mark = new Mark(new StackLayoutImageBuilder(new CircleImageBuilder(Color::white(), 32),
+                                                    new LabelImageBuilder(label,
+                                                                          GFont::sansSerif(labelFontSize, true),
+                                                                          2.0f,                 // margin
+                                                                          Color::black(),       // color
+                                                                          Color::transparent(), // shadowColor
+                                                                          5.0f,                 // shadowBlur
+                                                                          0.0f,                 // shadowOffsetX
+                                                                          0.0f,                 // shadowOffsetY
+                                                                          Color::white(),       // backgroundColor
+                                                                          4.0f                  // cornerRadius
+                                                                          )
+                                                    ),
+                        position,
+                        ABSOLUTE,
+                        0 // minDistanceToCamera
+                        );
+
+  return mark;
+}
+
+MapBoo::MBDatasetVectorSetSymbolizer::MBDatasetVectorSetSymbolizer(const MBVectorSymbology* symbology) :
+_symbology(symbology)
+{
+  _symbology->_retain();
+}
+
+MapBoo::MBDatasetVectorSetSymbolizer::~MBDatasetVectorSetSymbolizer() {
+  _symbology->_release();
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+}
+
+Mark* MapBoo::MBDatasetVectorSetSymbolizer::createFeatureMark(const GEO2DPointGeometry* geometry) const {
+  return _symbology->createFeatureMark( geometry );
+}
+
+Mark* MapBoo::MBDatasetVectorSetSymbolizer::createClusterMark(const VectorStreamingRenderer::Cluster* cluster,
+                                                              long long featuresCount) const {
+  return _symbology->createClusterMark( cluster, featuresCount );
 }

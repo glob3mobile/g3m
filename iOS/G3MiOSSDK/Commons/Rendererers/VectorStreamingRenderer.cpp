@@ -46,7 +46,8 @@ void VectorStreamingRenderer::ChildrenParserAsyncTask::runInBackground(const G3M
       _children = new std::vector<Node*>();
       for (int i = 0; i < nodesJSON->size(); i++) {
         const JSONObject* nodeJSON = nodesJSON->getAsObject(i);
-        _children->push_back( GEOJSONUtils::parseNode(nodeJSON,
+        _children->push_back( GEOJSONUtils::parseNode(_node,
+                                                      nodeJSON,
                                                       _node->getVectorSet(),
                                                       _verbose) );
       }
@@ -100,7 +101,17 @@ void VectorStreamingRenderer::NodeChildrenDownloadListener::onCanceledDownload(c
 
 VectorStreamingRenderer::FeaturesParserAsyncTask::~FeaturesParserAsyncTask() {
   _node->_release();
+
   delete _buffer;
+
+  if (_clusters != NULL) {
+    for (int i = 0; i < _clusters->size(); i++) {
+      Cluster* cluster = _clusters->at(i);
+      delete cluster;
+    }
+    delete _clusters;
+  }
+
   delete _features;
 
 #ifdef JAVA_CODE
@@ -108,15 +119,44 @@ VectorStreamingRenderer::FeaturesParserAsyncTask::~FeaturesParserAsyncTask() {
 #endif
 }
 
-void VectorStreamingRenderer::FeaturesParserAsyncTask::runInBackground(const G3MContext* context) {
-  _features = GEOJSONParser::parseJSON(_buffer, _verbose);
+std::vector<VectorStreamingRenderer::Cluster*>* VectorStreamingRenderer::FeaturesParserAsyncTask::parseClusters(const JSONArray* clustersJson) {
+  if (clustersJson == NULL) {
+    return NULL;
+  }
 
+  std::vector<VectorStreamingRenderer::Cluster*>* clusters = new std::vector<VectorStreamingRenderer::Cluster*>();
+  const size_t clustersCount = clustersJson->size();
+  for (int i = 0; i < clustersCount; i++) {
+    const JSONObject* clusterJson = clustersJson->getAsObject(i);
+    const Geodetic2D* position = GEOJSONUtils::parseGeodetic2D( clusterJson->getAsArray("position") );
+    const long long   size     = (long long) clusterJson->getAsNumber("size")->value();
+
+    clusters->push_back( new Cluster(position, size) );
+  }
+
+  return clusters;
+}
+
+
+void VectorStreamingRenderer::FeaturesParserAsyncTask::runInBackground(const G3MContext* context) {
+
+  const JSONBaseObject* jsonBaseObject = IJSONParser::instance()->parse(_buffer);
   delete _buffer;
   _buffer = NULL;
+
+  if (jsonBaseObject != NULL) {
+    const JSONObject* jsonObject = jsonBaseObject->asObject();
+
+    _clusters = parseClusters( jsonObject->get("clusters")->asArray() );
+    _features = GEOJSONParser::parse( jsonObject->get("features")->asObject() , _verbose);
+
+    delete jsonBaseObject;
+  }
 }
 
 void VectorStreamingRenderer::FeaturesParserAsyncTask::onPostExecute(const G3MContext* context) {
-  _node->parsedFeatures(_features, _threadUtils);
+  _node->parsedFeatures(_clusters, _features, _threadUtils);
+  _clusters = NULL; // moved ownership to _node
   _features = NULL; // moved ownership to _node
 }
 
@@ -157,10 +197,23 @@ void VectorStreamingRenderer::NodeFeaturesDownloadListener::onCanceledDownload(c
 VectorStreamingRenderer::Node::~Node() {
   unload();
 
+  delete _features;
+
+  if (_clusters != NULL) {
+    for (int i = 0; i < _clusters->size(); i++) {
+      Cluster* cluster = _clusters->at(i);
+      delete cluster;
+    }
+    delete _clusters;
+  }
+
   delete _nodeSector;
   delete _minimumSector;
-  delete _averagePosition;
   delete _boundingVolume;
+
+  if (_parent != NULL) {
+    _parent->_release();
+  }
 
 #ifdef JAVA_CODE
   super.dispose();
@@ -169,44 +222,71 @@ VectorStreamingRenderer::Node::~Node() {
 
 void VectorStreamingRenderer::Node::parsedChildren(std::vector<Node*>* children,
                                                    const IThreadUtils* threadUtils) {
-  if (children == NULL) {
-    // do nothing by now
-  }
-  else {
+  if (children != NULL) {
     _children = children;
     _loadingChildren = false;
     _childrenSize = _children->size();
   }
 }
 
-void VectorStreamingRenderer::Node::parsedFeatures(GEOObject* features,
-                                                   const IThreadUtils* threadUtils) {
+void VectorStreamingRenderer::Node::parsedFeatures(std::vector<Cluster*>* clusters,
+                                                   GEOObject*             features,
+                                                   const IThreadUtils*    threadUtils) {
   _loadedFeatures = true;
   _loadingFeatures = false;
   _featuresRequestID = -1;
-  if (features == NULL) {
-    // do nothing by now
-  }
-  else {
+
+  if (features != NULL) {
+    delete _features;
     _features = features;
 
-    _marksCount = _features->createMarks(_vectorSet, this);
-    if (_verbose) {
+    _featureMarksCount = _features->createFeatureMarks(_vectorSet, this);
+    if (_verbose && (_featureMarksCount > 0)) {
 #ifdef C_CODE
-      ILogger::instance()->logInfo("\"%s\": Created %ld marks",
+      ILogger::instance()->logInfo("\"%s\": Created %ld feature-marks",
                                    getFullName().c_str(),
-                                   _marksCount);
+                                   _featureMarksCount);
 #endif
 #ifdef JAVA_CODE
-      ILogger.instance().logInfo("\"%s\": Created %d marks",
+      ILogger.instance().logInfo("\"%s\": Created %d feature-marks",
                                  getFullName(),
-                                 _marksCount);
+                                 _featureMarksCount);
 #endif
     }
 
     //  Delete _features???
     delete _features;
     _features = NULL;
+  }
+
+  if (clusters != NULL) {
+    if (_clusters != NULL) {
+      for (int i = 0; i < _clusters->size(); i++) {
+        Cluster* cluster = _clusters->at(i);
+        delete cluster;
+      }
+      delete _clusters;
+    }
+
+    _clusters = clusters;
+    createClusterMarks();
+  }
+}
+
+void VectorStreamingRenderer::Node::createClusterMarks() {
+  _clusterMarksCount = _vectorSet->createClusterMarks(this, _clusters);
+
+  if (_verbose && (_clusterMarksCount > 0)) {
+#ifdef C_CODE
+    ILogger::instance()->logInfo("\"%s\": Created %ld cluster-marks",
+                                 getFullName().c_str(),
+                                 _clusterMarksCount);
+#endif
+#ifdef JAVA_CODE
+    ILogger.instance().logInfo("\"%s\": Created %d cluster-marks",
+                               getFullName(),
+                               _clusterMarksCount);
+#endif
   }
 }
 
@@ -217,22 +297,32 @@ BoundingVolume* VectorStreamingRenderer::Node::getBoundingVolume(const G3MRender
 
 #ifdef C_CODE
     const Vector3D c[5] = {
-      planet->toCartesian( _minimumSector->getNE()     ),
-      planet->toCartesian( _minimumSector->getNW()     ),
-      planet->toCartesian( _minimumSector->getSE()     ),
-      planet->toCartesian( _minimumSector->getSW()     ),
-      planet->toCartesian( _minimumSector->getCenter() )
+//      planet->toCartesian( _minimumSector->getNE()     ),
+//      planet->toCartesian( _minimumSector->getNW()     ),
+//      planet->toCartesian( _minimumSector->getSE()     ),
+//      planet->toCartesian( _minimumSector->getSW()     ),
+//      planet->toCartesian( _minimumSector->getCenter() )
+      planet->toCartesian( _nodeSector->getNE()     ),
+      planet->toCartesian( _nodeSector->getNW()     ),
+      planet->toCartesian( _nodeSector->getSE()     ),
+      planet->toCartesian( _nodeSector->getSW()     ),
+      planet->toCartesian( _nodeSector->getCenter() )
     };
 
     std::vector<Vector3D> points(c, c+5);
 #endif
 #ifdef JAVA_CODE
     java.util.ArrayList<Vector3D> points = new java.util.ArrayList<Vector3D>(5);
-    points.add( planet.toCartesian( _minimumSector.getNE()     ) );
-    points.add( planet.toCartesian( _minimumSector.getNW()     ) );
-    points.add( planet.toCartesian( _minimumSector.getSE()     ) );
-    points.add( planet.toCartesian( _minimumSector.getSW()     ) );
-    points.add( planet.toCartesian( _minimumSector.getCenter() ) );
+//    points.add( planet.toCartesian( _minimumSector.getNE()     ) );
+//    points.add( planet.toCartesian( _minimumSector.getNW()     ) );
+//    points.add( planet.toCartesian( _minimumSector.getSE()     ) );
+//    points.add( planet.toCartesian( _minimumSector.getSW()     ) );
+//    points.add( planet.toCartesian( _minimumSector.getCenter() ) );
+    points.add( planet.toCartesian( _nodeSector.getNE()     ) );
+    points.add( planet.toCartesian( _nodeSector.getNW()     ) );
+    points.add( planet.toCartesian( _nodeSector.getSE()     ) );
+    points.add( planet.toCartesian( _nodeSector.getSW()     ) );
+    points.add( planet.toCartesian( _nodeSector.getCenter() ) );
 #endif
 
     _boundingVolume = Sphere::enclosingSphere(points);
@@ -256,7 +346,7 @@ void VectorStreamingRenderer::Node::loadFeatures(const G3MRenderContext* rc) {
 
   _downloader = rc->getDownloader();
   _featuresRequestID = _downloader->requestBuffer(metadataURL,
-                                                  _vectorSet->getDownloadPriority() + _featuresCount,
+                                                  _vectorSet->getDownloadPriority() + _featuresCount + _clustersCount,
                                                   _vectorSet->getTimeToCache(),
                                                   _vectorSet->getReadExpired(),
                                                   new NodeFeaturesDownloadListener(this,
@@ -266,11 +356,20 @@ void VectorStreamingRenderer::Node::loadFeatures(const G3MRenderContext* rc) {
 }
 
 void VectorStreamingRenderer::Node::unloadFeatures() {
-  _loadedFeatures = false;
+  _loadedFeatures  = false;
   _loadingFeatures = false;
 
   delete _features;
   _features = NULL;
+
+  if (_clusters != NULL) {
+    for (int i = 0; i < _clusters->size(); i++) {
+      Cluster* cluster = _clusters->at(i);
+      delete cluster;
+    }
+    delete _clusters;
+    _clusters = NULL;
+  }
 }
 
 void VectorStreamingRenderer::Node::cancelLoadFeatures() {
@@ -343,14 +442,25 @@ void VectorStreamingRenderer::Node::cancelLoadChildren() {
   }
 }
 
-VectorStreamingRenderer::NodeMarksFilter::NodeMarksFilter(const Node* node) {
-  _nodeToken = node->getMarkToken();
+VectorStreamingRenderer::NodeAllMarksFilter::NodeAllMarksFilter(const Node* node) {
+  _nodeClusterToken = node->getClusterMarkToken();
+  _nodeFeatureToken = node->getFeatureMarkToken();
 }
 
-bool VectorStreamingRenderer::NodeMarksFilter::test(const Mark* mark) const {
-  return (mark->getToken() == _nodeToken);
+bool VectorStreamingRenderer::NodeAllMarksFilter::test(const Mark* mark) const {
+  const std::string token = mark->getToken();
+  return ((token == _nodeClusterToken) ||
+          (token == _nodeFeatureToken));
 }
 
+VectorStreamingRenderer::NodeClusterMarksFilter::NodeClusterMarksFilter(const Node* node) {
+  _nodeClusterToken = node->getClusterMarkToken();
+}
+
+bool VectorStreamingRenderer::NodeClusterMarksFilter::test(const Mark* mark) const {
+  const std::string token = mark->getToken();
+  return (token == _nodeClusterToken);
+}
 
 void VectorStreamingRenderer::Node::removeMarks() {
   //  if (_verbose) {
@@ -358,7 +468,7 @@ void VectorStreamingRenderer::Node::removeMarks() {
   //                                 getFullName().c_str());
   //  }
 
-  size_t removed = _vectorSet->getMarksRenderer()->removeAllMarks( NodeMarksFilter(this), true );
+  size_t removed = _vectorSet->getMarksRenderer()->removeAllMarks( NodeAllMarksFilter(this), true );
 
   if (_verbose && removed > 0) {
 #ifdef C_CODE
@@ -417,6 +527,44 @@ void VectorStreamingRenderer::Node::unload() {
   }
 }
 
+
+
+
+void VectorStreamingRenderer::Node::childRendered() {
+  if (_clusters != NULL) {
+    if (_clusters->size() > 0) {
+      if (_clusterMarksCount > 0) {
+        size_t removed = _vectorSet->getMarksRenderer()->removeAllMarks( NodeClusterMarksFilter(this), true );
+
+        _clusterMarksCount -= removed;
+
+        if (_verbose && removed > 0) {
+#ifdef C_CODE
+          ILogger::instance()->logInfo("\"%s\": Removed %ld cluster-marks",
+                                       getFullName().c_str(),
+                                       removed);
+#endif
+#ifdef JAVA_CODE
+          ILogger.instance().logInfo("\"%s\": Removed %d cluster-marks",
+                                     getFullName(),
+                                     removed);
+#endif
+        }
+      }
+    }
+  }
+}
+
+void VectorStreamingRenderer::Node::childStopRendered() {
+  if (_clusters != NULL) {
+    if (_clusters->size() > 0) {
+      if (_clusterMarksCount <= 0) {
+        createClusterMarks();
+      }
+    }
+  }
+}
+
 long long VectorStreamingRenderer::Node::render(const G3MRenderContext* rc,
                                                 const Frustum* frustumInModelCoordinates,
                                                 const long long cameraTS,
@@ -431,8 +579,11 @@ long long VectorStreamingRenderer::Node::render(const G3MRenderContext* rc,
   if (visible) {
     const bool bigEnough = isBigEnough(rc);
     if (bigEnough) {
-      renderedCount += _marksCount;
       if (_loadedFeatures) {
+        renderedCount += _featureMarksCount + _clusterMarksCount;
+        if (_parent != NULL) {
+          _parent->childRendered();
+        }
         // don't load nor render children until the features are loaded
         if (_children == NULL) {
           if (!_loadingChildren) {
@@ -461,6 +612,10 @@ long long VectorStreamingRenderer::Node::render(const G3MRenderContext* rc,
     else {
       if (_wasBigEnough) {
         unload();
+        if (_parent != NULL) {
+          //_parent->childUnloaded();
+          _parent->childStopRendered();
+        }
       }
     }
     _wasBigEnough = bigEnough;
@@ -468,6 +623,10 @@ long long VectorStreamingRenderer::Node::render(const G3MRenderContext* rc,
   else {
     if (_wasVisible) {
       unload();
+      if (_parent != NULL) {
+        //_parent->childUnloaded();
+        _parent->childStopRendered();
+      }
     }
   }
   _wasVisible = visible;
@@ -486,20 +645,21 @@ Sector* VectorStreamingRenderer::GEOJSONUtils::parseSector(const JSONArray* json
 }
 
 Geodetic2D* VectorStreamingRenderer::GEOJSONUtils::parseGeodetic2D(const JSONArray* json) {
-  const double lat = json->getAsNumber(0)->value();
-  const double lon = json->getAsNumber(1)->value();
+  const double lon = json->getAsNumber(0)->value();
+  const double lat = json->getAsNumber(1)->value();
 
   return new Geodetic2D(Angle::fromDegrees(lat), Angle::fromDegrees(lon));
 }
 
-VectorStreamingRenderer::Node* VectorStreamingRenderer::GEOJSONUtils::parseNode(const JSONObject* json,
+VectorStreamingRenderer::Node* VectorStreamingRenderer::GEOJSONUtils::parseNode(Node*             parent,
+                                                                                const JSONObject* json,
                                                                                 const VectorSet*  vectorSet,
                                                                                 const bool        verbose) {
-  const std::string id              = json->getAsString("id")->value();
-  Sector*           nodeSector      = GEOJSONUtils::parseSector( json->getAsArray("nodeSector") );
-  Sector*           minimumSector   = GEOJSONUtils::parseSector( json->getAsArray("minimumSector") );
-  int               featuresCount   = (int) json->getAsNumber("featuresCount")->value();
-  Geodetic2D*       averagePosition = GEOJSONUtils::parseGeodetic2D( json->getAsArray("averagePosition") );
+  const std::string id            = json->getAsString("id")->value();
+  Sector*           nodeSector    = GEOJSONUtils::parseSector( json->getAsArray("nodeSector") );
+  Sector*           minimumSector = GEOJSONUtils::parseSector( json->getAsArray("minimumSector") );
+  int               clustersCount = (int) json->getAsNumber("clustersCount")->value();
+  int               featuresCount = (int) json->getAsNumber("featuresCount")->value();
 
   std::vector<std::string> children;
   const JSONArray* childrenJSON = json->getAsArray("children");
@@ -508,11 +668,12 @@ VectorStreamingRenderer::Node* VectorStreamingRenderer::GEOJSONUtils::parseNode(
   }
 
   return new Node(vectorSet,
+                  parent,
                   id,
                   nodeSector,
                   minimumSector,
+                  clustersCount,
                   featuresCount,
-                  averagePosition,
                   children,
                   verbose);
 }
@@ -521,7 +682,6 @@ VectorStreamingRenderer::MetadataParserAsyncTask::~MetadataParserAsyncTask() {
   delete _buffer;
 
   delete _sector;
-  delete _averagePosition;
 
   if (_rootNodes != NULL) {
     for (size_t i = 0; i < _rootNodes->size(); i++) {
@@ -575,17 +735,18 @@ void VectorStreamingRenderer::MetadataParserAsyncTask::runInBackground(const G3M
       }
     }
     else {
-      _sector          = GEOJSONUtils::parseSector( jsonObject->getAsArray("sector") );
-      _featuresCount   = (long long) jsonObject->getAsNumber("featuresCount")->value();
-      _averagePosition = GEOJSONUtils::parseGeodetic2D( jsonObject->getAsArray("averagePosition") );
-      _nodesCount      = (int) jsonObject->getAsNumber("featuresCount")->value();
-      _minNodeDepth    = (int) jsonObject->getAsNumber("minNodeDepth")->value();
-      _maxNodeDepth    = (int) jsonObject->getAsNumber("maxNodeDepth")->value();
+      _sector        = GEOJSONUtils::parseSector( jsonObject->getAsArray("sector") );
+      _clustersCount = (long long) jsonObject->getAsNumber("clustersCount")->value();
+      _featuresCount = (long long) jsonObject->getAsNumber("featuresCount")->value();
+      _nodesCount    = (int) jsonObject->getAsNumber("nodesCount")->value();
+      _minNodeDepth  = (int) jsonObject->getAsNumber("minNodeDepth")->value();
+      _maxNodeDepth  = (int) jsonObject->getAsNumber("maxNodeDepth")->value();
 
       const JSONArray* rootNodesJSON = jsonObject->getAsArray("rootNodes");
       _rootNodes = new std::vector<Node*>();
       for (int i = 0; i < rootNodesJSON->size(); i++) {
-        Node* node = GEOJSONUtils::parseNode(rootNodesJSON->getAsObject(i),
+        Node* node = GEOJSONUtils::parseNode(NULL,
+                                             rootNodesJSON->getAsObject(i),
                                              _vectorSet,
                                              _verbose);
         _rootNodes->push_back(node);
@@ -602,14 +763,13 @@ void VectorStreamingRenderer::MetadataParserAsyncTask::onPostExecute(const G3MCo
   }
   else {
     _vectorSet->parsedMetadata(_sector,
+                               _clustersCount,
                                _featuresCount,
-                               _averagePosition,
                                _nodesCount,
                                _minNodeDepth,
                                _maxNodeDepth,
                                _rootNodes);
     _sector          = NULL; // moved ownership to _vectorSet
-    _averagePosition = NULL; // moved ownership to _vectorSet
     _rootNodes       = NULL; // moved ownership to _vectorSet
   }
 }
@@ -664,7 +824,6 @@ VectorStreamingRenderer::VectorSet::~VectorSet() {
   }
 
   delete _sector;
-  delete _averagePosition;
   if (_rootNodes != NULL) {
     for (size_t i = 0; i < _rootNodes->size(); i++) {
       Node* node = _rootNodes->at(i);
@@ -675,8 +834,8 @@ VectorStreamingRenderer::VectorSet::~VectorSet() {
 }
 
 void VectorStreamingRenderer::VectorSet::parsedMetadata(Sector* sector,
+                                                        long long clustersCount,
                                                         long long featuresCount,
-                                                        Geodetic2D* averagePosition,
                                                         int nodesCount,
                                                         int minNodeDepth,
                                                         int maxNodeDepth,
@@ -684,8 +843,8 @@ void VectorStreamingRenderer::VectorSet::parsedMetadata(Sector* sector,
   _downloadingMetadata = false;
 
   _sector          = sector;
+  _clustersCount   = clustersCount;
   _featuresCount   = featuresCount;
-  _averagePosition = averagePosition;
   _nodesCount      = nodesCount;
   _minNodeDepth    = minNodeDepth;
   _maxNodeDepth    = maxNodeDepth;
@@ -694,17 +853,18 @@ void VectorStreamingRenderer::VectorSet::parsedMetadata(Sector* sector,
 
   if (_verbose) {
     ILogger::instance()->logInfo("\"%s\": Metadata",         _name.c_str());
-    ILogger::instance()->logInfo("   Sector           : %s",    _sector->description().c_str());
+    ILogger::instance()->logInfo("   Sector        : %s",    _sector->description().c_str());
 #ifdef C_CODE
-    ILogger::instance()->logInfo("   Features Count   : %ld",   _featuresCount);
+    ILogger::instance()->logInfo("   Clusters Count: %ld",   _clustersCount);
+    ILogger::instance()->logInfo("   Features Count: %ld",   _featuresCount);
 #endif
 #ifdef JAVA_CODE
-    ILogger.instance().logInfo("   Features Count   : %d",   _featuresCount);
+    ILogger.instance().logInfo("   Clusters Count: %d",   _clustersCount);
+    ILogger.instance().logInfo("   Features Count: %d",   _featuresCount);
 #endif
-    ILogger::instance()->logInfo("   Average Position : %s",    _averagePosition->description().c_str());
-    ILogger::instance()->logInfo("   Nodes Count      : %d",    _nodesCount);
-    ILogger::instance()->logInfo("   Depth            : %d/%d", _minNodeDepth, _maxNodeDepth);
-    ILogger::instance()->logInfo("   Root Nodes       : %d",    _rootNodesSize);
+    ILogger::instance()->logInfo("   Nodes Count   : %d",    _nodesCount);
+    ILogger::instance()->logInfo("   Depth         : %d/%d", _minNodeDepth, _maxNodeDepth);
+    ILogger::instance()->logInfo("   Root Nodes    : %d",    _rootNodesSize);
   }
 
 }
@@ -777,14 +937,36 @@ void VectorStreamingRenderer::VectorSet::render(const G3MRenderContext* rc,
   }
 }
 
-long long VectorStreamingRenderer::VectorSet::createMark(const Node* node,
-                                                         const GEO2DPointGeometry* geometry) const {
-  Mark* mark = _symbolizer->createMark(geometry);
+long long VectorStreamingRenderer::VectorSet::createClusterMarks(const Node* node,
+                                                                 const std::vector<Cluster*>* clusters) const {
+  long long counter = 0;
+  if (clusters != NULL) {
+    const size_t clustersCount = clusters->size();
+    for (size_t i = 0; i < clustersCount; i++) {
+      const Cluster* cluster = clusters->at(i);
+      if (cluster != NULL) {
+        Mark* mark = _symbolizer->createClusterMark(cluster, _featuresCount);
+        if (mark != NULL) {
+          mark->setToken( node->getClusterMarkToken() );
+          _renderer->getMarkRenderer()->addMark( mark );
+          counter++;
+        }
+      }
+    }
+  }
+
+  return counter;
+}
+
+
+long long VectorStreamingRenderer::VectorSet::createFeatureMark(const Node* node,
+                                                                const GEO2DPointGeometry* geometry) const {
+  Mark* mark = _symbolizer->createFeatureMark(geometry);
   if (mark == NULL) {
     return 0;
   }
 
-  mark->setToken( node->getMarkToken() );
+  mark->setToken( node->getFeatureMarkToken() );
   _renderer->getMarkRenderer()->addMark( mark );
   return 1;
 }

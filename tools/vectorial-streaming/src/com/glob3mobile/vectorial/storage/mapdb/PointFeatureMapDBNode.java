@@ -11,7 +11,6 @@ import java.util.concurrent.ConcurrentNavigableMap;
 
 import org.mapdb.BTreeMap;
 
-import com.glob3mobile.geo.Angle;
 import com.glob3mobile.geo.Geodetic2D;
 import com.glob3mobile.geo.Sector;
 import com.glob3mobile.vectorial.storage.PointFeature;
@@ -33,15 +32,12 @@ class PointFeatureMapDBNode
 
 
       public final List<MapDBFeature> _features;
-      public final Geodetic2D         _averagePosition;
       public final Sector             _minimumSector;
 
 
       private MapDBFeaturesSet(final List<MapDBFeature> features,
-                               final Geodetic2D averagePosition,
                                final Sector minimumSector) {
          _features = features;
-         _averagePosition = averagePosition;
          _minimumSector = minimumSector;
       }
 
@@ -53,8 +49,6 @@ class PointFeatureMapDBNode
 
       private static MapDBFeaturesSet extractFeatures(final Sector sector,
                                                       final List<MapDBFeature> features) {
-         double sumLatRad = 0;
-         double sumLonRad = 0;
          double minLatRad = Double.POSITIVE_INFINITY;
          double minLonRad = Double.POSITIVE_INFINITY;
          double maxLatRad = Double.NEGATIVE_INFINITY;
@@ -71,9 +65,6 @@ class PointFeatureMapDBNode
 
                final double latRad = point._latitude._radians;
                final double lonRad = point._longitude._radians;
-
-               sumLatRad += latRad;
-               sumLonRad += lonRad;
 
                if (latRad < minLatRad) {
                   minLatRad = latRad;
@@ -93,17 +84,12 @@ class PointFeatureMapDBNode
             }
          }
 
-         final int extractedSize = extracted.size();
-         if (extractedSize == 0) {
+         if (extracted.isEmpty()) {
             return null;
          }
 
-         final double averageLatRad = sumLatRad / extractedSize;
-         final double averageLonRad = sumLonRad / extractedSize;
-
          return new MapDBFeaturesSet( //
                   extracted, //
-                  Geodetic2D.fromRadians(averageLatRad, averageLonRad), //
                   Sector.fromRadians(minLatRad, minLonRad, maxLatRad, maxLonRad));
       }
 
@@ -120,8 +106,7 @@ class PointFeatureMapDBNode
          features.add(new MapDBFeature(position, propertiesID));
       }
 
-      final MapDBFeaturesSet mapDBFeaturesSet = new MapDBFeaturesSet(features, featuresSet._averagePosition,
-               featuresSet._minimumSector);
+      final MapDBFeaturesSet mapDBFeaturesSet = new MapDBFeaturesSet(features, featuresSet._minimumSector);
 
       insertFeatures(storage, quadKey, mapDBFeaturesSet);
    }
@@ -209,7 +194,6 @@ class PointFeatureMapDBNode
 
    private int                            _featuresCount;
    private List<MapDBFeature>             _features;
-   private Geodetic2D                     _averagePosition;
 
 
    private PointFeatureMapDBNode(final PointFeatureMapDBStorage storage,
@@ -220,7 +204,6 @@ class PointFeatureMapDBNode
       _id = id;
       _nodeSector = nodeSector;
       _minimumSector = featuresSet._minimumSector;
-      _averagePosition = featuresSet._averagePosition;
       _featuresCount = featuresSet.size();
       _features = featuresSet._features;
    }
@@ -234,7 +217,6 @@ class PointFeatureMapDBNode
       _id = id;
       _nodeSector = header._nodeSector;
       _minimumSector = header._minimumSector;
-      _averagePosition = header._averagePosition;
       _featuresCount = header._featuresCount;
       _features = features;
    }
@@ -256,7 +238,7 @@ class PointFeatureMapDBNode
          }
       }
 
-      final NodeHeader header = new NodeHeader(getNodeSector(), getMinimumSector(), getAveragePosition(), getFeaturesCount());
+      final NodeHeader header = new NodeHeader(getNodeSector(), getMinimumSector(), getFeaturesCount());
       _storage.getNodesHeadersMap().put(_id, header);
 
       if (_features == null) {
@@ -316,12 +298,6 @@ class PointFeatureMapDBNode
    @Override
    public int getFeaturesCount() {
       return _featuresCount;
-   }
-
-
-   @Override
-   public Geodetic2D getAveragePosition() {
-      return _averagePosition;
    }
 
 
@@ -441,50 +417,41 @@ class PointFeatureMapDBNode
       mergedFeatures.addAll(getMapDBFeatures());
       mergedFeatures.addAll(newPointFeaturesSet._features);
 
-      final Geodetic2D mergedAveragePosition = weightedAverage( //
-               _averagePosition, oldFeaturesCount, //
-               newPointFeaturesSet._averagePosition, newFeaturesSize);
-
       _featuresCount = mergedFeaturesSize;
       _features = mergedFeatures;
-      _averagePosition = mergedAveragePosition;
       _minimumSector = _minimumSector.mergedWith(newPointFeaturesSet._minimumSector);
 
       rawSave();
    }
 
 
-   private static double weightedAverage(final double value1,
-                                         final int count1,
-                                         final double value2,
-                                         final int count2) {
-      return ((value1 * count1) + (value2 * count2)) / (count1 + count2);
-   }
-
-
-   private static Angle weightedAverage(final Angle value1,
-                                        final int count1,
-                                        final Angle value2,
-                                        final int count2) {
-      return Angle.fromRadians(weightedAverage(value1._radians, count1, value2._radians, count2));
-   }
-
-
-   private static Geodetic2D weightedAverage(final Geodetic2D value1,
-                                             final int count1,
-                                             final Geodetic2D value2,
-                                             final int count2) {
-
-      final Angle averageLatitude = weightedAverage( //
-               value1._latitude, count1, //
-               value2._latitude, count2);
-
-      final Angle averageLongitude = weightedAverage( //
-               value1._longitude, count1, //
-               value2._longitude, count2);
-
-      return new Geodetic2D(averageLatitude, averageLongitude);
-   }
+   //   private static double weightedAverage(final double value1,
+   //                                         final int count1,
+   //                                         final double value2,
+   //                                         final int count2) {
+   //      return ((value1 * count1) + (value2 * count2)) / (count1 + count2);
+   //   }
+   //   private static Angle weightedAverage(final Angle value1,
+   //                                        final int count1,
+   //                                        final Angle value2,
+   //                                        final int count2) {
+   //      return Angle.fromRadians(weightedAverage(value1._radians, count1, value2._radians, count2));
+   //   }
+   //   private static Geodetic2D weightedAverage(final Geodetic2D value1,
+   //                                             final int count1,
+   //                                             final Geodetic2D value2,
+   //                                             final int count2) {
+   //
+   //      final Angle averageLatitude = weightedAverage( //
+   //               value1._latitude, count1, //
+   //               value2._latitude, count2);
+   //
+   //      final Angle averageLongitude = weightedAverage( //
+   //               value1._longitude, count1, //
+   //               value2._longitude, count2);
+   //
+   //      return new Geodetic2D(averageLatitude, averageLongitude);
+   //   }
 
 
    private static List<QuadKey> descendantsQuadKeysOfLevel(final QuadKey key,
