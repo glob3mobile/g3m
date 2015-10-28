@@ -33,6 +33,7 @@ public:
   _interpolator(new BilinearInterpolator())
   {
     _data.push_back(data);
+    data->_retain();
   }
 
   void addElevationData(ElevationData* data);
