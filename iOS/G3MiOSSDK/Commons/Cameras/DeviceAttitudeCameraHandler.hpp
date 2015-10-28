@@ -12,6 +12,30 @@
 #include "CameraEventHandler.hpp"
 #include "MutableMatrix44D.hpp"
 
+class ILocationModifier{
+public:
+  virtual ~ILocationModifier() {}
+  
+  /** Modifies the sensors position every frame **/
+  virtual Geodetic3D modify(const Geodetic3D& location) = 0;
+  
+};
+
+class HeightOffsetLocationModifier: public ILocationModifier{
+  double _offsetInMeters;
+
+public:
+  
+  HeightOffsetLocationModifier(double offsetInMeters):_offsetInMeters(offsetInMeters){}
+  
+  Geodetic3D modify(const Geodetic3D& location){
+    return Geodetic3D::fromDegrees(location._latitude._degrees,
+                                   location._longitude._degrees,
+                                   location._height + _offsetInMeters);
+  }
+  
+};
+
 class DeviceAttitudeCameraHandler: public CameraEventHandler{
   
 private:
@@ -20,14 +44,15 @@ private:
   mutable MutableMatrix44D _camRM;
   
   bool _updateLocation;
-  double _heightOffset;
   mutable long long _lastLocationUpdateTimeInMS;
   mutable ITimer* _timer;
+  
+  ILocationModifier* _locationModifier;
   
 public:
   
   DeviceAttitudeCameraHandler(bool updateLocation,
-                              double heightOffset = 1000);
+                              ILocationModifier* locationModifier = NULL);
   
   ~DeviceAttitudeCameraHandler();
   
