@@ -44,8 +44,6 @@ private:
   mutable MutableMatrix44D _camRM;
   
   bool _updateLocation;
-  mutable long long _lastLocationUpdateTimeInMS;
-  mutable ITimer* _timer;
   
   ILocationModifier* _locationModifier;
   
