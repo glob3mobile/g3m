@@ -386,6 +386,9 @@ public:
   Angle getHorizontalFOV() const;
   
   Angle getVerticalFOV() const;
+  
+  /** Set -1 for unfixed**/
+  void setFixedZNear(double ZNearInMeters);
 
 
 private:
@@ -432,6 +435,7 @@ private:
   mutable Frustum*         _frustumInModelCoordinates;
   double                   _tanHalfVerticalFieldOfView;
   double                   _tanHalfHorizontalFieldOfView;
+  double                   _fixedZNear;
 
   //The Camera Effect Target
   class CameraEffectTarget: public EffectTarget {

@@ -338,9 +338,13 @@ void Camera::setPointOfView(const Geodetic3D& center,
 }
 
 FrustumData Camera::calculateFrustumData() const {
-
-  const double height = getGeodeticPosition()._height;
-  double zNear = height * 0.1;
+  
+  double zNear = _fixedZNear;
+  
+  if (zNear <= 0){
+    const double height = getGeodeticPosition()._height;
+    zNear = height * 0.1;
+  }
 
   //printf ("computing new znear=%.3f.  Height from ground =%.2f\n", zNear, heightFromGround);
   
@@ -522,4 +526,8 @@ Vector3D Camera::getFirstValidScenePositionForCentralColumn() const {
   
   return Vector3D::nan();
 
+}
+
+void Camera::setFixedZNear(double ZNearInMeters){
+  _fixedZNear = ZNearInMeters;
 }
