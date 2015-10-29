@@ -694,6 +694,12 @@ public class Camera
     return Angle.fromRadians(IMathUtils.instance().atan(_tanHalfVerticalFieldOfView)).times(2);
   }
 
+  /** Set -1 for unfixed**/
+  public final void setFixedZNear(double ZNearInMeters)
+  {
+    _fixedZNear = ZNearInMeters;
+  }
+
 
 
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
@@ -735,6 +741,7 @@ public class Camera
   private Frustum _frustumInModelCoordinates;
   private double _tanHalfVerticalFieldOfView;
   private double _tanHalfHorizontalFieldOfView;
+  private double _fixedZNear;
 
   //The Camera Effect Target
   private static class CameraEffectTarget implements EffectTarget
@@ -822,8 +829,13 @@ public class Camera
   private FrustumData calculateFrustumData()
   {
   
-    final double height = getGeodeticPosition()._height;
-    double zNear = height * 0.1;
+    double zNear = _fixedZNear;
+  
+    if (zNear <= 0)
+    {
+      final double height = getGeodeticPosition()._height;
+      zNear = height * 0.1;
+    }
   
     //printf ("computing new znear=%.3f.  Height from ground =%.2f\n", zNear, heightFromGround);
   
