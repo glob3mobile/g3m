@@ -41,6 +41,8 @@ private:
   
   ILocationModifier* _locationModifier;
   
+  void setPositionOnNextCamera(Camera* nextCamera, Geodetic3D& pos) const;
+  
 public:
   
   DeviceAttitudeCameraHandler(bool updateLocation,
