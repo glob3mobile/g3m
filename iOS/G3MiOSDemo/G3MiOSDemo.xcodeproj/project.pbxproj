@@ -53,6 +53,8 @@
 		D86436931BE3951F00A37924 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D86436921BE3951F00A37924 /* Images.xcassets */; };
 		D876E6DA1AE6554700F616DE /* StarsParser.mm in Sources */ = {isa = PBXBuildFile; fileRef = D876E6D91AE6554700F616DE /* StarsParser.mm */; };
 		D876E6DC1AE65A4400F616DE /* stars.csv in Resources */ = {isa = PBXBuildFile; fileRef = D876E6DB1AE65A4400F616DE /* stars.csv */; };
+		D87E4F331BE3A25500E53805 /* SWRevealViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D87E4F321BE3A25500E53805 /* SWRevealViewController.m */; };
+		D87E4F381BE3AA8500E53805 /* MenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D87E4F371BE3AA8400E53805 /* MenuViewController.m */; };
 		D882B1CD171D77C000C2AD9C /* full-earth-256x256.bil in Resources */ = {isa = PBXBuildFile; fileRef = D882B1CC171D76AD00C2AD9C /* full-earth-256x256.bil */; };
 		D8C4723D1AE8F637005254B3 /* stars_links.csv in Resources */ = {isa = PBXBuildFile; fileRef = D8C4723C1AE8F636005254B3 /* stars_links.csv */; };
 		D8EEF38B1577920B003FEB5E /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8EEF38A1577920B003FEB5E /* UIKit.framework */; };
@@ -138,6 +140,10 @@
 		D876E6D81AE6554700F616DE /* StarsParser.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = StarsParser.hpp; sourceTree = "<group>"; };
 		D876E6D91AE6554700F616DE /* StarsParser.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = StarsParser.mm; sourceTree = "<group>"; };
 		D876E6DB1AE65A4400F616DE /* stars.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = stars.csv; sourceTree = "<group>"; };
+		D87E4F311BE3A25500E53805 /* SWRevealViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SWRevealViewController.h; path = "../../../../../../Downloads/SWRevealViewController-master/SWRevealViewController/SWRevealViewController.h"; sourceTree = "<group>"; };
+		D87E4F321BE3A25500E53805 /* SWRevealViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SWRevealViewController.m; path = "../../../../../../Downloads/SWRevealViewController-master/SWRevealViewController/SWRevealViewController.m"; sourceTree = "<group>"; };
+		D87E4F361BE3AA8400E53805 /* MenuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MenuViewController.h; sourceTree = "<group>"; };
+		D87E4F371BE3AA8400E53805 /* MenuViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MenuViewController.m; sourceTree = "<group>"; };
 		D882B1CC171D76AD00C2AD9C /* full-earth-256x256.bil */ = {isa = PBXFileReference; lastKnownFileType = file; path = "full-earth-256x256.bil"; sourceTree = "<group>"; };
 		D8C4723C1AE8F636005254B3 /* stars_links.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = stars_links.csv; sourceTree = "<group>"; };
 		D8EEF3861577920B003FEB5E /* G3MiOSDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = G3MiOSDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -222,6 +228,8 @@
 		D8EEF3901577920B003FEB5E /* G3MiOSDemo */ = {
 			isa = PBXGroup;
 			children = (
+				D87E4F311BE3A25500E53805 /* SWRevealViewController.h */,
+				D87E4F321BE3A25500E53805 /* SWRevealViewController.m */,
 				D8EEF4271577B0D6003FEB5E /* Resources */,
 				D8EEF3991577920B003FEB5E /* AppDelegate.h */,
 				D8EEF39A1577920B003FEB5E /* AppDelegate.m */,
@@ -238,6 +246,8 @@
 				D83D604B1AA89D75002EA2B8 /* DeviceOrientation.h */,
 				D83D604C1AA89D75002EA2B8 /* DeviceOrientation.mm */,
 				D86436921BE3951F00A37924 /* Images.xcassets */,
+				D87E4F361BE3AA8400E53805 /* MenuViewController.h */,
+				D87E4F371BE3AA8400E53805 /* MenuViewController.m */,
 			);
 			name = G3MiOSDemo;
 			path = Glob3iOSDemo;
@@ -431,8 +441,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				D8EEF3971577920B003FEB5E /* main.m in Sources */,
+				D87E4F381BE3AA8500E53805 /* MenuViewController.m in Sources */,
 				D83165EE1ABAD435002A8451 /* StarDomeRenderer.cpp in Sources */,
 				D8EEF39B1577920B003FEB5E /* AppDelegate.m in Sources */,
+				D87E4F331BE3A25500E53805 /* SWRevealViewController.m in Sources */,
 				D83D604D1AA89D75002EA2B8 /* DeviceOrientation.mm in Sources */,
 				D818F9321AF251770083EB65 /* IDeviceAttitude.cpp in Sources */,
 				D876E6DA1AE6554700F616DE /* StarsParser.mm in Sources */,

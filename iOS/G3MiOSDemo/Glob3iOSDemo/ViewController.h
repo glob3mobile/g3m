@@ -34,4 +34,6 @@ Mesh* createSectorMesh(const Planet* planet,
 
 -(void) tick;
 
+-(IBAction)showMenu:(id)sender;
+
 @end

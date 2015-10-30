@@ -5374,5 +5374,9 @@ std::vector<StarDomeRenderer*> _sdrs;
   return YES;
 }
 
+-(IBAction)showMenu:(id)sender{
+  [self performSegueWithIdentifier:@"show_menu" sender:nil];
+}
+
 
 @end
