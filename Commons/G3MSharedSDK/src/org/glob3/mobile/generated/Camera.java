@@ -398,14 +398,11 @@ public class Camera
 
   public final void setGeodeticPosition(Geodetic3D g3d)
   {
-    final Angle heading = getHeading();
-    final Angle pitch = getPitch();
-    setPitch(Angle.fromDegrees(-90));
+    TaitBryanAngles tba = getHeadingPitchRoll();
     MutableMatrix44D dragMatrix = _planet.drag(getGeodeticPosition(), g3d);
     if (dragMatrix.isValid())
        applyTransform(dragMatrix);
-    setHeading(heading);
-    setPitch(pitch);
+    setHeadingPitchRoll(tba._heading, tba._pitch, tba._roll);
   }
 
   public final void setGeodeticPosition(Angle latitude, Angle longitude, double height)
