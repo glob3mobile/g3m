@@ -1210,6 +1210,10 @@ std::vector<StarDomeRenderer*> _sdrs;
 
         changed();
       }
+      
+      std::string getImageName(const G3MContext* context) const{
+        
+      }
 
     };
 
@@ -6199,7 +6203,15 @@ public:
 //    _latitude = (_degrees = 28.289078747687597, _radians = 0.4937375665031028)
 //    _longitude = (_degrees = -16.512578939050599, _radians = -0.28819887048190501)
 //  }
-
+  
+  MarksRenderer* mr = new MarksRenderer(false);
+  Mark* m = new   Mark("MARCA DE PRUEBA",
+                       URL("file:///g3m-marker.png"),
+                       Geodetic3D::fromDegrees(28.131817, -15.440219, 0),
+                       RELATIVE_TO_GROUND);
+  mr->addMark(m);
+  
+  builder.addRenderer(mr);
 
   Vector2I extent = Vector2I(256, 256);                             // image resolution
   URL url = URL("http://serdis.dis.ulpgc.es/~atrujill/glob3m/IGO/Tenerife-256x256.bil", false);

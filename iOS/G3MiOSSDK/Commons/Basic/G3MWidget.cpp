@@ -755,7 +755,14 @@ void G3MWidget::render(int width, int height) {
   _frameTasksExecutor->doPreRenderCycle(_renderContext);
 
 #warning AT WORK JM
-  rawRenderStereoToedIn(renderStateType);
+  if (bool stereo = true){
+    if (_currentCamera->getViewPortWidth() != _width / 2){
+      onResizeViewportEvent(_width / 2, _height);
+    }
+    rawRenderStereoToedIn(renderStateType);
+  } else{
+    rawRender(renderStateType);
+  }
 
   //Removing unused programs
   if (_renderCounter % _nFramesBeetweenProgramsCleanUp == 0) {
