@@ -651,7 +651,7 @@ void G3MWidget::rawRenderStereoParallelAxis(const RenderState_Type renderStateTy
   Vector3D up = _currentCamera->getUp();
   
   //Left
-  glViewport(0, 0, _width / 2, _height);
+  _gl->viewport(0, 0, _width / 2, _height);
   Vector3D leftEyePosition = camPos.add(eyesDirection.times(-eyesSeparation));
   Vector3D leftEyeCenter = camCenter.add(eyesDirection.times(-eyesSeparation));
   
@@ -663,7 +663,7 @@ void G3MWidget::rawRenderStereoParallelAxis(const RenderState_Type renderStateTy
   
   //Right
   
-  glViewport(_width / 2, 0, _width / 2, _height);
+  _gl->viewport(_width / 2, 0, _width / 2, _height);
   Vector3D rightEyePosition = camPos.add(eyesDirection.times(eyesSeparation));
   Vector3D rightEyeCenter = camCenter.add(eyesDirection.times(eyesSeparation));
   
@@ -766,7 +766,8 @@ void G3MWidget::render(int width, int height) {
   _frameTasksExecutor->doPreRenderCycle(_renderContext);
 
 #warning AT WORK JM
-  if (bool stereo = true){
+  bool stereo = true;
+  if (stereo){
     if (_currentCamera->getViewPortWidth() != _width / 2){
       onResizeViewportEvent(_width / 2, _height);
     }

@@ -198,7 +198,8 @@ public class G3MWidget implements ChangedRendererInfoListener, FrameDepthProvide
   
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#warning AT WORK JM
-    if (boolean stereo = true)
+    boolean stereo = true;
+    if (stereo)
     {
       if (_currentCamera.getViewPortWidth() != _width / 2)
       {
@@ -1172,7 +1173,7 @@ public class G3MWidget implements ChangedRendererInfoListener, FrameDepthProvide
     Vector3D up = _currentCamera.getUp();
   
     //Left
-    glViewport(0, 0, _width / 2, _height);
+    _gl.viewport(0, 0, _width / 2, _height);
     Vector3D leftEyePosition = camPos.add(eyesDirection.times(-eyesSeparation));
     Vector3D leftEyeCenter = camCenter.add(eyesDirection.times(-eyesSeparation));
   
@@ -1184,7 +1185,7 @@ public class G3MWidget implements ChangedRendererInfoListener, FrameDepthProvide
   
     //Right
   
-    glViewport(_width / 2, 0, _width / 2, _height);
+    _gl.viewport(_width / 2, 0, _width / 2, _height);
     Vector3D rightEyePosition = camPos.add(eyesDirection.times(eyesSeparation));
     Vector3D rightEyeCenter = camCenter.add(eyesDirection.times(eyesSeparation));
   
