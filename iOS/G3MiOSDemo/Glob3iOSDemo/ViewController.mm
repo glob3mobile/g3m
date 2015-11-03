@@ -293,56 +293,9 @@ const Planet* planet;
 {
   [super viewDidLoad];
   
-  // initialize a customized widget without using a builder
-  //[[self G3MWidget] initSingletons];
-  // [self initWithoutBuilder];
-  
-//  [self initCustomizedWithBuilder];
-  
-  //[self initTestingTileImageProvider];
-  
-  //  [self initWithNonOverlappingMarks];
-  
-  
-  //  [self initWithMapBooBuilder];
-  
-  //  [self initWithBuilderAndSegmentedWorld];
-  
-  //  [[self G3MWidget] widget]->setAnimatedCameraPosition(TimeInterval::fromSeconds(5),
-  //                                                       Geodetic3D::fromDegrees(25.743467472995700263,
-  //                                                                               -5.3656762990500403987,
-  //                                                                               1664155.1381164737977),
-  //                                                       Angle::fromDegrees(-0.145718),
-  //                                                       Angle::fromDegrees(-52.117699));
-  
-  
-  //#warning Buggy mark
-  //  [[self G3MWidget] widget]->setAnimatedCameraPosition(TimeInterval::fromSeconds(5),
-  //                                                       Geodetic3D::fromDegrees(47.3665119223405,
-  //                                                                               19.251949160207758,
-  //                                                                               1076.892613024946),
-  //                                                       Angle::fromDegrees(-5.714247),
-  //                                                       Angle::fromDegrees(-5.297620));
-  
-  //    [[self G3MWidget] widget]->setAnimatedCameraPosition(TimeInterval::fromSeconds(5),
-  //                                                         Geodetic3D::fromDegrees(40.3323148480663158,
-  //                                                                                 -5.5216079822178570,
-  //                                                                                 1000076.892613024946));
-  //
-  
-  
-  //  [NSTimer scheduledTimerWithTimeInterval:0.05
-  //                                   target:self
-  //                                 selector:@selector(changeCameraTick)
-  //                                 userInfo:nil
-  //                                  repeats:YES];
-  
-  
   _dO = [[DeviceOrientation alloc] init];
   
-  
   cameraPositionForStars = new Geodetic3D(Geodetic3D::fromDegrees(27.973105, -15.597545, 1000));
-  
   
   class MyMarkWidgetTouchListener: public NonOverlappingMarkTouchListener{
   public:
@@ -396,7 +349,7 @@ const Planet* planet;
   builder.addCameraConstraint(new DeviceOrientationCameraConstrainer(self));
   
   
-  planet = Planet::createEarth();
+  planet = Planet::createFlatEarth();
   
   
   mr = new MeshRenderer();
@@ -404,6 +357,7 @@ const Planet* planet;
   
   
   [self readStars: &builder];
+  [self createHorizonLine:&builder];
   
   builder.setPlanet(planet);
   builder.initializeWidget();
@@ -520,6 +474,33 @@ std::vector<StarDomeRenderer*> _sdrs;
     
   }
   
+}
+
+-(void) createHorizonLine: (IG3MBuilder*) builder{
+  
+  MeshRenderer* mr = new MeshRenderer();
+  builder->addRenderer(mr);
+  
+  double domeHeight = 1e5;
+  
+  Vector3D vx = Vector3D::upX().times(domeHeight);
+  Vector3D vz = Vector3D::upZ();
+  
+  Geodetic3D centerGeo = Geodetic3D::fromDegrees(28.1, -15.43, 500);
+  Vector3D center = planet->toCartesian(centerGeo);
+  
+  FloatBufferBuilderFromCartesian3D* fbb = FloatBufferBuilderFromCartesian3D::builderWithoutCenter();
+  
+  for(int i = 0; i < 360; i+=5){
+    fbb->add(vx.rotateAroundAxis(vz, Angle::fromDegrees(i)));
+  }
+  
+  Mesh* m = new DirectMesh(GLPrimitive::lineLoop(), true, center, fbb->create(), 10.0, 10.0);
+  
+  mr->addMesh(m);
+  
+  
+  delete fbb;
 }
 
 -(void) readStars: (IG3MBuilder*) builder{
