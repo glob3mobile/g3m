@@ -181,4 +181,6 @@ public abstract class INativeGL
 
   public abstract void setActiveTexture(int i);
 
+  public abstract void viewport(int x, int y, int width, int height);
+
 }

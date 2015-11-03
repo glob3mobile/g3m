@@ -474,6 +474,12 @@ public class GL
   }
 
 
+  public final void viewport(int x, int y, int width, int height)
+  {
+    _nativeGL.viewport(x, y, width, height);
+  }
+
+
 }
 //void GL::applyGLGlobalStateAndGPUProgramState(const GLGlobalState& state, GPUProgramManager& progManager, const GPUProgramState& progState) {
 //  state.applyChanges(this, *_currentState);
