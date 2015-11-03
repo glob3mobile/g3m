@@ -630,14 +630,19 @@ void G3MWidget::rawRenderStereoParallelAxis(const RenderState_Type renderStateTy
   Vector3D camPos = _currentCamera->getCartesianPosition();
   Vector3D camCenter = _currentCamera->getCenter();
   Vector3D eyesDirection = _currentCamera->getUp().cross(_currentCamera->getViewDirection()).normalized();
-  const double eyesSeparation = 200;// 0.03;
+  
+  //INTEROCULAR DISTANCE
+  const double eyesSeparation = 20;// 0.03;
   
   _gl->clearScreen(*_backgroundColor);
   
   Camera centralCamera(1000, this);
   centralCamera.copyFrom(*_currentCamera);
+  //centralCamera.initialize(_renderContext);
   
-  Vector3D center = centralCamera.pixel2PlanetPoint(Vector2F(_width/2, _height/2));
+  _currentCamera->setFOV(Angle::fromDegrees(60), Angle::fromDegrees(60));
+  
+  // Vector3D center = centralCamera.pixel2PlanetPoint(Vector2F(_width/2, _height/2));
   
   Vector3D up = _currentCamera->getUp();
   
@@ -666,7 +671,9 @@ void G3MWidget::rawRenderStereoParallelAxis(const RenderState_Type renderStateTy
   
   //  _currentCamera->setCartesianPosition(camPos);
   
-  _currentCamera->copyFrom(centralCamera);
+  _currentCamera->setLookAtParams(centralCamera.getCartesianPosition().asMutableVector3D(),
+                                  centralCamera.getCenter().asMutableVector3D(),
+                                  up.asMutableVector3D());
 }
 
 void G3MWidget::render(int width, int height) {
@@ -759,7 +766,7 @@ void G3MWidget::render(int width, int height) {
     if (_currentCamera->getViewPortWidth() != _width / 2){
       onResizeViewportEvent(_width / 2, _height);
     }
-    rawRenderStereoToedIn(renderStateType);
+    rawRenderStereoParallelAxis(renderStateType);
   } else{
     rawRender(renderStateType);
   }
