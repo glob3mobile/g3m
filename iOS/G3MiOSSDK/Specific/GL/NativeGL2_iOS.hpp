@@ -619,6 +619,11 @@ public:
     return Vector2F(r[0], r[1]);
   }
   
+  
+  void viewport(int x, int y, int width, int height) const{
+    glViewport(x, y, width, height);
+  }
+  
 };
 
 #endif

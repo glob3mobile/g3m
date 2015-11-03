@@ -380,7 +380,7 @@ private:
   void zRender();
   
   
-  void rawRenderStereoToedIn(const RenderState_Type renderStateType);
+//  void rawRenderStereoToedIn(const RenderState_Type renderStateType);
   
   void rawRenderStereoParallelAxis(const RenderState_Type renderStateType);
 
