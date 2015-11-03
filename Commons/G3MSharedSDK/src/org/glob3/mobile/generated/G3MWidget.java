@@ -198,7 +198,18 @@ public class G3MWidget implements ChangedRendererInfoListener, FrameDepthProvide
   
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#warning AT WORK JM
-    rawRenderStereoToedIn(renderStateType);
+    if (boolean stereo = true)
+    {
+      if (_currentCamera.getViewPortWidth() != _width / 2)
+      {
+        onResizeViewportEvent(_width / 2, _height);
+      }
+      rawRenderStereoParallelAxis(renderStateType);
+    }
+    else
+    {
+      rawRender(renderStateType);
+    }
   
     //Removing unused programs
     if (_renderCounter % _nFramesBeetweenProgramsCleanUp == 0)
@@ -1135,14 +1146,19 @@ public class G3MWidget implements ChangedRendererInfoListener, FrameDepthProvide
     Vector3D camPos = _currentCamera.getCartesianPosition();
     Vector3D camCenter = _currentCamera.getCenter();
     Vector3D eyesDirection = _currentCamera.getUp().cross(_currentCamera.getViewDirection()).normalized();
-    final double eyesSeparation = 200; // 0.03;
+  
+    //INTEROCULAR DISTANCE
+    final double eyesSeparation = 20; // 0.03;
   
     _gl.clearScreen(_backgroundColor);
   
     Camera centralCamera = new Camera(1000, this);
     centralCamera.copyFrom(_currentCamera);
+    //centralCamera.initialize(_renderContext);
   
-    Vector3D center = centralCamera.pixel2PlanetPoint(new Vector2F(_width/2, _height/2));
+    _currentCamera.setFOV(Angle.fromDegrees(60), Angle.fromDegrees(60));
+  
+    // Vector3D center = centralCamera.pixel2PlanetPoint(Vector2F(_width/2, _height/2));
   
     Vector3D up = _currentCamera.getUp();
   
@@ -1171,7 +1187,7 @@ public class G3MWidget implements ChangedRendererInfoListener, FrameDepthProvide
   
     //  _currentCamera->setCartesianPosition(camPos);
   
-    _currentCamera.copyFrom(centralCamera);
+    _currentCamera.setLookAtParams(centralCamera.getCartesianPosition().asMutableVector3D(), centralCamera.getCenter().asMutableVector3D(), up.asMutableVector3D());
   }
 
 
