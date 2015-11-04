@@ -17,7 +17,7 @@ package org.glob3.mobile.generated;
 
 
 
-public abstract class NullStorage extends IStorage
+public class NullStorage extends IStorage
 {
   public final IByteBufferResult readBuffer(URL url, boolean readExpired)
   {
@@ -51,6 +51,11 @@ public abstract class NullStorage extends IStorage
 
   public final void onDestroy(G3MContext context)
   {
+  }
+
+  public final void merge(String databasePath)
+  {
+
   }
 
 
