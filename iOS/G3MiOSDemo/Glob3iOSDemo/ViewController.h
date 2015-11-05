@@ -32,7 +32,10 @@ Mesh* createSectorMesh(const Planet* planet,
 }
 
 @property (retain, nonatomic) G3MWidget_iOS* G3MWidget;
+
 @property (nonatomic) MarksRenderer* galaxies;
+
+
 
 -(void) tick;
 
