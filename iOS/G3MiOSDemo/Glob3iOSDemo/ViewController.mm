@@ -303,6 +303,8 @@ std::vector<StarDomeRenderer*> _sdrs;
   
   Geodetic3D g = planet->toGeodetic3D(vx);
   
+  Vector3D vx = Star::getStarDisplacementInDome(domeHeight, <#double siderealTime#>, <#const Geodetic2D &domePos#>)
+  
   Mark* n = new   Mark(URL("file:///galaxy.png"),
                        g,
                        ABSOLUTE);
