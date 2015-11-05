@@ -50,10 +50,11 @@
 		D83165EE1ABAD435002A8451 /* StarDomeRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D83165EC1ABAD435002A8451 /* StarDomeRenderer.cpp */; };
 		D83D604A1AA89BC0002EA2B8 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D83D60491AA89BC0002EA2B8 /* CoreMotion.framework */; };
 		D83D604D1AA89D75002EA2B8 /* DeviceOrientation.mm in Sources */ = {isa = PBXBuildFile; fileRef = D83D604C1AA89D75002EA2B8 /* DeviceOrientation.mm */; };
+		D85B0C311BE8F8880073A034 /* galaxy.png in Resources */ = {isa = PBXBuildFile; fileRef = D85B0C301BE8F8880073A034 /* galaxy.png */; };
 		D86436931BE3951F00A37924 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D86436921BE3951F00A37924 /* Images.xcassets */; };
 		D876E6DA1AE6554700F616DE /* StarsParser.mm in Sources */ = {isa = PBXBuildFile; fileRef = D876E6D91AE6554700F616DE /* StarsParser.mm */; };
 		D876E6DC1AE65A4400F616DE /* stars.csv in Resources */ = {isa = PBXBuildFile; fileRef = D876E6DB1AE65A4400F616DE /* stars.csv */; };
-		D87E4F381BE3AA8500E53805 /* MenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D87E4F371BE3AA8400E53805 /* MenuViewController.m */; };
+		D87E4F381BE3AA8500E53805 /* MenuViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = D87E4F371BE3AA8400E53805 /* MenuViewController.mm */; };
 		D882B1CD171D77C000C2AD9C /* full-earth-256x256.bil in Resources */ = {isa = PBXBuildFile; fileRef = D882B1CC171D76AD00C2AD9C /* full-earth-256x256.bil */; };
 		D8C4723D1AE8F637005254B3 /* stars_links.csv in Resources */ = {isa = PBXBuildFile; fileRef = D8C4723C1AE8F636005254B3 /* stars_links.csv */; };
 		D8EEF38B1577920B003FEB5E /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8EEF38A1577920B003FEB5E /* UIKit.framework */; };
@@ -135,12 +136,13 @@
 		D83D60491AA89BC0002EA2B8 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
 		D83D604B1AA89D75002EA2B8 /* DeviceOrientation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DeviceOrientation.h; sourceTree = "<group>"; };
 		D83D604C1AA89D75002EA2B8 /* DeviceOrientation.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = DeviceOrientation.mm; sourceTree = "<group>"; };
+		D85B0C301BE8F8880073A034 /* galaxy.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = galaxy.png; sourceTree = "<group>"; };
 		D86436921BE3951F00A37924 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = G3MiOSDemo/Images.xcassets; sourceTree = SOURCE_ROOT; };
 		D876E6D81AE6554700F616DE /* StarsParser.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = StarsParser.hpp; sourceTree = "<group>"; };
 		D876E6D91AE6554700F616DE /* StarsParser.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = StarsParser.mm; sourceTree = "<group>"; };
 		D876E6DB1AE65A4400F616DE /* stars.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = stars.csv; sourceTree = "<group>"; };
 		D87E4F361BE3AA8400E53805 /* MenuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MenuViewController.h; sourceTree = "<group>"; };
-		D87E4F371BE3AA8400E53805 /* MenuViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MenuViewController.m; sourceTree = "<group>"; };
+		D87E4F371BE3AA8400E53805 /* MenuViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MenuViewController.mm; sourceTree = "<group>"; };
 		D882B1CC171D76AD00C2AD9C /* full-earth-256x256.bil */ = {isa = PBXFileReference; lastKnownFileType = file; path = "full-earth-256x256.bil"; sourceTree = "<group>"; };
 		D8C4723C1AE8F636005254B3 /* stars_links.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = stars_links.csv; sourceTree = "<group>"; };
 		D8EEF3861577920B003FEB5E /* G3MiOSDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = G3MiOSDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -242,7 +244,7 @@
 				D83D604C1AA89D75002EA2B8 /* DeviceOrientation.mm */,
 				D86436921BE3951F00A37924 /* Images.xcassets */,
 				D87E4F361BE3AA8400E53805 /* MenuViewController.h */,
-				D87E4F371BE3AA8400E53805 /* MenuViewController.m */,
+				D87E4F371BE3AA8400E53805 /* MenuViewController.mm */,
 			);
 			name = G3MiOSDemo;
 			path = Glob3iOSDemo;
@@ -270,6 +272,7 @@
 		D8EEF4271577B0D6003FEB5E /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				D85B0C301BE8F8880073A034 /* galaxy.png */,
 				D8C4723C1AE8F636005254B3 /* stars_links.csv */,
 				D80DF37B1AC5642900A7D92A /* stars_old.csv */,
 				D876E6DB1AE65A4400F616DE /* stars.csv */,
@@ -391,6 +394,7 @@
 				CF8E9887180D98DC00A08208 /* pointcloud in Resources */,
 				D8C4723D1AE8F637005254B3 /* stars_links.csv in Resources */,
 				CF0FC6F21899B86B005988D7 /* 3d_.json in Resources */,
+				D85B0C311BE8F8880073A034 /* galaxy.png in Resources */,
 				CFE26D6018A153DB00253709 /* 3d_1.json in Resources */,
 				D876E6DC1AE65A4400F616DE /* stars.csv in Resources */,
 				CF935B4C18006CCB0032A9C8 /* washington-memorial-normals.json in Resources */,
@@ -436,7 +440,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D8EEF3971577920B003FEB5E /* main.m in Sources */,
-				D87E4F381BE3AA8500E53805 /* MenuViewController.m in Sources */,
+				D87E4F381BE3AA8500E53805 /* MenuViewController.mm in Sources */,
 				D83165EE1ABAD435002A8451 /* StarDomeRenderer.cpp in Sources */,
 				D8EEF39B1577920B003FEB5E /* AppDelegate.m in Sources */,
 				D83D604D1AA89D75002EA2B8 /* DeviceOrientation.mm in Sources */,

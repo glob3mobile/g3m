@@ -8,6 +8,10 @@
 
 #import "MenuViewController.h"
 
+#import "ViewController.h"
+
+#import <G3MiOSSDK/MarksRenderer.hpp>
+
 
 
 @interface MenuViewController ()
@@ -19,10 +23,19 @@
 @implementation MenuViewController
 
 @synthesize textField;
+@synthesize _theVC;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+  galaxiesSwitch.on = _theVC.galaxies->isEnable();
+
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+  [super viewDidAppear:animated];
+  //galaxiesSwitch.on = _theVC._galaxies->isEnable();
 }
 
 - (void)didReceiveMemoryWarning {
@@ -68,6 +81,11 @@
   }
   
   
+}
+
+-(IBAction)showGalaxies:(id)sender{
+  bool v = ((UISwitch*) sender).on ;
+  _theVC.galaxies->setEnable( v);
 }
 
 @end

@@ -174,7 +174,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Lorem Ipsum..." textAlignment="justified" lineBreakMode="tailTruncation" numberOfLines="13" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="2lZ-l8-KrZ">
-                                <rect key="frame" x="20" y="301" width="280" height="159"/>
+                                <rect key="frame" x="20" y="330" width="280" height="130"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <animations/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -190,12 +190,29 @@
                                     <action selector="backToMenu:" destination="O4c-jY-6C1" eventType="touchUpInside" id="QYR-PO-LHO"/>
                                 </connections>
                             </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Galaxies" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="7Xs-Qx-zni">
+                                <rect key="frame" x="20" y="296" width="65" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <animations/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" id="LXZ-gu-Fhh">
+                                <rect key="frame" x="99" y="291" width="51" height="31"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <animations/>
+                                <connections>
+                                    <action selector="showGalaxies:" destination="O4c-jY-6C1" eventType="valueChanged" id="M0e-8H-cyS"/>
+                                </connections>
+                            </switch>
                         </subviews>
                         <animations/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
                     <navigationItem key="navigationItem" id="F8L-f3-Glq"/>
                     <connections>
+                        <outlet property="galaxiesSwitch" destination="LXZ-gu-Fhh" id="7Er-Bw-SSg"/>
                         <outlet property="textField" destination="2lZ-l8-KrZ" id="Jzp-Xc-kvl"/>
                         <segue destination="90h-7u-REb" kind="modal" identifier="back" modalTransitionStyle="flipHorizontal" id="6ED-JZ-cxP"/>
                     </connections>

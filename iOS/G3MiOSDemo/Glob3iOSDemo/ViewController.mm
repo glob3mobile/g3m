@@ -157,7 +157,7 @@
 
 
 
-
+#import "MenuViewController.h"
 
 
 //class TestVisibleSectorListener : public VisibleSectorListener {
@@ -358,6 +358,7 @@ const Planet* planet;
   
   [self readStars: &builder];
   [self createHorizonLine:&builder];
+  [self createGalaxies:&builder];
   
   builder.setPlanet(planet);
   builder.initializeWidget();
@@ -476,6 +477,30 @@ std::vector<StarDomeRenderer*> _sdrs;
   
 }
 
+
+- (void) createGalaxies: (IG3MBuilder*) builder{
+  
+  _galaxies = new MarksRenderer(true);
+  builder->addRenderer(_galaxies);
+  
+  Vector3D center = planet->toCartesian(*cameraPositionForStars);
+  double domeHeight = 1e5;
+  Vector3D vx = Vector3D::upX().times(domeHeight).add(Vector3D::upZ().times(5e3));
+  
+  Geodetic3D g = planet->toGeodetic3D(vx);
+  
+  Mark* n = new   Mark(URL("file:///galaxy.png"),
+                       g,
+                       ABSOLUTE);
+  
+  _galaxies->addMark(n);
+}
+
+
+-(void) showGalaxies: (BOOL) v{
+  _galaxies->setEnable(v);
+}
+
 -(void) createHorizonLine: (IG3MBuilder*) builder{
   
   MeshRenderer* mr = new MeshRenderer();
@@ -486,21 +511,70 @@ std::vector<StarDomeRenderer*> _sdrs;
   Vector3D vx = Vector3D::upX().times(domeHeight);
   Vector3D vz = Vector3D::upZ();
   
-  Geodetic3D centerGeo = Geodetic3D::fromDegrees(28.1, -15.43, 500);
-  Vector3D center = planet->toCartesian(centerGeo);
+//  Geodetic3D centerGeo = Geodetic3D::fromDegrees(28.1, -15.43, 500);
+  Vector3D center = planet->toCartesian(*cameraPositionForStars);
   
   FloatBufferBuilderFromCartesian3D* fbb = FloatBufferBuilderFromCartesian3D::builderWithoutCenter();
   
+  FloatBufferBuilderFromColor cfbb;
+  
+  MarksRenderer* marks = new MarksRenderer(true);
+  builder->addRenderer(marks);
+  
   for(int i = 0; i < 360; i+=5){
-    fbb->add(vx.rotateAroundAxis(vz, Angle::fromDegrees(i)));
+    
+    Vector3D pos = vx.rotateAroundAxis(vz, Angle::fromDegrees(i));
+    
+    fbb->add(pos);
+    fbb->add(pos);
+    
+    if (i % 10 == 0){
+      cfbb.add(1.0, 0.0, 0.0, 1.0);
+      cfbb.add(1.0, 0.0, 0.0, 0.0);
+    } else{
+      cfbb.add(1.0, 0.0, 0.0, 0.0);
+      cfbb.add(1.0, 0.0, 0.0, 1.0);
+    }
+    
+    if (i == 0){
+      Mark* n = new Mark("E", planet->toGeodetic3D(pos.add(center).add(vz.times(3e3))), ABSOLUTE, 4.5e+06, 40);
+      marks->addMark(n);
+    }
+    if (i == 270){
+      Mark* n = new Mark("S", planet->toGeodetic3D(pos.add(center).add(vz.times(3e3))), ABSOLUTE, 4.5e+06, 40);
+      marks->addMark(n);
+    }
+    if (i == 180){
+      Mark* n = new Mark("W", planet->toGeodetic3D(pos.add(center).add(vz.times(3e3))), ABSOLUTE, 4.5e+06, 40);
+      marks->addMark(n);
+    }
+    if (i == 90){
+      Mark* n = new Mark("N", planet->toGeodetic3D(pos.add(center).add(vz.times(3e3))), ABSOLUTE, 4.5e+06, 40);
+      marks->addMark(n);
+    }
+    
   }
   
-  Mesh* m = new DirectMesh(GLPrimitive::lineLoop(), true, center, fbb->create(), 10.0, 10.0);
+//  double             minDistanceToCamera=4.5e+06,
+//  const float        labelFontSize=20,
+//  const Color*       labelFontColor=Color::newFromRGBA(1, 1, 1, 1),
+//  const Color*       labelShadowColor=Color::newFromRGBA(0, 0, 0, 1),
+//  MarkUserData*      userData=NULL,
+//  bool               autoDeleteUserData=true,
+//  MarkTouchListener* listener=NULL,
+//  bool               autoDeleteListener=false)
+  
+  Mesh* m = new DirectMesh(GLPrimitive::lineLoop(), true,
+                           center, fbb->create(),
+                           6.0, 10.0,
+                           NULL,
+                           cfbb.create());
   
   mr->addMesh(m);
   
   
   delete fbb;
+
 }
 
 -(void) readStars: (IG3MBuilder*) builder{
@@ -5356,7 +5430,16 @@ std::vector<StarDomeRenderer*> _sdrs;
 }
 
 -(IBAction)showMenu:(id)sender{
-  [self performSegueWithIdentifier:@"show_menu" sender:nil];
+  [self performSegueWithIdentifier:@"show_menu" sender:self];
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+  if ([[segue identifier] isEqualToString:@"show_menu"])
+  {
+    MenuViewController* destination = [segue destinationViewController];
+    destination._theVC = self;
+  }
 }
 
 
