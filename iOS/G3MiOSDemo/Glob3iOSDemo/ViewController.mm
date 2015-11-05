@@ -321,11 +321,6 @@ std::vector<StarDomeRenderer*> _sdrs;
   builder->addRenderer(mr);
   
   double domeHeight = 1e5;
-  
-  Vector3D vx = Vector3D::upX().times(domeHeight);
-  Vector3D vz = Vector3D::upZ();
-  
-  //  Geodetic3D centerGeo = Geodetic3D::fromDegrees(28.1, -15.43, 500);
   Vector3D center = planet->toCartesian(*cameraPositionForStars);
   
   FloatBufferBuilderFromCartesian3D* fbb = FloatBufferBuilderFromCartesian3D::builderWithoutCenter();
@@ -335,9 +330,11 @@ std::vector<StarDomeRenderer*> _sdrs;
   MarksRenderer* marks = new MarksRenderer(true);
   builder->addRenderer(marks);
   
+  Vector3D up = Vector3D::upZ().times(3e3);
+  
   for(int i = 0; i < 360; i+=5){
     
-    Vector3D pos = vx.rotateAroundAxis(vz, Angle::fromDegrees(i));
+    Vector3D pos = Star::getStarDisplacementInDome(domeHeight, Angle::fromDegrees(i), Angle::fromDegrees(0));
     
     fbb->add(pos);
     fbb->add(pos);
@@ -351,19 +348,19 @@ std::vector<StarDomeRenderer*> _sdrs;
     }
     
     if (i == 0){
-      Mark* n = new Mark("E", planet->toGeodetic3D(pos.add(center).add(vz.times(3e3))), ABSOLUTE, 4.5e+06, 40);
+      Mark* n = new Mark("E", planet->toGeodetic3D(pos.add(center).add(up)), ABSOLUTE, 4.5e+06, 40);
       marks->addMark(n);
     }
     if (i == 270){
-      Mark* n = new Mark("S", planet->toGeodetic3D(pos.add(center).add(vz.times(3e3))), ABSOLUTE, 4.5e+06, 40);
+      Mark* n = new Mark("S", planet->toGeodetic3D(pos.add(center).add(up)), ABSOLUTE, 4.5e+06, 40);
       marks->addMark(n);
     }
     if (i == 180){
-      Mark* n = new Mark("W", planet->toGeodetic3D(pos.add(center).add(vz.times(3e3))), ABSOLUTE, 4.5e+06, 40);
+      Mark* n = new Mark("W", planet->toGeodetic3D(pos.add(center).add(up)), ABSOLUTE, 4.5e+06, 40);
       marks->addMark(n);
     }
     if (i == 90){
-      Mark* n = new Mark("N", planet->toGeodetic3D(pos.add(center).add(vz.times(3e3))), ABSOLUTE, 4.5e+06, 40);
+      Mark* n = new Mark("N", planet->toGeodetic3D(pos.add(center).add(up)), ABSOLUTE, 4.5e+06, 40);
       marks->addMark(n);
     }
     
@@ -545,59 +542,6 @@ std::vector<StarDomeRenderer*> _sdrs;
 
 -(BOOL)shouldAutorotate {
   return YES;
-}
-
-- (PeriodicalTask*) createSamplePeriodicalTask: (G3MBuilder_iOS*) builder
-{
-  TrailsRenderer* trailsRenderer = new TrailsRenderer();
-  
-  Trail* trail = new Trail(Color::fromRGBA(0, 1, 1, 0.6f),
-                           5000,
-                           0);
-  
-  Geodetic3D position(Angle::fromDegrees(37.78333333),
-                      Angle::fromDegrees(-122.41666666666667),
-                      25000);
-  trail->addPosition(position);
-  trailsRenderer->addTrail(trail);
-  builder->addRenderer(trailsRenderer);
-  
-  //  renderers.push_back(new GLErrorRenderer());
-  
-  class TestTrailTask : public GTask {
-  private:
-    Trail* _trail;
-    
-    double _lastLatitudeDegrees;
-    double _lastLongitudeDegrees;
-    double _lastHeight;
-    
-  public:
-    TestTrailTask(Trail* trail,
-                  Geodetic3D lastPosition) :
-    _trail(trail),
-    _lastLatitudeDegrees(lastPosition._latitude._degrees),
-    _lastLongitudeDegrees(lastPosition._longitude._degrees),
-    _lastHeight(lastPosition._height)
-    {
-    }
-    
-    void run(const G3MContext* context) {
-      const double latStep = 2.0 / ((arc4random() % 100) + 50);
-      const double lonStep = 2.0 / ((arc4random() % 100) + 50);
-      
-      _lastLatitudeDegrees  -= latStep;
-      _lastLongitudeDegrees += lonStep;
-      
-      _trail->addPosition(Geodetic3D(Angle::fromDegrees(_lastLatitudeDegrees),
-                                     Angle::fromDegrees(_lastLongitudeDegrees),
-                                     _lastHeight));
-    }
-  };
-  
-  PeriodicalTask* periodicalTask = new PeriodicalTask(TimeInterval::fromSeconds(0.25),
-                                                      new TestTrailTask(trail, position));
-  return periodicalTask;
 }
 
 - (void)viewDidUnload

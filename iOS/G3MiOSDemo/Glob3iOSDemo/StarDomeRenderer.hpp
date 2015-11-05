@@ -103,6 +103,9 @@ public:
     Angle::fromDegrees(getTrueNorthAzimuthInDegrees(siderealTime, viewerPosition)).distanceTo(trueNorthAzimuthInDegrees)._degrees;
   }
   
+  
+  static Vector3D getStarDisplacementInDome(double domeHeight, Angle azimuth, Angle altitude);
+  
 };
 
 class Constellation{

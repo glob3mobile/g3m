@@ -85,22 +85,28 @@ double Star::getAltitude(double siderealTime, const Geodetic2D viewerPosition) c
 }
 
 Vector3D Star::getStarDisplacementInDome(double domeHeight, double siderealTime, const Geodetic2D& domePos) const{
-  Vector3D north = Vector3D::upY();
-  Vector3D azimuthRotationAxis = Vector3D::downZ();
-  Vector3D altitudeRotationAxis = Vector3D::upX();
-  Vector3D origin = Vector3D::zero;
-  
-  Vector3D startingStarPos = origin.add(north.normalized().times(domeHeight));
-  
-  if (_name.find("Leo") != std::string::npos){
-    printf("ok");
-  }
+
+//  if (_name.find("Leo") != std::string::npos){
+//    printf("ok");
+//  }
   
   //Defining stars by true-north azimuth (heading) and altitude http://en.wikipedia.org/wiki/Azimuth
   Angle azimuth = Angle::fromDegrees(getTrueNorthAzimuthInDegrees(siderealTime, domePos));
   Angle altitude = Angle::fromDegrees(getAltitude(siderealTime, domePos));
   
   printf("STAR: %s - AZ: %f, AL: %f\n", _name.c_str(), azimuth._degrees, altitude._degrees);
+
+  return getStarDisplacementInDome(domeHeight, azimuth, altitude);
+}
+
+Vector3D Star::getStarDisplacementInDome(double domeHeight, Angle azimuth, Angle altitude){
+  
+  Vector3D north = Vector3D::upY();
+  Vector3D azimuthRotationAxis = Vector3D::downZ();
+  Vector3D altitudeRotationAxis = Vector3D::upX();
+  Vector3D origin = Vector3D::zero;
+  
+  Vector3D startingStarPos = origin.add(north.normalized().times(domeHeight));
   
   MutableMatrix44D mAltitude = MutableMatrix44D::createGeneralRotationMatrix(altitude, altitudeRotationAxis, origin);
   MutableMatrix44D mAzimuth = MutableMatrix44D::createGeneralRotationMatrix(azimuth, azimuthRotationAxis, origin);
