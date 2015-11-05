@@ -120,10 +120,12 @@ void MarksRenderer::removeMark(Mark* mark) {
 
 }
 
-void MarksRenderer::removeAllMarks() {
-  const size_t marksSize = _marks.size();
-  for (size_t i = 0; i < marksSize; i++) {
-    delete _marks[i];
+void MarksRenderer::removeAllMarks(bool deleteMarks) {
+  if (deleteMarks) {
+    const size_t marksSize = _marks.size();
+    for (size_t i = 0; i < marksSize; i++) {
+      delete _marks[i];
+    }
   }
   _marks.clear();
 }

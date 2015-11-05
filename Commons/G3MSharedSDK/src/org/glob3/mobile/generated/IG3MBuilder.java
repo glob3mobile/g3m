@@ -979,11 +979,13 @@ public abstract class IG3MBuilder
     _userData = userData;
   }
 
-
-  public final void setInitializationTask(GInitializationTask initializationTask) {
-    pvtSetInitializationTask(initializationTask,
-                             true // parameter ignored in Java code 
-);
+  public final void setInitializationTask(GInitializationTask initializationTask)
+  {
+     setInitializationTask(initializationTask, true);
+  }
+  public final void setInitializationTask(GInitializationTask initializationTask, boolean autoDeleteInitializationTask)
+  {
+    pvtSetInitializationTask(initializationTask, autoDeleteInitializationTask);
   }
 
 

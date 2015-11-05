@@ -40,17 +40,17 @@ G3MDemoBuilder::~G3MDemoBuilder() {
 class G3MDemoInitializationTask : public GInitializationTask {
 private:
   G3MDemoModel* _model;
-
+  
 public:
   G3MDemoInitializationTask(G3MDemoModel* model) :
   _model(model)
   {
   }
-
+  
   void run(const G3MContext* context) {
     _model->initializeG3MContext(context);
   }
-
+  
   bool isDone(const G3MContext* context) {
     return true;
   }
@@ -60,9 +60,9 @@ void G3MDemoBuilder::build() {
   if (_initialized) {
     THROW_EXCEPTION("G3MWidget already initialized.");
   }
-
+  
   IG3MBuilder* builder = getG3MBuilder();
-
+  
   //builder->getPlanetRendererBuilder()->setRenderDebug(true);
 
   LayerSet* layerSet = new LayerSet();
@@ -79,24 +79,24 @@ void G3MDemoBuilder::build() {
 
   PointCloudsRenderer* pointCloudsRenderer = new PointCloudsRenderer();
   builder->addRenderer(pointCloudsRenderer);
-//  builder->getPlanetRendererBuilder()->setTileRenderingListener(pointCloudsRenderer->getTileRenderingListener());
-
+  //  builder->getPlanetRendererBuilder()->setTileRenderingListener(pointCloudsRenderer->getTileRenderingListener());
+  
   GEORenderer* geoRenderer = new GEORenderer(NULL, /* symbolizer */
                                              meshRenderer,
                                              shapesRenderer,
                                              marksRenderer,
                                              NULL  /* geoVectorLayer */);
   builder->addRenderer(geoRenderer);
-
+  
   HUDRenderer* hudRenderer = new HUDRenderer();
   builder->setHUDRenderer(hudRenderer);
-
+  
   NonOverlappingMarksRenderer* nonOverlappingMarksRenderer = new NonOverlappingMarksRenderer(10);
   builder->addRenderer(nonOverlappingMarksRenderer);
-
+  
   VectorStreamingRenderer* vectorStreamingRenderer = new VectorStreamingRenderer(marksRenderer);
   builder->addRenderer(vectorStreamingRenderer);
-
+  
   _initialized = true;
   _model = new G3MDemoModel(_listener,
                             layerSet,
@@ -108,7 +108,7 @@ void G3MDemoBuilder::build() {
                             hudRenderer,
                             nonOverlappingMarksRenderer,
                             vectorStreamingRenderer);
-
+  
   builder->setInitializationTask(new G3MDemoInitializationTask(_model), true);
 }
 
