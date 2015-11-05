@@ -155,7 +155,7 @@
 
 #include <typeinfo>
 
-
+#import "AppDelegate.h"
 
 #import "MenuViewController.h"
 
@@ -299,17 +299,21 @@ std::vector<StarDomeRenderer*> _sdrs;
   
   Vector3D center = planet->toCartesian(*cameraPositionForStars);
   double domeHeight = 1e5;
-  Vector3D vx = Vector3D::upX().times(domeHeight).add(Vector3D::upZ().times(5e3));
+  //  Vector3D vx = Vector3D::upX().times(domeHeight).add(Vector3D::upZ().times(5e3));
+  
+  Vector3D vx = Star::getStarDisplacementInDome(domeHeight, Angle::fromDegrees(0), Angle::fromDegrees(0));
   
   Geodetic3D g = planet->toGeodetic3D(vx);
-  
-  Vector3D vx = Star::getStarDisplacementInDome(domeHeight, <#double siderealTime#>, <#const Geodetic2D &domePos#>)
   
   Mark* n = new   Mark(URL("file:///galaxy.png"),
                        g,
                        ABSOLUTE);
   
   galaxies->addMark(n);
+  
+  
+  AppDelegate* delegate = [UIApplication sharedApplication].delegate;
+  galaxies->setEnable(delegate.showingGalaxies);
 }
 
 

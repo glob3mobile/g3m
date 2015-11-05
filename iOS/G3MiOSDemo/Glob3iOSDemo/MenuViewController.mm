@@ -12,6 +12,8 @@
 
 #import <G3MiOSSDK/MarksRenderer.hpp>
 
+#import "AppDelegate.h"
+
 
 
 @interface MenuViewController ()
@@ -28,7 +30,11 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-  galaxiesSwitch.on = _theVC.galaxies->isEnable();
+  
+  
+  AppDelegate* delegate = [UIApplication sharedApplication].delegate;
+  
+  galaxiesSwitch.on = delegate.showingGalaxies;
 
 }
 
@@ -85,7 +91,7 @@
 
 -(IBAction)showGalaxies:(id)sender{
   bool v = ((UISwitch*) sender).on ;
-  _theVC.galaxies->setEnable( v);
+  ((AppDelegate*)[UIApplication sharedApplication].delegate).showingGalaxies = v;
 }
 
 @end

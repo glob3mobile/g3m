@@ -12,6 +12,11 @@
 
 @property (strong, nonatomic) UIWindow *window;
 
+
+@property (nonatomic) BOOL showingGalaxies;
+
 - (void)applicationDidReceiveMemoryWarning:(UIApplication *)application;
+
+
 
 @end

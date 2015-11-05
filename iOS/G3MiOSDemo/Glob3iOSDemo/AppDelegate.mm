@@ -11,6 +11,7 @@
 @implementation AppDelegate
 
 @synthesize window = _window;
+@synthesize showingGalaxies;
 
 - (void)applicationDidReceiveMemoryWarning:(UIApplication *)application
 {
@@ -19,6 +20,9 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+  
+  showingGalaxies = false;
+  
     // Override point for customization after application launch.
     return YES;
 }
