@@ -105,7 +105,12 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
       {
         _imageAssembler.deletedRasterizer();
       }
-    
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning TODO remove this warning after test converter;
+      /*
+       #warning TODO remove this warning after test converter;
+       */
+      ///#warning TODO remove this warning after test converter;
       _symbolizer = null;
       if (_buffer != null)
          _buffer.dispose();
