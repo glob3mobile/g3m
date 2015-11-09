@@ -24,7 +24,11 @@ TiledVectorLayerTileImageProvider::GEOJSONBufferRasterizer::~GEOJSONBufferRaster
   if (_imageAssembler != NULL) {
     _imageAssembler->deletedRasterizer();
   }
-
+#warning TODO remove this warning after test converter;
+  /*
+   #warning TODO remove this warning after test converter;
+   */
+  //#warning TODO remove this warning after test converter;
   delete _symbolizer;
   delete _buffer;
   delete _geoObject;
