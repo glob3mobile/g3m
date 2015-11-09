@@ -266,7 +266,7 @@ public class G3MWidget implements ChangedRendererInfoListener
     {
       _totalRenderTime += elapsedTimeMS;
   
-      if ((_renderStatisticsTimer == null) || (_renderStatisticsTimer.elapsedTimeInMilliseconds() > 2000))
+      if ((_renderStatisticsTimer == null) || (_renderStatisticsTimer.elapsedTimeInMilliseconds() > 3000))
       {
         final double averageTimePerRender = (double) _totalRenderTime / _renderCounter;
         final double fps = 1000.0 / averageTimePerRender;

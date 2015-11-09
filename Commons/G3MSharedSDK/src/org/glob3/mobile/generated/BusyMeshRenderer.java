@@ -76,9 +76,9 @@ public class BusyMeshRenderer implements ProtoRenderer, EffectTarget
     final int viewPortWidth = camera.getViewPortWidth();
     final int viewPortHeight = camera.getViewPortHeight();
     final int minSize = (viewPortWidth < viewPortHeight) ? viewPortWidth : viewPortHeight;
-    final float outerRadius = minSize / 15.0f;
-  
-    final IMathUtils mu = IMathUtils.instance();
+    final float outerRadius = minSize / 18.0f;
+      ILogger.instance().logError("This a test log line");
+      final IMathUtils mu = IMathUtils.instance();
   
     for (int step = 0; step <= numStrides; step++)
     {
