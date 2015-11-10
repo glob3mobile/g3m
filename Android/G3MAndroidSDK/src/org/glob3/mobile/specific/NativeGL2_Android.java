@@ -1,3 +1,5 @@
+
+
 package org.glob3.mobile.specific;
 
 import java.io.UnsupportedEncodingException;
@@ -36,9 +38,10 @@ import android.opengl.GLES20;
 import android.opengl.GLUtils;
 import android.util.Log;
 
+
 public final class NativeGL2_Android
-         extends
-            INativeGL {
+   extends
+      INativeGL {
 
    private Thread _openGLThread = null;
 
@@ -94,7 +97,7 @@ public final class NativeGL2_Android
    //   public void uniformMatrix4fv(final IGLUniformID location,
    //                                final boolean transpose,
    //                                final IFloatBuffer buffer) {
-   // checkOpenGLThread(); 
+   // checkOpenGLThread();
    //      GLES20.glUniformMatrix4fv(((GLUniformID_Android) location).getID(), 1, transpose,
    //               ((FloatBuffer_Android) buffer).getBuffer());
    //   }
@@ -817,6 +820,7 @@ public final class NativeGL2_Android
       return GLES20.GL_FLOAT_VEC3;
    }
 
+
    @Override
    public void depthMask(final boolean depthMask) {
       GLES20.glDepthMask(depthMask);
@@ -864,77 +868,73 @@ public final class NativeGL2_Android
       GLES20.glActiveTexture(GLES20.GL_TEXTURE0 + i);
    }
 
-   
 
-	@Override
-	public Color read1PixelAsRGBAColor(int x, int y) {
+   @Override
+   public Color read1PixelAsRGBAColor(final int x,
+                                      final int y) {
 
-		ByteBuffer pixels = ByteBuffer.allocate(4);
-		GLES20.glReadPixels(x, y, 1, 1, GLES20.GL_RGBA,
-				GLES20.GL_UNSIGNED_BYTE, pixels);
+      final ByteBuffer pixels = ByteBuffer.allocate(4);
+      GLES20.glReadPixels(x, y, 1, 1, GLES20.GL_RGBA, GLES20.GL_UNSIGNED_BYTE, pixels);
 
-		double r = byte2double(pixels.get(0)) / 255.0;
-		double g = byte2double(pixels.get(1)) / 255.0;
-		double b = byte2double(pixels.get(2)) / 255.0;
-		double a = byte2double(pixels.get(3)) / 255.0;
+      final double r = byte2double(pixels.get(0)) / 255.0;
+      final double g = byte2double(pixels.get(1)) / 255.0;
+      final double b = byte2double(pixels.get(2)) / 255.0;
+      final double a = byte2double(pixels.get(3)) / 255.0;
 
-		Color c = Color.fromRGBA((float)r, (float)g, (float)b, (float)a);
-		return c;
-	}
-
-	private double byte2double(byte b){
-		if (b >= 0){
-			return (double) b;
-		}
-		return 256 + (double) b;
-	}
-
-	@Override
-	public double read1PixelAsDouble(int x, int y) {
-
-		ByteBuffer pixels = ByteBuffer.allocate(4);
-		pixels.order(ByteOrder.nativeOrder());
-		pixels.position(0);
-		GLES20.glReadPixels(x, y, 1, 1, GLES20.GL_RGBA,
-				GLES20.GL_UNSIGNED_BYTE, pixels);
-
-		double r = byte2double(pixels.get(0));
-		double g = byte2double(pixels.get(1));
-//		double b = byte2double(pixels.get(2));
-		double a = byte2double(pixels.get(3));
-
-		if (a != 0) { // ZRENDER Shader sets all pixels with 0 alpha
-			return Double.NaN;
-		}
-/*
-		double winZ = r * 65536.0;
-		winZ += g * 256.0;
-		winZ += b;
-		winZ /= 16777215.0;
-		*/
-
-		double winZ = (r * 256.0 + g) / 65535.0;
-
-		//ILogger.instance().logInfo("DIST %f, %f, %f -> Z = %f", r,g,b, winZ);
+      final Color c = Color.fromRGBA((float) r, (float) g, (float) b, (float) a);
+      return c;
+   }
 
 
+   private static double byte2double(final byte b) {
+      return (b >= 0) ? b : 256 + (double) b;
+   }
 
 
+   @Override
+   public double read1PixelAsDouble(final int x,
+                                    final int y) {
 
-		return winZ;
-	}
+      final ByteBuffer pixels = ByteBuffer.allocate(4);
+      pixels.order(ByteOrder.nativeOrder());
+      pixels.position(0);
+      GLES20.glReadPixels(x, y, 1, 1, GLES20.GL_RGBA, GLES20.GL_UNSIGNED_BYTE, pixels);
 
-	@Override
-	public Vector2F getDepthRange() {
-		float[] range = new float[2];
-		GLES20.glGetFloatv(GLES20.GL_DEPTH_RANGE, range	, 0);
-		return new Vector2F(range[0], range[1]);
-	}
+      final double r = byte2double(pixels.get(0));
+      final double g = byte2double(pixels.get(1));
+      //		double b = byte2double(pixels.get(2));
+      final double a = byte2double(pixels.get(3));
+
+      if (a != 0) { // ZRENDER Shader sets all pixels with 0 alpha
+         return Double.NaN;
+      }
+      /*
+      		double winZ = r * 65536.0;
+      		winZ += g * 256.0;
+      		winZ += b;
+      		winZ /= 16777215.0;
+      		*/
+
+      final double winZ = ((r * 256.0) + g) / 65535.0;
+
+      //ILogger.instance().logInfo("DIST %f, %f, %f -> Z = %f", r,g,b, winZ);
 
 
-	@Override
-	public int Format_RGB() {
-		return GLES20.GL_RGB;
-	}
+      return winZ;
+   }
+
+
+   @Override
+   public Vector2F getDepthRange() {
+      final float[] range = new float[2];
+      GLES20.glGetFloatv(GLES20.GL_DEPTH_RANGE, range, 0);
+      return new Vector2F(range[0], range[1]);
+   }
+
+
+   @Override
+   public int Format_RGB() {
+      return GLES20.GL_RGB;
+   }
 
 }
