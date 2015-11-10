@@ -144,6 +144,7 @@
 #import <G3MiOSSDK/DebugTileImageProvider.hpp>
 #import <G3MiOSSDK/GEOVectorLayer.hpp>
 #import <G3MiOSSDK/Info.hpp>
+#import <G3MiOSSDK/CompositeRenderer.hpp>
 
 #import <G3MiOSSDK/NonOverlappingMarksRenderer.hpp>
 
@@ -181,10 +182,6 @@ const Planet* planet;
 - (void)viewDidLoad
 {
   [super viewDidLoad];
-  
-  _dO = [[DeviceOrientation alloc] init];
-
-  
   
   cameraPositionForStars = new Geodetic3D(Geodetic3D::fromDegrees(27.973105, -15.597545, 1000));
   
@@ -237,7 +234,9 @@ const Planet* planet;
   builder.addRenderer(mr);
   
   
-  [self readStars: &builder];
+  Renderer* stars1 = [self readStars: &builder withStarsFileName:@"stars" withLinksFileName:@"stars_links"];
+  builder.addRenderer(stars1);
+  
   [self createHorizonLine:&builder];
   [self createGalaxies:&builder];
   
@@ -252,15 +251,6 @@ const Planet* planet;
   [G3MWidget widget]->setCameraPosition(*cameraPositionForStars);
   [G3MWidget widget]->setCameraPitch(Angle::fromDegrees(0));
   [G3MWidget widget]->setCameraHeading(Angle::fromDegrees(30));
-  
-}
-
--(MutableMatrix44D) matrix:(CMRotationMatrix) m{
-  
-  return MutableMatrix44D(m.m11, m.m12, m.m13, 0,
-                          m.m21, m.m22, m.m23, 0,
-                          m.m31, m.m32, m.m33, 0,
-                          0, 0, 0, 1);
   
 }
 
@@ -303,9 +293,9 @@ std::vector<StarDomeRenderer*> _sdrs;
 }
 
 
--(void) showGalaxies: (BOOL) v{
-  galaxies->setEnable(v);
-}
+//-(void) showGalaxies: (BOOL) v{
+//  galaxies->setEnable(v);
+//}
 
 -(void) createHorizonLine: (IG3MBuilder*) builder{
   
@@ -371,7 +361,7 @@ std::vector<StarDomeRenderer*> _sdrs;
   
 }
 
--(void) readStars: (IG3MBuilder*) builder{
+-(Renderer*) readStars: (IG3MBuilder*) builder withStarsFileName: (NSString*) starsFile withLinksFileName: (NSString*) linksFile {
   
   //CALENDAR STUFF
   
@@ -405,13 +395,15 @@ std::vector<StarDomeRenderer*> _sdrs;
   //////
   
   
-  NSString *csvPath = [[NSBundle mainBundle] pathForResource: @"stars" ofType: @"csv"];
+  NSString *csvPath = [[NSBundle mainBundle] pathForResource: starsFile ofType: @"csv"];
   
-  NSString *csvLinksPath = [[NSBundle mainBundle] pathForResource: @"stars_links" ofType: @"csv"];
+  NSString *csvLinksPath = [[NSBundle mainBundle] pathForResource: linksFile ofType: @"csv"];
   
   //Geodetic3D gcPosition = Geodetic3D::fromDegrees(28.1, -15.43, 500);
   
   //  double clockTimeInDegrees = [self getClockTimeInDegrees];
+  
+  CompositeRenderer* cr = new CompositeRenderer();
   
   if (csvPath) {
     NSString *csv = [NSString stringWithContentsOfFile: csvPath
@@ -433,12 +425,16 @@ std::vector<StarDomeRenderer*> _sdrs;
       builder->addRenderer(mr);
       
       StarDomeRenderer* sdr = new StarDomeRenderer(c._name, c._stars, c._lines, *cameraPositionForStars, clockTimeInDegrees, dayOfYear, *c._color, mr);
-      builder->addRenderer(sdr);
+//      builder->addRenderer(sdr);
       
-      _sdrs.push_back(sdr);
+//      _sdrs.push_back(sdr);
+      
+      cr->addRenderer(sdr);
     }
     
   }
+  
+  return cr;
   
 }
 
@@ -468,14 +464,13 @@ std::vector<StarDomeRenderer*> _sdrs;
 {
   [super viewDidAppear:animated];
   
-  [_dO restart];
+  
 }
 
 - (void)viewWillDisappear:(BOOL)animated
 {
   [super viewWillDisappear:animated];
   
-  [_dO stop];
 }
 
 - (void)viewDidDisappear:(BOOL)animated

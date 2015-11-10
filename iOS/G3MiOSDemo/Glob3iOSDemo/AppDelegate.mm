@@ -13,6 +13,14 @@
 @synthesize window = _window;
 @synthesize showingGalaxies;
 
+
+-(BOOL) areStarsActive: (int) i{
+  return _starsActive[i];
+}
+-(void) setStarsActive: (int) i value: (BOOL) v{
+  _starsActive[i] = v;
+}
+
 - (void)applicationDidReceiveMemoryWarning:(UIApplication *)application
 {
 //  [[NSURLCache sharedURLCache] removeAllCachedResponses];
@@ -22,6 +30,10 @@
 {
   
   showingGalaxies = false;
+  
+  for(int i = 0; i < 5; i++){
+    _starsActive[i] = false;
+  }
   
     // Override point for customization after application launch.
     return YES;
