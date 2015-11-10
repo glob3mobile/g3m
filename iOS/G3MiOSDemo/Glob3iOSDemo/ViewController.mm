@@ -233,9 +233,14 @@ const Planet* planet;
   mr = new MeshRenderer();
   builder.addRenderer(mr);
   
-  
-  Renderer* stars1 = [self readStars: &builder withStarsFileName:@"stars" withLinksFileName:@"stars_links"];
-  builder.addRenderer(stars1);
+  AppDelegate* delegate = [UIApplication sharedApplication].delegate;
+  for (int i = 0; i < 5; i++) {
+    if ([delegate areStarsActive:i]){
+      Renderer* stars1 = [self readStars: &builder withStarsFileName:@"stars1" withLinksFileName:@"stars_links1"];
+      builder.addRenderer(stars1);
+    }
+  }
+
   
   [self createHorizonLine:&builder];
   [self createGalaxies:&builder];
@@ -246,11 +251,9 @@ const Planet* planet;
   
   [G3MWidget widget]->getPlanetRenderer()->setEnable(false);
   
-  
-  
   [G3MWidget widget]->setCameraPosition(*cameraPositionForStars);
-  [G3MWidget widget]->setCameraPitch(Angle::fromDegrees(0));
-  [G3MWidget widget]->setCameraHeading(Angle::fromDegrees(30));
+//  [G3MWidget widget]->setCameraPitch(Angle::fromDegrees(0));
+//  [G3MWidget widget]->setCameraHeading(Angle::fromDegrees(30));
   
 }
 

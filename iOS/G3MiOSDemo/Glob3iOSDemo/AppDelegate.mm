@@ -31,7 +31,8 @@
   
   showingGalaxies = false;
   
-  for(int i = 0; i < 5; i++){
+  _starsActive[0] = true;
+  for(int i = 1; i < 5; i++){
     _starsActive[i] = false;
   }
   

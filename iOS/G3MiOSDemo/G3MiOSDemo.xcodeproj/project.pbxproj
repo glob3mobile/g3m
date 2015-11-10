@@ -53,10 +53,10 @@
 		D85B0C311BE8F8880073A034 /* galaxy.png in Resources */ = {isa = PBXBuildFile; fileRef = D85B0C301BE8F8880073A034 /* galaxy.png */; };
 		D86436931BE3951F00A37924 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D86436921BE3951F00A37924 /* Images.xcassets */; };
 		D876E6DA1AE6554700F616DE /* StarsParser.mm in Sources */ = {isa = PBXBuildFile; fileRef = D876E6D91AE6554700F616DE /* StarsParser.mm */; };
-		D876E6DC1AE65A4400F616DE /* stars.csv in Resources */ = {isa = PBXBuildFile; fileRef = D876E6DB1AE65A4400F616DE /* stars.csv */; };
+		D876E6DC1AE65A4400F616DE /* stars1.csv in Resources */ = {isa = PBXBuildFile; fileRef = D876E6DB1AE65A4400F616DE /* stars1.csv */; };
 		D87E4F381BE3AA8500E53805 /* MenuViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = D87E4F371BE3AA8400E53805 /* MenuViewController.mm */; };
 		D882B1CD171D77C000C2AD9C /* full-earth-256x256.bil in Resources */ = {isa = PBXBuildFile; fileRef = D882B1CC171D76AD00C2AD9C /* full-earth-256x256.bil */; };
-		D8C4723D1AE8F637005254B3 /* stars_links.csv in Resources */ = {isa = PBXBuildFile; fileRef = D8C4723C1AE8F636005254B3 /* stars_links.csv */; };
+		D8C4723D1AE8F637005254B3 /* stars_links1.csv in Resources */ = {isa = PBXBuildFile; fileRef = D8C4723C1AE8F636005254B3 /* stars_links1.csv */; };
 		D8D3A26318363C58007A784A /* FlatColorMesh_DirectionLight.fsh in Sources */ = {isa = PBXBuildFile; fileRef = D8D3A25F18363C58007A784A /* FlatColorMesh_DirectionLight.fsh */; };
 		D8D3A26418363C58007A784A /* FlatColorMesh_DirectionLight.vsh in Sources */ = {isa = PBXBuildFile; fileRef = D8D3A26018363C58007A784A /* FlatColorMesh_DirectionLight.vsh */; };
 		D8D3A26518363C58007A784A /* TexturedMesh_DirectionLight.fsh in Sources */ = {isa = PBXBuildFile; fileRef = D8D3A26118363C58007A784A /* TexturedMesh_DirectionLight.fsh */; };
@@ -142,11 +142,11 @@
 		D86436921BE3951F00A37924 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = G3MiOSDemo/Images.xcassets; sourceTree = SOURCE_ROOT; };
 		D876E6D81AE6554700F616DE /* StarsParser.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = StarsParser.hpp; sourceTree = "<group>"; };
 		D876E6D91AE6554700F616DE /* StarsParser.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = StarsParser.mm; sourceTree = "<group>"; };
-		D876E6DB1AE65A4400F616DE /* stars.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = stars.csv; sourceTree = "<group>"; };
+		D876E6DB1AE65A4400F616DE /* stars1.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = stars1.csv; sourceTree = "<group>"; };
 		D87E4F361BE3AA8400E53805 /* MenuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MenuViewController.h; sourceTree = "<group>"; };
 		D87E4F371BE3AA8400E53805 /* MenuViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MenuViewController.mm; sourceTree = "<group>"; };
 		D882B1CC171D76AD00C2AD9C /* full-earth-256x256.bil */ = {isa = PBXFileReference; lastKnownFileType = file; path = "full-earth-256x256.bil"; sourceTree = "<group>"; };
-		D8C4723C1AE8F636005254B3 /* stars_links.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = stars_links.csv; sourceTree = "<group>"; };
+		D8C4723C1AE8F636005254B3 /* stars_links1.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = stars_links1.csv; sourceTree = "<group>"; };
 		D8D3A25F18363C58007A784A /* FlatColorMesh_DirectionLight.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = FlatColorMesh_DirectionLight.fsh; sourceTree = "<group>"; };
 		D8D3A26018363C58007A784A /* FlatColorMesh_DirectionLight.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = FlatColorMesh_DirectionLight.vsh; sourceTree = "<group>"; };
 		D8D3A26118363C58007A784A /* TexturedMesh_DirectionLight.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = TexturedMesh_DirectionLight.fsh; sourceTree = "<group>"; };
@@ -277,9 +277,9 @@
 			isa = PBXGroup;
 			children = (
 				D85B0C301BE8F8880073A034 /* galaxy.png */,
-				D8C4723C1AE8F636005254B3 /* stars_links.csv */,
+				D8C4723C1AE8F636005254B3 /* stars_links1.csv */,
 				D80DF37B1AC5642900A7D92A /* stars_old.csv */,
-				D876E6DB1AE65A4400F616DE /* stars.csv */,
+				D876E6DB1AE65A4400F616DE /* stars1.csv */,
 				4415B4AA19CC26B800E73D38 /* countries.geojson */,
 				CFE26D6718A154D700253709 /* 3d_2-0.json */,
 				CFE26D6818A154D700253709 /* 3d_2-1.json */,
@@ -397,11 +397,11 @@
 				D8EEF3951577920B003FEB5E /* InfoPlist.strings in Resources */,
 				D8EEF39E1577920B003FEB5E /* MainStoryboard_iPhone.storyboard in Resources */,
 				CF8E9887180D98DC00A08208 /* pointcloud in Resources */,
-				D8C4723D1AE8F637005254B3 /* stars_links.csv in Resources */,
+				D8C4723D1AE8F637005254B3 /* stars_links1.csv in Resources */,
 				CF0FC6F21899B86B005988D7 /* 3d_.json in Resources */,
 				D85B0C311BE8F8880073A034 /* galaxy.png in Resources */,
 				CFE26D6018A153DB00253709 /* 3d_1.json in Resources */,
-				D876E6DC1AE65A4400F616DE /* stars.csv in Resources */,
+				D876E6DC1AE65A4400F616DE /* stars1.csv in Resources */,
 				CF935B4C18006CCB0032A9C8 /* washington-memorial-normals.json in Resources */,
 				CFE26D6518A1547B00253709 /* 3d_1-2.json in Resources */,
 				CFE26D6B18A154D700253709 /* 3d_2-1.json in Resources */,
