@@ -164,8 +164,6 @@
 @synthesize G3MWidget;
 @synthesize galaxies;
 
-bool loaded = false;
-
 - (void)didReceiveMemoryWarning
 {
   [super didReceiveMemoryWarning];
@@ -183,90 +181,85 @@ const Planet* planet;
 {
   [super viewDidLoad];
   
-  if (!loaded){
-    loaded = true;
-    
-    _dO = [[DeviceOrientation alloc] init];
-    
-    cameraPositionForStars = new Geodetic3D(Geodetic3D::fromDegrees(27.973105, -15.597545, 1000));
-    
-    class MyMarkWidgetTouchListener: public NonOverlappingMarkTouchListener{
-    public:
-      MyMarkWidgetTouchListener(){
-        
-      }
-      
-      bool touchedMark(const NonOverlappingMark* mark,
-                       const Vector2F& touchedPixel){
-        NSString* message = [NSString stringWithFormat: @"Canarias!"];
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Island Selected"
-                                                        message:message
-                                                       delegate:nil
-                                              cancelButtonTitle:@"OK"
-                                              otherButtonTitles:nil];
-        [alert show];
-        return true;
-      }
-    };
-    
-    class DeviceOrientationCameraConstrainer: public ICameraConstrainer{
-      ViewController* _vc;
-    public:
-      
-      DeviceOrientationCameraConstrainer(ViewController* vc):_vc(vc){};
-      
-      bool onCameraChange(const Planet* planet,
-                          const Camera* previousCamera,
-                          Camera* nextCamera) const{
-        [_vc changeCameraTick];
-        return true;
-      }
-    };
-    
-    class RotateStarsTask: public GTask{
-      ViewController* _vc;
-    public:
-      RotateStarsTask(ViewController* vc):_vc(vc){}
-      
-      void run(const G3MContext* context){
-        [_vc rotateStars];
-      }
-      
-    };
-    
-    
-    G3MBuilder_iOS builder([self G3MWidget]);
-    
-    //builder.addPeriodicalTask(new PeriodicalTask(TimeInterval::fromSeconds(0.1), new RotateStarsTask(self)));
-    
-    builder.addCameraConstraint(new DeviceOrientationCameraConstrainer(self));
-    
-    
-    planet = Planet::createFlatEarth();
-    
-    
-    mr = new MeshRenderer();
-    builder.addRenderer(mr);
-    
-    
-    [self readStars: &builder];
-    [self createHorizonLine:&builder];
-    [self createGalaxies:&builder];
-    
-    builder.setPlanet(planet);
-    builder.initializeWidget();
-    [[self G3MWidget] startAnimation];
-    
-    [G3MWidget widget]->getPlanetRenderer()->setEnable(false);
-    
-    
-    
-    [G3MWidget widget]->setCameraPosition(*cameraPositionForStars);
-    [G3MWidget widget]->setCameraPitch(Angle::fromDegrees(0));
-    [G3MWidget widget]->setCameraHeading(Angle::fromDegrees(30));
-    
-  }
+  _dO = [[DeviceOrientation alloc] init];
   
+  cameraPositionForStars = new Geodetic3D(Geodetic3D::fromDegrees(27.973105, -15.597545, 1000));
+  
+  class MyMarkWidgetTouchListener: public NonOverlappingMarkTouchListener{
+  public:
+    MyMarkWidgetTouchListener(){
+      
+    }
+    
+    bool touchedMark(const NonOverlappingMark* mark,
+                     const Vector2F& touchedPixel){
+      NSString* message = [NSString stringWithFormat: @"Canarias!"];
+      UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Island Selected"
+                                                      message:message
+                                                     delegate:nil
+                                            cancelButtonTitle:@"OK"
+                                            otherButtonTitles:nil];
+      [alert show];
+      return true;
+    }
+  };
+  
+  class DeviceOrientationCameraConstrainer: public ICameraConstrainer{
+    ViewController* _vc;
+  public:
+    
+    DeviceOrientationCameraConstrainer(ViewController* vc):_vc(vc){};
+    
+    bool onCameraChange(const Planet* planet,
+                        const Camera* previousCamera,
+                        Camera* nextCamera) const{
+      [_vc changeCameraTick];
+      return true;
+    }
+  };
+  
+  /*
+  class RotateStarsTask: public GTask{
+    ViewController* _vc;
+  public:
+    RotateStarsTask(ViewController* vc):_vc(vc){}
+    
+    void run(const G3MContext* context){
+      [_vc rotateStars];
+    }
+    
+  };
+  */
+  
+  G3MBuilder_iOS builder([self G3MWidget]);
+  
+  //builder.addPeriodicalTask(new PeriodicalTask(TimeInterval::fromSeconds(0.1), new RotateStarsTask(self)));
+  
+  builder.addCameraConstraint(new DeviceOrientationCameraConstrainer(self));
+  
+  
+  planet = Planet::createFlatEarth();
+  
+  
+  mr = new MeshRenderer();
+  builder.addRenderer(mr);
+  
+  
+  [self readStars: &builder];
+  [self createHorizonLine:&builder];
+  [self createGalaxies:&builder];
+  
+  builder.setPlanet(planet);
+  builder.initializeWidget();
+  [[self G3MWidget] startAnimation];
+  
+  [G3MWidget widget]->getPlanetRenderer()->setEnable(false);
+  
+  
+  
+  [G3MWidget widget]->setCameraPosition(*cameraPositionForStars);
+  [G3MWidget widget]->setCameraPitch(Angle::fromDegrees(0));
+  [G3MWidget widget]->setCameraHeading(Angle::fromDegrees(30));
   
 }
 
@@ -281,6 +274,7 @@ const Planet* planet;
 
 std::vector<StarDomeRenderer*> _sdrs;
 
+/*
 - (void) rotateStars{
   
   for (int i = 0; i < _sdrs.size(); i++){
@@ -290,7 +284,7 @@ std::vector<StarDomeRenderer*> _sdrs;
   }
   
 }
-
+*/
 
 - (void) createGalaxies: (IG3MBuilder*) builder{
   
