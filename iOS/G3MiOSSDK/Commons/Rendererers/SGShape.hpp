@@ -75,11 +75,7 @@ public:
 
   std::vector<double> intersectionsDistances(const Planet* planet,
                                              const Vector3D& origin,
-                                             const Vector3D& direction) const
-  {
-    std::vector<double> intersections;
-    return intersections;
-  }
+                                             const Vector3D& direction) const;
 
   void zRawRender(const G3MRenderContext* rc, GLState* parentGLState);
 
