@@ -66,14 +66,12 @@ private:
   bool _processTouchEvents;
   std::vector<CameraEventHandler*> _handlers;
   CameraContext *_cameraContext;
-  MeshRenderer* _debugMR;
 
 
 public:
   CameraRenderer() :
   _cameraContext(NULL),
-  _processTouchEvents(true),
-  _debugMR(NULL)
+  _processTouchEvents(true)
   {
   }
 

@@ -239,7 +239,7 @@ Mesh* Tile::getTessellatorMesh(const G3MRenderContext* rc,
                                                        _tileTessellatorMeshData);
         
         computeTileCorners(rc->getPlanet());
-
+        
       }
       else {
         Mesh* tessellatorMesh = tessellator->createTileMesh(rc->getPlanet(),
@@ -264,7 +264,7 @@ Mesh* Tile::getTessellatorMesh(const G3MRenderContext* rc,
     }
     
     _elevationDataLevelOfTessellatorMesh = _elevationDataLevel;
-
+    
     //Notifying when the tile is first created and every time the elevation data changes
     _planetRenderer->sectorElevationChanged(_elevationData);
   }
@@ -369,7 +369,7 @@ bool Tile::meetsRenderCriteria(const G3MRenderContext* rc,
   }
   
   _lastMeetsRenderCriteriaTimeInMS = nowInMS; //Storing time of result
-
+  
 #warning store camera-timestamp to avoid recalculation when the camera isn't moving
   
   if ((_northArcSegmentRatioSquared == 0) ||
@@ -611,7 +611,7 @@ void Tile::deleteTexturizedMesh(TileTexturizer* texturizer) {
   // in this case, the mesh is always loaded (as well as its texture) to be the last option
   // falback texture for any tile
   if ((_parent != NULL) && (_texturizedMesh != NULL)) {
-
+    
     if (texturizer != NULL) {
       texturizer->tileMeshToBeDeleted(this, _texturizedMesh);
     }
@@ -1010,13 +1010,13 @@ void Tile::zRender(const G3MRenderContext* rc,
   if (_tessellatorMesh == NULL) {
     ILogger::instance()->logError("Calling ZRender for Tile withouth any valid mesh.");
     return;
-  } else{
-    _tessellatorMesh->zRender(rc, &parentState);
   }
+  
+  _tessellatorMesh->zRender(rc, &parentState);
 }
 
 void Tile::prepareTestLODData(const Planet* planet){
-
+  
   if ((_northWestPoint == NULL) ||
       (_northEastPoint == NULL) ||
       (_southWestPoint == NULL) ||

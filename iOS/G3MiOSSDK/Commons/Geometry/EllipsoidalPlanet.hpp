@@ -96,7 +96,7 @@ public:
                                              double directionX,
                                              double directionY,
                                              double directionZ) const {
-    return _ellipsoid.intersectionsDistances(originX,
+    return Ellipsoid::intersectionsDistances(originX,
                                              originY,
                                              originZ,
                                              directionX,
