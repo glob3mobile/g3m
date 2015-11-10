@@ -61,9 +61,9 @@ bool CameraRenderer::onTouchEvent(const G3MEventContext* ec,
 
 
 void CameraRenderer::setDebugMeshRenderer(MeshRenderer* meshRenderer) {
-  for (int n=0; n<_handlers.size(); n++){
+  _debugMR = meshRenderer;
+  for (int n=0; n<_handlers.size(); n++)
     _handlers[n]->setDebugMeshRenderer(meshRenderer);
-  }
 }
 
 void CameraRenderer::removeHandler(CameraEventHandler* handler){
