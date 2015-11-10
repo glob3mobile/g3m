@@ -348,19 +348,19 @@ std::vector<StarDomeRenderer*> _sdrs;
     }
     
     if (i == 0){
-      Mark* n = new Mark("E", planet->toGeodetic3D(pos.add(center).add(up)), ABSOLUTE, 4.5e+06, 40);
+      Mark* n = new Mark("N", planet->toGeodetic3D(pos.add(center).add(up)), ABSOLUTE, 4.5e+06, 40);
       marks->addMark(n);
     }
     if (i == 270){
-      Mark* n = new Mark("S", planet->toGeodetic3D(pos.add(center).add(up)), ABSOLUTE, 4.5e+06, 40);
-      marks->addMark(n);
-    }
-    if (i == 180){
       Mark* n = new Mark("W", planet->toGeodetic3D(pos.add(center).add(up)), ABSOLUTE, 4.5e+06, 40);
       marks->addMark(n);
     }
+    if (i == 180){
+      Mark* n = new Mark("S", planet->toGeodetic3D(pos.add(center).add(up)), ABSOLUTE, 4.5e+06, 40);
+      marks->addMark(n);
+    }
     if (i == 90){
-      Mark* n = new Mark("N", planet->toGeodetic3D(pos.add(center).add(up)), ABSOLUTE, 4.5e+06, 40);
+      Mark* n = new Mark("E", planet->toGeodetic3D(pos.add(center).add(up)), ABSOLUTE, 4.5e+06, 40);
       marks->addMark(n);
     }
     
