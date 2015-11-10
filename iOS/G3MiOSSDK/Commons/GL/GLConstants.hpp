@@ -173,7 +173,7 @@ public:
   static int oneMinusSrcAlpha() { return _oneMinusSrcAlpha; }
   static int one()              { return _one; }
   static int zero()             { return _zero; }
-  
+
   static void init(const INativeGL* ngl) {
     _srcAlpha         = ngl->BlendFactor_SrcAlpha();
     _oneMinusSrcAlpha = ngl->BlendFactor_OneMinusSrcAlpha();
@@ -261,12 +261,15 @@ public:
 
 class GLFormat{
   static int _rgba;
+  static int _rgb;
   
 public:
-  static int rgba() { return _rgba; }
-  
+  static int rgba() { return _rgba;}
+  static int rgb() { return _rgb;}
+
   static void init(const INativeGL* ngl) {
     _rgba = ngl->Format_RGBA();
+    _rgb = ngl->Format_RGB();
   }
 };
 

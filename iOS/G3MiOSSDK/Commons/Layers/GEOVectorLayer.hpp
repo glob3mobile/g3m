@@ -31,13 +31,13 @@ public:
                  const LayerCondition*                                 condition      = NULL,
                  std::vector<const Info*>*                             layerInfo      = new std::vector<const Info*>());
 
-  GEOVectorLayer(const int                        mercatorFirstLevel = 2,
-                 const int                        mercatorMaxLevel   = 18,
-                 const int                        wgs84firstLevel    = 0,
-                 const int                        wgs84maxLevel      = 18,
-                 const float                      transparency       = 1.0f,
-                 const LayerCondition*            condition          = NULL,
-                 std::vector<const Info*>*       layerInfo           = new std::vector<const Info*>());
+  GEOVectorLayer(const int                 mercatorFirstLevel = 2,
+                 const int                 mercatorMaxLevel   = 18,
+                 const int                 wgs84firstLevel    = 0,
+                 const int                 wgs84maxLevel      = 18,
+                 const float               transparency       = 1.0f,
+                 const LayerCondition*     condition          = NULL,
+                 std::vector<const Info*>* layerInfo          = new std::vector<const Info*>());
 
   ~GEOVectorLayer();
 

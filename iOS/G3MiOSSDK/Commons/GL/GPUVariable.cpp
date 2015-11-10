@@ -162,6 +162,16 @@ GPUUniformKey GPUVariable::getUniformKey(const std::string& name) {
     return BILLBOARD_ANCHOR;
   }
 
+  if (name.compare("uDepthFar") == 0) {
+    return DEPTH_FAR;
+  }
+
+  if (name.compare("uDepthNear") == 0) {
+    return DEPTH_NEAR;
+  }
+
+  ILogger::instance()->logError("UNRECOGNIZED UNIFORM - ", name.c_str());
+
   return UNRECOGNIZED_UNIFORM;
 }
 
@@ -194,6 +204,8 @@ GPUAttributeKey GPUVariable::getAttributeKey(const std::string& name) {
   if (name.compare("aPosition2D") == 0) {
     return POSITION_2D;
   }
+
+  ILogger::instance()->logError("UNRECOGNIZED ATTRIBUTE - ", name.c_str());
 
   return UNRECOGNIZED_ATTRIBUTE;
 }

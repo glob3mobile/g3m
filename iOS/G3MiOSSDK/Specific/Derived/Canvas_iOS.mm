@@ -30,6 +30,8 @@ Canvas_iOS::~Canvas_iOS() {
     CGContextRelease( _context );
     _context = NULL;
   }
+
+  delete [] _dataRGBA8888;
 }
 
 void Canvas_iOS::tryToSetCurrentFontToContext() {
@@ -45,13 +47,30 @@ void Canvas_iOS::tryToSetCurrentFontToContext() {
 void Canvas_iOS::_initialize(int width, int height) {
   CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
 
+//  _dataRGBA8888 = new unsigned char[4 * width * height];
+//  _context = CGBitmapContextCreate(_dataRGBA8888,
+//                                   width,
+//                                   height,
+//                                   8,          // bits per component
+//                                   4 * width,  // bytes per row
+//                                   colorSpace,
+//                                   kCGImageAlphaPremultipliedLast | kCGBitmapByteOrder32Big);
+//  if (_context == NULL) {
+//    delete _dataRGBA8888;
+//    _dataRGBA8888 = NULL;
+//    ILogger::instance()->logError("Can't create CGContext");
+//    return;
+//  }
+//
+//  CGContextClearRect( _context, CGRectMake( 0, 0, width, height ) );
+
   _context = CGBitmapContextCreate(NULL,       // memory created by Quartz
                                    width,
                                    height,
                                    8,          // bits per component
-                                   width * 4,  // bitmap bytes per row: 4 bytes per pixel
+                                   0,          // bytes per row
                                    colorSpace,
-                                   kCGImageAlphaPremultipliedLast);
+                                   kCGImageAlphaPremultipliedLast | kCGBitmapByteOrder32Big);
 
   CGColorSpaceRelease( colorSpace );
 
@@ -59,6 +78,14 @@ void Canvas_iOS::_initialize(int width, int height) {
     ILogger::instance()->logError("Can't create CGContext");
     return;
   }
+
+  CGContextSetShouldAntialias(_context, YES);
+  CGContextSetAllowsFontSmoothing(_context, YES);
+  CGContextSetShouldSmoothFonts(_context, YES);
+  CGContextSetShouldSubpixelPositionFonts(_context, NO);
+  CGContextSetShouldSubpixelQuantizeFonts(_context, NO);
+  CGContextSetInterpolationQuality(_context, kCGInterpolationHigh);
+
 
   tryToSetCurrentFontToContext();
 }
@@ -125,6 +152,13 @@ void Canvas_iOS::_setLineMiterLimit(float limit) {
 void Canvas_iOS::_setLineDash(float lengths[],
                               int count,
                               float phase) {
+//<<<<<<< HEAD
+//  //#warning UNCOMMENT
+//  CGContextSetLineDash(_context,
+//                       phase,
+//                       lengths, count);
+//  
+//=======
 #if __LP64__
   double* lengthsD = new double[count];
   for (int i = 0; i < count; i++) {
@@ -139,6 +173,7 @@ void Canvas_iOS::_setLineDash(float lengths[],
                        phase,
                        lengths, count);
 #endif
+
 }
 void Canvas_iOS::_setShadow(const Color& color,
                             float blur,
@@ -161,9 +196,6 @@ void Canvas_iOS::_removeShadow() {
 
 void Canvas_iOS::_clearRect(float left, float top,
                             float width, float height) {
-
-
-
   CGContextClearRect(_context, CGRectMake(left, _canvasHeight - top,
                                           width, -height));
 }
@@ -174,7 +206,8 @@ void Canvas_iOS::_createImage(IImageListener* listener,
   UIImage* image = [UIImage imageWithCGImage: cgImage];
   CFRelease(cgImage);
 
-  IImage* result = new Image_iOS(image, NULL);
+  IImage* result = new Image_iOS(image, NULL, _dataRGBA8888);
+  _dataRGBA8888 = NULL; // moved ownership to image
   listener->imageCreated(result);
   if (autodelete) {
     delete listener;
@@ -331,7 +364,8 @@ const Vector2F Canvas_iOS::_textExtent(const std::string& text) {
 
   CGSize cgSize = [nsString sizeWithFont: _currentUIFont];
 
-  return Vector2F(cgSize.width, cgSize.height);
+  return Vector2F((float) cgSize.width,
+                  (float) cgSize.height);
 }
 
 void Canvas_iOS::_fillText(const std::string& text,
@@ -544,4 +578,25 @@ void Canvas_iOS::_moveTo(float x, float y) {
 
 void Canvas_iOS::_lineTo(float x, float y) {
   CGPathAddLineToPoint(_path, &_transform, x, y);
+}
+
+
+void Canvas_iOS::_fillEllipse(float left, float top,
+                              float width, float height) {
+  CGContextFillEllipseInRect(_context,
+                             CGRectMake(left, _canvasHeight - top,
+                                        width, -height));
+}
+
+void Canvas_iOS::_strokeEllipse(float left, float top,
+                                float width, float height) {
+  CGContextStrokeEllipseInRect(_context,
+                               CGRectMake(left, _canvasHeight - top,
+                                          width, -height));
+}
+
+void Canvas_iOS::_fillAndStrokeEllipse(float left, float top,
+                                       float width, float height) {
+  _fillEllipse(left, top, width, height);
+  _strokeEllipse(left, top, width, height);
 }

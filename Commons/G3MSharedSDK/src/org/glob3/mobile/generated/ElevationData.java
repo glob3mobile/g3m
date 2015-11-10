@@ -23,7 +23,7 @@ package org.glob3.mobile.generated;
 //class Vector3D;
 //class Interpolator;
 
-public abstract class ElevationData
+public abstract class ElevationData extends RCObject
 {
   private Interpolator _interpolator;
   private Interpolator getInterpolator()
@@ -41,6 +41,12 @@ public abstract class ElevationData
 
   protected final Geodetic2D _resolution ;
 
+  public void dispose()
+  {
+    if (_interpolator != null)
+       _interpolator.dispose();
+  }
+
   public ElevationData(Sector sector, Vector2I extent)
   {
      _sector = new Sector(sector);
@@ -50,11 +56,6 @@ public abstract class ElevationData
      _interpolator = null;
   }
 
-  public void dispose()
-  {
-    if (_interpolator != null)
-       _interpolator.dispose();
-  }
 
   public Vector2I getExtent()
   {

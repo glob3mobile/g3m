@@ -70,8 +70,6 @@ private:
   InfoDisplay*                      _infoDisplay;
 
   GL*                               getGL();
-  IDownloader*                      getDownloader();
-  IThreadUtils*                     getThreadUtils();
   ICameraActivityListener*          getCameraActivityListener();
   std::vector<ICameraConstrainer*>* getCameraConstraints();
   CameraRenderer*                   getCameraRenderer();
@@ -88,7 +86,7 @@ private:
   WidgetUserData*                   getUserData();
   GPUProgramManager*                getGPUProgramManager();
   std::vector<ICameraConstrainer*>* createDefaultCameraConstraints();
-  CameraRenderer*                   createDefaultCameraRenderer();
+
   std::vector<Renderer*>*           createDefaultRenderers();
   std::vector<PeriodicalTask*>*     createDefaultPeriodicalTasks();
   Sector                            getShownSector() const;
@@ -107,15 +105,19 @@ protected:
 
   G3MWidget* create();
 
-  virtual IThreadUtils* createDefaultThreadUtils() = 0;
-  virtual IStorage*     createDefaultStorage()     = 0;
-  virtual IDownloader*  createDefaultDownloader()  = 0;
+  virtual IThreadUtils*   createDefaultThreadUtils()    = 0;
+  virtual IStorage*       createDefaultStorage()        = 0;
+  virtual IDownloader*    createDefaultDownloader()     = 0;
 
+  virtual CameraRenderer*  createDefaultCameraRenderer(); //WEBGL VERSION WILL OVERRIDE
 
 public:
   IG3MBuilder();
 
   virtual ~IG3MBuilder();
+
+  IDownloader*                      getDownloader();
+  IThreadUtils*                     getThreadUtils();
 
   void setGL(GL* gl);
 
@@ -157,20 +159,11 @@ public:
 
   void setUserData(WidgetUserData* userData);
 
-#ifdef C_CODE
   void setInitializationTask(GInitializationTask* initializationTask,
-                             const bool autoDeleteInitializationTask) {
+                             const bool autoDeleteInitializationTask = true) {
     pvtSetInitializationTask(initializationTask,
                              autoDeleteInitializationTask);
   }
-#endif
-
-#ifdef JAVA_CODE
-  public final void setInitializationTask(GInitializationTask initializationTask) {
-    pvtSetInitializationTask(initializationTask,
-                             true /* parameter ignored in Java code */);
-  }
-#endif
 
   const Planet* getPlanet();
   PlanetRendererBuilder* getPlanetRendererBuilder();

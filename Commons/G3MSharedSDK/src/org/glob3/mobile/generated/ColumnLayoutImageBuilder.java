@@ -23,7 +23,7 @@ public class ColumnLayoutImageBuilder extends LayoutImageBuilder
   {
     boolean anyError = false;
     String error = "";
-    String imageName = "";
+    String imageName = "Col";
   
     int maxWidth = 0;
     int accumulatedHeight = 0;
@@ -74,9 +74,9 @@ public class ColumnLayoutImageBuilder extends LayoutImageBuilder
       ICanvas canvas = context.getFactory().createCanvas();
       canvas.initialize(canvasWidth, canvasHeight);
   
-  ///#warning remove debug code
-  //    canvas->setFillColor(Color::red());
-  //    canvas->fillRectangle(0, 0, width, height);
+      ///#warning remove debug code
+      //    canvas->setFillColor(Color::red());
+      //    canvas->fillRectangle(0, 0, width, height);
   
       if (!_backgroundColor.isFullTransparent())
       {

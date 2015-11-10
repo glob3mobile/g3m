@@ -23,10 +23,10 @@ package org.glob3.mobile.generated;
 public class IndexedMesh extends AbstractMesh
 {
   private IShortBuffer _indices;
-  protected final void rawRender(G3MRenderContext rc)
+  protected final void rawRender(G3MRenderContext rc, GLState glState, RenderType renderType)
   {
     GL gl = rc.getGL();
-    gl.drawElements(_primitive, _indices, _glState, rc.getGPUProgramManager());
+    gl.drawElements(_primitive, _indices, glState, rc.getGPUProgramManager(), renderType);
   }
 
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
@@ -74,4 +74,5 @@ public class IndexedMesh extends AbstractMesh
     super.dispose();
   
   }
+
 }

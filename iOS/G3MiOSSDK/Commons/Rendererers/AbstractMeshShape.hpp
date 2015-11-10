@@ -48,6 +48,8 @@ public:
   virtual ~AbstractMeshShape();
 
   bool isTransparent(const G3MRenderContext* rc);
+
+  void zRawRender(const G3MRenderContext* rc, GLState* parentGLState);
 };
 
 #endif

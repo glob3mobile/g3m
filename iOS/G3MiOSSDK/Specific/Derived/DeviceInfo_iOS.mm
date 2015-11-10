@@ -21,6 +21,8 @@ DeviceInfo_iOS::DeviceInfo_iOS() {
   //  /*                          */ : 1;
   const float scale = 1; // doesn't consider the retina factor as the opengl-view doesn't change it size based on retina resolution
 
+#warning we need more members of iOS device family http://stackoverflow.com/questions/18414032/how-to-identify-a-hw-machine-identifier-reliable
+  
   if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
     size_t size;
     sysctlbyname("hw.machine", NULL, &size, NULL, 0);

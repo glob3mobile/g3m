@@ -33,10 +33,12 @@ private:
   {
   }
 
-
 public:
   const double _degrees;
   const double _radians;
+  
+  
+  static Angle halfPi;
 
 
   Angle(const Angle& angle):
@@ -186,6 +188,8 @@ public:
 
   Angle distanceTo(const Angle& other) const;
   
+  static double distanceBetweenAnglesInRadians(double r1, double r2);
+
   static Angle fromClockHoursMinutesSeconds(double hours,
                                             double minutes,
                                             double seconds) {
@@ -212,7 +216,7 @@ public:
     return Angle(degrees, TO_RADIANS(degrees));
   }
   
-  double getNormalizedDegrees() const {
+  double getNormalizedDegrees360() const {
     double degrees = _degrees;
     while (degrees < 0) {
       degrees += 360;

@@ -16,6 +16,7 @@
 
 void Camera::initialize(const G3MContext* context) {
   _planet = context->getPlanet();
+// #warning move this to Planet, and remove isFlat() method (DGD)
   if (_planet->isFlat()) {
     setCartesianPosition( MutableVector3D(0, 0, _planet->getRadii()._y * 5) );
     setUp(MutableVector3D(0, 1, 0));
@@ -29,6 +30,15 @@ void Camera::initialize(const G3MContext* context) {
 
 
 void Camera::copyFrom(const Camera &that) {
+
+  if (_timestamp == that._timestamp) {
+    return;
+  }
+
+  that.forceMatrixCreation();
+
+  _timestamp = that._timestamp;
+
   _viewPortWidth  = that._viewPortWidth;
   _viewPortHeight = that._viewPortHeight;
 
@@ -89,9 +99,12 @@ void Camera::copyFrom(const Camera &that) {
 
   _tanHalfVerticalFieldOfView   = that._tanHalfVerticalFieldOfView;
   _tanHalfHorizontalFieldOfView = that._tanHalfHorizontalFieldOfView;
+  
+  _frameDepthProvider = that._frameDepthProvider;
 }
 
-Camera::Camera() :
+
+Camera::Camera(long long timestamp, FrameDepthProvider* frameDepthProvider) :
 _planet(NULL),
 _position(0, 0, 0),
 _center(0, 0, 0),
@@ -111,13 +124,15 @@ _angle2Horizon(-99),
 _normalizedPosition(0, 0, 0),
 _tanHalfVerticalFieldOfView(NAND),
 _tanHalfHorizontalFieldOfView(NAND),
-_rollInRadians(0)
+_timestamp(timestamp),
+_frameDepthProvider(frameDepthProvider)
 {
   resizeViewport(0, 0);
   _dirtyFlags.setAllDirty();
 }
 
 void Camera::resizeViewport(int width, int height) {
+  _timestamp++;
   _viewPortWidth  = width;
   _viewPortHeight = height;
 
@@ -136,7 +151,6 @@ const Angle Camera::getHeading() const {
 }
 
 void Camera::setHeading(const Angle& angle) {
-  //ILogger::instance()->logInfo("SET CAMERA HEADING: %f", angle._degrees);
   const TaitBryanAngles angles = getHeadingPitchRoll();
   const CoordinateSystem localRS = getLocalCoordinateSystem();
   const CoordinateSystem cameraRS = localRS.applyTaitBryanAngles(angle, angles._pitch, angles._roll);
@@ -148,7 +162,6 @@ const Angle Camera::getPitch() const {
 }
 
 void Camera::setPitch(const Angle& angle) {
-  //ILogger::instance()->logInfo("SET CAMERA PITCH: %f", angle._degrees);
   const TaitBryanAngles angles = getHeadingPitchRoll();
   const CoordinateSystem localRS = getLocalCoordinateSystem();
   const CoordinateSystem cameraRS = localRS.applyTaitBryanAngles(angles._heading, angle, angles._roll);
@@ -156,35 +169,29 @@ void Camera::setPitch(const Angle& angle) {
 }
 
 void Camera::setGeodeticPosition(const Geodetic3D& g3d) {
-  const Angle heading = getHeading();
-  const Angle pitch = getPitch();
-  setPitch(Angle::fromDegrees(-90));
+  TaitBryanAngles tba = getHeadingPitchRoll();
   MutableMatrix44D dragMatrix = _planet->drag(getGeodeticPosition(), g3d);
   if (dragMatrix.isValid()) applyTransform(dragMatrix);
-  setHeading(heading);
-  setPitch(pitch);
+  setHeadingPitchRoll(tba._heading, tba._pitch, tba._roll);
 }
 
-void Camera::setGeodeticPositionStablePitch(const Geodetic3D& g3d) {
-  MutableMatrix44D dragMatrix = _planet->drag(getGeodeticPosition(), g3d);
-  if (dragMatrix.isValid()) applyTransform(dragMatrix);
-}
 
-const Vector3D Camera::pixel2Ray(const Vector2I& pixel) const {
-  const int px = pixel._x;
-  const int py = _viewPortHeight - pixel._y;
-  const Vector3D pixel3D(px, py, 0);
+//void Camera::render(const G3MRenderContext* rc,
+//                    const GLGlobalState& parentState) const {
+//  //TODO: NO LONGER NEEDED!!!
+//}
+
+const Vector3D Camera::pixel2Ray(const Vector3D& pixel3D) const {
 
   const Vector3D obj = getModelViewMatrix().unproject(pixel3D,
-                                                      0, 0, _viewPortWidth, _viewPortHeight);
+                                                      0, 0,
+                                                      _viewPortWidth, _viewPortHeight);
   if (obj.isNan()) {
-    ILogger::instance()->logWarning("Pixel to Ray return NaN");
     return obj;
   }
 
   return obj.sub(_position.asVector3D());
 }
-
 
 const Vector3D Camera::pixel2Ray(const Vector2F& pixel) const {
   const float px = pixel._x;
@@ -192,7 +199,8 @@ const Vector3D Camera::pixel2Ray(const Vector2F& pixel) const {
   const Vector3D pixel3D(px, py, 0);
 
   const Vector3D obj = getModelViewMatrix().unproject(pixel3D,
-                                                      0, 0, _viewPortWidth, _viewPortHeight);
+                                                      0, 0,
+                                                      _viewPortWidth, _viewPortHeight);
   if (obj.isNan()) {
     ILogger::instance()->logWarning("Pixel to Ray return NaN");
     return obj;
@@ -201,20 +209,34 @@ const Vector3D Camera::pixel2Ray(const Vector2F& pixel) const {
   return obj.sub(_position.asVector3D());
 }
 
-const Vector3D Camera::pixel2PlanetPoint(const Vector2I& pixel) const {
+const Vector3D Camera::pixel2PlanetPoint(const Vector2F& pixel) const {
   return _planet->closestIntersection(_position.asVector3D(), pixel2Ray(pixel));
 }
 
 const Vector2F Camera::point2Pixel(const Vector3D& point) const {
   const Vector2D p = getModelViewMatrix().project(point,
-                                                  0, 0, _viewPortWidth, _viewPortHeight);
+                                                  0, 0,
+                                                  _viewPortWidth, _viewPortHeight);
+
+  Vector3D direction = point.sub(getCartesianPosition());
+  double angle = direction.angleBetween(getViewDirection())._degrees;
+  if (angle > 90){    //Projecting point behind the camera
+    return Vector2F((float)-p._x, (float)-(_viewPortHeight - p._y));
+  }
 
   return Vector2F((float) p._x, (float) (_viewPortHeight - p._y) );
 }
 
 const Vector2F Camera::point2Pixel(const Vector3F& point) const {
   const Vector2F p = getModelViewMatrix().project(point,
-                                                  0, 0, _viewPortWidth, _viewPortHeight);
+                                                  0, 0,
+                                                  _viewPortWidth, _viewPortHeight);
+
+  Vector3D direction = point.asVector3D().sub(getCartesianPosition());
+  double angle = direction.angleBetween(getViewDirection())._degrees;
+  if (angle > 90){    //Projecting point behind the camera
+    return Vector2F((float)-p._x, (float)-(_viewPortHeight - p._y));
+  }
 
   return Vector2F(p._x, (_viewPortHeight - p._y) );
 }
@@ -278,8 +300,8 @@ Vector3D Camera::getHorizontalVector() {
   return Vector3D(M.get0(), M.get4(), M.get8());
 }
 
-Angle Camera::compute3DAngularDistance(const Vector2I& pixel0,
-                                       const Vector2I& pixel1) {
+Angle Camera::compute3DAngularDistance(const Vector2F& pixel0,
+                                       const Vector2F& pixel1) {
   const Vector3D point0 = pixel2PlanetPoint(pixel0);
   if (point0.isNan()) {
     return Angle::nan();
@@ -313,9 +335,12 @@ void Camera::setPointOfView(const Geodetic3D& center,
 }
 
 FrustumData Camera::calculateFrustumData() const {
+
   const double height = getGeodeticPosition()._height;
   double zNear = height * 0.1;
 
+  //printf ("computing new znear=%.3f.  Height from ground =%.2f\n", zNear, heightFromGround);
+  
   double zFar = _planet->distanceToHorizon(_position.asVector3D());
 
   const double goalRatio = 1000;
@@ -323,13 +348,6 @@ FrustumData Camera::calculateFrustumData() const {
   if (ratio < goalRatio) {
     zNear = zFar / goalRatio;
   }
-
-  //  int __TODO_remove_debug_code;
-  //  printf(">>> height=%f zNear=%f zFar=%f ratio=%f\n",
-  //         height,
-  //         zNear,
-  //         zFar,
-  //         ratio);
 
   // compute rest of frustum numbers
 
@@ -392,6 +410,7 @@ void Camera::setFOV(const Angle& vertical,
   const double newV = halfVFOV.tangent();
   if ((newH != _tanHalfHorizontalFieldOfView) ||
       (newV != _tanHalfVerticalFieldOfView)) {
+    _timestamp++;
     _tanHalfHorizontalFieldOfView = newH;
     _tanHalfVerticalFieldOfView   = newV;
 
@@ -404,7 +423,6 @@ void Camera::setFOV(const Angle& vertical,
 }
 
 void Camera::setRoll(const Angle& angle) {
-  //ILogger::instance()->logInfo("SET CAMERA ROLL: %f", angle._degrees);
   const TaitBryanAngles angles = getHeadingPitchRoll();
 
   const CoordinateSystem localRS = getLocalCoordinateSystem();
@@ -425,12 +443,11 @@ CoordinateSystem Camera::getCameraCoordinateSystem() const {
 }
 
 void Camera::setCameraCoordinateSystem(const CoordinateSystem& rs) {
-//  _center = _position.add(rs._y.asMutableVector3D());
+  _timestamp++;
   _center.copyFrom(_position);
   _center.addInPlace(rs._y);
-//  _up = rs._z.asMutableVector3D();
   _up.copyFrom(rs._z);
-  _dirtyFlags.setAllDirty();  //Recalculate Everything
+  _dirtyFlags.setAllDirty();
 }
 
 TaitBryanAngles Camera::getHeadingPitchRoll() const {
@@ -449,10 +466,6 @@ void Camera::setHeadingPitchRoll(const Angle& heading,
 
 double Camera::getEstimatedPixelDistance(const Vector3D& point0,
                                          const Vector3D& point1) const {
-//  const Vector3D ray0 = _position.sub(point0);
-//  const Vector3D ray1 = _position.sub(point1);
-//  const double angleInRadians = ray1.angleInRadiansBetween(ray0);
-
   _ray0.putSub(_position, point0);
   _ray1.putSub(_position, point1);
   const double angleInRadians = MutableVector3D::angleInRadiansBetween(_ray1, _ray0);
@@ -461,8 +474,41 @@ double Camera::getEstimatedPixelDistance(const Vector3D& point0,
   return distanceInMeters * _viewPortHeight / frustumData._top;
 }
 
-void Camera::setCameraCoordinateSystem(const Vector3D& viewDirection,
-                               const Vector3D& up){
+Vector3D Camera::getScenePositionForPixel(float x, float y){
+  const double z = _frameDepthProvider->getDepthForPixel(x, y);
   
-#warning TODO_JM
+  if (!ISNAN(z)){
+    Vector3D pixel3D(x, _viewPortHeight - y,z);
+    Vector3D pos = getModelViewMatrix().unproject(pixel3D, 0, 0, _viewPortWidth, _viewPortHeight);
+    //ILogger::instance()->logInfo("PIXEL 3D: %s -> %s\n", pixel3D.description().c_str(), pos.description().c_str() );
+    //ILogger::instance()->logInfo("Z = %f - DIST CAM: %f\n", z, _currentCamera->getCartesianPosition().sub(pos).length());
+    //ILogger::instance()->logInfo("GEO: %s\n", _planet->toGeodetic2D(pos).description().c_str());
+    
+    return pos;
+  } else{
+    //ILogger::instance()->logInfo("NO Z");
+    return Vector3D::nan();
+  }
+}
+
+Vector3D Camera::getScenePositionForCentralPixel(){
+  return getScenePositionForPixel(_viewPortWidth / 2, _viewPortHeight / 2);
+}
+
+Vector3D Camera::getFirstValidScenePositionForCentralColumn() const {
+  
+  const int halfWidth = _viewPortWidth/2;
+  
+  for (int row = _viewPortHeight / 2; row < _viewPortHeight-1; row++) {
+    const double z = _frameDepthProvider->getDepthForPixel(halfWidth, row);
+    
+    if (!ISNAN(z)){
+      Vector3D pixel3D(halfWidth, _viewPortHeight - row,z);
+      Vector3D pos = getModelViewMatrix().unproject(pixel3D, 0, 0, _viewPortWidth, _viewPortHeight);
+      return pos;
+    }
+  }
+  
+  return Vector3D::nan();
+
 }

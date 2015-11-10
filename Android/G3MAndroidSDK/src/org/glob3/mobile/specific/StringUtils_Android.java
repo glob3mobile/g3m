@@ -3,6 +3,7 @@
 package org.glob3.mobile.specific;
 
 import java.io.UnsupportedEncodingException;
+import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.Locale;
 
@@ -10,8 +11,8 @@ import org.glob3.mobile.generated.IStringUtils;
 
 
 public final class StringUtils_Android
-extends
-IStringUtils {
+   extends
+      IStringUtils {
 
    @Override
    public String createString(final byte[] data,
@@ -152,7 +153,12 @@ IStringUtils {
 
    @Override
    public String toString(final double value) {
-      return Double.toString(value);
+       
+       DecimalFormatSymbols dfs = new DecimalFormatSymbols(new Locale("en", "US"));
+       java.text.DecimalFormat df = new java.text.DecimalFormat("#.################", dfs); 
+       String s = df.format(value);
+       return s;
+       
    }
 
 
@@ -171,6 +177,14 @@ IStringUtils {
    @Override
    public String toString(final float value) {
       return Float.toString(value);
+   }
+
+
+   @Override
+   public String replaceAll(final String originalString,
+                            final String searchString,
+                            final String replaceString) {
+      return originalString.replace(searchString, replaceString);
    }
 
 }

@@ -48,6 +48,7 @@ public final class Downloader_Android_Handler {
 
    Downloader_Android_Handler(final URL url,
                               final IBufferDownloadListener listener,
+                              final boolean deleteListener,
                               final long priority,
                               final long requestId) {
       _priority = priority;
@@ -56,7 +57,7 @@ public final class Downloader_Android_Handler {
       try {
          _javaURL = new java.net.URL(url._path);
 
-         _listeners.add(new Downloader_Android_ListenerEntry(listener, null, requestId));
+         _listeners.add(new Downloader_Android_ListenerEntry(listener, null, deleteListener, requestId));
       }
       catch (final MalformedURLException e) {
          if (ILogger.instance() != null) {
@@ -75,6 +76,7 @@ public final class Downloader_Android_Handler {
 
    Downloader_Android_Handler(final URL url,
                               final IImageDownloadListener listener,
+                              final boolean deleteListener,
                               final long priority,
                               final long requestId) {
       _priority = priority;
@@ -83,7 +85,7 @@ public final class Downloader_Android_Handler {
       try {
          _javaURL = new java.net.URL(url._path);
 
-         _listeners.add(new Downloader_Android_ListenerEntry(null, listener, requestId));
+         _listeners.add(new Downloader_Android_ListenerEntry(null, listener, deleteListener, requestId));
       }
       catch (final MalformedURLException e) {
          if (ILogger.instance() != null) {
@@ -101,9 +103,11 @@ public final class Downloader_Android_Handler {
 
 
    void addListener(final IBufferDownloadListener listener,
+                    final boolean deleteListener,
                     final long priority,
                     final long requestId) {
-      final Downloader_Android_ListenerEntry entry = new Downloader_Android_ListenerEntry(listener, null, requestId);
+      final Downloader_Android_ListenerEntry entry = new Downloader_Android_ListenerEntry(listener, null, deleteListener,
+               requestId);
 
       synchronized (this) {
          _listeners.add(entry);
@@ -116,9 +120,11 @@ public final class Downloader_Android_Handler {
 
 
    void addListener(final IImageDownloadListener listener,
+                    final boolean deleteListener,
                     final long priority,
                     final long requestId) {
-      final Downloader_Android_ListenerEntry entry = new Downloader_Android_ListenerEntry(null, listener, requestId);
+      final Downloader_Android_ListenerEntry entry = new Downloader_Android_ListenerEntry(null, listener, deleteListener,
+               requestId);
 
       synchronized (this) {
          _hasImageListeners = true;
@@ -276,8 +282,8 @@ public final class Downloader_Android_Handler {
    }
 
    private class ProcessResponseGTask
-            extends
-               GTask {
+      extends
+         GTask {
 
       private final int    _statusCode;
       private final byte[] _data;

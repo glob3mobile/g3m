@@ -66,12 +66,15 @@ public:
 
   virtual const long long requestElevationData(const Sector& sector,
                                                const Vector2I& extent,
+                                               long long requestPriority,
                                                IElevationDataListener* listener,
                                                bool autodeleteListener) = 0;
 
   virtual void cancelRequest(const long long requestId) = 0;
 
   virtual std::vector<const Sector*> getSectors() const = 0;
+  
+  bool containsSector(const Sector& sector) const;
 
   virtual const Vector2I getMinResolution() const = 0;
 

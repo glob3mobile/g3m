@@ -48,7 +48,7 @@ public class CameraZoomAndRotateHandler extends CameraEventHandler
     double fingerSep = Math.sqrt((difCurrentPixels._x *difCurrentPixels._x+difCurrentPixels._y *difCurrentPixels._y));
     double factor = _fingerSep0 / fingerSep;
     double desp = 1-factor;
-    Vector3D w = _centralGlobePoint.asVector3D().sub(_camera0.getCartesianPosition());
+    Vector3D w = _centralGlobePoint.asVector3D().sub(_cameraPosition);
     double dist = w.length();
   
      // don't allow much closer
@@ -61,7 +61,7 @@ public class CameraZoomAndRotateHandler extends CameraEventHandler
       return;
   
      // make zoom and rotation
-    camera.copyFrom(_camera0);
+    camera.setLookAtParams(_cameraPosition, _cameraCenter, _cameraUp);
   
     // make rotation
     camera.rotateWithAxisAndPoint(_centralGlobeNormal.asVector3D(), _centralGlobePoint.asVector3D(), Angle.fromRadians(angle));
@@ -69,11 +69,6 @@ public class CameraZoomAndRotateHandler extends CameraEventHandler
   
     // make zoom
     camera.moveForward(desp *dist);
-  
-    /*printf("dist=%.2f.  desp=%f.   factor=%f   new dist=%.2f\n", dist, desp, factor, dist-desp*dist);
-    printf ("camera en (%.2f, %.2f, %.2f)     centralpoint en (%.2f, %.2f, %.2f). \n",
-            _camera0.getCartesianPosition().x(),  _camera0.getCartesianPosition().y(),  _camera0.getCartesianPosition().z(),
-            _centralGlobePoint.x(), _centralGlobePoint.y(), _centralGlobePoint.z());*/
   }
   private void rotate()
   {
@@ -82,10 +77,7 @@ public class CameraZoomAndRotateHandler extends CameraEventHandler
 
 
   public CameraZoomAndRotateHandler()
-  //_initialPoint(0,0,0),
-  //_initialPixel(0,0,0)
   {
-     _camera0 = new Camera(new Camera());
   }
 
   public void dispose()
@@ -162,7 +154,7 @@ public class CameraZoomAndRotateHandler extends CameraEventHandler
   public final void onDown(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
   {
     Camera camera = cameraContext.getNextCamera();
-    _camera0.copyFrom(camera);
+    camera.getLookAtParamsInto(_cameraPosition, _cameraCenter, _cameraUp);
     cameraContext.setCurrentGesture(Gesture.DoubleDrag);
   
     // double dragging
@@ -193,7 +185,8 @@ public class CameraZoomAndRotateHandler extends CameraEventHandler
       {
   
         // compute intersection of view direction with the globe
-        Vector3D intersection = planet.closestIntersection(_camera0.getCartesianPosition(), _camera0.getViewDirection());
+        //Vector3D intersection = planet->closestIntersection(_camera0.getCartesianPosition(), _camera0.getViewDirection());
+        Vector3D intersection = cameraContext.getNextCamera().getScenePositionForCentralPixel();
         if (!intersection.isNan())
         {
   //        _centralGlobePoint = intersection.asMutableVector3D();
@@ -246,6 +239,8 @@ public class CameraZoomAndRotateHandler extends CameraEventHandler
   public double _initialFingerSeparation;
   public double _initialFingerInclination;
 
-  public Camera _camera0 = new Camera(); //Initial Camera saved on Down event
+  public MutableVector3D _cameraPosition = new MutableVector3D();
+  public MutableVector3D _cameraCenter = new MutableVector3D();
+  public MutableVector3D _cameraUp = new MutableVector3D();
 
 }

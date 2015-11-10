@@ -280,6 +280,23 @@ public class MeshRenderer extends DefaultRenderer
     loadBSONPointCloud(url, DownloadPriority.MEDIUM, TimeInterval.fromDays(30), true, pointSize, deltaHeight, listener, deleteListener);
   }
 
+  public final void zRender(G3MRenderContext rc, GLState glState)
+  {
+  
+    final Frustum frustum = rc.getCurrentCamera().getFrustumInModelCoordinates();
+  
+    final int meshesCount = _meshes.size();
+    for (int i = 0; i < meshesCount; i++)
+    {
+      Mesh mesh = _meshes.get(i);
+      final BoundingVolume boundingVolume = mesh.getBoundingVolume();
+      if (boundingVolume.touchesFrustum(frustum))
+      {
+        mesh.zRender(rc, _glState);
+      }
+    }
+  }
+
   public final void loadJSONMesh(URL url, Color color, long priority, TimeInterval timeToCache, boolean readExpired, MeshLoadListener listener)
   {
      loadJSONMesh(url, color, priority, timeToCache, readExpired, listener, true);

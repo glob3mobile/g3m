@@ -198,6 +198,8 @@ public class CompositeTileImageProvider extends CanvasTileImageProvider
     
       TileImageContribution.releaseContribution(_compositeContribution);
     
+      _compositeTileImageProvider._release();
+    
       super.dispose();
     }
 
@@ -219,6 +221,8 @@ public class CompositeTileImageProvider extends CanvasTileImageProvider
        _anyCancelation = false;
        _canceled = false;
        _tileSector = new Sector(tileSector);
+      _compositeTileImageProvider._retain();
+    
       for (int i = 0; i < _contributionsSize; i++)
       {
         _results.add(null);

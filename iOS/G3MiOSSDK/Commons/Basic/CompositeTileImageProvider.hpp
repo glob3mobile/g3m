@@ -68,7 +68,7 @@ private:
     private CompositeTileImageContribution _compositeContribution;
 #endif
     std::vector<const ChildResult*>       _results;
-    const int                             _contributionsSize;
+    const size_t                          _contributionsSize;
 
     int _stepsDone;
     void stepDone();
@@ -115,12 +115,12 @@ private:
                       const IImage*                image,
                       const std::string&           imageId,
                       const TileImageContribution* contribution,
-                      const int                    index);
+                      const size_t                 index);
 
     void imageCreationError(const std::string& error,
-                            const int          index);
+                            const size_t       index);
 
-    void imageCreationCanceled(const int index);
+    void imageCreationCanceled(const size_t index);
 
     void cancel(const std::string& tileId);
 
@@ -175,12 +175,12 @@ private:
 
   class ChildTileImageListener : public TileImageListener {
   private:
-    Composer* _composer;
-    const int _index;
+    Composer*    _composer;
+    const size_t _index;
 
   public:
     ChildTileImageListener(Composer* composer,
-                           int index) :
+                           size_t index) :
     _composer(composer),
     _index(index)
     {
@@ -208,7 +208,7 @@ private:
 
 
   std::vector<TileImageProvider*> _children;
-  int                             _childrenSize;
+  size_t                          _childrenSize;
 
   std::map<const std::string, Composer*> _composers;
 

@@ -31,7 +31,7 @@ protected:
   
   ChangedRendererInfoListener* _changedInfoListener = NULL;
   
-  int _rendererIdentifier = -1;
+  size_t _rendererIdentifier = 0;
   
 #ifdef C_CODE
   const G3MContext* _context;
@@ -133,7 +133,8 @@ public:
   
   
   
-  virtual void setChangedRendererInfoListener(ChangedRendererInfoListener* changedInfoListener, const int rendererIdentifier);
+  virtual void setChangedRendererInfoListener(ChangedRendererInfoListener* changedInfoListener,
+                                              const size_t rendererIdentifier);
 };
 
 #endif

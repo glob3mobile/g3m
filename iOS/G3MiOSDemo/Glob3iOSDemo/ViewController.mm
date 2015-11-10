@@ -67,7 +67,6 @@
 #import <G3MiOSSDK/Factory_iOS.hpp>
 #import <G3MiOSSDK/G3MWidget.hpp>
 #import <G3MiOSSDK/GEOJSONParser.hpp>
-//import <G3MiOSSDK/WMSBilElevationDataProvider.hpp>
 #import <G3MiOSSDK/SingleBilElevationDataProvider.hpp>
 #import <G3MiOSSDK/FloatBufferElevationData.hpp>
 #import <G3MiOSSDK/GEOSymbolizer.hpp>
@@ -159,6 +158,8 @@
 
 #import "MenuViewController.h"
 
+#import <G3MiOSSDK/DeviceAttitudeCameraHandler.hpp>
+
 @implementation ViewController
 
 @synthesize G3MWidget;
@@ -182,6 +183,8 @@ const Planet* planet;
   [super viewDidLoad];
   
   _dO = [[DeviceOrientation alloc] init];
+
+  
   
   cameraPositionForStars = new Geodetic3D(Geodetic3D::fromDegrees(27.973105, -15.597545, 1000));
   
@@ -204,39 +207,28 @@ const Planet* planet;
     }
   };
   
-  class DeviceOrientationCameraConstrainer: public ICameraConstrainer{
-    ViewController* _vc;
-  public:
-    
-    DeviceOrientationCameraConstrainer(ViewController* vc):_vc(vc){};
-    
-    bool onCameraChange(const Planet* planet,
-                        const Camera* previousCamera,
-                        Camera* nextCamera) const{
-      [_vc changeCameraTick];
-      return true;
-    }
-  };
-  
   /*
-  class RotateStarsTask: public GTask{
-    ViewController* _vc;
-  public:
-    RotateStarsTask(ViewController* vc):_vc(vc){}
-    
-    void run(const G3MContext* context){
-      [_vc rotateStars];
-    }
-    
-  };
-  */
+   class RotateStarsTask: public GTask{
+   ViewController* _vc;
+   public:
+   RotateStarsTask(ViewController* vc):_vc(vc){}
+   
+   void run(const G3MContext* context){
+   [_vc rotateStars];
+   }
+   
+   };
+   */
   
   G3MBuilder_iOS builder([self G3MWidget]);
   
+  
+  DeviceAttitudeCameraHandler* dach = new DeviceAttitudeCameraHandler(false);
+  CameraRenderer* cr = new CameraRenderer();
+  cr->addHandler(dach);
+  builder.setCameraRenderer(cr);
+  
   //builder.addPeriodicalTask(new PeriodicalTask(TimeInterval::fromSeconds(0.1), new RotateStarsTask(self)));
-  
-  builder.addCameraConstraint(new DeviceOrientationCameraConstrainer(self));
-  
   
   planet = Planet::createFlatEarth();
   
@@ -275,16 +267,16 @@ const Planet* planet;
 std::vector<StarDomeRenderer*> _sdrs;
 
 /*
-- (void) rotateStars{
-  
-  for (int i = 0; i < _sdrs.size(); i++){
-    _sdrs[i]->setClockTimeInDegrees(_sdrs[i]->getCurrentClockTimeInDegrees() + 0.6);
-    _sdrs[i]->clear();
-    
-  }
-  
-}
-*/
+ - (void) rotateStars{
+ 
+ for (int i = 0; i < _sdrs.size(); i++){
+ _sdrs[i]->setClockTimeInDegrees(_sdrs[i]->getCurrentClockTimeInDegrees() + 0.6);
+ _sdrs[i]->clear();
+ 
+ }
+ 
+ }
+ */
 
 - (void) createGalaxies: (IG3MBuilder*) builder{
   
@@ -327,14 +319,14 @@ std::vector<StarDomeRenderer*> _sdrs;
   
   FloatBufferBuilderFromColor cfbb;
   
-  MarksRenderer* marks = new MarksRenderer(true);
+  MarksRenderer* marks = new MarksRenderer(false);
   builder->addRenderer(marks);
   
   Vector3D up = Vector3D::upZ().times(3e3);
   
   for(int i = 0; i < 360; i+=5){
     
-    Vector3D pos = Star::getStarDisplacementInDome(domeHeight, Angle::fromDegrees(i), Angle::fromDegrees(0));
+    Vector3D pos = Star::getStarDisplacementInDome(domeHeight, Angle::fromDegrees(i), Angle::fromDegrees(10));
     
     fbb->add(pos);
     fbb->add(pos);
@@ -437,7 +429,7 @@ std::vector<StarDomeRenderer*> _sdrs;
       Constellation c = cs[i];
       
       
-      MarksRenderer* mr = new MarksRenderer(true);
+      MarksRenderer* mr = new MarksRenderer(false);
       builder->addRenderer(mr);
       
       StarDomeRenderer* sdr = new StarDomeRenderer(c._name, c._stars, c._lines, *cameraPositionForStars, clockTimeInDegrees, dayOfYear, *c._color, mr);
@@ -449,91 +441,6 @@ std::vector<StarDomeRenderer*> _sdrs;
   }
   
 }
-
--(void) changeCameraTick{
-  
-  Camera* camera = [G3MWidget widget]->getNextCamera();
-  Geodetic3D camPosition = camera->getGeodeticPosition();
-  
-  CMRotationMatrix matrixR = [_dO getRotationMatrix];
-  
-  MutableMatrix44D quaternionRM =  [self matrix:matrixR];//quaternion.getRotationMatrix();
-  
-  CoordinateSystem global = CoordinateSystem::global();
-  CoordinateSystem local = planet->getCoordinateSystemAt(camPosition);
-  MutableMatrix44D localRM = local.getRotationMatrix();
-  
-  CoordinateSystem unorientedFinal = global.applyRotation(localRM.multiply(quaternionRM) ).changeOrigin(local._origin);
-  
-  Vector3D planetNormal = planet->geodeticSurfaceNormal(unorientedFinal._origin);
-  
-  CoordinateSystem final = unorientedFinal.applyRotation(MutableMatrix44D::createRotationMatrix(Angle::fromDegrees(90), planetNormal));
-  
-  if (!final.isConsistent()){
-    ILogger::instance()->logError("Invalid device attitude, skipping.");
-  }
-  
-  UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
-  
-  /*
-   Mesh* m = final.createMesh(1000, Color::red(), Color::green(), Color::blue());
-   mr->clearMeshes();
-   mr->addMesh(m);
-   */
-  
-  switch (orientation) {
-    case UIInterfaceOrientationPortrait:
-    {
-      
-      CoordinateSystem camCS(final._z.times(-1), //ViewDirection
-                             final._y,            //Up
-                             final._origin);       //Origin
-      
-      [G3MWidget widget]->getNextCamera()->setCameraCoordinateSystem(camCS);
-      
-      break;
-    }
-      
-    case UIInterfaceOrientationPortraitUpsideDown:
-    {
-      
-      CoordinateSystem camCS(final._z.times(-1), //ViewDirection
-                             final._y.times(-1),            //Up
-                             final._origin);       //Origin
-      
-      [G3MWidget widget]->getNextCamera()->setCameraCoordinateSystem(camCS);
-      
-      break;
-    }
-      
-    case UIInterfaceOrientationLandscapeLeft:
-    {
-      
-      CoordinateSystem camCS(final._z.times(-1), //ViewDirection
-                             final._x.times(-1),            //Up
-                             final._origin);       //Origin
-      
-      [G3MWidget widget]->getNextCamera()->setCameraCoordinateSystem(camCS);
-      break;
-    }
-      
-    case UIInterfaceOrientationLandscapeRight:
-    {
-      
-      CoordinateSystem camCS(final._z.times(-1), //ViewDirection
-                             final._x,            //Up
-                             final._origin);       //Origin
-      
-      [G3MWidget widget]->getNextCamera()->setCameraCoordinateSystem(camCS);
-      break;
-    }
-      
-    default:
-      ILogger::instance()->logInfo("Unexpected Interface Orientation");
-      break;
-  }
-}
-
 
 -(NSUInteger)supportedInterfaceOrientations {
   return UIInterfaceOrientationMaskAll;

@@ -85,7 +85,7 @@ void IImageUtils::combine(int width,
                           IImageListener* listener,
                           bool autodelete) {
 
-  const int imagesSize = images.size();
+  const size_t imagesSize = images.size();
 
   if (imagesSize != sourceRects.size() || imagesSize != destRects.size()) {
     ILogger::instance()->logError("Failure at combine images.");

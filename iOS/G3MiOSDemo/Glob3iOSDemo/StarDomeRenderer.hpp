@@ -236,6 +236,9 @@ public:
   void selectStar(const Angle& trueNorthAzimuthInDegrees,
                   const Angle& altitudeInDegrees);
   
+  void zRender(const G3MRenderContext* rc,
+               GLState* glState){}
+  
   
   
 };

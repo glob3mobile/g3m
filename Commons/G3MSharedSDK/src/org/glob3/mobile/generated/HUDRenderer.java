@@ -171,6 +171,10 @@ public class HUDRenderer extends DefaultRenderer
     }
   }
 
+  public final void zRender(G3MRenderContext rc, GLState glState)
+  {
+  }
+
   public final void render(G3MRenderContext rc, GLState glState)
   {
     if (_widgetsSize == 0)

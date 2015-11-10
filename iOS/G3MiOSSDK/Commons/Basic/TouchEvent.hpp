@@ -25,7 +25,7 @@ private:
   private final Vector2F _prevPos;
 #endif
   const unsigned char _tapCount;
-
+  
 public:
   Touch(const Touch& other) :
   _pos(other._pos),
@@ -44,7 +44,7 @@ public:
   const Vector2F getPos() const { return _pos; }
   const Vector2F getPrevPos() const { return _prevPos; }
   const unsigned char getTapCount() const { return _tapCount; }
-
+  
   ~Touch() {
   }
 };
@@ -55,7 +55,8 @@ enum TouchEventType {
   Up,
   Move,
   LongPress,
-  DownUp
+  DownUp,
+  MouseWheelChanged
 };
 
 
@@ -66,8 +67,8 @@ private:
   const bool                       _shiftPressed;
   const bool                       _ctrlPressed;
   const double                     _wheelDelta;
-
-
+  
+  
   TouchEvent(const TouchEventType& type,
              const std::vector<const Touch*> touchs,
              bool shift,
@@ -80,7 +81,7 @@ private:
   _wheelDelta(wheelDelta)
   {
   }
-
+  
 public:
   TouchEvent(const TouchEvent& other):
   _eventType(other._eventType),
@@ -89,12 +90,12 @@ public:
   _ctrlPressed(other._ctrlPressed),
   _wheelDelta(other._wheelDelta) {
   }
-
+  
   static TouchEvent* create(const TouchEventType& type,
                             const std::vector<const Touch*> touchs) {
     return new TouchEvent(type, touchs, false, false, 0.0);
   }
-
+  
   static TouchEvent* create(const TouchEventType& type,
                             const std::vector<const Touch*> touchs,
                             bool shift,
@@ -102,28 +103,28 @@ public:
                             double wheelDelta) {
     return new TouchEvent(type, touchs, shift, ctrl, wheelDelta);
   }
-
+  
   static TouchEvent* create(const TouchEventType& type,
                             const Touch* touch) {
     const std::vector<const Touch*> touchs(1, touch);
-
+    
     return create(type, touchs);
   }
-
+  
   static TouchEvent* create(const TouchEventType& type,
                             const Touch* touch,
                             bool shift,
                             bool ctrl,
                             double wheelDelta) {
     const std::vector<const Touch*> touchs(1, touch);
-
+    
     return create(type, touchs, shift, ctrl, wheelDelta);
   }
-
+  
   TouchEventType getType() const {
     return _eventType;
   }
-
+  
   const Touch* getTouch(int i) const {
     return _touchs[i];
   }
@@ -131,15 +132,20 @@ public:
   size_t getTouchCount() const {
     return _touchs.size();
   }
-
+  
   unsigned char getTapCount() const;
-
+  
   ~TouchEvent() {
     for (unsigned int i = 0; i < _touchs.size(); i++) {
       delete _touchs[i];
     }
   }
+  
+  double getMouseWheelDelta() const{
+    return _wheelDelta;
+  }
 
+  
 };
 
 #endif

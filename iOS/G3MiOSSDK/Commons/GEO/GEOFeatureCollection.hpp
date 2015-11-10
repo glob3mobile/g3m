@@ -43,8 +43,8 @@ public:
   GEOFeature* get(int i) const {
     return _features[i];
   }
-  
-  int size() const {
+
+  size_t size() const {
     return _features.size();
   }
 
@@ -56,6 +56,9 @@ public:
   long long getCoordinatesCount() const;
 
   GEOFeatureCollection* deepCopy() const;
+
+  long long createFeatureMarks(const VectorStreamingRenderer::VectorSet* vectorSet,
+                               const VectorStreamingRenderer::Node*      node) const;
 
 };
 

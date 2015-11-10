@@ -33,7 +33,8 @@ enum GLFeatureID{
   GLF_DIRECTION_LIGTH,
   GLF_VERTEX_NORMAL,
   GLF_MODEL_VIEW,
-  GLF_BLENDING_MODE
+  GLF_BLENDING_MODE,
+  GLF_DEPTH_RANGE
 };
 
 class GLFeature: public RCObject {
@@ -81,8 +82,8 @@ private:
   
 public:
   BillboardGLFeature(const Vector3D& position,
-                     int textureWidth,
-                     int textureHeight,
+                     float billboardWidth,
+                     float billboardHeight,
                      float anchorU, float anchorV);
   
   void applyOnGlobalGLState(GLGlobalState* state) const;
@@ -139,7 +140,7 @@ private:
 
 public:
 
-  GeometryGLFeature(IFloatBuffer* buffer,
+  GeometryGLFeature(const IFloatBuffer* buffer,
                     int arrayElementSize,
                     int index,
                     bool normalized,
@@ -454,7 +455,7 @@ private:
   }
 
 public:
-  ColorGLFeature(IFloatBuffer* colors,
+  ColorGLFeature(const IFloatBuffer* colors,
                  int arrayElementSize,
                  int index,
                  bool normalized,
@@ -569,13 +570,27 @@ private:
   }
 
 public:
-  VertexNormalGLFeature(IFloatBuffer* buffer,
+  VertexNormalGLFeature(const IFloatBuffer* buffer,
                         int arrayElementSize,
                         int index,
                         bool normalized,
                         int stride);
   
   void applyOnGlobalGLState(GLGlobalState* state) const {}
+};
+
+class DepthRangeGLFeature: public GLFeature {
+private:
+  ~DepthRangeGLFeature() {
+#ifdef JAVA_CODE
+    super.dispose();
+#endif
+  }
+
+public:
+  DepthRangeGLFeature(float far, float near);
+
+  void applyOnGlobalGLState(GLGlobalState* state) const{}
 };
 
 

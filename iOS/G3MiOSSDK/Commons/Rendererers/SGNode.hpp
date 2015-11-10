@@ -73,11 +73,11 @@ public:
   virtual const GLState* createState(const G3MRenderContext* rc,
                                      const GLState* parentState) { return parentState;}
 
-  int getChildrenCount() const {
+  size_t getChildrenCount() const {
     return _children.size();
   }
 
-  SGNode* getChild(int i) const {
+  SGNode* getChild(size_t i) const {
     return _children[i];
   }
 
@@ -86,6 +86,19 @@ public:
   virtual std::string description() {
     return "SGNode";
   };
+
+  virtual void zRawRender(const G3MRenderContext* rc,
+                          const GLState* parentState){}
+
+  virtual void zRender(const G3MRenderContext* rc,
+                       const GLState* parentState);
+
+  virtual const GLState* createZRenderState(const G3MRenderContext* rc,
+                                            const GLState* parentState) {
+    GLState* state = new GLState();
+    state->setParent(parentState);
+    return state;
+  }
 };
 
 #endif

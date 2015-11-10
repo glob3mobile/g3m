@@ -61,6 +61,14 @@ public:
   double getMeanRadius() const {
     return (_radii._x + _radii._y + _radii._y) / 3;
   }
+  
+  static std::vector<double> intersectionCenteredEllipsoidWithRay(const Vector3D& origin,
+                                                                  const Vector3D& direction,
+                                                                  const Vector3D& oneOverRadiiSquared);
+  
+  static Vector3D closestIntersectionCenteredEllipsoidWithRay(const Vector3D& origin,
+                                                              const Vector3D& direction,
+                                                              const Vector3D& oneOverRadiiSquared);
 
   std::vector<double> intersectionsDistances(const Vector3D& origin,
                                              const Vector3D& direction) const {
@@ -69,15 +77,21 @@ public:
                                   origin._z,
                                   direction._x,
                                   direction._y,
-                                  direction._z);
+                                  direction._z,
+                                  _oneOverRadiiSquared._x,
+                                  _oneOverRadiiSquared._y,
+                                  _oneOverRadiiSquared._z);
   }
 
-  std::vector<double> intersectionsDistances(double originX,
+  static std::vector<double> intersectionsDistances(double originX,
                                              double originY,
                                              double originZ,
                                              double directionX,
                                              double directionY,
-                                             double directionZ) const;
+                                             double directionZ,
+                                             double oneOverRadiiSquaredX,
+                                             double oneOverRadiiSquaredY,
+                                             double oneOverRadiiSquaredZ);
 };
 
 #endif

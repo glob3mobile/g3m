@@ -21,11 +21,11 @@ public class DirectMesh extends AbstractMesh
 {
   private int _renderVerticesCount;
 
-  protected final void rawRender(G3MRenderContext rc)
+  protected final void rawRender(G3MRenderContext rc, GLState glState, RenderType renderType)
   {
     GL gl = rc.getGL();
   
-    gl.drawArrays(_primitive, 0, _renderVerticesCount, _glState, rc.getGPUProgramManager());
+    gl.drawArrays(_primitive, 0, _renderVerticesCount, glState, rc.getGPUProgramManager(), renderType);
   }
 
 //  Mesh* createNormalsMesh() const;
@@ -64,7 +64,7 @@ public class DirectMesh extends AbstractMesh
 
   public final void setRenderVerticesCount(int renderVerticesCount)
   {
-    if ((renderVerticesCount < 0) || (renderVerticesCount > getRenderVerticesCount()))
+    if (renderVerticesCount > getRenderVerticesCount())
     {
       throw new RuntimeException("Invalid renderVerticesCount");
     }

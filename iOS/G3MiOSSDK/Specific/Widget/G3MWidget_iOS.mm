@@ -24,9 +24,14 @@
 #include "Sector.hpp"
 #include "InitialCameraPositionProvider.hpp"
 #include "InfoDisplay.hpp"
+#include "DeviceAttitude_iOS.hpp"
+#include "DeviceLocation_iOS.hpp"
 
 
-@interface G3MWidget_iOS ()
+@interface G3MWidget_iOS () {
+  CGFloat _scale;
+}
+
 @property(nonatomic, getter=isAnimating) BOOL animating;
 @end
 
@@ -121,11 +126,12 @@ autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
     eaglLayer.opaque = TRUE;
     eaglLayer.drawableProperties = [NSDictionary dictionaryWithObjectsAndKeys:
                                     [NSNumber numberWithBool:FALSE], kEAGLDrawablePropertyRetainedBacking, kEAGLColorFormatRGBA8, kEAGLDrawablePropertyColorFormat, nil];
+    _scale = 1;
 //    // for retina display
-//    eaglLayer.contentsScale = 2;
 //    if ([[UIScreen mainScreen] respondsToSelector:@selector(displayLinkWithTarget:selector:)]) {
-//      eaglLayer.contentsScale = [UIScreen mainScreen].scale;
+//      _scale = [UIScreen mainScreen].scale;
 //    }
+    eaglLayer.contentsScale = _scale;
 
     // create GL object
     _renderer = [[ES2Renderer alloc] init];
@@ -422,6 +428,9 @@ autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
   IMathUtils*         mathUtils       = new MathUtils_iOS();
   IJSONParser*        jsonParser      = new JSONParser_iOS();
   ITextUtils*         textUtils       = new TextUtils_iOS();
+  IDeviceAttitude*    devAttitude     = new DeviceAttitude_iOS();
+  IDeviceLocation*    devLocation     = new DeviceLocation_iOS();
+  
 
   G3MWidget::initSingletons(logger,
                             factory,
@@ -429,7 +438,9 @@ autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
                             stringBuilder,
                             mathUtils,
                             jsonParser,
-                            textUtils);
+                            textUtils,
+                            devAttitude,
+                            devLocation);
 }
 
 - (CameraRenderer*)getCameraRenderer {

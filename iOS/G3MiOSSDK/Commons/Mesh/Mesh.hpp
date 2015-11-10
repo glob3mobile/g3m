@@ -37,9 +37,9 @@ public:
   virtual ~Mesh() {
   }
   
-  virtual int getVertexCount() const = 0;
+  virtual size_t getVertexCount() const = 0;
   
-  virtual const Vector3D getVertex(int i) const = 0;
+  virtual const Vector3D getVertex(size_t i) const = 0;
     
   virtual BoundingVolume* getBoundingVolume() const = 0;
   
@@ -48,6 +48,8 @@ public:
   virtual void rawRender(const G3MRenderContext* rc,
                          const GLState* parentGLState) const = 0;
 
+  virtual void zRawRender(const G3MRenderContext* rc, const GLState* parentGLState) const = 0;
+
   void render(const G3MRenderContext* rc,
               const GLState* parentGLState) const {
     if (_enable) {
@@ -55,7 +57,18 @@ public:
     }
   }
 
+  void zRender(const G3MRenderContext* rc,
+              const GLState* parentGLState) const {
+    if (_enable) {
+      zRawRender(rc, parentGLState);
+    }
+  }
+  
   virtual void showNormals(bool v) const = 0;
+  
+  virtual IFloatBuffer* getVerticesFloatBuffer() const = 0;
+  
+  virtual Vector3D getVerticesOffset() const = 0;
 
 };
 

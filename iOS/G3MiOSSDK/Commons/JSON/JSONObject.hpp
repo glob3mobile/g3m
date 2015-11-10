@@ -22,6 +22,8 @@ private:
 
   void putKeyAndValueDescription(const std::string& key,
                                  IStringBuilder* isb) const;
+  void putKeyAndValueToString(const std::string& key,
+                              IStringBuilder* isb) const;
 
 public:
   ~JSONObject();
@@ -68,11 +70,12 @@ public:
   void put(const std::string& key,
            bool value);
 
-  int size() const;
+  size_t size() const;
 
   std::vector<std::string> keys() const;
 
   const std::string description() const;
+  const std::string toString() const;
 
   JSONObject* deepCopy() const;
 

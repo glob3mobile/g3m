@@ -45,4 +45,13 @@ public class GLErrorRenderer extends DefaultRenderer
 
 
 
+  public final void onDestroy(G3MContext context)
+  {
+
+  }
+
+  public final void zRender(G3MRenderContext rc, GLState glState)
+  {
+  }
+
 }

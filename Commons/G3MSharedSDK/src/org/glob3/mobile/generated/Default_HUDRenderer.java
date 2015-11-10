@@ -35,6 +35,10 @@ public class Default_HUDRenderer extends DefaultRenderer
     _hudImageRenderer.render(rc, glState);
   }
 
+  public final void zRender(G3MRenderContext rc, GLState glState)
+  {
+  }
+
   public final void onResizeViewportEvent(G3MEventContext ec, int width, int height)
   {
     _hudImageRenderer.onResizeViewportEvent(ec, width, height);

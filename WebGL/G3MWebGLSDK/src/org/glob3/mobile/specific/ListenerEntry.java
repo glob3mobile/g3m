@@ -17,17 +17,20 @@ public final class ListenerEntry {
 
    final static String                   TAG = "ListenerEntry";
 
-   private boolean                       _canceled;
-   private final long                    _requestId;
    private final IBufferDownloadListener _bufferListener;
    private final IImageDownloadListener  _imageListener;
+   private final boolean                 _deleteListener;
+   private final long                    _requestId;
+   private boolean                       _canceled;
 
 
    public ListenerEntry(final IBufferDownloadListener bufferListener,
                         final IImageDownloadListener imageListener,
+                        final boolean deleteListener,
                         final long requestId) {
       _bufferListener = bufferListener;
       _imageListener = imageListener;
+      _deleteListener = deleteListener;
       _requestId = requestId;
       _canceled = false;
    }
@@ -64,9 +67,15 @@ public final class ListenerEntry {
    void onCancel(final URL url) {
       if (_bufferListener != null) {
          _bufferListener.onCancel(url);
+         if (_deleteListener) {
+            _bufferListener.dispose();
+         }
       }
       if (_imageListener != null) {
          _imageListener.onCancel(url);
+         if (_deleteListener) {
+            _imageListener.dispose();
+         }
       }
    }
 
@@ -74,9 +83,15 @@ public final class ListenerEntry {
    void onError(final URL url) {
       if (_bufferListener != null) {
          _bufferListener.onError(url);
+         if (_deleteListener) {
+            _bufferListener.dispose();
+         }
       }
       if (_imageListener != null) {
          _imageListener.onError(url);
+         if (_deleteListener) {
+            _imageListener.dispose();
+         }
       }
    }
 
@@ -87,6 +102,10 @@ public final class ListenerEntry {
          final IByteBuffer byteBuffer = new ByteBuffer_WebGL(data);
 
          _bufferListener.onDownload(url, byteBuffer, false);
+
+         if (_deleteListener) {
+            _bufferListener.dispose();
+         }
       }
       if (_imageListener != null) {
          final Image_WebGL image = new Image_WebGL(data);
@@ -98,6 +117,10 @@ public final class ListenerEntry {
          else {
             _imageListener.onDownload(url, image, false);
             //IFactory.instance().deleteImage(image);
+         }
+
+         if (_deleteListener) {
+            _imageListener.dispose();
          }
       }
    }

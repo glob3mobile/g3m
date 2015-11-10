@@ -38,7 +38,7 @@ public class LabelImageBuilder extends AbstractImageBuilder
   private String getImageName()
   {
     final IStringUtils su = IStringUtils.instance();
-    return (_text + "/" + _font.description() + "/" + su.toString(_margin) + "/" + _color.description() + "/" + _shadowColor.description() + "/" + su.toString(_shadowBlur) + "/" + su.toString(_shadowOffsetX) + "/" + su.toString(_shadowOffsetY) + "/" + _backgroundColor.description() + "/" + su.toString(_cornerRadius));
+    return (_text + "/" + _font.description() + "/" + su.toString(_margin) + "/" + _color.toID() + "/" + _shadowColor.toID() + "/" + su.toString(_shadowBlur) + "/" + su.toString(_shadowOffsetX) + "/" + su.toString(_shadowOffsetY) + "/" + _backgroundColor.toID() + "/" + su.toString(_cornerRadius));
   }
 
 

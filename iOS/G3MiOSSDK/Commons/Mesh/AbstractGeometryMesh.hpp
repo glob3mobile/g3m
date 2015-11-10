@@ -22,11 +22,11 @@ class AbstractGeometryMesh : public Mesh {
   
 protected:
   const int               _primitive;
-  Vector3D                _center;
+  const Vector3D          _center;
   const MutableMatrix44D* _translationMatrix;
-  IFloatBuffer*           _vertices;
+  const IFloatBuffer*           _vertices;
   const bool              _ownsVertices;
-  IFloatBuffer*           _normals;
+  const IFloatBuffer*           _normals;
   const bool              _ownsNormals;
   const float             _lineWidth;
   const float             _pointSize;
@@ -48,8 +48,8 @@ protected:
   GLState* _glState;
   
   void createGLState();
-  
-  virtual void rawRender(const G3MRenderContext* rc) const = 0;
+
+  virtual void rawRender(const G3MRenderContext* rc, GLState* glState, RenderType renderType) const = 0;
 
   mutable bool _showNormals;
   mutable Mesh* _normalsMesh;
@@ -60,19 +60,30 @@ public:
   
   BoundingVolume* getBoundingVolume() const;
   
-  int getVertexCount() const;
+  size_t getVertexCount() const;
   
-  const Vector3D getVertex(int i) const;
+  const Vector3D getVertex(size_t i) const;
   
   bool isTransparent(const G3MRenderContext* rc) const {
     return false; //TODO: CHECK
   }
-  
+
   void rawRender(const G3MRenderContext* rc,
                  const GLState* parentGLState) const;
 
-  void showNormals(bool v) const {
+  void zRawRender(const G3MRenderContext* rc,
+                 const GLState* parentGLState) const;
+
+  void showNormals(bool v) const{
     _showNormals = v;
+  }
+
+  IFloatBuffer* getVerticesFloatBuffer() const{
+    return (IFloatBuffer*)_vertices; //Droping const so tiles can change their DEM
+  }
+  
+  Vector3D getVerticesOffset() const{
+    return _center;
   }
   
 };

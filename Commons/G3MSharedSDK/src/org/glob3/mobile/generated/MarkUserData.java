@@ -25,6 +25,8 @@ package org.glob3.mobile.generated;
 //class GLGlobalState;
 //class GPUProgramState;
 //class TextureIDReference;
+//class EffectTarget;
+//class IImageBuilder;
 
 public class MarkUserData
 {

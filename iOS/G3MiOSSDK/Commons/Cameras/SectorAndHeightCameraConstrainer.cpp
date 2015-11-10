@@ -40,9 +40,10 @@ bool RenderedSectorCameraConstrainer::onCameraChange(const Planet* planet,
 
     if (sector == NULL) {
       if (!isValidHeight) {
-        nextCamera->setGeodeticPosition(Geodetic3D(position._latitude,
+        /*nextCamera->setGeodeticPosition(Geodetic3D(position._latitude,
                                                    position._longitude,
-                                                   _maxHeight));
+                                                   _maxHeight));*/
+        nextCamera->copyFrom(*previousCamera);
       }
     }
     else {
@@ -51,9 +52,10 @@ bool RenderedSectorCameraConstrainer::onCameraChange(const Planet* planet,
 
       if (isValidPosition) {
         if (!isValidHeight) {
-          nextCamera->setGeodeticPosition(Geodetic3D(position._latitude,
+          /*nextCamera->setGeodeticPosition(Geodetic3D(position._latitude,
                                                      position._longitude,
-                                                     _maxHeight));
+                                                     _maxHeight));*/
+          nextCamera->copyFrom(*previousCamera);
         }
       }
       else {

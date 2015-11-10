@@ -14,6 +14,7 @@
 #include "ShapePositionEffect.hpp"
 #include "ShapeFullPositionEffect.hpp"
 #include "Camera.hpp"
+#include "ILogger.hpp"
 #include "ErrorHandling.hpp"
 
 class ShapePendingEffect {
@@ -36,8 +37,8 @@ public:
 
 
 Shape::~Shape() {
-  const int pendingEffectsCount = _pendingEffects.size();
-  for (int i = 0; i < pendingEffectsCount; i++) {
+  const size_t pendingEffectsCount = _pendingEffects.size();
+  for (size_t i = 0; i < pendingEffectsCount; i++) {
     ShapePendingEffect* pendingEffect = _pendingEffects[i];
     delete pendingEffect;
   }
@@ -100,10 +101,10 @@ void Shape::render(const G3MRenderContext* rc,
                    GLState* parentGLState,
                    bool renderNotReadyShapes) {
   if (renderNotReadyShapes || isReadyToRender(rc)) {
-    const int pendingEffectsCount = _pendingEffects.size();
+    const size_t pendingEffectsCount = _pendingEffects.size();
     if (pendingEffectsCount > 0) {
       EffectsScheduler* effectsScheduler = rc->getEffectsScheduler();
-      for (int i = 0; i < pendingEffectsCount; i++) {
+      for (size_t i = 0; i < pendingEffectsCount; i++) {
         ShapePendingEffect* pendingEffect = _pendingEffects[i];
         if (pendingEffect != NULL) {
           EffectTarget* target = pendingEffect->_targetIsCamera ? rc->getNextCamera()->getEffectTarget() : this;
@@ -195,7 +196,28 @@ void Shape::elevationChanged(const Geodetic2D& position,
   _transformMatrix = NULL;
 }
 
-//void Shape::setPosition(Geodetic3D* position,
+void Shape::zRender(const G3MRenderContext* rc,
+                   GLState* parentGLState,
+                   bool renderNotReadyShapes) {
+  if (renderNotReadyShapes || isReadyToRender(rc)) {
+    getTransformMatrix(rc->getPlanet()); //Applying transform to _glState
+
+    GLState* state = new GLState();
+
+    if (_transformMatrix != NULL) {
+      state->addGLFeature(new ModelTransformGLFeature(_transformMatrix->asMatrix44D()), false);
+    } else{
+      ILogger::instance()->logError("Render Z without Transform Matrix previously computed.");
+    }
+    state->setParent(parentGLState);
+
+    zRawRender(rc, state);
+
+    state->_release();
+  }
+}
+
+  //void Shape::setPosition(Geodetic3D* position,
 //                        AltitudeMode altitudeMode) {
 //  delete _position;
 //  _position = position;

@@ -1,5 +1,5 @@
 //
-//  FlatColorMesh_DirectionLight
+//  Default.vsh
 //
 //  Created by José Miguel Santana Núñez
 //

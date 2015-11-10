@@ -112,6 +112,8 @@ public class CompositeElevationDataProvider extends ElevationDataProvider
     private final Vector2I _resolution;
     private final Sector _sector ;
 
+    private final long _requestPriority;
+
 
     public java.util.ArrayList<ElevationDataProvider> _providers = new java.util.ArrayList<ElevationDataProvider>();
 
@@ -152,7 +154,7 @@ public class CompositeElevationDataProvider extends ElevationDataProvider
       return provider;
     }
 
-    public CompositeElevationDataProvider_Request(CompositeElevationDataProvider provider, Sector sector, Vector2I resolution, IElevationDataListener listener, boolean autodelete)
+    public CompositeElevationDataProvider_Request(CompositeElevationDataProvider provider, Sector sector, Vector2I resolution, long requestPriority, IElevationDataListener listener, boolean autodelete)
     {
        _providers = provider.getProviders(sector);
        _sector = new Sector(sector);
@@ -162,6 +164,7 @@ public class CompositeElevationDataProvider extends ElevationDataProvider
        _compProvider = provider;
        _compData = null;
        _currentStep = null;
+       _requestPriority = requestPriority;
     }
 
     public void dispose()
@@ -176,7 +179,7 @@ public class CompositeElevationDataProvider extends ElevationDataProvider
       {
         _currentStep = new CompositeElevationDataProvider_RequestStepListener(this);
     
-        _currentID = _currentProvider.requestElevationData(_sector, _resolution, _currentStep, true);
+        _currentID = _currentProvider.requestElevationData(_sector, _resolution, _requestPriority, _currentStep, true);
     
         return true;
       }
@@ -258,6 +261,7 @@ public class CompositeElevationDataProvider extends ElevationDataProvider
       else
       {
         _listener.onData(_sector, _resolution, _compData);
+        _compData._release();
         if (_autodelete)
         {
           if (_listener != null)
@@ -345,10 +349,10 @@ public class CompositeElevationDataProvider extends ElevationDataProvider
     }
   }
 
-  public final long requestElevationData(Sector sector, Vector2I extent, IElevationDataListener listener, boolean autodeleteListener)
+  public final long requestElevationData(Sector sector, Vector2I extent, long requestPriority, IElevationDataListener listener, boolean autodeleteListener)
   {
   
-    CompositeElevationDataProvider_Request req = new CompositeElevationDataProvider_Request(this, sector, extent, listener, autodeleteListener);
+    CompositeElevationDataProvider_Request req = new CompositeElevationDataProvider_Request(this, sector, extent, requestPriority, listener, autodeleteListener);
     _currentID++;
     _requests.put(_currentID, req);
   

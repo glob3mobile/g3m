@@ -13,6 +13,7 @@ import org.glob3.mobile.generated.Touch;
 import org.glob3.mobile.generated.TouchEvent;
 import org.glob3.mobile.generated.TouchEventType;
 import org.glob3.mobile.generated.Vector2F;
+import org.glob3.mobile.generated.Vector2I;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.JsArray;
@@ -46,8 +47,10 @@ public final class MotionEventProcessor {
    }
 
 
-   private static Vector2F createPosition(final Event event) {
-      return new Vector2F(event.getClientX(), event.getClientY());
+   private Vector2F createPosition(final Event event) {
+      return new Vector2F(//
+               event.getClientX() - _canvasElement.getAbsoluteLeft(), //
+               event.getClientY() - _canvasElement.getAbsoluteTop());
    }
 
 
@@ -121,7 +124,7 @@ public final class MotionEventProcessor {
          final Vector2F currentTouchPosition = new Vector2F( //
                   jsTouch.getRelativeX(_canvasElement), //
                   jsTouch.getRelativeY(_canvasElement) //
-                  );
+         );
 
          final Integer touchId = Integer.valueOf(jsTouch.getIdentifier());
 
@@ -170,12 +173,12 @@ public final class MotionEventProcessor {
          final Scheduler scheduler = Scheduler.get();
          for (final TouchEvent event : events) {
             scheduler.scheduleDeferred( //
-                     new Command() {
-                        @Override
-                        public void execute() {
-                           _widget.onTouchEvent(event);
-                        }
-                     });
+            new Command() {
+               @Override
+               public void execute() {
+                  _widget.onTouchEvent(event);
+               }
+            });
          }
       }
    }
@@ -247,7 +250,7 @@ public final class MotionEventProcessor {
       else {
          touches.add(new Touch(currentMousePosition, _previousMousePosition));
          touchType = (event.getCtrlKey() && (event.getButton() == NativeEvent.BUTTON_LEFT)) ? TouchEventType.LongPress
-                                                                                            : TouchEventType.Up;
+                                                                                           : TouchEventType.Up;
       }
       _previousMousePosition = currentMousePosition;
 
@@ -282,7 +285,11 @@ public final class MotionEventProcessor {
    private void processMouseWheel(final int delta,
                                   final int x,
                                   final int y) {
-      //      log(LogLevel.InfoLevel, " delta=" + delta + " x=" + x + " y=" + y);
+	   double dd = (double) delta;
+	   final ArrayList<Touch> touches = new ArrayList<Touch>(2);
+	   touches.add(new Touch(new Vector2F(x,y), new Vector2F(x,y)));
+	   TouchEvent te = TouchEvent.create(TouchEventType.MouseWheelChanged, touches, false, false, dd);
+	   dispatchEvents( te );
 
       final Vector2F beginFirstPosition = new Vector2F(x - 10, y - 10);
       final Vector2F beginSecondPosition = new Vector2F(x + 10, y + 10);
@@ -303,40 +310,40 @@ public final class MotionEventProcessor {
                TouchEvent.create(TouchEventType.Down, beginTouches), //
                TouchEvent.create(TouchEventType.Move, endTouches), //
                TouchEvent.create(TouchEventType.Up, endTouches) //
-               );
+      );
 
       _previousMousePosition = new Vector2F(x, y);
    }
 
 
    private native void jsAddMouseWheelListener() /*-{
-        //      debugger;
-        var thisInstance = this;
+		//      debugger;
+		var thisInstance = this;
 
-        var canvas = this.@org.glob3.mobile.specific.MotionEventProcessor::_canvasElement;
+		var canvas = this.@org.glob3.mobile.specific.MotionEventProcessor::_canvasElement;
 
-        $wnd.g3mMouseWheelHandler = function(e) {
-            // cross-browser wheel delta
-            var e = $wnd.event || e; // old IE support
-            var delta = (Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail))));
-            thisInstance.@org.glob3.mobile.specific.MotionEventProcessor::processMouseWheel(III)(delta, e.clientX, e.clientY);
-        };
+		$wnd.g3mMouseWheelHandler = function(e) {
+			// cross-browser wheel delta
+			var e = $wnd.event || e; // old IE support
+			var delta = (Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail))));
+			thisInstance.@org.glob3.mobile.specific.MotionEventProcessor::processMouseWheel(III)(delta, e.clientX, e.clientY);
+		};
 
-        if (canvas) {
+		if (canvas) {
 
-            if (canvas.addEventListener) {
-                // IE9, Chrome, Safari, Opera
-                canvas.addEventListener("mousewheel",
-                        $wnd.g3mMouseWheelHandler, false);
-                // Firefox
-                canvas.addEventListener("DOMMouseScroll",
-                        $wnd.g3mMouseWheelHandler, false);
-            }
-            // IE 6/7/8
-            else {
-                canvas.attachEvent("onmousewheel", $wnd.g3mMouseWheelHandler);
-            }
-        }
+			if (canvas.addEventListener) {
+				// IE9, Chrome, Safari, Opera
+				canvas.addEventListener("mousewheel",
+						$wnd.g3mMouseWheelHandler, false);
+				// Firefox
+				canvas.addEventListener("DOMMouseScroll",
+						$wnd.g3mMouseWheelHandler, false);
+			}
+			// IE 6/7/8
+			else {
+				canvas.attachEvent("onmousewheel", $wnd.g3mMouseWheelHandler);
+			}
+		}
 
    }-*/;
 

@@ -13,11 +13,11 @@
 #include "IMathUtils.hpp"
 
 IByteBuffer* ByteBufferBuilder::create() const {
-  const int size = _values.size();
+  const size_t size = _values.size();
 
   IByteBuffer* result = IFactory::instance()->createByteBuffer(size);
 
-  for (int i = 0; i < size; i++) {
+  for (size_t i = 0; i < size; i++) {
     result->rawPut(i, _values[i]);
   }
 
@@ -26,8 +26,8 @@ IByteBuffer* ByteBufferBuilder::create() const {
 
 void ByteBufferBuilder::addStringZeroTerminated(const std::string& str) {
 #ifdef C_CODE
-  const int size = str.size();
-  for (int i = 0; i < size; i++) {
+  const size_t size = str.size();
+  for (size_t i = 0; i < size; i++) {
     const char c = str.at(i);
     _values.push_back(c);
   }

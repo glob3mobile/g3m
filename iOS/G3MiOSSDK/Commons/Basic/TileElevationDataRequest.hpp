@@ -50,9 +50,12 @@ private:
   
   TileElevationDataRequestListener* _listener;
   
+  const long long _requestPriority;
+  
 public:
   TileElevationDataRequest(Tile* tile,
                            const Vector2I& resolution,
+                           long long requestPriority,
                            ElevationDataProvider* provider);
   
   ~TileElevationDataRequest() {

@@ -46,8 +46,8 @@ void LazyTextureMapping::modifyGLState(GLState& state) const {
       state.addGLFeature(new TextureGLFeature(_glTextureId->getID(),
                                               _texCoords, 2, 0, false, 0,
                                               _transparent,
-                                              GLBlendFactor::srcAlpha(),
-                                              GLBlendFactor::oneMinusSrcAlpha(),    //BLEND
+                                              _glTextureId->isPremultiplied() ? GLBlendFactor::one() : GLBlendFactor::srcAlpha(),
+                                              GLBlendFactor::oneMinusSrcAlpha(),
                                               _translationU,
                                               _translationV,
                                               _scaleU,
@@ -59,8 +59,9 @@ void LazyTextureMapping::modifyGLState(GLState& state) const {
       state.addGLFeature(new TextureGLFeature(_glTextureId->getID(),
                                               _texCoords, 2, 0, false, 0,
                                               _transparent,
-                                              GLBlendFactor::srcAlpha(),
-                                              GLBlendFactor::oneMinusSrcAlpha()),
+                                              _glTextureId->isPremultiplied() ? GLBlendFactor::one() : GLBlendFactor::srcAlpha(),
+                                              GLBlendFactor::oneMinusSrcAlpha()
+                                              ),
                          false);
     }
 
@@ -113,11 +114,11 @@ LeveledTexturedMesh::~LeveledTexturedMesh() {
 #endif
 }
 
-int LeveledTexturedMesh::getVertexCount() const {
+size_t LeveledTexturedMesh::getVertexCount() const {
   return _mesh->getVertexCount();
 }
 
-const Vector3D LeveledTexturedMesh::getVertex(int i) const {
+const Vector3D LeveledTexturedMesh::getVertex(size_t i) const {
   return _mesh->getVertex(i);
 }
 
@@ -224,3 +225,10 @@ void LeveledTexturedMesh::rawRender(const G3MRenderContext* rc,
     _mesh->render(rc, _glState);
   }
 }
+
+void LeveledTexturedMesh::zRawRender(const G3MRenderContext* rc,
+                           const GLState* parentState) const{
+  //TODO: transparencies
+  _mesh->render(rc, parentState);
+}
+

@@ -9,7 +9,7 @@
 #include "CompositeTileImageContribution.hpp"
 
 
-CompositeTileImageContribution::ChildContribution::ChildContribution(const int                    childIndex,
+CompositeTileImageContribution::ChildContribution::ChildContribution(const size_t                 childIndex,
                                                                      const TileImageContribution* contribution) :
 _childIndex(childIndex),
 _contribution(contribution)
@@ -21,8 +21,8 @@ CompositeTileImageContribution::ChildContribution::~ChildContribution() {
 }
 
 CompositeTileImageContribution::~CompositeTileImageContribution() {
-  const int contributionsSize = _contributions.size();
-  for (int i = 0; i < contributionsSize; i++) {
+  const size_t contributionsSize = _contributions.size();
+  for (size_t i = 0; i < contributionsSize; i++) {
 #ifdef C_CODE
     const ChildContribution* contribution = _contributions[i];
     delete contribution;

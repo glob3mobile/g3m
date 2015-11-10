@@ -47,7 +47,10 @@ class GLState;
 class PlanetRenderer;
 class ErrorRenderer;
 class G3MRenderContext;
+class Vector3D;
+class IDeviceAttitude;
 //class InfoDisplay;
+class IDeviceLocation;
 
 #include <vector>
 #include <string>
@@ -58,6 +61,7 @@ class G3MRenderContext;
 #include "RenderState.hpp"
 #include "InfoDisplay.hpp"
 #include "ChangedRendererInfoListener.hpp"
+#include "FrameDepthProvider.hpp"
 
 class G3MContext;
 class GLGlobalState;
@@ -89,8 +93,14 @@ public:
   }
 };
 
+enum FrameBufferContent{
+  EMPTY_FRAMEBUFFER,
+  REGULAR_FRAME,
+  DEPTH_IMAGE
+};
 
-class G3MWidget : public ChangedRendererInfoListener {
+
+class G3MWidget : public ChangedRendererInfoListener, FrameDepthProvider {
 public:
 
   static void initSingletons(ILogger*            logger,
@@ -99,7 +109,9 @@ public:
                              IStringBuilder*     stringBuilder,
                              IMathUtils*         mathUtils,
                              IJSONParser*        jsonParser,
-                             ITextUtils*         textUtils);
+                             ITextUtils*         textUtils,
+                             IDeviceAttitude*    devAttitude,
+                             IDeviceLocation*    devLocation);
 
   static G3MWidget* create(GL*                                  gl,
                            IStorage*                            storage,
@@ -127,7 +139,7 @@ public:
   ~G3MWidget();
 
   void render(int width, int height);
-
+  
   void onTouchEvent(const TouchEvent* myEvent);
 
   void onResizeViewportEvent(int width, int height);
@@ -232,8 +244,8 @@ public:
   void setForceBusyRenderer(bool forceBusyRenderer) {
     _forceBusyRenderer = forceBusyRenderer;
   }
-  
-  //void notifyChangedInfo() const;
+
+  double getDepthForPixel(float x, float y);
   
   void setInfoDisplay(InfoDisplay* infoDisplay) {
     _infoDisplay = infoDisplay;
@@ -243,10 +255,14 @@ public:
     return _infoDisplay;
   }
   
-  void changedRendererInfo(const int rendererIdentifier,
+  void changedRendererInfo(const size_t rendererIdentifier,
                            const std::vector<const Info*>& info);
 
   void removeAllPeriodicalTasks();
+  
+  void addCameraConstrainer(ICameraConstrainer* cc);
+  void removeCameraConstrainer(ICameraConstrainer* cc);
+
 
 
 private:
@@ -320,7 +336,12 @@ private:
   bool _forceBusyRenderer;
   
   InfoDisplay* _infoDisplay;
+
+  FrameBufferContent _frameBufferContent;
   
+  float _touchDownPositionX;
+  float _touchDownPositionY;
+
   G3MWidget(GL*                              gl,
             IStorage*                        storage,
             IDownloader*                     downloader,
@@ -350,6 +371,12 @@ private:
   RenderState calculateRendererState();
   
   void setSelectedRenderer(ProtoRenderer* selectedRenderer);
+  
+  /**
+   Generates a image on the FrameBuffer of the depth of each pixel
+   so the method getScenePositionForPixel can obtain it.
+  */
+  void zRender();
   
 };
 

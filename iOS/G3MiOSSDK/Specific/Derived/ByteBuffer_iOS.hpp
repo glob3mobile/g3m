@@ -11,15 +11,16 @@
 
 #include "IByteBuffer.hpp"
 #include "ILogger.hpp"
+#include "ErrorHandling.hpp"
 
 class ByteBuffer_iOS : public IByteBuffer {
 private:
-  const int            _size;
+  const size_t         _size;
   unsigned char* const _values;
   int                  _timestamp;
 
 public:
-  ByteBuffer_iOS(int size) :
+  ByteBuffer_iOS(size_t size) :
   _values(new unsigned char[size]),
   _size(size),
   _timestamp(-1)
@@ -30,7 +31,7 @@ public:
   }
 
   ByteBuffer_iOS(unsigned char* values,
-                 int size) :
+                 size_t size) :
   _values(values),
   _size(size),
   _timestamp(-1)
@@ -42,7 +43,7 @@ public:
     delete [] _values;
   }
 
-  int size() const {
+  size_t size() const {
     return _size;
   }
 
@@ -50,18 +51,18 @@ public:
     return _timestamp;
   }
 
-  unsigned char get(int i) const {
-    if (i < 0 || i > _size) {
-      ILogger::instance()->logError("Buffer Get error.");
+  unsigned char get(size_t i) const {
+    if (i >= _size) {
+      THROW_EXCEPTION("Buffer Overflow");
     }
 
     return _values[i];
   }
 
-  void put(int i,
+  void put(size_t i,
            unsigned char value) {
-    if (i < 0 || i > _size) {
-      ILogger::instance()->logError("Buffer Put error.");
+    if (i >= _size) {
+      THROW_EXCEPTION("Buffer Overflow");
     }
 
     if (_values[i] != value) {
@@ -70,10 +71,10 @@ public:
     }
   }
 
-  void rawPut(int i,
+  void rawPut(size_t i,
               unsigned char value) {
-    if (i < 0 || i > _size) {
-      ILogger::instance()->logError("Buffer Put error.");
+    if (i >= _size) {
+      THROW_EXCEPTION("Buffer Overflow");
     }
 
     _values[i] = value;

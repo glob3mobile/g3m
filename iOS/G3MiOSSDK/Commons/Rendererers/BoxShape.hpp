@@ -76,7 +76,7 @@ public:
   _borderColor(borderColor),
   _useNormals(useNormals)
   {
-
+    
   }
 
   ~BoxShape() {

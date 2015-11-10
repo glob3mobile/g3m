@@ -26,7 +26,8 @@ _x(x.normalized()),_y(y.normalized()),_z(z.normalized()), _origin(origin)
   //TODO CHECK CONSISTENCY
   if (!checkConsistency(x, y, z)) {
     ILogger::instance()->logError("Inconsistent CoordinateSystem created.");
-#warning DO NOT STOP EXECUTION, I WILL CHECK CONSISTENCY LATER ON
+    
+    //DO NOT STOP EXECUTION, I WILL CHECK CONSISTENCY LATER ON
     //THROW_EXCEPTION("Inconsistent CoordinateSystem created.");
   }
 }
@@ -226,6 +227,14 @@ MutableMatrix44D CoordinateSystem::getRotationMatrix() const{
                           _z._x, _z._y, _z._z, 0,
                           0,0,0,1);
   
+}
+
+
+void CoordinateSystem::copyValueOfRotationMatrix(MutableMatrix44D& m) const{
+  m.setValue(_x._x, _x._y, _x._z, 0,
+             _y._x, _y._y, _y._z, 0,
+             _z._x, _z._y, _z._z, 0,
+             0,0,0,1);
 }
 
 bool CoordinateSystem::isConsistent() const{

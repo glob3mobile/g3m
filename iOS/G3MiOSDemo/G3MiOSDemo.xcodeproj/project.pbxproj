@@ -10,6 +10,7 @@
 		4415B4AB19CC26B800E73D38 /* countries.geojson in Resources */ = {isa = PBXBuildFile; fileRef = 4415B4AA19CC26B800E73D38 /* countries.geojson */; };
 		443BBC8315A5C22000EAE280 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 443BBC8215A5C21F00EAE280 /* CoreData.framework */; };
 		44EEB5E0159B2B8B0086F243 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 44EEB5DF159B2B8B0086F243 /* libsqlite3.dylib */; };
+		CC405A7B18B0BA280082F7D6 /* Tenerife-256x256.bil in Resources */ = {isa = PBXBuildFile; fileRef = CC405A7A18B0BA280082F7D6 /* Tenerife-256x256.bil */; };
 		CF0223831668318600024B73 /* geojson in Resources */ = {isa = PBXBuildFile; fileRef = CF0223821668318600024B73 /* geojson */; };
 		CF04CCFA16D3E4D5004DFACF /* 409_554.bil in Resources */ = {isa = PBXBuildFile; fileRef = CF04CCF916D3E4D5004DFACF /* 409_554.bil */; };
 		CF09A94E16A0A0F500E72811 /* test.bson in Resources */ = {isa = PBXBuildFile; fileRef = CF09A94D16A09F7000E72811 /* test.bson */; };
@@ -46,7 +47,7 @@
 		CFE3DBB1164B0E7D00910037 /* seymour-plane.json in Resources */ = {isa = PBXBuildFile; fileRef = CFE3DBB0164B0E7D00910037 /* seymour-plane.json */; };
 		CFEA76681666DCB000E89BC7 /* images in Resources */ = {isa = PBXBuildFile; fileRef = CFEA76671666DCB000E89BC7 /* images */; };
 		D80DF37C1AC5642900A7D92A /* stars_old.csv in Resources */ = {isa = PBXBuildFile; fileRef = D80DF37B1AC5642900A7D92A /* stars_old.csv */; };
-		D818F9321AF251770083EB65 /* IDeviceAttitude.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D818F9301AF251760083EB65 /* IDeviceAttitude.cpp */; };
+		D82DFD981B44009200BF45F8 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D82DFD971B44009200BF45F8 /* CoreLocation.framework */; };
 		D83165EE1ABAD435002A8451 /* StarDomeRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D83165EC1ABAD435002A8451 /* StarDomeRenderer.cpp */; };
 		D83D604A1AA89BC0002EA2B8 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D83D60491AA89BC0002EA2B8 /* CoreMotion.framework */; };
 		D83D604D1AA89D75002EA2B8 /* DeviceOrientation.mm in Sources */ = {isa = PBXBuildFile; fileRef = D83D604C1AA89D75002EA2B8 /* DeviceOrientation.mm */; };
@@ -57,6 +58,10 @@
 		D87E4F381BE3AA8500E53805 /* MenuViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = D87E4F371BE3AA8400E53805 /* MenuViewController.mm */; };
 		D882B1CD171D77C000C2AD9C /* full-earth-256x256.bil in Resources */ = {isa = PBXBuildFile; fileRef = D882B1CC171D76AD00C2AD9C /* full-earth-256x256.bil */; };
 		D8C4723D1AE8F637005254B3 /* stars_links.csv in Resources */ = {isa = PBXBuildFile; fileRef = D8C4723C1AE8F636005254B3 /* stars_links.csv */; };
+		D8D3A26318363C58007A784A /* FlatColorMesh_DirectionLight.fsh in Sources */ = {isa = PBXBuildFile; fileRef = D8D3A25F18363C58007A784A /* FlatColorMesh_DirectionLight.fsh */; };
+		D8D3A26418363C58007A784A /* FlatColorMesh_DirectionLight.vsh in Sources */ = {isa = PBXBuildFile; fileRef = D8D3A26018363C58007A784A /* FlatColorMesh_DirectionLight.vsh */; };
+		D8D3A26518363C58007A784A /* TexturedMesh_DirectionLight.fsh in Sources */ = {isa = PBXBuildFile; fileRef = D8D3A26118363C58007A784A /* TexturedMesh_DirectionLight.fsh */; };
+		D8D3A26618363C58007A784A /* TexturedMesh_DirectionLight.vsh in Sources */ = {isa = PBXBuildFile; fileRef = D8D3A26218363C58007A784A /* TexturedMesh_DirectionLight.vsh */; };
 		D8EEF38B1577920B003FEB5E /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8EEF38A1577920B003FEB5E /* UIKit.framework */; };
 		D8EEF38D1577920B003FEB5E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8EEF38C1577920B003FEB5E /* Foundation.framework */; };
 		D8EEF38F1577920B003FEB5E /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8EEF38E1577920B003FEB5E /* CoreGraphics.framework */; };
@@ -92,6 +97,7 @@
 		4415B4AA19CC26B800E73D38 /* countries.geojson */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = countries.geojson; sourceTree = "<group>"; };
 		443BBC8215A5C21F00EAE280 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		44EEB5DF159B2B8B0086F243 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
+		CC405A7A18B0BA280082F7D6 /* Tenerife-256x256.bil */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Tenerife-256x256.bil"; sourceTree = "<group>"; };
 		CF0223821668318600024B73 /* geojson */ = {isa = PBXFileReference; lastKnownFileType = folder; path = geojson; sourceTree = "<group>"; };
 		CF04CCF916D3E4D5004DFACF /* 409_554.bil */ = {isa = PBXFileReference; lastKnownFileType = file; path = 409_554.bil; sourceTree = "<group>"; };
 		CF09A94D16A09F7000E72811 /* test.bson */ = {isa = PBXFileReference; lastKnownFileType = file; path = test.bson; sourceTree = "<group>"; };
@@ -129,8 +135,7 @@
 		CFE3DBB0164B0E7D00910037 /* seymour-plane.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "seymour-plane.json"; sourceTree = "<group>"; };
 		CFEA76671666DCB000E89BC7 /* images */ = {isa = PBXFileReference; lastKnownFileType = folder; path = images; sourceTree = "<group>"; };
 		D80DF37B1AC5642900A7D92A /* stars_old.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = stars_old.csv; sourceTree = "<group>"; };
-		D818F9301AF251760083EB65 /* IDeviceAttitude.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = IDeviceAttitude.cpp; sourceTree = "<group>"; };
-		D818F9311AF251760083EB65 /* IDeviceAttitude.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = IDeviceAttitude.hpp; sourceTree = "<group>"; };
+		D82DFD971B44009200BF45F8 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		D83165EC1ABAD435002A8451 /* StarDomeRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = StarDomeRenderer.cpp; sourceTree = "<group>"; };
 		D83165ED1ABAD435002A8451 /* StarDomeRenderer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = StarDomeRenderer.hpp; sourceTree = "<group>"; };
 		D83D60491AA89BC0002EA2B8 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
@@ -145,6 +150,10 @@
 		D87E4F371BE3AA8400E53805 /* MenuViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MenuViewController.mm; sourceTree = "<group>"; };
 		D882B1CC171D76AD00C2AD9C /* full-earth-256x256.bil */ = {isa = PBXFileReference; lastKnownFileType = file; path = "full-earth-256x256.bil"; sourceTree = "<group>"; };
 		D8C4723C1AE8F636005254B3 /* stars_links.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = stars_links.csv; sourceTree = "<group>"; };
+		D8D3A25F18363C58007A784A /* FlatColorMesh_DirectionLight.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = FlatColorMesh_DirectionLight.fsh; sourceTree = "<group>"; };
+		D8D3A26018363C58007A784A /* FlatColorMesh_DirectionLight.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = FlatColorMesh_DirectionLight.vsh; sourceTree = "<group>"; };
+		D8D3A26118363C58007A784A /* TexturedMesh_DirectionLight.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = TexturedMesh_DirectionLight.fsh; sourceTree = "<group>"; };
+		D8D3A26218363C58007A784A /* TexturedMesh_DirectionLight.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = TexturedMesh_DirectionLight.vsh; sourceTree = "<group>"; };
 		D8EEF3861577920B003FEB5E /* G3MiOSDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = G3MiOSDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D8EEF38A1577920B003FEB5E /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		D8EEF38C1577920B003FEB5E /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -169,6 +178,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D82DFD981B44009200BF45F8 /* CoreLocation.framework in Frameworks */,
 				D83D604A1AA89BC0002EA2B8 /* CoreMotion.framework in Frameworks */,
 				D8EEF38D1577920B003FEB5E /* Foundation.framework in Frameworks */,
 				CF4027EB1770E90000D5A80C /* Security.framework in Frameworks */,
@@ -208,6 +218,7 @@
 		D8EEF3891577920B003FEB5E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				D82DFD971B44009200BF45F8 /* CoreLocation.framework */,
 				D83D60491AA89BC0002EA2B8 /* CoreMotion.framework */,
 				CF4027E61770E8F100D5A80C /* libicucore.dylib */,
 				44EEB5DF159B2B8B0086F243 /* libsqlite3.dylib */,
@@ -235,8 +246,6 @@
 				D8EEF3A31577920B003FEB5E /* ViewController.mm */,
 				D83165EC1ABAD435002A8451 /* StarDomeRenderer.cpp */,
 				D876E6D81AE6554700F616DE /* StarsParser.hpp */,
-				D818F9301AF251760083EB65 /* IDeviceAttitude.cpp */,
-				D818F9311AF251760083EB65 /* IDeviceAttitude.hpp */,
 				D876E6D91AE6554700F616DE /* StarsParser.mm */,
 				D83165ED1ABAD435002A8451 /* StarDomeRenderer.hpp */,
 				D8EEF3911577920B003FEB5E /* Supporting Files */,
@@ -308,6 +317,7 @@
 				CF35A20A16D3D70100D795D8 /* sample_bil16_150x150.bil */,
 				CFE3DBB0164B0E7D00910037 /* seymour-plane.json */,
 				CFC39A8816FB9DB7004992C2 /* small-caceres.bil */,
+				CC405A7A18B0BA280082F7D6 /* Tenerife-256x256.bil */,
 				CF09A94D16A09F7000E72811 /* test.bson */,
 				CF186B0516B857DE00A39478 /* textures-A320 */,
 				CF186B0916B85A5F00A39478 /* textures-citation */,
@@ -342,7 +352,7 @@
 		D8EEF37D1577920A003FEB5E /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0500;
+				LastUpgradeCheck = 0700;
 				TargetAttributes = {
 					D8EEF3851577920A003FEB5E = {
 						DevelopmentTeam = CTLLY45L74;
@@ -400,6 +410,7 @@
 				CF935B4C18006CCB0032A9C8 /* washington-memorial-normals.json in Resources */,
 				CFE26D6518A1547B00253709 /* 3d_1-2.json in Resources */,
 				CFE26D6B18A154D700253709 /* 3d_2-1.json in Resources */,
+				CC405A7B18B0BA280082F7D6 /* Tenerife-256x256.bil in Resources */,
 				CFE26D6A18A154D700253709 /* 3d_2-0.json in Resources */,
 				CFE3DBB1164B0E7D00910037 /* seymour-plane.json in Resources */,
 				CFEA76681666DCB000E89BC7 /* images in Resources */,
@@ -439,12 +450,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D8D3A26418363C58007A784A /* FlatColorMesh_DirectionLight.vsh in Sources */,
+				D8D3A26318363C58007A784A /* FlatColorMesh_DirectionLight.fsh in Sources */,
+				D8D3A26518363C58007A784A /* TexturedMesh_DirectionLight.fsh in Sources */,
 				D8EEF3971577920B003FEB5E /* main.m in Sources */,
 				D87E4F381BE3AA8500E53805 /* MenuViewController.mm in Sources */,
+				D8D3A26618363C58007A784A /* TexturedMesh_DirectionLight.vsh in Sources */,
 				D83165EE1ABAD435002A8451 /* StarDomeRenderer.cpp in Sources */,
 				D8EEF39B1577920B003FEB5E /* AppDelegate.mm in Sources */,
 				D83D604D1AA89D75002EA2B8 /* DeviceOrientation.mm in Sources */,
-				D818F9321AF251770083EB65 /* IDeviceAttitude.cpp in Sources */,
 				D876E6DA1AE6554700F616DE /* StarsParser.mm in Sources */,
 				D8EEF3A41577920B003FEB5E /* ViewController.mm in Sources */,
 			);
@@ -490,12 +504,16 @@
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -533,11 +551,14 @@
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
@@ -564,7 +585,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = armv7;
+				ARCHS = "$(ARCHS_STANDARD)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
@@ -597,7 +618,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = armv7;
+				ARCHS = "$(ARCHS_STANDARD)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";

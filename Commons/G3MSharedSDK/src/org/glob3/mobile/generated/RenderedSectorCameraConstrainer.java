@@ -27,7 +27,10 @@ public class RenderedSectorCameraConstrainer implements ICameraConstrainer
       {
         if (!isValidHeight)
         {
-          nextCamera.setGeodeticPosition(new Geodetic3D(position._latitude, position._longitude, _maxHeight));
+          /*nextCamera->setGeodeticPosition(Geodetic3D(position._latitude,
+                                                     position._longitude,
+                                                     _maxHeight));*/
+          nextCamera.copyFrom(previousCamera);
         }
       }
       else
@@ -39,7 +42,10 @@ public class RenderedSectorCameraConstrainer implements ICameraConstrainer
         {
           if (!isValidHeight)
           {
-            nextCamera.setGeodeticPosition(new Geodetic3D(position._latitude, position._longitude, _maxHeight));
+            /*nextCamera->setGeodeticPosition(Geodetic3D(position._latitude,
+                                                       position._longitude,
+                                                       _maxHeight));*/
+            nextCamera.copyFrom(previousCamera);
           }
         }
         else

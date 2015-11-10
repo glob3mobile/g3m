@@ -220,4 +220,8 @@ public class BusyMeshRenderer implements ProtoRenderer, EffectTarget
   {
 
   }
+
+  public final void zRender(G3MRenderContext rc, GLState glState)
+  {
+  }
 }

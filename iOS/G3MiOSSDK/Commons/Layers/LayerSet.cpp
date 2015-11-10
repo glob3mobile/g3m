@@ -428,12 +428,12 @@ LayerTilesRenderParameters* LayerSet::checkAndComposeLayerTilesRenderParameters(
 
   std::vector<Layer*> multiProjectionLayers;
 
-  for (int i = 0; i < enableLayers.size(); i++) {
+  for (size_t i = 0; i < enableLayers.size(); i++) {
     Layer* layer = enableLayers[i];
 
     const std::vector<const LayerTilesRenderParameters*> layerParametersVector = layer->getLayerTilesRenderParametersVector();
 
-    const int layerParametersVectorSize = layerParametersVector.size();
+    const size_t layerParametersVectorSize = layerParametersVector.size();
     if (layerParametersVectorSize == 0) {
       continue;
     }
@@ -447,7 +447,7 @@ LayerTilesRenderParameters* LayerSet::checkAndComposeLayerTilesRenderParameters(
     }
   }
 
-  for (int i = 0; i < multiProjectionLayers.size(); i++) {
+  for (size_t i = 0; i < multiProjectionLayers.size(); i++) {
     Layer* layer = multiProjectionLayers[i];
     if (!mutableLayerTilesRenderParameters.update(layer, errors)) {
       return NULL;
@@ -479,8 +479,8 @@ void LayerSet::takeLayersFrom(LayerSet* that) {
   }
 
   std::vector<Layer*> thatLayers;
-  const int thatSize = that->size();
-  for (int i = 0; i < thatSize; i++) {
+  const size_t thatSize = that->size();
+  for (size_t i = 0; i < thatSize; i++) {
     thatLayers.push_back( that->getLayer(i) );
   }
 
@@ -496,8 +496,8 @@ TileImageProvider* LayerSet::createTileImageProvider(const G3MRenderContext* rc,
   TileImageProvider*          singleTileImageProvider    = NULL;
   CompositeTileImageProvider* compositeTileImageProvider = NULL;
 
-  const int layersSize = _layers.size();
-  for (int i = 0; i < layersSize; i++) {
+  const size_t layersSize = _layers.size();
+  for (size_t i = 0; i < layersSize; i++) {
     Layer* layer = _layers[i];
     if (layer->isEnable()) {
       TileImageProvider* layerTileImageProvider = layer->createTileImageProvider(rc, layerTilesRenderParameters);
@@ -530,13 +530,13 @@ TileImageProvider* LayerSet::getTileImageProvider(const G3MRenderContext* rc,
 
 const std::vector<const Info*> LayerSet::getInfo() {
   _infos.clear();
-  const int layersCount = _layers.size();
-  for (int i = 0; i < layersCount; i++) {
+  const size_t layersCount = _layers.size();
+  for (size_t i = 0; i < layersCount; i++) {
     Layer* layer = _layers[i];
     if (layer->isEnable()) {
       const std::vector<const Info*> layerInfo = layer->getInfo();
-      const int infoSize = layerInfo.size();
-      for (int j = 0; j < infoSize; j++) {
+      const size_t infoSize = layerInfo.size();
+      for (size_t j = 0; j < infoSize; j++) {
         _infos.push_back(layerInfo[j]);
       }
     }

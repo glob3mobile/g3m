@@ -42,9 +42,9 @@
   
   CMAttitude* attitude = _mm.deviceMotion.attitude;
   
-  double pitch = Angle::fromRadians(attitude.pitch).getNormalizedDegrees();
-  double roll = Angle::fromRadians(attitude.roll).getNormalizedDegrees();
-  double yaw = Angle::fromRadians(attitude.yaw).getNormalizedDegrees();
+  double pitch = Angle::fromRadians(attitude.pitch).getNormalizedDegrees360();
+  double roll = Angle::fromRadians(attitude.roll).getNormalizedDegrees360();
+  double yaw = Angle::fromRadians(attitude.yaw).getNormalizedDegrees360();
   
   printf("PITCH %f\n", pitch);
   printf("ROLL %f\n", roll);

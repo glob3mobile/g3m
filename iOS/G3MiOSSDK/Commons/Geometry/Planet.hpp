@@ -49,7 +49,7 @@ public:
   std::vector<double> intersectionsDistances(const Vector3D& origin,
                                              const Vector3D& direction) const;
 
-  std::vector<double> intersectionsDistances(const Vector3D& origin,
+  virtual std::vector<double> intersectionsDistances(const Vector3D& origin,
                                              const MutableVector3D& direction) const;
 
   virtual std::vector<double> intersectionsDistances(double originX,
@@ -84,6 +84,8 @@ public:
   
   virtual Geodetic3D toGeodetic3D(const Vector3D& position) const = 0;
   
+  virtual double getGeodetic3DHeight(const Vector3D& position) const = 0;
+  
   virtual Vector3D scaleToGeodeticSurface(const Vector3D& position) const = 0;
   
   virtual Vector3D scaleToGeocentricSurface(const Vector3D& position) const = 0;
@@ -103,30 +105,32 @@ public:
   
   //virtual Vector3D closestPointToSphere(const Vector3D& pos, const Vector3D& ray) const = 0;
 
-  Vector3D closestIntersection(const Vector3D& pos, const Vector3D& ray) const;
+  virtual Vector3D closestIntersection(const Vector3D& pos, const Vector3D& ray) const;
   
   
   virtual MutableMatrix44D createGeodeticTransformMatrix(const Geodetic3D& position) const = 0;
   
   virtual bool isFlat() const = 0;
 
-  virtual void beginSingleDrag(const Vector3D& origin, const Vector3D& initialRay) const = 0;
+  //virtual void beginSingleDrag(const Vector3D& origin, const Vector3D& initialRay) const = 0;
+  virtual void beginSingleDrag(const Vector3D& origin, const Vector3D& touchedPosition) const = 0;
   
   virtual MutableMatrix44D singleDrag(const Vector3D& finalRay) const = 0;
-    
+  
   virtual Effect* createEffectFromLastSingleDrag() const = 0;
 
   virtual void beginDoubleDrag(const Vector3D& origin,
                                const Vector3D& centerRay,
-                               const Vector3D& initialRay0,
-                               const Vector3D& initialRay1) const = 0;
+                               const Vector3D& centerPosition,
+                               const Vector3D& touchedPosition0,
+                               const Vector3D& touchedPosition1) const = 0;
   
   virtual MutableMatrix44D doubleDrag(const Vector3D& finalRay0,
                                       const Vector3D& finalRay1) const = 0;
   
   virtual Effect* createDoubleTapEffect(const Vector3D& origin,
                                         const Vector3D& centerRay,
-                                        const Vector3D& tapRay) const = 0;
+                                        const Vector3D& touchedPosition) const = 0;
   
   virtual double distanceToHorizon(const Vector3D& position) const = 0;
   
@@ -142,6 +146,13 @@ public:
   CoordinateSystem getCoordinateSystemAt(const Geodetic3D& geo) const;
 
   virtual const std::string getType() const = 0;
+  
+  virtual MutableMatrix44D zoomUsingMouseWheel(double factor,
+                                               const Vector3D& origin,
+                                               const Vector3D& centerRay,
+                                               const Vector3D& centerPosition,
+                                               const Vector3D& touchedPosition,
+                                               const Vector3D& finalRay) const = 0;
 
 };
 

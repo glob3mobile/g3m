@@ -32,7 +32,13 @@ public:
   virtual void setEnable(bool enable) = 0;
   
   virtual RenderState getRenderState(const G3MRenderContext* rc) = 0;
-  
+
+  virtual void render(const G3MRenderContext* rc,
+                      GLState* glState) = 0;
+
+  virtual void zRender(const G3MRenderContext* rc,
+                      GLState* glState) = 0;
+
   /**
    Gives to Renderer the opportunity to process touch events.
    
@@ -52,7 +58,8 @@ public:
   
   virtual PlanetRenderer* getPlanetRenderer() = 0;
     
-  virtual void setChangedRendererInfoListener(ChangedRendererInfoListener* changedInfoListener, const int rendererIdentifier) = 0;
+  virtual void setChangedRendererInfoListener(ChangedRendererInfoListener* changedInfoListener,
+                                              const size_t rendererIdentifier) = 0;
   
 //  virtual void setInfo(const std::vector<std::string>& info) = 0;
   

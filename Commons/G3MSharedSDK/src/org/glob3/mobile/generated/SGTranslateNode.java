@@ -51,4 +51,12 @@ public class SGTranslateNode extends SGNode
     return "SGTranslateNode";
   }
 
+  public final GLState createZRenderState(G3MRenderContext rc, GLState parentState)
+  {
+    GLState state = new GLState();
+    state.setParent(parentState);
+    state.addGLFeature(new ModelTransformGLFeature(_translationMatrix.asMatrix44D()), false);
+    return state;
+  }
+
 }

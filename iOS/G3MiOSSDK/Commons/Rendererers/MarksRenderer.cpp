@@ -30,22 +30,29 @@ void MarksRenderer::setMarkTouchListener(MarkTouchListener* markTouchListener,
   _autoDeleteMarkTouchListener = autoDelete;
 }
 
-MarksRenderer::MarksRenderer(bool readyWhenMarksReady) :
+MarksRenderer::MarksRenderer(bool readyWhenMarksReady,
+                             bool renderInReverse,
+                             bool progressiveInitialization) :
 _readyWhenMarksReady(readyWhenMarksReady),
+_renderInReverse(renderInReverse),
+_progressiveInitialization(progressiveInitialization),
 _lastCamera(NULL),
 _markTouchListener(NULL),
 _autoDeleteMarkTouchListener(false),
 _downloadPriority(DownloadPriority::MEDIUM),
 _glState(new GLState()),
-_billboardTexCoords(NULL)
+_billboardTexCoords(NULL),
+_initializationTimer(NULL)
 {
   _context = NULL;
 }
 
 
 MarksRenderer::~MarksRenderer() {
-  int marksSize = _marks.size();
-  for (int i = 0; i < marksSize; i++) {
+  delete _initializationTimer;
+
+  const size_t marksSize = _marks.size();
+  for (size_t i = 0; i < marksSize; i++) {
     delete _marks[i];
   }
 
@@ -66,8 +73,8 @@ MarksRenderer::~MarksRenderer() {
 
 
 void MarksRenderer::onChangedContext() {
-  int marksSize = _marks.size();
-  for (int i = 0; i < marksSize; i++) {
+  const size_t marksSize = _marks.size();
+  for (size_t i = 0; i < marksSize; i++) {
     Mark* mark = _marks[i];
     mark->initialize(_context, _downloadPriority);
   }
@@ -75,34 +82,50 @@ void MarksRenderer::onChangedContext() {
 
 void MarksRenderer::addMark(Mark* mark) {
   _marks.push_back(mark);
-  if (_context != NULL) {
+  if ((_context != NULL) && !_progressiveInitialization) {
     mark->initialize(_context, _downloadPriority);
   }
 }
 
 void MarksRenderer::removeMark(Mark* mark) {
-  int pos = -1;
-  const int marksSize = _marks.size();
-  for (int i = 0; i < marksSize; i++) {
+//  int pos = -1;
+//  const int marksSize = _marks.size();
+//  for (int i = 0; i < marksSize; i++) {
+//    if (_marks[i] == mark) {
+//      pos = i;
+//      break;
+//    }
+//  }
+//  if (pos != -1) {
+//#ifdef C_CODE
+//    _marks.erase(_marks.begin() + pos);
+//#endif
+//#ifdef JAVA_CODE
+//    _marks.remove(pos);
+//#endif
+//  }
+
+  const size_t marksSize = _marks.size();
+  for (size_t i = 0; i < marksSize; i++) {
     if (_marks[i] == mark) {
-      pos = i;
+#ifdef C_CODE
+      _marks.erase(_marks.begin() + i);
+#endif
+#ifdef JAVA_CODE
+      _marks.remove(i);
+#endif
       break;
     }
   }
-  if (pos != -1) {
-#ifdef C_CODE
-    _marks.erase(_marks.begin() + pos);
-#endif
-#ifdef JAVA_CODE
-    _marks.remove(pos);
-#endif
-  }
+
 }
 
-void MarksRenderer::removeAllMarks() {
-  const int marksSize = _marks.size();
-  for (int i = 0; i < marksSize; i++) {
-    delete _marks[i];
+void MarksRenderer::removeAllMarks(bool deleteMarks) {
+  if (deleteMarks) {
+    const size_t marksSize = _marks.size();
+    for (size_t i = 0; i < marksSize; i++) {
+      delete _marks[i];
+    }
   }
   _marks.clear();
 }
@@ -120,8 +143,8 @@ bool MarksRenderer::onTouchEvent(const G3MEventContext* ec,
       double minSqDistance = IMathUtils::instance()->maxDouble();
       Mark* nearestMark = NULL;
 
-      const int marksSize = _marks.size();
-      for (int i = 0; i < marksSize; i++) {
+      const size_t marksSize = _marks.size();
+      for (size_t i = 0; i < marksSize; i++) {
         Mark* mark = _marks[i];
 
         if (!mark->isReady()) {
@@ -174,8 +197,8 @@ bool MarksRenderer::onTouchEvent(const G3MEventContext* ec,
 
 RenderState MarksRenderer::getRenderState(const G3MRenderContext* rc) {
   if (_readyWhenMarksReady) {
-    int marksSize = _marks.size();
-    for (int i = 0; i < marksSize; i++) {
+    const size_t marksSize = _marks.size();
+    for (size_t i = 0; i < marksSize; i++) {
       if (!_marks[i]->isReady()) {
         return RenderState::busy();
       }
@@ -198,7 +221,8 @@ IFloatBuffer* MarksRenderer::getBillboardTexCoords() {
 }
 
 void MarksRenderer::render(const G3MRenderContext* rc, GLState* glState) {
-  const int marksSize = _marks.size();
+  const size_t marksSize = _marks.size();
+
   if (marksSize > 0) {
     const Camera* camera = rc->getCurrentCamera();
 
@@ -215,8 +239,31 @@ void MarksRenderer::render(const G3MRenderContext* rc, GLState* glState) {
 
     IFloatBuffer* billboardTexCoord = getBillboardTexCoords();
 
-    for (int i = 0; i < marksSize; i++) {
-      Mark* mark = _marks[i];
+
+    if (_progressiveInitialization) {
+      if (_initializationTimer == NULL) {
+        _initializationTimer = rc->getFactory()->createTimer();
+      }
+      else {
+        _initializationTimer->start();
+      }
+
+      for (size_t i = 0; i < marksSize; i++) {
+        if (_initializationTimer->elapsedTimeInMilliseconds() > 5) {
+          break;
+        }
+
+        const size_t ii = _renderInReverse ? i : (marksSize-1-i);
+        Mark* mark = _marks[ii];
+        if (!mark->isInitialized()) {
+          mark->initialize(_context, _downloadPriority);
+        }
+      }
+    }
+
+    for (size_t i = 0; i < marksSize; i++) {
+      const size_t ii = _renderInReverse ? (marksSize-1-i) : i;
+      Mark* mark = _marks[ii];
       if (mark->isReady()) {
         mark->render(rc,
                      cameraPosition,
@@ -253,3 +300,30 @@ void MarksRenderer::onResizeViewportEvent(const G3MEventContext* ec,
   _glState->clearGLFeatureGroup(NO_GROUP);
   _glState->addGLFeature(new ViewportExtentGLFeature(width, height), false);
 }
+
+size_t MarksRenderer::removeAllMarks(const MarksFilter& filter,
+                                     bool deleteMarks) {
+  size_t removed = 0;
+  std::vector<Mark*> newMarks;
+
+  const size_t marksSize = _marks.size();
+  for (size_t i = 0; i < marksSize; i++) {
+    Mark* mark = _marks[i];
+    if (filter.test(mark)) {
+      if (deleteMarks) {
+        delete mark;
+      }
+      removed++;
+    }
+    else {
+      newMarks.push_back(mark);
+    }
+  }
+  
+  if (removed > 0) {
+    _marks = newMarks;
+  }
+  
+  return removed;
+}
+

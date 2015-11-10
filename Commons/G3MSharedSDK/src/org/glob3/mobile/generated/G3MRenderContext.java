@@ -17,6 +17,8 @@ public class G3MRenderContext extends G3MContext
 
   private java.util.ArrayList<OrderedRenderable> _orderedRenderables;
 
+  private long _frameCounter;
+
   public G3MRenderContext(FrameTasksExecutor frameTasksExecutor, IFactory factory, IStringUtils stringUtils, IThreadUtils threadUtils, ILogger logger, IMathUtils mathUtils, IJSONParser jsonParser, Planet planet, GL gl, Camera currentCamera, Camera nextCamera, TexturesHandler texturesHandler, IDownloader downloader, EffectsScheduler scheduler, ITimer frameStartTimer, IStorage storage, GPUProgramManager gpuProgramManager, SurfaceElevationProvider surfaceElevationProvider)
   {
      super(factory, stringUtils, threadUtils, logger, mathUtils, jsonParser, planet, downloader, scheduler, storage, surfaceElevationProvider);
@@ -28,15 +30,18 @@ public class G3MRenderContext extends G3MContext
      _frameStartTimer = frameStartTimer;
      _orderedRenderables = null;
      _gpuProgramManager = gpuProgramManager;
+     _frameCounter = 0;
 
   }
 
-  public final void clear()
+  public final void clearForNewFrame()
   {
     _frameStartTimer.start();
 
     _orderedRenderables = null;
     _orderedRenderables = null;
+
+    _frameCounter++;
   }
 
   public final GL getGL()
@@ -72,6 +77,11 @@ public class G3MRenderContext extends G3MContext
   public final GPUProgramManager getGPUProgramManager()
   {
     return _gpuProgramManager;
+  }
+
+  public final long frameCounter()
+  {
+    return _frameCounter;
   }
 
   public void dispose()

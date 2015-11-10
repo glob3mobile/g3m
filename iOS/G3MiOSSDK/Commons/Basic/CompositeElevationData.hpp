@@ -33,14 +33,17 @@ public:
   _interpolator(new BilinearInterpolator())
   {
     _data.push_back(data);
+    data->_retain();
   }
 
   void addElevationData(ElevationData* data);
 
   virtual ~CompositeElevationData() {
-    int s = _data.size();
-    for (int i = 0; i < s; i++) {
-      delete _data[i];
+    size_t s = _data.size();
+    for (size_t i = 0; i < s; i++) {
+      if (_data[i] != NULL){
+        _data[i]->_release();
+      }
     }
     delete _interpolator;
     

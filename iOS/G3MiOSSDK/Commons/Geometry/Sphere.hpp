@@ -24,6 +24,9 @@ private:
 
  
 public:
+
+  static Sphere* enclosingSphere(const std::vector<Vector3D>& points);
+
   const Vector3D _center;
   const double   _radius;
   const double   _radiusSquared;
@@ -44,6 +47,11 @@ public:
   _radiusSquared(that._radiusSquared),
   _mesh(NULL)
   {
+  }
+  
+  ~Sphere() {
+    if (_mesh != NULL)
+      delete _mesh;
   }
 
   Vector3D getCenter() const {
@@ -96,7 +104,37 @@ public:
   bool fullContainedInSphere(const Sphere* that) const;
 
   Sphere* createSphere() const;
+  
+  static std::vector<double> intersectionCenteredSphereWithRay(double origin_x,
+                                                               double origin_y,
+                                                               double origin_z,
+                                                               double direction_x,
+                                                               double direction_y,
+                                                               double direction_z,
+                                                               double radius);
 
+  static std::vector<double> intersectionCenteredSphereWithRay(const Vector3D& origin,
+                                                               const Vector3D& direction,
+                                                               double radius) {
+    return intersectionCenteredSphereWithRay(origin._x, origin._y, origin._z,
+                                             direction._x, direction._y, direction._z,
+                                             radius);
+  }
+  
+  static Vector3D closestIntersectionCenteredSphereWithRay(const Vector3D& origin,
+                                                           const Vector3D& direction,
+                                                           double radius);
+  
+  static void setClosestIntersectionCenteredSphereWithRay(double origin_x,
+                                                          double origin_y,
+                                                          double origin_z,
+                                                          double direction_x,
+                                                          double direction_y,
+                                                          double direction_z,
+                                                          double radius,
+                                                          MutableVector3D& result);
+  
+  
 };
 
 #endif

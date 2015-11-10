@@ -27,7 +27,7 @@ public:
   /**
    Answer the size (the count of elements) of the buffer
    **/
-  virtual int size() const = 0;
+  virtual size_t size() const = 0;
   
   /**
    Answer the timestamp of the buffer.

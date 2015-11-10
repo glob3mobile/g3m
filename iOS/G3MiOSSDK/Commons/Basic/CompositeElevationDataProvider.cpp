@@ -24,8 +24,8 @@ void CompositeElevationDataProvider::addElevationDataProvider(ElevationDataProvi
 }
 
 bool CompositeElevationDataProvider::isReadyToRender(const G3MRenderContext* rc) {
-  int size = _providers.size();
-  for (int i = 0; i < size; i++) {
+  size_t size = _providers.size();
+  for (size_t i = 0; i < size; i++) {
     if (!_providers[i]->isReadyToRender(rc)) {
       return false;
     }
@@ -35,23 +35,23 @@ bool CompositeElevationDataProvider::isReadyToRender(const G3MRenderContext* rc)
 
 void CompositeElevationDataProvider::initialize(const G3MContext* context) {
   _context = context;
-  int size = _providers.size();
-  for (int i = 0; i < size; i++) {
+  size_t size = _providers.size();
+  for (size_t i = 0; i < size; i++) {
     _providers[i]->initialize(context);
   }
 }
 
 std::vector<ElevationDataProvider*> CompositeElevationDataProvider::getProviders(const Sector& s) const {
-  int size = _providers.size();
+  size_t size = _providers.size();
   std::vector<ElevationDataProvider*> providers;
 
-  for (int i = 0; i < size; i++) {
+  for (size_t i = 0; i < size; i++) {
 
     ElevationDataProvider* edp = _providers[i];
 
     std::vector<const Sector*> sectorsI = edp->getSectors();
-    int sizeI = sectorsI.size();
-    for (int j = 0; j < sizeI; j++) {
+    size_t sizeI = sectorsI.size();
+    for (size_t j = 0; j < sizeI; j++) {
       if (sectorsI[j]->touchesWith(s)) { //This provider contains the sector
         providers.push_back(edp);
       }
@@ -62,12 +62,14 @@ std::vector<ElevationDataProvider*> CompositeElevationDataProvider::getProviders
 
 const long long CompositeElevationDataProvider::requestElevationData(const Sector& sector,
                                                                      const Vector2I& extent,
+                                                                     long long requestPriority,
                                                                      IElevationDataListener* listener,
                                                                      bool autodeleteListener) {
 
   CompositeElevationDataProvider_Request* req = new CompositeElevationDataProvider_Request(this,
                                                                                            sector,
                                                                                            extent,
+                                                                                           requestPriority,
                                                                                            listener,
                                                                                            autodeleteListener);
   _currentID++;
@@ -80,11 +82,11 @@ const long long CompositeElevationDataProvider::requestElevationData(const Secto
 
 std::vector<const Sector*> CompositeElevationDataProvider::getSectors() const {
   std::vector<const Sector*> sectors;
-  int size = _providers.size();
-  for (int i = 0; i < size; i++) {
+  size_t size = _providers.size();
+  for (size_t i = 0; i < size; i++) {
     std::vector<const Sector*> sectorsI = _providers[i]->getSectors();
-    int sizeI = sectorsI.size();
-    for (int j = 0; j < sizeI; j++) {
+    size_t sizeI = sectorsI.size();
+    for (size_t j = 0; j < sizeI; j++) {
       sectors.push_back(sectorsI[j]);
     }
   }
@@ -92,12 +94,12 @@ std::vector<const Sector*> CompositeElevationDataProvider::getSectors() const {
 }
 
 const Vector2I CompositeElevationDataProvider::getMinResolution() const {
-  const int size = _providers.size();
+  const size_t size = _providers.size();
   double minD = IMathUtils::instance()->maxDouble();
   int x = -1;
   int y = -1;
 
-  for (int i = 0; i < size; i++) {
+  for (size_t i = 0; i < size; i++) {
     const Vector2I res = _providers[i]->getMinResolution();
     const double d = res.squaredLength();
 
@@ -173,6 +175,7 @@ CompositeElevationDataProvider::CompositeElevationDataProvider_Request::
 CompositeElevationDataProvider_Request(CompositeElevationDataProvider* provider,
                                        const Sector& sector,
                                        const Vector2I &resolution,
+                                       long long requestPriority,
                                        IElevationDataListener *listener,
                                        bool autodelete):
 _providers(provider->getProviders(sector)),
@@ -182,7 +185,8 @@ _listener(listener),
 _autodelete(autodelete),
 _compProvider(provider),
 _compData(NULL),
-_currentStep(NULL) {
+_currentStep(NULL),
+_requestPriority(requestPriority){
 }
 
 ElevationDataProvider* CompositeElevationDataProvider::
@@ -231,7 +235,7 @@ bool CompositeElevationDataProvider::CompositeElevationDataProvider_Request::lau
   if (_currentProvider != NULL) {
     _currentStep = new CompositeElevationDataProvider_RequestStepListener(this);
 
-    _currentID = _currentProvider->requestElevationData(_sector, _resolution, _currentStep, true);
+    _currentID = _currentProvider->requestElevationData(_sector, _resolution, _requestPriority, _currentStep, true);
 
     return true;
   }
@@ -294,6 +298,7 @@ void CompositeElevationDataProvider::CompositeElevationDataProvider_Request::res
   }
   else {
     _listener->onData(_sector, _resolution, _compData);
+    _compData->_release();
     if (_autodelete) {
       delete _listener;
     }

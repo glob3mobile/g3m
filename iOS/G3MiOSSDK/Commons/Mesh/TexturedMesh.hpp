@@ -66,11 +66,11 @@ public:
     return (_mesh == NULL) ? NULL : _mesh->getBoundingVolume();
   }
   
-  int getVertexCount() const {
+  size_t getVertexCount() const {
     return _mesh->getVertexCount();
   }
   
-  const Vector3D getVertex(int i) const {
+  const Vector3D getVertex(size_t i) const {
     return _mesh->getVertex(i);
   }
   
@@ -81,12 +81,23 @@ public:
   bool isTransparent(const G3MRenderContext* rc) const {
     return _transparent;
   }
-  
+
   void rawRender(const G3MRenderContext* rc,
                  const GLState* parentState) const;
 
-  void showNormals(bool v) const {
+  void zRawRender(const G3MRenderContext* rc,
+                 const GLState* parentState) const;
+  
+  void showNormals(bool v) const{
     _mesh->showNormals(v);
+  }
+  
+  IFloatBuffer* getVerticesFloatBuffer() const{
+    return _mesh->getVerticesFloatBuffer();
+  }
+  
+  Vector3D getVerticesOffset() const{
+    return _mesh->getVerticesOffset();
   }
 };
 

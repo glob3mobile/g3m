@@ -34,9 +34,10 @@ void GL::clearScreen(const Color& color) {
 }
 
 void GL::drawElements(int mode, IShortBuffer* indices, const GLState* state,
-                      GPUProgramManager& progManager) {
+                  GPUProgramManager& progManager,
+                  RenderType renderType) {
 
-  state->applyOnGPU(this, progManager);
+  state->applyOnGPU(this, progManager, renderType);
 
   _nativeGL->drawElements(mode,
                           indices->size(),
@@ -44,27 +45,22 @@ void GL::drawElements(int mode, IShortBuffer* indices, const GLState* state,
 }
 
 void GL::drawArrays(int mode,
-                    int first,
-                    int count, const GLState* state,
-                    GPUProgramManager& progManager) {
-  //  if (_verbose) {
-  //    ILogger::instance()->logInfo("GL::drawArrays(%d, %d, %d)",
-  //                                 mode,
-  //                                 first,
-  //                                 count);
-  //  }
+                int first,
+                int count, const GLState* state,
+                GPUProgramManager& progManager,
+                RenderType renderType) {
 
-  state->applyOnGPU(this, progManager);
+  state->applyOnGPU(this, progManager, renderType);
 
   _nativeGL->drawArrays(mode,
                         first,
                         count);
 }
 
-int GL::getError() {
-  //  if (_verbose) {
-  //    ILogger::instance()->logInfo("GL::getError()");
-  //  }
+int GL::getError() const {
+//  if (_verbose) {
+//    ILogger::instance()->logInfo("GL::getError()");
+//  }
 
   return _nativeGL->getError();
 }
@@ -122,7 +118,7 @@ const IGLTextureId* GL::uploadTexture(const IImage* image,
     GLGlobalState newState;
 
     newState.setPixelStoreIAlignmentUnpack(1);
-    newState.bindTexture(texId);
+    newState.bindTexture(0, texId);
 
     newState.applyChanges(this, *_currentGLGlobalState);
 
@@ -185,8 +181,8 @@ const IGLTextureId* GL::getGLTextureId() {
     //const int bugdetSize = 10240;
 
     const std::vector<IGLTextureId*> ids = _nativeGL->genTextures(bugdetSize);
-    const int idsCount = ids.size();
-    for (int i = 0; i < idsCount; i++) {
+    const size_t idsCount = ids.size();
+    for (size_t i = 0; i < idsCount; i++) {
       // ILogger::instance()->logInfo("  = Created textureId=%s", ids[i]->description().c_str());
       _texturesIdBag.push_front(ids[i]);
     }
@@ -219,28 +215,19 @@ const IGLTextureId* GL::getGLTextureId() {
 }
 
 void GL::deleteTexture(const IGLTextureId* textureId) {
-
   //  if (_verbose) {
   //    ILogger::instance()->logInfo("GL::deleteTexture()");
   //  }
 
   if (textureId != NULL) {
+    _currentGLGlobalState->onTextureDelete(textureId);
+
     if ( _nativeGL->deleteTexture(textureId) ) {
       _texturesIdBag.push_back(textureId);
     }
     else {
       delete textureId;
     }
-
-    if (_currentGLGlobalState->getBoundTexture() == textureId) {
-      _currentGLGlobalState->bindTexture(NULL);
-    }
-
-    //    GLState::textureHasBeenDeleted(textureId);
-
-    //    if (GLState::getCurrentGLGlobalState()->getBoundTexture() == textureId) {
-    //      GLState::getCurrentGLGlobalState()->bindTexture(NULL);
-    //    }
 
     //ILogger::instance()->logInfo("  = delete textureId=%s", texture->description().c_str());
   }

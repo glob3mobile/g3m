@@ -10,6 +10,8 @@
 
 #include "IStringBuilder.hpp"
 
+Angle Angle::halfPi = Angle::fromRadians(PI/2);
+
 Angle Angle::clampedTo(const Angle& min,
                        const Angle& max) const {
   if (_radians < min._radians) {
@@ -34,6 +36,13 @@ Angle Angle::distanceTo(const Angle& other) const {
   if (dif > 180) dif = 360 - dif;
   return Angle::fromDegrees(dif);
 }
+
+double Angle::distanceBetweenAnglesInRadians(double r1, double r2){
+  double dif1 = IMathUtils::instance()->abs(r1-r2);
+  if (dif1 > PI) dif1 = 2*PI - dif1;
+  return dif1;
+}
+
 
 
 Angle Angle::nearestAngleInInterval(const Angle& min,

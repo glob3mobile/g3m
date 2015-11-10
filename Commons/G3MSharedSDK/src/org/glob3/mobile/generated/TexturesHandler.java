@@ -67,7 +67,7 @@ public class TexturesHandler
     final IGLTextureId previousId = getGLTextureIdIfAvailable(textureSpec);
     if (previousId != null)
     {
-      return new TextureIDReference(previousId, this);
+      return new TextureIDReference(previousId, image.isPremultiplied(), this);
     }
   
     TextureHolder holder = new TextureHolder(textureSpec);
@@ -83,7 +83,7 @@ public class TexturesHandler
   
     //showHolders("getGLTextureId(): created holder " + holder->description());
   
-    return new TextureIDReference(holder._glTextureId, this);
+    return new TextureIDReference(holder._glTextureId, image.isPremultiplied(), this);
   }
 
 

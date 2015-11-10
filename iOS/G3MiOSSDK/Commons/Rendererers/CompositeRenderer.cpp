@@ -198,6 +198,17 @@ PlanetRenderer* CompositeRenderer::getPlanetRenderer() {
   return result;
 }
 
+void CompositeRenderer::zRender(const G3MRenderContext* rc, GLState* glState){
+
+  for (int i = 0; i < _renderersSize; i++) {
+    Renderer* renderer = _renderers[i]->getRenderer();
+    if (renderer->isEnable()) {
+      renderer->zRender(rc, glState);
+    }
+  }
+}
+
+
 const std::vector<const Info*> CompositeRenderer::getInfo() {
   _info.clear();
   
@@ -218,7 +229,8 @@ const std::vector<const Info*> CompositeRenderer::getInfo() {
   return _info;
 }
 
-void CompositeRenderer::setChangedRendererInfoListener(ChangedRendererInfoListener* changedInfoListener, const int rendererIdentifier) {
+void CompositeRenderer::setChangedRendererInfoListener(ChangedRendererInfoListener* changedInfoListener,
+                                                       const size_t rendererIdentifier) {
   if (_changedInfoListener != NULL) {
     ILogger::instance()->logError("Changed Renderer Info Listener of CompositeRenderer already set");
   }
@@ -229,9 +241,9 @@ void CompositeRenderer::setChangedRendererInfoListener(ChangedRendererInfoListen
   }
 }
 
-void CompositeRenderer::changedRendererInfo(const int rendererIdentifier,
+void CompositeRenderer::changedRendererInfo(const size_t rendererIdentifier,
                                             const std::vector<const Info*>& info) {
-  if(rendererIdentifier >= 0 && rendererIdentifier < _renderersSize) {
+  if (rendererIdentifier < _renderersSize) {
     _renderers[rendererIdentifier]->setInfo(info);
   }
   else {

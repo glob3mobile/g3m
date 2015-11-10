@@ -177,7 +177,7 @@ public abstract class Shape implements SurfaceElevationListener, EffectTarget
 //                   AltitudeMode altitudeMode);
 
 
-  //void Shape::setPosition(Geodetic3D* position,
+    //void Shape::setPosition(Geodetic3D* position,
   //                        AltitudeMode altitudeMode) {
   //  delete _position;
   //  _position = position;
@@ -400,7 +400,35 @@ public abstract class Shape implements SurfaceElevationListener, EffectTarget
   {
   }
 
-  public abstract java.util.ArrayList<Double> intersectionsDistances(Planet planet, Vector3D origin, Vector3D direction);
+//  virtual std::vector<double> intersectionsDistances(const Vector3D& origin,
+//                                             const Vector3D& direction) const = 0;
 
+  public final void zRender(G3MRenderContext rc, GLState parentGLState, boolean renderNotReadyShapes)
+  {
+    if (renderNotReadyShapes || isReadyToRender(rc))
+    {
+      getTransformMatrix(rc.getPlanet()); //Applying transform to _glState
+  
+      GLState state = new GLState();
+  
+      if (_transformMatrix != null)
+      {
+        state.addGLFeature(new ModelTransformGLFeature(_transformMatrix.asMatrix44D()), false);
+      }
+      else
+      {
+        ILogger.instance().logError("Render Z without Transform Matrix previously computed.");
+      }
+      state.setParent(parentGLState);
+  
+      zRawRender(rc, state);
+  
+      state._release();
+    }
+  }
+
+  public abstract void zRawRender(G3MRenderContext rc, GLState parentGLState);
+
+  public abstract java.util.ArrayList<Double> intersectionsDistances(Planet planet, Vector3D origin, Vector3D direction);
 
 }

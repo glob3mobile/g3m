@@ -18,7 +18,9 @@ package org.glob3.mobile.generated;
 
 
 
+
 //class MutableVector3D;
+//class Vector3F;
 
 public class Vector3D
 {
@@ -139,7 +141,7 @@ public class Vector3D
 
   public final boolean isPerpendicularTo(Vector3D v)
   {
-    return IMathUtils.instance().abs(_x * v._x + _y * v._y + _z * v._z) < 0.00001;
+    return IMathUtils.instance().abs(_x * v._x + _y * v._y + _z * v._z) < 0.001;
   }
 
   public final Vector3D add(Vector3D v)
@@ -387,6 +389,115 @@ public class Vector3D
   public final double distanceTo(Vector3D that)
   {
     return IMathUtils.instance().sqrt(squaredDistanceTo(that));
+  }
+
+  public final Vector3F asVector3F()
+  {
+    return new Vector3F((float)_x, (float)_y, (float)_z);
+  }
+
+
+  /*
+   std::vector<double> rotationAngleInRadiansToYZPlane(const Vector3D& rotationAxis, const Vector3D& rotationPoint) const{
+  
+   std::vector<double> sol;
+  
+   Vector3D axis = rotationAxis.normalized();
+   double x = _x, y = _y, z = _z;
+   double a = rotationPoint._x, b = rotationPoint._y, c = rotationPoint._z;
+   double u = axis._x, v = axis._y, w = axis._z;
+  
+   ////http://inside.mines.edu/fs_home/gmurray/ArbitraryAxisRotation/ 6.2
+   //////MATHEMATICA CODE
+  
+   const IMathUtils* mu = IMathUtils::instance();
+   double j = a*(v*v + w*w) - u*(b*v + c*w - u*x - v*y - w*z);
+   double i = -(c*v) + b*w - w*y + v*z;
+  
+   //  double s1 = -Arcmu->cos((mu->pow(j,2) - j*x - mu->sqrt(mu->pow(i,2)*(mu->pow(i,2) - 2*j*x + mu->pow(x,2))))/(mu->pow(i,2) + mu->pow(j - x,2)));
+   //  double s2 = -Arcmu->cos((mu->pow(j,2) - j*x + mu->sqrt(mu->pow(i,2)*(mu->pow(i,2) + x*(-2*j + x))))/(mu->pow(i,2) + mu->pow(j - x,2)));
+  
+   double s1 = (j*j - j*x - mu->sqrt(i*i*(i*i - 2*j*x + x*x)))/(i*i + (j - x) * (j - x));
+   double s2 = (j*j - j*x + mu->sqrt(i*i*(i*i + x*(-2*j + x))))/(i*i + (j - x) * (j - x));
+  
+   #define func(t) (a*(v*v+w*w)-u*(b*v+c*w-u*x-v*y-w*z))*(1-mu->cos[t])+(x*mu->cos[t])+(-c*v+b*w-w*y+v*z)*mu->sin[t]
+  
+   float validError = 1.0f;
+  
+   double t = mu->acos(s1);
+   double p = (a*(v*v+w*w)-u*(b*v+c*w-u*x-v*y-w*z))*(1-mu->cos(t))+(x*mu->cos(t))+(-c*v+b*w-w*y+v*z)*mu->sin(t);
+   if (mu->isBetween((float)p, -validError, validError)){
+   sol.push_back(t);
+   }
+   //  printf("X = %f\n", p);
+  
+   t = -t;
+   p = (a*(v*v+w*w)-u*(b*v+c*w-u*x-v*y-w*z))*(1-mu->cos(t))+(x*mu->cos(t))+(-c*v+b*w-w*y+v*z)*mu->sin(t);
+   if (mu->isBetween((float)p, -validError, validError)){
+   sol.push_back(t);
+   }
+   //  printf("X = %f\n", p);
+  
+   t = mu->acos(s2);
+   p = (a*(v*v+w*w)-u*(b*v+c*w-u*x-v*y-w*z))*(1-mu->cos(t))+(x*mu->cos(t))+(-c*v+b*w-w*y+v*z)*mu->sin(t);
+   if (mu->isBetween((float)p, -validError, validError)){
+   sol.push_back(t);
+   }
+   //  printf("X = %f\n", p);
+  
+   t = -t;
+   p = (a*(v*v+w*w)-u*(b*v+c*w-u*x-v*y-w*z))*(1-mu->cos(t))+(x*mu->cos(t))+(-c*v+b*w-w*y+v*z)*mu->sin(t);
+   if (mu->isBetween((float)p, -validError, validError)){
+   sol.push_back(t);
+   }
+   //  printf("X = %f\n", p);
+  
+   return sol;
+   }
+  
+   */
+  public final java.util.ArrayList<Double> rotationAngleInRadiansToYZPlane(Vector3D rotationAxis, Vector3D rotationPoint)
+  {
+  
+    java.util.ArrayList<Double> sol = new java.util.ArrayList<Double>();
+  
+    Vector3D axis = rotationAxis.normalized();
+    double x = _x;
+    double y = _y;
+    double z = _z;
+    double a = rotationPoint._x;
+    double b = rotationPoint._y;
+    double c = rotationPoint._z;
+    double u = axis._x;
+    double v = axis._y;
+    double w = axis._z;
+  
+    ////http://inside.mines.edu/fs_home/gmurray/ArbitraryAxisRotation/ 6.2
+    //////MATHEMATICA CODE
+  
+    final IMathUtils mu = IMathUtils.instance();
+    double i = a*(v *v + w *w) - u*(b *v + c *w - u *x - v *y - w *z);
+    double j = -(c *v) + b *w - w *y + v *z;
+  
+    //ATAN2 switches arguments in comparison to ATAN of Mathematica
+  
+    double s1 = mu.atan2(-((i - mu.pow(i, 3)/(mu.pow(i, 2) + mu.pow(j, 2) - 2 *i *x + mu.pow(x, 2)) + (2 *mu.pow(i, 2)*x)/(mu.pow(i, 2) + mu.pow(j, 2) - 2 *i *x + mu.pow(x, 2)) - (i *mu.pow(x, 2))/(mu.pow(i, 2) + mu.pow(j, 2) - 2 *i *x + mu.pow(x, 2)) + (i *mu.sqrt(mu.pow(j, 4) - 2 *i *mu.pow(j, 2)*x + mu.pow(j, 2)*mu.pow(x, 2)))/ (mu.pow(i, 2) + mu.pow(j, 2) - 2 *i *x + mu.pow(x, 2)) - (x *mu.sqrt(mu.pow(j, 4) - 2 *i *mu.pow(j, 2)*x + mu.pow(j, 2)*mu.pow(x, 2)))/ (mu.pow(i, 2) + mu.pow(j, 2) - 2 *i *x + mu.pow(x, 2)))/j), (mu.pow(i, 2) - i *x - mu.sqrt(mu.pow(j, 4) - 2 *i *mu.pow(j, 2)*x + mu.pow(j, 2)*mu.pow(x, 2)))/ (mu.pow(i, 2) + mu.pow(j, 2) - 2 *i *x + mu.pow(x, 2)));
+  
+    double s2 = mu.atan2(-((i - mu.pow(i, 3)/(mu.pow(i, 2) + mu.pow(j, 2) - 2 *i *x + mu.pow(x, 2)) + (2 *mu.pow(i, 2)*x)/(mu.pow(i, 2) + mu.pow(j, 2) - 2 *i *x + mu.pow(x, 2)) - (i *mu.pow(x, 2))/(mu.pow(i, 2) + mu.pow(j, 2) - 2 *i *x + mu.pow(x, 2)) - (i *mu.sqrt(mu.pow(j, 4) - 2 *i *mu.pow(j, 2)*x + mu.pow(j, 2)*mu.pow(x, 2)))/ (mu.pow(i, 2) + mu.pow(j, 2) - 2 *i *x + mu.pow(x, 2)) + (x *mu.sqrt(mu.pow(j, 4) - 2 *i *mu.pow(j, 2)*x + mu.pow(j, 2)*mu.pow(x, 2)))/ (mu.pow(i, 2) + mu.pow(j, 2) - 2 *i *x + mu.pow(x, 2)))/j), (mu.pow(i, 2) - i *x + mu.sqrt(mu.pow(j, 4) - 2 *i *mu.pow(j, 2)*x + mu.pow(j, 2)*mu.pow(x, 2)))/ (mu.pow(i, 2) + mu.pow(j, 2) - 2 *i *x + mu.pow(x, 2)));
+  
+    sol.add(s1);
+    sol.add(s2);
+  
+  
+    //Test
+    /*
+     double t = s1;
+     double Px =  (a*(mu->pow(v,2) + mu->pow(w,2)) - u*(b*v + c*w - u*x - v*y - w*z))*(1 - mu->cos(t)) + x*mu->cos(t) + (-(c*v) + b*w - w*y + v*z)*mu->sin(t);
+    
+     t = s2;
+     Px =  (a*(mu->pow(v,2) + mu->pow(w,2)) - u*(b*v + c*w - u*x - v*y - w*z))*(1 - mu->cos(t)) + x*mu->cos(t) + (-(c*v) + b*w - w*y + v*z)*mu->sin(t);
+     */
+    return sol;
   }
 
 }

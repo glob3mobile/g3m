@@ -56,6 +56,13 @@ public:
     return "SGRotateNode";
   }
 
+  const GLState* createZRenderState(const G3MRenderContext* rc, const GLState* parentState) {
+    GLState* state = new GLState();
+    state->setParent(parentState);
+    state->addGLFeature(new ModelTransformGLFeature(_rotationMatrix.asMatrix44D()), false);
+    return state;
+  }
+
   
 };
 

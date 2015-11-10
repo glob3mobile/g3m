@@ -141,8 +141,8 @@ public:
   }
 
   ~ShapesRenderer() {
-    const int shapesCount = _shapes.size();
-    for (int i = 0; i < shapesCount; i++) {
+    const size_t shapesCount = _shapes.size();
+    for (size_t i = 0; i < shapesCount; i++) {
       Shape* shape = _shapes[i];
       delete shape;
     }
@@ -254,6 +254,8 @@ public:
                     listener,
                     deleteListener);
   }
+
+  void zRender(const G3MRenderContext* rc, GLState* glState);
   
 };
 

@@ -41,6 +41,11 @@ public:
     return MutableVector2D(NAND, NAND);
   }
   
+  void setNan() {
+    _x = NAND;
+    _y = NAND;
+  }
+  
   bool isEquals(double x, double y) const {
     return _x == x && _y == y;
   }
@@ -110,6 +115,11 @@ public:
   }
 #endif
 
+  
+  void setValues (double x, double y) {
+    _x = x;
+    _y = y;
+  }
 };
 
 

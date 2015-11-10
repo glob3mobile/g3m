@@ -71,6 +71,17 @@ public class JSONArray extends JSONBaseObject
     return (object == null) ? null : object.asString();
   }
 
+  public final java.util.ArrayList<String> asStringVector()
+  {
+    java.util.ArrayList<String> result = new java.util.ArrayList<String>();
+    final int size = this.size();
+    for (int i = 0; i < size; i++)
+    {
+      result.add(getAsString(i).value());
+    }
+    return result;
+  }
+
   public final boolean getAsBoolean(int index, boolean defaultValue)
   {
     final JSONBoolean jsBool = getAsBoolean(index);
@@ -127,17 +138,13 @@ public class JSONArray extends JSONBaseObject
   {
     IStringBuilder isb = IStringBuilder.newStringBuilder();
   
-    int size = this.size();
+    final int size = this.size();
   
     isb.addString("[");
-    //  isb->addString("[size=");
-    //  isb->addInt(size);
   
     if (size > 0)
     {
-      //isb->addString(" ");
-  
-        isb.addString((this.get(0) == null) ? "null" : this.get(0).description());
+      isb.addString((this.get(0) == null) ? "null" : this.get(0).description());
   
       if (size <= 10)
       {
@@ -156,8 +163,48 @@ public class JSONArray extends JSONBaseObject
         }
         isb.addString(", ...");
         isb.addString(" size=");
-        isb.addInt(size);
+        isb.addLong(size);
   
+      }
+    }
+  
+    isb.addString("]");
+  
+    final String s = isb.getString();
+    if (isb != null)
+       isb.dispose();
+    return s;
+  }
+  public final String toString()
+  {
+    IStringBuilder isb = IStringBuilder.newStringBuilder();
+  
+    final int size = this.size();
+  
+    isb.addString("[");
+  
+    if (size > 0)
+    {
+      isb.addString((this.get(0) == null) ? "null" : this.get(0).toString());
+  
+      if (size <= 10)
+      {
+        for (int i = 1; i < size; i++)
+        {
+          isb.addString(", ");
+          isb.addString((this.get(i) == null) ? "null" : this.get(i).toString());
+        }
+      }
+      else
+      {
+        for (int i = 1; i < 10; i++)
+        {
+          isb.addString(", ");
+          isb.addString((this.get(i) == null) ? "null" : this.get(i).toString());
+        }
+        isb.addString(", ...");
+        isb.addString(" size=");
+        isb.addLong(size);
       }
     }
   

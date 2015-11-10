@@ -12,6 +12,7 @@
 #include <OpenGLES/ES2/gl.h>
 #include "IShortBuffer.hpp"
 #include "ILogger.hpp"
+#include "ErrorHandling.hpp"
 
 class ShortBuffer_iOS : public IShortBuffer {
 private:
@@ -22,9 +23,9 @@ private:
 //
 //  static void showStatistics();
 
-  const int _size;
-  short*    _values;
-  int       _timestamp;
+  const size_t _size;
+  short*       _values;
+  int          _timestamp;
 
   //ID
   const long long _id;
@@ -34,15 +35,15 @@ private:
   //IBO
   mutable bool   _indexBufferCreated;
   mutable GLuint _indexBuffer; //IBO
-  mutable int    _indexBufferTimeStamp;
+  mutable int    _indexBufferTimestamp;
   static GLuint  _boundIBO;
 
 public:
-  ShortBuffer_iOS(int size) :
+  ShortBuffer_iOS(size_t size) :
   _size(size),
   _timestamp(0),
   _indexBuffer(-1),
-  _indexBufferTimeStamp(-1),
+  _indexBufferTimestamp(-1),
   _indexBufferCreated(false),
   _id(_nextID++)
   {
@@ -61,7 +62,7 @@ public:
 
   ~ShortBuffer_iOS();
 
-  int size() const {
+  size_t size() const {
     return _size;
   }
 
@@ -69,17 +70,17 @@ public:
     return _timestamp;
   }
 
-  short get(int i) const {
-    if (i < 0 || i > _size) {
-      ILogger::instance()->logError("Buffer Put error.");
+  short get(size_t i) const {
+    if (i >= _size) {
+      THROW_EXCEPTION("Buffer Overflow");
     }
 
     return _values[i];
   }
 
-  void put(int i, short value) {
-    if (i < 0 || i > _size) {
-      ILogger::instance()->logError("Buffer Put error.");
+  void put(size_t i, short value) {
+    if (i >= _size) {
+      THROW_EXCEPTION("Buffer Overflow");
     }
 
     if (_values[i] != value) {
@@ -88,9 +89,9 @@ public:
     }
   }
 
-  void rawPut(int i, short value) {
-    if (i < 0 || i > _size) {
-      ILogger::instance()->logError("Buffer Put error.");
+  void rawPut(size_t i, short value) {
+    if (i >= _size) {
+      THROW_EXCEPTION("Buffer Overflow");
     }
     _values[i] = value;
   }

@@ -11,8 +11,8 @@
 #include "Vector3D.hpp"
 
 CompositeMesh::~CompositeMesh() {
-  const int childrenCount = _children.size();
-  for (int i = 0; i < childrenCount; i++) {
+  const size_t childrenCount = _children.size();
+  for (size_t i = 0; i < childrenCount; i++) {
     Mesh* child = _children[i];
     delete child;
   }
@@ -25,10 +25,10 @@ CompositeMesh::~CompositeMesh() {
 
 }
 
-int CompositeMesh::getVertexCount() const {
-  int result = 0;
-  const int childrenCount = _children.size();
-  for (int i = 0; i < childrenCount; i++) {
+size_t CompositeMesh::getVertexCount() const {
+  size_t result = 0;
+  const size_t childrenCount = _children.size();
+  for (size_t i = 0; i < childrenCount; i++) {
     Mesh* child = _children[i];
     result += child->getVertexCount();
   }
@@ -36,8 +36,8 @@ int CompositeMesh::getVertexCount() const {
 }
 
 bool CompositeMesh::isTransparent(const G3MRenderContext* rc) const {
-  const int childrenCount = _children.size();
-  for (int i = 0; i < childrenCount; i++) {
+  const size_t childrenCount = _children.size();
+  for (size_t i = 0; i < childrenCount; i++) {
     Mesh* child = _children[i];
     if (child->isTransparent(rc)) {
       return true;
@@ -46,13 +46,13 @@ bool CompositeMesh::isTransparent(const G3MRenderContext* rc) const {
   return false;
 }
 
-const Vector3D CompositeMesh::getVertex(int index) const {
+const Vector3D CompositeMesh::getVertex(size_t index) const {
   int acumIndex = 0;
-  const int childrenCount = _children.size();
-  for (int i = 0; i < childrenCount; i++) {
+  const size_t childrenCount = _children.size();
+  for (size_t i = 0; i < childrenCount; i++) {
     Mesh* child = _children[i];
-    const int childIndex = index - acumIndex;
-    const int childSize = child->getVertexCount();
+    const size_t childIndex = index - acumIndex;
+    const size_t childSize = child->getVertexCount();
     if (childIndex < childSize) {
       return child->getVertex(childIndex);
     }
@@ -62,13 +62,13 @@ const Vector3D CompositeMesh::getVertex(int index) const {
 }
 
 BoundingVolume* CompositeMesh::calculateBoundingVolume() const {
-  const int childrenCount = _children.size();
+  const size_t childrenCount = _children.size();
   if (childrenCount == 0) {
     return NULL;
   }
 
   BoundingVolume* result = _children[0]->getBoundingVolume();
-  for (int i = 1; i < childrenCount; i++) {
+  for (size_t i = 1; i < childrenCount; i++) {
     Mesh* child = _children[i];
     BoundingVolume* newResult = result->mergedWith( child->getBoundingVolume() );
     delete result;
@@ -94,16 +94,24 @@ void CompositeMesh::addMesh(Mesh* mesh) {
 
 void CompositeMesh::rawRender(const G3MRenderContext* rc,
                               const GLState* parentGLState) const {
-  const int childrenCount = _children.size();
-  for (int i = 0; i < childrenCount; i++) {
+  const size_t childrenCount = _children.size();
+  for (size_t i = 0; i < childrenCount; i++) {
     Mesh* child = _children[i];
     child->render(rc, parentGLState);
   }
 }
 
-void CompositeMesh::showNormals(bool v) const {
+void CompositeMesh::zRawRender(const G3MRenderContext* rc, const GLState* parentGLState) const{
   const int childrenCount = _children.size();
   for (int i = 0; i < childrenCount; i++) {
+    Mesh* child = _children[i];
+    child->zRender(rc, parentGLState);
+  }
+}
+
+void CompositeMesh::showNormals(bool v) const {
+  const size_t childrenCount = _children.size();
+  for (size_t i = 0; i < childrenCount; i++) {
     Mesh* child = _children[i];
     child->showNormals(v);
   }

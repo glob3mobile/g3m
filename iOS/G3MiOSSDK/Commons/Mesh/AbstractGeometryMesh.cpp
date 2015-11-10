@@ -73,9 +73,9 @@ _showNormals(false)
 }
 
 BoundingVolume* AbstractGeometryMesh::computeBoundingVolume() const {
-  const int vertexCount = getVertexCount();
+  const size_t vertexCount = getVertexCount();
 
-  if (vertexCount <= 0) {
+  if (vertexCount == 0) {
     return NULL;
   }
 
@@ -87,8 +87,8 @@ BoundingVolume* AbstractGeometryMesh::computeBoundingVolume() const {
   double maxY = -1e12;
   double maxZ = -1e12;
 
-  for (int i=0; i < vertexCount; i++) {
-    const int i3 = i * 3;
+  for (size_t i=0; i < vertexCount; i++) {
+    const size_t i3 = i * 3;
 
     const double x = _vertices->get(i3    ) + _center._x;
     const double y = _vertices->get(i3 + 1) + _center._y;
@@ -115,14 +115,14 @@ BoundingVolume* AbstractGeometryMesh::getBoundingVolume() const {
   return _extent;
 }
 
-const Vector3D AbstractGeometryMesh::getVertex(int i) const {
-  const int p = i * 3;
+const Vector3D AbstractGeometryMesh::getVertex(size_t i) const {
+  const size_t p = i * 3;
   return Vector3D(_vertices->get(p  ) + _center._x,
                   _vertices->get(p+1) + _center._y,
                   _vertices->get(p+2) + _center._z);
 }
 
-int AbstractGeometryMesh::getVertexCount() const {
+size_t AbstractGeometryMesh::getVertexCount() const {
   return _vertices->size() / 3;
 }
 
@@ -153,7 +153,7 @@ void AbstractGeometryMesh::createGLState() {
 void AbstractGeometryMesh::rawRender(const G3MRenderContext* rc,
                                      const GLState* parentGLState) const {
   _glState->setParent(parentGLState);
-  rawRender(rc);
+  rawRender(rc, _glState, REGULAR_RENDER);
 
   //RENDERING NORMALS
   if (_normals != NULL) {
@@ -172,6 +172,31 @@ void AbstractGeometryMesh::rawRender(const G3MRenderContext* rc,
       }
     }
   }
+}
+
+void AbstractGeometryMesh::zRawRender(const G3MRenderContext* rc, const GLState* parentGLState) const{
+
+  GLState* zRenderGLState = new GLState();
+
+  zRenderGLState->addGLFeature(new GeometryGLFeature(_vertices,    //The attribute is a float vector of 4 elements
+                                               3,            //Our buffer contains elements of 3
+                                               0,            //Index 0
+                                               false,        //Not normalized
+                                               0,            //Stride 0
+                                               true,         //Depth test
+                                               false, 0,
+                                               false, (float)0.0, (float)0.0,
+                                               _lineWidth,
+                                               true, _pointSize), false);
+
+  if (_translationMatrix != NULL) {
+    zRenderGLState->addGLFeature(new ModelTransformGLFeature(_translationMatrix->asMatrix44D()), false);
+  }
+
+  zRenderGLState->setParent(parentGLState);
+  rawRender(rc, zRenderGLState, Z_BUFFER_RENDER);
+
+  zRenderGLState->_release();
 }
 
 
@@ -196,11 +221,11 @@ Mesh* AbstractGeometryMesh::createNormalsMesh() const {
   double normalsSize = sphere->getRadius() / 10.0;
   delete sphere;
 
-  const int size = _vertices->size();
+  const size_t size = _vertices->size();
 
 //#warning FOR TILES NOT TAKING ALL VERTICES [Apparently there's not enough graphical memory]
 
-  for (int i = 0; i < size; i+=6) {
+  for (size_t i = 0; i < size; i+=6) {
     Vector3D v(_vertices->get(i), _vertices->get(i+1), _vertices->get(i+2));
     Vector3D n(_normals->get(i), _normals->get(i+1), _normals->get(i+2));
 
@@ -228,5 +253,4 @@ Mesh* AbstractGeometryMesh::createNormalsMesh() const {
   compositeMesh->addMesh(normalsMesh);
 
   return normalsMesh;
-  
 }

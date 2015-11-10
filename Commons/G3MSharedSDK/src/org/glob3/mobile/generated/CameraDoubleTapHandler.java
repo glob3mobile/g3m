@@ -73,8 +73,9 @@ public class CameraDoubleTapHandler extends CameraEventHandler
   
     final Vector2F pixel = touchEvent.getTouch(0).getPos();
     final Planet planet = eventContext.getPlanet();
+    Vector3D touchedPosition = cameraContext.getNextCamera().getScenePositionForPixel(pixel._x, pixel._y);
     Camera camera = cameraContext.getNextCamera();
-    Effect effect = planet.createDoubleTapEffect(camera.getCartesianPosition(), camera.getViewDirection(), camera.pixel2Ray(pixel));
+    Effect effect = planet.createDoubleTapEffect(camera.getCartesianPosition(), camera.getViewDirection(), touchedPosition);
   
     if (effect != null)
     {

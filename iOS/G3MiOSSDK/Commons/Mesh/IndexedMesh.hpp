@@ -17,7 +17,7 @@ class IndexedMesh : public AbstractMesh {
 private:
   IShortBuffer*       _indices;
 protected:
-  void rawRender(const G3MRenderContext* rc) const;
+  void rawRender(const G3MRenderContext* rc, GLState* glState, RenderType renderType) const;
 
   Mesh* createNormalsMesh() const;
 
@@ -36,6 +36,7 @@ public:
               IFloatBuffer* normals = NULL);
 
   ~IndexedMesh();
+
 };
 
 #endif

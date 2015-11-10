@@ -9,7 +9,7 @@ public class BillboardGLFeature extends GLFeature
   private GPUUniformValueVec2FloatMutable _size;
   private GPUUniformValueVec2FloatMutable _anchor;
 
-  public BillboardGLFeature(Vector3D position, int textureWidth, int textureHeight, float anchorU, float anchorV)
+  public BillboardGLFeature(Vector3D position, float billboardWidth, float billboardHeight, float anchorU, float anchorV)
   {
      super(GLFeatureGroupName.NO_GROUP, GLFeatureID.GLF_BILLBOARD);
   
@@ -17,7 +17,7 @@ public class BillboardGLFeature extends GLFeature
     _values.addUniformValue(GPUUniformKey.BILLBOARD_ANCHOR, _anchor, false);
   
   
-    _size = new GPUUniformValueVec2FloatMutable(textureWidth, textureHeight);
+    _size = new GPUUniformValueVec2FloatMutable(billboardWidth, billboardHeight);
     _values.addUniformValue(GPUUniformKey.TEXTURE_EXTENT, _size, false);
   
     _values.addUniformValue(GPUUniformKey.BILLBOARD_POSITION, new GPUUniformValueVec4Float((float) position._x, (float) position._y, (float) position._z, 1), false);

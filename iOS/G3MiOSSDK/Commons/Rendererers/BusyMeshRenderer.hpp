@@ -98,11 +98,13 @@ public:
   void onDestroy(const G3MContext* context) {
 
   }
+
+  void zRender(const G3MRenderContext* rc, GLState* glState){}
 };
 
 //***************************************************************
 
-class BusyMeshEffect : public EffectWithForce {
+class BusyMeshEffect : public EffectNeverEnding {
 private:
   BusyMeshRenderer* _renderer;
   long long _lastMS;
@@ -110,7 +112,7 @@ private:
 public:
 
   BusyMeshEffect(BusyMeshRenderer *renderer):
-  EffectWithForce(1, 1),
+  EffectNeverEnding(),
   _renderer(renderer)
   { }
 
@@ -121,7 +123,7 @@ public:
 
   void doStep(const G3MRenderContext* rc,
               const TimeInterval& when) {
-    EffectWithForce::doStep(rc, when);
+    EffectNeverEnding::doStep(rc, when);
 
     const long long now = when.milliseconds();
     const long long ellapsed = now - _lastMS;

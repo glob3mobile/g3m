@@ -149,44 +149,27 @@ public class GL
     _nativeGL.clear(GLBufferType.colorBuffer() | GLBufferType.depthBuffer());
   }
 
-//  void drawElements(int mode,
-//                    IShortBuffer* indices, const GLGlobalState& state,
-//                    GPUProgramManager& progManager,
-//                    const GPUProgramState* gpuState);
-
-  public final void drawElements(int mode, IShortBuffer indices, GLState state, GPUProgramManager progManager)
+  public final void drawElements(int mode, IShortBuffer indices, GLState state, GPUProgramManager progManager, RenderType renderType)
   {
   
-    state.applyOnGPU(this, progManager);
+    state.applyOnGPU(this, progManager, renderType);
   
     _nativeGL.drawElements(mode, indices.size(), indices);
   }
 
-//  void drawArrays(int mode,
-//                  int first,
-//                  int count, const GLGlobalState& state,
-//                  GPUProgramManager& progManager,
-//                  const GPUProgramState* gpuState);
-
-  public final void drawArrays(int mode, int first, int count, GLState state, GPUProgramManager progManager)
+  public final void drawArrays(int mode, int first, int count, GLState state, GPUProgramManager progManager, RenderType renderType)
   {
-    //  if (_verbose) {
-    //    ILogger::instance()->logInfo("GL::drawArrays(%d, %d, %d)",
-    //                                 mode,
-    //                                 first,
-    //                                 count);
-    //  }
   
-    state.applyOnGPU(this, progManager);
+    state.applyOnGPU(this, progManager, renderType);
   
     _nativeGL.drawArrays(mode, first, count);
   }
 
   public final int getError()
   {
-    //  if (_verbose) {
-    //    ILogger::instance()->logInfo("GL::getError()");
-    //  }
+  //  if (_verbose) {
+  //    ILogger::instance()->logInfo("GL::getError()");
+  //  }
   
     return _nativeGL.getError();
   }
@@ -204,7 +187,7 @@ public class GL
       GLGlobalState newState = new GLGlobalState();
   
       newState.setPixelStoreIAlignmentUnpack(1);
-      newState.bindTexture(texId);
+      newState.bindTexture(0, texId);
   
       newState.applyChanges(this, _currentGLGlobalState);
   
@@ -251,13 +234,14 @@ public class GL
 
   public final void deleteTexture(IGLTextureId textureId)
   {
-  
     //  if (_verbose) {
     //    ILogger::instance()->logInfo("GL::deleteTexture()");
     //  }
   
     if (textureId != null)
     {
+      _currentGLGlobalState.onTextureDelete(textureId);
+  
       if (_nativeGL.deleteTexture(textureId))
       {
         _texturesIdBag.addLast(textureId);
@@ -267,17 +251,6 @@ public class GL
         if (textureId != null)
            textureId.dispose();
       }
-  
-      if (_currentGLGlobalState.getBoundTexture() == textureId)
-      {
-        _currentGLGlobalState.bindTexture(null);
-      }
-  
-      //    GLState::textureHasBeenDeleted(textureId);
-  
-      //    if (GLState::getCurrentGLGlobalState()->getBoundTexture() == textureId) {
-      //      GLState::getCurrentGLGlobalState()->bindTexture(NULL);
-      //    }
   
       //ILogger::instance()->logInfo("  = delete textureId=%s", texture->description().c_str());
     }
@@ -404,12 +377,39 @@ public class GL
 
   public final GPUUniform getActiveUniform(GPUProgram program, int i)
   {
-    return _nativeGL.getActiveUniform(program, i);
+    GPUUniform u = _nativeGL.getActiveUniform(program, i);
+
+    if (_nativeGL.getError() != GLError.noError())
+    {
+      ILogger.instance().logError("Problem at getting uniform %d in program %s", i, program.getName());
+    }
+
+    return u;
   }
 
   public final GPUAttribute getActiveAttribute(GPUProgram program, int i)
   {
-    return _nativeGL.getActiveAttribute(program, i);
+
+    GPUAttribute a = _nativeGL.getActiveAttribute(program, i);
+
+    if (_nativeGL.getError() != GLError.noError())
+    {
+      ILogger.instance().logError("Problem at getting attribute %d in program %s", i, program.getName());
+    }
+
+    return a;
+
+    /*
+     =======
+  GPUUniform* getActiveUniform(const GPUProgram* program, int i) const {
+    return _nativeGL->getActiveUniform(program, i);
+  }
+  
+  GPUAttribute* getActiveAttribute(const GPUProgram* program, int i) const {
+    return _nativeGL->getActiveAttribute(program, i);
+>>>>>>> origin/purgatory
+     */
+
   }
 
   public final void useProgram(GPUProgram program)
@@ -451,6 +451,26 @@ public class GL
   public final GLGlobalState getCurrentGLGlobalState()
   {
     return _currentGLGlobalState;
+  }
+
+  public final double readPixelAsDouble(int x, int y, int viewportWidth, int viewportHeight)
+  {
+
+    final int px = x;
+    final int py = viewportHeight - y;
+
+    double d = _nativeGL.read1PixelAsDouble(px, py);
+    int e = getError();
+    if (e != GLError.noError())
+    {
+      ILogger.instance().logError("Problem at read1PixelAsDouble");
+    }
+    return d;
+  }
+
+  public final Vector2F getDepthRange()
+  {
+    return _nativeGL.getDepthRange();
   }
 
 
