@@ -50,7 +50,6 @@
 		D82DFD981B44009200BF45F8 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D82DFD971B44009200BF45F8 /* CoreLocation.framework */; };
 		D83165EE1ABAD435002A8451 /* StarDomeRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D83165EC1ABAD435002A8451 /* StarDomeRenderer.cpp */; };
 		D83D604A1AA89BC0002EA2B8 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D83D60491AA89BC0002EA2B8 /* CoreMotion.framework */; };
-		D83D604D1AA89D75002EA2B8 /* DeviceOrientation.mm in Sources */ = {isa = PBXBuildFile; fileRef = D83D604C1AA89D75002EA2B8 /* DeviceOrientation.mm */; };
 		D85B0C311BE8F8880073A034 /* galaxy.png in Resources */ = {isa = PBXBuildFile; fileRef = D85B0C301BE8F8880073A034 /* galaxy.png */; };
 		D86436931BE3951F00A37924 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D86436921BE3951F00A37924 /* Images.xcassets */; };
 		D876E6DA1AE6554700F616DE /* StarsParser.mm in Sources */ = {isa = PBXBuildFile; fileRef = D876E6D91AE6554700F616DE /* StarsParser.mm */; };
@@ -139,8 +138,6 @@
 		D83165EC1ABAD435002A8451 /* StarDomeRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = StarDomeRenderer.cpp; sourceTree = "<group>"; };
 		D83165ED1ABAD435002A8451 /* StarDomeRenderer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = StarDomeRenderer.hpp; sourceTree = "<group>"; };
 		D83D60491AA89BC0002EA2B8 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
-		D83D604B1AA89D75002EA2B8 /* DeviceOrientation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DeviceOrientation.h; sourceTree = "<group>"; };
-		D83D604C1AA89D75002EA2B8 /* DeviceOrientation.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = DeviceOrientation.mm; sourceTree = "<group>"; };
 		D85B0C301BE8F8880073A034 /* galaxy.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = galaxy.png; sourceTree = "<group>"; };
 		D86436921BE3951F00A37924 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = G3MiOSDemo/Images.xcassets; sourceTree = SOURCE_ROOT; };
 		D876E6D81AE6554700F616DE /* StarsParser.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = StarsParser.hpp; sourceTree = "<group>"; };
@@ -249,8 +246,6 @@
 				D876E6D91AE6554700F616DE /* StarsParser.mm */,
 				D83165ED1ABAD435002A8451 /* StarDomeRenderer.hpp */,
 				D8EEF3911577920B003FEB5E /* Supporting Files */,
-				D83D604B1AA89D75002EA2B8 /* DeviceOrientation.h */,
-				D83D604C1AA89D75002EA2B8 /* DeviceOrientation.mm */,
 				D86436921BE3951F00A37924 /* Images.xcassets */,
 				D87E4F361BE3AA8400E53805 /* MenuViewController.h */,
 				D87E4F371BE3AA8400E53805 /* MenuViewController.mm */,
@@ -458,7 +453,6 @@
 				D8D3A26618363C58007A784A /* TexturedMesh_DirectionLight.vsh in Sources */,
 				D83165EE1ABAD435002A8451 /* StarDomeRenderer.cpp in Sources */,
 				D8EEF39B1577920B003FEB5E /* AppDelegate.mm in Sources */,
-				D83D604D1AA89D75002EA2B8 /* DeviceOrientation.mm in Sources */,
 				D876E6DA1AE6554700F616DE /* StarsParser.mm in Sources */,
 				D8EEF3A41577920B003FEB5E /* ViewController.mm in Sources */,
 			);
