@@ -88,7 +88,7 @@ public:
 
   void removeMark(Mark* mark);
 
-  void removeAllMarks();
+  void removeAllMarks(bool deleteMarks = true);
 
   bool onTouchEvent(const G3MEventContext* ec,
                     const TouchEvent* touchEvent);

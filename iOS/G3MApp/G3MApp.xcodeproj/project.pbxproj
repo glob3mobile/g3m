@@ -41,7 +41,7 @@
 		CFC192D81A8D2E5F00FA89B3 /* G3MCanvas2DDemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFC192D61A8D2E5F00FA89B3 /* G3MCanvas2DDemoScene.cpp */; };
 		CFC192DB1A8D3A7C00FA89B3 /* colorgrid.jpg in Resources */ = {isa = PBXBuildFile; fileRef = CFC192DA1A8D3A7C00FA89B3 /* colorgrid.jpg */; };
 		CFC59BAC176F68DB002806D6 /* full-earth-2048x1024.bil in Resources */ = {isa = PBXBuildFile; fileRef = CFC59BAB176F68DB002806D6 /* full-earth-2048x1024.bil */; };
-		CFC664CA1BC476B10062BAF5 /* G3MVectorStreaming2DemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFC664C81BC476B10062BAF5 /* G3MVectorStreaming2DemoScene.cpp */; settings = {ASSET_TAGS = (); }; };
+		CFC664CA1BC476B10062BAF5 /* G3MVectorStreaming2DemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFC664C81BC476B10062BAF5 /* G3MVectorStreaming2DemoScene.cpp */; };
 		CFD3BE3D19D3324F00FE2D5A /* G3MStreamingPointCloud2DemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFD3BE3B19D3324F00FE2D5A /* G3MStreamingPointCloud2DemoScene.cpp */; };
 		CFE3B3C7183A99070078C796 /* G3MMarksDemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFE3B3C5183A99070078C796 /* G3MMarksDemoScene.cpp */; };
 		CFE3B3CB183ABAC70078C796 /* G3M3DSymbologyDemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFE3B3C9183ABAC70078C796 /* G3M3DSymbologyDemoScene.cpp */; };

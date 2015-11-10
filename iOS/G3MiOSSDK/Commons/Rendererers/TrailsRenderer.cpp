@@ -284,3 +284,14 @@ void TrailsRenderer::removeTrail(Trail* trail,
     }
   }
 }
+
+void TrailsRenderer::removeAllTrails(bool deleteTrails) {
+  if (deleteTrails) {
+    const size_t trailsCount = _trails.size();
+    for (size_t i = 0; i < trailsCount; i++) {
+      Trail* trail = _trails[i];
+      delete trail;
+    }
+  }
+  _trails.clear();
+}

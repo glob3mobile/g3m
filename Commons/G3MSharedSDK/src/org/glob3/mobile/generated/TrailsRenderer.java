@@ -76,6 +76,25 @@ public class TrailsRenderer extends DefaultRenderer
     }
   }
 
+  public final void removeAllTrails()
+  {
+     removeAllTrails(true);
+  }
+  public final void removeAllTrails(boolean deleteTrails)
+  {
+    if (deleteTrails)
+    {
+      final int trailsCount = _trails.size();
+      for (int i = 0; i < trailsCount; i++)
+      {
+        Trail trail = _trails.get(i);
+        if (trail != null)
+           trail.dispose();
+      }
+    }
+    _trails.clear();
+  }
+
   public void dispose()
   {
     final int trailsCount = _trails.size();
