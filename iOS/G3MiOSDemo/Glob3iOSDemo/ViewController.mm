@@ -236,7 +236,13 @@ const Planet* planet;
   AppDelegate* delegate = [UIApplication sharedApplication].delegate;
   for (int i = 0; i < 5; i++) {
     if ([delegate areStarsActive:i]){
-      Renderer* stars1 = [self readStars: &builder withStarsFileName:@"stars1" withLinksFileName:@"stars_links1"];
+      
+      NSString* sfn = [NSString stringWithFormat:@"stars%d", i];
+      NSString* slfn = [NSString stringWithFormat:@"stars_links%d", i];
+      
+      Renderer* stars1 = [self readStars: &builder
+                       withStarsFileName: sfn
+                       withLinksFileName: slfn];
       builder.addRenderer(stars1);
     }
   }

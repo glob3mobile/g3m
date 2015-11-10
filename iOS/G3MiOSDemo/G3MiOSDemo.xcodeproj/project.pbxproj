@@ -46,6 +46,8 @@
 		CFE26D6C18A154D700253709 /* 3d_2-2.json in Resources */ = {isa = PBXBuildFile; fileRef = CFE26D6918A154D700253709 /* 3d_2-2.json */; };
 		CFE3DBB1164B0E7D00910037 /* seymour-plane.json in Resources */ = {isa = PBXBuildFile; fileRef = CFE3DBB0164B0E7D00910037 /* seymour-plane.json */; };
 		CFEA76681666DCB000E89BC7 /* images in Resources */ = {isa = PBXBuildFile; fileRef = CFEA76671666DCB000E89BC7 /* images */; };
+		D80802481BF231C300E02ACD /* stars_links1.csv in Resources */ = {isa = PBXBuildFile; fileRef = D80802461BF231C300E02ACD /* stars_links1.csv */; };
+		D80802491BF231C300E02ACD /* stars1.csv in Resources */ = {isa = PBXBuildFile; fileRef = D80802471BF231C300E02ACD /* stars1.csv */; };
 		D80DF37C1AC5642900A7D92A /* stars_old.csv in Resources */ = {isa = PBXBuildFile; fileRef = D80DF37B1AC5642900A7D92A /* stars_old.csv */; };
 		D82DFD981B44009200BF45F8 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D82DFD971B44009200BF45F8 /* CoreLocation.framework */; };
 		D83165EE1ABAD435002A8451 /* StarDomeRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D83165EC1ABAD435002A8451 /* StarDomeRenderer.cpp */; };
@@ -53,10 +55,10 @@
 		D85B0C311BE8F8880073A034 /* galaxy.png in Resources */ = {isa = PBXBuildFile; fileRef = D85B0C301BE8F8880073A034 /* galaxy.png */; };
 		D86436931BE3951F00A37924 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D86436921BE3951F00A37924 /* Images.xcassets */; };
 		D876E6DA1AE6554700F616DE /* StarsParser.mm in Sources */ = {isa = PBXBuildFile; fileRef = D876E6D91AE6554700F616DE /* StarsParser.mm */; };
-		D876E6DC1AE65A4400F616DE /* stars1.csv in Resources */ = {isa = PBXBuildFile; fileRef = D876E6DB1AE65A4400F616DE /* stars1.csv */; };
+		D876E6DC1AE65A4400F616DE /* stars0.csv in Resources */ = {isa = PBXBuildFile; fileRef = D876E6DB1AE65A4400F616DE /* stars0.csv */; };
 		D87E4F381BE3AA8500E53805 /* MenuViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = D87E4F371BE3AA8400E53805 /* MenuViewController.mm */; };
 		D882B1CD171D77C000C2AD9C /* full-earth-256x256.bil in Resources */ = {isa = PBXBuildFile; fileRef = D882B1CC171D76AD00C2AD9C /* full-earth-256x256.bil */; };
-		D8C4723D1AE8F637005254B3 /* stars_links1.csv in Resources */ = {isa = PBXBuildFile; fileRef = D8C4723C1AE8F636005254B3 /* stars_links1.csv */; };
+		D8C4723D1AE8F637005254B3 /* stars_links0.csv in Resources */ = {isa = PBXBuildFile; fileRef = D8C4723C1AE8F636005254B3 /* stars_links0.csv */; };
 		D8D3A26318363C58007A784A /* FlatColorMesh_DirectionLight.fsh in Sources */ = {isa = PBXBuildFile; fileRef = D8D3A25F18363C58007A784A /* FlatColorMesh_DirectionLight.fsh */; };
 		D8D3A26418363C58007A784A /* FlatColorMesh_DirectionLight.vsh in Sources */ = {isa = PBXBuildFile; fileRef = D8D3A26018363C58007A784A /* FlatColorMesh_DirectionLight.vsh */; };
 		D8D3A26518363C58007A784A /* TexturedMesh_DirectionLight.fsh in Sources */ = {isa = PBXBuildFile; fileRef = D8D3A26118363C58007A784A /* TexturedMesh_DirectionLight.fsh */; };
@@ -133,6 +135,8 @@
 		CFE26D6918A154D700253709 /* 3d_2-2.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "3d_2-2.json"; sourceTree = "<group>"; };
 		CFE3DBB0164B0E7D00910037 /* seymour-plane.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "seymour-plane.json"; sourceTree = "<group>"; };
 		CFEA76671666DCB000E89BC7 /* images */ = {isa = PBXFileReference; lastKnownFileType = folder; path = images; sourceTree = "<group>"; };
+		D80802461BF231C300E02ACD /* stars_links1.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = stars_links1.csv; sourceTree = "<group>"; };
+		D80802471BF231C300E02ACD /* stars1.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = stars1.csv; sourceTree = "<group>"; };
 		D80DF37B1AC5642900A7D92A /* stars_old.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = stars_old.csv; sourceTree = "<group>"; };
 		D82DFD971B44009200BF45F8 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		D83165EC1ABAD435002A8451 /* StarDomeRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = StarDomeRenderer.cpp; sourceTree = "<group>"; };
@@ -142,11 +146,11 @@
 		D86436921BE3951F00A37924 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = G3MiOSDemo/Images.xcassets; sourceTree = SOURCE_ROOT; };
 		D876E6D81AE6554700F616DE /* StarsParser.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = StarsParser.hpp; sourceTree = "<group>"; };
 		D876E6D91AE6554700F616DE /* StarsParser.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = StarsParser.mm; sourceTree = "<group>"; };
-		D876E6DB1AE65A4400F616DE /* stars1.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = stars1.csv; sourceTree = "<group>"; };
+		D876E6DB1AE65A4400F616DE /* stars0.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = stars0.csv; sourceTree = "<group>"; };
 		D87E4F361BE3AA8400E53805 /* MenuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MenuViewController.h; sourceTree = "<group>"; };
 		D87E4F371BE3AA8400E53805 /* MenuViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MenuViewController.mm; sourceTree = "<group>"; };
 		D882B1CC171D76AD00C2AD9C /* full-earth-256x256.bil */ = {isa = PBXFileReference; lastKnownFileType = file; path = "full-earth-256x256.bil"; sourceTree = "<group>"; };
-		D8C4723C1AE8F636005254B3 /* stars_links1.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = stars_links1.csv; sourceTree = "<group>"; };
+		D8C4723C1AE8F636005254B3 /* stars_links0.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = stars_links0.csv; sourceTree = "<group>"; };
 		D8D3A25F18363C58007A784A /* FlatColorMesh_DirectionLight.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = FlatColorMesh_DirectionLight.fsh; sourceTree = "<group>"; };
 		D8D3A26018363C58007A784A /* FlatColorMesh_DirectionLight.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = FlatColorMesh_DirectionLight.vsh; sourceTree = "<group>"; };
 		D8D3A26118363C58007A784A /* TexturedMesh_DirectionLight.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = TexturedMesh_DirectionLight.fsh; sourceTree = "<group>"; };
@@ -276,10 +280,12 @@
 		D8EEF4271577B0D6003FEB5E /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				D80802461BF231C300E02ACD /* stars_links1.csv */,
+				D80802471BF231C300E02ACD /* stars1.csv */,
 				D85B0C301BE8F8880073A034 /* galaxy.png */,
-				D8C4723C1AE8F636005254B3 /* stars_links1.csv */,
+				D8C4723C1AE8F636005254B3 /* stars_links0.csv */,
 				D80DF37B1AC5642900A7D92A /* stars_old.csv */,
-				D876E6DB1AE65A4400F616DE /* stars1.csv */,
+				D876E6DB1AE65A4400F616DE /* stars0.csv */,
 				4415B4AA19CC26B800E73D38 /* countries.geojson */,
 				CFE26D6718A154D700253709 /* 3d_2-0.json */,
 				CFE26D6818A154D700253709 /* 3d_2-1.json */,
@@ -397,11 +403,11 @@
 				D8EEF3951577920B003FEB5E /* InfoPlist.strings in Resources */,
 				D8EEF39E1577920B003FEB5E /* MainStoryboard_iPhone.storyboard in Resources */,
 				CF8E9887180D98DC00A08208 /* pointcloud in Resources */,
-				D8C4723D1AE8F637005254B3 /* stars_links1.csv in Resources */,
+				D8C4723D1AE8F637005254B3 /* stars_links0.csv in Resources */,
 				CF0FC6F21899B86B005988D7 /* 3d_.json in Resources */,
 				D85B0C311BE8F8880073A034 /* galaxy.png in Resources */,
 				CFE26D6018A153DB00253709 /* 3d_1.json in Resources */,
-				D876E6DC1AE65A4400F616DE /* stars1.csv in Resources */,
+				D876E6DC1AE65A4400F616DE /* stars0.csv in Resources */,
 				CF935B4C18006CCB0032A9C8 /* washington-memorial-normals.json in Resources */,
 				CFE26D6518A1547B00253709 /* 3d_1-2.json in Resources */,
 				CFE26D6B18A154D700253709 /* 3d_2-1.json in Resources */,
@@ -412,6 +418,7 @@
 				CF0223831668318600024B73 /* geojson in Resources */,
 				CF186B0416B8572400A39478 /* A320.json in Resources */,
 				CF186B0616B857DE00A39478 /* textures-A320 in Resources */,
+				D80802481BF231C300E02ACD /* stars_links1.csv in Resources */,
 				CF186B0816B85A3600A39478 /* citation.json in Resources */,
 				CFE26D6618A1547B00253709 /* 3d_1-3.json in Resources */,
 				CF186B0A16B85A5F00A39478 /* textures-citation in Resources */,
@@ -430,6 +437,7 @@
 				CFE26D6418A1547B00253709 /* 3d_1-1.json in Resources */,
 				D80DF37C1AC5642900A7D92A /* stars_old.csv in Resources */,
 				CF0FC6EE1899A443005988D7 /* g3mesh.json in Resources */,
+				D80802491BF231C300E02ACD /* stars1.csv in Resources */,
 				E70B224D1700DBA300172DF3 /* A320.bson in Resources */,
 				CF9B5AD7175FC167002FB1B3 /* full-earth-2048x1024.bil in Resources */,
 				CF945F871768D59300215A4F /* MDT200-A_CORUNIA.bil in Resources */,
