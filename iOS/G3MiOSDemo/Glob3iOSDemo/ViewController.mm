@@ -164,7 +164,6 @@
 @implementation ViewController
 
 @synthesize G3MWidget;
-@synthesize galaxies;
 
 - (void)didReceiveMemoryWarning
 {
@@ -249,7 +248,10 @@ const Planet* planet;
 
   
   [self createHorizonLine:&builder];
-  [self createGalaxies:&builder];
+  
+  if (delegate.showingGalaxies){
+    [self createGalaxies:&builder];
+  }
   
   builder.setPlanet(planet);
   builder.initializeWidget();
@@ -279,7 +281,7 @@ std::vector<StarDomeRenderer*> _sdrs;
 
 - (void) createGalaxies: (IG3MBuilder*) builder{
   
-  galaxies = new MarksRenderer(true);
+  MarksRenderer* galaxies = new MarksRenderer(true);
   builder->addRenderer(galaxies);
   
   Vector3D center = planet->toCartesian(*cameraPositionForStars);
@@ -295,10 +297,6 @@ std::vector<StarDomeRenderer*> _sdrs;
                        ABSOLUTE);
   
   galaxies->addMark(n);
-  
-  
-  AppDelegate* delegate = [UIApplication sharedApplication].delegate;
-  galaxies->setEnable(delegate.showingGalaxies);
 }
 
 

@@ -35,6 +35,12 @@
   AppDelegate* delegate = [UIApplication sharedApplication].delegate;
   
   galaxiesSwitch.on = delegate.showingGalaxies;
+  
+  switchStars0.on = [delegate areStarsActive:0];
+  switchStars1.on = [delegate areStarsActive:1];
+  switchStars2.on = [delegate areStarsActive:2];
+  switchStars3.on = [delegate areStarsActive:3];
+  switchStars4.on = [delegate areStarsActive:4];
 
 }
 
@@ -92,6 +98,12 @@
 -(IBAction)showGalaxies:(id)sender{
   bool v = ((UISwitch*) sender).on ;
   ((AppDelegate*)[UIApplication sharedApplication].delegate).showingGalaxies = v;
+}
+
+-(IBAction)switchStars:(id)sender{
+  bool v = ((UISwitch*) sender).on ;
+  int i = ((UISwitch*) sender).tag;
+  [((AppDelegate*)[UIApplication sharedApplication].delegate) setStarsActive:i value:v];
 }
 
 @end

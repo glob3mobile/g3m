@@ -76,6 +76,9 @@
                                         <rect key="frame" x="215" y="8" width="51" height="31"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                         <animations/>
+                                        <connections>
+                                            <action selector="switchStars:" destination="O4c-jY-6C1" eventType="valueChanged" id="PZX-fz-rhE"/>
+                                        </connections>
                                     </switch>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="infoLight" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" id="tuK-7e-oZt">
                                         <rect key="frame" x="282" y="13" width="22" height="22"/>
@@ -89,11 +92,17 @@
                                         <rect key="frame" x="215" y="47" width="51" height="31"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                         <animations/>
+                                        <connections>
+                                            <action selector="switchStars:" destination="O4c-jY-6C1" eventType="valueChanged" id="Xub-7e-S2P"/>
+                                        </connections>
                                     </switch>
                                     <switch opaque="NO" tag="2" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="right" contentVerticalAlignment="center" on="YES" id="BtD-NR-Yd0">
                                         <rect key="frame" x="215" y="85" width="51" height="31"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                         <animations/>
+                                        <connections>
+                                            <action selector="switchStars:" destination="O4c-jY-6C1" eventType="valueChanged" id="w4g-La-tK1"/>
+                                        </connections>
                                     </switch>
                                     <button opaque="NO" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="infoLight" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" id="mrg-Jj-yTi">
                                         <rect key="frame" x="282" y="90" width="22" height="22"/>
@@ -107,6 +116,9 @@
                                         <rect key="frame" x="216" y="124" width="51" height="31"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                         <animations/>
+                                        <connections>
+                                            <action selector="switchStars:" destination="O4c-jY-6C1" eventType="valueChanged" id="etr-9e-fGt"/>
+                                        </connections>
                                     </switch>
                                     <button opaque="NO" tag="3" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="infoLight" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" id="S0w-c5-QTu">
                                         <rect key="frame" x="282" y="128" width="22" height="22"/>
@@ -120,6 +132,9 @@
                                         <rect key="frame" x="215" y="161" width="51" height="31"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                         <animations/>
+                                        <connections>
+                                            <action selector="switchStars:" destination="O4c-jY-6C1" eventType="valueChanged" id="INy-kz-6gn"/>
+                                        </connections>
                                     </switch>
                                     <button opaque="NO" tag="4" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="infoLight" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" id="H1Q-VQ-4eX">
                                         <rect key="frame" x="282" y="165" width="22" height="22"/>
@@ -213,6 +228,11 @@
                     <navigationItem key="navigationItem" id="F8L-f3-Glq"/>
                     <connections>
                         <outlet property="galaxiesSwitch" destination="LXZ-gu-Fhh" id="7Er-Bw-SSg"/>
+                        <outlet property="switchStars0" destination="iwZ-Db-eDo" id="wlx-ow-sXn"/>
+                        <outlet property="switchStars1" destination="njy-am-ZsJ" id="O5l-R8-SlS"/>
+                        <outlet property="switchStars2" destination="BtD-NR-Yd0" id="wu9-4I-f2U"/>
+                        <outlet property="switchStars3" destination="E9G-Dw-eD2" id="8Ui-4D-6jv"/>
+                        <outlet property="switchStars4" destination="krx-q0-MSk" id="Rqh-zT-2qN"/>
                         <outlet property="textField" destination="2lZ-l8-KrZ" id="Jzp-Xc-kvl"/>
                         <segue destination="90h-7u-REb" kind="modal" identifier="back" modalTransitionStyle="flipHorizontal" id="6ED-JZ-cxP"/>
                     </connections>
