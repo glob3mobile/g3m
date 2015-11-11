@@ -164,6 +164,13 @@ public:
     return from + ((to - from) * alpha);
   }
 
+  virtual double cosineInterpolation(double from,
+                                     double to,
+                                     double alpha) const {
+    const double alpha2 = (1.0 - cos(alpha*PI)) / 2.0;
+    return (from * (1.0 - alpha2) + to * alpha2);
+  }
+
   virtual float linearInterpolation(float from,
                                     float to,
                                     float alpha) const {
