@@ -25,9 +25,9 @@ mkdir %java_temp%
 rem echo package %package_path%; > headers.txt
 rem Se mueve todo el código fuente en C++ a la misma carpeta
 for /f %%a IN ('dir /b %commons%') do (
-	for /f %%X in ('dir /b %commons%\%%a\*.*') do (
-		copy %commons%\%%a\%%X %cpp_temp%\%%X > NUL
-	)
+for /f %%X in ('dir /b %commons%\%%a\*.*') do (
+copy %commons%\%%a\%%X %cpp_temp%\%%X > NUL
+)
 )
 rem Se recupera el ejecutable
 rem ren conversionapp.dat converter.exe
@@ -41,7 +41,7 @@ set "RutaTangible=Datos de programa"
 
 echo Userprofile: %userprofile%
 
-echo Path converter.dat: %converter_dat% 
+echo Path converter.dat: %converter_dat%
 
 copy "%converter_dat%" "%userprofile%\%RutaTangible%\Tangible Software Solutions Inc\C++ to Java Converter\C++ to Java Converter.dat" > NUL
 
