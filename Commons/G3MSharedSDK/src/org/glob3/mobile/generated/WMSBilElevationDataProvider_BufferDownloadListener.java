@@ -22,24 +22,9 @@ public class WMSBilElevationDataProvider_BufferDownloadListener extends IBufferD
 
   }
 
-//  static std::vector<std::string> _urls;
-
   public final void onDownload(URL url, IByteBuffer buffer, boolean expired)
   {
     final Vector2I resolution = new Vector2I(_width, _height);
-
-    /*
-     //DEBUGGING CODE
-#warning at work
-    if (_sector.contains(Geodetic2D::fromDegrees(28.271842, -16.642497))){
-      _urls.push_back(url._path);
-      
-      printf("ARRIVED BILs\n");
-      for (int i = 0; i < _urls.size(); i++) {
-        printf("%s\n", _urls[i].c_str());
-      }
-    }
-     */
 
     ShortBufferElevationData elevationData = BilParser.parseBil16(_sector, resolution, buffer, _deltaHeight);
     if (buffer != null)
@@ -52,9 +37,7 @@ public class WMSBilElevationDataProvider_BufferDownloadListener extends IBufferD
     else
     {
       _listener.onData(_sector, resolution, elevationData);
-      elevationData._release();
     }
-
 
     if (_autodeleteListener)
     {
@@ -79,27 +62,12 @@ public class WMSBilElevationDataProvider_BufferDownloadListener extends IBufferD
 
   public final void onCancel(URL url)
   {
-    if (_listener != null)
-    {
-      final Vector2I resolution = new Vector2I(_width, _height);
-      _listener.onCancel(_sector, resolution);
-      if (_autodeleteListener)
-      {
-        if (_listener != null)
-           _listener.dispose();
-        _listener = null;
-      }
-    }
+
   }
 
   public final void onCanceledDownload(URL url, IByteBuffer data, boolean expired)
   {
-    if (_autodeleteListener)
-    {
-      if (_listener != null)
-         _listener.dispose();
-      _listener = null;
-    }
+
   }
 
 

@@ -45,6 +45,8 @@ public abstract class ElevationData extends RCObject
   {
     if (_interpolator != null)
        _interpolator.dispose();
+  
+    super.dispose();
   }
 
   public ElevationData(Sector sector, Vector2I extent)

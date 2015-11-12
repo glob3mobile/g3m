@@ -81,6 +81,8 @@ public class GLState extends RCObject
     {
       _linkedProgram.removeReference();
     }
+  
+    super.dispose();
   }
 
 

@@ -43,10 +43,6 @@ public class WMSBilElevationDataProvider extends ElevationDataProvider
     return true;
   }
 
-
-  //std::vector<std::string> WMSBilElevationDataProvider_BufferDownloadListener::_urls;
-  
-  
   public final void initialize(G3MContext context)
   {
     _downloader = context.getDownloader();
@@ -79,45 +75,17 @@ public class WMSBilElevationDataProvider extends ElevationDataProvider
     isb.addString("&FORMAT=image/bil");
     isb.addString("&CRS=EPSG:4326");
   
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning CHECK THIS
-    /**
-     There is some inconsistency between the WMS 1.3.0 standard and the NASA implementation regarding the CRS with EPSG 4326
-    
-      http: //portal.opengeospatial.org/files/?artifact_id=14416
-     EXAMPLE 1 A <BoundingBox> metadata element for a Layer representing the entire Earth in the CRS:84 Layer CRS
-     would be written as
-     <BoundingBox CRS="CRS:84" minx="-180" miny="-90" maxx="180" maxy="90">.
-     A BBOX parameter requesting a map of the entire Earth would be written in this CRS as
-     BBOX=-180,-90,180,90.
-     EXAMPLE 2 A <BoundingBox> representing the entire Earth in the EPSG:4326 Layer CRS would be written as
-     <BoundingBox CRS="EPSG:4326" minx="-90" miny="-180" maxx="90" maxy="180">.
-     A BBOX parameter requesting a map of the entire Earth would be written in this CRS as
-     BBOX=-90,-180,90,180.
-    
-     Should be like:
-    
-     isb->addString("&BBOX=");
-     isb->addDouble(sector._lower._latitude._degrees);
-     isb->addString(",");
-     isb->addDouble(sector._lower._longitude._degrees);
-     isb->addString(",");
-     isb->addDouble(sector._upper._latitude._degrees);
-     isb->addString(",");
-     isb->addDouble(sector._upper._longitude._degrees);
-    
-     **/
-  
   
     isb.addString("&BBOX=");
     isb.addDouble(sector._lower._latitude._degrees);
     isb.addString(",");
-    isb.addDouble(sector._upper._longitude._degrees);
+    isb.addDouble(sector._lower._longitude._degrees);
     isb.addString(",");
     isb.addDouble(sector._upper._latitude._degrees);
+    isb.addString(",");
+    isb.addDouble(sector._upper._longitude._degrees);
   
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning TODO_WMS_1_1_1;
+    // TODO: #warning TODO_WMS_1_1_1;
     //  isb->addDouble(sector._lower._longitude._degrees);
     //  isb->addString(",");
     //  isb->addDouble(sector._lower._latitude._degrees);
