@@ -103,7 +103,7 @@ public class EllipsoidalPlanet extends Planet
 
   public final java.util.ArrayList<Double> intersectionsDistances(double originX, double originY, double originZ, double directionX, double directionY, double directionZ)
   {
-    return _ellipsoid.intersectionsDistances(originX, originY, originZ, directionX, directionY, directionZ, _oneOverDragRadiiSquared.x(), _oneOverDragRadiiSquared.y(), _oneOverDragRadiiSquared.z());
+    return Ellipsoid.intersectionsDistances(originX, originY, originZ, directionX, directionY, directionZ, _oneOverDragRadiiSquared.x(), _oneOverDragRadiiSquared.y(), _oneOverDragRadiiSquared.z());
   }
 
   public final Vector3D toCartesian(Angle latitude, Angle longitude, double height)

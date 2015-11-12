@@ -327,7 +327,7 @@ public class Camera
   public final void initialize(G3MContext context)
   {
     _planet = context.getPlanet();
-  // #warning move this to Planet, and remove isFlat() method (DGD)
+    // #warning move this to Planet, and remove isFlat() method (DGD)
     if (_planet.isFlat())
     {
       setCartesianPosition(new MutableVector3D(0, 0, _planet.getRadii()._y * 5));
@@ -581,11 +581,8 @@ public class Camera
   
       return pos;
     }
-    else
-    {
-      //ILogger::instance()->logInfo("NO Z");
-      return Vector3D.nan();
-    }
+    //ILogger::instance()->logInfo("NO Z");
+    return Vector3D.nan();
   }
 
   public final Vector3D getScenePositionForCentralPixel()
