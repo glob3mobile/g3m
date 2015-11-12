@@ -25,15 +25,11 @@ double CompositeElevationData::getElevationAt(int x,
 
 
 void CompositeElevationData::addElevationData(ElevationData* data) {
-//  ElevationData* d0 = _data[0];
 
   if ((data->getExtentWidth()  != _width) ||
       (data->getExtentHeight() != _height)) {
     ILogger::instance()->logError("Extents don't match.");
   }
-
-//  Sector s = data->getSector();
-//  Sector s2 = d0->getSector();
 
   if (!data->getSector().isEquals(getSector())) {
     ILogger::instance()->logError("Sectors don't match.");
