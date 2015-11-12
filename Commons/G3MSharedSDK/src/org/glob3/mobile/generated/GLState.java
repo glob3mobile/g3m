@@ -172,10 +172,16 @@ public class GLState extends RCObject
   
       GLFeatureGroup.applyToAllGroups(accumulatedFeatures, _valuesSet, _globalState);
   
-      final int uniformsCode = _valuesSet.getUniformsCode();
-      final int attributesCode = _valuesSet.getAttributesCode();
-  
-      _linkedProgram = progManager.getProgram(gl, uniformsCode, attributesCode); //GET RETAINED REFERENCE
+      if (_valuesSet.hasCustomShader())
+      {
+          _linkedProgram = progManager.getProgram(gl, _valuesSet.getCustomShaderName());
+      }
+      else
+      {
+          final int uniformsCode = _valuesSet.getUniformsCode();
+          final int attributesCode = _valuesSet.getAttributesCode();
+          _linkedProgram = progManager.getProgram(gl, uniformsCode, attributesCode); //GET RETAINED REFERENCE
+      }
     }
   
     if (_valuesSet == null || _globalState == null)

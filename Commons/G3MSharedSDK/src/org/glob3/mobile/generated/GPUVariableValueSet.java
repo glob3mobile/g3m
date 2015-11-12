@@ -26,6 +26,7 @@ public class GPUVariableValueSet
 
   private int _uniformsCode;
   private int _attributeCode;
+  private String _customShaderName;
 
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
 //  GPUVariableValueSet(GPUVariableValueSet that);
@@ -219,4 +220,18 @@ public class GPUVariableValueSet
     return _attributeCode;
   }
 
+  public final boolean hasCustomShader()
+  {
+    return !_customShaderName.length() == 0;
+  }
+
+  public final void setCustomShaderName(String name)
+  {
+    _customShaderName = name;
+  }
+
+  public final String getCustomShaderName()
+  {
+    return _customShaderName;
+  }
 }
