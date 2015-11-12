@@ -126,4 +126,11 @@ public final class IndexedDBStorage_WebGL
    }
 
 
+   @Override
+   public void merge(final String databasePath) {
+      // TODO Auto-generated method stub
+
+   }
+
+
 }
