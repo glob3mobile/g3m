@@ -74,6 +74,7 @@
 		D871790B1AE4FCCA00A9A14F /* G3MAnimatedMarksDemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D87179091AE4FCCA00A9A14F /* G3MAnimatedMarksDemoScene.cpp */; };
 		D871790E1AE500B500A9A14F /* radar-sprite.png in Resources */ = {isa = PBXBuildFile; fileRef = D871790D1AE500B500A9A14F /* radar-sprite.png */; };
 		D87179101AE501B100A9A14F /* pin.png in Resources */ = {isa = PBXBuildFile; fileRef = D871790F1AE501B100A9A14F /* pin.png */; };
+		D8F7304D1BF38F4F006DC379 /* G3MScenarioWMS_DEMDemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8F7304B1BF38F4F006DC379 /* G3MScenarioWMS_DEMDemoScene.cpp */; };
 		E75321CB16D3DF6200CB3F8D /* libG3MiOSSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E7D1B64F16D24DE800AF47C1 /* libG3MiOSSDK.a */; };
 		E780A3CD16D29EA5000F0395 /* map-on-96x48.png in Resources */ = {isa = PBXBuildFile; fileRef = E780A3C716D29EA5000F0395 /* map-on-96x48.png */; };
 		E780A3CE16D29EA5000F0395 /* marker-wikipedia-48x48.png in Resources */ = {isa = PBXBuildFile; fileRef = E780A3C816D29EA5000F0395 /* marker-wikipedia-48x48.png */; };
@@ -232,6 +233,8 @@
 		D871790A1AE4FCCA00A9A14F /* G3MAnimatedMarksDemoScene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = G3MAnimatedMarksDemoScene.hpp; sourceTree = "<group>"; };
 		D871790D1AE500B500A9A14F /* radar-sprite.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "radar-sprite.png"; sourceTree = "<group>"; };
 		D871790F1AE501B100A9A14F /* pin.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pin.png; sourceTree = "<group>"; };
+		D8F7304B1BF38F4F006DC379 /* G3MScenarioWMS_DEMDemoScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = G3MScenarioWMS_DEMDemoScene.cpp; sourceTree = "<group>"; };
+		D8F7304C1BF38F4F006DC379 /* G3MScenarioWMS_DEMDemoScene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = G3MScenarioWMS_DEMDemoScene.hpp; sourceTree = "<group>"; };
 		E780A3C716D29EA5000F0395 /* map-on-96x48.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "map-on-96x48.png"; sourceTree = "<group>"; };
 		E780A3C816D29EA5000F0395 /* marker-wikipedia-48x48.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "marker-wikipedia-48x48.png"; sourceTree = "<group>"; };
 		E780A3C916D29EA5000F0395 /* marker-wikipedia-72x72.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "marker-wikipedia-72x72.png"; sourceTree = "<group>"; };
@@ -329,6 +332,8 @@
 		CF6920AD1837E7EE007409D8 /* DemoBuilder */ = {
 			isa = PBXGroup;
 			children = (
+				D8F7304B1BF38F4F006DC379 /* G3MScenarioWMS_DEMDemoScene.cpp */,
+				D8F7304C1BF38F4F006DC379 /* G3MScenarioWMS_DEMDemoScene.hpp */,
 				CFE3B3D3183AD04A0078C796 /* G3M3DModelDemoScene.cpp */,
 				CFE3B3D4183AD04A0078C796 /* G3M3DModelDemoScene.hpp */,
 				CFE3B3C9183ABAC70078C796 /* G3M3DSymbologyDemoScene.cpp */,
@@ -707,6 +712,7 @@
 				E7D1B62816D2436700AF47C1 /* G3MViewController.mm in Sources */,
 				CF6920B71837F26B007409D8 /* G3MVectorialDemoScene.cpp in Sources */,
 				CF483EC51A2E5D5100B70D7E /* G3MHUDDemoScene.cpp in Sources */,
+				D8F7304D1BF38F4F006DC379 /* G3MScenarioWMS_DEMDemoScene.cpp in Sources */,
 				CFD3BE3D19D3324F00FE2D5A /* G3MStreamingPointCloud2DemoScene.cpp in Sources */,
 				CF3F8FDF183526AE00589B4C /* G3MDemoBuilder.cpp in Sources */,
 				CFE3B3CB183ABAC70078C796 /* G3M3DSymbologyDemoScene.cpp in Sources */,

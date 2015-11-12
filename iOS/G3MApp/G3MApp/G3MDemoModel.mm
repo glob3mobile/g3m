@@ -44,6 +44,7 @@
 #include "G3MAnimatedMarksDemoScene.hpp"
 #include "G3MVectorStreaming1DemoScene.hpp"
 #include "G3MVectorStreaming2DemoScene.hpp"
+#include "G3MScenarioWMS_DEMDemoScene.hpp"
 
 G3MDemoModel::G3MDemoModel(G3MDemoListener*             listener,
                            LayerSet*                    layerSet,
@@ -71,6 +72,7 @@ _context(NULL)
 {
   _scenes.push_back( new G3MRasterLayersDemoScene(this) );
   _scenes.push_back( new G3MScenarioDEMDemoScene(this) );
+  _scenes.push_back( new G3MScenarioWMS_DEMDemoScene(this) );
   _scenes.push_back( new G3MVectorialDemoScene(this) );
   _scenes.push_back( new G3MMarksDemoScene(this) );
   _scenes.push_back( new G3M3DSymbologyDemoScene(this) );
