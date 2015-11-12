@@ -224,7 +224,7 @@ PlanetRenderer::~PlanetRenderer() {
   delete _lastVisibleSector;
 
   const size_t visibleSectorListenersCount = _visibleSectorListeners.size();
-  for (int i = 0; i < visibleSectorListenersCount; i++) {
+  for (size_t i = 0; i < visibleSectorListenersCount; i++) {
     VisibleSectorListenerEntry* entry = _visibleSectorListeners[i];
     delete entry;
   }
@@ -244,7 +244,7 @@ PlanetRenderer::~PlanetRenderer() {
 
 void PlanetRenderer::clearFirstLevelTiles() {
   const size_t firstLevelTilesCount = _firstLevelTiles.size();
-  for (int i = 0; i < firstLevelTilesCount; i++) {
+  for (size_t i = 0; i < firstLevelTilesCount; i++) {
     Tile* tile = _firstLevelTiles[i];
     tile->toBeDeleted(_texturizer, _elevationDataProvider, _tilesStoppedRendering);
     delete tile;
@@ -342,7 +342,7 @@ void PlanetRenderer::createFirstLevelTiles(std::vector<Tile*>& firstLevelTiles,
                                                         false);
 
     const size_t childrenSize = children->size();
-    for (int i = 0; i < childrenSize; i++) {
+    for (size_t i = 0; i < childrenSize; i++) {
       Tile* child = children->at(i);
       createFirstLevelTiles(firstLevelTiles, child, firstLevel);
     }
@@ -414,7 +414,7 @@ void PlanetRenderer::createFirstLevelTiles(const G3MContext* context) {
 
   if (parameters->_firstLevel > 0) {
     const size_t topLevelTilesSize = topLevelTiles.size();
-    for (int i = 0; i < topLevelTilesSize; i++) {
+    for (size_t i = 0; i < topLevelTilesSize; i++) {
       Tile* tile = topLevelTiles[i];
       createFirstLevelTiles(_firstLevelTiles, tile, parameters->_firstLevel);
     }
@@ -486,6 +486,8 @@ RenderState PlanetRenderer::getRenderState(const G3MRenderContext* rc) {
   
   //CALLING prepareForFullRendering UNTIL ALL TEXTURE AND ELEV. ARE SOLVED AS TEXTURE IS REQUESTED AFTER ED IS RESOLVED
   if (!_allFirstLevelTilesAreTextureSolved) {
+
+    const size_t firstLevelTilesCount = _firstLevelTiles.size();
 
     const size_t firstLevelTilesCount = _firstLevelTiles.size();
 
