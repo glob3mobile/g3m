@@ -536,7 +536,6 @@ public class PlanetTileTessellator extends TileTessellator
   public final void updateSurface(Mesh mesh, Tile tile, Vector2I rawResolution, Planet planet, ElevationData elevationData, float verticalExaggeration, TileTessellatorMeshData data)
   {
   
-    final Sector tileSector = tile._sector;
     final Sector meshSector = getRenderedSectorForTile(tile); // tile->getSector();
     final Vector2I meshResolution = calculateResolution(rawResolution, tile, meshSector);
   
@@ -611,3 +610,5 @@ public class PlanetTileTessellator extends TileTessellator
 
 
 }
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning TODO also update skirts for tiles below height 0
