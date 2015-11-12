@@ -45,6 +45,7 @@ private:
 
   void hasChangedStructure() const;
 
+protected:
   ~GLState();
 
 public:

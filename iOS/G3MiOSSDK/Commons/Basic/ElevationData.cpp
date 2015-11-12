@@ -30,6 +30,10 @@ _interpolator(NULL)
 
 ElevationData::~ElevationData() {
   delete _interpolator;
+  
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
 }
 
 double ElevationData::getElevationAt(const Vector2I& position) const {

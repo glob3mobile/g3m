@@ -25,6 +25,10 @@ GLState::~GLState() {
   if (_linkedProgram != NULL) {
     _linkedProgram->removeReference();
   }
+  
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
 }
 
 void GLState::hasChangedStructure() const {
