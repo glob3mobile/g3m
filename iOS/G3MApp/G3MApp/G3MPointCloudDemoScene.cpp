@@ -77,12 +77,12 @@ public:
 
       FloatBufferBuilderFromColor colors;
 
-      const int size = pointsJson->size();
+      const size_t size = pointsJson->size();
 
       double minHeight = IMathUtils::instance()->maxDouble();
       double maxHeight = IMathUtils::instance()->minDouble();
       double totalHeight = 0;
-      for (int i = 0; i < size; i = i + 3) {
+      for (size_t i = 0; i < size; i = i + 3) {
         const double height = pointsJson->get(i + 2)->asNumber()->value();
         totalHeight += height;
         if (height < minHeight) {
@@ -98,7 +98,7 @@ public:
       const Color middleColor = Color::green();
       const Color toColor = Color::blue();
 
-      for (int i = 0; i < size; i = i + 3) {
+      for (size_t i = 0; i < size; i = i + 3) {
         const double latDegrees = pointsJson->getAsNumber(i + 1, 0);
         const double lonDegrees = pointsJson->getAsNumber(i, 0);
         const double height = pointsJson->get(i + 2)->asNumber()->value();

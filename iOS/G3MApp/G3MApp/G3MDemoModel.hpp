@@ -112,11 +112,11 @@ public:
 
   PlanetRenderer* getPlanetRenderer() const;
 
-  int getScenesCount() const {
+  size_t getScenesCount() const {
     return _scenes.size();
   }
 
-  const G3MDemoScene* getScene(int index) {
+  const G3MDemoScene* getScene(size_t index) {
     return _scenes[index];
   }
 

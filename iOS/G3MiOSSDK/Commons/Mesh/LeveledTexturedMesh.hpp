@@ -149,9 +149,9 @@ public:
 
   virtual ~LeveledTexturedMesh();
 
-  int getVertexCount() const;
+  size_t getVertexCount() const;
 
-  const Vector3D getVertex(int i) const;
+  const Vector3D getVertex(size_t i) const;
 
   BoundingVolume* getBoundingVolume() const;
 

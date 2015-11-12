@@ -37,9 +37,9 @@ public:
   virtual ~Mesh() {
   }
   
-  virtual int getVertexCount() const = 0;
+  virtual size_t getVertexCount() const = 0;
   
-  virtual const Vector3D getVertex(int i) const = 0;
+  virtual const Vector3D getVertex(size_t i) const = 0;
     
   virtual BoundingVolume* getBoundingVolume() const = 0;
   
