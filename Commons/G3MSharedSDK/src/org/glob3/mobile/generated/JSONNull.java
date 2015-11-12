@@ -34,6 +34,10 @@ public class JSONNull extends JSONBaseObject
   {
     return "null";
   }
+  public final String toString()
+  {
+    return "null";
+  }
 
   public final JSONNull deepCopy()
   {

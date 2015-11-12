@@ -17,8 +17,8 @@ import com.google.gwt.core.client.JavaScriptObject;
 
 
 public class Downloader_WebGL_Handler_DefaultImpl
-         implements
-            Downloader_WebGL_Handler {
+   implements
+      Downloader_WebGL_Handler {
 
    private final static String      TAG = "Downloader_WebGL_HandlerImpl";
 
@@ -37,12 +37,13 @@ public class Downloader_WebGL_Handler_DefaultImpl
    @Override
    final public void init(final URL url,
                           final IBufferDownloadListener bufferListener,
+                          final boolean deleteListener,
                           final long priority,
                           final long requestId) {
       _priority = priority;
       _url = url;
       _listeners = new ArrayList<ListenerEntry>();
-      final ListenerEntry entry = new ListenerEntry(bufferListener, null, requestId);
+      final ListenerEntry entry = new ListenerEntry(bufferListener, null, deleteListener, requestId);
       _listeners.add(entry);
       _requestingImage = false;
    }
@@ -51,12 +52,13 @@ public class Downloader_WebGL_Handler_DefaultImpl
    @Override
    final public void init(final URL url,
                           final IImageDownloadListener imageListener,
+                          final boolean deleteListener,
                           final long priority,
                           final long requestId) {
       _priority = priority;
       _url = url;
       _listeners = new ArrayList<ListenerEntry>();
-      final ListenerEntry entry = new ListenerEntry(null, imageListener, requestId);
+      final ListenerEntry entry = new ListenerEntry(null, imageListener, deleteListener, requestId);
       _listeners.add(entry);
       _requestingImage = true;
    }
@@ -70,9 +72,10 @@ public class Downloader_WebGL_Handler_DefaultImpl
 
    @Override
    final public void addListener(final IBufferDownloadListener listener,
+                                 final boolean deleteListener,
                                  final long priority,
                                  final long requestId) {
-      final ListenerEntry entry = new ListenerEntry(listener, null, requestId);
+      final ListenerEntry entry = new ListenerEntry(listener, null, deleteListener, requestId);
 
       _listeners.add(entry);
 
@@ -84,9 +87,10 @@ public class Downloader_WebGL_Handler_DefaultImpl
 
    @Override
    final public void addListener(final IImageDownloadListener listener,
+                                 final boolean deleteListener,
                                  final long priority,
                                  final long requestId) {
-      final ListenerEntry entry = new ListenerEntry(null, listener, requestId);
+      final ListenerEntry entry = new ListenerEntry(null, listener, deleteListener, requestId);
 
       _listeners.add(entry);
 
@@ -215,12 +219,10 @@ public class Downloader_WebGL_Handler_DefaultImpl
 				if (xhr.status === 200) {
 					if (that.@org.glob3.mobile.specific.Downloader_WebGL_Handler_DefaultImpl::_requestingImage) {
 						that.@org.glob3.mobile.specific.Downloader_WebGL_Handler_DefaultImpl::jsCreateImageFromBlob(ILcom/google/gwt/core/client/JavaScriptObject;)(xhr.status, xhr.response);
-					}
-					else {
+					} else {
 						that.@org.glob3.mobile.specific.Downloader_WebGL_Handler::processResponse(ILcom/google/gwt/core/client/JavaScriptObject;)(xhr.status, xhr.response);
 					}
-				}
-				else {
+				} else {
 					console.log("Error Retrieving Data!");
 					that.@org.glob3.mobile.specific.Downloader_WebGL_Handler::processResponse(ILcom/google/gwt/core/client/JavaScriptObject;)(xhr.status, null);
 				}

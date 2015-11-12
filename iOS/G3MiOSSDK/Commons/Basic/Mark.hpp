@@ -22,6 +22,7 @@
 #include "MutableVector3D.hpp"
 #include "GTask.hpp"
 #include "PeriodicalTask.hpp"
+#include "IImageBuilderListener.hpp"
 
 class IImage;
 class IFloatBuffer;
@@ -30,6 +31,8 @@ class MarkTouchListener;
 class GLGlobalState;
 class GPUProgramState;
 class TextureIDReference;
+class EffectTarget;
+class IImageBuilder;
 
 class MarkUserData {
 public:
@@ -40,6 +43,9 @@ public:
 
 class Mark : public SurfaceElevationListener {
 private:
+
+  IImageBuilder* _imageBuilder;
+
   /**
    * The text the mark displays.
    * Useless if the mark does not have label.
@@ -57,18 +63,32 @@ private:
    * Default value: 20
    */
   const float       _labelFontSize;
+
+
   /**
    * The color of the text.
    * Useless if the mark does not have label.
    * Default value: white
    */
+#ifdef C_CODE
   const Color*      _labelFontColor;
+#endif
+#ifdef JAVA_CODE
+  private Color     _labelFontColor;
+#endif
+
   /**
    * The color of the text shadow.
    * Useless if the mark does not have label.
    * Default value: black
    */
+#ifdef C_CODE
   const Color*      _labelShadowColor;
+#endif
+#ifdef JAVA_CODE
+  private Color     _labelShadowColor;
+#endif
+
   /**
    * The number of pixels between the icon and the text.
    * Useless if the mark does not have label or icon.
@@ -109,6 +129,8 @@ private:
    */
   const bool        _autoDeleteListener;
 
+  std::string _token = "";
+
 #ifdef C_CODE
   const TextureIDReference* _textureId;
 #endif
@@ -118,22 +140,22 @@ private:
 
   Vector3D* _cartesianPosition;
 
-  bool              _textureSolved;
+  bool           _textureSolved;
 #ifdef C_CODE
-  const IImage*     _textureImage;
+  const IImage*  _textureImage;
 #endif
 #ifdef JAVA_CODE
   private IImage _textureImage;
 #endif
-  float               _textureWidth;
-  float               _textureHeight;
-  float               _textureWidthProportion;
-  float               _textureHeightProportion;
-  bool              _textureSizeSetExternally;
-  bool              _textureProportionSetExternally;
-  const std::string _imageID;
+  float          _textureWidth;
+  float          _textureHeight;
+  float          _textureWidthProportion;
+  float          _textureHeightProportion;
+  bool           _textureSizeSetExternally;
+  bool           _textureProportionSetExternally;
+  std::string    _imageID;
   
-  bool _hasTCTransformations;
+  bool  _hasTCTransformations;
   float _translationTCX, _translationTCY;
   float _scalingTCX, _scalingTCY;
 
@@ -160,7 +182,42 @@ private:
   float _anchorV;
   BillboardGLFeature* _billboardGLF;
 
+  bool _initialized;
+
+  bool _zoomInAppears;
+  EffectsScheduler* _effectsScheduler;
+  bool _firstRender;
+
+
+  EffectTarget* _effectTarget;
+  EffectTarget* getEffectTarget();
+
 public:
+
+
+  class ImageBuilderListener : public IImageBuilderListener {
+  private:
+    Mark* _mark;
+
+  public:
+    ImageBuilderListener(Mark* mark) :
+    _mark(mark)
+    {
+
+    }
+
+    ~ImageBuilderListener() {
+
+    }
+
+    void imageCreated(const IImage*      image,
+                      const std::string& imageName);
+
+    void onError(const std::string& error);
+    
+  };
+  
+  
   /**
    * Creates a mark with icon and label
    */
@@ -219,7 +276,23 @@ public:
        MarkTouchListener* listener=NULL,
        bool               autoDeleteListener=false);
 
+  /**
+   * Creates a mark whith a IImageBuilder, in future versions it'll be the only constructor
+   */
+  Mark(IImageBuilder*     imageBuilder,
+       const Geodetic3D&  position,
+       AltitudeMode       altitudeMode,
+       double             minDistanceToCamera=4.5e+06,
+       MarkUserData*      userData=NULL,
+       bool               autoDeleteUserData=true,
+       MarkTouchListener* listener=NULL,
+       bool               autoDeleteListener=false);
+
   ~Mark();
+
+  bool isInitialized() const {
+    return _initialized;
+  }
 
   const std::string getLabel() const {
     return _label;
@@ -244,6 +317,11 @@ public:
   void onTextureDownloadError();
 
   void onTextureDownload(const IImage* image);
+
+  void onImageCreated(const IImage* image,
+                      const std::string& imageName);
+
+  void onImageCreationError(const std::string& error);
 
   float getTextureWidth() const {
     return _textureWidth;
@@ -300,6 +378,22 @@ public:
                                            const Vector2F& scaling);
   
   void setMarkAnchor(float anchorU, float anchorV);
+
+  void setToken(const std::string& token) {
+    _token = token;
+  }
+
+  const std::string getToken() const {
+    return _token;
+  }
+
+  void setZoomInAppears(bool zoomInAppears) {
+    _zoomInAppears = zoomInAppears;
+  }
+
+  bool getZoomInAppears() const {
+    return _zoomInAppears;
+  }
 
 };
 

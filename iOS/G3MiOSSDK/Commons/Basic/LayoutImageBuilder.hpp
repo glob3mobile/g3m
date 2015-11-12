@@ -13,10 +13,13 @@
 #include "IImageBuilderListener.hpp"
 #include "Color.hpp"
 #include "IImage.hpp"
+#include "RCObject.hpp"
 #include <vector>
+
 
 class LayoutImageBuilder : public AbstractImageBuilder {
 protected:
+
 
   class ChildResult {
   public:
@@ -44,20 +47,28 @@ protected:
     }
   };
 
-  class ChildrenResult {
+
+  class ChildrenResult : public RCObject {
   private:
     LayoutImageBuilder*    _layoutImageBuilder;
     const G3MContext*      _context;
     IImageBuilderListener* _listener;
     bool                   _deleteListener;
 
-    int _childrenResultPendingCounter;
+    size_t _childrenResultPendingCounter;
+
+  protected:
+    ~ChildrenResult() {
+#ifdef JAVA_CODE
+      super.dispose();
+#endif
+    }
 
   public:
     std::vector<ChildResult*> _childrenResult;
 
     ChildrenResult(LayoutImageBuilder* layoutImageBuilder,
-                   int childrenSize,
+                   size_t childrenSize,
                    const G3MContext* context,
                    IImageBuilderListener* listener,
                    bool deleteListener) :
@@ -67,34 +78,36 @@ protected:
     _deleteListener(deleteListener)
     {
       _childrenResultPendingCounter = childrenSize;
-      for (int i = 0; i < childrenSize; i++) {
+      for (size_t i = 0; i < childrenSize; i++) {
         _childrenResult.push_back(NULL); // make space for the result
       }
     }
 
     void childImageCreated(const IImage*      image,
                            const std::string& imageName,
-                           int                childIndex);
+                           size_t             childIndex);
 
-    void childError(const std::string& error,
-                    int   childIndex);
+    void childError(const  std::string& error,
+                    size_t childIndex);
   };
+
 
   class LayoutImageBuilderChildListener : public IImageBuilderListener {
   private:
     ChildrenResult* _childrenResult;
-    const int       _childIndex;
+    const size_t    _childIndex;
 
   public:
     LayoutImageBuilderChildListener(ChildrenResult* childrenResult,
-                                    const int       childIndex) :
+                                    const size_t    childIndex) :
     _childrenResult(childrenResult),
     _childIndex(childIndex)
     {
+      _childrenResult->_retain();
     }
 
     ~LayoutImageBuilderChildListener() {
-      
+      _childrenResult->_release();
     }
 
     void imageCreated(const IImage*      image,

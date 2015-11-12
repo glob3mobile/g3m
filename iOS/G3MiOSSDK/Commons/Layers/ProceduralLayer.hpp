@@ -26,7 +26,7 @@ protected:
   ProceduralLayer(const std::vector<const LayerTilesRenderParameters*> parametersVector,
                   const float                                          transparency,
                   const LayerCondition*                                condition,
-                  std::vector<const Info*>*                      layerInfo) :
+                  std::vector<const Info*>*                            layerInfo) :
   Layer(transparency,
         condition,
         layerInfo),
@@ -47,6 +47,8 @@ protected:
 #endif
 
 public:
+  ~ProceduralLayer();
+
   const std::vector<const LayerTilesRenderParameters*> getLayerTilesRenderParametersVector() const {
     return _parametersVector;
   }

@@ -13,17 +13,17 @@
 #include "LayerCondition.hpp"
 #include "ChessboardTileImageProvider.hpp"
 
-ChessboardLayer::ChessboardLayer(const int                        mercatorFirstLevel,
-                                 const int                        mercatorMaxLevel,
-                                 const int                        wgs84firstLevel,
-                                 const int                        wgs84maxLevel,
-                                 const Color&                     backgroundColor,
-                                 const Color&                     boxColor,
-                                 const int                        splits,
-                                 const Sector&                    dataSector,
-                                 const float                      transparency,
-                                 const LayerCondition*            condition,
-                                 std::vector<const Info*>*        layerInfo) :
+ChessboardLayer::ChessboardLayer(const int                 mercatorFirstLevel,
+                                 const int                 mercatorMaxLevel,
+                                 const int                 wgs84firstLevel,
+                                 const int                 wgs84maxLevel,
+                                 const Color&              backgroundColor,
+                                 const Color&              boxColor,
+                                 const int                 splits,
+                                 const Sector&             dataSector,
+                                 const float               transparency,
+                                 const LayerCondition*     condition,
+                                 std::vector<const Info*>* layerInfo) :
 ProceduralLayer(LayerTilesRenderParameters::createDefaultMultiProjection(mercatorFirstLevel,
                                                                          mercatorMaxLevel,
                                                                          wgs84firstLevel,
@@ -37,7 +37,6 @@ _boxColor(boxColor),
 _splits(splits)
 {
 }
-
 
 RenderState ChessboardLayer::getRenderState() {
   return RenderState::ready();
@@ -70,15 +69,15 @@ bool ChessboardLayer::rawIsEquals(const Layer* that) const {
   if (!_backgroundColor.isEquals(t->_backgroundColor)) {
     return  false;
   }
-  
+
   if (!_boxColor.isEquals(t->_boxColor)) {
     return  false;
   }
-  
+
   if (_splits != t->_splits) {
     return false;
   }
-  
+
   return _dataSector.isEquals(t->_dataSector);
 }
 

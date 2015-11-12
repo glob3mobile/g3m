@@ -25,3 +25,13 @@ const std::string JSONDouble::description() const {
   delete isb;
   return s;
 }
+
+const std::string JSONDouble::toString() const {
+  IStringBuilder* isb = IStringBuilder::newStringBuilder();
+
+  isb->addDouble(_value);
+
+  const std::string s = isb->getString();
+  delete isb;
+  return s;
+}

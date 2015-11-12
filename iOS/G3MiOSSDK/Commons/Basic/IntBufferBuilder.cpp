@@ -12,11 +12,11 @@
 #include "IIntBuffer.hpp"
 
 IIntBuffer* IntBufferBuilder::create() const {
-  const int size = _values.size();
+  const size_t size = _values.size();
   
   IIntBuffer* result = IFactory::instance()->createIntBuffer(size);
   
-  for (int i = 0; i < size; i++) {
+  for (size_t i = 0; i < size; i++) {
     result->rawPut(i, _values[i]);
   }
   

@@ -14,12 +14,14 @@ public interface Downloader_WebGL_Handler {
 
    public void init(final URL url,
                     final IBufferDownloadListener bufferListener,
+                    final boolean deleteListener,
                     final long priority,
                     final long requestId);
 
 
    public void init(final URL url,
                     final IImageDownloadListener imageListener,
+                    final boolean deleteListener,
                     final long priority,
                     final long requestId);
 
@@ -28,11 +30,13 @@ public interface Downloader_WebGL_Handler {
 
 
    public void addListener(final IBufferDownloadListener listener,
+                           final boolean deleteListener,
                            final long priority,
                            final long requestId);
 
 
    public void addListener(final IImageDownloadListener listener,
+                           final boolean deleteListener,
                            final long priority,
                            final long requestId);
 

@@ -28,8 +28,8 @@ void GEOGeometry::symbolize(const G3MRenderContext* rc,
   std::vector<GEOSymbol*>* symbols = createSymbols(symbolizer);
   if (symbols != NULL) {
 
-    const int symbolsSize = symbols->size();
-    for (int i = 0; i < symbolsSize; i++) {
+    const size_t symbolsSize = symbols->size();
+    for (size_t i = 0; i < symbolsSize; i++) {
       const GEOSymbol* symbol = symbols->at(i);
       if (symbol != NULL) {
         const bool deleteSymbol = symbol->symbolize(rc,

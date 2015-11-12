@@ -59,4 +59,16 @@ public class JSONInteger extends JSONNumber
     return s;
   }
 
+  public final String toString()
+  {
+    IStringBuilder isb = IStringBuilder.newStringBuilder();
+  
+    isb.addInt(_value);
+  
+    final String s = isb.getString();
+    if (isb != null)
+       isb.dispose();
+    return s;
+  }
+
 }

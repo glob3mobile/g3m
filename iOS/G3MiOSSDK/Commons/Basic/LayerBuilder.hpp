@@ -14,6 +14,7 @@
 
 class LayerBuilder {
 public:
+  static LayerSet* createDefault();
   static LayerSet* createDefaultSatelliteImagery();
   static std::vector<std::string> getDefaultLayersNames();
   static WMSLayer* createBingLayer(bool enabled);

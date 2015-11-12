@@ -31,7 +31,7 @@ public:
                   const Sector&                                        dataSector      = Sector::fullSphere(),
                   const float                                          transparency    = 1.0f,
                   const LayerCondition*                                condition       = NULL,
-                  std::vector<const Info*>*                      layerInfo       = new std::vector<const Info*>()) :
+                  std::vector<const Info*>*                            layerInfo       = new std::vector<const Info*>()) :
   ProceduralLayer(parametersVector,
                   transparency,
                   condition,
@@ -43,17 +43,17 @@ public:
   {
   }
 
-  ChessboardLayer(const int             mercatorFirstLevel = 2,
-                  const int             mercatorMaxLevel   = 18,
-                  const int             wgs84firstLevel    = 0,
-                  const int             wgs84maxLevel      = 18,
-                  const Color&          backgroundColor    = Color::white(),
-                  const Color&          boxColor           = Color::fromRGBA(0.9f, 0.9f, 0.35f, 1.0f),
-                  const int             splits             = 8,
-                  const Sector&         dataSector         = Sector::fullSphere(),
-                  const float           transparency       = 1.0f,
-                  const LayerCondition* condition          = NULL,
-                  std::vector<const Info*>* layerInfo= new std::vector<const Info*>());
+  ChessboardLayer(const int                 mercatorFirstLevel = 2,
+                  const int                 mercatorMaxLevel   = 18,
+                  const int                 wgs84firstLevel    = 0,
+                  const int                 wgs84maxLevel      = 18,
+                  const Color&              backgroundColor    = Color::white(),
+                  const Color&              boxColor           = Color::fromRGBA(0.9f, 0.9f, 0.35f, 1.0f),
+                  const int                 splits             = 8,
+                  const Sector&             dataSector         = Sector::fullSphere(),
+                  const float               transparency       = 1.0f,
+                  const LayerCondition*     condition          = NULL,
+                  std::vector<const Info*>* layerInfo          = new std::vector<const Info*>());
 
   std::string getLayerType() const {
     return "ChessboardLayer";
@@ -80,7 +80,7 @@ public:
   bool rawIsEquals(const Layer* that) const;
 
   const std::vector<URL*> getDownloadURLs(const Tile* tile) const;
-
+  
 };
 
 #endif

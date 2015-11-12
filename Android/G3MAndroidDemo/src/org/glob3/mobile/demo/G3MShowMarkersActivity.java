@@ -145,7 +145,7 @@ public class G3MShowMarkersActivity
             };
 
             downloader.requestBuffer( //
-                     new URL("http://openweathermap.org/data/2.1/find/city?bbox=-80,-180,80,180,4&cluster=yes", false), //
+                     new URL("http://api.openweathermap.org/data/2.5/box/city?bbox=-180,-80,180,80,4&cluster=yes", false), //
                      0, //
                      TimeInterval.fromHours(1.0), //
                      false, //

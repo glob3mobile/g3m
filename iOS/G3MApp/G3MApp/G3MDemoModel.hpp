@@ -26,6 +26,8 @@ class GEORenderer;
 class PointCloudsRenderer;
 class HUDRenderer;
 class NonOverlappingMarksRenderer;
+class VectorStreamingRenderer;
+
 
 class G3MDemoModel {
 private:
@@ -42,6 +44,7 @@ private:
   PointCloudsRenderer*         _pointCloudsRenderer;
   HUDRenderer*                 _hudRenderer;
   NonOverlappingMarksRenderer* _nonOverlappingMarksRenderer;
+  VectorStreamingRenderer*     _vectorStreamingRenderer;
 
   G3MDemoScene*              _selectedScene;
   std::vector<G3MDemoScene*> _scenes;
@@ -58,7 +61,8 @@ public:
                GEORenderer*                 geoRenderer,
                PointCloudsRenderer*         pointCloudsRenderer,
                HUDRenderer*                 hudRenderer,
-               NonOverlappingMarksRenderer* nonOverlappingMarksRenderer);
+               NonOverlappingMarksRenderer* nonOverlappingMarksRenderer,
+               VectorStreamingRenderer*     vectorStreamingRenderer);
 
 
   void initializeG3MWidget(G3MWidget* g3mWidget);
@@ -100,6 +104,11 @@ public:
   NonOverlappingMarksRenderer* getNonOverlappingMarksRenderer() const {
     return _nonOverlappingMarksRenderer;
   }
+
+  VectorStreamingRenderer* getVectorStreamingRenderer() const {
+    return _vectorStreamingRenderer;
+  }
+
 
   PlanetRenderer* getPlanetRenderer() const;
 

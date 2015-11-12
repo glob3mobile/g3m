@@ -305,20 +305,20 @@ const URL BingMapsLayer::createURL(const Tile* tile) const {
   const int numRows = (int) IMathUtils::instance()->pow(2.0, level);
   const int row     = numRows - tile->_row - 1;
   
-  const int subdomainsSize = _imageUrlSubdomains.size();
+  const size_t subdomainsSize = _imageUrlSubdomains.size();
   std::string subdomain = "";
   if (subdomainsSize > 0) {
     // select subdomain based on fixed data (instead of round-robin) to be cache friendly
-    const int subdomainsIndex =  IMathUtils::instance()->abs(level + column + row) % subdomainsSize;
+    const size_t subdomainsIndex =  IMathUtils::instance()->abs(level + column + row) % subdomainsSize;
     subdomain = _imageUrlSubdomains[subdomainsIndex];
   }
   
   const std::string quadkey = getQuadKey(level, column, row);
   
   std::string path = _imageUrl;
-  path = su->replaceSubstring(path, "{subdomain}", subdomain);
-  path = su->replaceSubstring(path, "{quadkey}",   quadkey);
-  path = su->replaceSubstring(path, "{culture}",   _culture);
+  path = su->replaceAll(path, "{subdomain}", subdomain);
+  path = su->replaceAll(path, "{quadkey}",   quadkey);
+  path = su->replaceAll(path, "{culture}",   _culture);
   
   return URL(path, false);
 }

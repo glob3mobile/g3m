@@ -77,7 +77,7 @@ void ShortBuffer_iOS::bindAsIBOToGPU() {
   if (_indexBufferTimestamp != _timestamp) {
     _indexBufferTimestamp = _timestamp;
     short* index = getPointer();
-    int iboSize = sizeof(short) * size();
+    int iboSize = (int) ( sizeof(short) * size() );
 
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, iboSize, index, GL_STATIC_DRAW);
   }

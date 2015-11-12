@@ -37,6 +37,8 @@
 #include "SceneLighting.hpp"
 #include "PlanetRenderer.hpp"
 #include "ErrorRenderer.hpp"
+#include "IDeviceInfo.hpp"
+
 
 void G3MWidget::initSingletons(ILogger*            logger,
                                IFactory*           factory,
@@ -136,7 +138,9 @@ _initialCameraPositionProvider(initialCameraPositionProvider),
 _initialCameraPositionHasBeenSet(false),
 _forceBusyRenderer(false),
 _nFramesBeetweenProgramsCleanUp(500),
-_infoDisplay(infoDisplay)
+_infoDisplay(infoDisplay),
+_touchDownPositionX(0),
+_touchDownPositionY(0)
 {
   _effectsScheduler->initialize(_context);
   _cameraRenderer->initialize(_context);
@@ -188,13 +192,13 @@ _infoDisplay(infoDisplay)
                                         _surfaceElevationProvider);
 
 
-//#ifdef C_CODE
-//  delete _rendererState;
-//  _rendererState = new RenderState( calculateRendererState() );
-//#endif
-//#ifdef JAVA_CODE
-//  _rendererState = calculateRendererState();
-//#endif
+  //#ifdef C_CODE
+  //  delete _rendererState;
+  //  _rendererState = new RenderState( calculateRendererState() );
+  //#endif
+  //#ifdef JAVA_CODE
+  //  _rendererState = calculateRendererState();
+  //#endif
 }
 
 
@@ -289,7 +293,7 @@ G3MWidget::~G3MWidget() {
     _rootState->_release();
   }
   delete _initialCameraPositionProvider;
-  
+
   if(_infoDisplay != NULL) {
     delete _infoDisplay;
   }
@@ -340,7 +344,7 @@ void G3MWidget::notifyTouchEvent(const G3MEventContext &ec,
 }
 
 void G3MWidget::onTouchEvent(const TouchEvent* touchEvent) {
-  
+
   G3MEventContext ec(IFactory::instance(),
                      IStringUtils::instance(),
                      _threadUtils,
@@ -352,37 +356,48 @@ void G3MWidget::onTouchEvent(const TouchEvent* touchEvent) {
                      _effectsScheduler,
                      _storage,
                      _surfaceElevationProvider);
-  
-    // notify the original event
-    notifyTouchEvent(ec, touchEvent);
-    
-    // creates DownUp event when a Down is immediately followed by an Up
-    //ILogger::instance()->logInfo("Touch Event: %i. Taps: %i. Touchs: %i",touchEvent->getType(), touchEvent->getTapCount(), touchEvent->getTouchCount());
-    if (touchEvent->getTouchCount() == 1) {
-      const TouchEventType eventType = touchEvent->getType();
-      if (eventType == Down) {
-        _clickOnProcess = true;
-      }
-      else {
-        if (eventType == Up) {
-          if (_clickOnProcess) {
-            
-            const Touch* touch = touchEvent->getTouch(0);
-            const TouchEvent* downUpEvent = TouchEvent::create(DownUp,
-                                                               new Touch(*touch));
-            
-            notifyTouchEvent(ec, downUpEvent);
-            
-            delete downUpEvent;
-          }
-        }
-        _clickOnProcess = false;
-      }
+
+  // notify the original event
+  notifyTouchEvent(ec, touchEvent);
+
+  // creates DownUp event when a Down is immediately followed by an Up
+  if (touchEvent->getTouchCount() == 1) {
+    const TouchEventType eventType = touchEvent->getType();
+    if (eventType == Down) {
+      _clickOnProcess = true;
+      const Vector2F pos = touchEvent->getTouch(0)->getPos();
+      _touchDownPositionX = pos._x;
+      _touchDownPositionY = pos._y;
     }
     else {
-      _clickOnProcess = false;
+      if (eventType == Up) {
+        if (_clickOnProcess) {
+          const Touch* touch = touchEvent->getTouch(0);
+          const TouchEvent* downUpEvent = TouchEvent::create(DownUp, new Touch(*touch));
+          notifyTouchEvent(ec, downUpEvent);
+          delete downUpEvent;
+        }
+      }
+      if (_clickOnProcess) {
+        if (eventType == Move) {
+          const Vector2F movePosition = touchEvent->getTouch(0)->getPos();
+          const double sd = movePosition.squaredDistanceTo(_touchDownPositionX, _touchDownPositionY);
+          const float thresholdInPixels = _context->getFactory()->getDeviceInfo()->getPixelsInMM(1);
+          if (sd > (thresholdInPixels * thresholdInPixels)) {
+            _clickOnProcess = false;
+          }
+        }
+        else {
+          _clickOnProcess = false;
+        }
+      }
     }
   }
+  else {
+    _clickOnProcess = false;
+  }
+
+}
 
 
 void G3MWidget::onResizeViewportEvent(int width, int height) {
@@ -542,7 +557,7 @@ void G3MWidget::render(int width, int height) {
   _frameTasksExecutor->doPreRenderCycle(_renderContext);
 
   _gl->clearScreen(*_backgroundColor);
-  
+
   if (_rootState == NULL) {
     _rootState = new GLState();
   }
@@ -551,13 +566,13 @@ void G3MWidget::render(int width, int height) {
     case RENDER_READY:
       setSelectedRenderer(_mainRenderer);
       _cameraRenderer->render(_renderContext, _rootState);
-      
+
       _sceneLighting->modifyGLState(_rootState, _renderContext);  //Applying ilumination to rootState
-      
+
       if (_mainRenderer->isEnable()) {
         _mainRenderer->render(_renderContext, _rootState);
       }
-      
+
       break;
 
     case RENDER_BUSY:
@@ -570,7 +585,7 @@ void G3MWidget::render(int width, int height) {
       setSelectedRenderer(_errorRenderer);
       _errorRenderer->render(_renderContext, _rootState);
       break;
-      
+
   }
 
   std::vector<OrderedRenderable*>* orderedRenderables = _renderContext->getSortedOrderedRenderables();
@@ -836,20 +851,19 @@ bool G3MWidget::setRenderedSector(const Sector& sector) {
 }
 
 //void G3MWidget::notifyChangedInfo() const {
-//
 //  if(_hudRenderer != NULL){
 //    const RenderState_Type renderStateType = _rendererState->_type;
 //    switch (renderStateType) {
 //      case RENDER_READY:
 //      //_hudRenderer->setInfo(_mainRenderer->getInfo());
 //      break;
-//      
+//
 //      case RENDER_BUSY:
 //      break;
-//      
+//
 //      default:
 //      break;
-//      
+//
 //    }
 //  }
 //}
@@ -859,9 +873,9 @@ void G3MWidget::changedRendererInfo(const int rendererIdentifier,
   if(_infoDisplay != NULL){
     _infoDisplay->changedInfo(info);
   }
-//  else {
-//    ILogger::instance()->logWarning("Render Infos are changing and InfoDisplay is NULL");
-//  }
+  //  else {
+  //    ILogger::instance()->logWarning("Render Infos are changing and InfoDisplay is NULL");
+  //  }
 }
 
 

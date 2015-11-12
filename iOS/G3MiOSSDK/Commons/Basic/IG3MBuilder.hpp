@@ -70,8 +70,6 @@ private:
   InfoDisplay*                      _infoDisplay;
 
   GL*                               getGL();
-  IDownloader*                      getDownloader();
-  IThreadUtils*                     getThreadUtils();
   ICameraActivityListener*          getCameraActivityListener();
   std::vector<ICameraConstrainer*>* getCameraConstraints();
   CameraRenderer*                   getCameraRenderer();
@@ -117,6 +115,9 @@ public:
 
   virtual ~IG3MBuilder();
 
+  IDownloader*                      getDownloader();
+  IThreadUtils*                     getThreadUtils();
+
   void setGL(GL* gl);
 
   void setStorage(IStorage* storage);
@@ -157,20 +158,11 @@ public:
 
   void setUserData(WidgetUserData* userData);
 
-#ifdef C_CODE
   void setInitializationTask(GInitializationTask* initializationTask,
-                             const bool autoDeleteInitializationTask) {
+                             const bool autoDeleteInitializationTask = true) {
     pvtSetInitializationTask(initializationTask,
                              autoDeleteInitializationTask);
   }
-#endif
-
-#ifdef JAVA_CODE
-  public final void setInitializationTask(GInitializationTask initializationTask) {
-    pvtSetInitializationTask(initializationTask,
-                             true /* parameter ignored in Java code */);
-  }
-#endif
 
   const Planet* getPlanet();
   PlanetRendererBuilder* getPlanetRendererBuilder();

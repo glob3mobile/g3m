@@ -68,6 +68,14 @@ public class Vector2F
     return (dx * dx) + (dy * dy);
   }
 
+  public final double squaredDistanceTo(float x, float y)
+  {
+    final double dx = _x - x;
+    final double dy = _y - y;
+    return (dx * dx) + (dy * dy);
+  }
+
+
   public final Vector2F add(Vector2F v)
   {
     return new Vector2F(_x + v._x, _y + v._y);

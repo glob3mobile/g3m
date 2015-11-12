@@ -181,6 +181,8 @@ public:
   void removeTrail(Trail* trail,
                    bool deleteTrail = true);
 
+  void removeAllTrails(bool deleteTrails = true);
+
   virtual ~TrailsRenderer();
 
   void onResizeViewportEvent(const G3MEventContext* ec,

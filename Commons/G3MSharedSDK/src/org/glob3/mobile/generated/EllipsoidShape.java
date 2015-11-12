@@ -232,12 +232,17 @@ public class EllipsoidShape extends AbstractMeshShape
   
     Mesh surfaceMesh = createSurfaceMesh(rc, vertices, texCoords, normals);
   
+    Mesh resultMesh;
     if (_borderWidth > 0)
     {
       CompositeMesh compositeMesh = new CompositeMesh();
       compositeMesh.addMesh(surfaceMesh);
       compositeMesh.addMesh(createBorderMesh(rc, vertices));
-      return compositeMesh;
+      resultMesh = compositeMesh;
+    }
+    else
+    {
+      resultMesh = surfaceMesh;
     }
   
     if (vertices != null)
@@ -245,7 +250,7 @@ public class EllipsoidShape extends AbstractMeshShape
     if (normals != null)
        normals.dispose();
   
-    return surfaceMesh;
+    return resultMesh;
   }
 
   public EllipsoidShape(Geodetic3D position, AltitudeMode altitudeMode, Vector3D radius, short resolution, float borderWidth, boolean texturedInside, boolean mercator, Color surfaceColor, Color borderColor)

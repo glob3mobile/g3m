@@ -94,6 +94,12 @@ public abstract class ICanvas
 
   protected abstract void _lineTo(float x, float y);
 
+  protected abstract void _fillEllipse(float left, float top, float width, float height);
+
+  protected abstract void _strokeEllipse(float left, float top, float width, float height);
+
+  protected abstract void _fillAndStrokeEllipse(float left, float top, float width, float height);
+
 
   public ICanvas()
   {
@@ -256,6 +262,25 @@ public abstract class ICanvas
     checkInitialized();
     _fillAndStrokeRoundedRectangle(left, top, width, height, radius);
   }
+
+  public final void fillEllipse(float left, float top, float width, float height)
+  {
+    checkInitialized();
+    _fillEllipse(left, top, width, height);
+  }
+
+  public final void strokeEllipse(float left, float top, float width, float height)
+  {
+    checkInitialized();
+    _strokeEllipse(left, top, width, height);
+  }
+
+  public final void fillAndStrokeEllipse(float left, float top, float width, float height)
+  {
+    checkInitialized();
+    _fillAndStrokeEllipse(left, top, width, height);
+  }
+
 
   public final void createImage(IImageListener listener, boolean autodelete)
   {

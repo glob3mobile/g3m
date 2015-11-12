@@ -18,15 +18,15 @@ public:
   virtual ~IByteBuffer() {
   }
 
-  virtual int size() const = 0;
+  virtual size_t size() const = 0;
 
   virtual int timestamp() const = 0;
 
-  virtual unsigned char get(int i) const = 0;
+  virtual unsigned char get(size_t i) const = 0;
 
-  virtual void put(int i, unsigned char value) = 0;
+  virtual void put(size_t i, unsigned char value) = 0;
 
-  virtual void rawPut(int i, unsigned char value) = 0;
+  virtual void rawPut(size_t i, unsigned char value) = 0;
 
   virtual const std::string description() const = 0;
 #ifdef JAVA_CODE

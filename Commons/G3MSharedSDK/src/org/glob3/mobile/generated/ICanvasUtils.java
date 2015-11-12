@@ -37,9 +37,10 @@ public class ICanvasUtils
     final int stringsSize = strings.size();
   
     int fontSize = maxFontSize;
-    boolean allFit = true;
+    boolean allFit = false;
     while (!allFit && (fontSize > minFontSize))
     {
+      allFit = true;
       canvas.setFont(GFont.sansSerif(fontSize));
       for (int i = 0; i < stringsSize; i++)
       {

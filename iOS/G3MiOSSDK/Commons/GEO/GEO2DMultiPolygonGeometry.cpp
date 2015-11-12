@@ -14,8 +14,8 @@
 
 GEO2DMultiPolygonGeometry::~GEO2DMultiPolygonGeometry() {
   if (_polygonsData != NULL) {
-    const int polygonsDataSize = _polygonsData->size();
-    for (int i = 0; i < polygonsDataSize; i++) {
+    const size_t polygonsDataSize = _polygonsData->size();
+    for (size_t i = 0; i < polygonsDataSize; i++) {
       GEO2DPolygonData* polygonData = _polygonsData->at(i);
       if (polygonData != NULL) {
         polygonData->_release();
@@ -43,8 +43,8 @@ std::vector<GEO2DPolygonData*>* GEO2DMultiPolygonGeometry::copy(const std::vecto
     return NULL;
   }
   std::vector<GEO2DPolygonData*>* result = new std::vector<GEO2DPolygonData*>();
-  const int size = polygonsData->size();
-  for (int i = 0; i < size; i++) {
+  const size_t size = polygonsData->size();
+  for (size_t i = 0; i < size; i++) {
     GEO2DPolygonData* each = polygonsData->at(i);
     if (each != NULL) {
       each->_retain();

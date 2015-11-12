@@ -25,3 +25,13 @@ const std::string JSONFloat::description() const {
   delete isb;
   return s;
 }
+
+const std::string JSONFloat::toString() const {
+  IStringBuilder* isb = IStringBuilder::newStringBuilder();
+
+  isb->addFloat(_value);
+
+  const std::string s = isb->getString();
+  delete isb;
+  return s;
+}

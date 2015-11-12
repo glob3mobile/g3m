@@ -46,8 +46,10 @@ public final class MotionEventProcessor {
    }
 
 
-   private static Vector2F createPosition(final Event event) {
-      return new Vector2F(event.getClientX(), event.getClientY());
+   private Vector2F createPosition(final Event event) {
+      return new Vector2F(//
+               event.getClientX() - _canvasElement.getAbsoluteLeft(), //
+               event.getClientY() - _canvasElement.getAbsoluteTop());
    }
 
 

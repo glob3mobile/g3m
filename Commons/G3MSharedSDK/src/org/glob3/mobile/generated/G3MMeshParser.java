@@ -148,8 +148,7 @@ public class G3MMeshParser
   
     IFloatBuffer normals = parseFloatBuffer(jsonMesh.getAsArray("normals"));
     IFloatBuffer colors = parseFloatBuffer(jsonMesh.getAsArray("colors"));
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning TODO texCoords
+  // #warning TODO texCoords
     //IFloatBuffer* texCoords = parseFloatBuffer( jsonMesh->getAsArray("texCoords") );
   
     IShortBuffer indices = parseShortBuffer(jsonMesh.getAsArray("indices"));
