@@ -239,11 +239,18 @@ public class MarksRenderer extends DefaultRenderer
 
   public final void removeAllMarks()
   {
-    final int marksSize = _marks.size();
-    for (int i = 0; i < marksSize; i++)
+     removeAllMarks(true);
+  }
+  public final void removeAllMarks(boolean deleteMarks)
+  {
+    if (deleteMarks)
     {
-      if (_marks.get(i) != null)
-         _marks.get(i).dispose();
+      final int marksSize = _marks.size();
+      for (int i = 0; i < marksSize; i++)
+      {
+        if (_marks.get(i) != null)
+           _marks.get(i).dispose();
+      }
     }
     _marks.clear();
   }

@@ -132,6 +132,8 @@ _anyCancelation(false),
 _canceled(false),
 _tileSector(tileSector)
 {
+  _compositeTileImageProvider->_retain();
+
   for (int i = 0; i < _contributionsSize; i++) {
     _results.push_back( NULL );
   }
@@ -144,6 +146,8 @@ CompositeTileImageProvider::Composer::~Composer() {
   }
 
   TileImageContribution::releaseContribution(_compositeContribution);
+
+  _compositeTileImageProvider->_release();
 
 #ifdef JAVA_CODE
   super.dispose();

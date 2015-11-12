@@ -14,4 +14,6 @@
 
 - (std::string) toCppString;
 
+- (NSString*) urlEncode;
+
 @end

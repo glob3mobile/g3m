@@ -359,7 +359,7 @@ _texID(texID)
 }
 
 void TextureIDGLFeature::applyOnGlobalGLState(GLGlobalState* state) const {
-  state->bindTexture(_texID);
+  state->bindTexture(0, _texID);
 }
 
 BlendingModeGLFeature::BlendingModeGLFeature(bool blend, int sFactor, int dFactor) :

@@ -170,6 +170,12 @@ public abstract class IMathUtils
     return from + ((to - from) * alpha);
   }
 
+  public double cosineInterpolation(double from, double to, double alpha)
+  {
+    final double alpha2 = (1.0 - Math.cos(alpha *DefineConstants.PI)) / 2.0;
+    return (from * (1.0 - alpha2) + to * alpha2);
+  }
+
   public float linearInterpolation(float from, float to, float alpha)
   {
     return from + ((to - from) * alpha);

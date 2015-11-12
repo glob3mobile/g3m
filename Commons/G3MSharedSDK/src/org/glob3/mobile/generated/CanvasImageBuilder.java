@@ -47,7 +47,7 @@ public abstract class CanvasImageBuilder extends AbstractImageBuilder
     return _canvas;
   }
 
-  private static long _counter = 0;
+//  static long long _counter;
 
   protected final int _width;
   protected final int _height;
@@ -61,6 +61,9 @@ public abstract class CanvasImageBuilder extends AbstractImageBuilder
      _canvasHeight = 0;
   }
 
+
+  ///#include "IStringUtils.hpp"
+  
   public void dispose()
   {
     if (_canvas != null)
@@ -71,13 +74,17 @@ public abstract class CanvasImageBuilder extends AbstractImageBuilder
 
   protected abstract void buildOnCanvas(G3MContext context, ICanvas canvas);
 
-  protected String getImageName(G3MContext context)
-  {
-    final IStringUtils su = context.getStringUtils();
-  
-    return "_CanvasImageBuilder_" + su.toString(_counter++);
-  }
+  protected abstract String getImageName(G3MContext context);
 
+
+  //long long CanvasImageBuilder::_counter = 0;
+  
+  //std::string CanvasImageBuilder::getImageName(const G3MContext* context) const {
+  //  const IStringUtils* su = context->getStringUtils();
+  //
+  //  return "_CanvasImageBuilder_" + su->toString(_counter++);
+  //}
+  
   public final void build(G3MContext context, IImageBuilderListener listener, boolean deleteListener)
   {
     ICanvas canvas = getCanvas(context);

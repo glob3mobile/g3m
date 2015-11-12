@@ -417,7 +417,7 @@ public:
   }
 
   SurfaceElevationProvider* getSurfaceElevationProvider() {
-    return (_elevationDataProvider == NULL) ? NULL : this;
+    return this;
   }
 
   PlanetRenderer* getPlanetRenderer() {
