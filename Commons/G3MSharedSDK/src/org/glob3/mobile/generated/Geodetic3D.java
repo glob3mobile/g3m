@@ -33,7 +33,11 @@ public class Geodetic3D
   public static Geodetic3D linearInterpolation(Geodetic3D from, Geodetic3D to, double alpha)
   {
     return new Geodetic3D(Angle.linearInterpolation(from._latitude, to._latitude, alpha), Angle.linearInterpolation(from._longitude, to._longitude, alpha), IMathUtils.instance().linearInterpolation(from._height, to._height, alpha));
-                      //((1.0 - alpha) * from._height) + (alpha * to._height)
+  }
+
+  public static Geodetic3D linearInterpolationFromDegrees(double fromLatitudeDegrees, double fromLongitudeDegrees, double fromHeight, double toLatitudeDegrees, double toLongitudeDegrees, double toHeight, double alpha)
+  {
+    return new Geodetic3D(Angle.linearInterpolationFromDegrees(fromLatitudeDegrees, toLatitudeDegrees, alpha), Angle.linearInterpolationFromDegrees(fromLongitudeDegrees, toLongitudeDegrees, alpha), IMathUtils.instance().linearInterpolation(fromHeight, toHeight, alpha));
   }
 
   public Geodetic3D(Angle latitude, Angle longitude, double height)
