@@ -112,6 +112,11 @@ public class Angle
     return Angle.fromRadians((1.0-alpha) * from._radians + alpha * to._radians);
   }
 
+  public static Angle cosineInterpolation(Angle from, Angle to, double alpha)
+  {
+    return Angle.fromRadians(IMathUtils.instance().cosineInterpolation(from._radians, to._radians, alpha));
+  }
+
   public static Angle linearInterpolationFromRadians(double fromRadians, double toRadians, double alpha)
   {
     return Angle.fromRadians((1.0-alpha) * fromRadians + alpha * toRadians);
