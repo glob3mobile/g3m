@@ -34,19 +34,16 @@ public class CompositeElevationData extends ElevationData
      _hasNoData = data.hasNoData();
      _interpolator = new BilinearInterpolator();
     _data.add(data);
+    data._retain();
   }
 
   public final void addElevationData(ElevationData data)
   {
-  //  ElevationData* d0 = _data[0];
   
     if ((data.getExtentWidth() != _width) || (data.getExtentHeight() != _height))
     {
       ILogger.instance().logError("Extents don't match.");
     }
-  
-  //  Sector s = data->getSector();
-  //  Sector s2 = d0->getSector();
   
     if (!data.getSector().isEquals(getSector()))
     {
