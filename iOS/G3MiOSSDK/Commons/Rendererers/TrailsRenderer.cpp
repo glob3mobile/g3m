@@ -25,8 +25,8 @@ TrailSegment::~TrailSegment() {
 
   delete _mesh;
 
-  const int positionsSize = _positions.size();
-  for (int i = 0; i < positionsSize; i++) {
+  const size_t positionsSize = _positions.size();
+  for (size_t i = 0; i < positionsSize; i++) {
     const Geodetic3D* position = _positions[i];
     delete position;
   }
@@ -42,7 +42,7 @@ Mesh* TrailSegment::getMesh(const Planet* planet) {
 }
 
 Mesh* TrailSegment::createMesh(const Planet* planet) {
-  const int positionsSize = _positions.size();
+  const size_t positionsSize = _positions.size();
 
   if (positionsSize < 2) {
     return NULL;
@@ -82,7 +82,7 @@ Mesh* TrailSegment::createMesh(const Planet* planet) {
   }
 
   if (_nextSegmentFirstPosition != NULL) {
-    const int lastPositionIndex = positionsSize - 1;
+    const size_t lastPositionIndex = positionsSize - 1;
     const Geodetic3D* lastPosition = _positions[lastPositionIndex];
     const double angleInRadians =  Geodetic2D::bearingInRadians(lastPosition->_latitude,
                                                                 lastPosition->_longitude,
@@ -131,8 +131,8 @@ Mesh* TrailSegment::createMesh(const Planet* planet) {
 }
 
 void Trail::clear() {
-  const int segmentsSize = _segments.size();
-  for (int i = 0; i < segmentsSize; i++) {
+  const size_t segmentsSize = _segments.size();
+  for (size_t i = 0; i < segmentsSize; i++) {
     TrailSegment* segment = _segments[i];
     delete segment;
   }
@@ -175,8 +175,8 @@ void Trail::addPosition(const Angle& latitude,
 }
 
 Trail::~Trail() {
-  const int segmentsSize = _segments.size();
-  for (int i = 0; i < segmentsSize; i++) {
+  const size_t segmentsSize = _segments.size();
+  for (size_t i = 0; i < segmentsSize; i++) {
     TrailSegment* segment = _segments[i];
     delete segment;
   }
@@ -221,8 +221,8 @@ void Trail::render(const G3MRenderContext* rc,
                    const Frustum* frustum,
                    const GLState* state) {
   if (_visible) {
-    const int segmentsSize = _segments.size();
-    for (int i = 0; i < segmentsSize; i++) {
+    const size_t segmentsSize = _segments.size();
+    for (size_t i = 0; i < segmentsSize; i++) {
       TrailSegment* segment = _segments[i];
       segment->render(rc, frustum, state);
     }
@@ -232,8 +232,8 @@ void Trail::render(const G3MRenderContext* rc,
 #pragma mark TrailsRenderer
 
 TrailsRenderer::~TrailsRenderer() {
-  const int trailsCount = _trails.size();
-  for (int i = 0; i < trailsCount; i++) {
+  const size_t trailsCount = _trails.size();
+  for (size_t i = 0; i < trailsCount; i++) {
     Trail* trail = _trails[i];
     delete trail;
   }
@@ -249,10 +249,10 @@ void TrailsRenderer::addTrail(Trail* trail) {
 }
 
 void TrailsRenderer::render(const G3MRenderContext* rc, GLState* glState) {
-  const int trailsCount = _trails.size();
+  const size_t trailsCount = _trails.size();
   const Frustum* frustum = rc->getCurrentCamera()->getFrustumInModelCoordinates();
   updateGLState(rc);
-  for (int i = 0; i < trailsCount; i++) {
+  for (size_t i = 0; i < trailsCount; i++) {
     Trail* trail = _trails[i];
     if (trail != NULL) {
       trail->render(rc, frustum, _glState);

@@ -76,9 +76,9 @@ _showNormals(false)
 }
 
 BoundingVolume* AbstractMesh::computeBoundingVolume() const {
-  const int vertexCount = getVertexCount();
+  const size_t vertexCount = getVertexCount();
 
-  if (vertexCount <= 0) {
+  if (vertexCount == 0) {
     return NULL;
   }
 
@@ -118,14 +118,14 @@ BoundingVolume* AbstractMesh::getBoundingVolume() const {
   return _boundingVolume;
 }
 
-const Vector3D AbstractMesh::getVertex(int i) const {
-  const int p = i * 3;
+const Vector3D AbstractMesh::getVertex(size_t i) const {
+  const size_t p = i * 3;
   return Vector3D(_vertices->get(p  ) + _center._x,
                   _vertices->get(p+1) + _center._y,
                   _vertices->get(p+2) + _center._z);
 }
 
-int AbstractMesh::getVertexCount() const {
+size_t AbstractMesh::getVertexCount() const {
   return _vertices->size() / 3;
 }
 
@@ -232,8 +232,8 @@ Mesh* AbstractMesh::createNormalsMesh() const {
   double normalsSize = sphere->getRadius() / 100.0;
   delete sphere;
 
-  const int size = _vertices->size();
-  for (int i = 0; i < size; i+=3) {
+  const size_t size = _vertices->size();
+  for (size_t i = 0; i < size; i+=3) {
     const Vector3D v(_vertices->get(i), _vertices->get(i+1), _vertices->get(i+2));
     const Vector3D n(_normals->get(i),  _normals->get(i+1),  _normals->get(i+2));
 

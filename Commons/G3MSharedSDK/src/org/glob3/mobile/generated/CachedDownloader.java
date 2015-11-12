@@ -193,11 +193,11 @@ public class CachedDownloader extends IDownloader
   {
     IStringBuilder isb = IStringBuilder.newStringBuilder();
     isb.addString("CachedDownloader(cache hits=");
-    isb.addInt(_cacheHitsCounter);
+    isb.addLong(_cacheHitsCounter);
     isb.addString("/");
-    isb.addInt(_requestsCounter);
+    isb.addLong(_requestsCounter);
     isb.addString(", saves=");
-    isb.addInt(_savesCounter);
+    isb.addLong(_savesCounter);
     isb.addString(", downloader=");
     isb.addString(_downloader.statistics());
     final String s = isb.getString();
