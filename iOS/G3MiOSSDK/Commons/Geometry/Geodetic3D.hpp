@@ -68,6 +68,15 @@ public:
                       );
   }
 
+  static Geodetic3D cosineInterpolation(const Geodetic3D& from,
+                                        const Geodetic3D& to,
+                                        double alpha) {
+    return Geodetic3D(Angle::cosineInterpolation(from._latitude,  to._latitude,  alpha),
+                      Angle::cosineInterpolation(from._longitude, to._longitude, alpha),
+                      IMathUtils::instance()->cosineInterpolation(from._height, to._height, alpha)
+                      );
+  }
+
   Geodetic3D(const Angle& latitude,
              const Angle& longitude,
              const double height) :

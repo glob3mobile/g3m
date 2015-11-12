@@ -106,6 +106,10 @@ public:
     return Angle::fromRadians( (1.0-alpha) * from._radians + alpha * to._radians );
   }
 
+  static Angle cosineInterpolation(const Angle& from,
+                                   const Angle& to,
+                                   double alpha);
+
   static Angle linearInterpolationFromRadians(const double fromRadians,
                                               const double toRadians,
                                               double alpha) {
