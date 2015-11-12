@@ -1,17 +1,17 @@
 //
-//  G3MScenarioWMS_DEMDemoScene.hpp
+//  G3MWMS_DEMDemoScene.hpp
 //  G3MApp
 //
 //  Created by Diego Gomez Deck on 11/20/13.
 //  Copyright (c) 2013 Igo Software SL. All rights reserved.
 //
 
-#ifndef __G3MApp__G3MScenarioWMS_DEMDemoScene__
-#define __G3MApp__G3MScenarioWMS_DEMDemoScene__
+#ifndef __G3MApp__G3MWMS_DEMDemoScene__
+#define __G3MApp__G3MWMS_DEMDemoScene__
 
 #include "G3MDemoScene.hpp"
 
-class G3MScenarioWMS_DEMDemoScene : public G3MDemoScene {
+class G3MWMS_DEMDemoScene : public G3MDemoScene {
 protected:
   void rawActivate(const G3MContext* context);
 
@@ -21,7 +21,7 @@ protected:
   }
 
 public:
-  G3MScenarioWMS_DEMDemoScene(G3MDemoModel* model) :
+  G3MWMS_DEMDemoScene(G3MDemoModel* model) :
   G3MDemoScene(model, "WMS DEM", "", -1)
   {
   }
