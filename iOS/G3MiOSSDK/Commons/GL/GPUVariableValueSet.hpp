@@ -135,7 +135,7 @@ public:
   int getAttributesCode() const;
   
   bool hasCustomShader() const {
-    return !_customShaderName.empty();
+    return (_customShaderName.length() != 0);
   }
     
   void setCustomShaderName(const std::string& name) {
