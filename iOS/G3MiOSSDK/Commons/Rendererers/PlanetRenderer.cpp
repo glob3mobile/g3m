@@ -129,7 +129,7 @@ _texturizer(texturizer),
 _layerSet(layerSet),
 _tilesRenderParameters(tilesRenderParameters),
 _showStatistics(showStatistics),
-_firstLevelTilesJustCreated(false),
+//_firstLevelTilesJustCreated(false),
 _lastSplitTimer(NULL),
 _lastCamera(NULL),
 _firstRender(false),
@@ -223,7 +223,7 @@ PlanetRenderer::~PlanetRenderer() {
 
   delete _lastVisibleSector;
 
-  const int visibleSectorListenersCount = _visibleSectorListeners.size();
+  const size_t visibleSectorListenersCount = _visibleSectorListeners.size();
   for (int i = 0; i < visibleSectorListenersCount; i++) {
     VisibleSectorListenerEntry* entry = _visibleSectorListeners[i];
     delete entry;
@@ -243,7 +243,7 @@ PlanetRenderer::~PlanetRenderer() {
 }
 
 void PlanetRenderer::clearFirstLevelTiles() {
-  const int firstLevelTilesCount = _firstLevelTiles.size();
+  const size_t firstLevelTilesCount = _firstLevelTiles.size();
   for (int i = 0; i < firstLevelTilesCount; i++) {
     Tile* tile = _firstLevelTiles[i];
     tile->toBeDeleted(_texturizer, _elevationDataProvider, _tilesStoppedRendering);
@@ -341,7 +341,7 @@ void PlanetRenderer::createFirstLevelTiles(std::vector<Tile*>& firstLevelTiles,
                                                         splitLongitude,
                                                         false);
 
-    const int childrenSize = children->size();
+    const size_t childrenSize = children->size();
     for (int i = 0; i < childrenSize; i++) {
       Tile* child = children->at(i);
       createFirstLevelTiles(firstLevelTiles, child, firstLevel);
@@ -413,7 +413,7 @@ void PlanetRenderer::createFirstLevelTiles(const G3MContext* context) {
   }
 
   if (parameters->_firstLevel > 0) {
-    const int topLevelTilesSize = topLevelTiles.size();
+    const size_t topLevelTilesSize = topLevelTiles.size();
     for (int i = 0; i < topLevelTilesSize; i++) {
       Tile* tile = topLevelTiles[i];
       createFirstLevelTiles(_firstLevelTiles, tile, parameters->_firstLevel);
@@ -427,7 +427,7 @@ void PlanetRenderer::createFirstLevelTiles(const G3MContext* context) {
     context->getLogger()->logWarning("%d tiles are many for the first level. We recommend a number of those less than 64. You can review some parameters (Render Sector and/or First Level) to reduce the number of tiles.", _firstLevelTiles.size());
   }
 
-  _firstLevelTilesJustCreated = true;
+//  _firstLevelTilesJustCreated = true;
 }
 
 void PlanetRenderer::initialize(const G3MContext* context) {
@@ -484,9 +484,8 @@ RenderState PlanetRenderer::getRenderState(const G3MRenderContext* rc) {
     return texturizerRenderState;
   }
   
-#warning CALLING THIS UNTIL TEXTURE AND ELEV. ARE SOLVED AS TEXTURE IS ASKED AFTER ED IS RESOLVED
+  //CALLING prepareForFullRendering UNTIL ALL TEXTURE AND ELEV. ARE SOLVED AS TEXTURE IS REQUESTED AFTER ED IS RESOLVED
   if (!_allFirstLevelTilesAreTextureSolved) {
-    _firstLevelTilesJustCreated = false;
 
     const size_t firstLevelTilesCount = _firstLevelTiles.size();
 
@@ -516,11 +515,10 @@ RenderState PlanetRenderer::getRenderState(const G3MRenderContext* rc) {
   }
 
   if (_tilesRenderParameters->_forceFirstLevelTilesRenderOnStart && !_allFirstLevelTilesAreTextureSolved) {
-    const int firstLevelTilesCount = _firstLevelTiles.size();
-    for (int i = 0; i < firstLevelTilesCount; i++) {
+    const size_t firstLevelTilesCount = _firstLevelTiles.size();
+    for (size_t i = 0; i < firstLevelTilesCount; i++) {
       Tile* tile = _firstLevelTiles[i];
-      if (!tile->isTextureSolved() ||
-          !tile->isElevationDataSolved()) {
+      if (!tile->isTextureSolved()) {
         return RenderState::busy();
       }
     }

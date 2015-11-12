@@ -232,7 +232,7 @@ private:
 #endif
 
   std::vector<Tile*> _firstLevelTiles;
-  bool               _firstLevelTilesJustCreated;
+//  bool               _firstLevelTilesJustCreated;
   bool               _allFirstLevelTilesAreTextureSolved;
 
   ITimer* _lastSplitTimer; // timer to start every time a tile get splitted into subtiles
