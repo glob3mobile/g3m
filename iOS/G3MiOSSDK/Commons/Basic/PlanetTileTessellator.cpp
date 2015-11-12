@@ -403,7 +403,7 @@ double PlanetTileTessellator::createSurface(const Sector& tileSector,
   return minElevation;
 }
 
-
+#warning TODO also update skirts for tiles below height 0
 void PlanetTileTessellator::updateSurface(Mesh* mesh,
                                           Tile* tile,
                                           Vector2I rawResolution,
@@ -412,7 +412,6 @@ void PlanetTileTessellator::updateSurface(Mesh* mesh,
                                           float verticalExaggeration,
                                           TileTessellatorMeshData& data) const {
   
-  const Sector tileSector = tile->_sector;
   const Sector meshSector = getRenderedSectorForTile(tile); // tile->getSector();
   const Vector2I meshResolution = calculateResolution(rawResolution, tile, meshSector);
   
