@@ -187,8 +187,6 @@ const long long WMSBilElevationDataProvider::requestElevationData(const Sector& 
   
   
   isb->addString("&BBOX=");
-  isb->addDouble(sector._lower._longitude._degrees);
-  isb->addString(",");
   isb->addDouble(sector._lower._latitude._degrees);
   isb->addString(",");
   isb->addDouble(sector._upper._longitude._degrees);
