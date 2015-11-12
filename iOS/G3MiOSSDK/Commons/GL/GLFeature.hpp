@@ -33,7 +33,8 @@ enum GLFeatureID{
   GLF_DIRECTION_LIGTH,
   GLF_VERTEX_NORMAL,
   GLF_MODEL_VIEW,
-  GLF_BLENDING_MODE
+  GLF_BLENDING_MODE,
+  GLF_CUSTOM_SHADER
 };
 
 class GLFeature: public RCObject {
@@ -578,5 +579,25 @@ public:
   void applyOnGlobalGLState(GLGlobalState* state) const {}
 };
 
+class CustomShaderGLFeature: public GLFeature {
+private:
+    const std::string _shaderName;
+    
+    ~CustomShaderGLFeature() {
+#ifdef JAVA_CODE
+        super.dispose();
+#endif
+    }
+    
+public:
+    CustomShaderGLFeature(const std::string shaderName) :
+    GLFeature(NO_GROUP, GLF_CUSTOM_SHADER),
+    _shaderName(shaderName)
+    {
+        _values->setCustomShaderName(shaderName);
+    }
+
+    void applyOnGlobalGLState(GLGlobalState* state) const {}
+};
 
 #endif

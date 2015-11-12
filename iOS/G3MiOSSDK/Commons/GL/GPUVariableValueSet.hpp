@@ -21,6 +21,7 @@ private:
 
   mutable int _uniformsCode;
   mutable int _attributeCode;
+  mutable std::string _customShaderName;
 
   GPUVariableValueSet(const GPUVariableValueSet& that);
   GPUVariableValueSet& operator=(const GPUVariableValueSet& that);
@@ -133,6 +134,17 @@ public:
 
   int getAttributesCode() const;
   
+  bool hasCustomShader() const {
+    return !_customShaderName.empty();
+  }
+    
+  void setCustomShaderName(const std::string& name) {
+    _customShaderName = name;
+  }
+    
+  const std::string& getCustomShaderName() const {
+    return _customShaderName;
+  }
 };
 
 #endif

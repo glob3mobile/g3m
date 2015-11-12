@@ -41,6 +41,26 @@ GPUProgram* GPUProgramManager::getProgram(GL* gl, int uniformsCode, int attribut
   return p;
 }
 
+GPUProgram* GPUProgramManager::getProgram(GL* gl, const std::string& name) {
+    GPUProgram* p = getCompiledProgram(name);
+    if (p == NULL) {
+        p = compileProgramWithName(gl, name);
+        if (p == NULL) {
+            ILogger::instance()->logError("Problem at compiling program.");
+            return NULL;
+        }
+
+        if (p->getName() != name) {
+            //#warning GIVE MORE DETAIL
+            ILogger::instance()->logError("New compiled program does not match GL state.");
+        }
+    }
+    
+    p->addReference();
+    
+    return p;
+}
+
 GPUProgram* GPUProgramManager::getNewProgram(GL* gl, int uniformsCode, int attributesCode) {
 
   const bool texture     = GPUVariable::hasAttribute(attributesCode, TEXTURE_COORDS);

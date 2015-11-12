@@ -37,6 +37,8 @@ public:
 
   GPUProgram* getProgram(GL* gl, int uniformsCode, int attributesCode);
 
+  GPUProgram* getProgram(GL* gl, const std::string& name);
+    
   void removeUnused();
 };
 

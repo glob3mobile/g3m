@@ -111,10 +111,13 @@ void GLState::applyOnGPU(GL* gl, GPUProgramManager& progManager) const {
 
     GLFeatureGroup::applyToAllGroups(*accumulatedFeatures, *_valuesSet, *_globalState);
 
-    const int uniformsCode   = _valuesSet->getUniformsCode();
-    const int attributesCode = _valuesSet->getAttributesCode();
-
-    _linkedProgram = progManager.getProgram(gl, uniformsCode, attributesCode); //GET RETAINED REFERENCE
+    if (_valuesSet->hasCustomShader()) {
+        _linkedProgram = progManager.getProgram(gl, _valuesSet->getCustomShaderName());
+    } else {
+        const int uniformsCode   = _valuesSet->getUniformsCode();
+        const int attributesCode = _valuesSet->getAttributesCode();
+        _linkedProgram = progManager.getProgram(gl, uniformsCode, attributesCode); //GET RETAINED REFERENCE
+    }
   }
 
   if (_valuesSet == NULL || _globalState == NULL) {
