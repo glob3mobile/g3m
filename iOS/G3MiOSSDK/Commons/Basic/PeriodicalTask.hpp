@@ -49,7 +49,7 @@ public:
   }
 
   void executeIfNecessary(const G3MContext* context) {
-    long long now = getTimer()->now()._milliseconds;
+    long long now = getTimer()->nowInMilliseconds();
 
     long long interval = now - _lastExecutionMS;
 

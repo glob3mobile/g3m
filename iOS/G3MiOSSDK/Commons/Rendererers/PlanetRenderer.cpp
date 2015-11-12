@@ -79,7 +79,7 @@ public:
       }
     }
     else {
-      const long long now = getTimer()->now()._milliseconds;
+      const long long now = getTimer()->nowInMilliseconds();
 
       if ( (_lastSector == NULL) || (!_lastSector->isEquals(*visibleSector)) ) {
         delete _lastSector;
