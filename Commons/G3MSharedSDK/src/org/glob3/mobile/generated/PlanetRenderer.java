@@ -20,7 +20,7 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
   private Camera     _lastCamera;
 
   private java.util.ArrayList<Tile> _firstLevelTiles = new java.util.ArrayList<Tile>();
-  private boolean _firstLevelTilesJustCreated;
+//  bool               _firstLevelTilesJustCreated;
   private boolean _allFirstLevelTilesAreTextureSolved;
 
   private ITimer _lastSplitTimer; // timer to start every time a tile get splitted into subtiles
@@ -119,7 +119,7 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
       context.getLogger().logWarning("%d tiles are many for the first level. We recommend a number of those less than 64. You can review some parameters (Render Sector and/or First Level) to reduce the number of tiles.", _firstLevelTiles.size());
     }
   
-    _firstLevelTilesJustCreated = true;
+  //  _firstLevelTilesJustCreated = true;
   }
   private void createFirstLevelTiles(java.util.ArrayList<Tile> firstLevelTiles, Tile tile, int firstLevel)
   {
@@ -345,6 +345,7 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
   private java.util.ArrayList<Tile> _toVisitInNextIteration = new java.util.ArrayList<Tile>();
 
   public PlanetRenderer(TileTessellator tessellator, ElevationDataProvider elevationDataProvider, boolean ownsElevationDataProvider, float verticalExaggeration, TileTexturizer texturizer, LayerSet layerSet, TilesRenderParameters tilesRenderParameters, boolean showStatistics, long tileDownloadPriority, Sector renderedSector, boolean renderTileMeshes, boolean logTilesPetitions, TileRenderingListener tileRenderingListener, ChangedRendererInfoListener changedInfoListener, TouchEventType touchEventTypeOfTerrainTouchListener)
+  //_firstLevelTilesJustCreated(false),
   {
      _tessellator = tessellator;
      _elevationDataProvider = elevationDataProvider;
@@ -354,7 +355,6 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
      _layerSet = layerSet;
      _tilesRenderParameters = tilesRenderParameters;
      _showStatistics = showStatistics;
-     _firstLevelTilesJustCreated = false;
      _lastSplitTimer = null;
      _lastCamera = null;
      _firstRender = false;
@@ -683,11 +683,9 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
       return texturizerRenderState;
     }
   
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning CALLING THIS UNTIL TEXTURE AND ELEV.ARE SOLVED AS TEXTURE IS ASKED AFTER ED IS RESOLVED
+    //CALLING prepareForFullRendering UNTIL ALL TEXTURE AND ELEV. ARE SOLVED AS TEXTURE IS REQUESTED AFTER ED IS RESOLVED
     if (!_allFirstLevelTilesAreTextureSolved)
     {
-      _firstLevelTilesJustCreated = false;
   
       final int firstLevelTilesCount = _firstLevelTiles.size();
   
@@ -715,7 +713,7 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
       for (int i = 0; i < firstLevelTilesCount; i++)
       {
         Tile tile = _firstLevelTiles.get(i);
-        if (!tile.isTextureSolved() || !tile.isElevationDataSolved())
+        if (!tile.isTextureSolved())
         {
           return RenderState.busy();
         }
