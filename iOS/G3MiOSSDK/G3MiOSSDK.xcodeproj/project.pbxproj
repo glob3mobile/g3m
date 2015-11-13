@@ -511,6 +511,8 @@
 		D8B8CE8F178D6C1C00EE1B97 /* GLFeatureGroup.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8B8CE8A178D63C400EE1B97 /* GLFeatureGroup.hpp */; };
 		D8B8CE90178D6C9600EE1B97 /* GLFeature.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8B8CE87178D636000EE1B97 /* GLFeature.hpp */; };
 		D8B8CE91178D6DCF00EE1B97 /* GPUVariableValueSet.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8B8CE8D178D645F00EE1B97 /* GPUVariableValueSet.hpp */; };
+		D8C0379B1BF627E000C8FF45 /* IDeviceAttitude.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8C037961BF627E000C8FF45 /* IDeviceAttitude.cpp */; };
+		D8C0379C1BF627E000C8FF45 /* IDeviceLocation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8C037981BF627E000C8FF45 /* IDeviceLocation.cpp */; };
 		D8C486D017E205E7000EAFC9 /* InitialCameraPositionProvider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8C486CE17E205E7000EAFC9 /* InitialCameraPositionProvider.cpp */; };
 		D8C486D117E20A2E000EAFC9 /* InitialCameraPositionProvider.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8C486CF17E205E7000EAFC9 /* InitialCameraPositionProvider.hpp */; };
 		D8D347BA15E5133B00EDB394 /* IStringBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8D347B915E5133B00EDB394 /* IStringBuilder.cpp */; };
@@ -1802,6 +1804,11 @@
 		D8B8CE8A178D63C400EE1B97 /* GLFeatureGroup.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; path = GLFeatureGroup.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		D8B8CE8C178D645F00EE1B97 /* GPUVariableValueSet.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GPUVariableValueSet.cpp; sourceTree = "<group>"; };
 		D8B8CE8D178D645F00EE1B97 /* GPUVariableValueSet.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GPUVariableValueSet.hpp; sourceTree = "<group>"; };
+		D8C037961BF627E000C8FF45 /* IDeviceAttitude.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = IDeviceAttitude.cpp; sourceTree = "<group>"; };
+		D8C037971BF627E000C8FF45 /* IDeviceAttitude.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = IDeviceAttitude.hpp; sourceTree = "<group>"; };
+		D8C037981BF627E000C8FF45 /* IDeviceLocation.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = IDeviceLocation.cpp; sourceTree = "<group>"; };
+		D8C037991BF627E000C8FF45 /* IDeviceLocation.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = IDeviceLocation.hpp; sourceTree = "<group>"; };
+		D8C0379A1BF627E000C8FF45 /* ILocationModifier.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ILocationModifier.hpp; sourceTree = "<group>"; };
 		D8C3BA2E1946174D003F6642 /* Billboard_TransformedTexCoor.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = Billboard_TransformedTexCoor.vsh; sourceTree = "<group>"; };
 		D8C3BA2F1946174D003F6642 /* Billboard_TransformedTexCoor.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = Billboard_TransformedTexCoor.fsh; sourceTree = "<group>"; };
 		D8C486CE17E205E7000EAFC9 /* InitialCameraPositionProvider.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = InitialCameraPositionProvider.cpp; path = Commons/Basic/InitialCameraPositionProvider.cpp; sourceTree = "<group>"; };
@@ -2276,6 +2283,11 @@
 		383BD38B1577EE040012AC53 /* Interfaces */ = {
 			isa = PBXGroup;
 			children = (
+				D8C037961BF627E000C8FF45 /* IDeviceAttitude.cpp */,
+				D8C037971BF627E000C8FF45 /* IDeviceAttitude.hpp */,
+				D8C037981BF627E000C8FF45 /* IDeviceLocation.cpp */,
+				D8C037991BF627E000C8FF45 /* IDeviceLocation.hpp */,
+				D8C0379A1BF627E000C8FF45 /* ILocationModifier.hpp */,
 				CF9CD89815DBE2C800C6FD7E /* CachedDownloader.cpp */,
 				CF9CD89915DBE2C800C6FD7E /* CachedDownloader.hpp */,
 				D8E17DD515FE2ABF00C980E6 /* IByteBuffer.hpp */,
@@ -3159,6 +3171,7 @@
 				CF6D724C171861770043C74B /* ColumnCanvasElement.cpp in Sources */,
 				D89FBD7D1725444800FFA541 /* MeshShape.cpp in Sources */,
 				D89D9CCC172E95370058CA9D /* TileElevationDataRequest.cpp in Sources */,
+				D8C0379C1BF627E000C8FF45 /* IDeviceLocation.cpp in Sources */,
 				D89D9CCD172E95370058CA9D /* CompositeElevationData.cpp in Sources */,
 				D89D9CCE172E95370058CA9D /* CompositeElevationDataProvider.cpp in Sources */,
 				441C28BD1733D413007DC83F /* ShapeFullPositionEffect.cpp in Sources */,
@@ -3228,6 +3241,7 @@
 				CFAA530217AAFDCF002A9204 /* DecimatedSubviewElevationData.cpp in Sources */,
 				CFADF22318FF1CDB00360565 /* DefaultTileTexturizer.cpp in Sources */,
 				CFAA530517AAFE3D002A9204 /* InterpolatedSubviewElevationData.cpp in Sources */,
+				D8C0379B1BF627E000C8FF45 /* IDeviceAttitude.cpp in Sources */,
 				CFAB754C17AC455300852FA7 /* SurfaceElevationProvider.cpp in Sources */,
 				D8F0C70B17B52702002A89E0 /* GenericQuadTree.cpp in Sources */,
 				CF3C992D17C2713300937BD3 /* NSString_CppAdditions.mm in Sources */,
