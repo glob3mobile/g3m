@@ -52,7 +52,28 @@ public:
     return Geodetic3D(Angle::linearInterpolation(from._latitude,  to._latitude,  alpha),
                       Angle::linearInterpolation(from._longitude, to._longitude, alpha),
                       IMathUtils::instance()->linearInterpolation(from._height, to._height, alpha)
-                      //((1.0 - alpha) * from._height) + (alpha * to._height)
+                      );
+  }
+
+  static Geodetic3D linearInterpolationFromDegrees(const double fromLatitudeDegrees,
+                                                   const double fromLongitudeDegrees,
+                                                   const double fromHeight,
+                                                   const double toLatitudeDegrees,
+                                                   const double toLongitudeDegrees,
+                                                   const double toHeight,
+                                                   double alpha) {
+    return Geodetic3D(Angle::linearInterpolationFromDegrees(fromLatitudeDegrees,  toLatitudeDegrees,  alpha),
+                      Angle::linearInterpolationFromDegrees(fromLongitudeDegrees, toLongitudeDegrees, alpha),
+                      IMathUtils::instance()->linearInterpolation(fromHeight, toHeight, alpha)
+                      );
+  }
+
+  static Geodetic3D cosineInterpolation(const Geodetic3D& from,
+                                        const Geodetic3D& to,
+                                        double alpha) {
+    return Geodetic3D(Angle::cosineInterpolation(from._latitude,  to._latitude,  alpha),
+                      Angle::cosineInterpolation(from._longitude, to._longitude, alpha),
+                      IMathUtils::instance()->cosineInterpolation(from._height, to._height, alpha)
                       );
   }
 
