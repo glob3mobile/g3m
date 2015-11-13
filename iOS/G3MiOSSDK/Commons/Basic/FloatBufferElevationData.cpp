@@ -28,9 +28,9 @@ _buffer(buffer)
     ILogger::instance()->logError("Invalid buffer size");
   }
 
-  const int size = buffer->size();
+  const size_t size = buffer->size();
   _hasNoData = false;
-  for (int i = 0; i < size; i++) {
+  for (size_t i = 0; i < size; i++) {
     if (buffer->get(i) == NO_DATA_VALUE) {
       _hasNoData = true;
       break;
@@ -86,8 +86,8 @@ Vector3D FloatBufferElevationData::getMinMaxAverageElevations() const {
   float maxHeight = mu->minFloat();
   double sumHeight = 0.0;
 
-  const int bufferSize = _buffer->size();
-  for (int i = 0; i < bufferSize; i++) {
+  const size_t bufferSize = _buffer->size();
+  for (size_t i = 0; i < bufferSize; i++) {
     const float height = _buffer->get(i);
     if (height != NO_DATA_VALUE) {
       if (height < minHeight) {

@@ -101,8 +101,8 @@ std::string StringUtils_iOS::rtrim(const std::string& string) const {
 
 bool StringUtils_iOS::endsWith(const std::string& string,
                                const std::string& suffix) const {
-  const int stringLength = string.length();
-  const int suffixLength = suffix.length();
+  const size_t stringLength = string.length();
+  const size_t suffixLength = suffix.length();
   if (stringLength >= suffixLength) {
     return (string.compare(stringLength - suffixLength, suffixLength, suffix) == 0);
   }

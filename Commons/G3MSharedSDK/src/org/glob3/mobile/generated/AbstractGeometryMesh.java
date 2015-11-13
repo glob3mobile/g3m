@@ -41,7 +41,7 @@ public abstract class AbstractGeometryMesh extends Mesh
   {
     final int vertexCount = getVertexCount();
   
-    if (vertexCount <= 0)
+    if (vertexCount == 0)
     {
       return null;
     }

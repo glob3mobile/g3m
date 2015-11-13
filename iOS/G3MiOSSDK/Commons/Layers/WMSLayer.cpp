@@ -394,11 +394,11 @@ URL WMSLayer::getFeatureInfoURL(const Geodetic2D& position,
 	}
 
   //If the server refer to itself as localhost...
-  int pos = req.find("localhost");
+  size_t pos = req.find("localhost");
   if (pos != -1) {
     req = req.substr(pos+9);
 
-    int pos2 = req.find("/", 8);
+    size_t pos2 = req.find("/", 8);
     std::string newHost = req.substr(0, pos2);
 
     req = newHost + req;

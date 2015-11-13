@@ -10,8 +10,8 @@
 
 
 QuadTree_Node::~QuadTree_Node() {
-  const int elementsSize = _elements.size();
-  for (int i = 0; i < elementsSize; i++) {
+  const size_t elementsSize = _elements.size();
+  for (size_t i = 0; i < elementsSize; i++) {
     delete _elements[i];
   }
 
@@ -106,8 +106,8 @@ bool QuadTree_Node::acceptVisitor(const Sector& sector,
     return false;
   }
 
-  const int elementsSize = _elements.size();
-  for (int i = 0; i < elementsSize; i++) {
+  const size_t elementsSize = _elements.size();
+  for (size_t i = 0; i < elementsSize; i++) {
     QuadTree_Element* element = _elements[i];
     if (element->_sector.touchesWith(sector)) {
       const bool abort = visitor.visitElement(element->_sector, element->_content);

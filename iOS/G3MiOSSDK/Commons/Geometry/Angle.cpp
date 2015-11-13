@@ -58,3 +58,11 @@ const std::string Angle::description() const {
   delete isb;
   return s;
 }
+
+Angle Angle::cosineInterpolation(const Angle& from,
+                                 const Angle& to,
+                                 double alpha) {
+  return Angle::fromRadians( IMathUtils::instance()->cosineInterpolation(from._radians,
+                                                                         to._radians,
+                                                                         alpha) );
+}

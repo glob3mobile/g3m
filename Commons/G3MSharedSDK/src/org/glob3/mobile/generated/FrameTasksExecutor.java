@@ -108,7 +108,7 @@ public class FrameTasksExecutor
       }
   
       isb.addString(" queued=");
-      isb.addInt(preRenderTasksSize);
+      isb.addLong(preRenderTasksSize);
   
       if (_stressed)
       {

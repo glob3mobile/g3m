@@ -36,8 +36,8 @@ public:
 
 
 Shape::~Shape() {
-  const int pendingEffectsCount = _pendingEffects.size();
-  for (int i = 0; i < pendingEffectsCount; i++) {
+  const size_t pendingEffectsCount = _pendingEffects.size();
+  for (size_t i = 0; i < pendingEffectsCount; i++) {
     ShapePendingEffect* pendingEffect = _pendingEffects[i];
     delete pendingEffect;
   }
@@ -100,10 +100,10 @@ void Shape::render(const G3MRenderContext* rc,
                    GLState* parentGLState,
                    bool renderNotReadyShapes) {
   if (renderNotReadyShapes || isReadyToRender(rc)) {
-    const int pendingEffectsCount = _pendingEffects.size();
+    const size_t pendingEffectsCount = _pendingEffects.size();
     if (pendingEffectsCount > 0) {
       EffectsScheduler* effectsScheduler = rc->getEffectsScheduler();
-      for (int i = 0; i < pendingEffectsCount; i++) {
+      for (size_t i = 0; i < pendingEffectsCount; i++) {
         ShapePendingEffect* pendingEffect = _pendingEffects[i];
         if (pendingEffect != NULL) {
           EffectTarget* target = pendingEffect->_targetIsCamera ? rc->getNextCamera()->getEffectTarget() : this;

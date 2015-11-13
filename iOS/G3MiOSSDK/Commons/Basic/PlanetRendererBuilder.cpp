@@ -48,8 +48,8 @@ PlanetRendererBuilder::~PlanetRendererBuilder() {
   delete _layerSet;
   delete _texturizer;
 
-  const int geoVectorLayersSize = _geoVectorLayers.size();
-  for (int i = 0; i < geoVectorLayersSize; i++) {
+  const size_t geoVectorLayersSize = _geoVectorLayers.size();
+  for (size_t i = 0; i < geoVectorLayersSize; i++) {
     GEOVectorLayer* geoVectorLayer = _geoVectorLayers[i];
     delete geoVectorLayer;
   }
@@ -344,8 +344,8 @@ TileRenderingListener* PlanetRendererBuilder::getTileRenderingListener() {
 PlanetRenderer* PlanetRendererBuilder::create() {
 
   LayerSet* layerSet = getLayerSet();
-  const int geoVectorLayersSize = _geoVectorLayers.size();
-  for (int i = 0; i < geoVectorLayersSize; i++) {
+  const size_t geoVectorLayersSize = _geoVectorLayers.size();
+  for (size_t i = 0; i < geoVectorLayersSize; i++) {
     GEOVectorLayer* geoVectorLayer = _geoVectorLayers[i];
     layerSet->addLayer(geoVectorLayer);
   }

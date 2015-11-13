@@ -129,6 +129,12 @@ public abstract class IMathUtils
     return (i1 < i2) ? i1 : i2;
   }
 
+  public final long min(long i1, long i2)
+  {
+    return (i1 < i2) ? i1 : i2;
+  }
+
+
   public abstract double max(double d1, double d2);
   public abstract float max(float f1, float f2);
 
@@ -162,6 +168,12 @@ public abstract class IMathUtils
   public double linearInterpolation(double from, double to, double alpha)
   {
     return from + ((to - from) * alpha);
+  }
+
+  public double cosineInterpolation(double from, double to, double alpha)
+  {
+    final double alpha2 = (1.0 - Math.cos(alpha *DefineConstants.PI)) / 2.0;
+    return (from * (1.0 - alpha2) + to * alpha2);
   }
 
   public float linearInterpolation(float from, float to, float alpha)
