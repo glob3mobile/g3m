@@ -41,8 +41,11 @@ void G3MWMS_DEMDemoScene::rawActivate(const G3MContext* context) {
 
   const Angle heading = Angle::fromDegrees(-43.474467);
   const Angle pitch = Angle::fromDegrees(-9.857420);
-
-  g3mWidget->setCameraPosition(position);
-  g3mWidget->setCameraHeading(heading);
-  g3mWidget->setCameraPitch(pitch);
+  
+  g3mWidget->setAnimatedCameraPosition(TimeInterval::fromSeconds(30),
+                                       position,
+                                       heading,
+                                       pitch,
+                                       false,
+                                       false);
 }
