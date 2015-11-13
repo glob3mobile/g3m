@@ -148,6 +148,8 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
       }
   
       children = null;
+  
+      tile.toBeDeleted(_texturizer, _elevationDataProvider, null);
       if (tile != null)
          tile.dispose();
     }
@@ -921,6 +923,14 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
   {
     if (_elevationDataProvider != elevationDataProvider)
     {
+  
+      final int size = _firstLevelTiles.size();
+      for (int i = 0; i < size; i++)
+      {
+        _firstLevelTiles.get(i).cancelAllElevationDataRequestOnSubtree();
+      }
+  
+  
       if (_ownsElevationDataProvider)
       {
         if (_elevationDataProvider != null)
