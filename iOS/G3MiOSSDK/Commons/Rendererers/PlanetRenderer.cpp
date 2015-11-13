@@ -348,6 +348,8 @@ void PlanetRenderer::createFirstLevelTiles(std::vector<Tile*>& firstLevelTiles,
     }
 
     delete children;
+    
+    tile->toBeDeleted(_texturizer, _elevationDataProvider, NULL);
     delete tile;
   }
 }

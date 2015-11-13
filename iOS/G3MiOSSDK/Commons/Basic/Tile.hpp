@@ -170,7 +170,9 @@ private:
   static std::string createTileId(int level,
                                   int row,
                                   int column);
-
+  
+  void cancelElevationDataRequest();
+  
 public:
   const Sector      _sector;
   const bool        _mercator;
