@@ -324,16 +324,18 @@ void SQLiteStorage_iOS::merge(const std::string &databasePath) {
     }
     
     
-    SQResultSet* rs = [readDB executeQuery:@"SELECT name, contents, expiration FROM buffer2"];
+    SQResultSet* rs = [readDB executeQuery:@"SELECT name, contents, expiration FROM image2"];
     NSLog(@"result %@ ",rs);
     while ([rs next]) {
       NSString* name = [rs stringColumnByIndex:0];
       NSData* nsData = [rs dataColumnByIndex: 1];
       double expirationIntervalInSeconds = [[rs stringColumnByIndex:2] doubleValue];
       
-      SQResultSet* sqrs = [_readDB executeQuery:@"SELECT expiration FROM buffer2 WHERE (name = ?)", name];
+      SQResultSet* sqrs = [_readDB executeQuery:@"SELECT expiration FROM image2 WHERE (name = ?)", name];
       if ([rs next]) {
         const double actualExpirationIntervalInSeconds = [[rs stringColumnByIndex:0] doubleValue];
+        printf("ExpirationIntervalInSeconds:\n\"%f\"\n\"%f\"\n", expirationIntervalInSeconds, actualExpirationIntervalInSeconds);
+
         expirationIntervalInSeconds = MAX(expirationIntervalInSeconds, actualExpirationIntervalInSeconds);
       }
       

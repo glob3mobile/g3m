@@ -312,48 +312,53 @@ public final class SQLiteStorage_Android
 
    @Override
    public void merge(final String databasePath) {
-      //TODO IMPORTANT FOR AEROGLOB3
-      /*
-      NSArray*  paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-      NSString* documentsDirectory = [paths objectAtIndex:0];
-      NSString* dbPath = [documentsDirectory stringByAppendingPathComponent: [NSString stringWithCppString: databasePath] ];
-      
-      
-      NSFileManager *fileManager = [NSFileManager defaultManager];
-      if ([fileManager fileExistsAtPath:dbPath]) {
-        SQDatabase* readDB = [SQDatabase databaseWithPath:dbPath];
-        if (!readDB) {
-          printf("Can't open read-database \"%s\"\n", [dbPath toCppString].c_str());
-        }
-        else {
-          [readDB openReadOnly];
-        }
-        
-        
-        SQResultSet* rs = [readDB executeQuery:@"SELECT name, contents, expiration FROM buffer2"];
-        NSLog(@"result %@ ",rs);
-        while ([rs next]) {
-          NSString* name = [rs stringColumnByIndex:0];
-          NSData* nsData = [rs dataColumnByIndex: 1];
-          double expirationIntervalInSeconds = [[rs stringColumnByIndex:2] doubleValue];
-          
-          SQResultSet* sqrs = [_readDB executeQuery:@"SELECT expiration FROM buffer2 WHERE (name = ?)", name];
-          if ([rs next]) {
-            const double actualExpirationIntervalInSeconds = [[rs stringColumnByIndex:0] doubleValue];
-            expirationIntervalInSeconds = MAX(expirationIntervalInSeconds, actualExpirationIntervalInSeconds);
-          }
-          
-          
-          [sqrs close];
-          
-          rawSave(@"buffer2", name, nsData, TimeInterval::fromSeconds((int)expirationIntervalInSeconds));
-        }
-        
-        
-        
-        [readDB close];
+      final File fromDataBase = new File(databasePath);
+      if (fromDataBase.exists()) {
+         final MySQLiteOpenHelper auxDbHelper = new MySQLiteOpenHelper(_androidContext, getPath());
+
+         final SQLiteDatabase auxReadDB = auxDbHelper.getReadableDatabase();
+
+         if (auxReadDB != null) {
+            final Cursor cursor = auxReadDB.query( //
+                     "image2", //
+                     new String[] { "name", "contents", "expiration" }, //
+                     "", //
+                     new String[] {}, //
+                     null, //
+                     null, //
+                     null);
+
+            if (cursor.moveToFirst()) {
+               do {
+                  final String name = cursor.getString(0);
+                  final byte[] data = cursor.getBlob(1);
+                  final String expirationS = cursor.getString(2);
+                  long expirationInterval = Long.parseLong(expirationS);
+
+
+                  final Cursor auxCursor = _readDB.query( //
+                           "image2", //
+                           COLUMNS, //
+                           SELECTION, //
+                           new String[] { name }, //
+                           null, //
+                           null, //
+                           null);
+                  if (auxCursor.moveToFirst()) {
+                     expirationInterval = Math.max(expirationInterval, Long.parseLong(auxCursor.getString(1)));
+                  }
+                  auxCursor.close();
+
+                  rawSave("image2", name, data, TimeInterval.fromSeconds(expirationInterval));
+               }
+               while (cursor.moveToNext());
+
+
+            }
+            cursor.close();
+            auxReadDB.close();
+         }
       }
-      */
    }
 
 
