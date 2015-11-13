@@ -17,19 +17,19 @@
 class TileElevationDataRequestListener : public IElevationDataListener {
 public:
   TileElevationDataRequest* _request;
-
+  
   TileElevationDataRequestListener(TileElevationDataRequest* request);
-
+  
   void onData(const Sector& sector,
               const Vector2I& resolution,
               ElevationData* elevationData);
-
+  
   void onError(const Sector& sector,
                const Vector2I& resolution);
-
+  
   void onCancel(const Sector& sector,
                 const Vector2I& resolution);
-
+  
   ~TileElevationDataRequestListener() {
   }
   
@@ -50,9 +50,12 @@ private:
   
   TileElevationDataRequestListener* _listener;
   
+  const long long _requestPriority;
+  
 public:
   TileElevationDataRequest(Tile* tile,
                            const Vector2I& resolution,
+                           long long requestPriority,
                            ElevationDataProvider* provider);
   
   ~TileElevationDataRequest() {

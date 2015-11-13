@@ -12,14 +12,16 @@
 
 TileElevationDataRequest::TileElevationDataRequest(Tile* tile,
                                                    const Vector2I& resolution,
+                                                   long long requestPriority,
                                                    ElevationDataProvider* provider) :
 _tile(tile),
 _resolution(resolution),
 _provider(provider),
 _requestID(-1),
-_listener(NULL)
+_listener(NULL),
+_requestPriority(requestPriority)
 {
-
+  
 }
 
 void TileElevationDataRequest::onData(const Sector& sector,
@@ -52,6 +54,7 @@ void TileElevationDataRequest::sendRequest() {
   _listener = new TileElevationDataRequestListener(this);
   _requestID = _provider->requestElevationData(_tile->_sector,
                                                _resolution,
+                                               _requestPriority,
                                                _listener, true);
 }
 

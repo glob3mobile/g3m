@@ -79,7 +79,8 @@ private:
                                   ElevationDataProvider* elevationDataProvider,
                                   const TileTessellator* tessellator,
                                   const LayerTilesRenderParameters* layerTilesRenderParameters,
-                                  const TilesRenderParameters* tilesRenderParameters);
+                                  const TilesRenderParameters* tilesRenderParameters,
+                                  long long elevationDataRequestPriority);
 
   Mesh* getDebugMesh(const G3MRenderContext* rc,
                      const TileTessellator* tessellator,
@@ -91,7 +92,8 @@ private:
                         const Sector* renderedSector,
                         const TileTessellator* tessellator,
                         const LayerTilesRenderParameters* layerTilesRenderParameters,
-                        const TilesRenderParameters* tilesRenderParameters);
+                        const TilesRenderParameters* tilesRenderParameters,
+                        long long elevationDataRequestPriority);
 
   bool _lastMeetsRenderCriteriaResult;
   double _lastMeetsRenderCriteriaTimeInMS;
@@ -116,7 +118,8 @@ private:
                         const TilesRenderParameters* tilesRenderParameters,
                         bool forceFullRender,
                         long long tileDownloadPriority,
-                        bool logTilesPetitions);
+                        bool logTilesPetitions,
+                        long long elevationDataRequestPriority);
 
   void debugRender(const G3MRenderContext* rc,
                    const GLState* glState,
@@ -163,7 +166,8 @@ private:
                                           ElevationDataProvider* elevationDataProvider,
                                           const TileTessellator* tessellator,
                                           const LayerTilesRenderParameters* layerTilesRenderParameters,
-                                          const TilesRenderParameters* tilesRenderParameters);
+                                          const TilesRenderParameters* tilesRenderParameters,
+                                          long long elevationDataRequestPriority);
 
   bool _rendered;
 
@@ -307,7 +311,8 @@ public:
                                const TileTessellator* tesselator,
                                const Vector2I& tileMeshResolution,
                                const Planet* planet,
-                               bool renderDebug);
+                               bool renderDebug,
+                               long long requestPriority);
 
   void ancestorChangedElevationData(Tile* ancestor);
 

@@ -101,6 +101,7 @@ void WMSBilElevationDataProvider::initialize(const G3MContext* context) {
 
 const long long WMSBilElevationDataProvider::requestElevationData(const Sector& sector,
                                                                   const Vector2I& extent,
+                                                                  long long requestPriority,
                                                                   IElevationDataListener* listener,
                                                                   bool autodeleteListener) {
   if (_downloader == NULL) {

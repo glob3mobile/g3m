@@ -62,12 +62,14 @@ std::vector<ElevationDataProvider*> CompositeElevationDataProvider::getProviders
 
 const long long CompositeElevationDataProvider::requestElevationData(const Sector& sector,
                                                                      const Vector2I& extent,
+                                                                     long long requestPriority,
                                                                      IElevationDataListener* listener,
                                                                      bool autodeleteListener) {
 
   CompositeElevationDataProvider_Request* req = new CompositeElevationDataProvider_Request(this,
                                                                                            sector,
                                                                                            extent,
+                                                                                           requestPriority,
                                                                                            listener,
                                                                                            autodeleteListener);
   _currentID++;
@@ -173,6 +175,7 @@ CompositeElevationDataProvider::CompositeElevationDataProvider_Request::
 CompositeElevationDataProvider_Request(CompositeElevationDataProvider* provider,
                                        const Sector& sector,
                                        const Vector2I &resolution,
+                                       long long requestPriority,
                                        IElevationDataListener *listener,
                                        bool autodelete):
 _providers(provider->getProviders(sector)),
@@ -182,7 +185,8 @@ _listener(listener),
 _autodelete(autodelete),
 _compProvider(provider),
 _compData(NULL),
-_currentStep(NULL) {
+_currentStep(NULL),
+_requestPriority(requestPriority) {
 }
 
 ElevationDataProvider* CompositeElevationDataProvider::
@@ -231,7 +235,7 @@ bool CompositeElevationDataProvider::CompositeElevationDataProvider_Request::lau
   if (_currentProvider != NULL) {
     _currentStep = new CompositeElevationDataProvider_RequestStepListener(this);
 
-    _currentID = _currentProvider->requestElevationData(_sector, _resolution, _currentStep, true);
+    _currentID = _currentProvider->requestElevationData(_sector, _resolution,  _requestPriority, _currentStep, true);
 
     return true;
   }
