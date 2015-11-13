@@ -25,33 +25,35 @@ private:
   const std::string _layerName;
   Sector            _sector;
   const double      _deltaHeight;
-
+  
 public:
   WMSBilElevationDataProvider(const URL& url,
-                               const std::string& layerName,
-                               const Sector& sector,
-                               double deltaHeight) :
+                              const std::string& layerName,
+                              const Sector& sector,
+                              double deltaHeight) :
   _url(url),
   _sector(sector),
   _downloader(NULL),
   _layerName(layerName),
   _deltaHeight(deltaHeight)
   {
-
+    
   }
-
+  
   bool isReadyToRender(const G3MRenderContext* rc) {
     return true;
   }
-
+  
   void initialize(const G3MContext* context);
-
+  
   const long long requestElevationData(const Sector& sector,
                                        const Vector2I& extent,
                                        long long requestPriority,
                                        IElevationDataListener* listener,
                                        bool autodeleteListener);
-
+  
+  std::string requestStringPath(const Sector& sector, const Vector2I& extent);
+  
   void cancelRequest(const long long requestId);
   
   std::vector<const Sector*> getSectors() const {
@@ -61,10 +63,10 @@ public:
   }
   
   const Vector2I getMinResolution() const {
-//    int WORKING_JM;
+    //    int WORKING_JM;
     return Vector2I::zero();
   }
-
+  
 };
 
 #endif
