@@ -32,7 +32,8 @@ public:
   _highestAttributeKey(0),
   _highestUniformKey(0),
   _uniformsCode(0),
-  _attributeCode(0) {
+  _attributeCode(0),
+  _customShaderName("") {
     for (int i = 0; i < 32; i++) {
       _uniformValues[i]   = NULL;
       _attributeValues[i] = NULL;
@@ -142,7 +143,7 @@ public:
     _customShaderName = name;
   }
     
-  const std::string& getCustomShaderName() const {
+  const std::string getCustomShaderName() const {
     return _customShaderName;
   }
 };
