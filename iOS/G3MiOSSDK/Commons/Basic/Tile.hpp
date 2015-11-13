@@ -318,6 +318,8 @@ public:
   
   bool canUseElevationDataProvider(const ElevationDataProvider* edp) const;
   
+  void cancelAllElevationDataRequestOnSubtree();
+  
 };
 
 #endif

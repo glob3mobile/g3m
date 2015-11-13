@@ -91,7 +91,7 @@ _id( createTileId(level, row, column) )
 }
 
 Tile::~Tile() {
-
+  
   delete _debugMesh;
   _debugMesh = NULL;
   
@@ -111,7 +111,7 @@ Tile::~Tile() {
     _elevationData->_release();
     _elevationData = NULL;
   }
-
+  
   delete _tessellatorData;
   
   delete _northWestPoint;
@@ -527,7 +527,25 @@ std::vector<Tile*>* Tile::getSubTiles(const Angle& splitLatitude,
 
 
 void Tile::cancelElevationDataRequest(){
-#warning TODO
+  
+  if (_elevationDataRequest != NULL) {
+    _elevationDataRequest->cancelRequest();
+    delete _elevationDataRequest;
+    _elevationDataRequest = NULL;
+  }
+  
+}
+
+void Tile::cancelAllElevationDataRequestOnSubtree(){
+  cancelElevationDataRequest();
+  
+  if (_subtiles != NULL){
+    const size_t subtilesSize = _subtiles->size();
+    for (size_t i = 0; i < subtilesSize; i++) {
+      Tile* subtile = _subtiles->at(i);
+      subtile->cancelAllElevationDataRequestOnSubtree();
+    }
+  }
 }
 
 void Tile::toBeDeleted(TileTexturizer*        texturizer,
@@ -545,12 +563,8 @@ void Tile::toBeDeleted(TileTexturizer*        texturizer,
     texturizer->tileToBeDeleted(this, _texturizedMesh);
   }
   
-  if (elevationDataProvider != NULL) {
-    if (_elevationDataRequest != NULL) {
-      _elevationDataRequest->cancelRequest();
-      delete _elevationDataRequest;
-      _elevationDataRequest = NULL;
-    }
+  if (elevationDataProvider != NULL){
+    cancelElevationDataRequest();
   }
 }
 
@@ -568,7 +582,7 @@ void Tile::prune(TileTexturizer*           texturizer,
       
       subtile->setIsVisible(false, texturizer);
       subtile->toBeDeleted(texturizer, elevationDataProvider, tilesStoppedRendering);
-
+      
       delete subtile;
     }
     

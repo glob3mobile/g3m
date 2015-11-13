@@ -908,6 +908,13 @@ bool PlanetRenderer::setRenderedSector(const Sector& sector) {
 void PlanetRenderer::setElevationDataProvider(ElevationDataProvider* elevationDataProvider,
                                               bool owned) {
   if (_elevationDataProvider != elevationDataProvider) {
+    
+    const size_t size = _firstLevelTiles.size();
+    for (int i = 0; i < size; i++) {
+      _firstLevelTiles[i]->cancelAllElevationDataRequestOnSubtree();
+    }
+    
+    
     if (_ownsElevationDataProvider) {
       delete _elevationDataProvider;
     }
