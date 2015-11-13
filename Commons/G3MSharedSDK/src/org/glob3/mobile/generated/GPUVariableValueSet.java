@@ -40,6 +40,7 @@ public class GPUVariableValueSet
      _highestUniformKey = 0;
      _uniformsCode = 0;
      _attributeCode = 0;
+     _customShaderName = "";
     for (int i = 0; i < 32; i++)
     {
       _uniformValues[i] = null;
