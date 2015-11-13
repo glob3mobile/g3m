@@ -57,3 +57,19 @@ bool CameraRenderer::onTouchEvent(const G3MEventContext* ec,
   // if no handler processed the event, return not-handled
   return false;
 }
+
+void CameraRenderer::removeHandler(CameraEventHandler* handler){
+  size_t size = _handlers.size();
+  for (size_t i = 0; i < size; i++) {
+    if (_handlers[i] == handler){
+#ifdef C_CODE
+      _handlers.erase(_handlers.begin() + i);
+#endif
+#ifdef JAVA_CODE
+      _handlers.remove(i);
+#endif
+      return;
+    }
+  }
+  ILogger::instance()->logError("Could not remove camera handler.");
+}

@@ -160,6 +160,11 @@ public:
                     _center.y() - _position.y(),
                     _center.z() - _position.z());
   }
+  
+  bool hasValidViewDirection() const{
+    double d = _center.squaredDistanceTo(_position);
+    return (d > 0) && !ISNAN(d);
+  }
 
   const void getViewDirectionInto(MutableVector3D& result) const {
     result.set(_center.x() - _position.x(),
@@ -345,6 +350,8 @@ public:
                                   const MutableVector2I& viewport,
                                   const MutableMatrix44D& modelViewMatrix);
 
+  void setCameraCoordinateSystem(const CoordinateSystem& rs);
+
 
 private:
 
@@ -510,8 +517,6 @@ private:
     }
     return _modelViewMatrix;
   }
-  
-  void setCameraCoordinateSystem(const CoordinateSystem& rs);
   
 };
 

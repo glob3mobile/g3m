@@ -119,6 +119,8 @@ public:
   void onDestroy(const G3MContext* context) {
     
   }
+  
+  void removeHandler(CameraEventHandler* handler);
 };
 
 
