@@ -222,7 +222,7 @@ public class GPUVariableValueSet
 
   public final boolean hasCustomShader()
   {
-    return !_customShaderName.length() == 0;
+    return (_customShaderName.length() != 0);
   }
 
   public final void setCustomShaderName(String name)
