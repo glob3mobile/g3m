@@ -489,8 +489,6 @@ RenderState PlanetRenderer::getRenderState(const G3MRenderContext* rc) {
 
     const size_t firstLevelTilesCount = _firstLevelTiles.size();
 
-    const size_t firstLevelTilesCount = _firstLevelTiles.size();
-
     if (_tilesRenderParameters->_forceFirstLevelTilesRenderOnStart) {
       _statistics.clear();
 
