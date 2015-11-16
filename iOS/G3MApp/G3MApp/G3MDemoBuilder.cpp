@@ -64,9 +64,7 @@ void G3MDemoBuilder::build() {
   IG3MBuilder* builder = getG3MBuilder();
   
   //builder->getPlanetRendererBuilder()->setRenderDebug(true);
-  
-  
-  
+
   LayerSet* layerSet = new LayerSet();
   builder->getPlanetRendererBuilder()->setLayerSet(layerSet);
   
@@ -78,7 +76,7 @@ void G3MDemoBuilder::build() {
   
   MarksRenderer* marksRenderer = new MarksRenderer(false);
   builder->addRenderer(marksRenderer);
-  
+
   PointCloudsRenderer* pointCloudsRenderer = new PointCloudsRenderer();
   builder->addRenderer(pointCloudsRenderer);
   //  builder->getPlanetRendererBuilder()->setTileRenderingListener(pointCloudsRenderer->getTileRenderingListener());

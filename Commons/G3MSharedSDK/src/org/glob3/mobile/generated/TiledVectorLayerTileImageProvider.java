@@ -105,7 +105,6 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
       {
         _imageAssembler.deletedRasterizer();
       }
-    
       _symbolizer = null;
       if (_buffer != null)
          _buffer.dispose();
