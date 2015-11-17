@@ -1,346 +1,448 @@
 function org_glob3_mobile_G3MWebGLTestingApplication(){
-  var $intern_0 = '', $intern_36 = '" for "gwt:onLoadErrorFn"', $intern_34 = '" for "gwt:onPropertyErrorFn"', $intern_21 = '"><\/script>', $intern_10 = '#', $intern_60 = '.cache.html', $intern_12 = '/', $intern_24 = '//', $intern_54 = '0FE578F0D2ABE76C67BCCF930E19F092', $intern_55 = '51B509ECB7A4DB07D2383000E15FB3F3', $intern_56 = '7A289AF83AC397805945556FF732BA09', $intern_57 = '8086940774641FF992501F2E79E65682', $intern_59 = ':', $intern_28 = '::', $intern_62 = '<script defer="defer">org_glob3_mobile_G3MWebGLTestingApplication.onInjectionDone(\'org.glob3.mobile.G3MWebGLTestingApplication\')<\/script>', $intern_20 = '<script id="', $intern_31 = '=', $intern_11 = '?', $intern_33 = 'Bad handler "', $intern_61 = 'DOMContentLoaded', $intern_58 = 'F22AC92B7D22B7BC1441CC86FB70C578', $intern_22 = 'SCRIPT', $intern_19 = '__gwt_marker_org.glob3.mobile.G3MWebGLTestingApplication', $intern_23 = 'base', $intern_15 = 'baseUrl', $intern_4 = 'begin', $intern_3 = 'bootstrap', $intern_14 = 'clear.cache.gif', $intern_30 = 'content', $intern_9 = 'end', $intern_48 = 'gecko', $intern_49 = 'gecko1_8', $intern_5 = 'gwt.codesvr=', $intern_6 = 'gwt.hosted=', $intern_7 = 'gwt.hybrid', $intern_35 = 'gwt:onLoadErrorFn', $intern_32 = 'gwt:onPropertyErrorFn', $intern_29 = 'gwt:property', $intern_52 = 'hosted.html?org_glob3_mobile_G3MWebGLTestingApplication', $intern_45 = 'ie10', $intern_47 = 'ie8', $intern_46 = 'ie9', $intern_37 = 'iframe', $intern_13 = 'img', $intern_38 = "javascript:''", $intern_51 = 'loadExternalRefs', $intern_25 = 'meta', $intern_40 = 'moduleRequested', $intern_8 = 'moduleStartup', $intern_44 = 'msie', $intern_26 = 'name', $intern_1 = 'org.glob3.mobile.G3MWebGLTestingApplication', $intern_17 = 'org.glob3.mobile.G3MWebGLTestingApplication.nocache.js', $intern_27 = 'org.glob3.mobile.G3MWebGLTestingApplication::', $intern_39 = 'position:absolute;width:0;height:0;border:none', $intern_43 = 'safari', $intern_16 = 'script', $intern_53 = 'selectingPermutation', $intern_2 = 'startup', $intern_18 = 'undefined', $intern_50 = 'unknown', $intern_41 = 'user.agent', $intern_42 = 'webkit';
-  var $wnd = window, $doc = document, $stats = $wnd.__gwtStatsEvent?function(a){
-    return $wnd.__gwtStatsEvent(a);
-  }
-  :null, $sessionId = $wnd.__gwtStatsSessionId?$wnd.__gwtStatsSessionId:null, scriptsDone, loadDone, bodyDone, base = $intern_0, metaProps = {}, values = [], providers = [], answers = [], softPermutationId = 0, onLoadErrorFunc, propertyErrorFunc;
-  $stats && $stats({moduleName:$intern_1, sessionId:$sessionId, subSystem:$intern_2, evtGroup:$intern_3, millis:(new Date).getTime(), type:$intern_4});
-  if (!$wnd.__gwt_stylesLoaded) {
-    $wnd.__gwt_stylesLoaded = {};
-  }
-  if (!$wnd.__gwt_scriptsLoaded) {
-    $wnd.__gwt_scriptsLoaded = {};
-  }
+  var $wnd_0 = window;
+  var $doc_0 = document;
+  sendStats('bootstrap', 'begin');
   function isHostedMode(){
-    var result = false;
-    try {
-      var query = $wnd.location.search;
-      return (query.indexOf($intern_5) != -1 || (query.indexOf($intern_6) != -1 || $wnd.external && $wnd.external.gwtOnLoad)) && query.indexOf($intern_7) == -1;
-    }
-     catch (e) {
-    }
-    isHostedMode = function(){
-      return result;
-    }
-    ;
-    return result;
+    var query = $wnd_0.location.search;
+    return query.indexOf('gwt.codesvr.org.glob3.mobile.G3MWebGLTestingApplication=') != -1 || query.indexOf('gwt.codesvr=') != -1;
   }
 
-  function maybeStartModule(){
-    if (scriptsDone && loadDone) {
-      var iframe = $doc.getElementById($intern_1);
-      var frameWnd = iframe.contentWindow;
-      if (isHostedMode()) {
-        frameWnd.__gwt_getProperty = function(name_0){
-          return computePropValue(name_0);
+  function sendStats(evtGroupString, typeString){
+    if ($wnd_0.__gwtStatsEvent) {
+      $wnd_0.__gwtStatsEvent({moduleName:'org.glob3.mobile.G3MWebGLTestingApplication', sessionId:$wnd_0.__gwtStatsSessionId, subSystem:'startup', evtGroup:evtGroupString, millis:(new Date).getTime(), type:typeString});
+    }
+  }
+
+  org_glob3_mobile_G3MWebGLTestingApplication.__sendStats = sendStats;
+  org_glob3_mobile_G3MWebGLTestingApplication.__moduleName = 'org.glob3.mobile.G3MWebGLTestingApplication';
+  org_glob3_mobile_G3MWebGLTestingApplication.__errFn = null;
+  org_glob3_mobile_G3MWebGLTestingApplication.__moduleBase = 'DUMMY';
+  org_glob3_mobile_G3MWebGLTestingApplication.__softPermutationId = 0;
+  org_glob3_mobile_G3MWebGLTestingApplication.__computePropValue = null;
+  org_glob3_mobile_G3MWebGLTestingApplication.__getPropMap = null;
+  org_glob3_mobile_G3MWebGLTestingApplication.__installRunAsyncCode = function(){
+  }
+  ;
+  org_glob3_mobile_G3MWebGLTestingApplication.__gwtStartLoadingFragment = function(){
+    return null;
+  }
+  ;
+  org_glob3_mobile_G3MWebGLTestingApplication.__gwt_isKnownPropertyValue = function(){
+    return false;
+  }
+  ;
+  org_glob3_mobile_G3MWebGLTestingApplication.__gwt_getMetaProperty = function(){
+    return null;
+  }
+  ;
+  var __propertyErrorFunction = null;
+  var activeModules = $wnd_0.__gwt_activeModules = $wnd_0.__gwt_activeModules || {};
+  activeModules['org.glob3.mobile.G3MWebGLTestingApplication'] = {moduleName:'org.glob3.mobile.G3MWebGLTestingApplication'};
+  org_glob3_mobile_G3MWebGLTestingApplication.__moduleStartupDone = function(permProps){
+    var oldBindings = activeModules['org.glob3.mobile.G3MWebGLTestingApplication'].bindings;
+    activeModules['org.glob3.mobile.G3MWebGLTestingApplication'].bindings = function(){
+      var props = oldBindings?oldBindings():{};
+      var embeddedProps = permProps[org_glob3_mobile_G3MWebGLTestingApplication.__softPermutationId];
+      for (var i = 0; i < embeddedProps.length; i++) {
+        var pair = embeddedProps[i];
+        props[pair[0]] = pair[1];
+      }
+      return props;
+    }
+    ;
+  }
+  ;
+  var frameDoc;
+  function getInstallLocationDoc(){
+    setupInstallLocation();
+    return frameDoc;
+  }
+
+  function setupInstallLocation(){
+    if (frameDoc) {
+      return;
+    }
+    var scriptFrame = $doc_0.createElement('iframe');
+    scriptFrame.src = 'javascript:""';
+    scriptFrame.id = 'org.glob3.mobile.G3MWebGLTestingApplication';
+    scriptFrame.style.cssText = 'position:absolute; width:0; height:0; border:none; left: -1000px;' + ' top: -1000px;';
+    scriptFrame.tabIndex = -1;
+    $doc_0.body.appendChild(scriptFrame);
+    frameDoc = scriptFrame.contentDocument;
+    if (!frameDoc) {
+      frameDoc = scriptFrame.contentWindow.document;
+    }
+    frameDoc.open();
+    var doctype = document.compatMode == 'CSS1Compat'?'<!doctype html>':'';
+    frameDoc.write(doctype + '<html><head><\/head><body><\/body><\/html>');
+    frameDoc.close();
+  }
+
+  function installScript(filename){
+    function setupWaitForBodyLoad(callback){
+      function isBodyLoaded(){
+        if (typeof $doc_0.readyState == 'undefined') {
+          return typeof $doc_0.body != 'undefined' && $doc_0.body != null;
+        }
+        return /loaded|complete/.test($doc_0.readyState);
+      }
+
+      var bodyDone = isBodyLoaded();
+      if (bodyDone) {
+        callback();
+        return;
+      }
+      function onBodyDone(){
+        if (!bodyDone) {
+          bodyDone = true;
+          callback();
+          if ($doc_0.removeEventListener) {
+            $doc_0.removeEventListener('DOMContentLoaded', onBodyDone, false);
+          }
+          if (onBodyDoneTimerId) {
+            clearInterval(onBodyDoneTimerId);
+          }
+        }
+      }
+
+      if ($doc_0.addEventListener) {
+        $doc_0.addEventListener('DOMContentLoaded', onBodyDone, false);
+      }
+      var onBodyDoneTimerId = setInterval(function(){
+        if (isBodyLoaded()) {
+          onBodyDone();
+        }
+      }
+      , 50);
+    }
+
+    function installCode(code_0){
+      var doc = getInstallLocationDoc();
+      var docbody = doc.body;
+      var script = doc.createElement('script');
+      script.language = 'javascript';
+      script.src = code_0;
+      if (org_glob3_mobile_G3MWebGLTestingApplication.__errFn) {
+        script.onerror = function(){
+          org_glob3_mobile_G3MWebGLTestingApplication.__errFn('org_glob3_mobile_G3MWebGLTestingApplication', new Error('Failed to load ' + code_0));
         }
         ;
       }
-      org_glob3_mobile_G3MWebGLTestingApplication = null;
-      frameWnd.gwtOnLoad(onLoadErrorFunc, $intern_1, base, softPermutationId);
-      $stats && $stats({moduleName:$intern_1, sessionId:$sessionId, subSystem:$intern_2, evtGroup:$intern_8, millis:(new Date).getTime(), type:$intern_9});
+      docbody.appendChild(script);
+      sendStats('moduleStartup', 'scriptTagAdded');
     }
+
+    sendStats('moduleStartup', 'moduleRequested');
+    setupWaitForBodyLoad(function(){
+      installCode(filename);
+    }
+    );
+  }
+
+  org_glob3_mobile_G3MWebGLTestingApplication.__startLoadingFragment = function(fragmentFile){
+    return computeUrlForResource(fragmentFile);
+  }
+  ;
+  org_glob3_mobile_G3MWebGLTestingApplication.__installRunAsyncCode = function(code_0){
+    var doc = getInstallLocationDoc();
+    var docbody = doc.body;
+    var script = doc.createElement('script');
+    script.language = 'javascript';
+    script.text = code_0;
+    docbody.appendChild(script);
+  }
+  ;
+  function processMetas(){
+    var metaProps = {};
+    var propertyErrorFunc;
+    var onLoadErrorFunc;
+    var metas = $doc_0.getElementsByTagName('meta');
+    for (var i = 0, n = metas.length; i < n; ++i) {
+      var meta = metas[i], name_1 = meta.getAttribute('name'), content_0;
+      if (name_1) {
+        name_1 = name_1.replace('org.glob3.mobile.G3MWebGLTestingApplication::', '');
+        if (name_1.indexOf('::') >= 0) {
+          continue;
+        }
+        if (name_1 == 'gwt:property') {
+          content_0 = meta.getAttribute('content');
+          if (content_0) {
+            var value_1, eq = content_0.indexOf('=');
+            if (eq >= 0) {
+              name_1 = content_0.substring(0, eq);
+              value_1 = content_0.substring(eq + 1);
+            }
+             else {
+              name_1 = content_0;
+              value_1 = '';
+            }
+            metaProps[name_1] = value_1;
+          }
+        }
+         else if (name_1 == 'gwt:onPropertyErrorFn') {
+          content_0 = meta.getAttribute('content');
+          if (content_0) {
+            try {
+              propertyErrorFunc = eval(content_0);
+            }
+             catch (e) {
+              alert('Bad handler "' + content_0 + '" for "gwt:onPropertyErrorFn"');
+            }
+          }
+        }
+         else if (name_1 == 'gwt:onLoadErrorFn') {
+          content_0 = meta.getAttribute('content');
+          if (content_0) {
+            try {
+              onLoadErrorFunc = eval(content_0);
+            }
+             catch (e) {
+              alert('Bad handler "' + content_0 + '" for "gwt:onLoadErrorFn"');
+            }
+          }
+        }
+      }
+    }
+    __gwt_getMetaProperty = function(name_0){
+      var value_0 = metaProps[name_0];
+      return value_0 == null?null:value_0;
+    }
+    ;
+    __propertyErrorFunction = propertyErrorFunc;
+    org_glob3_mobile_G3MWebGLTestingApplication.__errFn = onLoadErrorFunc;
   }
 
   function computeScriptBase(){
     function getDirectoryOfFile(path){
-      var hashIndex = path.lastIndexOf($intern_10);
+      var hashIndex = path.lastIndexOf('#');
       if (hashIndex == -1) {
         hashIndex = path.length;
       }
-      var queryIndex = path.indexOf($intern_11);
+      var queryIndex = path.indexOf('?');
       if (queryIndex == -1) {
         queryIndex = path.length;
       }
-      var slashIndex = path.lastIndexOf($intern_12, Math.min(queryIndex, hashIndex));
-      return slashIndex >= 0?path.substring(0, slashIndex + 1):$intern_0;
+      var slashIndex = path.lastIndexOf('/', Math.min(queryIndex, hashIndex));
+      return slashIndex >= 0?path.substring(0, slashIndex + 1):'';
     }
 
     function ensureAbsoluteUrl(url_0){
       if (url_0.match(/^\w+:\/\//)) {
       }
        else {
-        var img = $doc.createElement($intern_13);
-        img.src = url_0 + $intern_14;
+        var img = $doc_0.createElement('img');
+        img.src = url_0 + 'clear.cache.gif';
         url_0 = getDirectoryOfFile(img.src);
       }
       return url_0;
     }
 
     function tryMetaTag(){
-      var metaVal = __gwt_getMetaProperty($intern_15);
+      var metaVal = __gwt_getMetaProperty('baseUrl');
       if (metaVal != null) {
         return metaVal;
       }
-      return $intern_0;
+      return '';
     }
 
     function tryNocacheJsTag(){
-      var scriptTags = $doc.getElementsByTagName($intern_16);
+      var scriptTags = $doc_0.getElementsByTagName('script');
       for (var i = 0; i < scriptTags.length; ++i) {
-        if (scriptTags[i].src.indexOf($intern_17) != -1) {
+        if (scriptTags[i].src.indexOf('org.glob3.mobile.G3MWebGLTestingApplication.nocache.js') != -1) {
           return getDirectoryOfFile(scriptTags[i].src);
         }
       }
-      return $intern_0;
-    }
-
-    function tryMarkerScript(){
-      var thisScript;
-      if (typeof isBodyLoaded == $intern_18 || !isBodyLoaded()) {
-        var markerId = $intern_19;
-        var markerScript;
-        $doc.write($intern_20 + markerId + $intern_21);
-        markerScript = $doc.getElementById(markerId);
-        thisScript = markerScript && markerScript.previousSibling;
-        while (thisScript && thisScript.tagName != $intern_22) {
-          thisScript = thisScript.previousSibling;
-        }
-        if (markerScript) {
-          markerScript.parentNode.removeChild(markerScript);
-        }
-        if (thisScript && thisScript.src) {
-          return getDirectoryOfFile(thisScript.src);
-        }
-      }
-      return $intern_0;
+      return '';
     }
 
     function tryBaseTag(){
-      var baseElements = $doc.getElementsByTagName($intern_23);
+      var baseElements = $doc_0.getElementsByTagName('base');
       if (baseElements.length > 0) {
         return baseElements[baseElements.length - 1].href;
       }
-      return $intern_0;
+      return '';
     }
 
     function isLocationOk(){
-      var loc = $doc.location;
-      return loc.href == loc.protocol + $intern_24 + loc.host + loc.pathname + loc.search + loc.hash;
+      var loc = $doc_0.location;
+      return loc.href == loc.protocol + '//' + loc.host + loc.pathname + loc.search + loc.hash;
     }
 
     var tempBase = tryMetaTag();
-    if (tempBase == $intern_0) {
+    if (tempBase == '') {
       tempBase = tryNocacheJsTag();
     }
-    if (tempBase == $intern_0) {
-      tempBase = tryMarkerScript();
-    }
-    if (tempBase == $intern_0) {
+    if (tempBase == '') {
       tempBase = tryBaseTag();
     }
-    if (tempBase == $intern_0 && isLocationOk()) {
-      tempBase = getDirectoryOfFile($doc.location.href);
+    if (tempBase == '' && isLocationOk()) {
+      tempBase = getDirectoryOfFile($doc_0.location.href);
     }
     tempBase = ensureAbsoluteUrl(tempBase);
-    base = tempBase;
     return tempBase;
   }
 
-  function processMetas(){
-    var metas = document.getElementsByTagName($intern_25);
-    for (var i = 0, n = metas.length; i < n; ++i) {
-      var meta = metas[i], name_0 = meta.getAttribute($intern_26), content;
-      if (name_0) {
-        name_0 = name_0.replace($intern_27, $intern_0);
-        if (name_0.indexOf($intern_28) >= 0) {
-          continue;
-        }
-        if (name_0 == $intern_29) {
-          content = meta.getAttribute($intern_30);
-          if (content) {
-            var value_0, eq = content.indexOf($intern_31);
-            if (eq >= 0) {
-              name_0 = content.substring(0, eq);
-              value_0 = content.substring(eq + 1);
-            }
-             else {
-              name_0 = content;
-              value_0 = $intern_0;
-            }
-            metaProps[name_0] = value_0;
-          }
-        }
-         else if (name_0 == $intern_32) {
-          content = meta.getAttribute($intern_30);
-          if (content) {
-            try {
-              propertyErrorFunc = eval(content);
-            }
-             catch (e) {
-              alert($intern_33 + content + $intern_34);
-            }
-          }
-        }
-         else if (name_0 == $intern_35) {
-          content = meta.getAttribute($intern_30);
-          if (content) {
-            try {
-              onLoadErrorFunc = eval(content);
-            }
-             catch (e) {
-              alert($intern_33 + content + $intern_36);
-            }
-          }
-        }
+  function computeUrlForResource(resource){
+    if (resource.match(/^\//)) {
+      return resource;
+    }
+    if (resource.match(/^[a-zA-Z]+:\/\//)) {
+      return resource;
+    }
+    return org_glob3_mobile_G3MWebGLTestingApplication.__moduleBase + resource;
+  }
+
+  function getCompiledCodeFilename(){
+    var answers = [];
+    var softPermutationId = 0;
+    function unflattenKeylistIntoAnswers(propValArray, value_0){
+      var answer = answers;
+      for (var i = 0, n = propValArray.length - 1; i < n; ++i) {
+        answer = answer[propValArray[i]] || (answer[propValArray[i]] = []);
       }
+      answer[propValArray[n]] = value_0;
     }
-  }
 
-  function __gwt_getMetaProperty(name_0){
-    var value_0 = metaProps[name_0];
-    return value_0 == null?null:value_0;
-  }
+    var values = [];
+    var providers = [];
+    function computePropValue(propName){
+      var value_0 = providers[propName](), allowedValuesMap = values[propName];
+      if (value_0 in allowedValuesMap) {
+        return value_0;
+      }
+      var allowedValuesList = [];
+      for (var k in allowedValuesMap) {
+        allowedValuesList[allowedValuesMap[k]] = k;
+      }
+      if (__propertyErrorFunction) {
+        __propertyErrorFunction(propName, allowedValuesList, value_0);
+      }
+      throw null;
+    }
 
-  function unflattenKeylistIntoAnswers(propValArray, value_0){
-    var answer = answers;
-    for (var i = 0, n = propValArray.length - 1; i < n; ++i) {
-      answer = answer[propValArray[i]] || (answer[propValArray[i]] = []);
-    }
-    answer[propValArray[n]] = value_0;
-  }
-
-  function computePropValue(propName){
-    var value_0 = providers[propName](), allowedValuesMap = values[propName];
-    if (value_0 in allowedValuesMap) {
-      return value_0;
-    }
-    var allowedValuesList = [];
-    for (var k in allowedValuesMap) {
-      allowedValuesList[allowedValuesMap[k]] = k;
-    }
-    if (propertyErrorFunc) {
-      propertyErrorFunc(propName, allowedValuesList, value_0);
-    }
-    throw null;
-  }
-
-  var frameInjected;
-  function maybeInjectFrame(){
-    if (!frameInjected) {
-      frameInjected = true;
-      var iframe = $doc.createElement($intern_37);
-      iframe.src = $intern_38;
-      iframe.id = $intern_1;
-      iframe.style.cssText = $intern_39;
-      iframe.tabIndex = -1;
-      $doc.body.appendChild(iframe);
-      $stats && $stats({moduleName:$intern_1, sessionId:$sessionId, subSystem:$intern_2, evtGroup:$intern_8, millis:(new Date).getTime(), type:$intern_40});
-      iframe.contentWindow.location.replace(base + initialHtml);
-    }
-  }
-
-  providers[$intern_41] = function(){
-    var ua = navigator.userAgent.toLowerCase();
-    var makeVersion = function(result){
-      return parseInt(result[1]) * 1000 + parseInt(result[2]);
+    providers['user.agent'] = function(){
+      var ua = navigator.userAgent.toLowerCase();
+      var docMode = $doc_0.documentMode;
+      if (function(){
+        return ua.indexOf('webkit') != -1;
+      }
+      ())
+        return 'safari';
+      if (function(){
+        return ua.indexOf('msie') != -1 && (docMode >= 10 && docMode < 11);
+      }
+      ())
+        return 'ie10';
+      if (function(){
+        return ua.indexOf('msie') != -1 && (docMode >= 9 && docMode < 11);
+      }
+      ())
+        return 'ie9';
+      if (function(){
+        return ua.indexOf('msie') != -1 && (docMode >= 8 && docMode < 11);
+      }
+      ())
+        return 'ie8';
+      if (function(){
+        return ua.indexOf('gecko') != -1 || docMode >= 11;
+      }
+      ())
+        return 'gecko1_8';
+      return '';
     }
     ;
-    if (function(){
-      return ua.indexOf($intern_42) != -1;
+    values['user.agent'] = {gecko1_8:0, ie10:1, ie8:2, ie9:3, safari:4};
+    __gwt_isKnownPropertyValue = function(propName, propValue){
+      return propValue in values[propName];
     }
-    ())
-      return $intern_43;
-    if (function(){
-      return ua.indexOf($intern_44) != -1 && $doc.documentMode >= 10;
+    ;
+    org_glob3_mobile_G3MWebGLTestingApplication.__getPropMap = function(){
+      var result = {};
+      for (var key in values) {
+        if (values.hasOwnProperty(key)) {
+          result[key] = computePropValue(key);
+        }
+      }
+      return result;
     }
-    ())
-      return $intern_45;
-    if (function(){
-      return ua.indexOf($intern_44) != -1 && $doc.documentMode >= 9;
+    ;
+    org_glob3_mobile_G3MWebGLTestingApplication.__computePropValue = computePropValue;
+    $wnd_0.__gwt_activeModules['org.glob3.mobile.G3MWebGLTestingApplication'].bindings = org_glob3_mobile_G3MWebGLTestingApplication.__getPropMap;
+    sendStats('bootstrap', 'selectingPermutation');
+    if (isHostedMode()) {
+      return computeUrlForResource('org.glob3.mobile.G3MWebGLTestingApplication.devmode.js');
     }
-    ())
-      return $intern_46;
-    if (function(){
-      return ua.indexOf($intern_44) != -1 && $doc.documentMode >= 8;
-    }
-    ())
-      return $intern_47;
-    if (function(){
-      return ua.indexOf($intern_48) != -1;
-    }
-    ())
-      return $intern_49;
-    return $intern_50;
-  }
-  ;
-  values[$intern_41] = {gecko1_8:0, ie10:1, ie8:2, ie9:3, safari:4};
-  org_glob3_mobile_G3MWebGLTestingApplication.onScriptLoad = function(){
-    if (frameInjected) {
-      loadDone = true;
-      maybeStartModule();
-    }
-  }
-  ;
-  org_glob3_mobile_G3MWebGLTestingApplication.onInjectionDone = function(){
-    scriptsDone = true;
-    $stats && $stats({moduleName:$intern_1, sessionId:$sessionId, subSystem:$intern_2, evtGroup:$intern_51, millis:(new Date).getTime(), type:$intern_9});
-    maybeStartModule();
-  }
-  ;
-  processMetas();
-  computeScriptBase();
-  var strongName;
-  var initialHtml;
-  if (isHostedMode()) {
-    if ($wnd.external && ($wnd.external.initModule && $wnd.external.initModule($intern_1))) {
-      $wnd.location.reload();
-      return;
-    }
-    initialHtml = $intern_52;
-    strongName = $intern_0;
-  }
-  $stats && $stats({moduleName:$intern_1, sessionId:$sessionId, subSystem:$intern_2, evtGroup:$intern_3, millis:(new Date).getTime(), type:$intern_53});
-  if (!isHostedMode()) {
+    var strongName;
     try {
-      unflattenKeylistIntoAnswers([$intern_47], $intern_54);
-      unflattenKeylistIntoAnswers([$intern_43], $intern_55);
-      unflattenKeylistIntoAnswers([$intern_46], $intern_56);
-      unflattenKeylistIntoAnswers([$intern_45], $intern_57);
-      unflattenKeylistIntoAnswers([$intern_49], $intern_58);
-      strongName = answers[computePropValue($intern_41)];
-      var idx = strongName.indexOf($intern_59);
+      unflattenKeylistIntoAnswers(['ie10'], '44312FDD836D03689EB71F07DA7ACB4D');
+      unflattenKeylistIntoAnswers(['ie9'], '6AD79F0D3A617350CB0653C415716A31');
+      unflattenKeylistIntoAnswers(['gecko1_8'], 'BFEF3F0599159C7F1290BC3A5333BE3C');
+      unflattenKeylistIntoAnswers(['ie8'], 'C5942DFA7C7468D90D6AFD1614FE302C');
+      unflattenKeylistIntoAnswers(['safari'], 'EB1B40A1DB3046B801D78A7E84147054');
+      strongName = answers[computePropValue('user.agent')];
+      var idx = strongName.indexOf(':');
       if (idx != -1) {
-        softPermutationId = Number(strongName.substring(idx + 1));
+        softPermutationId = parseInt(strongName.substring(idx + 1), 10);
         strongName = strongName.substring(0, idx);
       }
-      initialHtml = strongName + $intern_60;
     }
      catch (e) {
-      return;
     }
-  }
-  var onBodyDoneTimerId;
-  function onBodyDone(){
-    if (!bodyDone) {
-      bodyDone = true;
-      maybeStartModule();
-      if ($doc.removeEventListener) {
-        $doc.removeEventListener($intern_61, onBodyDone, false);
-      }
-      if (onBodyDoneTimerId) {
-        clearInterval(onBodyDoneTimerId);
-      }
-    }
+    org_glob3_mobile_G3MWebGLTestingApplication.__softPermutationId = softPermutationId;
+    return computeUrlForResource(strongName + '.cache.js');
   }
 
-  if ($doc.addEventListener) {
-    $doc.addEventListener($intern_61, function(){
-      maybeInjectFrame();
-      onBodyDone();
+  function loadExternalStylesheets(){
+    if (!$wnd_0.__gwt_stylesLoaded) {
+      $wnd_0.__gwt_stylesLoaded = {};
     }
-    , false);
+    sendStats('loadExternalRefs', 'begin');
+    sendStats('loadExternalRefs', 'end');
   }
-  var onBodyDoneTimerId = setInterval(function(){
-    if (/loaded|complete/.test($doc.readyState)) {
-      maybeInjectFrame();
-      onBodyDone();
+
+  processMetas();
+  org_glob3_mobile_G3MWebGLTestingApplication.__moduleBase = computeScriptBase();
+  activeModules['org.glob3.mobile.G3MWebGLTestingApplication'].moduleBase = org_glob3_mobile_G3MWebGLTestingApplication.__moduleBase;
+  var filename_0 = getCompiledCodeFilename();
+  if ($wnd_0) {
+    var devModePermitted = !!($wnd_0.location.protocol == 'http:' || $wnd_0.location.protocol == 'file:');
+    $wnd_0.__gwt_activeModules['org.glob3.mobile.G3MWebGLTestingApplication'].canRedirect = devModePermitted;
+    function supportsSessionStorage(){
+      var key = '_gwt_dummy_';
+      try {
+        $wnd_0.sessionStorage.setItem(key, key);
+        $wnd_0.sessionStorage.removeItem(key);
+        return true;
+      }
+       catch (e) {
+        return false;
+      }
+    }
+
+    if (devModePermitted && supportsSessionStorage()) {
+      var devModeKey = '__gwtDevModeHook:org.glob3.mobile.G3MWebGLTestingApplication';
+      var devModeUrl = $wnd_0.sessionStorage[devModeKey];
+      if (!/^http:\/\/(localhost|127\.0\.0\.1)(:\d+)?\/.*$/.test(devModeUrl)) {
+        if (devModeUrl && (window.console && console.log)) {
+          console.log('Ignoring non-whitelisted Dev Mode URL: ' + devModeUrl);
+        }
+        devModeUrl = '';
+      }
+      if (devModeUrl && !$wnd_0[devModeKey]) {
+        $wnd_0[devModeKey] = true;
+        $wnd_0[devModeKey + ':moduleBase'] = computeScriptBase();
+        var devModeScript = $doc_0.createElement('script');
+        devModeScript.src = devModeUrl;
+        var head = $doc_0.getElementsByTagName('head')[0];
+        head.insertBefore(devModeScript, head.firstElementChild || head.children[0]);
+        return false;
+      }
     }
   }
-  , 50);
-  $stats && $stats({moduleName:$intern_1, sessionId:$sessionId, subSystem:$intern_2, evtGroup:$intern_3, millis:(new Date).getTime(), type:$intern_9});
-  $stats && $stats({moduleName:$intern_1, sessionId:$sessionId, subSystem:$intern_2, evtGroup:$intern_51, millis:(new Date).getTime(), type:$intern_4});
-  $doc.write($intern_62);
+  loadExternalStylesheets();
+  sendStats('bootstrap', 'end');
+  installScript(filename_0);
+  return true;
 }
 
-org_glob3_mobile_G3MWebGLTestingApplication();
+org_glob3_mobile_G3MWebGLTestingApplication.succeeded = org_glob3_mobile_G3MWebGLTestingApplication();

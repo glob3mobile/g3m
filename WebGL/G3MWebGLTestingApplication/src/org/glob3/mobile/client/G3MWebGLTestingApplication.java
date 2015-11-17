@@ -3,8 +3,10 @@
 package org.glob3.mobile.client;
 
 import org.glob3.mobile.generated.AltitudeMode;
+import org.glob3.mobile.generated.CameraRenderer;
 import org.glob3.mobile.generated.Color;
 import org.glob3.mobile.generated.ColumnLayoutImageBuilder;
+import org.glob3.mobile.generated.DeviceAttitudeCameraHandler;
 import org.glob3.mobile.generated.DownloaderImageBuilder;
 import org.glob3.mobile.generated.G3MContext;
 import org.glob3.mobile.generated.GFont;
@@ -19,6 +21,7 @@ import org.glob3.mobile.generated.LayerSet;
 import org.glob3.mobile.generated.MapQuestLayer;
 import org.glob3.mobile.generated.NonOverlappingMark;
 import org.glob3.mobile.generated.NonOverlappingMarksRenderer;
+import org.glob3.mobile.generated.OSMLayer;
 import org.glob3.mobile.generated.QuadShape;
 import org.glob3.mobile.generated.ShapesRenderer;
 import org.glob3.mobile.generated.TimeInterval;
@@ -33,15 +36,15 @@ import com.google.gwt.user.client.ui.RootPanel;
 
 
 public class G3MWebGLTestingApplication
-implements
-EntryPoint {
+         implements
+            EntryPoint {
 
    private static final String _g3mWidgetHolderId = "g3mWidgetHolder";
    private G3MWidget_WebGL     _g3mWidget         = null;
 
 
    private native void runUserPlugin() /*-{
-        $wnd.onLoadG3M();
+		$wnd.onLoadG3M();
    }-*/;
 
 
@@ -49,7 +52,8 @@ EntryPoint {
    public void onModuleLoad() {
       final Panel g3mWidgetHolder = RootPanel.get(_g3mWidgetHolderId);
 
-      _g3mWidget = createWidget();
+      //_g3mWidget = createWidget();
+      _g3mWidget = createWidgetVR();
       g3mWidgetHolder.add(_g3mWidget);
 
 
@@ -80,12 +84,27 @@ EntryPoint {
       final ColumnLayoutImageBuilder imageBuilderWidget = new ColumnLayoutImageBuilder( //
                new DownloaderImageBuilder(markBitmapURL), //
                new LabelImageBuilder(label, GFont.monospaced()) //
-               );
+      );
 
       return new NonOverlappingMark( //
                imageBuilderWidget, //
                new DownloaderImageBuilder(anchorBitmapURL), //
                position);
+   }
+
+
+   private G3MWidget_WebGL createWidgetVR() {
+      final G3MBuilder_WebGL builder = new G3MBuilder_WebGL();
+
+      final LayerSet layerSet = new LayerSet();
+      layerSet.addLayer(new OSMLayer(TimeInterval.fromDays(30)));
+      builder.getPlanetRendererBuilder().setLayerSet(layerSet);
+
+      final CameraRenderer cr = new CameraRenderer();
+      cr.addHandler(new DeviceAttitudeCameraHandler(true));
+      builder.setCameraRenderer(cr);
+
+      return builder.createWidget();
    }
 
 

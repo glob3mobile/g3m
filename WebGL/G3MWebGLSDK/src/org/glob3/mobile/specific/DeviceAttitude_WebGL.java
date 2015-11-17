@@ -4,7 +4,9 @@ package org.glob3.mobile.specific;
 
 import org.glob3.mobile.generated.Angle;
 import org.glob3.mobile.generated.CoordinateSystem;
+import org.glob3.mobile.generated.IDeviceAttitude;
 import org.glob3.mobile.generated.ILogger;
+import org.glob3.mobile.generated.InterfaceOrientation;
 import org.glob3.mobile.generated.MutableMatrix44D;
 
 
@@ -91,7 +93,7 @@ public class DeviceAttitude_WebGL
 
       ILogger.instance().logInfo("SIO " + orientation + " -> " + _currentIO.toString());
 
-   };
+   }
 
 
    private native void initInterfaceOrientation(DeviceAttitude_WebGL devAtt) /*-{
