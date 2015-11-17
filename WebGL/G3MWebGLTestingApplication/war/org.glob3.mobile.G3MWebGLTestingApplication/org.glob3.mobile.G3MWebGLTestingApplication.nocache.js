@@ -197,11 +197,11 @@ function org_glob3_mobile_G3MWebGLTestingApplication(){
   processMetas();
   try {
     var strongName;
-    unflattenKeylistIntoAnswers(['gecko1_8'], 'C09E52BDF1FE91E4AD4DACE40812002C');
-    unflattenKeylistIntoAnswers(['ie10'], 'C09E52BDF1FE91E4AD4DACE40812002C' + ':1');
-    unflattenKeylistIntoAnswers(['ie8'], 'C09E52BDF1FE91E4AD4DACE40812002C' + ':2');
-    unflattenKeylistIntoAnswers(['ie9'], 'C09E52BDF1FE91E4AD4DACE40812002C' + ':3');
-    unflattenKeylistIntoAnswers(['safari'], 'C09E52BDF1FE91E4AD4DACE40812002C' + ':4');
+    unflattenKeylistIntoAnswers(['gecko1_8'], '3D8C6F7611D982CF3D64B47DB7E9AD5B');
+    unflattenKeylistIntoAnswers(['ie10'], '3D8C6F7611D982CF3D64B47DB7E9AD5B' + ':1');
+    unflattenKeylistIntoAnswers(['ie8'], '3D8C6F7611D982CF3D64B47DB7E9AD5B' + ':2');
+    unflattenKeylistIntoAnswers(['ie9'], '3D8C6F7611D982CF3D64B47DB7E9AD5B' + ':3');
+    unflattenKeylistIntoAnswers(['safari'], '3D8C6F7611D982CF3D64B47DB7E9AD5B' + ':4');
     strongName = answers[computePropValue('user.agent')];
     var idx = strongName.indexOf(':');
     if (idx != -1) {
@@ -240,7 +240,7 @@ function org_glob3_mobile_G3MWebGLTestingApplication(){
 }
 
 org_glob3_mobile_G3MWebGLTestingApplication();
-(function () {var $gwt_version = "2.7.0";var $wnd = window;var $doc = $wnd.document;var $moduleName, $moduleBase;var $stats = $wnd.__gwtStatsEvent ? function(a) {$wnd.__gwtStatsEvent(a)} : null;var $strongName = 'C09E52BDF1FE91E4AD4DACE40812002C';var $intern_0 = {45:1, 39:1, 43:1, 42:1, 46:1, 33:1, 29:1}, $intern_1 = {3:1, 12:1}, $intern_2 = {3:1, 4:1, 430:1}, $intern_3 = 65535, $intern_4 = {3:1, 4:1}, $intern_5 = {167:1, 56:1, 3:1, 27:1, 19:1}, $intern_6 = {86:1, 3:1, 12:1}, $intern_7 = 4194303, $intern_8 = 1048575, $intern_9 = 524288, $intern_10 = 4194304, $intern_11 = 17592186044416, $intern_12 = -9223372036854775808, $intern_13 = {3:1, 4:1, 225:1}, $intern_14 = 32768, $intern_15 = 16384, $intern_16 = 65536, $intern_17 = 131072, $intern_18 = 262144, $intern_19 = 1048576, $intern_20 = 2097152, $intern_21 = 8388608, $intern_22 = 16777216, $intern_23 = 33554432, $intern_24 = 67108864, $intern_25 = {45:1, 39:1, 43:1, 42:1, 84:1, 46:1, 33:1, 29:1}, $intern_26 = {45:1, 39:1, 43:1, 42:1, 224:1, 46:1, 33:1, 29:1}, $intern_27 = {45:1, 39:1, 43:1, 42:1, 84:1, 46:1, 101:1, 33:1, 29:1}, $intern_28 = {143:1}, $intern_29 = {3:1}, $intern_30 = 1.52587890625E-5, $intern_31 = {98:1}, $intern_32 = {23:1}, $intern_33 = {3:1, 38:1, 114:1}, $intern_34 = 15525485, $intern_35 = 5.9604644775390625E-8, $intern_36 = 1000000000000, $intern_37 = -1000000000000, $intern_38 = {99:1}, $intern_39 = 57.29577951308232, $intern_40 = 3.141592653589793, $intern_41 = -1.5707963267948966, $intern_42 = {79:1}, $intern_43 = {96:1}, $intern_44 = {9:1, 52:1}, $intern_45 = {24:1, 9:1}, $intern_46 = {24:1, 71:1, 9:1}, $intern_47 = 1.5707963267948966, $intern_48 = 1.0E-5, $intern_49 = {115:1}, $intern_50 = 10000000000, $intern_51 = -10000000000, $intern_52 = {55:1, 24:1, 9:1}, $intern_53 = {92:1}, $intern_54 = {61:1, 36:1}, $intern_55 = {89:1, 94:1, 9:1}, $intern_56 = {30:1, 36:1}, $intern_57 = {28:1, 95:1, 9:1}, $intern_58 = {28:1, 129:1, 9:1}, $intern_59 = {28:1, 91:1, 9:1}, $intern_60 = 0.4000000059604645, $intern_61 = 6378137, $intern_62 = 6356752.314245, $intern_63 = 0.30000001192092896, $intern_64 = {34:1}, $intern_65 = {62:1, 9:1}, $intern_66 = 85.0511287798, $intern_67 = 1.4844222297452172, $intern_68 = -85.0511287798, $intern_69 = -1.4844222297452172, $intern_70 = 0.029999999329447746, $intern_71 = 1.7976931348623157E308, $intern_72 = -1.7976931348623157E308;
+(function () {var $gwt_version = "2.7.0";var $wnd = window;var $doc = $wnd.document;var $moduleName, $moduleBase;var $stats = $wnd.__gwtStatsEvent ? function(a) {$wnd.__gwtStatsEvent(a)} : null;var $strongName = '3D8C6F7611D982CF3D64B47DB7E9AD5B';var $intern_0 = {44:1, 38:1, 42:1, 41:1, 45:1, 33:1, 29:1}, $intern_1 = {3:1, 13:1}, $intern_2 = {3:1, 4:1, 415:1}, $intern_3 = 65535, $intern_4 = {3:1, 4:1}, $intern_5 = {159:1, 51:1, 3:1, 26:1, 15:1}, $intern_6 = {84:1, 3:1, 13:1}, $intern_7 = 4194303, $intern_8 = 1048575, $intern_9 = 524288, $intern_10 = 4194304, $intern_11 = 17592186044416, $intern_12 = -9223372036854775808, $intern_13 = {3:1, 4:1, 214:1}, $intern_14 = 32768, $intern_15 = 16384, $intern_16 = 65536, $intern_17 = 131072, $intern_18 = 262144, $intern_19 = 1048576, $intern_20 = 2097152, $intern_21 = 8388608, $intern_22 = 16777216, $intern_23 = 33554432, $intern_24 = 67108864, $intern_25 = {44:1, 38:1, 42:1, 41:1, 82:1, 45:1, 33:1, 29:1}, $intern_26 = {44:1, 38:1, 42:1, 41:1, 213:1, 45:1, 33:1, 29:1}, $intern_27 = {44:1, 38:1, 42:1, 41:1, 82:1, 45:1, 96:1, 33:1, 29:1}, $intern_28 = {134:1}, $intern_29 = {3:1}, $intern_30 = 1.52587890625E-5, $intern_31 = {94:1}, $intern_32 = {22:1}, $intern_33 = {3:1, 37:1, 108:1}, $intern_34 = 1000000000000, $intern_35 = -1000000000000, $intern_36 = 57.29577951308232, $intern_37 = 3.141592653589793, $intern_38 = -1.5707963267948966, $intern_39 = {64:1}, $intern_40 = {91:1}, $intern_41 = {9:1, 49:1}, $intern_42 = {27:1, 70:1, 9:1}, $intern_43 = 1.5707963267948966, $intern_44 = 1.0E-5, $intern_45 = 10000000000, $intern_46 = -10000000000, $intern_47 = {50:1, 27:1, 9:1}, $intern_48 = {90:1}, $intern_49 = {56:1, 35:1}, $intern_50 = {86:1, 89:1, 9:1}, $intern_51 = {30:1, 35:1}, $intern_52 = {28:1, 107:1, 9:1}, $intern_53 = {28:1, 130:1, 9:1}, $intern_54 = {28:1, 88:1, 9:1}, $intern_55 = 0.4000000059604645, $intern_56 = 6378137, $intern_57 = 6356752.314245, $intern_58 = 0.30000001192092896, $intern_59 = {34:1}, $intern_60 = {59:1, 9:1}, $intern_61 = 85.0511287798, $intern_62 = 1.4844222297452172, $intern_63 = -85.0511287798, $intern_64 = -1.4844222297452172, $intern_65 = 1.7976931348623157E308, $intern_66 = -1.7976931348623157E308;
 var _, initFnList_0, prototypesByTypeId_0 = {}, permutationId = -1;
 function org_glob3_mobile_specific_Downloader_1WebGL_1Handler(){
   if (permutationId == 4) {
@@ -449,7 +449,7 @@ _.toString = function(){
   return this.toString$();
 }
 ;
-stringCastMap = {3:1, 515:1, 27:1, 2:1};
+stringCastMap = {3:1, 499:1, 26:1, 2:1};
 modernizeBrowser();
 function canCast(src_0, dstId){
   return isJavaString(src_0) && !!stringCastMap[dstId] || src_0.castableTypeMap$ && !!src_0.castableTypeMap$[dstId];
@@ -640,7 +640,7 @@ function maybeSetClassLiteral(typeId, clazz){
   prototype_0.___clazz$ = clazz;
 }
 
-defineClass(168, 1, {}, Class);
+defineClass(160, 1, {}, Class);
 _.createClassLiteralForArray = function createClassLiteralForArray(dimensions){
   var clazz;
   clazz = new Class;
@@ -677,7 +677,7 @@ _.toString$ = function toString_10(){
 ;
 _.modifiers = 0;
 var nextSequentialId = 1;
-var Ljava_lang_Object_2_classLit = createForClass('java.lang', 'Object', 1), Lcom_google_gwt_core_client_JavaScriptObject_2_classLit = createForClass('com.google.gwt.core.client', 'JavaScriptObject$', 0), Ljava_lang_Class_2_classLit = createForClass('java.lang', 'Class', 168);
+var Ljava_lang_Object_2_classLit = createForClass('java.lang', 'Object', 1), Lcom_google_gwt_core_client_JavaScriptObject_2_classLit = createForClass('com.google.gwt.core.client', 'JavaScriptObject$', 0), Ljava_lang_Class_2_classLit = createForClass('java.lang', 'Class', 160);
 function $getElement(this$static){
   return $clinit_DOM() , this$static.element;
 }
@@ -695,7 +695,7 @@ function $setPixelSize(this$static, width_0, height){
   height >= 0 && (($clinit_DOM() , this$static.element).style['height'] = height + 'px' , undefined);
 }
 
-defineClass(33, 1, {42:1, 33:1});
+defineClass(33, 1, {41:1, 33:1});
 _.resolvePotentialElement = function resolvePotentialElement(){
   throw new UnsupportedOperationException;
 }
@@ -741,8 +741,8 @@ function $removeFromParent(this$static){
     $clinit_RootPanel();
     $contains_0(widgetsToDetach, this$static) && detachNow(this$static);
   }
-   else if (instanceOf(this$static.parent_0, 84)) {
-    dynamicCast(this$static.parent_0, 84).remove(this$static);
+   else if (instanceOf(this$static.parent_0, 82)) {
+    dynamicCast(this$static.parent_0, 82).remove(this$static);
   }
    else if (this$static.parent_0) {
     throw new IllegalStateException_0("This widget's parent does not implement HasWidgets");
@@ -818,7 +818,7 @@ function $setFocus(this$static){
   impl_0.focus_0(($clinit_DOM() , this$static.element));
 }
 
-defineClass(466, 29, $intern_0);
+defineClass(449, 29, $intern_0);
 _.onAttach = function onAttach_0(){
   var tabIndex;
   $onAttach(this);
@@ -827,7 +827,7 @@ _.onAttach = function onAttach_0(){
 }
 ;
 var impl_0;
-var Lcom_google_gwt_user_client_ui_FocusWidget_2_classLit = createForClass('com.google.gwt.user.client.ui', 'FocusWidget', 466);
+var Lcom_google_gwt_user_client_ui_FocusWidget_2_classLit = createForClass('com.google.gwt.user.client.ui', 'FocusWidget', 449);
 function $setCoordinateSpaceHeight(this$static, height){
   $setHeight(($clinit_DOM() , this$static.element), height);
 }
@@ -854,44 +854,44 @@ function createIfSupported(){
   return new Canvas_0(element);
 }
 
-defineClass(315, 466, $intern_0, Canvas_0);
+defineClass(301, 449, $intern_0, Canvas_0);
 _.getCanvasElement = function getCanvasElement(){
   return $clinit_DOM() , this.element;
 }
 ;
 var detector;
-var Lcom_google_gwt_canvas_client_Canvas_2_classLit = createForClass('com.google.gwt.canvas.client', 'Canvas', 315);
-defineClass(467, 1, {});
+var Lcom_google_gwt_canvas_client_Canvas_2_classLit = createForClass('com.google.gwt.canvas.client', 'Canvas', 301);
+defineClass(450, 1, {});
 _.isSupportedCompileTime = function isSupportedCompileTime(){
   return false;
 }
 ;
-var Lcom_google_gwt_canvas_client_Canvas$CanvasElementSupportDetector_2_classLit = createForClass('com.google.gwt.canvas.client', 'Canvas/CanvasElementSupportDetector', 467);
+var Lcom_google_gwt_canvas_client_Canvas$CanvasElementSupportDetector_2_classLit = createForClass('com.google.gwt.canvas.client', 'Canvas/CanvasElementSupportDetector', 450);
 function Canvas$CanvasElementSupportDetectedMaybe(){
 }
 
-defineClass(316, 467, {}, Canvas$CanvasElementSupportDetectedMaybe);
+defineClass(302, 450, {}, Canvas$CanvasElementSupportDetectedMaybe);
 _.isSupportedCompileTime = function isSupportedCompileTime_0(){
   return true;
 }
 ;
-var Lcom_google_gwt_canvas_client_Canvas$CanvasElementSupportDetectedMaybe_2_classLit = createForClass('com.google.gwt.canvas.client', 'Canvas/CanvasElementSupportDetectedMaybe', 316);
+var Lcom_google_gwt_canvas_client_Canvas$CanvasElementSupportDetectedMaybe_2_classLit = createForClass('com.google.gwt.canvas.client', 'Canvas/CanvasElementSupportDetectedMaybe', 302);
 function Canvas$CanvasElementSupportDetectedNo(){
 }
 
-defineClass(317, 467, {}, Canvas$CanvasElementSupportDetectedNo);
+defineClass(303, 450, {}, Canvas$CanvasElementSupportDetectedNo);
 _.isSupportedCompileTime = function isSupportedCompileTime_1(){
   return false;
 }
 ;
-var Lcom_google_gwt_canvas_client_Canvas$CanvasElementSupportDetectedNo_2_classLit = createForClass('com.google.gwt.canvas.client', 'Canvas/CanvasElementSupportDetectedNo', 317);
+var Lcom_google_gwt_canvas_client_Canvas$CanvasElementSupportDetectedNo_2_classLit = createForClass('com.google.gwt.canvas.client', 'Canvas/CanvasElementSupportDetectedNo', 303);
 function Duration(){
   this.start_0 = now_1();
 }
 
-defineClass(303, 1, {}, Duration);
+defineClass(289, 1, {}, Duration);
 _.start_0 = 0;
-var Lcom_google_gwt_core_client_Duration_2_classLit = createForClass('com.google.gwt.core.client', 'Duration', 303);
+var Lcom_google_gwt_core_client_Duration_2_classLit = createForClass('com.google.gwt.core.client', 'Duration', 289);
 function isScript(){
   return true;
 }
@@ -927,7 +927,7 @@ function Throwable(message, cause){
   $fillInStackTrace(this);
 }
 
-defineClass(12, 1, $intern_1);
+defineClass(13, 1, $intern_1);
 _.getMessage = function getMessage(){
   return this.detailMessage;
 }
@@ -939,9 +939,9 @@ _.toString$ = function toString_2(){
   return msg != null?className + ': ' + msg:className;
 }
 ;
-var Ljava_lang_Throwable_2_classLit = createForClass('java.lang', 'Throwable', 12);
-defineClass(117, 12, $intern_1);
-var Ljava_lang_Exception_2_classLit = createForClass('java.lang', 'Exception', 117);
+var Ljava_lang_Throwable_2_classLit = createForClass('java.lang', 'Throwable', 13);
+defineClass(110, 13, $intern_1);
+var Ljava_lang_Exception_2_classLit = createForClass('java.lang', 'Exception', 110);
 function RuntimeException(){
   $fillInStackTrace(this);
 }
@@ -955,10 +955,10 @@ function RuntimeException_1(message, cause){
   Throwable.call(this, message, cause);
 }
 
-defineClass(18, 117, $intern_1, RuntimeException_0);
-var Ljava_lang_RuntimeException_2_classLit = createForClass('java.lang', 'RuntimeException', 18);
-defineClass(231, 18, $intern_1);
-var Lcom_google_gwt_core_client_impl_JavaScriptExceptionBase_2_classLit = createForClass('com.google.gwt.core.client.impl', 'JavaScriptExceptionBase', 231);
+defineClass(17, 110, $intern_1, RuntimeException_0);
+var Ljava_lang_RuntimeException_2_classLit = createForClass('java.lang', 'RuntimeException', 17);
+defineClass(220, 17, $intern_1);
+var Lcom_google_gwt_core_client_impl_JavaScriptExceptionBase_2_classLit = createForClass('com.google.gwt.core.client.impl', 'JavaScriptExceptionBase', 220);
 function $clinit_JavaScriptException(){
   $clinit_JavaScriptException = emptyMethod;
   NOT_SET = new Object_0;
@@ -991,7 +991,7 @@ function getExceptionName0(e){
   return e == null?null:e.name;
 }
 
-defineClass(65, 231, {65:1, 3:1, 12:1}, JavaScriptException);
+defineClass(62, 220, {62:1, 3:1, 13:1}, JavaScriptException);
 _.getMessage = function getMessage_0(){
   $ensureInit(this);
   return this.message_0;
@@ -1002,7 +1002,7 @@ _.getThrown = function getThrown(){
 }
 ;
 var NOT_SET;
-var Lcom_google_gwt_core_client_JavaScriptException_2_classLit = createForClass('com.google.gwt.core.client', 'JavaScriptException', 65);
+var Lcom_google_gwt_core_client_JavaScriptException_2_classLit = createForClass('com.google.gwt.core.client', 'JavaScriptException', 62);
 function $push(this$static, value_0){
   this$static[this$static.length] = value_0;
 }
@@ -1018,8 +1018,8 @@ function now_1(){
   return (new Date).getTime();
 }
 
-defineClass(432, 1, {});
-var Lcom_google_gwt_core_client_Scheduler_2_classLit = createForClass('com.google.gwt.core.client', 'Scheduler', 432);
+defineClass(417, 1, {});
+var Lcom_google_gwt_core_client_Scheduler_2_classLit = createForClass('com.google.gwt.core.client', 'Scheduler', 417);
 function apply_0(jsFunction, thisObj, args){
   return jsFunction.apply(thisObj, args);
   var __0;
@@ -1065,7 +1065,7 @@ function entry0(jsFunction, thisObj, args){
       }
        catch ($e0) {
         $e0 = wrap($e0);
-        if (instanceOf($e0, 12)) {
+        if (instanceOf($e0, 13)) {
           t = $e0;
           reportUncaughtException(t);
           return undefined;
@@ -1115,7 +1115,7 @@ function reportUncaughtException(e){
     $log_2(handler.val$log2, ($clinit_Level() , SEVERE), e.getMessage(), e);
     return;
   }
-  reportToBrowser(instanceOf(e, 65)?dynamicCast(e, 65).getThrown():e);
+  reportToBrowser(instanceOf(e, 62)?dynamicCast(e, 62).getThrown():e);
 }
 
 function watchdogEntryDepthCancel(timerId){
@@ -1250,7 +1250,7 @@ function runScheduledTasks(tasks, rescheduled){
     }
      catch ($e0) {
       $e0 = wrap($e0);
-      if (instanceOf($e0, 12)) {
+      if (instanceOf($e0, 13)) {
         e = $e0;
         reportUncaughtException(e);
       }
@@ -1272,16 +1272,16 @@ function scheduleFixedDelayImpl(cmd, delayMs){
   $wnd.setTimeout(callback, delayMs);
 }
 
-defineClass(274, 432, {}, SchedulerImpl);
+defineClass(262, 417, {}, SchedulerImpl);
 _.flushRunning = false;
 _.shouldBeRunning = false;
 var INSTANCE;
-var Lcom_google_gwt_core_client_impl_SchedulerImpl_2_classLit = createForClass('com.google.gwt.core.client.impl', 'SchedulerImpl', 274);
+var Lcom_google_gwt_core_client_impl_SchedulerImpl_2_classLit = createForClass('com.google.gwt.core.client.impl', 'SchedulerImpl', 262);
 function SchedulerImpl$Flusher(this$0){
   this.this$01 = this$0;
 }
 
-defineClass(275, 1, {}, SchedulerImpl$Flusher);
+defineClass(263, 1, {}, SchedulerImpl$Flusher);
 _.execute = function execute_0(){
   this.this$01.flushRunning = true;
   $flushPostEventPumpCommands(this.this$01);
@@ -1289,18 +1289,18 @@ _.execute = function execute_0(){
   return this.this$01.shouldBeRunning = $isWorkQueued(this.this$01);
 }
 ;
-var Lcom_google_gwt_core_client_impl_SchedulerImpl$Flusher_2_classLit = createForClass('com.google.gwt.core.client.impl', 'SchedulerImpl/Flusher', 275);
+var Lcom_google_gwt_core_client_impl_SchedulerImpl$Flusher_2_classLit = createForClass('com.google.gwt.core.client.impl', 'SchedulerImpl/Flusher', 263);
 function SchedulerImpl$Rescuer(this$0){
   this.this$01 = this$0;
 }
 
-defineClass(276, 1, {}, SchedulerImpl$Rescuer);
+defineClass(264, 1, {}, SchedulerImpl$Rescuer);
 _.execute = function execute_1(){
   this.this$01.flushRunning && scheduleFixedDelayImpl(this.this$01.flusher, 1);
   return this.this$01.shouldBeRunning;
 }
 ;
-var Lcom_google_gwt_core_client_impl_SchedulerImpl$Rescuer_2_classLit = createForClass('com.google.gwt.core.client.impl', 'SchedulerImpl/Rescuer', 276);
+var Lcom_google_gwt_core_client_impl_SchedulerImpl$Rescuer_2_classLit = createForClass('com.google.gwt.core.client.impl', 'SchedulerImpl/Rescuer', 264);
 function $clinit_StackTraceCreator(){
   $clinit_StackTraceCreator = emptyMethod;
   var c, enforceLegacy;
@@ -1320,7 +1320,7 @@ function dropInternalFrames(stackTrace){
   numberOfFrameToSearch = min_1(stackTrace.length, 5);
   for (i_0 = 0; i_0 < numberOfFrameToSearch; i_0++) {
     if ($equals(stackTrace[i_0].methodName, dropFrameUntilFnName)) {
-      return dynamicCast((stackTrace.length >= i_0 + 1 && stackTrace.splice(0, i_0 + 1) , stackTrace), 430);
+      return dynamicCast((stackTrace.length >= i_0 + 1 && stackTrace.splice(0, i_0 + 1) , stackTrace), 415);
     }
   }
   return stackTrace;
@@ -1338,12 +1338,12 @@ function parseInt_0(number){
 }
 
 var collector;
-defineClass(443, 1, {});
-var Lcom_google_gwt_core_client_impl_StackTraceCreator$Collector_2_classLit = createForClass('com.google.gwt.core.client.impl', 'StackTraceCreator/Collector', 443);
+defineClass(428, 1, {});
+var Lcom_google_gwt_core_client_impl_StackTraceCreator$Collector_2_classLit = createForClass('com.google.gwt.core.client.impl', 'StackTraceCreator/Collector', 428);
 function StackTraceCreator$CollectorLegacy(){
 }
 
-defineClass(232, 443, {}, StackTraceCreator$CollectorLegacy);
+defineClass(221, 428, {}, StackTraceCreator$CollectorLegacy);
 _.collect = function collect(t, thrownIgnored){
   var seen = {}, name_1;
   t.fnStack = [];
@@ -1370,14 +1370,14 @@ _.getStackTrace = function getStackTrace(t){
   var i_0, length_0, stack_0, stackTrace;
   stack_0 = ($clinit_StackTraceCreator() , t && t.fnStack && t.fnStack instanceof Array?t.fnStack:[]);
   length_0 = stack_0.length;
-  stackTrace = initDim(Ljava_lang_StackTraceElement_2_classLit, $intern_2, 66, length_0, 0, 1);
+  stackTrace = initDim(Ljava_lang_StackTraceElement_2_classLit, $intern_2, 63, length_0, 0, 1);
   for (i_0 = 0; i_0 < length_0; i_0++) {
     stackTrace[i_0] = new StackTraceElement(stack_0[i_0], null, -1);
   }
   return stackTrace;
 }
 ;
-var Lcom_google_gwt_core_client_impl_StackTraceCreator$CollectorLegacy_2_classLit = createForClass('com.google.gwt.core.client.impl', 'StackTraceCreator/CollectorLegacy', 232);
+var Lcom_google_gwt_core_client_impl_StackTraceCreator$CollectorLegacy_2_classLit = createForClass('com.google.gwt.core.client.impl', 'StackTraceCreator/CollectorLegacy', 221);
 function $clinit_StackTraceCreator$CollectorModern(){
   $clinit_StackTraceCreator$CollectorModern = emptyMethod;
   Error.stackTraceLimit = 64;
@@ -1424,7 +1424,7 @@ function $parse(this$static, stString){
   return this$static.createSte(fileName, toReturn, line, col);
 }
 
-defineClass(444, 443, {});
+defineClass(429, 428, {});
 _.collect = function collect_0(t, jsThrown){
   function fixIE(e){
     if (!('stack' in e)) {
@@ -1449,7 +1449,7 @@ _.createSte = function createSte(fileName, method, line, col){
 _.getStackTrace = function getStackTrace_0(t){
   var addIndex, i_0, length_0, stack_0, stackTrace, ste, e;
   stack_0 = ($clinit_StackTraceCreator() , e = t.__gwt$backingJsError , e && e.stack?e.stack.split('\n'):[]);
-  stackTrace = initDim(Ljava_lang_StackTraceElement_2_classLit, $intern_2, 66, 0, 0, 1);
+  stackTrace = initDim(Ljava_lang_StackTraceElement_2_classLit, $intern_2, 63, 0, 0, 1);
   addIndex = 0;
   length_0 = stack_0.length;
   if (length_0 == 0) {
@@ -1463,17 +1463,17 @@ _.getStackTrace = function getStackTrace_0(t){
   return stackTrace;
 }
 ;
-var Lcom_google_gwt_core_client_impl_StackTraceCreator$CollectorModern_2_classLit = createForClass('com.google.gwt.core.client.impl', 'StackTraceCreator/CollectorModern', 444);
+var Lcom_google_gwt_core_client_impl_StackTraceCreator$CollectorModern_2_classLit = createForClass('com.google.gwt.core.client.impl', 'StackTraceCreator/CollectorModern', 429);
 function StackTraceCreator$CollectorModernNoSourceMap(){
   $clinit_StackTraceCreator$CollectorModern();
 }
 
-defineClass(233, 444, {}, StackTraceCreator$CollectorModernNoSourceMap);
+defineClass(222, 429, {}, StackTraceCreator$CollectorModernNoSourceMap);
 _.createSte = function createSte_0(fileName, method, line, col){
   return new StackTraceElement(method, fileName, -1);
 }
 ;
-var Lcom_google_gwt_core_client_impl_StackTraceCreator$CollectorModernNoSourceMap_2_classLit = createForClass('com.google.gwt.core.client.impl', 'StackTraceCreator/CollectorModernNoSourceMap', 233);
+var Lcom_google_gwt_core_client_impl_StackTraceCreator$CollectorModernNoSourceMap_2_classLit = createForClass('com.google.gwt.core.client.impl', 'StackTraceCreator/CollectorModernNoSourceMap', 222);
 function checkArrayType(expression, errorMessage){
   if (!expression) {
     throw new ArrayStoreException_0('' + errorMessage);
@@ -1660,7 +1660,7 @@ function toInt32(val){
   return val | 0;
 }
 
-defineClass(478, 1, {});
+defineClass(461, 1, {});
 _.createElement_0 = function createElement(doc, tag){
   return doc.createElement(tag);
 }
@@ -1720,7 +1720,7 @@ _.toString_0 = function toString_3(elem){
 }
 ;
 var impl_1;
-var Lcom_google_gwt_dom_client_DOMImpl_2_classLit = createForClass('com.google.gwt.dom.client', 'DOMImpl', 478);
+var Lcom_google_gwt_dom_client_DOMImpl_2_classLit = createForClass('com.google.gwt.dom.client', 'DOMImpl', 461);
 function $getBoundingClientRectLeft(elem){
   try {
     return elem.getBoundingClientRect().left;
@@ -1757,7 +1757,7 @@ function isOrHasChildImpl(parent_0, child){
   }
 }
 
-defineClass(486, 478, {});
+defineClass(468, 461, {});
 _.createElement_0 = function createElement_0(doc, tagName){
   var container, elem;
   if (tagName.indexOf(':') != -1) {
@@ -1801,12 +1801,12 @@ _.setInnerText = function setInnerText_0(elem, text_0){
 }
 ;
 var currentEventTarget;
-var Lcom_google_gwt_dom_client_DOMImplTrident_2_classLit = createForClass('com.google.gwt.dom.client', 'DOMImplTrident', 486);
+var Lcom_google_gwt_dom_client_DOMImplTrident_2_classLit = createForClass('com.google.gwt.dom.client', 'DOMImplTrident', 468);
 function DOMImplIE8(){
   $clinit_DOMImpl();
 }
 
-defineClass(344, 486, {}, DOMImplIE8);
+defineClass(329, 468, {}, DOMImplIE8);
 _.getAbsoluteLeft = function getAbsoluteLeft_0(elem){
   var doc;
   doc = elem.ownerDocument;
@@ -1826,8 +1826,8 @@ _.getScrollLeft_0 = function getScrollLeft_1(elem){
   return toInt32($getSubPixelScrollLeft(elem));
 }
 ;
-var Lcom_google_gwt_dom_client_DOMImplIE8_2_classLit = createForClass('com.google.gwt.dom.client', 'DOMImplIE8', 344);
-defineClass(487, 478, {});
+var Lcom_google_gwt_dom_client_DOMImplIE8_2_classLit = createForClass('com.google.gwt.dom.client', 'DOMImplIE8', 329);
+defineClass(469, 461, {});
 _.eventGetButton = function eventGetButton_0(evt){
   var button = evt.button;
   if (button == 1) {
@@ -1855,7 +1855,7 @@ _.setInnerText = function setInnerText_1(elem, text_0){
   elem.textContent = text_0 || '';
 }
 ;
-var Lcom_google_gwt_dom_client_DOMImplStandard_2_classLit = createForClass('com.google.gwt.dom.client', 'DOMImplStandard', 487);
+var Lcom_google_gwt_dom_client_DOMImplStandard_2_classLit = createForClass('com.google.gwt.dom.client', 'DOMImplStandard', 469);
 function $isRTL(elem){
   return elem.ownerDocument.defaultView.getComputedStyle(elem, '').direction == 'rtl';
 }
@@ -1923,7 +1923,7 @@ function getBoundingClientRect(element){
   return element.getBoundingClientRect && element.getBoundingClientRect();
 }
 
-defineClass(488, 487, {});
+defineClass(470, 469, {});
 _.createScriptElement = function createScriptElement_0(doc, source){
   var elem;
   elem = doc.createElement('script');
@@ -1968,7 +1968,7 @@ _.getTabIndex = function getTabIndex_0(elem){
   return typeof elem.tabIndex != 'undefined'?elem.tabIndex:-1;
 }
 ;
-var Lcom_google_gwt_dom_client_DOMImplStandardBase_2_classLit = createForClass('com.google.gwt.dom.client', 'DOMImplStandardBase', 488);
+var Lcom_google_gwt_dom_client_DOMImplStandardBase_2_classLit = createForClass('com.google.gwt.dom.client', 'DOMImplStandardBase', 470);
 function $getBoundingClientRectLeft_0(elem){
   try {
     return elem.getBoundingClientRect().left;
@@ -1999,7 +1999,7 @@ function DOMImplIE9(){
   $clinit_DOMImpl();
 }
 
-defineClass(346, 488, {}, DOMImplIE9);
+defineClass(331, 470, {}, DOMImplIE9);
 _.getAbsoluteLeft = function getAbsoluteLeft_2(elem){
   var left;
   left = $getBoundingClientRectLeft_0(elem) + $wnd.pageXOffset;
@@ -2034,7 +2034,7 @@ _.isOrHasChild = function isOrHasChild_1(parent_0, child){
   return isOrHasChildImpl(parent_0, child);
 }
 ;
-var Lcom_google_gwt_dom_client_DOMImplIE9_2_classLit = createForClass('com.google.gwt.dom.client', 'DOMImplIE9', 346);
+var Lcom_google_gwt_dom_client_DOMImplIE9_2_classLit = createForClass('com.google.gwt.dom.client', 'DOMImplIE9', 331);
 function $getAbsoluteLeftImpl(viewport, elem){
   if (Element.prototype.getBoundingClientRect) {
     return elem.getBoundingClientRect().left + viewport.scrollLeft | 0;
@@ -2068,7 +2068,7 @@ function getGeckoVersion(){
   return -1;
 }
 
-defineClass(345, 487, {}, DOMImplMozilla);
+defineClass(330, 469, {}, DOMImplMozilla);
 _.eventGetRelatedTarget = function eventGetRelatedTarget_1(evt){
   var relatedTarget = evt.relatedTarget;
   if (!relatedTarget) {
@@ -2113,13 +2113,13 @@ _.toString_0 = function toString_4(elem){
   return outer;
 }
 ;
-var Lcom_google_gwt_dom_client_DOMImplMozilla_2_classLit = createForClass('com.google.gwt.dom.client', 'DOMImplMozilla', 345);
+var Lcom_google_gwt_dom_client_DOMImplMozilla_2_classLit = createForClass('com.google.gwt.dom.client', 'DOMImplMozilla', 330);
 function DOMImplWebkit(){
   $clinit_DOMImpl();
 }
 
-defineClass(347, 488, {}, DOMImplWebkit);
-var Lcom_google_gwt_dom_client_DOMImplWebkit_2_classLit = createForClass('com.google.gwt.dom.client', 'DOMImplWebkit', 347);
+defineClass(332, 470, {}, DOMImplWebkit);
+var Lcom_google_gwt_dom_client_DOMImplWebkit_2_classLit = createForClass('com.google.gwt.dom.client', 'DOMImplWebkit', 332);
 function $createCanvasElement(this$static){
   return ($clinit_DOMImpl() , impl_1).createElement_0(this$static, 'canvas');
 }
@@ -2177,9 +2177,9 @@ function Enum(name_0, ordinal){
   this.ordinal = ordinal;
 }
 
-defineClass(19, 1, {3:1, 27:1, 19:1});
+defineClass(15, 1, {3:1, 26:1, 15:1});
 _.compareTo = function compareTo(other){
-  return $compareTo(this, dynamicCast(other, 19));
+  return $compareTo(this, dynamicCast(other, 15));
 }
 ;
 _.equals$ = function equals_0(other){
@@ -2195,7 +2195,7 @@ _.toString$ = function toString_5(){
 }
 ;
 _.ordinal = 0;
-var Ljava_lang_Enum_2_classLit = createForClass('java.lang', 'Enum', 19);
+var Ljava_lang_Enum_2_classLit = createForClass('java.lang', 'Enum', 15);
 function $clinit_Style$TextAlign(){
   $clinit_Style$TextAlign = emptyMethod;
   CENTER = new Style$TextAlign$1;
@@ -2210,36 +2210,36 @@ function Style$TextAlign(enum$name, enum$ordinal){
 
 function values_0(){
   $clinit_Style$TextAlign();
-  return initValues(getClassLiteralForArray(Lcom_google_gwt_dom_client_Style$TextAlign_2_classLit, 1), $intern_4, 56, 0, [CENTER, JUSTIFY, LEFT, RIGHT]);
+  return initValues(getClassLiteralForArray(Lcom_google_gwt_dom_client_Style$TextAlign_2_classLit, 1), $intern_4, 51, 0, [CENTER, JUSTIFY, LEFT, RIGHT]);
 }
 
-defineClass(56, 19, $intern_5);
+defineClass(51, 15, $intern_5);
 var CENTER, JUSTIFY, LEFT, RIGHT;
-var Lcom_google_gwt_dom_client_Style$TextAlign_2_classLit = createForEnum('com.google.gwt.dom.client', 'Style/TextAlign', 56, values_0);
+var Lcom_google_gwt_dom_client_Style$TextAlign_2_classLit = createForEnum('com.google.gwt.dom.client', 'Style/TextAlign', 51, values_0);
 function Style$TextAlign$1(){
   Style$TextAlign.call(this, 'CENTER', 0);
 }
 
-defineClass(369, 56, $intern_5, Style$TextAlign$1);
-var Lcom_google_gwt_dom_client_Style$TextAlign$1_2_classLit = createForEnum('com.google.gwt.dom.client', 'Style/TextAlign/1', 369, null);
+defineClass(354, 51, $intern_5, Style$TextAlign$1);
+var Lcom_google_gwt_dom_client_Style$TextAlign$1_2_classLit = createForEnum('com.google.gwt.dom.client', 'Style/TextAlign/1', 354, null);
 function Style$TextAlign$2(){
   Style$TextAlign.call(this, 'JUSTIFY', 1);
 }
 
-defineClass(370, 56, $intern_5, Style$TextAlign$2);
-var Lcom_google_gwt_dom_client_Style$TextAlign$2_2_classLit = createForEnum('com.google.gwt.dom.client', 'Style/TextAlign/2', 370, null);
+defineClass(355, 51, $intern_5, Style$TextAlign$2);
+var Lcom_google_gwt_dom_client_Style$TextAlign$2_2_classLit = createForEnum('com.google.gwt.dom.client', 'Style/TextAlign/2', 355, null);
 function Style$TextAlign$3(){
   Style$TextAlign.call(this, 'LEFT', 2);
 }
 
-defineClass(371, 56, $intern_5, Style$TextAlign$3);
-var Lcom_google_gwt_dom_client_Style$TextAlign$3_2_classLit = createForEnum('com.google.gwt.dom.client', 'Style/TextAlign/3', 371, null);
+defineClass(356, 51, $intern_5, Style$TextAlign$3);
+var Lcom_google_gwt_dom_client_Style$TextAlign$3_2_classLit = createForEnum('com.google.gwt.dom.client', 'Style/TextAlign/3', 356, null);
 function Style$TextAlign$4(){
   Style$TextAlign.call(this, 'RIGHT', 3);
 }
 
-defineClass(372, 56, $intern_5, Style$TextAlign$4);
-var Lcom_google_gwt_dom_client_Style$TextAlign$4_2_classLit = createForEnum('com.google.gwt.dom.client', 'Style/TextAlign/4', 372, null);
+defineClass(357, 51, $intern_5, Style$TextAlign$4);
+var Lcom_google_gwt_dom_client_Style$TextAlign$4_2_classLit = createForEnum('com.google.gwt.dom.client', 'Style/TextAlign/4', 357, null);
 function $getRelativeX(this$static, target){
   return toInt32(($clinit_DOMImpl() , this$static).clientX || 0) - impl_1.getAbsoluteLeft(target) + impl_1.getScrollLeft_0(target) + $getScrollLeft_0(target.ownerDocument);
 }
@@ -2248,19 +2248,19 @@ function $getRelativeY(this$static, target){
   return toInt32(($clinit_DOMImpl() , this$static).clientY || 0) - impl_1.getAbsoluteTop(target) + ((target.scrollTop || 0) | 0) + $getScrollTop(target.ownerDocument);
 }
 
-defineClass(457, 1, {});
+defineClass(441, 1, {});
 _.toString$ = function toString_6(){
   return 'An event type';
 }
 ;
-var Lcom_google_web_bindery_event_shared_Event_2_classLit = createForClass('com.google.web.bindery.event.shared', 'Event', 457);
+var Lcom_google_web_bindery_event_shared_Event_2_classLit = createForClass('com.google.web.bindery.event.shared', 'Event', 441);
 function $overrideSource(this$static, source){
   this$static.source = source;
 }
 
-defineClass(458, 457, {});
+defineClass(442, 441, {});
 _.dead = false;
-var Lcom_google_gwt_event_shared_GwtEvent_2_classLit = createForClass('com.google.gwt.event.shared', 'GwtEvent', 458);
+var Lcom_google_gwt_event_shared_GwtEvent_2_classLit = createForClass('com.google.gwt.event.shared', 'GwtEvent', 442);
 function fireNativeEvent(){
 }
 
@@ -2275,7 +2275,7 @@ function fire(source){
   }
 }
 
-defineClass(313, 458, {}, CloseEvent_0);
+defineClass(299, 442, {}, CloseEvent_0);
 _.dispatch = function dispatch(handler){
   detachWidgets();
 }
@@ -2285,8 +2285,8 @@ _.getAssociatedType = function getAssociatedType(){
 }
 ;
 var TYPE;
-var Lcom_google_gwt_event_logical_shared_CloseEvent_2_classLit = createForClass('com.google.gwt.event.logical.shared', 'CloseEvent', 313);
-defineClass(292, 1, {});
+var Lcom_google_gwt_event_logical_shared_CloseEvent_2_classLit = createForClass('com.google.gwt.event.logical.shared', 'CloseEvent', 299);
+defineClass(280, 1, {});
 _.hashCode$ = function hashCode_2(){
   return this.index_0;
 }
@@ -2297,13 +2297,13 @@ _.toString$ = function toString_7(){
 ;
 _.index_0 = 0;
 var nextHashCode = 0;
-var Lcom_google_web_bindery_event_shared_Event$Type_2_classLit = createForClass('com.google.web.bindery.event.shared', 'Event/Type', 292);
+var Lcom_google_web_bindery_event_shared_Event$Type_2_classLit = createForClass('com.google.web.bindery.event.shared', 'Event/Type', 280);
 function GwtEvent$Type(){
   this.index_0 = ++nextHashCode;
 }
 
-defineClass(185, 292, {}, GwtEvent$Type);
-var Lcom_google_gwt_event_shared_GwtEvent$Type_2_classLit = createForClass('com.google.gwt.event.shared', 'GwtEvent/Type', 185);
+defineClass(176, 280, {}, GwtEvent$Type);
+var Lcom_google_gwt_event_shared_GwtEvent$Type_2_classLit = createForClass('com.google.gwt.event.shared', 'GwtEvent/Type', 176);
 function $addHandler(this$static, type_0, handler){
   return new LegacyHandlerWrapper($doAdd(this$static.eventBus, type_0, handler));
 }
@@ -2318,7 +2318,7 @@ function $fireEvent(this$static, event_0){
   }
    catch ($e0) {
     $e0 = wrap($e0);
-    if (instanceOf($e0, 86)) {
+    if (instanceOf($e0, 84)) {
       e = $e0;
       throw new UmbrellaException_0(e.causes);
     }
@@ -2330,10 +2330,10 @@ function $fireEvent(this$static, event_0){
   }
 }
 
-defineClass(183, 1, {39:1});
-var Lcom_google_gwt_event_shared_HandlerManager_2_classLit = createForClass('com.google.gwt.event.shared', 'HandlerManager', 183);
-defineClass(459, 1, {});
-var Lcom_google_web_bindery_event_shared_EventBus_2_classLit = createForClass('com.google.web.bindery.event.shared', 'EventBus', 459);
+defineClass(174, 1, {38:1});
+var Lcom_google_gwt_event_shared_HandlerManager_2_classLit = createForClass('com.google.gwt.event.shared', 'HandlerManager', 174);
+defineClass(443, 1, {});
+var Lcom_google_web_bindery_event_shared_EventBus_2_classLit = createForClass('com.google.web.bindery.event.shared', 'EventBus', 443);
 function $defer(this$static, command){
   !this$static.deferredDeltas && (this$static.deferredDeltas = new ArrayList);
   $add_3(this$static.deferredDeltas, command);
@@ -2363,11 +2363,11 @@ function $doFire(this$static, event_0){
     while (this$static.isReverseOrder?it.hasPrevious():it.hasNext()) {
       handler = this$static.isReverseOrder?it.previous():it.next_0();
       try {
-        event_0.dispatch(dynamicCast(handler, 516));
+        event_0.dispatch(dynamicCast(handler, 500));
       }
        catch ($e0) {
         $e0 = wrap($e0);
-        if (instanceOf($e0, 12)) {
+        if (instanceOf($e0, 13)) {
           e = $e0;
           !causes && (causes = new HashSet);
           $add_4(causes, e);
@@ -2388,12 +2388,12 @@ function $doFire(this$static, event_0){
 
 function $ensureHandlerList(this$static, type_0, source){
   var handlers, sourceMap;
-  sourceMap = dynamicCast($get(this$static.map_0, type_0), 97);
+  sourceMap = dynamicCast($get(this$static.map_0, type_0), 93);
   if (!sourceMap) {
     sourceMap = new HashMap;
     $put(this$static.map_0, type_0, sourceMap);
   }
-  handlers = dynamicCast(sourceMap.get_0(source), 38);
+  handlers = dynamicCast(sourceMap.get_0(source), 37);
   if (!handlers) {
     handlers = new ArrayList;
     sourceMap.put(source, handlers);
@@ -2409,11 +2409,11 @@ function $getDispatchList(this$static, type_0){
 
 function $getHandlerList(this$static, type_0){
   var handlers, sourceMap;
-  sourceMap = dynamicCast($get(this$static.map_0, type_0), 97);
+  sourceMap = dynamicCast($get(this$static.map_0, type_0), 93);
   if (!sourceMap) {
     return $clinit_Collections() , $clinit_Collections() , EMPTY_LIST;
   }
-  handlers = dynamicCast(sourceMap.get_0(null), 38);
+  handlers = dynamicCast(sourceMap.get_0(null), 37);
   if (!handlers) {
     return $clinit_Collections() , $clinit_Collections() , EMPTY_LIST;
   }
@@ -2425,7 +2425,7 @@ function $handleQueuedAddsAndRemoves(this$static){
   if (this$static.deferredDeltas) {
     try {
       for (c$iterator = new AbstractList$IteratorImpl(this$static.deferredDeltas); c$iterator.i < c$iterator.this$01_0.size_1();) {
-        c = (checkCriticalElement(c$iterator.i < c$iterator.this$01_0.size_1()) , dynamicCast(c$iterator.this$01_0.get_1(c$iterator.last = c$iterator.i++), 517));
+        c = (checkCriticalElement(c$iterator.i < c$iterator.this$01_0.size_1()) , dynamicCast(c$iterator.this$01_0.get_1(c$iterator.last = c$iterator.i++), 501));
         $doAddNow(c.this$01, c.val$type2, c.val$source3, c.val$handler4);
       }
     }
@@ -2435,22 +2435,22 @@ function $handleQueuedAddsAndRemoves(this$static){
   }
 }
 
-defineClass(293, 459, {});
+defineClass(281, 443, {});
 _.firingDepth = 0;
 _.isReverseOrder = false;
-var Lcom_google_web_bindery_event_shared_SimpleEventBus_2_classLit = createForClass('com.google.web.bindery.event.shared', 'SimpleEventBus', 293);
+var Lcom_google_web_bindery_event_shared_SimpleEventBus_2_classLit = createForClass('com.google.web.bindery.event.shared', 'SimpleEventBus', 281);
 function HandlerManager$Bus(){
   this.map_0 = new HashMap;
   this.isReverseOrder = false;
 }
 
-defineClass(294, 293, {}, HandlerManager$Bus);
-var Lcom_google_gwt_event_shared_HandlerManager$Bus_2_classLit = createForClass('com.google.gwt.event.shared', 'HandlerManager/Bus', 294);
+defineClass(282, 281, {}, HandlerManager$Bus);
+var Lcom_google_gwt_event_shared_HandlerManager$Bus_2_classLit = createForClass('com.google.gwt.event.shared', 'HandlerManager/Bus', 282);
 function LegacyHandlerWrapper(){
 }
 
-defineClass(343, 1, {}, LegacyHandlerWrapper);
-var Lcom_google_gwt_event_shared_LegacyHandlerWrapper_2_classLit = createForClass('com.google.gwt.event.shared', 'LegacyHandlerWrapper', 343);
+defineClass(328, 1, {}, LegacyHandlerWrapper);
+var Lcom_google_gwt_event_shared_LegacyHandlerWrapper_2_classLit = createForClass('com.google.gwt.event.shared', 'LegacyHandlerWrapper', 328);
 function UmbrellaException(causes){
   RuntimeException_1.call(this, makeMessage(causes), makeCause(causes));
   this.causes = causes;
@@ -2462,7 +2462,7 @@ function makeCause(causes){
   if (!iterator.hasNext()) {
     return null;
   }
-  return dynamicCast(iterator.next_0(), 12);
+  return dynamicCast(iterator.next_0(), 13);
 }
 
 function makeMessage(causes){
@@ -2474,21 +2474,21 @@ function makeMessage(causes){
   b = new StringBuilder_1(count == 1?'Exception caught: ':count + ' exceptions caught: ');
   first = true;
   for (t$iterator = causes.iterator(); t$iterator.hasNext();) {
-    t = dynamicCast(t$iterator.next_0(), 12);
+    t = dynamicCast(t$iterator.next_0(), 13);
     first?(first = false):(b.string += '; ' , b);
     $append_0(b, t.getMessage());
   }
   return b.string;
 }
 
-defineClass(86, 18, $intern_6, UmbrellaException);
-var Lcom_google_web_bindery_event_shared_UmbrellaException_2_classLit = createForClass('com.google.web.bindery.event.shared', 'UmbrellaException', 86);
+defineClass(84, 17, $intern_6, UmbrellaException);
+var Lcom_google_web_bindery_event_shared_UmbrellaException_2_classLit = createForClass('com.google.web.bindery.event.shared', 'UmbrellaException', 84);
 function UmbrellaException_0(causes){
   UmbrellaException.call(this, causes);
 }
 
-defineClass(171, 86, $intern_6, UmbrellaException_0);
-var Lcom_google_gwt_event_shared_UmbrellaException_2_classLit = createForClass('com.google.gwt.event.shared', 'UmbrellaException', 171);
+defineClass(163, 84, $intern_6, UmbrellaException_0);
+var Lcom_google_gwt_event_shared_UmbrellaException_2_classLit = createForClass('com.google.gwt.event.shared', 'UmbrellaException', 163);
 function throwIfNull(value_0){
   if (null == value_0) {
     throw new NullPointerException_0('encodedURLComponent cannot be null');
@@ -2543,12 +2543,12 @@ function HasDirection$Direction(enum$name, enum$ordinal){
 
 function values_1(){
   $clinit_HasDirection$Direction();
-  return initValues(getClassLiteralForArray(Lcom_google_gwt_i18n_client_HasDirection$Direction_2_classLit, 1), $intern_4, 104, 0, [RTL, LTR, DEFAULT]);
+  return initValues(getClassLiteralForArray(Lcom_google_gwt_i18n_client_HasDirection$Direction_2_classLit, 1), $intern_4, 99, 0, [RTL, LTR, DEFAULT]);
 }
 
-defineClass(104, 19, {104:1, 3:1, 27:1, 19:1}, HasDirection$Direction);
+defineClass(99, 15, {99:1, 3:1, 26:1, 15:1}, HasDirection$Direction);
 var DEFAULT, LTR, RTL;
-var Lcom_google_gwt_i18n_client_HasDirection$Direction_2_classLit = createForEnum('com.google.gwt.i18n.client', 'HasDirection/Direction', 104, values_1);
+var Lcom_google_gwt_i18n_client_HasDirection$Direction_2_classLit = createForEnum('com.google.gwt.i18n.client', 'HasDirection/Direction', 99, values_1);
 function clone(array){
   return cloneSubrange(array, array.length);
 }
@@ -2673,8 +2673,8 @@ function cacheJavaScriptException(e, jse){
 
 function unwrap(e){
   var jse;
-  if (instanceOf(e, 65)) {
-    jse = dynamicCast(e, 65);
+  if (instanceOf(e, 62)) {
+    jse = dynamicCast(e, 62);
     if (maskUndefined(jse.e) !== maskUndefined(($clinit_JavaScriptException() , NOT_SET))) {
       return maskUndefined(jse.e) === maskUndefined(NOT_SET)?null:jse.e;
     }
@@ -2684,7 +2684,7 @@ function unwrap(e){
 
 function wrap(e){
   var jse;
-  if (instanceOf(e, 12)) {
+  if (instanceOf(e, 13)) {
     return e;
   }
   jse = e && e.__gwt$exception;
@@ -2971,7 +2971,7 @@ function fromInt(value_0){
   var rebase, result;
   if (value_0 > -129 && value_0 < 128) {
     rebase = value_0 + 128;
-    boxedValues == null && (boxedValues = initDim(Lcom_google_gwt_lang_LongLibBase$LongEmul_2_classLit, $intern_4, 522, 256, 0, 1));
+    boxedValues == null && (boxedValues = initDim(Lcom_google_gwt_lang_LongLibBase$LongEmul_2_classLit, $intern_4, 506, 256, 0, 1));
     result = boxedValues[rebase];
     !result && (result = boxedValues[rebase] = create_0(value_0));
     return result;
@@ -3171,14 +3171,14 @@ function $setLevel(this$static, newLevel){
   this$static.level = newLevel;
 }
 
-defineClass(103, 1, {103:1});
-var Ljava_util_logging_Handler_2_classLit = createForClass('java.util.logging', 'Handler', 103);
+defineClass(98, 1, {98:1});
+var Ljava_util_logging_Handler_2_classLit = createForClass('java.util.logging', 'Handler', 98);
 function ConsoleLogHandler(){
   $setFormatter(this, new TextLogFormatter(true));
   $setLevel(this, ($clinit_Level() , ALL));
 }
 
-defineClass(304, 103, {103:1}, ConsoleLogHandler);
+defineClass(290, 98, {98:1}, ConsoleLogHandler);
 _.publish = function publish(record){
   var msg, val;
   if (!window.console || ($getLevel(this) , -2147483648 > record.level.intValue_0())) {
@@ -3189,18 +3189,18 @@ _.publish = function publish(record){
   val >= ($clinit_Level() , 1000)?(window.console.error(msg) , undefined):val >= 900?(window.console.warn(msg) , undefined):val >= 800?(window.console.info(msg) , undefined):(window.console.log(msg) , undefined);
 }
 ;
-var Lcom_google_gwt_logging_client_ConsoleLogHandler_2_classLit = createForClass('com.google.gwt.logging.client', 'ConsoleLogHandler', 304);
+var Lcom_google_gwt_logging_client_ConsoleLogHandler_2_classLit = createForClass('com.google.gwt.logging.client', 'ConsoleLogHandler', 290);
 function DevelopmentModeLogHandler(){
   $setFormatter(this, new TextLogFormatter(false));
   $setLevel(this, ($clinit_Level() , ALL));
 }
 
-defineClass(305, 103, {103:1}, DevelopmentModeLogHandler);
+defineClass(291, 98, {98:1}, DevelopmentModeLogHandler);
 _.publish = function publish_0(record){
   return;
 }
 ;
-var Lcom_google_gwt_logging_client_DevelopmentModeLogHandler_2_classLit = createForClass('com.google.gwt.logging.client', 'DevelopmentModeLogHandler', 305);
+var Lcom_google_gwt_logging_client_DevelopmentModeLogHandler_2_classLit = createForClass('com.google.gwt.logging.client', 'DevelopmentModeLogHandler', 291);
 function $clinit_LogConfiguration(){
   $clinit_LogConfiguration = emptyMethod;
   impl_2 = new LogConfiguration$LogConfigurationImplRegular;
@@ -3221,8 +3221,8 @@ function LogConfiguration$1(val$log){
   this.val$log2 = val$log;
 }
 
-defineClass(228, 1, {}, LogConfiguration$1);
-var Lcom_google_gwt_logging_client_LogConfiguration$1_2_classLit = createForClass('com.google.gwt.logging.client', 'LogConfiguration/1', 228);
+defineClass(217, 1, {}, LogConfiguration$1);
+var Lcom_google_gwt_logging_client_LogConfiguration$1_2_classLit = createForClass('com.google.gwt.logging.client', 'LogConfiguration/1', 217);
 function $configureClientSideLogging(this$static){
   this$static.root = (new LoggerImplRegular , $ensureLogger(getLogManager(), ''));
   this$static.root.impl.useParentHandlers = false;
@@ -3240,7 +3240,7 @@ function $setDefaultHandlers(l){
 
 function $setLevels(l){
   var level, levelParam, paramsForName;
-  levelParam = (ensureListParameterMap() , paramsForName = dynamicCast(listParamMap.get_0('logLevel'), 38) , !paramsForName?null:dynamicCastToString(paramsForName.get_1(paramsForName.size_1() - 1)));
+  levelParam = (ensureListParameterMap() , paramsForName = dynamicCast(listParamMap.get_0('logLevel'), 37) , !paramsForName?null:dynamicCastToString(paramsForName.get_1(paramsForName.size_1() - 1)));
   level = levelParam == null?null:($clinit_Level() , $parse_0(levelParam));
   level?$setLevel_0(l.impl, level):$setLevel_1(l, ($clinit_Level() , ALL));
 }
@@ -3248,12 +3248,12 @@ function $setLevels(l){
 function LogConfiguration$LogConfigurationImplRegular(){
 }
 
-defineClass(227, 1, {}, LogConfiguration$LogConfigurationImplRegular);
-var Lcom_google_gwt_logging_client_LogConfiguration$LogConfigurationImplRegular_2_classLit = createForClass('com.google.gwt.logging.client', 'LogConfiguration/LogConfigurationImplRegular', 227);
-defineClass(476, 1, {});
-var Ljava_util_logging_Formatter_2_classLit = createForClass('java.util.logging', 'Formatter', 476);
-defineClass(477, 476, {});
-var Lcom_google_gwt_logging_impl_FormatterImpl_2_classLit = createForClass('com.google.gwt.logging.impl', 'FormatterImpl', 477);
+defineClass(216, 1, {}, LogConfiguration$LogConfigurationImplRegular);
+var Lcom_google_gwt_logging_client_LogConfiguration$LogConfigurationImplRegular_2_classLit = createForClass('com.google.gwt.logging.client', 'LogConfiguration/LogConfigurationImplRegular', 216);
+defineClass(459, 1, {});
+var Ljava_util_logging_Formatter_2_classLit = createForClass('java.util.logging', 'Formatter', 459);
+defineClass(460, 459, {});
+var Lcom_google_gwt_logging_impl_FormatterImpl_2_classLit = createForClass('com.google.gwt.logging.impl', 'FormatterImpl', 460);
 function $format(this$static, event_0){
   var message, date, s;
   message = new StringBuilder;
@@ -3267,9 +3267,9 @@ function TextLogFormatter(showStackTraces){
   this.showStackTraces = showStackTraces;
 }
 
-defineClass(190, 477, {}, TextLogFormatter);
+defineClass(180, 460, {}, TextLogFormatter);
 _.showStackTraces = false;
-var Lcom_google_gwt_logging_client_TextLogFormatter_2_classLit = createForClass('com.google.gwt.logging.client', 'TextLogFormatter', 190);
+var Lcom_google_gwt_logging_client_TextLogFormatter_2_classLit = createForClass('com.google.gwt.logging.client', 'TextLogFormatter', 180);
 function $parse_0(name_0){
   name_0 = name_0.toUpperCase();
   if ($equals(name_0, 'ALL')) {
@@ -3323,7 +3323,7 @@ function $getEffectiveLevel(this$static){
 }
 
 function $getHandlers(this$static){
-  return dynamicCast($toArray(this$static.handlers, initDim(Ljava_util_logging_Handler_2_classLit, $intern_13, 103, this$static.handlers.array.length, 0, 1)), 225);
+  return dynamicCast($toArray(this$static.handlers, initDim(Ljava_util_logging_Handler_2_classLit, $intern_13, 98, this$static.handlers.array.length, 0, 1)), 214);
 }
 
 function $isLoggable(this$static, messageLevel){
@@ -3343,7 +3343,7 @@ function $log(this$static, level, msg, thrown){
 function $log_0(this$static, record){
   var handler, handler$array, handler$array0, handler$index, handler$index0, handler$max, handler$max0, logger;
   if ($isLoggable(this$static, record.level)) {
-    for (handler$array0 = dynamicCast($toArray(this$static.handlers, initDim(Ljava_util_logging_Handler_2_classLit, $intern_13, 103, this$static.handlers.array.length, 0, 1)), 225) , handler$index0 = 0 , handler$max0 = handler$array0.length; handler$index0 < handler$max0; ++handler$index0) {
+    for (handler$array0 = dynamicCast($toArray(this$static.handlers, initDim(Ljava_util_logging_Handler_2_classLit, $intern_13, 98, this$static.handlers.array.length, 0, 1)), 214) , handler$index0 = 0 , handler$max0 = handler$array0.length; handler$index0 < handler$max0; ++handler$index0) {
       handler = handler$array0[handler$index0];
       handler.publish(record);
     }
@@ -3375,22 +3375,22 @@ function LoggerImplRegular(){
   this.handlers = new ArrayList;
 }
 
-defineClass(121, 1, {}, LoggerImplRegular);
+defineClass(114, 1, {}, LoggerImplRegular);
 _.level = null;
 _.useParentHandlers = false;
-var Lcom_google_gwt_logging_impl_LoggerImplRegular_2_classLit = createForClass('com.google.gwt.logging.impl', 'LoggerImplRegular', 121);
-defineClass(453, 1, {});
-var Ljava_io_OutputStream_2_classLit = createForClass('java.io', 'OutputStream', 453);
-defineClass(454, 453, {});
-var Ljava_io_FilterOutputStream_2_classLit = createForClass('java.io', 'FilterOutputStream', 454);
-defineClass(455, 454, {});
-var Ljava_io_PrintStream_2_classLit = createForClass('java.io', 'PrintStream', 455);
+var Lcom_google_gwt_logging_impl_LoggerImplRegular_2_classLit = createForClass('com.google.gwt.logging.impl', 'LoggerImplRegular', 114);
+defineClass(437, 1, {});
+var Ljava_io_OutputStream_2_classLit = createForClass('java.io', 'OutputStream', 437);
+defineClass(438, 437, {});
+var Ljava_io_FilterOutputStream_2_classLit = createForClass('java.io', 'FilterOutputStream', 438);
+defineClass(439, 438, {});
+var Ljava_io_PrintStream_2_classLit = createForClass('java.io', 'PrintStream', 439);
 function StackTracePrintStream(builder){
   this.builder = builder;
 }
 
-defineClass(330, 455, {}, StackTracePrintStream);
-var Lcom_google_gwt_logging_impl_StackTracePrintStream_2_classLit = createForClass('com.google.gwt.logging.impl', 'StackTracePrintStream', 330);
+defineClass(315, 439, {}, StackTracePrintStream);
+var Lcom_google_gwt_logging_impl_StackTracePrintStream_2_classLit = createForClass('com.google.gwt.logging.impl', 'StackTracePrintStream', 315);
 function $clinit_DOM(){
   $clinit_DOM = emptyMethod;
   impl_3 = com_google_gwt_user_client_impl_DOMImpl();
@@ -3489,7 +3489,7 @@ function setTimeout_0(func, time){
   return $wnd.setTimeout(func, time);
 }
 
-defineClass(181, 1, {});
+defineClass(189, 1, {});
 _.fire = function fire_0(scheduleCancelCounter){
   if (scheduleCancelCounter != this.cancelCounter) {
     return;
@@ -3501,7 +3501,7 @@ _.fire = function fire_0(scheduleCancelCounter){
 _.cancelCounter = 0;
 _.isRepeating = false;
 _.timerId = null;
-var Lcom_google_gwt_user_client_Timer_2_classLit = createForClass('com.google.gwt.user.client', 'Timer', 181);
+var Lcom_google_gwt_user_client_Timer_2_classLit = createForClass('com.google.gwt.user.client', 'Timer', 189);
 function $clinit_Window(){
   $clinit_Window = emptyMethod;
   impl_4 = com_google_gwt_user_client_impl_WindowImpl();
@@ -3550,7 +3550,7 @@ function Window$ClosingEvent(){
   $clinit_Window$ClosingEvent();
 }
 
-defineClass(291, 458, {}, Window$ClosingEvent);
+defineClass(279, 442, {}, Window$ClosingEvent);
 _.dispatch = function dispatch_0(handler){
   throwClassCastExceptionUnlessNull(handler);
   null.nullMethod();
@@ -3561,7 +3561,7 @@ _.getAssociatedType = function getAssociatedType_0(){
 }
 ;
 var TYPE_0;
-var Lcom_google_gwt_user_client_Window$ClosingEvent_2_classLit = createForClass('com.google.gwt.user.client', 'Window/ClosingEvent', 291);
+var Lcom_google_gwt_user_client_Window$ClosingEvent_2_classLit = createForClass('com.google.gwt.user.client', 'Window/ClosingEvent', 279);
 function buildListParamMap(queryString){
   var entry, entry$iterator, key, kv, kvPair, kvPair$array, kvPair$index, kvPair$max, out, qs, val, values, regexp;
   out = new HashMap;
@@ -3580,10 +3580,10 @@ function buildListParamMap(queryString){
       }
        catch ($e0) {
         $e0 = wrap($e0);
-        if (!instanceOf($e0, 65))
+        if (!instanceOf($e0, 62))
           throw unwrap($e0);
       }
-      values = dynamicCast(out.get_0(key), 38);
+      values = dynamicCast(out.get_0(key), 37);
       if (!values) {
         values = new ArrayList;
         out.put(key, values);
@@ -3592,8 +3592,8 @@ function buildListParamMap(queryString){
     }
   }
   for (entry$iterator = out.entrySet_0().iterator(); entry$iterator.hasNext();) {
-    entry = dynamicCast(entry$iterator.next_0(), 23);
-    entry.setValue(unmodifiableList(dynamicCast(entry.getValue(), 38)));
+    entry = dynamicCast(entry$iterator.next_0(), 22);
+    entry.setValue(unmodifiableList(dynamicCast(entry.getValue(), 37)));
   }
   out = ($clinit_Collections() , new Collections$UnmodifiableMap(out));
   return out;
@@ -3614,8 +3614,8 @@ function Window$WindowHandlers(){
   this.source = null;
 }
 
-defineClass(184, 183, {39:1}, Window$WindowHandlers);
-var Lcom_google_gwt_user_client_Window$WindowHandlers_2_classLit = createForClass('com.google.gwt.user.client', 'Window/WindowHandlers', 184);
+defineClass(175, 174, {38:1}, Window$WindowHandlers);
+var Lcom_google_gwt_user_client_Window$WindowHandlers_2_classLit = createForClass('com.google.gwt.user.client', 'Window/WindowHandlers', 175);
 function $eventGetTypeInt(eventType){
   switch (eventType) {
     case 'blur':
@@ -3686,16 +3686,16 @@ function $maybeInitializeEventSystem(this$static){
 
 function getEventListener_0(elem){
   var maybeListener = elem.__listener;
-  return !instanceOfJso(maybeListener) && instanceOf(maybeListener, 43)?maybeListener:null;
+  return !instanceOfJso(maybeListener) && instanceOf(maybeListener, 42)?maybeListener:null;
 }
 
 function setEventListener(elem, listener){
   elem.__listener = listener;
 }
 
-defineClass(461, 1, {});
+defineClass(444, 1, {});
 var eventSystemIsInitialized = false;
-var Lcom_google_gwt_user_client_impl_DOMImpl_2_classLit = createForClass('com.google.gwt.user.client.impl', 'DOMImpl', 461);
+var Lcom_google_gwt_user_client_impl_DOMImpl_2_classLit = createForClass('com.google.gwt.user.client.impl', 'DOMImpl', 444);
 function $sinkEventsImpl(elem, bits){
   var chMask = (elem.__eventBits || 0) ^ bits;
   elem.__eventBits = bits;
@@ -3731,7 +3731,7 @@ function previewEventImpl(){
   return !isCancelled;
 }
 
-defineClass(462, 461, {});
+defineClass(445, 444, {});
 _.initEventSystem = function initEventSystem(){
   $wnd.__gwt_globalEventArray == null && ($wnd.__gwt_globalEventArray = new Array);
   $wnd.__gwt_globalEventArray[$wnd.__gwt_globalEventArray.length] = $entry(function(){
@@ -3810,12 +3810,12 @@ _.sinkEvents = function sinkEvents_0(elem, bits){
 }
 ;
 var callDispatchDblClickEvent, callDispatchEvent, callDispatchOnLoadEvent, callDispatchUnhandledEvent;
-var Lcom_google_gwt_user_client_impl_DOMImplTrident_2_classLit = createForClass('com.google.gwt.user.client.impl', 'DOMImplTrident', 462);
+var Lcom_google_gwt_user_client_impl_DOMImplTrident_2_classLit = createForClass('com.google.gwt.user.client.impl', 'DOMImplTrident', 445);
 function DOMImplIE8_0(){
 }
 
-defineClass(306, 462, {}, DOMImplIE8_0);
-var Lcom_google_gwt_user_client_impl_DOMImplIE8_2_classLit = createForClass('com.google.gwt.user.client.impl', 'DOMImplIE8', 306);
+defineClass(292, 445, {}, DOMImplIE8_0);
+var Lcom_google_gwt_user_client_impl_DOMImplIE8_2_classLit = createForClass('com.google.gwt.user.client.impl', 'DOMImplIE8', 292);
 function $clinit_DOMImplStandard(){
   $clinit_DOMImplStandard = emptyMethod;
   bitlessEventDispatchers = {_default_:dispatchEvent_3, dragenter:dispatchDragEvent, dragover:dispatchDragEvent};
@@ -3916,7 +3916,7 @@ function getFirstAncestorWithListener(evt){
   return curElem;
 }
 
-defineClass(463, 461, {});
+defineClass(446, 444, {});
 _.initEventSystem = function initEventSystem_0(){
   $initEventSystem();
 }
@@ -3927,15 +3927,15 @@ _.sinkEvents = function sinkEvents_1(elem, bits){
 }
 ;
 var bitlessEventDispatchers, captureElem, captureEventDispatchers, dispatchEvent_2, dispatchUnhandledEvent_0;
-var Lcom_google_gwt_user_client_impl_DOMImplStandard_2_classLit = createForClass('com.google.gwt.user.client.impl', 'DOMImplStandard', 463);
-defineClass(464, 463, {});
-var Lcom_google_gwt_user_client_impl_DOMImplStandardBase_2_classLit = createForClass('com.google.gwt.user.client.impl', 'DOMImplStandardBase', 464);
+var Lcom_google_gwt_user_client_impl_DOMImplStandard_2_classLit = createForClass('com.google.gwt.user.client.impl', 'DOMImplStandard', 446);
+defineClass(447, 446, {});
+var Lcom_google_gwt_user_client_impl_DOMImplStandardBase_2_classLit = createForClass('com.google.gwt.user.client.impl', 'DOMImplStandardBase', 447);
 function DOMImplIE9_0(){
   $clinit_DOMImplStandard();
 }
 
-defineClass(308, 464, {}, DOMImplIE9_0);
-var Lcom_google_gwt_user_client_impl_DOMImplIE9_2_classLit = createForClass('com.google.gwt.user.client.impl', 'DOMImplIE9', 308);
+defineClass(294, 447, {}, DOMImplIE9_0);
+var Lcom_google_gwt_user_client_impl_DOMImplIE9_2_classLit = createForClass('com.google.gwt.user.client.impl', 'DOMImplIE9', 294);
 function $clinit_DOMImplMozilla(){
   $clinit_DOMImplMozilla = emptyMethod;
   $clinit_DOMImplStandard();
@@ -3960,7 +3960,7 @@ function DOMImplMozilla_0(){
   $clinit_DOMImplMozilla();
 }
 
-defineClass(307, 463, {}, DOMImplMozilla_0);
+defineClass(293, 446, {}, DOMImplMozilla_0);
 _.initEventSystem = function initEventSystem_1(){
   $initEventSystem();
   $initSyntheticMouseUpEvents();
@@ -3972,13 +3972,13 @@ _.sinkEvents = function sinkEvents_2(elem, bits){
   bits & $intern_17 && elem.addEventListener('DOMMouseScroll', ($clinit_DOMImplStandard() , dispatchEvent_2), false);
 }
 ;
-var Lcom_google_gwt_user_client_impl_DOMImplMozilla_2_classLit = createForClass('com.google.gwt.user.client.impl', 'DOMImplMozilla', 307);
+var Lcom_google_gwt_user_client_impl_DOMImplMozilla_2_classLit = createForClass('com.google.gwt.user.client.impl', 'DOMImplMozilla', 293);
 function DOMImplWebkit_0(){
   $clinit_DOMImplStandard();
 }
 
-defineClass(309, 464, {}, DOMImplWebkit_0);
-var Lcom_google_gwt_user_client_impl_DOMImplWebkit_2_classLit = createForClass('com.google.gwt.user.client.impl', 'DOMImplWebkit', 309);
+defineClass(295, 447, {}, DOMImplWebkit_0);
+var Lcom_google_gwt_user_client_impl_DOMImplWebkit_2_classLit = createForClass('com.google.gwt.user.client.impl', 'DOMImplWebkit', 295);
 function foreach_0(map_0, fn){
   for (var e in map_0) {
     map_0.hasOwnProperty(e) && fn(e, map_0[e]);
@@ -3988,7 +3988,7 @@ function foreach_0(map_0, fn){
 function WindowImpl(){
 }
 
-defineClass(310, 1, {}, WindowImpl);
+defineClass(296, 1, {}, WindowImpl);
 _.getQueryString = function getQueryString(){
   return $wnd.location.search;
 }
@@ -4028,11 +4028,11 @@ _.initWindowCloseHandler = function initWindowCloseHandler(){
   );
 }
 ;
-var Lcom_google_gwt_user_client_impl_WindowImpl_2_classLit = createForClass('com.google.gwt.user.client.impl', 'WindowImpl', 310);
+var Lcom_google_gwt_user_client_impl_WindowImpl_2_classLit = createForClass('com.google.gwt.user.client.impl', 'WindowImpl', 296);
 function WindowImplIE(){
 }
 
-defineClass(311, 310, {}, WindowImplIE);
+defineClass(297, 296, {}, WindowImplIE);
 _.getQueryString = function getQueryString_0(){
   var href_0 = $wnd.location.href;
   var hashLoc = href_0.indexOf('#');
@@ -4049,13 +4049,13 @@ _.initWindowCloseHandler = function initWindowCloseHandler_0(){
   $removeChild($doc.body, scriptElem);
 }
 ;
-var Lcom_google_gwt_user_client_impl_WindowImplIE_2_classLit = createForClass('com.google.gwt.user.client.impl', 'WindowImplIE', 311);
+var Lcom_google_gwt_user_client_impl_WindowImplIE_2_classLit = createForClass('com.google.gwt.user.client.impl', 'WindowImplIE', 297);
 function WindowImplMozilla(){
 }
 
-defineClass(312, 310, {}, WindowImplMozilla);
-var Lcom_google_gwt_user_client_impl_WindowImplMozilla_2_classLit = createForClass('com.google.gwt.user.client.impl', 'WindowImplMozilla', 312);
-defineClass(449, 29, $intern_25);
+defineClass(298, 296, {}, WindowImplMozilla);
+var Lcom_google_gwt_user_client_impl_WindowImplMozilla_2_classLit = createForClass('com.google.gwt.user.client.impl', 'WindowImplMozilla', 298);
+defineClass(434, 29, $intern_25);
 _.doAttachChildren = function doAttachChildren_0(){
   tryCommand(this, ($clinit_AttachDetachException() , attachCommand));
 }
@@ -4064,7 +4064,7 @@ _.doDetachChildren = function doDetachChildren_0(){
   tryCommand(this, ($clinit_AttachDetachException() , detachCommand));
 }
 ;
-var Lcom_google_gwt_user_client_ui_Panel_2_classLit = createForClass('com.google.gwt.user.client.ui', 'Panel', 449);
+var Lcom_google_gwt_user_client_ui_Panel_2_classLit = createForClass('com.google.gwt.user.client.ui', 'Panel', 434);
 function $add(this$static, child, container){
   $removeFromParent(child);
   $add_2(this$static.children, child);
@@ -4093,7 +4093,7 @@ function ComplexPanel(){
   this.children = new WidgetCollection(this);
 }
 
-defineClass(170, 449, $intern_25);
+defineClass(162, 434, $intern_25);
 _.iterator = function iterator_0(){
   return new WidgetCollection$WidgetIterator(this.children);
 }
@@ -4102,7 +4102,7 @@ _.remove = function remove(w){
   return $remove(this, w);
 }
 ;
-var Lcom_google_gwt_user_client_ui_ComplexPanel_2_classLit = createForClass('com.google.gwt.user.client.ui', 'ComplexPanel', 170);
+var Lcom_google_gwt_user_client_ui_ComplexPanel_2_classLit = createForClass('com.google.gwt.user.client.ui', 'ComplexPanel', 162);
 function $add_0(this$static, w){
   $add(this$static, w, ($clinit_DOM() , this$static.element));
 }
@@ -4113,7 +4113,7 @@ function changeToStaticPositioning(elem){
   $setPropertyImpl(elem.style, 'position', '');
 }
 
-defineClass(242, 170, $intern_25);
+defineClass(231, 162, $intern_25);
 _.remove = function remove_0(w){
   var removed;
   removed = $remove(this, w);
@@ -4121,7 +4121,7 @@ _.remove = function remove_0(w){
   return removed;
 }
 ;
-var Lcom_google_gwt_user_client_ui_AbsolutePanel_2_classLit = createForClass('com.google.gwt.user.client.ui', 'AbsolutePanel', 242);
+var Lcom_google_gwt_user_client_ui_AbsolutePanel_2_classLit = createForClass('com.google.gwt.user.client.ui', 'AbsolutePanel', 231);
 function $clinit_AttachDetachException(){
   $clinit_AttachDetachException = emptyMethod;
   attachCommand = new AttachDetachException$1;
@@ -4143,7 +4143,7 @@ function tryCommand(hasWidgets, c){
     }
      catch ($e0) {
       $e0 = wrap($e0);
-      if (instanceOf($e0, 12)) {
+      if (instanceOf($e0, 13)) {
         e = $e0;
         !caught && (caught = new HashSet);
         $add_4(caught, e);
@@ -4157,27 +4157,27 @@ function tryCommand(hasWidgets, c){
   }
 }
 
-defineClass(246, 171, $intern_6, AttachDetachException);
+defineClass(235, 163, $intern_6, AttachDetachException);
 var attachCommand, detachCommand;
-var Lcom_google_gwt_user_client_ui_AttachDetachException_2_classLit = createForClass('com.google.gwt.user.client.ui', 'AttachDetachException', 246);
+var Lcom_google_gwt_user_client_ui_AttachDetachException_2_classLit = createForClass('com.google.gwt.user.client.ui', 'AttachDetachException', 235);
 function AttachDetachException$1(){
 }
 
-defineClass(247, 1, {}, AttachDetachException$1);
+defineClass(236, 1, {}, AttachDetachException$1);
 _.execute_0 = function execute_2(w){
   w.onAttach();
 }
 ;
-var Lcom_google_gwt_user_client_ui_AttachDetachException$1_2_classLit = createForClass('com.google.gwt.user.client.ui', 'AttachDetachException/1', 247);
+var Lcom_google_gwt_user_client_ui_AttachDetachException$1_2_classLit = createForClass('com.google.gwt.user.client.ui', 'AttachDetachException/1', 236);
 function AttachDetachException$2(){
 }
 
-defineClass(248, 1, {}, AttachDetachException$2);
+defineClass(237, 1, {}, AttachDetachException$2);
 _.execute_0 = function execute_3(w){
   w.onDetach();
 }
 ;
-var Lcom_google_gwt_user_client_ui_AttachDetachException$2_2_classLit = createForClass('com.google.gwt.user.client.ui', 'AttachDetachException/2', 248);
+var Lcom_google_gwt_user_client_ui_AttachDetachException$2_2_classLit = createForClass('com.google.gwt.user.client.ui', 'AttachDetachException/2', 237);
 function $setCellHorizontalAlignment(td, align_0){
   $setPropertyString(($clinit_DOM() , td), 'align', align_0.textAlignString);
 }
@@ -4190,8 +4190,8 @@ function $setCellVerticalAlignment_0(td, align_0){
   $setPropertyImpl(td.style, 'verticalAlign', align_0.verticalAlignString);
 }
 
-defineClass(318, 170, $intern_25);
-var Lcom_google_gwt_user_client_ui_CellPanel_2_classLit = createForClass('com.google.gwt.user.client.ui', 'CellPanel', 318);
+defineClass(304, 162, $intern_25);
+var Lcom_google_gwt_user_client_ui_CellPanel_2_classLit = createForClass('com.google.gwt.user.client.ui', 'CellPanel', 304);
 function $checkInit(this$static){
   if (!this$static.widget) {
     throw new IllegalStateException_0('initWidget() is not called yet');
@@ -4206,7 +4206,7 @@ function $initWidget(this$static, widget){
   if (!widget) {
     throw new NullPointerException_0('widget cannot be null');
   }
-  instanceOf(widget, 224) && dynamicCast(widget, 224);
+  instanceOf(widget, 213) && dynamicCast(widget, 213);
   $removeFromParent(widget);
   elem = ($clinit_DOM() , widget.element);
   $setElement_0(this$static, elem);
@@ -4215,7 +4215,7 @@ function $initWidget(this$static, widget){
   $setParent(widget, this$static);
 }
 
-defineClass(448, 29, $intern_26);
+defineClass(433, 29, $intern_26);
 _.isAttached = function isAttached_0(){
   if (this.widget) {
     return this.widget.isAttached();
@@ -4248,7 +4248,7 @@ _.resolvePotentialElement = function resolvePotentialElement_0(){
   return this.element;
 }
 ;
-var Lcom_google_gwt_user_client_ui_Composite_2_classLit = createForClass('com.google.gwt.user.client.ui', 'Composite', 448);
+var Lcom_google_gwt_user_client_ui_Composite_2_classLit = createForClass('com.google.gwt.user.client.ui', 'Composite', 433);
 function $setTextOrHtml(this$static, content_0){
   $setInnerText(this$static.element, content_0);
   if (this$static.textDir != this$static.initialElementDir) {
@@ -4263,8 +4263,8 @@ function DirectionalTextHelper(element){
   this.textDir = this.initialElementDir;
 }
 
-defineClass(373, 1, {}, DirectionalTextHelper);
-var Lcom_google_gwt_user_client_ui_DirectionalTextHelper_2_classLit = createForClass('com.google.gwt.user.client.ui', 'DirectionalTextHelper', 373);
+defineClass(358, 1, {}, DirectionalTextHelper);
+var Lcom_google_gwt_user_client_ui_DirectionalTextHelper_2_classLit = createForClass('com.google.gwt.user.client.ui', 'DirectionalTextHelper', 358);
 function $clinit_HasHorizontalAlignment(){
   $clinit_HasHorizontalAlignment = emptyMethod;
   new HasHorizontalAlignment$HorizontalAlignmentConstant(($clinit_Style$TextAlign() , 'center'));
@@ -4276,14 +4276,14 @@ function $clinit_HasHorizontalAlignment(){
 }
 
 var ALIGN_DEFAULT, ALIGN_LEFT, ALIGN_LOCALE_START;
-defineClass(468, 1, {});
-var Lcom_google_gwt_user_client_ui_HasHorizontalAlignment$AutoHorizontalAlignmentConstant_2_classLit = createForClass('com.google.gwt.user.client.ui', 'HasHorizontalAlignment/AutoHorizontalAlignmentConstant', 468);
+defineClass(451, 1, {});
+var Lcom_google_gwt_user_client_ui_HasHorizontalAlignment$AutoHorizontalAlignmentConstant_2_classLit = createForClass('com.google.gwt.user.client.ui', 'HasHorizontalAlignment/AutoHorizontalAlignmentConstant', 451);
 function HasHorizontalAlignment$HorizontalAlignmentConstant(textAlignString){
   this.textAlignString = textAlignString;
 }
 
-defineClass(124, 468, {}, HasHorizontalAlignment$HorizontalAlignmentConstant);
-var Lcom_google_gwt_user_client_ui_HasHorizontalAlignment$HorizontalAlignmentConstant_2_classLit = createForClass('com.google.gwt.user.client.ui', 'HasHorizontalAlignment/HorizontalAlignmentConstant', 124);
+defineClass(116, 451, {}, HasHorizontalAlignment$HorizontalAlignmentConstant);
+var Lcom_google_gwt_user_client_ui_HasHorizontalAlignment$HorizontalAlignmentConstant_2_classLit = createForClass('com.google.gwt.user.client.ui', 'HasHorizontalAlignment/HorizontalAlignmentConstant', 116);
 function $clinit_HasVerticalAlignment(){
   $clinit_HasVerticalAlignment = emptyMethod;
   new HasVerticalAlignment$VerticalAlignmentConstant('bottom');
@@ -4296,23 +4296,23 @@ function HasVerticalAlignment$VerticalAlignmentConstant(verticalAlignString){
   this.verticalAlignString = verticalAlignString;
 }
 
-defineClass(151, 1, {}, HasVerticalAlignment$VerticalAlignmentConstant);
-var Lcom_google_gwt_user_client_ui_HasVerticalAlignment$VerticalAlignmentConstant_2_classLit = createForClass('com.google.gwt.user.client.ui', 'HasVerticalAlignment/VerticalAlignmentConstant', 151);
+defineClass(142, 1, {}, HasVerticalAlignment$VerticalAlignmentConstant);
+var Lcom_google_gwt_user_client_ui_HasVerticalAlignment$VerticalAlignmentConstant_2_classLit = createForClass('com.google.gwt.user.client.ui', 'HasVerticalAlignment/VerticalAlignmentConstant', 142);
 function LabelBase(element){
   $setElement_0(this, ($clinit_DOM() , element));
   this.directionalTextHelper = new DirectionalTextHelper(this.element);
 }
 
-defineClass(192, 29, $intern_0);
-var Lcom_google_gwt_user_client_ui_LabelBase_2_classLit = createForClass('com.google.gwt.user.client.ui', 'LabelBase', 192);
+defineClass(182, 29, $intern_0);
+var Lcom_google_gwt_user_client_ui_LabelBase_2_classLit = createForClass('com.google.gwt.user.client.ui', 'LabelBase', 182);
 function Label(text_0){
   LabelBase.call(this, $createDivElement($doc));
   ($clinit_DOM() , this.element).className = 'gwt-Label';
   $setTextOrHtml(this.directionalTextHelper, text_0);
 }
 
-defineClass(152, 192, $intern_0, Label);
-var Lcom_google_gwt_user_client_ui_Label_2_classLit = createForClass('com.google.gwt.user.client.ui', 'Label', 152);
+defineClass(143, 182, $intern_0, Label);
+var Lcom_google_gwt_user_client_ui_Label_2_classLit = createForClass('com.google.gwt.user.client.ui', 'Label', 143);
 function $clinit_PotentialElement(){
   $clinit_PotentialElement = emptyMethod;
   declareShim();
@@ -4389,7 +4389,7 @@ function detachWidgets(){
 function get_0(){
   $clinit_RootPanel();
   var elem, rp;
-  rp = dynamicCast($getStringValue(rootPanels, 'g3mWidgetHolder'), 101);
+  rp = dynamicCast($getStringValue(rootPanels, 'g3mWidgetHolder'), 96);
   if (!(elem = $doc.getElementById('g3mWidgetHolder'))) {
     return null;
   }
@@ -4405,29 +4405,29 @@ function get_0(){
   return rp;
 }
 
-defineClass(101, 242, $intern_27, RootPanel);
+defineClass(96, 231, $intern_27, RootPanel);
 var maybeDetachCommand, rootPanels, widgetsToDetach;
-var Lcom_google_gwt_user_client_ui_RootPanel_2_classLit = createForClass('com.google.gwt.user.client.ui', 'RootPanel', 101);
+var Lcom_google_gwt_user_client_ui_RootPanel_2_classLit = createForClass('com.google.gwt.user.client.ui', 'RootPanel', 96);
 function RootPanel$1(){
 }
 
-defineClass(244, 1, {}, RootPanel$1);
+defineClass(233, 1, {}, RootPanel$1);
 _.execute_0 = function execute_4(w){
   w.isAttached() && w.onDetach();
 }
 ;
-var Lcom_google_gwt_user_client_ui_RootPanel$1_2_classLit = createForClass('com.google.gwt.user.client.ui', 'RootPanel/1', 244);
+var Lcom_google_gwt_user_client_ui_RootPanel$1_2_classLit = createForClass('com.google.gwt.user.client.ui', 'RootPanel/1', 233);
 function RootPanel$2(){
 }
 
-defineClass(245, 1, {516:1}, RootPanel$2);
-var Lcom_google_gwt_user_client_ui_RootPanel$2_2_classLit = createForClass('com.google.gwt.user.client.ui', 'RootPanel/2', 245);
+defineClass(234, 1, {500:1}, RootPanel$2);
+var Lcom_google_gwt_user_client_ui_RootPanel$2_2_classLit = createForClass('com.google.gwt.user.client.ui', 'RootPanel/2', 234);
 function RootPanel$DefaultRootPanel(){
   RootPanel.call(this, $doc.body);
 }
 
-defineClass(243, 101, $intern_27, RootPanel$DefaultRootPanel);
-var Lcom_google_gwt_user_client_ui_RootPanel$DefaultRootPanel_2_classLit = createForClass('com.google.gwt.user.client.ui', 'RootPanel/DefaultRootPanel', 243);
+defineClass(232, 96, $intern_27, RootPanel$DefaultRootPanel);
+var Lcom_google_gwt_user_client_ui_RootPanel$DefaultRootPanel_2_classLit = createForClass('com.google.gwt.user.client.ui', 'RootPanel/DefaultRootPanel', 232);
 function $add_1(this$static, w){
   var td, tr, td_0;
   tr = ($clinit_DOM() , $createTRElement($doc));
@@ -4449,7 +4449,7 @@ function VerticalPanel(){
   $setPropertyString(this.table, 'cellPadding', '0');
 }
 
-defineClass(319, 318, $intern_25, VerticalPanel);
+defineClass(305, 304, $intern_25, VerticalPanel);
 _.remove = function remove_1(w){
   var removed, td;
   td = getParent(($clinit_DOM() , w.element));
@@ -4458,7 +4458,7 @@ _.remove = function remove_1(w){
   return removed;
 }
 ;
-var Lcom_google_gwt_user_client_ui_VerticalPanel_2_classLit = createForClass('com.google.gwt.user.client.ui', 'VerticalPanel', 319);
+var Lcom_google_gwt_user_client_ui_VerticalPanel_2_classLit = createForClass('com.google.gwt.user.client.ui', 'VerticalPanel', 305);
 function $add_2(this$static, w){
   $insert(this$static, w, this$static.size_0);
 }
@@ -4518,13 +4518,13 @@ function WidgetCollection(parent_0){
   this.array = initDim(Lcom_google_gwt_user_client_ui_Widget_2_classLit, $intern_4, 29, 4, 0, 1);
 }
 
-defineClass(314, 1, {}, WidgetCollection);
+defineClass(300, 1, {}, WidgetCollection);
 _.iterator = function iterator_1(){
   return new WidgetCollection$WidgetIterator(this);
 }
 ;
 _.size_0 = 0;
-var Lcom_google_gwt_user_client_ui_WidgetCollection_2_classLit = createForClass('com.google.gwt.user.client.ui', 'WidgetCollection', 314);
+var Lcom_google_gwt_user_client_ui_WidgetCollection_2_classLit = createForClass('com.google.gwt.user.client.ui', 'WidgetCollection', 300);
 function $next(this$static){
   if (this$static.index_0 >= this$static.this$01.size_0) {
     throw new NoSuchElementException;
@@ -4538,7 +4538,7 @@ function WidgetCollection$WidgetIterator(this$0){
   this.this$01 = this$0;
 }
 
-defineClass(189, 1, {}, WidgetCollection$WidgetIterator);
+defineClass(178, 1, {}, WidgetCollection$WidgetIterator);
 _.hasNext = function hasNext(){
   return this.index_0 < this.this$01.size_0;
 }
@@ -4557,11 +4557,11 @@ _.remove_0 = function remove_2(){
 }
 ;
 _.index_0 = 0;
-var Lcom_google_gwt_user_client_ui_WidgetCollection$WidgetIterator_2_classLit = createForClass('com.google.gwt.user.client.ui', 'WidgetCollection/WidgetIterator', 189);
+var Lcom_google_gwt_user_client_ui_WidgetCollection$WidgetIterator_2_classLit = createForClass('com.google.gwt.user.client.ui', 'WidgetCollection/WidgetIterator', 178);
 function $clinit_FocusImpl(){
   $clinit_FocusImpl = emptyMethod;
   implPanel = com_google_gwt_user_client_ui_impl_FocusImpl();
-  implWidget = instanceOf(implPanel, 127)?new FocusImpl:implPanel;
+  implWidget = instanceOf(implPanel, 119)?new FocusImpl:implPanel;
 }
 
 function $getTabIndex(elem){
@@ -4572,18 +4572,18 @@ function FocusImpl(){
   $clinit_FocusImpl();
 }
 
-defineClass(191, 1, {}, FocusImpl);
+defineClass(181, 1, {}, FocusImpl);
 _.focus_0 = function focus_0(elem){
   elem.focus();
 }
 ;
 var implPanel, implWidget;
-var Lcom_google_gwt_user_client_ui_impl_FocusImpl_2_classLit = createForClass('com.google.gwt.user.client.ui.impl', 'FocusImpl', 191);
+var Lcom_google_gwt_user_client_ui_impl_FocusImpl_2_classLit = createForClass('com.google.gwt.user.client.ui.impl', 'FocusImpl', 181);
 function FocusImplIE6(){
   $clinit_FocusImpl();
 }
 
-defineClass(348, 191, {}, FocusImplIE6);
+defineClass(333, 181, {}, FocusImplIE6);
 _.focus_0 = function focus_1(elem){
   try {
     elem.focus();
@@ -4595,18 +4595,18 @@ _.focus_0 = function focus_1(elem){
   }
 }
 ;
-var Lcom_google_gwt_user_client_ui_impl_FocusImplIE6_2_classLit = createForClass('com.google.gwt.user.client.ui.impl', 'FocusImplIE6', 348);
+var Lcom_google_gwt_user_client_ui_impl_FocusImplIE6_2_classLit = createForClass('com.google.gwt.user.client.ui.impl', 'FocusImplIE6', 333);
 function FocusImplStandard(){
   $clinit_FocusImpl();
 }
 
-defineClass(127, 191, {127:1}, FocusImplStandard);
-var Lcom_google_gwt_user_client_ui_impl_FocusImplStandard_2_classLit = createForClass('com.google.gwt.user.client.ui.impl', 'FocusImplStandard', 127);
+defineClass(119, 181, {119:1}, FocusImplStandard);
+var Lcom_google_gwt_user_client_ui_impl_FocusImplStandard_2_classLit = createForClass('com.google.gwt.user.client.ui.impl', 'FocusImplStandard', 119);
 function FocusImplSafari(){
   $clinit_FocusImpl();
 }
 
-defineClass(349, 127, {127:1}, FocusImplSafari);
+defineClass(334, 119, {119:1}, FocusImplSafari);
 _.focus_0 = function focus_2(elem){
   $wnd.setTimeout(function(){
     elem.focus();
@@ -4614,10 +4614,10 @@ _.focus_0 = function focus_2(elem){
   , 0);
 }
 ;
-var Lcom_google_gwt_user_client_ui_impl_FocusImplSafari_2_classLit = createForClass('com.google.gwt.user.client.ui.impl', 'FocusImplSafari', 349);
+var Lcom_google_gwt_user_client_ui_impl_FocusImplSafari_2_classLit = createForClass('com.google.gwt.user.client.ui.impl', 'FocusImplSafari', 334);
 function assertCompileTimeUserAgent(){
   var compileTimeValue, impl, runtimeValue;
-  impl = dynamicCast(com_google_gwt_useragent_client_UserAgent(), 143);
+  impl = dynamicCast(com_google_gwt_useragent_client_UserAgent(), 134);
   compileTimeValue = impl.getCompileTimeValue();
   runtimeValue = impl.getRuntimeValue();
   if (!$equals(compileTimeValue, runtimeValue)) {
@@ -4629,20 +4629,20 @@ function Error_0(message, cause){
   Throwable.call(this, message, cause);
 }
 
-defineClass(144, 12, $intern_1);
-var Ljava_lang_Error_2_classLit = createForClass('java.lang', 'Error', 144);
-defineClass(31, 144, $intern_1);
+defineClass(136, 13, $intern_1);
+var Ljava_lang_Error_2_classLit = createForClass('java.lang', 'Error', 136);
+defineClass(31, 136, $intern_1);
 var Ljava_lang_AssertionError_2_classLit = createForClass('java.lang', 'AssertionError', 31);
 function UserAgentAsserter$UserAgentAssertionError(compileTimeValue, runtimeValue){
-  Error_0.call(this, '' + ('Possible problem with your *.gwt.xml module file.\nThe compile time user.agent value (' + compileTimeValue + ') ' + 'does not match the runtime user.agent value (' + runtimeValue + ').\n' + 'Expect more errors.'), instanceOf('Possible problem with your *.gwt.xml module file.\nThe compile time user.agent value (' + compileTimeValue + ') ' + 'does not match the runtime user.agent value (' + runtimeValue + ').\n' + 'Expect more errors.', 12)?dynamicCast('Possible problem with your *.gwt.xml module file.\nThe compile time user.agent value (' + compileTimeValue + ') ' + 'does not match the runtime user.agent value (' + runtimeValue + ').\n' + 'Expect more errors.', 12):null);
+  Error_0.call(this, '' + ('Possible problem with your *.gwt.xml module file.\nThe compile time user.agent value (' + compileTimeValue + ') ' + 'does not match the runtime user.agent value (' + runtimeValue + ').\n' + 'Expect more errors.'), instanceOf('Possible problem with your *.gwt.xml module file.\nThe compile time user.agent value (' + compileTimeValue + ') ' + 'does not match the runtime user.agent value (' + runtimeValue + ').\n' + 'Expect more errors.', 13)?dynamicCast('Possible problem with your *.gwt.xml module file.\nThe compile time user.agent value (' + compileTimeValue + ') ' + 'does not match the runtime user.agent value (' + runtimeValue + ').\n' + 'Expect more errors.', 13):null);
 }
 
-defineClass(229, 31, $intern_1, UserAgentAsserter$UserAgentAssertionError);
-var Lcom_google_gwt_useragent_client_UserAgentAsserter$UserAgentAssertionError_2_classLit = createForClass('com.google.gwt.useragent.client', 'UserAgentAsserter/UserAgentAssertionError', 229);
+defineClass(218, 31, $intern_1, UserAgentAsserter$UserAgentAssertionError);
+var Lcom_google_gwt_useragent_client_UserAgentAsserter$UserAgentAssertionError_2_classLit = createForClass('com.google.gwt.useragent.client', 'UserAgentAsserter/UserAgentAssertionError', 218);
 function UserAgentImplGecko1_8(){
 }
 
-defineClass(277, 1, $intern_28, UserAgentImplGecko1_8);
+defineClass(265, 1, $intern_28, UserAgentImplGecko1_8);
 _.getCompileTimeValue = function getCompileTimeValue(){
   return 'gecko1_8';
 }
@@ -4678,11 +4678,11 @@ _.getRuntimeValue = function getRuntimeValue(){
   return 'unknown';
 }
 ;
-var Lcom_google_gwt_useragent_client_UserAgentImplGecko1_18_2_classLit = createForClass('com.google.gwt.useragent.client', 'UserAgentImplGecko1_8', 277);
+var Lcom_google_gwt_useragent_client_UserAgentImplGecko1_18_2_classLit = createForClass('com.google.gwt.useragent.client', 'UserAgentImplGecko1_8', 265);
 function UserAgentImplIe10(){
 }
 
-defineClass(279, 1, $intern_28, UserAgentImplIe10);
+defineClass(267, 1, $intern_28, UserAgentImplIe10);
 _.getCompileTimeValue = function getCompileTimeValue_0(){
   return 'ie10';
 }
@@ -4718,11 +4718,11 @@ _.getRuntimeValue = function getRuntimeValue_0(){
   return 'unknown';
 }
 ;
-var Lcom_google_gwt_useragent_client_UserAgentImplIe10_2_classLit = createForClass('com.google.gwt.useragent.client', 'UserAgentImplIe10', 279);
+var Lcom_google_gwt_useragent_client_UserAgentImplIe10_2_classLit = createForClass('com.google.gwt.useragent.client', 'UserAgentImplIe10', 267);
 function UserAgentImplIe8(){
 }
 
-defineClass(281, 1, $intern_28, UserAgentImplIe8);
+defineClass(269, 1, $intern_28, UserAgentImplIe8);
 _.getCompileTimeValue = function getCompileTimeValue_1(){
   return 'ie8';
 }
@@ -4758,11 +4758,11 @@ _.getRuntimeValue = function getRuntimeValue_1(){
   return 'unknown';
 }
 ;
-var Lcom_google_gwt_useragent_client_UserAgentImplIe8_2_classLit = createForClass('com.google.gwt.useragent.client', 'UserAgentImplIe8', 281);
+var Lcom_google_gwt_useragent_client_UserAgentImplIe8_2_classLit = createForClass('com.google.gwt.useragent.client', 'UserAgentImplIe8', 269);
 function UserAgentImplIe9(){
 }
 
-defineClass(280, 1, $intern_28, UserAgentImplIe9);
+defineClass(268, 1, $intern_28, UserAgentImplIe9);
 _.getCompileTimeValue = function getCompileTimeValue_2(){
   return 'ie9';
 }
@@ -4798,11 +4798,11 @@ _.getRuntimeValue = function getRuntimeValue_2(){
   return 'unknown';
 }
 ;
-var Lcom_google_gwt_useragent_client_UserAgentImplIe9_2_classLit = createForClass('com.google.gwt.useragent.client', 'UserAgentImplIe9', 280);
+var Lcom_google_gwt_useragent_client_UserAgentImplIe9_2_classLit = createForClass('com.google.gwt.useragent.client', 'UserAgentImplIe9', 268);
 function UserAgentImplSafari(){
 }
 
-defineClass(278, 1, $intern_28, UserAgentImplSafari);
+defineClass(266, 1, $intern_28, UserAgentImplSafari);
 _.getCompileTimeValue = function getCompileTimeValue_3(){
   return 'safari';
 }
@@ -4838,12 +4838,12 @@ _.getRuntimeValue = function getRuntimeValue_3(){
   return 'unknown';
 }
 ;
-var Lcom_google_gwt_useragent_client_UserAgentImplSafari_2_classLit = createForClass('com.google.gwt.useragent.client', 'UserAgentImplSafari', 278);
+var Lcom_google_gwt_useragent_client_UserAgentImplSafari_2_classLit = createForClass('com.google.gwt.useragent.client', 'UserAgentImplSafari', 266);
 function SimpleEventBus$1(){
 }
 
-defineClass(295, 1, {}, SimpleEventBus$1);
-var Lcom_google_web_bindery_event_shared_SimpleEventBus$1_2_classLit = createForClass('com.google.web.bindery.event.shared', 'SimpleEventBus/1', 295);
+defineClass(283, 1, {}, SimpleEventBus$1);
+var Lcom_google_web_bindery_event_shared_SimpleEventBus$1_2_classLit = createForClass('com.google.web.bindery.event.shared', 'SimpleEventBus/1', 283);
 function SimpleEventBus$2(this$0, val$type, val$handler){
   this.this$01 = this$0;
   this.val$type2 = val$type;
@@ -4851,24 +4851,24 @@ function SimpleEventBus$2(this$0, val$type, val$handler){
   this.val$handler4 = val$handler;
 }
 
-defineClass(296, 1, {517:1}, SimpleEventBus$2);
-var Lcom_google_web_bindery_event_shared_SimpleEventBus$2_2_classLit = createForClass('com.google.web.bindery.event.shared', 'SimpleEventBus/2', 296);
+defineClass(284, 1, {501:1}, SimpleEventBus$2);
+var Lcom_google_web_bindery_event_shared_SimpleEventBus$2_2_classLit = createForClass('com.google.web.bindery.event.shared', 'SimpleEventBus/2', 284);
 function AbstractStringBuilder(string){
   this.string = string;
 }
 
-defineClass(145, 1, {});
+defineClass(137, 1, {});
 _.toString$ = function toString_9(){
   return this.string;
 }
 ;
-var Ljava_lang_AbstractStringBuilder_2_classLit = createForClass('java.lang', 'AbstractStringBuilder', 145);
+var Ljava_lang_AbstractStringBuilder_2_classLit = createForClass('java.lang', 'AbstractStringBuilder', 137);
 function ArithmeticException(){
   RuntimeException_0.call(this, 'divide by zero');
 }
 
-defineClass(240, 18, $intern_1, ArithmeticException);
-var Ljava_lang_ArithmeticException_2_classLit = createForClass('java.lang', 'ArithmeticException', 240);
+defineClass(229, 17, $intern_1, ArithmeticException);
+var Ljava_lang_ArithmeticException_2_classLit = createForClass('java.lang', 'ArithmeticException', 229);
 function ArrayStoreException(){
   RuntimeException.call(this);
 }
@@ -4877,16 +4877,16 @@ function ArrayStoreException_0(message){
   RuntimeException_0.call(this, message);
 }
 
-defineClass(100, 18, $intern_1, ArrayStoreException, ArrayStoreException_0);
-var Ljava_lang_ArrayStoreException_2_classLit = createForClass('java.lang', 'ArrayStoreException', 100);
+defineClass(95, 17, $intern_1, ArrayStoreException, ArrayStoreException_0);
+var Ljava_lang_ArrayStoreException_2_classLit = createForClass('java.lang', 'ArrayStoreException', 95);
 function ClassCastException(){
   RuntimeException.call(this);
 }
 
-defineClass(85, 18, $intern_1, ClassCastException);
-var Ljava_lang_ClassCastException_2_classLit = createForClass('java.lang', 'ClassCastException', 85);
-defineClass(118, 1, {3:1, 118:1});
-var Ljava_lang_Number_2_classLit = createForClass('java.lang', 'Number', 118);
+defineClass(83, 17, $intern_1, ClassCastException);
+var Ljava_lang_ClassCastException_2_classLit = createForClass('java.lang', 'ClassCastException', 83);
+defineClass(111, 1, {3:1, 111:1});
+var Ljava_lang_Number_2_classLit = createForClass('java.lang', 'Number', 111);
 function $clinit_Double(){
   $clinit_Double = emptyMethod;
   powers = initValues(getClassLiteralForArray(D_classLit, 1), $intern_29, 0, 7, [1.3407807929942597E154, 1.157920892373162E77, 3.4028236692093846E38, 1.8446744073709552E19, 4294967296, $intern_16, 256, 16, 4, 2]);
@@ -4969,7 +4969,7 @@ function isNaN_0(x_0){
   return isNaN(x_0);
 }
 
-defineClass(32, 118, {3:1, 27:1, 32:1, 118:1}, Double);
+defineClass(32, 111, {3:1, 26:1, 32:1, 111:1}, Double);
 _.compareTo = function compareTo_0(b){
   return $compareTo_0(this, dynamicCast(b, 32));
 }
@@ -4993,8 +4993,8 @@ function IllegalArgumentException(message){
   RuntimeException_0.call(this, message);
 }
 
-defineClass(120, 18, $intern_1, IllegalArgumentException);
-var Ljava_lang_IllegalArgumentException_2_classLit = createForClass('java.lang', 'IllegalArgumentException', 120);
+defineClass(113, 17, $intern_1, IllegalArgumentException);
+var Ljava_lang_IllegalArgumentException_2_classLit = createForClass('java.lang', 'IllegalArgumentException', 113);
 function IllegalStateException(){
   RuntimeException.call(this);
 }
@@ -5003,8 +5003,8 @@ function IllegalStateException_0(s){
   RuntimeException_0.call(this, s);
 }
 
-defineClass(60, 18, $intern_1, IllegalStateException, IllegalStateException_0);
-var Ljava_lang_IllegalStateException_2_classLit = createForClass('java.lang', 'IllegalStateException', 60);
+defineClass(55, 17, $intern_1, IllegalStateException, IllegalStateException_0);
+var Ljava_lang_IllegalStateException_2_classLit = createForClass('java.lang', 'IllegalStateException', 55);
 function IndexOutOfBoundsException(){
   RuntimeException.call(this);
 }
@@ -5013,8 +5013,8 @@ function IndexOutOfBoundsException_0(message){
   RuntimeException_0.call(this, message);
 }
 
-defineClass(78, 18, $intern_1, IndexOutOfBoundsException, IndexOutOfBoundsException_0);
-var Ljava_lang_IndexOutOfBoundsException_2_classLit = createForClass('java.lang', 'IndexOutOfBoundsException', 78);
+defineClass(77, 17, $intern_1, IndexOutOfBoundsException, IndexOutOfBoundsException_0);
+var Ljava_lang_IndexOutOfBoundsException_2_classLit = createForClass('java.lang', 'IndexOutOfBoundsException', 77);
 function $compareTo_1(this$static, b){
   return compare_0(this$static.value_0, b.value_0);
 }
@@ -5083,13 +5083,13 @@ function valueOf(i_0){
   return new Integer(i_0);
 }
 
-defineClass(73, 118, {3:1, 27:1, 73:1, 118:1}, Integer);
+defineClass(72, 111, {3:1, 26:1, 72:1, 111:1}, Integer);
 _.compareTo = function compareTo_1(b){
-  return $compareTo_1(this, dynamicCast(b, 73));
+  return $compareTo_1(this, dynamicCast(b, 72));
 }
 ;
 _.equals$ = function equals_2(o){
-  return instanceOf(o, 73) && dynamicCast(o, 73).value_0 == this.value_0;
+  return instanceOf(o, 72) && dynamicCast(o, 72).value_0 == this.value_0;
 }
 ;
 _.hashCode$ = function hashCode_4(){
@@ -5101,10 +5101,10 @@ _.toString$ = function toString_12(){
 }
 ;
 _.value_0 = 0;
-var Ljava_lang_Integer_2_classLit = createForClass('java.lang', 'Integer', 73);
+var Ljava_lang_Integer_2_classLit = createForClass('java.lang', 'Integer', 72);
 function $clinit_Integer$BoxedValues(){
   $clinit_Integer$BoxedValues = emptyMethod;
-  boxedValues_0 = initDim(Ljava_lang_Integer_2_classLit, $intern_4, 73, 256, 0, 1);
+  boxedValues_0 = initDim(Ljava_lang_Integer_2_classLit, $intern_4, 72, 256, 0, 1);
 }
 
 var boxedValues_0;
@@ -5131,13 +5131,13 @@ function valueOf_0(i_0){
   return new Long(i_0);
 }
 
-defineClass(50, 118, {3:1, 27:1, 50:1, 118:1}, Long);
+defineClass(46, 111, {3:1, 26:1, 46:1, 111:1}, Long);
 _.compareTo = function compareTo_2(b){
-  return $compareTo_2(this, dynamicCast(b, 50));
+  return $compareTo_2(this, dynamicCast(b, 46));
 }
 ;
 _.equals$ = function equals_3(o){
-  return instanceOf(o, 50) && eq(dynamicCast(o, 50).value_0, this.value_0);
+  return instanceOf(o, 46) && eq(dynamicCast(o, 46).value_0, this.value_0);
 }
 ;
 _.hashCode$ = function hashCode_5(){
@@ -5149,10 +5149,10 @@ _.toString$ = function toString_13(){
 }
 ;
 _.value_0 = {l:0, m:0, h:0};
-var Ljava_lang_Long_2_classLit = createForClass('java.lang', 'Long', 50);
+var Ljava_lang_Long_2_classLit = createForClass('java.lang', 'Long', 46);
 function $clinit_Long$BoxedValues(){
   $clinit_Long$BoxedValues = emptyMethod;
-  boxedValues_1 = initDim(Ljava_lang_Long_2_classLit, $intern_4, 50, 256, 0, 1);
+  boxedValues_1 = initDim(Ljava_lang_Long_2_classLit, $intern_4, 46, 256, 0, 1);
 }
 
 var boxedValues_1;
@@ -5178,10 +5178,6 @@ function ceil_0(x_0){
 
 function cos_0(x_0){
   return Math.cos(x_0);
-}
-
-function floor_0(x_0){
-  return Math.floor(x_0);
 }
 
 function max_1(y_0){
@@ -5216,8 +5212,8 @@ function NullPointerException_0(message){
   RuntimeException_0.call(this, message);
 }
 
-defineClass(102, 18, $intern_1, NullPointerException, NullPointerException_0);
-var Ljava_lang_NullPointerException_2_classLit = createForClass('java.lang', 'NullPointerException', 102);
+defineClass(97, 17, $intern_1, NullPointerException, NullPointerException_0);
+var Ljava_lang_NullPointerException_2_classLit = createForClass('java.lang', 'NullPointerException', 97);
 function StackTraceElement(methodName, fileName, lineNumber){
   this.className_0 = 'Unknown';
   this.methodName = methodName;
@@ -5225,11 +5221,11 @@ function StackTraceElement(methodName, fileName, lineNumber){
   this.lineNumber = lineNumber;
 }
 
-defineClass(66, 1, {3:1, 66:1}, StackTraceElement);
+defineClass(63, 1, {3:1, 63:1}, StackTraceElement);
 _.equals$ = function equals_4(other){
   var st;
-  if (instanceOf(other, 66)) {
-    st = dynamicCast(other, 66);
+  if (instanceOf(other, 63)) {
+    st = dynamicCast(other, 63);
     return this.lineNumber == st.lineNumber && equals_15(this.methodName, st.methodName) && equals_15(this.className_0, st.className_0) && equals_15(this.fileName, st.fileName);
   }
   return false;
@@ -5244,7 +5240,7 @@ _.toString$ = function toString_14(){
 }
 ;
 _.lineNumber = 0;
-var Ljava_lang_StackTraceElement_2_classLit = createForClass('java.lang', 'StackTraceElement', 66);
+var Ljava_lang_StackTraceElement_2_classLit = createForClass('java.lang', 'StackTraceElement', 63);
 function $charAt(this$static, index_0){
   return this$static.charCodeAt(index_0);
 }
@@ -5425,8 +5421,8 @@ function StringBuilder_1(s){
   AbstractStringBuilder.call(this, s);
 }
 
-defineClass(74, 145, {515:1}, StringBuilder, StringBuilder_0, StringBuilder_1);
-var Ljava_lang_StringBuilder_2_classLit = createForClass('java.lang', 'StringBuilder', 74);
+defineClass(73, 137, {499:1}, StringBuilder, StringBuilder_0, StringBuilder_1);
+var Ljava_lang_StringBuilder_2_classLit = createForClass('java.lang', 'StringBuilder', 73);
 function arraycopy(src_0, srcOfs, dest, destOfs, len){
   var destArray, destComp, destEnd, destType, destlen, srcArray, srcComp, srcType, srclen;
   checkNotNull_0(src_0, 'src');
@@ -5470,8 +5466,8 @@ function UnsupportedOperationException_0(message){
   RuntimeException_0.call(this, message);
 }
 
-defineClass(59, 18, $intern_1, UnsupportedOperationException, UnsupportedOperationException_0);
-var Ljava_lang_UnsupportedOperationException_2_classLit = createForClass('java.lang', 'UnsupportedOperationException', 59);
+defineClass(54, 17, $intern_1, UnsupportedOperationException, UnsupportedOperationException_0);
+var Ljava_lang_UnsupportedOperationException_2_classLit = createForClass('java.lang', 'UnsupportedOperationException', 54);
 function $advanceToFind(this$static, o){
   var e, iter;
   for (iter = this$static.iterator(); iter.hasNext();) {
@@ -5508,7 +5504,7 @@ function $toString_0(this$static){
   return sb.string;
 }
 
-defineClass(446, 1, {});
+defineClass(431, 1, {});
 _.contains_0 = function contains(o){
   return $advanceToFind(this, o);
 }
@@ -5517,7 +5513,7 @@ _.toString$ = function toString_15(){
   return $toString_0(this);
 }
 ;
-var Ljava_util_AbstractCollection_2_classLit = createForClass('java.util', 'AbstractCollection', 446);
+var Ljava_util_AbstractCollection_2_classLit = createForClass('java.util', 'AbstractCollection', 431);
 function $containsEntry(this$static, entry){
   var key, ourValue, value_0;
   key = entry.getKey();
@@ -5535,7 +5531,7 @@ function $containsEntry(this$static, entry){
 function $implFindEntry(this$static, key){
   var entry, iter, k;
   for (iter = new AbstractHashMap$EntrySetIterator((new AbstractHashMap$EntrySet(this$static)).this$01); $hasNext(iter);) {
-    entry = (checkStructuralChange(iter.this$01, iter) , checkCriticalElement($hasNext(iter)) , iter.last = iter.current , dynamicCast(iter.current.next_0(), 23));
+    entry = (checkStructuralChange(iter.this$01, iter) , checkCriticalElement($hasNext(iter)) , iter.last = iter.current , dynamicCast(iter.current.next_0(), 22));
     k = entry.getKey();
     if (maskUndefined(key) === maskUndefined(k) || key != null && equals_Ljava_lang_Object__Z__devirtual$(key, k)) {
       return entry;
@@ -5552,21 +5548,21 @@ function getEntryValueOrNull(entry){
   return !entry?null:entry.getValue();
 }
 
-defineClass(445, 1, {97:1});
+defineClass(430, 1, {93:1});
 _.equals$ = function equals_5(obj){
   var entry, entry$iterator, otherMap;
   if (obj === this) {
     return true;
   }
-  if (!instanceOf(obj, 97)) {
+  if (!instanceOf(obj, 93)) {
     return false;
   }
-  otherMap = dynamicCast(obj, 97);
+  otherMap = dynamicCast(obj, 93);
   if (this.size_0 != otherMap.size_1()) {
     return false;
   }
   for (entry$iterator = otherMap.entrySet_0().iterator(); entry$iterator.hasNext();) {
-    entry = dynamicCast(entry$iterator.next_0(), 23);
+    entry = dynamicCast(entry$iterator.next_0(), 22);
     if (!$containsEntry(this, entry)) {
       return false;
     }
@@ -5595,7 +5591,7 @@ _.toString$ = function toString_16(){
   sb = new StringBuilder_1('{');
   comma = false;
   for (entry$iterator = new AbstractHashMap$EntrySetIterator((new AbstractHashMap$EntrySet(this)).this$01); $hasNext(entry$iterator);) {
-    entry = (checkStructuralChange(entry$iterator.this$01, entry$iterator) , checkCriticalElement($hasNext(entry$iterator)) , entry$iterator.last = entry$iterator.current , dynamicCast(entry$iterator.current.next_0(), 23));
+    entry = (checkStructuralChange(entry$iterator.this$01, entry$iterator) , checkCriticalElement($hasNext(entry$iterator)) , entry$iterator.last = entry$iterator.current , dynamicCast(entry$iterator.current.next_0(), 22));
     comma?(sb.string += ', ' , sb):(comma = true);
     $append_0(sb, $toString_1(this, entry.getKey()));
     sb.string += '=';
@@ -5605,7 +5601,7 @@ _.toString$ = function toString_16(){
   return sb.string;
 }
 ;
-var Ljava_util_AbstractMap_2_classLit = createForClass('java.util', 'AbstractMap', 445);
+var Ljava_util_AbstractMap_2_classLit = createForClass('java.util', 'AbstractMap', 430);
 function $containsKey(this$static, key){
   return isJavaString(key)?$hasStringValue(this$static, key):!!$getEntry(this$static.hashCodeMap, key);
 }
@@ -5662,7 +5658,7 @@ function $reset(this$static){
   structureChanged(this$static);
 }
 
-defineClass(234, 445, {97:1});
+defineClass(223, 430, {93:1});
 _.entrySet_0 = function entrySet(){
   return new AbstractHashMap$EntrySet(this);
 }
@@ -5680,17 +5676,17 @@ _.size_1 = function size_2(){
 }
 ;
 _.size_0 = 0;
-var Ljava_util_AbstractHashMap_2_classLit = createForClass('java.util', 'AbstractHashMap', 234);
-defineClass(447, 446, $intern_31);
+var Ljava_util_AbstractHashMap_2_classLit = createForClass('java.util', 'AbstractHashMap', 223);
+defineClass(432, 431, $intern_31);
 _.equals$ = function equals_6(o){
   var other;
   if (o === this) {
     return true;
   }
-  if (!instanceOf(o, 98)) {
+  if (!instanceOf(o, 94)) {
     return false;
   }
-  other = dynamicCast(o, 98);
+  other = dynamicCast(o, 94);
   if (other.size_1() != this.size_1()) {
     return false;
   }
@@ -5701,10 +5697,10 @@ _.hashCode$ = function hashCode_8(){
   return hashCode_13(this);
 }
 ;
-var Ljava_util_AbstractSet_2_classLit = createForClass('java.util', 'AbstractSet', 447);
+var Ljava_util_AbstractSet_2_classLit = createForClass('java.util', 'AbstractSet', 432);
 function $contains(this$static, o){
-  if (instanceOf(o, 23)) {
-    return $containsEntry(this$static.this$01, dynamicCast(o, 23));
+  if (instanceOf(o, 22)) {
+    return $containsEntry(this$static.this$01, dynamicCast(o, 22));
   }
   return false;
 }
@@ -5713,7 +5709,7 @@ function AbstractHashMap$EntrySet(this$0){
   this.this$01 = this$0;
 }
 
-defineClass(44, 447, $intern_31, AbstractHashMap$EntrySet);
+defineClass(43, 432, $intern_31, AbstractHashMap$EntrySet);
 _.contains_0 = function contains_0(o){
   return $contains(this, o);
 }
@@ -5726,7 +5722,7 @@ _.size_1 = function size_3(){
   return this.this$01.size_0;
 }
 ;
-var Ljava_util_AbstractHashMap$EntrySet_2_classLit = createForClass('java.util', 'AbstractHashMap/EntrySet', 44);
+var Ljava_util_AbstractHashMap$EntrySet_2_classLit = createForClass('java.util', 'AbstractHashMap/EntrySet', 43);
 function $hasNext(this$static){
   if (this$static.current.hasNext()) {
     return true;
@@ -5739,7 +5735,7 @@ function $hasNext(this$static){
 }
 
 function $next_0(this$static){
-  return checkStructuralChange(this$static.this$01, this$static) , checkCriticalElement($hasNext(this$static)) , this$static.last = this$static.current , dynamicCast(this$static.current.next_0(), 23);
+  return checkStructuralChange(this$static.this$01, this$static) , checkCriticalElement($hasNext(this$static)) , this$static.last = this$static.current , dynamicCast(this$static.current.next_0(), 22);
 }
 
 function $remove_3(this$static){
@@ -5757,7 +5753,7 @@ function AbstractHashMap$EntrySetIterator(this$0){
   setModCount(this, this$0._gwt_modCount);
 }
 
-defineClass(51, 1, {}, AbstractHashMap$EntrySetIterator);
+defineClass(47, 1, {}, AbstractHashMap$EntrySetIterator);
 _.hasNext = function hasNext_0(){
   return $hasNext(this);
 }
@@ -5770,7 +5766,7 @@ _.remove_0 = function remove_3(){
   $remove_3(this);
 }
 ;
-var Ljava_util_AbstractHashMap$EntrySetIterator_2_classLit = createForClass('java.util', 'AbstractHashMap/EntrySetIterator', 51);
+var Ljava_util_AbstractHashMap$EntrySetIterator_2_classLit = createForClass('java.util', 'AbstractHashMap/EntrySetIterator', 47);
 function $indexOf_1(this$static, toFind){
   var i_0, n;
   for (i_0 = 0 , n = this$static.array.length; i_0 < n; ++i_0) {
@@ -5781,7 +5777,7 @@ function $indexOf_1(this$static, toFind){
   return -1;
 }
 
-defineClass(450, 446, {38:1});
+defineClass(435, 431, {37:1});
 _.add_0 = function add_1(index_0, element){
   throw new UnsupportedOperationException_0('Add not supported on this list');
 }
@@ -5796,10 +5792,10 @@ _.equals$ = function equals_7(o){
   if (o === this) {
     return true;
   }
-  if (!instanceOf(o, 38)) {
+  if (!instanceOf(o, 37)) {
     return false;
   }
-  other = dynamicCast(o, 38);
+  other = dynamicCast(o, 37);
   if (this.size_1() != other.size_1()) {
     return false;
   }
@@ -5834,7 +5830,7 @@ _.remove_1 = function remove_4(index_0){
   throw new UnsupportedOperationException_0('Remove not supported on this list');
 }
 ;
-var Ljava_util_AbstractList_2_classLit = createForClass('java.util', 'AbstractList', 450);
+var Ljava_util_AbstractList_2_classLit = createForClass('java.util', 'AbstractList', 435);
 function $remove_4(this$static){
   checkState(this$static.last != -1);
   this$static.this$01_0.remove_1(this$static.last);
@@ -5846,7 +5842,7 @@ function AbstractList$IteratorImpl(this$0){
   this.this$01_0 = this$0;
 }
 
-defineClass(58, 1, {}, AbstractList$IteratorImpl);
+defineClass(53, 1, {}, AbstractList$IteratorImpl);
 _.hasNext = function hasNext_1(){
   return this.i < this.this$01_0.size_1();
 }
@@ -5861,7 +5857,7 @@ _.remove_0 = function remove_5(){
 ;
 _.i = 0;
 _.last = -1;
-var Ljava_util_AbstractList$IteratorImpl_2_classLit = createForClass('java.util', 'AbstractList/IteratorImpl', 58);
+var Ljava_util_AbstractList$IteratorImpl_2_classLit = createForClass('java.util', 'AbstractList/IteratorImpl', 53);
 function AbstractList$ListIteratorImpl(this$0, start_0){
   this.this$01 = this$0;
   AbstractList$IteratorImpl.call(this, this$0);
@@ -5869,7 +5865,7 @@ function AbstractList$ListIteratorImpl(this$0, start_0){
   this.i = start_0;
 }
 
-defineClass(257, 58, {}, AbstractList$ListIteratorImpl);
+defineClass(246, 53, {}, AbstractList$ListIteratorImpl);
 _.hasPrevious = function hasPrevious(){
   return this.i > 0;
 }
@@ -5879,7 +5875,7 @@ _.previous = function previous_0(){
   return this.this$01.get_1(this.last = --this.i);
 }
 ;
-var Ljava_util_AbstractList$ListIteratorImpl_2_classLit = createForClass('java.util', 'AbstractList/ListIteratorImpl', 257);
+var Ljava_util_AbstractList$ListIteratorImpl_2_classLit = createForClass('java.util', 'AbstractList/ListIteratorImpl', 246);
 function $iterator(this$static){
   var outerIter;
   outerIter = new AbstractHashMap$EntrySetIterator((new AbstractHashMap$EntrySet(this$static.this$01)).this$01);
@@ -5890,7 +5886,7 @@ function AbstractMap$1(this$0){
   this.this$01 = this$0;
 }
 
-defineClass(169, 447, $intern_31, AbstractMap$1);
+defineClass(161, 432, $intern_31, AbstractMap$1);
 _.contains_0 = function contains_1(key){
   return $containsKey(this.this$01, key);
 }
@@ -5903,12 +5899,12 @@ _.size_1 = function size_4(){
   return this.this$01.size_0;
 }
 ;
-var Ljava_util_AbstractMap$1_2_classLit = createForClass('java.util', 'AbstractMap/1', 169);
+var Ljava_util_AbstractMap$1_2_classLit = createForClass('java.util', 'AbstractMap/1', 161);
 function AbstractMap$1$1(val$outerIter){
   this.val$outerIter2 = val$outerIter;
 }
 
-defineClass(237, 1, {}, AbstractMap$1$1);
+defineClass(226, 1, {}, AbstractMap$1$1);
 _.hasNext = function hasNext_2(){
   return $hasNext(this.val$outerIter2);
 }
@@ -5923,7 +5919,7 @@ _.remove_0 = function remove_6(){
   $remove_3(this.val$outerIter2);
 }
 ;
-var Ljava_util_AbstractMap$1$1_2_classLit = createForClass('java.util', 'AbstractMap/1/1', 237);
+var Ljava_util_AbstractMap$1$1_2_classLit = createForClass('java.util', 'AbstractMap/1/1', 226);
 function $iterator_0(this$static){
   var outerIter;
   outerIter = new AbstractHashMap$EntrySetIterator((new AbstractHashMap$EntrySet(this$static.this$01)).this$01);
@@ -5934,7 +5930,7 @@ function AbstractMap$2(this$0){
   this.this$01 = this$0;
 }
 
-defineClass(238, 446, {}, AbstractMap$2);
+defineClass(227, 431, {}, AbstractMap$2);
 _.contains_0 = function contains_2(value_0){
   return $containsValue(this.this$01, value_0);
 }
@@ -5947,7 +5943,7 @@ _.size_1 = function size_5(){
   return this.this$01.size_0;
 }
 ;
-var Ljava_util_AbstractMap$2_2_classLit = createForClass('java.util', 'AbstractMap/2', 238);
+var Ljava_util_AbstractMap$2_2_classLit = createForClass('java.util', 'AbstractMap/2', 227);
 function $next_1(this$static){
   var entry;
   entry = $next_0(this$static.val$outerIter2);
@@ -5958,7 +5954,7 @@ function AbstractMap$2$1(val$outerIter){
   this.val$outerIter2 = val$outerIter;
 }
 
-defineClass(239, 1, {}, AbstractMap$2$1);
+defineClass(228, 1, {}, AbstractMap$2$1);
 _.hasNext = function hasNext_3(){
   return $hasNext(this.val$outerIter2);
 }
@@ -5971,14 +5967,14 @@ _.remove_0 = function remove_7(){
   $remove_3(this.val$outerIter2);
 }
 ;
-var Ljava_util_AbstractMap$2$1_2_classLit = createForClass('java.util', 'AbstractMap/2/1', 239);
-defineClass(235, 1, $intern_32);
+var Ljava_util_AbstractMap$2$1_2_classLit = createForClass('java.util', 'AbstractMap/2/1', 228);
+defineClass(224, 1, $intern_32);
 _.equals$ = function equals_8(other){
   var entry;
-  if (!instanceOf(other, 23)) {
+  if (!instanceOf(other, 22)) {
     return false;
   }
-  entry = dynamicCast(other, 23);
+  entry = dynamicCast(other, 22);
   return equals_15(this.key, entry.getKey()) && equals_15(this.value_0, entry.getValue());
 }
 ;
@@ -6005,21 +6001,21 @@ _.toString$ = function toString_17(){
   return this.key + '=' + this.value_0;
 }
 ;
-var Ljava_util_AbstractMap$AbstractEntry_2_classLit = createForClass('java.util', 'AbstractMap/AbstractEntry', 235);
+var Ljava_util_AbstractMap$AbstractEntry_2_classLit = createForClass('java.util', 'AbstractMap/AbstractEntry', 224);
 function AbstractMap$SimpleEntry(key, value_0){
   this.key = key;
   this.value_0 = value_0;
 }
 
-defineClass(236, 235, $intern_32, AbstractMap$SimpleEntry);
-var Ljava_util_AbstractMap$SimpleEntry_2_classLit = createForClass('java.util', 'AbstractMap/SimpleEntry', 236);
-defineClass(451, 1, $intern_32);
+defineClass(225, 224, $intern_32, AbstractMap$SimpleEntry);
+var Ljava_util_AbstractMap$SimpleEntry_2_classLit = createForClass('java.util', 'AbstractMap/SimpleEntry', 225);
+defineClass(436, 1, $intern_32);
 _.equals$ = function equals_9(other){
   var entry;
-  if (!instanceOf(other, 23)) {
+  if (!instanceOf(other, 22)) {
     return false;
   }
-  entry = dynamicCast(other, 23);
+  entry = dynamicCast(other, 22);
   return equals_15(this.getKey(), entry.getKey()) && equals_15(this.getValue(), entry.getValue());
 }
 ;
@@ -6031,8 +6027,8 @@ _.toString$ = function toString_18(){
   return this.getKey() + '=' + this.getValue();
 }
 ;
-var Ljava_util_AbstractMapEntry_2_classLit = createForClass('java.util', 'AbstractMapEntry', 451);
-defineClass(489, 450, {38:1});
+var Ljava_util_AbstractMapEntry_2_classLit = createForClass('java.util', 'AbstractMapEntry', 436);
+defineClass(471, 435, {37:1});
 _.add_0 = function add_3(index_0, element){
   var iter;
   iter = $listIterator(this, index_0);
@@ -6049,7 +6045,7 @@ _.get_1 = function get_3(index_0){
   }
    catch ($e0) {
     $e0 = wrap($e0);
-    if (instanceOf($e0, 69)) {
+    if (instanceOf($e0, 68)) {
       throw new IndexOutOfBoundsException_0("Can't get element " + index_0);
     }
      else 
@@ -6071,7 +6067,7 @@ _.remove_1 = function remove_8(index_0){
   }
    catch ($e0) {
     $e0 = wrap($e0);
-    if (instanceOf($e0, 69)) {
+    if (instanceOf($e0, 68)) {
       throw new IndexOutOfBoundsException_0("Can't remove element " + index_0);
     }
      else 
@@ -6079,7 +6075,7 @@ _.remove_1 = function remove_8(index_0){
   }
 }
 ;
-var Ljava_util_AbstractSequentialList_2_classLit = createForClass('java.util', 'AbstractSequentialList', 489);
+var Ljava_util_AbstractSequentialList_2_classLit = createForClass('java.util', 'AbstractSequentialList', 471);
 function $$init(this$static){
   this$static.array = initDim(Ljava_lang_Object_2_classLit, $intern_4, 1, 0, 3, 1);
 }
@@ -6165,7 +6161,7 @@ function splice_0(array, index_0, deleteCount, value_0){
   array.splice(index_0, deleteCount, value_0);
 }
 
-defineClass(7, 450, $intern_33, ArrayList, ArrayList_0, ArrayList_1);
+defineClass(7, 435, $intern_33, ArrayList, ArrayList_0, ArrayList_1);
 _.add_0 = function add_4(index_0, o){
   checkPositionIndex(index_0, this.array.length);
   splice_0(this.array, index_0, 0, o);
@@ -6254,7 +6250,7 @@ function Arrays$ArrayList(array){
   this.array = array;
 }
 
-defineClass(387, 450, $intern_33, Arrays$ArrayList);
+defineClass(372, 435, $intern_33, Arrays$ArrayList);
 _.contains_0 = function contains_4(o){
   return $indexOf_1(this, o) != -1;
 }
@@ -6267,7 +6263,7 @@ _.size_1 = function size_7(){
   return this.array.length;
 }
 ;
-var Ljava_util_Arrays$ArrayList_2_classLit = createForClass('java.util', 'Arrays/ArrayList', 387);
+var Ljava_util_Arrays$ArrayList_2_classLit = createForClass('java.util', 'Arrays/ArrayList', 372);
 function $clinit_Collections(){
   $clinit_Collections = emptyMethod;
   EMPTY_LIST = new Collections$EmptyList;
@@ -6315,14 +6311,14 @@ function sort_0(target, c){
 
 function unmodifiableList(list){
   $clinit_Collections();
-  return instanceOf(list, 114)?new Collections$UnmodifiableRandomAccessList(list):new Collections$UnmodifiableList(list);
+  return instanceOf(list, 108)?new Collections$UnmodifiableRandomAccessList(list):new Collections$UnmodifiableList(list);
 }
 
 var EMPTY_LIST;
 function Collections$EmptyList(){
 }
 
-defineClass(249, 450, $intern_33, Collections$EmptyList);
+defineClass(238, 435, $intern_33, Collections$EmptyList);
 _.contains_0 = function contains_5(object){
   return false;
 }
@@ -6344,7 +6340,7 @@ _.size_1 = function size_8(){
   return 0;
 }
 ;
-var Ljava_util_Collections$EmptyList_2_classLit = createForClass('java.util', 'Collections/EmptyList', 249);
+var Ljava_util_Collections$EmptyList_2_classLit = createForClass('java.util', 'Collections/EmptyList', 238);
 function $clinit_Collections$EmptyListIterator(){
   $clinit_Collections$EmptyListIterator = emptyMethod;
   INSTANCE_0 = new Collections$EmptyListIterator;
@@ -6353,7 +6349,7 @@ function $clinit_Collections$EmptyListIterator(){
 function Collections$EmptyListIterator(){
 }
 
-defineClass(250, 1, {}, Collections$EmptyListIterator);
+defineClass(239, 1, {}, Collections$EmptyListIterator);
 _.hasNext = function hasNext_4(){
   return false;
 }
@@ -6375,12 +6371,12 @@ _.remove_0 = function remove_10(){
 }
 ;
 var INSTANCE_0;
-var Ljava_util_Collections$EmptyListIterator_2_classLit = createForClass('java.util', 'Collections/EmptyListIterator', 250);
+var Ljava_util_Collections$EmptyListIterator_2_classLit = createForClass('java.util', 'Collections/EmptyListIterator', 239);
 function Collections$UnmodifiableCollection(coll){
   this.coll = coll;
 }
 
-defineClass(172, 1, {});
+defineClass(164, 1, {});
 _.add_1 = function add_6(o){
   throw new UnsupportedOperationException;
 }
@@ -6397,12 +6393,12 @@ _.toString$ = function toString_19(){
   return this.coll.toString$();
 }
 ;
-var Ljava_util_Collections$UnmodifiableCollection_2_classLit = createForClass('java.util', 'Collections/UnmodifiableCollection', 172);
+var Ljava_util_Collections$UnmodifiableCollection_2_classLit = createForClass('java.util', 'Collections/UnmodifiableCollection', 164);
 function Collections$UnmodifiableCollectionIterator(it){
   this.it = it;
 }
 
-defineClass(174, 1, {}, Collections$UnmodifiableCollectionIterator);
+defineClass(166, 1, {}, Collections$UnmodifiableCollectionIterator);
 _.hasNext = function hasNext_5(){
   return this.it.hasNext();
 }
@@ -6415,13 +6411,13 @@ _.remove_0 = function remove_11(){
   throw new UnsupportedOperationException;
 }
 ;
-var Ljava_util_Collections$UnmodifiableCollectionIterator_2_classLit = createForClass('java.util', 'Collections/UnmodifiableCollectionIterator', 174);
+var Ljava_util_Collections$UnmodifiableCollectionIterator_2_classLit = createForClass('java.util', 'Collections/UnmodifiableCollectionIterator', 166);
 function Collections$UnmodifiableList(list){
   Collections$UnmodifiableCollection.call(this, list);
   this.list = list;
 }
 
-defineClass(173, 172, {38:1}, Collections$UnmodifiableList);
+defineClass(165, 164, {37:1}, Collections$UnmodifiableList);
 _.equals$ = function equals_10(o){
   return this.list.equals$(o);
 }
@@ -6442,13 +6438,13 @@ _.listIterator_0 = function listIterator_3(from){
   return new Collections$UnmodifiableListIterator(this.list.listIterator_0(from));
 }
 ;
-var Ljava_util_Collections$UnmodifiableList_2_classLit = createForClass('java.util', 'Collections/UnmodifiableList', 173);
+var Ljava_util_Collections$UnmodifiableList_2_classLit = createForClass('java.util', 'Collections/UnmodifiableList', 165);
 function Collections$UnmodifiableListIterator(lit){
   Collections$UnmodifiableCollectionIterator.call(this, lit);
   this.lit = lit;
 }
 
-defineClass(175, 174, {}, Collections$UnmodifiableListIterator);
+defineClass(167, 166, {}, Collections$UnmodifiableListIterator);
 _.hasPrevious = function hasPrevious_1(){
   return this.lit.hasPrevious();
 }
@@ -6457,12 +6453,12 @@ _.previous = function previous_2(){
   return this.lit.previous();
 }
 ;
-var Ljava_util_Collections$UnmodifiableListIterator_2_classLit = createForClass('java.util', 'Collections/UnmodifiableListIterator', 175);
+var Ljava_util_Collections$UnmodifiableListIterator_2_classLit = createForClass('java.util', 'Collections/UnmodifiableListIterator', 167);
 function Collections$UnmodifiableMap(map_0){
   this.map_0 = map_0;
 }
 
-defineClass(251, 1, {97:1}, Collections$UnmodifiableMap);
+defineClass(240, 1, {93:1}, Collections$UnmodifiableMap);
 _.entrySet_0 = function entrySet_0(){
   !this.entrySet && (this.entrySet = new Collections$UnmodifiableMap$UnmodifiableEntrySet(this.map_0.entrySet_0()));
   return this.entrySet;
@@ -6492,8 +6488,8 @@ _.toString$ = function toString_20(){
   return this.map_0.toString$();
 }
 ;
-var Ljava_util_Collections$UnmodifiableMap_2_classLit = createForClass('java.util', 'Collections/UnmodifiableMap', 251);
-defineClass(252, 172, $intern_31);
+var Ljava_util_Collections$UnmodifiableMap_2_classLit = createForClass('java.util', 'Collections/UnmodifiableMap', 240);
+defineClass(241, 164, $intern_31);
 _.equals$ = function equals_12(o){
   return this.coll.equals$(o);
 }
@@ -6502,42 +6498,42 @@ _.hashCode$ = function hashCode_17(){
   return this.coll.hashCode$();
 }
 ;
-var Ljava_util_Collections$UnmodifiableSet_2_classLit = createForClass('java.util', 'Collections/UnmodifiableSet', 252);
+var Ljava_util_Collections$UnmodifiableSet_2_classLit = createForClass('java.util', 'Collections/UnmodifiableSet', 241);
 function Collections$UnmodifiableMap$UnmodifiableEntrySet(s){
   Collections$UnmodifiableCollection.call(this, s);
 }
 
-defineClass(253, 252, $intern_31, Collections$UnmodifiableMap$UnmodifiableEntrySet);
+defineClass(242, 241, $intern_31, Collections$UnmodifiableMap$UnmodifiableEntrySet);
 _.iterator = function iterator_9(){
   var it;
   it = this.coll.iterator();
   return new Collections$UnmodifiableMap$UnmodifiableEntrySet$1(it);
 }
 ;
-var Ljava_util_Collections$UnmodifiableMap$UnmodifiableEntrySet_2_classLit = createForClass('java.util', 'Collections/UnmodifiableMap/UnmodifiableEntrySet', 253);
+var Ljava_util_Collections$UnmodifiableMap$UnmodifiableEntrySet_2_classLit = createForClass('java.util', 'Collections/UnmodifiableMap/UnmodifiableEntrySet', 242);
 function Collections$UnmodifiableMap$UnmodifiableEntrySet$1(val$it){
   this.val$it2 = val$it;
 }
 
-defineClass(256, 1, {}, Collections$UnmodifiableMap$UnmodifiableEntrySet$1);
+defineClass(245, 1, {}, Collections$UnmodifiableMap$UnmodifiableEntrySet$1);
 _.hasNext = function hasNext_6(){
   return this.val$it2.hasNext();
 }
 ;
 _.next_0 = function next_7(){
-  return new Collections$UnmodifiableMap$UnmodifiableEntrySet$UnmodifiableEntry(dynamicCast(this.val$it2.next_0(), 23));
+  return new Collections$UnmodifiableMap$UnmodifiableEntrySet$UnmodifiableEntry(dynamicCast(this.val$it2.next_0(), 22));
 }
 ;
 _.remove_0 = function remove_12(){
   throw new UnsupportedOperationException;
 }
 ;
-var Ljava_util_Collections$UnmodifiableMap$UnmodifiableEntrySet$1_2_classLit = createForClass('java.util', 'Collections/UnmodifiableMap/UnmodifiableEntrySet/1', 256);
+var Ljava_util_Collections$UnmodifiableMap$UnmodifiableEntrySet$1_2_classLit = createForClass('java.util', 'Collections/UnmodifiableMap/UnmodifiableEntrySet/1', 245);
 function Collections$UnmodifiableMap$UnmodifiableEntrySet$UnmodifiableEntry(entry){
   this.entry = entry;
 }
 
-defineClass(254, 1, $intern_32, Collections$UnmodifiableMap$UnmodifiableEntrySet$UnmodifiableEntry);
+defineClass(243, 1, $intern_32, Collections$UnmodifiableMap$UnmodifiableEntrySet$UnmodifiableEntry);
 _.equals$ = function equals_13(o){
   return this.entry.equals$(o);
 }
@@ -6562,13 +6558,13 @@ _.toString$ = function toString_21(){
   return this.entry.toString$();
 }
 ;
-var Ljava_util_Collections$UnmodifiableMap$UnmodifiableEntrySet$UnmodifiableEntry_2_classLit = createForClass('java.util', 'Collections/UnmodifiableMap/UnmodifiableEntrySet/UnmodifiableEntry', 254);
+var Ljava_util_Collections$UnmodifiableMap$UnmodifiableEntrySet$UnmodifiableEntry_2_classLit = createForClass('java.util', 'Collections/UnmodifiableMap/UnmodifiableEntrySet/UnmodifiableEntry', 243);
 function Collections$UnmodifiableRandomAccessList(list){
   Collections$UnmodifiableList.call(this, list);
 }
 
-defineClass(255, 173, {38:1, 114:1}, Collections$UnmodifiableRandomAccessList);
-var Ljava_util_Collections$UnmodifiableRandomAccessList_2_classLit = createForClass('java.util', 'Collections/UnmodifiableRandomAccessList', 255);
+defineClass(244, 165, {37:1, 108:1}, Collections$UnmodifiableRandomAccessList);
+var Ljava_util_Collections$UnmodifiableRandomAccessList_2_classLit = createForClass('java.util', 'Collections/UnmodifiableRandomAccessList', 244);
 function $clinit_Comparators(){
   $clinit_Comparators = emptyMethod;
   NATURAL = new Comparators$1;
@@ -6578,14 +6574,14 @@ var NATURAL;
 function Comparators$1(){
 }
 
-defineClass(406, 1, {}, Comparators$1);
+defineClass(389, 1, {}, Comparators$1);
 _.compare = function compare_2(o1, o2){
   checkNotNull(o1);
   checkNotNull(o2);
-  return compareTo_Ljava_lang_Object__I__devirtual$(dynamicCast(o1, 27), o2);
+  return compareTo_Ljava_lang_Object__I__devirtual$(dynamicCast(o1, 26), o2);
 }
 ;
-var Ljava_util_Comparators$1_2_classLit = createForClass('java.util', 'Comparators/1', 406);
+var Ljava_util_Comparators$1_2_classLit = createForClass('java.util', 'Comparators/1', 389);
 function checkStructuralChange(host, iterator){
   if (iterator._gwt_modCount != host._gwt_modCount) {
     throw new ConcurrentModificationException;
@@ -6610,8 +6606,8 @@ function ConcurrentModificationException(){
   RuntimeException.call(this);
 }
 
-defineClass(383, 18, $intern_1, ConcurrentModificationException);
-var Ljava_util_ConcurrentModificationException_2_classLit = createForClass('java.util', 'ConcurrentModificationException', 383);
+defineClass(368, 17, $intern_1, ConcurrentModificationException);
+var Ljava_util_ConcurrentModificationException_2_classLit = createForClass('java.util', 'ConcurrentModificationException', 368);
 function $compareTo_3(this$static, other){
   return compare_1(fromDouble(this$static.jsdate.getTime()), fromDouble(other.jsdate.getTime()));
 }
@@ -6632,13 +6628,13 @@ function padTwo(number){
   return number < 10?'0' + number:'' + number;
 }
 
-defineClass(111, 1, {3:1, 27:1, 111:1}, Date_0);
+defineClass(104, 1, {3:1, 26:1, 104:1}, Date_0);
 _.compareTo = function compareTo_4(other){
-  return $compareTo_3(this, dynamicCast(other, 111));
+  return $compareTo_3(this, dynamicCast(other, 104));
 }
 ;
 _.equals$ = function equals_14(obj){
-  return instanceOf(obj, 111) && eq(fromDouble(this.jsdate.getTime()), fromDouble(dynamicCast(obj, 111).jsdate.getTime()));
+  return instanceOf(obj, 104) && eq(fromDouble(this.jsdate.getTime()), fromDouble(dynamicCast(obj, 104).jsdate.getTime()));
 }
 ;
 _.hashCode$ = function hashCode_19(){
@@ -6651,7 +6647,7 @@ _.toString$ = function toString_22(){
   return $toString_2(this);
 }
 ;
-var Ljava_util_Date_2_classLit = createForClass('java.util', 'Date', 111);
+var Ljava_util_Date_2_classLit = createForClass('java.util', 'Date', 104);
 function $clinit_Date$StringData(){
   $clinit_Date$StringData = emptyMethod;
   DAYS = initValues(getClassLiteralForArray(Ljava_lang_String_2_classLit, 1), $intern_4, 2, 4, ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']);
@@ -6673,8 +6669,8 @@ function HashMap(){
   $reset(this);
 }
 
-defineClass(26, 234, {3:1, 97:1}, HashMap);
-var Ljava_util_HashMap_2_classLit = createForClass('java.util', 'HashMap', 26);
+defineClass(24, 223, {3:1, 93:1}, HashMap);
+var Ljava_util_HashMap_2_classLit = createForClass('java.util', 'HashMap', 24);
 function $add_4(this$static, o){
   var old;
   old = $put(this$static.map_0, o, this$static);
@@ -6693,7 +6689,7 @@ function HashSet(){
   this.map_0 = new HashMap;
 }
 
-defineClass(147, 447, {3:1, 98:1}, HashSet);
+defineClass(139, 432, {3:1, 94:1}, HashSet);
 _.contains_0 = function contains_6(o){
   return $contains_0(this, o);
 }
@@ -6710,7 +6706,7 @@ _.toString$ = function toString_23(){
   return $toString_0(new AbstractMap$1(this.map_0));
 }
 ;
-var Ljava_util_HashSet_2_classLit = createForClass('java.util', 'HashSet', 147);
+var Ljava_util_HashSet_2_classLit = createForClass('java.util', 'HashSet', 139);
 function $ensureChain(this$static, hashCode){
   var map_0 = this$static.backingMap;
   return map_0[hashCode] || (map_0[hashCode] = []);
@@ -6772,7 +6768,7 @@ function InternalJsHashCodeMap(){
   this.backingMap = this.createMap();
 }
 
-defineClass(182, 1, {}, InternalJsHashCodeMap);
+defineClass(173, 1, {}, InternalJsHashCodeMap);
 _.containsValue = function containsValue(value_0){
   var entry, entry$array, entry$index, entry$max, hashCode, hashCode$array, hashCode$index, hashCode$max;
   for (hashCode$array = $keys(this) , hashCode$index = 0 , hashCode$max = hashCode$array.length; hashCode$index < hashCode$max; ++hashCode$index) {
@@ -6795,7 +6791,7 @@ _.entries = function entries(){
   return new InternalJsHashCodeMap$1(this);
 }
 ;
-var Ljava_util_InternalJsHashCodeMap_2_classLit = createForClass('java.util', 'InternalJsHashCodeMap', 182);
+var Ljava_util_InternalJsHashCodeMap_2_classLit = createForClass('java.util', 'InternalJsHashCodeMap', 173);
 function $hasNext_0(this$static){
   if (this$static.itemIndex < this$static.chain.length) {
     return true;
@@ -6811,10 +6807,10 @@ function $hasNext_0(this$static){
 function InternalJsHashCodeMap$1(this$0){
   this.this$01 = this$0;
   this.keys_0 = $keys(this.this$01);
-  this.chain = initDim(Ljava_util_Map$Entry_2_classLit, $intern_4, 23, 0, 0, 1);
+  this.chain = initDim(Ljava_util_Map$Entry_2_classLit, $intern_4, 22, 0, 0, 1);
 }
 
-defineClass(273, 1, {}, InternalJsHashCodeMap$1);
+defineClass(261, 1, {}, InternalJsHashCodeMap$1);
 _.hasNext = function hasNext_7(){
   return $hasNext_0(this);
 }
@@ -6834,12 +6830,12 @@ _.chainIndex = -1;
 _.itemIndex = 0;
 _.lastChain = null;
 _.lastEntry = null;
-var Ljava_util_InternalJsHashCodeMap$1_2_classLit = createForClass('java.util', 'InternalJsHashCodeMap/1', 273);
+var Ljava_util_InternalJsHashCodeMap$1_2_classLit = createForClass('java.util', 'InternalJsHashCodeMap/1', 261);
 function InternalJsHashCodeMap$InternalJsHashCodeMapLegacy(){
   InternalJsHashCodeMap.call(this);
 }
 
-defineClass(271, 182, {}, InternalJsHashCodeMap$InternalJsHashCodeMapLegacy);
+defineClass(259, 173, {}, InternalJsHashCodeMap$InternalJsHashCodeMapLegacy);
 _.containsValue = function containsValue_0(value_0){
   var map_0 = this.backingMap;
   for (var hashCode in map_0) {
@@ -6883,23 +6879,23 @@ _.newEntryList = function newEntryList(){
   return new InternalJsHashCodeMap$InternalJsHashCodeMapLegacy$1(this);
 }
 ;
-var Ljava_util_InternalJsHashCodeMap$InternalJsHashCodeMapLegacy_2_classLit = createForClass('java.util', 'InternalJsHashCodeMap/InternalJsHashCodeMapLegacy', 271);
+var Ljava_util_InternalJsHashCodeMap$InternalJsHashCodeMapLegacy_2_classLit = createForClass('java.util', 'InternalJsHashCodeMap/InternalJsHashCodeMapLegacy', 259);
 function InternalJsHashCodeMap$InternalJsHashCodeMapLegacy$1(this$1){
   this.this$11 = this$1;
   ArrayList.call(this);
 }
 
-defineClass(272, 7, $intern_33, InternalJsHashCodeMap$InternalJsHashCodeMapLegacy$1);
+defineClass(260, 7, $intern_33, InternalJsHashCodeMap$InternalJsHashCodeMapLegacy$1);
 _.remove_1 = function remove_14(index_0){
   var removed;
-  return removed = dynamicCast($remove_5(this, index_0), 23) , $remove_7(this.this$11, removed.getKey()) , removed;
+  return removed = dynamicCast($remove_5(this, index_0), 22) , $remove_7(this.this$11, removed.getKey()) , removed;
 }
 ;
-var Ljava_util_InternalJsHashCodeMap$InternalJsHashCodeMapLegacy$1_2_classLit = createForClass('java.util', 'InternalJsHashCodeMap/InternalJsHashCodeMapLegacy/1', 272);
+var Ljava_util_InternalJsHashCodeMap$InternalJsHashCodeMapLegacy$1_2_classLit = createForClass('java.util', 'InternalJsHashCodeMap/InternalJsHashCodeMapLegacy/1', 260);
 function InternalJsMapFactory(){
 }
 
-defineClass(268, 1, {}, InternalJsMapFactory);
+defineClass(256, 1, {}, InternalJsMapFactory);
 _.createJsHashCodeMap = function createJsHashCodeMap(){
   return new InternalJsHashCodeMap;
 }
@@ -6908,7 +6904,7 @@ _.createJsStringMap = function createJsStringMap(){
   return new InternalJsStringMap;
 }
 ;
-var Ljava_util_InternalJsMapFactory_2_classLit = createForClass('java.util', 'InternalJsMapFactory', 268);
+var Ljava_util_InternalJsMapFactory_2_classLit = createForClass('java.util', 'InternalJsMapFactory', 256);
 function $clinit_InternalJsMapFactory$BackwardCompatibleJsMapFactory(){
   $clinit_InternalJsMapFactory$BackwardCompatibleJsMapFactory = emptyMethod;
   delegate = createFactory();
@@ -6943,16 +6939,16 @@ var delegate;
 function InternalJsMapFactory$KeysWorkaroundJsMapFactory(){
 }
 
-defineClass(270, 268, {}, InternalJsMapFactory$KeysWorkaroundJsMapFactory);
+defineClass(258, 256, {}, InternalJsMapFactory$KeysWorkaroundJsMapFactory);
 _.createJsStringMap = function createJsStringMap_0(){
   return new InternalJsStringMap$InternalJsStringMapWithKeysWorkaround;
 }
 ;
-var Ljava_util_InternalJsMapFactory$KeysWorkaroundJsMapFactory_2_classLit = createForClass('java.util', 'InternalJsMapFactory/KeysWorkaroundJsMapFactory', 270);
+var Ljava_util_InternalJsMapFactory$KeysWorkaroundJsMapFactory_2_classLit = createForClass('java.util', 'InternalJsMapFactory/KeysWorkaroundJsMapFactory', 258);
 function InternalJsMapFactory$LegacyInternalJsMapFactory(){
 }
 
-defineClass(269, 268, {}, InternalJsMapFactory$LegacyInternalJsMapFactory);
+defineClass(257, 256, {}, InternalJsMapFactory$LegacyInternalJsMapFactory);
 _.createJsHashCodeMap = function createJsHashCodeMap_0(){
   return new InternalJsHashCodeMap$InternalJsHashCodeMapLegacy;
 }
@@ -6961,7 +6957,7 @@ _.createJsStringMap = function createJsStringMap_1(){
   return new InternalJsStringMap$InternalJsStringMapLegacy;
 }
 ;
-var Ljava_util_InternalJsMapFactory$LegacyInternalJsMapFactory_2_classLit = createForClass('java.util', 'InternalJsMapFactory/LegacyInternalJsMapFactory', 269);
+var Ljava_util_InternalJsMapFactory$LegacyInternalJsMapFactory_2_classLit = createForClass('java.util', 'InternalJsMapFactory/LegacyInternalJsMapFactory', 257);
 function $containsValue_0(this$static, value_0){
   var map_0 = this$static.backingMap;
   for (var key in map_0) {
@@ -7002,7 +6998,7 @@ function InternalJsStringMap(){
   this.backingMap = this.createMap_0();
 }
 
-defineClass(146, 1, {}, InternalJsStringMap);
+defineClass(138, 1, {}, InternalJsStringMap);
 _.containsValue = function containsValue_1(value_0){
   return $containsValue_0(this, value_0);
 }
@@ -7041,13 +7037,13 @@ _.remove_2 = function remove_15(key){
   return $remove_8(this, key);
 }
 ;
-var Ljava_util_InternalJsStringMap_2_classLit = createForClass('java.util', 'InternalJsStringMap', 146);
+var Ljava_util_InternalJsStringMap_2_classLit = createForClass('java.util', 'InternalJsStringMap', 138);
 function InternalJsStringMap$1(this$0, val$keys){
   this.this$01 = this$0;
   this.val$keys2 = val$keys;
 }
 
-defineClass(261, 1, {}, InternalJsStringMap$1);
+defineClass(250, 1, {}, InternalJsStringMap$1);
 _.hasNext = function hasNext_8(){
   return this.i < this.val$keys2.length;
 }
@@ -7064,13 +7060,13 @@ _.remove_0 = function remove_16(){
 ;
 _.i = 0;
 _.last = -1;
-var Ljava_util_InternalJsStringMap$1_2_classLit = createForClass('java.util', 'InternalJsStringMap/1', 261);
+var Ljava_util_InternalJsStringMap$1_2_classLit = createForClass('java.util', 'InternalJsStringMap/1', 250);
 function InternalJsStringMap$2(this$0, val$key){
   this.this$01 = this$0;
   this.val$key2 = val$key;
 }
 
-defineClass(176, 451, $intern_32, InternalJsStringMap$2);
+defineClass(168, 436, $intern_32, InternalJsStringMap$2);
 _.getKey = function getKey_1(){
   return this.val$key2;
 }
@@ -7083,12 +7079,12 @@ _.setValue = function setValue_1(object){
   return this.this$01.put_0(this.val$key2, object);
 }
 ;
-var Ljava_util_InternalJsStringMap$2_2_classLit = createForClass('java.util', 'InternalJsStringMap/2', 176);
+var Ljava_util_InternalJsStringMap$2_2_classLit = createForClass('java.util', 'InternalJsStringMap/2', 168);
 function InternalJsStringMap$InternalJsStringMapLegacy(){
   InternalJsStringMap.call(this);
 }
 
-defineClass(258, 146, {}, InternalJsStringMap$InternalJsStringMapLegacy);
+defineClass(247, 138, {}, InternalJsStringMap$InternalJsStringMapLegacy);
 _.containsValue = function containsValue_2(value_0){
   var map_0 = this.backingMap;
   for (var key in map_0) {
@@ -7133,24 +7129,24 @@ _.remove_2 = function remove_17(key){
   return $remove_8(this, ':' + key);
 }
 ;
-var Ljava_util_InternalJsStringMap$InternalJsStringMapLegacy_2_classLit = createForClass('java.util', 'InternalJsStringMap/InternalJsStringMapLegacy', 258);
+var Ljava_util_InternalJsStringMap$InternalJsStringMapLegacy_2_classLit = createForClass('java.util', 'InternalJsStringMap/InternalJsStringMapLegacy', 247);
 function InternalJsStringMap$InternalJsStringMapLegacy$1(this$1){
   this.this$11 = this$1;
   ArrayList.call(this);
 }
 
-defineClass(260, 7, $intern_33, InternalJsStringMap$InternalJsStringMapLegacy$1);
+defineClass(249, 7, $intern_33, InternalJsStringMap$InternalJsStringMapLegacy$1);
 _.remove_1 = function remove_18(index_0){
   var removed;
-  return removed = dynamicCast($remove_5(this, index_0), 23) , $remove_8(this.this$11, ':' + dynamicCastToString(removed.getKey())) , removed;
+  return removed = dynamicCast($remove_5(this, index_0), 22) , $remove_8(this.this$11, ':' + dynamicCastToString(removed.getKey())) , removed;
 }
 ;
-var Ljava_util_InternalJsStringMap$InternalJsStringMapLegacy$1_2_classLit = createForClass('java.util', 'InternalJsStringMap/InternalJsStringMapLegacy/1', 260);
+var Ljava_util_InternalJsStringMap$InternalJsStringMapLegacy$1_2_classLit = createForClass('java.util', 'InternalJsStringMap/InternalJsStringMapLegacy/1', 249);
 function InternalJsStringMap$InternalJsStringMapWithKeysWorkaround(){
   InternalJsStringMap.call(this);
 }
 
-defineClass(259, 146, {}, InternalJsStringMap$InternalJsStringMapWithKeysWorkaround);
+defineClass(248, 138, {}, InternalJsStringMap$InternalJsStringMapWithKeysWorkaround);
 _.containsValue = function containsValue_3(value_0){
   var protoValue;
   protoValue = this.backingMap['__proto__'];
@@ -7167,7 +7163,7 @@ _.keys_1 = function keys_2(){
   return keys_0;
 }
 ;
-var Ljava_util_InternalJsStringMap$InternalJsStringMapWithKeysWorkaround_2_classLit = createForClass('java.util', 'InternalJsStringMap/InternalJsStringMapWithKeysWorkaround', 259);
+var Ljava_util_InternalJsStringMap$InternalJsStringMapWithKeysWorkaround_2_classLit = createForClass('java.util', 'InternalJsStringMap/InternalJsStringMapWithKeysWorkaround', 248);
 function $addFirst(this$static, o){
   $addNode(this$static, o, this$static.header, this$static.header.next);
 }
@@ -7244,7 +7240,7 @@ function LinkedList(){
   this.size_0 = 0;
 }
 
-defineClass(198, 489, {3:1, 38:1}, LinkedList);
+defineClass(186, 471, {3:1, 37:1}, LinkedList);
 _.add_1 = function add_7(o){
   $addNode(this, o, this.tail.prev, this.tail);
   return true;
@@ -7259,7 +7255,7 @@ _.size_1 = function size_12(){
 }
 ;
 _.size_0 = 0;
-var Ljava_util_LinkedList_2_classLit = createForClass('java.util', 'LinkedList', 198);
+var Ljava_util_LinkedList_2_classLit = createForClass('java.util', 'LinkedList', 186);
 function $remove_9(this$static){
   var nextNode;
   checkState(!!this$static.lastNode);
@@ -7275,7 +7271,7 @@ function LinkedList$ListIteratorImpl(this$0, index_0, startNode){
   this.currentIndex = index_0;
 }
 
-defineClass(352, 1, {}, LinkedList$ListIteratorImpl);
+defineClass(337, 1, {}, LinkedList$ListIteratorImpl);
 _.hasNext = function hasNext_9(){
   return this.currentNode != this.this$01.tail;
 }
@@ -7301,19 +7297,19 @@ _.remove_0 = function remove_19(){
 ;
 _.currentIndex = 0;
 _.lastNode = null;
-var Ljava_util_LinkedList$ListIteratorImpl_2_classLit = createForClass('java.util', 'LinkedList/ListIteratorImpl', 352);
+var Ljava_util_LinkedList$ListIteratorImpl_2_classLit = createForClass('java.util', 'LinkedList/ListIteratorImpl', 337);
 function LinkedList$Node(){
 }
 
-defineClass(153, 1, {}, LinkedList$Node);
-var Ljava_util_LinkedList$Node_2_classLit = createForClass('java.util', 'LinkedList/Node', 153);
+defineClass(144, 1, {}, LinkedList$Node);
+var Ljava_util_LinkedList$Node_2_classLit = createForClass('java.util', 'LinkedList/Node', 144);
 var Ljava_util_Map$Entry_2_classLit = createForInterface('java.util', 'Map/Entry');
 function NoSuchElementException(){
   RuntimeException.call(this);
 }
 
-defineClass(69, 18, {3:1, 12:1, 69:1}, NoSuchElementException);
-var Ljava_util_NoSuchElementException_2_classLit = createForClass('java.util', 'NoSuchElementException', 69);
+defineClass(68, 17, {3:1, 13:1, 68:1}, NoSuchElementException);
+var Ljava_util_NoSuchElementException_2_classLit = createForClass('java.util', 'NoSuchElementException', 68);
 function equals_15(a, b){
   return maskUndefined(a) === maskUndefined(b) || a != null && equals_Ljava_lang_Object__Z__devirtual$(a, b);
 }
@@ -7339,47 +7335,17 @@ function $clinit_Random(){
   }
 }
 
-function $nextDouble(this$static){
-  return $nextInternal(this$static, 26) * 1.4901161193847656E-8 + $nextInternal(this$static, 27) * 1.1102230246251565E-16;
-}
-
-function $nextInternal(this$static, bits){
-  var carry, dval, h, hi, l, lo;
-  hi = this$static.seedhi * $intern_34 + this$static.seedlo * 1502;
-  lo = this$static.seedlo * $intern_34 + 11;
-  carry = Math.floor(lo * $intern_35);
-  hi += carry;
-  lo -= carry * $intern_22;
-  hi %= $intern_22;
-  this$static.seedhi = hi;
-  this$static.seedlo = lo;
-  if (bits <= 24) {
-    return floor_0(this$static.seedhi * twoToTheXMinus24[bits]);
-  }
-   else {
-    h = this$static.seedhi * (1 << bits - 24);
-    l = floor_0(this$static.seedlo * twoToTheXMinus48[bits]);
-    dval = h + l;
-    dval >= 2147483648 && (dval -= 4294967296);
-    return dval;
-  }
-}
-
 function Random(){
   $clinit_Random();
-  var hi, lo, seed;
+  var hi, seed;
   seed = uniqueSeed++ + now_1();
-  hi = round_int(Math.floor(seed * $intern_35)) & 16777215;
-  lo = round_int(seed - hi * $intern_22);
-  this.seedhi = hi ^ 1502;
-  this.seedlo = lo ^ $intern_34;
+  hi = round_int(Math.floor(seed * 5.9604644775390625E-8)) & 16777215;
+  round_int(seed - hi * $intern_22);
 }
 
-defineClass(368, 1, {}, Random);
-_.seedhi = 0;
-_.seedlo = 0;
+defineClass(353, 1, {}, Random);
 var twoToTheXMinus24, twoToTheXMinus48, uniqueSeed = 0;
-var Ljava_util_Random_2_classLit = createForClass('java.util', 'Random', 368);
+var Ljava_util_Random_2_classLit = createForClass('java.util', 'Random', 353);
 function $clinit_Level(){
   $clinit_Level = emptyMethod;
   ALL = new Level$LevelAll;
@@ -7393,7 +7359,7 @@ function $clinit_Level(){
   WARNING = new Level$LevelWarning;
 }
 
-defineClass(456, 1, $intern_29);
+defineClass(440, 1, $intern_29);
 _.getName = function getName_0(){
   return 'DUMMY';
 }
@@ -7407,11 +7373,11 @@ _.toString$ = function toString_24(){
 }
 ;
 var ALL, CONFIG, FINE, FINER, FINEST, INFO, OFF, SEVERE, WARNING;
-var Ljava_util_logging_Level_2_classLit = createForClass('java.util.logging', 'Level', 456);
+var Ljava_util_logging_Level_2_classLit = createForClass('java.util.logging', 'Level', 440);
 function Level$LevelAll(){
 }
 
-defineClass(282, 456, $intern_29, Level$LevelAll);
+defineClass(270, 440, $intern_29, Level$LevelAll);
 _.getName = function getName_1(){
   return 'ALL';
 }
@@ -7420,11 +7386,11 @@ _.intValue_0 = function intValue_0(){
   return -2147483648;
 }
 ;
-var Ljava_util_logging_Level$LevelAll_2_classLit = createForClass('java.util.logging', 'Level/LevelAll', 282);
+var Ljava_util_logging_Level$LevelAll_2_classLit = createForClass('java.util.logging', 'Level/LevelAll', 270);
 function Level$LevelConfig(){
 }
 
-defineClass(283, 456, $intern_29, Level$LevelConfig);
+defineClass(271, 440, $intern_29, Level$LevelConfig);
 _.getName = function getName_2(){
   return 'CONFIG';
 }
@@ -7433,11 +7399,11 @@ _.intValue_0 = function intValue_1(){
   return 700;
 }
 ;
-var Ljava_util_logging_Level$LevelConfig_2_classLit = createForClass('java.util.logging', 'Level/LevelConfig', 283);
+var Ljava_util_logging_Level$LevelConfig_2_classLit = createForClass('java.util.logging', 'Level/LevelConfig', 271);
 function Level$LevelFine(){
 }
 
-defineClass(284, 456, $intern_29, Level$LevelFine);
+defineClass(272, 440, $intern_29, Level$LevelFine);
 _.getName = function getName_3(){
   return 'FINE';
 }
@@ -7446,11 +7412,11 @@ _.intValue_0 = function intValue_2(){
   return 500;
 }
 ;
-var Ljava_util_logging_Level$LevelFine_2_classLit = createForClass('java.util.logging', 'Level/LevelFine', 284);
+var Ljava_util_logging_Level$LevelFine_2_classLit = createForClass('java.util.logging', 'Level/LevelFine', 272);
 function Level$LevelFiner(){
 }
 
-defineClass(285, 456, $intern_29, Level$LevelFiner);
+defineClass(273, 440, $intern_29, Level$LevelFiner);
 _.getName = function getName_4(){
   return 'FINER';
 }
@@ -7459,11 +7425,11 @@ _.intValue_0 = function intValue_3(){
   return 400;
 }
 ;
-var Ljava_util_logging_Level$LevelFiner_2_classLit = createForClass('java.util.logging', 'Level/LevelFiner', 285);
+var Ljava_util_logging_Level$LevelFiner_2_classLit = createForClass('java.util.logging', 'Level/LevelFiner', 273);
 function Level$LevelFinest(){
 }
 
-defineClass(286, 456, $intern_29, Level$LevelFinest);
+defineClass(274, 440, $intern_29, Level$LevelFinest);
 _.getName = function getName_5(){
   return 'FINEST';
 }
@@ -7472,11 +7438,11 @@ _.intValue_0 = function intValue_4(){
   return 300;
 }
 ;
-var Ljava_util_logging_Level$LevelFinest_2_classLit = createForClass('java.util.logging', 'Level/LevelFinest', 286);
+var Ljava_util_logging_Level$LevelFinest_2_classLit = createForClass('java.util.logging', 'Level/LevelFinest', 274);
 function Level$LevelInfo(){
 }
 
-defineClass(287, 456, $intern_29, Level$LevelInfo);
+defineClass(275, 440, $intern_29, Level$LevelInfo);
 _.getName = function getName_6(){
   return 'INFO';
 }
@@ -7485,11 +7451,11 @@ _.intValue_0 = function intValue_5(){
   return 800;
 }
 ;
-var Ljava_util_logging_Level$LevelInfo_2_classLit = createForClass('java.util.logging', 'Level/LevelInfo', 287);
+var Ljava_util_logging_Level$LevelInfo_2_classLit = createForClass('java.util.logging', 'Level/LevelInfo', 275);
 function Level$LevelOff(){
 }
 
-defineClass(288, 456, $intern_29, Level$LevelOff);
+defineClass(276, 440, $intern_29, Level$LevelOff);
 _.getName = function getName_7(){
   return 'OFF';
 }
@@ -7498,11 +7464,11 @@ _.intValue_0 = function intValue_6(){
   return 2147483647;
 }
 ;
-var Ljava_util_logging_Level$LevelOff_2_classLit = createForClass('java.util.logging', 'Level/LevelOff', 288);
+var Ljava_util_logging_Level$LevelOff_2_classLit = createForClass('java.util.logging', 'Level/LevelOff', 276);
 function Level$LevelSevere(){
 }
 
-defineClass(289, 456, $intern_29, Level$LevelSevere);
+defineClass(277, 440, $intern_29, Level$LevelSevere);
 _.getName = function getName_8(){
   return 'SEVERE';
 }
@@ -7511,11 +7477,11 @@ _.intValue_0 = function intValue_7(){
   return 1000;
 }
 ;
-var Ljava_util_logging_Level$LevelSevere_2_classLit = createForClass('java.util.logging', 'Level/LevelSevere', 289);
+var Ljava_util_logging_Level$LevelSevere_2_classLit = createForClass('java.util.logging', 'Level/LevelSevere', 277);
 function Level$LevelWarning(){
 }
 
-defineClass(290, 456, $intern_29, Level$LevelWarning);
+defineClass(278, 440, $intern_29, Level$LevelWarning);
 _.getName = function getName_9(){
   return 'WARNING';
 }
@@ -7524,14 +7490,14 @@ _.intValue_0 = function intValue_8(){
   return 900;
 }
 ;
-var Ljava_util_logging_Level$LevelWarning_2_classLit = createForClass('java.util.logging', 'Level/LevelWarning', 290);
+var Ljava_util_logging_Level$LevelWarning_2_classLit = createForClass('java.util.logging', 'Level/LevelWarning', 278);
 function $addLoggerImpl(this$static, logger){
   $putStringValue(this$static.loggerMap, logger.impl.name_0, logger);
 }
 
 function $ensureLogger(this$static, name_0){
   var logger, newLogger, name_1, parentName;
-  logger = dynamicCast($getStringValue(this$static.loggerMap, name_0), 119);
+  logger = dynamicCast($getStringValue(this$static.loggerMap, name_0), 112);
   if (!logger) {
     newLogger = new Logger(name_0);
     name_1 = newLogger.impl.name_0;
@@ -7558,9 +7524,9 @@ function getLogManager(){
   return singleton;
 }
 
-defineClass(262, 1, {}, LogManager);
+defineClass(251, 1, {}, LogManager);
 var singleton;
-var Ljava_util_logging_LogManager_2_classLit = createForClass('java.util.logging', 'LogManager', 262);
+var Ljava_util_logging_LogManager_2_classLit = createForClass('java.util.logging', 'LogManager', 251);
 function $setLoggerName(this$static, newName){
   this$static.loggerName = newName;
 }
@@ -7571,11 +7537,11 @@ function LogRecord(level, msg){
   this.millis = fromDouble(now_1());
 }
 
-defineClass(329, 1, $intern_29, LogRecord);
+defineClass(314, 1, $intern_29, LogRecord);
 _.loggerName = '';
 _.millis = {l:0, m:0, h:0};
 _.thrown = null;
-var Ljava_util_logging_LogRecord_2_classLit = createForClass('java.util.logging', 'LogRecord', 329);
+var Ljava_util_logging_LogRecord_2_classLit = createForClass('java.util.logging', 'LogRecord', 314);
 function $log_1(this$static, level, msg){
   $log(this$static.impl, level, msg, null);
 }
@@ -7602,12 +7568,12 @@ function getLogger(name_0){
   return $ensureLogger(getLogManager(), name_0);
 }
 
-defineClass(119, 1, {119:1}, Logger);
-var Ljava_util_logging_Logger_2_classLit = createForClass('java.util.logging', 'Logger', 119);
+defineClass(112, 1, {112:1}, Logger);
+var Ljava_util_logging_Logger_2_classLit = createForClass('java.util.logging', 'Logger', 112);
 function $onModuleLoad_1(this$static){
-  var g3mWidgetHolder, builder, layerSet, renderer;
+  var g3mWidgetHolder, builder, layerSet, cr;
   g3mWidgetHolder = get_0();
-  this$static._g3mWidget = (builder = new G3MBuilder_WebGL , layerSet = new LayerSet , $addLayer(layerSet, newOSM_0(new TimeInterval({l:4114432, m:617, h:0}))) , $setLayerSet((!builder._planetRendererBuilder && (builder._planetRendererBuilder = new PlanetRendererBuilder) , builder._planetRendererBuilder), layerSet) , $setDownloader(builder, new Downloader_WebGL(null)) , renderer = new NonOverlappingMarksRenderer , $add_3((!builder._renderers && (builder._renderers = new ArrayList) , builder._renderers), renderer) , $addMark(renderer, createMark(new Geodetic3D(new Angle(28.131817, 0.49099283121851367), new Angle(-15.440219, -0.26948265877898636), 0))) , $addMark(renderer, createMark_0(new Geodetic3D(new Angle(28.947345, 0.5052264799607179), new Angle(-13.523105, -0.23602270734290778), 0))) , $addMark(renderer, createMark_0(new Geodetic3D(new Angle(28.473802, 0.49696159546094637), new Angle(-13.85936, -0.24189146421920132), 0))) , $addMark(renderer, createMark_0(new Geodetic3D(new Angle(28.467706, 0.49685520018974483), new Angle(-16.251426, -0.283640891844212), 0))) , $addMark(renderer, createMark_0(new Geodetic3D(new Angle(28.701819, 0.5009412428614664), new Angle(-17.762003, -0.31000543409911036), 0))) , $addMark(renderer, createMark_0(new Geodetic3D(new Angle(28.086595, 0.49020355842417673), new Angle(-17.105796, -0.298552461374476), 0))) , $addMark(renderer, createMark_0(new Geodetic3D(new Angle(27.810709, 0.48538843936401965), new Angle(-17.917639, -0.3127217947337443), 0))) , $createWidget(builder));
+  this$static._g3mWidget = (builder = new G3MBuilder_WebGL , layerSet = new LayerSet , $addLayer(layerSet, newOSM_0(new TimeInterval({l:4114432, m:617, h:0}))) , $setLayerSet((!builder._planetRendererBuilder && (builder._planetRendererBuilder = new PlanetRendererBuilder) , builder._planetRendererBuilder), layerSet) , cr = new CameraRenderer , $addHandler_1(cr, new DeviceAttitudeCameraHandler) , $setCameraRenderer(builder, cr) , $createWidget(builder));
   $add_0(g3mWidgetHolder, this$static._g3mWidget);
   $setAnimatedCameraPosition_2(this$static._g3mWidget, new Geodetic3D(new Angle(28.034468668529083, 0.48929378231302334), new Angle(-15.904092315837872, -0.27757877545250076), 1634079));
 }
@@ -7615,24 +7581,9 @@ function $onModuleLoad_1(this$static){
 function G3MWebGLTestingApplication(){
 }
 
-function createMark(position){
-  var anchorBitmapURL, imageBuilderWidget, markBitmapURL;
-  markBitmapURL = new URL_0('/g3m-marker.png');
-  anchorBitmapURL = new URL_0('/anchorWidget.png');
-  imageBuilderWidget = new ColumnLayoutImageBuilder(new DownloaderImageBuilder(markBitmapURL), new LabelImageBuilder(new GFont('monospaced', 20)));
-  return new NonOverlappingMark(imageBuilderWidget, new DownloaderImageBuilder(anchorBitmapURL), position);
-}
-
-function createMark_0(position){
-  var anchorBitmapURL, markBitmapURL;
-  markBitmapURL = new URL_0('/g3m-marker.png');
-  anchorBitmapURL = new URL_0('/anchorWidget.png');
-  return new NonOverlappingMark(new DownloaderImageBuilder(markBitmapURL), new DownloaderImageBuilder(anchorBitmapURL), position);
-}
-
-defineClass(230, 1, {}, G3MWebGLTestingApplication);
+defineClass(219, 1, {}, G3MWebGLTestingApplication);
 _._g3mWidget = null;
-var Lorg_glob3_mobile_client_G3MWebGLTestingApplication_2_classLit = createForClass('org.glob3.mobile.client', 'G3MWebGLTestingApplication', 230);
+var Lorg_glob3_mobile_client_G3MWebGLTestingApplication_2_classLit = createForClass('org.glob3.mobile.client', 'G3MWebGLTestingApplication', 219);
 function $render(this$static, rc, parentGLState){
   this$static._enable && this$static.rawRender(rc, parentGLState);
 }
@@ -7641,21 +7592,21 @@ function Mesh(){
   this._enable = true;
 }
 
-defineClass(108, 1, {});
+defineClass(102, 1, {});
 _._enable = false;
-var Lorg_glob3_mobile_generated_Mesh_2_classLit = createForClass('org.glob3.mobile.generated', 'Mesh', 108);
+var Lorg_glob3_mobile_generated_Mesh_2_classLit = createForClass('org.glob3.mobile.generated', 'Mesh', 102);
 function $computeBoundingVolume(this$static){
   var i_0, i3, maxX, maxY, maxZ, minX, minY, minZ, vertexCount, x_0, y_0, z_0;
   vertexCount = ~~(this$static._vertices._buffer.length / 3);
   if (vertexCount == 0) {
     return null;
   }
-  minX = $intern_36;
-  minY = $intern_36;
-  minZ = $intern_36;
-  maxX = $intern_37;
-  maxY = $intern_37;
-  maxZ = $intern_37;
+  minX = $intern_34;
+  minY = $intern_34;
+  minZ = $intern_34;
+  maxX = $intern_35;
+  maxY = $intern_35;
+  maxZ = $intern_35;
   for (i_0 = 0; i_0 < vertexCount; i_0++) {
     i3 = i_0 * 3;
     x_0 = $get_5(this$static._vertices, i3) + this$static._center._x;
@@ -7671,7 +7622,7 @@ function $computeBoundingVolume(this$static){
   return new Box(new Vector3D(minX, minY, minZ), new Vector3D(maxX, maxY, maxZ));
 }
 
-defineClass(407, 108, {});
+defineClass(390, 102, {});
 _.rawRender = function rawRender(rc, parentGLState){
   $setParent_2(this._glState, parentGLState);
   $rawRender(this, rc);
@@ -7681,14 +7632,14 @@ _._lineWidth = 0;
 _._ownsVertices = false;
 _._pointSize = 0;
 _._primitive = 0;
-var Lorg_glob3_mobile_generated_AbstractGeometryMesh_2_classLit = createForClass('org.glob3.mobile.generated', 'AbstractGeometryMesh', 407);
-defineClass(460, 1, $intern_38);
-var Lorg_glob3_mobile_generated_AbstractImageBuilder_2_classLit = createForClass('org.glob3.mobile.generated', 'AbstractImageBuilder', 460);
+var Lorg_glob3_mobile_generated_AbstractGeometryMesh_2_classLit = createForClass('org.glob3.mobile.generated', 'AbstractGeometryMesh', 390);
+defineClass(475, 1, {});
+var Lorg_glob3_mobile_generated_AbstractImageBuilder_2_classLit = createForClass('org.glob3.mobile.generated', 'AbstractImageBuilder', 475);
 function $createGLState(this$static){
   $addGLFeature(this$static._glState, new GeometryGLFeature(this$static._vertices, this$static._depthTest, 0, 0, this$static._lineWidth, this$static._pointSize), false);
   !!this$static._translationMatrix && $addGLFeature(this$static._glState, new ModelTransformGLFeature($asMatrix44D(this$static._translationMatrix)), false);
   if (!!this$static._flatColor && !this$static._colors) {
-    $addGLFeature(this$static._glState, new FlatColorGLFeature_0(this$static._flatColor, this$static._flatColor._alpha < 1, _srcAlpha, _oneMinusSrcAlpha), false);
+    $addGLFeature(this$static._glState, new FlatColorGLFeature(this$static._flatColor, this$static._flatColor._alpha < 1, _srcAlpha, _oneMinusSrcAlpha), false);
     return;
   }
   !!this$static._colors && $addGLFeature(this$static._glState, new ColorGLFeature(this$static._colors, _srcAlpha, _oneMinusSrcAlpha), false);
@@ -7696,8 +7647,8 @@ function $createGLState(this$static){
 
 function $dispose(this$static){
   if (this$static._owner) {
-    !!this$static._vertices && $dispose_14(this$static._vertices);
-    !!this$static._colors && $dispose_14(this$static._colors);
+    !!this$static._vertices && $dispose_15(this$static._vertices);
+    !!this$static._colors && $dispose_15(this$static._colors);
   }
   !!this$static._translationMatrix && $dispose_9(this$static._translationMatrix);
   $_release(this$static._glState);
@@ -7719,7 +7670,7 @@ function AbstractMesh(primitive, center, vertices, flatColor, colors, depthTest)
   $createGLState(this);
 }
 
-defineClass(210, 108, {});
+defineClass(197, 102, {});
 _.rawRender = function rawRender_0(rc, parentGLState){
   $setParent_2(this._glState, parentGLState);
   this.rawRender_0(rc);
@@ -7730,11 +7681,11 @@ _._lineWidth = 0;
 _._owner = false;
 _._pointSize = 0;
 _._primitive = 0;
-var Lorg_glob3_mobile_generated_AbstractMesh_2_classLit = createForClass('org.glob3.mobile.generated', 'AbstractMesh', 210);
+var Lorg_glob3_mobile_generated_AbstractMesh_2_classLit = createForClass('org.glob3.mobile.generated', 'AbstractMesh', 197);
 function $add_5(this$static, a){
   var r;
   r = this$static._radians + a._radians;
-  return new Angle(r * $intern_39, r);
+  return new Angle(r * $intern_36, r);
 }
 
 function $description(this$static){
@@ -7749,7 +7700,7 @@ function $description(this$static){
 function $div(this$static, k){
   var r;
   r = this$static._radians / k;
-  return new Angle(r * $intern_39, r);
+  return new Angle(r * $intern_36, r);
 }
 
 function $div_0(this$static, k){
@@ -7793,6 +7744,10 @@ function $isEquals(this$static, that){
   return $isEquals_2(this$static._degrees, that._degrees) || $isEquals_2(this$static._radians, that._radians);
 }
 
+function $isNan(this$static){
+  return this$static._degrees != this$static._degrees;
+}
+
 function $lowerThan(this$static, a){
   return this$static._radians < a._radians;
 }
@@ -7800,13 +7755,13 @@ function $lowerThan(this$static, a){
 function $sub(this$static, a){
   var r;
   r = this$static._radians - a._radians;
-  return new Angle(r * $intern_39, r);
+  return new Angle(r * $intern_36, r);
 }
 
 function $times(this$static, k){
   var r;
   r = k * this$static._radians;
-  return new Angle(r * $intern_39, r);
+  return new Angle(r * $intern_36, r);
 }
 
 function Angle(degrees, radians){
@@ -7820,11 +7775,11 @@ function Angle_0(angle){
 }
 
 function fromDegrees(degrees){
-  return new Angle(degrees, degrees / 180 * $intern_40);
+  return new Angle(degrees, degrees / 180 * $intern_37);
 }
 
 function fromRadians(radians){
-  return new Angle(radians * $intern_39, radians);
+  return new Angle(radians * $intern_36, radians);
 }
 
 function linearInterpolation(from, to, alpha_0){
@@ -7867,8 +7822,8 @@ function $get_1(this$static, name_0){
   var i_0, size_0;
   size_0 = this$static._sources.array.length;
   for (i_0 = 0; i_0 < size_0; i_0++) {
-    if (compareTo_3(dynamicCast($get_0(this$static._sources, i_0), 22)._name, name_0) == 0) {
-      return dynamicCast($get_0(this$static._sources, i_0), 22);
+    if (compareTo_3(dynamicCast($get_0(this$static._sources, i_0), 21)._name, name_0) == 0) {
+      return dynamicCast($get_0(this$static._sources, i_0), 21);
     }
   }
   return null;
@@ -7878,8 +7833,8 @@ function GPUProgramFactory(){
   this._sources = new ArrayList;
 }
 
-defineClass(188, 1, {}, GPUProgramFactory);
-var Lorg_glob3_mobile_generated_GPUProgramFactory_2_classLit = createForClass('org.glob3.mobile.generated', 'GPUProgramFactory', 188);
+defineClass(177, 1, {}, GPUProgramFactory);
+var Lorg_glob3_mobile_generated_GPUProgramFactory_2_classLit = createForClass('org.glob3.mobile.generated', 'GPUProgramFactory', 177);
 function BasicShadersGL2(){
   var sourcesBillboard, sourcesBillboard_TransformedTexCoor, sourcesColorMesh, sourcesDefault, sourcesFlatColor2DMesh, sourcesFlatColorMesh, sourcesFlatColorMesh_DirectionLight, sourcesFullTransformedTexCoorMultiTexturedMesh, sourcesFullTransformedTexCoorTexturedMesh, sourcesMultiTexturedMesh, sourcesNoColorMesh, sourcesShader, sourcesTextured2DMesh, sourcesTexturedMesh, sourcesTexturedMesh_DirectionLight, sourcesTransformedTexCoorMultiTexturedMesh, sourcesTransformedTexCoorTexturedMesh, sourcesTransformedTexCoorTexturedMesh_DirectionLight;
   GPUProgramFactory.call(this);
@@ -7921,13 +7876,13 @@ function BasicShadersGL2(){
   $add_3(this._sources, sourcesTransformedTexCoorTexturedMesh_DirectionLight);
 }
 
-defineClass(301, 188, {}, BasicShadersGL2);
-var Lorg_glob3_mobile_generated_BasicShadersGL2_2_classLit = createForClass('org.glob3.mobile.generated', 'BasicShadersGL2', 301);
-defineClass(498, 1, {});
-var Lorg_glob3_mobile_generated_BoundingVolume_2_classLit = createForClass('org.glob3.mobile.generated', 'BoundingVolume', 498);
+defineClass(287, 177, {}, BasicShadersGL2);
+var Lorg_glob3_mobile_generated_BasicShadersGL2_2_classLit = createForClass('org.glob3.mobile.generated', 'BasicShadersGL2', 287);
+defineClass(481, 1, {});
+var Lorg_glob3_mobile_generated_BoundingVolume_2_classLit = createForClass('org.glob3.mobile.generated', 'BoundingVolume', 481);
 function $getCornersArray(this$static){
   if (this$static._cornersArray == null) {
-    this$static._cornersArray = initDim(Lorg_glob3_mobile_generated_Vector3F_2_classLit, $intern_4, 41, 8, 0, 1);
+    this$static._cornersArray = initDim(Lorg_glob3_mobile_generated_Vector3F_2_classLit, $intern_4, 40, 8, 0, 1);
     this$static._cornersArray[0] = new Vector3F(this$static._lower._x, this$static._lower._y, this$static._lower._z);
     this$static._cornersArray[1] = new Vector3F(this$static._lower._x, this$static._lower._y, this$static._upper._z);
     this$static._cornersArray[2] = new Vector3F(this$static._lower._x, this$static._upper._y, this$static._lower._z);
@@ -7967,9 +7922,9 @@ function Box(lower, upper){
   this._upper = new Vector3D_0(upper);
 }
 
-defineClass(220, 498, {}, Box);
+defineClass(209, 481, {}, Box);
 _._cornersArray = null;
-var Lorg_glob3_mobile_generated_Box_2_classLit = createForClass('org.glob3.mobile.generated', 'Box', 220);
+var Lorg_glob3_mobile_generated_Box_2_classLit = createForClass('org.glob3.mobile.generated', 'Box', 209);
 function gently(x_0){
   if (x_0 < 0.25) {
     return 2.6666666666666665 * x_0 * x_0;
@@ -7994,12 +7949,12 @@ function pace(f){
   return result;
 }
 
-defineClass(496, 1, {});
+defineClass(477, 1, {});
 _.dispose = function dispose(){
 }
 ;
-var Lorg_glob3_mobile_generated_Effect_2_classLit = createForClass('org.glob3.mobile.generated', 'Effect', 496);
-defineClass(497, 496, {});
+var Lorg_glob3_mobile_generated_Effect_2_classLit = createForClass('org.glob3.mobile.generated', 'Effect', 477);
+defineClass(480, 477, {});
 _.doStep = function doStep(rc, when){
 }
 ;
@@ -8007,12 +7962,12 @@ _.isDone = function isDone(rc, when){
   return false;
 }
 ;
-var Lorg_glob3_mobile_generated_EffectNeverEnding_2_classLit = createForClass('org.glob3.mobile.generated', 'EffectNeverEnding', 497);
+var Lorg_glob3_mobile_generated_EffectNeverEnding_2_classLit = createForClass('org.glob3.mobile.generated', 'EffectNeverEnding', 480);
 function BusyMeshEffect(renderer){
   this._renderer = renderer;
 }
 
-defineClass(385, 497, {}, BusyMeshEffect);
+defineClass(370, 480, {}, BusyMeshEffect);
 _.cancel = function cancel(when){
 }
 ;
@@ -8033,7 +7988,7 @@ _.stop_0 = function stop_0(rc, when){
 }
 ;
 _._lastMS = {l:0, m:0, h:0};
-var Lorg_glob3_mobile_generated_BusyMeshEffect_2_classLit = createForClass('org.glob3.mobile.generated', 'BusyMeshEffect', 385);
+var Lorg_glob3_mobile_generated_BusyMeshEffect_2_classLit = createForClass('org.glob3.mobile.generated', 'BusyMeshEffect', 370);
 function $createGLState_0(this$static){
   if (!this$static._projectionFeature) {
     this$static._projectionFeature = new ProjectionGLFeature($asMatrix44D(this$static._projectionMatrix));
@@ -8063,19 +8018,19 @@ function $createMesh(rc){
   minSize = viewPortWidth < viewPortHeight?viewPortWidth:viewPortHeight;
   outerRadius = minSize / 15;
   for (step = 0; step <= 5; step++) {
-    angle = step * 2 * $intern_40 / 5;
+    angle = step * 2 * $intern_37 / 5;
     c = cos_0(angle);
     s = sin_0(angle);
     $add_9(vertices, 0, 0);
     $add_9(vertices, outerRadius * c, outerRadius * s);
-    $add_17(indices, narrow_short(indicesCounter++));
-    $add_17(indices, narrow_short(indicesCounter++));
+    $add_16(indices, narrow_short(indicesCounter++));
+    $add_16(indices, narrow_short(indicesCounter++));
     $add_10(colors, 1);
     $add_10(colors, 0);
   }
   $push_back_0(indices._values, 0);
   $push_back_0(indices._values, 1);
-  result = new IndexedMesh(_triangleStrip, new Vector3D(vertices._cx, vertices._cy, vertices._cz), new FloatBuffer_WebGL_1(vertices._values._array, vertices._values._size), new ShortBuffer_WebGL(indices._values._array, indices._values._size), new FloatBuffer_WebGL_1(colors._values._array, colors._values._size));
+  result = new IndexedMesh(_triangleStrip, new Vector3D(vertices._cx, vertices._cy, vertices._cz), new FloatBuffer_WebGL_0(vertices._values._array, vertices._values._size), new ShortBuffer_WebGL(indices._values._array, indices._values._size), new FloatBuffer_WebGL_0(colors._values._array, colors._values._size));
   return result;
 }
 
@@ -8114,7 +8069,7 @@ function BusyMeshRenderer(backgroundColor){
   this._mesh = null;
 }
 
-defineClass(341, 1, {}, BusyMeshRenderer);
+defineClass(326, 1, {}, BusyMeshRenderer);
 _.initialize = function initialize(context){
 }
 ;
@@ -8139,7 +8094,7 @@ _.stop_1 = function stop_1(rc){
 }
 ;
 _._degrees = 0;
-var Lorg_glob3_mobile_generated_BusyMeshRenderer_2_classLit = createForClass('org.glob3.mobile.generated', 'BusyMeshRenderer', 341);
+var Lorg_glob3_mobile_generated_BusyMeshRenderer_2_classLit = createForClass('org.glob3.mobile.generated', 'BusyMeshRenderer', 326);
 function $_getCartesianCenterOfView(this$static){
   if (this$static._dirtyFlags._cartesianCenterOfViewDirty) {
     this$static._dirtyFlags._cartesianCenterOfViewDirty = false;
@@ -8306,11 +8261,11 @@ function $getUpMutable(this$static, result){
 }
 
 function $getViewDirectionInto(this$static, result){
-  $set_5(result, this$static._center._x - this$static._position._x, this$static._center._y - this$static._position._y, this$static._center._z - this$static._position._z);
+  $set_4(result, this$static._center._x - this$static._position._x, this$static._center._y - this$static._position._y, this$static._center._z - this$static._position._z);
 }
 
 function $getViewPortInto(this$static, viewport){
-  $set_4(viewport, this$static._viewPortWidth, this$static._viewPortHeight);
+  $set_3(viewport, this$static._viewPortWidth, this$static._viewPortHeight);
 }
 
 function $initialize(this$static, context){
@@ -8337,12 +8292,6 @@ function $pixel2Ray(this$static, pixel){
     return obj;
   }
   return $sub_2(obj, $asVector3D(this$static._position));
-}
-
-function $point2Pixel(this$static, point){
-  var p;
-  p = $project($getModelViewMatrix(this$static), point, this$static._viewPortWidth, this$static._viewPortHeight);
-  return new Vector2F(p._x, this$static._viewPortHeight - p._y);
 }
 
 function $resizeViewport(this$static, width_0, height){
@@ -8397,7 +8346,7 @@ function $setGeodeticPosition(this$static, g3d){
   var dragMatrix, heading, pitch;
   heading = $getHeadingPitchRoll(this$static)._heading;
   pitch = $getHeadingPitchRoll(this$static)._pitch;
-  $setPitch(this$static, new Angle(-90, $intern_41));
+  $setPitch(this$static, new Angle(-90, $intern_38));
   dragMatrix = $drag(this$static._planet, (!this$static._geodeticPosition && (this$static._geodeticPosition = new Geodetic3D_1($toGeodetic3D(this$static._planet, $asVector3D(this$static._position)))) , this$static._geodeticPosition), g3d);
   dragMatrix._isValid && $applyTransform(this$static, dragMatrix);
   $setHeading(this$static, heading);
@@ -8497,10 +8446,10 @@ function pixel2RayInto(position, pixel, viewport, modelViewMatrix, ray){
   py = viewport._y - pixel._y;
   pixel3D = new Vector3D(px, py, 0);
   obj = $unproject(modelViewMatrix, pixel3D, viewport._x, viewport._y);
-  obj._x != obj._x || obj._y != obj._y || obj._z != obj._z?$copyFrom_2(ray, obj):$set_5(ray, obj._x - position._x, obj._y - position._y, obj._z - position._z);
+  obj._x != obj._x || obj._y != obj._y || obj._z != obj._z?$copyFrom_2(ray, obj):$set_4(ray, obj._x - position._x, obj._y - position._y, obj._z - position._z);
 }
 
-defineClass(197, 1, {}, Camera);
+defineClass(185, 1, {}, Camera);
 _.getGeodeticPosition = function getGeodeticPosition(){
   return $getGeodeticPosition(this);
 }
@@ -8519,12 +8468,12 @@ _._tanHalfVerticalFieldOfView = 0;
 _._timestamp = {l:0, m:0, h:0};
 _._viewPortHeight = 0;
 _._viewPortWidth = 0;
-var Lorg_glob3_mobile_generated_Camera_2_classLit = createForClass('org.glob3.mobile.generated', 'Camera', 197);
+var Lorg_glob3_mobile_generated_Camera_2_classLit = createForClass('org.glob3.mobile.generated', 'Camera', 185);
 function Camera$CameraEffectTarget(){
 }
 
-defineClass(351, 1, {}, Camera$CameraEffectTarget);
-var Lorg_glob3_mobile_generated_Camera$CameraEffectTarget_2_classLit = createForClass('org.glob3.mobile.generated', 'Camera/CameraEffectTarget', 351);
+defineClass(336, 1, {}, Camera$CameraEffectTarget);
+var Lorg_glob3_mobile_generated_Camera$CameraEffectTarget_2_classLit = createForClass('org.glob3.mobile.generated', 'Camera/CameraEffectTarget', 336);
 function $setCurrentGesture(this$static, gesture){
   this$static._currentGesture = gesture;
 }
@@ -8534,8 +8483,8 @@ function CameraContext(gesture, nextCamera){
   this._nextCamera = nextCamera;
 }
 
-defineClass(367, 1, {}, CameraContext);
-var Lorg_glob3_mobile_generated_CameraContext_2_classLit = createForClass('org.glob3.mobile.generated', 'CameraContext', 367);
+defineClass(286, 1, {}, CameraContext);
+var Lorg_glob3_mobile_generated_CameraContext_2_classLit = createForClass('org.glob3.mobile.generated', 'CameraContext', 286);
 function $copyFrom_0(this$static, other){
   this$static._frustumDataDirty = other._frustumDataDirty;
   this$static._projectionMatrixDirty = other._projectionMatrixDirty;
@@ -8562,7 +8511,7 @@ function CameraDirtyFlags(){
   $setAllDirty(this);
 }
 
-defineClass(203, 1, {}, CameraDirtyFlags);
+defineClass(190, 1, {}, CameraDirtyFlags);
 _.toString$ = function toString_26(){
   var d;
   return d = '' , this._frustumDataDirty && (d += 'FD ') , this._projectionMatrixDirty && (d += 'PM ') , this._modelMatrixDirty && (d += 'MM ') , this._modelViewMatrixDirty && (d += 'MVM ') , this._cartesianCenterOfViewDirty && (d += 'CCV ') , this._geodeticCenterOfViewDirty && (d += 'GCV ') , this._frustumDirty && (d += 'F ') , this._frustumMCDirty && (d += 'FMC ') , d;
@@ -8576,9 +8525,9 @@ _._geodeticCenterOfViewDirty = false;
 _._modelMatrixDirty = false;
 _._modelViewMatrixDirty = false;
 _._projectionMatrixDirty = false;
-var Lorg_glob3_mobile_generated_CameraDirtyFlags_2_classLit = createForClass('org.glob3.mobile.generated', 'CameraDirtyFlags', 203);
-defineClass(79, 1, $intern_42);
-var Lorg_glob3_mobile_generated_CameraEventHandler_2_classLit = createForClass('org.glob3.mobile.generated', 'CameraEventHandler', 79);
+var Lorg_glob3_mobile_generated_CameraDirtyFlags_2_classLit = createForClass('org.glob3.mobile.generated', 'CameraDirtyFlags', 190);
+defineClass(64, 1, $intern_39);
+var Lorg_glob3_mobile_generated_CameraEventHandler_2_classLit = createForClass('org.glob3.mobile.generated', 'CameraEventHandler', 64);
 function $onDown(this$static, eventContext, touchEvent, cameraContext){
   var camera, initialRay0, initialRay1, pixel0, pixel1;
   camera = cameraContext._nextCamera;
@@ -8620,7 +8569,7 @@ function CameraDoubleDragHandler(){
   this._cameraModelViewMatrix = new MutableMatrix44D;
 }
 
-defineClass(360, 79, $intern_42, CameraDoubleDragHandler);
+defineClass(346, 64, $intern_39, CameraDoubleDragHandler);
 _.onTouchEvent = function onTouchEvent(eventContext, touchEvent, cameraContext){
   if (touchEvent._touchs.array.length != 2)
     return false;
@@ -8640,7 +8589,7 @@ _.onTouchEvent = function onTouchEvent(eventContext, touchEvent, cameraContext){
 _.render_0 = function render_0(rc, cameraContext){
 }
 ;
-var Lorg_glob3_mobile_generated_CameraDoubleDragHandler_2_classLit = createForClass('org.glob3.mobile.generated', 'CameraDoubleDragHandler', 360);
+var Lorg_glob3_mobile_generated_CameraDoubleDragHandler_2_classLit = createForClass('org.glob3.mobile.generated', 'CameraDoubleDragHandler', 346);
 function $onDown_0(eventContext, touchEvent, cameraContext){
   var camera, effect, pixel, planet, target;
   pixel = dynamicCast($get_0(touchEvent._touchs, 0), 10)._pos;
@@ -8656,7 +8605,7 @@ function $onDown_0(eventContext, touchEvent, cameraContext){
 function CameraDoubleTapHandler(){
 }
 
-defineClass(362, 79, $intern_42, CameraDoubleTapHandler);
+defineClass(348, 64, $intern_39, CameraDoubleTapHandler);
 _.onTouchEvent = function onTouchEvent_0(eventContext, touchEvent, cameraContext){
   if (touchEvent._touchs.array.length != 1)
     return false;
@@ -8671,9 +8620,9 @@ _.onTouchEvent = function onTouchEvent_0(eventContext, touchEvent, cameraContext
 _.render_0 = function render_1(rc, cameraContext){
 }
 ;
-var Lorg_glob3_mobile_generated_CameraDoubleTapHandler_2_classLit = createForClass('org.glob3.mobile.generated', 'CameraDoubleTapHandler', 362);
-defineClass(475, 1, {});
-var Lorg_glob3_mobile_generated_SceneLighting_2_classLit = createForClass('org.glob3.mobile.generated', 'SceneLighting', 475);
+var Lorg_glob3_mobile_generated_CameraDoubleTapHandler_2_classLit = createForClass('org.glob3.mobile.generated', 'CameraDoubleTapHandler', 348);
+defineClass(458, 1, {});
+var Lorg_glob3_mobile_generated_SceneLighting_2_classLit = createForClass('org.glob3.mobile.generated', 'SceneLighting', 458);
 function $modifyGLState(this$static, glState, rc){
   var camera, cameraVector, f, lightDir, rotationLightDirAxis;
   camera = rc._currentCamera;
@@ -8682,10 +8631,10 @@ function $modifyGLState(this$static, glState, rc){
   if (this$static._cameraDirX == this$static._camDir._x && this$static._cameraDirY == this$static._camDir._y && this$static._cameraDirZ == this$static._camDir._z && this$static._upX == this$static._up._x && this$static._upY == this$static._up._y && this$static._upZ == this$static._up._z) {
     return;
   }
-  cameraVector = $times_1(this$static._camDir);
+  cameraVector = $times_0(this$static._camDir);
   rotationLightDirAxis = $cross(this$static._up, cameraVector);
   lightDir = $rotateAroundAxis(cameraVector, rotationLightDirAxis, new Angle(45, 0.7853981633974483));
-  f = dynamicCast($getGLFeature(glState, 11), 158);
+  f = dynamicCast($getGLFeature(glState, 11), 148);
   if (!f) {
     $clearGLFeatureGroup(glState, ($clinit_GLFeatureGroupName() , LIGHTING_GROUP));
     $addGLFeature(glState, new DirectionLightGLFeature(new Vector3D(lightDir._x, lightDir._y, lightDir._z), this$static._diffuseColor, this$static._ambientColor), false);
@@ -8711,14 +8660,14 @@ function CameraFocusSceneLighting(ambient, diffuse){
   this._cameraDirZ = 0;
 }
 
-defineClass(342, 475, {}, CameraFocusSceneLighting);
+defineClass(327, 458, {}, CameraFocusSceneLighting);
 _._cameraDirX = 0;
 _._cameraDirY = 0;
 _._cameraDirZ = 0;
 _._upX = 0;
 _._upY = 0;
 _._upZ = 0;
-var Lorg_glob3_mobile_generated_CameraFocusSceneLighting_2_classLit = createForClass('org.glob3.mobile.generated', 'CameraFocusSceneLighting', 342);
+var Lorg_glob3_mobile_generated_CameraFocusSceneLighting_2_classLit = createForClass('org.glob3.mobile.generated', 'CameraFocusSceneLighting', 327);
 function $getAlpha(this$static, when){
   var percent;
   percent = $percentDone(this$static, when);
@@ -8742,7 +8691,7 @@ function EffectWithDuration(duration){
   this._started = {l:0, m:0, h:0};
 }
 
-defineClass(207, 496, {});
+defineClass(194, 477, {});
 _.isDone = function isDone_0(rc, when){
   var percent;
   percent = $percentDone(this, when);
@@ -8756,7 +8705,7 @@ _.start_1 = function start_3(rc, when){
 _._durationMS = {l:0, m:0, h:0};
 _._linearTiming = false;
 _._started = {l:0, m:0, h:0};
-var Lorg_glob3_mobile_generated_EffectWithDuration_2_classLit = createForClass('org.glob3.mobile.generated', 'EffectWithDuration', 207);
+var Lorg_glob3_mobile_generated_EffectWithDuration_2_classLit = createForClass('org.glob3.mobile.generated', 'EffectWithDuration', 194);
 function $calculateMaxHeight(this$static, planet){
   var averageHeight, delta, deltaLatInDeg, deltaLonInDeg, distanceInDeg, maxHeight, middleHeight;
   maxHeight = $axisAverage(planet._ellipsoid._radii) * 5;
@@ -8786,7 +8735,7 @@ function CameraGoToPositionEffect(duration, fromPosition, toPosition, fromHeadin
   this._linearHeight = false;
 }
 
-defineClass(382, 207, {}, CameraGoToPositionEffect);
+defineClass(367, 194, {}, CameraGoToPositionEffect);
 _.cancel = function cancel_0(when){
 }
 ;
@@ -8798,7 +8747,7 @@ _.doStep = function doStep_1(rc, when){
   $setGeodeticPosition(camera, new Geodetic3D(linearInterpolation(this._fromPosition._latitude, this._toPosition._latitude, alpha_0), linearInterpolation(this._fromPosition._longitude, this._toPosition._longitude, alpha_0), height));
   heading = linearInterpolation(this._fromHeading, this._toHeading, alpha_0);
   $setHeading(camera, heading);
-  middlePitch = new Angle(-90, $intern_41);
+  middlePitch = new Angle(-90, $intern_38);
   alpha_0 <= 0.1?$setPitch(camera, linearInterpolation(this._fromPitch, middlePitch, alpha_0 * 10)):alpha_0 >= 0.9?$setPitch(camera, linearInterpolation(middlePitch, this._toPitch, (alpha_0 - 0.9) * 10)):$setPitch(camera, middlePitch);
 }
 ;
@@ -8817,7 +8766,7 @@ _.stop_0 = function stop_2(rc, when){
 ;
 _._linearHeight = false;
 _._middleHeight = 0;
-var Lorg_glob3_mobile_generated_CameraGoToPositionEffect_2_classLit = createForClass('org.glob3.mobile.generated', 'CameraGoToPositionEffect', 382);
+var Lorg_glob3_mobile_generated_CameraGoToPositionEffect_2_classLit = createForClass('org.glob3.mobile.generated', 'CameraGoToPositionEffect', 367);
 function $addHandler_1(this$static, handler){
   $add_3(this$static._handlers, handler);
 }
@@ -8831,7 +8780,7 @@ function $onTouchEvent(this$static, ec, touchEvent){
     }
     handlersSize = this$static._handlers.array.length;
     for (i_0 = 0; i_0 < handlersSize; i_0++) {
-      if (dynamicCast($get_0(this$static._handlers, i_0), 79).onTouchEvent(ec, touchEvent, this$static._cameraContext)) {
+      if (dynamicCast($get_0(this$static._handlers, i_0), 64).onTouchEvent(ec, touchEvent, this$static._cameraContext)) {
         return true;
       }
     }
@@ -8844,7 +8793,7 @@ function $render_1(this$static, rc){
   !this$static._cameraContext && (this$static._cameraContext = new CameraContext(($clinit_Gesture() , None), rc._nextCamera));
   handlersSize = this$static._handlers.array.length;
   for (i_0 = 0; i_0 < handlersSize; i_0++) {
-    dynamicCast($get_0(this$static._handlers, i_0), 79).render_0(rc, this$static._cameraContext);
+    dynamicCast($get_0(this$static._handlers, i_0), 64).render_0(rc, this$static._cameraContext);
   }
 }
 
@@ -8854,7 +8803,7 @@ function CameraRenderer(){
   this._processTouchEvents = true;
 }
 
-defineClass(325, 1, {}, CameraRenderer);
+defineClass(171, 1, {}, CameraRenderer);
 _.initialize = function initialize_0(context){
 }
 ;
@@ -8872,7 +8821,7 @@ _.stop_1 = function stop_3(rc){
 }
 ;
 _._processTouchEvents = false;
-var Lorg_glob3_mobile_generated_CameraRenderer_2_classLit = createForClass('org.glob3.mobile.generated', 'CameraRenderer', 325);
+var Lorg_glob3_mobile_generated_CameraRenderer_2_classLit = createForClass('org.glob3.mobile.generated', 'CameraRenderer', 171);
 function $onDown_1(this$static, touchEvent, cameraContext){
   var averagePixel, camera, pixel0, pixel1, pixel2;
   camera = cameraContext._nextCamera;
@@ -8881,10 +8830,10 @@ function $onDown_1(this$static, touchEvent, cameraContext){
   pixel0 = dynamicCast($get_0(touchEvent._touchs, 0), 10)._pos;
   pixel1 = dynamicCast($get_0(touchEvent._touchs, 1), 10)._pos;
   pixel2 = dynamicCast($get_0(touchEvent._touchs, 2), 10)._pos;
-  averagePixel = $div_1($add_18(new Vector2F(pixel0._x + pixel1._x, pixel0._y + pixel1._y), pixel2), 3);
+  averagePixel = $div_1($add_17(new Vector2F(pixel0._x + pixel1._x, pixel0._y + pixel1._y), pixel2));
   this$static._pivotPixel = new MutableVector2F_0(averagePixel._x, averagePixel._y);
   $copyFrom_2(this$static._pivotPoint, $asVector3D($_getCartesianCenterOfView(camera)));
-  if ($isNan(this$static._pivotPoint)) {
+  if ($isNan_0(this$static._pivotPoint)) {
     $logError(_instance_3, 'CAMERA ERROR: center point does not intersect globe!!\n', initValues(getClassLiteralForArray(Ljava_lang_Object_2_classLit, 1), $intern_4, 1, 3, []));
     $setCurrentGesture(cameraContext, None);
   }
@@ -8897,22 +8846,22 @@ function $onMove_0(this$static, eventContext, touchEvent, cameraContext){
   c0 = dynamicCast($get_0(touchEvent._touchs, 0), 10)._pos;
   c1 = dynamicCast($get_0(touchEvent._touchs, 1), 10)._pos;
   c2 = dynamicCast($get_0(touchEvent._touchs, 2), 10)._pos;
-  cm = $div_1($add_18(new Vector2F(c0._x + c1._x, c0._y + c1._y), c2), 3);
+  cm = $div_1($add_17(new Vector2F(c0._x + c1._x, c0._y + c1._y), c2));
   normal = $geodeticSurfaceNormal(eventContext._planet, this$static._pivotPoint);
   camera = cameraContext._nextCamera;
   $setLookAtParams(camera, this$static._cameraPosition, this$static._cameraCenter, this$static._cameraUp);
   angle_v = fromDegrees((this$static._pivotPixel._x - cm._x) * 0.25);
   $rotateWithAxisAndPoint(camera, normal, $asVector3D(this$static._pivotPoint), angle_v);
   view = new Vector3D(camera._center._x - camera._position._x, camera._center._y - camera._position._y, camera._center._z - camera._position._z);
-  dot = $dot_0($normalized_0(normal), $times_3($normalized_0(view), -1));
-  initialAngle = acos_0(dot) / $intern_40 * 180;
+  dot = $dot_0($normalized_0(normal), $times_2($normalized_0(view), -1));
+  initialAngle = acos_0(dot) / $intern_37 * 180;
   delta = (cm._y - this$static._pivotPixel._y) * 0.25;
   finalAngle = initialAngle + delta;
   finalAngle > 85 && (delta = 85 - initialAngle);
   finalAngle < 0 && (delta = -initialAngle);
   $getLookAtParamsInto(camera, this$static._tempCameraPosition, this$static._tempCameraCenter, this$static._tempCameraUp);
   u = (M = $getModelMatrix(camera) , new Vector3D(M._m00, M._m01, M._m02));
-  $rotateWithAxisAndPoint(camera, u, $asVector3D(this$static._pivotPoint), new Angle(delta, delta / 180 * $intern_40));
+  $rotateWithAxisAndPoint(camera, u, $asVector3D(this$static._pivotPoint), new Angle(delta, delta / 180 * $intern_37));
   $isNan_1($asVector3D($_getCartesianCenterOfView(camera))) && $setLookAtParams(camera, this$static._tempCameraPosition, this$static._tempCameraCenter, this$static._tempCameraUp);
 }
 
@@ -8929,7 +8878,7 @@ function CameraRotationHandler(){
   this._pivotPixel = new MutableVector2F_0(0, 0);
 }
 
-defineClass(361, 79, $intern_42, CameraRotationHandler);
+defineClass(347, 64, $intern_39, CameraRotationHandler);
 _.onTouchEvent = function onTouchEvent_1(eventContext, touchEvent, cameraContext){
   if (touchEvent._touchs.array.length != 3)
     return false;
@@ -8950,7 +8899,7 @@ _.onTouchEvent = function onTouchEvent_1(eventContext, touchEvent, cameraContext
 _.render_0 = function render_3(rc, cameraContext){
 }
 ;
-var Lorg_glob3_mobile_generated_CameraRotationHandler_2_classLit = createForClass('org.glob3.mobile.generated', 'CameraRotationHandler', 361);
+var Lorg_glob3_mobile_generated_CameraRotationHandler_2_classLit = createForClass('org.glob3.mobile.generated', 'CameraRotationHandler', 347);
 function $onDown_2(this$static, eventContext, touchEvent, cameraContext){
   var camera, initialRay, pixel;
   camera = cameraContext._nextCamera;
@@ -8971,7 +8920,7 @@ function $onMove_1(this$static, eventContext, touchEvent, cameraContext){
     return;
   pixel = dynamicCast($get_0(touchEvent._touchs, 0), 10)._pos;
   pixel2RayInto(this$static._cameraPosition, pixel, this$static._cameraViewPort, this$static._cameraModelViewMatrix, this$static._finalRay);
-  if ($isNan(this$static._finalRay))
+  if ($isNan_0(this$static._finalRay))
     return;
   planet = eventContext._planet;
   matrix = $singleDrag(planet, $asVector3D(this$static._finalRay));
@@ -9010,7 +8959,7 @@ function CameraSingleDragHandler(){
   this._useInertia = true;
 }
 
-defineClass(359, 79, $intern_42, CameraSingleDragHandler);
+defineClass(345, 64, $intern_39, CameraSingleDragHandler);
 _.onTouchEvent = function onTouchEvent_2(eventContext, touchEvent, cameraContext){
   if (touchEvent._touchs.array.length != 1)
     return false;
@@ -9033,14 +8982,14 @@ _.render_0 = function render_4(rc, cameraContext){
 }
 ;
 _._useInertia = false;
-var Lorg_glob3_mobile_generated_CameraSingleDragHandler_2_classLit = createForClass('org.glob3.mobile.generated', 'CameraSingleDragHandler', 359);
-defineClass(96, 1, $intern_43);
-var Lorg_glob3_mobile_generated_CanvasElement_2_classLit = createForClass('org.glob3.mobile.generated', 'CanvasElement', 96);
-function $build(this$static, listener, deleteListener){
+var Lorg_glob3_mobile_generated_CameraSingleDragHandler_2_classLit = createForClass('org.glob3.mobile.generated', 'CameraSingleDragHandler', 345);
+defineClass(91, 1, $intern_40);
+var Lorg_glob3_mobile_generated_CanvasElement_2_classLit = createForClass('org.glob3.mobile.generated', 'CanvasElement', 91);
+function $build(this$static, listener){
   var canvas;
   canvas = $getCanvas(this$static);
   $buildOnCanvas(this$static, canvas);
-  $createImage(canvas, new CanvasImageBuilder_ImageListener('_DefaultChessCanvasImage_' + ('' + this$static._width) + '_' + ('' + this$static._height) + '_' + $toID(this$static._backgroundColor) + '_' + $toID(this$static._boxColor) + '_' + ('' + this$static._splits), listener, deleteListener));
+  $createImage(canvas, new CanvasImageBuilder_ImageListener('_DefaultChessCanvasImage_' + ('' + this$static._width) + '_' + ('' + this$static._height) + '_' + $toID(this$static._backgroundColor) + '_' + $toID(this$static._boxColor) + '_' + ('' + this$static._splits), listener));
 }
 
 function $getCanvas(this$static){
@@ -9052,45 +9001,37 @@ function $getCanvas(this$static){
   }
    else {
     $setFillColor(this$static._canvas, new Color(0, 0, 0, 0));
-    $fillRectangle(this$static._canvas, 0, 0, this$static._width, this$static._height);
+    $fillRectangle(this$static._canvas, this$static._width, this$static._height);
   }
   return this$static._canvas;
 }
 
-defineClass(375, 460, $intern_38);
-_.build = function build(context, listener, deleteListener){
-  $build(this, listener, deleteListener);
-}
-;
+defineClass(360, 475, {});
 _._canvasHeight = 0;
 _._canvasWidth = 0;
 _._height = 0;
 _._width = 0;
-var Lorg_glob3_mobile_generated_CanvasImageBuilder_2_classLit = createForClass('org.glob3.mobile.generated', 'CanvasImageBuilder', 375);
-defineClass(493, 1, {});
+var Lorg_glob3_mobile_generated_CanvasImageBuilder_2_classLit = createForClass('org.glob3.mobile.generated', 'CanvasImageBuilder', 360);
+defineClass(473, 1, {});
 _.dispose = function dispose_0(){
 }
 ;
-var Lorg_glob3_mobile_generated_IImageListener_2_classLit = createForClass('org.glob3.mobile.generated', 'IImageListener', 493);
-function CanvasImageBuilder_ImageListener(imageName, listener, deleteListener){
+var Lorg_glob3_mobile_generated_IImageListener_2_classLit = createForClass('org.glob3.mobile.generated', 'IImageListener', 473);
+function CanvasImageBuilder_ImageListener(imageName, listener){
   this._imageName = imageName;
   this._listener = listener;
-  this._deleteListener = deleteListener;
 }
 
-defineClass(392, 493, {}, CanvasImageBuilder_ImageListener);
+defineClass(375, 473, {}, CanvasImageBuilder_ImageListener);
 _.dispose = function dispose_1(){
-  this._deleteListener && !!this._listener && this._listener.dispose();
 }
 ;
 _.imageCreated = function imageCreated(image){
-  this._listener.imageCreated_1(image, this._imageName);
-  this._deleteListener && !!this._listener && this._listener.dispose();
+  $imageCreated_1(this._listener, image, this._imageName);
   this._listener = null;
 }
 ;
-_._deleteListener = false;
-var Lorg_glob3_mobile_generated_CanvasImageBuilder_1ImageListener_2_classLit = createForClass('org.glob3.mobile.generated', 'CanvasImageBuilder_ImageListener', 392);
+var Lorg_glob3_mobile_generated_CanvasImageBuilder_1ImageListener_2_classLit = createForClass('org.glob3.mobile.generated', 'CanvasImageBuilder_ImageListener', 375);
 function $_release(this$static){
   if (--this$static._referenceCounter == 0) {
     this$static.dispose();
@@ -9120,18 +9061,18 @@ function TileImageProvider(){
   RCObject.call(this);
 }
 
-defineClass(52, 9, $intern_44);
+defineClass(49, 9, $intern_41);
 _.dispose = function dispose_3(){
   $dispose_0(this);
 }
 ;
-var Lorg_glob3_mobile_generated_TileImageProvider_2_classLit = createForClass('org.glob3.mobile.generated', 'TileImageProvider', 52);
-defineClass(414, 52, $intern_44);
+var Lorg_glob3_mobile_generated_TileImageProvider_2_classLit = createForClass('org.glob3.mobile.generated', 'TileImageProvider', 49);
+defineClass(393, 49, $intern_41);
 _.dispose = function dispose_4(){
   $dispose_0(this);
 }
 ;
-var Lorg_glob3_mobile_generated_CanvasTileImageProvider_2_classLit = createForClass('org.glob3.mobile.generated', 'CanvasTileImageProvider', 414);
+var Lorg_glob3_mobile_generated_CanvasTileImageProvider_2_classLit = createForClass('org.glob3.mobile.generated', 'CanvasTileImageProvider', 393);
 function $setInfo(this$static, info){
   this$static._info.array = initDim(Ljava_lang_Object_2_classLit, $intern_4, 1, 0, 3, 1);
   $addAll(this$static._info, info);
@@ -9142,8 +9083,8 @@ function ChildRenderer(renderer){
   this._renderer = renderer;
 }
 
-defineClass(37, 1, {37:1}, ChildRenderer);
-var Lorg_glob3_mobile_generated_ChildRenderer_2_classLit = createForClass('org.glob3.mobile.generated', 'ChildRenderer', 37);
+defineClass(36, 1, {36:1}, ChildRenderer);
+var Lorg_glob3_mobile_generated_ChildRenderer_2_classLit = createForClass('org.glob3.mobile.generated', 'ChildRenderer', 36);
 function $toID(this$static){
   var isb, s;
   isb = new StringBuilder_WebGL;
@@ -9172,7 +9113,7 @@ function Color_0(that){
   this._alpha = that._alpha;
 }
 
-defineClass(15, 1, {}, Color, Color_0);
+defineClass(25, 1, {}, Color, Color_0);
 _.toString$ = function toString_27(){
   var isb;
   return isb = new StringBuilder_WebGL , isb._string += '[Color red=' , $addFloat(isb, this._red) , isb._string += ', green=' , $addFloat(isb, this._green) , isb._string += ', blue=' , $addFloat(isb, this._blue) , isb._string += ', alpha=' , $addFloat(isb, this._alpha) , isb._string += ']' , isb._string;
@@ -9182,7 +9123,7 @@ _._alpha = 0;
 _._blue = 0;
 _._green = 0;
 _._red = 0;
-var Lorg_glob3_mobile_generated_Color_2_classLit = createForClass('org.glob3.mobile.generated', 'Color', 15);
+var Lorg_glob3_mobile_generated_Color_2_classLit = createForClass('org.glob3.mobile.generated', 'Color', 25);
 function GLFeature(group, id_0){
   RCObject.call(this);
   this._group = group;
@@ -9190,27 +9131,27 @@ function GLFeature(group, id_0){
   this._values = new GPUVariableValueSet;
 }
 
-defineClass(24, 9, $intern_45);
+defineClass(27, 9, {27:1, 9:1});
 _.dispose = function dispose_5(){
   !!this._values && $dispose_4(this._values);
   $dispose_0(this);
 }
 ;
 _._id = 0;
-var Lorg_glob3_mobile_generated_GLFeature_2_classLit = createForClass('org.glob3.mobile.generated', 'GLFeature', 24);
+var Lorg_glob3_mobile_generated_GLFeature_2_classLit = createForClass('org.glob3.mobile.generated', 'GLFeature', 27);
 function PriorityGLFeature(g, id_0, priority){
   GLFeature.call(this, g, id_0);
   this._priority = priority;
 }
 
-defineClass(71, 24, $intern_46);
+defineClass(70, 27, $intern_42);
 _.dispose = function dispose_6(){
   !!this._values && $dispose_4(this._values);
   $dispose_0(this);
 }
 ;
 _._priority = 0;
-var Lorg_glob3_mobile_generated_PriorityGLFeature_2_classLit = createForClass('org.glob3.mobile.generated', 'PriorityGLFeature', 71);
+var Lorg_glob3_mobile_generated_PriorityGLFeature_2_classLit = createForClass('org.glob3.mobile.generated', 'PriorityGLFeature', 70);
 function $blendingOnGlobalGLState(this$static, state){
   if (this$static._blend) {
     state._blend = true;
@@ -9228,7 +9169,7 @@ function GLColorGroupFeature(id_0, priority, blend, sFactor, dFactor){
   this._dFactor = dFactor;
 }
 
-defineClass(133, 71, $intern_46);
+defineClass(128, 70, $intern_42);
 _.dispose = function dispose_7(){
   !!this._values && $dispose_4(this._values);
   $dispose_0(this);
@@ -9237,7 +9178,7 @@ _.dispose = function dispose_7(){
 _._blend = false;
 _._dFactor = 0;
 _._sFactor = 0;
-var Lorg_glob3_mobile_generated_GLColorGroupFeature_2_classLit = createForClass('org.glob3.mobile.generated', 'GLColorGroupFeature', 133);
+var Lorg_glob3_mobile_generated_GLColorGroupFeature_2_classLit = createForClass('org.glob3.mobile.generated', 'GLColorGroupFeature', 128);
 function ColorGLFeature(colors, sFactor, dFactor){
   var value_0;
   GLColorGroupFeature.call(this, 7, 3, true, sFactor, dFactor);
@@ -9245,7 +9186,7 @@ function ColorGLFeature(colors, sFactor, dFactor){
   $addAttributeValue(this._values, ($clinit_GPUAttributeKey() , COLOR), value_0);
 }
 
-defineClass(413, 133, $intern_46, ColorGLFeature);
+defineClass(392, 128, $intern_42, ColorGLFeature);
 _.applyOnGlobalGLState = function applyOnGlobalGLState(state){
   $blendingOnGlobalGLState(this, state);
 }
@@ -9255,7 +9196,7 @@ _.dispose = function dispose_8(){
   $dispose_0(this);
 }
 ;
-var Lorg_glob3_mobile_generated_ColorGLFeature_2_classLit = createForClass('org.glob3.mobile.generated', 'ColorGLFeature', 413);
+var Lorg_glob3_mobile_generated_ColorGLFeature_2_classLit = createForClass('org.glob3.mobile.generated', 'ColorGLFeature', 392);
 function $add_7(this$static, child){
   $add_3(this$static._children, child);
   this$static._extent = null;
@@ -9281,7 +9222,7 @@ function $getExtent(this$static, canvas){
   return this$static._extent;
 }
 
-defineClass(420, 96, $intern_43);
+defineClass(398, 91, $intern_40);
 _.drawAt = function drawAt(left, top_0, canvas){
   $drawAt(this, left, top_0, canvas);
 }
@@ -9293,14 +9234,14 @@ _.getExtent = function getExtent(canvas){
 _._cornerRadius = 0;
 _._margin = 0;
 _._padding = 0;
-var Lorg_glob3_mobile_generated_GroupCanvasElement_2_classLit = createForClass('org.glob3.mobile.generated', 'GroupCanvasElement', 420);
+var Lorg_glob3_mobile_generated_GroupCanvasElement_2_classLit = createForClass('org.glob3.mobile.generated', 'GroupCanvasElement', 398);
 function $calculateExtent(this$static, canvas){
   var child, childExtent, childrenSize, height, i_0, width_0;
   width_0 = 0;
   height = 0;
   childrenSize = this$static._children.array.length;
   for (i_0 = 0; i_0 < childrenSize; i_0++) {
-    child = dynamicCast($get_0(this$static._children, i_0), 96);
+    child = dynamicCast($get_0(this$static._children, i_0), 91);
     childExtent = child.getExtent(canvas);
     childExtent._x > width_0 && (width_0 = childExtent._x);
     height += childExtent._y;
@@ -9314,7 +9255,7 @@ function $rawDrawAt(this$static, left, top_0, extent, canvas){
   cursorTop = top_0;
   childrenSize = this$static._children.array.length;
   for (i_0 = 0; i_0 < childrenSize; i_0++) {
-    child = dynamicCast($get_0(this$static._children, i_0), 96);
+    child = dynamicCast($get_0(this$static._children, i_0), 91);
     childExtent = child.getExtent(canvas);
     switch (this$static._elementAlign) {
       case 0:
@@ -9342,124 +9283,9 @@ function ColumnCanvasElement(color_0){
   this._elementAlign = 1;
 }
 
-defineClass(421, 420, $intern_43, ColumnCanvasElement);
+defineClass(399, 398, $intern_40, ColumnCanvasElement);
 _._elementAlign = 0;
-var Lorg_glob3_mobile_generated_ColumnCanvasElement_2_classLit = createForClass('org.glob3.mobile.generated', 'ColumnCanvasElement', 421);
-defineClass(298, 460, $intern_38);
-_.build = function build_0(context, listener, deleteListener){
-  var child, childrenResult, childrenSize, i_0;
-  childrenSize = this._children.array.length;
-  childrenResult = new LayoutImageBuilder$ChildrenResult(this, childrenSize, listener, deleteListener);
-  for (i_0 = 0; i_0 < childrenSize; i_0++) {
-    child = dynamicCast($get_0(this._children, i_0), 99);
-    child.build(context, new LayoutImageBuilder$LayoutImageBuilderChildListener(childrenResult, i_0), true);
-  }
-  $_release(childrenResult);
-}
-;
-_._borderWidth = 0;
-_._childrenSeparation = 0;
-_._cornerRadius = 0;
-_._margin = 0;
-_._padding = 0;
-var Lorg_glob3_mobile_generated_LayoutImageBuilder_2_classLit = createForClass('org.glob3.mobile.generated', 'LayoutImageBuilder', 298);
-function $doLayout(this$static, listener, deleteListener, results){
-  var accumulatedHeight, anyError, canvas, canvasHeight, canvasWidth, cursorTop, error, i_0, i0, i1, image, imageHeight, imageName, imageWidth, left, margin2, maxWidth, padding2, result, resultsSize, context, imageJS;
-  anyError = false;
-  error = '';
-  imageName = 'Col';
-  maxWidth = 0;
-  accumulatedHeight = 0;
-  resultsSize = results.array.length;
-  for (i0 = 0; i0 < resultsSize; i0++) {
-    result = (checkElementIndex(i0, results.array.length) , dynamicCast(results.array[i0], 87));
-    image = result._image;
-    if (!image) {
-      anyError = true;
-      error += result._error + ' ';
-    }
-     else {
-      accumulatedHeight += $getHeight_0(image);
-      $getWidth_0(image) > maxWidth && (maxWidth = $getWidth_0(image));
-      imageName += result._imageName + '/';
-    }
-  }
-  if (anyError) {
-    if (listener) {
-      listener.onError(error);
-      deleteListener && !!listener && listener.dispose();
-    }
-  }
-   else {
-    margin2 = this$static._margin * 2;
-    padding2 = this$static._padding * 2;
-    canvasWidth = maxWidth + margin2 + padding2;
-    canvasHeight = accumulatedHeight + margin2 + padding2 + (resultsSize - 1) * this$static._childrenSeparation;
-    canvas = new Canvas_WebGL;
-    $initialize_2(canvas, canvasWidth, canvasHeight);
-    if (this$static._backgroundColor._alpha >= 0.01) {
-      $setFillColor(canvas, this$static._backgroundColor);
-      this$static._cornerRadius > 0?$fillRoundedRectangle(canvas, this$static._margin, this$static._margin, canvasWidth - margin2, canvasHeight - margin2, this$static._cornerRadius):$fillRectangle(canvas, this$static._margin, this$static._margin, canvasWidth - margin2, canvasHeight - margin2);
-    }
-    if (this$static._borderWidth > 0 && this$static._borderColor._alpha >= 0.01) {
-      $setLineColor(canvas, this$static._borderColor);
-      $setLineWidth_0(canvas, this$static._borderWidth);
-      this$static._cornerRadius > 0?$strokeRoundedRectangle(canvas, this$static._margin, this$static._margin, canvasWidth - margin2, canvasHeight - margin2, this$static._cornerRadius):$strokeRectangle(canvas, this$static._margin, this$static._margin, canvasWidth - margin2, canvasHeight - margin2);
-    }
-    cursorTop = this$static._margin + this$static._padding;
-    for (i1 = 0; i1 < resultsSize; i1++) {
-      result = (checkElementIndex(i1, results.array.length) , dynamicCast(results.array[i1], 87));
-      image = result._image;
-      imageWidth = $getWidth_0(image);
-      imageHeight = $getHeight_0(image);
-      left = (canvasWidth - imageWidth) / 2;
-      canvas._canvasWidth > 0 && canvas._canvasHeight > 0 || $logError(_instance_3, 'Canvas is not initialized', initValues(getClassLiteralForArray(Ljava_lang_Object_2_classLit, 1), $intern_4, 1, 3, []));
-      context = canvas._domCanvasContext;
-      imageJS = image.getImage();
-      context.drawImage(imageJS, left, cursorTop, imageJS.width, imageJS.height);
-      cursorTop += imageHeight + this$static._childrenSeparation;
-    }
-    $createImage(canvas, new ColumnLayoutImageBuilder_IImageListener(imageName, listener, deleteListener));
-  }
-  for (i_0 = 0; i_0 < resultsSize; i_0++) {
-    checkElementIndex(i_0, results.array.length);
-    dynamicCast(results.array[i_0], 87);
-  }
-}
-
-function ColumnLayoutImageBuilder(child0, child1){
-  ColumnLayoutImageBuilder_0.call(this, child0, child1, new Color(0, 0, 0, 0), new Color(0, 0, 0, 0));
-}
-
-function ColumnLayoutImageBuilder_0(child0, child1, borderColor, backgroundColor){
-  this._children = new ArrayList;
-  this._margin = 0;
-  this._borderWidth = 0;
-  this._borderColor = new Color_0(borderColor);
-  this._padding = 0;
-  this._backgroundColor = new Color_0(backgroundColor);
-  this._cornerRadius = 0;
-  this._childrenSeparation = 0;
-  $add_3(this._children, child0);
-  $add_3(this._children, child1);
-}
-
-defineClass(186, 298, $intern_38, ColumnLayoutImageBuilder);
-var Lorg_glob3_mobile_generated_ColumnLayoutImageBuilder_2_classLit = createForClass('org.glob3.mobile.generated', 'ColumnLayoutImageBuilder', 186);
-function ColumnLayoutImageBuilder_IImageListener(imageName, listener, deleteListener){
-  this._imageName = imageName;
-  this._listener = listener;
-  this._deleteListener = deleteListener;
-}
-
-defineClass(426, 493, {}, ColumnLayoutImageBuilder_IImageListener);
-_.imageCreated = function imageCreated_0(image){
-  this._listener.imageCreated_1(image, this._imageName);
-  this._deleteListener && !!this._listener && this._listener.dispose();
-}
-;
-_._deleteListener = false;
-var Lorg_glob3_mobile_generated_ColumnLayoutImageBuilder_1IImageListener_2_classLit = createForClass('org.glob3.mobile.generated', 'ColumnLayoutImageBuilder_IImageListener', 426);
+var Lorg_glob3_mobile_generated_ColumnCanvasElement_2_classLit = createForClass('org.glob3.mobile.generated', 'ColumnCanvasElement', 399);
 function $addChildRenderer(this$static, renderer){
   $add_3(this$static._renderers, renderer);
   this$static._renderersSize = this$static._renderers.array.length;
@@ -9471,7 +9297,7 @@ function $getInfo(this$static){
   var child, childInfo, i_0;
   this$static._info.array = initDim(Ljava_lang_Object_2_classLit, $intern_4, 1, 0, 3, 1);
   for (i_0 = 0; i_0 < this$static._renderersSize; i_0++) {
-    child = dynamicCast($get_0(this$static._renderers, i_0), 37);
+    child = dynamicCast($get_0(this$static._renderers, i_0), 36);
     childInfo = child._info;
     $addAll(this$static._info, childInfo);
   }
@@ -9488,9 +9314,9 @@ function CompositeRenderer(){
   this._changedInfoListener = null;
 }
 
-defineClass(125, 1, {125:1, 115:1}, CompositeRenderer);
+defineClass(117, 1, {117:1, 135:1}, CompositeRenderer);
 _.changedRendererInfo = function changedRendererInfo(rendererIdentifier, info){
-  rendererIdentifier < this._renderersSize?$setInfo(dynamicCast($get_0(this._renderers, rendererIdentifier), 37), info):$logWarning(_instance_3, 'Child Render not found: %d', initValues(getClassLiteralForArray(Ljava_lang_Object_2_classLit, 1), $intern_4, 1, 3, [valueOf(rendererIdentifier)]));
+  rendererIdentifier < this._renderersSize?$setInfo(dynamicCast($get_0(this._renderers, rendererIdentifier), 36), info):$logWarning(_instance_3, 'Child Render not found: %d', initValues(getClassLiteralForArray(Ljava_lang_Object_2_classLit, 1), $intern_4, 1, 3, [valueOf(rendererIdentifier)]));
   !!this._changedInfoListener && this._changedInfoListener.changedRendererInfo(-1, $getInfo(this));
 }
 ;
@@ -9498,7 +9324,7 @@ _.getPlanetRenderer = function getPlanetRenderer(){
   var i_0, planetRenderer, renderer, result;
   result = null;
   for (i_0 = 0; i_0 < this._renderersSize; i_0++) {
-    renderer = dynamicCast($get_0(this._renderers, i_0), 37)._renderer;
+    renderer = dynamicCast($get_0(this._renderers, i_0), 36)._renderer;
     planetRenderer = renderer.getPlanetRenderer();
     !!planetRenderer && (!result?(result = planetRenderer):$logError(_instance_3, 'Inconsistency in Renderers: more than one PlanetRenderer', initValues(getClassLiteralForArray(Ljava_lang_Object_2_classLit, 1), $intern_4, 1, 3, [])));
   }
@@ -9511,7 +9337,7 @@ _.getRenderState = function getRenderState(rc){
   busyFlag = false;
   errorFlag = false;
   for (i_0 = 0; i_0 < this._renderersSize; i_0++) {
-    child = dynamicCast($get_0(this._renderers, i_0), 37)._renderer;
+    child = dynamicCast($get_0(this._renderers, i_0), 36)._renderer;
     if (child.isEnable()) {
       childRenderState = child.getRenderState(rc);
       childRenderStateType = childRenderState._type;
@@ -9531,7 +9357,7 @@ _.getSurfaceElevationProvider = function getSurfaceElevationProvider(){
   var childSurfaceElevationProvider, i_0, renderer, result;
   result = null;
   for (i_0 = 0; i_0 < this._renderersSize; i_0++) {
-    renderer = dynamicCast($get_0(this._renderers, i_0), 37)._renderer;
+    renderer = dynamicCast($get_0(this._renderers, i_0), 36)._renderer;
     childSurfaceElevationProvider = renderer.getSurfaceElevationProvider();
     !!childSurfaceElevationProvider && (!result?(result = childSurfaceElevationProvider):$logError(_instance_3, 'Inconsistency in Renderers: more than one SurfaceElevationProvider', initValues(getClassLiteralForArray(Ljava_lang_Object_2_classLit, 1), $intern_4, 1, 3, [])));
   }
@@ -9542,7 +9368,7 @@ _.initialize = function initialize_1(context){
   var i_0;
   this._context = context;
   for (i_0 = 0; i_0 < this._renderersSize; i_0++) {
-    dynamicCast($get_0(this._renderers, i_0), 37)._renderer.initialize(context);
+    dynamicCast($get_0(this._renderers, i_0), 36)._renderer.initialize(context);
   }
 }
 ;
@@ -9552,7 +9378,7 @@ _.isEnable = function isEnable(){
     return false;
   }
   for (i_0 = 0; i_0 < this._renderersSize; i_0++) {
-    if (dynamicCast($get_0(this._renderers, i_0), 37)._renderer.isEnable()) {
+    if (dynamicCast($get_0(this._renderers, i_0), 36)._renderer.isEnable()) {
       return true;
     }
   }
@@ -9566,14 +9392,14 @@ _.isPlanetRenderer = function isPlanetRenderer(){
 _.onResizeViewportEvent = function onResizeViewportEvent_1(ec, width_0, height){
   var i_0;
   for (i_0 = this._renderersSize - 1; i_0 >= 0; i_0--) {
-    dynamicCast($get_0(this._renderers, i_0), 37)._renderer.onResizeViewportEvent(ec, width_0, height);
+    dynamicCast($get_0(this._renderers, i_0), 36)._renderer.onResizeViewportEvent(ec, width_0, height);
   }
 }
 ;
 _.onTouchEvent_0 = function onTouchEvent_3(ec, touchEvent){
   var i_0, renderer;
   for (i_0 = this._renderersSize - 1; i_0 >= 0; i_0--) {
-    renderer = dynamicCast($get_0(this._renderers, i_0), 37)._renderer;
+    renderer = dynamicCast($get_0(this._renderers, i_0), 36)._renderer;
     if (renderer.isEnable()) {
       if (renderer.onTouchEvent_0(ec, touchEvent)) {
         return true;
@@ -9586,7 +9412,7 @@ _.onTouchEvent_0 = function onTouchEvent_3(ec, touchEvent){
 _.render = function render_5(rc, glState){
   var i_0, renderer;
   for (i_0 = 0; i_0 < this._renderersSize; i_0++) {
-    renderer = dynamicCast($get_0(this._renderers, i_0), 37)._renderer;
+    renderer = dynamicCast($get_0(this._renderers, i_0), 36)._renderer;
     renderer.isEnable() && renderer.render(rc, glState);
   }
 }
@@ -9600,20 +9426,20 @@ _.setChangedRendererInfoListener = function setChangedRendererInfoListener(chang
 _.start_2 = function start_6(rc){
   var i_0;
   for (i_0 = 0; i_0 < this._renderersSize; i_0++) {
-    dynamicCast($get_0(this._renderers, i_0), 37)._renderer.start_2(rc);
+    dynamicCast($get_0(this._renderers, i_0), 36)._renderer.start_2(rc);
   }
 }
 ;
 _.stop_1 = function stop_4(rc){
   var i_0;
   for (i_0 = 0; i_0 < this._renderersSize; i_0++) {
-    dynamicCast($get_0(this._renderers, i_0), 37)._renderer.stop_1(rc);
+    dynamicCast($get_0(this._renderers, i_0), 36)._renderer.stop_1(rc);
   }
 }
 ;
 _._enable = false;
 _._renderersSize = 0;
-var Lorg_glob3_mobile_generated_CompositeRenderer_2_classLit = createForClass('org.glob3.mobile.generated', 'CompositeRenderer', 125);
+var Lorg_glob3_mobile_generated_CompositeRenderer_2_classLit = createForClass('org.glob3.mobile.generated', 'CompositeRenderer', 117);
 function $clinit_TileImageContribution(){
   $clinit_TileImageContribution = emptyMethod;
   FULL_COVERAGE_OPAQUE = new TileImageContribution_0(false, 1);
@@ -9664,7 +9490,7 @@ function retainContribution(contribution){
   !!contribution && ++contribution._referenceCounter;
 }
 
-defineClass(113, 9, {9:1}, TileImageContribution, TileImageContribution_0);
+defineClass(105, 9, {9:1}, TileImageContribution, TileImageContribution_0);
 _.dispose = function dispose_9(){
   $dispose_0(this);
 }
@@ -9673,7 +9499,7 @@ _._alpha = 0;
 _._isFullCoverage = false;
 _._isTransparent = false;
 var FULL_COVERAGE_OPAQUE, _lastFullCoverageTransparent = null;
-var Lorg_glob3_mobile_generated_TileImageContribution_2_classLit = createForClass('org.glob3.mobile.generated', 'TileImageContribution', 113);
+var Lorg_glob3_mobile_generated_TileImageContribution_2_classLit = createForClass('org.glob3.mobile.generated', 'TileImageContribution', 105);
 function CompositeTileImageContribution(contributions, transparent){
   TileImageContribution_0.call(this, transparent, 1);
   this._contributions = contributions;
@@ -9685,39 +9511,39 @@ function create_2(contributions){
   if (contributions.array.length == 0) {
     return null;
   }
-  firsChild = (checkElementIndex(0, contributions.array.length) , dynamicCast(contributions.array[0], 83));
+  firsChild = (checkElementIndex(0, contributions.array.length) , dynamicCast(contributions.array[0], 80));
   return new CompositeTileImageContribution(contributions, firsChild._contribution._alpha >= 0.99);
 }
 
-defineClass(165, 113, {165:1, 9:1}, CompositeTileImageContribution);
+defineClass(155, 105, {155:1, 9:1}, CompositeTileImageContribution);
 _.dispose = function dispose_10(){
   var contribution, contributionsSize, i_0;
   contributionsSize = this._contributions.array.length;
   for (i_0 = 0; i_0 < contributionsSize; i_0++) {
-    contribution = dynamicCast($get_0(this._contributions, i_0), 83);
+    contribution = dynamicCast($get_0(this._contributions, i_0), 80);
     releaseContribution(contribution._contribution);
   }
   $dispose_0(this);
 }
 ;
-var Lorg_glob3_mobile_generated_CompositeTileImageContribution_2_classLit = createForClass('org.glob3.mobile.generated', 'CompositeTileImageContribution', 165);
+var Lorg_glob3_mobile_generated_CompositeTileImageContribution_2_classLit = createForClass('org.glob3.mobile.generated', 'CompositeTileImageContribution', 155);
 function CompositeTileImageContribution$ChildContribution(childIndex, contribution){
   this._childIndex = childIndex;
   this._contribution = contribution;
 }
 
-defineClass(83, 1, {83:1}, CompositeTileImageContribution$ChildContribution);
+defineClass(80, 1, {80:1}, CompositeTileImageContribution$ChildContribution);
 _._childIndex = 0;
-var Lorg_glob3_mobile_generated_CompositeTileImageContribution$ChildContribution_2_classLit = createForClass('org.glob3.mobile.generated', 'CompositeTileImageContribution/ChildContribution', 83);
+var Lorg_glob3_mobile_generated_CompositeTileImageContribution$ChildContribution_2_classLit = createForClass('org.glob3.mobile.generated', 'CompositeTileImageContribution/ChildContribution', 80);
 function $cancelChildren(this$static, tileId, compositeContribution){
   var child, contributionsSize, i_0, i0, indexes;
   contributionsSize = compositeContribution._contributions.array.length;
   indexes = initDim(I_classLit, $intern_29, 0, contributionsSize, 7, 1);
   for (i0 = 0; i0 < contributionsSize; i0++) {
-    indexes[i0] = dynamicCast($get_0(compositeContribution._contributions, i0), 83)._childIndex;
+    indexes[i0] = dynamicCast($get_0(compositeContribution._contributions, i0), 80)._childIndex;
   }
   for (i_0 = 0; i_0 < contributionsSize; i_0++) {
-    child = dynamicCast($get_0(this$static._children, indexes[i_0]), 52);
+    child = dynamicCast($get_0(this$static._children, indexes[i_0]), 49);
     child.cancel_0(tileId);
   }
 }
@@ -9735,10 +9561,10 @@ function CompositeTileImageProvider(){
   this._childrenSize = 0;
 }
 
-defineClass(415, 414, $intern_44, CompositeTileImageProvider);
+defineClass(394, 393, $intern_41, CompositeTileImageProvider);
 _.cancel_0 = function cancel_1(tileId){
   var composer;
-  composer = dynamicCast($removeStringValue(this._composers, tileId), 164);
+  composer = dynamicCast($removeStringValue(this._composers, tileId), 153);
   !!composer && (composer._canceled = true , $cancelChildren(composer._compositeTileImageProvider, tileId, composer._compositeContribution));
 }
 ;
@@ -9746,13 +9572,13 @@ _.contribution = function contribution_0(tile){
   var child, childContribution, childrenContributions, childrenContributionsSize, i_0, j, previousContribution;
   childrenContributions = new ArrayList;
   for (i_0 = 0; i_0 < this._childrenSize; i_0++) {
-    child = dynamicCast($get_0(this._children, i_0), 52);
+    child = dynamicCast($get_0(this._children, i_0), 49);
     childContribution = child.contribution(tile);
     if (childContribution) {
       childrenContributionsSize = childrenContributions.array.length;
       if (childrenContributionsSize > 0 && childContribution._isFullCoverage && !childContribution._isTransparent && childContribution._alpha >= 0.99) {
         for (j = 0; j < childrenContributionsSize; j++) {
-          previousContribution = (checkElementIndex(j, childrenContributions.array.length) , dynamicCast(childrenContributions.array[j], 83));
+          previousContribution = (checkElementIndex(j, childrenContributions.array.length) , dynamicCast(childrenContributions.array[j], 80));
           releaseContribution(previousContribution._contribution);
         }
         childrenContributions.array = initDim(Ljava_lang_Object_2_classLit, $intern_4, 1, 0, 3, 1);
@@ -9765,14 +9591,14 @@ _.contribution = function contribution_0(tile){
 ;
 _.create_0 = function create_3(tile, contribution, resolution, tileDownloadPriority, logDownloadActivity, listener, deleteListener, frameTasksExecutor){
   var child, childContribution, composer, compositeContribution, contributionsSize, i_0, tileId;
-  compositeContribution = dynamicCast(contribution, 165);
+  compositeContribution = dynamicCast(contribution, 155);
   tileId = tile._id;
   composer = new CompositeTileImageProvider$Composer(resolution._x, resolution._y, this, tileId, tile._sector, listener, deleteListener, compositeContribution, frameTasksExecutor);
   $putStringValue(this._composers, tileId, composer);
   contributionsSize = compositeContribution._contributions.array.length;
   for (i_0 = 0; i_0 < contributionsSize; i_0++) {
-    childContribution = dynamicCast($get_0(compositeContribution._contributions, i_0), 83);
-    child = dynamicCast($get_0(this._children, childContribution._childIndex), 52);
+    childContribution = dynamicCast($get_0(compositeContribution._contributions, i_0), 80);
+    child = dynamicCast($get_0(this._children, childContribution._childIndex), 49);
     retainContribution(childContribution._contribution);
     child.create_0(tile, childContribution._contribution, resolution, tileDownloadPriority, logDownloadActivity, new CompositeTileImageProvider$ChildTileImageListener(composer, i_0), true, frameTasksExecutor);
   }
@@ -9781,14 +9607,14 @@ _.create_0 = function create_3(tile, contribution, resolution, tileDownloadPrior
 _.dispose = function dispose_11(){
   var child, i_0;
   for (i_0 = 0; i_0 < this._childrenSize; i_0++) {
-    child = dynamicCast($get_0(this._children, i_0), 52);
+    child = dynamicCast($get_0(this._children, i_0), 49);
     $_release(child);
   }
   $dispose_0(this);
 }
 ;
 _._childrenSize = 0;
-var Lorg_glob3_mobile_generated_CompositeTileImageProvider_2_classLit = createForClass('org.glob3.mobile.generated', 'CompositeTileImageProvider', 415);
+var Lorg_glob3_mobile_generated_CompositeTileImageProvider_2_classLit = createForClass('org.glob3.mobile.generated', 'CompositeTileImageProvider', 394);
 function CompositeTileImageProvider$ChildResult(isError, isCanceled, image, imageId, contribution, error){
   this._isError = isError;
   this._isCanceled = isCanceled;
@@ -9798,27 +9624,27 @@ function CompositeTileImageProvider$ChildResult(isError, isCanceled, image, imag
   this._error = error;
 }
 
-defineClass(63, 1, {63:1}, CompositeTileImageProvider$ChildResult);
+defineClass(60, 1, {60:1}, CompositeTileImageProvider$ChildResult);
 _._isCanceled = false;
 _._isError = false;
-var Lorg_glob3_mobile_generated_CompositeTileImageProvider$ChildResult_2_classLit = createForClass('org.glob3.mobile.generated', 'CompositeTileImageProvider/ChildResult', 63);
-defineClass(502, 1, {});
+var Lorg_glob3_mobile_generated_CompositeTileImageProvider$ChildResult_2_classLit = createForClass('org.glob3.mobile.generated', 'CompositeTileImageProvider/ChildResult', 60);
+defineClass(485, 1, {});
 _.dispose = function dispose_12(){
 }
 ;
-var Lorg_glob3_mobile_generated_TileImageListener_2_classLit = createForClass('org.glob3.mobile.generated', 'TileImageListener', 502);
+var Lorg_glob3_mobile_generated_TileImageListener_2_classLit = createForClass('org.glob3.mobile.generated', 'TileImageListener', 485);
 function CompositeTileImageProvider$ChildTileImageListener(composer, index_0){
   this._composer = composer;
   this._index = index_0;
   ++this._composer._referenceCounter;
 }
 
-defineClass(418, 502, {}, CompositeTileImageProvider$ChildTileImageListener);
+defineClass(397, 485, {}, CompositeTileImageProvider$ChildTileImageListener);
 _.dispose = function dispose_13(){
   $_release(this._composer);
 }
 ;
-_.imageCreated_0 = function imageCreated_1(tileId, image, imageId, contribution){
+_.imageCreated_0 = function imageCreated_0(tileId, image, imageId, contribution){
   $imageCreated(this._composer, image, imageId, contribution, this._index);
 }
 ;
@@ -9831,7 +9657,7 @@ _.imageCreationError = function imageCreationError(tileId, error){
 }
 ;
 _._index = 0;
-var Lorg_glob3_mobile_generated_CompositeTileImageProvider$ChildTileImageListener_2_classLit = createForClass('org.glob3.mobile.generated', 'CompositeTileImageProvider/ChildTileImageListener', 418);
+var Lorg_glob3_mobile_generated_CompositeTileImageProvider$ChildTileImageListener_2_classLit = createForClass('org.glob3.mobile.generated', 'CompositeTileImageProvider/ChildTileImageListener', 397);
 function $cleanUp(this$static){
   if (this$static._deleteListener) {
     !!this$static._listener && this$static._listener.dispose();
@@ -9847,7 +9673,7 @@ function $done(this$static){
     return;
   }
   if (this$static._contributionsSize == 1) {
-    singleResult = dynamicCast($get_0(this$static._results, 0), 63);
+    singleResult = dynamicCast($get_0(this$static._results, 0), 60);
     contributionSector = !singleResult._contribution?null:singleResult._contribution._sector;
     simpleCase = !contributionSector || contributionSector._lower._latitude._degrees != contributionSector._lower._latitude._degrees || $isEquals_3(this$static._tileSector, contributionSector);
   }
@@ -9855,7 +9681,7 @@ function $done(this$static){
     simpleCase = false;
   }
   if (simpleCase) {
-    singleResult = dynamicCast($get_0(this$static._results, 0), 63);
+    singleResult = dynamicCast($get_0(this$static._results, 0), 60);
     if (singleResult._isError) {
       this$static._listener.imageCreationError(this$static._tileId, singleResult._error);
     }
@@ -9872,7 +9698,7 @@ function $done(this$static){
     if (this$static._anyError) {
       composedError = '';
       for (i_0 = 0; i_0 < this$static._contributionsSize; i_0++) {
-        childResult = dynamicCast($get_0(this$static._results, i_0), 63);
+        childResult = dynamicCast($get_0(this$static._results, i_0), 60);
         childResult._isError && (composedError += childResult._error + ' ');
       }
       this$static._listener.imageCreationError(this$static._tileId, composedError);
@@ -9926,7 +9752,7 @@ function $mixResult(this$static){
   $initialize_2(canvas, this$static._width, this$static._height);
   imageId = new StringBuilder_WebGL;
   for (i_0 = 0; i_0 < this$static._contributionsSize; i_0++) {
-    result = dynamicCast($get_0(this$static._results, i_0), 63);
+    result = dynamicCast($get_0(this$static._results, i_0), 60);
     $addString(imageId, result._imageId);
     imageId._string += '|';
     image = result._image;
@@ -9946,7 +9772,7 @@ function $mixResult(this$static){
       visibleContributionSector = $intersection(imageSector, this$static._tileSector);
       $addString(imageId, $id_0(visibleContributionSector));
       imageId._string += '|';
-      srcRect = calculateInnerRectangleFromSector($getWidth_0(image), $getHeight_0(image), imageSector, visibleContributionSector);
+      srcRect = calculateInnerRectangleFromSector($getWidth(image), $getHeight(image), imageSector, visibleContributionSector);
       destRect = calculateInnerRectangleFromSector(this$static._width, this$static._height, this$static._tileSector, visibleContributionSector);
       $addString(imageId, $id(destRect));
       imageId._string += '|';
@@ -9981,11 +9807,11 @@ function CompositeTileImageProvider$Composer(width_0, height, compositeTileImage
   }
 }
 
-defineClass(164, 9, {164:1, 9:1}, CompositeTileImageProvider$Composer);
+defineClass(153, 9, {153:1, 9:1}, CompositeTileImageProvider$Composer);
 _.dispose = function dispose_14(){
   var i_0, result;
   for (i_0 = 0; i_0 < this._contributionsSize; i_0++) {
-    result = dynamicCast($get_0(this._results, i_0), 63);
+    result = dynamicCast($get_0(this._results, i_0), 60);
     !!result && releaseContribution(result._contribution);
   }
   releaseContribution(this._compositeContribution);
@@ -10001,18 +9827,18 @@ _._deleteListener = false;
 _._height = 0;
 _._stepsDone = 0;
 _._width = 0;
-var Lorg_glob3_mobile_generated_CompositeTileImageProvider$Composer_2_classLit = createForClass('org.glob3.mobile.generated', 'CompositeTileImageProvider/Composer', 164);
-defineClass(109, 1, {109:1});
+var Lorg_glob3_mobile_generated_CompositeTileImageProvider$Composer_2_classLit = createForClass('org.glob3.mobile.generated', 'CompositeTileImageProvider/Composer', 153);
+defineClass(103, 1, {103:1});
 _.dispose = function dispose_15(){
 }
 ;
-var Lorg_glob3_mobile_generated_FrameTask_2_classLit = createForClass('org.glob3.mobile.generated', 'FrameTask', 109);
+var Lorg_glob3_mobile_generated_FrameTask_2_classLit = createForClass('org.glob3.mobile.generated', 'FrameTask', 103);
 function CompositeTileImageProvider$ComposerFrameTask(composer){
   this._composer = composer;
   ++this._composer._referenceCounter;
 }
 
-defineClass(417, 109, {109:1}, CompositeTileImageProvider$ComposerFrameTask);
+defineClass(396, 103, {103:1}, CompositeTileImageProvider$ComposerFrameTask);
 _.dispose = function dispose_16(){
   $_release(this._composer);
 }
@@ -10025,22 +9851,26 @@ _.isCanceled = function isCanceled_0(rc){
   return false;
 }
 ;
-var Lorg_glob3_mobile_generated_CompositeTileImageProvider$ComposerFrameTask_2_classLit = createForClass('org.glob3.mobile.generated', 'CompositeTileImageProvider/ComposerFrameTask', 417);
+var Lorg_glob3_mobile_generated_CompositeTileImageProvider$ComposerFrameTask_2_classLit = createForClass('org.glob3.mobile.generated', 'CompositeTileImageProvider/ComposerFrameTask', 396);
 function CompositeTileImageProvider$ComposerImageListener(composer){
   this._composer = composer;
   ++this._composer._referenceCounter;
 }
 
-defineClass(416, 493, {}, CompositeTileImageProvider$ComposerImageListener);
+defineClass(395, 473, {}, CompositeTileImageProvider$ComposerImageListener);
 _.dispose = function dispose_17(){
   $_release(this._composer);
 }
 ;
-_.imageCreated = function imageCreated_2(image){
+_.imageCreated = function imageCreated_1(image){
   $imageCreated_0(this._composer, image);
 }
 ;
-var Lorg_glob3_mobile_generated_CompositeTileImageProvider$ComposerImageListener_2_classLit = createForClass('org.glob3.mobile.generated', 'CompositeTileImageProvider/ComposerImageListener', 416);
+var Lorg_glob3_mobile_generated_CompositeTileImageProvider$ComposerImageListener_2_classLit = createForClass('org.glob3.mobile.generated', 'CompositeTileImageProvider/ComposerImageListener', 395);
+function $applyRotation(this$static, m){
+  return new CoordinateSystem_0($transformedBy_0(this$static._x, m, 1), $transformedBy_0(this$static._y, m, 1), $transformedBy_0(this$static._z, m, 1), this$static._origin);
+}
+
 function $applyTaitBryanAngles(this$static, heading, pitch, roll){
   var hm, isHeadingZero, isPitchZero, isRollZero, pm, rm, u, up, uppp, v, vp, vpp, w, wpp, wppp;
   u = this$static._x;
@@ -10061,6 +9891,10 @@ function $applyTaitBryanAngles(this$static, heading, pitch, roll){
   return new CoordinateSystem_0(uppp, vpp, wppp, this$static._origin);
 }
 
+function $copyValueOfRotationMatrix(this$static, m){
+  $setValue(m, this$static._x._x, this$static._x._y, this$static._x._z, this$static._y._x, this$static._y._y, this$static._y._z, this$static._z._x, this$static._z._y, this$static._z._z);
+}
+
 function $getTaitBryanAngles(this$static, global){
   var heading, heading0, pitch, pitch0, roll, roll0, u, up, v, vp, vppp, w, wpp, wppp, x_0;
   u = global._x;
@@ -10070,15 +9904,15 @@ function $getTaitBryanAngles(this$static, global){
   wppp = this$static._z;
   x_0 = vppp._x * w._x + vppp._y * w._y + vppp._z * w._z;
   if (x_0 < -0.99999 && x_0 > -1.000001) {
-    pitch0 = new Angle(-90, $intern_41);
+    pitch0 = new Angle(-90, $intern_38);
     roll0 = new Angle(0, 0);
     heading0 = $signedAngleBetween(v, wppp, w);
     return new TaitBryanAngles(heading0, pitch0, roll0);
   }
    else if (x_0 > 0.99999 && x_0 < 1.000001) {
-    pitch0 = new Angle(90, $intern_47);
+    pitch0 = new Angle(90, $intern_43);
     roll0 = new Angle(0, 0);
-    heading0 = $sub($signedAngleBetween(v, wppp, w), new Angle(180, $intern_40));
+    heading0 = $sub($signedAngleBetween(v, wppp, w), new Angle(180, $intern_37));
     return new TaitBryanAngles(heading0, pitch0, roll0);
   }
   up = new Vector3D(vppp._y * w._z - vppp._z * w._y, vppp._z * w._x - vppp._x * w._z, vppp._x * w._y - vppp._y * w._x);
@@ -10116,35 +9950,26 @@ function checkConsistency(x_0, y_0, z_0){
   if (x_0._x != x_0._x || x_0._y != x_0._y || x_0._z != x_0._z || y_0._x != y_0._x || y_0._y != y_0._y || y_0._z != y_0._z || z_0._x != z_0._x || z_0._y != z_0._y || z_0._z != z_0._z) {
     return false;
   }
-  return $abs(x_0._x * y_0._x + x_0._y * y_0._y + x_0._z * y_0._z) < $intern_48 && $abs(x_0._x * z_0._x + x_0._y * z_0._y + x_0._z * z_0._z) < $intern_48 && $abs(y_0._x * z_0._x + y_0._y * z_0._y + y_0._z * z_0._z) < $intern_48;
+  return $abs(x_0._x * y_0._x + x_0._y * y_0._y + x_0._z * y_0._z) < $intern_44 && $abs(x_0._x * z_0._x + x_0._y * z_0._y + x_0._z * z_0._z) < $intern_44 && $abs(y_0._x * z_0._x + y_0._y * z_0._y + y_0._z * z_0._z) < $intern_44;
 }
 
-defineClass(155, 1, {}, CoordinateSystem, CoordinateSystem_0);
-var Lorg_glob3_mobile_generated_CoordinateSystem_2_classLit = createForClass('org.glob3.mobile.generated', 'CoordinateSystem', 155);
+defineClass(58, 1, {}, CoordinateSystem, CoordinateSystem_0);
+var Lorg_glob3_mobile_generated_CoordinateSystem_2_classLit = createForClass('org.glob3.mobile.generated', 'CoordinateSystem', 58);
+function $imageCreated_1(this$static, image, imageName){
+  $setDefaultBackGroundImage(this$static._defaultTileTesturizer, image);
+  $setDefaultBackGroundImageName(this$static._defaultTileTesturizer, imageName);
+  this$static._defaultTileTesturizer._defaultBackGroundImageLoaded = true;
+  $logInfo(_instance_3, 'Default Background Image loaded...', initValues(getClassLiteralForArray(Ljava_lang_Object_2_classLit, 1), $intern_4, 1, 3, []));
+}
+
 function DTT_IImageBuilderListener(defaultTileTesturizer){
   this._defaultTileTesturizer = defaultTileTesturizer;
 }
 
-defineClass(384, 1, {}, DTT_IImageBuilderListener);
-_.dispose = function dispose_18(){
-}
-;
-_.imageCreated_1 = function imageCreated_3(image, imageName){
-  $setDefaultBackGroundImage(this._defaultTileTesturizer, image);
-  $setDefaultBackGroundImageName(this._defaultTileTesturizer, imageName);
-  this._defaultTileTesturizer._defaultBackGroundImageLoaded = true;
-  $logInfo(_instance_3, 'Default Background Image loaded...', initValues(getClassLiteralForArray(Ljava_lang_Object_2_classLit, 1), $intern_4, 1, 3, []));
-}
-;
-_.onError = function onError(error){
-  $logError(_instance_3, error, initValues(getClassLiteralForArray(Ljava_lang_Object_2_classLit, 1), $intern_4, 1, 3, []));
-  $add_3(this._defaultTileTesturizer._errors, "Can't download background image default");
-  $add_3(this._defaultTileTesturizer._errors, error);
-}
-;
-var Lorg_glob3_mobile_generated_DTT_1IImageBuilderListener_2_classLit = createForClass('org.glob3.mobile.generated', 'DTT_IImageBuilderListener', 384);
-defineClass(503, 1, {});
-var Lorg_glob3_mobile_generated_LazyTextureMappingInitializer_2_classLit = createForClass('org.glob3.mobile.generated', 'LazyTextureMappingInitializer', 503);
+defineClass(369, 1, {}, DTT_IImageBuilderListener);
+var Lorg_glob3_mobile_generated_DTT_1IImageBuilderListener_2_classLit = createForClass('org.glob3.mobile.generated', 'DTT_IImageBuilderListener', 369);
+defineClass(486, 1, {});
+var Lorg_glob3_mobile_generated_LazyTextureMappingInitializer_2_classLit = createForClass('org.glob3.mobile.generated', 'LazyTextureMappingInitializer', 486);
 function $getScale(this$static){
   return new Vector2F(this$static._scaleU, this$static._scaleV);
 }
@@ -10175,28 +10000,28 @@ function DTT_LTMInitializer(tile, ancestor){
   this._scaleV = 1;
 }
 
-defineClass(219, 503, {}, DTT_LTMInitializer);
+defineClass(208, 486, {}, DTT_LTMInitializer);
 _._scaleU = 0;
 _._scaleV = 0;
 _._translationU = 0;
 _._translationV = 0;
-var Lorg_glob3_mobile_generated_DTT_1LTMInitializer_2_classLit = createForClass('org.glob3.mobile.generated', 'DTT_LTMInitializer', 219);
+var Lorg_glob3_mobile_generated_DTT_1LTMInitializer_2_classLit = createForClass('org.glob3.mobile.generated', 'DTT_LTMInitializer', 208);
 function DTT_NotFullProviderImageListener(builder, imageId){
   this._builder = builder;
   this._imageId = imageId;
   ++this._builder._referenceCounter;
 }
 
-defineClass(429, 493, {}, DTT_NotFullProviderImageListener);
-_.dispose = function dispose_19(){
+defineClass(414, 473, {}, DTT_NotFullProviderImageListener);
+_.dispose = function dispose_18(){
   !!this._builder && $_release(this._builder);
 }
 ;
-_.imageCreated = function imageCreated_4(image){
-  $imageCreated_1(this._builder, image, this._imageId, ($clinit_TileImageContribution() , ++FULL_COVERAGE_OPAQUE._referenceCounter , $clinit_TileImageContribution() , FULL_COVERAGE_OPAQUE));
+_.imageCreated = function imageCreated_2(image){
+  $imageCreated_2(this._builder, image, this._imageId, ($clinit_TileImageContribution() , ++FULL_COVERAGE_OPAQUE._referenceCounter , $clinit_TileImageContribution() , FULL_COVERAGE_OPAQUE));
 }
 ;
-var Lorg_glob3_mobile_generated_DTT_1NotFullProviderImageListener_2_classLit = createForClass('org.glob3.mobile.generated', 'DTT_NotFullProviderImageListener', 429);
+var Lorg_glob3_mobile_generated_DTT_1NotFullProviderImageListener_2_classLit = createForClass('org.glob3.mobile.generated', 'DTT_NotFullProviderImageListener', 414);
 function DTT_TileImageListener(builder, tile, tileTextureResolution, backGroundTileImage, backGroundTileImageName){
   this._builder = builder;
   this._tileSector = new Sector_0(tile._sector);
@@ -10206,15 +10031,15 @@ function DTT_TileImageListener(builder, tile, tileTextureResolution, backGroundT
   ++this._builder._referenceCounter;
 }
 
-defineClass(408, 502, {}, DTT_TileImageListener);
-_.dispose = function dispose_20(){
+defineClass(391, 485, {}, DTT_TileImageListener);
+_.dispose = function dispose_19(){
   !!this._builder && $_release(this._builder);
 }
 ;
-_.imageCreated_0 = function imageCreated_5(tileId, image, imageId, contribution){
+_.imageCreated_0 = function imageCreated_3(tileId, image, imageId, contribution){
   var alpha_0, auxImageId, canvas, destRect, height, imageSector, srcRect, visibleContributionSector, width_0;
   if (contribution._isFullCoverage && !contribution._isTransparent && contribution._alpha >= 0.99) {
-    $imageCreated_1(this._builder, image, imageId, contribution);
+    $imageCreated_2(this._builder, image, imageId, contribution);
   }
    else {
     auxImageId = new StringBuilder_WebGL;
@@ -10241,7 +10066,7 @@ _.imageCreated_0 = function imageCreated_5(tileId, image, imageId, contribution)
       visibleContributionSector = $intersection(imageSector, this._tileSector);
       $addString(auxImageId, $id_0(visibleContributionSector));
       auxImageId._string += '|';
-      srcRect = calculateInnerRectangleFromSector($getWidth_0(image), $getHeight_0(image), imageSector, visibleContributionSector);
+      srcRect = calculateInnerRectangleFromSector($getWidth(image), $getHeight(image), imageSector, visibleContributionSector);
       destRect = calculateInnerRectangleFromSector(width_0, height, this._tileSector, visibleContributionSector);
       $addString(auxImageId, $id(destRect));
       auxImageId._string += '|';
@@ -10260,7 +10085,7 @@ _.imageCreationError = function imageCreationError_0(tileId, error){
   $logError(_instance_3, '%s', initValues(getClassLiteralForArray(Ljava_lang_Object_2_classLit, 1), $intern_4, 1, 3, [error]));
 }
 ;
-var Lorg_glob3_mobile_generated_DTT_1TileImageListener_2_classLit = createForClass('org.glob3.mobile.generated', 'DTT_TileImageListener', 408);
+var Lorg_glob3_mobile_generated_DTT_1TileImageListener_2_classLit = createForClass('org.glob3.mobile.generated', 'DTT_TileImageListener', 391);
 function $cancel_0(this$static, cleanTile){
   this$static._texturedMesh = null;
   cleanTile && (this$static._tile = null);
@@ -10270,7 +10095,7 @@ function $cancel_0(this$static, cleanTile){
   }
 }
 
-function $imageCreated_1(this$static, image, imageId, contribution){
+function $imageCreated_2(this$static, image, imageId, contribution){
   var glTextureId;
   contribution._isFullCoverage && !contribution._isTransparent && contribution._alpha >= 0.99 || $logWarning(_instance_3, "Contribution isn't full covearge and opaque before to upload tuxtuer", initValues(getClassLiteralForArray(Ljava_lang_Object_2_classLit, 1), $intern_4, 1, 3, []));
   !this$static._canceled && !!this$static._tile && !!this$static._texturedMesh && (glTextureId = $getTextureIDReference(this$static._texturesHandler, image, _rgba, imageId, this$static._generateMipmap) , $setGLTextureIdForLevel(this$static._texturedMesh, 0, glTextureId) || $releaseGLTextureId_1(glTextureId._texHandler, glTextureId._id) , true) && $setTextureSolved(this$static._tile, true);
@@ -10282,7 +10107,7 @@ function $start(this$static){
   var contribution;
   if (!this$static._canceled) {
     contribution = this$static._tileImageProvider.contribution(this$static._tile);
-    !contribution?!!this$static._tile && $imageCreated_1(this$static, new Image_WebGL(this$static._backGroundTileImage._imgObject), this$static._backGroundTileImageName, ($clinit_TileImageContribution() , ++FULL_COVERAGE_OPAQUE._referenceCounter , $clinit_TileImageContribution() , FULL_COVERAGE_OPAQUE)):this$static._tileImageProvider.create_0(this$static._tile, contribution, this$static._tileTextureResolution, this$static._tileDownloadPriority, this$static._logTilesPetitions, new DTT_TileImageListener(this$static, this$static._tile, this$static._tileTextureResolution, this$static._backGroundTileImage, this$static._backGroundTileImageName), true, this$static._frameTasksExecutor);
+    !contribution?!!this$static._tile && $imageCreated_2(this$static, new Image_WebGL(this$static._backGroundTileImage._imgObject), this$static._backGroundTileImageName, ($clinit_TileImageContribution() , ++FULL_COVERAGE_OPAQUE._referenceCounter , $clinit_TileImageContribution() , FULL_COVERAGE_OPAQUE)):this$static._tileImageProvider.create_0(this$static._tile, contribution, this$static._tileTextureResolution, this$static._tileDownloadPriority, this$static._logTilesPetitions, new DTT_TileImageListener(this$static, this$static._tile, this$static._tileTextureResolution, this$static._backGroundTileImage, this$static._backGroundTileImageName), true, this$static._frameTasksExecutor);
   }
 }
 
@@ -10336,8 +10161,8 @@ function createMesh(tile, tessellatorMesh, texturesHandler, backGroundTileImage,
   return new LeveledTexturedMesh(tessellatorMesh, mappings);
 }
 
-defineClass(398, 9, {9:1}, DTT_TileTextureBuilder);
-_.dispose = function dispose_21(){
+defineClass(381, 9, {9:1}, DTT_TileTextureBuilder);
+_.dispose = function dispose_20(){
   $_release(this._tileImageProvider);
   $dispose_0(this);
 }
@@ -10348,7 +10173,7 @@ _._logTilesPetitions = false;
 _._ownedTexCoords = false;
 _._tileDownloadPriority = {l:0, m:0, h:0};
 _._transparent = false;
-var Lorg_glob3_mobile_generated_DTT_1TileTextureBuilder_2_classLit = createForClass('org.glob3.mobile.generated', 'DTT_TileTextureBuilder', 398);
+var Lorg_glob3_mobile_generated_DTT_1TileTextureBuilder_2_classLit = createForClass('org.glob3.mobile.generated', 'DTT_TileTextureBuilder', 381);
 function $dispose_1(this$static){
   !!this$static._builder && $_release(this$static._builder);
 }
@@ -10357,15 +10182,15 @@ function DTT_TileTextureBuilderHolder(builder){
   this._builder = builder;
 }
 
-defineClass(397, 1, {}, DTT_TileTextureBuilderHolder);
-var Lorg_glob3_mobile_generated_DTT_1TileTextureBuilderHolder_2_classLit = createForClass('org.glob3.mobile.generated', 'DTT_TileTextureBuilderHolder', 397);
+defineClass(380, 1, {}, DTT_TileTextureBuilderHolder);
+var Lorg_glob3_mobile_generated_DTT_1TileTextureBuilderHolder_2_classLit = createForClass('org.glob3.mobile.generated', 'DTT_TileTextureBuilderHolder', 380);
 function DTT_TileTextureBuilderStartTask(builder){
   this._builder = builder;
   ++this._builder._referenceCounter;
 }
 
-defineClass(403, 109, {109:1}, DTT_TileTextureBuilderStartTask);
-_.dispose = function dispose_22(){
+defineClass(384, 103, {103:1}, DTT_TileTextureBuilderStartTask);
+_.dispose = function dispose_21(){
   $_release(this._builder);
 }
 ;
@@ -10377,7 +10202,7 @@ _.isCanceled = function isCanceled_1(rc){
   return this._builder._canceled;
 }
 ;
-var Lorg_glob3_mobile_generated_DTT_1TileTextureBuilderStartTask_2_classLit = createForClass('org.glob3.mobile.generated', 'DTT_TileTextureBuilderStartTask', 403);
+var Lorg_glob3_mobile_generated_DTT_1TileTextureBuilderStartTask_2_classLit = createForClass('org.glob3.mobile.generated', 'DTT_TileTextureBuilderStartTask', 384);
 function $buildOnCanvas(this$static, canvas){
   var col, height, row, width_0, x_0, x2, xInterval, y_0, y2, yInterval;
   width_0 = canvas._canvasWidth;
@@ -10413,9 +10238,9 @@ function DefaultChessCanvasImageBuilder(backgroundColor, boxColor){
   this._splits = 4;
 }
 
-defineClass(376, 375, $intern_38, DefaultChessCanvasImageBuilder);
+defineClass(361, 360, {}, DefaultChessCanvasImageBuilder);
 _._splits = 0;
-var Lorg_glob3_mobile_generated_DefaultChessCanvasImageBuilder_2_classLit = createForClass('org.glob3.mobile.generated', 'DefaultChessCanvasImageBuilder', 376);
+var Lorg_glob3_mobile_generated_DefaultChessCanvasImageBuilder_2_classLit = createForClass('org.glob3.mobile.generated', 'DefaultChessCanvasImageBuilder', 361);
 function $notifyChangedInfo(this$static, info){
   !!this$static._changedInfoListener && this$static._enable && this$static._changedInfoListener.changedRendererInfo(this$static._rendererIdentifier, info);
 }
@@ -10425,7 +10250,7 @@ function DefaultRenderer(){
   this._enable = true;
 }
 
-defineClass(148, 1, $intern_49);
+defineClass(179, 1, {135:1});
 _.getPlanetRenderer = function getPlanetRenderer_0(){
   return null;
 }
@@ -10474,9 +10299,9 @@ _.stop_1 = function stop_5(rc){
 _._changedInfoListener = null;
 _._enable = false;
 _._rendererIdentifier = 0;
-var Lorg_glob3_mobile_generated_DefaultRenderer_2_classLit = createForClass('org.glob3.mobile.generated', 'DefaultRenderer', 148);
-defineClass(469, 1, {});
-var Lorg_glob3_mobile_generated_TileTexturizer_2_classLit = createForClass('org.glob3.mobile.generated', 'TileTexturizer', 469);
+var Lorg_glob3_mobile_generated_DefaultRenderer_2_classLit = createForClass('org.glob3.mobile.generated', 'DefaultRenderer', 179);
+defineClass(452, 1, {});
+var Lorg_glob3_mobile_generated_TileTexturizer_2_classLit = createForClass('org.glob3.mobile.generated', 'TileTexturizer', 452);
 function $ancestorTexturedSolvedChanged(tile, ancestorTile, textureSolved){
   var ancestorMesh, glTextureId, glTextureIdRetainedCopy, level, tileMesh;
   if (!textureSolved) {
@@ -10521,9 +10346,9 @@ function $getRenderState(this$static, layerSet){
   return $clinit_RenderState() , $clinit_RenderState() , READY;
 }
 
-function $initialize_1(this$static, context){
+function $initialize_1(this$static){
   $logInfo(_instance_3, 'Initializing texturizer...', initValues(getClassLiteralForArray(Ljava_lang_Object_2_classLit, 1), $intern_4, 1, 3, []));
-  $build(this$static._defaultBackGroundImageBuilder, new DTT_IImageBuilderListener(this$static), true);
+  $build(this$static._defaultBackGroundImageBuilder, new DTT_IImageBuilderListener(this$static));
 }
 
 function $onTerrainTouchEvent(position, tile, layerSet){
@@ -10586,15 +10411,58 @@ function DefaultTileTexturizer(defaultBackGroundImageBuilder){
   $logInfo(_instance_3, 'Create texturizer...', initValues(getClassLiteralForArray(Ljava_lang_Object_2_classLit, 1), $intern_4, 1, 3, []));
 }
 
-defineClass(355, 469, {}, DefaultTileTexturizer);
+defineClass(339, 452, {}, DefaultTileTexturizer);
 _._defaultBackGroundImageLoaded = false;
-var Lorg_glob3_mobile_generated_DefaultTileTexturizer_2_classLit = createForClass('org.glob3.mobile.generated', 'DefaultTileTexturizer', 355);
+var Lorg_glob3_mobile_generated_DefaultTileTexturizer_2_classLit = createForClass('org.glob3.mobile.generated', 'DefaultTileTexturizer', 339);
+function DeviceAttitudeCameraHandler(){
+  this._localRM = new MutableMatrix44D;
+  this._attitudeMatrix = new MutableMatrix44D;
+  this._camRM = new MutableMatrix44D;
+  this._updateLocation = true;
+}
+
+defineClass(172, 64, $intern_39, DeviceAttitudeCameraHandler);
+_.onTouchEvent = function onTouchEvent_5(eventContext, touchEvent, cameraContext){
+  return false;
+}
+;
+_.render_0 = function render_6(rc, cameraContext){
+  var camCS, camPosition, devAtt, finalCS, g, loc, local, nextCamera, ori, d;
+  devAtt = _instance;
+  nextCamera = rc._nextCamera;
+  if (!devAtt) {
+    $logError(_instance_3, 'IDeviceAttitude not initilized', initValues(getClassLiteralForArray(Ljava_lang_Object_2_classLit, 1), $intern_4, 1, 3, []));
+    return;
+  }
+  devAtt._isTracking || (trackGyroscope(devAtt) , devAtt._isTracking = true);
+  $copyValueOfRotationMatrix_0(_instance, this._attitudeMatrix);
+  if (!this._attitudeMatrix._isValid) {
+    return;
+  }
+  camPosition = (!nextCamera._geodeticPosition && (nextCamera._geodeticPosition = new Geodetic3D_1($toGeodetic3D(nextCamera._planet, $asVector3D(nextCamera._position)))) , nextCamera._geodeticPosition);
+  ori = _instance._currentIO;
+  camCS = $getCameraCoordinateSystemForInterfaceOrientation(_instance, ori);
+  local = $getCoordinateSystemAt(rc._planet, camPosition);
+  $copyValueOfRotationMatrix(local, this._localRM);
+  $copyValueOfMultiplication(this._camRM, this._localRM, this._attitudeMatrix);
+  finalCS = $applyRotation(camCS, this._camRM);
+  $setCameraCoordinateSystem(nextCamera, finalCS);
+  if (this._updateLocation) {
+    loc = _instance_0;
+    loc._isTracking || (loc._isTracking = $startTrackingLocationJS(loc) , loc._isTracking);
+    g = fromDegrees_1(_lat, _lon, _altitude);
+    $isNan(g._latitude) || $isNan(g._longitude) || ((d = $squaredDistanceTo(nextCamera._center, nextCamera._position) , d > 0 && d == d)?$setGeodeticPosition(nextCamera, g):$logWarning(_instance_3, 'Trying to set position of unvalid camera. ViewDirection: %s', initValues(getClassLiteralForArray(Ljava_lang_Object_2_classLit, 1), $intern_4, 1, 3, [$description_8(new Vector3D(nextCamera._center._x - nextCamera._position._x, nextCamera._center._y - nextCamera._position._y, nextCamera._center._z - nextCamera._position._z))])));
+  }
+}
+;
+_._updateLocation = false;
+var Lorg_glob3_mobile_generated_DeviceAttitudeCameraHandler_2_classLit = createForClass('org.glob3.mobile.generated', 'DeviceAttitudeCameraHandler', 172);
 function DirectMesh(primitive, center, vertices){
   AbstractMesh.call(this, primitive, center, vertices, null, null, true);
   this._renderVerticesCount = ~~(vertices._buffer.length / 3);
 }
 
-defineClass(211, 210, {}, DirectMesh);
+defineClass(198, 197, {}, DirectMesh);
 _.rawRender_0 = function rawRender_1(rc){
   var gl;
   gl = rc._gl;
@@ -10602,7 +10470,7 @@ _.rawRender_0 = function rawRender_1(rc){
 }
 ;
 _._renderVerticesCount = 0;
-var Lorg_glob3_mobile_generated_DirectMesh_2_classLit = createForClass('org.glob3.mobile.generated', 'DirectMesh', 211);
+var Lorg_glob3_mobile_generated_DirectMesh_2_classLit = createForClass('org.glob3.mobile.generated', 'DirectMesh', 198);
 function $setLightDirection(this$static, lightDir){
   var dirN;
   dirN = $normalized_0(lightDir);
@@ -10619,16 +10487,16 @@ function DirectionLightGLFeature(diffuseLightDirection, diffuseLightColor, ambie
   $addUniformValue(this._values, DIFFUSE_LIGHT_COLOR, new GPUUniformValueVec3Float(diffuseLightColor));
 }
 
-defineClass(158, 24, {158:1, 24:1, 9:1}, DirectionLightGLFeature);
+defineClass(148, 27, {148:1, 27:1, 9:1}, DirectionLightGLFeature);
 _.applyOnGlobalGLState = function applyOnGlobalGLState_0(state){
 }
 ;
-_.dispose = function dispose_23(){
+_.dispose = function dispose_22(){
   !!this._values && $dispose_4(this._values);
   $dispose_0(this);
 }
 ;
-var Lorg_glob3_mobile_generated_DirectionLightGLFeature_2_classLit = createForClass('org.glob3.mobile.generated', 'DirectionLightGLFeature', 158);
+var Lorg_glob3_mobile_generated_DirectionLightGLFeature_2_classLit = createForClass('org.glob3.mobile.generated', 'DirectionLightGLFeature', 148);
 function DoubleTapRotationEffect(duration, axis_0, angle, distance){
   EffectWithDuration.call(this, duration);
   this._axis = new Vector3D_0(axis_0);
@@ -10636,7 +10504,7 @@ function DoubleTapRotationEffect(duration, axis_0, angle, distance){
   this._distance = distance;
 }
 
-defineClass(223, 207, {}, DoubleTapRotationEffect);
+defineClass(211, 194, {}, DoubleTapRotationEffect);
 _.cancel = function cancel_2(when){
 }
 ;
@@ -10665,67 +10533,8 @@ _.stop_0 = function stop_6(rc, when){
 ;
 _._distance = 0;
 _._lastAlpha = 0;
-var Lorg_glob3_mobile_generated_DoubleTapRotationEffect_2_classLit = createForClass('org.glob3.mobile.generated', 'DoubleTapRotationEffect', 223);
-function DownloaderImageBuilder(url_0){
-  this._url = url_0;
-  this._priority = {l:1000, m:0, h:0};
-  new TimeInterval({l:4114432, m:617, h:0});
-}
-
-defineClass(123, 460, $intern_38, DownloaderImageBuilder);
-_.build = function build_1(context, listener, deleteListener){
-  var downloader;
-  downloader = context._downloader;
-  $requestImage_0(downloader, this._url, this._priority, new DownloaderImageBuilder_ImageDownloadListener(listener, deleteListener));
-}
-;
-_._priority = {l:0, m:0, h:0};
-var Lorg_glob3_mobile_generated_DownloaderImageBuilder_2_classLit = createForClass('org.glob3.mobile.generated', 'DownloaderImageBuilder', 123);
-defineClass(499, 1, {});
-_.dispose = function dispose_24(){
-}
-;
-var Lorg_glob3_mobile_generated_IImageDownloadListener_2_classLit = createForClass('org.glob3.mobile.generated', 'IImageDownloadListener', 499);
-function DownloaderImageBuilder_ImageDownloadListener(listener, deleteListener){
-  this._listener = listener;
-  this._deleteListener = deleteListener;
-}
-
-defineClass(390, 499, {}, DownloaderImageBuilder_ImageDownloadListener);
-_.dispose = function dispose_25(){
-  this._deleteListener && !!this._listener && this._listener.dispose();
-}
-;
-_.onCancel = function onCancel(url_0){
-  this._listener.onError('Canceled download image from "' + url_0._path + '"');
-  if (this._deleteListener) {
-    !!this._listener && this._listener.dispose();
-    this._listener = null;
-  }
-}
-;
-_.onCanceledDownload = function onCanceledDownload(url_0, image, expired){
-}
-;
-_.onDownload = function onDownload(url_0, image, expired){
-  this._listener.imageCreated_1(image, url_0._path);
-  if (this._deleteListener) {
-    !!this._listener && this._listener.dispose();
-    this._listener = null;
-  }
-}
-;
-_.onError_0 = function onError_0(url_0){
-  this._listener.onError('Error downloading image from "' + url_0._path + '"');
-  if (this._deleteListener) {
-    !!this._listener && this._listener.dispose();
-    this._listener = null;
-  }
-}
-;
-_._deleteListener = false;
-var Lorg_glob3_mobile_generated_DownloaderImageBuilder_1ImageDownloadListener_2_classLit = createForClass('org.glob3.mobile.generated', 'DownloaderImageBuilder_ImageDownloadListener', 390);
-defineClass(427, 496, {});
+var Lorg_glob3_mobile_generated_DoubleTapRotationEffect_2_classLit = createForClass('org.glob3.mobile.generated', 'DoubleTapRotationEffect', 211);
+defineClass(408, 477, {});
 _.doStep = function doStep_3(rc, when){
   this._force *= this._friction;
 }
@@ -10736,14 +10545,14 @@ _.isDone = function isDone_1(rc, when){
 ;
 _._force = 0;
 _._friction = 0;
-var Lorg_glob3_mobile_generated_EffectWithForce_2_classLit = createForClass('org.glob3.mobile.generated', 'EffectWithForce', 427);
+var Lorg_glob3_mobile_generated_EffectWithForce_2_classLit = createForClass('org.glob3.mobile.generated', 'EffectWithForce', 408);
 function $cancelAllEffectsFor(this$static, target){
   var effectRun, effectsToCancelSize, i_0, iterator, now_0;
   now_0 = new TimeInterval(fromDouble(now_1()));
   this$static._effectsToCancel.array = initDim(Ljava_lang_Object_2_classLit, $intern_4, 1, 0, 3, 1);
   iterator = new AbstractList$IteratorImpl(this$static._effectsRuns);
   while (iterator.i < iterator.this$01_0.size_1()) {
-    effectRun = (checkCriticalElement(iterator.i < iterator.this$01_0.size_1()) , dynamicCast(iterator.this$01_0.get_1(iterator.last = iterator.i++), 76));
+    effectRun = (checkCriticalElement(iterator.i < iterator.this$01_0.size_1()) , dynamicCast(iterator.this$01_0.get_1(iterator.last = iterator.i++), 75));
     if (effectRun._target == target) {
       effectRun._started?$add_3(this$static._effectsToCancel, effectRun):!!effectRun._effect && effectRun._effect.dispose();
       $remove_4(iterator);
@@ -10751,7 +10560,7 @@ function $cancelAllEffectsFor(this$static, target){
   }
   effectsToCancelSize = this$static._effectsToCancel.array.length;
   for (i_0 = 0; i_0 < effectsToCancelSize; i_0++) {
-    effectRun = dynamicCast($get_0(this$static._effectsToCancel, i_0), 76);
+    effectRun = dynamicCast($get_0(this$static._effectsToCancel, i_0), 75);
     effectRun._effect.cancel(now_0);
     !!effectRun._effect && effectRun._effect.dispose();
   }
@@ -10764,7 +10573,7 @@ function $doOneCyle(this$static, rc){
     $processFinishedEffects(this$static, rc, now_0);
     effectsRunsSize = this$static._effectsRuns.array.length;
     for (i_0 = 0; i_0 < effectsRunsSize; i_0++) {
-      effectRun = dynamicCast($get_0(this$static._effectsRuns, i_0), 76);
+      effectRun = dynamicCast($get_0(this$static._effectsRuns, i_0), 75);
       effect = effectRun._effect;
       if (!effectRun._started) {
         effect.start_1(rc, now_0);
@@ -10780,7 +10589,7 @@ function $processFinishedEffects(this$static, rc, when){
   this$static._effectsToStop.array = initDim(Ljava_lang_Object_2_classLit, $intern_4, 1, 0, 3, 1);
   iterator = new AbstractList$IteratorImpl(this$static._effectsRuns);
   while (iterator.i < iterator.this$01_0.size_1()) {
-    effectRun = (checkCriticalElement(iterator.i < iterator.this$01_0.size_1()) , dynamicCast(iterator.this$01_0.get_1(iterator.last = iterator.i++), 76));
+    effectRun = (checkCriticalElement(iterator.i < iterator.this$01_0.size_1()) , dynamicCast(iterator.this$01_0.get_1(iterator.last = iterator.i++), 75));
     if (effectRun._started) {
       if (effectRun._effect.isDone(rc, when)) {
         $remove_4(iterator);
@@ -10790,7 +10599,7 @@ function $processFinishedEffects(this$static, rc, when){
   }
   effectsToStopSize = this$static._effectsToStop.array.length;
   for (i_0 = 0; i_0 < effectsToStopSize; i_0++) {
-    effectRun = dynamicCast($get_0(this$static._effectsToStop, i_0), 76);
+    effectRun = dynamicCast($get_0(this$static._effectsToStop, i_0), 75);
     effectRun._effect.stop_0(rc, when);
     !!effectRun._effect && effectRun._effect.dispose();
   }
@@ -10807,17 +10616,17 @@ function EffectsScheduler(){
   this._effectsRuns = new ArrayList;
 }
 
-defineClass(350, 1, {}, EffectsScheduler);
-var Lorg_glob3_mobile_generated_EffectsScheduler_2_classLit = createForClass('org.glob3.mobile.generated', 'EffectsScheduler', 350);
+defineClass(335, 1, {}, EffectsScheduler);
+var Lorg_glob3_mobile_generated_EffectsScheduler_2_classLit = createForClass('org.glob3.mobile.generated', 'EffectsScheduler', 335);
 function EffectsScheduler$EffectRun(effect, target){
   this._effect = effect;
   this._target = target;
   this._started = false;
 }
 
-defineClass(76, 1, {76:1}, EffectsScheduler$EffectRun);
+defineClass(75, 1, {75:1}, EffectsScheduler$EffectRun);
 _._started = false;
-var Lorg_glob3_mobile_generated_EffectsScheduler$EffectRun_2_classLit = createForClass('org.glob3.mobile.generated', 'EffectsScheduler/EffectRun', 76);
+var Lorg_glob3_mobile_generated_EffectsScheduler$EffectRun_2_classLit = createForClass('org.glob3.mobile.generated', 'EffectsScheduler/EffectRun', 75);
 function $getMeanRadius(this$static){
   return (this$static._radii._x + this$static._radii._y + this$static._radii._y) / 3;
 }
@@ -10858,8 +10667,8 @@ function Ellipsoid(center, radii){
   this._oneOverRadiiSquared = new Vector3D_0(new Vector3D(1 / (radii._x * radii._x), 1 / (radii._y * radii._y), 1 / (radii._z * radii._z)));
 }
 
-defineClass(202, 1, {}, Ellipsoid);
-var Lorg_glob3_mobile_generated_Ellipsoid_2_classLit = createForClass('org.glob3.mobile.generated', 'Ellipsoid', 202);
+defineClass(188, 1, {}, Ellipsoid);
+var Lorg_glob3_mobile_generated_Ellipsoid_2_classLit = createForClass('org.glob3.mobile.generated', 'Ellipsoid', 188);
 function $closestIntersection(this$static, pos, ray){
   var distances;
   if (pos._x != pos._x || pos._y != pos._y || pos._z != pos._z || ray._x != ray._x || ray._y != ray._y || ray._z != ray._z) {
@@ -10869,7 +10678,7 @@ function $closestIntersection(this$static, pos, ray){
   if (distances.array.length == 0) {
     return $clinit_Vector3D() , new Vector3D(NaN, NaN, NaN);
   }
-  return $add_19(pos, $times_3(ray, (checkElementIndex(0, distances.array.length) , dynamicCast(distances.array[0], 32)).value_0));
+  return $add_18(pos, $times_2(ray, (checkElementIndex(0, distances.array.length) , dynamicCast(distances.array[0], 32)).value_0));
 }
 
 function $getCoordinateSystemAt(this$static, geo){
@@ -10881,8 +10690,8 @@ function $getCoordinateSystemAt(this$static, geo){
   return new CoordinateSystem_0(x_0, y_0, z_0, origin);
 }
 
-defineClass(472, 1, {});
-var Lorg_glob3_mobile_generated_Planet_2_classLit = createForClass('org.glob3.mobile.generated', 'Planet', 472);
+defineClass(454, 1, {});
+var Lorg_glob3_mobile_generated_Planet_2_classLit = createForClass('org.glob3.mobile.generated', 'Planet', 454);
 function $beginDoubleDrag(this$static, origin, centerRay, initialRay0, initialRay1){
   var g, g0, g1;
   this$static._origin = new MutableVector3D_0(origin._x, origin._y, origin._z);
@@ -10928,7 +10737,7 @@ function $closestPointToSphere(this$static, pos, ray){
     rad_ = b_ * b_ - 4 * a_ * c_;
     t = (-b_ - sqrt_0(rad_)) / (2 * a_);
   }
-  result = $add_19(pos, new Vector3D(ray._x * t, ray._y * t, ray._z * t));
+  result = $add_18(pos, new Vector3D(ray._x * t, ray._y * t, ray._z * t));
   return result;
 }
 
@@ -10946,7 +10755,7 @@ function $createDoubleTapEffect(this$static, origin, centerRay, tapRay){
 }
 
 function $createEffectFromLastSingleDrag(this$static){
-  if (!this$static._validSingleDrag || $isNan(this$static._lastDragAxis))
+  if (!this$static._validSingleDrag || $isNan_0(this$static._lastDragAxis))
     return null;
   return new RotateWithAxisEffect($asVector3D(this$static._lastDragAxis), fromRadians(this$static._lastDragRadiansStep));
 }
@@ -10960,7 +10769,7 @@ function $distanceToHorizon(this$static, position){
 
 function $doubleDrag(this$static, finalRay0, finalRay1){
   var P0, P1, angle, angle0, angle1, angle_n, angle_n1, centerPoint2, d, dAccum, distance, factor, finalPoint, finalRaysAngle, g, initialPoint, matrix, normal, p0, point0, point1, positionCamera, precision, ray0, ray1, rotation, rotationAxis, rotationDelta, sign, translation, translation2, v0, v1, viewDirection;
-  if ($isNan(this$static._initialPoint0) || $isNan(this$static._initialPoint1))
+  if ($isNan_0(this$static._initialPoint0) || $isNan_0(this$static._initialPoint1))
     return new MutableMatrix44D_2;
   positionCamera = this$static._origin;
   finalRaysAngle = fromRadians(angleInRadiansBetween_0(finalRay0, finalRay1))._degrees;
@@ -10968,7 +10777,7 @@ function $doubleDrag(this$static, finalRay0, finalRay1){
   dAccum = 0;
   distance = $length($sub_0(this$static._origin, this$static._centerPoint));
   d = distance * (factor - 1) / factor;
-  translation = createTranslationMatrix($times_3($normalized_0($asVector3D(this$static._centerRay)), d));
+  translation = createTranslationMatrix($times_2($normalized_0($asVector3D(this$static._centerRay)), d));
   positionCamera = new MutableVector3D_0(positionCamera._x * translation._m00 + positionCamera._y * translation._m01 + positionCamera._z * translation._m02 + translation._m03, positionCamera._x * translation._m10 + positionCamera._y * translation._m11 + positionCamera._z * translation._m12 + translation._m13, positionCamera._x * translation._m20 + positionCamera._y * translation._m21 + positionCamera._z * translation._m22 + translation._m23);
   dAccum += d;
   point0 = $closestIntersection(this$static, new Vector3D(positionCamera._x, positionCamera._y, positionCamera._z), finalRay0);
@@ -10978,7 +10787,7 @@ function $doubleDrag(this$static, finalRay0, finalRay1){
     return new MutableMatrix44D_2;
   d = (distance - d) * 0.3 <= 0?0 - (distance - d) * 0.3:(distance - d) * 0.3;
   angle0 < this$static._angleBetweenInitialPoints && (d *= -1);
-  $copyValue(translation, createTranslationMatrix($times_3($normalized_0($asVector3D(this$static._centerRay)), d)));
+  $copyValue(translation, createTranslationMatrix($times_2($normalized_0($asVector3D(this$static._centerRay)), d)));
   positionCamera = new MutableVector3D_0(positionCamera._x * translation._m00 + positionCamera._y * translation._m01 + positionCamera._z * translation._m02 + translation._m03, positionCamera._x * translation._m10 + positionCamera._y * translation._m11 + positionCamera._z * translation._m12 + translation._m13, positionCamera._x * translation._m20 + positionCamera._y * translation._m21 + positionCamera._z * translation._m22 + translation._m23);
   dAccum += d;
   point0 = $closestIntersection(this$static, new Vector3D(positionCamera._x, positionCamera._y, positionCamera._z), finalRay0);
@@ -10991,7 +10800,7 @@ function $doubleDrag(this$static, finalRay0, finalRay1){
   angle_n = angle1;
   while ($abs(angle_n - this$static._angleBetweenInitialPoints) > precision) {
     (angle_n1 - angle_n) / (angle_n - this$static._angleBetweenInitialPoints) < 0 && (d *= -0.5);
-    $copyValue(translation, createTranslationMatrix($times_3($normalized_0($asVector3D(this$static._centerRay)), d)));
+    $copyValue(translation, createTranslationMatrix($times_2($normalized_0($asVector3D(this$static._centerRay)), d)));
     positionCamera = new MutableVector3D_0(positionCamera._x * translation._m00 + positionCamera._y * translation._m01 + positionCamera._z * translation._m02 + translation._m03, positionCamera._x * translation._m10 + positionCamera._y * translation._m11 + positionCamera._z * translation._m12 + translation._m13, positionCamera._x * translation._m20 + positionCamera._y * translation._m21 + positionCamera._z * translation._m22 + translation._m23);
     dAccum += d;
     angle_n1 = angle_n;
@@ -11017,7 +10826,7 @@ function $doubleDrag(this$static, finalRay0, finalRay1){
   ray0 = new MutableVector3D_0(ray0._x * rotation._m00 + ray0._y * rotation._m01 + ray0._z * rotation._m02, ray0._x * rotation._m10 + ray0._y * rotation._m11 + ray0._z * rotation._m12, ray0._x * rotation._m20 + ray0._y * rotation._m21 + ray0._z * rotation._m22);
   ray1 = new MutableVector3D_0(ray1._x * rotation._m00 + ray1._y * rotation._m01 + ray1._z * rotation._m02, ray1._x * rotation._m10 + ray1._y * rotation._m11 + ray1._z * rotation._m12, ray1._x * rotation._m20 + ray1._y * rotation._m21 + ray1._z * rotation._m22);
   $copyValueOfMultiplication(matrix, rotation, matrix);
-  translation2 = createTranslationMatrix($times_3($normalized_0(new Vector3D(viewDirection._x, viewDirection._y, viewDirection._z)), dAccum));
+  translation2 = createTranslationMatrix($times_2($normalized_0(new Vector3D(viewDirection._x, viewDirection._y, viewDirection._z)), dAccum));
   positionCamera = new MutableVector3D_0(positionCamera._x * translation2._m00 + positionCamera._y * translation2._m01 + positionCamera._z * translation2._m02 + translation2._m03, positionCamera._x * translation2._m10 + positionCamera._y * translation2._m11 + positionCamera._z * translation2._m12 + translation2._m13, positionCamera._x * translation2._m20 + positionCamera._y * translation2._m21 + positionCamera._z * translation2._m22 + translation2._m23);
   $copyValueOfMultiplication(matrix, translation2, matrix);
   centerPoint2 = $closestIntersection(this$static, new Vector3D(positionCamera._x, positionCamera._y, positionCamera._z), new Vector3D(viewDirection._x, viewDirection._y, viewDirection._z));
@@ -11035,14 +10844,14 @@ function $doubleDrag(this$static, finalRay0, finalRay1){
   ray0 = new MutableVector3D_0(ray0._x * rotation._m00 + ray0._y * rotation._m01 + ray0._z * rotation._m02, ray0._x * rotation._m10 + ray0._y * rotation._m11 + ray0._z * rotation._m12, ray0._x * rotation._m20 + ray0._y * rotation._m21 + ray0._z * rotation._m22);
   new MutableVector3D_0(ray1._x * rotation._m00 + ray1._y * rotation._m01 + ray1._z * rotation._m02, ray1._x * rotation._m10 + ray1._y * rotation._m11 + ray1._z * rotation._m12, ray1._x * rotation._m20 + ray1._y * rotation._m21 + ray1._z * rotation._m22);
   $copyValueOfMultiplication(matrix, rotation, matrix);
-  normal = $normalized_0($times_4(centerPoint2, this$static._ellipsoid._oneOverRadiiSquared));
+  normal = $normalized_0($times_3(centerPoint2, this$static._ellipsoid._oneOverRadiiSquared));
   v0 = $projectionInPlane($sub_2($asVector3D(this$static._initialPoint0), centerPoint2), normal);
   p0 = $closestIntersection(this$static, new Vector3D(positionCamera._x, positionCamera._y, positionCamera._z), new Vector3D(ray0._x, ray0._y, ray0._z));
   v1 = $projectionInPlane(new Vector3D(p0._x - centerPoint2._x, p0._y - centerPoint2._y, p0._z - centerPoint2._z), normal);
   angle = fromRadians(angleInRadiansBetween_0(v0, v1))._degrees;
   sign = $dot_0(new Vector3D(v1._y * v0._z - v1._z * v0._y, v1._z * v0._x - v1._x * v0._z, v1._x * v0._y - v1._y * v0._x), normal);
   sign < 0 && (angle = -angle);
-  rotation = createGeneralRotationMatrix(new Angle(angle, angle / 180 * $intern_40), normal, centerPoint2);
+  rotation = createGeneralRotationMatrix(new Angle(angle, angle / 180 * $intern_37), normal, centerPoint2);
   $copyValueOfMultiplication(matrix, rotation, matrix);
   return matrix;
 }
@@ -11062,7 +10871,7 @@ function $drag(this$static, origin, destination){
 }
 
 function $geodeticSurfaceNormal(this$static, positionOnEllipsoidalPlanet){
-  return $asVector3D($normalized($times_2(positionOnEllipsoidalPlanet, this$static._ellipsoid._oneOverRadiiSquared)));
+  return $asVector3D($normalized($times_1(positionOnEllipsoidalPlanet, this$static._ellipsoid._oneOverRadiiSquared)));
 }
 
 function $getDefaultCameraPosition(this$static, rendereSector){
@@ -11127,7 +10936,7 @@ function $scaleToGeodeticSurface(this$static, position){
 
 function $singleDrag(this$static, finalRay){
   var finalPoint, origin, radians, rotationAxis, rotationDelta, sinus;
-  if ($isNan(this$static._initialPoint))
+  if ($isNan_0(this$static._initialPoint))
     return new MutableMatrix44D_2;
   origin = $asVector3D(this$static._origin);
   finalPoint = $asMutableVector3D($closestIntersection(this$static, origin, finalRay));
@@ -11154,10 +10963,10 @@ function $singleDrag(this$static, finalRay){
 function $toCartesian(this$static, latitude, longitude, height){
   var gamma_0, k, n, rSurface, cosLatitude;
   n = (cosLatitude = cos_0(latitude._radians) , new Vector3D(cosLatitude * cos_0(longitude._radians), cosLatitude * sin_0(longitude._radians), sin_0(latitude._radians)));
-  k = $times_4(this$static._ellipsoid._radiiSquared, n);
+  k = $times_3(this$static._ellipsoid._radiiSquared, n);
   gamma_0 = sqrt_0(k._x * n._x + k._y * n._y + k._z * n._z);
   rSurface = new Vector3D(k._x / gamma_0, k._y / gamma_0, k._z / gamma_0);
-  return $add_19(rSurface, new Vector3D(n._x * height, n._y * height, n._z * height));
+  return $add_18(rSurface, new Vector3D(n._x * height, n._y * height, n._z * height));
 }
 
 function $toCartesian_0(this$static, geodetic){
@@ -11168,13 +10977,9 @@ function $toCartesian_1(this$static, geodetic, height){
   return $toCartesian(this$static, geodetic._latitude, geodetic._longitude, height);
 }
 
-function $toCartesian_2(this$static, geodetic){
-  return $toCartesian(this$static, geodetic._latitude, geodetic._longitude, geodetic._height);
-}
-
 function $toGeodetic2D(this$static, positionOnEllipsoidalPlanet){
   var n;
-  n = $normalized_0($times_4(positionOnEllipsoidalPlanet, this$static._ellipsoid._oneOverRadiiSquared));
+  n = $normalized_0($times_3(positionOnEllipsoidalPlanet, this$static._ellipsoid._oneOverRadiiSquared));
   return new Geodetic2D(fromRadians(asin_0(n._z)), fromRadians(atan2_0(n._y, n._x)));
 }
 
@@ -11197,33 +11002,29 @@ function EllipsoidalPlanet(ellipsoid){
   this._ellipsoid = ellipsoid;
 }
 
-defineClass(201, 472, {}, EllipsoidalPlanet);
+defineClass(187, 454, {}, EllipsoidalPlanet);
 _._angleBetweenInitialPoints = 0;
 _._angleBetweenInitialRays = 0;
 _._lastDragRadians = 0;
 _._lastDragRadiansStep = 0;
 _._validSingleDrag = false;
-var Lorg_glob3_mobile_generated_EllipsoidalPlanet_2_classLit = createForClass('org.glob3.mobile.generated', 'EllipsoidalPlanet', 201);
-function FlatColorGLFeature(color_0){
-  FlatColorGLFeature_0.call(this, color_0, false, _srcAlpha, _oneMinusSrcAlpha);
-}
-
-function FlatColorGLFeature_0(color_0, blend, sFactor, dFactor){
+var Lorg_glob3_mobile_generated_EllipsoidalPlanet_2_classLit = createForClass('org.glob3.mobile.generated', 'EllipsoidalPlanet', 187);
+function FlatColorGLFeature(color_0, blend, sFactor, dFactor){
   GLColorGroupFeature.call(this, 8, 2, blend, sFactor, dFactor);
   $addUniformValue(this._values, ($clinit_GPUUniformKey() , FLAT_COLOR), new GPUUniformValueVec4Float(color_0._red, color_0._green, color_0._blue, color_0._alpha));
 }
 
-defineClass(134, 133, $intern_46, FlatColorGLFeature, FlatColorGLFeature_0);
+defineClass(204, 128, $intern_42, FlatColorGLFeature);
 _.applyOnGlobalGLState = function applyOnGlobalGLState_1(state){
   $blendingOnGlobalGLState(this, state);
 }
 ;
-_.dispose = function dispose_26(){
+_.dispose = function dispose_23(){
   !!this._values && $dispose_4(this._values);
   $dispose_0(this);
 }
 ;
-var Lorg_glob3_mobile_generated_FlatColorGLFeature_2_classLit = createForClass('org.glob3.mobile.generated', 'FlatColorGLFeature', 134);
+var Lorg_glob3_mobile_generated_FlatColorGLFeature_2_classLit = createForClass('org.glob3.mobile.generated', 'FlatColorGLFeature', 204);
 function $dispose_2(this$static){
   this$static._ownedMesh && !!this$static._mesh && $dispose_5(this$static._mesh);
   $_release(this$static._glState);
@@ -11235,19 +11036,19 @@ function FlatColorMesh(mesh, color_0){
   this._ownedMesh = false;
   this._flatColor = color_0;
   this._glState = new GLState;
-  $addGLFeature(this._glState, new FlatColorGLFeature_0(this._flatColor, this._flatColor._alpha < 1, _srcAlpha, _oneMinusSrcAlpha), false);
+  $addGLFeature(this._glState, new FlatColorGLFeature(this._flatColor, this._flatColor._alpha < 1, _srcAlpha, _oneMinusSrcAlpha), false);
 }
 
-defineClass(395, 108, {}, FlatColorMesh);
+defineClass(378, 102, {}, FlatColorMesh);
 _.rawRender = function rawRender_2(rc, parentState){
   $setParent_2(this._glState, parentState);
   $render(this._mesh, rc, this._glState);
 }
 ;
 _._ownedMesh = false;
-var Lorg_glob3_mobile_generated_FlatColorMesh_2_classLit = createForClass('org.glob3.mobile.generated', 'FlatColorMesh', 395);
+var Lorg_glob3_mobile_generated_FlatColorMesh_2_classLit = createForClass('org.glob3.mobile.generated', 'FlatColorMesh', 378);
 function $create(this$static){
-  return new FloatBuffer_WebGL_1(this$static._values._array, this$static._values._size);
+  return new FloatBuffer_WebGL_0(this$static._values._array, this$static._values._size);
 }
 
 function $getVector2D(this$static, i_0){
@@ -11260,8 +11061,8 @@ function FloatBufferBuilder(){
   this._values = new FloatBufferBuilder$FloatArrayList;
 }
 
-defineClass(130, 1, {});
-var Lorg_glob3_mobile_generated_FloatBufferBuilder_2_classLit = createForClass('org.glob3.mobile.generated', 'FloatBufferBuilder', 130);
+defineClass(122, 1, {});
+var Lorg_glob3_mobile_generated_FloatBufferBuilder_2_classLit = createForClass('org.glob3.mobile.generated', 'FloatBufferBuilder', 122);
 function $ensureCapacity(this$static, mincap){
   var newcap, olddata;
   if (mincap > this$static._array.length) {
@@ -11286,9 +11087,9 @@ function FloatBufferBuilder$FloatArrayList(){
   this._size = 0;
 }
 
-defineClass(209, 1, {}, FloatBufferBuilder$FloatArrayList);
+defineClass(196, 1, {}, FloatBufferBuilder$FloatArrayList);
 _._size = 0;
-var Lorg_glob3_mobile_generated_FloatBufferBuilder$FloatArrayList_2_classLit = createForClass('org.glob3.mobile.generated', 'FloatBufferBuilder/FloatArrayList', 209);
+var Lorg_glob3_mobile_generated_FloatBufferBuilder$FloatArrayList_2_classLit = createForClass('org.glob3.mobile.generated', 'FloatBufferBuilder/FloatArrayList', 196);
 function $add_8(this$static, x_0, y_0){
   $push_back(this$static._values, x_0);
   $push_back(this$static._values, y_0);
@@ -11298,8 +11099,8 @@ function FloatBufferBuilderFromCartesian2D(){
   FloatBufferBuilder.call(this);
 }
 
-defineClass(136, 130, {}, FloatBufferBuilderFromCartesian2D);
-var Lorg_glob3_mobile_generated_FloatBufferBuilderFromCartesian2D_2_classLit = createForClass('org.glob3.mobile.generated', 'FloatBufferBuilderFromCartesian2D', 136);
+defineClass(201, 122, {}, FloatBufferBuilderFromCartesian2D);
+var Lorg_glob3_mobile_generated_FloatBufferBuilderFromCartesian2D_2_classLit = createForClass('org.glob3.mobile.generated', 'FloatBufferBuilderFromCartesian2D', 201);
 function $add_9(this$static, x_0, y_0){
   this$static._centerStrategy == 1 && this$static._values._size == 0 && $setCenter_0(this$static, x_0, y_0, 0);
   if (this$static._centerStrategy == 0) {
@@ -11326,12 +11127,12 @@ function FloatBufferBuilderFromCartesian3D(center){
   $setCenter_0(this, center._x, center._y, center._z);
 }
 
-defineClass(208, 130, {}, FloatBufferBuilderFromCartesian3D);
+defineClass(195, 122, {}, FloatBufferBuilderFromCartesian3D);
 _._centerStrategy = 0;
 _._cx = 0;
 _._cy = 0;
 _._cz = 0;
-var Lorg_glob3_mobile_generated_FloatBufferBuilderFromCartesian3D_2_classLit = createForClass('org.glob3.mobile.generated', 'FloatBufferBuilderFromCartesian3D', 208);
+var Lorg_glob3_mobile_generated_FloatBufferBuilderFromCartesian3D_2_classLit = createForClass('org.glob3.mobile.generated', 'FloatBufferBuilderFromCartesian3D', 195);
 function $add_10(this$static, a){
   $push_back(this$static._values, 1);
   $push_back(this$static._values, 1);
@@ -11343,8 +11144,8 @@ function FloatBufferBuilderFromColor(){
   FloatBufferBuilder.call(this);
 }
 
-defineClass(396, 130, {}, FloatBufferBuilderFromColor);
-var Lorg_glob3_mobile_generated_FloatBufferBuilderFromColor_2_classLit = createForClass('org.glob3.mobile.generated', 'FloatBufferBuilderFromColor', 396);
+defineClass(379, 122, {}, FloatBufferBuilderFromColor);
+var Lorg_glob3_mobile_generated_FloatBufferBuilderFromColor_2_classLit = createForClass('org.glob3.mobile.generated', 'FloatBufferBuilderFromColor', 379);
 function $add_11(this$static, latitude, longitude, height){
   var vector;
   vector = $toCartesian(this$static._planet, latitude, longitude, height);
@@ -11378,12 +11179,12 @@ function FloatBufferBuilderFromGeodetic(planet, center){
   $setCenter_1(this, $toCartesian_0(this._planet, center));
 }
 
-defineClass(215, 130, {}, FloatBufferBuilderFromGeodetic);
+defineClass(202, 122, {}, FloatBufferBuilderFromGeodetic);
 _._centerStrategy = 0;
 _._cx = 0;
 _._cy = 0;
 _._cz = 0;
-var Lorg_glob3_mobile_generated_FloatBufferBuilderFromGeodetic_2_classLit = createForClass('org.glob3.mobile.generated', 'FloatBufferBuilderFromGeodetic', 215);
+var Lorg_glob3_mobile_generated_FloatBufferBuilderFromGeodetic_2_classLit = createForClass('org.glob3.mobile.generated', 'FloatBufferBuilderFromGeodetic', 202);
 function $addPreRenderTask(this$static, task){
   $addLast(this$static._tasks, task);
 }
@@ -11422,7 +11223,7 @@ function $doPreRenderCycle(this$static, rc){
   canceledCounter = 0;
   i_0 = $listIterator(this$static._tasks, 0);
   while (i_0.currentNode != i_0.this$01.tail) {
-    task = (checkCriticalElement(i_0.currentNode != i_0.this$01.tail) , i_0.lastNode = i_0.currentNode , i_0.currentNode = i_0.currentNode.next , ++i_0.currentIndex , dynamicCast(i_0.lastNode.value_0, 109));
+    task = (checkCriticalElement(i_0.currentNode != i_0.this$01.tail) , i_0.lastNode = i_0.currentNode , i_0.currentNode = i_0.currentNode.next , ++i_0.currentIndex , dynamicCast(i_0.lastNode.value_0, 103));
     isCanceled = task.isCanceled(rc);
     if (isCanceled) {
       !!task && task.dispose();
@@ -11433,7 +11234,7 @@ function $doPreRenderCycle(this$static, rc){
   this$static._debug && canceledCounter > 0 && $logInfo(rc._logger, 'FTE: Removed %d tasks, active %d tasks.', initValues(getClassLiteralForArray(Ljava_lang_Object_2_classLit, 1), $intern_4, 1, 3, [valueOf(canceledCounter), valueOf(this$static._tasks.size_0)]));
   executedCounter = 0;
   while ($canExecutePreRenderStep(this$static, rc, executedCounter)) {
-    task = dynamicCast($getFirst(this$static._tasks), 109);
+    task = dynamicCast($getFirst(this$static._tasks), 103);
     $removeFirst(this$static._tasks);
     task.execute_1(rc);
     !!task && task.dispose();
@@ -11478,7 +11279,7 @@ function FrameTasksExecutor(){
   this._debug = false;
 }
 
-defineClass(364, 1, {}, FrameTasksExecutor);
+defineClass(350, 1, {}, FrameTasksExecutor);
 _._debug = false;
 _._maxTimePerFrameMS = {l:0, m:0, h:0};
 _._maxTimePerFrameStressedMS = {l:0, m:0, h:0};
@@ -11486,21 +11287,21 @@ _._maximumExecutionsPerFrame = 0;
 _._maximumQueuedTasks = 0;
 _._minimumExecutionsPerFrame = 0;
 _._stressed = false;
-var Lorg_glob3_mobile_generated_FrameTasksExecutor_2_classLit = createForClass('org.glob3.mobile.generated', 'FrameTasksExecutor', 364);
+var Lorg_glob3_mobile_generated_FrameTasksExecutor_2_classLit = createForClass('org.glob3.mobile.generated', 'FrameTasksExecutor', 350);
 function $computeBoundingVolume_0(this$static){
   var maxx, maxy, maxz, minx, miny, minz;
-  minx = $intern_50;
-  miny = $intern_50;
-  minz = $intern_50;
-  maxx = $intern_51;
-  maxy = $intern_51;
-  maxz = $intern_51;
-  this$static._ltn._x < $intern_50 && (minx = this$static._ltn._x);
-  this$static._ltn._x > $intern_51 && (maxx = this$static._ltn._x);
-  this$static._ltn._y < $intern_50 && (miny = this$static._ltn._y);
-  this$static._ltn._y > $intern_51 && (maxy = this$static._ltn._y);
-  this$static._ltn._z < $intern_50 && (minz = this$static._ltn._z);
-  this$static._ltn._z > $intern_51 && (maxz = this$static._ltn._z);
+  minx = $intern_45;
+  miny = $intern_45;
+  minz = $intern_45;
+  maxx = $intern_46;
+  maxy = $intern_46;
+  maxz = $intern_46;
+  this$static._ltn._x < $intern_45 && (minx = this$static._ltn._x);
+  this$static._ltn._x > $intern_46 && (maxx = this$static._ltn._x);
+  this$static._ltn._y < $intern_45 && (miny = this$static._ltn._y);
+  this$static._ltn._y > $intern_46 && (maxy = this$static._ltn._y);
+  this$static._ltn._z < $intern_45 && (minz = this$static._ltn._z);
+  this$static._ltn._z > $intern_46 && (maxz = this$static._ltn._z);
   this$static._rtn._x < minx && (minx = this$static._rtn._x);
   this$static._rtn._x > maxx && (maxx = this$static._rtn._x);
   this$static._rtn._y < miny && (miny = this$static._rtn._y);
@@ -11546,22 +11347,6 @@ function $computeBoundingVolume_0(this$static){
   return new Box(new Vector3D(minx, miny, minz), new Vector3D(maxx, maxy, maxz));
 }
 
-function $contains_1(this$static, point){
-  if ($signedDistance(this$static._leftPlane, point) > 0)
-    return false;
-  if ($signedDistance(this$static._rightPlane, point) > 0)
-    return false;
-  if ($signedDistance(this$static._bottomPlane, point) > 0)
-    return false;
-  if ($signedDistance(this$static._topPlane, point) > 0)
-    return false;
-  if ($signedDistance(this$static._nearPlane, point) > 0)
-    return false;
-  if ($signedDistance(this$static._farPlane, point) > 0)
-    return false;
-  return true;
-}
-
 function $touchesWithBox(this$static, that){
   var corners;
   !this$static._boundingVolume && (this$static._boundingVolume = $computeBoundingVolume_0(this$static));
@@ -11569,7 +11354,7 @@ function $touchesWithBox(this$static, that){
     return false;
   }
   corners = $getCornersArray(that);
-  return !($signedDistance_0(this$static._leftPlane, corners[0]) >= 0 && $signedDistance_0(this$static._leftPlane, corners[1]) >= 0 && $signedDistance_0(this$static._leftPlane, corners[2]) >= 0 && $signedDistance_0(this$static._leftPlane, corners[3]) >= 0 && $signedDistance_0(this$static._leftPlane, corners[4]) >= 0 && $signedDistance_0(this$static._leftPlane, corners[5]) >= 0 && $signedDistance_0(this$static._leftPlane, corners[6]) >= 0 && $signedDistance_0(this$static._leftPlane, corners[7]) >= 0) && !($signedDistance_0(this$static._bottomPlane, corners[0]) >= 0 && $signedDistance_0(this$static._bottomPlane, corners[1]) >= 0 && $signedDistance_0(this$static._bottomPlane, corners[2]) >= 0 && $signedDistance_0(this$static._bottomPlane, corners[3]) >= 0 && $signedDistance_0(this$static._bottomPlane, corners[4]) >= 0 && $signedDistance_0(this$static._bottomPlane, corners[5]) >= 0 && $signedDistance_0(this$static._bottomPlane, corners[6]) >= 0 && $signedDistance_0(this$static._bottomPlane, corners[7]) >= 0) && !($signedDistance_0(this$static._rightPlane, corners[0]) >= 0 && $signedDistance_0(this$static._rightPlane, corners[1]) >= 0 && $signedDistance_0(this$static._rightPlane, corners[2]) >= 0 && $signedDistance_0(this$static._rightPlane, corners[3]) >= 0 && $signedDistance_0(this$static._rightPlane, corners[4]) >= 0 && $signedDistance_0(this$static._rightPlane, corners[5]) >= 0 && $signedDistance_0(this$static._rightPlane, corners[6]) >= 0 && $signedDistance_0(this$static._rightPlane, corners[7]) >= 0) && !($signedDistance_0(this$static._topPlane, corners[0]) >= 0 && $signedDistance_0(this$static._topPlane, corners[1]) >= 0 && $signedDistance_0(this$static._topPlane, corners[2]) >= 0 && $signedDistance_0(this$static._topPlane, corners[3]) >= 0 && $signedDistance_0(this$static._topPlane, corners[4]) >= 0 && $signedDistance_0(this$static._topPlane, corners[5]) >= 0 && $signedDistance_0(this$static._topPlane, corners[6]) >= 0 && $signedDistance_0(this$static._topPlane, corners[7]) >= 0) && !($signedDistance_0(this$static._nearPlane, corners[0]) >= 0 && $signedDistance_0(this$static._nearPlane, corners[1]) >= 0 && $signedDistance_0(this$static._nearPlane, corners[2]) >= 0 && $signedDistance_0(this$static._nearPlane, corners[3]) >= 0 && $signedDistance_0(this$static._nearPlane, corners[4]) >= 0 && $signedDistance_0(this$static._nearPlane, corners[5]) >= 0 && $signedDistance_0(this$static._nearPlane, corners[6]) >= 0 && $signedDistance_0(this$static._nearPlane, corners[7]) >= 0) && !($signedDistance_0(this$static._farPlane, corners[0]) >= 0 && $signedDistance_0(this$static._farPlane, corners[1]) >= 0 && $signedDistance_0(this$static._farPlane, corners[2]) >= 0 && $signedDistance_0(this$static._farPlane, corners[3]) >= 0 && $signedDistance_0(this$static._farPlane, corners[4]) >= 0 && $signedDistance_0(this$static._farPlane, corners[5]) >= 0 && $signedDistance_0(this$static._farPlane, corners[6]) >= 0 && $signedDistance_0(this$static._farPlane, corners[7]) >= 0);
+  return !($signedDistance(this$static._leftPlane, corners[0]) >= 0 && $signedDistance(this$static._leftPlane, corners[1]) >= 0 && $signedDistance(this$static._leftPlane, corners[2]) >= 0 && $signedDistance(this$static._leftPlane, corners[3]) >= 0 && $signedDistance(this$static._leftPlane, corners[4]) >= 0 && $signedDistance(this$static._leftPlane, corners[5]) >= 0 && $signedDistance(this$static._leftPlane, corners[6]) >= 0 && $signedDistance(this$static._leftPlane, corners[7]) >= 0) && !($signedDistance(this$static._bottomPlane, corners[0]) >= 0 && $signedDistance(this$static._bottomPlane, corners[1]) >= 0 && $signedDistance(this$static._bottomPlane, corners[2]) >= 0 && $signedDistance(this$static._bottomPlane, corners[3]) >= 0 && $signedDistance(this$static._bottomPlane, corners[4]) >= 0 && $signedDistance(this$static._bottomPlane, corners[5]) >= 0 && $signedDistance(this$static._bottomPlane, corners[6]) >= 0 && $signedDistance(this$static._bottomPlane, corners[7]) >= 0) && !($signedDistance(this$static._rightPlane, corners[0]) >= 0 && $signedDistance(this$static._rightPlane, corners[1]) >= 0 && $signedDistance(this$static._rightPlane, corners[2]) >= 0 && $signedDistance(this$static._rightPlane, corners[3]) >= 0 && $signedDistance(this$static._rightPlane, corners[4]) >= 0 && $signedDistance(this$static._rightPlane, corners[5]) >= 0 && $signedDistance(this$static._rightPlane, corners[6]) >= 0 && $signedDistance(this$static._rightPlane, corners[7]) >= 0) && !($signedDistance(this$static._topPlane, corners[0]) >= 0 && $signedDistance(this$static._topPlane, corners[1]) >= 0 && $signedDistance(this$static._topPlane, corners[2]) >= 0 && $signedDistance(this$static._topPlane, corners[3]) >= 0 && $signedDistance(this$static._topPlane, corners[4]) >= 0 && $signedDistance(this$static._topPlane, corners[5]) >= 0 && $signedDistance(this$static._topPlane, corners[6]) >= 0 && $signedDistance(this$static._topPlane, corners[7]) >= 0) && !($signedDistance(this$static._nearPlane, corners[0]) >= 0 && $signedDistance(this$static._nearPlane, corners[1]) >= 0 && $signedDistance(this$static._nearPlane, corners[2]) >= 0 && $signedDistance(this$static._nearPlane, corners[3]) >= 0 && $signedDistance(this$static._nearPlane, corners[4]) >= 0 && $signedDistance(this$static._nearPlane, corners[5]) >= 0 && $signedDistance(this$static._nearPlane, corners[6]) >= 0 && $signedDistance(this$static._nearPlane, corners[7]) >= 0) && !($signedDistance(this$static._farPlane, corners[0]) >= 0 && $signedDistance(this$static._farPlane, corners[1]) >= 0 && $signedDistance(this$static._farPlane, corners[2]) >= 0 && $signedDistance(this$static._farPlane, corners[3]) >= 0 && $signedDistance(this$static._farPlane, corners[4]) >= 0 && $signedDistance(this$static._farPlane, corners[5]) >= 0 && $signedDistance(this$static._farPlane, corners[6]) >= 0 && $signedDistance(this$static._farPlane, corners[7]) >= 0);
 }
 
 function $transformedBy_P(this$static, matrix){
@@ -11577,14 +11362,14 @@ function $transformedBy_P(this$static, matrix){
 }
 
 function Frustum(that, matrix, inverse){
-  this._ltn = new Vector3D_0($transformedBy_0(that._ltn, inverse));
-  this._rtn = new Vector3D_0($transformedBy_0(that._rtn, inverse));
-  this._lbn = new Vector3D_0($transformedBy_0(that._lbn, inverse));
-  this._rbn = new Vector3D_0($transformedBy_0(that._rbn, inverse));
-  this._ltf = new Vector3D_0($transformedBy_0(that._ltf, inverse));
-  this._rtf = new Vector3D_0($transformedBy_0(that._rtf, inverse));
-  this._lbf = new Vector3D_0($transformedBy_0(that._lbf, inverse));
-  this._rbf = new Vector3D_0($transformedBy_0(that._rbf, inverse));
+  this._ltn = new Vector3D_0($transformedBy_0(that._ltn, inverse, 1));
+  this._rtn = new Vector3D_0($transformedBy_0(that._rtn, inverse, 1));
+  this._lbn = new Vector3D_0($transformedBy_0(that._lbn, inverse, 1));
+  this._rbn = new Vector3D_0($transformedBy_0(that._rbn, inverse, 1));
+  this._ltf = new Vector3D_0($transformedBy_0(that._ltf, inverse, 1));
+  this._rtf = new Vector3D_0($transformedBy_0(that._rtf, inverse, 1));
+  this._lbf = new Vector3D_0($transformedBy_0(that._lbf, inverse, 1));
+  this._rbf = new Vector3D_0($transformedBy_0(that._rbf, inverse, 1));
   this._leftPlane = $transformedByTranspose(that._leftPlane, matrix);
   this._rightPlane = $transformedByTranspose(that._rightPlane, matrix);
   this._bottomPlane = $transformedByTranspose(that._bottomPlane, matrix);
@@ -11612,8 +11397,8 @@ function Frustum_0(data_0){
   this._boundingVolume = null;
 }
 
-defineClass(206, 1, {}, Frustum, Frustum_0);
-var Lorg_glob3_mobile_generated_Frustum_2_classLit = createForClass('org.glob3.mobile.generated', 'Frustum', 206);
+defineClass(193, 1, {}, Frustum, Frustum_0);
+var Lorg_glob3_mobile_generated_Frustum_2_classLit = createForClass('org.glob3.mobile.generated', 'Frustum', 193);
 function FrustumData(){
   this._left = -1;
   this._right = 1;
@@ -11632,14 +11417,14 @@ function FrustumData_0(left, right, bottom, top_0, znear, zfar){
   this._zfar = zfar;
 }
 
-defineClass(157, 1, {}, FrustumData, FrustumData_0);
+defineClass(147, 1, {}, FrustumData, FrustumData_0);
 _._bottom = 0;
 _._left = 0;
 _._right = 0;
 _._top = 0;
 _._zfar = 0;
 _._znear = 0;
-var Lorg_glob3_mobile_generated_FrustumData_2_classLit = createForClass('org.glob3.mobile.generated', 'FrustumData', 157);
+var Lorg_glob3_mobile_generated_FrustumData_2_classLit = createForClass('org.glob3.mobile.generated', 'FrustumData', 147);
 function G3MContext(factory, threadUtils, logger, planet, downloader, effectsScheduler){
   this._factory = factory;
   this._threadUtils = threadUtils;
@@ -11649,14 +11434,14 @@ function G3MContext(factory, threadUtils, logger, planet, downloader, effectsSch
   this._effectsScheduler = effectsScheduler;
 }
 
-defineClass(150, 1, {}, G3MContext);
-var Lorg_glob3_mobile_generated_G3MContext_2_classLit = createForClass('org.glob3.mobile.generated', 'G3MContext', 150);
+defineClass(141, 1, {}, G3MContext);
+var Lorg_glob3_mobile_generated_G3MContext_2_classLit = createForClass('org.glob3.mobile.generated', 'G3MContext', 141);
 function G3MEventContext(factory, threadUtils, logger, planet, downloader, scheduler){
   G3MContext.call(this, factory, threadUtils, logger, planet, downloader, scheduler);
 }
 
-defineClass(196, 150, {}, G3MEventContext);
-var Lorg_glob3_mobile_generated_G3MEventContext_2_classLit = createForClass('org.glob3.mobile.generated', 'G3MEventContext', 196);
+defineClass(184, 141, {}, G3MEventContext);
+var Lorg_glob3_mobile_generated_G3MEventContext_2_classLit = createForClass('org.glob3.mobile.generated', 'G3MEventContext', 184);
 function G3MRenderContext(frameTasksExecutor, factory, threadUtils, logger, planet, gl, currentCamera, nextCamera, texturesHandler, downloader, scheduler, frameStartTimer, gpuProgramManager){
   G3MContext.call(this, factory, threadUtils, logger, planet, downloader, scheduler);
   this._frameTasksExecutor = frameTasksExecutor;
@@ -11668,8 +11453,8 @@ function G3MRenderContext(frameTasksExecutor, factory, threadUtils, logger, plan
   this._gpuProgramManager = gpuProgramManager;
 }
 
-defineClass(366, 150, {}, G3MRenderContext);
-var Lorg_glob3_mobile_generated_G3MRenderContext_2_classLit = createForClass('org.glob3.mobile.generated', 'G3MRenderContext', 366);
+defineClass(352, 141, {}, G3MRenderContext);
+var Lorg_glob3_mobile_generated_G3MRenderContext_2_classLit = createForClass('org.glob3.mobile.generated', 'G3MRenderContext', 352);
 function $addPeriodicalTask(this$static, periodicalTask){
   $add_3(this$static._periodicalTasks, periodicalTask);
 }
@@ -11741,13 +11526,13 @@ function $onTouchEvent_0(this$static, touchEvent){
           touch = dynamicCast($get_0(touchEvent._touchs, 0), 10);
           downUpEvent = create_5(DownUp, new Touch_0(touch));
           $notifyTouchEvent(this$static, ec, downUpEvent);
-          $dispose_13(downUpEvent);
+          $dispose_14(downUpEvent);
         }
       }
       if (this$static._clickOnProcess) {
         if (eventType == Move) {
           movePosition = dynamicCast($get_0(touchEvent._touchs, 0), 10)._pos;
-          sd = $squaredDistanceTo(movePosition, this$static._touchDownPositionX, this$static._touchDownPositionY);
+          sd = $squaredDistanceTo_0(movePosition, this$static._touchDownPositionX, this$static._touchDownPositionY);
           $getDeviceInfo(this$static._context._factory);
           sd > 14.28482899873035 && (this$static._clickOnProcess = false);
         }
@@ -11777,11 +11562,11 @@ function $render_2(this$static, width_0, height){
     position = $getCameraPosition(this$static._planet, this$static._mainRenderer.getPlanetRenderer());
     $setGeodeticPosition(this$static._currentCamera, position);
     $setHeading(this$static._currentCamera, new Angle(0, 0));
-    $setPitch(this$static._currentCamera, new Angle(-90, $intern_41));
+    $setPitch(this$static._currentCamera, new Angle(-90, $intern_38));
     $setRoll(this$static._currentCamera, new Angle(0, 0));
     $setGeodeticPosition(this$static._nextCamera, position);
     $setHeading(this$static._nextCamera, new Angle(0, 0));
-    $setPitch(this$static._nextCamera, new Angle(-90, $intern_41));
+    $setPitch(this$static._nextCamera, new Angle(-90, $intern_38));
     $setRoll(this$static._nextCamera, new Angle(0, 0));
   }
   this$static._timer._startTimeInMilliseconds = fromDouble(now_1());
@@ -11793,7 +11578,7 @@ function $render_2(this$static, width_0, height){
   }
   cameraConstrainersCount = this$static._cameraConstrainers.array.length;
   for (i_0 = 0; i_0 < cameraConstrainersCount; i_0++) {
-    constrainer = dynamicCast($get_0(this$static._cameraConstrainers, i_0), 431);
+    constrainer = dynamicCast($get_0(this$static._cameraConstrainers, i_0), 416);
     constrainer.onCameraChange(this$static._planet, this$static._currentCamera, this$static._nextCamera);
   }
   $copyFrom(this$static._currentCamera, this$static._nextCamera);
@@ -11968,7 +11753,7 @@ function initSingletons(logger, factory, stringUtils, stringBuilder, mathUtils, 
   }
 }
 
-defineClass(267, 1, {}, G3MWidget);
+defineClass(255, 1, {}, G3MWidget);
 _.changedRendererInfo = function changedRendererInfo_0(rendererIdentifier, info){
 }
 ;
@@ -11990,23 +11775,9 @@ _._totalRenderTime = 0;
 _._touchDownPositionX = 0;
 _._touchDownPositionY = 0;
 _._width = 0;
-var Lorg_glob3_mobile_generated_G3MWidget_2_classLit = createForClass('org.glob3.mobile.generated', 'G3MWidget', 267);
-function $description_0(this$static){
-  var isb, s;
-  isb = new StringBuilder_WebGL;
-  isb._string += '(GFont name="';
-  $addString(isb, this$static._name);
-  isb._string += '", size=';
-  $addFloat(isb, this$static._size);
-  this$static._bold && (isb._string += ', bold' , isb);
-  this$static._italic && (isb._string += ', italic' , isb);
-  isb._string += ')';
-  s = isb._string;
-  return s;
-}
-
-function GFont(name_0, size_0){
-  this._name = name_0;
+var Lorg_glob3_mobile_generated_G3MWidget_2_classLit = createForClass('org.glob3.mobile.generated', 'G3MWidget', 255);
+function GFont(size_0){
+  this._name = 'sans-serif';
   this._size = size_0;
   this._bold = false;
   this._italic = false;
@@ -12019,15 +11790,16 @@ function GFont_0(that){
   this._italic = that._italic;
 }
 
-defineClass(105, 1, {}, GFont, GFont_0);
+defineClass(124, 1, {}, GFont, GFont_0);
 _.toString$ = function toString_28(){
-  return $description_0(this);
+  var isb;
+  return isb = new StringBuilder_WebGL , isb._string += '(GFont name="' , $addString(isb, this._name) , isb._string += '", size=' , $addFloat(isb, this._size) , this._bold && (isb._string += ', bold' , isb) , this._italic && (isb._string += ', italic' , isb) , isb._string += ')' , isb._string;
 }
 ;
 _._bold = false;
 _._italic = false;
 _._size = 0;
-var Lorg_glob3_mobile_generated_GFont_2_classLit = createForClass('org.glob3.mobile.generated', 'GFont', 105);
+var Lorg_glob3_mobile_generated_GFont_2_classLit = createForClass('org.glob3.mobile.generated', 'GFont', 124);
 function $attachShader(this$static, program, shader){
   $attachShader_0(this$static._nativeGL, program, shader);
 }
@@ -12081,7 +11853,7 @@ function $getGLTextureId(this$static){
     ids = $genTextures(this$static._nativeGL, 1024);
     idsCount = ids.array.length;
     for (i_0 = 0; i_0 < idsCount; i_0++) {
-      $addFirst(this$static._texturesIdBag, (checkElementIndex(i_0, ids.array.length) , dynamicCast(ids.array[i_0], 226)));
+      $addFirst(this$static._texturesIdBag, (checkElementIndex(i_0, ids.array.length) , dynamicCast(ids.array[i_0], 215)));
     }
     this$static._texturesIdAllocationCounter += idsCount;
     $logInfo(_instance_3, '= Created %d texturesIds (accumulated %d).', initValues(getClassLiteralForArray(Ljava_lang_Object_2_classLit, 1), $intern_4, 1, 3, [valueOf(idsCount), valueOf(this$static._texturesIdAllocationCounter)]));
@@ -12090,7 +11862,7 @@ function $getGLTextureId(this$static){
     $logError(_instance_3, 'TextureIds bag exhausted', initValues(getClassLiteralForArray(Ljava_lang_Object_2_classLit, 1), $intern_4, 1, 3, []));
     return null;
   }
-  result = dynamicCast($getLast(this$static._texturesIdBag), 226);
+  result = dynamicCast($getLast(this$static._texturesIdBag), 215);
   $removeLast(this$static._texturesIdBag);
   return result;
 }
@@ -12143,7 +11915,7 @@ function $uploadTexture(this$static, image, format, generateMipmap){
     $texParameteri(this$static._nativeGL, texture2D, _wrapS, clampToEdge);
     $texParameteri(this$static._nativeGL, texture2D, _wrapT, clampToEdge);
     $texImage2D(this$static._nativeGL, image, format);
-    generateMipmap && (isPowerOfTwo($getWidth_0(image)) && isPowerOfTwo($getHeight_0(image))?$generateMipmap(this$static._nativeGL, texture2D):$logError(_instance_3, "Can't generate bitmap. Texture dimensions are not power of two.", initValues(getClassLiteralForArray(Ljava_lang_Object_2_classLit, 1), $intern_4, 1, 3, [])));
+    generateMipmap && (isPowerOfTwo($getWidth(image)) && isPowerOfTwo($getHeight(image))?$generateMipmap(this$static._nativeGL, texture2D):$logError(_instance_3, "Can't generate bitmap. Texture dimensions are not power of two.", initValues(getClassLiteralForArray(Ljava_lang_Object_2_classLit, 1), $intern_4, 1, 3, [])));
   }
    else {
     $logError(_instance_3, "can't get a valid texture id\n", initValues(getClassLiteralForArray(Ljava_lang_Object_2_classLit, 1), $intern_4, 1, 3, []));
@@ -12198,9 +11970,9 @@ function isPowerOfTwo(x_0){
   return x_0 >= 0 && (x_0 == 1 || x_0 == 2 || x_0 == 4 || x_0 == 8 || x_0 == 16 || x_0 == 32 || x_0 == 64 || x_0 == 128 || x_0 == 256 || x_0 == 512 || x_0 == 1024 || x_0 == 2048 || x_0 == 4096 || x_0 == 8192 || x_0 == $intern_15 || x_0 == $intern_14 || x_0 == $intern_16 || x_0 == $intern_17 || x_0 == $intern_18 || x_0 == $intern_9 || x_0 == $intern_19 || x_0 == $intern_20 || x_0 == $intern_10 || x_0 == $intern_21 || x_0 == $intern_22 || x_0 == $intern_23 || x_0 == $intern_24 || x_0 == 134217728 || x_0 == 268435456 || x_0 == 536870912 || x_0 == 1073741824);
 }
 
-defineClass(302, 1, {}, GL);
+defineClass(288, 1, {}, GL);
 _._texturesIdAllocationCounter = 0;
-var Lorg_glob3_mobile_generated_GL_2_classLit = createForClass('org.glob3.mobile.generated', 'GL', 302);
+var Lorg_glob3_mobile_generated_GL_2_classLit = createForClass('org.glob3.mobile.generated', 'GL', 288);
 function init_0(ngl){
   ngl._gl.PACK_ALIGNMENT;
   _unpack = ngl._gl.UNPACK_ALIGNMENT;
@@ -12230,25 +12002,25 @@ function GLCameraGroupFeature(matrix, id_0){
   this._matrixHolder = new Matrix44DHolder(matrix);
 }
 
-defineClass(55, 24, $intern_52);
+defineClass(50, 27, $intern_47);
 _.applyOnGlobalGLState = function applyOnGlobalGLState_2(state){
 }
 ;
-_.dispose = function dispose_27(){
+_.dispose = function dispose_24(){
   $_release(this._matrixHolder);
   !!this._values && $dispose_4(this._values);
   $dispose_0(this);
 }
 ;
 _._matrixHolder = null;
-var Lorg_glob3_mobile_generated_GLCameraGroupFeature_2_classLit = createForClass('org.glob3.mobile.generated', 'GLCameraGroupFeature', 55);
+var Lorg_glob3_mobile_generated_GLCameraGroupFeature_2_classLit = createForClass('org.glob3.mobile.generated', 'GLCameraGroupFeature', 50);
 function init_3(ngl){
-  _front = ngl._gl.FRONT;
+  ngl._gl.FRONT;
   _back = ngl._gl.BACK;
   ngl._gl.FRONT_AND_BACK;
 }
 
-var _back = 0, _front = 0;
+var _back = 0;
 function init_4(ngl){
   _noError = ngl._gl.NO_ERROR;
 }
@@ -12257,7 +12029,7 @@ var _noError = 0;
 function applyToAllGroups(features, vs, state){
   var groupName, i_0, i0;
   if (_groups == null) {
-    _groups = initDim(Lorg_glob3_mobile_generated_GLFeatureGroup_2_classLit, $intern_4, 92, 4, 0, 1);
+    _groups = initDim(Lorg_glob3_mobile_generated_GLFeatureGroup_2_classLit, $intern_4, 90, 4, 0, 1);
     for (i0 = 0; i0 < 4; i0++) {
       groupName = getGroupName(i0);
       setCheck(_groups, i0, createGroup(groupName));
@@ -12297,13 +12069,13 @@ function getGroupName(i_0){
   }
 }
 
-defineClass(92, 1, $intern_53);
+defineClass(90, 1, $intern_48);
 var _groups = null;
-var Lorg_glob3_mobile_generated_GLFeatureGroup_2_classLit = createForClass('org.glob3.mobile.generated', 'GLFeatureGroup', 92);
+var Lorg_glob3_mobile_generated_GLFeatureGroup_2_classLit = createForClass('org.glob3.mobile.generated', 'GLFeatureGroup', 90);
 function GLFeatureCameraGroup(){
 }
 
-defineClass(410, 92, $intern_53, GLFeatureCameraGroup);
+defineClass(403, 90, $intern_48, GLFeatureCameraGroup);
 _.apply_0 = function apply_1(features, vs, state){
   var cf, f, featuresSize, group, i_0, id_0, modelTransformHolderBuilder, modelViewHolderBuilder, modelViewProvider, normalsAvailable, prov;
   modelViewHolderBuilder = new Matrix44DMultiplicationHolderBuilder;
@@ -12315,7 +12087,7 @@ _.apply_0 = function apply_1(features, vs, state){
     group = f._group;
     id_0 = f._id;
     if (group == ($clinit_GLFeatureGroupName() , CAMERA_GROUP)) {
-      cf = dynamicCast(f, 55);
+      cf = dynamicCast(f, 50);
       id_0 == 5?$add_15(modelTransformHolderBuilder, cf._matrixHolder):$add_15(modelViewHolderBuilder, cf._matrixHolder);
     }
      else {
@@ -12338,11 +12110,11 @@ _.apply_0 = function apply_1(features, vs, state){
   $dispose_8(modelTransformHolderBuilder);
 }
 ;
-var Lorg_glob3_mobile_generated_GLFeatureCameraGroup_2_classLit = createForClass('org.glob3.mobile.generated', 'GLFeatureCameraGroup', 410);
+var Lorg_glob3_mobile_generated_GLFeatureCameraGroup_2_classLit = createForClass('org.glob3.mobile.generated', 'GLFeatureCameraGroup', 403);
 function GLFeatureColorGroup(){
 }
 
-defineClass(411, 92, $intern_53, GLFeatureColorGroup);
+defineClass(404, 90, $intern_48, GLFeatureColorGroup);
 _.apply_0 = function apply_2(features, vs, state){
   var f, featuresSize, i_0, i0, pf, priority;
   featuresSize = features._nFeatures;
@@ -12350,14 +12122,14 @@ _.apply_0 = function apply_2(features, vs, state){
   for (i0 = 0; i0 < featuresSize; i0++) {
     f = $get_3(features, i0);
     if (f._group == ($clinit_GLFeatureGroupName() , COLOR_GROUP)) {
-      pf = dynamicCast(f, 71);
+      pf = dynamicCast(f, 70);
       pf._priority > priority && pf._id != 14 && (priority = pf._priority);
     }
   }
   for (i_0 = 0; i_0 < featuresSize; i_0++) {
     f = $get_3(features, i_0);
     if (f._group == ($clinit_GLFeatureGroupName() , COLOR_GROUP)) {
-      pf = dynamicCast(f, 71);
+      pf = dynamicCast(f, 70);
       if (pf._priority == priority) {
         pf.applyOnGlobalGLState(state);
         $combineWith(vs, f._values);
@@ -12366,7 +12138,7 @@ _.apply_0 = function apply_2(features, vs, state){
   }
 }
 ;
-var Lorg_glob3_mobile_generated_GLFeatureColorGroup_2_classLit = createForClass('org.glob3.mobile.generated', 'GLFeatureColorGroup', 411);
+var Lorg_glob3_mobile_generated_GLFeatureColorGroup_2_classLit = createForClass('org.glob3.mobile.generated', 'GLFeatureColorGroup', 404);
 function $clinit_GLFeatureGroupName(){
   $clinit_GLFeatureGroupName = emptyMethod;
   UNRECOGNIZED_GROUP = new GLFeatureGroupName('UNRECOGNIZED_GROUP', 0, -1);
@@ -12383,16 +12155,16 @@ function GLFeatureGroupName(enum$name, enum$ordinal, value_0){
 
 function values_2(){
   $clinit_GLFeatureGroupName();
-  return initValues(getClassLiteralForArray(Lorg_glob3_mobile_generated_GLFeatureGroupName_2_classLit, 1), $intern_4, 81, 0, [UNRECOGNIZED_GROUP, NO_GROUP, CAMERA_GROUP, COLOR_GROUP, LIGHTING_GROUP]);
+  return initValues(getClassLiteralForArray(Lorg_glob3_mobile_generated_GLFeatureGroupName_2_classLit, 1), $intern_4, 79, 0, [UNRECOGNIZED_GROUP, NO_GROUP, CAMERA_GROUP, COLOR_GROUP, LIGHTING_GROUP]);
 }
 
-defineClass(81, 19, {3:1, 27:1, 19:1, 81:1}, GLFeatureGroupName);
+defineClass(79, 15, {3:1, 26:1, 15:1, 79:1}, GLFeatureGroupName);
 var CAMERA_GROUP, COLOR_GROUP, LIGHTING_GROUP, NO_GROUP, UNRECOGNIZED_GROUP, mappings_0;
-var Lorg_glob3_mobile_generated_GLFeatureGroupName_2_classLit = createForEnum('org.glob3.mobile.generated', 'GLFeatureGroupName', 81, values_2);
+var Lorg_glob3_mobile_generated_GLFeatureGroupName_2_classLit = createForEnum('org.glob3.mobile.generated', 'GLFeatureGroupName', 79, values_2);
 function GLFeatureLightingGroup(){
 }
 
-defineClass(412, 92, $intern_53, GLFeatureLightingGroup);
+defineClass(405, 90, $intern_48, GLFeatureLightingGroup);
 _.apply_0 = function apply_3(features, vs, state){
   var f, i_0, i0, normalsAvailable, size_0;
   size_0 = features._nFeatures;
@@ -12415,11 +12187,11 @@ _.apply_0 = function apply_3(features, vs, state){
   }
 }
 ;
-var Lorg_glob3_mobile_generated_GLFeatureLightingGroup_2_classLit = createForClass('org.glob3.mobile.generated', 'GLFeatureLightingGroup', 412);
+var Lorg_glob3_mobile_generated_GLFeatureLightingGroup_2_classLit = createForClass('org.glob3.mobile.generated', 'GLFeatureLightingGroup', 405);
 function GLFeatureNoGroup(){
 }
 
-defineClass(409, 92, $intern_53, GLFeatureNoGroup);
+defineClass(402, 90, $intern_48, GLFeatureNoGroup);
 _.apply_0 = function apply_4(features, vs, state){
   var f, i_0, size_0;
   size_0 = features._nFeatures;
@@ -12432,7 +12204,7 @@ _.apply_0 = function apply_4(features, vs, state){
   }
 }
 ;
-var Lorg_glob3_mobile_generated_GLFeatureNoGroup_2_classLit = createForClass('org.glob3.mobile.generated', 'GLFeatureNoGroup', 409);
+var Lorg_glob3_mobile_generated_GLFeatureNoGroup_2_classLit = createForClass('org.glob3.mobile.generated', 'GLFeatureNoGroup', 402);
 function $add_13(this$static, f){
   setCheck(this$static._features, this$static._nFeatures++, f);
   ++f._referenceCounter;
@@ -12478,16 +12250,16 @@ function $get_3(this$static, i_0){
 
 function GLFeatureSet(){
   var i_0;
-  this._features = initDim(Lorg_glob3_mobile_generated_GLFeature_2_classLit, $intern_4, 24, 20, 0, 1);
+  this._features = initDim(Lorg_glob3_mobile_generated_GLFeature_2_classLit, $intern_4, 27, 20, 0, 1);
   this._nFeatures = 0;
   for (i_0 = 0; i_0 < 20; i_0++) {
     setCheck(this._features, i_0, null);
   }
 }
 
-defineClass(205, 1, {}, GLFeatureSet);
+defineClass(192, 1, {}, GLFeatureSet);
 _._nFeatures = 0;
-var Lorg_glob3_mobile_generated_GLFeatureSet_2_classLit = createForClass('org.glob3.mobile.generated', 'GLFeatureSet', 205);
+var Lorg_glob3_mobile_generated_GLFeatureSet_2_classLit = createForClass('org.glob3.mobile.generated', 'GLFeatureSet', 192);
 function init_5(ngl){
   _rgba = ngl._gl.RGBA;
 }
@@ -12611,7 +12383,7 @@ function $setLineWidth(this$static, lineWidth){
 
 function GLGlobalState(){
   var i_0;
-  this._boundTextureId = initDim(Lorg_glob3_mobile_generated_IGLTextureId_2_classLit, $intern_4, 226, 4, 0, 1);
+  this._boundTextureId = initDim(Lorg_glob3_mobile_generated_IGLTextureId_2_classLit, $intern_4, 215, 4, 0, 1);
   this._depthTest = false;
   this._blend = false;
   this._cullFace = true;
@@ -12633,7 +12405,7 @@ function GLGlobalState(){
   }
 }
 
-defineClass(126, 1, {}, GLGlobalState);
+defineClass(118, 1, {}, GLGlobalState);
 _._blend = false;
 _._blendDFactor = 0;
 _._blendSFactor = 0;
@@ -12650,18 +12422,18 @@ _._polygonOffsetFactor = 0;
 _._polygonOffsetFill = false;
 _._polygonOffsetUnits = 0;
 var _initializationAvailable = false;
-var Lorg_glob3_mobile_generated_GLGlobalState_2_classLit = createForClass('org.glob3.mobile.generated', 'GLGlobalState', 126);
+var Lorg_glob3_mobile_generated_GLGlobalState_2_classLit = createForClass('org.glob3.mobile.generated', 'GLGlobalState', 118);
 function init_6(ngl){
   ngl._gl.TRIANGLES;
   _triangleStrip = ngl._gl.TRIANGLE_STRIP;
   ngl._gl.TRIANGLE_FAN;
-  _lines = ngl._gl.LINES;
+  ngl._gl.LINES;
   ngl._gl.LINE_STRIP;
   _lineLoop = ngl._gl.LINE_LOOP;
   ngl._gl.POINTS;
 }
 
-var _lineLoop = 0, _lines = 0, _triangleStrip = 0;
+var _lineLoop = 0, _triangleStrip = 0;
 function init_7(ngl){
   _polygonOffsetFill = ngl._gl.POLYGON_OFFSET_FILL;
   _depthTest = ngl._gl.DEPTH_TEST;
@@ -12780,8 +12552,8 @@ function GLState(){
   this._features = new GLFeatureSet;
 }
 
-defineClass(48, 9, {9:1}, GLState);
-_.dispose = function dispose_28(){
+defineClass(57, 9, {9:1}, GLState);
+_.dispose = function dispose_25(){
   !!this._features && $dispose_3(this._features);
   !!this._accumulatedFeatures && $dispose_3(this._accumulatedFeatures);
   !!this._valuesSet && $dispose_4(this._valuesSet);
@@ -12791,7 +12563,7 @@ _.dispose = function dispose_28(){
 ;
 _._parentsTimestamp = 0;
 _._timestamp = 0;
-var Lorg_glob3_mobile_generated_GLState_2_classLit = createForClass('org.glob3.mobile.generated', 'GLState', 48);
+var Lorg_glob3_mobile_generated_GLState_2_classLit = createForClass('org.glob3.mobile.generated', 'GLState', 57);
 function init_8(ngl){
   _minFilter = ngl._gl.TEXTURE_MIN_FILTER;
   _magFilter = ngl._gl.TEXTURE_MAG_FILTER;
@@ -12968,8 +12740,8 @@ function hasUniform(code_0, u){
   return (code_0 >> index_0 & 1) != 0;
 }
 
-defineClass(36, 1, {36:1});
-var Lorg_glob3_mobile_generated_GPUVariable_2_classLit = createForClass('org.glob3.mobile.generated', 'GPUVariable', 36);
+defineClass(35, 1, {35:1});
+var Lorg_glob3_mobile_generated_GPUVariable_2_classLit = createForClass('org.glob3.mobile.generated', 'GPUVariable', 35);
 function $applyChanges_0(this$static, gl){
   if (!this$static._value) {
     this$static._enabled && $logError(_instance_3, 'Attribute ' + this$static._name + ' was not set but it is enabled.', initValues(getClassLiteralForArray(Ljava_lang_Object_2_classLit, 1), $intern_4, 1, 3, []));
@@ -13029,12 +12801,12 @@ function GPUAttribute(name_0, id_0, type_0){
   this._key = getAttributeKey(name_0);
 }
 
-defineClass(61, 36, $intern_54);
+defineClass(56, 35, $intern_49);
 _._dirty = false;
 _._enabled = false;
 _._id = 0;
 _._type = 0;
-var Lorg_glob3_mobile_generated_GPUAttribute_2_classLit = createForClass('org.glob3.mobile.generated', 'GPUAttribute', 61);
+var Lorg_glob3_mobile_generated_GPUAttribute_2_classLit = createForClass('org.glob3.mobile.generated', 'GPUAttribute', 56);
 function $clinit_GPUAttributeKey(){
   $clinit_GPUAttributeKey = emptyMethod;
   UNRECOGNIZED_ATTRIBUTE = new GPUAttributeKey('UNRECOGNIZED_ATTRIBUTE', 0, -1);
@@ -13055,26 +12827,26 @@ function GPUAttributeKey(enum$name, enum$ordinal, value_0){
 
 function values_3(){
   $clinit_GPUAttributeKey();
-  return initValues(getClassLiteralForArray(Lorg_glob3_mobile_generated_GPUAttributeKey_2_classLit, 1), $intern_4, 57, 0, [UNRECOGNIZED_ATTRIBUTE, POSITION, TEXTURE_COORDS, COLOR, NORMAL, TEXTURE_COORDS_2, TEXTURE_COORDS_3, POSITION_2D]);
+  return initValues(getClassLiteralForArray(Lorg_glob3_mobile_generated_GPUAttributeKey_2_classLit, 1), $intern_4, 52, 0, [UNRECOGNIZED_ATTRIBUTE, POSITION, TEXTURE_COORDS, COLOR, NORMAL, TEXTURE_COORDS_2, TEXTURE_COORDS_3, POSITION_2D]);
 }
 
-defineClass(57, 19, {3:1, 27:1, 19:1, 57:1}, GPUAttributeKey);
+defineClass(52, 15, {3:1, 26:1, 15:1, 52:1}, GPUAttributeKey);
 _.intValue = 0;
 var COLOR, NORMAL, POSITION, POSITION_2D, TEXTURE_COORDS, TEXTURE_COORDS_2, TEXTURE_COORDS_3, UNRECOGNIZED_ATTRIBUTE, mappings_1;
-var Lorg_glob3_mobile_generated_GPUAttributeKey_2_classLit = createForEnum('org.glob3.mobile.generated', 'GPUAttributeKey', 57, values_3);
-function GPUAttributeValue(type_0, attributeSize, arrayElementSize, normalized){
+var Lorg_glob3_mobile_generated_GPUAttributeKey_2_classLit = createForEnum('org.glob3.mobile.generated', 'GPUAttributeKey', 52, values_3);
+function GPUAttributeValue(type_0, attributeSize, arrayElementSize){
   RCObject.call(this);
   this._enabled = true;
   this._type = type_0;
   this._attributeSize = attributeSize;
   this._index = 0;
   this._stride = 0;
-  this._normalized = normalized;
+  this._normalized = false;
   this._arrayElementSize = arrayElementSize;
 }
 
-defineClass(89, 9, {89:1, 9:1});
-_.dispose = function dispose_29(){
+defineClass(86, 9, {86:1, 9:1});
+_.dispose = function dispose_26(){
   $dispose_0(this);
 }
 ;
@@ -13089,15 +12861,15 @@ _._index = 0;
 _._normalized = false;
 _._stride = 0;
 _._type = 0;
-var Lorg_glob3_mobile_generated_GPUAttributeValue_2_classLit = createForClass('org.glob3.mobile.generated', 'GPUAttributeValue', 89);
-function GPUAttributeValueVecFloat(buffer, attributeSize, arrayElementSize, normalized){
-  GPUAttributeValue.call(this, _float, attributeSize, arrayElementSize, normalized);
+var Lorg_glob3_mobile_generated_GPUAttributeValue_2_classLit = createForClass('org.glob3.mobile.generated', 'GPUAttributeValue', 86);
+function GPUAttributeValueVecFloat(buffer, attributeSize, arrayElementSize){
+  GPUAttributeValue.call(this, _float, attributeSize, arrayElementSize);
   this._buffer = buffer;
-  this._timestamp = buffer._timestamp;
+  this._timestamp = 0;
   this._id = buffer._id;
 }
 
-defineClass(94, 89, $intern_55);
+defineClass(89, 86, $intern_50);
 _.description_0 = function description(){
   var isb, s;
   isb = new StringBuilder_WebGL;
@@ -13116,7 +12888,7 @@ _.description_0 = function description(){
   return s;
 }
 ;
-_.dispose = function dispose_30(){
+_.dispose = function dispose_27(){
   $dispose_0(this);
 }
 ;
@@ -13125,7 +12897,7 @@ _.isEquals = function isEquals(v){
   if (!v._enabled) {
     return false;
   }
-  vecV = dynamicCast(v, 94);
+  vecV = dynamicCast(v, 89);
   equal = eq(this._id, vecV._buffer._id) && this._timestamp == vecV._timestamp && this._type == v._type && this._attributeSize == v._attributeSize && this._stride == v._stride && this._normalized == v._normalized;
   return equal;
 }
@@ -13137,45 +12909,45 @@ _.setAttribute = function setAttribute(gl, id_0){
 ;
 _._id = {l:0, m:0, h:0};
 _._timestamp = 0;
-var Lorg_glob3_mobile_generated_GPUAttributeValueVecFloat_2_classLit = createForClass('org.glob3.mobile.generated', 'GPUAttributeValueVecFloat', 94);
-function GPUAttributeValueVec2Float(buffer, normalized){
-  GPUAttributeValueVecFloat.call(this, buffer, 2, 2, normalized);
+var Lorg_glob3_mobile_generated_GPUAttributeValueVecFloat_2_classLit = createForClass('org.glob3.mobile.generated', 'GPUAttributeValueVecFloat', 89);
+function GPUAttributeValueVec2Float(buffer){
+  GPUAttributeValueVecFloat.call(this, buffer, 2, 2);
 }
 
-defineClass(214, 94, $intern_55, GPUAttributeValueVec2Float);
-_.dispose = function dispose_31(){
+defineClass(410, 89, $intern_50, GPUAttributeValueVec2Float);
+_.dispose = function dispose_28(){
   $dispose_0(this);
 }
 ;
-var Lorg_glob3_mobile_generated_GPUAttributeValueVec2Float_2_classLit = createForClass('org.glob3.mobile.generated', 'GPUAttributeValueVec2Float', 214);
+var Lorg_glob3_mobile_generated_GPUAttributeValueVec2Float_2_classLit = createForClass('org.glob3.mobile.generated', 'GPUAttributeValueVec2Float', 410);
 function GPUAttributeValueVec4Float(buffer, arrayElementSize){
-  GPUAttributeValueVecFloat.call(this, buffer, 4, arrayElementSize, false);
+  GPUAttributeValueVecFloat.call(this, buffer, 4, arrayElementSize);
 }
 
-defineClass(221, 94, $intern_55, GPUAttributeValueVec4Float);
-_.dispose = function dispose_32(){
+defineClass(210, 89, $intern_50, GPUAttributeValueVec4Float);
+_.dispose = function dispose_29(){
   $dispose_0(this);
 }
 ;
-var Lorg_glob3_mobile_generated_GPUAttributeValueVec4Float_2_classLit = createForClass('org.glob3.mobile.generated', 'GPUAttributeValueVec4Float', 221);
+var Lorg_glob3_mobile_generated_GPUAttributeValueVec4Float_2_classLit = createForClass('org.glob3.mobile.generated', 'GPUAttributeValueVec4Float', 210);
 function GPUAttributeVec2Float(name_0, id_0){
   GPUAttribute.call(this, name_0, id_0, _float);
 }
 
-defineClass(514, 61, $intern_54, GPUAttributeVec2Float);
-var Lorg_glob3_mobile_generated_GPUAttributeVec2Float_2_classLit = createForClass('org.glob3.mobile.generated', 'GPUAttributeVec2Float', 514);
+defineClass(498, 56, $intern_49, GPUAttributeVec2Float);
+var Lorg_glob3_mobile_generated_GPUAttributeVec2Float_2_classLit = createForClass('org.glob3.mobile.generated', 'GPUAttributeVec2Float', 498);
 function GPUAttributeVec3Float(name_0, id_0){
   GPUAttribute.call(this, name_0, id_0, _float);
 }
 
-defineClass(512, 61, $intern_54, GPUAttributeVec3Float);
-var Lorg_glob3_mobile_generated_GPUAttributeVec3Float_2_classLit = createForClass('org.glob3.mobile.generated', 'GPUAttributeVec3Float', 512);
+defineClass(496, 56, $intern_49, GPUAttributeVec3Float);
+var Lorg_glob3_mobile_generated_GPUAttributeVec3Float_2_classLit = createForClass('org.glob3.mobile.generated', 'GPUAttributeVec3Float', 496);
 function GPUAttributeVec4Float(name_0, id_0){
   GPUAttribute.call(this, name_0, id_0, _float);
 }
 
-defineClass(513, 61, $intern_54, GPUAttributeVec4Float);
-var Lorg_glob3_mobile_generated_GPUAttributeVec4Float_2_classLit = createForClass('org.glob3.mobile.generated', 'GPUAttributeVec4Float', 513);
+defineClass(497, 56, $intern_49, GPUAttributeVec4Float);
+var Lorg_glob3_mobile_generated_GPUAttributeVec4Float_2_classLit = createForClass('org.glob3.mobile.generated', 'GPUAttributeVec4Float', 497);
 function $applyChanges_1(this$static, gl){
   var attribute, i_0, i0, uniform;
   for (i0 = 0; i0 < this$static._nUniforms; i0++) {
@@ -13217,7 +12989,7 @@ function $getVariables(this$static, gl){
   this$static._attributesCode = 0;
   this$static._nAttributes = $getProgramiv(gl, this$static, _activeAttributes);
   counter = 0;
-  this$static._createdAttributes = initDim(Lorg_glob3_mobile_generated_GPUAttribute_2_classLit, $intern_4, 61, this$static._nAttributes, 0, 1);
+  this$static._createdAttributes = initDim(Lorg_glob3_mobile_generated_GPUAttribute_2_classLit, $intern_4, 56, this$static._nAttributes, 0, 1);
   for (i_0 = 0; i_0 < this$static._nAttributes; i_0++) {
     a = $getActiveAttribute(gl._nativeGL, this$static, i_0);
     if (a) {
@@ -13261,7 +13033,7 @@ function $setGPUUniformValue(this$static, key, v){
 
 function GPUProgram(){
   this._uniforms = initDim(Lorg_glob3_mobile_generated_GPUUniform_2_classLit, $intern_4, 30, 32, 0, 1);
-  this._attributes = initDim(Lorg_glob3_mobile_generated_GPUAttribute_2_classLit, $intern_4, 61, 32, 0, 1);
+  this._attributes = initDim(Lorg_glob3_mobile_generated_GPUAttribute_2_classLit, $intern_4, 56, 32, 0, 1);
   this._createdAttributes = null;
   this._createdUniforms = null;
   this._nUniforms = 0;
@@ -13307,7 +13079,7 @@ function createProgram(gl, name_0, vertexSource, fragmentSource){
   return p;
 }
 
-defineClass(107, 1, {107:1}, GPUProgram);
+defineClass(101, 1, {101:1}, GPUProgram);
 _.getProgramID = function getProgramID(){
   return this._programID;
 }
@@ -13318,10 +13090,10 @@ _._nReferences = 0;
 _._nUniforms = 0;
 _._programID = 0;
 _._uniformsCode = 0;
-var Lorg_glob3_mobile_generated_GPUProgram_2_classLit = createForClass('org.glob3.mobile.generated', 'GPUProgram', 107);
+var Lorg_glob3_mobile_generated_GPUProgram_2_classLit = createForClass('org.glob3.mobile.generated', 'GPUProgram', 101);
 function $compileProgramWithName(this$static, gl, name_0){
   var prog, ps;
-  prog = dynamicCast($getStringValue(this$static._programs, name_0), 107);
+  prog = dynamicCast($getStringValue(this$static._programs, name_0), 101);
   if (!prog) {
     ps = $get_1(this$static._factory, name_0);
     if (ps) {
@@ -13342,7 +13114,7 @@ function $compileProgramWithName(this$static, gl, name_0){
 function $getCompiledProgram(this$static, uniformsCode, attributesCode){
   var p, p$iterator;
   for (p$iterator = $iterator_0(new AbstractMap$2(this$static._programs)); $hasNext(p$iterator.val$outerIter2);) {
-    p = dynamicCast($next_1(p$iterator), 107);
+    p = dynamicCast($next_1(p$iterator), 101);
     if (p._uniformsCode == uniformsCode && p._attributesCode == attributesCode) {
       return p;
     }
@@ -13431,8 +13203,8 @@ function $removeUnused(this$static){
   var entry, iterator, program;
   iterator = new AbstractHashMap$EntrySetIterator((new AbstractHashMap$EntrySet(this$static._programs)).this$01);
   while ($hasNext(iterator)) {
-    entry = (checkStructuralChange(iterator.this$01, iterator) , checkCriticalElement($hasNext(iterator)) , iterator.last = iterator.current , dynamicCast(iterator.current.next_0(), 23));
-    program = dynamicCast(entry.getValue(), 107);
+    entry = (checkStructuralChange(iterator.this$01, iterator) , checkCriticalElement($hasNext(iterator)) , iterator.last = iterator.current , dynamicCast(iterator.current.next_0(), 22));
+    program = dynamicCast(entry.getValue(), 101);
     if (program._nReferences == 0) {
       $logInfo(_instance_3, 'Deleting program %s', initValues(getClassLiteralForArray(Ljava_lang_Object_2_classLit, 1), $intern_4, 1, 3, [program._name]));
       $remove_3(iterator);
@@ -13445,16 +13217,16 @@ function GPUProgramManager(factory){
   this._factory = factory;
 }
 
-defineClass(326, 1, {}, GPUProgramManager);
-var Lorg_glob3_mobile_generated_GPUProgramManager_2_classLit = createForClass('org.glob3.mobile.generated', 'GPUProgramManager', 326);
+defineClass(311, 1, {}, GPUProgramManager);
+var Lorg_glob3_mobile_generated_GPUProgramManager_2_classLit = createForClass('org.glob3.mobile.generated', 'GPUProgramManager', 311);
 function GPUProgramSources(name_0, vertexSource, fragmentSource){
   this._name = name_0;
   this._vertexSource = vertexSource;
   this._fragmentSource = fragmentSource;
 }
 
-defineClass(22, 1, {22:1}, GPUProgramSources);
-var Lorg_glob3_mobile_generated_GPUProgramSources_2_classLit = createForClass('org.glob3.mobile.generated', 'GPUProgramSources', 22);
+defineClass(21, 1, {21:1}, GPUProgramSources);
+var Lorg_glob3_mobile_generated_GPUProgramSources_2_classLit = createForClass('org.glob3.mobile.generated', 'GPUProgramSources', 21);
 function $applyChanges_2(this$static, gl){
   if (this$static._dirty) {
     this$static._value.setUniform(gl, this$static._id);
@@ -13496,7 +13268,7 @@ function GPUUniform(name_0, id_0, type_0){
   this._key = getUniformKey(name_0);
 }
 
-defineClass(30, 36, $intern_56);
+defineClass(30, 35, $intern_51);
 _._dirty = false;
 _._type = 0;
 var Lorg_glob3_mobile_generated_GPUUniform_2_classLit = createForClass('org.glob3.mobile.generated', 'GPUUniform', 30);
@@ -13504,14 +13276,14 @@ function GPUUniformBool(name_0, id_0){
   GPUUniform.call(this, name_0, id_0, _bool);
 }
 
-defineClass(510, 30, $intern_56, GPUUniformBool);
-var Lorg_glob3_mobile_generated_GPUUniformBool_2_classLit = createForClass('org.glob3.mobile.generated', 'GPUUniformBool', 510);
+defineClass(494, 30, $intern_51, GPUUniformBool);
+var Lorg_glob3_mobile_generated_GPUUniformBool_2_classLit = createForClass('org.glob3.mobile.generated', 'GPUUniformBool', 494);
 function GPUUniformFloat(name_0, id_0){
   GPUUniform.call(this, name_0, id_0, _float);
 }
 
-defineClass(507, 30, $intern_56, GPUUniformFloat);
-var Lorg_glob3_mobile_generated_GPUUniformFloat_2_classLit = createForClass('org.glob3.mobile.generated', 'GPUUniformFloat', 507);
+defineClass(491, 30, $intern_51, GPUUniformFloat);
+var Lorg_glob3_mobile_generated_GPUUniformFloat_2_classLit = createForClass('org.glob3.mobile.generated', 'GPUUniformFloat', 491);
 function $clinit_GPUUniformKey(){
   $clinit_GPUUniformKey = emptyMethod;
   UNRECOGNIZED_UNIFORM = new GPUUniformKey('UNRECOGNIZED_UNIFORM', 0, -1);
@@ -13548,32 +13320,32 @@ function GPUUniformKey(enum$name, enum$ordinal, value_0){
 
 function values_4(){
   $clinit_GPUUniformKey();
-  return initValues(getClassLiteralForArray(Lorg_glob3_mobile_generated_GPUUniformKey_2_classLit, 1), $intern_4, 20, 0, [UNRECOGNIZED_UNIFORM, FLAT_COLOR, MODELVIEW, TEXTURE_EXTENT, VIEWPORT_EXTENT, TRANSLATION_TEXTURE_COORDS, SCALE_TEXTURE_COORDS, POINT_SIZE, AMBIENT_LIGHT_COLOR, DIFFUSE_LIGHT_DIRECTION, DIFFUSE_LIGHT_COLOR, PROJECTION, CAMERA_MODEL, MODEL, POINT_LIGHT_POSITION, POINT_LIGHT_COLOR, BILLBOARD_POSITION, ROTATION_CENTER_TEXTURE_COORDS, ROTATION_ANGLE_TEXTURE_COORDS, SAMPLER, SAMPLER2, SAMPLER3, TRANSLATION_2D, BILLBOARD_ANCHOR]);
+  return initValues(getClassLiteralForArray(Lorg_glob3_mobile_generated_GPUUniformKey_2_classLit, 1), $intern_4, 18, 0, [UNRECOGNIZED_UNIFORM, FLAT_COLOR, MODELVIEW, TEXTURE_EXTENT, VIEWPORT_EXTENT, TRANSLATION_TEXTURE_COORDS, SCALE_TEXTURE_COORDS, POINT_SIZE, AMBIENT_LIGHT_COLOR, DIFFUSE_LIGHT_DIRECTION, DIFFUSE_LIGHT_COLOR, PROJECTION, CAMERA_MODEL, MODEL, POINT_LIGHT_POSITION, POINT_LIGHT_COLOR, BILLBOARD_POSITION, ROTATION_CENTER_TEXTURE_COORDS, ROTATION_ANGLE_TEXTURE_COORDS, SAMPLER, SAMPLER2, SAMPLER3, TRANSLATION_2D, BILLBOARD_ANCHOR]);
 }
 
-defineClass(20, 19, {3:1, 27:1, 19:1, 20:1}, GPUUniformKey);
+defineClass(18, 15, {3:1, 26:1, 15:1, 18:1}, GPUUniformKey);
 _.intValue = 0;
 var AMBIENT_LIGHT_COLOR, BILLBOARD_ANCHOR, BILLBOARD_POSITION, CAMERA_MODEL, DIFFUSE_LIGHT_COLOR, DIFFUSE_LIGHT_DIRECTION, FLAT_COLOR, MODEL, MODELVIEW, POINT_LIGHT_COLOR, POINT_LIGHT_POSITION, POINT_SIZE, PROJECTION, ROTATION_ANGLE_TEXTURE_COORDS, ROTATION_CENTER_TEXTURE_COORDS, SAMPLER, SAMPLER2, SAMPLER3, SCALE_TEXTURE_COORDS, TEXTURE_EXTENT, TRANSLATION_2D, TRANSLATION_TEXTURE_COORDS, UNRECOGNIZED_UNIFORM, VIEWPORT_EXTENT, mappings_2;
-var Lorg_glob3_mobile_generated_GPUUniformKey_2_classLit = createForEnum('org.glob3.mobile.generated', 'GPUUniformKey', 20, values_4);
+var Lorg_glob3_mobile_generated_GPUUniformKey_2_classLit = createForEnum('org.glob3.mobile.generated', 'GPUUniformKey', 18, values_4);
 function GPUUniformMatrix4Float(name_0, id_0){
   GPUUniform.call(this, name_0, id_0, _matrix4Float);
 }
 
-defineClass(505, 30, $intern_56, GPUUniformMatrix4Float);
-var Lorg_glob3_mobile_generated_GPUUniformMatrix4Float_2_classLit = createForClass('org.glob3.mobile.generated', 'GPUUniformMatrix4Float', 505);
+defineClass(489, 30, $intern_51, GPUUniformMatrix4Float);
+var Lorg_glob3_mobile_generated_GPUUniformMatrix4Float_2_classLit = createForClass('org.glob3.mobile.generated', 'GPUUniformMatrix4Float', 489);
 function GPUUniformSampler2D(name_0, id_0){
   GPUUniform.call(this, name_0, id_0, _int);
 }
 
-defineClass(511, 30, $intern_56, GPUUniformSampler2D);
-var Lorg_glob3_mobile_generated_GPUUniformSampler2D_2_classLit = createForClass('org.glob3.mobile.generated', 'GPUUniformSampler2D', 511);
+defineClass(495, 30, $intern_51, GPUUniformSampler2D);
+var Lorg_glob3_mobile_generated_GPUUniformSampler2D_2_classLit = createForClass('org.glob3.mobile.generated', 'GPUUniformSampler2D', 495);
 function GPUUniformValue(type_0){
   RCObject.call(this);
   this._type = type_0;
 }
 
 defineClass(28, 9, {28:1, 9:1});
-_.dispose = function dispose_33(){
+_.dispose = function dispose_30(){
   $dispose_0(this);
 }
 ;
@@ -13588,7 +13360,7 @@ function GPUUniformValueFloat(d){
   this._value = d;
 }
 
-defineClass(95, 28, $intern_57, GPUUniformValueFloat);
+defineClass(107, 28, $intern_52, GPUUniformValueFloat);
 _.description_0 = function description_0(){
   var isb, s;
   isb = new StringBuilder_WebGL;
@@ -13598,13 +13370,13 @@ _.description_0 = function description_0(){
   return s;
 }
 ;
-_.dispose = function dispose_34(){
+_.dispose = function dispose_31(){
   $dispose_0(this);
 }
 ;
 _.isEquals_0 = function isEquals_0(v){
   var v2;
-  v2 = dynamicCast(v, 95);
+  v2 = dynamicCast(v, 107);
   return this._value == v2._value;
 }
 ;
@@ -13613,7 +13385,7 @@ _.setUniform = function setUniform(gl, id_0){
 }
 ;
 _._value = 0;
-var Lorg_glob3_mobile_generated_GPUUniformValueFloat_2_classLit = createForClass('org.glob3.mobile.generated', 'GPUUniformValueFloat', 95);
+var Lorg_glob3_mobile_generated_GPUUniformValueFloat_2_classLit = createForClass('org.glob3.mobile.generated', 'GPUUniformValueFloat', 107);
 function $changeValue(this$static, x_0){
   this$static._value = x_0;
 }
@@ -13622,18 +13394,18 @@ function GPUUniformValueFloatMutable(x_0){
   GPUUniformValueFloat.call(this, x_0);
 }
 
-defineClass(423, 95, $intern_57, GPUUniformValueFloatMutable);
-_.dispose = function dispose_35(){
+defineClass(401, 107, $intern_52, GPUUniformValueFloatMutable);
+_.dispose = function dispose_32(){
   $dispose_0(this);
 }
 ;
-var Lorg_glob3_mobile_generated_GPUUniformValueFloatMutable_2_classLit = createForClass('org.glob3.mobile.generated', 'GPUUniformValueFloatMutable', 423);
+var Lorg_glob3_mobile_generated_GPUUniformValueFloatMutable_2_classLit = createForClass('org.glob3.mobile.generated', 'GPUUniformValueFloatMutable', 401);
 function GPUUniformValueInt(b){
   GPUUniformValue.call(this, _int);
   this._value = b;
 }
 
-defineClass(166, 28, {28:1, 166:1, 9:1}, GPUUniformValueInt);
+defineClass(157, 28, {28:1, 157:1, 9:1}, GPUUniformValueInt);
 _.description_0 = function description_1(){
   var isb, s;
   isb = new StringBuilder_WebGL;
@@ -13643,12 +13415,12 @@ _.description_0 = function description_1(){
   return s;
 }
 ;
-_.dispose = function dispose_36(){
+_.dispose = function dispose_33(){
   $dispose_0(this);
 }
 ;
 _.isEquals_0 = function isEquals_1(v){
-  return this._value == dynamicCast(v, 166)._value;
+  return this._value == dynamicCast(v, 157)._value;
 }
 ;
 _.setUniform = function setUniform_0(gl, id_0){
@@ -13656,7 +13428,7 @@ _.setUniform = function setUniform_0(gl, id_0){
 }
 ;
 _._value = 0;
-var Lorg_glob3_mobile_generated_GPUUniformValueInt_2_classLit = createForClass('org.glob3.mobile.generated', 'GPUUniformValueInt', 166);
+var Lorg_glob3_mobile_generated_GPUUniformValueInt_2_classLit = createForClass('org.glob3.mobile.generated', 'GPUUniformValueInt', 157);
 function GPUUniformValueMatrix4(provider){
   GPUUniformValue.call(this, _matrix4Float);
   this._provider = provider;
@@ -13664,7 +13436,7 @@ function GPUUniformValueMatrix4(provider){
   ++this._provider._referenceCounter;
 }
 
-defineClass(140, 28, {28:1, 140:1, 9:1}, GPUUniformValueMatrix4);
+defineClass(131, 28, {28:1, 131:1, 9:1}, GPUUniformValueMatrix4);
 _.description_0 = function description_2(){
   var isb, s;
   isb = new StringBuilder_WebGL;
@@ -13673,14 +13445,14 @@ _.description_0 = function description_2(){
   return s;
 }
 ;
-_.dispose = function dispose_37(){
+_.dispose = function dispose_34(){
   $_release(this._provider);
   !!this._lastModelSet && $_release(this._lastModelSet);
   $dispose_0(this);
 }
 ;
 _.isEquals_0 = function isEquals_2(v){
-  if (this._lastModelSet == $getMatrix(dynamicCast(v, 140)._provider)) {
+  if (this._lastModelSet == $getMatrix(dynamicCast(v, 131)._provider)) {
     return true;
   }
   return false;
@@ -13693,8 +13465,8 @@ _.setUniform = function setUniform_1(gl, id_0){
   $uniformMatrix4fv(gl, id_0, this._lastModelSet);
 }
 ;
-var Lorg_glob3_mobile_generated_GPUUniformValueMatrix4_2_classLit = createForClass('org.glob3.mobile.generated', 'GPUUniformValueMatrix4', 140);
-defineClass(129, 28, $intern_58);
+var Lorg_glob3_mobile_generated_GPUUniformValueMatrix4_2_classLit = createForClass('org.glob3.mobile.generated', 'GPUUniformValueMatrix4', 131);
+defineClass(130, 28, $intern_53);
 _.description_0 = function description_3(){
   var isb, s;
   isb = new StringBuilder_WebGL;
@@ -13706,13 +13478,13 @@ _.description_0 = function description_3(){
   return s;
 }
 ;
-_.dispose = function dispose_38(){
+_.dispose = function dispose_35(){
   $dispose_0(this);
 }
 ;
 _.isEquals_0 = function isEquals_3(v){
   var v2;
-  v2 = dynamicCast(v, 129);
+  v2 = dynamicCast(v, 130);
   return this._x == v2._x && this._y == v2._y;
 }
 ;
@@ -13722,7 +13494,7 @@ _.setUniform = function setUniform_2(gl, id_0){
 ;
 _._x = 0;
 _._y = 0;
-var Lorg_glob3_mobile_generated_GPUUniformValueVec2Float_2_classLit = createForClass('org.glob3.mobile.generated', 'GPUUniformValueVec2Float', 129);
+var Lorg_glob3_mobile_generated_GPUUniformValueVec2Float_2_classLit = createForClass('org.glob3.mobile.generated', 'GPUUniformValueVec2Float', 130);
 function $changeValue_0(this$static, x_0, y_0){
   this$static._x = x_0;
   this$static._y = y_0;
@@ -13734,12 +13506,12 @@ function GPUUniformValueVec2FloatMutable(x_0, y_0){
   this._y = y_0;
 }
 
-defineClass(110, 129, $intern_58, GPUUniformValueVec2FloatMutable);
-_.dispose = function dispose_39(){
+defineClass(156, 130, $intern_53, GPUUniformValueVec2FloatMutable);
+_.dispose = function dispose_36(){
   $dispose_0(this);
 }
 ;
-var Lorg_glob3_mobile_generated_GPUUniformValueVec2FloatMutable_2_classLit = createForClass('org.glob3.mobile.generated', 'GPUUniformValueVec2FloatMutable', 110);
+var Lorg_glob3_mobile_generated_GPUUniformValueVec2FloatMutable_2_classLit = createForClass('org.glob3.mobile.generated', 'GPUUniformValueVec2FloatMutable', 156);
 function GPUUniformValueVec3Float(color_0){
   GPUUniformValue.call(this, _vec3Float);
   this._x = color_0._red;
@@ -13747,7 +13519,7 @@ function GPUUniformValueVec3Float(color_0){
   this._z = color_0._blue;
 }
 
-defineClass(91, 28, $intern_59, GPUUniformValueVec3Float);
+defineClass(88, 28, $intern_54, GPUUniformValueVec3Float);
 _.description_0 = function description_4(){
   var isb, s;
   isb = new StringBuilder_WebGL;
@@ -13761,13 +13533,13 @@ _.description_0 = function description_4(){
   return s;
 }
 ;
-_.dispose = function dispose_40(){
+_.dispose = function dispose_37(){
   $dispose_0(this);
 }
 ;
 _.isEquals_0 = function isEquals_4(v){
   var v2;
-  v2 = dynamicCast(v, 91);
+  v2 = dynamicCast(v, 88);
   return this._x == v2._x && this._y == v2._y && this._z == v2._z;
 }
 ;
@@ -13778,7 +13550,7 @@ _.setUniform = function setUniform_3(gl, id_0){
 _._x = 0;
 _._y = 0;
 _._z = 0;
-var Lorg_glob3_mobile_generated_GPUUniformValueVec3Float_2_classLit = createForClass('org.glob3.mobile.generated', 'GPUUniformValueVec3Float', 91);
+var Lorg_glob3_mobile_generated_GPUUniformValueVec3Float_2_classLit = createForClass('org.glob3.mobile.generated', 'GPUUniformValueVec3Float', 88);
 function $changeValue_1(this$static, x_0, y_0, z_0){
   this$static._x = x_0;
   this$static._y = y_0;
@@ -13792,12 +13564,12 @@ function GPUUniformValueVec3FloatMutable(x_0, y_0, z_0){
   this._z = z_0;
 }
 
-defineClass(386, 91, $intern_59, GPUUniformValueVec3FloatMutable);
-_.dispose = function dispose_41(){
+defineClass(371, 88, $intern_54, GPUUniformValueVec3FloatMutable);
+_.dispose = function dispose_38(){
   $dispose_0(this);
 }
 ;
-var Lorg_glob3_mobile_generated_GPUUniformValueVec3FloatMutable_2_classLit = createForClass('org.glob3.mobile.generated', 'GPUUniformValueVec3FloatMutable', 386);
+var Lorg_glob3_mobile_generated_GPUUniformValueVec3FloatMutable_2_classLit = createForClass('org.glob3.mobile.generated', 'GPUUniformValueVec3FloatMutable', 371);
 function GPUUniformValueVec4Float(x_0, y_0, z_0, w){
   GPUUniformValue.call(this, _vec4Float);
   this._x = x_0;
@@ -13806,7 +13578,7 @@ function GPUUniformValueVec4Float(x_0, y_0, z_0, w){
   this._w = w;
 }
 
-defineClass(161, 28, {28:1, 161:1, 9:1}, GPUUniformValueVec4Float);
+defineClass(154, 28, {28:1, 154:1, 9:1}, GPUUniformValueVec4Float);
 _.description_0 = function description_5(){
   var isb, s;
   isb = new StringBuilder_WebGL;
@@ -13822,13 +13594,13 @@ _.description_0 = function description_5(){
   return s;
 }
 ;
-_.dispose = function dispose_42(){
+_.dispose = function dispose_39(){
   $dispose_0(this);
 }
 ;
 _.isEquals_0 = function isEquals_5(v){
   var v2;
-  v2 = dynamicCast(v, 161);
+  v2 = dynamicCast(v, 154);
   return this._x == v2._x && this._y == v2._y && this._z == v2._z && this._w == v2._w;
 }
 ;
@@ -13840,25 +13612,25 @@ _._w = 0;
 _._x = 0;
 _._y = 0;
 _._z = 0;
-var Lorg_glob3_mobile_generated_GPUUniformValueVec4Float_2_classLit = createForClass('org.glob3.mobile.generated', 'GPUUniformValueVec4Float', 161);
+var Lorg_glob3_mobile_generated_GPUUniformValueVec4Float_2_classLit = createForClass('org.glob3.mobile.generated', 'GPUUniformValueVec4Float', 154);
 function GPUUniformVec2Float(name_0, id_0){
   GPUUniform.call(this, name_0, id_0, _vec2Float);
 }
 
-defineClass(508, 30, $intern_56, GPUUniformVec2Float);
-var Lorg_glob3_mobile_generated_GPUUniformVec2Float_2_classLit = createForClass('org.glob3.mobile.generated', 'GPUUniformVec2Float', 508);
+defineClass(492, 30, $intern_51, GPUUniformVec2Float);
+var Lorg_glob3_mobile_generated_GPUUniformVec2Float_2_classLit = createForClass('org.glob3.mobile.generated', 'GPUUniformVec2Float', 492);
 function GPUUniformVec3Float(name_0, id_0){
   GPUUniform.call(this, name_0, id_0, _vec3Float);
 }
 
-defineClass(509, 30, $intern_56, GPUUniformVec3Float);
-var Lorg_glob3_mobile_generated_GPUUniformVec3Float_2_classLit = createForClass('org.glob3.mobile.generated', 'GPUUniformVec3Float', 509);
+defineClass(493, 30, $intern_51, GPUUniformVec3Float);
+var Lorg_glob3_mobile_generated_GPUUniformVec3Float_2_classLit = createForClass('org.glob3.mobile.generated', 'GPUUniformVec3Float', 493);
 function GPUUniformVec4Float(name_0, id_0){
   GPUUniform.call(this, name_0, id_0, _vec4Float);
 }
 
-defineClass(506, 30, $intern_56, GPUUniformVec4Float);
-var Lorg_glob3_mobile_generated_GPUUniformVec4Float_2_classLit = createForClass('org.glob3.mobile.generated', 'GPUUniformVec4Float', 506);
+defineClass(490, 30, $intern_51, GPUUniformVec4Float);
+var Lorg_glob3_mobile_generated_GPUUniformVec4Float_2_classLit = createForClass('org.glob3.mobile.generated', 'GPUUniformVec4Float', 490);
 function $clinit_GPUVariableType(){
   $clinit_GPUVariableType = emptyMethod;
   ATTRIBUTE = new GPUVariableType('ATTRIBUTE', 0, 1);
@@ -13872,12 +13644,12 @@ function GPUVariableType(enum$name, enum$ordinal, value_0){
 
 function values_5(){
   $clinit_GPUVariableType();
-  return initValues(getClassLiteralForArray(Lorg_glob3_mobile_generated_GPUVariableType_2_classLit, 1), $intern_4, 142, 0, [ATTRIBUTE, UNIFORM]);
+  return initValues(getClassLiteralForArray(Lorg_glob3_mobile_generated_GPUVariableType_2_classLit, 1), $intern_4, 133, 0, [ATTRIBUTE, UNIFORM]);
 }
 
-defineClass(142, 19, {3:1, 27:1, 19:1, 142:1}, GPUVariableType);
+defineClass(133, 15, {3:1, 26:1, 15:1, 133:1}, GPUVariableType);
 var ATTRIBUTE, UNIFORM, mappings_3;
-var Lorg_glob3_mobile_generated_GPUVariableType_2_classLit = createForEnum('org.glob3.mobile.generated', 'GPUVariableType', 142, values_5);
+var Lorg_glob3_mobile_generated_GPUVariableType_2_classLit = createForEnum('org.glob3.mobile.generated', 'GPUVariableType', 133, values_5);
 function $addAttributeValue(this$static, key, v){
   var index_0;
   index_0 = key.intValue;
@@ -13969,7 +13741,7 @@ function $removeUniformValue(this$static, key){
 function GPUVariableValueSet(){
   var i_0;
   this._uniformValues = initDim(Lorg_glob3_mobile_generated_GPUUniformValue_2_classLit, $intern_4, 28, 32, 0, 1);
-  this._attributeValues = initDim(Lorg_glob3_mobile_generated_GPUAttributeValue_2_classLit, $intern_4, 89, 32, 0, 1);
+  this._attributeValues = initDim(Lorg_glob3_mobile_generated_GPUAttributeValue_2_classLit, $intern_4, 86, 32, 0, 1);
   this._highestAttributeKey = 0;
   this._highestUniformKey = 0;
   this._uniformsCode = 0;
@@ -13980,15 +13752,15 @@ function GPUVariableValueSet(){
   }
 }
 
-defineClass(204, 1, {}, GPUVariableValueSet);
+defineClass(191, 1, {}, GPUVariableValueSet);
 _._attributeCode = 0;
 _._highestAttributeKey = 0;
 _._highestUniformKey = 0;
 _._uniformsCode = 0;
-var Lorg_glob3_mobile_generated_GPUVariableValueSet_2_classLit = createForClass('org.glob3.mobile.generated', 'GPUVariableValueSet', 204);
-defineClass(474, 1, {});
-var Lorg_glob3_mobile_generated_GTask_2_classLit = createForClass('org.glob3.mobile.generated', 'GTask', 474);
-function $description_1(this$static){
+var Lorg_glob3_mobile_generated_GPUVariableValueSet_2_classLit = createForClass('org.glob3.mobile.generated', 'GPUVariableValueSet', 191);
+defineClass(457, 1, {});
+var Lorg_glob3_mobile_generated_GTask_2_classLit = createForClass('org.glob3.mobile.generated', 'GTask', 457);
+function $description_0(this$static){
   var isb, s;
   isb = new StringBuilder_WebGL;
   isb._string += '(lat=';
@@ -14011,7 +13783,7 @@ function $equals_2(this$static, obj){
   if (Lorg_glob3_mobile_generated_Geodetic2D_2_classLit != getClass__Ljava_lang_Class___devirtual$(obj)) {
     return false;
   }
-  other = dynamicCast(obj, 11);
+  other = dynamicCast(obj, 12);
   if (!this$static._latitude) {
     if (other._latitude) {
       return false;
@@ -14053,10 +13825,10 @@ function Geodetic2D_0(g){
 }
 
 function fromDegrees_0(lat, lon){
-  return new Geodetic2D(new Angle(lat, lat / 180 * $intern_40), new Angle(lon, lon / 180 * $intern_40));
+  return new Geodetic2D(new Angle(lat, lat / 180 * $intern_37), new Angle(lon, lon / 180 * $intern_37));
 }
 
-defineClass(11, 1, {11:1}, Geodetic2D, Geodetic2D_0);
+defineClass(12, 1, {12:1}, Geodetic2D, Geodetic2D_0);
 _.equals$ = function equals_17(obj){
   return $equals_2(this, obj);
 }
@@ -14066,11 +13838,11 @@ _.hashCode$ = function hashCode_22(){
 }
 ;
 _.toString$ = function toString_31(){
-  return $description_1(this);
+  return $description_0(this);
 }
 ;
-var Lorg_glob3_mobile_generated_Geodetic2D_2_classLit = createForClass('org.glob3.mobile.generated', 'Geodetic2D', 11);
-function $description_2(this$static){
+var Lorg_glob3_mobile_generated_Geodetic2D_2_classLit = createForClass('org.glob3.mobile.generated', 'Geodetic2D', 12);
+function $description_1(this$static){
   var isb, s;
   isb = new StringBuilder_WebGL;
   isb._string += '(lat=';
@@ -14103,43 +13875,16 @@ function Geodetic3D_1(g){
 }
 
 function fromDegrees_1(lat, lon, height){
-  return new Geodetic3D(new Angle(lat, lat / 180 * $intern_40), new Angle(lon, lon / 180 * $intern_40), height);
+  return new Geodetic3D(new Angle(lat, lat / 180 * $intern_37), new Angle(lon, lon / 180 * $intern_37), height);
 }
 
-defineClass(17, 1, {}, Geodetic3D, Geodetic3D_0, Geodetic3D_1);
+defineClass(20, 1, {}, Geodetic3D, Geodetic3D_0, Geodetic3D_1);
 _.toString$ = function toString_32(){
-  return $description_2(this);
+  return $description_1(this);
 }
 ;
 _._height = 0;
-var Lorg_glob3_mobile_generated_Geodetic3D_2_classLit = createForClass('org.glob3.mobile.generated', 'Geodetic3D', 17);
-function $setTranslation(this$static, x_0, y_0){
-  $changeValue_0(this$static._translation, x_0, y_0);
-}
-
-function Geometry2DGLFeature(buffer, translation){
-  GLFeature.call(this, ($clinit_GLFeatureGroupName() , NO_GROUP), 2);
-  this._lineWidth = 3;
-  this._position = new GPUAttributeValueVec2Float(buffer, true);
-  $addAttributeValue(this._values, ($clinit_GPUAttributeKey() , POSITION_2D), this._position);
-  this._translation = new GPUUniformValueVec2FloatMutable(translation._x, translation._y);
-  $addUniformValue(this._values, ($clinit_GPUUniformKey() , TRANSLATION_2D), this._translation);
-  $addUniformValue(this._values, POINT_SIZE, new GPUUniformValueFloat(1));
-}
-
-defineClass(199, 24, $intern_45, Geometry2DGLFeature);
-_.applyOnGlobalGLState = function applyOnGlobalGLState_3(state){
-  $enableCullFace(state, _front);
-  $setLineWidth(state, this._lineWidth);
-}
-;
-_.dispose = function dispose_43(){
-  !!this._values && $dispose_4(this._values);
-  $dispose_0(this);
-}
-;
-_._lineWidth = 0;
-var Lorg_glob3_mobile_generated_Geometry2DGLFeature_2_classLit = createForClass('org.glob3.mobile.generated', 'Geometry2DGLFeature', 199);
+var Lorg_glob3_mobile_generated_Geodetic3D_2_classLit = createForClass('org.glob3.mobile.generated', 'Geodetic3D', 20);
 function GeometryGLFeature(buffer, depthTestEnabled, polygonOffsetFactor, polygonOffsetUnits, lineWidth, pointSize){
   GLFeature.call(this, ($clinit_GLFeatureGroupName() , NO_GROUP), 2);
   this._depthTestEnabled = depthTestEnabled;
@@ -14154,15 +13899,15 @@ function GeometryGLFeature(buffer, depthTestEnabled, polygonOffsetFactor, polygo
   $addUniformValue(this._values, ($clinit_GPUUniformKey() , POINT_SIZE), new GPUUniformValueFloat(pointSize));
 }
 
-defineClass(217, 24, $intern_45, GeometryGLFeature);
-_.applyOnGlobalGLState = function applyOnGlobalGLState_4(state){
+defineClass(205, 27, {27:1, 9:1}, GeometryGLFeature);
+_.applyOnGlobalGLState = function applyOnGlobalGLState_3(state){
   this._depthTestEnabled?(state._depthTest = true):(state._depthTest = false);
   this._cullFace?$enableCullFace(state, this._culledFace):(state._cullFace = false);
   this._polygonOffsetFill?$enablePolygonOffsetFill(state, this._polygonOffsetFactor, this._polygonOffsetUnits):(state._polygonOffsetFill = false);
   $setLineWidth(state, this._lineWidth);
 }
 ;
-_.dispose = function dispose_44(){
+_.dispose = function dispose_40(){
   !!this._values && $dispose_4(this._values);
   $dispose_0(this);
 }
@@ -14174,7 +13919,7 @@ _._lineWidth = 0;
 _._polygonOffsetFactor = 0;
 _._polygonOffsetFill = false;
 _._polygonOffsetUnits = 0;
-var Lorg_glob3_mobile_generated_GeometryGLFeature_2_classLit = createForClass('org.glob3.mobile.generated', 'GeometryGLFeature', 217);
+var Lorg_glob3_mobile_generated_GeometryGLFeature_2_classLit = createForClass('org.glob3.mobile.generated', 'GeometryGLFeature', 205);
 function $clinit_Gesture(){
   $clinit_Gesture = emptyMethod;
   None = new Gesture('None', 0);
@@ -14190,12 +13935,12 @@ function Gesture(enum$name, enum$ordinal){
 
 function values_6(){
   $clinit_Gesture();
-  return initValues(getClassLiteralForArray(Lorg_glob3_mobile_generated_Gesture_2_classLit, 1), $intern_4, 80, 0, [None, Drag, Zoom, Rotate, DoubleDrag]);
+  return initValues(getClassLiteralForArray(Lorg_glob3_mobile_generated_Gesture_2_classLit, 1), $intern_4, 78, 0, [None, Drag, Zoom, Rotate, DoubleDrag]);
 }
 
-defineClass(80, 19, {3:1, 27:1, 19:1, 80:1}, Gesture);
+defineClass(78, 15, {3:1, 26:1, 15:1, 78:1}, Gesture);
 var DoubleDrag, Drag, None, Rotate, Zoom;
-var Lorg_glob3_mobile_generated_Gesture_2_classLit = createForEnum('org.glob3.mobile.generated', 'Gesture', 80, values_6);
+var Lorg_glob3_mobile_generated_Gesture_2_classLit = createForEnum('org.glob3.mobile.generated', 'Gesture', 78, values_6);
 function $onResizeViewportEvent_1(this$static, ec, width_0, height){
   $onResizeViewportEvent_2(this$static._hudImageRenderer, width_0, height);
 }
@@ -14214,7 +13959,7 @@ function HUDErrorRenderer(){
   this._hudImageRenderer = new HUDImageRenderer(new HUDErrorRenderer_ImageFactory);
 }
 
-defineClass(195, 1, {}, HUDErrorRenderer);
+defineClass(183, 1, {}, HUDErrorRenderer);
 _.initialize = function initialize_3(context){
 }
 ;
@@ -14222,7 +13967,7 @@ _.onResizeViewportEvent = function onResizeViewportEvent_2(ec, width_0, height){
   $onResizeViewportEvent_1(this, ec, width_0, height);
 }
 ;
-_.render = function render_6(rc, glState){
+_.render = function render_7(rc, glState){
   $render_3(this, rc, glState);
 }
 ;
@@ -14233,7 +13978,7 @@ _.stop_1 = function stop_7(rc){
   $stop(this._hudImageRenderer);
 }
 ;
-var Lorg_glob3_mobile_generated_HUDErrorRenderer_2_classLit = createForClass('org.glob3.mobile.generated', 'HUDErrorRenderer', 195);
+var Lorg_glob3_mobile_generated_HUDErrorRenderer_2_classLit = createForClass('org.glob3.mobile.generated', 'HUDErrorRenderer', 183);
 function $create_0(this$static, width_0, height, listener){
   var canvas;
   canvas = new Canvas_WebGL;
@@ -14241,13 +13986,13 @@ function $create_0(this$static, width_0, height, listener){
   $setFillColor(canvas, new Color(0, 0, 0, 1));
   canvas._canvasWidth > 0 && canvas._canvasHeight > 0 || $logError(_instance_3, 'Canvas is not initialized', initValues(getClassLiteralForArray(Ljava_lang_Object_2_classLit, 1), $intern_4, 1, 3, []));
   $_fillRectangle(canvas, 0, 0, width_0, height);
-  drawStringsOn(this$static._errors, canvas, width_0, height, new Color(1, 1, 1, 1), new Color(0.8999999761581421, $intern_60, $intern_60, 1), new Color(0, 0, 0, 0));
+  drawStringsOn(this$static._errors, canvas, width_0, height, new Color(1, 1, 1, 1), new Color(0.8999999761581421, $intern_55, $intern_55, 1), new Color(0, 0, 0, 0));
   canvas._canvasWidth > 0 && canvas._canvasHeight > 0 || $logError(_instance_3, 'Canvas is not initialized', initValues(getClassLiteralForArray(Ljava_lang_Object_2_classLit, 1), $intern_4, 1, 3, []));
   $_createImage(canvas, listener, true);
 }
 
-defineClass(495, 1, {});
-var Lorg_glob3_mobile_generated_HUDImageRenderer$CanvasImageFactory_2_classLit = createForClass('org.glob3.mobile.generated', 'HUDImageRenderer/CanvasImageFactory', 495);
+defineClass(476, 1, {});
+var Lorg_glob3_mobile_generated_HUDImageRenderer$CanvasImageFactory_2_classLit = createForClass('org.glob3.mobile.generated', 'HUDImageRenderer/CanvasImageFactory', 476);
 function $isEquals_1(v1, v2){
   var i_0, size1, size2, str1, str2;
   size1 = v1.array.length;
@@ -14278,13 +14023,13 @@ function HUDErrorRenderer_ImageFactory(){
   this._errors = new ArrayList;
 }
 
-defineClass(381, 495, {}, HUDErrorRenderer_ImageFactory);
-var Lorg_glob3_mobile_generated_HUDErrorRenderer_1ImageFactory_2_classLit = createForClass('org.glob3.mobile.generated', 'HUDErrorRenderer_ImageFactory', 381);
+defineClass(366, 476, {}, HUDErrorRenderer_ImageFactory);
+var Lorg_glob3_mobile_generated_HUDErrorRenderer_1ImageFactory_2_classLit = createForClass('org.glob3.mobile.generated', 'HUDErrorRenderer_ImageFactory', 366);
 function $createMesh_0(this$static, rc){
   var $tmp, camera, halfHeight, halfWidth, mesh, texCoords, texId, textureMapping, textureName, vertices;
   this$static._creatingMesh = false;
   if (this$static._mesh) {
-    !!this$static._mesh && $dispose_12(this$static._mesh);
+    !!this$static._mesh && $dispose_13(this$static._mesh);
     this$static._mesh = null;
   }
   textureName = 'HUDImageRenderer' + ('' + toString_8(this$static._instanceID)) + '/' + ('' + toString_8(($tmp = this$static._changeCounter , this$static._changeCounter = add_0(this$static._changeCounter, {l:1, m:0, h:0}) , $tmp)));
@@ -14299,7 +14044,7 @@ function $createMesh_0(this$static, rc){
   $add_9(vertices, -halfWidth, -halfHeight);
   $add_9(vertices, halfWidth, halfHeight);
   $add_9(vertices, halfWidth, -halfHeight);
-  mesh = new DirectMesh(_triangleStrip, new Vector3D(vertices._cx, vertices._cy, vertices._cz), new FloatBuffer_WebGL_1(vertices._values._array, vertices._values._size));
+  mesh = new DirectMesh(_triangleStrip, new Vector3D(vertices._cx, vertices._cy, vertices._cz), new FloatBuffer_WebGL_0(vertices._values._array, vertices._values._size));
   texCoords = new FloatBufferBuilderFromCartesian2D;
   $push_back(texCoords._values, 0);
   $push_back(texCoords._values, 0);
@@ -14309,7 +14054,7 @@ function $createMesh_0(this$static, rc){
   $push_back(texCoords._values, 0);
   $push_back(texCoords._values, 1);
   $push_back(texCoords._values, 1);
-  textureMapping = new SimpleTextureMapping(texId, new FloatBuffer_WebGL_1(texCoords._values._array, texCoords._values._size));
+  textureMapping = new SimpleTextureMapping(texId, new FloatBuffer_WebGL_0(texCoords._values._array, texCoords._values._size));
   return new TexturedMesh(mesh, textureMapping);
 }
 
@@ -14335,14 +14080,14 @@ function $onResizeViewportEvent_2(this$static, width_0, height){
   halfWidth = ~~(width_0 / 2);
   halfHeight = ~~(height / 2);
   projectionMatrix = createOrthographicProjectionMatrix(-halfWidth, halfWidth, -halfHeight, halfHeight, -halfWidth, halfWidth);
-  pr = dynamicCast($getGLFeature(this$static._glState, 4), 128);
+  pr = dynamicCast($getGLFeature(this$static._glState, 4), 120);
   !pr?$addGLFeature(this$static._glState, new ProjectionGLFeature((!projectionMatrix._matrix44D && (projectionMatrix._matrix44D = new Matrix44D(projectionMatrix._m00, projectionMatrix._m10, projectionMatrix._m20, projectionMatrix._m30, projectionMatrix._m01, projectionMatrix._m11, projectionMatrix._m21, projectionMatrix._m31, projectionMatrix._m02, projectionMatrix._m12, projectionMatrix._m22, projectionMatrix._m32, projectionMatrix._m03, projectionMatrix._m13, projectionMatrix._m23, projectionMatrix._m33)) , projectionMatrix._matrix44D)), false):$setMatrix(pr, (!projectionMatrix._matrix44D && (projectionMatrix._matrix44D = new Matrix44D(projectionMatrix._m00, projectionMatrix._m10, projectionMatrix._m20, projectionMatrix._m30, projectionMatrix._m01, projectionMatrix._m11, projectionMatrix._m21, projectionMatrix._m31, projectionMatrix._m02, projectionMatrix._m12, projectionMatrix._m22, projectionMatrix._m32, projectionMatrix._m03, projectionMatrix._m13, projectionMatrix._m23, projectionMatrix._m33)) , projectionMatrix._matrix44D));
   $recreateImage(this$static);
 }
 
 function $recreateImage(this$static){
   this$static._creatingMesh = false;
-  !!this$static._mesh && $dispose_12(this$static._mesh);
+  !!this$static._mesh && $dispose_13(this$static._mesh);
   this$static._mesh = null;
   this$static._image = null;
   this$static._image = null;
@@ -14374,7 +14119,7 @@ function HUDImageRenderer(imageFactory){
   this._changeCounter = {l:0, m:0, h:0};
 }
 
-defineClass(379, 148, $intern_49, HUDImageRenderer);
+defineClass(364, 179, {135:1}, HUDImageRenderer);
 _.initialize = function initialize_4(context){
 }
 ;
@@ -14382,7 +14127,7 @@ _.onResizeViewportEvent = function onResizeViewportEvent_3(ec, width_0, height){
   $onResizeViewportEvent_2(this, width_0, height);
 }
 ;
-_.render = function render_7(rc, glState){
+_.render = function render_8(rc, glState){
   $render_4(this, rc);
 }
 ;
@@ -14394,17 +14139,17 @@ _._changeCounter = {l:0, m:0, h:0};
 _._creatingMesh = false;
 _._instanceID = {l:0, m:0, h:0};
 var INSTANCE_COUNTER = {l:0, m:0, h:0};
-var Lorg_glob3_mobile_generated_HUDImageRenderer_2_classLit = createForClass('org.glob3.mobile.generated', 'HUDImageRenderer', 379);
+var Lorg_glob3_mobile_generated_HUDImageRenderer_2_classLit = createForClass('org.glob3.mobile.generated', 'HUDImageRenderer', 364);
 function HUDImageRenderer$ImageListener(hudImageRenderer){
   this._hudImageRenderer = hudImageRenderer;
 }
 
-defineClass(380, 493, {}, HUDImageRenderer$ImageListener);
-_.imageCreated = function imageCreated_6(image){
+defineClass(365, 473, {}, HUDImageRenderer$ImageListener);
+_.imageCreated = function imageCreated_4(image){
   $setImage(this._hudImageRenderer, image);
 }
 ;
-var Lorg_glob3_mobile_generated_HUDImageRenderer$ImageListener_2_classLit = createForClass('org.glob3.mobile.generated', 'HUDImageRenderer/ImageListener', 380);
+var Lorg_glob3_mobile_generated_HUDImageRenderer$ImageListener_2_classLit = createForClass('org.glob3.mobile.generated', 'HUDImageRenderer/ImageListener', 365);
 function $createImage(this$static, listener){
   this$static._canvasWidth > 0 && this$static._canvasHeight > 0 || $logError(_instance_3, 'Canvas is not initialized', initValues(getClassLiteralForArray(Ljava_lang_Object_2_classLit, 1), $intern_4, 1, 3, []));
   $_createImage(this$static, listener, true);
@@ -14426,7 +14171,7 @@ function $drawImage_0(this$static, image, destWidth, destHeight, transparency){
 function $drawImage_1(this$static, image, srcLeft, srcTop, srcWidth, srcHeight, destLeft, destTop, destWidth, destHeight, transparency){
   var context, imageJS, context_0, imageJS_0;
   this$static._canvasWidth > 0 && this$static._canvasHeight > 0 || $logError(_instance_3, 'Canvas is not initialized', initValues(getClassLiteralForArray(Ljava_lang_Object_2_classLit, 1), $intern_4, 1, 3, []));
-  if (fullContains($getWidth_0(image), $getHeight_0(image), srcLeft, srcTop, srcWidth, srcHeight)) {
+  if (fullContains($getWidth(image), $getHeight(image), srcLeft, srcTop, srcWidth, srcHeight)) {
     if (transparency <= 0) {
       return;
     }
@@ -14437,9 +14182,9 @@ function $drawImage_1(this$static, image, srcLeft, srcTop, srcWidth, srcHeight, 
   }
 }
 
-function $fillRectangle(this$static, left, top_0, width_0, height){
+function $fillRectangle(this$static, width_0, height){
   this$static._canvasWidth > 0 && this$static._canvasHeight > 0 || $logError(_instance_3, 'Canvas is not initialized', initValues(getClassLiteralForArray(Ljava_lang_Object_2_classLit, 1), $intern_4, 1, 3, []));
-  $_fillRectangle(this$static, left, top_0, width_0, height);
+  $_fillRectangle(this$static, 0, 0, width_0, height);
 }
 
 function $fillRoundedRectangle(this$static, left, top_0, width_0, height, radius){
@@ -14489,47 +14234,18 @@ function $setFont(this$static, font){
   $tryToSetCurrentFontToContext(this$static);
 }
 
-function $setLineColor(this$static, color_0){
-  var jsColor;
-  this$static._canvasWidth > 0 && this$static._canvasHeight > 0 || $logError(_instance_3, 'Canvas is not initialized', initValues(getClassLiteralForArray(Ljava_lang_Object_2_classLit, 1), $intern_4, 1, 3, []));
-  jsColor = createDOMColor(color_0);
-  this$static._domCanvasContext.strokeStyle = jsColor;
-}
-
-function $setLineWidth_0(this$static, width_0){
-  this$static._canvasWidth > 0 && this$static._canvasHeight > 0 || $logError(_instance_3, 'Canvas is not initialized', initValues(getClassLiteralForArray(Ljava_lang_Object_2_classLit, 1), $intern_4, 1, 3, []));
-  this$static._domCanvasContext.lineWidth = width_0;
-}
-
-function $setShadow(this$static, color_0, blur_0, offsetX, offsetY){
-  this$static._canvasWidth > 0 && this$static._canvasHeight > 0 || $logError(_instance_3, 'Canvas is not initialized', initValues(getClassLiteralForArray(Ljava_lang_Object_2_classLit, 1), $intern_4, 1, 3, []));
-  $_setShadow(this$static, color_0, blur_0, offsetX, offsetY);
-}
-
-function $strokeRectangle(this$static, left, top_0, width_0, height){
-  var context;
-  this$static._canvasWidth > 0 && this$static._canvasHeight > 0 || $logError(_instance_3, 'Canvas is not initialized', initValues(getClassLiteralForArray(Ljava_lang_Object_2_classLit, 1), $intern_4, 1, 3, []));
-  context = this$static._domCanvasContext;
-  context.strokeRect(left, top_0, width_0, height);
-}
-
-function $strokeRoundedRectangle(this$static, left, top_0, width_0, height, radius){
-  this$static._canvasWidth > 0 && this$static._canvasHeight > 0 || $logError(_instance_3, 'Canvas is not initialized', initValues(getClassLiteralForArray(Ljava_lang_Object_2_classLit, 1), $intern_4, 1, 3, []));
-  $roundRect(this$static, left, top_0, width_0, height, radius, false, true);
-}
-
 function $textExtent(this$static, text_0){
   var width_0, height;
   !this$static._currentFont && $logError(_instance_3, 'Current font no set', initValues(getClassLiteralForArray(Ljava_lang_Object_2_classLit, 1), $intern_4, 1, 3, []));
   return width_0 = this$static._domCanvasContext.measureText(text_0).width , height = Math.round(this$static._currentFontSize * 1.66) , new Vector2F(width_0, height);
 }
 
-defineClass(388, 1, {});
+defineClass(373, 1, {});
 _._canvasHeight = 0;
 _._canvasWidth = 0;
-var Lorg_glob3_mobile_generated_ICanvas_2_classLit = createForClass('org.glob3.mobile.generated', 'ICanvas', 388);
+var Lorg_glob3_mobile_generated_ICanvas_2_classLit = createForClass('org.glob3.mobile.generated', 'ICanvas', 373);
 function drawStringsOn(strings, canvas, width_0, height, color_0, backgroundColor, shadowColor){
-  var allFit, column, extent, extent0, fontSize, i_0, i0, labelFont, maxWidth, position, stringsSize, left, top_0;
+  var allFit, column, extent, extent0, fontSize, i_0, i0, labelFont, maxWidth, position, stringsSize, context, left, top_0;
   if (strings.array.length == 0) {
     return;
   }
@@ -14539,7 +14255,7 @@ function drawStringsOn(strings, canvas, width_0, height, color_0, backgroundColo
   allFit = false;
   while (!allFit && fontSize > 5) {
     allFit = true;
-    $setFont(canvas, new GFont('sans-serif', fontSize));
+    $setFont(canvas, new GFont(fontSize));
     for (i0 = 0; i0 < stringsSize; i0++) {
       extent0 = $textExtent(canvas, (checkElementIndex(i0, strings.array.length) , dynamicCastToString(strings.array[i0])));
       if (extent0._x > maxWidth) {
@@ -14550,9 +14266,13 @@ function drawStringsOn(strings, canvas, width_0, height, color_0, backgroundColo
     }
   }
   canvas._canvasWidth > 0 && canvas._canvasHeight > 0 || $logError(_instance_3, 'Canvas is not initialized', initValues(getClassLiteralForArray(Ljava_lang_Object_2_classLit, 1), $intern_4, 1, 3, []));
-  $_setShadow(canvas, shadowColor, 1, 0, 0);
+  context = canvas._domCanvasContext;
+  context.shadowColor = createDOMColor(shadowColor);
+  context.shadowBlur = 1;
+  context.shadowOffsetX = 0;
+  context.shadowOffsetY = 0;
   column = new ColumnCanvasElement(backgroundColor);
-  labelFont = new GFont('sans-serif', fontSize);
+  labelFont = new GFont(fontSize);
   for (i_0 = 0; i_0 < stringsSize; i_0++) {
     $add_7(column, new TextCanvasElement((checkElementIndex(i_0, strings.array.length) , dynamicCastToString(strings.array[i_0])), labelFont, color_0));
   }
@@ -14561,26 +14281,57 @@ function drawStringsOn(strings, canvas, width_0, height, color_0, backgroundColo
   $drawAt(column, position._x, position._y, canvas);
 }
 
-defineClass(483, 1, {});
+function $getCameraCoordinateSystemForInterfaceOrientation(this$static, orientation){
+  if (!this$static._camCSLL) {
+    this$static._camCSPortrait = new CoordinateSystem_0(new Vector3D(1, 0, 0), new Vector3D(0, 0, -1), new Vector3D(0, 1, 0), ($clinit_Vector3D() , zero));
+    this$static._camCSPortraitUD = new CoordinateSystem_0(new Vector3D(1, 0, 0), new Vector3D(0, 0, -1), new Vector3D(0, -1, 0), zero);
+    this$static._camCSLL = new CoordinateSystem_0(new Vector3D(0, 1, 0), new Vector3D(0, 0, -1), new Vector3D(-1, 0, 0), zero);
+    this$static._camCSLR = new CoordinateSystem_0(new Vector3D(0, 1, 0), new Vector3D(0, 0, -1), new Vector3D(1, 0, 0), zero);
+  }
+  switch (orientation.ordinal) {
+    case 0:
+      {
+        return this$static._camCSPortrait;
+      }
+
+    case 1:
+      {
+        return this$static._camCSPortraitUD;
+      }
+
+    case 3:
+      {
+        return this$static._camCSLL;
+      }
+
+    default:case 2:
+      {
+        return this$static._camCSLR;
+      }
+
+  }
+}
+
+defineClass(317, 1, {});
 var _instance;
-var Lorg_glob3_mobile_generated_IDeviceAttitude_2_classLit = createForClass('org.glob3.mobile.generated', 'IDeviceAttitude', 483);
-defineClass(494, 1, {});
-var Lorg_glob3_mobile_generated_IDeviceInfo_2_classLit = createForClass('org.glob3.mobile.generated', 'IDeviceInfo', 494);
-defineClass(484, 1, {});
+var Lorg_glob3_mobile_generated_IDeviceAttitude_2_classLit = createForClass('org.glob3.mobile.generated', 'IDeviceAttitude', 317);
+defineClass(474, 1, {});
+var Lorg_glob3_mobile_generated_IDeviceInfo_2_classLit = createForClass('org.glob3.mobile.generated', 'IDeviceInfo', 474);
+defineClass(467, 1, {});
 var _instance_0 = null;
-var Lorg_glob3_mobile_generated_IDeviceLocation_2_classLit = createForClass('org.glob3.mobile.generated', 'IDeviceLocation', 484);
-defineClass(452, 1, {});
-var Lorg_glob3_mobile_generated_IDownloader_2_classLit = createForClass('org.glob3.mobile.generated', 'IDownloader', 452);
+var Lorg_glob3_mobile_generated_IDeviceLocation_2_classLit = createForClass('org.glob3.mobile.generated', 'IDeviceLocation', 467);
+defineClass(455, 1, {});
+var Lorg_glob3_mobile_generated_IDownloader_2_classLit = createForClass('org.glob3.mobile.generated', 'IDownloader', 455);
 function $getDeviceInfo(this$static){
   !this$static._deviceInfo && (this$static._deviceInfo = new DeviceInfo_WebGL);
   return this$static._deviceInfo;
 }
 
-defineClass(331, 1, {});
+defineClass(316, 1, {});
 var _instance_1 = null;
-var Lorg_glob3_mobile_generated_IFactory_2_classLit = createForClass('org.glob3.mobile.generated', 'IFactory', 331);
-defineClass(485, 1, {});
-var Lorg_glob3_mobile_generated_IFloatBuffer_2_classLit = createForClass('org.glob3.mobile.generated', 'IFloatBuffer', 485);
+var Lorg_glob3_mobile_generated_IFactory_2_classLit = createForClass('org.glob3.mobile.generated', 'IFactory', 316);
+defineClass(478, 1, {});
+var Lorg_glob3_mobile_generated_IFloatBuffer_2_classLit = createForClass('org.glob3.mobile.generated', 'IFloatBuffer', 478);
 function $addCameraConstraint(this$static, cameraConstraint){
   $add_3((!this$static._cameraConstraints && (this$static._cameraConstraints = $createDefaultCameraConstraints()) , this$static._cameraConstraints), cameraConstraint);
 }
@@ -14592,7 +14343,7 @@ function $addGPUProgramSources(this$static, s){
 function $containsPlanetRenderer(renderers){
   var i_0;
   for (i_0 = 0; i_0 < renderers.array.length; i_0++) {
-    if ((checkElementIndex(i_0, renderers.array.length) , dynamicCast(renderers.array[i_0], 115)).isPlanetRenderer()) {
+    if ((checkElementIndex(i_0, renderers.array.length) , dynamicCast(renderers.array[i_0], 135)).isPlanetRenderer()) {
       return true;
     }
   }
@@ -14605,17 +14356,17 @@ function $create_1(this$static){
   $setRenderedSector((!this$static._planetRendererBuilder && (this$static._planetRendererBuilder = new PlanetRendererBuilder) , this$static._planetRendererBuilder), shownSector);
   if ((!this$static._renderers && (this$static._renderers = new ArrayList) , this$static._renderers).array.length > 0) {
     mainRenderer = new CompositeRenderer;
-    $containsPlanetRenderer((!this$static._renderers && (this$static._renderers = new ArrayList) , this$static._renderers)) || $addChildRenderer(dynamicCast(mainRenderer, 125), new ChildRenderer($create_4((!this$static._planetRendererBuilder && (this$static._planetRendererBuilder = new PlanetRendererBuilder) , this$static._planetRendererBuilder))));
+    $containsPlanetRenderer((!this$static._renderers && (this$static._renderers = new ArrayList) , this$static._renderers)) || $addChildRenderer(dynamicCast(mainRenderer, 117), new ChildRenderer($create_4((!this$static._planetRendererBuilder && (this$static._planetRendererBuilder = new PlanetRendererBuilder) , this$static._planetRendererBuilder))));
     for (i_0 = 0; i_0 < (!this$static._renderers && (this$static._renderers = new ArrayList) , this$static._renderers).array.length; i_0++) {
-      $addChildRenderer(dynamicCast(mainRenderer, 125), new ChildRenderer(dynamicCast($get_0((!this$static._renderers && (this$static._renderers = new ArrayList) , this$static._renderers), i_0), 115)));
+      $addChildRenderer(dynamicCast(mainRenderer, 117), new ChildRenderer(dynamicCast($get_0((!this$static._renderers && (this$static._renderers = new ArrayList) , this$static._renderers), i_0), 135)));
     }
   }
    else {
     mainRenderer = $create_4((!this$static._planetRendererBuilder && (this$static._planetRendererBuilder = new PlanetRendererBuilder) , this$static._planetRendererBuilder));
   }
-  initialCameraPosition = (!this$static._planet && (this$static._planet = new EllipsoidalPlanet(new Ellipsoid(($clinit_Vector3D() , zero), new Vector3D($intern_61, $intern_61, $intern_62)))) , $getDefaultCameraPosition(this$static._planet, shownSector));
+  initialCameraPosition = (!this$static._planet && (this$static._planet = new EllipsoidalPlanet(new Ellipsoid(($clinit_Vector3D() , zero), new Vector3D($intern_56, $intern_56, $intern_57)))) , $getDefaultCameraPosition(this$static._planet, shownSector));
   $addCameraConstraint(this$static, new RenderedSectorCameraConstrainer(mainRenderer.getPlanetRenderer(), initialCameraPosition._height * 1.2));
-  g3mWidget = new G3MWidget((!this$static._gl && $logError(_instance_3, 'LOGIC ERROR: gl not initialized', initValues(getClassLiteralForArray(Ljava_lang_Object_2_classLit, 1), $intern_4, 1, 3, [])) , this$static._gl), (!this$static._downloader && (this$static._downloader = new Downloader_WebGL('')) , this$static._downloader), (!this$static._threadUtils && (this$static._threadUtils = new ThreadUtils_WebGL) , this$static._threadUtils), (!this$static._planet && (this$static._planet = new EllipsoidalPlanet(new Ellipsoid(($clinit_Vector3D() , zero), new Vector3D($intern_61, $intern_61, $intern_62)))) , this$static._planet), (!this$static._cameraConstraints && (this$static._cameraConstraints = $createDefaultCameraConstraints()) , this$static._cameraConstraints), (!this$static._cameraRenderer && (this$static._cameraRenderer = (cameraRenderer = new CameraRenderer , $addHandler_1(cameraRenderer, new CameraSingleDragHandler) , $addHandler_1(cameraRenderer, new CameraDoubleDragHandler) , $addHandler_1(cameraRenderer, new CameraRotationHandler) , $addHandler_1(cameraRenderer, new CameraDoubleTapHandler) , cameraRenderer)) , this$static._cameraRenderer), mainRenderer, (!this$static._busyRenderer && (this$static._busyRenderer = new BusyMeshRenderer(new Color(0, 0, 0, 1))) , this$static._busyRenderer), (!this$static._errorRenderer && (this$static._errorRenderer = new HUDErrorRenderer) , this$static._errorRenderer), (!this$static._backgroundColor && (this$static._backgroundColor = new Color(0, 0.10000000149011612, 0.20000000298023224, 1)) , this$static._backgroundColor), this$static._logFPS, this$static._logDownloaderStatistics, (!this$static._periodicalTasks && (this$static._periodicalTasks = new ArrayList) , this$static._periodicalTasks), $getGPUProgramManager(this$static), (!this$static._sceneLighting && (this$static._sceneLighting = new CameraFocusSceneLighting(new Color($intern_63, $intern_63, $intern_63, 1), new Color(1, 1, 0, 1))) , this$static._sceneLighting));
+  g3mWidget = new G3MWidget((!this$static._gl && $logError(_instance_3, 'LOGIC ERROR: gl not initialized', initValues(getClassLiteralForArray(Ljava_lang_Object_2_classLit, 1), $intern_4, 1, 3, [])) , this$static._gl), (!this$static._downloader && (this$static._downloader = new Downloader_WebGL) , this$static._downloader), (!this$static._threadUtils && (this$static._threadUtils = new ThreadUtils_WebGL) , this$static._threadUtils), (!this$static._planet && (this$static._planet = new EllipsoidalPlanet(new Ellipsoid(($clinit_Vector3D() , zero), new Vector3D($intern_56, $intern_56, $intern_57)))) , this$static._planet), (!this$static._cameraConstraints && (this$static._cameraConstraints = $createDefaultCameraConstraints()) , this$static._cameraConstraints), (!this$static._cameraRenderer && (this$static._cameraRenderer = (cameraRenderer = new CameraRenderer , $addHandler_1(cameraRenderer, new CameraSingleDragHandler) , $addHandler_1(cameraRenderer, new CameraDoubleDragHandler) , $addHandler_1(cameraRenderer, new CameraRotationHandler) , $addHandler_1(cameraRenderer, new CameraDoubleTapHandler) , cameraRenderer)) , this$static._cameraRenderer), mainRenderer, (!this$static._busyRenderer && (this$static._busyRenderer = new BusyMeshRenderer(new Color(0, 0, 0, 1))) , this$static._busyRenderer), (!this$static._errorRenderer && (this$static._errorRenderer = new HUDErrorRenderer) , this$static._errorRenderer), (!this$static._backgroundColor && (this$static._backgroundColor = new Color(0, 0.10000000149011612, 0.20000000298023224, 1)) , this$static._backgroundColor), this$static._logFPS, this$static._logDownloaderStatistics, (!this$static._periodicalTasks && (this$static._periodicalTasks = new ArrayList) , this$static._periodicalTasks), $getGPUProgramManager(this$static), (!this$static._sceneLighting && (this$static._sceneLighting = new CameraFocusSceneLighting(new Color($intern_58, $intern_58, $intern_58, 1), new Color(1, 1, 0, 1))) , this$static._sceneLighting));
   this$static._gl = null;
   this$static._downloader = null;
   this$static._threadUtils = null;
@@ -14644,18 +14395,18 @@ function $getGPUProgramManager(this$static){
   var gpuProgramFactory, gpuProgramManager, i_0;
   gpuProgramFactory = new GPUProgramFactory;
   for (i_0 = 0; i_0 < this$static._sources.array.length; i_0++) {
-    $add_6(gpuProgramFactory, dynamicCast($get_0(this$static._sources, i_0), 22));
+    $add_6(gpuProgramFactory, dynamicCast($get_0(this$static._sources, i_0), 21));
   }
   gpuProgramManager = new GPUProgramManager(gpuProgramFactory);
   return gpuProgramManager;
 }
 
-function $setDownloader(this$static, downloader){
-  if (this$static._downloader) {
-    $logError(_instance_3, 'LOGIC ERROR: downloader already initialized', initValues(getClassLiteralForArray(Ljava_lang_Object_2_classLit, 1), $intern_4, 1, 3, []));
+function $setCameraRenderer(this$static, cameraRenderer){
+  if (this$static._cameraRenderer) {
+    $logError(_instance_3, 'LOGIC ERROR: cameraRenderer already initialized', initValues(getClassLiteralForArray(Ljava_lang_Object_2_classLit, 1), $intern_4, 1, 3, []));
     return;
   }
-  this$static._downloader = downloader;
+  this$static._cameraRenderer = cameraRenderer;
 }
 
 function $setGL(this$static, gl){
@@ -14670,32 +14421,26 @@ function $setGL(this$static, gl){
   this$static._gl = gl;
 }
 
-defineClass(263, 1, {});
+defineClass(252, 1, {});
 _._logDownloaderStatistics = false;
 _._logFPS = false;
-var Lorg_glob3_mobile_generated_IG3MBuilder_2_classLit = createForClass('org.glob3.mobile.generated', 'IG3MBuilder', 263);
+var Lorg_glob3_mobile_generated_IG3MBuilder_2_classLit = createForClass('org.glob3.mobile.generated', 'IG3MBuilder', 252);
 var Lorg_glob3_mobile_generated_IGLTextureId_2_classLit = createForInterface('org.glob3.mobile.generated', 'IGLTextureId');
-defineClass(490, 1, {});
+defineClass(479, 1, {});
 _.toString$ = function toString_33(){
-  return 'Image_WebGL ' + $getWidth_0(this) + ' x ' + $getHeight_0(this) + ', _image=(' + this._imgObject + ')';
+  return 'Image_WebGL ' + $getWidth(this) + ' x ' + $getHeight(this) + ', _image=(' + this._imgObject + ')';
 }
 ;
-var Lorg_glob3_mobile_generated_IImage_2_classLit = createForClass('org.glob3.mobile.generated', 'IImage', 490);
-defineClass(481, 1, {});
+var Lorg_glob3_mobile_generated_IImage_2_classLit = createForClass('org.glob3.mobile.generated', 'IImage', 479);
+defineClass(487, 1, {});
+var Lorg_glob3_mobile_generated_IImageDownloadListener_2_classLit = createForClass('org.glob3.mobile.generated', 'IImageDownloadListener', 487);
+defineClass(465, 1, {});
 var _instance_2 = null;
-var Lorg_glob3_mobile_generated_IJSONParser_2_classLit = createForClass('org.glob3.mobile.generated', 'IJSONParser', 481);
-defineClass(297, 1, {});
+var Lorg_glob3_mobile_generated_IJSONParser_2_classLit = createForClass('org.glob3.mobile.generated', 'IJSONParser', 465);
+defineClass(285, 1, {});
 _._level = 0;
 var _instance_3 = null;
-var Lorg_glob3_mobile_generated_ILogger_2_classLit = createForClass('org.glob3.mobile.generated', 'ILogger', 297);
-function $clamp(value_0, min_0, max_0){
-  if (value_0 < min_0)
-    return min_0;
-  if (value_0 > max_0)
-    return max_0;
-  return value_0;
-}
-
+var Lorg_glob3_mobile_generated_ILogger_2_classLit = createForClass('org.glob3.mobile.generated', 'ILogger', 285);
 function $isEquals_2(x_0, y_0){
   if (x_0 == y_0) {
     return true;
@@ -14713,29 +14458,29 @@ function $quadraticBezierInterpolation(from, middle, to, alpha_0){
   return oneMinusAlpha * oneMinusAlpha * from + 2 * oneMinusAlpha * alpha_0 * middle + alpha_0 * alpha_0 * to;
 }
 
-defineClass(480, 1, {});
+defineClass(464, 1, {});
 var _instance_4 = null;
-var Lorg_glob3_mobile_generated_IMathUtils_2_classLit = createForClass('org.glob3.mobile.generated', 'IMathUtils', 480);
-defineClass(465, 1, {});
-var Lorg_glob3_mobile_generated_INativeGL_2_classLit = createForClass('org.glob3.mobile.generated', 'INativeGL', 465);
-defineClass(501, 1, {});
-var Lorg_glob3_mobile_generated_IShortBuffer_2_classLit = createForClass('org.glob3.mobile.generated', 'IShortBuffer', 501);
-defineClass(471, 1, {});
+var Lorg_glob3_mobile_generated_IMathUtils_2_classLit = createForClass('org.glob3.mobile.generated', 'IMathUtils', 464);
+defineClass(448, 1, {});
+var Lorg_glob3_mobile_generated_INativeGL_2_classLit = createForClass('org.glob3.mobile.generated', 'INativeGL', 448);
+defineClass(483, 1, {});
+var Lorg_glob3_mobile_generated_IShortBuffer_2_classLit = createForClass('org.glob3.mobile.generated', 'IShortBuffer', 483);
+defineClass(463, 1, {});
 var _instance_5 = null;
-var Lorg_glob3_mobile_generated_IStringBuilder_2_classLit = createForClass('org.glob3.mobile.generated', 'IStringBuilder', 471);
-defineClass(479, 1, {});
+var Lorg_glob3_mobile_generated_IStringBuilder_2_classLit = createForClass('org.glob3.mobile.generated', 'IStringBuilder', 463);
+defineClass(462, 1, {});
 var _instance_6;
-var Lorg_glob3_mobile_generated_IStringUtils_2_classLit = createForClass('org.glob3.mobile.generated', 'IStringUtils', 479);
-defineClass(482, 1, {});
+var Lorg_glob3_mobile_generated_IStringUtils_2_classLit = createForClass('org.glob3.mobile.generated', 'IStringUtils', 462);
+defineClass(466, 1, {});
 var _instance_7 = null;
-var Lorg_glob3_mobile_generated_ITextUtils_2_classLit = createForClass('org.glob3.mobile.generated', 'ITextUtils', 482);
-defineClass(473, 1, {});
-var Lorg_glob3_mobile_generated_IThreadUtils_2_classLit = createForClass('org.glob3.mobile.generated', 'IThreadUtils', 473);
-defineClass(492, 1, {});
-var Lorg_glob3_mobile_generated_ITimer_2_classLit = createForClass('org.glob3.mobile.generated', 'ITimer', 492);
+var Lorg_glob3_mobile_generated_ITextUtils_2_classLit = createForClass('org.glob3.mobile.generated', 'ITextUtils', 466);
+defineClass(456, 1, {});
+var Lorg_glob3_mobile_generated_IThreadUtils_2_classLit = createForClass('org.glob3.mobile.generated', 'IThreadUtils', 456);
+defineClass(472, 1, {});
+var Lorg_glob3_mobile_generated_ITimer_2_classLit = createForClass('org.glob3.mobile.generated', 'ITimer', 472);
 function $dispose_5(this$static){
-  this$static._ownsIndices && !!this$static._indices && $dispose_15(this$static._indices);
-  this$static._ownsVertices && !!this$static._vertices && $dispose_14(this$static._vertices);
+  this$static._ownsIndices && !!this$static._indices && $dispose_16(this$static._indices);
+  this$static._ownsVertices && !!this$static._vertices && $dispose_15(this$static._vertices);
   !!this$static._translationMatrix && $dispose_9(this$static._translationMatrix);
   $_release(this$static._glState);
 }
@@ -14763,11 +14508,11 @@ function IndexedGeometryMesh(primitive, center, vertices, indices){
   this._ownsIndices = true;
 }
 
-defineClass(216, 407, {}, IndexedGeometryMesh);
+defineClass(203, 390, {}, IndexedGeometryMesh);
 _._ownsIndices = false;
-var Lorg_glob3_mobile_generated_IndexedGeometryMesh_2_classLit = createForClass('org.glob3.mobile.generated', 'IndexedGeometryMesh', 216);
+var Lorg_glob3_mobile_generated_IndexedGeometryMesh_2_classLit = createForClass('org.glob3.mobile.generated', 'IndexedGeometryMesh', 203);
 function $dispose_6(this$static){
-  this$static._owner && !!this$static._indices && $dispose_15(this$static._indices);
+  this$static._owner && !!this$static._indices && $dispose_16(this$static._indices);
   $dispose(this$static);
 }
 
@@ -14790,12 +14535,12 @@ function IndexedMesh_1(primitive, center, vertices, indices, flatColor, colors, 
   this._indices = indices;
 }
 
-defineClass(135, 210, {}, IndexedMesh, IndexedMesh_0);
+defineClass(123, 197, {}, IndexedMesh, IndexedMesh_0);
 _.rawRender_0 = function rawRender_3(rc){
   $rawRender_0(this, rc);
 }
 ;
-var Lorg_glob3_mobile_generated_IndexedMesh_2_classLit = createForClass('org.glob3.mobile.generated', 'IndexedMesh', 135);
+var Lorg_glob3_mobile_generated_IndexedMesh_2_classLit = createForClass('org.glob3.mobile.generated', 'IndexedMesh', 123);
 function $clinit_InterfaceOrientation(){
   $clinit_InterfaceOrientation = emptyMethod;
   PORTRAIT = new InterfaceOrientation('PORTRAIT', 0);
@@ -14810,74 +14555,12 @@ function InterfaceOrientation(enum$name, enum$ordinal){
 
 function values_7(){
   $clinit_InterfaceOrientation();
-  return initValues(getClassLiteralForArray(Lorg_glob3_mobile_generated_InterfaceOrientation_2_classLit, 1), $intern_4, 88, 0, [PORTRAIT, PORTRAIT_UPSIDEDOWN, LANDSCAPE_RIGHT, LANDSCAPE_LEFT]);
+  return initValues(getClassLiteralForArray(Lorg_glob3_mobile_generated_InterfaceOrientation_2_classLit, 1), $intern_4, 85, 0, [PORTRAIT, PORTRAIT_UPSIDEDOWN, LANDSCAPE_RIGHT, LANDSCAPE_LEFT]);
 }
 
-defineClass(88, 19, {3:1, 27:1, 19:1, 88:1}, InterfaceOrientation);
+defineClass(85, 15, {3:1, 26:1, 15:1, 85:1}, InterfaceOrientation);
 var LANDSCAPE_LEFT, LANDSCAPE_RIGHT, PORTRAIT, PORTRAIT_UPSIDEDOWN;
-var Lorg_glob3_mobile_generated_InterfaceOrientation_2_classLit = createForEnum('org.glob3.mobile.generated', 'InterfaceOrientation', 88, values_7);
-function LabelImageBuilder(font){
-  LabelImageBuilder_0.call(this, font, new Color(1, 1, 1, 1), new Color(0, 0, 0, 0), new Color(0, 0, 0, 0));
-}
-
-function LabelImageBuilder_0(font, color_0, shadowColor, backgroundColor){
-  this._text = 'Label #1';
-  this._font = font;
-  this._margin = 0;
-  this._color = new Color_0(color_0);
-  this._shadowColor = new Color_0(shadowColor);
-  this._shadowBlur = 0;
-  this._shadowOffsetX = 0;
-  this._shadowOffsetY = 0;
-  this._backgroundColor = new Color_0(backgroundColor);
-  this._cornerRadius = 0;
-}
-
-defineClass(187, 460, $intern_38, LabelImageBuilder);
-_.build = function build_2(context, listener, deleteListener){
-  var canvas, height, margin2, textExtent, width_0;
-  canvas = new Canvas_WebGL;
-  $setFont(canvas, this._font);
-  textExtent = $textExtent(canvas, this._text);
-  margin2 = this._margin * 2;
-  width_0 = round_0(textExtent._x + margin2);
-  height = round_0(textExtent._y + margin2);
-  $initialize_2(canvas, width_0, height);
-  this._shadowColor._alpha < 0.01 || $setShadow(canvas, this._shadowColor, this._shadowBlur, this._shadowOffsetX, this._shadowOffsetY);
-  if (this._backgroundColor._alpha >= 0.01) {
-    $setFillColor(canvas, this._backgroundColor);
-    this._cornerRadius > 0?$fillRoundedRectangle(canvas, 0, 0, width_0, height, this._cornerRadius):(canvas._canvasWidth > 0 && canvas._canvasHeight > 0 || $logError(_instance_3, 'Canvas is not initialized', initValues(getClassLiteralForArray(Ljava_lang_Object_2_classLit, 1), $intern_4, 1, 3, [])) , $_fillRectangle(canvas, 0, 0, width_0, height));
-  }
-  $setFillColor(canvas, this._color);
-  $fillText(canvas, this._text, this._margin, this._margin);
-  $createImage(canvas, new LabelImageBuilder_ImageListener(listener, deleteListener, this._text + '/' + $description_0(this._font) + '/' + ('' + this._margin) + '/' + $toID(this._color) + '/' + $toID(this._shadowColor) + '/' + ('' + this._shadowBlur) + '/' + ('' + this._shadowOffsetX) + '/' + ('' + this._shadowOffsetY) + '/' + $toID(this._backgroundColor) + '/' + ('' + this._cornerRadius)));
-}
-;
-_._cornerRadius = 0;
-_._margin = 0;
-_._shadowBlur = 0;
-_._shadowOffsetX = 0;
-_._shadowOffsetY = 0;
-var Lorg_glob3_mobile_generated_LabelImageBuilder_2_classLit = createForClass('org.glob3.mobile.generated', 'LabelImageBuilder', 187);
-function LabelImageBuilder_ImageListener(listener, deleteListener, imageName){
-  this._listener = listener;
-  this._deleteListener = deleteListener;
-  this._imageName = imageName;
-}
-
-defineClass(391, 493, {}, LabelImageBuilder_ImageListener);
-_.dispose = function dispose_45(){
-  !!this._listener && this._listener.dispose();
-}
-;
-_.imageCreated = function imageCreated_7(image){
-  this._listener.imageCreated_1(image, this._imageName);
-  this._deleteListener && !!this._listener && this._listener.dispose();
-  this._listener = null;
-}
-;
-_._deleteListener = false;
-var Lorg_glob3_mobile_generated_LabelImageBuilder_1ImageListener_2_classLit = createForClass('org.glob3.mobile.generated', 'LabelImageBuilder_ImageListener', 391);
+var Lorg_glob3_mobile_generated_InterfaceOrientation_2_classLit = createForEnum('org.glob3.mobile.generated', 'InterfaceOrientation', 85, values_7);
 function $isAvailable(this$static){
   if (!this$static._enable) {
     return false;
@@ -14894,7 +14577,7 @@ function $onLayerTouchEventListener(this$static){
   return false;
 }
 
-defineClass(34, 1, $intern_64);
+defineClass(34, 1, $intern_59);
 _.toString$ = function toString_34(){
   return this.description_0();
 }
@@ -14922,7 +14605,7 @@ function $checkAndComposeLayerTilesRenderParameters(enableLayers, errors){
       continue;
     }
      else if (layerParametersVectorSize == 1) {
-      if (!$update_0(mutableLayerTilesRenderParameters, (checkElementIndex(0, layerParametersVector.array.length) , dynamicCast(layerParametersVector.array[0], 77)), errors)) {
+      if (!$update_0(mutableLayerTilesRenderParameters, (checkElementIndex(0, layerParametersVector.array.length) , dynamicCast(layerParametersVector.array[0], 76)), errors)) {
         return null;
       }
     }
@@ -15137,8 +14820,8 @@ function LayerSet(){
   this._changedInfoListener = null;
 }
 
-defineClass(178, 1, {}, LayerSet);
-var Lorg_glob3_mobile_generated_LayerSet_2_classLit = createForClass('org.glob3.mobile.generated', 'LayerSet', 178);
+defineClass(170, 1, {}, LayerSet);
+var Lorg_glob3_mobile_generated_LayerSet_2_classLit = createForClass('org.glob3.mobile.generated', 'LayerSet', 170);
 function LayerTilesRenderParameters(topSector, topSectorSplitsByLatitude, topSectorSplitsByLongitude, firstLevel, maxLevel, tileTextureResolution, tileMeshResolution, mercator){
   this._topSector = new Sector_0(topSector);
   this._topSectorSplitsByLatitude = topSectorSplitsByLatitude;
@@ -15151,95 +14834,23 @@ function LayerTilesRenderParameters(topSector, topSectorSplitsByLatitude, topSec
   this._mercator = mercator;
 }
 
-defineClass(77, 1, {77:1}, LayerTilesRenderParameters);
+defineClass(76, 1, {76:1}, LayerTilesRenderParameters);
 _._firstLevel = 0;
 _._maxLevel = 0;
 _._maxLevelForPoles = 0;
 _._mercator = false;
 _._topSectorSplitsByLatitude = 0;
 _._topSectorSplitsByLongitude = 0;
-var Lorg_glob3_mobile_generated_LayerTilesRenderParameters_2_classLit = createForClass('org.glob3.mobile.generated', 'LayerTilesRenderParameters', 77);
+var Lorg_glob3_mobile_generated_LayerTilesRenderParameters_2_classLit = createForClass('org.glob3.mobile.generated', 'LayerTilesRenderParameters', 76);
 function LayerTouchEvent(position, sector){
   new Geodetic3D_1(position);
   new Sector_0(sector);
 }
 
-defineClass(424, 1, {}, LayerTouchEvent);
-var Lorg_glob3_mobile_generated_LayerTouchEvent_2_classLit = createForClass('org.glob3.mobile.generated', 'LayerTouchEvent', 424);
-function LayoutImageBuilder$ChildResult(error){
-  this._image = null;
-  this._imageName = '';
-  this._error = error;
-}
-
-function LayoutImageBuilder$ChildResult_0(image, imageName){
-  this._image = image;
-  this._imageName = imageName;
-  this._error = '';
-}
-
-defineClass(87, 1, {87:1}, LayoutImageBuilder$ChildResult, LayoutImageBuilder$ChildResult_0);
-var Lorg_glob3_mobile_generated_LayoutImageBuilder$ChildResult_2_classLit = createForClass('org.glob3.mobile.generated', 'LayoutImageBuilder/ChildResult', 87);
-function $childError(this$static, error, childIndex){
-  if ($get_0(this$static._childrenResult, childIndex) != null) {
-    throw new RuntimeException_0('Logic error');
-  }
-  $set(this$static._childrenResult, childIndex, new LayoutImageBuilder$ChildResult(error));
-  --this$static._childrenResultPendingCounter == 0 && $doLayout(this$static._layoutImageBuilder, this$static._listener, this$static._deleteListener, this$static._childrenResult);
-}
-
-function $childImageCreated(this$static, image, imageName, childIndex){
-  if ($get_0(this$static._childrenResult, childIndex) != null) {
-    throw new RuntimeException_0('Logic error');
-  }
-  $set(this$static._childrenResult, childIndex, new LayoutImageBuilder$ChildResult_0(image, imageName));
-  --this$static._childrenResultPendingCounter == 0 && $doLayout(this$static._layoutImageBuilder, this$static._listener, this$static._deleteListener, this$static._childrenResult);
-}
-
-function LayoutImageBuilder$ChildrenResult(layoutImageBuilder, childrenSize, listener, deleteListener){
-  var i_0;
-  RCObject.call(this);
-  this._childrenResult = new ArrayList;
-  this._layoutImageBuilder = layoutImageBuilder;
-  this._listener = listener;
-  this._deleteListener = deleteListener;
-  this._childrenResultPendingCounter = childrenSize;
-  for (i_0 = 0; i_0 < childrenSize; i_0++) {
-    $add_3(this._childrenResult, null);
-  }
-}
-
-defineClass(299, 9, {9:1}, LayoutImageBuilder$ChildrenResult);
-_.dispose = function dispose_46(){
-  $dispose_0(this);
-}
-;
-_._childrenResultPendingCounter = 0;
-_._deleteListener = false;
-var Lorg_glob3_mobile_generated_LayoutImageBuilder$ChildrenResult_2_classLit = createForClass('org.glob3.mobile.generated', 'LayoutImageBuilder/ChildrenResult', 299);
-function LayoutImageBuilder$LayoutImageBuilderChildListener(childrenResult, childIndex){
-  this._childrenResult = childrenResult;
-  this._childIndex = childIndex;
-  ++this._childrenResult._referenceCounter;
-}
-
-defineClass(300, 1, {}, LayoutImageBuilder$LayoutImageBuilderChildListener);
-_.dispose = function dispose_47(){
-  $_release(this._childrenResult);
-}
-;
-_.imageCreated_1 = function imageCreated_8(image, imageName){
-  $childImageCreated(this._childrenResult, image, imageName, this._childIndex);
-}
-;
-_.onError = function onError_1(error){
-  $childError(this._childrenResult, error, this._childIndex);
-}
-;
-_._childIndex = 0;
-var Lorg_glob3_mobile_generated_LayoutImageBuilder$LayoutImageBuilderChildListener_2_classLit = createForClass('org.glob3.mobile.generated', 'LayoutImageBuilder/LayoutImageBuilderChildListener', 300);
-defineClass(491, 1, {});
-var Lorg_glob3_mobile_generated_TextureMapping_2_classLit = createForClass('org.glob3.mobile.generated', 'TextureMapping', 491);
+defineClass(406, 1, {}, LayerTouchEvent);
+var Lorg_glob3_mobile_generated_LayerTouchEvent_2_classLit = createForClass('org.glob3.mobile.generated', 'LayerTouchEvent', 406);
+defineClass(484, 1, {});
+var Lorg_glob3_mobile_generated_TextureMapping_2_classLit = createForClass('org.glob3.mobile.generated', 'TextureMapping', 484);
 function $modifyGLState_0(this$static, state){
   var scale, translation;
   if (!this$static._initialized) {
@@ -15265,7 +14876,7 @@ function $modifyGLState_0(this$static, state){
 
 function $releaseGLTextureId(this$static){
   if (this$static._glTextureId) {
-    $dispose_11(this$static._glTextureId);
+    $dispose_12(this$static._glTextureId);
     this$static._glTextureId = null;
   }
 }
@@ -15288,7 +14899,7 @@ function LazyTextureMapping(initializer, ownedTexCoords, transparent){
   this._transparent = transparent;
 }
 
-defineClass(64, 491, {64:1}, LazyTextureMapping);
+defineClass(61, 484, {61:1}, LazyTextureMapping);
 _._initialized = false;
 _._ownedTexCoords = false;
 _._scaleU = 0;
@@ -15296,14 +14907,14 @@ _._scaleV = 0;
 _._translationU = 0;
 _._translationV = 0;
 _._transparent = false;
-var Lorg_glob3_mobile_generated_LazyTextureMapping_2_classLit = createForClass('org.glob3.mobile.generated', 'LazyTextureMapping', 64);
+var Lorg_glob3_mobile_generated_LazyTextureMapping_2_classLit = createForClass('org.glob3.mobile.generated', 'LazyTextureMapping', 61);
 function $dispose_7(this$static){
   var i_0, mapping;
   this$static._ownedMesh && !!this$static._mesh && $dispose_5(this$static._mesh);
   if (this$static._mappings) {
     for (i_0 = 0; i_0 < this$static._mappings.array.length; i_0++) {
-      mapping = dynamicCast($get_0(this$static._mappings, i_0), 64);
-      !!mapping && (mapping._initializer = null , mapping._ownedTexCoords && !!mapping._texCoords && $dispose_14(mapping._texCoords) , mapping._texCoords = null , $releaseGLTextureId(mapping) , undefined);
+      mapping = dynamicCast($get_0(this$static._mappings, i_0), 61);
+      !!mapping && (mapping._initializer = null , mapping._ownedTexCoords && !!mapping._texCoords && $dispose_15(mapping._texCoords) , mapping._texCoords = null , $releaseGLTextureId(mapping) , undefined);
     }
     this$static._mappings = null;
   }
@@ -15319,7 +14930,7 @@ function $getCurrentTextureMapping(this$static){
     newCurrentLevel = -1;
     levelsCount = this$static._mappings.array.length;
     for (i0 = 0; i0 < levelsCount; i0++) {
-      mapping = dynamicCast($get_0(this$static._mappings, i0), 64);
+      mapping = dynamicCast($get_0(this$static._mappings, i0), 61);
       if (mapping) {
         if (mapping._glTextureId) {
           newCurrentLevel = i0;
@@ -15329,17 +14940,17 @@ function $getCurrentTextureMapping(this$static){
     }
     if (newCurrentLevel >= 0) {
       this$static._currentLevel = newCurrentLevel;
-      $modifyGLState_0(dynamicCast($get_0(this$static._mappings, this$static._currentLevel), 64), this$static._glState);
+      $modifyGLState_0(dynamicCast($get_0(this$static._mappings, this$static._currentLevel), 61), this$static._glState);
       if (this$static._currentLevel < levelsCount - 1) {
         for (i_0 = levelsCount - 1; i_0 > this$static._currentLevel; i_0--) {
-          mapping = dynamicCast($get_0(this$static._mappings, i_0), 64);
-          !!mapping && (mapping._initializer = null , mapping._ownedTexCoords && !!mapping._texCoords && $dispose_14(mapping._texCoords) , mapping._texCoords = null , $releaseGLTextureId(mapping) , undefined);
+          mapping = dynamicCast($get_0(this$static._mappings, i_0), 61);
+          !!mapping && (mapping._initializer = null , mapping._ownedTexCoords && !!mapping._texCoords && $dispose_15(mapping._texCoords) , mapping._texCoords = null , $releaseGLTextureId(mapping) , undefined);
           this$static._mappings.remove_1(i_0);
         }
       }
     }
   }
-  return this$static._currentLevel >= 0?dynamicCast($get_0(this$static._mappings, this$static._currentLevel), 64):null;
+  return this$static._currentLevel >= 0?dynamicCast($get_0(this$static._mappings, this$static._currentLevel), 61):null;
 }
 
 function $getTopLevelTextureId(this$static){
@@ -15356,7 +14967,7 @@ function $getTopLevelTextureId(this$static){
 function $setGLTextureIdForLevel(this$static, level, glTextureId){
   if (this$static._mappings.array.length > 0) {
     if (this$static._currentLevel < 0 || level < this$static._currentLevel) {
-      $setGLTextureId(dynamicCast($get_0(this$static._mappings, level), 64), glTextureId);
+      $setGLTextureId(dynamicCast($get_0(this$static._mappings, level), 61), glTextureId);
       this$static._currentLevel = -1;
       return true;
     }
@@ -15379,7 +14990,7 @@ function LeveledTexturedMesh(mesh, mappings){
   }
 }
 
-defineClass(402, 108, {}, LeveledTexturedMesh);
+defineClass(383, 102, {}, LeveledTexturedMesh);
 _.rawRender = function rawRender_4(rc, parentGLState){
   var mapping;
   mapping = $getCurrentTextureMapping(this);
@@ -15395,7 +15006,7 @@ _.rawRender = function rawRender_4(rc, parentGLState){
 ;
 _._currentLevel = 0;
 _._ownedMesh = false;
-var Lorg_glob3_mobile_generated_LeveledTexturedMesh_2_classLit = createForClass('org.glob3.mobile.generated', 'LeveledTexturedMesh', 402);
+var Lorg_glob3_mobile_generated_LeveledTexturedMesh_2_classLit = createForClass('org.glob3.mobile.generated', 'LeveledTexturedMesh', 383);
 function $getParentTileOfSuitableLevel(this$static, tile){
   var maxLevel, result;
   maxLevel = this$static._parameters._maxLevel;
@@ -15425,7 +15036,7 @@ function RasterLayer(parameters, layerInfo){
   this._tileImageProvider = null;
 }
 
-defineClass(264, 34, $intern_64);
+defineClass(253, 34, $intern_59);
 _.createTileImageProvider = function createTileImageProvider(rc, layerTilesRenderParameters){
   !this._tileImageProvider && (this._tileImageProvider = new RasterLayerTileImageProvider(this, rc._downloader));
   ++this._tileImageProvider._referenceCounter;
@@ -15443,8 +15054,8 @@ _.selectLayerTilesRenderParameters = function selectLayerTilesRenderParameters(i
   throw new RuntimeException_0('Logic error');
 }
 ;
-var Lorg_glob3_mobile_generated_RasterLayer_2_classLit = createForClass('org.glob3.mobile.generated', 'RasterLayer', 264);
-defineClass(265, 264, $intern_64);
+var Lorg_glob3_mobile_generated_RasterLayer_2_classLit = createForClass('org.glob3.mobile.generated', 'RasterLayer', 253);
+defineClass(254, 253, $intern_59);
 _.createURL = function createURL(tile){
   var column, isb, level, numRows, path, row, subdomainsIndex, subdomainsSize;
   level = tile._level;
@@ -15496,7 +15107,7 @@ _.rawContribution = function rawContribution(tile){
   return this._transparency < 1?partialCoverageTransparent(requestedImageSector, this._transparency):($clinit_TileImageContribution() , new TileImageContribution(requestedImageSector, false, 1));
 }
 ;
-var Lorg_glob3_mobile_generated_MercatorTiledLayer_2_classLit = createForClass('org.glob3.mobile.generated', 'MercatorTiledLayer', 265);
+var Lorg_glob3_mobile_generated_MercatorTiledLayer_2_classLit = createForClass('org.glob3.mobile.generated', 'MercatorTiledLayer', 254);
 function MapQuestLayer(subdomains){
   MapQuestLayer_0.call(this, subdomains, new ArrayList);
 }
@@ -15527,7 +15138,7 @@ function newOSM_0(){
   return new MapQuestLayer(getSubdomains());
 }
 
-defineClass(149, 265, $intern_64, MapQuestLayer);
+defineClass(140, 254, $intern_59, MapQuestLayer);
 _.description_0 = function description_7(){
   return '[MapQuestLayer]';
 }
@@ -15536,125 +15147,7 @@ _.getRenderState_0 = function getRenderState_2(){
   return $clinit_RenderState() , $clinit_RenderState() , READY;
 }
 ;
-var Lorg_glob3_mobile_generated_MapQuestLayer_2_classLit = createForClass('org.glob3.mobile.generated', 'MapQuestLayer', 149);
-function $getHeight(this$static){
-  return !this$static._image?0:$getHeight_0(this$static._image);
-}
-
-function $getScreenPos(this$static){
-  return new Vector2F(this$static._x, this$static._y);
-}
-
-function $getWidth(this$static){
-  return !this$static._image?0:$getWidth_0(this$static._image);
-}
-
-function $init(this$static, rc){
-  if (!this$static._glState) {
-    this$static._glState = new GLState;
-    this$static._viewportExtentGLFeature = new ViewportExtentGLFeature(rc._currentCamera);
-    this$static._texHandler = rc._texturesHandler;
-    this$static._imageBuilder.build(rc, new MarkWidget$WidgetImageListener(this$static), true);
-    $addGLFeature(this$static._glState, this$static._viewportExtentGLFeature, false);
-  }
-}
-
-function $onResizeViewportEvent_3(this$static, width_0, height){
-  !!this$static._viewportExtentGLFeature && $changeExtent(this$static._viewportExtentGLFeature, width_0, height);
-}
-
-function $prepareWidget(this$static, image, imageName){
-  var pos2D, texCoords, textureID;
-  this$static._image = image;
-  this$static._imageName = imageName;
-  this$static._halfWidth = $getWidth_0(image) / 2;
-  this$static._halfHeight = $getHeight_0(image) / 2;
-  !!this$static._vertices && !!this$static._vertices && $dispose_14(this$static._vertices);
-  pos2D = new FloatBufferBuilderFromCartesian2D;
-  $add_8(pos2D, -this$static._halfWidth, -this$static._halfHeight);
-  $add_8(pos2D, -this$static._halfWidth, this$static._halfHeight);
-  $add_8(pos2D, this$static._halfWidth, -this$static._halfHeight);
-  $add_8(pos2D, this$static._halfWidth, this$static._halfHeight);
-  this$static._vertices = new FloatBuffer_WebGL_1(pos2D._values._array, pos2D._values._size);
-  this$static._geo2Dfeature = new Geometry2DGLFeature(this$static._vertices, new Vector2F(this$static._x, this$static._y));
-  $addGLFeature(this$static._glState, this$static._geo2Dfeature, false);
-  texCoords = new FloatBufferBuilderFromCartesian2D;
-  $push_back(texCoords._values, 0);
-  $push_back(texCoords._values, 1);
-  $push_back(texCoords._values, 0);
-  $push_back(texCoords._values, 0);
-  $push_back(texCoords._values, 1);
-  $push_back(texCoords._values, 1);
-  $push_back(texCoords._values, 1);
-  $push_back(texCoords._values, 0);
-  textureID = $getTextureIDReference(this$static._texHandler, this$static._image, _rgba, this$static._imageName, false);
-  !!this$static._textureMapping && !!this$static._textureMapping && $dispose_10(this$static._textureMapping);
-  this$static._textureMapping = new SimpleTextureMapping(textureID, new FloatBuffer_WebGL_1(texCoords._values._array, texCoords._values._size));
-  $modifyGLState_1(this$static._textureMapping, this$static._glState);
-}
-
-function $render_5(this$static, rc){
-  $drawArrays(rc._gl, _triangleStrip, 4, this$static._glState, rc._gpuProgramManager);
-}
-
-function $resetPosition(this$static){
-  !!this$static._geo2Dfeature && $setTranslation(this$static._geo2Dfeature, 0, 0);
-  this$static._x = NaN;
-  this$static._y = NaN;
-}
-
-function $setAndClampScreenPos(this$static, x_0, y_0, viewportWidth, viewportHeight, margin){
-  var xx, yy;
-  xx = $clamp(x_0, this$static._halfWidth + margin, viewportWidth - this$static._halfWidth - margin);
-  yy = $clamp(y_0, this$static._halfHeight + margin, viewportHeight - this$static._halfHeight - margin);
-  !!this$static._geo2Dfeature && $setTranslation(this$static._geo2Dfeature, xx, yy);
-  this$static._x = xx;
-  this$static._y = yy;
-}
-
-function $setScreenPos(this$static, x_0, y_0){
-  !!this$static._geo2Dfeature && $setTranslation(this$static._geo2Dfeature, x_0, y_0);
-  this$static._x = x_0;
-  this$static._y = y_0;
-}
-
-function MarkWidget(imageBuilder){
-  this._image = null;
-  this._imageBuilder = imageBuilder;
-  this._viewportExtentGLFeature = null;
-  this._geo2Dfeature = null;
-  this._glState = null;
-  this._x = NaN;
-  this._y = NaN;
-  this._halfHeight = 0;
-  this._halfWidth = 0;
-  this._vertices = null;
-  this._textureMapping = null;
-}
-
-defineClass(194, 1, {}, MarkWidget);
-_._halfHeight = 0;
-_._halfWidth = 0;
-_._x = 0;
-_._y = 0;
-var Lorg_glob3_mobile_generated_MarkWidget_2_classLit = createForClass('org.glob3.mobile.generated', 'MarkWidget', 194);
-function MarkWidget$WidgetImageListener(widget){
-  this._widget = widget;
-}
-
-defineClass(340, 1, {}, MarkWidget$WidgetImageListener);
-_.dispose = function dispose_48(){
-}
-;
-_.imageCreated_1 = function imageCreated_9(image, imageName){
-  $prepareWidget(this._widget, image, imageName);
-}
-;
-_.onError = function onError_2(error){
-  $logError(_instance_3, error, initValues(getClassLiteralForArray(Ljava_lang_Object_2_classLit, 1), $intern_4, 1, 3, []));
-}
-;
-var Lorg_glob3_mobile_generated_MarkWidget$WidgetImageListener_2_classLit = createForClass('org.glob3.mobile.generated', 'MarkWidget/WidgetImageListener', 340);
+var Lorg_glob3_mobile_generated_MapQuestLayer_2_classLit = createForClass('org.glob3.mobile.generated', 'MapQuestLayer', 140);
 function $createMultiplication(this$static, that){
   var m00, m01, m02, m03, m10, m11, m12, m13, m20, m21, m22, m23, m30, m31, m32, m33, that00, that01, that02, that03, that10, that11, that12, that13, that20, that21, that22, that23, that30, that31, that32, that33;
   that00 = that._m00;
@@ -15759,10 +15252,10 @@ function Matrix44D_0(m){
   this._columnMajorFloatBuffer = null;
 }
 
-defineClass(70, 9, {70:1, 9:1}, Matrix44D, Matrix44D_0);
-_.dispose = function dispose_49(){
+defineClass(65, 9, {65:1, 9:1}, Matrix44D, Matrix44D_0);
+_.dispose = function dispose_41(){
   this._columnMajorFloatArray = null;
-  !!this._columnMajorFloatBuffer && $dispose_14(this._columnMajorFloatBuffer);
+  !!this._columnMajorFloatBuffer && $dispose_15(this._columnMajorFloatBuffer);
   $dispose_0(this);
 }
 ;
@@ -15787,17 +15280,17 @@ _._m30 = 0;
 _._m31 = 0;
 _._m32 = 0;
 _._m33 = 0;
-var Lorg_glob3_mobile_generated_Matrix44D_2_classLit = createForClass('org.glob3.mobile.generated', 'Matrix44D', 70);
+var Lorg_glob3_mobile_generated_Matrix44D_2_classLit = createForClass('org.glob3.mobile.generated', 'Matrix44D', 65);
 function Matrix44DProvider(){
   RCObject.call(this);
 }
 
-defineClass(62, 9, $intern_65);
-_.dispose = function dispose_50(){
+defineClass(59, 9, $intern_60);
+_.dispose = function dispose_42(){
   $dispose_0(this);
 }
 ;
-var Lorg_glob3_mobile_generated_Matrix44DProvider_2_classLit = createForClass('org.glob3.mobile.generated', 'Matrix44DProvider', 62);
+var Lorg_glob3_mobile_generated_Matrix44DProvider_2_classLit = createForClass('org.glob3.mobile.generated', 'Matrix44DProvider', 59);
 function $setMatrix_0(this$static, matrix){
   if (!matrix) {
     throw new RuntimeException_0('Setting NULL in Matrix44D Holder');
@@ -15818,8 +15311,8 @@ function Matrix44DHolder(matrix){
   ++this._matrix._referenceCounter;
 }
 
-defineClass(393, 62, $intern_65, Matrix44DHolder);
-_.dispose = function dispose_51(){
+defineClass(376, 59, $intern_60, Matrix44DHolder);
+_.dispose = function dispose_43(){
   $_release(this._matrix);
   $dispose_0(this);
 }
@@ -15828,7 +15321,7 @@ _.getMatrix = function getMatrix(){
   return this._matrix;
 }
 ;
-var Lorg_glob3_mobile_generated_Matrix44DHolder_2_classLit = createForClass('org.glob3.mobile.generated', 'Matrix44DHolder', 393);
+var Lorg_glob3_mobile_generated_Matrix44DHolder_2_classLit = createForClass('org.glob3.mobile.generated', 'Matrix44DHolder', 376);
 function $getMatrix(this$static){
   var i_0, m, m2, m3;
   if (this$static._modelview) {
@@ -15872,8 +15365,8 @@ function Matrix44DMultiplicationHolder(providers, matricesSize){
   Matrix44DProvider.call(this);
   this._matricesSize = matricesSize;
   this._modelview = null;
-  this._matrices = initDim(Lorg_glob3_mobile_generated_Matrix44D_2_classLit, $intern_4, 70, this._matricesSize, 0, 1);
-  this._providers = initDim(Lorg_glob3_mobile_generated_Matrix44DProvider_2_classLit, $intern_4, 62, this._matricesSize, 0, 1);
+  this._matrices = initDim(Lorg_glob3_mobile_generated_Matrix44D_2_classLit, $intern_4, 65, this._matricesSize, 0, 1);
+  this._providers = initDim(Lorg_glob3_mobile_generated_Matrix44DProvider_2_classLit, $intern_4, 59, this._matricesSize, 0, 1);
   for (i_0 = 0; i_0 < this._matricesSize; i_0++) {
     this._matrices[i_0] = null;
     setCheck(this._providers, i_0, providers[i_0]);
@@ -15882,8 +15375,8 @@ function Matrix44DMultiplicationHolder(providers, matricesSize){
   $pullMatrixes(this);
 }
 
-defineClass(419, 62, $intern_65, Matrix44DMultiplicationHolder);
-_.dispose = function dispose_52(){
+defineClass(411, 59, $intern_60, Matrix44DMultiplicationHolder);
+_.dispose = function dispose_44(){
   var j;
   for (j = 0; j < this._matricesSize; j++) {
     !!this._matrices[j] && $_release(this._matrices[j]);
@@ -15898,7 +15391,7 @@ _.getMatrix = function getMatrix_0(){
 }
 ;
 _._matricesSize = 0;
-var Lorg_glob3_mobile_generated_Matrix44DMultiplicationHolder_2_classLit = createForClass('org.glob3.mobile.generated', 'Matrix44DMultiplicationHolder', 419);
+var Lorg_glob3_mobile_generated_Matrix44DMultiplicationHolder_2_classLit = createForClass('org.glob3.mobile.generated', 'Matrix44DMultiplicationHolder', 411);
 function $add_15(this$static, provider){
   $add_3(this$static._providers, provider);
   ++provider._referenceCounter;
@@ -15907,9 +15400,9 @@ function $add_15(this$static, provider){
 function $create_2(this$static){
   var i_0, providersSize, ps;
   providersSize = this$static._providers.array.length;
-  ps = initDim(Lorg_glob3_mobile_generated_Matrix44DProvider_2_classLit, $intern_4, 62, providersSize, 0, 1);
+  ps = initDim(Lorg_glob3_mobile_generated_Matrix44DProvider_2_classLit, $intern_4, 59, providersSize, 0, 1);
   for (i_0 = 0; i_0 < providersSize; i_0++) {
-    setCheck(ps, i_0, dynamicCast($get_0(this$static._providers, i_0), 62));
+    setCheck(ps, i_0, dynamicCast($get_0(this$static._providers, i_0), 59));
   }
   return new Matrix44DMultiplicationHolder(ps, providersSize);
 }
@@ -15918,7 +15411,7 @@ function $dispose_8(this$static){
   var i_0, providersSize;
   providersSize = this$static._providers.array.length;
   for (i_0 = 0; i_0 < providersSize; i_0++) {
-    $_release(dynamicCast($get_0(this$static._providers, i_0), 62));
+    $_release(dynamicCast($get_0(this$static._providers, i_0), 59));
   }
 }
 
@@ -15926,14 +15419,14 @@ function Matrix44DMultiplicationHolderBuilder(){
   this._providers = new ArrayList;
 }
 
-defineClass(222, 1, {}, Matrix44DMultiplicationHolderBuilder);
-var Lorg_glob3_mobile_generated_Matrix44DMultiplicationHolderBuilder_2_classLit = createForClass('org.glob3.mobile.generated', 'Matrix44DMultiplicationHolderBuilder', 222);
+defineClass(212, 1, {}, Matrix44DMultiplicationHolderBuilder);
+var Lorg_glob3_mobile_generated_Matrix44DMultiplicationHolderBuilder_2_classLit = createForClass('org.glob3.mobile.generated', 'Matrix44DMultiplicationHolderBuilder', 212);
 function $clinit_MercatorUtils(){
   $clinit_MercatorUtils = emptyMethod;
-  new Angle($intern_66, $intern_67);
-  new Angle($intern_68, $intern_69);
-  new Angle($intern_66, $intern_67);
-  new Angle($intern_68, $intern_69);
+  new Angle($intern_61, $intern_62);
+  new Angle($intern_63, $intern_64);
+  new Angle($intern_61, $intern_62);
+  new Angle($intern_63, $intern_64);
 }
 
 function calculateSplitLatitude(lowerLatitude, upperLatitude){
@@ -15941,7 +15434,7 @@ function calculateSplitLatitude(lowerLatitude, upperLatitude){
   $clinit_MercatorUtils();
   var middleV;
   middleV = (getMercatorV(lowerLatitude) + getMercatorV(upperLatitude)) / 2;
-  return exp_0 = Math.exp(-6.283185307179586 * (1 - middleV - 0.5)) , atan_0 = Math.atan(exp_0) , new Angle(($intern_47 - 2 * atan_0) * $intern_39, $intern_47 - 2 * atan_0);
+  return exp_0 = Math.exp(-6.283185307179586 * (1 - middleV - 0.5)) , atan_0 = Math.atan(exp_0) , new Angle(($intern_43 - 2 * atan_0) * $intern_36, $intern_43 - 2 * atan_0);
 }
 
 function getMercatorV(latitude){
@@ -15950,50 +15443,50 @@ function getMercatorV(latitude){
   if (latitude._degrees >= _upperLimitInDegrees) {
     return 0;
   }
-  if (latitude._degrees <= $intern_68) {
+  if (latitude._degrees <= $intern_63) {
     return 1;
   }
   latSin = sin_0(latitude._radians);
   return 1 - (Math.log((1 + latSin) / (1 - latSin)) / 12.566370614359172 + 0.5);
 }
 
-var _upperLimitInDegrees = $intern_66;
+var _upperLimitInDegrees = $intern_61;
 function ModelGLFeature(model){
   GLCameraGroupFeature.call(this, model, 3);
 }
 
-defineClass(363, 55, $intern_52, ModelGLFeature);
-_.dispose = function dispose_53(){
+defineClass(349, 50, $intern_47, ModelGLFeature);
+_.dispose = function dispose_45(){
   $_release(this._matrixHolder);
   !!this._values && $dispose_4(this._values);
   $dispose_0(this);
 }
 ;
-var Lorg_glob3_mobile_generated_ModelGLFeature_2_classLit = createForClass('org.glob3.mobile.generated', 'ModelGLFeature', 363);
+var Lorg_glob3_mobile_generated_ModelGLFeature_2_classLit = createForClass('org.glob3.mobile.generated', 'ModelGLFeature', 349);
 function ModelTransformGLFeature(transform){
   GLCameraGroupFeature.call(this, transform, 5);
 }
 
-defineClass(218, 55, $intern_52, ModelTransformGLFeature);
-_.dispose = function dispose_54(){
+defineClass(206, 50, $intern_47, ModelTransformGLFeature);
+_.dispose = function dispose_46(){
   $_release(this._matrixHolder);
   !!this._values && $dispose_4(this._values);
   $dispose_0(this);
 }
 ;
-var Lorg_glob3_mobile_generated_ModelTransformGLFeature_2_classLit = createForClass('org.glob3.mobile.generated', 'ModelTransformGLFeature', 218);
+var Lorg_glob3_mobile_generated_ModelTransformGLFeature_2_classLit = createForClass('org.glob3.mobile.generated', 'ModelTransformGLFeature', 206);
 function ModelViewGLFeature(camera){
   GLCameraGroupFeature.call(this, $asMatrix44D($getModelViewMatrix(camera)), 13);
 }
 
-defineClass(159, 55, {55:1, 24:1, 159:1, 9:1}, ModelViewGLFeature);
-_.dispose = function dispose_55(){
+defineClass(149, 50, {50:1, 27:1, 149:1, 9:1}, ModelViewGLFeature);
+_.dispose = function dispose_47(){
   $_release(this._matrixHolder);
   !!this._values && $dispose_4(this._values);
   $dispose_0(this);
 }
 ;
-var Lorg_glob3_mobile_generated_ModelViewGLFeature_2_classLit = createForClass('org.glob3.mobile.generated', 'ModelViewGLFeature', 159);
+var Lorg_glob3_mobile_generated_ModelViewGLFeature_2_classLit = createForClass('org.glob3.mobile.generated', 'ModelViewGLFeature', 149);
 function $create_3(this$static, errors){
   if (!this$static._topSector) {
     setCheck(errors.array, errors.array.length, "Can't find any enabled Layer");
@@ -16006,11 +15499,11 @@ function $update(this$static, layer, errors){
   var foundI, i_0, layerParametersVector, parameters;
   layerParametersVector = layer.getLayerTilesRenderParametersVector();
   if (!this$static._topSector) {
-    return $update_0(this$static, (checkElementIndex(0, layerParametersVector.array.length) , dynamicCast(layerParametersVector.array[0], 77)), errors);
+    return $update_0(this$static, (checkElementIndex(0, layerParametersVector.array.length) , dynamicCast(layerParametersVector.array[0], 76)), errors);
   }
   foundI = -1;
   for (i_0 = 0; i_0 < layerParametersVector.array.length; i_0++) {
-    parameters = (checkElementIndex(i_0, layerParametersVector.array.length) , dynamicCast(layerParametersVector.array[i_0], 77));
+    parameters = (checkElementIndex(i_0, layerParametersVector.array.length) , dynamicCast(layerParametersVector.array[i_0], 76));
     if (parameters._mercator == this$static._mercator) {
       foundI = i_0;
       break;
@@ -16021,7 +15514,7 @@ function $update(this$static, layer, errors){
     return false;
   }
   layer.selectLayerTilesRenderParameters(foundI);
-  return $update_0(this$static, (checkElementIndex(foundI, layerParametersVector.array.length) , dynamicCast(layerParametersVector.array[foundI], 77)), errors);
+  return $update_0(this$static, (checkElementIndex(foundI, layerParametersVector.array.length) , dynamicCast(layerParametersVector.array[foundI], 76)), errors);
 }
 
 function $update_0(this$static, parameters, errors){
@@ -16086,7 +15579,7 @@ function MutableLayerTilesRenderParameters(){
   this._mercator = false;
 }
 
-defineClass(404, 1, {}, MutableLayerTilesRenderParameters);
+defineClass(385, 1, {}, MutableLayerTilesRenderParameters);
 _._firstLevel = 0;
 _._maxLevel = 0;
 _._mercator = false;
@@ -16096,7 +15589,7 @@ _._tileTextureHeight = 0;
 _._tileTextureWidth = 0;
 _._topSectorSplitsByLatitude = 0;
 _._topSectorSplitsByLongitude = 0;
-var Lorg_glob3_mobile_generated_MutableLayerTilesRenderParameters_2_classLit = createForClass('org.glob3.mobile.generated', 'MutableLayerTilesRenderParameters', 404);
+var Lorg_glob3_mobile_generated_MutableLayerTilesRenderParameters_2_classLit = createForClass('org.glob3.mobile.generated', 'MutableLayerTilesRenderParameters', 385);
 function $asMatrix44D(this$static){
   !this$static._matrix44D && (this$static._matrix44D = new Matrix44D(this$static._m00, this$static._m10, this$static._m20, this$static._m30, this$static._m01, this$static._m11, this$static._m21, this$static._m31, this$static._m02, this$static._m12, this$static._m22, this$static._m32, this$static._m03, this$static._m13, this$static._m23, this$static._m33));
   return this$static._matrix44D;
@@ -16184,7 +15677,7 @@ function $copyValueOfMultiplication(this$static, m1, m2){
   }
 }
 
-function $description_3(this$static){
+function $description_2(this$static){
   var f, i_0, isb, s;
   isb = new StringBuilder_WebGL;
   isb._string += 'MUTABLE MATRIX 44D: ';
@@ -16287,22 +15780,24 @@ function $multiply(this$static, that){
   return new MutableMatrix44D_0(m00, m10, m20, m30, m01, m11, m21, m31, m02, m12, m22, m32, m03, m13, m23, m33);
 }
 
-function $project(this$static, point, vpWidth, vpHeight){
-  var out0, out1, out3, winx, winy, x_0, y_0, z_0;
-  x_0 = point._x;
-  y_0 = point._y;
-  z_0 = point._z;
-  out0 = this$static._m00 * x_0 + this$static._m01 * y_0 + this$static._m02 * z_0 + this$static._m03;
-  out1 = this$static._m10 * x_0 + this$static._m11 * y_0 + this$static._m12 * z_0 + this$static._m13;
-  out3 = this$static._m30 * x_0 + this$static._m31 * y_0 + this$static._m32 * z_0 + this$static._m33;
-  if (out3 == 0) {
-    return new Vector2D(NaN, NaN);
-  }
-  out0 /= out3;
-  out1 /= out3;
-  winx = (1 + out0) * vpWidth / 2;
-  winy = (1 + out1) * vpHeight / 2;
-  return new Vector2D(winx, winy);
+function $setValue(this$static, m00, m10, m20, m01, m11, m21, m02, m12, m22){
+  this$static._m00 = m00;
+  this$static._m01 = m01;
+  this$static._m02 = m02;
+  this$static._m03 = 0;
+  this$static._m10 = m10;
+  this$static._m11 = m11;
+  this$static._m12 = m12;
+  this$static._m13 = 0;
+  this$static._m20 = m20;
+  this$static._m21 = m21;
+  this$static._m22 = m22;
+  this$static._m23 = 0;
+  this$static._m30 = 0;
+  this$static._m31 = 0;
+  this$static._m32 = 0;
+  this$static._m33 = 1;
+  this$static._isValid = true;
 }
 
 function $unproject(this$static, pixel3D, vpWidth, vpHeight){
@@ -16446,9 +15941,9 @@ function createTranslationMatrix(t){
   return new MutableMatrix44D_0(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, t._x, t._y, t._z, 1);
 }
 
-defineClass(13, 1, {}, MutableMatrix44D, MutableMatrix44D_0, MutableMatrix44D_1, MutableMatrix44D_2);
+defineClass(11, 1, {}, MutableMatrix44D, MutableMatrix44D_0, MutableMatrix44D_1, MutableMatrix44D_2);
 _.toString$ = function toString_35(){
-  return $description_3(this);
+  return $description_2(this);
 }
 ;
 _._isValid = false;
@@ -16468,22 +15963,7 @@ _._m30 = 0;
 _._m31 = 0;
 _._m32 = 0;
 _._m33 = 0;
-var Lorg_glob3_mobile_generated_MutableMatrix44D_2_classLit = createForClass('org.glob3.mobile.generated', 'MutableMatrix44D', 13);
-function $add_16(this$static, x_0, y_0){
-  this$static._x += x_0;
-  this$static._y += y_0;
-}
-
-function $set_3(this$static){
-  this$static._x = 0;
-  this$static._y = 0;
-}
-
-function $times_0(this$static, k){
-  this$static._x *= k;
-  this$static._y *= k;
-}
-
+var Lorg_glob3_mobile_generated_MutableMatrix44D_2_classLit = createForClass('org.glob3.mobile.generated', 'MutableMatrix44D', 11);
 function MutableVector2F(){
   this._x = 0;
   this._y = 0;
@@ -16494,16 +15974,11 @@ function MutableVector2F_0(x_0, y_0){
   this._y = y_0;
 }
 
-function MutableVector2F_1(that){
-  this._x = that._x;
-  this._y = that._y;
-}
-
-defineClass(54, 1, {}, MutableVector2F, MutableVector2F_0, MutableVector2F_1);
+defineClass(121, 1, {}, MutableVector2F, MutableVector2F_0);
 _._x = 0;
 _._y = 0;
-var Lorg_glob3_mobile_generated_MutableVector2F_2_classLit = createForClass('org.glob3.mobile.generated', 'MutableVector2F', 54);
-function $set_4(this$static, x_0, y_0){
+var Lorg_glob3_mobile_generated_MutableVector2F_2_classLit = createForClass('org.glob3.mobile.generated', 'MutableVector2F', 121);
+function $set_3(this$static, x_0, y_0){
   this$static._x = x_0;
   this$static._y = y_0;
 }
@@ -16513,10 +15988,10 @@ function MutableVector2I(){
   this._y = 0;
 }
 
-defineClass(212, 1, {}, MutableVector2I);
+defineClass(199, 1, {}, MutableVector2I);
 _._x = 0;
 _._y = 0;
-var Lorg_glob3_mobile_generated_MutableVector2I_2_classLit = createForClass('org.glob3.mobile.generated', 'MutableVector2I', 212);
+var Lorg_glob3_mobile_generated_MutableVector2I_2_classLit = createForClass('org.glob3.mobile.generated', 'MutableVector2I', 199);
 function $addInPlace(this$static, that){
   this$static._x += that._x;
   this$static._y += that._y;
@@ -16560,7 +16035,7 @@ function $equalTo(this$static, v){
   return v._x == this$static._x && v._y == this$static._y && v._z == this$static._z;
 }
 
-function $isNan(this$static){
+function $isNan_0(this$static){
   return this$static._x != this$static._x || this$static._y != this$static._y || this$static._z != this$static._z;
 }
 
@@ -16600,21 +16075,29 @@ function $rotateAroundAxis(this$static, axis_0, theta){
   return new MutableVector3D_0((u * (u * this$static._x + v * this$static._y + w * this$static._z) + (this$static._x * (v * v + w * w) - u * (v * this$static._y + w * this$static._z)) * cosTheta + m * (-w * this$static._y + v * this$static._z) * sinTheta) / ms, (v * (u * this$static._x + v * this$static._y + w * this$static._z) + (this$static._y * (u * u + w * w) - v * (u * this$static._x + w * this$static._z)) * cosTheta + m * (w * this$static._x - u * this$static._z) * sinTheta) / ms, (w * (u * this$static._x + v * this$static._y + w * this$static._z) + (this$static._z * (u * u + v * v) - w * (u * this$static._x + v * this$static._y)) * cosTheta + m * (-(v * this$static._x) + u * this$static._y) * sinTheta) / ms);
 }
 
-function $set_5(this$static, x_0, y_0, z_0){
+function $set_4(this$static, x_0, y_0, z_0){
   this$static._x = x_0;
   this$static._y = y_0;
   this$static._z = z_0;
+}
+
+function $squaredDistanceTo(this$static, that){
+  var dx, dy, dz;
+  dx = this$static._x - that._x;
+  dy = this$static._y - that._y;
+  dz = this$static._z - that._z;
+  return dx * dx + dy * dy + dz * dz;
 }
 
 function $sub_0(this$static, v){
   return new MutableVector3D_0(this$static._x - v._x, this$static._y - v._y, this$static._z - v._z);
 }
 
-function $times_1(this$static){
+function $times_0(this$static){
   return new MutableVector3D_0(-this$static._x, -this$static._y, -this$static._z);
 }
 
-function $times_2(this$static, v){
+function $times_1(this$static, v){
   return new MutableVector3D_0(this$static._x * v._x, this$static._y * v._y, this$static._z * v._z);
 }
 
@@ -16646,283 +16129,7 @@ _._x = 0;
 _._y = 0;
 _._z = 0;
 var Lorg_glob3_mobile_generated_MutableVector3D_2_classLit = createForClass('org.glob3.mobile.generated', 'MutableVector3D', 8);
-function $applyCoulombsLaw(this$static, that){
-  var d, direction, distance, force, strength;
-  d = $sub_1($getScreenPos(this$static._widget), $getScreenPos(that._widget));
-  distance = sqrt_0(d._x * d._x + d._y * d._y) + 0.001;
-  direction = $div_1(d, distance);
-  strength = this$static._electricCharge * that._electricCharge / (distance * distance);
-  force = new Vector2F(direction._x * strength, direction._y * strength);
-  $applyForce(this$static, force._x, force._y);
-  $applyForce(that, -force._x, -force._y);
-}
-
-function $applyCoulombsLawFromAnchor(this$static, that){
-  var dAnchor, directionAnchor, distanceAnchor, strengthAnchor;
-  dAnchor = $sub_1($getScreenPos(this$static._widget), $getScreenPos(that._anchorWidget));
-  distanceAnchor = sqrt_0(dAnchor._x * dAnchor._x + dAnchor._y * dAnchor._y) + 0.001;
-  directionAnchor = $div_1(dAnchor, distanceAnchor);
-  strengthAnchor = this$static._electricCharge * that._anchorElectricCharge / (distanceAnchor * distanceAnchor);
-  $applyForce(this$static, directionAnchor._x * strengthAnchor, directionAnchor._y * strengthAnchor);
-}
-
-function $applyForce(this$static, x_0, y_0){
-  $add_16(this$static._force, x_0, y_0);
-}
-
-function $computeAnchorScreenPos(this$static, camera, planet){
-  var deltaX, deltaY, sp;
-  sp = new Vector2F_0($point2Pixel(camera, (!this$static._cartesianPos && (this$static._cartesianPos = new Vector3D_0($toCartesian_2(planet, this$static._geoPosition))) , this$static._cartesianPos)));
-  $setScreenPos(this$static._anchorWidget, sp._x, sp._y);
-  if ($isNan_0($getScreenPos(this$static._widget))) {
-    deltaX = $nextDouble(_instance_4._random) * 2 - 1;
-    deltaY = $nextDouble(_instance_4._random) * 2 - 1;
-    $setScreenPos(this$static._widget, sp._x + deltaX, sp._y + deltaY);
-  }
-}
-
-function $onResizeViewportEvent_4(this$static, width_0, height){
-  $onResizeViewportEvent_3(this$static._widget, width_0, height);
-  $onResizeViewportEvent_3(this$static._anchorWidget, width_0, height);
-  !!this$static._springViewportExtentGLFeature && $changeExtent(this$static._springViewportExtentGLFeature, width_0, height);
-}
-
-function $renderAnchorWidget(this$static, rc){
-  this$static._anchorWidget._image?!!this$static._widget._image && $render_5(this$static._anchorWidget, rc):$init(this$static._anchorWidget, rc);
-}
-
-function $renderSpringWidget(this$static, rc){
-  var asp, sp;
-  if (!this$static._widget._image || !this$static._anchorWidget._image) {
-    return;
-  }
-  sp = $getScreenPos(this$static._widget);
-  asp = $getScreenPos(this$static._anchorWidget);
-  if (!this$static._springGLState) {
-    this$static._springGLState = new GLState;
-    $addGLFeature(this$static._springGLState, new FlatColorGLFeature(new Color(0, 0, 0, 1)), false);
-    this$static._springVertices = new FloatBuffer_WebGL_0;
-    $rawPut(this$static._springVertices, 0, sp._x);
-    $rawPut(this$static._springVertices, 1, -sp._y);
-    $rawPut(this$static._springVertices, 2, asp._x);
-    $rawPut(this$static._springVertices, 3, -asp._y);
-    $addGLFeature(this$static._springGLState, new Geometry2DGLFeature(this$static._springVertices, new Vector2F(0, 0)), false);
-    this$static._springViewportExtentGLFeature = new ViewportExtentGLFeature(rc._currentCamera);
-    $addGLFeature(this$static._springGLState, this$static._springViewportExtentGLFeature, false);
-  }
-   else {
-    $put_2(this$static._springVertices, 0, sp._x);
-    $put_2(this$static._springVertices, 1, -sp._y);
-    $put_2(this$static._springVertices, 2, asp._x);
-    $put_2(this$static._springVertices, 3, -asp._y);
-  }
-  $drawArrays(rc._gl, _lines, 2, this$static._springGLState, rc._gpuProgramManager);
-}
-
-function $renderWidget(this$static, rc){
-  this$static._widget._image?!!this$static._anchorWidget._image && $render_5(this$static._widget, rc):$init(this$static._widget, rc);
-}
-
-function $updatePositionWithCurrentForce(this$static, timeInSeconds, viewportWidth, viewportHeight, viewportMargin){
-  var anchorPosition, newX, newY, spring, widgetPosition;
-  $add_16(this$static._speed, this$static._force._x * timeInSeconds, this$static._force._y * timeInSeconds);
-  $times_0(this$static._speed, this$static._resistanceFactor);
-  $set_3(this$static._force);
-  widgetPosition = $getScreenPos(this$static._widget);
-  newX = widgetPosition._x + this$static._speed._x * timeInSeconds;
-  newY = widgetPosition._y + this$static._speed._y * timeInSeconds;
-  anchorPosition = $getScreenPos(this$static._anchorWidget);
-  spring = $clampLength(new Vector2F(newX - anchorPosition._x, newY - anchorPosition._y), this$static._minSpringLength, this$static._maxSpringLength);
-  $setAndClampScreenPos(this$static._widget, anchorPosition._x + spring._x, anchorPosition._y + spring._y, viewportWidth, viewportHeight, viewportMargin);
-}
-
-function NonOverlappingMark(imageBuilderWidget, imageBuilderAnchor, position){
-  this._speed = new MutableVector2F;
-  this._force = new MutableVector2F;
-  this._cartesianPos = null;
-  this._speed = new MutableVector2F_1(new MutableVector2F_0(0, 0));
-  this._force = new MutableVector2F_1(new MutableVector2F_0(0, 0));
-  this._geoPosition = new Geodetic3D_1(position);
-  this._springLengthInPixels = 100;
-  this._springK = 70;
-  this._minSpringLength = 25;
-  this._maxSpringLength = 125;
-  this._electricCharge = 3000;
-  this._anchorElectricCharge = 2000;
-  this._resistanceFactor = 0.949999988079071;
-  this._springGLState = null;
-  this._springVertices = null;
-  this._springViewportExtentGLFeature = null;
-  this._widget = new MarkWidget(imageBuilderWidget);
-  this._anchorWidget = new MarkWidget(imageBuilderAnchor);
-}
-
-defineClass(35, 1, {35:1}, NonOverlappingMark);
-_._anchorElectricCharge = 0;
-_._electricCharge = 0;
-_._maxSpringLength = 0;
-_._minSpringLength = 0;
-_._resistanceFactor = 0;
-_._springK = 0;
-_._springLengthInPixels = 0;
-var Lorg_glob3_mobile_generated_NonOverlappingMark_2_classLit = createForClass('org.glob3.mobile.generated', 'NonOverlappingMark', 35);
-function $addMark(this$static, mark){
-  $add_3(this$static._marks, mark);
-}
-
-function $applyForces(this$static, now_0, camera){
-  var elapsedMS, i_0, timeInSeconds, viewPortHeight, viewPortWidth, visibleMarksSize;
-  if (neq(this$static._lastPositionsUpdatedTime, {l:0, m:0, h:0})) {
-    viewPortWidth = camera._viewPortWidth;
-    viewPortHeight = camera._viewPortHeight;
-    elapsedMS = toDouble(sub_0(now_0, this$static._lastPositionsUpdatedTime));
-    timeInSeconds = elapsedMS / 1000;
-    timeInSeconds > $intern_70 && (timeInSeconds = $intern_70);
-    visibleMarksSize = this$static._visibleMarks.array.length;
-    for (i_0 = 0; i_0 < visibleMarksSize; i_0++) {
-      $updatePositionWithCurrentForce(dynamicCast($get_0(this$static._visibleMarks, i_0), 35), timeInSeconds, viewPortWidth, viewPortHeight, this$static._viewportMargin);
-    }
-  }
-  this$static._lastPositionsUpdatedTime = now_0;
-}
-
-function $computeForces(this$static, camera, planet){
-  var i_0, i0, j, j0, mark, visibleMarksSize, d, mod, displacement, direction, force;
-  visibleMarksSize = this$static._visibleMarks.array.length;
-  for (i0 = 0; i0 < visibleMarksSize; i0++) {
-    $computeAnchorScreenPos(dynamicCast($get_0(this$static._visibleMarks, i0), 35), camera, planet);
-  }
-  for (i_0 = 0; i_0 < visibleMarksSize; i_0++) {
-    mark = dynamicCast($get_0(this$static._visibleMarks, i_0), 35);
-    d = $sub_1($getScreenPos(mark._widget), $getScreenPos(mark._anchorWidget));
-    mod = sqrt_0(d._x * d._x + d._y * d._y);
-    displacement = mark._springLengthInPixels - mod;
-    direction = $div_1(d, mod);
-    force = mark._springK * displacement;
-    $applyForce(mark, direction._x * force, direction._y * force);
-    for (j0 = i_0 + 1; j0 < visibleMarksSize; j0++) {
-      $applyCoulombsLaw(mark, dynamicCast($get_0(this$static._visibleMarks, j0), 35));
-    }
-    for (j = 0; j < visibleMarksSize; j++) {
-      i_0 != j && $applyCoulombsLawFromAnchor(mark, dynamicCast($get_0(this$static._visibleMarks, j), 35));
-    }
-  }
-}
-
-function $computeMarksToBeRendered(this$static, camera, planet){
-  var frustrum, i_0, i0, m, marksSize;
-  this$static._visibleMarks.array = initDim(Ljava_lang_Object_2_classLit, $intern_4, 1, 0, 3, 1);
-  $clear_1(this$static._visibleMarksIDsBuilder);
-  frustrum = $getFrustumInModelCoordinates(camera);
-  marksSize = this$static._marks.array.length;
-  for (i0 = 0; i0 < marksSize; i0++) {
-    m = dynamicCast($get_0(this$static._marks, i0), 35);
-    if (this$static._visibleMarks.array.length < this$static._maxVisibleMarks && $contains_1(frustrum, (!m._cartesianPos && (m._cartesianPos = new Vector3D_0($toCartesian_2(planet, m._geoPosition))) , m._cartesianPos))) {
-      $add_3(this$static._visibleMarks, m);
-      $addLong(this$static._visibleMarksIDsBuilder, fromInt(i0));
-      $addString(this$static._visibleMarksIDsBuilder, '/');
-    }
-     else {
-      $resetPosition(m._widget);
-      $set_3(m._speed);
-      $set_3(m._force);
-    }
-  }
-  if (!$contentEqualsTo(this$static._visibleMarksIDsBuilder, this$static._visibleMarksIDs)) {
-    this$static._visibleMarksIDs = this$static._visibleMarksIDsBuilder._string;
-    for (i_0 = 0; i_0 < this$static._visibilityListeners.array.length; i_0++) {
-      throwClassCastExceptionUnlessNull($get_0(this$static._visibilityListeners, i_0)).nullMethod();
-    }
-  }
-}
-
-function $renderMarks(this$static, rc){
-  var i_0, i0, i1, visibleMarksSize;
-  visibleMarksSize = this$static._visibleMarks.array.length;
-  if (visibleMarksSize > 0) {
-    for (i0 = 0; i0 < visibleMarksSize; i0++) {
-      $renderSpringWidget(dynamicCast($get_0(this$static._visibleMarks, i0), 35), rc);
-    }
-    for (i1 = 0; i1 < visibleMarksSize; i1++) {
-      $renderAnchorWidget(dynamicCast($get_0(this$static._visibleMarks, i1), 35), rc);
-    }
-    for (i_0 = 0; i_0 < visibleMarksSize; i_0++) {
-      $renderWidget(dynamicCast($get_0(this$static._visibleMarks, i_0), 35), rc);
-    }
-  }
-}
-
-function NonOverlappingMarksRenderer(){
-  DefaultRenderer.call(this);
-  this._marks = new ArrayList;
-  this._visibleMarks = new ArrayList;
-  this._visibilityListeners = new ArrayList;
-  this._maxVisibleMarks = 30;
-  this._viewportMargin = 5;
-  this._lastPositionsUpdatedTime = {l:0, m:0, h:0};
-  this._visibleMarksIDsBuilder = new StringBuilder_WebGL;
-  this._visibleMarksIDs = '';
-}
-
-defineClass(179, 148, $intern_49, NonOverlappingMarksRenderer);
-_.getRenderState = function getRenderState_3(rc){
-  return $clinit_RenderState() , $clinit_RenderState() , READY;
-}
-;
-_.onResizeViewportEvent = function onResizeViewportEvent_4(ec, width_0, height){
-  var i_0, marksSize;
-  marksSize = this._marks.array.length;
-  for (i_0 = 0; i_0 < marksSize; i_0++) {
-    $onResizeViewportEvent_4(dynamicCast($get_0(this._marks, i_0), 35), width_0, height);
-  }
-}
-;
-_.onTouchEvent_0 = function onTouchEvent_5(ec, touchEvent){
-  var i_0, mark, markHeight, markPixel, markPixelBounds, markWidth, minSqDistance, sqDistance, touchedPixel, visibleMarksSize, dx, dy;
-  if (touchEvent._eventType == ($clinit_TouchEventType() , DownUp)) {
-    touchedPixel = dynamicCast($get_0(touchEvent._touchs, 0), 10)._pos;
-    minSqDistance = $intern_71;
-    visibleMarksSize = this._visibleMarks.array.length;
-    for (i_0 = 0; i_0 < visibleMarksSize; i_0++) {
-      mark = dynamicCast($get_0(this._visibleMarks, i_0), 35);
-      markWidth = $getWidth(mark._widget);
-      if (markWidth <= 0) {
-        continue;
-      }
-      markHeight = $getHeight(mark._widget);
-      if (markHeight <= 0) {
-        continue;
-      }
-      markPixel = $getScreenPos(mark._widget);
-      markPixelBounds = new RectangleF(markPixel._x - markWidth / 2, markPixel._y - markHeight / 2, markWidth, markHeight);
-      if ($contains_2(markPixelBounds, touchedPixel._x, touchedPixel._y)) {
-        sqDistance = (dx = markPixel._x - touchedPixel._x , dy = markPixel._y - touchedPixel._y , dx * dx + dy * dy);
-        sqDistance < minSqDistance && (minSqDistance = sqDistance);
-      }
-    }
-  }
-  return false;
-}
-;
-_.render = function render_8(rc, glState){
-  var camera, planet;
-  camera = rc._currentCamera;
-  planet = rc._planet;
-  $computeMarksToBeRendered(this, camera, planet);
-  $computeForces(this, camera, planet);
-  $applyForces(this, fromDouble(now_1()), camera);
-  $renderMarks(this, rc);
-}
-;
-_._lastPositionsUpdatedTime = {l:0, m:0, h:0};
-_._maxVisibleMarks = 0;
-_._viewportMargin = 0;
-var Lorg_glob3_mobile_generated_NonOverlappingMarksRenderer_2_classLit = createForClass('org.glob3.mobile.generated', 'NonOverlappingMarksRenderer', 179);
 function $signedDistance(this$static, point){
-  return this$static._normal._x * point._x + this$static._normal._y * point._y + this$static._normal._z * point._z + this$static._d;
-}
-
-function $signedDistance_0(this$static, point){
   return this$static._normalF._x * point._x + this$static._normalF._y * point._y + this$static._normalF._z * point._z + this$static._dF;
 }
 
@@ -16956,10 +16163,10 @@ function fromPoints(point0, point1, point2){
   return new Plane_0(normal, d);
 }
 
-defineClass(132, 1, {}, Plane, Plane_0);
+defineClass(125, 1, {}, Plane, Plane_0);
 _._d = 0;
 _._dF = 0;
-var Lorg_glob3_mobile_generated_Plane_2_classLit = createForClass('org.glob3.mobile.generated', 'Plane', 132);
+var Lorg_glob3_mobile_generated_Plane_2_classLit = createForClass('org.glob3.mobile.generated', 'Plane', 125);
 function $addVisibleSectorListener(this$static, stabilizationInterval){
   $add_3(this$static._visibleSectorListeners, new VisibleSectorListenerEntry(stabilizationInterval));
 }
@@ -16979,7 +16186,7 @@ function $clearFirstLevelTiles(this$static){
   var firstLevelTilesCount, i_0, tile;
   firstLevelTilesCount = this$static._firstLevelTiles.array.length;
   for (i_0 = 0; i_0 < firstLevelTilesCount; i_0++) {
-    tile = dynamicCast($get_0(this$static._firstLevelTiles, i_0), 25);
+    tile = dynamicCast($get_0(this$static._firstLevelTiles, i_0), 23);
     $toBeDeleted(tile, this$static._texturizer, this$static._elevationDataProvider, this$static._tilesStoppedRendering);
     !!tile && (!!tile._debugMesh && $dispose_6(tile._debugMesh) , tile._debugMesh = null , !!tile._flatColorMesh && $dispose_2(tile._flatColorMesh) , tile._flatColorMesh = null , !!tile._tessellatorMesh && $dispose_5(tile._tessellatorMesh) , tile._tessellatorMesh = null , !!tile._texturizerData && $dispose_1(tile._texturizerData) , tile._texturizerData = null , !!tile._texturizedMesh && $dispose_7(tile._texturizedMesh) , tile._texturizedMesh = null , null);
   }
@@ -17000,7 +16207,7 @@ function $createFirstLevelTiles(this$static, firstLevelTiles, tile, firstLevel){
     children = $createSubTiles(tile, splitLatitude, splitLongitude, false);
     childrenSize = children.array.length;
     for (i_0 = 0; i_0 < childrenSize; i_0++) {
-      child = (checkElementIndex(i_0, children.array.length) , dynamicCast(children.array[i_0], 25));
+      child = (checkElementIndex(i_0, children.array.length) , dynamicCast(children.array[i_0], 23));
       $createFirstLevelTiles(this$static, firstLevelTiles, child, firstLevel);
     }
     !!tile && (!!tile._debugMesh && $dispose_6(tile._debugMesh) , tile._debugMesh = null , !!tile._flatColorMesh && $dispose_2(tile._flatColorMesh) , tile._flatColorMesh = null , !!tile._tessellatorMesh && $dispose_5(tile._tessellatorMesh) , tile._tessellatorMesh = null , !!tile._texturizerData && $dispose_1(tile._texturizerData) , tile._texturizerData = null , !!tile._texturizedMesh && $dispose_7(tile._texturizedMesh) , tile._texturizedMesh = null , null);
@@ -17040,7 +16247,7 @@ function $createFirstLevelTiles_0(this$static, context){
   if (parameters._firstLevel > 0) {
     topLevelTilesSize = topLevelTiles.array.length;
     for (i_0 = 0; i_0 < topLevelTilesSize; i_0++) {
-      tile = (checkElementIndex(i_0, topLevelTiles.array.length) , dynamicCast(topLevelTiles.array[i_0], 25));
+      tile = (checkElementIndex(i_0, topLevelTiles.array.length) , dynamicCast(topLevelTiles.array[i_0], 23));
       $createFirstLevelTiles(this$static, this$static._firstLevelTiles, tile, parameters._firstLevel);
     }
   }
@@ -17065,7 +16272,7 @@ function $pruneFirstLevelTiles(this$static){
   var firstLevelTilesCount, i_0, tile;
   firstLevelTilesCount = this$static._firstLevelTiles.array.length;
   for (i_0 = 0; i_0 < firstLevelTilesCount; i_0++) {
-    tile = dynamicCast($get_0(this$static._firstLevelTiles, i_0), 25);
+    tile = dynamicCast($get_0(this$static._firstLevelTiles, i_0), 23);
     $prune(tile, this$static._texturizer, this$static._elevationDataProvider, this$static._tilesStoppedRendering);
   }
 }
@@ -17121,12 +16328,12 @@ function PlanetRenderer(tessellator, elevationDataProvider, verticalExaggeration
   this._rendererIdentifier = -1;
 }
 
-defineClass(322, 148, $intern_49, PlanetRenderer);
+defineClass(308, 179, {135:1}, PlanetRenderer);
 _.getPlanetRenderer = function getPlanetRenderer_1(){
   return this;
 }
 ;
-_.getRenderState = function getRenderState_4(rc){
+_.getRenderState = function getRenderState_3(rc){
   var firstLevelTilesCount, i_0, i0, layerSetRenderState, layerTilesRenderParameters, texturizerRenderState, tile;
   if (!this._tessellator) {
     return error_0('Tessellator is null');
@@ -17159,18 +16366,18 @@ _.getRenderState = function getRenderState_4(rc){
     if (this._tilesRenderParameters._forceFirstLevelTilesRenderOnStart) {
       $clear(this._statistics);
       for (i0 = 0; i0 < firstLevelTilesCount; i0++) {
-        tile = dynamicCast($get_0(this._firstLevelTiles, i0), 25);
+        tile = dynamicCast($get_0(this._firstLevelTiles, i0), 23);
         $prepareForFullRendering(tile, rc, this._texturizer, this._tessellator, layerTilesRenderParameters, this._layerSet, this._tileDownloadPriority, this._verticalExaggeration, this._logTilesPetitions);
       }
     }
     for (i_0 = 0; i_0 < firstLevelTilesCount; i_0++) {
-      dynamicCast($get_0(this._firstLevelTiles, i_0), 25);
+      dynamicCast($get_0(this._firstLevelTiles, i_0), 23);
     }
   }
   if (this._tilesRenderParameters._forceFirstLevelTilesRenderOnStart && !this._allFirstLevelTilesAreTextureSolved) {
     firstLevelTilesCount = this._firstLevelTiles.array.length;
     for (i_0 = 0; i_0 < firstLevelTilesCount; i_0++) {
-      tile = dynamicCast($get_0(this._firstLevelTiles, i_0), 25);
+      tile = dynamicCast($get_0(this._firstLevelTiles, i_0), 23);
       if (!tile._textureSolved) {
         return $clinit_RenderState() , $clinit_RenderState() , BUSY;
       }
@@ -17191,14 +16398,14 @@ _.initialize = function initialize_5(context){
   $createFirstLevelTiles_0(this, context);
   this._lastSplitTimer = new Timer_WebGL;
   $initialize_3(this._layerSet);
-  $initialize_1(this._texturizer, context);
+  $initialize_1(this._texturizer);
 }
 ;
 _.isPlanetRenderer = function isPlanetRenderer_1(){
   return true;
 }
 ;
-_.onResizeViewportEvent = function onResizeViewportEvent_5(ec, width_0, height){
+_.onResizeViewportEvent = function onResizeViewportEvent_4(ec, width_0, height){
 }
 ;
 _.onTouchEvent_0 = function onTouchEvent_6(ec, touchEvent){
@@ -17219,14 +16426,14 @@ _.onTouchEvent_0 = function onTouchEvent_6(ec, touchEvent){
     position = $toGeodetic3D(planet, positionCartesian);
     firstLevelTilesCount = this._firstLevelTiles.array.length;
     for (i_0 = 0; i_0 < firstLevelTilesCount; i_0++) {
-      tile = $getDeepestTileContaining(dynamicCast($get_0(this._firstLevelTiles, i_0), 25), position);
+      tile = $getDeepestTileContaining(dynamicCast($get_0(this._firstLevelTiles, i_0), 23), position);
       if (tile) {
         tileDimension = new Vector2I(256, 256);
         normalizedPixel = $getNormalizedPixelsFromPosition(tile, new Geodetic2D(position._latitude, position._longitude), tileDimension);
-        $logInfo(_instance_3, 'Touched on %s', initValues(getClassLiteralForArray(Ljava_lang_Object_2_classLit, 1), $intern_4, 1, 3, [$description_7(tile)]));
-        $logInfo(_instance_3, 'Touched on position %s', initValues(getClassLiteralForArray(Ljava_lang_Object_2_classLit, 1), $intern_4, 1, 3, [$description_2(position)]));
-        $logInfo(_instance_3, 'Touched on pixels %s', initValues(getClassLiteralForArray(Ljava_lang_Object_2_classLit, 1), $intern_4, 1, 3, [$description_8(normalizedPixel)]));
-        $logInfo(_instance_3, 'Camera position=%s heading=%f pitch=%f', initValues(getClassLiteralForArray(Ljava_lang_Object_2_classLit, 1), $intern_4, 1, 3, [$description_2($getGeodeticPosition(this._lastCamera)), ($clinit_Double() , new Double($getHeadingPitchRoll(this._lastCamera)._heading._degrees)), new Double($getHeadingPitchRoll(this._lastCamera)._pitch._degrees)]));
+        $logInfo(_instance_3, 'Touched on %s', initValues(getClassLiteralForArray(Ljava_lang_Object_2_classLit, 1), $intern_4, 1, 3, [$description_6(tile)]));
+        $logInfo(_instance_3, 'Touched on position %s', initValues(getClassLiteralForArray(Ljava_lang_Object_2_classLit, 1), $intern_4, 1, 3, [$description_1(position)]));
+        $logInfo(_instance_3, 'Touched on pixels %s', initValues(getClassLiteralForArray(Ljava_lang_Object_2_classLit, 1), $intern_4, 1, 3, [$description_7(normalizedPixel)]));
+        $logInfo(_instance_3, 'Camera position=%s heading=%f pitch=%f', initValues(getClassLiteralForArray(Ljava_lang_Object_2_classLit, 1), $intern_4, 1, 3, [$description_1($getGeodeticPosition(this._lastCamera)), ($clinit_Double() , new Double($getHeadingPitchRoll(this._lastCamera)._heading._degrees)), new Double($getHeadingPitchRoll(this._lastCamera)._pitch._degrees)]));
         if ($onTerrainTouchEvent(position, tile, this._layerSet)) {
           return true;
         }
@@ -17251,7 +16458,7 @@ _.render = function render_9(rc, glState){
     return;
   }
   camera = rc._currentCamera;
-  f = dynamicCast($getGLFeature(this._glState, 13), 159);
+  f = dynamicCast($getGLFeature(this._glState, 13), 149);
   !f?$addGLFeature(this._glState, new ModelViewGLFeature(camera), true):$setMatrix(f, $asMatrix44D($getModelViewMatrix(camera)));
   $setParent_2(this._glState, glState);
   this._lastCamera = rc._currentCamera;
@@ -17268,26 +16475,26 @@ _.render = function render_9(rc, glState){
   nowInMS = toDouble(fromDouble(now_1()));
   if (this._firstRender && this._tilesRenderParameters._forceFirstLevelTilesRenderOnStart) {
     for (i_0 = 0; i_0 < firstLevelTilesCount; i_0++) {
-      tile = dynamicCast($get_0(this._firstLevelTiles, i_0), 25);
-      $render_6(tile, rc, this._glState, null, cameraFrustumInModelCoordinates, this._statistics, this._verticalExaggeration, layerTilesRenderParameters, this._texturizer, this._tilesRenderParameters, this._lastSplitTimer, this._elevationDataProvider, this._tessellator, this._layerSet, this._renderedSector, this._firstRender, this._tileDownloadPriority, texWidthSquared, texHeightSquared, nowInMS, this._renderTileMeshes, this._logTilesPetitions, this._tilesStoppedRendering);
+      tile = dynamicCast($get_0(this._firstLevelTiles, i_0), 23);
+      $render_5(tile, rc, this._glState, null, cameraFrustumInModelCoordinates, this._statistics, this._verticalExaggeration, layerTilesRenderParameters, this._texturizer, this._tilesRenderParameters, this._lastSplitTimer, this._elevationDataProvider, this._tessellator, this._layerSet, this._renderedSector, this._firstRender, this._tileDownloadPriority, texWidthSquared, texHeightSquared, nowInMS, this._renderTileMeshes, this._logTilesPetitions, this._tilesStoppedRendering);
     }
   }
    else {
     this._toVisit.array = initDim(Ljava_lang_Object_2_classLit, $intern_4, 1, 0, 3, 1);
     for (i0 = 0; i0 < firstLevelTilesCount; i0++) {
-      $add_3(this._toVisit, dynamicCast($get_0(this._firstLevelTiles, i0), 25));
+      $add_3(this._toVisit, dynamicCast($get_0(this._firstLevelTiles, i0), 23));
     }
     while (this._toVisit.array.length != 0) {
       this._toVisitInNextIteration.array = initDim(Ljava_lang_Object_2_classLit, $intern_4, 1, 0, 3, 1);
       toVisitSize = this._toVisit.array.length;
       for (i1 = 0; i1 < toVisitSize; i1++) {
-        tile = dynamicCast($get_0(this._toVisit, i1), 25);
-        $render_6(tile, rc, this._glState, this._toVisitInNextIteration, cameraFrustumInModelCoordinates, this._statistics, this._verticalExaggeration, layerTilesRenderParameters, this._texturizer, this._tilesRenderParameters, this._lastSplitTimer, this._elevationDataProvider, this._tessellator, this._layerSet, this._renderedSector, this._firstRender, this._tileDownloadPriority, texWidthSquared, texHeightSquared, nowInMS, this._renderTileMeshes, this._logTilesPetitions, this._tilesStoppedRendering);
+        tile = dynamicCast($get_0(this._toVisit, i1), 23);
+        $render_5(tile, rc, this._glState, this._toVisitInNextIteration, cameraFrustumInModelCoordinates, this._statistics, this._verticalExaggeration, layerTilesRenderParameters, this._texturizer, this._tilesRenderParameters, this._lastSplitTimer, this._elevationDataProvider, this._tessellator, this._layerSet, this._renderedSector, this._firstRender, this._tileDownloadPriority, texWidthSquared, texHeightSquared, nowInMS, this._renderTileMeshes, this._logTilesPetitions, this._tilesStoppedRendering);
       }
       this._toVisit.array = initDim(Ljava_lang_Object_2_classLit, $intern_4, 1, 0, 3, 1);
       toVisitInNextIterationSize = this._toVisitInNextIteration.array.length;
       for (i_0 = 0; i_0 < toVisitInNextIterationSize; i_0++) {
-        $add_3(this._toVisit, dynamicCast($get_0(this._toVisitInNextIteration, i_0), 25));
+        $add_3(this._toVisit, dynamicCast($get_0(this._toVisitInNextIteration, i_0), 23));
       }
     }
   }
@@ -17299,7 +16506,7 @@ _.render = function render_9(rc, glState){
     if (this._lastVisibleSector) {
       visibleSectorListenersCount = this._visibleSectorListeners.array.length;
       for (i_0 = 0; i_0 < visibleSectorListenersCount; i_0++) {
-        entry = dynamicCast($get_0(this._visibleSectorListeners, i_0), 154);
+        entry = dynamicCast($get_0(this._visibleSectorListeners, i_0), 145);
         $tryToNotifyListener(entry, this._lastVisibleSector, rc);
       }
     }
@@ -17331,7 +16538,7 @@ _._renderTileMeshes = false;
 _._showStatistics = false;
 _._tileDownloadPriority = {l:0, m:0, h:0};
 _._verticalExaggeration = 0;
-var Lorg_glob3_mobile_generated_PlanetRenderer_2_classLit = createForClass('org.glob3.mobile.generated', 'PlanetRenderer', 322);
+var Lorg_glob3_mobile_generated_PlanetRenderer_2_classLit = createForClass('org.glob3.mobile.generated', 'PlanetRenderer', 308);
 function $compare(i_0, j){
   var columnI, columnJ, rowI, rowJ;
   rowI = i_0._row;
@@ -17356,12 +16563,12 @@ function $compare(i_0, j){
 function PlanetRenderer$1(){
 }
 
-defineClass(323, 1, {}, PlanetRenderer$1);
+defineClass(309, 1, {}, PlanetRenderer$1);
 _.compare = function compare_3(i_0, j){
-  return $compare(dynamicCast(i_0, 25), dynamicCast(j, 25));
+  return $compare(dynamicCast(i_0, 23), dynamicCast(j, 23));
 }
 ;
-var Lorg_glob3_mobile_generated_PlanetRenderer$1_2_classLit = createForClass('org.glob3.mobile.generated', 'PlanetRenderer/1', 323);
+var Lorg_glob3_mobile_generated_PlanetRenderer$1_2_classLit = createForClass('org.glob3.mobile.generated', 'PlanetRenderer/1', 309);
 function $create_4(this$static){
   var geoVectorLayer, geoVectorLayersSize, i_0, i0, layerSet, planetRenderer, layerSet_0;
   layerSet = (!this$static._layerSet && (this$static._layerSet = (layerSet_0 = new LayerSet , $addLayer(layerSet_0, newOSM(new TimeInterval({l:4114432, m:617, h:0}))) , layerSet_0)) , this$static._layerSet);
@@ -17372,7 +16579,7 @@ function $create_4(this$static){
   }
   planetRenderer = new PlanetRenderer((!this$static._tileTessellator && (this$static._tileTessellator = new PlanetTileTessellator($getRenderedSector(this$static))) , this$static._tileTessellator), this$static._elevationDataProvider, (this$static._verticalExaggeration <= 0 && (this$static._verticalExaggeration = 1) , this$static._verticalExaggeration), (!this$static._texturizer && (this$static._texturizer = new DefaultTileTexturizer(new DefaultChessCanvasImageBuilder(new Color(0, 0, 0, 1), new Color(1, 1, 1, 1)))) , this$static._texturizer), layerSet, (!this$static._parameters && (this$static._parameters = new TilesRenderParameters(this$static._renderDebug, this$static._useTilesSplitBudget, this$static._forceFirstLevelTilesRenderOnStart, this$static._incrementalTileQuality, this$static._quality)) , this$static._parameters), this$static._showStatistics, this$static._tileDownloadPriority, $getRenderedSector(this$static), this$static._renderTileMeshes, this$static._logTilesPetitions, this$static._changedInfoListener, this$static._touchEventTypeOfTerrainTouchListener);
   for (i_0 = 0; i_0 < (!this$static._visibleSectorListeners && (this$static._visibleSectorListeners = new ArrayList) , this$static._visibleSectorListeners).array.length; i_0++) {
-    $addVisibleSectorListener(planetRenderer, (throwClassCastExceptionUnlessNull($get_0((!this$static._visibleSectorListeners && (this$static._visibleSectorListeners = new ArrayList) , this$static._visibleSectorListeners), i_0)) , new TimeInterval(dynamicCast($get_0((!this$static._stabilizationMilliSeconds && (this$static._stabilizationMilliSeconds = new ArrayList) , this$static._stabilizationMilliSeconds), i_0), 50).value_0)));
+    $addVisibleSectorListener(planetRenderer, (throwClassCastExceptionUnlessNull($get_0((!this$static._visibleSectorListeners && (this$static._visibleSectorListeners = new ArrayList) , this$static._visibleSectorListeners), i_0)) , new TimeInterval(dynamicCast($get_0((!this$static._stabilizationMilliSeconds && (this$static._stabilizationMilliSeconds = new ArrayList) , this$static._stabilizationMilliSeconds), i_0), 46).value_0)));
   }
   this$static._parameters = null;
   this$static._layerSet = null;
@@ -17435,7 +16642,7 @@ function PlanetRendererBuilder(){
   this._touchEventTypeOfTerrainTouchListener = ($clinit_TouchEventType() , LongPress);
 }
 
-defineClass(122, 1, {}, PlanetRendererBuilder);
+defineClass(115, 1, {}, PlanetRendererBuilder);
 _._forceFirstLevelTilesRenderOnStart = false;
 _._incrementalTileQuality = false;
 _._logTilesPetitions = false;
@@ -17445,13 +16652,13 @@ _._showStatistics = false;
 _._tileDownloadPriority = {l:0, m:0, h:0};
 _._useTilesSplitBudget = false;
 _._verticalExaggeration = 0;
-var Lorg_glob3_mobile_generated_PlanetRendererBuilder_2_classLit = createForClass('org.glob3.mobile.generated', 'PlanetRendererBuilder', 122);
+var Lorg_glob3_mobile_generated_PlanetRendererBuilder_2_classLit = createForClass('org.glob3.mobile.generated', 'PlanetRendererBuilder', 115);
 function $getTextCoord(tile, position){
   return $getTextCoord_0(tile, position._latitude, position._longitude);
 }
 
-defineClass(470, 1, {});
-var Lorg_glob3_mobile_generated_TileTessellator_2_classLit = createForClass('org.glob3.mobile.generated', 'TileTessellator', 470);
+defineClass(453, 1, {});
+var Lorg_glob3_mobile_generated_TileTessellator_2_classLit = createForClass('org.glob3.mobile.generated', 'TileTessellator', 453);
 function $createEastSkirt(meshSector, meshResolution, skirtHeight, vertices, indices, textCoords){
   var firstSkirtVertex, g, j, rx, ry, skirtIndex, southEastCorner, surfaceIndex, uv, y_0;
   firstSkirtVertex = narrow_short(~~(vertices._values._size / 3));
@@ -17472,8 +16679,8 @@ function $createEastSkirt(meshSector, meshResolution, skirtHeight, vertices, ind
     ++skirtIndex;
     surfaceIndex = surfaceIndex - rx;
   }
-  $add_17(indices, narrow_short(surfaceIndex + rx));
-  $add_17(indices, narrow_short(surfaceIndex + rx));
+  $add_16(indices, narrow_short(surfaceIndex + rx));
+  $add_16(indices, narrow_short(surfaceIndex + rx));
 }
 
 function $createNorthSkirt(meshSector, meshResolution, skirtHeight, vertices, indices, textCoords){
@@ -17496,8 +16703,8 @@ function $createNorthSkirt(meshSector, meshResolution, skirtHeight, vertices, in
     ++skirtIndex;
     surfaceIndex = narrow_short(surfaceIndex - 1);
   }
-  $add_17(indices, narrow_short(surfaceIndex + 1));
-  $add_17(indices, narrow_short(surfaceIndex + 1));
+  $add_16(indices, narrow_short(surfaceIndex + 1));
+  $add_16(indices, narrow_short(surfaceIndex + 1));
 }
 
 function $createSouthSkirt(meshSector, meshResolution, skirtHeight, vertices, indices, textCoords){
@@ -17516,11 +16723,11 @@ function $createSouthSkirt(meshSector, meshResolution, skirtHeight, vertices, in
     uv = $getVector2D(textCoords, surfaceIndex);
     $add_8(textCoords, uv._x, uv._y);
     $push_back_0(indices._values, surfaceIndex);
-    $add_17(indices, skirtIndex++);
+    $add_16(indices, skirtIndex++);
     surfaceIndex = narrow_short(surfaceIndex + 1);
   }
-  $add_17(indices, narrow_short(surfaceIndex - 1));
-  $add_17(indices, narrow_short(surfaceIndex - 1));
+  $add_16(indices, narrow_short(surfaceIndex - 1));
+  $add_16(indices, narrow_short(surfaceIndex - 1));
 }
 
 function $createSurface(tileSector, meshSector, meshResolution, mercator, vertices, indices, textCoords, data_0){
@@ -17555,10 +16762,10 @@ function $createSurface(tileSector, meshSector, meshResolution, mercator, vertic
     jTimesResolution = narrow_short(j * rx);
     j > 0 && $push_back_0(indices._values, jTimesResolution);
     for (i_0 = 0; i_0 < rx; i_0++) {
-      $add_17(indices, narrow_short(jTimesResolution + i_0));
-      $add_17(indices, narrow_short(jTimesResolution + i_0 + rx));
+      $add_16(indices, narrow_short(jTimesResolution + i_0));
+      $add_16(indices, narrow_short(jTimesResolution + i_0 + rx));
     }
-    $add_17(indices, narrow_short(jTimesResolution + 2 * rx - 1));
+    $add_16(indices, narrow_short(jTimesResolution + 2 * rx - 1));
   }
   return minElevation;
 }
@@ -17586,22 +16793,22 @@ function $createTileDebugMesh(this$static, planet, rawResolution, tile){
   indices = new ShortBufferBuilder;
   for (j0 = 0; j0 < resolutionYMinus1; j0++) {
     $add_12(vertices, $getInnerPoint(sector, 0, j0 / resolutionYMinus1), offset);
-    $add_17(indices, posS++);
+    $add_16(indices, posS++);
   }
   for (i0 = 0; i0 < resolutionXMinus1; i0++) {
     $add_12(vertices, $getInnerPoint(sector, i0 / resolutionXMinus1, 1), offset);
-    $add_17(indices, posS++);
+    $add_16(indices, posS++);
   }
   for (j = resolutionYMinus1; j > 0; j--) {
     $add_12(vertices, $getInnerPoint(sector, 1, j / resolutionYMinus1), offset);
-    $add_17(indices, posS++);
+    $add_16(indices, posS++);
   }
   for (i_0 = resolutionXMinus1; i_0 > 0; i_0--) {
     $add_12(vertices, $getInnerPoint(sector, i_0 / resolutionXMinus1, 0), offset);
-    $add_17(indices, posS++);
+    $add_16(indices, posS++);
   }
   color_0 = new Color(1, 0, 0, 1);
-  result = new IndexedMesh_0(_lineLoop, new Vector3D(vertices._cx, vertices._cy, vertices._cz), new FloatBuffer_WebGL_1(vertices._values._array, vertices._values._size), new ShortBuffer_WebGL(indices._values._array, indices._values._size), color_0);
+  result = new IndexedMesh_0(_lineLoop, new Vector3D(vertices._cx, vertices._cy, vertices._cz), new FloatBuffer_WebGL_0(vertices._values._array, vertices._values._size), new ShortBuffer_WebGL(indices._values._array, indices._values._size), color_0);
   return result;
 }
 
@@ -17624,7 +16831,7 @@ function $createTileMesh(this$static, planet, rawResolution, tile, data_0){
     $createSouthSkirt(meshSector, meshResolution, $needsSouthSkirt(this$static, tileSector)?relativeSkirtHeight:absoluteSkirtHeight, vertices, indices, textCoords);
   }
   $setTessellatorData(tile, new PlanetTileTessellatorData(textCoords));
-  verticesB = new FloatBuffer_WebGL_1(vertices._values._array, vertices._values._size);
+  verticesB = new FloatBuffer_WebGL_0(vertices._values._array, vertices._values._size);
   indicesB = new ShortBuffer_WebGL(indices._values._array, indices._values._size);
   result = new IndexedGeometryMesh(_triangleStrip, new Vector3D(vertices._cx, vertices._cy, vertices._cz), verticesB, indicesB);
   return result;
@@ -17650,8 +16857,8 @@ function $createWestSkirt(meshSector, meshResolution, skirtHeight, vertices, ind
     ++skirtIndex;
     surfaceIndex = surfaceIndex + rx;
   }
-  $add_17(indices, narrow_short(surfaceIndex - rx));
-  $add_17(indices, narrow_short(surfaceIndex - rx));
+  $add_16(indices, narrow_short(surfaceIndex - rx));
+  $add_16(indices, narrow_short(surfaceIndex - rx));
 }
 
 function $getRenderedSectorForTile(this$static, tile){
@@ -17718,27 +16925,27 @@ function skirtDepthForSector(planet, sector){
   return sideLength / 20;
 }
 
-defineClass(374, 470, {}, PlanetTileTessellator);
+defineClass(359, 453, {}, PlanetTileTessellator);
 _._skirted = false;
-var Lorg_glob3_mobile_generated_PlanetTileTessellator_2_classLit = createForClass('org.glob3.mobile.generated', 'PlanetTileTessellator', 374);
+var Lorg_glob3_mobile_generated_PlanetTileTessellator_2_classLit = createForClass('org.glob3.mobile.generated', 'PlanetTileTessellator', 359);
 function PlanetTileTessellatorData(textCoords){
   this._textCoords = textCoords;
 }
 
-defineClass(389, 1, {}, PlanetTileTessellatorData);
-var Lorg_glob3_mobile_generated_PlanetTileTessellatorData_2_classLit = createForClass('org.glob3.mobile.generated', 'PlanetTileTessellatorData', 389);
+defineClass(374, 1, {}, PlanetTileTessellatorData);
+var Lorg_glob3_mobile_generated_PlanetTileTessellatorData_2_classLit = createForClass('org.glob3.mobile.generated', 'PlanetTileTessellatorData', 374);
 function ProjectionGLFeature(projection){
   GLCameraGroupFeature.call(this, projection, 4);
 }
 
-defineClass(128, 55, {55:1, 24:1, 128:1, 9:1}, ProjectionGLFeature);
-_.dispose = function dispose_56(){
+defineClass(120, 50, {50:1, 27:1, 120:1, 9:1}, ProjectionGLFeature);
+_.dispose = function dispose_48(){
   $_release(this._matrixHolder);
   !!this._values && $dispose_4(this._values);
   $dispose_0(this);
 }
 ;
-var Lorg_glob3_mobile_generated_ProjectionGLFeature_2_classLit = createForClass('org.glob3.mobile.generated', 'ProjectionGLFeature', 128);
+var Lorg_glob3_mobile_generated_ProjectionGLFeature_2_classLit = createForClass('org.glob3.mobile.generated', 'ProjectionGLFeature', 120);
 function $clinit_Quality(){
   $clinit_Quality = emptyMethod;
   QUALITY_LOW = new Quality('QUALITY_LOW', 0);
@@ -17752,12 +16959,33 @@ function Quality(enum$name, enum$ordinal){
 
 function values_8(){
   $clinit_Quality();
-  return initValues(getClassLiteralForArray(Lorg_glob3_mobile_generated_Quality_2_classLit, 1), $intern_4, 106, 0, [QUALITY_LOW, QUALITY_MEDIUM, QUALITY_HIGH]);
+  return initValues(getClassLiteralForArray(Lorg_glob3_mobile_generated_Quality_2_classLit, 1), $intern_4, 100, 0, [QUALITY_LOW, QUALITY_MEDIUM, QUALITY_HIGH]);
 }
 
-defineClass(106, 19, {3:1, 27:1, 19:1, 106:1}, Quality);
+defineClass(100, 15, {3:1, 26:1, 15:1, 100:1}, Quality);
 var QUALITY_HIGH, QUALITY_LOW, QUALITY_MEDIUM;
-var Lorg_glob3_mobile_generated_Quality_2_classLit = createForEnum('org.glob3.mobile.generated', 'Quality', 106, values_8);
+var Lorg_glob3_mobile_generated_Quality_2_classLit = createForEnum('org.glob3.mobile.generated', 'Quality', 100, values_8);
+function $dispose_10(this$static){
+  $requestFinish(this$static._rasterLayerTileImageProvider, this$static._tileId);
+  this$static._deleteListener && !!this$static._listener && this$static._listener.dispose();
+  releaseContribution(this$static._contribution);
+}
+
+function $onCancel(this$static){
+  this$static._listener.imageCreationCanceled(this$static._tileId);
+}
+
+function $onDownload(this$static, url_0, image){
+  var contribution;
+  contribution = this$static._contribution;
+  this$static._contribution = null;
+  this$static._listener.imageCreated_0(this$static._tileId, image, url_0._path, contribution);
+}
+
+function $onError(this$static, url_0){
+  this$static._listener.imageCreationError(this$static._tileId, 'Download error - ' + url_0._path);
+}
+
 function RLTIP_ImageDownloadListener(rasterLayerTileImageProvider, tileId, contribution, listener, deleteListener){
   this._rasterLayerTileImageProvider = rasterLayerTileImageProvider;
   this._tileId = tileId;
@@ -17766,33 +16994,9 @@ function RLTIP_ImageDownloadListener(rasterLayerTileImageProvider, tileId, contr
   this._deleteListener = deleteListener;
 }
 
-defineClass(425, 499, {}, RLTIP_ImageDownloadListener);
-_.dispose = function dispose_57(){
-  $requestFinish(this._rasterLayerTileImageProvider, this._tileId);
-  this._deleteListener && !!this._listener && this._listener.dispose();
-  releaseContribution(this._contribution);
-}
-;
-_.onCancel = function onCancel_0(url_0){
-  this._listener.imageCreationCanceled(this._tileId);
-}
-;
-_.onCanceledDownload = function onCanceledDownload_0(url_0, image, expired){
-}
-;
-_.onDownload = function onDownload_0(url_0, image, expired){
-  var contribution;
-  contribution = this._contribution;
-  this._contribution = null;
-  this._listener.imageCreated_0(this._tileId, image, url_0._path, contribution);
-}
-;
-_.onError_0 = function onError_3(url_0){
-  this._listener.imageCreationError(this._tileId, 'Download error - ' + url_0._path);
-}
-;
+defineClass(407, 487, {}, RLTIP_ImageDownloadListener);
 _._deleteListener = false;
-var Lorg_glob3_mobile_generated_RLTIP_1ImageDownloadListener_2_classLit = createForClass('org.glob3.mobile.generated', 'RLTIP_ImageDownloadListener', 425);
+var Lorg_glob3_mobile_generated_RLTIP_1ImageDownloadListener_2_classLit = createForClass('org.glob3.mobile.generated', 'RLTIP_ImageDownloadListener', 407);
 function $requestFinish(this$static, tileId){
   $removeStringValue(this$static._requestsIdsPerTile, tileId);
 }
@@ -17804,10 +17008,10 @@ function RasterLayerTileImageProvider(layer, downloader){
   this._downloader = downloader;
 }
 
-defineClass(353, 52, $intern_44, RasterLayerTileImageProvider);
+defineClass(338, 49, $intern_41, RasterLayerTileImageProvider);
 _.cancel_0 = function cancel_3(tileId){
   var requestId;
-  requestId = dynamicCast($removeStringValue(this._requestsIdsPerTile, tileId), 50);
+  requestId = dynamicCast($removeStringValue(this._requestsIdsPerTile, tileId), 46);
   !!requestId && $cancelRequest(this._downloader, requestId.value_0);
 }
 ;
@@ -17822,26 +17026,22 @@ _.create_0 = function create_4(tile, contribution, resolution, tileDownloadPrior
   gte_0(requestId, {l:0, m:0, h:0}) && $putStringValue(this._requestsIdsPerTile, tileId, valueOf_0(requestId));
 }
 ;
-_.dispose = function dispose_58(){
+_.dispose = function dispose_49(){
   var entry, entry$iterator;
   for (entry$iterator = new AbstractHashMap$EntrySetIterator((new AbstractHashMap$EntrySet(this._requestsIdsPerTile)).this$01); $hasNext(entry$iterator);) {
-    entry = (checkStructuralChange(entry$iterator.this$01, entry$iterator) , checkCriticalElement($hasNext(entry$iterator)) , entry$iterator.last = entry$iterator.current , dynamicCast(entry$iterator.current.next_0(), 23));
-    $cancelRequest(this._downloader, dynamicCast(entry.getValue(), 50).value_0);
+    entry = (checkStructuralChange(entry$iterator.this$01, entry$iterator) , checkCriticalElement($hasNext(entry$iterator)) , entry$iterator.last = entry$iterator.current , dynamicCast(entry$iterator.current.next_0(), 22));
+    $cancelRequest(this._downloader, dynamicCast(entry.getValue(), 46).value_0);
   }
   $dispose_0(this);
 }
 ;
-var Lorg_glob3_mobile_generated_RasterLayerTileImageProvider_2_classLit = createForClass('org.glob3.mobile.generated', 'RasterLayerTileImageProvider', 353);
+var Lorg_glob3_mobile_generated_RasterLayerTileImageProvider_2_classLit = createForClass('org.glob3.mobile.generated', 'RasterLayerTileImageProvider', 338);
 function RecreateTilesTask(planetRenderer){
   this._planetRenderer = planetRenderer;
 }
 
-defineClass(378, 474, {}, RecreateTilesTask);
-var Lorg_glob3_mobile_generated_RecreateTilesTask_2_classLit = createForClass('org.glob3.mobile.generated', 'RecreateTilesTask', 378);
-function $contains_2(this$static, x_0, y_0){
-  return x_0 >= this$static._x && y_0 >= this$static._y && x_0 <= this$static._x + this$static._width && y_0 <= this$static._y + this$static._height;
-}
-
+defineClass(363, 457, {}, RecreateTilesTask);
+var Lorg_glob3_mobile_generated_RecreateTilesTask_2_classLit = createForClass('org.glob3.mobile.generated', 'RecreateTilesTask', 363);
 function $id(this$static){
   var isb, s;
   isb = new StringBuilder_WebGL;
@@ -17882,7 +17082,7 @@ function calculateInnerRectangleFromSector(wholeSectorWidth, wholeSectorHeight, 
   heightFactor = upperUV._y - lowerUV._y;
   deltaWidthFactor = widthFactor - widthFactor2;
   deltaHeightFactor = heightFactor - heightFactor2;
-  (deltaWidthFactor < -1.0E-5 || deltaWidthFactor > $intern_48 || deltaHeightFactor < -1.0E-5 || deltaHeightFactor > $intern_48) && $logWarning(_instance_3, 'Testing this case (view code): factors are diferents: %f and %f', initValues(getClassLiteralForArray(Ljava_lang_Object_2_classLit, 1), $intern_4, 1, 3, [($clinit_Double() , new Double(widthFactor - widthFactor2)), new Double(heightFactor - heightFactor2)]));
+  (deltaWidthFactor < -1.0E-5 || deltaWidthFactor > $intern_44 || deltaHeightFactor < -1.0E-5 || deltaHeightFactor > $intern_44) && $logWarning(_instance_3, 'Testing this case (view code): factors are diferents: %f and %f', initValues(getClassLiteralForArray(Ljava_lang_Object_2_classLit, 1), $intern_4, 1, 3, [($clinit_Double() , new Double(widthFactor - widthFactor2)), new Double(heightFactor - heightFactor2)]));
   return new RectangleF(lowerUV._x * wholeSectorWidth, lowerUV._y * wholeSectorHeight, widthFactor * wholeSectorWidth, heightFactor * wholeSectorHeight);
 }
 
@@ -17902,12 +17102,12 @@ function fullContains(outerWidth_0, outerHeight_0, innerX, innerY, innerWidth_0,
   return true;
 }
 
-defineClass(139, 1, {}, RectangleF);
+defineClass(158, 1, {}, RectangleF);
 _._height = 0;
 _._width = 0;
 _._x = 0;
 _._y = 0;
-var Lorg_glob3_mobile_generated_RectangleF_2_classLit = createForClass('org.glob3.mobile.generated', 'RectangleF', 139);
+var Lorg_glob3_mobile_generated_RectangleF_2_classLit = createForClass('org.glob3.mobile.generated', 'RectangleF', 158);
 function $clinit_RenderState(){
   $clinit_RenderState = emptyMethod;
   READY = new RenderState_1(0);
@@ -17939,16 +17139,16 @@ function error_0(error){
   return new RenderState(errors);
 }
 
-defineClass(67, 1, {}, RenderState, RenderState_0, RenderState_1);
+defineClass(66, 1, {}, RenderState, RenderState_0, RenderState_1);
 _._type = 0;
 var BUSY, READY;
-var Lorg_glob3_mobile_generated_RenderState_2_classLit = createForClass('org.glob3.mobile.generated', 'RenderState', 67);
+var Lorg_glob3_mobile_generated_RenderState_2_classLit = createForClass('org.glob3.mobile.generated', 'RenderState', 66);
 function RenderedSectorCameraConstrainer(planetRenderer, maxHeight){
   this._planetRenderer = planetRenderer;
   this._maxHeight = maxHeight;
 }
 
-defineClass(324, 1, {431:1}, RenderedSectorCameraConstrainer);
+defineClass(310, 1, {416:1}, RenderedSectorCameraConstrainer);
 _.onCameraChange = function onCameraChange(planet, previousCamera, nextCamera){
   var center, isValidHeight, isValidPosition, position, sector;
   if (this._planetRenderer) {
@@ -17960,7 +17160,7 @@ _.onCameraChange = function onCameraChange(planet, previousCamera, nextCamera){
     }
      else {
       center = $_getGeodeticCenterOfView(nextCamera);
-      isValidPosition = $contains_3(sector, center._latitude, center._longitude);
+      isValidPosition = $contains_1(sector, center._latitude, center._longitude);
       isValidPosition?isValidHeight || $setGeodeticPosition(nextCamera, new Geodetic3D(position._latitude, position._longitude, this._maxHeight)):$copyFrom(nextCamera, previousCamera);
     }
   }
@@ -17968,7 +17168,7 @@ _.onCameraChange = function onCameraChange(planet, previousCamera, nextCamera){
 }
 ;
 _._maxHeight = 0;
-var Lorg_glob3_mobile_generated_RenderedSectorCameraConstrainer_2_classLit = createForClass('org.glob3.mobile.generated', 'RenderedSectorCameraConstrainer', 324);
+var Lorg_glob3_mobile_generated_RenderedSectorCameraConstrainer_2_classLit = createForClass('org.glob3.mobile.generated', 'RenderedSectorCameraConstrainer', 310);
 function RotateWithAxisEffect(axis_0, angle){
   this._force = 1;
   this._friction = 0.975;
@@ -17976,11 +17176,11 @@ function RotateWithAxisEffect(axis_0, angle){
   this._degrees = angle._degrees;
 }
 
-defineClass(428, 427, {}, RotateWithAxisEffect);
+defineClass(409, 408, {}, RotateWithAxisEffect);
 _.cancel = function cancel_4(when){
 }
 ;
-_.dispose = function dispose_59(){
+_.dispose = function dispose_50(){
 }
 ;
 _.doStep = function doStep_4(rc, when){
@@ -17996,31 +17196,31 @@ _.stop_0 = function stop_10(rc, when){
 }
 ;
 _._degrees = 0;
-var Lorg_glob3_mobile_generated_RotateWithAxisEffect_2_classLit = createForClass('org.glob3.mobile.generated', 'RotateWithAxisEffect', 428);
+var Lorg_glob3_mobile_generated_RotateWithAxisEffect_2_classLit = createForClass('org.glob3.mobile.generated', 'RotateWithAxisEffect', 409);
 function $clinit_Sector(){
   $clinit_Sector = emptyMethod;
   FULL_SPHERE = fromDegrees_2(-90, -180, 90, 180);
   NAN_SECTOR = fromDegrees_2(NaN, NaN, NaN, NaN);
 }
 
-function $contains_3(this$static, latitude, longitude){
+function $contains_1(this$static, latitude, longitude){
   return $isBetween(latitude, this$static._lower._latitude, this$static._upper._latitude) && $isBetween(longitude, this$static._lower._longitude, this$static._upper._longitude);
 }
 
-function $description_4(this$static){
+function $description_3(this$static){
   var isb, s;
   isb = new StringBuilder_WebGL;
   isb._string += '(Sector ';
-  $addString(isb, $description_1(this$static._lower));
+  $addString(isb, $description_0(this$static._lower));
   isb._string += ' - ';
-  $addString(isb, $description_1(this$static._upper));
+  $addString(isb, $description_0(this$static._upper));
   isb._string += ')';
   s = isb._string;
   return s;
 }
 
 function $fullContains(this$static, that){
-  return $contains_3(this$static, that._upper._latitude, that._upper._longitude) && $contains_3(this$static, that._lower._latitude, that._lower._longitude);
+  return $contains_1(this$static, that._upper._latitude, that._upper._longitude) && $contains_1(this$static, that._lower._latitude, that._lower._longitude);
 }
 
 function $getAngularAreaInSquaredDegrees(this$static){
@@ -18130,12 +17330,12 @@ function Sector_0(sector){
 
 function fromDegrees_2(minLat, minLon, maxLat, maxLon){
   var lower, upper;
-  lower = new Geodetic2D(new Angle(minLat, minLat / 180 * $intern_40), new Angle(minLon, minLon / 180 * $intern_40));
-  upper = new Geodetic2D(new Angle(maxLat, maxLat / 180 * $intern_40), new Angle(maxLon, maxLon / 180 * $intern_40));
+  lower = new Geodetic2D(new Angle(minLat, minLat / 180 * $intern_37), new Angle(minLon, minLon / 180 * $intern_37));
+  upper = new Geodetic2D(new Angle(maxLat, maxLat / 180 * $intern_37), new Angle(maxLon, maxLon / 180 * $intern_37));
   return new Sector(lower, upper);
 }
 
-defineClass(21, 1, {21:1}, Sector, Sector_0);
+defineClass(19, 1, {19:1}, Sector, Sector_0);
 _.equals$ = function equals_18(obj){
   var other;
   if (this === obj) {
@@ -18147,7 +17347,7 @@ _.equals$ = function equals_18(obj){
   if (Lorg_glob3_mobile_generated_Sector_2_classLit != getClass__Ljava_lang_Class___devirtual$(obj)) {
     return false;
   }
-  other = dynamicCast(obj, 21);
+  other = dynamicCast(obj, 19);
   if (!this._lower) {
     if (other._lower) {
       return false;
@@ -18175,12 +17375,12 @@ _.hashCode$ = function hashCode_23(){
 }
 ;
 _.toString$ = function toString_36(){
-  return $description_4(this);
+  return $description_3(this);
 }
 ;
 _._deltaRadiusInRadians = 0;
 var FULL_SPHERE, NAN_SECTOR;
-var Lorg_glob3_mobile_generated_Sector_2_classLit = createForClass('org.glob3.mobile.generated', 'Sector', 21);
+var Lorg_glob3_mobile_generated_Sector_2_classLit = createForClass('org.glob3.mobile.generated', 'Sector', 19);
 function $clinit_ShaderType(){
   $clinit_ShaderType = emptyMethod;
   VERTEX_SHADER = new ShaderType('VERTEX_SHADER', 0);
@@ -18193,17 +17393,17 @@ function ShaderType(enum$name, enum$ordinal){
 
 function values_9(){
   $clinit_ShaderType();
-  return initValues(getClassLiteralForArray(Lorg_glob3_mobile_generated_ShaderType_2_classLit, 1), $intern_4, 141, 0, [VERTEX_SHADER, FRAGMENT_SHADER]);
+  return initValues(getClassLiteralForArray(Lorg_glob3_mobile_generated_ShaderType_2_classLit, 1), $intern_4, 132, 0, [VERTEX_SHADER, FRAGMENT_SHADER]);
 }
 
-defineClass(141, 19, {3:1, 27:1, 19:1, 141:1}, ShaderType);
+defineClass(132, 15, {3:1, 26:1, 15:1, 132:1}, ShaderType);
 var FRAGMENT_SHADER, VERTEX_SHADER;
-var Lorg_glob3_mobile_generated_ShaderType_2_classLit = createForEnum('org.glob3.mobile.generated', 'ShaderType', 141, values_9);
-function $add_17(this$static, value_0){
+var Lorg_glob3_mobile_generated_ShaderType_2_classLit = createForEnum('org.glob3.mobile.generated', 'ShaderType', 132, values_9);
+function $add_16(this$static, value_0){
   $push_back_0(this$static._values, value_0);
 }
 
-function $description_5(this$static){
+function $description_4(this$static){
   var i_0, isb, s, v;
   isb = new StringBuilder_WebGL;
   isb._string += 'ShortBufferBuilder: ';
@@ -18220,12 +17420,12 @@ function ShortBufferBuilder(){
   this._values = new ShortBufferBuilder$ShortArrayList;
 }
 
-defineClass(160, 1, {}, ShortBufferBuilder);
+defineClass(150, 1, {}, ShortBufferBuilder);
 _.toString$ = function toString_37(){
-  return $description_5(this);
+  return $description_4(this);
 }
 ;
-var Lorg_glob3_mobile_generated_ShortBufferBuilder_2_classLit = createForClass('org.glob3.mobile.generated', 'ShortBufferBuilder', 160);
+var Lorg_glob3_mobile_generated_ShortBufferBuilder_2_classLit = createForClass('org.glob3.mobile.generated', 'ShortBufferBuilder', 150);
 function $ensureCapacity_0(this$static, mincap){
   var newcap, olddata;
   if (mincap > this$static._array.length) {
@@ -18250,13 +17450,13 @@ function ShortBufferBuilder$ShortArrayList(){
   this._size = 0;
 }
 
-defineClass(213, 1, {}, ShortBufferBuilder$ShortArrayList);
+defineClass(200, 1, {}, ShortBufferBuilder$ShortArrayList);
 _._size = 0;
-var Lorg_glob3_mobile_generated_ShortBufferBuilder$ShortArrayList_2_classLit = createForClass('org.glob3.mobile.generated', 'ShortBufferBuilder/ShortArrayList', 213);
+var Lorg_glob3_mobile_generated_ShortBufferBuilder$ShortArrayList_2_classLit = createForClass('org.glob3.mobile.generated', 'ShortBufferBuilder/ShortArrayList', 200);
 function SimpleCameraConstrainer(){
 }
 
-defineClass(358, 1, {431:1}, SimpleCameraConstrainer);
+defineClass(344, 1, {416:1}, SimpleCameraConstrainer);
 _.onCameraChange = function onCameraChange_0(planet, previousCamera, nextCamera){
   var height, maxHeight, radii;
   radii = $maxAxis(planet._ellipsoid._radii);
@@ -18266,14 +17466,14 @@ _.onCameraChange = function onCameraChange_0(planet, previousCamera, nextCamera)
   return true;
 }
 ;
-var Lorg_glob3_mobile_generated_SimpleCameraConstrainer_2_classLit = createForClass('org.glob3.mobile.generated', 'SimpleCameraConstrainer', 358);
+var Lorg_glob3_mobile_generated_SimpleCameraConstrainer_2_classLit = createForClass('org.glob3.mobile.generated', 'SimpleCameraConstrainer', 344);
 function $getCameraPosition(planet, planetRenderer){
   var sector;
   sector = !planetRenderer?null:planetRenderer._renderedSector;
   return !sector?$getDefaultCameraPosition(planet, ($clinit_Sector() , $clinit_Sector() , FULL_SPHERE)):$getDefaultCameraPosition(planet, sector);
 }
 
-defineClass(354, 491, {});
+defineClass(386, 484, {});
 _._rotationCenterU = 0;
 _._rotationCenterV = 0;
 _._rotationInRadians = 0;
@@ -18281,9 +17481,9 @@ _._scaleU = 0;
 _._scaleV = 0;
 _._translationU = 0;
 _._translationV = 0;
-var Lorg_glob3_mobile_generated_TransformableTextureMapping_2_classLit = createForClass('org.glob3.mobile.generated', 'TransformableTextureMapping', 354);
-function $dispose_10(this$static){
-  this$static._ownedTexCoords && !!this$static._texCoords && $dispose_14(this$static._texCoords);
+var Lorg_glob3_mobile_generated_TransformableTextureMapping_2_classLit = createForClass('org.glob3.mobile.generated', 'TransformableTextureMapping', 386);
+function $dispose_11(this$static){
+  this$static._ownedTexCoords && !!this$static._texCoords && $dispose_15(this$static._texCoords);
   $releaseGLTextureId_0(this$static);
 }
 
@@ -18293,10 +17493,10 @@ function $modifyGLState_1(this$static, state){
     $logError(_instance_3, 'SimpleTextureMapping::bind() with _texCoords == NULL', initValues(getClassLiteralForArray(Ljava_lang_Object_2_classLit, 1), $intern_4, 1, 3, []));
   }
    else {
-    tglf = dynamicCast($getGLFeature(state, 6), 72);
+    tglf = dynamicCast($getGLFeature(state, 6), 71);
     if (!!tglf && tglf._texID == this$static._glTextureId._id) {
       $setScale(tglf, this$static._scaleU, this$static._scaleV);
-      $setTranslation_0(tglf, this$static._translationU, this$static._translationV);
+      $setTranslation(tglf, this$static._translationU, this$static._translationV);
       $setRotationAngleInRadiansAndRotationCenter(tglf, this$static._rotationInRadians, this$static._rotationCenterU, this$static._rotationCenterV);
     }
      else {
@@ -18308,7 +17508,7 @@ function $modifyGLState_1(this$static, state){
 
 function $releaseGLTextureId_0(this$static){
   if (this$static._glTextureId) {
-    $dispose_11(this$static._glTextureId);
+    $dispose_12(this$static._glTextureId);
     this$static._glTextureId = null;
   }
    else {
@@ -18330,25 +17530,25 @@ function SimpleTextureMapping(glTextureId, texCoords){
   this._transparent = true;
 }
 
-defineClass(200, 354, {}, SimpleTextureMapping);
+defineClass(387, 386, {}, SimpleTextureMapping);
 _._ownedTexCoords = false;
 _._transparent = false;
-var Lorg_glob3_mobile_generated_SimpleTextureMapping_2_classLit = createForClass('org.glob3.mobile.generated', 'SimpleTextureMapping', 200);
+var Lorg_glob3_mobile_generated_SimpleTextureMapping_2_classLit = createForClass('org.glob3.mobile.generated', 'SimpleTextureMapping', 387);
 function TaitBryanAngles(heading, pitch, roll){
   this._heading = new Angle_0(heading);
   this._pitch = new Angle_0(pitch);
   this._roll = new Angle_0(roll);
 }
 
-defineClass(156, 1, {}, TaitBryanAngles);
-var Lorg_glob3_mobile_generated_TaitBryanAngles_2_classLit = createForClass('org.glob3.mobile.generated', 'TaitBryanAngles', 156);
+defineClass(146, 1, {}, TaitBryanAngles);
+var Lorg_glob3_mobile_generated_TaitBryanAngles_2_classLit = createForClass('org.glob3.mobile.generated', 'TaitBryanAngles', 146);
 function TextCanvasElement(text_0, font, color_0){
   this._text = text_0;
   this._font = new GFont_0(font);
   this._color = new Color_0(color_0);
 }
 
-defineClass(422, 96, $intern_43, TextCanvasElement);
+defineClass(400, 91, $intern_40, TextCanvasElement);
 _.drawAt = function drawAt_0(left, top_0, canvas){
   $setFont(canvas, this._font);
   $setFillColor(canvas, this._color);
@@ -18360,10 +17560,10 @@ _.getExtent = function getExtent_0(canvas){
   return $textExtent(canvas, this._text);
 }
 ;
-var Lorg_glob3_mobile_generated_TextCanvasElement_2_classLit = createForClass('org.glob3.mobile.generated', 'TextCanvasElement', 422);
+var Lorg_glob3_mobile_generated_TextCanvasElement_2_classLit = createForClass('org.glob3.mobile.generated', 'TextCanvasElement', 400);
 function $createBasicValues(this$static, texCoords){
   var texUnit, value_0;
-  value_0 = new GPUAttributeValueVec2Float(texCoords, false);
+  value_0 = new GPUAttributeValueVec2Float(texCoords);
   texUnit = new GPUUniformValueInt(this$static._target);
   switch (this$static._target) {
     case 0:
@@ -18415,7 +17615,7 @@ function $setScale(this$static, u, v){
   }
 }
 
-function $setTranslation_0(this$static, u, v){
+function $setTranslation(this$static, u, v){
   if (!this$static._translation) {
     this$static._translation = new GPUUniformValueVec2FloatMutable(u, v);
     $addUniformValue(this$static._values, ($clinit_GPUUniformKey() , TRANSLATION_TEXTURE_COORDS), this$static._translation);
@@ -18445,35 +17645,35 @@ function TextureGLFeature_0(texID, texCoords, blend, sFactor, dFactor, translate
   this._rotationCenter = null;
   this._rotationAngle = null;
   $createBasicValues(this, texCoords);
-  $setTranslation_0(this, translateU, translateV);
+  $setTranslation(this, translateU, translateV);
   $setScale(this, scaleU, scaleV);
   $setRotationAngleInRadiansAndRotationCenter(this, rotationAngleInRadians, rotationCenterU, rotationCenterV);
 }
 
-defineClass(72, 133, {24:1, 71:1, 9:1, 72:1}, TextureGLFeature, TextureGLFeature_0);
-_.applyOnGlobalGLState = function applyOnGlobalGLState_5(state){
+defineClass(71, 128, {27:1, 70:1, 9:1, 71:1}, TextureGLFeature, TextureGLFeature_0);
+_.applyOnGlobalGLState = function applyOnGlobalGLState_4(state){
   $blendingOnGlobalGLState(this, state);
   $bindTexture(state, this._target, this._texID);
 }
 ;
-_.dispose = function dispose_60(){
+_.dispose = function dispose_51(){
   !!this._values && $dispose_4(this._values);
   $dispose_0(this);
 }
 ;
 _._target = 0;
 _._texID = null;
-var Lorg_glob3_mobile_generated_TextureGLFeature_2_classLit = createForClass('org.glob3.mobile.generated', 'TextureGLFeature', 72);
+var Lorg_glob3_mobile_generated_TextureGLFeature_2_classLit = createForClass('org.glob3.mobile.generated', 'TextureGLFeature', 71);
 function TextureHolder(textureSpec){
   this._referenceCounter = 1;
   this._textureSpec = textureSpec;
   this._glTextureId = null;
 }
 
-defineClass(112, 1, {112:1}, TextureHolder);
+defineClass(106, 1, {106:1}, TextureHolder);
 _._referenceCounter = 0;
-var Lorg_glob3_mobile_generated_TextureHolder_2_classLit = createForClass('org.glob3.mobile.generated', 'TextureHolder', 112);
-function $dispose_11(this$static){
+var Lorg_glob3_mobile_generated_TextureHolder_2_classLit = createForClass('org.glob3.mobile.generated', 'TextureHolder', 106);
+function $dispose_12(this$static){
   $releaseGLTextureId_1(this$static._texHandler, this$static._id);
 }
 
@@ -18483,10 +17683,10 @@ function TextureIDReference(id_0, isPremultiplied, texHandler){
   this._texHandler = texHandler;
 }
 
-defineClass(131, 1, {}, TextureIDReference);
+defineClass(126, 1, {}, TextureIDReference);
 _._isPremultiplied = false;
-var Lorg_glob3_mobile_generated_TextureIDReference_2_classLit = createForClass('org.glob3.mobile.generated', 'TextureIDReference', 131);
-function $description_6(this$static){
+var Lorg_glob3_mobile_generated_TextureIDReference_2_classLit = createForClass('org.glob3.mobile.generated', 'TextureIDReference', 126);
+function $description_5(this$static){
   var isb, s;
   isb = new StringBuilder_WebGL;
   isb._string += '(';
@@ -18511,7 +17711,7 @@ function TextureSpec(id_0, width_0, height, generateMipmap){
   this._generateMipmap = generateMipmap;
 }
 
-defineClass(163, 1, {163:1}, TextureSpec);
+defineClass(152, 1, {152:1}, TextureSpec);
 _.equals$ = function equals_19(obj){
   var other;
   if (this === obj)
@@ -18520,7 +17720,7 @@ _.equals$ = function equals_19(obj){
     return false;
   if (Lorg_glob3_mobile_generated_TextureSpec_2_classLit != getClass__Ljava_lang_Class___devirtual$(obj))
     return false;
-  other = dynamicCast(obj, 163);
+  other = dynamicCast(obj, 152);
   if (this._height != other._height)
     return false;
   if (this._id == null) {
@@ -18543,16 +17743,16 @@ _.hashCode$ = function hashCode_24(){
 }
 ;
 _.toString$ = function toString_38(){
-  return $description_6(this);
+  return $description_5(this);
 }
 ;
 _._generateMipmap = false;
 _._height = 0;
 _._width = 0;
-var Lorg_glob3_mobile_generated_TextureSpec_2_classLit = createForClass('org.glob3.mobile.generated', 'TextureSpec', 163);
-function $dispose_12(this$static){
+var Lorg_glob3_mobile_generated_TextureSpec_2_classLit = createForClass('org.glob3.mobile.generated', 'TextureSpec', 152);
+function $dispose_13(this$static){
   this$static._ownedMesh && !!this$static._mesh && $dispose(this$static._mesh);
-  this$static._ownedTexMapping && !!this$static._textureMapping && $dispose_10(this$static._textureMapping);
+  this$static._ownedTexMapping && !!this$static._textureMapping && $dispose_11(this$static._textureMapping);
   $_release(this$static._glState);
 }
 
@@ -18565,7 +17765,7 @@ function TexturedMesh(mesh, textureMapping){
   this._glState = new GLState;
 }
 
-defineClass(405, 108, {}, TexturedMesh);
+defineClass(388, 102, {}, TexturedMesh);
 _.rawRender = function rawRender_5(rc, parentState){
   $modifyGLState_1(this._textureMapping, this._glState);
   $setParent_2(this._glState, parentState);
@@ -18574,12 +17774,12 @@ _.rawRender = function rawRender_5(rc, parentState){
 ;
 _._ownedMesh = false;
 _._ownedTexMapping = false;
-var Lorg_glob3_mobile_generated_TexturedMesh_2_classLit = createForClass('org.glob3.mobile.generated', 'TexturedMesh', 405);
+var Lorg_glob3_mobile_generated_TexturedMesh_2_classLit = createForClass('org.glob3.mobile.generated', 'TexturedMesh', 388);
 function $getGLTextureIdIfAvailable(this$static, textureSpec){
   var _textureHoldersSize, holder, i_0;
   _textureHoldersSize = this$static._textureHolders.array.length;
   for (i_0 = 0; i_0 < _textureHoldersSize; i_0++) {
-    holder = dynamicCast($get_0(this$static._textureHolders, i_0), 112);
+    holder = dynamicCast($get_0(this$static._textureHolders, i_0), 106);
     if ($equalsTo(holder._textureSpec, textureSpec)) {
       ++holder._referenceCounter;
       return holder._glTextureId;
@@ -18590,14 +17790,14 @@ function $getGLTextureIdIfAvailable(this$static, textureSpec){
 
 function $getTextureIDReference(this$static, image, format, name_0, generateMipmap){
   var holder, previousId, textureSpec;
-  textureSpec = new TextureSpec(name_0, $getWidth_0(image), $getHeight_0(image), generateMipmap);
+  textureSpec = new TextureSpec(name_0, $getWidth(image), $getHeight(image), generateMipmap);
   previousId = $getGLTextureIdIfAvailable(this$static, textureSpec);
   if (previousId) {
     return new TextureIDReference(previousId, false, this$static);
   }
   holder = new TextureHolder(textureSpec);
   holder._glTextureId = $uploadTexture(this$static._gl, image, format, textureSpec._generateMipmap);
-  this$static._verbose && $logInfo(_instance_3, 'Uploaded texture "%s" to GPU with texId=%s', initValues(getClassLiteralForArray(Ljava_lang_Object_2_classLit, 1), $intern_4, 1, 3, [$description_6(textureSpec), 'GLTextureId_WebGL ' + getHashCode(holder._glTextureId._webGLTexture)]));
+  this$static._verbose && $logInfo(_instance_3, 'Uploaded texture "%s" to GPU with texId=%s', initValues(getClassLiteralForArray(Ljava_lang_Object_2_classLit, 1), $intern_4, 1, 3, [$description_5(textureSpec), 'GLTextureId_WebGL ' + getHashCode(holder._glTextureId._webGLTexture)]));
   $add_3(this$static._textureHolders, holder);
   return new TextureIDReference(holder._glTextureId, false, this$static);
 }
@@ -18608,7 +17808,7 @@ function $releaseGLTextureId_1(this$static, glTextureId){
     return;
   }
   for (i_0 = 0; i_0 < this$static._textureHolders.array.length; i_0++) {
-    holder = dynamicCast($get_0(this$static._textureHolders, i_0), 112);
+    holder = dynamicCast($get_0(this$static._textureHolders, i_0), 106);
     if ($isEquals_4(holder._glTextureId, glTextureId)) {
       --holder._referenceCounter;
       if (holder._referenceCounter <= 0) {
@@ -18626,7 +17826,7 @@ function $retainGLTextureId(this$static, glTextureId){
     return;
   }
   for (i_0 = 0; i_0 < this$static._textureHolders.array.length; i_0++) {
-    holder = dynamicCast($get_0(this$static._textureHolders, i_0), 112);
+    holder = dynamicCast($get_0(this$static._textureHolders, i_0), 106);
     if ($isEquals_4(holder._glTextureId, glTextureId)) {
       ++holder._referenceCounter;
       return;
@@ -18641,9 +17841,9 @@ function TexturesHandler(gl){
   this._verbose = false;
 }
 
-defineClass(365, 1, {}, TexturesHandler);
+defineClass(351, 1, {}, TexturesHandler);
 _._verbose = false;
-var Lorg_glob3_mobile_generated_TexturesHandler_2_classLit = createForClass('org.glob3.mobile.generated', 'TexturesHandler', 365);
+var Lorg_glob3_mobile_generated_TexturesHandler_2_classLit = createForClass('org.glob3.mobile.generated', 'TexturesHandler', 351);
 function $ancestorTexturedSolvedChanged_0(this$static, ancestor, textureSolved){
   var i_0, subtile, subtilesSize;
   if (textureSolved && this$static._textureSolved) {
@@ -18653,7 +17853,7 @@ function $ancestorTexturedSolvedChanged_0(this$static, ancestor, textureSolved){
   if (this$static._subtiles) {
     subtilesSize = this$static._subtiles.array.length;
     for (i_0 = 0; i_0 < subtilesSize; i_0++) {
-      subtile = dynamicCast($get_0(this$static._subtiles, i_0), 25);
+      subtile = dynamicCast($get_0(this$static._subtiles, i_0), 23);
       $ancestorTexturedSolvedChanged_0(subtile, ancestor, textureSolved);
     }
   }
@@ -18710,7 +17910,7 @@ function $deleteTexturizedMesh(this$static, texturizer){
   }
 }
 
-function $description_7(this$static){
+function $description_6(this$static){
   var isb, s;
   isb = new StringBuilder_WebGL;
   isb._string += '(Tile';
@@ -18721,7 +17921,7 @@ function $description_7(this$static){
   isb._string += ', column=';
   $addInt(isb, this$static._column);
   isb._string += ', sector=';
-  $addString(isb, $description_4(this$static._sector));
+  $addString(isb, $description_3(this$static._sector));
   isb._string += ')';
   s = isb._string;
   return s;
@@ -18747,12 +17947,12 @@ function $getDebugMesh(this$static, rc, tessellator, layerTilesRenderParameters)
 
 function $getDeepestTileContaining(this$static, position){
   var i_0, subtile, subtileResult;
-  if ($contains_3(this$static._sector, position._latitude, position._longitude)) {
+  if ($contains_1(this$static._sector, position._latitude, position._longitude)) {
     if (!this$static._subtiles) {
       return this$static;
     }
     for (i_0 = 0; i_0 < this$static._subtiles.array.length; i_0++) {
-      subtile = dynamicCast($get_0(this$static._subtiles, i_0), 25);
+      subtile = dynamicCast($get_0(this$static._subtiles, i_0), 23);
       subtileResult = $getDeepestTileContaining(subtile, position);
       if (subtileResult) {
         return subtileResult;
@@ -18873,7 +18073,7 @@ function $prune(this$static, texturizer, elevationDataProvider, tilesStoppedRend
   if (this$static._subtiles) {
     subtilesSize = this$static._subtiles.array.length;
     for (i_0 = 0; i_0 < subtilesSize; i_0++) {
-      subtile = dynamicCast($get_0(this$static._subtiles, i_0), 25);
+      subtile = dynamicCast($get_0(this$static._subtiles, i_0), 23);
       $setIsVisible(subtile, false, texturizer);
       $prune(subtile, texturizer, elevationDataProvider, tilesStoppedRendering);
       !!texturizer && $tileToBeDeleted(subtile);
@@ -18906,7 +18106,7 @@ function $rawRender_1(this$static, rc, glState, texturizer, tessellator, layerTi
   }
 }
 
-function $render_6(this$static, rc, parentState, toVisitInNextIteration, cameraFrustumInModelCoordinates, tilesStatistics, verticalExaggeration, layerTilesRenderParameters, texturizer, tilesRenderParameters, lastSplitTimer, elevationDataProvider, tessellator, layerSet, renderedSector, forceFullRender, tileDownloadPriority, texWidthSquared, texHeightSquared, nowInMS, renderTileMeshes, logTilesPetitions, tilesStoppedRendering){
+function $render_5(this$static, rc, parentState, toVisitInNextIteration, cameraFrustumInModelCoordinates, tilesStatistics, verticalExaggeration, layerTilesRenderParameters, texturizer, tilesRenderParameters, lastSplitTimer, elevationDataProvider, tessellator, layerSet, renderedSector, forceFullRender, tileDownloadPriority, texWidthSquared, texHeightSquared, nowInMS, renderTileMeshes, logTilesPetitions, tilesStoppedRendering){
   var i_0, isRawRender, rendered, subTile, subTiles, subTilesSize, tileTexturePriority, level, level_0, debugMesh, level_1, sector, lowerLatitudeDegrees, lowerLongitudeDegrees, upperLatitudeDegrees, upperLongitudeDegrees;
   ++tilesStatistics._tilesProcessed;
   level = this$static._level;
@@ -18950,7 +18150,7 @@ function $render_6(this$static, rc, parentState, toVisitInNextIteration, cameraF
       }
       subTilesSize = subTiles.array.length;
       for (i_0 = 0; i_0 < subTilesSize; i_0++) {
-        subTile = (checkElementIndex(i_0, subTiles.array.length) , dynamicCast(subTiles.array[i_0], 25));
+        subTile = (checkElementIndex(i_0, subTiles.array.length) , dynamicCast(subTiles.array[i_0], 23));
         setCheck(toVisitInNextIteration.array, toVisitInNextIteration.array.length, subTile);
       }
     }
@@ -18984,7 +18184,7 @@ function $setTextureSolved(this$static, textureSolved){
     if (this$static._subtiles) {
       subtilesSize = this$static._subtiles.array.length;
       for (i_0 = 0; i_0 < subtilesSize; i_0++) {
-        subtile = dynamicCast($get_0(this$static._subtiles, i_0), 25);
+        subtile = dynamicCast($get_0(this$static._subtiles, i_0), 23);
         $ancestorTexturedSolvedChanged_0(subtile, this$static, this$static._textureSolved);
       }
     }
@@ -19048,9 +18248,9 @@ function getSquaredArcSegmentRatio(a, b){
   return arcSegmentRatio * arcSegmentRatio;
 }
 
-defineClass(25, 1, {25:1}, Tile);
+defineClass(23, 1, {23:1}, Tile);
 _.toString$ = function toString_39(){
-  return $description_7(this);
+  return $description_6(this);
 }
 ;
 _._column = 0;
@@ -19070,13 +18270,13 @@ _._textureSolved = false;
 _._texturizerDirty = false;
 _._verticalExaggeration = 0;
 _._westArcSegmentRatioSquared = 0;
-var Lorg_glob3_mobile_generated_Tile_2_classLit = createForClass('org.glob3.mobile.generated', 'Tile', 25);
+var Lorg_glob3_mobile_generated_Tile_2_classLit = createForClass('org.glob3.mobile.generated', 'Tile', 23);
 function TileTessellatorMeshData(){
 }
 
-defineClass(399, 1, {}, TileTessellatorMeshData);
+defineClass(382, 1, {}, TileTessellatorMeshData);
 _._averageHeight = 0;
-var Lorg_glob3_mobile_generated_TileTessellatorMeshData_2_classLit = createForClass('org.glob3.mobile.generated', 'TileTessellatorMeshData', 399);
+var Lorg_glob3_mobile_generated_TileTessellatorMeshData_2_classLit = createForClass('org.glob3.mobile.generated', 'TileTessellatorMeshData', 382);
 function TilesRenderParameters(renderDebug, useTilesSplitBudget, forceFirstLevelTilesRenderOnStart, incrementalTileQuality, quality){
   this._renderDebug = renderDebug;
   this._useTilesSplitBudget = useTilesSplitBudget;
@@ -19093,22 +18293,22 @@ function TilesRenderParameters(renderDebug, useTilesSplitBudget, forceFirstLevel
   }
 }
 
-defineClass(321, 1, {}, TilesRenderParameters);
+defineClass(307, 1, {}, TilesRenderParameters);
 _._forceFirstLevelTilesRenderOnStart = false;
 _._incrementalTileQuality = false;
 _._renderDebug = false;
 _._texturePixelsPerInch = 0;
 _._useTilesSplitBudget = false;
-var Lorg_glob3_mobile_generated_TilesRenderParameters_2_classLit = createForClass('org.glob3.mobile.generated', 'TilesRenderParameters', 321);
+var Lorg_glob3_mobile_generated_TilesRenderParameters_2_classLit = createForClass('org.glob3.mobile.generated', 'TilesRenderParameters', 307);
 function $clear(this$static){
   var i_0;
   this$static._tilesProcessed = 0;
   this$static._tilesVisible = 0;
   this$static._tilesRendered = 0;
-  this$static._visibleLowerLatitudeDegrees = $intern_71;
-  this$static._visibleLowerLongitudeDegrees = $intern_71;
-  this$static._visibleUpperLatitudeDegrees = $intern_72;
-  this$static._visibleUpperLongitudeDegrees = $intern_72;
+  this$static._visibleLowerLatitudeDegrees = $intern_65;
+  this$static._visibleLowerLongitudeDegrees = $intern_65;
+  this$static._visibleUpperLatitudeDegrees = $intern_66;
+  this$static._visibleUpperLongitudeDegrees = $intern_66;
   for (i_0 = 0; i_0 < 128; i_0++) {
     this$static._tilesProcessedByLevel[i_0] = 0;
     this$static._tilesVisibleByLevel[i_0] = 0;
@@ -19154,7 +18354,7 @@ function asLogString(m){
   return s;
 }
 
-defineClass(377, 1, {}, TilesStatistics);
+defineClass(362, 1, {}, TilesStatistics);
 _._tilesProcessed = 0;
 _._tilesRendered = 0;
 _._tilesVisible = 0;
@@ -19162,12 +18362,12 @@ _._visibleLowerLatitudeDegrees = 0;
 _._visibleLowerLongitudeDegrees = 0;
 _._visibleUpperLatitudeDegrees = 0;
 _._visibleUpperLongitudeDegrees = 0;
-var Lorg_glob3_mobile_generated_TilesStatistics_2_classLit = createForClass('org.glob3.mobile.generated', 'TilesStatistics', 377);
+var Lorg_glob3_mobile_generated_TilesStatistics_2_classLit = createForClass('org.glob3.mobile.generated', 'TilesStatistics', 362);
 function TimeInterval(milliseconds){
   this._milliseconds = milliseconds;
 }
 
-defineClass(47, 1, {47:1}, TimeInterval);
+defineClass(48, 1, {48:1}, TimeInterval);
 _.equals$ = function equals_20(obj){
   var other;
   if (this === obj) {
@@ -19179,7 +18379,7 @@ _.equals$ = function equals_20(obj){
   if (Lorg_glob3_mobile_generated_TimeInterval_2_classLit != getClass__Ljava_lang_Class___devirtual$(obj)) {
     return false;
   }
-  other = dynamicCast(obj, 47);
+  other = dynamicCast(obj, 48);
   if (neq(this._milliseconds, other._milliseconds)) {
     return false;
   }
@@ -19193,7 +18393,7 @@ _.hashCode$ = function hashCode_25(){
 }
 ;
 _._milliseconds = {l:0, m:0, h:0};
-var Lorg_glob3_mobile_generated_TimeInterval_2_classLit = createForClass('org.glob3.mobile.generated', 'TimeInterval', 47);
+var Lorg_glob3_mobile_generated_TimeInterval_2_classLit = createForClass('org.glob3.mobile.generated', 'TimeInterval', 48);
 function Touch_0(other){
   this._pos = other._pos;
   this._prevPos = other._prevPos;
@@ -19213,7 +18413,7 @@ function Touch_2(pos, prev, tapCount){
 defineClass(10, 1, {10:1}, Touch_0, Touch_1, Touch_2);
 _._tapCount = 0;
 var Lorg_glob3_mobile_generated_Touch_2_classLit = createForClass('org.glob3.mobile.generated', 'Touch', 10);
-function $dispose_13(this$static){
+function $dispose_14(this$static){
   var i_0;
   for (i_0 = 0; i_0 < this$static._touchs.array.length; i_0++) {
     $get_0(this$static._touchs, i_0) != null && dynamicCast($get_0(this$static._touchs, i_0), 10);
@@ -19237,8 +18437,8 @@ function create_5(type_0, touch){
   return new TouchEvent_0(type_0, touchs);
 }
 
-defineClass(40, 1, {40:1}, TouchEvent_0);
-var Lorg_glob3_mobile_generated_TouchEvent_2_classLit = createForClass('org.glob3.mobile.generated', 'TouchEvent', 40);
+defineClass(39, 1, {39:1}, TouchEvent_0);
+var Lorg_glob3_mobile_generated_TouchEvent_2_classLit = createForClass('org.glob3.mobile.generated', 'TouchEvent', 39);
 function $clinit_TouchEventType(){
   $clinit_TouchEventType = emptyMethod;
   Down = new TouchEventType('Down', 0);
@@ -19254,12 +18454,12 @@ function TouchEventType(enum$name, enum$ordinal){
 
 function values_10(){
   $clinit_TouchEventType();
-  return initValues(getClassLiteralForArray(Lorg_glob3_mobile_generated_TouchEventType_2_classLit, 1), $intern_4, 75, 0, [Down, Up, Move, LongPress, DownUp]);
+  return initValues(getClassLiteralForArray(Lorg_glob3_mobile_generated_TouchEventType_2_classLit, 1), $intern_4, 74, 0, [Down, Up, Move, LongPress, DownUp]);
 }
 
-defineClass(75, 19, {3:1, 27:1, 19:1, 75:1}, TouchEventType);
+defineClass(74, 15, {3:1, 26:1, 15:1, 74:1}, TouchEventType);
 var Down, DownUp, LongPress, Move, Up;
-var Lorg_glob3_mobile_generated_TouchEventType_2_classLit = createForEnum('org.glob3.mobile.generated', 'TouchEventType', 75, values_10);
+var Lorg_glob3_mobile_generated_TouchEventType_2_classLit = createForEnum('org.glob3.mobile.generated', 'TouchEventType', 74, values_10);
 function URL_0(path){
   URL_1.call(this, path);
 }
@@ -19268,7 +18468,7 @@ function URL_1(path){
   this._path = path;
 }
 
-defineClass(53, 1, {53:1}, URL_0, URL_1);
+defineClass(92, 1, {92:1}, URL_0, URL_1);
 _.equals$ = function equals_21(obj){
   var other;
   if (this === obj) {
@@ -19280,7 +18480,7 @@ _.equals$ = function equals_21(obj){
   if (Lorg_glob3_mobile_generated_URL_2_classLit != getClass__Ljava_lang_Class___devirtual$(obj)) {
     return false;
   }
-  other = dynamicCast(obj, 53);
+  other = dynamicCast(obj, 92);
   if ($equals(this._path, other._path)) {
     return true;
   }
@@ -19296,13 +18496,13 @@ _.toString$ = function toString_40(){
   return isb = new StringBuilder_WebGL , isb._string += 'URL(' , $addString(isb, this._path) , isb._string += ')' , isb._string;
 }
 ;
-var Lorg_glob3_mobile_generated_URL_2_classLit = createForClass('org.glob3.mobile.generated', 'URL', 53);
+var Lorg_glob3_mobile_generated_URL_2_classLit = createForClass('org.glob3.mobile.generated', 'URL', 92);
 function Vector2D(x_0, y_0){
   this._x = x_0;
   this._y = y_0;
 }
 
-defineClass(137, 1, {}, Vector2D);
+defineClass(207, 1, {}, Vector2D);
 _.toString$ = function toString_41(){
   var isb;
   return isb = new StringBuilder_WebGL , isb._string += '(V2D ' , $addDouble(isb, this._x) , isb._string += ', ' , $addDouble(isb, this._y) , isb._string += ')' , isb._string;
@@ -19310,36 +18510,20 @@ _.toString$ = function toString_41(){
 ;
 _._x = 0;
 _._y = 0;
-var Lorg_glob3_mobile_generated_Vector2D_2_classLit = createForClass('org.glob3.mobile.generated', 'Vector2D', 137);
-function $add_18(this$static, v){
+var Lorg_glob3_mobile_generated_Vector2D_2_classLit = createForClass('org.glob3.mobile.generated', 'Vector2D', 207);
+function $add_17(this$static, v){
   return new Vector2F(this$static._x + v._x, this$static._y + v._y);
 }
 
-function $clampLength(this$static, min_0, max_0){
-  var length_0;
-  length_0 = sqrt_0(this$static._x * this$static._x + this$static._y * this$static._y);
-  if (length_0 < min_0) {
-    return new Vector2F(this$static._x * (min_0 / length_0), this$static._y * (min_0 / length_0));
-  }
-  if (length_0 > max_0) {
-    return new Vector2F(this$static._x * (max_0 / length_0), this$static._y * (max_0 / length_0));
-  }
-  return this$static;
-}
-
-function $div_1(this$static, v){
-  return new Vector2F(this$static._x / v, this$static._y / v);
-}
-
-function $isNan_0(this$static){
-  return this$static._x != this$static._x || this$static._y != this$static._y;
+function $div_1(this$static){
+  return new Vector2F(this$static._x / 3, this$static._y / 3);
 }
 
 function $length_0(this$static){
   return sqrt_0(this$static._x * this$static._x + this$static._y * this$static._y);
 }
 
-function $squaredDistanceTo(this$static, x_0, y_0){
+function $squaredDistanceTo_0(this$static, x_0, y_0){
   var dx, dy;
   dx = this$static._x - x_0;
   dy = this$static._y - y_0;
@@ -19355,16 +18539,11 @@ function Vector2F(x_0, y_0){
   this._y = y_0;
 }
 
-function Vector2F_0(v){
-  this._x = v._x;
-  this._y = v._y;
-}
-
-defineClass(14, 1, {14:1}, Vector2F, Vector2F_0);
+defineClass(16, 1, {16:1}, Vector2F);
 _._x = 0;
 _._y = 0;
-var Lorg_glob3_mobile_generated_Vector2F_2_classLit = createForClass('org.glob3.mobile.generated', 'Vector2F', 14);
-function $description_8(this$static){
+var Lorg_glob3_mobile_generated_Vector2F_2_classLit = createForClass('org.glob3.mobile.generated', 'Vector2F', 16);
+function $description_7(this$static){
   var isb, s;
   isb = new StringBuilder_WebGL;
   isb._string += '(V2I ';
@@ -19386,20 +18565,20 @@ function Vector2I_0(that){
   this._y = that._y;
 }
 
-defineClass(68, 1, {}, Vector2I, Vector2I_0);
+defineClass(67, 1, {}, Vector2I, Vector2I_0);
 _.toString$ = function toString_42(){
-  return $description_8(this);
+  return $description_7(this);
 }
 ;
 _._x = 0;
 _._y = 0;
-var Lorg_glob3_mobile_generated_Vector2I_2_classLit = createForClass('org.glob3.mobile.generated', 'Vector2I', 68);
+var Lorg_glob3_mobile_generated_Vector2I_2_classLit = createForClass('org.glob3.mobile.generated', 'Vector2I', 67);
 function $clinit_Vector3D(){
   $clinit_Vector3D = emptyMethod;
   zero = new Vector3D(0, 0, 0);
 }
 
-function $add_19(this$static, v){
+function $add_18(this$static, v){
   return new Vector3D(this$static._x + v._x, this$static._y + v._y, this$static._z + v._z);
 }
 
@@ -19413,6 +18592,20 @@ function $axisAverage(this$static){
 
 function $cross_0(this$static, other){
   return new Vector3D(this$static._y * other._z - this$static._z * other._y, this$static._z * other._x - this$static._x * other._z, this$static._x * other._y - this$static._y * other._x);
+}
+
+function $description_8(this$static){
+  var isb, s;
+  isb = new StringBuilder_WebGL;
+  isb._string += '(V3D ';
+  $addDouble(isb, this$static._x);
+  isb._string += ', ';
+  $addDouble(isb, this$static._y);
+  isb._string += ', ';
+  $addDouble(isb, this$static._z);
+  isb._string += ')';
+  s = isb._string;
+  return s;
 }
 
 function $dot_0(this$static, v){
@@ -19450,9 +18643,9 @@ function $normalized_0(this$static){
 function $projectionInPlane(this$static, normal){
   var axis_0, m, projected;
   axis_0 = new Vector3D(normal._y * this$static._z - normal._z * this$static._y, normal._z * this$static._x - normal._x * this$static._z, normal._x * this$static._y - normal._y * this$static._x);
-  m = createRotationMatrix(new Angle(90, $intern_47), axis_0);
+  m = createRotationMatrix(new Angle(90, $intern_43), axis_0);
   projected = $normalized_0(new Vector3D(normal._x * m._m00 + normal._y * m._m01 + normal._z * m._m02, normal._x * m._m10 + normal._y * m._m11 + normal._z * m._m12, normal._x * m._m20 + normal._y * m._m21 + normal._z * m._m22));
-  return $times_3(projected, sqrt_0(this$static._x * this$static._x + this$static._y * this$static._y + this$static._z * this$static._z));
+  return $times_2(projected, sqrt_0(this$static._x * this$static._x + this$static._y * this$static._y + this$static._z * this$static._z));
 }
 
 function $rotateAroundAxis_0(this$static, axis_0, theta){
@@ -19480,16 +18673,16 @@ function $sub_2(this$static, v){
   return new Vector3D(this$static._x - v._x, this$static._y - v._y, this$static._z - v._z);
 }
 
-function $times_3(this$static, magnitude){
+function $times_2(this$static, magnitude){
   return new Vector3D(this$static._x * magnitude, this$static._y * magnitude, this$static._z * magnitude);
 }
 
-function $times_4(this$static, v){
+function $times_3(this$static, v){
   return new Vector3D(this$static._x * v._x, this$static._y * v._y, this$static._z * v._z);
 }
 
-function $transformedBy_0(this$static, m){
-  return new Vector3D(this$static._x * m._m00 + this$static._y * m._m01 + this$static._z * m._m02 + m._m03, this$static._x * m._m10 + this$static._y * m._m11 + this$static._z * m._m12 + m._m13, this$static._x * m._m20 + this$static._y * m._m21 + this$static._z * m._m22 + m._m23);
+function $transformedBy_0(this$static, m, homogeneus){
+  return new Vector3D(this$static._x * m._m00 + this$static._y * m._m01 + this$static._z * m._m02 + homogeneus * m._m03, this$static._x * m._m10 + this$static._y * m._m11 + this$static._z * m._m12 + homogeneus * m._m13, this$static._x * m._m20 + this$static._y * m._m21 + this$static._z * m._m22 + homogeneus * m._m23);
 }
 
 function Vector3D(x_0, y_0, z_0){
@@ -19517,8 +18710,7 @@ function angleInRadiansBetween_0(a, b){
 
 defineClass(5, 1, {}, Vector3D, Vector3D_0);
 _.toString$ = function toString_43(){
-  var isb;
-  return isb = new StringBuilder_WebGL , isb._string += '(V3D ' , $addDouble(isb, this._x) , isb._string += ', ' , $addDouble(isb, this._y) , isb._string += ', ' , $addDouble(isb, this._z) , isb._string += ')' , isb._string;
+  return $description_8(this);
 }
 ;
 _._x = 0;
@@ -19538,31 +18730,11 @@ function Vector3F(x_0, y_0, z_0){
   this._z = z_0;
 }
 
-defineClass(41, 1, {41:1}, Vector3F);
+defineClass(40, 1, {40:1}, Vector3F);
 _._x = 0;
 _._y = 0;
 _._z = 0;
-var Lorg_glob3_mobile_generated_Vector3F_2_classLit = createForClass('org.glob3.mobile.generated', 'Vector3F', 41);
-function $changeExtent(this$static, viewportWidth, viewportHeight){
-  $changeValue_0(this$static._extent, viewportWidth, viewportHeight);
-}
-
-function ViewportExtentGLFeature(camera){
-  GLFeature.call(this, ($clinit_GLFeatureGroupName() , NO_GROUP), 1);
-  this._extent = new GPUUniformValueVec2FloatMutable(camera._viewPortWidth, camera._viewPortHeight);
-  $addUniformValue(this._values, ($clinit_GPUUniformKey() , VIEWPORT_EXTENT), this._extent);
-}
-
-defineClass(193, 24, $intern_45, ViewportExtentGLFeature);
-_.applyOnGlobalGLState = function applyOnGlobalGLState_6(state){
-}
-;
-_.dispose = function dispose_61(){
-  !!this._values && $dispose_4(this._values);
-  $dispose_0(this);
-}
-;
-var Lorg_glob3_mobile_generated_ViewportExtentGLFeature_2_classLit = createForClass('org.glob3.mobile.generated', 'ViewportExtentGLFeature', 193);
+var Lorg_glob3_mobile_generated_Vector3F_2_classLit = createForClass('org.glob3.mobile.generated', 'Vector3F', 40);
 function $tryToNotifyListener(this$static, visibleSector, rc){
   var now_0;
   if (eq(this$static._stabilizationIntervalInMS, {l:0, m:0, h:0})) {
@@ -19593,10 +18765,10 @@ function VisibleSectorListenerEntry(stabilizationInterval){
   this._whenNotifyInMS = {l:0, m:0, h:0};
 }
 
-defineClass(154, 1, {154:1}, VisibleSectorListenerEntry);
+defineClass(145, 1, {145:1}, VisibleSectorListenerEntry);
 _._stabilizationIntervalInMS = {l:0, m:0, h:0};
 _._whenNotifyInMS = {l:0, m:0, h:0};
-var Lorg_glob3_mobile_generated_VisibleSectorListenerEntry_2_classLit = createForClass('org.glob3.mobile.generated', 'VisibleSectorListenerEntry', 154);
+var Lorg_glob3_mobile_generated_VisibleSectorListenerEntry_2_classLit = createForClass('org.glob3.mobile.generated', 'VisibleSectorListenerEntry', 145);
 function $_createImage(this$static, listener, autodelete){
   var jsImage = new Image;
   jsImage.onload = function(){
@@ -19619,14 +18791,6 @@ function $_drawImage(this$static, image, left, top_0, width_0, height, transpare
 function $_fillRectangle(this$static, left, top_0, width_0, height){
   var context = this$static._domCanvasContext;
   context.fillRect(left, top_0, width_0, height);
-}
-
-function $_setShadow(this$static, color_0, blur_0, offsetX, offsetY){
-  var context = this$static._domCanvasContext;
-  context.shadowColor = createDOMColor(color_0);
-  context.shadowBlur = blur_0;
-  context.shadowOffsetX = offsetX;
-  context.shadowOffsetY = offsetY;
 }
 
 function $roundRect(this$static, x_0, y_0, width_0, height, radius, fill, stroke){
@@ -19674,13 +18838,25 @@ function createDOMColor(color_0){
   return 'rgba(' + r + ', ' + g + ', ' + b + ', ' + a + ')';
 }
 
-defineClass(93, 388, {}, Canvas_WebGL);
+defineClass(127, 373, {}, Canvas_WebGL);
 _.tryToSetCurrentFontToContext = function tryToSetCurrentFontToContext(){
   $tryToSetCurrentFontToContext(this);
 }
 ;
 _._currentFontSize = 0;
-var Lorg_glob3_mobile_specific_Canvas_1WebGL_2_classLit = createForClass('org.glob3.mobile.specific', 'Canvas_WebGL', 93);
+var Lorg_glob3_mobile_specific_Canvas_1WebGL_2_classLit = createForClass('org.glob3.mobile.specific', 'Canvas_WebGL', 127);
+function $copyValueOfRotationMatrix_0(this$static, rotationMatrix){
+  var cs;
+  if (isNaN_0(this$static._beta) || isNaN_0(this$static._gamma) || isNaN_0(this$static._alpha)) {
+    rotationMatrix._isValid = false;
+    $logError(_instance_3, 'Browser attitude data is undefined.', initValues(getClassLiteralForArray(Ljava_lang_Object_2_classLit, 1), $intern_4, 1, 3, []));
+  }
+   else {
+    cs = $applyTaitBryanAngles(new CoordinateSystem_0(($clinit_Vector3D() , new Vector3D(1, 0, 0)), new Vector3D(0, 1, 0), new Vector3D(0, 0, 1), zero), fromDegrees(this$static._alpha), fromDegrees(this$static._gamma), fromDegrees(-this$static._beta));
+    $copyValue(rotationMatrix, new MutableMatrix44D_0(cs._x._x, cs._x._y, cs._x._z, 0, cs._y._x, cs._y._y, cs._y._z, 0, cs._z._x, cs._z._y, cs._z._z, 0, 0, 0, 0, 1));
+  }
+}
+
 function $initInterfaceOrientation(devAtt){
   try {
     if ($wnd.screen.orientation !== undefined) {
@@ -19725,28 +18901,77 @@ function $trackInterfaceOrientation(devAtt){
 }
 
 function DeviceAttitude_WebGL(){
+  this._camCSPortrait = null;
+  this._camCSPortraitUD = null;
+  this._camCSLL = null;
+  this._camCSLR = null;
   $trackInterfaceOrientation(this);
   $initInterfaceOrientation(this);
 }
 
-defineClass(338, 483, {}, DeviceAttitude_WebGL);
+function trackGyroscope(devAtt){
+  try {
+    $wnd.addEventListener('deviceorientation', function(event_0){
+      devAtt._beta = event_0.beta;
+      devAtt._gamma = event_0.gamma;
+      devAtt._alpha = event_0.alpha;
+      console.log('TG EVENT B:' + devAtt._beta + ' G:' + devAtt._gamma + ' A:' + devAtt._alpha);
+    }
+    , false);
+  }
+   catch (err) {
+  }
+}
+
+defineClass(324, 317, {}, DeviceAttitude_WebGL);
 _.storeInterfaceOrientation = function storeInterfaceOrientation(orientation){
   $equalsIgnoreCase(orientation, 'portrait-primary')?(this._currentIO = ($clinit_InterfaceOrientation() , PORTRAIT)):$equalsIgnoreCase(orientation, 'portrait-secondary')?(this._currentIO = ($clinit_InterfaceOrientation() , PORTRAIT_UPSIDEDOWN)):$equalsIgnoreCase(orientation, 'landscape-primary')?(this._currentIO = ($clinit_InterfaceOrientation() , LANDSCAPE_RIGHT)):$equalsIgnoreCase(orientation, 'landscape-secondary') && (this._currentIO = ($clinit_InterfaceOrientation() , LANDSCAPE_LEFT));
   $logInfo(_instance_3, 'SIO ' + orientation + ' -> ' + $toString(this._currentIO), initValues(getClassLiteralForArray(Ljava_lang_Object_2_classLit, 1), $intern_4, 1, 3, []));
 }
 ;
+_._alpha = NaN;
+_._beta = NaN;
 _._currentIO = null;
-var Lorg_glob3_mobile_specific_DeviceAttitude_1WebGL_2_classLit = createForClass('org.glob3.mobile.specific', 'DeviceAttitude_WebGL', 338);
+_._gamma = NaN;
+_._isTracking = false;
+var Lorg_glob3_mobile_specific_DeviceAttitude_1WebGL_2_classLit = createForClass('org.glob3.mobile.specific', 'DeviceAttitude_WebGL', 324);
 function DeviceInfo_WebGL(){
 }
 
-defineClass(394, 494, {}, DeviceInfo_WebGL);
-var Lorg_glob3_mobile_specific_DeviceInfo_1WebGL_2_classLit = createForClass('org.glob3.mobile.specific', 'DeviceInfo_WebGL', 394);
+defineClass(377, 474, {}, DeviceInfo_WebGL);
+var Lorg_glob3_mobile_specific_DeviceInfo_1WebGL_2_classLit = createForClass('org.glob3.mobile.specific', 'DeviceInfo_WebGL', 377);
+function $startTrackingLocationJS(devLoc){
+  if ('geolocation' in navigator) {
+    devLoc._watchId = navigator.geolocation.watchPosition(devLoc.onPositionChanged, devLoc.onError);
+    return true;
+  }
+  return false;
+}
+
 function DeviceLocation_WebGL(){
 }
 
-defineClass(339, 484, {}, DeviceLocation_WebGL);
-var Lorg_glob3_mobile_specific_DeviceLocation_1WebGL_2_classLit = createForClass('org.glob3.mobile.specific', 'DeviceLocation_WebGL', 339);
+defineClass(325, 467, {}, DeviceLocation_WebGL);
+_.onError = function onError(error){
+  console.log(error);
+}
+;
+_.onPositionChanged = function onPositionChanged(location_0){
+  _lat = location_0.coords.latitude;
+  _lon = location_0.coords.longitude;
+  if (location_0.coords.altitude == null) {
+    console.log('Device altitude is undefined, assuming 0');
+    _altitude = 0;
+  }
+   else {
+    _altitude = location_0.coords.altitude;
+  }
+}
+;
+_._isTracking = false;
+_._watchId = -1;
+var _altitude = NaN, _lat = NaN, _lon = NaN;
+var Lorg_glob3_mobile_specific_DeviceLocation_1WebGL_2_classLit = createForClass('org.glob3.mobile.specific', 'DeviceLocation_WebGL', 325);
 function $cancelRequest(this$static, requestId){
   var e, found, handler, iter;
   if (lt(requestId, {l:0, m:0, h:0})) {
@@ -19756,18 +18981,18 @@ function $cancelRequest(this$static, requestId){
   found = false;
   iter = new AbstractHashMap$EntrySetIterator((new AbstractHashMap$EntrySet(this$static._queuedHandlers)).this$01);
   while ($hasNext(iter) && !found) {
-    e = (checkStructuralChange(iter.this$01, iter) , checkCriticalElement($hasNext(iter)) , iter.last = iter.current , dynamicCast(iter.current.next_0(), 23));
-    handler = dynamicCast(e.getValue(), 116);
+    e = (checkStructuralChange(iter.this$01, iter) , checkCriticalElement($hasNext(iter)) , iter.last = iter.current , dynamicCast(iter.current.next_0(), 22));
+    handler = dynamicCast(e.getValue(), 109);
     if (handler.removeListenerForRequestId(requestId)) {
-      handler.hasListener() || (checkState(!!iter.last) , checkStructuralChange(iter.this$01, iter) , iter.last.remove_0() , iter.last = null , recordLastKnownStructure(iter.this$01, iter));
+      handler.hasListener() || $remove_3(iter);
       found = true;
     }
   }
   if (!found) {
     iter = new AbstractHashMap$EntrySetIterator((new AbstractHashMap$EntrySet(this$static._downloadingHandlers)).this$01);
     while ($hasNext(iter) && !found) {
-      e = (checkStructuralChange(iter.this$01, iter) , checkCriticalElement($hasNext(iter)) , iter.last = iter.current , dynamicCast(iter.current.next_0(), 23));
-      handler = dynamicCast(e.getValue(), 116);
+      e = (checkStructuralChange(iter.this$01, iter) , checkCriticalElement($hasNext(iter)) , iter.last = iter.current , dynamicCast(iter.current.next_0(), 22));
+      handler = dynamicCast(e.getValue(), 109);
       handler.cancelListenerForRequestId(requestId) && (found = true);
     }
   }
@@ -19780,9 +19005,9 @@ function $getHandlerToRun(this$static){
   selectedURL = null;
   it = new AbstractHashMap$EntrySetIterator((new AbstractHashMap$EntrySet(this$static._queuedHandlers)).this$01);
   while ($hasNext(it)) {
-    e = (checkStructuralChange(it.this$01, it) , checkCriticalElement($hasNext(it)) , it.last = it.current , dynamicCast(it.current.next_0(), 23));
-    url_0 = dynamicCast(e.getKey(), 53);
-    handler = dynamicCast(e.getValue(), 116);
+    e = (checkStructuralChange(it.this$01, it) , checkCriticalElement($hasNext(it)) , it.last = it.current , dynamicCast(it.current.next_0(), 22));
+    url_0 = dynamicCast(e.getKey(), 92);
+    handler = dynamicCast(e.getValue(), 109);
     priority = handler.getPriority();
     if (gt(priority, selectedPriority)) {
       selectedPriority = priority;
@@ -19818,12 +19043,12 @@ function $requestImage_0(this$static, url_0, priority, listener){
   proxyUrl = $getProxiedURL(this$static, url_0);
   this$static._requestsCounter = add_0(this$static._requestsCounter, {l:1, m:0, h:0});
   requestId = ($tmp = this$static._requestIdCounter , this$static._requestIdCounter = add_0(this$static._requestIdCounter, {l:1, m:0, h:0}) , $tmp);
-  handler = dynamicCast($get(this$static._downloadingHandlers, proxyUrl), 116);
+  handler = dynamicCast($get(this$static._downloadingHandlers, proxyUrl), 109);
   if (!!handler && handler.isRequestingImage()) {
     handler.addListener(listener, true, priority, requestId);
   }
    else {
-    handler = dynamicCast($get(this$static._queuedHandlers, proxyUrl), 116);
+    handler = dynamicCast($get(this$static._queuedHandlers, proxyUrl), 109);
     if (!!handler && handler.isRequestingImage()) {
       handler.addListener(listener, true, priority, requestId);
     }
@@ -19858,8 +19083,8 @@ function $statistics(this$static){
   return sb._string;
 }
 
-function Downloader_WebGL(proxy){
-  var thisDownloader, trimmedProxy, s, i_0;
+function Downloader_WebGL(){
+  var thisDownloader, s, i_0;
   this._maxConcurrentOperationCount = 8;
   this._requestIdCounter = {l:1, m:0, h:0};
   this._requestsCounter = {l:0, m:0, h:0};
@@ -19867,31 +19092,25 @@ function Downloader_WebGL(proxy){
   this._downloadingHandlers = new HashMap;
   this._queuedHandlers = new HashMap;
   this._delayMillis = 10;
-  if (proxy == null) {
-    this._proxy = null;
-  }
-   else {
-    trimmedProxy = $trim(proxy);
-    !trimmedProxy.length?(this._proxy = (s = $doc.location.href , i_0 = s.indexOf('#') , i_0 != -1 && (s = s.substring(0, i_0)) , i_0 = s.indexOf('?') , i_0 != -1 && (s = s.substring(0, i_0)) , i_0 = s.lastIndexOf('/') , i_0 != -1 && (s = s.substring(0, i_0)) , s.length > 0?s + '/':'') + 'proxy?url='):(this._proxy = trimmedProxy);
-  }
+  this._proxy = (s = $doc.location.href , i_0 = s.indexOf('#') , i_0 != -1 && (s = s.substring(0, i_0)) , i_0 = s.indexOf('?') , i_0 != -1 && (s = s.substring(0, i_0)) , i_0 = s.lastIndexOf('/') , i_0 != -1 && (s = s.substring(0, i_0)) , s.length > 0?s + '/':'') + 'proxy?url=';
   thisDownloader = this;
   this._timer = new Downloader_WebGL$1(this, thisDownloader);
 }
 
-defineClass(180, 452, {}, Downloader_WebGL);
+defineClass(340, 455, {}, Downloader_WebGL);
 _._cancelsCounter = {l:0, m:0, h:0};
 _._delayMillis = 0;
 _._maxConcurrentOperationCount = 0;
 _._requestIdCounter = {l:0, m:0, h:0};
 _._requestsCounter = {l:0, m:0, h:0};
-var Lorg_glob3_mobile_specific_Downloader_1WebGL_2_classLit = createForClass('org.glob3.mobile.specific', 'Downloader_WebGL', 180);
+var Lorg_glob3_mobile_specific_Downloader_1WebGL_2_classLit = createForClass('org.glob3.mobile.specific', 'Downloader_WebGL', 340);
 function Downloader_WebGL$1(this$0, val$thisDownloader){
   this.this$01 = this$0;
   this.val$thisDownloader2 = val$thisDownloader;
   Timer.call(this);
 }
 
-defineClass(266, 181, {}, Downloader_WebGL$1);
+defineClass(341, 189, {}, Downloader_WebGL$1);
 _.run = function run(){
   var handler;
   if (this.this$01._downloadingHandlers.size_0 < this.this$01._maxConcurrentOperationCount) {
@@ -19901,7 +19120,7 @@ _.run = function run(){
   $sendRequest(this.this$01);
 }
 ;
-var Lorg_glob3_mobile_specific_Downloader_1WebGL$1_2_classLit = createForClass('org.glob3.mobile.specific', 'Downloader_WebGL/1', 266);
+var Lorg_glob3_mobile_specific_Downloader_1WebGL$1_2_classLit = createForClass('org.glob3.mobile.specific', 'Downloader_WebGL/1', 341);
 function $log_4(msg){
   !!_instance_3 && $logError(_instance_3, 'Downloader_WebGL_HandlerImpl' + msg, initValues(getClassLiteralForArray(Ljava_lang_Object_2_classLit, 1), $intern_4, 1, 3, []));
 }
@@ -19909,7 +19128,7 @@ function $log_4(msg){
 function Downloader_WebGL_Handler_DefaultImpl(){
 }
 
-defineClass(400, 1, {116:1}, Downloader_WebGL_Handler_DefaultImpl);
+defineClass(412, 1, {109:1}, Downloader_WebGL_Handler_DefaultImpl);
 _.addListener = function addListener(listener, deleteListener, priority, requestId){
   var entry;
   entry = new ListenerEntry(listener, deleteListener, requestId);
@@ -19922,7 +19141,7 @@ _.cancelListenerForRequestId = function cancelListenerForRequestId(requestId){
   canceled = false;
   iter = new AbstractList$IteratorImpl(this._listeners);
   while (iter.i < iter.this$01_0.size_1() && !canceled) {
-    entry = (checkCriticalElement(iter.i < iter.this$01_0.size_1()) , dynamicCast(iter.this$01_0.get_1(iter.last = iter.i++), 82));
+    entry = (checkCriticalElement(iter.i < iter.this$01_0.size_1()) , dynamicCast(iter.this$01_0.get_1(iter.last = iter.i++), 81));
     if (eq(entry._requestId, requestId)) {
       entry._canceled && $log_5(': Listener for requestId=' + toString_8(entry._requestId) + ' already canceled');
       entry._canceled = true;
@@ -20002,21 +19221,21 @@ _.processResponse = function processResponse(statusCode, data_0){
   dataIsValid = !!data_0 && statusCode == 200;
   if (dataIsValid) {
     for (entry$iterator = new AbstractList$IteratorImpl(this._listeners); entry$iterator.i < entry$iterator.this$01_0.size_1();) {
-      entry = (checkCriticalElement(entry$iterator.i < entry$iterator.this$01_0.size_1()) , dynamicCast(entry$iterator.this$01_0.get_1(entry$iterator.last = entry$iterator.i++), 82));
+      entry = (checkCriticalElement(entry$iterator.i < entry$iterator.this$01_0.size_1()) , dynamicCast(entry$iterator.this$01_0.get_1(entry$iterator.last = entry$iterator.i++), 81));
       if (entry._canceled) {
         $onCanceledDownload(entry, this._url, data_0);
-        $onCancel(entry, this._url);
+        $onCancel_0(entry);
       }
        else {
-        $onDownload(entry, this._url, data_0);
+        $onDownload_0(entry, this._url, data_0);
       }
     }
   }
    else {
     $log_4(': Error runWithDownloader: statusCode=' + statusCode + ', data=' + data_0 + ', url=' + this._url._path);
     for (entry$iterator = new AbstractList$IteratorImpl(this._listeners); entry$iterator.i < entry$iterator.this$01_0.size_1();) {
-      entry = (checkCriticalElement(entry$iterator.i < entry$iterator.this$01_0.size_1()) , dynamicCast(entry$iterator.this$01_0.get_1(entry$iterator.last = entry$iterator.i++), 82));
-      $onError(entry, this._url);
+      entry = (checkCriticalElement(entry$iterator.i < entry$iterator.this$01_0.size_1()) , dynamicCast(entry$iterator.this$01_0.get_1(entry$iterator.last = entry$iterator.i++), 81));
+      $onError_0(entry, this._url);
     }
   }
 }
@@ -20030,9 +19249,9 @@ _.removeListenerForRequestId = function removeListenerForRequestId(requestId){
   removed = false;
   iter = new AbstractList$IteratorImpl(this._listeners);
   while (iter.i < iter.this$01_0.size_1()) {
-    entry = (checkCriticalElement(iter.i < iter.this$01_0.size_1()) , dynamicCast(iter.this$01_0.get_1(iter.last = iter.i++), 82));
+    entry = (checkCriticalElement(iter.i < iter.this$01_0.size_1()) , dynamicCast(iter.this$01_0.get_1(iter.last = iter.i++), 81));
     if (eq(entry._requestId, requestId)) {
-      $onCancel(entry, this._url);
+      $onCancel_0(entry);
       $remove_4(iter);
       removed = true;
       break;
@@ -20048,7 +19267,7 @@ _.runWithDownloader = function runWithDownloader(downloader){
 ;
 _._priority = {l:0, m:0, h:0};
 _._requestingImage = false;
-var Lorg_glob3_mobile_specific_Downloader_1WebGL_1Handler_1DefaultImpl_2_classLit = createForClass('org.glob3.mobile.specific', 'Downloader_WebGL_Handler_DefaultImpl', 400);
+var Lorg_glob3_mobile_specific_Downloader_1WebGL_1Handler_1DefaultImpl_2_classLit = createForClass('org.glob3.mobile.specific', 'Downloader_WebGL_Handler_DefaultImpl', 412);
 function $clinit_Downloader_WebGL_Handler_WebkitImpl(){
   $clinit_Downloader_WebGL_Handler_WebkitImpl = emptyMethod;
   _isChrome = $wnd.navigator.userAgent.toLowerCase().indexOf('chrome') > -1;
@@ -20058,7 +19277,7 @@ function Downloader_WebGL_Handler_WebkitImpl(){
   $clinit_Downloader_WebGL_Handler_WebkitImpl();
 }
 
-defineClass(401, 400, {116:1}, Downloader_WebGL_Handler_WebkitImpl);
+defineClass(413, 412, {109:1}, Downloader_WebGL_Handler_WebkitImpl);
 _.jsRequest = function jsRequest_0(url_0){
   var that = this;
   var xhr = new XMLHttpRequest;
@@ -20095,20 +19314,20 @@ _.jsRequest = function jsRequest_0(url_0){
 }
 ;
 var _isChrome = false;
-var Lorg_glob3_mobile_specific_Downloader_1WebGL_1Handler_1WebkitImpl_2_classLit = createForClass('org.glob3.mobile.specific', 'Downloader_WebGL_Handler_WebkitImpl', 401);
+var Lorg_glob3_mobile_specific_Downloader_1WebGL_1Handler_1WebkitImpl_2_classLit = createForClass('org.glob3.mobile.specific', 'Downloader_WebGL_Handler_WebkitImpl', 413);
 function Factory_WebGL(){
   this._deviceInfo = null;
   new HashMap;
 }
 
-defineClass(333, 331, {}, Factory_WebGL);
-var Lorg_glob3_mobile_specific_Factory_1WebGL_2_classLit = createForClass('org.glob3.mobile.specific', 'Factory_WebGL', 333);
+defineClass(319, 316, {}, Factory_WebGL);
+var Lorg_glob3_mobile_specific_Factory_1WebGL_2_classLit = createForClass('org.glob3.mobile.specific', 'Factory_WebGL', 319);
 function $$init_0(this$static){
   var $tmp;
   this$static._id = ($tmp = _nextID , _nextID = add_0(_nextID, {l:1, m:0, h:0}) , $tmp);
 }
 
-function $dispose_14(this$static){
+function $dispose_15(this$static){
   if (this$static._webGLBuffer) {
     this$static._gl.deleteBuffer(this$static._webGLBuffer);
     this$static._webGLBuffer = null;
@@ -20120,38 +19339,22 @@ function $get_5(this$static, i_0){
   return this$static._buffer[i_0];
 }
 
-function $put_2(this$static, i_0, value_0){
-  if (this$static._buffer[i_0] != value_0) {
-    this$static._buffer[i_0] = value_0;
-    this$static.incTimestamp();
-  }
-}
-
-function $rawPut(this$static, i_0, value_0){
-  this$static._buffer[i_0] = value_0;
-}
-
 function FloatBuffer_WebGL(f0, f1, f2, f3, f4, f5, f6, f7, f8, f9, f10, f11, f12, f13, f14, f15){
   var buffer;
   $$init_0(this);
   this._buffer = (buffer = new Float32Array(16) , buffer[0] = f0 , buffer[1] = f1 , buffer[2] = f2 , buffer[3] = f3 , buffer[4] = f4 , buffer[5] = f5 , buffer[6] = f6 , buffer[7] = f7 , buffer[8] = f8 , buffer[9] = f9 , buffer[10] = f10 , buffer[11] = f11 , buffer[12] = f12 , buffer[13] = f13 , buffer[14] = f14 , buffer[15] = f15 , buffer);
 }
 
-function FloatBuffer_WebGL_0(){
-  $$init_0(this);
-  this._buffer = new Float32Array(4);
-}
-
-function FloatBuffer_WebGL_1(array, length_0){
+function FloatBuffer_WebGL_0(array, length_0){
   var i_0;
   $$init_0(this);
   this._buffer = new Float32Array(length_0);
   for (i_0 = 0; i_0 < length_0; i_0++) {
-    $rawPut(this, i_0, array[i_0]);
+    this._buffer[i_0] = array[i_0];
   }
 }
 
-defineClass(49, 485, {}, FloatBuffer_WebGL, FloatBuffer_WebGL_0, FloatBuffer_WebGL_1);
+defineClass(69, 478, {}, FloatBuffer_WebGL, FloatBuffer_WebGL_0);
 _.bindVBO = function bindVBO(gl){
   var buffer, buffer_0;
   if (!this._webGLBuffer) {
@@ -20160,8 +19363,8 @@ _.bindVBO = function bindVBO(gl){
   }
   buffer = this._webGLBuffer;
   gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
-  if (this._bufferTimeStamp != this._timestamp) {
-    this._bufferTimeStamp = this._timestamp;
+  if (this._bufferTimeStamp != 0) {
+    this._bufferTimeStamp = 0;
     buffer_0 = this._buffer;
     gl.bufferData(gl.ARRAY_BUFFER, buffer_0, gl.STATIC_DRAW);
   }
@@ -20172,23 +19375,18 @@ _.getBuffer = function getBuffer(){
   return this._buffer;
 }
 ;
-_.incTimestamp = function incTimestamp(){
-  ++this._timestamp;
-}
-;
 _._bufferTimeStamp = -1;
 _._gl = null;
 _._id = {l:0, m:0, h:0};
-_._timestamp = 0;
 _._webGLBuffer = null;
 var _nextID = {l:0, m:0, h:0};
-var Lorg_glob3_mobile_specific_FloatBuffer_1WebGL_2_classLit = createForClass('org.glob3.mobile.specific', 'FloatBuffer_WebGL', 49);
+var Lorg_glob3_mobile_specific_FloatBuffer_1WebGL_2_classLit = createForClass('org.glob3.mobile.specific', 'FloatBuffer_WebGL', 69);
 function $createWidget(this$static){
   var i_0, shaders;
   if ($isWebGLSupported(this$static._nativeWidget)) {
     shaders = new BasicShadersGL2;
     for (i_0 = 0; i_0 < shaders._sources.array.length; i_0++) {
-      $addGPUProgramSources(this$static, dynamicCast($get_0(shaders._sources, i_0), 22));
+      $addGPUProgramSources(this$static, dynamicCast($get_0(shaders._sources, i_0), 21));
     }
     $setGL(this$static, this$static._nativeWidget._gl);
     $setG3MWidget(this$static._nativeWidget, $create_1(this$static));
@@ -20221,8 +19419,8 @@ function G3MBuilder_WebGL_0(widget){
   this._nativeWidget = widget;
 }
 
-defineClass(177, 263, {}, G3MBuilder_WebGL);
-var Lorg_glob3_mobile_specific_G3MBuilder_1WebGL_2_classLit = createForClass('org.glob3.mobile.specific', 'G3MBuilder_WebGL', 177);
+defineClass(169, 252, {}, G3MBuilder_WebGL);
+var Lorg_glob3_mobile_specific_G3MBuilder_1WebGL_2_classLit = createForClass('org.glob3.mobile.specific', 'G3MBuilder_WebGL', 169);
 function $exportJSFunctions(this$static){
   var that = this$static;
   !$wnd.G3M && ($wnd.G3M = {});
@@ -20332,7 +19530,7 @@ function $onSizeChanged(this$static, w, h){
 }
 
 function $setAnimatedCameraPosition_2(this$static, position){
-  $setAnimatedCameraPosition(this$static._g3mWidget, position, new Angle(0, 0), new Angle(-90, $intern_41));
+  $setAnimatedCameraPosition(this$static._g3mWidget, position, new Angle(0, 0), new Angle(-90, $intern_38));
 }
 
 function $setG3MWidget(this$static, widget){
@@ -20387,7 +19585,7 @@ function createUnsupportedMessage(message){
   return panel;
 }
 
-defineClass(241, 448, $intern_26, G3MWidget_WebGL);
+defineClass(230, 433, $intern_26, G3MWidget_WebGL);
 _.getCameraData_0 = function getCameraData(){
   var widget = this._g3mWidget;
   var camera = widget.getCurrentCamera();
@@ -20407,11 +19605,11 @@ _.getCameraData_0 = function getCameraData(){
 }
 ;
 _.moveCameraTo_0 = function moveCameraTo(position){
-  $setAnimatedCameraPosition_0(this._g3mWidget, new TimeInterval({l:5000, m:0, h:0}), position, new Angle(0, 0), new Angle(-90, $intern_41));
+  $setAnimatedCameraPosition_0(this._g3mWidget, new TimeInterval({l:5000, m:0, h:0}), position, new Angle(0, 0), new Angle(-90, $intern_38));
 }
 ;
 _.newGeodetic3D_0 = function newGeodetic3D(latitude, longitude, height){
-  return new Geodetic3D(new Angle(latitude, latitude / 180 * $intern_40), new Angle(longitude, longitude / 180 * $intern_40), height);
+  return new Geodetic3D(new Angle(latitude, latitude / 180 * $intern_37), new Angle(longitude, longitude / 180 * $intern_37), height);
 }
 ;
 _.onBrowserEvent = function onBrowserEvent_1(event_0){
@@ -20448,7 +19646,7 @@ _.takeScreenshotAsImage_0 = function takeScreenshotAsImage(){
 ;
 _._height = 0;
 _._width = 0;
-var Lorg_glob3_mobile_specific_G3MWidget_1WebGL_2_classLit = createForClass('org.glob3.mobile.specific', 'G3MWidget_WebGL', 241);
+var Lorg_glob3_mobile_specific_G3MWidget_1WebGL_2_classLit = createForClass('org.glob3.mobile.specific', 'G3MWidget_WebGL', 230);
 function $isEquals_4(this$static, that){
   return this$static._webGLTexture == that._webGLTexture;
 }
@@ -20457,56 +19655,56 @@ function GLTextureId_WebGL(webGLTexture){
   this._webGLTexture = webGLTexture;
 }
 
-defineClass(500, 1, {226:1}, GLTextureId_WebGL);
+defineClass(482, 1, {215:1}, GLTextureId_WebGL);
 _.getWebGLTexture = function getWebGLTexture(){
   return this._webGLTexture;
 }
 ;
-var Lorg_glob3_mobile_specific_GLTextureId_1WebGL_2_classLit = createForClass('org.glob3.mobile.specific', 'GLTextureId_WebGL', 500);
+var Lorg_glob3_mobile_specific_GLTextureId_1WebGL_2_classLit = createForClass('org.glob3.mobile.specific', 'GLTextureId_WebGL', 482);
 function GLUniformID_WebGL(id_0){
   this._id = id_0;
 }
 
-defineClass(504, 1, {}, GLUniformID_WebGL);
+defineClass(488, 1, {}, GLUniformID_WebGL);
 _.getId = function getId(){
   return this._id;
 }
 ;
-var Lorg_glob3_mobile_specific_GLUniformID_1WebGL_2_classLit = createForClass('org.glob3.mobile.specific', 'GLUniformID_WebGL', 504);
-function $getHeight_0(this$static){
+var Lorg_glob3_mobile_specific_GLUniformID_1WebGL_2_classLit = createForClass('org.glob3.mobile.specific', 'GLUniformID_WebGL', 488);
+function $getHeight(this$static){
   var jsImage = this$static._imgObject;
   return jsImage?jsImage.height:0;
 }
 
-function $getWidth_0(this$static){
+function $getWidth(this$static){
   var jsImage = this$static._imgObject;
   return jsImage?jsImage.width:0;
 }
 
 function Image_WebGL(data_0){
   this._imgObject = data_0;
-  ($getWidth_0(this) <= 0 || $getHeight_0(this) <= 0) && (this._imgObject = null);
+  ($getWidth(this) <= 0 || $getHeight(this) <= 0) && (this._imgObject = null);
 }
 
-defineClass(138, 490, {}, Image_WebGL);
+defineClass(129, 479, {}, Image_WebGL);
 _.getImage = function getImage(){
   return this._imgObject;
 }
 ;
-var Lorg_glob3_mobile_specific_Image_1WebGL_2_classLit = createForClass('org.glob3.mobile.specific', 'Image_WebGL', 138);
+var Lorg_glob3_mobile_specific_Image_1WebGL_2_classLit = createForClass('org.glob3.mobile.specific', 'Image_WebGL', 129);
 function JSONParser_WebGL(){
 }
 
-defineClass(336, 481, {}, JSONParser_WebGL);
-var Lorg_glob3_mobile_specific_JSONParser_1WebGL_2_classLit = createForClass('org.glob3.mobile.specific', 'JSONParser_WebGL', 336);
+defineClass(322, 465, {}, JSONParser_WebGL);
+var Lorg_glob3_mobile_specific_JSONParser_1WebGL_2_classLit = createForClass('org.glob3.mobile.specific', 'JSONParser_WebGL', 322);
 function $log_5(msg){
   !!_instance_3 && $logError(_instance_3, 'ListenerEntry' + msg, initValues(getClassLiteralForArray(Ljava_lang_Object_2_classLit, 1), $intern_4, 1, 3, []));
 }
 
-function $onCancel(this$static, url_0){
+function $onCancel_0(this$static){
   if (this$static._imageListener) {
-    this$static._imageListener.onCancel(url_0);
-    this$static._deleteListener && this$static._imageListener.dispose();
+    $onCancel(this$static._imageListener);
+    this$static._deleteListener && $dispose_10(this$static._imageListener);
   }
 }
 
@@ -20514,29 +19712,29 @@ function $onCanceledDownload(this$static, url_0, data_0){
   var image;
   if (this$static._imageListener) {
     image = new Image_WebGL(data_0);
-    !image._imgObject?$log_5(": Can't create image from data (URL=" + url_0._path + ')'):this$static._imageListener.onCanceledDownload(url_0, image, false);
+    !image._imgObject?$log_5(": Can't create image from data (URL=" + url_0._path + ')'):undefined;
   }
 }
 
-function $onDownload(this$static, url_0, data_0){
+function $onDownload_0(this$static, url_0, data_0){
   var image;
   if (this$static._imageListener) {
     image = new Image_WebGL(data_0);
     if (!image._imgObject) {
       $log_5(": Can't create image from data (URL=" + url_0._path + ')');
-      this$static._imageListener.onError_0(url_0);
+      $onError(this$static._imageListener, url_0);
     }
      else {
-      this$static._imageListener.onDownload(url_0, image, false);
+      $onDownload(this$static._imageListener, url_0, image);
     }
-    this$static._deleteListener && this$static._imageListener.dispose();
+    this$static._deleteListener && $dispose_10(this$static._imageListener);
   }
 }
 
-function $onError(this$static, url_0){
+function $onError_0(this$static, url_0){
   if (this$static._imageListener) {
-    this$static._imageListener.onError_0(url_0);
-    this$static._deleteListener && this$static._imageListener.dispose();
+    $onError(this$static._imageListener, url_0);
+    this$static._deleteListener && $dispose_10(this$static._imageListener);
   }
 }
 
@@ -20547,11 +19745,11 @@ function ListenerEntry(imageListener, deleteListener, requestId){
   this._canceled = false;
 }
 
-defineClass(82, 1, {82:1}, ListenerEntry);
+defineClass(81, 1, {81:1}, ListenerEntry);
 _._canceled = false;
 _._deleteListener = false;
 _._requestId = {l:0, m:0, h:0};
-var Lorg_glob3_mobile_specific_ListenerEntry_2_classLit = createForClass('org.glob3.mobile.specific', 'ListenerEntry', 82);
+var Lorg_glob3_mobile_specific_ListenerEntry_2_classLit = createForClass('org.glob3.mobile.specific', 'ListenerEntry', 81);
 function $logError(this$static, x_0, LegacyParamArray){
   var res;
   if (this$static._level <= 3) {
@@ -20594,18 +19792,18 @@ function Logger_WebGL(){
   this._logger = (new LoggerImplRegular , $ensureLogger(getLogManager(), ''));
 }
 
-defineClass(332, 297, {}, Logger_WebGL);
-var Lorg_glob3_mobile_specific_Logger_1WebGL_2_classLit = createForClass('org.glob3.mobile.specific', 'Logger_WebGL', 332);
+defineClass(318, 285, {}, Logger_WebGL);
+var Lorg_glob3_mobile_specific_Logger_1WebGL_2_classLit = createForClass('org.glob3.mobile.specific', 'Logger_WebGL', 318);
 function $abs(v){
   return v <= 0?0 - v:v;
 }
 
 function MathUtils_WebGL(){
-  this._random = new Random;
+  new Random;
 }
 
-defineClass(335, 480, {}, MathUtils_WebGL);
-var Lorg_glob3_mobile_specific_MathUtils_1WebGL_2_classLit = createForClass('org.glob3.mobile.specific', 'MathUtils_WebGL', 335);
+defineClass(321, 464, {}, MathUtils_WebGL);
+var Lorg_glob3_mobile_specific_MathUtils_1WebGL_2_classLit = createForClass('org.glob3.mobile.specific', 'MathUtils_WebGL', 321);
 function $clinit_MotionEventProcessor(){
   $clinit_MotionEventProcessor = emptyMethod;
   DELTA = new Vector2F(10, 0);
@@ -20622,7 +19820,7 @@ function $createTouches(this$static, event_0){
     currentTouchPosition = new Vector2F($getRelativeX(jsTouch, this$static._canvasElement), $getRelativeY(jsTouch, this$static._canvasElement));
     touchId = valueOf(jsTouch.identifier);
     $put_0(currentTouchesPositions.hashCodeMap, touchId, currentTouchPosition);
-    previousTouchPosition = dynamicCast($get(this$static._previousTouchesPositions, touchId), 14);
+    previousTouchPosition = dynamicCast($get(this$static._previousTouchesPositions, touchId), 16);
     !previousTouchPosition && (previousTouchPosition = currentTouchPosition);
     $add_3(touches, new Touch_1(currentTouchPosition, previousTouchPosition));
   }
@@ -20702,7 +19900,7 @@ function $processEvent(this$static, event_0){
       break;
     default:return;
   }
-  !!touchEvent && $dispatchEvents(this$static, initValues(getClassLiteralForArray(Lorg_glob3_mobile_generated_TouchEvent_2_classLit, 1), $intern_4, 40, 0, [touchEvent]));
+  !!touchEvent && $dispatchEvents(this$static, initValues(getClassLiteralForArray(Lorg_glob3_mobile_generated_TouchEvent_2_classLit, 1), $intern_4, 39, 0, [touchEvent]));
 }
 
 function $processMouseDown(this$static, event_0){
@@ -20713,7 +19911,7 @@ function $processMouseDown(this$static, event_0){
   if (event_0.shiftKey) {
     $add_3(touches, new Touch_1($sub_1(currentMousePosition, DELTA), $sub_1(this$static._previousMousePosition, DELTA)));
     $add_3(touches, new Touch_1(currentMousePosition, this$static._previousMousePosition));
-    $add_3(touches, new Touch_1($add_18(currentMousePosition, DELTA), $add_18(this$static._previousMousePosition, DELTA)));
+    $add_3(touches, new Touch_1($add_17(currentMousePosition, DELTA), $add_17(this$static._previousMousePosition, DELTA)));
   }
    else {
     $add_3(touches, new Touch_1(currentMousePosition, this$static._previousMousePosition));
@@ -20732,7 +19930,7 @@ function $processMouseMove(this$static, event_0){
   if (event_0.shiftKey) {
     $add_3(touches, new Touch_1($sub_1(currentMousePosition, DELTA), $sub_1(this$static._previousMousePosition, DELTA)));
     $add_3(touches, new Touch_1(currentMousePosition, this$static._previousMousePosition));
-    $add_3(touches, new Touch_1($add_18(currentMousePosition, DELTA), $add_18(this$static._previousMousePosition, DELTA)));
+    $add_3(touches, new Touch_1($add_17(currentMousePosition, DELTA), $add_17(this$static._previousMousePosition, DELTA)));
   }
    else {
     $add_3(touches, new Touch_1(currentMousePosition, this$static._previousMousePosition));
@@ -20749,7 +19947,7 @@ function $processMouseUp(this$static, event_0){
   if (event_0.shiftKey) {
     $add_3(touches, new Touch_1($sub_1(currentMousePosition, DELTA), $sub_1(this$static._previousMousePosition, DELTA)));
     $add_3(touches, new Touch_1(currentMousePosition, this$static._previousMousePosition));
-    $add_3(touches, new Touch_1($add_18(currentMousePosition, DELTA), $add_18(this$static._previousMousePosition, DELTA)));
+    $add_3(touches, new Touch_1($add_17(currentMousePosition, DELTA), $add_17(this$static._previousMousePosition, DELTA)));
     touchType = ($clinit_TouchEventType() , Up);
   }
    else {
@@ -20768,7 +19966,7 @@ function MotionEventProcessor(widget, canvasElement){
   $jsAddMouseWheelListener(this);
 }
 
-defineClass(327, 1, {}, MotionEventProcessor);
+defineClass(312, 1, {}, MotionEventProcessor);
 _.processMouseWheel = function processMouseWheel(delta, x_0, y_0){
   var beginFirstPosition, beginSecondPosition, beginTouches, endFirstPosition, endSecondPosition, endTouches;
   beginFirstPosition = new Vector2F(x_0 - 10, y_0 - 10);
@@ -20781,21 +19979,21 @@ _.processMouseWheel = function processMouseWheel(delta, x_0, y_0){
   endTouches = new ArrayList_0(2);
   $add_3(endTouches, new Touch_1(endFirstPosition, beginFirstPosition));
   $add_3(endTouches, new Touch_1(endSecondPosition, beginSecondPosition));
-  $dispatchEvents(this, initValues(getClassLiteralForArray(Lorg_glob3_mobile_generated_TouchEvent_2_classLit, 1), $intern_4, 40, 0, [new TouchEvent_0(($clinit_TouchEventType() , Down), beginTouches), new TouchEvent_0(Move, endTouches), new TouchEvent_0(Up, endTouches)]));
+  $dispatchEvents(this, initValues(getClassLiteralForArray(Lorg_glob3_mobile_generated_TouchEvent_2_classLit, 1), $intern_4, 39, 0, [new TouchEvent_0(($clinit_TouchEventType() , Down), beginTouches), new TouchEvent_0(Move, endTouches), new TouchEvent_0(Up, endTouches)]));
   this._previousMousePosition = new Vector2F(x_0, y_0);
 }
 ;
 _._mouseDown = false;
 _._previousMousePosition = null;
 var DELTA;
-var Lorg_glob3_mobile_specific_MotionEventProcessor_2_classLit = createForClass('org.glob3.mobile.specific', 'MotionEventProcessor', 327);
+var Lorg_glob3_mobile_specific_MotionEventProcessor_2_classLit = createForClass('org.glob3.mobile.specific', 'MotionEventProcessor', 312);
 function MotionEventProcessor$1(this$0, val$event){
   this.this$01 = this$0;
   this.val$event2 = val$event;
 }
 
-defineClass(328, 1, {}, MotionEventProcessor$1);
-var Lorg_glob3_mobile_specific_MotionEventProcessor$1_2_classLit = createForClass('org.glob3.mobile.specific', 'MotionEventProcessor/1', 328);
+defineClass(313, 1, {}, MotionEventProcessor$1);
+var Lorg_glob3_mobile_specific_MotionEventProcessor$1_2_classLit = createForClass('org.glob3.mobile.specific', 'MotionEventProcessor/1', 313);
 function $attachShader_0(this$static, program, shader){
   var shaderList = this$static._shaderList;
   var jsoProgram = shaderList.get_1(program);
@@ -21078,9 +20276,9 @@ function NativeGL_WebGL(webGLContext){
   this._gl = webGLContext;
 }
 
-defineClass(320, 465, {}, NativeGL_WebGL);
-var Lorg_glob3_mobile_specific_NativeGL_1WebGL_2_classLit = createForClass('org.glob3.mobile.specific', 'NativeGL_WebGL', 320);
-function $dispose_15(this$static){
+defineClass(306, 448, {}, NativeGL_WebGL);
+var Lorg_glob3_mobile_specific_NativeGL_1WebGL_2_classLit = createForClass('org.glob3.mobile.specific', 'NativeGL_WebGL', 306);
+function $dispose_16(this$static){
   if (this$static._webGLBuffer) {
     this$static._gl.deleteBuffer(this$static._webGLBuffer);
     this$static._webGLBuffer = null;
@@ -21098,7 +20296,7 @@ function ShortBuffer_WebGL(array, length_0){
   }
 }
 
-defineClass(162, 501, {}, ShortBuffer_WebGL);
+defineClass(151, 483, {}, ShortBuffer_WebGL);
 _.getBuffer = function getBuffer_0(){
   return this._buffer;
 }
@@ -21114,7 +20312,7 @@ _.getWebGLBuffer = function getWebGLBuffer(gl){
 _._gl = null;
 _._webGLBuffer = null;
 var _nextID_0 = {l:0, m:0, h:0};
-var Lorg_glob3_mobile_specific_ShortBuffer_1WebGL_2_classLit = createForClass('org.glob3.mobile.specific', 'ShortBuffer_WebGL', 162);
+var Lorg_glob3_mobile_specific_ShortBuffer_1WebGL_2_classLit = createForClass('org.glob3.mobile.specific', 'ShortBuffer_WebGL', 151);
 function $addBool(this$static, b){
   this$static._string += b;
   return this$static;
@@ -21145,31 +20343,22 @@ function $addString(this$static, s){
   return this$static;
 }
 
-function $clear_1(this$static){
-  this$static._string = '';
-  return this$static;
-}
-
-function $contentEqualsTo(this$static, that){
-  return $equals(this$static._string, that);
-}
-
 function StringBuilder_WebGL(){
 }
 
-defineClass(16, 471, {}, StringBuilder_WebGL);
+defineClass(14, 463, {}, StringBuilder_WebGL);
 _._string = '';
-var Lorg_glob3_mobile_specific_StringBuilder_1WebGL_2_classLit = createForClass('org.glob3.mobile.specific', 'StringBuilder_WebGL', 16);
+var Lorg_glob3_mobile_specific_StringBuilder_1WebGL_2_classLit = createForClass('org.glob3.mobile.specific', 'StringBuilder_WebGL', 14);
 function StringUtils_WebGL(){
 }
 
-defineClass(334, 479, {}, StringUtils_WebGL);
-var Lorg_glob3_mobile_specific_StringUtils_1WebGL_2_classLit = createForClass('org.glob3.mobile.specific', 'StringUtils_WebGL', 334);
+defineClass(320, 462, {}, StringUtils_WebGL);
+var Lorg_glob3_mobile_specific_StringUtils_1WebGL_2_classLit = createForClass('org.glob3.mobile.specific', 'StringUtils_WebGL', 320);
 function TextUtils_WebGL(){
 }
 
-defineClass(337, 482, {}, TextUtils_WebGL);
-var Lorg_glob3_mobile_specific_TextUtils_1WebGL_2_classLit = createForClass('org.glob3.mobile.specific', 'TextUtils_WebGL', 337);
+defineClass(323, 466, {}, TextUtils_WebGL);
+var Lorg_glob3_mobile_specific_TextUtils_1WebGL_2_classLit = createForClass('org.glob3.mobile.specific', 'TextUtils_WebGL', 323);
 function $invokeTask(this$static, task){
   var timer;
   timer = new ThreadUtils_WebGL$1(task);
@@ -21180,20 +20369,20 @@ function ThreadUtils_WebGL(){
   this._delayMillis = 10;
 }
 
-defineClass(356, 473, {}, ThreadUtils_WebGL);
+defineClass(342, 456, {}, ThreadUtils_WebGL);
 _._delayMillis = 0;
-var Lorg_glob3_mobile_specific_ThreadUtils_1WebGL_2_classLit = createForClass('org.glob3.mobile.specific', 'ThreadUtils_WebGL', 356);
+var Lorg_glob3_mobile_specific_ThreadUtils_1WebGL_2_classLit = createForClass('org.glob3.mobile.specific', 'ThreadUtils_WebGL', 342);
 function ThreadUtils_WebGL$1(val$task){
   this.val$task2 = val$task;
   Timer.call(this);
 }
 
-defineClass(357, 181, {}, ThreadUtils_WebGL$1);
+defineClass(343, 189, {}, ThreadUtils_WebGL$1);
 _.run = function run_0(){
   $recreateTiles(this.val$task2._planetRenderer);
 }
 ;
-var Lorg_glob3_mobile_specific_ThreadUtils_1WebGL$1_2_classLit = createForClass('org.glob3.mobile.specific', 'ThreadUtils_WebGL/1', 357);
+var Lorg_glob3_mobile_specific_ThreadUtils_1WebGL$1_2_classLit = createForClass('org.glob3.mobile.specific', 'ThreadUtils_WebGL/1', 343);
 function $elapsedTimeInMilliseconds(this$static){
   return sub_0(fromDouble(now_1()), this$static._startTimeInMilliseconds);
 }
@@ -21202,10 +20391,10 @@ function Timer_WebGL(){
   this._startTimeInMilliseconds = fromDouble(now_1());
 }
 
-defineClass(90, 492, {}, Timer_WebGL);
+defineClass(87, 472, {}, Timer_WebGL);
 _._startTimeInMilliseconds = {l:0, m:0, h:0};
-var Lorg_glob3_mobile_specific_Timer_1WebGL_2_classLit = createForClass('org.glob3.mobile.specific', 'Timer_WebGL', 90);
-var I_classLit = createForPrimitive('int', 'I'), Lcom_google_gwt_lang_CollapsedPropertyHolder_2_classLit = createForClass('com.google.gwt.lang', 'CollapsedPropertyHolder', 434), Lcom_google_gwt_lang_JavaClassHierarchySetupUtil_2_classLit = createForClass('com.google.gwt.lang', 'JavaClassHierarchySetupUtil', 436), Lcom_google_gwt_lang_LongLibBase$LongEmul_2_classLit = createForClass('com.google.gwt.lang', 'LongLibBase/LongEmul', null), Lcom_google_gwt_lang_ModuleUtils_2_classLit = createForClass('com.google.gwt.lang', 'ModuleUtils', 439), D_classLit = createForPrimitive('double', 'D'), F_classLit = createForPrimitive('float', 'F'), S_classLit = createForPrimitive('short', 'S'), Ljava_util_Map$Entry_2_classLit = createForInterface('java.util', 'Map/Entry'), Lorg_glob3_mobile_generated_IGLTextureId_2_classLit = createForInterface('org.glob3.mobile.generated', 'IGLTextureId');
+var Lorg_glob3_mobile_specific_Timer_1WebGL_2_classLit = createForClass('org.glob3.mobile.specific', 'Timer_WebGL', 87);
+var I_classLit = createForPrimitive('int', 'I'), Lcom_google_gwt_lang_CollapsedPropertyHolder_2_classLit = createForClass('com.google.gwt.lang', 'CollapsedPropertyHolder', 419), Lcom_google_gwt_lang_JavaClassHierarchySetupUtil_2_classLit = createForClass('com.google.gwt.lang', 'JavaClassHierarchySetupUtil', 421), Lcom_google_gwt_lang_LongLibBase$LongEmul_2_classLit = createForClass('com.google.gwt.lang', 'LongLibBase/LongEmul', null), Lcom_google_gwt_lang_ModuleUtils_2_classLit = createForClass('com.google.gwt.lang', 'ModuleUtils', 424), D_classLit = createForPrimitive('double', 'D'), F_classLit = createForPrimitive('float', 'F'), S_classLit = createForPrimitive('short', 'S'), Ljava_util_Map$Entry_2_classLit = createForInterface('java.util', 'Map/Entry'), Lorg_glob3_mobile_generated_IGLTextureId_2_classLit = createForInterface('org.glob3.mobile.generated', 'IGLTextureId');
 var $entry = registerEntry();
 var gwtOnLoad = gwtOnLoad = gwtOnLoad_0;
 addInitFunctions(init);
