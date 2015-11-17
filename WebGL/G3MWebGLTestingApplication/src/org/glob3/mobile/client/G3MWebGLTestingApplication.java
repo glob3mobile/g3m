@@ -36,8 +36,8 @@ import com.google.gwt.user.client.ui.RootPanel;
 
 
 public class G3MWebGLTestingApplication
-         implements
-            EntryPoint {
+implements
+EntryPoint {
 
    private static final String _g3mWidgetHolderId = "g3mWidgetHolder";
    private G3MWidget_WebGL     _g3mWidget         = null;
@@ -52,8 +52,8 @@ public class G3MWebGLTestingApplication
    public void onModuleLoad() {
       final Panel g3mWidgetHolder = RootPanel.get(_g3mWidgetHolderId);
 
-      //_g3mWidget = createWidget();
-      _g3mWidget = createWidgetVR();
+      _g3mWidget = createWidget();
+      //_g3mWidget = createWidgetVR();
       g3mWidgetHolder.add(_g3mWidget);
 
 
@@ -84,7 +84,7 @@ public class G3MWebGLTestingApplication
       final ColumnLayoutImageBuilder imageBuilderWidget = new ColumnLayoutImageBuilder( //
                new DownloaderImageBuilder(markBitmapURL), //
                new LabelImageBuilder(label, GFont.monospaced()) //
-      );
+               );
 
       return new NonOverlappingMark( //
                imageBuilderWidget, //
