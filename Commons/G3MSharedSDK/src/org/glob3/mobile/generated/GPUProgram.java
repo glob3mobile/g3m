@@ -205,7 +205,7 @@ public class GPUProgram
     // link program
     if (!p.linkProgram(gl))
     {
-      ILogger.instance().logError("GPUProgram: ERROR linking graphic program\n");
+      ILogger.instance().logError("GPUProgram: ERROR linking graphic program: %s\n", name);
       p.deleteShader(gl, vertexShader);
       p.deleteShader(gl, fragmentShader);
       p.deleteProgram(gl, p);
@@ -221,7 +221,7 @@ public class GPUProgram
   
     if (gl.getError() != GLError.noError())
     {
-      ILogger.instance().logError("Error while compiling program");
+      ILogger.instance().logError("Error while compiling program: %s\n", name);
     }
   
     return p;

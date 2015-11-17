@@ -168,6 +168,11 @@ public class GPUVariableValueSet
         }
       }
     }
+  
+    if (vs.hasCustomShader())
+    {
+      _customShaderName = vs.getCustomShaderName();
+    }
   }
 
   public final void applyValuesToProgram(GPUProgram prog)
