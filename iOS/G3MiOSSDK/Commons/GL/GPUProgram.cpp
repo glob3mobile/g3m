@@ -54,7 +54,7 @@ GPUProgram* GPUProgram::createProgram(GL* gl,
 
   // link program
   if (!p->linkProgram(gl)) {
-    ILogger::instance()->logError("GPUProgram: ERROR linking graphic program\n");
+    ILogger::instance()->logError("GPUProgram: ERROR linking graphic program: %s\n", name.c_str());
     p->deleteShader(gl, vertexShader);
     p->deleteShader(gl, fragmentShader);
     p->deleteProgram(gl, p);
@@ -69,7 +69,7 @@ GPUProgram* GPUProgram::createProgram(GL* gl,
   p->getVariables(gl);
 
   if (gl->getError() != GLError::noError()) {
-    ILogger::instance()->logError("Error while compiling program");
+    ILogger::instance()->logError("Error while compiling program: %s\n", name.c_str());
   }
 
   return p;

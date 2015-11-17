@@ -581,7 +581,6 @@ public:
 
 class CustomShaderGLFeature: public GLFeature {
 private:
-    const std::string _shaderName;
     
     ~CustomShaderGLFeature() {
 #ifdef JAVA_CODE
@@ -591,8 +590,7 @@ private:
     
 public:
     CustomShaderGLFeature(const std::string shaderName) :
-    GLFeature(NO_GROUP, GLF_CUSTOM_SHADER),
-    _shaderName(shaderName)
+    GLFeature(NO_GROUP, GLF_CUSTOM_SHADER)
     {
         _values->setCustomShaderName(shaderName);
     }
