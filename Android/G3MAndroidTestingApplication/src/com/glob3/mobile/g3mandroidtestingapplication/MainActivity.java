@@ -52,7 +52,7 @@ public class MainActivity
 
       setContentView(R.layout.activity_main);
 
-      _g3mWidget = createWidget();
+      _g3mWidget = createWidgetStreamingElevations();
 
       final RelativeLayout placeHolder = (RelativeLayout) findViewById(R.id.g3mWidgetHolder);
 
@@ -99,13 +99,15 @@ public class MainActivity
       final LayerSet layerSet = new LayerSet();
       layerSet.addLayer(new OSMLayer(TimeInterval.fromDays(30)));
       builder.getPlanetRendererBuilder().setLayerSet(layerSet);
-      
-      NASAElevationDataProvider edp = new NASAElevationDataProvider();
-      
+
+      final NASAElevationDataProvider edp = new NASAElevationDataProvider();
+
       builder.getPlanetRendererBuilder().setElevationDataProvider(edp);
-      
+      builder.getPlanetRendererBuilder().setVerticalExaggeration(4);
+
       return builder.createWidget();
    }
+
 
    private G3MWidget_Android createWidget() {
       final G3MBuilder_Android builder = new G3MBuilder_Android(this);
