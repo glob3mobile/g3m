@@ -3,6 +3,7 @@
 package org.glob3.mobile.client;
 
 import org.glob3.mobile.generated.AltitudeMode;
+import org.glob3.mobile.generated.Angle;
 import org.glob3.mobile.generated.Color;
 import org.glob3.mobile.generated.ColumnLayoutImageBuilder;
 import org.glob3.mobile.generated.DownloaderImageBuilder;
@@ -20,7 +21,6 @@ import org.glob3.mobile.generated.MapQuestLayer;
 import org.glob3.mobile.generated.NASAElevationDataProvider;
 import org.glob3.mobile.generated.NonOverlappingMark;
 import org.glob3.mobile.generated.NonOverlappingMarksRenderer;
-import org.glob3.mobile.generated.OSMLayer;
 import org.glob3.mobile.generated.QuadShape;
 import org.glob3.mobile.generated.ShapesRenderer;
 import org.glob3.mobile.generated.TimeInterval;
@@ -59,7 +59,16 @@ EntryPoint {
       // -58.4447233540403559, 35000));
 
       // Canarias
-      _g3mWidget.setAnimatedCameraPosition(Geodetic3D.fromDegrees(28.034468668529083146, -15.904092315837871752, 1634079));
+      // _g3mWidget.setAnimatedCameraPosition(Geodetic3D.fromDegrees(28.034468668529083146, -15.904092315837871752, 1634079));
+
+      final Geodetic3D position = Geodetic3D.fromDegrees(28.6004501909256774183631932829, -17.9961281315742489539388770936,
+               4499.92370976353322475915774703);
+
+      final Angle heading = Angle.fromDegrees(-43.474467);
+      final Angle pitch = Angle.fromDegrees(-9.857420);
+
+      _g3mWidget.setAnimatedCameraPosition(TimeInterval.fromSeconds(30), position, heading, pitch, true, true);
+
    }
 
 
@@ -101,13 +110,20 @@ EntryPoint {
                proxy));
 
 
+      //final LayerSet layerSet = new LayerSet();
+      // layerSet.addLayer(new OSMLayer(TimeInterval.fromDays(30)));
+
       final LayerSet layerSet = new LayerSet();
-      layerSet.addLayer(new OSMLayer(TimeInterval.fromDays(30)));
+      layerSet.addLayer(MapQuestLayer.newOSM(TimeInterval.fromDays(30)));
+      //      layerSet.addLayer(new MapBoxLayer("examples.map-m0t0lrpu", TimeInterval.fromDays(30), true, 2));
       builder.getPlanetRendererBuilder().setLayerSet(layerSet);
 
-      final NASAElevationDataProvider edp = new NASAElevationDataProvider();
 
+      final NASAElevationDataProvider edp = new NASAElevationDataProvider();
       builder.getPlanetRendererBuilder().setElevationDataProvider(edp);
+
+      builder.getPlanetRendererBuilder().setIncrementalTileQuality(true);
+      builder.getPlanetRendererBuilder().setVerticalExaggeration(2.0f);
 
       return builder.createWidget();
    }

@@ -12,4 +12,7 @@
 	
 	<collapse-all-properties />
     	<add-linker name="sso" />
+    	
+    	 <!-- allow Super Dev Mode -->
+   	<add-linker name="xsiframe" />
 </module>

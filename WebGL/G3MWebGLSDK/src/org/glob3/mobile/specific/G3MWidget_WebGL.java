@@ -48,8 +48,8 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 
 public class G3MWidget_WebGL
-   extends
-      Composite {
+         extends
+            Composite {
 
    private Canvas               _canvas;
    private JavaScriptObject     _webGLContext;
@@ -453,6 +453,16 @@ public class G3MWidget_WebGL
    public void setAnimatedCameraPosition(final Geodetic3D position,
                                          final TimeInterval interval) {
       getG3MWidget().setAnimatedCameraPosition(interval, position);
+   }
+
+
+   public final void setAnimatedCameraPosition(final TimeInterval interval,
+                                               final Geodetic3D position,
+                                               final Angle heading,
+                                               final Angle pitch,
+                                               final boolean linearTiming,
+                                               final boolean linearHeight) {
+      getG3MWidget().setAnimatedCameraPosition(interval, position, heading, pitch, linearTiming, linearHeight);
    }
 
 
