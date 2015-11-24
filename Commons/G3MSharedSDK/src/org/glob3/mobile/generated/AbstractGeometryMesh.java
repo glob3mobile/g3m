@@ -26,11 +26,11 @@ public abstract class AbstractGeometryMesh extends Mesh
 {
 
   protected final int _primitive;
-  protected Vector3D _center ;
+  protected final Vector3D _center ;
   protected final MutableMatrix44D _translationMatrix;
-  protected IFloatBuffer _vertices;
+  protected final IFloatBuffer _vertices;
   protected final boolean _ownsVertices;
-  protected IFloatBuffer _normals;
+  protected final IFloatBuffer _normals;
   protected final boolean _ownsNormals;
   protected final float _lineWidth;
   protected final float _pointSize;
@@ -41,7 +41,7 @@ public abstract class AbstractGeometryMesh extends Mesh
   {
     final int vertexCount = getVertexCount();
   
-    if (vertexCount <= 0)
+    if (vertexCount == 0)
     {
       return null;
     }

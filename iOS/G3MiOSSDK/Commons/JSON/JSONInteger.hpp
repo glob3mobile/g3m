@@ -36,7 +36,9 @@ public:
   void acceptVisitor(JSONVisitor* visitor) const;
 
   const std::string description() const;
-  
+
+  const std::string toString() const;
+
 };
 
 

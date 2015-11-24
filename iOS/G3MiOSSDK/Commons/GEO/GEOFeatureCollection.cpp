@@ -12,8 +12,8 @@
 
 
 GEOFeatureCollection::~GEOFeatureCollection() {
-  const int featuresCount = _features.size();
-  for (int i = 0; i < featuresCount; i++) {
+  const size_t featuresCount = _features.size();
+  for (size_t i = 0; i < featuresCount; i++) {
     GEOFeature* feature = _features[i];
     delete feature;
   }
@@ -30,8 +30,8 @@ void GEOFeatureCollection::symbolize(const G3MRenderContext* rc,
                                      ShapesRenderer*         shapesRenderer,
                                      MarksRenderer*          marksRenderer,
                                      GEOVectorLayer*         geoVectorLayer) const {
-  const int featuresCount = _features.size();
-  for (int i = 0; i < featuresCount; i++) {
+  const size_t featuresCount = _features.size();
+  for (size_t i = 0; i < featuresCount; i++) {
     GEOFeature* feature = _features[i];
     feature->symbolize(rc,
                        symbolizer,
@@ -46,8 +46,8 @@ void GEOFeatureCollection::rasterize(const GEORasterSymbolizer* symbolizer,
                                      ICanvas* canvas,
                                      const GEORasterProjection* projection,
                                      int tileLevel) const {
-  const int featuresCount = _features.size();
-  for (int i = 0; i < featuresCount; i++) {
+  const size_t featuresCount = _features.size();
+  for (size_t i = 0; i < featuresCount; i++) {
     GEOFeature* feature = _features[i];
     if (feature != NULL) {
       feature->rasterize(symbolizer,
@@ -61,8 +61,8 @@ void GEOFeatureCollection::rasterize(const GEORasterSymbolizer* symbolizer,
 
 long long GEOFeatureCollection::getCoordinatesCount() const {
   long long result = 0;
-  const int featuresCount = _features.size();
-  for (int i = 0; i < featuresCount; i++) {
+  const size_t featuresCount = _features.size();
+  for (size_t i = 0; i < featuresCount; i++) {
     GEOFeature* feature = _features[i];
     result += feature->getCoordinatesCount();
   }
@@ -71,8 +71,8 @@ long long GEOFeatureCollection::getCoordinatesCount() const {
 
 const std::vector<GEOFeature*> GEOFeatureCollection::copy(const std::vector<GEOFeature*>& features) {
   std::vector<GEOFeature*> result;
-  const int size = features.size();
-  for (int i = 0; i < size; i++) {
+  const size_t size = features.size();
+  for (size_t i = 0; i < size; i++) {
     GEOFeature* feature = features[i];
     result.push_back( (feature == NULL) ? NULL : feature->deepCopy() );
   }
@@ -81,4 +81,17 @@ const std::vector<GEOFeature*> GEOFeatureCollection::copy(const std::vector<GEOF
 
 GEOFeatureCollection* GEOFeatureCollection::deepCopy() const {
   return new GEOFeatureCollection( copy(_features) );
+}
+
+long long GEOFeatureCollection::createFeatureMarks(const VectorStreamingRenderer::VectorSet* vectorSet,
+                                                   const VectorStreamingRenderer::Node*      node) const {
+  long long result = 0;
+  const size_t featuresCount = _features.size();
+  for (size_t i = 0; i < featuresCount; i++) {
+    GEOFeature* feature = _features[i];
+    if (feature != NULL) {
+      result += feature->createFeatureMarks(vectorSet, node);
+    }
+  }
+  return result;
 }

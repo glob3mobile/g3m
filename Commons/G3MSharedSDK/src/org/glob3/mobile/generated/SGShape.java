@@ -87,6 +87,8 @@ public class SGShape extends Shape
 
   public final java.util.ArrayList<Double> intersectionsDistances(Planet planet, Vector3D origin, Vector3D direction)
   {
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning TODO
     java.util.ArrayList<Double> intersections = new java.util.ArrayList<Double>();
     return intersections;
   }

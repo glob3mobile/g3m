@@ -41,7 +41,7 @@
                  data:(NSData*) data
 {
   if (_cppBufferListener) {
-    const int length = [data length];
+    const size_t length = [data length];
     unsigned char* bytes = new unsigned char[ length ]; // will be deleted by IByteBuffer's destructor
     [data getBytes: bytes
             length: length];
@@ -54,7 +54,7 @@
   if (_cppImageListener) {
     UIImage* uiImage = [UIImage imageWithData:data];
     if (uiImage) {
-      IImage* image = new Image_iOS(uiImage, data);
+      IImage* image = new Image_iOS(uiImage, data, NULL);
       _cppImageListener->onDownload(url, image, false);
     }
     else {
@@ -89,7 +89,7 @@
                          data:(NSData*) data
 {
   if (_cppBufferListener) {
-    const int length = [data length];
+    const size_t length = [data length];
     unsigned char* bytes = new unsigned char[ length ]; // will be deleted by IByteBuffer's destructor
     [data getBytes: bytes
             length: length];
@@ -102,7 +102,7 @@
   if (_cppImageListener) {
     UIImage* uiImage = [UIImage imageWithData:data];
     if (uiImage) {
-      IImage* image = new Image_iOS(uiImage, data);
+      IImage* image = new Image_iOS(uiImage, data, NULL);
       _cppImageListener->onCanceledDownload(url, image, false);
       delete image;
     }

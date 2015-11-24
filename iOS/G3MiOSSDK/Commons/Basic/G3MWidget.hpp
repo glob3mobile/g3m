@@ -243,7 +243,7 @@ public:
     return _infoDisplay;
   }
   
-  void changedRendererInfo(const int rendererIdentifier,
+  void changedRendererInfo(const size_t rendererIdentifier,
                            const std::vector<const Info*>& info);
 
   void removeAllPeriodicalTasks();
@@ -320,7 +320,12 @@ private:
   bool _forceBusyRenderer;
   
   InfoDisplay* _infoDisplay;
-  
+
+
+  float _touchDownPositionX;
+  float _touchDownPositionY;
+
+
   G3MWidget(GL*                              gl,
             IStorage*                        storage,
             IDownloader*                     downloader,

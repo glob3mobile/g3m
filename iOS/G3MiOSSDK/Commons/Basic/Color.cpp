@@ -44,7 +44,7 @@ Color* Color::parse(const std::string& str) {
 #endif
   }
 
-  const int strSize = colorStr.size();
+  const size_t strSize = colorStr.size();
 
   std::string rs;
   std::string gs;
@@ -221,6 +221,20 @@ Color Color::wheelStep(int wheelSize,
                                             getSaturation(),
                                             getBrightness(),
                                             _alpha);
+}
+
+const std::string Color::toID() const {
+  IStringBuilder* isb = IStringBuilder::newStringBuilder();
+  isb->addFloat(_red);
+  isb->addString("/");
+  isb->addFloat(_green);
+  isb->addString("/");
+  isb->addFloat(_blue);
+  isb->addString("/");
+  isb->addFloat(_alpha);
+  const std::string s = isb->getString();
+  delete isb;
+  return s;
 }
 
 const std::string Color::description() const {

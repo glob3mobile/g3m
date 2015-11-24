@@ -22,7 +22,7 @@ public abstract class EffectWithForce extends Effect
 
   public boolean isDone(G3MRenderContext rc, TimeInterval when)
   {
-    return (IMathUtils.instance().abs(_force) < 1e-6);
+    return (IMathUtils.instance().abs(_force) < 0.005);
   }
 
 }

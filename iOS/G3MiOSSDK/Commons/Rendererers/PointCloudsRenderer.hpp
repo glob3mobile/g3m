@@ -587,7 +587,7 @@ private:
   ITimer* _timer;
 
   std::vector<PointCloud*> _clouds;
-  int _cloudsSize;
+  size_t _cloudsSize;
   std::vector<std::string> _errors;
 
   GLState* _glState;

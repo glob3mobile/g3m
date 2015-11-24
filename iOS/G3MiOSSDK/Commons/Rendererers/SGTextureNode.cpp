@@ -25,8 +25,8 @@ void SGTextureNode::addLayer(SGLayerNode* layer) {
 }
 
 bool SGTextureNode::isReadyToRender(const G3MRenderContext* rc) {
-  const int layersCount = _layers.size();
-  for (int i = 0; i < layersCount; i++) {
+  const size_t layersCount = _layers.size();
+  for (size_t i = 0; i < layersCount; i++) {
     SGLayerNode* layer = _layers[i];
     if (!layer->isReadyToRender(rc)) {
       return false;
@@ -40,16 +40,16 @@ void SGTextureNode::initialize(const G3MContext* context,
                                SGShape *shape) {
   SGNode::initialize(context, shape);
 
-  const int layersCount = _layers.size();
-  for (int i = 0; i < layersCount; i++) {
+  const size_t layersCount = _layers.size();
+  for (size_t i = 0; i < layersCount; i++) {
     SGLayerNode* child = _layers[i];
     child->initialize(context, shape);
   }
 }
 
 SGTextureNode::~SGTextureNode() {
-  const int layersCount = _layers.size();
-  for (int i = 0; i < layersCount; i++) {
+  const size_t layersCount = _layers.size();
+  for (size_t i = 0; i < layersCount; i++) {
     SGLayerNode* layer = _layers[i];
     delete layer;
   }
@@ -67,8 +67,8 @@ const GLState* SGTextureNode::createState(const G3MRenderContext* rc, const GLSt
   if (_glState == NULL) {
     _glState = new GLState();
 
-    const int layersCount = _layers.size();
-    for (int i = 0; i < layersCount; i++) {
+    const size_t layersCount = _layers.size();
+    for (size_t i = 0; i < layersCount; i++) {
       SGLayerNode* layer = _layers[i];
       if (!layer->modifyGLState(rc, _glState)) {
         _glState->_release();

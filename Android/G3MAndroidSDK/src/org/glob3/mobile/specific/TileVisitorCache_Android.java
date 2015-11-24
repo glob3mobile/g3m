@@ -17,12 +17,15 @@ public class TileVisitorCache_Android
          implements
             ITileVisitor {
 
-   private long             _debugCounter = 0;
-   private final G3MContext _context;
+   private long                      _debugCounter = 0;
+   private final G3MContext          _context;
+   private final TileVisitorListener _listener;
 
 
-   public TileVisitorCache_Android(final G3MContext context) {
+   public TileVisitorCache_Android(final G3MContext context,
+                                   final TileVisitorListener listener) {
       _context = context;
+      _listener = listener;
    }
 
 
@@ -43,15 +46,18 @@ public class TileVisitorCache_Android
 
 
       final TimeInterval timeToCache = TimeInterval.fromDays(30);
-
+      _listener.onStartedProccess();
       for (final Layer layer : layers) {
          for (final URL url : layer.getDownloadURLs(tile)) {
-            _context.getLogger().logInfo(url._path);
-            _context.getDownloader().requestImage(url, 1, timeToCache, true, new IImageDownloadListenerTileCache(_debugCounter),
-                     true);
+
+            _listener.onPetition(url._path);
+            _context.getDownloader().requestImage(url, 1, timeToCache, true,
+                     new IImageDownloadListenerTileCache(_debugCounter, _listener), true);
             _debugCounter++;
+
          }
       }
+      _listener.onFinishedProcess();
    }
 
 

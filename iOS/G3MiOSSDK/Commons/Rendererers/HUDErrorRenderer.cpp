@@ -53,7 +53,7 @@ void HUDErrorRenderer_ImageFactory::drawOn(ICanvas* canvas,
                               Middle,
                               Center,
                               Color::white(),
-                              18,
+                              20,
                               5,
                               Color::fromRGBA(0.9f, 0.4f, 0.4f, 1.0f),
                               Color::transparent(),
@@ -62,13 +62,13 @@ void HUDErrorRenderer_ImageFactory::drawOn(ICanvas* canvas,
 
 bool HUDErrorRenderer_ImageFactory::isEquals(const std::vector<std::string>& v1,
                                              const std::vector<std::string>& v2) const {
-  const int size1 = v1.size();
-  const int size2 = v2.size();
+  const size_t size1 = v1.size();
+  const size_t size2 = v2.size();
   if (size1 != size2) {
     return false;
   }
 
-  for (int i = 0; i < size1; i++) {
+  for (size_t i = 0; i < size1; i++) {
     const std::string str1 = v1[i];
     const std::string str2 = v2[i];
     if (str1 != str2) {

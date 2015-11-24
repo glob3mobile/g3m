@@ -14,8 +14,8 @@ import android.graphics.Bitmap;
 
 
 public final class Image_Android
-         extends
-            IImage {
+   extends
+      IImage {
 
    private static final boolean DEBUG = false;
 
@@ -160,6 +160,12 @@ public final class Image_Android
    @Override
    public int getHeight() {
       return (_bitmapHolder._bitmap == null) ? 0 : _bitmapHolder._bitmap.getHeight();
+   }
+
+
+   @Override
+   public boolean isPremultiplied() {
+      return (_bitmapHolder._bitmap == null) ? false : _bitmapHolder._bitmap.isPremultiplied();
    }
 
 

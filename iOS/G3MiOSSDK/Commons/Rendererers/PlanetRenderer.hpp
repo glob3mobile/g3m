@@ -417,7 +417,7 @@ public:
   }
 
   SurfaceElevationProvider* getSurfaceElevationProvider() {
-    return (_elevationDataProvider == NULL) ? NULL : this;
+    return this;
   }
 
   PlanetRenderer* getPlanetRenderer() {
@@ -469,7 +469,8 @@ public:
     return _verticalExaggeration;
   }
   
-  void setChangedRendererInfoListener(ChangedRendererInfoListener* changedInfoListener, const int rendererIdentifier);
+  void setChangedRendererInfoListener(ChangedRendererInfoListener* changedInfoListener,
+                                      const size_t rendererIdentifier);
   
 };
 

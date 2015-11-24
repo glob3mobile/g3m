@@ -8,7 +8,7 @@ public class HUDErrorRenderer_ImageFactory extends HUDImageRenderer.CanvasImageF
   {
     canvas.setFillColor(Color.black());
     canvas.fillRectangle(0, 0, width, height);
-    ICanvasUtils.drawStringsOn(_errors, canvas, width, height, HorizontalAlignment.Center, VerticalAlignment.Middle, HorizontalAlignment.Center, Color.white(), 18, 5, Color.fromRGBA(0.9f, 0.4f, 0.4f, 1.0f), Color.transparent(), 16);
+    ICanvasUtils.drawStringsOn(_errors, canvas, width, height, HorizontalAlignment.Center, VerticalAlignment.Middle, HorizontalAlignment.Center, Color.white(), 20, 5, Color.fromRGBA(0.9f, 0.4f, 0.4f, 1.0f), Color.transparent(), 16);
   }
 
   protected final boolean isEquals(java.util.ArrayList<String> v1, java.util.ArrayList<String> v2)

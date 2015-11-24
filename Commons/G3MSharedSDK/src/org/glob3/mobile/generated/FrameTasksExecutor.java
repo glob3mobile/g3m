@@ -108,7 +108,7 @@ public class FrameTasksExecutor
       }
   
       isb.addString(" queued=");
-      isb.addInt(preRenderTasksSize);
+      isb.addLong(preRenderTasksSize);
   
       if (_stressed)
       {
@@ -170,7 +170,7 @@ public class FrameTasksExecutor
     {
       if (canceledCounter > 0)
       {
-        rc.getLogger().logInfo("FTE: Removed %d tasks, actived %d tasks.", canceledCounter, _tasks.size());
+        rc.getLogger().logInfo("FTE: Removed %d tasks, active %d tasks.", canceledCounter, _tasks.size());
       }
     }
   

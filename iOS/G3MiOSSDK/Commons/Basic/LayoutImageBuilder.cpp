@@ -11,22 +11,22 @@
 #include "ErrorHandling.hpp"
 
 LayoutImageBuilder::~LayoutImageBuilder() {
-  const int childrenSize = _children.size();
-  for (int i = 0; i < childrenSize; i++) {
+  const size_t childrenSize = _children.size();
+  for (size_t i = 0; i < childrenSize; i++) {
     IImageBuilder* child = _children[i];
     delete child;
   }
 }
 
 bool LayoutImageBuilder::isMutable() const {
-#warning TODO: make mutable if any children is
+  //TODO: #warning TODO: make mutable if any children is
   return false;
 }
 
 void LayoutImageBuilder::build(const G3MContext* context,
                                IImageBuilderListener* listener,
                                bool deleteListener) {
-  const int childrenSize = _children.size();
+  const size_t childrenSize = _children.size();
   ChildrenResult* childrenResult = new ChildrenResult(this,
                                                       childrenSize,
                                                       context,
@@ -39,11 +39,13 @@ void LayoutImageBuilder::build(const G3MContext* context,
                  new LayoutImageBuilderChildListener(childrenResult, i),
                  true);
   }
+
+  childrenResult->_release();
 }
 
-void LayoutImageBuilder::ChildrenResult::childImageCreated(const IImage *image,
-                                                           const std::string &imageName,
-                                                           int childIndex) {
+void LayoutImageBuilder::ChildrenResult::childImageCreated(const IImage*      image,
+                                                           const std::string& imageName,
+                                                           size_t             childIndex) {
   if (_childrenResult[childIndex] != NULL) {
     THROW_EXCEPTION("Logic error");
   }
@@ -58,7 +60,7 @@ void LayoutImageBuilder::ChildrenResult::childImageCreated(const IImage *image,
 }
 
 void LayoutImageBuilder::ChildrenResult::childError(const std::string& error,
-                                                    int   childIndex) {
+                                                    size_t             childIndex) {
   if (_childrenResult[childIndex] != NULL) {
     THROW_EXCEPTION("Logic error");
   }

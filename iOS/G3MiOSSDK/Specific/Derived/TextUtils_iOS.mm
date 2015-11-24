@@ -65,7 +65,7 @@ void TextUtils_iOS::createLabelImage(const std::string& label,
   UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
   UIGraphicsEndImageContext();
 
-  IImage* result = new Image_iOS(image, NULL);
+  IImage* result = new Image_iOS(image, NULL, NULL);
   listener->imageCreated(result);
   if (autodelete) {
     delete listener;
@@ -100,8 +100,8 @@ void TextUtils_iOS::labelImage(const IImage* image,
     CGSize labelSize = (shadowColor == NULL) ? textSize : CGSizeMake(textSize.width + 2,
                                                                      textSize.height + 2);
 
-    float resultWidth;
-    float resultHeight;
+    CGFloat resultWidth;
+    CGFloat resultHeight;
     if (labelPosition == Bottom) {
       resultWidth  = fmaxf(labelSize.width, image->getWidth());
       resultHeight = labelSize.height + separation + image->getHeight();
@@ -154,7 +154,7 @@ void TextUtils_iOS::labelImage(const IImage* image,
     UIImage* resultImage = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
 
-    IImage* result = new Image_iOS(resultImage, NULL);
+    IImage* result = new Image_iOS(resultImage, NULL, NULL);
     listener->imageCreated(result);
     if (autodelete) {
       delete listener;

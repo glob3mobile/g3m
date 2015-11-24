@@ -29,3 +29,12 @@ void SGShape::rawRender(const G3MRenderContext* rc,
   _glState->setParent(parentState);
   _node->render(rc, _glState, renderNotReadyShapes);
 }
+
+std::vector<double> SGShape::intersectionsDistances(const Planet* planet,
+                                                    const Vector3D& origin,
+                                                    const Vector3D& direction) const
+{
+#warning TODO
+  std::vector<double> intersections;
+  return intersections;
+}

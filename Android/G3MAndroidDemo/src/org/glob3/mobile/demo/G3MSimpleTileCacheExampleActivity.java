@@ -16,6 +16,7 @@ import org.glob3.mobile.generated.WMSServerVersion;
 import org.glob3.mobile.specific.G3MBuilder_Android;
 import org.glob3.mobile.specific.G3MWidget_Android;
 import org.glob3.mobile.specific.TileVisitorCache_Android;
+import org.glob3.mobile.specific.TileVisitorListener;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -24,7 +25,9 @@ import android.widget.LinearLayout;
 
 public class G3MSimpleTileCacheExampleActivity
          extends
-            Activity {
+            Activity
+         implements
+            TileVisitorListener {
 
    private G3MWidget_Android _widgetAndroid = null;
 
@@ -70,21 +73,50 @@ public class G3MSimpleTileCacheExampleActivity
       _widgetAndroid = builder.createWidget();
 
 
-      final TileVisitorCache_Android tvc = new TileVisitorCache_Android(_widgetAndroid.getG3MContext());
+      final TileVisitorCache_Android tvc = new TileVisitorCache_Android(_widgetAndroid.getG3MContext(),
+               G3MSimpleTileCacheExampleActivity.this);
       // Are cached the first two levels of the world
       _widgetAndroid.getG3MWidget().getPlanetRenderer().acceptTileVisitor(tvc, Sector.fullSphere(), 0, 2, false);
       // Sector specified cached at the indicated levels
 
-      _widgetAndroid.getG3MWidget().getPlanetRenderer().acceptTileVisitor(
-               tvc,
-               new Sector(new Geodetic2D(Angle.fromDegrees(39.31), Angle.fromDegrees(-6.72)), new Geodetic2D(
-                        Angle.fromDegrees(39.38), Angle.fromDegrees(-6.64))), 2, 14, false);
+      _widgetAndroid.getG3MWidget().getPlanetRenderer().acceptTileVisitor(tvc,
+               new Sector(new Geodetic2D(Angle.fromDegrees(39.31), Angle.fromDegrees(-6.72)),
+                        new Geodetic2D(Angle.fromDegrees(39.38), Angle.fromDegrees(-6.64))),
+               2, 14);
 
 
       _widgetAndroid.getG3MContext().getLogger().logInfo("Precaching has been completed");
 
       final LinearLayout g3mLayout = (LinearLayout) findViewById(R.id.glob3);
       g3mLayout.addView(_widgetAndroid);
+
+   }
+
+
+   @Override
+   public void onTileDownloaded() {
+      // TODO Auto-generated method stub
+
+   }
+
+
+   @Override
+   public void onStartedProccess() {
+      // TODO Auto-generated method stub
+
+   }
+
+
+   @Override
+   public void onFinishedProcess() {
+      // TODO Auto-generated method stub
+
+   }
+
+
+   @Override
+   public void onPetition(final String url) {
+      // TODO Auto-generated method stub
 
    }
 

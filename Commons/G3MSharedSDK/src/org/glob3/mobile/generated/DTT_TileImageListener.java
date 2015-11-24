@@ -8,16 +8,16 @@ package org.glob3.mobile.generated;
 public class DTT_TileImageListener extends TileImageListener
 {
   private DTT_TileTextureBuilder _builder;
-  private final Tile _tile;
+  private final Sector _tileSector ;
   private final IImage _backGroundTileImage;
   private final String _backGroundTileImageName;
 
-  private final Vector2I _tileTextureResolution;
+  private final Vector2I  _tileTextureResolution;
 
   public DTT_TileImageListener(DTT_TileTextureBuilder builder, Tile tile, Vector2I tileTextureResolution, IImage backGroundTileImage, String backGroundTileImageName)
   {
      _builder = builder;
-     _tile = tile;
+     _tileSector = new Sector(tile._sector);
      _tileTextureResolution = tileTextureResolution;
      _backGroundTileImage = backGroundTileImage;
      _backGroundTileImageName = backGroundTileImageName;
@@ -45,21 +45,18 @@ public class DTT_TileImageListener extends TileImageListener
   
       ICanvas canvas = IFactory.instance().createCanvas();
   
-      final int _width = _tileTextureResolution._x;
-  
-      final int _height = _tileTextureResolution._y;
-  
-      final Sector tileSector = _tile._sector;
+      final int width = _tileTextureResolution._x;
+      final int height = _tileTextureResolution._y;
   
       //ILogger::instance()->logInfo("Tile " + _tile->description());
   
-      canvas.initialize(_width, _height);
+      canvas.initialize(width, height);
   
       if (_backGroundTileImage != null)
       {
         auxImageId.addString(_backGroundTileImageName);
         auxImageId.addString("|");
-        canvas.drawImage(_backGroundTileImage, 0, 0, _width, _height);
+        canvas.drawImage(_backGroundTileImage, 0, 0, width, height);
       }
   
       auxImageId.addString(imageId);
@@ -71,20 +68,20 @@ public class DTT_TileImageListener extends TileImageListener
       {
         auxImageId.addFloat(alpha);
         auxImageId.addString("|");
-        canvas.drawImage(image, 0, 0, _width, _height, alpha);
+        canvas.drawImage(image, 0, 0, width, height, alpha);
       }
       else
       {
         final Sector imageSector = contribution.getSector();
   
-        final Sector visibleContributionSector = imageSector.intersection(tileSector);
+        final Sector visibleContributionSector = imageSector.intersection(_tileSector);
   
         auxImageId.addString(visibleContributionSector.id());
         auxImageId.addString("|");
   
         final RectangleF srcRect = RectangleF.calculateInnerRectangleFromSector(image.getWidth(), image.getHeight(), imageSector, visibleContributionSector);
   
-        final RectangleF destRect = RectangleF.calculateInnerRectangleFromSector(_width, _height, tileSector, visibleContributionSector);
+        final RectangleF destRect = RectangleF.calculateInnerRectangleFromSector(width, height, _tileSector, visibleContributionSector);
   
   
         //We add "destRect->id()" to "auxImageId" for to differentiate cases of same "visibleContributionSector" at different levels of tiles
@@ -98,9 +95,6 @@ public class DTT_TileImageListener extends TileImageListener
         canvas.drawImage(image, srcRect._x, srcRect._y, srcRect._width, srcRect._height, destRect._x, destRect._y, destRect._width, destRect._height, alpha);
                           //SRC RECT
                           //DEST RECT
-  
-  
-  
   
         if (destRect != null)
            destRect.dispose();

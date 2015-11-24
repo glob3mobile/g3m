@@ -22,3 +22,8 @@ std::vector<GEORasterSymbol*>* GEO2DPointGeometry::createRasterSymbols(const GEO
 GEO2DPointGeometry* GEO2DPointGeometry::deepCopy() const {
   return new GEO2DPointGeometry(_position);
 }
+
+long long GEO2DPointGeometry::createFeatureMarks(const VectorStreamingRenderer::VectorSet* vectorSet,
+                                                 const VectorStreamingRenderer::Node*      node) const {
+  return vectorSet->createFeatureMark(node, this);
+}

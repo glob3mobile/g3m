@@ -1,30 +1,4 @@
 package org.glob3.mobile.generated; 
-//
-//  MarksRenderer.cpp
-//  G3MiOSSDK
-//
-//  Created by Diego Gomez Deck on 05/06/12.
-//  Copyright (c) 2012 IGO Software SL. All rights reserved.
-//
-
-//
-//  MarksRenderer.hpp
-//  G3MiOSSDK
-//
-//  Created by Diego Gomez Deck on 05/06/12.
-//  Copyright (c) 2012 IGO Software SL. All rights reserved.
-//
-
-
-
-///#include "GPUProgramState.hpp"
-
-
-//class Mark;
-//class Camera;
-//class MarkTouchListener;
-//class IFloatBuffer;
-
 public class MarksRenderer extends DefaultRenderer
 {
   private final boolean _readyWhenMarksReady;
@@ -73,17 +47,42 @@ public class MarksRenderer extends DefaultRenderer
     return _billboardTexCoords;
   }
 
+  private boolean _renderInReverse;
+  private boolean _progressiveInitialization;
+  private ITimer _initializationTimer;
 
+
+  public MarksRenderer(boolean readyWhenMarksReady, boolean renderInReverse)
+  {
+     this(readyWhenMarksReady, renderInReverse, true);
+  }
   public MarksRenderer(boolean readyWhenMarksReady)
   {
+     this(readyWhenMarksReady, false, true);
+  }
+  public MarksRenderer(boolean readyWhenMarksReady, boolean renderInReverse, boolean progressiveInitialization)
+  {
      _readyWhenMarksReady = readyWhenMarksReady;
+     _renderInReverse = renderInReverse;
+     _progressiveInitialization = progressiveInitialization;
      _lastCamera = null;
      _markTouchListener = null;
      _autoDeleteMarkTouchListener = false;
      _downloadPriority = DownloadPriority.MEDIUM;
      _glState = new GLState();
      _billboardTexCoords = null;
+     _initializationTimer = null;
     _context = null;
+  }
+
+  public final void setRenderInReverse(boolean renderInReverse)
+  {
+    _renderInReverse = renderInReverse;
+  }
+
+  public final boolean getRenderInReverse()
+  {
+    return _renderInReverse;
   }
 
   public final void setMarkTouchListener(MarkTouchListener markTouchListener, boolean autoDelete)
@@ -100,7 +99,10 @@ public class MarksRenderer extends DefaultRenderer
 
   public void dispose()
   {
-    int marksSize = _marks.size();
+    if (_initializationTimer != null)
+       _initializationTimer.dispose();
+  
+    final int marksSize = _marks.size();
     for (int i = 0; i < marksSize; i++)
     {
       if (_marks.get(i) != null)
@@ -125,7 +127,7 @@ public class MarksRenderer extends DefaultRenderer
 
   public void onChangedContext()
   {
-    int marksSize = _marks.size();
+    final int marksSize = _marks.size();
     for (int i = 0; i < marksSize; i++)
     {
       Mark mark = _marks.get(i);
@@ -136,6 +138,7 @@ public class MarksRenderer extends DefaultRenderer
   public void render(G3MRenderContext rc, GLState glState)
   {
     final int marksSize = _marks.size();
+  
     if (marksSize > 0)
     {
       final Camera camera = rc.getCurrentCamera();
@@ -152,9 +155,38 @@ public class MarksRenderer extends DefaultRenderer
   
       IFloatBuffer billboardTexCoord = getBillboardTexCoords();
   
+  
+      if (_progressiveInitialization)
+      {
+        if (_initializationTimer == null)
+        {
+          _initializationTimer = rc.getFactory().createTimer();
+        }
+        else
+        {
+          _initializationTimer.start();
+        }
+  
+        for (int i = 0; i < marksSize; i++)
+        {
+          if (_initializationTimer.elapsedTimeInMilliseconds() > 5)
+          {
+            break;
+          }
+  
+          final int ii = _renderInReverse ? i : (marksSize-1-i);
+          Mark mark = _marks.get(ii);
+          if (!mark.isInitialized())
+          {
+            mark.initialize(_context, _downloadPriority);
+          }
+        }
+      }
+  
       for (int i = 0; i < marksSize; i++)
       {
-        Mark mark = _marks.get(i);
+        final int ii = _renderInReverse ? (marksSize-1-i) : i;
+        Mark mark = _marks.get(ii);
         if (mark.isReady())
         {
           mark.render(rc, cameraPosition, cameraHeight, _glState, planet, gl, billboardTexCoord);
@@ -166,7 +198,7 @@ public class MarksRenderer extends DefaultRenderer
   public final void addMark(Mark mark)
   {
     _marks.add(mark);
-    if (_context != null)
+    if ((_context != null) && !_progressiveInitialization)
     {
       mark.initialize(_context, _downloadPriority);
     }
@@ -174,29 +206,49 @@ public class MarksRenderer extends DefaultRenderer
 
   public final void removeMark(Mark mark)
   {
-    int pos = -1;
+  //  int pos = -1;
+  //  const int marksSize = _marks.size();
+  //  for (int i = 0; i < marksSize; i++) {
+  //    if (_marks[i] == mark) {
+  //      pos = i;
+  //      break;
+  //    }
+  //  }
+  //  if (pos != -1) {
+  ///#ifdef C_CODE
+  //    _marks.erase(_marks.begin() + pos);
+  ///#endif
+  ///#ifdef JAVA_CODE
+  //    _marks.remove(pos);
+  ///#endif
+  //  }
+  
     final int marksSize = _marks.size();
     for (int i = 0; i < marksSize; i++)
     {
       if (_marks.get(i) == mark)
       {
-        pos = i;
+        _marks.remove(i);
         break;
       }
     }
-    if (pos != -1)
-    {
-      _marks.remove(pos);
-    }
+  
   }
 
   public final void removeAllMarks()
   {
-    final int marksSize = _marks.size();
-    for (int i = 0; i < marksSize; i++)
+     removeAllMarks(true);
+  }
+  public final void removeAllMarks(boolean deleteMarks)
+  {
+    if (deleteMarks)
     {
-      if (_marks.get(i) != null)
-         _marks.get(i).dispose();
+      final int marksSize = _marks.size();
+      for (int i = 0; i < marksSize; i++)
+      {
+        if (_marks.get(i) != null)
+           _marks.get(i).dispose();
+      }
     }
     _marks.clear();
   }
@@ -230,13 +282,13 @@ public class MarksRenderer extends DefaultRenderer
             continue;
           }
   
-          final int markWidth = mark.getTextureWidth();
+          final int markWidth = (int)mark.getTextureWidth();
           if (markWidth <= 0)
           {
             continue;
           }
   
-          final int markHeight = mark.getTextureHeight();
+          final int markHeight = (int)mark.getTextureHeight();
           if (markHeight <= 0)
           {
             continue;
@@ -286,7 +338,7 @@ public class MarksRenderer extends DefaultRenderer
   {
     if (_readyWhenMarksReady)
     {
-      int marksSize = _marks.size();
+      final int marksSize = _marks.size();
       for (int i = 0; i < marksSize; i++)
       {
         if (!_marks.get(i).isReady())
@@ -327,6 +379,38 @@ public class MarksRenderer extends DefaultRenderer
   public final void modifiyGLState(GLState state)
   {
 
+  }
+
+  public final int removeAllMarks(MarksFilter filter, boolean deleteMarks)
+  {
+    int removed = 0;
+    java.util.ArrayList<Mark> newMarks = new java.util.ArrayList<Mark>();
+  
+    final int marksSize = _marks.size();
+    for (int i = 0; i < marksSize; i++)
+    {
+      Mark mark = _marks.get(i);
+      if (filter.test(mark))
+      {
+        if (deleteMarks)
+        {
+          if (mark != null)
+             mark.dispose();
+        }
+        removed++;
+      }
+      else
+      {
+        newMarks.add(mark);
+      }
+    }
+  
+    if (removed > 0)
+    {
+      _marks = newMarks;
+    }
+  
+    return removed;
   }
 
 }

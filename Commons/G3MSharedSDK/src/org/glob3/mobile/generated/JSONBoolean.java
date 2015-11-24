@@ -46,6 +46,11 @@ public class JSONBoolean extends JSONBaseObject
     return s;
   }
 
+  public final String toString()
+  {
+    return _value ? "true" : "false";
+  }
+
   public final JSONBoolean deepCopy()
   {
     return new JSONBoolean(_value);

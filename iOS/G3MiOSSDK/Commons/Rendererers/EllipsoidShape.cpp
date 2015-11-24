@@ -258,17 +258,21 @@ Mesh* EllipsoidShape::createMesh(const G3MRenderContext* rc) {
 
   Mesh* surfaceMesh = createSurfaceMesh(rc, vertices, &texCoords, normals);
 
+  Mesh* resultMesh;
   if (_borderWidth > 0) {
     CompositeMesh* compositeMesh = new CompositeMesh();
     compositeMesh->addMesh(surfaceMesh);
     compositeMesh->addMesh(createBorderMesh(rc, vertices));
-    return compositeMesh;
+    resultMesh = compositeMesh;
+  }
+  else {
+    resultMesh = surfaceMesh;
   }
 
   delete vertices;
   delete normals;
 
-  return surfaceMesh;
+  return resultMesh;
 }
 
 

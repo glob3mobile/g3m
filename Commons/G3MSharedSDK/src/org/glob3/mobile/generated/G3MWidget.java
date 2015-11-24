@@ -181,7 +181,7 @@ public class G3MWidget implements ChangedRendererInfoListener
     }
     _planet.applyCameraConstrainers(_currentCamera, _nextCamera);
   
-    _currentCamera.copyFromForcingMatrixCreation(_nextCamera);
+    _currentCamera.copyFrom(_nextCamera);
   
     _rendererState = calculateRendererState();
     final RenderState_Type renderStateType = _rendererState._type;
@@ -308,42 +308,58 @@ public class G3MWidget implements ChangedRendererInfoListener
   
     G3MEventContext ec = new G3MEventContext(IFactory.instance(), IStringUtils.instance(), _threadUtils, ILogger.instance(), IMathUtils.instance(), IJSONParser.instance(), _planet, _downloader, _effectsScheduler, _storage, _surfaceElevationProvider);
   
-      // notify the original event
-      notifyTouchEvent(ec, touchEvent);
+    // notify the original event
+    notifyTouchEvent(ec, touchEvent);
   
-      // creates DownUp event when a Down is immediately followed by an Up
-      //ILogger::instance()->logInfo("Touch Event: %i. Taps: %i. Touchs: %i",touchEvent->getType(), touchEvent->getTapCount(), touchEvent->getTouchCount());
-      if (touchEvent.getTouchCount() == 1)
+    // creates DownUp event when a Down is immediately followed by an Up
+    if (touchEvent.getTouchCount() == 1)
+    {
+      final TouchEventType eventType = touchEvent.getType();
+      if (eventType == TouchEventType.Down)
       {
-        final TouchEventType eventType = touchEvent.getType();
-        if (eventType == TouchEventType.Down)
-        {
-          _clickOnProcess = true;
-        }
-        else
-        {
-          if (eventType == TouchEventType.Up)
-          {
-            if (_clickOnProcess)
-            {
-  
-              final Touch touch = touchEvent.getTouch(0);
-              final TouchEvent downUpEvent = TouchEvent.create(TouchEventType.DownUp, new Touch(touch));
-  
-              notifyTouchEvent(ec, downUpEvent);
-  
-              if (downUpEvent != null)
-                 downUpEvent.dispose();
-            }
-          }
-          _clickOnProcess = false;
-        }
+        _clickOnProcess = true;
+        final Vector2F pos = touchEvent.getTouch(0).getPos();
+        _touchDownPositionX = pos._x;
+        _touchDownPositionY = pos._y;
       }
       else
       {
-        _clickOnProcess = false;
+        if (eventType == TouchEventType.Up)
+        {
+          if (_clickOnProcess)
+          {
+            final Touch touch = touchEvent.getTouch(0);
+            final TouchEvent downUpEvent = TouchEvent.create(TouchEventType.DownUp, new Touch(touch));
+            notifyTouchEvent(ec, downUpEvent);
+            if (downUpEvent != null)
+               downUpEvent.dispose();
+          }
+        }
+        if (_clickOnProcess)
+        {
+          if (eventType == TouchEventType.Move)
+          {
+            final Vector2F movePosition = touchEvent.getTouch(0).getPos();
+            final double sd = movePosition.squaredDistanceTo(_touchDownPositionX, _touchDownPositionY);
+            final float thresholdInPixels = _context.getFactory().getDeviceInfo().getPixelsInMM(1);
+            if (sd > (thresholdInPixels * thresholdInPixels))
+            {
+              _clickOnProcess = false;
+            }
+          }
+          else
+          {
+            _clickOnProcess = false;
+          }
+        }
       }
     }
+    else
+    {
+      _clickOnProcess = false;
+    }
+  
+  }
 
   public final void onResizeViewportEvent(int width, int height)
   {
@@ -659,20 +675,19 @@ public class G3MWidget implements ChangedRendererInfoListener
 
 
   //void G3MWidget::notifyChangedInfo() const {
-  //
   //  if(_hudRenderer != NULL){
   //    const RenderState_Type renderStateType = _rendererState->_type;
   //    switch (renderStateType) {
   //      case RENDER_READY:
   //      //_hudRenderer->setInfo(_mainRenderer->getInfo());
   //      break;
-  //      
+  //
   //      case RENDER_BUSY:
   //      break;
-  //      
+  //
   //      default:
   //      break;
-  //      
+  //
   //    }
   //  }
   //}
@@ -683,9 +698,9 @@ public class G3MWidget implements ChangedRendererInfoListener
     {
       _infoDisplay.changedInfo(info);
     }
-  //  else {
-  //    ILogger::instance()->logWarning("Render Infos are changing and InfoDisplay is NULL");
-  //  }
+    //  else {
+    //    ILogger::instance()->logWarning("Render Infos are changing and InfoDisplay is NULL");
+    //  }
   }
 
   public final void removeAllPeriodicalTasks()
@@ -771,6 +786,11 @@ public class G3MWidget implements ChangedRendererInfoListener
 
   private InfoDisplay _infoDisplay;
 
+
+  private float _touchDownPositionX;
+  private float _touchDownPositionY;
+
+
   private G3MWidget(GL gl, IStorage storage, IDownloader downloader, IThreadUtils threadUtils, ICameraActivityListener cameraActivityListener, Planet planet, java.util.ArrayList<ICameraConstrainer> cameraConstrainers, CameraRenderer cameraRenderer, Renderer mainRenderer, ProtoRenderer busyRenderer, ErrorRenderer errorRenderer, Renderer hudRenderer, Color backgroundColor, boolean logFPS, boolean logDownloaderStatistics, GInitializationTask initializationTask, boolean autoDeleteInitializationTask, java.util.ArrayList<PeriodicalTask> periodicalTasks, GPUProgramManager gpuProgramManager, SceneLighting sceneLighting, InitialCameraPositionProvider initialCameraPositionProvider, InfoDisplay infoDisplay)
   {
      _frameTasksExecutor = new FrameTasksExecutor();
@@ -790,8 +810,8 @@ public class G3MWidget implements ChangedRendererInfoListener
      _hudRenderer = hudRenderer;
      _width = 1;
      _height = 1;
-     _currentCamera = new Camera();
-     _nextCamera = new Camera();
+     _currentCamera = new Camera(1);
+     _nextCamera = new Camera(2);
      _backgroundColor = new Color(backgroundColor);
      _timer = IFactory.instance().createTimer();
      _renderCounter = 0;
@@ -818,6 +838,8 @@ public class G3MWidget implements ChangedRendererInfoListener
      _forceBusyRenderer = false;
      _nFramesBeetweenProgramsCleanUp = 500;
      _infoDisplay = infoDisplay;
+     _touchDownPositionX = 0F;
+     _touchDownPositionY = 0F;
     _effectsScheduler.initialize(_context);
     _cameraRenderer.initialize(_context);
     _mainRenderer.initialize(_context);
@@ -856,13 +878,13 @@ public class G3MWidget implements ChangedRendererInfoListener
     _renderContext = new G3MRenderContext(_frameTasksExecutor, IFactory.instance(), IStringUtils.instance(), _threadUtils, ILogger.instance(), IMathUtils.instance(), IJSONParser.instance(), _planet, _gl, _currentCamera, _nextCamera, _texturesHandler, _downloader, _effectsScheduler, IFactory.instance().createTimer(), _storage, _gpuProgramManager, _surfaceElevationProvider);
   
   
-  ///#ifdef C_CODE
-  //  delete _rendererState;
-  //  _rendererState = new RenderState( calculateRendererState() );
-  ///#endif
-  ///#ifdef JAVA_CODE
-  //  _rendererState = calculateRendererState();
-  ///#endif
+    ///#ifdef C_CODE
+    //  delete _rendererState;
+    //  _rendererState = new RenderState( calculateRendererState() );
+    ///#endif
+    ///#ifdef JAVA_CODE
+    //  _rendererState = calculateRendererState();
+    ///#endif
   }
 
   private void notifyTouchEvent(G3MEventContext ec, TouchEvent touchEvent)

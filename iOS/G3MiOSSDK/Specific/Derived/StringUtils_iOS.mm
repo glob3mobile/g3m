@@ -41,30 +41,30 @@ bool StringUtils_iOS::beginsWith(const std::string& string,
   return string.compare(0, prefix.size(), prefix) == 0;
 }
 
-size_t StringUtils_iOS::indexOf(const std::string& string,
-                                const std::string& search) const {
-  const size_t pos = string.find(search);
+int StringUtils_iOS::indexOf(const std::string& string,
+                             const std::string& search) const {
+  const int pos = string.find(search);
   if (pos == std::string::npos) {
     return -1;
   }
   return pos;
 }
 
-size_t StringUtils_iOS::indexOf(const std::string& string,
-                                const std::string& search,
-                                size_t fromIndex) const {
-  const size_t pos = string.find(search, fromIndex);
+int StringUtils_iOS::indexOf(const std::string& string,
+                             const std::string& search,
+                             int fromIndex) const {
+  const int pos = string.find(search, fromIndex);
   if (pos == std::string::npos) {
     return -1;
   }
   return pos;
 }
 
-size_t StringUtils_iOS::indexOf(const std::string& string,
-                                const std::string& search,
-                                size_t fromIndex,
-                                size_t endIndex) const {
-  const size_t pos = string.find(search, fromIndex);
+int StringUtils_iOS::indexOf(const std::string& string,
+                             const std::string& search,
+                             int fromIndex,
+                             int endIndex) const {
+  const int pos = string.find(search, fromIndex);
   if ((pos == std::string::npos) ||
       (pos > endIndex)) {
     return -1;
@@ -73,8 +73,8 @@ size_t StringUtils_iOS::indexOf(const std::string& string,
 }
 
 std::string StringUtils_iOS::substring(const std::string& string,
-                                       size_t beginIndex,
-                                       size_t endIndex) const {
+                                       int beginIndex,
+                                       int endIndex) const {
   return string.substr(beginIndex, endIndex - beginIndex);
 }
 
@@ -133,10 +133,10 @@ long long StringUtils_iOS::parseHexInt(const std::string& str) const {
   return result;
 }
 
-size_t StringUtils_iOS::indexOfFirstNonBlank(const std::string& string,
-                                             size_t fromIndex) const {
-  const size_t stringLen = string.length();
-  for (size_t i = fromIndex ; i < stringLen; i++) {
+int StringUtils_iOS::indexOfFirstNonBlank(const std::string& string,
+                                          int fromIndex) const {
+  const int stringLen = string.length();
+  for (int i = fromIndex ; i < stringLen; i++) {
     if (!std::isspace( string[i] )) {
       return i;
     }
@@ -144,22 +144,11 @@ size_t StringUtils_iOS::indexOfFirstNonBlank(const std::string& string,
   return -1;
 }
 
-//int StringUtils_iOS::indexOfFirstBlank(const std::string& string,
-//                                       int fromIndex) const {
-//  const int stringLen = string.length();
-//  for (int i = fromIndex ; i < stringLen; i++) {
-//    if (std::isspace( string[i] )) {
-//      return i;
-//    }
-//  }
-//  return -1;
-//}
-
-size_t StringUtils_iOS::indexOfFirstNonChar(const std::string& string,
-                                            const std::string& chars,
-                                            size_t fromIndex) const {
-  const size_t stringLen = string.length();
-  for (size_t i = fromIndex ; i < stringLen; i++) {
+int StringUtils_iOS::indexOfFirstNonChar(const std::string& string,
+                                         const std::string& chars,
+                                         int fromIndex) const {
+  const int stringLen = string.length();
+  for (int i = fromIndex ; i < stringLen; i++) {
     if (chars.find(string[i]) != std::string::npos) {
       return i;
     }
@@ -193,4 +182,22 @@ std::string StringUtils_iOS::toString(float value) const {
 
 double StringUtils_iOS::parseDouble(const std::string& str) const {
   return atof(str.c_str());
+}
+
+
+std::string StringUtils_iOS::replaceAll(const std::string& originalString,
+                                        const std::string& searchString,
+                                        const std::string& replaceString) const {
+  std::string result = originalString;
+  for ( size_t pos = 0; ; pos += replaceString.length() ) {
+    // Locate the substring to replace
+    pos = result.find( searchString, pos );
+    if( pos == std::string::npos ) {
+      break;
+    }
+    // Replace by erasing and inserting
+    result.erase( pos, searchString.length() );
+    result.insert( pos, replaceString );
+  }
+  return result;
 }

@@ -61,8 +61,8 @@ public abstract class IStringUtils
 
   public abstract int indexOfFirstNonBlank(String String, int fromIndex);
 
-  //  virtual size_t indexOfFirstBlank(const std::string& string,
-  //                                size_t fromIndex) const = 0;
+  //  virtual int indexOfFirstBlank(const std::string& string,
+  //                                int fromIndex) const = 0;
 
   public abstract int indexOfFirstNonChar(String String, String chars, int fromIndex);
 
@@ -75,35 +75,10 @@ public abstract class IStringUtils
 
   public String substring(String String, int beginIndex)
   {
-    //    return substring(string, beginIndex, string.size() + 1);
     return substring(String, beginIndex, String.length());
   }
 
-  public String replaceSubstring(String originalString, String searchString, String replaceString, int beginIndex, int endIndex2)
-  {
-    int startIndex = indexOf(originalString, searchString, beginIndex, endIndex2);
-    //The part to replace was not found. Return original String
-    if (startIndex == -1)
-    {
-      return originalString;
-    }
-    final int endReplacedIndex = startIndex + searchString.length();
-    final String left = substring(originalString, 0, startIndex);
-    final String right = substring(originalString, endReplacedIndex);
-    final String result = left + replaceString + right;
-    startIndex = indexOf(result, searchString, endReplacedIndex+1, endIndex2);
-    if (startIndex != -1)
-    {
-      //recursive call to replace other ocurrences
-      return replaceSubstring(result, searchString, replaceString, endReplacedIndex+1, endIndex2);
-    }
-    return result;
-  }
-
-  public String replaceSubstring(String originalString, String searchString, String replaceString)
-  {
-    return replaceSubstring(originalString, searchString, replaceString, 0, originalString.length());
-  }
+  public abstract String replaceAll(String originalString, String searchString, String replaceString);
 
   public String left(String String, int endIndex)
   {

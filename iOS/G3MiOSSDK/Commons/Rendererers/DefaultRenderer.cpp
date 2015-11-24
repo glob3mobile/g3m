@@ -24,7 +24,8 @@ void DefaultRenderer::setEnable(bool enable) {
   }
 }
 
-void DefaultRenderer::setChangedRendererInfoListener(ChangedRendererInfoListener* changedInfoListener, const int rendererIdentifier) {
+void DefaultRenderer::setChangedRendererInfoListener(ChangedRendererInfoListener* changedInfoListener,
+                                                     const size_t rendererIdentifier) {
   if (_changedInfoListener != NULL) {
     ILogger::instance()->logError("Changed Renderer Info Listener of DefaultRenderer already set");
   }

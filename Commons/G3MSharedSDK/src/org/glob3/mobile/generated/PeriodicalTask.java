@@ -49,7 +49,7 @@ public class PeriodicalTask
 
   public final void executeIfNecessary(G3MContext context)
   {
-    long now = getTimer().now()._milliseconds;
+    long now = getTimer().nowInMilliseconds();
 
     long interval = now - _lastExecutionMS;
 

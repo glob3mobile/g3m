@@ -464,6 +464,22 @@ public class Color
     return adjustSaturationBrightness(-0.24f, 0.64f);
   }
 
+  public final String toID()
+  {
+    IStringBuilder isb = IStringBuilder.newStringBuilder();
+    isb.addFloat(_red);
+    isb.addString("/");
+    isb.addFloat(_green);
+    isb.addString("/");
+    isb.addFloat(_blue);
+    isb.addString("/");
+    isb.addFloat(_alpha);
+    final String s = isb.getString();
+    if (isb != null)
+       isb.dispose();
+    return s;
+  }
+
   public final String description()
   {
     IStringBuilder isb = IStringBuilder.newStringBuilder();

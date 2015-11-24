@@ -28,6 +28,8 @@ public:
   }
 #endif
 
+  virtual bool isPremultiplied() const = 0;
+
   virtual IImage* shallowCopy() const = 0;
 };
 

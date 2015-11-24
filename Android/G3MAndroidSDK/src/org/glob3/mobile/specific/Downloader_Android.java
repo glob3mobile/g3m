@@ -21,8 +21,8 @@ import android.util.Log;
 
 
 public final class Downloader_Android
-         extends
-            IDownloader {
+   extends
+      IDownloader {
 
    final static String                                      TAG             = "Downloader_Android";
 
@@ -143,17 +143,17 @@ public final class Downloader_Android
             handler = _queuedHandlers.get(path);
             if (handler == null) {
                // new handler, queue it
-               handler = new Downloader_Android_Handler(url, listener, priority, requestId);
+               handler = new Downloader_Android_Handler(url, listener, deleteListener, priority, requestId);
                _queuedHandlers.put(path, handler);
             }
             else {
                // the URL is queued for future download, just add the new listener
-               handler.addListener(listener, priority, requestId);
+               handler.addListener(listener, deleteListener, priority, requestId);
             }
          }
          else {
             // the URL is being downloaded, just add the new listener
-            handler.addListener(listener, priority, requestId);
+            handler.addListener(listener, deleteListener, priority, requestId);
          }
       }
 
@@ -180,17 +180,17 @@ public final class Downloader_Android
             handler = _queuedHandlers.get(path);
             if (handler == null) {
                // new handler, queue it
-               handler = new Downloader_Android_Handler(url, listener, priority, requestId);
+               handler = new Downloader_Android_Handler(url, listener, deleteListener, priority, requestId);
                _queuedHandlers.put(path, handler);
             }
             else {
                // the URL is queued for future download, just add the new listener
-               handler.addListener(listener, priority, requestId);
+               handler.addListener(listener, deleteListener, priority, requestId);
             }
          }
          else {
             // the URL is being downloaded, just add the new listener
-            handler.addListener(listener, priority, requestId);
+            handler.addListener(listener, deleteListener, priority, requestId);
          }
       }
 

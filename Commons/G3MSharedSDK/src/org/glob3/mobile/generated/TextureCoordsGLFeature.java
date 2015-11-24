@@ -26,6 +26,5 @@ public class TextureCoordsGLFeature extends PriorityGLFeature
 
   public final void applyOnGlobalGLState(GLGlobalState state)
   {
-  
   }
 }

@@ -56,6 +56,11 @@ public class JSONString extends JSONBaseObject
     return s;
   }
 
+  public final String toString()
+  {
+    return _value;
+  }
+
   public final JSONString deepCopy()
   {
     return new JSONString(_value);

@@ -16,7 +16,7 @@
 
 bool FrameTasksExecutor::canExecutePreRenderStep(const G3MRenderContext* rc,
                                                  int executedCounter) {
-  const int tasksCount = _tasks.size();
+  const size_t tasksCount = _tasks.size();
   if (tasksCount <= _minimumExecutionsPerFrame) {
     if (_debug) {
       if (_stressed) {
@@ -83,7 +83,7 @@ void FrameTasksExecutor::doPreRenderCycle(const G3MRenderContext* rc) {
 
   if (_debug) {
     if (canceledCounter > 0) {
-      rc->getLogger()->logInfo("FTE: Removed %d tasks, actived %d tasks.",
+      rc->getLogger()->logInfo("FTE: Removed %d tasks, active %d tasks.",
                                canceledCounter,
                                _tasks.size());
     }
@@ -113,7 +113,7 @@ void FrameTasksExecutor::doPreRenderCycle(const G3MRenderContext* rc) {
 void FrameTasksExecutor::showDebugInfo(const G3MRenderContext* rc,
                                        int executedCounter,
                                        int canceledCounter) {
-  const int preRenderTasksSize = _tasks.size();
+  const size_t preRenderTasksSize = _tasks.size();
   if ((executedCounter > 0) ||
       (canceledCounter > 0) ||
       (preRenderTasksSize > 0)) {
@@ -135,7 +135,7 @@ void FrameTasksExecutor::showDebugInfo(const G3MRenderContext* rc,
     }
 
     isb->addString(" queued=");
-    isb->addInt(preRenderTasksSize);
+    isb->addLong(preRenderTasksSize);
 
     if (_stressed) {
       isb->addString(" *Stressed*");

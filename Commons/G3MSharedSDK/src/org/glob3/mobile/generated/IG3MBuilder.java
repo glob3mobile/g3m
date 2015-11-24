@@ -89,36 +89,6 @@ public abstract class IG3MBuilder
   }
 
   /**
-   * Returns the _downloader. If it does not exist, it will be default initializated.
-   *
-   * @return _downloader: IDownloader*
-   */
-  private IDownloader getDownloader()
-  {
-    if (_downloader == null)
-    {
-      _downloader = createDefaultDownloader();
-    }
-  
-    return _downloader;
-  }
-
-  /**
-   * Returns the _threadUtils. If it does not exist, it will be default initializated.
-   *
-   * @return _threadUtils: IThreadUtils*
-   */
-  private IThreadUtils getThreadUtils()
-  {
-    if (_threadUtils == null)
-    {
-      _threadUtils = createDefaultThreadUtils();
-    }
-  
-    return _threadUtils;
-  }
-
-  /**
    * Returns the _cameraActivityListener. If it does not exist, it will be default initializated.
    *
    * @return _threadUtils: IThreadUtils*
@@ -307,6 +277,7 @@ public abstract class IG3MBuilder
     final boolean useInertia = true;
     cameraRenderer.addHandler(new CameraSingleDragHandler(useInertia));
     cameraRenderer.addHandler(new CameraDoubleDragHandler());
+    //cameraRenderer->addHandler(new CameraZoomAndRotateHandler());
     cameraRenderer.addHandler(new CameraRotationHandler());
     cameraRenderer.addHandler(new CameraDoubleTapHandler());
   
@@ -569,6 +540,37 @@ public abstract class IG3MBuilder
        _planetRendererBuilder.dispose();
     if (_shownSector != null)
        _shownSector.dispose();
+  }
+
+
+  /**
+   * Returns the _downloader. If it does not exist, it will be default initializated.
+   *
+   * @return _downloader: IDownloader*
+   */
+  public final IDownloader getDownloader()
+  {
+    if (_downloader == null)
+    {
+      _downloader = createDefaultDownloader();
+    }
+  
+    return _downloader;
+  }
+
+  /**
+   * Returns the _threadUtils. If it does not exist, it will be default initializated.
+   *
+   * @return _threadUtils: IThreadUtils*
+   */
+  public final IThreadUtils getThreadUtils()
+  {
+    if (_threadUtils == null)
+    {
+      _threadUtils = createDefaultThreadUtils();
+    }
+  
+    return _threadUtils;
   }
 
 
@@ -978,11 +980,13 @@ public abstract class IG3MBuilder
     _userData = userData;
   }
 
-
-  public final void setInitializationTask(GInitializationTask initializationTask) {
-    pvtSetInitializationTask(initializationTask,
-                             true // parameter ignored in Java code 
-);
+  public final void setInitializationTask(GInitializationTask initializationTask)
+  {
+     setInitializationTask(initializationTask, true);
+  }
+  public final void setInitializationTask(GInitializationTask initializationTask, boolean autoDeleteInitializationTask)
+  {
+    pvtSetInitializationTask(initializationTask, autoDeleteInitializationTask);
   }
 
 

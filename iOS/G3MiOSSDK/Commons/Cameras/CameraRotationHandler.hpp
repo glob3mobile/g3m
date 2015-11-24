@@ -19,11 +19,16 @@ private:
   MutableVector2F _pivotPixel;  //Initial pixel at start of gesture
 
 //  int _lastYValid;
-  Camera _camera0;         //Initial Camera saved on Down event
+  MutableVector3D _cameraPosition;
+  MutableVector3D _cameraCenter;
+  MutableVector3D _cameraUp;
+  MutableVector3D _tempCameraPosition;
+  MutableVector3D _tempCameraCenter;
+  MutableVector3D _tempCameraUp;
+
 
 public:
   CameraRotationHandler():
-  _camera0(Camera()),
   _pivotPoint(0, 0, 0),
   _pivotPixel(0, 0)
   {}

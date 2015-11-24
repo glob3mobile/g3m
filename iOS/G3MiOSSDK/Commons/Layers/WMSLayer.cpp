@@ -15,6 +15,145 @@
 #include "RenderState.hpp"
 #include "TimeInterval.hpp"
 
+WMSLayer* WMSLayer::newMercator(const std::string&        mapLayer,
+                                const URL&                mapServerURL,
+                                const WMSServerVersion    mapServerVersion,
+                                const std::string&        queryLayer,
+                                const URL&                queryServerURL,
+                                const WMSServerVersion    queryServerVersion,
+                                const Sector&             dataSector,
+                                const std::string&        format,
+                                const std::string&        style,
+                                const bool                isTransparent,
+                                const int                 firstLevel,
+                                const int                 maxLevel,
+                                const LayerCondition*     condition,
+                                const TimeInterval&       timeToCache,
+                                const bool                readExpired,
+                                const float               transparency,
+                                std::vector<const Info*>* layerInfo) {
+//  if (srs.compare("EPSG:4326") == 0) {
+//    layerTilesRenderParameters = LayerTilesRenderParameters::createDefaultWGS84(0, 17);
+//  }
+//  else if (srs.compare("EPSG:3857") == 0) {
+//    layerTilesRenderParameters = LayerTilesRenderParameters::createDefaultMercator(0, 17);
+//  }
+  return new WMSLayer(mapLayer,
+                      mapServerURL,
+                      mapServerVersion,
+                      queryLayer,
+                      queryServerURL,
+                      queryServerVersion,
+                      dataSector,
+                      format,
+                      "EPSG:3857",
+                      style,
+                      isTransparent,
+                      condition,
+                      timeToCache,
+                      readExpired,
+                      LayerTilesRenderParameters::createDefaultMercator(firstLevel, maxLevel),
+                      transparency,
+                      layerInfo);
+}
+
+WMSLayer* WMSLayer::newMercator(const std::string&        mapLayer,
+                                const URL&                mapServerURL,
+                                const WMSServerVersion    mapServerVersion,
+                                const Sector&             dataSector,
+                                const std::string&        format,
+                                const std::string&        style,
+                                const bool                isTransparent,
+                                const int                 firstLevel,
+                                const int                 maxLevel,
+                                const LayerCondition*     condition,
+                                const TimeInterval&       timeToCache,
+                                const bool                readExpired,
+                                const float               transparency,
+                                std::vector<const Info*>* layerInfo) {
+  return new WMSLayer(mapLayer,
+                      mapServerURL,
+                      mapServerVersion,
+                      dataSector,
+                      format,
+                      "EPSG:3857",
+                      style,
+                      isTransparent,
+                      condition,
+                      timeToCache,
+                      readExpired,
+                      LayerTilesRenderParameters::createDefaultMercator(firstLevel, maxLevel),
+                      transparency,
+                      layerInfo);
+}
+
+WMSLayer* WMSLayer::newWGS84(const std::string&        mapLayer,
+                             const URL&                mapServerURL,
+                             const WMSServerVersion    mapServerVersion,
+                             const std::string&        queryLayer,
+                             const URL&                queryServerURL,
+                             const WMSServerVersion    queryServerVersion,
+                             const Sector&             dataSector,
+                             const std::string&        format,
+                             const std::string&        style,
+                             const bool                isTransparent,
+                             const int                 firstLevel,
+                             const int                 maxLevel,
+                             const LayerCondition*     condition,
+                             const TimeInterval&       timeToCache,
+                             const bool                readExpired,
+                             const float               transparency,
+                             std::vector<const Info*>* layerInfo) {
+  return new WMSLayer(mapLayer,
+                      mapServerURL,
+                      mapServerVersion,
+                      queryLayer,
+                      queryServerURL,
+                      queryServerVersion,
+                      dataSector,
+                      format,
+                      "EPSG:4326",
+                      style,
+                      isTransparent,
+                      condition,
+                      timeToCache,
+                      readExpired,
+                      LayerTilesRenderParameters::createDefaultWGS84(firstLevel, maxLevel),
+                      transparency,
+                      layerInfo);
+}
+
+WMSLayer* WMSLayer::newWGS84(const std::string&        mapLayer,
+                             const URL&                mapServerURL,
+                             const WMSServerVersion    mapServerVersion,
+                             const Sector&             dataSector,
+                             const std::string&        format,
+                             const std::string&        style,
+                             const bool                isTransparent,
+                             const int                 firstLevel,
+                             const int                 maxLevel,
+                             const LayerCondition*     condition,
+                             const TimeInterval&       timeToCache,
+                             const bool                readExpired,
+                             const float               transparency,
+                             std::vector<const Info*>* layerInfo) {
+  return new WMSLayer(mapLayer,
+                      mapServerURL,
+                      mapServerVersion,
+                      dataSector,
+                      format,
+                      "EPSG:4326",
+                      style,
+                      isTransparent,
+                      condition,
+                      timeToCache,
+                      readExpired,
+                      LayerTilesRenderParameters::createDefaultWGS84(firstLevel, maxLevel),
+                      transparency,
+                      layerInfo);
+}
+
+
 WMSLayer::WMSLayer(const std::string&                mapLayer,
                    const URL&                        mapServerURL,
                    const WMSServerVersion            mapServerVersion,
@@ -150,7 +289,14 @@ const URL WMSLayer::createURL(const Tile* tile) const {
     case WMS_1_3_0:
     {
       req += "&VERSION=1.3.0";
-      
+
+      if (_srs != "") {
+        req += "&CRS=" + _srs;
+      }
+      else {
+        req += "&CRS=EPSG:4326";
+
+      }
       IStringBuilder* isb = IStringBuilder::newStringBuilder();
       
       isb->addString("&WIDTH=");
@@ -168,9 +314,6 @@ const URL WMSLayer::createURL(const Tile* tile) const {
 
       req += isb->getString();
       delete isb;
-      
-      req += "&CRS=EPSG:4326";
-      
       break;
     }
     case WMS_1_1_0:
@@ -178,30 +321,20 @@ const URL WMSLayer::createURL(const Tile* tile) const {
     {
       // default is 1.1.1
       req += "&VERSION=1.1.1";
-      
+
+      if (_srs != "") {
+        req += "&SRS=" + _srs;
+      }
+      else {
+        req += "&SRS=EPSG:4326";
+      }
+
       IStringBuilder* isb = IStringBuilder::newStringBuilder();
       
       isb->addString("&WIDTH=");
       isb->addInt(width);
       isb->addString("&HEIGHT=");
       isb->addInt(height);
-      
-      
-      
-//      const double widthHeihtFactor  = sector._deltaLongitude.div(sector._deltaLatitude);
-//      if (widthHeihtFactor >= 1) {
-//        isb->addString("&WIDTH=");
-//        isb->addInt(tileTextureResolution._x);
-//        isb->addString("&HEIGHT=");
-//        isb->addInt((int)tileTextureResolution._y/widthHeihtFactor);
-//      } else {
-//        isb->addString("&WIDTH=");
-//        isb->addInt((int)tileTextureResolution._x*widthHeihtFactor);
-//        isb->addString("&HEIGHT=");
-//        isb->addInt(tileTextureResolution._y);
-//      }
-      
-      
 
       isb->addString("&BBOX=");
       isb->addDouble( toBBOXLongitude( sector._lower._longitude ) );
@@ -211,14 +344,6 @@ const URL WMSLayer::createURL(const Tile* tile) const {
       isb->addDouble( toBBOXLongitude( sector._upper._longitude ) );
       isb->addString(",");
       isb->addDouble( toBBOXLatitude( sector._upper._latitude ) );
-      
-//      isb->addDouble( toBBOXLatitude( tileSector._lower._longitude ) );
-//      isb->addString(",");
-//      isb->addDouble( toBBOXLongitude( tileSector._lower._latitude ) );
-//      isb->addString(",");
-//      isb->addDouble( toBBOXLatitude( tileSector._upper._longitude ) );
-//      isb->addString(",");
-//      isb->addDouble( toBBOXLongitude( tileSector._upper._latitude ) );
 
       req += isb->getString();
       delete isb;
@@ -229,14 +354,8 @@ const URL WMSLayer::createURL(const Tile* tile) const {
   req += "&LAYERS=" + _mapLayer;
   
 	req += "&FORMAT=" + _format;
-  
-  if (_srs != "") {
-    req += "&SRS=" + _srs;
-  }
-	else {
-    req += "&SRS=EPSG:4326";
-  }
-  
+
+
   //Style
   if (_style != "") {
     req += "&STYLES=" + _style;
@@ -276,31 +395,28 @@ URL WMSLayer::getFeatureInfoURL(const Geodetic2D& position,
 	}
   
   //If the server refer to itself as localhost...
-  int pos = req.find("localhost");
+  size_t pos = req.find("localhost");
   if (pos != -1) {
     req = req.substr(pos+9);
-    
-    int pos2 = req.find("/", 8);
+    size_t pos2 = req.find("/", 8);
     std::string newHost = req.substr(0, pos2);
     
     req = newHost + req;
   }
   
   req += "REQUEST=GetFeatureInfo&SERVICE=WMS";
-  
-  //SRS
-  if (_srs != "") {
-    req += "&SRS=" + _srs;
-  }
-	else {
-    req += "&SRS=EPSG:4326";
-  }
-  
+
   switch (_queryServerVersion) {
     case WMS_1_3_0:
     {
       req += "&VERSION=1.3.0";
-      
+      if (_srs != "") {
+        req += "&CRS=" + _srs;
+      }
+      else {
+        req += "&CRS=EPSG:4326";
+      }
+
       IStringBuilder* isb = IStringBuilder::newStringBuilder();
       
       isb->addString("&WIDTH=");
@@ -320,9 +436,6 @@ URL WMSLayer::getFeatureInfoURL(const Geodetic2D& position,
       req += isb->getString();
       
       delete isb;
-      
-      req += "&CRS=EPSG:4326";
-      
       break;
     }
     case WMS_1_1_0:
@@ -330,7 +443,13 @@ URL WMSLayer::getFeatureInfoURL(const Geodetic2D& position,
     {
       // default is 1.1.1
       req += "&VERSION=1.1.1";
-      
+      if (_srs != "") {
+        req += "&SRS=" + _srs;
+      }
+      else {
+        req += "&SRS=EPSG:4326";
+      }
+
       IStringBuilder* isb = IStringBuilder::newStringBuilder();
       
       isb->addString("&WIDTH=");

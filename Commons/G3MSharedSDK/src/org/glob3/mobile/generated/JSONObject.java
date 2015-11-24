@@ -29,7 +29,14 @@ public class JSONObject extends JSONBaseObject
     isb.addString("\"");
     isb.addString(key);
     isb.addString("\":");
-      isb.addString((get(key) == null) ? "null" : get(key).description());
+    isb.addString((get(key) == null) ? "null" : get(key).description());
+  }
+  private void putKeyAndValueToString(String key, IStringBuilder isb)
+  {
+    isb.addString("\"");
+    isb.addString(key);
+    isb.addString("\":");
+    isb.addString((get(key) == null) ? "null" : get(key).toString());
   }
 
   public void dispose()
@@ -184,6 +191,32 @@ public class JSONObject extends JSONBaseObject
        isb.dispose();
     return s;
   }
+  public final String toString()
+  {
+    IStringBuilder isb = IStringBuilder.newStringBuilder();
+  
+    isb.addString("{");
+  
+    java.util.ArrayList<String> keys = this.keys();
+  
+    int keysCount = keys.size();
+    if (keysCount > 0)
+    {
+      putKeyAndValueToString(keys.get(0), isb);
+      for (int i = 1; i < keysCount; i++)
+      {
+        isb.addString(", ");
+        putKeyAndValueToString(keys.get(i), isb);
+      }
+    }
+  
+    isb.addString("}");
+  
+    final String s = isb.getString();
+    if (isb != null)
+       isb.dispose();
+    return s;
+  }
 
   public final JSONObject deepCopy()
   {
@@ -219,7 +252,7 @@ public class JSONObject extends JSONBaseObject
       final JSONBaseObject child = get(key);
       if(child != null)
       {
-          child.acceptVisitor(visitor);
+        child.acceptVisitor(visitor);
       }
     }
   
