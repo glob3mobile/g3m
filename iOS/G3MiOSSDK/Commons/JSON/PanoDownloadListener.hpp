@@ -52,12 +52,11 @@ class PanoDownloadListener : public IBufferDownloadListener {
     static const std::string LAT;
     static const std::string LON;
     
-    MarksRenderer* _marksRenderer;
-    MarkTouchListener* _panoTouchListener;
+    MarksRenderer* _panoMarksRenderer;
     std::string _urlIcon;
   
 public:
-    PanoDownloadListener(MarksRenderer* _marksRenderer, MarkTouchListener* panoTouchListener, std::string urlIcon);
+    PanoDownloadListener(MarksRenderer* _panoMarksRenderer, std::string urlIcon);
     
     void onDownload(const URL& url,
                     IByteBuffer* buffer,
