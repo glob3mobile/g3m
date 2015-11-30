@@ -8,14 +8,12 @@ public class PanoDownloadListener extends IBufferDownloadListener
     private static final String LAT = "lat";
     private static final String LON = "lon";
 
-    private MarksRenderer _marksRenderer;
-    private MarkTouchListener _panoTouchListener;
+    private MarksRenderer _panoMarksRenderer;
     private String _urlIcon;
 
-    public PanoDownloadListener(MarksRenderer marksRenderer, MarkTouchListener panoTouchListener, String urlIcon)
+    public PanoDownloadListener(MarksRenderer panoMarksRenderer, String urlIcon)
     {
-      _marksRenderer = marksRenderer;
-      _panoTouchListener = panoTouchListener;
+      _panoMarksRenderer = panoMarksRenderer;
       _urlIcon = urlIcon;
     }
 
@@ -51,8 +49,8 @@ public class PanoDownloadListener extends IBufferDownloadListener
       final Angle latitude = Angle.fromDegrees(json.getAsObject(POSITION).getAsNumber(LAT).value());
       final Angle longitude = Angle.fromDegrees(json.getAsObject(POSITION).getAsNumber(LON).value());
     
-      Mark mark = new Mark(new URL(_urlIcon,false), new Geodetic3D(latitude, longitude, 0), AltitudeMode.RELATIVE_TO_GROUND, 0, new PanoMarkUserData(json.getAsString(NAME).value(), new URL(url, false)),true, _panoTouchListener,true);
+      Mark mark = new Mark(new URL(_urlIcon,false), new Geodetic3D(latitude, longitude, 0), AltitudeMode.RELATIVE_TO_GROUND, 0, new PanoMarkUserData(json.getAsString(NAME).value(), new URL(url, false)),true);
     
-      _marksRenderer.addMark(mark);
+      _panoMarksRenderer.addMark(mark);
     }
 }

@@ -245,8 +245,6 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
             numVisits+=visitSubTilesTouchesWith(layers, tile, sector, firstLevelToVisit, maxLevelToVisit);
           }
         }
-        logger.logInfo("%d request for precaching rests of levels has been sent. Waiting responses...", numVisits);
-  
       }
       else
       {

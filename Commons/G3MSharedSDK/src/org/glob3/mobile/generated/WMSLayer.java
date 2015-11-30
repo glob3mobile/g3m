@@ -215,7 +215,6 @@ public class WMSLayer extends RasterLayer
         req += isb.getString();
         if (isb != null)
            isb.dispose();
-  
         break;
       }
       case WMS_1_1_0:
@@ -259,6 +258,7 @@ public class WMSLayer extends RasterLayer
     req += "&LAYERS=" + _mapLayer;
   
      req += "&FORMAT=" + _format;
+  
   
     //Style
     if (!_style.equals(""))
@@ -509,7 +509,6 @@ public class WMSLayer extends RasterLayer
     if (pos != -1)
     {
       req = req.substring(pos+9);
-  
       int pos2 = req.indexOf("/", 8);
       String newHost = req.substring(0, pos2);
   
@@ -517,7 +516,6 @@ public class WMSLayer extends RasterLayer
     }
   
     req += "REQUEST=GetFeatureInfo&SERVICE=WMS";
-  
   
     switch (_queryServerVersion)
     {
@@ -553,7 +551,6 @@ public class WMSLayer extends RasterLayer
   
         if (isb != null)
            isb.dispose();
-  
         break;
       }
       case WMS_1_1_0:
@@ -561,7 +558,6 @@ public class WMSLayer extends RasterLayer
       {
         // default is 1.1.1
         req += "&VERSION=1.1.1";
-  
         if (!_srs.equals(""))
         {
           req += "&SRS=" + _srs;

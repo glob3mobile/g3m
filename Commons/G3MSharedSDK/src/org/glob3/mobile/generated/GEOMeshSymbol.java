@@ -54,6 +54,7 @@ public abstract class GEOMeshSymbol extends GEOSymbol
   
     final int coordinatesArrayCount = coordinatesArray.size();
     short index = 0;
+  
     for (int i = 0; i < coordinatesArrayCount; i++)
     {
       final java.util.ArrayList<Geodetic2D> coordinates = coordinatesArray.get(i);

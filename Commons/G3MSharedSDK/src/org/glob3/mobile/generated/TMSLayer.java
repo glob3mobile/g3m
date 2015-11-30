@@ -69,7 +69,7 @@ public class TMSLayer extends RasterLayer
     isb.addString("/");
     isb.addInt(tile._row);
     isb.addString(".");
-    isb.addString(IStringUtils.instance().replaceSubstring(_format, "image/", ""));
+    isb.addString(IStringUtils.instance().replaceAll(_format, "image/", ""));
     ILogger.instance().logInfo(isb.getString());
   
   
