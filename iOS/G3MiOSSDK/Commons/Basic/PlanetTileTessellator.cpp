@@ -27,6 +27,8 @@
 
 #include "NormalsUtils.hpp"
 
+#include "WireframeUtils.hpp"
+
 
 PlanetTileTessellator::PlanetTileTessellator(const bool skirted, const Sector& sector):
 _skirted(skirted),
@@ -234,6 +236,9 @@ IFloatBuffer* PlanetTileTessellator::createTextCoords(const Vector2I& rawResolut
 Mesh* PlanetTileTessellator::createTileDebugMesh(const Planet* planet,
                                                  const Vector2I& rawResolution,
                                                  const Tile* tile) const {
+  
+  /*
+  
   const Sector sector = getRenderedSectorForTile(tile); // tile->getSector();
 
   const int resolutionXMinus1 = rawResolution._x - 1;
@@ -293,6 +298,11 @@ Mesh* PlanetTileTessellator::createTileDebugMesh(const Planet* planet,
   delete vertices;
 
   return result;
+   
+   */
+  
+  Mesh* wireframe = WireframeUtils::createWireframeMesh((const IndexedGeometryMesh*)tile->getTessellatorMesh());
+  return wireframe;
 }
 
 Sector PlanetTileTessellator::getRenderedSectorForTile(const Tile* tile) const {

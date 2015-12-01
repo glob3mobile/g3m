@@ -33,9 +33,16 @@ public:
               IFloatBuffer* colors = NULL,
               const float colorsIntensity = 0.0f,
               bool depthTest = true,
-              IFloatBuffer* normals = NULL);
+              IFloatBuffer* normals = NULL,
+              bool polygonOffsetFill = false,
+              float polygonOffsetFactor = 0,
+              float polygonOffsetUnits = 0);
 
   ~IndexedMesh();
+  
+  const IShortBuffer* getIndices() const{
+    return _indices;
+  }
 };
 
 #endif

@@ -97,6 +97,9 @@ void G3MDemoBuilder::build() {
   VectorStreamingRenderer* vectorStreamingRenderer = new VectorStreamingRenderer(marksRenderer);
   builder->addRenderer(vectorStreamingRenderer);
   
+#warning REMOVE
+  builder->getPlanetRendererBuilder()->setRenderDebug(true);
+  
   _initialized = true;
   _model = new G3MDemoModel(_listener,
                             layerSet,

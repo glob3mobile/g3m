@@ -86,7 +86,8 @@ _southArcSegmentRatioSquared(0),
 _eastArcSegmentRatioSquared(0),
 _westArcSegmentRatioSquared(0),
 _rendered(false),
-_id( createTileId(level, row, column) )
+_id( createTileId(level, row, column) ),
+_tessellatorMeshIsMeshHolder(false)
 {
 }
 
@@ -198,6 +199,7 @@ Mesh* Tile::getTessellatorMesh(const G3MRenderContext* rc,
                                                      _verticalExaggeration,
                                                      tilesRenderParameters->_renderDebug,
                                                      _tileTessellatorMeshData);
+      _tessellatorMeshIsMeshHolder = false;
 
       computeTileCorners(rc->getPlanet());
     }
@@ -214,6 +216,7 @@ Mesh* Tile::getTessellatorMesh(const G3MRenderContext* rc,
       if (meshHolder == NULL) {
         meshHolder = new MeshHolder(tessellatorMesh);
         _tessellatorMesh = meshHolder;
+        _tessellatorMeshIsMeshHolder = true;
       }
       else {
         meshHolder->setMesh(tessellatorMesh);
@@ -992,4 +995,13 @@ Vector2I Tile::getNormalizedPixelsFromPosition(const Geodetic2D& position2D,
   const IMathUtils* math = IMathUtils::instance();
   const Vector2D uv = _sector.getUVCoordinates(position2D);
   return Vector2I(math->toInt(tileDimension._x * uv._x), math->toInt(tileDimension._y * uv._y));
+}
+
+const Mesh* Tile::getTessellatorMesh() const{
+  
+  if (_tessellatorMeshIsMeshHolder){
+    return ((MeshHolder*) _tessellatorMesh)->getMesh();
+  }
+  
+  return _tessellatorMesh;
 }

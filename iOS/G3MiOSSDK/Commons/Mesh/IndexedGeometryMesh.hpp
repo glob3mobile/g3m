@@ -45,7 +45,9 @@ public:
 
   ~IndexedGeometryMesh();
 
-
+  const IShortBuffer* getIndices() const{
+    return _indices;
+  }
 };
 
 #endif

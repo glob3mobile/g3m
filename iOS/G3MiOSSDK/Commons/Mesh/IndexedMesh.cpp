@@ -35,7 +35,10 @@ IndexedMesh::IndexedMesh(const int primitive,
                          IFloatBuffer* colors,
                          const float colorsIntensity,
                          bool depthTest,
-                         IFloatBuffer* normals) :
+                         IFloatBuffer* normals,
+                         bool polygonOffsetFill,
+                         float polygonOffsetFactor,
+                         float polygonOffsetUnits) :
 AbstractMesh(primitive,
              owner,
              center,
@@ -46,7 +49,10 @@ AbstractMesh(primitive,
              colors,
              colorsIntensity,
              depthTest,
-             normals),
+             normals,
+             polygonOffsetFill,
+             polygonOffsetFactor,
+             polygonOffsetUnits),
 _indices(indices)
 {
 
