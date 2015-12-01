@@ -9,9 +9,15 @@ import org.glob3.mobile.generated.ColumnLayoutImageBuilder;
 import org.glob3.mobile.generated.DeviceAttitudeCameraHandler;
 import org.glob3.mobile.generated.DownloaderImageBuilder;
 import org.glob3.mobile.generated.G3MContext;
+import org.glob3.mobile.generated.G3MWidget;
 import org.glob3.mobile.generated.GFont;
 import org.glob3.mobile.generated.GInitializationTask;
+import org.glob3.mobile.generated.GTask;
 import org.glob3.mobile.generated.Geodetic3D;
+import org.glob3.mobile.generated.HUDAbsolutePosition;
+import org.glob3.mobile.generated.HUDQuadWidget;
+import org.glob3.mobile.generated.HUDRelativeSize;
+import org.glob3.mobile.generated.HUDRenderer;
 import org.glob3.mobile.generated.ICanvas;
 import org.glob3.mobile.generated.IImage;
 import org.glob3.mobile.generated.IImageDownloadListener;
@@ -21,6 +27,7 @@ import org.glob3.mobile.generated.LayerSet;
 import org.glob3.mobile.generated.MapQuestLayer;
 import org.glob3.mobile.generated.NonOverlappingMark;
 import org.glob3.mobile.generated.NonOverlappingMarksRenderer;
+import org.glob3.mobile.generated.PeriodicalTask;
 import org.glob3.mobile.generated.QuadShape;
 import org.glob3.mobile.generated.ShapesRenderer;
 import org.glob3.mobile.generated.TimeInterval;
@@ -91,6 +98,30 @@ EntryPoint {
                position);
    }
 
+   private class AnimateHUDWidgetsTask
+   extends
+   GTask {
+
+      LabelImageBuilder _labelBuilder;
+      G3MWidget         _widget;
+
+
+      public AnimateHUDWidgetsTask(final G3MWidget widget,
+                                   final LabelImageBuilder labelBuilder) {
+         _labelBuilder = labelBuilder;
+         _widget = widget;
+      }
+
+
+      @Override
+      public void run(final G3MContext context) {
+         // TODO Auto-generated method stub
+         _labelBuilder.setText("H: " + _widget.getCurrentCamera().getHeading() + "P: " + _widget.getCurrentCamera().getPitch()
+                  + "R: " + _widget.getCurrentCamera().getRoll());
+      }
+
+   }
+
 
    private G3MWidget_WebGL createWidgetVR() {
       final G3MBuilder_WebGL builder = new G3MBuilder_WebGL();
@@ -104,7 +135,33 @@ EntryPoint {
       cr.addHandler(new DeviceAttitudeCameraHandler(true));
       builder.setCameraRenderer(cr);
 
-      return builder.createWidget();
+      final HUDRenderer hudRenderer = new HUDRenderer();
+      builder.addRenderer(hudRenderer);
+      final LabelImageBuilder labelBuilder = new LabelImageBuilder("glob3", // text
+               GFont.monospaced(38), // font
+               6, // margin
+               Color.yellow(), // color
+               Color.black(), // shadowColor
+               3, // shadowBlur
+               1, // shadowOffsetX
+               -1, // shadowOffsetY
+               Color.red(), // backgroundColor
+               4, // cornerRadius
+               true // mutable
+      );
+
+      final HUDQuadWidget label = new HUDQuadWidget(labelBuilder, new HUDAbsolutePosition(10), new HUDAbsolutePosition(10),
+               new HUDRelativeSize(1, HUDRelativeSize.Reference.BITMAP_WIDTH), new HUDRelativeSize(1,
+                        HUDRelativeSize.Reference.BITMAP_HEIGHT));
+      hudRenderer.addWidget(label);
+
+      final G3MWidget_WebGL widget = builder.createWidget();
+
+      builder.addPeriodicalTask(new PeriodicalTask(TimeInterval.fromMilliseconds(200), new AnimateHUDWidgetsTask(
+               widget.getG3MWidget(), labelBuilder)));
+
+
+      return widget;
    }
 
 
