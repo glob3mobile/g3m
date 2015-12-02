@@ -581,6 +581,7 @@ public:
 
 class CustomShaderGLFeature: public GLFeature {
 private:
+    bool _initializedShader;
     
     ~CustomShaderGLFeature() {
 #ifdef JAVA_CODE
@@ -590,12 +591,22 @@ private:
     
 public:
     CustomShaderGLFeature(const std::string shaderName) :
-    GLFeature(NO_GROUP, GLF_CUSTOM_SHADER)
+    GLFeature(NO_GROUP, GLF_CUSTOM_SHADER), _initializedShader(false)
     {
         _values->setCustomShaderName(shaderName);
     }
 
-    void applyOnGlobalGLState(GLGlobalState* state) const {}
+    virtual bool onInitializeShader(const GL* gl, const GLState* state, const GPUProgram* linkedProgram)=0;
+    virtual void onAfterApplyShaderOnGPU(const GL* gl, const GLState* state, const GPUProgram* linkedProgram)=0;
+    
+    void afterApplyOnGPU(const GL* gl, const GLState* state, const GPUProgram* linkedProgram) {
+        if (!_initializedShader) {
+            _initializedShader = onInitializeShader(gl, state, linkedProgram);
+        }
+        if (_initializedShader) {
+            onAfterApplyShaderOnGPU(gl, state, linkedProgram);
+        }
+    }
 };
 
 #endif
