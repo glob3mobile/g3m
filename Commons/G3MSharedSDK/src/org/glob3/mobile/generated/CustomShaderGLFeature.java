@@ -8,15 +8,15 @@ public abstract class CustomShaderGLFeature extends GLFeature
         super.dispose();
     }
 
+    protected abstract boolean onInitializeShader(GL gl, GLState state, GPUProgram linkedProgram);
+    protected abstract void onAfterApplyShaderOnGPU(GL gl, GLState state, GPUProgram linkedProgram);
+
     public CustomShaderGLFeature(String shaderName)
     {
        super(GLFeatureGroupName.NO_GROUP, GLFeatureID.GLF_CUSTOM_SHADER);
        _initializedShader = false;
         _values.setCustomShaderName(shaderName);
     }
-
-    public abstract boolean onInitializeShader(GL gl, GLState state, GPUProgram linkedProgram);
-    public abstract void onAfterApplyShaderOnGPU(GL gl, GLState state, GPUProgram linkedProgram);
 
     public final void afterApplyOnGPU(GL gl, GLState state, GPUProgram linkedProgram)
     {
