@@ -588,6 +588,10 @@ private:
         super.dispose();
 #endif
     }
+
+protected:
+    virtual bool onInitializeShader(const GL* gl, const GLState* state, const GPUProgram* linkedProgram)=0;
+    virtual void onAfterApplyShaderOnGPU(const GL* gl, const GLState* state, const GPUProgram* linkedProgram)=0;
     
 public:
     CustomShaderGLFeature(const std::string shaderName) :
@@ -595,9 +599,6 @@ public:
     {
         _values->setCustomShaderName(shaderName);
     }
-
-    virtual bool onInitializeShader(const GL* gl, const GLState* state, const GPUProgram* linkedProgram)=0;
-    virtual void onAfterApplyShaderOnGPU(const GL* gl, const GLState* state, const GPUProgram* linkedProgram)=0;
     
     void afterApplyOnGPU(const GL* gl, const GLState* state, const GPUProgram* linkedProgram) {
         if (!_initializedShader) {
