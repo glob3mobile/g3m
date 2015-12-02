@@ -578,4 +578,27 @@ public:
   }
 };
 
+class GPUUniformValueUnrecognized : public GPUUniformValue {
+private:
+    ~GPUUniformValueUnrecognized() {
+#ifdef JAVA_CODE
+        super.dispose();
+#endif
+    }
+    
+public:
+    GPUUniformValueUnrecognized(const int type):GPUUniformValue(type) {}
+    
+    void setUniform(GL* gl, const IGLUniformID* id) const {
+    }
+
+    bool isEquals(const GPUUniformValue* v) const {
+        return getType() == v->getType();
+    }
+    
+    std::string description() const {
+        return "Uniform Unrecognized";
+    }
+};
+
 #endif

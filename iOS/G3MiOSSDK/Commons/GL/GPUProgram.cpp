@@ -153,11 +153,15 @@ void GPUProgram::getVariables(GL* gl) {
 
   for (int i = 0; i < _nUniforms; i++) {
     GPUUniform* u = gl->getActiveUniform(this, i);
-    if (u != NULL && u->getIndex() >= 0) {
-      _uniforms[u->getIndex()] = u;
+    if (u != NULL) {
+      if (u->getIndex() == UNRECOGNIZED_UNIFORM) {
+        u->set(new GPUUniformValueUnrecognized(u->_type));
+      } else {
+        _uniforms[u->getIndex()] = u;
 
-      const int code = GPUVariable::getUniformCode(u->_key);
-      _uniformsCode = _uniformsCode | code;
+        const int code = GPUVariable::getUniformCode(u->_key);
+        _uniformsCode = _uniformsCode | code;
+      }
     }
 
     _createdUniforms[counter++] = u; //Adding to created uniforms array
@@ -172,11 +176,15 @@ void GPUProgram::getVariables(GL* gl) {
 
   for (int i = 0; i < _nAttributes; i++) {
     GPUAttribute* a = gl->getActiveAttribute(this, i);
-    if (a != NULL && a->getIndex() >= 0) {
-      _attributes[a->getIndex()] = a;
+    if (a != NULL) {
+      if (a->getIndex() == UNRECOGNIZED_ATTRIBUTE) {
+          a->set(new GPUAttributeValueUnrecognized(a->_type));
+      } else {
+        _attributes[a->getIndex()] = a;
 
-      const int code = GPUVariable::getAttributeCode(a->_key);
-      _attributesCode = _attributesCode | code;
+        const int code = GPUVariable::getAttributeCode(a->_key);
+        _attributesCode = _attributesCode | code;
+      }
     }
 
     _createdAttributes[counter++] = a;

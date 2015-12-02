@@ -415,4 +415,46 @@ public:
 };
 ////////
 
+///////////
+class GPUAttributeValueUnrecognized : public GPUAttributeValue {
+private:
+    ~GPUAttributeValueUnrecognized() {
+#ifdef JAVA_CODE
+        super.dispose();
+#endif
+    }
+    
+public:
+    GPUAttributeValueUnrecognized(const int type) :
+    GPUAttributeValue(type, 0, 0, 0, 0, false) {}
+    
+    void setAttribute(GL* gl, const int id) const {
+    }
+    
+    bool isEquals(const GPUAttributeValue* v) const {
+        return (v->_type == _type);
+    }
+    
+    GPUAttributeValue* shallowCopy() const {
+        return new GPUAttributeValueUnrecognized(_type);
+    }
+    
+    std::string description() const {
+        return "Attribute Unrecognized.";
+    }
+    
+    GPUAttributeValue* copyOrCreate(GPUAttributeValue* oldAtt) const {
+        if (oldAtt == NULL) {
+            return new GPUAttributeValueUnrecognized(_type);
+        }
+        if (oldAtt->_enabled) {
+            oldAtt->_release();
+            return new GPUAttributeValueUnrecognized(_type);
+        }
+        return oldAtt;
+    }
+    
+};
+////////
+
 #endif
