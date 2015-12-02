@@ -154,7 +154,7 @@ void GPUProgram::getVariables(GL* gl) {
   for (int i = 0; i < _nUniforms; i++) {
     GPUUniform* u = gl->getActiveUniform(this, i);
     if (u != NULL) {
-      if (u->getIndex() == GPUVariable::getUniformCode(UNRECOGNIZED_UNIFORM)) {
+      if (u->_key == UNRECOGNIZED_UNIFORM) {
         u->set(new GPUUniformValueUnrecognized(u->_type));
       } else {
         _uniforms[u->getIndex()] = u;
@@ -177,7 +177,7 @@ void GPUProgram::getVariables(GL* gl) {
   for (int i = 0; i < _nAttributes; i++) {
     GPUAttribute* a = gl->getActiveAttribute(this, i);
     if (a != NULL) {
-      if (a->getIndex() == GPUVariable::getAttributeCode(UNRECOGNIZED_ATTRIBUTE)) {
+      if (a->_key == UNRECOGNIZED_ATTRIBUTE) {
           a->set(new GPUAttributeValueUnrecognized(a->_type));
       } else {
         _attributes[a->getIndex()] = a;
