@@ -199,6 +199,12 @@ public class GLState extends RCObject
   
       _linkedProgram.applyChanges(gl);
   
+      CustomShaderGLFeature feature = (CustomShaderGLFeature) getGLFeature(GLFeatureID.GLF_CUSTOM_SHADER);
+      if (feature != null)
+      {
+          feature.afterApplyOnGPU(gl, this, _linkedProgram);
+      }
+  
       //prog->onUnused(); //Uncomment to check that all GPUProgramStates are complete
     }
     else
