@@ -82,6 +82,10 @@ public class GPUUniform extends GPUVariable
 
   public final void applyChanges(GL gl)
   {
+    if (_type == GPUUniformKey.UNRECOGNIZED_UNIFORM.getValue())
+    {
+      return;
+    }
     if (_dirty)
     {
       _value.setUniform(gl, _id);

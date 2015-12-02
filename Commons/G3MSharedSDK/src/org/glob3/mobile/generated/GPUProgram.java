@@ -81,7 +81,7 @@ public class GPUProgram
     for (int i = 0; i < _nUniforms; i++)
     {
       GPUUniform u = gl.getActiveUniform(this, i);
-      if (u != null && u->getIndex() >= 0)
+      if (u != null && u.getIndex() >= 0)
       {
         _uniforms[u.getIndex()] = u;
   

@@ -96,6 +96,10 @@ public class GPUAttribute extends GPUVariable
 
   public void applyChanges(GL gl)
   {
+    if (_type == GPUAttributeKey.UNRECOGNIZED_ATTRIBUTE.getValue())
+    {
+      return;
+    }
     if (_value == null)
     {
       if (_enabled)
