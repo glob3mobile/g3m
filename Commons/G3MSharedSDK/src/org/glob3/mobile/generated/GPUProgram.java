@@ -83,7 +83,7 @@ public class GPUProgram
       GPUUniform u = gl.getActiveUniform(this, i);
       if (u != null)
       {
-        if (u.getIndex() == GPUVariable.getUniformCode(GPUUniformKey.UNRECOGNIZED_UNIFORM))
+        if (u._key == GPUUniformKey.UNRECOGNIZED_UNIFORM)
         {
           u.set(new GPUUniformValueUnrecognized(u._type));
         }
@@ -111,7 +111,7 @@ public class GPUProgram
       GPUAttribute a = gl.getActiveAttribute(this, i);
       if (a != null)
       {
-        if (a.getIndex() == GPUVariable.getAttributeCode(GPUAttributeKey.UNRECOGNIZED_ATTRIBUTE))
+        if (a._key == GPUAttributeKey.UNRECOGNIZED_ATTRIBUTE)
         {
             a.set(new GPUAttributeValueUnrecognized(a._type));
         }
