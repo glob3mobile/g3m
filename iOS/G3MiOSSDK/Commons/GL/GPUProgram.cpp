@@ -153,7 +153,7 @@ void GPUProgram::getVariables(GL* gl) {
 
   for (int i = 0; i < _nUniforms; i++) {
     GPUUniform* u = gl->getActiveUniform(this, i);
-    if (u != NULL && u->getIndex() >= 0) {
+    if (u != NULL && u->getIndex() >= 0) {
       _uniforms[u->getIndex()] = u;
 
       const int code = GPUVariable::getUniformCode(u->_key);
