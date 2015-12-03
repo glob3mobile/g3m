@@ -419,8 +419,8 @@ public class PlanetTileTessellator extends TileTessellator
     IFloatBuffer verticesB = vertices.create();
     IShortBuffer indicesB = indices.create();
     IFloatBuffer normals = null;
-  ///#warning Testing_Terrain_Normals;
-  //  IFloatBuffer* normals = NormalsUtils::createTriangleStripSmoothNormals(verticesB, indicesB);
+    ///#warning Testing_Terrain_Normals;
+    //  IFloatBuffer* normals = NormalsUtils::createTriangleStripSmoothNormals(verticesB, indicesB);
   
     Mesh result = new IndexedGeometryMesh(GLPrimitive.triangleStrip(), vertices.getCenter(), verticesB, true, normals, true, indicesB, true);
   
@@ -432,56 +432,69 @@ public class PlanetTileTessellator extends TileTessellator
 
   public final Mesh createTileDebugMesh(Planet planet, Vector2I rawResolution, Tile tile)
   {
-    final Sector sector = getRenderedSectorForTile(tile); // tile->getSector();
   
-    final int resolutionXMinus1 = rawResolution._x - 1;
-    final int resolutionYMinus1 = rawResolution._y - 1;
-    short posS = 0;
+    final Sector tileSector = tile._sector;
+    final Sector meshSector = getRenderedSectorForTile(tile); // tile->getSector();
+    final Vector2I meshResolution = calculateResolution(rawResolution, tile, meshSector);
+    final short rx = (short)meshResolution._x;
+    final short ry = (short)meshResolution._y;
   
-    // compute offset for vertices
-    final Vector3D sw = planet.toCartesian(sector.getSW());
-    final Vector3D nw = planet.toCartesian(sector.getNW());
-    final double offset = nw.sub(sw).length() * 1e-3;
+    AbstractGeometryMesh mesh = ((AbstractGeometryMesh)tile.getTessellatorMesh());
+    final IFloatBuffer vertices = mesh.getVertices();
   
-    FloatBufferBuilderFromGeodetic vertices = FloatBufferBuilderFromGeodetic.builderWithGivenCenter(planet, sector._center);
-    ShortBufferBuilder indices = new ShortBufferBuilder();
-  
-    // west side
-    for (int j = 0; j < resolutionYMinus1; j++)
+    //INDEX OF BORDER///////////////////////////////////////////////////////////////
+    ShortBufferBuilder indicesBorder = new ShortBufferBuilder();
+    for (short j = 0; j < rx; j++)
     {
-      vertices.add(sector.getInnerPoint(0, (double)j/resolutionYMinus1), offset);
-      indices.add(posS++);
+      indicesBorder.add(j);
     }
   
-    // south side
-    for (int i = 0; i < resolutionXMinus1; i++)
+    for (short i = 2; i < ry+1; i++)
     {
-      vertices.add(sector.getInnerPoint((double)i/resolutionXMinus1, 1), offset);
-      indices.add(posS++);
+      indicesBorder.add((short)((i * rx)-1));
     }
   
-    // east side
-    for (int j = resolutionYMinus1; j > 0; j--)
+    for (short j = (short)(rx *ry-2); j >= (short)(rx*(ry-1)); j--)
     {
-      vertices.add(sector.getInnerPoint(1, (double)j/resolutionYMinus1), offset);
-      indices.add(posS++);
+      indicesBorder.add(j);
     }
   
-    // north side
-    for (int i = resolutionXMinus1; i > 0; i--)
+    for (short j = (short)(rx*(ry-1)-rx); j >= 0; j-=rx)
     {
-      vertices.add(sector.getInnerPoint((double)i/resolutionXMinus1, 0), offset);
-      indices.add(posS++);
+      indicesBorder.add(j);
     }
   
-    Color color = Color.newFromRGBA((float) 1.0, (float) 0.0, (float) 0, (float) 1.0);
+    //INDEX OF GRID
+    ShortBufferBuilder indicesGrid = new ShortBufferBuilder();
+    for (short i = 0; i < ry-1; i++)
+    {
+      short rowOffset = i * rx;
   
-    Mesh result = new IndexedMesh(GLPrimitive.lineLoop(), true, vertices.getCenter(), vertices.create(), indices.create(), 1, 1, color, null, 0, false); // colorsIntensity -  colors
+      for (short j = 0; j < rx; j++)
+      {
+        indicesGrid.add(rowOffset + j);
+        indicesGrid.add(rowOffset + j+rx);
+      }
+      for (short j = (2 *rx)-1; j >= rx; j--)
+      {
+        indicesGrid.add(rowOffset + j);
+      }
   
-    if (vertices != null)
-       vertices.dispose();
+    }
   
-    return result;
+    final Color levelColor = Color.blue().wheelStep(5, tile._level % 5);
+    final int gridLineWidth = tile.isElevationDataSolved()? 2.0 : 5.0;
+  
+  
+    IndexedMesh border = new IndexedMesh(GLPrimitive.lineStrip(), mesh.getCenter(), (IFloatBuffer)vertices, false, indicesBorder.create(), true, 2.0, 1.0, Color.newFromRGBA(1.0, 0.0, 0.0, 1.0), null, 1.0, false, null, true, 1.0, 1.0);
+  
+    IndexedMesh grid = new IndexedMesh(GLPrimitive.lineStrip(), mesh.getCenter(), (IFloatBuffer)vertices, false, indicesGrid.create(), true, gridLineWidth, 1.0, new Color(levelColor), null, 1.0, false, null, true, 1.0, 1.0);
+  
+    CompositeMesh c = new CompositeMesh();
+    c.addMesh(grid);
+    c.addMesh(border);
+  
+    return c;
   }
 
   public final IFloatBuffer createTextCoords(Vector2I rawResolution, Tile tile)

@@ -86,5 +86,8 @@ public class IndexedGeometryMesh extends AbstractGeometryMesh
   
   }
 
-
+  public final IShortBuffer getIndices()
+  {
+    return _indices;
+  }
 }

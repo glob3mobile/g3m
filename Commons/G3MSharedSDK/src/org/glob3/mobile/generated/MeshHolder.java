@@ -77,4 +77,9 @@ public class MeshHolder extends Mesh
     _mesh.showNormals(v);
   }
 
+  public final Mesh getMesh()
+  {
+    return _mesh;
+  }
+
 }
