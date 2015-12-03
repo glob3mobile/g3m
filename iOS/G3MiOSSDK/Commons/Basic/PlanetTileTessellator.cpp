@@ -269,20 +269,20 @@ Mesh* PlanetTileTessellator::createTileDebugMesh(const Planet* planet,
   //INDEX OF GRID
   ShortBufferBuilder indicesGrid;
   for (short i = 0; i < ry-1; i++) {
-    short rowOffset = i * rx;
+    short rowOffset = (short)(i * rx);
     
     for (short j = 0; j < rx; j++) {
-      indicesGrid.add(rowOffset + j);
-      indicesGrid.add(rowOffset + j+rx);
+      indicesGrid.add((short)(rowOffset + j));
+      indicesGrid.add((short)(rowOffset + j+rx));
     }
-    for (short j = (2*rx)-1; j >= rx; j--) {
-      indicesGrid.add(rowOffset + j);
+    for (short j = (short)((2*rx)-1); j >= rx; j--) {
+      indicesGrid.add((short)(rowOffset + j));
     }
     
   }
   
   const Color levelColor = Color::blue().wheelStep(5, tile->_level % 5);
-  const int gridLineWidth = tile->isElevationDataSolved()? 2.0 : 5.0;
+  const float gridLineWidth = tile->isElevationDataSolved() || (tile->getElevationData() == NULL) ? 2.0f : 5.0f;
   
   
   IndexedMesh* border = new IndexedMesh(GLPrimitive::lineStrip(),
@@ -291,14 +291,14 @@ Mesh* PlanetTileTessellator::createTileDebugMesh(const Planet* planet,
                                         false,
                                         indicesBorder.create(),
                                         true,
-                                        2.0,
-                                        1.0,
-                                        Color::newFromRGBA(1.0, 0.0, 0.0, 1.0),
+                                        2.0f,
+                                        1.0f,
+                                        Color::newFromRGBA(1.0f, 0.0f, 0.0f, 1.0f),
                                         NULL,
-                                        1.0,
+                                        1.0f,
                                         false,
                                         NULL,
-                                        true, 1.0, 1.0);
+                                        true, 1.0f, 1.0f);
   
   IndexedMesh* grid = new IndexedMesh(GLPrimitive::lineStrip(),
                                       mesh->getCenter(),
@@ -307,13 +307,13 @@ Mesh* PlanetTileTessellator::createTileDebugMesh(const Planet* planet,
                                       indicesGrid.create(),
                                       true,
                                       gridLineWidth,
-                                      1.0,
+                                      1.0f,
                                       new Color(levelColor),
                                       NULL,
-                                      1.0,
+                                      1.0f,
                                       false,
                                       NULL,
-                                      true, 1.0, 1.0);
+                                      true, 1.0f, 1.0f);
   
   CompositeMesh* c = new CompositeMesh();
   c->addMesh(grid);

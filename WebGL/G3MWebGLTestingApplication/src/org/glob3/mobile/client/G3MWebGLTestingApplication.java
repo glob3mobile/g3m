@@ -41,7 +41,7 @@ EntryPoint {
 
 
    private native void runUserPlugin() /*-{
-        $wnd.onLoadG3M();
+		$wnd.onLoadG3M();
    }-*/;
 
 
@@ -49,7 +49,7 @@ EntryPoint {
    public void onModuleLoad() {
       final Panel g3mWidgetHolder = RootPanel.get(_g3mWidgetHolderId);
 
-      _g3mWidget = createWidget();
+      _g3mWidget = createWidgetPlanetDebug();
       g3mWidgetHolder.add(_g3mWidget);
 
 
@@ -238,6 +238,26 @@ EntryPoint {
             }
          });
       }
+
+
+      return builder.createWidget();
+   }
+
+
+   private static G3MWidget_WebGL createWidgetPlanetDebug() {
+      final G3MBuilder_WebGL builder = new G3MBuilder_WebGL();
+
+      final LayerSet layerSet = new LayerSet();
+      layerSet.addLayer(MapQuestLayer.newOSM(TimeInterval.fromDays(30)));
+
+      builder.getPlanetRendererBuilder().setLayerSet(layerSet);
+      builder.getPlanetRendererBuilder().setRenderDebug(true);
+
+      final String proxy = null; // "http://galileo.glob3mobile.com/" + "proxy.php?url="
+      builder.setDownloader(new Downloader_WebGL( //
+               8, // maxConcurrentOperationCount
+               10, // delayMillis
+               proxy));
 
 
       return builder.createWidget();
