@@ -17,9 +17,6 @@ void GPUUniform::unset() {
 }
 
 void GPUUniform::applyChanges(GL* gl) {
-  if (_type == UNRECOGNIZED_UNIFORM) {
-    return;
-  }
   if (_dirty) {
     _value->setUniform(gl, _id);
     _dirty = false;

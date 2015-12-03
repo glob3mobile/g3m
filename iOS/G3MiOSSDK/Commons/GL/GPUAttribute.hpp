@@ -171,9 +171,6 @@ public:
 
 
   virtual void applyChanges(GL* gl) {
-    if (_type == UNRECOGNIZED_ATTRIBUTE) {
-      return;
-    }
     if (_value == NULL) {
       if (_enabled) {
         ILogger::instance()->logError("Attribute " + _name + " was not set but it is enabled.");
