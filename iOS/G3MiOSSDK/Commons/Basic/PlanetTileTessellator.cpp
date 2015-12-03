@@ -22,12 +22,14 @@
 #include "ElevationData.hpp"
 #include "MercatorUtils.hpp"
 #include "FloatBufferBuilderFromCartesian2D.hpp"
+#include "FloatBufferBuilderFromCartesian3D.hpp"
 #include "IndexedGeometryMesh.hpp"
 #include "IShortBuffer.hpp"
 
 #include "NormalsUtils.hpp"
 
 #include "WireframeUtils.hpp"
+#include "Sphere.hpp"
 
 
 PlanetTileTessellator::PlanetTileTessellator(const bool skirted, const Sector& sector):
@@ -116,6 +118,9 @@ Mesh* PlanetTileTessellator::createTileMesh(const Planet* planet,
   const Sector tileSector = tile->_sector;
   const Sector meshSector = getRenderedSectorForTile(tile); // tile->getSector();
   const Vector2I meshResolution = calculateResolution(rawResolution, tile, meshSector);
+  
+  tile->_tRX = meshResolution._x;
+  tile->_tRY = meshResolution._y;
 
   FloatBufferBuilderFromGeodetic* vertices = FloatBufferBuilderFromGeodetic::builderWithGivenCenter(planet, meshSector._center);
   ShortBufferBuilder indices;
@@ -301,8 +306,90 @@ Mesh* PlanetTileTessellator::createTileDebugMesh(const Planet* planet,
    
    */
   
-  Mesh* wireframe = WireframeUtils::createWireframeMesh((const IndexedGeometryMesh*)tile->getTessellatorMesh());
+  
+  /*
+  
+  const Sector tileSector = tile->_sector;
+  const Sector meshSector = getRenderedSectorForTile(tile); // tile->getSector();
+  const Vector2I meshResolution = calculateResolution(rawResolution, tile, meshSector);
+  const int rx = meshResolution._x, ry = meshResolution._y;
+  
+  Mesh* wireframe = WireframeUtils::createWireframeMesh((const IndexedGeometryMesh*)tile->getTessellatorMesh(),
+                                                        rx*ry,
+                                                        (2* (ry-1) * rx) + (ry-2) + (ry-1) );
   return wireframe;
+   
+   */
+  
+  const Sector tileSector = tile->_sector;
+  const Sector meshSector = getRenderedSectorForTile(tile); // tile->getSector();
+  const Vector2I meshResolution = calculateResolution(rawResolution, tile, meshSector);
+  const int rx = meshResolution._x, ry = meshResolution._y;
+  
+  AbstractGeometryMesh* mesh = ((AbstractGeometryMesh*)tile->getTessellatorMesh());
+  const IFloatBuffer* vertices = mesh->getVertices();
+  
+  Sphere* bv = mesh->getBoundingVolume()->createSphere();
+  Vector3D centerOfMesh = bv->getCenter();
+  double meshSize = bv->getRadius();
+  
+  
+  ///VERTICES////
+  
+  FloatBufferBuilderFromCartesian3D* newVertBuilder = FloatBufferBuilderFromCartesian3D::builderWithoutCenter();
+  
+  //Copying
+  const size_t size = rx*ry*3;
+  for (int i = 0; i < size; i = i+3) {
+    
+#warning UNTIL HAVING POLYGONOFFSET
+    Vector3D v(vertices->get(i),
+               vertices->get(i+1),
+               vertices->get(i+2));
+    
+//    Vector3D d = centerOfMesh.sub(v);
+//    Vector3D fv = v.add(d.times((0.01 * meshSize) / d.length()));
+    
+    newVertBuilder->add(v);
+  }
+  
+  
+  ShortBufferBuilder indices;
+  
+  //INDEX OF BORDER///////////////////////////////////////////////////////////////
+  for (short j = 0; j < rx; j++) {
+    indices.add(j);
+  }
+  
+  for (short i = 2; i < ry+1; i++) {
+    indices.add((short)((i * rx)-1));
+  }
+  
+  for (short j = (short)(rx*ry-2); j >= (short)(rx*(ry-1)); j--) {
+    indices.add(j);
+  }
+  
+  for (short j = (short)(rx*(ry-1)-rx); j >= 0; j-=rx) {
+    indices.add(j);
+  }
+
+  IndexedMesh* im = new IndexedMesh(GLPrimitive::lineStrip(),
+                                    true,
+                                    mesh->getCenter(),
+                                    newVertBuilder->create(),
+                                    indices.create(),
+                                    2.0,
+                                    1.0,
+                                    Color::newFromRGBA(1.0, 0.0, 0.0, 1.0),
+                                    NULL,
+                                    1.0,
+                                    false,
+                                    NULL,
+                                    true, -1, -1);
+  
+  delete newVertBuilder;
+  
+  return im;
 }
 
 Sector PlanetTileTessellator::getRenderedSectorForTile(const Tile* tile) const {

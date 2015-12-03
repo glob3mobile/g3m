@@ -224,6 +224,11 @@ Mesh* Tile::getTessellatorMesh(const G3MRenderContext* rc,
 
       computeTileCorners(rc->getPlanet());
     }
+    
+    if (_debugMesh != NULL){
+      delete _debugMesh;
+      _debugMesh = NULL;
+    }
 
     //Notifying when the tile is first created and every time the elevation data changes
     _planetRenderer->sectorElevationChanged(_elevationData);
@@ -604,6 +609,11 @@ void Tile::render(const G3MRenderContext* rc,
                   bool logTilesPetitions,
                   std::vector<const Tile*>* tilesStartedRendering,
                   std::vector<std::string>* tilesStoppedRendering) {
+//#warning REMOVE
+//  if (!_sector.contains(Angle::fromDegrees(28), Angle::fromDegrees(-15))){
+//    return;
+//  }
+  
 
   tilesStatistics->computeTileProcessed(this);
 

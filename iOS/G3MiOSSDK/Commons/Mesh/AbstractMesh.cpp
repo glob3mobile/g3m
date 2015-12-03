@@ -149,7 +149,7 @@ void AbstractMesh::createGLState() {
                                                0,            //Index 0
                                                false,        //Not normalized
                                                0,            //Stride 0
-                                               true,         //Depth test
+                                               _depthTest,         //Depth test
                                                false, 0,     //Cull and culled face
                                                _polygonOffsetFill, _polygonOffsetFactor, _polygonOffsetUnits,  //Polygon Offset
                                                _lineWidth,

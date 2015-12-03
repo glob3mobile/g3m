@@ -12,13 +12,15 @@
 #include "FloatBufferBuilderFromCartesian3D.hpp"
 #include "IFloatBuffer.hpp"
 #include "IndexedMesh.hpp"
+#include "BoundingVolume.hpp"
+#include "Sphere.hpp"
 
 
-IShortBuffer* WireframeUtils::createIndicesFromTriangleStrip(const IShortBuffer* triangleStripIndices){
+IShortBuffer* WireframeUtils::createIndicesFromTriangleStrip(const IShortBuffer* triangleStripIndices, int lastIndex){
   
   ShortBufferBuilder indices;
   
-  const size_t size = triangleStripIndices->size();
+  const size_t size = lastIndex < 0? triangleStripIndices->size() : lastIndex;
   for (int i = 0; i < size; i ++) {
     indices.add(triangleStripIndices->get(i));
   }
@@ -26,21 +28,33 @@ IShortBuffer* WireframeUtils::createIndicesFromTriangleStrip(const IShortBuffer*
   return indices.create();
 }
 
-AbstractMesh* WireframeUtils::createWireframeMesh(const IndexedGeometryMesh* mesh){
+AbstractMesh* WireframeUtils::createWireframeMesh(const IndexedGeometryMesh* mesh, int lastVertex, int lastIndex){
   
   const IFloatBuffer* vertices = mesh->getVertices();
+  
+  Sphere* bv = mesh->getBoundingVolume()->createSphere();
+  Vector3D centerOfMesh = bv->getCenter();
+  double meshSize = bv->getRadius();
+  
   
   FloatBufferBuilderFromCartesian3D* newVertBuilder = FloatBufferBuilderFromCartesian3D::builderWithoutCenter();
   
   //Copying
-  const size_t size = vertices->size();
+  const size_t size = lastVertex < 0? vertices->size() : lastVertex * 3;
   for (int i = 0; i < size; i = i+3) {
-    newVertBuilder->add(vertices->get(i),
-                        vertices->get(i+1),
-                        vertices->get(i+2));
+    
+#warning UNTIL HAVING POLYGONOFFSET
+    Vector3D v(vertices->get(i),
+               vertices->get(i+1),
+               vertices->get(i+2));
+    
+    Vector3D d = centerOfMesh.sub(v);
+    Vector3D fv = v.add(d.times((0.01 * meshSize) / d.length()));
+    
+    newVertBuilder->add(fv);
   }
   
-  IShortBuffer* indices = createIndicesFromTriangleStrip(mesh->getIndices());
+  IShortBuffer* indices = createIndicesFromTriangleStrip(mesh->getIndices(), lastIndex);
   
   
 //  IndexedMesh::IndexedMesh(const int primitive,
@@ -68,7 +82,7 @@ AbstractMesh* WireframeUtils::createWireframeMesh(const IndexedGeometryMesh* mes
                                     1.0,
                                     true,
                                     NULL,
-                                    true, 10, 10);
+                                    true, -1, -1);
   
   return im;
                                     

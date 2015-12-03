@@ -70,13 +70,13 @@ void GLGlobalState::applyChanges(GL* gl, GLGlobalState& currentState) const {
     if (_polygonOffsetFill) {
       nativeGL->enable(GLStage::polygonOffsetFill());
 
-      if (_polygonOffsetFactor != currentState._polygonOffsetFactor ||
-          _polygonOffsetUnits != currentState._polygonOffsetUnits) {
+     /* if (_polygonOffsetFactor != currentState._polygonOffsetFactor ||
+          _polygonOffsetUnits != currentState._polygonOffsetUnits) {*/
         nativeGL->polygonOffset(_polygonOffsetFactor, _polygonOffsetUnits);
 
         currentState._polygonOffsetUnits = _polygonOffsetUnits;
         currentState._polygonOffsetFactor = _polygonOffsetFactor;
-      }
+   //   }
     }
     else {
       nativeGL->disable(GLStage::polygonOffsetFill());

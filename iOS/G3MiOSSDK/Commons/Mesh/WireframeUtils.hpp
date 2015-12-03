@@ -18,9 +18,10 @@
 class WireframeUtils{
 public:
   
-  static IShortBuffer* createIndicesFromTriangleStrip(const IShortBuffer* triangleStripIndices);
+  static IShortBuffer* createIndicesFromTriangleStrip(const IShortBuffer* triangleStripIndices,
+                                                      int lastIndex = -1);
   
-  static AbstractMesh* createWireframeMesh(const IndexedGeometryMesh* mesh);
+  static AbstractMesh* createWireframeMesh(const IndexedGeometryMesh* mesh, int lastVertex = -1, int lastIndex = -1);
   
   
 };
