@@ -199,7 +199,7 @@ public class GLState extends RCObject
   
       _linkedProgram.applyChanges(gl);
   
-      CustomShaderGLFeature feature = (CustomShaderGLFeature) getGLFeature(GLFeatureID.GLF_CUSTOM_SHADER);
+      CustomShaderGLFeature feature = (CustomShaderGLFeature) getGLFeatureIncludingAncestors(GLFeatureID.GLF_CUSTOM_SHADER);
       if (feature != null)
       {
           feature.afterApplyOnGPU(gl, this, _linkedProgram);
@@ -256,6 +256,24 @@ public class GLState extends RCObject
     }
   
     return null;
+  }
+  public final GLFeature getGLFeatureIncludingAncestors(GLFeatureID id)
+  {
+      final int size = _features.size();
+      for (int i = 0; i < size; i++)
+      {
+          GLFeature f = _features.get(i);
+          if (f._id == id)
+          {
+              return f;
+          }
+      }
+      if (_parentGLState != null)
+      {
+          return _parentGLState.getGLFeatureIncludingAncestors(id);
+      }
+  
+      return null;
   }
 
   public final GLFeatureSet getGLFeatures(GLFeatureID id)
