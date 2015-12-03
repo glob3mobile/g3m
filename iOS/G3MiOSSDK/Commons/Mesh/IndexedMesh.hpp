@@ -16,6 +16,7 @@ class IShortBuffer;
 class IndexedMesh : public AbstractMesh {
 private:
   IShortBuffer*       _indices;
+  bool _ownsIndices;
 protected:
   void rawRender(const G3MRenderContext* rc) const;
 
@@ -23,10 +24,11 @@ protected:
 
 public:
   IndexedMesh(const int primitive,
-              bool owner,
               const Vector3D& center,
               IFloatBuffer* vertices,
+              bool ownsVertices,
               IShortBuffer* indices,
+              bool ownsIndices,
               float lineWidth,
               float pointSize = 1,
               const Color* flatColor = NULL,

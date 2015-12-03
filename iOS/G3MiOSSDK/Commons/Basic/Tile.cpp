@@ -189,6 +189,11 @@ Mesh* Tile::getTessellatorMesh(const G3MRenderContext* rc,
 
   if ( (_tessellatorMesh == NULL) || _mustActualizeMeshDueToNewElevationData ) {
     _mustActualizeMeshDueToNewElevationData = false;
+    
+    if (_debugMesh != NULL){
+      delete _debugMesh;
+      _debugMesh = NULL;
+    }
 
     if (elevationDataProvider == NULL) {
       // no elevation data provider, just create a simple mesh without elevation
@@ -223,11 +228,6 @@ Mesh* Tile::getTessellatorMesh(const G3MRenderContext* rc,
       }
 
       computeTileCorners(rc->getPlanet());
-    }
-    
-    if (_debugMesh != NULL){
-      delete _debugMesh;
-      _debugMesh = NULL;
     }
 
     //Notifying when the tile is first created and every time the elevation data changes

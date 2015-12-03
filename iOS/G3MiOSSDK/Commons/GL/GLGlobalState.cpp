@@ -65,8 +65,8 @@ void GLGlobalState::applyChanges(GL* gl, GLGlobalState& currentState) const {
   }
 
   //Polygon Offset
-  if (_polygonOffsetFill != currentState._polygonOffsetFill) {
-    currentState._polygonOffsetFill = _polygonOffsetFill;
+ // if (_polygonOffsetFill != currentState._polygonOffsetFill) {
+//    currentState._polygonOffsetFill = _polygonOffsetFill;
     if (_polygonOffsetFill) {
       nativeGL->enable(GLStage::polygonOffsetFill());
 
@@ -81,7 +81,7 @@ void GLGlobalState::applyChanges(GL* gl, GLGlobalState& currentState) const {
     else {
       nativeGL->disable(GLStage::polygonOffsetFill());
     }
-  }
+//  }
 
   //Blending Factors
   if (_blendDFactor != currentState._blendDFactor || _blendSFactor != currentState._blendSFactor) {

@@ -14,7 +14,7 @@
 
 
 IndexedMesh::~IndexedMesh() {
-  if (_owner) {
+  if (_ownsIndices) {
     delete _indices;
   }
 
@@ -25,10 +25,11 @@ IndexedMesh::~IndexedMesh() {
 }
 
 IndexedMesh::IndexedMesh(const int primitive,
-                         bool owner,
                          const Vector3D& center,
                          IFloatBuffer* vertices,
+                         bool ownsVertices,
                          IShortBuffer* indices,
+                         bool ownsIndices,
                          float lineWidth,
                          float pointSize,
                          const Color* flatColor,
@@ -40,7 +41,7 @@ IndexedMesh::IndexedMesh(const int primitive,
                          float polygonOffsetFactor,
                          float polygonOffsetUnits) :
 AbstractMesh(primitive,
-             owner,
+             ownsVertices,
              center,
              vertices,
              lineWidth,
@@ -53,7 +54,8 @@ AbstractMesh(primitive,
              polygonOffsetFill,
              polygonOffsetFactor,
              polygonOffsetUnits),
-_indices(indices)
+_indices(indices),
+_ownsIndices(ownsIndices)
 {
 
 }

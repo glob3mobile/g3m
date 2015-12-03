@@ -462,7 +462,6 @@
 		D842D9B01A72906A008D55E4 /* NonOverlappingMarksRenderer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D842D9AE1A727FAF008D55E4 /* NonOverlappingMarksRenderer.hpp */; };
 		D84D5A31157E0EAA000C5E35 /* MutableVector3D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D84D5A2F157E0EAA000C5E35 /* MutableVector3D.cpp */; };
 		D856FBFD189BB5610053F514 /* CoordinateSystem.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8F2EBAC18994A7B001B6103 /* CoordinateSystem.hpp */; };
-		D86A7BCF1C0DB1D800FAE216 /* WireframeUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D86A7BCD1C0DB1D800FAE216 /* WireframeUtils.cpp */; };
 		D8715C1E17032AC700CF7BE2 /* GPUProgram.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8715C1C17032AC700CF7BE2 /* GPUProgram.cpp */; };
 		D874D08E18900B1600610F85 /* SingleBilElevationDataProvider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D874D08D18900B1600610F85 /* SingleBilElevationDataProvider.cpp */; };
 		D874D09018900B4500610F85 /* SingleBilElevationDataProvider.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D874D08F18900B1E00610F85 /* SingleBilElevationDataProvider.hpp */; };
@@ -1729,8 +1728,6 @@
 		D84625DE177732A900FC4862 /* ColorMesh.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = ColorMesh.vsh; sourceTree = "<group>"; };
 		D84D5A2F157E0EAA000C5E35 /* MutableVector3D.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MutableVector3D.cpp; path = Commons/Geometry/MutableVector3D.cpp; sourceTree = "<group>"; };
 		D84D5A30157E0EAA000C5E35 /* MutableVector3D.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = MutableVector3D.hpp; path = Commons/Geometry/MutableVector3D.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
-		D86A7BCD1C0DB1D800FAE216 /* WireframeUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = WireframeUtils.cpp; path = Commons/Mesh/WireframeUtils.cpp; sourceTree = "<group>"; };
-		D86A7BCE1C0DB1D800FAE216 /* WireframeUtils.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = WireframeUtils.hpp; path = Commons/Mesh/WireframeUtils.hpp; sourceTree = "<group>"; };
 		D8715C1C17032AC700CF7BE2 /* GPUProgram.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GPUProgram.cpp; sourceTree = "<group>"; };
 		D8715C1D17032AC700CF7BE2 /* GPUProgram.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GPUProgram.hpp; sourceTree = "<group>"; };
 		D8715C1F170344FB00CF7BE2 /* GPUAttribute.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; path = GPUAttribute.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
@@ -2734,8 +2731,6 @@
 				CF6FE3EC1899812800C05775 /* G3MMeshParser.hpp */,
 				CF6FE3EE1899852300C05775 /* G3MMeshMaterial.cpp */,
 				CF6FE3EF1899852300C05775 /* G3MMeshMaterial.hpp */,
-				D86A7BCD1C0DB1D800FAE216 /* WireframeUtils.cpp */,
-				D86A7BCE1C0DB1D800FAE216 /* WireframeUtils.hpp */,
 			);
 			name = Mesh;
 			sourceTree = "<group>";
@@ -3160,7 +3155,6 @@
 				CF6D723B17184D620043C74B /* CanvasElement.cpp in Sources */,
 				CF6D7240171854F50043C74B /* TextCanvasElement.cpp in Sources */,
 				CF6D724717185CF20043C74B /* GroupCanvasElement.cpp in Sources */,
-				D86A7BCF1C0DB1D800FAE216 /* WireframeUtils.cpp in Sources */,
 				CF1751D11BA617BB006286C6 /* StackLayoutImageBuilder.cpp in Sources */,
 				CF6D724C171861770043C74B /* ColumnCanvasElement.cpp in Sources */,
 				D89FBD7D1725444800FFA541 /* MeshShape.cpp in Sources */,
