@@ -3,8 +3,8 @@
 package org.glob3.mobile.generated;
 
 public class PlanetTileTessellator
-extends
-TileTessellator {
+         extends
+            TileTessellator {
    private final boolean _skirted;
    private Sector        _renderedSector;
 
@@ -437,20 +437,20 @@ TileTessellator {
          }
 
          createEastSkirt(planet, tileSector, meshSector, meshResolution, needsEastSkirt(tileSector) ? relativeSkirtHeight
-                                                                                                    : absoluteSkirtHeight,
-                                                                                                    vertices, indices, textCoords);
+                                                                                                   : absoluteSkirtHeight,
+                  vertices, indices, textCoords);
 
          createNorthSkirt(planet, tileSector, meshSector, meshResolution, needsNorthSkirt(tileSector) ? relativeSkirtHeight
-                                                                                                      : absoluteSkirtHeight,
-                                                                                                      vertices, indices, textCoords);
+                                                                                                     : absoluteSkirtHeight,
+                  vertices, indices, textCoords);
 
          createWestSkirt(planet, tileSector, meshSector, meshResolution, needsWestSkirt(tileSector) ? relativeSkirtHeight
-                                                                                                    : absoluteSkirtHeight,
-                                                                                                    vertices, indices, textCoords);
+                                                                                                   : absoluteSkirtHeight,
+                  vertices, indices, textCoords);
 
          createSouthSkirt(planet, tileSector, meshSector, meshResolution, needsSouthSkirt(tileSector) ? relativeSkirtHeight
-                                                                                                      : absoluteSkirtHeight,
-                                                                                                      vertices, indices, textCoords);
+                                                                                                     : absoluteSkirtHeight,
+                  vertices, indices, textCoords);
       }
 
       //Storing textCoords in Tile
@@ -521,7 +521,7 @@ TileTessellator {
       }
 
       final Color levelColor = Color.blue().wheelStep(5, tile._level % 5);
-      final float gridLineWidth = tile.isElevationDataSolved() || (tile.getElevationData() == null) ? 2.0f : 5.0f;
+      final float gridLineWidth = tile.isElevationDataSolved() || (tile.getElevationData() == null) ? 1.0f : 3.0f;
 
 
       final IndexedMesh border = new IndexedMesh(GLPrimitive.lineStrip(), mesh.getCenter(), vertices, false,
