@@ -8,22 +8,27 @@
 
 #include "TileLoDTester.hpp"
 
+TileLoDTester::~TileLoDTester(){
+  delete _nextTesterNotVisible;
+  delete _nextTesterRightLoD;
+  delete _nextTesterVisible;
+  delete _nextTesterWrongLoD;
+}
+
 bool TileLoDTester::meetsRenderCriteria(int testerLevel,
-                                        Tile* tile,
-                                        TileTessellator * tessellator,
-                                        TileTexturizer* texturizer) const{
+                                        Tile* tile) const{
   
   //Right LOD
-  if (_meetsRenderCriteria(testerLevel, tile, tessellator, texturizer)){
+  if (_meetsRenderCriteria(testerLevel, tile)){
     if (_nextTesterRightLoD != NULL){
-      return _nextTesterRightLoD->meetsRenderCriteria(testerLevel + 1, tile, tessellator, texturizer);
+      return _nextTesterRightLoD->meetsRenderCriteria(testerLevel + 1, tile);
     }
     return true;
   }
   
   //Wrong LOD
   if (_nextTesterWrongLoD != NULL){
-    return _nextTesterWrongLoD->meetsRenderCriteria(testerLevel + 1, tile, tessellator, texturizer);
+    return _nextTesterWrongLoD->meetsRenderCriteria(testerLevel + 1, tile);
   }
   return false;
 }

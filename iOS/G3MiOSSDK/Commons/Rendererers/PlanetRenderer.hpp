@@ -475,7 +475,11 @@ public:
   void setChangedRendererInfoListener(ChangedRendererInfoListener* changedInfoListener,
                                       const size_t rendererIdentifier);
   
-  static TileLoDTester* createDefaultTileLoDTester();
+  TileLoDTester* createDefaultTileLoDTester();
+  
+  TileLoDTester* getTileLoDTester() const{
+    return _tileLoDTester;
+  }
   
 };
 

@@ -315,7 +315,7 @@ public:
                                            const Vector2I& size) const;
   
   TileLoDTesterData* getDataForLoDTester(int level) const{
-    if (level > _loDTesterData.size()){
+    if (level >= _loDTesterData.size()){
       return NULL;
     }
     
@@ -323,6 +323,15 @@ public:
   }
   
   void setDataForLoDTester(int level, TileLoDTesterData* data){
+    
+    while (_loDTesterData.size() < level + 1) {
+      _loDTesterData.push_back(NULL);
+    }
+    
+    if (_loDTesterData[level] != NULL){
+      delete _loDTesterData[level];
+    }
+    
     _loDTesterData[level] = data;
   }
   

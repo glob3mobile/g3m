@@ -222,7 +222,8 @@ _lastApplicationCurrentSceneId("-1"),
 _context(NULL),
 _webSocket(NULL),
 _marksRenderer(NULL),
-_hasParsedApplication(false)
+_hasParsedApplication(false),
+_tileLoDTester(NULL)
 {
   _featureInfoDownloadListener = new FeatureInfoDownloadListener(_applicationListener);
 }
@@ -2287,7 +2288,7 @@ void MapBooOLDBuilder::setTileLoDTester(TileLoDTester* tlt){
 }
 
 TileLoDTester* MapBooOLDBuilder::createDefaultTileLODTester() const{
-  return PlanetRenderer::createDefaultTileLoDTester();
+  return NULL;
 }
 
 TileLoDTester* MapBooOLDBuilder::getTileLoDTester(){

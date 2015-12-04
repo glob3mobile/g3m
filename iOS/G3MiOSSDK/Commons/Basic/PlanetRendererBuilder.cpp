@@ -39,7 +39,8 @@ _renderTileMeshes(true),
 _logTilesPetitions(false),
 _tileRenderingListener(NULL),
 _changedInfoListener(NULL),
-_touchEventTypeOfTerrainTouchListener(LongPress)
+_touchEventTypeOfTerrainTouchListener(LongPress),
+_tileLoDTester(NULL)
 {
 }
 
@@ -446,7 +447,7 @@ void PlanetRendererBuilder::setTileLoDTester(TileLoDTester* tlt){
 }
 
 TileLoDTester* PlanetRendererBuilder::createDefaultTileLODTester() const{
-  return PlanetRenderer::createDefaultTileLoDTester();;
+  return NULL;
 }
 
 TileLoDTester* PlanetRendererBuilder::getTileLoDTester(){

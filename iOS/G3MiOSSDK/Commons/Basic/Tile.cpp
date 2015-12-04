@@ -311,9 +311,13 @@ bool Tile::meetsRenderCriteria(const G3MRenderContext* rc,
     }
   }
 
-  if (_lastMeetsRenderCriteriaTimeInMS != 0 &&
-      (nowInMS - _lastMeetsRenderCriteriaTimeInMS) < 250 /*500*/ ) {
-    return _lastMeetsRenderCriteriaResult;
+//  if (_lastMeetsRenderCriteriaTimeInMS != 0 &&
+//      (nowInMS - _lastMeetsRenderCriteriaTimeInMS) < 250 /*500*/ ) {
+//    return _lastMeetsRenderCriteriaResult;
+//  }
+  
+  if (_planetRenderer->getTileLoDTester()->meetsRenderCriteria(0, this)){
+    return true;
   }
 
   if (tilesRenderParameters->_useTilesSplitBudget) {
