@@ -443,6 +443,8 @@
 		CFFAFD73169F2E3000BCE129 /* TextUtils_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = CFFAFD71169F2E3000BCE129 /* TextUtils_iOS.mm */; };
 		CFFEC12315C2EA5F003FA986 /* Downloader_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = CFFEC12215C2EA5F003FA986 /* Downloader_iOS.mm */; };
 		CFFEC12615C2EBA6003FA986 /* URL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFFEC12515C2EBA6003FA986 /* URL.cpp */; };
+		D8019FF01C11D91800784287 /* TileLoDTester.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8019FEE1C11D91800784287 /* TileLoDTester.cpp */; };
+		D8019FF21C11DFCF00784287 /* TileLoDTester.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8019FEF1C11D91800784287 /* TileLoDTester.hpp */; };
 		D80270BE17B3AADF0029F0BE /* CameraDoubleDragHandler.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = FBBDBCDD17AB983200077004 /* CameraDoubleDragHandler.hpp */; };
 		D80A286B1746474E0058CEC3 /* Planet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D80A28691746474E0058CEC3 /* Planet.cpp */; };
 		D80A286C1746474E0058CEC3 /* EllipsoidalPlanet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D80A286A1746474E0058CEC3 /* EllipsoidalPlanet.cpp */; };
@@ -731,6 +733,7 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				D8019FF21C11DFCF00784287 /* TileLoDTester.hpp in CopyFiles */,
 				CF1751D21BA61808006286C6 /* StackLayoutImageBuilder.hpp in CopyFiles */,
 				CF3623411B97AFD900824932 /* CircleImageBuilder.hpp in CopyFiles */,
 				CF75A9FD1B87E2B10033DA25 /* MapBoo.hpp in CopyFiles */,
@@ -1686,6 +1689,8 @@
 		CFFEC12215C2EA5F003FA986 /* Downloader_iOS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Downloader_iOS.mm; path = Specific/Derived/Downloader_iOS.mm; sourceTree = "<group>"; };
 		CFFEC12415C2EB96003FA986 /* URL.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = URL.hpp; path = Commons/Basic/URL.hpp; sourceTree = "<group>"; };
 		CFFEC12515C2EBA6003FA986 /* URL.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = URL.cpp; path = Commons/Basic/URL.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
+		D8019FEE1C11D91800784287 /* TileLoDTester.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TileLoDTester.cpp; path = Commons/Rendererers/TileLoDTester.cpp; sourceTree = "<group>"; };
+		D8019FEF1C11D91800784287 /* TileLoDTester.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = TileLoDTester.hpp; path = Commons/Rendererers/TileLoDTester.hpp; sourceTree = "<group>"; };
 		D802448B177B314800F58D0D /* TransformedTexCoorTexturedMesh.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = TransformedTexCoorTexturedMesh.fsh; sourceTree = "<group>"; };
 		D802448C177B314800F58D0D /* TransformedTexCoorTexturedMesh.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = TransformedTexCoorTexturedMesh.vsh; sourceTree = "<group>"; };
 		D807875E1846141400A6DB28 /* FlatColorMesh_DirectionLight.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = FlatColorMesh_DirectionLight.fsh; sourceTree = "<group>"; };
@@ -2462,6 +2467,8 @@
 				D842D9AE1A727FAF008D55E4 /* NonOverlappingMarksRenderer.hpp */,
 				CFECA7791B6AB9B200A0A44E /* VectorStreamingRenderer.cpp */,
 				CFECA77A1B6AB9B200A0A44E /* VectorStreamingRenderer.hpp */,
+				D8019FEE1C11D91800784287 /* TileLoDTester.cpp */,
+				D8019FEF1C11D91800784287 /* TileLoDTester.hpp */,
 			);
 			name = Renderers;
 			sourceTree = "<group>";
@@ -3086,6 +3093,7 @@
 				CF923CA416AB126D00D04301 /* ShortBufferBuilder.cpp in Sources */,
 				CFBA53EE16B9B76500256453 /* ICameraConstrainer.cpp in Sources */,
 				CFBA53F216B9B7CD00256453 /* SimpleCameraConstrainer.cpp in Sources */,
+				D8019FF01C11D91800784287 /* TileLoDTester.cpp in Sources */,
 				D8F2EBAD18994A7B001B6103 /* CoordinateSystem.cpp in Sources */,
 				CFCAEC4916BB20D500CDC17D /* ShapeOrbitCameraEffect.cpp in Sources */,
 				4435E3D41906B8070064A7D7 /* ChildRenderer.cpp in Sources */,
