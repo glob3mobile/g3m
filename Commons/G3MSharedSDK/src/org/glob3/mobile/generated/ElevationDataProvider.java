@@ -24,6 +24,10 @@ public abstract class ElevationDataProvider
 
   public abstract long requestElevationData(Sector sector, Vector2I extent, long requestPriority, IElevationDataListener listener, boolean autodeleteListener);
 
+  public long requestElevationData(Sector sector, int level, int row, int column, Vector2I extent, long requestPriority, IElevationDataListener listener, boolean autodeleteListener){
+	  return requestElevationData(sector,extent,requestPriority,listener,autodeleteListener);
+  }
+  
   public abstract void cancelRequest(long requestId);
 
   public abstract java.util.ArrayList<Sector> getSectors();

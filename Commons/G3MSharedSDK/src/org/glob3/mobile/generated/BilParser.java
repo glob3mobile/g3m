@@ -67,4 +67,45 @@ public class BilParser
   
     return new ShortBufferElevationData(sector, extent, sector, extent, shortBuffer, size, deltaHeight);
   }
+  
+  public static ShortBufferElevationData parseBil16MaxMin(Sector sector, Vector2I extent, IByteBuffer buffer, double deltaHeight)
+  {
+  
+    final int size = extent._x * extent._y;
+  
+    final int expectedSizeInBytes = (size * 2) + 4;
+    if (buffer.size() != expectedSizeInBytes)
+    {
+      ILogger.instance().logError("Invalid buffer size, expected %d bytes, but got %d", expectedSizeInBytes, buffer.size());
+      return null;
+    }
+  
+    ByteBufferIterator iterator = new ByteBufferIterator(buffer);
+  
+    final short minValue = IMathUtils.instance().minInt16();
+  
+    short[] shortBuffer = new short[size];
+    for (int i = 0; i < size; i++)
+    {
+      short height = iterator.nextInt16();
+  
+      if (height == -9999)
+      {
+        height = ShortBufferElevationData.NO_DATA_VALUE;
+      }
+      else if (height == minValue)
+      {
+        height = ShortBufferElevationData.NO_DATA_VALUE;
+      }
+  
+      shortBuffer[i] = height;
+    }
+    
+    //TODO: do something with this;
+    short warning_max = iterator.nextInt16();
+    short warning_min = iterator.nextInt16();
+    ILogger.instance().logInfo("Parsed bil with max: "+warning_max+" ,min: "+warning_min);
+  
+    return new ShortBufferElevationData(sector, extent, sector, extent, shortBuffer, size, deltaHeight);
+  }
 }

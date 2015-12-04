@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project default="create_run_jar" name="Create Runnable Jar for Project GeoTIFFToWebMercator with libraries in sub-folder">
+    <!--this file was created by Eclipse Runnable JAR Export Wizard-->
+    <!--ANT 1.7 is required                                        -->
+    <target name="create_run_jar">
+        <jar destfile="/Users/mdelacalle/Desktop/GeoTIFFToTiles.jar">
+            <manifest>
+                <attribute name="Main-Class" value="com.glob3mobile.server.tools.GTF"/>
+                <attribute name="Class-Path" value=". GeoTIFFToTiles_lib/vecmath-1.3.2.jar GeoTIFFToTiles_lib/commons-pool-1.5.4.jar GeoTIFFToTiles_lib/jsr-275-1.0-beta-2.jar GeoTIFFToTiles_lib/jai_core-1.1.3.jar GeoTIFFToTiles_lib/gt-opengis-10.2.jar GeoTIFFToTiles_lib/gt-metadata-10.2.jar GeoTIFFToTiles_lib/jgridshift-1.0.jar GeoTIFFToTiles_lib/gt-referencing-10.2.jar GeoTIFFToTiles_lib/hsqldb-1.8.0.7.jar GeoTIFFToTiles_lib/gt-epsg-hsql-10.2.jar GeoTIFFToTiles_lib/jts-1.13.jar GeoTIFFToTiles_lib/gt-api-10.2.jar GeoTIFFToTiles_lib/jdom-1.0.jar GeoTIFFToTiles_lib/gt-main-10.2.jar GeoTIFFToTiles_lib/jai_imageio-1.1.jar GeoTIFFToTiles_lib/imageio-ext-tiff-1.1.7.jar GeoTIFFToTiles_lib/imageio-ext-utilities-1.1.7.jar GeoTIFFToTiles_lib/jt-zonalstats-1.3.1.jar GeoTIFFToTiles_lib/jt-utils-1.3.1.jar GeoTIFFToTiles_lib/gt-coverage-10.2.jar GeoTIFFToTiles_lib/args4j-2.0.21.jar GeoTIFFToTiles_lib/gt-geotiff-10.2.jar"/>
+            </manifest>
+            <fileset dir="/Users/mdelacalle/Documents/java_src/IGO-GIT-Repository/g3m-server/GeoTIFFToWebMercator/bin"/>
+        </jar>
+        <delete dir="/Users/mdelacalle/Desktop/GeoTIFFToTiles_lib"/>
+        <mkdir dir="/Users/mdelacalle/Desktop/GeoTIFFToTiles_lib"/>
+        <copy file="/Users/mdelacalle/Documents/java_src/IGO-GIT-Repository/g3m-server/GeoTIFFToWebMercator/libs/geotools-10.2/vecmath-1.3.2.jar" todir="/Users/mdelacalle/Desktop/GeoTIFFToTiles_lib"/>
+        <copy file="/Users/mdelacalle/Documents/java_src/IGO-GIT-Repository/g3m-server/GeoTIFFToWebMercator/libs/geotools-10.2/commons-pool-1.5.4.jar" todir="/Users/mdelacalle/Desktop/GeoTIFFToTiles_lib"/>
+        <copy file="/Users/mdelacalle/Documents/java_src/IGO-GIT-Repository/g3m-server/GeoTIFFToWebMercator/libs/geotools-10.2/jsr-275-1.0-beta-2.jar" todir="/Users/mdelacalle/Desktop/GeoTIFFToTiles_lib"/>
+        <copy file="/Users/mdelacalle/Documents/java_src/IGO-GIT-Repository/g3m-server/GeoTIFFToWebMercator/libs/geotools-10.2/jai_core-1.1.3.jar" todir="/Users/mdelacalle/Desktop/GeoTIFFToTiles_lib"/>
+        <copy file="/Users/mdelacalle/Documents/java_src/IGO-GIT-Repository/g3m-server/GeoTIFFToWebMercator/libs/geotools-10.2/gt-opengis-10.2.jar" todir="/Users/mdelacalle/Desktop/GeoTIFFToTiles_lib"/>
+        <copy file="/Users/mdelacalle/Documents/java_src/IGO-GIT-Repository/g3m-server/GeoTIFFToWebMercator/libs/geotools-10.2/gt-metadata-10.2.jar" todir="/Users/mdelacalle/Desktop/GeoTIFFToTiles_lib"/>
+        <copy file="/Users/mdelacalle/Documents/java_src/IGO-GIT-Repository/g3m-server/GeoTIFFToWebMercator/libs/geotools-10.2/jgridshift-1.0.jar" todir="/Users/mdelacalle/Desktop/GeoTIFFToTiles_lib"/>
+        <copy file="/Users/mdelacalle/Documents/java_src/IGO-GIT-Repository/g3m-server/GeoTIFFToWebMercator/libs/geotools-10.2/gt-referencing-10.2.jar" todir="/Users/mdelacalle/Desktop/GeoTIFFToTiles_lib"/>
+        <copy file="/Users/mdelacalle/Documents/java_src/IGO-GIT-Repository/g3m-server/GeoTIFFToWebMercator/libs/geotools-10.2/hsqldb-1.8.0.7.jar" todir="/Users/mdelacalle/Desktop/GeoTIFFToTiles_lib"/>
+        <copy file="/Users/mdelacalle/Documents/java_src/IGO-GIT-Repository/g3m-server/GeoTIFFToWebMercator/libs/geotools-10.2/gt-epsg-hsql-10.2.jar" todir="/Users/mdelacalle/Desktop/GeoTIFFToTiles_lib"/>
+        <copy file="/Users/mdelacalle/Documents/java_src/IGO-GIT-Repository/g3m-server/GeoTIFFToWebMercator/libs/geotools-10.2/jts-1.13.jar" todir="/Users/mdelacalle/Desktop/GeoTIFFToTiles_lib"/>
+        <copy file="/Users/mdelacalle/Documents/java_src/IGO-GIT-Repository/g3m-server/GeoTIFFToWebMercator/libs/geotools-10.2/gt-api-10.2.jar" todir="/Users/mdelacalle/Desktop/GeoTIFFToTiles_lib"/>
+        <copy file="/Users/mdelacalle/Documents/java_src/IGO-GIT-Repository/g3m-server/GeoTIFFToWebMercator/libs/geotools-10.2/jdom-1.0.jar" todir="/Users/mdelacalle/Desktop/GeoTIFFToTiles_lib"/>
+        <copy file="/Users/mdelacalle/Documents/java_src/IGO-GIT-Repository/g3m-server/GeoTIFFToWebMercator/libs/geotools-10.2/gt-main-10.2.jar" todir="/Users/mdelacalle/Desktop/GeoTIFFToTiles_lib"/>
+        <copy file="/Users/mdelacalle/Documents/java_src/IGO-GIT-Repository/g3m-server/GeoTIFFToWebMercator/libs/geotools-10.2/jai_imageio-1.1.jar" todir="/Users/mdelacalle/Desktop/GeoTIFFToTiles_lib"/>
+        <copy file="/Users/mdelacalle/Documents/java_src/IGO-GIT-Repository/g3m-server/GeoTIFFToWebMercator/libs/geotools-10.2/imageio-ext-tiff-1.1.7.jar" todir="/Users/mdelacalle/Desktop/GeoTIFFToTiles_lib"/>
+        <copy file="/Users/mdelacalle/Documents/java_src/IGO-GIT-Repository/g3m-server/GeoTIFFToWebMercator/libs/geotools-10.2/imageio-ext-utilities-1.1.7.jar" todir="/Users/mdelacalle/Desktop/GeoTIFFToTiles_lib"/>
+        <copy file="/Users/mdelacalle/Documents/java_src/IGO-GIT-Repository/g3m-server/GeoTIFFToWebMercator/libs/geotools-10.2/jt-zonalstats-1.3.1.jar" todir="/Users/mdelacalle/Desktop/GeoTIFFToTiles_lib"/>
+        <copy file="/Users/mdelacalle/Documents/java_src/IGO-GIT-Repository/g3m-server/GeoTIFFToWebMercator/libs/geotools-10.2/jt-utils-1.3.1.jar" todir="/Users/mdelacalle/Desktop/GeoTIFFToTiles_lib"/>
+        <copy file="/Users/mdelacalle/Documents/java_src/IGO-GIT-Repository/g3m-server/GeoTIFFToWebMercator/libs/geotools-10.2/gt-coverage-10.2.jar" todir="/Users/mdelacalle/Desktop/GeoTIFFToTiles_lib"/>
+        <copy file="/Users/mdelacalle/Documents/java_src/IGO-GIT-Repository/g3m-server/GeoTIFFToWebMercator/libs/args4j-2.0.21.jar" todir="/Users/mdelacalle/Desktop/GeoTIFFToTiles_lib"/>
+        <copy file="/Users/mdelacalle/Documents/java_src/IGO-GIT-Repository/g3m-server/GeoTIFFToWebMercator/libs/geotools-10.2/gt-geotiff-10.2.jar" todir="/Users/mdelacalle/Desktop/GeoTIFFToTiles_lib"/>
+    </target>
+</project>
