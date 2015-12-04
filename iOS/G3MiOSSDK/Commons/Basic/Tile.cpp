@@ -123,6 +123,11 @@ Tile::~Tile() {
   delete _northEastPoint;
   delete _southWestPoint;
   delete _southEastPoint;
+  
+  const size_t size = _loDTesterData.size();
+  for (size_t i = 0; i < _loDTesterData.size(); i++) {
+    delete _loDTesterData[i];
+  }
 }
 
 void Tile::setTexturizerData(ITexturizerData* texturizerData) {

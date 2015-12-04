@@ -542,7 +542,8 @@ PlanetRenderer* MapBooOLDBuilder::createPlanetRenderer() {
                                               logTilesPetitions,
                                               tileRenderingListener,
                                               changedRendererInfoListener,
-                                              touchEventTypeOfTerrainTouchListener);
+                                              touchEventTypeOfTerrainTouchListener,
+                                              getTileLoDTester());
 
   if (_enableNotifications) {
     result->addTerrainTouchListener(new MapBooOLDBuilder_TerrainTouchListener(this));
@@ -2279,4 +2280,19 @@ RenderState MapBooOLD_ErrorRenderer::getRenderState(const G3MRenderContext* rc) 
     return RenderState::error(_errors);
   }
   return RenderState::ready();
+}
+
+void MapBooOLDBuilder::setTileLoDTester(TileLoDTester* tlt){
+  _tileLoDTester = tlt;
+}
+
+TileLoDTester* MapBooOLDBuilder::createDefaultTileLODTester() const{
+  return PlanetRenderer::createDefaultTileLoDTester();
+}
+
+TileLoDTester* MapBooOLDBuilder::getTileLoDTester(){
+  if (_tileLoDTester == NULL){
+    _tileLoDTester = createDefaultTileLODTester();
+  }
+  return _tileLoDTester;
 }

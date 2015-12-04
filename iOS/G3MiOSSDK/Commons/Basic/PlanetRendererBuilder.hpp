@@ -17,6 +17,7 @@ class IImageBuilder;
 #include "PlanetRenderer.hpp"
 #include "DefaultChessCanvasImageBuilder.hpp"
 #include "DownloaderImageBuilder.hpp"
+#include "TileLoDTester.hpp"
 
 
 
@@ -26,6 +27,8 @@ private:
   TileTessellator* _tileTessellator;
   TileTexturizer* _texturizer;
   std::vector<GEOVectorLayer*> _geoVectorLayers;
+  TileLoDTester* _tileLoDTester;
+  
 
   LayerSet* _layerSet;
   TilesRenderParameters* _parameters;
@@ -84,6 +87,8 @@ private:
   IImageBuilder* _defaultTileBackGroundImage = NULL;
   
   IImageBuilder* getDefaultTileBackGroundImageBuilder() const;
+  
+  TileLoDTester* createDefaultTileLODTester() const;
 
 public:
   PlanetRendererBuilder();
@@ -131,6 +136,10 @@ public:
   void setTouchEventTypeOfTerrainTouchListener(TouchEventType _touchEventTypeOfTerrainTouchListener);
   
   void setDefaultTileBackGroundImage(IImageBuilder* defaultTileBackGroundImage);
+  
+  void setTileLoDTester(TileLoDTester* tlt);
+  
+  TileLoDTester* getTileLoDTester();
 };
 
 #endif

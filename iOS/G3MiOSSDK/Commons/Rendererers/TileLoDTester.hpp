@@ -26,13 +26,13 @@ class TileLoDTester{
   
 protected:
   
-  bool _meetsRenderCriteria(int testerLevel,
-                            Tile* tile,
-                           TileTessellator * tessellator,
-                           TileTexturizer* texturizer) const;
+  virtual bool _meetsRenderCriteria(int testerLevel,
+                                    Tile* tile,
+                                    TileTessellator * tessellator,
+                                    TileTexturizer* texturizer) const;
   
-  bool _isVisible(int testerLevel,
-                  Tile* tile) const;
+  virtual bool _isVisible(int testerLevel,
+                          Tile* tile) const;
   
 public:
   
@@ -47,14 +47,19 @@ public:
     
   }
   
+  virtual ~TileLoDTester(){
+    delete _nextTesterNotVisible;
+    delete _nextTesterRightLoD;
+    delete _nextTesterVisible;
+    delete _nextTesterWrongLoD;
+  }
+  
   bool meetsRenderCriteria(int testerLevel,
                            Tile* tile,
                            TileTessellator * tessellator,
                            TileTexturizer* texturizer) const;
   
   bool isVisible(int testerLevel, Tile* tile) const;
-  
-  
 };
 
 #endif /* TileLoDTester_hpp */

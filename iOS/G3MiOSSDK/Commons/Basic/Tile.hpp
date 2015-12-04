@@ -315,6 +315,10 @@ public:
                                            const Vector2I& size) const;
   
   TileLoDTesterData* getDataForLoDTester(int level) const{
+    if (level > _loDTesterData.size()){
+      return NULL;
+    }
+    
     return _loDTesterData.at(level);
   }
   

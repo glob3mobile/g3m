@@ -120,7 +120,8 @@ PlanetRenderer::PlanetRenderer(TileTessellator*             tessellator,
                                const bool                   logTilesPetitions,
                                TileRenderingListener*       tileRenderingListener,
                                ChangedRendererInfoListener* changedInfoListener,
-                               TouchEventType               touchEventTypeOfTerrainTouchListener) :
+                               TouchEventType               touchEventTypeOfTerrainTouchListener,
+                               TileLoDTester*               tileLoDTester) :
 _tessellator(tessellator),
 _elevationDataProvider(elevationDataProvider),
 _ownsElevationDataProvider(ownsElevationDataProvider),
@@ -231,6 +232,8 @@ PlanetRenderer::~PlanetRenderer() {
 
   delete _renderedSector;
   delete _tileRenderingListener;
+  
+  delete _tileLoDTester;
 
 #ifdef C_CODE
   delete _tilesStartedRendering;
@@ -958,4 +961,10 @@ void PlanetRenderer::setChangedRendererInfoListener(ChangedRendererInfoListener*
 //  
 //  return _info;
 //}
+
+TileLoDTester* PlanetRenderer::createDefaultTileLoDTester(){
+  
+  return NULL;
+  
+}
 

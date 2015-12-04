@@ -445,6 +445,7 @@
 		CFFEC12615C2EBA6003FA986 /* URL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFFEC12515C2EBA6003FA986 /* URL.cpp */; };
 		D8019FF01C11D91800784287 /* TileLoDTester.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8019FEE1C11D91800784287 /* TileLoDTester.cpp */; };
 		D8019FF21C11DFCF00784287 /* TileLoDTester.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8019FEF1C11D91800784287 /* TileLoDTester.hpp */; };
+		D8019FF51C11E42900784287 /* TimedTileLoDTester.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8019FF31C11E42900784287 /* TimedTileLoDTester.cpp */; };
 		D80270BE17B3AADF0029F0BE /* CameraDoubleDragHandler.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = FBBDBCDD17AB983200077004 /* CameraDoubleDragHandler.hpp */; };
 		D80A286B1746474E0058CEC3 /* Planet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D80A28691746474E0058CEC3 /* Planet.cpp */; };
 		D80A286C1746474E0058CEC3 /* EllipsoidalPlanet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D80A286A1746474E0058CEC3 /* EllipsoidalPlanet.cpp */; };
@@ -1691,6 +1692,8 @@
 		CFFEC12515C2EBA6003FA986 /* URL.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = URL.cpp; path = Commons/Basic/URL.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		D8019FEE1C11D91800784287 /* TileLoDTester.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TileLoDTester.cpp; path = Commons/Rendererers/TileLoDTester.cpp; sourceTree = "<group>"; };
 		D8019FEF1C11D91800784287 /* TileLoDTester.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = TileLoDTester.hpp; path = Commons/Rendererers/TileLoDTester.hpp; sourceTree = "<group>"; };
+		D8019FF31C11E42900784287 /* TimedTileLoDTester.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TimedTileLoDTester.cpp; path = Commons/Rendererers/TimedTileLoDTester.cpp; sourceTree = "<group>"; };
+		D8019FF41C11E42900784287 /* TimedTileLoDTester.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = TimedTileLoDTester.hpp; path = Commons/Rendererers/TimedTileLoDTester.hpp; sourceTree = "<group>"; };
 		D802448B177B314800F58D0D /* TransformedTexCoorTexturedMesh.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = TransformedTexCoorTexturedMesh.fsh; sourceTree = "<group>"; };
 		D802448C177B314800F58D0D /* TransformedTexCoorTexturedMesh.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = TransformedTexCoorTexturedMesh.vsh; sourceTree = "<group>"; };
 		D807875E1846141400A6DB28 /* FlatColorMesh_DirectionLight.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = FlatColorMesh_DirectionLight.fsh; sourceTree = "<group>"; };
@@ -2469,6 +2472,8 @@
 				CFECA77A1B6AB9B200A0A44E /* VectorStreamingRenderer.hpp */,
 				D8019FEE1C11D91800784287 /* TileLoDTester.cpp */,
 				D8019FEF1C11D91800784287 /* TileLoDTester.hpp */,
+				D8019FF31C11E42900784287 /* TimedTileLoDTester.cpp */,
+				D8019FF41C11E42900784287 /* TimedTileLoDTester.hpp */,
 			);
 			name = Renderers;
 			sourceTree = "<group>";
@@ -3088,6 +3093,7 @@
 				CFFAFD73169F2E3000BCE129 /* TextUtils_iOS.mm in Sources */,
 				E7B9964E16A94EC400753FC3 /* LayerBuilder.cpp in Sources */,
 				CFD8E770184FB71D00228031 /* SectorTileCondition.cpp in Sources */,
+				D8019FF51C11E42900784287 /* TimedTileLoDTester.cpp in Sources */,
 				CFBD42E016AA1A8900663F21 /* ShortBuffer_iOS.cpp in Sources */,
 				CF47E0F21901CA8C00410BB5 /* DebugTileImageProvider.cpp in Sources */,
 				CF923CA416AB126D00D04301 /* ShortBufferBuilder.cpp in Sources */,
