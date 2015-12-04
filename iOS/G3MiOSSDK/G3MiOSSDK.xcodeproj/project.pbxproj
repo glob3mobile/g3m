@@ -510,6 +510,9 @@
 		D8B749AE175E04FA00046B96 /* Sphere.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8B749AC175E04FA00046B96 /* Sphere.cpp */; };
 		D8B749B0175E183900046B96 /* Ellipsoid.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8B749AA175E040800046B96 /* Ellipsoid.hpp */; };
 		D8B78E241C1208CB00DDE2B9 /* MaxLevelForPolesTileLoDTester.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8B78E221C1208CB00DDE2B9 /* MaxLevelForPolesTileLoDTester.cpp */; };
+		D8B78E271C120CF800DDE2B9 /* ProjectedCornersDistanceTileLoDTester.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8B78E251C120CF800DDE2B9 /* ProjectedCornersDistanceTileLoDTester.cpp */; };
+		D8B78E281C120D4F00DDE2B9 /* ProjectedCornersDistanceTileLoDTester.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8B78E261C120CF800DDE2B9 /* ProjectedCornersDistanceTileLoDTester.hpp */; };
+		D8B78E291C120D4F00DDE2B9 /* MaxLevelForPolesTileLoDTester.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8B78E231C1208CB00DDE2B9 /* MaxLevelForPolesTileLoDTester.hpp */; };
 		D8B8CE88178D636000EE1B97 /* GLFeature.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8B8CE86178D636000EE1B97 /* GLFeature.cpp */; };
 		D8B8CE8B178D63C400EE1B97 /* GLFeatureGroup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8B8CE89178D63C400EE1B97 /* GLFeatureGroup.cpp */; };
 		D8B8CE8E178D645F00EE1B97 /* GPUVariableValueSet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8B8CE8C178D645F00EE1B97 /* GPUVariableValueSet.cpp */; };
@@ -736,6 +739,8 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				D8B78E281C120D4F00DDE2B9 /* ProjectedCornersDistanceTileLoDTester.hpp in CopyFiles */,
+				D8B78E291C120D4F00DDE2B9 /* MaxLevelForPolesTileLoDTester.hpp in CopyFiles */,
 				D8019FF61C1201EC00784287 /* TimedTileLoDTester.hpp in CopyFiles */,
 				D8019FF21C11DFCF00784287 /* TileLoDTester.hpp in CopyFiles */,
 				CF1751D21BA61808006286C6 /* StackLayoutImageBuilder.hpp in CopyFiles */,
@@ -1809,6 +1814,8 @@
 		D8B749AD175E04FA00046B96 /* Sphere.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Sphere.hpp; path = Commons/Geometry/Sphere.hpp; sourceTree = "<group>"; };
 		D8B78E221C1208CB00DDE2B9 /* MaxLevelForPolesTileLoDTester.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MaxLevelForPolesTileLoDTester.cpp; path = Commons/Rendererers/MaxLevelForPolesTileLoDTester.cpp; sourceTree = "<group>"; };
 		D8B78E231C1208CB00DDE2B9 /* MaxLevelForPolesTileLoDTester.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = MaxLevelForPolesTileLoDTester.hpp; path = Commons/Rendererers/MaxLevelForPolesTileLoDTester.hpp; sourceTree = "<group>"; };
+		D8B78E251C120CF800DDE2B9 /* ProjectedCornersDistanceTileLoDTester.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ProjectedCornersDistanceTileLoDTester.cpp; path = Commons/Rendererers/ProjectedCornersDistanceTileLoDTester.cpp; sourceTree = "<group>"; };
+		D8B78E261C120CF800DDE2B9 /* ProjectedCornersDistanceTileLoDTester.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = ProjectedCornersDistanceTileLoDTester.hpp; path = Commons/Rendererers/ProjectedCornersDistanceTileLoDTester.hpp; sourceTree = "<group>"; };
 		D8B8CE86178D636000EE1B97 /* GLFeature.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = GLFeature.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		D8B8CE87178D636000EE1B97 /* GLFeature.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; path = GLFeature.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		D8B8CE89178D63C400EE1B97 /* GLFeatureGroup.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLFeatureGroup.cpp; sourceTree = "<group>"; };
@@ -2479,6 +2486,8 @@
 				D8019FEF1C11D91800784287 /* TileLoDTester.hpp */,
 				D8019FF31C11E42900784287 /* TimedTileLoDTester.cpp */,
 				D8019FF41C11E42900784287 /* TimedTileLoDTester.hpp */,
+				D8B78E251C120CF800DDE2B9 /* ProjectedCornersDistanceTileLoDTester.cpp */,
+				D8B78E261C120CF800DDE2B9 /* ProjectedCornersDistanceTileLoDTester.hpp */,
 				D8B78E221C1208CB00DDE2B9 /* MaxLevelForPolesTileLoDTester.cpp */,
 				D8B78E231C1208CB00DDE2B9 /* MaxLevelForPolesTileLoDTester.hpp */,
 			);
@@ -2961,6 +2970,7 @@
 				CC41E3B615B32DFB00B5581C /* Frustum.cpp in Sources */,
 				CCB2565015B5A33A00079B96 /* TexturedMesh.cpp in Sources */,
 				CF6CCE3919254B7500AA3ED7 /* ProceduralLayer.cpp in Sources */,
+				D8B78E271C120CF800DDE2B9 /* ProjectedCornersDistanceTileLoDTester.cpp in Sources */,
 				CCB2566415B5F58500079B96 /* Box.cpp in Sources */,
 				D895CA1E1861C33A00AE8291 /* IImageUtils.cpp in Sources */,
 				D87EC5C715BEB12F00E38C36 /* LayerSet.cpp in Sources */,

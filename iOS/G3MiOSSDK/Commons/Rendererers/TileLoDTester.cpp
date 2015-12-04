@@ -16,39 +16,53 @@ TileLoDTester::~TileLoDTester(){
 }
 
 bool TileLoDTester::meetsRenderCriteria(int testerLevel,
-                                        Tile* tile) const{
+                                        Tile* tile,
+                                        const G3MRenderContext& rc) const{
   
   //Right LOD
-  if (_meetsRenderCriteria(testerLevel, tile)){
+  if (_meetsRenderCriteria(testerLevel, tile, rc)){
     if (_nextTesterRightLoD != NULL){
-      return _nextTesterRightLoD->meetsRenderCriteria(testerLevel + 1, tile);
+      return _nextTesterRightLoD->meetsRenderCriteria(testerLevel + 1, tile, rc);
     }
     return true;
   }
   
   //Wrong LOD
   if (_nextTesterWrongLoD != NULL){
-    return _nextTesterWrongLoD->meetsRenderCriteria(testerLevel + 1, tile);
+    return _nextTesterWrongLoD->meetsRenderCriteria(testerLevel + 1, tile, rc);
   }
   return false;
 }
 
 
 bool TileLoDTester::isVisible(int testerLevel,
-                              Tile* tile) const{
+                              Tile* tile,
+                              const G3MRenderContext& rc) const{
   
   //Visible
-  if (_isVisible(testerLevel, tile)){
+  if (_isVisible(testerLevel, tile, rc)){
     if (_nextTesterVisible != NULL){
-      return _nextTesterVisible->isVisible(testerLevel+1, tile);
+      return _nextTesterVisible->isVisible(testerLevel+1, tile, rc);
     }
     return true;
   }
   
   //Wrong LOD
   if (_nextTesterNotVisible != NULL){
-    return _nextTesterNotVisible->isVisible(testerLevel+1, tile);
+    return _nextTesterNotVisible->isVisible(testerLevel+1, tile, rc);
   }
   return false;
   
+}
+
+void TileLoDTester::onTileHasChangedMesh(int testerLevel, Tile* tile) const{
+  _onTileHasChangedMesh(testerLevel, tile);
+  if (_nextTesterNotVisible != NULL)
+    _nextTesterNotVisible->onTileHasChangedMesh(testerLevel+1, tile);
+  if (_nextTesterVisible != NULL)
+    _nextTesterVisible->onTileHasChangedMesh(testerLevel+1, tile);
+  if (_nextTesterRightLoD != NULL)
+    _nextTesterRightLoD->onTileHasChangedMesh(testerLevel+1, tile);
+  if (_nextTesterWrongLoD != NULL)
+    _nextTesterWrongLoD->onTileHasChangedMesh(testerLevel+1, tile);
 }

@@ -13,6 +13,7 @@
 #include "Tile.hpp"
 #include "ITimer.hpp"
 #include "IFactory.hpp"
+#include "Context.hpp"
 
 class TimedTileLoDTester: public TileLoDTester{
 protected:
@@ -23,23 +24,20 @@ protected:
   };
   
   bool _meetsRenderCriteria(int testerLevel,
-                            Tile* tile) const{
-    
-    if (_timer == NULL) {
-      _timer = IFactory::instance()->createTimer();
-    }
+                            Tile* tile, const G3MRenderContext& rc) const{
     
     TimedTileLoDTesterData* data = (TimedTileLoDTesterData*) tile->getDataForLoDTester(testerLevel);
     if (data == NULL){
       data = new TimedTileLoDTesterData();
-      data->_lastMeetsRenderCriteriaTimeInMS = _timer->nowInMilliseconds();
+      data->_lastMeetsRenderCriteriaTimeInMS = rc.getFrameStartTimer()->nowInMilliseconds();
       tile->setDataForLoDTester(testerLevel, data);
+      return false;
     }
     
     double lastTime = data->_lastMeetsRenderCriteriaTimeInMS;
-    data->_lastMeetsRenderCriteriaTimeInMS = _timer->nowInMilliseconds(); //Update
+    data->_lastMeetsRenderCriteriaTimeInMS = rc.getFrameStartTimer()->nowInMilliseconds(); //Update
 
-    if ((_timer->nowInMilliseconds() - lastTime) > _maxElapsedTimeInMS){
+    if ((rc.getFrameStartTimer()->nowInMilliseconds() - lastTime) > _maxElapsedTimeInMS){
       return true;
     } else{
       return false;
@@ -48,11 +46,10 @@ protected:
   }
   
   bool _isVisible(int testerLevel,
-                  Tile* tile) const{
+                  Tile* tile, const G3MRenderContext& rc) const{
     return true;
   }
   
-  mutable ITimer* _timer;
   double _maxElapsedTimeInMS;
   
 public:
@@ -62,7 +59,6 @@ public:
                      TileLoDTester* nextTesterWrongLoD,
                      TileLoDTester* nextTesterVisible,
                      TileLoDTester* nextTesterNotVisible):
-  _timer(NULL),
   _maxElapsedTimeInMS(maxElapsedTimeInMS),
   TileLoDTester(nextTesterRightLoD,
                 nextTesterWrongLoD,
@@ -71,7 +67,6 @@ public:
   
   
   ~TimedTileLoDTester(){
-    delete _timer;
   }
   
 };

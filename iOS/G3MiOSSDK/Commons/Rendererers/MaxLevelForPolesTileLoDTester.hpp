@@ -11,12 +11,14 @@
 
 #include "TileLoDTester.hpp"
 #include "Tile.hpp"
+#include "Context.hpp"
 
 class MaxLevelForPolesTileLoDTester: public TileLoDTester{
 protected:
 
   bool _meetsRenderCriteria(int testerLevel,
-                            Tile* tile) const{
+                            Tile* tile,
+                            const G3MRenderContext& rc) const{
     
     if (tile->_sector.touchesPoles()){
       if (tile->_level >= _maxLevelForPoles){
@@ -28,7 +30,8 @@ protected:
   }
   
   bool _isVisible(int testerLevel,
-                  Tile* tile) const{
+                  Tile* tile,
+                  const G3MRenderContext& rc) const{
     return true;
   }
   

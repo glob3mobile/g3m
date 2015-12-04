@@ -11,6 +11,7 @@
 
 #include "TileTessellator.hpp"
 #include "TileTexturizer.hpp"
+#include "Context.hpp"
 
 class TileLoDTesterData{
   //Empty class. Each TileLoDTester will implement a different set of associated data and will
@@ -27,10 +28,14 @@ class TileLoDTester{
 protected:
   
   virtual bool _meetsRenderCriteria(int testerLevel,
-                                    Tile* tile) const = 0;
+                                    Tile* tile,
+                                    const G3MRenderContext& rc) const = 0;
   
   virtual bool _isVisible(int testerLevel,
-                          Tile* tile) const = 0;
+                          Tile* tile,
+                          const G3MRenderContext& rc) const = 0;
+  
+  virtual void _onTileHasChangedMesh(int testerLevel, Tile* tile) const{}
   
 public:
   
@@ -48,9 +53,11 @@ public:
   virtual ~TileLoDTester();
   
   bool meetsRenderCriteria(int testerLevel,
-                           Tile* tile) const;
+                           Tile* tile, const G3MRenderContext& rc) const;
   
-  bool isVisible(int testerLevel, Tile* tile) const;
+  bool isVisible(int testerLevel, Tile* tile, const G3MRenderContext& rc) const;
+  
+  virtual void onTileHasChangedMesh(int testerLevel, Tile* tile) const;
 };
 
 #endif /* TileLoDTester_hpp */
