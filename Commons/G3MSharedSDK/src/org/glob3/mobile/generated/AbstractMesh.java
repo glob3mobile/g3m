@@ -209,11 +209,13 @@ public abstract class AbstractMesh extends Mesh
          _vertices.dispose();
       if (_colors != null)
          _colors.dispose();
-      if (_flatColor != null)
-         _flatColor.dispose();
       if (_normals != null)
          _normals.dispose();
     }
+  
+    //Always deleting flatColor
+    if (_flatColor != null)
+       _flatColor.dispose();
   
     if (_boundingVolume != null)
        _boundingVolume.dispose();
