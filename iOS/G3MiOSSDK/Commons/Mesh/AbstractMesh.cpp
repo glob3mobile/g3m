@@ -26,9 +26,11 @@ AbstractMesh::~AbstractMesh() {
   if (_owner) {
     delete _vertices;
     delete _colors;
-    delete _flatColor;
     delete _normals;
   }
+  
+  //Always deleting flatColor
+  delete _flatColor;
 
   delete _boundingVolume;
   delete _translationMatrix;

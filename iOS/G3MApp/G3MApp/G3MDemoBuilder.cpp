@@ -97,8 +97,8 @@ void G3MDemoBuilder::build() {
   VectorStreamingRenderer* vectorStreamingRenderer = new VectorStreamingRenderer(marksRenderer);
   builder->addRenderer(vectorStreamingRenderer);
   
-#warning REMOVE
-  builder->getPlanetRendererBuilder()->setRenderDebug(true);
+  //Uncomment to see render debug mesh on top of tiles
+  //builder->getPlanetRendererBuilder()->setRenderDebug(true);
   
   _initialized = true;
   _model = new G3MDemoModel(_listener,
