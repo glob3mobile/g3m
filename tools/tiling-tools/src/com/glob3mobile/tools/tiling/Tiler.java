@@ -421,23 +421,27 @@ public class Tiler {
       System.out.println("---------\n");
 
 
+      /*
+        gdalwarp --config GDAL_CACHEMAX 512 -wm 512 -multi -s_srs EPSG:4326 -t_srs EPSG:3857 -r lanczos TrueMarble.1km.21600x21600.A1.tif  mercator_TrueMarble.1km.21600x21600.A1.tif
+       */
+
+
       //      final String inputName = "/Volumes/SSD1/GIS_DATA/true_marble/TrueMarble.4km.10800x5400.tif";
       //      final String outputDirectoryName = "/Volumes/SSD1/_TEST_/TrueMarble.4km/";
       //      final Pyramid pyramid = WGS84Pyramid.createDefault();
 
 
-      final String inputName = "/Volumes/SSD1/earth-pyramid/1000m/mercator_TrueMarble.1km.21600x21600.A1.tif";
+      //      final String inputName = "/Volumes/SSD1/earth-pyramid/1000m/mercator_TrueMarble.1km.21600x21600.A1.tif";
+      //      final String outputDirectoryName = "/Volumes/SSD1/_TEST_/mercator_TrueMarble.1km/";
+      //      final Pyramid pyramid = WebMercatorPyramid.createDefault();
+      //
+      //      Tiler.processFile(pyramid, inputName, outputDirectoryName);
+
+
+      final String inputDirectoryName = "/Volumes/SSD1/earth-pyramid/1000m/";
       final String outputDirectoryName = "/Volumes/SSD1/_TEST_/mercator_TrueMarble.1km/";
       final Pyramid pyramid = WebMercatorPyramid.createDefault();
-
-
-      Tiler.processFile(pyramid, inputName, outputDirectoryName);
-
-
-      //      final String inputDirectoryName = "/Users/dgd/Desktop/LH-Imagery/all/";
-      //      final String outputDirectoryName = "/Users/dgd/Desktop/LH-Imagery/_result_/";
-      //      Tiler.convertDirectory(inputDirectoryName, outputDirectoryName, true);
-
+      Tiler.processDirectory(pyramid, inputDirectoryName, outputDirectoryName, true);
 
    }
 
