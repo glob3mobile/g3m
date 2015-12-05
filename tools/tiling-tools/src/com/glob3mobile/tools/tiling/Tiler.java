@@ -31,7 +31,8 @@ import com.glob3mobile.utils.Logger;
 
 public class Tiler {
 
-   public static void convertDirectory(final String inputDirectoryName,
+   public static void convertDirectory(final TilingPyramid pyramid,
+                                       final String inputDirectoryName,
                                        final String outputDirectoryName,
                                        final boolean recursive) throws IOException {
       final File inputDirectory = new File(inputDirectoryName);
@@ -42,17 +43,18 @@ public class Tiler {
          throw new IOException("\"" + inputDirectoryName + "\" is not a directory");
       }
 
-      processDirectory(inputDirectory, outputDirectoryName, recursive);
+      processDirectory(pyramid, inputDirectory, outputDirectoryName, recursive);
    }
 
 
-   private static void processDirectory(final File directory,
+   private static void processDirectory(final TilingPyramid pyramid,
+                                        final File directory,
                                         final String outputDirectoryName,
                                         final boolean recursive) throws IOException {
       for (final File child : listFiles(directory)) {
          if (child.isDirectory()) {
             if (recursive) {
-               processDirectory(child, outputDirectoryName, recursive);
+               processDirectory(pyramid, child, outputDirectoryName, recursive);
             }
          }
          else if (child.isFile()) {
@@ -61,7 +63,7 @@ public class Tiler {
                final String subdirectoryName = child.getName().replace('.', '_') + ".tiles";
                final String childOutputDirectoryName = new File(outputDirectoryName, subdirectoryName).getAbsolutePath();
                //System.out.println("- Found geotiff: " + child.getName() + " ==> " + childOutputDirectoryName);
-               final Tiler converter = new Tiler(child.getAbsolutePath(), childOutputDirectoryName);
+               final Tiler converter = new Tiler(pyramid, child.getAbsolutePath(), childOutputDirectoryName);
                converter.process();
             }
          }
@@ -83,19 +85,23 @@ public class Tiler {
    }
 
 
-   public static void convertFile(final String inputFileName,
+   public static void convertFile(final TilingPyramid pyramid,
+                                  final String inputFileName,
                                   final String outputDirectoryName) throws IOException {
-      final Tiler converter = new Tiler(inputFileName, outputDirectoryName);
+      final Tiler converter = new Tiler(pyramid, inputFileName, outputDirectoryName);
       converter.process();
    }
 
 
-   private final File _inputFile;
-   private final File _outputDirectory;
+   private final TilingPyramid _pyramid;
+   private final File          _inputFile;
+   private final File          _outputDirectory;
 
 
-   private Tiler(final String inputFileName,
+   private Tiler(final TilingPyramid pyramid,
+                 final String inputFileName,
                  final String outputDirectoryName) throws IOException {
+      _pyramid = pyramid;
       _inputFile = new File(inputFileName);
       if (!_inputFile.exists()) {
          throw new IOException("\"" + inputFileName + "\" not found!");
@@ -138,7 +144,7 @@ public class Tiler {
 
 
    private void processTile(final GEOImage geoImage,
-                            final WGS84Pyramid pyramid,
+                            final TilingPyramid pyramid,
                             final Tile tile,
                             final int maxLevel,
                             final Level[] levels) {
@@ -161,6 +167,7 @@ public class Tiler {
    }
 
    private static class Level {
+      private final TilingPyramid   _pyramid;
       private final int             _level;
 
       private int                   _minRow    = Integer.MAX_VALUE;
@@ -171,7 +178,9 @@ public class Tiler {
       private final ArrayList<Tile> _tiles     = new ArrayList<Tile>();
 
 
-      private Level(final int level) {
+      private Level(final TilingPyramid pyramid,
+                    final int level) {
+         _pyramid = pyramid;
          _level = level;
       }
 
@@ -237,7 +246,7 @@ public class Tiler {
 
          final Point2D previousResolution = calculateResolution(sector, previousImage);
 
-         final Point2D levelResolution = WGS84Pyramid.resolutionForLevel(_level);
+         final Point2D levelResolution = _pyramid.resolutionForLevel(_level);
          final int width = Math.round((float) ((previousImage.getWidth() * previousResolution.getX()) / levelResolution.getX()));
          final int height = Math.round((float) ((previousImage.getHeight() * previousResolution.getY()) / levelResolution.getY()));
 
@@ -267,8 +276,8 @@ public class Tiler {
                             final BufferedImage image,
                             final GEOSector imageSector,
                             final Tile tile) throws IOException {
-         final int tileImageWidth = WGS84Pyramid.TILE_IMAGE_WIDTH;
-         final int tileImageHeight = WGS84Pyramid.TILE_IMAGE_HEIGHT;
+         final int tileImageWidth = _pyramid.getTileImageWidth();
+         final int tileImageHeight = _pyramid.getTileImageHeight();
 
          final Point2D lowerUV = imageSector.getUVCoordinates(tile._sector._lower);
          final Point2D upperUV = imageSector.getUVCoordinates(tile._sector._upper);
@@ -300,7 +309,7 @@ public class Tiler {
          g2d.dispose();
 
 
-         final int numRows = WGS84Pyramid.topSectorSplitsByLatitude * (int) Math.pow(2, _level);
+         final int numRows = _pyramid.getNumberOfRows(_level);
          final int row = numRows - tile._row - 1;
          // final int row = tile._row;
 
@@ -367,19 +376,18 @@ public class Tiler {
       final GEOImage geoImage = read(_inputFile);
 
       final int minLevel = 0;
-      final int maxLevel = WGS84Pyramid.bestLevelForResolution(geoImage._resolution.getX(), geoImage._resolution.getY());
+      final int maxLevel = _pyramid.bestLevelForResolution(geoImage._resolution.getX(), geoImage._resolution.getY());
       //      final int minLevel = 7;
       //      final int maxLevel = 7;
       Logger.log("MaxLevel: " + maxLevel);
 
       final Level[] levels = new Level[maxLevel + 1];
       for (int i = 0; i <= maxLevel; i++) {
-         levels[i] = (i < minLevel) ? null : new Level(i);
+         levels[i] = (i < minLevel) ? null : new Level(_pyramid, i);
       }
 
-      final WGS84Pyramid pyramid = new WGS84Pyramid();
-      for (final Tile tile : pyramid._topTiles) {
-         processTile(geoImage, pyramid, tile, maxLevel, levels);
+      for (final Tile tile : _pyramid.getTopTiles()) {
+         processTile(geoImage, _pyramid, tile, maxLevel, levels);
       }
 
       for (final Level level : levels) {
@@ -431,7 +439,8 @@ public class Tiler {
       final String outputDirectoryName = "/Users/dgd/Desktop/LH-Imagery/_result_/" + "elevation";
 
 
-      Tiler.convertFile(inputName, outputDirectoryName);
+      final TilingPyramid pyramid = WGS84TilingPyramid.createDefault();
+      Tiler.convertFile(pyramid, inputName, outputDirectoryName);
 
       //      final String inputDirectoryName = "/Users/dgd/Desktop/LH-Imagery/all/";
       //      final String outputDirectoryName = "/Users/dgd/Desktop/LH-Imagery/_result_/";
