@@ -6,12 +6,11 @@ import java.awt.geom.Point2D;
 import java.util.List;
 
 import com.glob3mobile.geo.GEOSector;
-import com.glob3mobile.tools.tiling.Tile;
 
 
-public abstract class TilingPyramid {
+public abstract class Pyramid {
 
-   protected TilingPyramid() {
+   protected Pyramid() {
    }
 
 

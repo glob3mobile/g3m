@@ -1,6 +1,6 @@
 
 
-package com.glob3mobile.tools.tiling;
+package com.glob3mobile.tools.tiling.pyramid;
 
 import java.util.ArrayList;
 import java.util.List;

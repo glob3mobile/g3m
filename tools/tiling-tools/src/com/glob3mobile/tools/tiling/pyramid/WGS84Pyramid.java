@@ -10,21 +10,21 @@ import java.util.List;
 
 import com.glob3mobile.geo.GEOGeodetic;
 import com.glob3mobile.geo.GEOSector;
-import com.glob3mobile.tools.tiling.Tile;
 
 
-public class WGS84TilingPyramid
+public class WGS84Pyramid
    extends
-      TilingPyramid {
+      Pyramid {
 
-   public static TilingPyramid createDefault() {
+
+   public static Pyramid createDefault() {
       final GEOSector topSector = GEOSector.fullSphere();
       final int topSectorSplitsByLatitude = 2;
       final int topSectorSplitsByLongitude = 4;
       final int tileImageWidth = 256;
       final int tileImageHeight = 256;
 
-      return new WGS84TilingPyramid( //
+      return new WGS84Pyramid( //
                topSector, //
                topSectorSplitsByLatitude, //
                topSectorSplitsByLongitude, //
@@ -42,11 +42,11 @@ public class WGS84TilingPyramid
    private final List<Tile> _topTiles;
 
 
-   public WGS84TilingPyramid(final GEOSector topSector,
-                             final int topSectorSplitsByLatitude,
-                             final int topSectorSplitsByLongitude,
-                             final int tileImageWidth,
-                             final int tileImageHeight) {
+   public WGS84Pyramid(final GEOSector topSector,
+                       final int topSectorSplitsByLatitude,
+                       final int topSectorSplitsByLongitude,
+                       final int tileImageWidth,
+                       final int tileImageHeight) {
       _topSector = topSector;
       _topSectorSplitsByLatitude = topSectorSplitsByLatitude;
       _topSectorSplitsByLongitude = topSectorSplitsByLongitude;

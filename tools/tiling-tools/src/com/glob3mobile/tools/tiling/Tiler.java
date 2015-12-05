@@ -25,15 +25,16 @@ import org.geotools.gce.geotiff.GeoTiffReader;
 
 import com.glob3mobile.geo.GEOImage;
 import com.glob3mobile.geo.GEOSector;
-import com.glob3mobile.tools.tiling.pyramid.TilingPyramid;
-import com.glob3mobile.tools.tiling.pyramid.WGS84TilingPyramid;
+import com.glob3mobile.tools.tiling.pyramid.Pyramid;
+import com.glob3mobile.tools.tiling.pyramid.Tile;
+import com.glob3mobile.tools.tiling.pyramid.WGS84Pyramid;
 import com.glob3mobile.utils.IOUtils;
 import com.glob3mobile.utils.Logger;
 
 
 public class Tiler {
 
-   public static void convertDirectory(final TilingPyramid pyramid,
+   public static void convertDirectory(final Pyramid pyramid,
                                        final String inputDirectoryName,
                                        final String outputDirectoryName,
                                        final boolean recursive) throws IOException {
@@ -49,7 +50,7 @@ public class Tiler {
    }
 
 
-   private static void processDirectory(final TilingPyramid pyramid,
+   private static void processDirectory(final Pyramid pyramid,
                                         final File directory,
                                         final String outputDirectoryName,
                                         final boolean recursive) throws IOException {
@@ -87,7 +88,7 @@ public class Tiler {
    }
 
 
-   public static void convertFile(final TilingPyramid pyramid,
+   public static void convertFile(final Pyramid pyramid,
                                   final String inputFileName,
                                   final String outputDirectoryName) throws IOException {
       final Tiler converter = new Tiler(pyramid, inputFileName, outputDirectoryName);
@@ -95,12 +96,12 @@ public class Tiler {
    }
 
 
-   private final TilingPyramid _pyramid;
-   private final File          _inputFile;
-   private final File          _outputDirectory;
+   private final Pyramid _pyramid;
+   private final File    _inputFile;
+   private final File    _outputDirectory;
 
 
-   private Tiler(final TilingPyramid pyramid,
+   private Tiler(final Pyramid pyramid,
                  final String inputFileName,
                  final String outputDirectoryName) throws IOException {
       _pyramid = pyramid;
@@ -146,7 +147,7 @@ public class Tiler {
 
 
    private void processTile(final GEOImage geoImage,
-                            final TilingPyramid pyramid,
+                            final Pyramid pyramid,
                             final Tile tile,
                             final int maxLevel,
                             final Level[] levels) {
@@ -169,7 +170,7 @@ public class Tiler {
    }
 
    private static class Level {
-      private final TilingPyramid   _pyramid;
+      private final Pyramid         _pyramid;
       private final int             _level;
 
       private int                   _minRow    = Integer.MAX_VALUE;
@@ -180,7 +181,7 @@ public class Tiler {
       private final ArrayList<Tile> _tiles     = new ArrayList<Tile>();
 
 
-      private Level(final TilingPyramid pyramid,
+      private Level(final Pyramid pyramid,
                     final int level) {
          _pyramid = pyramid;
          _level = level;
@@ -441,7 +442,7 @@ public class Tiler {
       final String outputDirectoryName = "/Users/dgd/Desktop/LH-Imagery/_result_/" + "elevation";
 
 
-      final TilingPyramid pyramid = WGS84TilingPyramid.createDefault();
+      final Pyramid pyramid = WGS84Pyramid.createDefault();
       Tiler.convertFile(pyramid, inputName, outputDirectoryName);
 
       //      final String inputDirectoryName = "/Users/dgd/Desktop/LH-Imagery/all/";
