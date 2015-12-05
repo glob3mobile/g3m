@@ -2,7 +2,13 @@
 
 package com.glob3mobile.geo;
 
+import org.geotools.referencing.CRS;
 import org.opengis.geometry.DirectPosition;
+import org.opengis.geometry.MismatchedDimensionException;
+import org.opengis.referencing.FactoryException;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
+import org.opengis.referencing.operation.MathTransform;
+import org.opengis.referencing.operation.TransformException;
 
 
 public class GEOGeodetic {
@@ -17,9 +23,24 @@ public class GEOGeodetic {
    }
 
 
-   GEOGeodetic(final DirectPosition directPosition) {
-      _latitude = directPosition.getOrdinate(1);
-      _longitude = directPosition.getOrdinate(0);
+   GEOGeodetic(final CoordinateReferenceSystem crs,
+               final DirectPosition directPosition) {
+      try {
+         final CoordinateReferenceSystem wsg84 = CRS.decode("EPSG:4326");
+
+         final boolean lenient = true;
+         final MathTransform transform = CRS.findMathTransform(crs, wsg84, lenient);
+
+         final DirectPosition reprojectedDirectPosition = transform.transform(directPosition, null);
+         _latitude = reprojectedDirectPosition.getOrdinate(0);
+         _longitude = reprojectedDirectPosition.getOrdinate(1);
+      }
+      catch (final FactoryException | MismatchedDimensionException | TransformException e) {
+         throw new RuntimeException(e);
+      }
+
+      //      _latitude = directPosition.getOrdinate(1);
+      //      _longitude = directPosition.getOrdinate(0);
    }
 
 

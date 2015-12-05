@@ -27,14 +27,14 @@ import com.glob3mobile.geo.GEOImage;
 import com.glob3mobile.geo.GEOSector;
 import com.glob3mobile.tools.tiling.pyramid.Pyramid;
 import com.glob3mobile.tools.tiling.pyramid.Tile;
-import com.glob3mobile.tools.tiling.pyramid.WGS84Pyramid;
+import com.glob3mobile.tools.tiling.pyramid.WebMercatorPyramid;
 import com.glob3mobile.utils.IOUtils;
 import com.glob3mobile.utils.Logger;
 
 
 public class Tiler {
 
-   public static void convertDirectory(final Pyramid pyramid,
+   public static void processDirectory(final Pyramid pyramid,
                                        final String inputDirectoryName,
                                        final String outputDirectoryName,
                                        final boolean recursive) throws IOException {
@@ -66,8 +66,8 @@ public class Tiler {
                final String subdirectoryName = child.getName().replace('.', '_') + ".tiles";
                final String childOutputDirectoryName = new File(outputDirectoryName, subdirectoryName).getAbsolutePath();
                //System.out.println("- Found geotiff: " + child.getName() + " ==> " + childOutputDirectoryName);
-               final Tiler converter = new Tiler(pyramid, child.getAbsolutePath(), childOutputDirectoryName);
-               converter.process();
+               final Tiler tiler = new Tiler(pyramid, child.getAbsolutePath(), childOutputDirectoryName);
+               tiler.process();
             }
          }
       }
@@ -88,11 +88,11 @@ public class Tiler {
    }
 
 
-   public static void convertFile(final Pyramid pyramid,
+   public static void processFile(final Pyramid pyramid,
                                   final String inputFileName,
                                   final String outputDirectoryName) throws IOException {
-      final Tiler converter = new Tiler(pyramid, inputFileName, outputDirectoryName);
-      converter.process();
+      final Tiler tiler = new Tiler(pyramid, inputFileName, outputDirectoryName);
+      tiler.process();
    }
 
 
@@ -130,11 +130,13 @@ public class Tiler {
    }
 
 
-   private static GEOImage read(final File inputFile) throws IOException {
+   private GEOImage read(final File inputFile) throws IOException {
       Logger.log("Reading image \"" + inputFile.getAbsolutePath() + "\"...");
 
       final GeoTiffReader reader = new GeoTiffReader(inputFile);
       final GridCoverage2D coverage = reader.read(null);
+
+      _pyramid.checkCRS(coverage);
 
       final GEOSector sector = createSector(coverage);
       Logger.log("Read image, sector " + sector);
@@ -380,8 +382,6 @@ public class Tiler {
 
       final int minLevel = 0;
       final int maxLevel = _pyramid.bestLevelForResolution(geoImage._resolution.getX(), geoImage._resolution.getY());
-      //      final int minLevel = 7;
-      //      final int maxLevel = 7;
       Logger.log("MaxLevel: " + maxLevel);
 
       final Level[] levels = new Level[maxLevel + 1];
@@ -421,29 +421,18 @@ public class Tiler {
       System.out.println("---------\n");
 
 
-      //      // final String inputName = "/Users/dgd/Desktop/LH-Imagery/BOS BOSTON/15m/N40-W072_ll.tif";
-      //      // final String outputDirectoryName = "/Users/dgd/Desktop/LH-Imagery/_result_/" + "BOS-BOSTON/15m";
-      //
-      //      // final String inputName = "/Users/dgd/Desktop/LH-Imagery/muc.zip/1m/MUC_QB_tile1.tif.comp.tif";
-      //      // final String outputDirectoryName = "/Users/dgd/Desktop/LH-Imagery/_result_/" + "1m";
-      //
-      //      // final String inputName = "/Users/dgd/Desktop/LH-Imagery/muc.zip/15m/N45-E006_ll.tif.comp.tif";
-      //      // final String outputDirectoryName = "/Users/dgd/Desktop/LH-Imagery/_result_/" + "15m";
-      //
-      //      // final String inputName = "/Users/dgd/Desktop/LH-Imagery/muc.zip/120m/N40-E000_ll_4as.tif";
-      //      // final String outputDirectoryName = "/Users/dgd/Desktop/LH-Imagery/_result_/" + "120m";
-      //
-
-      //      //      final String inputName = "/Users/dgd/Desktop/LH-Imagery/TrueMarble.32km.1350x675.tif";
-      //            final String inputName = "/Users/dgd/Desktop/LH-Imagery/TrueMarble.2km.21600x10800.tif";
-      //            final String outputDirectoryName = "/Users/dgd/Desktop/LH-Imagery/_result_/" + "MB";
-
-      final String inputName = "/Users/dgd/Desktop/LH-Imagery/all/muc.zip/elevation/N45-E006_SRTM.tif";
-      final String outputDirectoryName = "/Users/dgd/Desktop/LH-Imagery/_result_/" + "elevation";
+      //      final String inputName = "/Volumes/SSD1/GIS_DATA/true_marble/TrueMarble.4km.10800x5400.tif";
+      //      final String outputDirectoryName = "/Volumes/SSD1/_TEST_/TrueMarble.4km/";
+      //      final Pyramid pyramid = WGS84Pyramid.createDefault();
 
 
-      final Pyramid pyramid = WGS84Pyramid.createDefault();
-      Tiler.convertFile(pyramid, inputName, outputDirectoryName);
+      final String inputName = "/Volumes/SSD1/earth-pyramid/1000m/mercator_TrueMarble.1km.21600x21600.A1.tif";
+      final String outputDirectoryName = "/Volumes/SSD1/_TEST_/mercator_TrueMarble.1km/";
+      final Pyramid pyramid = WebMercatorPyramid.createDefault();
+
+
+      Tiler.processFile(pyramid, inputName, outputDirectoryName);
+
 
       //      final String inputDirectoryName = "/Users/dgd/Desktop/LH-Imagery/all/";
       //      final String outputDirectoryName = "/Users/dgd/Desktop/LH-Imagery/_result_/";

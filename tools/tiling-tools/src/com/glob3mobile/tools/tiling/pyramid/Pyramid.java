@@ -5,6 +5,8 @@ package com.glob3mobile.tools.tiling.pyramid;
 import java.awt.geom.Point2D;
 import java.util.List;
 
+import org.geotools.coverage.grid.GridCoverage2D;
+
 import com.glob3mobile.geo.GEOSector;
 
 
@@ -27,13 +29,29 @@ public abstract class Pyramid {
    public abstract int getTileImageHeight();
 
 
-   public abstract int bestLevelForResolution(double x,
-                                              double y);
+   //   public abstract int bestLevelForResolution(double x,
+   //                                              double y);
+
+   public int bestLevelForResolution(final double resX,
+                                     final double resY) {
+      int level = 0;
+      while (true) {
+         final Point2D resolution = resolutionForLevel(level);
+         if ((resolution.getX() < resX) || (resolution.getY() < resY)) {
+            return (level > 0) ? level - 1 : level;
+            //return level;
+         }
+         level++;
+      }
+   }
 
 
    public abstract List<Tile> getTopTiles();
 
 
    public abstract int getNumberOfRows(int level);
+
+
+   public abstract void checkCRS(GridCoverage2D coverage);
 
 }

@@ -8,6 +8,9 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import org.geotools.coverage.grid.GridCoverage2D;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
+
 import com.glob3mobile.geo.GEOGeodetic;
 import com.glob3mobile.geo.GEOSector;
 
@@ -161,26 +164,20 @@ public class WGS84Pyramid
 
 
    @Override
-   public int bestLevelForResolution(final double resX,
-                                     final double resY) {
-      int level = 0;
-      while (true) {
-         final Point2D resolution = resolutionForLevel(level);
-         if ((resolution.getX() < resX) || (resolution.getY() < resY)) {
-            return (level > 0) ? level - 1 : level;
-            //return level;
-         }
-         level++;
-      }
-   }
-
-
-   @Override
    public List<Tile> createChildren(final GEOSector sector,
                                     final Tile tile) {
       final double splitLatitude = tile._sector._center._latitude;
       final double splitLongitude = tile._sector._center._longitude;
       return tile.createSubTiles(sector, splitLatitude, splitLongitude);
+   }
+
+
+   @Override
+   public void checkCRS(final GridCoverage2D coverage) {
+      final CoordinateReferenceSystem crs = coverage.getCoordinateReferenceSystem();
+      if (!crs.getName().getCode().equalsIgnoreCase("WGS 84")) {
+         throw new RuntimeException("Invalid CRS\n" + crs);
+      }
    }
 
 }

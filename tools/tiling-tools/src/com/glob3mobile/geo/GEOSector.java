@@ -5,6 +5,7 @@ package com.glob3mobile.geo;
 import java.awt.geom.Point2D;
 
 import org.opengis.geometry.Envelope;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 
 public class GEOSector {
@@ -34,8 +35,9 @@ public class GEOSector {
 
 
    public GEOSector(final Envelope envelope) {
-      _lower = new GEOGeodetic(envelope.getLowerCorner());
-      _upper = new GEOGeodetic(envelope.getUpperCorner());
+      final CoordinateReferenceSystem crs = envelope.getCoordinateReferenceSystem();
+      _lower = new GEOGeodetic(crs, envelope.getLowerCorner());
+      _upper = new GEOGeodetic(crs, envelope.getUpperCorner());
       _delta = _upper.sub(_lower);
       _center = new GEOGeodetic( //
                (_lower._latitude + _upper._latitude) / 2, //
