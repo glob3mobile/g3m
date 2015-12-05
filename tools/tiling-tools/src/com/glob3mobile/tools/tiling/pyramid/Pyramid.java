@@ -34,14 +34,13 @@ public abstract class Pyramid {
 
    public int bestLevelForResolution(final double resX,
                                      final double resY) {
-      int level = 0;
+      int currentLevel = 0;
       while (true) {
-         final Point2D resolution = resolutionForLevel(level);
+         final Point2D resolution = resolutionForLevel(currentLevel);
          if ((resolution.getX() < resX) || (resolution.getY() < resY)) {
-            return (level > 0) ? level - 1 : level;
-            //return level;
+            return (currentLevel > 0) ? currentLevel - 1 : currentLevel;
          }
-         level++;
+         currentLevel++;
       }
    }
 
