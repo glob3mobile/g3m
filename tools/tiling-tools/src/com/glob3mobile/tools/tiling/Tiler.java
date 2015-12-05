@@ -25,6 +25,8 @@ import org.geotools.gce.geotiff.GeoTiffReader;
 
 import com.glob3mobile.geo.GEOImage;
 import com.glob3mobile.geo.GEOSector;
+import com.glob3mobile.tools.tiling.pyramid.TilingPyramid;
+import com.glob3mobile.tools.tiling.pyramid.WGS84TilingPyramid;
 import com.glob3mobile.utils.IOUtils;
 import com.glob3mobile.utils.Logger;
 

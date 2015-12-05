@@ -1,6 +1,6 @@
 
 
-package com.glob3mobile.tools.tiling;
+package com.glob3mobile.tools.tiling.pyramid;
 
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
@@ -10,6 +10,7 @@ import java.util.List;
 
 import com.glob3mobile.geo.GEOGeodetic;
 import com.glob3mobile.geo.GEOSector;
+import com.glob3mobile.tools.tiling.Tile;
 
 
 public class WGS84TilingPyramid

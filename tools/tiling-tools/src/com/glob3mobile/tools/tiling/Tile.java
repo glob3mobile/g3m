@@ -17,11 +17,11 @@ public class Tile {
    public final int       _column;
 
 
-   Tile(final Tile parent,
-        final GEOSector sector,
-        final int level,
-        final int row,
-        final int column) {
+   public Tile(final Tile parent,
+               final GEOSector sector,
+               final int level,
+               final int row,
+               final int column) {
       _parent = parent;
       _sector = sector;
       _level = level;
