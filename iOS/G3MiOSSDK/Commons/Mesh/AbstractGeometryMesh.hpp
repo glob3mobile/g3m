@@ -48,9 +48,9 @@ protected:
                        float           lineWidth,
                        float           pointSize,
                        bool            depthTest,
-                       bool polygonOffsetFill = false,
-                       float polygonOffsetFactor = 0,
-                       float polygonOffsetUnits = 0);
+                       bool polygonOffsetFill,
+                       float polygonOffsetFactor,
+                       float polygonOffsetUnits);
   
   GLState* _glState;
   
