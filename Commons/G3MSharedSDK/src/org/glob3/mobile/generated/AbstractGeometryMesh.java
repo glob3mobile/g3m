@@ -85,18 +85,6 @@ public abstract class AbstractGeometryMesh extends Mesh
     return new Box(new Vector3D(minX, minY, minZ), new Vector3D(maxX, maxY, maxZ));
   }
 
-  protected AbstractGeometryMesh(int primitive, Vector3D center, IFloatBuffer vertices, boolean ownsVertices, IFloatBuffer normals, boolean ownsNormals, float lineWidth, float pointSize, boolean depthTest, boolean polygonOffsetFill, float polygonOffsetFactor)
-  {
-     this(primitive, center, vertices, ownsVertices, normals, ownsNormals, lineWidth, pointSize, depthTest, polygonOffsetFill, polygonOffsetFactor, 0);
-  }
-  protected AbstractGeometryMesh(int primitive, Vector3D center, IFloatBuffer vertices, boolean ownsVertices, IFloatBuffer normals, boolean ownsNormals, float lineWidth, float pointSize, boolean depthTest, boolean polygonOffsetFill)
-  {
-     this(primitive, center, vertices, ownsVertices, normals, ownsNormals, lineWidth, pointSize, depthTest, polygonOffsetFill, 0, 0);
-  }
-  protected AbstractGeometryMesh(int primitive, Vector3D center, IFloatBuffer vertices, boolean ownsVertices, IFloatBuffer normals, boolean ownsNormals, float lineWidth, float pointSize, boolean depthTest)
-  {
-     this(primitive, center, vertices, ownsVertices, normals, ownsNormals, lineWidth, pointSize, depthTest, false, 0, 0);
-  }
   protected AbstractGeometryMesh(int primitive, Vector3D center, IFloatBuffer vertices, boolean ownsVertices, IFloatBuffer normals, boolean ownsNormals, float lineWidth, float pointSize, boolean depthTest, boolean polygonOffsetFill, float polygonOffsetFactor, float polygonOffsetUnits)
   {
      _primitive = primitive;
