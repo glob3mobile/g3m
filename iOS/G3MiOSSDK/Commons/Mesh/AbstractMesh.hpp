@@ -51,9 +51,9 @@ protected:
                const float colorsIntensity,
                bool depthTest,
                const IFloatBuffer* normals,
-               bool polygonOffsetFill = false,
-               float polygonOffsetFactor = 0,
-               float polygonOffsetUnits = 0);
+               bool polygonOffsetFill,
+               float polygonOffsetFactor,
+               float polygonOffsetUnits);
 
   virtual void rawRender(const G3MRenderContext* rc) const = 0;
 //  virtual void rawRender(const G3MRenderContext* rc, const GLState* parentGLState) const = 0;
