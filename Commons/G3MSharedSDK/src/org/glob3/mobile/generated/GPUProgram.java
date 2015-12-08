@@ -83,10 +83,17 @@ public class GPUProgram
       GPUUniform u = gl.getActiveUniform(this, i);
       if (u != null)
       {
-        _uniforms[u.getIndex()] = u;
+        if (u._key == GPUUniformKey.UNRECOGNIZED_UNIFORM)
+        {
+          u.set(new GPUUniformValueUnrecognized(u._type));
+        }
+        else
+        {
+          _uniforms[u.getIndex()] = u;
   
-        final int code = GPUVariable.getUniformCode(u._key);
-        _uniformsCode = _uniformsCode | code;
+          final int code = GPUVariable.getUniformCode(u._key);
+          _uniformsCode = _uniformsCode | code;
+        }
       }
   
       _createdUniforms[counter++] = u; //Adding to created uniforms array
@@ -104,10 +111,17 @@ public class GPUProgram
       GPUAttribute a = gl.getActiveAttribute(this, i);
       if (a != null)
       {
-        _attributes[a.getIndex()] = a;
+        if (a._key == GPUAttributeKey.UNRECOGNIZED_ATTRIBUTE)
+        {
+            a.set(new GPUAttributeValueUnrecognized(a._type));
+        }
+        else
+        {
+          _attributes[a.getIndex()] = a;
   
-        final int code = GPUVariable.getAttributeCode(a._key);
-        _attributesCode = _attributesCode | code;
+          final int code = GPUVariable.getAttributeCode(a._key);
+          _attributesCode = _attributesCode | code;
+        }
       }
   
       _createdAttributes[counter++] = a;
@@ -205,7 +219,7 @@ public class GPUProgram
     // link program
     if (!p.linkProgram(gl))
     {
-      ILogger.instance().logError("GPUProgram: ERROR linking graphic program\n");
+      ILogger.instance().logError("GPUProgram: ERROR linking graphic program: %s\n", name);
       p.deleteShader(gl, vertexShader);
       p.deleteShader(gl, fragmentShader);
       p.deleteProgram(gl, p);
@@ -221,7 +235,7 @@ public class GPUProgram
   
     if (gl.getError() != GLError.noError())
     {
-      ILogger.instance().logError("Error while compiling program");
+      ILogger.instance().logError("Error while compiling program: %s\n", name);
     }
   
     return p;

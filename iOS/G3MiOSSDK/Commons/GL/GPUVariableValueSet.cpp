@@ -28,6 +28,10 @@ void GPUVariableValueSet::combineWith(const GPUVariableValueSet* vs) {
       }
     }
   }
+
+  if (vs->hasCustomShader()) {
+    _customShaderName = vs->getCustomShaderName();
+  }
 }
 
 void GPUVariableValueSet::applyValuesToProgram(GPUProgram* prog) const {

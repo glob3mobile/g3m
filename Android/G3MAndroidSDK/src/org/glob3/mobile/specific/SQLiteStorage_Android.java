@@ -2,8 +2,13 @@
 
 package org.glob3.mobile.specific;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
+import android.content.ContentValues;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Log;
 
 import org.glob3.mobile.generated.G3MContext;
 import org.glob3.mobile.generated.GTask;
@@ -16,18 +21,22 @@ import org.glob3.mobile.generated.IStorage;
 import org.glob3.mobile.generated.TimeInterval;
 import org.glob3.mobile.generated.URL;
 
-import android.content.ContentValues;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.util.Log;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.charset.Charset;
 
 
 public final class SQLiteStorage_Android
          extends
             IStorage {
+
+   private static final long DB_RAW_DATA_EXTERNAL_THRESHOLD = 1024 * 1024; // 1 MiB
+   private static final String DB_EXTERNAL_TAG = "EXT:";
+   private static final Charset UTF8 = Charset.forName("UTF-8");
 
    private static final String[]         COLUMNS       = new String[] { "contents", "expiration" };
    private static final String           SELECTION     = "name = ?";
@@ -41,6 +50,7 @@ public final class SQLiteStorage_Android
 
    private final BitmapFactory.Options   _options;
    private final byte[]                  _temp_storage = new byte[128 * 1024];
+   private final String                  _documentsDirectory;
 
 
    private class MySQLiteOpenHelper
@@ -81,13 +91,7 @@ public final class SQLiteStorage_Android
 
 
    private String getPath() {
-      File f = _androidContext.getExternalCacheDir();
-      if ((f == null) || !f.exists()) {
-         f = _androidContext.getCacheDir();
-      }
-      final String documentsDirectory = f.getAbsolutePath();
-
-      final File f2 = new File(new File(documentsDirectory), _databaseName);
+      final File f2 = new File(new File(_documentsDirectory), _databaseName);
 
       final String path = f2.getAbsolutePath();
       Log.d("SQLiteStorage_Android", "Creating DB in " + path);
@@ -98,8 +102,14 @@ public final class SQLiteStorage_Android
 
    public SQLiteStorage_Android(final String path,
                                 final android.content.Context context) {
+       _androidContext = context;
+       File f = _androidContext.getExternalCacheDir();
+       if ((f == null) || !f.exists()) {
+           f = _androidContext.getCacheDir();
+       }
+       _documentsDirectory = f.getAbsolutePath();
+
       _databaseName = path;
-      _androidContext = context;
 
       _dbHelper = new MySQLiteOpenHelper(context, getPath());
       _writeDB = _dbHelper.getWritableDatabase();
@@ -135,14 +145,74 @@ public final class SQLiteStorage_Android
       }
    }
 
+    private boolean writeFileToCacheFolder(final String fileName, final byte[] content) {
+        final File f2 = new File(new File(_documentsDirectory),  fileName);
+        FileOutputStream fout = null;
+        try {
+            fout = new FileOutputStream(f2);
+            fout.write(content);
+            fout.flush();
+            return true;
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            return false;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            if (fout != null) {
+                try {
+                    fout.close();
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
+            }
+        }
+    }
+
+    private byte[] readFileFromCacheFolder(final String fileName) {
+        final File f2 = new File(new File(_documentsDirectory), fileName);
+        FileInputStream fin = null;
+        try {
+            fin = new FileInputStream(f2);
+            final int avail = fin.available();
+            if (avail == 0) {
+                return null;
+            }
+            final byte[] r = new byte[avail];
+            if (fin.read(r) != avail) {
+                return null;
+            }
+            return r;
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            return null;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+            if (fin != null) {
+                try {
+                    fin.close();
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
+            }
+        }
+    }
 
    private synchronized void rawSave(final String table,
                                      final String name,
                                      final byte[] contents,
                                      final TimeInterval timeToExpires) {
+
+      final boolean external = contents.length >= DB_RAW_DATA_EXTERNAL_THRESHOLD;
+      final String externalFileName = external ? (table + name).hashCode() + ".raw_cache" : null;
+
       final ContentValues values = new ContentValues(3);
       values.put("name", name);
-      values.put("contents", contents);
+      values.put("contents",
+                    external ? (DB_EXTERNAL_TAG + externalFileName).getBytes(UTF8) : contents);
       final long expiration = System.currentTimeMillis() + timeToExpires.milliseconds();
       values.put("expiration", Long.toString(expiration));
 
@@ -150,6 +220,13 @@ public final class SQLiteStorage_Android
          ILogger.instance().logError("SQL: Can't write " + table + " in database \"%s\". _writeDB not available\n", _databaseName);
       }
       else {
+         if (external) {
+             if (!writeFileToCacheFolder(externalFileName, contents)) {
+                 ILogger.instance().logError("SQL: Can't write external file for cache \"%s\"\n", name);
+                 return;
+             }
+         }
+
          final long rowID = _writeDB.insertWithOnConflict(table, null, values, SQLiteDatabase.CONFLICT_REPLACE);
          if (rowID == -1) {
             ILogger.instance().logError("SQL: Can't write " + table + " in database \"%s\"\n", _databaseName);
@@ -165,7 +242,7 @@ public final class SQLiteStorage_Android
       boolean expired = false;
       final String name = url._path;
 
-      final Cursor cursor = _readDB.query( // 
+       final Cursor cursor = _readDB.query( //
                "buffer2", //
                COLUMNS, //
                SELECTION, //
@@ -180,7 +257,23 @@ public final class SQLiteStorage_Android
 
          expired = (expirationInterval <= System.currentTimeMillis());
          if (!expired || readExpired) {
-            buffer = new ByteBuffer_Android(data);
+             if (data.length > DB_EXTERNAL_TAG.length()) {
+                 final String extTag = new String(data, 0, DB_EXTERNAL_TAG.length(), UTF8);
+                 if (!extTag.isEmpty() && DB_EXTERNAL_TAG.equalsIgnoreCase(extTag)) {
+                     final byte[] cacheData = readFileFromCacheFolder(
+                             new String(data, DB_EXTERNAL_TAG.length(), data.length - DB_EXTERNAL_TAG.length(), UTF8));
+                     if (cacheData == null || cacheData.length == 0) {
+                         ILogger.instance()
+                                 .logError("SQL: Can't read external file for cache \"%s\"\n", name);
+                         cursor.close();
+                         return new IByteBufferResult(null, expired);
+                     }
+                     buffer = new ByteBuffer_Android(cacheData);
+                 }
+             }
+             if (buffer == null) {
+                 buffer = new ByteBuffer_Android(data);
+             }
          }
       }
       cursor.close();
@@ -251,8 +344,27 @@ public final class SQLiteStorage_Android
 
          expired = (expirationInterval <= System.currentTimeMillis());
          if (!expired || readExpired) {
+             Bitmap bitmap = null;
+
+             if (data.length > DB_EXTERNAL_TAG.length()) {
+                 final String extTag = new String(data, 0, DB_EXTERNAL_TAG.length(), UTF8);
+                 if (!extTag.isEmpty() && DB_EXTERNAL_TAG.equalsIgnoreCase(extTag)) {
+                     final byte[] cacheData = readFileFromCacheFolder(
+                             new String(data, DB_EXTERNAL_TAG.length(), data.length - DB_EXTERNAL_TAG.length(), UTF8));
+                     if (cacheData == null || cacheData.length == 0) {
+                         ILogger.instance()
+                                 .logError("SQL: Can't read external file for cache \"%s\"\n", name);
+                         cursor.close();
+                         return new IImageResult(null, expired);
+                     }
+                     bitmap = BitmapFactory.decodeByteArray(cacheData, 0, cacheData.length, _options);
+                 }
+             }
+
             // final long start = System.currentTimeMillis();
-            final Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length, _options);
+            if (bitmap == null) {
+                bitmap = BitmapFactory.decodeByteArray(data, 0, data.length, _options);
+            }
             // ILogger.instance().logInfo("CACHE: Bitmap parsed in " + (System.currentTimeMillis() - start) + "ms");
 
             if (bitmap == null) {

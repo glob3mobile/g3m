@@ -207,6 +207,30 @@ public class GPUProgramManager
     return p;
   }
 
+  public final GPUProgram getProgram(GL gl, String name)
+  {
+      GPUProgram p = getCompiledProgram(name);
+      if (p == null)
+      {
+          p = compileProgramWithName(gl, name);
+          if (p == null)
+          {
+              ILogger.instance().logError("Problem at compiling program.");
+              return null;
+          }
+  
+          if (!name.equals(p.getName()))
+          {
+              ///#warning GIVE MORE DETAIL
+              ILogger.instance().logError("New compiled program does not match GL state.");
+          }
+      }
+  
+      p.addReference();
+  
+      return p;
+  }
+
   public final void removeUnused()
   {
     final java.util.Iterator<java.util.Map.Entry<String, GPUProgram>> iterator = _programs.entrySet().iterator();

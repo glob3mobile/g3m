@@ -54,7 +54,7 @@ GPUProgram* GPUProgram::createProgram(GL* gl,
 
   // link program
   if (!p->linkProgram(gl)) {
-    ILogger::instance()->logError("GPUProgram: ERROR linking graphic program\n");
+    ILogger::instance()->logError("GPUProgram: ERROR linking graphic program: %s\n", name.c_str());
     p->deleteShader(gl, vertexShader);
     p->deleteShader(gl, fragmentShader);
     p->deleteProgram(gl, p);
@@ -69,7 +69,7 @@ GPUProgram* GPUProgram::createProgram(GL* gl,
   p->getVariables(gl);
 
   if (gl->getError() != GLError::noError()) {
-    ILogger::instance()->logError("Error while compiling program");
+    ILogger::instance()->logError("Error while compiling program: %s\n", name.c_str());
   }
 
   return p;
@@ -154,10 +154,14 @@ void GPUProgram::getVariables(GL* gl) {
   for (int i = 0; i < _nUniforms; i++) {
     GPUUniform* u = gl->getActiveUniform(this, i);
     if (u != NULL) {
-      _uniforms[u->getIndex()] = u;
+      if (u->_key == UNRECOGNIZED_UNIFORM) {
+        u->set(new GPUUniformValueUnrecognized(u->_type));
+      } else {
+        _uniforms[u->getIndex()] = u;
 
-      const int code = GPUVariable::getUniformCode(u->_key);
-      _uniformsCode = _uniformsCode | code;
+        const int code = GPUVariable::getUniformCode(u->_key);
+        _uniformsCode = _uniformsCode | code;
+      }
     }
 
     _createdUniforms[counter++] = u; //Adding to created uniforms array
@@ -173,10 +177,14 @@ void GPUProgram::getVariables(GL* gl) {
   for (int i = 0; i < _nAttributes; i++) {
     GPUAttribute* a = gl->getActiveAttribute(this, i);
     if (a != NULL) {
-      _attributes[a->getIndex()] = a;
+      if (a->_key == UNRECOGNIZED_ATTRIBUTE) {
+          a->set(new GPUAttributeValueUnrecognized(a->_type));
+      } else {
+        _attributes[a->getIndex()] = a;
 
-      const int code = GPUVariable::getAttributeCode(a->_key);
-      _attributesCode = _attributesCode | code;
+        const int code = GPUVariable::getAttributeCode(a->_key);
+        _attributesCode = _attributesCode | code;
+      }
     }
 
     _createdAttributes[counter++] = a;
