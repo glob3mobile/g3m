@@ -71,9 +71,9 @@ Mesh* BusyMeshRenderer::createMesh(const G3MRenderContext* rc) {
   const int viewPortWidth  = camera->getViewPortWidth();
   const int viewPortHeight = camera->getViewPortHeight();
   const int minSize = (viewPortWidth < viewPortHeight) ? viewPortWidth : viewPortHeight;
-  const float outerRadius = minSize / 18.0f;
-    ILogger::instance()->logError("This a test log line");
-    const IMathUtils* mu = IMathUtils::instance();
+  const float outerRadius = minSize / 15.0f;
+
+  const IMathUtils* mu = IMathUtils::instance();
 
   for (int step = 0; step <= numStrides; step++) {
     const double angle = (double) step * 2 * PI / numStrides;
