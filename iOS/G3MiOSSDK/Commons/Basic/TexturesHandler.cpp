@@ -120,6 +120,16 @@ const TextureIDReference* TexturesHandler::getTextureIDReference(const IImage* i
                                                                  int format,
                                                                  const std::string& name,
                                                                  bool generateMipmap) {
+  const int clampToEdge = GLTextureParameterValue::clampToEdge();
+  return getTextureIDReference(image, format, name, generateMipmap, clampToEdge);
+}
+
+
+const TextureIDReference* TexturesHandler::getTextureIDReference(const IImage* image,
+                                                                 int format,
+                                                                 const std::string& name,
+                                                                 bool generateMipmap,
+                                                                 int wrapMode) {
 
   const TextureSpec textureSpec(name,
                                 image->getWidth(),
@@ -134,7 +144,7 @@ const TextureIDReference* TexturesHandler::getTextureIDReference(const IImage* i
   }
 
   TextureHolder* holder = new TextureHolder(textureSpec);
-  holder->_glTextureId = _gl->uploadTexture(image, format, textureSpec.generateMipmap());
+  holder->_glTextureId = _gl->uploadTexture(image, format, textureSpec.generateMipmap(), wrapMode);
 
 
   if (_verbose) {
