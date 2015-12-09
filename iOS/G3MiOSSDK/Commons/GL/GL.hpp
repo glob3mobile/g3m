@@ -121,6 +121,11 @@ public:
   const IGLTextureId* uploadTexture(const IImage* image,
                                     int format,
                                     bool generateMipmap);
+    
+  const IGLTextureId* uploadTexture(const IImage* image,
+                                    int format,
+                                    bool generateMipmap,
+                                    int wrapMode);
   
   void deleteTexture(const IGLTextureId* textureId);
 
