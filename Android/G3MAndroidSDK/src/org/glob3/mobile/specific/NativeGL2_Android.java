@@ -105,12 +105,12 @@ INativeGL {
                                 final Matrix44D matrix) {
       checkOpenGLThread();
       GLES20.glUniformMatrix4fv( //
-               ((GLUniformID_Android) location).getID(), //
-               1, //
-               transpose, //
-               matrix.getColumnMajorFloatArray(), //
-               0 //
-               );
+              ((GLUniformID_Android) location).getID(), //
+              1, //
+              transpose, //
+              matrix.getColumnMajorFloatArray(), //
+              0 //
+      );
 
       //      ILogger.instance().logInfo("UNIFORM MATRIX " + ((GLUniformID_Android) location).getID() + " " + matrix.description() );
    }
@@ -519,6 +519,11 @@ INativeGL {
    @Override
    public int TextureParameterValue_ClampToEdge() {
       return GLES20.GL_CLAMP_TO_EDGE;
+   }
+
+   @Override
+   public int TextureParameterValue_Repeat() {
+      return GLES20.GL_REPEAT;
    }
 
 
