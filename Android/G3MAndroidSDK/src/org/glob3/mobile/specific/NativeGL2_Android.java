@@ -105,11 +105,11 @@ public final class NativeGL2_Android
                                 final Matrix44D matrix) {
       checkOpenGLThread();
       GLES20.glUniformMatrix4fv( //
-               ((GLUniformID_Android) location).getID(), //
-               1, //
-               transpose, //
-               matrix.getColumnMajorFloatArray(), //
-               0 //
+              ((GLUniformID_Android) location).getID(), //
+              1, //
+              transpose, //
+              matrix.getColumnMajorFloatArray(), //
+              0 //
       );
 
       //      ILogger.instance().logInfo("UNIFORM MATRIX " + ((GLUniformID_Android) location).getID() + " " + matrix.description() );
@@ -201,7 +201,7 @@ public final class NativeGL2_Android
    @Override
    public boolean deleteTexture(final IGLTextureId texture) {
       checkOpenGLThread();
-      GLES20.glDeleteTextures(1, new int[] { ((GLTextureId_Android) texture).getGLTextureId() }, 0);
+      GLES20.glDeleteTextures(1, new int[]{((GLTextureId_Android) texture).getGLTextureId()}, 0);
       return false;
    }
 
@@ -519,6 +519,11 @@ public final class NativeGL2_Android
    @Override
    public int TextureParameterValue_ClampToEdge() {
       return GLES20.GL_CLAMP_TO_EDGE;
+   }
+
+   @Override
+   public int TextureParameterValue_Repeat() {
+      return GLES20.GL_REPEAT;
    }
 
 

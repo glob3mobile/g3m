@@ -481,6 +481,12 @@ public final class NativeGL_WebGL
 
 
    @Override
+   public native int TextureParameterValue_Repeat() /*-{
+		return this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.REPEAT;
+   }-*/;
+
+
+   @Override
    public native int Alignment_Pack() /*-{
 		return this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.PACK_ALIGNMENT;
    }-*/;
