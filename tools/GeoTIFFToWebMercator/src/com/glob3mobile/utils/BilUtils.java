@@ -19,6 +19,9 @@ import java.nio.file.Path;
 
 public class BilUtils {
 	
+	public final static short LOWER_EARTH_LIMIT = 11200;
+	public final static short NODATAVALUE = 15000;
+	
 	public static BufferedImage BilFileToBufferedImage(String filename, int rows, int columns){
 		Path p = FileSystems.getDefault().getPath("", filename);
 		try {
@@ -29,8 +32,11 @@ public class BilUtils {
 			for (int i=0; i<rows; i++) for (int j=0;j<columns; j++){
 				short data = buffer.get(i*columns + j);
 				
-				//TODO: I'm not considering negative values by the moment. This should be changed.
-				if (data < 0) data = 0;
+				//This function will be used only on the original data records.
+				//Applying rescale so we can use image ops while saving under
+				//0 heights ...
+				
+				data += LOWER_EARTH_LIMIT;
 				
 				image.setRGB(j, i,((255<<24)|(0<<16)|data));
 			}
@@ -46,11 +52,15 @@ public class BilUtils {
 	public static class MaxMinBufferedImage {
 		public BufferedImage _image;
 		public short _min, _max;
+		public short _childrenData, _similarity;
 		
-		public MaxMinBufferedImage(BufferedImage image, short min, short max){
+		public MaxMinBufferedImage(BufferedImage image, short min, short max,
+				short childrenData, short similarity){
 			_image = image;
 			_min = min;
 			_max = max;
+			_childrenData = childrenData;
+			_similarity = similarity;
 		}
 	}
 	
@@ -64,19 +74,24 @@ public class BilUtils {
 			for (int i=0; i<rows; i++) for (int j=0;j<columns; j++){
 				short data = buffer.get(i*columns + j);
 				
-				//TODO: I'm not considering negative values by the moment. This should be changed.
-				if (data < 0) data = 0;
-				
-				image.setRGB(j, i,((255<<24)|(0<<16)|data));
+				//Considering our own NODATAS and under zero heights.
+				if (data == NODATAVALUE)
+					image.setRGB(j,i,0);
+				else {
+					data += LOWER_EARTH_LIMIT;
+					image.setRGB(j, i,((255<<24)|(0<<16)|data));
+				}
 			}
 			
 			short max = buffer.get(rows*columns);
 			short min = buffer.get(rows*columns + 1);
+			short childrenData = buffer.get(rows*columns + 2);
+			short similarity = buffer.get(rows*columns + 3);
 			
 			buffer.clear();
 			buffer = null;
 			
-			return new MaxMinBufferedImage(image,min,max);
+			return new MaxMinBufferedImage(image,min,max,childrenData,similarity);
 		}
 		catch (Exception E){return null;}
 	}
@@ -88,7 +103,10 @@ public class BilUtils {
 		for (int i=0; i<width; i++) for (int j=0;j<height; j++){
 
 			short data = (short) ((image.getRGB(j,i)) & 0x0000FFFF);
-			buffer.put(i*height + j, data);
+			if (data == 0)
+				buffer.put(i*height + j, NODATAVALUE);
+			else
+				buffer.put(i*height + j, (short) (data - LOWER_EARTH_LIMIT));
 		}
 		
 		try {
@@ -103,24 +121,30 @@ public class BilUtils {
 		}
 	}
 	
-	public static void BufferedImageToBilFileMaxMin(BufferedImage image, String filename, int width, int height, short max, short min){
+	public static void BufferedImageToBilFileMaxMin(BufferedImage image, String filename, 
+			int width, int height, short max, short min, short childrenData, short similarity){
 		/**
 		 * This function alters the normal BIL format to add a tile max and min after the elevation matrix.
 		 * This should be noted when developing a pyramid client.
 		 */
 		
-		final int dim = (width*height*2) + 4;
+		final int dim = (width*height*2) + 8;
 		ByteBuffer bytebuffer = ByteBuffer.allocate(dim).order(ByteOrder.LITTLE_ENDIAN);
 		ShortBuffer buffer = bytebuffer.asShortBuffer();
 
 		for (int i=0; i<width; i++) for (int j=0;j<height; j++){
 
 			short data = (short) ((image.getRGB(j,i)) & 0x0000FFFF);
-			buffer.put(i*height + j, data);
+			if (data == 0)
+				buffer.put(i*height + j, NODATAVALUE);
+			else
+				buffer.put(i*height + j, (short) (data - LOWER_EARTH_LIMIT));
 		}
 		
 		buffer.put(width*height,max);
 		buffer.put((width*height)+1,min);
+		buffer.put(width*height + 2,childrenData);
+		buffer.put(width*height + 3,similarity);
 		
 		try {
 			FileOutputStream fos = new FileOutputStream(filename);

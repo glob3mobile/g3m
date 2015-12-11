@@ -26,7 +26,7 @@ public class BilTiler {
 	private final File _outputDirectory;
 	
 	private void processTile(final GEOImage geoImage,
-            final WGS84Pyramid pyramid,
+            final Pyramid pyramid,
             final GEOTile tile,
             final int maxLevel,
             final Level[] levels) {
@@ -62,8 +62,6 @@ public class BilTiler {
 	}
 	
 	private static GEOImage read(final File inputFile, final GeoData data) throws IOException {
-		
-		WGS84Pyramid.setTileImageDimensions(16, 16);
 
 		final GEOSector sector = new GEOSector (new GEOGeodetic(data.lowerlat,data.lowerlon), new GEOGeodetic(data.upperlat,data.upperlon) );
 		final BufferedImage image = BilUtils.BilFileToBufferedImage(inputFile.getAbsolutePath(), data.rows, data.columns);
@@ -80,11 +78,11 @@ public class BilTiler {
 		IOUtils.ensureEmptyDirectory(_outputDirectory);
 	}
 	
-	public static void convertFile(final String inputFileName, final GeoData data,
+	public static void convertFile(final String inputFileName, final GeoData data, int pyramidType,
             final String outputDirectoryName) throws IOException {
 		
 		final BilTiler converter = new BilTiler(inputFileName, outputDirectoryName);
-		converter.process(data);
+		converter.process(data,pyramidType);
 	}
 	
 	public static Level[] levels;
@@ -107,7 +105,7 @@ public class BilTiler {
 			for (int x=0; x<tiles.size();x++){
 				GEOTile tile = tiles.get(x);
 				if (tile._row == rowToUpdate && tile._column == columnToUpdate){
-					tile.updateMaxMinValues(maxToUpdate, minToUpdate);
+					tile.updateMaxMinValues(maxToUpdate, minToUpdate,true);
 					maxToUpdate = tile._maxValue;
 					minToUpdate = tile._minValue;
 					break;
@@ -116,12 +114,14 @@ public class BilTiler {
 		}
 	}
 	
-	private void process(GeoData data) throws IOException {
-	      final GEOImage geoImage = read(_inputFile,data);
+	private void process(GeoData data, final int pyramidType) throws IOException {
+		
+		  final GEOImage geoImage = read(_inputFile,data);
+		  
 
 	      final int minLevel = 0;
-	      final int maxLevel = WGS84Pyramid.bestLevelForResolution(geoImage._resolution.getX(), geoImage._resolution.getY());
-
+	      final int maxLevel = Pyramid.bestLevelForResolution(geoImage._resolution.getX(), geoImage._resolution.getY());
+	      
 	      Logger.log("MaxLevel: " + maxLevel);
 
 	      //final Level[] levels = new Level[maxLevel + 1];
@@ -132,16 +132,27 @@ public class BilTiler {
 	      }
 
 	      //This one will be for DEM purposes.
-	      final WGS84Pyramid pyramid = new WGS84Pyramid();
+	      Pyramid pyramid = null;
+	      switch (pyramidType){
+		      case Pyramid.PYR_WGS84:
+		    	  pyramid = new WGS84Pyramid();
+		    	  break;
+		      case Pyramid.PYR_WEBMERC:
+		    	  pyramid = new WebMercatorPyramid();
+		    	  break;
+	      }
+
 	      for (final GEOTile tile : pyramid._topTiles) {
 	         processTile(geoImage, pyramid, tile, maxLevel, levels);
 	      }
+	      
 
 	      for (final Level level : levels) {
 	         if (level != null) {
 	            level.initialize();
 	         }
 	      }
+	      
 
 	      BufferedImage currentImage = geoImage._bufferedImage;
 	      for (int i = maxLevel; i >= minLevel; i--) {
@@ -164,96 +175,99 @@ public class BilTiler {
 	      String inputName, outputDirectoryName;
 	      GeoData data;
 	      
+	      int pyramidType = Pyramid.PYR_WEBMERC;
+		  Pyramid.setTileImageDimensions(16, 16);
+		  Pyramid.setTopSectorSplits(1, 1);
+	      
 	      System.out.println(" --- Cañón del colorado --- ");
 	      inputName = "/users/sebastianortegatrujillo/Desktop/Elevs combo/sources/elev.bil";
 	      outputDirectoryName = "/users/sebastianortegatrujillo/Desktop/Elevs combo/elev.biltiles"; 
 	      data = new GeoData(36,36.5,-112,-111.5,3000,3000);
-	      BilTiler.convertFile(inputName, data, outputDirectoryName);
+	      BilTiler.convertFile(inputName, data, pyramidType, outputDirectoryName);
 	      
 	      System.out.println(" --- Tierra A --- ");
 	      inputName = "/users/sebastianortegatrujillo/Desktop/Elevs combo/sources/a.bil";
 	      outputDirectoryName = "/users/sebastianortegatrujillo/Desktop/Elevs combo/a.biltiles"; 
 	      data = new GeoData(50,90,-180,-90,4800,10800);
-	      BilTiler.convertFile(inputName, data, outputDirectoryName);
+	      BilTiler.convertFile(inputName, data, pyramidType, outputDirectoryName);
 	      System.out.println(" --- Tierra B --- ");
 	      inputName = "/users/sebastianortegatrujillo/Desktop/Elevs combo/sources/b.bil";
 	      outputDirectoryName = "/users/sebastianortegatrujillo/Desktop/Elevs combo/b.biltiles"; 
 	      data = new GeoData(50,90,-90,0,4800,10800);
-	      BilTiler.convertFile(inputName, data, outputDirectoryName);
+	      BilTiler.convertFile(inputName, data, pyramidType, outputDirectoryName);
 	      System.out.println(" --- Tierra C --- ");
 	      inputName = "/users/sebastianortegatrujillo/Desktop/Elevs combo/sources/c.bil";
 	      outputDirectoryName = "/users/sebastianortegatrujillo/Desktop/Elevs combo/c.biltiles"; 
 	      data = new GeoData(50,90,0,90,4800,10800);
-	      BilTiler.convertFile(inputName, data, outputDirectoryName);
+	      BilTiler.convertFile(inputName, data, pyramidType, outputDirectoryName);
 	      System.out.println(" --- Tierra D --- ");
 	      inputName = "/users/sebastianortegatrujillo/Desktop/Elevs combo/sources/d.bil";
 	      outputDirectoryName = "/users/sebastianortegatrujillo/Desktop/Elevs combo/d.biltiles"; 
 	      data = new GeoData(50,90,90,180,4800,10800);
-	      BilTiler.convertFile(inputName, data, outputDirectoryName);
+	      BilTiler.convertFile(inputName, data, pyramidType, outputDirectoryName);
 	      
 	      System.out.println(" --- Tierra E --- ");
 	      inputName = "/users/sebastianortegatrujillo/Desktop/Elevs combo/sources/e.bil";
 	      outputDirectoryName = "/users/sebastianortegatrujillo/Desktop/Elevs combo/e.biltiles"; 
 	      data = new GeoData(0,50,-180,-90,6000,10800);
-	      BilTiler.convertFile(inputName, data, outputDirectoryName);
+	      BilTiler.convertFile(inputName, data, pyramidType, outputDirectoryName);
 	      System.out.println(" --- Tierra F --- ");
 	      inputName = "/users/sebastianortegatrujillo/Desktop/Elevs combo/sources/f.bil";
 	      outputDirectoryName = "/users/sebastianortegatrujillo/Desktop/Elevs combo/f.biltiles"; 
 	      data = new GeoData(0,50,-90,0,6000,10800);
-	      BilTiler.convertFile(inputName, data, outputDirectoryName);
+	      BilTiler.convertFile(inputName, data, pyramidType, outputDirectoryName);
 	      System.out.println(" --- Tierra G --- ");
 	      inputName = "/users/sebastianortegatrujillo/Desktop/Elevs combo/sources/g.bil";
 	      outputDirectoryName = "/users/sebastianortegatrujillo/Desktop/Elevs combo/g.biltiles"; 
 	      data = new GeoData(0,50,0,90,6000,10800);
-	      BilTiler.convertFile(inputName, data, outputDirectoryName);
+	      BilTiler.convertFile(inputName, data, pyramidType, outputDirectoryName);
 	      System.out.println(" --- Tierra H --- ");
 	      inputName = "/users/sebastianortegatrujillo/Desktop/Elevs combo/sources/h.bil";
 	      outputDirectoryName = "/users/sebastianortegatrujillo/Desktop/Elevs combo/h.biltiles"; 
 	      data = new GeoData(0,50,90,180,6000,10800);
-	      BilTiler.convertFile(inputName, data, outputDirectoryName);
+	      BilTiler.convertFile(inputName, data, pyramidType, outputDirectoryName);
 	      
 	      System.out.println(" --- Tierra I --- ");
 	      inputName = "/users/sebastianortegatrujillo/Desktop/Elevs combo/sources/i.bil";
 	      outputDirectoryName = "/users/sebastianortegatrujillo/Desktop/Elevs combo/i.biltiles"; 
 	      data = new GeoData(-50,0,-180,-90,6000,10800);
-	      BilTiler.convertFile(inputName, data, outputDirectoryName);
+	      BilTiler.convertFile(inputName, data, pyramidType, outputDirectoryName);
 	      System.out.println(" --- Tierra J --- ");
 	      inputName = "/users/sebastianortegatrujillo/Desktop/Elevs combo/sources/j.bil";
 	      outputDirectoryName = "/users/sebastianortegatrujillo/Desktop/Elevs combo/j.biltiles"; 
 	      data = new GeoData(-50,0,-90,0,6000,10800);
-	      BilTiler.convertFile(inputName, data, outputDirectoryName);
+	      BilTiler.convertFile(inputName, data, pyramidType, outputDirectoryName);
 	      System.out.println(" --- Tierra K --- ");
 	      inputName = "/users/sebastianortegatrujillo/Desktop/Elevs combo/sources/k.bil";
 	      outputDirectoryName = "/users/sebastianortegatrujillo/Desktop/Elevs combo/k.biltiles"; 
 	      data = new GeoData(-50,0,0,90,6000,10800);
-	      BilTiler.convertFile(inputName, data, outputDirectoryName);
+	      BilTiler.convertFile(inputName, data, pyramidType, outputDirectoryName);
 	      System.out.println(" --- Tierra L --- ");
 	      inputName = "/users/sebastianortegatrujillo/Desktop/Elevs combo/sources/l.bil";
 	      outputDirectoryName = "/users/sebastianortegatrujillo/Desktop/Elevs combo/l.biltiles"; 
 	      data = new GeoData(-50,0,90,180,6000,10800);
-	      BilTiler.convertFile(inputName, data, outputDirectoryName);
+	      BilTiler.convertFile(inputName, data, pyramidType, outputDirectoryName);
 	      
 	      System.out.println(" --- Tierra M --- ");
 	      inputName = "/users/sebastianortegatrujillo/Desktop/Elevs combo/sources/m.bil";
 	      outputDirectoryName = "/users/sebastianortegatrujillo/Desktop/Elevs combo/m.biltiles"; 
 	      data = new GeoData(-90,-50,-180,-90,4800,10800);
-	      BilTiler.convertFile(inputName, data, outputDirectoryName);
+	      BilTiler.convertFile(inputName, data, pyramidType, outputDirectoryName);
 	      System.out.println(" --- Tierra N --- ");
 	      inputName = "/users/sebastianortegatrujillo/Desktop/Elevs combo/sources/n.bil";
 	      outputDirectoryName = "/users/sebastianortegatrujillo/Desktop/Elevs combo/n.biltiles"; 
 	      data = new GeoData(-90,-50,-90,0,4800,10800);
-	      BilTiler.convertFile(inputName, data, outputDirectoryName);
+	      BilTiler.convertFile(inputName, data, pyramidType, outputDirectoryName);
 	      System.out.println(" --- Tierra O --- ");
 	      inputName = "/users/sebastianortegatrujillo/Desktop/Elevs combo/sources/o.bil";
 	      outputDirectoryName = "/users/sebastianortegatrujillo/Desktop/Elevs combo/o.biltiles"; 
 	      data = new GeoData(-90,-50,0,90,4800,10800);
-	      BilTiler.convertFile(inputName, data, outputDirectoryName);
+	      BilTiler.convertFile(inputName, data, pyramidType, outputDirectoryName);
 	      System.out.println(" --- Tierra P --- ");
 	      inputName = "/users/sebastianortegatrujillo/Desktop/Elevs combo/sources/p.bil";
 	      outputDirectoryName = "/users/sebastianortegatrujillo/Desktop/Elevs combo/p.biltiles"; 
 	      data = new GeoData(-90,-50,90,180,4800,10800);
-	      BilTiler.convertFile(inputName, data, outputDirectoryName);
-
+	      BilTiler.convertFile(inputName, data, pyramidType, outputDirectoryName);
 	}
 	
 	// Auxiliar classes
@@ -335,7 +349,7 @@ public class BilTiler {
 
 	         final Point2D previousResolution = calculateResolution(sector, previousImage);
 
-	         final Point2D levelResolution = WGS84Pyramid.resolutionForLevel(_level);
+	         final Point2D levelResolution = Pyramid.resolutionForLevel(_level);
 	         final int width = Math.round((float) ((previousImage.getWidth() * previousResolution.getX()) / levelResolution.getX()));
 	         final int height = Math.round((float) ((previousImage.getHeight() * previousResolution.getY()) / levelResolution.getY()));
 
@@ -363,8 +377,8 @@ public class BilTiler {
 	                            final BufferedImage image,
 	                            final GEOSector imageSector,
 	                            final GEOTile tile) throws IOException {
-	         final int tileImageWidth = WGS84Pyramid.TILE_IMAGE_WIDTH;
-	         final int tileImageHeight = WGS84Pyramid.TILE_IMAGE_HEIGHT;
+	         final int tileImageWidth = Pyramid.TILE_IMAGE_WIDTH;
+	         final int tileImageHeight = Pyramid.TILE_IMAGE_HEIGHT;
 
 	         final Point2D lowerUV = imageSector.getUVCoordinates(tile._sector._lower);
 	         final Point2D upperUV = imageSector.getUVCoordinates(tile._sector._upper);
@@ -377,17 +391,15 @@ public class BilTiler {
 	         final int sy1 = Math.round((float) upperUV.getY() * image.getHeight());
 	         final int sx2 = Math.round((float) upperUV.getX() * image.getWidth());
 	         final int sy2 = Math.round((float) lowerUV.getY() * image.getHeight());
-
-	 
+	         
 	        final BufferedImage tileImage = new BufferedImage(tileImageWidth, tileImageHeight, BufferedImage.TYPE_INT_ARGB);
 
 	        final Graphics2D g2d = tileImage.createGraphics();
 
-
 	         g2d.drawImage( //
 	                  image, //
 	                  dx1, dy1, dx2, dy2, //
-	                  sx1, sy1, sx2, sy2, //
+	                  sx1, sy1, sx2+1, sy2+1, //
 	                  null);
 	         
 	         g2d.dispose();
@@ -403,11 +415,12 @@ public class BilTiler {
 	         
 	         short[] maxmin = getTileMaxMin(tileImage);
 	         
-	         tile.updateMaxMinValues(maxmin[0],maxmin[1]);
+	         tile.updateMaxMinValues(maxmin[0],maxmin[1],tile._withChildren);
 	         updateParentsStartingOnLevel(tile._level, tile._row, tile._column, tile._maxValue, tile._minValue);
 
-	         //System.out.println("Saving tile: "+tile._level+"-"+tile._row+"-"+tile._column+", max= "+tile._maxValue+" , min= "+tile._minValue );
-	         BilUtils.BufferedImageToBilFileMaxMin(tileImage, output.getAbsolutePath(), tileImageWidth, tileImageHeight, tile._maxValue, tile._minValue);
+	         //System.out.println("Saving tile: "+tile._level+"-"+tile._row+"-"+tile._column+", max= "+tile._maxValue+" , min= "+tile._minValue+", withChildren = "+(tile._withChildren? (short) 1: (short) 0) );
+	         BilUtils.BufferedImageToBilFileMaxMin(tileImage, output.getAbsolutePath(), tileImageWidth, tileImageHeight, tile._maxValue, tile._minValue,
+	        		 tile._withChildren ? (short) 1: (short) 0, (short) 0);
 	      }
 	      
 	      private short[] getTileMaxMin(final BufferedImage image){

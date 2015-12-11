@@ -25,6 +25,7 @@ public abstract class ElevationDataProvider
   public abstract long requestElevationData(Sector sector, Vector2I extent, long requestPriority, IElevationDataListener listener, boolean autodeleteListener);
 
   public long requestElevationData(Sector sector, int level, int row, int column, Vector2I extent, long requestPriority, IElevationDataListener listener, boolean autodeleteListener){
+	  int warning_method_madeby_chano__default_executes_normal_one__override_this_to_get_a_LRC_based_request;
 	  return requestElevationData(sector,extent,requestPriority,listener,autodeleteListener);
   }
   

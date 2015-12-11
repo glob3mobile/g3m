@@ -15,7 +15,9 @@ import java.util.Map;
 import java.util.concurrent.ExecutorService;
 
 import com.glob3mobile.server.tools.GEOSector;
+import com.glob3mobile.server.tools.Pyramid;
 import com.glob3mobile.server.tools.WGS84Pyramid;
+import com.glob3mobile.server.tools.WebMercatorPyramid;
 import com.glob3mobile.utils.BilUtils;
 import com.glob3mobile.utils.BilUtils.MaxMinBufferedImage;
 import com.glob3mobile.utils.CollectionsUtils;
@@ -24,6 +26,7 @@ import com.glob3mobile.utils.Progress;
 
 public class BilMergedPyramid {
 	private final SourcePyramid[] _sourcePyramids;
+	private static int _type;
 
 	private static int BIL_DIM = 16;
 
@@ -56,6 +59,7 @@ public class BilMergedPyramid {
 	            BufferedImage image = null;
 	            short max = Short.MIN_VALUE;
 	            short min = Short.MAX_VALUE;
+	            short withChildren = 0;
 	            Graphics2D g2d = null;
 	            for (final File sourceImageFile : sourceImageFiles) {
 
@@ -68,12 +72,14 @@ public class BilMergedPyramid {
 	               g2d.drawImage(sourceImage._image, 0, 0, null);
 	               max = (short) Math.max(max, sourceImage._max);
 	               min = (short) Math.min(min, sourceImage._min);
+	               //One from chosen with children, all with children, I guess ...
+	               withChildren = (short) Math.max(withChildren, sourceImage._childrenData);
 	            }
 	            if (g2d != null) {
 	               g2d.dispose();
 	            }
 
-	            return new MaxMinBufferedImage(image,min,max);
+	            return new MaxMinBufferedImage(image,min,max,withChildren,(short) 0);
 	         }
 	      }
 
@@ -165,17 +171,41 @@ public class BilMergedPyramid {
 	                  BufferedImage.TYPE_INT_ARGB);
 	         short max = firstImage._max;
 	         short min = firstImage._min;
+	         short withChildren = firstImage._childrenData;
 
 	         final Graphics2D g2d = image.createGraphics();
 	         g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
 
-	         final GEOSector tileSector = WGS84Pyramid.sectorFor(_column._level._level, _column._column, _row);
+	         GEOSector tileSector = null;
+	         switch (_type){
+		         case Pyramid.PYR_WGS84:
+		        	 tileSector = WGS84Pyramid.sectorFor(_column._level._level, _column._column, _row);
+		        	 break;
+		         case Pyramid.PYR_WEBMERC:
+		        	 tileSector = WebMercatorPyramid.sectorFor(_column._level._level, _column._column, _row);
+		        	 break;
+	             default:
+	        		 System.out.println("Failure: uninitialized pyramid type");
+	        		 System.exit(-1);
+	         }
 
 	         for (final SourcePyramidTile ancestor : ancestors) {
 	            final MaxMinBufferedImage ancestorImage = BilUtils.BilFileMaxMinToBufferedImage(ancestor.getImageFile().getAbsolutePath(),BIL_DIM,BIL_DIM);
 
-	            final GEOSector ancestorSector = WGS84Pyramid.sectorFor(ancestor._column._level._level, ancestor._column._column,
-	                     ancestor._row);
+	            GEOSector ancestorSector = null;
+	            switch (_type){
+			         case Pyramid.PYR_WGS84:
+			        	 ancestorSector = WGS84Pyramid.sectorFor(ancestor._column._level._level, ancestor._column._column,
+			                     ancestor._row);
+			        	 break;
+			         case Pyramid.PYR_WEBMERC:
+			        	 ancestorSector = WebMercatorPyramid.sectorFor(ancestor._column._level._level, ancestor._column._column,
+			                     ancestor._row);
+			        	 break;
+		             default:
+		        		 System.out.println("Failure: uninitialized pyramid type");
+		        		 System.exit(-1);
+		         }
 
 	            final Point2D lowerUV = ancestorSector.getUVCoordinates(tileSector._lower);
 	            final Point2D upperUV = ancestorSector.getUVCoordinates(tileSector._upper);
@@ -194,6 +224,7 @@ public class BilMergedPyramid {
 	            g2d.drawImage(ancestorImage._image, dx1, dy1, dx2, dy2, sx1, sy1, sx2, sy2, null);
 	            max = (short) Math.max(max,ancestorImage._max);
 	            min = (short) Math.min(min, ancestorImage._min);
+	            //Ancestors should not be taken into account for own children info.
 
 	         }
 
@@ -201,11 +232,12 @@ public class BilMergedPyramid {
 	            g2d.drawImage(sourceImage._image, 0, 0, null);
 	            max = (short) Math.max(max,sourceImage._max);
 	            min = (short) Math.min(min, sourceImage._min);
+	            withChildren = (short) Math.max(withChildren, sourceImage._childrenData);
 	         }
 
 	         g2d.dispose();
 
-	         saveImage(output, new MaxMinBufferedImage(image,min,max), mutex);
+	         saveImage(output, new MaxMinBufferedImage(image,min,max,withChildren,(short) 0), mutex);
 	      }
 
 
@@ -358,8 +390,9 @@ public class BilMergedPyramid {
 	   private final Map<Integer, MergedLevel> _levels = new HashMap<>();
 
 
-	   public BilMergedPyramid(final SourcePyramid[] sourcePyramids) {
+	   public BilMergedPyramid(final SourcePyramid[] sourcePyramids, final int pyramidType) {
 	      _sourcePyramids = sourcePyramids;
+	      _type = pyramidType;
 
 	      for (final SourcePyramid sourcePyramid : _sourcePyramids) {
 	         for (final SourcePyramidLevel sourceLevel : sourcePyramid.getLevels()) {
@@ -399,6 +432,57 @@ public class BilMergedPyramid {
 	         level.process(_sourcePyramids, outputDirectory, progress, executor, mutex);
 	      }
 	   }
+	   
+	   public void similarity(){
+		   final List<Integer> keys = new ArrayList<>(_levels.keySet());
+		      Collections.sort(keys, Collections.reverseOrder());
+		      
+		      keys.remove(0); //Ninguno tendrá hijos. Eso supondría una similaridad 0. Esto podría
+		      //ser necesario cambiarlo.
+
+		      for (final Integer key : keys) {
+
+		         final MergedLevel level = _levels.get(key);
+		         for (final Integer columnKey : level._columns.keySet()){
+		        	 final MergedColumn column = level._columns.get(columnKey);
+		        	 for (final Integer rowKey : column._tiles.keySet()){
+		        		 final MergedTile tile = column._tiles.get(rowKey);
+		        		 // Magic goes here
+		        		 try {
+		        			 String str = tile._sourceTiles.get(0).getImageFile().getAbsolutePath();
+		        			 String thePart = level._level + "/" + tile._column._column + "/" + tile._row;
+		        			 
+		        			 String childPartA = (level._level + 1) + "/" + (tile._column._column * 2) + "/" + (tile._row *2);
+		        			 String childPartB = (level._level + 1) + "/" + (tile._column._column * 2 + 1) + "/" + (tile._row *2);
+		        			 String childPartC = (level._level + 1) + "/" + (tile._column._column * 2) + "/" + (tile._row *2 + 1);
+		        			 String childPartD = (level._level + 1) + "/" + (tile._column._column * 2 + 1) + "/" + (tile._row *2 + 1);
+		        			 
+		        			 String childA_str = str.replace(thePart,childPartA);
+		        			 String childB_str = str.replace(thePart,childPartB);
+		        			 String childC_str = str.replace(thePart,childPartC);
+		        			 String childD_str = str.replace(thePart,childPartD);
+		        			 
+		        			 MaxMinBufferedImage parent = BilUtils.BilFileMaxMinToBufferedImage(str, BIL_DIM, BIL_DIM);
+		        			 MaxMinBufferedImage childA = BilUtils.BilFileMaxMinToBufferedImage(childA_str, BIL_DIM, BIL_DIM);
+		        			 MaxMinBufferedImage childB = BilUtils.BilFileMaxMinToBufferedImage(childB_str, BIL_DIM, BIL_DIM);
+		        			 MaxMinBufferedImage childC = BilUtils.BilFileMaxMinToBufferedImage(childC_str, BIL_DIM, BIL_DIM);
+		        			 MaxMinBufferedImage childD = BilUtils.BilFileMaxMinToBufferedImage(childD_str, BIL_DIM, BIL_DIM);
+		        			 
+		        			 double similarity = calculateSimilarity (parent, childA, childB, childC, childD);
+		        			 
+		        			 System.out.println(str);
+		        			 System.out.println("Error medio por vértice (similaridad no completada):"+similarity);
+		        			 
+		        		 }
+		        		 catch (Exception e) {
+		        			 
+		        		 }
+		        		 
+		        	 }
+		         }
+		      }
+		      
+	   }
 
 
 	   private static void saveImage(final File output,
@@ -413,9 +497,7 @@ public class BilMergedPyramid {
 	         }
 	      }
 	      
-	      //TODO: ¿Por qué lo del 0.9 en el JPEG de la versión original?
-	      
-	      BilUtils.BufferedImageToBilFileMaxMin(image._image, output.getAbsolutePath(), BIL_DIM, BIL_DIM, image._max, image._min);
+	      BilUtils.BufferedImageToBilFileMaxMin(image._image, output.getAbsolutePath(), BIL_DIM, BIL_DIM, image._max, image._min, image._childrenData, image._similarity);
 	   }
 
 
@@ -441,5 +523,37 @@ public class BilMergedPyramid {
 	         tilesCount += level.getTilesCount();
 	      }
 	      return tilesCount;
+	   }
+	   
+	   private double calculateSimilarity(MaxMinBufferedImage parent, MaxMinBufferedImage childA, 
+			   MaxMinBufferedImage childB, MaxMinBufferedImage childC, MaxMinBufferedImage childD) {
+		   double res = 0;
+		   
+		   //Misma vertical, restar. Diferente vertical, intuir altura del padre.
+		   for (int x=0 ; x < childA._image.getWidth() ; x+=2) for (int y=0; y < childA._image.getHeight(); y+=2) {
+			   short childData = (short) ((childA._image.getRGB(x,y)) & 0x0000FFFF);
+			   short parentData = (short) ((parent._image.getRGB(x/2,y/2)) & 0x0000FFFF);
+			   
+			   short childDataY1 = (short) ((childA._image.getRGB(x,y+1)) & 0x0000FFFF);
+			   short childDataR1 = (short) ((childA._image.getRGB(x+1,y)) & 0x0000FFFF);
+			   short childDataR1Y1 = (short) ((childA._image.getRGB(x+1,y+1)) & 0x0000FFFF);
+			   short parentDataY1 = (short) ((parentData + (parent._image.getRGB(x/2,(y/2)+1)) & 0x0000FFFF)/2);
+			   short parentDataR1 = (short) ((parentData + (parent._image.getRGB((x/2) + 1,y/2)) & 0x0000FFFF)/2);
+			   short parentDataR1Y1 = (short) ((((parent._image.getRGB(x/2,(y/2)+1)) & 0x0000FFFF) + ((parent._image.getRGB((x/2) + 1,y/2)) & 0x0000FFFF))/2) ;
+			   
+			   res += Math.pow((childData-parentData),2);
+			   res += Math.pow((childDataY1-parentDataY1),2);
+			   res += Math.pow((childDataR1-parentDataR1),2);
+			   res += Math.pow((childDataR1Y1-parentDataR1Y1),2);
+		   }
+		   
+		   res = res / Math.pow(BIL_DIM,2);
+		   res = Math.sqrt(res);
+		   //TODO: hacer la similaridad invariante a escala.
+		   //TODO: repetir para cada tipo de hijo. De lo contrario failure.;
+		   
+		   return res;
+				   
+		   
 	   }
 }

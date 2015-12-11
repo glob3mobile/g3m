@@ -15,6 +15,7 @@ public class GEOTile {
    
    public short _maxValue;
    public short _minValue;
+   public boolean _withChildren;
 
 
    GEOTile(final GEOTile parent,
@@ -27,14 +28,16 @@ public class GEOTile {
       _level = level;
       _row = row;
       _column = column;
+      _withChildren = false;
       
       _minValue = Short.MAX_VALUE;
       _maxValue = Short.MIN_VALUE;
    }
    
-   public void updateMaxMinValues(short max, short min){
+   public void updateMaxMinValues(short max, short min, boolean withChildren){
 	   _minValue = (short) Math.min(_minValue, min);
 	   _maxValue = (short) Math.max(_maxValue, max);
+	   _withChildren = withChildren;
    }
 
 

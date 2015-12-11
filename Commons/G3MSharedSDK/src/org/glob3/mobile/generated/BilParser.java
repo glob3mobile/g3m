@@ -70,10 +70,11 @@ public class BilParser
   
   public static ShortBufferElevationData parseBil16MaxMin(Sector sector, Vector2I extent, IByteBuffer buffer, double deltaHeight)
   {
-  
+	int warning_elevparser_madeby_chano;
+	  
     final int size = extent._x * extent._y;
   
-    final int expectedSizeInBytes = (size * 2) + 4;
+    final int expectedSizeInBytes = (size * 2) + 8;
     if (buffer.size() != expectedSizeInBytes)
     {
       ILogger.instance().logError("Invalid buffer size, expected %d bytes, but got %d", expectedSizeInBytes, buffer.size());
@@ -89,7 +90,7 @@ public class BilParser
     {
       short height = iterator.nextInt16();
   
-      if (height == -9999)
+      if (height == 15000) //Our own NODATA, since -9999 is a valid height.
       {
         height = ShortBufferElevationData.NO_DATA_VALUE;
       }
@@ -101,11 +102,14 @@ public class BilParser
       shortBuffer[i] = height;
     }
     
-    //TODO: do something with this;
-    short warning_max = iterator.nextInt16();
-    short warning_min = iterator.nextInt16();
-    ILogger.instance().logInfo("Parsed bil with max: "+warning_max+" ,min: "+warning_min);
+    short max = iterator.nextInt16();
+    short min = iterator.nextInt16();
+    short children = iterator.nextInt16();
+    short similarity = iterator.nextInt16();
+    
+    //ILogger.instance().logInfo("Parsed bil with max: "+warning_max+" ,min: "+warning_min);
   
-    return new ShortBufferElevationData(sector, extent, sector, extent, shortBuffer, size, deltaHeight);
+    return new ShortBufferElevationData(sector, extent, sector, extent, shortBuffer, 
+    		size, deltaHeight,max,min,children,similarity);
   }
 }

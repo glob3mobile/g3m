@@ -28,10 +28,10 @@ public class TileElevationDataRequest
 
   public final void onData(Sector sector, Vector2I resolution, ElevationData elevationData)
   {
-    _listener = null;
+	_listener = null;
     if (_tile != null)
     {
-      _tile.setElevationData(elevationData, _tile._level);
+     _tile.setElevationData(elevationData, _tile._level);
     }
   }
 
@@ -47,8 +47,9 @@ public class TileElevationDataRequest
 
   public final void sendRequest()
   {
-    _listener = new TileElevationDataRequestListener(this);
-    _requestID = _provider.requestElevationData(_tile._sector,_tile._level,_tile._row,_tile._column, _resolution, _requestPriority, _listener, true);
+	int warning_chano_modified_this;  
+		_listener = new TileElevationDataRequestListener(this);
+		_requestID = _provider.requestElevationData(_tile._sector,_tile._level,_tile._row,_tile._column, _resolution, _requestPriority, _listener, true);
   }
 
   public final void cancelRequest()

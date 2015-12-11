@@ -40,6 +40,9 @@ public abstract class ElevationData extends RCObject
   protected final int _height;
 
   protected final Geodetic2D _resolution ;
+  
+  int warning_chano_was_adding_variables_here;
+  protected int _children,_similarity;
 
   public void dispose()
   {
@@ -56,6 +59,10 @@ public abstract class ElevationData extends RCObject
      _height = extent._y;
      _resolution = new Geodetic2D(sector._deltaLatitude.div(extent._y), sector._deltaLongitude.div(extent._x));
      _interpolator = null;
+     
+     int warning_chano_starts_working_here;
+     _children = Short.MIN_VALUE;
+     _similarity = Short.MIN_VALUE;
   }
 
 

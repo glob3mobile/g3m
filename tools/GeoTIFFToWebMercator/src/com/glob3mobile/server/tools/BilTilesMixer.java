@@ -22,7 +22,8 @@ import com.glob3mobile.utils.Progress;
 public class BilTilesMixer {
 
 	   public static void processSubdirectories(final String inputDirectoryName,
-	                                            final String outputDirectoryName) throws IOException {
+	                                            final String outputDirectoryName,
+	                                            final int pyramidType) throws IOException {
 	      final File inputDirectory = new File(inputDirectoryName);
 	      if (!inputDirectory.exists()) {
 	         throw new IOException("Input directory \"" + inputDirectoryName + "\" doesn't exist");
@@ -50,14 +51,21 @@ public class BilTilesMixer {
 
 
 	      final BilTilesMixer mixer = new BilTilesMixer(inputDirectoriesNames, outputDirectoryName);
-	      mixer.process();
+	      mixer.process(pyramidType);
 	   }
 
 
 	   public static void processDirectories(final List<String> inputDirectoriesNames,
-	                                         final String outputDirectoryName) throws IOException {
+	                                         final String outputDirectoryName,
+	                                         final int pyramidType) throws IOException {
 	      final BilTilesMixer mixer = new BilTilesMixer(inputDirectoriesNames, outputDirectoryName);
-	      mixer.process();
+	      mixer.process(pyramidType);
+	   }
+	   
+	   public static void processResultForSimilarity(final String resultDirectoryName,int pyramidType) throws IOException {
+		   final BilTilesMixer mixer = new BilTilesMixer (resultDirectoryName);
+		   mixer.similarity(pyramidType);
+		   
 	   }
 
 
@@ -77,6 +85,14 @@ public class BilTilesMixer {
 
 	      _outputDirectory = new File(outputDirectoryName);
 	      IOUtils.ensureEmptyDirectory(_outputDirectory);
+	   }
+	   
+	   BilTilesMixer ( final String resultDirectoryName ) throws IOException  {
+		   _inputDirectories = new File[1];
+		   File inputDir = new File(resultDirectoryName);
+		   IOUtils.checkDirectory(inputDir);
+		   _inputDirectories[0] = inputDir;
+		   _outputDirectory = null;
 	   }
 
 
@@ -124,8 +140,8 @@ public class BilTilesMixer {
 	   }
 
 
-	   private void process() throws IOException {
-	      final BilMergedPyramid mergedPyramid = new BilMergedPyramid(getSourcePyramids());
+	   private void process(int pyramidType) throws IOException {
+	      final BilMergedPyramid mergedPyramid = new BilMergedPyramid(getSourcePyramids(),pyramidType);
 
 	      final int scaleFactor = 2;
 	      final int cpus = Runtime.getRuntime().availableProcessors();
@@ -163,6 +179,11 @@ public class BilTilesMixer {
 
 	      Logger.log("done!");
 	   }
+	   
+	   private void similarity(int pyramidType) throws IOException {
+		   final BilMergedPyramid mergedPyramid = new BilMergedPyramid(getSourcePyramids(),pyramidType);
+		   mergedPyramid.similarity();
+	   }
 
 
 	   public static void main(final String[] args) throws IOException {
@@ -171,7 +192,14 @@ public class BilTilesMixer {
 
 	      final String inputDirectoryName = "/users/sebastianortegatrujillo/Desktop/Elevs combo/";
 	      final String outputDirectoryName = "/users/sebastianortegatrujillo/Desktop/Elevs combo/result";
-	      BilTilesMixer.processSubdirectories(inputDirectoryName, outputDirectoryName);
+	      
+	      final int pyramidType = Pyramid.PYR_WEBMERC;
+	      final boolean merge = false;
+	      
+	      if (merge)
+	    	  BilTilesMixer.processSubdirectories(inputDirectoryName, outputDirectoryName, pyramidType);
+	      else
+	    	  BilTilesMixer.processResultForSimilarity(outputDirectoryName, pyramidType);
 	   }
 	}
 

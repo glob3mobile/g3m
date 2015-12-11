@@ -532,6 +532,7 @@ public class Tile
      _eastArcSegmentRatioSquared = 0;
      _westArcSegmentRatioSquared = 0;
      _rendered = false;
+     
      _id = createTileId(level, row, column);
   }
 
@@ -679,7 +680,7 @@ public class Tile
         //TODO: AVISAR CAMBIO DE TERRENO
       }
       else
-      {
+      {    	  
         java.util.ArrayList<Tile> subTiles = getSubTiles();
         if (_justCreatedSubtiles)
         {
@@ -1021,10 +1022,9 @@ public class Tile
     _lastTileMeshResolutionY = tileMeshResolution._y;
     if (_elevationDataRequest == null)
     {
-  
-      final Vector2I res = tessellator.getTileMeshResolution(planet, tileMeshResolution, this, renderDebug);
-      _elevationDataRequest = new TileElevationDataRequest(this, res, requestPriority, elevationDataProvider);
-      _elevationDataRequest.sendRequest();
+    	final Vector2I res = tessellator.getTileMeshResolution(planet, tileMeshResolution, this, renderDebug);
+    	_elevationDataRequest = new TileElevationDataRequest(this, res, requestPriority, elevationDataProvider);
+      	_elevationDataRequest.sendRequest();
     }
   
     //If after petition we still have no data we request from ancestor (provider asynchronous)

@@ -22,6 +22,9 @@ public class ShortBufferElevationData extends BufferElevationData
 {
   private short[] _buffer;
   private boolean _hasNoData;
+  
+  
+  private final short _max, _min;
 
   protected final double getValueInBufferAt(int index)
   {
@@ -55,7 +58,45 @@ public class ShortBufferElevationData extends BufferElevationData
         break;
       }
     }
+    
+    int warning_chano_starts_working_here;
+    _max = Short.MIN_VALUE;
+    _min = Short.MAX_VALUE;
+    _children = Short.MIN_VALUE;
+    _similarity = Short.MIN_VALUE;
   }
+  
+  public ShortBufferElevationData(Sector sector, Vector2I extent, Sector realSector, Vector2I realExtent, short[] buffer, 
+		  int bufferSize, double deltaHeight, short max, short min, short children, short similarity)
+  {
+     super(sector, extent, realSector, realExtent, bufferSize, deltaHeight);
+     
+     int warning_constructor_madeby_chano;
+     
+     _buffer = buffer;
+    if (_bufferSize != (_width * _height))
+    {
+      ILogger.instance().logError("Invalid buffer size");
+    }
+  
+    final int size = _bufferSize;
+    _hasNoData = false;
+    for (int i = 0; i < size; i++)
+    {
+      if (buffer[i] == NO_DATA_VALUE)
+      {
+        _hasNoData = true;
+        break;
+      }
+    }
+    
+    _max = max;
+    _min = min;
+    _children = children;
+    _similarity = similarity;
+  }
+  
+  
 
   public void dispose()
   {
@@ -96,9 +137,11 @@ public class ShortBufferElevationData extends BufferElevationData
 
   public final Vector3D getMinMaxAverageElevations()
   {
-    final IMathUtils mu = IMathUtils.instance();
-    short minHeight = mu.maxInt16();
-    short maxHeight = mu.minInt16();
+    int warning_chano_modified_this;
+    
+    //final IMathUtils mu = IMathUtils.instance();
+    //short minHeight = mu.maxInt16();
+    //short maxHeight = mu.minInt16();
     double sumHeight = 0.0;
   
     final int bufferSize = _bufferSize;
@@ -107,28 +150,39 @@ public class ShortBufferElevationData extends BufferElevationData
       final short height = _buffer[i];
       if (height != NO_DATA_VALUE)
       {
-        if (height < minHeight)
+        /*if (height < minHeight)
         {
           minHeight = height;
         }
         if (height > maxHeight)
         {
           maxHeight = height;
-        }
+        }*/
         sumHeight += height;
       }
     }
   
-    if (minHeight == mu.maxInt16())
+    /*if (minHeight == mu.maxInt16())
     {
       minHeight = 0;
     }
     if (maxHeight == mu.minInt16())
     {
       maxHeight = 0;
-    }
+    }*/
   
-    return new Vector3D(minHeight, maxHeight, sumHeight / (_width * _height));
+    return new Vector3D(_min, _max, sumHeight / (_width * _height));
+  }
+  
+  public final boolean hasChildren (){
+	  int warning_method_madeby_chano;
+	  if (_children > 0) return true;
+	  return false; 
+  }
+  
+  public final int getSimilarity(){
+	  int warning_method_madeby_chano;
+	  return _similarity;
   }
 
   public final boolean hasNoData()
