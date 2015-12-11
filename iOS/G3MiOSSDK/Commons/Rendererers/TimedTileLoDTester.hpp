@@ -34,14 +34,15 @@ protected:
       return false;
     }
     
-    double lastTime = data->_lastMeetsRenderCriteriaTimeInMS;
-    data->_lastMeetsRenderCriteriaTimeInMS = rc.getFrameStartTimer()->nowInMilliseconds(); //Update
+    const double lastTime = data->_lastMeetsRenderCriteriaTimeInMS;
+    const double now = rc.getFrameStartTimer()->nowInMilliseconds();
 
-    if ((rc.getFrameStartTimer()->nowInMilliseconds() - lastTime) > _maxElapsedTimeInMS){
-      return true;
-    } else{
-      return false;
+    const bool res = ((now - lastTime) > _maxElapsedTimeInMS);
+    if (res){
+      data->_lastMeetsRenderCriteriaTimeInMS = now; //Update
     }
+
+    return res;
     
   }
   
