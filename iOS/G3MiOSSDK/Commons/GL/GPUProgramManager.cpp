@@ -160,7 +160,7 @@ GPUProgram* GPUProgramManager::getCompiledProgram(int uniformsCode, int attribut
 #endif
 #ifdef JAVA_CODE
   for (final GPUProgram p : _programs.values()) {
-    if ((p.getUniformsCode() == uniformsCode) && (p.getAttributesCode() == attributesCode)) {
+    if ((p.getUniformsCode() == uniformsCode) && (p.getAttributesCode() == attributesCode) && p.isReferencedByName()) {
       return p;
     }
   }
