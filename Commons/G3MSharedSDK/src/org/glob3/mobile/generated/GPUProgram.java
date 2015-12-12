@@ -20,6 +20,8 @@ public class GPUProgram
 
   private int _nReferences; //Number of items that reference this Program
 
+  private boolean _referencedByName;
+
   private boolean compileShader(GL gl, int shader, String source)
   {
     boolean result = gl.compileShader(shader, source);
@@ -177,7 +179,7 @@ public class GPUProgram
     }
   }
 
-  public static GPUProgram createProgram(GL gl, String name, String vertexSource, String fragmentSource)
+  public static GPUProgram createProgram(GL gl, String name, String vertexSource, String fragmentSource, boolean referencedByName)
   {
   
     GPUProgram p = new GPUProgram();
@@ -185,6 +187,7 @@ public class GPUProgram
     p._name = name;
     p._programID = gl.createProgram();
     p._gl = gl;
+    p._referencedByName = referencedByName;
   
     // compile vertex shader
     int vertexShader = gl.createShader(ShaderType.VERTEX_SHADER);
@@ -258,6 +261,11 @@ public class GPUProgram
   public final int getGPUUniformsNumber()
   {
      return _nUniforms;
+  }
+
+  public final boolean isReferencedByName()
+  {
+     return _referencedByName;
   }
 
   public final GPUUniform getGPUUniform(String name)
