@@ -171,7 +171,7 @@ public class GPUProgramManager
   private GPUProgram getCompiledProgram(int uniformsCode, int attributesCode)
   {
     for (final GPUProgram p : _programs.values()) {
-      if ((p.getUniformsCode() == uniformsCode) && (p.getAttributesCode() == attributesCode)) {
+      if ((p.getUniformsCode() == uniformsCode) && (p.getAttributesCode() == attributesCode) && p.isReferencedByName()) {
         return p;
       }
     }
