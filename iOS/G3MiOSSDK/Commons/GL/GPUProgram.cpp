@@ -16,13 +16,15 @@
 GPUProgram* GPUProgram::createProgram(GL* gl,
                                       const std::string& name,
                                       const std::string& vertexSource,
-                                      const std::string& fragmentSource) {
+                                      const std::string& fragmentSource,
+                                      const bool referencedByName) {
 
   GPUProgram* p = new GPUProgram();
 
   p->_name = name;
   p->_programID = gl->createProgram();
   p->_gl = gl;
+  p->_referencedByName = referencedByName;
 
   // compile vertex shader
   int vertexShader= gl->createShader(VERTEX_SHADER);
