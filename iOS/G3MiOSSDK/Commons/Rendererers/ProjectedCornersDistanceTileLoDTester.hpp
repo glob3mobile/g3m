@@ -15,6 +15,8 @@
 #include "Planet.hpp"
 #include "Context.hpp"
 #include "Camera.hpp"
+#include "BoundingVolume.hpp"
+#include "Mesh.hpp"
 
 class ProjectedCornersDistanceTileLoDTester: public TileLoDTester{
 protected:
@@ -44,6 +46,8 @@ protected:
     Vector3D _southWestPoint;
     Vector3D _southEastPoint;
     
+    BoundingVolume* _bvol;
+    
     ProjectedCornersDistanceTileLoDTesterData(Tile* tile, double mediumHeight, const Planet* planet):
     TileLoDTesterData(),
     _northWestPoint(planet->toCartesian( tile->_sector.getNW(), mediumHeight )),
@@ -60,6 +64,15 @@ protected:
       _southArcSegmentRatioSquared = getSquaredArcSegmentRatio(normalSW, normalSE);
       _eastArcSegmentRatioSquared  = getSquaredArcSegmentRatio(normalNE, normalSE);
       _westArcSegmentRatioSquared  = getSquaredArcSegmentRatio(normalNW, normalSW);
+      
+      //Computing Bounding Volume
+      
+//      const Mesh* mesh = tile->getCurrentTessellatorMesh();
+//      if (mesh == NULL) {
+//        ILogger::instance()->logError("Problem computing BVolume in ProjectedCornersDistanceTileLoDTesterData");
+//      }
+//      _bvol = mesh->getBoundingVolume();
+      
     }
     
     bool evaluate(const Camera* camera, double texHeightSquared, double texWidthSquared){

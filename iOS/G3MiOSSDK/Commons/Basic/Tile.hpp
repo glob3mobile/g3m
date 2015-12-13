@@ -341,6 +341,10 @@ public:
     return &_tileTessellatorMeshData;
   }
   
+  const Mesh* getCurrentTessellatorMesh() const{
+    return _tessellatorMesh;
+  }
+  
 };
 
 #endif

@@ -22,14 +22,16 @@ bool TileLoDTester::meetsRenderCriteria(int testerLevel,
   //Right LOD
   if (_meetsRenderCriteria(testerLevel, tile, rc)){
     if (_nextTesterRightLoD != NULL){
-      return _nextTesterRightLoD->meetsRenderCriteria(testerLevel + 1, tile, rc);
+      _lastMeetsRenderCriteriaResult = _nextTesterRightLoD->meetsRenderCriteria(testerLevel + 1, tile, rc);
+      return _lastMeetsRenderCriteriaResult;
     }
     return true;
   }
   
   //Wrong LOD
   if (_nextTesterWrongLoD != NULL){
-    return _nextTesterWrongLoD->meetsRenderCriteria(testerLevel + 1, tile, rc);
+    _lastMeetsRenderCriteriaResult = _nextTesterWrongLoD->meetsRenderCriteria(testerLevel + 1, tile, rc);
+    return _lastMeetsRenderCriteriaResult;
   }
   return false;
 }
@@ -42,14 +44,16 @@ bool TileLoDTester::isVisible(int testerLevel,
   //Visible
   if (_isVisible(testerLevel, tile, rc)){
     if (_nextTesterVisible != NULL){
-      return _nextTesterVisible->isVisible(testerLevel+1, tile, rc);
+      _lastIsVisibleResult = _nextTesterVisible->isVisible(testerLevel+1, tile, rc);
+      return _lastIsVisibleResult;
     }
     return true;
   }
   
   //Wrong LOD
   if (_nextTesterNotVisible != NULL){
-    return _nextTesterNotVisible->isVisible(testerLevel+1, tile, rc);
+    _lastIsVisibleResult = _nextTesterNotVisible->isVisible(testerLevel+1, tile, rc);
+    return _lastIsVisibleResult;
   }
   return false;
   
