@@ -26,6 +26,8 @@ class GPUProgramManager {
 
   GPUProgram* compileProgramWithName(GL* gl, const std::string& name);
 
+  GPUProgram* compileProgramWithName(GL* gl, const std::string& name, bool referencedByName);
+
   GPUProgram* getNewProgram(GL* gl, int uniformsCode, int attributesCode);
 
   GPUProgram* getCompiledProgram(int uniformsCode, int attributesCode);

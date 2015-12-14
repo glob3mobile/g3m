@@ -32,6 +32,11 @@ public class GPUProgramManager
 
   private GPUProgram compileProgramWithName(GL gl, String name)
   {
+    return compileProgramWithName(gl, name, false);
+  }
+
+  private GPUProgram compileProgramWithName(GL gl, String name, boolean referencedByName)
+  {
   
     GPUProgram prog = getCompiledProgram(name);
     if (prog == null)
@@ -41,7 +46,7 @@ public class GPUProgramManager
       //Compile new Program
       if (ps != null)
       {
-        prog = GPUProgram.createProgram(gl, ps._name, ps._vertexSource, ps._fragmentSource);
+        prog = GPUProgram.createProgram(gl, ps._name, ps._vertexSource, ps._fragmentSource, referencedByName);
         ///#warning DETECT COLISSION WITH COLLECTION OF GPUPROGRAM
         if (prog == null)
         {
@@ -166,7 +171,7 @@ public class GPUProgramManager
   private GPUProgram getCompiledProgram(int uniformsCode, int attributesCode)
   {
     for (final GPUProgram p : _programs.values()) {
-      if ((p.getUniformsCode() == uniformsCode) && (p.getAttributesCode() == attributesCode)) {
+      if ((p.getUniformsCode() == uniformsCode) && (p.getAttributesCode() == attributesCode) && !p.isReferencedByName()) {
         return p;
       }
     }
@@ -212,7 +217,7 @@ public class GPUProgramManager
       GPUProgram p = getCompiledProgram(name);
       if (p == null)
       {
-          p = compileProgramWithName(gl, name);
+          p = compileProgramWithName(gl, name, true);
           if (p == null)
           {
               ILogger.instance().logError("Problem at compiling program.");
