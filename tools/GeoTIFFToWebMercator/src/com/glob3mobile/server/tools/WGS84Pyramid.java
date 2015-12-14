@@ -2,7 +2,13 @@
 
 package com.glob3mobile.server.tools;
 
+import java.awt.geom.Point2D;
 import java.util.List;
+
+import org.geotools.referencing.CRS;
+import org.geotools.referencing.GeodeticCalculator;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
+import org.opengis.referencing.datum.Ellipsoid;
 
 
 public class WGS84Pyramid extends Pyramid {
@@ -39,6 +45,22 @@ public class WGS84Pyramid extends Pyramid {
                lower._longitude + deltaLongitude);
 
       return new GEOSector(lower, upper);
+   }
+   
+   public static double tileShorterSideDistance(int level, int column, int row){
+	   
+	   GEOSector sector = sectorFor(level,column,row);
+	   double distance = -1;
+	   
+	   try {
+		   CoordinateReferenceSystem crs = CRS.decode("EPSG:4326");
+		   GeodeticCalculator geoCalculator = new GeodeticCalculator(crs);
+		   geoCalculator.setStartingGeographicPoint(sector._upper._latitude, sector._lower._longitude);
+		   geoCalculator.setDestinationGeographicPoint(sector._lower._latitude, sector._lower._longitude);
+		   distance = geoCalculator.getOrthodromicDistance();
+	   }
+	   catch (Exception e) {System.out.println("Something really wrong happened while calculating distance"); }
+	   return distance;
    }
 
 

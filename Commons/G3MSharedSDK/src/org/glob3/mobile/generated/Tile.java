@@ -681,20 +681,20 @@ public class Tile
       }
       else
       {    	  
-        java.util.ArrayList<Tile> subTiles = getSubTiles();
-        if (_justCreatedSubtiles)
-        {
-          lastSplitTimer.start();
-          _justCreatedSubtiles = false;
-        }
-  
-        final int subTilesSize = subTiles.size();
-        for (int i = 0; i < subTilesSize; i++)
-        {
-          Tile subTile = subTiles.get(i);
-          toVisitInNextIteration.add(subTile);
-        }
-      }
+	    	java.util.ArrayList<Tile> subTiles = getSubTiles();
+	        if (_justCreatedSubtiles)
+	        {
+	          lastSplitTimer.start();
+	          _justCreatedSubtiles = false;
+	        }
+	  
+	        final int subTilesSize = subTiles.size();
+	        for (int i = 0; i < subTilesSize; i++)
+	        {
+	          Tile subTile = subTiles.get(i);
+	          toVisitInNextIteration.add(subTile);
+	        }
+    	}
     }
     else
     {
@@ -1024,7 +1024,15 @@ public class Tile
     {
     	final Vector2I res = tessellator.getTileMeshResolution(planet, tileMeshResolution, this, renderDebug);
     	_elevationDataRequest = new TileElevationDataRequest(this, res, requestPriority, elevationDataProvider);
-      	_elevationDataRequest.sendRequest();
+    	int warning_chano_changed_this___using_this_combined_with_incremental_tile_quality_you_could_avoid_loading_bad_tiles;
+    	if (this._parent != null && this._parent.isElevationDataSolved() && this._parent._elevationData._children == 0) {
+    		getElevationDataFromAncestor(tileMeshResolution);
+    	    //Supposing you need to take elevData from ancestor, new ElevData won't be found. Taking this into account ...
+    	    _elevationData._children = 0; //No children
+    	    _elevationData._similarity = 0; //No similarity
+    	    _elevationDataLevel = _level; //Marking data elev as solved.
+    	}
+    	else  _elevationDataRequest.sendRequest();
     }
   
     //If after petition we still have no data we request from ancestor (provider asynchronous)

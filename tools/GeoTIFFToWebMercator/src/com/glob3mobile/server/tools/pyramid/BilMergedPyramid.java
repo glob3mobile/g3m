@@ -447,11 +447,10 @@ public class BilMergedPyramid {
 		        	 final MergedColumn column = level._columns.get(columnKey);
 		        	 for (final Integer rowKey : column._tiles.keySet()){
 		        		 final MergedTile tile = column._tiles.get(rowKey);
-		        		 // Magic goes here
+		        		 String thePart = level._level + "/" + tile._column._column + "/" + tile._row;
 		        		 try {
 		        			 String str = tile._sourceTiles.get(0).getImageFile().getAbsolutePath();
-		        			 String thePart = level._level + "/" + tile._column._column + "/" + tile._row;
-		        			 
+
 		        			 String childPartA = (level._level + 1) + "/" + (tile._column._column * 2) + "/" + (tile._row *2);
 		        			 String childPartB = (level._level + 1) + "/" + (tile._column._column * 2 + 1) + "/" + (tile._row *2);
 		        			 String childPartC = (level._level + 1) + "/" + (tile._column._column * 2) + "/" + (tile._row *2 + 1);
@@ -468,14 +467,33 @@ public class BilMergedPyramid {
 		        			 MaxMinBufferedImage childC = BilUtils.BilFileMaxMinToBufferedImage(childC_str, BIL_DIM, BIL_DIM);
 		        			 MaxMinBufferedImage childD = BilUtils.BilFileMaxMinToBufferedImage(childD_str, BIL_DIM, BIL_DIM);
 		        			 
-		        			 double similarity = calculateSimilarity (parent, childA, childB, childC, childD);
+		        			 double avgError = calculateSimilarity (parent, childA, childB, childC, childD);
 		        			 
-		        			 System.out.println(str);
-		        			 System.out.println("Error medio por vértice (similaridad no completada):"+similarity);
+		        			 double distance = -1;
+		        			 switch (_type) {
+		        			 	case Pyramid.PYR_WGS84:
+		        			 		distance = WGS84Pyramid.tileShorterSideDistance(level._level, tile._column._column, tile._row);
+		        			 		break;
+		        			 	case Pyramid.PYR_WEBMERC:
+		        			 		distance = WebMercatorPyramid.tileShorterSideDistance(level._level, tile._column._column, tile._row);
+		        			 		break;
+		        			 	default:
+		        			 		System.out.println("Something weird happened while calculating distance");	
+		        			 }
+		        			 double similarity = avgError / distance;
+		        			
+		        			 short invertedSimilarity;
+		        			 if (avgError == 0) invertedSimilarity = Short.MAX_VALUE;
+		        			 else if (Math.round(1/similarity) > Short.MAX_VALUE) invertedSimilarity = Short.MAX_VALUE;
+		        			 else invertedSimilarity = (short) ( Math.round(1/similarity));
+
+		        			 System.out.println(thePart+" - Avg error: "+avgError+" , dist [mt]: "+distance+" , similarity: "+similarity+ ", invertedSimilarity:"+invertedSimilarity);
+		        			 
+		        			 BilUtils.BufferedImageToBilFileMaxMin(parent._image, str, BIL_DIM, BIL_DIM, parent._max, parent._min, parent._childrenData, invertedSimilarity);
 		        			 
 		        		 }
 		        		 catch (Exception e) {
-		        			 
+		        			 System.out.println(thePart+" - Discarded [no children]");
 		        		 }
 		        		 
 		        	 }

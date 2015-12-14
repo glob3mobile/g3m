@@ -36,6 +36,10 @@ public class SubviewElevationData extends ElevationData
     }
   
     _hasNoData = false;
+    
+    int warning_chano_added_lines_here;
+    this._children = elevationData._children;
+    this._similarity = elevationData._similarity;
   }
 
 

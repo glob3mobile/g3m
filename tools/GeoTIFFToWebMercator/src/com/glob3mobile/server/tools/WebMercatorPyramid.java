@@ -2,6 +2,10 @@ package com.glob3mobile.server.tools;
 
 import java.util.List;
 
+import org.geotools.referencing.CRS;
+import org.geotools.referencing.GeodeticCalculator;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
+
 import com.glob3mobile.utils.Angle;
 
 public class WebMercatorPyramid extends Pyramid {
@@ -28,9 +32,7 @@ public class WebMercatorPyramid extends Pyramid {
 
 		final int splitsByLongitude = topSectorSplitsByLongitude * (int) Math.pow(2, level);
 
-		//TODO: Revisar MUCHO esta línea. Es candidata nº 1 a reventar y hacer aguas.
 		final double[] deltaLatitudes = calculateDeltaLatitudesForLevel(level, row);
-		
 		
 		final double deltaLongitude = 360.0 / splitsByLongitude;
 
@@ -109,6 +111,25 @@ public class WebMercatorPyramid extends Pyramid {
 	    final double latSin = java.lang.Math.sin(latitude._radians);
 	    return 1.0 - ((Math.log((1.0 + latSin) / (1.0 - latSin)) / pi4) + 0.5);
 	  }
+	
+	public static double tileShorterSideDistance(int level, int column, int row){
+		
+		Pyramid.setTopSectorSplits(1, 1);
+		   
+		   GEOSector sector = sectorFor(level,column,row);
+		   double distance = -1;
+		   
+		   try {
+			   GeodeticCalculator geoCalculator = new GeodeticCalculator();
+			   geoCalculator.setStartingGeographicPoint(sector._lower._longitude,sector._upper._latitude);
+			   geoCalculator.setDestinationGeographicPoint(sector._lower._longitude, sector._lower._latitude);
+			   distance = geoCalculator.getOrthodromicDistance();
+		   }
+		   catch (Exception e) {
+			   e.printStackTrace();
+			   System.out.println("Something really wrong happened while calculating distance"); }
+		   return distance;
+	   }
 
 }
 
