@@ -147,12 +147,6 @@ private:
   
   const PlanetRenderer* _planetRenderer;
   
-  const BoundingVolume* getBoundingVolume(const G3MRenderContext* rc,
-                                          ElevationDataProvider* elevationDataProvider,
-                                          const TileTessellator* tessellator,
-                                          const LayerTilesRenderParameters* layerTilesRenderParameters,
-                                          const TilesRenderParameters* tilesRenderParameters);
-  
   bool _rendered;
   
   static std::string createTileId(int level,

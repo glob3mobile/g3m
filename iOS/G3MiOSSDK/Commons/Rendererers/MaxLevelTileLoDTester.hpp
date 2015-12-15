@@ -50,12 +50,13 @@ public:
                         TileLoDTester* nextTesterWrongLoD,
                         TileLoDTester* nextTesterVisible,
                         TileLoDTester* nextTesterNotVisible):
-  _maxLevelForPoles(maxLevelForPoles),
-  _maxLevel(maxLevel),
   TileLoDTester(nextTesterRightLoD,
                 nextTesterWrongLoD,
                 nextTesterVisible,
-                nextTesterNotVisible){}
+                nextTesterNotVisible),
+  _maxLevelForPoles(maxLevelForPoles),
+  _maxLevel(maxLevel)
+  {}
   
   
   ~MaxLevelTileLoDTester(){

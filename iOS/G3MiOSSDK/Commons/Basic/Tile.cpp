@@ -236,25 +236,6 @@ Mesh* Tile::getDebugMesh(const G3MRenderContext* rc,
   return _debugMesh;
 }
 
-
-const BoundingVolume* Tile::getBoundingVolume(const G3MRenderContext* rc,
-                                              ElevationDataProvider* elevationDataProvider,
-                                              const TileTessellator* tessellator,
-                                              const LayerTilesRenderParameters* layerTilesRenderParameters,
-                                              const TilesRenderParameters* tilesRenderParameters) {
-  if (_boundingVolume == NULL) {
-    Mesh* mesh = getTessellatorMesh(rc,
-                                    elevationDataProvider,
-                                    tessellator,
-                                    layerTilesRenderParameters,
-                                    tilesRenderParameters);
-    if (mesh != NULL) {
-      _boundingVolume = mesh->getBoundingVolume();
-    }
-  }
-  return _boundingVolume;
-}
-
 bool Tile::isVisible(const G3MRenderContext* rc,
                      const Sector* renderedSector) {
   if ((renderedSector != NULL) &&

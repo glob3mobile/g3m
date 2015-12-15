@@ -140,12 +140,13 @@ public:
                                         TileLoDTester* nextTesterWrongLoD,
                                         TileLoDTester* nextTesterVisible,
                                         TileLoDTester* nextTesterNotVisible):
-  _texHeightSquared(textureHeight * textureHeight),
-  _texWidthSquared(textureWidth * textureWidth),
   TileLoDTester(nextTesterRightLoD,
                 nextTesterWrongLoD,
                 nextTesterVisible,
-                nextTesterNotVisible){}
+                nextTesterNotVisible),
+  _texHeightSquared(textureHeight * textureHeight),
+  _texWidthSquared(textureWidth * textureWidth)
+  {}
   
   
   ~ProjectedCornersDistanceTileLoDTester(){

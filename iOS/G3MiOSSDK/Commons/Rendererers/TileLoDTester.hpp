@@ -16,6 +16,13 @@
 class TileLoDTesterData{
   //Empty class. Each TileLoDTester will implement a different set of associated data and will
   //store it inside the tile using its unique level id
+public:
+#ifdef C_CODE
+  virtual ~TileLoDTesterData() { }
+#endif
+#ifdef JAVA_CODE
+  void dispose();
+#endif
 };
 
 class TileLoDTester{
