@@ -67,11 +67,13 @@ protected:
       
       //Computing Bounding Volume
       
-//      const Mesh* mesh = tile->getCurrentTessellatorMesh();
-//      if (mesh == NULL) {
-//        ILogger::instance()->logError("Problem computing BVolume in ProjectedCornersDistanceTileLoDTesterData");
-//      }
-//      _bvol = mesh->getBoundingVolume();
+      const Mesh* mesh = tile->getCurrentTessellatorMesh();
+      if (mesh == NULL) {
+        ILogger::instance()->logError("Problem computing BVolume in ProjectedCornersDistanceTileLoDTesterData");
+        _bvol = NULL;
+      } else{
+        _bvol = mesh->getBoundingVolume(); //BV is deleted by mesh
+      }
       
     }
     
@@ -96,7 +98,18 @@ protected:
   };
   
   void _onTileHasChangedMesh(int testerLevel, Tile* tile) const{
+    //Recomputing data when tile changes tessellator mesh
     tile->setDataForLoDTester(testerLevel, NULL);
+  }
+  
+  ProjectedCornersDistanceTileLoDTesterData* getData(Tile* tile, int testerLevel, const G3MRenderContext& rc) const{
+    ProjectedCornersDistanceTileLoDTesterData* data = (ProjectedCornersDistanceTileLoDTesterData*) tile->getDataForLoDTester(testerLevel);
+    if (data == NULL){
+      const double mediumHeight = tile->getTessellatorMeshData()->_averageHeight;
+      data = new ProjectedCornersDistanceTileLoDTesterData(tile, mediumHeight, rc.getPlanet());
+      tile->setDataForLoDTester(testerLevel, data);
+    }
+    return data;
   }
   
   bool _meetsRenderCriteria(int testerLevel,
@@ -104,12 +117,7 @@ protected:
                             const G3MRenderContext& rc) const{
     
     
-    ProjectedCornersDistanceTileLoDTesterData* data = (ProjectedCornersDistanceTileLoDTesterData*) tile->getDataForLoDTester(testerLevel);
-    if (data == NULL){
-      const double mediumHeight = tile->getTessellatorMeshData()->_averageHeight;
-      data = new ProjectedCornersDistanceTileLoDTesterData(tile, mediumHeight, rc.getPlanet());
-      tile->setDataForLoDTester(testerLevel, data);
-    }
+    ProjectedCornersDistanceTileLoDTesterData* data = getData(tile, testerLevel, rc);
     
     return data->evaluate(rc.getCurrentCamera(), _texHeightSquared, _texWidthSquared);
   }
@@ -117,7 +125,8 @@ protected:
   bool _isVisible(int testerLevel,
                   Tile* tile,
                   const G3MRenderContext& rc) const{
-    return true;
+    ProjectedCornersDistanceTileLoDTesterData* data = getData(tile, testerLevel, rc);
+    return data->_bvol->touchesFrustum(rc.getCurrentCamera()->getFrustumInModelCoordinates());
   }
   
   double _texHeightSquared;

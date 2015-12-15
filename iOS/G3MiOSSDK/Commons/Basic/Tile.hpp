@@ -87,24 +87,14 @@ private:
                      const LayerTilesRenderParameters* layerTilesRenderParameters);
   
   inline bool isVisible(const G3MRenderContext* rc,
-                        const Frustum* cameraFrustumInModelCoordinates,
-                        ElevationDataProvider* elevationDataProvider,
-                        const Sector* renderedSector,
-                        const TileTessellator* tessellator,
-                        const LayerTilesRenderParameters* layerTilesRenderParameters,
-                        const TilesRenderParameters* tilesRenderParameters);
+                        const Sector* renderedSector);
   
-//  bool _lastMeetsRenderCriteriaResult;
-//  double _lastMeetsRenderCriteriaTimeInMS;
+  bool _lastMeetsRenderCriteriaResult;
+  double _lastMeetsRenderCriteriaTimeInMS;
   
   inline bool meetsRenderCriteria(const G3MRenderContext* rc,
-                                  const LayerTilesRenderParameters* layerTilesRenderParameters,
-                                  TileTexturizer* texturizer,
                                   const TilesRenderParameters* tilesRenderParameters,
-                                  const TilesStatistics* tilesStatistics,
                                   const ITimer* lastSplitTimer,
-                                  double texWidthSquared,
-                                  double texHeightSquared,
                                   double nowInMS);
   
   inline void rawRender(const G3MRenderContext* rc,

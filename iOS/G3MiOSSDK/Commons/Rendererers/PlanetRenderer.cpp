@@ -33,7 +33,7 @@
 #include <algorithm>
 
 #include "TimedTileLoDTester.hpp"
-#include "MaxLevelForPolesTileLoDTester.hpp"
+#include "MaxLevelTileLoDTester.hpp"
 #include "ProjectedCornersDistanceTileLoDTester.hpp"
 #include "ProjectedCornersDistanceTileLoDTester.hpp"
 
@@ -980,7 +980,7 @@ TileLoDTester* PlanetRenderer::createDefaultTileLoDTester(){
   //                TileLoDTester* nextTesterVisible,
   //                TileLoDTester* nextTesterNotVisible)
   
-  //2
+  //1
   ProjectedCornersDistanceTileLoDTester* proj =
         new ProjectedCornersDistanceTileLoDTester(getLayerTilesRenderParameters()->_tileTextureResolution._x,
                                                   getLayerTilesRenderParameters()->_tileTextureResolution._y,
@@ -989,21 +989,22 @@ TileLoDTester* PlanetRenderer::createDefaultTileLoDTester(){
                                                   NULL,
                                                   NULL);
   
-  //1
-  MaxLevelForPolesTileLoDTester* poles = new MaxLevelForPolesTileLoDTester(getLayerTilesRenderParameters()->_maxLevelForPoles,
+  //0
+  MaxLevelTileLoDTester* poles = new MaxLevelTileLoDTester(getLayerTilesRenderParameters()->_maxLevel,
+                                                           getLayerTilesRenderParameters()->_maxLevelForPoles,
                                                                            NULL,
                                                                            proj,
-                                                                           NULL,
-                                                                           NULL);
-  //0
-  TimedTileLoDTester* timed = new TimedTileLoDTester(250,
-                                                     NULL,
-                                                     poles,
-                                                     NULL,
-                                                     NULL);
+                                                                           proj,
+                                                                           proj);
+//  //0
+//  TimedTileLoDTester* timed = new TimedTileLoDTester(250,
+//                                                     NULL,
+//                                                     poles,
+//                                                     NULL,
+//                                                     NULL);
   
   
-  return timed;
+  return poles;
   
 }
 

@@ -25,9 +25,6 @@ class TileLoDTester{
   TileLoDTester* _nextTesterVisible;
   TileLoDTester* _nextTesterNotVisible;
   
-  mutable bool _lastMeetsRenderCriteriaResult;
-  mutable bool _lastIsVisibleResult;
-  
 protected:
   
   virtual bool _meetsRenderCriteria(int testerLevel,

@@ -445,8 +445,6 @@
 		CFFEC12615C2EBA6003FA986 /* URL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFFEC12515C2EBA6003FA986 /* URL.cpp */; };
 		D8019FF01C11D91800784287 /* TileLoDTester.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8019FEE1C11D91800784287 /* TileLoDTester.cpp */; };
 		D8019FF21C11DFCF00784287 /* TileLoDTester.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8019FEF1C11D91800784287 /* TileLoDTester.hpp */; };
-		D8019FF51C11E42900784287 /* TimedTileLoDTester.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8019FF31C11E42900784287 /* TimedTileLoDTester.cpp */; };
-		D8019FF61C1201EC00784287 /* TimedTileLoDTester.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8019FF41C11E42900784287 /* TimedTileLoDTester.hpp */; };
 		D80270BE17B3AADF0029F0BE /* CameraDoubleDragHandler.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = FBBDBCDD17AB983200077004 /* CameraDoubleDragHandler.hpp */; };
 		D80A286B1746474E0058CEC3 /* Planet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D80A28691746474E0058CEC3 /* Planet.cpp */; };
 		D80A286C1746474E0058CEC3 /* EllipsoidalPlanet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D80A286A1746474E0058CEC3 /* EllipsoidalPlanet.cpp */; };
@@ -509,10 +507,10 @@
 		D8B749AB175E040900046B96 /* Ellipsoid.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8B749A9175E040800046B96 /* Ellipsoid.cpp */; };
 		D8B749AE175E04FA00046B96 /* Sphere.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8B749AC175E04FA00046B96 /* Sphere.cpp */; };
 		D8B749B0175E183900046B96 /* Ellipsoid.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8B749AA175E040800046B96 /* Ellipsoid.hpp */; };
-		D8B78E241C1208CB00DDE2B9 /* MaxLevelForPolesTileLoDTester.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8B78E221C1208CB00DDE2B9 /* MaxLevelForPolesTileLoDTester.cpp */; };
+		D8B78E241C1208CB00DDE2B9 /* MaxLevelTileLoDTester.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8B78E221C1208CB00DDE2B9 /* MaxLevelTileLoDTester.cpp */; };
 		D8B78E271C120CF800DDE2B9 /* ProjectedCornersDistanceTileLoDTester.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8B78E251C120CF800DDE2B9 /* ProjectedCornersDistanceTileLoDTester.cpp */; };
 		D8B78E281C120D4F00DDE2B9 /* ProjectedCornersDistanceTileLoDTester.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8B78E261C120CF800DDE2B9 /* ProjectedCornersDistanceTileLoDTester.hpp */; };
-		D8B78E291C120D4F00DDE2B9 /* MaxLevelForPolesTileLoDTester.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8B78E231C1208CB00DDE2B9 /* MaxLevelForPolesTileLoDTester.hpp */; };
+		D8B78E291C120D4F00DDE2B9 /* MaxLevelTileLoDTester.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8B78E231C1208CB00DDE2B9 /* MaxLevelTileLoDTester.hpp */; };
 		D8B8CE88178D636000EE1B97 /* GLFeature.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8B8CE86178D636000EE1B97 /* GLFeature.cpp */; };
 		D8B8CE8B178D63C400EE1B97 /* GLFeatureGroup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8B8CE89178D63C400EE1B97 /* GLFeatureGroup.cpp */; };
 		D8B8CE8E178D645F00EE1B97 /* GPUVariableValueSet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8B8CE8C178D645F00EE1B97 /* GPUVariableValueSet.cpp */; };
@@ -740,8 +738,7 @@
 			dstSubfolderSpec = 16;
 			files = (
 				D8B78E281C120D4F00DDE2B9 /* ProjectedCornersDistanceTileLoDTester.hpp in CopyFiles */,
-				D8B78E291C120D4F00DDE2B9 /* MaxLevelForPolesTileLoDTester.hpp in CopyFiles */,
-				D8019FF61C1201EC00784287 /* TimedTileLoDTester.hpp in CopyFiles */,
+				D8B78E291C120D4F00DDE2B9 /* MaxLevelTileLoDTester.hpp in CopyFiles */,
 				D8019FF21C11DFCF00784287 /* TileLoDTester.hpp in CopyFiles */,
 				CF1751D21BA61808006286C6 /* StackLayoutImageBuilder.hpp in CopyFiles */,
 				CF3623411B97AFD900824932 /* CircleImageBuilder.hpp in CopyFiles */,
@@ -1700,8 +1697,6 @@
 		CFFEC12515C2EBA6003FA986 /* URL.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = URL.cpp; path = Commons/Basic/URL.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		D8019FEE1C11D91800784287 /* TileLoDTester.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TileLoDTester.cpp; path = Commons/Rendererers/TileLoDTester.cpp; sourceTree = "<group>"; };
 		D8019FEF1C11D91800784287 /* TileLoDTester.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = TileLoDTester.hpp; path = Commons/Rendererers/TileLoDTester.hpp; sourceTree = "<group>"; };
-		D8019FF31C11E42900784287 /* TimedTileLoDTester.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TimedTileLoDTester.cpp; path = Commons/Rendererers/TimedTileLoDTester.cpp; sourceTree = "<group>"; };
-		D8019FF41C11E42900784287 /* TimedTileLoDTester.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = TimedTileLoDTester.hpp; path = Commons/Rendererers/TimedTileLoDTester.hpp; sourceTree = "<group>"; };
 		D802448B177B314800F58D0D /* TransformedTexCoorTexturedMesh.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = TransformedTexCoorTexturedMesh.fsh; sourceTree = "<group>"; };
 		D802448C177B314800F58D0D /* TransformedTexCoorTexturedMesh.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = TransformedTexCoorTexturedMesh.vsh; sourceTree = "<group>"; };
 		D807875E1846141400A6DB28 /* FlatColorMesh_DirectionLight.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = FlatColorMesh_DirectionLight.fsh; sourceTree = "<group>"; };
@@ -1812,8 +1807,8 @@
 		D8B749AA175E040800046B96 /* Ellipsoid.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Ellipsoid.hpp; path = Commons/Geometry/Ellipsoid.hpp; sourceTree = "<group>"; };
 		D8B749AC175E04FA00046B96 /* Sphere.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Sphere.cpp; path = Commons/Geometry/Sphere.cpp; sourceTree = "<group>"; };
 		D8B749AD175E04FA00046B96 /* Sphere.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Sphere.hpp; path = Commons/Geometry/Sphere.hpp; sourceTree = "<group>"; };
-		D8B78E221C1208CB00DDE2B9 /* MaxLevelForPolesTileLoDTester.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MaxLevelForPolesTileLoDTester.cpp; path = Commons/Rendererers/MaxLevelForPolesTileLoDTester.cpp; sourceTree = "<group>"; };
-		D8B78E231C1208CB00DDE2B9 /* MaxLevelForPolesTileLoDTester.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = MaxLevelForPolesTileLoDTester.hpp; path = Commons/Rendererers/MaxLevelForPolesTileLoDTester.hpp; sourceTree = "<group>"; };
+		D8B78E221C1208CB00DDE2B9 /* MaxLevelTileLoDTester.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MaxLevelTileLoDTester.cpp; path = Commons/Rendererers/MaxLevelTileLoDTester.cpp; sourceTree = "<group>"; };
+		D8B78E231C1208CB00DDE2B9 /* MaxLevelTileLoDTester.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = MaxLevelTileLoDTester.hpp; path = Commons/Rendererers/MaxLevelTileLoDTester.hpp; sourceTree = "<group>"; };
 		D8B78E251C120CF800DDE2B9 /* ProjectedCornersDistanceTileLoDTester.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ProjectedCornersDistanceTileLoDTester.cpp; path = Commons/Rendererers/ProjectedCornersDistanceTileLoDTester.cpp; sourceTree = "<group>"; };
 		D8B78E261C120CF800DDE2B9 /* ProjectedCornersDistanceTileLoDTester.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = ProjectedCornersDistanceTileLoDTester.hpp; path = Commons/Rendererers/ProjectedCornersDistanceTileLoDTester.hpp; sourceTree = "<group>"; };
 		D8B8CE86178D636000EE1B97 /* GLFeature.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = GLFeature.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
@@ -2484,12 +2479,10 @@
 				CFECA77A1B6AB9B200A0A44E /* VectorStreamingRenderer.hpp */,
 				D8019FEE1C11D91800784287 /* TileLoDTester.cpp */,
 				D8019FEF1C11D91800784287 /* TileLoDTester.hpp */,
-				D8019FF31C11E42900784287 /* TimedTileLoDTester.cpp */,
-				D8019FF41C11E42900784287 /* TimedTileLoDTester.hpp */,
 				D8B78E251C120CF800DDE2B9 /* ProjectedCornersDistanceTileLoDTester.cpp */,
 				D8B78E261C120CF800DDE2B9 /* ProjectedCornersDistanceTileLoDTester.hpp */,
-				D8B78E221C1208CB00DDE2B9 /* MaxLevelForPolesTileLoDTester.cpp */,
-				D8B78E231C1208CB00DDE2B9 /* MaxLevelForPolesTileLoDTester.hpp */,
+				D8B78E221C1208CB00DDE2B9 /* MaxLevelTileLoDTester.cpp */,
+				D8B78E231C1208CB00DDE2B9 /* MaxLevelTileLoDTester.hpp */,
 			);
 			name = Renderers;
 			sourceTree = "<group>";
@@ -2946,7 +2939,7 @@
 				383BD3AF1577EE5A0012AC53 /* Geodetic2D.cpp in Sources */,
 				D88EE1C71869B70C00AED85A /* MultiTexturedHUDQuadWidget.cpp in Sources */,
 				383BD3B11577EE5A0012AC53 /* Geodetic3D.cpp in Sources */,
-				D8B78E241C1208CB00DDE2B9 /* MaxLevelForPolesTileLoDTester.cpp in Sources */,
+				D8B78E241C1208CB00DDE2B9 /* MaxLevelTileLoDTester.cpp in Sources */,
 				383BD3B41577EE5A0012AC53 /* Vector2D.cpp in Sources */,
 				44D922721998D1EA0066D180 /* DefaultInfoDisplay.cpp in Sources */,
 				383BD3B61577EE5A0012AC53 /* Vector3D.cpp in Sources */,
@@ -3111,7 +3104,6 @@
 				CFFAFD73169F2E3000BCE129 /* TextUtils_iOS.mm in Sources */,
 				E7B9964E16A94EC400753FC3 /* LayerBuilder.cpp in Sources */,
 				CFD8E770184FB71D00228031 /* SectorTileCondition.cpp in Sources */,
-				D8019FF51C11E42900784287 /* TimedTileLoDTester.cpp in Sources */,
 				CFBD42E016AA1A8900663F21 /* ShortBuffer_iOS.cpp in Sources */,
 				CF47E0F21901CA8C00410BB5 /* DebugTileImageProvider.cpp in Sources */,
 				CF923CA416AB126D00D04301 /* ShortBufferBuilder.cpp in Sources */,
