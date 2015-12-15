@@ -137,9 +137,9 @@ public class ProjectedCornersDistanceTileLoDTester extends TileLoDTester
 
   public ProjectedCornersDistanceTileLoDTester(double textureWidth, double textureHeight, TileLoDTester nextTesterRightLoD, TileLoDTester nextTesterWrongLoD, TileLoDTester nextTesterVisible, TileLoDTester nextTesterNotVisible)
   {
+     super(nextTesterRightLoD, nextTesterWrongLoD, nextTesterVisible, nextTesterNotVisible);
      _texHeightSquared = textureHeight * textureHeight;
      _texWidthSquared = textureWidth * textureWidth;
-     super(nextTesterRightLoD, nextTesterWrongLoD, nextTesterVisible, nextTesterNotVisible);
   }
 
 

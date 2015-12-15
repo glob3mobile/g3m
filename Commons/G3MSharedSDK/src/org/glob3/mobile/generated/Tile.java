@@ -325,19 +325,6 @@ public class Tile
 
   private final PlanetRenderer _planetRenderer;
 
-  private BoundingVolume getBoundingVolume(G3MRenderContext rc, ElevationDataProvider elevationDataProvider, TileTessellator tessellator, LayerTilesRenderParameters layerTilesRenderParameters, TilesRenderParameters tilesRenderParameters)
-  {
-    if (_boundingVolume == null)
-    {
-      Mesh mesh = getTessellatorMesh(rc, elevationDataProvider, tessellator, layerTilesRenderParameters, tilesRenderParameters);
-      if (mesh != null)
-      {
-        _boundingVolume = mesh.getBoundingVolume();
-      }
-    }
-    return _boundingVolume;
-  }
-
   private boolean _rendered;
 
   private static String createTileId(int level, int row, int column)

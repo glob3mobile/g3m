@@ -50,9 +50,9 @@ public class MaxLevelTileLoDTester extends TileLoDTester
 
   public MaxLevelTileLoDTester(int maxLevel, int maxLevelForPoles, TileLoDTester nextTesterRightLoD, TileLoDTester nextTesterWrongLoD, TileLoDTester nextTesterVisible, TileLoDTester nextTesterNotVisible)
   {
+     super(nextTesterRightLoD, nextTesterWrongLoD, nextTesterVisible, nextTesterNotVisible);
      _maxLevelForPoles = maxLevelForPoles;
      _maxLevel = maxLevel;
-     super(nextTesterRightLoD, nextTesterWrongLoD, nextTesterVisible, nextTesterNotVisible);
   }
 
 

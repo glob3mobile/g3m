@@ -21,4 +21,5 @@ public class TileLoDTesterData
 {
   //Empty class. Each TileLoDTester will implement a different set of associated data and will
   //store it inside the tile using its unique level id
+  void dispose();
 }
