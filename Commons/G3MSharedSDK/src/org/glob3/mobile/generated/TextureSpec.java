@@ -64,6 +64,7 @@ public class TextureSpec
      _width = 0;
      _height = 0;
      _generateMipmap = false;
+     _wrapMode = GLTextureParameterValue.clampToEdge();
   }
 
   public TextureSpec(TextureSpec that)
