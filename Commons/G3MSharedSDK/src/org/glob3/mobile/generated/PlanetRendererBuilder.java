@@ -29,6 +29,8 @@ public class PlanetRendererBuilder
   private TileTessellator _tileTessellator;
   private TileTexturizer _texturizer;
   private java.util.ArrayList<GEOVectorLayer> _geoVectorLayers = new java.util.ArrayList<GEOVectorLayer>();
+  private TileLoDTester _tileLoDTester;
+
 
   private LayerSet _layerSet;
   private TilesRenderParameters _parameters;
@@ -266,6 +268,11 @@ public class PlanetRendererBuilder
     return _defaultTileBackGroundImage;
   }
 
+  private TileLoDTester createDefaultTileLODTester()
+  {
+    return null;
+  }
+
   public PlanetRendererBuilder()
   {
      _showStatistics = false;
@@ -289,6 +296,7 @@ public class PlanetRendererBuilder
      _tileRenderingListener = null;
      _changedInfoListener = null;
      _touchEventTypeOfTerrainTouchListener = TouchEventType.LongPress;
+     _tileLoDTester = null;
   }
   public void dispose()
   {
@@ -329,7 +337,7 @@ public class PlanetRendererBuilder
       layerSet.addLayer(geoVectorLayer);
     }
   
-    PlanetRenderer planetRenderer = new PlanetRenderer(getTileTessellator(), getElevationDataProvider(), true, getVerticalExaggeration(), getTexturizer(), layerSet, getParameters(), getShowStatistics(), getTileDownloadPriority(), getRenderedSector(), getRenderTileMeshes(), getLogTilesPetitions(), getTileRenderingListener(), getChangedRendererInfoListener(), getTouchEventTypeOfTerrainTouchListener());
+    PlanetRenderer planetRenderer = new PlanetRenderer(getTileTessellator(), getElevationDataProvider(), true, getVerticalExaggeration(), getTexturizer(), layerSet, getParameters(), getShowStatistics(), getTileDownloadPriority(), getRenderedSector(), getRenderTileMeshes(), getLogTilesPetitions(), getTileRenderingListener(), getChangedRendererInfoListener(), getTouchEventTypeOfTerrainTouchListener(), getTileLoDTester());
   
     for (int i = 0; i < getVisibleSectorListeners().size(); i++)
     {
@@ -523,5 +531,19 @@ public class PlanetRendererBuilder
   public final void setDefaultTileBackGroundImage(IImageBuilder defaultTileBackGroundImage)
   {
     _defaultTileBackGroundImage = defaultTileBackGroundImage;
+  }
+
+  public final void setTileLoDTester(TileLoDTester tlt)
+  {
+    _tileLoDTester = tlt;
+  }
+
+  public final TileLoDTester getTileLoDTester()
+  {
+    if (_tileLoDTester == null)
+    {
+      _tileLoDTester = createDefaultTileLODTester();
+    }
+    return _tileLoDTester;
   }
 }

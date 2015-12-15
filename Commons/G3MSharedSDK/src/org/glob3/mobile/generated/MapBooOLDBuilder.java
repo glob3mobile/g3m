@@ -36,6 +36,8 @@ public abstract class MapBooOLDBuilder
 
   private boolean _isApplicationTubeOpen;
 
+  private TileLoDTester _tileLoDTester;
+
   private MapBooOLD_ErrorRenderer _mbErrorRenderer;
 
   private LayerSet _layerSet;
@@ -72,7 +74,7 @@ public abstract class MapBooOLDBuilder
   
     TouchEventType touchEventTypeOfTerrainTouchListener = TouchEventType.DownUp;
   
-    PlanetRenderer result = new PlanetRenderer(tessellator, elevationDataProvider, true, verticalExaggeration, texturizer, _layerSet, parameters, showStatistics, tileDownloadPriority, renderedSector, renderTileMeshes, logTilesPetitions, tileRenderingListener, changedRendererInfoListener, touchEventTypeOfTerrainTouchListener);
+    PlanetRenderer result = new PlanetRenderer(tessellator, elevationDataProvider, true, verticalExaggeration, texturizer, _layerSet, parameters, showStatistics, tileDownloadPriority, renderedSector, renderTileMeshes, logTilesPetitions, tileRenderingListener, changedRendererInfoListener, touchEventTypeOfTerrainTouchListener, getTileLoDTester());
   
     if (_enableNotifications)
     {
@@ -1045,6 +1047,7 @@ public abstract class MapBooOLDBuilder
      _webSocket = null;
      _marksRenderer = null;
      _hasParsedApplication = false;
+     _tileLoDTester = null;
     _featureInfoDownloadListener = new FeatureInfoDownloadListener(_applicationListener);
   }
 
@@ -1188,6 +1191,11 @@ public abstract class MapBooOLDBuilder
     final double upperLon = sector.getAsNumber("upperLon", 180.0);
   
     return new Sector(Geodetic2D.fromDegrees(lowerLat, lowerLon), Geodetic2D.fromDegrees(upperLat, upperLon));
+  }
+
+  protected final TileLoDTester createDefaultTileLODTester()
+  {
+    return null;
   }
 
   /** Private to MapbooBuilder, don't call it */
@@ -1851,5 +1859,19 @@ public abstract class MapBooOLDBuilder
   public final String getApplicationId()
   {
     return _applicationId;
+  }
+
+  public final void setTileLoDTester(TileLoDTester tlt)
+  {
+    _tileLoDTester = tlt;
+  }
+
+  public final TileLoDTester getTileLoDTester()
+  {
+    if (_tileLoDTester == null)
+    {
+      _tileLoDTester = createDefaultTileLODTester();
+    }
+    return _tileLoDTester;
   }
 }
