@@ -1,4 +1,7 @@
-package org.glob3.mobile.generated; 
+
+
+package org.glob3.mobile.generated;
+
 //
 //  TileLoDTester.cpp
 //  G3MiOSSDK
@@ -16,10 +19,9 @@ package org.glob3.mobile.generated;
 //
 
 
-
-public class TileLoDTesterData
-{
-  //Empty class. Each TileLoDTester will implement a different set of associated data and will
-  //store it inside the tile using its unique level id
-  void dispose();
+public class TileLoDTesterData {
+   //Empty class. Each TileLoDTester will implement a different set of associated data and will
+   //store it inside the tile using its unique level id
+   void dispose() {
+   }
 }

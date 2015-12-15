@@ -21,7 +21,7 @@ public:
   virtual ~TileLoDTesterData() { }
 #endif
 #ifdef JAVA_CODE
-  void dispose();
+  void dispose(){}
 #endif
 };
 
