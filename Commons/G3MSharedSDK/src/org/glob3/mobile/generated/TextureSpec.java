@@ -33,6 +33,7 @@ public class TextureSpec
   private final int _width;
   private final int _height;
   private final boolean _generateMipmap;
+  private final int _wrapMode;
 
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
 //  TextureSpec operator =(TextureSpec that);
@@ -43,6 +44,17 @@ public class TextureSpec
      _width = width;
      _height = height;
      _generateMipmap = generateMipmap;
+     _wrapMode = GLTextureParameterValue.clampToEdge();
+
+  }
+
+  public TextureSpec(String id, int width, int height, boolean generateMipmap, int wrapMode)
+  {
+     _id = id;
+     _width = width;
+     _height = height;
+     _generateMipmap = generateMipmap;
+     _wrapMode = wrapMode;
 
   }
 
@@ -60,6 +72,7 @@ public class TextureSpec
      _width = that._width;
      _height = that._height;
      _generateMipmap = that._generateMipmap;
+     _wrapMode = that._wrapMode;
 
   }
 
@@ -78,9 +91,14 @@ public class TextureSpec
     return _height;
   }
 
+  public final int getWrapMode()
+  {
+    return _wrapMode;
+  }
+
   public final boolean equalsTo(TextureSpec that)
   {
-    return ((_id.compareTo(that._id) == 0) && (_width == that._width) && (_height == that._height));
+    return ((_id.compareTo(that._id) == 0) && (_width == that._width) && (_height == that._height) && (_wrapMode == that._wrapMode));
   }
 
   public final boolean lowerThan(TextureSpec that)
@@ -134,6 +152,7 @@ public class TextureSpec
 		result = prime * result + _height;
 		result = prime * result + ((_id == null) ? 0 : _id.hashCode());
 		result = prime * result + _width;
+		result = prime * result + _wrapMode;
 		return result;
 	}
 
@@ -154,6 +173,8 @@ public class TextureSpec
 		} else if (!_id.equals(other._id))
 			return false;
 		if (_width != other._width)
+			return false;
+		if (_wrapMode != other._wrapMode)
 			return false;
 		return true;
 	}

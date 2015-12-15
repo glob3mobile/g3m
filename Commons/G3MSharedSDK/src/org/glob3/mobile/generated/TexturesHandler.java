@@ -68,7 +68,7 @@ public class TexturesHandler
   public final TextureIDReference getTextureIDReference(IImage image, int format, String name, boolean generateMipmap, int wrapMode)
   {
   
-    final TextureSpec textureSpec = new TextureSpec(name, image.getWidth(), image.getHeight(), generateMipmap);
+    final TextureSpec textureSpec = new TextureSpec(name, image.getWidth(), image.getHeight(), generateMipmap, wrapMode);
   
     final IGLTextureId previousId = getGLTextureIdIfAvailable(textureSpec);
     if (previousId != null)
