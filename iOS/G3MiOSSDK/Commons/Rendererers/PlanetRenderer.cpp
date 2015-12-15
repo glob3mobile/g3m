@@ -32,7 +32,6 @@
 #include "Layer.hpp"
 #include <algorithm>
 
-#include "TimedTileLoDTester.hpp"
 #include "MaxLevelTileLoDTester.hpp"
 #include "ProjectedCornersDistanceTileLoDTester.hpp"
 #include "ProjectedCornersDistanceTileLoDTester.hpp"
