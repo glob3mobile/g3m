@@ -61,7 +61,7 @@ public:
 
   }
 
-  TextureSpec():_id(""), _width(0),_height(0), _generateMipmap(false) {}
+  TextureSpec():_id(""), _width(0),_height(0), _generateMipmap(false) _wrapMode(GLTextureParameterValue::clampToEdge()) {}
 
   TextureSpec(const TextureSpec& that):
   _id(that._id),
