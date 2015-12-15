@@ -134,7 +134,8 @@ const TextureIDReference* TexturesHandler::getTextureIDReference(const IImage* i
   const TextureSpec textureSpec(name,
                                 image->getWidth(),
                                 image->getHeight(),
-                                generateMipmap);
+                                generateMipmap,
+								wrapMode);
 
   const IGLTextureId* previousId = getGLTextureIdIfAvailable(textureSpec);
   if (previousId != NULL) {
