@@ -62,10 +62,15 @@ public class BilTilesMixer {
 	      mixer.process(pyramidType);
 	   }
 	   
-	   public static void processResultForSimilarity(final String resultDirectoryName,int pyramidType) throws IOException {
+	   public static void processResultForSimilarity(final String resultDirectoryName,int pyramidType,int similarityErrorMethod) throws IOException {
 		   final BilTilesMixer mixer = new BilTilesMixer (resultDirectoryName);
-		   mixer.similarity(pyramidType);
-		   
+		   mixer.similarity(pyramidType,similarityErrorMethod);
+	   }
+	   
+	   public static void processResultForRedim(final String resultDirectoryName, final String redimDirectoryName,
+			   int pyramidType, int similarityErrorMethod) throws IOException{
+		   final BilTilesMixer mixer = new BilTilesMixer(resultDirectoryName, redimDirectoryName);
+		   mixer.redim(pyramidType,similarityErrorMethod);
 	   }
 
 
@@ -93,6 +98,15 @@ public class BilTilesMixer {
 		   IOUtils.checkDirectory(inputDir);
 		   _inputDirectories[0] = inputDir;
 		   _outputDirectory = null;
+	   }
+	   
+	   BilTilesMixer (final String resultDirectoryName, final String redimDirectoryName) throws IOException {
+		   _inputDirectories = new File[1];
+		   File inputDir = new File(resultDirectoryName);
+		   IOUtils.checkDirectory(inputDir);
+		   _inputDirectories[0] = inputDir;
+		   _outputDirectory = new File(redimDirectoryName);
+		   IOUtils.ensureEmptyDirectory(_outputDirectory);
 	   }
 
 
@@ -180,10 +194,25 @@ public class BilTilesMixer {
 	      Logger.log("done!");
 	   }
 	   
-	   private void similarity(int pyramidType) throws IOException {
+	   private void similarity(int pyramidType,int similarityErrorMethod) throws IOException {
 		   final BilMergedPyramid mergedPyramid = new BilMergedPyramid(getSourcePyramids(),pyramidType);
-		   mergedPyramid.similarity();
+		   mergedPyramid.similarity(similarityErrorMethod);
 	   }
+	   
+	   
+	   private void redim(int pyramidType, int similarityErrorMethod) throws IOException {
+		   final BilMergedPyramid mergedPyramid = new BilMergedPyramid(getSourcePyramids(),pyramidType);
+		   mergedPyramid.redim(similarityErrorMethod,_outputDirectory.getAbsolutePath());
+	   }
+	   
+	   
+	   
+	   
+	   ////////////////
+	   
+	   final static int OP_MERGE = 0;
+	   final static int OP_SIMILARITY = 1;
+	   final static int OP_REDIM = 2;
 
 
 	   public static void main(final String[] args) throws IOException {
@@ -192,14 +221,26 @@ public class BilTilesMixer {
 
 	      final String inputDirectoryName = "/users/sebastianortegatrujillo/Desktop/Elevs combo/";
 	      final String outputDirectoryName = "/users/sebastianortegatrujillo/Desktop/Elevs combo/result";
+	      final String redimDirectoryName = "/users/sebastianortegatrujillo/Desktop/Elevs combo/redim";
 	      
 	      final int pyramidType = Pyramid.PYR_WEBMERC;
-	      final boolean merge = false;
+	      final int similarityErrorType = BilMergedPyramid.SIMILARITY_MAX_ERROR;
+	      //TODO: Remember to change this parameter!
+	      final int op = OP_REDIM;
 	      
-	      if (merge)
-	    	  BilTilesMixer.processSubdirectories(inputDirectoryName, outputDirectoryName, pyramidType);
-	      else
-	    	  BilTilesMixer.processResultForSimilarity(outputDirectoryName, pyramidType);
+	      BilMergedPyramid.setTileImageDimensions(32);
+	      
+	      switch (op) {
+	      	case OP_MERGE:
+	      		BilTilesMixer.processSubdirectories(inputDirectoryName, outputDirectoryName, pyramidType);
+	      		break;
+	      	case OP_SIMILARITY:
+	      		BilTilesMixer.processResultForSimilarity(outputDirectoryName, pyramidType,similarityErrorType);
+	      		break;
+	      	case OP_REDIM:
+	      		BilTilesMixer.processResultForRedim(outputDirectoryName, redimDirectoryName, pyramidType, similarityErrorType);
+	      		break;
+	      }
 	   }
 	}
 

@@ -433,7 +433,80 @@ public class BilMergedPyramid {
 	      }
 	   }
 	   
-	   public void similarity(){
+	   private class RedimBufferedImage {
+		   public MaxMinBufferedImage _bil;
+		   public int _dims;
+		   
+		   RedimBufferedImage (MaxMinBufferedImage bil, int dims) {
+			   _bil = bil;
+			   _dims = dims;
+		   }
+	   }
+	   
+	   public void redim (final int similarityErrorMethod, final String redimDirectory) throws IOException{
+		   final List<Integer> keys = new ArrayList<>(_levels.keySet());
+		   Collections.sort(keys, Collections.reverseOrder());
+		   
+		   for (final Integer key : keys) {
+			   final MergedLevel level = _levels.get(key);
+			   for (final Integer columnKey : level._columns.keySet()){
+				   final MergedColumn column = level._columns.get(columnKey);
+				   for (final Integer rowKey : column._tiles.keySet()){
+					   final MergedTile tile = column._tiles.get(rowKey); 
+					   
+					   String str = tile._sourceTiles.get(0).getImageFile().getAbsolutePath();
+					   
+					   MaxMinBufferedImage baseBil = BilUtils.BilFileMaxMinToBufferedImage(str, BIL_DIM, BIL_DIM);
+					   RedimBufferedImage resultBil = redim(new RedimBufferedImage(baseBil,BIL_DIM),similarityErrorMethod);
+					   System.out.println(str+" : generated a new "+resultBil._dims+" bil file");
+					   
+					   final File output = new File(redimDirectory, tile._column._level._level + "/" + tile._column._column + "/" + tile._row + ".bil");
+
+				         final File parentDirectory = output.getParentFile();
+				         if (!parentDirectory.exists()) {
+				            if (!parentDirectory.mkdirs()) {
+				               throw new IOException("Can't create directory \"" + parentDirectory.getAbsolutePath() + "\"");
+				            }
+				         }
+					   
+					   BilUtils.saveRedimBilFile((short) resultBil._dims, resultBil._bil._image, output.getAbsolutePath(), 
+							   resultBil._bil._max, resultBil._bil._min, resultBil._bil._childrenData, resultBil._bil._similarity);
+				   }
+			   }
+		   }
+	   }
+	   
+	   private RedimBufferedImage redim(RedimBufferedImage inputBil, int similarityErrorMethod){
+		   
+		   final int ERROR_THRESHOLD = 10; // I don't really know what threshold would be nice for this purpose.
+		   
+		   if (inputBil._dims == 2) {
+			   System.out.println("Solved by 2x2 case");
+			   return inputBil;
+		   }
+		   else {
+			   int dims = inputBil._dims / 2;
+			   BufferedImage image = new BufferedImage(dims,dims,BufferedImage.TYPE_INT_ARGB);
+			   for (int x = 0; x<inputBil._dims; x+=2) for (int y = 0; y<inputBil._dims; y+=2){
+				   image.setRGB(x/2,y/2,inputBil._bil._image.getRGB(x, y));
+			   }
+			   //TODO: max, min could be changed to fit the ones on the image.
+			   RedimBufferedImage outputBil = new RedimBufferedImage (
+					   new MaxMinBufferedImage(image,inputBil._bil._min,inputBil._bil._max,
+							   inputBil._bil._childrenData, inputBil._bil._similarity),
+					   dims);
+			   double redimError = redimError(inputBil, outputBil, similarityErrorMethod );
+			   if ( redimError >= ERROR_THRESHOLD) {
+				   System.out.println("Solved by threshold: "+redimError);
+				   return inputBil;
+			   }
+		   	   else return redim(outputBil, similarityErrorMethod);
+		   }
+			   
+	   }
+	   
+	   
+	   public void similarity(final int similarityErrorMethod){
 		   final List<Integer> keys = new ArrayList<>(_levels.keySet());
 		      Collections.sort(keys, Collections.reverseOrder());
 		      
@@ -467,32 +540,44 @@ public class BilMergedPyramid {
 		        			 MaxMinBufferedImage childC = BilUtils.BilFileMaxMinToBufferedImage(childC_str, BIL_DIM, BIL_DIM);
 		        			 MaxMinBufferedImage childD = BilUtils.BilFileMaxMinToBufferedImage(childD_str, BIL_DIM, BIL_DIM);
 		        			 
-		        			 double avgError = calculateSimilarity (parent, childA, childB, childC, childD);
-		        			 
-		        			 double distance = -1;
-		        			 switch (_type) {
-		        			 	case Pyramid.PYR_WGS84:
-		        			 		distance = WGS84Pyramid.tileShorterSideDistance(level._level, tile._column._column, tile._row);
-		        			 		break;
-		        			 	case Pyramid.PYR_WEBMERC:
-		        			 		distance = WebMercatorPyramid.tileShorterSideDistance(level._level, tile._column._column, tile._row);
-		        			 		break;
-		        			 	default:
-		        			 		System.out.println("Something weird happened while calculating distance");	
-		        			 }
-		        			 double similarity = avgError / distance;
-		        			
-		        			 short invertedSimilarity;
-		        			 if (avgError == 0) invertedSimilarity = Short.MAX_VALUE;
-		        			 else if (Math.round(1/similarity) > Short.MAX_VALUE) invertedSimilarity = Short.MAX_VALUE;
-		        			 else invertedSimilarity = (short) ( Math.round(1/similarity));
+		        			 double avgError = calculateSimilarity (similarityErrorMethod, parent, childA, childB, childC, childD);
 
-		        			 System.out.println(thePart+" - Avg error: "+avgError+" , dist [mt]: "+distance+" , similarity: "+similarity+ ", invertedSimilarity:"+invertedSimilarity);
+		        			 short invertedSimilarity = Short.MAX_VALUE;
+		        			 
+		        			 switch (similarityErrorMethod) {
+		        			 	 case SIMILARITY_AVG_SQ_ERROR:
+		        			 		double distance = -1;
+				        			 switch (_type) {
+				        			 	case Pyramid.PYR_WGS84:
+				        			 		distance = WGS84Pyramid.tileShorterSideDistance(level._level, tile._column._column, tile._row);
+				        			 		break;
+				        			 	case Pyramid.PYR_WEBMERC:
+				        			 		distance = WebMercatorPyramid.tileShorterSideDistance(level._level, tile._column._column, tile._row);
+				        			 		break;
+				        			 	default:
+				        			 		System.out.println("Something weird happened while calculating distance");	
+				        			 } 
+				        			 
+				        			 double similarity = avgError / distance;
+				        			 if (avgError == 0) invertedSimilarity = Short.MAX_VALUE;
+				        			 else if (Math.round(1/similarity) > Short.MAX_VALUE) invertedSimilarity = Short.MAX_VALUE;
+				        			 else invertedSimilarity = (short) ( Math.round(1/similarity));
+				        			 
+				        			 System.out.println(thePart+" - Avg error: "+avgError+" , dist [mt]: "+distance+" , similarity: "+similarity+ ", invertedSimilarity:"+invertedSimilarity);
+				        			 break;
+		        			 	 case SIMILARITY_MAX_ERROR:
+		        			 	 	 invertedSimilarity = (short) (Math.min(avgError, Short.MAX_VALUE));
+		        			 	 	 System.out.println(thePart+" - Avg error: "+avgError+" ,invertedSimilarity:"+invertedSimilarity);
+		        			 	 	 break;
+		        			 }
+
+		        			 
 		        			 
 		        			 BilUtils.BufferedImageToBilFileMaxMin(parent._image, str, BIL_DIM, BIL_DIM, parent._max, parent._min, parent._childrenData, invertedSimilarity);
 		        			 
 		        		 }
 		        		 catch (Exception e) {
+		        			 //e.printStackTrace();
 		        			 System.out.println(thePart+" - Discarded [no children]");
 		        		 }
 		        		 
@@ -543,21 +628,71 @@ public class BilMergedPyramid {
 	      return tilesCount;
 	   }
 	   
-	   private double calculateSimilarity(MaxMinBufferedImage parent, MaxMinBufferedImage childA, 
+	   public static void setTileImageDimensions (int dimensions){
+		   BIL_DIM = dimensions;
+	   }
+	   
+	   ////////////////////////////////////////
+	   //Similarity stuff
+	   ///////////////////////////////////////
+	   
+	   public static final int SIMILARITY_AVG_SQ_ERROR = 0;
+	   public static final int SIMILARITY_MAX_ERROR = 1;
+	   
+	   private double calculateSimilarity(int similarity_type, MaxMinBufferedImage parent, MaxMinBufferedImage childA, 
+	   MaxMinBufferedImage childB, MaxMinBufferedImage childC, MaxMinBufferedImage childD){
+		   
+		   switch (similarity_type){
+		   	case SIMILARITY_AVG_SQ_ERROR:
+		   		return calculateSimilarityByAvgSqError(parent,childA,childB,childC,childD);
+		   	case SIMILARITY_MAX_ERROR:
+		   		return calculateSimilarityByMaxError(parent,childA,childB,childC,childD);
+		   	default:
+		   		return 0;
+		   }
+	   }
+	   
+	   private double calculateSimilarityByAvgSqError(MaxMinBufferedImage parent, MaxMinBufferedImage childA, 
 			   MaxMinBufferedImage childB, MaxMinBufferedImage childC, MaxMinBufferedImage childD) {
+		   double res = 0;
+		   int offset = BIL_DIM/2;
+		   res += avgSqErrorByChild(parent,childA,0,0);
+		   res += avgSqErrorByChild(parent,childB,0,offset);
+		   res += avgSqErrorByChild(parent,childC,offset,0);
+		   res += avgSqErrorByChild(parent,childD,offset,offset);
+		   
+		   res = res / Math.pow(BIL_DIM,2);
+		   res = Math.sqrt(res);
+		   
+		   return res;
+	   }
+	   
+	   private double calculateSimilarityByMaxError(MaxMinBufferedImage parent, MaxMinBufferedImage childA, 
+			   MaxMinBufferedImage childB, MaxMinBufferedImage childC, MaxMinBufferedImage childD) {
+		   double res = 0;
+		   int offset = BIL_DIM/2;
+		   res = Math.max(maxErrorByChild(parent,childA,0,0),res);
+		   res = Math.max(maxErrorByChild(parent,childB,0,offset),res);
+		   res = Math.max(maxErrorByChild(parent,childC,offset,0),res);
+		   res = Math.max(maxErrorByChild(parent,childD,offset,offset),res);
+		   
+		   return res;
+	   }
+	   
+	   private double avgSqErrorByChild(MaxMinBufferedImage parent, MaxMinBufferedImage child, int parentOffsetX, int parentOffsetY){
 		   double res = 0;
 		   
 		   //Misma vertical, restar. Diferente vertical, intuir altura del padre.
-		   for (int x=0 ; x < childA._image.getWidth() ; x+=2) for (int y=0; y < childA._image.getHeight(); y+=2) {
-			   short childData = (short) ((childA._image.getRGB(x,y)) & 0x0000FFFF);
-			   short parentData = (short) ((parent._image.getRGB(x/2,y/2)) & 0x0000FFFF);
+		   for (int x=0 ; x < child._image.getWidth() ; x+=2) for (int y=0; y < child._image.getHeight(); y+=2) {
+			   short childData = (short) ((child._image.getRGB(x,y)) & 0x0000FFFF);
+			   short parentData = (short) ((parent._image.getRGB(parentOffsetX + (x/2),parentOffsetY + (y/2))) & 0x0000FFFF);
 			   
-			   short childDataY1 = (short) ((childA._image.getRGB(x,y+1)) & 0x0000FFFF);
-			   short childDataR1 = (short) ((childA._image.getRGB(x+1,y)) & 0x0000FFFF);
-			   short childDataR1Y1 = (short) ((childA._image.getRGB(x+1,y+1)) & 0x0000FFFF);
-			   short parentDataY1 = (short) ((parentData + (parent._image.getRGB(x/2,(y/2)+1)) & 0x0000FFFF)/2);
-			   short parentDataR1 = (short) ((parentData + (parent._image.getRGB((x/2) + 1,y/2)) & 0x0000FFFF)/2);
-			   short parentDataR1Y1 = (short) ((((parent._image.getRGB(x/2,(y/2)+1)) & 0x0000FFFF) + ((parent._image.getRGB((x/2) + 1,y/2)) & 0x0000FFFF))/2) ;
+			   short childDataY1 = (short) ((child._image.getRGB(x,y+1)) & 0x0000FFFF);
+			   short childDataR1 = (short) ((child._image.getRGB(x+1,y)) & 0x0000FFFF);
+			   short childDataR1Y1 = (short) ((child._image.getRGB(x+1,y+1)) & 0x0000FFFF);
+			   short parentDataY1 = (short) ((parentData + (parent._image.getRGB(parentOffsetX + (x/2),parentOffsetY + (y/2)+1)) & 0x0000FFFF)/2);
+			   short parentDataR1 = (short) ((parentData + (parent._image.getRGB(parentOffsetX + (x/2) + 1,parentOffsetY + (y/2))) & 0x0000FFFF)/2);
+			   short parentDataR1Y1 = (short) ((((parent._image.getRGB(x/2,(y/2)+1)) & 0x0000FFFF) + ((parent._image.getRGB(parentOffsetX+ (x/2) + 1,parentOffsetX+(y/2))) & 0x0000FFFF))/2) ;
 			   
 			   res += Math.pow((childData-parentData),2);
 			   res += Math.pow((childDataY1-parentDataY1),2);
@@ -565,13 +700,102 @@ public class BilMergedPyramid {
 			   res += Math.pow((childDataR1Y1-parentDataR1Y1),2);
 		   }
 		   
-		   res = res / Math.pow(BIL_DIM,2);
-		   res = Math.sqrt(res);
-		   //TODO: hacer la similaridad invariante a escala.
-		   //TODO: repetir para cada tipo de hijo. De lo contrario failure.;
+		   return res;
+	   }
+	   
+	   private double maxErrorByChild(MaxMinBufferedImage parent, MaxMinBufferedImage child, int parentOffsetX, int parentOffsetY){
+		   
+		   //try{
+			   double res = 0;
+		   
+		   
+		   //Misma vertical, restar. Diferente vertical, intuir altura del padre.
+		   for (int x=0 ; x < child._image.getWidth() ; x+=2) for (int y=0; y < child._image.getHeight(); y+=2) {
+			   short childData = (short) ((child._image.getRGB(x,y)) & 0x0000FFFF);
+			   short parentData = (short) ((parent._image.getRGB(parentOffsetX + (x/2),parentOffsetY + (y/2))) & 0x0000FFFF);
+			   
+			   short childDataY1 = (short) ((child._image.getRGB(x,y+1)) & 0x0000FFFF);
+			   short childDataR1 = (short) ((child._image.getRGB(x+1,y)) & 0x0000FFFF);
+			   short childDataR1Y1 = (short) ((child._image.getRGB(x+1,y+1)) & 0x0000FFFF);
+			   		   
+			   int px2_py21, px21_py2; 
+			   //Vamos a asumir que el 1º valor del vecino será igual al último nuestro. Quizá esto cambie ...
+			   if (parentOffsetY + (y/2) + 1 >= BIL_DIM) 
+				   px2_py21 = parentData;
+			   else
+				   px2_py21 = parent._image.getRGB(parentOffsetX + (x/2),parentOffsetY + (y/2)+1);
+			   if (parentOffsetX + (x/2) + 1 >= BIL_DIM)
+				   px21_py2 = parentData;
+			   else
+				   px21_py2 = parent._image.getRGB(parentOffsetX + (x/2) + 1,parentOffsetY + (y/2));
+			   
+			   short parentDataY1 = (short) ((parentData + (px2_py21 & 0x0000FFFF))/2);
+			   short parentDataR1 = (short) ((parentData + (px21_py2 & 0x0000FFFF))/2);
+			   short parentDataR1Y1 = (short) (((px2_py21 & 0x0000FFFF) + (px21_py2 & 0x0000FFFF))/2) ;
+			   
+			   res = Math.max(Math.abs(childData-parentData),res);
+			   res = Math.max(Math.abs(childDataY1-parentDataY1),res);
+			   res = Math.max(Math.abs(childDataR1-parentDataR1),res);
+			   res = Math.max(Math.abs(childDataR1Y1-parentDataR1Y1),res);
+		   }
 		   
 		   return res;
-				   
+		  /* }
+		   catch (Exception E){
+			   E.printStackTrace();
+			   return 0;
+		   }*/
+	   }
+	   
+	   private double redimError (RedimBufferedImage greater, RedimBufferedImage shorter, int similarityErrorMethod){
+		   switch (similarityErrorMethod){
+		   		case SIMILARITY_MAX_ERROR:
+		   			return maxRedimError(greater,shorter);
+		   		case SIMILARITY_AVG_SQ_ERROR:
+		   			return avgRedimError(greater,shorter);
+		   		default:
+		   			return Double.MAX_VALUE;
+		   }
+	   }
+	   
+	   private double maxRedimError(RedimBufferedImage greater, RedimBufferedImage shorter){
+		   double res = 0;
 		   
+		   //Misma vertical, restar. Diferente vertical, intuir altura del padre.
+		   for (int x=0 ; x < greater._dims ; x+=2) for (int y=0; y < greater._dims; y+=2) {
+			   short childData = (short) ((greater._bil._image.getRGB(x,y)) & 0x0000FFFF);
+			   short parentData = (short) ((shorter._bil._image.getRGB((x/2),(y/2))) & 0x0000FFFF);
+			   
+			   short childDataY1 = (short) ((greater._bil._image.getRGB(x,y+1)) & 0x0000FFFF);
+			   short childDataR1 = (short) ((greater._bil._image.getRGB(x+1,y)) & 0x0000FFFF);
+			   short childDataR1Y1 = (short) ((greater._bil._image.getRGB(x+1,y+1)) & 0x0000FFFF);
+			   		   
+			   int px2_py21, px21_py2; 
+			   //Vamos a asumir que el 1º valor del vecino será igual al último nuestro. Quizá esto cambie ...
+			   if ((y/2) + 1 >= shorter._dims) 
+				   px2_py21 = parentData;
+			   else
+				   px2_py21 = shorter._bil._image.getRGB((x/2),(y/2)+1);
+			   if ((x/2) + 1 >= shorter._dims)
+				   px21_py2 = parentData;
+			   else
+				   px21_py2 = shorter._bil._image.getRGB((x/2) + 1,(y/2));
+			   
+			   short parentDataY1 = (short) ((parentData + (px2_py21 & 0x0000FFFF))/2);
+			   short parentDataR1 = (short) ((parentData + (px21_py2 & 0x0000FFFF))/2);
+			   short parentDataR1Y1 = (short) (((px2_py21 & 0x0000FFFF) + (px21_py2 & 0x0000FFFF))/2) ;
+			   
+			   res = Math.max(Math.abs(childData-parentData),res);
+			   res = Math.max(Math.abs(childDataY1-parentDataY1),res);
+			   res = Math.max(Math.abs(childDataR1-parentDataR1),res);
+			   res = Math.max(Math.abs(childDataR1Y1-parentDataR1Y1),res);
+		   }
+		   
+		   return res;
+	   }
+	   
+	   private double avgRedimError(RedimBufferedImage greater, RedimBufferedImage shorter){
+		   //TODO: hacerlo en algún momento.
+		   return Double.MAX_VALUE;
 	   }
 }

@@ -112,4 +112,52 @@ public class BilParser
     return new ShortBufferElevationData(sector, extent, sector, extent, shortBuffer, 
     		size, deltaHeight,max,min,children,similarity);
   }
+  
+  public static ShortBufferElevationData parseBil16Redim (Sector sector, IByteBuffer buffer, double deltaHeight)
+  {
+	int warning_elevparser_madeby_chano;
+	
+	ByteBufferIterator iterator = new ByteBufferIterator(buffer);
+	
+    final short size = iterator.nextInt16();
+  
+    final int expectedSizeInBytes = (size * size * 2) + 10;
+    if (buffer.size() != expectedSizeInBytes)
+    {
+      ILogger.instance().logError("Invalid buffer size, expected %d bytes, but got %d", expectedSizeInBytes, buffer.size());
+      return null;
+    }
+
+    final short minValue = IMathUtils.instance().minInt16();
+  
+    short[] shortBuffer = new short[size*size];
+    for (int i = 0; i < size*size; i++)
+    {
+      short height = iterator.nextInt16();
+  
+      if (height == 15000) //Our own NODATA, since -9999 is a valid height.
+      {
+        height = ShortBufferElevationData.NO_DATA_VALUE;
+      }
+      else if (height == minValue)
+      {
+        height = ShortBufferElevationData.NO_DATA_VALUE;
+      }
+  
+      shortBuffer[i] = height;
+    }
+    
+    short max = iterator.nextInt16();
+    short min = iterator.nextInt16();
+    short children = iterator.nextInt16();
+    short similarity = iterator.nextInt16();
+    
+    //ILogger.instance().logInfo("Parsed bil with dims: "+size+" x "+size);
+    //if (size == 2) ILogger.instance().logInfo(shortBuffer[0]+" , "+shortBuffer[1]+" , "+shortBuffer[2]+" , "+shortBuffer[3]);
+    
+    Vector2I extent = new Vector2I(size,size);
+  
+    return new ShortBufferElevationData(sector, extent, sector, extent, shortBuffer, 
+    		size*size, deltaHeight,max,min,children,similarity);
+  }
 }

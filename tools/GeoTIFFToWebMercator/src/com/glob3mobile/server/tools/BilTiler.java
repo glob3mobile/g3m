@@ -176,7 +176,7 @@ public class BilTiler {
 	      GeoData data;
 	      
 	      int pyramidType = Pyramid.PYR_WEBMERC;
-		  Pyramid.setTileImageDimensions(16, 16);
+		  Pyramid.setTileImageDimensions(32, 32);
 		  Pyramid.setTopSectorSplits(1, 1);
 	      
 	      System.out.println(" --- Cañón del colorado --- ");

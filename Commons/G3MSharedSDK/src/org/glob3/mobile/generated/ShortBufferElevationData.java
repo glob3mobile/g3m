@@ -76,7 +76,7 @@ public class ShortBufferElevationData extends BufferElevationData
      _buffer = buffer;
     if (_bufferSize != (_width * _height))
     {
-      ILogger.instance().logError("Invalid buffer size");
+      ILogger.instance().logError("Invalid buffer size: bufSize: "+_bufferSize+" ,w*h: "+(_width*_height));
     }
   
     final int size = _bufferSize;

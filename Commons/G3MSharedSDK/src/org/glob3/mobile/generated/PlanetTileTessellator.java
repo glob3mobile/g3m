@@ -386,7 +386,9 @@ public class PlanetTileTessellator extends TileTessellator
   
     final Sector tileSector = tile._sector;
     final Sector meshSector = getRenderedSectorForTile(tile); // tile->getSector();
-    final Vector2I meshResolution = calculateResolution(rawResolution, tile, meshSector);
+    
+    int warning_chano_changed_this___rawResolutionIsEqualToElevDataSizeSoChangingValuesShouldNotHaveSideEffects;
+    final Vector2I meshResolution = calculateResolution(elevationData.getExtent(), tile, meshSector);
   
     FloatBufferBuilderFromGeodetic vertices = FloatBufferBuilderFromGeodetic.builderWithGivenCenter(planet, meshSector._center);
     ShortBufferBuilder indices = new ShortBufferBuilder();
@@ -537,7 +539,9 @@ public class PlanetTileTessellator extends TileTessellator
   {
   
     final Sector meshSector = getRenderedSectorForTile(tile); // tile->getSector();
-    final Vector2I meshResolution = calculateResolution(rawResolution, tile, meshSector);
+    
+    int warning_chano_changed_this___rawResolutionIsEqualToElevDataSizeSoChangingValuesShouldNotHaveSideEffects;
+    final Vector2I meshResolution = calculateResolution(elevationData.getExtent(), tile, meshSector);
   
     IFloatBuffer vertices = mesh.getVerticesFloatBuffer();
     Vector3D offset = mesh.getVerticesOffset();

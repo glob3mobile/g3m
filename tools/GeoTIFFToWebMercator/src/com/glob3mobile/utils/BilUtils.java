@@ -157,5 +157,42 @@ public class BilUtils {
 			System.out.println("BilMaxMin File write failure");
 		}
 	}
+	
+	public static void saveRedimBilFile(short dims, BufferedImage image, String filename, 
+			short max, short min, short childrenData, short similarity){
+		
+		int width = dims, height = dims;
+		
+		final int dim = (width*height*2) + 10;
+		ByteBuffer bytebuffer = ByteBuffer.allocate(dim).order(ByteOrder.LITTLE_ENDIAN);
+		ShortBuffer buffer = bytebuffer.asShortBuffer();
+
+		for (int i=0; i<width; i++) for (int j=0;j<height; j++){
+
+			short data = (short) ((image.getRGB(j,i)) & 0x0000FFFF);
+			if (data == 0)
+				buffer.put((i*height + j)+1, NODATAVALUE);
+			else
+				buffer.put((i*height + j)+1, (short) (data - LOWER_EARTH_LIMIT));
+		}
+		
+		buffer.put(0,dims);
+		
+		buffer.put(width*height + 1,max);
+		buffer.put((width*height)+2,min);
+		buffer.put(width*height + 3,childrenData);
+		buffer.put(width*height + 4,similarity);
+		
+		try {
+			FileOutputStream fos = new FileOutputStream(filename);
+			FileChannel out = fos.getChannel();
+			out.write(bytebuffer);
+			out.close();
+			fos.close();
+		}
+		catch (Exception E){
+			System.out.println("BilMaxMin File write failure");
+		}
+	}
 
 }
