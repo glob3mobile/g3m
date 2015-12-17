@@ -79,10 +79,11 @@ Mesh* GEOMeshSymbol::createLines2DMesh(const std::vector<std::vector<Geodetic2D*
   }
 
   Mesh* result = new IndexedMesh(GLPrimitive::lines(),
-                                 true,
                                  vertices->getCenter(),
                                  vertices->create(),
+                                 true,
                                  indices.create(),
+                                 true,
                                  lineWidth,
                                  1,
                                  new Color(lineColor),

@@ -468,10 +468,11 @@ private:
         }
         
         _mesh = new IndexedMesh(GLPrimitive::triangles(),
-                                true,
                                 vertices->getCenter(),
                                 vertices->create(),
+                                true,
                                 indices,
+                                true,
                                 1, // lineWidth
                                 1, // pointSize
                                 _color, // flatColor

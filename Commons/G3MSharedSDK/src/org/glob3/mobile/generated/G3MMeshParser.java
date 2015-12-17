@@ -160,7 +160,7 @@ public class G3MMeshParser
     }
     else
     {
-      mesh = new IndexedMesh(toGLPrimitive(primitive), true, new Vector3D(centerX, centerY, centerZ), vertices, indices, lineWidth, pointSize, material._color, colors, 0, depthTest, normals); // colorsIntensity -  flatColor -  owner
+      mesh = new IndexedMesh(toGLPrimitive(primitive), new Vector3D(centerX, centerY, centerZ), vertices, true, indices, true, lineWidth, pointSize, material._color, colors, 0, depthTest, normals); // colorsIntensity -  flatColor
     }
     return mesh;
   }

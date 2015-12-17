@@ -131,10 +131,11 @@ Mesh* Sphere::createWireframeMesh(const Color& color,
   }
 
   Mesh* mesh = new IndexedMesh(GLPrimitive::lines(),
-                               true,
                                vertices->getCenter(),
                                vertices->create(),
+                               true,
                                indices.create(),
+                               true,
                                1,
                                1,
                                new Color(color));

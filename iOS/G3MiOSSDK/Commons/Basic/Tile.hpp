@@ -39,6 +39,7 @@ private:
   Tile*           _parent;
 
   Mesh* _tessellatorMesh;
+  bool _tessellatorMeshIsMeshHolder;
 
   Mesh* _debugMesh;
   Mesh* _texturizedMesh;
@@ -310,6 +311,8 @@ public:
 
   Vector2I getNormalizedPixelsFromPosition(const Geodetic2D& position2D,
                                            const Vector2I& size) const;
+  
+  const Mesh* getTessellatorMesh() const;
   
 };
 
