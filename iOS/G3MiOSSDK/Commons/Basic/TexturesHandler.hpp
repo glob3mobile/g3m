@@ -13,6 +13,7 @@
 #include <vector>
 
 #include "INativeGL.hpp"
+#include "GLConstants.hpp"
 
 class IImage;
 class G3MRenderContext;
