@@ -366,7 +366,7 @@ PlanetRenderer* PlanetRendererBuilder::create() {
                                                       getTileRenderingListener(),
                                                       getChangedRendererInfoListener(),
                                                       getTouchEventTypeOfTerrainTouchListener(),
-                                                      getTileLoDTester());
+                                                      getTileLODTester());
 
   for (int i = 0; i < getVisibleSectorListeners()->size(); i++) {
     planetRenderer->addVisibleSectorListener(getVisibleSectorListeners()->at(i),
@@ -442,15 +442,15 @@ GEOVectorLayer* PlanetRendererBuilder::createGEOVectorLayer() {
   return geoVectorLayer;
 }
 
-void PlanetRendererBuilder::setTileLoDTester(TileLoDTester* tlt){
+void PlanetRendererBuilder::setTileLODTester(TileLODTester* tlt){
   _tileLoDTester = tlt;
 }
 
-TileLoDTester* PlanetRendererBuilder::createDefaultTileLODTester() const{
+TileLODTester* PlanetRendererBuilder::createDefaultTileLODTester() const{
   return NULL;
 }
 
-TileLoDTester* PlanetRendererBuilder::getTileLoDTester(){
+TileLODTester* PlanetRendererBuilder::getTileLODTester(){
   if (_tileLoDTester == NULL){
     _tileLoDTester = createDefaultTileLODTester();
   }

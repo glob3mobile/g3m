@@ -30,7 +30,7 @@ class TileRenderingListener;
 #include "SurfaceElevationProvider.hpp"
 #include "ChangedListener.hpp"
 #include "TouchEvent.hpp"
-#include "TileLoDTester.hpp"
+#include "TileLODTester.hpp"
 
 
 
@@ -218,7 +218,7 @@ private:
   const bool                   _showStatistics;
   const bool                   _logTilesPetitions;
   ITileVisitor*                _tileVisitor = NULL;
-  TileLoDTester*               _tileLoDTester;
+  TileLODTester*               _tileLoDTester;
 
   TileRenderingListener*       _tileRenderingListener;
   std::vector<const Tile*>*    _tilesStartedRendering;
@@ -315,7 +315,7 @@ public:
                  TileRenderingListener*       tileRenderingListener,
                  ChangedRendererInfoListener* changedInfoListener,
                  TouchEventType               touchEventTypeOfTerrainTouchListener,
-                 TileLoDTester*               tileLoDTester);
+                 TileLODTester*               tileLoDTester);
 
   ~PlanetRenderer();
 
@@ -475,9 +475,9 @@ public:
   void setChangedRendererInfoListener(ChangedRendererInfoListener* changedInfoListener,
                                       const size_t rendererIdentifier);
   
-  TileLoDTester* createDefaultTileLoDTester();
+  TileLODTester* createDefaultTileLODTester();
   
-  TileLoDTester* getTileLoDTester() const{
+  TileLODTester* getTileLODTester() const{
     return _tileLoDTester;
   }
   

@@ -1,21 +1,21 @@
 //
-//  TileLoDTester.cpp
+//  TileLODTester.cpp
 //  G3MiOSSDK
 //
 //  Created by Jose Miguel SN on 4/12/15.
 //
 //
 
-#include "TileLoDTester.hpp"
+#include "TileLODTester.hpp"
 
-TileLoDTester::~TileLoDTester(){
+TileLODTester::~TileLODTester(){
   delete _nextTesterNotVisible;
   delete _nextTesterRightLoD;
   delete _nextTesterVisible;
   delete _nextTesterWrongLoD;
 }
 
-bool TileLoDTester::meetsRenderCriteria(int testerLevel,
+bool TileLODTester::meetsRenderCriteria(int testerLevel,
                                         Tile* tile,
                                         const G3MRenderContext& rc) const{
   
@@ -35,7 +35,7 @@ bool TileLoDTester::meetsRenderCriteria(int testerLevel,
 }
 
 
-bool TileLoDTester::isVisible(int testerLevel,
+bool TileLODTester::isVisible(int testerLevel,
                               Tile* tile,
                               const G3MRenderContext& rc) const{
   
@@ -55,7 +55,7 @@ bool TileLoDTester::isVisible(int testerLevel,
   
 }
 
-void TileLoDTester::onTileHasChangedMesh(int testerLevel, Tile* tile) const{
+void TileLODTester::onTileHasChangedMesh(int testerLevel, Tile* tile) const{
   _onTileHasChangedMesh(testerLevel, tile);
   if (_nextTesterNotVisible != NULL)
     _nextTesterNotVisible->onTileHasChangedMesh(testerLevel+1, tile);

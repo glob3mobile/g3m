@@ -184,8 +184,8 @@ Mesh* Tile::getTessellatorMesh(const G3MRenderContext* rc,
     _mustActualizeMeshDueToNewElevationData = false;
     
     //Informs the lod testers
-    if (_planetRenderer->getTileLoDTester() != NULL){
-      _planetRenderer->getTileLoDTester()->onTileHasChangedMesh(0, this);
+    if (_planetRenderer->getTileLODTester() != NULL){
+      _planetRenderer->getTileLODTester()->onTileHasChangedMesh(0, this);
     }
     
     if (_debugMesh != NULL){
@@ -251,7 +251,7 @@ bool Tile::isVisible(const G3MRenderContext* rc,
     return false;
   }
   
-  return _planetRenderer->getTileLoDTester()->isVisible(0, this, *rc);
+  return _planetRenderer->getTileLODTester()->isVisible(0, this, *rc);
 }
 
 bool Tile::meetsRenderCriteria(const G3MRenderContext* rc,
@@ -271,6 +271,8 @@ bool Tile::meetsRenderCriteria(const G3MRenderContext* rc,
     return _lastMeetsRenderCriteriaResult;
   }
   
+  
+#warning CHANGE
   if (tilesRenderParameters->_useTilesSplitBudget) {
     if (_subtiles == NULL) { // the tile needs to create the subtiles
       if (lastSplitTimer->elapsedTimeInMilliseconds() < 67) {
@@ -281,7 +283,7 @@ bool Tile::meetsRenderCriteria(const G3MRenderContext* rc,
   }
   
   
-  return _planetRenderer->getTileLoDTester()->meetsRenderCriteria(0, this, *rc);
+  return _planetRenderer->getTileLODTester()->meetsRenderCriteria(0, this, *rc);
 }
 
 void Tile::prepareForFullRendering(const G3MRenderContext* rc,

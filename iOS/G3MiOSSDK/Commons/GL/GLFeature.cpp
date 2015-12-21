@@ -157,7 +157,7 @@ _lineWidth(lineWidth)
 }
 
 void Geometry2DGLFeature::applyOnGlobalGLState(GLGlobalState* state) const {
-  state->enableCullFace(GLCullFace::front());
+  state->enableCullFace(GLCullFace::back());
   state->setLineWidth(_lineWidth);
 }
 

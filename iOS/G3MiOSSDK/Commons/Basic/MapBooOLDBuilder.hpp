@@ -63,7 +63,7 @@ class IBufferDownloadListener;
 #include "HUDImageRenderer.hpp"
 #include "GroupCanvasElement.hpp"
 #include "IBufferDownloadListener.hpp"
-#include "TileLoDTester.hpp"
+#include "TileLODTester.hpp"
 
 
 
@@ -620,7 +620,7 @@ private:
 
   bool        _isApplicationTubeOpen;
   
-  TileLoDTester* _tileLoDTester;
+  TileLODTester* _tileLoDTester;
     
   MapBooOLD_ErrorRenderer* _mbErrorRenderer;
 
@@ -771,7 +771,7 @@ protected:
   
   const Sector parseSector(const JSONObject* jsonObject, const std::string& paramName) const;
   
-  TileLoDTester* createDefaultTileLODTester() const;
+  TileLODTester* createDefaultTileLODTester() const;
 
 public:
   /** Private to MapbooBuilder, don't call it */
@@ -900,9 +900,9 @@ public:
   
   const std::string getApplicationId();
   
-  void setTileLoDTester(TileLoDTester* tlt);
+  void setTileLODTester(TileLODTester* tlt);
   
-  TileLoDTester* getTileLoDTester();
+  TileLODTester* getTileLODTester();
 };
 
 #endif

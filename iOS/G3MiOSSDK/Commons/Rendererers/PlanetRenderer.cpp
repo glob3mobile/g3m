@@ -32,9 +32,9 @@
 #include "Layer.hpp"
 #include <algorithm>
 
-#include "MaxLevelTileLoDTester.hpp"
-#include "ProjectedCornersDistanceTileLoDTester.hpp"
-#include "ProjectedCornersDistanceTileLoDTester.hpp"
+#include "MaxLevelTileLODTester.hpp"
+#include "ProjectedCornersDistanceTileLODTester.hpp"
+#include "ProjectedCornersDistanceTileLODTester.hpp"
 
 class VisibleSectorListenerEntry {
 private:
@@ -125,7 +125,7 @@ PlanetRenderer::PlanetRenderer(TileTessellator*             tessellator,
                                TileRenderingListener*       tileRenderingListener,
                                ChangedRendererInfoListener* changedInfoListener,
                                TouchEventType               touchEventTypeOfTerrainTouchListener,
-                               TileLoDTester*               tileLoDTester) :
+                               TileLODTester*               tileLoDTester) :
 _tessellator(tessellator),
 _elevationDataProvider(elevationDataProvider),
 _ownsElevationDataProvider(ownsElevationDataProvider),
@@ -634,7 +634,7 @@ void PlanetRenderer::render(const G3MRenderContext* rc,
   
   //Init _tileLoDTester
   if (_tileLoDTester == NULL){
-    _tileLoDTester = createDefaultTileLoDTester();
+    _tileLoDTester = createDefaultTileLODTester();
   }
   
   updateGLState(rc);
@@ -972,16 +972,16 @@ void PlanetRenderer::setChangedRendererInfoListener(ChangedRendererInfoListener*
 //  return _info;
 //}
 
-TileLoDTester* PlanetRenderer::createDefaultTileLoDTester(){
+TileLODTester* PlanetRenderer::createDefaultTileLODTester(){
   
-  //  TileLoDTester(TileLoDTester* nextTesterRightLoD,
-  //                TileLoDTester* nextTesterWrongLoD,
-  //                TileLoDTester* nextTesterVisible,
-  //                TileLoDTester* nextTesterNotVisible)
+  //  TileLODTester(TileLODTester* nextTesterRightLoD,
+  //                TileLODTester* nextTesterWrongLoD,
+  //                TileLODTester* nextTesterVisible,
+  //                TileLODTester* nextTesterNotVisible)
   
   //1
-  ProjectedCornersDistanceTileLoDTester* proj =
-        new ProjectedCornersDistanceTileLoDTester(getLayerTilesRenderParameters()->_tileTextureResolution._x,
+  ProjectedCornersDistanceTileLODTester* proj =
+        new ProjectedCornersDistanceTileLODTester(getLayerTilesRenderParameters()->_tileTextureResolution._x,
                                                   getLayerTilesRenderParameters()->_tileTextureResolution._y,
                                                   NULL,
                                                   NULL,
@@ -989,14 +989,14 @@ TileLoDTester* PlanetRenderer::createDefaultTileLoDTester(){
                                                   NULL);
   
   //0
-  MaxLevelTileLoDTester* poles = new MaxLevelTileLoDTester(getLayerTilesRenderParameters()->_maxLevel,
+  MaxLevelTileLODTester* poles = new MaxLevelTileLODTester(getLayerTilesRenderParameters()->_maxLevel,
                                                            getLayerTilesRenderParameters()->_maxLevelForPoles,
                                                                            NULL,
                                                                            proj,
                                                                            proj,
                                                                            proj);
 //  //0
-//  TimedTileLoDTester* timed = new TimedTileLoDTester(250,
+//  TimedTileLODTester* timed = new TimedTileLODTester(250,
 //                                                     NULL,
 //                                                     poles,
 //                                                     NULL,

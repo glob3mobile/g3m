@@ -12,7 +12,7 @@
 #include <vector>
 #include "TileTessellator.hpp"
 #include "Sector.hpp"
-#include "TileLoDTester.hpp"
+#include "TileLODTester.hpp"
 
 class TileTexturizer;
 class Mesh;
@@ -154,7 +154,7 @@ private:
                                   int row,
                                   int column);
   
-  std::vector<TileLoDTesterData*> _loDTesterData;
+  std::vector<TileLODTesterData*> _loDTesterData;
   
 public:
   const Sector      _sector;
@@ -299,7 +299,7 @@ public:
   Vector2I getNormalizedPixelsFromPosition(const Geodetic2D& position2D,
                                            const Vector2I& size) const;
   
-  TileLoDTesterData* getDataForLoDTester(int level) const{
+  TileLODTesterData* getDataForLoDTester(int level) const{
     if (level >= _loDTesterData.size()){
       return NULL;
     }
@@ -308,7 +308,7 @@ public:
   }
   const Mesh* getTessellatorMesh() const;
   
-  void setDataForLoDTester(int level, TileLoDTesterData* data){
+  void setDataForLoDTester(int level, TileLODTesterData* data){
     
     while (_loDTesterData.size() < level + 1) {
       _loDTesterData.push_back(NULL);
