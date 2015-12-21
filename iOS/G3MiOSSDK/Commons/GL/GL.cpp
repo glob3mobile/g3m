@@ -39,7 +39,7 @@ void GL::drawElements(int mode, IShortBuffer* indices, const GLState* state,
   state->applyOnGPU(this, progManager);
 
   _nativeGL->drawElements(mode,
-                          indices->size(),
+                          (int)indices->size(),
                           indices);
 }
 

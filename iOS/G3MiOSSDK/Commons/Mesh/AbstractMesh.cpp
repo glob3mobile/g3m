@@ -26,9 +26,11 @@ AbstractMesh::~AbstractMesh() {
   if (_owner) {
     delete _vertices;
     delete _colors;
-    delete _flatColor;
     delete _normals;
   }
+  
+  //Always deleting flatColor
+  delete _flatColor;
 
   delete _boundingVolume;
   delete _translationMatrix;
@@ -52,7 +54,10 @@ AbstractMesh::AbstractMesh(const int primitive,
                            const IFloatBuffer* colors,
                            const float colorsIntensity,
                            bool depthTest,
-                           const IFloatBuffer* normals) :
+                           const IFloatBuffer* normals,
+                           bool polygonOffsetFill,
+                           float polygonOffsetFactor,
+                           float polygonOffsetUnits) :
 _primitive(primitive),
 _owner(owner),
 _vertices(vertices),
@@ -70,7 +75,10 @@ _depthTest(depthTest),
 _glState(new GLState()),
 _normals(normals),
 _normalsMesh(NULL),
-_showNormals(false)
+_showNormals(false),
+_polygonOffsetFactor(polygonOffsetFactor),
+_polygonOffsetUnits(polygonOffsetUnits),
+_polygonOffsetFill(polygonOffsetFill)
 {
   createGLState();
 }
@@ -138,17 +146,16 @@ bool AbstractMesh::isTransparent(const G3MRenderContext* rc) const {
 
 void AbstractMesh::createGLState() {
 
-  _glState->addGLFeature(new GeometryGLFeature(_vertices,    // The attribute is a float vector of 4 elements
-                                               3,            // Our buffer contains elements of 3
-                                               0,            // Index 0
-                                               false,        // Not normalized
-                                               0,            // Stride 0
-                                               _depthTest,   // Depth test
-                                               false, 0,
-                                               false, 0.0f, 0.0f,
+  _glState->addGLFeature(new GeometryGLFeature(_vertices,    //The attribute is a float vector of 4 elements
+                                               3,            //Our buffer contains elements of 3
+                                               0,            //Index 0
+                                               false,        //Not normalized
+                                               0,            //Stride 0
+                                               _depthTest,         //Depth test
+                                               false, 0,     //Cull and culled face
+                                               _polygonOffsetFill, _polygonOffsetFactor, _polygonOffsetUnits,  //Polygon Offset
                                                _lineWidth,
-                                               true,
-                                               _pointSize),
+                                               true, _pointSize),
                          false);
 
   if (_normals != NULL) {

@@ -43,6 +43,7 @@ public class Tile
   private Tile _parent;
 
   private Mesh _tessellatorMesh;
+  private boolean _tessellatorMeshIsMeshHolder;
 
   private Mesh _debugMesh;
   private Mesh _texturizedMesh;
@@ -113,6 +114,7 @@ public class Tile
         {
           meshHolder = new MeshHolder(tessellatorMesh);
           _tessellatorMesh = meshHolder;
+          _tessellatorMeshIsMeshHolder = true;
         }
         else
         {
@@ -485,6 +487,11 @@ public class Tile
 
   public final void render(G3MRenderContext rc, GLState parentState, java.util.ArrayList<Tile> toVisitInNextIteration, Frustum cameraFrustumInModelCoordinates, TilesStatistics tilesStatistics, float verticalExaggeration, LayerTilesRenderParameters layerTilesRenderParameters, TileTexturizer texturizer, TilesRenderParameters tilesRenderParameters, ITimer lastSplitTimer, ElevationDataProvider elevationDataProvider, TileTessellator tessellator, LayerSet layerSet, Sector renderedSector, boolean forceFullRender, long tileDownloadPriority, double texWidthSquared, double texHeightSquared, double nowInMS, boolean renderTileMeshes, boolean logTilesPetitions, java.util.ArrayList<Tile> tilesStartedRendering, java.util.ArrayList<String> tilesStoppedRendering)
   {
+  ///#warning REMOVE
+  //  if (!_sector.contains(Angle::fromDegrees(28), Angle::fromDegrees(-15))){
+  //    return;
+  //  }
+  
   
     tilesStatistics.computeTileProcessed(this);
   

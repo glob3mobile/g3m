@@ -332,7 +332,7 @@ BoundingVolume* VectorStreamingRenderer::Node::getBoundingVolume(const G3MRender
 }
 
 void VectorStreamingRenderer::Node::loadFeatures(const G3MRenderContext* rc) {
-  const URL metadataURL(_vectorSet->getServerURL(),
+  const URL featuresURL(_vectorSet->getServerURL(),
                         _vectorSet->getName() + "/features" +
                         "?node=" + _id +
                         "&properties=" + _vectorSet->getProperties(),
@@ -345,7 +345,7 @@ void VectorStreamingRenderer::Node::loadFeatures(const G3MRenderContext* rc) {
   //  }
 
   _downloader = rc->getDownloader();
-  _featuresRequestID = _downloader->requestBuffer(metadataURL,
+  _featuresRequestID = _downloader->requestBuffer(featuresURL,
                                                   _vectorSet->getDownloadPriority() + _featuresCount + _clustersCount,
                                                   _vectorSet->getTimeToCache(),
                                                   _vectorSet->getReadExpired(),

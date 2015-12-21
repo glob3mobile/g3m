@@ -98,6 +98,7 @@ public class MainActivity
       final LayerSet layerSet = new LayerSet();
       layerSet.addLayer(new OSMLayer(TimeInterval.fromDays(30)));
       builder.getPlanetRendererBuilder().setLayerSet(layerSet);
+      builder.getPlanetRendererBuilder().setRenderDebug(true);
 
 
       final NonOverlappingMarksRenderer renderer = new NonOverlappingMarksRenderer(30);
@@ -111,6 +112,7 @@ public class MainActivity
             return true;
          }
       });
+
 
       renderer.addMark(createMark("Label #1", Geodetic3D.fromDegrees(28.131817, -15.440219, 0)));
       renderer.addMark(createMark(Geodetic3D.fromDegrees(28.947345, -13.523105, 0)));

@@ -71,7 +71,7 @@ public class BusyMeshRenderer implements ProtoRenderer, EffectTarget
   
     final float innerRadius = 0F;
   
-  //  const float r2=50;
+    //  const float r2=50;
     final Camera camera = rc.getCurrentCamera();
     final int viewPortWidth = camera.getViewPortWidth();
     final int viewPortHeight = camera.getViewPortHeight();
@@ -114,7 +114,7 @@ public class BusyMeshRenderer implements ProtoRenderer, EffectTarget
     indices.add((short) 1);
   
   
-    Mesh result = new IndexedMesh(GLPrimitive.triangleStrip(), true, vertices.getCenter(), vertices.create(), indices.create(), 1, 1, null, colors.create());
+    Mesh result = new IndexedMesh(GLPrimitive.triangleStrip(), vertices.getCenter(), vertices.create(), true, indices.create(), true, 1, 1, null, colors.create());
     if (vertices != null)
        vertices.dispose();
   

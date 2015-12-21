@@ -101,10 +101,11 @@ Mesh* EllipsoidShape::createBorderMesh(const G3MRenderContext* rc,
   }
 
   return new IndexedMesh(GLPrimitive::lines(),
-                         true,
                          vertices->getCenter(),
                          vertices->create(),
+                         true,
                          indices.create(),
+                         true,
                          (_borderWidth < 1) ? 1 : _borderWidth,
                          1,
                          borderColor);
@@ -144,10 +145,11 @@ Mesh* EllipsoidShape::createSurfaceMesh(const G3MRenderContext* rc,
   // create mesh
   Color* surfaceColor = (_surfaceColor == NULL) ? NULL : new Color(*_surfaceColor);
   Mesh* im = new IndexedMesh(GLPrimitive::triangleStrip(),
-                             true,
                              vertices->getCenter(),
                              vertices->create(),
+                             true,
                              indices.create(),
+                             true,
                              (_borderWidth < 1) ? 1 : _borderWidth,
                              1,
                              surfaceColor,

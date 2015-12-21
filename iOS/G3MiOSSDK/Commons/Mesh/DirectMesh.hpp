@@ -33,7 +33,10 @@ public:
              const IFloatBuffer* colors = NULL,
              const float colorsIntensity = 0.0f,
              bool depthTest = true,
-             const IFloatBuffer* normals = NULL);
+             const IFloatBuffer* normals = NULL,
+             bool polygonOffsetFill = false,
+             float polygonOffsetFactor = 0,
+             float polygonOffsetUnits = 0);
 
   ~DirectMesh() {
 #ifdef JAVA_CODE

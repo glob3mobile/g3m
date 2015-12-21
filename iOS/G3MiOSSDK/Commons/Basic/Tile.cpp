@@ -210,6 +210,7 @@ Mesh* Tile::getTessellatorMesh(const G3MRenderContext* rc,
       if (meshHolder == NULL) {
         meshHolder = new MeshHolder(tessellatorMesh);
         _tessellatorMesh = meshHolder;
+        _tessellatorMeshIsMeshHolder = true;
       }
       else {
         meshHolder->setMesh(tessellatorMesh);
@@ -860,4 +861,13 @@ Vector2I Tile::getNormalizedPixelsFromPosition(const Geodetic2D& position2D,
   const IMathUtils* math = IMathUtils::instance();
   const Vector2D uv = _sector.getUVCoordinates(position2D);
   return Vector2I(math->toInt(tileDimension._x * uv._x), math->toInt(tileDimension._y * uv._y));
+}
+
+const Mesh* Tile::getTessellatorMesh() const{
+  
+  if (_tessellatorMeshIsMeshHolder){
+    return ((MeshHolder*) _tessellatorMesh)->getMesh();
+  }
+  
+  return _tessellatorMesh;
 }
