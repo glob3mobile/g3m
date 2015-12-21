@@ -40,7 +40,8 @@ private:
   Tile*           _parent;
   
   Mesh* _tessellatorMesh;
-  
+  bool _tessellatorMeshIsMeshHolder;
+
   Mesh* _debugMesh;
   Mesh* _texturizedMesh;
   TileElevationDataRequest* _elevationDataRequest;
@@ -305,6 +306,7 @@ public:
     
     return _loDTesterData.at(level);
   }
+  const Mesh* getTessellatorMesh() const;
   
   void setDataForLoDTester(int level, TileLoDTesterData* data){
     

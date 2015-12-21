@@ -78,6 +78,7 @@ _planetRenderer(planetRenderer),
 _tessellatorData(NULL),
 _rendered(false),
 _id( createTileId(level, row, column) ),
+_tessellatorMeshIsMeshHolder(false),
 _lastMeetsRenderCriteriaResult(false),
 _lastMeetsRenderCriteriaTimeInMS(0)
 {
@@ -187,6 +188,11 @@ Mesh* Tile::getTessellatorMesh(const G3MRenderContext* rc,
       _planetRenderer->getTileLoDTester()->onTileHasChangedMesh(0, this);
     }
     
+    if (_debugMesh != NULL){
+      delete _debugMesh;
+      _debugMesh = NULL;
+    }
+    
     if (elevationDataProvider == NULL) {
       // no elevation data provider, just create a simple mesh without elevation
       _tessellatorMesh = tessellator->createTileMesh(rc->getPlanet(),
@@ -196,6 +202,7 @@ Mesh* Tile::getTessellatorMesh(const G3MRenderContext* rc,
                                                      _verticalExaggeration,
                                                      tilesRenderParameters->_renderDebug,
                                                      _tileTessellatorMeshData);
+      _tessellatorMeshIsMeshHolder = false;
     }
     else {
       Mesh* tessellatorMesh = tessellator->createTileMesh(rc->getPlanet(),
@@ -528,7 +535,12 @@ void Tile::render(const G3MRenderContext* rc,
                   bool logTilesPetitions,
                   std::vector<const Tile*>* tilesStartedRendering,
                   std::vector<std::string>* tilesStoppedRendering) {
+//#warning REMOVE
+//  if (!_sector.contains(Angle::fromDegrees(28), Angle::fromDegrees(-15))){
+//    return;
+//  }
   
+
   tilesStatistics->computeTileProcessed(this);
   
   if (verticalExaggeration != _verticalExaggeration) {

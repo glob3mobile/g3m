@@ -94,9 +94,10 @@ public class Tile
     {
       _mustActualizeMeshDueToNewElevationData = false;
   
-      //Informs the lod testers
-      if (_planetRenderer.getTileLoDTester() != null)
-      {
+      if (_debugMesh != null)
+        if (_debugMesh != null)
+           _debugMesh.dispose();
+        _debugMesh = null;
         _planetRenderer.getTileLoDTester().onTileHasChangedMesh(0, this);
       }
   
@@ -104,6 +105,9 @@ public class Tile
       {
         // no elevation data provider, just create a simple mesh without elevation
         _tessellatorMesh = tessellator.createTileMesh(rc.getPlanet(), layerTilesRenderParameters._tileMeshResolution, this, null, _verticalExaggeration, tilesRenderParameters._renderDebug, _tileTessellatorMeshData);
+        _tessellatorMeshIsMeshHolder = false;
+  
+        computeTileCorners(rc.getPlanet());
       }
       else
       {
@@ -375,8 +379,7 @@ public class Tile
      _rendered = false;
      _id = createTileId(level, row, column);
      _lastMeetsRenderCriteriaResult = false;
-     _lastMeetsRenderCriteriaTimeInMS = 0;
-  }
+     _tessellatorMeshIsMeshHolder = false;
 
   public void dispose()
   {
@@ -943,44 +946,15 @@ public class Tile
     return new Vector2I(math.toInt(tileDimension._x * uv._x), math.toInt(tileDimension._y * uv._y));
   }
 
-  public final TileLoDTesterData getDataForLoDTester(int level)
+  public final Mesh getTessellatorMesh()
   {
-    if (level >= _loDTesterData.size())
+  
+    if (_tessellatorMeshIsMeshHolder)
     {
       return null;
-    }
+      return ((MeshHolder) _tessellatorMesh).getMesh();
 
-    return _loDTesterData.get(level);
-  }
-
-  public final void setDataForLoDTester(int level, TileLoDTesterData data)
-  {
-
-    while (_loDTesterData.size() < level + 1)
-    {
-      _loDTesterData.add(null);
-    }
-
-    if (_loDTesterData.get(level) != data)
-    {
-      if (_loDTesterData.get(level) != null)
-      {
-        if (_loDTesterData.get(level) != null)
-           _loDTesterData.get(level).dispose();
-      }
-
-      _loDTesterData.set(level, data);
-    }
-  }
-
-  public final TileTessellatorMeshData getTessellatorMeshData()
-  {
-    return _tileTessellatorMeshData;
-  }
-
-  public final Mesh getCurrentTessellatorMesh()
-  {
-    return _tessellatorMesh;
+  
   }
 
 }
