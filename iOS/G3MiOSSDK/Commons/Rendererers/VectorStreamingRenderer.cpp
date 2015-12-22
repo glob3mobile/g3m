@@ -334,8 +334,6 @@ BoundingVolume* VectorStreamingRenderer::Node::getBoundingVolume(const G3MRender
 
 
 void VectorStreamingRenderer::Node::loadFeatures(const G3MRenderContext* rc) {
-  const URL featuresURL = _vectorSet->getNodeFeaturesURL(_id);
-
   //  if (_verbose) {
   //    ILogger::instance()->logInfo("\"%s\": Downloading features for node \'%s\'",
   //                                 _vectorSet->getName().c_str(),
@@ -343,7 +341,7 @@ void VectorStreamingRenderer::Node::loadFeatures(const G3MRenderContext* rc) {
   //  }
 
   _downloader = rc->getDownloader();
-  _featuresRequestID = _downloader->requestBuffer(featuresURL,
+  _featuresRequestID = _downloader->requestBuffer(_vectorSet->getNodeFeaturesURL(_id),
                                                   _vectorSet->getDownloadPriority() + _featuresCount + _clustersCount,
                                                   _vectorSet->getTimeToCache(),
                                                   _vectorSet->getReadExpired(),
@@ -384,12 +382,6 @@ void VectorStreamingRenderer::Node::loadChildren(const G3MRenderContext* rc) {
     parsedChildren(children, rc->getThreadUtils());
     return;
   }
-
-
-//  const URL childrenURL(_vectorSet->getServerURL(),
-//                        _vectorSet->getName() +
-//                        "?nodes=" + nodes,
-//                        true);
 
   //  if (_verbose) {
   //    ILogger::instance()->logInfo("\"%s\": Downloading children for node \'%s\'",
@@ -922,8 +914,6 @@ void VectorStreamingRenderer::VectorSet::initialize(const G3MContext* context) {
   _downloadingMetadata = true;
   _errorDownloadingMetadata = false;
   _errorParsingMetadata = false;
-
-//  const URL metadataURL(_serverURL, _name);
 
   if (_verbose) {
     ILogger::instance()->logInfo("\"%s\": Downloading metadata", _name.c_str());
