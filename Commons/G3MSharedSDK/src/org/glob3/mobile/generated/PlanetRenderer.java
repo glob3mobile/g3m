@@ -10,7 +10,7 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
   private final boolean _showStatistics;
   private final boolean _logTilesPetitions;
   private ITileVisitor _tileVisitor = null;
-  private TileLoDTester _tileLoDTester;
+  private TileLODTester _tileLoDTester;
 
   private TileRenderingListener _tileRenderingListener;
   private final java.util.ArrayList<Tile> _tilesStartedRendering;
@@ -345,7 +345,7 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
   private java.util.ArrayList<Tile> _toVisit = new java.util.ArrayList<Tile>();
   private java.util.ArrayList<Tile> _toVisitInNextIteration = new java.util.ArrayList<Tile>();
 
-  public PlanetRenderer(TileTessellator tessellator, ElevationDataProvider elevationDataProvider, boolean ownsElevationDataProvider, float verticalExaggeration, TileTexturizer texturizer, LayerSet layerSet, TilesRenderParameters tilesRenderParameters, boolean showStatistics, long tileDownloadPriority, Sector renderedSector, boolean renderTileMeshes, boolean logTilesPetitions, TileRenderingListener tileRenderingListener, ChangedRendererInfoListener changedInfoListener, TouchEventType touchEventTypeOfTerrainTouchListener, TileLoDTester tileLoDTester)
+  public PlanetRenderer(TileTessellator tessellator, ElevationDataProvider elevationDataProvider, boolean ownsElevationDataProvider, float verticalExaggeration, TileTexturizer texturizer, LayerSet layerSet, TilesRenderParameters tilesRenderParameters, boolean showStatistics, long tileDownloadPriority, Sector renderedSector, boolean renderTileMeshes, boolean logTilesPetitions, TileRenderingListener tileRenderingListener, ChangedRendererInfoListener changedInfoListener, TouchEventType touchEventTypeOfTerrainTouchListener, TileLODTester tileLoDTester)
   {
      _tessellator = tessellator;
      _elevationDataProvider = elevationDataProvider;
@@ -467,7 +467,7 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
     //Init _tileLoDTester
     if (_tileLoDTester == null)
     {
-      _tileLoDTester = createDefaultTileLoDTester();
+      _tileLoDTester = createDefaultTileLODTester();
     }
   
     updateGLState(rc);
@@ -1021,32 +1021,31 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
   //  return _info;
   //}
   
-  public final TileLoDTester createDefaultTileLoDTester()
+  public final TileLODTester createDefaultTileLODTester()
   {
   
-    //  TileLoDTester(TileLoDTester* nextTesterRightLoD,
-    //                TileLoDTester* nextTesterWrongLoD,
-    //                TileLoDTester* nextTesterVisible,
-    //                TileLoDTester* nextTesterNotVisible)
+    //  TileLODTester(TileLODTester* nextTesterRightLoD,
+    //                TileLODTester* nextTesterWrongLoD,
+    //                TileLODTester* nextTesterVisible,
+    //                TileLODTester* nextTesterNotVisible)
   
+    //3
+    ProjectedCornersDistanceTileLODTester proj = new ProjectedCornersDistanceTileLODTester(getLayerTilesRenderParameters()._tileTextureResolution._x, getLayerTilesRenderParameters()._tileTextureResolution._y, null, null, null, null);
+  
+    //2
+    MaxLevelTileLODTester poles = new MaxLevelTileLODTester(getLayerTilesRenderParameters()._maxLevel, getLayerTilesRenderParameters()._maxLevelForPoles, null, proj, proj, proj);
     //1
-    ProjectedCornersDistanceTileLoDTester proj = new ProjectedCornersDistanceTileLoDTester(getLayerTilesRenderParameters()._tileTextureResolution._x, getLayerTilesRenderParameters()._tileTextureResolution._y, null, null, null, null);
+    MaxFrameTimeTileLODTester frameTime = new MaxFrameTimeTileLODTester(1000 / 60, poles);
   
     //0
-    MaxLevelTileLoDTester poles = new MaxLevelTileLoDTester(getLayerTilesRenderParameters()._maxLevel, getLayerTilesRenderParameters()._maxLevelForPoles, null, proj, proj, proj);
-  //  //0
-  //  TimedTileLoDTester* timed = new TimedTileLoDTester(250,
-  //                                                     NULL,
-  //                                                     poles,
-  //                                                     NULL,
-  //                                                     NULL);
+    TimedTileLODTester timed = new TimedTileLODTester(250, frameTime);
   
   
-    return poles;
+    return timed;
   
   }
 
-  public final TileLoDTester getTileLoDTester()
+  public final TileLODTester getTileLODTester()
   {
     return _tileLoDTester;
   }

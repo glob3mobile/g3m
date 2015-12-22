@@ -1,6 +1,6 @@
 package org.glob3.mobile.generated; 
 //
-//  MaxLevelTileLoDTester.cpp
+//  MaxLevelTileLODTester.cpp
 //  G3MiOSSDK
 //
 //  Created by Jose Miguel SN on 4/12/15.
@@ -8,7 +8,7 @@ package org.glob3.mobile.generated;
 //
 
 //
-//  MaxLevelTileLoDTester.hpp
+//  MaxLevelTileLODTester.hpp
 //  G3MiOSSDK
 //
 //  Created by Jose Miguel SN on 4/12/15.
@@ -17,7 +17,7 @@ package org.glob3.mobile.generated;
 
 
 
-public class MaxLevelTileLoDTester extends TileLoDTester
+public class MaxLevelTileLODTester extends TileLODTesterResponder
 {
 
   protected final boolean _meetsRenderCriteria(int testerLevel, Tile tile, G3MRenderContext rc)
@@ -48,7 +48,7 @@ public class MaxLevelTileLoDTester extends TileLoDTester
   protected int _maxLevel;
 
 
-  public MaxLevelTileLoDTester(int maxLevel, int maxLevelForPoles, TileLoDTester nextTesterRightLoD, TileLoDTester nextTesterWrongLoD, TileLoDTester nextTesterVisible, TileLoDTester nextTesterNotVisible)
+  public MaxLevelTileLODTester(int maxLevel, int maxLevelForPoles, TileLODTester nextTesterRightLoD, TileLODTester nextTesterWrongLoD, TileLODTester nextTesterVisible, TileLODTester nextTesterNotVisible)
   {
      super(nextTesterRightLoD, nextTesterWrongLoD, nextTesterVisible, nextTesterNotVisible);
      _maxLevelForPoles = maxLevelForPoles;

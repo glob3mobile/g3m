@@ -1,11 +1,11 @@
 package org.glob3.mobile.generated; 
-public abstract class TileLoDTester
+public abstract class TileLODTesterResponder extends TileLODTester
 {
 
-  private TileLoDTester _nextTesterRightLoD;
-  private TileLoDTester _nextTesterWrongLoD;
-  private TileLoDTester _nextTesterVisible;
-  private TileLoDTester _nextTesterNotVisible;
+  private TileLODTester _nextTesterRightLoD;
+  private TileLODTester _nextTesterWrongLoD;
+  private TileLODTester _nextTesterVisible;
+  private TileLODTester _nextTesterNotVisible;
 
 
   protected abstract boolean _meetsRenderCriteria(int testerLevel, Tile tile, G3MRenderContext rc);
@@ -17,7 +17,7 @@ public abstract class TileLoDTester
   }
 
 
-  public TileLoDTester(TileLoDTester nextTesterRightLoD, TileLoDTester nextTesterWrongLoD, TileLoDTester nextTesterVisible, TileLoDTester nextTesterNotVisible)
+  public TileLODTesterResponder(TileLODTester nextTesterRightLoD, TileLODTester nextTesterWrongLoD, TileLODTester nextTesterVisible, TileLODTester nextTesterNotVisible)
   {
      _nextTesterRightLoD = nextTesterRightLoD;
      _nextTesterWrongLoD = nextTesterWrongLoD;

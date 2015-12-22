@@ -36,7 +36,7 @@ public abstract class MapBooOLDBuilder
 
   private boolean _isApplicationTubeOpen;
 
-  private TileLoDTester _tileLoDTester;
+  private TileLODTester _tileLoDTester;
 
   private MapBooOLD_ErrorRenderer _mbErrorRenderer;
 
@@ -74,7 +74,7 @@ public abstract class MapBooOLDBuilder
   
     TouchEventType touchEventTypeOfTerrainTouchListener = TouchEventType.DownUp;
   
-    PlanetRenderer result = new PlanetRenderer(tessellator, elevationDataProvider, true, verticalExaggeration, texturizer, _layerSet, parameters, showStatistics, tileDownloadPriority, renderedSector, renderTileMeshes, logTilesPetitions, tileRenderingListener, changedRendererInfoListener, touchEventTypeOfTerrainTouchListener, getTileLoDTester());
+    PlanetRenderer result = new PlanetRenderer(tessellator, elevationDataProvider, true, verticalExaggeration, texturizer, _layerSet, parameters, showStatistics, tileDownloadPriority, renderedSector, renderTileMeshes, logTilesPetitions, tileRenderingListener, changedRendererInfoListener, touchEventTypeOfTerrainTouchListener, getTileLODTester());
   
     if (_enableNotifications)
     {
@@ -1193,7 +1193,7 @@ public abstract class MapBooOLDBuilder
     return new Sector(Geodetic2D.fromDegrees(lowerLat, lowerLon), Geodetic2D.fromDegrees(upperLat, upperLon));
   }
 
-  protected final TileLoDTester createDefaultTileLODTester()
+  protected final TileLODTester createDefaultTileLODTester()
   {
     return null;
   }
@@ -1861,12 +1861,12 @@ public abstract class MapBooOLDBuilder
     return _applicationId;
   }
 
-  public final void setTileLoDTester(TileLoDTester tlt)
+  public final void setTileLODTester(TileLODTester tlt)
   {
     _tileLoDTester = tlt;
   }
 
-  public final TileLoDTester getTileLoDTester()
+  public final TileLODTester getTileLODTester()
   {
     if (_tileLoDTester == null)
     {

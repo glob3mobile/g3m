@@ -62,22 +62,6 @@ public class Tile
 
   private BoundingVolume _boundingVolume;
 
-//  Vector3D* _northWestPoint;
-//  Vector3D* _northEastPoint;
-//  Vector3D* _southWestPoint;
-//  Vector3D* _southEastPoint;
-
-//  static double getSquaredArcSegmentRatio(const Vector3D& a,
-//                                          const Vector3D& b);
-//  
-//  void computeTileCorners(const Planet* planet);
-
-//  double _northArcSegmentRatioSquared;
-//  double _southArcSegmentRatioSquared;
-//  double _eastArcSegmentRatioSquared;
-//  double _westArcSegmentRatioSquared;
-
-
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
 //  void prepareTestLODData(Planet planet);
 
@@ -94,11 +78,17 @@ public class Tile
     {
       _mustActualizeMeshDueToNewElevationData = false;
   
+      //Informs the lod testers
+      if (_planetRenderer.getTileLODTester() != null)
+      {
+        _planetRenderer.getTileLODTester().onTileHasChangedMesh(0, this);
+      }
+  
       if (_debugMesh != null)
+      {
         if (_debugMesh != null)
            _debugMesh.dispose();
         _debugMesh = null;
-        _planetRenderer.getTileLoDTester().onTileHasChangedMesh(0, this);
       }
   
       if (elevationDataProvider == null)
@@ -106,8 +96,6 @@ public class Tile
         // no elevation data provider, just create a simple mesh without elevation
         _tessellatorMesh = tessellator.createTileMesh(rc.getPlanet(), layerTilesRenderParameters._tileMeshResolution, this, null, _verticalExaggeration, tilesRenderParameters._renderDebug, _tileTessellatorMeshData);
         _tessellatorMeshIsMeshHolder = false;
-  
-        computeTileCorners(rc.getPlanet());
       }
       else
       {
@@ -153,11 +141,8 @@ public class Tile
       return false;
     }
   
-    return _planetRenderer.getTileLoDTester().isVisible(0, this, rc);
+    return _planetRenderer.getTileLODTester().isVisible(0, this, rc);
   }
-
-  private boolean _lastMeetsRenderCriteriaResult;
-  private double _lastMeetsRenderCriteriaTimeInMS;
 
   private boolean meetsRenderCriteria(G3MRenderContext rc, TilesRenderParameters tilesRenderParameters, ITimer lastSplitTimer, double nowInMS)
   {
@@ -169,11 +154,8 @@ public class Tile
   //    }
   //  }
   
-    if (_lastMeetsRenderCriteriaTimeInMS != 0 && (nowInMS - _lastMeetsRenderCriteriaTimeInMS) < 250) //500
-    {
-      return _lastMeetsRenderCriteriaResult;
-    }
-  
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning CHANGE
     if (tilesRenderParameters._useTilesSplitBudget)
     {
       if (_subtiles == null) // the tile needs to create the subtiles
@@ -187,7 +169,7 @@ public class Tile
     }
   
   
-    return _planetRenderer.getTileLoDTester().meetsRenderCriteria(0, this, rc);
+    return _planetRenderer.getTileLODTester().meetsRenderCriteria(0, this, rc);
   }
 
   private void rawRender(G3MRenderContext rc, GLState glState, TileTexturizer texturizer, ElevationDataProvider elevationDataProvider, TileTessellator tessellator, LayerTilesRenderParameters layerTilesRenderParameters, LayerSet layerSet, TilesRenderParameters tilesRenderParameters, boolean forceFullRender, long tileDownloadPriority, boolean logTilesPetitions)
@@ -338,7 +320,7 @@ public class Tile
     return level + "/" + row + "/" + column;
   }
 
-  private java.util.ArrayList<TileLoDTesterData> _loDTesterData = new java.util.ArrayList<TileLoDTesterData>();
+  private java.util.ArrayList<TileLODTesterData> _loDTesterData = new java.util.ArrayList<TileLODTesterData>();
 
   public final Sector _sector ;
   public final boolean _mercator;
@@ -378,8 +360,8 @@ public class Tile
      _tessellatorData = null;
      _rendered = false;
      _id = createTileId(level, row, column);
-     _lastMeetsRenderCriteriaResult = false;
      _tessellatorMeshIsMeshHolder = false;
+  }
 
   public void dispose()
   {
@@ -946,15 +928,59 @@ public class Tile
     return new Vector2I(math.toInt(tileDimension._x * uv._x), math.toInt(tileDimension._y * uv._y));
   }
 
+  public final TileLODTesterData getDataForLoDTester(int level)
+  {
+    if (level >= _loDTesterData.size())
+    {
+      return null;
+    }
+
+    return _loDTesterData.get(level);
+  }
   public final Mesh getTessellatorMesh()
   {
   
     if (_tessellatorMeshIsMeshHolder)
     {
-      return null;
       return ((MeshHolder) _tessellatorMesh).getMesh();
-
+    }
   
+    return _tessellatorMesh;
+  }
+
+  public final void setDataForLoDTester(int level, TileLODTesterData data)
+  {
+
+    while (_loDTesterData.size() < level + 1)
+    {
+      _loDTesterData.add(null);
+    }
+
+    if (_loDTesterData.get(level) != data)
+    {
+      if (_loDTesterData.get(level) != null)
+      {
+        if (_loDTesterData.get(level) != null)
+           _loDTesterData.get(level).dispose();
+      }
+
+      _loDTesterData.set(level, data);
+    }
+  }
+
+  public final TileTessellatorMeshData getTessellatorMeshData()
+  {
+    return _tileTessellatorMeshData;
+  }
+
+  public final Mesh getCurrentTessellatorMesh()
+  {
+    return _tessellatorMesh;
+  }
+
+  public final boolean areSubtilesCreated()
+  {
+    return _subtiles != null;
   }
 
 }

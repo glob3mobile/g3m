@@ -29,7 +29,7 @@ public class PlanetRendererBuilder
   private TileTessellator _tileTessellator;
   private TileTexturizer _texturizer;
   private java.util.ArrayList<GEOVectorLayer> _geoVectorLayers = new java.util.ArrayList<GEOVectorLayer>();
-  private TileLoDTester _tileLoDTester;
+  private TileLODTester _tileLoDTester;
 
 
   private LayerSet _layerSet;
@@ -268,7 +268,7 @@ public class PlanetRendererBuilder
     return _defaultTileBackGroundImage;
   }
 
-  private TileLoDTester createDefaultTileLODTester()
+  private TileLODTester createDefaultTileLODTester()
   {
     return null;
   }
@@ -337,7 +337,7 @@ public class PlanetRendererBuilder
       layerSet.addLayer(geoVectorLayer);
     }
   
-    PlanetRenderer planetRenderer = new PlanetRenderer(getTileTessellator(), getElevationDataProvider(), true, getVerticalExaggeration(), getTexturizer(), layerSet, getParameters(), getShowStatistics(), getTileDownloadPriority(), getRenderedSector(), getRenderTileMeshes(), getLogTilesPetitions(), getTileRenderingListener(), getChangedRendererInfoListener(), getTouchEventTypeOfTerrainTouchListener(), getTileLoDTester());
+    PlanetRenderer planetRenderer = new PlanetRenderer(getTileTessellator(), getElevationDataProvider(), true, getVerticalExaggeration(), getTexturizer(), layerSet, getParameters(), getShowStatistics(), getTileDownloadPriority(), getRenderedSector(), getRenderTileMeshes(), getLogTilesPetitions(), getTileRenderingListener(), getChangedRendererInfoListener(), getTouchEventTypeOfTerrainTouchListener(), getTileLODTester());
   
     for (int i = 0; i < getVisibleSectorListeners().size(); i++)
     {
@@ -533,12 +533,12 @@ public class PlanetRendererBuilder
     _defaultTileBackGroundImage = defaultTileBackGroundImage;
   }
 
-  public final void setTileLoDTester(TileLoDTester tlt)
+  public final void setTileLODTester(TileLODTester tlt)
   {
     _tileLoDTester = tlt;
   }
 
-  public final TileLoDTester getTileLoDTester()
+  public final TileLODTester getTileLODTester()
   {
     if (_tileLoDTester == null)
     {

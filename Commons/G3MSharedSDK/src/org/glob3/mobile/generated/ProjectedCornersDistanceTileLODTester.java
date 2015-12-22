@@ -1,6 +1,6 @@
 package org.glob3.mobile.generated; 
 //
-//  ProjectedCornersDistanceTileLoDTester.cpp
+//  ProjectedCornersDistanceTileLODTester.cpp
 //  G3MiOSSDK
 //
 //  Created by Jose Miguel SN on 4/12/15.
@@ -8,7 +8,7 @@ package org.glob3.mobile.generated;
 //
 
 //
-//  ProjectedCornersDistanceTileLoDTester.hpp
+//  ProjectedCornersDistanceTileLODTester.hpp
 //  G3MiOSSDK
 //
 //  Created by Jose Miguel SN on 4/12/15.
@@ -18,10 +18,10 @@ package org.glob3.mobile.generated;
 
 
 
-public class ProjectedCornersDistanceTileLoDTester extends TileLoDTester
+public class ProjectedCornersDistanceTileLODTester extends TileLODTesterResponder
 {
 
-  protected static class ProjectedCornersDistanceTileLoDTesterData extends TileLoDTesterData
+  protected static class ProjectedCornersDistanceTileLODTesterData extends TileLODTesterData
   {
 
     private double getSquaredArcSegmentRatio(Vector3D a, Vector3D b)
@@ -48,7 +48,7 @@ public class ProjectedCornersDistanceTileLoDTester extends TileLoDTester
 
     public BoundingVolume _bvol;
 
-    public ProjectedCornersDistanceTileLoDTesterData(Tile tile, double mediumHeight, Planet planet)
+    public ProjectedCornersDistanceTileLODTesterData(Tile tile, double mediumHeight, Planet planet)
     {
        super();
        _northWestPoint = new Vector3D(planet.toCartesian(tile._sector.getNW(), mediumHeight));
@@ -70,7 +70,7 @@ public class ProjectedCornersDistanceTileLoDTester extends TileLoDTester
       final Mesh mesh = tile.getCurrentTessellatorMesh();
       if (mesh == null)
       {
-        ILogger.instance().logError("Problem computing BVolume in ProjectedCornersDistanceTileLoDTesterData");
+        ILogger.instance().logError("Problem computing BVolume in ProjectedCornersDistanceTileLODTesterData");
         _bvol = null;
       }
       else
@@ -104,13 +104,13 @@ public class ProjectedCornersDistanceTileLoDTester extends TileLoDTester
     tile.setDataForLoDTester(testerLevel, null);
   }
 
-  protected final ProjectedCornersDistanceTileLoDTesterData getData(Tile tile, int testerLevel, G3MRenderContext rc)
+  protected final ProjectedCornersDistanceTileLODTesterData getData(Tile tile, int testerLevel, G3MRenderContext rc)
   {
-    ProjectedCornersDistanceTileLoDTesterData data = (ProjectedCornersDistanceTileLoDTesterData) tile.getDataForLoDTester(testerLevel);
+    ProjectedCornersDistanceTileLODTesterData data = (ProjectedCornersDistanceTileLODTesterData) tile.getDataForLoDTester(testerLevel);
     if (data == null)
     {
       final double mediumHeight = tile.getTessellatorMeshData()._averageHeight;
-      data = new ProjectedCornersDistanceTileLoDTesterData(tile, mediumHeight, rc.getPlanet());
+      data = new ProjectedCornersDistanceTileLODTesterData(tile, mediumHeight, rc.getPlanet());
       tile.setDataForLoDTester(testerLevel, data);
     }
     return data;
@@ -120,14 +120,14 @@ public class ProjectedCornersDistanceTileLoDTester extends TileLoDTester
   {
 
 
-    ProjectedCornersDistanceTileLoDTesterData data = getData(tile, testerLevel, rc);
+    ProjectedCornersDistanceTileLODTesterData data = getData(tile, testerLevel, rc);
 
     return data.evaluate(rc.getCurrentCamera(), _texHeightSquared, _texWidthSquared);
   }
 
   protected final boolean _isVisible(int testerLevel, Tile tile, G3MRenderContext rc)
   {
-    ProjectedCornersDistanceTileLoDTesterData data = getData(tile, testerLevel, rc);
+    ProjectedCornersDistanceTileLODTesterData data = getData(tile, testerLevel, rc);
     return data._bvol.touchesFrustum(rc.getCurrentCamera().getFrustumInModelCoordinates());
   }
 
@@ -135,7 +135,7 @@ public class ProjectedCornersDistanceTileLoDTester extends TileLoDTester
   protected double _texWidthSquared;
 
 
-  public ProjectedCornersDistanceTileLoDTester(double textureWidth, double textureHeight, TileLoDTester nextTesterRightLoD, TileLoDTester nextTesterWrongLoD, TileLoDTester nextTesterVisible, TileLoDTester nextTesterNotVisible)
+  public ProjectedCornersDistanceTileLODTester(double textureWidth, double textureHeight, TileLODTester nextTesterRightLoD, TileLODTester nextTesterWrongLoD, TileLODTester nextTesterVisible, TileLODTester nextTesterNotVisible)
   {
      super(nextTesterRightLoD, nextTesterWrongLoD, nextTesterVisible, nextTesterNotVisible);
      _texHeightSquared = textureHeight * textureHeight;
