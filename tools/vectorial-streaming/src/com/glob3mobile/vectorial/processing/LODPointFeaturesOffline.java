@@ -93,11 +93,10 @@ public class LODPointFeaturesOffline {
 
       for (final String childID : childrenIDs) {
          final PointFeatureLODStorage.Node child = lodStorage.getNode(childID);
-         //         JSON.
          childrenMetadataJSON.add(JSON.toJSON(child));
       }
 
-      final File file = new File(target, "nodes" + File.separator + toDirectories(node.getID()) + "children.json");
+      final File file = new File(target, toNodesDirectories(node.getID()) + "children.json");
       final String childrenMetadata = JSONUtils.toJSON(childrenMetadataJSON);
       IOUtils.save(file, childrenMetadata);
    }
@@ -106,31 +105,20 @@ public class LODPointFeaturesOffline {
    private static void saveNodeFeatures(final File target,
                                         final PointFeatureLODStorage.Node node,
                                         final String[] properties) throws IOException {
-      //      final File file = new File(target, "features" + File.separator + toDirectories(node.getID()) + ".json");
-      final File file = new File(target, "nodes" + File.separator + toDirectories(node.getID()) + "features.json");
+      final File file = new File(target, toNodesDirectories(node.getID()) + "features.json");
       final String features = JSONUtils.toJSON(JSON.toGEOJSON(node, properties));
       IOUtils.save(file, features);
    }
 
 
-   private static String toDirectories(final String id) {
-      final StringBuilder sb = new StringBuilder();
+   private static String toNodesDirectories(final String id) {
+      final StringBuilder sb = new StringBuilder("nodes" + File.separator);
       final int length = id.length();
-      //      if (length == 0) {
-      //         return "root";
-      //      }
-      //      for (int i = 0; i < (length - 1); i++) {
-      //         final char c = id.charAt(i);
-      //         sb.append(c);
-      //         sb.append(File.separatorChar);
-      //      }
-      //      sb.append(id.charAt(length - 1));
       for (int i = 0; i < length; i++) {
          final char c = id.charAt(i);
          sb.append(c);
          sb.append(File.separatorChar);
       }
-
       return sb.toString();
    }
 
