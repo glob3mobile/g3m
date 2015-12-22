@@ -8,14 +8,14 @@
 
 #include "TileLODTester.hpp"
 
-TileLODTester::~TileLODTester(){
+TileLODTesterResponder::~TileLODTesterResponder(){
   delete _nextTesterNotVisible;
   delete _nextTesterRightLoD;
   delete _nextTesterVisible;
   delete _nextTesterWrongLoD;
 }
 
-bool TileLODTester::meetsRenderCriteria(int testerLevel,
+bool TileLODTesterResponder::meetsRenderCriteria(int testerLevel,
                                         Tile* tile,
                                         const G3MRenderContext& rc) const{
   
@@ -35,7 +35,7 @@ bool TileLODTester::meetsRenderCriteria(int testerLevel,
 }
 
 
-bool TileLODTester::isVisible(int testerLevel,
+bool TileLODTesterResponder::isVisible(int testerLevel,
                               Tile* tile,
                               const G3MRenderContext& rc) const{
   
@@ -55,7 +55,7 @@ bool TileLODTester::isVisible(int testerLevel,
   
 }
 
-void TileLODTester::onTileHasChangedMesh(int testerLevel, Tile* tile) const{
+void TileLODTesterResponder::onTileHasChangedMesh(int testerLevel, Tile* tile) const{
   _onTileHasChangedMesh(testerLevel, tile);
   if (_nextTesterNotVisible != NULL)
     _nextTesterNotVisible->onTileHasChangedMesh(testerLevel+1, tile);
