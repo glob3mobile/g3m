@@ -79,10 +79,4 @@ public final class StringBuilder_WebGL
    }
 
 
-   @Override
-   public IStringBuilder addChar(final byte c) {
-      _string += (char) c;
-      return this;
-   }
-
 }

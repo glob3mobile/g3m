@@ -868,8 +868,6 @@ const std::string VectorStreamingRenderer::VectorSet::toNodesDirectories(const s
   isb->addString( "nodes/" );
   const size_t length = nodeID.length();
   for (size_t i = 0; i < length; i++) {
-//    const char c = nodeID.at(i);
-//    isb->addChar(c);
     const std::string c = su->substring(nodeID, i, i+1);
     isb->addString(c);
     isb->addString("/");

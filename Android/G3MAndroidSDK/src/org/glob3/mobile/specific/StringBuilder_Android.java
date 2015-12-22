@@ -79,10 +79,4 @@ public final class StringBuilder_Android
    }
 
 
-   @Override
-   public IStringBuilder addChar(final byte c) {
-      _builder.append((char) c);
-      return this;
-   }
-
 }
