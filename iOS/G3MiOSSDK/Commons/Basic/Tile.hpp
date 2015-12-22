@@ -59,22 +59,6 @@ private:
   
   BoundingVolume* _boundingVolume;
   
-//  Vector3D* _northWestPoint;
-//  Vector3D* _northEastPoint;
-//  Vector3D* _southWestPoint;
-//  Vector3D* _southEastPoint;
-  
-//  static double getSquaredArcSegmentRatio(const Vector3D& a,
-//                                          const Vector3D& b);
-//  
-//  void computeTileCorners(const Planet* planet);
-  
-//  double _northArcSegmentRatioSquared;
-//  double _southArcSegmentRatioSquared;
-//  double _eastArcSegmentRatioSquared;
-//  double _westArcSegmentRatioSquared;
-  
-  
   void prepareTestLODData(const Planet* planet);
   
   inline Mesh* getTessellatorMesh(const G3MRenderContext* rc,
@@ -89,9 +73,6 @@ private:
   
   inline bool isVisible(const G3MRenderContext* rc,
                         const Sector* renderedSector);
-  
-  bool _lastMeetsRenderCriteriaResult;
-  double _lastMeetsRenderCriteriaTimeInMS;
   
   inline bool meetsRenderCriteria(const G3MRenderContext* rc,
                                   const TilesRenderParameters* tilesRenderParameters,

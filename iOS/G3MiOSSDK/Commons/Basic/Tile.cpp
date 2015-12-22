@@ -78,9 +78,7 @@ _planetRenderer(planetRenderer),
 _tessellatorData(NULL),
 _rendered(false),
 _id( createTileId(level, row, column) ),
-_tessellatorMeshIsMeshHolder(false),
-_lastMeetsRenderCriteriaResult(false),
-_lastMeetsRenderCriteriaTimeInMS(0)
+_tessellatorMeshIsMeshHolder(false)
 {
 }
 
@@ -265,13 +263,7 @@ bool Tile::meetsRenderCriteria(const G3MRenderContext* rc,
 //      return true;
 //    }
 //  }
-  
-  if (_lastMeetsRenderCriteriaTimeInMS != 0 &&
-      (nowInMS - _lastMeetsRenderCriteriaTimeInMS) < 250 /*500*/ ) {
-    return _lastMeetsRenderCriteriaResult;
-  }
-  
-  
+
 #warning CHANGE
   if (tilesRenderParameters->_useTilesSplitBudget) {
     if (_subtiles == NULL) { // the tile needs to create the subtiles
