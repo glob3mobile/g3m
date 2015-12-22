@@ -8,5 +8,6 @@ test.png
 /PointFeaturesStorage/
 /PointFeaturesLOD/
 /PointFeaturesCluster/
+/PointFeaturesLOD_Cache/
 /test-files/
 /testing-bitmaps/
