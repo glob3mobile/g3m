@@ -37,6 +37,22 @@ package org.glob3.mobile.generated;
 public class VectorStreamingRenderer extends DefaultRenderer
 {
 
+  public enum Format
+  {
+    SERVER,
+    PLAIN_FILES;
+
+     public int getValue()
+     {
+        return this.ordinal();
+     }
+
+     public static Format forValue(int value)
+     {
+        return values()[value];
+     }
+  }
+
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following type could not be found.
 //  class VectorSet;
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following type could not be found.
@@ -500,7 +516,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
     private long _featuresRequestID;
     private void loadFeatures(G3MRenderContext rc)
     {
-      final URL featuresURL = new URL(_vectorSet.getServerURL(), _vectorSet.getName() + "/features" + "?node=" + _id + "&properties=" + _vectorSet.getProperties(), true);
+      final URL featuresURL = _vectorSet.getNodeFeaturesURL(_id);
     
       //  if (_verbose) {
       //    ILogger::instance()->logInfo("\"%s\": Downloading features for node \'%s\'",
@@ -552,17 +568,11 @@ public class VectorStreamingRenderer extends DefaultRenderer
         return;
       }
     
-      String nodes = "";
-      for (int i = 0; i < childrenIDsSize; i++)
-      {
-        if (i > 0)
-        {
-          nodes += "|";
-        }
-        nodes += _childrenIDs.get(i);
-      }
     
-      final URL childrenURL = new URL(_vectorSet.getServerURL(), _vectorSet.getName() + "?nodes=" + nodes, true);
+    //  const URL childrenURL(_vectorSet->getServerURL(),
+    //                        _vectorSet->getName() +
+    //                        "?nodes=" + nodes,
+    //                        true);
     
       //  if (_verbose) {
       //    ILogger::instance()->logInfo("\"%s\": Downloading children for node \'%s\'",
@@ -572,7 +582,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
     
       _downloader = rc.getDownloader();
     
-      _childrenRequestID = _downloader.requestBuffer(childrenURL, _vectorSet.getDownloadPriority(), _vectorSet.getTimeToCache(), _vectorSet.getReadExpired(), new NodeChildrenDownloadListener(this, rc.getThreadUtils(), _verbose), true);
+      _childrenRequestID = _downloader.requestBuffer(_vectorSet.getNodeChildrenURL(_id, _childrenIDs), _vectorSet.getDownloadPriority(), _vectorSet.getTimeToCache(), _vectorSet.getReadExpired(), new NodeChildrenDownloadListener(this, rc.getThreadUtils(), _verbose), true);
     }
     private void unloadChildren()
     {
@@ -1126,6 +1136,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
     private final boolean _readExpired;
     private final boolean _verbose;
     private final boolean _haltOnError;
+    private final Format _format;
 
     private final String _properties;
 
@@ -1144,8 +1155,34 @@ public class VectorStreamingRenderer extends DefaultRenderer
 
     private long _lastRenderedCount;
 
+    private URL getMetadataURL()
+    {
+      if (_format == SERVER)
+      {
+        return new URL(_serverURL, _name);
+      }
+      return new URL(_serverURL, _name + "/metadata.json");
+    }
 
-    public VectorSet(VectorStreamingRenderer renderer, URL serverURL, String name, String properties, VectorSetSymbolizer symbolizer, boolean deleteSymbolizer, long downloadPriority, TimeInterval timeToCache, boolean readExpired, boolean verbose, boolean haltOnError)
+    private String toNodesDirectories(String nodeID)
+    {
+      IStringBuilder isb = IStringBuilder.newStringBuilder();
+      isb.addString("nodes/");
+      final int length = nodeID.length();
+      for (int i = 0; i < length; i++)
+      {
+        final byte c = nodeID.charAt(i);
+        isb.addChar(c);
+        isb.addString("/");
+      }
+      final String result = isb.getString();
+      if (isb != null)
+         isb.dispose();
+      return result;
+    }
+
+
+    public VectorSet(VectorStreamingRenderer renderer, URL serverURL, String name, String properties, VectorSetSymbolizer symbolizer, boolean deleteSymbolizer, long downloadPriority, TimeInterval timeToCache, boolean readExpired, boolean verbose, boolean haltOnError, Format format)
     {
        _renderer = renderer;
        _serverURL = serverURL;
@@ -1158,6 +1195,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
        _readExpired = readExpired;
        _verbose = verbose;
        _haltOnError = haltOnError;
+       _format = format;
        _downloadingMetadata = false;
        _errorDownloadingMetadata = false;
        _errorParsingMetadata = false;
@@ -1189,10 +1227,40 @@ public class VectorStreamingRenderer extends DefaultRenderer
       }
     }
 
-    public final URL getServerURL()
+    public final URL getNodeFeaturesURL(String nodeID)
     {
-      return _serverURL;
+      if (_format == SERVER)
+      {
+        return new URL(_serverURL, _name + "/features" + "?node=" + nodeID + "&properties=" + _properties, true);
+      }
+      return new URL(_serverURL, _name + "/" + toNodesDirectories(nodeID) + "/features.json");
     }
+
+    public final URL getNodeChildrenURL(String nodeID, java.util.ArrayList<String> childrenIDs)
+    {
+      if (_format == SERVER)
+      {
+        String nodes = "";
+        final int childrenIDsSize = childrenIDs.size();
+    
+        for (int i = 0; i < childrenIDsSize; i++)
+        {
+          if (i > 0)
+          {
+            nodes += "|";
+          }
+          nodes += childrenIDs.get(i);
+        }
+    
+        return new URL(_serverURL, _name + "?nodes=" + nodes, true);
+    
+      }
+      return new URL(_serverURL, _name + "/" + toNodesDirectories(nodeID) + "/children.json");
+    }
+
+//    const URL getServerURL() const {
+//      return _serverURL;
+//    }
 
     public final String getName()
     {
@@ -1214,10 +1282,9 @@ public class VectorStreamingRenderer extends DefaultRenderer
       return _readExpired;
     }
 
-    public final String getProperties()
-    {
-      return _properties;
-    }
+//    const std::string getProperties() const {
+//      return _properties;
+//    }
 
     public final void initialize(G3MContext context)
     {
@@ -1225,14 +1292,14 @@ public class VectorStreamingRenderer extends DefaultRenderer
       _errorDownloadingMetadata = false;
       _errorParsingMetadata = false;
     
-      final URL metadataURL = new URL(_serverURL, _name);
+    //  const URL metadataURL(_serverURL, _name);
     
       if (_verbose)
       {
         ILogger.instance().logInfo("\"%s\": Downloading metadata", _name);
       }
     
-      context.getDownloader().requestBuffer(metadataURL, _downloadPriority, _timeToCache, _readExpired, new MetadataDownloadListener(this, context.getThreadUtils(), _verbose), true);
+      context.getDownloader().requestBuffer(getMetadataURL(), _downloadPriority, _timeToCache, _readExpired, new MetadataDownloadListener(this, context.getThreadUtils(), _verbose), true);
     }
 
     public final RenderState getRenderState(G3MRenderContext rc)
@@ -1363,6 +1430,8 @@ public class VectorStreamingRenderer extends DefaultRenderer
   }
 
 
+
+
   private MarksRenderer _markRenderer;
 
   private int _vectorSetsSize;
@@ -1443,9 +1512,9 @@ public class VectorStreamingRenderer extends DefaultRenderer
     }
   }
 
-  public final void addVectorSet(URL serverURL, String name, String properties, VectorSetSymbolizer symbolizer, boolean deleteSymbolizer, long downloadPriority, TimeInterval timeToCache, boolean readExpired, boolean verbose, boolean haltOnError)
+  public final void addVectorSet(URL serverURL, String name, String properties, VectorSetSymbolizer symbolizer, boolean deleteSymbolizer, long downloadPriority, TimeInterval timeToCache, boolean readExpired, boolean verbose, boolean haltOnError, Format format)
   {
-    VectorSet vectorSet = new VectorSet(this, serverURL, name, properties, symbolizer, deleteSymbolizer, downloadPriority, timeToCache, readExpired, verbose, haltOnError);
+    VectorSet vectorSet = new VectorSet(this, serverURL, name, properties, symbolizer, deleteSymbolizer, downloadPriority, timeToCache, readExpired, verbose, haltOnError, format);
     if (_context != null)
     {
       vectorSet.initialize(_context);
