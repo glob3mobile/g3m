@@ -86,11 +86,11 @@ void MarkWidget::prepareWidget(const IImage* image,
   }
 
   FloatBufferBuilderFromCartesian2D pos2D;
-  pos2D.add( -_halfWidth, -_halfHeight );   // vertex 1
-  pos2D.add( -_halfWidth,  _halfHeight );   // vertex 2
-  pos2D.add(  _halfWidth, -_halfHeight );   // vertex 3
-  pos2D.add(  _halfWidth,  _halfHeight );   // vertex 4
 // #warning TODO: share vertices for marks of the same size?
+  pos2D.add( -_halfWidth, -_halfHeight );   // vertex 1
+  pos2D.add(  _halfWidth, -_halfHeight );   // vertex 2
+  pos2D.add( -_halfWidth,  _halfHeight );   // vertex 3
+  pos2D.add(  _halfWidth,  _halfHeight );   // vertex 4
 
   _vertices = pos2D.create();
 
@@ -110,8 +110,8 @@ void MarkWidget::prepareWidget(const IImage* image,
 
   FloatBufferBuilderFromCartesian2D texCoords;
   texCoords.add( 0.0f, 1.0f );   // vertex 1
-  texCoords.add( 0.0f, 0.0f );   // vertex 2
-  texCoords.add( 1.0f, 1.0f );   // vertex 3
+  texCoords.add( 1.0f, 1.0f );   // vertex 2
+  texCoords.add( 0.0f, 0.0f );   // vertex 3
   texCoords.add( 1.0f, 0.0f );   // vertex 4
 
   const TextureIDReference* textureID = _texHandler->getTextureIDReference(_image,
