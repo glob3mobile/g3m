@@ -30,9 +30,9 @@ private:
   
 public:
   
-  TimedTileLODTester(long long timeInMs,
+  TimedTileLODTester(const TimeInterval& time,
                      TileLODTester* nextTester):
-  _timeInMs(timeInMs),
+  _timeInMs(time.milliseconds()),
   _nextTester(nextTester)
   {}
   

@@ -18,12 +18,17 @@ private:
   TileLODTester* _nextTester;
   long long _maxFrameTimeInMs;
   
+  mutable long long _lastElapsedTime;
+  mutable int _nSplitsInFrame;
+  
 public:
   
-  MaxFrameTimeTileLODTester(long long maxFrameTimeInMs,
+  MaxFrameTimeTileLODTester(const TimeInterval& maxFrameTimeInMs,
                      TileLODTester* nextTester):
-  _maxFrameTimeInMs(maxFrameTimeInMs),
-  _nextTester(nextTester)
+  _maxFrameTimeInMs(maxFrameTimeInMs.milliseconds()),
+  _nextTester(nextTester),
+  _lastElapsedTime(0),
+  _nSplitsInFrame(0)
   {}
   
   virtual ~MaxFrameTimeTileLODTester(){
@@ -33,12 +38,28 @@ public:
   virtual bool meetsRenderCriteria(int testerLevel,
                                    Tile* tile, const G3MRenderContext& rc) const{
     
-    if (!tile->areSubtilesCreated() &&
-        rc.getFrameStartTimer()->elapsedTimeInMilliseconds() > _maxFrameTimeInMs){
+    const bool hasSubtiles = tile->areSubtilesCreated();
+    long long elapsedTime = rc.getFrameStartTimer()->elapsedTimeInMilliseconds();
+    if (elapsedTime < _lastElapsedTime){
+      //New frame
+//      if (_nSplitsInFrame > 0){
+//        printf("Tile splits on last frame: %d\n", _nSplitsInFrame);
+//      }
+      _nSplitsInFrame = 0;
+    }
+    _lastElapsedTime = elapsedTime;
+    
+    if (!hasSubtiles && elapsedTime > _maxFrameTimeInMs && _nSplitsInFrame > 0){
       return true;
     }
     
-    return _nextTester->meetsRenderCriteria(testerLevel+1, tile, rc);
+    bool res = _nextTester->meetsRenderCriteria(testerLevel+1, tile, rc);
+    
+    if (!res && !hasSubtiles){
+      _nSplitsInFrame++;
+    }
+    
+    return res;
   }
   
   virtual bool isVisible(int testerLevel, Tile* tile, const G3MRenderContext& rc) const{

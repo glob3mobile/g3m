@@ -997,11 +997,11 @@ TileLODTester* PlanetRenderer::createDefaultTileLODTester(){
                                                                            proj,
                                                                            proj);
   //1
-  MaxFrameTimeTileLODTester* frameTime = new MaxFrameTimeTileLODTester( 1000 / 60,
+  MaxFrameTimeTileLODTester* frameTime = new MaxFrameTimeTileLODTester(TimeInterval::fromSeconds((double)1 / 60.0),
                                                                        poles);
   
   //0
-  TimedTileLODTester* timed = new TimedTileLODTester(250,
+  TimedTileLODTester* timed = new TimedTileLODTester(TimeInterval::fromMilliseconds(250),
                                                      frameTime);
   
   
