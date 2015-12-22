@@ -35,6 +35,7 @@
 #include "MaxLevelTileLODTester.hpp"
 #include "ProjectedCornersDistanceTileLODTester.hpp"
 #include "TimedTileLODTester.hpp"
+#include "MaxFrameTimeTileLODTester.hpp"
 
 class VisibleSectorListenerEntry {
 private:
@@ -979,7 +980,7 @@ TileLODTester* PlanetRenderer::createDefaultTileLODTester(){
   //                TileLODTester* nextTesterVisible,
   //                TileLODTester* nextTesterNotVisible)
   
-  //2
+  //3
   ProjectedCornersDistanceTileLODTester* proj =
         new ProjectedCornersDistanceTileLODTester(getLayerTilesRenderParameters()->_tileTextureResolution._x,
                                                   getLayerTilesRenderParameters()->_tileTextureResolution._y,
@@ -988,16 +989,20 @@ TileLODTester* PlanetRenderer::createDefaultTileLODTester(){
                                                   NULL,
                                                   NULL);
   
-  //1
+  //2
   MaxLevelTileLODTester* poles = new MaxLevelTileLODTester(getLayerTilesRenderParameters()->_maxLevel,
                                                            getLayerTilesRenderParameters()->_maxLevelForPoles,
                                                                            NULL,
                                                                            proj,
                                                                            proj,
                                                                            proj);
+  //1
+  MaxFrameTimeTileLODTester* frameTime = new MaxFrameTimeTileLODTester( 1000 / 60,
+                                                                       poles);
+  
   //0
   TimedTileLODTester* timed = new TimedTileLODTester(250,
-                                                     poles);
+                                                     frameTime);
   
   
   return timed;

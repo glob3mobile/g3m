@@ -312,6 +312,10 @@ public:
     return _tessellatorMesh;
   }
   
+  bool areSubtilesCreated() const{
+    return _subtiles != NULL;
+  }
+  
 };
 
 #endif

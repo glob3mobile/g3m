@@ -15,7 +15,7 @@
 class TimedTileLODTester: public TileLODTester{
 private:
   TileLODTester* _nextTester;
-  long long _time;
+  long long _timeInMs;
   
   class TimedTileLODTesterData: public TileLODTesterData{
   public:
@@ -30,9 +30,9 @@ private:
   
 public:
   
-  TimedTileLODTester(long long time,
+  TimedTileLODTester(long long timeInMs,
                      TileLODTester* nextTester):
-  _time(time),
+  _timeInMs(timeInMs),
   _nextTester(nextTester)
   {}
   
@@ -52,7 +52,7 @@ public:
       data->_lastMeetsRenderCriteriaResult = _nextTester->meetsRenderCriteria(testerLevel+1, tile, rc);
     }
     
-    if ((now - data->_lastMeetsRenderCriteriaTimeInMS) > _time){
+    if ((now - data->_lastMeetsRenderCriteriaTimeInMS) > _timeInMs){
       data->_lastMeetsRenderCriteriaResult = _nextTester->meetsRenderCriteria(testerLevel+1, tile, rc);
     }
     
