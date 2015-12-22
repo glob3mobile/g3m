@@ -34,7 +34,7 @@ public:
   virtual IStringBuilder* addString(const std::string& s) = 0;
   virtual IStringBuilder* addBool(bool b) = 0;
 
-  virtual IStringBuilder* addChar(const char c) = 0;
+//  virtual IStringBuilder* addChar(const char c) = 0;
 
   virtual IStringBuilder* clear() = 0;
 

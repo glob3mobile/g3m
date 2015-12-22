@@ -6,8 +6,8 @@ import org.glob3.mobile.generated.IStringBuilder;
 
 
 public final class StringBuilder_JavaDesktop
-         extends
-            IStringBuilder {
+   extends
+      IStringBuilder {
 
    private final StringBuilder _builder = new StringBuilder();
 
@@ -76,6 +76,13 @@ public final class StringBuilder_JavaDesktop
    @Override
    public boolean contentEqualsTo(final String that) {
       return (_builder.length() == that.length()) && (_builder.indexOf(that) == 0);
+   }
+
+
+   @Override
+   public IStringBuilder addChar(final byte c) {
+      _builder.append((char) c);
+      return this;
    }
 
 }

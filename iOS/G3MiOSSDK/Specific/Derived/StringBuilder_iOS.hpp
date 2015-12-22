@@ -54,10 +54,10 @@ public:
     return this;
   }
 
-  IStringBuilder* addChar(const char c) {
-    _oss << c;
-    return this;
-  }
+//  IStringBuilder* addChar(const char c) {
+//    _oss << c;
+//    return this;
+//  }
 
   IStringBuilder* addString(const std::string& s) {
     _oss << s;
