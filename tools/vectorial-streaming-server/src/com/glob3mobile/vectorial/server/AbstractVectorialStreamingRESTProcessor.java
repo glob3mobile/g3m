@@ -25,7 +25,7 @@ import com.glob3mobile.server.rest.RESTPath;
 import com.glob3mobile.server.rest.RESTResponse;
 import com.glob3mobile.vectorial.lod.PointFeatureLODStorage;
 import com.glob3mobile.vectorial.lod.mapdb.PointFeatureLODMapDBStorage;
-import com.glob3mobile.vectorial.server.utils.JSON;
+import com.glob3mobile.vectorial.utils.JSON;
 
 
 public abstract class AbstractVectorialStreamingRESTProcessor

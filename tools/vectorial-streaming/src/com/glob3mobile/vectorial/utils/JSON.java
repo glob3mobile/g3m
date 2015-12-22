@@ -1,6 +1,6 @@
 
 
-package com.glob3mobile.vectorial.server.utils;
+package com.glob3mobile.vectorial.utils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
