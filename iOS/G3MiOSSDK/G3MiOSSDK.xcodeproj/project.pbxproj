@@ -463,6 +463,12 @@
 		D8378FA21BFB331300E6557E /* DeviceAttitudeCameraHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8378FA01BFB331300E6557E /* DeviceAttitudeCameraHandler.cpp */; };
 		D8378FA71BFB337200E6557E /* DeviceAttitude_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = D8378FA41BFB337200E6557E /* DeviceAttitude_iOS.mm */; };
 		D8378FA81BFB337200E6557E /* DeviceLocation_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = D8378FA61BFB337200E6557E /* DeviceLocation_iOS.mm */; };
+		D84251EC1C29715900273D3A /* DeviceAttitudeCameraHandler.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8378FA11BFB331300E6557E /* DeviceAttitudeCameraHandler.hpp */; };
+		D84251ED1C29716E00273D3A /* IDeviceAttitude.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8378F9A1BFB32B900E6557E /* IDeviceAttitude.hpp */; };
+		D84251EE1C29716E00273D3A /* IDeviceLocation.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8378F9C1BFB32B900E6557E /* IDeviceLocation.hpp */; };
+		D84251EF1C29716E00273D3A /* ILocationModifier.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8378F9D1BFB32B900E6557E /* ILocationModifier.hpp */; };
+		D84251F01C29717B00273D3A /* DeviceAttitude_iOS.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8378FA31BFB337200E6557E /* DeviceAttitude_iOS.hpp */; };
+		D84251F11C29717B00273D3A /* DeviceLocation_iOS.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8378FA51BFB337200E6557E /* DeviceLocation_iOS.hpp */; };
 		D842D9AF1A727FAF008D55E4 /* NonOverlappingMarksRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D842D9AD1A727FAF008D55E4 /* NonOverlappingMarksRenderer.cpp */; };
 		D842D9B01A72906A008D55E4 /* NonOverlappingMarksRenderer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D842D9AE1A727FAF008D55E4 /* NonOverlappingMarksRenderer.hpp */; };
 		D84D5A31157E0EAA000C5E35 /* MutableVector3D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D84D5A2F157E0EAA000C5E35 /* MutableVector3D.cpp */; };
@@ -736,6 +742,12 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				D84251F01C29717B00273D3A /* DeviceAttitude_iOS.hpp in CopyFiles */,
+				D84251F11C29717B00273D3A /* DeviceLocation_iOS.hpp in CopyFiles */,
+				D84251ED1C29716E00273D3A /* IDeviceAttitude.hpp in CopyFiles */,
+				D84251EE1C29716E00273D3A /* IDeviceLocation.hpp in CopyFiles */,
+				D84251EF1C29716E00273D3A /* ILocationModifier.hpp in CopyFiles */,
+				D84251EC1C29715900273D3A /* DeviceAttitudeCameraHandler.hpp in CopyFiles */,
 				CF1751D21BA61808006286C6 /* StackLayoutImageBuilder.hpp in CopyFiles */,
 				CF3623411B97AFD900824932 /* CircleImageBuilder.hpp in CopyFiles */,
 				CF75A9FD1B87E2B10033DA25 /* MapBoo.hpp in CopyFiles */,

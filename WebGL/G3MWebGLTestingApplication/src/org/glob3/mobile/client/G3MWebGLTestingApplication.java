@@ -60,6 +60,7 @@ public class G3MWebGLTestingApplication
 
       //_g3mWidget = createWidget();
       _g3mWidget = createWidgetVR();
+      //_g3mWidget = createWidgetPlanetDebug();
       g3mWidgetHolder.add(_g3mWidget);
 
 
