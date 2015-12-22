@@ -1157,7 +1157,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
 
     private URL getMetadataURL()
     {
-      if (_format == SERVER)
+      if (_format == VectorStreamingRenderer.Format.SERVER)
       {
         return new URL(_serverURL, _name);
       }
@@ -1167,12 +1167,15 @@ public class VectorStreamingRenderer extends DefaultRenderer
     private String toNodesDirectories(String nodeID)
     {
       IStringBuilder isb = IStringBuilder.newStringBuilder();
+      final IStringUtils su = IStringUtils.instance();
       isb.addString("nodes/");
       final int length = nodeID.length();
       for (int i = 0; i < length; i++)
       {
-        final byte c = nodeID.charAt(i);
-        isb.addChar(c);
+    //    const char c = nodeID.at(i);
+    //    isb->addChar(c);
+        final String c = su.substring(nodeID, i, i+1);
+        isb.addString(c);
         isb.addString("/");
       }
       final String result = isb.getString();
@@ -1229,7 +1232,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
 
     public final URL getNodeFeaturesURL(String nodeID)
     {
-      if (_format == SERVER)
+      if (_format == VectorStreamingRenderer.Format.SERVER)
       {
         return new URL(_serverURL, _name + "/features" + "?node=" + nodeID + "&properties=" + _properties, true);
       }
@@ -1238,7 +1241,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
 
     public final URL getNodeChildrenURL(String nodeID, java.util.ArrayList<String> childrenIDs)
     {
-      if (_format == SERVER)
+      if (_format == VectorStreamingRenderer.Format.SERVER)
       {
         String nodes = "";
         final int childrenIDsSize = childrenIDs.size();
