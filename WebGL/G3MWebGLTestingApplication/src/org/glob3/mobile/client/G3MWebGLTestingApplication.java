@@ -42,8 +42,8 @@ import com.google.gwt.user.client.ui.RootPanel;
 
 
 public class G3MWebGLTestingApplication
-implements
-EntryPoint {
+         implements
+            EntryPoint {
 
    private static final String _g3mWidgetHolderId = "g3mWidgetHolder";
    private G3MWidget_WebGL     _g3mWidget         = null;
@@ -90,7 +90,7 @@ EntryPoint {
       final ColumnLayoutImageBuilder imageBuilderWidget = new ColumnLayoutImageBuilder( //
                new DownloaderImageBuilder(markBitmapURL), //
                new LabelImageBuilder(label, GFont.monospaced()) //
-               );
+      );
 
       return new NonOverlappingMark( //
                imageBuilderWidget, //
@@ -314,6 +314,26 @@ EntryPoint {
             }
          });
       }
+
+
+      return builder.createWidget();
+   }
+
+
+   private static G3MWidget_WebGL createWidgetPlanetDebug() {
+      final G3MBuilder_WebGL builder = new G3MBuilder_WebGL();
+
+      final LayerSet layerSet = new LayerSet();
+      layerSet.addLayer(MapQuestLayer.newOSM(TimeInterval.fromDays(30)));
+
+      builder.getPlanetRendererBuilder().setLayerSet(layerSet);
+      builder.getPlanetRendererBuilder().setRenderDebug(true);
+
+      final String proxy = null; // "http://galileo.glob3mobile.com/" + "proxy.php?url="
+      builder.setDownloader(new Downloader_WebGL( //
+               8, // maxConcurrentOperationCount
+               10, // delayMillis
+               proxy));
 
 
       return builder.createWidget();

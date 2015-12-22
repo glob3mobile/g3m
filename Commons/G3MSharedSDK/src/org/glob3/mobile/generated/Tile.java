@@ -43,6 +43,7 @@ public class Tile
   private Tile _parent;
 
   private Mesh _tessellatorMesh;
+  private boolean _tessellatorMeshIsMeshHolder;
 
   private Mesh _debugMesh;
   private Mesh _texturizedMesh;
@@ -143,10 +144,18 @@ public class Tile
     {
       _mustActualizeMeshDueToNewElevationData = false;
   
+      if (_debugMesh != null)
+      {
+        if (_debugMesh != null)
+           _debugMesh.dispose();
+        _debugMesh = null;
+      }
+  
       if (elevationDataProvider == null)
       {
         // no elevation data provider, just create a simple mesh without elevation
         _tessellatorMesh = tessellator.createTileMesh(rc.getPlanet(), layerTilesRenderParameters._tileMeshResolution, this, null, _verticalExaggeration, tilesRenderParameters._renderDebug, _tileTessellatorMeshData);
+        _tessellatorMeshIsMeshHolder = false;
   
         computeTileCorners(rc.getPlanet());
       }
@@ -159,6 +168,7 @@ public class Tile
         {
           meshHolder = new MeshHolder(tessellatorMesh);
           _tessellatorMesh = meshHolder;
+          _tessellatorMeshIsMeshHolder = true;
         }
         else
         {
@@ -473,6 +483,7 @@ public class Tile
      _westArcSegmentRatioSquared = 0;
      _rendered = false;
      _id = createTileId(level, row, column);
+     _tessellatorMeshIsMeshHolder = false;
   }
 
   public void dispose()
@@ -586,6 +597,11 @@ public class Tile
 
   public final void render(G3MRenderContext rc, GLState parentState, java.util.ArrayList<Tile> toVisitInNextIteration, Frustum cameraFrustumInModelCoordinates, TilesStatistics tilesStatistics, float verticalExaggeration, LayerTilesRenderParameters layerTilesRenderParameters, TileTexturizer texturizer, TilesRenderParameters tilesRenderParameters, ITimer lastSplitTimer, ElevationDataProvider elevationDataProvider, TileTessellator tessellator, LayerSet layerSet, Sector renderedSector, boolean forceFullRender, long tileDownloadPriority, double texWidthSquared, double texHeightSquared, double nowInMS, boolean renderTileMeshes, boolean logTilesPetitions, java.util.ArrayList<Tile> tilesStartedRendering, java.util.ArrayList<String> tilesStoppedRendering)
   {
+  ///#warning REMOVE
+  //  if (!_sector.contains(Angle::fromDegrees(28), Angle::fromDegrees(-15))){
+  //    return;
+  //  }
+  
   
     tilesStatistics.computeTileProcessed(this);
   
@@ -1033,6 +1049,17 @@ public class Tile
     final IMathUtils math = IMathUtils.instance();
     final Vector2D uv = _sector.getUVCoordinates(position2D);
     return new Vector2I(math.toInt(tileDimension._x * uv._x), math.toInt(tileDimension._y * uv._y));
+  }
+
+  public final Mesh getTessellatorMesh()
+  {
+  
+    if (_tessellatorMeshIsMeshHolder)
+    {
+      return ((MeshHolder) _tessellatorMesh).getMesh();
+    }
+  
+    return _tessellatorMesh;
   }
 
 }

@@ -195,7 +195,7 @@ public class MeshRenderer_MeshParserAsyncTask extends GAsyncTask
           indices.put(i, (short) jsonIndices.getAsNumber(i, 0));
         }
 
-        _mesh = new IndexedMesh(GLPrimitive.triangles(), true, vertices.getCenter(), vertices.create(), indices, 1, 1, _color, null, 1, true, normals); // depthTest, -  colorsIntensity, -  colors, -  flatColor -  pointSize -  lineWidth
+        _mesh = new IndexedMesh(GLPrimitive.triangles(), vertices.getCenter(), vertices.create(), true, indices, true, 1, 1, _color, null, 1, true, normals); // depthTest, -  colorsIntensity, -  colors, -  flatColor -  pointSize -  lineWidth
 
         if (vertices != null)
            vertices.dispose();

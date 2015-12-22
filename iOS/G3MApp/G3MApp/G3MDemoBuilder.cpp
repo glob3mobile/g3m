@@ -64,9 +64,7 @@ void G3MDemoBuilder::build() {
   IG3MBuilder* builder = getG3MBuilder();
   
   //builder->getPlanetRendererBuilder()->setRenderDebug(true);
-  
-  
-  
+
   LayerSet* layerSet = new LayerSet();
   builder->getPlanetRendererBuilder()->setLayerSet(layerSet);
   
@@ -78,7 +76,7 @@ void G3MDemoBuilder::build() {
   
   MarksRenderer* marksRenderer = new MarksRenderer(false);
   builder->addRenderer(marksRenderer);
-  
+
   PointCloudsRenderer* pointCloudsRenderer = new PointCloudsRenderer();
   builder->addRenderer(pointCloudsRenderer);
   //  builder->getPlanetRendererBuilder()->setTileRenderingListener(pointCloudsRenderer->getTileRenderingListener());
@@ -98,6 +96,9 @@ void G3MDemoBuilder::build() {
   
   VectorStreamingRenderer* vectorStreamingRenderer = new VectorStreamingRenderer(marksRenderer);
   builder->addRenderer(vectorStreamingRenderer);
+  
+  //Uncomment to see render debug mesh on top of tiles
+  //builder->getPlanetRendererBuilder()->setRenderDebug(true);
   
   _initialized = true;
   _model = new G3MDemoModel(_listener,

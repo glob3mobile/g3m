@@ -32,7 +32,10 @@ IndexedGeometryMesh::IndexedGeometryMesh(const int       primitive,
                                          bool            ownsIndices,
                                          float           lineWidth,
                                          float           pointSize,
-                                         bool            depthTest) :
+                                         bool            depthTest,
+                                         bool polygonOffsetFill,
+                                         float polygonOffsetFactor,
+                                         float polygonOffsetUnits) :
 AbstractGeometryMesh(primitive,
                      center,
                      vertices,
@@ -41,7 +44,10 @@ AbstractGeometryMesh(primitive,
                      ownsNormals,
                      lineWidth,
                      pointSize,
-                     depthTest),
+                     depthTest,
+                     polygonOffsetFill,
+                     polygonOffsetFactor,
+                     polygonOffsetUnits),
 _indices(indices),
 _ownsIndices(ownsIndices)
 {
@@ -59,7 +65,10 @@ IndexedGeometryMesh::IndexedGeometryMesh(const int primitive,
                                          bool ownsIndices,
                                          float lineWidth,
                                          float pointSize,
-                                         bool depthTest) :
+                                         bool depthTest,
+                                         bool polygonOffsetFill,
+                                         float polygonOffsetFactor,
+                                         float polygonOffsetUnits) :
 AbstractGeometryMesh(primitive,
                      center,
                      vertices,
@@ -68,7 +77,10 @@ AbstractGeometryMesh(primitive,
                      false, // ownsNormals
                      lineWidth,
                      pointSize,
-                     depthTest),
+                     depthTest,
+                     polygonOffsetFill,
+                     polygonOffsetFactor,
+                     polygonOffsetUnits),
 _indices(indices),
 _ownsIndices(ownsIndices)
 {

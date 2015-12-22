@@ -258,5 +258,4 @@ public final class FloatBuffer_WebGL
       return _id;
    }
 
-
 }
