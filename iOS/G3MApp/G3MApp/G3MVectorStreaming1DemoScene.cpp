@@ -121,7 +121,8 @@ void G3MVectorStreaming1DemoScene::rawActivate(const G3MContext* context) {
                          TimeInterval::zero(),
                          true, // readExpired
                          true, // verbose
-                         true  // haltOnError
+                         true, // haltOnError
+                         VectorStreamingRenderer::Format::SERVER
                          );
 
 

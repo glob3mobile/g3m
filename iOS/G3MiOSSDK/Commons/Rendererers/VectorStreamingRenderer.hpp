@@ -39,6 +39,11 @@ class GEOObject;
 class VectorStreamingRenderer : public DefaultRenderer {
 public:
 
+  enum Format {
+    SERVER,
+    PLAIN_FILES
+  };
+
   class VectorSet;
   class Node;
 
@@ -512,6 +517,7 @@ public:
     const bool                 _readExpired;
     const bool                 _verbose;
     const bool                 _haltOnError;
+    const Format               _format;
 
     const std::string _properties;
 
@@ -530,6 +536,10 @@ public:
 
     long long _lastRenderedCount;
 
+    const URL getMetadataURL() const;
+
+    const std::string toNodesDirectories(const std::string& nodeID) const;
+
   public:
 
     VectorSet(VectorStreamingRenderer*   renderer,
@@ -542,7 +552,8 @@ public:
               const TimeInterval&        timeToCache,
               bool                       readExpired,
               bool                       verbose,
-              bool                       haltOnError) :
+              bool                       haltOnError,
+              const Format               format) :
     _renderer(renderer),
     _serverURL(serverURL),
     _name(name),
@@ -554,6 +565,7 @@ public:
     _readExpired(readExpired),
     _verbose(verbose),
     _haltOnError(haltOnError),
+    _format(format),
     _downloadingMetadata(false),
     _errorDownloadingMetadata(false),
     _errorParsingMetadata(false),
@@ -567,9 +579,14 @@ public:
 
     ~VectorSet();
 
-    const URL getServerURL() const {
-      return _serverURL;
-    }
+    const URL getNodeFeaturesURL(const std::string& nodeID) const;
+
+    const URL getNodeChildrenURL(const std::string& nodeID,
+                                 const std::vector<std::string>& childrenIDs) const;
+
+//    const URL getServerURL() const {
+//      return _serverURL;
+//    }
 
     const std::string getName() const {
       return _name;
@@ -587,9 +604,9 @@ public:
       return _readExpired;
     }
 
-    const std::string getProperties() const {
-      return _properties;
-    }
+//    const std::string getProperties() const {
+//      return _properties;
+//    }
 
     void initialize(const G3MContext* context);
 
@@ -621,6 +638,8 @@ public:
     }
 
   };
+
+
 
 
 private:
@@ -663,7 +682,8 @@ public:
                     const TimeInterval&        timeToCache,
                     bool                       readExpired,
                     bool                       verbose,
-                    bool                       haltOnError);
+                    bool                       haltOnError,
+                    const Format               format);
   
   void removeAllVectorSets();
   

@@ -331,12 +331,10 @@ BoundingVolume* VectorStreamingRenderer::Node::getBoundingVolume(const G3MRender
   return _boundingVolume;
 }
 
+
+
 void VectorStreamingRenderer::Node::loadFeatures(const G3MRenderContext* rc) {
-  const URL featuresURL(_vectorSet->getServerURL(),
-                        _vectorSet->getName() + "/features" +
-                        "?node=" + _id +
-                        "&properties=" + _vectorSet->getProperties(),
-                        true);
+  const URL featuresURL = _vectorSet->getNodeFeaturesURL(_id);
 
   //  if (_verbose) {
   //    ILogger::instance()->logInfo("\"%s\": Downloading features for node \'%s\'",
@@ -387,23 +385,11 @@ void VectorStreamingRenderer::Node::loadChildren(const G3MRenderContext* rc) {
     return;
   }
 
-  std::string nodes = "";
-  for (size_t i = 0; i < childrenIDsSize; i++) {
-    if (i > 0) {
-      nodes += "|";
-    }
-#ifdef C_CODE
-    nodes += _childrenIDs[i];
-#endif
-#ifdef JAVA_CODE
-    nodes += _childrenIDs.get(i);
-#endif
-  }
 
-  const URL childrenURL(_vectorSet->getServerURL(),
-                        _vectorSet->getName() +
-                        "?nodes=" + nodes,
-                        true);
+//  const URL childrenURL(_vectorSet->getServerURL(),
+//                        _vectorSet->getName() +
+//                        "?nodes=" + nodes,
+//                        true);
 
   //  if (_verbose) {
   //    ILogger::instance()->logInfo("\"%s\": Downloading children for node \'%s\'",
@@ -413,7 +399,7 @@ void VectorStreamingRenderer::Node::loadChildren(const G3MRenderContext* rc) {
 
   _downloader = rc->getDownloader();
 
-  _childrenRequestID = _downloader->requestBuffer(childrenURL,
+  _childrenRequestID = _downloader->requestBuffer(_vectorSet->getNodeChildrenURL(_id, _childrenIDs),
                                                   _vectorSet->getDownloadPriority(),
                                                   _vectorSet->getTimeToCache(),
                                                   _vectorSet->getReadExpired(),
@@ -869,18 +855,80 @@ void VectorStreamingRenderer::VectorSet::parsedMetadata(Sector* sector,
 
 }
 
+const URL VectorStreamingRenderer::VectorSet::getMetadataURL() const {
+  if (_format == SERVER) {
+    return URL(_serverURL, _name);
+  }
+  return URL(_serverURL, _name + "/metadata.json");
+}
+
+const std::string VectorStreamingRenderer::VectorSet::toNodesDirectories(const std::string& nodeID) const {
+  IStringBuilder* isb = IStringBuilder::newStringBuilder();
+  isb->addString( "nodes/" );
+  const size_t length = nodeID.length();
+  for (size_t i = 0; i < length; i++) {
+    const char c = nodeID.at(i);
+    isb->addChar(c);
+    isb->addString("/");
+  }
+  const std::string result = isb->getString();
+  delete isb;
+  return result;
+}
+
+const URL VectorStreamingRenderer::VectorSet::getNodeFeaturesURL(const std::string& nodeID) const {
+  if (_format == SERVER) {
+    return URL(_serverURL,
+               _name + "/features" +
+               "?node=" + nodeID +
+               "&properties=" + _properties,
+               true);
+  }
+  return URL(_serverURL,
+             _name + "/" + toNodesDirectories(nodeID) + "/features.json");
+}
+
+const URL VectorStreamingRenderer::VectorSet::getNodeChildrenURL(const std::string& nodeID,
+                                                                 const std::vector<std::string>& childrenIDs) const {
+  if (_format == SERVER) {
+    std::string nodes = "";
+    const size_t childrenIDsSize = childrenIDs.size();
+
+    for (size_t i = 0; i < childrenIDsSize; i++) {
+      if (i > 0) {
+        nodes += "|";
+      }
+#ifdef C_CODE
+      nodes += childrenIDs[i];
+#endif
+#ifdef JAVA_CODE
+      nodes += childrenIDs.get(i);
+#endif
+    }
+
+    return URL(_serverURL,
+               _name +
+               "?nodes=" + nodes,
+               true);
+
+  }
+  return URL(_serverURL,
+             _name + "/" + toNodesDirectories(nodeID) + "/children.json");
+}
+
+
 void VectorStreamingRenderer::VectorSet::initialize(const G3MContext* context) {
   _downloadingMetadata = true;
   _errorDownloadingMetadata = false;
   _errorParsingMetadata = false;
 
-  const URL metadataURL(_serverURL, _name);
+//  const URL metadataURL(_serverURL, _name);
 
   if (_verbose) {
     ILogger::instance()->logInfo("\"%s\": Downloading metadata", _name.c_str());
   }
 
-  context->getDownloader()->requestBuffer(metadataURL,
+  context->getDownloader()->requestBuffer(getMetadataURL(),
                                           _downloadPriority,
                                           _timeToCache,
                                           _readExpired,
@@ -1057,7 +1105,8 @@ void VectorStreamingRenderer::addVectorSet(const URL&                 serverURL,
                                            const TimeInterval&        timeToCache,
                                            bool                       readExpired,
                                            bool                       verbose,
-                                           bool                       haltOnError) {
+                                           bool                       haltOnError,
+                                           const Format               format) {
   VectorSet* vectorSet = new VectorSet(this,
                                        serverURL,
                                        name,
@@ -1068,7 +1117,8 @@ void VectorStreamingRenderer::addVectorSet(const URL&                 serverURL,
                                        timeToCache,
                                        readExpired,
                                        verbose,
-                                       haltOnError);
+                                       haltOnError,
+                                       format);
   if (_context != NULL) {
     vectorSet->initialize(_context);
   }
