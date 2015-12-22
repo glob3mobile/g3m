@@ -253,10 +253,11 @@ Mesh* Box::createMesh(const Color& color) const {
   }
 
   Mesh* mesh = new IndexedMesh(GLPrimitive::lines(),
-                               true,
                                vertices->getCenter(),
                                vertices->create(),
+                               true,
                                indices.create(),
+                               true,
                                2,
                                1,
                                new Color(color));

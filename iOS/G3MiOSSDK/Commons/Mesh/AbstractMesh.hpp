@@ -24,7 +24,8 @@ protected:
   const bool              _owner;
   const Vector3D                _center;
   const MutableMatrix44D* _translationMatrix;
-  const IFloatBuffer*           _vertices;
+  //const IFloatBuffer*           _vertices;
+  IFloatBuffer* _vertices;
   const Color*            _flatColor;
   const IFloatBuffer*           _colors;
   const float             _colorsIntensity;
@@ -35,18 +36,26 @@ protected:
 
   mutable BoundingVolume* _boundingVolume;
   BoundingVolume* computeBoundingVolume() const;
+  
+  const bool _polygonOffsetFill;
+  const float _polygonOffsetFactor;
+  const float _polygonOffsetUnits;
 
   AbstractMesh(const int primitive,
                bool owner,
                const Vector3D& center,
-               const IFloatBuffer* vertices,
+               //const IFloatBuffer* vertices,
+               IFloatBuffer* vertices,
                float lineWidth,
                float pointSize,
                const Color* flatColor,
                const IFloatBuffer* colors,
                const float colorsIntensity,
                bool depthTest,
-               const IFloatBuffer* normals);
+               const IFloatBuffer* normals,
+               bool polygonOffsetFill,
+               float polygonOffsetFactor,
+               float polygonOffsetUnits);
 
   virtual void rawRender(const G3MRenderContext* rc) const = 0;
 //  virtual void rawRender(const G3MRenderContext* rc, const GLState* parentGLState) const = 0;
@@ -77,11 +86,11 @@ public:
     _showNormals = v;
   }
   
-  IFloatBuffer* getVerticesFloatBuffer() const{
-    return (IFloatBuffer*)_vertices; //Droping const so tiles can change their DEM
+  IFloatBuffer* getVertices() const{
+    return _vertices;
   }
   
-  Vector3D getVerticesOffset() const{
+  Vector3D getCenter() const{
     return _center;
   }
   

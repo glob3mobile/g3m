@@ -39,6 +39,7 @@ private:
   Tile*           _parent;
 
   Mesh* _tessellatorMesh;
+  bool _tessellatorMeshIsMeshHolder;
 
   Mesh* _debugMesh;
   Mesh* _texturizedMesh;
@@ -324,6 +325,9 @@ public:
   bool canUseElevationDataProvider(const ElevationDataProvider* edp) const;
   
   void cancelAllElevationDataRequestOnSubtree();
+
+  const Mesh* getTessellatorMesh() const;
+
   
 };
 

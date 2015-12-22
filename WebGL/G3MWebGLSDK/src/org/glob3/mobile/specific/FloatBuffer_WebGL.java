@@ -192,7 +192,7 @@ IFloatBuffer {
                           final float value) /*-{
 		if (this.@org.glob3.mobile.specific.FloatBuffer_WebGL::_buffer[i] != value) {
 			this.@org.glob3.mobile.specific.FloatBuffer_WebGL::_buffer[i] = value;
-			this.@org.glob3.mobile.specific.FloatBuffer_WebGL::incTimestamp();
+			this.@org.glob3.mobile.specific.FloatBuffer_WebGL::incTimestamp()();
 		}
    }-*/;
 
@@ -257,6 +257,5 @@ IFloatBuffer {
    public long getID() {
       return _id;
    }
-
 
 }

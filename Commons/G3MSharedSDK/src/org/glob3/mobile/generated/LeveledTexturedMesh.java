@@ -192,14 +192,11 @@ public class LeveledTexturedMesh extends Mesh
     _mesh.showNormals(v);
   }
 
-  public final IFloatBuffer getVerticesFloatBuffer()
-  {
-    return _mesh.getVerticesFloatBuffer();
-  }
-
-  public final Vector3D getVerticesOffset()
-  {
-    return _mesh.getVerticesOffset();
-  }
-
+	public IFloatBuffer getVertices() {
+		return _mesh.getVertices();
+	}
+	
+	public Vector3D getCenter() {
+		return _mesh.getCenter();
+	}
 }

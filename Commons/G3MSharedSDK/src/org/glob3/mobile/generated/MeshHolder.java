@@ -77,13 +77,17 @@ public class MeshHolder extends Mesh
     _mesh.showNormals(v);
   }
 
-  public final IFloatBuffer getVerticesFloatBuffer()
+  public final Mesh getMesh()
   {
-    return _mesh.getVerticesFloatBuffer();
+    return _mesh;
   }
 
-  public final Vector3D getVerticesOffset()
-  {
-    return _mesh.getVerticesOffset();
-  }
+	public IFloatBuffer getVertices() {
+		return _mesh.getVertices();
+	}
+	
+	public Vector3D getCenter() {
+		return _mesh.getCenter();
+	}
+
 }

@@ -53,6 +53,11 @@ public class NullStorage extends IStorage
   {
   }
 
+  public final void merge(String databasePath)
+  {
+
+  }
+
 
   public final boolean isAvailable()
   {

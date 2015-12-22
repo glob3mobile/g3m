@@ -57,9 +57,9 @@ public:
 
   virtual void showNormals(bool v) const = 0;
   
-  virtual IFloatBuffer* getVerticesFloatBuffer() const = 0;
+  virtual IFloatBuffer* getVertices() const = 0;
   
-  virtual Vector3D getVerticesOffset() const = 0;
+  virtual Vector3D getCenter() const = 0;
 
 };
 

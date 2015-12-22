@@ -43,6 +43,7 @@ public class Tile
   private Tile _parent;
 
   private Mesh _tessellatorMesh;
+  private boolean _tessellatorMeshIsMeshHolder;
 
   private Mesh _debugMesh;
   private Mesh _texturizedMesh;
@@ -176,6 +177,20 @@ public class Tile
   
         computeTileCorners(planet);
         prepareTestLODData(planet);
+        
+        //Idea here: updating mesh too.
+        Mesh tessellatorMesh = tessellator.createTileMesh(rc.getPlanet(), layerTilesRenderParameters._tileMeshResolution, this, _elevationData, _verticalExaggeration, tilesRenderParameters._renderDebug, _tileTessellatorMeshData);
+        MeshHolder meshHolder = (MeshHolder) _tessellatorMesh;
+        if (meshHolder == null)
+        {
+          meshHolder = new MeshHolder(tessellatorMesh);
+          _tessellatorMesh = meshHolder;
+          _tessellatorMeshIsMeshHolder = true;
+        }
+        else
+        {
+          meshHolder.setMesh(tessellatorMesh);
+        }
   
         _boundingVolume = null;
       }
@@ -186,8 +201,9 @@ public class Tile
         {
           // no elevation data provider, just create a simple mesh without elevation
           _tessellatorMesh = tessellator.createTileMesh(rc.getPlanet(), layerTilesRenderParameters._tileMeshResolution, this, null, _verticalExaggeration, tilesRenderParameters._renderDebug, _tileTessellatorMeshData);
-  
+  		  _tessellatorMeshIsMeshHolder = false;
           computeTileCorners(rc.getPlanet());
+
         }
         else
         {
@@ -198,6 +214,7 @@ public class Tile
           {
             meshHolder = new MeshHolder(tessellatorMesh);
             _tessellatorMesh = meshHolder;
+            _tessellatorMeshIsMeshHolder = true;
           }
           else
           {
@@ -441,7 +458,7 @@ public class Tile
   private PlanetTileTessellatorData _tessellatorData;
 
   private int _elevationDataLevel;
-  private ElevationData _elevationData;
+  ElevationData _elevationData;
 //  bool                   _mustUpdateMeshDueToNewED;
 
   private int _elevationDataLevelOfTessellatorMesh;
@@ -534,6 +551,7 @@ public class Tile
      _rendered = false;
      
      _id = createTileId(level, row, column);
+     _tessellatorMeshIsMeshHolder = false;
   }
 
   public void dispose()
@@ -640,6 +658,11 @@ public class Tile
 
   public final void render(G3MRenderContext rc, GLState parentState, java.util.ArrayList<Tile> toVisitInNextIteration, Frustum cameraFrustumInModelCoordinates, TilesStatistics tilesStatistics, float verticalExaggeration, LayerTilesRenderParameters layerTilesRenderParameters, TileTexturizer texturizer, TilesRenderParameters tilesRenderParameters, ITimer lastSplitTimer, ElevationDataProvider elevationDataProvider, TileTessellator tessellator, LayerSet layerSet, Sector renderedSector, boolean forceFullRender, long tileDownloadPriority, double texWidthSquared, double texHeightSquared, double nowInMS, boolean renderTileMeshes, boolean logTilesPetitions, java.util.ArrayList<Tile> tilesStartedRendering, java.util.ArrayList<String> tilesStoppedRendering)
   {
+  ///#warning REMOVE
+  //  if (!_sector.contains(Angle::fromDegrees(28), Angle::fromDegrees(-15))){
+  //    return;
+  //  }
+  
   
     tilesStatistics.computeTileProcessed(this);
   
@@ -1120,6 +1143,26 @@ public class Tile
         subtile.cancelAllElevationDataRequestOnSubtree();
       }
     }
+  }
+  
+  public final Mesh getTessellatorMesh()
+  {
+  
+    if (_tessellatorMeshIsMeshHolder)
+    {
+      //return ((MeshHolder) _tessellatorMesh).getMesh();
+    	Mesh m = ((MeshHolder) _tessellatorMesh).getMesh();
+    	 if (this.isElevationDataSolved())
+    	    	ILogger.instance().logInfo("M - MESH COUNT: "+m.getVertexCount()+" , ELEV DIM: "+this._elevationData.getExtent().description());
+    	 else ILogger.instance().logInfo("M - noElev");
+    	return m;
+    }
+    
+    if (this.isElevationDataSolved())
+    	ILogger.instance().logInfo("TM - MESH COUNT: "+_tessellatorMesh.getVertexCount()+" , ELEV DIM: "+this._elevationData.getExtent().description());
+    else ILogger.instance().logInfo("TM - noElev");
+  
+    return _tessellatorMesh;
   }
 
 }

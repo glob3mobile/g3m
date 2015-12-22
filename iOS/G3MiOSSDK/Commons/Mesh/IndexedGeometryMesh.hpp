@@ -29,7 +29,10 @@ public:
                       bool            ownsIndices,
                       float           lineWidth = 1,
                       float           pointSize = 1,
-                      bool            depthTest = true);
+                      bool            depthTest = true,
+                      bool polygonOffsetFill = false,
+                      float polygonOffsetFactor = 0,
+                      float polygonOffsetUnits = 0);
 
   IndexedGeometryMesh(const int       primitive,
                       const Vector3D& center,
@@ -41,11 +44,16 @@ public:
                       bool            ownsIndices,
                       float           lineWidth = 1,
                       float           pointSize = 1,
-                      bool            depthTest = true);
+                      bool            depthTest = true,
+                      bool polygonOffsetFill = false,
+                      float polygonOffsetFactor = 0,
+                      float polygonOffsetUnits = 0);
 
   ~IndexedGeometryMesh();
 
-
+  const IShortBuffer* getIndices() const{
+    return _indices;
+  }
 };
 
 #endif

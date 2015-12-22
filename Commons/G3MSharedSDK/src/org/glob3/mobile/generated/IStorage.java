@@ -36,4 +36,6 @@ public abstract class IStorage
 
   public abstract boolean isAvailable();
 
+  public abstract void merge(String databasePath);
+
 }

@@ -39,11 +39,11 @@ public:
 
   void showNormals(bool v) const;
   
-  IFloatBuffer* getVerticesFloatBuffer() const{
+  IFloatBuffer* getVertices() const{
     return NULL;
   }
   
-  Vector3D getVerticesOffset() const{
+  Vector3D getCenter() const{
     return Vector3D::nan();
   }
   

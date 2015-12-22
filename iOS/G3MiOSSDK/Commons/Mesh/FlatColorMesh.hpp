@@ -84,12 +84,12 @@ public:
     _mesh->showNormals(v);
   }
   
-  IFloatBuffer* getVerticesFloatBuffer() const{
-    return _mesh->getVerticesFloatBuffer();
+  IFloatBuffer* getVertices() const{
+    return _mesh->getVertices();
   }
   
-  Vector3D getVerticesOffset() const{
-    return _mesh->getVerticesOffset();
+  Vector3D getCenter() const{
+    return _mesh->getCenter();
   }
   
 };

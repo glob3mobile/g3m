@@ -159,7 +159,7 @@ public class GL
   
     state.applyOnGPU(this, progManager);
   
-    _nativeGL.drawElements(mode, indices.size(), indices);
+    _nativeGL.drawElements(mode, (int)indices.size(), indices);
   }
 
 //  void drawArrays(int mode,

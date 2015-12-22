@@ -24,13 +24,18 @@ protected:
   const int               _primitive;
   const Vector3D          _center;
   const MutableMatrix44D* _translationMatrix;
-  const IFloatBuffer*           _vertices;
+  //const IFloatBuffer*           _vertices;
+    IFloatBuffer*           _vertices;
   const bool              _ownsVertices;
   const IFloatBuffer*           _normals;
   const bool              _ownsNormals;
   const float             _lineWidth;
   const float             _pointSize;
   const bool              _depthTest;
+  
+  const bool _polygonOffsetFill;
+  const float _polygonOffsetFactor;
+  const float _polygonOffsetUnits;
   
   mutable BoundingVolume* _extent;
   BoundingVolume* computeBoundingVolume() const;
@@ -43,7 +48,10 @@ protected:
                        bool            ownsNormals,
                        float           lineWidth,
                        float           pointSize,
-                       bool            depthTest);
+                       bool            depthTest,
+                       bool polygonOffsetFill,
+                       float polygonOffsetFactor,
+                       float polygonOffsetUnits);
   
   GLState* _glState;
   
@@ -80,6 +88,14 @@ public:
   }
   
   Vector3D getVerticesOffset() const{
+    return _center;
+  }
+  
+  IFloatBuffer* getVertices() const{
+    return _vertices;
+  }
+  
+  Vector3D getCenter() const{
     return _center;
   }
   

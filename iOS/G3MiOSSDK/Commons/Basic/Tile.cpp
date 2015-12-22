@@ -86,7 +86,8 @@ _southArcSegmentRatioSquared(0),
 _eastArcSegmentRatioSquared(0),
 _westArcSegmentRatioSquared(0),
 _rendered(false),
-_id( createTileId(level, row, column) )
+_id( createTileId(level, row, column) ),
+_tessellatorMeshIsMeshHolder(false)
 {
 }
 
@@ -219,6 +220,25 @@ Mesh* Tile::getTessellatorMesh(const G3MRenderContext* rc,
       
       computeTileCorners(planet);
       prepareTestLODData(planet);
+        
+        Mesh* tessellatorMesh = tessellator->createTileMesh(rc->getPlanet(),
+                                                            layerTilesRenderParameters->_tileMeshResolution,
+                                                            this,
+                                                            _elevationData,
+                                                            _verticalExaggeration,
+                                                            tilesRenderParameters->_renderDebug,
+                                                            _tileTessellatorMeshData);
+        
+        MeshHolder* meshHolder = (MeshHolder*) _tessellatorMesh;
+        if (meshHolder == NULL) {
+            meshHolder = new MeshHolder(tessellatorMesh);
+            _tessellatorMesh = meshHolder;
+            _tessellatorMeshIsMeshHolder = true;
+        }
+        else {
+            meshHolder->setMesh(tessellatorMesh);
+        }
+
       
       _boundingVolume = NULL;
     } else{
@@ -232,8 +252,9 @@ Mesh* Tile::getTessellatorMesh(const G3MRenderContext* rc,
                                                        _verticalExaggeration,
                                                        tilesRenderParameters->_renderDebug,
                                                        _tileTessellatorMeshData);
-        
+        _tessellatorMeshIsMeshHolder = false;
         computeTileCorners(rc->getPlanet());
+
       }
       else {
         Mesh* tessellatorMesh = tessellator->createTileMesh(rc->getPlanet(),
@@ -246,8 +267,9 @@ Mesh* Tile::getTessellatorMesh(const G3MRenderContext* rc,
         
         MeshHolder* meshHolder = (MeshHolder*) _tessellatorMesh;
         if (meshHolder == NULL) {
-          meshHolder = new MeshHolder(tessellatorMesh);
-          _tessellatorMesh = meshHolder;
+            meshHolder = new MeshHolder(tessellatorMesh);
+            _tessellatorMesh = meshHolder;
+            _tessellatorMeshIsMeshHolder = true;
         }
         else {
           meshHolder->setMesh(tessellatorMesh);
@@ -659,7 +681,7 @@ void Tile::render(const G3MRenderContext* rc,
                   bool logTilesPetitions,
                   std::vector<const Tile*>* tilesStartedRendering,
                   std::vector<std::string>* tilesStoppedRendering) {
-  
+
   tilesStatistics->computeTileProcessed(this);
   
   if (verticalExaggeration != _verticalExaggeration) {
@@ -1072,4 +1094,13 @@ Vector2I Tile::getNormalizedPixelsFromPosition(const Geodetic2D& position2D,
 
 bool Tile::canUseElevationDataProvider(const ElevationDataProvider* edp) const{
   return (edp != NULL && edp->isEnabled() && edp->containsSector(_sector));
+}
+
+const Mesh* Tile::getTessellatorMesh() const{
+  
+  if (_tessellatorMeshIsMeshHolder){
+    return ((MeshHolder*) _tessellatorMesh)->getMesh();
+  }
+  
+  return _tessellatorMesh;
 }

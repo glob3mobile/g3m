@@ -144,12 +144,12 @@ public class CompositeMesh extends Mesh
     }
   }
 
-  public final IFloatBuffer getVerticesFloatBuffer()
+  public final IFloatBuffer getVertices()
   {
     return null;
   }
 
-  public final Vector3D getVerticesOffset()
+  public final Vector3D getCenter()
   {
     return Vector3D.nan();
   }

@@ -46,7 +46,7 @@ public class Box extends BoundingVolume
       indices.add(i[n]);
     }
   
-    Mesh mesh = new IndexedMesh(GLPrimitive.lines(), true, vertices.getCenter(), vertices.create(), indices.create(), 2, 1, new Color(color));
+    Mesh mesh = new IndexedMesh(GLPrimitive.lines(), vertices.getCenter(), vertices.create(), true, indices.create(), true, 2, 1, new Color(color));
   
     if (vertices != null)
        vertices.dispose();

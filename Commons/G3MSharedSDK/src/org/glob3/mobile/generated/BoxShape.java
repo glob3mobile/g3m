@@ -69,7 +69,7 @@ public class BoxShape extends AbstractMeshShape
   
     Color borderColor = (_borderColor != null) ? new Color(_borderColor) : new Color(_surfaceColor);
   
-    Mesh result = new IndexedMesh(GLPrimitive.lines(), true, vertices.getCenter(), vertices.create(), indices.create(), (_borderWidth>1)? _borderWidth : 1, 1, borderColor);
+    Mesh result = new IndexedMesh(GLPrimitive.lines(), vertices.getCenter(), vertices.create(), true, indices.create(), true, (_borderWidth>1)? _borderWidth : 1, 1, borderColor);
   
     if (vertices != null)
        vertices.dispose();
@@ -106,7 +106,7 @@ public class BoxShape extends AbstractMeshShape
   
     Color surfaceColor = (_surfaceColor == null) ? null : new Color(_surfaceColor);
   
-    Mesh result = new IndexedMesh(GLPrimitive.triangleStrip(), true, vertices.getCenter(), vertices.create(), indices.create(), (_borderWidth>1)? _borderWidth : 1, 1, surfaceColor);
+    Mesh result = new IndexedMesh(GLPrimitive.triangleStrip(), vertices.getCenter(), vertices.create(), true, indices.create(), true, (_borderWidth>1)? _borderWidth : 1, 1, surfaceColor);
   
     if (vertices != null)
        vertices.dispose();
