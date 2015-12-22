@@ -22,7 +22,7 @@ public class BilUtils {
 	public final static short LOWER_EARTH_LIMIT = 11200;
 	public final static short NODATAVALUE = 15000;
 	
-	public static BufferedImage BilFileToBufferedImage(String filename, int rows, int columns){
+	public static BufferedImage BilFileToBufferedImage(String filename, int rows, int columns, short noDataValue){
 		Path p = FileSystems.getDefault().getPath("", filename);
 		try {
 			byte [] fileData = Files.readAllBytes(p);
@@ -35,6 +35,10 @@ public class BilUtils {
 				//This function will be used only on the original data records.
 				//Applying rescale so we can use image ops while saving under
 				//0 heights ...
+				
+				if (data == noDataValue) {
+					data = - LOWER_EARTH_LIMIT;
+				}
 				
 				data += LOWER_EARTH_LIMIT;
 				

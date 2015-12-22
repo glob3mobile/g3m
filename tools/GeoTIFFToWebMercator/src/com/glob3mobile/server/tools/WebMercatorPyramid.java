@@ -32,7 +32,7 @@ public class WebMercatorPyramid extends Pyramid {
 
 		final int splitsByLongitude = topSectorSplitsByLongitude * (int) Math.pow(2, level);
 
-		final double[] deltaLatitudes = calculateDeltaLatitudesForLevel(level, row);
+		final double[] deltaLatitudes = calculateDeltaLatitudesForLevel(level,column, row);
 		
 		final double deltaLongitude = 360.0 / splitsByLongitude;
 
@@ -47,33 +47,37 @@ public class WebMercatorPyramid extends Pyramid {
 		return new GEOSector(lower, upper);
 	}
 	
-	private static double[] calculateDeltaLatitudesForLevel(int level, int row){
-
+	private static double[] calculateDeltaLatitudesForLevel(int level, int column, int row){
+		
 		double [] deltaLats = new double[2]; 
 		
 		int[] parentsrows = new int[level+1];
 		parentsrows[level] = row;
-		for (int i=level-1;i>=0;i--) parentsrows[i] = (int) Math.floor(parentsrows[i]/2); 
+		for (int i=level-1;i>=0;i--) parentsrows[i] = (int) Math.floor(parentsrows[i+1]/2); 
 		
 		GEOSector sector = GEOSector.fullSphere();
-		int currentRow = 0;
-		if (level != 0 ) for (int i=1; i<=level; i++){
-			Angle latitude = calculateSplitLatitude(sector);
-			if (parentsrows[i] == currentRow){
-				sector = new GEOSector( 
+		
+		if (level != 0 ){
+			for (int i=0; i<level; i++){
+				Angle latitude = calculateSplitLatitude(sector);
+				//if (parentsrows[i] == currentRow){
+				if (parentsrows[i+1] % 2 == 0) {
+					sector = new GEOSector( 
 							new GEOGeodetic(latitude._degrees,sector._lower._longitude),
 							new GEOGeodetic(sector._upper._latitude,sector._upper._longitude)
 						);
-				currentRow = currentRow * 2;
-			}
-			else {
-				sector = new GEOSector( 
-						new GEOGeodetic(sector._lower._latitude,sector._lower._longitude),
-						new GEOGeodetic(latitude._degrees,sector._upper._longitude)
-					);
-				currentRow = currentRow * 2 + 1;
+					//Alto
+				}
+				else {
+					sector = new GEOSector( 
+							new GEOGeodetic(sector._lower._latitude,sector._lower._longitude),
+							new GEOGeodetic(latitude._degrees,sector._upper._longitude)
+						);
+					//Bajo
+				}
 			}
 		}
+			
 		deltaLats[0] = sector._lower._latitude;
 		deltaLats[1] = sector._upper._latitude;
 		return deltaLats;

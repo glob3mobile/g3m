@@ -6,6 +6,7 @@ import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -27,14 +28,18 @@ import com.glob3mobile.utils.Progress;
 public class BilMergedPyramid {
 	private final SourcePyramid[] _sourcePyramids;
 	private static int _type;
+	private final String _outputDirectory;
 
 	private static int BIL_DIM = 16;
+	
+	public final static int OP_MERGE = 0;
+	public final static int OP_SIMILARITY = 1;
+	public final static int OP_REDIM = 2;
 
 	   private static class MergedTile {
 	      private final MergedColumn            _column;
 	      private final int                     _row;
 	      private final List<SourcePyramidTile> _sourceTiles = new ArrayList<>();
-
 
 	      private MergedTile(final MergedColumn column,
 	                         final int row) {
@@ -173,8 +178,10 @@ public class BilMergedPyramid {
 	         short min = firstImage._min;
 	         short withChildren = firstImage._childrenData;
 
-	         final Graphics2D g2d = image.createGraphics();
-	         g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
+	         //final 
+	         Graphics2D g2d = image.createGraphics();
+	         int warning_renderingHintDisabled;
+	         //g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
 
 	         GEOSector tileSector = null;
 	         switch (_type){
@@ -209,6 +216,8 @@ public class BilMergedPyramid {
 
 	            final Point2D lowerUV = ancestorSector.getUVCoordinates(tileSector._lower);
 	            final Point2D upperUV = ancestorSector.getUVCoordinates(tileSector._upper);
+	            
+	            
 
 	            final int ancestorImageWidth = ancestorImage._image.getWidth();
 	            final int ancestorImageHeight = ancestorImage._image.getHeight();
@@ -221,13 +230,26 @@ public class BilMergedPyramid {
 	            final int sy2 = (int) Math.round(lowerUV.getY() * ancestorImageHeight);
 	            final int sx2 = (int) Math.round(upperUV.getX() * ancestorImageWidth);
 	            final int sy1 = (int) Math.round(upperUV.getY() * ancestorImageHeight);
-	            g2d.drawImage(ancestorImage._image, dx1, dy1, dx2, dy2, sx1, sy1, sx2, sy2, null);
+	            
+	            //Idea here: forcing tiles to join by avoiding interpolation on borders. Not sure if I should apply interpolation inside or not ...
+	            //Let's see ...
+	            
+	            final BufferedImage ancestorSection = new BufferedImage(firstImage._image.getWidth()/2, firstImage._image.getHeight()/2,
+		                  BufferedImage.TYPE_INT_ARGB);
+	            Graphics2D ancestorG2D = ancestorSection.createGraphics();
+	            ancestorG2D.drawImage(ancestorImage._image, dx1, dy1, BIL_DIM/2, BIL_DIM/2, sx1, sy1, sx2+1, sy2+1, null);
+		        ancestorG2D.dispose();
+	            
+	            //g2d.drawImage(ancestorImage._image, dx1, dy1, dx2, dy2, sx1, sy1, sx2, sy2, null);
+		        g2d.drawImage(ancestorSection,dx1,dy1,dx2,dy2,0,0,ancestorSection.getWidth(),ancestorSection.getHeight(),null);
+		        
 	            max = (short) Math.max(max,ancestorImage._max);
 	            min = (short) Math.min(min, ancestorImage._min);
-	            //Ancestors should not be taken into account for own children info.
-
 	         }
-
+	         
+	         int warning_renderingHintEnabled;
+	         g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
+	         
 	         for (final MaxMinBufferedImage sourceImage : sourceImageFiles) {
 	            g2d.drawImage(sourceImage._image, 0, 0, null);
 	            max = (short) Math.max(max,sourceImage._max);
@@ -239,6 +261,17 @@ public class BilMergedPyramid {
 
 	         saveImage(output, new MaxMinBufferedImage(image,min,max,withChildren,(short) 0), mutex);
 	      }
+	      
+	      /*private boolean isEquals(BufferedImage img1, BufferedImage img2){
+	    	  if (img1.getHeight() != img2.getHeight()) return false;
+	    	  if (img1.getWidth() != img2.getWidth()) return false;
+	    	  
+	    	  for (int x=0; x<img1.getWidth(); x++) for (int y=0; y<img1.getHeight(); y++){
+	    		  if (img1.getRGB(x, y) != img2.getRGB(x,y)) return false;
+	    	  }
+	    	  return true;
+	    	  
+	      }*/
 
 
 	      private void mergeFromSourceTiles(final File output,
@@ -390,9 +423,14 @@ public class BilMergedPyramid {
 	   private final Map<Integer, MergedLevel> _levels = new HashMap<>();
 
 
-	   public BilMergedPyramid(final SourcePyramid[] sourcePyramids, final int pyramidType) {
+	   public BilMergedPyramid(final SourcePyramid[] sourcePyramids, final int pyramidType,
+			   final String outputDirectory) {
 	      _sourcePyramids = sourcePyramids;
 	      _type = pyramidType;
+	      _outputDirectory = outputDirectory;
+	      
+	      if (_type == Pyramid.PYR_WEBMERC) Pyramid.setTopSectorSplits(1, 1);
+	      else if (_type == Pyramid.PYR_WGS84) Pyramid.setTopSectorSplits(2 , 4);
 
 	      for (final SourcePyramid sourcePyramid : _sourcePyramids) {
 	         for (final SourcePyramidLevel sourceLevel : sourcePyramid.getLevels()) {
@@ -429,8 +467,29 @@ public class BilMergedPyramid {
 	      for (final Integer key : keys) {
 
 	         final MergedLevel level = _levels.get(key);
-	         level.process(_sourcePyramids, outputDirectory, progress, executor, mutex);
+	         //if (level._level > 9) 
+	        	 level.process(_sourcePyramids, outputDirectory, progress, executor, mutex);
 	      }
+	      
+	      saveMetadata(OP_MERGE);
+	   }
+	   
+	   private void saveMetadata(int operation){
+		   File file = new File(_outputDirectory, "meta.json");
+		   try {
+				PrintWriter writer = new PrintWriter(file.getAbsolutePath(), "UTF-8");
+				if (operation == OP_MERGE) writer.println("[");
+				for (int i=0; i< _sourcePyramids.length; i++){
+					writer.println(_sourcePyramids[i].getMetadata());
+					if (operation == OP_MERGE && i<(_sourcePyramids.length-1)) writer.println(",");
+				}
+				if (operation == OP_MERGE) writer.println("]");
+				writer.close();
+			}
+			catch (Exception E){
+				System.out.println("Metadata cannot be saved");
+				E.printStackTrace();
+			}
 	   }
 	   
 	   private class RedimBufferedImage {
@@ -474,6 +533,8 @@ public class BilMergedPyramid {
 				   }
 			   }
 		   }
+		   
+		   saveMetadata(OP_REDIM);
 	   }
 	   
 	   private RedimBufferedImage redim(RedimBufferedImage inputBil, int similarityErrorMethod){

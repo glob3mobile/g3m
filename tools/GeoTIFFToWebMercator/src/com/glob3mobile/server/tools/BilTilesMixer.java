@@ -155,7 +155,7 @@ public class BilTilesMixer {
 
 
 	   private void process(int pyramidType) throws IOException {
-	      final BilMergedPyramid mergedPyramid = new BilMergedPyramid(getSourcePyramids(),pyramidType);
+	      final BilMergedPyramid mergedPyramid = new BilMergedPyramid(getSourcePyramids(),pyramidType,_outputDirectory.getAbsolutePath());
 
 	      final int scaleFactor = 2;
 	      final int cpus = Runtime.getRuntime().availableProcessors();
@@ -195,24 +195,20 @@ public class BilTilesMixer {
 	   }
 	   
 	   private void similarity(int pyramidType,int similarityErrorMethod) throws IOException {
-		   final BilMergedPyramid mergedPyramid = new BilMergedPyramid(getSourcePyramids(),pyramidType);
+		   final BilMergedPyramid mergedPyramid = new BilMergedPyramid(getSourcePyramids(),pyramidType,"");
 		   mergedPyramid.similarity(similarityErrorMethod);
 	   }
 	   
 	   
 	   private void redim(int pyramidType, int similarityErrorMethod) throws IOException {
-		   final BilMergedPyramid mergedPyramid = new BilMergedPyramid(getSourcePyramids(),pyramidType);
+		   final BilMergedPyramid mergedPyramid = new BilMergedPyramid(getSourcePyramids(),pyramidType,_outputDirectory.getAbsolutePath());
 		   mergedPyramid.redim(similarityErrorMethod,_outputDirectory.getAbsolutePath());
 	   }
 	   
 	   
-	   
-	   
 	   ////////////////
 	   
-	   final static int OP_MERGE = 0;
-	   final static int OP_SIMILARITY = 1;
-	   final static int OP_REDIM = 2;
+	   
 
 
 	   public static void main(final String[] args) throws IOException {
@@ -226,18 +222,18 @@ public class BilTilesMixer {
 	      final int pyramidType = Pyramid.PYR_WEBMERC;
 	      final int similarityErrorType = BilMergedPyramid.SIMILARITY_MAX_ERROR;
 	      //TODO: Remember to change this parameter!
-	      final int op = OP_REDIM;
+	      final int op = BilMergedPyramid.OP_REDIM;
 	      
 	      BilMergedPyramid.setTileImageDimensions(32);
 	      
 	      switch (op) {
-	      	case OP_MERGE:
+	      	case BilMergedPyramid.OP_MERGE:
 	      		BilTilesMixer.processSubdirectories(inputDirectoryName, outputDirectoryName, pyramidType);
 	      		break;
-	      	case OP_SIMILARITY:
+	      	case BilMergedPyramid.OP_SIMILARITY:
 	      		BilTilesMixer.processResultForSimilarity(outputDirectoryName, pyramidType,similarityErrorType);
 	      		break;
-	      	case OP_REDIM:
+	      	case BilMergedPyramid.OP_REDIM:
 	      		BilTilesMixer.processResultForRedim(outputDirectoryName, redimDirectoryName, pyramidType, similarityErrorType);
 	      		break;
 	      }

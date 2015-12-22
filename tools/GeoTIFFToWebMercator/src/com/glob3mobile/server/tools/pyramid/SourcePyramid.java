@@ -2,7 +2,9 @@
 
 package com.glob3mobile.server.tools.pyramid;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -18,6 +20,7 @@ import com.glob3mobile.utils.Logger;
 public class SourcePyramid {
    private final File                     _directory;
    private final List<SourcePyramidLevel> _levels;
+   private final String _metadata;
 
 
    public SourcePyramid(final File directory, final boolean isDem) throws IOException {
@@ -26,6 +29,7 @@ public class SourcePyramid {
       Logger.log("Reading \"" + directory.getAbsolutePath() + "\"");
 
       _levels = initializeLevels(isDem);
+      _metadata = readMetadata();
    }
 
 
@@ -37,6 +41,33 @@ public class SourcePyramid {
       }
       return levels;
    }
+   
+   private String readMetadata(){
+	   File file = new File(_directory,"meta.json");
+	   String metadata = "";
+	   try {
+		   BufferedReader br = new BufferedReader(new FileReader(file.getAbsolutePath()));
+		   try {
+		       StringBuilder sb = new StringBuilder();
+		       String line = br.readLine();
+	
+		       while (line != null) {
+		           sb.append(line);
+		           sb.append(System.lineSeparator());
+		           line = br.readLine();
+		       }
+		       metadata = sb.toString();
+		   } finally {
+		       br.close();
+		   } 
+	   }
+	   catch (Exception E) {
+		   System.out.println("Metadata cannot be read");
+	   }
+	   return metadata;
+   }
+   
+   public String getMetadata() { return _metadata; }
 
 
    static File[] getNumberedDirectories(final File directory) {
