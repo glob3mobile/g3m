@@ -1172,8 +1172,6 @@ public class VectorStreamingRenderer extends DefaultRenderer
       final int length = nodeID.length();
       for (int i = 0; i < length; i++)
       {
-    //    const char c = nodeID.at(i);
-    //    isb->addChar(c);
         final String c = su.substring(nodeID, i, i+1);
         isb.addString(c);
         isb.addString("/");

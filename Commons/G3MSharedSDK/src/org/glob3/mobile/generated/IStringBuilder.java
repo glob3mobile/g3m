@@ -49,8 +49,6 @@ public abstract class IStringBuilder
   public abstract IStringBuilder addString(String s);
   public abstract IStringBuilder addBool(boolean b);
 
-//  virtual IStringBuilder* addChar(const char c) = 0;
-
   public abstract IStringBuilder clear();
 
   public abstract String getString();
