@@ -970,39 +970,3 @@ void PlanetRenderer::setChangedRendererInfoListener(ChangedRendererInfoListener*
 //  return _info;
 //}
 
-//TileLODTester* PlanetRenderer::createDefaultTileLODTester(){
-//  
-//  //  TileLODTester(TileLODTester* nextTesterRightLoD,
-//  //                TileLODTester* nextTesterWrongLoD,
-//  //                TileLODTester* nextTesterVisible,
-//  //                TileLODTester* nextTesterNotVisible)
-//  
-//  //3
-//  ProjectedCornersDistanceTileLODTester* proj =
-//        new ProjectedCornersDistanceTileLODTester(getLayerTilesRenderParameters()->_tileTextureResolution._x,
-//                                                  getLayerTilesRenderParameters()->_tileTextureResolution._y,
-//                                                  NULL,
-//                                                  NULL,
-//                                                  NULL,
-//                                                  NULL);
-//  
-//  //2
-//  MaxLevelTileLODTester* poles = new MaxLevelTileLODTester(getLayerTilesRenderParameters()->_maxLevel,
-//                                                           getLayerTilesRenderParameters()->_maxLevelForPoles,
-//                                                                           NULL,
-//                                                                           proj,
-//                                                                           proj,
-//                                                                           proj);
-//  //1
-//  MaxFrameTimeTileLODTester* frameTime = new MaxFrameTimeTileLODTester(TimeInterval::fromSeconds((double)1 / 60.0),
-//                                                                       poles);
-//  
-//  //0
-//  TimedTileLODTester* timed = new TimedTileLODTester(TimeInterval::fromMilliseconds(250),
-//                                                     frameTime);
-//  
-//  
-//  return timed;
-//  
-//}
-
