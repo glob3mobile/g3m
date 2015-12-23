@@ -119,6 +119,10 @@ public class ProjectedCornersDistanceTileLODTester extends TileLODTesterResponde
   protected final boolean _meetsRenderCriteria(int testerLevel, Tile tile, G3MRenderContext rc)
   {
 
+    if (_texHeightSquared < 0 || _texHeightSquared < 0)
+    {
+      return true;
+    }
 
     ProjectedCornersDistanceTileLODTesterData data = getData(tile, testerLevel, rc);
 
@@ -133,6 +137,20 @@ public class ProjectedCornersDistanceTileLODTester extends TileLODTesterResponde
 
   protected double _texHeightSquared;
   protected double _texWidthSquared;
+
+  protected final void _onLayerTilesRenderParametersChanged(LayerTilesRenderParameters ltrp)
+  {
+    if (ltrp != null)
+    {
+      _texWidthSquared = ltrp._tileTextureResolution._x * ltrp._tileTextureResolution._x;
+      _texHeightSquared = ltrp._tileTextureResolution._y * ltrp._tileTextureResolution._y;
+    }
+    else
+    {
+      _texWidthSquared = -1;
+      _texHeightSquared = -1;
+    }
+  }
 
 
   public ProjectedCornersDistanceTileLODTester(double textureWidth, double textureHeight, TileLODTester nextTesterRightLoD, TileLODTester nextTesterWrongLoD, TileLODTester nextTesterVisible, TileLODTester nextTesterNotVisible)

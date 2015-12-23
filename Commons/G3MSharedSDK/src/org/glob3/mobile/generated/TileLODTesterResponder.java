@@ -16,6 +16,8 @@ public abstract class TileLODTesterResponder extends TileLODTester
   {
   }
 
+  protected abstract void _onLayerTilesRenderParametersChanged(LayerTilesRenderParameters ltrp);
+
 
   public TileLODTesterResponder(TileLODTester nextTesterRightLoD, TileLODTester nextTesterWrongLoD, TileLODTester nextTesterVisible, TileLODTester nextTesterNotVisible)
   {
@@ -81,7 +83,7 @@ public abstract class TileLODTesterResponder extends TileLODTester
   
   }
 
-  public void onTileHasChangedMesh(int testerLevel, Tile tile)
+  public final void onTileHasChangedMesh(int testerLevel, Tile tile)
   {
     _onTileHasChangedMesh(testerLevel, tile);
     if (_nextTesterNotVisible != null)
@@ -92,5 +94,18 @@ public abstract class TileLODTesterResponder extends TileLODTester
       _nextTesterRightLoD.onTileHasChangedMesh(testerLevel+1, tile);
     if (_nextTesterWrongLoD != null)
       _nextTesterWrongLoD.onTileHasChangedMesh(testerLevel+1, tile);
+  }
+
+  public final void onLayerTilesRenderParametersChanged(LayerTilesRenderParameters ltrp)
+  {
+    _onLayerTilesRenderParametersChanged(ltrp);
+    if (_nextTesterNotVisible != null)
+      _nextTesterNotVisible.onLayerTilesRenderParametersChanged(ltrp);
+    if (_nextTesterVisible != null)
+      _nextTesterVisible.onLayerTilesRenderParametersChanged(ltrp);
+    if (_nextTesterRightLoD != null)
+      _nextTesterRightLoD.onLayerTilesRenderParametersChanged(ltrp);
+    if (_nextTesterWrongLoD != null)
+      _nextTesterWrongLoD.onLayerTilesRenderParametersChanged(ltrp);
   }
 }

@@ -333,6 +333,8 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
         ILogger.instance().logError("LayerSet returned a NULL for LayerTilesRenderParameters, can't render planet");
       }
       _layerTilesRenderParametersDirty = false;
+  
+      _tileLoDTester.onLayerTilesRenderParametersChanged(_layerTilesRenderParameters);
     }
     return _layerTilesRenderParameters;
   }
@@ -391,6 +393,11 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
     }
   
     _rendererIdentifier = -1;
+  
+    if (_tileLoDTester == null)
+    {
+      throw new RuntimeException("Null TileLoDTester provided to PlanetRenderer");
+    }
   }
 
   public void dispose()
@@ -462,12 +469,6 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
     if (layerTilesRenderParameters == null)
     {
       return;
-    }
-  
-    //Init _tileLoDTester
-    if (_tileLoDTester == null)
-    {
-      _tileLoDTester = createDefaultTileLODTester();
     }
   
     updateGLState(rc);
@@ -1004,45 +1005,6 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
     {
       _changedInfoListener.changedRendererInfo(rendererIdentifier, _layerSet.getInfo());
     }
-  }
-
-
-  //std::vector<std::string> PlanetRenderer::getInfo() {
-  //  _info.clear();
-  //  std::vector<std::string> info = _layerSet->getInfo();
-  //
-  ///#ifdef C_CODE
-  //      _info.insert(_info.end(),info.begin(), info.end());
-  ///#endif
-  ///#ifdef JAVA_CODE
-  //      _infos.add(info);
-  ///#endif
-  //
-  //  return _info;
-  //}
-  
-  public final TileLODTester createDefaultTileLODTester()
-  {
-  
-    //  TileLODTester(TileLODTester* nextTesterRightLoD,
-    //                TileLODTester* nextTesterWrongLoD,
-    //                TileLODTester* nextTesterVisible,
-    //                TileLODTester* nextTesterNotVisible)
-  
-    //3
-    ProjectedCornersDistanceTileLODTester proj = new ProjectedCornersDistanceTileLODTester(getLayerTilesRenderParameters()._tileTextureResolution._x, getLayerTilesRenderParameters()._tileTextureResolution._y, null, null, null, null);
-  
-    //2
-    MaxLevelTileLODTester poles = new MaxLevelTileLODTester(getLayerTilesRenderParameters()._maxLevel, getLayerTilesRenderParameters()._maxLevelForPoles, null, proj, proj, proj);
-    //1
-    MaxFrameTimeTileLODTester frameTime = new MaxFrameTimeTileLODTester(1000 / 60, poles);
-  
-    //0
-    TimedTileLODTester timed = new TimedTileLODTester(250, frameTime);
-  
-  
-    return timed;
-  
   }
 
   public final TileLODTester getTileLODTester()

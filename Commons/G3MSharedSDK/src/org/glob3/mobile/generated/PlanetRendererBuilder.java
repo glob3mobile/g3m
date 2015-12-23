@@ -207,7 +207,7 @@ public class PlanetRendererBuilder
   }
   private TileTessellator createTileTessellator()
   {
-  ///#warning Testing Terrain Normals
+    ///#warning Testing Terrain Normals
     final boolean skirted = true;
     return new PlanetTileTessellator(skirted, getRenderedSector());
   }
@@ -270,7 +270,19 @@ public class PlanetRendererBuilder
 
   private TileLODTester createDefaultTileLODTester()
   {
-    return null;
+  
+    ProjectedCornersDistanceTileLODTester proj = new ProjectedCornersDistanceTileLODTester(-1, -1, null, null, null, null);
+  
+    //2
+    MaxLevelTileLODTester poles = new MaxLevelTileLODTester(-1, -1, null, proj, proj, proj);
+    //1
+    MaxFrameTimeTileLODTester frameTime = new MaxFrameTimeTileLODTester(TimeInterval.fromSeconds((double)1 / 60.0), poles);
+  
+    //0
+    TimedTileLODTester timed = new TimedTileLODTester(TimeInterval.fromMilliseconds(250), frameTime);
+  
+  
+    return timed;
   }
 
   public PlanetRendererBuilder()

@@ -23,11 +23,16 @@ public class MaxFrameTimeTileLODTester extends TileLODTester
   private TileLODTester _nextTester;
   private long _maxFrameTimeInMs;
 
+  private long _lastElapsedTime;
+  private int _nSplitsInFrame;
 
-  public MaxFrameTimeTileLODTester(long maxFrameTimeInMs, TileLODTester nextTester)
+
+  public MaxFrameTimeTileLODTester(TimeInterval maxFrameTimeInMs, TileLODTester nextTester)
   {
-     _maxFrameTimeInMs = maxFrameTimeInMs;
+     _maxFrameTimeInMs = maxFrameTimeInMs.milliseconds();
      _nextTester = nextTester;
+     _lastElapsedTime = 0;
+     _nSplitsInFrame = 0;
   }
 
   public void dispose()
@@ -39,22 +44,56 @@ public class MaxFrameTimeTileLODTester extends TileLODTester
   public boolean meetsRenderCriteria(int testerLevel, Tile tile, G3MRenderContext rc)
   {
 
-    if (!tile.areSubtilesCreated() && rc.getFrameStartTimer().elapsedTimeInMilliseconds() > _maxFrameTimeInMs)
+    final boolean hasSubtiles = tile.areSubtilesCreated();
+    long elapsedTime = rc.getFrameStartTimer().elapsedTimeInMilliseconds();
+    if (elapsedTime < _lastElapsedTime)
+    {
+      //New frame
+//      if (_nSplitsInFrame > 0){
+//        printf("Tile splits on last frame: %d\n", _nSplitsInFrame);
+//      }
+      _nSplitsInFrame = 0;
+    }
+    _lastElapsedTime = elapsedTime;
+
+    if (!hasSubtiles && elapsedTime > _maxFrameTimeInMs && _nSplitsInFrame > 0)
     {
       return true;
     }
 
-    return _nextTester.meetsRenderCriteria(testerLevel+1, tile, rc);
+    boolean res = (_nextTester == null)? true : _nextTester.meetsRenderCriteria(testerLevel+1, tile, rc);
+
+    if (!res && !hasSubtiles)
+    {
+      _nSplitsInFrame++;
+    }
+
+    return res;
   }
 
   public boolean isVisible(int testerLevel, Tile tile, G3MRenderContext rc)
   {
+    if (_nextTester == null)
+    {
+      return true;
+    }
     return _nextTester.isVisible(testerLevel+1, tile, rc);
   }
 
   public void onTileHasChangedMesh(int testerLevel, Tile tile)
   {
-    _nextTester.onTileHasChangedMesh(testerLevel+1, tile);
+    if (_nextTester != null)
+    {
+      _nextTester.onTileHasChangedMesh(testerLevel+1, tile);
+    }
+  }
+
+  public final void onLayerTilesRenderParametersChanged(LayerTilesRenderParameters ltrp)
+  {
+    if (_nextTester != null)
+    {
+      _nextTester.onLayerTilesRenderParametersChanged(ltrp);
+    }
   }
 
 }

@@ -16,4 +16,7 @@ public abstract class TileLODTester
   public abstract boolean isVisible(int testerLevel, Tile tile, G3MRenderContext rc);
 
   public abstract void onTileHasChangedMesh(int testerLevel, Tile tile);
+
+  public abstract void onLayerTilesRenderParametersChanged(LayerTilesRenderParameters ltrp);
+
 }
