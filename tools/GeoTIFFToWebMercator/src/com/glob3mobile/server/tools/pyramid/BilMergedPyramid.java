@@ -150,6 +150,46 @@ public class BilMergedPyramid {
 	         }
 	      }
 
+	      private int[] calculateSplitArea(int ancestorRow, int ancestorColumn, int dim){
+	    	 int [] res = new int[4];
+	    	 if (ancestorRow % 2 == 0)  {
+	    		 res[0] = 0;
+	    		 res[1] = dim/2;
+	    	 }
+	    	 else {
+	    		 res[0] = dim/2;
+	    		 res[1] = dim;
+	    	 }
+	    	 if (ancestorColumn % 2 == 1){
+	    		 res[2] = dim/2;
+	    		 res[3] = dim;
+	    	 }
+	    	 else {
+	    		 res[2] = 0;
+	    		 res[3] = dim/2;			 
+	    	 }
+	    	 return res;
+	      }
+	      
+	      private int[] calculateSplitArea(int tileLevel,int tileColumn, int tileRow, SourcePyramidTile ancestor, int dim){
+	    	  if (tileLevel - ancestor._column._level._level == 1)
+	    		  return calculateSplitArea(ancestor._row,ancestor._column._column,dim);
+	    	  else {
+	    		  int[] presentAncestor = calculateSplitArea(tileRow/2, tileColumn/2,dim);
+	    		  int[] innerAncestor = calculateSplitArea(tileLevel-1, tileColumn/2, tileRow/2, ancestor, dim/2);
+	    		  
+	    		  // Transforming = bases should be sum:
+	    		  innerAncestor[0] = presentAncestor[0]+innerAncestor[0];
+	    		  innerAncestor[2] = presentAncestor[2]+innerAncestor[2];
+	    		  
+	    		  //Endings should be recalculed from bases and inner ancestors;
+	    		  innerAncestor[1] = presentAncestor[0]+innerAncestor[1];
+	    		  innerAncestor[3] = presentAncestor[2]+innerAncestor[3];
+
+	    		  return innerAncestor;
+	    	  }
+	      }
+
 
 	      private void mergeFromSourceTilesAndAncestors(final List<SourcePyramidTile> ancestors,
 	                                                    final File output,
@@ -195,8 +235,10 @@ public class BilMergedPyramid {
 	        		 System.out.println("Failure: uninitialized pyramid type");
 	        		 System.exit(-1);
 	         }
+	         
 
 	         for (final SourcePyramidTile ancestor : ancestors) {
+	        
 	            final MaxMinBufferedImage ancestorImage = BilUtils.BilFileMaxMinToBufferedImage(ancestor.getImageFile().getAbsolutePath(),BIL_DIM,BIL_DIM);
 
 	            GEOSector ancestorSector = null;
@@ -214,10 +256,10 @@ public class BilMergedPyramid {
 		        		 System.exit(-1);
 		         }
 
-	            final Point2D lowerUV = ancestorSector.getUVCoordinates(tileSector._lower);
-	            final Point2D upperUV = ancestorSector.getUVCoordinates(tileSector._upper);
+	            //final Point2D lowerUV = ancestorSector.getUVCoordinates(tileSector._lower);
+	            //final Point2D upperUV = ancestorSector.getUVCoordinates(tileSector._upper);
 	            
-	            
+	            int [] sValues = calculateSplitArea(_column._level._level,_column._column, _row, ancestor,BIL_DIM);
 
 	            final int ancestorImageWidth = ancestorImage._image.getWidth();
 	            final int ancestorImageHeight = ancestorImage._image.getHeight();
@@ -226,29 +268,22 @@ public class BilMergedPyramid {
 	            final int dy1 = 0;
 	            final int dx2 = BIL_DIM;
 	            final int dy2 = BIL_DIM;
-	            final int sx1 = (int) Math.round(lowerUV.getX() * ancestorImageWidth);
+	            /*final int sx1 = (int) Math.round(lowerUV.getX() * ancestorImageWidth);
 	            final int sy2 = (int) Math.round(lowerUV.getY() * ancestorImageHeight);
 	            final int sx2 = (int) Math.round(upperUV.getX() * ancestorImageWidth);
-	            final int sy1 = (int) Math.round(upperUV.getY() * ancestorImageHeight);
+	            final int sy1 = (int) Math.round(upperUV.getY() * ancestorImageHeight);*/
 	            
 	            //Idea here: forcing tiles to join by avoiding interpolation on borders. Not sure if I should apply interpolation inside or not ...
 	            //Let's see ...
 	            
-	            final BufferedImage ancestorSection = new BufferedImage(firstImage._image.getWidth()/2, firstImage._image.getHeight()/2,
-		                  BufferedImage.TYPE_INT_ARGB);
-	            Graphics2D ancestorG2D = ancestorSection.createGraphics();
-	            ancestorG2D.drawImage(ancestorImage._image, dx1, dy1, BIL_DIM/2, BIL_DIM/2, sx1, sy1, sx2+1, sy2+1, null);
-		        ancestorG2D.dispose();
-	            
-	            //g2d.drawImage(ancestorImage._image, dx1, dy1, dx2, dy2, sx1, sy1, sx2, sy2, null);
-		        g2d.drawImage(ancestorSection,dx1,dy1,dx2,dy2,0,0,ancestorSection.getWidth(),ancestorSection.getHeight(),null);
+	            g2d.drawImage(ancestorImage._image, dx1, dy1, dx2, dy2, sValues[2], sValues[0], sValues[3], sValues[1], null);
 		        
 	            max = (short) Math.max(max,ancestorImage._max);
 	            min = (short) Math.min(min, ancestorImage._min);
 	         }
 	         
-	         int warning_renderingHintEnabled;
-	         g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
+	         //int warning_renderingHintEnabled;
+	         //g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
 	         
 	         for (final MaxMinBufferedImage sourceImage : sourceImageFiles) {
 	            g2d.drawImage(sourceImage._image, 0, 0, null);
@@ -261,17 +296,6 @@ public class BilMergedPyramid {
 
 	         saveImage(output, new MaxMinBufferedImage(image,min,max,withChildren,(short) 0), mutex);
 	      }
-	      
-	      /*private boolean isEquals(BufferedImage img1, BufferedImage img2){
-	    	  if (img1.getHeight() != img2.getHeight()) return false;
-	    	  if (img1.getWidth() != img2.getWidth()) return false;
-	    	  
-	    	  for (int x=0; x<img1.getWidth(); x++) for (int y=0; y<img1.getHeight(); y++){
-	    		  if (img1.getRGB(x, y) != img2.getRGB(x,y)) return false;
-	    	  }
-	    	  return true;
-	    	  
-	      }*/
 
 
 	      private void mergeFromSourceTiles(final File output,
@@ -467,7 +491,7 @@ public class BilMergedPyramid {
 	      for (final Integer key : keys) {
 
 	         final MergedLevel level = _levels.get(key);
-	         //if (level._level > 9) 
+	         //if (level._level > 10) 
 	        	 level.process(_sourcePyramids, outputDirectory, progress, executor, mutex);
 	      }
 	      
