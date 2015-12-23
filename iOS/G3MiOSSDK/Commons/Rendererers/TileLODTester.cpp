@@ -66,3 +66,15 @@ void TileLODTesterResponder::onTileHasChangedMesh(int testerLevel, Tile* tile) c
   if (_nextTesterWrongLoD != NULL)
     _nextTesterWrongLoD->onTileHasChangedMesh(testerLevel+1, tile);
 }
+
+void TileLODTesterResponder::onLayerTilesRenderParametersChanged(const LayerTilesRenderParameters *ltrp){
+  _onLayerTilesRenderParametersChanged(ltrp);
+  if (_nextTesterNotVisible != NULL)
+    _nextTesterNotVisible->onLayerTilesRenderParametersChanged(ltrp);
+  if (_nextTesterVisible != NULL)
+    _nextTesterVisible->onLayerTilesRenderParametersChanged(ltrp);
+  if (_nextTesterRightLoD != NULL)
+    _nextTesterRightLoD->onLayerTilesRenderParametersChanged(ltrp);
+  if (_nextTesterWrongLoD != NULL)
+    _nextTesterWrongLoD->onLayerTilesRenderParametersChanged(ltrp);
+}

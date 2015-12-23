@@ -17,6 +17,7 @@
 #include "Camera.hpp"
 #include "BoundingVolume.hpp"
 #include "Mesh.hpp"
+#include "LayerTilesRenderParameters.hpp"
 
 class ProjectedCornersDistanceTileLODTester: public TileLODTesterResponder{
 protected:
@@ -116,6 +117,9 @@ protected:
                             Tile* tile,
                             const G3MRenderContext& rc) const{
     
+    if (_texHeightSquared < 0 || _texHeightSquared < 0){
+      return true;
+    }
     
     ProjectedCornersDistanceTileLODTesterData* data = getData(tile, testerLevel, rc);
     
@@ -131,6 +135,16 @@ protected:
   
   double _texHeightSquared;
   double _texWidthSquared;
+  
+  void _onLayerTilesRenderParametersChanged(const LayerTilesRenderParameters* ltrp){
+    if (ltrp != NULL){
+      _texWidthSquared = ltrp->_tileTextureResolution._x * ltrp->_tileTextureResolution._x;
+      _texHeightSquared = ltrp->_tileTextureResolution._y * ltrp->_tileTextureResolution._y;
+    } else{
+      _texWidthSquared = -1;
+      _texHeightSquared = -1;
+    }
+  }
   
 public:
   

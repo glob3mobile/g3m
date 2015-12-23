@@ -53,7 +53,7 @@ public:
       return true;
     }
     
-    bool res = _nextTester->meetsRenderCriteria(testerLevel+1, tile, rc);
+    bool res = (_nextTester == NULL)? true : _nextTester->meetsRenderCriteria(testerLevel+1, tile, rc);
     
     if (!res && !hasSubtiles){
       _nSplitsInFrame++;
@@ -63,11 +63,22 @@ public:
   }
   
   virtual bool isVisible(int testerLevel, Tile* tile, const G3MRenderContext& rc) const{
+    if (_nextTester == NULL){
+      return true;
+    }
     return _nextTester->isVisible(testerLevel+1, tile, rc);
   }
   
   virtual void onTileHasChangedMesh(int testerLevel, Tile* tile) const{
-    _nextTester->onTileHasChangedMesh(testerLevel+1, tile);
+    if (_nextTester != NULL){
+      _nextTester->onTileHasChangedMesh(testerLevel+1, tile);
+    }
+  }
+  
+  void onLayerTilesRenderParametersChanged(const LayerTilesRenderParameters* ltrp){
+    if (_nextTester != NULL){
+      _nextTester->onLayerTilesRenderParametersChanged(ltrp);
+    }
   }
   
 };

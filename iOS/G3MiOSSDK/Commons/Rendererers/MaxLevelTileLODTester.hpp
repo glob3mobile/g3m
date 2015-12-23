@@ -12,6 +12,7 @@
 #include "TileLODTester.hpp"
 #include "Tile.hpp"
 #include "Context.hpp"
+#include "LayerTilesRenderParameters.hpp"
 
 class MaxLevelTileLODTester: public TileLODTesterResponder{
 protected:
@@ -20,12 +21,12 @@ protected:
                             Tile* tile,
                             const G3MRenderContext& rc) const{
     
-    if (tile->_level >= _maxLevel){
+    if (tile->_level >= _maxLevel && _maxLevel > -1){
       return true;
     }
     
     if (tile->_sector.touchesPoles()){
-      if (tile->_level >= _maxLevelForPoles){
+      if (tile->_level >= _maxLevelForPoles && _maxLevelForPoles > -1){
         return true;
       }
     }
@@ -41,6 +42,16 @@ protected:
   
   int _maxLevelForPoles;
   int _maxLevel;
+  
+  void _onLayerTilesRenderParametersChanged(const LayerTilesRenderParameters* ltrp){
+    if (ltrp != NULL){
+      _maxLevel = ltrp->_maxLevel;
+      _maxLevelForPoles = ltrp->_maxLevelForPoles;
+    } else{
+      _maxLevel = -1;
+      _maxLevelForPoles = -1;
+    }
+  }
   
 public:
   

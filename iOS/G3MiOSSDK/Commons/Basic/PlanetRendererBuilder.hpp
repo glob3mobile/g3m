@@ -88,7 +88,7 @@ private:
   
   IImageBuilder* getDefaultTileBackGroundImageBuilder() const;
   
-  TileLODTester* createDefaultTileLODTester() const;
+  TileLODTester* createDefaultTileLODTester();
 
 public:
   PlanetRendererBuilder();

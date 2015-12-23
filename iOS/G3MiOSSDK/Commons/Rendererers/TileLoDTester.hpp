@@ -39,6 +39,9 @@ public:
   virtual bool isVisible(int testerLevel, Tile* tile, const G3MRenderContext& rc) const = 0;
   
   virtual void onTileHasChangedMesh(int testerLevel, Tile* tile) const = 0;
+  
+  virtual void onLayerTilesRenderParametersChanged(const LayerTilesRenderParameters* ltrp) = 0;
+  
 };
 
 class TileLODTesterResponder: public TileLODTester{
@@ -60,6 +63,8 @@ protected:
   
   virtual void _onTileHasChangedMesh(int testerLevel, Tile* tile) const{}
   
+  virtual void _onLayerTilesRenderParametersChanged(const LayerTilesRenderParameters* ltrp) = 0;
+  
 public:
   
   TileLODTesterResponder(TileLODTester* nextTesterRightLoD,
@@ -80,7 +85,9 @@ public:
   
   bool isVisible(int testerLevel, Tile* tile, const G3MRenderContext& rc) const;
   
-  virtual void onTileHasChangedMesh(int testerLevel, Tile* tile) const;
+  void onTileHasChangedMesh(int testerLevel, Tile* tile) const;
+  
+  void onLayerTilesRenderParametersChanged(const LayerTilesRenderParameters* ltrp);
 };
 
 #endif /* TileLODTester_hpp */

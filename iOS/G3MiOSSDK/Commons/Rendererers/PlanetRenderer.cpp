@@ -32,10 +32,6 @@
 #include "Layer.hpp"
 #include <algorithm>
 
-#include "MaxLevelTileLODTester.hpp"
-#include "ProjectedCornersDistanceTileLODTester.hpp"
-#include "TimedTileLODTester.hpp"
-#include "MaxFrameTimeTileLODTester.hpp"
 
 class VisibleSectorListenerEntry {
 private:
@@ -170,6 +166,10 @@ _tileLoDTester(tileLoDTester)
   }
   
   _rendererIdentifier = -1;
+  
+  if (_tileLoDTester == NULL){
+    THROW_EXCEPTION("Null TileLoDTester provided to PlanetRenderer");
+  }
 }
 
 void PlanetRenderer::recreateTiles() {
@@ -371,6 +371,8 @@ const LayerTilesRenderParameters* PlanetRenderer::getLayerTilesRenderParameters(
       ILogger::instance()->logError("LayerSet returned a NULL for LayerTilesRenderParameters, can't render planet");
     }
     _layerTilesRenderParametersDirty = false;
+    
+    _tileLoDTester->onLayerTilesRenderParametersChanged(_layerTilesRenderParameters);
   }
   return _layerTilesRenderParameters;
 }
@@ -631,11 +633,6 @@ void PlanetRenderer::render(const G3MRenderContext* rc,
   const LayerTilesRenderParameters* layerTilesRenderParameters = getLayerTilesRenderParameters();
   if (layerTilesRenderParameters == NULL) {
     return;
-  }
-  
-  //Init _tileLoDTester
-  if (_tileLoDTester == NULL){
-    _tileLoDTester = createDefaultTileLODTester();
   }
   
   updateGLState(rc);
@@ -973,39 +970,39 @@ void PlanetRenderer::setChangedRendererInfoListener(ChangedRendererInfoListener*
 //  return _info;
 //}
 
-TileLODTester* PlanetRenderer::createDefaultTileLODTester(){
-  
-  //  TileLODTester(TileLODTester* nextTesterRightLoD,
-  //                TileLODTester* nextTesterWrongLoD,
-  //                TileLODTester* nextTesterVisible,
-  //                TileLODTester* nextTesterNotVisible)
-  
-  //3
-  ProjectedCornersDistanceTileLODTester* proj =
-        new ProjectedCornersDistanceTileLODTester(getLayerTilesRenderParameters()->_tileTextureResolution._x,
-                                                  getLayerTilesRenderParameters()->_tileTextureResolution._y,
-                                                  NULL,
-                                                  NULL,
-                                                  NULL,
-                                                  NULL);
-  
-  //2
-  MaxLevelTileLODTester* poles = new MaxLevelTileLODTester(getLayerTilesRenderParameters()->_maxLevel,
-                                                           getLayerTilesRenderParameters()->_maxLevelForPoles,
-                                                                           NULL,
-                                                                           proj,
-                                                                           proj,
-                                                                           proj);
-  //1
-  MaxFrameTimeTileLODTester* frameTime = new MaxFrameTimeTileLODTester(TimeInterval::fromSeconds((double)1 / 60.0),
-                                                                       poles);
-  
-  //0
-  TimedTileLODTester* timed = new TimedTileLODTester(TimeInterval::fromMilliseconds(250),
-                                                     frameTime);
-  
-  
-  return timed;
-  
-}
+//TileLODTester* PlanetRenderer::createDefaultTileLODTester(){
+//  
+//  //  TileLODTester(TileLODTester* nextTesterRightLoD,
+//  //                TileLODTester* nextTesterWrongLoD,
+//  //                TileLODTester* nextTesterVisible,
+//  //                TileLODTester* nextTesterNotVisible)
+//  
+//  //3
+//  ProjectedCornersDistanceTileLODTester* proj =
+//        new ProjectedCornersDistanceTileLODTester(getLayerTilesRenderParameters()->_tileTextureResolution._x,
+//                                                  getLayerTilesRenderParameters()->_tileTextureResolution._y,
+//                                                  NULL,
+//                                                  NULL,
+//                                                  NULL,
+//                                                  NULL);
+//  
+//  //2
+//  MaxLevelTileLODTester* poles = new MaxLevelTileLODTester(getLayerTilesRenderParameters()->_maxLevel,
+//                                                           getLayerTilesRenderParameters()->_maxLevelForPoles,
+//                                                                           NULL,
+//                                                                           proj,
+//                                                                           proj,
+//                                                                           proj);
+//  //1
+//  MaxFrameTimeTileLODTester* frameTime = new MaxFrameTimeTileLODTester(TimeInterval::fromSeconds((double)1 / 60.0),
+//                                                                       poles);
+//  
+//  //0
+//  TimedTileLODTester* timed = new TimedTileLODTester(TimeInterval::fromMilliseconds(250),
+//                                                     frameTime);
+//  
+//  
+//  return timed;
+//  
+//}
 

@@ -49,22 +49,33 @@ public:
     if (data == NULL){
       data = new TimedTileLODTesterData(now);
       tile->setDataForLoDTester(testerLevel, data);
-      data->_lastMeetsRenderCriteriaResult = _nextTester->meetsRenderCriteria(testerLevel+1, tile, rc);
+      data->_lastMeetsRenderCriteriaResult = (_nextTester == NULL)? true : _nextTester->meetsRenderCriteria(testerLevel+1, tile, rc);
     }
     
     if ((now - data->_lastMeetsRenderCriteriaTimeInMS) > _timeInMs){
-      data->_lastMeetsRenderCriteriaResult = _nextTester->meetsRenderCriteria(testerLevel+1, tile, rc);
+      data->_lastMeetsRenderCriteriaResult = (_nextTester == NULL)? true : _nextTester->meetsRenderCriteria(testerLevel+1, tile, rc);
     }
     
     return data->_lastMeetsRenderCriteriaResult;
   }
   
   virtual bool isVisible(int testerLevel, Tile* tile, const G3MRenderContext& rc) const{
+    if (_nextTester == NULL){
+      return true;
+    }
     return _nextTester->isVisible(testerLevel+1, tile, rc);
   }
   
   virtual void onTileHasChangedMesh(int testerLevel, Tile* tile) const{
-    _nextTester->onTileHasChangedMesh(testerLevel+1, tile);
+    if (_nextTester != NULL){
+      _nextTester->onTileHasChangedMesh(testerLevel+1, tile);
+    }
+  }
+  
+  void onLayerTilesRenderParametersChanged(const LayerTilesRenderParameters* ltrp){
+    if (_nextTester != NULL){
+      _nextTester->onLayerTilesRenderParametersChanged(ltrp);
+    }
   }
   
 };
