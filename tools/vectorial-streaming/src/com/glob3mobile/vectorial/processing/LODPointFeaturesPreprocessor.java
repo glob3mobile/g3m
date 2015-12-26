@@ -135,17 +135,38 @@ public class LODPointFeaturesPreprocessor {
       // final String sourceName = "Cities1000";
       // final String sourceName = "AR";
       // final String sourceName = "ES";
-      //  final String sourceName = "GEONames-PopulatedPlaces";
+      final String sourceName = "GEONames-PopulatedPlaces";
       //      final String sourceName = "SpanishBars";
-      final String sourceName = "Tornados";
+      //      final String sourceName = "Tornados";
 
       final File lodDir = new File("PointFeaturesLOD");
       final String lodName = sourceName + "_LOD";
 
-      final int maxFeaturesPerNode = 64;
+      final int maxFeaturesPerNode = 32;
       // final int maxFeaturesPerNode = 96;
 
-      final boolean createClusters = true;
+      // final int maxFeaturesPerNode = 64;
+      //       --------------------------------------------------------------
+      //       Storage: GEONames-PopulatedPlaces_LOD
+      //        Features: 352787
+      //        Nodes Count: 17578
+      //        Clusters/Node: min=0, max=0, avg=0.0
+      //        Features/Node: min=0, max=64, avg=20.069803
+      //        Node Depth: min=0, max=14, avg=9.993059
+      //      --------------------------------------------------------------
+
+      // final int maxFeaturesPerNode = 32;
+      //      --------------------------------------------------------------
+      //      Storage: GEONames-PopulatedPlaces_LOD
+      //       Features: 352787
+      //       Nodes Count: 32973
+      //       Clusters/Node: min=0, max=0, avg=0.0
+      //       Features/Node: min=0, max=32, avg=10.699269
+      //       Node Depth: min=0, max=16, avg=10.546326
+      //     --------------------------------------------------------------
+
+
+      final boolean createClusters = false;
       final Comparator<PointFeature> featuresComparator = createClusters ? null : new GEONamesComparator();
 
 
