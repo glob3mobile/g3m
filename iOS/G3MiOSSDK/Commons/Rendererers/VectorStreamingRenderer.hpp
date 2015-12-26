@@ -97,19 +97,16 @@ public:
     Node*               _node;
     bool                _verbose;
     IByteBuffer*        _buffer;
-    const IThreadUtils* _threadUtils;
 
     std::vector<Node*>* _children;
 
   public:
-    ChildrenParserAsyncTask(Node*               node,
-                            bool                verbose,
-                            IByteBuffer*        buffer,
-                            const IThreadUtils* threadUtils) :
+    ChildrenParserAsyncTask(Node*        node,
+                            bool         verbose,
+                            IByteBuffer* buffer) :
     _node(node),
     _verbose(verbose),
     _buffer(buffer),
-    _threadUtils(threadUtils),
     _children(NULL)
     {
       _node->_retain();
@@ -170,7 +167,6 @@ public:
     Node*               _node;
     bool                _verbose;
     IByteBuffer*        _buffer;
-    const IThreadUtils* _threadUtils;
 
     std::vector<Cluster*>* _clusters;
     GEOObject*             _features;
@@ -181,14 +177,12 @@ public:
     std::vector<Node*>*    parseChildren(const JSONBaseObject* jsonBaseObject);
 
   public:
-    FeaturesParserAsyncTask(Node*               node,
-                            bool                verbose,
-                            IByteBuffer*        buffer,
-                            const IThreadUtils* threadUtils) :
+    FeaturesParserAsyncTask(Node*        node,
+                            bool         verbose,
+                            IByteBuffer* buffer) :
     _node(node),
     _verbose(verbose),
     _buffer(buffer),
-    _threadUtils(threadUtils),
     _clusters(NULL),
     _features(NULL),
     _children(NULL)

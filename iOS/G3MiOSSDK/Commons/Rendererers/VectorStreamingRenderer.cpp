@@ -81,7 +81,7 @@ void VectorStreamingRenderer::NodeChildrenDownloadListener::onDownload(const URL
 #endif
   }
 
-  _threadUtils->invokeAsyncTask(new ChildrenParserAsyncTask(_node, _verbose, buffer, _threadUtils),
+  _threadUtils->invokeAsyncTask(new ChildrenParserAsyncTask(_node, _verbose, buffer),
                                 true);
 }
 
@@ -208,7 +208,7 @@ void VectorStreamingRenderer::NodeFeaturesDownloadListener::onDownload(const URL
 #endif
   }
 
-  _threadUtils->invokeAsyncTask(new FeaturesParserAsyncTask(_node, _verbose, buffer, _threadUtils),
+  _threadUtils->invokeAsyncTask(new FeaturesParserAsyncTask(_node, _verbose, buffer),
                                 true);
 }
 
