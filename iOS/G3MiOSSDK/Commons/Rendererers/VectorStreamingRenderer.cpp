@@ -1024,7 +1024,6 @@ VectorStreamingRenderer::~VectorStreamingRenderer() {
   }
 
   _glState->_release();
-  //  delete _timer;
 
 #ifdef JAVA_CODE
   super.dispose();

@@ -584,10 +584,6 @@ public:
     const URL getNodeChildrenURL(const std::string& nodeID,
                                  const std::vector<std::string>& childrenIDs) const;
 
-//    const URL getServerURL() const {
-//      return _serverURL;
-//    }
-
     const std::string getName() const {
       return _name;
     }
@@ -603,10 +599,6 @@ public:
     bool getReadExpired() const {
       return _readExpired;
     }
-
-//    const std::string getProperties() const {
-//      return _properties;
-//    }
 
     void initialize(const G3MContext* context);
 
