@@ -4,9 +4,6 @@ package com.glob3mobile.vectorial.processing;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 import com.glob3mobile.json.JSONUtils;
 import com.glob3mobile.utils.IOUtils;
@@ -62,8 +59,8 @@ public class LODPointFeaturesOffline {
                //               throw new RuntimeException();
 
                try {
-                  saveNodeFeatures(target, node, properties);
-                  saveNodeChildrenMetadata(target, node, lodStorage);
+                  saveNodeFeatures(target, node, properties, lodStorage);
+                  //                  saveNodeChildrenMetadata(target, node, lodStorage);
                }
                catch (final IOException e) {
                   throw new RuntimeException(e);
@@ -84,29 +81,30 @@ public class LODPointFeaturesOffline {
    }
 
 
-   private static void saveNodeChildrenMetadata(final File target,
-                                                final PointFeatureLODStorage.Node node,
-                                                final PointFeatureLODStorage lodStorage) throws IOException {
-      final List<String> childrenIDs = node.getChildrenIDs();
-
-      final List<Map<String, Object>> childrenMetadataJSON = new ArrayList<>(childrenIDs.size());
-
-      for (final String childID : childrenIDs) {
-         final PointFeatureLODStorage.Node child = lodStorage.getNode(childID);
-         childrenMetadataJSON.add(JSON.toJSON(child));
-      }
-
-      final File file = new File(target, toNodesDirectories(node.getID()) + "children.json");
-      final String childrenMetadata = JSONUtils.toJSON(childrenMetadataJSON);
-      IOUtils.save(file, childrenMetadata);
-   }
+   //   private static void saveNodeChildrenMetadata(final File target,
+   //                                                final PointFeatureLODStorage.Node node,
+   //                                                final PointFeatureLODStorage lodStorage) throws IOException {
+   //      final List<String> childrenIDs = node.getChildrenIDs();
+   //
+   //      final List<Map<String, Object>> childrenMetadataJSON = new ArrayList<>(childrenIDs.size());
+   //
+   //      for (final String childID : childrenIDs) {
+   //         final PointFeatureLODStorage.Node child = lodStorage.getNode(childID);
+   //         childrenMetadataJSON.add(JSON.toJSON(child));
+   //      }
+   //
+   //      final File file = new File(target, toNodesDirectories(node.getID()) + "children.json");
+   //      final String childrenMetadata = JSONUtils.toJSON(childrenMetadataJSON);
+   //      IOUtils.save(file, childrenMetadata);
+   //   }
 
 
    private static void saveNodeFeatures(final File target,
                                         final PointFeatureLODStorage.Node node,
-                                        final String[] properties) throws IOException {
+                                        final String[] properties,
+                                        final PointFeatureLODStorage lodStorage) throws IOException {
       final File file = new File(target, toNodesDirectories(node.getID()) + "features.json");
-      final String features = JSONUtils.toJSON(JSON.toGEOJSON(node, properties));
+      final String features = JSONUtils.toJSON(JSON.toGEOJSON(node, properties, true, lodStorage));
       IOUtils.save(file, features);
    }
 
@@ -125,7 +123,7 @@ public class LODPointFeaturesOffline {
 
    private static void saveLODMetadata(final PointFeatureLODStorage lodStorage,
                                        final File target) throws IOException {
-      final String metadata = JSONUtils.toJSON(JSON.getMetadataAsJSON(lodStorage));
+      final String metadata = JSONUtils.toJSON(JSON.getMetadataAsJSON(lodStorage, true));
       IOUtils.save(new File(target, "metadata.json"), metadata);
    }
 

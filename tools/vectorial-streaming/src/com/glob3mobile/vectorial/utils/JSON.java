@@ -19,7 +19,8 @@ public class JSON {
    }
 
 
-   public static Map<String, Object> getMetadataAsJSON(final PointFeatureLODStorage lodStorage) {
+   public static Map<String, Object> getMetadataAsJSON(final PointFeatureLODStorage lodStorage,
+                                                       final boolean includeChildren) {
       final PointFeatureLODStorage.Statistics statistics = lodStorage.getStatistics(false);
       final Map<String, Object> result = new LinkedHashMap<>();
       result.put("name", lodStorage.getName());
@@ -30,34 +31,53 @@ public class JSON {
       final int minNodeDepth = statistics.getMinNodeDepth();
       result.put("minNodeDepth", minNodeDepth);
       result.put("maxNodeDepth", statistics.getMaxNodeDepth());
-      result.put("rootNodes", toNodesJSON(lodStorage.getAllNodesOfDepth(minNodeDepth)));
+      result.put("rootNodes", toNodesJSON(lodStorage.getAllNodesOfDepth(minNodeDepth), includeChildren, lodStorage));
       return result;
    }
 
 
-   private static List<Map<String, Object>> toNodesJSON(final List<PointFeatureLODStorage.Node> nodes) {
+   private static List<Map<String, Object>> toNodesJSON(final List<PointFeatureLODStorage.Node> nodes,
+                                                        final boolean includeChildren,
+                                                        final PointFeatureLODStorage lodStorage) {
       final List<Map<String, Object>> result = new ArrayList<>(nodes.size());
       for (final PointFeatureLODStorage.Node node : nodes) {
-         result.add(toJSON(node));
+         result.add(toJSON(node, includeChildren, lodStorage));
       }
       return result;
    }
 
 
-   public static Map<String, Object> toJSON(final PointFeatureLODStorage.Node node) {
+   public static Map<String, Object> toJSON(final PointFeatureLODStorage.Node node,
+                                            final boolean includeChildren,
+                                            final PointFeatureLODStorage lodStorage) {
       final Map<String, Object> result = new LinkedHashMap<>();
       result.put("id", node.getID());
       result.put("nodeSector", GEOJSONUtils.toJSON(node.getNodeSector()));
       result.put("minimumSector", GEOJSONUtils.toJSON(node.getMinimumSector()));
       result.put("clustersCount", node.getClustersCount());
       result.put("featuresCount", node.getFeaturesCount());
-      result.put("children", node.getChildrenIDs());
+      if (includeChildren) {
+         final List<String> childrenIDs = node.getChildrenIDs();
+
+         final List<Map<String, Object>> childrenMetadataJSON = new ArrayList<>(childrenIDs.size());
+
+         for (final String childID : childrenIDs) {
+            final PointFeatureLODStorage.Node child = lodStorage.getNode(childID);
+            childrenMetadataJSON.add(JSON.toJSON(child, false, null));
+         }
+         result.put("children", childrenMetadataJSON);
+      }
+      else {
+         result.put("children", node.getChildrenIDs());
+      }
       return result;
    }
 
 
    public static Map<String, Object> toGEOJSON(final PointFeatureLODStorage.Node node,
-                                               final String[] properties) {
+                                               final String[] properties,
+                                               final boolean includeChildren,
+                                               final PointFeatureLODStorage lodStorage) {
       final Map<String, Object> result = new LinkedHashMap<>();
 
       result.put("clusters", toJSONClusters(node.getClusters()));
@@ -66,6 +86,18 @@ public class JSON {
       features.put("type", "FeatureCollection");
       features.put("features", toGEOJSONFeatures(node.getFeatures(), properties));
       result.put("features", features);
+
+      if (includeChildren) {
+         final List<String> childrenIDs = node.getChildrenIDs();
+
+         final List<Map<String, Object>> childrenMetadataJSON = new ArrayList<>(childrenIDs.size());
+
+         for (final String childID : childrenIDs) {
+            final PointFeatureLODStorage.Node child = lodStorage.getNode(childID);
+            childrenMetadataJSON.add(JSON.toJSON(child, false, null));
+         }
+         result.put("children", childrenMetadataJSON);
+      }
 
       return result;
    }

@@ -25,6 +25,7 @@ class IThreadUtils;
 class IByteBuffer;
 class Sector;
 class Geodetic2D;
+class JSONBaseObject;
 class JSONArray;
 class JSONObject;
 class Mark;
@@ -173,9 +174,11 @@ public:
 
     std::vector<Cluster*>* _clusters;
     GEOObject*             _features;
+    std::vector<Node*>*    _children;
 
   private:
     std::vector<Cluster*>* parseClusters(const JSONArray* clustersJson);
+    std::vector<Node*>*    parseChildren(const JSONBaseObject* jsonBaseObject);
 
   public:
     FeaturesParserAsyncTask(Node*               node,
@@ -187,7 +190,8 @@ public:
     _buffer(buffer),
     _threadUtils(threadUtils),
     _clusters(NULL),
-    _features(NULL)
+    _features(NULL),
+    _children(NULL)
     {
       _node->_retain();
     }
@@ -327,6 +331,8 @@ public:
 
     void createClusterMarks();
 
+    void setParent(Node* parent);
+
   protected:
     ~Node();
 
@@ -339,36 +345,8 @@ public:
          const int                       clustersCount,
          const int                       featuresCount,
          const std::vector<std::string>& childrenIDs,
-         const bool                      verbose) :
-    _vectorSet(vectorSet),
-    _parent(parent),
-    _id(id),
-    _nodeSector(nodeSector),
-    _minimumSector(minimumSector),
-    _clustersCount(clustersCount),
-    _featuresCount(featuresCount),
-    _childrenIDs(childrenIDs),
-    _verbose(verbose),
-    _wasVisible(false),
-    _loadedFeatures(false),
-    _loadingFeatures(false),
-    _children(NULL),
-    _childrenSize(0),
-    _loadingChildren(false),
-    _wasBigEnough(false),
-    _boundingVolume(NULL),
-    _featuresRequestID(-1),
-    _childrenRequestID(-1),
-    _downloader(NULL),
-    _clusters(NULL),
-    _features(NULL),
-    _clusterMarksCount(0),
-    _featureMarksCount(0)
-    {
-      if (_parent != NULL) {
-        _parent->_retain();
-      }
-    }
+         std::vector<Node*>*             children,
+         const bool                      verbose);
 
     const VectorSet* getVectorSet() const {
       return _vectorSet;
@@ -397,14 +375,13 @@ public:
 
     void parsedFeatures(std::vector<Cluster*>* clusters,
                         GEOObject*             features,
-                        const IThreadUtils*    threadUtils);
+                        std::vector<Node*>*    children);
 
     void errorDownloadingChildren() {
       // do nothing by now
     }
 
-    void parsedChildren(std::vector<Node*>* children,
-                        const IThreadUtils* threadUtils);
+    void parsedChildren(std::vector<Node*>* children);
 
   };
 
