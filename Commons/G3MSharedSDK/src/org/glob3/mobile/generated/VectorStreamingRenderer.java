@@ -1251,10 +1251,6 @@ public class VectorStreamingRenderer extends DefaultRenderer
       return new URL(_serverURL, _name + "/" + toNodesDirectories(nodeID) + "/children.json");
     }
 
-//    const URL getServerURL() const {
-//      return _serverURL;
-//    }
-
     public final String getName()
     {
       return _name;
@@ -1274,10 +1270,6 @@ public class VectorStreamingRenderer extends DefaultRenderer
     {
       return _readExpired;
     }
-
-//    const std::string getProperties() const {
-//      return _properties;
-//    }
 
     public final void initialize(G3MContext context)
     {
@@ -1462,7 +1454,6 @@ public class VectorStreamingRenderer extends DefaultRenderer
     }
   
     _glState._release();
-    //  delete _timer;
   
     super.dispose();
   }
