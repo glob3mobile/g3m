@@ -159,16 +159,14 @@ public class VectorStreamingRenderer extends DefaultRenderer
     private Node _node;
     private boolean _verbose;
     private IByteBuffer _buffer;
-    private final IThreadUtils _threadUtils;
 
     private java.util.ArrayList<Node> _children;
 
-    public ChildrenParserAsyncTask(Node node, boolean verbose, IByteBuffer buffer, IThreadUtils threadUtils)
+    public ChildrenParserAsyncTask(Node node, boolean verbose, IByteBuffer buffer)
     {
        _node = node;
        _verbose = verbose;
        _buffer = buffer;
-       _threadUtils = threadUtils;
        _children = null;
       _node._retain();
     }
@@ -256,7 +254,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
                                    buffer.size());
       }
     
-      _threadUtils.invokeAsyncTask(new ChildrenParserAsyncTask(_node, _verbose, buffer, _threadUtils), true);
+      _threadUtils.invokeAsyncTask(new ChildrenParserAsyncTask(_node, _verbose, buffer), true);
     }
 
     public final void onError(URL url)
@@ -283,7 +281,6 @@ public class VectorStreamingRenderer extends DefaultRenderer
     private Node _node;
     private boolean _verbose;
     private IByteBuffer _buffer;
-    private final IThreadUtils _threadUtils;
 
     private java.util.ArrayList<Cluster> _clusters;
     private GEOObject _features;
@@ -332,12 +329,11 @@ public class VectorStreamingRenderer extends DefaultRenderer
       return result;
     }
 
-    public FeaturesParserAsyncTask(Node node, boolean verbose, IByteBuffer buffer, IThreadUtils threadUtils)
+    public FeaturesParserAsyncTask(Node node, boolean verbose, IByteBuffer buffer)
     {
        _node = node;
        _verbose = verbose;
        _buffer = buffer;
-       _threadUtils = threadUtils;
        _clusters = null;
        _features = null;
        _children = null;
@@ -439,7 +435,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
                                    buffer.size());
       }
     
-      _threadUtils.invokeAsyncTask(new FeaturesParserAsyncTask(_node, _verbose, buffer, _threadUtils), true);
+      _threadUtils.invokeAsyncTask(new FeaturesParserAsyncTask(_node, _verbose, buffer), true);
     }
 
     public final void onError(URL url)
