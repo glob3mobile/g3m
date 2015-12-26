@@ -516,8 +516,6 @@ public class VectorStreamingRenderer extends DefaultRenderer
     private long _featuresRequestID;
     private void loadFeatures(G3MRenderContext rc)
     {
-      final URL featuresURL = _vectorSet.getNodeFeaturesURL(_id);
-    
       //  if (_verbose) {
       //    ILogger::instance()->logInfo("\"%s\": Downloading features for node \'%s\'",
       //                                 _vectorSet->getName().c_str(),
@@ -525,7 +523,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
       //  }
     
       _downloader = rc.getDownloader();
-      _featuresRequestID = _downloader.requestBuffer(featuresURL, _vectorSet.getDownloadPriority() + _featuresCount + _clustersCount, _vectorSet.getTimeToCache(), _vectorSet.getReadExpired(), new NodeFeaturesDownloadListener(this, rc.getThreadUtils(), _verbose), true);
+      _featuresRequestID = _downloader.requestBuffer(_vectorSet.getNodeFeaturesURL(_id), _vectorSet.getDownloadPriority() + _featuresCount + _clustersCount, _vectorSet.getTimeToCache(), _vectorSet.getReadExpired(), new NodeFeaturesDownloadListener(this, rc.getThreadUtils(), _verbose), true);
     }
     private void unloadFeatures()
     {
@@ -567,12 +565,6 @@ public class VectorStreamingRenderer extends DefaultRenderer
         parsedChildren(children, rc.getThreadUtils());
         return;
       }
-    
-    
-    //  const URL childrenURL(_vectorSet->getServerURL(),
-    //                        _vectorSet->getName() +
-    //                        "?nodes=" + nodes,
-    //                        true);
     
       //  if (_verbose) {
       //    ILogger::instance()->logInfo("\"%s\": Downloading children for node \'%s\'",
@@ -1292,8 +1284,6 @@ public class VectorStreamingRenderer extends DefaultRenderer
       _downloadingMetadata = true;
       _errorDownloadingMetadata = false;
       _errorParsingMetadata = false;
-    
-    //  const URL metadataURL(_serverURL, _name);
     
       if (_verbose)
       {
