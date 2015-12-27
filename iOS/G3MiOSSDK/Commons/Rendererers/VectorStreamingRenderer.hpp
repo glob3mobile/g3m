@@ -458,9 +458,11 @@ public:
   public:
     virtual ~VectorSetSymbolizer() { }
 
-    virtual Mark* createFeatureMark(const GEO2DPointGeometry* geometry) const = 0;
+    virtual Mark* createFeatureMark(const VectorStreamingRenderer::Node* node,
+                                    const GEO2DPointGeometry* geometry) const = 0;
 
-    virtual Mark* createClusterMark(const VectorStreamingRenderer::Cluster* cluster,
+    virtual Mark* createClusterMark(const VectorStreamingRenderer::Node* node,
+                                    const VectorStreamingRenderer::Cluster* cluster,
                                     long long featuresCount) const = 0;
 
   };

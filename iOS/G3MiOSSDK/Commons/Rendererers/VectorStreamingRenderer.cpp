@@ -1092,7 +1092,9 @@ long long VectorStreamingRenderer::VectorSet::createClusterMarks(const Node* nod
     for (size_t i = 0; i < clustersCount; i++) {
       const Cluster* cluster = clusters->at(i);
       if (cluster != NULL) {
-        Mark* mark = _symbolizer->createClusterMark(cluster, _featuresCount);
+        Mark* mark = _symbolizer->createClusterMark(node,
+                                                    cluster,
+                                                    _featuresCount);
         if (mark != NULL) {
           mark->setToken( node->getClusterMarkToken() );
           _renderer->getMarkRenderer()->addMark( mark );
@@ -1108,7 +1110,8 @@ long long VectorStreamingRenderer::VectorSet::createClusterMarks(const Node* nod
 
 long long VectorStreamingRenderer::VectorSet::createFeatureMark(const Node* node,
                                                                 const GEO2DPointGeometry* geometry) const {
-  Mark* mark = _symbolizer->createFeatureMark(geometry);
+  Mark* mark = _symbolizer->createFeatureMark(node,
+                                              geometry);
   if (mark == NULL) {
     return 0;
   }
