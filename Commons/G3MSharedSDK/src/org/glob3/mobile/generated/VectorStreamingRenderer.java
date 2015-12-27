@@ -1183,9 +1183,9 @@ public class VectorStreamingRenderer extends DefaultRenderer
     {
     }
 
-    public abstract Mark createFeatureMark(GEO2DPointGeometry geometry);
+    public abstract Mark createFeatureMark(VectorStreamingRenderer.Node node, GEO2DPointGeometry geometry);
 
-    public abstract Mark createClusterMark(VectorStreamingRenderer.Cluster cluster, long featuresCount);
+    public abstract Mark createClusterMark(VectorStreamingRenderer.Node node, VectorStreamingRenderer.Cluster cluster, long featuresCount);
 
   }
 
@@ -1443,7 +1443,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
 
     public final long createFeatureMark(Node node, GEO2DPointGeometry geometry)
     {
-      Mark mark = _symbolizer.createFeatureMark(geometry);
+      Mark mark = _symbolizer.createFeatureMark(node, geometry);
       if (mark == null)
       {
         return 0;
@@ -1465,7 +1465,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
           final Cluster cluster = clusters.get(i);
           if (cluster != null)
           {
-            Mark mark = _symbolizer.createClusterMark(cluster, _featuresCount);
+            Mark mark = _symbolizer.createClusterMark(node, cluster, _featuresCount);
             if (mark != null)
             {
               mark.setToken(node.getClusterMarkToken());
