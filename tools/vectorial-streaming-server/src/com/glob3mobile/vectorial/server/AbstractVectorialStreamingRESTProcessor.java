@@ -25,7 +25,7 @@ import com.glob3mobile.server.rest.RESTPath;
 import com.glob3mobile.server.rest.RESTResponse;
 import com.glob3mobile.vectorial.lod.PointFeatureLODStorage;
 import com.glob3mobile.vectorial.lod.mapdb.PointFeatureLODMapDBStorage;
-import com.glob3mobile.vectorial.server.utils.JSON;
+import com.glob3mobile.vectorial.utils.JSON;
 
 
 public abstract class AbstractVectorialStreamingRESTProcessor
@@ -115,7 +115,7 @@ public abstract class AbstractVectorialStreamingRESTProcessor
          if (node == null) {
             throw new RESTJSONErrorException(SC_OK, NOT_FOUND, "node: \'" + nodeID + "\'");
          }
-         return new RESTJSONResponse(JSON.toGEOJSON(node, properties));
+         return new RESTJSONResponse(JSON.toGEOJSON(node, properties, true, lodStorage));
       }
       catch (final IOException e) {
          throw new RESTJSONErrorException(SC_OK, NOT_FOUND, lodName);
@@ -124,7 +124,7 @@ public abstract class AbstractVectorialStreamingRESTProcessor
 
 
    private static RESTResponse sendLODMetadata(final PointFeatureLODStorage lodStorage) {
-      return new RESTJSONResponse(JSON.getMetadataAsJSON(lodStorage));
+      return new RESTJSONResponse(JSON.getMetadataAsJSON(lodStorage, true));
    }
 
 
@@ -134,7 +134,7 @@ public abstract class AbstractVectorialStreamingRESTProcessor
       if (node == null) {
          throw new RESTJSONErrorException(SC_OK, NOT_FOUND, "node: \'" + nodeID + "\'");
       }
-      return new RESTJSONResponse(JSON.toJSON(node));
+      return new RESTJSONResponse(JSON.toJSON(node, true, lodStorage));
    }
 
 
@@ -149,7 +149,7 @@ public abstract class AbstractVectorialStreamingRESTProcessor
          if (node == null) {
             throw new RESTJSONErrorException(SC_OK, NOT_FOUND, "node: \'" + nodeID + "\'");
          }
-         nodesJSON.add(JSON.toJSON(node));
+         nodesJSON.add(JSON.toJSON(node, false, null));
       }
 
       return new RESTJSONResponse(nodesJSON);

@@ -191,9 +191,11 @@ public:
                const VectorStreamingRenderer::VectorSetSymbolizer* symbolizer,
                const bool                                          deleteSymbolizer) const;
 
-    Mark* createFeatureMark(const GEO2DPointGeometry* geometry) const;
+    Mark* createFeatureMark(const VectorStreamingRenderer::Node* node,
+                            const GEO2DPointGeometry* geometry) const;
 
-    Mark* createClusterMark(const VectorStreamingRenderer::Cluster* cluster,
+    Mark* createClusterMark(const VectorStreamingRenderer::Node* node,
+                            const VectorStreamingRenderer::Cluster* cluster,
                             long long featuresCount) const;
 
   };
@@ -247,9 +249,11 @@ public:
 
     ~MBDatasetVectorSetSymbolizer();
 
-    Mark* createFeatureMark(const GEO2DPointGeometry* geometry) const;
+    Mark* createFeatureMark(const VectorStreamingRenderer::Node* node,
+                            const GEO2DPointGeometry* geometry) const;
 
-    Mark* createClusterMark(const VectorStreamingRenderer::Cluster* cluster,
+    Mark* createClusterMark(const VectorStreamingRenderer::Node* node,
+                            const VectorStreamingRenderer::Cluster* cluster,
                             long long featuresCount) const;
 
   };
