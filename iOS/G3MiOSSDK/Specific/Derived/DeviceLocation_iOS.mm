@@ -72,9 +72,8 @@ DeviceLocation_iOS::DeviceLocation_iOS(){
   _isTracking = false;
 }
 
-bool DeviceLocation_iOS::startTrackingLocation(){  
-  [_delegate startTrackingLocation];
-  _isTracking = true;
+bool DeviceLocation_iOS::startTrackingLocation(){
+  _isTracking = [_delegate startTrackingLocation];
   return _isTracking;
 }
 
