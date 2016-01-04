@@ -156,7 +156,7 @@ public class Vector2D
   public static Vector2D intersectionOfTwoLines(Vector2D p1, Vector2D r1, Vector2D p2, Vector2D r2)
   {
   
-    //u = (p2 − p1) × r1 / (r1 × r2)
+    //u = (p2 - p1) × r1 / (r1 × r2)
     //out = p2 + u x r2
   
     double u = ((p2.sub(p1)).dot(r1)) / r1.dot(r2);
