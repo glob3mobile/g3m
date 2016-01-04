@@ -211,7 +211,7 @@ public:
     _force.add(x, y);
   }
 
-  void updatePositionWithCurrentForce(float timeInSeconds,
+  double updatePositionWithCurrentForce(float timeInSeconds,
                                       int viewportWidth,
                                       int viewportHeight,
                                       float viewportMargin);
@@ -241,11 +241,23 @@ public:
   virtual void onVisibilityChange(const std::vector<NonOverlappingMark*>& visible) = 0;
 };
 
+class NonOverlappingMarksStoppedListener {
+public:
+  virtual ~NonOverlappingMarksStoppedListener() {
+  }
+  
+  virtual void onMarksStopped(const G3MRenderContext& rc, const std::vector<NonOverlappingMark*>& visible) = 0;
+};
+
 
 class NonOverlappingMarksRenderer: public DefaultRenderer {
 private:
   const size_t _maxVisibleMarks;
   const float  _viewportMargin;
+  const double _minDistanceForMovement;
+  
+  long long _lastRunningCameraTimeStamp;
+  bool _stopped;
 
   std::vector<NonOverlappingMark*> _marks;
 
@@ -254,6 +266,7 @@ private:
   std::string     _visibleMarksIDs;
 
   std::vector<NonOverlappingMarksVisibilityListener*> _visibilityListeners;
+  std::vector<NonOverlappingMarksStoppedListener*> _stoppedListeners;
 
   NonOverlappingMarkTouchListener* _touchListener;
 
@@ -265,11 +278,12 @@ private:
   void computeForces(const Camera* camera, const Planet* planet);
   void renderMarks(const G3MRenderContext* rc,
                    GLState* glState);
-  void applyForces(long long now, const Camera* camera);
+  double applyForces(long long now, const Camera* camera);
 
 public:
   NonOverlappingMarksRenderer(size_t maxVisibleMarks,
-                              float viewportMargin = 5);
+                              float viewportMargin = 5,
+                              double minDistanceForMovement = 0.5);
 
   ~NonOverlappingMarksRenderer();
 
@@ -279,6 +293,10 @@ public:
 
   void addVisibilityListener(NonOverlappingMarksVisibilityListener* listener) {
     _visibilityListeners.push_back(listener);
+  }
+  
+  void addStoppedListener(NonOverlappingMarksStoppedListener* listener) {
+    _stoppedListeners.push_back(listener);
   }
 
   void removeAllListeners();
