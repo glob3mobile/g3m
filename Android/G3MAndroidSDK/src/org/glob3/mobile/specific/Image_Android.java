@@ -165,7 +165,11 @@ public final class Image_Android
 
    @Override
    public boolean isPremultiplied() {
-      return (_bitmapHolder._bitmap == null) ? false : _bitmapHolder._bitmap.isPremultiplied();
+      if(_bitmapHolder._bitmap == null) {
+         return false;
+      }
+      Bitmap bmp = _bitmapHolder._bitmap;
+      return bmp.getConfig() != Bitmap.Config.RGB_565 && bmp.hasAlpha();
    }
 
 
