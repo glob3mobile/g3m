@@ -193,6 +193,12 @@ public class GL
 
   public final IGLTextureId uploadTexture(IImage image, int format, boolean generateMipmap)
   {
+      final int clampToEdge = GLTextureParameterValue.clampToEdge();
+      return uploadTexture(image, format, generateMipmap, clampToEdge);
+  }
+
+  public final IGLTextureId uploadTexture(IImage image, int format, boolean generateMipmap, int wrapMode)
+  {
   
     //  if (_verbose) {
     //    ILogger::instance()->logInfo("GL::uploadTexture()");
@@ -222,9 +228,8 @@ public class GL
   
       _nativeGL.texParameteri(texture2D, GLTextureParameter.magFilter(), linear);
   
-      final int clampToEdge = GLTextureParameterValue.clampToEdge();
-      _nativeGL.texParameteri(texture2D, GLTextureParameter.wrapS(), clampToEdge);
-      _nativeGL.texParameteri(texture2D, GLTextureParameter.wrapT(), clampToEdge);
+      _nativeGL.texParameteri(texture2D, GLTextureParameter.wrapS(), wrapMode);
+      _nativeGL.texParameteri(texture2D, GLTextureParameter.wrapT(), wrapMode);
   
       _nativeGL.texImage2D(image, format);
   
