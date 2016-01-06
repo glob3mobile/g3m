@@ -105,12 +105,12 @@ INativeGL {
                                 final Matrix44D matrix) {
       checkOpenGLThread();
       GLES20.glUniformMatrix4fv( //
-              ((GLUniformID_Android) location).getID(), //
-              1, //
-              transpose, //
-              matrix.getColumnMajorFloatArray(), //
-              0 //
-      );
+               ((GLUniformID_Android) location).getID(), //
+               1, //
+               transpose, //
+               matrix.getColumnMajorFloatArray(), //
+               0 //
+               );
 
       //      ILogger.instance().logInfo("UNIFORM MATRIX " + ((GLUniformID_Android) location).getID() + " " + matrix.description() );
    }
