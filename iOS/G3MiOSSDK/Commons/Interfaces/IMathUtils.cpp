@@ -80,8 +80,9 @@ double IMathUtils::closestSegmentsIntersection(const Vector2D& p, const Vector2D
   }
   
   //Lines crossing at 1 point
-  double t = qpr / rs;
-  if (isBetween((float)t, 0, 1)){
+  double t = (q.sub(p)).crossProduct(s) / rs;
+  double u = qpr / rs;
+  if (isBetween((float)t, 0, 1) && isBetween((float)u, 0, 1)){
     return t;
   }
   return NAND;

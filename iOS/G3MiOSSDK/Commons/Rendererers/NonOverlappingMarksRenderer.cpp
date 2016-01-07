@@ -275,7 +275,7 @@ void NonOverlappingMark::applyCoulombsLaw(NonOverlappingMark* that) {
   
 #warning EXPERIMENTING WITH ATTRACTIVE FORCE
   if (this->isCrossedWith(*that)){
-    strength *= -1;
+    strength *= -0.5;
   }
   
   const Vector2F force = direction.times(strength);
@@ -298,7 +298,7 @@ void NonOverlappingMark::applyCoulombsLawFromAnchor(NonOverlappingMark* that) {
   
 #warning EXPERIMENTING WITH ATTRACTIVE FORCE
   if (this->isCrossedWith(*that)){
-    strengthAnchor *= -1;
+    strengthAnchor *= 0;
   }
   
   this->applyForce(directionAnchor._x * strengthAnchor,

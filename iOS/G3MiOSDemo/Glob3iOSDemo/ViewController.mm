@@ -392,8 +392,7 @@ public:
     }
     
     //printf("N MARKS \t %d \t MIN DIS \t %f \t T: \t %lld\n", (int)visible.size(), minDis, t - _lastTime);
-    
-    _lastTime = t;
+   
     
     _nAttempt++;
     if (_nAttempt > 0){
@@ -408,10 +407,11 @@ public:
       }
       
       
-        printf("N MARKS \t %d \t TM: \t %f TR: \t %f \t CROSSED: \t %d\n", (int)visible.size(),
+        printf("N MARKS \t %d \t TM: \t %f TR: \t %f \t CROSSED: \t %d \t MIN DIS \t %lld \t TT: \t %lld\n", (int)visible.size(),
                ((double)_nomr->_timeSpentRepositioningInMS / _nomr->_frames),
                ((double)_nomr->_timeSpentRenderingInMS / _nomr->_frames),
-               crossed);
+               crossed,
+               t - _lastTime);
       _nomr->_timeSpentRepositioningInMS = 0;
       _nomr->_timeSpentRenderingInMS = 0;
       _nomr->_frames = 0;
@@ -427,6 +427,9 @@ public:
     } else{
       reset((int)visible.size());
     }
+    
+    
+    _lastTime = t;
   }
   
 };
@@ -442,13 +445,13 @@ public:
   
   NonOverlappingMarksRenderer* nomr = new NonOverlappingMarksRenderer(100);
   
-// nomr->addStoppedListener(new AnalyzerNOMSL(nomr));
+ nomr->addStoppedListener(new AnalyzerNOMSL(nomr));
   
   builder.addRenderer(nomr);
   
   builder.setPlanet(Planet::createFlatEarth());
   
-  for(int i = 0; i < 30; i++){
+  for(int i = 0; i < 1; i++){
     
     double lat = ((rand() % 18000) - 9000) / 100.0;
     double lon = ((rand() % 36000) - 18000) / 100.0;
