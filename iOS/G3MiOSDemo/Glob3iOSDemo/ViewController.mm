@@ -397,12 +397,26 @@ public:
     
     _nAttempt++;
     if (_nAttempt > 0){
-        printf("N MARKS \t %d TM: \t %f TR: \t %f\n", (int)visible.size(),
+      
+      int crossed = 0;
+      for (int i = 0; i < visible.size(); i++){
+        for (int j = i; j < visible.size(); j++){
+          if (visible[i]->isCrossedWith(*visible[j])){
+            crossed++;
+          }
+        }
+      }
+      
+      
+        printf("N MARKS \t %d \t TM: \t %f TR: \t %f \t CROSSED: \t %d\n", (int)visible.size(),
                ((double)_nomr->_timeSpentRepositioningInMS / _nomr->_frames),
-               ((double)_nomr->_timeSpentRenderingInMS / _nomr->_frames));
+               ((double)_nomr->_timeSpentRenderingInMS / _nomr->_frames),
+               crossed);
       _nomr->_timeSpentRepositioningInMS = 0;
       _nomr->_timeSpentRenderingInMS = 0;
       _nomr->_frames = 0;
+      
+
       
       
       reset((int)visible.size() + 1);
@@ -428,7 +442,7 @@ public:
   
   NonOverlappingMarksRenderer* nomr = new NonOverlappingMarksRenderer(100);
   
- // nomr->addStoppedListener(new AnalyzerNOMSL(nomr));
+// nomr->addStoppedListener(new AnalyzerNOMSL(nomr));
   
   builder.addRenderer(nomr);
   

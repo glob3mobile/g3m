@@ -296,6 +296,11 @@ void NonOverlappingMark::applyCoulombsLawFromAnchor(NonOverlappingMark* that) {
   
   float strengthAnchor = (float)(this->_electricCharge * that->_anchorElectricCharge / (distanceAnchor * distanceAnchor));
   
+#warning EXPERIMENTING WITH ATTRACTIVE FORCE
+  if (this->isCrossedWith(*that)){
+    strengthAnchor *= -1;
+  }
+  
   this->applyForce(directionAnchor._x * strengthAnchor,
                    directionAnchor._y * strengthAnchor);
 }
@@ -441,11 +446,17 @@ bool NonOverlappingMark::onTouchEvent(const Vector2F& touchedPixel) {
 
 bool NonOverlappingMark::isCrossedWith(const NonOverlappingMark& m){
   
-  Vector2F p = Vector2F(0.5,1.5);//getAnchorScreenPos();
-  Vector2F r = Vector2F(1,1);// getScreenPos().sub(p);
+//  Vector2F p = Vector2F(0.5,1.5);//getAnchorScreenPos();
+//  Vector2F r = Vector2F(1,1);// getScreenPos().sub(p);
+//  
+//  Vector2F q = Vector2F(0,1);//m.getAnchorScreenPos();
+//  Vector2F s = Vector2F(1,1);//m.getScreenPos().sub(q);
   
-  Vector2F q = Vector2F(0,1);//m.getAnchorScreenPos();
-  Vector2F s = Vector2F(1,1);//m.getScreenPos().sub(q);
+  Vector2F p = getAnchorScreenPos();
+  Vector2F r = getScreenPos().sub(p);
+  
+  Vector2F q = m.getAnchorScreenPos();
+  Vector2F s = m.getScreenPos().sub(q);
 
   return IMathUtils::segmentsIntersect(p.toVector2D(), r.toVector2D(), q.toVector2D(), s.toVector2D());
 }
