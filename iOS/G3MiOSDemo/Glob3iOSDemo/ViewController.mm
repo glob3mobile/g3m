@@ -428,13 +428,13 @@ public:
   
   NonOverlappingMarksRenderer* nomr = new NonOverlappingMarksRenderer(100);
   
-  nomr->addStoppedListener(new AnalyzerNOMSL(nomr));
+ // nomr->addStoppedListener(new AnalyzerNOMSL(nomr));
   
   builder.addRenderer(nomr);
   
   builder.setPlanet(Planet::createFlatEarth());
   
-  for(int i = 0; i < 1; i++){
+  for(int i = 0; i < 30; i++){
     
     double lat = ((rand() % 18000) - 9000) / 100.0;
     double lon = ((rand() % 36000) - 18000) / 100.0;

@@ -95,6 +95,11 @@ public:
     return (_x <= _y) ? _x : _y;
   }
   
+  double crossProduct(const Vector2D& other) const {
+    //U x V = Ux*Vy-Uy*Vx
+    return (_x * other._y) - (_y*other._x);
+  }
+  
   MutableVector2D asMutableVector2D() const;
   
   bool isNan() const {

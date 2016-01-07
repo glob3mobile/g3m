@@ -7,7 +7,7 @@
 //
 
 #include "Vector2F.hpp"
-
+#include "Vector2D.hpp"
 #include "Vector2I.hpp"
 
 const double Vector2F::squaredDistanceTo(const Vector2F& that) const {
@@ -37,4 +37,8 @@ Vector2F Vector2F::clampLength(float min, float max) const{
     return this->times(max / length);
   }
   return *this;
+}
+
+Vector2D Vector2F::toVector2D() const{
+  return Vector2D((double)_x,(double)_y);
 }

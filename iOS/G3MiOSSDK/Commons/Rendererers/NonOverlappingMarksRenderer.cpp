@@ -273,6 +273,11 @@ void NonOverlappingMark::applyCoulombsLaw(NonOverlappingMark* that) {
   
   float strength = (float)(this->_electricCharge * that->_electricCharge / (distance * distance));
   
+#warning EXPERIMENTING WITH ATTRACTIVE FORCE
+  if (this->isCrossedWith(*that)){
+    strength *= -1;
+  }
+  
   const Vector2F force = direction.times(strength);
   
   this->applyForce( force._x,  force._y);
@@ -432,6 +437,17 @@ bool NonOverlappingMark::onTouchEvent(const Vector2F& touchedPixel) {
     return _touchListener->touchedMark(this, touchedPixel);
   }
   return false;
+}
+
+bool NonOverlappingMark::isCrossedWith(const NonOverlappingMark& m){
+  
+  Vector2F p = Vector2F(0.5,1.5);//getAnchorScreenPos();
+  Vector2F r = Vector2F(1,1);// getScreenPos().sub(p);
+  
+  Vector2F q = Vector2F(0,1);//m.getAnchorScreenPos();
+  Vector2F s = Vector2F(1,1);//m.getScreenPos().sub(q);
+
+  return IMathUtils::segmentsIntersect(p.toVector2D(), r.toVector2D(), q.toVector2D(), s.toVector2D());
 }
 
 NonOverlappingMarksRenderer::NonOverlappingMarksRenderer(size_t maxVisibleMarks,
@@ -642,8 +658,14 @@ void NonOverlappingMarksRenderer::render(const G3MRenderContext* rc, GLState* gl
       computeMarksToBeRendered(camera, planet);
     }
     
+    long long now1 = timer->nowInMilliseconds();
+    
     computeForces(camera, planet);
     const double maxMovedDist = applyForces(now, camera);
+    
+    long long now2 = timer->nowInMilliseconds();
+    _timeSpentRepositioningInMS += (now2 - now1);
+    
     
     if (maxMovedDist < _minDistanceForMovement && maxMovedDist >= 0){
       _stopped = true;
@@ -653,7 +675,7 @@ void NonOverlappingMarksRenderer::render(const G3MRenderContext* rc, GLState* gl
     }
     
   } else{
-    ILogger::instance()->logInfo("NonOverlappingMarksRenderer stopped");
+    //ILogger::instance()->logInfo("NonOverlappingMarksRenderer stopped");
   }
   
   long long now2 = timer->nowInMilliseconds();
@@ -662,7 +684,7 @@ void NonOverlappingMarksRenderer::render(const G3MRenderContext* rc, GLState* gl
   
   long long now3 = timer->nowInMilliseconds();
   
-  _timeSpentRepositioningInMS += (now2 - now);
+  
   _timeSpentRenderingInMS += (now3 - now2);
   _frames++;
 }

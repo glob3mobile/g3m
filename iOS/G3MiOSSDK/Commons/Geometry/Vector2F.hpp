@@ -10,6 +10,8 @@
 #define __G3MiOSSDK__Vector2F__
 
 #include "IMathUtils.hpp"
+
+class Vector2D;
 class Vector2I;
 
 class Vector2F {
@@ -85,6 +87,8 @@ public:
   }
   
   Vector2F clampLength(float min, float max) const;
+  
+  Vector2D toVector2D() const;
   
 };
 

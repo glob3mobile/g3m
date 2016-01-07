@@ -229,6 +229,8 @@ public:
   int getHeight() const;
 
   bool onTouchEvent(const Vector2F& touchedPixel);
+  
+  bool isCrossedWith(const NonOverlappingMark& m);
 
 };
 
