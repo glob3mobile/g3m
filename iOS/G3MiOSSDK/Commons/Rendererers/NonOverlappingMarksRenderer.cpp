@@ -488,6 +488,7 @@ void NonOverlappingMarksRenderer::removeAllListeners() {
 void NonOverlappingMarksRenderer::addMark(NonOverlappingMark* mark) {
   _marks.push_back(mark);
   _stopped = false;
+  _movingStartTime = -1;
 }
 
 void NonOverlappingMarksRenderer::removeAllMarks() {
@@ -617,12 +618,11 @@ void NonOverlappingMarksRenderer::render(const G3MRenderContext* rc, GLState* gl
   const Camera* camera = rc->getCurrentCamera();
   const Planet* planet = rc->getPlanet();
   
-  
   long long now = rc->getFrameStartTimer()->nowInMilliseconds();
   
   long long ts = camera->getTimestamp();
   bool cameraChanged = ts != _lastMovingCameraTimeStamp;
-  if (cameraChanged){
+  if (cameraChanged || _movingStartTime == -1){
     _movingStartTime = now;
   }
 

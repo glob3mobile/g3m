@@ -423,7 +423,7 @@ public:
   
   builder.setPlanet(Planet::createFlatEarth());
   
-  for(int i = 0; i < 70; i++){
+  for(int i = 0; i < 1; i++){
     
     double lat = ((rand() % 18000) - 9000) / 100.0;
     double lon = ((rand() % 36000) - 18000) / 100.0;
