@@ -351,9 +351,10 @@
 class AnalyzerNOMSL: public NonOverlappingMarksStoppedListener{
   NonOverlappingMarksRenderer* _nomr;
   long long _lastTime;
+  int _nAttempt = 0;
 public:
   
-  AnalyzerNOMSL(NonOverlappingMarksRenderer* nomr):_nomr(nomr), _lastTime(0){
+  AnalyzerNOMSL(NonOverlappingMarksRenderer* nomr):_nomr(nomr), _lastTime(0), _nAttempt(0){
     
   }
   
@@ -394,7 +395,13 @@ public:
     
     _lastTime = t;
     
-    reset((int)visible.size() + 1);
+    _nAttempt++;
+    if (_nAttempt > 3){
+      reset((int)visible.size() + 1);
+      _nAttempt=0;
+    } else{
+      reset((int)visible.size());
+    }
   }
   
 };
@@ -416,7 +423,7 @@ public:
   
   builder.setPlanet(Planet::createFlatEarth());
   
-  for(int i = 0; i < 1; i++){
+  for(int i = 0; i < 70; i++){
     
     double lat = ((rand() % 18000) - 9000) / 100.0;
     double lon = ((rand() % 36000) - 18000) / 100.0;

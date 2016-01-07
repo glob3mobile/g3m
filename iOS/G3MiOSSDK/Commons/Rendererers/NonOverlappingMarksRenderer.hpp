@@ -255,8 +255,10 @@ private:
   const size_t _maxVisibleMarks;
   const float  _viewportMargin;
   const double _minDistanceForMovement;
+  long long _maxMovingTimeInMS;
   
-  long long _lastRunningCameraTimeStamp;
+  long long _lastMovingCameraTimeStamp;
+  long long _movingStartTime;
   bool _stopped;
 
   std::vector<NonOverlappingMark*> _marks;
@@ -283,7 +285,8 @@ private:
 public:
   NonOverlappingMarksRenderer(size_t maxVisibleMarks,
                               float viewportMargin = 5,
-                              double minDistanceForMovement = 0.5);
+                              double minDistanceForMovement = 0.5,
+                              long long maxMovingTimeInMS = 15000);
 
   ~NonOverlappingMarksRenderer();
 

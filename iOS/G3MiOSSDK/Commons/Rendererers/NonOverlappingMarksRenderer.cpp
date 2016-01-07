@@ -436,7 +436,8 @@ bool NonOverlappingMark::onTouchEvent(const Vector2F& touchedPixel) {
 
 NonOverlappingMarksRenderer::NonOverlappingMarksRenderer(size_t maxVisibleMarks,
                                                          float viewportMargin,
-                                                         double minDistanceForMovement):
+                                                         double minDistanceForMovement,
+                                                         long long maxMovingTimeInMS):
 _maxVisibleMarks(maxVisibleMarks),
 _viewportMargin(viewportMargin),
 _lastPositionsUpdatedTime(0),
@@ -445,7 +446,9 @@ _visibleMarksIDsBuilder( IStringBuilder::newStringBuilder() ),
 _visibleMarksIDs(""),
 _touchListener(NULL),
 _minDistanceForMovement(minDistanceForMovement),
-_lastRunningCameraTimeStamp(-1)
+_lastMovingCameraTimeStamp(-1),
+_movingStartTime(-1),
+_maxMovingTimeInMS(maxMovingTimeInMS)
 {
   
 }
@@ -614,14 +617,26 @@ void NonOverlappingMarksRenderer::render(const G3MRenderContext* rc, GLState* gl
   const Camera* camera = rc->getCurrentCamera();
   const Planet* planet = rc->getPlanet();
   
+  
+  long long now = rc->getFrameStartTimer()->nowInMilliseconds();
+  
   long long ts = camera->getTimestamp();
-  if (!_stopped || ts != _lastRunningCameraTimeStamp){
-    _lastRunningCameraTimeStamp = ts;
+  bool cameraChanged = ts != _lastMovingCameraTimeStamp;
+  if (cameraChanged){
+    _movingStartTime = now;
+  }
+
+  if((now - _movingStartTime) > _maxMovingTimeInMS){ //Stopping marks movement after certain time
+    _stopped = true;
+  }
+
+  if (!_stopped || cameraChanged){
+    _lastMovingCameraTimeStamp = ts;
     _stopped = false;
     
     computeMarksToBeRendered(camera, planet);
     computeForces(camera, planet);
-    const double maxMovedDist = applyForces(rc->getFrameStartTimer()->nowInMilliseconds(), camera);
+    const double maxMovedDist = applyForces(now, camera);
     
     if (maxMovedDist < _minDistanceForMovement && maxMovedDist >= 0){
       _stopped = true;
@@ -630,6 +645,8 @@ void NonOverlappingMarksRenderer::render(const G3MRenderContext* rc, GLState* gl
       }
     }
     
+  } else{
+    ILogger::instance()->logInfo("NonOverlappingMarksRenderer stopped");
   }
   
   renderMarks(rc, glState);
