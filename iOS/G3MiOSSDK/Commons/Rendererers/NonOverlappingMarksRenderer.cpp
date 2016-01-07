@@ -448,7 +448,10 @@ _touchListener(NULL),
 _minDistanceForMovement(minDistanceForMovement),
 _lastMovingCameraTimeStamp(-1),
 _movingStartTime(-1),
-_maxMovingTimeInMS(maxMovingTimeInMS)
+_maxMovingTimeInMS(maxMovingTimeInMS),
+_timeSpentRenderingInMS(0),
+_timeSpentRepositioningInMS(0),
+_frames(0)
 {
   
 }
@@ -617,24 +620,28 @@ double NonOverlappingMarksRenderer::applyForces(long long now, const Camera* cam
 void NonOverlappingMarksRenderer::render(const G3MRenderContext* rc, GLState* glState) {
   const Camera* camera = rc->getCurrentCamera();
   const Planet* planet = rc->getPlanet();
+  const ITimer* timer = rc->getFrameStartTimer();
   
-  long long now = rc->getFrameStartTimer()->nowInMilliseconds();
+  long long now = timer->nowInMilliseconds();
   
   long long ts = camera->getTimestamp();
   bool cameraChanged = ts != _lastMovingCameraTimeStamp;
   if (cameraChanged || _movingStartTime == -1){
     _movingStartTime = now;
   }
-
+  
   if((now - _movingStartTime) > _maxMovingTimeInMS){ //Stopping marks movement after certain time
     _stopped = true;
   }
-
+  
   if (!_stopped || cameraChanged){
     _lastMovingCameraTimeStamp = ts;
     _stopped = false;
     
-    computeMarksToBeRendered(camera, planet);
+    if (cameraChanged || _movingStartTime == now){ //Assuming marks don't move over the planet
+      computeMarksToBeRendered(camera, planet);
+    }
+    
     computeForces(camera, planet);
     const double maxMovedDist = applyForces(now, camera);
     
@@ -649,7 +656,15 @@ void NonOverlappingMarksRenderer::render(const G3MRenderContext* rc, GLState* gl
     ILogger::instance()->logInfo("NonOverlappingMarksRenderer stopped");
   }
   
+  long long now2 = timer->nowInMilliseconds();
+  
   renderMarks(rc, glState);
+  
+  long long now3 = timer->nowInMilliseconds();
+  
+  _timeSpentRepositioningInMS += (now2 - now);
+  _timeSpentRenderingInMS += (now3 - now2);
+  _frames++;
 }
 
 void NonOverlappingMarksRenderer::onResizeViewportEvent(const G3MEventContext* ec,

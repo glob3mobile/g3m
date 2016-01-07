@@ -391,14 +391,25 @@ public:
       }
     }
     
-    printf("N MARKS \t %d \t MIN DIS \t %f \t T: \t %lld\n", (int)visible.size(), minDis, t - _lastTime);
+    //printf("N MARKS \t %d \t MIN DIS \t %f \t T: \t %lld\n", (int)visible.size(), minDis, t - _lastTime);
     
     _lastTime = t;
     
     _nAttempt++;
-    if (_nAttempt > 3){
+    if (_nAttempt > 0){
+        printf("N MARKS \t %d TM: \t %f TR: \t %f\n", (int)visible.size(),
+               ((double)_nomr->_timeSpentRepositioningInMS / _nomr->_frames),
+               ((double)_nomr->_timeSpentRenderingInMS / _nomr->_frames));
+      _nomr->_timeSpentRepositioningInMS = 0;
+      _nomr->_timeSpentRenderingInMS = 0;
+      _nomr->_frames = 0;
+      
+      
       reset((int)visible.size() + 1);
       _nAttempt=0;
+      
+
+      
     } else{
       reset((int)visible.size());
     }

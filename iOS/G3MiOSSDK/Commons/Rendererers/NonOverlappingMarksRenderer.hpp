@@ -320,6 +320,11 @@ public:
   
   void setTouchListener(NonOverlappingMarkTouchListener* touchListener);
   
+#warning FOR DEBUGGING PURPOSES
+  long long _timeSpentRenderingInMS;
+  long long _timeSpentRepositioningInMS;
+  int _frames;
+  
 };
 
 #endif
