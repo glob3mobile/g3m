@@ -298,7 +298,7 @@ void NonOverlappingMark::applyCoulombsLawFromAnchor(NonOverlappingMark* that) {
   
 #warning EXPERIMENTING WITH ATTRACTIVE FORCE
   if (this->isCrossedWith(*that)){
-    strengthAnchor *= 0;
+    strengthAnchor *= -0.5;
   }
   
   this->applyForce(directionAnchor._x * strengthAnchor,
@@ -445,20 +445,29 @@ bool NonOverlappingMark::onTouchEvent(const Vector2F& touchedPixel) {
 }
 
 bool NonOverlappingMark::isCrossedWith(const NonOverlappingMark& m){
-  
-//  Vector2F p = Vector2F(0.5,1.5);//getAnchorScreenPos();
-//  Vector2F r = Vector2F(1,1);// getScreenPos().sub(p);
-//  
-//  Vector2F q = Vector2F(0,1);//m.getAnchorScreenPos();
-//  Vector2F s = Vector2F(1,1);//m.getScreenPos().sub(q);
-  
+ 
   Vector2F p = getAnchorScreenPos();
   Vector2F r = getScreenPos().sub(p);
   
   Vector2F q = m.getAnchorScreenPos();
   Vector2F s = m.getScreenPos().sub(q);
+  
+  if (p.sub(q).length() < 5){
+    //if anchors are projected on the same location we don't consider these marks as crossed
+    return false;
+  }
 
   return IMathUtils::segmentsIntersect(p.toVector2D(), r.toVector2D(), q.toVector2D(), s.toVector2D());
+}
+
+void NonOverlappingMark::applyBouyantForce(double cameraPitchInDegrees){
+  //-45 -> min force, 0 -> max force
+  
+  float force = 1 + ((float)cameraPitchInDegrees / 45);
+  force = force < 0 ? 0 : force;
+  if (force != 0){
+    applyForce(0, -5000 * force);
+  }
 }
 
 NonOverlappingMarksRenderer::NonOverlappingMarksRenderer(size_t maxVisibleMarks,
@@ -573,10 +582,14 @@ void NonOverlappingMarksRenderer::computeForces(const Camera* camera, const Plan
     _visibleMarks[i]->computeAnchorScreenPos(camera, planet);
   }
   
+  double pitch = camera->getPitch()._degrees;
+  
   //Compute Mark Forces
   for (size_t i = 0; i < visibleMarksSize; i++) {
     NonOverlappingMark* mark = _visibleMarks[i];
     mark->applyHookesLaw();
+    
+    mark->applyBouyantForce(pitch);
     
     for (size_t j = i+1; j < visibleMarksSize; j++) {
       mark->applyCoulombsLaw(_visibleMarks[j]);
@@ -677,7 +690,6 @@ void NonOverlappingMarksRenderer::render(const G3MRenderContext* rc, GLState* gl
     long long now2 = timer->nowInMilliseconds();
     _timeSpentRepositioningInMS += (now2 - now1);
     
-    
     if (maxMovedDist < _minDistanceForMovement && maxMovedDist >= 0){
       _stopped = true;
       for (size_t i = 0; i < _stoppedListeners.size(); i++) {
@@ -694,7 +706,6 @@ void NonOverlappingMarksRenderer::render(const G3MRenderContext* rc, GLState* gl
   renderMarks(rc, glState);
   
   long long now3 = timer->nowInMilliseconds();
-  
   
   _timeSpentRenderingInMS += (now3 - now2);
   _frames++;

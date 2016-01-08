@@ -199,7 +199,7 @@
   
   //[self initTestingTileImageProvider];
   
-  [self initWithNonOverlappingMarks];
+  [self initWithNonOverlappingMarksCanarias];
   
   [[self G3MWidget] widget]->setCameraPosition(Geodetic3D::fromDegrees(0,0,3.2e7));
   
@@ -392,7 +392,7 @@ public:
     }
     
     //printf("N MARKS \t %d \t MIN DIS \t %f \t T: \t %lld\n", (int)visible.size(), minDis, t - _lastTime);
-   
+    
     
     _nAttempt++;
     if (_nAttempt > 0){
@@ -407,22 +407,22 @@ public:
       }
       
       
-        printf("N MARKS \t %d \t TM: \t %f TR: \t %f \t CROSSED: \t %d \t MIN DIS \t %lld \t TT: \t %lld\n", (int)visible.size(),
-               ((double)_nomr->_timeSpentRepositioningInMS / _nomr->_frames),
-               ((double)_nomr->_timeSpentRenderingInMS / _nomr->_frames),
-               crossed,
-               t - _lastTime);
+      printf("N MARKS \t %d \t TM: \t %f TR: \t %f \t CROSSED: \t %d \t MIN DIS \t %lld \t TT: \t %lld\n", (int)visible.size(),
+             ((double)_nomr->_timeSpentRepositioningInMS / _nomr->_frames),
+             ((double)_nomr->_timeSpentRenderingInMS / _nomr->_frames),
+             crossed,
+             t - _lastTime);
       _nomr->_timeSpentRepositioningInMS = 0;
       _nomr->_timeSpentRenderingInMS = 0;
       _nomr->_frames = 0;
       
-
+      
       
       
       reset((int)visible.size() + 1);
       _nAttempt=0;
       
-
+      
       
     } else{
       reset((int)visible.size());
@@ -435,6 +435,121 @@ public:
 };
 
 
+- (void) initWithNonOverlappingMarksCanarias
+{
+  G3MBuilder_iOS builder([self G3MWidget]);
+  
+  LayerSet* layerSet = new LayerSet();
+  layerSet->addLayer(MapQuestLayer::newOSM(TimeInterval::fromDays(30)));
+  builder.getPlanetRendererBuilder()->setLayerSet(layerSet);
+  
+  NonOverlappingMarksRenderer* nomr = new NonOverlappingMarksRenderer(100);
+  
+  builder.addRenderer(nomr);
+  
+  builder.setPlanet(Planet::createEarth());
+  
+  class MyMarkWidgetTouchListener: public NonOverlappingMarkTouchListener{
+  public:
+    MyMarkWidgetTouchListener(){
+      
+    }
+    
+    bool touchedMark(const NonOverlappingMark* mark,
+                     const Vector2F& touchedPixel){
+      NSString* message = [NSString stringWithFormat: @"Canarias!"];
+      UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Island Selected"
+                                                      message:message
+                                                     delegate:nil
+                                            cancelButtonTitle:@"OK"
+                                            otherButtonTitles:nil];
+      [alert show];
+      return true;
+    }
+  };
+  
+  Geodetic3D canarias[] = { Geodetic3D::fromDegrees(28.131817, -15.440219, 0),
+    Geodetic3D::fromDegrees(28.947345, -13.523105, 0),
+    Geodetic3D::fromDegrees(28.473802, -13.859360, 0),
+    Geodetic3D::fromDegrees(28.467706, -16.251426, 0),
+    Geodetic3D::fromDegrees(28.701819, -17.762003, 0),
+    Geodetic3D::fromDegrees(28.086595, -17.105796, 0),
+    Geodetic3D::fromDegrees(27.810709, -17.917639, 0)
+  };
+  
+  Geodetic3D cities[] = {
+    Geodetic3D::fromDegrees(40.416775, -3.70379, 0),
+    Geodetic3D::fromDegrees(39.469907, -0.376288, 0),
+    Geodetic3D::fromDegrees(41.385064, 2.173403, 0),
+    Geodetic3D::fromDegrees(37.389092, -5.984459, 0),
+    Geodetic3D::fromDegrees(41.979400, 2.821426, 0),
+    Geodetic3D::fromDegrees(41.648823, -0.889085, 0),
+    Geodetic3D::fromDegrees(43.009738, -7.556758, 0)
+  };
+  
+  
+  for (int i = 0; i < 7; i++){
+    NonOverlappingMark* mark = new NonOverlappingMark(new DownloaderImageBuilder(URL("file:///g3m-marker.png")),
+                                                      new DownloaderImageBuilder(URL("file:///anchorWidget.png")),
+                                                      cities[i],
+                                                      NULL,
+                                                      100.0);
+    nomr->addMark(mark);
+  }
+  
+  NonOverlappingMark* mark = new NonOverlappingMark(new DownloaderImageBuilder(URL("file:///g3m-marker.png")),
+                                                    new DownloaderImageBuilder(URL("file:///anchorWidget.png")),
+                                                    Geodetic3D::fromDegrees(28.131817, -15.440219, 0),
+                                                    new MyMarkWidgetTouchListener(),
+                                                    100.0);
+  nomr->addMark(mark);
+  
+  NonOverlappingMark* mark2 = new NonOverlappingMark(new DownloaderImageBuilder(URL("file:///g3m-marker.png")),
+                                                     new DownloaderImageBuilder(URL("file:///anchorWidget.png")),
+                                                     Geodetic3D::fromDegrees(28.947345, -13.523105, 0),
+                                                     new MyMarkWidgetTouchListener(),
+                                                     100.0);
+  nomr->addMark(mark2);
+  
+  NonOverlappingMark* mark3 = new NonOverlappingMark(new DownloaderImageBuilder(URL("file:///g3m-marker.png")),
+                                                     new DownloaderImageBuilder(URL("file:///anchorWidget.png")),
+                                                     Geodetic3D::fromDegrees(28.473802, -13.859360, 0),
+                                                     new MyMarkWidgetTouchListener(),
+                                                     100.0);
+  nomr->addMark(mark3);
+  
+  NonOverlappingMark* mark4 = new NonOverlappingMark(new DownloaderImageBuilder(URL("file:///g3m-marker.png")),
+                                                     new DownloaderImageBuilder(URL("file:///anchorWidget.png")),
+                                                     Geodetic3D::fromDegrees(28.467706, -16.251426, 0),
+                                                     new MyMarkWidgetTouchListener(),
+                                                     100.0);
+  nomr->addMark(mark4);
+  
+  NonOverlappingMark* mark5 = new NonOverlappingMark(new DownloaderImageBuilder(URL("file:///g3m-marker.png")),
+                                                     new DownloaderImageBuilder(URL("file:///anchorWidget.png")),
+                                                     Geodetic3D::fromDegrees(28.701819, -17.762003, 0),
+                                                     new MyMarkWidgetTouchListener(),
+                                                     100.0);
+  nomr->addMark(mark5);
+  
+  NonOverlappingMark* mark6 = new NonOverlappingMark(new DownloaderImageBuilder(URL("file:///g3m-marker.png")),
+                                                     new DownloaderImageBuilder(URL("file:///anchorWidget.png")),
+                                                     Geodetic3D::fromDegrees(28.086595, -17.105796, 0),
+                                                     new MyMarkWidgetTouchListener(),
+                                                     100.0);
+  nomr->addMark(mark6);
+  
+  NonOverlappingMark* mark7 = new NonOverlappingMark(new DownloaderImageBuilder(URL("file:///g3m-marker.png")),
+                                                     new DownloaderImageBuilder(URL("file:///anchorWidget.png")),
+                                                     Geodetic3D::fromDegrees(27.810709, -17.917639, 0),
+                                                     new MyMarkWidgetTouchListener(),
+                                                     100.0);
+  nomr->addMark(mark7);
+  
+  builder.initializeWidget();
+}
+
+
 - (void) initWithNonOverlappingMarks
 {
   G3MBuilder_iOS builder([self G3MWidget]);
@@ -445,7 +560,7 @@ public:
   
   NonOverlappingMarksRenderer* nomr = new NonOverlappingMarksRenderer(100);
   
- nomr->addStoppedListener(new AnalyzerNOMSL(nomr));
+  nomr->addStoppedListener(new AnalyzerNOMSL(nomr));
   
   builder.addRenderer(nomr);
   

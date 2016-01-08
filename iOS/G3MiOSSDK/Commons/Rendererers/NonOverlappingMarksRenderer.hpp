@@ -206,6 +206,8 @@ public:
   void applyCoulombsLawFromAnchor(NonOverlappingMark* that);
 
   void applyHookesLaw();   //Spring
+  
+  void applyBouyantForce(double cameraPitchInDegrees);
 
   void applyForce(float x, float y) {
     _force.add(x, y);
