@@ -6,6 +6,7 @@ import org.glob3.mobile.generated.Angle;
 import org.glob3.mobile.generated.BSONParser;
 import org.glob3.mobile.generated.Color;
 import org.glob3.mobile.generated.DirectMesh;
+import org.glob3.mobile.generated.EllipsoidalPlanet;
 import org.glob3.mobile.generated.FloatBufferBuilderFromColor;
 import org.glob3.mobile.generated.FloatBufferBuilderFromGeodetic;
 import org.glob3.mobile.generated.G3MContext;
@@ -23,7 +24,6 @@ import org.glob3.mobile.generated.JSONObject;
 import org.glob3.mobile.generated.LayerSet;
 import org.glob3.mobile.generated.MapBoxLayer;
 import org.glob3.mobile.generated.MeshRenderer;
-import org.glob3.mobile.generated.Planet;
 import org.glob3.mobile.generated.TimeInterval;
 import org.glob3.mobile.generated.URL;
 import org.glob3.mobile.specific.G3MBuilder_Android;
@@ -35,12 +35,12 @@ import android.widget.RelativeLayout;
 
 
 public class PointCloudActivity
-         extends
-            Activity {
+   extends
+      Activity {
 
    private final class PointsCloudParser
-            extends
-               GAsyncTask {
+      extends
+         GAsyncTask {
 
       private final IByteBuffer _buffer;
       private DirectMesh        _mesh;
@@ -123,8 +123,8 @@ public class PointCloudActivity
    }
 
    private final class PointsCloudDownloader
-            extends
-               IBufferDownloadListener {
+      extends
+         IBufferDownloadListener {
 
       private final IThreadUtils _threadUtils;
 
@@ -192,7 +192,7 @@ public class PointCloudActivity
 
       _builder = new G3MBuilder_Android(this);
       //      _builder.setPlanet(Planet.createSphericalEarth());
-      _builder.setPlanet(Planet.createEarth());
+      _builder.setPlanet(EllipsoidalPlanet.createEarth());
       _builder.getPlanetRendererBuilder().setLayerSet(layerSet);
 
       _builder.setInitializationTask(pointCloudInitializationTask());
