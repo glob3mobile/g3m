@@ -22,12 +22,7 @@ class CoordinateSystem;
 
 class Planet {
 public:
-  
-  static const Planet* createEarth();
-  static const Planet* createSphericalEarth();
-  static const Planet* createFlatEarth();
 
-  
   virtual ~Planet() {
   }
   
@@ -87,11 +82,7 @@ public:
   virtual Vector3D scaleToGeodeticSurface(const Vector3D& position) const = 0;
   
   virtual Vector3D scaleToGeocentricSurface(const Vector3D& position) const = 0;
-  
-  /*virtual std::list<Vector3D> computeCurve(const Vector3D& start,
-                                           const Vector3D& stop,
-                                           double granularity) const = 0;*/
-  
+
   virtual Geodetic2D getMidPoint (const Geodetic2D& P0, const Geodetic2D& P1) const = 0;
   
   
@@ -101,8 +92,6 @@ public:
   virtual double computeFastLatLonDistance(const Geodetic2D& g1,
                                            const Geodetic2D& g2) const = 0;
   
-  //virtual Vector3D closestPointToSphere(const Vector3D& pos, const Vector3D& ray) const = 0;
-
   Vector3D closestIntersection(const Vector3D& pos, const Vector3D& ray) const;
   
   

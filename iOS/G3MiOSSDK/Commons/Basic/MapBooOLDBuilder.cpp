@@ -52,6 +52,7 @@
 #include "ICanvas.hpp"
 #include "ICanvasUtils.hpp"
 #include "DownloaderImageBuilder.hpp"
+#include "SphericalPlanet.hpp"
 
 #include "LevelTileCondition.hpp"
 #include "Info.hpp"
@@ -553,7 +554,7 @@ PlanetRenderer* MapBooOLDBuilder::createPlanetRenderer() {
 
 const Planet* MapBooOLDBuilder::createPlanet() {
   //return Planet::createEarth();
-  return Planet::createSphericalEarth();
+  return SphericalPlanet::createEarth();
 }
 
 std::vector<ICameraConstrainer*>* MapBooOLDBuilder::createCameraConstraints(const Planet* planet,
