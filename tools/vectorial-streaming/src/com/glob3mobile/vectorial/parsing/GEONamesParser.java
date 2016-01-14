@@ -20,8 +20,8 @@ public class GEONamesParser
       GEOParser {
 
 
-   public final static GEOParser INSTANCE = new GEONamesParser();
-   private String                _currentLine;
+   public final static GEONamesParser INSTANCE = new GEONamesParser();
+   private String                     _currentLine;
 
 
    private GEONamesParser() {
