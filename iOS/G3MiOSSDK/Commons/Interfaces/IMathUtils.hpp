@@ -37,6 +37,9 @@
 
 #define ISNAN(x) (x != x)
 
+class Geodetic2D;
+class Angle;
+
 class IMathUtils {
 private:
   static IMathUtils* _instance;
@@ -260,6 +263,12 @@ public:
 
   /** answer a double value in the range 0.0 (inclusive) and 1.0 (exclusive) */
   virtual double nextRandomDouble() const = 0;
+
+  Geodetic2D greatCircleIntermediatePoint(const Angle& fromLat,
+                                          const Angle& fromLon,
+                                          const Angle& toLat,
+                                          const Angle& toLon,
+                                          const double alpha) const;
 
 };
 

@@ -50,7 +50,6 @@ public class LODPointFeaturesStatistics {
          statistics.show();
 
          final int nodesCount = statistics.getNodesCount();
-         final long featuresCount = statistics.getFeaturesCount();
          final int minNodeDepth = 0;
          final int maxNodeDepth = 4; //statistics.getMaxNodeDepth();
 
@@ -74,7 +73,7 @@ public class LODPointFeaturesStatistics {
                //            final PointFeatureLODStorage.NodeVisitor visitor = new LODDrawerVisitor(sectorToProcess, clusterStorage, nodesCount,
                //                     minDepth, maxDepth, featuresCount);
                final PointFeatureLODStorage.NodeVisitor visitor = new LODExporterVisitor(sectorToProcess, clusterStorage,
-                        nodesCount, minDepth, maxDepth, featuresCount, visitedFeaturesCounter, writter, properties);
+                        nodesCount, minDepth, maxDepth, visitedFeaturesCounter, writter, properties);
                clusterStorage.acceptDepthFirstVisitor(visitor);
             }
 

@@ -29,7 +29,8 @@
 
 class G3MVectorStreaming1DemoScene_Symbolizer : public VectorStreamingRenderer::VectorSetSymbolizer {
 public:
-  Mark* createFeatureMark(const GEO2DPointGeometry* geometry) const {
+  Mark* createFeatureMark(const VectorStreamingRenderer::Node* node,
+                          const GEO2DPointGeometry* geometry) const {
     const GEOFeature* feature = geometry->getFeature();
 
     const JSONObject* properties = feature->getProperties();
@@ -91,7 +92,8 @@ public:
     return mark;
   }
 
-  Mark* createClusterMark(const VectorStreamingRenderer::Cluster* cluster,
+  Mark* createClusterMark(const VectorStreamingRenderer::Node* node,
+                          const VectorStreamingRenderer::Cluster* cluster,
                           long long featuresCount) const {
     return NULL;
   }
@@ -121,7 +123,8 @@ void G3MVectorStreaming1DemoScene::rawActivate(const G3MContext* context) {
                          TimeInterval::zero(),
                          true, // readExpired
                          true, // verbose
-                         true  // haltOnError
+                         true, // haltOnError
+                         VectorStreamingRenderer::Format::SERVER
                          );
 
 
