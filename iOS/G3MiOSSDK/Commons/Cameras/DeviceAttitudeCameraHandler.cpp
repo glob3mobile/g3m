@@ -23,7 +23,7 @@ _locationModifier(locationModifier)
 DeviceAttitudeCameraHandler::~DeviceAttitudeCameraHandler(){
   IDeviceAttitude::instance()->stopTrackingDeviceOrientation();
   IDeviceLocation::instance()->stopTrackingLocation();
-
+  
   delete _locationModifier;
 }
 
@@ -43,7 +43,7 @@ void DeviceAttitudeCameraHandler::render(const G3MRenderContext* rc, CameraConte
   Camera* nextCamera = rc->getNextCamera();
   
   if (devAtt == NULL){
-    ILogger::instance()->logError("IDeviceAttitude not initilized");
+    THROW_EXCEPTION("IDeviceAttitude not initilized");
     return;
   }
   
@@ -78,22 +78,26 @@ void DeviceAttitudeCameraHandler::render(const G3MRenderContext* rc, CameraConte
   if (_updateLocation){
     
     IDeviceLocation* loc = IDeviceLocation::instance();
-    if (!loc->isTrackingLocation()){
-      loc->startTrackingLocation();
+    
+    bool isTracking = loc->isTrackingLocation();
+    if (!isTracking){
+      isTracking = loc->startTrackingLocation();
     }
     
-    Geodetic3D g = loc->getLocation();
-    if (!g.isNan()){
-      
-      //Changing current location
-      if (_locationModifier == NULL){
-        setPositionOnNextCamera(nextCamera, g);
-      } else{
-        Geodetic3D g2 = _locationModifier->modify(g);
-        setPositionOnNextCamera(nextCamera, g2);
+    if (isTracking){
+      Geodetic3D g = loc->getLocation();
+      if (!g.isNan()){
+        
+        //Changing current location
+        if (_locationModifier == NULL){
+          setPositionOnNextCamera(nextCamera, g);
+        } else{
+          Geodetic3D g2 = _locationModifier->modify(g);
+          setPositionOnNextCamera(nextCamera, g2);
+        }
       }
-      
     }
+    
   }
   
 }

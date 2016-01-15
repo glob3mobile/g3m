@@ -13,11 +13,16 @@
 #pragma mark Location Delegate
 
 -(BOOL) startTrackingLocation{
+  
+  if (_requestingPermission){
+    return FALSE;
+  }
 
   CLAuthorizationStatus status = [CLLocationManager authorizationStatus];
   if (status == kCLAuthorizationStatusRestricted ||
       status == kCLAuthorizationStatusDenied ||
       ![CLLocationManager locationServicesEnabled]){
+    _requestingPermission = FALSE;
     return false;
   }
   
@@ -27,9 +32,11 @@
   _locationManager.desiredAccuracy = kCLLocationAccuracyBest;
   _locationManager.distanceFilter = kCLDistanceFilterNone;
   
-  if ([_locationManager respondsToSelector:@selector(requestWhenInUseAuthorization)]) {
+  if (status == kCLAuthorizationStatusNotDetermined &&
+      [_locationManager respondsToSelector:@selector(requestWhenInUseAuthorization)]) {
     //Make sure to have the key NSLocationWhenInUseUsageDescription defined before calling this method
     [_locationManager requestWhenInUseAuthorization];
+    _requestingPermission = TRUE;
   }
   
   status = [CLLocationManager authorizationStatus];
@@ -38,6 +45,7 @@
       status == kCLAuthorizationStatusAuthorizedWhenInUse){
     
     [_locationManager startUpdatingLocation];
+    _requestingPermission = FALSE;
     return true;
   }
   
@@ -67,9 +75,9 @@
 @end
 
 
-DeviceLocation_iOS::DeviceLocation_iOS(){
+DeviceLocation_iOS::DeviceLocation_iOS():
+_isTracking(false){
   _delegate = [[LocationDelegate alloc] init];
-  _isTracking = false;
 }
 
 bool DeviceLocation_iOS::startTrackingLocation(){

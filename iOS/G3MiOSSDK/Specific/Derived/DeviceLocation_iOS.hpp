@@ -18,6 +18,8 @@
   
   CLLocationManager* _locationManager;
   CLLocation* _lastLocation;
+  
+  BOOL _requestingPermission;
 }
 
 @end
