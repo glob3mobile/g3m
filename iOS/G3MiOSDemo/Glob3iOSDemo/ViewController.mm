@@ -199,7 +199,7 @@
   
   //[self initTestingTileImageProvider];
   
-  [self initWithNonOverlappingMarksCanarias];
+  [self initWithNonOverlappingMarks];
   
   [[self G3MWidget] widget]->setCameraPosition(Geodetic3D::fromDegrees(0,0,3.2e7));
   
