@@ -44,7 +44,6 @@ void DeviceAttitudeCameraHandler::render(const G3MRenderContext* rc, CameraConte
   
   if (devAtt == NULL){
     THROW_EXCEPTION("IDeviceAttitude not initilized");
-    return;
   }
   
   if (!devAtt->isTracking()){
