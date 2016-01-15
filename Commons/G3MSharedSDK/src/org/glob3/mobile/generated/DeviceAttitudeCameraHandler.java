@@ -50,7 +50,7 @@ public class DeviceAttitudeCameraHandler extends CameraEventHandler
   
     if (devAtt == null)
     {
-      ILogger.instance().logError("IDeviceAttitude not initilized");
+      throw new RuntimeException("IDeviceAttitude not initilized");
       return;
     }
   
@@ -88,27 +88,32 @@ public class DeviceAttitudeCameraHandler extends CameraEventHandler
     {
   
       IDeviceLocation loc = IDeviceLocation.instance();
-      if (!loc.isTrackingLocation())
+  
+      boolean isTracking = loc.isTrackingLocation();
+      if (!isTracking)
       {
-        loc.startTrackingLocation();
+        isTracking = loc.startTrackingLocation();
       }
   
-      Geodetic3D g = loc.getLocation();
-      if (!g.isNan())
+      if (isTracking)
       {
-  
-        //Changing current location
-        if (_locationModifier == null)
+        Geodetic3D g = loc.getLocation();
+        if (!g.isNan())
         {
-          setPositionOnNextCamera(nextCamera, g);
-        }
-        else
-        {
-          Geodetic3D g2 = _locationModifier.modify(g);
-          setPositionOnNextCamera(nextCamera, g2);
-        }
   
+          //Changing current location
+          if (_locationModifier == null)
+          {
+            setPositionOnNextCamera(nextCamera, g);
+          }
+          else
+          {
+            Geodetic3D g2 = _locationModifier.modify(g);
+            setPositionOnNextCamera(nextCamera, g2);
+          }
+        }
       }
+  
     }
   
   }
