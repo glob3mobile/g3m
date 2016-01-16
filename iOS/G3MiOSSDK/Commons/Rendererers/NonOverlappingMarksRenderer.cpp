@@ -146,8 +146,8 @@ void MarkWidget::setAndClampScreenPos(float x,
                                       int viewportHeight,
                                       float margin) {
   const IMathUtils* mu = IMathUtils::instance();
-  const float xx = mu->clamp(x, _halfWidth  + margin, viewportWidth  - _halfWidth  - margin);
-  const float yy = mu->clamp(y, _halfHeight + margin, viewportHeight - _halfHeight - margin);
+  const float xx = x;// mu->clamp(x, _halfWidth  + margin, viewportWidth  - _halfWidth  - margin);
+  const float yy = y; //mu->clamp(y, _halfHeight + margin, viewportHeight - _halfHeight - margin);
   
   if (_geo2Dfeature != NULL) {
     _geo2Dfeature->setTranslation(xx, yy);
@@ -283,6 +283,45 @@ void NonOverlappingMark::applyCoulombsLaw(NonOverlappingMark* that) {
   this->applyForce( force._x,  force._y);
   that->applyForce(-force._x, -force._y);
 }
+
+void NonOverlappingMark::applyBorderRepulsion(int screenW, int screenH) {
+  const Vector2F p = getScreenPos();
+  const float w2 = _widget->getWidth() / 2;
+  const float h2 = _widget->getHeight() / 2;
+  
+  float R = 1000.0f; //Force
+  float b = 1000.0f; //Border
+  
+  
+  //Left
+  float d = p._x - w2;
+  float force = d < 0? 1: (b - d) / (b + b*d);
+  if (force > 0){
+    applyForce(R * force, 0);
+  }
+  
+  //Rigth
+  d = screenW - (p._x + w2);
+  force = d < 0? 1: (b - d) / (b + b*d);
+  if (force > 0){
+    applyForce(-R * force,0);
+  }
+  
+  //Top
+  d = p._y;
+  force = d < 0? 1: (b - d) / (b + b*d);
+  if (force > 0){
+    applyForce(R * force,0);
+  }
+  
+  //Bottom
+  d = screenH - (p._y + h2);
+  force = d < 0? 1: (b - d) / (b + b*d);
+  if (force > 0){
+    applyForce(-R * force,0);
+  }
+}
+
 
 void NonOverlappingMark::applyCoulombsLawFromAnchor(NonOverlappingMark* that) {
   Vector2F dAnchor = getScreenPos().sub(that->getAnchorScreenPos());
@@ -584,12 +623,17 @@ void NonOverlappingMarksRenderer::computeForces(const Camera* camera, const Plan
   
   double pitch = camera->getPitch()._degrees;
   
+  int w = camera->getViewPortWidth();
+  int h = camera->getViewPortHeight();
+  
   //Compute Mark Forces
   for (size_t i = 0; i < visibleMarksSize; i++) {
     NonOverlappingMark* mark = _visibleMarks[i];
     mark->applyHookesLaw();
     
     mark->applyBouyantForce(pitch);
+    
+    mark->applyBorderRepulsion(w, h);
     
     for (size_t j = i+1; j < visibleMarksSize; j++) {
       mark->applyCoulombsLaw(_visibleMarks[j]);

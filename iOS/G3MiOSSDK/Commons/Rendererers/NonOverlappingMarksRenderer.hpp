@@ -173,7 +173,7 @@ public:
                      float maxSpringLength = 0.0f,
                      float electricCharge = 3000.0f,
                      float anchorElectricCharge = 2000.0f,
-                     float resistanceFactor = 0.95f);
+                     float resistanceFactor = 0.85f);
 
   void setID(const std::string& id) {
     _id = id;
@@ -204,6 +204,7 @@ public:
 
   void applyCoulombsLaw(NonOverlappingMark* that);
   void applyCoulombsLawFromAnchor(NonOverlappingMark* that);
+  void applyBorderRepulsion(int screenW, int screenH);
 
   void applyHookesLaw();   //Spring
   
