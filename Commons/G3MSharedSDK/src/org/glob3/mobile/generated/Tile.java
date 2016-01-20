@@ -20,7 +20,6 @@ package org.glob3.mobile.generated;
 //class TileTexturizer;
 //class Mesh;
 //class TileElevationDataRequest;
-//class BoundingVolume;
 //class Vector3D;
 //class TilesRenderParameters;
 //class LayerTilesRenderParameters;
@@ -59,8 +58,6 @@ public class Tile
 
   private float _verticalExaggeration;
   private TileTessellatorMeshData _tileTessellatorMeshData = new TileTessellatorMeshData();
-
-  private BoundingVolume _boundingVolume;
 
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
 //  void prepareTestLODData(Planet planet);
@@ -355,7 +352,6 @@ public class Tile
      _mustActualizeMeshDueToNewElevationData = false;
      _lastTileMeshResolutionX = -1;
      _lastTileMeshResolutionY = -1;
-     _boundingVolume = null;
      _planetRenderer = planetRenderer;
      _tessellatorData = null;
      _rendered = false;
