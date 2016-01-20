@@ -17,7 +17,6 @@
 class TileTexturizer;
 class Mesh;
 class TileElevationDataRequest;
-class BoundingVolume;
 class Vector3D;
 class TilesRenderParameters;
 class LayerTilesRenderParameters;
@@ -56,9 +55,7 @@ private:
   
   float _verticalExaggeration;
   TileTessellatorMeshData _tileTessellatorMeshData;
-  
-  BoundingVolume* _boundingVolume;
-  
+
   void prepareTestLODData(const Planet* planet);
   
   inline Mesh* getTessellatorMesh(const G3MRenderContext* rc,
