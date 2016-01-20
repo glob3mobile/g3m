@@ -570,11 +570,6 @@ public class VectorStreamingRenderer extends DefaultRenderer
     private long _featuresRequestID;
     private void loadFeatures(G3MRenderContext rc)
     {
-<<<<<<< HEAD
-      final URL featuresURL = new URL(_vectorSet.getServerURL(), _vectorSet.getName() + "/features" + "?node=" + _id + "&properties=" + _vectorSet.getProperties(), true);
-    
-=======
->>>>>>> purgatory
       //  if (_verbose) {
       //    ILogger::instance()->logInfo("\"%s\": Downloading features for node \'%s\'",
       //                                 _vectorSet->getName().c_str(),
@@ -582,11 +577,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
       //  }
     
       _downloader = rc.getDownloader();
-<<<<<<< HEAD
-      _featuresRequestID = _downloader.requestBuffer(featuresURL, _vectorSet.getDownloadPriority() + _featuresCount + _clustersCount, _vectorSet.getTimeToCache(), _vectorSet.getReadExpired(), new NodeFeaturesDownloadListener(this, rc.getThreadUtils(), _verbose), true);
-=======
       _featuresRequestID = _downloader.requestBuffer(_vectorSet.getNodeFeaturesURL(_id), _vectorSet.getDownloadPriority() + _featuresCount + _clustersCount, _vectorSet.getTimeToCache(), _vectorSet.getReadExpired(), new NodeFeaturesDownloadListener(this, rc.getThreadUtils(), _verbose), true);
->>>>>>> purgatory
     }
     private void unloadFeatures()
     {
