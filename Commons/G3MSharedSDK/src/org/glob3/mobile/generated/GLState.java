@@ -172,10 +172,16 @@ public class GLState extends RCObject
   
       GLFeatureGroup.applyToAllGroups(accumulatedFeatures, _valuesSet, _globalState);
   
-      final int uniformsCode = _valuesSet.getUniformsCode();
-      final int attributesCode = _valuesSet.getAttributesCode();
-  
-      _linkedProgram = progManager.getProgram(gl, uniformsCode, attributesCode); //GET RETAINED REFERENCE
+      if (_valuesSet.hasCustomShader())
+      {
+          _linkedProgram = progManager.getProgram(gl, _valuesSet.getCustomShaderName());
+      }
+      else
+      {
+          final int uniformsCode = _valuesSet.getUniformsCode();
+          final int attributesCode = _valuesSet.getAttributesCode();
+          _linkedProgram = progManager.getProgram(gl, uniformsCode, attributesCode); //GET RETAINED REFERENCE
+      }
     }
   
     if (_valuesSet == null || _globalState == null)
@@ -192,6 +198,12 @@ public class GLState extends RCObject
       _globalState.applyChanges(gl, gl.getCurrentGLGlobalState());
   
       _linkedProgram.applyChanges(gl);
+  
+      CustomShaderGLFeature feature = (CustomShaderGLFeature) getGLFeatureIncludingAncestors(GLFeatureID.GLF_CUSTOM_SHADER);
+      if (feature != null)
+      {
+          feature.afterApplyOnGPU(gl, this, _linkedProgram);
+      }
   
       //prog->onUnused(); //Uncomment to check that all GPUProgramStates are complete
     }
@@ -244,6 +256,24 @@ public class GLState extends RCObject
     }
   
     return null;
+  }
+  public final GLFeature getGLFeatureIncludingAncestors(GLFeatureID id)
+  {
+      final int size = _features.size();
+      for (int i = 0; i < size; i++)
+      {
+          GLFeature f = _features.get(i);
+          if (f._id == id)
+          {
+              return f;
+          }
+      }
+      if (_parentGLState != null)
+      {
+          return _parentGLState.getGLFeatureIncludingAncestors(id);
+      }
+  
+      return null;
   }
 
   public final GLFeatureSet getGLFeatures(GLFeatureID id)

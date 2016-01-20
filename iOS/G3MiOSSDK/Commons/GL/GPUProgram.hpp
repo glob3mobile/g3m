@@ -56,6 +56,8 @@ class GPUProgram{
 
   int _nReferences; //Number of items that reference this Program
   
+  bool _referencedByName;
+
   bool compileShader(GL* gl, int shader, const std::string& source) const;
   bool linkProgram(GL* gl) const;
   void deleteShader(GL* gl, int shader) const;
@@ -85,7 +87,8 @@ public:
   static GPUProgram* createProgram(GL* gl,
                                    const std::string& name,
                                    const std::string& vertexSource,
-                                   const std::string& fragmentSource);
+                                   const std::string& fragmentSource,
+                                   const bool referencedByName);
 
   std::string getName() const { return _name;}
   
@@ -94,6 +97,8 @@ public:
   int getGPUAttributesNumber() const { return _nAttributes;}
   int getGPUUniformsNumber() const { return _nUniforms;}
   
+  bool isReferencedByName() const { return _referencedByName; }
+
   GPUUniform* getGPUUniform(const std::string& name) const;
   GPUAttribute* getGPUAttribute(const std::string& name) const;
   
