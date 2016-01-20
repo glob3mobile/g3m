@@ -207,9 +207,9 @@ MapBoo::MBMap* MapBoo::MBMap::fromJSON(MBHandler*            handler,
   std::vector<MapBoo::MBSymbolizedDataset*> symDatasets = parseSymbolizedDatasets(handler,
                                                                                   jsonObject->get("symbolizedDatasets")->asArray(),
                                                                                   verbose );
-  const int                                 timestamp   = (int) jsonObject->get("timestamp")->asNumber()->value();
+  // const int                                 timestamp   = (int) jsonObject->get("timestamp")->asNumber()->value();
 
-  return new MBMap(id, name, layers, symDatasets, timestamp, verbose);
+  return new MBMap(id, name, layers, symDatasets, /* timestamp, */ verbose);
 }
 
 std::vector<MapBoo::MBLayer*> MapBoo::MBMap::parseLayers(const JSONArray* jsonArray,
@@ -266,9 +266,9 @@ MapBoo::MBLayer* MapBoo::MBLayer::fromJSON(const JSONBaseObject* jsonBaseObject,
 
   const std::string type         = jsonObject->get("type")->asString()->value();
   const std::string url          = jsonObject->getAsString("url", "");
-  const std::string attribution  = jsonObject->getAsString("attribution", "");
+  // const std::string attribution  = jsonObject->getAsString("attribution", "");
 
-  return new MapBoo::MBLayer(type, url, attribution, verbose);
+  return new MapBoo::MBLayer(type, url, /* attribution, */ verbose);
 }
 
 MapBoo::MBLayer::~MBLayer() {
@@ -469,15 +469,15 @@ MapBoo::MBSymbolizedDataset* MapBoo::MBSymbolizedDataset::fromJSON(MBHandler*   
 
   const std::string  datasetID          = jsonObject->get("datasetID")->asString()->value();
   const std::string  datasetName        = jsonObject->getAsString("datasetName", "");
-  const std::string  datasetAttribution = jsonObject->getAsString("datasetAttribution", "");
+//  const std::string  datasetAttribution = jsonObject->getAsString("datasetAttribution", "");
   const MBSymbology* symbology          = MBSymbology::fromJSON(handler,
                                                                 datasetID,
                                                                 datasetName,
                                                                 jsonObject->get("symbology"));
 
-  return new MBSymbolizedDataset(datasetID,
-                                 datasetName,
-                                 datasetAttribution,
+  return new MBSymbolizedDataset(// datasetID,
+                                 // datasetName,
+                                 // datasetAttribution,
                                  symbology);
 }
 
