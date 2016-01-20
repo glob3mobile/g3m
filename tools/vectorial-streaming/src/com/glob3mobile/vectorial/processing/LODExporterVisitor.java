@@ -24,7 +24,6 @@ public final class LODExporterVisitor
    private final int                    _nodesCount;
    private final int                    _minDepth;
    private final int                    _maxDepth;
-   private final long                   _featuresCount;
 
    private Progress                     _progress;
 
@@ -40,7 +39,6 @@ public final class LODExporterVisitor
                              final int nodesCount,
                              final int minDepth,
                              final int maxDepth,
-                             final long featuresCount,
                              final AtomicLong visitedFeaturesCounter,
                              final BufferedWriter writter,
                              final Set<String> properties) {
@@ -49,7 +47,6 @@ public final class LODExporterVisitor
       _nodesCount = nodesCount;
       _minDepth = minDepth;
       _maxDepth = maxDepth;
-      _featuresCount = featuresCount;
       _visitedFeaturesCounter = visitedFeaturesCounter;
       _writter = writter;
       _properties = properties;

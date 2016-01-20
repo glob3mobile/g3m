@@ -1,6 +1,6 @@
 
 
-package com.glob3mobile.vectorial.server.utils;
+package com.glob3mobile.vectorial.utils;
 
 import com.glob3mobile.geo.Geodetic2D;
 import com.glob3mobile.geo.Sector;
