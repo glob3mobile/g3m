@@ -146,8 +146,8 @@ void MarkWidget::setAndClampScreenPos(float x,
                                       int viewportHeight,
                                       float margin) {
   const IMathUtils* mu = IMathUtils::instance();
-  const float xx = x;// mu->clamp(x, _halfWidth  + margin, viewportWidth  - _halfWidth  - margin);
-  const float yy = y; //mu->clamp(y, _halfHeight + margin, viewportHeight - _halfHeight - margin);
+  const float xx = mu->clamp(x, _halfWidth  + margin, viewportWidth  - _halfWidth  - margin);
+  const float yy = mu->clamp(y, _halfHeight + margin, viewportHeight - _halfHeight - margin);
   
   if (_geo2Dfeature != NULL) {
     _geo2Dfeature->setTranslation(xx, yy);
@@ -333,7 +333,7 @@ void NonOverlappingMark::applyCoulombsLawFromAnchor(NonOverlappingMark* that) {
   
   Vector2F directionAnchor = dAnchor.div((float)distanceAnchor);
   
-  float strengthAnchor = (float)(this->_electricCharge * that->_anchorElectricCharge / (distanceAnchor * distanceAnchor));
+  float strengthAnchor =  (float)(this->_electricCharge * that->_anchorElectricCharge / (distanceAnchor * distanceAnchor));
   
 #warning EXPERIMENTING WITH ATTRACTIVE FORCE
   if (this->isCrossedWith(*that)){

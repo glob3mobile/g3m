@@ -171,8 +171,8 @@ public:
                      float springK = 70.0f,
                      float minSpringLength = 0.0f,
                      float maxSpringLength = 0.0f,
-                     float electricCharge = 3000.0f,
-                     float anchorElectricCharge = 2000.0f,
+                     float electricCharge = 3000.0f/* / 947628.61f*/, //Not having into account Coulombs Constant
+                     float anchorElectricCharge = 2000.0f/* / 947628.61f*/,
                      float resistanceFactor = 0.85f);
 
   void setID(const std::string& id) {

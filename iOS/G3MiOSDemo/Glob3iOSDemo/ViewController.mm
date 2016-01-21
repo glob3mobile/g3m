@@ -147,6 +147,11 @@
 
 #import <G3MiOSSDK/NonOverlappingMarksRenderer.hpp>
 
+#import <G3MiOSSDK/CircleImageBuilder.hpp>
+#import <G3MiOSSDK/LabelImageBuilder.hpp>
+#import <G3MiOSSDK/StackLayoutImageBUilder.hpp>
+#include <string>
+
 #include <typeinfo>
 
 @implementation ViewController
@@ -365,7 +370,17 @@ public:
       double lat = ((rand() % 18000) - 9000) / 100.0;
       double lon = ((rand() % 36000) - 18000) / 100.0;
       
-      NonOverlappingMark* mark = new NonOverlappingMark(new DownloaderImageBuilder(URL("file:///g3m-marker.png")),
+      NSString* string = [NSString stringWithFormat:@"%d", i, nil];
+      const char* label = [string UTF8String];
+      
+      CircleImageBuilder* cib = new CircleImageBuilder(Color::blue(), 30);
+      LabelImageBuilder* lib = new LabelImageBuilder(label);
+      std::vector<IImageBuilder*> vib;
+      vib.push_back(cib);
+      vib.push_back(lib);
+      StackLayoutImageBuilder* slib = new StackLayoutImageBuilder(vib);
+      
+      NonOverlappingMark* mark = new NonOverlappingMark(slib,
                                                         new DownloaderImageBuilder(URL("file:///anchorWidget.png")),
                                                         Geodetic3D::fromDegrees(lat, lon, 0),
                                                         NULL,
@@ -566,12 +581,22 @@ public:
   
   builder.setPlanet(Planet::createFlatEarth());
   
-  for(int i = 0; i < 1; i++){
+  for(int i = 0; i < 30; i++){
     
     double lat = ((rand() % 18000) - 9000) / 100.0;
     double lon = ((rand() % 36000) - 18000) / 100.0;
     
-    NonOverlappingMark* mark = new NonOverlappingMark(new DownloaderImageBuilder(URL("file:///g3m-marker.png")),
+    NSString* string = [NSString stringWithFormat:@"%d", i, nil];
+    const char* label = [string UTF8String];
+    
+    CircleImageBuilder* cib = new CircleImageBuilder(Color::blue(), 30);
+    LabelImageBuilder* lib = new LabelImageBuilder(label);
+    std::vector<IImageBuilder*> vib;
+    vib.push_back(cib);
+    vib.push_back(lib);
+    StackLayoutImageBuilder* slib = new StackLayoutImageBuilder(vib);
+    
+    NonOverlappingMark* mark = new NonOverlappingMark(slib, //new DownloaderImageBuilder(URL("file:///g3m-marker.png")),
                                                       new DownloaderImageBuilder(URL("file:///anchorWidget.png")),
                                                       Geodetic3D::fromDegrees(lat, lon, 0),
                                                       NULL,
