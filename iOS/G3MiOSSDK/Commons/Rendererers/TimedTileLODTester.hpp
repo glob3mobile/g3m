@@ -19,68 +19,69 @@ class TimedTileLODTester: public TileLODTester {
 private:
   TileLODTester* _nextTester;
   long long _timeInMs;
-  
+
   class TimedTileLODTesterData: public TileLODTesterData{
   public:
     bool _lastMeetsRenderCriteriaResult;
     long long _lastMeetsRenderCriteriaTimeInMS;
-    
+
     TimedTileLODTesterData(long long now) {
       _lastMeetsRenderCriteriaTimeInMS = now;
       _lastMeetsRenderCriteriaResult = false;
     }
   };
-  
+
 public:
-  
+
   TimedTileLODTester(const TimeInterval& time,
                      TileLODTester* nextTester):
   _timeInMs(time.milliseconds()),
   _nextTester(nextTester)
   {}
-  
+
   virtual ~TimedTileLODTester() {
     delete _nextTester;
   }
-  
-  virtual bool meetsRenderCriteria(int testerLevel,
-                                   Tile* tile, const G3MRenderContext& rc) const {
-    
+
+  virtual bool meetsRenderCriteria(Tile* tile,
+                                   const G3MRenderContext& rc) const {
+
     long long now = rc.getFrameStartTimer()->nowInMilliseconds();
-    
-    TimedTileLODTesterData* data = (TimedTileLODTesterData*) tile->getDataForLODTester(testerLevel);
+
+    TimedTileLODTesterData* data = (TimedTileLODTesterData*) tile->getDataForLODTester(_id);
     if (data == NULL) {
       data = new TimedTileLODTesterData(now);
-      tile->setDataForLODTester(testerLevel, data);
-      data->_lastMeetsRenderCriteriaResult = (_nextTester == NULL)? true : _nextTester->meetsRenderCriteria(testerLevel+1, tile, rc);
+      tile->setDataForLODTester(_id, data);
+      data->_lastMeetsRenderCriteriaResult = (_nextTester == NULL)? true : _nextTester->meetsRenderCriteria(tile, rc);
     }
-    
+
     if ((now - data->_lastMeetsRenderCriteriaTimeInMS) > _timeInMs) {
-      data->_lastMeetsRenderCriteriaResult = (_nextTester == NULL)? true : _nextTester->meetsRenderCriteria(testerLevel+1, tile, rc);
+      data->_lastMeetsRenderCriteriaResult = (_nextTester == NULL)? true : _nextTester->meetsRenderCriteria(tile, rc);
     }
-    
+
     return data->_lastMeetsRenderCriteriaResult;
   }
-  
-  virtual bool isVisible(int testerLevel, Tile* tile, const G3MRenderContext& rc) const {
+
+  virtual bool isVisible(Tile* tile,
+                         const G3MRenderContext& rc) const {
     if (_nextTester == NULL) {
       return true;
     }
-    return _nextTester->isVisible(testerLevel+1, tile, rc);
+    return _nextTester->isVisible(tile, rc);
   }
-  
-  virtual void onTileHasChangedMesh(int testerLevel, Tile* tile) const {
+
+  virtual void onTileHasChangedMesh(Tile* tile) const {
     if (_nextTester != NULL) {
-      _nextTester->onTileHasChangedMesh(testerLevel+1, tile);
+      _nextTester->onTileHasChangedMesh(tile);
     }
   }
-  
+
   void onLayerTilesRenderParametersChanged(const LayerTilesRenderParameters* ltrp) {
     if (_nextTester != NULL) {
       _nextTester->onLayerTilesRenderParametersChanged(ltrp);
     }
   }
-  
+
 };
 
-#endif /* TimedLODTester_hpp */
+#endif

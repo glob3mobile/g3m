@@ -20,15 +20,13 @@ class TileLODTesterResponder: public TileLODTester {
 
 protected:
 
-  virtual bool _meetsRenderCriteria(int testerLevel,
-                                    Tile* tile,
+  virtual bool _meetsRenderCriteria(Tile* tile,
                                     const G3MRenderContext& rc) const = 0;
 
-  virtual bool _isVisible(int testerLevel,
-                          Tile* tile,
+  virtual bool _isVisible(Tile* tile,
                           const G3MRenderContext& rc) const = 0;
 
-  virtual void _onTileHasChangedMesh(int testerLevel, Tile* tile) const {}
+  virtual void _onTileHasChangedMesh(Tile* tile) const {}
 
   virtual void _onLayerTilesRenderParametersChanged(const LayerTilesRenderParameters* ltrp) = 0;
 
@@ -47,16 +45,13 @@ public:
 
   virtual ~TileLODTesterResponder();
 
-  bool meetsRenderCriteria(int testerLevel,
-                           Tile* tile,
+  bool meetsRenderCriteria(Tile* tile,
                            const G3MRenderContext& rc) const;
 
-  bool isVisible(int testerLevel,
-                 Tile* tile,
+  bool isVisible(Tile* tile,
                  const G3MRenderContext& rc) const;
 
-  void onTileHasChangedMesh(int testerLevel,
-                            Tile* tile) const;
+  void onTileHasChangedMesh(Tile* tile) const;
 
   void onLayerTilesRenderParametersChanged(const LayerTilesRenderParameters* ltrp);
 };

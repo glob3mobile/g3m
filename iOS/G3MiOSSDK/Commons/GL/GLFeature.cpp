@@ -292,7 +292,7 @@ void TextureGLFeature::setScale(float u, float v) {
     if (u == 1.0 && v == 1.0) {
       _values->removeUniformValue(SCALE_TEXTURE_COORDS);
     }
-    else{
+    else {
       _scale->changeValue(u, v);
     }
   }

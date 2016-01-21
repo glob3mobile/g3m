@@ -864,10 +864,7 @@ void Mark::setTextureCoordinatesTransformation(const Vector2F& translation,
 
     _textureGLF->setTranslation(_translationTCX, _translationTCY);
     _textureGLF->setScale(_scalingTCX, _scalingTCY);
-  } else{
-
   }
-
 }
 
 void Mark::setMarkAnchor(float anchorU, float anchorV) {

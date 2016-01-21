@@ -8,3 +8,4 @@
 
 #include "TileLODTester.hpp"
 
+int TileLODTester::ID_COUNTER = 0;

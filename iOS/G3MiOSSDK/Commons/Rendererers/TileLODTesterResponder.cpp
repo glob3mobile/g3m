@@ -18,56 +18,54 @@ TileLODTesterResponder::~TileLODTesterResponder() {
   delete _nextTesterWrongLOD;
 }
 
-bool TileLODTesterResponder::meetsRenderCriteria(int testerLevel,
-                                                 Tile* tile,
+bool TileLODTesterResponder::meetsRenderCriteria(Tile* tile,
                                                  const G3MRenderContext& rc) const {
 
   //Right LOD
-  if (_meetsRenderCriteria(testerLevel, tile, rc)) {
+  if (_meetsRenderCriteria(tile, rc)) {
     if (_nextTesterRightLOD != NULL) {
-      return _nextTesterRightLOD->meetsRenderCriteria(testerLevel + 1, tile, rc);
+      return _nextTesterRightLOD->meetsRenderCriteria(tile, rc);
     }
     return true;
   }
 
   //Wrong LOD
   if (_nextTesterWrongLOD != NULL) {
-    return _nextTesterWrongLOD->meetsRenderCriteria(testerLevel + 1, tile, rc);
+    return _nextTesterWrongLOD->meetsRenderCriteria(tile, rc);
   }
+
   return false;
 }
 
 
-bool TileLODTesterResponder::isVisible(int testerLevel,
-                                       Tile* tile,
+bool TileLODTesterResponder::isVisible(Tile* tile,
                                        const G3MRenderContext& rc) const {
-
   //Visible
-  if (_isVisible(testerLevel, tile, rc)) {
+  if (_isVisible(tile, rc)) {
     if (_nextTesterVisible != NULL) {
-      return _nextTesterVisible->isVisible(testerLevel+1, tile, rc);
+      return _nextTesterVisible->isVisible(tile, rc);
     }
     return true;
   }
 
   //Not visible
   if (_nextTesterNotVisible != NULL) {
-    return _nextTesterNotVisible->isVisible(testerLevel+1, tile, rc);
+    return _nextTesterNotVisible->isVisible(tile, rc);
   }
-  return false;
 
+  return false;
 }
 
-void TileLODTesterResponder::onTileHasChangedMesh(int testerLevel, Tile* tile) const {
-  _onTileHasChangedMesh(testerLevel, tile);
+void TileLODTesterResponder::onTileHasChangedMesh(Tile* tile) const {
+  _onTileHasChangedMesh(tile);
   if (_nextTesterNotVisible != NULL)
-    _nextTesterNotVisible->onTileHasChangedMesh(testerLevel+1, tile);
+    _nextTesterNotVisible->onTileHasChangedMesh(tile);
   if (_nextTesterVisible != NULL)
-    _nextTesterVisible->onTileHasChangedMesh(testerLevel+1, tile);
+    _nextTesterVisible->onTileHasChangedMesh(tile);
   if (_nextTesterRightLOD != NULL)
-    _nextTesterRightLOD->onTileHasChangedMesh(testerLevel+1, tile);
+    _nextTesterRightLOD->onTileHasChangedMesh(tile);
   if (_nextTesterWrongLOD != NULL)
-    _nextTesterWrongLOD->onTileHasChangedMesh(testerLevel+1, tile);
+    _nextTesterWrongLOD->onTileHasChangedMesh(tile);
 }
 
 void TileLODTesterResponder::onLayerTilesRenderParametersChanged(const LayerTilesRenderParameters *ltrp) {

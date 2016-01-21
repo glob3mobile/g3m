@@ -15,23 +15,28 @@ class LayerTilesRenderParameters;
 
 
 class TileLODTester {
+private:
+  static int ID_COUNTER;
+
+protected:
+  const int _id;
 
 public:
 
-  TileLODTester() { }
+  TileLODTester() :
+  _id(ID_COUNTER++)
+  {
+  }
 
   virtual ~TileLODTester() { }
 
-  virtual bool meetsRenderCriteria(int testerLevel,
-                                   Tile* tile,
+  virtual bool meetsRenderCriteria(Tile* tile,
                                    const G3MRenderContext& rc) const = 0;
 
-  virtual bool isVisible(int testerLevel,
-                         Tile* tile,
+  virtual bool isVisible(Tile* tile,
                          const G3MRenderContext& rc) const = 0;
 
-  virtual void onTileHasChangedMesh(int testerLevel,
-                                    Tile* tile) const = 0;
+  virtual void onTileHasChangedMesh(Tile* tile) const = 0;
 
   virtual void onLayerTilesRenderParametersChanged(const LayerTilesRenderParameters* ltrp) = 0;
 

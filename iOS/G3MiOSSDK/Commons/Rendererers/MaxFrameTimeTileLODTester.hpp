@@ -11,11 +11,11 @@
 
 
 #include "TileLODTester.hpp"
-#include "Tile.hpp"
-#include "Context.hpp"
+
+class TimeInterval;
 
 
-class MaxFrameTimeTileLODTester: public TileLODTester{
+class MaxFrameTimeTileLODTester: public TileLODTester {
 private:
   TileLODTester* _nextTester;
   long long _maxFrameTimeInMs;
@@ -26,64 +26,20 @@ private:
 public:
 
   MaxFrameTimeTileLODTester(const TimeInterval& maxFrameTimeInMs,
-                            TileLODTester* nextTester):
-  _maxFrameTimeInMs(maxFrameTimeInMs.milliseconds()),
-  _nextTester(nextTester),
-  _lastElapsedTime(0),
-  _nSplitsInFrame(0)
-  {}
+                            TileLODTester* nextTester);
 
-  virtual ~MaxFrameTimeTileLODTester() {
-    delete _nextTester;
-  }
+  virtual ~MaxFrameTimeTileLODTester();
 
-  virtual bool meetsRenderCriteria(int testerLevel,
-                                   Tile* tile, const G3MRenderContext& rc) const {
+  virtual bool meetsRenderCriteria(Tile* tile,
+                                   const G3MRenderContext& rc) const;
 
-    const bool hasSubtiles = tile->areSubtilesCreated();
-    long long elapsedTime = rc.getFrameStartTimer()->elapsedTimeInMilliseconds();
-    if (elapsedTime < _lastElapsedTime) {
-      //New frame
-      //      if (_nSplitsInFrame > 0) {
-      //        printf("Tile splits on last frame: %d\n", _nSplitsInFrame);
-      //      }
-      _nSplitsInFrame = 0;
-    }
-    _lastElapsedTime = elapsedTime;
+  virtual bool isVisible(Tile* tile,
+                         const G3MRenderContext& rc) const;
 
-    if (!hasSubtiles && elapsedTime > _maxFrameTimeInMs && _nSplitsInFrame > 0) {
-      return true;
-    }
+  virtual void onTileHasChangedMesh(Tile* tile) const;
 
-    bool res = (_nextTester == NULL)? true : _nextTester->meetsRenderCriteria(testerLevel+1, tile, rc);
-
-    if (!res && !hasSubtiles) {
-      _nSplitsInFrame++;
-    }
-
-    return res;
-  }
-
-  virtual bool isVisible(int testerLevel, Tile* tile, const G3MRenderContext& rc) const {
-    if (_nextTester == NULL) {
-      return true;
-    }
-    return _nextTester->isVisible(testerLevel+1, tile, rc);
-  }
-
-  virtual void onTileHasChangedMesh(int testerLevel, Tile* tile) const {
-    if (_nextTester != NULL) {
-      _nextTester->onTileHasChangedMesh(testerLevel+1, tile);
-    }
-  }
-
-  void onLayerTilesRenderParametersChanged(const LayerTilesRenderParameters* ltrp) {
-    if (_nextTester != NULL) {
-      _nextTester->onLayerTilesRenderParametersChanged(ltrp);
-    }
-  }
-
+  void onLayerTilesRenderParametersChanged(const LayerTilesRenderParameters* ltrp);
+  
 };
 
-
-#endif /* MaxFrameTimeTileLODTester_hpp */
+#endif

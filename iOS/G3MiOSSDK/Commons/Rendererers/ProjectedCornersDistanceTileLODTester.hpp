@@ -11,141 +11,62 @@
 
 
 #include "TileLODTesterResponder.hpp"
-#include "Tile.hpp"
-#include "Planet.hpp"
-#include "Context.hpp"
-#include "Camera.hpp"
-#include "BoundingVolume.hpp"
-#include "Mesh.hpp"
-#include "LayerTilesRenderParameters.hpp"
+
 #include "TileLODTesterData.hpp"
+#include "Vector3D.hpp"
+class BoundingVolume;
+class Planet;
+class Camera;
+
 
 class ProjectedCornersDistanceTileLODTester: public TileLODTesterResponder {
+private:
+  double _texHeightSquared;
+  double _texWidthSquared;
+
+
 protected:
 
-  class ProjectedCornersDistanceTileLODTesterData: public TileLODTesterData {
+  class PCDTesterData: public TileLODTesterData {
+  private:
+    static double getSquaredArcSegmentRatio(const Vector3D& a,
+                                            const Vector3D& b);
 
-    double getSquaredArcSegmentRatio(const Vector3D& a,
-                                     const Vector3D& b) {
-      /*
-       Arco = ang * Cuerda / (2 * sen(ang/2))
-       */
-
-      const double angleInRadians = Vector3D::angleInRadiansBetween(a, b);
-      const double halfAngleSin = SIN(angleInRadians / 2);
-      const double arcSegmentRatio = (halfAngleSin == 0) ? 1 : angleInRadians / (2 * halfAngleSin);
-      return (arcSegmentRatio * arcSegmentRatio);
-    }
-
-  public:
     double _northArcSegmentRatioSquared;
     double _southArcSegmentRatioSquared;
     double _eastArcSegmentRatioSquared;
     double _westArcSegmentRatioSquared;
 
-    Vector3D _northWestPoint;
-    Vector3D _northEastPoint;
-    Vector3D _southWestPoint;
-    Vector3D _southEastPoint;
+    const Vector3D _northWestPoint;
+    const Vector3D _northEastPoint;
+    const Vector3D _southWestPoint;
+    const Vector3D _southEastPoint;
 
+
+  public:
     BoundingVolume* _bvol;
 
-    ProjectedCornersDistanceTileLODTesterData(Tile* tile, double mediumHeight, const Planet* planet):
-    TileLODTesterData(),
-    _northWestPoint(planet->toCartesian( tile->_sector.getNW(), mediumHeight )),
-    _northEastPoint(planet->toCartesian( tile->_sector.getNE(), mediumHeight )),
-    _southWestPoint(planet->toCartesian( tile->_sector.getSW(), mediumHeight )),
-    _southEastPoint(planet->toCartesian( tile->_sector.getSE(), mediumHeight ))
-    {
-      const Vector3D normalNW = planet->centricSurfaceNormal(_northWestPoint);
-      const Vector3D normalNE = planet->centricSurfaceNormal(_northEastPoint);
-      const Vector3D normalSW = planet->centricSurfaceNormal(_southWestPoint);
-      const Vector3D normalSE = planet->centricSurfaceNormal(_southEastPoint);
+    PCDTesterData(Tile* tile,
+                  double mediumHeight,
+                  const Planet* planet);
 
-      _northArcSegmentRatioSquared = getSquaredArcSegmentRatio(normalNW, normalNE);
-      _southArcSegmentRatioSquared = getSquaredArcSegmentRatio(normalSW, normalSE);
-      _eastArcSegmentRatioSquared  = getSquaredArcSegmentRatio(normalNE, normalSE);
-      _westArcSegmentRatioSquared  = getSquaredArcSegmentRatio(normalNW, normalSW);
-
-      //Computing Bounding Volume
-
-      const Mesh* mesh = tile->getCurrentTessellatorMesh();
-      if (mesh == NULL) {
-        ILogger::instance()->logError("Problem computing BVolume in ProjectedCornersDistanceTileLODTesterData");
-        _bvol = NULL;
-      } else{
-        _bvol = mesh->getBoundingVolume(); //BV is deleted by mesh
-      }
-
-    }
-
-    bool evaluate(const Camera* camera, double texHeightSquared, double texWidthSquared) {
-
-      const double distanceInPixelsNorth = camera->getEstimatedPixelDistance(_northWestPoint, _northEastPoint);
-      const double distanceInPixelsSouth = camera->getEstimatedPixelDistance(_southWestPoint, _southEastPoint);
-      const double distanceInPixelsWest  = camera->getEstimatedPixelDistance(_northWestPoint, _southWestPoint);
-      const double distanceInPixelsEast  = camera->getEstimatedPixelDistance(_northEastPoint, _southEastPoint);
-
-      const double distanceInPixelsSquaredArcNorth = (distanceInPixelsNorth * distanceInPixelsNorth) * _northArcSegmentRatioSquared;
-      const double distanceInPixelsSquaredArcSouth = (distanceInPixelsSouth * distanceInPixelsSouth) * _southArcSegmentRatioSquared;
-      const double distanceInPixelsSquaredArcWest  = (distanceInPixelsWest  * distanceInPixelsWest)  * _westArcSegmentRatioSquared;
-      const double distanceInPixelsSquaredArcEast  = (distanceInPixelsEast  * distanceInPixelsEast)  * _eastArcSegmentRatioSquared;
-
-      return ((distanceInPixelsSquaredArcNorth <= texHeightSquared) &&
-              (distanceInPixelsSquaredArcSouth <= texHeightSquared) &&
-              (distanceInPixelsSquaredArcWest  <= texWidthSquared ) &&
-              (distanceInPixelsSquaredArcEast  <= texWidthSquared ));
-    }
-
+    bool evaluate(const Camera* camera,
+                  double texHeightSquared,
+                  double texWidthSquared);
   };
 
-  void _onTileHasChangedMesh(int testerLevel, Tile* tile) const {
-    //Recomputing data when tile changes tessellator mesh
-    tile->setDataForLODTester(testerLevel, NULL);
-  }
+  void _onTileHasChangedMesh(Tile* tile) const;
 
-  ProjectedCornersDistanceTileLODTesterData* getData(Tile* tile, int testerLevel, const G3MRenderContext& rc) const {
-    ProjectedCornersDistanceTileLODTesterData* data = (ProjectedCornersDistanceTileLODTesterData*) tile->getDataForLODTester(testerLevel);
-    if (data == NULL) {
-      const double mediumHeight = tile->getTessellatorMeshData()->_averageHeight;
-      data = new ProjectedCornersDistanceTileLODTesterData(tile, mediumHeight, rc.getPlanet());
-      tile->setDataForLODTester(testerLevel, data);
-    }
-    return data;
-  }
+  PCDTesterData* getData(Tile* tile,
+                         const G3MRenderContext& rc) const;
 
-  bool _meetsRenderCriteria(int testerLevel,
-                            Tile* tile,
-                            const G3MRenderContext& rc) const {
+  bool _meetsRenderCriteria(Tile* tile,
+                            const G3MRenderContext& rc) const;
 
-    if (_texHeightSquared < 0 || _texHeightSquared < 0) {
-      return true;
-    }
+  bool _isVisible(Tile* tile,
+                  const G3MRenderContext& rc) const;
 
-    ProjectedCornersDistanceTileLODTesterData* data = getData(tile, testerLevel, rc);
-
-    return data->evaluate(rc.getCurrentCamera(), _texHeightSquared, _texWidthSquared);
-  }
-
-  bool _isVisible(int testerLevel,
-                  Tile* tile,
-                  const G3MRenderContext& rc) const {
-    ProjectedCornersDistanceTileLODTesterData* data = getData(tile, testerLevel, rc);
-    return data->_bvol->touchesFrustum(rc.getCurrentCamera()->getFrustumInModelCoordinates());
-  }
-
-  double _texHeightSquared;
-  double _texWidthSquared;
-
-  void _onLayerTilesRenderParametersChanged(const LayerTilesRenderParameters* ltrp) {
-    if (ltrp != NULL) {
-      _texWidthSquared = ltrp->_tileTextureResolution._x * ltrp->_tileTextureResolution._x;
-      _texHeightSquared = ltrp->_tileTextureResolution._y * ltrp->_tileTextureResolution._y;
-    } else{
-      _texWidthSquared = -1;
-      _texHeightSquared = -1;
-    }
-  }
+  void _onLayerTilesRenderParametersChanged(const LayerTilesRenderParameters* ltrp);
 
 public:
 
@@ -154,20 +75,11 @@ public:
                                         TileLODTester* nextTesterRightLOD,
                                         TileLODTester* nextTesterWrongLOD,
                                         TileLODTester* nextTesterVisible,
-                                        TileLODTester* nextTesterNotVisible):
-  TileLODTesterResponder(nextTesterRightLOD,
-                         nextTesterWrongLOD,
-                         nextTesterVisible,
-                         nextTesterNotVisible),
-  _texHeightSquared(textureHeight * textureHeight),
-  _texWidthSquared(textureWidth * textureWidth)
-  {}
+                                        TileLODTester* nextTesterNotVisible);
 
-
-  ~ProjectedCornersDistanceTileLODTester() {
-  }
-
+  ~ProjectedCornersDistanceTileLODTester();
+  
 };
 
 
-#endif /* ProjectedCornersDistanceTileLODTester_hpp */
+#endif

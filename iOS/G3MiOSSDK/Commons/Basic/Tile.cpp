@@ -183,7 +183,7 @@ Mesh* Tile::getTessellatorMesh(const G3MRenderContext* rc,
     
     //Informs the lod testers
     if (_planetRenderer->getTileLODTester() != NULL) {
-      _planetRenderer->getTileLODTester()->onTileHasChangedMesh(0, this);
+      _planetRenderer->getTileLODTester()->onTileHasChangedMesh(this);
     }
     
     if (_debugMesh != NULL) {
@@ -249,7 +249,7 @@ bool Tile::isVisible(const G3MRenderContext* rc,
     return false;
   }
   
-  return _planetRenderer->getTileLODTester()->isVisible(0, this, *rc);
+  return _planetRenderer->getTileLODTester()->isVisible(this, *rc);
 }
 
 bool Tile::meetsRenderCriteria(const G3MRenderContext* rc,
@@ -275,7 +275,7 @@ bool Tile::meetsRenderCriteria(const G3MRenderContext* rc,
   }
   
   
-  return _planetRenderer->getTileLODTester()->meetsRenderCriteria(0, this, *rc);
+  return _planetRenderer->getTileLODTester()->meetsRenderCriteria(this, *rc);
 }
 
 void Tile::prepareForFullRendering(const G3MRenderContext* rc,
@@ -878,18 +878,23 @@ const Mesh* Tile::getTessellatorMesh() const {
   return _tessellatorMesh;
 }
 
-void Tile::setDataForLODTester(int level, TileLODTesterData* data) {
-
-  while (_lodTesterData.size() < level + 1) {
+void Tile::setDataForLODTester(int id, TileLODTesterData* data) {
+  while (_lodTesterData.size() < id + 1) {
     _lodTesterData.push_back(NULL);
   }
 
-  if (_lodTesterData[level] != data) {
-    if (_lodTesterData[level] != NULL) {
-      delete _lodTesterData[level];
-    }
+  TileLODTesterData* current = _lodTesterData[id];
+  if (current != data) {
+    delete current;
 
-    _lodTesterData[level] = data;
+    _lodTesterData[id] = data;
   }
 }
 
+TileLODTesterData* Tile::getDataForLODTester(int id) const {
+  if (id >= _lodTesterData.size()) {
+    return NULL;
+  }
+
+  return _lodTesterData[id];
+}

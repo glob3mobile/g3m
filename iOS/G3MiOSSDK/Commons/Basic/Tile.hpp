@@ -276,17 +276,11 @@ public:
   
   Vector2I getNormalizedPixelsFromPosition(const Geodetic2D& position2D,
                                            const Vector2I& size) const;
-  
-  TileLODTesterData* getDataForLODTester(int level) const {
-    if (level >= _lodTesterData.size()) {
-      return NULL;
-    }
-    
-    return _lodTesterData.at(level);
-  }
+
   const Mesh* getTessellatorMesh() const;
   
-  void setDataForLODTester(int level, TileLODTesterData* data);
+  TileLODTesterData* getDataForLODTester(int id) const;
+  void setDataForLODTester(int id, TileLODTesterData* data);
   
   const TileTessellatorMeshData* getTessellatorMeshData() const {
     return &_tileTessellatorMeshData;
