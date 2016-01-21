@@ -10,7 +10,7 @@
 #define ProjectedCornersDistanceTileLODTester_hpp
 
 
-#include "TileLODTester.hpp"
+#include "TileLODTesterResponder.hpp"
 #include "Tile.hpp"
 #include "Planet.hpp"
 #include "Context.hpp"
@@ -18,6 +18,7 @@
 #include "BoundingVolume.hpp"
 #include "Mesh.hpp"
 #include "LayerTilesRenderParameters.hpp"
+#include "TileLODTesterData.hpp"
 
 class ProjectedCornersDistanceTileLODTester: public TileLODTesterResponder {
 protected:

@@ -9,7 +9,7 @@
 #ifndef MaxLevelForPolesTileLODTester_hpp
 #define MaxLevelForPolesTileLODTester_hpp
 
-#include "TileLODTester.hpp"
+#include "TileLODTesterResponder.hpp"
 #include "Tile.hpp"
 #include "Context.hpp"
 #include "LayerTilesRenderParameters.hpp"

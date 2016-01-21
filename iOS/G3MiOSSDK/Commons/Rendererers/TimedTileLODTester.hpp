@@ -12,8 +12,10 @@
 #include "TileLODTester.hpp"
 #include "Tile.hpp"
 #include "Context.hpp"
+#include "TileLODTesterData.hpp"
 
-class TimedTileLODTester: public TileLODTester{
+
+class TimedTileLODTester: public TileLODTester {
 private:
   TileLODTester* _nextTester;
   long long _timeInMs;

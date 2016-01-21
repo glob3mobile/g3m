@@ -21,6 +21,7 @@
 #include "FlatColorMesh.hpp"
 #include "MercatorUtils.hpp"
 #include "DecimatedSubviewElevationData.hpp"
+#include "TileLODTesterData.hpp"
 
 std::string Tile::createTileId(int level,
                                int row,
@@ -876,3 +877,19 @@ const Mesh* Tile::getTessellatorMesh() const {
   
   return _tessellatorMesh;
 }
+
+void Tile::setDataForLODTester(int level, TileLODTesterData* data) {
+
+  while (_lodTesterData.size() < level + 1) {
+    _lodTesterData.push_back(NULL);
+  }
+
+  if (_lodTesterData[level] != data) {
+    if (_lodTesterData[level] != NULL) {
+      delete _lodTesterData[level];
+    }
+
+    _lodTesterData[level] = data;
+  }
+}
+

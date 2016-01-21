@@ -242,6 +242,8 @@
 		CF75C3A316EA57C700F7EE9F /* MapBoxLayer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF75C3A116EA54CC00F7EE9F /* MapBoxLayer.hpp */; };
 		CF75C3A616EA621D00F7EE9F /* GoogleMapsLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF75C3A416EA621D00F7EE9F /* GoogleMapsLayer.cpp */; };
 		CF75C3A716EA62B800F7EE9F /* GoogleMapsLayer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF75C3A516EA621D00F7EE9F /* GoogleMapsLayer.hpp */; };
+		CF792A041C51618100FDE7C9 /* TileLODTesterResponder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF792A021C51618100FDE7C9 /* TileLODTesterResponder.cpp */; };
+		CF792A071C51620800FDE7C9 /* TileLODTesterData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF792A051C51620800FDE7C9 /* TileLODTesterData.cpp */; };
 		CF7A78EC159B9BE300074422 /* MutableVector2D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF7A78EA159B9BE300074422 /* MutableVector2D.cpp */; };
 		CF7B07B117F5D8D400FE363D /* HUDImageRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF7B07AF17F5D8D400FE363D /* HUDImageRenderer.cpp */; };
 		CF7B07B617F5DBDC00FE363D /* HUDImageRenderer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF7B07B017F5D8D400FE363D /* HUDImageRenderer.hpp */; };
@@ -1444,6 +1446,10 @@
 		CF75C3A116EA54CC00F7EE9F /* MapBoxLayer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = MapBoxLayer.hpp; sourceTree = "<group>"; };
 		CF75C3A416EA621D00F7EE9F /* GoogleMapsLayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GoogleMapsLayer.cpp; sourceTree = "<group>"; };
 		CF75C3A516EA621D00F7EE9F /* GoogleMapsLayer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GoogleMapsLayer.hpp; sourceTree = "<group>"; };
+		CF792A021C51618100FDE7C9 /* TileLODTesterResponder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TileLODTesterResponder.cpp; path = Commons/Rendererers/TileLODTesterResponder.cpp; sourceTree = "<group>"; };
+		CF792A031C51618100FDE7C9 /* TileLODTesterResponder.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = TileLODTesterResponder.hpp; path = Commons/Rendererers/TileLODTesterResponder.hpp; sourceTree = "<group>"; };
+		CF792A051C51620800FDE7C9 /* TileLODTesterData.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TileLODTesterData.cpp; path = Commons/Rendererers/TileLODTesterData.cpp; sourceTree = "<group>"; };
+		CF792A061C51620800FDE7C9 /* TileLODTesterData.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = TileLODTesterData.hpp; path = Commons/Rendererers/TileLODTesterData.hpp; sourceTree = "<group>"; };
 		CF7A78EA159B9BE300074422 /* MutableVector2D.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MutableVector2D.cpp; path = Commons/Geometry/MutableVector2D.cpp; sourceTree = "<group>"; };
 		CF7A78EB159B9BE300074422 /* MutableVector2D.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = MutableVector2D.hpp; path = Commons/Geometry/MutableVector2D.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CF7B07AF17F5D8D400FE363D /* HUDImageRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = HUDImageRenderer.cpp; path = Commons/Rendererers/HUDImageRenderer.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
@@ -2485,6 +2491,10 @@
 				CFECA77A1B6AB9B200A0A44E /* VectorStreamingRenderer.hpp */,
 				D8019FEE1C11D91800784287 /* TileLODTester.cpp */,
 				D8019FEF1C11D91800784287 /* TileLODTester.hpp */,
+				CF792A051C51620800FDE7C9 /* TileLODTesterData.cpp */,
+				CF792A061C51620800FDE7C9 /* TileLODTesterData.hpp */,
+				CF792A021C51618100FDE7C9 /* TileLODTesterResponder.cpp */,
+				CF792A031C51618100FDE7C9 /* TileLODTesterResponder.hpp */,
 				D8B78E251C120CF800DDE2B9 /* ProjectedCornersDistanceTileLODTester.cpp */,
 				D8B78E261C120CF800DDE2B9 /* ProjectedCornersDistanceTileLODTester.hpp */,
 				D8B78E221C1208CB00DDE2B9 /* MaxLevelTileLODTester.cpp */,
@@ -2961,6 +2971,7 @@
 				CF0C396A157F988100646A2F /* Mark.cpp in Sources */,
 				38D786E61587B446003BBC75 /* Tile.cpp in Sources */,
 				CF31CBF1158776130085E8F1 /* Effects.cpp in Sources */,
+				CF792A041C51618100FDE7C9 /* TileLODTesterResponder.cpp in Sources */,
 				CF883B821590984900AEE39C /* TexturesHandler.cpp in Sources */,
 				CF883BCB1594B9A500AEE39C /* Sector.cpp in Sources */,
 				CF2412AF191FE3D100B796FB /* GEO2DCoordinatesArrayData.cpp in Sources */,
@@ -3249,6 +3260,7 @@
 				CF2DF7D2178DEA8900FF5FF0 /* QuadTree.cpp in Sources */,
 				CF2DF7D6178DECC400FF5FF0 /* GEOLineRasterSymbol.cpp in Sources */,
 				CF2DF7D9178DECF100FF5FF0 /* GEOMultiLineRasterSymbol.cpp in Sources */,
+				CF792A071C51620800FDE7C9 /* TileLODTesterData.cpp in Sources */,
 				CF2A47C5178F211200901857 /* GEORasterProjection.cpp in Sources */,
 				CFBD67AD179DBB7F0056A2BD /* GEO2DLineRasterStyle.cpp in Sources */,
 				CFAB53F21A8BCD9B00DD0099 /* LayoutImageBuilder.cpp in Sources */,

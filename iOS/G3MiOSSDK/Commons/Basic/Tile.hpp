@@ -31,7 +31,7 @@ class PlanetTileTessellatorData;
 class PlanetRenderer;
 class TileKey;
 class Geodetic3D;
-
+class TileLODTesterData;
 
 class Tile {
 private:
@@ -286,20 +286,7 @@ public:
   }
   const Mesh* getTessellatorMesh() const;
   
-  void setDataForLODTester(int level, TileLODTesterData* data) {
-    
-    while (_lodTesterData.size() < level + 1) {
-      _lodTesterData.push_back(NULL);
-    }
-    
-    if (_lodTesterData[level] != data) {
-      if (_lodTesterData[level] != NULL) {
-        delete _lodTesterData[level];
-      }
-      
-      _lodTesterData[level] = data;
-    }
-  }
+  void setDataForLODTester(int level, TileLODTesterData* data);
   
   const TileTessellatorMeshData* getTessellatorMeshData() const {
     return &_tileTessellatorMeshData;
