@@ -96,7 +96,7 @@ Vector2I PlanetTileTessellator::calculateResolution(const Vector2I& resolution,
   //  return Vector2I(resolutionX, resolutionY);
 }
 
-double PlanetTileTessellator::skirtDepthForSector(const Planet* planet, const Sector& sector){
+double PlanetTileTessellator::skirtDepthForSector(const Planet* planet, const Sector& sector) {
   
   const Vector3D se = planet->toCartesian(sector.getSE());
   const Vector3D nw = planet->toCartesian(sector.getNW());

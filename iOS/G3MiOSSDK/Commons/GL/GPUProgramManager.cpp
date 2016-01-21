@@ -60,15 +60,15 @@ GPUProgram* GPUProgramManager::getNewProgram(GL* gl, int uniformsCode, int attri
 //  const bool bbAnchor = GPUVariable::hasUniform(uniformsCode,    BILLBOARD_ANCHOR);
 
   
-  if (is2D){
-    if (flatColor){
+  if (is2D) {
+    if (flatColor) {
       return compileProgramWithName(gl, "FlatColor2DMesh");
     }
     return compileProgramWithName(gl, "Textured2DMesh");
   }
   
   if (billboard) {
-    if (transformTC){
+    if (transformTC) {
       return compileProgramWithName(gl, "Billboard_TransformedTexCoor");
     }
     

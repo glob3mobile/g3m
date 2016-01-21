@@ -223,7 +223,7 @@ _context(NULL),
 _webSocket(NULL),
 _marksRenderer(NULL),
 _hasParsedApplication(false),
-_tileLoDTester(NULL)
+_tileLODTester(NULL)
 {
   _featureInfoDownloadListener = new FeatureInfoDownloadListener(_applicationListener);
 }
@@ -2283,17 +2283,17 @@ RenderState MapBooOLD_ErrorRenderer::getRenderState(const G3MRenderContext* rc) 
   return RenderState::ready();
 }
 
-void MapBooOLDBuilder::setTileLODTester(TileLODTester* tlt){
-  _tileLoDTester = tlt;
+void MapBooOLDBuilder::setTileLODTester(TileLODTester* tlt) {
+  _tileLODTester = tlt;
 }
 
-TileLODTester* MapBooOLDBuilder::createDefaultTileLODTester() const{
+TileLODTester* MapBooOLDBuilder::createDefaultTileLODTester() const {
   return NULL;
 }
 
-TileLODTester* MapBooOLDBuilder::getTileLODTester(){
-  if (_tileLoDTester == NULL){
-    _tileLoDTester = createDefaultTileLODTester();
+TileLODTester* MapBooOLDBuilder::getTileLODTester() {
+  if (_tileLODTester == NULL) {
+    _tileLODTester = createDefaultTileLODTester();
   }
-  return _tileLoDTester;
+  return _tileLODTester;
 }

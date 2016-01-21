@@ -110,9 +110,9 @@ Tile::~Tile() {
   
   delete _tessellatorData;
   
-  const size_t size = _loDTesterData.size();
+  const size_t size = _lodTesterData.size();
   for (size_t i = 0; i < size; i++) {
-    delete _loDTesterData[i];
+    delete _lodTesterData[i];
   }
 }
 
@@ -181,11 +181,11 @@ Mesh* Tile::getTessellatorMesh(const G3MRenderContext* rc,
     _mustActualizeMeshDueToNewElevationData = false;
     
     //Informs the lod testers
-    if (_planetRenderer->getTileLODTester() != NULL){
+    if (_planetRenderer->getTileLODTester() != NULL) {
       _planetRenderer->getTileLODTester()->onTileHasChangedMesh(0, this);
     }
     
-    if (_debugMesh != NULL){
+    if (_debugMesh != NULL) {
       delete _debugMesh;
       _debugMesh = NULL;
     }
@@ -529,7 +529,7 @@ void Tile::render(const G3MRenderContext* rc,
                   std::vector<const Tile*>* tilesStartedRendering,
                   std::vector<std::string>* tilesStoppedRendering) {
 //#warning REMOVE
-//  if (!_sector.contains(Angle::fromDegrees(28), Angle::fromDegrees(-15))){
+//  if (!_sector.contains(Angle::fromDegrees(28), Angle::fromDegrees(-15))) {
 //    return;
 //  }
   
@@ -868,9 +868,9 @@ Vector2I Tile::getNormalizedPixelsFromPosition(const Geodetic2D& position2D,
   return Vector2I(math->toInt(tileDimension._x * uv._x), math->toInt(tileDimension._y * uv._y));
 }
 
-const Mesh* Tile::getTessellatorMesh() const{
+const Mesh* Tile::getTessellatorMesh() const {
   
-  if (_tessellatorMeshIsMeshHolder){
+  if (_tessellatorMeshIsMeshHolder) {
     return ((MeshHolder*) _tessellatorMesh)->getMesh();
   }
   

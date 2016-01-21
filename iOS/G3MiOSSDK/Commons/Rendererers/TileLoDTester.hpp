@@ -9,9 +9,10 @@
 #ifndef TileLODTester_hpp
 #define TileLODTester_hpp
 
-#include "TileTessellator.hpp"
-#include "TileTexturizer.hpp"
-#include "Context.hpp"
+class Tile;
+class G3MRenderContext;
+class LayerTilesRenderParameters;
+
 
 class TileLODTesterData{
   //Empty class. Each TileLODTester will implement a different set of associated data and will
@@ -21,73 +22,81 @@ public:
   virtual ~TileLODTesterData() { }
 #endif
 #ifdef JAVA_CODE
-  void dispose(){}
+  void dispose() {}
 #endif
 };
 
-class TileLODTester{
-  
+class TileLODTester {
+
 public:
-  
-  TileLODTester(){}
-  
-  virtual ~TileLODTester(){}
-  
+
+  TileLODTester() { }
+
+  virtual ~TileLODTester() { }
+
   virtual bool meetsRenderCriteria(int testerLevel,
-                                   Tile* tile, const G3MRenderContext& rc) const = 0;
-  
-  virtual bool isVisible(int testerLevel, Tile* tile, const G3MRenderContext& rc) const = 0;
-  
-  virtual void onTileHasChangedMesh(int testerLevel, Tile* tile) const = 0;
-  
+                                   Tile* tile,
+                                   const G3MRenderContext& rc) const = 0;
+
+  virtual bool isVisible(int testerLevel,
+                         Tile* tile,
+                         const G3MRenderContext& rc) const = 0;
+
+  virtual void onTileHasChangedMesh(int testerLevel,
+                                    Tile* tile) const = 0;
+
   virtual void onLayerTilesRenderParametersChanged(const LayerTilesRenderParameters* ltrp) = 0;
-  
+
 };
 
-class TileLODTesterResponder: public TileLODTester{
-  
-  TileLODTester* _nextTesterRightLoD;
-  TileLODTester* _nextTesterWrongLoD;
+class TileLODTesterResponder: public TileLODTester {
+
+  TileLODTester* _nextTesterRightLOD;
+  TileLODTester* _nextTesterWrongLOD;
   TileLODTester* _nextTesterVisible;
   TileLODTester* _nextTesterNotVisible;
-  
+
 protected:
-  
+
   virtual bool _meetsRenderCriteria(int testerLevel,
                                     Tile* tile,
                                     const G3MRenderContext& rc) const = 0;
-  
+
   virtual bool _isVisible(int testerLevel,
                           Tile* tile,
                           const G3MRenderContext& rc) const = 0;
-  
-  virtual void _onTileHasChangedMesh(int testerLevel, Tile* tile) const{}
-  
+
+  virtual void _onTileHasChangedMesh(int testerLevel, Tile* tile) const {}
+
   virtual void _onLayerTilesRenderParametersChanged(const LayerTilesRenderParameters* ltrp) = 0;
-  
+
 public:
-  
-  TileLODTesterResponder(TileLODTester* nextTesterRightLoD,
-                         TileLODTester* nextTesterWrongLoD,
+
+  TileLODTesterResponder(TileLODTester* nextTesterRightLOD,
+                         TileLODTester* nextTesterWrongLOD,
                          TileLODTester* nextTesterVisible,
                          TileLODTester* nextTesterNotVisible):
-  _nextTesterRightLoD(nextTesterRightLoD),
-  _nextTesterWrongLoD(nextTesterWrongLoD),
+  _nextTesterRightLOD(nextTesterRightLOD),
+  _nextTesterWrongLOD(nextTesterWrongLOD),
   _nextTesterVisible(nextTesterVisible),
-  _nextTesterNotVisible(nextTesterNotVisible){
-    
+  _nextTesterNotVisible(nextTesterNotVisible) {
+
   }
-  
+
   virtual ~TileLODTesterResponder();
-  
+
   bool meetsRenderCriteria(int testerLevel,
-                           Tile* tile, const G3MRenderContext& rc) const;
-  
-  bool isVisible(int testerLevel, Tile* tile, const G3MRenderContext& rc) const;
-  
-  void onTileHasChangedMesh(int testerLevel, Tile* tile) const;
-  
+                           Tile* tile,
+                           const G3MRenderContext& rc) const;
+
+  bool isVisible(int testerLevel,
+                 Tile* tile,
+                 const G3MRenderContext& rc) const;
+
+  void onTileHasChangedMesh(int testerLevel,
+                            Tile* tile) const;
+
   void onLayerTilesRenderParametersChanged(const LayerTilesRenderParameters* ltrp);
 };
 
-#endif /* TileLODTester_hpp */
+#endif

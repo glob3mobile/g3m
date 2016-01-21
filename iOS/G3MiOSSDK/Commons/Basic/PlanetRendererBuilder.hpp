@@ -27,7 +27,7 @@ private:
   TileTessellator* _tileTessellator;
   TileTexturizer* _texturizer;
   std::vector<GEOVectorLayer*> _geoVectorLayers;
-  TileLODTester* _tileLoDTester;
+  TileLODTester* _tileLODTester;
   
 
   LayerSet* _layerSet;

@@ -218,7 +218,7 @@ private:
   const bool                   _showStatistics;
   const bool                   _logTilesPetitions;
   ITileVisitor*                _tileVisitor = NULL;
-  TileLODTester*               _tileLoDTester;
+  TileLODTester*               _tileLODTester;
 
   TileRenderingListener*       _tileRenderingListener;
   std::vector<const Tile*>*    _tilesStartedRendering;
@@ -315,7 +315,7 @@ public:
                  TileRenderingListener*       tileRenderingListener,
                  ChangedRendererInfoListener* changedInfoListener,
                  TouchEventType               touchEventTypeOfTerrainTouchListener,
-                 TileLODTester*               tileLoDTester);
+                 TileLODTester*               tileLODTester);
 
   ~PlanetRenderer();
 
@@ -475,10 +475,11 @@ public:
   void setChangedRendererInfoListener(ChangedRendererInfoListener* changedInfoListener,
                                       const size_t rendererIdentifier);
   
-  TileLODTester* getTileLODTester() const{
-    return _tileLoDTester;
+  TileLODTester* getTileLODTester() const {
+#warning TODO: remove this
+    return _tileLODTester;
   }
-  
+
 };
 
 

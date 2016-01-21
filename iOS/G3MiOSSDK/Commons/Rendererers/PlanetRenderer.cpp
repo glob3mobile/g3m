@@ -122,7 +122,7 @@ PlanetRenderer::PlanetRenderer(TileTessellator*             tessellator,
                                TileRenderingListener*       tileRenderingListener,
                                ChangedRendererInfoListener* changedInfoListener,
                                TouchEventType               touchEventTypeOfTerrainTouchListener,
-                               TileLODTester*               tileLoDTester) :
+                               TileLODTester*               tileLODTester) :
 _tessellator(tessellator),
 _elevationDataProvider(elevationDataProvider),
 _ownsElevationDataProvider(ownsElevationDataProvider),
@@ -147,7 +147,7 @@ _renderTileMeshes(renderTileMeshes),
 _logTilesPetitions(logTilesPetitions),
 _tileRenderingListener(tileRenderingListener),
 _touchEventTypeOfTerrainTouchListener(touchEventTypeOfTerrainTouchListener),
-_tileLoDTester(tileLoDTester)
+_tileLODTester(tileLODTester)
 {
   _context = NULL;
   _changedInfoListener = changedInfoListener;
@@ -167,8 +167,8 @@ _tileLoDTester(tileLoDTester)
   
   _rendererIdentifier = -1;
   
-  if (_tileLoDTester == NULL){
-    THROW_EXCEPTION("Null TileLoDTester provided to PlanetRenderer");
+  if (_tileLODTester == NULL) {
+    THROW_EXCEPTION("Null TileLODTester provided to PlanetRenderer");
   }
 }
 
@@ -239,7 +239,7 @@ PlanetRenderer::~PlanetRenderer() {
   delete _renderedSector;
   delete _tileRenderingListener;
   
-  delete _tileLoDTester;
+  delete _tileLODTester;
   
 #ifdef C_CODE
   delete _tilesStartedRendering;
@@ -372,7 +372,7 @@ const LayerTilesRenderParameters* PlanetRenderer::getLayerTilesRenderParameters(
     }
     _layerTilesRenderParametersDirty = false;
     
-    _tileLoDTester->onLayerTilesRenderParametersChanged(_layerTilesRenderParameters);
+    _tileLODTester->onLayerTilesRenderParametersChanged(_layerTilesRenderParameters);
   }
   return _layerTilesRenderParameters;
 }

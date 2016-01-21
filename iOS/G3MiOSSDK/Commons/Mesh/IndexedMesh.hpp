@@ -42,7 +42,7 @@ public:
 
   ~IndexedMesh();
   
-  const IShortBuffer* getIndices() const{
+  const IShortBuffer* getIndices() const {
     return _indices;
   }
 };

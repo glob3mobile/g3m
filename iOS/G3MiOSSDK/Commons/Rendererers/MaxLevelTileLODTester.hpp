@@ -14,65 +14,66 @@
 #include "Context.hpp"
 #include "LayerTilesRenderParameters.hpp"
 
-class MaxLevelTileLODTester: public TileLODTesterResponder{
+class MaxLevelTileLODTester: public TileLODTesterResponder {
 protected:
-  
+
   bool _meetsRenderCriteria(int testerLevel,
                             Tile* tile,
-                            const G3MRenderContext& rc) const{
-    
-    if (tile->_level >= _maxLevel && _maxLevel > -1){
+                            const G3MRenderContext& rc) const {
+
+    if (tile->_level >= _maxLevel && _maxLevel > -1) {
       return true;
     }
-    
-    if (tile->_sector.touchesPoles()){
-      if (tile->_level >= _maxLevelForPoles && _maxLevelForPoles > -1){
+
+    if (tile->_sector.touchesPoles()) {
+      if (tile->_level >= _maxLevelForPoles && _maxLevelForPoles > -1) {
         return true;
       }
     }
-    
+
     return false;
   }
-  
+
   bool _isVisible(int testerLevel,
                   Tile* tile,
-                  const G3MRenderContext& rc) const{
+                  const G3MRenderContext& rc) const {
     return true;
   }
-  
+
   int _maxLevelForPoles;
   int _maxLevel;
-  
-  void _onLayerTilesRenderParametersChanged(const LayerTilesRenderParameters* ltrp){
-    if (ltrp != NULL){
+
+  void _onLayerTilesRenderParametersChanged(const LayerTilesRenderParameters* ltrp) {
+    if (ltrp != NULL) {
       _maxLevel = ltrp->_maxLevel;
       _maxLevelForPoles = ltrp->_maxLevelForPoles;
-    } else{
+    }
+    else {
       _maxLevel = -1;
       _maxLevelForPoles = -1;
     }
   }
-  
+
 public:
-  
+
   MaxLevelTileLODTester(int maxLevel,
                         int maxLevelForPoles,
-                        TileLODTester* nextTesterRightLoD,
-                        TileLODTester* nextTesterWrongLoD,
+                        TileLODTester* nextTesterRightLOD,
+                        TileLODTester* nextTesterWrongLOD,
                         TileLODTester* nextTesterVisible,
                         TileLODTester* nextTesterNotVisible):
-  TileLODTesterResponder(nextTesterRightLoD,
-                         nextTesterWrongLoD,
+  TileLODTesterResponder(nextTesterRightLOD,
+                         nextTesterWrongLOD,
                          nextTesterVisible,
                          nextTesterNotVisible),
   _maxLevelForPoles(maxLevelForPoles),
   _maxLevel(maxLevel)
   {}
-  
-  
-  ~MaxLevelTileLODTester(){
+
+
+  ~MaxLevelTileLODTester() {
   }
-  
+
 };
 
 #endif /* MaxLevelForPolesTileLODTester_hpp */

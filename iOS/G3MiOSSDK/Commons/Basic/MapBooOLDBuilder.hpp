@@ -532,7 +532,7 @@ public:
     
   }
   
-  void changedInfo(const std::vector<const Info*>& info){
+  void changedInfo(const std::vector<const Info*>& info) {
     _mapBooHUDRenderer->updateInfo(info);
     
   }
@@ -620,7 +620,7 @@ private:
 
   bool        _isApplicationTubeOpen;
   
-  TileLODTester* _tileLoDTester;
+  TileLODTester* _tileLODTester;
     
   MapBooOLD_ErrorRenderer* _mbErrorRenderer;
 

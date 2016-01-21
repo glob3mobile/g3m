@@ -64,7 +64,7 @@ bool RasterLayer::isEquals(const Layer* that) const {
 TileImageProvider* RasterLayer::createTileImageProvider(const G3MRenderContext* rc,
                                                         const LayerTilesRenderParameters* layerTilesRenderParameters) const {
   if (_tileImageProvider == NULL) {
-    _tileImageProvider = new RasterLayerTileImageProvider(this, rc->getDownloader());;
+    _tileImageProvider = new RasterLayerTileImageProvider(this, rc->getDownloader());
   }
   _tileImageProvider->_retain();
   return _tileImageProvider;

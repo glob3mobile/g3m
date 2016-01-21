@@ -432,7 +432,7 @@ void DTT_TileImageListener::imageCreated(const std::string&           tileId,
                                          const std::string&           imageId,
                                          const TileImageContribution* contribution) {
 
-  if (!contribution->isFullCoverageAndOpaque()){
+  if (!contribution->isFullCoverageAndOpaque()) {
 
     IStringBuilder* auxImageId = IStringBuilder::newStringBuilder();
 

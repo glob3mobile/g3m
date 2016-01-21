@@ -34,7 +34,7 @@ GLFeature(NO_GROUP, GLF_VIEWPORT_EXTENT)
 }
 
 void ViewportExtentGLFeature::changeExtent(int viewportWidth,
-                                           int viewportHeight){
+                                           int viewportHeight) {
   _extent->changeValue(viewportWidth, viewportHeight);
 }
 

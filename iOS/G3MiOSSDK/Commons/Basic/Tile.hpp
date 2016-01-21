@@ -132,7 +132,7 @@ private:
                                   int row,
                                   int column);
   
-  std::vector<TileLODTesterData*> _loDTesterData;
+  std::vector<TileLODTesterData*> _lodTesterData;
   
 public:
   const Sector      _sector;
@@ -277,39 +277,39 @@ public:
   Vector2I getNormalizedPixelsFromPosition(const Geodetic2D& position2D,
                                            const Vector2I& size) const;
   
-  TileLODTesterData* getDataForLoDTester(int level) const{
-    if (level >= _loDTesterData.size()){
+  TileLODTesterData* getDataForLODTester(int level) const {
+    if (level >= _lodTesterData.size()) {
       return NULL;
     }
     
-    return _loDTesterData.at(level);
+    return _lodTesterData.at(level);
   }
   const Mesh* getTessellatorMesh() const;
   
-  void setDataForLoDTester(int level, TileLODTesterData* data){
+  void setDataForLODTester(int level, TileLODTesterData* data) {
     
-    while (_loDTesterData.size() < level + 1) {
-      _loDTesterData.push_back(NULL);
+    while (_lodTesterData.size() < level + 1) {
+      _lodTesterData.push_back(NULL);
     }
     
-    if (_loDTesterData[level] != data){
-      if (_loDTesterData[level] != NULL){
-        delete _loDTesterData[level];
+    if (_lodTesterData[level] != data) {
+      if (_lodTesterData[level] != NULL) {
+        delete _lodTesterData[level];
       }
       
-      _loDTesterData[level] = data;
+      _lodTesterData[level] = data;
     }
   }
   
-  const TileTessellatorMeshData* getTessellatorMeshData() const{
+  const TileTessellatorMeshData* getTessellatorMeshData() const {
     return &_tileTessellatorMeshData;
   }
   
-  const Mesh* getCurrentTessellatorMesh() const{
+  const Mesh* getCurrentTessellatorMesh() const {
     return _tessellatorMesh;
   }
   
-  bool areSubtilesCreated() const{
+  bool areSubtilesCreated() const {
     return _subtiles != NULL;
   }
   
