@@ -18,6 +18,8 @@ package org.glob3.mobile.generated;
 
 
 
+//class TimeInterval;
+
 
 public class MaxFrameTimeTileLODTester extends TileLODTester
 {
@@ -42,9 +44,9 @@ public class MaxFrameTimeTileLODTester extends TileLODTester
        _nextTester.dispose();
   }
 
-  public boolean meetsRenderCriteria(int testerLevel, Tile tile, G3MRenderContext rc)
+  public boolean meetsRenderCriteria(Tile tile, G3MRenderContext rc)
   {
-
+  
     final boolean hasSubtiles = tile.areSubtilesCreated();
     long elapsedTime = rc.getFrameStartTimer().elapsedTimeInMilliseconds();
     if (elapsedTime < _lastElapsedTime)
@@ -56,36 +58,36 @@ public class MaxFrameTimeTileLODTester extends TileLODTester
       _nSplitsInFrame = 0;
     }
     _lastElapsedTime = elapsedTime;
-
+  
     if (!hasSubtiles && elapsedTime > _maxFrameTimeInMs && _nSplitsInFrame > 0)
     {
       return true;
     }
-
-    boolean res = (_nextTester == null)? true : _nextTester.meetsRenderCriteria(testerLevel+1, tile, rc);
-
+  
+    boolean res = (_nextTester == null)? true : _nextTester.meetsRenderCriteria(tile, rc);
+  
     if (!res && !hasSubtiles)
     {
       _nSplitsInFrame++;
     }
-
+  
     return res;
   }
 
-  public boolean isVisible(int testerLevel, Tile tile, G3MRenderContext rc)
+  public boolean isVisible(Tile tile, G3MRenderContext rc)
   {
     if (_nextTester == null)
     {
       return true;
     }
-    return _nextTester.isVisible(testerLevel+1, tile, rc);
+    return _nextTester.isVisible(tile, rc);
   }
 
-  public void onTileHasChangedMesh(int testerLevel, Tile tile)
+  public void onTileHasChangedMesh(Tile tile)
   {
     if (_nextTester != null)
     {
-      _nextTester.onTileHasChangedMesh(testerLevel+1, tile);
+      _nextTester.onTileHasChangedMesh(tile);
     }
   }
 

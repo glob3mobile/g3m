@@ -48,41 +48,41 @@ public class TimedTileLODTester extends TileLODTester
        _nextTester.dispose();
   }
 
-  public boolean meetsRenderCriteria(int testerLevel, Tile tile, G3MRenderContext rc)
+  public boolean meetsRenderCriteria(Tile tile, G3MRenderContext rc)
   {
 
     long now = rc.getFrameStartTimer().nowInMilliseconds();
 
-    TimedTileLODTesterData data = (TimedTileLODTesterData) tile.getDataForLODTester(testerLevel);
+    TimedTileLODTesterData data = (TimedTileLODTesterData) tile.getDataForLODTester(_id);
     if (data == null)
     {
       data = new TimedTileLODTesterData(now);
-      tile.setDataForLODTester(testerLevel, data);
-      data._lastMeetsRenderCriteriaResult = (_nextTester == null)? true : _nextTester.meetsRenderCriteria(testerLevel+1, tile, rc);
+      tile.setDataForLODTester(_id, data);
+      data._lastMeetsRenderCriteriaResult = (_nextTester == null)? true : _nextTester.meetsRenderCriteria(tile, rc);
     }
 
     if ((now - data._lastMeetsRenderCriteriaTimeInMS) > _timeInMs)
     {
-      data._lastMeetsRenderCriteriaResult = (_nextTester == null)? true : _nextTester.meetsRenderCriteria(testerLevel+1, tile, rc);
+      data._lastMeetsRenderCriteriaResult = (_nextTester == null)? true : _nextTester.meetsRenderCriteria(tile, rc);
     }
 
     return data._lastMeetsRenderCriteriaResult;
   }
 
-  public boolean isVisible(int testerLevel, Tile tile, G3MRenderContext rc)
+  public boolean isVisible(Tile tile, G3MRenderContext rc)
   {
     if (_nextTester == null)
     {
       return true;
     }
-    return _nextTester.isVisible(testerLevel+1, tile, rc);
+    return _nextTester.isVisible(tile, rc);
   }
 
-  public void onTileHasChangedMesh(int testerLevel, Tile tile)
+  public void onTileHasChangedMesh(Tile tile)
   {
     if (_nextTester != null)
     {
-      _nextTester.onTileHasChangedMesh(testerLevel+1, tile);
+      _nextTester.onTileHasChangedMesh(tile);
     }
   }
 

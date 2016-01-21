@@ -1026,11 +1026,6 @@ public class Mark implements SurfaceElevationListener
       _textureGLF.setTranslation(_translationTCX, _translationTCY);
       _textureGLF.setScale(_scalingTCX, _scalingTCY);
     }
-    else
-    {
-  
-    }
-  
   }
 
   public final void setMarkAnchor(float anchorU, float anchorV)

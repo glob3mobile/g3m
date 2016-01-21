@@ -23,21 +23,25 @@ package org.glob3.mobile.generated;
 
 public abstract class TileLODTester
 {
+  private static int ID_COUNTER = 0;
+
+  protected final int _id;
 
 
   public TileLODTester()
   {
+     _id = ID_COUNTER++;
   }
 
   public void dispose()
   {
   }
 
-  public abstract boolean meetsRenderCriteria(int testerLevel, Tile tile, G3MRenderContext rc);
+  public abstract boolean meetsRenderCriteria(Tile tile, G3MRenderContext rc);
 
-  public abstract boolean isVisible(int testerLevel, Tile tile, G3MRenderContext rc);
+  public abstract boolean isVisible(Tile tile, G3MRenderContext rc);
 
-  public abstract void onTileHasChangedMesh(int testerLevel, Tile tile);
+  public abstract void onTileHasChangedMesh(Tile tile);
 
   public abstract void onLayerTilesRenderParametersChanged(LayerTilesRenderParameters ltrp);
 

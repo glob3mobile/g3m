@@ -18,37 +18,46 @@ package org.glob3.mobile.generated;
 
 
 
+//class BoundingVolume;
+//class Planet;
+//class Camera;
+
+
 public class ProjectedCornersDistanceTileLODTester extends TileLODTesterResponder
 {
+  private double _texHeightSquared;
+  private double _texWidthSquared;
 
-  protected static class ProjectedCornersDistanceTileLODTesterData extends TileLODTesterData
+
+
+  protected static class PCDTesterData extends TileLODTesterData
   {
-
-    private double getSquaredArcSegmentRatio(Vector3D a, Vector3D b)
+    private static double getSquaredArcSegmentRatio(Vector3D a, Vector3D b)
     {
       /*
        Arco = ang * Cuerda / (2 * sen(ang/2))
        */
-
+    
       final double angleInRadians = Vector3D.angleInRadiansBetween(a, b);
       final double halfAngleSin = java.lang.Math.sin(angleInRadians / 2);
       final double arcSegmentRatio = (halfAngleSin == 0) ? 1 : angleInRadians / (2 * halfAngleSin);
       return (arcSegmentRatio * arcSegmentRatio);
     }
 
-    public double _northArcSegmentRatioSquared;
-    public double _southArcSegmentRatioSquared;
-    public double _eastArcSegmentRatioSquared;
-    public double _westArcSegmentRatioSquared;
+    private double _northArcSegmentRatioSquared;
+    private double _southArcSegmentRatioSquared;
+    private double _eastArcSegmentRatioSquared;
+    private double _westArcSegmentRatioSquared;
 
-    public Vector3D _northWestPoint ;
-    public Vector3D _northEastPoint ;
-    public Vector3D _southWestPoint ;
-    public Vector3D _southEastPoint ;
+    private final Vector3D _northWestPoint ;
+    private final Vector3D _northEastPoint ;
+    private final Vector3D _southWestPoint ;
+    private final Vector3D _southEastPoint ;
+
 
     public BoundingVolume _bvol;
 
-    public ProjectedCornersDistanceTileLODTesterData(Tile tile, double mediumHeight, Planet planet)
+    public PCDTesterData(Tile tile, double mediumHeight, Planet planet)
     {
        super();
        _northWestPoint = new Vector3D(planet.toCartesian(tile._sector.getNW(), mediumHeight));
@@ -59,14 +68,14 @@ public class ProjectedCornersDistanceTileLODTester extends TileLODTesterResponde
       final Vector3D normalNE = planet.centricSurfaceNormal(_northEastPoint);
       final Vector3D normalSW = planet.centricSurfaceNormal(_southWestPoint);
       final Vector3D normalSE = planet.centricSurfaceNormal(_southEastPoint);
-
+    
       _northArcSegmentRatioSquared = getSquaredArcSegmentRatio(normalNW, normalNE);
       _southArcSegmentRatioSquared = getSquaredArcSegmentRatio(normalSW, normalSE);
       _eastArcSegmentRatioSquared = getSquaredArcSegmentRatio(normalNE, normalSE);
       _westArcSegmentRatioSquared = getSquaredArcSegmentRatio(normalNW, normalSW);
-
+    
       //Computing Bounding Volume
-
+    
       final Mesh mesh = tile.getCurrentTessellatorMesh();
       if (mesh == null)
       {
@@ -77,66 +86,62 @@ public class ProjectedCornersDistanceTileLODTester extends TileLODTesterResponde
       {
         _bvol = mesh.getBoundingVolume(); //BV is deleted by mesh
       }
-
+    
     }
 
     public final boolean evaluate(Camera camera, double texHeightSquared, double texWidthSquared)
     {
-
+    
       final double distanceInPixelsNorth = camera.getEstimatedPixelDistance(_northWestPoint, _northEastPoint);
       final double distanceInPixelsSouth = camera.getEstimatedPixelDistance(_southWestPoint, _southEastPoint);
       final double distanceInPixelsWest = camera.getEstimatedPixelDistance(_northWestPoint, _southWestPoint);
       final double distanceInPixelsEast = camera.getEstimatedPixelDistance(_northEastPoint, _southEastPoint);
-
+    
       final double distanceInPixelsSquaredArcNorth = (distanceInPixelsNorth * distanceInPixelsNorth) * _northArcSegmentRatioSquared;
       final double distanceInPixelsSquaredArcSouth = (distanceInPixelsSouth * distanceInPixelsSouth) * _southArcSegmentRatioSquared;
       final double distanceInPixelsSquaredArcWest = (distanceInPixelsWest * distanceInPixelsWest) * _westArcSegmentRatioSquared;
       final double distanceInPixelsSquaredArcEast = (distanceInPixelsEast * distanceInPixelsEast) * _eastArcSegmentRatioSquared;
-
+    
       return ((distanceInPixelsSquaredArcNorth <= texHeightSquared) && (distanceInPixelsSquaredArcSouth <= texHeightSquared) && (distanceInPixelsSquaredArcWest <= texWidthSquared) && (distanceInPixelsSquaredArcEast <= texWidthSquared));
     }
-
   }
 
-  protected final void _onTileHasChangedMesh(int testerLevel, Tile tile)
+  protected final void _onTileHasChangedMesh(Tile tile)
   {
     //Recomputing data when tile changes tessellator mesh
-    tile.setDataForLODTester(testerLevel, null);
+    tile.setDataForLODTester(_id, null);
   }
 
-  protected final ProjectedCornersDistanceTileLODTesterData getData(Tile tile, int testerLevel, G3MRenderContext rc)
+  protected final ProjectedCornersDistanceTileLODTester.PCDTesterData getData(Tile tile, G3MRenderContext rc)
   {
-    ProjectedCornersDistanceTileLODTesterData data = (ProjectedCornersDistanceTileLODTesterData) tile.getDataForLODTester(testerLevel);
+    PCDTesterData data = (PCDTesterData) tile.getDataForLODTester(_id);
     if (data == null)
     {
       final double mediumHeight = tile.getTessellatorMeshData()._averageHeight;
-      data = new ProjectedCornersDistanceTileLODTesterData(tile, mediumHeight, rc.getPlanet());
-      tile.setDataForLODTester(testerLevel, data);
+      data = new PCDTesterData(tile, mediumHeight, rc.getPlanet());
+      tile.setDataForLODTester(_id, data);
     }
     return data;
   }
 
-  protected final boolean _meetsRenderCriteria(int testerLevel, Tile tile, G3MRenderContext rc)
+  protected final boolean _meetsRenderCriteria(Tile tile, G3MRenderContext rc)
   {
-
+  
     if (_texHeightSquared < 0 || _texHeightSquared < 0)
     {
       return true;
     }
-
-    ProjectedCornersDistanceTileLODTesterData data = getData(tile, testerLevel, rc);
-
+  
+    PCDTesterData data = getData(tile, rc);
+  
     return data.evaluate(rc.getCurrentCamera(), _texHeightSquared, _texWidthSquared);
   }
 
-  protected final boolean _isVisible(int testerLevel, Tile tile, G3MRenderContext rc)
+  protected final boolean _isVisible(Tile tile, G3MRenderContext rc)
   {
-    ProjectedCornersDistanceTileLODTesterData data = getData(tile, testerLevel, rc);
+    PCDTesterData data = getData(tile, rc);
     return data._bvol.touchesFrustum(rc.getCurrentCamera().getFrustumInModelCoordinates());
   }
-
-  protected double _texHeightSquared;
-  protected double _texWidthSquared;
 
   protected final void _onLayerTilesRenderParametersChanged(LayerTilesRenderParameters ltrp)
   {
@@ -159,7 +164,6 @@ public class ProjectedCornersDistanceTileLODTester extends TileLODTesterResponde
      _texHeightSquared = textureHeight * textureHeight;
      _texWidthSquared = textureWidth * textureWidth;
   }
-
 
   public void dispose()
   {

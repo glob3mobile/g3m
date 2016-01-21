@@ -26,11 +26,11 @@ public abstract class TileLODTesterResponder extends TileLODTester
   private TileLODTester _nextTesterNotVisible;
 
 
-  protected abstract boolean _meetsRenderCriteria(int testerLevel, Tile tile, G3MRenderContext rc);
+  protected abstract boolean _meetsRenderCriteria(Tile tile, G3MRenderContext rc);
 
-  protected abstract boolean _isVisible(int testerLevel, Tile tile, G3MRenderContext rc);
+  protected abstract boolean _isVisible(Tile tile, G3MRenderContext rc);
 
-  protected void _onTileHasChangedMesh(int testerLevel, Tile tile)
+  protected void _onTileHasChangedMesh(Tile tile)
   {
   }
 
@@ -58,15 +58,15 @@ public abstract class TileLODTesterResponder extends TileLODTester
        _nextTesterWrongLOD.dispose();
   }
 
-  public final boolean meetsRenderCriteria(int testerLevel, Tile tile, G3MRenderContext rc)
+  public final boolean meetsRenderCriteria(Tile tile, G3MRenderContext rc)
   {
   
     //Right LOD
-    if (_meetsRenderCriteria(testerLevel, tile, rc))
+    if (_meetsRenderCriteria(tile, rc))
     {
       if (_nextTesterRightLOD != null)
       {
-        return _nextTesterRightLOD.meetsRenderCriteria(testerLevel + 1, tile, rc);
+        return _nextTesterRightLOD.meetsRenderCriteria(tile, rc);
       }
       return true;
     }
@@ -74,20 +74,20 @@ public abstract class TileLODTesterResponder extends TileLODTester
     //Wrong LOD
     if (_nextTesterWrongLOD != null)
     {
-      return _nextTesterWrongLOD.meetsRenderCriteria(testerLevel + 1, tile, rc);
+      return _nextTesterWrongLOD.meetsRenderCriteria(tile, rc);
     }
+  
     return false;
   }
 
-  public final boolean isVisible(int testerLevel, Tile tile, G3MRenderContext rc)
+  public final boolean isVisible(Tile tile, G3MRenderContext rc)
   {
-  
     //Visible
-    if (_isVisible(testerLevel, tile, rc))
+    if (_isVisible(tile, rc))
     {
       if (_nextTesterVisible != null)
       {
-        return _nextTesterVisible.isVisible(testerLevel+1, tile, rc);
+        return _nextTesterVisible.isVisible(tile, rc);
       }
       return true;
     }
@@ -95,23 +95,23 @@ public abstract class TileLODTesterResponder extends TileLODTester
     //Not visible
     if (_nextTesterNotVisible != null)
     {
-      return _nextTesterNotVisible.isVisible(testerLevel+1, tile, rc);
+      return _nextTesterNotVisible.isVisible(tile, rc);
     }
-    return false;
   
+    return false;
   }
 
-  public final void onTileHasChangedMesh(int testerLevel, Tile tile)
+  public final void onTileHasChangedMesh(Tile tile)
   {
-    _onTileHasChangedMesh(testerLevel, tile);
+    _onTileHasChangedMesh(tile);
     if (_nextTesterNotVisible != null)
-      _nextTesterNotVisible.onTileHasChangedMesh(testerLevel+1, tile);
+      _nextTesterNotVisible.onTileHasChangedMesh(tile);
     if (_nextTesterVisible != null)
-      _nextTesterVisible.onTileHasChangedMesh(testerLevel+1, tile);
+      _nextTesterVisible.onTileHasChangedMesh(tile);
     if (_nextTesterRightLOD != null)
-      _nextTesterRightLOD.onTileHasChangedMesh(testerLevel+1, tile);
+      _nextTesterRightLOD.onTileHasChangedMesh(tile);
     if (_nextTesterWrongLOD != null)
-      _nextTesterWrongLOD.onTileHasChangedMesh(testerLevel+1, tile);
+      _nextTesterWrongLOD.onTileHasChangedMesh(tile);
   }
 
   public final void onLayerTilesRenderParametersChanged(LayerTilesRenderParameters ltrp)

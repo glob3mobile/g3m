@@ -78,7 +78,7 @@ public class Tile
       //Informs the lod testers
       if (_planetRenderer.getTileLODTester() != null)
       {
-        _planetRenderer.getTileLODTester().onTileHasChangedMesh(0, this);
+        _planetRenderer.getTileLODTester().onTileHasChangedMesh(this);
       }
   
       if (_debugMesh != null)
@@ -138,7 +138,7 @@ public class Tile
       return false;
     }
   
-    return _planetRenderer.getTileLODTester().isVisible(0, this, rc);
+    return _planetRenderer.getTileLODTester().isVisible(this, rc);
   }
 
   private boolean meetsRenderCriteria(G3MRenderContext rc, TilesRenderParameters tilesRenderParameters, ITimer lastSplitTimer, double nowInMS)
@@ -166,7 +166,7 @@ public class Tile
     }
   
   
-    return _planetRenderer.getTileLODTester().meetsRenderCriteria(0, this, rc);
+    return _planetRenderer.getTileLODTester().meetsRenderCriteria(this, rc);
   }
 
   private void rawRender(G3MRenderContext rc, GLState glState, TileTexturizer texturizer, ElevationDataProvider elevationDataProvider, TileTessellator tessellator, LayerTilesRenderParameters layerTilesRenderParameters, LayerSet layerSet, TilesRenderParameters tilesRenderParameters, boolean forceFullRender, long tileDownloadPriority, boolean logTilesPetitions)
@@ -924,15 +924,6 @@ public class Tile
     return new Vector2I(math.toInt(tileDimension._x * uv._x), math.toInt(tileDimension._y * uv._y));
   }
 
-  public final TileLODTesterData getDataForLODTester(int level)
-  {
-    if (level >= _lodTesterData.size())
-    {
-      return null;
-    }
-
-    return _lodTesterData.get(level);
-  }
   public final Mesh getTessellatorMesh()
   {
   
@@ -944,23 +935,29 @@ public class Tile
     return _tessellatorMesh;
   }
 
-  public final void setDataForLODTester(int level, TileLODTesterData data)
+  public final TileLODTesterData getDataForLODTester(int id)
   {
+    if (id >= _lodTesterData.size())
+    {
+      return null;
+    }
   
-    while (_lodTesterData.size() < level + 1)
+    return _lodTesterData.get(id);
+  }
+  public final void setDataForLODTester(int id, TileLODTesterData data)
+  {
+    while (_lodTesterData.size() < id + 1)
     {
       _lodTesterData.add(null);
     }
   
-    if (_lodTesterData.get(level) != data)
+    TileLODTesterData current = _lodTesterData.get(id);
+    if (current != data)
     {
-      if (_lodTesterData.get(level) != null)
-      {
-        if (_lodTesterData.get(level) != null)
-           _lodTesterData.get(level).dispose();
-      }
+      if (current != null)
+         current.dispose();
   
-      _lodTesterData.set(level, data);
+      _lodTesterData.set(id, data);
     }
   }
 
@@ -982,4 +979,3 @@ public class Tile
 }
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#pragma mark ElevationData methods
-

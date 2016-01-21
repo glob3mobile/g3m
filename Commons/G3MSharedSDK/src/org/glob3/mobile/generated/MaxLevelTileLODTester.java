@@ -17,17 +17,21 @@ package org.glob3.mobile.generated;
 
 
 
+
 public class MaxLevelTileLODTester extends TileLODTesterResponder
 {
+  private int _maxLevel;
+  private int _maxLevelForPoles;
 
-  protected final boolean _meetsRenderCriteria(int testerLevel, Tile tile, G3MRenderContext rc)
+
+  protected final boolean _meetsRenderCriteria(Tile tile, G3MRenderContext rc)
   {
-
+  
     if (tile._level >= _maxLevel && _maxLevel > -1)
     {
       return true;
     }
-
+  
     if (tile._sector.touchesPoles())
     {
       if (tile._level >= _maxLevelForPoles && _maxLevelForPoles > -1)
@@ -35,17 +39,14 @@ public class MaxLevelTileLODTester extends TileLODTesterResponder
         return true;
       }
     }
-
+  
     return false;
   }
 
-  protected final boolean _isVisible(int testerLevel, Tile tile, G3MRenderContext rc)
+  protected final boolean _isVisible(Tile tile, G3MRenderContext rc)
   {
     return true;
   }
-
-  protected int _maxLevelForPoles;
-  protected int _maxLevel;
 
   protected final void _onLayerTilesRenderParametersChanged(LayerTilesRenderParameters ltrp)
   {
