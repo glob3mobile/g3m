@@ -273,8 +273,7 @@ bool Tile::meetsRenderCriteria(const G3MRenderContext* rc,
       }
     }
   }
-  
-  
+
   return _planetRenderer->getTileLODTester()->meetsRenderCriteria(this, *rc);
 }
 
