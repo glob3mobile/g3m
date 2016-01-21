@@ -1,4 +1,22 @@
 package org.glob3.mobile.generated; 
+//
+//  TileLODTesterResponder.cpp
+//  G3MiOSSDK
+//
+//  Created by Diego Gomez Deck on 1/21/16.
+//
+//
+
+//
+//  TileLODTesterResponder.hpp
+//  G3MiOSSDK
+//
+//  Created by Diego Gomez Deck on 1/21/16.
+//
+//
+
+
+
 public abstract class TileLODTesterResponder extends TileLODTester
 {
 

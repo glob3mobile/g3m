@@ -1,24 +1,19 @@
 package org.glob3.mobile.generated; 
 //
-//  TileLODTester.cpp
+//  TileLODTesterData.cpp
 //  G3MiOSSDK
 //
-//  Created by Jose Miguel SN on 4/12/15.
+//  Created by Diego Gomez Deck on 1/21/16.
 //
 //
 
 //
-//  TileLODTester.hpp
+//  TileLODTesterData.hpp
 //  G3MiOSSDK
 //
-//  Created by Jose Miguel SN on 4/12/15.
+//  Created by Diego Gomez Deck on 1/21/16.
 //
 //
-
-
-//class Tile;
-//class G3MRenderContext;
-//class LayerTilesRenderParameters;
 
 
 public class TileLODTesterData

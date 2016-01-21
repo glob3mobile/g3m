@@ -34,7 +34,7 @@ package org.glob3.mobile.generated;
 //class PlanetRenderer;
 //class TileKey;
 //class Geodetic3D;
-
+//class TileLODTesterData;
 
 public class Tile
 {
@@ -946,12 +946,12 @@ public class Tile
 
   public final void setDataForLODTester(int level, TileLODTesterData data)
   {
-
+  
     while (_lodTesterData.size() < level + 1)
     {
       _lodTesterData.add(null);
     }
-
+  
     if (_lodTesterData.get(level) != data)
     {
       if (_lodTesterData.get(level) != null)
@@ -959,7 +959,7 @@ public class Tile
         if (_lodTesterData.get(level) != null)
            _lodTesterData.get(level).dispose();
       }
-
+  
       _lodTesterData.set(level, data);
     }
   }
@@ -982,3 +982,4 @@ public class Tile
 }
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#pragma mark ElevationData methods
+
