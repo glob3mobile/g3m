@@ -36,7 +36,7 @@ public abstract class MapBooOLDBuilder
 
   private boolean _isApplicationTubeOpen;
 
-  private TileLODTester _tileLoDTester;
+  private TileLODTester _tileLODTester;
 
   private MapBooOLD_ErrorRenderer _mbErrorRenderer;
 
@@ -1047,7 +1047,7 @@ public abstract class MapBooOLDBuilder
      _webSocket = null;
      _marksRenderer = null;
      _hasParsedApplication = false;
-     _tileLoDTester = null;
+     _tileLODTester = null;
     _featureInfoDownloadListener = new FeatureInfoDownloadListener(_applicationListener);
   }
 
@@ -1863,15 +1863,15 @@ public abstract class MapBooOLDBuilder
 
   public final void setTileLODTester(TileLODTester tlt)
   {
-    _tileLoDTester = tlt;
+    _tileLODTester = tlt;
   }
 
   public final TileLODTester getTileLODTester()
   {
-    if (_tileLoDTester == null)
+    if (_tileLODTester == null)
     {
-      _tileLoDTester = createDefaultTileLODTester();
+      _tileLODTester = createDefaultTileLODTester();
     }
-    return _tileLoDTester;
+    return _tileLODTester;
   }
 }

@@ -62,9 +62,9 @@ public class MaxLevelTileLODTester extends TileLODTesterResponder
   }
 
 
-  public MaxLevelTileLODTester(int maxLevel, int maxLevelForPoles, TileLODTester nextTesterRightLoD, TileLODTester nextTesterWrongLoD, TileLODTester nextTesterVisible, TileLODTester nextTesterNotVisible)
+  public MaxLevelTileLODTester(int maxLevel, int maxLevelForPoles, TileLODTester nextTesterRightLOD, TileLODTester nextTesterWrongLOD, TileLODTester nextTesterVisible, TileLODTester nextTesterNotVisible)
   {
-     super(nextTesterRightLoD, nextTesterWrongLoD, nextTesterVisible, nextTesterNotVisible);
+     super(nextTesterRightLOD, nextTesterWrongLOD, nextTesterVisible, nextTesterNotVisible);
      _maxLevelForPoles = maxLevelForPoles;
      _maxLevel = maxLevel;
   }

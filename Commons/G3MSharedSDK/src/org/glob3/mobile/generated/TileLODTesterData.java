@@ -16,10 +16,14 @@ package org.glob3.mobile.generated;
 //
 
 
+//class Tile;
+//class G3MRenderContext;
+//class LayerTilesRenderParameters;
+
 
 public class TileLODTesterData
 {
   //Empty class. Each TileLODTester will implement a different set of associated data and will
   //store it inside the tile using its unique level id
-  void dispose(){}
+  void dispose() {}
 }

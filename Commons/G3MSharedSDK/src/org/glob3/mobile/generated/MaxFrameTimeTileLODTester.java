@@ -18,6 +18,7 @@ package org.glob3.mobile.generated;
 
 
 
+
 public class MaxFrameTimeTileLODTester extends TileLODTester
 {
   private TileLODTester _nextTester;
@@ -49,9 +50,9 @@ public class MaxFrameTimeTileLODTester extends TileLODTester
     if (elapsedTime < _lastElapsedTime)
     {
       //New frame
-//      if (_nSplitsInFrame > 0){
-//        printf("Tile splits on last frame: %d\n", _nSplitsInFrame);
-//      }
+      //      if (_nSplitsInFrame > 0) {
+      //        printf("Tile splits on last frame: %d\n", _nSplitsInFrame);
+      //      }
       _nSplitsInFrame = 0;
     }
     _lastElapsedTime = elapsedTime;

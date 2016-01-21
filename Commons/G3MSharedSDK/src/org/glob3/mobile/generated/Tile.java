@@ -317,7 +317,7 @@ public class Tile
     return level + "/" + row + "/" + column;
   }
 
-  private java.util.ArrayList<TileLODTesterData> _loDTesterData = new java.util.ArrayList<TileLODTesterData>();
+  private java.util.ArrayList<TileLODTesterData> _lodTesterData = new java.util.ArrayList<TileLODTesterData>();
 
   public final Sector _sector ;
   public final boolean _mercator;
@@ -398,11 +398,11 @@ public class Tile
     if (_tessellatorData != null)
        _tessellatorData.dispose();
   
-    final int size = _loDTesterData.size();
+    final int size = _lodTesterData.size();
     for (int i = 0; i < size; i++)
     {
-      if (_loDTesterData.get(i) != null)
-         _loDTesterData.get(i).dispose();
+      if (_lodTesterData.get(i) != null)
+         _lodTesterData.get(i).dispose();
     }
   }
 
@@ -469,7 +469,7 @@ public class Tile
   public final void render(G3MRenderContext rc, GLState parentState, java.util.ArrayList<Tile> toVisitInNextIteration, Frustum cameraFrustumInModelCoordinates, TilesStatistics tilesStatistics, float verticalExaggeration, LayerTilesRenderParameters layerTilesRenderParameters, TileTexturizer texturizer, TilesRenderParameters tilesRenderParameters, ITimer lastSplitTimer, ElevationDataProvider elevationDataProvider, TileTessellator tessellator, LayerSet layerSet, Sector renderedSector, boolean forceFullRender, long tileDownloadPriority, double texWidthSquared, double texHeightSquared, double nowInMS, boolean renderTileMeshes, boolean logTilesPetitions, java.util.ArrayList<Tile> tilesStartedRendering, java.util.ArrayList<String> tilesStoppedRendering)
   {
   ///#warning REMOVE
-  //  if (!_sector.contains(Angle::fromDegrees(28), Angle::fromDegrees(-15))){
+  //  if (!_sector.contains(Angle::fromDegrees(28), Angle::fromDegrees(-15))) {
   //    return;
   //  }
   
@@ -924,14 +924,14 @@ public class Tile
     return new Vector2I(math.toInt(tileDimension._x * uv._x), math.toInt(tileDimension._y * uv._y));
   }
 
-  public final TileLODTesterData getDataForLoDTester(int level)
+  public final TileLODTesterData getDataForLODTester(int level)
   {
-    if (level >= _loDTesterData.size())
+    if (level >= _lodTesterData.size())
     {
       return null;
     }
 
-    return _loDTesterData.get(level);
+    return _lodTesterData.get(level);
   }
   public final Mesh getTessellatorMesh()
   {
@@ -944,23 +944,23 @@ public class Tile
     return _tessellatorMesh;
   }
 
-  public final void setDataForLoDTester(int level, TileLODTesterData data)
+  public final void setDataForLODTester(int level, TileLODTesterData data)
   {
 
-    while (_loDTesterData.size() < level + 1)
+    while (_lodTesterData.size() < level + 1)
     {
-      _loDTesterData.add(null);
+      _lodTesterData.add(null);
     }
 
-    if (_loDTesterData.get(level) != data)
+    if (_lodTesterData.get(level) != data)
     {
-      if (_loDTesterData.get(level) != null)
+      if (_lodTesterData.get(level) != null)
       {
-        if (_loDTesterData.get(level) != null)
-           _loDTesterData.get(level).dispose();
+        if (_lodTesterData.get(level) != null)
+           _lodTesterData.get(level).dispose();
       }
 
-      _loDTesterData.set(level, data);
+      _lodTesterData.set(level, data);
     }
   }
 

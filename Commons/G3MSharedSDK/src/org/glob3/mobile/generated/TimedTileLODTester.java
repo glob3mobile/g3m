@@ -52,11 +52,11 @@ public class TimedTileLODTester extends TileLODTester
 
     long now = rc.getFrameStartTimer().nowInMilliseconds();
 
-    TimedTileLODTesterData data = (TimedTileLODTesterData) tile.getDataForLoDTester(testerLevel);
+    TimedTileLODTesterData data = (TimedTileLODTesterData) tile.getDataForLODTester(testerLevel);
     if (data == null)
     {
       data = new TimedTileLODTesterData(now);
-      tile.setDataForLoDTester(testerLevel, data);
+      tile.setDataForLODTester(testerLevel, data);
       data._lastMeetsRenderCriteriaResult = (_nextTester == null)? true : _nextTester.meetsRenderCriteria(testerLevel+1, tile, rc);
     }
 

@@ -2,8 +2,8 @@ package org.glob3.mobile.generated;
 public abstract class TileLODTesterResponder extends TileLODTester
 {
 
-  private TileLODTester _nextTesterRightLoD;
-  private TileLODTester _nextTesterWrongLoD;
+  private TileLODTester _nextTesterRightLOD;
+  private TileLODTester _nextTesterWrongLOD;
   private TileLODTester _nextTesterVisible;
   private TileLODTester _nextTesterNotVisible;
 
@@ -19,10 +19,10 @@ public abstract class TileLODTesterResponder extends TileLODTester
   protected abstract void _onLayerTilesRenderParametersChanged(LayerTilesRenderParameters ltrp);
 
 
-  public TileLODTesterResponder(TileLODTester nextTesterRightLoD, TileLODTester nextTesterWrongLoD, TileLODTester nextTesterVisible, TileLODTester nextTesterNotVisible)
+  public TileLODTesterResponder(TileLODTester nextTesterRightLOD, TileLODTester nextTesterWrongLOD, TileLODTester nextTesterVisible, TileLODTester nextTesterNotVisible)
   {
-     _nextTesterRightLoD = nextTesterRightLoD;
-     _nextTesterWrongLoD = nextTesterWrongLoD;
+     _nextTesterRightLOD = nextTesterRightLOD;
+     _nextTesterWrongLOD = nextTesterWrongLOD;
      _nextTesterVisible = nextTesterVisible;
      _nextTesterNotVisible = nextTesterNotVisible;
 
@@ -32,12 +32,12 @@ public abstract class TileLODTesterResponder extends TileLODTester
   {
     if (_nextTesterNotVisible != null)
        _nextTesterNotVisible.dispose();
-    if (_nextTesterRightLoD != null)
-       _nextTesterRightLoD.dispose();
+    if (_nextTesterRightLOD != null)
+       _nextTesterRightLOD.dispose();
     if (_nextTesterVisible != null)
        _nextTesterVisible.dispose();
-    if (_nextTesterWrongLoD != null)
-       _nextTesterWrongLoD.dispose();
+    if (_nextTesterWrongLOD != null)
+       _nextTesterWrongLOD.dispose();
   }
 
   public final boolean meetsRenderCriteria(int testerLevel, Tile tile, G3MRenderContext rc)
@@ -46,17 +46,17 @@ public abstract class TileLODTesterResponder extends TileLODTester
     //Right LOD
     if (_meetsRenderCriteria(testerLevel, tile, rc))
     {
-      if (_nextTesterRightLoD != null)
+      if (_nextTesterRightLOD != null)
       {
-        return _nextTesterRightLoD.meetsRenderCriteria(testerLevel + 1, tile, rc);
+        return _nextTesterRightLOD.meetsRenderCriteria(testerLevel + 1, tile, rc);
       }
       return true;
     }
   
     //Wrong LOD
-    if (_nextTesterWrongLoD != null)
+    if (_nextTesterWrongLOD != null)
     {
-      return _nextTesterWrongLoD.meetsRenderCriteria(testerLevel + 1, tile, rc);
+      return _nextTesterWrongLOD.meetsRenderCriteria(testerLevel + 1, tile, rc);
     }
     return false;
   }
@@ -90,10 +90,10 @@ public abstract class TileLODTesterResponder extends TileLODTester
       _nextTesterNotVisible.onTileHasChangedMesh(testerLevel+1, tile);
     if (_nextTesterVisible != null)
       _nextTesterVisible.onTileHasChangedMesh(testerLevel+1, tile);
-    if (_nextTesterRightLoD != null)
-      _nextTesterRightLoD.onTileHasChangedMesh(testerLevel+1, tile);
-    if (_nextTesterWrongLoD != null)
-      _nextTesterWrongLoD.onTileHasChangedMesh(testerLevel+1, tile);
+    if (_nextTesterRightLOD != null)
+      _nextTesterRightLOD.onTileHasChangedMesh(testerLevel+1, tile);
+    if (_nextTesterWrongLOD != null)
+      _nextTesterWrongLOD.onTileHasChangedMesh(testerLevel+1, tile);
   }
 
   public final void onLayerTilesRenderParametersChanged(LayerTilesRenderParameters ltrp)
@@ -103,9 +103,9 @@ public abstract class TileLODTesterResponder extends TileLODTester
       _nextTesterNotVisible.onLayerTilesRenderParametersChanged(ltrp);
     if (_nextTesterVisible != null)
       _nextTesterVisible.onLayerTilesRenderParametersChanged(ltrp);
-    if (_nextTesterRightLoD != null)
-      _nextTesterRightLoD.onLayerTilesRenderParametersChanged(ltrp);
-    if (_nextTesterWrongLoD != null)
-      _nextTesterWrongLoD.onLayerTilesRenderParametersChanged(ltrp);
+    if (_nextTesterRightLOD != null)
+      _nextTesterRightLOD.onLayerTilesRenderParametersChanged(ltrp);
+    if (_nextTesterWrongLOD != null)
+      _nextTesterWrongLOD.onLayerTilesRenderParametersChanged(ltrp);
   }
 }

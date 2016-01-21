@@ -10,7 +10,7 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
   private final boolean _showStatistics;
   private final boolean _logTilesPetitions;
   private ITileVisitor _tileVisitor = null;
-  private TileLODTester _tileLoDTester;
+  private TileLODTester _tileLODTester;
 
   private TileRenderingListener _tileRenderingListener;
   private final java.util.ArrayList<Tile> _tilesStartedRendering;
@@ -334,7 +334,7 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
       }
       _layerTilesRenderParametersDirty = false;
   
-      _tileLoDTester.onLayerTilesRenderParametersChanged(_layerTilesRenderParameters);
+      _tileLODTester.onLayerTilesRenderParametersChanged(_layerTilesRenderParameters);
     }
     return _layerTilesRenderParameters;
   }
@@ -347,7 +347,7 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
   private java.util.ArrayList<Tile> _toVisit = new java.util.ArrayList<Tile>();
   private java.util.ArrayList<Tile> _toVisitInNextIteration = new java.util.ArrayList<Tile>();
 
-  public PlanetRenderer(TileTessellator tessellator, ElevationDataProvider elevationDataProvider, boolean ownsElevationDataProvider, float verticalExaggeration, TileTexturizer texturizer, LayerSet layerSet, TilesRenderParameters tilesRenderParameters, boolean showStatistics, long tileDownloadPriority, Sector renderedSector, boolean renderTileMeshes, boolean logTilesPetitions, TileRenderingListener tileRenderingListener, ChangedRendererInfoListener changedInfoListener, TouchEventType touchEventTypeOfTerrainTouchListener, TileLODTester tileLoDTester)
+  public PlanetRenderer(TileTessellator tessellator, ElevationDataProvider elevationDataProvider, boolean ownsElevationDataProvider, float verticalExaggeration, TileTexturizer texturizer, LayerSet layerSet, TilesRenderParameters tilesRenderParameters, boolean showStatistics, long tileDownloadPriority, Sector renderedSector, boolean renderTileMeshes, boolean logTilesPetitions, TileRenderingListener tileRenderingListener, ChangedRendererInfoListener changedInfoListener, TouchEventType touchEventTypeOfTerrainTouchListener, TileLODTester tileLODTester)
   {
      _tessellator = tessellator;
      _elevationDataProvider = elevationDataProvider;
@@ -373,7 +373,7 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
      _logTilesPetitions = logTilesPetitions;
      _tileRenderingListener = tileRenderingListener;
      _touchEventTypeOfTerrainTouchListener = touchEventTypeOfTerrainTouchListener;
-     _tileLoDTester = tileLoDTester;
+     _tileLODTester = tileLODTester;
     _context = null;
     _changedInfoListener = changedInfoListener;
   
@@ -394,9 +394,9 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
   
     _rendererIdentifier = -1;
   
-    if (_tileLoDTester == null)
+    if (_tileLODTester == null)
     {
-      throw new RuntimeException("Null TileLoDTester provided to PlanetRenderer");
+      throw new RuntimeException("Null TileLODTester provided to PlanetRenderer");
     }
   }
 
@@ -435,8 +435,8 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
     if (_tileRenderingListener != null)
        _tileRenderingListener.dispose();
   
-    if (_tileLoDTester != null)
-       _tileLoDTester.dispose();
+    if (_tileLODTester != null)
+       _tileLODTester.dispose();
   
   
     super.dispose();
@@ -1009,7 +1009,9 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
 
   public final TileLODTester getTileLODTester()
   {
-    return _tileLoDTester;
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning TODO: remove this
+    return _tileLODTester;
   }
 
 }

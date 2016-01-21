@@ -101,17 +101,17 @@ public class ProjectedCornersDistanceTileLODTester extends TileLODTesterResponde
   protected final void _onTileHasChangedMesh(int testerLevel, Tile tile)
   {
     //Recomputing data when tile changes tessellator mesh
-    tile.setDataForLoDTester(testerLevel, null);
+    tile.setDataForLODTester(testerLevel, null);
   }
 
   protected final ProjectedCornersDistanceTileLODTesterData getData(Tile tile, int testerLevel, G3MRenderContext rc)
   {
-    ProjectedCornersDistanceTileLODTesterData data = (ProjectedCornersDistanceTileLODTesterData) tile.getDataForLoDTester(testerLevel);
+    ProjectedCornersDistanceTileLODTesterData data = (ProjectedCornersDistanceTileLODTesterData) tile.getDataForLODTester(testerLevel);
     if (data == null)
     {
       final double mediumHeight = tile.getTessellatorMeshData()._averageHeight;
       data = new ProjectedCornersDistanceTileLODTesterData(tile, mediumHeight, rc.getPlanet());
-      tile.setDataForLoDTester(testerLevel, data);
+      tile.setDataForLODTester(testerLevel, data);
     }
     return data;
   }
@@ -153,9 +153,9 @@ public class ProjectedCornersDistanceTileLODTester extends TileLODTesterResponde
   }
 
 
-  public ProjectedCornersDistanceTileLODTester(double textureWidth, double textureHeight, TileLODTester nextTesterRightLoD, TileLODTester nextTesterWrongLoD, TileLODTester nextTesterVisible, TileLODTester nextTesterNotVisible)
+  public ProjectedCornersDistanceTileLODTester(double textureWidth, double textureHeight, TileLODTester nextTesterRightLOD, TileLODTester nextTesterWrongLOD, TileLODTester nextTesterVisible, TileLODTester nextTesterNotVisible)
   {
-     super(nextTesterRightLoD, nextTesterWrongLoD, nextTesterVisible, nextTesterNotVisible);
+     super(nextTesterRightLOD, nextTesterWrongLOD, nextTesterVisible, nextTesterNotVisible);
      _texHeightSquared = textureHeight * textureHeight;
      _texWidthSquared = textureWidth * textureWidth;
   }

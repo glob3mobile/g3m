@@ -29,7 +29,7 @@ public class PlanetRendererBuilder
   private TileTessellator _tileTessellator;
   private TileTexturizer _texturizer;
   private java.util.ArrayList<GEOVectorLayer> _geoVectorLayers = new java.util.ArrayList<GEOVectorLayer>();
-  private TileLODTester _tileLoDTester;
+  private TileLODTester _tileLODTester;
 
 
   private LayerSet _layerSet;
@@ -308,7 +308,7 @@ public class PlanetRendererBuilder
      _tileRenderingListener = null;
      _changedInfoListener = null;
      _touchEventTypeOfTerrainTouchListener = TouchEventType.LongPress;
-     _tileLoDTester = null;
+     _tileLODTester = null;
   }
   public void dispose()
   {
@@ -547,15 +547,15 @@ public class PlanetRendererBuilder
 
   public final void setTileLODTester(TileLODTester tlt)
   {
-    _tileLoDTester = tlt;
+    _tileLODTester = tlt;
   }
 
   public final TileLODTester getTileLODTester()
   {
-    if (_tileLoDTester == null)
+    if (_tileLODTester == null)
     {
-      _tileLoDTester = createDefaultTileLODTester();
+      _tileLODTester = createDefaultTileLODTester();
     }
-    return _tileLoDTester;
+    return _tileLODTester;
   }
 }
