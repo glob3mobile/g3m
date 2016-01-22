@@ -333,22 +333,7 @@ void PlanetRenderer::createFirstLevelTiles(std::vector<Tile*>& firstLevelTiles,
     firstLevelTiles.push_back(tile);
   }
   else {
-    const Sector sector = tile->_sector;
-    const Geodetic2D lower = sector._lower;
-    const Geodetic2D upper = sector._upper;
-    
-    const Angle splitLongitude = Angle::midAngle(lower._longitude,
-                                                 upper._longitude);
-    
-    const Angle splitLatitude = (tile->_mercator
-                                 ? MercatorUtils::calculateSplitLatitude(lower._latitude,
-                                                                         upper._latitude)
-                                 : Angle::midAngle(lower._latitude,
-                                                   upper._latitude));
-    
-    std::vector<Tile*>* children = tile->createSubTiles(splitLatitude,
-                                                        splitLongitude,
-                                                        false);
+    std::vector<Tile*>* children = tile->createSubTiles(false);
     
     const size_t childrenSize = children->size();
     for (size_t i = 0; i < childrenSize; i++) {

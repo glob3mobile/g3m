@@ -267,7 +267,8 @@ bool Tile::meetsRenderCriteria(const G3MRenderContext* rc,
 #warning CHANGE
   if (tilesRenderParameters->_useTilesSplitBudget) {
     if (_subtiles == NULL) { // the tile needs to create the subtiles
-      if (lastSplitTimer->elapsedTimeInMilliseconds() < 67) {
+//      if (lastSplitTimer->elapsedTimeInMilliseconds() < 67) {
+      if (lastSplitTimer->elapsedTimeInMilliseconds() < 5) {
         // there are not more time-budget to spend
         return true;
       }
@@ -387,36 +388,11 @@ void Tile::debugRender(const G3MRenderContext* rc,
   }
 }
 
-
 std::vector<Tile*>* Tile::getSubTiles() {
-  if (_subtiles != NULL) {
-    // quick check to avoid splitLongitude/splitLatitude calculation
-    return _subtiles;
-  }
-  
-  const Geodetic2D lower = _sector._lower;
-  const Geodetic2D upper = _sector._upper;
-  
-  const Angle splitLongitude = Angle::midAngle(lower._longitude,
-                                               upper._longitude);
-  
-  
-  const Angle splitLatitude = _mercator
-  /*                               */ ? MercatorUtils::calculateSplitLatitude(lower._latitude,
-                                                                              upper._latitude)
-  /*                               */ : Angle::midAngle(lower._latitude,
-                                                        upper._latitude);
-  
-  return getSubTiles(splitLatitude, splitLongitude);
-}
-
-
-std::vector<Tile*>* Tile::getSubTiles(const Angle& splitLatitude,
-                                      const Angle& splitLongitude) {
   if (_subtiles == NULL) {
-    _subtiles = createSubTiles(splitLatitude, splitLongitude, true);
-    _justCreatedSubtiles = true;
+    _subtiles = createSubTiles(true);
   }
+
   return _subtiles;
 }
 
@@ -564,11 +540,10 @@ void Tile::render(const G3MRenderContext* rc,
                               );
     
     if (isRawRender) {
-      
       const long long tileTexturePriority = (tilesRenderParameters->_incrementalTileQuality
                                              ? tileDownloadPriority + layerTilesRenderParameters->_maxLevel - _level
                                              : tileDownloadPriority + _level);
-      
+
       rendered = true;
       if (renderTileMeshes) {
         rawRender(rc,
@@ -645,12 +620,20 @@ Tile* Tile::createSubTile(const Angle& lowerLat, const Angle& lowerLon,
                   _planetRenderer);
 }
 
-std::vector<Tile*>* Tile::createSubTiles(const Angle& splitLatitude,
-                                         const Angle& splitLongitude,
-                                         bool setParent) {
+std::vector<Tile*>* Tile::createSubTiles(bool setParent) {
+  _justCreatedSubtiles = true;
+
   const Geodetic2D lower = _sector._lower;
   const Geodetic2D upper = _sector._upper;
-  
+  const Angle splitLongitude = Angle::midAngle(lower._longitude,
+                                               upper._longitude);
+
+  const Angle splitLatitude = _mercator
+  /*                               */ ? MercatorUtils::calculateSplitLatitude(lower._latitude,
+                                                                              upper._latitude)
+  /*                               */ : Angle::midAngle(lower._latitude,
+                                                        upper._latitude);
+
   const int nextLevel = _level + 1;
   
   const int row2    = 2 * _row;

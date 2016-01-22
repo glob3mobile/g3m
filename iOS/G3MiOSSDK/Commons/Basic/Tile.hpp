@@ -75,7 +75,7 @@ private:
                                   const TilesRenderParameters* tilesRenderParameters,
                                   const ITimer* lastSplitTimer,
                                   double nowInMS);
-  
+
   inline void rawRender(const G3MRenderContext* rc,
                         const GLState* glState,
                         TileTexturizer* texturizer,
@@ -98,10 +98,6 @@ private:
                              const int level,
                              const int row, const int column,
                              bool setParent);
-  
-  
-  inline std::vector<Tile*>* getSubTiles(const Angle& splitLatitude,
-                                         const Angle& splitLongitude);
   
   Tile(const Tile& that);
   
@@ -248,9 +244,7 @@ public:
   }
 #endif
   
-  std::vector<Tile*>* createSubTiles(const Angle& splitLatitude,
-                                     const Angle& splitLongitude,
-                                     bool setParent);
+  std::vector<Tile*>* createSubTiles(bool setParent);
   
   bool isElevationDataSolved() const {
     return (_elevationDataLevel == _level);

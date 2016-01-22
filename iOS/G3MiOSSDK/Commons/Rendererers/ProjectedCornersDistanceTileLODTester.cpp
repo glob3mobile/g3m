@@ -9,12 +9,11 @@
 #include "ProjectedCornersDistanceTileLODTester.hpp"
 
 #include "Tile.hpp"
-#include "Planet.hpp"
 #include "Context.hpp"
-#include "Camera.hpp"
 #include "BoundingVolume.hpp"
-#include "Mesh.hpp"
+#include "Camera.hpp"
 #include "LayerTilesRenderParameters.hpp"
+#include "Mesh.hpp"
 
 
 ProjectedCornersDistanceTileLODTester::ProjectedCornersDistanceTileLODTester(double textureWidth,
