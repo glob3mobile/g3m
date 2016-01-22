@@ -41,6 +41,7 @@ private:
   
 
 public:
+  static const Planet* createEarth();
 
   SphericalPlanet(const Sphere& sphere);
 
@@ -48,7 +49,6 @@ public:
 #ifdef JAVA_CODE
   super.dispose();
 #endif
-
   }
 
   Vector3D getRadii() const {

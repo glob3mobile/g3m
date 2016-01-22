@@ -4,9 +4,9 @@ package org.glob3.mobile.demo;
 
 import org.glob3.mobile.generated.Color;
 import org.glob3.mobile.generated.ElevationDataProvider;
+import org.glob3.mobile.generated.FlatPlanet;
 import org.glob3.mobile.generated.LayerSet;
 import org.glob3.mobile.generated.MapBoxLayer;
-import org.glob3.mobile.generated.Planet;
 import org.glob3.mobile.generated.Sector;
 import org.glob3.mobile.generated.SingleBilElevationDataProvider;
 import org.glob3.mobile.generated.TimeInterval;
@@ -21,8 +21,8 @@ import android.widget.RelativeLayout;
 
 
 public class FlatWorldActivity
-         extends
-            Activity {
+   extends
+      Activity {
 
    private G3MWidget_Android _g3mWidget;
    private RelativeLayout    _placeHolder;
@@ -35,7 +35,7 @@ public class FlatWorldActivity
 
       final G3MBuilder_Android builder = new G3MBuilder_Android(this);
 
-      builder.setPlanet(Planet.createFlatEarth());
+      builder.setPlanet(FlatPlanet.createEarth());
 
       final LayerSet layerSet = new LayerSet();
       final MapBoxLayer mboxTerrainLayer = new MapBoxLayer("examples.map-qogxobv1", TimeInterval.fromDays(30), true, 2);
