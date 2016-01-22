@@ -157,14 +157,14 @@ public class Tile
     {
       if (_subtiles == null) // the tile needs to create the subtiles
       {
-        if (lastSplitTimer.elapsedTimeInMilliseconds() < 67)
+  //      if (lastSplitTimer->elapsedTimeInMilliseconds() < 67) {
+        if (lastSplitTimer.elapsedTimeInMilliseconds() < 5)
         {
           // there are not more time-budget to spend
           return true;
         }
       }
     }
-  
   
     return _planetRenderer.getTileLODTester().meetsRenderCriteria(this, rc);
   }
@@ -220,17 +220,6 @@ public class Tile
   {
     Tile parent = setParent ? this : null;
     return new Tile(_texturizer, parent, new Sector(new Geodetic2D(lowerLat, lowerLon), new Geodetic2D(upperLat, upperLon)), _mercator, level, row, column, _planetRenderer);
-  }
-
-
-  private java.util.ArrayList<Tile> getSubTiles(Angle splitLatitude, Angle splitLongitude)
-  {
-    if (_subtiles == null)
-    {
-      _subtiles = createSubTiles(splitLatitude, splitLongitude, true);
-      _justCreatedSubtiles = true;
-    }
-    return _subtiles;
   }
 
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
@@ -409,23 +398,12 @@ public class Tile
   //Change to public for TileCache
   public final java.util.ArrayList<Tile> getSubTiles()
   {
-    if (_subtiles != null)
+    if (_subtiles == null)
     {
-      // quick check to avoid splitLongitude/splitLatitude calculation
-      return _subtiles;
+      _subtiles = createSubTiles(true);
     }
   
-    final Geodetic2D lower = _sector._lower;
-    final Geodetic2D upper = _sector._upper;
-  
-    final Angle splitLongitude = Angle.midAngle(lower._longitude, upper._longitude);
-  
-  
-    final Angle splitLatitude = _mercator ? MercatorUtils.calculateSplitLatitude(lower._latitude, upper._latitude) : Angle.midAngle(lower._latitude, upper._latitude);
-    /*                               */
-    /*                               */
-  
-    return getSubTiles(splitLatitude, splitLongitude);
+    return _subtiles;
   }
 
   public final Mesh getTexturizedMesh()
@@ -496,7 +474,6 @@ public class Tile
   
       if (isRawRender)
       {
-  
         final long tileTexturePriority = (tilesRenderParameters._incrementalTileQuality ? tileDownloadPriority + layerTilesRenderParameters._maxLevel - _level : tileDownloadPriority + _level);
   
         rendered = true;
@@ -743,10 +720,17 @@ public class Tile
     return description();
   }
 
-  public final java.util.ArrayList<Tile> createSubTiles(Angle splitLatitude, Angle splitLongitude, boolean setParent)
+  public final java.util.ArrayList<Tile> createSubTiles(boolean setParent)
   {
+    _justCreatedSubtiles = true;
+  
     final Geodetic2D lower = _sector._lower;
     final Geodetic2D upper = _sector._upper;
+    final Angle splitLongitude = Angle.midAngle(lower._longitude, upper._longitude);
+  
+    final Angle splitLatitude = _mercator ? MercatorUtils.calculateSplitLatitude(lower._latitude, upper._latitude) : Angle.midAngle(lower._latitude, upper._latitude);
+    /*                               */
+    /*                               */
   
     final int nextLevel = _level + 1;
   

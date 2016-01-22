@@ -131,15 +131,7 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
     }
     else
     {
-      final Sector sector = tile._sector;
-      final Geodetic2D lower = sector._lower;
-      final Geodetic2D upper = sector._upper;
-  
-      final Angle splitLongitude = Angle.midAngle(lower._longitude, upper._longitude);
-  
-      final Angle splitLatitude = (tile._mercator ? MercatorUtils.calculateSplitLatitude(lower._latitude, upper._latitude) : Angle.midAngle(lower._latitude, upper._latitude));
-  
-      java.util.ArrayList<Tile> children = tile.createSubTiles(splitLatitude, splitLongitude, false);
+      java.util.ArrayList<Tile> children = tile.createSubTiles(false);
   
       final int childrenSize = children.size();
       for (int i = 0; i < childrenSize; i++)
