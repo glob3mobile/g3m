@@ -56,11 +56,11 @@ public abstract class TileLODTesterResponder extends TileLODTester
        _nextTesterVisible.dispose();
     if (_nextTesterWrongLOD != null)
        _nextTesterWrongLOD.dispose();
+    super.dispose();
   }
 
   public final boolean meetsRenderCriteria(Tile tile, G3MRenderContext rc)
   {
-  
     //Right LOD
     if (_meetsRenderCriteria(tile, rc))
     {
@@ -105,25 +105,41 @@ public abstract class TileLODTesterResponder extends TileLODTester
   {
     _onTileHasChangedMesh(tile);
     if (_nextTesterNotVisible != null)
+    {
       _nextTesterNotVisible.onTileHasChangedMesh(tile);
+    }
     if (_nextTesterVisible != null)
+    {
       _nextTesterVisible.onTileHasChangedMesh(tile);
+    }
     if (_nextTesterRightLOD != null)
+    {
       _nextTesterRightLOD.onTileHasChangedMesh(tile);
+    }
     if (_nextTesterWrongLOD != null)
+    {
       _nextTesterWrongLOD.onTileHasChangedMesh(tile);
+    }
   }
 
   public final void onLayerTilesRenderParametersChanged(LayerTilesRenderParameters ltrp)
   {
     _onLayerTilesRenderParametersChanged(ltrp);
     if (_nextTesterNotVisible != null)
+    {
       _nextTesterNotVisible.onLayerTilesRenderParametersChanged(ltrp);
+    }
     if (_nextTesterVisible != null)
+    {
       _nextTesterVisible.onLayerTilesRenderParametersChanged(ltrp);
+    }
     if (_nextTesterRightLOD != null)
+    {
       _nextTesterRightLOD.onLayerTilesRenderParametersChanged(ltrp);
+    }
     if (_nextTesterWrongLOD != null)
+    {
       _nextTesterWrongLOD.onLayerTilesRenderParametersChanged(ltrp);
+    }
   }
 }

@@ -17,10 +17,11 @@ package org.glob3.mobile.generated;
 
 
 
+//class TimeInterval;
 
-public class TimedTileLODTester extends TileLODTester
+
+public class TimedTileLODTester extends DecoratorTileLODTester
 {
-  private TileLODTester _nextTester;
   private long _timeInMs;
 
   private static class TimedTileLODTesterData extends TileLODTesterData
@@ -36,62 +37,54 @@ public class TimedTileLODTester extends TileLODTester
   }
 
 
-  public TimedTileLODTester(TimeInterval time, TileLODTester nextTester)
+  public TimedTileLODTester(TimeInterval time, TileLODTester tileLODTester)
   {
+     super(tileLODTester);
      _timeInMs = time.milliseconds();
-     _nextTester = nextTester;
   }
 
   public void dispose()
   {
-    if (_nextTester != null)
-       _nextTester.dispose();
+    super.dispose();
   }
 
-  public boolean meetsRenderCriteria(Tile tile, G3MRenderContext rc)
+  public final boolean meetsRenderCriteria(Tile tile, G3MRenderContext rc)
   {
-
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning TODO: move now up in the chain
     long now = rc.getFrameStartTimer().nowInMilliseconds();
-
+  
     TimedTileLODTesterData data = (TimedTileLODTesterData) tile.getDataForLODTester(_id);
     if (data == null)
     {
       data = new TimedTileLODTesterData(now);
       tile.setDataForLODTester(_id, data);
-      data._lastMeetsRenderCriteriaResult = (_nextTester == null)? true : _nextTester.meetsRenderCriteria(tile, rc);
+      data._lastMeetsRenderCriteriaResult = _tileLODTester.meetsRenderCriteria(tile, rc);
     }
-
-    if ((now - data._lastMeetsRenderCriteriaTimeInMS) > _timeInMs)
+    else if ((now - data._lastMeetsRenderCriteriaTimeInMS) > _timeInMs)
     {
-      data._lastMeetsRenderCriteriaResult = (_nextTester == null)? true : _nextTester.meetsRenderCriteria(tile, rc);
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning TODO: talk with JM
+      data._lastMeetsRenderCriteriaTimeInMS = now;
+      data._lastMeetsRenderCriteriaResult = _tileLODTester.meetsRenderCriteria(tile, rc);
     }
-
+  
     return data._lastMeetsRenderCriteriaResult;
   }
 
-  public boolean isVisible(Tile tile, G3MRenderContext rc)
+  public final boolean isVisible(Tile tile, G3MRenderContext rc)
   {
-    if (_nextTester == null)
-    {
-      return true;
-    }
-    return _nextTester.isVisible(tile, rc);
+    return _tileLODTester.isVisible(tile, rc);
   }
 
-  public void onTileHasChangedMesh(Tile tile)
+  public final void onTileHasChangedMesh(Tile tile)
   {
-    if (_nextTester != null)
-    {
-      _nextTester.onTileHasChangedMesh(tile);
-    }
+    _tileLODTester.onTileHasChangedMesh(tile);
   }
 
   public final void onLayerTilesRenderParametersChanged(LayerTilesRenderParameters ltrp)
   {
-    if (_nextTester != null)
-    {
-      _nextTester.onLayerTilesRenderParametersChanged(ltrp);
-    }
+    _tileLODTester.onLayerTilesRenderParametersChanged(ltrp);
   }
 
 }

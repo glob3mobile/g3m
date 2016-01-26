@@ -21,30 +21,28 @@ package org.glob3.mobile.generated;
 //class TimeInterval;
 
 
-public class MaxFrameTimeTileLODTester extends TileLODTester
+public class MaxFrameTimeTileLODTester extends DecoratorTileLODTester
 {
-  private TileLODTester _nextTester;
   private long _maxFrameTimeInMs;
 
   private long _lastElapsedTime;
   private int _nSplitsInFrame;
 
 
-  public MaxFrameTimeTileLODTester(TimeInterval maxFrameTimeInMs, TileLODTester nextTester)
+  public MaxFrameTimeTileLODTester(TimeInterval maxFrameTimeInMs, TileLODTester tileLODTester)
   {
+     super(tileLODTester);
      _maxFrameTimeInMs = maxFrameTimeInMs.milliseconds();
-     _nextTester = nextTester;
      _lastElapsedTime = 0;
      _nSplitsInFrame = 0;
   }
 
   public void dispose()
   {
-    if (_nextTester != null)
-       _nextTester.dispose();
+    super.dispose();
   }
 
-  public boolean meetsRenderCriteria(Tile tile, G3MRenderContext rc)
+  public final boolean meetsRenderCriteria(Tile tile, G3MRenderContext rc)
   {
   
     final boolean hasSubtiles = tile.areSubtilesCreated();
@@ -64,7 +62,7 @@ public class MaxFrameTimeTileLODTester extends TileLODTester
       return true;
     }
   
-    boolean res = (_nextTester == null)? true : _nextTester.meetsRenderCriteria(tile, rc);
+    final boolean res = _tileLODTester.meetsRenderCriteria(tile, rc);
   
     if (!res && !hasSubtiles)
     {
@@ -74,29 +72,19 @@ public class MaxFrameTimeTileLODTester extends TileLODTester
     return res;
   }
 
-  public boolean isVisible(Tile tile, G3MRenderContext rc)
+  public final boolean isVisible(Tile tile, G3MRenderContext rc)
   {
-    if (_nextTester == null)
-    {
-      return true;
-    }
-    return _nextTester.isVisible(tile, rc);
+    return _tileLODTester.isVisible(tile, rc);
   }
 
-  public void onTileHasChangedMesh(Tile tile)
+  public final void onTileHasChangedMesh(Tile tile)
   {
-    if (_nextTester != null)
-    {
-      _nextTester.onTileHasChangedMesh(tile);
-    }
+    _tileLODTester.onTileHasChangedMesh(tile);
   }
 
   public final void onLayerTilesRenderParametersChanged(LayerTilesRenderParameters ltrp)
   {
-    if (_nextTester != null)
-    {
-      _nextTester.onLayerTilesRenderParametersChanged(ltrp);
-    }
+    _tileLODTester.onLayerTilesRenderParametersChanged(ltrp);
   }
 
 }
