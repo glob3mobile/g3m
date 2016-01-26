@@ -205,6 +205,7 @@ public:
   void applyCoulombsLaw(NonOverlappingMark* that);
   void applyCoulombsLawFromAnchor(NonOverlappingMark* that);
   void applyBorderRepulsion(int screenW, int screenH);
+  void applyStokesLaw();
 
   void applyHookesLaw();   //Spring
   

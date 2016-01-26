@@ -323,6 +323,14 @@ void NonOverlappingMark::applyBorderRepulsion(int screenW, int screenH) {
 }
 
 
+void NonOverlappingMark::applyStokesLaw(){
+  
+  float resistance = -7.0f;
+  applyForce(resistance * _speed._x, resistance * _speed._y);
+  
+}
+
+
 void NonOverlappingMark::applyCoulombsLawFromAnchor(NonOverlappingMark* that) {
   Vector2F dAnchor = getScreenPos().sub(that->getAnchorScreenPos());
   double distanceAnchor = dAnchor.length() + 0.001;
@@ -440,7 +448,7 @@ double NonOverlappingMark::updatePositionWithCurrentForce(float timeInSeconds,
                                                           float viewportMargin) {
   _speed.add(_force._x * timeInSeconds,
              _force._y * timeInSeconds);
-  _speed.times(_resistanceFactor);
+  //_speed.times(_resistanceFactor);
   
   //Force has been applied and must be reset
   _force.set(0, 0);
@@ -577,6 +585,7 @@ void NonOverlappingMarksRenderer::removeAllMarks() {
   _marks.clear();
   _visibleMarks.clear();
   _stopped = true;
+  _movingStartTime = -1;
 }
 
 void NonOverlappingMarksRenderer::computeMarksToBeRendered(const Camera* camera,
@@ -613,6 +622,7 @@ void NonOverlappingMarksRenderer::computeMarksToBeRendered(const Camera* camera,
   
 }
 
+
 void NonOverlappingMarksRenderer::computeForces(const Camera* camera, const Planet* planet) {
   const size_t visibleMarksSize = _visibleMarks.size();
   
@@ -634,6 +644,8 @@ void NonOverlappingMarksRenderer::computeForces(const Camera* camera, const Plan
     mark->applyBouyantForce(pitch);
     
     mark->applyBorderRepulsion(w, h);
+    
+    mark->applyStokesLaw();
     
     for (size_t j = i+1; j < visibleMarksSize; j++) {
       mark->applyCoulombsLaw(_visibleMarks[j]);
@@ -715,7 +727,14 @@ void NonOverlappingMarksRenderer::render(const G3MRenderContext* rc, GLState* gl
   }
   
   if((now - _movingStartTime) > _maxMovingTimeInMS){ //Stopping marks movement after certain time
-    _stopped = true;
+    if (!_stopped){
+      
+      _stopped = true;
+      
+      for (size_t i = 0; i < _stoppedListeners.size(); i++) {
+        _stoppedListeners[i]->onMarksStopped(*rc, _visibleMarks);
+      }
+    }
   }
   
   if (!_stopped || cameraChanged){

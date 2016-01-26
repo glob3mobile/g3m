@@ -150,6 +150,7 @@
 #import <G3MiOSSDK/CircleImageBuilder.hpp>
 #import <G3MiOSSDK/LabelImageBuilder.hpp>
 #import <G3MiOSSDK/StackLayoutImageBUilder.hpp>
+#import <G3MiOSSDK/ColumnLayoutImageBUilder.hpp>
 #include <string>
 
 #include <typeinfo>
@@ -204,9 +205,14 @@
   
   //[self initTestingTileImageProvider];
   
-  [self initWithNonOverlappingMarks];
+  //[self initWithNonOverlappingMarks];
+  //[[self G3MWidget] widget]->setCameraPosition(Geodetic3D::fromDegrees(0,0,3.2e7));
   
-  [[self G3MWidget] widget]->setCameraPosition(Geodetic3D::fromDegrees(0,0,3.2e7));
+  [self initWithBouyantNonOverlappingMarks];
+  
+  //  [[self G3MWidget] widget]->setCameraPitch(Angle::fromDegrees(-80));
+  //  [[self G3MWidget] widget]->setCameraPosition(Geodetic3D::fromDegrees(30.490826224448195347, -4.5410263152963246114, 539615.88103083171882));
+  [[self G3MWidget] widget]->setAnimatedCameraPosition(Geodetic3D::fromDegrees(32.194133092045866817, -5.5087815927823822193,259546.15123778069392), Angle::fromDegrees(0.504079), Angle::fromDegrees(-25.488326));
   
   
   //  [self initWithMapBooBuilder];
@@ -357,9 +363,11 @@ class AnalyzerNOMSL: public NonOverlappingMarksStoppedListener{
   NonOverlappingMarksRenderer* _nomr;
   long long _lastTime;
   int _nAttempt = 0;
+  ViewController* _vc;
 public:
   
-  AnalyzerNOMSL(NonOverlappingMarksRenderer* nomr):_nomr(nomr), _lastTime(0), _nAttempt(0){
+  AnalyzerNOMSL(NonOverlappingMarksRenderer* nomr, ViewController* vc):
+  _nomr(nomr), _lastTime(0), _nAttempt(0), _vc(vc){
     
   }
   
@@ -373,14 +381,16 @@ public:
       NSString* string = [NSString stringWithFormat:@"%d", i, nil];
       const char* label = [string UTF8String];
       
-      CircleImageBuilder* cib = new CircleImageBuilder(Color::blue(), 30);
+      CircleImageBuilder* bcib = new CircleImageBuilder(Color::black(), 31);
+      CircleImageBuilder* cib = new CircleImageBuilder(Color::fromRGBA255(51, 153, 255, 255), 30);
       LabelImageBuilder* lib = new LabelImageBuilder(label);
       std::vector<IImageBuilder*> vib;
+      vib.push_back(bcib);
       vib.push_back(cib);
       vib.push_back(lib);
       StackLayoutImageBuilder* slib = new StackLayoutImageBuilder(vib);
       
-      NonOverlappingMark* mark = new NonOverlappingMark(slib,
+      NonOverlappingMark* mark = new NonOverlappingMark(new DownloaderImageBuilder(URL("https://cdn0.iconfinder.com/data/icons/kameleon-free-pack-rounded/110/Application-Map-128.png")),
                                                         new DownloaderImageBuilder(URL("file:///anchorWidget.png")),
                                                         Geodetic3D::fromDegrees(lat, lon, 0),
                                                         NULL,
@@ -390,6 +400,12 @@ public:
   }
   
   void onMarksStopped(const G3MRenderContext& rc, const std::vector<NonOverlappingMark*>& visible){
+    //
+    //    UIGraphicsBeginImageContextWithOptions(_vc.view.bounds.size, _vc.view.opaque, 0.0);
+    //    [_vc.G3MWidget.layer renderInContext:UIGraphicsGetCurrentContext()];
+    //    UIImage*theImage = UIGraphicsGetImageFromCurrentImageContext();
+    //    UIGraphicsEndImageContext();
+    //    UIImageWriteToSavedPhotosAlbum(theImage,nil,NULL,NULL);
     
     const long long t = rc.getFrameStartTimer()->nowInMilliseconds();
     
@@ -434,7 +450,7 @@ public:
       
       
       
-      reset((int)visible.size() + 1);
+      //reset((int)visible.size() + 1);
       _nAttempt=0;
       
       
@@ -565,6 +581,114 @@ public:
 }
 
 
+- (void) initWithBouyantNonOverlappingMarks
+{
+  G3MBuilder_iOS builder([self G3MWidget]);
+  
+  LayerSet* layerSet = new LayerSet();
+  layerSet->addLayer(MapQuestLayer::newOSM(TimeInterval::fromDays(30)));
+  builder.getPlanetRendererBuilder()->setLayerSet(layerSet);
+  
+  NonOverlappingMarksRenderer* nomr = new NonOverlappingMarksRenderer(100);
+  
+  //  nomr->addStoppedListener(new AnalyzerNOMSL(nomr, self));
+  
+  //builder.addRenderer(nomr);
+  
+  builder.setPlanet(Planet::createEarth());
+  
+  
+  {
+    CircleImageBuilder* bcib = new CircleImageBuilder(Color::black(), 61);
+    CircleImageBuilder* cib = new CircleImageBuilder(Color::fromRGBA255(51, 153, 255, 255), 60);
+    
+    std::vector<IImageBuilder*> cvib;
+    cvib.push_back(new LabelImageBuilder("Empire State"));
+    cvib.push_back(new LabelImageBuilder("Building"));
+    ColumnLayoutImageBuilder* clib = new ColumnLayoutImageBuilder(cvib);
+    
+    std::vector<IImageBuilder*> vib;
+    vib.push_back(bcib);
+    vib.push_back(cib);
+    vib.push_back(clib);
+    StackLayoutImageBuilder* slib = new StackLayoutImageBuilder(vib);
+    
+    NonOverlappingMark* mark = new NonOverlappingMark(slib,
+                                                      new DownloaderImageBuilder(URL("file:///anchorWidget.png")),
+                                                      Geodetic3D::fromDegrees(40.7484079,-73.985693, 0),
+                                                      NULL,
+                                                      200.0);
+    nomr->addMark(mark);
+  }
+  {
+    CircleImageBuilder* bcib = new CircleImageBuilder(Color::black(), 61);
+    CircleImageBuilder* cib = new CircleImageBuilder(Color::fromRGBA255(51, 153, 255, 255), 60);
+    
+    std::vector<IImageBuilder*> cvib;
+    cvib.push_back(new LabelImageBuilder("Cadiz"));
+    ColumnLayoutImageBuilder* clib = new ColumnLayoutImageBuilder(cvib);
+    
+    std::vector<IImageBuilder*> vib;
+    vib.push_back(bcib);
+    vib.push_back(cib);
+    vib.push_back(clib);
+    StackLayoutImageBuilder* slib = new StackLayoutImageBuilder(vib);
+    NonOverlappingMark* cadiz = new NonOverlappingMark(slib,
+                                                       new DownloaderImageBuilder(URL("file:///anchorWidget.png")),
+                                                       Geodetic3D::fromDegrees(36.5163711,-6.3174658, 0),
+                                                       NULL,
+                                                       200.0);
+    nomr->addMark(cadiz);
+  }
+  {
+    CircleImageBuilder* bcib = new CircleImageBuilder(Color::black(), 61);
+    CircleImageBuilder* cib = new CircleImageBuilder(Color::fromRGBA255(51, 153, 255, 255), 60);
+    
+    std::vector<IImageBuilder*> cvib;
+    cvib.push_back(new LabelImageBuilder("Sevilla"));
+    ColumnLayoutImageBuilder* clib = new ColumnLayoutImageBuilder(cvib);
+    
+    std::vector<IImageBuilder*> vib;
+    vib.push_back(bcib);
+    vib.push_back(cib);
+    vib.push_back(clib);
+    StackLayoutImageBuilder* slib = new StackLayoutImageBuilder(vib);
+    NonOverlappingMark* sevilla = new NonOverlappingMark(slib,
+                                                         new DownloaderImageBuilder(URL("file:///anchorWidget.png")),
+                                                         Geodetic3D::fromDegrees(37.3754865,-6.0250983, 0),
+                                                         NULL,
+                                                         200.0);
+    nomr->addMark(sevilla);
+  }
+  {
+    CircleImageBuilder* bcib = new CircleImageBuilder(Color::black(), 61);
+    CircleImageBuilder* cib = new CircleImageBuilder(Color::fromRGBA255(51, 153, 255, 255), 60);
+    
+    std::vector<IImageBuilder*> cvib;
+    cvib.push_back(new LabelImageBuilder("Málaga"));
+    ColumnLayoutImageBuilder* clib = new ColumnLayoutImageBuilder(cvib);
+    
+    std::vector<IImageBuilder*> vib;
+    vib.push_back(bcib);
+    vib.push_back(cib);
+    vib.push_back(clib);
+    StackLayoutImageBuilder* slib = new StackLayoutImageBuilder(vib);
+    
+    
+    NonOverlappingMark* malaga = new NonOverlappingMark(slib,
+                                                        new DownloaderImageBuilder(URL("file:///anchorWidget.png")),
+                                                        Geodetic3D::fromDegrees(36.765025,-4.5642737, 0),
+                                                        NULL,
+                                                        200.0);
+    nomr->addMark(malaga);
+  }
+  
+  
+  builder.initializeWidget();
+}
+
+
+
 - (void) initWithNonOverlappingMarks
 {
   G3MBuilder_iOS builder([self G3MWidget]);
@@ -575,7 +699,7 @@ public:
   
   NonOverlappingMarksRenderer* nomr = new NonOverlappingMarksRenderer(100);
   
-  nomr->addStoppedListener(new AnalyzerNOMSL(nomr));
+  //  nomr->addStoppedListener(new AnalyzerNOMSL(nomr, self));
   
   builder.addRenderer(nomr);
   
@@ -589,20 +713,47 @@ public:
     NSString* string = [NSString stringWithFormat:@"%d", i, nil];
     const char* label = [string UTF8String];
     
-    CircleImageBuilder* cib = new CircleImageBuilder(Color::blue(), 30);
+    CircleImageBuilder* bcib = new CircleImageBuilder(Color::black(), 31);
+    CircleImageBuilder* cib = new CircleImageBuilder(Color::fromRGBA255(51, 153, 255, 255), 30);
     LabelImageBuilder* lib = new LabelImageBuilder(label);
     std::vector<IImageBuilder*> vib;
+    vib.push_back(bcib);
     vib.push_back(cib);
     vib.push_back(lib);
     StackLayoutImageBuilder* slib = new StackLayoutImageBuilder(vib);
     
-    NonOverlappingMark* mark = new NonOverlappingMark(slib, //new DownloaderImageBuilder(URL("file:///g3m-marker.png")),
+    NonOverlappingMark* mark = new NonOverlappingMark(new DownloaderImageBuilder(URL("https://cdn0.iconfinder.com/data/icons/kameleon-free-pack-rounded/110/Application-Map-64.png")),
                                                       new DownloaderImageBuilder(URL("file:///anchorWidget.png")),
                                                       Geodetic3D::fromDegrees(lat, lon, 0),
                                                       NULL,
                                                       100.0);
     nomr->addMark(mark);
   }
+  
+  CircleImageBuilder* bcib = new CircleImageBuilder(Color::black(), 61);
+  CircleImageBuilder* cib = new CircleImageBuilder(Color::fromRGBA255(51, 153, 255, 255), 60);
+  
+  std::vector<IImageBuilder*> cvib;
+  cvib.push_back(new LabelImageBuilder("Empire State"));
+  cvib.push_back(new LabelImageBuilder("Building"));
+  ColumnLayoutImageBuilder* clib = new ColumnLayoutImageBuilder(cvib);
+  
+  std::vector<IImageBuilder*> vib;
+  vib.push_back(bcib);
+  vib.push_back(cib);
+  vib.push_back(clib);
+  StackLayoutImageBuilder* slib = new StackLayoutImageBuilder(vib);
+  
+  NonOverlappingMark* mark = new NonOverlappingMark(slib,
+                                                    new DownloaderImageBuilder(URL("file:///anchorWidget.png")),
+                                                    Geodetic3D::fromDegrees(40.7484079,-73.985693, 0),
+                                                    NULL,
+                                                    200.0);
+  nomr->addMark(mark);
+  
+  
+  
+  
   /*
    class MyMarkWidgetTouchListener: public NonOverlappingMarkTouchListener{
    public:
