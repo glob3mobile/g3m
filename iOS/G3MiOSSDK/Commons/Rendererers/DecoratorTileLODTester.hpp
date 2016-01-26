@@ -1,0 +1,26 @@
+//
+//  DecoratorTileLODTester.hpp
+//  G3MiOSSDK
+//
+//  Created by Diego Gomez Deck on 1/26/16.
+//
+//
+
+#ifndef DecoratorTileLODTester_hpp
+#define DecoratorTileLODTester_hpp
+
+#include "TileLoDTester.hpp"
+
+
+class DecoratorTileLODTester : public TileLODTester {
+protected:
+  TileLODTester* _tileLODTester;
+
+  DecoratorTileLODTester(TileLODTester* tileLODTester);
+
+public:
+  virtual ~DecoratorTileLODTester();
+
+};
+
+#endif

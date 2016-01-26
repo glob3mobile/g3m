@@ -12,7 +12,7 @@
 #include "TileLODTesterResponder.hpp"
 
 
-class MaxLevelTileLODTester: public TileLODTesterResponder {
+class MaxLevelTileLODTester : public TileLODTesterResponder {
 private:
   int _maxLevel;
   int _maxLevelForPoles;

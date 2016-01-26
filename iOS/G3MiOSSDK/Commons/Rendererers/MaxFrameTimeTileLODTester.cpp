@@ -13,15 +13,17 @@
 
 
 MaxFrameTimeTileLODTester::MaxFrameTimeTileLODTester(const TimeInterval& maxFrameTimeInMs,
-                                                     TileLODTester* nextTester):
+                                                     TileLODTester* tileLODTester) :
+DecoratorTileLODTester(tileLODTester),
 _maxFrameTimeInMs(maxFrameTimeInMs.milliseconds()),
-_nextTester(nextTester),
 _lastElapsedTime(0),
 _nSplitsInFrame(0)
 {}
 
 MaxFrameTimeTileLODTester::~MaxFrameTimeTileLODTester() {
-  delete _nextTester;
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
 }
 
 bool MaxFrameTimeTileLODTester::meetsRenderCriteria(Tile* tile,
@@ -42,7 +44,7 @@ bool MaxFrameTimeTileLODTester::meetsRenderCriteria(Tile* tile,
     return true;
   }
 
-  bool res = (_nextTester == NULL)? true : _nextTester->meetsRenderCriteria(tile, rc);
+  const bool res = _tileLODTester->meetsRenderCriteria(tile, rc);
 
   if (!res && !hasSubtiles) {
     _nSplitsInFrame++;
@@ -53,20 +55,13 @@ bool MaxFrameTimeTileLODTester::meetsRenderCriteria(Tile* tile,
 
 bool MaxFrameTimeTileLODTester::isVisible(Tile* tile,
                                           const G3MRenderContext& rc) const {
-  if (_nextTester == NULL) {
-    return true;
-  }
-  return _nextTester->isVisible(tile, rc);
+  return _tileLODTester->isVisible(tile, rc);
 }
 
 void MaxFrameTimeTileLODTester::onTileHasChangedMesh(Tile* tile) const {
-  if (_nextTester != NULL) {
-    _nextTester->onTileHasChangedMesh(tile);
-  }
+  _tileLODTester->onTileHasChangedMesh(tile);
 }
 
 void MaxFrameTimeTileLODTester::onLayerTilesRenderParametersChanged(const LayerTilesRenderParameters* ltrp) {
-  if (_nextTester != NULL) {
-    _nextTester->onLayerTilesRenderParametersChanged(ltrp);
-  }
+  _tileLODTester->onLayerTilesRenderParametersChanged(ltrp);
 }

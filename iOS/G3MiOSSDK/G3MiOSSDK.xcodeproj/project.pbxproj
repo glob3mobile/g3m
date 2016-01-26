@@ -335,6 +335,12 @@
 		CFB72A3D15E65DBC00A5BAF4 /* LevelTileCondition.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFB72A3B15E65DBB00A5BAF4 /* LevelTileCondition.cpp */; };
 		CFB72A6915E6808900A5BAF4 /* IStringUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFB72A6715E6808900A5BAF4 /* IStringUtils.cpp */; };
 		CFB72A6E15E682B400A5BAF4 /* StringUtils_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = CFB72A6C15E682B400A5BAF4 /* StringUtils_iOS.mm */; };
+		CFB94E561C57E9F400DAB4E6 /* DecoratorTileLODTester.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFB94E541C57E9F400DAB4E6 /* DecoratorTileLODTester.cpp */; };
+		CFB94E571C57EAA900DAB4E6 /* DecoratorTileLODTester.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFB94E551C57E9F400DAB4E6 /* DecoratorTileLODTester.hpp */; };
+		CFB94E581C57EAA900DAB4E6 /* TileLODTesterData.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF792A061C51620800FDE7C9 /* TileLODTesterData.hpp */; };
+		CFB94E591C57EAA900DAB4E6 /* TileLODTesterResponder.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF792A031C51618100FDE7C9 /* TileLODTesterResponder.hpp */; };
+		CFB94E5A1C57EAA900DAB4E6 /* TimedTileLODTester.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D824A8551C295BCD002C84AA /* TimedTileLODTester.hpp */; };
+		CFB94E5B1C57EAA900DAB4E6 /* MaxFrameTimeTileLODTester.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D824A8581C296381002C84AA /* MaxFrameTimeTileLODTester.hpp */; };
 		CFBA53EE16B9B76500256453 /* ICameraConstrainer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFBA53EC16B9B76500256453 /* ICameraConstrainer.cpp */; };
 		CFBA53F216B9B7CD00256453 /* SimpleCameraConstrainer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFBA53F016B9B7CC00256453 /* SimpleCameraConstrainer.cpp */; };
 		CFBA88EB186CCA89003A4473 /* HUDRelativeSize.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFBA88E9186CCA89003A4473 /* HUDRelativeSize.cpp */; };
@@ -741,6 +747,11 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				CFB94E571C57EAA900DAB4E6 /* DecoratorTileLODTester.hpp in CopyFiles */,
+				CFB94E581C57EAA900DAB4E6 /* TileLODTesterData.hpp in CopyFiles */,
+				CFB94E591C57EAA900DAB4E6 /* TileLODTesterResponder.hpp in CopyFiles */,
+				CFB94E5A1C57EAA900DAB4E6 /* TimedTileLODTester.hpp in CopyFiles */,
+				CFB94E5B1C57EAA900DAB4E6 /* MaxFrameTimeTileLODTester.hpp in CopyFiles */,
 				D8B78E281C120D4F00DDE2B9 /* ProjectedCornersDistanceTileLODTester.hpp in CopyFiles */,
 				D8B78E291C120D4F00DDE2B9 /* MaxLevelTileLODTester.hpp in CopyFiles */,
 				D8019FF21C11DFCF00784287 /* TileLODTester.hpp in CopyFiles */,
@@ -1568,6 +1579,8 @@
 		CFB72A6815E6808900A5BAF4 /* IStringUtils.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = IStringUtils.hpp; path = Commons/Interfaces/IStringUtils.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CFB72A6C15E682B400A5BAF4 /* StringUtils_iOS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = StringUtils_iOS.mm; path = Specific/Derived/StringUtils_iOS.mm; sourceTree = "<group>"; };
 		CFB72A6D15E682B400A5BAF4 /* StringUtils_iOS.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = StringUtils_iOS.hpp; path = Specific/Derived/StringUtils_iOS.hpp; sourceTree = "<group>"; };
+		CFB94E541C57E9F400DAB4E6 /* DecoratorTileLODTester.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = DecoratorTileLODTester.cpp; path = Commons/Rendererers/DecoratorTileLODTester.cpp; sourceTree = "<group>"; };
+		CFB94E551C57E9F400DAB4E6 /* DecoratorTileLODTester.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = DecoratorTileLODTester.hpp; path = Commons/Rendererers/DecoratorTileLODTester.hpp; sourceTree = "<group>"; };
 		CFBA53EC16B9B76500256453 /* ICameraConstrainer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ICameraConstrainer.cpp; path = Commons/Cameras/ICameraConstrainer.cpp; sourceTree = "<group>"; };
 		CFBA53ED16B9B76500256453 /* ICameraConstrainer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = ICameraConstrainer.hpp; path = Commons/Cameras/ICameraConstrainer.hpp; sourceTree = "<group>"; };
 		CFBA53F016B9B7CC00256453 /* SimpleCameraConstrainer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SimpleCameraConstrainer.cpp; path = Commons/Cameras/SimpleCameraConstrainer.cpp; sourceTree = "<group>"; };
@@ -2491,6 +2504,8 @@
 				CFECA77A1B6AB9B200A0A44E /* VectorStreamingRenderer.hpp */,
 				D8019FEE1C11D91800784287 /* TileLODTester.cpp */,
 				D8019FEF1C11D91800784287 /* TileLODTester.hpp */,
+				CFB94E541C57E9F400DAB4E6 /* DecoratorTileLODTester.cpp */,
+				CFB94E551C57E9F400DAB4E6 /* DecoratorTileLODTester.hpp */,
 				CF792A051C51620800FDE7C9 /* TileLODTesterData.cpp */,
 				CF792A061C51620800FDE7C9 /* TileLODTesterData.hpp */,
 				CF792A021C51618100FDE7C9 /* TileLODTesterResponder.cpp */,
@@ -3044,6 +3059,7 @@
 				CF9D2D8815F7D3C100B5CE2E /* IBuffer.cpp in Sources */,
 				CF7E626115F7D6FC0086B71D /* FloatBufferBuilder.cpp in Sources */,
 				CF7E626615F7DD740086B71D /* IntBufferBuilder.cpp in Sources */,
+				CFB94E561C57E9F400DAB4E6 /* DecoratorTileLODTester.cpp in Sources */,
 				CFA1899A15F8D7CA0048BF46 /* FloatBuffer_iOS.cpp in Sources */,
 				CFA1899F15F8D9F80048BF46 /* IntBuffer_iOS.cpp in Sources */,
 				CFA189AF15F926CA0048BF46 /* IFactory.cpp in Sources */,

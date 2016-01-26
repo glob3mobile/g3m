@@ -16,11 +16,13 @@ TileLODTesterResponder::~TileLODTesterResponder() {
   delete _nextTesterRightLOD;
   delete _nextTesterVisible;
   delete _nextTesterWrongLOD;
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
 }
 
 bool TileLODTesterResponder::meetsRenderCriteria(Tile* tile,
                                                  const G3MRenderContext& rc) const {
-
   //Right LOD
   if (_meetsRenderCriteria(tile, rc)) {
     if (_nextTesterRightLOD != NULL) {
@@ -36,7 +38,6 @@ bool TileLODTesterResponder::meetsRenderCriteria(Tile* tile,
 
   return false;
 }
-
 
 bool TileLODTesterResponder::isVisible(Tile* tile,
                                        const G3MRenderContext& rc) const {
@@ -58,24 +59,32 @@ bool TileLODTesterResponder::isVisible(Tile* tile,
 
 void TileLODTesterResponder::onTileHasChangedMesh(Tile* tile) const {
   _onTileHasChangedMesh(tile);
-  if (_nextTesterNotVisible != NULL)
+  if (_nextTesterNotVisible != NULL) {
     _nextTesterNotVisible->onTileHasChangedMesh(tile);
-  if (_nextTesterVisible != NULL)
+  }
+  if (_nextTesterVisible != NULL) {
     _nextTesterVisible->onTileHasChangedMesh(tile);
-  if (_nextTesterRightLOD != NULL)
+  }
+  if (_nextTesterRightLOD != NULL) {
     _nextTesterRightLOD->onTileHasChangedMesh(tile);
-  if (_nextTesterWrongLOD != NULL)
+  }
+  if (_nextTesterWrongLOD != NULL) {
     _nextTesterWrongLOD->onTileHasChangedMesh(tile);
+  }
 }
 
 void TileLODTesterResponder::onLayerTilesRenderParametersChanged(const LayerTilesRenderParameters *ltrp) {
   _onLayerTilesRenderParametersChanged(ltrp);
-  if (_nextTesterNotVisible != NULL)
+  if (_nextTesterNotVisible != NULL) {
     _nextTesterNotVisible->onLayerTilesRenderParametersChanged(ltrp);
-  if (_nextTesterVisible != NULL)
+  }
+  if (_nextTesterVisible != NULL) {
     _nextTesterVisible->onLayerTilesRenderParametersChanged(ltrp);
-  if (_nextTesterRightLOD != NULL)
+  }
+  if (_nextTesterRightLOD != NULL) {
     _nextTesterRightLOD->onLayerTilesRenderParametersChanged(ltrp);
-  if (_nextTesterWrongLOD != NULL)
+  }
+  if (_nextTesterWrongLOD != NULL) {
     _nextTesterWrongLOD->onLayerTilesRenderParametersChanged(ltrp);
+  }
 }

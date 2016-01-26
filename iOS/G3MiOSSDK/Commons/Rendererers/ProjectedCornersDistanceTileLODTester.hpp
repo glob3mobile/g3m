@@ -19,7 +19,7 @@ class Planet;
 class Camera;
 
 
-class ProjectedCornersDistanceTileLODTester: public TileLODTesterResponder {
+class ProjectedCornersDistanceTileLODTester : public TileLODTesterResponder {
 private:
   double _texHeightSquared;
   double _texWidthSquared;

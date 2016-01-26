@@ -10,14 +10,13 @@
 #define MaxFrameTimeTileLODTester_hpp
 
 
-#include "TileLODTester.hpp"
+#include "DecoratorTileLODTester.hpp"
 
 class TimeInterval;
 
 
-class MaxFrameTimeTileLODTester: public TileLODTester {
+class MaxFrameTimeTileLODTester : public DecoratorTileLODTester {
 private:
-  TileLODTester* _nextTester;
   long long _maxFrameTimeInMs;
 
   mutable long long _lastElapsedTime;
@@ -26,20 +25,20 @@ private:
 public:
 
   MaxFrameTimeTileLODTester(const TimeInterval& maxFrameTimeInMs,
-                            TileLODTester* nextTester);
+                            TileLODTester* tileLODTester);
 
-  virtual ~MaxFrameTimeTileLODTester();
+  ~MaxFrameTimeTileLODTester();
+  
+  bool meetsRenderCriteria(Tile* tile,
+                           const G3MRenderContext& rc) const;
 
-  virtual bool meetsRenderCriteria(Tile* tile,
-                                   const G3MRenderContext& rc) const;
+  bool isVisible(Tile* tile,
+                 const G3MRenderContext& rc) const;
 
-  virtual bool isVisible(Tile* tile,
-                         const G3MRenderContext& rc) const;
-
-  virtual void onTileHasChangedMesh(Tile* tile) const;
+  void onTileHasChangedMesh(Tile* tile) const;
 
   void onLayerTilesRenderParametersChanged(const LayerTilesRenderParameters* ltrp);
-  
+
 };
 
 #endif

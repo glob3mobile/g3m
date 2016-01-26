@@ -11,7 +11,7 @@
 
 #include "TileLODTester.hpp"
 
-class TileLODTesterResponder: public TileLODTester {
+class TileLODTesterResponder : public TileLODTester {
 
   TileLODTester* _nextTesterRightLOD;
   TileLODTester* _nextTesterWrongLOD;
