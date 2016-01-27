@@ -271,7 +271,7 @@ public class PlanetRendererBuilder
   private TileLODTester createDefaultTileLODTester()
   {
   
-    ProjectedCornersDistanceTileLODTester proj = new ProjectedCornersDistanceTileLODTester(-1, -1, null, null, null, null);
+    ProjectedCornersDistanceTileLODTester proj = new ProjectedCornersDistanceTileLODTester(null, null, null, null);
   
     //2
     MaxLevelTileLODTester poles = new MaxLevelTileLODTester(-1, -1, null, proj, proj, proj);

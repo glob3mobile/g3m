@@ -44,8 +44,6 @@ public abstract class TileTexturizer
 
   public abstract void tileMeshToBeDeleted(Tile tile, Mesh mesh);
 
-  public abstract boolean tileMeetsRenderCriteria(Tile tile);
-
   public abstract void justCreatedTopTile(G3MRenderContext rc, Tile tile, LayerSet layerSet);
 
   public abstract void ancestorTexturedSolvedChanged(Tile tile, Tile ancestorTile, boolean textureSolved);

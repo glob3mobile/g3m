@@ -24,17 +24,17 @@ public class MaxLevelTileLODTester extends TileLODTesterResponder
   private int _maxLevelForPoles;
 
 
-  protected final boolean _meetsRenderCriteria(Tile tile, G3MRenderContext rc)
+  protected final boolean _meetsRenderCriteria(Tile tile, G3MRenderContext rc, TilesRenderParameters tilesRenderParameters, ITimer lastSplitTimer, double texWidthSquared, double texHeightSquared, long nowInMS)
   {
   
-    if (tile._level >= _maxLevel && _maxLevel > -1)
+    if ((tile._level >= _maxLevel) && (_maxLevel > -1))
     {
       return true;
     }
   
     if (tile._sector.touchesPoles())
     {
-      if (tile._level >= _maxLevelForPoles && _maxLevelForPoles > -1)
+      if ((tile._level >= _maxLevelForPoles) && (_maxLevelForPoles > -1))
       {
         return true;
       }
@@ -73,6 +73,7 @@ public class MaxLevelTileLODTester extends TileLODTesterResponder
 
   public void dispose()
   {
+    super.dispose();
   }
 
 }

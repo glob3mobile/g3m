@@ -76,10 +76,7 @@ public class Tile
       _mustActualizeMeshDueToNewElevationData = false;
   
       //Informs the lod testers
-      if (_planetRenderer.getTileLODTester() != null)
-      {
-        _planetRenderer.getTileLODTester().onTileHasChangedMesh(this);
-      }
+      _planetRenderer.getTileLODTester().onTileHasChangedMesh(this);
   
       if (_debugMesh != null)
       {
@@ -131,28 +128,22 @@ public class Tile
     return _debugMesh;
   }
 
-  private boolean isVisible(G3MRenderContext rc, Sector renderedSector)
+  private boolean isVisible(G3MRenderContext rc, Sector renderedSector, TileLODTester tileLODTester)
   {
     if ((renderedSector != null) && !renderedSector.touchesWith(_sector)) //Incomplete world
     {
       return false;
     }
   
-    return _planetRenderer.getTileLODTester().isVisible(this, rc);
+    return tileLODTester.isVisible(this, rc);
   }
 
-  private boolean meetsRenderCriteria(G3MRenderContext rc, TilesRenderParameters tilesRenderParameters, ITimer lastSplitTimer, double nowInMS)
+  private boolean meetsRenderCriteria(G3MRenderContext rc, TileLODTester tileLODTester, TilesRenderParameters tilesRenderParameters, ITimer lastSplitTimer, double texWidthSquared, double texHeightSquared, long nowInMS)
   {
-  
-    //TODO
-  //  if (texturizer != NULL) {
-  //    if (texturizer->tileMeetsRenderCriteria(this)) {
-  //      return true;
-  //    }
-  //  }
-  
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning CHANGE
+//#warning TODO: move to an implementation of TileLODTester
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning Remove this method when the code is moved from here
     if (tilesRenderParameters._useTilesSplitBudget)
     {
       if (_subtiles == null) // the tile needs to create the subtiles
@@ -166,7 +157,7 @@ public class Tile
       }
     }
   
-    return _planetRenderer.getTileLODTester().meetsRenderCriteria(this, rc);
+    return tileLODTester.meetsRenderCriteria(this, rc, tilesRenderParameters, lastSplitTimer, texWidthSquared, texHeightSquared, nowInMS);
   }
 
   private void rawRender(G3MRenderContext rc, GLState glState, TileTexturizer texturizer, ElevationDataProvider elevationDataProvider, TileTessellator tessellator, LayerTilesRenderParameters layerTilesRenderParameters, LayerSet layerSet, TilesRenderParameters tilesRenderParameters, boolean forceFullRender, long tileDownloadPriority, boolean logTilesPetitions)
@@ -444,7 +435,7 @@ public class Tile
     }
   }
 
-  public final void render(G3MRenderContext rc, GLState parentState, java.util.ArrayList<Tile> toVisitInNextIteration, Frustum cameraFrustumInModelCoordinates, TilesStatistics tilesStatistics, float verticalExaggeration, LayerTilesRenderParameters layerTilesRenderParameters, TileTexturizer texturizer, TilesRenderParameters tilesRenderParameters, ITimer lastSplitTimer, ElevationDataProvider elevationDataProvider, TileTessellator tessellator, LayerSet layerSet, Sector renderedSector, boolean forceFullRender, long tileDownloadPriority, double texWidthSquared, double texHeightSquared, double nowInMS, boolean renderTileMeshes, boolean logTilesPetitions, java.util.ArrayList<Tile> tilesStartedRendering, java.util.ArrayList<String> tilesStoppedRendering)
+  public final void render(G3MRenderContext rc, GLState parentState, java.util.ArrayList<Tile> toVisitInNextIteration, TileLODTester tileLODTester, Frustum cameraFrustumInModelCoordinates, TilesStatistics tilesStatistics, float verticalExaggeration, LayerTilesRenderParameters layerTilesRenderParameters, TileTexturizer texturizer, TilesRenderParameters tilesRenderParameters, ITimer lastSplitTimer, ElevationDataProvider elevationDataProvider, TileTessellator tessellator, LayerSet layerSet, Sector renderedSector, boolean forceFullRender, long tileDownloadPriority, double texWidthSquared, double texHeightSquared, long nowInMS, boolean renderTileMeshes, boolean logTilesPetitions, java.util.ArrayList<Tile> tilesStartedRendering, java.util.ArrayList<String> tilesStoppedRendering)
   {
   ///#warning REMOVE
   //  if (!_sector.contains(Angle::fromDegrees(28), Angle::fromDegrees(-15))) {
@@ -464,13 +455,13 @@ public class Tile
     getTessellatorMesh(rc, elevationDataProvider, tessellator, layerTilesRenderParameters, tilesRenderParameters);
   
     boolean rendered = false;
-    if (isVisible(rc, renderedSector))
+    if (isVisible(rc, renderedSector, tileLODTester))
     {
       setIsVisible(true, texturizer);
   
       tilesStatistics.computeVisibleTile(this);
   
-      final boolean isRawRender = ((toVisitInNextIteration == null) || meetsRenderCriteria(rc, tilesRenderParameters, lastSplitTimer, nowInMS) || (tilesRenderParameters._incrementalTileQuality && !_textureSolved));
+      final boolean isRawRender = ((toVisitInNextIteration == null) || meetsRenderCriteria(rc, tileLODTester, tilesRenderParameters, lastSplitTimer, texWidthSquared, texHeightSquared, nowInMS) || (tilesRenderParameters._incrementalTileQuality && !_textureSolved));
   
       if (isRawRender)
       {

@@ -42,7 +42,7 @@ public class MaxFrameTimeTileLODTester extends DecoratorTileLODTester
     super.dispose();
   }
 
-  public final boolean meetsRenderCriteria(Tile tile, G3MRenderContext rc)
+  public final boolean meetsRenderCriteria(Tile tile, G3MRenderContext rc, TilesRenderParameters tilesRenderParameters, ITimer lastSplitTimer, double texWidthSquared, double texHeightSquared, long nowInMS)
   {
   
     final boolean hasSubtiles = tile.areSubtilesCreated();
@@ -57,12 +57,12 @@ public class MaxFrameTimeTileLODTester extends DecoratorTileLODTester
     }
     _lastElapsedTime = elapsedTime;
   
-    if (!hasSubtiles && elapsedTime > _maxFrameTimeInMs && _nSplitsInFrame > 0)
+    if (!hasSubtiles && (elapsedTime > _maxFrameTimeInMs) && (_nSplitsInFrame > 0))
     {
       return true;
     }
   
-    final boolean res = _tileLODTester.meetsRenderCriteria(tile, rc);
+    final boolean res = _tileLODTester.meetsRenderCriteria(tile, rc, tilesRenderParameters, lastSplitTimer, texWidthSquared, texHeightSquared, nowInMS);
   
     if (!res && !hasSubtiles)
     {

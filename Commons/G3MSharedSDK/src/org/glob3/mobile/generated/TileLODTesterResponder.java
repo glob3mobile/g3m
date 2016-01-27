@@ -26,7 +26,7 @@ public abstract class TileLODTesterResponder extends TileLODTester
   private TileLODTester _nextTesterNotVisible;
 
 
-  protected abstract boolean _meetsRenderCriteria(Tile tile, G3MRenderContext rc);
+  protected abstract boolean _meetsRenderCriteria(Tile tile, G3MRenderContext rc, TilesRenderParameters tilesRenderParameters, ITimer lastSplitTimer, double texWidthSquared, double texHeightSquared, long nowInMS);
 
   protected abstract boolean _isVisible(Tile tile, G3MRenderContext rc);
 
@@ -59,14 +59,14 @@ public abstract class TileLODTesterResponder extends TileLODTester
     super.dispose();
   }
 
-  public final boolean meetsRenderCriteria(Tile tile, G3MRenderContext rc)
+  public final boolean meetsRenderCriteria(Tile tile, G3MRenderContext rc, TilesRenderParameters tilesRenderParameters, ITimer lastSplitTimer, double texWidthSquared, double texHeightSquared, long nowInMS)
   {
     //Right LOD
-    if (_meetsRenderCriteria(tile, rc))
+    if (_meetsRenderCriteria(tile, rc, tilesRenderParameters, lastSplitTimer, texWidthSquared, texHeightSquared, nowInMS))
     {
       if (_nextTesterRightLOD != null)
       {
-        return _nextTesterRightLOD.meetsRenderCriteria(tile, rc);
+        return _nextTesterRightLOD.meetsRenderCriteria(tile, rc, tilesRenderParameters, lastSplitTimer, texWidthSquared, texHeightSquared, nowInMS);
       }
       return true;
     }
@@ -74,7 +74,7 @@ public abstract class TileLODTesterResponder extends TileLODTester
     //Wrong LOD
     if (_nextTesterWrongLOD != null)
     {
-      return _nextTesterWrongLOD.meetsRenderCriteria(tile, rc);
+      return _nextTesterWrongLOD.meetsRenderCriteria(tile, rc, tilesRenderParameters, lastSplitTimer, texWidthSquared, texHeightSquared, nowInMS);
     }
   
     return false;

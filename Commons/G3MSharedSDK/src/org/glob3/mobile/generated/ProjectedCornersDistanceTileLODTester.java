@@ -25,10 +25,6 @@ package org.glob3.mobile.generated;
 
 public class ProjectedCornersDistanceTileLODTester extends TileLODTesterResponder
 {
-  private double _texHeightSquared;
-  private double _texWidthSquared;
-
-
 
   protected static class PCDTesterData extends TileLODTesterData
   {
@@ -124,17 +120,11 @@ public class ProjectedCornersDistanceTileLODTester extends TileLODTesterResponde
     return data;
   }
 
-  protected final boolean _meetsRenderCriteria(Tile tile, G3MRenderContext rc)
+  protected final boolean _meetsRenderCriteria(Tile tile, G3MRenderContext rc, TilesRenderParameters tilesRenderParameters, ITimer lastSplitTimer, double texWidthSquared, double texHeightSquared, long nowInMS)
   {
-  
-    if (_texHeightSquared < 0 || _texHeightSquared < 0)
-    {
-      return true;
-    }
-  
     PCDTesterData data = getData(tile, rc);
   
-    return data.evaluate(rc.getCurrentCamera(), _texHeightSquared, _texWidthSquared);
+    return data.evaluate(rc.getCurrentCamera(), texHeightSquared, texWidthSquared);
   }
 
   protected final boolean _isVisible(Tile tile, G3MRenderContext rc)
@@ -145,28 +135,17 @@ public class ProjectedCornersDistanceTileLODTester extends TileLODTesterResponde
 
   protected final void _onLayerTilesRenderParametersChanged(LayerTilesRenderParameters ltrp)
   {
-    if (ltrp != null)
-    {
-      _texWidthSquared = ltrp._tileTextureResolution._x * ltrp._tileTextureResolution._x;
-      _texHeightSquared = ltrp._tileTextureResolution._y * ltrp._tileTextureResolution._y;
-    }
-    else
-    {
-      _texWidthSquared = -1;
-      _texHeightSquared = -1;
-    }
   }
 
 
-  public ProjectedCornersDistanceTileLODTester(double textureWidth, double textureHeight, TileLODTester nextTesterRightLOD, TileLODTester nextTesterWrongLOD, TileLODTester nextTesterVisible, TileLODTester nextTesterNotVisible)
+  public ProjectedCornersDistanceTileLODTester(TileLODTester nextTesterRightLOD, TileLODTester nextTesterWrongLOD, TileLODTester nextTesterVisible, TileLODTester nextTesterNotVisible)
   {
      super(nextTesterRightLOD, nextTesterWrongLOD, nextTesterVisible, nextTesterNotVisible);
-     _texHeightSquared = textureHeight * textureHeight;
-     _texWidthSquared = textureWidth * textureWidth;
   }
 
   public void dispose()
   {
+    super.dispose();
   }
 
 }
