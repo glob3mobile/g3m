@@ -20,11 +20,6 @@ class Camera;
 
 
 class ProjectedCornersDistanceTileLODTester : public TileLODTesterResponder {
-private:
-  double _texHeightSquared;
-  double _texWidthSquared;
-
-
 protected:
 
   class PCDTesterData: public TileLODTesterData {
@@ -58,21 +53,24 @@ protected:
   void _onTileHasChangedMesh(Tile* tile) const;
 
   PCDTesterData* getData(Tile* tile,
-                         const G3MRenderContext& rc) const;
+                         const G3MRenderContext* rc) const;
 
   bool _meetsRenderCriteria(Tile* tile,
-                            const G3MRenderContext& rc) const;
+                            const G3MRenderContext* rc,
+                            const TilesRenderParameters* tilesRenderParameters,
+                            const ITimer* lastSplitTimer,
+                            const double texWidthSquared,
+                            const double texHeightSquared,
+                            long long nowInMS) const;
 
   bool _isVisible(Tile* tile,
-                  const G3MRenderContext& rc) const;
+                  const G3MRenderContext* rc) const;
 
   void _onLayerTilesRenderParametersChanged(const LayerTilesRenderParameters* ltrp);
 
 public:
 
-  ProjectedCornersDistanceTileLODTester(double textureWidth,
-                                        double textureHeight,
-                                        TileLODTester* nextTesterRightLOD,
+  ProjectedCornersDistanceTileLODTester(TileLODTester* nextTesterRightLOD,
                                         TileLODTester* nextTesterWrongLOD,
                                         TileLODTester* nextTesterVisible,
                                         TileLODTester* nextTesterNotVisible);
@@ -80,6 +78,5 @@ public:
   ~ProjectedCornersDistanceTileLODTester();
   
 };
-
 
 #endif

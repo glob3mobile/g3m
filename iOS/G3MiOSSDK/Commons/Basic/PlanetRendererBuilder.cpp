@@ -455,8 +455,7 @@ void PlanetRendererBuilder::setTileLODTester(TileLODTester* tlt) {
 
 TileLODTester* PlanetRendererBuilder::createDefaultTileLODTester() {
   
-  ProjectedCornersDistanceTileLODTester* proj = new ProjectedCornersDistanceTileLODTester(-1, -1,
-                                                                                          NULL,
+  ProjectedCornersDistanceTileLODTester* proj = new ProjectedCornersDistanceTileLODTester(NULL,
                                                                                           NULL,
                                                                                           NULL,
                                                                                           NULL);

@@ -69,12 +69,16 @@ private:
                      const LayerTilesRenderParameters* layerTilesRenderParameters);
   
   inline bool isVisible(const G3MRenderContext* rc,
-                        const Sector* renderedSector);
+                        const Sector* renderedSector,
+                        TileLODTester* tileLODTester);
   
   inline bool meetsRenderCriteria(const G3MRenderContext* rc,
+                                  TileLODTester* tileLODTester,
                                   const TilesRenderParameters* tilesRenderParameters,
                                   const ITimer* lastSplitTimer,
-                                  double nowInMS);
+                                  const double texWidthSquared,
+                                  const double texHeightSquared,
+                                  long long nowInMS);
 
   inline void rawRender(const G3MRenderContext* rc,
                         const GLState* glState,
@@ -175,6 +179,7 @@ public:
   void render(const G3MRenderContext* rc,
               const GLState& parentState,
               std::vector<Tile*>* toVisitInNextIteration,
+              TileLODTester* tileLODTester,
               const Frustum* cameraFrustumInModelCoordinates,
               TilesStatistics* tilesStatistics,
               const float verticalExaggeration,
@@ -190,7 +195,7 @@ public:
               long long tileDownloadPriority,
               double texWidth,
               double texHeight,
-              double nowInMS,
+              long long nowInMS,
               const bool renderTileMeshes,
               bool logTilesPetitions,
               std::vector<const Tile*>* tilesStartedRendering,

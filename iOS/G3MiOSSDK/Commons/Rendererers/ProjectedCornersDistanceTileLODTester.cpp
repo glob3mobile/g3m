@@ -16,22 +16,22 @@
 #include "Mesh.hpp"
 
 
-ProjectedCornersDistanceTileLODTester::ProjectedCornersDistanceTileLODTester(double textureWidth,
-                                                                             double textureHeight,
-                                                                             TileLODTester* nextTesterRightLOD,
+ProjectedCornersDistanceTileLODTester::ProjectedCornersDistanceTileLODTester(TileLODTester* nextTesterRightLOD,
                                                                              TileLODTester* nextTesterWrongLOD,
                                                                              TileLODTester* nextTesterVisible,
                                                                              TileLODTester* nextTesterNotVisible):
 TileLODTesterResponder(nextTesterRightLOD,
                        nextTesterWrongLOD,
                        nextTesterVisible,
-                       nextTesterNotVisible),
-_texHeightSquared(textureHeight * textureHeight),
-_texWidthSquared(textureWidth * textureWidth)
-{}
+                       nextTesterNotVisible)
+{
+}
 
 
 ProjectedCornersDistanceTileLODTester::~ProjectedCornersDistanceTileLODTester() {
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
 }
 
 void ProjectedCornersDistanceTileLODTester::_onTileHasChangedMesh(Tile* tile) const {
@@ -40,43 +40,35 @@ void ProjectedCornersDistanceTileLODTester::_onTileHasChangedMesh(Tile* tile) co
 }
 
 ProjectedCornersDistanceTileLODTester::PCDTesterData* ProjectedCornersDistanceTileLODTester::getData(Tile* tile,
-                                                                                                     const G3MRenderContext& rc) const {
+                                                                                                     const G3MRenderContext* rc) const {
   PCDTesterData* data = (PCDTesterData*) tile->getDataForLODTester(_id);
   if (data == NULL) {
     const double mediumHeight = tile->getTessellatorMeshData()->_averageHeight;
-    data = new PCDTesterData(tile, mediumHeight, rc.getPlanet());
+    data = new PCDTesterData(tile, mediumHeight, rc->getPlanet());
     tile->setDataForLODTester(_id, data);
   }
   return data;
 }
 
 bool ProjectedCornersDistanceTileLODTester::_meetsRenderCriteria(Tile* tile,
-                                                                 const G3MRenderContext& rc) const {
-
-  if (_texHeightSquared < 0 || _texHeightSquared < 0) {
-    return true;
-  }
-
+                                                                 const G3MRenderContext* rc,
+                                                                 const TilesRenderParameters* tilesRenderParameters,
+                                                                 const ITimer* lastSplitTimer,
+                                                                 const double texWidthSquared,
+                                                                 const double texHeightSquared,
+                                                                 long long nowInMS) const {
   PCDTesterData* data = getData(tile, rc);
 
-  return data->evaluate(rc.getCurrentCamera(), _texHeightSquared, _texWidthSquared);
+  return data->evaluate(rc->getCurrentCamera(), texHeightSquared, texWidthSquared);
 }
 
 bool ProjectedCornersDistanceTileLODTester::_isVisible(Tile* tile,
-                                                       const G3MRenderContext& rc) const {
+                                                       const G3MRenderContext* rc) const {
   PCDTesterData* data = getData(tile, rc);
-  return data->_bvol->touchesFrustum(rc.getCurrentCamera()->getFrustumInModelCoordinates());
+  return data->_bvol->touchesFrustum(rc->getCurrentCamera()->getFrustumInModelCoordinates());
 }
 
 void ProjectedCornersDistanceTileLODTester::_onLayerTilesRenderParametersChanged(const LayerTilesRenderParameters* ltrp) {
-  if (ltrp != NULL) {
-    _texWidthSquared  = ltrp->_tileTextureResolution._x * ltrp->_tileTextureResolution._x;
-    _texHeightSquared = ltrp->_tileTextureResolution._y * ltrp->_tileTextureResolution._y;
-  }
-  else {
-    _texWidthSquared  = -1;
-    _texHeightSquared = -1;
-  }
 }
 
 double ProjectedCornersDistanceTileLODTester::PCDTesterData::getSquaredArcSegmentRatio(const Vector3D& a,

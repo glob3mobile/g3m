@@ -27,10 +27,15 @@ MaxFrameTimeTileLODTester::~MaxFrameTimeTileLODTester() {
 }
 
 bool MaxFrameTimeTileLODTester::meetsRenderCriteria(Tile* tile,
-                                                    const G3MRenderContext& rc) const {
+                                                    const G3MRenderContext* rc,
+                                                    const TilesRenderParameters* tilesRenderParameters,
+                                                    const ITimer* lastSplitTimer,
+                                                    const double texWidthSquared,
+                                                    const double texHeightSquared,
+                                                    long long nowInMS) const {
 
   const bool hasSubtiles = tile->areSubtilesCreated();
-  long long elapsedTime = rc.getFrameStartTimer()->elapsedTimeInMilliseconds();
+  long long elapsedTime = rc->getFrameStartTimer()->elapsedTimeInMilliseconds();
   if (elapsedTime < _lastElapsedTime) {
     //New frame
     //      if (_nSplitsInFrame > 0) {
@@ -40,11 +45,17 @@ bool MaxFrameTimeTileLODTester::meetsRenderCriteria(Tile* tile,
   }
   _lastElapsedTime = elapsedTime;
 
-  if (!hasSubtiles && elapsedTime > _maxFrameTimeInMs && _nSplitsInFrame > 0) {
+  if (!hasSubtiles && (elapsedTime > _maxFrameTimeInMs) && (_nSplitsInFrame > 0)) {
     return true;
   }
 
-  const bool res = _tileLODTester->meetsRenderCriteria(tile, rc);
+  const bool res = _tileLODTester->meetsRenderCriteria(tile,
+                                                       rc,
+                                                       tilesRenderParameters,
+                                                       lastSplitTimer,
+                                                       texWidthSquared,
+                                                       texHeightSquared,
+                                                       nowInMS);
 
   if (!res && !hasSubtiles) {
     _nSplitsInFrame++;
@@ -54,7 +65,7 @@ bool MaxFrameTimeTileLODTester::meetsRenderCriteria(Tile* tile,
 }
 
 bool MaxFrameTimeTileLODTester::isVisible(Tile* tile,
-                                          const G3MRenderContext& rc) const {
+                                          const G3MRenderContext* rc) const {
   return _tileLODTester->isVisible(tile, rc);
 }
 

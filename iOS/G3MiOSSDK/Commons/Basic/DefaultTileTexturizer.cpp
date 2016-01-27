@@ -721,10 +721,6 @@ void DefaultTileTexturizer::tileMeshToBeDeleted(Tile* tile,
   }
 }
 
-bool DefaultTileTexturizer::tileMeetsRenderCriteria(Tile* tile) {
-  return false;
-}
-
 void DefaultTileTexturizer::justCreatedTopTile(const G3MRenderContext* rc,
                                                Tile* tile,
                                                LayerSet* layerSet) {

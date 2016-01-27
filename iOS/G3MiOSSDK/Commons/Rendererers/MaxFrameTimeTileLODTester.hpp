@@ -30,10 +30,15 @@ public:
   ~MaxFrameTimeTileLODTester();
   
   bool meetsRenderCriteria(Tile* tile,
-                           const G3MRenderContext& rc) const;
+                           const G3MRenderContext* rc,
+                           const TilesRenderParameters* tilesRenderParameters,
+                           const ITimer* lastSplitTimer,
+                           const double texWidthSquared,
+                           const double texHeightSquared,
+                           long long nowInMS) const;
 
   bool isVisible(Tile* tile,
-                 const G3MRenderContext& rc) const;
+                 const G3MRenderContext* rc) const;
 
   void onTileHasChangedMesh(Tile* tile) const;
 

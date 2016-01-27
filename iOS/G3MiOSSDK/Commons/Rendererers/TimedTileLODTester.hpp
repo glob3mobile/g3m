@@ -17,7 +17,7 @@ class TimeInterval;
 
 class TimedTileLODTester : public DecoratorTileLODTester {
 private:
-  long long _timeInMs;
+  long long _timeoutInMS;
 
   class TimedTileLODTesterData: public TileLODTesterData{
   public:
@@ -32,16 +32,21 @@ private:
 
 public:
 
-  TimedTileLODTester(const TimeInterval& time,
+  TimedTileLODTester(const TimeInterval& timeout,
                      TileLODTester* tileLODTester);
 
   virtual ~TimedTileLODTester();
 
   bool meetsRenderCriteria(Tile* tile,
-                           const G3MRenderContext& rc) const;
+                           const G3MRenderContext* rc,
+                           const TilesRenderParameters* tilesRenderParameters,
+                           const ITimer* lastSplitTimer,
+                           const double texWidthSquared,
+                           const double texHeightSquared,
+                           long long nowInMS) const;
 
   bool isVisible(Tile* tile,
-                 const G3MRenderContext& rc) const;
+                 const G3MRenderContext* rc) const;
 
   void onTileHasChangedMesh(Tile* tile) const;
 

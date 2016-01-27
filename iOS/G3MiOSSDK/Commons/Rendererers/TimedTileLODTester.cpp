@@ -12,10 +12,10 @@
 #include "Context.hpp"
 
 
-TimedTileLODTester::TimedTileLODTester(const TimeInterval& time,
+TimedTileLODTester::TimedTileLODTester(const TimeInterval& timeout,
                                        TileLODTester* tileLODTester) :
 DecoratorTileLODTester(tileLODTester),
-_timeInMs(time.milliseconds())
+_timeoutInMS(timeout.milliseconds())
 {
 }
 
@@ -26,27 +26,41 @@ TimedTileLODTester::~TimedTileLODTester() {
 }
 
 bool TimedTileLODTester::meetsRenderCriteria(Tile* tile,
-                                             const G3MRenderContext& rc) const {
-#warning TODO: move now up in the chain
-  long long now = rc.getFrameStartTimer()->nowInMilliseconds();
+                                             const G3MRenderContext* rc,
+                                             const TilesRenderParameters* tilesRenderParameters,
+                                             const ITimer* lastSplitTimer,
+                                             const double texWidthSquared,
+                                             const double texHeightSquared,
+                                             long long nowInMS) const {
 
   TimedTileLODTesterData* data = (TimedTileLODTesterData*) tile->getDataForLODTester(_id);
   if (data == NULL) {
-    data = new TimedTileLODTesterData(now);
+    data = new TimedTileLODTesterData(nowInMS);
     tile->setDataForLODTester(_id, data);
-    data->_lastMeetsRenderCriteriaResult = _tileLODTester->meetsRenderCriteria(tile, rc);
+    data->_lastMeetsRenderCriteriaResult = _tileLODTester->meetsRenderCriteria(tile,
+                                                                               rc,
+                                                                               tilesRenderParameters,
+                                                                               lastSplitTimer,
+                                                                               texWidthSquared,
+                                                                               texHeightSquared,
+                                                                               nowInMS);
   }
-  else if ((now - data->_lastMeetsRenderCriteriaTimeInMS) > _timeInMs) {
-#warning TODO: talk with JM
-    data->_lastMeetsRenderCriteriaTimeInMS = now;
-    data->_lastMeetsRenderCriteriaResult = _tileLODTester->meetsRenderCriteria(tile, rc);
+  else if ((nowInMS - data->_lastMeetsRenderCriteriaTimeInMS) > _timeoutInMS) {
+    data->_lastMeetsRenderCriteriaTimeInMS = nowInMS;
+    data->_lastMeetsRenderCriteriaResult = _tileLODTester->meetsRenderCriteria(tile,
+                                                                               rc,
+                                                                               tilesRenderParameters,
+                                                                               lastSplitTimer,
+                                                                               texWidthSquared,
+                                                                               texHeightSquared,
+                                                                               nowInMS);
   }
 
   return data->_lastMeetsRenderCriteriaResult;
 }
 
 bool TimedTileLODTester::isVisible(Tile* tile,
-                                   const G3MRenderContext& rc) const {
+                                   const G3MRenderContext* rc) const {
   return _tileLODTester->isVisible(tile, rc);
 }
 

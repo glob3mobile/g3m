@@ -22,25 +22,48 @@ TileLODTesterResponder::~TileLODTesterResponder() {
 }
 
 bool TileLODTesterResponder::meetsRenderCriteria(Tile* tile,
-                                                 const G3MRenderContext& rc) const {
+                                                 const G3MRenderContext* rc,
+                                                 const TilesRenderParameters* tilesRenderParameters,
+                                                 const ITimer* lastSplitTimer,
+                                                 const double texWidthSquared,
+                                                 const double texHeightSquared,
+                                                 long long nowInMS) const {
   //Right LOD
-  if (_meetsRenderCriteria(tile, rc)) {
+  if (_meetsRenderCriteria(tile,
+                           rc,
+                           tilesRenderParameters,
+                           lastSplitTimer,
+                           texWidthSquared,
+                           texHeightSquared,
+                           nowInMS)) {
     if (_nextTesterRightLOD != NULL) {
-      return _nextTesterRightLOD->meetsRenderCriteria(tile, rc);
+      return _nextTesterRightLOD->meetsRenderCriteria(tile,
+                                                      rc,
+                                                      tilesRenderParameters,
+                                                      lastSplitTimer,
+                                                      texWidthSquared,
+                                                      texHeightSquared,
+                                                      nowInMS);
     }
     return true;
   }
 
   //Wrong LOD
   if (_nextTesterWrongLOD != NULL) {
-    return _nextTesterWrongLOD->meetsRenderCriteria(tile, rc);
+    return _nextTesterWrongLOD->meetsRenderCriteria(tile,
+                                                    rc,
+                                                    tilesRenderParameters,
+                                                    lastSplitTimer,
+                                                    texWidthSquared,
+                                                    texHeightSquared,
+                                                    nowInMS);
   }
 
   return false;
 }
 
 bool TileLODTesterResponder::isVisible(Tile* tile,
-                                       const G3MRenderContext& rc) const {
+                                       const G3MRenderContext* rc) const {
   //Visible
   if (_isVisible(tile, rc)) {
     if (_nextTesterVisible != NULL) {

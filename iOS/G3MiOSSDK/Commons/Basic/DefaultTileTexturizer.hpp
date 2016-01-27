@@ -67,8 +67,6 @@ public:
   void tileMeshToBeDeleted(Tile* tile,
                            Mesh* mesh);
 
-  bool tileMeetsRenderCriteria(Tile* tile);
-
   void justCreatedTopTile(const G3MRenderContext* rc,
                           Tile* tile,
                           LayerSet* layerSet);

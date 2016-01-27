@@ -29,17 +29,27 @@ _maxLevel(maxLevel)
 
 
 MaxLevelTileLODTester::~MaxLevelTileLODTester() {
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
 }
 
 bool MaxLevelTileLODTester::_meetsRenderCriteria(Tile* tile,
-                                                 const G3MRenderContext& rc) const {
+                                                 const G3MRenderContext* rc,
+                                                 const TilesRenderParameters* tilesRenderParameters,
+                                                 const ITimer* lastSplitTimer,
+                                                 const double texWidthSquared,
+                                                 const double texHeightSquared,
+                                                 long long nowInMS) const {
 
-  if (tile->_level >= _maxLevel && _maxLevel > -1) {
+  if ((tile->_level >= _maxLevel) &&
+      (_maxLevel > -1)) {
     return true;
   }
 
   if (tile->_sector.touchesPoles()) {
-    if (tile->_level >= _maxLevelForPoles && _maxLevelForPoles > -1) {
+    if ((tile->_level >= _maxLevelForPoles) &&
+        (_maxLevelForPoles > -1)) {
       return true;
     }
   }
@@ -48,7 +58,7 @@ bool MaxLevelTileLODTester::_meetsRenderCriteria(Tile* tile,
 }
 
 bool MaxLevelTileLODTester::_isVisible(Tile* tile,
-                                       const G3MRenderContext& rc) const {
+                                       const G3MRenderContext* rc) const {
   return true;
 }
 

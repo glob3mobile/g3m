@@ -20,10 +20,15 @@ private:
 protected:
 
   bool _meetsRenderCriteria(Tile* tile,
-                            const G3MRenderContext& rc) const;
+                            const G3MRenderContext* rc,
+                            const TilesRenderParameters* tilesRenderParameters,
+                            const ITimer* lastSplitTimer,
+                            const double texWidthSquared,
+                            const double texHeightSquared,
+                            long long nowInMS) const;
 
   bool _isVisible(Tile* tile,
-                  const G3MRenderContext& rc) const;
+                  const G3MRenderContext* rc) const;
 
   void _onLayerTilesRenderParametersChanged(const LayerTilesRenderParameters* ltrp);
 

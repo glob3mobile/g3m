@@ -49,8 +49,6 @@ public:
   virtual void tileMeshToBeDeleted(Tile* tile,
                                    Mesh* mesh) = 0;
 
-  virtual bool tileMeetsRenderCriteria(Tile* tile) = 0;
-
   virtual void justCreatedTopTile(const G3MRenderContext* rc,
                                   Tile* tile,
                                   LayerSet* layerSet) = 0;

@@ -182,10 +182,8 @@ Mesh* Tile::getTessellatorMesh(const G3MRenderContext* rc,
     _mustActualizeMeshDueToNewElevationData = false;
     
     //Informs the lod testers
-    if (_planetRenderer->getTileLODTester() != NULL) {
-      _planetRenderer->getTileLODTester()->onTileHasChangedMesh(this);
-    }
-    
+    _planetRenderer->getTileLODTester()->onTileHasChangedMesh(this);
+
     if (_debugMesh != NULL) {
       delete _debugMesh;
       _debugMesh = NULL;
@@ -243,28 +241,25 @@ Mesh* Tile::getDebugMesh(const G3MRenderContext* rc,
 }
 
 bool Tile::isVisible(const G3MRenderContext* rc,
-                     const Sector* renderedSector) {
+                     const Sector* renderedSector,
+                     TileLODTester* tileLODTester) {
   if ((renderedSector != NULL) &&
       !renderedSector->touchesWith(_sector)) { //Incomplete world
     return false;
   }
   
-  return _planetRenderer->getTileLODTester()->isVisible(this, *rc);
+  return tileLODTester->isVisible(this, rc);
 }
 
 bool Tile::meetsRenderCriteria(const G3MRenderContext* rc,
+                               TileLODTester* tileLODTester,
                                const TilesRenderParameters* tilesRenderParameters,
                                const ITimer* lastSplitTimer,
-                               double nowInMS) {
-  
-  //TODO
-//  if (texturizer != NULL) {
-//    if (texturizer->tileMeetsRenderCriteria(this)) {
-//      return true;
-//    }
-//  }
-
-#warning CHANGE
+                               const double texWidthSquared,
+                               const double texHeightSquared,
+                               long long nowInMS) {
+#warning TODO: move to an implementation of TileLODTester
+#warning Remove this method when the code is moved from here
   if (tilesRenderParameters->_useTilesSplitBudget) {
     if (_subtiles == NULL) { // the tile needs to create the subtiles
 //      if (lastSplitTimer->elapsedTimeInMilliseconds() < 67) {
@@ -275,7 +270,13 @@ bool Tile::meetsRenderCriteria(const G3MRenderContext* rc,
     }
   }
 
-  return _planetRenderer->getTileLODTester()->meetsRenderCriteria(this, *rc);
+  return tileLODTester->meetsRenderCriteria(this,
+                                            rc,
+                                            tilesRenderParameters,
+                                            lastSplitTimer,
+                                            texWidthSquared,
+                                            texHeightSquared,
+                                            nowInMS);
 }
 
 void Tile::prepareForFullRendering(const G3MRenderContext* rc,
@@ -484,6 +485,7 @@ void Tile::deleteTexturizedMesh(TileTexturizer* texturizer) {
 void Tile::render(const G3MRenderContext* rc,
                   const GLState& parentState,
                   std::vector<Tile*>* toVisitInNextIteration,
+                  TileLODTester* tileLODTester,
                   const Frustum* cameraFrustumInModelCoordinates,
                   TilesStatistics* tilesStatistics,
                   const float verticalExaggeration,
@@ -499,7 +501,7 @@ void Tile::render(const G3MRenderContext* rc,
                   long long tileDownloadPriority,
                   double texWidthSquared,
                   double texHeightSquared,
-                  double nowInMS,
+                  long long nowInMS,
                   const bool renderTileMeshes,
                   bool logTilesPetitions,
                   std::vector<const Tile*>* tilesStartedRendering,
@@ -525,7 +527,7 @@ void Tile::render(const G3MRenderContext* rc,
                      tilesRenderParameters);
   
   bool rendered = false;
-  if (isVisible(rc, renderedSector)) {
+  if (isVisible(rc, renderedSector, tileLODTester)) {
     setIsVisible(true, texturizer);
     
     tilesStatistics->computeVisibleTile(this);
@@ -533,8 +535,11 @@ void Tile::render(const G3MRenderContext* rc,
     const bool isRawRender = (
                               (toVisitInNextIteration == NULL) ||
                               meetsRenderCriteria(rc,
+                                                  tileLODTester,
                                                   tilesRenderParameters,
                                                   lastSplitTimer,
+                                                  texWidthSquared,
+                                                  texHeightSquared,
                                                   nowInMS) ||
                               (tilesRenderParameters->_incrementalTileQuality && !_textureSolved)
                               );

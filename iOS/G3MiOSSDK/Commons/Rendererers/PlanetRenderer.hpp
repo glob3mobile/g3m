@@ -474,13 +474,11 @@ public:
   
   void setChangedRendererInfoListener(ChangedRendererInfoListener* changedInfoListener,
                                       const size_t rendererIdentifier);
-  
+
   TileLODTester* getTileLODTester() const {
-#warning TODO: remove this
     return _tileLODTester;
   }
 
 };
-
 
 #endif
