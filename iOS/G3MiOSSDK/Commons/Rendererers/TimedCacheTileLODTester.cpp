@@ -6,36 +6,36 @@
 //
 //
 
-#include "TimedTileLODTester.hpp"
+#include "TimedCacheTileLODTester.hpp"
 
 #include "Tile.hpp"
 #include "Context.hpp"
 
 
-TimedTileLODTester::TimedTileLODTester(const TimeInterval& timeout,
-                                       TileLODTester* tileLODTester) :
+TimedCacheTileLODTester::TimedCacheTileLODTester(const TimeInterval& timeout,
+                                                 TileLODTester* tileLODTester) :
 DecoratorTileLODTester(tileLODTester),
 _timeoutInMS(timeout.milliseconds())
 {
 }
 
-TimedTileLODTester::~TimedTileLODTester() {
+TimedCacheTileLODTester::~TimedCacheTileLODTester() {
 #ifdef JAVA_CODE
   super.dispose();
 #endif
 }
 
-bool TimedTileLODTester::meetsRenderCriteria(const Tile* tile,
-                                             const G3MRenderContext* rc,
-                                             const TilesRenderParameters* tilesRenderParameters,
-                                             const ITimer* lastSplitTimer,
-                                             const double texWidthSquared,
-                                             const double texHeightSquared,
-                                             long long nowInMS) const {
+bool TimedCacheTileLODTester::meetsRenderCriteria(const Tile* tile,
+                                                  const G3MRenderContext* rc,
+                                                  const TilesRenderParameters* tilesRenderParameters,
+                                                  const ITimer* lastSplitTimer,
+                                                  const double texWidthSquared,
+                                                  const double texHeightSquared,
+                                                  long long nowInMS) const {
 
-  TimedTileLODTesterData* data = (TimedTileLODTesterData*) tile->getDataForLODTester(_id);
+  PvtData* data = (PvtData*) tile->getDataForLODTester(_id);
   if (data == NULL) {
-    data = new TimedTileLODTesterData(nowInMS);
+    data = new PvtData(nowInMS);
     tile->setDataForLODTester(_id, data);
     data->_lastMeetsRenderCriteriaResult = _tileLODTester->meetsRenderCriteria(tile,
                                                                                rc,

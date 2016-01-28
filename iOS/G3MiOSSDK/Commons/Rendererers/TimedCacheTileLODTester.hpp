@@ -15,16 +15,16 @@
 class TimeInterval;
 
 
-class TimedTileLODTester : public DecoratorTileLODTester {
+class TimedCacheTileLODTester : public DecoratorTileLODTester {
 private:
   long long _timeoutInMS;
 
-  class TimedTileLODTesterData: public TileLODTesterData{
+  class PvtData: public TileLODTesterData {
   public:
     bool _lastMeetsRenderCriteriaResult;
     long long _lastMeetsRenderCriteriaTimeInMS;
 
-    TimedTileLODTesterData(long long now) {
+    PvtData(long long now) {
       _lastMeetsRenderCriteriaTimeInMS = now;
       _lastMeetsRenderCriteriaResult = false;
     }
@@ -32,10 +32,10 @@ private:
 
 public:
 
-  TimedTileLODTester(const TimeInterval& timeout,
-                     TileLODTester* tileLODTester);
+  TimedCacheTileLODTester(const TimeInterval& timeout,
+                          TileLODTester* tileLODTester);
 
-  virtual ~TimedTileLODTester();
+  virtual ~TimedCacheTileLODTester();
 
   bool meetsRenderCriteria(const Tile* tile,
                            const G3MRenderContext* rc,

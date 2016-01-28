@@ -21,7 +21,7 @@
 #include "ProjectedCornersDistanceTileLODTester.hpp"
 #include "MaxLevelTileLODTester.hpp"
 #include "MaxFrameTimeTileLODTester.hpp"
-#include "TimedTileLODTester.hpp"
+#include "TimedCacheTileLODTester.hpp"
 #include "PlanetTileTessellator.hpp"
 #include "LayerBuilder.hpp"
 #include "MeshBoundingVolumeTileVisibilityTester.hpp"
@@ -57,18 +57,18 @@ PlanetRendererBuilder::~PlanetRendererBuilder() {
   delete _parameters;
   delete _layerSet;
   delete _texturizer;
-  
+
   const size_t geoVectorLayersSize = _geoVectorLayers.size();
   for (size_t i = 0; i < geoVectorLayersSize; i++) {
     GEOVectorLayer* geoVectorLayer = _geoVectorLayers[i];
     delete geoVectorLayer;
   }
-  
+
   delete _tileTessellator;
   delete _elevationDataProvider;
-  
+
   delete _renderedSector;
-  
+
   delete _tileRenderingListener;
 }
 
@@ -81,7 +81,7 @@ TileTessellator* PlanetRendererBuilder::getTileTessellator() {
   if (!_tileTessellator) {
     _tileTessellator = createTileTessellator();
   }
-  
+
   return _tileTessellator;
 }
 
@@ -94,7 +94,7 @@ TileTexturizer* PlanetRendererBuilder::getTexturizer() {
   if (!_texturizer) {
     _texturizer = new DefaultTileTexturizer(PlanetRendererBuilder::getDefaultTileBackGroundImageBuilder());
   }
-  
+
   return _texturizer;
 }
 
@@ -107,7 +107,7 @@ LayerSet* PlanetRendererBuilder::getLayerSet() {
   if (!_layerSet) {
     _layerSet = createLayerSet();
   }
-  
+
   return _layerSet;
 }
 
@@ -120,7 +120,7 @@ TilesRenderParameters* PlanetRendererBuilder::getParameters() {
   if (!_parameters) {
     _parameters = createPlanetRendererParameters();
   }
-  
+
   return _parameters;
 }
 
@@ -311,7 +311,7 @@ void PlanetRendererBuilder::setTileRenderingListener(TileRenderingListener* tile
     ILogger::instance()->logError("LOGIC ERROR: TileRenderingListener already set");
     return;
   }
-  
+
   _tileRenderingListener = tileRenderingListener;
 }
 
@@ -352,14 +352,14 @@ TileRenderingListener* PlanetRendererBuilder::getTileRenderingListener() {
 }
 
 PlanetRenderer* PlanetRendererBuilder::create() {
-  
+
   LayerSet* layerSet = getLayerSet();
   const size_t geoVectorLayersSize = _geoVectorLayers.size();
   for (size_t i = 0; i < geoVectorLayersSize; i++) {
     GEOVectorLayer* geoVectorLayer = _geoVectorLayers[i];
     layerSet->addLayer(geoVectorLayer);
   }
-  
+
   PlanetRenderer* planetRenderer = new PlanetRenderer(getTileTessellator(),
                                                       getElevationDataProvider(),
                                                       true,
@@ -377,12 +377,12 @@ PlanetRenderer* PlanetRendererBuilder::create() {
                                                       getTouchEventTypeOfTerrainTouchListener(),
                                                       getTileLODTester(),
                                                       getTileVisibilityTester());
-  
+
   for (int i = 0; i < getVisibleSectorListeners()->size(); i++) {
     planetRenderer->addVisibleSectorListener(getVisibleSectorListeners()->at(i),
                                              TimeInterval::fromMilliseconds(getStabilizationMilliSeconds()->at(i)));
   }
-  
+
   _parameters = NULL;
   _layerSet = NULL;
   _texturizer = NULL;
@@ -391,16 +391,16 @@ PlanetRenderer* PlanetRendererBuilder::create() {
   _visibleSectorListeners = NULL;
   delete _stabilizationMilliSeconds;
   _stabilizationMilliSeconds = NULL;
-  
+
   _elevationDataProvider = NULL;
-  
+
   delete _renderedSector;
   _renderedSector = NULL;
-  
+
   _tileRenderingListener = NULL;
-  
+
   _geoVectorLayers.clear();
-  
+
   return planetRenderer;
 }
 
@@ -457,22 +457,19 @@ void PlanetRendererBuilder::setTileLODTester(TileLODTester* tlt) {
 }
 
 TileLODTester* PlanetRendererBuilder::createDefaultTileLODTester() const {
-  ProjectedCornersDistanceTileLODTester* proj = new ProjectedCornersDistanceTileLODTester(NULL,
-                                                                                          NULL);
-  
-  //2
-  MaxLevelTileLODTester* poles = new MaxLevelTileLODTester(-1, -1,
-                                                           NULL,
-                                                           proj);
-  //1
-  MaxFrameTimeTileLODTester* frameTime = new MaxFrameTimeTileLODTester(TimeInterval::fromSeconds((double)1 / 60.0),
-                                                                       poles);
-  
-  //0
-  TimedTileLODTester* timed = new TimedTileLODTester(TimeInterval::fromMilliseconds(250),
+  TileLODTester* proj = new ProjectedCornersDistanceTileLODTester(NULL,
+                                                                  NULL);
+
+  TileLODTester* poles = new MaxLevelTileLODTester(-1, -1,
+                                                   NULL,
+                                                   proj);
+
+  TileLODTester* frameTime = new MaxFrameTimeTileLODTester(TimeInterval::fromSeconds((double)1 / 60.0),
+                                                           poles);
+
+  TileLODTester* timed = new TimedCacheTileLODTester(TimeInterval::fromMilliseconds(250),
                                                      frameTime);
-  
-  
+
   return timed;
 }
 
@@ -484,8 +481,8 @@ TileLODTester* PlanetRendererBuilder::getTileLODTester() {
 }
 
 TileVisibilityTester* PlanetRendererBuilder::createDefaultTileVisibilityTester() const {
-#warning TODO: add timedTrueVisibility
-  return new MeshBoundingVolumeTileVisibilityTester();
+  return new TimedCacheTileVisibilityTester(TimeInterval::fromMilliseconds(250),
+                                            new MeshBoundingVolumeTileVisibilityTester());
 }
 
 TileVisibilityTester* PlanetRendererBuilder::getTileVisibilityTester() {
