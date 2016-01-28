@@ -22,13 +22,9 @@ public abstract class TileLODTesterResponder extends TileLODTester
 
   private TileLODTester _nextTesterRightLOD;
   private TileLODTester _nextTesterWrongLOD;
-  private TileLODTester _nextTesterVisible;
-  private TileLODTester _nextTesterNotVisible;
 
 
   protected abstract boolean _meetsRenderCriteria(Tile tile, G3MRenderContext rc, TilesRenderParameters tilesRenderParameters, ITimer lastSplitTimer, double texWidthSquared, double texHeightSquared, long nowInMS);
-
-  protected abstract boolean _isVisible(Tile tile, G3MRenderContext rc);
 
   protected void _onTileHasChangedMesh(Tile tile)
   {
@@ -37,23 +33,16 @@ public abstract class TileLODTesterResponder extends TileLODTester
   protected abstract void _onLayerTilesRenderParametersChanged(LayerTilesRenderParameters ltrp);
 
 
-  public TileLODTesterResponder(TileLODTester nextTesterRightLOD, TileLODTester nextTesterWrongLOD, TileLODTester nextTesterVisible, TileLODTester nextTesterNotVisible)
+  public TileLODTesterResponder(TileLODTester nextTesterRightLOD, TileLODTester nextTesterWrongLOD)
   {
      _nextTesterRightLOD = nextTesterRightLOD;
      _nextTesterWrongLOD = nextTesterWrongLOD;
-     _nextTesterVisible = nextTesterVisible;
-     _nextTesterNotVisible = nextTesterNotVisible;
-
   }
 
   public void dispose()
   {
-    if (_nextTesterNotVisible != null)
-       _nextTesterNotVisible.dispose();
     if (_nextTesterRightLOD != null)
        _nextTesterRightLOD.dispose();
-    if (_nextTesterVisible != null)
-       _nextTesterVisible.dispose();
     if (_nextTesterWrongLOD != null)
        _nextTesterWrongLOD.dispose();
     super.dispose();
@@ -80,38 +69,9 @@ public abstract class TileLODTesterResponder extends TileLODTester
     return false;
   }
 
-  public final boolean isVisible(Tile tile, G3MRenderContext rc)
-  {
-    //Visible
-    if (_isVisible(tile, rc))
-    {
-      if (_nextTesterVisible != null)
-      {
-        return _nextTesterVisible.isVisible(tile, rc);
-      }
-      return true;
-    }
-  
-    //Not visible
-    if (_nextTesterNotVisible != null)
-    {
-      return _nextTesterNotVisible.isVisible(tile, rc);
-    }
-  
-    return false;
-  }
-
   public final void onTileHasChangedMesh(Tile tile)
   {
     _onTileHasChangedMesh(tile);
-    if (_nextTesterNotVisible != null)
-    {
-      _nextTesterNotVisible.onTileHasChangedMesh(tile);
-    }
-    if (_nextTesterVisible != null)
-    {
-      _nextTesterVisible.onTileHasChangedMesh(tile);
-    }
     if (_nextTesterRightLOD != null)
     {
       _nextTesterRightLOD.onTileHasChangedMesh(tile);
@@ -125,14 +85,6 @@ public abstract class TileLODTesterResponder extends TileLODTester
   public final void onLayerTilesRenderParametersChanged(LayerTilesRenderParameters ltrp)
   {
     _onLayerTilesRenderParametersChanged(ltrp);
-    if (_nextTesterNotVisible != null)
-    {
-      _nextTesterNotVisible.onLayerTilesRenderParametersChanged(ltrp);
-    }
-    if (_nextTesterVisible != null)
-    {
-      _nextTesterVisible.onLayerTilesRenderParametersChanged(ltrp);
-    }
     if (_nextTesterRightLOD != null)
     {
       _nextTesterRightLOD.onLayerTilesRenderParametersChanged(ltrp);

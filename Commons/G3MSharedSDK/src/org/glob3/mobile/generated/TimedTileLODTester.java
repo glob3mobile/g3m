@@ -67,19 +67,4 @@ public class TimedTileLODTester extends DecoratorTileLODTester
     return data._lastMeetsRenderCriteriaResult;
   }
 
-  public final boolean isVisible(Tile tile, G3MRenderContext rc)
-  {
-    return _tileLODTester.isVisible(tile, rc);
-  }
-
-  public final void onTileHasChangedMesh(Tile tile)
-  {
-    _tileLODTester.onTileHasChangedMesh(tile);
-  }
-
-  public final void onLayerTilesRenderParametersChanged(LayerTilesRenderParameters ltrp)
-  {
-    _tileLODTester.onLayerTilesRenderParametersChanged(ltrp);
-  }
-
 }

@@ -38,4 +38,14 @@ public abstract class DecoratorTileLODTester extends TileLODTester
     super.dispose();
   }
 
+  public void onTileHasChangedMesh(Tile tile)
+  {
+    _tileLODTester.onTileHasChangedMesh(tile);
+  }
+
+  public void onLayerTilesRenderParametersChanged(LayerTilesRenderParameters ltrp)
+  {
+    _tileLODTester.onLayerTilesRenderParametersChanged(ltrp);
+  }
+
 }

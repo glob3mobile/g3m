@@ -11,6 +11,7 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
   private final boolean _logTilesPetitions;
   private ITileVisitor _tileVisitor = null;
   private TileLODTester _tileLODTester;
+  private TileVisibilityTester _tileVisibilityTester;
 
   private TileRenderingListener _tileRenderingListener;
   private final java.util.ArrayList<Tile> _tilesStartedRendering;
@@ -327,6 +328,7 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
       _layerTilesRenderParametersDirty = false;
   
       _tileLODTester.onLayerTilesRenderParametersChanged(_layerTilesRenderParameters);
+      _tileVisibilityTester.onLayerTilesRenderParametersChanged(_layerTilesRenderParameters);
     }
     return _layerTilesRenderParameters;
   }
@@ -339,7 +341,7 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
   private java.util.ArrayList<Tile> _toVisit = new java.util.ArrayList<Tile>();
   private java.util.ArrayList<Tile> _toVisitInNextIteration = new java.util.ArrayList<Tile>();
 
-  public PlanetRenderer(TileTessellator tessellator, ElevationDataProvider elevationDataProvider, boolean ownsElevationDataProvider, float verticalExaggeration, TileTexturizer texturizer, LayerSet layerSet, TilesRenderParameters tilesRenderParameters, boolean showStatistics, long tileDownloadPriority, Sector renderedSector, boolean renderTileMeshes, boolean logTilesPetitions, TileRenderingListener tileRenderingListener, ChangedRendererInfoListener changedInfoListener, TouchEventType touchEventTypeOfTerrainTouchListener, TileLODTester tileLODTester)
+  public PlanetRenderer(TileTessellator tessellator, ElevationDataProvider elevationDataProvider, boolean ownsElevationDataProvider, float verticalExaggeration, TileTexturizer texturizer, LayerSet layerSet, TilesRenderParameters tilesRenderParameters, boolean showStatistics, long tileDownloadPriority, Sector renderedSector, boolean renderTileMeshes, boolean logTilesPetitions, TileRenderingListener tileRenderingListener, ChangedRendererInfoListener changedInfoListener, TouchEventType touchEventTypeOfTerrainTouchListener, TileLODTester tileLODTester, TileVisibilityTester tileVisibilityTester)
   {
      _tessellator = tessellator;
      _elevationDataProvider = elevationDataProvider;
@@ -366,6 +368,7 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
      _tileRenderingListener = tileRenderingListener;
      _touchEventTypeOfTerrainTouchListener = touchEventTypeOfTerrainTouchListener;
      _tileLODTester = tileLODTester;
+     _tileVisibilityTester = tileVisibilityTester;
     _context = null;
     _changedInfoListener = changedInfoListener;
   
@@ -388,7 +391,11 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
   
     if (_tileLODTester == null)
     {
-      throw new RuntimeException("Null TileLODTester provided to PlanetRenderer");
+      throw new RuntimeException("TileLODTester can't be NULL");
+    }
+    if (_tileVisibilityTester == null)
+    {
+      throw new RuntimeException("TileVisibilityTester can't be NULL");
     }
   }
 
@@ -429,6 +436,8 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
   
     if (_tileLODTester != null)
        _tileLODTester.dispose();
+    if (_tileVisibilityTester != null)
+       _tileVisibilityTester.dispose();
   
   
     super.dispose();
@@ -498,7 +507,7 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
       for (int i = 0; i < firstLevelTilesCount; i++)
       {
         Tile tile = _firstLevelTiles.get(i);
-        tile.render(rc, _glState, null, _tileLODTester, cameraFrustumInModelCoordinates, _statistics, _verticalExaggeration, layerTilesRenderParameters, _texturizer, _tilesRenderParameters, _lastSplitTimer, _elevationDataProvider, _tessellator, _layerSet, _renderedSector, _firstRender, _tileDownloadPriority, texWidthSquared, texHeightSquared, nowInMS, _renderTileMeshes, _logTilesPetitions, _tilesStartedRendering, _tilesStoppedRendering); // if first render, force full render
+        tile.render(rc, _glState, null, _tileLODTester, _tileVisibilityTester, cameraFrustumInModelCoordinates, _statistics, _verticalExaggeration, layerTilesRenderParameters, _texturizer, _tilesRenderParameters, _lastSplitTimer, _elevationDataProvider, _tessellator, _layerSet, _renderedSector, _firstRender, _tileDownloadPriority, texWidthSquared, texHeightSquared, nowInMS, _renderTileMeshes, _logTilesPetitions, _tilesStartedRendering, _tilesStoppedRendering); // if first render, force full render
       }
   
   
@@ -522,7 +531,7 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
         for (int i = 0; i < toVisitSize; i++)
         {
           Tile tile = _toVisit.get(i);
-          tile.render(rc, _glState, _toVisitInNextIteration, _tileLODTester, cameraFrustumInModelCoordinates, _statistics, _verticalExaggeration, layerTilesRenderParameters, _texturizer, _tilesRenderParameters, _lastSplitTimer, _elevationDataProvider, _tessellator, _layerSet, _renderedSector, _firstRender, _tileDownloadPriority, texWidthSquared, texHeightSquared, nowInMS, _renderTileMeshes, _logTilesPetitions, _tilesStartedRendering, _tilesStoppedRendering); // if first render, forceFullRender
+          tile.render(rc, _glState, _toVisitInNextIteration, _tileLODTester, _tileVisibilityTester, cameraFrustumInModelCoordinates, _statistics, _verticalExaggeration, layerTilesRenderParameters, _texturizer, _tilesRenderParameters, _lastSplitTimer, _elevationDataProvider, _tessellator, _layerSet, _renderedSector, _firstRender, _tileDownloadPriority, texWidthSquared, texHeightSquared, nowInMS, _renderTileMeshes, _logTilesPetitions, _tilesStartedRendering, _tilesStoppedRendering); // if first render, forceFullRender
                        //_tileRenderingListener
         }
   
@@ -999,9 +1008,29 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
     }
   }
 
-  public final TileLODTester getTileLODTester()
+//  TileLODTester* getTileLODTester() const {
+//    return _tileLODTester;
+//  }
+
+
+  //std::vector<std::string> PlanetRenderer::getInfo() {
+  //  _info.clear();
+  //  std::vector<std::string> info = _layerSet->getInfo();
+  //
+  ///#ifdef C_CODE
+  //      _info.insert(_info.end(),info.begin(), info.end());
+  ///#endif
+  ///#ifdef JAVA_CODE
+  //      _infos.add(info);
+  ///#endif
+  //
+  //  return _info;
+  //}
+  
+  public final void onTileHasChangedMesh(Tile tile)
   {
-    return _tileLODTester;
+    _tileLODTester.onTileHasChangedMesh(tile);
+    _tileVisibilityTester.onTileHasChangedMesh(tile);
   }
 
 }

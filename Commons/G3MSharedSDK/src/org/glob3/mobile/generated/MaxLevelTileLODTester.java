@@ -43,11 +43,6 @@ public class MaxLevelTileLODTester extends TileLODTesterResponder
     return false;
   }
 
-  protected final boolean _isVisible(Tile tile, G3MRenderContext rc)
-  {
-    return true;
-  }
-
   protected final void _onLayerTilesRenderParametersChanged(LayerTilesRenderParameters ltrp)
   {
     if (ltrp != null)
@@ -63,9 +58,9 @@ public class MaxLevelTileLODTester extends TileLODTesterResponder
   }
 
 
-  public MaxLevelTileLODTester(int maxLevel, int maxLevelForPoles, TileLODTester nextTesterRightLOD, TileLODTester nextTesterWrongLOD, TileLODTester nextTesterVisible, TileLODTester nextTesterNotVisible)
+  public MaxLevelTileLODTester(int maxLevel, int maxLevelForPoles, TileLODTester nextTesterRightLOD, TileLODTester nextTesterWrongLOD)
   {
-     super(nextTesterRightLOD, nextTesterWrongLOD, nextTesterVisible, nextTesterNotVisible);
+     super(nextTesterRightLOD, nextTesterWrongLOD);
      _maxLevelForPoles = maxLevelForPoles;
      _maxLevel = maxLevel;
   }

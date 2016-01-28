@@ -51,8 +51,6 @@ public class ProjectedCornersDistanceTileLODTester extends TileLODTesterResponde
     private final Vector3D _southEastPoint ;
 
 
-    public BoundingVolume _bvol;
-
     public PCDTesterData(Tile tile, double mediumHeight, Planet planet)
     {
        super();
@@ -69,20 +67,6 @@ public class ProjectedCornersDistanceTileLODTester extends TileLODTesterResponde
       _southArcSegmentRatioSquared = getSquaredArcSegmentRatio(normalSW, normalSE);
       _eastArcSegmentRatioSquared = getSquaredArcSegmentRatio(normalNE, normalSE);
       _westArcSegmentRatioSquared = getSquaredArcSegmentRatio(normalNW, normalSW);
-    
-      //Computing Bounding Volume
-    
-      final Mesh mesh = tile.getCurrentTessellatorMesh();
-      if (mesh == null)
-      {
-        ILogger.instance().logError("Problem computing BVolume in ProjectedCornersDistanceTileLODTesterData");
-        _bvol = null;
-      }
-      else
-      {
-        _bvol = mesh.getBoundingVolume(); //BV is deleted by mesh
-      }
-    
     }
 
     public final boolean evaluate(Camera camera, double texHeightSquared, double texWidthSquared)
@@ -127,20 +111,18 @@ public class ProjectedCornersDistanceTileLODTester extends TileLODTesterResponde
     return data.evaluate(rc.getCurrentCamera(), texHeightSquared, texWidthSquared);
   }
 
-  protected final boolean _isVisible(Tile tile, G3MRenderContext rc)
-  {
-    PCDTesterData data = getData(tile, rc);
-    return data._bvol.touchesFrustum(rc.getCurrentCamera().getFrustumInModelCoordinates());
-  }
-
   protected final void _onLayerTilesRenderParametersChanged(LayerTilesRenderParameters ltrp)
   {
   }
 
 
-  public ProjectedCornersDistanceTileLODTester(TileLODTester nextTesterRightLOD, TileLODTester nextTesterWrongLOD, TileLODTester nextTesterVisible, TileLODTester nextTesterNotVisible)
+
+  ///#include "BoundingVolume.hpp"
+  
+  
+  public ProjectedCornersDistanceTileLODTester(TileLODTester nextTesterRightLOD, TileLODTester nextTesterWrongLOD)
   {
-     super(nextTesterRightLOD, nextTesterWrongLOD, nextTesterVisible, nextTesterNotVisible);
+     super(nextTesterRightLOD, nextTesterWrongLOD);
   }
 
   public void dispose()

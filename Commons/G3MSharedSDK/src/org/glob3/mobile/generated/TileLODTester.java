@@ -40,8 +40,6 @@ public abstract class TileLODTester
 
   public abstract boolean meetsRenderCriteria(Tile tile, G3MRenderContext rc, TilesRenderParameters tilesRenderParameters, ITimer lastSplitTimer, double texWidthSquared, double texHeightSquared, long nowInMS);
 
-  public abstract boolean isVisible(Tile tile, G3MRenderContext rc);
-
   public abstract void onTileHasChangedMesh(Tile tile);
 
   public abstract void onLayerTilesRenderParametersChanged(LayerTilesRenderParameters ltrp);

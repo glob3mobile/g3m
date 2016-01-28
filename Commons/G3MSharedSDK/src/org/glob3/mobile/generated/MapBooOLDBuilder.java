@@ -37,6 +37,7 @@ public abstract class MapBooOLDBuilder
   private boolean _isApplicationTubeOpen;
 
   private TileLODTester _tileLODTester;
+  private TileVisibilityTester _tileVisibilityTester;
 
   private MapBooOLD_ErrorRenderer _mbErrorRenderer;
 
@@ -74,7 +75,7 @@ public abstract class MapBooOLDBuilder
   
     TouchEventType touchEventTypeOfTerrainTouchListener = TouchEventType.DownUp;
   
-    PlanetRenderer result = new PlanetRenderer(tessellator, elevationDataProvider, true, verticalExaggeration, texturizer, _layerSet, parameters, showStatistics, tileDownloadPriority, renderedSector, renderTileMeshes, logTilesPetitions, tileRenderingListener, changedRendererInfoListener, touchEventTypeOfTerrainTouchListener, getTileLODTester());
+    PlanetRenderer result = new PlanetRenderer(tessellator, elevationDataProvider, true, verticalExaggeration, texturizer, _layerSet, parameters, showStatistics, tileDownloadPriority, renderedSector, renderTileMeshes, logTilesPetitions, tileRenderingListener, changedRendererInfoListener, touchEventTypeOfTerrainTouchListener, getTileLODTester(), getTileVisibilityTester());
   
     if (_enableNotifications)
     {
@@ -1048,6 +1049,7 @@ public abstract class MapBooOLDBuilder
      _marksRenderer = null;
      _hasParsedApplication = false;
      _tileLODTester = null;
+     _tileVisibilityTester = null;
     _featureInfoDownloadListener = new FeatureInfoDownloadListener(_applicationListener);
   }
 
@@ -1194,6 +1196,10 @@ public abstract class MapBooOLDBuilder
   }
 
   protected final TileLODTester createDefaultTileLODTester()
+  {
+    return null;
+  }
+  protected final TileVisibilityTester createDefaultTileVisibilityTester()
   {
     return null;
   }
@@ -1874,4 +1880,14 @@ public abstract class MapBooOLDBuilder
     }
     return _tileLODTester;
   }
+
+  public final TileVisibilityTester getTileVisibilityTester()
+  {
+    if (_tileVisibilityTester == null)
+    {
+      _tileVisibilityTester = createDefaultTileVisibilityTester();
+    }
+    return _tileVisibilityTester;
+  }
+
 }

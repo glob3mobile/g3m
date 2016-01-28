@@ -16,6 +16,7 @@ package org.glob3.mobile.generated;
 //
 
 
+///#include "TileLODTester.hpp"
 
 //class TileTexturizer;
 //class Mesh;
@@ -34,7 +35,10 @@ package org.glob3.mobile.generated;
 //class PlanetRenderer;
 //class TileKey;
 //class Geodetic3D;
+//class TileLODTester;
 //class TileLODTesterData;
+//class TileVisibilityTester;
+
 
 public class Tile
 {
@@ -75,8 +79,7 @@ public class Tile
     {
       _mustActualizeMeshDueToNewElevationData = false;
   
-      //Informs the lod testers
-      _planetRenderer.getTileLODTester().onTileHasChangedMesh(this);
+      _planetRenderer.onTileHasChangedMesh(this);
   
       if (_debugMesh != null)
       {
@@ -128,14 +131,14 @@ public class Tile
     return _debugMesh;
   }
 
-  private boolean isVisible(G3MRenderContext rc, Sector renderedSector, TileLODTester tileLODTester)
+  private boolean isVisible(G3MRenderContext rc, Sector renderedSector, TileVisibilityTester tileVisibilityTester)
   {
     if ((renderedSector != null) && !renderedSector.touchesWith(_sector)) //Incomplete world
     {
       return false;
     }
   
-    return tileLODTester.isVisible(this, rc);
+    return tileVisibilityTester.isVisible(this, rc);
   }
 
   private boolean meetsRenderCriteria(G3MRenderContext rc, TileLODTester tileLODTester, TilesRenderParameters tilesRenderParameters, ITimer lastSplitTimer, double texWidthSquared, double texHeightSquared, long nowInMS)
@@ -435,7 +438,7 @@ public class Tile
     }
   }
 
-  public final void render(G3MRenderContext rc, GLState parentState, java.util.ArrayList<Tile> toVisitInNextIteration, TileLODTester tileLODTester, Frustum cameraFrustumInModelCoordinates, TilesStatistics tilesStatistics, float verticalExaggeration, LayerTilesRenderParameters layerTilesRenderParameters, TileTexturizer texturizer, TilesRenderParameters tilesRenderParameters, ITimer lastSplitTimer, ElevationDataProvider elevationDataProvider, TileTessellator tessellator, LayerSet layerSet, Sector renderedSector, boolean forceFullRender, long tileDownloadPriority, double texWidthSquared, double texHeightSquared, long nowInMS, boolean renderTileMeshes, boolean logTilesPetitions, java.util.ArrayList<Tile> tilesStartedRendering, java.util.ArrayList<String> tilesStoppedRendering)
+  public final void render(G3MRenderContext rc, GLState parentState, java.util.ArrayList<Tile> toVisitInNextIteration, TileLODTester tileLODTester, TileVisibilityTester tileVisibilityTester, Frustum cameraFrustumInModelCoordinates, TilesStatistics tilesStatistics, float verticalExaggeration, LayerTilesRenderParameters layerTilesRenderParameters, TileTexturizer texturizer, TilesRenderParameters tilesRenderParameters, ITimer lastSplitTimer, ElevationDataProvider elevationDataProvider, TileTessellator tessellator, LayerSet layerSet, Sector renderedSector, boolean forceFullRender, long tileDownloadPriority, double texWidthSquared, double texHeightSquared, long nowInMS, boolean renderTileMeshes, boolean logTilesPetitions, java.util.ArrayList<Tile> tilesStartedRendering, java.util.ArrayList<String> tilesStoppedRendering)
   {
   ///#warning REMOVE
   //  if (!_sector.contains(Angle::fromDegrees(28), Angle::fromDegrees(-15))) {
@@ -455,7 +458,7 @@ public class Tile
     getTessellatorMesh(rc, elevationDataProvider, tessellator, layerTilesRenderParameters, tilesRenderParameters);
   
     boolean rendered = false;
-    if (isVisible(rc, renderedSector, tileLODTester))
+    if (isVisible(rc, renderedSector, tileVisibilityTester))
     {
       setIsVisible(true, texturizer);
   

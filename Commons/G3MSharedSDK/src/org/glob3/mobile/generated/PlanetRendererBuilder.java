@@ -16,11 +16,20 @@ package org.glob3.mobile.generated;
 //
 
 
-//class LayerSet;
+
+//class TileTessellator;
+//class TileTexturizer;
 //class GEOVectorLayer;
+//class TileLODTester;
+//class TileVisibilityTester;
+//class LayerSet;
+//class VisibleSectorListener;
+//class ElevationDataProvider;
+//class Sector;
+//class TileRenderingListener;
+//class ChangedRendererInfoListener;
 //class IImageBuilder;
-
-
+//class PlanetRenderer;
 
 
 public class PlanetRendererBuilder
@@ -30,7 +39,7 @@ public class PlanetRendererBuilder
   private TileTexturizer _texturizer;
   private java.util.ArrayList<GEOVectorLayer> _geoVectorLayers = new java.util.ArrayList<GEOVectorLayer>();
   private TileLODTester _tileLODTester;
-
+  private TileVisibilityTester _tileVisibilityTester;
 
   private LayerSet _layerSet;
   private TilesRenderParameters _parameters;
@@ -270,11 +279,10 @@ public class PlanetRendererBuilder
 
   private TileLODTester createDefaultTileLODTester()
   {
-  
-    ProjectedCornersDistanceTileLODTester proj = new ProjectedCornersDistanceTileLODTester(null, null, null, null);
+    ProjectedCornersDistanceTileLODTester proj = new ProjectedCornersDistanceTileLODTester(null, null);
   
     //2
-    MaxLevelTileLODTester poles = new MaxLevelTileLODTester(-1, -1, null, proj, proj, proj);
+    MaxLevelTileLODTester poles = new MaxLevelTileLODTester(-1, -1, null, proj);
     //1
     MaxFrameTimeTileLODTester frameTime = new MaxFrameTimeTileLODTester(TimeInterval.fromSeconds((double)1 / 60.0), poles);
   
@@ -284,6 +292,14 @@ public class PlanetRendererBuilder
   
     return timed;
   }
+
+  private TileVisibilityTester createDefaultTileVisibilityTester()
+  {
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning TODO: add timedTrueVisibility
+    return new MeshBoundingVolumeTileVisibilityTester();
+  }
+
 
   public PlanetRendererBuilder()
   {
@@ -309,6 +325,7 @@ public class PlanetRendererBuilder
      _changedInfoListener = null;
      _touchEventTypeOfTerrainTouchListener = TouchEventType.LongPress;
      _tileLODTester = null;
+     _tileVisibilityTester = null;
   }
   public void dispose()
   {
@@ -349,7 +366,7 @@ public class PlanetRendererBuilder
       layerSet.addLayer(geoVectorLayer);
     }
   
-    PlanetRenderer planetRenderer = new PlanetRenderer(getTileTessellator(), getElevationDataProvider(), true, getVerticalExaggeration(), getTexturizer(), layerSet, getParameters(), getShowStatistics(), getTileDownloadPriority(), getRenderedSector(), getRenderTileMeshes(), getLogTilesPetitions(), getTileRenderingListener(), getChangedRendererInfoListener(), getTouchEventTypeOfTerrainTouchListener(), getTileLODTester());
+    PlanetRenderer planetRenderer = new PlanetRenderer(getTileTessellator(), getElevationDataProvider(), true, getVerticalExaggeration(), getTexturizer(), layerSet, getParameters(), getShowStatistics(), getTileDownloadPriority(), getRenderedSector(), getRenderTileMeshes(), getLogTilesPetitions(), getTileRenderingListener(), getChangedRendererInfoListener(), getTouchEventTypeOfTerrainTouchListener(), getTileLODTester(), getTileVisibilityTester());
   
     for (int i = 0; i < getVisibleSectorListeners().size(); i++)
     {
@@ -558,4 +575,14 @@ public class PlanetRendererBuilder
     }
     return _tileLODTester;
   }
+
+  public final TileVisibilityTester getTileVisibilityTester()
+  {
+    if (_tileVisibilityTester == null)
+    {
+      _tileVisibilityTester = createDefaultTileVisibilityTester();
+    }
+    return _tileVisibilityTester;
+  }
+
 }
