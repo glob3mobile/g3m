@@ -20,16 +20,16 @@ package org.glob3.mobile.generated;
 //class TimeInterval;
 
 
-public class TimedTileLODTester extends DecoratorTileLODTester
+public class TimedCacheTileLODTester extends DecoratorTileLODTester
 {
   private long _timeoutInMS;
 
-  private static class TimedTileLODTesterData extends TileLODTesterData
+  private static class PvtData extends TileData
   {
     public boolean _lastMeetsRenderCriteriaResult;
     public long _lastMeetsRenderCriteriaTimeInMS;
 
-    public TimedTileLODTesterData(long now)
+    public PvtData(long now)
     {
       _lastMeetsRenderCriteriaTimeInMS = now;
       _lastMeetsRenderCriteriaResult = false;
@@ -37,7 +37,7 @@ public class TimedTileLODTester extends DecoratorTileLODTester
   }
 
 
-  public TimedTileLODTester(TimeInterval timeout, TileLODTester tileLODTester)
+  public TimedCacheTileLODTester(TimeInterval timeout, TileLODTester tileLODTester)
   {
      super(tileLODTester);
      _timeoutInMS = timeout.milliseconds();
@@ -51,11 +51,11 @@ public class TimedTileLODTester extends DecoratorTileLODTester
   public final boolean meetsRenderCriteria(Tile tile, G3MRenderContext rc, TilesRenderParameters tilesRenderParameters, ITimer lastSplitTimer, double texWidthSquared, double texHeightSquared, long nowInMS)
   {
   
-    TimedTileLODTesterData data = (TimedTileLODTesterData) tile.getDataForLODTester(_id);
+    PvtData data = (PvtData) tile.getData(_id);
     if (data == null)
     {
-      data = new TimedTileLODTesterData(nowInMS);
-      tile.setDataForLODTester(_id, data);
+      data = new PvtData(nowInMS);
+      tile.setData(_id, data);
       data._lastMeetsRenderCriteriaResult = _tileLODTester.meetsRenderCriteria(tile, rc, tilesRenderParameters, lastSplitTimer, texWidthSquared, texHeightSquared, nowInMS);
     }
     else if ((nowInMS - data._lastMeetsRenderCriteriaTimeInMS) > _timeoutInMS)

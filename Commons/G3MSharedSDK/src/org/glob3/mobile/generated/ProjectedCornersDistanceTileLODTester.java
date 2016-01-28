@@ -26,7 +26,7 @@ package org.glob3.mobile.generated;
 public class ProjectedCornersDistanceTileLODTester extends TileLODTesterResponder
 {
 
-  protected static class PCDTesterData extends TileLODTesterData
+  protected static class PvtData extends TileData
   {
     private static double getSquaredArcSegmentRatio(Vector3D a, Vector3D b)
     {
@@ -51,7 +51,7 @@ public class ProjectedCornersDistanceTileLODTester extends TileLODTesterResponde
     private final Vector3D _southEastPoint ;
 
 
-    public PCDTesterData(Tile tile, double mediumHeight, Planet planet)
+    public PvtData(Tile tile, double mediumHeight, Planet planet)
     {
        super();
        _northWestPoint = new Vector3D(planet.toCartesian(tile._sector.getNW(), mediumHeight));
@@ -89,26 +89,26 @@ public class ProjectedCornersDistanceTileLODTester extends TileLODTesterResponde
   protected final void _onTileHasChangedMesh(Tile tile)
   {
     //Recomputing data when tile changes tessellator mesh
-    tile.setDataForLODTester(_id, null);
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning Is it necessary?
+    tile.setData(_id, null);
   }
 
-  protected final ProjectedCornersDistanceTileLODTester.PCDTesterData getData(Tile tile, G3MRenderContext rc)
+  protected final ProjectedCornersDistanceTileLODTester.PvtData getData(Tile tile, G3MRenderContext rc)
   {
-    PCDTesterData data = (PCDTesterData) tile.getDataForLODTester(_id);
+    PvtData data = (PvtData) tile.getData(_id);
     if (data == null)
     {
       final double mediumHeight = tile.getTessellatorMeshData()._averageHeight;
-      data = new PCDTesterData(tile, mediumHeight, rc.getPlanet());
-      tile.setDataForLODTester(_id, data);
+      data = new PvtData(tile, mediumHeight, rc.getPlanet());
+      tile.setData(_id, data);
     }
     return data;
   }
 
   protected final boolean _meetsRenderCriteria(Tile tile, G3MRenderContext rc, TilesRenderParameters tilesRenderParameters, ITimer lastSplitTimer, double texWidthSquared, double texHeightSquared, long nowInMS)
   {
-    PCDTesterData data = getData(tile, rc);
-  
-    return data.evaluate(rc.getCurrentCamera(), texHeightSquared, texWidthSquared);
+    return getData(tile, rc).evaluate(rc.getCurrentCamera(), texHeightSquared, texWidthSquared);
   }
 
   protected final void _onLayerTilesRenderParametersChanged(LayerTilesRenderParameters ltrp)

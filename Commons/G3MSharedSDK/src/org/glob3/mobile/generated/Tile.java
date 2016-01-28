@@ -36,7 +36,7 @@ package org.glob3.mobile.generated;
 //class TileKey;
 //class Geodetic3D;
 //class TileLODTester;
-//class TileLODTesterData;
+//class TileData;
 //class TileVisibilityTester;
 
 
@@ -131,14 +131,14 @@ public class Tile
     return _debugMesh;
   }
 
-  private boolean isVisible(G3MRenderContext rc, Sector renderedSector, TileVisibilityTester tileVisibilityTester)
+  private boolean isVisible(G3MRenderContext rc, Sector renderedSector, TileVisibilityTester tileVisibilityTester, long nowInMS)
   {
     if ((renderedSector != null) && !renderedSector.touchesWith(_sector)) //Incomplete world
     {
       return false;
     }
   
-    return tileVisibilityTester.isVisible(this, rc);
+    return tileVisibilityTester.isVisible(this, rc, nowInMS);
   }
 
   private boolean meetsRenderCriteria(G3MRenderContext rc, TileLODTester tileLODTester, TilesRenderParameters tilesRenderParameters, ITimer lastSplitTimer, double texWidthSquared, double texHeightSquared, long nowInMS)
@@ -300,7 +300,7 @@ public class Tile
     return level + "/" + row + "/" + column;
   }
 
-  private java.util.ArrayList<TileLODTesterData> _lodTesterData = new java.util.ArrayList<TileLODTesterData>();
+  private java.util.ArrayList<TileData> _data = new java.util.ArrayList<TileData>();
 
   public final Sector _sector ;
   public final boolean _mercator;
@@ -381,11 +381,12 @@ public class Tile
     if (_tessellatorData != null)
        _tessellatorData.dispose();
   
-    final int size = _lodTesterData.size();
+    final int size = _data.size();
     for (int i = 0; i < size; i++)
     {
-      if (_lodTesterData.get(i) != null)
-         _lodTesterData.get(i).dispose();
+      TileData data = _data.get(i);
+      if (data != null)
+         data.dispose();
     }
   }
 
@@ -458,7 +459,7 @@ public class Tile
     getTessellatorMesh(rc, elevationDataProvider, tessellator, layerTilesRenderParameters, tilesRenderParameters);
   
     boolean rendered = false;
-    if (isVisible(rc, renderedSector, tileVisibilityTester))
+    if (isVisible(rc, renderedSector, tileVisibilityTester, nowInMS))
     {
       setIsVisible(true, texturizer);
   
@@ -913,29 +914,28 @@ public class Tile
     return _tessellatorMesh;
   }
 
-  public final TileLODTesterData getDataForLODTester(int id)
+  public final TileData getData(int id)
   {
-    if (id >= _lodTesterData.size())
+    if (id >= _data.size())
     {
       return null;
     }
   
-    return _lodTesterData.get(id);
+    return _data.get(id);
   }
-  public final void setDataForLODTester(int id, TileLODTesterData data)
+  public final void setData(int id, TileData data)
   {
-    while (_lodTesterData.size() < id + 1)
+    while (_data.size() < id + 1)
     {
-      _lodTesterData.add(null);
+      _data.add(null);
     }
   
-    TileLODTesterData current = _lodTesterData.get(id);
+    TileData current = _data.get(id);
     if (current != data)
     {
       if (current != null)
          current.dispose();
-  
-      _lodTesterData.set(id, data);
+      _data.set(id, data);
     }
   }
 

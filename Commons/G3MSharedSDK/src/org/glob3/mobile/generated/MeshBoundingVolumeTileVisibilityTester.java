@@ -26,7 +26,7 @@ public class MeshBoundingVolumeTileVisibilityTester extends TileVisibilityTester
     super.dispose();
   }
 
-  public final boolean isVisible(Tile tile, G3MRenderContext rc)
+  public final boolean isVisible(Tile tile, G3MRenderContext rc, long nowInMS)
   {
     final Mesh mesh = tile.getCurrentTessellatorMesh();
     if (mesh == null)

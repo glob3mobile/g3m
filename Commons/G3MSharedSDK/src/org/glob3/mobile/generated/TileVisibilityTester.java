@@ -32,7 +32,7 @@ public abstract class TileVisibilityTester
   {
   }
 
-  public abstract boolean isVisible(Tile tile, G3MRenderContext rc);
+  public abstract boolean isVisible(Tile tile, G3MRenderContext rc, long nowInMS);
 
   public abstract void onTileHasChangedMesh(Tile tile);
 

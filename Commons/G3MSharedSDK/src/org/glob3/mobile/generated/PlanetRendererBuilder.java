@@ -279,25 +279,20 @@ public class PlanetRendererBuilder
 
   private TileLODTester createDefaultTileLODTester()
   {
-    ProjectedCornersDistanceTileLODTester proj = new ProjectedCornersDistanceTileLODTester(null, null);
+    TileLODTester proj = new ProjectedCornersDistanceTileLODTester(null, null);
   
-    //2
-    MaxLevelTileLODTester poles = new MaxLevelTileLODTester(-1, -1, null, proj);
-    //1
-    MaxFrameTimeTileLODTester frameTime = new MaxFrameTimeTileLODTester(TimeInterval.fromSeconds((double)1 / 60.0), poles);
+    TileLODTester poles = new MaxLevelTileLODTester(-1, -1, null, proj);
   
-    //0
-    TimedTileLODTester timed = new TimedTileLODTester(TimeInterval.fromMilliseconds(250), frameTime);
+    TileLODTester frameTime = new MaxFrameTimeTileLODTester(TimeInterval.fromSeconds((double)1 / 60.0), poles);
   
+    TileLODTester timed = new TimedCacheTileLODTester(TimeInterval.fromMilliseconds(250), frameTime);
   
     return timed;
   }
 
   private TileVisibilityTester createDefaultTileVisibilityTester()
   {
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning TODO: add timedTrueVisibility
-    return new MeshBoundingVolumeTileVisibilityTester();
+    return new TimedCacheTileVisibilityTester(TimeInterval.fromMilliseconds(500), new MeshBoundingVolumeTileVisibilityTester());
   }
 
 
