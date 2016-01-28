@@ -120,6 +120,7 @@ Tile::~Tile() {
     TileData* data = _data[i];
     delete data;
   }
+  delete [] _data;
 }
 
 void Tile::setTexturizerData(ITexturizerData* texturizerData) {
@@ -893,9 +894,10 @@ void Tile::setData(int id, TileData* data) const {
       for (size_t i = 0; i < oldDataSize; i++) {
         _data[i] = oldData[i];
       }
-      for (size_t i = oldDataSize-1; i < _dataSize; i++) {
+      for (size_t i = oldDataSize; i < _dataSize; i++) {
         _data[i] = NULL;
       }
+      delete [] oldData;
 #endif
 #ifdef JAVA_CODE
       System.arraycopy(oldData, 0, _data, 0, oldDataSize);
@@ -911,9 +913,5 @@ void Tile::setData(int id, TileData* data) const {
 }
 
 TileData* Tile::getData(int id) const {
-  if (id >= _dataSize) {
-    return NULL;
-  }
-
-  return _data[id];
+  return (id >= _dataSize) ? NULL : _data[id];
 }
