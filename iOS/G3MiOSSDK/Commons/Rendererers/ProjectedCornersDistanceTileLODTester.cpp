@@ -31,16 +31,17 @@ ProjectedCornersDistanceTileLODTester::~ProjectedCornersDistanceTileLODTester() 
 
 void ProjectedCornersDistanceTileLODTester::_onTileHasChangedMesh(const Tile* tile) const {
   //Recomputing data when tile changes tessellator mesh
-  tile->setDataForLODTester(_id, NULL);
+#warning Is it necessary?
+  tile->setData(_id, NULL);
 }
 
-ProjectedCornersDistanceTileLODTester::PCDTesterData* ProjectedCornersDistanceTileLODTester::getData(const Tile* tile,
-                                                                                                     const G3MRenderContext* rc) const {
-  PCDTesterData* data = (PCDTesterData*) tile->getDataForLODTester(_id);
+ProjectedCornersDistanceTileLODTester::PvtData* ProjectedCornersDistanceTileLODTester::getData(const Tile* tile,
+                                                                                               const G3MRenderContext* rc) const {
+  PvtData* data = (PvtData*) tile->getData(_id);
   if (data == NULL) {
     const double mediumHeight = tile->getTessellatorMeshData()->_averageHeight;
-    data = new PCDTesterData(tile, mediumHeight, rc->getPlanet());
-    tile->setDataForLODTester(_id, data);
+    data = new PvtData(tile, mediumHeight, rc->getPlanet());
+    tile->setData(_id, data);
   }
   return data;
 }
@@ -52,16 +53,16 @@ bool ProjectedCornersDistanceTileLODTester::_meetsRenderCriteria(const Tile* til
                                                                  const double texWidthSquared,
                                                                  const double texHeightSquared,
                                                                  long long nowInMS) const {
-  PCDTesterData* data = getData(tile, rc);
-
-  return data->evaluate(rc->getCurrentCamera(), texHeightSquared, texWidthSquared);
+  return getData(tile, rc)->evaluate(rc->getCurrentCamera(),
+                                     texHeightSquared,
+                                     texWidthSquared);
 }
 
 void ProjectedCornersDistanceTileLODTester::_onLayerTilesRenderParametersChanged(const LayerTilesRenderParameters* ltrp) {
 }
 
-double ProjectedCornersDistanceTileLODTester::PCDTesterData::getSquaredArcSegmentRatio(const Vector3D& a,
-                                                                                       const Vector3D& b) {
+double ProjectedCornersDistanceTileLODTester::PvtData::getSquaredArcSegmentRatio(const Vector3D& a,
+                                                                                 const Vector3D& b) {
   /*
    Arco = ang * Cuerda / (2 * sen(ang/2))
    */
@@ -73,10 +74,10 @@ double ProjectedCornersDistanceTileLODTester::PCDTesterData::getSquaredArcSegmen
 }
 
 
-ProjectedCornersDistanceTileLODTester::PCDTesterData::PCDTesterData(const Tile* tile,
-                                                                    double mediumHeight,
-                                                                    const Planet* planet):
-TileLODTesterData(),
+ProjectedCornersDistanceTileLODTester::PvtData::PvtData(const Tile* tile,
+                                                        double mediumHeight,
+                                                        const Planet* planet):
+TileData(),
 _northWestPoint( planet->toCartesian( tile->_sector.getNW(), mediumHeight ) ),
 _northEastPoint( planet->toCartesian( tile->_sector.getNE(), mediumHeight ) ),
 _southWestPoint( planet->toCartesian( tile->_sector.getSW(), mediumHeight ) ),
@@ -93,9 +94,9 @@ _southEastPoint( planet->toCartesian( tile->_sector.getSE(), mediumHeight ) )
   _westArcSegmentRatioSquared  = getSquaredArcSegmentRatio(normalNW, normalSW);
 }
 
-bool ProjectedCornersDistanceTileLODTester::PCDTesterData::evaluate(const Camera* camera,
-                                                                    double texHeightSquared,
-                                                                    double texWidthSquared) {
+bool ProjectedCornersDistanceTileLODTester::PvtData::evaluate(const Camera* camera,
+                                                              double texHeightSquared,
+                                                              double texWidthSquared) {
 
   const double distanceInPixelsNorth = camera->getEstimatedPixelDistance(_northWestPoint, _northEastPoint);
   const double distanceInPixelsSouth = camera->getEstimatedPixelDistance(_southWestPoint, _southEastPoint);

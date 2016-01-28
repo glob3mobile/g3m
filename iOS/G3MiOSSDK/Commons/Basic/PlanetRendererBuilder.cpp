@@ -25,6 +25,8 @@
 #include "PlanetTileTessellator.hpp"
 #include "LayerBuilder.hpp"
 #include "MeshBoundingVolumeTileVisibilityTester.hpp"
+#include "TimedCacheTileVisibilityTester.hpp"
+
 
 PlanetRendererBuilder::PlanetRendererBuilder() :
 _showStatistics(false),
@@ -481,7 +483,7 @@ TileLODTester* PlanetRendererBuilder::getTileLODTester() {
 }
 
 TileVisibilityTester* PlanetRendererBuilder::createDefaultTileVisibilityTester() const {
-  return new TimedCacheTileVisibilityTester(TimeInterval::fromMilliseconds(250),
+  return new TimedCacheTileVisibilityTester(TimeInterval::fromMilliseconds(500),
                                             new MeshBoundingVolumeTileVisibilityTester());
 }
 

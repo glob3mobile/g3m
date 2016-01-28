@@ -12,7 +12,7 @@
 
 #include "TileLODTesterResponder.hpp"
 
-#include "TileLODTesterData.hpp"
+#include "TileData.hpp"
 #include "Vector3D.hpp"
 class BoundingVolume;
 class Planet;
@@ -22,7 +22,7 @@ class Camera;
 class ProjectedCornersDistanceTileLODTester : public TileLODTesterResponder {
 protected:
 
-  class PCDTesterData: public TileLODTesterData {
+  class PvtData: public TileData {
   private:
     static double getSquaredArcSegmentRatio(const Vector3D& a,
                                             const Vector3D& b);
@@ -39,9 +39,9 @@ protected:
 
 
   public:
-    PCDTesterData(const Tile* tile,
-                  double mediumHeight,
-                  const Planet* planet);
+    PvtData(const Tile* tile,
+            double mediumHeight,
+            const Planet* planet);
 
     bool evaluate(const Camera* camera,
                   double texHeightSquared,
@@ -50,8 +50,8 @@ protected:
 
   void _onTileHasChangedMesh(const Tile* tile) const;
 
-  PCDTesterData* getData(const Tile* tile,
-                         const G3MRenderContext* rc) const;
+  PvtData* getData(const Tile* tile,
+                   const G3MRenderContext* rc) const;
 
   bool _meetsRenderCriteria(const Tile* tile,
                             const G3MRenderContext* rc,

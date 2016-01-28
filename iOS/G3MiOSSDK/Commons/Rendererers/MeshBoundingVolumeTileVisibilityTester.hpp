@@ -22,7 +22,8 @@ public:
   }
 
   bool isVisible(const Tile* tile,
-                 const G3MRenderContext* rc) const;
+                 const G3MRenderContext* rc,
+                 long long nowInMS) const;
 
   void onTileHasChangedMesh(const Tile* tile) const;
 

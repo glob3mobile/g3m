@@ -22,7 +22,7 @@
 #include "MercatorUtils.hpp"
 #include "DecimatedSubviewElevationData.hpp"
 #include "TileLODTester.hpp"
-#include "TileLODTesterData.hpp"
+#include "TileData.hpp"
 #include "TileVisibilityTester.hpp"
 
 
@@ -114,9 +114,10 @@ Tile::~Tile() {
   
   delete _tessellatorData;
   
-  const size_t size = _lodTesterData.size();
+  const size_t size = _data.size();
   for (size_t i = 0; i < size; i++) {
-    delete _lodTesterData[i];
+    TileData* data = _data[i];
+    delete data;
   }
 }
 
@@ -244,13 +245,14 @@ Mesh* Tile::getDebugMesh(const G3MRenderContext* rc,
 
 bool Tile::isVisible(const G3MRenderContext* rc,
                      const Sector* renderedSector,
-                     TileVisibilityTester* tileVisibilityTester) {
+                     TileVisibilityTester* tileVisibilityTester,
+                     long long nowInMS) {
   if ((renderedSector != NULL) &&
       !renderedSector->touchesWith(_sector)) { //Incomplete world
     return false;
   }
   
-  return tileVisibilityTester->isVisible(this, rc);
+  return tileVisibilityTester->isVisible(this, rc, nowInMS);
 }
 
 bool Tile::meetsRenderCriteria(const G3MRenderContext* rc,
@@ -530,7 +532,7 @@ void Tile::render(const G3MRenderContext* rc,
                      tilesRenderParameters);
   
   bool rendered = false;
-  if (isVisible(rc, renderedSector, tileVisibilityTester)) {
+  if (isVisible(rc, renderedSector, tileVisibilityTester, nowInMS)) {
     setIsVisible(true, texturizer);
     
     tilesStatistics->computeVisibleTile(this);
@@ -868,23 +870,22 @@ const Mesh* Tile::getTessellatorMesh() const {
   return _tessellatorMesh;
 }
 
-void Tile::setDataForLODTester(int id, TileLODTesterData* data) const {
-  while (_lodTesterData.size() < id + 1) {
-    _lodTesterData.push_back(NULL);
+void Tile::setData(int id, TileData* data) const {
+  while (_data.size() < id + 1) {
+    _data.push_back(NULL);
   }
 
-  TileLODTesterData* current = _lodTesterData[id];
+  TileData* current = _data[id];
   if (current != data) {
     delete current;
-
-    _lodTesterData[id] = data;
+    _data[id] = data;
   }
 }
 
-TileLODTesterData* Tile::getDataForLODTester(int id) const {
-  if (id >= _lodTesterData.size()) {
+TileData* Tile::getData(int id) const {
+  if (id >= _data.size()) {
     return NULL;
   }
 
-  return _lodTesterData[id];
+  return _data[id];
 }

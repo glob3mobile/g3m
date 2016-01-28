@@ -33,10 +33,10 @@ bool TimedCacheTileLODTester::meetsRenderCriteria(const Tile* tile,
                                                   const double texHeightSquared,
                                                   long long nowInMS) const {
 
-  PvtData* data = (PvtData*) tile->getDataForLODTester(_id);
+  PvtData* data = (PvtData*) tile->getData(_id);
   if (data == NULL) {
     data = new PvtData(nowInMS);
-    tile->setDataForLODTester(_id, data);
+    tile->setData(_id, data);
     data->_lastMeetsRenderCriteriaResult = _tileLODTester->meetsRenderCriteria(tile,
                                                                                rc,
                                                                                tilesRenderParameters,

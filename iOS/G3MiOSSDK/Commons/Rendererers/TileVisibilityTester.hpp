@@ -24,7 +24,8 @@ public:
   virtual ~TileVisibilityTester() { }
 
   virtual bool isVisible(const Tile* tile,
-                         const G3MRenderContext* rc) const = 0;
+                         const G3MRenderContext* rc,
+                         long long nowInMS) const = 0;
 
   virtual void onTileHasChangedMesh(const Tile* tile) const = 0;
 

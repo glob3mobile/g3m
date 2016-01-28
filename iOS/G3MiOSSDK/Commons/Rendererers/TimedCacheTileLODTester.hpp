@@ -11,7 +11,7 @@
 
 #include "DecoratorTileLODTester.hpp"
 
-#include "TileLODTesterData.hpp"
+#include "TileData.hpp"
 class TimeInterval;
 
 
@@ -19,7 +19,7 @@ class TimedCacheTileLODTester : public DecoratorTileLODTester {
 private:
   long long _timeoutInMS;
 
-  class PvtData: public TileLODTesterData {
+  class PvtData: public TileData {
   public:
     bool _lastMeetsRenderCriteriaResult;
     long long _lastMeetsRenderCriteriaTimeInMS;
@@ -35,7 +35,7 @@ public:
   TimedCacheTileLODTester(const TimeInterval& timeout,
                           TileLODTester* tileLODTester);
 
-  virtual ~TimedCacheTileLODTester();
+  ~TimedCacheTileLODTester();
 
   bool meetsRenderCriteria(const Tile* tile,
                            const G3MRenderContext* rc,

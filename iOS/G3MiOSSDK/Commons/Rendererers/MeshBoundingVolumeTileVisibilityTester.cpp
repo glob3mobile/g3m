@@ -15,7 +15,8 @@
 
 
 bool MeshBoundingVolumeTileVisibilityTester::isVisible(const Tile* tile,
-                                                       const G3MRenderContext* rc) const {
+                                                       const G3MRenderContext* rc,
+                                                       long long nowInMS) const {
   const Mesh* mesh = tile->getCurrentTessellatorMesh();
   if (mesh == NULL) {
     return false;

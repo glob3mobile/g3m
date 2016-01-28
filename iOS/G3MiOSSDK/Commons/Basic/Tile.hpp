@@ -32,7 +32,7 @@ class PlanetRenderer;
 class TileKey;
 class Geodetic3D;
 class TileLODTester;
-class TileLODTesterData;
+class TileData;
 class TileVisibilityTester;
 
 
@@ -73,7 +73,8 @@ private:
   
   inline bool isVisible(const G3MRenderContext* rc,
                         const Sector* renderedSector,
-                        TileVisibilityTester* tileVisibilityTester);
+                        TileVisibilityTester* tileVisibilityTester,
+                        long long nowInMS);
   
   inline bool meetsRenderCriteria(const G3MRenderContext* rc,
                                   TileLODTester* tileLODTester,
@@ -135,7 +136,7 @@ private:
                                   int row,
                                   int column);
   
-  mutable std::vector<TileLODTesterData*> _lodTesterData;
+  mutable std::vector<TileData*> _data;
   
 public:
   const Sector      _sector;
@@ -282,8 +283,8 @@ public:
 
   const Mesh* getTessellatorMesh() const;
   
-  TileLODTesterData* getDataForLODTester(int id) const;
-  void setDataForLODTester(int id, TileLODTesterData* data) const;
+  TileData* getData(int id) const;
+  void setData(int id, TileData* data) const;
   
   const TileTessellatorMeshData* getTessellatorMeshData() const {
     return &_tileTessellatorMeshData;
