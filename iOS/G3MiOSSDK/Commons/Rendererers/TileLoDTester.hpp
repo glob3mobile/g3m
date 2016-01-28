@@ -31,7 +31,7 @@ public:
 
   virtual ~TileLODTester() { }
 
-  virtual bool meetsRenderCriteria(Tile* tile,
+  virtual bool meetsRenderCriteria(const Tile* tile,
                                    const G3MRenderContext* rc,
                                    const TilesRenderParameters* tilesRenderParameters,
                                    const ITimer* lastSplitTimer,
@@ -39,10 +39,7 @@ public:
                                    const double texHeightSquared,
                                    long long nowInMS) const = 0;
 
-  virtual bool isVisible(Tile* tile,
-                         const G3MRenderContext* rc) const = 0;
-
-  virtual void onTileHasChangedMesh(Tile* tile) const = 0;
+  virtual void onTileHasChangedMesh(const Tile* tile) const = 0;
 
   virtual void onLayerTilesRenderParametersChanged(const LayerTilesRenderParameters* ltrp) = 0;
 

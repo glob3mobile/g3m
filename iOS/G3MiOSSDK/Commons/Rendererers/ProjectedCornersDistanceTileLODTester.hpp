@@ -39,9 +39,7 @@ protected:
 
 
   public:
-    BoundingVolume* _bvol;
-
-    PCDTesterData(Tile* tile,
+    PCDTesterData(const Tile* tile,
                   double mediumHeight,
                   const Planet* planet);
 
@@ -50,12 +48,12 @@ protected:
                   double texWidthSquared);
   };
 
-  void _onTileHasChangedMesh(Tile* tile) const;
+  void _onTileHasChangedMesh(const Tile* tile) const;
 
-  PCDTesterData* getData(Tile* tile,
+  PCDTesterData* getData(const Tile* tile,
                          const G3MRenderContext* rc) const;
 
-  bool _meetsRenderCriteria(Tile* tile,
+  bool _meetsRenderCriteria(const Tile* tile,
                             const G3MRenderContext* rc,
                             const TilesRenderParameters* tilesRenderParameters,
                             const ITimer* lastSplitTimer,
@@ -63,17 +61,12 @@ protected:
                             const double texHeightSquared,
                             long long nowInMS) const;
 
-  bool _isVisible(Tile* tile,
-                  const G3MRenderContext* rc) const;
-
   void _onLayerTilesRenderParametersChanged(const LayerTilesRenderParameters* ltrp);
 
 public:
 
   ProjectedCornersDistanceTileLODTester(TileLODTester* nextTesterRightLOD,
-                                        TileLODTester* nextTesterWrongLOD,
-                                        TileLODTester* nextTesterVisible,
-                                        TileLODTester* nextTesterNotVisible);
+                                        TileLODTester* nextTesterWrongLOD);
 
   ~ProjectedCornersDistanceTileLODTester();
   

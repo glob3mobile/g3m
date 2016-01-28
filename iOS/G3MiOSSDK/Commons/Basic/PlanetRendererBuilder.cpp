@@ -7,23 +7,24 @@
 //
 
 #include "PlanetRendererBuilder.hpp"
-#include "WMSLayer.hpp"
-#include "DefaultTileTexturizer.hpp"
-#include "PlanetTileTessellator.hpp"
-#include "LayerBuilder.hpp"
+
+#include "LayerSet.hpp"
 #include "DownloadPriority.hpp"
+#include "DefaultTileTexturizer.hpp"
+#include "GEOVectorLayer.hpp"
+#include "TileTessellator.hpp"
 #include "ElevationDataProvider.hpp"
 #include "TileRenderingListener.hpp"
-#include "GEOVectorLayer.hpp"
-#include "TouchEvent.hpp"
-
-
-#include "MaxLevelTileLODTester.hpp"
+#include "LayerSet.hpp"
+#include "DefaultChessCanvasImageBuilder.hpp"
+#include "PlanetRenderer.hpp"
 #include "ProjectedCornersDistanceTileLODTester.hpp"
-#include "TimedTileLODTester.hpp"
+#include "MaxLevelTileLODTester.hpp"
 #include "MaxFrameTimeTileLODTester.hpp"
-#include "LayerTilesRenderParameters.hpp"
-
+#include "TimedTileLODTester.hpp"
+#include "PlanetTileTessellator.hpp"
+#include "LayerBuilder.hpp"
+#include "MeshBoundingVolumeTileVisibilityTester.hpp"
 
 PlanetRendererBuilder::PlanetRendererBuilder() :
 _showStatistics(false),
@@ -47,7 +48,8 @@ _logTilesPetitions(false),
 _tileRenderingListener(NULL),
 _changedInfoListener(NULL),
 _touchEventTypeOfTerrainTouchListener(LongPress),
-_tileLODTester(NULL)
+_tileLODTester(NULL),
+_tileVisibilityTester(NULL)
 {
 }
 
@@ -373,7 +375,8 @@ PlanetRenderer* PlanetRendererBuilder::create() {
                                                       getTileRenderingListener(),
                                                       getChangedRendererInfoListener(),
                                                       getTouchEventTypeOfTerrainTouchListener(),
-                                                      getTileLODTester());
+                                                      getTileLODTester(),
+                                                      getTileVisibilityTester());
   
   for (int i = 0; i < getVisibleSectorListeners()->size(); i++) {
     planetRenderer->addVisibleSectorListener(getVisibleSectorListeners()->at(i),
@@ -453,18 +456,13 @@ void PlanetRendererBuilder::setTileLODTester(TileLODTester* tlt) {
   _tileLODTester = tlt;
 }
 
-TileLODTester* PlanetRendererBuilder::createDefaultTileLODTester() {
-  
+TileLODTester* PlanetRendererBuilder::createDefaultTileLODTester() const {
   ProjectedCornersDistanceTileLODTester* proj = new ProjectedCornersDistanceTileLODTester(NULL,
-                                                                                          NULL,
-                                                                                          NULL,
                                                                                           NULL);
   
   //2
   MaxLevelTileLODTester* poles = new MaxLevelTileLODTester(-1, -1,
                                                            NULL,
-                                                           proj,
-                                                           proj,
                                                            proj);
   //1
   MaxFrameTimeTileLODTester* frameTime = new MaxFrameTimeTileLODTester(TimeInterval::fromSeconds((double)1 / 60.0),
@@ -483,4 +481,16 @@ TileLODTester* PlanetRendererBuilder::getTileLODTester() {
     _tileLODTester = createDefaultTileLODTester();
   }
   return _tileLODTester;
+}
+
+TileVisibilityTester* PlanetRendererBuilder::createDefaultTileVisibilityTester() const {
+#warning TODO: add timedTrueVisibility
+  return new MeshBoundingVolumeTileVisibilityTester();
+}
+
+TileVisibilityTester* PlanetRendererBuilder::getTileVisibilityTester() {
+  if (_tileVisibilityTester == NULL) {
+    _tileVisibilityTester = createDefaultTileVisibilityTester();
+  }
+  return _tileVisibilityTester;
 }

@@ -15,12 +15,10 @@ class TileLODTesterResponder : public TileLODTester {
 
   TileLODTester* _nextTesterRightLOD;
   TileLODTester* _nextTesterWrongLOD;
-  TileLODTester* _nextTesterVisible;
-  TileLODTester* _nextTesterNotVisible;
 
 protected:
 
-  virtual bool _meetsRenderCriteria(Tile* tile,
+  virtual bool _meetsRenderCriteria(const Tile* tile,
                                     const G3MRenderContext* rc,
                                     const TilesRenderParameters* tilesRenderParameters,
                                     const ITimer* lastSplitTimer,
@@ -28,29 +26,22 @@ protected:
                                     const double texHeightSquared,
                                     long long nowInMS) const = 0;
 
-  virtual bool _isVisible(Tile* tile,
-                          const G3MRenderContext* rc) const = 0;
-
-  virtual void _onTileHasChangedMesh(Tile* tile) const {}
+  virtual void _onTileHasChangedMesh(const Tile* tile) const {}
 
   virtual void _onLayerTilesRenderParametersChanged(const LayerTilesRenderParameters* ltrp) = 0;
 
 public:
 
   TileLODTesterResponder(TileLODTester* nextTesterRightLOD,
-                         TileLODTester* nextTesterWrongLOD,
-                         TileLODTester* nextTesterVisible,
-                         TileLODTester* nextTesterNotVisible):
+                         TileLODTester* nextTesterWrongLOD):
   _nextTesterRightLOD(nextTesterRightLOD),
-  _nextTesterWrongLOD(nextTesterWrongLOD),
-  _nextTesterVisible(nextTesterVisible),
-  _nextTesterNotVisible(nextTesterNotVisible) {
-
+  _nextTesterWrongLOD(nextTesterWrongLOD)
+  {
   }
 
   virtual ~TileLODTesterResponder();
 
-  bool meetsRenderCriteria(Tile* tile,
+  bool meetsRenderCriteria(const Tile* tile,
                            const G3MRenderContext* rc,
                            const TilesRenderParameters* tilesRenderParameters,
                            const ITimer* lastSplitTimer,
@@ -58,10 +49,7 @@ public:
                            const double texHeightSquared,
                            long long nowInMS) const;
 
-  bool isVisible(Tile* tile,
-                 const G3MRenderContext* rc) const;
-
-  void onTileHasChangedMesh(Tile* tile) const;
+  void onTileHasChangedMesh(const Tile* tile) const;
 
   void onLayerTilesRenderParametersChanged(const LayerTilesRenderParameters* ltrp);
 };

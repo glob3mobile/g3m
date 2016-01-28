@@ -30,8 +30,8 @@ class TileRenderingListener;
 #include "SurfaceElevationProvider.hpp"
 #include "ChangedListener.hpp"
 #include "TouchEvent.hpp"
-#include "TileLODTester.hpp"
-
+class TileLODTester;
+class TileVisibilityTester;
 
 
 class EllipsoidShape;
@@ -219,6 +219,7 @@ private:
   const bool                   _logTilesPetitions;
   ITileVisitor*                _tileVisitor = NULL;
   TileLODTester*               _tileLODTester;
+  TileVisibilityTester*        _tileVisibilityTester;
 
   TileRenderingListener*       _tileRenderingListener;
   std::vector<const Tile*>*    _tilesStartedRendering;
@@ -315,7 +316,8 @@ public:
                  TileRenderingListener*       tileRenderingListener,
                  ChangedRendererInfoListener* changedInfoListener,
                  TouchEventType               touchEventTypeOfTerrainTouchListener,
-                 TileLODTester*               tileLODTester);
+                 TileLODTester*               tileLODTester,
+                 TileVisibilityTester*        tileVisibilityTester);
 
   ~PlanetRenderer();
 
@@ -475,9 +477,11 @@ public:
   void setChangedRendererInfoListener(ChangedRendererInfoListener* changedInfoListener,
                                       const size_t rendererIdentifier);
 
-  TileLODTester* getTileLODTester() const {
-    return _tileLODTester;
-  }
+//  TileLODTester* getTileLODTester() const {
+//    return _tileLODTester;
+//  }
+
+  void onTileHasChangedMesh(const Tile* tile) const;
 
 };
 

@@ -12,7 +12,7 @@
 #include <vector>
 #include "TileTessellator.hpp"
 #include "Sector.hpp"
-#include "TileLODTester.hpp"
+//#include "TileLODTester.hpp"
 
 class TileTexturizer;
 class Mesh;
@@ -31,7 +31,10 @@ class PlanetTileTessellatorData;
 class PlanetRenderer;
 class TileKey;
 class Geodetic3D;
+class TileLODTester;
 class TileLODTesterData;
+class TileVisibilityTester;
+
 
 class Tile {
 private:
@@ -70,7 +73,7 @@ private:
   
   inline bool isVisible(const G3MRenderContext* rc,
                         const Sector* renderedSector,
-                        TileLODTester* tileLODTester);
+                        TileVisibilityTester* tileVisibilityTester);
   
   inline bool meetsRenderCriteria(const G3MRenderContext* rc,
                                   TileLODTester* tileLODTester,
@@ -132,7 +135,7 @@ private:
                                   int row,
                                   int column);
   
-  std::vector<TileLODTesterData*> _lodTesterData;
+  mutable std::vector<TileLODTesterData*> _lodTesterData;
   
 public:
   const Sector      _sector;
@@ -180,6 +183,7 @@ public:
               const GLState& parentState,
               std::vector<Tile*>* toVisitInNextIteration,
               TileLODTester* tileLODTester,
+              TileVisibilityTester* tileVisibilityTester,
               const Frustum* cameraFrustumInModelCoordinates,
               TilesStatistics* tilesStatistics,
               const float verticalExaggeration,
@@ -279,7 +283,7 @@ public:
   const Mesh* getTessellatorMesh() const;
   
   TileLODTesterData* getDataForLODTester(int id) const;
-  void setDataForLODTester(int id, TileLODTesterData* data);
+  void setDataForLODTester(int id, TileLODTesterData* data) const;
   
   const TileTessellatorMeshData* getTessellatorMeshData() const {
     return &_tileTessellatorMeshData;

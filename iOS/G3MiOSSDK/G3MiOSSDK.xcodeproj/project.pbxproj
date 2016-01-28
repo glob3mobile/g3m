@@ -203,6 +203,10 @@
 		CF60500317724C5C00EB48A6 /* JSONNull.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF60500117724C5C00EB48A6 /* JSONNull.cpp */; };
 		CF605004177376A600EB48A6 /* JSONNull.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF60500217724C5C00EB48A6 /* JSONNull.hpp */; };
 		CF65361316BC41B2001F9139 /* ShapePositionEffect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF65361116BC41B2001F9139 /* ShapePositionEffect.cpp */; };
+		CF67D9C31C5A90BB00873661 /* TileVisibilityTester.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF67D9C11C5A90BB00873661 /* TileVisibilityTester.cpp */; };
+		CF67D9C61C5A99C300873661 /* MeshBoundingVolumeTileVisibilityTester.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF67D9C41C5A99C300873661 /* MeshBoundingVolumeTileVisibilityTester.cpp */; };
+		CF67D9C71C5AB11A00873661 /* TileVisibilityTester.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF67D9C21C5A90BB00873661 /* TileVisibilityTester.hpp */; };
+		CF67D9C81C5AB11A00873661 /* MeshBoundingVolumeTileVisibilityTester.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF67D9C51C5A99C300873661 /* MeshBoundingVolumeTileVisibilityTester.hpp */; };
 		CF6920BF18392F83007409D8 /* NormalsUtils.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF708F2F1836A43500AAB0B1 /* NormalsUtils.hpp */; };
 		CF6B5F5D16C1910500C590C1 /* JSONDouble.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF6B5F5B16C1910500C590C1 /* JSONDouble.cpp */; };
 		CF6B5F6116C1938D00C590C1 /* JSONFloat.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF6B5F5F16C1938D00C590C1 /* JSONFloat.cpp */; };
@@ -747,6 +751,8 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				CF67D9C71C5AB11A00873661 /* TileVisibilityTester.hpp in CopyFiles */,
+				CF67D9C81C5AB11A00873661 /* MeshBoundingVolumeTileVisibilityTester.hpp in CopyFiles */,
 				CFB94E571C57EAA900DAB4E6 /* DecoratorTileLODTester.hpp in CopyFiles */,
 				CFB94E581C57EAA900DAB4E6 /* TileLODTesterData.hpp in CopyFiles */,
 				CFB94E591C57EAA900DAB4E6 /* TileLODTesterResponder.hpp in CopyFiles */,
@@ -1412,6 +1418,10 @@
 		CF60500217724C5C00EB48A6 /* JSONNull.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = JSONNull.hpp; sourceTree = "<group>"; };
 		CF65361116BC41B2001F9139 /* ShapePositionEffect.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ShapePositionEffect.cpp; path = Commons/Rendererers/ShapePositionEffect.cpp; sourceTree = "<group>"; };
 		CF65361216BC41B2001F9139 /* ShapePositionEffect.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = ShapePositionEffect.hpp; path = Commons/Rendererers/ShapePositionEffect.hpp; sourceTree = "<group>"; };
+		CF67D9C11C5A90BB00873661 /* TileVisibilityTester.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TileVisibilityTester.cpp; path = Commons/Rendererers/TileVisibilityTester.cpp; sourceTree = "<group>"; };
+		CF67D9C21C5A90BB00873661 /* TileVisibilityTester.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = TileVisibilityTester.hpp; path = Commons/Rendererers/TileVisibilityTester.hpp; sourceTree = "<group>"; };
+		CF67D9C41C5A99C300873661 /* MeshBoundingVolumeTileVisibilityTester.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MeshBoundingVolumeTileVisibilityTester.cpp; path = Commons/Rendererers/MeshBoundingVolumeTileVisibilityTester.cpp; sourceTree = "<group>"; };
+		CF67D9C51C5A99C300873661 /* MeshBoundingVolumeTileVisibilityTester.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = MeshBoundingVolumeTileVisibilityTester.hpp; path = Commons/Rendererers/MeshBoundingVolumeTileVisibilityTester.hpp; sourceTree = "<group>"; };
 		CF6873A415F77F54002EDFD0 /* IFloatBuffer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = IFloatBuffer.hpp; path = Commons/Basic/IFloatBuffer.hpp; sourceTree = "<group>"; };
 		CF6873A915F77FFC002EDFD0 /* IIntBuffer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = IIntBuffer.hpp; path = Commons/Basic/IIntBuffer.hpp; sourceTree = "<group>"; };
 		CF6B5F5B16C1910500C590C1 /* JSONDouble.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = JSONDouble.cpp; sourceTree = "<group>"; };
@@ -2504,6 +2514,10 @@
 				CFECA77A1B6AB9B200A0A44E /* VectorStreamingRenderer.hpp */,
 				D8019FEE1C11D91800784287 /* TileLODTester.cpp */,
 				D8019FEF1C11D91800784287 /* TileLODTester.hpp */,
+				CF67D9C11C5A90BB00873661 /* TileVisibilityTester.cpp */,
+				CF67D9C21C5A90BB00873661 /* TileVisibilityTester.hpp */,
+				CF67D9C41C5A99C300873661 /* MeshBoundingVolumeTileVisibilityTester.cpp */,
+				CF67D9C51C5A99C300873661 /* MeshBoundingVolumeTileVisibilityTester.hpp */,
 				CFB94E541C57E9F400DAB4E6 /* DecoratorTileLODTester.cpp */,
 				CFB94E551C57E9F400DAB4E6 /* DecoratorTileLODTester.hpp */,
 				CF792A051C51620800FDE7C9 /* TileLODTesterData.cpp */,
@@ -2962,6 +2976,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				CCF45F551743AE620037CA28 /* SphericalPlanet.cpp in Sources */,
+				CF67D9C31C5A90BB00873661 /* TileVisibilityTester.cpp in Sources */,
 				383BD37D1577EDC00012AC53 /* Logger_iOS.mm in Sources */,
 				383BD3851577EDDB0012AC53 /* ES2Renderer.mm in Sources */,
 				383BD3871577EDDB0012AC53 /* G3MWidget_iOS.mm in Sources */,
@@ -3071,6 +3086,7 @@
 				CF4F784A1804ADFC00550409 /* DeviceInfo_iOS.mm in Sources */,
 				CF9F74DF18805470008D65F7 /* CanvasImageBuilder.cpp in Sources */,
 				CF1F55E318772FC80019E8A5 /* AbstractImageBuilder.cpp in Sources */,
+				CF67D9C61C5A99C300873661 /* MeshBoundingVolumeTileVisibilityTester.cpp in Sources */,
 				A7EE0020161B274300C77604 /* JSONArray.cpp in Sources */,
 				A70F5608161B54A400340256 /* IJSONParser.cpp in Sources */,
 				A70F560E161B5CD800340256 /* JSONParser_iOS.mm in Sources */,

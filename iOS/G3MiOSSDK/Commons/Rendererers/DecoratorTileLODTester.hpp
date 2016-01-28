@@ -21,6 +21,10 @@ protected:
 public:
   virtual ~DecoratorTileLODTester();
 
+  virtual void onTileHasChangedMesh(const Tile* tile) const;
+
+  virtual void onLayerTilesRenderParametersChanged(const LayerTilesRenderParameters* ltrp);
+
 };
 
 #endif

@@ -25,3 +25,12 @@ DecoratorTileLODTester::~DecoratorTileLODTester() {
   super.dispose();
 #endif
 }
+
+
+void DecoratorTileLODTester::onTileHasChangedMesh(const Tile* tile) const {
+  _tileLODTester->onTileHasChangedMesh(tile);
+}
+
+void DecoratorTileLODTester::onLayerTilesRenderParametersChanged(const LayerTilesRenderParameters* ltrp) {
+  _tileLODTester->onLayerTilesRenderParametersChanged(ltrp);
+}

@@ -26,7 +26,7 @@ MaxFrameTimeTileLODTester::~MaxFrameTimeTileLODTester() {
 #endif
 }
 
-bool MaxFrameTimeTileLODTester::meetsRenderCriteria(Tile* tile,
+bool MaxFrameTimeTileLODTester::meetsRenderCriteria(const Tile* tile,
                                                     const G3MRenderContext* rc,
                                                     const TilesRenderParameters* tilesRenderParameters,
                                                     const ITimer* lastSplitTimer,
@@ -62,17 +62,4 @@ bool MaxFrameTimeTileLODTester::meetsRenderCriteria(Tile* tile,
   }
 
   return res;
-}
-
-bool MaxFrameTimeTileLODTester::isVisible(Tile* tile,
-                                          const G3MRenderContext* rc) const {
-  return _tileLODTester->isVisible(tile, rc);
-}
-
-void MaxFrameTimeTileLODTester::onTileHasChangedMesh(Tile* tile) const {
-  _tileLODTester->onTileHasChangedMesh(tile);
-}
-
-void MaxFrameTimeTileLODTester::onLayerTilesRenderParametersChanged(const LayerTilesRenderParameters* ltrp) {
-  _tileLODTester->onLayerTilesRenderParametersChanged(ltrp);
 }

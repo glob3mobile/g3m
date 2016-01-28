@@ -16,13 +16,9 @@
 MaxLevelTileLODTester::MaxLevelTileLODTester(int maxLevel,
                                              int maxLevelForPoles,
                                              TileLODTester* nextTesterRightLOD,
-                                             TileLODTester* nextTesterWrongLOD,
-                                             TileLODTester* nextTesterVisible,
-                                             TileLODTester* nextTesterNotVisible):
+                                             TileLODTester* nextTesterWrongLOD):
 TileLODTesterResponder(nextTesterRightLOD,
-                       nextTesterWrongLOD,
-                       nextTesterVisible,
-                       nextTesterNotVisible),
+                       nextTesterWrongLOD),
 _maxLevelForPoles(maxLevelForPoles),
 _maxLevel(maxLevel)
 {}
@@ -34,7 +30,7 @@ MaxLevelTileLODTester::~MaxLevelTileLODTester() {
 #endif
 }
 
-bool MaxLevelTileLODTester::_meetsRenderCriteria(Tile* tile,
+bool MaxLevelTileLODTester::_meetsRenderCriteria(const Tile* tile,
                                                  const G3MRenderContext* rc,
                                                  const TilesRenderParameters* tilesRenderParameters,
                                                  const ITimer* lastSplitTimer,
@@ -55,11 +51,6 @@ bool MaxLevelTileLODTester::_meetsRenderCriteria(Tile* tile,
   }
 
   return false;
-}
-
-bool MaxLevelTileLODTester::_isVisible(Tile* tile,
-                                       const G3MRenderContext* rc) const {
-  return true;
 }
 
 void MaxLevelTileLODTester::_onLayerTilesRenderParametersChanged(const LayerTilesRenderParameters* ltrp) {

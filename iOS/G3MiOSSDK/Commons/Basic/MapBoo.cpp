@@ -27,6 +27,8 @@
 #include "ColumnLayoutImageBuilder.hpp"
 #include "CircleImageBuilder.hpp"
 #include "StackLayoutImageBuilder.hpp"
+#include "LayerSet.hpp"
+#include "DownloadPriority.hpp"
 
 
 MapBoo::MapBoo(IG3MBuilder* builder,

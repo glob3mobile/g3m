@@ -224,7 +224,8 @@ _context(NULL),
 _webSocket(NULL),
 _marksRenderer(NULL),
 _hasParsedApplication(false),
-_tileLODTester(NULL)
+_tileLODTester(NULL),
+_tileVisibilityTester(NULL)
 {
   _featureInfoDownloadListener = new FeatureInfoDownloadListener(_applicationListener);
 }
@@ -545,7 +546,8 @@ PlanetRenderer* MapBooOLDBuilder::createPlanetRenderer() {
                                               tileRenderingListener,
                                               changedRendererInfoListener,
                                               touchEventTypeOfTerrainTouchListener,
-                                              getTileLODTester());
+                                              getTileLODTester(),
+                                              getTileVisibilityTester());
 
   if (_enableNotifications) {
     result->addTerrainTouchListener(new MapBooOLDBuilder_TerrainTouchListener(this));
@@ -2297,4 +2299,15 @@ TileLODTester* MapBooOLDBuilder::getTileLODTester() {
     _tileLODTester = createDefaultTileLODTester();
   }
   return _tileLODTester;
+}
+
+TileVisibilityTester* MapBooOLDBuilder::createDefaultTileVisibilityTester() const {
+  return NULL;
+}
+
+TileVisibilityTester* MapBooOLDBuilder::getTileVisibilityTester() {
+  if (_tileVisibilityTester == NULL) {
+    _tileVisibilityTester = createDefaultTileVisibilityTester();
+  }
+  return _tileVisibilityTester;
 }

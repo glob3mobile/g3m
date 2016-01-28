@@ -25,7 +25,7 @@ TimedTileLODTester::~TimedTileLODTester() {
 #endif
 }
 
-bool TimedTileLODTester::meetsRenderCriteria(Tile* tile,
+bool TimedTileLODTester::meetsRenderCriteria(const Tile* tile,
                                              const G3MRenderContext* rc,
                                              const TilesRenderParameters* tilesRenderParameters,
                                              const ITimer* lastSplitTimer,
@@ -57,17 +57,4 @@ bool TimedTileLODTester::meetsRenderCriteria(Tile* tile,
   }
 
   return data->_lastMeetsRenderCriteriaResult;
-}
-
-bool TimedTileLODTester::isVisible(Tile* tile,
-                                   const G3MRenderContext* rc) const {
-  return _tileLODTester->isVisible(tile, rc);
-}
-
-void TimedTileLODTester::onTileHasChangedMesh(Tile* tile) const {
-  _tileLODTester->onTileHasChangedMesh(tile);
-}
-
-void TimedTileLODTester::onLayerTilesRenderParametersChanged(const LayerTilesRenderParameters* ltrp) {
-  _tileLODTester->onLayerTilesRenderParametersChanged(ltrp);
 }

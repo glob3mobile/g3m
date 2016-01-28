@@ -31,6 +31,8 @@
 #include "IFactory.hpp"
 #include "Layer.hpp"
 #include <algorithm>
+#include "TileLODTester.hpp"
+#include "TileVisibilityTester.hpp"
 
 
 class VisibleSectorListenerEntry {
@@ -122,7 +124,8 @@ PlanetRenderer::PlanetRenderer(TileTessellator*             tessellator,
                                TileRenderingListener*       tileRenderingListener,
                                ChangedRendererInfoListener* changedInfoListener,
                                TouchEventType               touchEventTypeOfTerrainTouchListener,
-                               TileLODTester*               tileLODTester) :
+                               TileLODTester*               tileLODTester,
+                               TileVisibilityTester*        tileVisibilityTester) :
 _tessellator(tessellator),
 _elevationDataProvider(elevationDataProvider),
 _ownsElevationDataProvider(ownsElevationDataProvider),
@@ -147,7 +150,8 @@ _renderTileMeshes(renderTileMeshes),
 _logTilesPetitions(logTilesPetitions),
 _tileRenderingListener(tileRenderingListener),
 _touchEventTypeOfTerrainTouchListener(touchEventTypeOfTerrainTouchListener),
-_tileLODTester(tileLODTester)
+_tileLODTester(tileLODTester),
+_tileVisibilityTester(tileVisibilityTester)
 {
   _context = NULL;
   _changedInfoListener = changedInfoListener;
@@ -168,7 +172,10 @@ _tileLODTester(tileLODTester)
   _rendererIdentifier = -1;
   
   if (_tileLODTester == NULL) {
-    THROW_EXCEPTION("Null TileLODTester provided to PlanetRenderer");
+    THROW_EXCEPTION("TileLODTester can't be NULL");
+  }
+  if (_tileVisibilityTester == NULL) {
+    THROW_EXCEPTION("TileVisibilityTester can't be NULL");
   }
 }
 
@@ -240,6 +247,7 @@ PlanetRenderer::~PlanetRenderer() {
   delete _tileRenderingListener;
   
   delete _tileLODTester;
+  delete _tileVisibilityTester;
   
 #ifdef C_CODE
   delete _tilesStartedRendering;
@@ -358,6 +366,7 @@ const LayerTilesRenderParameters* PlanetRenderer::getLayerTilesRenderParameters(
     _layerTilesRenderParametersDirty = false;
     
     _tileLODTester->onLayerTilesRenderParametersChanged(_layerTilesRenderParameters);
+    _tileVisibilityTester->onLayerTilesRenderParametersChanged(_layerTilesRenderParameters);
   }
   return _layerTilesRenderParameters;
 }
@@ -657,6 +666,7 @@ void PlanetRenderer::render(const G3MRenderContext* rc,
                    *_glState,
                    NULL,
                    _tileLODTester,
+                   _tileVisibilityTester,
                    cameraFrustumInModelCoordinates,
                    &_statistics,
                    _verticalExaggeration,
@@ -706,6 +716,7 @@ void PlanetRenderer::render(const G3MRenderContext* rc,
                      *_glState,
                      &_toVisitInNextIteration,
                      _tileLODTester,
+                     _tileVisibilityTester,
                      cameraFrustumInModelCoordinates,
                      &_statistics,
                      _verticalExaggeration,
@@ -957,3 +968,7 @@ void PlanetRenderer::setChangedRendererInfoListener(ChangedRendererInfoListener*
 //  return _info;
 //}
 
+void PlanetRenderer::onTileHasChangedMesh(const Tile *tile) const {
+  _tileLODTester->onTileHasChangedMesh(tile);
+  _tileVisibilityTester->onTileHasChangedMesh(tile);
+}

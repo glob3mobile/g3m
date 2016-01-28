@@ -19,16 +19,13 @@ private:
 
 protected:
 
-  bool _meetsRenderCriteria(Tile* tile,
+  bool _meetsRenderCriteria(const Tile* tile,
                             const G3MRenderContext* rc,
                             const TilesRenderParameters* tilesRenderParameters,
                             const ITimer* lastSplitTimer,
                             const double texWidthSquared,
                             const double texHeightSquared,
                             long long nowInMS) const;
-
-  bool _isVisible(Tile* tile,
-                  const G3MRenderContext* rc) const;
 
   void _onLayerTilesRenderParametersChanged(const LayerTilesRenderParameters* ltrp);
 
@@ -37,9 +34,7 @@ public:
   MaxLevelTileLODTester(int maxLevel,
                         int maxLevelForPoles,
                         TileLODTester* nextTesterRightLOD,
-                        TileLODTester* nextTesterWrongLOD,
-                        TileLODTester* nextTesterVisible,
-                        TileLODTester* nextTesterNotVisible);
+                        TileLODTester* nextTesterWrongLOD);
 
 
   ~MaxLevelTileLODTester();

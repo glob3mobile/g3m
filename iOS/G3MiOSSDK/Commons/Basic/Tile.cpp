@@ -21,7 +21,10 @@
 #include "FlatColorMesh.hpp"
 #include "MercatorUtils.hpp"
 #include "DecimatedSubviewElevationData.hpp"
+#include "TileLODTester.hpp"
 #include "TileLODTesterData.hpp"
+#include "TileVisibilityTester.hpp"
+
 
 std::string Tile::createTileId(int level,
                                int row,
@@ -181,8 +184,7 @@ Mesh* Tile::getTessellatorMesh(const G3MRenderContext* rc,
   if ( (_tessellatorMesh == NULL) || _mustActualizeMeshDueToNewElevationData ) {
     _mustActualizeMeshDueToNewElevationData = false;
     
-    //Informs the lod testers
-    _planetRenderer->getTileLODTester()->onTileHasChangedMesh(this);
+    _planetRenderer->onTileHasChangedMesh(this);
 
     if (_debugMesh != NULL) {
       delete _debugMesh;
@@ -242,13 +244,13 @@ Mesh* Tile::getDebugMesh(const G3MRenderContext* rc,
 
 bool Tile::isVisible(const G3MRenderContext* rc,
                      const Sector* renderedSector,
-                     TileLODTester* tileLODTester) {
+                     TileVisibilityTester* tileVisibilityTester) {
   if ((renderedSector != NULL) &&
       !renderedSector->touchesWith(_sector)) { //Incomplete world
     return false;
   }
   
-  return tileLODTester->isVisible(this, rc);
+  return tileVisibilityTester->isVisible(this, rc);
 }
 
 bool Tile::meetsRenderCriteria(const G3MRenderContext* rc,
@@ -486,6 +488,7 @@ void Tile::render(const G3MRenderContext* rc,
                   const GLState& parentState,
                   std::vector<Tile*>* toVisitInNextIteration,
                   TileLODTester* tileLODTester,
+                  TileVisibilityTester* tileVisibilityTester,
                   const Frustum* cameraFrustumInModelCoordinates,
                   TilesStatistics* tilesStatistics,
                   const float verticalExaggeration,
@@ -527,7 +530,7 @@ void Tile::render(const G3MRenderContext* rc,
                      tilesRenderParameters);
   
   bool rendered = false;
-  if (isVisible(rc, renderedSector, tileLODTester)) {
+  if (isVisible(rc, renderedSector, tileVisibilityTester)) {
     setIsVisible(true, texturizer);
     
     tilesStatistics->computeVisibleTile(this);
@@ -865,7 +868,7 @@ const Mesh* Tile::getTessellatorMesh() const {
   return _tessellatorMesh;
 }
 
-void Tile::setDataForLODTester(int id, TileLODTesterData* data) {
+void Tile::setDataForLODTester(int id, TileLODTesterData* data) const {
   while (_lodTesterData.size() < id + 1) {
     _lodTesterData.push_back(NULL);
   }

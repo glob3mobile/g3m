@@ -9,16 +9,24 @@
 #ifndef __G3MiOSSDK__PlanetRendererBuilder__
 #define __G3MiOSSDK__PlanetRendererBuilder__
 
-class LayerSet;
-class GEOVectorLayer;
-class IImageBuilder;
-
+#include <vector>
 #include "TilesRenderParameters.hpp"
-#include "PlanetRenderer.hpp"
-#include "DefaultChessCanvasImageBuilder.hpp"
-#include "DownloaderImageBuilder.hpp"
-#include "TileLODTester.hpp"
+#include "TouchEvent.hpp"
+#include "TimeInterval.hpp"
 
+class TileTessellator;
+class TileTexturizer;
+class GEOVectorLayer;
+class TileLODTester;
+class TileVisibilityTester;
+class LayerSet;
+class VisibleSectorListener;
+class ElevationDataProvider;
+class Sector;
+class TileRenderingListener;
+class ChangedRendererInfoListener;
+class IImageBuilder;
+class PlanetRenderer;
 
 
 class PlanetRendererBuilder {
@@ -28,7 +36,7 @@ private:
   TileTexturizer* _texturizer;
   std::vector<GEOVectorLayer*> _geoVectorLayers;
   TileLODTester* _tileLODTester;
-  
+  TileVisibilityTester* _tileVisibilityTester;
 
   LayerSet* _layerSet;
   TilesRenderParameters* _parameters;
@@ -88,7 +96,10 @@ private:
   
   IImageBuilder* getDefaultTileBackGroundImageBuilder() const;
   
-  TileLODTester* createDefaultTileLODTester();
+  TileLODTester* createDefaultTileLODTester() const;
+
+  TileVisibilityTester* createDefaultTileVisibilityTester() const;
+
 
 public:
   PlanetRendererBuilder();
@@ -140,6 +151,9 @@ public:
   void setTileLODTester(TileLODTester* tlt);
   
   TileLODTester* getTileLODTester();
+
+  TileVisibilityTester* getTileVisibilityTester();
+
 };
 
 #endif
