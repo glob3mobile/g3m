@@ -137,8 +137,11 @@ private:
                                   int row,
                                   int column);
   
-  mutable std::vector<TileData*> _data;
-  
+//  mutable std::vector<TileData*> _data;
+  mutable TileData** _data;
+  mutable size_t     _dataSize;
+#warning Diego at work!
+
 public:
   const Sector      _sector;
   const bool        _mercator;

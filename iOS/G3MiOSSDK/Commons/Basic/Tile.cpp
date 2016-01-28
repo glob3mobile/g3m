@@ -81,7 +81,9 @@ _planetRenderer(planetRenderer),
 _tessellatorData(NULL),
 _rendered(false),
 _id( createTileId(level, row, column) ),
-_tessellatorMeshIsMeshHolder(false)
+_tessellatorMeshIsMeshHolder(false),
+_data(NULL),
+_dataSize(0)
 {
 }
 
@@ -114,8 +116,7 @@ Tile::~Tile() {
   
   delete _tessellatorData;
   
-  const size_t size = _data.size();
-  for (size_t i = 0; i < size; i++) {
+  for (size_t i = 0; i < _dataSize; i++) {
     TileData* data = _data[i];
     delete data;
   }
@@ -872,8 +873,34 @@ const Mesh* Tile::getTessellatorMesh() const {
 }
 
 void Tile::setData(int id, TileData* data) const {
-  while (_data.size() < id + 1) {
-    _data.push_back(NULL);
+  const size_t requiredSize = id+1;
+  if (_dataSize < requiredSize) {
+    if (_dataSize == 0) {
+      _data = new TileData*[requiredSize];
+      _dataSize = requiredSize;
+#ifdef C_CODE
+      for (size_t i = 0; i < _dataSize; i++) {
+        _data[i] = NULL;
+      }
+#endif
+    }
+    else {
+      TileData** oldData = _data;
+      const size_t oldDataSize = _dataSize;
+      _data = new TileData*[requiredSize];
+      _dataSize = requiredSize;
+#ifdef C_CODE
+      for (size_t i = 0; i < oldDataSize; i++) {
+        _data[i] = oldData[i];
+      }
+      for (size_t i = oldDataSize-1; i < _dataSize; i++) {
+        _data[i] = NULL;
+      }
+#endif
+#ifdef JAVA_CODE
+      System.arraycopy(oldData, 0, _data, 0, oldDataSize);
+#endif
+    }
   }
 
   TileData* current = _data[id];
@@ -884,7 +911,7 @@ void Tile::setData(int id, TileData* data) const {
 }
 
 TileData* Tile::getData(int id) const {
-  if (id >= _data.size()) {
+  if (id >= _dataSize) {
     return NULL;
   }
 
