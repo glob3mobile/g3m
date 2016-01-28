@@ -300,7 +300,11 @@ public class Tile
     return level + "/" + row + "/" + column;
   }
 
-  private java.util.ArrayList<TileData> _data = new java.util.ArrayList<TileData>();
+//  mutable std::vector<TileData*> _data;
+  private TileData[] _data;
+  private int _dataSize;
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning Diego at work!
 
   public final Sector _sector ;
   public final boolean _mercator;
@@ -340,6 +344,8 @@ public class Tile
      _rendered = false;
      _id = createTileId(level, row, column);
      _tessellatorMeshIsMeshHolder = false;
+     _data = null;
+     _dataSize = 0;
   }
 
   public void dispose()
@@ -381,10 +387,9 @@ public class Tile
     if (_tessellatorData != null)
        _tessellatorData.dispose();
   
-    final int size = _data.size();
-    for (int i = 0; i < size; i++)
+    for (int i = 0; i < _dataSize; i++)
     {
-      TileData data = _data.get(i);
+      TileData data = _data[i];
       if (data != null)
          data.dispose();
     }
@@ -916,26 +921,39 @@ public class Tile
 
   public final TileData getData(int id)
   {
-    if (id >= _data.size())
+    if (id >= _dataSize)
     {
       return null;
     }
   
-    return _data.get(id);
+    return _data[id];
   }
   public final void setData(int id, TileData data)
   {
-    while (_data.size() < id + 1)
+    final int requiredSize = id+1;
+    if (_dataSize < requiredSize)
     {
-      _data.add(null);
+      if (_dataSize == 0)
+      {
+        _data = new TileData[requiredSize];
+        _dataSize = requiredSize;
+      }
+      else
+      {
+        TileData[] oldData = _data;
+        final int oldDataSize = _dataSize;
+        _data = new TileData[requiredSize];
+        _dataSize = requiredSize;
+        System.arraycopy(oldData, 0, _data, 0, oldDataSize);
+      }
     }
   
-    TileData current = _data.get(id);
+    TileData current = _data[id];
     if (current != data)
     {
       if (current != null)
          current.dispose();
-      _data.set(id, data);
+      _data[id] = data;
     }
   }
 
