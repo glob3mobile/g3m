@@ -292,7 +292,7 @@ public class PlanetRendererBuilder
 
   private TileVisibilityTester createDefaultTileVisibilityTester()
   {
-    return new TimedCacheTileVisibilityTester(TimeInterval.fromMilliseconds(500), new MeshBoundingVolumeTileVisibilityTester());
+    return new TimedCacheTileVisibilityTester(TimeInterval.fromMilliseconds(1000), new MeshBoundingVolumeTileVisibilityTester());
   }
 
 

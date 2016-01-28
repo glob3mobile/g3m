@@ -393,6 +393,7 @@ public class Tile
       if (data != null)
          data.dispose();
     }
+    _data = null;
   }
 
   //Change to public for TileCache
@@ -921,12 +922,7 @@ public class Tile
 
   public final TileData getData(int id)
   {
-    if (id >= _dataSize)
-    {
-      return null;
-    }
-  
-    return _data[id];
+    return (id >= _dataSize) ? null : _data[id];
   }
   public final void setData(int id, TileData data)
   {
