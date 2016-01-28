@@ -12,7 +12,7 @@
 class Tile;
 class G3MRenderContext;
 class LayerTilesRenderParameters;
-
+class Frustum;
 
 class TileVisibilityTester {
 public:
@@ -25,7 +25,8 @@ public:
 
   virtual bool isVisible(const Tile* tile,
                          const G3MRenderContext* rc,
-                         long long nowInMS) const = 0;
+                         long long nowInMS,
+                         const Frustum* frustumInModelCoordinates) const = 0;
 
   virtual void onTileHasChangedMesh(const Tile* tile) const = 0;
 

@@ -38,7 +38,8 @@ public:
 
   bool isVisible(const Tile* tile,
                  const G3MRenderContext* rc,
-                 long long nowInMS) const;
+                 long long nowInMS,
+                 const Frustum* frustumInModelCoordinates) const;
 
 };
 

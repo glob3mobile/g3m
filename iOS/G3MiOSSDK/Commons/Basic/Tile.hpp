@@ -74,7 +74,8 @@ private:
   inline bool isVisible(const G3MRenderContext* rc,
                         const Sector* renderedSector,
                         TileVisibilityTester* tileVisibilityTester,
-                        long long nowInMS);
+                        long long nowInMS,
+                        const Frustum* frustumInModelCoordinates);
   
   inline bool meetsRenderCriteria(const G3MRenderContext* rc,
                                   TileLODTester* tileLODTester,
@@ -185,7 +186,7 @@ public:
               std::vector<Tile*>* toVisitInNextIteration,
               TileLODTester* tileLODTester,
               TileVisibilityTester* tileVisibilityTester,
-              const Frustum* cameraFrustumInModelCoordinates,
+              const Frustum* frustumInModelCoordinates,
               TilesStatistics* tilesStatistics,
               const float verticalExaggeration,
               const LayerTilesRenderParameters* layerTilesRenderParameters,
@@ -291,6 +292,7 @@ public:
   }
   
   const Mesh* getCurrentTessellatorMesh() const {
+#warning TODO: ask JM
     return _tessellatorMesh;
   }
   

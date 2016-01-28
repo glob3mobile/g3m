@@ -651,7 +651,7 @@ void PlanetRenderer::render(const G3MRenderContext* rc,
   
   const size_t firstLevelTilesCount = _firstLevelTiles.size();
   
-  const Frustum* cameraFrustumInModelCoordinates = _lastCamera->getFrustumInModelCoordinates();
+  const Frustum* frustumInModelCoordinates = _lastCamera->getFrustumInModelCoordinates();
   
   const long long nowInMS = _lastSplitTimer->nowInMilliseconds();
   
@@ -667,7 +667,7 @@ void PlanetRenderer::render(const G3MRenderContext* rc,
                    NULL,
                    _tileLODTester,
                    _tileVisibilityTester,
-                   cameraFrustumInModelCoordinates,
+                   frustumInModelCoordinates,
                    &_statistics,
                    _verticalExaggeration,
                    layerTilesRenderParameters,
@@ -717,7 +717,7 @@ void PlanetRenderer::render(const G3MRenderContext* rc,
                      &_toVisitInNextIteration,
                      _tileLODTester,
                      _tileVisibilityTester,
-                     cameraFrustumInModelCoordinates,
+                     frustumInModelCoordinates,
                      &_statistics,
                      _verticalExaggeration,
                      layerTilesRenderParameters,

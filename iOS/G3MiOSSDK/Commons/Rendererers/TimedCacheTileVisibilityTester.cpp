@@ -28,7 +28,8 @@ TimedCacheTileVisibilityTester::~TimedCacheTileVisibilityTester() {
 
 bool TimedCacheTileVisibilityTester::isVisible(const Tile* tile,
                                                const G3MRenderContext* rc,
-                                               long long nowInMS) const {
+                                               long long nowInMS,
+                                               const Frustum* frustumInModelCoordinates) const {
   // return _tileVisibilityTester->isVisible(tile, rc, nowInMS);
 
 #warning Calculate ID;
@@ -38,7 +39,7 @@ bool TimedCacheTileVisibilityTester::isVisible(const Tile* tile,
   PvtData* data = (PvtData*) tile->getData(_id);
 
   if (data == NULL) {
-    result = _tileVisibilityTester->isVisible(tile, rc, nowInMS);
+    result = _tileVisibilityTester->isVisible(tile, rc, nowInMS, frustumInModelCoordinates);
     if (result) {
       data = new PvtData(nowInMS + _timeoutInMS);
       tile->setData(_id, data);
@@ -49,7 +50,7 @@ bool TimedCacheTileVisibilityTester::isVisible(const Tile* tile,
       result = true;
     }
     else {
-      result = _tileVisibilityTester->isVisible(tile, rc, nowInMS);
+      result = _tileVisibilityTester->isVisible(tile, rc, nowInMS, frustumInModelCoordinates);
       if (result) {
         data->_timeoutTimeInMS = nowInMS + _timeoutInMS;
       }

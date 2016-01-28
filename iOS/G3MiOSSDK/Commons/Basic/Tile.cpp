@@ -246,13 +246,14 @@ Mesh* Tile::getDebugMesh(const G3MRenderContext* rc,
 bool Tile::isVisible(const G3MRenderContext* rc,
                      const Sector* renderedSector,
                      TileVisibilityTester* tileVisibilityTester,
-                     long long nowInMS) {
+                     long long nowInMS,
+                     const Frustum* frustumInModelCoordinates) {
   if ((renderedSector != NULL) &&
       !renderedSector->touchesWith(_sector)) { //Incomplete world
     return false;
   }
   
-  return tileVisibilityTester->isVisible(this, rc, nowInMS);
+  return tileVisibilityTester->isVisible(this, rc, nowInMS, frustumInModelCoordinates);
 }
 
 bool Tile::meetsRenderCriteria(const G3MRenderContext* rc,
@@ -491,7 +492,7 @@ void Tile::render(const G3MRenderContext* rc,
                   std::vector<Tile*>* toVisitInNextIteration,
                   TileLODTester* tileLODTester,
                   TileVisibilityTester* tileVisibilityTester,
-                  const Frustum* cameraFrustumInModelCoordinates,
+                  const Frustum* frustumInModelCoordinates,
                   TilesStatistics* tilesStatistics,
                   const float verticalExaggeration,
                   const LayerTilesRenderParameters* layerTilesRenderParameters,
@@ -532,7 +533,7 @@ void Tile::render(const G3MRenderContext* rc,
                      tilesRenderParameters);
   
   bool rendered = false;
-  if (isVisible(rc, renderedSector, tileVisibilityTester, nowInMS)) {
+  if (isVisible(rc, renderedSector, tileVisibilityTester, nowInMS, frustumInModelCoordinates)) {
     setIsVisible(true, texturizer);
     
     tilesStatistics->computeVisibleTile(this);
