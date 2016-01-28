@@ -131,14 +131,14 @@ public class Tile
     return _debugMesh;
   }
 
-  private boolean isVisible(G3MRenderContext rc, Sector renderedSector, TileVisibilityTester tileVisibilityTester, long nowInMS)
+  private boolean isVisible(G3MRenderContext rc, Sector renderedSector, TileVisibilityTester tileVisibilityTester, long nowInMS, Frustum frustumInModelCoordinates)
   {
     if ((renderedSector != null) && !renderedSector.touchesWith(_sector)) //Incomplete world
     {
       return false;
     }
   
-    return tileVisibilityTester.isVisible(this, rc, nowInMS);
+    return tileVisibilityTester.isVisible(this, rc, nowInMS, frustumInModelCoordinates);
   }
 
   private boolean meetsRenderCriteria(G3MRenderContext rc, TileLODTester tileLODTester, TilesRenderParameters tilesRenderParameters, ITimer lastSplitTimer, double texWidthSquared, double texHeightSquared, long nowInMS)
@@ -439,7 +439,7 @@ public class Tile
     }
   }
 
-  public final void render(G3MRenderContext rc, GLState parentState, java.util.ArrayList<Tile> toVisitInNextIteration, TileLODTester tileLODTester, TileVisibilityTester tileVisibilityTester, Frustum cameraFrustumInModelCoordinates, TilesStatistics tilesStatistics, float verticalExaggeration, LayerTilesRenderParameters layerTilesRenderParameters, TileTexturizer texturizer, TilesRenderParameters tilesRenderParameters, ITimer lastSplitTimer, ElevationDataProvider elevationDataProvider, TileTessellator tessellator, LayerSet layerSet, Sector renderedSector, boolean forceFullRender, long tileDownloadPriority, double texWidthSquared, double texHeightSquared, long nowInMS, boolean renderTileMeshes, boolean logTilesPetitions, java.util.ArrayList<Tile> tilesStartedRendering, java.util.ArrayList<String> tilesStoppedRendering)
+  public final void render(G3MRenderContext rc, GLState parentState, java.util.ArrayList<Tile> toVisitInNextIteration, TileLODTester tileLODTester, TileVisibilityTester tileVisibilityTester, Frustum frustumInModelCoordinates, TilesStatistics tilesStatistics, float verticalExaggeration, LayerTilesRenderParameters layerTilesRenderParameters, TileTexturizer texturizer, TilesRenderParameters tilesRenderParameters, ITimer lastSplitTimer, ElevationDataProvider elevationDataProvider, TileTessellator tessellator, LayerSet layerSet, Sector renderedSector, boolean forceFullRender, long tileDownloadPriority, double texWidthSquared, double texHeightSquared, long nowInMS, boolean renderTileMeshes, boolean logTilesPetitions, java.util.ArrayList<Tile> tilesStartedRendering, java.util.ArrayList<String> tilesStoppedRendering)
   {
   ///#warning REMOVE
   //  if (!_sector.contains(Angle::fromDegrees(28), Angle::fromDegrees(-15))) {
@@ -459,7 +459,7 @@ public class Tile
     getTessellatorMesh(rc, elevationDataProvider, tessellator, layerTilesRenderParameters, tilesRenderParameters);
   
     boolean rendered = false;
-    if (isVisible(rc, renderedSector, tileVisibilityTester, nowInMS))
+    if (isVisible(rc, renderedSector, tileVisibilityTester, nowInMS, frustumInModelCoordinates))
     {
       setIsVisible(true, texturizer);
   
@@ -946,6 +946,8 @@ public class Tile
 
   public final Mesh getCurrentTessellatorMesh()
   {
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning TODO: ask JM
     return _tessellatorMesh;
   }
 

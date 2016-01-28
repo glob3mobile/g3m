@@ -47,7 +47,7 @@ public class TimedCacheTileVisibilityTester extends DecoratorTileVisibilityTeste
     super.dispose();
   }
 
-  public final boolean isVisible(Tile tile, G3MRenderContext rc, long nowInMS)
+  public final boolean isVisible(Tile tile, G3MRenderContext rc, long nowInMS, Frustum frustumInModelCoordinates)
   {
     // return _tileVisibilityTester->isVisible(tile, rc, nowInMS);
   
@@ -60,7 +60,7 @@ public class TimedCacheTileVisibilityTester extends DecoratorTileVisibilityTeste
   
     if (data == null)
     {
-      result = _tileVisibilityTester.isVisible(tile, rc, nowInMS);
+      result = _tileVisibilityTester.isVisible(tile, rc, nowInMS, frustumInModelCoordinates);
       if (result)
       {
         data = new PvtData(nowInMS + _timeoutInMS);
@@ -75,7 +75,7 @@ public class TimedCacheTileVisibilityTester extends DecoratorTileVisibilityTeste
       }
       else
       {
-        result = _tileVisibilityTester.isVisible(tile, rc, nowInMS);
+        result = _tileVisibilityTester.isVisible(tile, rc, nowInMS, frustumInModelCoordinates);
         if (result)
         {
           data._timeoutTimeInMS = nowInMS + _timeoutInMS;

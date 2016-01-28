@@ -26,7 +26,7 @@ public class MeshBoundingVolumeTileVisibilityTester extends TileVisibilityTester
     super.dispose();
   }
 
-  public final boolean isVisible(Tile tile, G3MRenderContext rc, long nowInMS)
+  public final boolean isVisible(Tile tile, G3MRenderContext rc, long nowInMS, Frustum frustumInModelCoordinates)
   {
     final Mesh mesh = tile.getCurrentTessellatorMesh();
     if (mesh == null)
@@ -34,7 +34,7 @@ public class MeshBoundingVolumeTileVisibilityTester extends TileVisibilityTester
       return false;
     }
   
-    return mesh.getBoundingVolume().touchesFrustum(rc.getCurrentCamera().getFrustumInModelCoordinates());
+    return mesh.getBoundingVolume().touchesFrustum(frustumInModelCoordinates);
   }
 
   public final void onTileHasChangedMesh(Tile tile)
