@@ -20,7 +20,7 @@ public class ShortBuffer_Android
    private final long _id = _nextID++;
    private int _glBuffer;
    private boolean _vertexBufferCreated = false;
-   private int _boundVertexBuffer = -1;
+   private static int _boundVertexBuffer = -1;
    private int _vertexBufferTimeStamp = -1;
 
 
@@ -130,10 +130,10 @@ public class ShortBuffer_Android
          _vertexBufferCreated = true;
       }
 
-/*      if (_glBuffer != _boundVertexBuffer) {
+      if (_glBuffer != _boundVertexBuffer) {
+         GLES20.glBindBuffer(GLES20.GL_ELEMENT_ARRAY_BUFFER, _glBuffer);
          _boundVertexBuffer = _glBuffer;
-      }*/
-      GLES20.glBindBuffer(GLES20.GL_ELEMENT_ARRAY_BUFFER, _glBuffer);
+      }
 
       if (_vertexBufferTimeStamp != _timestamp) {
          _vertexBufferTimeStamp = _timestamp;

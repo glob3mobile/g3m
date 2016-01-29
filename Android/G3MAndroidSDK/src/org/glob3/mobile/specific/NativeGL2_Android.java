@@ -326,6 +326,9 @@ public final class NativeGL2_Android
 
       GLES20.glDrawElements(mode, count, GLES20.GL_UNSIGNED_SHORT, 0);
 
+      //GLES20.glDrawElements(mode, count, GLES20.GL_UNSIGNED_SHORT,
+      //        indexBuffer.getBuffer());
+
 
       //      final ShortBuffer_Android bufferAndroid = (ShortBuffer_Android) indices;
       //      final int webGLBuffer = bufferAndroid.getGLBuffer();
