@@ -2,6 +2,8 @@
 
 package org.glob3.mobile.specific;
 
+import android.opengl.GLES20;
+
 import java.nio.ShortBuffer;
 
 import org.glob3.mobile.generated.IShortBuffer;
@@ -16,6 +18,10 @@ public class ShortBuffer_Android
    //ID
    private static long _nextID = 0;
    private final long _id = _nextID++;
+   private int _glBuffer;
+   private boolean _vertexBufferCreated = false;
+   private int _boundVertexBuffer = -1;
+   private int _vertexBufferTimeStamp = -1;
 
 
    //   private boolean           _hasGLBuffer = false;
@@ -107,10 +113,75 @@ public class ShortBuffer_Android
    }
 
 
-@Override
-public long getID() {
-	return _id;
-}
+   @Override
+   public long getID() {
+	  return _id;
+   }
+
+
+
+
+   public void bindAsElementVBOToGPU() {
+
+      if (!_vertexBufferCreated) {
+         final java.nio.IntBuffer ib = java.nio.IntBuffer.allocate(1);
+         GLES20.glGenBuffers(1, ib); //COULD RETURN GL_INVALID_VALUE EVEN WITH NO ERROR
+         _glBuffer = ib.get(0);
+         _vertexBufferCreated = true;
+      }
+
+      if (_glBuffer != _boundVertexBuffer) {
+         GLES20.glBindBuffer(GLES20.GL_ELEMENT_ARRAY_BUFFER, _glBuffer);
+         _boundVertexBuffer = _glBuffer;
+      }
+
+      if (_vertexBufferTimeStamp != _timestamp) {
+         _vertexBufferTimeStamp = _timestamp;
+
+         final ShortBuffer buffer = getBuffer();
+         final int vboSize = 2 * size(); // sizeof short = 2
+         GLES20.glBufferData(GLES20.GL_ELEMENT_ARRAY_BUFFER, vboSize, buffer, GLES20.GL_STATIC_DRAW);
+      }
+
+   }
+
+
+   public void bindAsVBOToGPU() {
+
+      if (!_vertexBufferCreated) {
+         final java.nio.IntBuffer ib = java.nio.IntBuffer.allocate(1);
+         GLES20.glGenBuffers(1, ib); //COULD RETURN GL_INVALID_VALUE EVEN WITH NO ERROR
+         _glBuffer = ib.get(0);
+         _vertexBufferCreated = true;
+      }
+
+      if (_glBuffer != _boundVertexBuffer) {
+         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, _glBuffer);
+         _boundVertexBuffer = _glBuffer;
+      }
+
+      if (_vertexBufferTimeStamp != _timestamp) {
+         _vertexBufferTimeStamp = _timestamp;
+
+         final ShortBuffer buffer = getBuffer();
+         final int vboSize = 2 * size(); // sizeof short = 2
+         GLES20.glBufferData(GLES20.GL_ARRAY_BUFFER, vboSize, buffer, GLES20.GL_STATIC_DRAW);
+      }
+   }
+
+
+   @Override
+   public void dispose() {
+      if (_vertexBufferCreated) {
+         final int[] buffers = new int[] {_glBuffer};
+         GLES20.glDeleteBuffers(1, buffers, 0);
+         _vertexBufferCreated = false;
+
+         if (_glBuffer == _boundVertexBuffer) {
+            _boundVertexBuffer = -1;
+         }
+      }
+   }
 
 
    //   @Override

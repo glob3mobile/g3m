@@ -320,13 +320,11 @@ public final class NativeGL2_Android
                             final IShortBuffer indices) {
       checkOpenGLThread();
 
-      final ShortBuffer indexBuffer = ((ShortBuffer_Android) indices).getBuffer();
+      final ShortBuffer_Android indexBuffer = (ShortBuffer_Android) indices;
 
-      //      System.err.println("drawElements(mode=" + mode + //
-      //                         ", count=" + count + //
-      //                         ", indexBuffer=" + indexBuffer + ")");
+      indexBuffer.bindAsElementVBOToGPU();
 
-      GLES20.glDrawElements(mode, count, GLES20.GL_UNSIGNED_SHORT, indexBuffer);
+      GLES20.glDrawElements(mode, count, GLES20.GL_UNSIGNED_SHORT, 0);
 
 
       //      final ShortBuffer_Android bufferAndroid = (ShortBuffer_Android) indices;
