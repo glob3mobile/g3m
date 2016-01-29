@@ -137,10 +137,8 @@ private:
                                   int row,
                                   int column);
   
-//  mutable std::vector<TileData*> _data;
   mutable TileData** _data;
   mutable size_t     _dataSize;
-#warning Diego at work!
 
 public:
   const Sector      _sector;
@@ -286,19 +284,20 @@ public:
                                            const Vector2I& size) const;
 
   const Mesh* getTessellatorMesh() const;
-  
+
   TileData* getData(int id) const;
   void setData(int id, TileData* data) const;
   
   const TileTessellatorMeshData* getTessellatorMeshData() const {
+#warning ask JM
     return &_tileTessellatorMeshData;
   }
   
   const Mesh* getCurrentTessellatorMesh() const {
-#warning TODO: ask JM
+#warning TODO: remove this
     return _tessellatorMesh;
   }
-  
+
   bool areSubtilesCreated() const {
     return _subtiles != NULL;
   }

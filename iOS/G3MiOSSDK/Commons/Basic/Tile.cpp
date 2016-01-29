@@ -526,14 +526,14 @@ void Tile::render(const G3MRenderContext* rc,
     // TODO: verticalExaggeration changed, invalidate tileExtent, Mesh, etc.
     _verticalExaggeration = verticalExaggeration;
   }
-  
-  //Forcing tessellator mesh generation before visibility test
+
+#warning TODO Remove: Forcing tessellator mesh generation before visibility test
   getTessellatorMesh(rc,
                      elevationDataProvider,
                      tessellator,
                      layerTilesRenderParameters,
                      tilesRenderParameters);
-  
+
   bool rendered = false;
   if (isVisible(rc, renderedSector, tileVisibilityTester, nowInMS, frustumInModelCoordinates)) {
     setIsVisible(true, texturizer);
@@ -865,7 +865,7 @@ Vector2I Tile::getNormalizedPixelsFromPosition(const Geodetic2D& position2D,
 }
 
 const Mesh* Tile::getTessellatorMesh() const {
-  
+#warning TODO: remove this method and _tessellatorMeshIsMeshHolder variable
   if (_tessellatorMeshIsMeshHolder) {
     return ((MeshHolder*) _tessellatorMesh)->getMesh();
   }
