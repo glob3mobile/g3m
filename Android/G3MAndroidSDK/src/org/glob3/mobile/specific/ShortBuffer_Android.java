@@ -130,10 +130,10 @@ public class ShortBuffer_Android
          _vertexBufferCreated = true;
       }
 
-      if (_glBuffer != _boundVertexBuffer) {
-         GLES20.glBindBuffer(GLES20.GL_ELEMENT_ARRAY_BUFFER, _glBuffer);
+/*      if (_glBuffer != _boundVertexBuffer) {
          _boundVertexBuffer = _glBuffer;
-      }
+      }*/
+      GLES20.glBindBuffer(GLES20.GL_ELEMENT_ARRAY_BUFFER, _glBuffer);
 
       if (_vertexBufferTimeStamp != _timestamp) {
          _vertexBufferTimeStamp = _timestamp;
@@ -145,7 +145,7 @@ public class ShortBuffer_Android
 
    }
 
-
+/*
    public void bindAsVBOToGPU() {
 
       if (!_vertexBufferCreated) {
@@ -168,7 +168,7 @@ public class ShortBuffer_Android
          GLES20.glBufferData(GLES20.GL_ARRAY_BUFFER, vboSize, buffer, GLES20.GL_STATIC_DRAW);
       }
    }
-
+*/
 
    @Override
    public void dispose() {
