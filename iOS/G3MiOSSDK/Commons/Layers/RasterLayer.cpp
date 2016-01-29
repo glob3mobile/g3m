@@ -10,7 +10,7 @@
 #include "TimeInterval.hpp"
 #include "RasterLayerTileImageProvider.hpp"
 #include "LayerCondition.hpp"
-#include "Context.hpp"
+#include "G3MRenderContext.hpp"
 #include "IDownloader.hpp"
 #include "URL.hpp"
 #include "LayerTilesRenderParameters.hpp"

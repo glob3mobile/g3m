@@ -9,7 +9,7 @@
 #include "CameraDoubleDragHandler.hpp"
 #include "GL.hpp"
 #include "TouchEvent.hpp"
-
+#include "G3MEventContext.hpp"
 
 
 bool CameraDoubleDragHandler::onTouchEvent(const G3MEventContext *eventContext,

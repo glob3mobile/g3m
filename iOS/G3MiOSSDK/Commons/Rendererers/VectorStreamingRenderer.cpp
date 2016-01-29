@@ -7,7 +7,7 @@
 //
 
 #include "VectorStreamingRenderer.hpp"
-#include "Context.hpp"
+#include "G3MContext.hpp"
 #include "IDownloader.hpp"
 #include "IJSONParser.hpp"
 #include "Sector.hpp"

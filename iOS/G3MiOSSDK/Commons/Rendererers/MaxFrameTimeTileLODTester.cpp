@@ -9,7 +9,7 @@
 #include "MaxFrameTimeTileLODTester.hpp"
 
 #include "Tile.hpp"
-#include "Context.hpp"
+#include "G3MRenderContext.hpp"
 #include "ITimer.hpp"
 
 

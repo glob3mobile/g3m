@@ -10,7 +10,7 @@
 
 
 #include "IImage.hpp"
-#include "Context.hpp"
+#include "G3MContext.hpp"
 #include "IStringBuilder.hpp"
 #include "GL.hpp"
 #include "TextureIDReference.hpp"

@@ -9,7 +9,7 @@
 #include "TimedCacheTileLODTester.hpp"
 
 #include "Tile.hpp"
-#include "Context.hpp"
+#include "G3MContext.hpp"
 #include "TimeInterval.hpp"
 
 

@@ -9,7 +9,7 @@
 #include "ProjectedCornersDistanceTileLODTester.hpp"
 
 #include "Tile.hpp"
-#include "Context.hpp"
+#include "G3MContext.hpp"
 //#include "BoundingVolume.hpp"
 #include "Camera.hpp"
 #include "LayerTilesRenderParameters.hpp"

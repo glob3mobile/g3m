@@ -9,7 +9,7 @@
 #include "MaxLevelTileLODTester.hpp"
 
 #include "Tile.hpp"
-#include "Context.hpp"
+#include "G3MContext.hpp"
 #include "LayerTilesRenderParameters.hpp"
 
 

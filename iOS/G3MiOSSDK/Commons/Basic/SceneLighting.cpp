@@ -10,7 +10,7 @@
 
 #include "GLState.hpp"
 #include "Vector3D.hpp"
-#include "Context.hpp"
+#include "G3MContext.hpp"
 #include "Camera.hpp"
 
 #include "DirectMesh.hpp"

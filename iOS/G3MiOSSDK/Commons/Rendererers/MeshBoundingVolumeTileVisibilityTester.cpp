@@ -8,7 +8,7 @@
 
 #include "MeshBoundingVolumeTileVisibilityTester.hpp"
 
-#include "Context.hpp"
+#include "G3MContext.hpp"
 #include "Tile.hpp"
 #include "Mesh.hpp"
 

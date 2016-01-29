@@ -11,7 +11,7 @@
 
 #include <string>
 #include "Geodetic3D.hpp"
-#include "Context.hpp"
+#include "G3MContext.hpp"
 
 #include "Vector3D.hpp"
 #include "URL.hpp"

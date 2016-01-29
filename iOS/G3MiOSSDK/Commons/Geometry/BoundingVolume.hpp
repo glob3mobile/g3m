@@ -9,8 +9,7 @@
 #ifndef G3MiOSSDK_BoundingVolume
 #define G3MiOSSDK_BoundingVolume
 
-#include "Context.hpp"
-//#include "IMathUtils.hpp"
+#include "G3MRenderContext.hpp"
 #include "Vector2I.hpp"
 
 class Vector2D;

@@ -33,6 +33,7 @@
 #include <algorithm>
 #include "TileLODTester.hpp"
 #include "TileVisibilityTester.hpp"
+#include "G3MEventContext.hpp"
 
 
 class VisibleSectorListenerEntry {

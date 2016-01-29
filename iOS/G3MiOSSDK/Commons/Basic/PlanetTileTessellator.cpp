@@ -9,7 +9,7 @@
 #include "PlanetTileTessellator.hpp"
 
 #include "Tile.hpp"
-#include "Context.hpp"
+#include "G3MContext.hpp"
 #include "IndexedMesh.hpp"
 #include "TextureMapping.hpp"
 #include "TexturedMesh.hpp"

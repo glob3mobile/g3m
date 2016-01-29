@@ -12,7 +12,7 @@
 #include "Planet.hpp"
 #include "GLState.hpp"
 #include "FloatBufferBuilderFromCartesian2D.hpp"
-#include "Context.hpp"
+#include "G3MContext.hpp"
 #include "TexturesHandler.hpp"
 #include "Camera.hpp"
 #include "Vector3D.hpp"
