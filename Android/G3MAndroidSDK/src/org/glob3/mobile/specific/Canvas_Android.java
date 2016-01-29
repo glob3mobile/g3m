@@ -512,8 +512,8 @@ public final class Canvas_Android
    }
 
     @Override
-    protected void _scale(final float scalex, final float scaley, final float pivotx, final float pivoty) {
-        _canvas.scale(scalex, scaley, pivotx, pivoty);
+    protected void _scale(final float scaleX, final float scaleY, final float pivotX, final float pivotY) {
+        _canvas.scale(scaleX, scaleY, pivotX, pivotY);
     }
 
 }

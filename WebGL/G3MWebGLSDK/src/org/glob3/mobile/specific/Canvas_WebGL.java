@@ -239,7 +239,7 @@ public final class Canvas_WebGL
    }
 
     @Override
-   protected void _scale(float scalex, float scaley, float pivotx, float pivoty) {
+   protected void _scale(float scaleX, float scaleY, float pivotX, float pivotY) {
        throw new RuntimeException("WebGL canvas scale is not implemented!");
    }
 
