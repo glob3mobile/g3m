@@ -266,15 +266,15 @@ bool Tile::meetsRenderCriteria(const G3MRenderContext* rc,
                                const double texHeightSquared,
                                long long nowInMS) {
 #warning TODO: move to an implementation of TileLODTester and remove this method when the code is moved from here
-  if (tilesRenderParameters->_useTilesSplitBudget) {
-    if (_subtiles == NULL) { // the tile needs to create the subtiles
-//      if (lastSplitTimer->elapsedTimeInMilliseconds() < 67) {
-      if (lastSplitTimer->elapsedTimeInMilliseconds() < 5) {
-        // there are not more time-budget to spend
-        return true;
-      }
-    }
-  }
+//  if (tilesRenderParameters->_useTilesSplitBudget) {
+//    if (_subtiles == NULL) { // the tile needs to create the subtiles
+////      if (lastSplitTimer->elapsedTimeInMilliseconds() < 67) {
+//      if (lastSplitTimer->elapsedTimeInMilliseconds() < 5) {
+//        // there are not more time-budget to spend
+//        return true;
+//      }
+//    }
+//  }
 
   return tileLODTester->meetsRenderCriteria(this,
                                             rc,

@@ -32,3 +32,7 @@ void MeshBoundingVolumeTileVisibilityTester::onTileHasChangedMesh(const Tile* ti
 void MeshBoundingVolumeTileVisibilityTester::onLayerTilesRenderParametersChanged(const LayerTilesRenderParameters* ltrp) {
 
 }
+
+void MeshBoundingVolumeTileVisibilityTester::renderStarted() const {
+
+}

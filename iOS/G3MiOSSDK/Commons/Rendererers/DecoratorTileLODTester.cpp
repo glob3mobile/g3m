@@ -34,3 +34,7 @@ void DecoratorTileLODTester::onTileHasChangedMesh(const Tile* tile) const {
 void DecoratorTileLODTester::onLayerTilesRenderParametersChanged(const LayerTilesRenderParameters* ltrp) {
   _tileLODTester->onLayerTilesRenderParametersChanged(ltrp);
 }
+
+void DecoratorTileLODTester::renderStarted() const {
+  _tileLODTester->renderStarted();
+}

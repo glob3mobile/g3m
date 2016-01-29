@@ -31,13 +31,14 @@ protected:
 
 public:
 
-  MaxLevelTileLODTester(int maxLevel,
-                        int maxLevelForPoles,
-                        TileLODTester* nextTesterRightLOD,
-                        TileLODTester* nextTesterWrongLOD);
+  MaxLevelTileLODTester();
 
 
   ~MaxLevelTileLODTester();
+
+  void renderStarted() const {
+
+  }
 
 };
 

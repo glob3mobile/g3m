@@ -15,10 +15,9 @@
 #include "LayerTilesRenderParameters.hpp"
 
 
-ProjectedCornersDistanceTileLODTester::ProjectedCornersDistanceTileLODTester(TileLODTester* nextTesterRightLOD,
-                                                                             TileLODTester* nextTesterWrongLOD):
-TileLODTesterResponder(nextTesterRightLOD,
-                       nextTesterWrongLOD)
+ProjectedCornersDistanceTileLODTester::ProjectedCornersDistanceTileLODTester():
+TileLODTesterResponder(NULL,
+                       NULL)
 {
 }
 

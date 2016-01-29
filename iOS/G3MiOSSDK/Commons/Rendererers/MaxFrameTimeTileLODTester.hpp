@@ -19,8 +19,7 @@ class MaxFrameTimeTileLODTester : public DecoratorTileLODTester {
 private:
   long long _maxFrameTimeInMs;
 
-  mutable long long _lastElapsedTime;
-  mutable int _nSplitsInFrame;
+  mutable int _splitsInFrameCounter;
 
 public:
 
@@ -36,6 +35,8 @@ public:
                            const double texWidthSquared,
                            const double texHeightSquared,
                            long long nowInMS) const;
+
+  void renderStarted() const;
 
 };
 

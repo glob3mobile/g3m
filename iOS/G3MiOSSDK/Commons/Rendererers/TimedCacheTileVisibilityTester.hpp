@@ -41,6 +41,8 @@ public:
                  long long nowInMS,
                  const Frustum* frustumInModelCoordinates) const;
 
+  void renderStarted() const;
+
 };
 
 

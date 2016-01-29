@@ -26,6 +26,7 @@
 #include "LayerBuilder.hpp"
 #include "MeshBoundingVolumeTileVisibilityTester.hpp"
 #include "TimedCacheTileVisibilityTester.hpp"
+#include "OrTileLODTester.hpp"
 
 
 PlanetRendererBuilder::PlanetRendererBuilder() :
@@ -459,20 +460,33 @@ void PlanetRendererBuilder::setTileLODTester(TileLODTester* tlt) {
 }
 
 TileLODTester* PlanetRendererBuilder::createDefaultTileLODTester() const {
-  TileLODTester* proj = new ProjectedCornersDistanceTileLODTester(NULL,
-                                                                  NULL);
+//  TileLODTester* proj = new ProjectedCornersDistanceTileLODTester(NULL,
+//                                                                  NULL);
+//
+//  TileLODTester* maxLevel = new MaxLevelTileLODTester(NULL,
+//                                                      proj);
+//
+//  TileLODTester* frameTime = new MaxFrameTimeTileLODTester(TimeInterval::fromMilliseconds(20),
+//                                                           maxLevel);
+//
+//  TileLODTester* timed = new TimedCacheTileLODTester(TimeInterval::fromMilliseconds(250),
+//                                                     frameTime);
+//
+//  return timed;
 
-  TileLODTester* poles = new MaxLevelTileLODTester(-1, -1,
-                                                   NULL,
-                                                   proj);
+#warning Diego at work!
 
-  TileLODTester* frameTime = new MaxFrameTimeTileLODTester(TimeInterval::fromSeconds((double)1 / 60.0),
-                                                           poles);
+  TileLODTester* proj = new ProjectedCornersDistanceTileLODTester();
 
   TileLODTester* timed = new TimedCacheTileLODTester(TimeInterval::fromMilliseconds(250),
-                                                     frameTime);
+                                                     proj);
 
-  return timed;
+  TileLODTester* maxLevel = new MaxLevelTileLODTester();
+
+  TileLODTester* composite = new OrTileLODTester(maxLevel, timed);
+
+  return new MaxFrameTimeTileLODTester(TimeInterval::fromMilliseconds(20),
+                                       composite);
 }
 
 TileLODTester* PlanetRendererBuilder::getTileLODTester() {

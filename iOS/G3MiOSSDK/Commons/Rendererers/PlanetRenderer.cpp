@@ -655,8 +655,11 @@ void PlanetRenderer::render(const G3MRenderContext* rc,
   const Frustum* frustumInModelCoordinates = _lastCamera->getFrustumInModelCoordinates();
   
   const long long nowInMS = _lastSplitTimer->nowInMilliseconds();
-  
-  
+
+  _tileLODTester->renderStarted();
+  _tileVisibilityTester->renderStarted();
+
+
   if (_firstRender && _tilesRenderParameters->_forceFirstLevelTilesRenderOnStart) {
     // force one render pass of the firstLevelTiles tiles to make the (toplevel) textures
     // loaded as they will be used as last-chance fallback texture for any tile.

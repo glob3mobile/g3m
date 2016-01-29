@@ -62,3 +62,7 @@ bool TimedCacheTileVisibilityTester::isVisible(const Tile* tile,
 
   return result;
 }
+
+void TimedCacheTileVisibilityTester::renderStarted() const {
+
+}

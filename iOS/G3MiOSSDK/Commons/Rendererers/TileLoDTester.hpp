@@ -43,6 +43,8 @@ public:
 
   virtual void onLayerTilesRenderParametersChanged(const LayerTilesRenderParameters* ltrp) = 0;
 
+  virtual void renderStarted() const = 0;
+
 };
 
 

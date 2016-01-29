@@ -65,11 +65,14 @@ protected:
 
 public:
 
-  ProjectedCornersDistanceTileLODTester(TileLODTester* nextTesterRightLOD,
-                                        TileLODTester* nextTesterWrongLOD);
+  ProjectedCornersDistanceTileLODTester();
 
   ~ProjectedCornersDistanceTileLODTester();
-  
+
+  void renderStarted() const {
+
+  }
+
 };
 
 #endif

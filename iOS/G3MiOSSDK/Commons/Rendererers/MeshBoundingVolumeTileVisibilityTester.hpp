@@ -30,6 +30,8 @@ public:
 
   void onLayerTilesRenderParametersChanged(const LayerTilesRenderParameters* ltrp);
 
+  void renderStarted() const;
+
 };
 
 #endif

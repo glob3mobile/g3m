@@ -13,15 +13,13 @@
 #include "LayerTilesRenderParameters.hpp"
 
 
-MaxLevelTileLODTester::MaxLevelTileLODTester(int maxLevel,
-                                             int maxLevelForPoles,
-                                             TileLODTester* nextTesterRightLOD,
-                                             TileLODTester* nextTesterWrongLOD):
-TileLODTesterResponder(nextTesterRightLOD,
-                       nextTesterWrongLOD),
-_maxLevelForPoles(maxLevelForPoles),
-_maxLevel(maxLevel)
-{}
+MaxLevelTileLODTester::MaxLevelTileLODTester():
+TileLODTesterResponder(NULL,
+                       NULL),
+_maxLevel(-1),
+_maxLevelForPoles(-1)
+{
+}
 
 
 MaxLevelTileLODTester::~MaxLevelTileLODTester() {
@@ -38,28 +36,28 @@ bool MaxLevelTileLODTester::_meetsRenderCriteria(const Tile* tile,
                                                  const double texHeightSquared,
                                                  long long nowInMS) const {
 
-  if ((tile->_level >= _maxLevel) &&
-      (_maxLevel > -1)) {
+  if (_maxLevel < 0) {
     return true;
   }
 
-  if (tile->_sector.touchesPoles()) {
-    if ((tile->_level >= _maxLevelForPoles) &&
-        (_maxLevelForPoles > -1)) {
-      return true;
-    }
+  if (tile->_level >= _maxLevel) {
+    return true;
+  }
+
+  if ((tile->_level >= _maxLevelForPoles) && (tile->_sector.touchesPoles())) {
+    return true;
   }
 
   return false;
 }
 
 void MaxLevelTileLODTester::_onLayerTilesRenderParametersChanged(const LayerTilesRenderParameters* ltrp) {
-  if (ltrp != NULL) {
-    _maxLevel = ltrp->_maxLevel;
-    _maxLevelForPoles = ltrp->_maxLevelForPoles;
+  if (ltrp == NULL) {
+    _maxLevel         = -1;
+    _maxLevelForPoles = -1;
   }
   else {
-    _maxLevel = -1;
-    _maxLevelForPoles = -1;
+    _maxLevel         = ltrp->_maxLevel;
+    _maxLevelForPoles = ltrp->_maxLevelForPoles;
   }
 }

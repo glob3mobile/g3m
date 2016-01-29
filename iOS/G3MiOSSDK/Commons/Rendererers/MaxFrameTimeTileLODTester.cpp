@@ -17,9 +17,9 @@ MaxFrameTimeTileLODTester::MaxFrameTimeTileLODTester(const TimeInterval& maxFram
                                                      TileLODTester* tileLODTester) :
 DecoratorTileLODTester(tileLODTester),
 _maxFrameTimeInMs(maxFrameTimeInMs.milliseconds()),
-_lastElapsedTime(0),
-_nSplitsInFrame(0)
-{}
+_splitsInFrameCounter(0)
+{
+}
 
 MaxFrameTimeTileLODTester::~MaxFrameTimeTileLODTester() {
 #ifdef JAVA_CODE
@@ -35,32 +35,35 @@ bool MaxFrameTimeTileLODTester::meetsRenderCriteria(const Tile* tile,
                                                     const double texHeightSquared,
                                                     long long nowInMS) const {
 
+#warning Diego at work!
+
   const bool hasSubtiles = tile->areSubtilesCreated();
-  long long elapsedTime = rc->getFrameStartTimer()->elapsedTimeInMilliseconds();
-  if (elapsedTime < _lastElapsedTime) {
-    //New frame
-    //      if (_nSplitsInFrame > 0) {
-    //        printf("Tile splits on last frame: %d\n", _nSplitsInFrame);
-    //      }
-    _nSplitsInFrame = 0;
-  }
-  _lastElapsedTime = elapsedTime;
 
-  if (!hasSubtiles && (elapsedTime > _maxFrameTimeInMs) && (_nSplitsInFrame > 0)) {
-    return true;
+  if (!hasSubtiles) {
+    if (_splitsInFrameCounter > 0) {
+      long long elapsedTime = rc->getFrameStartTimer()->elapsedTimeInMilliseconds();
+      if (elapsedTime > _maxFrameTimeInMs) {
+        return true;
+      }
+    }
   }
 
-  const bool res = _tileLODTester->meetsRenderCriteria(tile,
-                                                       rc,
-                                                       tilesRenderParameters,
-                                                       lastSplitTimer,
-                                                       texWidthSquared,
-                                                       texHeightSquared,
-                                                       nowInMS);
+  const bool result = _tileLODTester->meetsRenderCriteria(tile,
+                                                          rc,
+                                                          tilesRenderParameters,
+                                                          lastSplitTimer,
+                                                          texWidthSquared,
+                                                          texHeightSquared,
+                                                          nowInMS);
 
-  if (!res && !hasSubtiles) {
-    _nSplitsInFrame++;
+  if (!result && !hasSubtiles) {
+    _splitsInFrameCounter++;
   }
 
-  return res;
+  return result;
+}
+
+void MaxFrameTimeTileLODTester::renderStarted() const {
+  _splitsInFrameCounter = 0;
+  DecoratorTileLODTester::renderStarted();
 }
