@@ -136,10 +136,10 @@ public final class Canvas_Android
 
    private static int toAndroidColor(final org.glob3.mobile.generated.Color g3mColor) {
       return android.graphics.Color.argb( //
-               floatTo255(g3mColor._alpha), //
-               floatTo255(g3mColor._red), //
-               floatTo255(g3mColor._green), //
-               floatTo255(g3mColor._blue));
+              floatTo255(g3mColor._alpha), //
+              floatTo255(g3mColor._red), //
+              floatTo255(g3mColor._green), //
+              floatTo255(g3mColor._blue));
    }
 
 
@@ -369,9 +369,9 @@ public final class Canvas_Android
 
       final Rect src = _rect;
       src.set(Math.round(srcLeft), //
-               Math.round(srcTop), //
-               Math.round(srcLeft + srcWidth), // Right
-               Math.round(srcTop + srcHeight)); // Bottom
+              Math.round(srcTop), //
+              Math.round(srcLeft + srcWidth), // Right
+              Math.round(srcTop + srcHeight)); // Bottom
 
       _canvas.drawBitmap(bitmap, src, dst, null);
    }
@@ -512,8 +512,8 @@ public final class Canvas_Android
    }
 
     @Override
-    protected void _scale(final float sx, final float sy, final float px, final float py) {
-        _canvas.scale(sx, sy, px, py);
+    protected void _scale(final float scalex, final float scaley, final float pivotx, final float pivoty) {
+        _canvas.scale(scalex, scaley, pivotx, pivoty);
     }
 
 }

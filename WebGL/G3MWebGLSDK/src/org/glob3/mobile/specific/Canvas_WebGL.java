@@ -239,9 +239,9 @@ public final class Canvas_WebGL
    }
 
     @Override
-    protected void _scale(float sx, float sy, float px, float py) {
-        throw new RuntimeException("WebGL canvas scale is not implemented!");
-    }
+   protected void _scale(float scalex, float scaley, float pivotx, float pivoty) {
+       throw new RuntimeException("WebGL canvas scale is not implemented!");
+   }
 
 
    private native void drawEllipse(final float x,
