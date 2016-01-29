@@ -48,7 +48,6 @@ public class G3MContext
   protected IDownloader _downloader;
   protected EffectsScheduler _effectsScheduler;
   protected IStorage _storage;
-
   protected SurfaceElevationProvider _surfaceElevationProvider;
 
   public G3MContext(IFactory factory, IStringUtils stringUtils, IThreadUtils threadUtils, ILogger logger, IMathUtils mathUtils, IJSONParser jsonParser, Planet planet, IDownloader downloader, EffectsScheduler effectsScheduler, IStorage storage, SurfaceElevationProvider surfaceElevationProvider)
@@ -68,7 +67,6 @@ public class G3MContext
 
   public void dispose()
   {
-
   }
 
   public final IFactory getFactory()

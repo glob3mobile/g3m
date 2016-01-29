@@ -144,9 +144,7 @@ public class Tile
   private boolean meetsRenderCriteria(G3MRenderContext rc, TileLODTester tileLODTester, TilesRenderParameters tilesRenderParameters, ITimer lastSplitTimer, double texWidthSquared, double texHeightSquared, long nowInMS)
   {
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning TODO: move to an implementation of TileLODTester
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning Remove this method when the code is moved from here
+//#warning TODO: move to an implementation of TileLODTester && remove this method when the code is moved from here
     if (tilesRenderParameters._useTilesSplitBudget)
     {
       if (_subtiles == null) // the tile needs to create the subtiles
@@ -300,11 +298,8 @@ public class Tile
     return level + "/" + row + "/" + column;
   }
 
-//  mutable std::vector<TileData*> _data;
   private TileData[] _data;
   private int _dataSize;
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning Diego at work!
 
   public final Sector _sector ;
   public final boolean _mercator;
@@ -461,7 +456,8 @@ public class Tile
       _verticalExaggeration = verticalExaggeration;
     }
   
-    //Forcing tessellator mesh generation before visibility test
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning TODO Remove: Forcing tessellator mesh generation before visibility test
     getTessellatorMesh(rc, elevationDataProvider, tessellator, layerTilesRenderParameters, tilesRenderParameters);
   
     boolean rendered = false;
@@ -911,7 +907,8 @@ public class Tile
 
   public final Mesh getTessellatorMesh()
   {
-  
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning TODO: remove this method && _tessellatorMeshIsMeshHolder variable
     if (_tessellatorMeshIsMeshHolder)
     {
       return ((MeshHolder) _tessellatorMesh).getMesh();
@@ -955,13 +952,15 @@ public class Tile
 
   public final TileTessellatorMeshData getTessellatorMeshData()
   {
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning ask JM
     return _tileTessellatorMeshData;
   }
 
   public final Mesh getCurrentTessellatorMesh()
   {
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning TODO: ask JM
+//#warning TODO: remove this method
     return _tessellatorMesh;
   }
 

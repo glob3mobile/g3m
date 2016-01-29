@@ -34,7 +34,7 @@ public class G3MRenderContext extends G3MContext
   public final void clear()
   {
     _frameStartTimer.start();
-
+  
     _orderedRenderables = null;
     _orderedRenderables = null;
   }
@@ -81,7 +81,6 @@ public class G3MRenderContext extends G3MContext
     _orderedRenderables = null;
   
     super.dispose();
-  
   }
 
   /*
