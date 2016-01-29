@@ -423,15 +423,15 @@ public abstract class ICanvas
     lineTo(position._x, position._y);
   }
 
-  public final void scale(float scalex, float scaley float pivotx, float pivoty)
+  public final void scale(float scaleX, float scaleY, float pivotX, float pivotY)
   {
     checkInitialized();
-    _scale(scalex, scaley, pivotx, pivoty);
+    _scale(scaleX, scaleY, pivotX, pivotY);
   }
 
-  public final void scale(Vector2F scale, Vector2F pivot)
+  public final void scale(Vector2F factor, Vector2F pivot)
   {
-    scale(scale._x, scale._y, pivot._x, pivot._y);
+    scale(factor._x, factor._y, pivot._x, pivot._y);
   }
 
 }
