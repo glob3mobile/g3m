@@ -511,5 +511,9 @@ public final class Canvas_Android
       _canvas.drawBitmap(bitmap, src, dst, paint);
    }
 
+    @Override
+    protected void _scale(final float sx, final float sy, final float px, final float py) {
+        _canvas.scale(sx, sy, px, py);
+    }
 
 }
