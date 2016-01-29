@@ -46,7 +46,7 @@ bool TimedCacheTileVisibilityTester::isVisible(const Tile* tile,
     }
   }
   else {
-    if (data->_timeoutTimeInMS <= nowInMS) {
+    if (data->_timeoutTimeInMS > nowInMS) {
       result = true;
     }
     else {
