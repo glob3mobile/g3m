@@ -69,7 +69,7 @@ public class TimedCacheTileVisibilityTester extends DecoratorTileVisibilityTeste
     }
     else
     {
-      if (data._timeoutTimeInMS <= nowInMS)
+      if (data._timeoutTimeInMS > nowInMS)
       {
         result = true;
       }
