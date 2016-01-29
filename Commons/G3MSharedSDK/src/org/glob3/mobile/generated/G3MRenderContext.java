@@ -1,8 +1,31 @@
 package org.glob3.mobile.generated; 
-//************************************************************
+//
+//  G3MRenderContext.cpp
+//  G3MiOSSDK
+//
+//  Created by Diego Gomez Deck on 1/29/16.
+//
+//
+
+//
+//  G3MRenderContext.hpp
+//  G3MiOSSDK
+//
+//  Created by Diego Gomez Deck on 1/29/16.
+//
+//
 
 
+
+//class OrderedRenderable;
 //class FrameTasksExecutor;
+//class GL;
+//class Camera;
+//class TexturesHandler;
+//class ITimer;
+//class GPUProgramManager;
+
+
 
 
 public class G3MRenderContext extends G3MContext
