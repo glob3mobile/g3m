@@ -55,6 +55,11 @@ public class ShortBuffer_Android
 
 
    @Override
+   public void rewind() {
+      _buffer.rewind();
+   }
+
+   @Override
    public int timestamp() {
       return _timestamp;
    }
@@ -69,11 +74,19 @@ public class ShortBuffer_Android
    @Override
    public void put(final int i,
                    final short value) {
-      if (_buffer.get(i) != value) {
+      /*if (_buffer.get(i) != value) */{
          _buffer.put(i, value);
          _timestamp++;
       }
    }
+
+   @Override
+   public void put(short[] value) {
+      _buffer.put(value);
+      _timestamp++;
+   }
+
+
 
 
    @Override
