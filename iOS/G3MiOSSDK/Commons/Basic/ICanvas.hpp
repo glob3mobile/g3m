@@ -305,11 +305,11 @@ public:
     lineTo(position._x, position._y);
   }
 
-  void scale(float scalex, float scaley
-             float pivotx, float pivoty);
+  void scale(float scaleX, float scaleY,
+             float pivotX, float pivotY);
 
-  void scale(const Vector2F& scale, const Vector2F& pivot) {
-    scale(scale._x, scale._y, pivot._x, pivot._y);
+  void scale(const Vector2F& factor, const Vector2F& pivot) {
+    scale(factor._x, factor._y, pivot._x, pivot._y);
   }
   
 };
