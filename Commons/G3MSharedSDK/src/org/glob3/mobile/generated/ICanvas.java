@@ -100,6 +100,7 @@ public abstract class ICanvas
 
   protected abstract void _fillAndStrokeEllipse(float left, float top, float width, float height);
 
+  protected abstract void _scale(float scalex, float scaley, float pivotx, float pivoty);
 
   public ICanvas()
   {
@@ -420,6 +421,14 @@ public abstract class ICanvas
   public final void lineTo(Vector2F position)
   {
     lineTo(position._x, position._y);
+  }
+
+//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
+//  void scale(float scalex, float scaley float pivotx, float pivoty);
+
+  public final void scale(Vector2F scale, Vector2F pivot)
+  {
+    scale(scale._x, scale._y, pivot._x, pivot._y);
   }
 
 }
