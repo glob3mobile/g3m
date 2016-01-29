@@ -44,4 +44,6 @@ public abstract class TileLODTester
 
   public abstract void onLayerTilesRenderParametersChanged(LayerTilesRenderParameters ltrp);
 
+  public abstract void renderStarted();
+
 }

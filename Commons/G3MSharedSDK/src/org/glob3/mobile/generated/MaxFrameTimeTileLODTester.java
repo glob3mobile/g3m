@@ -25,16 +25,14 @@ public class MaxFrameTimeTileLODTester extends DecoratorTileLODTester
 {
   private long _maxFrameTimeInMs;
 
-  private long _lastElapsedTime;
-  private int _nSplitsInFrame;
+  private int _splitsInFrameCounter;
 
 
   public MaxFrameTimeTileLODTester(TimeInterval maxFrameTimeInMs, TileLODTester tileLODTester)
   {
      super(tileLODTester);
      _maxFrameTimeInMs = maxFrameTimeInMs.milliseconds();
-     _lastElapsedTime = 0;
-     _nSplitsInFrame = 0;
+     _splitsInFrameCounter = 0;
   }
 
   public void dispose()
@@ -45,31 +43,37 @@ public class MaxFrameTimeTileLODTester extends DecoratorTileLODTester
   public final boolean meetsRenderCriteria(Tile tile, G3MRenderContext rc, TilesRenderParameters tilesRenderParameters, ITimer lastSplitTimer, double texWidthSquared, double texHeightSquared, long nowInMS)
   {
   
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning Diego at work!
+  
     final boolean hasSubtiles = tile.areSubtilesCreated();
-    long elapsedTime = rc.getFrameStartTimer().elapsedTimeInMilliseconds();
-    if (elapsedTime < _lastElapsedTime)
-    {
-      //New frame
-      //      if (_nSplitsInFrame > 0) {
-      //        printf("Tile splits on last frame: %d\n", _nSplitsInFrame);
-      //      }
-      _nSplitsInFrame = 0;
-    }
-    _lastElapsedTime = elapsedTime;
   
-    if (!hasSubtiles && (elapsedTime > _maxFrameTimeInMs) && (_nSplitsInFrame > 0))
+    if (!hasSubtiles)
     {
-      return true;
+      if (_splitsInFrameCounter > 0)
+      {
+        long elapsedTime = rc.getFrameStartTimer().elapsedTimeInMilliseconds();
+        if (elapsedTime > _maxFrameTimeInMs)
+        {
+          return true;
+        }
+      }
     }
   
-    final boolean res = _tileLODTester.meetsRenderCriteria(tile, rc, tilesRenderParameters, lastSplitTimer, texWidthSquared, texHeightSquared, nowInMS);
+    final boolean result = _tileLODTester.meetsRenderCriteria(tile, rc, tilesRenderParameters, lastSplitTimer, texWidthSquared, texHeightSquared, nowInMS);
   
-    if (!res && !hasSubtiles)
+    if (!result && !hasSubtiles)
     {
-      _nSplitsInFrame++;
+      _splitsInFrameCounter++;
     }
   
-    return res;
+    return result;
+  }
+
+  public final void renderStarted()
+  {
+    _splitsInFrameCounter = 0;
+    super.renderStarted();
   }
 
 }

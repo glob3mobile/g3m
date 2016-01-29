@@ -23,10 +23,10 @@ package org.glob3.mobile.generated;
 //class Camera;
 
 
-public class ProjectedCornersDistanceTileLODTester extends TileLODTesterResponder
+public class ProjectedCornersDistanceTileLODTester extends TileLODTester
 {
 
-  protected static class PvtData extends TileData
+  private static class PvtData extends TileData
   {
     private static double getSquaredArcSegmentRatio(Vector3D a, Vector3D b)
     {
@@ -86,15 +86,8 @@ public class ProjectedCornersDistanceTileLODTester extends TileLODTesterResponde
     }
   }
 
-  protected final void _onTileHasChangedMesh(Tile tile)
-  {
-    //Recomputing data when tile changes tessellator mesh
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning Is it necessary?
-    tile.setData(_id, null);
-  }
 
-  protected final ProjectedCornersDistanceTileLODTester.PvtData getData(Tile tile, G3MRenderContext rc)
+  private ProjectedCornersDistanceTileLODTester.PvtData getData(Tile tile, G3MRenderContext rc)
   {
     PvtData data = (PvtData) tile.getData(_id);
     if (data == null)
@@ -106,28 +99,38 @@ public class ProjectedCornersDistanceTileLODTester extends TileLODTesterResponde
     return data;
   }
 
-  protected final boolean _meetsRenderCriteria(Tile tile, G3MRenderContext rc, TilesRenderParameters tilesRenderParameters, ITimer lastSplitTimer, double texWidthSquared, double texHeightSquared, long nowInMS)
-  {
-    return getData(tile, rc).evaluate(rc.getCurrentCamera(), texHeightSquared, texWidthSquared);
-  }
-
-  protected final void _onLayerTilesRenderParametersChanged(LayerTilesRenderParameters ltrp)
-  {
-  }
-
 
 
   ///#include "BoundingVolume.hpp"
   
   
-  public ProjectedCornersDistanceTileLODTester(TileLODTester nextTesterRightLOD, TileLODTester nextTesterWrongLOD)
+  public ProjectedCornersDistanceTileLODTester()
   {
-     super(nextTesterRightLOD, nextTesterWrongLOD);
   }
 
   public void dispose()
   {
     super.dispose();
+  }
+
+  public final boolean meetsRenderCriteria(Tile tile, G3MRenderContext rc, TilesRenderParameters tilesRenderParameters, ITimer lastSplitTimer, double texWidthSquared, double texHeightSquared, long nowInMS)
+  {
+    return getData(tile, rc).evaluate(rc.getCurrentCamera(), texHeightSquared, texWidthSquared);
+  }
+
+  public final void onTileHasChangedMesh(Tile tile)
+  {
+
+  }
+
+  public final void onLayerTilesRenderParametersChanged(LayerTilesRenderParameters ltrp)
+  {
+
+  }
+
+  public final void renderStarted()
+  {
+
   }
 
 }

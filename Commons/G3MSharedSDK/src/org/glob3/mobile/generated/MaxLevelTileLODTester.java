@@ -18,57 +18,67 @@ package org.glob3.mobile.generated;
 
 
 
-public class MaxLevelTileLODTester extends TileLODTesterResponder
+public class MaxLevelTileLODTester extends TileLODTester
 {
   private int _maxLevel;
   private int _maxLevelForPoles;
 
 
-  protected final boolean _meetsRenderCriteria(Tile tile, G3MRenderContext rc, TilesRenderParameters tilesRenderParameters, ITimer lastSplitTimer, double texWidthSquared, double texHeightSquared, long nowInMS)
+
+  public MaxLevelTileLODTester()
+  {
+     _maxLevel = -1;
+     _maxLevelForPoles = -1;
+  }
+
+  public void dispose()
+  {
+    super.dispose();
+  }
+
+  public final boolean meetsRenderCriteria(Tile tile, G3MRenderContext rc, TilesRenderParameters tilesRenderParameters, ITimer lastSplitTimer, double texWidthSquared, double texHeightSquared, long nowInMS)
   {
   
-    if ((tile._level >= _maxLevel) && (_maxLevel > -1))
+    if (_maxLevel < 0)
     {
       return true;
     }
   
-    if (tile._sector.touchesPoles())
+    if (tile._level >= _maxLevel)
     {
-      if ((tile._level >= _maxLevelForPoles) && (_maxLevelForPoles > -1))
-      {
-        return true;
-      }
+      return true;
+    }
+  
+    if ((tile._level >= _maxLevelForPoles) && (tile._sector.touchesPoles()))
+    {
+      return true;
     }
   
     return false;
   }
 
-  protected final void _onLayerTilesRenderParametersChanged(LayerTilesRenderParameters ltrp)
+  public final void onTileHasChangedMesh(Tile tile)
   {
-    if (ltrp != null)
-    {
-      _maxLevel = ltrp._maxLevel;
-      _maxLevelForPoles = ltrp._maxLevelForPoles;
-    }
-    else
+
+  }
+
+  public final void onLayerTilesRenderParametersChanged(LayerTilesRenderParameters ltrp)
+  {
+    if (ltrp == null)
     {
       _maxLevel = -1;
       _maxLevelForPoles = -1;
     }
+    else
+    {
+      _maxLevel = ltrp._maxLevel;
+      _maxLevelForPoles = ltrp._maxLevelForPoles;
+    }
   }
 
-
-  public MaxLevelTileLODTester(int maxLevel, int maxLevelForPoles, TileLODTester nextTesterRightLOD, TileLODTester nextTesterWrongLOD)
+  public final void renderStarted()
   {
-     super(nextTesterRightLOD, nextTesterWrongLOD);
-     _maxLevelForPoles = maxLevelForPoles;
-     _maxLevel = maxLevel;
-  }
 
-
-  public void dispose()
-  {
-    super.dispose();
   }
 
 }

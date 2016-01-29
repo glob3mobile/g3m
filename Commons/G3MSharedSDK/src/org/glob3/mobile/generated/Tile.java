@@ -145,18 +145,15 @@ public class Tile
   {
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#warning TODO: move to an implementation of TileLODTester && remove this method when the code is moved from here
-    if (tilesRenderParameters._useTilesSplitBudget)
-    {
-      if (_subtiles == null) // the tile needs to create the subtiles
-      {
-  //      if (lastSplitTimer->elapsedTimeInMilliseconds() < 67) {
-        if (lastSplitTimer.elapsedTimeInMilliseconds() < 5)
-        {
-          // there are not more time-budget to spend
-          return true;
-        }
-      }
-    }
+  //  if (tilesRenderParameters->_useTilesSplitBudget) {
+  //    if (_subtiles == NULL) { // the tile needs to create the subtiles
+  ////      if (lastSplitTimer->elapsedTimeInMilliseconds() < 67) {
+  //      if (lastSplitTimer->elapsedTimeInMilliseconds() < 5) {
+  //        // there are not more time-budget to spend
+  //        return true;
+  //      }
+  //    }
+  //  }
   
     return tileLODTester.meetsRenderCriteria(this, rc, tilesRenderParameters, lastSplitTimer, texWidthSquared, texHeightSquared, nowInMS);
   }

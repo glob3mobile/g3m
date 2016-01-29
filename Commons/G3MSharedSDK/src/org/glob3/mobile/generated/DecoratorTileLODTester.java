@@ -48,4 +48,9 @@ public abstract class DecoratorTileLODTester extends TileLODTester
     _tileLODTester.onLayerTilesRenderParametersChanged(ltrp);
   }
 
+  public void renderStarted()
+  {
+    _tileLODTester.renderStarted();
+  }
+
 }

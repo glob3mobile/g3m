@@ -279,15 +279,32 @@ public class PlanetRendererBuilder
 
   private TileLODTester createDefaultTileLODTester()
   {
-    TileLODTester proj = new ProjectedCornersDistanceTileLODTester(null, null);
+  //  TileLODTester* proj = new ProjectedCornersDistanceTileLODTester(NULL,
+  //                                                                  NULL);
+  //
+  //  TileLODTester* maxLevel = new MaxLevelTileLODTester(NULL,
+  //                                                      proj);
+  //
+  //  TileLODTester* frameTime = new MaxFrameTimeTileLODTester(TimeInterval::fromMilliseconds(20),
+  //                                                           maxLevel);
+  //
+  //  TileLODTester* timed = new TimedCacheTileLODTester(TimeInterval::fromMilliseconds(250),
+  //                                                     frameTime);
+  //
+  //  return timed;
   
-    TileLODTester poles = new MaxLevelTileLODTester(-1, -1, null, proj);
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning Diego at work!
   
-    TileLODTester frameTime = new MaxFrameTimeTileLODTester(TimeInterval.fromSeconds((double)1 / 60.0), poles);
+    TileLODTester proj = new ProjectedCornersDistanceTileLODTester();
   
-    TileLODTester timed = new TimedCacheTileLODTester(TimeInterval.fromMilliseconds(250), frameTime);
+    TileLODTester timed = new TimedCacheTileLODTester(TimeInterval.fromMilliseconds(250), proj);
   
-    return timed;
+    TileLODTester maxLevel = new MaxLevelTileLODTester();
+  
+    TileLODTester composite = new OrTileLODTester(maxLevel, timed);
+  
+    return new MaxFrameTimeTileLODTester(TimeInterval.fromMilliseconds(20), composite);
   }
 
   private TileVisibilityTester createDefaultTileVisibilityTester()

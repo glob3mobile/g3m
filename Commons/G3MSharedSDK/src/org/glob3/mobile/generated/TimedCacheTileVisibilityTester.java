@@ -90,4 +90,9 @@ public class TimedCacheTileVisibilityTester extends DecoratorTileVisibilityTeste
     return result;
   }
 
+  public final void renderStarted()
+  {
+  
+  }
+
 }

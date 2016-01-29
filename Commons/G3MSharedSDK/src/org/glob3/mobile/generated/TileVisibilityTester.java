@@ -38,4 +38,6 @@ public abstract class TileVisibilityTester
 
   public abstract void onLayerTilesRenderParametersChanged(LayerTilesRenderParameters ltrp);
 
+  public abstract void renderStarted();
+
 }

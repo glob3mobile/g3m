@@ -47,4 +47,9 @@ public class MeshBoundingVolumeTileVisibilityTester extends TileVisibilityTester
   
   }
 
+  public final void renderStarted()
+  {
+  
+  }
+
 }

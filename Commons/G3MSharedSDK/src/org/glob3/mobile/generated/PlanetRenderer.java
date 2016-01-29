@@ -498,6 +498,9 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
   
     final long nowInMS = _lastSplitTimer.nowInMilliseconds();
   
+    _tileLODTester.renderStarted();
+    _tileVisibilityTester.renderStarted();
+  
   
     if (_firstRender && _tilesRenderParameters._forceFirstLevelTilesRenderOnStart)
     {
