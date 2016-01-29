@@ -205,14 +205,13 @@
   
   //[self initTestingTileImageProvider];
   
-  //[self initWithNonOverlappingMarks];
-  //[[self G3MWidget] widget]->setCameraPosition(Geodetic3D::fromDegrees(0,0,3.2e7));
+  [self initWithNonOverlappingMarks];
+  [[self G3MWidget] widget]->setCameraPosition(Geodetic3D::fromDegrees(0,0,3.2e7));
   
-  [self initWithBouyantNonOverlappingMarks];
-  
+  //[self initWithBouyantNonOverlappingMarks];
   //  [[self G3MWidget] widget]->setCameraPitch(Angle::fromDegrees(-80));
   //  [[self G3MWidget] widget]->setCameraPosition(Geodetic3D::fromDegrees(30.490826224448195347, -4.5410263152963246114, 539615.88103083171882));
-  [[self G3MWidget] widget]->setAnimatedCameraPosition(Geodetic3D::fromDegrees(32.194133092045866817, -5.5087815927823822193,259546.15123778069392), Angle::fromDegrees(0.504079), Angle::fromDegrees(-25.488326));
+  //  [[self G3MWidget] widget]->setAnimatedCameraPosition(Geodetic3D::fromDegrees(32.194133092045866817, -5.5087815927823822193,259546.15123778069392), Angle::fromDegrees(0.504079), Angle::fromDegrees(-25.488326));
   
   
   //  [self initWithMapBooBuilder];
@@ -390,13 +389,40 @@ public:
       vib.push_back(lib);
       StackLayoutImageBuilder* slib = new StackLayoutImageBuilder(vib);
       
-      NonOverlappingMark* mark = new NonOverlappingMark(new DownloaderImageBuilder(URL("https://cdn0.iconfinder.com/data/icons/kameleon-free-pack-rounded/110/Application-Map-128.png")),
+      NonOverlappingMark* mark = new NonOverlappingMark(slib,//new DownloaderImageBuilder(URL("https://cdn0.iconfinder.com/data/icons/kameleon-free-pack-rounded/110/Application-Map-128.png")),
                                                         new DownloaderImageBuilder(URL("file:///anchorWidget.png")),
                                                         Geodetic3D::fromDegrees(lat, lon, 0),
                                                         NULL,
                                                         100.0);
       _nomr->addMark(mark);
     }
+//    
+//    
+//    for(int n = 2; n < 86; n++){
+//      
+//      for (int att = 0; att < 4; att++) {
+//        
+//        
+//        std::vector<Vector2D*> v;
+//        for(int i = 0; i < n; i++){
+//          v.push_back(new Vector2D(rand() % 2048 / 2, rand() % 1536 / 2));
+//        }
+//        
+//        double minDis = 999999999999;
+//        for (int i = 0; i < n; i++) {
+//          for (int j = i+1; j<n; j++) {
+//            double d = v[i]->sub(*v[j]).length();
+//            if (d < minDis){
+//              minDis = d;
+//            }
+//          }
+//        }
+//        
+//        printf("N ANCHORS \t %d \t MIN DIS \t %f\n", n, minDis);
+//        
+//      }
+//      
+//    }
   }
   
   void onMarksStopped(const G3MRenderContext& rc, const std::vector<NonOverlappingMark*>& visible){
@@ -410,54 +436,62 @@ public:
     const long long t = rc.getFrameStartTimer()->nowInMilliseconds();
     
     double minDis = 9999999999999;
+    
+    double totalDistance = 0;
+    int npairs = 0;
+    
     for(size_t i = 0; i < visible.size(); i++){
       NonOverlappingMark* m1 = visible[i];
       for(size_t j = i+1; j < visible.size(); j++){
         NonOverlappingMark* m2 = visible[j];
         
         double d = m1->getScreenPos().sub(m2->getScreenPos()).length();
+        
+        totalDistance += d;
+        npairs++;
+        
         if (d < minDis){
           minDis = d;
         }
       }
     }
     
+    double mediumDistance = totalDistance / (double)npairs;
+    
     //printf("N MARKS \t %d \t MIN DIS \t %f \t T: \t %lld\n", (int)visible.size(), minDis, t - _lastTime);
     
     
-    _nAttempt++;
-    if (_nAttempt > 0){
-      
-      int crossed = 0;
-      for (int i = 0; i < visible.size(); i++){
-        for (int j = i; j < visible.size(); j++){
-          if (visible[i]->isCrossedWith(*visible[j])){
-            crossed++;
-          }
+    int crossed = 0;
+    for (int i = 0; i < visible.size(); i++){
+      for (int j = i; j < visible.size(); j++){
+        if (visible[i]->isCrossedWith(*visible[j])){
+          crossed++;
         }
       }
-      
-      
-      printf("N MARKS \t %d \t TM: \t %f TR: \t %f \t CROSSED: \t %d \t MIN DIS \t %lld \t TT: \t %lld\n", (int)visible.size(),
-             ((double)_nomr->_timeSpentRepositioningInMS / _nomr->_frames),
-             ((double)_nomr->_timeSpentRenderingInMS / _nomr->_frames),
-             crossed,
-             t - _lastTime);
-      _nomr->_timeSpentRepositioningInMS = 0;
-      _nomr->_timeSpentRenderingInMS = 0;
-      _nomr->_frames = 0;
-      
-      
-      
-      
-      //reset((int)visible.size() + 1);
+    }
+    
+    
+    printf("N MARKS \t %d \t TM: \t %f TR: \t %f \t CROSSED: \t %d \t MIN DIS \t %f \t MEDIUM DIS \t %f \t TT: \t %lld\n",
+           (int)visible.size(),
+           ((double)_nomr->_timeSpentRepositioningInMS / _nomr->_frames),
+           ((double)_nomr->_timeSpentRenderingInMS / _nomr->_frames),
+           crossed,
+           minDis,
+           mediumDistance,
+           t - _lastTime);
+    _nomr->_timeSpentRepositioningInMS = 0;
+    _nomr->_timeSpentRenderingInMS = 0;
+    _nomr->_frames = 0;
+    
+    _nAttempt++;
+    if (_nAttempt > 3){
+      reset((int)visible.size() + 1);
       _nAttempt=0;
-      
-      
-      
     } else{
       reset((int)visible.size());
     }
+    
+    
     
     
     _lastTime = t;
@@ -691,6 +725,11 @@ public:
 
 - (void) initWithNonOverlappingMarks
 {
+  
+
+  
+  
+  
   G3MBuilder_iOS builder([self G3MWidget]);
   
   LayerSet* layerSet = new LayerSet();
@@ -699,13 +738,13 @@ public:
   
   NonOverlappingMarksRenderer* nomr = new NonOverlappingMarksRenderer(100);
   
-  //  nomr->addStoppedListener(new AnalyzerNOMSL(nomr, self));
+  nomr->addStoppedListener(new AnalyzerNOMSL(nomr, self));
   
   builder.addRenderer(nomr);
   
   builder.setPlanet(Planet::createFlatEarth());
   
-  for(int i = 0; i < 30; i++){
+  for(int i = 0; i < 2; i++){
     
     double lat = ((rand() % 18000) - 9000) / 100.0;
     double lon = ((rand() % 36000) - 18000) / 100.0;
@@ -730,27 +769,28 @@ public:
     nomr->addMark(mark);
   }
   
-  CircleImageBuilder* bcib = new CircleImageBuilder(Color::black(), 61);
-  CircleImageBuilder* cib = new CircleImageBuilder(Color::fromRGBA255(51, 153, 255, 255), 60);
-  
-  std::vector<IImageBuilder*> cvib;
-  cvib.push_back(new LabelImageBuilder("Empire State"));
-  cvib.push_back(new LabelImageBuilder("Building"));
-  ColumnLayoutImageBuilder* clib = new ColumnLayoutImageBuilder(cvib);
-  
-  std::vector<IImageBuilder*> vib;
-  vib.push_back(bcib);
-  vib.push_back(cib);
-  vib.push_back(clib);
-  StackLayoutImageBuilder* slib = new StackLayoutImageBuilder(vib);
-  
-  NonOverlappingMark* mark = new NonOverlappingMark(slib,
-                                                    new DownloaderImageBuilder(URL("file:///anchorWidget.png")),
-                                                    Geodetic3D::fromDegrees(40.7484079,-73.985693, 0),
-                                                    NULL,
-                                                    200.0);
-  nomr->addMark(mark);
-  
+  /*
+   CircleImageBuilder* bcib = new CircleImageBuilder(Color::black(), 61);
+   CircleImageBuilder* cib = new CircleImageBuilder(Color::fromRGBA255(51, 153, 255, 255), 60);
+   
+   std::vector<IImageBuilder*> cvib;
+   cvib.push_back(new LabelImageBuilder("Empire State"));
+   cvib.push_back(new LabelImageBuilder("Building"));
+   ColumnLayoutImageBuilder* clib = new ColumnLayoutImageBuilder(cvib);
+   
+   std::vector<IImageBuilder*> vib;
+   vib.push_back(bcib);
+   vib.push_back(cib);
+   vib.push_back(clib);
+   StackLayoutImageBuilder* slib = new StackLayoutImageBuilder(vib);
+   
+   NonOverlappingMark* mark = new NonOverlappingMark(slib,
+   new DownloaderImageBuilder(URL("file:///anchorWidget.png")),
+   Geodetic3D::fromDegrees(40.7484079,-73.985693, 0),
+   NULL,
+   200.0);
+   nomr->addMark(mark);
+   */
   
   
   

@@ -273,10 +273,10 @@ void NonOverlappingMark::applyCoulombsLaw(NonOverlappingMark* that) {
   
   float strength = (float)(this->_electricCharge * that->_electricCharge / (distance * distance));
   
-#warning EXPERIMENTING WITH ATTRACTIVE FORCE
-  if (this->isCrossedWith(*that)){
-    strength *= -0.5;
-  }
+//#warning EXPERIMENTING WITH ATTRACTIVE FORCE
+//  if (this->isCrossedWith(*that)){
+//    strength *= -0.5;
+//  }
   
   const Vector2F force = direction.times(strength);
   
@@ -343,10 +343,10 @@ void NonOverlappingMark::applyCoulombsLawFromAnchor(NonOverlappingMark* that) {
   
   float strengthAnchor =  (float)(this->_electricCharge * that->_anchorElectricCharge / (distanceAnchor * distanceAnchor));
   
-#warning EXPERIMENTING WITH ATTRACTIVE FORCE
-  if (this->isCrossedWith(*that)){
-    strengthAnchor *= -0.5;
-  }
+//#warning EXPERIMENTING WITH ATTRACTIVE FORCE
+//  if (this->isCrossedWith(*that)){
+//    strengthAnchor *= -0.5;
+//  }
   
   this->applyForce(directionAnchor._x * strengthAnchor,
                    directionAnchor._y * strengthAnchor);
