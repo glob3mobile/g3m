@@ -15,9 +15,7 @@
 #include "LayerTilesRenderParameters.hpp"
 
 
-ProjectedCornersDistanceTileLODTester::ProjectedCornersDistanceTileLODTester():
-TileLODTesterResponder(NULL,
-                       NULL)
+ProjectedCornersDistanceTileLODTester::ProjectedCornersDistanceTileLODTester()
 {
 }
 
@@ -26,12 +24,6 @@ ProjectedCornersDistanceTileLODTester::~ProjectedCornersDistanceTileLODTester() 
 #ifdef JAVA_CODE
   super.dispose();
 #endif
-}
-
-void ProjectedCornersDistanceTileLODTester::_onTileHasChangedMesh(const Tile* tile) const {
-  //Recomputing data when tile changes tessellator mesh
-#warning Is it necessary?
-  tile->setData(_id, NULL);
 }
 
 ProjectedCornersDistanceTileLODTester::PvtData* ProjectedCornersDistanceTileLODTester::getData(const Tile* tile,
@@ -45,7 +37,7 @@ ProjectedCornersDistanceTileLODTester::PvtData* ProjectedCornersDistanceTileLODT
   return data;
 }
 
-bool ProjectedCornersDistanceTileLODTester::_meetsRenderCriteria(const Tile* tile,
+bool ProjectedCornersDistanceTileLODTester::meetsRenderCriteria(const Tile* tile,
                                                                  const G3MRenderContext* rc,
                                                                  const TilesRenderParameters* tilesRenderParameters,
                                                                  const ITimer* lastSplitTimer,
@@ -55,9 +47,6 @@ bool ProjectedCornersDistanceTileLODTester::_meetsRenderCriteria(const Tile* til
   return getData(tile, rc)->evaluate(rc->getCurrentCamera(),
                                      texHeightSquared,
                                      texWidthSquared);
-}
-
-void ProjectedCornersDistanceTileLODTester::_onLayerTilesRenderParametersChanged(const LayerTilesRenderParameters* ltrp) {
 }
 
 double ProjectedCornersDistanceTileLODTester::PvtData::getSquaredArcSegmentRatio(const Vector3D& a,
@@ -71,7 +60,6 @@ double ProjectedCornersDistanceTileLODTester::PvtData::getSquaredArcSegmentRatio
   const double arcSegmentRatio = (halfAngleSin == 0) ? 1 : angleInRadians / (2 * halfAngleSin);
   return (arcSegmentRatio * arcSegmentRatio);
 }
-
 
 ProjectedCornersDistanceTileLODTester::PvtData::PvtData(const Tile* tile,
                                                         double mediumHeight,

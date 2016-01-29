@@ -14,8 +14,6 @@
 
 
 MaxLevelTileLODTester::MaxLevelTileLODTester():
-TileLODTesterResponder(NULL,
-                       NULL),
 _maxLevel(-1),
 _maxLevelForPoles(-1)
 {
@@ -28,13 +26,13 @@ MaxLevelTileLODTester::~MaxLevelTileLODTester() {
 #endif
 }
 
-bool MaxLevelTileLODTester::_meetsRenderCriteria(const Tile* tile,
-                                                 const G3MRenderContext* rc,
-                                                 const TilesRenderParameters* tilesRenderParameters,
-                                                 const ITimer* lastSplitTimer,
-                                                 const double texWidthSquared,
-                                                 const double texHeightSquared,
-                                                 long long nowInMS) const {
+bool MaxLevelTileLODTester::meetsRenderCriteria(const Tile* tile,
+                                                const G3MRenderContext* rc,
+                                                const TilesRenderParameters* tilesRenderParameters,
+                                                const ITimer* lastSplitTimer,
+                                                const double texWidthSquared,
+                                                const double texHeightSquared,
+                                                long long nowInMS) const {
 
   if (_maxLevel < 0) {
     return true;
@@ -51,7 +49,7 @@ bool MaxLevelTileLODTester::_meetsRenderCriteria(const Tile* tile,
   return false;
 }
 
-void MaxLevelTileLODTester::_onLayerTilesRenderParametersChanged(const LayerTilesRenderParameters* ltrp) {
+void MaxLevelTileLODTester::onLayerTilesRenderParametersChanged(const LayerTilesRenderParameters* ltrp) {
   if (ltrp == NULL) {
     _maxLevel         = -1;
     _maxLevelForPoles = -1;

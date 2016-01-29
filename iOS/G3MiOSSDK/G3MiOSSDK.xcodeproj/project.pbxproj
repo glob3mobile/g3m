@@ -257,7 +257,6 @@
 		CF75C3A316EA57C700F7EE9F /* MapBoxLayer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF75C3A116EA54CC00F7EE9F /* MapBoxLayer.hpp */; };
 		CF75C3A616EA621D00F7EE9F /* GoogleMapsLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF75C3A416EA621D00F7EE9F /* GoogleMapsLayer.cpp */; };
 		CF75C3A716EA62B800F7EE9F /* GoogleMapsLayer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF75C3A516EA621D00F7EE9F /* GoogleMapsLayer.hpp */; };
-		CF792A041C51618100FDE7C9 /* TileLODTesterResponder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF792A021C51618100FDE7C9 /* TileLODTesterResponder.cpp */; };
 		CF792A071C51620800FDE7C9 /* TileData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF792A051C51620800FDE7C9 /* TileData.cpp */; };
 		CF7A78EC159B9BE300074422 /* MutableVector2D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF7A78EA159B9BE300074422 /* MutableVector2D.cpp */; };
 		CF7B07B117F5D8D400FE363D /* HUDImageRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF7B07AF17F5D8D400FE363D /* HUDImageRenderer.cpp */; };
@@ -353,7 +352,6 @@
 		CFB94E561C57E9F400DAB4E6 /* DecoratorTileLODTester.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFB94E541C57E9F400DAB4E6 /* DecoratorTileLODTester.cpp */; };
 		CFB94E571C57EAA900DAB4E6 /* DecoratorTileLODTester.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFB94E551C57E9F400DAB4E6 /* DecoratorTileLODTester.hpp */; };
 		CFB94E581C57EAA900DAB4E6 /* TileData.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF792A061C51620800FDE7C9 /* TileData.hpp */; };
-		CFB94E591C57EAA900DAB4E6 /* TileLODTesterResponder.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF792A031C51618100FDE7C9 /* TileLODTesterResponder.hpp */; };
 		CFB94E5A1C57EAA900DAB4E6 /* TimedCacheTileLODTester.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D824A8551C295BCD002C84AA /* TimedCacheTileLODTester.hpp */; };
 		CFB94E5B1C57EAA900DAB4E6 /* MaxFrameTimeTileLODTester.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D824A8581C296381002C84AA /* MaxFrameTimeTileLODTester.hpp */; };
 		CFBA53EE16B9B76500256453 /* ICameraConstrainer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFBA53EC16B9B76500256453 /* ICameraConstrainer.cpp */; };
@@ -771,7 +769,6 @@
 				CF67D9C81C5AB11A00873661 /* MeshBoundingVolumeTileVisibilityTester.hpp in CopyFiles */,
 				CFB94E571C57EAA900DAB4E6 /* DecoratorTileLODTester.hpp in CopyFiles */,
 				CFB94E581C57EAA900DAB4E6 /* TileData.hpp in CopyFiles */,
-				CFB94E591C57EAA900DAB4E6 /* TileLODTesterResponder.hpp in CopyFiles */,
 				CFB94E5A1C57EAA900DAB4E6 /* TimedCacheTileLODTester.hpp in CopyFiles */,
 				CFB94E5B1C57EAA900DAB4E6 /* MaxFrameTimeTileLODTester.hpp in CopyFiles */,
 				D8B78E281C120D4F00DDE2B9 /* ProjectedCornersDistanceTileLODTester.hpp in CopyFiles */,
@@ -1492,8 +1489,6 @@
 		CF75C3A116EA54CC00F7EE9F /* MapBoxLayer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = MapBoxLayer.hpp; sourceTree = "<group>"; };
 		CF75C3A416EA621D00F7EE9F /* GoogleMapsLayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GoogleMapsLayer.cpp; sourceTree = "<group>"; };
 		CF75C3A516EA621D00F7EE9F /* GoogleMapsLayer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GoogleMapsLayer.hpp; sourceTree = "<group>"; };
-		CF792A021C51618100FDE7C9 /* TileLODTesterResponder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TileLODTesterResponder.cpp; path = Commons/Rendererers/TileLODTesterResponder.cpp; sourceTree = "<group>"; };
-		CF792A031C51618100FDE7C9 /* TileLODTesterResponder.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = TileLODTesterResponder.hpp; path = Commons/Rendererers/TileLODTesterResponder.hpp; sourceTree = "<group>"; };
 		CF792A051C51620800FDE7C9 /* TileData.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TileData.cpp; path = Commons/Rendererers/TileData.cpp; sourceTree = "<group>"; };
 		CF792A061C51620800FDE7C9 /* TileData.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = TileData.hpp; path = Commons/Rendererers/TileData.hpp; sourceTree = "<group>"; };
 		CF7A78EA159B9BE300074422 /* MutableVector2D.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MutableVector2D.cpp; path = Commons/Geometry/MutableVector2D.cpp; sourceTree = "<group>"; };
@@ -2552,8 +2547,6 @@
 				D8019FEF1C11D91800784287 /* TileLODTester.hpp */,
 				CF7539681C5C04EF006CE697 /* OrTileLODTester.cpp */,
 				CF7539691C5C04EF006CE697 /* OrTileLODTester.hpp */,
-				CF792A021C51618100FDE7C9 /* TileLODTesterResponder.cpp */,
-				CF792A031C51618100FDE7C9 /* TileLODTesterResponder.hpp */,
 				CF1B62D219055B7900AB01A9 /* TilesRenderParameters.cpp */,
 				CFA71BE715D2F6C500F8C78D /* TilesRenderParameters.hpp */,
 				CF67D9C11C5A90BB00873661 /* TileVisibilityTester.cpp */,
@@ -3035,7 +3028,6 @@
 				CF0C396A157F988100646A2F /* Mark.cpp in Sources */,
 				38D786E61587B446003BBC75 /* Tile.cpp in Sources */,
 				CF31CBF1158776130085E8F1 /* Effects.cpp in Sources */,
-				CF792A041C51618100FDE7C9 /* TileLODTesterResponder.cpp in Sources */,
 				CF883B821590984900AEE39C /* TexturesHandler.cpp in Sources */,
 				CF883BCB1594B9A500AEE39C /* Sector.cpp in Sources */,
 				CF2412AF191FE3D100B796FB /* GEO2DCoordinatesArrayData.cpp in Sources */,

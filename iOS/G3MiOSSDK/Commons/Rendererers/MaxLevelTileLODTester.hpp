@@ -6,40 +6,42 @@
 //
 //
 
-#ifndef MaxLevelForPolesTileLODTester_hpp
-#define MaxLevelForPolesTileLODTester_hpp
+#ifndef MaxLevelTileLODTester_hpp
+#define MaxLevelTileLODTester_hpp
 
-#include "TileLODTesterResponder.hpp"
+#include "TileLODTester.hpp"
 
 
-class MaxLevelTileLODTester : public TileLODTesterResponder {
+class MaxLevelTileLODTester : public TileLODTester {
 private:
   int _maxLevel;
   int _maxLevelForPoles;
 
-protected:
-
-  bool _meetsRenderCriteria(const Tile* tile,
-                            const G3MRenderContext* rc,
-                            const TilesRenderParameters* tilesRenderParameters,
-                            const ITimer* lastSplitTimer,
-                            const double texWidthSquared,
-                            const double texHeightSquared,
-                            long long nowInMS) const;
-
-  void _onLayerTilesRenderParametersChanged(const LayerTilesRenderParameters* ltrp);
 
 public:
 
   MaxLevelTileLODTester();
 
-
   ~MaxLevelTileLODTester();
 
-  void renderStarted() const {
+  bool meetsRenderCriteria(const Tile* tile,
+                           const G3MRenderContext* rc,
+                           const TilesRenderParameters* tilesRenderParameters,
+                           const ITimer* lastSplitTimer,
+                           const double texWidthSquared,
+                           const double texHeightSquared,
+                           long long nowInMS) const;
+
+  void onTileHasChangedMesh(const Tile* tile) const {
 
   }
 
+  void onLayerTilesRenderParametersChanged(const LayerTilesRenderParameters* ltrp);
+
+  void renderStarted() const {
+    
+  }
+  
 };
 
 #endif

@@ -10,7 +10,7 @@
 #define ProjectedCornersDistanceTileLODTester_hpp
 
 
-#include "TileLODTesterResponder.hpp"
+#include "TileLODTester.hpp"
 
 #include "TileData.hpp"
 #include "Vector3D.hpp"
@@ -19,8 +19,8 @@ class Planet;
 class Camera;
 
 
-class ProjectedCornersDistanceTileLODTester : public TileLODTesterResponder {
-protected:
+class ProjectedCornersDistanceTileLODTester : public TileLODTester {
+private:
 
   class PvtData: public TileData {
   private:
@@ -48,20 +48,9 @@ protected:
                   double texWidthSquared);
   };
 
-  void _onTileHasChangedMesh(const Tile* tile) const;
 
   PvtData* getData(const Tile* tile,
                    const G3MRenderContext* rc) const;
-
-  bool _meetsRenderCriteria(const Tile* tile,
-                            const G3MRenderContext* rc,
-                            const TilesRenderParameters* tilesRenderParameters,
-                            const ITimer* lastSplitTimer,
-                            const double texWidthSquared,
-                            const double texHeightSquared,
-                            long long nowInMS) const;
-
-  void _onLayerTilesRenderParametersChanged(const LayerTilesRenderParameters* ltrp);
 
 public:
 
@@ -69,10 +58,26 @@ public:
 
   ~ProjectedCornersDistanceTileLODTester();
 
-  void renderStarted() const {
+  bool meetsRenderCriteria(const Tile* tile,
+                           const G3MRenderContext* rc,
+                           const TilesRenderParameters* tilesRenderParameters,
+                           const ITimer* lastSplitTimer,
+                           const double texWidthSquared,
+                           const double texHeightSquared,
+                           long long nowInMS) const;
+
+  void onTileHasChangedMesh(const Tile* tile) const {
 
   }
 
+  void onLayerTilesRenderParametersChanged(const LayerTilesRenderParameters* ltrp) {
+
+  }
+
+  void renderStarted() const {
+    
+  }
+  
 };
 
 #endif
