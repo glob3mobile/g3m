@@ -12,6 +12,7 @@
 #include "OrderedRenderable.hpp"
 #include <algorithm>
 
+
 G3MRenderContext::~G3MRenderContext() {
   delete _frameStartTimer;
   delete _orderedRenderables;
@@ -19,7 +20,6 @@ G3MRenderContext::~G3MRenderContext() {
 #ifdef JAVA_CODE
   super.dispose();
 #endif
-
 }
 
 void G3MRenderContext::addOrderedRenderable(OrderedRenderable* orderedRenderable) const {
@@ -58,4 +58,11 @@ std::vector<OrderedRenderable*>* G3MRenderContext::getSortedOrderedRenderables()
   }
 
   return _orderedRenderables;
+}
+
+void G3MRenderContext::clear() {
+  _frameStartTimer->start();
+
+  delete _orderedRenderables;
+  _orderedRenderables = NULL;
 }

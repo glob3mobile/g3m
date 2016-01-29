@@ -10,6 +10,7 @@
 
 #include "Tile.hpp"
 #include "Context.hpp"
+#include "ITimer.hpp"
 
 
 MaxFrameTimeTileLODTester::MaxFrameTimeTileLODTester(const TimeInterval& maxFrameTimeInMs,

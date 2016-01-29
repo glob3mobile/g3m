@@ -18,7 +18,7 @@ class IDownloader;
 class ILogger;
 class GL;
 class EffectsScheduler;
-//class ITimer;
+class ITimer;
 class IStringUtils;
 class IThreadUtils;
 class IMathUtils;
@@ -28,22 +28,20 @@ class OrderedRenderable;
 class GPUProgramManager;
 class SurfaceElevationProvider;
 
-#include "ITimer.hpp"
 #include <vector>
 
 class G3MContext {
 protected:
-  const IFactory*     _factory;
-  const IStringUtils* _stringUtils;
-  const IThreadUtils* _threadUtils;
-  const ILogger*      _logger;
-  const IMathUtils*   _mathUtils;
-  const IJSONParser*  _jsonParser;
-  const Planet*       _planet;
-  IDownloader*        _downloader;
-  EffectsScheduler*   _effectsScheduler;
-  IStorage*           _storage;
-
+  const IFactory*           _factory;
+  const IStringUtils*       _stringUtils;
+  const IThreadUtils*       _threadUtils;
+  const ILogger*            _logger;
+  const IMathUtils*         _mathUtils;
+  const IJSONParser*        _jsonParser;
+  const Planet*             _planet;
+  IDownloader*              _downloader;
+  EffectsScheduler*         _effectsScheduler;
+  IStorage*                 _storage;
   SurfaceElevationProvider* _surfaceElevationProvider;
 
 public:
@@ -73,7 +71,6 @@ public:
   }
 
   virtual ~G3MContext() {
-
   }
 
   const IFactory* getFactory() const {
@@ -217,12 +214,7 @@ public:
 
   }
 
-  void clear() {
-    _frameStartTimer->start();
-
-    delete _orderedRenderables;
-    _orderedRenderables = NULL;
-  }
+  void clear();
 
   GL* getGL() const {
     return _gl;
@@ -247,7 +239,7 @@ public:
   FrameTasksExecutor* getFrameTasksExecutor() const {
     return _frameTasksExecutor;
   }
-  
+
   GPUProgramManager* getGPUProgramManager() const {
     return _gpuProgramManager;
   }
@@ -258,11 +250,9 @@ public:
    Get the OrderedRenderables, sorted by distanceFromEye()
    */
   std::vector<OrderedRenderable*>* getSortedOrderedRenderables() const;
-  
+
   void addOrderedRenderable(OrderedRenderable* orderedRenderable) const;
   
 };
-
-
 
 #endif

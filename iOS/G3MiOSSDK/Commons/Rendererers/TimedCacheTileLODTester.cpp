@@ -10,6 +10,7 @@
 
 #include "Tile.hpp"
 #include "Context.hpp"
+#include "TimeInterval.hpp"
 
 
 TimedCacheTileLODTester::TimedCacheTileLODTester(const TimeInterval& timeout,

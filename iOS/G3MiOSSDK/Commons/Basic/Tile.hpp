@@ -294,7 +294,7 @@ public:
   }
   
   const Mesh* getCurrentTessellatorMesh() const {
-#warning TODO: remove this
+#warning TODO: remove this method
     return _tessellatorMesh;
   }
 
