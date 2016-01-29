@@ -423,8 +423,11 @@ public abstract class ICanvas
     lineTo(position._x, position._y);
   }
 
-//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
-//  void scale(float scalex, float scaley float pivotx, float pivoty);
+  public final void scale(float scalex, float scaley float pivotx, float pivoty)
+  {
+    checkInitialized();
+    _scale(scalex, scaley, pivotx, pivoty);
+  }
 
   public final void scale(Vector2F scale, Vector2F pivot)
   {
