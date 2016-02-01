@@ -595,7 +595,7 @@ void Canvas_iOS::_fillAndStrokeEllipse(float left, float top,
 
 void Canvas_iOS::_scale(float scaleX, float scaleY,
                         float pivotX, float pivotY) {
-  CGContextTranslateCTM(_context, pivotX, pivotY);
-  CGContextScaleCTM(_context, scaleX, scaleY);
   CGContextTranslateCTM(_context, -pivotX, -pivotY);
+  CGContextScaleCTM(_context, scaleX, scaleY);
+  CGContextTranslateCTM(_context, pivotX, pivotY);
 }
