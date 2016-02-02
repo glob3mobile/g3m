@@ -524,8 +524,6 @@ PlanetRenderer* MapBooOLDBuilder::createPlanetRenderer() {
   const bool renderTileMeshes = true;
 
   const bool logTilesPetitions = false;
-
-  TileRenderingListener* tileRenderingListener = NULL;
   
   ChangedRendererInfoListener* changedRendererInfoListener = NULL;
 
@@ -543,7 +541,6 @@ PlanetRenderer* MapBooOLDBuilder::createPlanetRenderer() {
                                               renderedSector,
                                               renderTileMeshes,
                                               logTilesPetitions,
-                                              tileRenderingListener,
                                               changedRendererInfoListener,
                                               touchEventTypeOfTerrainTouchListener,
                                               getTileLODTester(),
@@ -557,7 +554,6 @@ PlanetRenderer* MapBooOLDBuilder::createPlanetRenderer() {
 }
 
 const Planet* MapBooOLDBuilder::createPlanet() {
-  //return Planet::createEarth();
   return SphericalPlanet::createEarth();
 }
 

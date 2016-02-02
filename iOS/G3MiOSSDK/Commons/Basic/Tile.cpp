@@ -404,15 +404,8 @@ std::vector<Tile*>* Tile::getSubTiles() {
 }
 
 void Tile::toBeDeleted(TileTexturizer*        texturizer,
-                       ElevationDataProvider* elevationDataProvider,
-                       std::vector<std::string>* tilesStoppedRendering) {
-  if (_rendered) {
-    if (tilesStoppedRendering != NULL) {
-      tilesStoppedRendering->push_back(_id);
-    }
-  }
-  
-  prune(texturizer, elevationDataProvider, tilesStoppedRendering);
+                       ElevationDataProvider* elevationDataProvider) {  
+  prune(texturizer, elevationDataProvider);
   
   if (texturizer != NULL) {
     texturizer->tileToBeDeleted(this, _texturizedMesh);
@@ -426,8 +419,7 @@ void Tile::toBeDeleted(TileTexturizer*        texturizer,
 }
 
 void Tile::prune(TileTexturizer*           texturizer,
-                 ElevationDataProvider*    elevationDataProvider,
-                 std::vector<std::string>* tilesStoppedRendering) {
+                 ElevationDataProvider*    elevationDataProvider) {
   
   if (_subtiles != NULL) {
     //Notifying elevation event when LOD decreases
@@ -439,16 +431,11 @@ void Tile::prune(TileTexturizer*           texturizer,
       
       subtile->setIsVisible(false, texturizer);
       
-      subtile->prune(texturizer, elevationDataProvider, tilesStoppedRendering);
+      subtile->prune(texturizer, elevationDataProvider);
       if (texturizer != NULL) {
         texturizer->tileToBeDeleted(subtile, subtile->_texturizedMesh);
       }
       
-      //      if (_rendered) {
-      //        if (tilesStoppedRendering != NULL) {
-      //          tilesStoppedRendering->push_back(subtile);
-      //        }
-      //      }
       delete subtile;
     }
     
@@ -510,9 +497,7 @@ void Tile::render(const G3MRenderContext* rc,
                   double texHeightSquared,
                   long long nowInMS,
                   const bool renderTileMeshes,
-                  bool logTilesPetitions,
-                  std::vector<const Tile*>* tilesStartedRendering,
-                  std::vector<std::string>* tilesStoppedRendering) {
+                  bool logTilesPetitions) {
 //#warning REMOVE
 //  if (!_sector.contains(Angle::fromDegrees(28), Angle::fromDegrees(-15))) {
 //    return;
@@ -576,7 +561,7 @@ void Tile::render(const G3MRenderContext* rc,
       
       tilesStatistics->computeTileRenderered(this);
       
-      prune(texturizer, elevationDataProvider, tilesStoppedRendering);
+      prune(texturizer, elevationDataProvider);
       //TODO: AVISAR CAMBIO DE TERRENO
     }
     else {
@@ -596,23 +581,13 @@ void Tile::render(const G3MRenderContext* rc,
   else {
     setIsVisible(false, texturizer);
     
-    prune(texturizer, elevationDataProvider, tilesStoppedRendering);
+    prune(texturizer, elevationDataProvider);
     //TODO: AVISAR CAMBIO DE TERRENO
   }
   
   if (_rendered != rendered) {
     _rendered = rendered;
-    
-    if (_rendered) {
-      if (tilesStartedRendering != NULL) {
-        tilesStartedRendering->push_back(this);
-      }
-    }
-    else {
-      if (tilesStoppedRendering != NULL) {
-        tilesStoppedRendering->push_back(_id);
-      }
-    }
+#warning TODO: Is it needed?
   }
   
 }

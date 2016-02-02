@@ -23,7 +23,6 @@ class LayerSet;
 class VisibleSectorListener;
 class ElevationDataProvider;
 class Sector;
-class TileRenderingListener;
 class ChangedRendererInfoListener;
 class IImageBuilder;
 class PlanetRenderer;
@@ -84,8 +83,6 @@ private:
 
   bool getLogTilesPetitions();
 
-  TileRenderingListener* _tileRenderingListener;
-  
   ChangedRendererInfoListener* _changedInfoListener;
   
   TouchEventType _touchEventTypeOfTerrainTouchListener;
@@ -135,10 +132,6 @@ public:
   void setRenderTileMeshes(bool renderTileMeshes);
 
   void setLogTilesPetitions(bool logTilesPetitions);
-
-  void setTileRenderingListener(TileRenderingListener* tileRenderingListener);
-
-  TileRenderingListener* getTileRenderingListener();
   
   ChangedRendererInfoListener* getChangedRendererInfoListener();
   

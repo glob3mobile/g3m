@@ -14,7 +14,6 @@
 #include "GEOVectorLayer.hpp"
 #include "TileTessellator.hpp"
 #include "ElevationDataProvider.hpp"
-#include "TileRenderingListener.hpp"
 #include "LayerSet.hpp"
 #include "DefaultChessCanvasImageBuilder.hpp"
 #include "PlanetRenderer.hpp"
@@ -48,7 +47,6 @@ _verticalExaggeration(0),
 _renderedSector(NULL),
 _renderTileMeshes(true),
 _logTilesPetitions(false),
-_tileRenderingListener(NULL),
 _changedInfoListener(NULL),
 _touchEventTypeOfTerrainTouchListener(LongPress),
 _tileLODTester(NULL),
@@ -71,8 +69,6 @@ PlanetRendererBuilder::~PlanetRendererBuilder() {
   delete _elevationDataProvider;
 
   delete _renderedSector;
-
-  delete _tileRenderingListener;
 }
 
 /**
@@ -309,15 +305,6 @@ float PlanetRendererBuilder::getVerticalExaggeration() {
   return _verticalExaggeration;
 }
 
-void PlanetRendererBuilder::setTileRenderingListener(TileRenderingListener* tileRenderingListener) {
-  if (_tileRenderingListener != NULL) {
-    ILogger::instance()->logError("LOGIC ERROR: TileRenderingListener already set");
-    return;
-  }
-
-  _tileRenderingListener = tileRenderingListener;
-}
-
 ChangedRendererInfoListener* PlanetRendererBuilder::getChangedRendererInfoListener() {
   return _changedInfoListener;
 }
@@ -350,10 +337,6 @@ IImageBuilder* PlanetRendererBuilder::getDefaultTileBackGroundImageBuilder() con
   return _defaultTileBackGroundImage;
 }
 
-TileRenderingListener* PlanetRendererBuilder::getTileRenderingListener() {
-  return _tileRenderingListener;
-}
-
 PlanetRenderer* PlanetRendererBuilder::create() {
 
   LayerSet* layerSet = getLayerSet();
@@ -375,7 +358,6 @@ PlanetRenderer* PlanetRendererBuilder::create() {
                                                       getRenderedSector(),
                                                       getRenderTileMeshes(),
                                                       getLogTilesPetitions(),
-                                                      getTileRenderingListener(),
                                                       getChangedRendererInfoListener(),
                                                       getTouchEventTypeOfTerrainTouchListener(),
                                                       getTileLODTester(),
@@ -399,8 +381,6 @@ PlanetRenderer* PlanetRendererBuilder::create() {
 
   delete _renderedSector;
   _renderedSector = NULL;
-
-  _tileRenderingListener = NULL;
 
   _geoVectorLayers.clear();
 

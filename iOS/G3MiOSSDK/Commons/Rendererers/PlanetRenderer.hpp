@@ -18,7 +18,6 @@ class ElevationDataProvider;
 class LayerTilesRenderParameters;
 class TerrainTouchListener;
 class ChangedInfoListener;
-class TileRenderingListener;
 
 #include "IStringBuilder.hpp"
 #include "DefaultRenderer.hpp"
@@ -221,10 +220,6 @@ private:
   TileLODTester*               _tileLODTester;
   TileVisibilityTester*        _tileVisibilityTester;
 
-  TileRenderingListener*       _tileRenderingListener;
-  std::vector<const Tile*>*    _tilesStartedRendering;
-  std::vector<std::string>*    _tilesStoppedRendering;
-
   TilesStatistics _statistics;
 
 #ifdef C_CODE
@@ -313,7 +308,6 @@ public:
                  const Sector&                renderedSector,
                  const bool                   renderTileMeshes,
                  const bool                   logTilesPetitions,
-                 TileRenderingListener*       tileRenderingListener,
                  ChangedRendererInfoListener* changedInfoListener,
                  TouchEventType               touchEventTypeOfTerrainTouchListener,
                  TileLODTester*               tileLODTester,

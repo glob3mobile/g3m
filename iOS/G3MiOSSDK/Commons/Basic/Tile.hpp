@@ -204,9 +204,7 @@ public:
               double texHeight,
               long long nowInMS,
               const bool renderTileMeshes,
-              bool logTilesPetitions,
-              std::vector<const Tile*>* tilesStartedRendering,
-              std::vector<std::string>* tilesStoppedRendering);
+              bool logTilesPetitions);
   
   void setTextureSolved(bool textureSolved);
   
@@ -241,12 +239,10 @@ public:
   const Tile* getDeepestTileContaining(const Geodetic3D& position) const;
   
   void prune(TileTexturizer*           texturizer,
-             ElevationDataProvider*    elevationDataProvider,
-             std::vector<std::string>* tilesStoppedRendering);
+             ElevationDataProvider*    elevationDataProvider);
   
   void toBeDeleted(TileTexturizer*        texturizer,
-                   ElevationDataProvider* elevationDataProvider,
-                   std::vector<std::string>* tilesStoppedRendering);
+                   ElevationDataProvider* elevationDataProvider);
   
   const std::string description() const;
 #ifdef JAVA_CODE

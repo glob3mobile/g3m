@@ -27,7 +27,6 @@
 #include "TerrainTouchListener.hpp"
 #include "IDeviceInfo.hpp"
 #include "Sector.hpp"
-#include "TileRenderingListener.hpp"
 #include "IFactory.hpp"
 #include "Layer.hpp"
 #include <algorithm>
@@ -122,7 +121,6 @@ PlanetRenderer::PlanetRenderer(TileTessellator*             tessellator,
                                const Sector&                renderedSector,
                                const bool                   renderTileMeshes,
                                const bool                   logTilesPetitions,
-                               TileRenderingListener*       tileRenderingListener,
                                ChangedRendererInfoListener* changedInfoListener,
                                TouchEventType               touchEventTypeOfTerrainTouchListener,
                                TileLODTester*               tileLODTester,
@@ -149,7 +147,6 @@ _layerTilesRenderParameters(NULL),
 _layerTilesRenderParametersDirty(true),
 _renderTileMeshes(renderTileMeshes),
 _logTilesPetitions(logTilesPetitions),
-_tileRenderingListener(tileRenderingListener),
 _touchEventTypeOfTerrainTouchListener(touchEventTypeOfTerrainTouchListener),
 _tileLODTester(tileLODTester),
 _tileVisibilityTester(tileVisibilityTester)
@@ -160,16 +157,7 @@ _tileVisibilityTester(tileVisibilityTester)
   _layerSet->setChangeListener(this);
   
   _layerSet->setChangedInfoListener(this);
-  
-  if (_tileRenderingListener == NULL) {
-    _tilesStartedRendering = NULL;
-    _tilesStoppedRendering = NULL;
-  }
-  else {
-    _tilesStartedRendering = new std::vector<const Tile*>();
-    _tilesStoppedRendering = new std::vector<std::string>();
-  }
-  
+
   _rendererIdentifier = -1;
   
   if (_tileLODTester == NULL) {
@@ -245,15 +233,9 @@ PlanetRenderer::~PlanetRenderer() {
   }
   
   delete _renderedSector;
-  delete _tileRenderingListener;
-  
+
   delete _tileLODTester;
   delete _tileVisibilityTester;
-  
-#ifdef C_CODE
-  delete _tilesStartedRendering;
-  delete _tilesStoppedRendering;
-#endif
   
 #ifdef JAVA_CODE
   super.dispose();
@@ -264,18 +246,10 @@ void PlanetRenderer::clearFirstLevelTiles() {
   const size_t firstLevelTilesCount = _firstLevelTiles.size();
   for (size_t i = 0; i < firstLevelTilesCount; i++) {
     Tile* tile = _firstLevelTiles[i];
-    tile->toBeDeleted(_texturizer, _elevationDataProvider, _tilesStoppedRendering);
+    tile->toBeDeleted(_texturizer, _elevationDataProvider);
     delete tile;
   }
-  
-  if (_tileRenderingListener != NULL) {
-    if (!_tilesStartedRendering->empty() || !_tilesStoppedRendering->empty()) {
-      _tileRenderingListener->changedTilesRendering(_tilesStartedRendering, _tilesStoppedRendering);
-      _tilesStartedRendering->clear();
-      _tilesStoppedRendering->clear();
-    }
-  }
-  
+
   _firstLevelTiles.clear();
 }
 
@@ -688,9 +662,7 @@ void PlanetRenderer::render(const G3MRenderContext* rc,
                    texHeightSquared,
                    nowInMS,
                    _renderTileMeshes,
-                   _logTilesPetitions,
-                   _tilesStartedRendering,
-                   _tilesStoppedRendering);
+                   _logTilesPetitions);
     }
     
     
@@ -738,10 +710,7 @@ void PlanetRenderer::render(const G3MRenderContext* rc,
                      texHeightSquared,
                      nowInMS,
                      _renderTileMeshes,
-                     _logTilesPetitions,
-                     //_tileRenderingListener
-                     _tilesStartedRendering,
-                     _tilesStoppedRendering);
+                     _logTilesPetitions);
       }
       
 #ifdef C_CODE
@@ -766,15 +735,7 @@ void PlanetRenderer::render(const G3MRenderContext* rc,
   if (_showStatistics) {
     _statistics.log( rc->getLogger() );
   }
-  
-  if (_tileRenderingListener != NULL) {
-    if (!_tilesStartedRendering->empty() || !_tilesStoppedRendering->empty()) {
-      _tileRenderingListener->changedTilesRendering(_tilesStartedRendering, _tilesStoppedRendering);
-      _tilesStartedRendering->clear();
-      _tilesStoppedRendering->clear();
-    }
-  }
-  
+
   const Sector* previousLastVisibleSector = _lastVisibleSector;
   _lastVisibleSector = _statistics.updateVisibleSector(_lastVisibleSector);
   if (previousLastVisibleSector != _lastVisibleSector) {
@@ -857,14 +818,7 @@ void PlanetRenderer::pruneFirstLevelTiles() {
   const size_t firstLevelTilesCount = _firstLevelTiles.size();
   for (size_t i = 0; i < firstLevelTilesCount; i++) {
     Tile* tile = _firstLevelTiles[i];
-    tile->prune(_texturizer, _elevationDataProvider, _tilesStoppedRendering);
-  }
-  if (_tileRenderingListener != NULL) {
-    if (!_tilesStartedRendering->empty() || !_tilesStoppedRendering->empty()) {
-      _tileRenderingListener->changedTilesRendering(_tilesStartedRendering, _tilesStoppedRendering);
-      _tilesStartedRendering->clear();
-      _tilesStoppedRendering->clear();
-    }
+    tile->prune(_texturizer, _elevationDataProvider);
   }
 }
 
