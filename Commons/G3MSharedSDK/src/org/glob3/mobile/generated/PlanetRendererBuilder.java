@@ -26,7 +26,6 @@ package org.glob3.mobile.generated;
 //class VisibleSectorListener;
 //class ElevationDataProvider;
 //class Sector;
-//class TileRenderingListener;
 //class ChangedRendererInfoListener;
 //class IImageBuilder;
 //class PlanetRenderer;
@@ -255,8 +254,6 @@ public class PlanetRendererBuilder
     return _logTilesPetitions;
   }
 
-  private TileRenderingListener _tileRenderingListener;
-
   private ChangedRendererInfoListener _changedInfoListener;
 
   private TouchEventType _touchEventTypeOfTerrainTouchListener;
@@ -333,7 +330,6 @@ public class PlanetRendererBuilder
      _renderedSector = null;
      _renderTileMeshes = true;
      _logTilesPetitions = false;
-     _tileRenderingListener = null;
      _changedInfoListener = null;
      _touchEventTypeOfTerrainTouchListener = TouchEventType.LongPress;
      _tileLODTester = null;
@@ -363,9 +359,6 @@ public class PlanetRendererBuilder
   
     if (_renderedSector != null)
        _renderedSector.dispose();
-  
-    if (_tileRenderingListener != null)
-       _tileRenderingListener.dispose();
   }
   public final PlanetRenderer create()
   {
@@ -378,7 +371,7 @@ public class PlanetRendererBuilder
       layerSet.addLayer(geoVectorLayer);
     }
   
-    PlanetRenderer planetRenderer = new PlanetRenderer(getTileTessellator(), getElevationDataProvider(), true, getVerticalExaggeration(), getTexturizer(), layerSet, getParameters(), getShowStatistics(), getTileDownloadPriority(), getRenderedSector(), getRenderTileMeshes(), getLogTilesPetitions(), getTileRenderingListener(), getChangedRendererInfoListener(), getTouchEventTypeOfTerrainTouchListener(), getTileLODTester(), getTileVisibilityTester());
+    PlanetRenderer planetRenderer = new PlanetRenderer(getTileTessellator(), getElevationDataProvider(), true, getVerticalExaggeration(), getTexturizer(), layerSet, getParameters(), getShowStatistics(), getTileDownloadPriority(), getRenderedSector(), getRenderTileMeshes(), getLogTilesPetitions(), getChangedRendererInfoListener(), getTouchEventTypeOfTerrainTouchListener(), getTileLODTester(), getTileVisibilityTester());
   
     for (int i = 0; i < getVisibleSectorListeners().size(); i++)
     {
@@ -399,8 +392,6 @@ public class PlanetRendererBuilder
     if (_renderedSector != null)
        _renderedSector.dispose();
     _renderedSector = null;
-  
-    _tileRenderingListener = null;
   
     _geoVectorLayers.clear();
   
@@ -530,22 +521,6 @@ public class PlanetRendererBuilder
   public final void setLogTilesPetitions(boolean logTilesPetitions)
   {
     _logTilesPetitions = logTilesPetitions;
-  }
-
-  public final void setTileRenderingListener(TileRenderingListener tileRenderingListener)
-  {
-    if (_tileRenderingListener != null)
-    {
-      ILogger.instance().logError("LOGIC ERROR: TileRenderingListener already set");
-      return;
-    }
-  
-    _tileRenderingListener = tileRenderingListener;
-  }
-
-  public final TileRenderingListener getTileRenderingListener()
-  {
-    return _tileRenderingListener;
   }
 
   public final ChangedRendererInfoListener getChangedRendererInfoListener()

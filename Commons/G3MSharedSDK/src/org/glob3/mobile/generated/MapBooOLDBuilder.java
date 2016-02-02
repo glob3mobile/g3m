@@ -69,13 +69,11 @@ public abstract class MapBooOLDBuilder
   
     final boolean logTilesPetitions = false;
   
-    TileRenderingListener tileRenderingListener = null;
-  
     ChangedRendererInfoListener changedRendererInfoListener = null;
   
     TouchEventType touchEventTypeOfTerrainTouchListener = TouchEventType.DownUp;
   
-    PlanetRenderer result = new PlanetRenderer(tessellator, elevationDataProvider, true, verticalExaggeration, texturizer, _layerSet, parameters, showStatistics, tileDownloadPriority, renderedSector, renderTileMeshes, logTilesPetitions, tileRenderingListener, changedRendererInfoListener, touchEventTypeOfTerrainTouchListener, getTileLODTester(), getTileVisibilityTester());
+    PlanetRenderer result = new PlanetRenderer(tessellator, elevationDataProvider, true, verticalExaggeration, texturizer, _layerSet, parameters, showStatistics, tileDownloadPriority, renderedSector, renderTileMeshes, logTilesPetitions, changedRendererInfoListener, touchEventTypeOfTerrainTouchListener, getTileLODTester(), getTileVisibilityTester());
   
     if (_enableNotifications)
     {
@@ -1129,7 +1127,6 @@ public abstract class MapBooOLDBuilder
 
   protected final Planet createPlanet()
   {
-    //return Planet::createEarth();
     return SphericalPlanet.createEarth();
   }
 

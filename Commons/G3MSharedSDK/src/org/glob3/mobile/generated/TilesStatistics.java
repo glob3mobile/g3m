@@ -25,7 +25,6 @@ package org.glob3.mobile.generated;
 //class LayerTilesRenderParameters;
 //class TerrainTouchListener;
 //class ChangedInfoListener;
-//class TileRenderingListener;
 
 //class TileLODTester;
 //class TileVisibilityTester;

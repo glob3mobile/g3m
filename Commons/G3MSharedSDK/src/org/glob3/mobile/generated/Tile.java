@@ -437,7 +437,7 @@ public class Tile
     }
   }
 
-  public final void render(G3MRenderContext rc, GLState parentState, java.util.ArrayList<Tile> toVisitInNextIteration, TileLODTester tileLODTester, TileVisibilityTester tileVisibilityTester, Frustum frustumInModelCoordinates, TilesStatistics tilesStatistics, float verticalExaggeration, LayerTilesRenderParameters layerTilesRenderParameters, TileTexturizer texturizer, TilesRenderParameters tilesRenderParameters, ITimer lastSplitTimer, ElevationDataProvider elevationDataProvider, TileTessellator tessellator, LayerSet layerSet, Sector renderedSector, boolean forceFullRender, long tileDownloadPriority, double texWidthSquared, double texHeightSquared, long nowInMS, boolean renderTileMeshes, boolean logTilesPetitions, java.util.ArrayList<Tile> tilesStartedRendering, java.util.ArrayList<String> tilesStoppedRendering)
+  public final void render(G3MRenderContext rc, GLState parentState, java.util.ArrayList<Tile> toVisitInNextIteration, TileLODTester tileLODTester, TileVisibilityTester tileVisibilityTester, Frustum frustumInModelCoordinates, TilesStatistics tilesStatistics, float verticalExaggeration, LayerTilesRenderParameters layerTilesRenderParameters, TileTexturizer texturizer, TilesRenderParameters tilesRenderParameters, ITimer lastSplitTimer, ElevationDataProvider elevationDataProvider, TileTessellator tessellator, LayerSet layerSet, Sector renderedSector, boolean forceFullRender, long tileDownloadPriority, double texWidthSquared, double texHeightSquared, long nowInMS, boolean renderTileMeshes, boolean logTilesPetitions)
   {
   ///#warning REMOVE
   //  if (!_sector.contains(Angle::fromDegrees(28), Angle::fromDegrees(-15))) {
@@ -482,7 +482,7 @@ public class Tile
   
         tilesStatistics.computeTileRenderered(this);
   
-        prune(texturizer, elevationDataProvider, tilesStoppedRendering);
+        prune(texturizer, elevationDataProvider);
         //TODO: AVISAR CAMBIO DE TERRENO
       }
       else
@@ -506,28 +506,15 @@ public class Tile
     {
       setIsVisible(false, texturizer);
   
-      prune(texturizer, elevationDataProvider, tilesStoppedRendering);
+      prune(texturizer, elevationDataProvider);
       //TODO: AVISAR CAMBIO DE TERRENO
     }
   
     if (_rendered != rendered)
     {
       _rendered = rendered;
-  
-      if (_rendered)
-      {
-        if (tilesStartedRendering != null)
-        {
-          tilesStartedRendering.add(this);
-        }
-      }
-      else
-      {
-        if (tilesStoppedRendering != null)
-        {
-          tilesStoppedRendering.add(_id);
-        }
-      }
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning TODO: Is it needed?
     }
   
   }
@@ -630,7 +617,7 @@ public class Tile
     return null;
   }
 
-  public final void prune(TileTexturizer texturizer, ElevationDataProvider elevationDataProvider, java.util.ArrayList<String> tilesStoppedRendering)
+  public final void prune(TileTexturizer texturizer, ElevationDataProvider elevationDataProvider)
   {
   
     if (_subtiles != null)
@@ -645,17 +632,12 @@ public class Tile
   
         subtile.setIsVisible(false, texturizer);
   
-        subtile.prune(texturizer, elevationDataProvider, tilesStoppedRendering);
+        subtile.prune(texturizer, elevationDataProvider);
         if (texturizer != null)
         {
           texturizer.tileToBeDeleted(subtile, subtile._texturizedMesh);
         }
   
-        //      if (_rendered) {
-        //        if (tilesStoppedRendering != NULL) {
-        //          tilesStoppedRendering->push_back(subtile);
-        //        }
-        //      }
         if (subtile != null)
            subtile.dispose();
       }
@@ -665,17 +647,9 @@ public class Tile
     }
   }
 
-  public final void toBeDeleted(TileTexturizer texturizer, ElevationDataProvider elevationDataProvider, java.util.ArrayList<String> tilesStoppedRendering)
+  public final void toBeDeleted(TileTexturizer texturizer, ElevationDataProvider elevationDataProvider)
   {
-    if (_rendered)
-    {
-      if (tilesStoppedRendering != null)
-      {
-        tilesStoppedRendering.add(_id);
-      }
-    }
-  
-    prune(texturizer, elevationDataProvider, tilesStoppedRendering);
+    prune(texturizer, elevationDataProvider);
   
     if (texturizer != null)
     {
