@@ -100,6 +100,7 @@ public abstract class ICanvas
 
   protected abstract void _fillAndStrokeEllipse(float left, float top, float width, float height);
 
+  protected abstract void _scale(float scalex, float scaley, float pivotx, float pivoty);
 
   public ICanvas()
   {
@@ -420,6 +421,17 @@ public abstract class ICanvas
   public final void lineTo(Vector2F position)
   {
     lineTo(position._x, position._y);
+  }
+
+  public final void scale(float scaleX, float scaleY, float pivotX, float pivotY)
+  {
+    checkInitialized();
+    _scale(scaleX, scaleY, pivotX, pivotY);
+  }
+
+  public final void scale(Vector2F factor, Vector2F pivot)
+  {
+    scale(factor._x, factor._y, pivot._x, pivot._y);
   }
 
 }

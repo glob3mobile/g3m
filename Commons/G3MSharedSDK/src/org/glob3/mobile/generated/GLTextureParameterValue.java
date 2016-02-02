@@ -9,7 +9,7 @@ public class GLTextureParameterValue
   private static int _linearMipmapLinear = 0;
 
   private static int _clampToEdge = 0;
-  private static int _repeat;
+  private static int _repeat = 0;
 
 
   public static int nearest()
