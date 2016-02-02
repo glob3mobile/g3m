@@ -42,7 +42,7 @@ public:
                  const Frustum* frustumInModelCoordinates) const;
 
   void renderStarted() const;
-
+  
 };
 
 

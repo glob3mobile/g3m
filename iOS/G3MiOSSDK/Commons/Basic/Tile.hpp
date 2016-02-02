@@ -287,7 +287,7 @@ public:
 
   TileData* getData(int id) const;
   void setData(int id, TileData* data) const;
-  
+
   const TileTessellatorMeshData* getTessellatorMeshData() const {
 #warning ask JM
     return &_tileTessellatorMeshData;
