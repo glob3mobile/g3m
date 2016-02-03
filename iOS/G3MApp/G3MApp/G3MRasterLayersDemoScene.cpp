@@ -201,14 +201,36 @@ void G3MRasterLayersDemoScene::rawActivate(const G3MContext* context) {
   // FOLLOWING CODE IS FOR TESTING INTERSECTION SPHERE FRUSTUM
 
   // creating sample frustum
-  Frustum frustum(FrustumData(-1500,1500,-2000,2000,8000,20000));
-  Frustum* frustum2 = frustum.transformedBy_P(MutableMatrix44D::createTranslationMatrix(6.38e6, 0, 0.7e6).inversed());
+  Frustum frustum0(FrustumData(-1500,1500,-2000,2000,8000,20000));
+  Frustum* frustum = frustum0.transformedBy_P(MutableMatrix44D::createTranslationMatrix(6.38e6, 0, 0.7e6).inversed());
   MeshRenderer* meshRenderer = getModel()->getMeshRenderer();
-  meshRenderer->addMesh(frustum2->createWireFrameMesh());
+  meshRenderer->addMesh(frustum->createWireFrameMesh());
   
   // creating spheres
-  Sphere sphere1(Vector3D(6.38e6,0,0.7e6), 5000);
-  meshRenderer->addMesh(sphere1.createWireframeMesh(Color::fromRGBA(1, 0, 0, 1), 50));
+  {
+    // outside, close to a frustum corner
+    Sphere sphere(Vector3D(6383750+1000, -5000-1000, 680000-1000), 1000);
+    Color color =  (sphere.touchesFrustum(frustum))? Color::fromRGBA(0, 1, 0, 1) : Color::fromRGBA(1, 0, 0, 1);
+    meshRenderer->addMesh(sphere.createWireframeMesh(color, 50));
+  }
+  {
+    // outside, close to a frustum edge
+    Sphere sphere(Vector3D(6380000, -5000-800, 680000-800), 800);
+    Color color =  (sphere.touchesFrustum(frustum))? Color::fromRGBA(0, 1, 0, 1) : Color::fromRGBA(1, 0, 0, 1);
+    meshRenderer->addMesh(sphere.createWireframeMesh(color, 50));
+  }
+  {
+    // outside, in the center of proyection of the frustum
+    Sphere sphere(Vector3D(6380000, 0, 700000), 1000);
+    Color color =  (sphere.touchesFrustum(frustum))? Color::fromRGBA(0, 1, 0, 1) : Color::fromRGBA(1, 0, 0, 1);
+    meshRenderer->addMesh(sphere.createWireframeMesh(color, 50));
+  }
+  {
+    // inside the frustum center
+    Sphere sphere(Vector3D(6380000, 0, 686000), 800);
+    Color color =  (sphere.touchesFrustum(frustum))? Color::fromRGBA(0, 1, 0, 1) : Color::fromRGBA(1, 0, 0, 1);
+    meshRenderer->addMesh(sphere.createWireframeMesh(color, 50));
+  }
   
   
   // locating camera
