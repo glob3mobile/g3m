@@ -229,17 +229,49 @@ bool Frustum::touchesWithSphere(const Sphere* sphere) const {
   if (bottomDistance > 0) numOutsiders++;
   
   // numOutsiders always between 0 and 3
-  double squareDistance;
+  double squareDistance, distance;
   switch (numOutsiders) {
       
-    case 0: // sphere center inside the frustum
-      return true;
+    //case 0: // sphere center inside the frustum
+    //return true;
       
-    case 1: // need to compute distance from sphere center to frustum plane
-      return true;
+    //case 1: // need to compute distance from sphere center to frustum plane
+    //return true;
       
     case 2: // need to compute distance from sphere center to frustum edge
-      return true;
+      if (leftDistance > 0) {
+        if (topDistance > 0)
+          distance = sphere->_center.distanceToLine(_ltn, _ltf.sub(_ltn));
+        else if (bottomDistance > 0)
+          distance = sphere->_center.distanceToLine(_lbn, _lbf.sub(_lbn));
+        else if (nearDistance > 0)
+          distance = sphere->_center.distanceToLine(_ltn, _lbn.sub(_ltn));
+        else
+          distance = sphere->_center.distanceToLine(_ltf, _lbf.sub(_ltf));
+      } else if (rightDistance > 0) {
+        if (topDistance > 0)
+          distance = sphere->_center.distanceToLine(_rtn, _rtf.sub(_rtn));
+        else if (bottomDistance > 0)
+          distance = sphere->_center.distanceToLine(_rbn, _rbf.sub(_rbn));
+        else if (nearDistance > 0)
+          distance = sphere->_center.distanceToLine(_rtn, _rbn.sub(_rtn));
+        else
+          distance = sphere->_center.distanceToLine(_rtf, _rbf.sub(_rtf));
+      } else if (nearDistance > 0) {
+        if (topDistance > 0)
+          distance = sphere->_center.distanceToLine(_ltn, _rtn.sub(_ltn));
+        else
+          distance = sphere->_center.distanceToLine(_lbn, _rbn.sub(_lbn));
+      } else {
+        if (topDistance > 0)
+          distance = sphere->_center.distanceToLine(_ltf, _rtf.sub(_ltf));
+        else
+          distance = sphere->_center.distanceToLine(_lbf, _rbf.sub(_lbf));
+      }
+      if (distance > sphere->_radius)
+        return false;
+      else
+        return true;
       
     case 3: // need to compute distance from sphere center to frustum vertex
       if (leftDistance > 0) {

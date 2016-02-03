@@ -220,6 +220,12 @@ void G3MRasterLayersDemoScene::rawActivate(const G3MContext* context) {
     meshRenderer->addMesh(sphere.createWireframeMesh(color, 50));
   }
   {
+    // outside, close to a frustum face
+    Sphere sphere(Vector3D(6384000, 0, 686000), 800);
+    Color color =  (sphere.touchesFrustum(frustum))? Color::fromRGBA(0, 1, 0, 1) : Color::fromRGBA(1, 0, 0, 1);
+    meshRenderer->addMesh(sphere.createWireframeMesh(color, 50));
+  }
+  {
     // outside, in the center of proyection of the frustum
     Sphere sphere(Vector3D(6380000, 0, 700000), 1000);
     Color color =  (sphere.touchesFrustum(frustum))? Color::fromRGBA(0, 1, 0, 1) : Color::fromRGBA(1, 0, 0, 1);
