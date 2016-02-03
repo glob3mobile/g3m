@@ -223,3 +223,8 @@ Vector3D Vector3D::sub(const MutableVector3D& v) const {
                   _y - v.y(),
                   _z - v.z());
 }
+
+const double Vector3D::distanceToLine(const Vector3D& point,
+                                      const Vector3D& vector) const {
+  
+}
