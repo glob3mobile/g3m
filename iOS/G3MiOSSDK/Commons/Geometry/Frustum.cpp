@@ -8,9 +8,10 @@
 
 #include "Frustum.hpp"
 #include "Box.hpp"
+#include "Sphere.hpp"
 #include "Mesh.hpp"
 #include <FloatBufferBuilderFromCartesian3D.hpp>
-#include <G3MiOSSDK/DirectMesh.hpp>
+#include <DirectMesh.hpp>
 
 
 
@@ -201,4 +202,77 @@ Mesh* Frustum::createWireFrameMesh() const {
                                            (float)1.0,
                                            new Color(Color::blue()));
 }
+
+bool Frustum::touchesWithSphere(const Sphere* sphere) const {
+  // this implementation is right exact, but slower than touchesFrustumApprox()
+  int numOutsiders = 0;
+  // flags for the frustum vertices: _ltn, _rtn, _lbn, _rbn, _ltf, _rtf, _lbf, _rbf
+  //bool vertices[8] = {true, true, true, true, true, true, true, true};
+  
+  double nearDistance = _nearPlane.signedDistance(sphere->_center);
+  if (nearDistance > sphere->_radius) return false;
+  if (nearDistance > 0) numOutsiders++;
+  double farDistance = _farPlane.signedDistance(sphere->_center);
+  if (farDistance > sphere->_radius) return false;
+  if (farDistance > 0) numOutsiders++;
+  double leftDistance = _leftPlane.signedDistance(sphere->_center);
+  if (leftDistance > sphere->_radius) return false;
+  if (leftDistance > 0) numOutsiders++;
+  double rightDistance = _rightPlane.signedDistance(sphere->_center);
+  if (rightDistance > sphere->_radius) return false;
+  if (rightDistance > 0) numOutsiders++;
+  double topDistance = _topPlane.signedDistance(sphere->_center);
+  if (topDistance > sphere->_radius) return false;
+  if (topDistance > 0) numOutsiders++;
+  double bottomDistance = _bottomPlane.signedDistance(sphere->_center);
+  if (bottomDistance > sphere->_radius) return false;
+  if (bottomDistance > 0) numOutsiders++;
+  
+  // numOutsiders always between 0 and 3
+  double squareDistance;
+  switch (numOutsiders) {
+      
+    case 0: // sphere center inside the frustum
+      return true;
+      
+    case 1: // need to compute distance from sphere center to frustum plane
+      return true;
+      
+    case 2: // need to compute distance from sphere center to frustum edge
+      return true;
+      
+    case 3: // need to compute distance from sphere center to frustum vertex
+      if (leftDistance > 0) {
+        if (topDistance > 0) {
+          if (nearDistance > 0)
+            squareDistance = sphere->_center.squaredDistanceTo(_ltn);
+          else
+            squareDistance = sphere->_center.squaredDistanceTo(_ltf);
+        } else {
+          if (nearDistance > 0)
+            squareDistance = sphere->_center.squaredDistanceTo(_lbn);
+          else
+            squareDistance = sphere->_center.squaredDistanceTo(_lbf);
+        }
+      } else {
+        if (topDistance > 0) {
+          if (nearDistance > 0)
+            squareDistance = sphere->_center.squaredDistanceTo(_rtn);
+          else
+            squareDistance = sphere->_center.squaredDistanceTo(_rtf);
+        } else {
+          if (nearDistance > 0)
+            squareDistance = sphere->_center.squaredDistanceTo(_rbn);
+          else
+            squareDistance = sphere->_center.squaredDistanceTo(_rbf);
+        }
+      }
+      if (squareDistance > sphere->_radius * sphere->_radius)
+        return false;
+      else
+        return true;
+  }
+  return true;
+}
+
 

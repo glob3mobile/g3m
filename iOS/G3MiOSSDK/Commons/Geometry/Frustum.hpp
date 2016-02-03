@@ -168,7 +168,9 @@ public:
   
   bool contains(const Vector3D& point) const;
   
-  bool touchesWithBox(const Box *box) const;
+  bool touchesWithBox(const Box* box) const;
+  bool touchesWithSphere(const Sphere* sphere) const;
+  
   
   Frustum* transformedBy_P(const MutableMatrix44D& matrix) const {
     return new Frustum(this, matrix, matrix.inversed());

@@ -156,7 +156,7 @@ void Sphere::render(const G3MRenderContext* rc,
 }
 
 
-bool Sphere::touchesFrustum(const Frustum *frustum) const {
+bool Sphere::touchesFrustumApprox(const Frustum *frustum) const {
   // this implementation is not right exact, but it's faster.
   if (frustum->getNearPlane().signedDistance(_center)   > _radius) return false;
   if (frustum->getFarPlane().signedDistance(_center)    > _radius) return false;

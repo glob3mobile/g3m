@@ -13,6 +13,7 @@
 #include "BoundingVolume.hpp"
 #include "Mesh.hpp"
 #include "Color.hpp"
+#include "Frustum.hpp"
 
 
 class Sphere : public BoundingVolume {
@@ -74,7 +75,13 @@ public:
   }
 
   bool touchesBox(const Box* that) const;
-  bool touchesFrustum(const Frustum* frustum) const;
+  bool touchesFrustumApprox(const Frustum* frustum) const;
+  
+  bool touchesFrustum(const Frustum* frustum) const {
+    return frustum->touchesWithSphere(this);
+  };
+
+  
   bool touchesSphere(const Sphere* that) const;
 
   BoundingVolume* mergedWith(const BoundingVolume* that) const {
