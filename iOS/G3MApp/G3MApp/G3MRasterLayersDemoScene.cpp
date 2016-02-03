@@ -22,6 +22,15 @@
 #include <G3MiOSSDK/TimeInterval.hpp>
 #include <G3MiOSSDK/MercatorTiledLayer.hpp>
 
+
+
+// temp
+#include <G3MiOSSDK/DirectMesh.hpp>
+#include <G3MiOSSDK/FloatBufferBuilderFromCartesian3D.hpp>
+#include <G3MiOSSDK/MeshRenderer.hpp>
+
+
+
 void G3MRasterLayersDemoScene::createLayerSet(LayerSet* layerSet) {
   MapBoxLayer* mboxOSMLayer = new MapBoxLayer("examples.map-cnkhv76j",
                                               TimeInterval::fromDays(30),
@@ -187,6 +196,30 @@ void G3MRasterLayersDemoScene::createLayerSet(LayerSet* layerSet) {
 
 void G3MRasterLayersDemoScene::rawActivate(const G3MContext* context) {
   createLayerSet( getModel()->getLayerSet() );
+  
+  
+  // FOLLOWING CODE IS FOR TESTING INTERSECTION SPHERE FRUSTUM
+  const Vector3D center(0,0,0);
+  FloatBufferBuilderFromCartesian3D* fbb = FloatBufferBuilderFromCartesian3D::builderWithoutCenter();
+  fbb->add(Vector3D(0,0,0));
+  fbb->add(Vector3D(1e10,0,0));
+  IFloatBuffer* edges = fbb->create();
+  delete fbb;
+
+    DirectMesh* normalsMesh = new DirectMesh(GLPrimitive::lines(),
+                                             true,
+                                             center,
+                                             edges,
+                                             (float)2.0,
+                                             (float)1.0,
+                                             new Color(Color::blue()));
+  
+  
+  MeshRenderer* meshRenderer = getModel()->getMeshRenderer();
+  meshRenderer->addMesh(normalsMesh);
+  
+  
+  
 }
 
 void G3MRasterLayersDemoScene::rawSelectOption(const std::string& option,
