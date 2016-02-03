@@ -25,9 +25,8 @@
 
 
 // temp
-#include <G3MiOSSDK/DirectMesh.hpp>
-#include <G3MiOSSDK/FloatBufferBuilderFromCartesian3D.hpp>
 #include <G3MiOSSDK/MeshRenderer.hpp>
+#include <G3MiOSSDK/Frustum.hpp>
 
 
 
@@ -199,24 +198,16 @@ void G3MRasterLayersDemoScene::rawActivate(const G3MContext* context) {
   
   
   // FOLLOWING CODE IS FOR TESTING INTERSECTION SPHERE FRUSTUM
-  const Vector3D center(0,0,0);
-  FloatBufferBuilderFromCartesian3D* fbb = FloatBufferBuilderFromCartesian3D::builderWithoutCenter();
-  fbb->add(Vector3D(0,0,0));
-  fbb->add(Vector3D(1e10,0,0));
-  IFloatBuffer* edges = fbb->create();
-  delete fbb;
-
-    DirectMesh* normalsMesh = new DirectMesh(GLPrimitive::lines(),
-                                             true,
-                                             center,
-                                             edges,
-                                             (float)2.0,
-                                             (float)1.0,
-                                             new Color(Color::blue()));
-  
-  
+  Frustum frustum(FrustumData(-1500,1500,-2000,2000,8000,20000));
+  Frustum* frustum2 = frustum.transformedBy_P(MutableMatrix44D::createTranslationMatrix(6.38e6, 0, 0.7e6).inversed());
   MeshRenderer* meshRenderer = getModel()->getMeshRenderer();
-  meshRenderer->addMesh(normalsMesh);
+  meshRenderer->addMesh(frustum2->createMesh());
+  
+  G3MWidget*    g3mWidget = getModel()->getG3MWidget();
+  g3mWidget->setCameraPosition(Geodetic3D(Angle::fromDegrees(5.88), Angle::fromDegrees(0.5), 71600));
+  g3mWidget->setCameraHeading(Angle::fromDegrees(59.30));
+  g3mWidget->setCameraPitch(Angle::fromDegrees(-29.15));
+
   
   
   

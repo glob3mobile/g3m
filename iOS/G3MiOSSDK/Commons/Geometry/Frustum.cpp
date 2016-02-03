@@ -8,6 +8,10 @@
 
 #include "Frustum.hpp"
 #include "Box.hpp"
+#include "Mesh.hpp"
+#include <FloatBufferBuilderFromCartesian3D.hpp>
+#include <G3MiOSSDK/DirectMesh.hpp>
+
 
 
 Frustum::Frustum (const FrustumData& data):
@@ -156,5 +160,45 @@ BoundingVolume* Frustum::computeBoundingVolume() const {
   if (_rbf._z<minz) minz=_rbf._z;     if (_rbf._z>maxz) maxz=_rbf._z;
 
   return new Box(Vector3D(minx, miny, minz), Vector3D(maxx, maxy, maxz));
+}
+
+Mesh* Frustum::createMesh() const {
+  FloatBufferBuilderFromCartesian3D* fbb = FloatBufferBuilderFromCartesian3D::builderWithoutCenter();
+  fbb->add(_ltn);
+  fbb->add(_ltf);
+  fbb->add(_rtn);
+  fbb->add(_rtf);
+  fbb->add(_lbn);
+  fbb->add(_lbf);
+  fbb->add(_rbn);
+  fbb->add(_rbf);
+  
+  fbb->add(_ltn);
+  fbb->add(_rtn);
+  fbb->add(_rtn);
+  fbb->add(_rbn);
+  fbb->add(_rbn);
+  fbb->add(_lbn);
+  fbb->add(_lbn);
+  fbb->add(_ltn);
+  
+  fbb->add(_ltf);
+  fbb->add(_rtf);
+  fbb->add(_rtf);
+  fbb->add(_rbf);
+  fbb->add(_rbf);
+  fbb->add(_lbf);
+  fbb->add(_lbf);
+  fbb->add(_ltf);
+  IFloatBuffer* edges = fbb->create();
+  delete fbb;
+  
+  return new DirectMesh(GLPrimitive::lines(),
+                                           true,
+                                           Vector3D(0,0,0),
+                                           edges,
+                                           (float)2.0,
+                                           (float)1.0,
+                                           new Color(Color::blue()));
 }
 

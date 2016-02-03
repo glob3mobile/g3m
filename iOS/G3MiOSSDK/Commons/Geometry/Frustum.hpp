@@ -15,6 +15,8 @@
 #include "BoundingVolume.hpp"
 
 class Box;
+class Mesh;
+
 
 class FrustumData {
 public:
@@ -187,6 +189,8 @@ public:
   Plane getRightPlane() const  { return _rightPlane; }
   Plane getNearPlane() const   { return _nearPlane; }
   Plane getFarPlane() const    { return _farPlane; }
+  
+  Mesh* createMesh() const;
   
 };
 
