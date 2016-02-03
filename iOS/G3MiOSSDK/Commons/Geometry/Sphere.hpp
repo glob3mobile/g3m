@@ -19,8 +19,6 @@ class Sphere : public BoundingVolume {
 private:
 
   mutable Mesh* _mesh;
-  Mesh* createWireframeMesh(const Color& color,
-                            short resolution) const;
 
  
 public:
@@ -99,6 +97,10 @@ public:
   bool fullContainedInSphere(const Sphere* that) const;
 
   Sphere* createSphere() const;
+  
+  Mesh* createWireframeMesh(const Color& color,
+                            short resolution) const;
+
 
 };
 

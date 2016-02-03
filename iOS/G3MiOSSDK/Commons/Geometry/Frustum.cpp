@@ -162,7 +162,7 @@ BoundingVolume* Frustum::computeBoundingVolume() const {
   return new Box(Vector3D(minx, miny, minz), Vector3D(maxx, maxy, maxz));
 }
 
-Mesh* Frustum::createMesh() const {
+Mesh* Frustum::createWireFrameMesh() const {
   FloatBufferBuilderFromCartesian3D* fbb = FloatBufferBuilderFromCartesian3D::builderWithoutCenter();
   fbb->add(_ltn);
   fbb->add(_ltf);
@@ -190,9 +190,9 @@ Mesh* Frustum::createMesh() const {
   fbb->add(_lbf);
   fbb->add(_lbf);
   fbb->add(_ltf);
+  
   IFloatBuffer* edges = fbb->create();
   delete fbb;
-  
   return new DirectMesh(GLPrimitive::lines(),
                                            true,
                                            Vector3D(0,0,0),

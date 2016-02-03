@@ -190,7 +190,7 @@ public:
   Plane getNearPlane() const   { return _nearPlane; }
   Plane getFarPlane() const    { return _farPlane; }
   
-  Mesh* createMesh() const;
+  Mesh* createWireFrameMesh() const;
   
 };
 

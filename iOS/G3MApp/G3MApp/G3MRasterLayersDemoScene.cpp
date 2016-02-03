@@ -27,6 +27,7 @@
 // temp
 #include <G3MiOSSDK/MeshRenderer.hpp>
 #include <G3MiOSSDK/Frustum.hpp>
+#include <G3MiOSSDK/Sphere.hpp>
 
 
 
@@ -198,11 +199,19 @@ void G3MRasterLayersDemoScene::rawActivate(const G3MContext* context) {
   
   
   // FOLLOWING CODE IS FOR TESTING INTERSECTION SPHERE FRUSTUM
+
+  // creating sample frustum
   Frustum frustum(FrustumData(-1500,1500,-2000,2000,8000,20000));
   Frustum* frustum2 = frustum.transformedBy_P(MutableMatrix44D::createTranslationMatrix(6.38e6, 0, 0.7e6).inversed());
   MeshRenderer* meshRenderer = getModel()->getMeshRenderer();
-  meshRenderer->addMesh(frustum2->createMesh());
+  meshRenderer->addMesh(frustum2->createWireFrameMesh());
   
+  // creating spheres
+  Sphere sphere1(Vector3D(6.38e6,0,0.7e6), 5000);
+  meshRenderer->addMesh(sphere1.createWireframeMesh(Color::fromRGBA(1, 0, 0, 1), 50));
+  
+  
+  // locating camera
   G3MWidget*    g3mWidget = getModel()->getG3MWidget();
   g3mWidget->setCameraPosition(Geodetic3D(Angle::fromDegrees(5.88), Angle::fromDegrees(0.5), 71600));
   g3mWidget->setCameraHeading(Angle::fromDegrees(59.30));
