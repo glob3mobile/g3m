@@ -87,6 +87,9 @@ private:
   // the eight vertices of the frustum, i.e: ltn = left,top,near
   const Vector3D _ltn, _rtn, _lbn, _rbn, _ltf, _rtf, _lbf, _rbf;
   
+  // the center of projection for the frustum
+  const Vector3D _projCenter;
+  
   mutable BoundingVolume*   _boundingVolume;
   
   Frustum(const Frustum *that,
@@ -100,6 +103,7 @@ private:
   _rtf(that->_rtf.transformedBy(inverse, 1)),
   _lbf(that->_lbf.transformedBy(inverse, 1)),
   _rbf(that->_rbf.transformedBy(inverse, 1)),
+  _projCenter(that->_projCenter.transformedBy(inverse, 1)),
   _leftPlane(that->_leftPlane.transformedByTranspose(matrix)),
   _rightPlane(that->_rightPlane.transformedByTranspose(matrix)),
   _bottomPlane(that->_bottomPlane.transformedByTranspose(matrix)),
@@ -130,6 +134,7 @@ public:
   _rtf(that._rtf),
   _lbf(that._lbf),
   _rbf(that._rbf),
+  _projCenter(that._projCenter),
   _boundingVolume(NULL)
   {
 
@@ -146,6 +151,7 @@ public:
   _rtf(Vector3D(zfar/znear*right, zfar/znear*top,     -zfar)),
   _lbf(Vector3D(zfar/znear*left,  zfar/znear*bottom,  -zfar)),
   _rbf(Vector3D(zfar/znear*right, zfar/znear*bottom,  -zfar)),
+  _projCenter(Vector3D(0,0,0)),
   _leftPlane(Plane::fromPoints(Vector3D::zero,
                                Vector3D(left, top, -znear),
                                Vector3D(left, bottom, -znear))),

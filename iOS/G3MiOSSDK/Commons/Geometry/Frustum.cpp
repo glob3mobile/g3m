@@ -24,6 +24,7 @@ _ltf(Vector3D(data._zfar/data._znear*data._left,  data._zfar/data._znear*data._t
 _rtf(Vector3D(data._zfar/data._znear*data._right, data._zfar/data._znear*data._top,     -data._zfar)),
 _lbf(Vector3D(data._zfar/data._znear*data._left,  data._zfar/data._znear*data._bottom,  -data._zfar)),
 _rbf(Vector3D(data._zfar/data._znear*data._right, data._zfar/data._znear*data._bottom,  -data._zfar)),
+_projCenter(Vector3D(0,0,0)),
 _leftPlane(Plane::fromPoints(Vector3D::zero,
                              Vector3D(data._left, data._top, -data._znear),
                              Vector3D(data._left, data._bottom, -data._znear))),
