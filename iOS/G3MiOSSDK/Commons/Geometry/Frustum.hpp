@@ -96,6 +96,9 @@ private:
   
   // the four edges in near plane
   const StraightLine _ln, _tn, _rn, _bn;
+
+  // the four edges in near plane
+  const StraightLine _lf, _tf, _rf, _bf;
   
   mutable BoundingVolume*   _boundingVolume;
   
@@ -118,6 +121,10 @@ private:
   _rn(StraightLine(_rtn, _rtn.sub(_rbn))),
   _tn(StraightLine(_ltn, _ltn.sub(_rtn))),
   _bn(StraightLine(_lbn, _lbn.sub(_rbn))),
+  _lf(StraightLine(_ltf, _ltf.sub(_lbf))),
+  _rf(StraightLine(_rtf, _rtf.sub(_rbf))),
+  _tf(StraightLine(_ltf, _ltf.sub(_rtf))),
+  _bf(StraightLine(_lbf, _lbf.sub(_rbf))),
   _znear(that->_znear),
   _leftPlane(that->_leftPlane.transformedByTranspose(matrix)),
   _rightPlane(that->_rightPlane.transformedByTranspose(matrix)),
@@ -157,6 +164,10 @@ public:
   _rn(that._rn),
   _tn(that._tn),
   _bn(that._bn),
+  _lf(that._lf),
+  _rf(that._rf),
+  _tf(that._tf),
+  _bf(that._bf),
   _znear(that._znear),
   _boundingVolume(NULL)
   {
@@ -182,6 +193,10 @@ public:
   _rn(StraightLine(_rtn, _rtn.sub(_rbn))),
   _tn(StraightLine(_ltn, _ltn.sub(_rtn))),
   _bn(StraightLine(_lbn, _lbn.sub(_rbn))),
+  _lf(StraightLine(_ltf, _ltf.sub(_lbf))),
+  _rf(StraightLine(_rtf, _rtf.sub(_rbf))),
+  _tf(StraightLine(_ltf, _ltf.sub(_rtf))),
+  _bf(StraightLine(_lbf, _lbf.sub(_rbf))),
   _znear(znear),
   _leftPlane(Plane::fromPoints(Vector3D::zero,
                                Vector3D(left, top, -znear),

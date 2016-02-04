@@ -32,6 +32,10 @@ _ln(StraightLine(_ltn, _ltn.sub(_lbn))),
 _rn(StraightLine(_rtn, _rtn.sub(_rbn))),
 _tn(StraightLine(_ltn, _ltn.sub(_rtn))),
 _bn(StraightLine(_lbn, _lbn.sub(_rbn))),
+_lf(StraightLine(_ltf, _ltf.sub(_lbf))),
+_rf(StraightLine(_rtf, _rtf.sub(_rbf))),
+_tf(StraightLine(_ltf, _ltf.sub(_rtf))),
+_bf(StraightLine(_lbf, _lbf.sub(_rbf))),
 _znear(data._znear),
 _leftPlane(Plane::fromPoints(Vector3D::zero,
                              Vector3D(data._left, data._top, -data._znear),
@@ -241,7 +245,7 @@ bool Frustum::touchesWithSphere(const Sphere* sphere) const {
   if (bottomDistance > 0) numOutsiders++;
   
   // numOutsiders always between 0 and 3
-  double squareDistance, distance;
+  double squareDistance;
   switch (numOutsiders) {
       
     //case 0: // sphere center inside the frustum
@@ -253,37 +257,34 @@ bool Frustum::touchesWithSphere(const Sphere* sphere) const {
     case 2: // need to compute distance from sphere center to frustum edge
       if (leftDistance > 0) {
         if (topDistance > 0)
-          distance = _lt.distanceToPoint(sphere->_center);
+          squareDistance = _lt.squaredDistanceToPoint(sphere->_center);
         else if (bottomDistance > 0)
-          distance = _lb.distanceToPoint(sphere->_center);
+          squareDistance = _lb.squaredDistanceToPoint(sphere->_center);
         else if (nearDistance > 0)
-          distance = _ln.distanceToPoint(sphere->_center);
+          squareDistance = _ln.squaredDistanceToPoint(sphere->_center);
         else
-          distance = sphere->_center.distanceToLine(_ltf, _lbf.sub(_ltf));
+          squareDistance = _lf.squaredDistanceToPoint(sphere->_center);
       } else if (rightDistance > 0) {
         if (topDistance > 0)
-          distance = _rt.distanceToPoint(sphere->_center);
+          squareDistance = _rt.squaredDistanceToPoint(sphere->_center);
         else if (bottomDistance > 0)
-          distance = _rb.distanceToPoint(sphere->_center);
+          squareDistance = _rb.squaredDistanceToPoint(sphere->_center);
         else if (nearDistance > 0)
-          distance = _rn.distanceToPoint(sphere->_center);
+          squareDistance = _rn.squaredDistanceToPoint(sphere->_center);
         else
-          distance = sphere->_center.distanceToLine(_rtf, _rbf.sub(_rtf));
+          squareDistance = _rf.squaredDistanceToPoint(sphere->_center);
       } else if (nearDistance > 0) {
         if (topDistance > 0)
-          distance = _tn.distanceToPoint(sphere->_center);
+          squareDistance = _tn.squaredDistanceToPoint(sphere->_center);
         else
-          distance = _bn.distanceToPoint(sphere->_center);
+          squareDistance = _bn.squaredDistanceToPoint(sphere->_center);
       } else {
         if (topDistance > 0)
-          distance = sphere->_center.distanceToLine(_ltf, _rtf.sub(_ltf));
+          squareDistance = _tf.squaredDistanceToPoint(sphere->_center);
         else
-          distance = sphere->_center.distanceToLine(_lbf, _rbf.sub(_lbf));
+          squareDistance = _bf.squaredDistanceToPoint(sphere->_center);
       }
-      if (distance > sphere->_radius)
-        return false;
-      else
-        return true;
+      return (squareDistance < sphere->_radiusSquared);
       
     case 3: // need to compute distance from sphere center to frustum vertex
       if (leftDistance > 0) {
@@ -311,10 +312,7 @@ bool Frustum::touchesWithSphere(const Sphere* sphere) const {
             squareDistance = sphere->_center.squaredDistanceTo(_rbf);
         }
       }
-      if (squareDistance > sphere->_radius * sphere->_radius)
-        return false;
-      else
-        return true;
+      return (squareDistance < sphere->_radiusSquared);
   }
   return true;
 }
