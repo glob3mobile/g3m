@@ -18,6 +18,9 @@ public class Frustum
   private final Vector3D _lbf ;
   private final Vector3D _rbf ;
 
+  // the center of projection for the frustum
+  private final double _znear;
+
   private BoundingVolume _boundingVolume;
 
   private Frustum(Frustum that, MutableMatrix44D matrix, MutableMatrix44D inverse)
@@ -30,6 +33,7 @@ public class Frustum
      _rtf = new Vector3D(that._rtf.transformedBy(inverse, 1));
      _lbf = new Vector3D(that._lbf.transformedBy(inverse, 1));
      _rbf = new Vector3D(that._rbf.transformedBy(inverse, 1));
+     _znear = that._znear;
      _leftPlane = that._leftPlane.transformedByTranspose(matrix);
      _rightPlane = that._rightPlane.transformedByTranspose(matrix);
      _bottomPlane = that._bottomPlane.transformedByTranspose(matrix);
@@ -173,6 +177,7 @@ public class Frustum
      _rtf = new Vector3D(that._rtf);
      _lbf = new Vector3D(that._lbf);
      _rbf = new Vector3D(that._rbf);
+     _znear = that._znear;
      _boundingVolume = null;
 
   }
@@ -187,6 +192,7 @@ public class Frustum
      _rtf = new Vector3D(new Vector3D(zfar/znear *right, zfar/znear *top, -zfar));
      _lbf = new Vector3D(new Vector3D(zfar/znear *left, zfar/znear *bottom, -zfar));
      _rbf = new Vector3D(new Vector3D(zfar/znear *right, zfar/znear *bottom, -zfar));
+     _znear = znear;
      _leftPlane = Plane.fromPoints(Vector3D.zero, new Vector3D(left, top, -znear), new Vector3D(left, bottom, -znear));
      _bottomPlane = Plane.fromPoints(Vector3D.zero, new Vector3D(left, bottom, -znear), new Vector3D(right, bottom, -znear));
      _rightPlane = Plane.fromPoints(Vector3D.zero, new Vector3D(right, bottom, -znear), new Vector3D(right, top, -znear));
@@ -206,6 +212,7 @@ public class Frustum
      _rtf = new Vector3D(new Vector3D(data._zfar/data._znear *data._right, data._zfar/data._znear *data._top, -data._zfar));
      _lbf = new Vector3D(new Vector3D(data._zfar/data._znear *data._left, data._zfar/data._znear *data._bottom, -data._zfar));
      _rbf = new Vector3D(new Vector3D(data._zfar/data._znear *data._right, data._zfar/data._znear *data._bottom, -data._zfar));
+     _znear = data._znear;
      _leftPlane = Plane.fromPoints(Vector3D.zero, new Vector3D(data._left, data._top, -data._znear), new Vector3D(data._left, data._bottom, -data._znear));
      _bottomPlane = Plane.fromPoints(Vector3D.zero, new Vector3D(data._left, data._bottom, -data._znear), new Vector3D(data._right, data._bottom, -data._znear));
      _rightPlane = Plane.fromPoints(Vector3D.zero, new Vector3D(data._right, data._bottom, -data._znear), new Vector3D(data._right, data._top, -data._znear));
@@ -267,6 +274,145 @@ public class Frustum
                   && (_farPlane.signedDistance(corners[4]) >= 0) && (_farPlane.signedDistance(corners[5]) >= 0)
                   && (_farPlane.signedDistance(corners[6]) >= 0) && (_farPlane.signedDistance(corners[7]) >= 0));
   }
+  public final boolean touchesWithSphere(Sphere sphere)
+  {
+    // this implementation is right exact, but slower than touchesFrustumApprox()
+    int numOutsiders = 0;
+  
+    // compute distances to near and far planes
+    double nearDistance = _nearPlane.signedDistance(sphere._center);
+    if (nearDistance > sphere._radius)
+       return false;
+    if (nearDistance > 0)
+       numOutsiders++;
+    double farDistance = _farPlane.signedDistance(sphere._center);
+    if (farDistance > sphere._radius)
+       return false;
+    if (farDistance > 0)
+       numOutsiders++;
+  
+    // test if sphere center is behind center of projection, to invert sign of lateral sides
+    double invSign = 1;
+    if (nearDistance > _znear)
+       invSign = -1;
+    double leftDistance = _leftPlane.signedDistance(sphere._center) * invSign;
+    if (leftDistance > sphere._radius)
+       return false;
+    if (leftDistance > 0)
+       numOutsiders++;
+    double rightDistance = _rightPlane.signedDistance(sphere._center) * invSign;
+    if (rightDistance > sphere._radius)
+       return false;
+    if (rightDistance > 0)
+       numOutsiders++;
+    double topDistance = _topPlane.signedDistance(sphere._center) * invSign;
+    if (topDistance > sphere._radius)
+       return false;
+    if (topDistance > 0)
+       numOutsiders++;
+    double bottomDistance = _bottomPlane.signedDistance(sphere._center) * invSign;
+    if (bottomDistance > sphere._radius)
+       return false;
+    if (bottomDistance > 0)
+       numOutsiders++;
+  
+    // numOutsiders always between 0 and 3
+    double squareDistance;
+    double distance;
+    switch (numOutsiders)
+    {
+  
+      //case 0: // sphere center inside the frustum
+      //return true;
+  
+      //case 1: // need to compute distance from sphere center to frustum plane
+      //return true;
+  
+      case 2: // need to compute distance from sphere center to frustum edge
+        if (leftDistance > 0)
+        {
+          if (topDistance > 0)
+            distance = sphere._center.distanceToLine(_ltn, _ltf.sub(_ltn));
+          else if (bottomDistance > 0)
+            distance = sphere._center.distanceToLine(_lbn, _lbf.sub(_lbn));
+          else if (nearDistance > 0)
+            distance = sphere._center.distanceToLine(_ltn, _lbn.sub(_ltn));
+          else
+            distance = sphere._center.distanceToLine(_ltf, _lbf.sub(_ltf));
+        }
+        else if (rightDistance > 0)
+        {
+          if (topDistance > 0)
+            distance = sphere._center.distanceToLine(_rtn, _rtf.sub(_rtn));
+          else if (bottomDistance > 0)
+            distance = sphere._center.distanceToLine(_rbn, _rbf.sub(_rbn));
+          else if (nearDistance > 0)
+            distance = sphere._center.distanceToLine(_rtn, _rbn.sub(_rtn));
+          else
+            distance = sphere._center.distanceToLine(_rtf, _rbf.sub(_rtf));
+        }
+        else if (nearDistance > 0)
+        {
+          if (topDistance > 0)
+            distance = sphere._center.distanceToLine(_ltn, _rtn.sub(_ltn));
+          else
+            distance = sphere._center.distanceToLine(_lbn, _rbn.sub(_lbn));
+        }
+        else
+        {
+          if (topDistance > 0)
+            distance = sphere._center.distanceToLine(_ltf, _rtf.sub(_ltf));
+          else
+            distance = sphere._center.distanceToLine(_lbf, _rbf.sub(_lbf));
+        }
+        if (distance > sphere._radius)
+          return false;
+        else
+          return true;
+  
+      case 3: // need to compute distance from sphere center to frustum vertex
+        if (leftDistance > 0)
+        {
+          if (topDistance > 0)
+          {
+            if (nearDistance > 0)
+              squareDistance = sphere._center.squaredDistanceTo(_ltn);
+            else
+              squareDistance = sphere._center.squaredDistanceTo(_ltf);
+          }
+          else
+          {
+            if (nearDistance > 0)
+              squareDistance = sphere._center.squaredDistanceTo(_lbn);
+            else
+              squareDistance = sphere._center.squaredDistanceTo(_lbf);
+          }
+        }
+        else
+        {
+          if (topDistance > 0)
+          {
+            if (nearDistance > 0)
+              squareDistance = sphere._center.squaredDistanceTo(_rtn);
+            else
+              squareDistance = sphere._center.squaredDistanceTo(_rtf);
+          }
+          else
+          {
+            if (nearDistance > 0)
+              squareDistance = sphere._center.squaredDistanceTo(_rbn);
+            else
+              squareDistance = sphere._center.squaredDistanceTo(_rbf);
+          }
+        }
+        if (squareDistance > sphere._radius * sphere._radius)
+          return false;
+        else
+          return true;
+    }
+    return true;
+  }
+
 
   public final Frustum transformedBy_P(MutableMatrix44D matrix)
   {
@@ -312,6 +458,43 @@ public class Frustum
      return _farPlane;
   }
 
+  public final Mesh createWireFrameMesh()
+  {
+    FloatBufferBuilderFromCartesian3D fbb = FloatBufferBuilderFromCartesian3D.builderWithoutCenter();
+    fbb.add(_ltn);
+    fbb.add(_ltf);
+    fbb.add(_rtn);
+    fbb.add(_rtf);
+    fbb.add(_lbn);
+    fbb.add(_lbf);
+    fbb.add(_rbn);
+    fbb.add(_rbf);
+  
+    fbb.add(_ltn);
+    fbb.add(_rtn);
+    fbb.add(_rtn);
+    fbb.add(_rbn);
+    fbb.add(_rbn);
+    fbb.add(_lbn);
+    fbb.add(_lbn);
+    fbb.add(_ltn);
+  
+    fbb.add(_ltf);
+    fbb.add(_rtf);
+    fbb.add(_rtf);
+    fbb.add(_rbf);
+    fbb.add(_rbf);
+    fbb.add(_lbf);
+    fbb.add(_lbf);
+    fbb.add(_ltf);
+  
+    IFloatBuffer edges = fbb.create();
+    if (fbb != null)
+       fbb.dispose();
+    return new DirectMesh(GLPrimitive.lines(), true, new Vector3D(0,0,0), edges, (float)2.0, (float)1.0, new Color(Color.blue()));
+  }
+
 }
 //#define testAllCornersInside(plane, corners) ( (plane.signedDistance(corners[0]) >= 0) && (plane.signedDistance(corners[1]) >= 0) && (plane.signedDistance(corners[2]) >= 0) && (plane.signedDistance(corners[3]) >= 0) && (plane.signedDistance(corners[4]) >= 0) && (plane.signedDistance(corners[5]) >= 0) && (plane.signedDistance(corners[6]) >= 0) && (plane.signedDistance(corners[7]) >= 0) )
+
 

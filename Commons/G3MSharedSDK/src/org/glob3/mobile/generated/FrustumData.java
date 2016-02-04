@@ -18,6 +18,8 @@ package org.glob3.mobile.generated;
 
 
 //class Box;
+//class Mesh;
+
 
 public class FrustumData
 {

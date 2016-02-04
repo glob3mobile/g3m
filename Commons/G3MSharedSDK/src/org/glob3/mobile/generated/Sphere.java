@@ -23,67 +23,6 @@ public class Sphere extends BoundingVolume
 
   private Mesh _mesh;
 
-  //Vector2I Sphere::projectedExtent(const G3MRenderContext* rc) const {
-  //  int TODO_remove_this; // Agustin: no implementes este método que va a desaparecer
-  //  return Vector2I::zero();
-  //}
-  
-  private Mesh createWireframeMesh(Color color, short resolution)
-  {
-    final IMathUtils mu = IMathUtils.instance();
-    final double delta = DefineConstants.PI / (resolution-1);
-  
-    // create vertices
-    FloatBufferBuilderFromCartesian3D vertices = FloatBufferBuilderFromCartesian3D.builderWithFirstVertexAsCenter();
-    for (int i = 0; i<2 *resolution-2; i++)
-    {
-      final double longitude = -DefineConstants.PI + i *delta;
-      for (int j = 0; j<resolution; j++)
-      {
-        final double latitude = -DefineConstants.PI/2 + j *delta;
-        final double h = mu.cos(latitude);
-        final double x = h * mu.cos(longitude);
-        final double y = h * mu.sin(longitude);
-        final double z = mu.sin(latitude);
-        vertices.add(new Vector3D(x,y,z).times(_radius).add(_center));
-      }
-    }
-  
-    // create border indices for vertical lines
-    ShortBufferBuilder indices = new ShortBufferBuilder();
-    for (short i = 0; i<2 *resolution-2; i++)
-    {
-      for (short j = 0; j<resolution-1; j++)
-      {
-        indices.add((short)(j+i *resolution));
-        indices.add((short)(j+1+i *resolution));
-      }
-    }
-  
-    // create border indices for horizontal lines
-    for (short j = 1; j<resolution-1; j++)
-    {
-      for (short i = 0; i<2 *resolution-3; i++)
-      {
-        indices.add((short)(j+i *resolution));
-        indices.add((short)(j+(i+1)*resolution));
-      }
-    }
-    for (short j = 1; j<resolution-1; j++)
-    {
-      final short i = (short)(2 *resolution-3);
-      indices.add((short)(j+i *resolution));
-      indices.add((short)(j));
-    }
-  
-    Mesh mesh = new IndexedMesh(GLPrimitive.lines(), vertices.getCenter(), vertices.create(), true, indices.create(), true, 1, 1, new Color(color));
-  
-    if (vertices != null)
-       vertices.dispose();
-  
-    return mesh;
-  }
-
 
 
   public static Sphere enclosingSphere(java.util.ArrayList<Vector3D> points)
@@ -225,7 +164,7 @@ public class Sphere extends BoundingVolume
     final Vector3D v = p.sub(_center);
     return v.dot(v) <= (_radius * _radius);
   }
-  public final boolean touchesFrustum(Frustum frustum)
+  public final boolean touchesFrustumApprox(Frustum frustum)
   {
     // this implementation is not right exact, but it's faster.
     if (frustum.getNearPlane().signedDistance(_center) > _radius)
@@ -242,6 +181,13 @@ public class Sphere extends BoundingVolume
        return false;
     return true;
   }
+
+  public final boolean touchesFrustum(Frustum frustum)
+  {
+    return frustum.touchesWithSphere(this);
+  }
+
+
   public final boolean touchesSphere(Sphere that)
   {
     final Vector3D d = _center.sub(that._center);
@@ -375,5 +321,68 @@ public class Sphere extends BoundingVolume
   {
     return new Sphere(this);
   }
+
+
+  //Vector2I Sphere::projectedExtent(const G3MRenderContext* rc) const {
+  //  int TODO_remove_this; // Agustin: no implementes este método que va a desaparecer
+  //  return Vector2I::zero();
+  //}
+  
+  public final Mesh createWireframeMesh(Color color, short resolution)
+  {
+    final IMathUtils mu = IMathUtils.instance();
+    final double delta = DefineConstants.PI / (resolution-1);
+  
+    // create vertices
+    FloatBufferBuilderFromCartesian3D vertices = FloatBufferBuilderFromCartesian3D.builderWithFirstVertexAsCenter();
+    for (int i = 0; i<2 *resolution-2; i++)
+    {
+      final double longitude = -DefineConstants.PI + i *delta;
+      for (int j = 0; j<resolution; j++)
+      {
+        final double latitude = -DefineConstants.PI/2 + j *delta;
+        final double h = mu.cos(latitude);
+        final double x = h * mu.cos(longitude);
+        final double y = h * mu.sin(longitude);
+        final double z = mu.sin(latitude);
+        vertices.add(new Vector3D(x,y,z).times(_radius).add(_center));
+      }
+    }
+  
+    // create border indices for vertical lines
+    ShortBufferBuilder indices = new ShortBufferBuilder();
+    for (short i = 0; i<2 *resolution-2; i++)
+    {
+      for (short j = 0; j<resolution-1; j++)
+      {
+        indices.add((short)(j+i *resolution));
+        indices.add((short)(j+1+i *resolution));
+      }
+    }
+  
+    // create border indices for horizontal lines
+    for (short j = 1; j<resolution-1; j++)
+    {
+      for (short i = 0; i<2 *resolution-3; i++)
+      {
+        indices.add((short)(j+i *resolution));
+        indices.add((short)(j+(i+1)*resolution));
+      }
+    }
+    for (short j = 1; j<resolution-1; j++)
+    {
+      final short i = (short)(2 *resolution-3);
+      indices.add((short)(j+i *resolution));
+      indices.add((short)(j));
+    }
+  
+    Mesh mesh = new IndexedMesh(GLPrimitive.lines(), vertices.getCenter(), vertices.create(), true, indices.create(), true, 1, 1, new Color(color));
+  
+    if (vertices != null)
+       vertices.dispose();
+  
+    return mesh;
+  }
+
 
 }
