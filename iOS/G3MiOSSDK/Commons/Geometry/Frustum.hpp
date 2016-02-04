@@ -68,6 +68,14 @@ public:
 
 class Frustum {
 private:
+  
+  // the eight vertices of the frustum, i.e: ltn = left,top,near
+  const Vector3D _ltn, _rtn, _lbn, _rbn, _ltf, _rtf, _lbf, _rbf;
+  
+  // the center of projection for the frustum
+  const double _znear;
+  
+
 #ifdef C_CODE
   const Plane _leftPlane;
   const Plane _rightPlane;
@@ -75,6 +83,16 @@ private:
   const Plane _topPlane;
   const Plane _nearPlane;
   const Plane _farPlane;
+  
+  // the four lateral edges of the frustum
+  const StraightLine _lt, _rt, _lb, _rb;
+  
+  // the four edges in near plane
+  const StraightLine _ln, _tn, _rn, _bn;
+  
+  // the four edges in near plane
+  const StraightLine _lf, _tf, _rf, _bf;
+
 #endif
 #ifdef JAVA_CODE
   private final Plane _leftPlane;
@@ -83,22 +101,18 @@ private:
   private final Plane _topPlane;
   private final Plane _nearPlane;
   private final Plane _farPlane;
-#endif
-
-  // the eight vertices of the frustum, i.e: ltn = left,top,near
-  const Vector3D _ltn, _rtn, _lbn, _rbn, _ltf, _rtf, _lbf, _rbf;
-  
-  // the center of projection for the frustum
-  const double _znear;
   
   // the four lateral edges of the frustum
-  const StraightLine _lt, _rt, _lb, _rb;
+  private final StraightLine _lt, _rt, _lb, _rb;
   
   // the four edges in near plane
-  const StraightLine _ln, _tn, _rn, _bn;
-
+  private final StraightLine _ln, _tn, _rn, _bn;
+  
   // the four edges in near plane
-  const StraightLine _lf, _tf, _rf, _bf;
+  private final StraightLine _lf, _tf, _rf, _bf;
+
+#endif
+
   
   mutable BoundingVolume*   _boundingVolume;
   
