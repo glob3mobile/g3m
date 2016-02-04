@@ -391,6 +391,6 @@ public class Vector3D
 
   public final double distanceToLine(Vector3D point, Vector3D vector)
   {
-    return point.subthis.cross(vector).length() / vector.length();
+    return this.sub(point).cross(vector).length() / vector.length();
   }
 }
