@@ -24,7 +24,7 @@ _ltf(Vector3D(data._zfar/data._znear*data._left,  data._zfar/data._znear*data._t
 _rtf(Vector3D(data._zfar/data._znear*data._right, data._zfar/data._znear*data._top,     -data._zfar)),
 _lbf(Vector3D(data._zfar/data._znear*data._left,  data._zfar/data._znear*data._bottom,  -data._zfar)),
 _rbf(Vector3D(data._zfar/data._znear*data._right, data._zfar/data._znear*data._bottom,  -data._zfar)),
-_projCenter(Vector3D(0,0,0)),
+_znear(data._znear),
 _leftPlane(Plane::fromPoints(Vector3D::zero,
                              Vector3D(data._left, data._top, -data._znear),
                              Vector3D(data._left, data._bottom, -data._znear))),
@@ -207,25 +207,28 @@ Mesh* Frustum::createWireFrameMesh() const {
 bool Frustum::touchesWithSphere(const Sphere* sphere) const {
   // this implementation is right exact, but slower than touchesFrustumApprox()
   int numOutsiders = 0;
-  // flags for the frustum vertices: _ltn, _rtn, _lbn, _rbn, _ltf, _rtf, _lbf, _rbf
-  //bool vertices[8] = {true, true, true, true, true, true, true, true};
-  
+
+  // compute distances to near and far planes
   double nearDistance = _nearPlane.signedDistance(sphere->_center);
   if (nearDistance > sphere->_radius) return false;
   if (nearDistance > 0) numOutsiders++;
   double farDistance = _farPlane.signedDistance(sphere->_center);
   if (farDistance > sphere->_radius) return false;
   if (farDistance > 0) numOutsiders++;
-  double leftDistance = _leftPlane.signedDistance(sphere->_center);
+  
+  // test if sphere center is behind center of projection, to invert sign of lateral sides
+  double invSign = 1;
+  if (nearDistance > _znear) invSign = -1;
+  double leftDistance = _leftPlane.signedDistance(sphere->_center) * invSign;
   if (leftDistance > sphere->_radius) return false;
   if (leftDistance > 0) numOutsiders++;
-  double rightDistance = _rightPlane.signedDistance(sphere->_center);
+  double rightDistance = _rightPlane.signedDistance(sphere->_center) * invSign;
   if (rightDistance > sphere->_radius) return false;
   if (rightDistance > 0) numOutsiders++;
-  double topDistance = _topPlane.signedDistance(sphere->_center);
+  double topDistance = _topPlane.signedDistance(sphere->_center) * invSign;
   if (topDistance > sphere->_radius) return false;
   if (topDistance > 0) numOutsiders++;
-  double bottomDistance = _bottomPlane.signedDistance(sphere->_center);
+  double bottomDistance = _bottomPlane.signedDistance(sphere->_center) * invSign;
   if (bottomDistance > sphere->_radius) return false;
   if (bottomDistance > 0) numOutsiders++;
   

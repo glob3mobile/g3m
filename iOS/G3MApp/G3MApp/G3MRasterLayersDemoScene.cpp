@@ -225,19 +225,25 @@ void G3MRasterLayersDemoScene::rawActivate(const G3MContext* context) {
     Color color =  (sphere.touchesFrustum(frustum))? Color::fromRGBA(0, 1, 0, 1) : Color::fromRGBA(1, 0, 0, 1);
     meshRenderer->addMesh(sphere.createWireframeMesh(color, 50));
   }
-  {
+  /*{
     // outside, in the center of proyection of the frustum
     Sphere sphere(Vector3D(6380000, 0, 700000), 1000);
     Color color =  (sphere.touchesFrustum(frustum))? Color::fromRGBA(0, 1, 0, 1) : Color::fromRGBA(1, 0, 0, 1);
     meshRenderer->addMesh(sphere.createWireframeMesh(color, 50));
-  }
+  }*/
   {
     // inside the frustum center
     Sphere sphere(Vector3D(6380000, 0, 686000), 800);
     Color color =  (sphere.touchesFrustum(frustum))? Color::fromRGBA(0, 1, 0, 1) : Color::fromRGBA(1, 0, 0, 1);
     meshRenderer->addMesh(sphere.createWireframeMesh(color, 50));
   }
-  
+  {
+    // behind the center of proyection, with big radius
+    Sphere sphere(Vector3D(6375000, 0, 700000), 8500);
+    Color color =  (sphere.touchesFrustum(frustum))? Color::fromRGBA(0, 1, 0, 1) : Color::fromRGBA(1, 0, 0, 1);
+    meshRenderer->addMesh(sphere.createWireframeMesh(color, 50));
+  }
+
   
   // locating camera
   G3MWidget*    g3mWidget = getModel()->getG3MWidget();
