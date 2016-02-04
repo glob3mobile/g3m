@@ -1,12 +1,6 @@
 package org.glob3.mobile.generated; 
 public class Frustum
 {
-  private final Plane _leftPlane;
-  private final Plane _rightPlane;
-  private final Plane _bottomPlane;
-  private final Plane _topPlane;
-  private final Plane _nearPlane;
-  private final Plane _farPlane;
 
   // the eight vertices of the frustum, i.e: ltn = left,top,near
   private final Vector3D _ltn ;
@@ -21,23 +15,24 @@ public class Frustum
   // the center of projection for the frustum
   private final double _znear;
 
+
+  private final Plane _leftPlane;
+  private final Plane _rightPlane;
+  private final Plane _bottomPlane;
+  private final Plane _topPlane;
+  private final Plane _nearPlane;
+  private final Plane _farPlane;
+  
   // the four lateral edges of the frustum
-  private final StraightLine _lt = new StraightLine();
-  private final StraightLine _rt = new StraightLine();
-  private final StraightLine _lb = new StraightLine();
-  private final StraightLine _rb = new StraightLine();
-
+  private final StraightLine _lt, _rt, _lb, _rb;
+  
   // the four edges in near plane
-  private final StraightLine _ln = new StraightLine();
-  private final StraightLine _tn = new StraightLine();
-  private final StraightLine _rn = new StraightLine();
-  private final StraightLine _bn = new StraightLine();
-
+  private final StraightLine _ln, _tn, _rn, _bn;
+  
   // the four edges in near plane
-  private final StraightLine _lf = new StraightLine();
-  private final StraightLine _tf = new StraightLine();
-  private final StraightLine _rf = new StraightLine();
-  private final StraightLine _bf = new StraightLine();
+  private final StraightLine _lf, _tf, _rf, _bf;
+
+
 
   private BoundingVolume _boundingVolume;
 
