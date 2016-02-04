@@ -217,7 +217,7 @@ public:
   const double distanceTo(const Vector3D& that) const;
 
   const double distanceToLine(const Vector3D& point, const Vector3D& vector) const {
-    return point.sub(*this).cross(vector).length() / vector.length();
+    return this->sub(point).cross(vector).length() / vector.length();
   }
 };
 
