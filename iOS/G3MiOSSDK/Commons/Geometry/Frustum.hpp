@@ -13,6 +13,7 @@
 #include "MutableMatrix44D.hpp"
 #include "Plane.hpp"
 #include "BoundingVolume.hpp"
+#include "StraightLine.hpp"
 
 class Box;
 class Mesh;
@@ -90,6 +91,12 @@ private:
   // the center of projection for the frustum
   const double _znear;
   
+  // the four lateral edges of the frustum
+  const StraightLine _lt, _rt, _lb, _rb;
+  
+  // the four edges in near plane
+  const StraightLine _ln, _tn, _rn, _bn;
+  
   mutable BoundingVolume*   _boundingVolume;
   
   Frustum(const Frustum *that,
@@ -103,6 +110,14 @@ private:
   _rtf(that->_rtf.transformedBy(inverse, 1)),
   _lbf(that->_lbf.transformedBy(inverse, 1)),
   _rbf(that->_rbf.transformedBy(inverse, 1)),
+  _lt(StraightLine(_ltn, _ltf.sub(_ltn))),
+  _rt(StraightLine(_rtn, _rtf.sub(_rtn))),
+  _lb(StraightLine(_lbn, _ltf.sub(_lbn))),
+  _rb(StraightLine(_rbn, _rtf.sub(_rbn))),
+  _ln(StraightLine(_ltn, _ltn.sub(_lbn))),
+  _rn(StraightLine(_rtn, _rtn.sub(_rbn))),
+  _tn(StraightLine(_ltn, _ltn.sub(_rtn))),
+  _bn(StraightLine(_lbn, _lbn.sub(_rbn))),
   _znear(that->_znear),
   _leftPlane(that->_leftPlane.transformedByTranspose(matrix)),
   _rightPlane(that->_rightPlane.transformedByTranspose(matrix)),
@@ -134,6 +149,14 @@ public:
   _rtf(that._rtf),
   _lbf(that._lbf),
   _rbf(that._rbf),
+  _lt(that._lt),
+  _rt(that._rt),
+  _lb(that._lb),
+  _rb(that._rb),
+  _ln(that._ln),
+  _rn(that._rn),
+  _tn(that._tn),
+  _bn(that._bn),
   _znear(that._znear),
   _boundingVolume(NULL)
   {
@@ -151,6 +174,14 @@ public:
   _rtf(Vector3D(zfar/znear*right, zfar/znear*top,     -zfar)),
   _lbf(Vector3D(zfar/znear*left,  zfar/znear*bottom,  -zfar)),
   _rbf(Vector3D(zfar/znear*right, zfar/znear*bottom,  -zfar)),
+  _lt(StraightLine(_ltn, _ltf.sub(_ltn))),
+  _rt(StraightLine(_rtn, _rtf.sub(_rtn))),
+  _lb(StraightLine(_lbn, _ltf.sub(_lbn))),
+  _rb(StraightLine(_rbn, _rtf.sub(_rbn))),
+  _ln(StraightLine(_ltn, _ltn.sub(_lbn))),
+  _rn(StraightLine(_rtn, _rtn.sub(_rbn))),
+  _tn(StraightLine(_ltn, _ltn.sub(_rtn))),
+  _bn(StraightLine(_lbn, _lbn.sub(_rbn))),
   _znear(znear),
   _leftPlane(Plane::fromPoints(Vector3D::zero,
                                Vector3D(left, top, -znear),

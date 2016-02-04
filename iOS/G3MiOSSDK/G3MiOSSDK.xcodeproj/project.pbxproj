@@ -720,6 +720,7 @@
 		FB31AE3616F76B4C00C415FF /* LayoutUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB31AE3516F76B4C00C415FF /* LayoutUtils.cpp */; };
 		FB31AE3916F8A37D00C415FF /* LayoutUtils.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = FB31AE3416F76AE500C415FF /* LayoutUtils.hpp */; };
 		FB6D00A516CBFF3A009BF93D /* EllipsoidShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB6D00A416CBFF3A009BF93D /* EllipsoidShape.cpp */; };
+		FBB7C6371C63B3A300AC1DE1 /* StraightLine.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = FBB7C6361C63AD4200AC1DE1 /* StraightLine.hpp */; };
 		FBBDBCDC17AB940C00077004 /* FlatPlanet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FBBDBCDA17AB940C00077004 /* FlatPlanet.cpp */; };
 		FBC2309B17973100009343FC /* CameraEffects.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FBC23099179730FF009343FC /* CameraEffects.cpp */; };
 /* End PBXBuildFile section */
@@ -731,6 +732,7 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				FBB7C6371C63B3A300AC1DE1 /* StraightLine.hpp in CopyFiles */,
 				CF1751D21BA61808006286C6 /* StackLayoutImageBuilder.hpp in CopyFiles */,
 				CF3623411B97AFD900824932 /* CircleImageBuilder.hpp in CopyFiles */,
 				CF75A9FD1B87E2B10033DA25 /* MapBoo.hpp in CopyFiles */,
@@ -1867,6 +1869,7 @@
 		FB31AE3516F76B4C00C415FF /* LayoutUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = LayoutUtils.cpp; path = Commons/Geometry/LayoutUtils.cpp; sourceTree = "<group>"; };
 		FB6D00A416CBFF3A009BF93D /* EllipsoidShape.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = EllipsoidShape.cpp; path = Commons/Rendererers/EllipsoidShape.cpp; sourceTree = "<group>"; };
 		FB6D00A716CBFF4F009BF93D /* EllipsoidShape.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = EllipsoidShape.hpp; path = Commons/Rendererers/EllipsoidShape.hpp; sourceTree = "<group>"; };
+		FBB7C6361C63AD4200AC1DE1 /* StraightLine.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = StraightLine.hpp; path = Commons/Geometry/StraightLine.hpp; sourceTree = "<group>"; };
 		FBBDBCDA17AB940C00077004 /* FlatPlanet.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = FlatPlanet.cpp; path = Commons/Geometry/FlatPlanet.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		FBBDBCDB17AB940C00077004 /* FlatPlanet.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = FlatPlanet.hpp; path = Commons/Geometry/FlatPlanet.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		FBBDBCDD17AB983200077004 /* CameraDoubleDragHandler.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = CameraDoubleDragHandler.hpp; path = Commons/Cameras/CameraDoubleDragHandler.hpp; sourceTree = "<group>"; };
@@ -2199,6 +2202,7 @@
 		383BD38A1577EDFD0012AC53 /* Geometry */ = {
 			isa = PBXGroup;
 			children = (
+				FBB7C6361C63AD4200AC1DE1 /* StraightLine.hpp */,
 				D80FAAD917CB81B600ACD249 /* Extent.hpp */,
 				D80FAADA17CB81B600ACD249 /* Matrix44DProvider.hpp */,
 				D80FAADB17CB81B600ACD249 /* Matrix44DProvider.cpp */,

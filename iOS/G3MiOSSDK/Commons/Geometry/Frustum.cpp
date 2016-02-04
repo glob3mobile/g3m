@@ -24,6 +24,14 @@ _ltf(Vector3D(data._zfar/data._znear*data._left,  data._zfar/data._znear*data._t
 _rtf(Vector3D(data._zfar/data._znear*data._right, data._zfar/data._znear*data._top,     -data._zfar)),
 _lbf(Vector3D(data._zfar/data._znear*data._left,  data._zfar/data._znear*data._bottom,  -data._zfar)),
 _rbf(Vector3D(data._zfar/data._znear*data._right, data._zfar/data._znear*data._bottom,  -data._zfar)),
+_lt(StraightLine(_ltn, _ltf.sub(_ltn))),
+_rt(StraightLine(_rtn, _rtf.sub(_rtn))),
+_lb(StraightLine(_lbn, _ltf.sub(_lbn))),
+_rb(StraightLine(_rbn, _rtf.sub(_rbn))),
+_ln(StraightLine(_ltn, _ltn.sub(_lbn))),
+_rn(StraightLine(_rtn, _rtn.sub(_rbn))),
+_tn(StraightLine(_ltn, _ltn.sub(_rtn))),
+_bn(StraightLine(_lbn, _lbn.sub(_rbn))),
 _znear(data._znear),
 _leftPlane(Plane::fromPoints(Vector3D::zero,
                              Vector3D(data._left, data._top, -data._znear),
@@ -245,27 +253,27 @@ bool Frustum::touchesWithSphere(const Sphere* sphere) const {
     case 2: // need to compute distance from sphere center to frustum edge
       if (leftDistance > 0) {
         if (topDistance > 0)
-          distance = sphere->_center.distanceToLine(_ltn, _ltf.sub(_ltn));
+          distance = _lt.distanceToPoint(sphere->_center);
         else if (bottomDistance > 0)
-          distance = sphere->_center.distanceToLine(_lbn, _lbf.sub(_lbn));
+          distance = _lb.distanceToPoint(sphere->_center);
         else if (nearDistance > 0)
-          distance = sphere->_center.distanceToLine(_ltn, _lbn.sub(_ltn));
+          distance = _ln.distanceToPoint(sphere->_center);
         else
           distance = sphere->_center.distanceToLine(_ltf, _lbf.sub(_ltf));
       } else if (rightDistance > 0) {
         if (topDistance > 0)
-          distance = sphere->_center.distanceToLine(_rtn, _rtf.sub(_rtn));
+          distance = _rt.distanceToPoint(sphere->_center);
         else if (bottomDistance > 0)
-          distance = sphere->_center.distanceToLine(_rbn, _rbf.sub(_rbn));
+          distance = _rb.distanceToPoint(sphere->_center);
         else if (nearDistance > 0)
-          distance = sphere->_center.distanceToLine(_rtn, _rbn.sub(_rtn));
+          distance = _rn.distanceToPoint(sphere->_center);
         else
           distance = sphere->_center.distanceToLine(_rtf, _rbf.sub(_rtf));
       } else if (nearDistance > 0) {
         if (topDistance > 0)
-          distance = sphere->_center.distanceToLine(_ltn, _rtn.sub(_ltn));
+          distance = _tn.distanceToPoint(sphere->_center);
         else
-          distance = sphere->_center.distanceToLine(_lbn, _rbn.sub(_lbn));
+          distance = _bn.distanceToPoint(sphere->_center);
       } else {
         if (topDistance > 0)
           distance = sphere->_center.distanceToLine(_ltf, _rtf.sub(_ltf));
