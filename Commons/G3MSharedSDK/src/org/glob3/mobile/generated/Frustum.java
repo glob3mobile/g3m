@@ -21,6 +21,24 @@ public class Frustum
   // the center of projection for the frustum
   private final double _znear;
 
+  // the four lateral edges of the frustum
+  private final StraightLine _lt = new StraightLine();
+  private final StraightLine _rt = new StraightLine();
+  private final StraightLine _lb = new StraightLine();
+  private final StraightLine _rb = new StraightLine();
+
+  // the four edges in near plane
+  private final StraightLine _ln = new StraightLine();
+  private final StraightLine _tn = new StraightLine();
+  private final StraightLine _rn = new StraightLine();
+  private final StraightLine _bn = new StraightLine();
+
+  // the four edges in near plane
+  private final StraightLine _lf = new StraightLine();
+  private final StraightLine _tf = new StraightLine();
+  private final StraightLine _rf = new StraightLine();
+  private final StraightLine _bf = new StraightLine();
+
   private BoundingVolume _boundingVolume;
 
   private Frustum(Frustum that, MutableMatrix44D matrix, MutableMatrix44D inverse)
@@ -33,6 +51,18 @@ public class Frustum
      _rtf = new Vector3D(that._rtf.transformedBy(inverse, 1));
      _lbf = new Vector3D(that._lbf.transformedBy(inverse, 1));
      _rbf = new Vector3D(that._rbf.transformedBy(inverse, 1));
+     _lt = StraightLine(_ltn, _ltf.sub(_ltn));
+     _rt = StraightLine(_rtn, _rtf.sub(_rtn));
+     _lb = StraightLine(_lbn, _ltf.sub(_lbn));
+     _rb = StraightLine(_rbn, _rtf.sub(_rbn));
+     _ln = StraightLine(_ltn, _ltn.sub(_lbn));
+     _rn = StraightLine(_rtn, _rtn.sub(_rbn));
+     _tn = StraightLine(_ltn, _ltn.sub(_rtn));
+     _bn = StraightLine(_lbn, _lbn.sub(_rbn));
+     _lf = StraightLine(_ltf, _ltf.sub(_lbf));
+     _rf = StraightLine(_rtf, _rtf.sub(_rbf));
+     _tf = StraightLine(_ltf, _ltf.sub(_rtf));
+     _bf = StraightLine(_lbf, _lbf.sub(_rbf));
      _znear = that._znear;
      _leftPlane = that._leftPlane.transformedByTranspose(matrix);
      _rightPlane = that._rightPlane.transformedByTranspose(matrix);
@@ -177,6 +207,18 @@ public class Frustum
      _rtf = new Vector3D(that._rtf);
      _lbf = new Vector3D(that._lbf);
      _rbf = new Vector3D(that._rbf);
+     _lt = that._lt;
+     _rt = that._rt;
+     _lb = that._lb;
+     _rb = that._rb;
+     _ln = that._ln;
+     _rn = that._rn;
+     _tn = that._tn;
+     _bn = that._bn;
+     _lf = that._lf;
+     _rf = that._rf;
+     _tf = that._tf;
+     _bf = that._bf;
      _znear = that._znear;
      _boundingVolume = null;
 
@@ -192,6 +234,18 @@ public class Frustum
      _rtf = new Vector3D(new Vector3D(zfar/znear *right, zfar/znear *top, -zfar));
      _lbf = new Vector3D(new Vector3D(zfar/znear *left, zfar/znear *bottom, -zfar));
      _rbf = new Vector3D(new Vector3D(zfar/znear *right, zfar/znear *bottom, -zfar));
+     _lt = StraightLine(_ltn, _ltf.sub(_ltn));
+     _rt = StraightLine(_rtn, _rtf.sub(_rtn));
+     _lb = StraightLine(_lbn, _ltf.sub(_lbn));
+     _rb = StraightLine(_rbn, _rtf.sub(_rbn));
+     _ln = StraightLine(_ltn, _ltn.sub(_lbn));
+     _rn = StraightLine(_rtn, _rtn.sub(_rbn));
+     _tn = StraightLine(_ltn, _ltn.sub(_rtn));
+     _bn = StraightLine(_lbn, _lbn.sub(_rbn));
+     _lf = StraightLine(_ltf, _ltf.sub(_lbf));
+     _rf = StraightLine(_rtf, _rtf.sub(_rbf));
+     _tf = StraightLine(_ltf, _ltf.sub(_rtf));
+     _bf = StraightLine(_lbf, _lbf.sub(_rbf));
      _znear = znear;
      _leftPlane = Plane.fromPoints(Vector3D.zero, new Vector3D(left, top, -znear), new Vector3D(left, bottom, -znear));
      _bottomPlane = Plane.fromPoints(Vector3D.zero, new Vector3D(left, bottom, -znear), new Vector3D(right, bottom, -znear));
@@ -212,6 +266,18 @@ public class Frustum
      _rtf = new Vector3D(new Vector3D(data._zfar/data._znear *data._right, data._zfar/data._znear *data._top, -data._zfar));
      _lbf = new Vector3D(new Vector3D(data._zfar/data._znear *data._left, data._zfar/data._znear *data._bottom, -data._zfar));
      _rbf = new Vector3D(new Vector3D(data._zfar/data._znear *data._right, data._zfar/data._znear *data._bottom, -data._zfar));
+     _lt = StraightLine(_ltn, _ltf.sub(_ltn));
+     _rt = StraightLine(_rtn, _rtf.sub(_rtn));
+     _lb = StraightLine(_lbn, _ltf.sub(_lbn));
+     _rb = StraightLine(_rbn, _rtf.sub(_rbn));
+     _ln = StraightLine(_ltn, _ltn.sub(_lbn));
+     _rn = StraightLine(_rtn, _rtn.sub(_rbn));
+     _tn = StraightLine(_ltn, _ltn.sub(_rtn));
+     _bn = StraightLine(_lbn, _lbn.sub(_rbn));
+     _lf = StraightLine(_ltf, _ltf.sub(_lbf));
+     _rf = StraightLine(_rtf, _rtf.sub(_rbf));
+     _tf = StraightLine(_ltf, _ltf.sub(_rtf));
+     _bf = StraightLine(_lbf, _lbf.sub(_rbf));
      _znear = data._znear;
      _leftPlane = Plane.fromPoints(Vector3D.zero, new Vector3D(data._left, data._top, -data._znear), new Vector3D(data._left, data._bottom, -data._znear));
      _bottomPlane = Plane.fromPoints(Vector3D.zero, new Vector3D(data._left, data._bottom, -data._znear), new Vector3D(data._right, data._bottom, -data._znear));
@@ -318,7 +384,6 @@ public class Frustum
   
     // numOutsiders always between 0 and 3
     double squareDistance;
-    double distance;
     switch (numOutsiders)
     {
   
@@ -332,43 +397,40 @@ public class Frustum
         if (leftDistance > 0)
         {
           if (topDistance > 0)
-            distance = sphere._center.distanceToLine(_ltn, _ltf.sub(_ltn));
+            squareDistance = _lt.squaredDistanceToPoint(sphere._center);
           else if (bottomDistance > 0)
-            distance = sphere._center.distanceToLine(_lbn, _lbf.sub(_lbn));
+            squareDistance = _lb.squaredDistanceToPoint(sphere._center);
           else if (nearDistance > 0)
-            distance = sphere._center.distanceToLine(_ltn, _lbn.sub(_ltn));
+            squareDistance = _ln.squaredDistanceToPoint(sphere._center);
           else
-            distance = sphere._center.distanceToLine(_ltf, _lbf.sub(_ltf));
+            squareDistance = _lf.squaredDistanceToPoint(sphere._center);
         }
         else if (rightDistance > 0)
         {
           if (topDistance > 0)
-            distance = sphere._center.distanceToLine(_rtn, _rtf.sub(_rtn));
+            squareDistance = _rt.squaredDistanceToPoint(sphere._center);
           else if (bottomDistance > 0)
-            distance = sphere._center.distanceToLine(_rbn, _rbf.sub(_rbn));
+            squareDistance = _rb.squaredDistanceToPoint(sphere._center);
           else if (nearDistance > 0)
-            distance = sphere._center.distanceToLine(_rtn, _rbn.sub(_rtn));
+            squareDistance = _rn.squaredDistanceToPoint(sphere._center);
           else
-            distance = sphere._center.distanceToLine(_rtf, _rbf.sub(_rtf));
+            squareDistance = _rf.squaredDistanceToPoint(sphere._center);
         }
         else if (nearDistance > 0)
         {
           if (topDistance > 0)
-            distance = sphere._center.distanceToLine(_ltn, _rtn.sub(_ltn));
+            squareDistance = _tn.squaredDistanceToPoint(sphere._center);
           else
-            distance = sphere._center.distanceToLine(_lbn, _rbn.sub(_lbn));
+            squareDistance = _bn.squaredDistanceToPoint(sphere._center);
         }
         else
         {
           if (topDistance > 0)
-            distance = sphere._center.distanceToLine(_ltf, _rtf.sub(_ltf));
+            squareDistance = _tf.squaredDistanceToPoint(sphere._center);
           else
-            distance = sphere._center.distanceToLine(_lbf, _rbf.sub(_lbf));
+            squareDistance = _bf.squaredDistanceToPoint(sphere._center);
         }
-        if (distance > sphere._radius)
-          return false;
-        else
-          return true;
+        return (squareDistance < sphere._radiusSquared);
   
       case 3: // need to compute distance from sphere center to frustum vertex
         if (leftDistance > 0)
@@ -405,10 +467,7 @@ public class Frustum
               squareDistance = sphere._center.squaredDistanceTo(_rbf);
           }
         }
-        if (squareDistance > sphere._radius * sphere._radius)
-          return false;
-        else
-          return true;
+        return (squareDistance < sphere._radiusSquared);
     }
     return true;
   }

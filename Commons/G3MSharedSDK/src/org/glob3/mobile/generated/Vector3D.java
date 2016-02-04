@@ -389,8 +389,4 @@ public class Vector3D
     return IMathUtils.instance().sqrt(squaredDistanceTo(that));
   }
 
-  public final double distanceToLine(Vector3D point, Vector3D vector)
-  {
-    return this.sub(point).cross(vector).length() / vector.length();
-  }
 }
