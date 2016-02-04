@@ -187,6 +187,7 @@
 		CF4FAAC31695C66F009734CA /* ByteBufferBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF4FAAC11695C66F009734CA /* ByteBufferBuilder.cpp */; };
 		CF4FAACC1695E4A8009734CA /* JSONGenerator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF4FAACA1695E4A8009734CA /* JSONGenerator.cpp */; };
 		CF4FAAD51695F344009734CA /* BSONGenerator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF4FAAD31695F344009734CA /* BSONGenerator.cpp */; };
+		CF516E931C63EF5D002F19E3 /* PlanetRenderContext.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF516E911C63EF5D002F19E3 /* PlanetRenderContext.cpp */; };
 		CF527E1F162E33F500E0BDE0 /* DefaultRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF527E1D162E33F500E0BDE0 /* DefaultRenderer.cpp */; };
 		CF547B4A196C45C9002DBBDD /* GEOVectorLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF547B48196C45C9002DBBDD /* GEOVectorLayer.cpp */; };
 		CF547B4B196C4921002DBBDD /* GEOVectorLayer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF547B49196C45C9002DBBDD /* GEOVectorLayer.hpp */; };
@@ -1400,6 +1401,8 @@
 		CF4FAACB1695E4A8009734CA /* JSONGenerator.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = JSONGenerator.hpp; sourceTree = "<group>"; };
 		CF4FAAD31695F344009734CA /* BSONGenerator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BSONGenerator.cpp; sourceTree = "<group>"; };
 		CF4FAAD41695F344009734CA /* BSONGenerator.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = BSONGenerator.hpp; sourceTree = "<group>"; };
+		CF516E911C63EF5D002F19E3 /* PlanetRenderContext.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PlanetRenderContext.cpp; path = Commons/Rendererers/PlanetRenderContext.cpp; sourceTree = "<group>"; };
+		CF516E921C63EF5D002F19E3 /* PlanetRenderContext.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = PlanetRenderContext.hpp; path = Commons/Rendererers/PlanetRenderContext.hpp; sourceTree = "<group>"; };
 		CF527E1A162E2B4200E0BDE0 /* GTask.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = GTask.hpp; path = Commons/Basic/GTask.hpp; sourceTree = "<group>"; };
 		CF527E1D162E33F500E0BDE0 /* DefaultRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = DefaultRenderer.cpp; path = Commons/Rendererers/DefaultRenderer.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CF527E1E162E33F500E0BDE0 /* DefaultRenderer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = DefaultRenderer.hpp; path = Commons/Rendererers/DefaultRenderer.hpp; sourceTree = "<group>"; };
@@ -2526,6 +2529,8 @@
 				D842D9AE1A727FAF008D55E4 /* NonOverlappingMarksRenderer.hpp */,
 				CCC2A02C15CA6C7D00923850 /* PlanetRenderer.cpp */,
 				CCC2A02D15CA6C7D00923850 /* PlanetRenderer.hpp */,
+				CF516E911C63EF5D002F19E3 /* PlanetRenderContext.cpp */,
+				CF516E921C63EF5D002F19E3 /* PlanetRenderContext.hpp */,
 				CFBD815419A3E0E100F1A8C4 /* PointCloudsRenderer.cpp */,
 				CFBD815519A3E0E100F1A8C4 /* PointCloudsRenderer.hpp */,
 				D8B78E251C120CF800DDE2B9 /* ProjectedCornersDistanceTileLODTester.cpp */,
@@ -3335,6 +3340,7 @@
 				CFDDDF9C17F8C9E100DD3499 /* URLTemplateLayer.cpp in Sources */,
 				CFAA530217AAFDCF002A9204 /* DecimatedSubviewElevationData.cpp in Sources */,
 				CFADF22318FF1CDB00360565 /* DefaultTileTexturizer.cpp in Sources */,
+				CF516E931C63EF5D002F19E3 /* PlanetRenderContext.cpp in Sources */,
 				CFAA530517AAFE3D002A9204 /* InterpolatedSubviewElevationData.cpp in Sources */,
 				CFAB754C17AC455300852FA7 /* SurfaceElevationProvider.cpp in Sources */,
 				D8F0C70B17B52702002A89E0 /* GenericQuadTree.cpp in Sources */,
