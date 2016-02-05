@@ -12,12 +12,15 @@
 #include "CameraEffects.hpp"
 #include "Camera.hpp"
 
+const Planet* EllipsoidalPlanet::createEarth() {
+  return new EllipsoidalPlanet(Ellipsoid(Vector3D::zero,
+                                         Vector3D(6378137.0, 6378137.0, 6356752.314245)));
+}
 
 EllipsoidalPlanet::EllipsoidalPlanet(const Ellipsoid& ellipsoid):
 _ellipsoid(ellipsoid)
 {
 }
-
 
 Vector3D EllipsoidalPlanet::geodeticSurfaceNormal(const Angle& latitude,
                                                   const Angle& longitude) const {
@@ -190,7 +193,6 @@ std::list<Vector3D> EllipsoidalPlanet::computeCurve(const Vector3D& start,
   const Vector3D normal = start.cross(stop).normalized();
   const double theta = start.angleInRadiansBetween(stop);
 
-  //int n = max((int)(theta / granularity) - 1, 0);
   int n = ((int) (theta / granularity) - 1) > 0 ? (int) (theta / granularity) - 1 : 0;
 
   std::list<Vector3D> positions;
@@ -251,7 +253,6 @@ double EllipsoidalPlanet::computeFastLatLonDistance(const Geodetic2D& g1,
   const double medLon = g1._longitude._degrees;
 
   // this way is faster, and works properly further away from the poles
-  //double diflat = fabs(g._latitude-medLat);
   double diflat = mu->abs(g2._latitude._degrees - medLat);
   if (diflat > 180) {
     diflat = 360 - diflat;
@@ -318,9 +319,7 @@ MutableMatrix44D EllipsoidalPlanet::createGeodeticTransformMatrix(const Geodetic
 
 void EllipsoidalPlanet::beginSingleDrag(const Vector3D& origin, const Vector3D& initialRay) const
 {
-//  _origin = origin.asMutableVector3D();
   _origin.copyFrom(origin);
-//  _initialPoint = closestIntersection(origin, initialRay).asMutableVector3D();
   _initialPoint.copyFrom(closestIntersection(origin, initialRay));
   _validSingleDrag = false;
 }
@@ -336,7 +335,6 @@ MutableMatrix44D EllipsoidalPlanet::singleDrag(const Vector3D& finalRay) const
   MutableVector3D finalPoint = closestIntersection(origin, finalRay).asMutableVector3D();
   if (finalPoint.isNan()) {
     //printf ("--invalid final point in drag!!\n");
-//    finalPoint = closestPointToSphere(origin, finalRay).asMutableVector3D();
     finalPoint.copyFrom(closestPointToSphere(origin, finalRay));
     if (finalPoint.isNan()) {
       ILogger::instance()->logWarning("EllipsoidalPlanet::singleDrag-> finalPoint is NaN");
@@ -353,7 +351,6 @@ MutableMatrix44D EllipsoidalPlanet::singleDrag(const Vector3D& finalRay) const
   if (rotationDelta.isNan()) return MutableMatrix44D::invalid();
 
   // save params for possible inertial animations
-//  _lastDragAxis = rotationAxis.asMutableVector3D();
   _lastDragAxis.copyFrom(rotationAxis);
   double radians = rotationDelta._radians;
   _lastDragRadiansStep = radians - _lastDragRadians;
@@ -482,7 +479,7 @@ MutableMatrix44D EllipsoidalPlanet::doubleDrag(const Vector3D& finalRay0,
   {
     MutableMatrix44D translation2 = MutableMatrix44D::createTranslationMatrix(viewDirection.asVector3D().normalized().times(dAccum));
     positionCamera = positionCamera.transformedBy(translation2, 1.0);
-//    matrix.copyValue(translation2.multiply(matrix));
+    //    matrix.copyValue(translation2.multiply(matrix));
     matrix.copyValueOfMultiplication(translation2, matrix);
   }
 
@@ -505,7 +502,6 @@ MutableMatrix44D EllipsoidalPlanet::doubleDrag(const Vector3D& finalRay0,
     viewDirection = viewDirection.transformedBy(rotation, 0.0);
     ray0 = ray0.transformedBy(rotation, 0.0);
     ray1 = ray1.transformedBy(rotation, 0.0);
-//    matrix.copyValue(rotation.multiply(matrix));
     matrix.copyValueOfMultiplication(rotation, matrix);
   }
 
@@ -519,7 +515,6 @@ MutableMatrix44D EllipsoidalPlanet::doubleDrag(const Vector3D& finalRay0,
     double sign     = v1.cross(v0).dot(normal);
     if (sign<0) angle = -angle;
     MutableMatrix44D rotation = MutableMatrix44D::createGeneralRotationMatrix(Angle::fromDegrees(angle), normal, centerPoint2);
-//    matrix.copyValue(rotation.multiply(matrix));
     matrix.copyValueOfMultiplication(rotation, matrix);
   }
 
@@ -575,5 +570,5 @@ MutableMatrix44D EllipsoidalPlanet::drag(const Geodetic3D& origin, const Geodeti
 
 void EllipsoidalPlanet::applyCameraConstrainers(const Camera* previousCamera,
                                                 Camera* nextCamera) const {
-
+  
 }

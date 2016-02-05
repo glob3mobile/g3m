@@ -42,7 +42,7 @@ public abstract class AbstractMesh extends Mesh
   {
     final int vertexCount = getVertexCount();
   
-    if (vertexCount <= 0)
+    if (vertexCount == 0)
     {
       return null;
     }
@@ -82,7 +82,11 @@ public abstract class AbstractMesh extends Mesh
     return new Box(new Vector3D(minX, minY, minZ), new Vector3D(maxX, maxY, maxZ));
   }
 
-  protected AbstractMesh(int primitive, boolean owner, Vector3D center, IFloatBuffer vertices, float lineWidth, float pointSize, Color flatColor, IFloatBuffer colors, float colorsIntensity, boolean depthTest, IFloatBuffer normals)
+  protected final boolean _polygonOffsetFill;
+  protected final float _polygonOffsetFactor;
+  protected final float _polygonOffsetUnits;
+
+  protected AbstractMesh(int primitive, boolean owner, Vector3D center, IFloatBuffer vertices, float lineWidth, float pointSize, Color flatColor, IFloatBuffer colors, float colorsIntensity, boolean depthTest, IFloatBuffer normals, boolean polygonOffsetFill, float polygonOffsetFactor, float polygonOffsetUnits)
   {
      _primitive = primitive;
      _owner = owner;
@@ -100,6 +104,9 @@ public abstract class AbstractMesh extends Mesh
      _normals = normals;
      _normalsMesh = null;
      _showNormals = false;
+     _polygonOffsetFactor = polygonOffsetFactor;
+     _polygonOffsetUnits = polygonOffsetUnits;
+     _polygonOffsetFill = polygonOffsetFill;
     createGLState();
   }
 
@@ -111,7 +118,7 @@ public abstract class AbstractMesh extends Mesh
   protected final void createGLState()
   {
   
-    _glState.addGLFeature(new GeometryGLFeature(_vertices, 3, 0, false, 0, _depthTest, false, 0, false, 0.0f, 0.0f, _lineWidth, true, _pointSize), false); // Depth test -  Stride 0 -  Not normalized -  Index 0 -  Our buffer contains elements of 3 -  The attribute is a float vector of 4 elements
+    _glState.addGLFeature(new GeometryGLFeature(_vertices, 3, 0, false, 0, _depthTest, false, 0, _polygonOffsetFill, _polygonOffsetFactor, _polygonOffsetUnits, _lineWidth, true, _pointSize), false); //Polygon Offset - Cull and culled face - Depth test - Stride 0 - Not normalized - Index 0 - Our buffer contains elements of 3 - The attribute is a float vector of 4 elements
   
     if (_normals != null)
     {
@@ -190,11 +197,13 @@ public abstract class AbstractMesh extends Mesh
          _vertices.dispose();
       if (_colors != null)
          _colors.dispose();
-      if (_flatColor != null)
-         _flatColor.dispose();
       if (_normals != null)
          _normals.dispose();
     }
+  
+    //Always deleting flatColor
+    if (_flatColor != null)
+       _flatColor.dispose();
   
     if (_boundingVolume != null)
        _boundingVolume.dispose();
@@ -272,6 +281,16 @@ public abstract class AbstractMesh extends Mesh
   public final void showNormals(boolean v)
   {
     _showNormals = v;
+  }
+
+  public final IFloatBuffer getVertices()
+  {
+    return _vertices;
+  }
+
+  public final Vector3D getCenter()
+  {
+    return _center;
   }
 
 }

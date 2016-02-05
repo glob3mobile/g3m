@@ -157,6 +157,11 @@ public:
   const std::string description() const;
   
   void bindAsVBOToGPU() const;
+  
+  static void onGPUProgramHasChanged(){
+    //APPARENTLY CHANGING PROGRAM FORCES TO REBIND THE BUFFERS
+    _boundVertexBuffer = -1;
+  }
 
   void rawPut(size_t i,
               const IFloatBuffer* srcBuffer,

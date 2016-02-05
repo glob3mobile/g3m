@@ -14,7 +14,7 @@
 #include "Color.hpp"
 #include "IImageListener.hpp"
 #include "IImageBuilderListener.hpp"
-#include "IStringUtils.hpp"
+//#include "IStringUtils.hpp"
 
 CanvasImageBuilder::~CanvasImageBuilder() {
   delete _canvas;
@@ -79,13 +79,13 @@ public:
   }
 };
 
-long long CanvasImageBuilder::_counter = 0;
+//long long CanvasImageBuilder::_counter = 0;
 
-std::string CanvasImageBuilder::getImageName(const G3MContext* context) const {
-  const IStringUtils* su = context->getStringUtils();
-
-  return "_CanvasImageBuilder_" + su->toString(_counter++);
-}
+//std::string CanvasImageBuilder::getImageName(const G3MContext* context) const {
+//  const IStringUtils* su = context->getStringUtils();
+//
+//  return "_CanvasImageBuilder_" + su->toString(_counter++);
+//}
 
 void CanvasImageBuilder::build(const G3MContext* context,
                                IImageBuilderListener* listener,

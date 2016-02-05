@@ -18,6 +18,6 @@ public class TextureIDGLFeature extends PriorityGLFeature
   }
   public final void applyOnGlobalGLState(GLGlobalState state)
   {
-    state.bindTexture(_texID);
+    state.bindTexture(0, _texID);
   }
 }

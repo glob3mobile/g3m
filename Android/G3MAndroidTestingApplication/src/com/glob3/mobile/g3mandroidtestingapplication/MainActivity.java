@@ -98,6 +98,7 @@ public class MainActivity
       final LayerSet layerSet = new LayerSet();
       layerSet.addLayer(new OSMLayer(TimeInterval.fromDays(30)));
       builder.getPlanetRendererBuilder().setLayerSet(layerSet);
+      builder.getPlanetRendererBuilder().setRenderDebug(true);
 
 //
 //      final NonOverlappingMarksRenderer renderer = new NonOverlappingMarksRenderer(30);

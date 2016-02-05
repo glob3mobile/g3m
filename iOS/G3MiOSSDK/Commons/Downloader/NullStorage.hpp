@@ -47,6 +47,10 @@ public:
 
   void onDestroy(const G3MContext* context) {
   }
+  
+  void merge(const std::string& databasePath) {
+    
+  }
 
 
   bool isAvailable() {

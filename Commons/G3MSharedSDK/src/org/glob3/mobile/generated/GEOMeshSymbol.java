@@ -73,7 +73,7 @@ public abstract class GEOMeshSymbol extends GEOSymbol
       }
     }
   
-    Mesh result = new IndexedMesh(GLPrimitive.lines(), true, vertices.getCenter(), vertices.create(), indices.create(), lineWidth, 1, new Color(lineColor), null, 0.0f, false);
+    Mesh result = new IndexedMesh(GLPrimitive.lines(), vertices.getCenter(), vertices.create(), true, indices.create(), true, lineWidth, 1, new Color(lineColor), null, 0.0f, false);
   
     if (vertices != null)
        vertices.dispose();

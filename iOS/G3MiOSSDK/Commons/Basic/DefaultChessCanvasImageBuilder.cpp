@@ -9,6 +9,7 @@
 #include "DefaultChessCanvasImageBuilder.hpp"
 #include "Context.hpp"
 #include "ICanvas.hpp"
+#include "IStringUtils.hpp"
 
 
 DefaultChessCanvasImageBuilder::DefaultChessCanvasImageBuilder(int width,
@@ -57,4 +58,15 @@ void DefaultChessCanvasImageBuilder::buildOnCanvas(const G3MContext* context,
                                    4);
     }
   }
+}
+
+std::string DefaultChessCanvasImageBuilder::getImageName(const G3MContext* context) const {
+  const IStringUtils* su = context->getStringUtils();
+
+  return "_DefaultChessCanvasImage_" +
+          su->toString(_width) +
+          "_" + su->toString(_height) +
+          "_" + _backgroundColor.toID() +
+          "_" + _boxColor.toID() +
+          "_" + su->toString(_splits);
 }

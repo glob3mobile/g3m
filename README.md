@@ -312,7 +312,7 @@ Slides
 Roadpmap
 ========
 
-Our roadmap is changing continously, and we are open to change the order of new development according the requests of our users.
+Our roadmap is changing continuously, and we are open to change the order of new development according the requests of our users.
 
 ##Near (weeks)
 

@@ -26,6 +26,9 @@ private:
 protected:
   void buildOnCanvas(const G3MContext* context,
                      ICanvas* canvas);
+
+  std::string getImageName(const G3MContext* context) const;
+
 public:
   DefaultChessCanvasImageBuilder(int width,
                                  int height,

@@ -14,8 +14,8 @@
 #include "SGShape.hpp"
 
 SGNode::~SGNode() {
-  const int childrenCount = _children.size();
-  for (int i = 0; i < childrenCount; i++) {
+  const size_t childrenCount = _children.size();
+  for (size_t i = 0; i < childrenCount; i++) {
     SGNode* child = _children[i];
     delete child;
   }
@@ -27,8 +27,8 @@ void SGNode::initialize(const G3MContext* context,
   _context = context;
   _shape = shape;
 
-  const int childrenCount = _children.size();
-  for (int i = 0; i < childrenCount; i++) {
+  const size_t childrenCount = _children.size();
+  for (size_t i = 0; i < childrenCount; i++) {
     SGNode* child = _children[i];
     child->initialize(context, shape);
   }
@@ -43,8 +43,8 @@ void SGNode::addNode(SGNode* child) {
 }
 
 bool SGNode::isReadyToRender(const G3MRenderContext* rc) {
-  const int childrenCount = _children.size();
-  for (int i = 0; i < childrenCount; i++) {
+  const size_t childrenCount = _children.size();
+  for (size_t i = 0; i < childrenCount; i++) {
     SGNode* child = _children[i];
     if (!child->isReadyToRender(rc)) {
       return false;
@@ -73,8 +73,8 @@ void SGNode::render(const G3MRenderContext* rc, const GLState* parentGLState, bo
 
     rawRender(rc, glState);
 
-    const int childrenCount = _children.size();
-    for (int i = 0; i < childrenCount; i++) {
+    const size_t childrenCount = _children.size();
+    for (size_t i = 0; i < childrenCount; i++) {
       SGNode* child = _children[i];
       child->render(rc, glState, renderNotReadyShapes);
     }

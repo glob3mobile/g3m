@@ -1,12 +1,12 @@
 //
-//  G3MVectorStreamingDemoScene.cpp
+//  G3MVectorStreaming2DemoScene.cpp
 //  G3MApp
 //
 //  Created by Diego Gomez Deck on 7/30/15.
 //  Copyright (c) 2015 Igo Software SL. All rights reserved.
 //
 
-#include "G3MVectorStreamingDemoScene.hpp"
+#include "G3MVectorStreaming2DemoScene.hpp"
 
 #include <G3MiOSSDK/G3MWidget.hpp>
 #include <G3MiOSSDK/BingMapsLayer.hpp>
@@ -27,52 +27,80 @@
 #include <sstream>
 
 
-class G3MVectorStreamingDemoScene_Symbolizer : public VectorStreamingRenderer::VectorSetSymbolizer {
+class G3MVectorStreaming2DemoScene_Symbolizer : public VectorStreamingRenderer::VectorSetSymbolizer {
 public:
-  Mark* createFeatureMark(const GEO2DPointGeometry* geometry) const {
+  Mark* createFeatureMark(const VectorStreamingRenderer::Node* node,
+                          const GEO2DPointGeometry* geometry) const {
     const GEOFeature* feature = geometry->getFeature();
 
     const JSONObject* properties = feature->getProperties();
 
-    const std::string label = properties->getAsString("name", "<bar>");
+    const int mag = properties->getAsNumber("mag")->value();
+
     const Geodetic3D  position( geometry->getPosition(), 0);
 
-//    double maxPopulation = 22315474;
-//    double population = properties->getAsNumber("population")->value();
-//    float labelFontSize = (float) (14.0 * (population / maxPopulation) + 16.0) ;
+    int red   = 255;
+    int green = 255;
+    int blue  = 255;
+    int alpha = 171;
+    // int alpha = 255;
+    switch (mag) {
+      case 0:
+        red   = 0;
+        green = 250;
+        blue  = 244;
+        break;
+      case 1:
+        red   = 255;
+        green = 255;
+        blue  = 204;
+        break;
+      case 2:
+        red   = 255;
+        green = 231;
+        blue  = 117;
+        break;
+      case 3:
+        red   = 255;
+        green = 193;
+        blue  = 64;
+        break;
+      case 4:
+        red   = 255;
+        green = 143;
+        blue  = 32;
+        break;
+      case 5:
+        red   = 255;
+        green = 96;
+        blue  = 96;
+        break;
 
-     float labelFontSize = 18.0f;
+      default:
+        break;
+    }
+    Color featureColor = Color::fromRGBA255(red, green, blue, alpha);
 
-    Mark* mark = new Mark(label,
+    int pointSize = 12;
+
+    Mark* mark = new Mark(new CircleImageBuilder(featureColor, pointSize),
                           position,
                           ABSOLUTE,
-                          0, // minDistanceToCamera
-                          labelFontSize
-                          // Color::newFromRGBA(1, 1, 0, 1)
+                          0 // minDistanceToCamera
                           );
-
-//    int pointSize = 12;
-//
-//    Mark* mark = new Mark(new CircleImageBuilder(Color::white(),
-//                                                 pointSize),
-//                          position,
-//                          ABSOLUTE,
-//                          0 // minDistanceToCamera
-//                          );
 
     return mark;
   }
 
-  Mark* createClusterMark(const VectorStreamingRenderer::Cluster* cluster,
+  Mark* createClusterMark(const VectorStreamingRenderer::Node* node,
+                          const VectorStreamingRenderer::Cluster* cluster,
                           long long featuresCount) const {
-    const Geodetic3D  position(cluster->getPosition()->_latitude,
-                               cluster->getPosition()->_longitude,
-                               0);
+    const Geodetic3D position(cluster->getPosition()->_latitude,
+                              cluster->getPosition()->_longitude,
+                              0);
 
     std::stringstream labelStream;
-//    labelStream << "(";
     labelStream << cluster->getSize();
-//    labelStream << ")";
 
     std::string label;
     labelStream >> label;
@@ -81,24 +109,22 @@ public:
 
     const IMathUtils* mu = IMathUtils::instance();
 
-     float labelFontSize = (float) ((14.0 * clusterPercent) + 16.0) ;
-//    float labelFontSize = 18.0f;
+    const float labelFontSize = (float) ((14.0 * clusterPercent) + 16.0) ;
 
-    double area = (15000.0 * clusterPercent);
-//    int pointSize = mu->max(12, mu->round((float) mu->sqrt(area)));
-    int pointSize = 12 + mu->round((float) mu->sqrt(area));
+    const double area = (15000.0 * clusterPercent);
+    const int radius = 12 + mu->round((float) mu->sqrt(area / PI));
 
     Mark* mark = new Mark(new StackLayoutImageBuilder(new CircleImageBuilder(Color::white(),
-                                                                             pointSize),
+                                                                             radius),
                                                       new LabelImageBuilder(label,
                                                                             GFont::sansSerif(labelFontSize, true),
                                                                             2.0f,                 // margin
                                                                             Color::black(),       // color
-                                                                            Color::transparent(), // shadowColor
+                                                                            Color::white(),       // shadowColor
                                                                             5.0f,                 // shadowBlur
                                                                             0.0f,                 // shadowOffsetX
                                                                             0.0f,                 // shadowOffsetY
-                                                                            Color::white(),       // backgroundColor
+                                                                            Color::transparent(), // backgroundColor
                                                                             4.0f                  // cornerRadius
                                                                             )
                                                       ),
@@ -113,10 +139,9 @@ public:
 };
 
 
-void G3MVectorStreamingDemoScene::rawActivate(const G3MContext* context) {
+void G3MVectorStreaming2DemoScene::rawActivate(const G3MContext* context) {
   G3MDemoModel* model     = getModel();
-  G3MWidget*    g3mWidget = model->getG3MWidget();
-
+//  G3MWidget*    g3mWidget = model->getG3MWidget();
 
   BingMapsLayer* layer = new BingMapsLayer(BingMapType::Aerial(),
                                            "AnU5uta7s5ql_HTrRZcPLI4_zotvNefEeSxIClF1Jf7eS-mLig1jluUdCoecV7jc",
@@ -126,24 +151,20 @@ void G3MVectorStreamingDemoScene::rawActivate(const G3MContext* context) {
   model->getMarksRenderer()->setRenderInReverse(true);
 
   VectorStreamingRenderer* renderer = model->getVectorStreamingRenderer();
-  renderer->addVectorSet(URL("http://192.168.1.12:8080/server-mapboo/public/VectorialStreaming/"),
-                         // "GEONames-PopulatedPlaces_LOD",
-                         // "name|population|featureClass|featureCode",
-                         "SpanishBars_LOD",
-                         "name",
-                         //"Tornados_LOD",
-                         //"mag",
-                         new G3MVectorStreamingDemoScene_Symbolizer(),
+  renderer->addVectorSet(//URL("http://192.168.1.12:8080/server-mapboo/public/VectorialStreaming/"),
+                         URL("http://mapboo.com/server-mapboo/public/v1/VectorialStreaming/"),
+                         "55f922dc0c1bc2b9673c6203", // tornados clustering
+                         "om|yr|mo|dy|date|time|tz|st|stf|stn|mag|inj|fat|loss|closs|slat|slon|elat|elon|len|wid|",
+                         new G3MVectorStreaming2DemoScene_Symbolizer(),
                          true, // deleteSymbolizer
-                         //DownloadPriority::LOWER,
                          DownloadPriority::HIGHER,
                          TimeInterval::zero(),
                          true, // readExpired
                          true, // verbose
-                         true  // haltOnError
+                         true, // haltOnError
+                         VectorStreamingRenderer::Format::SERVER
                          );
 
+//  g3mWidget->setAnimatedCameraPosition( Geodetic3D::fromDegrees(46.612016780685230799, 7.8587244849714883443, 5410460) );
 
-  g3mWidget->setAnimatedCameraPosition( Geodetic3D::fromDegrees(46.612016780685230799, 7.8587244849714883443, 5410460) );
-  
 }

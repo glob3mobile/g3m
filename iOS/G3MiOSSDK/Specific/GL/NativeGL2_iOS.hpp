@@ -27,6 +27,12 @@ class NativeGL2_iOS: public INativeGL {
 public:
 
   void useProgram(GPUProgram* program) const {
+    
+#warning TODO: Check all the parameters that should be changed on OpenGL after a glUseProgram()
+    
+    //Must forget bound buffer
+    FloatBuffer_iOS::onGPUProgramHasChanged();
+    
     glUseProgram(program->getProgramID());
   }
 

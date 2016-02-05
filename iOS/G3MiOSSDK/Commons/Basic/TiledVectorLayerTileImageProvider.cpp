@@ -24,7 +24,6 @@ TiledVectorLayerTileImageProvider::GEOJSONBufferRasterizer::~GEOJSONBufferRaster
   if (_imageAssembler != NULL) {
     _imageAssembler->deletedRasterizer();
   }
-
   delete _symbolizer;
   delete _buffer;
   delete _geoObject;

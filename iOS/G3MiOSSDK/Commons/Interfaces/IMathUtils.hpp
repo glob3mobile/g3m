@@ -37,6 +37,9 @@
 
 #define ISNAN(x) (x != x)
 
+class Geodetic2D;
+class Angle;
+
 class IMathUtils {
 private:
   static IMathUtils* _instance;
@@ -131,6 +134,11 @@ public:
     return (i1 < i2) ? i1 : i2;
   }
 
+  long long min(long long i1, long long i2) const {
+    return (i1 < i2) ? i1 : i2;
+  }
+
+
   virtual double max(double d1, double d2) const = 0;
   virtual float  max(float f1,  float f2)  const = 0;
 
@@ -162,6 +170,13 @@ public:
                                      double to,
                                      double alpha) const {
     return from + ((to - from) * alpha);
+  }
+
+  virtual double cosineInterpolation(double from,
+                                     double to,
+                                     double alpha) const {
+    const double alpha2 = (1.0 - cos(alpha*PI)) / 2.0;
+    return (from * (1.0 - alpha2) + to * alpha2);
   }
 
   virtual float linearInterpolation(float from,
@@ -248,6 +263,12 @@ public:
 
   /** answer a double value in the range 0.0 (inclusive) and 1.0 (exclusive) */
   virtual double nextRandomDouble() const = 0;
+
+  Geodetic2D greatCircleIntermediatePoint(const Angle& fromLat,
+                                          const Angle& fromLon,
+                                          const Angle& toLat,
+                                          const Angle& toLon,
+                                          const double alpha) const;
 
 };
 

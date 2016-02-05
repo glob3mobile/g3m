@@ -72,14 +72,10 @@ public:
   bool isTransparent(const G3MRenderContext* rc) {
     return _isTransparent;
   }
-  
+
   std::vector<double> intersectionsDistances(const Planet* planet,
                                              const Vector3D& origin,
-                                             const Vector3D& direction) const
-  {
-    std::vector<double> intersections;
-    return intersections;
-  }
+                                             const Vector3D& direction) const;
   
   
 };

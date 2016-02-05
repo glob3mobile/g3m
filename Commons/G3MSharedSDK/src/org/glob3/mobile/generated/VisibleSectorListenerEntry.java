@@ -49,7 +49,7 @@ public class VisibleSectorListenerEntry
     }
     else
     {
-      final long now = getTimer().now()._milliseconds;
+      final long now = getTimer().nowInMilliseconds();
 
       if ((_lastSector == null) || (!_lastSector.isEquals(visibleSector)))
       {

@@ -22,10 +22,14 @@
 #include "ElevationData.hpp"
 #include "MercatorUtils.hpp"
 #include "FloatBufferBuilderFromCartesian2D.hpp"
+#include "FloatBufferBuilderFromCartesian3D.hpp"
 #include "IndexedGeometryMesh.hpp"
 #include "IShortBuffer.hpp"
+#include "CompositeMesh.hpp"
 
 #include "NormalsUtils.hpp"
+
+#include "Sphere.hpp"
 
 
 PlanetTileTessellator::PlanetTileTessellator(const bool skirted, const Sector& sector):
@@ -39,7 +43,7 @@ PlanetTileTessellator::~PlanetTileTessellator() {
 #ifdef JAVA_CODE
   super.dispose();
 #endif
-
+  
 }
 
 Vector2I PlanetTileTessellator::getTileMeshResolution(const Planet* planet,
@@ -54,28 +58,28 @@ Vector2I PlanetTileTessellator::calculateResolution(const Vector2I& resolution,
                                                     const Tile* tile,
                                                     const Sector& renderedSector) const {
   Sector sector = tile->_sector;
-
+  
   const double latRatio = sector._deltaLatitude._degrees  / renderedSector._deltaLatitude._degrees;
   const double lonRatio = sector._deltaLongitude._degrees / renderedSector._deltaLongitude._degrees;
-
+  
   const IMathUtils* mu = IMathUtils::instance();
-
+  
   int resX = (int) mu->ceil((resolution._x / lonRatio));
   if (resX < 2) {
     resX = 2;
   }
-
+  
   int resY = (int) mu->ceil((resolution._y / latRatio) );
   if (resY < 2) {
     resY = 2;
   }
-
+  
   const Vector2I meshRes = Vector2I(resX, resY);
   return meshRes;
-
-
+  
+  
   //  return rawResolution;
-
+  
   //  /* testing for dynamic latitude-resolution */
   //  const double cos = sector._center._latitude.cosinus();
   //
@@ -93,7 +97,7 @@ Vector2I PlanetTileTessellator::calculateResolution(const Vector2I& resolution,
 }
 
 double PlanetTileTessellator::skirtDepthForSector(const Planet* planet, const Sector& sector){
-
+  
   const Vector3D se = planet->toCartesian(sector.getSE());
   const Vector3D nw = planet->toCartesian(sector.getNW());
   const double diagonalLength = nw.sub(se).length();
@@ -110,15 +114,15 @@ Mesh* PlanetTileTessellator::createTileMesh(const Planet* planet,
                                             float verticalExaggeration,
                                             bool renderDebug,
                                             TileTessellatorMeshData& data) const {
-
+  
   const Sector tileSector = tile->_sector;
   const Sector meshSector = getRenderedSectorForTile(tile); // tile->getSector();
   const Vector2I meshResolution = calculateResolution(rawResolution, tile, meshSector);
-
+  
   FloatBufferBuilderFromGeodetic* vertices = FloatBufferBuilderFromGeodetic::builderWithGivenCenter(planet, meshSector._center);
   ShortBufferBuilder indices;
   FloatBufferBuilderFromCartesian2D* textCoords = new FloatBufferBuilderFromCartesian2D();
-
+  
   const double minElevation = createSurface(tileSector,
                                             meshSector,
                                             meshResolution,
@@ -129,10 +133,10 @@ Mesh* PlanetTileTessellator::createTileMesh(const Planet* planet,
                                             indices,
                                             *textCoords,
                                             data);
-
+  
   if (_skirted) {
     const double relativeSkirtHeight = minElevation - skirtDepthForSector(planet, tileSector);
-
+    
     double absoluteSkirtHeight = 0;
     if (_renderedSector != NULL) {
 #ifdef C_CODE
@@ -142,7 +146,7 @@ Mesh* PlanetTileTessellator::createTileMesh(const Planet* planet,
       absoluteSkirtHeight = -skirtDepthForSector(planet, _renderedSector);
 #endif
     }
-
+    
     createEastSkirt(planet,
                     tileSector,
                     meshSector,
@@ -151,7 +155,7 @@ Mesh* PlanetTileTessellator::createTileMesh(const Planet* planet,
                     vertices,
                     indices,
                     *textCoords);
-
+    
     createNorthSkirt(planet,
                      tileSector,
                      meshSector,
@@ -160,7 +164,7 @@ Mesh* PlanetTileTessellator::createTileMesh(const Planet* planet,
                      vertices,
                      indices,
                      *textCoords);
-
+    
     createWestSkirt(planet,
                     tileSector,
                     meshSector,
@@ -169,7 +173,7 @@ Mesh* PlanetTileTessellator::createTileMesh(const Planet* planet,
                     vertices,
                     indices,
                     *textCoords);
-
+    
     createSouthSkirt(planet,
                      tileSector,
                      meshSector,
@@ -179,24 +183,24 @@ Mesh* PlanetTileTessellator::createTileMesh(const Planet* planet,
                      indices,
                      *textCoords);
   }
-
+  
   //Storing textCoords in Tile
   tile->setTessellatorData(new PlanetTileTessellatorData(textCoords));
-
+  
   IFloatBuffer* verticesB = vertices->create();
   IShortBuffer* indicesB  = indices.create();
   IFloatBuffer* normals = NULL;
-//#warning Testing_Terrain_Normals;
-//  IFloatBuffer* normals = NormalsUtils::createTriangleStripSmoothNormals(verticesB, indicesB);
-
+  //#warning Testing_Terrain_Normals;
+  //  IFloatBuffer* normals = NormalsUtils::createTriangleStripSmoothNormals(verticesB, indicesB);
+  
   Mesh* result = new IndexedGeometryMesh(GLPrimitive::triangleStrip(),
                                          vertices->getCenter(),
                                          verticesB, true,
                                          normals,   true,
                                          indicesB,  true);
-
+  
   delete vertices;
-
+  
   return result;
 }
 
@@ -204,25 +208,25 @@ const Vector2F PlanetTileTessellator::getTextCoord(const Tile* tile,
                                                    const Angle& latitude,
                                                    const Angle& longitude) const {
   const Sector sector = tile->_sector;
-
+  
   const Vector2F linearUV = sector.getUVCoordinatesF(latitude, longitude);
   if (!tile->_mercator) {
     return linearUV;
   }
-
+  
   const double lowerGlobalV = MercatorUtils::getMercatorV(sector._lower._latitude);
   const double upperGlobalV = MercatorUtils::getMercatorV(sector._upper._latitude);
   const double deltaGlobalV = lowerGlobalV - upperGlobalV;
-
+  
   const double globalV = MercatorUtils::getMercatorV(latitude);
   const double localV  = (globalV - upperGlobalV) / deltaGlobalV;
-
+  
   return Vector2F(linearUV._x, (float) localV);
 }
 
 IFloatBuffer* PlanetTileTessellator::createTextCoords(const Vector2I& rawResolution,
                                                       const Tile* tile) const {
-
+  
   PlanetTileTessellatorData* data = (PlanetTileTessellatorData*) tile->getTessellatorData();
   if (data == NULL || data->_textCoords == NULL) {
     ILogger::instance()->logError("Logic error on PlanetTileTessellator::createTextCoord");
@@ -234,65 +238,88 @@ IFloatBuffer* PlanetTileTessellator::createTextCoords(const Vector2I& rawResolut
 Mesh* PlanetTileTessellator::createTileDebugMesh(const Planet* planet,
                                                  const Vector2I& rawResolution,
                                                  const Tile* tile) const {
-  const Sector sector = getRenderedSectorForTile(tile); // tile->getSector();
+  
+  const Sector tileSector = tile->_sector;
+  const Sector meshSector = getRenderedSectorForTile(tile); // tile->getSector();
+  const Vector2I meshResolution = calculateResolution(rawResolution, tile, meshSector);
+  const short rx = (short)meshResolution._x;
+  const short ry = (short)meshResolution._y;
+  
+  AbstractGeometryMesh* mesh = ((AbstractGeometryMesh*)tile->getTessellatorMesh());
+  const IFloatBuffer* vertices = mesh->getVertices();
 
-  const int resolutionXMinus1 = rawResolution._x - 1;
-  const int resolutionYMinus1 = rawResolution._y - 1;
-  short posS = 0;
-
-  // compute offset for vertices
-  const Vector3D sw = planet->toCartesian(sector.getSW());
-  const Vector3D nw = planet->toCartesian(sector.getNW());
-  const double offset = nw.sub(sw).length() * 1e-3;
-
-  FloatBufferBuilderFromGeodetic* vertices = FloatBufferBuilderFromGeodetic::builderWithGivenCenter(planet, sector._center);
-  ShortBufferBuilder indices;
-
-  // west side
-  for (int j = 0; j < resolutionYMinus1; j++) {
-    vertices->add(sector.getInnerPoint(0, (double)j/resolutionYMinus1),
-                  offset);
-    indices.add(posS++);
+  //INDEX OF BORDER///////////////////////////////////////////////////////////////
+  ShortBufferBuilder indicesBorder;
+  for (short j = 0; j < rx; j++) {
+    indicesBorder.add(j);
   }
-
-  // south side
-  for (int i = 0; i < resolutionXMinus1; i++) {
-    vertices->add(sector.getInnerPoint((double)i/resolutionXMinus1, 1),
-                  offset);
-    indices.add(posS++);
+  
+  for (short i = 2; i < ry+1; i++) {
+    indicesBorder.add((short)((i * rx)-1));
   }
-
-  // east side
-  for (int j = resolutionYMinus1; j > 0; j--) {
-    vertices->add(sector.getInnerPoint(1, (double)j/resolutionYMinus1),
-                  offset);
-    indices.add(posS++);
+  
+  for (short j = (short)(rx*ry-2); j >= (short)(rx*(ry-1)); j--) {
+    indicesBorder.add(j);
   }
-
-  // north side
-  for (int i = resolutionXMinus1; i > 0; i--) {
-    vertices->add(sector.getInnerPoint((double)i/resolutionXMinus1, 0),
-                  offset);
-    indices.add(posS++);
+  
+  for (short j = (short)(rx*(ry-1)-rx); j >= 0; j-=rx) {
+    indicesBorder.add(j);
   }
-
-  Color *color = Color::newFromRGBA((float) 1.0, (float) 0.0, (float) 0, (float) 1.0);
-
-  Mesh* result = new IndexedMesh(GLPrimitive::lineLoop(),
-                                 true,
-                                 vertices->getCenter(),
-                                 vertices->create(),
-                                 indices.create(),
-                                 1,
-                                 1,
-                                 color,
-                                 NULL, // colors
-                                 0, // colorsIntensity
-                                 false);
-
-  delete vertices;
-
-  return result;
+  
+  //INDEX OF GRID
+  ShortBufferBuilder indicesGrid;
+  for (short i = 0; i < ry-1; i++) {
+    short rowOffset = (short)(i * rx);
+    
+    for (short j = 0; j < rx; j++) {
+      indicesGrid.add((short)(rowOffset + j));
+      indicesGrid.add((short)(rowOffset + j+rx));
+    }
+    for (short j = (short)((2*rx)-1); j >= rx; j--) {
+      indicesGrid.add((short)(rowOffset + j));
+    }
+    
+  }
+  
+  const Color levelColor = Color::blue().wheelStep(5, tile->_level % 5);
+  const float gridLineWidth = tile->isElevationDataSolved() || (tile->getElevationData() == NULL) ? 1.0f : 3.0f;
+  
+  
+  IndexedMesh* border = new IndexedMesh(GLPrimitive::lineStrip(),
+                                        mesh->getCenter(),
+                                        (IFloatBuffer*)vertices,
+                                        false,
+                                        indicesBorder.create(),
+                                        true,
+                                        2.0f,
+                                        1.0f,
+                                        Color::newFromRGBA(1.0f, 0.0f, 0.0f, 1.0f),
+                                        NULL,
+                                        1.0f,
+                                        false,
+                                        NULL,
+                                        true, 1.0f, 1.0f);
+  
+  IndexedMesh* grid = new IndexedMesh(GLPrimitive::lineStrip(),
+                                      mesh->getCenter(),
+                                      (IFloatBuffer*)vertices,
+                                      false,
+                                      indicesGrid.create(),
+                                      true,
+                                      gridLineWidth,
+                                      1.0f,
+                                      new Color(levelColor),
+                                      NULL,
+                                      1.0f,
+                                      false,
+                                      NULL,
+                                      true, 1.0f, 1.0f);
+  
+  CompositeMesh* c = new CompositeMesh();
+  c->addMesh(grid);
+  c->addMesh(border);
+  
+  return c;
 }
 
 Sector PlanetTileTessellator::getRenderedSectorForTile(const Tile* tile) const {
@@ -317,14 +344,14 @@ double PlanetTileTessellator::createSurface(const Sector& tileSector,
                                             ShortBufferBuilder& indices,
                                             FloatBufferBuilderFromCartesian2D& textCoords,
                                             TileTessellatorMeshData& data) const {
-
+  
   const int rx = meshResolution._x;
   const int ry = meshResolution._y;
-
+  
   const double mercatorLowerGlobalV = MercatorUtils::getMercatorV(tileSector._lower._latitude);
   const double mercatorUpperGlobalV = MercatorUtils::getMercatorV(tileSector._upper._latitude);
   const double mercatorDeltaGlobalV = mercatorLowerGlobalV - mercatorUpperGlobalV;
-
+  
   //VERTICES///////////////////////////////////////////////////////////////
   const IMathUtils* mu = IMathUtils::instance();
   double minElevation = mu->maxDouble();
@@ -332,42 +359,42 @@ double PlanetTileTessellator::createSurface(const Sector& tileSector,
   double averageElevation = 0;
   for (int j = 0; j < ry; j++) {
     const double v = (double) j / (ry - 1);
-
+    
     for (int i = 0; i < rx; i++) {
       const double u = (double) i / (rx - 1);
       const Geodetic2D position = meshSector.getInnerPoint(u, v);
       double elevation = 0;
-
+      
       if (elevationData != NULL) {
         const double rawElevation = elevationData->getElevationAt(position);
-
+        
         elevation = ISNAN(rawElevation)? 0 : rawElevation * verticalExaggeration;
-
+        
         //MIN
         if (elevation < minElevation) {
           minElevation = elevation;
         }
-
+        
         //MAX
         if (elevation > maxElevation) {
           maxElevation = elevation;
         }
-
+        
         //AVERAGE
         averageElevation += elevation;
       }
-
+      
       vertices->add( position, elevation );
-
+      
       //TEXT COORDS
       if (mercator) {
         //U
         const double m_u = tileSector.getUCoordinate(position._longitude);
-
+        
         //V
         const double mercatorGlobalV = MercatorUtils::getMercatorV(position._latitude);
         const double m_v = (mercatorGlobalV - mercatorUpperGlobalV) / mercatorDeltaGlobalV;
-
+        
         textCoords.add((float)m_u, (float)m_v);
       }
       else {
@@ -376,18 +403,18 @@ double PlanetTileTessellator::createSurface(const Sector& tileSector,
       }
     }
   }
-
+  
   if (minElevation == mu->maxDouble()) {
     minElevation = 0;
   }
   if (maxElevation == mu->minDouble()) {
     maxElevation = 0;
   }
-
+  
   data._minHeight = minElevation;
   data._maxHeight = maxElevation;
   data._averageHeight = averageElevation / (rx * ry);
-
+  
   //INDEX///////////////////////////////////////////////////////////////
   for (short j = 0; j < (ry-1); j++) {
     const short jTimesResolution = (short) (j*rx);
@@ -400,7 +427,7 @@ double PlanetTileTessellator::createSurface(const Sector& tileSector,
     }
     indices.add((short) (jTimesResolution + 2*rx - 1));
   }
-
+  
   return minElevation;
 }
 
@@ -412,37 +439,37 @@ void PlanetTileTessellator::createEastSkirt(const Planet* planet,
                                             FloatBufferBuilderFromGeodetic* vertices,
                                             ShortBufferBuilder& indices,
                                             FloatBufferBuilderFromCartesian2D& textCoords) const {
-
+  
   //VERTICES///////////////////////////////////////////////////////////////
   const short firstSkirtVertex = (short) (vertices->size() / 3);
-
+  
   const short rx = (short) meshResolution._x;
   const short ry = (short) meshResolution._y;
-
+  
   const short southEastCorner = (short)((rx * ry) - 1);
-
+  
   short skirtIndex = firstSkirtVertex;
   short surfaceIndex = southEastCorner;
-
+  
   // east side
   for (int j = ry-1; j >= 0; j--) {
     const double x = 1;
     const double y = (double)j/(ry-1);
     const Geodetic2D g = meshSector.getInnerPoint(x, y);
     vertices->add(g, skirtHeight);
-
+    
     //TEXTURE COORDS/////////////////////////////
     Vector2D uv = textCoords.getVector2D(surfaceIndex);
     textCoords.add(uv);
-
+    
     //INDEX///////////////////////////////////////////////////////////////
     indices.add(surfaceIndex);
     indices.add(skirtIndex);
-
+    
     skirtIndex++;
     surfaceIndex -= rx;
   }
-
+  
   indices.add((short)(surfaceIndex + rx));
   indices.add((short)(surfaceIndex + rx));
 }
@@ -455,38 +482,38 @@ void PlanetTileTessellator::createNorthSkirt(const Planet* planet,
                                              FloatBufferBuilderFromGeodetic* vertices,
                                              ShortBufferBuilder& indices,
                                              FloatBufferBuilderFromCartesian2D& textCoords) const {
-
+  
   //VERTICES///////////////////////////////////////////////////////////////
   const short firstSkirtVertex = (short) (vertices->size() / 3);
-
+  
   const short rx = (short) meshResolution._x;
   //  const short ry = (short) meshResolution._y;
-
+  
   const short northEastCorner = (short) (rx - 1);
-
+  
   short skirtIndex = firstSkirtVertex;
   short surfaceIndex = northEastCorner;
-
+  
   indices.add(surfaceIndex);
-
+  
   for (int i = rx-1; i >= 0; i--) {
     const double x = (double)i/(rx-1);
     const double y = 0;
     const Geodetic2D g = meshSector.getInnerPoint(x, y);
     vertices->add(g, skirtHeight);
-
+    
     //TEXTURE COORDS/////////////////////////////
     Vector2D uv = textCoords.getVector2D(surfaceIndex);
     textCoords.add(uv);
-
+    
     //INDEX///////////////////////////////////////////////////////////////
     indices.add(surfaceIndex);
     indices.add(skirtIndex);
-
+    
     skirtIndex++;
     surfaceIndex -= 1;
   }
-
+  
   indices.add((short)(surfaceIndex + 1));
   indices.add((short)(surfaceIndex + 1));
 }
@@ -499,38 +526,38 @@ void PlanetTileTessellator::createWestSkirt(const Planet* planet,
                                             FloatBufferBuilderFromGeodetic* vertices,
                                             ShortBufferBuilder& indices,
                                             FloatBufferBuilderFromCartesian2D& textCoords) const {
-
+  
   //VERTICES///////////////////////////////////////////////////////////////
   const short firstSkirtVertex = (short) (vertices->size() / 3);
-
+  
   const short rx = (short) meshResolution._x;
   const short ry = (short) meshResolution._y;
-
+  
   const short northWestCorner = (short)0;
-
+  
   short skirtIndex = firstSkirtVertex;
   short surfaceIndex = northWestCorner;
-
+  
   indices.add(surfaceIndex);
-
+  
   for (int j = 0; j < ry; j++) {
     const double x = 0;
     const double y = (double)j/(ry-1);
     const Geodetic2D g = meshSector.getInnerPoint(x, y);
     vertices->add(g, skirtHeight);
-
+    
     //TEXTURE COORDS/////////////////////////////
     Vector2D uv = textCoords.getVector2D(surfaceIndex);
     textCoords.add(uv);
-
+    
     //INDEX///////////////////////////////////////////////////////////////
     indices.add(surfaceIndex);
     indices.add(skirtIndex);
-
+    
     skirtIndex++;
     surfaceIndex += rx;
   }
-
+  
   indices.add((short)(surfaceIndex - rx));
   indices.add((short)(surfaceIndex - rx));
 }
@@ -543,30 +570,30 @@ void PlanetTileTessellator::createSouthSkirt(const Planet* planet,
                                              FloatBufferBuilderFromGeodetic* vertices,
                                              ShortBufferBuilder& indices,
                                              FloatBufferBuilderFromCartesian2D& textCoords) const {
-
+  
   //VERTICES///////////////////////////////////////////////////////////////
   const short firstSkirtVertex = (short) (vertices->size() / 3);
-
+  
   const short rx = (short) meshResolution._x;
   const short ry = (short) meshResolution._y;
-
+  
   const short southWestCorner = (short) (rx * (ry-1));
-
+  
   short skirtIndex = firstSkirtVertex;
   short surfaceIndex = southWestCorner;
-
+  
   indices.add(surfaceIndex);
-
+  
   for (int i = 0; i < rx; i++) {
     const double x = (double)i/(rx-1);
     const double y = 1;
     const Geodetic2D g = meshSector.getInnerPoint(x, y);
     vertices->add(g, skirtHeight);
-
+    
     //TEXTURE COORDS/////////////////////////////
     Vector2D uv = textCoords.getVector2D(surfaceIndex);
     textCoords.add((float)uv._x, (float)uv._y);
-
+    
     //INDEX///////////////////////////////////////////////////////////////
     indices.add(surfaceIndex);
     indices.add((short) skirtIndex++);

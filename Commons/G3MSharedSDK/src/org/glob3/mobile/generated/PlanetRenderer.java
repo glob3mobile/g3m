@@ -848,7 +848,7 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
 
   public final SurfaceElevationProvider getSurfaceElevationProvider()
   {
-    return (_elevationDataProvider == null) ? null : this;
+    return this;
   }
 
   public final PlanetRenderer getPlanetRenderer()

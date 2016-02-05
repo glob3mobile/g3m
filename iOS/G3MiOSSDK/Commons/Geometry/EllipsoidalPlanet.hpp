@@ -45,6 +45,7 @@ private:
 
 
 public:
+  static const Planet* createEarth();
 
   EllipsoidalPlanet(const Ellipsoid& ellipsoid);
 
@@ -215,7 +216,7 @@ public:
     return Geodetic3D(rendereSector._center,
                       height);
   }
-
+  
   const std::string getType() const {
     return "Ellipsoidal";
   }

@@ -23,6 +23,7 @@ package org.glob3.mobile.generated;
 //class IByteBuffer;
 //class Sector;
 //class Geodetic2D;
+//class JSONBaseObject;
 //class JSONArray;
 //class JSONObject;
 //class Mark;
@@ -36,6 +37,22 @@ package org.glob3.mobile.generated;
 
 public class VectorStreamingRenderer extends DefaultRenderer
 {
+
+  public enum Format
+  {
+    SERVER,
+    PLAIN_FILES;
+
+     public int getValue()
+     {
+        return this.ordinal();
+     }
+
+     public static Format forValue(int value)
+     {
+        return values()[value];
+     }
+  }
 
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following type could not be found.
 //  class VectorSet;
@@ -73,14 +90,35 @@ public class VectorStreamingRenderer extends DefaultRenderer
       int clustersCount = (int) json.getAsNumber("clustersCount").value();
       int featuresCount = (int) json.getAsNumber("featuresCount").value();
     
-      java.util.ArrayList<String> children = new java.util.ArrayList<String>();
+      java.util.ArrayList<String> childrenIDs = new java.util.ArrayList<String>();
+      java.util.ArrayList<Node> children = null;
       final JSONArray childrenJSON = json.getAsArray("children");
       for (int i = 0; i < childrenJSON.size(); i++)
       {
-        children.add(childrenJSON.getAsString(i).value());
+        final JSONString childID = childrenJSON.getAsString(i);
+        if (childID != null)
+        {
+          childrenIDs.add(childID.value());
+        }
+        else
+        {
+          final JSONObject jsonChild = childrenJSON.getAsObject(i);
+          if (jsonChild != null)
+          {
+            Node child = parseNode(null, jsonChild, vectorSet, verbose); // parent will set in the Node constructor
+            if (child != null)
+            {
+              if (children == null)
+              {
+                children = new java.util.ArrayList<Node>();
+              }
+              children.add(child);
+            }
+          }
+        }
       }
     
-      return new Node(vectorSet, parent, id, nodeSector, minimumSector, clustersCount, featuresCount, children, verbose);
+      return new Node(vectorSet, parent, id, nodeSector, minimumSector, clustersCount, featuresCount, childrenIDs, children, verbose);
     }
 
   }
@@ -121,16 +159,14 @@ public class VectorStreamingRenderer extends DefaultRenderer
     private Node _node;
     private boolean _verbose;
     private IByteBuffer _buffer;
-    private final IThreadUtils _threadUtils;
 
     private java.util.ArrayList<Node> _children;
 
-    public ChildrenParserAsyncTask(Node node, boolean verbose, IByteBuffer buffer, IThreadUtils threadUtils)
+    public ChildrenParserAsyncTask(Node node, boolean verbose, IByteBuffer buffer)
     {
        _node = node;
        _verbose = verbose;
        _buffer = buffer;
-       _threadUtils = threadUtils;
        _children = null;
       _node._retain();
     }
@@ -181,7 +217,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
 
     public final void onPostExecute(G3MContext context)
     {
-      _node.parsedChildren(_children, _threadUtils);
+      _node.parsedChildren(_children);
       _children = null; // moved ownership to _node
     }
 
@@ -218,7 +254,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
                                    buffer.size());
       }
     
-      _threadUtils.invokeAsyncTask(new ChildrenParserAsyncTask(_node, _verbose, buffer, _threadUtils), true);
+      _threadUtils.invokeAsyncTask(new ChildrenParserAsyncTask(_node, _verbose, buffer), true);
     }
 
     public final void onError(URL url)
@@ -245,10 +281,10 @@ public class VectorStreamingRenderer extends DefaultRenderer
     private Node _node;
     private boolean _verbose;
     private IByteBuffer _buffer;
-    private final IThreadUtils _threadUtils;
 
     private java.util.ArrayList<Cluster> _clusters;
     private GEOObject _features;
+    private java.util.ArrayList<Node> _children;
 
     private java.util.ArrayList<VectorStreamingRenderer.Cluster> parseClusters(JSONArray clustersJson)
     {
@@ -270,15 +306,37 @@ public class VectorStreamingRenderer extends DefaultRenderer
     
       return clusters;
     }
+    private java.util.ArrayList<VectorStreamingRenderer.Node> parseChildren(JSONBaseObject jsonBaseObject)
+    {
+      if (jsonBaseObject == null)
+      {
+        return null;
+      }
+    
+      final JSONArray jsonArray = jsonBaseObject.asArray();
+      if (jsonArray == null)
+      {
+        return null;
+      }
+    
+      java.util.ArrayList<Node> result = new java.util.ArrayList<Node>();
+      for (int i = 0; i < jsonArray.size(); i++)
+      {
+        final JSONObject nodeJSON = jsonArray.getAsObject(i);
+        result.add(GEOJSONUtils.parseNode(_node, nodeJSON, _node.getVectorSet(), _verbose));
+      }
+    
+      return result;
+    }
 
-    public FeaturesParserAsyncTask(Node node, boolean verbose, IByteBuffer buffer, IThreadUtils threadUtils)
+    public FeaturesParserAsyncTask(Node node, boolean verbose, IByteBuffer buffer)
     {
        _node = node;
        _verbose = verbose;
        _buffer = buffer;
-       _threadUtils = threadUtils;
        _clusters = null;
        _features = null;
+       _children = null;
       _node._retain();
     }
 
@@ -303,6 +361,16 @@ public class VectorStreamingRenderer extends DefaultRenderer
       if (_features != null)
          _features.dispose();
     
+      if (_children != null)
+      {
+        for (int i = 0; i < _children.size(); i++)
+        {
+          Node child = _children.get(i);
+          child._release();
+        }
+        _children = null;
+      }
+    
       super.dispose();
     }
 
@@ -320,6 +388,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
     
         _clusters = parseClusters(jsonObject.get("clusters").asArray());
         _features = GEOJSONParser.parse(jsonObject.get("features").asObject(), _verbose);
+        _children = parseChildren(jsonObject.get("children"));
     
         if (jsonBaseObject != null)
            jsonBaseObject.dispose();
@@ -328,9 +397,10 @@ public class VectorStreamingRenderer extends DefaultRenderer
 
     public final void onPostExecute(G3MContext context)
     {
-      _node.parsedFeatures(_clusters, _features, _threadUtils);
+      _node.parsedFeatures(_clusters, _features, _children);
       _clusters = null; // moved ownership to _node
       _features = null; // moved ownership to _node
+      _children = null; // moved ownership to _node
     }
 
   }
@@ -365,7 +435,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
                                    buffer.size());
       }
     
-      _threadUtils.invokeAsyncTask(new FeaturesParserAsyncTask(_node, _verbose, buffer, _threadUtils), true);
+      _threadUtils.invokeAsyncTask(new FeaturesParserAsyncTask(_node, _verbose, buffer), true);
     }
 
     public final void onError(URL url)
@@ -500,8 +570,6 @@ public class VectorStreamingRenderer extends DefaultRenderer
     private long _featuresRequestID;
     private void loadFeatures(G3MRenderContext rc)
     {
-      final URL metadataURL = new URL(_vectorSet.getServerURL(), _vectorSet.getName() + "/features" + "?node=" + _id + "&properties=" + _vectorSet.getProperties(), true);
-    
       //  if (_verbose) {
       //    ILogger::instance()->logInfo("\"%s\": Downloading features for node \'%s\'",
       //                                 _vectorSet->getName().c_str(),
@@ -509,7 +577,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
       //  }
     
       _downloader = rc.getDownloader();
-      _featuresRequestID = _downloader.requestBuffer(metadataURL, _vectorSet.getDownloadPriority() + _featuresCount + _clustersCount, _vectorSet.getTimeToCache(), _vectorSet.getReadExpired(), new NodeFeaturesDownloadListener(this, rc.getThreadUtils(), _verbose), true);
+      _featuresRequestID = _downloader.requestBuffer(_vectorSet.getNodeFeaturesURL(_id), _vectorSet.getDownloadPriority() + _featuresCount + _clustersCount, _vectorSet.getTimeToCache(), _vectorSet.getReadExpired(), new NodeFeaturesDownloadListener(this, rc.getThreadUtils(), _verbose), true);
     }
     private void unloadFeatures()
     {
@@ -548,21 +616,9 @@ public class VectorStreamingRenderer extends DefaultRenderer
       if (childrenIDsSize == 0)
       {
         java.util.ArrayList<Node> children = new java.util.ArrayList<Node>();
-        parsedChildren(children, rc.getThreadUtils());
+        parsedChildren(children);
         return;
       }
-    
-      String nodes = "";
-      for (int i = 0; i < childrenIDsSize; i++)
-      {
-        if (i > 0)
-        {
-          nodes += "|";
-        }
-        nodes += _childrenIDs.get(i);
-      }
-    
-      final URL childrenURL = new URL(_vectorSet.getServerURL(), _vectorSet.getName() + "?nodes=" + nodes, true);
     
       //  if (_verbose) {
       //    ILogger::instance()->logInfo("\"%s\": Downloading children for node \'%s\'",
@@ -572,7 +628,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
     
       _downloader = rc.getDownloader();
     
-      _childrenRequestID = _downloader.requestBuffer(childrenURL, _vectorSet.getDownloadPriority(), _vectorSet.getTimeToCache(), _vectorSet.getReadExpired(), new NodeChildrenDownloadListener(this, rc.getThreadUtils(), _verbose), true);
+      _childrenRequestID = _downloader.requestBuffer(_vectorSet.getNodeChildrenURL(_id, _childrenIDs), _vectorSet.getDownloadPriority(), _vectorSet.getTimeToCache(), _vectorSet.getReadExpired(), new NodeChildrenDownloadListener(this, rc.getThreadUtils(), _verbose), true);
     }
     private void unloadChildren()
     {
@@ -693,6 +749,16 @@ public class VectorStreamingRenderer extends DefaultRenderer
       }
     }
 
+    private void setParent(Node parent)
+    {
+      if (_parent != null)
+      {
+        throw new RuntimeException("Node already has a parent");
+      }
+      _parent = parent;
+      _parent._retain();
+    }
+
     public void dispose()
     {
       unload();
@@ -726,7 +792,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
       super.dispose();
     }
 
-    public Node(VectorSet vectorSet, Node parent, String id, Sector nodeSector, Sector minimumSector, int clustersCount, int featuresCount, java.util.ArrayList<String> childrenIDs, boolean verbose)
+    public Node(VectorSet vectorSet, Node parent, String id, Sector nodeSector, Sector minimumSector, int clustersCount, int featuresCount, java.util.ArrayList<String> childrenIDs, java.util.ArrayList<Node> children, boolean verbose)
     {
        _vectorSet = vectorSet;
        _parent = parent;
@@ -740,8 +806,8 @@ public class VectorStreamingRenderer extends DefaultRenderer
        _wasVisible = false;
        _loadedFeatures = false;
        _loadingFeatures = false;
-       _children = null;
-       _childrenSize = 0;
+       _children = children;
+       _childrenSize = children == null ? 0 : children.size();
        _loadingChildren = false;
        _wasBigEnough = false;
        _boundingVolume = null;
@@ -755,6 +821,14 @@ public class VectorStreamingRenderer extends DefaultRenderer
       if (_parent != null)
       {
         _parent._retain();
+      }
+      if (_children != null)
+      {
+        for (int i = 0; i < _children.size(); i++)
+        {
+          Node child = _children.get(i);
+          child.setParent(this);
+        }
       }
     }
 
@@ -863,11 +937,13 @@ public class VectorStreamingRenderer extends DefaultRenderer
       // do nothing by now
     }
 
-    public final void parsedFeatures(java.util.ArrayList<Cluster> clusters, GEOObject features, IThreadUtils threadUtils)
+    public final void parsedFeatures(java.util.ArrayList<Cluster> clusters, GEOObject features, java.util.ArrayList<Node> children)
     {
       _loadedFeatures = true;
       _loadingFeatures = false;
       _featuresRequestID = -1;
+    
+      parsedChildren(children);
     
       if (features != null)
       {
@@ -912,7 +988,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
       // do nothing by now
     }
 
-    public final void parsedChildren(java.util.ArrayList<Node> children, IThreadUtils threadUtils)
+    public final void parsedChildren(java.util.ArrayList<Node> children)
     {
       if (children != null)
       {
@@ -1107,9 +1183,9 @@ public class VectorStreamingRenderer extends DefaultRenderer
     {
     }
 
-    public abstract Mark createFeatureMark(GEO2DPointGeometry geometry);
+    public abstract Mark createFeatureMark(VectorStreamingRenderer.Node node, GEO2DPointGeometry geometry);
 
-    public abstract Mark createClusterMark(VectorStreamingRenderer.Cluster cluster, long featuresCount);
+    public abstract Mark createClusterMark(VectorStreamingRenderer.Node node, VectorStreamingRenderer.Cluster cluster, long featuresCount);
 
   }
 
@@ -1126,6 +1202,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
     private final boolean _readExpired;
     private final boolean _verbose;
     private final boolean _haltOnError;
+    private final Format _format;
 
     private final String _properties;
 
@@ -1144,8 +1221,35 @@ public class VectorStreamingRenderer extends DefaultRenderer
 
     private long _lastRenderedCount;
 
+    private URL getMetadataURL()
+    {
+      if (_format == VectorStreamingRenderer.Format.SERVER)
+      {
+        return new URL(_serverURL, _name);
+      }
+      return new URL(_serverURL, _name + "/metadata.json");
+    }
 
-    public VectorSet(VectorStreamingRenderer renderer, URL serverURL, String name, String properties, VectorSetSymbolizer symbolizer, boolean deleteSymbolizer, long downloadPriority, TimeInterval timeToCache, boolean readExpired, boolean verbose, boolean haltOnError)
+    private String toNodesDirectories(String nodeID)
+    {
+      IStringBuilder isb = IStringBuilder.newStringBuilder();
+      final IStringUtils su = IStringUtils.instance();
+      isb.addString("nodes/");
+      final int length = nodeID.length();
+      for (int i = 0; i < length; i++)
+      {
+        final String c = su.substring(nodeID, i, i+1);
+        isb.addString(c);
+        isb.addString("/");
+      }
+      final String result = isb.getString();
+      if (isb != null)
+         isb.dispose();
+      return result;
+    }
+
+
+    public VectorSet(VectorStreamingRenderer renderer, URL serverURL, String name, String properties, VectorSetSymbolizer symbolizer, boolean deleteSymbolizer, long downloadPriority, TimeInterval timeToCache, boolean readExpired, boolean verbose, boolean haltOnError, Format format)
     {
        _renderer = renderer;
        _serverURL = serverURL;
@@ -1158,6 +1262,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
        _readExpired = readExpired;
        _verbose = verbose;
        _haltOnError = haltOnError;
+       _format = format;
        _downloadingMetadata = false;
        _errorDownloadingMetadata = false;
        _errorParsingMetadata = false;
@@ -1189,9 +1294,35 @@ public class VectorStreamingRenderer extends DefaultRenderer
       }
     }
 
-    public final URL getServerURL()
+    public final URL getNodeFeaturesURL(String nodeID)
     {
-      return _serverURL;
+      if (_format == VectorStreamingRenderer.Format.SERVER)
+      {
+        return new URL(_serverURL, _name + "/features" + "?node=" + nodeID + "&properties=" + _properties, true);
+      }
+      return new URL(_serverURL, _name + "/" + toNodesDirectories(nodeID) + "/features.json");
+    }
+
+    public final URL getNodeChildrenURL(String nodeID, java.util.ArrayList<String> childrenIDs)
+    {
+      if (_format == VectorStreamingRenderer.Format.SERVER)
+      {
+        String nodes = "";
+        final int childrenIDsSize = childrenIDs.size();
+    
+        for (int i = 0; i < childrenIDsSize; i++)
+        {
+          if (i > 0)
+          {
+            nodes += "|";
+          }
+          nodes += childrenIDs.get(i);
+        }
+    
+        return new URL(_serverURL, _name + "?nodes=" + nodes, true);
+    
+      }
+      return new URL(_serverURL, _name + "/" + toNodesDirectories(nodeID) + "/children.json");
     }
 
     public final String getName()
@@ -1214,25 +1345,18 @@ public class VectorStreamingRenderer extends DefaultRenderer
       return _readExpired;
     }
 
-    public final String getProperties()
-    {
-      return _properties;
-    }
-
     public final void initialize(G3MContext context)
     {
       _downloadingMetadata = true;
       _errorDownloadingMetadata = false;
       _errorParsingMetadata = false;
     
-      final URL metadataURL = new URL(_serverURL, _name);
-    
       if (_verbose)
       {
         ILogger.instance().logInfo("\"%s\": Downloading metadata", _name);
       }
     
-      context.getDownloader().requestBuffer(metadataURL, _downloadPriority, _timeToCache, _readExpired, new MetadataDownloadListener(this, context.getThreadUtils(), _verbose), true);
+      context.getDownloader().requestBuffer(getMetadataURL(), _downloadPriority, _timeToCache, _readExpired, new MetadataDownloadListener(this, context.getThreadUtils(), _verbose), true);
     }
 
     public final RenderState getRenderState(G3MRenderContext rc)
@@ -1319,7 +1443,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
 
     public final long createFeatureMark(Node node, GEO2DPointGeometry geometry)
     {
-      Mark mark = _symbolizer.createFeatureMark(geometry);
+      Mark mark = _symbolizer.createFeatureMark(node, geometry);
       if (mark == null)
       {
         return 0;
@@ -1341,7 +1465,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
           final Cluster cluster = clusters.get(i);
           if (cluster != null)
           {
-            Mark mark = _symbolizer.createClusterMark(cluster, _featuresCount);
+            Mark mark = _symbolizer.createClusterMark(node, cluster, _featuresCount);
             if (mark != null)
             {
               mark.setToken(node.getClusterMarkToken());
@@ -1361,6 +1485,8 @@ public class VectorStreamingRenderer extends DefaultRenderer
     }
 
   }
+
+
 
 
   private MarksRenderer _markRenderer;
@@ -1402,7 +1528,6 @@ public class VectorStreamingRenderer extends DefaultRenderer
     }
   
     _glState._release();
-    //  delete _timer;
   
     super.dispose();
   }
@@ -1414,16 +1539,16 @@ public class VectorStreamingRenderer extends DefaultRenderer
 
   public final void render(G3MRenderContext rc, GLState glState)
   {
+    final Camera camera = rc.getCurrentCamera();
+    final Frustum frustumInModelCoordinates = camera.getFrustumInModelCoordinates();
+  
+    final long cameraTS = camera.getTimestamp();
+  
+    updateGLState(camera);
+    _glState.setParent(glState);
+  
     for (int i = 0; i < _vectorSetsSize; i++)
     {
-      final Camera camera = rc.getCurrentCamera();
-      final Frustum frustumInModelCoordinates = camera.getFrustumInModelCoordinates();
-  
-      final long cameraTS = camera.getTimestamp();
-  
-      updateGLState(camera);
-      _glState.setParent(glState);
-  
       VectorSet vectorSector = _vectorSets.get(i);
       vectorSector.render(rc, frustumInModelCoordinates, cameraTS, _glState);
     }
@@ -1443,9 +1568,9 @@ public class VectorStreamingRenderer extends DefaultRenderer
     }
   }
 
-  public final void addVectorSet(URL serverURL, String name, String properties, VectorSetSymbolizer symbolizer, boolean deleteSymbolizer, long downloadPriority, TimeInterval timeToCache, boolean readExpired, boolean verbose, boolean haltOnError)
+  public final void addVectorSet(URL serverURL, String name, String properties, VectorSetSymbolizer symbolizer, boolean deleteSymbolizer, long downloadPriority, TimeInterval timeToCache, boolean readExpired, boolean verbose, boolean haltOnError, Format format)
   {
-    VectorSet vectorSet = new VectorSet(this, serverURL, name, properties, symbolizer, deleteSymbolizer, downloadPriority, timeToCache, readExpired, verbose, haltOnError);
+    VectorSet vectorSet = new VectorSet(this, serverURL, name, properties, symbolizer, deleteSymbolizer, downloadPriority, timeToCache, readExpired, verbose, haltOnError, format);
     if (_context != null)
     {
       vectorSet.initialize(_context);

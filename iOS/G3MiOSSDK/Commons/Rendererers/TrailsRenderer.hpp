@@ -50,7 +50,7 @@ public:
 
   ~TrailSegment();
   
-  int getSize() const {
+  size_t getSize() const {
     return _positions.size();
   }
 
@@ -180,6 +180,8 @@ public:
 
   void removeTrail(Trail* trail,
                    bool deleteTrail = true);
+
+  void removeAllTrails(bool deleteTrails = true);
 
   virtual ~TrailsRenderer();
 

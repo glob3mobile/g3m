@@ -65,23 +65,23 @@ void GLGlobalState::applyChanges(GL* gl, GLGlobalState& currentState) const {
   }
 
   //Polygon Offset
-  if (_polygonOffsetFill != currentState._polygonOffsetFill) {
-    currentState._polygonOffsetFill = _polygonOffsetFill;
+ // if (_polygonOffsetFill != currentState._polygonOffsetFill) {
+//    currentState._polygonOffsetFill = _polygonOffsetFill;
     if (_polygonOffsetFill) {
       nativeGL->enable(GLStage::polygonOffsetFill());
 
-      if (_polygonOffsetFactor != currentState._polygonOffsetFactor ||
-          _polygonOffsetUnits != currentState._polygonOffsetUnits) {
+     /* if (_polygonOffsetFactor != currentState._polygonOffsetFactor ||
+          _polygonOffsetUnits != currentState._polygonOffsetUnits) {*/
         nativeGL->polygonOffset(_polygonOffsetFactor, _polygonOffsetUnits);
 
         currentState._polygonOffsetUnits = _polygonOffsetUnits;
         currentState._polygonOffsetFactor = _polygonOffsetFactor;
-      }
+   //   }
     }
     else {
       nativeGL->disable(GLStage::polygonOffsetFill());
     }
-  }
+//  }
 
   //Blending Factors
   if (_blendDFactor != currentState._blendDFactor || _blendSFactor != currentState._blendSFactor) {
@@ -128,6 +128,6 @@ void GLGlobalState::applyChanges(GL* gl, GLGlobalState& currentState) const {
     currentState._clearColorB = _clearColorB;
     currentState._clearColorA = _clearColorA;
   }
-
+  
 }
 

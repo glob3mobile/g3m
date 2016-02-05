@@ -94,8 +94,8 @@ GenericQuadTree_Node* GenericQuadTree_Node::getBestNodeForInsertion(GenericQuadT
       if (cost == minChildInsertionCost) {
         //        printf("BOTH CHILDREN WITH SAME COST");
 
-        int n1 = bestChildForInsertion->getSubtreeNElements();
-        int n2 = child->getSubtreeNElements();
+        size_t n1 = bestChildForInsertion->getSubtreeNElements();
+        size_t n2 = child->getSubtreeNElements();
 
         if (n2 < n1) { //SAME COST BUT LESS CONFLICTS
           minChildInsertionCost = cost;
@@ -271,10 +271,10 @@ bool GenericQuadTree_Node::acceptVisitor(const Geodetic2D& geo,
     return false;
   }
 
-  const int elementsSize = _elements.size();
+  const size_t elementsSize = _elements.size();
   visitor.addComparisonsDoneWhileVisiting(elementsSize);
 
-  for (int i = 0; i < elementsSize; i++) {
+  for (size_t i = 0; i < elementsSize; i++) {
     GenericQuadTree_Element* element = _elements[i];
 
     if (element->isSectorElement()) { //Element is associated to sector

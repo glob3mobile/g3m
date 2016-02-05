@@ -9,8 +9,8 @@
 #include "AndTileCondition.hpp"
 
 AndTileCondition::~AndTileCondition() {
-  int size = _children.size();
-  for (int i = 0; i < size; i++) {
+  size_t size = _children.size();
+  for (size_t i = 0; i < size; i++) {
     LayerCondition* child = _children[i];
     delete child;
   }
@@ -41,8 +41,8 @@ AndTileCondition::~AndTileCondition() {
 //}
 
 bool AndTileCondition::isAvailable(const Tile* tile) const {
-  int size = _children.size();
-  for (int i = 0; i < size; i++) {
+  size_t size = _children.size();
+  for (size_t i = 0; i < size; i++) {
     LayerCondition* child = _children[i];
     if (!child->isAvailable(tile)) {
       return false;

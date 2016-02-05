@@ -35,6 +35,10 @@ protected:
 
   mutable BoundingVolume* _boundingVolume;
   BoundingVolume* computeBoundingVolume() const;
+  
+  const bool _polygonOffsetFill;
+  const float _polygonOffsetFactor;
+  const float _polygonOffsetUnits;
 
   AbstractMesh(const int primitive,
                bool owner,
@@ -46,7 +50,10 @@ protected:
                const IFloatBuffer* colors,
                const float colorsIntensity,
                bool depthTest,
-               const IFloatBuffer* normals);
+               const IFloatBuffer* normals,
+               bool polygonOffsetFill,
+               float polygonOffsetFactor,
+               float polygonOffsetUnits);
 
   virtual void rawRender(const G3MRenderContext* rc) const = 0;
 //  virtual void rawRender(const G3MRenderContext* rc, const GLState* parentGLState) const = 0;
@@ -64,9 +71,9 @@ public:
   
   BoundingVolume* getBoundingVolume() const;
 
-  int getVertexCount() const;
+  size_t getVertexCount() const;
 
-  const Vector3D getVertex(int i) const;
+  const Vector3D getVertex(size_t i) const;
 
   bool isTransparent(const G3MRenderContext* rc) const;
   
@@ -75,6 +82,14 @@ public:
 
   void showNormals(bool v) const {
     _showNormals = v;
+  }
+  
+  const IFloatBuffer* getVertices() const{
+    return _vertices;
+  }
+  
+  Vector3D getCenter() const{
+    return _center;
   }
   
 };
