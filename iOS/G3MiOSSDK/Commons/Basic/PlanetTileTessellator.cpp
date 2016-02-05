@@ -239,7 +239,6 @@ Mesh* PlanetTileTessellator::createTileDebugMesh(const Planet* planet,
                                                  const Vector2I& rawResolution,
                                                  const Tile* tile) const {
   
-  const Sector tileSector = tile->_sector;
   const Sector meshSector = getRenderedSectorForTile(tile); // tile->getSector();
   const Vector2I meshResolution = calculateResolution(rawResolution, tile, meshSector);
   const short rx = (short)meshResolution._x;
