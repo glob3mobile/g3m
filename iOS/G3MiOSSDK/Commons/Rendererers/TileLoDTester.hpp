@@ -9,11 +9,11 @@
 #ifndef TileLODTester_hpp
 #define TileLODTester_hpp
 
-class Tile;
 class G3MRenderContext;
+class PlanetRenderContext;
+class Tile;
 class LayerTilesRenderParameters;
-class TilesRenderParameters;
-class ITimer;
+
 
 class TileLODTester {
 private:
@@ -31,13 +31,9 @@ public:
 
   virtual ~TileLODTester() { }
 
-  virtual bool meetsRenderCriteria(const Tile* tile,
-                                   const G3MRenderContext* rc,
-                                   const TilesRenderParameters* tilesRenderParameters,
-                                   const ITimer* lastSplitTimer,
-                                   const double texWidthSquared,
-                                   const double texHeightSquared,
-                                   long long nowInMS) const = 0;
+  virtual bool meetsRenderCriteria(const G3MRenderContext* rc,
+                                   const PlanetRenderContext* prc,
+                                   const Tile* tile) const = 0;
 
   virtual void onTileHasChangedMesh(const Tile* tile) const = 0;
 

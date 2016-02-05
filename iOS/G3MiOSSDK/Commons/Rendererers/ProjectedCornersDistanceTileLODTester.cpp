@@ -10,9 +10,8 @@
 
 #include "Tile.hpp"
 #include "G3MContext.hpp"
-//#include "BoundingVolume.hpp"
 #include "Camera.hpp"
-#include "LayerTilesRenderParameters.hpp"
+#include "PlanetRenderContext.hpp"
 
 
 ProjectedCornersDistanceTileLODTester::ProjectedCornersDistanceTileLODTester()
@@ -37,16 +36,12 @@ ProjectedCornersDistanceTileLODTester::PvtData* ProjectedCornersDistanceTileLODT
   return data;
 }
 
-bool ProjectedCornersDistanceTileLODTester::meetsRenderCriteria(const Tile* tile,
-                                                                 const G3MRenderContext* rc,
-                                                                 const TilesRenderParameters* tilesRenderParameters,
-                                                                 const ITimer* lastSplitTimer,
-                                                                 const double texWidthSquared,
-                                                                 const double texHeightSquared,
-                                                                 long long nowInMS) const {
+bool ProjectedCornersDistanceTileLODTester::meetsRenderCriteria(const G3MRenderContext* rc,
+                                                                const PlanetRenderContext* prc,
+                                                                const Tile* tile) const {
   return getData(tile, rc)->evaluate(rc->getCurrentCamera(),
-                                     texHeightSquared,
-                                     texWidthSquared);
+                                     prc->_texHeightSquared,
+                                     prc->_texWidthSquared);
 }
 
 double ProjectedCornersDistanceTileLODTester::PvtData::getSquaredArcSegmentRatio(const Vector3D& a,

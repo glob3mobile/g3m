@@ -33,6 +33,7 @@
 #include "TileLODTester.hpp"
 #include "TileVisibilityTester.hpp"
 #include "G3MEventContext.hpp"
+#include "PlanetRenderContext.hpp"
 
 
 class VisibleSectorListenerEntry {
@@ -166,6 +167,8 @@ _tileVisibilityTester(tileVisibilityTester)
   if (_tileVisibilityTester == NULL) {
     THROW_EXCEPTION("TileVisibilityTester can't be NULL");
   }
+
+  _prc = new PlanetRenderContext();
 }
 
 void PlanetRenderer::recreateTiles() {
@@ -236,7 +239,9 @@ PlanetRenderer::~PlanetRenderer() {
 
   delete _tileLODTester;
   delete _tileVisibilityTester;
-  
+
+  delete _prc;
+
 #ifdef JAVA_CODE
   super.dispose();
 #endif
@@ -471,20 +476,30 @@ RenderState PlanetRenderer::getRenderState(const G3MRenderContext* rc) {
     
     if (_tilesRenderParameters->_forceFirstLevelTilesRenderOnStart) {
       _statistics.clear();
-      
+
+      _prc->_tileLODTester              = _tileLODTester;
+      _prc->_tileVisibilityTester       = _tileVisibilityTester;
+      _prc->_frustumInModelCoordinates  = ;
+      _prc->_verticalExaggeration       = _verticalExaggeration;
+      _prc->_layerTilesRenderParameters = ;
+      _prc->_texturizer                 = _texturizer;
+      _prc->_tilesRenderParameters      = _tilesRenderParameters;
+      _prc->_lastSplitTimer             = ;
+      _prc->_elevationDataProvider      = _elevationDataProvider;
+      _prc->_tessellator                = _tessellator;
+      _prc->_layerSet                   = _layerSet;
+      _prc->_renderedSector             = ;
+      _prc->_forceFullRender            = ;
+      _prc->_tileDownloadPriority       = _tileDownloadPriority;
+      _prc->_texWidthSquared            = ;
+      _prc->_texHeightSquared           = ;
+      _prc->_nowInMS                    = ;
+      _prc->_renderTileMeshes           = ;
+      _prc->_logTilesPetitions          = _logTilesPetitions;
+
       for (size_t i = 0; i < firstLevelTilesCount; i++) {
         Tile* tile = _firstLevelTiles[i];
-        tile->prepareForFullRendering(rc,
-                                      _texturizer,
-                                      _elevationDataProvider,
-                                      _tessellator,
-                                      layerTilesRenderParameters,
-                                      _layerSet,
-                                      _tilesRenderParameters,
-                                      true, // forceFullRender
-                                      _tileDownloadPriority,
-                                      _verticalExaggeration,
-                                      _logTilesPetitions);
+        tile->prepareForFullRendering(rc, _prc);
       }
     }
     

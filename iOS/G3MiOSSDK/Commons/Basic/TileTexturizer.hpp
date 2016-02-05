@@ -21,6 +21,8 @@ class Geodetic3D;
 class LayerSet;
 class LayerTilesRenderParameters;
 class G3MEventContext;
+class PlanetRenderContext;
+
 
 class TileTexturizer {
 public:
@@ -32,16 +34,11 @@ public:
   virtual void initialize(const G3MContext* context,
                           const TilesRenderParameters* parameters) = 0;
 
-  virtual Mesh* texturize(const G3MRenderContext* rc,
-                          const TileTessellator* tessellator,
-                          const LayerTilesRenderParameters* layerTilesRenderParameters,
-                          const LayerSet* layerSet,
-                          bool forceFullRender,
-                          long long tileDownloadPriority,
+  virtual Mesh* texturize(const G3MRenderContext*    rc,
+                          const PlanetRenderContext* prc,
                           Tile* tile,
                           Mesh* tessellatorMesh,
-                          Mesh* previousMesh,
-                          bool logTilesPetitions) = 0;
+                          Mesh* previousMesh) = 0;
 
   virtual void tileToBeDeleted(Tile* tile,
                                Mesh* mesh) = 0;

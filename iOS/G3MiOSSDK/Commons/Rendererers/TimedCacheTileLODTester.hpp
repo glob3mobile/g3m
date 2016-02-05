@@ -37,14 +37,10 @@ public:
 
   ~TimedCacheTileLODTester();
 
-  bool meetsRenderCriteria(const Tile* tile,
-                           const G3MRenderContext* rc,
-                           const TilesRenderParameters* tilesRenderParameters,
-                           const ITimer* lastSplitTimer,
-                           const double texWidthSquared,
-                           const double texHeightSquared,
-                           long long nowInMS) const;
-  
+  bool meetsRenderCriteria(const G3MRenderContext* rc,
+                           const PlanetRenderContext* prc,
+                           const Tile* tile) const;
+
 };
 
 #endif

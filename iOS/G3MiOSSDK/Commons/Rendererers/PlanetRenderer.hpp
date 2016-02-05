@@ -220,6 +220,8 @@ private:
   TileLODTester*               _tileLODTester;
   TileVisibilityTester*        _tileVisibilityTester;
 
+  PlanetRenderContext*         _prc;
+
   TilesStatistics _statistics;
 
 #ifdef C_CODE
@@ -470,10 +472,6 @@ public:
   
   void setChangedRendererInfoListener(ChangedRendererInfoListener* changedInfoListener,
                                       const size_t rendererIdentifier);
-
-//  TileLODTester* getTileLODTester() const {
-//    return _tileLODTester;
-//  }
 
   void onTileHasChangedMesh(const Tile* tile) const;
 

@@ -11,7 +11,7 @@
 #include "Tile.hpp"
 #include "G3MContext.hpp"
 #include "TimeInterval.hpp"
-
+#include "PlanetRenderContext.hpp"
 
 TimedCacheTileLODTester::TimedCacheTileLODTester(const TimeInterval& timeout,
                                                  TileLODTester* tileLODTester) :
@@ -26,35 +26,21 @@ TimedCacheTileLODTester::~TimedCacheTileLODTester() {
 #endif
 }
 
-bool TimedCacheTileLODTester::meetsRenderCriteria(const Tile* tile,
-                                                  const G3MRenderContext* rc,
-                                                  const TilesRenderParameters* tilesRenderParameters,
-                                                  const ITimer* lastSplitTimer,
-                                                  const double texWidthSquared,
-                                                  const double texHeightSquared,
-                                                  long long nowInMS) const {
+bool TimedCacheTileLODTester::meetsRenderCriteria(const G3MRenderContext* rc,
+                                                  const PlanetRenderContext* prc,
+                                                  const Tile* tile) const {
+
+  const long long nowInMS = prc->_nowInMS;
 
   PvtData* data = (PvtData*) tile->getData(_id);
   if (data == NULL) {
     data = new PvtData(nowInMS);
     tile->setData(_id, data);
-    data->_lastMeetsRenderCriteriaResult = _tileLODTester->meetsRenderCriteria(tile,
-                                                                               rc,
-                                                                               tilesRenderParameters,
-                                                                               lastSplitTimer,
-                                                                               texWidthSquared,
-                                                                               texHeightSquared,
-                                                                               nowInMS);
+    data->_lastMeetsRenderCriteriaResult = _tileLODTester->meetsRenderCriteria(rc, prc, tile);
   }
   else if ((nowInMS - data->_lastMeetsRenderCriteriaTimeInMS) > _timeoutInMS) {
     data->_lastMeetsRenderCriteriaTimeInMS = nowInMS;
-    data->_lastMeetsRenderCriteriaResult = _tileLODTester->meetsRenderCriteria(tile,
-                                                                               rc,
-                                                                               tilesRenderParameters,
-                                                                               lastSplitTimer,
-                                                                               texWidthSquared,
-                                                                               texHeightSquared,
-                                                                               nowInMS);
+    data->_lastMeetsRenderCriteriaResult = _tileLODTester->meetsRenderCriteria(rc, prc, tile);
   }
 
   return data->_lastMeetsRenderCriteriaResult;

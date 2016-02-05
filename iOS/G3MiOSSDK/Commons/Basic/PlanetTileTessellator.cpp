@@ -26,6 +26,8 @@
 #include "IndexedGeometryMesh.hpp"
 #include "IShortBuffer.hpp"
 #include "CompositeMesh.hpp"
+#include "PlanetRenderContext.hpp"
+#include "LayerTilesRenderParameters.hpp"
 
 #include "NormalsUtils.hpp"
 
@@ -46,19 +48,19 @@ PlanetTileTessellator::~PlanetTileTessellator() {
   
 }
 
-Vector2I PlanetTileTessellator::getTileMeshResolution(const Planet* planet,
-                                                      const Vector2I& rawResolution,
-                                                      const Tile* tile,
-                                                      bool debug) const {
-  Sector sector = getRenderedSectorForTile(tile); // tile->getSector();
-  return calculateResolution(rawResolution, tile, sector);
+Vector2I PlanetTileTessellator::getTileMeshResolution(const G3MRenderContext* rc,
+                                                      const PlanetRenderContext* prc,
+                                                      const Tile* tile) const {
+  Sector sector = getRenderedSectorForTile(tile);
+  return calculateResolution(prc, tile, sector);
 }
 
-Vector2I PlanetTileTessellator::calculateResolution(const Vector2I& resolution,
+Vector2I PlanetTileTessellator::calculateResolution(const PlanetRenderContext* prc,
                                                     const Tile* tile,
                                                     const Sector& renderedSector) const {
   Sector sector = tile->_sector;
-  
+  const Vector2I resolution = prc->_layerTilesRenderParameters->_tileMeshResolution;
+
   const double latRatio = sector._deltaLatitude._degrees  / renderedSector._deltaLatitude._degrees;
   const double lonRatio = sector._deltaLongitude._degrees / renderedSector._deltaLongitude._degrees;
   
@@ -107,18 +109,18 @@ double PlanetTileTessellator::skirtDepthForSector(const Planet* planet, const Se
 }
 
 
-Mesh* PlanetTileTessellator::createTileMesh(const Planet* planet,
-                                            const Vector2I& rawResolution,
+Mesh* PlanetTileTessellator::createTileMesh(const G3MRenderContext* rc,
+                                            const PlanetRenderContext* prc,
                                             Tile* tile,
                                             const ElevationData* elevationData,
-                                            float verticalExaggeration,
-                                            bool renderDebug,
                                             TileTessellatorMeshData& data) const {
   
   const Sector tileSector = tile->_sector;
   const Sector meshSector = getRenderedSectorForTile(tile); // tile->getSector();
-  const Vector2I meshResolution = calculateResolution(rawResolution, tile, meshSector);
-  
+  const Vector2I meshResolution = calculateResolution(prc, tile, meshSector);
+
+  const Planet* planet = rc->getPlanet();
+
   FloatBufferBuilderFromGeodetic* vertices = FloatBufferBuilderFromGeodetic::builderWithGivenCenter(planet, meshSector._center);
   ShortBufferBuilder indices;
   FloatBufferBuilderFromCartesian2D* textCoords = new FloatBufferBuilderFromCartesian2D();
@@ -127,7 +129,7 @@ Mesh* PlanetTileTessellator::createTileMesh(const Planet* planet,
                                             meshSector,
                                             meshResolution,
                                             elevationData,
-                                            verticalExaggeration,
+                                            prc->_verticalExaggeration,
                                             tile->_mercator,
                                             vertices,
                                             indices,
@@ -235,12 +237,12 @@ IFloatBuffer* PlanetTileTessellator::createTextCoords(const Vector2I& rawResolut
   return data->_textCoords->create();
 }
 
-Mesh* PlanetTileTessellator::createTileDebugMesh(const Planet* planet,
-                                                 const Vector2I& rawResolution,
+Mesh* PlanetTileTessellator::createTileDebugMesh(const G3MRenderContext* rc,
+                                                 const PlanetRenderContext* prc,
                                                  const Tile* tile) const {
   
   const Sector meshSector = getRenderedSectorForTile(tile);
-  const Vector2I meshResolution = calculateResolution(rawResolution, tile, meshSector);
+  const Vector2I meshResolution = calculateResolution(prc, tile, meshSector);
   const short rx = (short)meshResolution._x;
   const short ry = (short)meshResolution._y;
   

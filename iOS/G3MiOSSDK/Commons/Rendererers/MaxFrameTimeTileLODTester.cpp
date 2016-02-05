@@ -27,13 +27,9 @@ MaxFrameTimeTileLODTester::~MaxFrameTimeTileLODTester() {
 #endif
 }
 
-bool MaxFrameTimeTileLODTester::meetsRenderCriteria(const Tile* tile,
-                                                    const G3MRenderContext* rc,
-                                                    const TilesRenderParameters* tilesRenderParameters,
-                                                    const ITimer* lastSplitTimer,
-                                                    const double texWidthSquared,
-                                                    const double texHeightSquared,
-                                                    long long nowInMS) const {
+bool MaxFrameTimeTileLODTester::meetsRenderCriteria(const G3MRenderContext* rc,
+                                                    const PlanetRenderContext* prc,
+                                                    const Tile* tile) const {
 
 #warning Diego at work!
 
@@ -48,13 +44,7 @@ bool MaxFrameTimeTileLODTester::meetsRenderCriteria(const Tile* tile,
     }
   }
 
-  const bool result = _tileLODTester->meetsRenderCriteria(tile,
-                                                          rc,
-                                                          tilesRenderParameters,
-                                                          lastSplitTimer,
-                                                          texWidthSquared,
-                                                          texHeightSquared,
-                                                          nowInMS);
+  const bool result = _tileLODTester->meetsRenderCriteria(rc, prc, tile);
 
   if (!result && !hasSubtiles) {
     _splitsInFrameCounter++;

@@ -26,13 +26,9 @@ MaxLevelTileLODTester::~MaxLevelTileLODTester() {
 #endif
 }
 
-bool MaxLevelTileLODTester::meetsRenderCriteria(const Tile* tile,
-                                                const G3MRenderContext* rc,
-                                                const TilesRenderParameters* tilesRenderParameters,
-                                                const ITimer* lastSplitTimer,
-                                                const double texWidthSquared,
-                                                const double texHeightSquared,
-                                                long long nowInMS) const {
+bool MaxLevelTileLODTester::meetsRenderCriteria(const G3MRenderContext* rc,
+                                                const PlanetRenderContext* prc,
+                                                const Tile* tile) const {
 
   if (_maxLevel < 0) {
     return true;

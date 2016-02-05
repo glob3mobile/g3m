@@ -10,6 +10,7 @@
 
 #include "TimeInterval.hpp"
 #include "Tile.hpp"
+#include "PlanetRenderContext.hpp"
 
 
 TimedCacheTileVisibilityTester::TimedCacheTileVisibilityTester(const TimeInterval&   timeout,
@@ -30,11 +31,12 @@ void TimedCacheTileVisibilityTester::renderStarted() const {
 
 }
 
-bool TimedCacheTileVisibilityTester::isVisible(const Tile* tile,
-                                               const G3MRenderContext* rc,
-                                               long long nowInMS,
-                                               const Frustum* frustumInModelCoordinates) const {
+bool TimedCacheTileVisibilityTester::isVisible(const G3MRenderContext* rc,
+                                               const PlanetRenderContext* prc,
+                                               const Tile* tile) const {
 
+  const long long nowInMS = prc->_nowInMS;
+  
 #warning Calculate ID;
   const int id = 32;
 
@@ -42,7 +44,7 @@ bool TimedCacheTileVisibilityTester::isVisible(const Tile* tile,
   PvtData* data = (PvtData*) tile->getData(id);
 
   if (data == NULL) {
-    result = _tileVisibilityTester->isVisible(tile, rc, nowInMS, frustumInModelCoordinates);
+    result = _tileVisibilityTester->isVisible(rc, prc, tile);
     if (result) {
       data = new PvtData(nowInMS + _timeoutInMS);
       tile->setData(id, data);
@@ -53,7 +55,7 @@ bool TimedCacheTileVisibilityTester::isVisible(const Tile* tile,
       result = true;
     }
     else {
-      result = _tileVisibilityTester->isVisible(tile, rc, nowInMS, frustumInModelCoordinates);
+      result = _tileVisibilityTester->isVisible(rc, prc, tile);
       if (result) {
         data->_timeoutTimeInMS = nowInMS + _timeoutInMS;
       }

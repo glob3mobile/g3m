@@ -91,7 +91,7 @@ TileTessellator* PlanetRendererBuilder::getTileTessellator() {
  */
 TileTexturizer* PlanetRendererBuilder::getTexturizer() {
   if (!_texturizer) {
-    _texturizer = new DefaultTileTexturizer(PlanetRendererBuilder::getDefaultTileBackGroundImageBuilder());
+    _texturizer = new DefaultTileTexturizer(PlanetRendererBuilder::getDefaultTileBackgroundImageBuilder());
   }
 
   return _texturizer;
@@ -326,15 +326,15 @@ TouchEventType PlanetRendererBuilder::getTouchEventTypeOfTerrainTouchListener() 
   return _touchEventTypeOfTerrainTouchListener;
 }
 
-void PlanetRendererBuilder::setDefaultTileBackGroundImage(IImageBuilder* defaultTileBackGroundImage) {
-  _defaultTileBackGroundImage = defaultTileBackGroundImage;
+void PlanetRendererBuilder::setDefaultTileBackgroundImage(IImageBuilder* defaultTileBackgroundImage) {
+  _defaultTileBackgroundImage = defaultTileBackgroundImage;
 }
 
-IImageBuilder* PlanetRendererBuilder::getDefaultTileBackGroundImageBuilder() const {
-  if (_defaultTileBackGroundImage == NULL) {
+IImageBuilder* PlanetRendererBuilder::getDefaultTileBackgroundImageBuilder() const {
+  if (_defaultTileBackgroundImage == NULL) {
     return new DefaultChessCanvasImageBuilder(256, 256, Color::black(), Color::white(), 4);
   }
-  return _defaultTileBackGroundImage;
+  return _defaultTileBackgroundImage;
 }
 
 PlanetRenderer* PlanetRendererBuilder::create() {

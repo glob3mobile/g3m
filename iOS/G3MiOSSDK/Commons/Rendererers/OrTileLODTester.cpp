@@ -26,31 +26,15 @@ OrTileLODTester::~OrTileLODTester() {
 }
 
 
-bool OrTileLODTester::meetsRenderCriteria(const Tile* tile,
-                                          const G3MRenderContext* rc,
-                                          const TilesRenderParameters* tilesRenderParameters,
-                                          const ITimer* lastSplitTimer,
-                                          const double texWidthSquared,
-                                          const double texHeightSquared,
-                                          long long nowInMS) const {
+bool OrTileLODTester::meetsRenderCriteria(const G3MRenderContext* rc,
+                                          const PlanetRenderContext* prc,
+                                          const Tile* tile) const {
 
-  if (_left->meetsRenderCriteria(tile,
-                                 rc,
-                                 tilesRenderParameters,
-                                 lastSplitTimer,
-                                 texWidthSquared,
-                                 texHeightSquared,
-                                 nowInMS)) {
+  if (_left->meetsRenderCriteria(rc, prc, tile)) {
     return true;
   }
 
-  return _right->meetsRenderCriteria(tile,
-                                     rc,
-                                     tilesRenderParameters,
-                                     lastSplitTimer,
-                                     texWidthSquared,
-                                     texHeightSquared,
-                                     nowInMS);
+  return _right->meetsRenderCriteria(rc, prc, tile);
 }
 
 void OrTileLODTester::onTileHasChangedMesh(const Tile* tile) const {

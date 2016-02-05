@@ -9,10 +9,10 @@
 #ifndef TileVisibilityTester_hpp
 #define TileVisibilityTester_hpp
 
-class Tile;
 class G3MRenderContext;
+class PlanetRenderContext;
+class Tile;
 class LayerTilesRenderParameters;
-class Frustum;
 
 class TileVisibilityTester {
 public:
@@ -23,10 +23,9 @@ public:
 
   virtual ~TileVisibilityTester() { }
 
-  virtual bool isVisible(const Tile* tile,
-                         const G3MRenderContext* rc,
-                         long long nowInMS,
-                         const Frustum* frustumInModelCoordinates) const = 0;
+  virtual bool isVisible(const G3MRenderContext* rc,
+                         const PlanetRenderContext* prc,
+                         const Tile* tile) const = 0;
 
   virtual void onTileHasChangedMesh(const Tile* tile) const = 0;
 

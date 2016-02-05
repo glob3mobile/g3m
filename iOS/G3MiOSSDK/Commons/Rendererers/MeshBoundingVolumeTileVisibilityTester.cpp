@@ -11,18 +11,18 @@
 #include "G3MContext.hpp"
 #include "Tile.hpp"
 #include "Mesh.hpp"
+#include "PlanetRenderContext.hpp"
 
 
-bool MeshBoundingVolumeTileVisibilityTester::isVisible(const Tile* tile,
-                                                       const G3MRenderContext* rc,
-                                                       long long nowInMS,
-                                                       const Frustum* frustumInModelCoordinates) const {
+bool MeshBoundingVolumeTileVisibilityTester::isVisible(const G3MRenderContext* rc,
+                                                       const PlanetRenderContext* prc,
+                                                       const Tile* tile) const {
   const Mesh* mesh = tile->getCurrentTessellatorMesh();
   if (mesh == NULL) {
     return false;
   }
 
-  return mesh->getBoundingVolume()->touchesFrustum(frustumInModelCoordinates);
+  return mesh->getBoundingVolume()->touchesFrustum(prc->_frustumInModelCoordinates);
 }
 
 void MeshBoundingVolumeTileVisibilityTester::onTileHasChangedMesh(const Tile* tile) const {

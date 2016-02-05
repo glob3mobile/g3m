@@ -18,6 +18,7 @@ class IFloatBuffer;
 class ElevationData;
 class Geodetic2D;
 class Sector;
+class PlanetRenderContext;
 
 #include "Vector2I.hpp"
 #include "Vector2F.hpp"
@@ -35,21 +36,18 @@ public:
   virtual ~TileTessellator() {
   }
 
-  virtual Mesh* createTileMesh(const Planet* planet,
-                               const Vector2I& resolution,
+  virtual Mesh* createTileMesh(const G3MRenderContext* rc,
+                               const PlanetRenderContext* prc,
                                Tile* tile,
                                const ElevationData* elevationData,
-                               float verticalExaggeration,
-                               bool debug,
                                TileTessellatorMeshData& data) const = 0;
 
-  virtual Vector2I getTileMeshResolution(const Planet* planet,
-                                         const Vector2I& resolution,
-                                         const Tile* tile,
-                                         bool debug) const = 0;
+  virtual Vector2I getTileMeshResolution(const G3MRenderContext* rc,
+                                         const PlanetRenderContext* prc,
+                                         const Tile* tile) const = 0;
 
-  virtual Mesh* createTileDebugMesh(const Planet* planet,
-                                    const Vector2I& resolution,
+  virtual Mesh* createTileDebugMesh(const G3MRenderContext* rc,
+                                    const PlanetRenderContext* prc,
                                     const Tile* tile) const = 0;
 
   virtual IFloatBuffer* createTextCoords(const Vector2I& resolution,

@@ -89,9 +89,9 @@ private:
   
   TouchEventType getTouchEventTypeOfTerrainTouchListener();
   
-  IImageBuilder* _defaultTileBackGroundImage = NULL;
+  IImageBuilder* _defaultTileBackgroundImage = NULL;
   
-  IImageBuilder* getDefaultTileBackGroundImageBuilder() const;
+  IImageBuilder* getDefaultTileBackgroundImageBuilder() const;
   
   TileLODTester* createDefaultTileLODTester() const;
 
@@ -139,7 +139,7 @@ public:
   
   void setTouchEventTypeOfTerrainTouchListener(TouchEventType _touchEventTypeOfTerrainTouchListener);
   
-  void setDefaultTileBackGroundImage(IImageBuilder* defaultTileBackGroundImage);
+  void setDefaultTileBackgroundImage(IImageBuilder* defaultTileBackgroundImage);
   
   void setTileLODTester(TileLODTester* tlt);
   
