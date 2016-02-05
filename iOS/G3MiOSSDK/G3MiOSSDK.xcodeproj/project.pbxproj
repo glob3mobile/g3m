@@ -444,6 +444,7 @@
 		CFFEC12315C2EA5F003FA986 /* Downloader_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = CFFEC12215C2EA5F003FA986 /* Downloader_iOS.mm */; };
 		CFFEC12615C2EBA6003FA986 /* URL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFFEC12515C2EBA6003FA986 /* URL.cpp */; };
 		D80270BE17B3AADF0029F0BE /* CameraDoubleDragHandler.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = FBBDBCDD17AB983200077004 /* CameraDoubleDragHandler.hpp */; };
+		D805EC091C64CF4C000F8409 /* StraightLine.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D805EC081C64CF4C000F8409 /* StraightLine.cpp */; };
 		D80A286B1746474E0058CEC3 /* Planet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D80A28691746474E0058CEC3 /* Planet.cpp */; };
 		D80A286C1746474E0058CEC3 /* EllipsoidalPlanet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D80A286A1746474E0058CEC3 /* EllipsoidalPlanet.cpp */; };
 		D80A28711746572E0058CEC3 /* GLState.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D80A286F1746572E0058CEC3 /* GLState.cpp */; };
@@ -1690,6 +1691,7 @@
 		CFFEC12515C2EBA6003FA986 /* URL.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = URL.cpp; path = Commons/Basic/URL.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		D802448B177B314800F58D0D /* TransformedTexCoorTexturedMesh.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = TransformedTexCoorTexturedMesh.fsh; sourceTree = "<group>"; };
 		D802448C177B314800F58D0D /* TransformedTexCoorTexturedMesh.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = TransformedTexCoorTexturedMesh.vsh; sourceTree = "<group>"; };
+		D805EC081C64CF4C000F8409 /* StraightLine.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = StraightLine.cpp; path = Commons/Geometry/StraightLine.cpp; sourceTree = "<group>"; };
 		D807875E1846141400A6DB28 /* FlatColorMesh_DirectionLight.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = FlatColorMesh_DirectionLight.fsh; sourceTree = "<group>"; };
 		D807875F1846141400A6DB28 /* FlatColorMesh_DirectionLight.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = FlatColorMesh_DirectionLight.vsh; sourceTree = "<group>"; };
 		D80787601846141400A6DB28 /* TexturedMesh_DirectionLight.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = TexturedMesh_DirectionLight.fsh; sourceTree = "<group>"; };
@@ -2203,6 +2205,7 @@
 			isa = PBXGroup;
 			children = (
 				FBB7C6361C63AD4200AC1DE1 /* StraightLine.hpp */,
+				D805EC081C64CF4C000F8409 /* StraightLine.cpp */,
 				D80FAAD917CB81B600ACD249 /* Extent.hpp */,
 				D80FAADA17CB81B600ACD249 /* Matrix44DProvider.hpp */,
 				D80FAADB17CB81B600ACD249 /* Matrix44DProvider.cpp */,
@@ -3133,6 +3136,7 @@
 				FB31AE3616F76B4C00C415FF /* LayoutUtils.cpp in Sources */,
 				CF8AE0061702049F00FE9F56 /* GEOLine2DStyle.cpp in Sources */,
 				CF8AE0071702049F00FE9F56 /* GEOLine2DMeshSymbol.cpp in Sources */,
+				D805EC091C64CF4C000F8409 /* StraightLine.cpp in Sources */,
 				CF8AE0081702049F00FE9F56 /* GEOMultiLine2DMeshSymbol.cpp in Sources */,
 				CF8AE0091702049F00FE9F56 /* GEOStyle.cpp in Sources */,
 				CF8AE00A1702049F00FE9F56 /* GEOSymbol.cpp in Sources */,
