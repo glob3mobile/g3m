@@ -1661,7 +1661,8 @@ G3MWidget* MapBooOLDBuilder::create() {
                                  getGPUProgramManager(),
                                  createSceneLighting(),
                                  icpp,
-                                 infoDisplay);
+                                 infoDisplay,
+                                 MONO);
   delete cameraConstraints;
   delete periodicalTasks;
 
