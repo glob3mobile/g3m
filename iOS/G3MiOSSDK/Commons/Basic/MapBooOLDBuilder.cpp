@@ -53,9 +53,10 @@
 #include "ICanvasUtils.hpp"
 #include "DownloaderImageBuilder.hpp"
 #include "SphericalPlanet.hpp"
-
+#include "LayerSet.hpp"
 #include "LevelTileCondition.hpp"
 #include "Info.hpp"
+
 
 const std::string MapBooOLD_CameraPosition::description() const {
   IStringBuilder* isb = IStringBuilder::newStringBuilder();

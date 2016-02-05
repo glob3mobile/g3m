@@ -16,8 +16,8 @@
 
 bool MeshBoundingVolumeTileVisibilityTester::isVisible(const G3MRenderContext* rc,
                                                        const PlanetRenderContext* prc,
-                                                       const Tile* tile) const {
-  const Mesh* mesh = tile->getCurrentTessellatorMesh();
+                                                       Tile* tile) const {
+  const Mesh* mesh = tile->getTessellatorMesh(rc, prc);
   if (mesh == NULL) {
     return false;
   }

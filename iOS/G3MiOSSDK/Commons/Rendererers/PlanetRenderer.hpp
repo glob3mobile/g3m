@@ -9,31 +9,29 @@
 #ifndef G3MiOSSDK_PlanetRenderer
 #define G3MiOSSDK_PlanetRenderer
 
-class Tile;
-class TileTessellator;
-class LayerSet;
-class VisibleSectorListenerEntry;
-class VisibleSectorListener;
-class ElevationDataProvider;
-class LayerTilesRenderParameters;
-class TerrainTouchListener;
-class ChangedInfoListener;
-
-#include "IStringBuilder.hpp"
-#include "DefaultRenderer.hpp"
 #include "Sector.hpp"
 #include "Tile.hpp"
-#include "Camera.hpp"
-#include "LayerSet.hpp"
-#include "ITileVisitor.hpp"
-#include "SurfaceElevationProvider.hpp"
+#include "DefaultRenderer.hpp"
 #include "ChangedListener.hpp"
+#include "ChangedInfoListener.hpp"
+#include "SurfaceElevationProvider.hpp"
 #include "TouchEvent.hpp"
+#include "TimeInterval.hpp"
+#include "Camera.hpp"
+#include "ITileVisitor.hpp"
+
+class ITileVisitor;
+class LayerSet;
+class TilesRenderParameters;
 class TileLODTester;
 class TileVisibilityTester;
-
-
-class EllipsoidShape;
+class ITimer;
+class VisibleSectorListener;
+class VisibleSectorListenerEntry;
+class Layer;
+class LayerTilesRenderParameters;
+class Layer;
+class TerrainTouchListener;
 
 
 class TilesStatistics {

@@ -25,7 +25,7 @@ public:
 
   virtual bool isVisible(const G3MRenderContext* rc,
                          const PlanetRenderContext* prc,
-                         const Tile* tile) const = 0;
+                         Tile* tile) const = 0;
 
   virtual void onTileHasChangedMesh(const Tile* tile) const = 0;
 

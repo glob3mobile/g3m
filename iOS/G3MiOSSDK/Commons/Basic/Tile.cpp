@@ -13,18 +13,18 @@
 #include "ElevationData.hpp"
 #include "TileElevationDataRequest.hpp"
 #include "PlanetTileTessellator.hpp"
-#include "TileTexturizer.hpp"
-#include "LayerTilesRenderParameters.hpp"
-#include "TilesRenderParameters.hpp"
-#include "MeshHolder.hpp"
-#include "PlanetRenderer.hpp"
-#include "FlatColorMesh.hpp"
-#include "MercatorUtils.hpp"
-#include "DecimatedSubviewElevationData.hpp"
-#include "TileLODTester.hpp"
 #include "TileData.hpp"
-#include "TileVisibilityTester.hpp"
+#include "TileTexturizer.hpp"
 #include "PlanetRenderContext.hpp"
+#include "PlanetRenderer.hpp"
+#include "MeshHolder.hpp"
+#include "TileVisibilityTester.hpp"
+#include "TileLODTester.hpp"
+#include "FlatColorMesh.hpp"
+#include "TilesRenderParameters.hpp"
+#include "MercatorUtils.hpp"
+#include "LayerTilesRenderParameters.hpp"
+#include "DecimatedSubviewElevationData.hpp"
 
 
 std::string Tile::createTileId(int level,
@@ -80,7 +80,6 @@ _lastTileMeshResolutionX(-1),
 _lastTileMeshResolutionY(-1),
 _planetRenderer(planetRenderer),
 _tessellatorData(NULL),
-_rendered(false),
 _id( createTileId(level, row, column) ),
 _tessellatorMeshIsMeshHolder(false),
 _data(NULL),
@@ -235,17 +234,20 @@ Mesh* Tile::getDebugMesh(const G3MRenderContext* rc,
 
 bool Tile::isVisible(const G3MRenderContext* rc,
                      const PlanetRenderContext* prc) {
-  if ((prc->_renderedSector != NULL) &&
-      !prc->_renderedSector->touchesWith(_sector)) { //Incomplete world
-    return false;
-  }
-
+//  if ((prc->_renderedSector != NULL) &&
+//      !(prc->_renderedSector->touchesWith(_sector))) { //Incomplete world
+//#warning TODO: test if this condition happens
+//    ILogger::instance()->logError("Ooops!");
+//    return false;
+//  }
+#warning TODO: remove this method
   return prc->_tileVisibilityTester->isVisible(rc, prc, this);
 }
 
 bool Tile::meetsRenderCriteria(const G3MRenderContext* rc,
                                const PlanetRenderContext* prc) {
 #warning TODO: move to an implementation of TileLODTester and remove this method when the code is moved from here
+#warning TODO: remove lastSplitTimer
   //  if (tilesRenderParameters->_useTilesSplitBudget) {
   //    if (_subtiles == NULL) { // the tile needs to create the subtiles
   ////      if (lastSplitTimer->elapsedTimeInMilliseconds() < 67) {
@@ -316,8 +318,10 @@ void Tile::rawRender(const G3MRenderContext*    rc,
     else {
       //Adding flat color if no texture set on the mesh
       if (_flatColorMesh == NULL) {
-        _flatColorMesh = new FlatColorMesh(tessellatorMesh, false,
-                                           Color::newFromRGBA((float) 1.0, (float) 1.0, (float) 1.0, (float) 1.0), true);
+        _flatColorMesh = new FlatColorMesh(tessellatorMesh,
+                                           false,
+                                           Color::newFromRGBA(1.0f, 1.0f, 1.0f, 1.0f),
+                                           true);
       }
       _flatColorMesh->render(rc, glState);
     }
@@ -337,7 +341,6 @@ std::vector<Tile*>* Tile::getSubTiles() {
   if (_subtiles == NULL) {
     _subtiles = createSubTiles(true);
   }
-
   return _subtiles;
 }
 
@@ -356,8 +359,8 @@ void Tile::toBeDeleted(TileTexturizer*        texturizer,
   }
 }
 
-void Tile::prune(TileTexturizer*           texturizer,
-                 ElevationDataProvider*    elevationDataProvider) {
+void Tile::prune(TileTexturizer*        texturizer,
+                 ElevationDataProvider* elevationDataProvider) {
 
   if (_subtiles != NULL) {
     //Notifying elevation event when LOD decreases
@@ -425,10 +428,6 @@ void Tile::render(const G3MRenderContext*    rc,
     _verticalExaggeration = prc->_verticalExaggeration;
   }
 
-#warning TODO Remove: Forcing tessellator mesh generation before visibility test
-  getTessellatorMesh(rc, prc);
-
-  bool rendered = false;
   if (isVisible(rc, prc)) {
     setIsVisible(true, prc->_texturizer);
 
@@ -441,11 +440,8 @@ void Tile::render(const G3MRenderContext*    rc,
                               );
 
     if (isRawRender) {
-      rendered = true;
       if (prc->_renderTileMeshes) {
-        rawRender(rc,
-                  prc,
-                  parentState);
+        rawRender(rc, prc, parentState);
       }
       if (prc->_tilesRenderParameters->_renderDebug) {
         debugRender(rc, prc, parentState);
@@ -476,12 +472,7 @@ void Tile::render(const G3MRenderContext*    rc,
     prune(prc->_texturizer, prc->_elevationDataProvider);
     //TODO: AVISAR CAMBIO DE TERRENO
   }
-
-  if (_rendered != rendered) {
-    _rendered = rendered;
-#warning TODO: Is it needed?
-  }
-
+  
 }
 
 Tile* Tile::createSubTile(const Angle& lowerLat, const Angle& lowerLon,
@@ -575,7 +566,8 @@ const Tile* Tile::getDeepestTileContaining(const Geodetic3D& position) const {
       return this;
     }
 
-    for (int i = 0; i < _subtiles->size(); i++) {
+    const size_t subtilesSize = _subtiles->size();
+    for (size_t i = 0; i < subtilesSize; i++) {
       const Tile* subtile = _subtiles->at(i);
       const Tile* subtileResult = subtile->getDeepestTileContaining(position);
       if (subtileResult != NULL) {
@@ -720,20 +712,12 @@ void Tile::setTessellatorData(PlanetTileTessellatorData* tessellatorData) {
   }
 }
 
-Vector2I Tile::getNormalizedPixelsFromPosition(const Geodetic2D& position2D,
-                                               const Vector2I& tileDimension) const {
+Vector2I Tile::getNormalizedPixelFromPosition(const Geodetic2D& position,
+                                              const Vector2I& tileDimension) const {
   const IMathUtils* math = IMathUtils::instance();
-  const Vector2D uv = _sector.getUVCoordinates(position2D);
-  return Vector2I(math->toInt(tileDimension._x * uv._x), math->toInt(tileDimension._y * uv._y));
-}
-
-const Mesh* Tile::getTessellatorMesh() const {
-#warning TODO: remove this method and _tessellatorMeshIsMeshHolder variable
-  if (_tessellatorMeshIsMeshHolder) {
-    return ((MeshHolder*) _tessellatorMesh)->getMesh();
-  }
-
-  return _tessellatorMesh;
+  const Vector2D uv = _sector.getUVCoordinates(position);
+  return Vector2I(math->toInt(tileDimension._x * uv._x),
+                  math->toInt(tileDimension._y * uv._y));
 }
 
 void Tile::setData(int id, TileData* data) const {

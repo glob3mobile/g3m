@@ -38,7 +38,7 @@ public:
 
   bool isVisible(const G3MRenderContext* rc,
                  const PlanetRenderContext* prc,
-                 const Tile* tile) const;
+                 Tile* tile) const;
 
   void renderStarted() const;
   

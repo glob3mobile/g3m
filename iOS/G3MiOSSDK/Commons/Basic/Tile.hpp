@@ -12,30 +12,16 @@
 #include <vector>
 #include "TileTessellator.hpp"
 #include "Sector.hpp"
-//#include "TileLODTester.hpp"
 
-#warning Clean forward declarations
 class TileTexturizer;
-class Mesh;
 class TileElevationDataRequest;
-class Vector3D;
-class TilesRenderParameters;
-class LayerTilesRenderParameters;
-class Frustum;
-class TilesStatistics;
-class ElevationDataProvider;
-class ITimer;
 class GLState;
-class LayerSet;
 class ITexturizerData;
 class PlanetTileTessellatorData;
+class ElevationDataProvider;
 class PlanetRenderer;
-class TileKey;
-class Geodetic3D;
-class TileLODTester;
 class TileData;
-class TileVisibilityTester;
-class PlanetRenderContext;
+class TilesStatistics;
 
 
 class Tile {
@@ -62,9 +48,6 @@ private:
   TileTessellatorMeshData _tileTessellatorMeshData;
 
   void prepareTestLODData(const Planet* planet);
-
-  inline Mesh* getTessellatorMesh(const G3MRenderContext* rc,
-                                  const PlanetRenderContext* prc);
 
   Mesh* getDebugMesh(const G3MRenderContext* rc,
                      const PlanetRenderContext* prc);
@@ -111,8 +94,6 @@ private:
   int _lastTileMeshResolutionY;
 
   const PlanetRenderer* _planetRenderer;
-
-  bool _rendered;
 
   static std::string createTileId(int level,
                                   int row,
@@ -192,8 +173,8 @@ public:
 
   const Tile* getDeepestTileContaining(const Geodetic3D& position) const;
 
-  void prune(TileTexturizer*           texturizer,
-             ElevationDataProvider*    elevationDataProvider);
+  void prune(TileTexturizer*        texturizer,
+             ElevationDataProvider* elevationDataProvider);
 
   void toBeDeleted(TileTexturizer*        texturizer,
                    ElevationDataProvider* elevationDataProvider);
@@ -227,10 +208,8 @@ public:
 
   ElevationData* createElevationDataSubviewFromAncestor(Tile* ancestor) const;
 
-  Vector2I getNormalizedPixelsFromPosition(const Geodetic2D& position2D,
-                                           const Vector2I& size) const;
-
-  const Mesh* getTessellatorMesh() const;
+  Vector2I getNormalizedPixelFromPosition(const Geodetic2D& position,
+                                          const Vector2I& size) const;
 
   TileData* getData(int id) const;
   void setData(int id, TileData* data) const;
@@ -240,10 +219,8 @@ public:
     return &_tileTessellatorMeshData;
   }
 
-  const Mesh* getCurrentTessellatorMesh() const {
-#warning TODO: remove this method
-    return _tessellatorMesh;
-  }
+  Mesh* getTessellatorMesh(const G3MRenderContext* rc,
+                           const PlanetRenderContext* prc);
 
   bool areSubtilesCreated() const {
     return _subtiles != NULL;

@@ -33,7 +33,7 @@ void TimedCacheTileVisibilityTester::renderStarted() const {
 
 bool TimedCacheTileVisibilityTester::isVisible(const G3MRenderContext* rc,
                                                const PlanetRenderContext* prc,
-                                               const Tile* tile) const {
+                                               Tile* tile) const {
 
   const long long nowInMS = prc->_nowInMS;
   
