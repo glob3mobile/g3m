@@ -1,5 +1,13 @@
 package org.glob3.mobile.generated; 
 //
+//  StraightLine.cpp
+//  G3MiOSSDK
+//
+//  Created by Jose Miguel SN on 5/2/16.
+//
+//
+
+//
 //  StraightLine.hpp
 //  G3MiOSSDK
 //
